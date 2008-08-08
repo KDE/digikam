@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-01-04
- * Description : a Digikam image editor plugin for superimpose a 
+ * Description : a Digikam image editor plugin for superimpose a
  *               template to an image.
  *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-// Qt includes. 
- 
+// Qt includes.
+
 #include <qvgroupbox.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
@@ -36,7 +36,7 @@
 #include <qframe.h>
 #include <qdir.h>
 #include <qfile.h>
-#include <qhbuttongroup.h> 
+#include <qhbuttongroup.h>
 
 // KDE includes.
 
@@ -51,7 +51,7 @@
 #include <kprogress.h>
 #include <knuminput.h>
 #include <kiconloader.h>
-#include <kfiledialog.h> 
+#include <kfiledialog.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kglobalsettings.h>
@@ -59,6 +59,7 @@
 // Local includes.
 
 #include "version.h"
+#include "daboutdata.h"
 #include "ddebug.h"
 #include "dimg.h"
 #include "imageiface.h"
@@ -76,29 +77,29 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
                                                "superimpose", false, false)
 {
     QString whatsThis;
-           
+
     // About data and help button.
-    
+
     KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Template Superimpose"), 
+                                       I18N_NOOP("Template Superimpose"),
                                        digikam_version,
                                        I18N_NOOP("A digiKam image plugin to superimpose a template onto a photograph."),
                                        KAboutData::License_GPL,
                                        "(c) 2005-2006, Gilles Caulier\n"
-                                       "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg", 
+                                       "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg",
                                        0,
-                                       "http://www.digikam.org");
-    
+                                       Digikam::webProjectUrl());
+
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");
-    
+
     about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
                      "marcel dot wiesweg at gmx dot de");
 
-    setAboutData(about);    
-    
+    setAboutData(about);
+
     // -------------------------------------------------------------
-    
+
     QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
 
@@ -108,7 +109,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     gridFrame->setRowStretch(0, 10);
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the template "
                                            "superimposed onto the image.") );
-    
+
     // -------------------------------------------------------------
 
     QHButtonGroup *bGroup = new QHButtonGroup(frame);
@@ -138,42 +139,42 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     gridFrame->addMultiCellWidget(bGroup, 1, 1, 1, 1);
     gridFrame->setColStretch(0, 10);
     gridFrame->setColStretch(2, 10);
-    
-    setPreviewAreaWidget(frame);     
-    
+
+    setPreviewAreaWidget(frame);
+
     // -------------------------------------------------------------
-    
+
     QWidget *gbox2    = new QWidget(plainPage());
     QGridLayout* grid = new QGridLayout( gbox2, 1, 1, marginHint(), spacingHint());
-    
+
     m_thumbnailsBar = new Digikam::ThumbBarView(gbox2);
     m_dirSelect     = new DirSelectWidget(gbox2);
     QPushButton *templateDirButton = new QPushButton( i18n("Root Directory..."), gbox2 );
     QWhatsThis::add( templateDirButton, i18n("<p>Set here the current templates' root directory.") );
 
     grid->addMultiCellWidget(m_thumbnailsBar, 0, 1, 0, 0);
-    grid->addMultiCellWidget(m_dirSelect, 0, 0, 1, 1);    
-    grid->addMultiCellWidget(templateDirButton, 1, 1, 1, 1);    
+    grid->addMultiCellWidget(m_dirSelect, 0, 0, 1, 1);
+    grid->addMultiCellWidget(templateDirButton, 1, 1, 1, 1);
     grid->setColStretch(1, 10);
 
     setUserAreaWidget(gbox2);
-    
+
     // -------------------------------------------------------------
-    
+
     connect(bGroup, SIGNAL(released(int)),
             m_previewWidget, SLOT(slotEditModeChanged(int)));
-    
+
     connect(m_thumbnailsBar, SIGNAL(signalURLSelected(const KURL&)),
-            m_previewWidget, SLOT(slotSetCurrentTemplate(const KURL&)));            
+            m_previewWidget, SLOT(slotSetCurrentTemplate(const KURL&)));
 
     connect(m_dirSelect, SIGNAL(folderItemSelected(const KURL &)),
             this, SLOT(slotTemplateDirChanged(const KURL &)));
-    
+
     connect(templateDirButton, SIGNAL(clicked()),
             this, SLOT(slotRootTemplateDirChanged()));
-                                    
+
     // -------------------------------------------------------------
-    
+
     populateTemplates();
 }
 
@@ -184,21 +185,21 @@ ImageEffect_SuperImpose::~ImageEffect_SuperImpose()
 void ImageEffect_SuperImpose::populateTemplates(void)
 {
     m_thumbnailsBar->clear(true);
-    
+
     if (!m_templatesUrl.isValid() || !m_templatesUrl.isLocalFile())
        return;
-       
+
     QDir dir(m_templatesUrl.path(), "*.png *.PNG");
-    
+
     if (!dir.exists())
        return;
-       
+
     dir.setFilter ( QDir::Files | QDir::NoSymLinks );
 
     const QFileInfoList* fileinfolist = dir.entryInfoList();
     if (!fileinfolist)
        return;
-    
+
     QFileInfoListIterator it(*fileinfolist);
     QFileInfo* fi;
 
@@ -232,7 +233,7 @@ void ImageEffect_SuperImpose::writeUserSettings()
 void ImageEffect_SuperImpose::resetValues()
 {
     m_previewWidget->resetEdit();
-} 
+}
 
 void ImageEffect_SuperImpose::slotRootTemplateDirChanged(void)
 {

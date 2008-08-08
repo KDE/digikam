@@ -4,23 +4,23 @@
  * http://www.digikam.org
  *
  * Date        : 2004-08-26
- * Description : a digiKam image editor plugin for add film 
+ * Description : a digiKam image editor plugin for add film
  *               grain on an image.
- * 
+ *
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -44,6 +44,7 @@
 // Local includes.
 
 #include "version.h"
+#include "daboutdata.h"
 #include "ddebug.h"
 #include "dimg.h"
 #include "imageiface.h"
@@ -56,14 +57,14 @@ namespace DigikamFilmGrainImagesPlugin
 {
 
 ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
-                     : Digikam::CtrlPanelDlg(parent, i18n("Add Film Grain to Photograph"), 
+                     : Digikam::CtrlPanelDlg(parent, i18n("Add Film Grain to Photograph"),
                                              "filmgrain", false, false, true,
                                              Digikam::ImagePannelWidget::SeparateViewAll)
 {
     QString whatsThis;
 
     KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Film Grain"), 
+                                       I18N_NOOP("Film Grain"),
                                        digikam_version,
                                        I18N_NOOP("A digiKam image plugin to apply a film grain "
                                                  "effect to an image."),
@@ -71,7 +72,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
                                        "(c) 2004-2005, Gilles Caulier\n"
                                        "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg",
                                        0,
-                                       "http://www.digikam.org");
+                                       Digikam::webProjectUrl());
 
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");
@@ -109,7 +110,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     // -------------------------------------------------------------
 
     connect( m_sensibilitySlider, SIGNAL(valueChanged(int)),
-             this, SLOT(slotTimer()) ); 
+             this, SLOT(slotTimer()) );
 
     // this connection is necessary to change the LCD display when
     // the value is changed by single clicking on the slider
@@ -117,7 +118,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
              this, SLOT(slotSliderMoved(int)) );
 
     connect( m_sensibilitySlider, SIGNAL(sliderMoved(int)),
-             this, SLOT(slotSliderMoved(int)) ); 
+             this, SLOT(slotSliderMoved(int)) );
 }
 
 ImageEffect_FilmGrain::~ImageEffect_FilmGrain()
@@ -128,7 +129,7 @@ void ImageEffect_FilmGrain::renderingFinished()
 {
     m_sensibilitySlider->setEnabled(true);
 }
- 
+
 void ImageEffect_FilmGrain::readUserSettings()
 {
     KConfig* config = kapp->config();
@@ -152,7 +153,7 @@ void ImageEffect_FilmGrain::resetValues()
     m_sensibilitySlider->blockSignals(true);
     m_sensibilitySlider->setValue(12);
     m_sensibilitySlider->blockSignals(false);
-} 
+}
 
 void ImageEffect_FilmGrain::slotSliderMoved(int v)
 {

@@ -5,25 +5,25 @@
  *
  * Date        : 2005-02-17
  * Description : a plugin to change image perspective .
- * 
+ *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
-// Qt includes. 
- 
+// Qt includes.
+
 #include <qvgroupbox.h>
 #include <qlabel.h>
 #include <qspinbox.h>
@@ -50,6 +50,7 @@
 // Local includes.
 
 #include "version.h"
+#include "daboutdata.h"
 #include "ddebug.h"
 #include "dimg.h"
 #include "imageiface.h"
@@ -61,22 +62,22 @@ namespace DigikamPerspectiveImagesPlugin
 {
 
 ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
-                       : Digikam::ImageDlgBase(parent, i18n("Adjust Photograph Perspective"), 
+                       : Digikam::ImageDlgBase(parent, i18n("Adjust Photograph Perspective"),
                                                "perspective", false, false)
 {
     QString whatsThis;
-    
+
     // About data and help button.
-    
+
     KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Perspective"), 
+                                       I18N_NOOP("Perspective"),
                                        digikam_version,
                                        I18N_NOOP("A digiKam image plugin to process image perspective adjustment."),
                                        KAboutData::License_GPL,
                                        "(c) 2005-2006, Gilles Caulier\n"
                                        "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg",
                                        0,
-                                       "http://www.digikam.org");
+                                       Digikam::webProjectUrl());
 
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");
@@ -85,9 +86,9 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
                      "marcel dot wiesweg at gmx dot de");
 
     setAboutData(about);
-    
+
     // -------------------------------------------------------------
-    
+
     QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l  = new QVBoxLayout(frame, 5, 0);
@@ -96,8 +97,8 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the perspective transformation operation preview. "
                                            "You can use the mouse for dragging the corner to adjust the "
                                            "perspective transformation area."));
-    setPreviewAreaWidget(frame); 
-    
+    setPreviewAreaWidget(frame);
+
     // -------------------------------------------------------------
 
     QString temp;
@@ -113,16 +114,16 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     QLabel *label2   = new QLabel(i18n("New height:"), gbox2);
     m_newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"), gbox2);
     m_newHeightLabel->setAlignment( AlignBottom | AlignRight );
-    
+
     gridLayout->addMultiCellWidget(label1, 0, 0, 0, 0);
     gridLayout->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 2);
     gridLayout->addMultiCellWidget(label2, 1, 1, 0, 0);
     gridLayout->addMultiCellWidget(m_newHeightLabel, 1, 1, 1, 2);
-    
+
     // -------------------------------------------------------------
-    
+
     KSeparator *line = new KSeparator (Horizontal, gbox2);
-    
+
     QLabel *angleLabel = new QLabel(i18n("Angles (in degrees):"), gbox2);
     QLabel *label3 = new QLabel(i18n("  Top left:"), gbox2);
     m_topLeftAngleLabel = new QLabel(gbox2);
@@ -132,7 +133,7 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     m_bottomLeftAngleLabel = new QLabel(gbox2);
     QLabel *label6 = new QLabel(i18n("  Bottom right:"), gbox2);
     m_bottomRightAngleLabel = new QLabel(gbox2);
-    
+
     gridLayout->addMultiCellWidget(line, 2, 2, 0, 2);
     gridLayout->addMultiCellWidget(angleLabel, 3, 3, 0, 2);
     gridLayout->addMultiCellWidget(label3, 4, 4, 0, 0);
@@ -177,7 +178,7 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     // -------------------------------------------------------------
 
     connect(m_previewWidget, SIGNAL(signalPerspectiveChanged(QRect, float, float, float, float)),
-            this, SLOT(slotUpdateInfo(QRect, float, float, float, float)));  
+            this, SLOT(slotUpdateInfo(QRect, float, float, float, float)));
 
     connect(m_drawWhileMovingCheckBox, SIGNAL(toggled(bool)),
             m_previewWidget, SLOT(slotToggleDrawWhileMoving(bool)));
@@ -231,8 +232,8 @@ void ImageEffect_Perspective::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     m_previewWidget->applyPerspectiveAdjustment();
-    accept();   
-    kapp->restoreOverrideCursor();       
+    accept();
+    kapp->restoreOverrideCursor();
 }
 
 void ImageEffect_Perspective::slotUpdateInfo(QRect newSize, float topLeftAngle, float topRightAngle,
@@ -241,7 +242,7 @@ void ImageEffect_Perspective::slotUpdateInfo(QRect newSize, float topLeftAngle, 
     QString temp;
     m_newWidthLabel->setText(temp.setNum( newSize.width())   + i18n(" px") );
     m_newHeightLabel->setText(temp.setNum( newSize.height()) + i18n(" px") );
-    
+
     m_topLeftAngleLabel->setText(temp.setNum( topLeftAngle, 'f', 1 ));
     m_topRightAngleLabel->setText(temp.setNum( topRightAngle, 'f', 1 ));
     m_bottomLeftAngleLabel->setText(temp.setNum( bottomLeftAngle, 'f', 1 ));

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-12-20
- * Description : a widget to display a welcome page 
+ * Description : a widget to display a welcome page
  *               on root album.
  *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -41,6 +41,7 @@
 // Local includes.
 
 #include "version.h"
+#include "daboutdata.h"
 #include "welcomepageview.h"
 #include "welcomepageview.moc"
 
@@ -129,7 +130,7 @@ QString WelcomePageView::infoPage()
         "<p style='margin-bottom: 0px'>&nbsp; &nbsp; The digiKam Team</p>")
         .arg(digikam_version)            // current digiKam version
         .arg("help:/digikam/index.html") // digiKam help:// URL
-        .arg("http://www.digikam.org")   // digiKam homepage URL
+        .arg(Digikam::webProjectUrl())   // digiKam homepage URL
         .arg("0.8.2");                   // previous digiKam release.
 
     QStringList newFeatures;
@@ -178,9 +179,9 @@ QCString WelcomePageView::fileToString(const QString &aFileName)
     unsigned int len = info.size();
     QFile file(aFileName);
 
-    if (aFileName.isEmpty() || len <= 0 || 
+    if (aFileName.isEmpty() || len <= 0 ||
         !info.exists() || info.isDir() || !info.isReadable() ||
-        !file.open(IO_Raw|IO_ReadOnly)) 
+        !file.open(IO_Raw|IO_ReadOnly))
         return QCString();
 
     result.resize(len + 2);

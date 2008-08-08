@@ -5,25 +5,25 @@
  *
  * Date        : 2004-09-30
  * Description : a plugin to add rain drop over an image
- * 
+ *
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
-// Qt includes. 
- 
+// Qt includes.
+
 #include <qlabel.h>
 #include <qwhatsthis.h>
 #include <qlayout.h>
@@ -43,6 +43,7 @@
 // Local includes.
 
 #include "version.h"
+#include "daboutdata.h"
 #include "ddebug.h"
 #include "imageiface.h"
 #include "imagewidget.h"
@@ -54,27 +55,27 @@ namespace DigikamRainDropImagesPlugin
 {
 
 ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
-                    : Digikam::ImageGuideDlg(parent, i18n("Add Raindrops to Photograph"), 
+                    : Digikam::ImageGuideDlg(parent, i18n("Add Raindrops to Photograph"),
                                              "raindrops", false, true, false,
                                              Digikam::ImageGuideWidget::HVGuideMode)
 {
     QString whatsThis;
 
     KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Raindrops"), 
+                                       I18N_NOOP("Raindrops"),
                                        digikam_version,
                                        I18N_NOOP("A digiKam image plugin to add raindrops to an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2004-2005, Gilles Caulier\n"
                                        "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg",
                                        0,
-                                       "http://www.digikam.org");
+                                       Digikam::webProjectUrl());
 
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");
 
-    about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Raindrops algorithm"), 
-                     "pieter dot voloshyn at gmail dot com"); 
+    about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Raindrops algorithm"),
+                     "pieter dot voloshyn at gmail dot com");
 
     about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
                      "marcel dot wiesweg at gmx dot de");
@@ -85,59 +86,59 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
                                            "<p>Note: if you have previously selected an area in the editor, "
                                            "this will be unaffected by the filter. You can use this method to "
                                            "disable the Raindrops effect on a human face, for example.") );
-    
+
     // -------------------------------------------------------------
-    
+
     QWidget *gboxSettings = new QWidget(plainPage());
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 2, spacingHint());
-                                                  
+
     QLabel *label1 = new QLabel(i18n("Drop size:"), gboxSettings);
-    
+
     m_dropInput = new KIntNumInput(gboxSettings);
     m_dropInput->setRange(0, 200, 1, true);
     m_dropInput->setValue(80);
     QWhatsThis::add( m_dropInput, i18n("<p>Set here the raindrops' size."));
-    
+
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 2);
     gridSettings->addMultiCellWidget(m_dropInput, 1, 1, 0, 2);
-    
+
     // -------------------------------------------------------------
 
     QLabel *label2 = new QLabel(i18n("Number:"), gboxSettings);
-    
+
     m_amountInput = new KIntNumInput(gboxSettings);
     m_amountInput->setRange(1, 500, 1, true);
     m_amountInput->setValue(150);
-    QWhatsThis::add( m_amountInput, i18n("<p>This value controls the maximum number of raindrops.")); 
-    
+    QWhatsThis::add( m_amountInput, i18n("<p>This value controls the maximum number of raindrops."));
+
     gridSettings->addMultiCellWidget(label2, 2, 2, 0, 2);
     gridSettings->addMultiCellWidget(m_amountInput, 3, 3, 0, 2);
-    
+
     // -------------------------------------------------------------
 
     QLabel *label3 = new QLabel(i18n("Fish eyes:"), gboxSettings);
-    
+
     m_coeffInput = new KIntNumInput(gboxSettings);
     m_coeffInput->setRange(1, 100, 1, true);
     m_coeffInput->setValue(30);
     QWhatsThis::add( m_coeffInput, i18n("<p>This value is the fish-eye-effect optical "
-                                        "distortion coefficient."));     
-    
+                                        "distortion coefficient."));
+
     gridSettings->addMultiCellWidget(label3, 4, 4, 0, 2);
     gridSettings->addMultiCellWidget(m_coeffInput, 5, 5, 0, 2);
-    
+
     setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
-    
+
     connect(m_dropInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));  
-    
+            this, SLOT(slotTimer()));
+
     connect(m_amountInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));  
-    
+            this, SLOT(slotTimer()));
+
     connect(m_coeffInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));  
+            this, SLOT(slotTimer()));
 }
 
 ImageEffect_RainDrop::~ImageEffect_RainDrop()
@@ -159,15 +160,15 @@ void ImageEffect_RainDrop::readUserSettings(void)
     m_dropInput->blockSignals(true);
     m_amountInput->blockSignals(true);
     m_coeffInput->blockSignals(true);
-    
+
     m_dropInput->setValue(config->readNumEntry("DropAdjustment", 80));
     m_amountInput->setValue(config->readNumEntry("AmountAdjustment", 150));
     m_coeffInput->setValue(config->readNumEntry("CoeffAdjustment", 30));
-    
+
     m_dropInput->blockSignals(false);
     m_amountInput->blockSignals(false);
     m_coeffInput->blockSignals(false);
-    
+
     slotEffect();
 }
 
@@ -186,7 +187,7 @@ void ImageEffect_RainDrop::resetValues()
     m_dropInput->blockSignals(true);
     m_amountInput->blockSignals(true);
     m_coeffInput->blockSignals(true);
-    
+
     m_dropInput->setValue(80);
     m_amountInput->setValue(150);
     m_coeffInput->setValue(30);
@@ -194,14 +195,14 @@ void ImageEffect_RainDrop::resetValues()
     m_dropInput->blockSignals(false);
     m_amountInput->blockSignals(false);
     m_coeffInput->blockSignals(false);
-} 
+}
 
 void ImageEffect_RainDrop::prepareEffect()
 {
     m_dropInput->setEnabled(false);
     m_amountInput->setEnabled(false);
     m_coeffInput->setEnabled(false);
-    
+
     int d        = m_dropInput->value();
     int a        = m_amountInput->value();
     int c        = m_coeffInput->value();
@@ -221,7 +222,7 @@ void ImageEffect_RainDrop::prepareFinal()
     m_dropInput->setEnabled(false);
     m_amountInput->setEnabled(false);
     m_coeffInput->setEnabled(false);
-    
+
     int d       = m_dropInput->value();
     int a       = m_amountInput->value();
     int c       = m_coeffInput->value();

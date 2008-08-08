@@ -50,6 +50,7 @@
 // Local includes.
 
 #include "version.h"
+#include "daboutdata.h"
 #include "ddebug.h"
 #include "dimg.h"
 #include "imageiface.h"
@@ -75,7 +76,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
                                        KAboutData::License_GPL,
                                        "(c) 2004-2008, Gilles Caulier",
                                        0,
-                                       "http://www.digikam.org");
+                                       Digikam::webProjectUrl());
 
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");
@@ -267,31 +268,31 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
 
 //     connect(m_radiusInput, SIGNAL(valueChanged(double)),
 //             this, SLOT(slotTimer()));
-// 
+//
 //     connect(m_lumToleranceInput, SIGNAL(valueChanged(double)),
 //             this, SLOT(slotTimer()));
-// 
+//
 //     connect(m_thresholdInput, SIGNAL(valueChanged(double)),
 //             this, SLOT(slotTimer()));
-// 
+//
 //     connect(m_textureInput, SIGNAL(valueChanged(double)),
 //             this, SLOT(slotTimer()));
-// 
+//
 //     connect(m_sharpnessInput, SIGNAL(valueChanged(double)),
 //             this, SLOT(slotTimer()));
-// 
+//
 //     connect(m_csmoothInput, SIGNAL(valueChanged(double)),
 //             this, SLOT(slotTimer()));
-// 
+//
 //     connect(m_lookaheadInput, SIGNAL(valueChanged(double)),
 //             this, SLOT(slotTimer()));
-// 
+//
 //     connect(m_gammaInput, SIGNAL(valueChanged(double)),
 //             this, SLOT(slotTimer()));
-// 
+//
 //     connect(m_dampingInput, SIGNAL(valueChanged(double)),
 //             this, SLOT(slotTimer()));
-// 
+//
 //     connect(m_phaseInput, SIGNAL(valueChanged(double)),
 //             this, SLOT(slotTimer()));
 }

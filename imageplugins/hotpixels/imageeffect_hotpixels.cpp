@@ -6,24 +6,24 @@
  * Date        : 2005-03-27
  * Description : a digiKam image plugin for fixing dots produced by
  *               hot/stuck/dead pixels from a CCD.
- * 
+ *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
-// Qt includes. 
+// Qt includes.
 
 #include <qcombobox.h>
 #include <qlabel.h>
@@ -46,6 +46,7 @@
 // Local includes.
 
 #include "version.h"
+#include "daboutdata.h"
 #include "ddebug.h"
 #include "dimg.h"
 #include "imageiface.h"
@@ -59,24 +60,24 @@ namespace DigikamHotPixelsImagesPlugin
 {
 
 ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
-                     : CtrlPanelDlg(parent, i18n("Hot Pixels Correction"), 
-                                    "hotpixels", false, false, false, 
+                     : CtrlPanelDlg(parent, i18n("Hot Pixels Correction"),
+                                    "hotpixels", false, false, false,
                                     Digikam::ImagePannelWidget::SeparateViewDuplicate)
 {
     // No need Abort button action.
-    showButton(User1, false); 
+    showButton(User1, false);
 
     QString whatsThis;
 
     KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Hot Pixels Correction"), 
+                                       I18N_NOOP("Hot Pixels Correction"),
                                        digikam_version,
                                        I18N_NOOP("A digiKam image plugin for fixing dots produced by "
                                                  "hot/stuck/dead pixels from a CCD."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005-2006, Unai Garro\n(c) 2005-2008, Gilles Caulier", 
+                                       "(c) 2005-2006, Unai Garro\n(c) 2005-2008, Gilles Caulier",
                                        0,
-                                       "http://www.digikam.org");
+                                       Digikam::webProjectUrl());
 
     about->addAuthor("Unai Garro", I18N_NOOP("Author and maintainer"),
                      "ugarro at sourceforge dot net");
@@ -98,9 +99,9 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     m_filterMethodCombo->insertItem(i18n("Quadratic"));
     m_filterMethodCombo->insertItem(i18n("Cubic"));
 
-    m_blackFrameButton = new QPushButton(i18n("Black Frame..."), gboxSettings);    
+    m_blackFrameButton = new QPushButton(i18n("Black Frame..."), gboxSettings);
     setButtonWhatsThis( Apply, i18n("<p>Use this button to add a new black frame file which will "
-                                    "be used by the hot pixels removal filter.") );  
+                                    "be used by the hot pixels removal filter.") );
 
     m_blackFrameListView = new BlackFrameListView(gboxSettings);
     m_progressBar        = new KProgress(100, gboxSettings);
@@ -124,7 +125,7 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
             this, SLOT(slotAddBlackFrame()));
 
     connect(m_blackFrameListView, SIGNAL(blackFrameSelected(QValueList<HotPixel>, const KURL&)),
-            this, SLOT(slotBlackFrame(QValueList<HotPixel>, const KURL&))); 
+            this, SLOT(slotBlackFrame(QValueList<HotPixel>, const KURL&)));
 }
 
 ImageEffect_HotPixels::~ImageEffect_HotPixels()
@@ -165,7 +166,7 @@ void ImageEffect_HotPixels::resetValues()
     m_filterMethodCombo->blockSignals(true);
     m_filterMethodCombo->setCurrentItem(HotPixelFixer::QUADRATIC_INTERPOLATION);
     m_filterMethodCombo->blockSignals(false);
-} 
+}
 
 void ImageEffect_HotPixels::slotAddBlackFrame()
 {
@@ -210,19 +211,19 @@ void ImageEffect_HotPixels::prepareEffect()
 {
     m_filterMethodCombo->setEnabled(false);
     m_blackFrameListView->setEnabled(false);
-    enableButton(Apply, false);     
+    enableButton(Apply, false);
 
     Digikam::DImg image     = m_imagePreviewWidget->getOriginalRegionImage();
     int interpolationMethod = m_filterMethodCombo->currentItem();
 
     QValueList<HotPixel> hotPixelsRegion;
     QRect area = m_imagePreviewWidget->getOriginalImageRegionToRender();
-    QValueList<HotPixel>::Iterator end(m_hotPixelsList.end()); 
-    
+    QValueList<HotPixel>::Iterator end(m_hotPixelsList.end());
+
     for (QValueList<HotPixel>::Iterator it = m_hotPixelsList.begin() ; it != end ; ++it )
     {
         HotPixel hp = (*it);
-        
+
         if ( area.contains( hp.rect ) )
         {
            hp.rect.moveTopLeft(QPoint( hp.rect.x()-area.x(), hp.rect.y()-area.y() ));
@@ -238,8 +239,8 @@ void ImageEffect_HotPixels::prepareFinal()
 {
     m_filterMethodCombo->setEnabled(false);
     m_blackFrameListView->setEnabled(false);
-    enableButton(Apply, false);     
-        
+    enableButton(Apply, false);
+
     int interpolationMethod = m_filterMethodCombo->currentItem();
 
     Digikam::ImageIface iface(0, 0);
@@ -262,17 +263,17 @@ void ImageEffect_HotPixels::slotBlackFrame(QValueList<HotPixel> hpList, const KU
 {
     m_blackFrameURL = blackFrameURL;
     m_hotPixelsList = hpList;
-    
+
     QPointArray pointList(m_hotPixelsList.size());
     QValueList <HotPixel>::Iterator it;
     int i = 0;
     QValueList <HotPixel>::Iterator end(m_hotPixelsList.end());
-    
+
     for (it = m_hotPixelsList.begin() ; it != end ; ++it, i++)
        pointList.setPoint(i, (*it).rect.center());
-        
+
     m_imagePreviewWidget->setPanIconHighLightPoints(pointList);
-    
+
     slotEffect();
 }
 

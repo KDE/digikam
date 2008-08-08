@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-08-26
- * Description : a digikam image editor plugin to 
+ * Description : a digikam image editor plugin to
  *               simulate charcoal drawing.
  *
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -41,6 +41,7 @@
 // Local includes.
 
 #include "version.h"
+#include "daboutdata.h"
 #include "ddebug.h"
 #include "dimg.h"
 #include "imageiface.h"
@@ -53,62 +54,62 @@ namespace DigikamCharcoalImagesPlugin
 {
 
 ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
-                    : Digikam::CtrlPanelDlg(parent, i18n("Charcoal Drawing"), 
+                    : Digikam::CtrlPanelDlg(parent, i18n("Charcoal Drawing"),
                                             "charcoal", false, false, true,
                                             Digikam::ImagePannelWidget::SeparateViewAll)
 {
     QString whatsThis;
-        
+
     KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Charcoal Drawing"), 
+                                       I18N_NOOP("Charcoal Drawing"),
                                        digikam_version,
                                        I18N_NOOP("A digiKam charcoal drawing image effect plugin."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2008, Gilles Caulier", 
+                                       "(c) 2004-2008, Gilles Caulier",
                                        0,
-                                       "http://www.digikam.org");
-    
+                                       Digikam::webProjectUrl());
+
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");
-    
+
     setAboutData(about);
-        
+
     // -------------------------------------------------------------
-    
+
     QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 1, 0, spacingHint());
     QLabel *label1 = new QLabel(i18n("Pencil size:"), gboxSettings);
-    
+
     m_pencilInput = new KIntNumInput(gboxSettings);
-    m_pencilInput->setRange(1, 100, 1, true);  
+    m_pencilInput->setRange(1, 100, 1, true);
     m_pencilInput->setValue(5);
     QWhatsThis::add( m_pencilInput, i18n("<p>Set here the charcoal pencil size used to simulate the drawing."));
 
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
     gridSettings->addMultiCellWidget(m_pencilInput, 1, 1, 0, 1);
-    
+
     // -------------------------------------------------------------
-    
+
     QLabel *label2 = new QLabel(i18n("Smooth:"), gboxSettings);
-    
+
     m_smoothInput = new KIntNumInput(gboxSettings);
-    m_smoothInput->setRange(1, 100, 1, true);  
+    m_smoothInput->setRange(1, 100, 1, true);
     m_smoothInput->setValue(10);
     QWhatsThis::add( m_smoothInput, i18n("<p>This value controls the smoothing effect of the pencil "
                                          "under the canvas."));
 
     gridSettings->addMultiCellWidget(label2, 2, 2, 0, 1);
     gridSettings->addMultiCellWidget(m_smoothInput, 3, 3, 0, 1);
-    
+
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
-    
+
     // -------------------------------------------------------------
-    
+
     connect(m_pencilInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));      
-                
+            this, SLOT(slotTimer()));
+
     connect(m_smoothInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));      
+            this, SLOT(slotTimer()));
 }
 
 ImageEffect_Charcoal::~ImageEffect_Charcoal()
@@ -150,16 +151,16 @@ void ImageEffect_Charcoal::resetValues()
     m_smoothInput->setValue(10);
     m_pencilInput->blockSignals(false);
     m_smoothInput->blockSignals(false);
-} 
+}
 
 void ImageEffect_Charcoal::prepareEffect()
 {
     m_pencilInput->setEnabled(false);
     m_smoothInput->setEnabled(false);
-            
+
     double pencil = (double)m_pencilInput->value()/10.0;
     double smooth = (double)m_smoothInput->value();
-    
+
     Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
 
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new Charcoal(&image, this, pencil, smooth));
@@ -169,12 +170,12 @@ void ImageEffect_Charcoal::prepareFinal()
 {
     m_pencilInput->setEnabled(false);
     m_smoothInput->setEnabled(false);
-    
+
     double pencil = (double)m_pencilInput->value()/10.0;
     double smooth = (double)m_smoothInput->value();
 
     Digikam::ImageIface iface(0, 0);
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new Charcoal(iface.getOriginalImg(), 
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new Charcoal(iface.getOriginalImg(),
                                                                    this, pencil, smooth));
 }
 

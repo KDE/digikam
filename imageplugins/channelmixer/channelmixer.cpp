@@ -8,8 +8,8 @@
  *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
- * Load and save mixer gains methods inspired from 
- * Gimp 2.2.3 and copyrighted 2002 by Martin Guldahl 
+ * Load and save mixer gains methods inspired from
+ * Gimp 2.2.3 and copyrighted 2002 by Martin Guldahl
  * <mguldahl at xmission dot com>.
  *
  * This program is free software; you can redistribute it
@@ -39,7 +39,7 @@
 #include <qgroupbox.h>
 #include <qhgroupbox.h>
 #include <qvgroupbox.h>
-#include <qhbuttongroup.h> 
+#include <qhbuttongroup.h>
 #include <qlabel.h>
 #include <qpainter.h>
 #include <qcombobox.h>
@@ -74,6 +74,7 @@
 // Local includes.
 
 #include "version.h"
+#include "daboutdata.h"
 #include "dimg.h"
 #include "ddebug.h"
 #include "imageiface.h"
@@ -89,7 +90,7 @@ namespace DigikamChannelMixerImagesPlugin
 {
 
 ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
-                  : Digikam::ImageDlgBase(parent, i18n("Color Channel Mixer"), 
+                  : Digikam::ImageDlgBase(parent, i18n("Color Channel Mixer"),
                     "channelmixer", true, false)
 {
     m_destinationPreviewData = 0L;
@@ -103,7 +104,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
                                        KAboutData::License_GPL,
                                        "(c) 2005-2008, Gilles Caulier",
                                        0,
-                                       "http://www.digikam.org");
+                                       Digikam::webProjectUrl());
 
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");
@@ -116,7 +117,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
                           i18n("<p>You can see here the image's color channels' "
                                "gains adjustments preview. You can pick color on image "
                                "to see the color level corresponding on histogram."));
-    setPreviewAreaWidget(m_previewWidget); 
+    setPreviewAreaWidget(m_previewWidget);
 
     // -------------------------------------------------------------
 
@@ -176,26 +177,26 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
                                              "of the selected image channel. This one is re-computed at any "
                                              "mixer settings changes."));
     QLabel *space = new QLabel(histoBox);
-    space->setFixedHeight(1);    
+    space->setFixedHeight(1);
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
-    
+
     grid->addMultiCellWidget(histoBox, 1, 2, 0, 4);
-    
+
     // -------------------------------------------------------------
-        
+
     QLabel *redLabel = new QLabel(i18n("Red:"), gboxSettings);
     m_redGain = new KDoubleNumInput(gboxSettings);
     m_redGain->setPrecision(0);
     m_redGain->setRange(-200.0, 200.0, 1, true);
     QWhatsThis::add( m_redGain, i18n("<p>Select the red color gain in percent for the current channel here."));
-    
+
     QLabel *blueLabel = new QLabel(i18n("Blue:"), gboxSettings);
     m_greenGain = new KDoubleNumInput(gboxSettings);
     m_greenGain->setPrecision(0);
     m_greenGain->setRange(-200.0, 200.0, 1, true);
     QWhatsThis::add( m_greenGain, i18n("<p>Select the green color gain in percent for the current channel here."));
-    
+
     QLabel *greenLabel = new QLabel(i18n("Green:"), gboxSettings);
     m_blueGain = new KDoubleNumInput(gboxSettings);
     m_blueGain->setPrecision(0);
@@ -214,20 +215,20 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
     grid->addMultiCellWidget(m_resetButton, 6, 6, 0, 1);
 
     // -------------------------------------------------------------
-    
+
     m_monochrome = new QCheckBox( i18n("Monochrome"), gboxSettings);
     QWhatsThis::add( m_monochrome, i18n("<p>Enable this option if you want the image rendered in monochrome mode. "
                                         "In this mode, the histogram will display only luminosity values."));
-    
+
     m_preserveLuminosity = new QCheckBox( i18n("Preserve luminosity"), gboxSettings);
     QWhatsThis::add( m_preserveLuminosity, i18n("<p>Enable this option is you want preserve the image luminosity."));
-    
+
     grid->addMultiCellWidget(m_monochrome, 7, 7, 0, 4);
     grid->addMultiCellWidget(m_preserveLuminosity, 8, 8, 0, 4);
     grid->setRowStretch(9, 10);
-    
+
     setUserAreaWidget(gboxSettings);
-    
+
     // -------------------------------------------------------------
     // Channels and scale selection slots.
 
@@ -239,27 +240,27 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
 
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
-                        
+
     connect(m_previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));                             
-    
+            this, SLOT(slotEffect()));
+
     // -------------------------------------------------------------
     // Gains settings slots.
 
     connect(m_redGain, SIGNAL(valueChanged(double)),
-            this, SLOT(slotGainsChanged()));  
+            this, SLOT(slotGainsChanged()));
 
     connect(m_greenGain, SIGNAL(valueChanged(double)),
-            this, SLOT(slotGainsChanged()));  
-    
+            this, SLOT(slotGainsChanged()));
+
     connect(m_blueGain, SIGNAL(valueChanged(double)),
-            this, SLOT(slotGainsChanged()));  
+            this, SLOT(slotGainsChanged()));
 
     connect(m_preserveLuminosity, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));             
-    
+            this, SLOT(slotEffect()));
+
     connect(m_monochrome, SIGNAL(toggled (bool)),
-            this, SLOT(slotMonochromeActived(bool)));             
+            this, SLOT(slotMonochromeActived(bool)));
 
     // -------------------------------------------------------------
     // Bouttons slots.
@@ -272,9 +273,9 @@ ChannelMixerDialog::~ChannelMixerDialog()
 {
     m_histogramWidget->stopHistogramComputation();
 
-    if (m_destinationPreviewData) 
+    if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
-       
+
     delete m_histogramWidget;
 }
 
@@ -309,7 +310,7 @@ void ChannelMixerDialog::slotResetCurrentChannel()
           }
           break;
     }
-    
+
     adjustSliders();
     slotEffect();
     m_histogramWidget->reset();
@@ -390,7 +391,7 @@ void ChannelMixerDialog::adjustSliders(void)
           }
           break;
     }
-    
+
     m_redGain->blockSignals(false);
     m_greenGain->blockSignals(false);
     m_blueGain->blockSignals(false);
@@ -410,13 +411,13 @@ void ChannelMixerDialog::slotEffect()
     int w                      = iface->previewWidth();
     int h                      = iface->previewHeight();
     bool sb                    = iface->previewSixteenBit();
-    
+
     // Create the new empty destination image data space.
     m_histogramWidget->stopHistogramComputation();
 
-    if (m_destinationPreviewData) 
+    if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
-    
+
     m_destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
     Digikam::DImgImageFilters filter;
 
@@ -438,10 +439,10 @@ void ChannelMixerDialog::slotEffect()
                 m_greenRedGain, m_greenGreenGain, m_greenBlueGain,              // Green channel gains.
                 m_blueRedGain,  m_blueGreenGain,  m_blueBlueGain);              // Blue channel gains.
     }
-    
+
     iface->putPreviewImage(data);
     m_previewWidget->updatePreview();
-    
+
     // Update histogram.
     memcpy (m_destinationPreviewData, data, w*h*(sb ? 8 : 4));
     m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
@@ -502,12 +503,12 @@ void ChannelMixerDialog::slotChannelChanged(int channel)
           if ( m_monochrome->isChecked() )
           {
              m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
-             m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );          
+             m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
           }
           else
           {
              m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
-             m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );          
+             m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
           }
           break;
     }
@@ -534,21 +535,21 @@ void ChannelMixerDialog::readUserSettings()
     m_monochrome->setChecked(config->readBoolEntry("Monochrome", false));
     m_preserveLuminosity->setChecked(config->readNumEntry("PreserveLuminosity", false));
 
-    m_redRedGain     = config->readDoubleNumEntry("RedRedGain", 1.0); 
-    m_redGreenGain   = config->readDoubleNumEntry("RedGreenGain", 0.0); 
-    m_redBlueGain    = config->readDoubleNumEntry("RedBlueGain", 0.0); 
-    
+    m_redRedGain     = config->readDoubleNumEntry("RedRedGain", 1.0);
+    m_redGreenGain   = config->readDoubleNumEntry("RedGreenGain", 0.0);
+    m_redBlueGain    = config->readDoubleNumEntry("RedBlueGain", 0.0);
+
     m_greenRedGain   = config->readDoubleNumEntry("GreenRedGain", 0.0);
-    m_greenGreenGain = config->readDoubleNumEntry("GreenGreenGain", 1.0); 
+    m_greenGreenGain = config->readDoubleNumEntry("GreenGreenGain", 1.0);
     m_greenBlueGain  = config->readDoubleNumEntry("GreenBlueGain", 0.0);
-    
+
     m_blueRedGain    = config->readDoubleNumEntry("BlueRedGain", 0.0);
     m_blueGreenGain  = config->readDoubleNumEntry("BlueGreenGain", 0.0);
     m_blueBlueGain   = config->readDoubleNumEntry("BlueBlueGain", 1.0);
 
-    m_blackRedGain   = config->readDoubleNumEntry("BlackRedGain", 1.0); 
-    m_blackGreenGain = config->readDoubleNumEntry("BlackGreenGain", 0.0); 
-    m_blackBlueGain  = config->readDoubleNumEntry("BlackBlueGain", 0.0); 
+    m_blackRedGain   = config->readDoubleNumEntry("BlackRedGain", 1.0);
+    m_blackGreenGain = config->readDoubleNumEntry("BlackGreenGain", 0.0);
+    m_blackBlueGain  = config->readDoubleNumEntry("BlackBlueGain", 0.0);
 
     adjustSliders();
     m_histogramWidget->reset();
@@ -590,29 +591,29 @@ void ChannelMixerDialog::resetValues()
 {
     m_monochrome->blockSignals(true);
     m_preserveLuminosity->blockSignals(true);
-    
-    m_redRedGain     = 1.0; 
-    m_redGreenGain   = 0.0; 
-    m_redBlueGain    = 0.0; 
-    
+
+    m_redRedGain     = 1.0;
+    m_redGreenGain   = 0.0;
+    m_redBlueGain    = 0.0;
+
     m_greenRedGain   = 0.0;
-    m_greenGreenGain = 1.0; 
+    m_greenGreenGain = 1.0;
     m_greenBlueGain  = 0.0;
-    
+
     m_blueRedGain    = 0.0;
     m_blueGreenGain  = 0.0;
     m_blueBlueGain   = 1.0;
 
-    m_blackRedGain   = 1.0; 
-    m_blackGreenGain = 0.0; 
-    m_blackBlueGain  = 0.0; 
+    m_blackRedGain   = 1.0;
+    m_blackGreenGain = 0.0;
+    m_blackBlueGain  = 0.0;
 
     adjustSliders();
-    
+
     m_monochrome->blockSignals(false);
     m_preserveLuminosity->blockSignals(false);
     m_channelCB->setEnabled(true);
-    
+
     m_histogramWidget->reset();
 
     slotChannelChanged(RedChannelGains);
@@ -625,15 +626,15 @@ void ChannelMixerDialog::slotUser3()
     FILE *fp = 0L;
     int currentOutputChannel;
     bool monochrome;
-    
+
     loadGainsFileUrl = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Select Gimp Gains Mixer File to Load")) );
     if( loadGainsFileUrl.isEmpty() )
        return;
 
-    fp = fopen(QFile::encodeName(loadGainsFileUrl.path()), "r");   
-    
+    fp = fopen(QFile::encodeName(loadGainsFileUrl.path()), "r");
+
     if ( fp )
     {
         char buf1[1024];
@@ -645,27 +646,27 @@ void ChannelMixerDialog::slotUser3()
         fgets(buf1, 1023, fp);
 
         fscanf (fp, "%*s %s", buf1);
-        
+
         // Get the current output channel in dialog.
-        
+
         if (strcmp (buf1, "RED") == 0)
             currentOutputChannel = RedChannelGains;
         else if (strcmp (buf1, "GREEN") == 0)
-            currentOutputChannel = GreenChannelGains; 
+            currentOutputChannel = GreenChannelGains;
         else if (strcmp (buf1, "BLUE") == 0)
-            currentOutputChannel = BlueChannelGains;  
+            currentOutputChannel = BlueChannelGains;
 
-        fscanf (fp, "%*s %s", buf1); // preview flag, preserved for compatibility 
+        fscanf (fp, "%*s %s", buf1); // preview flag, preserved for compatibility
 
         fscanf (fp, "%*s %s", buf1);
-          
+
         if (strcmp (buf1, "true") == 0)
             monochrome = true;
         else
             monochrome = false;
 
         fscanf (fp, "%*s %s", buf1);
-        
+
         if (strcmp (buf1, "true") == 0)
             m_preserveLuminosity->setChecked(true);
         else
@@ -675,22 +676,22 @@ void ChannelMixerDialog::slotUser3()
         m_redRedGain = atof(buf1);
         m_redGreenGain = atof(buf2);
         m_redBlueGain = atof(buf3);
-        
+
         fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
         m_greenRedGain = atof(buf1);
         m_greenGreenGain = atof(buf2);
         m_greenBlueGain = atof(buf3);
-        
+
         fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
         m_blueRedGain = atof(buf1);
         m_blueGreenGain = atof(buf2);
         m_blueBlueGain = atof(buf3);
-        
+
         fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
         m_blackRedGain = atof(buf1);
         m_blackGreenGain = atof(buf2);
         m_blackBlueGain = atof(buf3);
-        
+
         fclose(fp);
 
         // Refresh settings.
@@ -710,15 +711,15 @@ void ChannelMixerDialog::slotUser2()
 {
     KURL saveGainsFileUrl;
     FILE *fp = 0L;
-    
+
     saveGainsFileUrl = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                                QString( "*" ), this,
                                                QString( i18n("Gimp Gains Mixer File to Save")) );
     if( saveGainsFileUrl.isEmpty() )
        return;
 
-    fp = fopen(QFile::encodeName(saveGainsFileUrl.path()), "w");   
-    
+    fp = fopen(QFile::encodeName(saveGainsFileUrl.path()), "w");
+
     if ( fp )
     {
         const char *str = 0L;
@@ -745,18 +746,18 @@ void ChannelMixerDialog::slotUser2()
         fprintf (fp, "# Channel Mixer Configuration File\n");
 
         fprintf (fp, "CHANNEL: %s\n", str);
-        fprintf (fp, "PREVIEW: %s\n", "true"); // preserved for compatibility 
+        fprintf (fp, "PREVIEW: %s\n", "true"); // preserved for compatibility
         fprintf (fp, "MONOCHROME: %s\n",
                  m_monochrome->isChecked() ? "true" : "false");
         fprintf (fp, "PRESERVE_LUMINOSITY: %s\n",
                  m_preserveLuminosity->isChecked() ? "true" : "false");
 
-        sprintf (buf1, "%5.3f", m_redRedGain);                 
+        sprintf (buf1, "%5.3f", m_redRedGain);
         sprintf (buf2, "%5.3f", m_redGreenGain);
         sprintf (buf3, "%5.3f", m_redBlueGain);
         fprintf (fp, "RED: %s %s %s\n", buf1, buf2,buf3);
 
-        sprintf (buf1, "%5.3f", m_greenRedGain);                 
+        sprintf (buf1, "%5.3f", m_greenRedGain);
         sprintf (buf2, "%5.3f", m_greenGreenGain);
         sprintf (buf3, "%5.3f", m_greenBlueGain);
         fprintf (fp, "GREEN: %s %s %s\n", buf1, buf2,buf3);
@@ -770,7 +771,7 @@ void ChannelMixerDialog::slotUser2()
         sprintf (buf2, "%5.3f", m_blackGreenGain);
         sprintf (buf3, "%5.3f", m_blackBlueGain);
         fprintf (fp, "BLACK: %s %s %s\n", buf1, buf2,buf3);
-        
+
         fclose (fp);
     }
     else
