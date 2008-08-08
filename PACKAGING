@@ -5,7 +5,7 @@ Notice to make release tarballs from SVN
    TODO: not clear where an how to store them yet. 
 
 1/ Update the release info in these files and commit it to svn :
-   - digikam/digikam/daboutdata.h (digikam_version and showfoto_version)
+   - digikam/digikam/daboutdata.h ("digikam_version" and "showfoto_version")
    - digikam/digikam.lsm - update date as well
   
 2/ Edited release_digikam.rb and release_digikam_docs.rb script. Update these settings :
