@@ -5,8 +5,8 @@
  *
  * Date        : 2004-12-01
  * Description : image curves manipulation methods.
- * 
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Some code parts are inspired from gimp 2.0
  * app/base/curves.c, gimplut.c, and app/base/gimpcurvetool.c 
@@ -18,18 +18,18 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
 // C++ includes.
- 
+
 #include <cstdio>
 #include <cmath>
 #include <cstring>
@@ -527,6 +527,20 @@ QPoint ImageCurves::getCurvePoint(int channel, int point)
     return QPoint(-1, -1);
 }
 
+QPointArray ImageCurves::getCurvePoints(int channel)
+{
+    QPointArray array(16);
+
+    if ( d->curves &&
+         channel>=0 && channel<5)
+    {
+        for (int j = 0 ; j < 17 ; j++)
+        array.setPoint(j, getCurvePoint(channel, j));
+    }
+
+    return array;
+}
+
 int ImageCurves::getCurvePointX(int channel, int point)
 {
     if ( d->curves &&
@@ -564,7 +578,7 @@ void ImageCurves::setCurveValue(int channel, int bin, int val)
        d->curves->curve[channel][bin] = val;
 }
 
-void ImageCurves::setCurvePoint(int channel, int point, QPoint val)
+void ImageCurves::setCurvePoint(int channel, int point, const QPoint& val)
 {
     if ( d->curves &&
          channel>=0 && channel<5 && 
@@ -574,6 +588,17 @@ void ImageCurves::setCurvePoint(int channel, int point, QPoint val)
     {
        d->curves->points[channel][point][0] = val.x();
        d->curves->points[channel][point][1] = val.y();
+    }
+}
+
+void ImageCurves::setCurvePoints(int channel, const QPointArray& vals)
+{
+    if ( d->curves &&
+         channel>=0 && channel<5 && 
+         vals.size() != 16 )
+    {
+        for (int j = 0 ; j < 17 ; j++)
+            setCurvePoint(channel, j, vals.point(j));
     }
 }
 
