@@ -5,8 +5,8 @@
  *
  * Date        : 2004-12-01
  * Description : image curves manipulation methods.
- * 
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Some code parts are inspired from gimp 2.0
  * app/base/curves.c, gimplut.c, and app/base/gimpcurvetool.c 
@@ -18,18 +18,18 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
 // C++ includes.
- 
+
 #include <cstdio>
 #include <cmath>
 #include <cstring>
@@ -50,7 +50,7 @@ namespace Digikam
 
 class ImageCurvesPriv
 {
-    
+
 public:
 
     struct _Curves
@@ -59,7 +59,7 @@ public:
         int                    points[5][17][2];  // Curve main points in Smooth mode ([channel][point id][x,y]).
         unsigned short         curve[5][65536];   // Curve values by channels.
     };
-    
+
     struct _Lut
     {
         unsigned short **luts;
@@ -76,7 +76,7 @@ public:
 
     // Curves data.
     struct _Curves *curves;
-    
+
     // Lut data.
     struct _Lut    *lut;
 
@@ -102,7 +102,7 @@ ImageCurves::ImageCurves(bool sixteenBit)
 }
 
 ImageCurves::~ImageCurves()
-{ 
+{
     if (d->lut)
     {
        if (d->lut->luts)
@@ -112,17 +112,17 @@ ImageCurves::~ImageCurves()
 
           delete [] d->lut->luts;
        }
-       
+
        delete d->lut;
     }
-    
+
     if (d->curves)
        delete d->curves;
-       
+
     delete d;
 }
 
-void ImageCurves::curvesReset(void)
+void ImageCurves::curvesReset()
 {
     memset(d->curves, 0, sizeof(struct ImageCurvesPriv::_Curves));
     d->lut->luts      = NULL;
@@ -138,16 +138,16 @@ void ImageCurves::curvesReset(void)
 void ImageCurves::curvesChannelReset(int channel)
 {
     int j;
-    
+
     if (!d->curves) return;
 
     // Contruct a linear curve.
-    
+
     for (j = 0 ; j <= d->segmentMax ; j++)
        d->curves->curve[channel][j] = j;
 
     // Init coordinates points to null.
-       
+
     for (j = 0 ; j < 17 ; j++)
     {
        d->curves->points[channel][j][0] = -1;
@@ -155,7 +155,7 @@ void ImageCurves::curvesChannelReset(int channel)
     }
 
     // First and last points init.
-       
+
     d->curves->points[channel][0][0]  = 0;
     d->curves->points[channel][0][1]  = 0;
     d->curves->points[channel][16][0] = d->segmentMax;
@@ -178,23 +178,23 @@ void ImageCurves::curvesCalculateCurve(int channel)
 
        case CURVE_SMOOTH:
        {
-          //  Cycle through the curves  
-          
+          //  Cycle through the curves
+
           num_pts = 0;
-          
+
           for (i = 0 ; i < 17 ; i++)
              if (d->curves->points[channel][i][0] != -1)
                 points[num_pts++] = i;
 
-          //  Initialize boundary curve points 
-          
+          //  Initialize boundary curve points
+
           if (num_pts != 0)
           {
              for (i = 0 ; i < d->curves->points[channel][points[0]][0] ; i++)
              {
                 d->curves->curve[channel][i] = d->curves->points[channel][points[0]][1];
              }
-             
+
              for (i = d->curves->points[channel][points[num_pts - 1]][0] ; i <= d->segmentMax ; i++)
              {
                 d->curves->curve[channel][i] = d->curves->points[channel][points[num_pts - 1]][1];
@@ -212,7 +212,7 @@ void ImageCurves::curvesCalculateCurve(int channel)
           }
 
           // Ensure that the control points are used exactly 
-      
+
           for (i = 0 ; i < num_pts ; i++)
           {
              int x, y;
@@ -245,14 +245,14 @@ float ImageCurves::curvesLutFunc(int n_channels, int channel, float value)
 
     // For color images this runs through the loop with j = channel +1
     // the first time and j = 0 the second time.
-    
+
     // For bw images this runs through the loop with j = 0 the first and
     // only time.
-    
+
     for ( ; j >= 0 ; j -= (channel + 1))
     {
        // Don't apply the overall curve to the alpha channel.
-       
+
        if (j == 0 && (n_channels == 2 || n_channels == 4) && channel == n_channels -1)
           return inten;
 
@@ -288,7 +288,7 @@ void ImageCurves::curvesPlotCurve(int channel, int p1, int p2, int p3, int p4)
     if (!d->curves) return;
 
     // Construct the geometry matrix from the segment.
-  
+
     for (i = 0 ; i < 4 ; i++)
     {
        geometry[i][2] = 0;
@@ -305,35 +305,35 @@ void ImageCurves::curvesPlotCurve(int channel, int p1, int p2, int p3, int p4)
 
     // Subdivide the curve 1000 times.
     // n can be adjusted to give a finer or coarser curve.
-    
+
     d1  = 1.0 / loopdiv;
     d2 = d1 * d1;
     d3 = d1 * d1 * d1;
 
     // Construct a temporary matrix for determining the forward differencing deltas.
-  
+
     tmp2[0][0] = 0;     tmp2[0][1] = 0;     tmp2[0][2] = 0;    tmp2[0][3] = 1;
     tmp2[1][0] = d3;    tmp2[1][1] = d2;    tmp2[1][2] = d1;   tmp2[1][3] = 0;
     tmp2[2][0] = 6*d3;  tmp2[2][1] = 2*d2;  tmp2[2][2] = 0;    tmp2[2][3] = 0;
     tmp2[3][0] = 6*d3;  tmp2[3][1] = 0;     tmp2[3][2] = 0;    tmp2[3][3] = 0;
 
     // Compose the basis and geometry matrices.
-  
+
     curvesCRCompose(CR_basis, geometry, tmp1);
 
     // Compose the above results to get the deltas matrix.
-  
+
     curvesCRCompose(tmp2, tmp1, deltas);
 
     // Extract the x deltas.
-    
+
     x   = deltas[0][0];
     dx  = deltas[1][0];
     dx2 = deltas[2][0];
     dx3 = deltas[3][0];
 
     // Extract the y deltas.
-    
+
     y   = deltas[0][1];
     dy  = deltas[1][1];
     dy2 = deltas[2][1];
@@ -345,17 +345,17 @@ void ImageCurves::curvesPlotCurve(int channel, int p1, int p2, int p3, int p4)
     d->curves->curve[channel][lastx] = lasty;
 
     // Loop over the curve.
-    
+
     for (i = 0 ; i < loopdiv ; i++)
     {
        // Increment the x values.
-       
+
        x   += dx;
        dx  += dx2;
        dx2 += dx3;
 
        // Increment the y values.
-      
+
        y   += dy;
        dy  += dy2;
        dy2 += dy3;
@@ -364,7 +364,7 @@ void ImageCurves::curvesPlotCurve(int channel, int p1, int p2, int p3, int p4)
        newy = CLAMP(ROUND (y), 0, d->segmentMax);
 
        // If this point is different than the last one...then draw it.
-      
+
        if ((lastx != newx) || (lasty != newy))
           d->curves->curve[channel][newx] = newy;
 
@@ -405,7 +405,7 @@ void ImageCurves::curvesLutSetup(int nchannels)
 
     d->lut->nchannels = nchannels;
     d->lut->luts      = new unsigned short*[d->lut->nchannels];
-    
+
     for (i = 0 ; i < d->lut->nchannels ; i++)
     {
        d->lut->luts[i] = new unsigned short[d->segmentMax+1];
@@ -413,9 +413,9 @@ void ImageCurves::curvesLutSetup(int nchannels)
        for (v = 0 ; v <= (uint)d->segmentMax ; v++)
        {
           // To add gamma correction use func(v ^ g) ^ 1/g instead. 
-          
+
           val = (float)(d->segmentMax) * curvesLutFunc( d->lut->nchannels, i, v / (float)(d->segmentMax)) + 0.5;
-                        
+
           d->lut->luts[i][v] = (unsigned short)CLAMP (val, 0, d->segmentMax);
        }
     }
@@ -424,7 +424,7 @@ void ImageCurves::curvesLutSetup(int nchannels)
 void ImageCurves::curvesLutProcess(uchar *srcPR, uchar *destPR, int w, int h)
 {
     unsigned short *lut0 = NULL, *lut1 = NULL, *lut2 = NULL, *lut3 = NULL;
-    
+
     int       i;
 
     if (d->lut->nchannels > 0)
@@ -435,13 +435,13 @@ void ImageCurves::curvesLutProcess(uchar *srcPR, uchar *destPR, int w, int h)
        lut2 = d->lut->luts[2];
     if (d->lut->nchannels > 3)
        lut3 = d->lut->luts[3];
-    
+
     if (d->segmentMax == 255)        // 8 bits image.
     {
         uchar red, green, blue, alpha;
         uchar *ptr = srcPR;
         uchar *dst = destPR;
-        
+
         for (i = 0 ; i < w*h ; i++)
         {
             blue  = ptr[0];
@@ -451,16 +451,16 @@ void ImageCurves::curvesLutProcess(uchar *srcPR, uchar *destPR, int w, int h)
 
             if ( d->lut->nchannels > 0 )
                red = lut0[red];
-            
+
             if ( d->lut->nchannels > 1 )
                green = lut1[green];
-            
+
             if ( d->lut->nchannels > 2 )
                blue = lut2[blue];
-        
+
             if ( d->lut->nchannels > 3 )
                alpha = lut3[alpha];
-                       
+
             dst[0] = blue;
             dst[1] = green;
             dst[2] = red;
@@ -482,19 +482,19 @@ void ImageCurves::curvesLutProcess(uchar *srcPR, uchar *destPR, int w, int h)
             green = ptr[1];
             red   = ptr[2];
             alpha = ptr[3];
-        
+
             if ( d->lut->nchannels > 0 )
                red = lut0[red];
-            
+
             if ( d->lut->nchannels > 1 )
                green = lut1[green];
-            
+
             if ( d->lut->nchannels > 2 )
                blue = lut2[blue];
-        
+
             if ( d->lut->nchannels > 3 )
                alpha = lut3[alpha];
-                                
+
             dst[0] = blue;
             dst[1] = green;
             dst[2] = red;
@@ -503,16 +503,16 @@ void ImageCurves::curvesLutProcess(uchar *srcPR, uchar *destPR, int w, int h)
             ptr += 4;
             dst += 4;
         }
-    }    
+    }
 }
 
 int ImageCurves::getCurveValue(int channel, int bin)
-{    
+{
     if ( d->curves &&
          channel>=0 && channel<5 && 
          bin>=0 && bin<=d->segmentMax )
        return(d->curves->curve[channel][bin]);
-    
+
     return 0;
 }
 
@@ -523,8 +523,22 @@ QPoint ImageCurves::getCurvePoint(int channel, int point)
          point>=0 && point<=17 )
        return(QPoint(d->curves->points[channel][point][0],
                      d->curves->points[channel][point][1]) );
-    
+
     return QPoint(-1, -1);
+}
+
+QPointArray ImageCurves::getCurvePoints(int channel)
+{
+    QPointArray array(16);
+
+    if ( d->curves &&
+         channel>=0 && channel<5)
+    {
+        for (int j = 0 ; j < 17 ; j++)
+        array.setPoint(j, getCurvePoint(channel, j));
+    }
+
+    return array;
 }
 
 int ImageCurves::getCurvePointX(int channel, int point)
@@ -533,7 +547,7 @@ int ImageCurves::getCurvePointX(int channel, int point)
          channel>=0 && channel<5 && 
          point>=0 && point<=17 )
        return(d->curves->points[channel][point][0]);
-    
+
     return(-1);
 }
 
@@ -543,7 +557,7 @@ int ImageCurves::getCurvePointY(int channel, int point)
          channel>=0 && channel<5 && 
          point>=0 && point<=17 )
        return(d->curves->points[channel][point][1]);
-    
+
     return (-1);
 }
 
@@ -552,7 +566,7 @@ int ImageCurves::getCurveType(int channel)
     if ( d->curves &&
          channel>=0 && channel<5 )
        return ( d->curves->curve_type[channel] );
-    
+
     return (-1);
 }
 
@@ -564,7 +578,7 @@ void ImageCurves::setCurveValue(int channel, int bin, int val)
        d->curves->curve[channel][bin] = val;
 }
 
-void ImageCurves::setCurvePoint(int channel, int point, QPoint val)
+void ImageCurves::setCurvePoint(int channel, int point, const QPoint& val)
 {
     if ( d->curves &&
          channel>=0 && channel<5 && 
@@ -574,6 +588,17 @@ void ImageCurves::setCurvePoint(int channel, int point, QPoint val)
     {
        d->curves->points[channel][point][0] = val.x();
        d->curves->points[channel][point][1] = val.y();
+    }
+}
+
+void ImageCurves::setCurvePoints(int channel, const QPointArray& vals)
+{
+    if ( d->curves &&
+         channel>=0 && channel<5 && 
+         vals.size() != 16 )
+    {
+        for (int j = 0 ; j < 17 ; j++)
+            setCurvePoint(channel, j, vals.point(j));
     }
 }
 
@@ -610,7 +635,7 @@ void ImageCurves::setCurveType(int channel, CurveType type)
 bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl &fileUrl)
 {
     // TODO : support KUrl !
-    
+
     FILE *file;
     int   i, j;
     int   fields;
@@ -621,7 +646,7 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl &fileUrl)
     file = fopen(QFile::encodeName(fileUrl.path()), "r");
     if (!file)
        return false;
-    
+
     if (! fgets (buf, sizeof (buf), file))
     {
        fclose(file);
@@ -646,7 +671,7 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl &fileUrl)
     }
 
     curvesReset();
-    
+
     for (i = 0 ; i < 5 ; i++)
     {
        d->curves->curve_type[i] = CURVE_SMOOTH;
@@ -670,22 +695,22 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl &fileUrl)
 bool ImageCurves::saveCurvesToGimpCurvesFile(const KUrl &fileUrl)
 {
     // TODO : support KUrl !
-    
+
     FILE *file;
     int   i, j;
     int   index;
 
     file = fopen(QFile::encodeName(fileUrl.path()), "w");
-    
+
     if (!file)
        return false;
-    
+
     for (i = 0 ; i < 5 ; i++)
     {
        if (d->curves->curve_type[i] == CURVE_FREE)
        {
           //  Pick representative points from the curve and make them control points.
-   
+
           for (j = 0 ; j <= 8 ; j++)
           {
              index = CLAMP(j * 32, 0, d->segmentMax);
@@ -710,7 +735,7 @@ bool ImageCurves::saveCurvesToGimpCurvesFile(const KUrl &fileUrl)
           fprintf (file, "\n");
        }
     }
-    
+
     fflush(file);
     fclose(file);
 
