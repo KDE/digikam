@@ -25,9 +25,30 @@
 #ifndef DABOUT_DATA_H
 #define DABOUT_DATA_H
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+// C Ansi includes.
+
+extern "C"
+{
+#include <png.h>
+}
+
 // Qt includes.
 
 #include <qstring.h>
+
+// Libkexiv2 includes.
+
+#include <libkexiv2/kexiv2.h>
+#include <libkexiv2/version.h>
+
+// Libkdcraw includes.
+
+#include <libkdcraw/kdcraw.h>
+#include <libkdcraw/dcrawbinary.h>
 
 // KDE includes.
 
@@ -41,6 +62,34 @@ static const char showfoto_version[]    = "0.9.0-svn";
 
 namespace Digikam
 {
+static inline QString libraryInfo()
+{
+    QString DcrawVer    = KDcrawIface::DcrawBinary::internalVersion();
+
+    QString Exiv2Ver    = KExiv2Iface::KExiv2::Exiv2Version();
+
+    QString Kexiv2Ver;
+
+#if KEXIV2_VERSION <= 0x000106
+    Kexiv2Ver = QString(kexiv2_version);
+#else
+    Kexiv2Ver = KExiv2Iface::KExiv2::version();
+#endif
+
+    QString libInfo =
+        QString(I18N_NOOP("Using KExiv2 library version %1")).arg(Kexiv2Ver) +
+        QString("\n") +
+        QString(I18N_NOOP("Using Exiv2 library version %1")).arg(Exiv2Ver) +
+        QString("\n") +
+        QString(I18N_NOOP("Using KDcraw library version %1")).arg(KDcrawIface::KDcraw::version()) +
+        QString("\n") +
+        QString(I18N_NOOP("Using Dcraw program version %1")).arg(DcrawVer) +
+        QString("\n") +
+        QString(I18N_NOOP("Using PNG library version %1")).arg(PNG_LIBPNG_VER_STRING);
+
+    return libInfo;
+}
+
 static inline const char* digiKamDescription()
 {
     return I18N_NOOP("A Photo-Management Application for KDE");

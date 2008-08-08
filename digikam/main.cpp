@@ -50,24 +50,6 @@
 #include <libkipi/version.h>
 #include <libkipi/interface.h>
 
-// Libkexiv2 includes.
-
-#include <libkexiv2/version.h>
-#include <libkexiv2/kexiv2.h>
-
-// Libkdcraw includes.
-
-#include <libkdcraw/kdcraw.h>
-#include <libkdcraw/dcrawbinary.h>
-
-// C Ansi includes.
-
-extern "C"
-{
-#include <gphoto2-version.h>
-#include <png.h>
-}
-
 // Local includes.
 
 #include "daboutdata.h"
@@ -84,39 +66,7 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char *argv[])
 {
-    QString DcrawVer    = KDcrawIface::DcrawBinary::internalVersion();
-
-    QString Exiv2Ver    = KExiv2Iface::KExiv2::Exiv2Version();
-
-    QString Gphoto2Ver  = QString(gp_library_version(GP_VERSION_SHORT)[0]);
-
-    QString KipiVer, Kexiv2Ver;
-
-#if KIPI_VERSION <= 0x000105
-    KipiVer = QString(kipi_version);
-#else
-    KipiVer = KIPI::Interface::version();
-#endif
-
-#if KEXIV2_VERSION <= 0x000106
-    Kexiv2Ver = QString(kexiv2_version);
-#else
-    Kexiv2Ver = KExiv2Iface::KExiv2::version();
-#endif
-
-    QString libInfo     = QString(I18N_NOOP("Using Kipi library version %1")).arg(KipiVer) +
-                          QString("\n") +
-                          QString(I18N_NOOP("Using KExiv2 library version %1")).arg(Kexiv2Ver) +
-                          QString("\n") +
-                          QString(I18N_NOOP("Using Exiv2 library version %1")).arg(Exiv2Ver) +
-                          QString("\n") +
-                          QString(I18N_NOOP("Using KDcraw library version %1")).arg(KDcrawIface::KDcraw::version()) +
-                          QString("\n") +
-                          QString(I18N_NOOP("Using Dcraw program version %1")).arg(DcrawVer) +
-                          QString("\n") +
-                          QString(I18N_NOOP("Using PNG library version %1")).arg(PNG_LIBPNG_VER_STRING) +
-                          QString("\n") +
-                          QString(I18N_NOOP("Using Gphoto2 library version %1")).arg(Gphoto2Ver);
+    QString libInfo     = Digikam::libraryInfo();
 
     QString description = Digikam::digiKamDescription();
 
