@@ -2,10 +2,10 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2007-02-06
  * Description : setup RAW decoding settings.
- * 
+ *
  * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -36,9 +36,8 @@
 // KDE includes.
 
 #include <klocale.h>
+#include <kiconloader.h>
 #include <kdialog.h>
-#include <kcolorbutton.h>
-#include <knuminput.h>
 #include <kconfig.h>
 #include <kapplication.h>
 
@@ -75,6 +74,11 @@ SetupDcraw::SetupDcraw(QWidget* parent )
     d = new SetupDcrawPriv;
     QVBoxLayout *layout = new QVBoxLayout(parent, 0, KDialog::spacingHint());
     d->dcrawSettings    = new KDcrawIface::DcrawSettingsWidget(parent, true, false);
+#if KDCRAW_VERSION >= 0x000105
+    d->dcrawSettings->setItemIconSet(0, SmallIconSet("kdcraw"));
+    d->dcrawSettings->setItemIconSet(1, SmallIconSet("whitebalance"));
+    d->dcrawSettings->setItemIconSet(2, SmallIconSet("lensdistortion"));
+#endif
     layout->addWidget(d->dcrawSettings);
     layout->addStretch();
 
