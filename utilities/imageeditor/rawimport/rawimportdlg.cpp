@@ -286,6 +286,12 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
 #if KDCRAW_VERSION >= 0x000105
     d->decodingSettingsBox->addItem(d->advExposureBox, i18n("Exposure"));
     d->decodingSettingsBox->addItem(d->infoBox, i18n("Infos"));
+    d->decodingSettingsBox->setItemIconSet(0, SmallIconSet("kdcraw"));
+    d->decodingSettingsBox->setItemIconSet(1, SmallIconSet("whitebalance"));
+    d->decodingSettingsBox->setItemIconSet(2, SmallIconSet("lensdistortion"));
+    d->decodingSettingsBox->setItemIconSet(3, SmallIconSet("colormanagement"));
+    d->decodingSettingsBox->setItemIconSet(4, SmallIconSet("contrast"));
+    d->decodingSettingsBox->setItemIconSet(5, SmallIconSet("exifinfo"));
     d->decodingSettingsBox->updateMinimumWidth();
 #else
     d->decodingSettingsBox->insertTab(d->advExposureBox, i18n("Exposure"));
