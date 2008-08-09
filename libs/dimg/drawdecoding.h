@@ -26,6 +26,10 @@
 #ifndef DRAW_DECODING_H
 #define DRAW_DECODING_H
 
+// Qt includes.
+
+#include <QPolygon>
+
 // LibKDcraw includes.
 
 #include <libkdcraw/rawdecodingsettings.h>
@@ -50,6 +54,7 @@ public:
         saturation   = 1.0;
         exposureComp = 0.0;
         contrast     = 0.0;
+        curveAdjust  = QPolygon();
     };
 
     /** Standard destructor 
@@ -65,16 +70,18 @@ public:
         saturation   = 1.0;
         exposureComp = 0.0;
         contrast     = 0.0;
+        curveAdjust  = QPolygon();
     };
 
     /** Method to check is a post-processing setting have been changed 
      */
     bool postProcessingSettingsIsDirty()
     {
-        return (contrast     != 0.0 ||
-                gamma        != 1.0 ||
-                saturation   != 1.0 ||
-                exposureComp != 0.0);
+        return (contrast     != 0.0    ||
+                gamma        != 1.0    ||
+                saturation   != 1.0    ||
+                exposureComp != 0.0    ||
+                !curveAdjust.isEmpty());
     }
 
 public:
@@ -94,6 +101,10 @@ public:
     /** Exposure compensation value.
     */
     double exposureComp;
+
+    /** Luminosity curve adjustements.
+    */
+    QPolygon curveAdjust;
 };
 
 }  // namespace Digikam
