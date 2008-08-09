@@ -112,17 +112,17 @@ ImageCurves::~ImageCurves()
 
           delete [] d->lut->luts;
        }
-       
+
        delete d->lut;
     }
-    
+
     if (d->curves)
        delete d->curves;
-       
+
     delete d;
 }
 
-void ImageCurves::curvesReset(void)
+void ImageCurves::curvesReset()
 {
     memset(d->curves, 0, sizeof(struct ImageCurvesPriv::_Curves));
     d->lut->luts      = NULL;
@@ -138,16 +138,16 @@ void ImageCurves::curvesReset(void)
 void ImageCurves::curvesChannelReset(int channel)
 {
     int j;
-    
+
     if (!d->curves) return;
 
     // Contruct a linear curve.
-    
+
     for (j = 0 ; j <= d->segmentMax ; j++)
        d->curves->curve[channel][j] = j;
 
     // Init coordinates points to null.
-       
+
     for (j = 0 ; j < 17 ; j++)
     {
        d->curves->points[channel][j][0] = -1;
@@ -155,7 +155,7 @@ void ImageCurves::curvesChannelReset(int channel)
     }
 
     // First and last points init.
-       
+
     d->curves->points[channel][0][0]  = 0;
     d->curves->points[channel][0][1]  = 0;
     d->curves->points[channel][16][0] = d->segmentMax;
@@ -529,12 +529,12 @@ QPoint ImageCurves::getCurvePoint(int channel, int point)
 
 QPointArray ImageCurves::getCurvePoints(int channel)
 {
-    QPointArray array(16);
+    QPointArray array(17);
 
     if ( d->curves &&
          channel>=0 && channel<5)
     {
-        for (int j = 0 ; j < 17 ; j++)
+        for (int j = 0 ; j <= 17 ; j++)
             array.setPoint(j, getCurvePoint(channel, j));
     }
 
@@ -595,10 +595,12 @@ void ImageCurves::setCurvePoints(int channel, const QPointArray& vals)
 {
     if ( d->curves &&
          channel>=0 && channel<5 && 
-         vals.size() == 16 )
+         vals.size() == 17 )
     {
         for (int j = 0 ; j < 17 ; j++)
+        {
             setCurvePoint(channel, j, vals.point(j));
+        }
     }
 }
 

@@ -58,21 +58,21 @@ public:
     typedef double CRMatrix[4][4];
 
 public:
-    
+
     ImageCurves(bool sixteenBit);
     ~ImageCurves();
 
     // Methods for to manipulate the curves data.
-    
-    void   curvesReset(void);
+
+    void   curvesReset();
     void   curvesChannelReset(int channel);
     void   curvesCalculateCurve(int channel);
     float  curvesLutFunc(int n_channels, int channel, float value);
     void   curvesLutSetup(int nchannels);
     void   curvesLutProcess(uchar *srcPR, uchar *destPR, int w, int h);
 
-    // Methods for to set manually the curves values.        
-    
+    // Methods for to set manually the curves values.
+
     void   setCurveValue(int channel, int bin, int val);
     void   setCurvePointX(int channel, int point, int x);
     void   setCurvePointY(int channel, int point, int y);
@@ -90,12 +90,12 @@ public:
     QPointArray getCurvePoints(int channel);
 
     // Methods for to save/load the curves values to/from a Gimp curves text file.        
-    
+
     bool   saveCurvesToGimpCurvesFile(const KURL& fileUrl);
     bool   loadCurvesFromGimpCurvesFile(const KURL& fileUrl);
 
 private:
-    
+
     void curvesPlotCurve(int channel, int p1, int p2, int p3, int p4);
     void curvesCRCompose(CRMatrix a, CRMatrix b, CRMatrix ab);
 
