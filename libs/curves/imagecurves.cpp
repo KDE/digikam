@@ -597,7 +597,7 @@ void ImageCurves::setCurvePoints(int channel, const QPointArray& vals)
          channel>=0 && channel<5 && 
          vals.size() == 17 )
     {
-        for (int j = 0 ; j < 17 ; j++)
+        for (int j = 0 ; j <= 17 ; j++)
         {
             setCurvePoint(channel, j, vals.point(j));
         }
