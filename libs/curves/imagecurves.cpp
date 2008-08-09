@@ -72,6 +72,7 @@ public:
     {
         curves = 0;
         lut    = 0;
+        dirty  = false;
     }
 
     // Curves data.
@@ -81,6 +82,8 @@ public:
     struct _Lut    *lut;
 
     int             segmentMax;
+
+    bool            dirty;
 };
 
 ImageCurves::CRMatrix CR_basis =
@@ -122,11 +125,17 @@ ImageCurves::~ImageCurves()
     delete d;
 }
 
+bool ImageCurves::isDirty()
+{
+    return d->dirty;
+}
+
 void ImageCurves::curvesReset()
 {
     memset(d->curves, 0, sizeof(struct ImageCurvesPriv::_Curves));
     d->lut->luts      = NULL;
     d->lut->nchannels = 0;
+    d->dirty          = false;
 
     for (int channel = 0 ; channel < 5 ; channel++)
     {
@@ -575,7 +584,10 @@ void ImageCurves::setCurveValue(int channel, int bin, int val)
     if ( d->curves &&
          channel>=0 && channel<5 && 
          bin>=0 && bin<=d->segmentMax )
+    {
+       d->dirty = true;
        d->curves->curve[channel][bin] = val;
+    }
 }
 
 void ImageCurves::setCurvePoint(int channel, int point, const QPoint& val)
@@ -586,6 +598,7 @@ void ImageCurves::setCurvePoint(int channel, int point, const QPoint& val)
          val.x()>=-1 && val.x()<=d->segmentMax && // x can be egal to -1
          val.y()>=0 && val.y()<=d->segmentMax)    // if the current point is disable !!!
     {
+       d->dirty = true;
        d->curves->points[channel][point][0] = val.x();
        d->curves->points[channel][point][1] = val.y();
     }
@@ -597,6 +610,7 @@ void ImageCurves::setCurvePoints(int channel, const QPolygon& vals)
          channel>=0 && channel<5 && 
          vals.size() == 17 )
     {
+        d->dirty = true;
         for (int j = 0 ; j <= 17 ; j++)
             setCurvePoint(channel, j, vals.point(j));
     }
@@ -609,7 +623,8 @@ void ImageCurves::setCurvePointX(int channel, int point, int x)
          point>=0 && point<=17 &&
          x>=-1 && x<=d->segmentMax) // x can be egal to -1 if the current point is disable !!!
     {
-       d->curves->points[channel][point][0] = x;
+        d->dirty = true;
+        d->curves->points[channel][point][0] = x;
     }
 }
 
@@ -620,7 +635,8 @@ void ImageCurves::setCurvePointY(int channel, int point, int y)
          point>=0 && point<=17 &&
          y>=0 && y<=d->segmentMax)
     {
-       d->curves->points[channel][point][1] = y;
+         d->dirty = true;
+         d->curves->points[channel][point][1] = y;
     }
 }
 
