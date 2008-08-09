@@ -529,12 +529,12 @@ QPoint ImageCurves::getCurvePoint(int channel, int point)
 
 QPolygon ImageCurves::getCurvePoints(int channel)
 {
-    QPolygon array(16);
+    QPolygon array(17);
 
     if ( d->curves &&
          channel>=0 && channel<5)
     {
-        for (int j = 0 ; j < 17 ; j++)
+        for (int j = 0 ; j <= 17 ; j++)
         array.setPoint(j, getCurvePoint(channel, j));
     }
 
@@ -595,9 +595,9 @@ void ImageCurves::setCurvePoints(int channel, const QPolygon& vals)
 {
     if ( d->curves &&
          channel>=0 && channel<5 && 
-         vals.size() == 16 )
+         vals.size() == 17 )
     {
-        for (int j = 0 ; j < 17 ; j++)
+        for (int j = 0 ; j <= 17 ; j++)
             setCurvePoint(channel, j, vals.point(j));
     }
 }
