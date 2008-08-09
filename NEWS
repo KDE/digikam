@@ -19,4 +19,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 155076 : RAW Conversion UI Needs to be more generic.
 011 ==> 142975 : Better support for RAW photo handling.
 012 ==> 147136 : When selecting pictures from folder showfoto got closed.
-013 ==> 
+013 ==> 168780 : Loose the raw import.
+014 ==> 
