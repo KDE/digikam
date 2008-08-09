@@ -39,6 +39,7 @@
 
 #include "ddebug.h"
 #include "imagehistogram.h"
+#include "imagecurves.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "bcgmodifier.h"
@@ -316,6 +317,18 @@ void RAWLoader::postProcessing()
         bcg.setGamma(m_customRawSettings.gamma);
         bcg.setContrast(m_customRawSettings.contrast);
         bcg.applyBCG(imageData(), imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage);
+    }
+
+    if (!m_customRawSettings.curveAdjust.isEmpty())
+    {
+        DImg tmp(imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage);
+        ImageCurves curves(m_rawDecodingSettings.sixteenBitsImage);
+        curves.setCurvePoints(ImageHistogram::ValueChannel, m_customRawSettings.curveAdjust);
+        curves.curvesCalculateCurve(ImageHistogram::ValueChannel);
+        curves.curvesLutSetup(ImageHistogram::AlphaChannel);
+        curves.curvesLutProcess(imageData(), tmp.bits(), imageWidth(), imageHeight());
+
+        memcpy(imageData(), tmp.bits(), tmp.numBytes());
     }
 }
 
