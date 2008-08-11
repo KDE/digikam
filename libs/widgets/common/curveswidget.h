@@ -65,6 +65,8 @@ public:
 
 public:
 
+    CurvesWidget(int w, int h, ImageCurves *curves, QWidget *parent, bool readOnly=false);
+
     CurvesWidget(int w, int h,                         // Widget size.
                  uchar *i_data, uint i_w, uint i_h,    // Full image info.
                  bool i_sixteenBits,                   // 8 or 16 bits image.
@@ -75,8 +77,14 @@ public:
 
     ~CurvesWidget();
 
+    void setup(int w, int h, ImageCurves *curves, bool readOnly);
+    void updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits);
+
     // Stop current histogram computations.
     void stopHistogramComputation();
+
+    void setDataLoading();
+    void setLoadingFailed();
 
     void reset();
     void curveTypeChanged();

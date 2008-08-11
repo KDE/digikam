@@ -66,7 +66,8 @@ public:
 
     enum RepaintType
     {
-        HistogramNone = 0,        // No current histogram values calculation.
+        HistogramDataLoading = 0, // Image Data loading in progress.
+        HistogramNone,            // No current histogram values calculation.
         HistogramStarted,         // Histogram values calculation started.
         HistogramCompleted,       // Histogram values calculation completed.
         HistogramFailed           // Histogram values calculation failed.
@@ -106,6 +107,14 @@ public:
 
 };
 
+CurvesWidget::CurvesWidget(int w, int h, ImageCurves *curves, QWidget *parent, bool readOnly)
+            : QWidget(parent, 0, Qt::WDestructiveClose)
+{
+    d = new CurvesWidgetPriv;
+
+    setup(w, h, curves, readOnly);
+}
+
 CurvesWidget::CurvesWidget(int w, int h, 
                            uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits,
                            ImageCurves *curves, QWidget *parent, 
@@ -113,22 +122,9 @@ CurvesWidget::CurvesWidget(int w, int h,
             : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new CurvesWidgetPriv;
-    d->curves       = curves;
-    d->readOnlyMode = readOnly;
-    d->sixteenBits  = i_sixteenBits;
-    m_channelType   = ValueHistogram;
-    m_scaleType     = LogScaleHistogram;
 
-    setMouseTracking(true);
-    setPaletteBackgroundColor(colorGroup().background());
-    setMinimumSize(w, h);
-
-    d->blinkTimer = new QTimer( this );
-
-    connect( d->blinkTimer, SIGNAL(timeout()),
-             this, SLOT(slotBlinkTimerDone()) );
-
-    m_imageHistogram = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, this);
+    setup(w, h, curves, readOnly);
+    updateData(i_data, i_w, i_h, i_sixteenBits);
 }
 
 CurvesWidget::~CurvesWidget()
@@ -141,11 +137,63 @@ CurvesWidget::~CurvesWidget()
     delete d;
 }
 
+void CurvesWidget::setup(int w, int h, ImageCurves *curves, bool readOnly)
+{
+    d->curves        = curves;
+    d->readOnlyMode  = readOnly;
+    m_channelType    = ValueHistogram;
+    m_scaleType      = LogScaleHistogram;
+    m_imageHistogram = 0;
+
+    setMouseTracking(true);
+    setPaletteBackgroundColor(colorGroup().background());
+    setMinimumSize(w, h);
+
+    d->blinkTimer = new QTimer( this );
+
+    connect( d->blinkTimer, SIGNAL(timeout()),
+             this, SLOT(slotBlinkTimerDone()) );
+}
+
+void CurvesWidget::updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits)
+{
+    stopHistogramComputation();
+
+    d->sixteenBits = i_sixteenBits;
+
+    // Remove old histogram data from memory.
+    if (m_imageHistogram)
+       delete m_imageHistogram;
+
+    // Calc new histogram data
+    m_imageHistogram = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, this);
+}
+
 void CurvesWidget::reset()
 {
-    d->grabPoint   = -1;
+    d->grabPoint    = -1;
     d->guideVisible = false;
     repaint(false);
+}
+
+void CurvesWidget::setDataLoading()
+{
+    if (d->clearFlag != CurvesWidgetPriv::HistogramDataLoading)
+    {
+        setCursor( KCursor::waitCursor() );
+        d->clearFlag = CurvesWidgetPriv::HistogramDataLoading;
+        d->pos       = 0;
+        d->blinkTimer->start( 100 );
+    }
+}
+
+void CurvesWidget::setLoadingFailed()
+{
+    d->clearFlag = CurvesWidgetPriv::HistogramFailed;
+    d->pos       = 0;
+    d->blinkTimer->stop();
+    repaint(false);
+    setCursor( KCursor::arrowCursor() );
 }
 
 void CurvesWidget::setCurveGuide(const DColor& color)
@@ -158,7 +206,7 @@ void CurvesWidget::setCurveGuide(const DColor& color)
 void CurvesWidget::curveTypeChanged()
 {
     switch ( d->curves->getCurveType(m_channelType) )
-       {
+    {
        case ImageCurves::CURVE_SMOOTH:
 
           //  pick representative points from the curve and make them control points
@@ -179,7 +227,7 @@ void CurvesWidget::curveTypeChanged()
 
        case ImageCurves::CURVE_FREE:
           break;
-       }
+    }
 
     repaint(false);
     emit signalCurvesChanged();
@@ -240,7 +288,8 @@ void CurvesWidget::slotBlinkTimerDone()
 
 void CurvesWidget::paintEvent(QPaintEvent*)
 {
-    if (d->clearFlag == CurvesWidgetPriv::HistogramStarted)
+    if (d->clearFlag == CurvesWidgetPriv::HistogramDataLoading ||
+        d->clearFlag == CurvesWidgetPriv::HistogramStarted)
     {
        // In first, we draw an animation.
 
@@ -271,8 +320,14 @@ void CurvesWidget::paintEvent(QPaintEvent*)
        p1.drawRect(0, 0, width(), height());
        p1.drawPixmap(width()/2 - asize /2, asize, anim);
        p1.setPen(QPen(palette().active().text()));
-       p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
-                   i18n("Histogram calculation..."));
+
+       if (d->clearFlag == CurvesWidgetPriv::HistogramDataLoading)
+           p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
+                       i18n("Loading image......"));
+       else
+           p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
+                       i18n("Histogram calculation..."));
+
        p1.end();
        bitBlt(this, 0, 0, &pm);
        return;
@@ -293,6 +348,8 @@ void CurvesWidget::paintEvent(QPaintEvent*)
        bitBlt(this, 0, 0, &pm);
        return;
     }
+
+    if (!m_imageHistogram) return;
 
     int    x, y;
     int    wWidth = width();
@@ -539,7 +596,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
 
 void CurvesWidget::mousePressEvent ( QMouseEvent * e )
 {
-   if (d->readOnlyMode) return;
+   if (d->readOnlyMode || !m_imageHistogram) return;
 
    int i;
    int closest_point;
@@ -628,7 +685,7 @@ void CurvesWidget::mousePressEvent ( QMouseEvent * e )
 
 void CurvesWidget::mouseReleaseEvent ( QMouseEvent * e )
 {
-   if (d->readOnlyMode) return;
+   if (d->readOnlyMode || !m_imageHistogram) return;
 
    if (e->button() != Qt::LeftButton || d->clearFlag == CurvesWidgetPriv::HistogramStarted)
       return;
@@ -642,7 +699,7 @@ void CurvesWidget::mouseReleaseEvent ( QMouseEvent * e )
 
 void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
 {
-   if (d->readOnlyMode) return;
+   if (d->readOnlyMode || !m_imageHistogram) return;
 
    int i;
    int closest_point;
