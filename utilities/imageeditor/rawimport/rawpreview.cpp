@@ -28,6 +28,7 @@
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qpixmap.h>
+#include <qfileinfo.h>
 
 // KDE includes.
 
@@ -58,7 +59,7 @@ public:
         panIconPopup         = 0;
         panIconWidget        = 0;
         cornerButton         = 0;
-        loadThread           = 0;
+        thread               = 0;
         url                  = 0;
         currentFitWindowZoom = 0;
     }
@@ -75,13 +76,16 @@ public:
 
     DImg                   preview;
 
-    ManagedLoadSaveThread *loadThread;
+    ManagedLoadSaveThread *thread;
+
+    LoadingDescription     loadingDesc;
 };
 
-RawPreview::RawPreview(QWidget *parent)
+RawPreview::RawPreview(QWidget *parent, ManagedLoadSaveThread *thread)
           : PreviewWidget(parent)
 {
     d = new RawPreviewPriv;
+    d->thread = thread;
 
     setMinimumWidth(640);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -93,6 +97,12 @@ RawPreview::RawPreview(QWidget *parent)
     setCornerWidget(d->cornerButton);
 
     // ------------------------------------------------------------
+
+    connect(d->thread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
+            this, SLOT(slotImageLoaded(const LoadingDescription&, const DImg&)));
+
+    connect(d->thread, SIGNAL(signalLoadingProgress(const LoadingDescription&, float)),
+            this, SLOT(slotLoadingProgress(const LoadingDescription&, float)));
 
     connect(d->cornerButton, SIGNAL(pressed()),
             this, SLOT(slotCornerButtonPressed()));
@@ -107,7 +117,6 @@ RawPreview::RawPreview(QWidget *parent)
 
 RawPreview::~RawPreview()
 {
-    delete d->loadThread;
     delete d;
 }
 
@@ -126,41 +135,25 @@ DImg& RawPreview::getImage() const
     return d->preview;
 }
 
-void RawPreview::setUrl(const KURL& url)
+void RawPreview::setDecodingSettings(const KURL& url, const DRawDecoding& settings)
 {
-    d->url = url;
-}
-
-void RawPreview::setDecodingSettings(const DRawDecoding& settings)
-{
-    if (!d->url.isEmpty())
+    if (!url.isEmpty())
     {
         setCursor(KCursor::waitCursor());
-
-        if (!d->loadThread)
-        {
-            d->loadThread = new ManagedLoadSaveThread();
-            connect(d->loadThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
-                    this, SLOT(slotImageLoaded(const LoadingDescription&, const DImg&)));
-
-            connect(d->loadThread, SIGNAL(signalLoadingProgress(const LoadingDescription&, float)),
-                    this, SLOT(slotLoadingProgress(const LoadingDescription&, float)));
-        }
-
-        d->loadThread->load(LoadingDescription(d->url.path(), settings),
-                            ManagedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+        d->loadingDesc = LoadingDescription(url.path(), settings);
+        d->thread->load(d->loadingDesc, ManagedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
         emit signalLoadingStarted();
     }
 }
 
 void RawPreview::cancelLoading()
 {
-    d->loadThread->stopLoading(d->url.path());
+    d->thread->stopLoading(d->loadingDesc.filePath);
 }
 
 void RawPreview::slotLoadingProgress(const LoadingDescription& description, float progress)
 {
-    if (description.filePath != d->url.path())
+    if (description.filePath != d->loadingDesc.filePath)
         return;
 
     emit signalLoadingProgress(progress);
@@ -168,7 +161,7 @@ void RawPreview::slotLoadingProgress(const LoadingDescription& description, floa
 
 void RawPreview::slotImageLoaded(const LoadingDescription& description, const DImg& image)
 {
-    if (description.filePath != d->url.path())
+    if (description.filePath != d->loadingDesc.filePath)
         return;
 
     if (image.isNull())
@@ -180,7 +173,7 @@ void RawPreview::slotImageLoaded(const LoadingDescription& description, const DI
         p.drawText(0, 0, pix.width(), pix.height(),
                    Qt::AlignCenter|Qt::WordBreak, 
                    i18n("Cannot decode RAW image for\n\"%1\"")
-                   .arg(d->url.fileName()));
+                   .arg(QFileInfo(d->loadingDesc.filePath).fileName()));
         p.end();
         // three copies - but the image is small
         setImage(DImg(pix.convertToImage()));
@@ -272,7 +265,7 @@ void RawPreview::resizeEvent(QResizeEvent* e)
 
     QScrollView::resizeEvent(e);
 
-    if (!d->url.isEmpty())
+    if (!d->loadingDesc.filePath.isEmpty())
         d->cornerButton->hide(); 
 
     updateZoomAndSize(false);
@@ -315,8 +308,8 @@ bool RawPreview::previewIsNull()
 
 void RawPreview::resetPreview()
 {
-    d->preview = DImg();
-    d->url     = KURL();
+    d->preview     = DImg();
+    d->loadingDesc = LoadingDescription();
 
     updateZoomAndSize(false);
 }

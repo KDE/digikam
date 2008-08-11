@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2008-08-04
- * Description : Raw import dialog
+ * Date        : 2008-08-11
+ * Description : Raw import settings box
  *
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,12 +20,15 @@
  *
  * ============================================================ */
 
-#ifndef RAWIMPORTDLG_H
-#define RAWIMPORTDLG_H
+#ifndef RAWSETTINGSBOX_H
+#define RAWSETTINGSBOX_H
+
+// Qt includes.
+
+#include <qwidget.h>
 
 // KDE includes.
 
-#include <kdialogbase.h>
 #include <kurl.h>
 
 // Local includes
@@ -33,53 +36,34 @@
 #include "dimg.h"
 #include "digikam_export.h"
 
-class QCloseEvent;
-
-namespace KDcrawIface
-{
-class RawDecodingSettings;
-}
-
 namespace Digikam
 {
 
-class LoadingDescription;
-class RawImportDlgPriv;
+class HistogramWidget;
+class CurvesWidget;
+class RawSettingsBoxPriv;
 
-class DIGIKAM_EXPORT RawImportDlg : public KDialogBase
+class DIGIKAM_EXPORT RawSettingsBox : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    RawImportDlg(const KURL& info, QWidget *parent);
-    ~RawImportDlg();
+    RawSettingsBox(QWidget *parent);
+    ~RawSettingsBox();
 
-    DRawDecoding rawDecodingSettings();
+    void setUrl(const KURL& url);
+    void setDefaultSettings();
+    void setCurveImage(const DImg& img);
 
-protected:
+    HistogramWidget* histogram() const;
+    CurvesWidget*    curve()     const;
+    DRawDecoding     settings();
 
-    void closeEvent(QCloseEvent *e);
-
-private:
-
-    void readSettings();
     void saveSettings();
-
-    void busy(bool busy);
+    void readSettings();
 
 private slots:
-
-    void slotImageLoaded(const DImg& img);
-    void slotLoadingFailed();
-    void slotLoadingStarted();
-    void slotLoadingProgress(float progress);
-
-    void slotDefault();
-    void slotClose();
-    void slotOk();
-    void slotUser1();
-    void slotUser2();
 
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
@@ -89,13 +73,11 @@ private slots:
     void slotSixteenBitsImageToggled(bool);
     void slotSettingsTabChanged(int);
 
-    void slotImageLoaded(const LoadingDescription& desc, const DImg& img);
-
 private:
 
-    RawImportDlgPriv *d;
+    RawSettingsBoxPriv *d;
 };
 
 } // NameSpace Digikam
 
-#endif // RAWIMPORTDLG_H
+#endif // RAWSETTINGSBOX_H
