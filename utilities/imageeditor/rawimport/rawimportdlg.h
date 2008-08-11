@@ -81,14 +81,6 @@ private slots:
     void slotUser1();
     void slotUser2();
 
-    void slotChannelChanged(int channel);
-    void slotScaleChanged(int scale);
-    void slotColorsChanged(int color);
-
-    void slotResetCurve();
-    void slotSixteenBitsImageToggled(bool);
-    void slotSettingsTabChanged(int);
-
     void slotImageLoaded(const LoadingDescription& desc, const DImg& img);
 
 private:
