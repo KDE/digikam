@@ -15,7 +15,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 167139 : Crash if Exif.GPSInfo.GPSAltitude is empty.
 004 ==> 167778 : Assigning ratings in image editor via shortcuts or toolbar not working.
 005 ==> 168567 : Unable to edit or remove iptc and xmp info.
-006 ==> 
+006 ==> 168846 : crash after playing with tags (seems to be rather a crash in Qt or kdelibs).
+007 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta2 - Release date: 2008-07-31
