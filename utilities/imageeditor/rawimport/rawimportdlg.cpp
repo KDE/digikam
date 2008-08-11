@@ -223,7 +223,7 @@ void RawImportDlg::slotImageLoaded(const LoadingDescription& desc, const DImg& i
     disconnect(d->thread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
                this, SLOT(slotImageLoaded(const LoadingDescription&, const DImg&)));
 
-
+    d->settingsBox->setCurveImage(img);
     slotUser1();
 }
 
