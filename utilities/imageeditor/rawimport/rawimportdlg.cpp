@@ -187,7 +187,7 @@ void RawImportDlg::busy(bool val)
 {
     if (val) d->previewWidget->setCursor(KCursor::waitCursor());
     else d->previewWidget->unsetCursor();
-    d->settingsBox->setEnabled(!val);
+    d->settingsBox->setBusy(val);
     enableButton (Default, !val);
     enableButton (Ok,      !val);
     enableButton (Close,   !val);

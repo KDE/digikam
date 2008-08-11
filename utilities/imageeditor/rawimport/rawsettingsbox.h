@@ -55,6 +55,7 @@ public:
     void setUrl(const KURL& url);
     void setDefaultSettings();
     void setCurveImage(const DImg& img);
+    void setBusy(bool b);
 
     HistogramWidget* histogram() const;
     CurvesWidget*    curve()     const;

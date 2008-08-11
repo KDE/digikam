@@ -364,6 +364,11 @@ RawSettingsBox::~RawSettingsBox()
     delete d;
 }
 
+void RawSettingsBox::setBusy(bool b)
+{
+    d->decodingSettingsBox->setEnabled(!b);
+}
+
 void RawSettingsBox::setUrl(const KURL& url)
 {
     d->infoBox->showPreview(url);
