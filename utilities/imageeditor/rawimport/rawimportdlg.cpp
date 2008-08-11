@@ -230,8 +230,6 @@ void RawImportDlg::slotImageLoaded(const LoadingDescription& desc, const DImg& i
 // 'Preview' dialog button.
 void RawImportDlg::slotUser1()
 {
-    d->settingsBox->histogram()->setDataLoading();
-
     DRawDecoding settings = rawDecodingSettings();
     // We will load an half size image to speed up preview computing.
     settings.halfSizeColorImage = true;
