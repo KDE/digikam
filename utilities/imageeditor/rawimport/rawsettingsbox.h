@@ -54,7 +54,7 @@ public:
 
     void setUrl(const KURL& url);
     void setDefaultSettings();
-    void setCurveImage(const DImg& img);
+    void setImage(const DImg& img);
     void setBusy(bool b);
 
     HistogramWidget* histogram() const;
@@ -72,7 +72,6 @@ private slots:
 
     void slotResetCurve();
     void slotSixteenBitsImageToggled(bool);
-    void slotSettingsTabChanged(int);
 
 private:
 

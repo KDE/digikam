@@ -63,15 +63,12 @@ public:
     RawImportDlgPriv()
     {
         previewWidget = 0;
-        thread        = 0;
         settingsBox   = 0; 
     }
 
     RawSettingsBox        *settingsBox;
 
     KURL                   url;
-
-    ManagedLoadSaveThread *thread;
 
     RawPreview            *previewWidget;
 };
@@ -81,8 +78,7 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
                           Help|Default|User1|User2|Ok|Cancel, Cancel, true)
 {
     d = new RawImportDlgPriv;
-    d->thread = new ManagedLoadSaveThread;
-    d->url    = url;
+    d->url = url;
 
     setHelp("rawimport.anchor", "digikam");
     setCaption(i18n("Raw Import - %1").arg(d->url.fileName()));
@@ -105,7 +101,7 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     QWidget *page = new QWidget(this);
     setMainWidget(page);
     QGridLayout *mainLayout = new QGridLayout(page, 1, 1);
-    d->previewWidget        = new RawPreview(page, d->thread);
+    d->previewWidget        = new RawPreview(page);
     d->settingsBox          = new RawSettingsBox(page);
     d->settingsBox->setUrl(d->url);
 
@@ -135,23 +131,13 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     connect(d->previewWidget, SIGNAL(signalLoadingProgress(float)),
             this, SLOT(slotLoadingProgress(float)));
 
-    connect(d->thread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
-            this, SLOT(slotImageLoaded(const LoadingDescription&, const DImg&)));
-
     // ---------------------------------------------------------------
 
     readSettings();
 
-    // Load image for curve widget.
     busy(true);
     enableButton (User2, false);
-    d->settingsBox->histogram()->setDataLoading();
-
-    d->settingsBox->curve()->setDataLoading();
-    DRawDecoding settings;
-    settings.optimizeTimeLoading();
-    d->thread->load(LoadingDescription(d->url.path(), settings), 
-                    ManagedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+    slotUser1();
 }
 
 RawImportDlg::~RawImportDlg()
@@ -215,18 +201,6 @@ DRawDecoding RawImportDlg::rawDecodingSettings()
     return d->settingsBox->settings();
 }
 
-void RawImportDlg::slotImageLoaded(const LoadingDescription& desc, const DImg& img)
-{
-    if (desc.filePath != d->url.path())
-        return;
-
-    disconnect(d->thread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
-               this, SLOT(slotImageLoaded(const LoadingDescription&, const DImg&)));
-
-    d->settingsBox->setCurveImage(img);
-    slotUser1();
-}
-
 // 'Preview' dialog button.
 void RawImportDlg::slotUser1()
 {
@@ -257,8 +231,7 @@ void RawImportDlg::slotLoadingProgress(float /*progress*/)
 
 void RawImportDlg::slotImageLoaded(const DImg& img)
 {
-    d->settingsBox->histogram()->stopHistogramComputation();
-    d->settingsBox->histogram()->updateData(img.bits(), img.width(), img.height(), img.sixteenBit(), 0, 0, 0, true);
+    d->settingsBox->setImage(img);
     busy(false);
 }
 

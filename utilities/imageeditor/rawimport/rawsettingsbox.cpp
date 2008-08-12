@@ -139,7 +139,7 @@ public:
 
     ImageDialogPreview               *infoBox;
 
-    DImg                              curveImage;
+    DImg                              image;
 
     KDcrawIface::DcrawSettingsWidget *decodingSettingsBox;
 };
@@ -350,9 +350,6 @@ RawSettingsBox::RawSettingsBox(QWidget *parent)
     connect(d->decodingSettingsBox, SIGNAL(signalSixteenBitsImageToggled(bool)),
             this, SLOT(slotSixteenBitsImageToggled(bool)));
 
-    connect(d->decodingSettingsBox, SIGNAL(currentChanged(int)),
-            this, SLOT(slotSettingsTabChanged(int)));
-
     connect(d->resetCurveBtn, SIGNAL(clicked()),
             this, SLOT(slotResetCurve()));
 }
@@ -372,6 +369,15 @@ void RawSettingsBox::setBusy(bool b)
 void RawSettingsBox::setUrl(const KURL& url)
 {
     d->infoBox->showPreview(url);
+}
+
+void RawSettingsBox::setImage(const DImg& img)
+{
+    d->image = img;
+    d->histogramWidget->stopHistogramComputation();
+    d->histogramWidget->updateData(d->image.bits(), d->image.width(), d->image.height(), d->image.sixteenBit());
+    d->curveWidget->stopHistogramComputation();
+    d->curveWidget->updateData(d->image.bits(), d->image.width(), d->image.height(), d->image.sixteenBit());
 }
 
 void RawSettingsBox::setDefaultSettings()
@@ -556,10 +562,6 @@ DRawDecoding RawSettingsBox::settings()
     return settings;
 }
 
-void RawSettingsBox::slotSettingsTabChanged(int tab)
-{
-}
-
 void RawSettingsBox::slotChannelChanged(int channel)
 {
     switch(channel)
@@ -622,12 +624,6 @@ void RawSettingsBox::slotColorsChanged(int color)
     }
 
     d->histogramWidget->repaint(false);
-}
-
-void RawSettingsBox::setCurveImage(const DImg& img)
-{
-    d->curveImage = img;
-    d->curveWidget->updateData(d->curveImage.bits(), d->curveImage.width(), d->curveImage.height(), d->curveImage.sixteenBit());
 }
 
 } // NameSpace Digikam

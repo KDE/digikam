@@ -43,7 +43,6 @@ class RawDecodingSettings;
 namespace Digikam
 {
 
-class LoadingDescription;
 class RawImportDlgPriv;
 
 class DIGIKAM_EXPORT RawImportDlg : public KDialogBase
@@ -70,18 +69,16 @@ private:
 
 private slots:
 
-    void slotImageLoaded(const DImg& img);
-    void slotLoadingFailed();
     void slotLoadingStarted();
     void slotLoadingProgress(float progress);
+    void slotImageLoaded(const DImg& img);
+    void slotLoadingFailed();
 
     void slotDefault();
     void slotClose();
     void slotOk();
     void slotUser1();
     void slotUser2();
-
-    void slotImageLoaded(const LoadingDescription& desc, const DImg& img);
 
 private:
 

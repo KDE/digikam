@@ -81,11 +81,11 @@ public:
     LoadingDescription     loadingDesc;
 };
 
-RawPreview::RawPreview(QWidget *parent, ManagedLoadSaveThread *thread)
+RawPreview::RawPreview(QWidget *parent)
           : PreviewWidget(parent)
 {
     d = new RawPreviewPriv;
-    d->thread = thread;
+    d->thread = new ManagedLoadSaveThread;
 
     setMinimumWidth(640);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

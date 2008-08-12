@@ -43,7 +43,6 @@ class QPixmap;
 namespace Digikam
 {
 
-class ManagedLoadSaveThread;
 class RawPreviewPriv;
 
 class DIGIKAM_EXPORT RawPreview : public PreviewWidget
@@ -53,7 +52,7 @@ Q_OBJECT
 
 public:
 
-    RawPreview(QWidget *parent, ManagedLoadSaveThread *thread);
+    RawPreview(QWidget *parent);
     ~RawPreview();
 
     void setImage(const DImg& image);
