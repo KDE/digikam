@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2002-16-10
- * Description : album icon view 
+ * Description : album icon view
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2002-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -406,13 +406,13 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
         d->itemInfoMap.insert((*it), iconItem);
     }
 
-    // Make the icon, specified by d->itemUrlToFind, the current one 
+    // Make the icon, specified by d->itemUrlToFind, the current one
     // in the album icon view and make it visible.
     // This is for example used after a "Go To",
     // e.g. from tags (or date) view to folder view.
     // Note that AlbumIconView::slotImageListerNewItems may
     // be called several times after another, because images get
-    // listed in packages of 200. 
+    // listed in packages of 200.
     // Therefore the item might not always be available in the very
     // first call when there are sufficiently many images.
     // Also, because of this, we cannot reset the item which is to be found,
@@ -421,14 +421,14 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
     if (!d->itemUrlToFind.isEmpty())
     {
         AlbumIconItem* icon = findItem(d->itemUrlToFind.url());
-        if (icon) 
+        if (icon)
         {
             clearSelection();
             updateContents();
-            setCurrentItem(icon); 
+            setCurrentItem(icon);
             ensureItemVisible(icon);
 
-            // make the item really visible 
+            // make the item really visible
             // (the previous ensureItemVisible does not work)
             setStoredVisibleItem(icon);
             triggerRearrangement();
@@ -564,7 +564,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // --------------------------------------------------------
 
-    // Obtain a list of all selected images. 
+    // Obtain a list of all selected images.
     // This is needed both for the goto tags submenu here and also
     // for the "move to trash" and further actions below.
     QList<qlonglong> selectedImageIDs;
@@ -588,7 +588,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     TagsPopupMenu* gotoTagsPopup = new TagsPopupMenu(selectedImageIDs, TagsPopupMenu::DISPLAY);
     QAction *gotoTag             = gotoMenu.addMenu(gotoTagsPopup);
     gotoTag->setIcon(SmallIcon("tag"));
-    gotoTag->setText(i18n("Tag")); 
+    gotoTag->setText(i18n("Tag"));
 
     // Disable the goto Tag popup menu, if there are no tags at all.
     if (!DatabaseAccess().db()->hasTags(selectedImageIDs))
@@ -597,9 +597,9 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     connect(gotoTagsPopup, SIGNAL(signalTagActivated(int)),
             this, SLOT(slotGotoTag(int)));
 
-    if (d->currentAlbum->type() == Album::PHYSICAL ) 
+    if (d->currentAlbum->type() == Album::PHYSICAL )
     {
-        // If the currently selected album is the same as album to 
+        // If the currently selected album is the same as album to
         // which the image belongs, then disable the "Go To" Album.
         // (Note that in recursive album view these can be different).
         if (iconItem->imageInfo().albumId() == d->currentAlbum->id())
@@ -616,12 +616,12 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     QAction *viewAction       = popmenu.addAction(SmallIcon("viewimage"),     i18n("View..."));
     QAction *editAction       = popmenu.addAction(SmallIcon("editimage"),     i18n("Edit..."));
     QAction *lighttableAction = popmenu.addAction(SmallIcon("lighttableadd"), i18n("Add to Light Table"));
-    QAction *gotoAction       = popmenu.addMenu(&gotoMenu); 
+    QAction *gotoAction       = popmenu.addMenu(&gotoMenu);
     gotoAction->setIcon(SmallIcon("go-jump"));
     gotoAction->setText(i18n("Go To"));
 
-    // If there is more than one image selected, disable the goto menu entry. 
-    if (selectedImageIDs.count() > 1) 
+    // If there is more than one image selected, disable the goto menu entry.
+    if (selectedImageIDs.count() > 1)
     {
         gotoAction->setEnabled(false);
     }
@@ -719,7 +719,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // Performance: Only check for tags if there are <250 images selected
     // Also disable the remove Tag popup menu, if there are no tags at all.
-    if (selectedImageIDs.count() > 250 || 
+    if (selectedImageIDs.count() > 250 ||
         !DatabaseAccess().db()->hasTags(selectedImageIDs))
         removeTagsPopup->menuAction()->setEnabled(false);
 
@@ -767,12 +767,12 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
             insertSelectionToLightTable(true);
         }
         else if (choice == gotoAlbum)
-        { 
+        {
             // send a signal to the parent widget (digikamview.cpp)
             emit signalGotoAlbumAndItem(iconItem);
         }
         else if (choice == gotoDate)
-        { 
+        {
             // send a signal to the parent widget (digikamview.cpp)
             emit signalGotoDateAndItem(iconItem);
         }
@@ -798,10 +798,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     //---------------------------------------------------------------
 
-    delete assignTagsPopup;
-    delete removeTagsPopup;
-    delete copy;
-    delete paste;
+    popmenu.deleteLater();
 }
 
 void AlbumIconView::slotCopy()
@@ -853,7 +850,7 @@ void AlbumIconView::slotPaste()
                 album = dynamic_cast<Album*>(AlbumManager::instance()->findTAlbum(grp->albumID()));
         }
     }
-    if (!album) 
+    if (!album)
         album = d->currentAlbum;
 
     if (d->currentAlbum->type() == Album::PHYSICAL && KUrl::List::canDecode(data))
@@ -946,7 +943,7 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
 
     bool ok;
 
-    QString newName = KInputDialog::getText(i18n("Rename Item (%1)",fi.fileName()), 
+    QString newName = KInputDialog::getText(i18n("Rename Item (%1)",fi.fileName()),
                                             i18n("Enter new name (without extension):"),
                                             name, &ok, this);
     if (!ok)
@@ -991,7 +988,7 @@ void AlbumIconView::slotDeleteSelectedItems(bool deletePermanently)
 
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
-        if (it->isSelected()) 
+        if (it->isSelected())
         {
             AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
             ImageInfo info = iconItem->imageInfo();
@@ -1328,7 +1325,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
                 album = dynamic_cast<Album*>(AlbumManager::instance()->findTAlbum(grp->albumID()));
         }
     }
-    if (!album) 
+    if (!album)
         album = d->currentAlbum;
 
     KUrl::List urls;
@@ -1338,7 +1335,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
 
     if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
     {
-        // Drag & drop inside of digiKam 
+        // Drag & drop inside of digiKam
 
         // Check if items dropped come from outside current album.
         KUrl::List extUrls;
@@ -1389,7 +1386,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
     }
     else if (KUrl::List::canDecode(e->mimeData()) && d->currentAlbum->type() == Album::PHYSICAL)
     {
-        // Drag & drop outside of digiKam 
+        // Drag & drop outside of digiKam
         PAlbum* palbum = (PAlbum*)album;
         KUrl destURL(palbum->databaseUrl());
 
@@ -1468,7 +1465,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
             {
                 if (choice == assignToSelectedAction)    // Selected Items
                 {
-                    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+                    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                                i18n("Assigning image tags. Please wait..."));
 
                     // always give a copy of the image infos (the "true"). Else there were crashes reported.
@@ -1478,7 +1475,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
                 }
                 else if (choice == assignToAllAction)    // All Items
                 {
-                    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+                    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                                i18n("Assigning image tags. Please wait..."));
                     ImageInfo current;
                     changeTagOnImageInfos(allImageInfos(current), QList<int>() << tagID, true, true);
@@ -1552,7 +1549,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
             }
             else if (choice == assignToAllAction)    // All Items
             {
-                emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+                emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                             i18n("Assigning image tags. Please wait..."));
                 ImageInfo current;
                 changeTagOnImageInfos(allImageInfos(current), tagIDs, true, true);
@@ -1578,9 +1575,9 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
         {
             KMenu popMenu(this);
             popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
-            QAction *downAction    = popMenu.addAction(SmallIcon("file-export"), 
+            QAction *downAction    = popMenu.addAction(SmallIcon("file-export"),
                                                        i18n("Download from camera"));
-            QAction *downDelAction = popMenu.addAction(SmallIcon("file-export"), 
+            QAction *downDelAction = popMenu.addAction(SmallIcon("file-export"),
                                                        i18n("Download && Delete from camera"));
             popMenu.addSeparator();
             popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
@@ -1698,7 +1695,7 @@ ImageInfoList AlbumIconView::allImageInfos(ImageInfo& current) const
 
         list << info;
 
-        // By default copy the first item info as current in 
+        // By default copy the first item info as current in
         // case of no selection is done.
         if (current.isNull())
             current = info;
@@ -1804,7 +1801,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
 
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
-        if (it->isSelected()) 
+        if (it->isSelected())
         {
             AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
             urlList.append(iconItem->imageInfo().fileUrl());
@@ -1816,7 +1813,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
     QStringList faildItems;
     KUrl::List::Iterator it;
     float cnt = (float)urlList.count();
-    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                 i18n("Revising Exif Orientation tags. Please wait..."));
 
     for( it = urlList.begin(); it != urlList.end(); ++it )
@@ -1840,7 +1837,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
         kapp->processEvents();
     }
 
-    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());    
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
 
     if (!faildItems.isEmpty())
     {
@@ -2213,7 +2210,7 @@ void AlbumIconView::slotAlbumModified()
 
 void AlbumIconView::slotGotoTag(int tagID)
 {
-    // send a signal to the parent widget (digikamview.cpp) to change 
+    // send a signal to the parent widget (digikamview.cpp) to change
     // to Tag view and the corresponding item
 
     emit signalGotoTagAndItem(tagID);
@@ -2221,7 +2218,7 @@ void AlbumIconView::slotGotoTag(int tagID)
 
 void AlbumIconView::slotAssignTag(int tagID)
 {
-    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                 i18n("Assigning image tags. Please wait..."));
 
     changeTagOnImageInfos(selectedImageInfos(), QList<int>() << tagID, true, true);
@@ -2231,7 +2228,7 @@ void AlbumIconView::slotAssignTag(int tagID)
 
 void AlbumIconView::slotRemoveTag(int tagID)
 {
-    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                 i18n("Removing image tags. Please wait..."));
 
     changeTagOnImageInfos(selectedImageInfos(), QList<int>() << tagID, false, true);
