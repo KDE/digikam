@@ -48,7 +48,6 @@
 #include "curveswidget.h"
 #include "imagehistogram.h"
 #include "rawsettingsbox.h"
-#include "managedloadsavethread.h"
 #include "rawpreview.h"
 #include "rawimportdlg.h"
 #include "rawimportdlg.moc"
@@ -68,8 +67,6 @@ public:
 
     RawSettingsBox        *settingsBox;
 
-    KURL                   url;
-
     RawPreview            *previewWidget;
 };
 
@@ -78,10 +75,9 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
                           Help|Default|User1|User2|Ok|Cancel, Cancel, true)
 {
     d = new RawImportDlgPriv;
-    d->url = url;
 
     setHelp("rawimport.anchor", "digikam");
-    setCaption(i18n("Raw Import - %1").arg(d->url.fileName()));
+    setCaption(i18n("Raw Import - %1").arg(url.fileName()));
 
     setButtonGuiItem(User1, KGuiItem(i18n("&Preview"), "run"));
     setButtonTip(User1, i18n("<p>Generate a Raw image preview using current settings."));
@@ -101,9 +97,8 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     QWidget *page = new QWidget(this);
     setMainWidget(page);
     QGridLayout *mainLayout = new QGridLayout(page, 1, 1);
-    d->previewWidget        = new RawPreview(page);
-    d->settingsBox          = new RawSettingsBox(page);
-    d->settingsBox->setUrl(d->url);
+    d->previewWidget        = new RawPreview(url, page);
+    d->settingsBox          = new RawSettingsBox(url, page);
 
     // ---------------------------------------------------------------
 
@@ -127,9 +122,6 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
 
     connect(d->previewWidget, SIGNAL(signalLoadingFailed()),
             this, SLOT(slotLoadingFailed()));
-
-    connect(d->previewWidget, SIGNAL(signalLoadingProgress(float)),
-            this, SLOT(slotLoadingProgress(float)));
 
     // ---------------------------------------------------------------
 
@@ -208,7 +200,7 @@ void RawImportDlg::slotUser1()
     // We will load an half size image to speed up preview computing.
     settings.halfSizeColorImage = true;
 
-    d->previewWidget->setDecodingSettings(d->url, settings);
+    d->previewWidget->setDecodingSettings(settings);
 }
 
 // 'Abort' dialog button.
@@ -223,10 +215,6 @@ void RawImportDlg::slotLoadingStarted()
 {
     d->settingsBox->histogram()->setDataLoading();
     busy(true);
-}
-
-void RawImportDlg::slotLoadingProgress(float /*progress*/)
-{
 }
 
 void RawImportDlg::slotImageLoaded(const DImg& img)

@@ -144,7 +144,7 @@ public:
     KDcrawIface::DcrawSettingsWidget *decodingSettingsBox;
 };
 
-RawSettingsBox::RawSettingsBox(QWidget *parent)
+RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
               : QWidget(parent)
 {
     d = new RawSettingsBoxPriv;
@@ -220,6 +220,7 @@ RawSettingsBox::RawSettingsBox(QWidget *parent)
 
     d->decodingSettingsBox = new KDcrawIface::DcrawSettingsWidget(this, true, true, false);
     d->infoBox             = new ImageDialogPreview(d->decodingSettingsBox);
+    d->infoBox->showPreview(url);
 
     // ---------------------------------------------------------------
 
@@ -364,11 +365,6 @@ RawSettingsBox::~RawSettingsBox()
 void RawSettingsBox::setBusy(bool b)
 {
     d->decodingSettingsBox->setEnabled(!b);
-}
-
-void RawSettingsBox::setUrl(const KURL& url)
-{
-    d->infoBox->showPreview(url);
 }
 
 void RawSettingsBox::setImage(const DImg& img)

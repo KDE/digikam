@@ -81,11 +81,12 @@ public:
     LoadingDescription     loadingDesc;
 };
 
-RawPreview::RawPreview(QWidget *parent)
+RawPreview::RawPreview(const KURL& url, QWidget *parent)
           : PreviewWidget(parent)
 {
     d = new RawPreviewPriv;
     d->thread = new ManagedLoadSaveThread;
+    d->url    = url;
 
     setMinimumWidth(640);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -135,15 +136,12 @@ DImg& RawPreview::getImage() const
     return d->preview;
 }
 
-void RawPreview::setDecodingSettings(const KURL& url, const DRawDecoding& settings)
+void RawPreview::setDecodingSettings(const DRawDecoding& settings)
 {
-    if (!url.isEmpty())
-    {
-        setCursor(KCursor::waitCursor());
-        d->loadingDesc = LoadingDescription(url.path(), settings);
-        d->thread->load(d->loadingDesc, ManagedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
-        emit signalLoadingStarted();
-    }
+    setCursor(KCursor::waitCursor());
+    d->loadingDesc = LoadingDescription(d->url.path(), settings);
+    d->thread->load(d->loadingDesc, ManagedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+    emit signalLoadingStarted();
 }
 
 void RawPreview::cancelLoading()

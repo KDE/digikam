@@ -51,7 +51,7 @@ class DIGIKAM_EXPORT RawImportDlg : public KDialogBase
 
 public:
 
-    RawImportDlg(const KURL& info, QWidget *parent);
+    RawImportDlg(const KURL& url, QWidget *parent);
     ~RawImportDlg();
 
     DRawDecoding rawDecodingSettings();
@@ -70,7 +70,6 @@ private:
 private slots:
 
     void slotLoadingStarted();
-    void slotLoadingProgress(float progress);
     void slotImageLoaded(const DImg& img);
     void slotLoadingFailed();
 
