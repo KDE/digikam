@@ -50,11 +50,7 @@ public:
      */
     DRawDecoding()
     {
-        gamma        = 1.0;
-        saturation   = 1.0;
-        exposureComp = 0.0;
-        contrast     = 0.0;
-        curveAdjust  = QPolygon();
+        resetPostProcessingSettings();
     };
 
     /** Standard destructor 
@@ -66,6 +62,13 @@ public:
     void optimizeTimeLoading()
     {
         KDcrawIface::RawDecodingSettings::optimizeTimeLoading();
+        resetPostProcessingSettings();
+    };
+
+    /** Method to reset to default values all Raw processing settings.
+     */
+    void resetPostProcessingSettings()
+    {
         gamma        = 1.0;
         saturation   = 1.0;
         exposureComp = 0.0;
