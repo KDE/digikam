@@ -130,6 +130,11 @@ bool ImageCurves::isDirty()
     return d->dirty;
 }
 
+bool ImageCurves::isSixteenBits()
+{
+    return (d->segmentMax == 65535);
+}
+
 void ImageCurves::curvesReset()
 {
     memset(d->curves, 0, sizeof(struct ImageCurvesPriv::_Curves));
