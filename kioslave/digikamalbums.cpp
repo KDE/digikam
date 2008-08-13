@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2005-04-21
- * Description : a kio-slave to process file operations on 
- *               digiKam albums. 
- * 
+ * Description : a kio-slave to process file operations on
+ *               digiKam albums.
+ *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * Lots of the file io code is copied from KDE file kioslave.
@@ -20,19 +20,19 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #define MAX_IPC_SIZE (1024*32)
 
 // C Ansi includes.
 
-extern "C" 
+extern "C"
 {
 #include <unistd.h>
 #include <fcntl.h>
@@ -171,9 +171,20 @@ void kio_digikamalbums::special(const QByteArray& data)
     if (folders)       // Special mode to stats all album items
     {
         QMap<int, int> albumsStatMap;
-        QStringList    values;
+        QStringList    values, allAbumIDs;
         int            albumID;
 
+        // initialize allAbumIDs with all existing albums from db to prevent
+        // wrong album image counters
+        m_sqlDB.execSql(QString("SELECT id from Albums"), &allAbumIDs);
+
+        for ( QStringList::iterator it = allAbumIDs.begin(); it != allAbumIDs.end(); ++it)
+        {
+            albumID = (*it).toInt();
+            albumsStatMap.insert(albumID, 0);
+        }
+
+        // now we can count the images assigned to albums
         m_sqlDB.execSql(QString("SELECT dirid, Images.name FROM Images "
                                 "WHERE Images.dirid IN (SELECT DISTINCT id FROM Albums)"), &values);
 
@@ -207,32 +218,32 @@ void kio_digikamalbums::special(const QByteArray& data)
             // Otherwise albums on the same level like "Paris", "Paris 2006",
             // would be found in addition to "Paris/*".
             urlWithTrailingSlash = kurl.path(1);
-    
+
             m_sqlDB.execSql(QString("SELECT DISTINCT id, url FROM Albums WHERE  url='%1' OR url LIKE '%2\%';")
                             .arg(escapeString(url)).arg(escapeString(urlWithTrailingSlash)), &albumvalues);
         }
         else
         {
-            // Search for albums 
-    
+            // Search for albums
+
             m_sqlDB.execSql(QString("SELECT DISTINCT id, url FROM Albums WHERE url='%1';")
                             .arg(escapeString(url)), &albumvalues);
         }
-    
+
         QDataStream* os = new QDataStream(ba, IO_WriteOnly);
-    
-        QString base;  
+
+        QString base;
         Q_LLONG id;
         QString name;
         QString date;
         QSize   dims;
-    
+
         struct stat stbuf;
-        
+
         QStringList values;
         QString albumurl;
         int albumid;
-    
+
         // Loop over all albums:
         int count = 0 ;
         for (QStringList::iterator albumit = albumvalues.begin(); albumit != albumvalues.end();)
@@ -241,14 +252,14 @@ void kio_digikamalbums::special(const QByteArray& data)
             ++albumit;
             albumurl = *albumit;
             ++albumit;
-    
+
             base = libraryPath + albumurl + '/';
-    
+
             values.clear();
             m_sqlDB.execSql(QString("SELECT id, name, datetime FROM Images "
                                     "WHERE dirid = %1;")
                             .arg(albumid), &values);
-    
+
             // Loop over all images in each album (specified by its albumid).
             for (QStringList::iterator it = values.begin(); it != values.end();)
             {
@@ -258,20 +269,20 @@ void kio_digikamalbums::special(const QByteArray& data)
                 ++it;
                 date = *it;
                 ++it;
-    
+
                 if (!matchFilterList(regex, name))
                 continue;
-    
+
                 if (::stat(QFile::encodeName(base + name), &stbuf) != 0)
                 continue;
-    
+
                 dims = QSize();
                 if (getDimensions)
                 {
                     QFileInfo fileInfo(base + name);
                     QString rawFilesExt(KDcrawIface::DcrawBinary::instance()->rawFiles());
                     QString ext = fileInfo.extension(false).upper();
-    
+
                     if (!ext.isEmpty() && rawFilesExt.upper().contains(ext))
                     {
                         Digikam::DMetadata metaData(base + name);
@@ -296,29 +307,29 @@ void kio_digikamalbums::special(const QByteArray& data)
                             {
                                 dims = metaInfo.group("Technical").
                                 item("Dimensions").value().toSize();
-                            }                         
-                        }                    
+                            }
+                        }
                     }
                 }
-    
+
                 *os << id;
                 *os << albumid;
                 *os << name;
                 *os << date;
                 *os << static_cast<size_t>(stbuf.st_size);
                 *os << dims;
-    
+
                 count++;
-    
+
                 // Send images in batches of 200.
                 if (count > 200)
                 {
                     delete os;
                     os = 0;
-    
+
                     SlaveBase::data(ba);
                     ba.resize(0);
-    
+
                     count = 0;
                     os = new QDataStream(ba, IO_WriteOnly);
                 }
@@ -328,7 +339,7 @@ void kio_digikamalbums::special(const QByteArray& data)
     }
 
     SlaveBase::data(ba);
-    
+
     finished();
 }
 
@@ -352,7 +363,7 @@ static int write_all(int fd, const char *buf, size_t len)
 void kio_digikamalbums::get( const KURL& url )
 {
 // Code duplication from file:// ioslave
-    kdDebug() << k_funcinfo << " : " << url << endl;    
+    kdDebug() << k_funcinfo << " : " << url << endl;
 
     // get the libraryPath
     QString libraryPath = url.user();
@@ -363,7 +374,7 @@ void kio_digikamalbums::get( const KURL& url )
     }
 
     // no need to open the db. we don't need to read/write to it
-    
+
     QCString path(QFile::encodeName(libraryPath + url.path()));
     KDE_struct_stat buff;
     if ( KDE_stat( path.data(), &buff ) == -1 )
@@ -380,7 +391,7 @@ void kio_digikamalbums::get( const KURL& url )
         error( KIO::ERR_IS_DIRECTORY, url.url() );
         return;
     }
-    
+
     if ( !S_ISREG( buff.st_mode ) )
     {
         error( KIO::ERR_CANNOT_OPEN_FOR_READING, url.url() );
@@ -467,8 +478,8 @@ void kio_digikamalbums::put(const KURL& url, int permissions, bool overwrite, bo
               .arg(url.directory()));
         return;
     }
-    
-    
+
+
     QString dest = libraryPath + url.path();
     QCString _dest( QFile::encodeName(dest));
 
@@ -504,7 +515,7 @@ void kio_digikamalbums::put(const KURL& url, int permissions, bool overwrite, bo
     }
 
     int result;
-    
+
     // Loop until we get 0 (end of data)
     do
     {
@@ -519,7 +530,7 @@ void kio_digikamalbums::put(const KURL& url, int permissions, bool overwrite, bo
                 if ( errno == ENOSPC ) // disk full
                 {
                     error( KIO::ERR_DISK_FULL, url.url());
-                    result = -1; 
+                    result = -1;
                 }
                 else
                 {
@@ -584,7 +595,7 @@ void kio_digikamalbums::put(const KURL& url, int permissions, bool overwrite, bo
         // Now insert the file into the database
         addImage(album.id, m_libraryPath + url.path());
     }
-    
+
     // We have done our job => finish
     finished();
 }
@@ -592,7 +603,7 @@ void kio_digikamalbums::put(const KURL& url, int permissions, bool overwrite, bo
 void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int mode, bool overwrite )
 {
 // Code duplication from file:// ioslave?
-    kdDebug() << k_funcinfo << "Src: " << src.path() << ", Dst: " << dst.path()   << endl;        
+    kdDebug() << k_funcinfo << "Src: " << src.path() << ", Dst: " << dst.path()   << endl;
 
     // get the album library path
     QString libraryPath = src.user();
@@ -686,7 +697,7 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int mode, bool o
     {
         error( KIO::ERR_CANNOT_OPEN_FOR_READING, src.url() );
         return;
-    } 
+    }
 
     // stat the dst file
     KDE_struct_stat buff_dest;
@@ -757,7 +768,7 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int mode, bool o
 
     while (1)
     {
-        // read in chunks of MAX_IPC_SIZE 
+        // read in chunks of MAX_IPC_SIZE
         n = ::read( src_fd, buffer, MAX_IPC_SIZE );
 
         if (n == -1)
@@ -769,10 +780,10 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int mode, bool o
             close(dest_fd);
             return;
         }
-       
+
         // Finished ?
         if (n == 0)
-            break; 
+            break;
 
         // write to the destination file
         if (write_all( dest_fd, buffer, n))
@@ -792,11 +803,11 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int mode, bool o
             }
             return;
         }
-       
+
         processedSize( processed_size );
     }
 
-    
+
     close( src_fd );
 
     if (close( dest_fd))
@@ -829,7 +840,7 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int mode, bool o
 
     // now copy the metadata over
     copyImage(srcAlbum.id, src.fileName(), dstAlbum.id, dst.fileName());
-    
+
     processedSize( buff_src.st_size );
     finished();
 }
@@ -837,7 +848,7 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int mode, bool o
 void kio_digikamalbums::rename( const KURL& src, const KURL& dst, bool overwrite )
 {
 // Code duplication from file:// ioslave?
-    kdDebug() << k_funcinfo << "Src: " << src << ", Dst: " << dst   << endl;        
+    kdDebug() << k_funcinfo << "Src: " << src << ", Dst: " << dst   << endl;
 
     // if the filename is .digikam_properties fake that we renamed it
     if (src.fileName() == ".digikam_properties")
@@ -845,7 +856,7 @@ void kio_digikamalbums::rename( const KURL& src, const KURL& dst, bool overwrite
         finished();
         return;
     }
-    
+
     QString libraryPath = src.user();
     if (libraryPath.isEmpty())
     {
@@ -905,7 +916,7 @@ void kio_digikamalbums::rename( const KURL& src, const KURL& dst, bool overwrite
         }
     }
 
-    
+
     // build album list
     buildAlbumList();
 
@@ -941,7 +952,7 @@ void kio_digikamalbums::rename( const KURL& src, const KURL& dst, bool overwrite
                   .arg(dst.directory()));
             return;
         }
-    }    
+    }
 
     // actually rename the file/folder
     if ( ::rename(csrc.data(), cdst.data()))
@@ -993,14 +1004,14 @@ void kio_digikamalbums::stat( const KURL& url )
         error(KIO::ERR_UNKNOWN, "Album Library Path not supplied to kioslave");
         return;
     }
-    
+
     KIO::UDSEntry entry;
     if (!createUDSEntry(libraryPath + url.path(), entry))
     {
         error(KIO::ERR_DOES_NOT_EXIST, url.path(-1));
         return;
     }
-    
+
     statEntry(entry);
     finished();
 }
@@ -1008,7 +1019,7 @@ void kio_digikamalbums::stat( const KURL& url )
 void kio_digikamalbums::listDir( const KURL& url )
 {
 // Code duplication from file:// ioslave?
-    kdDebug() << k_funcinfo << " : " << url.path() << endl;            
+    kdDebug() << k_funcinfo << " : " << url.path() << endl;
 
     QString libraryPath = url.user();
     if (libraryPath.isEmpty())
@@ -1032,7 +1043,7 @@ void kio_digikamalbums::listDir( const KURL& url )
         error( KIO::ERR_CANNOT_ENTER_DIRECTORY, url.path());
         return;
     }
-    
+
     const QFileInfoList *list = dir.entryInfoList(QDir::All|QDir::Hidden);
     QFileInfoListIterator it( *list );
     QFileInfo *fi;
@@ -1073,10 +1084,10 @@ void kio_digikamalbums::mkdir( const KURL& url, int permissions )
         m_sqlDB.closeDB();
         m_sqlDB.openDB(m_libraryPath);
     }
-    
+
     QString   path = libraryPath + url.path();
     QCString _path( QFile::encodeName(path));
-    
+
     KDE_struct_stat buff;
     if ( KDE_stat( _path, &buff ) == -1 )
     {
@@ -1105,13 +1116,13 @@ void kio_digikamalbums::mkdir( const KURL& url, int permissions )
                                      "VALUES('%1','%2')")
                              .arg(escapeString(url.path()),
                                   QDate::currentDate().toString(Qt::ISODate)) );
-            
+
             if ( permissions != -1 )
             {
                 if ( ::chmod( _path.data(), permissions ) == -1 )
                     error( KIO::ERR_CANNOT_CHMOD, path );
                 else
-                    finished();                                   
+                    finished();
             }
             else
                 finished();
@@ -1125,7 +1136,7 @@ void kio_digikamalbums::mkdir( const KURL& url, int permissions )
         return;
     }
 
-    error( KIO::ERR_FILE_ALREADY_EXIST, path );                
+    error( KIO::ERR_FILE_ALREADY_EXIST, path );
 }
 
 void kio_digikamalbums::chmod( const KURL& url, int permissions )
@@ -1151,7 +1162,7 @@ void kio_digikamalbums::chmod( const KURL& url, int permissions )
 void kio_digikamalbums::del( const KURL& url, bool isfile)
 {
 // Code duplication from file:// ioslave?
-    kdDebug() << k_funcinfo << " : " << url.url() << endl;            
+    kdDebug() << k_funcinfo << " : " << url.url() << endl;
 
     // get the album library path
     QString libraryPath = url.user();
@@ -1173,7 +1184,7 @@ void kio_digikamalbums::del( const KURL& url, bool isfile)
     buildAlbumList();
 
     QCString path( QFile::encodeName(libraryPath + url.path()));
-    
+
     if (isfile)
     {
         kdDebug(  ) <<  "Deleting file "<< url.url() << endl;
@@ -1221,11 +1232,11 @@ void kio_digikamalbums::del( const KURL& url, bool isfile)
                   .arg(url.path()));
             return;
         }
-      
+
         if ( ::rmdir( path.data() ) == -1 )
         {
             // TODO handle symlink delete
-            
+
             if ((errno == EACCES) || (errno == EPERM))
             {
                 error( KIO::ERR_ACCESS_DENIED, url.url());
@@ -1244,7 +1255,7 @@ void kio_digikamalbums::del( const KURL& url, bool isfile)
     }
 
     finished();
-    
+
 }
 
 bool kio_digikamalbums::createUDSEntry(const QString& path, KIO::UDSEntry& entry)
@@ -1267,7 +1278,7 @@ bool kio_digikamalbums::createUDSEntry(const QString& path, KIO::UDSEntry& entry
 
     atom.m_uds = KIO::UDS_SIZE;
     atom.m_long = stbuf.st_size;
-    entry.append( atom );       
+    entry.append( atom );
 
     atom.m_uds = KIO::UDS_MODIFICATION_TIME;
     atom.m_long = stbuf.st_mtime;
@@ -1275,7 +1286,7 @@ bool kio_digikamalbums::createUDSEntry(const QString& path, KIO::UDSEntry& entry
 
     atom.m_uds = KIO::UDS_ACCESS_TIME;
     atom.m_long = stbuf.st_atime;
-    entry.append( atom );   
+    entry.append( atom );
 
     atom.m_uds = KIO::UDS_NAME;
     atom.m_str = QFileInfo(path).fileName();
@@ -1300,7 +1311,7 @@ bool kio_digikamalbums::createUDSEntry(const QString& path, KIO::UDSEntry& entry
 void kio_digikamalbums::createDigikamPropsUDSEntry(KIO::UDSEntry& entry)
 {
     entry.clear();
-    
+
     KIO::UDSAtom  atom;
 
     atom.m_uds = KIO::UDS_FILE_TYPE;
@@ -1313,7 +1324,7 @@ void kio_digikamalbums::createDigikamPropsUDSEntry(KIO::UDSEntry& entry)
 
     atom.m_uds = KIO::UDS_SIZE;
     atom.m_long = 0;
-    entry.append( atom );       
+    entry.append( atom );
 
     atom.m_uds = KIO::UDS_MODIFICATION_TIME;
     atom.m_long = QDateTime::currentDateTime().toTime_t();
@@ -1321,7 +1332,7 @@ void kio_digikamalbums::createDigikamPropsUDSEntry(KIO::UDSEntry& entry)
 
     atom.m_uds = KIO::UDS_ACCESS_TIME;
     atom.m_long = QDateTime::currentDateTime().toTime_t();
-    entry.append( atom );   
+    entry.append( atom );
 
     atom.m_uds = KIO::UDS_NAME;
     atom.m_str = ".digikam_properties";
@@ -1332,7 +1343,7 @@ void kio_digikamalbums::buildAlbumList()
 {
 // simplified from AlbumDB::scanAlbums()
     m_albumList.clear();
-    
+
     QStringList values;
     m_sqlDB.execSql( QString("SELECT id, url, date, caption, collection, icon "
                              "FROM Albums;"), &values );
@@ -1340,7 +1351,7 @@ void kio_digikamalbums::buildAlbumList()
     for (QStringList::iterator it = values.begin(); it != values.end();)
     {
         AlbumInfo info;
-        
+
         info.id = (*it).toInt();
         ++it;
         info.url = *it;
@@ -1353,8 +1364,8 @@ void kio_digikamalbums::buildAlbumList()
         ++it;
         info.icon = (*it).toLongLong();
         ++it;
-        
-        m_albumList.append(info);        
+
+        m_albumList.append(info);
     }
 }
 
@@ -1373,7 +1384,7 @@ AlbumInfo kio_digikamalbums::findAlbum(const QString& url, bool addIfNotExists)
     }
 
     album.id = -1;
-    
+
     if (addIfNotExists)
     {
         QFileInfo fi(m_libraryPath + url);
@@ -1389,10 +1400,10 @@ AlbumInfo kio_digikamalbums::findAlbum(const QString& url, bool addIfNotExists)
         album.url  = url;
         album.date = fi.lastModified().date();
         album.icon = 0;
-        
+
         m_albumList.append(album);
     }
-    
+
     return album;
 }
 
@@ -1400,7 +1411,7 @@ void kio_digikamalbums::delAlbum(int albumID)
 {
 // code duplication from AlbumDB::deleteAlbum
     m_sqlDB.execSql(QString("DELETE FROM Albums WHERE id='%1'")
-                    .arg(albumID));    
+                    .arg(albumID));
 }
 
 void kio_digikamalbums::renameAlbum(const QString& oldURL, const QString& newURL)
@@ -1433,7 +1444,7 @@ bool kio_digikamalbums::findImage(int albumID, const QString& name) const
 {
 // no similar method in AlbumDB?
     QStringList values;
-    
+
     m_sqlDB.execSql( QString("SELECT name FROM Images "
                              "WHERE dirid=%1 AND name='%2';")
                      .arg(albumID)
@@ -1546,7 +1557,7 @@ void kio_digikamalbums::addImage(int albumID, const QString& filePath)
         for (QStringList::iterator kwd = keywordsList.begin();
             kwd != keywordsList.end(); ++kwd )
         {
-            // split full tag "url" into list of single tag names 
+            // split full tag "url" into list of single tag names
             QStringList tagHierarchy = QStringList::split('/', *kwd);
             if (tagHierarchy.isEmpty())
                 continue;
@@ -1616,10 +1627,10 @@ void kio_digikamalbums::addImage(int albumID, const QString& filePath)
 
         if (!keywordsList2Create.isEmpty())
         {
-            for (QStringList::iterator kwd = keywordsList2Create.begin(); 
+            for (QStringList::iterator kwd = keywordsList2Create.begin();
                 kwd != keywordsList2Create.end(); ++kwd )
             {
-                // split full tag "url" into list of single tag names 
+                // split full tag "url" into list of single tag names
                 QStringList tagHierarchy = QStringList::split('/', *kwd);
 
                 if (tagHierarchy.isEmpty())
@@ -1797,7 +1808,7 @@ void kio_digikamalbums::scanOneAlbum(const QString& url)
 
     {
         // scan albums
-        
+
         QStringList currAlbumList;
         m_sqlDB.execSql( QString("SELECT url FROM Albums WHERE ") +
                          QString("url LIKE '") + subURL + QString("%' ") +
@@ -1808,22 +1819,22 @@ void kio_digikamalbums::scanOneAlbum(const QString& url)
         const QFileInfoList* infoList = dir.entryInfoList(QDir::Dirs);
         if (!infoList)
             return;
-        
+
         QFileInfoListIterator it(*infoList);
         QFileInfo* fi;
-        
+
         QStringList newAlbumList;
         while ((fi = it.current()) != 0)
         {
             ++it;
-            
+
             if (fi->fileName() == "." || fi->fileName() == "..")
             {
                 continue;
             }
-            
+
             QString u = QDir::cleanDirPath(url + '/' + fi->fileName());
-            
+
             if (currAlbumList.contains(u))
             {
                 continue;
@@ -1863,7 +1874,7 @@ void kio_digikamalbums::scanOneAlbum(const QString& url)
         QStringList currItemList;
         m_sqlDB.execSql( QString("SELECT name FROM Images WHERE dirid=%1")
                          .arg(albumID), &currItemList );
-        
+
         const QFileInfoList* infoList = dir.entryInfoList(QDir::Files);
         if (!infoList)
             return;
@@ -1910,7 +1921,7 @@ void kio_digikamalbums::removeInvalidAlbums()
     m_sqlDB.execSql("BEGIN TRANSACTION");
 
     struct stat stbuf;
-    
+
     for (QStringList::iterator it = urlList.begin();
          it != urlList.end(); ++it)
     {
@@ -1919,7 +1930,7 @@ void kio_digikamalbums::removeInvalidAlbums()
 
         kdDebug() << "Deleted Album: " << *it << endl;
         m_sqlDB.execSql(QString("DELETE FROM Albums WHERE url='%1'")
-                    .arg(escapeString(*it)));    
+                    .arg(escapeString(*it)));
     }
 
     m_sqlDB.execSql("COMMIT TRANSACTION");
@@ -1934,7 +1945,7 @@ extern "C"
         KLocale::setMainCatalogue("digikam");
         KInstance instance( "kio_digikamalbums" );
         KGlobal::locale();
-        
+
         if (argc != 4) {
             kdDebug() << "Usage: kio_digikamalbums  protocol domain-socket1 domain-socket2"
                       << endl;
@@ -1943,7 +1954,7 @@ extern "C"
 
         kio_digikamalbums slave(argv[2], argv[3]);
         slave.dispatchLoop();
-        
+
         return 0;
     }
 }

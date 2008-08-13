@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-07-09
- * Description : a kio-slave to process tag query on 
+ * Description : a kio-slave to process tag query on
  *               digiKam albums.
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
@@ -142,10 +142,21 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
     {
         QMap<int, int> tagsStatMap;
         int            tagID, imageID;
-        QStringList    values;
+        QStringList    values, allTagIDs;
 
+        // initialize allTagIDs with all existing tags from db to prevent
+        // wrong tag counters
+        m_db.execSql(QString("SELECT id from Tags"), &allTagIDs);
+
+        for ( QStringList::iterator it = allTagIDs.begin(); it != allTagIDs.end(); ++it)
+        {
+            tagID = (*it).toInt();
+            tagsStatMap.insert(tagID, 0);
+        }
+
+        // now we can count the tags assigned to images
         m_db.execSql(QString("SELECT ImageTags.tagid, Images.name FROM ImageTags, Images "
-                             "WHERE ImageTags.imageid=Images.id"), &values);
+                "WHERE ImageTags.imageid=Images.id"), &values);
 
         for ( QStringList::iterator it = values.begin(); it != values.end(); )
         {
@@ -172,7 +183,7 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
         tagID = QStringList::split('/',url).last().toInt();
 
         QStringList values;
-    
+
         if (recurseTags)
         {
             // Obtain all images with the given tag, or with this tag as a parent.
@@ -199,7 +210,7 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
                                     "   AND Albums.id=Images.dirid \n " )
                         .arg(tagID), &values );
         }
-    
+
         Q_LLONG imageid;
         QString name;
         QString path;
@@ -207,10 +218,10 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
         QString date;
         QString purl;
         QSize   dims;
-    
+
         int count = 0;
         QDataStream* os = new QDataStream(ba, IO_WriteOnly);
-    
+
         struct stat stbuf;
         for (QStringList::iterator it = values.begin(); it != values.end();)
         {
@@ -224,14 +235,14 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
             ++it;
             purl  = *it;
             ++it;
-    
+
             if (!matchFilterList(regex, name))
                 continue;
-    
+
             path = m_libraryPath + purl + '/' + name;
             if (::stat(QFile::encodeName(path), &stbuf) != 0)
                 continue;
-    
+
             dims = QSize();
             if (getDimensions)
             {
@@ -255,29 +266,29 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
                     }
                 }
             }
-    
+
             *os << imageid;
             *os << dirid;
             *os << name;
             *os << date;
             *os << static_cast<size_t>(stbuf.st_size);
             *os << dims;
-    
+
             count++;
-    
+
             if (count > 200)
             {
                 delete os;
                 os = 0;
-    
+
                 SlaveBase::data(ba);
                 ba.resize(0);
-    
+
                 count = 0;
                 os = new QDataStream(ba, IO_WriteOnly);
             }
         }
-    
+
         delete os;
     }
 
