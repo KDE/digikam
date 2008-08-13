@@ -246,10 +246,10 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     d->saturationInput->setRange(0.0, 2.0, 0.01, true);
     QWhatsThis::add( d->saturationInput, i18n("<p>Set here the color saturation correction."));
 
-    d->fineExposureLabel = new QLabel(i18n("Exposure:"), d->advExposureBox);
+    d->fineExposureLabel = new QLabel(i18n("Exposure (E.V):"), d->advExposureBox);
     d->fineExposureInput = new KDoubleNumInput(d->advExposureBox);
     d->fineExposureInput->setPrecision(2);
-    d->fineExposureInput->setRange(-0.5, 0.5, 0.01, true);
+    d->fineExposureInput->setRange(-0.5, 0.5, 0.1, true);
     QWhatsThis::add(d->fineExposureInput, i18n("<p>This value in E.V will be used to perform "
                                                "an exposure compensation of the image."));
 
