@@ -62,9 +62,9 @@ public:
 
     RawImportDlgPriv()
     {
-        timer         = 0;
         previewWidget = 0;
-        settingsBox   = 0; 
+        settingsBox   = 0;
+        timer         = 0;
     }
 
     QTimer         *timer;
@@ -79,6 +79,7 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
                           Help|Default|User1|User2|Ok|Cancel, Cancel, true)
 {
     d = new RawImportDlgPriv;
+    d->timer = new QTimer(this);
 
     setHelp("rawimport.anchor", "digikam");
     setCaption(i18n("Raw Import - %1").arg(url.fileName()));
@@ -133,6 +134,9 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
             this, SLOT(slotLoadingFailed()));
 
     connect(d->settingsBox, SIGNAL(signalPostProcessingChanged()),
+            this, SLOT(slotTimer()));
+
+    connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotPostProcessing()));
 
     // ---------------------------------------------------------------
@@ -144,7 +148,6 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
 
 RawImportDlg::~RawImportDlg()
 {
-    delete d->timer;
     delete d;
 }
 
@@ -248,15 +251,6 @@ void RawImportDlg::slotLoadingFailed()
 
 void RawImportDlg::slotTimer()
 {
-    if (d->timer)
-    {
-       d->timer->stop();
-       delete d->timer;
-    }
-
-    d->timer = new QTimer( this );
-    connect( d->timer, SIGNAL(timeout()),
-             this, SLOT(slotPostProcessing()) );
     d->timer->start(500, true);
 }
 
