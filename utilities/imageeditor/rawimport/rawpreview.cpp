@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-08-04
- * Description : RAW preview widget.
+ * Description : RAW postProcessedImg widget.
  *
  * Copyright (C) 2008 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -44,6 +44,7 @@
 #include "managedloadsavethread.h"
 #include "loadingdescription.h"
 #include "themeengine.h"
+#include "rawpostprocessing.h"
 #include "rawpreview.h"
 #include "rawpreview.moc"
 
@@ -74,7 +75,11 @@ public:
 
     PanIconWidget         *panIconWidget;
 
-    DImg                   preview;
+    DImg                   demosaicedImg;
+
+    DImg                   postProcessedImg;
+
+    DRawDecoding           settings;
 
     ManagedLoadSaveThread *thread;
 
@@ -121,9 +126,9 @@ RawPreview::~RawPreview()
     delete d;
 }
 
-void RawPreview::setImage(const DImg& image)
+void RawPreview::setPostProcessedImage(const DImg& image)
 {
-    d->preview = image;
+    d->postProcessedImg = image;
 
     updateZoomAndSize(false);
 
@@ -131,17 +136,36 @@ void RawPreview::setImage(const DImg& image)
     viewport()->update();
 }
 
-DImg& RawPreview::getImage() const
+DImg& RawPreview::postProcessedImage() const
 {
-    return d->preview;
+    return d->postProcessedImg;
+}
+
+DImg& RawPreview::demosaicedImage() const
+{
+    return d->demosaicedImg;
 }
 
 void RawPreview::setDecodingSettings(const DRawDecoding& settings)
 {
     setCursor(KCursor::waitCursor());
-    d->loadingDesc = LoadingDescription(d->url.path(), settings);
+    // Save post processing settings.
+    d->settings = settings;
+
+    // All post processing settings will be used after demosaicing.
+    DRawDecoding demosaisedSettings = settings;
+    demosaisedSettings.resetPostProcessingSettings();
+
+    d->loadingDesc = LoadingDescription(d->url.path(), demosaisedSettings);
     d->thread->load(d->loadingDesc, ManagedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
     emit signalLoadingStarted();
+}
+
+void RawPreview::setPostProcessingSettings(const DRawDecoding& settings)
+{
+    setCursor(KCursor::waitCursor());
+    postProcessing(settings);
+    unsetCursor();
 }
 
 void RawPreview::cancelLoading()
@@ -174,16 +198,27 @@ void RawPreview::slotImageLoaded(const LoadingDescription& description, const DI
                    .arg(QFileInfo(d->loadingDesc.filePath).fileName()));
         p.end();
         // three copies - but the image is small
-        setImage(DImg(pix.convertToImage()));
+        setPostProcessedImage(DImg(pix.convertToImage()));
         emit signalLoadingFailed();
     }
     else
     {
-        setImage(image);
-        emit signalImageLoaded(image);
+        d->demosaicedImg = image;
+        emit signalDemosaicedImage();
+
+        // Now, we will apply all Raw post processing corrections.
+        postProcessing(d->settings);
     }
 
     unsetCursor();
+}
+
+void RawPreview::postProcessing(const DRawDecoding& settings)
+{
+    DImg postImg = d->demosaicedImg;
+    RawPostProcessing postProc(&postImg, 0, settings);
+    setPostProcessedImage(postProc.getTargetImage());
+    emit signalPostProcessedImage();
 }
 
 void RawPreview::slotThemeChanged()
@@ -202,7 +237,7 @@ void RawPreview::slotCornerButtonPressed()
 
     d->panIconPopup    = new KPopupFrame(this);
     PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
-    pan->setImage(180, 120, getImage());
+    pan->setImage(180, 120, postProcessedImage());
     d->panIconPopup->setMainWidget(pan);
 
     QRect r((int)(contentsX()    / zoomFactor()), (int)(contentsY()     / zoomFactor()),
@@ -291,22 +326,22 @@ void RawPreview::updateZoomAndSize(bool alwaysFitToWindow)
 
 int RawPreview::previewWidth()
 {
-    return d->preview.width();
+    return d->postProcessedImg.width();
 }
 
 int RawPreview::previewHeight()
 {
-    return d->preview.height();
+    return d->postProcessedImg.height();
 }
 
 bool RawPreview::previewIsNull()
 {
-    return d->preview.isNull();
+    return d->postProcessedImg.isNull();
 }
 
 void RawPreview::resetPreview()
 {
-    d->preview     = DImg();
+    d->postProcessedImg     = DImg();
     d->loadingDesc = LoadingDescription();
 
     updateZoomAndSize(false);
@@ -314,7 +349,7 @@ void RawPreview::resetPreview()
 
 void RawPreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
 {
-    DImg img     = d->preview.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());
+    DImg img     = d->postProcessedImg.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());
     QPixmap pix2 = img.convertToPixmap();
     bitBlt(pix, 0, 0, &pix2, 0, 0);
 }

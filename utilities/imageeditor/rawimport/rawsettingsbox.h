@@ -53,7 +53,6 @@ public:
     ~RawSettingsBox();
 
     void setDefaultSettings();
-    void setImage(const DImg& img);
     void setBusy(bool b);
 
     HistogramWidget* histogram() const;
@@ -62,6 +61,13 @@ public:
 
     void saveSettings();
     void readSettings();
+
+    void setDemosaicedImage(DImg& img);
+    void setPostProcessedImage(DImg& img);
+
+signals:
+
+    void signalPostProcessingChanged();
 
 private slots:
 

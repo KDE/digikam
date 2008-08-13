@@ -56,10 +56,11 @@ public:
     RawPreview(const KURL& url, QWidget *parent);
     ~RawPreview();
 
-    void setImage(const DImg& image);
-    DImg& getImage() const;
+    DImg& demosaicedImage() const;
+    DImg& postProcessedImage() const;
 
     void setDecodingSettings(const DRawDecoding& settings);
+    void setPostProcessingSettings(const DRawDecoding& settings);
 
     void cancelLoading();
 
@@ -68,7 +69,8 @@ signals:
     void signalLoadingStarted();
     void signalLoadingProgress(float);
     void signalLoadingFailed();
-    void signalImageLoaded(const DImg&);
+    void signalDemosaicedImage();
+    void signalPostProcessedImage();
 
 protected:
 
@@ -85,6 +87,9 @@ private slots:
 
 private:
 
+    void setPostProcessedImage(const DImg& image);
+    void setdemosaicedImg(const DImg& image);
+    void postProcessing(const DRawDecoding& settings);
     int  previewWidth();
     int  previewHeight();
     bool previewIsNull();

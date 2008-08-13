@@ -2,12 +2,15 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = librawimport.la 
 
-librawimport_la_SOURCES = rawpreview.cpp rawsettingsbox.cpp rawimportdlg.cpp
+librawimport_la_SOURCES = rawpreview.cpp rawsettingsbox.cpp rawimportdlg.cpp \
+	                  rawpostprocessing.cpp
 
 librawimport_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) 
 
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	  -I$(top_srcdir)/digikam/libs/histogram \
+	  -I$(top_srcdir)/digikam/libs/curves \
+	  -I$(top_srcdir)/digikam/libs/whitebalance \
 	  -I$(top_srcdir)/digikam/libs/dmetadata \
 	  -I$(top_srcdir)/digikam/libs/curves \
 	  -I$(top_srcdir)/digikam/libs/dimg \

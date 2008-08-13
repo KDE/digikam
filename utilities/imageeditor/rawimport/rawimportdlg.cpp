@@ -26,6 +26,7 @@
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -61,13 +62,16 @@ public:
 
     RawImportDlgPriv()
     {
+        timer         = 0;
         previewWidget = 0;
         settingsBox   = 0; 
     }
 
-    RawSettingsBox        *settingsBox;
+    QTimer         *timer;
 
-    RawPreview            *previewWidget;
+    RawSettingsBox *settingsBox;
+
+    RawPreview     *previewWidget;
 };
 
 RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
@@ -109,13 +113,18 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     mainLayout->setSpacing(spacingHint());
     mainLayout->setMargin(0);
 
+    readSettings();
+
     // ---------------------------------------------------------------
 
     connect(d->previewWidget, SIGNAL(signalLoadingStarted()),
             this, SLOT(slotLoadingStarted()));
 
-    connect(d->previewWidget, SIGNAL(signalImageLoaded(const DImg&)),
-            this, SLOT(slotImageLoaded(const DImg&)));
+    connect(d->previewWidget, SIGNAL(signalDemosaicedImage()),
+            this, SLOT(slotDemosaicedImage()));
+
+    connect(d->previewWidget, SIGNAL(signalPostProcessedImage()),
+            this, SLOT(slotPostProcessedImage()));
 
     connect(d->previewWidget, SIGNAL(signalLoadingStarted()),
             this, SLOT(slotLoadingStarted()));
@@ -123,9 +132,10 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     connect(d->previewWidget, SIGNAL(signalLoadingFailed()),
             this, SLOT(slotLoadingFailed()));
 
-    // ---------------------------------------------------------------
+    connect(d->settingsBox, SIGNAL(signalPostProcessingChanged()),
+            this, SLOT(slotPostProcessing()));
 
-    readSettings();
+    // ---------------------------------------------------------------
 
     busy(true);
     enableButton (User2, false);
@@ -134,6 +144,7 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
 
 RawImportDlg::~RawImportDlg()
 {
+    delete d->timer;
     delete d;
 }
 
@@ -184,7 +195,7 @@ void RawImportDlg::saveSettings()
 {
     KConfig* config = kapp->config();
     saveDialogSize(*config, QString("RAW Import Dialog"));
-    d->settingsBox->saveSettings(); 
+    d->settingsBox->saveSettings();
     config->sync();
 }
 
@@ -214,12 +225,18 @@ void RawImportDlg::slotUser2()
 void RawImportDlg::slotLoadingStarted()
 {
     d->settingsBox->histogram()->setDataLoading();
+    d->settingsBox->curve()->setDataLoading();
     busy(true);
 }
 
-void RawImportDlg::slotImageLoaded(const DImg& img)
+void RawImportDlg::slotDemosaicedImage()
 {
-    d->settingsBox->setImage(img);
+    d->settingsBox->setDemosaicedImage(d->previewWidget->demosaicedImage());
+}
+
+void RawImportDlg::slotPostProcessedImage()
+{
+    d->settingsBox->setPostProcessedImage(d->previewWidget->postProcessedImage());
     busy(false);
 }
 
@@ -227,6 +244,25 @@ void RawImportDlg::slotLoadingFailed()
 {
     d->settingsBox->histogram()->setLoadingFailed();
     busy(false);
+}
+
+void RawImportDlg::slotTimer()
+{
+    if (d->timer)
+    {
+       d->timer->stop();
+       delete d->timer;
+    }
+
+    d->timer = new QTimer( this );
+    connect( d->timer, SIGNAL(timeout()),
+             this, SLOT(slotPostProcessing()) );
+    d->timer->start(500, true);
+}
+
+void RawImportDlg::slotPostProcessing()
+{
+    d->previewWidget->setPostProcessingSettings(rawDecodingSettings());
 }
 
 } // NameSpace Digikam

@@ -95,12 +95,12 @@ public:
         infoBox             = 0;
         advExposureBox      = 0;
         gammaLabel          = 0;
-        gammaSpinBox        = 0;
+        gammaInput        = 0;
         saturationLabel     = 0;
         saturationInput     = 0;
         fineExposureLabel   = 0;
         fineExposureInput   = 0;
-        contrastSpinBox     = 0;
+        contrastInput     = 0;
         contrastLabel       = 0;
         curveBox            = 0;
         curveWidget         = 0;
@@ -124,9 +124,9 @@ public:
 
     QToolButton                      *resetCurveBtn;
 
-    KIntNumInput                     *contrastSpinBox;
+    KIntNumInput                     *contrastInput;
 
-    KDoubleNumInput                  *gammaSpinBox;
+    KDoubleNumInput                  *gammaInput;
     KDoubleNumInput                  *saturationInput;
     KDoubleNumInput                  *fineExposureInput;
 
@@ -138,8 +138,6 @@ public:
     HistogramWidget                  *histogramWidget;
 
     ImageDialogPreview               *infoBox;
-
-    DImg                              image;
 
     KDcrawIface::DcrawSettingsWidget *decodingSettingsBox;
 };
@@ -228,17 +226,17 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     QGridLayout* advExposureLayout = new QGridLayout(d->advExposureBox, 4, 2);
 
     d->contrastLabel   = new QLabel(i18n("Contrast:"), d->advExposureBox);
-    d->contrastSpinBox = new KIntNumInput(d->advExposureBox);
-    d->contrastSpinBox->setRange(-100, 100, 1, true);
-    d->contrastSpinBox->setValue(0);
-    QWhatsThis::add(d->contrastSpinBox, i18n("<p>Set here the contrast adjustment of the image."));
+    d->contrastInput = new KIntNumInput(d->advExposureBox);
+    d->contrastInput->setRange(-100, 100, 1, true);
+    d->contrastInput->setValue(0);
+    QWhatsThis::add(d->contrastInput, i18n("<p>Set here the contrast adjustment of the image."));
 
     d->gammaLabel   = new QLabel(i18n("Gamma:"), d->advExposureBox);
-    d->gammaSpinBox = new KDoubleNumInput(d->advExposureBox);
-    d->gammaSpinBox->setPrecision(2);
-    d->gammaSpinBox->setRange(0.1, 3.0, 0.01, true);
-    d->gammaSpinBox->setValue(1.0);
-    QWhatsThis::add(d->gammaSpinBox, i18n("Set here the gamma adjustement of the image"));
+    d->gammaInput = new KDoubleNumInput(d->advExposureBox);
+    d->gammaInput->setPrecision(2);
+    d->gammaInput->setRange(0.1, 3.0, 0.01, true);
+    d->gammaInput->setValue(1.0);
+    QWhatsThis::add(d->gammaInput, i18n("Set here the gamma adjustement of the image"));
 
     d->saturationLabel = new QLabel(i18n("Saturation:"), d->advExposureBox);
     d->saturationInput = new KDoubleNumInput(d->advExposureBox);
@@ -246,7 +244,7 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     d->saturationInput->setRange(0.0, 2.0, 0.01, true);
     QWhatsThis::add( d->saturationInput, i18n("<p>Set here the color saturation correction."));
 
-    d->fineExposureLabel = new QLabel(i18n("Exposure (E.V):"), d->advExposureBox);
+    d->fineExposureLabel = new QLabel(i18n("Exposure:"), d->advExposureBox);
     d->fineExposureInput = new KDoubleNumInput(d->advExposureBox);
     d->fineExposureInput->setPrecision(2);
     d->fineExposureInput->setRange(-0.5, 0.5, 0.1, true);
@@ -254,9 +252,9 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
                                                "an exposure compensation of the image."));
 
     advExposureLayout->addMultiCellWidget(d->contrastLabel,     0, 0, 0, 0);
-    advExposureLayout->addMultiCellWidget(d->contrastSpinBox,   0, 0, 1, 2);
+    advExposureLayout->addMultiCellWidget(d->contrastInput,   0, 0, 1, 2);
     advExposureLayout->addMultiCellWidget(d->gammaLabel,        1, 1, 0, 0);
-    advExposureLayout->addMultiCellWidget(d->gammaSpinBox,      1, 1, 1, 2);
+    advExposureLayout->addMultiCellWidget(d->gammaInput,      1, 1, 1, 2);
     advExposureLayout->addMultiCellWidget(d->saturationLabel,   2, 2, 0, 0);
     advExposureLayout->addMultiCellWidget(d->saturationInput,   2, 2, 1, 2);
     advExposureLayout->addMultiCellWidget(d->fineExposureLabel, 3, 3, 0, 0);
@@ -353,6 +351,21 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
 
     connect(d->resetCurveBtn, SIGNAL(clicked()),
             this, SLOT(slotResetCurve()));
+
+    connect(d->curveWidget, SIGNAL(signalCurvesChanged()),
+            this, SIGNAL(signalPostProcessingChanged()));
+
+    connect(d->contrastInput, SIGNAL(valueChanged(int)),
+            this, SIGNAL(signalPostProcessingChanged()));
+
+    connect(d->gammaInput, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalPostProcessingChanged()));
+
+    connect(d->saturationInput, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalPostProcessingChanged()));
+
+    connect(d->fineExposureInput, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalPostProcessingChanged()));
 }
 
 RawSettingsBox::~RawSettingsBox()
@@ -367,20 +380,23 @@ void RawSettingsBox::setBusy(bool b)
     d->decodingSettingsBox->setEnabled(!b);
 }
 
-void RawSettingsBox::setImage(const DImg& img)
+void RawSettingsBox::setDemosaicedImage(DImg& img)
 {
-    d->image = img;
-    d->histogramWidget->stopHistogramComputation();
-    d->histogramWidget->updateData(d->image.bits(), d->image.width(), d->image.height(), d->image.sixteenBit());
     d->curveWidget->stopHistogramComputation();
-    d->curveWidget->updateData(d->image.bits(), d->image.width(), d->image.height(), d->image.sixteenBit());
+    d->curveWidget->updateData(img.bits(), img.width(), img.height(), img.sixteenBit());
+}
+
+void RawSettingsBox::setPostProcessedImage(DImg& img)
+{
+    d->histogramWidget->stopHistogramComputation();
+    d->histogramWidget->updateData(img.bits(), img.width(), img.height(), img.sixteenBit());
 }
 
 void RawSettingsBox::setDefaultSettings()
 {
     d->decodingSettingsBox->setDefaultSettings();
-    d->contrastSpinBox->setValue(0);
-    d->gammaSpinBox->setValue(1.0);
+    d->contrastInput->setValue(0);
+    d->gammaInput->setValue(1.0);
     d->saturationInput->setValue(1.0);
     d->fineExposureInput->setValue(0.0);
     slotResetCurve();
@@ -390,6 +406,7 @@ void RawSettingsBox::slotResetCurve()
 {
     d->curves->curvesReset();
     d->curveWidget->reset();
+    emit signalPostProcessingChanged();
 }
 
 HistogramWidget* RawSettingsBox::histogram() const
@@ -451,8 +468,8 @@ void RawSettingsBox::readSettings()
         (DRawDecoding::OutputColorSpace)config->readNumEntry("Output Color Space", 
             (int)(DRawDecoding::SRGB))); 
 
-    d->contrastSpinBox->setValue(config->readNumEntry("Constrast", 0));
-    d->gammaSpinBox->setValue(config->readDoubleNumEntry("Gamma", 1.0));
+    d->contrastInput->setValue(config->readNumEntry("Constrast", 0));
+    d->gammaInput->setValue(config->readDoubleNumEntry("Gamma", 1.0));
     d->saturationInput->setValue(config->readDoubleNumEntry("Saturation", 1.0));
     d->fineExposureInput->setValue(config->readDoubleNumEntry("FineExposure", 0.0));
 
@@ -506,8 +523,8 @@ void RawSettingsBox::saveSettings()
     config->writeEntry("Decoding Quality",           (int)d->decodingSettingsBox->quality());
     config->writeEntry("Output Color Space",         (int)d->decodingSettingsBox->outputColorSpace());
 
-    config->writeEntry("Constrast",                  d->contrastSpinBox->value());
-    config->writeEntry("Gamma",                      d->gammaSpinBox->value());
+    config->writeEntry("Constrast",                  d->contrastInput->value());
+    config->writeEntry("Gamma",                      d->gammaInput->value());
     config->writeEntry("Saturation",                 d->saturationInput->value());
     config->writeEntry("FineExposure",               d->fineExposureInput->value());
 
@@ -547,8 +564,8 @@ DRawDecoding RawSettingsBox::settings()
     settings.RAWQuality              = d->decodingSettingsBox->quality();
     settings.outputColorSpace        = d->decodingSettingsBox->outputColorSpace();
 
-    settings.contrast                = (double)(d->contrastSpinBox->value()/100.0) + 1.00;
-    settings.gamma                   = d->gammaSpinBox->value();
+    settings.contrast                = (double)(d->contrastInput->value()/100.0) + 1.00;
+    settings.gamma                   = d->gammaInput->value();
     settings.saturation              = d->saturationInput->value();
     settings.exposureComp            = d->fineExposureInput->value();
 

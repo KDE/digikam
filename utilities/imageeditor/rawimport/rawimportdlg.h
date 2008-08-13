@@ -70,7 +70,8 @@ private:
 private slots:
 
     void slotLoadingStarted();
-    void slotImageLoaded(const DImg& img);
+    void slotDemosaicedImage();
+    void slotPostProcessedImage();
     void slotLoadingFailed();
 
     void slotDefault();
@@ -78,6 +79,9 @@ private slots:
     void slotOk();
     void slotUser1();
     void slotUser2();
+
+    void slotTimer();
+    void slotPostProcessing();
 
 private:
 
