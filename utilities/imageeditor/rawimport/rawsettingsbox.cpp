@@ -537,7 +537,7 @@ void RawSettingsBox::saveSettings()
     for (int j = 0 ; j <= 17 ; j++)
     {
         QPoint p = d->curves->getCurvePoint(ImageHistogram::ValueChannel, j);
-        if (!d->decodingSettingsBox->sixteenBits())
+        if (!d->curves->isSixteenBits())
         {
             // Store point as 16 bits depth.
             p.setX(p.x()*255);
