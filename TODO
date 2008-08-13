@@ -63,3 +63,7 @@ LATER 0.9.4 TODO LIST
 
 * General:
    - Custom ordering of images
+   - Re-implement KIO::Job* scan() method in dio.cpp, also take a look at
+     this bugreport for further details:
+     http://bugs.kde.org/show_bug.cgi?id=160564
+     
