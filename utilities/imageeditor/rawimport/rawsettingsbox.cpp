@@ -480,6 +480,12 @@ void RawSettingsBox::readSettings()
     {
         QPoint disable(-1, -1);
         QPoint p = config->readPointEntry(QString("CurveAjustmentPoint%1").arg(j), &disable);
+        if (!d->decodingSettingsBox->sixteenBits() && p != disable)
+        {
+            // Restore point as 16 bits depth.
+            p.setX(p.x()/255);
+            p.setY(p.y()/255);
+        }
         d->curves->setCurvePoint(ImageHistogram::ValueChannel, j, p);
     }
     d->curves->curvesCalculateCurve(ImageHistogram::ValueChannel);
@@ -531,6 +537,12 @@ void RawSettingsBox::saveSettings()
     for (int j = 0 ; j <= 17 ; j++)
     {
         QPoint p = d->curves->getCurvePoint(ImageHistogram::ValueChannel, j);
+        if (!d->decodingSettingsBox->sixteenBits())
+        {
+            // Store point as 16 bits depth.
+            p.setX(p.x()*255);
+            p.setY(p.y()*255);
+        }
         config->writeEntry(QString("CurveAjustmentPoint%1").arg(j), p);
     }
 
