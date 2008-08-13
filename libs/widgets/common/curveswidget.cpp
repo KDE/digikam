@@ -163,10 +163,16 @@ void CurvesWidget::updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenB
 
     // Remove old histogram data from memory.
     if (m_imageHistogram)
-       delete m_imageHistogram;
+        delete m_imageHistogram;
 
     // Calc new histogram data
     m_imageHistogram = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, this);
+
+    if (d->curves)
+        delete d->curves;
+
+    d->curves = new ImageCurves(i_sixteenBits);
+    reset();
 }
 
 void CurvesWidget::reset()
