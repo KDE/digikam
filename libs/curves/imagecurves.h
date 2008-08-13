@@ -65,6 +65,7 @@ public:
     // Methods for to manipulate the curves data.
 
     bool   isDirty();
+    bool   isSixteenBits();
     void   curvesReset();
     void   curvesChannelReset(int channel);
     void   curvesCalculateCurve(int channel);
