@@ -177,6 +177,7 @@ void CurvesWidget::updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenB
 
 void CurvesWidget::reset()
 {
+    d->curves->curvesReset();
     d->grabPoint    = -1;
     d->guideVisible = false;
     repaint(false);
