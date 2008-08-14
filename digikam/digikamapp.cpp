@@ -6,7 +6,7 @@
  * Date        : 2002-16-10
  * Description : main digiKam interface implementation
  *
- * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu> 
+ * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C)      2006 by Tom Albers <tomalbers@kde.nl>
  * Copyright (C) 2002-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -186,7 +186,7 @@ DigikamApp::DigikamApp()
 
     d->dcopIface = new DCOPIface(this, "camera");
 
-    connect(d->dcopIface, SIGNAL(signalCameraAutoDetect()), 
+    connect(d->dcopIface, SIGNAL(signalCameraAutoDetect()),
             this, SLOT(slotDcopCameraAutoDetect()));
 
     connect(d->dcopIface, SIGNAL(signalDownloadImages( const QString & )),
@@ -278,7 +278,7 @@ void DigikamApp::show()
     // Report errors from dcraw detection.
     KDcrawIface::DcrawBinary::instance()->checkReport();
 
-    // Init album icon view zoom factor. 
+    // Init album icon view zoom factor.
     slotThumbSizeChanged(d->albumSettings->getDefaultIconSize());
 }
 
@@ -560,11 +560,11 @@ void DigikamApp::setupActions()
     sortActionList.append(i18n("By Date"));
     d->albumSortAction->setItems(sortActionList);
 
-    d->recurseAlbumsAction = new KToggleAction(i18n("Include Album Sub-Tree"), 
+    d->recurseAlbumsAction = new KToggleAction(i18n("Include Album Sub-Tree"),
                                                0,
-                                               this, 
+                                               this,
                                                0,
-                                               actionCollection(), 
+                                               actionCollection(),
                                                "albums_recursive");
     d->recurseAlbumsAction->setWhatsThis(i18n("Activate this option to recursively show all sub-albums below "
                                               "the current album."));
@@ -572,13 +572,13 @@ void DigikamApp::setupActions()
     connect(d->recurseAlbumsAction, SIGNAL(toggled(bool)),
             this, SLOT(slotRecurseAlbums(bool)));
 
-    d->recurseTagsAction = new KToggleAction(i18n("Include Tag Sub-Tree"), 
+    d->recurseTagsAction = new KToggleAction(i18n("Include Tag Sub-Tree"),
                                              0,
-                                             this, 
+                                             this,
                                              0,
-                                             actionCollection(), 
+                                             actionCollection(),
                                              "tags_recursive");
-    d->recurseTagsAction->setWhatsThis(i18n("Activate this option to show all images marked by the given tag " 
+    d->recurseTagsAction->setWhatsThis(i18n("Activate this option to show all images marked by the given tag "
                                             "and its all its sub-tags."));
 
     connect(d->recurseTagsAction, SIGNAL(toggled(bool)),
@@ -681,7 +681,7 @@ void DigikamApp::setupActions()
 
     d->imageLightTableAction = new KAction(i18n("Place onto Light Table"),
                                     "lighttable",
-                                    Key_F6,
+                                    SHIFT+Key_L,
                                     d->view,
                                     SLOT(slotImageLightTable()),
                                     actionCollection(),
@@ -690,7 +690,7 @@ void DigikamApp::setupActions()
 
     d->imageAddLightTableAction = new KAction(i18n("Add to Light Table"),
                                     "lighttableadd",
-                                    CTRL+Key_F6,
+                                    SHIFT+CTRL+Key_L,
                                     d->view,
                                     SLOT(slotImageAddToLightTable()),
                                     actionCollection(),
@@ -881,20 +881,20 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "album_zoomout");
 
-    d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), 
+    d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"),
                                    "viewmag1",
                                    ALT+CTRL+Key_0,      // NOTE: Photoshop 7 use ALT+CTRL+0.
-                                   d->view, 
+                                   d->view,
                                    SLOT(slotZoomTo100Percents()),
-                                   actionCollection(), 
+                                   actionCollection(),
                                    "album_zoomto100percents");
 
-    d->zoomFitToWindowAction = new KAction(i18n("Fit to &Window"), 
+    d->zoomFitToWindowAction = new KAction(i18n("Fit to &Window"),
                                    "view_fit_window",
-                                   CTRL+SHIFT+Key_E, 
-                                   d->view, 
+                                   CTRL+SHIFT+Key_E,
+                                   d->view,
                                    SLOT(slotFitToWindow()),
-                                   actionCollection(), 
+                                   actionCollection(),
                                    "album_zoomfit2window");
 
     // Do not use std KDE action for full screen because action text is too large for app. toolbar.
@@ -918,16 +918,16 @@ void DigikamApp::setupActions()
     d->slideShowAction->insert(d->slideShowAllAction);
 
     d->slideShowSelectionAction = new KAction(i18n("Selection"), 0, ALT+Key_F9,
-                                              d->view, 
+                                              d->view,
                                               SLOT(slotSlideShowSelection()),
-                                              actionCollection(), 
+                                              actionCollection(),
                                               "slideshow_selected");
     d->slideShowAction->insert(d->slideShowSelectionAction);
 
     d->slideShowRecursiveAction = new KAction(i18n("With all sub-albums"), 0, SHIFT+Key_F9,
-                                              d->view, 
+                                              d->view,
                                               SLOT(slotSlideShowRecursive()),
-                                              actionCollection(), 
+                                              actionCollection(),
                                               "slideshow_recursive");
     d->slideShowAction->insert(d->slideShowRecursiveAction);
 
@@ -936,9 +936,9 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "app_exit");
 
-    d->rawCameraListAction = new KAction(i18n("RAW camera supported"), 
-                                   "kdcraw", 
-                                   0, 
+    d->rawCameraListAction = new KAction(i18n("RAW camera supported"),
+                                   "kdcraw",
+                                   0,
                                    this,
                                    SLOT(slotRawCameraList()),
                                    actionCollection(),
@@ -966,7 +966,7 @@ void DigikamApp::setupActions()
                                    "help_donatemoney");
 
     d->contributeAction = new KAction(i18n("Contribute..."),
-                                      0, 0, 
+                                      0, 0,
                                       this, SLOT(slotContribute()),
                                       actionCollection(),
                                       "help_contribute");
@@ -981,16 +981,16 @@ void DigikamApp::setupActions()
     d->rating1Star = new KAction(i18n("Assign Rating \"One Star\""), CTRL+Key_1,
                           d->view, SLOT(slotAssignRatingOneStar()),
                           actionCollection(), "rateonestar");
-    d->rating2Star = new KAction(i18n("Assign Rating \"Two Stars\""), CTRL+Key_2, 
+    d->rating2Star = new KAction(i18n("Assign Rating \"Two Stars\""), CTRL+Key_2,
                           d->view, SLOT(slotAssignRatingTwoStar()),
                           actionCollection(), "ratetwostar");
-    d->rating3Star = new KAction(i18n("Assign Rating \"Three Stars\""), CTRL+Key_3, 
+    d->rating3Star = new KAction(i18n("Assign Rating \"Three Stars\""), CTRL+Key_3,
                           d->view, SLOT(slotAssignRatingThreeStar()),
                           actionCollection(), "ratethreestar");
-    d->rating4Star = new KAction(i18n("Assign Rating \"Four Stars\""), CTRL+Key_4, 
+    d->rating4Star = new KAction(i18n("Assign Rating \"Four Stars\""), CTRL+Key_4,
                           d->view, SLOT(slotAssignRatingFourStar()),
                           actionCollection(), "ratefourstar");
-    d->rating5Star = new KAction(i18n("Assign Rating \"Five Stars\""), CTRL+Key_5, 
+    d->rating5Star = new KAction(i18n("Assign Rating \"Five Stars\""), CTRL+Key_5,
                           d->view, SLOT(slotAssignRatingFiveStar()),
                           actionCollection(), "ratefivestar");
 
@@ -1006,12 +1006,12 @@ void DigikamApp::setupActions()
     advFindAction->setText(i18n("Advanced Search..."));
     advFindAction->setShortcut("Ctrl+Alt+F");
 
-    new KAction(i18n("Light Table"), "idea", SHIFT+Key_F6,
-                d->view, SLOT(slotLightTable()), actionCollection(), 
+    new KAction(i18n("Light Table"), "idea", Key_L,
+                d->view, SLOT(slotLightTable()), actionCollection(),
                 "light_table");
 
     new KAction(i18n("Scan for New Images"), "reload_page", 0,
-                this, SLOT(slotDatabaseRescan()), actionCollection(), 
+                this, SLOT(slotDatabaseRescan()), actionCollection(),
                 "database_rescan");
 
     new KAction(i18n("Rebuild all Thumbnails..."), "reload_page", 0,
@@ -1034,7 +1034,7 @@ void DigikamApp::setupActions()
     // are plugged into the toolbar at startup
     if (d->splashScreen)
         d->splashScreen->message(i18n("Loading cameras"), AlignLeft, white);
-    
+
     loadCameras();
 
     createGUI(QString::fromLatin1( "digikamui.rc" ), false);
@@ -1172,13 +1172,13 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->albumImportAction->setEnabled(true);
 
         KAction *action;
-        for (action = d->kipiFileActionsImport.first(); action; 
+        for (action = d->kipiFileActionsImport.first(); action;
              action = d->kipiFileActionsImport.next())
         {
             action->setEnabled(true);
         }
 
-        for (action = d->kipiFileActionsExport.first(); action; 
+        for (action = d->kipiFileActionsExport.first(); action;
              action = d->kipiFileActionsExport.next())
         {
             action->setEnabled(true);
@@ -1205,13 +1205,13 @@ void DigikamApp::slotAlbumSelected(bool val)
         }
 
         KAction *action;
-        for (action = d->kipiFileActionsImport.first(); action; 
+        for (action = d->kipiFileActionsImport.first(); action;
              action = d->kipiFileActionsImport.next())
         {
             action->setEnabled(false);
         }
 
-        for (action = d->kipiFileActionsExport.first(); action; 
+        for (action = d->kipiFileActionsExport.first(); action;
              action = d->kipiFileActionsExport.next())
         {
             action->setEnabled(true);
@@ -1253,13 +1253,13 @@ void DigikamApp::slotTagSelected(bool val)
         d->editTagAction->setEnabled(false);
 
         KAction *action;
-        for (action = d->kipiFileActionsImport.first(); action; 
+        for (action = d->kipiFileActionsImport.first(); action;
              action = d->kipiFileActionsImport.next())
         {
             action->setEnabled(false);
         }
 
-        for (action = d->kipiFileActionsExport.first(); action; 
+        for (action = d->kipiFileActionsExport.first(); action;
              action = d->kipiFileActionsExport.next())
         {
             action->setEnabled(true);
@@ -1267,7 +1267,7 @@ void DigikamApp::slotTagSelected(bool val)
     }
 }
 
-void DigikamApp::slotImageSelected(const QPtrList<ImageInfo>& list, bool hasPrev, bool hasNext, 
+void DigikamApp::slotImageSelected(const QPtrList<ImageInfo>& list, bool hasPrev, bool hasNext,
                                    const KURL::List& listAll)
 {
     QPtrList<ImageInfo> selection = list;
@@ -1304,7 +1304,7 @@ void DigikamApp::slotImageSelected(const QPtrList<ImageInfo>& list, bool hasPrev
                 index++;
             }
 
-            text = selection.first()->kurl().fileName()  
+            text = selection.first()->kurl().fileName()
                                    + i18n(" (%1 of %2)")
                                    .arg(QString::number(index))
                                    .arg(QString::number(num_images));
@@ -1333,7 +1333,7 @@ void DigikamApp::slotProgressValue(int count)
 
 void DigikamApp::slotExit()
 {
-    if (d->fullScreen) 
+    if (d->fullScreen)
     {
         slotToggleFullScreen();
         QTimer::singleShot(0, this, SLOT(close()));
@@ -1377,7 +1377,7 @@ QString DigikamApp::convertToLocalUrl( const QString& folder )
             else
                 return slreply[6];
         }
-        else 
+        else
         {
             DWarning() << "dcop call failed\n";
         }
@@ -1558,7 +1558,7 @@ void DigikamApp::slotCameraMediaMenuEntries( Job *, const UDSEntryList & list )
         QString name;
         QString path;
 
-        for ( UDSEntry::const_iterator et = (*it).begin() ; et != (*it).end() ; ++et ) 
+        for ( UDSEntry::const_iterator et = (*it).begin() ; et != (*it).end() ; ++et )
         {
             if ( (*et).m_uds == KIO::UDS_NAME)
                 name = ( *et ).m_str;
@@ -2049,8 +2049,8 @@ void DigikamApp::slotTogglePreview(bool t)
 {
     // NOTE: if 't' is true, we are in Preview Mode, else we are in AlbumView Mode
 
-    // This is require if ESC is pressed to go out of Preview Mode. 
-    // imagePreviewAction is handled by F3 key only. 
+    // This is require if ESC is pressed to go out of Preview Mode.
+    // imagePreviewAction is handled by F3 key only.
     d->imagePreviewAction->setChecked(t);
 
     // Here, we will toggle some menu actions depending of current Mode.
