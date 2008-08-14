@@ -22,5 +22,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 013 ==> 168780 : Loose the raw import.
 014 ==> 160564 : No refresh of the number of pictures assigned to a tag after removing the tag from some pictures.
 015 ==> 158144 : Showfoto crashes in settings window.
-016 ==>
+016 ==> 162845 : 'Ctrl+F6' Conflict with KDE global shortcut.
+017 ==>
+
  
