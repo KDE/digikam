@@ -494,21 +494,21 @@ void DigikamApp::setupAccelerators()
 void DigikamApp::setupActions()
 {
     d->solidCameraActionGroup = new QActionGroup(this);
-    connect(d->solidCameraActionGroup, SIGNAL(triggered(QAction*)), 
+    connect(d->solidCameraActionGroup, SIGNAL(triggered(QAction*)),
             this, SLOT(slotOpenSolidCamera(QAction*)));
 
     d->solidUsmActionGroup = new QActionGroup(this);
-    connect(d->solidUsmActionGroup, SIGNAL(triggered(QAction*)), 
+    connect(d->solidUsmActionGroup, SIGNAL(triggered(QAction*)),
             this, SLOT(slotOpenSolidUsmDevice(QAction*)));
 
     d->manualCameraActionGroup = new QActionGroup(this);
-    connect(d->manualCameraActionGroup, SIGNAL(triggered(QAction*)), 
+    connect(d->manualCameraActionGroup, SIGNAL(triggered(QAction*)),
             this, SLOT(slotOpenManualCamera(QAction*)));
 
     // -----------------------------------------------------------------
 
     d->themeMenuAction = new KSelectAction(i18n("&Themes"), this);
-    connect(d->themeMenuAction, SIGNAL(triggered(const QString&)), 
+    connect(d->themeMenuAction, SIGNAL(triggered(const QString&)),
             this, SLOT(slotChangeTheme(const QString&)));
     actionCollection()->addAction("theme_menu", d->themeMenuAction);
 
@@ -636,7 +636,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->imageLightTableAction = new KAction(KIcon("lighttable"), i18n("Place onto Light Table"), this);
-    d->imageLightTableAction->setShortcut(Qt::Key_F6);
+    d->imageLightTableAction->setShortcut(Qt::SHIFT+Qt::Key_L);
     d->imageLightTableAction->setWhatsThis(i18n("Place the selected items on the light table thumbbar."));
     connect(d->imageLightTableAction, SIGNAL(triggered()), d->view, SLOT(slotImageLightTable()));
     actionCollection()->addAction("image_lighttable", d->imageLightTableAction);
@@ -644,7 +644,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->imageAddLightTableAction = new KAction(KIcon("lighttableadd"), i18n("Add to Light Table"), this);
-    d->imageAddLightTableAction->setShortcut(Qt::CTRL+Qt::Key_F6);
+    d->imageAddLightTableAction->setShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_L);
     d->imageAddLightTableAction->setWhatsThis(i18n("Add selected items to the light table thumbbar."));
     connect(d->imageAddLightTableAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToLightTable()));
     actionCollection()->addAction("image_add_to_lighttable", d->imageAddLightTableAction);
@@ -779,28 +779,28 @@ void DigikamApp::setupActions()
     d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation7Action);
     d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation8Action);
 
-    connect(d->imageSetExifOrientation1Action, SIGNAL(triggered()), 
+    connect(d->imageSetExifOrientation1Action, SIGNAL(triggered()),
             exifOrientationMapper, SLOT(map()));
 
-    connect(d->imageSetExifOrientation2Action, SIGNAL(triggered()), 
+    connect(d->imageSetExifOrientation2Action, SIGNAL(triggered()),
             exifOrientationMapper, SLOT(map()));
 
-    connect(d->imageSetExifOrientation3Action, SIGNAL(triggered()), 
+    connect(d->imageSetExifOrientation3Action, SIGNAL(triggered()),
             exifOrientationMapper, SLOT(map()));
 
-    connect(d->imageSetExifOrientation4Action, SIGNAL(triggered()), 
+    connect(d->imageSetExifOrientation4Action, SIGNAL(triggered()),
             exifOrientationMapper, SLOT(map()));
 
-    connect(d->imageSetExifOrientation5Action, SIGNAL(triggered()), 
+    connect(d->imageSetExifOrientation5Action, SIGNAL(triggered()),
             exifOrientationMapper, SLOT(map()));
 
-    connect(d->imageSetExifOrientation6Action, SIGNAL(triggered()), 
+    connect(d->imageSetExifOrientation6Action, SIGNAL(triggered()),
             exifOrientationMapper, SLOT(map()));
 
-    connect(d->imageSetExifOrientation7Action, SIGNAL(triggered()), 
+    connect(d->imageSetExifOrientation7Action, SIGNAL(triggered()),
             exifOrientationMapper, SLOT(map()));
 
-    connect(d->imageSetExifOrientation8Action, SIGNAL(triggered()), 
+    connect(d->imageSetExifOrientation8Action, SIGNAL(triggered()),
             exifOrientationMapper, SLOT(map()));
 
     exifOrientationMapper->setMapping(d->imageSetExifOrientation1Action, 1);
@@ -999,7 +999,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     KAction *ltAction = new KAction(KIcon("lighttable"), i18n("Light Table"), this);
-    ltAction->setShortcut(Qt::SHIFT+Qt::Key_F6);
+    ltAction->setShortcut(Qt::Key_L);
     connect(ltAction, SIGNAL(triggered()), d->view, SLOT(slotLightTable()));
     actionCollection()->addAction("light_table", ltAction);
 
@@ -1274,7 +1274,7 @@ void DigikamApp::slotImageSelected(const ImageInfoList& list, bool hasPrev, bool
             break;
         }
         default:
-            d->statusProgressBar->setText(i18n("%1/%2 items selected", selection.count(), 
+            d->statusProgressBar->setText(i18n("%1/%2 items selected", selection.count(),
                                                                        QString::number(num_images)));
             break;
     }
@@ -1354,7 +1354,7 @@ void DigikamApp::loadCameras()
     // -----------------------------------------------------------------
 
     d->addFoldersAction = new KAction(KIcon("albumfolder-importdir"), i18n("Add Folders..."), this);
-    d->addFoldersAction->setWhatsThis(i18n("Adds new folders to Albums library."));    
+    d->addFoldersAction->setWhatsThis(i18n("Adds new folders to Albums library."));
     connect(d->addFoldersAction, SIGNAL(triggered()), this, SLOT(slotImportAddFolders()));
     actionCollection()->addAction("import_addFolders", d->addFoldersAction);
 
@@ -2315,7 +2315,7 @@ void DigikamApp::slotTogglePreview(bool t)
 
 void DigikamApp::slotImportAddImages()
 {
-    QString path = KFileDialog::getExistingDirectory(KGlobalSettings::documentPath(), this, 
+    QString path = KFileDialog::getExistingDirectory(KGlobalSettings::documentPath(), this,
                                 i18n("Select folder to parse"));
 
     if(path.isEmpty())
