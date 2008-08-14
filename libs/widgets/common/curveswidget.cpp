@@ -107,23 +107,22 @@ public:
 
 };
 
-CurvesWidget::CurvesWidget(int w, int h, ImageCurves *curves, QWidget *parent, bool readOnly)
+CurvesWidget::CurvesWidget(int w, int h, QWidget *parent, bool readOnly)
             : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new CurvesWidgetPriv;
 
-    setup(w, h, curves, readOnly);
+    setup(w, h, readOnly);
 }
 
 CurvesWidget::CurvesWidget(int w, int h, 
                            uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits,
-                           ImageCurves *curves, QWidget *parent, 
-                           bool readOnly)
+                           QWidget *parent, bool readOnly)
             : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new CurvesWidgetPriv;
 
-    setup(w, h, curves, readOnly);
+    setup(w, h, readOnly);
     updateData(i_data, i_w, i_h, i_sixteenBits);
 }
 
@@ -134,13 +133,16 @@ CurvesWidget::~CurvesWidget()
     if (m_imageHistogram)
        delete m_imageHistogram;
 
+    if (d->curves)
+       delete d->curves;
+
     delete d;
 }
 
-void CurvesWidget::setup(int w, int h, ImageCurves *curves, bool readOnly)
+void CurvesWidget::setup(int w, int h, bool readOnly)
 {
-    d->curves        = curves;
     d->readOnlyMode  = readOnly;
+    d->curves        = new ImageCurves(true);
     m_channelType    = ValueHistogram;
     m_scaleType      = LogScaleHistogram;
     m_imageHistogram = 0;
@@ -177,10 +179,17 @@ void CurvesWidget::updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenB
 
 void CurvesWidget::reset()
 {
-    d->curves->curvesReset();
+    if (d->curves) 
+        d->curves->curvesReset();
+
     d->grabPoint    = -1;
     d->guideVisible = false;
     repaint(false);
+}
+
+ImageCurves* CurvesWidget::curves() const
+{
+    return d->curves;
 }
 
 void CurvesWidget::setDataLoading()

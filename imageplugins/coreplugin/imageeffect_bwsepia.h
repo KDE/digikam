@@ -7,19 +7,19 @@
  * Description : Black and White conversion tool.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 
@@ -48,7 +48,6 @@ class ColorGradientWidget;
 class ImageWidget;
 class DColor;
 class DImg;
-class ImageCurves;
 class CurvesWidget;
 }
 
@@ -67,7 +66,7 @@ public:
     ~ImageEffect_BWSepia();
 
     friend class PreviewPixmapFactory;
-    
+
 protected:
 
     QPixmap getThumbnailForEffect(int type);
@@ -83,7 +82,7 @@ private:
     void writeUserSettings();
     void resetValues();
     void blackAndWhiteConversion(uchar *data, int w, int h, bool sb, int type);
-    
+
 private slots:
 
     void slotUser2();
@@ -91,7 +90,7 @@ private slots:
     void slotEffect();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
-    void slotSpotColorChanged(const Digikam::DColor &color);    
+    void slotSpotColorChanged(const Digikam::DColor &color);
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
     void slotFilterSelected(int filter);
 
@@ -106,7 +105,7 @@ private:
         BWYellowFilter,
 
         BWGeneric,            // B&W film simulation.
-        BWAgfa200X,    
+        BWAgfa200X,
         BWAgfapan25,
         BWAgfapan100,
         BWAgfapan400,
@@ -122,12 +121,12 @@ private:
         BWKodakTriX,
 
         BWNoTone,             // Chemical color tone filter.
-        BWSepiaTone,        
+        BWSepiaTone,
         BWBrownTone,
         BWColdTone,
         BWSeleniumTone,
         BWPlatinumTone,
-	BWGreenTone
+        BWGreenTone
     };
 
     enum HistogramScale
@@ -152,37 +151,35 @@ private:
         LuminosityTab
     };
 
-    // Color filter attenuation in percents. 
+    // Color filter attenuation in percents.
     double m_redAttn, m_greenAttn, m_blueAttn;
 
-    // Channel mixer color multiplier. 
+    // Channel mixer color multiplier.
     double m_redMult, m_greenMult, m_blueMult; 
 
     uchar                        *m_destinationPreviewData;
-    
+
     QComboBox                    *m_channelCB;
-    
+
     QHButtonGroup                *m_scaleBG;
-    
+
     QListBox                     *m_bwFilters;
     QListBox                     *m_bwFilm;
     QListBox                     *m_bwTone;
 
     KIntNumInput                 *m_cInput;
     KIntNumInput                 *m_strengthInput;
-    
+
     KTabWidget                   *m_tab;
-    
+
     Digikam::ImageWidget         *m_previewWidget;
 
     Digikam::ColorGradientWidget *m_hGradient;
-    
+
     Digikam::HistogramWidget     *m_histogramWidget;
 
     Digikam::CurvesWidget        *m_curvesWidget;
 
-    Digikam::ImageCurves         *m_curves;
-    
     Digikam::DImg                *m_originalImage;
     Digikam::DImg                 m_thumbnailImage;
 

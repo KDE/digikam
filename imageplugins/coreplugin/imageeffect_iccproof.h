@@ -50,7 +50,6 @@ class HistogramWidget;
 class ColorGradientWidget;
 class DColor;
 class ICCPreviewWidget;
-class ImageCurves;
 class CurvesWidget;
 }
 
@@ -184,8 +183,6 @@ private:
     Digikam::DImg                  *m_originalImage;
 
     Digikam::CurvesWidget          *m_curvesWidget;
-
-    Digikam::ImageCurves           *m_curves;
 
     Digikam::ImageWidget           *m_previewWidget;
 

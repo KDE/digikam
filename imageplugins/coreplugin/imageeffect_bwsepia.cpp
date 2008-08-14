@@ -7,23 +7,23 @@
  * Description : Black and White conversion tool.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
  // Qt includes.
- 
+
 #include <qcolor.h>
 #include <qgroupbox.h>
 #include <qhgroupbox.h>
@@ -164,7 +164,6 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                      m_previewWidget(0),
                      m_histogramWidget(0),
                      m_curvesWidget(0),
-                     m_curves(0),
                      m_originalImage(0),
                      m_previewPixmapFactory(0)
 {
@@ -173,7 +172,6 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     Digikam::ImageIface iface(0, 0);
     m_originalImage  = iface.getOriginalImg();
     m_thumbnailImage = m_originalImage->smoothScale(128, 128, QSize::ScaleMin);
-    m_curves         = new Digikam::ImageCurves(m_originalImage->sixteenBit());
 
     // -------------------------------------------------------------
 
@@ -184,7 +182,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     setPreviewAreaWidget(m_previewWidget);
 
     // -------------------------------------------------------------
-        
+
     QWidget *gboxSettings     = new QWidget(plainPage());
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 4, 4, spacingHint());
 
@@ -209,7 +207,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
-    
+
     QPushButton *linHistoButton = new QPushButton( m_scaleBG );
     QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
     m_scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
@@ -217,7 +215,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
     linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
     linHistoButton->setToggleButton(true);
-    
+
     QPushButton *logHistoButton = new QPushButton( m_scaleBG );
     QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
     m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
@@ -231,7 +229,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     l1->addWidget(m_channelCB);
     l1->addStretch(10);
     l1->addWidget(m_scaleBG);
-    
+
     gridSettings->addMultiCellLayout(l1, 0, 0, 0, 4);
 
     // -------------------------------------------------------------
@@ -245,7 +243,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     space->setFixedHeight(1);    
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-    
+
     gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
 
     // -------------------------------------------------------------
@@ -352,7 +350,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                                      i18n("No Lens Filter"), m_previewPixmapFactory, type);
     whatsThis->add( item, i18n("<b>No Lens Filter</b>:"
                                "<p>Do not apply a lens filter when rendering the image.</p>"));
-    
+
     ++type;
     item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Green Filter"), m_previewPixmapFactory, type);
     whatsThis->add( item, i18n("<b>Black & White with Green Filter</b>:"
@@ -380,7 +378,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                                "<p>Simulate black and white film exposure using a yellow filter. "
                                "This has the most natural tonal correction, and improves contrast. Ideal for "
                                "landscapes.</p>"));
-    
+
     m_strengthInput = new KIntNumInput(vbox);
     m_strengthInput->setLabel(i18n("Strength:"), AlignLeft | AlignVCenter);
     m_strengthInput->setRange(1, 5, 1, true);
@@ -432,14 +430,14 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     whatsThis3->add( item, i18n("<b>Black & White with Platinum Tone</b>:"
                                 "<p>This effect replicates traditional platinum chemical toning done "
                                 "in the darkroom.</p>"));
-    
+
     ++type;
     item = new ListBoxBWPreviewItem(m_bwTone, i18n("Green Tone"), m_previewPixmapFactory, type);
     whatsThis3->add( item, i18n("<b>Black & White with greenish tint</b>:"
                                 "<p>This effect is also known as Verdante.</p>"));
-    
+
     // -------------------------------------------------------------
-    
+
     QWidget *curveBox     = new QWidget( m_tab );
     QGridLayout *gridTab2 = new QGridLayout(curveBox, 5, 2, spacingHint(), 0);
 
@@ -450,10 +448,10 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     QLabel *spacev = new QLabel(curveBox);
     spacev->setFixedWidth(1);
-    
+
     m_curvesWidget = new Digikam::CurvesWidget(256, 256, m_originalImage->bits(), m_originalImage->width(),
                                                m_originalImage->height(), m_originalImage->sixteenBit(),
-                                               m_curves, curveBox);
+                                               curveBox);
     QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve adjustment of the image luminosity"));
 
     QLabel *spaceh = new QLabel(curveBox);
@@ -463,7 +461,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                                                   Digikam::ColorGradientWidget::Horizontal,
                                                   10, curveBox );
     hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-    
+
     m_cInput = new KIntNumInput(curveBox);
     m_cInput->setLabel(i18n("Contrast:"), AlignLeft | AlignVCenter);
     m_cInput->setRange(-100, 100, 1, true);
@@ -478,7 +476,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     gridTab2->addMultiCellWidget(m_cInput, 4, 4, 0, 2);
     gridTab2->setRowSpacing(3, spacingHint());
     gridTab2->setRowStretch(5, 10);
-    
+
     // -------------------------------------------------------------
 
     m_tab->insertTab(m_bwFilm, i18n("Film"),         FilmTab);
@@ -489,7 +487,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     gridSettings->addMultiCellWidget(m_tab, 3, 3, 0, 4);
     gridSettings->setRowStretch(3, 10);
     setUserAreaWidget(gboxSettings);
-    
+
     // -------------------------------------------------------------
 
     connect(m_channelCB, SIGNAL(activated(int)),
@@ -500,7 +498,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
             this, SLOT(slotSpotColorChanged(const Digikam::DColor&)));
-    
+
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
@@ -518,10 +516,10 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
             this, SLOT(slotTimer()));
-    
+
     connect(m_cInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
-                     
+
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
 }
@@ -531,11 +529,9 @@ ImageEffect_BWSepia::~ImageEffect_BWSepia()
     m_histogramWidget->stopHistogramComputation();
 
     delete [] m_destinationPreviewData;
-       
     delete m_histogramWidget;
     delete m_previewWidget;
     delete m_curvesWidget;
-    delete m_curves;
 }
 
 void ImageEffect_BWSepia::slotFilterSelected(int filter)
@@ -568,11 +564,11 @@ QPixmap ImageEffect_BWSepia::getThumbnailForEffect(int type)
         blackAndWhiteConversion(thumb.bits(), w, h, sb, type);
     }
 
-    if (m_curves)   // in case we're called before the creator is done 
+    if (m_curvesWidget->curves())   // in case we're called before the creator is done 
     {
         uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
-        m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
-        m_curves->curvesLutProcess(thumb.bits(), targetData, w, h);
+        m_curvesWidget->curves()->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
+        m_curvesWidget->curves()->curvesLutProcess(thumb.bits(), targetData, w, h);
 
         Digikam::DImg preview(w, h, sb, a, targetData);
         Digikam::BCGModifier cmod;
@@ -647,9 +643,9 @@ void ImageEffect_BWSepia::readUserSettings()
     m_strengthInput->setValue(config->readNumEntry("StrengthAjustment", 1));
 
     for (int i = 0 ; i < 5 ; i++)
-        m_curves->curvesChannelReset(i);
+        m_curvesWidget->curves()->curvesChannelReset(i);
 
-    m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
+    m_curvesWidget->curves()->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
     m_curvesWidget->reset();
 
     for (int j = 0 ; j < 17 ; j++)
@@ -663,11 +659,11 @@ void ImageEffect_BWSepia::readUserSettings()
             p.setY(p.y()*255);
         }
 
-        m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, j, p);
+        m_curvesWidget->curves()->setCurvePoint(Digikam::ImageHistogram::ValueChannel, j, p);
     }
 
     for (int i = 0 ; i < 5 ; i++)
-        m_curves->curvesCalculateCurve(i);
+        m_curvesWidget->curves()->curvesCalculateCurve(i);
 
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
@@ -689,7 +685,7 @@ void ImageEffect_BWSepia::writeUserSettings()
 
     for (int j = 0 ; j < 17 ; j++)
     {
-        QPoint p = m_curves->getCurvePoint(Digikam::ImageHistogram::ValueChannel, j);
+        QPoint p = m_curvesWidget->curves()->getCurvePoint(Digikam::ImageHistogram::ValueChannel, j);
 
         if (m_originalImage->sixteenBit() && p.x() != -1)
         {
@@ -717,12 +713,12 @@ void ImageEffect_BWSepia::resetValues()
     m_bwTone->setSelected(0, true);
 
     m_cInput->setValue(0);
-    
+
     for (int channel = 0 ; channel < 5 ; channel++)
-       m_curves->curvesChannelReset(channel);
+       m_curvesWidget->curves()->curvesChannelReset(channel);
 
     m_curvesWidget->reset();
-    
+
     m_cInput->blockSignals(false);
     m_bwTone->blockSignals(false);
     m_bwFilters->blockSignals(false);
@@ -762,13 +758,13 @@ void ImageEffect_BWSepia::slotEffect()
     blackAndWhiteConversion(m_destinationPreviewData, w, h, sb, m_bwTone->currentItem() + BWNoTone);
 
     // Calculate and apply the curve on image.
-    
+
     uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
-    m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
-    m_curves->curvesLutProcess(m_destinationPreviewData, targetData, w, h);
+    m_curvesWidget->curves()->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
+    m_curvesWidget->curves()->curvesLutProcess(m_destinationPreviewData, targetData, w, h);
 
     // Adjust contrast.
-    
+
     Digikam::DImg preview(w, h, sb, a, targetData);
     Digikam::BCGModifier cmod;
     cmod.setContrast((double)(m_cInput->value()/100.0) + 1.00);
@@ -778,11 +774,11 @@ void ImageEffect_BWSepia::slotEffect()
     m_previewWidget->updatePreview();
 
     // Update histogram.
-    
+
     memcpy(m_destinationPreviewData, preview.bits(), preview.numBytes());
     m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
     delete [] targetData;
-    
+
     kapp->restoreOverrideCursor();
 }
 
@@ -806,29 +802,29 @@ void ImageEffect_BWSepia::finalRendering()
     int h                      = iface->originalHeight();
     bool a                     = iface->originalHasAlpha();
     bool sb                    = iface->originalSixteenBit();
-    
+
     if (data) 
     {
         // Apply black and white filter.
-    
+
         blackAndWhiteConversion(data, w, h, sb, m_bwFilters->currentItem());
 
         // Apply black and white film type.
-    
+
         blackAndWhiteConversion(data, w, h, sb, m_bwFilm->currentItem() + BWGeneric);
 
         // Apply color tone filter.
-    
+
         blackAndWhiteConversion(data, w, h, sb, m_bwTone->currentItem() + BWNoTone);
 
         // Calculate and apply the curve on image.
-    
+
         uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
-        m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
-        m_curves->curvesLutProcess(data, targetData, w, h);
-        
+        m_curvesWidget->curves()->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
+        m_curvesWidget->curves()->curvesLutProcess(data, targetData, w, h);
+
         // Adjust contrast.
-            
+
         Digikam::DImg img(w, h, sb, a, targetData);
         Digikam::BCGModifier cmod;
         cmod.setContrast((double)(m_cInput->value()/100.0) + 1.00);
@@ -864,19 +860,19 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, boo
           m_greenAttn = +0.11 * strength;
           m_blueAttn  = +0.09 * strength; 
           break;
-       
+
        case BWOrangeFilter:
           m_redAttn   = +0.48 * strength;
           m_greenAttn = -0.37 * strength;
           m_blueAttn  = -0.11 * strength; 
           break;
-       
+
        case BWRedFilter:
           m_redAttn   = +0.60 * strength;
           m_greenAttn = -0.49 * strength;
           m_blueAttn  = -0.11 * strength; 
           break;
-       
+
        case BWYellowFilter:
           m_redAttn   = +0.30 * strength;
           m_greenAttn = -0.31 * strength;
@@ -1041,19 +1037,19 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, boo
        case BWSepiaTone:
           filter.changeTonality(data, w, h, sb, 162*mul, 132*mul, 101*mul);
           break;
-       
+
        case BWBrownTone:
           filter.changeTonality(data, w, h, sb, 129*mul, 115*mul, 104*mul);
           break;
-       
+
        case BWColdTone:
           filter.changeTonality(data, w, h, sb, 102*mul, 109*mul, 128*mul);
           break;
-       
+
        case BWSeleniumTone:
           filter.changeTonality(data, w, h, sb, 122*mul, 115*mul, 122*mul);
           break;
-       
+
        case BWPlatinumTone:
           filter.changeTonality(data, w, h, sb, 115*mul, 110*mul, 106*mul);
           break;
@@ -1076,8 +1072,8 @@ void ImageEffect_BWSepia::slotUser3()
        return;
 
     QFile file(loadFile.path());
-    
-    if ( file.open(IO_ReadOnly) )   
+
+    if ( file.open(IO_ReadOnly) )
     {
         QTextStream stream( &file );
 
@@ -1086,10 +1082,10 @@ void ImageEffect_BWSepia::slotUser3()
            KMessageBox::error(this, 
                         i18n("\"%1\" is not a Black & White settings text file.")
                         .arg(loadFile.fileName()));
-           file.close();            
+           file.close();
            return;
         }
-        
+
         m_bwFilters->blockSignals(true);
         m_bwTone->blockSignals(true);
         m_cInput->blockSignals(true);
@@ -1099,9 +1095,9 @@ void ImageEffect_BWSepia::slotUser3()
         m_cInput->setValue(stream.readLine().toInt());
 
         for (int i = 0 ; i < 5 ; i++)
-            m_curves->curvesChannelReset(i);
+            m_curvesWidget->curves()->curvesChannelReset(i);
 
-        m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
+        m_curvesWidget->curves()->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
         m_curvesWidget->reset();
 
         for (int j = 0 ; j < 17 ; j++)
@@ -1110,18 +1106,18 @@ void ImageEffect_BWSepia::slotUser3()
             QPoint p;
             p.setX( stream.readLine().toInt() );
             p.setY( stream.readLine().toInt() );
-    
+
             if (m_originalImage->sixteenBit() && p != disable)
             {
                 p.setX(p.x()*255);
                 p.setY(p.y()*255);
             }
-    
-            m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, j, p);
+
+            m_curvesWidget->curves()->setCurvePoint(Digikam::ImageHistogram::ValueChannel, j, p);
         }
 
         for (int i = 0 ; i < 5 ; i++)
-           m_curves->curvesCalculateCurve(i);
+           m_curvesWidget->curves()->curvesCalculateCurve(i);
 
         m_bwFilters->blockSignals(false);
         m_bwTone->blockSignals(false);
@@ -1130,9 +1126,9 @@ void ImageEffect_BWSepia::slotUser3()
         m_histogramWidget->reset();
         m_previewPixmapFactory->invalidate();
         m_bwFilters->triggerUpdate(false);
-        m_bwTone->triggerUpdate(false);     
+        m_bwTone->triggerUpdate(false);
 
-        slotEffect();  
+        slotEffect();
     }
     else
         KMessageBox::error(this, i18n("Cannot load settings from the Black & White text file."));
@@ -1151,18 +1147,18 @@ void ImageEffect_BWSepia::slotUser2()
        return;
 
     QFile file(saveFile.path());
-    
-    if ( file.open(IO_WriteOnly) )   
+
+    if ( file.open(IO_WriteOnly) )
     {
-        QTextStream stream( &file );        
+        QTextStream stream( &file );
         stream << "# Black & White Configuration File\n";
-        stream << m_bwFilters->currentItem() << "\n";    
-        stream << m_bwTone->currentItem() << "\n";    
-        stream << m_cInput->value() << "\n";    
+        stream << m_bwFilters->currentItem() << "\n";
+        stream << m_bwTone->currentItem() << "\n";
+        stream << m_cInput->value() << "\n";
 
         for (int j = 0 ; j < 17 ; j++)
         {
-            QPoint p = m_curves->getCurvePoint(Digikam::ImageHistogram::ValueChannel, j);
+            QPoint p = m_curvesWidget->curves()->getCurvePoint(Digikam::ImageHistogram::ValueChannel, j);
             if (m_originalImage->sixteenBit())
             {
                 p.setX(p.x()/255);
@@ -1174,10 +1170,8 @@ void ImageEffect_BWSepia::slotUser2()
     }
     else
         KMessageBox::error(this, i18n("Cannot save settings to the Black & White text file."));
-    
-    file.close();        
+
+    file.close();
 }
 
 }  // NameSpace DigikamImagesPluginCore
-
-

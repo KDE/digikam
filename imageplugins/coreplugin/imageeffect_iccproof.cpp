@@ -102,7 +102,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     Digikam::ImageIface iface(0, 0);
     m_originalImage = iface.getOriginalImg();
     m_embeddedICC   = iface.getEmbeddedICCFromOriginalImage();
-    m_curves        = new Digikam::ImageCurves(m_originalImage->sixteenBit());
 
     m_previewWidget = new Digikam::ImageWidget("colormanagement Tool Dialog", plainPage(),
                                                i18n("<p>Here you can see the image preview after "
@@ -406,7 +405,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     m_curvesWidget = new Digikam::CurvesWidget(256, 192, m_originalImage->bits(), m_originalImage->width(),
                                                m_originalImage->height(), m_originalImage->sixteenBit(),
-                                               m_curves, lightnessadjust);
+                                               lightnessadjust);
     QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve adjustment of the image luminosity"));
 
     QLabel *spaceh = new QLabel(lightnessadjust);
@@ -522,7 +521,6 @@ ImageEffect_ICCProof::~ImageEffect_ICCProof()
     delete m_histogramWidget;
     delete m_previewWidget;
     delete m_curvesWidget;
-    delete m_curves;
 }
 
 void ImageEffect_ICCProof::readUserSettings()
@@ -576,9 +574,9 @@ void ImageEffect_ICCProof::readUserSettings()
     m_cInput->setValue(config->readNumEntry("ContrastAjustment", 0));
 
     for (int i = 0 ; i < 5 ; i++)
-        m_curves->curvesChannelReset(i);
+        m_curvesWidget->curves()->curvesChannelReset(i);
 
-    m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
+    m_curvesWidget->curves()->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
     m_curvesWidget->reset();
 
     for (int j = 0 ; j < 17 ; j++)
@@ -592,11 +590,11 @@ void ImageEffect_ICCProof::readUserSettings()
             p.setY(p.y()*255);
         }
 
-        m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, j, p);
+        m_curvesWidget->curves()->setCurvePoint(Digikam::ImageHistogram::ValueChannel, j, p);
     }
 
     for (int i = 0 ; i < 5 ; i++)
-        m_curves->curvesCalculateCurve(i);
+        m_curvesWidget->curves()->curvesCalculateCurve(i);
 
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
@@ -624,7 +622,7 @@ void ImageEffect_ICCProof::writeUserSettings()
 
     for (int j = 0 ; j < 17 ; j++)
     {
-        QPoint p = m_curves->getCurvePoint(Digikam::ImageHistogram::ValueChannel, j);
+        QPoint p = m_curvesWidget->curves()->getCurvePoint(Digikam::ImageHistogram::ValueChannel, j);
 
         if (m_originalImage->sixteenBit() && p.x() != -1)
         {
@@ -693,7 +691,7 @@ void ImageEffect_ICCProof::resetValues()
     m_cInput->setValue(0);
 
     for (int i = 0 ; i < 5 ; i++)
-       m_curves->curvesChannelReset(i);
+       m_curvesWidget->curves()->curvesChannelReset(i);
 
     m_curvesWidget->reset();
     m_cInput->blockSignals(false);
@@ -841,8 +839,8 @@ void ImageEffect_ICCProof::slotEffect()
         //-- Calculate and apply the curve on image after transformation -------------
 
         Digikam::DImg preview2(w, h, sb, a, 0, false);
-        m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
-        m_curves->curvesLutProcess(preview.bits(), preview2.bits(), w, h);
+        m_curvesWidget->curves()->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
+        m_curvesWidget->curves()->curvesLutProcess(preview.bits(), preview2.bits(), w, h);
 
         //-- Adjust contrast ---------------------------------------------------------
 
@@ -992,8 +990,8 @@ void ImageEffect_ICCProof::finalRendering()
             //-- Calculate and apply the curve on image after transformation -------------
 
             Digikam::DImg img2(w, h, sb, a, 0, false);
-            m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
-            m_curves->curvesLutProcess(img.bits(), img2.bits(), w, h);
+            m_curvesWidget->curves()->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
+            m_curvesWidget->curves()->curvesLutProcess(img.bits(), img2.bits(), w, h);
 
             //-- Adjust contrast ---------------------------------------------------------
 
@@ -1199,9 +1197,9 @@ void ImageEffect_ICCProof::slotUser3()
         m_cInput->setValue( stream.readLine().toInt() );
 
         for (int i = 0 ; i < 5 ; i++)
-            m_curves->curvesChannelReset(i);
+            m_curvesWidget->curves()->curvesChannelReset(i);
 
-        m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
+        m_curvesWidget->curves()->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
         m_curvesWidget->reset();
 
         for (int j = 0 ; j < 17 ; j++)
@@ -1217,13 +1215,13 @@ void ImageEffect_ICCProof::slotUser3()
                 p.setY(p.y()*255);
             }
 
-            m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, j, p);
+            m_curvesWidget->curves()->setCurvePoint(Digikam::ImageHistogram::ValueChannel, j, p);
         }
 
         blockSignals(false);
 
         for (int i = 0 ; i < 5 ; i++)
-           m_curves->curvesCalculateCurve(i);
+           m_curvesWidget->curves()->curvesCalculateCurve(i);
 
         m_histogramWidget->reset();
         slotEffect();  
@@ -1265,7 +1263,7 @@ void ImageEffect_ICCProof::slotUser2()
 
         for (int j = 0 ; j < 17 ; j++)
         {
-            QPoint p = m_curves->getCurvePoint(Digikam::ImageHistogram::ValueChannel, j);
+            QPoint p = m_curvesWidget->curves()->getCurvePoint(Digikam::ImageHistogram::ValueChannel, j);
             if (m_originalImage->sixteenBit())
             {
                 p.setX(p.x()/255);

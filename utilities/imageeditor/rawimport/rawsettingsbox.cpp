@@ -52,8 +52,8 @@
 
 #include "ddebug.h"
 #include "imagedialog.h"
-#include "imagecurves.h"
 #include "imagehistogram.h"
+#include "imagecurves.h"
 #include "histogramwidget.h"
 #include "curveswidget.h"
 #include "colorgradientwidget.h"
@@ -95,16 +95,15 @@ public:
         infoBox             = 0;
         advExposureBox      = 0;
         gammaLabel          = 0;
-        gammaInput        = 0;
+        gammaInput          = 0;
         saturationLabel     = 0;
         saturationInput     = 0;
         fineExposureLabel   = 0;
         fineExposureInput   = 0;
-        contrastInput     = 0;
+        contrastInput       = 0;
         contrastLabel       = 0;
         curveBox            = 0;
         curveWidget         = 0;
-        curves              = 0;
         resetCurveBtn       = 0;
         decodingSettingsBox = 0;
     }
@@ -132,7 +131,6 @@ public:
 
     ColorGradientWidget              *hGradient;
 
-    ImageCurves                      *curves;
     CurvesWidget                     *curveWidget;
 
     HistogramWidget                  *histogramWidget;
@@ -274,8 +272,7 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     QLabel *spacev = new QLabel(d->curveBox);
     spacev->setFixedWidth(1);
 
-    d->curves      = new ImageCurves(true);
-    d->curveWidget = new CurvesWidget(256, 192, d->curves, d->curveBox);
+    d->curveWidget = new CurvesWidget(256, 192, d->curveBox);
     QWhatsThis::add(d->curveWidget, i18n("<p>This is the curve adjustment of the image luminosity"));
 
     d->resetCurveBtn = new QToolButton(d->curveBox);
@@ -371,7 +368,6 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
 RawSettingsBox::~RawSettingsBox()
 {
     delete d->curveWidget;
-    delete d->curves;
     delete d;
 }
 
@@ -404,7 +400,6 @@ void RawSettingsBox::setDefaultSettings()
 
 void RawSettingsBox::slotResetCurve()
 {
-    d->curves->curvesReset();
     d->curveWidget->reset();
     emit signalPostProcessingChanged();
 }
@@ -473,7 +468,6 @@ void RawSettingsBox::readSettings()
     d->saturationInput->setValue(config->readDoubleNumEntry("Saturation", 1.0));
     d->fineExposureInput->setValue(config->readDoubleNumEntry("FineExposure", 0.0));
 
-    d->curves->curvesReset();
     d->curveWidget->reset();
 
     for (int j = 0 ; j <= 17 ; j++)
@@ -486,9 +480,9 @@ void RawSettingsBox::readSettings()
             p.setX(p.x()/255);
             p.setY(p.y()/255);
         }
-        d->curves->setCurvePoint(ImageHistogram::ValueChannel, j, p);
+        d->curveWidget->curves()->setCurvePoint(ImageHistogram::ValueChannel, j, p);
     }
-    d->curves->curvesCalculateCurve(ImageHistogram::ValueChannel);
+    d->curveWidget->curves()->curvesCalculateCurve(ImageHistogram::ValueChannel);
 
     d->decodingSettingsBox->setCurrentIndex(config->readNumEntry("Settings Tab", 0));
 
@@ -536,8 +530,8 @@ void RawSettingsBox::saveSettings()
 
     for (int j = 0 ; j <= 17 ; j++)
     {
-        QPoint p = d->curves->getCurvePoint(ImageHistogram::ValueChannel, j);
-        if (!d->curves->isSixteenBits())
+        QPoint p = d->curveWidget->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
+        if (!d->curveWidget->curves()->isSixteenBits())
         {
             // Store point as 16 bits depth.
             p.setX(p.x()*255);
@@ -581,8 +575,8 @@ DRawDecoding RawSettingsBox::settings()
     settings.saturation              = d->saturationInput->value();
     settings.exposureComp            = d->fineExposureInput->value();
 
-    if (d->curves->isDirty())
-        settings.curveAdjust         = d->curves->getCurvePoints(ImageHistogram::ValueChannel);
+    if (d->curveWidget->curves()->isDirty())
+        settings.curveAdjust         = d->curveWidget->curves()->getCurvePoints(ImageHistogram::ValueChannel);
 
     return settings;
 }
