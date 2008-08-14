@@ -636,7 +636,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->imageLightTableAction = new KAction(KIcon("lighttable"), i18n("Place onto Light Table"), this);
-    d->imageLightTableAction->setShortcut(Qt::SHIFT+Qt::Key_L);
+    d->imageLightTableAction->setShortcut(Qt::CTRL+Qt::Key_L);
     d->imageLightTableAction->setWhatsThis(i18n("Place the selected items on the light table thumbbar."));
     connect(d->imageLightTableAction, SIGNAL(triggered()), d->view, SLOT(slotImageLightTable()));
     actionCollection()->addAction("image_lighttable", d->imageLightTableAction);
