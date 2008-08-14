@@ -681,7 +681,7 @@ void DigikamApp::setupActions()
 
     d->imageLightTableAction = new KAction(i18n("Place onto Light Table"),
                                     "lighttable",
-                                    SHIFT+Key_L,
+                                    CTRL+Key_L,
                                     d->view,
                                     SLOT(slotImageLightTable()),
                                     actionCollection(),

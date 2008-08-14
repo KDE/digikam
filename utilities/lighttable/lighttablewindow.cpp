@@ -549,8 +549,8 @@ void LightTableWindow::slotThumbbarDroppedItems(const ImageInfoList& list)
 }
 
 // We get here either
-// - via SHIFT+L (from the albumview)
-//     a) digikamapp.cpp:  SHIFT+key_L leads to slotImageLightTable())
+// - via CTRL+L (from the albumview)
+//     a) digikamapp.cpp:  CTRL+key_L leads to slotImageLightTable())
 //     b) digikamview.cpp: void DigikamView::slotImageLightTable()
 //          calls d->iconView->insertToLightTable(list, info);
 //     c) albumiconview.cpp: AlbumIconView::insertToLightTable
