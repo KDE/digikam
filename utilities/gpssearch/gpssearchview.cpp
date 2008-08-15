@@ -121,7 +121,7 @@ GPSSearchView::GPSSearchView(QWidget *parent)
     d->saveBtn  = new QPushButton(hbox);
     d->saveBtn->setIcon(SmallIcon("document-save"));
     d->saveBtn->setEnabled(false);
-    d->saveBtn->setToolTip(i18n("Save current sketch search to a new virtual Album"));
+    d->saveBtn->setToolTip(i18n("Save current map search to a new virtual album"));
     d->saveBtn->setWhatsThis(i18n("<p>If you press this button, current map search "
                                   "will be saved to a new search "
                                   "virtual album using name "
@@ -214,7 +214,7 @@ SearchTextBar* GPSSearchView::searchBar() const
 
 void GPSSearchView::setActive(bool val)
 {
-    if (d->gpsSearchFolderView->selectedItem()) 
+    if (d->gpsSearchFolderView->selectedItem())
     {
         d->gpsSearchFolderView->setActive(val);
     }
@@ -268,7 +268,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
 
 void GPSSearchView::slotAlbumSelected(SAlbum* salbum)
 {
-    if (!salbum) 
+    if (!salbum)
         return;
 
     AlbumManager::instance()->setCurrentAlbum(salbum);
@@ -290,7 +290,7 @@ bool GPSSearchView::checkName(QString& name)
 {
     bool checked = checkAlbum(name);
 
-    while (!checked) 
+    while (!checked)
     {
         QString label = i18n( "Search name already exists.\n"
                               "Please enter a new name:" );
