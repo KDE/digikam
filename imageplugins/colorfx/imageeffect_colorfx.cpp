@@ -25,29 +25,30 @@
 
 // Qt includes.
 
-#include <QGroupBox>
 #include <QButtonGroup>
 #include <QComboBox>
-#include <QLabel>
-#include <QPushButton>
 #include <QFrame>
-#include <QHBoxLayout>
 #include <QGridLayout>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QLabel>
 #include <QPixmap>
+#include <QPushButton>
+#include <QToolButton>
 
 // KDE includes.
 
-#include <kconfig.h>
-#include <knuminput.h>
-#include <klocale.h>
-#include <kcursor.h>
 #include <kaboutdata.h>
+#include <kapplication.h>
+#include <kconfig.h>
+#include <kcursor.h>
+#include <kglobal.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
-#include <kapplication.h>
+#include <klocale.h>
 #include <kmenu.h>
+#include <knuminput.h>
 #include <kstandarddirs.h>
-#include <kglobal.h>
 #include <kvbox.h>
 
 // Local includes.
@@ -128,13 +129,13 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
                                  "Logarithmic scale can be used when the maximal counts are big; "
                                  "if it is used, all values (small and large) will be visible on the graph."));
 
-    QPushButton *linHistoButton = new QPushButton( scaleBox );
+    QToolButton *linHistoButton = new QToolButton( scaleBox );
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
     linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
     linHistoButton->setCheckable(true);
     m_scaleBG->addButton(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
 
-    QPushButton *logHistoButton = new QPushButton( scaleBox );
+    QToolButton *logHistoButton = new QToolButton( scaleBox );
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
     logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
     logHistoButton->setCheckable(true);

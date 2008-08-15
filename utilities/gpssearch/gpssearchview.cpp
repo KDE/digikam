@@ -23,25 +23,26 @@
 
 // Qt includes.
 
+#include <QFrame>
 #include <QImage>
 #include <QLabel>
-#include <QFrame>
 #include <QLayout>
 #include <QPushButton>
 #include <QStyle>
+#include <QToolButton>
 
 // KDE include.
 
-#include <khbox.h>
-#include <klocale.h>
+#include <kapplication.h>
 #include <kconfig.h>
 #include <kdialog.h>
-#include <kiconloader.h>
-#include <kapplication.h>
-#include <kstandarddirs.h>
-#include <kmessagebox.h>
 #include <khbox.h>
+#include <khbox.h>
+#include <kiconloader.h>
 #include <kinputdialog.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kstandarddirs.h>
 
 // Local includes.
 
@@ -73,7 +74,7 @@ public:
         gpsSearchFolderView = 0;
     }
 
-    QPushButton            *saveBtn;
+    QToolButton            *saveBtn;
 
     KLineEdit              *nameEdit;
 
@@ -118,7 +119,7 @@ GPSSearchView::GPSSearchView(QWidget *parent)
     d->nameEdit->setWhatsThis(i18n("<p>Enter the name of the current map search to save in the "
                                    "\"My Map Searches\" view"));
 
-    d->saveBtn  = new QPushButton(hbox);
+    d->saveBtn  = new QToolButton(hbox);
     d->saveBtn->setIcon(SmallIcon("document-save"));
     d->saveBtn->setEnabled(false);
     d->saveBtn->setToolTip(i18n("Save current map search to a new virtual album"));

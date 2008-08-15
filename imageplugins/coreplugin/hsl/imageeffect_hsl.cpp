@@ -14,40 +14,41 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
- 
+
+#include <QButtonGroup>
 #include <QColor>
-#include <QGroupBox>
-#include <QButtonGroup> 
-#include <QLabel>
-#include <QFrame>
-#include <QPushButton>
 #include <QComboBox>
-#include <QTimer>
-#include <QHBoxLayout>
+#include <QFrame>
 #include <QGridLayout>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QLabel>
 #include <QPixmap>
+#include <QPushButton>
+#include <QTimer>
+#include <QToolButton>
 
 // KDE includes.
 
-#include <knuminput.h>
-#include <klocale.h>
 #include <kapplication.h>
+#include <kcolordialog.h>
 #include <kconfig.h>
 #include <kcursor.h>
-#include <kstandarddirs.h>
-#include <kcolordialog.h>
 #include <kglobal.h>
-#include <kvbox.h>
 #include <khuesaturationselect.h>
+#include <klocale.h>
+#include <knuminput.h>
+#include <kstandarddirs.h>
+#include <kvbox.h>
 
 // Digikam includes.
 
@@ -78,7 +79,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
                                                     "Hue/Saturation/Lightness adjustments preview. "
                                                     "You can pick color on image "
                                                     "to see the color level corresponding on histogram."));
-    setPreviewAreaWidget(m_previewWidget); 
+    setPreviewAreaWidget(m_previewWidget);
 
     // -------------------------------------------------------------
 
@@ -108,13 +109,13 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
                                 "Logarithmic scale can be used when the maximal counts are big; "
                                 "if it is used, all values (small and large) will be visible on the graph."));
 
-    QPushButton *linHistoButton = new QPushButton( scaleBox );
+    QToolButton *linHistoButton = new QToolButton( scaleBox );
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
     linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
     linHistoButton->setCheckable(true);
     m_scaleBG->addButton(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
 
-    QPushButton *logHistoButton = new QPushButton( scaleBox );
+    QToolButton *logHistoButton = new QToolButton( scaleBox );
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
     logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
     logHistoButton->setCheckable(true);
@@ -142,7 +143,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
                                           "of the selected image channel. This one is re-computed at any "
                                           "settings changes."));
     QLabel *space = new QLabel(histoBox);
-    space->setFixedHeight(1);    
+    space->setFixedHeight(1);
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
@@ -216,20 +217,20 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
 
     connect(m_hInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotHChanged(double)));
-            
+
     connect(m_sInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
 
     connect(m_sInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotSChanged(double)));
-            
+
     connect(m_lInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
-    
+
     connect(m_previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));              
-            
-    // -------------------------------------------------------------            
+            this, SLOT(slotEffect()));
+
+    // -------------------------------------------------------------
 
     enableButtonOk( false );
 }
@@ -238,9 +239,9 @@ ImageEffect_HSL::~ImageEffect_HSL()
 {
     m_histogramWidget->stopHistogramComputation();
 
-    if (m_destinationPreviewData) 
+    if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
-       
+
     delete m_histogramWidget;
     delete m_previewWidget;
 }
@@ -253,18 +254,18 @@ void ImageEffect_HSL::slotChannelChanged(int channel)
             m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
             break;
-    
+
         case RedChannel:
             m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
             break;
-    
-        case GreenChannel:         
+
+        case GreenChannel:
             m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
             break;
-    
-        case BlueChannel:         
+
+        case BlueChannel:
             m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
             break;
@@ -292,13 +293,13 @@ void ImageEffect_HSL::slotHSChanged(int h, int s)
 
     double sat = ((double)s * (200.0/255.0)) - 100.0;
 
-    m_hInput->blockSignals(true);       
-    m_sInput->blockSignals(true);       
+    m_hInput->blockSignals(true);
+    m_sInput->blockSignals(true);
     m_hInput->setValue(hue);
     m_sInput->setValue(sat);
-    m_hInput->blockSignals(false);       
-    m_sInput->blockSignals(false);   
-    slotTimer();    
+    m_hInput->blockSignals(false);
+    m_sInput->blockSignals(false);
+    slotTimer();
 }
 
 void ImageEffect_HSL::slotHChanged(double h)
@@ -307,18 +308,18 @@ void ImageEffect_HSL::slotHChanged(double h)
     if (h >= -180 && h < 0)
         hue = int(h) + 359;
 
-    m_HSSelector->blockSignals(true);       
+    m_HSSelector->blockSignals(true);
     m_HSSelector->setXValue(hue);
-    m_HSSelector->blockSignals(false);       
+    m_HSSelector->blockSignals(false);
 }
 
 void ImageEffect_HSL::slotSChanged(double s)
 {
     int sat = (int)((s + 100.0) * (255.0/200.0));
 
-    m_HSSelector->blockSignals(true);       
+    m_HSSelector->blockSignals(true);
     m_HSSelector->setYValue(sat);
-    m_HSSelector->blockSignals(false);       
+    m_HSSelector->blockSignals(false);
 }
 
 void ImageEffect_HSL::readUserSettings()
@@ -326,7 +327,7 @@ void ImageEffect_HSL::readUserSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("hsladjust Tool Dialog");
     m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->button(group.readEntry("Histogram Scale", 
+    m_scaleBG->button(group.readEntry("Histogram Scale",
                       (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
 
     m_hInput->setValue(group.readEntry("HueAjustment", 0.0));
@@ -352,33 +353,33 @@ void ImageEffect_HSL::writeUserSettings()
 
 void ImageEffect_HSL::resetValues()
 {
-    m_hInput->blockSignals(true);	
-    m_sInput->blockSignals(true);	
-    m_lInput->blockSignals(true);	
+    m_hInput->blockSignals(true);
+    m_sInput->blockSignals(true);
+    m_lInput->blockSignals(true);
     m_hInput->setValue(0.0);
     m_sInput->setValue(0.0);
     m_lInput->setValue(0.0);
     slotHChanged(0.0);
     slotSChanged(0.0);
-    m_hInput->blockSignals(false);	
-    m_sInput->blockSignals(false);	
-    m_lInput->blockSignals(false);	
-} 
+    m_hInput->blockSignals(false);
+    m_sInput->blockSignals(false);
+    m_lInput->blockSignals(false);
+}
 
 void ImageEffect_HSL::slotEffect()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
 
     double hu  = m_hInput->value();
-    double sa  = m_sInput->value();    
+    double sa  = m_sInput->value();
     double lu  = m_lInput->value();
-    
+
     enableButtonOk( hu != 0.0 || sa != 0.0 || lu != 0.0);
-    
+
     m_HSPreview->setHS(hu, sa);
     m_histogramWidget->stopHistogramComputation();
 
-    if (m_destinationPreviewData) 
+    if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
@@ -399,7 +400,7 @@ void ImageEffect_HSL::slotEffect()
     m_previewWidget->updatePreview();
 
     // Update histogram.
-   
+
     memcpy(m_destinationPreviewData, preview.bits(), preview.numBytes());
     m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
 
@@ -411,7 +412,7 @@ void ImageEffect_HSL::finalRendering()
     kapp->setOverrideCursor( Qt::WaitCursor );
 
     double hu  = m_hInput->value();
-    double sa  = m_sInput->value();    
+    double sa  = m_sInput->value();
     double lu  = m_lInput->value();
 
     Digikam::ImageIface* iface = m_previewWidget->imageIface();

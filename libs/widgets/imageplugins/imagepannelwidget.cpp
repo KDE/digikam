@@ -23,30 +23,31 @@
 
 // Qt includes.
 
+#include <QButtonGroup>
 #include <QFrame>
+#include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
 #include <QPixmap>
-#include <QTimer>
-#include <QButtonGroup> 
+#include <QProgressBar>
 #include <QPushButton>
 #include <QResizeEvent>
-#include <QGridLayout>
-#include <QProgressBar>
-#include <QVBoxLayout>
 #include <QSplitter>
+#include <QTimer>
+#include <QToolButton>
+#include <QVBoxLayout>
 
 // KDE includes.
 
-#include <kdialog.h>
-#include <klocale.h>
-#include <kcursor.h>
 #include <kapplication.h>
-#include <kiconloader.h>
 #include <kconfig.h>
-#include <kstandarddirs.h>
-#include <kseparator.h>
+#include <kcursor.h>
+#include <kdialog.h>
 #include <kglobal.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kseparator.h>
+#include <kstandarddirs.h>
 
 // Local includes.
 
@@ -106,7 +107,7 @@ public:
     StatusZoomBar      *zoomBar;
 };
 
-ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSection, 
+ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSection,
                                      QWidget *parent, int separateViewMode)
                  : KHBox(parent)
 {
@@ -155,7 +156,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     if (separateViewMode == SeparateViewDuplicate ||
         separateViewMode == SeparateViewAll)
     {
-       QPushButton *duplicateHorButton = new QPushButton( d->sepaBBox );
+        QToolButton *duplicateHorButton = new QToolButton( d->sepaBBox );
        d->separateView->addButton(duplicateHorButton, ImageRegionWidget::SeparateViewDuplicateHorz);
        hlay->addWidget(duplicateHorButton);
        duplicateHorButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/duplicatebothhorz.png")));
@@ -165,7 +166,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
                                               "at the same time. The target is duplicated from the original "
                                               "below the red dashed line." ) );
 
-       QPushButton *duplicateVerButton = new QPushButton( d->sepaBBox );
+       QToolButton *duplicateVerButton = new QToolButton( d->sepaBBox );
        d->separateView->addButton(duplicateVerButton, ImageRegionWidget::SeparateViewDuplicateVert);
        hlay->addWidget(duplicateVerButton);
        duplicateVerButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/duplicatebothvert.png")));
@@ -179,7 +180,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     if (separateViewMode == SeparateViewNormal ||
         separateViewMode == SeparateViewAll)
     {
-       QPushButton *separateHorButton = new QPushButton( d->sepaBBox );
+        QToolButton *separateHorButton = new QToolButton( d->sepaBBox );
        d->separateView->addButton(separateHorButton, ImageRegionWidget::SeparateViewHorizontal);
        hlay->addWidget(separateHorButton);
        separateHorButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/bothhorz.png")));
@@ -189,7 +190,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
                                               "at the same time. The original is above the "
                                               "red dashed line, the target below it." ) );
 
-       QPushButton *separateVerButton = new QPushButton( d->sepaBBox );
+       QToolButton *separateVerButton = new QToolButton( d->sepaBBox );
        d->separateView->addButton(separateVerButton, ImageRegionWidget::SeparateViewVertical);
        hlay->addWidget(separateVerButton);
        separateVerButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/bothvert.png")));
@@ -200,7 +201,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
                                               "red dashed line, the target to the right of it." ) );
     }
 
-    QPushButton *noSeparateButton = new QPushButton( d->sepaBBox );
+    QToolButton *noSeparateButton = new QToolButton( d->sepaBBox );
     d->separateView->addButton(noSeparateButton, ImageRegionWidget::SeparateViewNone);
     hlay->addWidget(noSeparateButton);
     noSeparateButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/target.png")));
@@ -258,13 +259,13 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     d->settingsLayout->setSpacing(0);
     d->settingsLayout->setMargin(0);
 
-    d->settingsSideBar->appendTab(d->settings, SmallIcon("configure"), i18n("Settings"));    
+    d->settingsSideBar->appendTab(d->settings, SmallIcon("configure"), i18n("Settings"));
     d->settingsSideBar->loadViewState();
 
     // -------------------------------------------------------------
 
     setProgressVisible(false);
-    QTimer::singleShot(0, this, SLOT(slotInitGui())); 
+    QTimer::singleShot(0, this, SLOT(slotInitGui()));
 
     // -------------------------------------------------------------
 
@@ -354,7 +355,7 @@ void ImagePannelWidget::slotZoomFactorChanged(double zoom)
     double zmax = d->imageRegionWidget->zoomMax();
     double b    = (zmin-(zmax*s/h))/(1-s/h);
     double a    = (zmax-b)/h;
-    int size    = (int)((zoom - b) /a); 
+    int size    = (int)((zoom - b) /a);
 
     d->zoomBar->setZoomSliderValue(size);
     d->zoomBar->setZoomTrackerText(i18n("zoom: %1%",(int)(zoom*100.0)));
@@ -379,7 +380,7 @@ void ImagePannelWidget::slotZoomSliderChanged(int size)
     double zmax = d->imageRegionWidget->zoomMax();
     double b    = (zmin-(zmax*s/h))/(1-s/h);
     double a    = (zmax-b)/h;
-    double z    = a*size+b; 
+    double z    = a*size+b;
 
     d->imageRegionWidget->setZoomFactorSnapped(z);
 }
@@ -401,7 +402,7 @@ void ImagePannelWidget::slotInitGui()
     slotOriginalImageRegionChanged(true);
 }
 
-void ImagePannelWidget::setPanIconHighLightPoints(const QPolygon& pt) 
+void ImagePannelWidget::setPanIconHighLightPoints(const QPolygon& pt)
 {
     d->imageRegionWidget->setHighLightPoints(pt);
     d->imagePanIconWidget->setHighLightPoints(pt);
@@ -448,7 +449,7 @@ void ImagePannelWidget::setPreviewImageWaitCursor(bool enable)
 {
     if ( enable )
        d->imageRegionWidget->setCursor( Qt::WaitCursor );
-    else 
+    else
        d->imageRegionWidget->unsetCursor();
 }
 
@@ -484,7 +485,7 @@ void ImagePannelWidget::slotSetImageRegionPosition(const QRect& rect, bool targe
 
 void ImagePannelWidget::updateSelectionInfo(const QRect& rect)
 {
-    d->imagePanIconWidget->setToolTip(i18n("<nobr>(%1,%2)(%3x%4)</nobr>", 
+    d->imagePanIconWidget->setToolTip(i18n("<nobr>(%1,%2)(%3x%4)</nobr>",
                                            rect.left(), rect.top(),
                                            rect.width(), rect.height()));
 }

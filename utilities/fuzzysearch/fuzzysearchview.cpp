@@ -24,31 +24,32 @@
 
 // Qt includes.
 
-#include <QTime>
+#include <QFrame>
 #include <QImage>
 #include <QLabel>
-#include <QTimer>
-#include <QFrame>
 #include <QLayout>
 #include <QPushButton>
 #include <QSpinBox>
+#include <QTime>
+#include <QTimer>
+#include <QToolButton>
 
 // KDE include.
 
-#include <khbox.h>
-#include <klocale.h>
+#include <kapplication.h>
+#include <kcolorvalueselector.h>
 #include <kconfig.h>
 #include <kdialog.h>
-#include <kiconloader.h>
-#include <kapplication.h>
-#include <kstandarddirs.h>
-#include <kmessagebox.h>
+#include <khbox.h>
 #include <khuesaturationselect.h>
-#include <kcolorvalueselector.h>
-#include <kvbox.h>
+#include <kiconloader.h>
 #include <kinputdialog.h>
-#include <ktabwidget.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 #include <ksqueezedtextlabel.h>
+#include <kstandarddirs.h>
+#include <ktabwidget.h>
+#include <kvbox.h>
 
 // Local includes.
 
@@ -115,11 +116,11 @@ public:
         fingerprintsChecked   = false;
     }
 
-    QPushButton            *resetButton;
-    QPushButton            *saveBtnSketch;
-    QPushButton            *undoBtnSketch;
-    QPushButton            *redoBtnSketch;
-    QPushButton            *saveBtnImage;
+    QToolButton            *resetButton;
+    QToolButton            *saveBtnSketch;
+    QToolButton            *undoBtnSketch;
+    QToolButton            *redoBtnSketch;
+    QToolButton            *saveBtnImage;
 
     QSpinBox               *penSize;
     QSpinBox               *resultsSketch;
@@ -235,7 +236,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->nameEditImage->setWhatsThis(i18n("<p>Enter the name of the current similar image search to save in the "
                                         "\"My Fuzzy Searches\" view"));
 
-    d->saveBtnImage  = new QPushButton(hbox4);
+    d->saveBtnImage  = new QToolButton(hbox4);
     d->saveBtnImage->setIcon(SmallIcon("document-save"));
     d->saveBtnImage->setEnabled(false);
     d->saveBtnImage->setToolTip(i18n("Save current similar image search to a new virtual Album"));
@@ -294,14 +295,14 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     KHBox *hbox        = new KHBox(sketchPanel);
 
-    d->undoBtnSketch   = new QPushButton(hbox);
+    d->undoBtnSketch   = new QToolButton(hbox);
     d->undoBtnSketch->setAutoRepeat(true);
     d->undoBtnSketch->setIcon(SmallIcon("edit-undo"));
     d->undoBtnSketch->setToolTip(i18n("Undo last draw on sketch"));
     d->undoBtnSketch->setWhatsThis(i18n("<p>Use this button to undo last drawing action on sketch."));
     d->undoBtnSketch->setEnabled(false);
 
-    d->redoBtnSketch   = new QPushButton(hbox);
+    d->redoBtnSketch   = new QToolButton(hbox);
     d->redoBtnSketch->setAutoRepeat(true);
     d->redoBtnSketch->setIcon(SmallIcon("edit-redo"));
     d->redoBtnSketch->setToolTip(i18n("Redo last draw on sketch"));
@@ -333,7 +334,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     hbox2->setMargin(0);
     hbox2->setSpacing(KDialog::spacingHint());
 
-    d->resetButton    = new QPushButton(hbox2);
+    d->resetButton    = new QToolButton(hbox2);
     d->resetButton->setIcon(SmallIcon("document-revert"));
     d->resetButton->setToolTip(i18n("Clear sketch"));
     d->resetButton->setWhatsThis(i18n("<p>Use this button to clear sketch contents."));
@@ -343,7 +344,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->nameEditSketch->setWhatsThis(i18n("<p>Enter the name of the current sketch search to save in the "
                                          "\"My Fuzzy Searches\" view"));
 
-    d->saveBtnSketch  = new QPushButton(hbox2);
+    d->saveBtnSketch  = new QToolButton(hbox2);
     d->saveBtnSketch->setIcon(SmallIcon("document-save"));
     d->saveBtnSketch->setEnabled(false);
     d->saveBtnSketch->setToolTip(i18n("Save current sketch search to a new virtual Album"));
@@ -553,13 +554,13 @@ void FuzzySearchView::setActive(bool val)
     {
         case FuzzySearchViewPriv::SIMILARS:
         {
-            if (d->fuzzySearchFolderView->selectedItem()) 
+            if (d->fuzzySearchFolderView->selectedItem())
                 d->fuzzySearchFolderView->setActive(val);
             break;
         }
         case FuzzySearchViewPriv::SKETCH:
         {
-            if (d->fuzzySearchFolderView->selectedItem()) 
+            if (d->fuzzySearchFolderView->selectedItem())
                 d->fuzzySearchFolderView->setActive(val);
             break;
         }
@@ -600,7 +601,7 @@ void FuzzySearchView::slotTabChanged(int tab)
 
 void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
 {
-    if (!salbum || !salbum->isHaarSearch()) 
+    if (!salbum || !salbum->isHaarSearch())
         return;
 
     AlbumManager::instance()->setCurrentAlbum(salbum);
@@ -631,7 +632,7 @@ bool FuzzySearchView::checkName(QString& name)
 {
     bool checked = checkAlbum(name);
 
-    while (!checked) 
+    while (!checked)
     {
         QString label = i18n( "Search name already exists.\n"
                               "Please enter a new name:" );
@@ -845,7 +846,7 @@ void FuzzySearchView::slotTimerImageDone()
 
 void FuzzySearchView::setImageId(qlonglong imageid)
 {
-    if (d->imageInfo) 
+    if (d->imageInfo)
         delete d->imageInfo;
 
     d->imageInfo = new ImageInfo(imageid);

@@ -35,39 +35,40 @@
 
 // Qt includes.
 
-#include <QColor>
-#include <QGroupBox>
 #include <QButtonGroup>
+#include <QCheckBox>
+#include <QColor>
+#include <QComboBox>
+#include <QFile>
+#include <QFrame>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QPainter>
-#include <QComboBox>
-#include <QSpinBox>
-#include <QPushButton>
-#include <QFrame>
-#include <QTimer>
-#include <QCheckBox>
-#include <QFile>
-#include <QHBoxLayout>
-#include <QGridLayout>
 #include <QPixmap>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QTimer>
+#include <QToolButton>
 
 // KDE includes.
 
+#include <kaboutdata.h>
+#include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
-#include <klocale.h>
-#include <knuminput.h>
-#include <kmessagebox.h>
-#include <kselector.h>
 #include <kfiledialog.h>
+#include <kglobal.h>
 #include <kglobalsettings.h>
-#include <kaboutdata.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
-#include <kapplication.h>
+#include <klocale.h>
 #include <kmenu.h>
+#include <kmessagebox.h>
+#include <knuminput.h>
+#include <kselector.h>
 #include <kstandarddirs.h>
-#include <kglobal.h>
 #include <kvbox.h>
 
 // Local includes.
@@ -145,13 +146,13 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
                                 "Logarithmic scale can be used when the maximal counts are big; "
                                 "if it is used, all values (small and large) will be visible on the graph."));
 
-    QPushButton *linHistoButton = new QPushButton( scaleBox );
+    QToolButton *linHistoButton = new QToolButton( scaleBox );
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
     linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
     linHistoButton->setCheckable(true);
     m_scaleBG->addButton(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
 
-    QPushButton *logHistoButton = new QPushButton( scaleBox );
+    QToolButton *logHistoButton = new QToolButton( scaleBox );
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
     logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
     logHistoButton->setCheckable(true);

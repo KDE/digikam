@@ -23,36 +23,37 @@
 
 // Qt includes.
 
-#include <Q3SimpleRichText>
-#include <Q3PaintDeviceMetrics>
-#include <Q3StyleSheet>
 #include <Q3MimeSourceFactory>
-#include <QColorGroup>
-#include <QMimeData>
-#include <QClipboard>
-#include <QMap>
-#include <QFile> 
-#include <QPainter>
-#include <QPushButton>
-#include <QLabel>
-#include <QGridLayout>
-#include <QFrame>
-#include <QVBoxLayout>
+#include <Q3PaintDeviceMetrics>
+#include <Q3SimpleRichText>
+#include <Q3StyleSheet>
 #include <QButtonGroup>
-#include <QDataStream>
+#include <QClipboard>
 #include <QColorGroup>
-#include <QPrinter>
+#include <QColorGroup>
+#include <QDataStream>
+#include <QFile>
+#include <QFrame>
+#include <QGridLayout>
+#include <QLabel>
+#include <QMap>
+#include <QMimeData>
+#include <QPainter>
 #include <QPrintDialog>
+#include <QPrinter>
+#include <QPushButton>
+#include <QToolButton>
+#include <QVBoxLayout>
 
 // KDE includes.
 
-#include <klocale.h>
-#include <kglobal.h>
-#include <kfiledialog.h>
-#include <kglobalsettings.h>
-#include <kglobal.h>
-#include <kiconloader.h>
 #include <kapplication.h>
+#include <kfiledialog.h>
+#include <kglobal.h>
+#include <kglobal.h>
+#include <kglobalsettings.h>
+#include <kiconloader.h>
+#include <klocale.h>
 
 // Local includes.
 
@@ -117,7 +118,7 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     QHBoxLayout *hlay1 = new QHBoxLayout(d->levelGBox);
     d->levelButtons->setExclusive(true);
 
-    QPushButton *simpleLevel = new QPushButton( d->levelGBox );
+    QToolButton *simpleLevel = new QToolButton( d->levelGBox );
     simpleLevel->setIcon( iconLoader->loadIcon( "user-identity", (KIconLoader::Group)KIconLoader::Toolbar ) );
     simpleLevel->setCheckable(true);
     simpleLevel->setWhatsThis( i18n( "Switch the tags view to a simple human-readable list" ) );
@@ -125,7 +126,7 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     d->levelButtons->addButton(simpleLevel, SIMPLE);
     hlay1->addWidget(simpleLevel);
 
-    QPushButton *fullLevel = new QPushButton( d->levelGBox );
+    QToolButton *fullLevel = new QToolButton( d->levelGBox );
     fullLevel->setIcon( iconLoader->loadIcon( "view-media-playlist", (KIconLoader::Group)KIconLoader::Toolbar ) );
     fullLevel->setCheckable(true);
     fullLevel->setWhatsThis( i18n( "Switch the tags view to a full list" ) );
@@ -142,19 +143,19 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     d->toolButtons     = new QButtonGroup(d->toolsGBox);
     QHBoxLayout *hlay2 = new QHBoxLayout(d->toolsGBox);
 
-    QPushButton *saveMetadata = new QPushButton( d->toolsGBox );
+    QToolButton *saveMetadata = new QToolButton( d->toolsGBox );
     saveMetadata->setIcon( iconLoader->loadIcon( "document-save", (KIconLoader::Group)KIconLoader::Toolbar ) );
     saveMetadata->setWhatsThis( i18n( "Save metadata to a binary file" ) );
     saveMetadata->setToolTip( i18n( "Save metadata" ));
     d->toolButtons->addButton(saveMetadata);
 
-    QPushButton *printMetadata = new QPushButton( d->toolsGBox );
+    QToolButton *printMetadata = new QToolButton( d->toolsGBox );
     printMetadata->setIcon( iconLoader->loadIcon( "document-print", (KIconLoader::Group)KIconLoader::Toolbar ) );
     printMetadata->setWhatsThis( i18n( "Print metadata to printer" ) );
     printMetadata->setToolTip(i18n( "Print metadata" ));
     d->toolButtons->addButton(printMetadata);
 
-    QPushButton *copy2ClipBoard = new QPushButton( d->toolsGBox );
+    QToolButton *copy2ClipBoard = new QToolButton( d->toolsGBox );
     copy2ClipBoard->setIcon( iconLoader->loadIcon( "edit-copy", (KIconLoader::Group)KIconLoader::Toolbar ) );
     copy2ClipBoard->setWhatsThis( i18n( "Copy metadata to clipboard" ) );
     copy2ClipBoard->setToolTip(i18n( "Copy metadata to clipboard" ));
@@ -259,7 +260,7 @@ bool MetadataWidget::storeMetadataToFile(const KUrl& url, const QByteArray& meta
         return false;
 
     QFile file(url.path());
-    if ( !file.open(QIODevice::WriteOnly) ) 
+    if ( !file.open(QIODevice::WriteOnly) )
         return false;
 
     QDataStream stream( &file );
@@ -384,7 +385,7 @@ void MetadataWidget::slotPrintMetadata()
     {
         QPainter p(&printer);
 
-        if ( !p.device() ) 
+        if ( !p.device() )
             return;
 
         Q3PaintDeviceMetrics metrics(p.device());

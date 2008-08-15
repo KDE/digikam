@@ -27,26 +27,27 @@
 
 // Qt Includes.
 
-#include <QSpinBox>
+#include <QButtonGroup>
 #include <QComboBox>
-#include <QLabel>
-#include <QGroupBox>
-#include <QButtonGroup> 
-#include <QPushButton>
-#include <QHBoxLayout>
-#include <QGridLayout>
-#include <QPixmap>
 #include <QFrame>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPixmap>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QToolButton>
 
 // KDE includes.
 
-#include <klocale.h>
-#include <ksqueezedtextlabel.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdialog.h>
-#include <kstandarddirs.h>
 #include <kglobal.h>
+#include <klocale.h>
+#include <ksqueezedtextlabel.h>
+#include <kstandarddirs.h>
 #include <kvbox.h>
 
 // Local includes.
@@ -180,13 +181,13 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
                                  "if it is used, all values (small and large) will be visible on the "
                                  "graph."));
 
-    QPushButton *linHistoButton = new QPushButton(scaleBox);
+    QToolButton *linHistoButton = new QToolButton(scaleBox);
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
     linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
     linHistoButton->setCheckable(true);
     d->scaleBG->addButton(linHistoButton, HistogramWidget::LinScaleHistogram);
 
-    QPushButton *logHistoButton = new QPushButton(scaleBox);
+    QToolButton *logHistoButton = new QToolButton(scaleBox);
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
     logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
     logHistoButton->setCheckable(true);
@@ -421,7 +422,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     d->scaleBG->button(group.readEntry("Histogram Scale",
                                        (int)HistogramWidget::LogScaleHistogram))->setChecked(true);
     d->colorsCB->setCurrentIndex(group.readEntry("Histogram Color", 0));       // Red.
-    d->regionBG->button(group.readEntry("Histogram Rendering", 
+    d->regionBG->button(group.readEntry("Histogram Rendering",
                                         (int)HistogramWidget::FullImageHistogram))->setChecked(true);
 }
 
@@ -498,7 +499,7 @@ void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect &selectionAr
     {
         loadImageFromUrl(url);
     }
-    else 
+    else
     {
         d->image = img->copy();
 
@@ -506,7 +507,7 @@ void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect &selectionAr
         {
             getICCData();
 
-            // If a selection area is done in Image Editor and if the current image is the same 
+            // If a selection area is done in Image Editor and if the current image is the same
             // in Image Editor, then compute too the histogram for this selection.
             if (d->selectionArea.isValid())
             {
@@ -517,15 +518,15 @@ void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect &selectionAr
                 d->regionBox->show();
                 updateInformations();
             }
-            else 
+            else
             {
-                d->histogramWidget->updateData(d->image.bits(), d->image.width(), 
+                d->histogramWidget->updateData(d->image.bits(), d->image.width(),
                                                d->image.height(), d->image.sixteenBit());
                 d->regionBox->hide();
                 updateInformations();
             }
         }
-        else 
+        else
         {
             d->histogramWidget->setLoadingFailed();
             d->iccProfileWidget->setLoadingFailed();
@@ -629,7 +630,7 @@ void ImagePropertiesColorsTab::setSelection(const QRect &selectionArea)
                                                 d->imageSelection.height(), d->imageSelection.sixteenBit());
         d->regionBox->show();
     }
-    else 
+    else
     {
         d->regionBox->hide();
         slotRenderingChanged(HistogramWidget::FullImageHistogram);
@@ -656,7 +657,7 @@ void ImagePropertiesColorsTab::slotChannelChanged(int channel)
 {
     switch(channel)
     {
-        case RedChannel: 
+        case RedChannel:
             d->histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
             d->hGradient->setColors( QColor( "black" ), QColor( "red" ) );
             d->colorsCB->setEnabled(false);
@@ -756,7 +757,7 @@ void ImagePropertiesColorsTab::slotUpdateInterval(int min, int max)
 {
     // Called when value is set from within histogram widget.
     // Block signals to prevent slotMinValueChanged and
-    // slotMaxValueChanged being called. 
+    // slotMaxValueChanged being called.
     d->minInterv->blockSignals(true);
     d->minInterv->setMaximum(max+1);
     d->minInterv->setValue(min);

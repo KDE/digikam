@@ -23,28 +23,29 @@
 
 // Qt includes.
 
-#include <QButtonGroup> 
-#include <QTimer>
+#include <QButtonGroup>
+#include <QComboBox>
 #include <QFrame>
 #include <QLayout>
-#include <QComboBox>
-#include <QPushButton>
 #include <QMap>
+#include <QPushButton>
 #include <QScrollBar>
+#include <QTimer>
+#include <QToolButton>
 
 // KDE include.
 
-#include <khbox.h>
-#include <klocale.h>
+#include <kapplication.h>
 #include <kconfig.h>
 #include <kdialog.h>
-#include <klineedit.h>
+#include <khbox.h>
 #include <kiconloader.h>
-#include <kapplication.h>
+#include <kinputdialog.h>
+#include <klineedit.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 #include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
-#include <kmessagebox.h>
-#include <kinputdialog.h>
 
 // Local includes.
 
@@ -92,8 +93,8 @@ public:
 
     QLabel             *cursorCountLabel;
 
-    QPushButton        *resetButton;
-    QPushButton        *saveButton;
+    QToolButton        *resetButton;
+    QToolButton        *saveButton;
 
     KLineEdit          *nameEdit;
 
@@ -146,13 +147,13 @@ TimeLineView::TimeLineView(QWidget *parent)
                                   "if it is used, all values (small and large) will be visible on the "
                                   "graph."));
 
-    QPushButton *linHistoButton = new QPushButton(scaleBox);
+    QToolButton *linHistoButton = new QToolButton(scaleBox);
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
     linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
     linHistoButton->setCheckable(true);
     d->scaleBG->addButton(linHistoButton, TimeLineWidget::LinScale);
 
-    QPushButton *logHistoButton = new QPushButton(scaleBox);
+    QToolButton *logHistoButton = new QToolButton(scaleBox);
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
     logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
     logHistoButton->setCheckable(true);
@@ -188,7 +189,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     hbox2->setMargin(0);
     hbox2->setSpacing(KDialog::spacingHint());
 
-    d->resetButton = new QPushButton(hbox2);
+    d->resetButton = new QToolButton(hbox2);
     d->resetButton->setIcon(SmallIcon("document-revert"));
     d->resetButton->setToolTip(i18n("Clear current selection"));
     d->resetButton->setWhatsThis(i18n("<p>If you press this button, current "
@@ -199,7 +200,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->nameEdit->setWhatsThis(i18n("<p>Enter the name of the current dates search to save in the "
                                    "\"My Date Searches\" view"));
 
-    d->saveButton  = new QPushButton(hbox2);
+    d->saveButton  = new QToolButton(hbox2);
     d->saveButton->setIcon(SmallIcon("document-save"));
     d->saveButton->setEnabled(false);
     d->saveButton->setToolTip(i18n("Save current selection to a new virtual Album"));
@@ -227,7 +228,7 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     vlay->addWidget(panel);
     vlay->addWidget(d->timeLineFolderView);
-    vlay->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+    vlay->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
                                   QSizePolicy::Minimum, QSizePolicy::Minimum));
     vlay->addWidget(d->searchDateBar);
     vlay->setMargin(0);
@@ -349,7 +350,7 @@ void TimeLineView::writeConfig()
 
 void TimeLineView::setActive(bool val)
 {
-    if (d->timeLineFolderView->selectedItem()) 
+    if (d->timeLineFolderView->selectedItem())
     {
         d->timeLineFolderView->setActive(val);
     }
@@ -421,7 +422,7 @@ void TimeLineView::slotUpdateCurrentDateSearchAlbum()
 void TimeLineView::slotSaveSelection()
 {
     QString name = d->nameEdit->text();
-    if (!checkName(name)) 
+    if (!checkName(name))
         return;
     createNewDateSearchAlbum(name);
 }
@@ -467,7 +468,7 @@ void TimeLineView::createNewDateSearchAlbum(const QString& name)
 
 void TimeLineView::slotAlbumSelected(SAlbum* salbum)
 {
-    if (!salbum) 
+    if (!salbum)
     {
         slotResetSelection();
         return;
@@ -521,7 +522,7 @@ bool TimeLineView::checkName(QString& name)
 {
     bool checked = checkAlbum(name);
 
-    while (!checked) 
+    while (!checked)
     {
         QString label = i18n( "Search name already exists.\n"
                               "Please enter a new name:" );
@@ -574,7 +575,7 @@ void TimeLineView::slotRenameAlbum(SAlbum* salbum)
     QString oldName(salbum->title());
     bool    ok;
 
-    QString name = KInputDialog::getText(i18n("Rename Album (%1)",oldName), 
+    QString name = KInputDialog::getText(i18n("Rename Album (%1)",oldName),
                                           i18n("Enter new album name:"),
                                           oldName, &ok, this);
 

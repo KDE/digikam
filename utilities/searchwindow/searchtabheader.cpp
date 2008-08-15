@@ -5,7 +5,7 @@
  *
  * Date        : 2008-02-26
  * Description : Upper widget in the search sidebar
- * 
+ *
  * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -13,33 +13,34 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes
 
 #include <QGroupBox>
-#include <QStackedLayout>
-#include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QPushButton>
-#include <QTimer>
 #include <QLabel>
+#include <QPushButton>
+#include <QStackedLayout>
+#include <QTimer>
+#include <QToolButton>
+#include <QVBoxLayout>
 
 // KDE includes
 
-#include <klineedit.h>
-#include <kurllabel.h>
-#include <klocale.h>
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <kinputdialog.h>
+#include <klineedit.h>
+#include <klocale.h>
 #include <ksqueezedtextlabel.h>
+#include <kurllabel.h>
 
 // Local includes
 
@@ -147,7 +148,7 @@ public:
     QPushButton        *advancedEditLabel;
 
     KLineEdit          *saveNameEdit;
-    QPushButton        *saveButton;
+    QToolButton        *saveButton;
 
     KSqueezedTextLabel *storedKeywordEditName;
     KLineEdit          *storedKeywordEdit;
@@ -219,7 +220,7 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
     d->saveNameEdit->setWhatsThis(i18n("<p>Enter a name for the current search to save it in the "
                                        "\"Searches\" view"));
 
-    d->saveButton      = new QPushButton(QString());
+    d->saveButton      = new QToolButton;
     d->saveButton->setIcon(SmallIcon("document-save"));
     d->saveButton->setToolTip(i18n("Save current search to a new virtual Album"));
     d->saveButton->setWhatsThis(i18n("<p>If you press this button, the current search "

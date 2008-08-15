@@ -24,30 +24,31 @@
 
 // Qt includes.
 
+#include <QButtonGroup>
 #include <QColor>
-#include <QGroupBox>
-#include <QButtonGroup> 
-#include <QLabel>
-#include <QFrame>
-#include <QPushButton>
 #include <QComboBox>
-#include <QHBoxLayout>
+#include <QFrame>
 #include <QGridLayout>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QLabel>
 #include <QPixmap>
+#include <QPushButton>
+#include <QToolButton>
 
 // KDE includes.
 
-#include <knuminput.h>
-#include <klocale.h>
 #include <kapplication.h>
+#include <kcolordialog.h>
+#include <kcolorvalueselector.h>
 #include <kconfig.h>
 #include <kcursor.h>
-#include <kstandarddirs.h>
-#include <kcolordialog.h>
 #include <kglobal.h>
-#include <kvbox.h>
 #include <khuesaturationselect.h>
-#include <kcolorvalueselector.h>
+#include <klocale.h>
+#include <knuminput.h>
+#include <kstandarddirs.h>
+#include <kvbox.h>
 
 // Digikam includes.
 
@@ -77,7 +78,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
                                                i18n("<p>Here you can see the image selection preview with "
                                                     "red eye reduction applied."),
                                                true, Digikam::ImageGuideWidget::PickColorMode, true, true);
-    setPreviewAreaWidget(m_previewWidget); 
+    setPreviewAreaWidget(m_previewWidget);
 
     // -------------------------------------------------------------
 
@@ -107,13 +108,13 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
                                 "Logarithmic scale can be used when the maximal counts are big; "
                                 "if it is used, all values (small and large) will be visible on the graph."));
 
-    QPushButton *linHistoButton = new QPushButton( scaleBox );
+    QToolButton *linHistoButton = new QToolButton( scaleBox );
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
     linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
     linHistoButton->setCheckable(true);
     m_scaleBG->addButton(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
 
-    QPushButton *logHistoButton = new QPushButton( scaleBox );
+    QToolButton *logHistoButton = new QToolButton( scaleBox );
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
     logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
     logHistoButton->setCheckable(true);
@@ -141,7 +142,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
                                          "of the selected image channel. It is "
                                          "updated upon setting changes."));
     QLabel *space = new QLabel(histoBox);
-    space->setFixedHeight(1);    
+    space->setFixedHeight(1);
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox);
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
@@ -238,7 +239,7 @@ ImageEffect_RedEye::~ImageEffect_RedEye()
 {
     m_histogramWidget->stopHistogramComputation();
 
-    if (m_destinationPreviewData) 
+    if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 
     delete m_histogramWidget;
@@ -301,7 +302,7 @@ void ImageEffect_RedEye::readUserSettings()
     KConfigGroup group        = config->group("redeye Tool Dialog");
 
     m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0)); // Luminosity.
-    m_scaleBG->button(group.readEntry("Histogram Scale", 
+    m_scaleBG->button(group.readEntry("Histogram Scale",
                       (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
 
     m_redThreshold->setValue(group.readEntry("RedThreshold", 20));
@@ -352,7 +353,7 @@ void ImageEffect_RedEye::resetValues()
     m_HSSelector->blockSignals(false);
     m_VSelector->blockSignals(false);
     m_tintLevel->blockSignals(false);
-} 
+}
 
 void ImageEffect_RedEye::slotEffect()
 {
@@ -360,12 +361,12 @@ void ImageEffect_RedEye::slotEffect()
 
     m_histogramWidget->stopHistogramComputation();
 
-    if (m_destinationPreviewData) 
+    if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 
-    // Here, we need to use the real selection image data because we will apply 
-    // a Gaussian blur filter on pixels and we cannot use directly the preview scaled image 
-    // else the blur radius will not give the same result between preview and final rendering.  
+    // Here, we need to use the real selection image data because we will apply
+    // a Gaussian blur filter on pixels and we cannot use directly the preview scaled image
+    // else the blur radius will not give the same result between preview and final rendering.
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
     m_destinationPreviewData   = iface->getImageSelection();
     int w                      = iface->selectedWidth();
@@ -454,7 +455,7 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
     green_norm *= coloring.green() / level;
     blue_norm  *= coloring.blue()  / level;
 
-    // Perform a red color pixels detection in selection image and create a correction mask using an alpha channel. 
+    // Perform a red color pixels detection in selection image and create a correction mask using an alpha channel.
 
     if (!selection.sixteenBit())         // 8 bits image.
     {
@@ -462,7 +463,7 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
         uchar* mptr = mask.bits();
         uchar  r, g, b, r1, g1, b1;
 
-        for (uint i = 0 ; i < selection.width() * selection.height() ; i++) 
+        for (uint i = 0 ; i < selection.width() * selection.height() ; i++)
         {
             b       = ptr[0];
             g       = ptr[1];
@@ -499,7 +500,7 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
         unsigned short* mptr = (unsigned short*)mask.bits();
         unsigned short  r, g, b, r1, g1, b1;
 
-        for (uint i = 0 ; i < selection.width() * selection.height() ; i++) 
+        for (uint i = 0 ; i < selection.width() * selection.height() ; i++)
         {
             b       = ptr[0];
             g       = ptr[1];

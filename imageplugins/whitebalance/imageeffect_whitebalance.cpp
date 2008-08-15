@@ -25,39 +25,40 @@
 
 // Qt includes.
 
-#include <QGroupBox>
-#include <QLabel>
-#include <QPushButton>
 #include <QButtonGroup>
-#include <QFrame>
 #include <QComboBox>
-#include <QTimer>
-#include <QPixmap>
 #include <QFile>
-#include <QTextStream>
-#include <QHBoxLayout>
+#include <QFrame>
 #include <QGridLayout>
-#include <QVBoxLayout>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPixmap>
 #include <QProgressBar>
+#include <QPushButton>
+#include <QTextStream>
+#include <QTimer>
+#include <QToolButton>
+#include <QVBoxLayout>
 
 // KDE includes.
 
 #include <k3activelabel.h>
-#include <kcursor.h>
-#include <klocale.h>
 #include <kaboutdata.h>
+#include <kapplication.h>
+#include <kconfig.h>
+#include <kcursor.h>
+#include <kfiledialog.h>
+#include <kglobal.h>
+#include <kglobalsettings.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
-#include <kapplication.h>
+#include <klocale.h>
 #include <kmenu.h>
-#include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <knuminput.h>
-#include <kglobalsettings.h>
-#include <kfiledialog.h>
 #include <kseparator.h>
-#include <kconfig.h>
-#include <kglobal.h>
+#include <kstandarddirs.h>
 #include <kvbox.h>
 
 // Local includes.
@@ -145,14 +146,14 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
                                  "if it is used, all values (small and large) will be visible on the "
                                  "graph."));
 
-    QPushButton *linHistoButton = new QPushButton( scaleBox );
+    QToolButton *linHistoButton = new QToolButton( scaleBox );
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
     m_scaleBG->addButton(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
     linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
     linHistoButton->setCheckable(true);
     hlay1->addWidget(linHistoButton);
 
-    QPushButton *logHistoButton = new QPushButton( scaleBox );
+    QToolButton *logHistoButton = new QToolButton( scaleBox );
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
     m_scaleBG->addButton(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
     logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));

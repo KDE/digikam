@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2006-02-01
- * Description : a widget to display an image preview with some 
+ * Description : a widget to display an image preview with some
  *               modes to compare effect results.
- * 
+ *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -14,34 +14,34 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
-// Qt includes. 
+// Qt includes.
 
-#include <QLayout>
-#include <QFrame>
 #include <QButtonGroup>
-#include <QPushButton>
+#include <QFrame>
 #include <QGridLayout>
+#include <QLayout>
 #include <QPixmap>
+#include <QToolButton>
 #include <QVBoxLayout>
 
 // KDE includes.
 
-#include <ksqueezedtextlabel.h>
-#include <kdialog.h>
 #include <kapplication.h>
-#include <klocale.h>
-#include <kiconloader.h>
 #include <kconfig.h>
-#include <kstandarddirs.h>
+#include <kdialog.h>
 #include <kglobal.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <ksqueezedtextlabel.h>
+#include <kstandarddirs.h>
 
 // Local includes
 
@@ -74,16 +74,16 @@ public:
 
     QButtonGroup       *previewButtons;
 
-    QPushButton        *underExposureButton;
-    QPushButton        *overExposureButton;
+    QToolButton        *underExposureButton;
+    QToolButton        *overExposureButton;
 
     KSqueezedTextLabel *spotInfoLabel;
 
     ImageGuideWidget   *previewWidget;
 };
 
-ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent, 
-                         const QString& previewWhatsThis, bool prevModeOptions, 
+ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
+                         const QString& previewWhatsThis, bool prevModeOptions,
                          int guideMode, bool guideVisible, bool useImageSelection)
            : QWidget(parent)
 {
@@ -91,13 +91,13 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     d->settingsSection = settingsSection;
 
     // -------------------------------------------------------------
-    
+
     QGridLayout* grid = new QGridLayout(this);
     d->spotInfoLabel  = new KSqueezedTextLabel(this);
     d->spotInfoLabel->setAlignment(Qt::AlignRight);
 
     // -------------------------------------------------------------
-    
+
     d->prevBBox       = new QWidget(this);
     QHBoxLayout *hlay = new QHBoxLayout(d->prevBBox);
     d->previewButtons = new QButtonGroup(d->prevBBox);
@@ -105,7 +105,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     hlay->setSpacing(0);
     hlay->setMargin(0);
 
-    QPushButton *previewOriginalButton = new QPushButton( d->prevBBox );
+    QToolButton *previewOriginalButton = new QToolButton( d->prevBBox );
     d->previewButtons->addButton(previewOriginalButton, ImageGuideWidget::PreviewOriginalImage);
     hlay->addWidget(previewOriginalButton);
     previewOriginalButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/original.png")));
@@ -113,7 +113,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     previewOriginalButton->setWhatsThis( i18n( "<p>If you enable this option, you will see "
                                                "the original image." ) );
 
-    QPushButton *previewBothButtonVert = new QPushButton( d->prevBBox );
+    QToolButton *previewBothButtonVert = new QToolButton( d->prevBBox );
     d->previewButtons->addButton(previewBothButtonVert, ImageGuideWidget::PreviewBothImagesVertCont);
     hlay->addWidget(previewBothButtonVert);
     previewBothButtonVert->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/bothvert.png")));
@@ -124,7 +124,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
                                                "with one half from the original image, "
                                                "the other half from the target image.") );
 
-    QPushButton *previewBothButtonHorz = new QPushButton( d->prevBBox );
+    QToolButton *previewBothButtonHorz = new QToolButton( d->prevBBox );
     d->previewButtons->addButton(previewBothButtonHorz, ImageGuideWidget::PreviewBothImagesHorzCont);
     hlay->addWidget(previewBothButtonHorz);
     previewBothButtonHorz->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/bothhorz.png")));
@@ -135,7 +135,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
                                                "with one half from the original image, "
                                                "the other half from the target image.") );
 
-    QPushButton *previewDuplicateBothButtonVert = new QPushButton( d->prevBBox );
+    QToolButton *previewDuplicateBothButtonVert = new QToolButton( d->prevBBox );
     d->previewButtons->addButton(previewDuplicateBothButtonVert, ImageGuideWidget::PreviewBothImagesVert);
     hlay->addWidget(previewDuplicateBothButtonVert);
     previewDuplicateBothButtonVert->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/duplicatebothvert.png")));
@@ -145,7 +145,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
                                                         "The same part of the original and the target image "
                                                         "will be shown side by side.") );
 
-    QPushButton *previewDupplicateBothButtonHorz = new QPushButton( d->prevBBox );
+    QToolButton *previewDupplicateBothButtonHorz = new QToolButton( d->prevBBox );
     d->previewButtons->addButton(previewDupplicateBothButtonHorz, ImageGuideWidget::PreviewBothImagesHorz);
     hlay->addWidget(previewDupplicateBothButtonHorz);
     previewDupplicateBothButtonHorz->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/duplicatebothhorz.png")));
@@ -155,7 +155,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
                                                          "The same part of the original and the target image "
                                                          "will be shown side by side.") );
 
-    QPushButton *previewtargetButton = new QPushButton( d->prevBBox );
+    QToolButton *previewtargetButton = new QToolButton( d->prevBBox );
     d->previewButtons->addButton(previewtargetButton, ImageGuideWidget::PreviewTargetImage);
     hlay->addWidget(previewtargetButton);
     previewtargetButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/target.png")));
@@ -163,7 +163,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     previewtargetButton->setWhatsThis( i18n( "<p>If you enable this option, you will see "
                                              "the target image." ) );
 
-    QPushButton *previewToggleMouseOverButton = new QPushButton( d->prevBBox );
+    QToolButton *previewToggleMouseOverButton = new QToolButton( d->prevBBox );
     d->previewButtons->addButton(previewToggleMouseOverButton, ImageGuideWidget::PreviewToggleOnMouseOver);
     hlay->addWidget(previewToggleMouseOverButton);
     previewToggleMouseOverButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/togglemouseover.png")));
@@ -173,14 +173,14 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
                                                       "else the target image." ) );
 
     // -------------------------------------------------------------
-    
+
     d->expoBBox                   = new QWidget(this);
     QHBoxLayout *hlay2            = new QHBoxLayout(d->expoBBox);
     QButtonGroup *exposureButtons = new QButtonGroup(d->expoBBox);
     hlay2->setSpacing(0);
     hlay2->setMargin(0);
 
-    d->underExposureButton = new QPushButton(d->expoBBox);
+    d->underExposureButton = new QToolButton(d->expoBBox);
     exposureButtons->addButton(d->underExposureButton, UnderExposure);
     hlay2->addWidget(d->underExposureButton);
     d->underExposureButton->setIcon(SmallIcon("underexposure"));
@@ -189,7 +189,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
                                                "overlaid on the preview. This will help you to avoid "
                                                "under-exposing the image." ) );
 
-    d->overExposureButton = new QPushButton(d->expoBBox);
+    d->overExposureButton = new QToolButton(d->expoBBox);
     exposureButtons->addButton(d->overExposureButton, OverExposure);
     hlay2->addWidget(d->overExposureButton);
     d->overExposureButton->setIcon(SmallIcon("overexposure"));
@@ -199,20 +199,20 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
                                               "over-exposing the image." ) );
 
     // -------------------------------------------------------------
-    
+
     QFrame *frame    = new QFrame(this);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l   = new QVBoxLayout(frame);
     l->setMargin(5);
     l->setSpacing(0);
-    d->previewWidget = new ImageGuideWidget(480, 320, frame, guideVisible, 
-                                            guideMode, Qt::red, 1, false, 
+    d->previewWidget = new ImageGuideWidget(480, 320, frame, guideVisible,
+                                            guideMode, Qt::red, 1, false,
                                             useImageSelection);
     d->previewWidget->setWhatsThis(previewWhatsThis);
     l->addWidget(d->previewWidget, 0);
 
     // -------------------------------------------------------------
-    
+
     grid->addWidget(d->prevBBox, 1, 0, 1, 1);
     grid->addWidget(d->spotInfoLabel, 1, 1, 1, 1);
     grid->addWidget(d->expoBBox, 1, 3, 1, 1);
@@ -227,7 +227,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     grid->setMargin(0);
 
     // -------------------------------------------------------------
-    
+
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SIGNAL(signalResized()));
 
@@ -236,7 +236,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
 
     connect(d->previewWidget, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
             this, SLOT(slotUpdateSpotInfo(const Digikam::DColor&, const QPoint&)));
-    
+
     connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
             this, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)));
 
@@ -253,16 +253,16 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
             d->previewWidget, SLOT(slotToggleOverExposure(bool)));
 
     // -------------------------------------------------------------
-    
+
     if (prevModeOptions)
         readSettings();
     else
     {
         setRenderingPreviewMode(ImageGuideWidget::NoPreviewMode);
         d->spotInfoLabel->hide();
-        d->prevBBox->hide();    
+        d->prevBBox->hide();
         d->expoBBox->hide();
-    }     
+    }
 }
 
 ImageWidget::~ImageWidget()
@@ -315,21 +315,21 @@ int ImageWidget::getRenderingPreviewMode()
 {
     return ( d->previewWidget->getRenderingPreviewMode() );
 }
-    
+
 void ImageWidget::setRenderingPreviewMode(int mode)
 {
     if (d->previewButtons->button(mode))
         d->previewButtons->button(mode)->setChecked(true);
-    
+
     d->previewWidget->slotChangeRenderingPreviewMode(mode);
 }
 
 void ImageWidget::slotUpdateSpotInfo(const Digikam::DColor &col, const QPoint &point)
 {
     DColor color = col;
-    d->spotInfoLabel->setText(i18n("(%1,%2) RGBA:%3,%4,%5,%6", 
+    d->spotInfoLabel->setText(i18n("(%1,%2) RGBA:%3,%4,%5,%6",
                               point.x(), point.y(),
-                              color.red(), color.green(), 
+                              color.red(), color.green(),
                               color.blue(), color.alpha()));
 }
 
@@ -346,7 +346,7 @@ void ImageWidget::readSettings()
     mode = qMin((int)ImageGuideWidget::NoPreviewMode, mode);
     setRenderingPreviewMode(mode);
 }
-    
+
 void ImageWidget::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();

@@ -13,39 +13,40 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
  // Qt includes.
- 
-#include <QListWidget>
-#include <QColor>
-#include <QGroupBox>
-#include <QButtonGroup> 
-#include <QRadioButton>
-#include <QLabel>
-#include <QFrame>
-#include <QTimer>
-#include <QPushButton>
+
+#include <QButtonGroup>
 #include <QCheckBox>
+#include <QColor>
 #include <QComboBox>
-#include <QHBoxLayout>
+#include <QFrame>
 #include <QGridLayout>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QListWidget>
 #include <QPixmap>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QTimer>
+#include <QToolButton>
 
 // KDE includes.
 
-#include <kcursor.h>
-#include <kstandarddirs.h>
-#include <kconfig.h>
-#include <klocale.h>
 #include <kapplication.h>
+#include <kconfig.h>
+#include <kcursor.h>
 #include <kglobal.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
 #include <kvbox.h>
 
 // Digikam includes.
@@ -67,11 +68,11 @@ namespace DigikamImagesPluginCore
 {
 
 ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
-                          : Digikam::ImageDlgBase(parent, i18n("Auto Color Correction"), 
+                          : Digikam::ImageDlgBase(parent, i18n("Auto Color Correction"),
                             "autocorrection", false), m_destinationPreviewData(0L)
 {
     setHelp("autocolorcorrectiontool.anchor", "digikam");
-    
+
     // -------------------------------------------------------------
 
     m_previewWidget = new Digikam::ImageWidget("autocorrection Tool Dialog", mainWidget(),
@@ -79,7 +80,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
                                                     "preview. You can pick color on image "
                                                     "to see the color level corresponding on histogram."));
     setPreviewAreaWidget(m_previewWidget);
-    
+
     // -------------------------------------------------------------
 
     Digikam::ImageIface iface(0, 0);
@@ -110,19 +111,19 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
                                 "If the image's maximal counts are small, you can use the linear scale.<p>"
                                 "Logarithmic scale can be used when the maximal counts are big; "
                                 "if it is used, all values (small and large) will be visible on the graph."));
-    
-    QPushButton *linHistoButton = new QPushButton( scaleBox );
+
+    QToolButton *linHistoButton = new QToolButton( scaleBox );
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
     linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
     linHistoButton->setCheckable(true);
     m_scaleBG->addButton(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
-    
-    QPushButton *logHistoButton = new QPushButton( scaleBox );
+
+    QToolButton *logHistoButton = new QToolButton( scaleBox );
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
     logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
     logHistoButton->setCheckable(true);
     m_scaleBG->addButton(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
-    
+
     hlay->setMargin(0);
     hlay->setSpacing(0);
     hlay->addWidget(linHistoButton);
@@ -136,7 +137,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     l1->addWidget(m_channelCB);
     l1->addStretch(10);
     l1->addWidget(scaleBox);
-    
+
     // -------------------------------------------------------------
 
     KVBox *histoBox   = new KVBox(gboxSettings);
@@ -148,9 +149,9 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     space->setFixedHeight(1);
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-    
+
     // -------------------------------------------------------------
-    
+
     m_correctionTools = new QListWidget(gboxSettings);
     m_correctionTools->setIconSize(QSize(128, 128));
 
@@ -205,20 +206,20 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     m_correctionTools->insertItem(AutoExposureCorrection, item);
 
     // -------------------------------------------------------------
-    
+
     m_correctionTools->setFocus();
 
     gridSettings->addLayout(l1,                0, 0, 1, 5);
-    gridSettings->addWidget(histoBox,          1, 0, 2, 5);   
+    gridSettings->addWidget(histoBox,          1, 0, 2, 5);
     gridSettings->addWidget(m_correctionTools, 3, 0, 1, 5);
     gridSettings->setRowStretch(3, 10);
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
 
     setUserAreaWidget(gboxSettings);
-   
+
     // -------------------------------------------------------------
-    
+
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
 
@@ -230,7 +231,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
 
     connect(m_correctionTools, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotEffect()));
-    
+
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
 }
@@ -239,9 +240,9 @@ ImageEffect_AutoCorrection::~ImageEffect_AutoCorrection()
 {
     m_histogramWidget->stopHistogramComputation();
 
-    if (m_destinationPreviewData) 
+    if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
-       
+
     delete m_histogramWidget;
     delete m_previewWidget;
 }
@@ -254,18 +255,18 @@ void ImageEffect_AutoCorrection::slotChannelChanged(int channel)
             m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
             break;
-    
+
         case RedChannel:
             m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
             break;
-    
-        case GreenChannel:         
+
+        case GreenChannel:
             m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
             break;
-    
-        case BlueChannel:         
+
+        case BlueChannel:
             m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
             break;
@@ -291,7 +292,7 @@ void ImageEffect_AutoCorrection::readUserSettings()
     KConfigGroup group        = config->group("autocorrection Tool Dialog");
 
     m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->button(group.readEntry("Histogram Scale", 
+    m_scaleBG->button(group.readEntry("Histogram Scale",
                       (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
 
     m_correctionTools->setCurrentRow(group.readEntry("Auto Correction Filter", (int)AutoLevelsCorrection));
@@ -322,9 +323,9 @@ void ImageEffect_AutoCorrection::slotEffect()
 
     m_histogramWidget->stopHistogramComputation();
 
-    if (m_destinationPreviewData) 
+    if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
-       
+
     Digikam::ImageIface* iface      = m_previewWidget->imageIface();
     uchar *m_destinationPreviewData = iface->getPreviewImage();
     int w                           = iface->previewWidth();
@@ -337,7 +338,7 @@ void ImageEffect_AutoCorrection::slotEffect()
     m_previewWidget->updatePreview();
 
     // Update histogram.
-   
+
     m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
 
     kapp->restoreOverrideCursor();
@@ -365,7 +366,7 @@ void ImageEffect_AutoCorrection::finalRendering()
        int type = m_correctionTools->currentRow();
        autoCorrection(data, w, h, sb, type);
        QString name;
-       
+
        switch (type)
        {
           case AutoLevelsCorrection:
@@ -388,7 +389,7 @@ void ImageEffect_AutoCorrection::finalRendering()
              name = i18n("Auto Exposure");
           break;
        }
-                                                  
+
        iface->putOriginalImage(name, data);
        delete [] data;
     }
@@ -406,15 +407,15 @@ void ImageEffect_AutoCorrection::autoCorrection(uchar *data, int w, int h, bool 
         case AutoLevelsCorrection:
             filter.autoLevelsCorrectionImage(data, w, h, sb);
             break;
-        
+
         case NormalizeCorrection:
             filter.normalizeImage(data, w, h, sb);
             break;
-        
+
         case EqualizeCorrection:
             filter.equalizeImage(data, w, h, sb);
             break;
-        
+
         case StretchContrastCorrection:
             filter.stretchContrastImage(data, w, h, sb);
             break;
@@ -424,7 +425,7 @@ void ImageEffect_AutoCorrection::autoCorrection(uchar *data, int w, int h, bool 
             double blackLevel;
             double exposureLevel;
             wbFilter.autoExposureAdjustement(data, w, h, sb, blackLevel, exposureLevel);
-            wbFilter.whiteBalance(data, w, h, sb, blackLevel, exposureLevel);            
+            wbFilter.whiteBalance(data, w, h, sb, blackLevel, exposureLevel);
         break;
     }
 }
