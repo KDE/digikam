@@ -282,7 +282,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     QHBoxLayout *hlay3       = new QHBoxLayout(m_pickerBox);
     m_pickerColorButtonGroup = new QButtonGroup(m_pickerBox);
 
-    m_pickBlack = new QPushButton(m_pickerBox);
+    m_pickBlack = new QToolButton(m_pickerBox);
     m_pickerColorButtonGroup->addButton(m_pickBlack, BlackTonal);
     m_pickBlack->setIcon(KIcon("color-picker-black.png"));
     m_pickBlack->setCheckable(true);
@@ -291,7 +291,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
                                     "image used to set <b>Shadow Tone</b> "
                                     "levels input on Red, Green, Blue, and Luminosity channels."));
 
-    m_pickGray  = new QPushButton(m_pickerBox);
+    m_pickGray  = new QToolButton(m_pickerBox);
     m_pickerColorButtonGroup->addButton(m_pickGray, GrayTonal);
     m_pickGray->setIcon(KIcon("color-picker-grey.png"));
     m_pickGray->setCheckable(true);
@@ -300,7 +300,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
                                    "image used to set <b>Middle Tone</b> "
                                    "levels input on Red, Green, Blue, and Luminosity channels."));
 
-    m_pickWhite = new QPushButton(m_pickerBox);
+    m_pickWhite = new QToolButton(m_pickerBox);
     m_pickerColorButtonGroup->addButton(m_pickWhite, WhiteTonal);
     m_pickWhite->setIcon(KIcon("color-picker-white.png"));
     m_pickWhite->setCheckable(true);
@@ -319,7 +319,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_autoButton = new QPushButton(gboxSettings);
+    m_autoButton = new QToolButton(gboxSettings);
     m_autoButton->setIcon(KIconLoader::global()->loadIcon("system-run", KIconLoader::Toolbar));
     m_autoButton->setToolTip( i18n( "Adjust all levels automatically." ) );
     m_autoButton->setWhatsThis( i18n("<p>If you press this button, all channel levels will be adjusted "

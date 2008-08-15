@@ -4,23 +4,23 @@
  * http://www.digikam.org
  *
  * Date        : 2005-03-11
- * Description : a digiKam image editor plugin to correct 
- *               image white balance 
- * 
+ * Description : a digiKam image editor plugin to correct
+ *               image white balance
+ *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008 by Guillaume Castagnino <casta at xwing dot info>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef IMAGEEFFECT_WHITEBALANCE_H
@@ -39,6 +39,7 @@ class QPushButton;
 class QLabel;
 class QComboBox;
 class QPushButton;
+class QToolButton;
 class QButtonGroup;
 
 class KDoubleNumInput;
@@ -66,7 +67,7 @@ public:
 
 protected:
 
-    void finalRendering();    
+    void finalRendering();
 
 private slots:
 
@@ -80,7 +81,7 @@ private slots:
     void slotTemperatureChanged(double temperature);
     void slotTemperaturePresetChanged(int tempPreset);
     void slotAutoAdjustExposure(void);
-    void slotPickerColorButtonActived();    
+    void slotPickerColorButtonActived();
 
 private:
 
@@ -88,14 +89,14 @@ private:
     void writeUserSettings();
     void resetValues();
 
-private:    
+private:
 
     enum HistogramScale
     {
         Linear=0,
         Logarithmic
     };
-    
+
     enum ColorChannel
     {
         LuminosityChannel=0,
@@ -103,7 +104,7 @@ private:
         GreenChannel,
         BlueChannel
     };
-    
+
     enum TemperaturePreset
     {
         Candle=0,
@@ -127,13 +128,13 @@ private:
     int                           m_currentPreviewMode;
 
     QPushButton                  *m_pickTemperature;
-    QPushButton                  *m_autoAdjustExposure;
-    
-    QComboBox                    *m_temperaturePresetCB;    
-    QComboBox                    *m_channelCB;    
-    
-    QButtonGroup                 *m_scaleBG;  
-        
+    QToolButton                  *m_autoAdjustExposure;
+
+    QComboBox                    *m_temperaturePresetCB;
+    QComboBox                    *m_channelCB;
+
+    QButtonGroup                 *m_scaleBG;
+
     QLabel                       *m_adjTemperatureLabel;
     QLabel                       *m_temperaturePresetLabel;
     QLabel                       *m_darkLabel;
@@ -143,7 +144,7 @@ private:
     QLabel                       *m_gammaLabel;
     QLabel                       *m_saturationLabel;
     QLabel                       *m_greenLabel;
-    
+
     K3ActiveLabel                *m_exposureLabel;
     K3ActiveLabel                *m_temperatureLabel;
 
@@ -155,11 +156,11 @@ private:
     KDoubleNumInput              *m_gammaInput;
     KDoubleNumInput              *m_saturationInput;
     KDoubleNumInput              *m_greenInput;
-    
+
     Digikam::HistogramWidget     *m_histogramWidget;
-    
+
     Digikam::ColorGradientWidget *m_hGradient;
-    
+
     Digikam::ImageWidget         *m_previewWidget;
 };
 

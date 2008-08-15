@@ -39,6 +39,7 @@
 #include <QTextStream>
 #include <QTimer>
 #include <QToolButton>
+#include <QToolButton>
 #include <QVBoxLayout>
 
 // KDE includes.
@@ -279,7 +280,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     m_exposureLabel      = new K3ActiveLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Exposure_value'>Exposure Compensation</a> "
                                                  " (E.V): </qt>"), gboxSettings);
     m_mainExposureLabel  = new QLabel(i18n("Main:"), gboxSettings);
-    m_autoAdjustExposure = new QPushButton(gboxSettings);
+    m_autoAdjustExposure = new QToolButton(gboxSettings);
     m_autoAdjustExposure->setIcon(KIconLoader::global()->loadIcon("system-run", KIconLoader::Toolbar));
     m_autoAdjustExposure->setToolTip( i18n( "Auto exposure adjustments" ) );
     m_autoAdjustExposure->setWhatsThis( i18n("<p>With this button, you can automatically adjust Exposure "

@@ -38,6 +38,7 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QPushButton>
+#include <QToolButton>
 #include <QSpinBox>
 #include <QTimer>
 #include <QToolButton>
@@ -223,7 +224,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     QHBoxLayout *hlay2 = new QHBoxLayout(typeBox);
     m_curveType        = new QButtonGroup(typeBox);
 
-    m_curveFree = new QPushButton(typeBox);
+    m_curveFree = new QToolButton(typeBox);
     m_curveFree->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/curvefree.png")));
     m_curveFree->setCheckable(true);
     m_curveFree->setToolTip( i18n( "Curve free mode" ) );
@@ -231,7 +232,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
                                     "with the mouse."));
     m_curveType->addButton(m_curveFree, FreeDrawing);
 
-    m_curveSmooth = new QPushButton(typeBox);
+    m_curveSmooth = new QToolButton(typeBox);
     m_curveSmooth->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/curvemooth.png")));
     m_curveSmooth->setCheckable(true);
     m_curveSmooth->setToolTip( i18n( "Curve smooth mode" ) );
@@ -253,7 +254,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     QHBoxLayout *hlay3       = new QHBoxLayout(m_pickerBox);
     m_pickerColorButtonGroup = new QButtonGroup(m_pickerBox);
 
-    m_pickBlack = new QPushButton(m_pickerBox);
+    m_pickBlack = new QToolButton(m_pickerBox);
     m_pickerColorButtonGroup->addButton(m_pickBlack, BlackTonal);
     m_pickBlack->setIcon(KIcon("color-picker-black.png"));
     m_pickBlack->setCheckable(true);
@@ -262,7 +263,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
                                     "image used to set <b>Shadow Tone</b> "
                                     "smooth curves point on Red, Green, Blue, and Luminosity channels."));
 
-    m_pickGray  = new QPushButton(m_pickerBox);
+    m_pickGray  = new QToolButton(m_pickerBox);
     m_pickerColorButtonGroup->addButton(m_pickGray, GrayTonal);
     m_pickGray->setIcon(KIcon("color-picker-grey.png"));
     m_pickGray->setCheckable(true);
@@ -271,7 +272,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
                                    "image used to set <b>Middle Tone</b> "
                                    "smooth curves point on Red, Green, Blue, and Luminosity channels."));
 
-    m_pickWhite = new QPushButton(m_pickerBox);
+    m_pickWhite = new QToolButton(m_pickerBox);
     m_pickerColorButtonGroup->addButton(m_pickWhite, WhiteTonal);
     m_pickWhite->setIcon(KIcon("color-picker-white.png"));
     m_pickWhite->setCheckable(true);
