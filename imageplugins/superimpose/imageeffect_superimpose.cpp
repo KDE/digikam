@@ -25,34 +25,33 @@
 
 // Qt includes.
 
-#include <QGroupBox>
-#include <QLabel>
-#include <QPushButton>
-#include <QPixmap>
-#include <QFrame>
+#include <QButtonGroup>
 #include <QDir>
 #include <QFile>
-#include <QButtonGroup>
+#include <QFrame>
 #include <QGridLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QPixmap>
+#include <QPushButton>
+#include <QToolButton>
 
 // KDE includes.
 
-#include <kcursor.h>
-#include <klocale.h>
 #include <kaboutdata.h>
-#include <khelpmenu.h>
-#include <kiconloader.h>
-#include <kapplication.h>
-#include <kmenu.h>
-#include <kstandarddirs.h>
-#include <qprogressbar.h>
-#include <knuminput.h>
-#include <kiconloader.h>
-#include <kfiledialog.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kglobalsettings.h>
+#include <kcursor.h>
+#include <kfiledialog.h>
 #include <kglobal.h>
+#include <kglobalsettings.h>
+#include <khelpmenu.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kmenu.h>
+#include <knuminput.h>
+#include <kstandarddirs.h>
+#include <qprogressbar.h>
 
 // Local includes.
 
@@ -112,21 +111,21 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     QHBoxLayout *hlay    = new QHBoxLayout(toolBox);
     QButtonGroup *bGroup = new QButtonGroup(frame);
 
-    QPushButton *zoomInButton = new QPushButton( toolBox );
+    QToolButton *zoomInButton = new QToolButton( toolBox );
     bGroup->addButton(zoomInButton, ZOOMIN);
-    zoomInButton->setIcon(KIconLoader::global()->loadIcon("zoom-in", KIconLoader::Toolbar));
+    zoomInButton->setIcon(KIcon("zoom-in.png"));
     zoomInButton->setCheckable(true);
     zoomInButton->setToolTip( i18n( "Zoom in" ) );
 
-    QPushButton *zoomOutButton = new QPushButton( toolBox );
+    QToolButton *zoomOutButton = new QToolButton( toolBox );
     bGroup->addButton(zoomOutButton, ZOOMOUT);
-    zoomOutButton->setIcon(KIconLoader::global()->loadIcon("zoom-out", KIconLoader::Toolbar));
+    zoomOutButton->setIcon(KIcon("zoom-out.png"));
     zoomOutButton->setCheckable(true);
     zoomOutButton->setToolTip( i18n( "Zoom out" ) );
 
-    QPushButton *moveButton = new QPushButton( toolBox );
+    QToolButton *moveButton = new QToolButton( toolBox );
     bGroup->addButton(moveButton, MOVE);
-    moveButton->setIcon(KIconLoader::global()->loadIcon("move", KIconLoader::Toolbar));
+    moveButton->setIcon(KIcon("transform-move.png"));
     moveButton->setCheckable(true);
     moveButton->setChecked(true);
     moveButton->setToolTip( i18n( "Move" ) );
