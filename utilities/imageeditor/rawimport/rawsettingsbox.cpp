@@ -349,6 +349,9 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     connect(d->resetCurveBtn, SIGNAL(clicked()),
             this, SLOT(slotResetCurve()));
 
+    connect(d->decodingSettingsBox, SIGNAL(signalSettingsChanged()),
+            this, SIGNAL(signalDemosaicingChanged()));
+
     connect(d->curveWidget, SIGNAL(signalCurvesChanged()),
             this, SIGNAL(signalPostProcessingChanged()));
 

@@ -67,6 +67,7 @@ public:
 
 signals:
 
+    void signalDemosaicingChanged();
     void signalPostProcessingChanged();
 
 private slots:

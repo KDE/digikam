@@ -82,6 +82,7 @@ private slots:
 
     void slotTimer();
     void slotPostProcessing();
+    void slotDemosaicingChanged();
 
 private:
 

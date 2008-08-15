@@ -86,9 +86,11 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
 
     setButtonGuiItem(User1, KGuiItem(i18n("&Preview"), "run"));
     setButtonTip(User1, i18n("<p>Generate a Raw image preview using current settings."));
+    enableButton(User1, false);
 
     setButtonGuiItem(User2, KGuiItem(i18n("&Abort"), "stop"));
     setButtonTip(User2, i18n("<p>Abort the current Raw image preview"));
+    enableButton(User2, false);
 
     setButtonText(Ok, i18n("&Import"));
     setButtonTip(Ok, i18n("<p>Import image to editor using current settings."));
@@ -133,6 +135,9 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     connect(d->previewWidget, SIGNAL(signalLoadingFailed()),
             this, SLOT(slotLoadingFailed()));
 
+    connect(d->settingsBox, SIGNAL(signalDemosaicingChanged()),
+            this, SLOT(slotDemosaicingChanged()));
+
     connect(d->settingsBox, SIGNAL(signalPostProcessingChanged()),
             this, SLOT(slotTimer()));
 
@@ -142,7 +147,6 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     // ---------------------------------------------------------------
 
     busy(true);
-    enableButton (User2, false);
     slotUser1();
 }
 
@@ -180,11 +184,10 @@ void RawImportDlg::busy(bool val)
     if (val) d->previewWidget->setCursor(KCursor::waitCursor());
     else d->previewWidget->unsetCursor();
     d->settingsBox->setBusy(val);
-    enableButton (Default, !val);
-    enableButton (Ok,      !val);
-    enableButton (Close,   !val);
-    enableButton (User1,   !val);
-    enableButton (User2,   val);
+    enableButton(Default, !val);
+    enableButton(Ok,      !val);
+    enableButton(Close,   !val);
+    enableButton(User2,   val);
 }
 
 void RawImportDlg::readSettings()
@@ -227,6 +230,7 @@ void RawImportDlg::slotUser2()
 
 void RawImportDlg::slotLoadingStarted()
 {
+    enableButton(User1, false);
     d->settingsBox->histogram()->setDataLoading();
     d->settingsBox->curve()->setDataLoading();
     busy(true);
@@ -257,6 +261,11 @@ void RawImportDlg::slotTimer()
 void RawImportDlg::slotPostProcessing()
 {
     d->previewWidget->setPostProcessingSettings(rawDecodingSettings());
+}
+
+void RawImportDlg::slotDemosaicingChanged()
+{
+    enableButton(User1, true);
 }
 
 } // NameSpace Digikam
