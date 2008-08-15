@@ -127,7 +127,7 @@ private:
 
     int                           m_currentPreviewMode;
 
-    QPushButton                  *m_pickTemperature;
+    QToolButton                  *m_pickTemperature;
     QToolButton                  *m_autoAdjustExposure;
 
     QComboBox                    *m_temperaturePresetCB;

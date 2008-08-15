@@ -230,8 +230,8 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
                                               "<b>Xenon Lamp</b>: xenon lamp or light arc (6420K).<p>"
                                               "<b>Daylight D65</b>: overcast sky light (6500K).<p>"
                                               "<b>None</b>: no preset value."));
-    m_pickTemperature = new QPushButton(gboxSettings);
-    m_pickTemperature->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/color-picker-grey.png")));
+    m_pickTemperature = new QToolButton(gboxSettings);
+    m_pickTemperature->setIcon(KIcon("color-picker-grey.png"));
     m_pickTemperature->setCheckable(true);
     m_pickTemperature->setToolTip( i18n( "Temperature tone color picker." ) );
     m_pickTemperature->setWhatsThis( i18n("<p>With this button, you can pick the color from original "
@@ -252,7 +252,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     m_darkInput = new KDoubleNumInput(gboxSettings);
     m_darkInput->setDecimals(2);
     m_darkInput->setRange(0.0, 1.0, 0.01, true);
-    m_darkInput->setWhatsThis( i18n("<p>Set here the shadows noise suppresion level."));
+    m_darkInput->setWhatsThis( i18n("<p>Set here the shadows noise suppression level."));
 
     m_saturationLabel = new QLabel(i18n("Saturation:"), gboxSettings);
     m_saturationInput = new KDoubleNumInput(gboxSettings);
