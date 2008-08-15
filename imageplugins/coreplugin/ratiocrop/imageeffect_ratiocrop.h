@@ -30,11 +30,11 @@
 
 #include "imagedlgbase.h"
 
-class QLabel;
-class QComboBox;
-class QPushButton;
 class QCheckBox;
+class QComboBox;
+class QLabel;
 class QSpinBox;
+class QToolButton;
 
 class KIntNumInput;
 class KIntSpinBox;
@@ -99,8 +99,8 @@ private:
     QComboBox            *m_orientCB;
     QComboBox            *m_guideLinesCB;
 
-    QPushButton          *m_centerWidth;
-    QPushButton          *m_centerHeight;
+    QToolButton          *m_centerWidth;
+    QToolButton          *m_centerHeight;
 
     QCheckBox            *m_goldenSectionBox;
     QCheckBox            *m_goldenSpiralSectionBox;

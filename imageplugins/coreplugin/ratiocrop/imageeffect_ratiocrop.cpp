@@ -25,29 +25,29 @@
 
 // Qt includes.
 
-#include <QFrame>
-#include <QRect>
-#include <QGroupBox>
-#include <QLabel>
-#include <QComboBox>
-#include <QSpinBox>
-#include <QImage>
-#include <QPushButton>
-#include <QTimer>
 #include <QCheckBox>
+#include <QComboBox>
+#include <QFrame>
 #include <QGridLayout>
+#include <QGroupBox>
+#include <QImage>
+#include <QLabel>
 #include <QPixmap>
+#include <QRect>
+#include <QSpinBox>
+#include <QTimer>
+#include <QToolButton>
 #include <QVBoxLayout>
 
 // KDE includes.
 
+#include <kapplication.h>
+#include <kcolorbutton.h>
+#include <kconfig.h>
 #include <kcursor.h>
 #include <klocale.h>
 #include <knuminput.h>
-#include <kapplication.h>
-#include <kconfig.h>
 #include <kstandarddirs.h>
-#include <kcolorbutton.h>
 
 // Digikam includes.
 
@@ -178,7 +178,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
                            m_imageSelectionWidget->getWidthStep());
     m_widthInput->setSliderEnabled(true);
 
-    m_centerWidth = new QPushButton(cropSelection);
+    m_centerWidth = new QToolButton(cropSelection);
     m_centerWidth->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/centerwidth.png")));
     m_centerWidth->setWhatsThis( i18n("<p>Set width position to center."));
 
@@ -198,7 +198,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
                             m_imageSelectionWidget->getHeightStep());
     m_heightInput->setSliderEnabled(true);
 
-    m_centerHeight = new QPushButton(cropSelection);
+    m_centerHeight = new QToolButton(cropSelection);
     m_centerHeight->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/centerheight.png")));
     m_centerHeight->setWhatsThis( i18n("<p>Set height position to center."));
 
@@ -281,7 +281,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     gridBox2->addWidget(cropSelection, 0, 0, 1, 1);
     gridBox2->addWidget(compositionGuide, 1, 0, 1, 1);
-    gridBox2->setRowStretch(2, 10);    
+    gridBox2->setRowStretch(2, 10);
     gridBox2->setMargin(spacingHint());
     gridBox2->setSpacing(spacingHint());
 
@@ -523,10 +523,10 @@ void ImageEffect_RatioCrop::slotSelectionChanged(QRect rect)
     m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth() - rect.width(), 1);
     m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageHeight() - rect.height(), 1);
     m_widthInput->setRange(m_imageSelectionWidget->getMinWidthRange(),
-                           m_imageSelectionWidget->getMaxWidthRange(), 
+                           m_imageSelectionWidget->getMaxWidthRange(),
                            m_imageSelectionWidget->getWidthStep());
     m_heightInput->setRange(m_imageSelectionWidget->getMinHeightRange(),
-                            m_imageSelectionWidget->getMaxHeightRange(), 
+                            m_imageSelectionWidget->getMaxHeightRange(),
                             m_imageSelectionWidget->getHeightStep());
 
     m_xInput->setValue(rect.x());
