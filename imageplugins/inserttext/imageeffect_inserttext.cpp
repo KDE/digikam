@@ -24,37 +24,39 @@
 
 // Qt includes.
 
+#include <QBrush>
+#include <QButtonGroup>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QFont>
+#include <QFrame>
+#include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
-#include <QPushButton>
-#include <QFrame>
-#include <QComboBox>
-#include <QCheckBox>
-#include <QPixmap>
 #include <QPainter>
-#include <QBrush>
 #include <QPen>
-#include <QFont>
+#include <QPixmap>
 #include <QTimer>
-#include <QButtonGroup>
-#include <QGridLayout>
+#include <QToolButton>
 #include <QVBoxLayout>
+
 
 // KDE includes.
 
-#include <klocale.h>
-#include <kcursor.h>
 #include <kaboutdata.h>
+#include <kapplication.h>
+#include <kcolorbutton.h>
+#include <kconfig.h>
+#include <kcursor.h>
+#include <kfontchooser.h>
+#include <kglobal.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
-#include <kfontchooser.h>
-#include <kapplication.h>
+#include <klocale.h>
 #include <kmenu.h>
 #include <kstandarddirs.h>
-#include <kconfig.h>
-#include <kcolorbutton.h>
 #include <ktextedit.h>
-#include <kglobal.h>
+
 
 // Local includes.
 
@@ -133,25 +135,25 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     m_alignButtonGroup = new QButtonGroup(alignBox);
     m_alignButtonGroup->setExclusive(true);
 
-    QPushButton *alignLeft = new QPushButton( alignBox );
+    QToolButton *alignLeft = new QToolButton( alignBox );
     m_alignButtonGroup->addButton(alignLeft, ALIGN_LEFT);
-    alignLeft->setIcon(SmallIcon("leftjust"));
+    alignLeft->setIcon(SmallIcon("format-justify-left"));
     alignLeft->setCheckable(true);
     alignLeft->setToolTip( i18n( "Align text to the left" ) );
 
-    QPushButton *alignRight = new QPushButton( alignBox );
+    QToolButton *alignRight = new QToolButton( alignBox );
     m_alignButtonGroup->addButton(alignRight, ALIGN_RIGHT);
-    alignRight->setIcon(SmallIcon("rightjust"));
+    alignRight->setIcon(SmallIcon("format-justify-right"));
     alignRight->setCheckable(true);
     alignRight->setToolTip( i18n( "Align text to the right" ) );
 
-    QPushButton *alignCenter = new QPushButton( alignBox );
+    QToolButton *alignCenter = new QToolButton( alignBox );
     m_alignButtonGroup->addButton(alignCenter, ALIGN_CENTER);
-    alignCenter->setIcon(SmallIcon("centrejust"));
+    alignCenter->setIcon(SmallIcon("format-justify-center"));
     alignCenter->setCheckable(true);
     alignCenter->setToolTip( i18n( "Align text to center" ) );
 
-    QPushButton *alignBlock = new QPushButton( alignBox );
+    QToolButton *alignBlock = new QToolButton( alignBox );
     m_alignButtonGroup->addButton(alignBlock, ALIGN_BLOCK);
     alignBlock->setIcon(SmallIcon("format-justify-fill"));
     alignBlock->setCheckable(true);
