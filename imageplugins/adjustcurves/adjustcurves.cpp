@@ -256,7 +256,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
 
     m_pickBlack = new QToolButton(m_pickerBox);
     m_pickerColorButtonGroup->addButton(m_pickBlack, BlackTonal);
-    m_pickBlack->setIcon(KIcon("color-picker-black.png"));
+    m_pickBlack->setIcon(KIcon("color-picker-black"));
     m_pickBlack->setCheckable(true);
     m_pickBlack->setToolTip( i18n( "All channels shadow tone color picker" ) );
     m_pickBlack->setWhatsThis( i18n("<p>With this button, you can pick the color from original "
@@ -265,7 +265,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
 
     m_pickGray  = new QToolButton(m_pickerBox);
     m_pickerColorButtonGroup->addButton(m_pickGray, GrayTonal);
-    m_pickGray->setIcon(KIcon("color-picker-grey.png"));
+    m_pickGray->setIcon(KIcon("color-picker-grey"));
     m_pickGray->setCheckable(true);
     m_pickGray->setToolTip( i18n( "All channels middle tone color picker" ) );
     m_pickGray->setWhatsThis( i18n("<p>With this button, you can pick the color from original "
@@ -274,7 +274,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
 
     m_pickWhite = new QToolButton(m_pickerBox);
     m_pickerColorButtonGroup->addButton(m_pickWhite, WhiteTonal);
-    m_pickWhite->setIcon(KIcon("color-picker-white.png"));
+    m_pickWhite->setIcon(KIcon("color-picker-white"));
     m_pickWhite->setCheckable(true);
     m_pickWhite->setToolTip( i18n( "All channels highlight tone color picker" ) );
     m_pickWhite->setWhatsThis( i18n("<p>With this button, you can pick the color from original "

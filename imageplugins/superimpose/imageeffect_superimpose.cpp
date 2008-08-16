@@ -113,19 +113,19 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
 
     QToolButton *zoomInButton = new QToolButton( toolBox );
     bGroup->addButton(zoomInButton, ZOOMIN);
-    zoomInButton->setIcon(KIcon("zoom-in.png"));
+    zoomInButton->setIcon(KIcon("zoom-in"));
     zoomInButton->setCheckable(true);
     zoomInButton->setToolTip( i18n( "Zoom in" ) );
 
     QToolButton *zoomOutButton = new QToolButton( toolBox );
     bGroup->addButton(zoomOutButton, ZOOMOUT);
-    zoomOutButton->setIcon(KIcon("zoom-out.png"));
+    zoomOutButton->setIcon(KIcon("zoom-out"));
     zoomOutButton->setCheckable(true);
     zoomOutButton->setToolTip( i18n( "Zoom out" ) );
 
     QToolButton *moveButton = new QToolButton( toolBox );
     bGroup->addButton(moveButton, MOVE);
-    moveButton->setIcon(KIcon("transform-move.png"));
+    moveButton->setIcon(KIcon("transform-move"));
     moveButton->setCheckable(true);
     moveButton->setChecked(true);
     moveButton->setToolTip( i18n( "Move" ) );

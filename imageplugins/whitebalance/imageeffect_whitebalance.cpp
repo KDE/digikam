@@ -231,7 +231,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
                                               "<b>Daylight D65</b>: overcast sky light (6500K).<p>"
                                               "<b>None</b>: no preset value."));
     m_pickTemperature = new QToolButton(gboxSettings);
-    m_pickTemperature->setIcon(KIcon("color-picker-grey.png"));
+    m_pickTemperature->setIcon(KIcon("color-picker-grey"));
     m_pickTemperature->setCheckable(true);
     m_pickTemperature->setToolTip( i18n( "Temperature tone color picker." ) );
     m_pickTemperature->setWhatsThis( i18n("<p>With this button, you can pick the color from original "
