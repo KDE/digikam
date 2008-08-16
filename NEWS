@@ -14,7 +14,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 167343 : Albums view corrupted and unusable.
 006 ==> 146033 : When switching with Page* image jumps.
 007 ==> 127242 : Flashing 'histogram calculation in progress' is a bit annoying.
-008 ==> 150457 : more raw controls in color managment pop-up please.
+008 ==> 150457 : More RAW controls in color management pop-up please.
 009 ==> 155074 : Edit Image should allow chance to adjust RAW conversion parameters.
 010 ==> 155076 : RAW Conversion UI Needs to be more generic.
 011 ==> 142975 : Better support for RAW photo handling.
@@ -25,7 +25,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 016 ==> 162845 : 'Ctrl+F6' Conflict with KDE global shortcut.
 017 ==> 159523 : Digikam crashes while downloading images from Olympus mju 810/Stylus 810 camera no xD card.
 018 ==> 161369 : Quick filter indicator lamp is not working properly in recursive image folder view mode.
-019 ==> 147314 : Renaming like crasy with F2 slows down my system.
+019 ==> 147314 : Renaming like crazy with F2 slows down my system.
 020 ==> 
 
  
