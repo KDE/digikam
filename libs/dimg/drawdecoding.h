@@ -69,10 +69,11 @@ public:
      */
     void resetPostProcessingSettings()
     {
+        lightness    = 0.0;
+        contrast     = 1.0;
         gamma        = 1.0;
         saturation   = 1.0;
         exposureComp = 0.0;
-        contrast     = 0.0;
         curveAdjust  = QPolygon();
     };
 
@@ -80,7 +81,8 @@ public:
      */
     bool postProcessingSettingsIsDirty()
     {
-        return (contrast     != 0.0    ||
+        return (lightness    != 0.0    ||
+                contrast     != 1.0    ||
                 gamma        != 1.0    ||
                 saturation   != 1.0    ||
                 exposureComp != 0.0    ||
@@ -88,6 +90,10 @@ public:
     }
 
 public:
+
+    /** Lightness correction value.
+    */
+    double lightness;
 
     /** Contrast correction value.
     */
