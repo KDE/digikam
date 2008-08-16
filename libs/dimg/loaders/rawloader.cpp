@@ -311,11 +311,14 @@ void RAWLoader::postProcessing()
                         m_customRawSettings.saturation);    // saturation
     }
 
-    if (m_customRawSettings.gamma != 1.0 || m_customRawSettings.contrast != 0.0)
+    if (m_customRawSettings.lightness != 0.0 ||
+        m_customRawSettings.contrast  != 1.0 ||
+        m_customRawSettings.gamma     != 1.0)
     {
         BCGModifier bcg;
-        bcg.setGamma(m_customRawSettings.gamma);
+        bcg.setBrightness(m_customRawSettings.lightness);
         bcg.setContrast(m_customRawSettings.contrast);
+        bcg.setGamma(m_customRawSettings.gamma);
         bcg.applyBCG(imageData(), imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage);
     }
 
