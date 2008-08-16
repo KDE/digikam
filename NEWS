@@ -24,6 +24,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 158144 : Showfoto crashes in settings window.
 016 ==> 162845 : 'Ctrl+F6' Conflict with KDE global shortcut.
 017 ==> 159523 : Digikam crashes while downloading images from Olympus mju 810/Stylus 810 camera no xD card.
-018 ==> 
+018 ==> 161369 : Quick filter indicator lamp is not working properly in recursive image folder view mode.
+019 ==> 
 
  
