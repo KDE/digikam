@@ -86,11 +86,12 @@ void RawPostProcessing::rawPostProcessing(uchar *data, int width, int height, bo
                         settings.saturation);    // saturation
     }
 
-    if (settings.gamma != 1.0 || settings.contrast != 0.0)
+    if (settings.lightness != 0.0 || settings.contrast != 1.0 || settings.gamma != 1.0)
     {
         BCGModifier bcg;
-        bcg.setGamma(settings.gamma);
+        bcg.setBrightness(settings.lightness);
         bcg.setContrast(settings.contrast);
+        bcg.setGamma(settings.gamma);
         bcg.applyBCG(data, width, height, sixteenBit);
     }
 

@@ -77,8 +77,8 @@ private slots:
     void slotDefault();
     void slotClose();
     void slotOk();
-    void slotUser1();
-    void slotUser2();
+    void slotUpdatePreview();
+    void slotAbortPreview();
 
     void slotTimer();
     void slotPostProcessing();

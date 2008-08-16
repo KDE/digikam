@@ -65,8 +65,12 @@ public:
     void setDemosaicedImage(DImg& img);
     void setPostProcessedImage(DImg& img);
 
+    void enableUpdateBtn(bool b);
+
 signals:
 
+    void signalUpdatePreview();
+    void signalAbortPreview();
     void signalDemosaicingChanged();
     void signalPostProcessingChanged();
 
@@ -77,7 +81,6 @@ private slots:
     void slotColorsChanged(int color);
 
     void slotResetCurve();
-    void slotSixteenBitsImageToggled(bool);
 
 private:
 

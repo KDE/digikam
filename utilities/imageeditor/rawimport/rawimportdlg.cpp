@@ -76,21 +76,13 @@ public:
 
 RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
             : KDialogBase(parent, 0, false, QString(),
-                          Help|Default|User1|User2|Ok|Cancel, Cancel, true)
+                          Help|Default|Ok|Cancel, Cancel, true)
 {
     d = new RawImportDlgPriv;
     d->timer = new QTimer(this);
 
     setHelp("rawimport.anchor", "digikam");
     setCaption(i18n("Raw Import - %1").arg(url.fileName()));
-
-    setButtonGuiItem(User1, KGuiItem(i18n("&Preview"), "run"));
-    setButtonTip(User1, i18n("<p>Generate a Raw image preview using current settings."));
-    enableButton(User1, false);
-
-    setButtonGuiItem(User2, KGuiItem(i18n("&Abort"), "stop"));
-    setButtonTip(User2, i18n("<p>Abort the current Raw image preview"));
-    enableButton(User2, false);
 
     setButtonText(Ok, i18n("&Import"));
     setButtonTip(Ok, i18n("<p>Import image to editor using current settings."));
@@ -144,10 +136,16 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotPostProcessing()));
 
+    connect(d->settingsBox, SIGNAL(signalUpdatePreview()),
+            this, SLOT(slotUpdatePreview()));
+
+    connect(d->settingsBox, SIGNAL(signalAbortPreview()),
+            this, SLOT(slotAbortPreview()));
+
     // ---------------------------------------------------------------
 
     busy(true);
-    slotUser1();
+    slotUpdatePreview();
 }
 
 RawImportDlg::~RawImportDlg()
@@ -187,7 +185,6 @@ void RawImportDlg::busy(bool val)
     enableButton(Default, !val);
     enableButton(Ok,      !val);
     enableButton(Close,   !val);
-    enableButton(User2,   val);
 }
 
 void RawImportDlg::readSettings()
@@ -210,8 +207,8 @@ DRawDecoding RawImportDlg::rawDecodingSettings()
     return d->settingsBox->settings();
 }
 
-// 'Preview' dialog button.
-void RawImportDlg::slotUser1()
+// User1
+void RawImportDlg::slotUpdatePreview()
 {
     DRawDecoding settings = rawDecodingSettings();
     // We will load an half size image to speed up preview computing.
@@ -220,8 +217,8 @@ void RawImportDlg::slotUser1()
     d->previewWidget->setDecodingSettings(settings);
 }
 
-// 'Abort' dialog button.
-void RawImportDlg::slotUser2()
+// User2
+void RawImportDlg::slotAbortPreview()
 {
     d->previewWidget->cancelLoading();
     d->settingsBox->histogram()->stopHistogramComputation();
@@ -230,7 +227,7 @@ void RawImportDlg::slotUser2()
 
 void RawImportDlg::slotLoadingStarted()
 {
-    enableButton(User1, false);
+    d->settingsBox->enableUpdateBtn(false);
     d->settingsBox->histogram()->setDataLoading();
     d->settingsBox->curve()->setDataLoading();
     busy(true);
@@ -265,7 +262,7 @@ void RawImportDlg::slotPostProcessing()
 
 void RawImportDlg::slotDemosaicingChanged()
 {
-    enableButton(User1, true);
+    d->settingsBox->enableUpdateBtn(true);
 }
 
 } // NameSpace Digikam

@@ -31,11 +31,13 @@
 #include <qlabel.h>
 #include <qvbox.h>
 #include <qtoolbutton.h>
+#include <qtoolbox.h>
 #include <qpushbutton.h>
 
 // KDE includes.
 
 #include <kapplication.h>
+#include <ktabwidget.h>
 #include <kdialog.h>
 #include <knuminput.h>
 #include <klocale.h>
@@ -87,33 +89,42 @@ public:
 
     RawSettingsBoxPriv()
     {
-        channelCB           = 0;
-        colorsCB            = 0;
-        scaleBG             = 0;
-        hGradient           = 0;
-        histogramWidget     = 0;
-        infoBox             = 0;
-        advExposureBox      = 0;
-        gammaLabel          = 0;
-        gammaInput          = 0;
-        saturationLabel     = 0;
-        saturationInput     = 0;
-        fineExposureLabel   = 0;
-        fineExposureInput   = 0;
-        contrastInput       = 0;
-        contrastLabel       = 0;
-        curveBox            = 0;
-        curveWidget         = 0;
-        resetCurveBtn       = 0;
-        decodingSettingsBox = 0;
+        channelCB              = 0;
+        colorsCB               = 0;
+        scaleBG                = 0;
+        hGradient              = 0;
+        histogramWidget        = 0;
+        infoBox                = 0;
+        advExposureBox         = 0;
+        gammaLabel             = 0;
+        gammaInput             = 0;
+        saturationLabel        = 0;
+        saturationInput        = 0;
+        fineExposureLabel      = 0;
+        fineExposureInput      = 0;
+        contrastInput          = 0;
+        contrastLabel          = 0;
+        curveBox               = 0;
+        curveWidget            = 0;
+        resetCurveBtn          = 0;
+        decodingSettingsBox    = 0;
+        postProcessSettingsBox = 0;
+        tabView                = 0;
+        abortBtn               = 0;
+        updateBtn              = 0;
+        rawdecodingBox         = 0;
+        brightnessLabel        = 0;
+        brightnessInput        = 0;
     }
 
     QWidget                          *advExposureBox;
     QWidget                          *curveBox;
+    QWidget                          *rawdecodingBox;
 
     QComboBox                        *channelCB;
     QComboBox                        *colorsCB;
 
+    QLabel                           *brightnessLabel;
     QLabel                           *contrastLabel;
     QLabel                           *gammaLabel;
     QLabel                           *saturationLabel;
@@ -121,9 +132,15 @@ public:
 
     QHButtonGroup                    *scaleBG;
 
+    QPushButton                      *abortBtn;
+    QPushButton                      *updateBtn;
     QToolButton                      *resetCurveBtn;
+    QToolBox                         *postProcessSettingsBox;
+
+    KTabWidget                       *tabView;
 
     KIntNumInput                     *contrastInput;
+    KIntNumInput                     *brightnessInput;
 
     KDoubleNumInput                  *gammaInput;
     KDoubleNumInput                  *saturationInput;
@@ -144,6 +161,7 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
               : QWidget(parent)
 {
     d = new RawSettingsBoxPriv;
+
     // ---------------------------------------------------------------
 
     QGridLayout* gridSettings = new QGridLayout(this, 5, 4);
@@ -214,22 +232,52 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    d->decodingSettingsBox = new KDcrawIface::DcrawSettingsWidget(this, true, true, false);
-    d->infoBox             = new ImageDialogPreview(d->decodingSettingsBox);
+    d->tabView             = new KTabWidget(this);
+    d->rawdecodingBox      = new QWidget(d->tabView);
+    QGridLayout* rawGrid   = new QGridLayout(d->rawdecodingBox, 1, 2);
+    d->decodingSettingsBox = new KDcrawIface::DcrawSettingsWidget(d->rawdecodingBox, true, true, false);
+
+    d->abortBtn = new QPushButton(i18n("Abort"), d->rawdecodingBox);
+    d->abortBtn->setIconSet(SmallIconSet("stop"));
+    d->abortBtn->setEnabled(false);
+    QToolTip::add(d->abortBtn, i18n("Abort the current Raw image preview."));
+
+    d->updateBtn = new QPushButton(i18n("Update"), d->rawdecodingBox);
+    d->updateBtn->setIconSet(SmallIconSet("reload_page"));
+    d->updateBtn->setEnabled(false);
+    QToolTip::add(d->updateBtn, i18n("Generate a Raw image preview using current settings."));
+
+    rawGrid->addMultiCellWidget(d->decodingSettingsBox, 0, 0, 0, 2);
+    rawGrid->addMultiCellWidget(d->abortBtn,            1, 1, 0, 0);
+    rawGrid->addMultiCellWidget(d->updateBtn,           1, 1, 2, 2);
+    rawGrid->setColStretch(1, 10);
+    rawGrid->setSpacing(KDialog::spacingHint());
+    rawGrid->setMargin(KDialog::spacingHint());
+
+    // ---------------------------------------------------------------
+
+    d->postProcessSettingsBox = new QToolBox(d->tabView);
+    d->infoBox                = new ImageDialogPreview(d->postProcessSettingsBox);
     d->infoBox->showPreview(url);
 
     // ---------------------------------------------------------------
 
-    d->advExposureBox              = new QWidget(d->decodingSettingsBox);
-    QGridLayout* advExposureLayout = new QGridLayout(d->advExposureBox, 4, 2);
+    d->advExposureBox              = new QWidget(d->postProcessSettingsBox);
+    QGridLayout* advExposureLayout = new QGridLayout(d->advExposureBox, 5, 2);
 
-    d->contrastLabel   = new QLabel(i18n("Contrast:"), d->advExposureBox);
+    d->brightnessLabel = new QLabel(i18n("Brightness:"), d->advExposureBox);
+    d->brightnessInput = new KIntNumInput(d->advExposureBox);
+    d->brightnessInput->setRange(-100, 100, 1, true);
+    d->brightnessInput->setValue(0);
+    QWhatsThis::add(d->brightnessInput, i18n("<p>Set here the brightness adjustment of the image."));
+
+    d->contrastLabel = new QLabel(i18n("Contrast:"), d->advExposureBox);
     d->contrastInput = new KIntNumInput(d->advExposureBox);
     d->contrastInput->setRange(-100, 100, 1, true);
     d->contrastInput->setValue(0);
     QWhatsThis::add(d->contrastInput, i18n("<p>Set here the contrast adjustment of the image."));
 
-    d->gammaLabel   = new QLabel(i18n("Gamma:"), d->advExposureBox);
+    d->gammaLabel = new QLabel(i18n("Gamma:"), d->advExposureBox);
     d->gammaInput = new KDoubleNumInput(d->advExposureBox);
     d->gammaInput->setPrecision(2);
     d->gammaInput->setRange(0.1, 3.0, 0.01, true);
@@ -249,21 +297,23 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     QWhatsThis::add(d->fineExposureInput, i18n("<p>This value in E.V will be used to perform "
                                                "an exposure compensation of the image."));
 
-    advExposureLayout->addMultiCellWidget(d->contrastLabel,     0, 0, 0, 0);
-    advExposureLayout->addMultiCellWidget(d->contrastInput,   0, 0, 1, 2);
-    advExposureLayout->addMultiCellWidget(d->gammaLabel,        1, 1, 0, 0);
-    advExposureLayout->addMultiCellWidget(d->gammaInput,      1, 1, 1, 2);
-    advExposureLayout->addMultiCellWidget(d->saturationLabel,   2, 2, 0, 0);
-    advExposureLayout->addMultiCellWidget(d->saturationInput,   2, 2, 1, 2);
-    advExposureLayout->addMultiCellWidget(d->fineExposureLabel, 3, 3, 0, 0);
-    advExposureLayout->addMultiCellWidget(d->fineExposureInput, 3, 3, 1, 2);
-    advExposureLayout->setRowStretch(4, 10);
+    advExposureLayout->addMultiCellWidget(d->brightnessLabel,   0, 0, 0, 0);
+    advExposureLayout->addMultiCellWidget(d->brightnessInput,   0, 0, 1, 2);
+    advExposureLayout->addMultiCellWidget(d->contrastLabel,     1, 1, 0, 0);
+    advExposureLayout->addMultiCellWidget(d->contrastInput,     1, 1, 1, 2);
+    advExposureLayout->addMultiCellWidget(d->gammaLabel,        2, 2, 0, 0);
+    advExposureLayout->addMultiCellWidget(d->gammaInput,        2, 2, 1, 2);
+    advExposureLayout->addMultiCellWidget(d->saturationLabel,   3, 3, 0, 0);
+    advExposureLayout->addMultiCellWidget(d->saturationInput,   3, 3, 1, 2);
+    advExposureLayout->addMultiCellWidget(d->fineExposureLabel, 4, 4, 0, 0);
+    advExposureLayout->addMultiCellWidget(d->fineExposureInput, 4, 4, 1, 2);
+    advExposureLayout->setRowStretch(5, 10);
     advExposureLayout->setSpacing(0);
     advExposureLayout->setMargin(KDialog::spacingHint());
 
     // ---------------------------------------------------------------
 
-    d->curveBox              = new QWidget(d->decodingSettingsBox);
+    d->curveBox              = new QWidget(d->postProcessSettingsBox);
     QGridLayout* curveLayout = new QGridLayout(d->curveBox, 3, 2);
 
     ColorGradientWidget* vGradient = new ColorGradientWidget(ColorGradientWidget::Vertical, 10, d->curveBox);
@@ -300,33 +350,32 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
 
     // ---------------------------------------------------------------
 
+    d->postProcessSettingsBox->addItem(d->advExposureBox, i18n("Exposure"));
+    d->postProcessSettingsBox->addItem(d->curveBox,       i18n("Curve"));
+    d->postProcessSettingsBox->setItemIconSet(0, SmallIconSet("contrast"));
+    d->postProcessSettingsBox->setItemIconSet(1, SmallIconSet("adjustcurves"));
+
 #if KDCRAW_VERSION >= 0x000105
-    d->decodingSettingsBox->addItem(d->advExposureBox, i18n("Exposure"));
-    d->decodingSettingsBox->addItem(d->curveBox, i18n("Curve"));
-    d->decodingSettingsBox->addItem(d->infoBox, i18n("Infos"));
     d->decodingSettingsBox->setItemIconSet(0, SmallIconSet("kdcraw"));
     d->decodingSettingsBox->setItemIconSet(1, SmallIconSet("whitebalance"));
     d->decodingSettingsBox->setItemIconSet(2, SmallIconSet("lensdistortion"));
     d->decodingSettingsBox->setItemIconSet(3, SmallIconSet("colormanagement"));
-    d->decodingSettingsBox->setItemIconSet(4, SmallIconSet("contrast"));
-    d->decodingSettingsBox->setItemIconSet(5, SmallIconSet("adjustcurves"));
-    d->decodingSettingsBox->setItemIconSet(6, SmallIconSet("exifinfo"));
     d->decodingSettingsBox->updateMinimumWidth();
-#else
-    d->decodingSettingsBox->insertTab(d->curveBox, i18n("Curve"));
-    d->decodingSettingsBox->insertTab(d->advExposureBox, i18n("Exposure"));
-    d->decodingSettingsBox->insertTab(d->infoBox, i18n("Infos"));
 #endif
+
+    d->tabView->insertTab(d->rawdecodingBox,         i18n("Raw Decoding"),    0);
+    d->tabView->insertTab(d->postProcessSettingsBox, i18n("Post Processing"), 1);
+    d->tabView->insertTab(d->infoBox,                i18n("Info"),            2);
 
     // ---------------------------------------------------------------
 
-    gridSettings->addMultiCellWidget(label1,                 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(d->channelCB,           0, 0, 1, 1);
-    gridSettings->addMultiCellWidget(d->scaleBG,             0, 0, 4, 4);
-    gridSettings->addMultiCellWidget(label10,                1, 1, 0, 0);
-    gridSettings->addMultiCellWidget(d->colorsCB,            1, 1, 1, 1);
-    gridSettings->addMultiCellWidget(histoBox,               2, 3, 0, 4);
-    gridSettings->addMultiCellWidget(d->decodingSettingsBox, 4, 4, 0, 4);
+    gridSettings->addMultiCellWidget(label1,       0, 0, 0, 0);
+    gridSettings->addMultiCellWidget(d->channelCB, 0, 0, 1, 1);
+    gridSettings->addMultiCellWidget(d->scaleBG,   0, 0, 4, 4);
+    gridSettings->addMultiCellWidget(label10,      1, 1, 0, 0);
+    gridSettings->addMultiCellWidget(d->colorsCB,  1, 1, 1, 1);
+    gridSettings->addMultiCellWidget(histoBox,     2, 3, 0, 4);
+    gridSettings->addMultiCellWidget(d->tabView,   4, 4, 0, 4);
     gridSettings->setRowStretch(5, 10);
     gridSettings->setColStretch(2, 10);
     gridSettings->setSpacing(KDialog::spacingHint());
@@ -343,16 +392,22 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     connect(d->colorsCB, SIGNAL(activated(int)),
             this, SLOT(slotColorsChanged(int)));
 
-    connect(d->decodingSettingsBox, SIGNAL(signalSixteenBitsImageToggled(bool)),
-            this, SLOT(slotSixteenBitsImageToggled(bool)));
-
     connect(d->resetCurveBtn, SIGNAL(clicked()),
             this, SLOT(slotResetCurve()));
+
+    connect(d->updateBtn, SIGNAL(clicked()),
+            this, SIGNAL(signalUpdatePreview()));
+
+    connect(d->abortBtn, SIGNAL(clicked()),
+            this, SIGNAL(signalAbortPreview()));
 
     connect(d->decodingSettingsBox, SIGNAL(signalSettingsChanged()),
             this, SIGNAL(signalDemosaicingChanged()));
 
     connect(d->curveWidget, SIGNAL(signalCurvesChanged()),
+            this, SIGNAL(signalPostProcessingChanged()));
+
+    connect(d->brightnessInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalPostProcessingChanged()));
 
     connect(d->contrastInput, SIGNAL(valueChanged(int)),
@@ -374,9 +429,15 @@ RawSettingsBox::~RawSettingsBox()
     delete d;
 }
 
+void RawSettingsBox::enableUpdateBtn(bool b)
+{
+    d->updateBtn->setEnabled(b);
+}
+
 void RawSettingsBox::setBusy(bool b)
 {
     d->decodingSettingsBox->setEnabled(!b);
+    d->abortBtn->setEnabled(b);
 }
 
 void RawSettingsBox::setDemosaicedImage(DImg& img)
@@ -394,6 +455,7 @@ void RawSettingsBox::setPostProcessedImage(DImg& img)
 void RawSettingsBox::setDefaultSettings()
 {
     d->decodingSettingsBox->setDefaultSettings();
+    d->brightnessInput->setValue(0);
     d->contrastInput->setValue(0);
     d->gammaInput->setValue(1.0);
     d->saturationInput->setValue(1.0);
@@ -417,15 +479,6 @@ CurvesWidget* RawSettingsBox::curve() const
     return d->curveWidget;
 }
 
-void RawSettingsBox::slotSixteenBitsImageToggled(bool)
-{
-#if KDCRAW_VERSION >= 0x000105
-    // Dcraw do not provide a way to set brigness of image in 16 bits color depth.
-    // We always set on this option. We drive brightness adjustment in digiKam Raw image loader.
-    d->decodingSettingsBox->setEnabledBrightnessSettings(true);
-#endif
-}
-
 void RawSettingsBox::readSettings()
 {
     KConfig* config = kapp->config();
@@ -445,7 +498,6 @@ void RawSettingsBox::readSettings()
     d->decodingSettingsBox->setUnclipColor(config->readNumEntry("Unclip Color", 0));
     d->decodingSettingsBox->setDontStretchPixels(config->readBoolEntry("Dont Stretch Pixels", false));
     d->decodingSettingsBox->setNoiseReduction(config->readBoolEntry("Use Noise Reduction", false));
-    d->decodingSettingsBox->setBrightness(config->readDoubleNumEntry("Brightness Multiplier", 1.0));
     d->decodingSettingsBox->setUseBlackPoint(config->readBoolEntry("Use Black Point", false));
     d->decodingSettingsBox->setBlackPoint(config->readNumEntry("Black Point", 0));
 #if KDCRAW_VERSION >= 0x000105
@@ -466,6 +518,7 @@ void RawSettingsBox::readSettings()
         (DRawDecoding::OutputColorSpace)config->readNumEntry("Output Color Space", 
             (int)(DRawDecoding::SRGB))); 
 
+    d->brightnessInput->setValue(config->readNumEntry("Brightness", 0));
     d->contrastInput->setValue(config->readNumEntry("Constrast", 0));
     d->gammaInput->setValue(config->readDoubleNumEntry("Gamma", 1.0));
     d->saturationInput->setValue(config->readDoubleNumEntry("Saturation", 1.0));
@@ -487,7 +540,9 @@ void RawSettingsBox::readSettings()
     }
     d->curveWidget->curves()->curvesCalculateCurve(ImageHistogram::ValueChannel);
 
-    d->decodingSettingsBox->setCurrentIndex(config->readNumEntry("Settings Tab", 0));
+    d->tabView->setCurrentPage(config->readNumEntry("Settings Page", 0));
+    d->decodingSettingsBox->setCurrentIndex(config->readNumEntry("Decoding Settings Tab", 0));
+    d->postProcessSettingsBox->setCurrentIndex(config->readNumEntry("Post Processing Settings Tab", 0));
 
     slotChannelChanged(d->channelCB->currentItem());
     slotScaleChanged(d->scaleBG->selectedId());
@@ -511,7 +566,6 @@ void RawSettingsBox::saveSettings()
     config->writeEntry("Unclip Color",               d->decodingSettingsBox->unclipColor());
     config->writeEntry("Dont Stretch Pixels",        d->decodingSettingsBox->useDontStretchPixels());
     config->writeEntry("Use Noise Reduction",        d->decodingSettingsBox->useNoiseReduction());
-    config->writeEntry("Brightness Multiplier",      d->decodingSettingsBox->brightness());
     config->writeEntry("Use Black Point",            d->decodingSettingsBox->useBlackPoint());
     config->writeEntry("Black Point",                d->decodingSettingsBox->blackPoint());
 #if KDCRAW_VERSION >= 0x000105
@@ -526,6 +580,7 @@ void RawSettingsBox::saveSettings()
     config->writeEntry("Decoding Quality",           (int)d->decodingSettingsBox->quality());
     config->writeEntry("Output Color Space",         (int)d->decodingSettingsBox->outputColorSpace());
 
+    config->writeEntry("Brightness",                 d->brightnessInput->value());
     config->writeEntry("Constrast",                  d->contrastInput->value());
     config->writeEntry("Gamma",                      d->gammaInput->value());
     config->writeEntry("Saturation",                 d->saturationInput->value());
@@ -543,7 +598,9 @@ void RawSettingsBox::saveSettings()
         config->writeEntry(QString("CurveAjustmentPoint%1").arg(j), p);
     }
 
-    config->writeEntry("Settings Tab", d->decodingSettingsBox->currentIndex());
+    config->writeEntry("Settings Page", d->tabView->currentPage());
+    config->writeEntry("Decoding Settings Tab", d->decodingSettingsBox->currentIndex());
+    config->writeEntry("Post Processing Settings Tab", d->postProcessSettingsBox->currentIndex());
     config->sync();
 }
 
@@ -558,7 +615,6 @@ DRawDecoding RawSettingsBox::settings()
     settings.unclipColors            = d->decodingSettingsBox->unclipColor();
     settings.DontStretchPixels       = d->decodingSettingsBox->useDontStretchPixels();
     settings.enableNoiseReduction    = d->decodingSettingsBox->useNoiseReduction();
-    settings.brightness              = d->decodingSettingsBox->brightness();
     settings.enableBlackPoint        = d->decodingSettingsBox->useBlackPoint();
     settings.blackPoint              = d->decodingSettingsBox->blackPoint();
 #if KDCRAW_VERSION >= 0x000105
@@ -573,6 +629,7 @@ DRawDecoding RawSettingsBox::settings()
     settings.RAWQuality              = d->decodingSettingsBox->quality();
     settings.outputColorSpace        = d->decodingSettingsBox->outputColorSpace();
 
+    settings.lightness               = (double)d->brightnessInput->value()/250.0;
     settings.contrast                = (double)(d->contrastInput->value()/100.0) + 1.00;
     settings.gamma                   = d->gammaInput->value();
     settings.saturation              = d->saturationInput->value();
