@@ -91,7 +91,7 @@ libkde     >= 3.4.x (>=3.5.x recommended)  http://www.kde.org
 libgphoto2 >= 2.x.x (>=2.4.x recommended)  http://www.gphoto.org
 libkipi    >= 0.1.5 (>=0.1.6 recommended)  http://www.kipi-plugins.org
 libkexiv2  >= 0.1.6 (>=0.1.7 recommended)  http://www.kipi-plugins.org
-libkdcraw  >= 0.1.4                        http://www.kipi-plugins.org
+libkdcraw  >= 0.1.5                        http://www.kipi-plugins.org
 liblcms    >= 1.14.x                       http://www.littlecms.com
 libtiff    >= 3.6.x (>=3.8.2 recommended)  http://www.remotesensing.org/libtiff
 libpng     >= 1.2.x                        http://www.libpng.org/pub/png/libpng.html

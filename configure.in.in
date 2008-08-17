@@ -211,7 +211,7 @@ fi
 if test "$PKGCONFIGFOUND" = "yes" ; then
    have_libkdcraw=no
 
-   KDE_PKG_CHECK_MODULES(LIBKDCRAW, libkdcraw >= 0.1.4,
+   KDE_PKG_CHECK_MODULES(LIBKDCRAW, libkdcraw >= 0.1.5,
                          have_libkdcraw=yes, have_libkdcraw=no)
 
    if test "x$have_libkdcraw" = "xno"; then
