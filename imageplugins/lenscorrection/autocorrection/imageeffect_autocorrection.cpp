@@ -68,7 +68,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     KAboutData* about = new KAboutData("digikam", 0,
                                        ki18n("Lens Auto-Correction"),
                                        digiKamVersion().toAscii(),
-                                       ki18n("A digiKam image plugin to fix automaticaly camera "
+                                       ki18n("A digiKam image plugin to automatically fix "
                                              "lens aberrations using LensFun library."),
                                        KAboutData::License_GPL,
                                        ki18n("(c) 2008, Adrian Schroeter\n"
@@ -97,21 +97,20 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     // -------------------------------------------------------------
 
     m_showGrid   = new QCheckBox(i18n("Show grid"), m_settingsWidget);
-    m_showGrid->setWhatsThis(i18n("Set on this option to show a grid over preview to visualize "
-                                 "lens distortion correction applied."));
+    m_showGrid->setWhatsThis(i18n("Set this option to visualize correction grid to be applied.";
 
     m_filterCCA  = new QCheckBox(i18n("Chromatic Aberration"), m_settingsWidget);
     m_filterCCA->setWhatsThis(i18n("Chromatic aberration is easily recognised as color fringes "
                                    "towards the image corners. CA is due to a variing lens focus "
                                    "for different colors."));
     m_filterVig  = new QCheckBox(i18n("Vignetting"), m_settingsWidget);
-    m_filterVig->setWhatsThis(i18n("Vignetting refers to an image darkening in the corners. "
+    m_filterVig->setWhatsThis(i18n("Vignetting refers to an image darkening, mostly in the corners. "
                                    "Optical and natural vignetting can be cancelled out with this option, "
                                    "whereas mechanical vignetting will not be cured."));
     m_filterCCI  = new QCheckBox(i18n("Color Correction"), m_settingsWidget);
-    m_filterCCI->setWhatsThis(i18n("Lenses all have a slight color tinge to them, "
+    m_filterCCI->setWhatsThis(i18n("All lenses have a slight color tinge to them, "
                                    "mostly due to the anti-reflective coating. "
-                                   "The tinge can be taken away when the respective data is know for the lens."));
+                                   "The tinge can be cancelled when the respective data is known for the lens."));
     m_filterDist = new QCheckBox(i18n("Distortion"), m_settingsWidget);
     m_filterDist->setWhatsThis(i18n("Distortion refers to an image deformation, which is most pronounced "
                                     "towards the corners. These Seidel aberrations are known as pincushion "

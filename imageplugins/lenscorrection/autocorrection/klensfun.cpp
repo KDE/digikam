@@ -130,8 +130,8 @@ KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
 
     m_exifUsage->setEnabled(false);
     m_exifUsage->setCheckState(Qt::Unchecked);
-    m_exifUsage->setWhatsThis(i18n("Set on this option to lets tool find the right camera/lens settings "
-                                   "used to take the picture from image metadata (as Exif or Xmp)."));
+    m_exifUsage->setWhatsThis(i18n("Set this option to try to guess the right camera/lens settings "
+                                   "from the image metadata (as Exif or Xmp)."));
     m_make->setInsertPolicy(QComboBox::InsertAlphabetically);
     m_model->setInsertPolicy(QComboBox::InsertAlphabetically);
     m_lens->setInsertPolicy(QComboBox::InsertAlphabetically);
@@ -250,10 +250,10 @@ void KLFDeviceSelector::findFromMetadata()
         slotUpdateLensCombo();
     }
 
-    // The LensFun DB has the Maker in front of the Lens model name.
+    // The LensFun DB has the Maker before the Lens model name.
     // We use here the Camera Maker, because the Lens Maker seems not to be
     // part of the Exif data. This is of course bad for 3rd party lenses, but
-    // they seem anyway not to have Exif entrys ususally :/
+    // they seem anyway not to have Exif entries ususally :/
     int lensIdx = m_lens->findText(lens);
     if (lensIdx < 0)
        lensIdx = m_lens->findText(make + " " + lens);
