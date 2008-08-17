@@ -93,7 +93,7 @@ RawPreview::RawPreview(const KURL& url, QWidget *parent)
     d->thread = new ManagedLoadSaveThread;
     d->url    = url;
 
-    setMinimumWidth(640);
+    setMinimumWidth(500);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     d->cornerButton = new QToolButton(this);

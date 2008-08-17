@@ -39,7 +39,6 @@
 #include <kapplication.h>
 #include <ktabwidget.h>
 #include <kdialog.h>
-#include <knuminput.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kconfig.h>
@@ -49,6 +48,7 @@
 
 #include <libkdcraw/version.h>
 #include <libkdcraw/dcrawsettingswidget.h>
+#include <libkdcraw/rnuminput.h>
 
 // Local includes.
 
@@ -61,6 +61,8 @@
 #include "colorgradientwidget.h"
 #include "rawsettingsbox.h"
 #include "rawsettingsbox.moc"
+
+using namespace KDcrawIface; 
 
 namespace Digikam
 {
@@ -117,44 +119,44 @@ public:
         brightnessInput        = 0;
     }
 
-    QWidget                          *advExposureBox;
-    QWidget                          *curveBox;
-    QWidget                          *rawdecodingBox;
+    QWidget             *advExposureBox;
+    QWidget             *curveBox;
+    QWidget             *rawdecodingBox;
 
-    QComboBox                        *channelCB;
-    QComboBox                        *colorsCB;
+    QComboBox           *channelCB;
+    QComboBox           *colorsCB;
 
-    QLabel                           *brightnessLabel;
-    QLabel                           *contrastLabel;
-    QLabel                           *gammaLabel;
-    QLabel                           *saturationLabel;
-    QLabel                           *fineExposureLabel;
+    QLabel              *brightnessLabel;
+    QLabel              *contrastLabel;
+    QLabel              *gammaLabel;
+    QLabel              *saturationLabel;
+    QLabel              *fineExposureLabel;
 
-    QHButtonGroup                    *scaleBG;
+    QHButtonGroup       *scaleBG;
 
-    QPushButton                      *abortBtn;
-    QPushButton                      *updateBtn;
-    QToolButton                      *resetCurveBtn;
-    QToolBox                         *postProcessSettingsBox;
+    QPushButton         *abortBtn;
+    QPushButton         *updateBtn;
+    QToolButton         *resetCurveBtn;
+    QToolBox            *postProcessSettingsBox;
 
-    KTabWidget                       *tabView;
+    KTabWidget          *tabView;
 
-    KIntNumInput                     *contrastInput;
-    KIntNumInput                     *brightnessInput;
+    ColorGradientWidget *hGradient;
 
-    KDoubleNumInput                  *gammaInput;
-    KDoubleNumInput                  *saturationInput;
-    KDoubleNumInput                  *fineExposureInput;
+    CurvesWidget        *curveWidget;
 
-    ColorGradientWidget              *hGradient;
+    HistogramWidget     *histogramWidget;
 
-    CurvesWidget                     *curveWidget;
+    ImageDialogPreview  *infoBox;
 
-    HistogramWidget                  *histogramWidget;
+    RIntNumInput        *contrastInput;
+    RIntNumInput        *brightnessInput;
 
-    ImageDialogPreview               *infoBox;
+    RDoubleNumInput     *gammaInput;
+    RDoubleNumInput     *saturationInput;
+    RDoubleNumInput     *fineExposureInput;
 
-    KDcrawIface::DcrawSettingsWidget *decodingSettingsBox;
+    DcrawSettingsWidget *decodingSettingsBox;
 };
 
 RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
@@ -266,36 +268,38 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     QGridLayout* advExposureLayout = new QGridLayout(d->advExposureBox, 5, 2);
 
     d->brightnessLabel = new QLabel(i18n("Brightness:"), d->advExposureBox);
-    d->brightnessInput = new KIntNumInput(d->advExposureBox);
-    d->brightnessInput->setRange(-100, 100, 1, true);
-    d->brightnessInput->setValue(0);
-    QWhatsThis::add(d->brightnessInput, i18n("<p>Set here the brightness adjustment of the image."));
+    d->brightnessInput = new RIntNumInput(d->advExposureBox);
+    d->brightnessInput->setRange(-100, 100, 1);
+    d->brightnessInput->setDefaultValue(0);
+    QWhatsThis::add(d->brightnessInput->input(), i18n("<p>Set here the brightness adjustment of the image."));
 
     d->contrastLabel = new QLabel(i18n("Contrast:"), d->advExposureBox);
-    d->contrastInput = new KIntNumInput(d->advExposureBox);
-    d->contrastInput->setRange(-100, 100, 1, true);
-    d->contrastInput->setValue(0);
-    QWhatsThis::add(d->contrastInput, i18n("<p>Set here the contrast adjustment of the image."));
+    d->contrastInput = new RIntNumInput(d->advExposureBox);
+    d->contrastInput->setRange(-100, 100, 1);
+    d->contrastInput->setDefaultValue(0);
+    QWhatsThis::add(d->contrastInput->input(), i18n("<p>Set here the contrast adjustment of the image."));
 
     d->gammaLabel = new QLabel(i18n("Gamma:"), d->advExposureBox);
-    d->gammaInput = new KDoubleNumInput(d->advExposureBox);
-    d->gammaInput->setPrecision(2);
-    d->gammaInput->setRange(0.1, 3.0, 0.01, true);
-    d->gammaInput->setValue(1.0);
-    QWhatsThis::add(d->gammaInput, i18n("Set here the gamma adjustement of the image"));
+    d->gammaInput = new RDoubleNumInput(d->advExposureBox);
+    d->gammaInput->input()->setPrecision(2);
+    d->gammaInput->input()->setRange(0.1, 3.0, 0.01, true);
+    d->gammaInput->setDefaultValue(1.0);
+    QWhatsThis::add(d->gammaInput->input(), i18n("Set here the gamma adjustement of the image"));
 
     d->saturationLabel = new QLabel(i18n("Saturation:"), d->advExposureBox);
-    d->saturationInput = new KDoubleNumInput(d->advExposureBox);
+    d->saturationInput = new RDoubleNumInput(d->advExposureBox);
     d->saturationInput->setPrecision(2);
-    d->saturationInput->setRange(0.0, 2.0, 0.01, true);
-    QWhatsThis::add( d->saturationInput, i18n("<p>Set here the color saturation correction."));
+    d->saturationInput->setRange(0.0, 2.0, 0.01);
+    d->saturationInput->setDefaultValue(1.0);
+    QWhatsThis::add(d->saturationInput->input(), i18n("<p>Set here the color saturation correction."));
 
     d->fineExposureLabel = new QLabel(i18n("Exposure:"), d->advExposureBox);
-    d->fineExposureInput = new KDoubleNumInput(d->advExposureBox);
+    d->fineExposureInput = new RDoubleNumInput(d->advExposureBox);
     d->fineExposureInput->setPrecision(2);
-    d->fineExposureInput->setRange(-0.5, 0.5, 0.1, true);
-    QWhatsThis::add(d->fineExposureInput, i18n("<p>This value in E.V will be used to perform "
-                                               "an exposure compensation of the image."));
+    d->fineExposureInput->setRange(-0.5, 0.5, 0.1);
+    d->fineExposureInput->setDefaultValue(0.0);
+    QWhatsThis::add(d->fineExposureInput->input(), i18n("<p>This value in E.V will be used to perform "
+                                                        "an exposure compensation of the image."));
 
     advExposureLayout->addMultiCellWidget(d->brightnessLabel,   0, 0, 0, 0);
     advExposureLayout->addMultiCellWidget(d->brightnessInput,   0, 0, 1, 2);
@@ -455,11 +459,11 @@ void RawSettingsBox::setPostProcessedImage(DImg& img)
 void RawSettingsBox::setDefaultSettings()
 {
     d->decodingSettingsBox->setDefaultSettings();
-    d->brightnessInput->setValue(0);
-    d->contrastInput->setValue(0);
-    d->gammaInput->setValue(1.0);
-    d->saturationInput->setValue(1.0);
-    d->fineExposureInput->setValue(0.0);
+    d->brightnessInput->slotReset();
+    d->contrastInput->slotReset();
+    d->gammaInput->slotReset();
+    d->saturationInput->slotReset();
+    d->fineExposureInput->slotReset();
     slotResetCurve();
 }
 
