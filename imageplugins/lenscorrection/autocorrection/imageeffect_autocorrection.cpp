@@ -97,7 +97,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     // -------------------------------------------------------------
 
     m_showGrid   = new QCheckBox(i18n("Show grid"), m_settingsWidget);
-    m_showGrid->setWhatsThis(i18n("Set this option to visualize correction grid to be applied.";
+    m_showGrid->setWhatsThis(i18n("Set this option to visualize correction grid to be applied."));
 
     m_filterCCA  = new QCheckBox(i18n("Chromatic Aberration"), m_settingsWidget);
     m_filterCCA->setWhatsThis(i18n("Chromatic aberration is easily recognised as color fringes "
