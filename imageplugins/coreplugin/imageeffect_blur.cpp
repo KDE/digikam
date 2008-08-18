@@ -30,7 +30,6 @@
 // KDE includes.
 
 #include <kaboutdata.h>
-#include <knuminput.h>
 #include <kconfig.h>
 #include <kcursor.h>
 #include <klocale.h>

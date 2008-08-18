@@ -53,7 +53,6 @@
 #include <kstandarddirs.h>
 #include <kprogress.h>
 #include <kmessagebox.h>
-#include <knuminput.h>
 #include <kglobalsettings.h>
 #include <kfiledialog.h>
 #include <kseparator.h>

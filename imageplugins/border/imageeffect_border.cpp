@@ -40,7 +40,6 @@
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
-#include <knuminput.h>
 #include <kcolorbutton.h>
 
 // LibKDcraw includes.

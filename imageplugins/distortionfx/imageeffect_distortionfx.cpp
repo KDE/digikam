@@ -43,7 +43,6 @@
 #include <kaboutdata.h>
 #include <khelpmenu.h>
 #include <kapplication.h>
-#include <knuminput.h>
 #include <kstandarddirs.h>
 #include <kprogress.h>
 

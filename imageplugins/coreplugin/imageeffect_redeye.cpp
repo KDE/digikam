@@ -42,7 +42,6 @@
 // KDE includes.
 
 #include <kcolordialog.h>
-#include <knuminput.h>
 #include <klocale.h>
 #include <kapplication.h>
 #include <kconfig.h>

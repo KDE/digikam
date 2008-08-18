@@ -59,7 +59,6 @@
 #include <kconfig.h>
 #include <kcursor.h>
 #include <klocale.h>
-#include <knuminput.h>
 #include <kmessagebox.h>
 #include <kselect.h>
 #include <kfiledialog.h>

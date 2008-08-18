@@ -51,7 +51,6 @@
 #include <klistbox.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <knuminput.h>
 
 // LibKDcraw includes.
 

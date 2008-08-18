@@ -36,7 +36,6 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kstandarddirs.h>
-#include <knuminput.h>
 #include <kseparator.h>
 #include <kcursor.h>
 #include <kconfig.h>

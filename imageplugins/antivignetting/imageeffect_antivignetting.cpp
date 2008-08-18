@@ -41,7 +41,6 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kstandarddirs.h>
-#include <knuminput.h>
 #include <kseparator.h>
 
 // LibKDcraw includes.
