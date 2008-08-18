@@ -46,7 +46,6 @@
 
 // LibKDcraw includes.
 
-#include <libkdcraw/version.h>
 #include <libkdcraw/dcrawsettingswidget.h>
 #include <libkdcraw/rnuminput.h>
 
@@ -359,13 +358,11 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     d->postProcessSettingsBox->setItemIconSet(0, SmallIconSet("contrast"));
     d->postProcessSettingsBox->setItemIconSet(1, SmallIconSet("adjustcurves"));
 
-#if KDCRAW_VERSION >= 0x000105
     d->decodingSettingsBox->setItemIconSet(0, SmallIconSet("kdcraw"));
     d->decodingSettingsBox->setItemIconSet(1, SmallIconSet("whitebalance"));
     d->decodingSettingsBox->setItemIconSet(2, SmallIconSet("lensdistortion"));
     d->decodingSettingsBox->setItemIconSet(3, SmallIconSet("colormanagement"));
     d->decodingSettingsBox->updateMinimumWidth();
-#endif
 
     d->tabView->insertTab(d->rawdecodingBox,         i18n("Raw Decoding"),    0);
     d->tabView->insertTab(d->postProcessSettingsBox, i18n("Post Processing"), 1);
@@ -504,23 +501,28 @@ void RawSettingsBox::readSettings()
     d->decodingSettingsBox->setNoiseReduction(config->readBoolEntry("Use Noise Reduction", false));
     d->decodingSettingsBox->setUseBlackPoint(config->readBoolEntry("Use Black Point", false));
     d->decodingSettingsBox->setBlackPoint(config->readNumEntry("Black Point", 0));
-#if KDCRAW_VERSION >= 0x000105
     d->decodingSettingsBox->setUseWhitePoint(config->readBoolEntry("Use White Point", false));
     d->decodingSettingsBox->setWhitePoint(config->readNumEntry("White Point", 0));
     d->decodingSettingsBox->setMedianFilterPasses(config->readNumEntry("Median Filter Passes", 0));
-#endif
     d->decodingSettingsBox->setNRThreshold(config->readNumEntry("NR Threshold", 100));
     d->decodingSettingsBox->setUseCACorrection(config->readBoolEntry("EnableCACorrection", false));
     d->decodingSettingsBox->setcaRedMultiplier(config->readDoubleNumEntry("caRedMultiplier", 1.0));
     d->decodingSettingsBox->setcaBlueMultiplier(config->readDoubleNumEntry("caBlueMultiplier", 1.0));
 
     d->decodingSettingsBox->setQuality(
-        (DRawDecoding::DecodingQuality)config->readNumEntry("Decoding Quality", 
-            (int)(DRawDecoding::BILINEAR))); 
+        (DRawDecoding::DecodingQuality)config->readNumEntry("Decoding Quality",
+            (int)(DRawDecoding::BILINEAR)));
+
+    d->decodingSettingsBox->setInputColorSpace(
+        (DRawDecoding::InputColorSpace)config->readNumEntry("Input Color Space",
+            (int)(DRawDecoding::NOINPUTCS)));
 
     d->decodingSettingsBox->setOutputColorSpace(
-        (DRawDecoding::OutputColorSpace)config->readNumEntry("Output Color Space", 
-            (int)(DRawDecoding::SRGB))); 
+        (DRawDecoding::OutputColorSpace)config->readNumEntry("Output Color Space",
+            (int)(DRawDecoding::SRGB)));
+
+    d->decodingSettingsBox->setInputColorProfile(config->readPathEntry("Input Color Profile", QString()));
+    d->decodingSettingsBox->setOutputColorProfile(config->readPathEntry("Output Color Profile", QString()));
 
     d->brightnessInput->setValue(config->readNumEntry("Brightness", 0));
     d->contrastInput->setValue(config->readNumEntry("Constrast", 0));
@@ -572,17 +574,18 @@ void RawSettingsBox::saveSettings()
     config->writeEntry("Use Noise Reduction",        d->decodingSettingsBox->useNoiseReduction());
     config->writeEntry("Use Black Point",            d->decodingSettingsBox->useBlackPoint());
     config->writeEntry("Black Point",                d->decodingSettingsBox->blackPoint());
-#if KDCRAW_VERSION >= 0x000105
     config->writeEntry("Use White Point",            d->decodingSettingsBox->useWhitePoint());
     config->writeEntry("White Point",                d->decodingSettingsBox->whitePoint());
     config->writeEntry("MedianFilterPasses",         d->decodingSettingsBox->medianFilterPasses());
-#endif
     config->writeEntry("NR Threshold",               d->decodingSettingsBox->NRThreshold());
     config->writeEntry("EnableCACorrection",         d->decodingSettingsBox->useCACorrection());
     config->writeEntry("caRedMultiplier",            d->decodingSettingsBox->caRedMultiplier());
     config->writeEntry("caBlueMultiplier",           d->decodingSettingsBox->caBlueMultiplier());
     config->writeEntry("Decoding Quality",           (int)d->decodingSettingsBox->quality());
+    config->writeEntry("Input Color Space",          (int)d->decodingSettingsBox->inputColorSpace());
     config->writeEntry("Output Color Space",         (int)d->decodingSettingsBox->outputColorSpace());
+    config->writeEntry("Input Color Profile",        d->decodingSettingsBox->inputColorProfile());
+    config->writeEntry("Output Color Profile",       d->decodingSettingsBox->outputColorProfile());
 
     config->writeEntry("Brightness",                 d->brightnessInput->value());
     config->writeEntry("Constrast",                  d->contrastInput->value());
@@ -621,17 +624,18 @@ DRawDecoding RawSettingsBox::settings()
     settings.enableNoiseReduction    = d->decodingSettingsBox->useNoiseReduction();
     settings.enableBlackPoint        = d->decodingSettingsBox->useBlackPoint();
     settings.blackPoint              = d->decodingSettingsBox->blackPoint();
-#if KDCRAW_VERSION >= 0x000105
     settings.enableWhitePoint        = d->decodingSettingsBox->useWhitePoint();
     settings.whitePoint              = d->decodingSettingsBox->whitePoint();
     settings.medianFilterPasses      = d->decodingSettingsBox->medianFilterPasses();
-#endif
     settings.NRThreshold             = d->decodingSettingsBox->NRThreshold();
     settings.enableCACorrection      = d->decodingSettingsBox->useCACorrection();
     settings.caMultiplier[0]         = d->decodingSettingsBox->caRedMultiplier();
     settings.caMultiplier[1]         = d->decodingSettingsBox->caBlueMultiplier();
     settings.RAWQuality              = d->decodingSettingsBox->quality();
+    settings.inputColorSpace         = d->decodingSettingsBox->inputColorSpace();
     settings.outputColorSpace        = d->decodingSettingsBox->outputColorSpace();
+    settings.inputProfile            = d->decodingSettingsBox->inputColorProfile();
+    settings.outputProfile           = d->decodingSettingsBox->outputColorProfile();
 
     settings.lightness               = (double)d->brightnessInput->value()/250.0;
     settings.contrast                = (double)(d->contrastInput->value()/100.0) + 1.00;
