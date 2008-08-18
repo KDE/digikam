@@ -24,21 +24,24 @@
 
 // Qt includes.
 
-#include <qlabel.h>
-#include <qwhatsthis.h>
-#include <qlayout.h>
-#include <qslider.h>
-#include <qimage.h>
 #include <qcombobox.h>
 #include <qdatetime.h>
+#include <qimage.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qslider.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
-#include <kconfig.h>
-#include <klocale.h>
 #include <kaboutdata.h>
 #include <kapplication.h>
-#include <knuminput.h>
+#include <kconfig.h>
+#include <klocale.h>
+
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
 
 // Local includes.
 
@@ -50,6 +53,7 @@
 #include "imageeffect_blurfx.h"
 #include "imageeffect_blurfx.moc"
 
+using namespace KDcrawIface;
 namespace DigikamBlurFXImagesPlugin
 {
 
@@ -127,16 +131,16 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
     gridSettings->addMultiCellWidget(m_effectType, 1, 1, 0, 1);
 
     m_distanceLabel = new QLabel(i18n("Distance:"), gboxSettings);
-    m_distanceInput = new KIntNumInput(gboxSettings);
-    m_distanceInput->setRange(0, 100, 1, true);
+    m_distanceInput = new RIntNumInput(gboxSettings);
+    m_distanceInput->setRange(0, 100, 1);
     QWhatsThis::add( m_distanceInput, i18n("<p>Set here the blur distance in pixels."));
 
     gridSettings->addMultiCellWidget(m_distanceLabel, 2, 2, 0, 1);
     gridSettings->addMultiCellWidget(m_distanceInput, 3, 3, 0, 1);
 
     m_levelLabel = new QLabel(i18n("Level:"), gboxSettings);
-    m_levelInput = new KIntNumInput(gboxSettings);
-    m_levelInput->setRange(0, 360, 1, true);
+    m_levelInput = new RIntNumInput(gboxSettings);
+    m_levelInput->setRange(0, 360, 1);
     QWhatsThis::add( m_levelInput, i18n("<p>This value controls the level to use with the current effect."));
 
     gridSettings->addMultiCellWidget(m_levelLabel, 4, 4, 0, 1);
@@ -230,9 +234,9 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
 
     m_distanceInput->blockSignals(true);
     m_levelInput->blockSignals(true);
-    m_distanceInput->setRange(0, 200, 1, true);
+    m_distanceInput->setRange(0, 200, 1);
     m_distanceInput->setValue(100);
-    m_levelInput->setRange(0, 360, 1, true);
+    m_levelInput->setRange(0, 360, 1);
     m_levelInput->setValue(45);
 
     m_levelInput->setEnabled(false);
@@ -245,19 +249,19 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
 
        case BlurFX::RadialBlur:
        case BlurFX::FrostGlass:
-          m_distanceInput->setRange(0, 10, 1, true);
+          m_distanceInput->setRange(0, 10, 1);
           m_distanceInput->setValue(3);
           break;
 
        case BlurFX::FarBlur:
-          m_distanceInput->setRange(0, 20, 1, true);
-          m_distanceInput->setMaxValue(20);
+          m_distanceInput->setRange(0, 20, 1);
+          m_distanceInput->input()->setMaxValue(20);
           m_distanceInput->setValue(10);
           break;
 
        case BlurFX::MotionBlur:
        case BlurFX::FocusBlur:
-          m_distanceInput->setRange(0, 100, 1, true);
+          m_distanceInput->setRange(0, 100, 1);
           m_distanceInput->setValue(20);
           m_levelInput->setEnabled(true);
           m_levelLabel->setEnabled(true);
@@ -269,21 +273,21 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
           break;
 
        case BlurFX::ShakeBlur:
-          m_distanceInput->setRange(0, 100, 1, true);
+          m_distanceInput->setRange(0, 100, 1);
           m_distanceInput->setValue(20);
           break;
 
        case BlurFX::SmartBlur:
-          m_distanceInput->setRange(0, 20, 1, true);
+          m_distanceInput->setRange(0, 20, 1);
           m_distanceInput->setValue(3);
           m_levelInput->setEnabled(true);
           m_levelLabel->setEnabled(true);
-          m_levelInput->setRange(0, 255, 1, true);
+          m_levelInput->setRange(0, 255, 1);
           m_levelInput->setValue(128);
           break;
 
        case BlurFX::Mosaic:
-          m_distanceInput->setRange(0, 50, 1, true);
+          m_distanceInput->setRange(0, 50, 1);
           m_distanceInput->setValue(3);
           break;
        }

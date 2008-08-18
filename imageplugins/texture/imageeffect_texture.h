@@ -5,21 +5,21 @@
  *
  * Date        : 2005-03-10
  * Description : a plugin to apply texture over an image
- * 
+ *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef IMAGEEFFECT_TEXTURE_H
@@ -35,7 +35,10 @@
 
 class QComboBox;
 
-class KIntNumInput;
+namespace KDcrawIface
+{
+class RIntNumInput;
+}
 
 namespace DigikamTextureImagesPlugin
 {
@@ -60,7 +63,7 @@ private slots:
 private:
 
     void writeUserSettings();
-    void resetValues();    
+    void resetValues();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
@@ -69,7 +72,7 @@ private:
 
 private:
 
-    enum TextureTypes 
+    enum TextureTypes
     {
         PaperTexture=0,
         Paper2Texture,
@@ -91,7 +94,7 @@ private:
 
     QComboBox    *m_textureType;
 
-    KIntNumInput *m_blendGain;
+    KDcrawIface::RIntNumInput *m_blendGain;
 };
 
 }  // NameSpace DigikamTextureImagesPlugin

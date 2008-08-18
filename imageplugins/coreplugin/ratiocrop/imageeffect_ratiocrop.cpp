@@ -25,28 +25,31 @@
 
 // Qt includes.
 
-#include <qlayout.h>
-#include <qframe.h>
-#include <qrect.h>
-#include <qvgroupbox.h>
-#include <qlabel.h>
-#include <qwhatsthis.h>
-#include <qcombobox.h>
-#include <qspinbox.h>
-#include <qimage.h>
-#include <qpushbutton.h>
-#include <qtimer.h>
 #include <qcheckbox.h>
+#include <qcombobox.h>
+#include <qframe.h>
+#include <qimage.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qpushbutton.h>
+#include <qrect.h>
+#include <qspinbox.h>
+#include <qtimer.h>
+#include <qvgroupbox.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
+#include <kapplication.h>
+#include <kcolorbutton.h>
+#include <kconfig.h>
 #include <kcursor.h>
 #include <klocale.h>
-#include <knuminput.h>
-#include <kapplication.h>
-#include <kconfig.h>
 #include <kstandarddirs.h>
-#include <kcolorbutton.h>
+
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
 
 // Digikam includes.
 
@@ -58,6 +61,7 @@
 #include "imageeffect_ratiocrop.h"
 #include "imageeffect_ratiocrop.moc"
 
+using namespace KDcrawIface;
 namespace DigikamImagesPluginCore
 {
 
@@ -155,17 +159,17 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_xInput = new KIntNumInput(cropSelection);
+    m_xInput = new RIntNumInput(cropSelection);
     QWhatsThis::add( m_xInput, i18n("<p>Set here the top left selection corner position for cropping."));
-    m_xInput->setLabel(i18n("X:"), AlignLeft|AlignVCenter);
-    m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
+    m_xInput->input()->setLabel(i18n("X:"), AlignLeft|AlignVCenter);
+    m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1);
 
-    m_widthInput = new KIntNumInput(cropSelection);
-    m_widthInput->setLabel(i18n("Width:"), AlignLeft|AlignVCenter);
+    m_widthInput = new RIntNumInput(cropSelection);
+    m_widthInput->input()->setLabel(i18n("Width:"), AlignLeft|AlignVCenter);
     QWhatsThis::add( m_widthInput, i18n("<p>Set here the width selection for cropping."));
     m_widthInput->setRange(m_imageSelectionWidget->getMinWidthRange(),
                            m_imageSelectionWidget->getMaxWidthRange(),
-                           m_imageSelectionWidget->getWidthStep(), true);
+                           m_imageSelectionWidget->getWidthStep());
 
     m_centerWidth = new QPushButton(cropSelection);
     KGlobal::dirs()->addResourceType("centerwidth", KGlobal::dirs()->kde_default("data") + "digikam/data");
@@ -179,17 +183,17 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_yInput = new KIntNumInput(cropSelection);
-    m_yInput->setLabel(i18n("Y:"), AlignLeft|AlignVCenter);
+    m_yInput = new RIntNumInput(cropSelection);
+    m_yInput->input()->setLabel(i18n("Y:"), AlignLeft|AlignVCenter);
     QWhatsThis::add( m_yInput, i18n("<p>Set here the top left selection corner position for cropping."));
-    m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageHeight(), 1, true);
+    m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageHeight(), 1);
 
-    m_heightInput = new KIntNumInput(cropSelection);
-    m_heightInput->setLabel(i18n("Height:"), AlignLeft|AlignVCenter);
+    m_heightInput = new RIntNumInput(cropSelection);
+    m_heightInput->input()->setLabel(i18n("Height:"), AlignLeft|AlignVCenter);
     QWhatsThis::add( m_heightInput, i18n("<p>Set here the height selection for cropping."));
     m_heightInput->setRange(m_imageSelectionWidget->getMinHeightRange(),
                             m_imageSelectionWidget->getMaxHeightRange(),
-                            m_imageSelectionWidget->getHeightStep(), true);
+                            m_imageSelectionWidget->getHeightStep());
 
     m_centerHeight = new QPushButton(cropSelection);
     KGlobal::dirs()->addResourceType("centerheight", KGlobal::dirs()->kde_default("data") + "digikam/data");
@@ -493,14 +497,14 @@ void ImageEffect_RatioCrop::slotSelectionChanged(QRect rect)
     m_widthInput->blockSignals(true);
     m_heightInput->blockSignals(true);
 
-    m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth() - rect.width(), 1, true);
-    m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageHeight() - rect.height(), 1, true);
+    m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth() - rect.width(), 1);
+    m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageHeight() - rect.height(), 1);
     m_widthInput->setRange(m_imageSelectionWidget->getMinWidthRange(),
                            m_imageSelectionWidget->getMaxWidthRange(),
-                           m_imageSelectionWidget->getWidthStep(), true);
+                           m_imageSelectionWidget->getWidthStep());
     m_heightInput->setRange(m_imageSelectionWidget->getMinHeightRange(),
                             m_imageSelectionWidget->getMaxHeightRange(),
-                            m_imageSelectionWidget->getHeightStep(), true);
+                            m_imageSelectionWidget->getHeightStep());
 
     m_xInput->setValue(rect.x());
     m_yInput->setValue(rect.y());

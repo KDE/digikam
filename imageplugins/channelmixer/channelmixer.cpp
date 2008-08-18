@@ -71,6 +71,10 @@
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "daboutdata.h"
@@ -85,6 +89,7 @@
 #include "channelmixer.h"
 #include "channelmixer.moc"
 
+using namespace KDcrawIface;
 namespace DigikamChannelMixerImagesPlugin
 {
 
@@ -185,21 +190,21 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     QLabel *redLabel = new QLabel(i18n("Red:"), gboxSettings);
-    m_redGain = new KDoubleNumInput(gboxSettings);
+    m_redGain = new RDoubleNumInput(gboxSettings);
     m_redGain->setPrecision(0);
-    m_redGain->setRange(-200.0, 200.0, 1, true);
+    m_redGain->setRange(-200.0, 200.0, 1);
     QWhatsThis::add( m_redGain, i18n("<p>Select the red color gain in percent for the current channel here."));
 
     QLabel *blueLabel = new QLabel(i18n("Blue:"), gboxSettings);
-    m_greenGain = new KDoubleNumInput(gboxSettings);
+    m_greenGain = new RDoubleNumInput(gboxSettings);
     m_greenGain->setPrecision(0);
-    m_greenGain->setRange(-200.0, 200.0, 1, true);
+    m_greenGain->setRange(-200.0, 200.0, 1);
     QWhatsThis::add( m_greenGain, i18n("<p>Select the green color gain in percent for the current channel here."));
 
     QLabel *greenLabel = new QLabel(i18n("Green:"), gboxSettings);
-    m_blueGain = new KDoubleNumInput(gboxSettings);
+    m_blueGain = new RDoubleNumInput(gboxSettings);
     m_blueGain->setPrecision(0);
-    m_blueGain->setRange(-200.0, 200.0, 1, true);
+    m_blueGain->setRange(-200.0, 200.0, 1);
     QWhatsThis::add( m_blueGain, i18n("<p>Select the blue color gain in percent for the current channel here."));
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);

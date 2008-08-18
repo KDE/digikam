@@ -40,7 +40,7 @@ class QPushButton;
 class QToolBox;
 
 class KURLRequester;
-class KIntNumInput;
+class KDcrawIface::RIntNumInput;
 
 namespace Digikam
 {
@@ -174,7 +174,7 @@ private:
 
     QToolBox                       *m_toolBoxWidgets;
 
-    KIntNumInput                   *m_cInput;
+    KDcrawIface::RIntNumInput                   *m_cInput;
 
     KURLRequester                  *m_inProfilesPath;
     KURLRequester                  *m_spaceProfilePath;

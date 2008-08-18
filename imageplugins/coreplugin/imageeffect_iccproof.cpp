@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-12-21
- * Description : digiKam image editor tool to correct picture 
+ * Description : digiKam image editor tool to correct picture
  *               colors using an ICC color profile
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
@@ -15,54 +15,57 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
 
+#include <qcheckbox.h>
 #include <qcolor.h>
+#include <qcombobox.h>
+#include <qfile.h>
+#include <qframe.h>
 #include <qgroupbox.h>
 #include <qhbox.h>
 #include <qhbuttongroup.h>
-#include <qvbuttongroup.h>
+#include <qlabel.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qframe.h>
 #include <qpoint.h>
-#include <qvbox.h>
-#include <qlabel.h>
 #include <qpushbutton.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qwhatsthis.h>
-#include <qtooltip.h>
 #include <qradiobutton.h>
-#include <qfile.h>
-#include <qtoolbox.h>
 #include <qtextstream.h>
+#include <qtoolbox.h>
+#include <qtooltip.h>
+#include <qvbox.h>
+#include <qvbuttongroup.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
-#include <knuminput.h>
-#include <klocale.h>
 #include <kapplication.h>
-#include <kcursor.h>
-#include <kstandarddirs.h>
-#include <ktabwidget.h>
 #include <kconfig.h>
-#include <kurlrequester.h>
-#include <kurllabel.h>
-#include <kfiledialog.h>
+#include <kcursor.h>
 #include <kfile.h>
-#include <kmessagebox.h>
+#include <kfiledialog.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 #include <ksqueezedtextlabel.h>
+#include <kstandarddirs.h>
+#include <ktabwidget.h>
+#include <kurllabel.h>
+#include <kurlrequester.h>
+
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
 
 // Digikam includes.
 
@@ -86,11 +89,12 @@
 #include "imageeffect_iccproof.h"
 #include "imageeffect_iccproof.moc"
 
+using namespace KDcrawIface;
 namespace DigikamImagesPluginCore
 {
 
 ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
-                    : Digikam::ImageDlgBase(parent,i18n("Color Management"), 
+                    : Digikam::ImageDlgBase(parent,i18n("Color Management"),
                                             "colormanagement", true, false)
 {
     m_destinationPreviewData = 0;
@@ -106,7 +110,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_previewWidget = new Digikam::ImageWidget("colormanagement Tool Dialog", plainPage(),
                                                i18n("<p>Here you can see the image preview after "
                                                     "applying a color profile</p>"));
-    setPreviewAreaWidget(m_previewWidget); 
+    setPreviewAreaWidget(m_previewWidget);
 
     // -------------------------------------------------------------------
 
@@ -165,11 +169,11 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QVBox *histoBox   = new QVBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram "
-                                             "of the selected image channel. " 
+                                             "of the selected image channel. "
                                              "This one is updated after setting changes."));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);
-    m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, 
+    m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10,
                                                     histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
@@ -186,7 +190,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     //---------- "General" Page Setup ----------------------------------
 
-    m_toolBoxWidgets->insertItem(GENERALPAGE, generalOptions, 
+    m_toolBoxWidgets->insertItem(GENERALPAGE, generalOptions,
                                  SmallIconSet("misc"), i18n("General Settings"));
     QWhatsThis::add(generalOptions, i18n("<p>Here you can set general parameters.</p>"));
 
@@ -320,7 +324,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     //---------- "Workspace" Page Setup ---------------------------------
 
-    m_toolBoxWidgets->insertItem(WORKSPACEPAGE, spaceProfiles, 
+    m_toolBoxWidgets->insertItem(WORKSPACEPAGE, spaceProfiles,
                                  SmallIconSet("tablet"), i18n("Workspace Profile"));
     QWhatsThis::add(spaceProfiles, i18n("<p>Set here all parameters relevant to Color Workspace "
                     "Profiles.</p>"));
@@ -346,20 +350,20 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     QPushButton *spaceProfilesInfo = new QPushButton(i18n("Info..."), spaceProfiles);
 
-    secondPageLayout->addMultiCellWidget(m_spaceProfileBG, 0, 1, 0, 0);    
-    secondPageLayout->addMultiCellWidget(spaceProfilesInfo, 0, 0, 2, 2);    
-    secondPageLayout->addMultiCellWidget(m_spaceProfilePath, 2, 2, 0, 2);    
+    secondPageLayout->addMultiCellWidget(m_spaceProfileBG, 0, 1, 0, 0);
+    secondPageLayout->addMultiCellWidget(spaceProfilesInfo, 0, 0, 2, 2);
+    secondPageLayout->addMultiCellWidget(m_spaceProfilePath, 2, 2, 0, 2);
     secondPageLayout->setColStretch(1, 10);
     secondPageLayout->setRowStretch(3, 10);
 
     //---------- "Proofing" Page Setup ---------------------------------
 
-    m_toolBoxWidgets->insertItem(PROOFINGPAGE, proofProfiles, 
+    m_toolBoxWidgets->insertItem(PROOFINGPAGE, proofProfiles,
                                  SmallIconSet("printer1"), i18n("Proofing Profile"));
     QWhatsThis::add(proofProfiles, i18n("<p>Set here all parameters relevant to Proofing Color "
                     "Profiles.</p>"));
 
-    QGridLayout *thirdPageLayout = new QGridLayout(proofProfiles, 3, 2, 
+    QGridLayout *thirdPageLayout = new QGridLayout(proofProfiles, 3, 2,
                                    spacingHint(), spacingHint());
 
     m_proofProfileBG = new QButtonGroup(2, Qt::Vertical, proofProfiles);
@@ -381,15 +385,15 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     QPushButton *proofProfilesInfo = new QPushButton(i18n("Info..."), proofProfiles);
 
-    thirdPageLayout->addMultiCellWidget(m_proofProfileBG, 0, 1, 0, 0);    
-    thirdPageLayout->addMultiCellWidget(proofProfilesInfo, 0, 0, 2, 2);    
-    thirdPageLayout->addMultiCellWidget(m_proofProfilePath, 2, 2, 0, 2);    
+    thirdPageLayout->addMultiCellWidget(m_proofProfileBG, 0, 1, 0, 0);
+    thirdPageLayout->addMultiCellWidget(proofProfilesInfo, 0, 0, 2, 2);
+    thirdPageLayout->addMultiCellWidget(m_proofProfilePath, 2, 2, 0, 2);
     thirdPageLayout->setColStretch(1, 10);
     thirdPageLayout->setRowStretch(3, 10);
 
     //---------- "Lightness" Page Setup ----------------------------------
 
-    m_toolBoxWidgets->insertItem(LIGHTNESSPAGE, lightnessadjust, 
+    m_toolBoxWidgets->insertItem(LIGHTNESSPAGE, lightnessadjust,
                                  SmallIconSet("blend"), i18n("Lightness Adjustments"));
     QWhatsThis::add(lightnessadjust, i18n("<p>Set here all lightness adjustments to the target image.</p>"));
 
@@ -416,9 +420,9 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                                   10, lightnessadjust );
     hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
-    m_cInput = new KIntNumInput(lightnessadjust);
-    m_cInput->setLabel(i18n("Contrast:"), AlignLeft | AlignVCenter);
-    m_cInput->setRange(-100, 100, 1, true);
+    m_cInput = new RIntNumInput(lightnessadjust);
+    m_cInput->input()->setLabel(i18n("Contrast:"), AlignLeft | AlignVCenter);
+    m_cInput->setRange(-100, 100, 1);
     m_cInput->setValue(0);
     QWhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
 
@@ -460,35 +464,35 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     //-- Check box options connections -------------------------------------------
 
     connect(m_doSoftProofBox, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));      
+            this, SLOT(slotEffect()));
 
     connect(m_checkGamutBox, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));      
+            this, SLOT(slotEffect()));
 
     connect(m_BPCBox, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));      
+            this, SLOT(slotEffect()));
 
     //-- Button Group ICC profile options connections ----------------------------
 
     connect(m_inProfileBG, SIGNAL(released (int)),
-            this, SLOT(slotEffect())); 
+            this, SLOT(slotEffect()));
 
     connect(m_spaceProfileBG, SIGNAL(released (int)),
-            this, SLOT(slotEffect())); 
+            this, SLOT(slotEffect()));
 
     connect(m_proofProfileBG, SIGNAL(released (int)),
-            this, SLOT(slotEffect())); 
+            this, SLOT(slotEffect()));
 
     //-- url requester ICC profile connections -----------------------------------
 
     connect(m_inProfilesPath, SIGNAL(urlSelected(const QString&)),
-            this, SLOT(slotEffect()));      
+            this, SLOT(slotEffect()));
 
     connect(m_spaceProfilePath, SIGNAL(urlSelected(const QString&)),
-            this, SLOT(slotEffect()));      
+            this, SLOT(slotEffect()));
 
     connect(m_proofProfilePath, SIGNAL(urlSelected(const QString&)),
-            this, SLOT(slotEffect()));      
+            this, SLOT(slotEffect()));
 
     //-- Image preview widget connections ----------------------------
 
@@ -560,8 +564,8 @@ void ImageEffect_ICCProof::readUserSettings()
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
     m_toolBoxWidgets->setCurrentIndex(config->readNumEntry("Settings Tab", GENERALPAGE));
-    m_inProfilesPath->setURL(config->readPathEntry("InputProfilePath", defaultICCPath)); 
-    m_proofProfilePath->setURL(config->readPathEntry("ProofProfilePath", defaultICCPath)); 
+    m_inProfilesPath->setURL(config->readPathEntry("InputProfilePath", defaultICCPath));
+    m_proofProfilePath->setURL(config->readPathEntry("ProofProfilePath", defaultICCPath));
     m_spaceProfilePath->setURL(config->readPathEntry("SpaceProfilePath", defaultICCPath));
     m_renderingIntentsCB->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
     m_doSoftProofBox->setChecked(config->readBoolEntry("DoSoftProof", false));
@@ -705,7 +709,7 @@ void ImageEffect_ICCProof::slotEffect()
 
     Digikam::IccTransform transform;
 
-    if (m_destinationPreviewData) 
+    if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 
     Digikam::ImageIface *iface = m_previewWidget->imageIface();
@@ -1168,13 +1172,13 @@ void ImageEffect_ICCProof::slotUser3()
 
     QFile file(loadColorManagementFile.path());
 
-    if ( file.open(IO_ReadOnly) )   
+    if ( file.open(IO_ReadOnly) )
     {
         QTextStream stream( &file );
 
         if ( stream.readLine() != "# Color Management Configuration File" )
         {
-           KMessageBox::error(this, 
+           KMessageBox::error(this,
                         i18n("\"%1\" is not a Color Management settings text file.")
                         .arg(loadColorManagementFile.fileName()));
            file.close();
@@ -1224,7 +1228,7 @@ void ImageEffect_ICCProof::slotUser3()
            m_curvesWidget->curves()->curvesCalculateCurve(i);
 
         m_histogramWidget->reset();
-        slotEffect();  
+        slotEffect();
     }
     else
         KMessageBox::error(this, i18n("Cannot load settings from the Color Management text file."));
@@ -1244,22 +1248,22 @@ void ImageEffect_ICCProof::slotUser2()
 
     QFile file(saveColorManagementFile.path());
 
-    if ( file.open(IO_WriteOnly) )   
+    if ( file.open(IO_WriteOnly) )
     {
-        QTextStream stream( &file );        
-        stream << "# Color Management Configuration File\n";    
-        stream << m_renderingIntentsCB->currentItem() << "\n";    
-        stream << m_doSoftProofBox->isChecked() << "\n";    
-        stream << m_checkGamutBox->isChecked() << "\n";    
-        stream << m_embeddProfileBox->isChecked() << "\n";    
-        stream << m_BPCBox->isChecked() << "\n";    
-        stream << m_inProfileBG->selectedId() << "\n";    
-        stream << m_spaceProfileBG->selectedId() << "\n";    
-        stream << m_proofProfileBG->selectedId() << "\n";    
-        stream << m_inProfilesPath->url() << "\n";    
-        stream << m_proofProfilePath->url() << "\n";    
-        stream << m_spaceProfilePath->url() << "\n";    
-        stream << m_cInput->value() << "\n";    
+        QTextStream stream( &file );
+        stream << "# Color Management Configuration File\n";
+        stream << m_renderingIntentsCB->currentItem() << "\n";
+        stream << m_doSoftProofBox->isChecked() << "\n";
+        stream << m_checkGamutBox->isChecked() << "\n";
+        stream << m_embeddProfileBox->isChecked() << "\n";
+        stream << m_BPCBox->isChecked() << "\n";
+        stream << m_inProfileBG->selectedId() << "\n";
+        stream << m_spaceProfileBG->selectedId() << "\n";
+        stream << m_proofProfileBG->selectedId() << "\n";
+        stream << m_inProfilesPath->url() << "\n";
+        stream << m_proofProfilePath->url() << "\n";
+        stream << m_spaceProfilePath->url() << "\n";
+        stream << m_cInput->value() << "\n";
 
         for (int j = 0 ; j < 17 ; j++)
         {

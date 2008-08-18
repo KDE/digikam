@@ -38,6 +38,10 @@
 #include <knuminput.h>
 #include <kstandarddirs.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "daboutdata.h"
@@ -49,6 +53,7 @@
 #include "imageeffect_charcoal.h"
 #include "imageeffect_charcoal.moc"
 
+using namespace KDcrawIface;
 namespace DigikamCharcoalImagesPlugin
 {
 
@@ -79,8 +84,8 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 1, 0, spacingHint());
     QLabel *label1 = new QLabel(i18n("Pencil size:"), gboxSettings);
 
-    m_pencilInput = new KIntNumInput(gboxSettings);
-    m_pencilInput->setRange(1, 100, 1, true);
+    m_pencilInput = new RIntNumInput(gboxSettings);
+    m_pencilInput->setRange(1, 100, 1);
     m_pencilInput->setValue(5);
     QWhatsThis::add( m_pencilInput, i18n("<p>Set here the charcoal pencil size used to simulate the drawing."));
 
@@ -91,8 +96,8 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
 
     QLabel *label2 = new QLabel(i18n("Smooth:"), gboxSettings);
 
-    m_smoothInput = new KIntNumInput(gboxSettings);
-    m_smoothInput->setRange(1, 100, 1, true);
+    m_smoothInput = new RIntNumInput(gboxSettings);
+    m_smoothInput->setRange(1, 100, 1);
     m_smoothInput->setValue(10);
     QWhatsThis::add( m_smoothInput, i18n("<p>This value controls the smoothing effect of the pencil "
                                          "under the canvas."));

@@ -6,7 +6,7 @@
  * Date        : 2005-01-20
  * Description : a digiKam image plugin to add a border
  *               around an image.
- * 
+ *
  * Copyright 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -15,12 +15,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef IMAGEEFFECT_BORDER_H
@@ -39,8 +39,12 @@ class QLabel;
 class QCheckBox;
 class QColor;
 
-class KIntNumInput;
 class KColorButton;
+
+namespace KDcrawIface
+{
+class RIntNumInput;
+}
 
 namespace DigikamBorderImagesPlugin
 {
@@ -48,7 +52,7 @@ namespace DigikamBorderImagesPlugin
 class ImageEffect_Border : public Digikam::ImageGuideDlg
 {
     Q_OBJECT
-    
+
 public:
 
     ImageEffect_Border(QWidget *parent);
@@ -57,7 +61,7 @@ public:
 private:
 
     QString getBorderPath(int border);
-    
+
 private slots:
 
     void slotPreserveAspectRatioToggled(bool);
@@ -69,7 +73,7 @@ private slots:
 private:
 
     void writeUserSettings();
-    void resetValues();  
+    void resetValues();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
@@ -87,20 +91,20 @@ private:
     QComboBox    *m_borderType;
 
     QCheckBox    *m_preserveAspectRatio;
-    
+
     QColor        m_solidColor;
     QColor        m_niepceBorderColor;
     QColor        m_niepceLineColor;
-    QColor        m_bevelUpperLeftColor; 
+    QColor        m_bevelUpperLeftColor;
     QColor        m_bevelLowerRightColor;
-    QColor        m_decorativeFirstColor; 
+    QColor        m_decorativeFirstColor;
     QColor        m_decorativeSecondColor;
-    
-    KIntNumInput *m_borderPercent;
-    KIntNumInput *m_borderWidth;
-    
+
+    KDcrawIface::RIntNumInput *m_borderPercent;
+    KDcrawIface::RIntNumInput *m_borderWidth;
+
     KColorButton *m_firstColorButton;
-    KColorButton *m_secondColorButton;    
+    KColorButton *m_secondColorButton;
 };
 
 }  // NameSpace DigikamBorderImagesPlugin

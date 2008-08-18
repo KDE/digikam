@@ -26,18 +26,21 @@
 // Qt includes.
 
 #include <qlabel.h>
-#include <qwhatsthis.h>
 #include <qlayout.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
-#include <klocale.h>
 #include <kaboutdata.h>
-#include <kiconloader.h>
 #include <kapplication.h>
-#include <kstandarddirs.h>
-#include <knuminput.h>
 #include <kconfig.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
+
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
 
 // Local includes.
 
@@ -48,6 +51,7 @@
 #include "imageeffect_emboss.h"
 #include "imageeffect_emboss.moc"
 
+using namespace KDcrawIface;
 namespace DigikamEmbossImagesPlugin
 {
 
@@ -84,8 +88,8 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 1, 0, spacingHint());
     QLabel *label1 = new QLabel(i18n("Depth:"), gboxSettings);
 
-    m_depthInput = new KIntNumInput(gboxSettings);
-    m_depthInput->setRange(10, 300, 1, true);
+    m_depthInput = new RIntNumInput(gboxSettings);
+    m_depthInput->setRange(10, 300, 1);
     QWhatsThis::add( m_depthInput, i18n("<p>Set here the depth of the embossing image effect.") );
 
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);

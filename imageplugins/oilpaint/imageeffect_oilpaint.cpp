@@ -24,21 +24,24 @@
 
 // Qt includes.
 
-#include <qlabel.h>
-#include <qwhatsthis.h>
 #include <qimage.h>
+#include <qlabel.h>
 #include <qlayout.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
-#include <kcursor.h>
-#include <klocale.h>
 #include <kaboutdata.h>
-#include <kiconloader.h>
 #include <kapplication.h>
-#include <kstandarddirs.h>
-#include <knuminput.h>
 #include <kconfig.h>
+#include <kcursor.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
+
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
 
 // Local includes.
 
@@ -51,6 +54,7 @@
 #include "imageeffect_oilpaint.h"
 #include "imageeffect_oilpaint.moc"
 
+using namespace KDcrawIface;
 namespace DigikamOilPaintImagesPlugin
 {
 
@@ -88,8 +92,8 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 1, 0, spacingHint());
 
     QLabel *label1   = new QLabel(i18n("Brush size:"), gboxSettings);
-    m_brushSizeInput = new KIntNumInput(gboxSettings);
-    m_brushSizeInput->setRange(1, 5, 1, true);
+    m_brushSizeInput = new RIntNumInput(gboxSettings);
+    m_brushSizeInput->setRange(1, 5, 1);
     QWhatsThis::add( m_brushSizeInput, i18n("<p>Set here the brush size to use for "
                                             "simulating the oil painting.") );
 
@@ -99,8 +103,8 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     // -------------------------------------------------------------
 
     QLabel *label2 = new QLabel(i18n("Smooth:"), gboxSettings);
-    m_smoothInput  = new KIntNumInput(gboxSettings);
-    m_smoothInput->setRange(10, 255, 1, true);
+    m_smoothInput  = new RIntNumInput(gboxSettings);
+    m_smoothInput->setRange(10, 255, 1);
     QWhatsThis::add( m_smoothInput, i18n("<p>This value controls the smoothing effect "
                                          "of the brush under the canvas.") );
 

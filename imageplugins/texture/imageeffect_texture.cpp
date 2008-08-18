@@ -24,21 +24,24 @@
 
 // Qt includes.
 
-#include <qlabel.h>
-#include <qwhatsthis.h>
-#include <qlayout.h>
 #include <qcombobox.h>
 #include <qimage.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
-#include <kconfig.h>
-#include <klocale.h>
 #include <kaboutdata.h>
-#include <kiconloader.h>
 #include <kapplication.h>
+#include <kconfig.h>
+#include <kiconloader.h>
+#include <klocale.h>
 #include <kstandarddirs.h>
-#include <knuminput.h>
+
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
 
 // Local includes.
 
@@ -51,6 +54,7 @@
 #include "imageeffect_texture.h"
 #include "imageeffect_texture.moc"
 
+using namespace KDcrawIface;
 namespace DigikamTextureImagesPlugin
 {
 
@@ -112,8 +116,8 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
 
     QLabel *label2 = new QLabel(i18n("Relief:"), gboxSettings);
 
-    m_blendGain = new KIntNumInput(gboxSettings);
-    m_blendGain->setRange(1, 255, 1, true);
+    m_blendGain = new RIntNumInput(gboxSettings);
+    m_blendGain->setRange(1, 255, 1);
     m_blendGain->setValue(200);
     QWhatsThis::add( m_blendGain, i18n("<p>Set here the relief gain used to merge texture and image."));
 

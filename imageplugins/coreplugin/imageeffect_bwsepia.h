@@ -38,7 +38,7 @@ class QHButtonGroup;
 class QComboBox;
 class QButtonGroup;
 
-class KIntNumInput;
+class KDcrawIface::RIntNumInput;
 class KTabWidget;
 
 namespace Digikam
@@ -167,8 +167,8 @@ private:
     QListBox                     *m_bwFilm;
     QListBox                     *m_bwTone;
 
-    KIntNumInput                 *m_cInput;
-    KIntNumInput                 *m_strengthInput;
+    KDcrawIface::RIntNumInput                 *m_cInput;
+    KDcrawIface::RIntNumInput                 *m_strengthInput;
 
     KTabWidget                   *m_tab;
 

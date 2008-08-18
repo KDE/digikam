@@ -5,20 +5,20 @@
  *
  * Date        : 2004-08-24
  * Description : a plugin to reduce CCD noise.
- * 
+ *
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef IMAGEEFFECT_NOISEREDUCTION_H
@@ -28,7 +28,10 @@
 
 #include "ctrlpaneldlg.h"
 
-class KDoubleNumInput;
+namespace KDcrawIface
+{
+class RDoubleNumInput;
+}
 
 namespace DigikamNoiseReductionImagesPlugin
 {
@@ -49,13 +52,13 @@ private slots:
 private:
 
     void writeUserSettings();
-    void resetValues();    
+    void resetValues();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
     void putFinalData();
-    void renderingFinished();        
-       
+    void renderingFinished();
+
 private slots:
 
     void slotUser2();
@@ -63,17 +66,17 @@ private slots:
 
 private:
 
-    KDoubleNumInput *m_radiusInput;
-    KDoubleNumInput *m_lumToleranceInput;
-    KDoubleNumInput *m_thresholdInput;
-    KDoubleNumInput *m_textureInput;
-    KDoubleNumInput *m_sharpnessInput;
+    KDcrawIface::RDoubleNumInput *m_radiusInput;
+    KDcrawIface::RDoubleNumInput *m_lumToleranceInput;
+    KDcrawIface::RDoubleNumInput *m_thresholdInput;
+    KDcrawIface::RDoubleNumInput *m_textureInput;
+    KDcrawIface::RDoubleNumInput *m_sharpnessInput;
 
-    KDoubleNumInput *m_csmoothInput;
-    KDoubleNumInput *m_lookaheadInput;
-    KDoubleNumInput *m_gammaInput;
-    KDoubleNumInput *m_dampingInput;
-    KDoubleNumInput *m_phaseInput;
+    KDcrawIface::RDoubleNumInput *m_csmoothInput;
+    KDcrawIface::RDoubleNumInput *m_lookaheadInput;
+    KDcrawIface::RDoubleNumInput *m_gammaInput;
+    KDcrawIface::RDoubleNumInput *m_dampingInput;
+    KDcrawIface::RDoubleNumInput *m_phaseInput;
 };
 
 }  // NameSpace DigikamNoiseReductionImagesPlugin

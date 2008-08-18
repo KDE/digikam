@@ -40,7 +40,7 @@ class QHButtonGroup;
 
 class KHSSelector;
 class KValueSelector;
-class KIntNumInput;
+class KDcrawIface::RIntNumInput;
 
 namespace Digikam
 {
@@ -133,9 +133,9 @@ private:
 
     QHButtonGroup                *m_scaleBG;
 
-    KIntNumInput                 *m_tintLevel;
-    KIntNumInput                 *m_redThreshold;
-    KIntNumInput                 *m_smoothLevel;
+    KDcrawIface::RIntNumInput                 *m_tintLevel;
+    KDcrawIface::RIntNumInput                 *m_redThreshold;
+    KDcrawIface::RIntNumInput                 *m_smoothLevel;
 
     KHSSelector                  *m_HSSelector;
     KValueSelector               *m_VSelector;

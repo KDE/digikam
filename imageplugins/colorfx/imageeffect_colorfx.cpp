@@ -50,6 +50,10 @@
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "daboutdata.h"
@@ -65,6 +69,7 @@
 #include "imageeffect_colorfx.h"
 #include "imageeffect_colorfx.moc"
 
+using namespace KDcrawIface;
 namespace DigikamColorFXImagesPlugin
 {
 
@@ -187,16 +192,16 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     gridSettings->addMultiCellWidget(m_effectType, 4, 4, 0, 4);
 
     m_levelLabel = new QLabel(i18n("Level:"), gboxSettings);
-    m_levelInput = new KIntNumInput(gboxSettings);
-    m_levelInput->setRange(0, 100, 1, true);
+    m_levelInput = new RIntNumInput(gboxSettings);
+    m_levelInput->setRange(0, 100, 1);
     QWhatsThis::add( m_levelInput, i18n("<p>Set here the level of the effect."));
 
     gridSettings->addMultiCellWidget(m_levelLabel, 5, 5, 0, 4);
     gridSettings->addMultiCellWidget(m_levelInput, 6, 6, 0, 4);
 
     m_iterationLabel = new QLabel(i18n("Iteration:"), gboxSettings);
-    m_iterationInput = new KIntNumInput(gboxSettings);
-    m_iterationInput->setRange(0, 100, 1, true);
+    m_iterationInput = new RIntNumInput(gboxSettings);
+    m_iterationInput->setRange(0, 100, 1);
     QWhatsThis::add( m_iterationInput, i18n("<p>This value controls the number of iterations "
                                             "to use with the Neon and Find Edges effects."));
 
@@ -311,20 +316,20 @@ void ImageEffect_ColorFX::slotEffectTypeChanged(int type)
 
     m_levelInput->blockSignals(true);
     m_iterationInput->blockSignals(true);
-    m_levelInput->setRange(0, 100, 1, true);
+    m_levelInput->setRange(0, 100, 1);
     m_levelInput->setValue(25);
 
     switch (type)
        {
        case ColorFX:
-          m_levelInput->setRange(0, 100, 1, true);
+          m_levelInput->setRange(0, 100, 1);
           m_levelInput->setValue(0);
           m_iterationInput->setEnabled(false);
           m_iterationLabel->setEnabled(false);
           break;
 
        case Vivid:
-          m_levelInput->setRange(0, 50, 1, true);
+          m_levelInput->setRange(0, 50, 1);
           m_levelInput->setValue(5);
           m_iterationInput->setEnabled(false);
           m_iterationLabel->setEnabled(false);
@@ -332,11 +337,11 @@ void ImageEffect_ColorFX::slotEffectTypeChanged(int type)
 
        case Neon:
        case FindEdges:
-          m_levelInput->setRange(0, 5, 1, true);
+          m_levelInput->setRange(0, 5, 1);
           m_levelInput->setValue(3);
           m_iterationInput->setEnabled(true);
           m_iterationLabel->setEnabled(true);
-          m_iterationInput->setRange(0, 5, 1, true);
+          m_iterationInput->setRange(0, 5, 1);
           m_iterationInput->setValue(2);
           break;
        }

@@ -41,6 +41,10 @@
 #include <kcursor.h>
 #include <kconfig.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "daboutdata.h"
@@ -52,6 +56,7 @@
 #include "imageeffect_sheartool.h"
 #include "imageeffect_sheartool.moc"
 
+using namespace KDcrawIface;
 namespace DigikamShearToolImagesPlugin
 {
 
@@ -116,16 +121,16 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     gridSettings->addMultiCellWidget(line, 2, 2, 0, 2);
 
     QLabel *label3 = new QLabel(i18n("Main horizontal angle:"), gboxSettings);
-    m_mainHAngleInput = new KIntNumInput(gboxSettings);
-    m_mainHAngleInput->setRange(-45, 45, 1, true);
+    m_mainHAngleInput = new RIntNumInput(gboxSettings);
+    m_mainHAngleInput->setRange(-45, 45, 1);
     m_mainHAngleInput->setValue(0);
     QWhatsThis::add( m_mainHAngleInput, i18n("<p>The main horizontal shearing angle, in degrees."));
     gridSettings->addMultiCellWidget(label3, 3, 3, 0, 2);
     gridSettings->addMultiCellWidget(m_mainHAngleInput, 4, 4, 0, 2);
 
     QLabel *label4 = new QLabel(i18n("Fine horizontal angle:"), gboxSettings);
-    m_fineHAngleInput = new KDoubleNumInput(gboxSettings);
-    m_fineHAngleInput->setRange(-5.0, 5.0, 0.01, true);
+    m_fineHAngleInput = new RDoubleNumInput(gboxSettings);
+    m_fineHAngleInput->setRange(-5.0, 5.0, 0.01);
     m_fineHAngleInput->setValue(0);
     QWhatsThis::add( m_fineHAngleInput, i18n("<p>This value in degrees will be added to main horizontal angle value "
                                              "to set fine adjustments."));
@@ -133,16 +138,16 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     gridSettings->addMultiCellWidget(m_fineHAngleInput, 6, 6, 0, 2);
 
     QLabel *label5 = new QLabel(i18n("Main vertical angle:"), gboxSettings);
-    m_mainVAngleInput = new KIntNumInput(gboxSettings);
-    m_mainVAngleInput->setRange(-45, 45, 1, true);
+    m_mainVAngleInput = new RIntNumInput(gboxSettings);
+    m_mainVAngleInput->setRange(-45, 45, 1);
     m_mainVAngleInput->setValue(0);
     QWhatsThis::add( m_mainVAngleInput, i18n("<p>The main vertical shearing angle, in degrees."));
     gridSettings->addMultiCellWidget(label5, 7, 7, 0, 0);
     gridSettings->addMultiCellWidget(m_mainVAngleInput, 8, 8, 0, 2);
 
     QLabel *label6 = new QLabel(i18n("Fine vertical angle:"), gboxSettings);
-    m_fineVAngleInput = new KDoubleNumInput(gboxSettings);
-    m_fineVAngleInput->setRange(-5.0, 5.0, 0.01, true);
+    m_fineVAngleInput = new RDoubleNumInput(gboxSettings);
+    m_fineVAngleInput->setRange(-5.0, 5.0, 0.01);
     m_fineVAngleInput->setValue(0);
     QWhatsThis::add( m_fineVAngleInput, i18n("<p>This value in degrees will be added to main vertical angle value "
                                              "to set fine adjustments."));

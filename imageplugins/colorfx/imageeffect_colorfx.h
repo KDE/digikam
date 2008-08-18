@@ -4,23 +4,23 @@
  * http://www.digikam.org
  *
  * Date        : 2004-02-14
- * Description : a digiKam image plugin for to apply a color 
+ * Description : a digiKam image plugin for to apply a color
  *               effect to an image.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef IMAGEEFFECT_COLORFX_H
@@ -34,7 +34,10 @@ class QHButtonGroup;
 class QComboBox;
 class QLabel;
 
-class KIntNumInput;
+namespace KDcrawIface
+{
+class RIntNumInput;
+}
 
 namespace Digikam
 {
@@ -87,7 +90,7 @@ private:
         Linear=0,
         Logarithmic
     };
-    
+
     enum ColorChannel
     {
         LuminosityChannel=0,
@@ -105,24 +108,24 @@ private:
     };
 
     uchar                        *m_destinationPreviewData;
-    
+
     QComboBox                    *m_channelCB;
     QComboBox                    *m_effectType;
-    
+
     QHButtonGroup                *m_scaleBG;
 
     QLabel                       *m_effectTypeLabel;
     QLabel                       *m_levelLabel;
     QLabel                       *m_iterationLabel;
-    
-    KIntNumInput                 *m_levelInput;
-    KIntNumInput                 *m_iterationInput;
-    
+
+    KDcrawIface::RIntNumInput    *m_levelInput;
+    KDcrawIface::RIntNumInput    *m_iterationInput;
+
     Digikam::ImageWidget         *m_previewWidget;
 
     Digikam::ColorGradientWidget *m_hGradient;
-    
-    Digikam::HistogramWidget     *m_histogramWidget;    
+
+    Digikam::HistogramWidget     *m_histogramWidget;
 };
 
 }  // NameSpace DigikamColorFXImagesPlugin

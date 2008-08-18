@@ -42,11 +42,16 @@
 #include "imageiface.h"
 #include "dimggaussianblur.h"
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "imageeffect_blur.h"
 #include "imageeffect_blur.moc"
 
+using namespace KDcrawIface;
 namespace DigikamImagesPluginCore
 {
 
@@ -60,8 +65,8 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 1, 0, spacingHint());
     QLabel *label = new QLabel(i18n("Smoothness:"), gboxSettings);
 
-    m_radiusInput = new KIntNumInput(gboxSettings);
-    m_radiusInput->setRange(0, 100, 1, true);
+    m_radiusInput = new RIntNumInput(gboxSettings);
+    m_radiusInput->setRange(0, 100, 1);
     m_radiusInput->setValue(0);
     QWhatsThis::add( m_radiusInput, i18n("<p>A smoothness of 0 has no effect, "
                                          "1 and above determine the Gaussian blur matrix radius "

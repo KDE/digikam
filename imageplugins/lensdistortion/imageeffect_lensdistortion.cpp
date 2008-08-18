@@ -30,23 +30,26 @@
 
 // Qt includes.
 
-#include <qlabel.h>
-#include <qwhatsthis.h>
-#include <qlayout.h>
-#include <qpixmap.h>
-#include <qpainter.h>
 #include <qbrush.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qpainter.h>
 #include <qpen.h>
+#include <qpixmap.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
-#include <klocale.h>
-#include <kconfig.h>
 #include <kaboutdata.h>
-#include <kiconloader.h>
 #include <kapplication.h>
+#include <kconfig.h>
+#include <kiconloader.h>
+#include <klocale.h>
 #include <kstandarddirs.h>
-#include <knuminput.h>
+
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
 
 // Local includes.
 
@@ -58,6 +61,7 @@
 #include "imageeffect_lensdistortion.h"
 #include "imageeffect_lensdistortion.moc"
 
+using namespace KDcrawIface;
 namespace DigikamLensDistortionImagesPlugin
 {
 
@@ -105,9 +109,9 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
 
     QLabel *label1 = new QLabel(i18n("Main:"), gboxSettings);
 
-    m_mainInput = new KDoubleNumInput(gboxSettings);
+    m_mainInput = new RDoubleNumInput(gboxSettings);
     m_mainInput->setPrecision(1);
-    m_mainInput->setRange(-100.0, 100.0, 0.1, true);
+    m_mainInput->setRange(-100.0, 100.0, 0.1);
     QWhatsThis::add( m_mainInput, i18n("<p>This value controls the amount of distortion. Negative values correct lens barrel "
                                        "distortion, while positive values correct lens pincushion distortion."));
 
@@ -118,9 +122,9 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
 
     QLabel *label2 = new QLabel(i18n("Edge:"), gboxSettings);
 
-    m_edgeInput = new KDoubleNumInput(gboxSettings);
+    m_edgeInput = new RDoubleNumInput(gboxSettings);
     m_edgeInput->setPrecision(1);
-    m_edgeInput->setRange(-100.0, 100.0, 0.1, true);
+    m_edgeInput->setRange(-100.0, 100.0, 0.1);
     QWhatsThis::add( m_edgeInput, i18n("<p>This value controls in the same manner as the Main control, but has more effect "
                                        "at the edges of the image than at the center."));
 
@@ -131,9 +135,9 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
 
     QLabel *label3 = new QLabel(i18n("Zoom:"), gboxSettings);
 
-    m_rescaleInput = new KDoubleNumInput(gboxSettings);
+    m_rescaleInput = new RDoubleNumInput(gboxSettings);
     m_rescaleInput->setPrecision(1);
-    m_rescaleInput->setRange(-100.0, 100.0, 0.1, true);
+    m_rescaleInput->setRange(-100.0, 100.0, 0.1);
     QWhatsThis::add( m_rescaleInput, i18n("<p>This value rescales the overall image size."));
 
     gridSettings->addMultiCellWidget(label3, 5, 5, 0, 1);
@@ -143,9 +147,9 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
 
     QLabel *label4 = new QLabel(i18n("Brighten:"), gboxSettings);
 
-    m_brightenInput = new KDoubleNumInput(gboxSettings);
+    m_brightenInput = new RDoubleNumInput(gboxSettings);
     m_brightenInput->setPrecision(1);
-    m_brightenInput->setRange(-100.0, 100.0, 0.1, true);
+    m_brightenInput->setRange(-100.0, 100.0, 0.1);
     QWhatsThis::add( m_brightenInput, i18n("<p>This value adjusts the brightness in image corners."));
 
     gridSettings->addMultiCellWidget(label4, 7, 7, 0, 1);

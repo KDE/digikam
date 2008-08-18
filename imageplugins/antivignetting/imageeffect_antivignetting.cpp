@@ -44,6 +44,10 @@
 #include <knuminput.h>
 #include <kseparator.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "daboutdata.h"
@@ -56,6 +60,7 @@
 #include "imageeffect_antivignetting.h"
 #include "imageeffect_antivignetting.moc"
 
+using namespace KDcrawIface;
 namespace DigikamAntiVignettingImagesPlugin
 {
 
@@ -98,9 +103,9 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
 
     QLabel *label1 = new QLabel(i18n("Density:"), gboxSettings);
 
-    m_densityInput = new KDoubleNumInput(gboxSettings);
+    m_densityInput = new RDoubleNumInput(gboxSettings);
     m_densityInput->setPrecision(1);
-    m_densityInput->setRange(1.0, 20.0, 0.1, true);
+    m_densityInput->setRange(1.0, 20.0, 0.1);
     QWhatsThis::add( m_densityInput, i18n("<p>This value controls the degree of intensity attenuation by the filter "
                                           "at its point of maximum density."));
 
@@ -111,9 +116,9 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
 
     QLabel *label2 = new QLabel(i18n("Power:"), gboxSettings);
 
-    m_powerInput = new KDoubleNumInput(gboxSettings);
+    m_powerInput = new RDoubleNumInput(gboxSettings);
     m_powerInput->setPrecision(1);
-    m_powerInput->setRange(0.1, 2.0, 0.1, true);
+    m_powerInput->setRange(0.1, 2.0, 0.1);
     QWhatsThis::add( m_powerInput, i18n("<p>This value is used as the exponent controlling the fall-off in density "
                                         "from the center of the filter to the periphery."));
 
@@ -124,9 +129,9 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
 
     QLabel *label3 = new QLabel(i18n("Radius:"), gboxSettings);
 
-    m_radiusInput = new KDoubleNumInput(gboxSettings);
+    m_radiusInput = new RDoubleNumInput(gboxSettings);
     m_radiusInput->setPrecision(1);
-    m_radiusInput->setRange(-100.0, 100.0, 0.1, true);
+    m_radiusInput->setRange(-100.0, 100.0, 0.1);
     QWhatsThis::add( m_radiusInput, i18n("<p>This value is the radius of the center filter. It is a multiple of the "
                                           "half-diagonal measure of the image, at which the density of the filter falls "
                                           "to zero."));
@@ -141,8 +146,8 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
 
     QLabel *label4 = new QLabel(i18n("Brightness:"), gboxSettings);
 
-    m_brightnessInput = new KIntNumInput(gboxSettings);
-    m_brightnessInput->setRange(0, 100, 1, true);
+    m_brightnessInput = new RIntNumInput(gboxSettings);
+    m_brightnessInput->setRange(0, 100, 1);
     QWhatsThis::add( m_brightnessInput, i18n("<p>Set here the brightness re-adjustment of the target image."));
 
     gridSettings->addMultiCellWidget(label4, 8, 8, 0, 2);
@@ -152,8 +157,8 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
 
     QLabel *label5 = new QLabel(i18n("Contrast:"), gboxSettings);
 
-    m_contrastInput = new KIntNumInput(gboxSettings);
-    m_contrastInput->setRange(0, 100, 1, true);
+    m_contrastInput = new RIntNumInput(gboxSettings);
+    m_contrastInput->setRange(0, 100, 1);
     QWhatsThis::add( m_contrastInput, i18n("<p>Set here the contrast re-adjustment of the target image."));
 
     gridSettings->addMultiCellWidget(label5, 10, 10, 0, 2);
@@ -163,9 +168,9 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
 
     QLabel *label6 = new QLabel(i18n("Gamma:"), gboxSettings);
 
-    m_gammaInput = new KDoubleNumInput(gboxSettings);
+    m_gammaInput = new RDoubleNumInput(gboxSettings);
     m_gammaInput->setPrecision(2);
-    m_gammaInput->setRange(0.1, 3.0, 0.01, true);
+    m_gammaInput->setRange(0.1, 3.0, 0.01);
     m_gammaInput->setValue(1.0);
     QWhatsThis::add( m_gammaInput, i18n("<p>Set here the gamma re-adjustment of the target image."));
 

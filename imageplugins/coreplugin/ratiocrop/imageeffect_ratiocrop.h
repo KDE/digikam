@@ -36,7 +36,7 @@ class QPushButton;
 class QCheckBox;
 class QSpinBox;
 
-class KIntNumInput;
+class KDcrawIface::RIntNumInput;
 class KIntSpinBox;
 class KColorButton;
 
@@ -113,10 +113,10 @@ private:
 
     QSpinBox             *m_guideSize;
 
-    KIntNumInput         *m_widthInput;
-    KIntNumInput         *m_heightInput;
-    KIntNumInput         *m_xInput;
-    KIntNumInput         *m_yInput;
+    KDcrawIface::RIntNumInput         *m_widthInput;
+    KDcrawIface::RIntNumInput         *m_heightInput;
+    KDcrawIface::RIntNumInput         *m_xInput;
+    KDcrawIface::RIntNumInput         *m_yInput;
 
     KIntSpinBox          *m_customRatioNInput;
     KIntSpinBox          *m_customRatioDInput;

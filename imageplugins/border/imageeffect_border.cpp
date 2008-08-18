@@ -43,6 +43,10 @@
 #include <knuminput.h>
 #include <kcolorbutton.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "daboutdata.h"
@@ -53,6 +57,7 @@
 #include "imageeffect_border.h"
 #include "imageeffect_border.moc"
 
+using namespace KDcrawIface;
 namespace DigikamBorderImagesPlugin
 {
 
@@ -126,12 +131,12 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
                                                 "in pixels."));
 
     m_labelBorderPercent  = new QLabel(i18n("Width (%):"), gboxSettings);
-    m_borderPercent       = new KIntNumInput(gboxSettings);
-    m_borderPercent->setRange(1, 50, 1, true);
+    m_borderPercent       = new RIntNumInput(gboxSettings);
+    m_borderPercent->setRange(1, 50, 1);
     QWhatsThis::add(m_borderPercent, i18n("<p>Set here the border width in percent of the image size."));
 
     m_labelBorderWidth = new QLabel(i18n("Width (pixels):"), gboxSettings);
-    m_borderWidth      = new KIntNumInput(gboxSettings);
+    m_borderWidth      = new RIntNumInput(gboxSettings);
     QWhatsThis::add(m_borderWidth, i18n("<p>Set here the border width in pixels to add around the image."));
 
     Digikam::ImageIface iface(0, 0);
@@ -139,9 +144,9 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     int h = iface.originalHeight();
 
     if (w > h)
-       m_borderWidth->setRange(1, h/2, 1, true);
+       m_borderWidth->setRange(1, h/2, 1);
     else
-       m_borderWidth->setRange(1, w/2, 1, true);
+       m_borderWidth->setRange(1, w/2, 1);
 
     KSeparator *line2 = new KSeparator(Horizontal, gboxSettings);
 

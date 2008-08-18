@@ -47,6 +47,10 @@
 #include <kstandarddirs.h>
 #include <kprogress.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "daboutdata.h"
@@ -58,6 +62,7 @@
 #include "imageeffect_distortionfx.h"
 #include "imageeffect_distortionfx.moc"
 
+using namespace KDcrawIface;
 namespace DigikamDistortionFXImagesPlugin
 {
 
@@ -144,16 +149,16 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
     gridSettings->addMultiCellWidget(m_effectType, 1, 1, 0, 2);
 
     m_levelLabel = new QLabel(i18n("Level:"), gboxSettings);
-    m_levelInput = new KIntNumInput(gboxSettings);
-    m_levelInput->setRange(0, 100, 1, true);
+    m_levelInput = new RIntNumInput(gboxSettings);
+    m_levelInput->setRange(0, 100, 1);
     QWhatsThis::add( m_levelInput, i18n("<p>Set here the level of the effect."));
 
     gridSettings->addMultiCellWidget(m_levelLabel, 2, 2, 0, 2);
     gridSettings->addMultiCellWidget(m_levelInput, 3, 3, 0, 2);
 
     m_iterationLabel = new QLabel(i18n("Iteration:"), gboxSettings);
-    m_iterationInput = new KIntNumInput(gboxSettings);
-    m_iterationInput->setRange(0, 100, 1, true);
+    m_iterationInput = new RIntNumInput(gboxSettings);
+    m_iterationInput->setRange(0, 100, 1);
     QWhatsThis::add( m_iterationInput, i18n("<p>This value controls the iterations to use for Waves, "
                                             "Tile, and Neon effects."));
 
@@ -262,13 +267,13 @@ void ImageEffect_DistortionFX::slotEffectTypeChanged(int type)
 
     m_levelInput->blockSignals(true);
     m_iterationInput->blockSignals(true);
-    m_levelInput->setRange(0, 100, 1, true);
+    m_levelInput->setRange(0, 100, 1);
     m_levelInput->setValue(25);
 
     switch (type)
        {
        case DistortionFX::Twirl:
-          m_levelInput->setRange(-50, 50, 1, true);
+          m_levelInput->setRange(-50, 50, 1);
           m_levelInput->setValue(10);
           break;
 
@@ -277,12 +282,12 @@ void ImageEffect_DistortionFX::slotEffectTypeChanged(int type)
        case DistortionFX::CilindricalVert:
        case DistortionFX::CilindricalHV:
        case DistortionFX::Caricature:
-          m_levelInput->setRange(0, 200, 1, true);
+          m_levelInput->setRange(0, 200, 1);
           m_levelInput->setValue(50);
           break;
 
        case DistortionFX::MultipleCorners:
-          m_levelInput->setRange(1, 10, 1, true);
+          m_levelInput->setRange(1, 10, 1);
           m_levelInput->setValue(4);
           break;
 
@@ -295,7 +300,7 @@ void ImageEffect_DistortionFX::slotEffectTypeChanged(int type)
        case DistortionFX::Tile:
           m_iterationInput->setEnabled(true);
           m_iterationLabel->setEnabled(true);
-          m_iterationInput->setRange(0, 200, 1, true);
+          m_iterationInput->setRange(0, 200, 1);
           m_iterationInput->setValue(10);
           break;
 

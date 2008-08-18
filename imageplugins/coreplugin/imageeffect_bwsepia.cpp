@@ -25,37 +25,40 @@
  // Qt includes.
 
 #include <qcolor.h>
+#include <qcombobox.h>
+#include <qfile.h>
+#include <qframe.h>
 #include <qgroupbox.h>
+#include <qhbuttongroup.h>
 #include <qhgroupbox.h>
-#include <qvgroupbox.h>
-#include <qhbuttongroup.h> 
-#include <qlistbox.h>
+#include <qintdict.h>
+#include <qlabel.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qframe.h>
-#include <qlabel.h>
+#include <qlistbox.h>
 #include <qpushbutton.h>
-#include <qtimer.h>
-#include <qcombobox.h>
-#include <qwhatsthis.h>
-#include <qtooltip.h>
-#include <qintdict.h>
 #include <qtextstream.h>
-#include <qfile.h>
+#include <qtimer.h>
+#include <qtooltip.h>
 #include <qvbox.h>
+#include <qvgroupbox.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
+#include <kapplication.h>
+#include <kconfig.h>
+#include <kcursor.h>
 #include <kfiledialog.h>
 #include <kglobalsettings.h>
-#include <kmessagebox.h>
-#include <kcursor.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kapplication.h>
-#include <knuminput.h>
 #include <ktabwidget.h>
-#include <kconfig.h>
+
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
 
 // Digikam includes.
 
@@ -76,6 +79,7 @@
 #include "imageeffect_bwsepia.h"
 #include "imageeffect_bwsepia.moc"
 
+using namespace KDcrawIface;
 namespace DigikamImagesPluginCore
 {
 
@@ -105,7 +109,7 @@ PreviewPixmapFactory::PreviewPixmapFactory(ImageEffect_BWSepia* bwSepia)
 
 const QPixmap* PreviewPixmapFactory::pixmap(int id)
 {
-    if (m_previewPixmapMap.find(id) == 0) 
+    if (m_previewPixmapMap.find(id) == 0)
     {
         QPixmap pix = makePixmap(id);
         m_previewPixmapMap.insert(id, new QPixmap(pix));
@@ -152,7 +156,7 @@ const QPixmap* ListBoxBWPreviewItem::pixmap() const
 // -----------------------------------------------------------------------------------
 
 ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
-                   : Digikam::ImageDlgBase(parent, i18n("Convert to Black & White"), 
+                   : Digikam::ImageDlgBase(parent, i18n("Convert to Black & White"),
                                            "convertbw", true, false),
                      m_destinationPreviewData(0L),
                      m_channelCB(0),
@@ -222,7 +226,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
     logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
-    logHistoButton->setToggleButton(true);       
+    logHistoButton->setToggleButton(true);
 
     QHBoxLayout* l1 = new QHBoxLayout();
     l1->addWidget(label1);
@@ -240,7 +244,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                                              "of the selected image channel. This one is re-computed at any "
                                              "settings changes."));
     QLabel *space = new QLabel(histoBox);
-    space->setFixedHeight(1);    
+    space->setFixedHeight(1);
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
@@ -346,7 +350,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     type = BWNoFilter;
 
-    item = new ListBoxBWPreviewItem(m_bwFilters, 
+    item = new ListBoxBWPreviewItem(m_bwFilters,
                                      i18n("No Lens Filter"), m_previewPixmapFactory, type);
     whatsThis->add( item, i18n("<b>No Lens Filter</b>:"
                                "<p>Do not apply a lens filter when rendering the image.</p>"));
@@ -379,9 +383,9 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                                "This has the most natural tonal correction, and improves contrast. Ideal for "
                                "landscapes.</p>"));
 
-    m_strengthInput = new KIntNumInput(vbox);
-    m_strengthInput->setLabel(i18n("Strength:"), AlignLeft | AlignVCenter);
-    m_strengthInput->setRange(1, 5, 1, true);
+    m_strengthInput = new RIntNumInput(vbox);
+    m_strengthInput->input()->setLabel(i18n("Strength:"), AlignLeft | AlignVCenter);
+    m_strengthInput->setRange(1, 5, 1);
     m_strengthInput->setValue(1);
     QWhatsThis::add(m_strengthInput, i18n("<p>Here, set the strength adjustment of the lens filter."));
 
@@ -462,9 +466,9 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                                                   10, curveBox );
     hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
-    m_cInput = new KIntNumInput(curveBox);
-    m_cInput->setLabel(i18n("Contrast:"), AlignLeft | AlignVCenter);
-    m_cInput->setRange(-100, 100, 1, true);
+    m_cInput = new RIntNumInput(curveBox);
+    m_cInput->input()->setLabel(i18n("Contrast:"), AlignLeft | AlignVCenter);
+    m_cInput->setRange(-100, 100, 1);
     m_cInput->setValue(0);
     QWhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
 
@@ -544,7 +548,7 @@ void ImageEffect_BWSepia::slotFilterSelected(int filter)
     slotEffect();
 }
 
-QPixmap ImageEffect_BWSepia::getThumbnailForEffect(int type) 
+QPixmap ImageEffect_BWSepia::getThumbnailForEffect(int type)
 {
     Digikam::DImg thumb = m_thumbnailImage.copy();
     int w   = thumb.width();
@@ -554,17 +558,17 @@ QPixmap ImageEffect_BWSepia::getThumbnailForEffect(int type)
 
     if (type < BWGeneric)
     {
-        // In Filter view, we will render a preview of the B&W filter with the generic B&W film. 
+        // In Filter view, we will render a preview of the B&W filter with the generic B&W film.
         blackAndWhiteConversion(thumb.bits(), w, h, sb, type);
         blackAndWhiteConversion(thumb.bits(), w, h, sb, BWGeneric);
     }
     else
     {
-        // In Film and Tone view, we will render the preview without to use the B&W Filter 
+        // In Film and Tone view, we will render the preview without to use the B&W Filter
         blackAndWhiteConversion(thumb.bits(), w, h, sb, type);
     }
 
-    if (m_curvesWidget->curves())   // in case we're called before the creator is done 
+    if (m_curvesWidget->curves())   // in case we're called before the creator is done
     {
         uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
         m_curvesWidget->curves()->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
@@ -590,18 +594,18 @@ void ImageEffect_BWSepia::slotChannelChanged(int channel)
             m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
             break;
-    
+
         case RedChannel:
             m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
             break;
-    
-        case GreenChannel:         
+
+        case GreenChannel:
             m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
             break;
-    
-        case BlueChannel:         
+
+        case BlueChannel:
             m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
             break;
@@ -733,7 +737,7 @@ void ImageEffect_BWSepia::resetValues()
 void ImageEffect_BWSepia::slotEffect()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
-    
+
     m_histogramWidget->stopHistogramComputation();
 
     delete [] m_destinationPreviewData;
@@ -785,7 +789,7 @@ void ImageEffect_BWSepia::slotEffect()
 void ImageEffect_BWSepia::slotTimer()
 {
     Digikam::ImageDlgBase::slotTimer();
-    if (m_previewPixmapFactory && m_bwFilters && m_bwTone) 
+    if (m_previewPixmapFactory && m_bwFilters && m_bwTone)
     {
         m_previewPixmapFactory->invalidate();
         m_bwFilters->triggerUpdate(false);
@@ -803,7 +807,7 @@ void ImageEffect_BWSepia::finalRendering()
     bool a                     = iface->originalHasAlpha();
     bool sb                    = iface->originalSixteenBit();
 
-    if (data) 
+    if (data)
     {
         // Apply black and white filter.
 
@@ -852,31 +856,31 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, boo
        case BWNoFilter:
           m_redAttn   = 0.0;
           m_greenAttn = 0.0;
-          m_blueAttn  = 0.0; 
+          m_blueAttn  = 0.0;
           break;
 
        case BWGreenFilter:
           m_redAttn   = -0.20 * strength;
           m_greenAttn = +0.11 * strength;
-          m_blueAttn  = +0.09 * strength; 
+          m_blueAttn  = +0.09 * strength;
           break;
 
        case BWOrangeFilter:
           m_redAttn   = +0.48 * strength;
           m_greenAttn = -0.37 * strength;
-          m_blueAttn  = -0.11 * strength; 
+          m_blueAttn  = -0.11 * strength;
           break;
 
        case BWRedFilter:
           m_redAttn   = +0.60 * strength;
           m_greenAttn = -0.49 * strength;
-          m_blueAttn  = -0.11 * strength; 
+          m_blueAttn  = -0.11 * strength;
           break;
 
        case BWYellowFilter:
           m_redAttn   = +0.30 * strength;
           m_greenAttn = -0.31 * strength;
-          m_blueAttn  = +0.01 * strength; 
+          m_blueAttn  = +0.01 * strength;
           break;
 
        // --------------------------------------------------------------------------------
@@ -885,150 +889,150 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, boo
        case BWNoTone:
           m_redMult   = 0.24;
           m_greenMult = 0.68;
-          m_blueMult  = 0.08; 
-          filter.channelMixerImage(data, w, h, sb, true, true, 
-                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
-                 0.0, 1.0, 0.0, 
+          m_blueMult  = 0.08;
+          filter.channelMixerImage(data, w, h, sb, true, true,
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn,
+                 0.0, 1.0, 0.0,
                  0.0, 0.0, 1.0);
           break;
 
        case BWAgfa200X:
           m_redMult   = 0.18;
           m_greenMult = 0.41;
-          m_blueMult  = 0.41; 
-          filter.channelMixerImage(data, w, h, sb, true, true, 
-                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
-                 0.0, 1.0, 0.0, 
+          m_blueMult  = 0.41;
+          filter.channelMixerImage(data, w, h, sb, true, true,
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn,
+                 0.0, 1.0, 0.0,
                  0.0, 0.0, 1.0);
           break;
 
        case BWAgfapan25:
           m_redMult   = 0.25;
           m_greenMult = 0.39;
-          m_blueMult  = 0.36; 
-          filter.channelMixerImage(data, w, h, sb, true, true, 
-                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
-                 0.0, 1.0, 0.0, 
+          m_blueMult  = 0.36;
+          filter.channelMixerImage(data, w, h, sb, true, true,
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn,
+                 0.0, 1.0, 0.0,
                  0.0, 0.0, 1.0);
           break;
 
        case BWAgfapan100:
           m_redMult   = 0.21;
           m_greenMult = 0.40;
-          m_blueMult  = 0.39; 
-          filter.channelMixerImage(data, w, h, sb, true, true, 
-                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
-                 0.0, 1.0, 0.0, 
+          m_blueMult  = 0.39;
+          filter.channelMixerImage(data, w, h, sb, true, true,
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn,
+                 0.0, 1.0, 0.0,
                  0.0, 0.0, 1.0);
           break;
 
        case BWAgfapan400:
           m_redMult   = 0.20;
           m_greenMult = 0.41;
-          m_blueMult  = 0.39; 
-          filter.channelMixerImage(data, w, h, sb, true, true, 
-                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
-                 0.0, 1.0, 0.0, 
+          m_blueMult  = 0.39;
+          filter.channelMixerImage(data, w, h, sb, true, true,
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn,
+                 0.0, 1.0, 0.0,
                  0.0, 0.0, 1.0);
           break;
 
        case BWIlfordDelta100:
           m_redMult   = 0.21;
           m_greenMult = 0.42;
-          m_blueMult  = 0.37; 
-          filter.channelMixerImage(data, w, h, sb, true, true, 
-                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
-                 0.0, 1.0, 0.0, 
+          m_blueMult  = 0.37;
+          filter.channelMixerImage(data, w, h, sb, true, true,
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn,
+                 0.0, 1.0, 0.0,
                  0.0, 0.0, 1.0);
           break;
 
        case BWIlfordDelta400:
           m_redMult   = 0.22;
           m_greenMult = 0.42;
-          m_blueMult  = 0.36; 
-          filter.channelMixerImage(data, w, h, sb, true, true, 
-                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
-                 0.0, 1.0, 0.0, 
+          m_blueMult  = 0.36;
+          filter.channelMixerImage(data, w, h, sb, true, true,
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn,
+                 0.0, 1.0, 0.0,
                  0.0, 0.0, 1.0);
           break;
 
        case BWIlfordDelta400Pro3200:
           m_redMult   = 0.31;
           m_greenMult = 0.36;
-          m_blueMult  = 0.33; 
-          filter.channelMixerImage(data, w, h, sb, true, true, 
-                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
-                 0.0, 1.0, 0.0, 
+          m_blueMult  = 0.33;
+          filter.channelMixerImage(data, w, h, sb, true, true,
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn,
+                 0.0, 1.0, 0.0,
                  0.0, 0.0, 1.0);
           break;
 
        case BWIlfordFP4:
           m_redMult   = 0.28;
           m_greenMult = 0.41;
-          m_blueMult  = 0.31; 
-          filter.channelMixerImage(data, w, h, sb, true, true, 
-                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
-                 0.0, 1.0, 0.0, 
+          m_blueMult  = 0.31;
+          filter.channelMixerImage(data, w, h, sb, true, true,
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn,
+                 0.0, 1.0, 0.0,
                  0.0, 0.0, 1.0);
           break;
 
        case BWIlfordHP5:
           m_redMult   = 0.23;
           m_greenMult = 0.37;
-          m_blueMult  = 0.40; 
-          filter.channelMixerImage(data, w, h, sb, true, true, 
-                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
-                 0.0, 1.0, 0.0, 
+          m_blueMult  = 0.40;
+          filter.channelMixerImage(data, w, h, sb, true, true,
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn,
+                 0.0, 1.0, 0.0,
                  0.0, 0.0, 1.0);
           break;
 
        case BWIlfordPanF:
           m_redMult   = 0.33;
           m_greenMult = 0.36;
-          m_blueMult  = 0.31; 
-          filter.channelMixerImage(data, w, h, sb, true, true, 
-                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
-                 0.0, 1.0, 0.0, 
+          m_blueMult  = 0.31;
+          filter.channelMixerImage(data, w, h, sb, true, true,
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn,
+                 0.0, 1.0, 0.0,
                  0.0, 0.0, 1.0);
           break;
 
        case BWIlfordXP2Super:
           m_redMult   = 0.21;
           m_greenMult = 0.42;
-          m_blueMult  = 0.37; 
-          filter.channelMixerImage(data, w, h, sb, true, true, 
-                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
-                 0.0, 1.0, 0.0, 
+          m_blueMult  = 0.37;
+          filter.channelMixerImage(data, w, h, sb, true, true,
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn,
+                 0.0, 1.0, 0.0,
                  0.0, 0.0, 1.0);
           break;
 
        case BWKodakTmax100:
           m_redMult   = 0.24;
           m_greenMult = 0.37;
-          m_blueMult  = 0.39; 
-          filter.channelMixerImage(data, w, h, sb, true, true, 
-                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
-                 0.0, 1.0, 0.0, 
+          m_blueMult  = 0.39;
+          filter.channelMixerImage(data, w, h, sb, true, true,
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn,
+                 0.0, 1.0, 0.0,
                  0.0, 0.0, 1.0);
           break;
 
        case BWKodakTmax400:
           m_redMult   = 0.27;
           m_greenMult = 0.36;
-          m_blueMult  = 0.37; 
-          filter.channelMixerImage(data, w, h, sb, true, true, 
-                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
-                 0.0, 1.0, 0.0, 
+          m_blueMult  = 0.37;
+          filter.channelMixerImage(data, w, h, sb, true, true,
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn,
+                 0.0, 1.0, 0.0,
                  0.0, 0.0, 1.0);
           break;
 
        case BWKodakTriX:
           m_redMult   = 0.25;
           m_greenMult = 0.35;
-          m_blueMult  = 0.40; 
-          filter.channelMixerImage(data, w, h, sb, true, true, 
-                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
-                 0.0, 1.0, 0.0, 
+          m_blueMult  = 0.40;
+          filter.channelMixerImage(data, w, h, sb, true, true,
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn,
+                 0.0, 1.0, 0.0,
                  0.0, 0.0, 1.0);
           break;
 
@@ -1079,7 +1083,7 @@ void ImageEffect_BWSepia::slotUser3()
 
         if ( stream.readLine() != "# Black & White Configuration File" )
         {
-           KMessageBox::error(this, 
+           KMessageBox::error(this,
                         i18n("\"%1\" is not a Black & White settings text file.")
                         .arg(loadFile.fileName()));
            file.close();

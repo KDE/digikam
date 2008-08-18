@@ -43,6 +43,10 @@
 #include <kseparator.h>
 #include <kconfig.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "daboutdata.h"
@@ -54,6 +58,7 @@
 #include "imageeffect_freerotation.h"
 #include "imageeffect_freerotation.moc"
 
+using namespace KDcrawIface;
 namespace DigikamFreeRotationImagesPlugin
 {
 
@@ -116,8 +121,8 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     gridSettings->addMultiCellWidget(line, 2, 2, 0, 2);
 
     QLabel *label3 = new QLabel(i18n("Main angle:"), gboxSettings);
-    m_angleInput = new KIntNumInput(gboxSettings);
-    m_angleInput->setRange(-180, 180, 1, true);
+    m_angleInput = new RIntNumInput(gboxSettings);
+    m_angleInput->setRange(-180, 180, 1);
     m_angleInput->setValue(0);
     QWhatsThis::add( m_angleInput, i18n("<p>An angle in degrees by which to rotate the image. "
                                         "A positive angle rotates the image clockwise; "
@@ -127,8 +132,8 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     gridSettings->addMultiCellWidget(m_angleInput, 4, 4, 0, 2);
 
     QLabel *label4 = new QLabel(i18n("Fine angle:"), gboxSettings);
-    m_fineAngleInput = new KDoubleNumInput(gboxSettings);
-    m_fineAngleInput->setRange(-5.0, 5.0, 0.01, true);
+    m_fineAngleInput = new RDoubleNumInput(gboxSettings);
+    m_fineAngleInput->setRange(-5.0, 5.0, 0.01);
     m_fineAngleInput->setValue(0);
     QWhatsThis::add( m_fineAngleInput, i18n("<p>This value in degrees will be added to main angle value "
                                             "to set fine target angle."));

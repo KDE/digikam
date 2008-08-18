@@ -27,40 +27,43 @@
 
 // Qt includes.
 
-#include <qlayout.h>
 #include <qcolor.h>
-#include <qgroupbox.h>
-#include <qhgroupbox.h>
-#include <qvgroupbox.h>
-#include <qlabel.h>
-#include <qpainter.h>
 #include <qcombobox.h>
-#include <qspinbox.h>
-#include <qwhatsthis.h>
-#include <qtooltip.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
 #include <qframe.h>
-#include <qtimer.h>
+#include <qgroupbox.h>
 #include <qhbuttongroup.h>
+#include <qhgroupbox.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qlayout.h>
+#include <qpainter.h>
 #include <qpixmap.h>
+#include <qpushbutton.h>
+#include <qspinbox.h>
+#include <qtimer.h>
+#include <qtooltip.h>
+#include <qvgroupbox.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
+#include <kaboutdata.h>
+#include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
-#include <klocale.h>
-#include <knuminput.h>
-#include <kmessagebox.h>
-#include <kselect.h>
 #include <kfiledialog.h>
 #include <kglobalsettings.h>
-#include <kaboutdata.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
-#include <kapplication.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 #include <kpopupmenu.h>
+#include <kselect.h>
 #include <kstandarddirs.h>
+
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
 
 // Local includes.
 
@@ -75,6 +78,7 @@
 #include "adjustlevels.h"
 #include "adjustlevels.moc"
 
+using namespace KDcrawIface;
 namespace DigikamAdjustLevelsImagesPlugin
 {
 
@@ -211,7 +215,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     QWhatsThis::add( m_minInput, i18n("<p>Select the minimal intensity input value of the histogram."));
     QToolTip::add( m_minInput, i18n( "Minimal intensity input." ) );
 
-    m_gammaInput = new KDoubleNumInput(gboxSettings);
+    m_gammaInput = new RDoubleNumInput(gboxSettings);
     m_gammaInput->setPrecision(2);
     m_gammaInput->setRange(0.1, 3.0, 0.01);
     m_gammaInput->setValue(1.0);

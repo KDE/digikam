@@ -28,7 +28,7 @@
 #include <qhbox.h>
 #include <qhgroupbox.h>
 #include <qvgroupbox.h>
-#include <qhbuttongroup.h> 
+#include <qhbuttongroup.h>
 #include <qvbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
@@ -60,11 +60,16 @@
 #include "dimg.h"
 #include "dimgimagefilters.h"
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "imageeffect_redeye.h"
 #include "imageeffect_redeye.moc"
 
+using namespace KDcrawIface;
 namespace DigikamImagesPluginCore
 {
 
@@ -76,9 +81,9 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
 
     m_previewWidget = new Digikam::ImageWidget("redeye Tool Dialog", plainPage(),
                                                i18n("<p>Here you can see the image selection preview with "
-                                                    "red eye reduction applied."), 
+                                                    "red eye reduction applied."),
                                                true, Digikam::ImageGuideWidget::PickColorMode, true, true);
-    setPreviewAreaWidget(m_previewWidget); 
+    setPreviewAreaWidget(m_previewWidget);
 
     // -------------------------------------------------------------
 
@@ -144,8 +149,8 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     // -------------------------------------------------------------
 
     m_thresholdLabel = new QLabel(i18n("Sensitivity:"), gboxSettings);
-    m_redThreshold   = new KIntNumInput(gboxSettings);
-    m_redThreshold->setRange(10, 90, 1, true);
+    m_redThreshold   = new RIntNumInput(gboxSettings);
+    m_redThreshold->setRange(10, 90, 1);
     m_redThreshold->setValue(20);
     QWhatsThis::add(m_redThreshold, i18n("<p>Sets the red color pixels selection threshold. "
                                          "Low values will select more red color pixels (agressive correction), high "
@@ -153,8 +158,8 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
                                          "exactly. Use high value if other parts of the face are also selected."));
 
     m_smoothLabel = new QLabel(i18n("Smooth:"), gboxSettings);
-    m_smoothLevel = new KIntNumInput(gboxSettings);
-    m_smoothLevel->setRange(0, 5, 1, true);
+    m_smoothLevel = new RIntNumInput(gboxSettings);
+    m_smoothLevel->setRange(0, 5, 1);
     m_smoothLevel->setValue(1);
     QWhatsThis::add(m_smoothLevel, i18n("<p>Sets the smoothness value when blurring the border "
                                         "of the changed pixels. "
@@ -168,8 +173,8 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     QWhatsThis::add(m_HSSelector, i18n("<p>Sets a custom color to re-colorize the eyes."));
 
     QLabel *label4 = new QLabel(i18n("Tint Level:"), gboxSettings);
-    m_tintLevel    = new KIntNumInput(gboxSettings);
-    m_tintLevel->setRange(1, 200, 1, true);
+    m_tintLevel    = new RIntNumInput(gboxSettings);
+    m_tintLevel->setRange(1, 200, 1);
     m_tintLevel->setValue(128);
     QWhatsThis::add(m_tintLevel, i18n("<p>Set the tint level to adjust the luminosity of "
                                       "the new color of the pupil."));
@@ -223,7 +228,7 @@ ImageEffect_RedEye::~ImageEffect_RedEye()
 {
     m_histogramWidget->stopHistogramComputation();
 
-    if (m_destinationPreviewData) 
+    if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 
     delete m_histogramWidget;
@@ -334,7 +339,7 @@ void ImageEffect_RedEye::resetValues()
     m_HSSelector->blockSignals(false);
     m_VSelector->blockSignals(false);
     m_tintLevel->blockSignals(false);
-} 
+}
 
 void ImageEffect_RedEye::slotEffect()
 {
@@ -342,12 +347,12 @@ void ImageEffect_RedEye::slotEffect()
 
     m_histogramWidget->stopHistogramComputation();
 
-    if (m_destinationPreviewData) 
+    if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 
-    // Here, we need to use the real selection image data because we will apply 
-    // a Gaussian blur filter on pixels and we cannot use directly the preview scaled image 
-    // else the blur radius will not give the same result between preview and final rendering.  
+    // Here, we need to use the real selection image data because we will apply
+    // a Gaussian blur filter on pixels and we cannot use directly the preview scaled image
+    // else the blur radius will not give the same result between preview and final rendering.
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
     m_destinationPreviewData   = iface->getImageSelection();
     int w                      = iface->selectedWidth();
@@ -437,7 +442,7 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
     green_norm *= coloring.green() / level;
     blue_norm  *= coloring.blue()  / level;
 
-    // Perform a red color pixels detection in selection image and create a correction mask using an alpha channel. 
+    // Perform a red color pixels detection in selection image and create a correction mask using an alpha channel.
 
     if (!selection.sixteenBit())         // 8 bits image.
     {
@@ -445,7 +450,7 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
         uchar* mptr = mask.bits();
         uchar  r, g, b, r1, g1, b1;
 
-        for (uint i = 0 ; i < selection.width() * selection.height() ; i++) 
+        for (uint i = 0 ; i < selection.width() * selection.height() ; i++)
         {
             b       = ptr[0];
             g       = ptr[1];
@@ -482,7 +487,7 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
         unsigned short* mptr = (unsigned short*)mask.bits();
         unsigned short  r, g, b, r1, g1, b1;
 
-        for (uint i = 0 ; i < selection.width() * selection.height() ; i++) 
+        for (uint i = 0 ; i < selection.width() * selection.height() ; i++)
         {
             b       = ptr[0];
             g       = ptr[1];
@@ -518,7 +523,7 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
 
     Digikam::DImg mask2 = mask.copy();
     Digikam::DImgImageFilters filter;
-    filter.gaussianBlurImage(mask2.bits(), mask2.width(), mask2.height(), 
+    filter.gaussianBlurImage(mask2.bits(), mask2.width(), mask2.height(),
                              mask2.sixteenBit(), m_smoothLevel->value());
 
     if (!selection.sixteenBit())         // 8 bits image.
