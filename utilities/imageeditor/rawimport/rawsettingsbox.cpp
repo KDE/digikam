@@ -43,6 +43,7 @@
 #include <kiconloader.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
+#include <kfiledialog.h>
 
 // LibKDcraw includes.
 
@@ -55,13 +56,14 @@
 #include "imagedialog.h"
 #include "imagehistogram.h"
 #include "imagecurves.h"
+#include "iccpreviewwidget.h"
 #include "histogramwidget.h"
 #include "curveswidget.h"
 #include "colorgradientwidget.h"
 #include "rawsettingsbox.h"
 #include "rawsettingsbox.moc"
 
-using namespace KDcrawIface; 
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -236,7 +238,13 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     d->tabView             = new KTabWidget(this);
     d->rawdecodingBox      = new QWidget(d->tabView);
     QGridLayout* rawGrid   = new QGridLayout(d->rawdecodingBox, 1, 2);
-    d->decodingSettingsBox = new KDcrawIface::DcrawSettingsWidget(d->rawdecodingBox, true, true, false);
+    d->decodingSettingsBox = new DcrawSettingsWidget(d->rawdecodingBox, true, true, false);
+
+    KFileDialog *inputDlg  = d->decodingSettingsBox->inputProfileUrlEdit()->fileDialog();
+    inputDlg->setPreviewWidget(new ICCPreviewWidget(inputDlg));
+
+    KFileDialog *outputDlg = d->decodingSettingsBox->outputProfileUrlEdit()->fileDialog();
+    outputDlg->setPreviewWidget(new ICCPreviewWidget(outputDlg));
 
     d->abortBtn = new QPushButton(i18n("Abort"), d->rawdecodingBox);
     d->abortBtn->setIconSet(SmallIconSet("stop"));
@@ -354,14 +362,14 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     // ---------------------------------------------------------------
 
     d->postProcessSettingsBox->addItem(d->advExposureBox, i18n("Exposure"));
-    d->postProcessSettingsBox->addItem(d->curveBox,       i18n("Curve"));
+    d->postProcessSettingsBox->addItem(d->curveBox,       i18n("Luminosity Curve"));
     d->postProcessSettingsBox->setItemIconSet(0, SmallIconSet("contrast"));
     d->postProcessSettingsBox->setItemIconSet(1, SmallIconSet("adjustcurves"));
 
-    d->decodingSettingsBox->setItemIconSet(0, SmallIconSet("kdcraw"));
-    d->decodingSettingsBox->setItemIconSet(1, SmallIconSet("whitebalance"));
-    d->decodingSettingsBox->setItemIconSet(2, SmallIconSet("lensdistortion"));
-    d->decodingSettingsBox->setItemIconSet(3, SmallIconSet("colormanagement"));
+    d->decodingSettingsBox->setItemIconSet(DcrawSettingsWidget::DEMOSAICING,     SmallIconSet("kdcraw"));
+    d->decodingSettingsBox->setItemIconSet(DcrawSettingsWidget::WHITEBALANCE,    SmallIconSet("whitebalance"));
+    d->decodingSettingsBox->setItemIconSet(DcrawSettingsWidget::CORRECTIONS,     SmallIconSet("lensdistortion"));
+    d->decodingSettingsBox->setItemIconSet(DcrawSettingsWidget::COLORMANAGEMENT, SmallIconSet("colormanagement"));
     d->decodingSettingsBox->updateMinimumWidth();
 
     d->tabView->insertTab(d->rawdecodingBox,         i18n("Raw Decoding"),    0);
@@ -547,7 +555,7 @@ void RawSettingsBox::readSettings()
     d->curveWidget->curves()->curvesCalculateCurve(ImageHistogram::ValueChannel);
 
     d->tabView->setCurrentPage(config->readNumEntry("Settings Page", 0));
-    d->decodingSettingsBox->setCurrentIndex(config->readNumEntry("Decoding Settings Tab", 0));
+    d->decodingSettingsBox->setCurrentIndex(config->readNumEntry("Decoding Settings Tab", DcrawSettingsWidget::DEMOSAICING));
     d->postProcessSettingsBox->setCurrentIndex(config->readNumEntry("Post Processing Settings Tab", 0));
 
     slotChannelChanged(d->channelCB->currentItem());

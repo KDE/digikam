@@ -17,6 +17,7 @@ INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	  -I$(top_srcdir)/digikam/libs/dimg/filters \
 	  -I$(top_srcdir)/digikam/libs/dialogs \
 	  -I$(top_srcdir)/digikam/libs/widgets/common \
+	  -I$(top_srcdir)/digikam/libs/widgets/iccprofiles \
 	  -I$(top_srcdir)/digikam/libs/threadimageio \
 	  -I$(top_srcdir)/digikam/libs/themeengine \
 	  $(LIBKDCRAW_CFLAGS) \
