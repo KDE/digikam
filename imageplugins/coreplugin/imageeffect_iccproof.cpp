@@ -309,9 +309,9 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_inProfilesPath = new KUrlRequester(inProfiles);
     m_inProfilesPath->setMode(KFile::File|KFile::ExistingOnly);
     m_inProfilesPath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
-    KFileDialog *inProfiles_dialog = m_inProfilesPath->fileDialog();
-    m_iccInPreviewWidget = new Digikam::ICCPreviewWidget(inProfiles_dialog);
-    inProfiles_dialog->setPreviewWidget(m_iccInPreviewWidget);
+//    KFileDialog *inProfiles_dialog = m_inProfilesPath->fileDialog();
+//    m_iccInPreviewWidget = new Digikam::ICCPreviewWidget(inProfiles_dialog);
+//    inProfiles_dialog->setPreviewWidget(m_iccInPreviewWidget);
 
     QPushButton *inProfilesInfo = new QPushButton(i18n("Info..."), inProfiles);
 
@@ -370,9 +370,9 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_spaceProfilePath = new KUrlRequester(box2);
     m_spaceProfilePath->setMode(KFile::File|KFile::ExistingOnly);
     m_spaceProfilePath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
-    KFileDialog *spaceProfiles_dialog = m_spaceProfilePath->fileDialog();
-    m_iccSpacePreviewWidget = new Digikam::ICCPreviewWidget(spaceProfiles_dialog);
-    spaceProfiles_dialog->setPreviewWidget(m_iccSpacePreviewWidget);
+//    KFileDialog *spaceProfiles_dialog = m_spaceProfilePath->fileDialog();
+//    m_iccSpacePreviewWidget = new Digikam::ICCPreviewWidget(spaceProfiles_dialog);
+//    spaceProfiles_dialog->setPreviewWidget(m_iccSpacePreviewWidget);
 
     QPushButton *spaceProfilesInfo = new QPushButton(i18n("Info..."), box2);
 
@@ -413,9 +413,9 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_proofProfilePath = new KUrlRequester(box3);
     m_proofProfilePath->setMode(KFile::File|KFile::ExistingOnly);
     m_proofProfilePath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
-    KFileDialog *proofProfiles_dialog = m_proofProfilePath->fileDialog();
-    m_iccProofPreviewWidget = new Digikam::ICCPreviewWidget(proofProfiles_dialog);
-    proofProfiles_dialog->setPreviewWidget(m_iccProofPreviewWidget);
+//    KFileDialog *proofProfiles_dialog = m_proofProfilePath->fileDialog();
+//    m_iccProofPreviewWidget = new Digikam::ICCPreviewWidget(proofProfiles_dialog);
+//    proofProfiles_dialog->setPreviewWidget(m_iccProofPreviewWidget);
 
     QPushButton *proofProfilesInfo = new QPushButton(i18n("Info..."), box3);
 
@@ -566,9 +566,9 @@ ImageEffect_ICCProof::~ImageEffect_ICCProof()
     m_histogramWidget->stopHistogramComputation();
 
     delete [] m_destinationPreviewData;
-    delete m_histogramWidget;
-    delete m_previewWidget;
-    delete m_curvesWidget;
+//    delete m_histogramWidget;
+//    delete m_previewWidget;
+//    delete m_curvesWidget;
     delete m_curves;
 }
 
