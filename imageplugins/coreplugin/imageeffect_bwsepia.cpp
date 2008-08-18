@@ -386,7 +386,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_strengthInput = new RIntNumInput(vbox);
     m_strengthInput->input()->setLabel(i18n("Strength:"), AlignLeft | AlignVCenter);
     m_strengthInput->setRange(1, 5, 1);
-    m_strengthInput->setValue(1);
+    m_strengthInput->setDefaultValue(1);
     QWhatsThis::add(m_strengthInput, i18n("<p>Here, set the strength adjustment of the lens filter."));
 
     // -------------------------------------------------------------
@@ -469,7 +469,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_cInput = new RIntNumInput(curveBox);
     m_cInput->input()->setLabel(i18n("Contrast:"), AlignLeft | AlignVCenter);
     m_cInput->setRange(-100, 100, 1);
-    m_cInput->setValue(0);
+    m_cInput->setDefaultValue(0);
     QWhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
 
     gridTab2->addMultiCellWidget(vGradient, 0, 0, 0, 0);

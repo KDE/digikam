@@ -170,7 +170,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     m_gammaInput = new RDoubleNumInput(gboxSettings);
     m_gammaInput->setPrecision(2);
     m_gammaInput->setRange(0.1, 3.0, 0.01);
-    m_gammaInput->setValue(1.0);
+    m_gammaInput->setDefaultValue(1.0);
     QWhatsThis::add( m_gammaInput, i18n("<p>Set here the gamma re-adjustment of the target image."));
 
     gridSettings->addMultiCellWidget(label6, 12, 12, 0, 2);

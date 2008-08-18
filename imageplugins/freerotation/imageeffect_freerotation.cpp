@@ -122,7 +122,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     QLabel *label3 = new QLabel(i18n("Main angle:"), gboxSettings);
     m_angleInput = new RIntNumInput(gboxSettings);
     m_angleInput->setRange(-180, 180, 1);
-    m_angleInput->setValue(0);
+    m_angleInput->setDefaultValue(0);
     QWhatsThis::add( m_angleInput, i18n("<p>An angle in degrees by which to rotate the image. "
                                         "A positive angle rotates the image clockwise; "
                                         "a negative angle rotates it counter-clockwise."));
@@ -133,7 +133,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     QLabel *label4 = new QLabel(i18n("Fine angle:"), gboxSettings);
     m_fineAngleInput = new RDoubleNumInput(gboxSettings);
     m_fineAngleInput->setRange(-5.0, 5.0, 0.01);
-    m_fineAngleInput->setValue(0);
+    m_fineAngleInput->setDefaultValue(0);
     QWhatsThis::add( m_fineAngleInput, i18n("<p>This value in degrees will be added to main angle value "
                                             "to set fine target angle."));
 

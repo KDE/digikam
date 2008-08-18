@@ -423,7 +423,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_cInput = new RIntNumInput(lightnessadjust);
     m_cInput->input()->setLabel(i18n("Contrast:"), AlignLeft | AlignVCenter);
     m_cInput->setRange(-100, 100, 1);
-    m_cInput->setValue(0);
+    m_cInput->setDefaultValue(0);
     QWhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
 
     fourPageLayout->addMultiCellWidget(vGradient, 0, 0, 0, 0);

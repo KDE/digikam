@@ -85,7 +85,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
 
     m_pencilInput = new RIntNumInput(gboxSettings);
     m_pencilInput->setRange(1, 100, 1);
-    m_pencilInput->setValue(5);
+    m_pencilInput->setDefaultValue(5);
     QWhatsThis::add( m_pencilInput, i18n("<p>Set here the charcoal pencil size used to simulate the drawing."));
 
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
@@ -97,7 +97,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
 
     m_smoothInput = new RIntNumInput(gboxSettings);
     m_smoothInput->setRange(1, 100, 1);
-    m_smoothInput->setValue(10);
+    m_smoothInput->setDefaultValue(10);
     QWhatsThis::add( m_smoothInput, i18n("<p>This value controls the smoothing effect of the pencil "
                                          "under the canvas."));
 

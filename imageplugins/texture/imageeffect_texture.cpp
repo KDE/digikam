@@ -118,7 +118,7 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
 
     m_blendGain = new RIntNumInput(gboxSettings);
     m_blendGain->setRange(1, 255, 1);
-    m_blendGain->setValue(200);
+    m_blendGain->setDefaultValue(200);
     QWhatsThis::add( m_blendGain, i18n("<p>Set here the relief gain used to merge texture and image."));
 
     gridSettings->addMultiCellWidget(label2, 1, 1, 0, 1);

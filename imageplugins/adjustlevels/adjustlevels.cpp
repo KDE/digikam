@@ -218,7 +218,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_gammaInput = new RDoubleNumInput(gboxSettings);
     m_gammaInput->setPrecision(2);
     m_gammaInput->setRange(0.1, 3.0, 0.01);
-    m_gammaInput->setValue(1.0);
+    m_gammaInput->setDefaultValue(1.0);
     QToolTip::add( m_gammaInput, i18n( "Gamma input value." ) );
     QWhatsThis::add( m_gammaInput, i18n("<p>Select the gamma input value."));
 

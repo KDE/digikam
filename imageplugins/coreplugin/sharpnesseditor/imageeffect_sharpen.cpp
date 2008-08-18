@@ -100,7 +100,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     QLabel *label = new QLabel(i18n("Sharpness:"), simpleSharpSettings);
     m_radiusInput = new RIntNumInput(simpleSharpSettings);
     m_radiusInput->setRange(0, 100, 1);
-    m_radiusInput->setValue(0);
+    m_radiusInput->setDefaultValue(0);
     QWhatsThis::add( m_radiusInput, i18n("<p>A sharpness of 0 has no effect, "
                                          "1 and above determine the sharpen matrix radius "
                                          "that determines how much to sharpen the image."));

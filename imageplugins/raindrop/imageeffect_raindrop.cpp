@@ -99,7 +99,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
 
     m_dropInput = new RIntNumInput(gboxSettings);
     m_dropInput->setRange(0, 200, 1);
-    m_dropInput->setValue(80);
+    m_dropInput->setDefaultValue(80);
     QWhatsThis::add( m_dropInput, i18n("<p>Set here the raindrops' size."));
 
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 2);
@@ -111,7 +111,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
 
     m_amountInput = new RIntNumInput(gboxSettings);
     m_amountInput->setRange(1, 500, 1);
-    m_amountInput->setValue(150);
+    m_amountInput->setDefaultValue(150);
     QWhatsThis::add( m_amountInput, i18n("<p>This value controls the maximum number of raindrops."));
 
     gridSettings->addMultiCellWidget(label2, 2, 2, 0, 2);
@@ -123,7 +123,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
 
     m_coeffInput = new RIntNumInput(gboxSettings);
     m_coeffInput->setRange(1, 100, 1);
-    m_coeffInput->setValue(30);
+    m_coeffInput->setDefaultValue(30);
     QWhatsThis::add( m_coeffInput, i18n("<p>This value is the fish-eye-effect optical "
                                         "distortion coefficient."));
 
