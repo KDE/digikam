@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-06-05
- * Description : digiKam image editor to adjust Brightness, 
+ * Description : digiKam image editor to adjust Brightness,
                  Contrast, and Gamma of picture.
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
@@ -15,12 +15,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef IMAGEEFFECT_BCG_H
@@ -34,8 +34,11 @@ class QCheckBox;
 class QComboBox;
 class QHButtonGroup;
 
-class KIntNumInput;
-class KDoubleNumInput;
+namespace KDcrawIface
+{
+class RIntNumInput;
+class RDoubleNumInput;
+}
 
 namespace Digikam
 {
@@ -89,18 +92,18 @@ private:
 
     uchar                        *m_destinationPreviewData;
 
-    QComboBox                    *m_channelCB;    
-    
-    QHButtonGroup                *m_scaleBG;  
+    QComboBox                    *m_channelCB;
 
-    KIntNumInput                 *m_bInput;
-    KIntNumInput                 *m_cInput;
-    KDoubleNumInput              *m_gInput;
-    
+    QHButtonGroup                *m_scaleBG;
+
+    KDcrawIface::RIntNumInput    *m_bInput;
+    KDcrawIface::RIntNumInput    *m_cInput;
+    KDcrawIface::RDoubleNumInput *m_gInput;
+
     Digikam::ImageWidget         *m_previewWidget;
 
     Digikam::ColorGradientWidget *m_hGradient;
-    
+
     Digikam::HistogramWidget     *m_histogramWidget;
 };
 
