@@ -27,6 +27,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 161369 : Quick filter indicator lamp is not working properly in recursive image folder view mode.
 019 ==> 147314 : Renaming like crazy with F2 slows down my system.
 020 ==> 164622 : crash using timeline when switching from month to week to month view.
-021 ==> 
+021 ==> 141951 : Blank empty context right-click menus.
+022 ==> 
 
  
