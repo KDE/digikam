@@ -28,6 +28,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 019 ==> 147314 : Renaming like crazy with F2 slows down my system.
 020 ==> 164622 : crash using timeline when switching from month to week to month view.
 021 ==> 141951 : Blank empty context right-click menus.
-022 ==> 
+022 ==> 116886 : Proposal for adding a new destripe/denoise technique.
+023 ==> 
 
  
