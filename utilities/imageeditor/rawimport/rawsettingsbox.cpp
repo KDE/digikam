@@ -280,8 +280,8 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
 
     d->gammaLabel = new QLabel(i18n("Gamma:"), d->advExposureBox);
     d->gammaInput = new RDoubleNumInput(d->advExposureBox);
-    d->gammaInput->input()->setPrecision(2);
-    d->gammaInput->input()->setRange(0.1, 3.0, 0.01, true);
+    d->gammaInput->setPrecision(2);
+    d->gammaInput->setRange(0.1, 3.0, 0.01);
     d->gammaInput->setDefaultValue(1.0);
     QWhatsThis::add(d->gammaInput->input(), i18n("Set here the gamma adjustement of the image"));
 
@@ -292,10 +292,10 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     d->saturationInput->setDefaultValue(1.0);
     QWhatsThis::add(d->saturationInput->input(), i18n("<p>Set here the color saturation correction."));
 
-    d->fineExposureLabel = new QLabel(i18n("Exposure:"), d->advExposureBox);
+    d->fineExposureLabel = new QLabel(i18n("Exposure (E.V):"), d->advExposureBox);
     d->fineExposureInput = new RDoubleNumInput(d->advExposureBox);
     d->fineExposureInput->setPrecision(2);
-    d->fineExposureInput->setRange(-0.5, 0.5, 0.1);
+    d->fineExposureInput->setRange(-3.0, 3.0, 0.1);
     d->fineExposureInput->setDefaultValue(0.0);
     QWhatsThis::add(d->fineExposureInput->input(), i18n("<p>This value in E.V will be used to perform "
                                                         "an exposure compensation of the image."));
