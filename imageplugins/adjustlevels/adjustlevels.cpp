@@ -79,6 +79,7 @@
 #include "adjustlevels.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamAdjustLevelsImagesPlugin
 {
 

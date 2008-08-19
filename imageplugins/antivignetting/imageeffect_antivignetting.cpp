@@ -60,6 +60,7 @@
 #include "imageeffect_antivignetting.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamAntiVignettingImagesPlugin
 {
 

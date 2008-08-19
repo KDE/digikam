@@ -53,6 +53,7 @@
 #include "imageeffect_charcoal.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamCharcoalImagesPlugin
 {
 

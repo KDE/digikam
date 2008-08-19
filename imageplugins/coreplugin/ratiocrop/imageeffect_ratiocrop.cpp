@@ -62,6 +62,7 @@
 #include "imageeffect_ratiocrop.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamImagesPluginCore
 {
 

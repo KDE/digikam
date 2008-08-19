@@ -68,6 +68,7 @@
 #include "imageeffect_bcg.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamImagesPluginCore
 {
 

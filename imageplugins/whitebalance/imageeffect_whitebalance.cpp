@@ -80,6 +80,7 @@
 #include "imageeffect_whitebalance.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamWhiteBalanceImagesPlugin
 {
 

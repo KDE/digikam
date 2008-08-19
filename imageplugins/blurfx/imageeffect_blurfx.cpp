@@ -54,6 +54,7 @@
 #include "imageeffect_blurfx.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamBlurFXImagesPlugin
 {
 

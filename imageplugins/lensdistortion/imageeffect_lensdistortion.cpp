@@ -62,6 +62,7 @@
 #include "imageeffect_lensdistortion.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamLensDistortionImagesPlugin
 {
 

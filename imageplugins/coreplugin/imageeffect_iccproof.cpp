@@ -90,6 +90,7 @@
 #include "imageeffect_iccproof.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamImagesPluginCore
 {
 

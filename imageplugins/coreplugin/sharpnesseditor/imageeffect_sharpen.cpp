@@ -63,6 +63,7 @@
 #include "imageeffect_sharpen.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamImagesPluginCore
 {
 

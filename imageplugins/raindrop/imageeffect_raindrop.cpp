@@ -54,6 +54,7 @@
 #include "imageeffect_raindrop.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamRainDropImagesPlugin
 {
 

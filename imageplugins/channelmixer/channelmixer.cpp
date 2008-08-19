@@ -89,6 +89,7 @@
 #include "channelmixer.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamChannelMixerImagesPlugin
 {
 

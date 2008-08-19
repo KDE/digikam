@@ -40,7 +40,11 @@ class QHButtonGroup;
 
 class KHSSelector;
 class KValueSelector;
-class KDcrawIface::RIntNumInput;
+
+namespace KDcrawIface
+{
+class RIntNumInput;
+}
 
 namespace Digikam
 {

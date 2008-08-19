@@ -80,6 +80,7 @@
 #include "imageeffect_bwsepia.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamImagesPluginCore
 {
 

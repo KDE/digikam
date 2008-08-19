@@ -69,6 +69,7 @@
 #include "imageeffect_redeye.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamImagesPluginCore
 {
 

@@ -52,6 +52,7 @@
 #include "imageeffect_emboss.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamEmbossImagesPlugin
 {
 

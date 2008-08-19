@@ -51,6 +51,7 @@
 #include "imageeffect_blur.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamImagesPluginCore
 {
 

@@ -55,6 +55,7 @@
 #include "imageeffect_oilpaint.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamOilPaintImagesPlugin
 {
 

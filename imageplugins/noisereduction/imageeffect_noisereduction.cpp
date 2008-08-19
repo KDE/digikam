@@ -62,6 +62,7 @@
 #include "imageeffect_noisereduction.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamNoiseReductionImagesPlugin
 {
 

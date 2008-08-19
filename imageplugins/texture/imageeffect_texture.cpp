@@ -55,6 +55,7 @@
 #include "imageeffect_texture.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamTextureImagesPlugin
 {
 

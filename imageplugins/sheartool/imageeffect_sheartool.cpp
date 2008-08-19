@@ -56,6 +56,7 @@
 #include "imageeffect_sheartool.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamShearToolImagesPlugin
 {
 

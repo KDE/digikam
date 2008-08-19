@@ -62,6 +62,7 @@
 #include "imageeffect_distortionfx.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamDistortionFXImagesPlugin
 {
 

@@ -38,8 +38,12 @@ class QHButtonGroup;
 class QComboBox;
 class QButtonGroup;
 
-class KDcrawIface::RIntNumInput;
 class KTabWidget;
+
+namespace KDcrawIface
+{
+class RIntNumInput;
+}
 
 namespace Digikam
 {
@@ -155,7 +159,7 @@ private:
     double m_redAttn, m_greenAttn, m_blueAttn;
 
     // Channel mixer color multiplier.
-    double m_redMult, m_greenMult, m_blueMult; 
+    double m_redMult, m_greenMult, m_blueMult;
 
     uchar                        *m_destinationPreviewData;
 

@@ -69,6 +69,7 @@
 #include "imageeffect_colorfx.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamColorFXImagesPlugin
 {
 

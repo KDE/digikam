@@ -69,6 +69,7 @@
 #include "imageeffect_hsl.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamImagesPluginCore
 {
 

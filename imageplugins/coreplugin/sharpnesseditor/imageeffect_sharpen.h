@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef IMAGEEFFECT_SHARPEN_H
@@ -31,8 +31,11 @@
 class QComboBox;
 class QWidgetStack;
 
-class KDcrawIface::RIntNumInput;
-class KDcrawIface::RDoubleNumInput;
+namespace KDcrawIface
+{
+class RIntNumInput;
+class RDoubleNumInput;
+}
 
 namespace Digikam
 {
@@ -61,7 +64,7 @@ private slots:
 private:
 
     void writeUserSettings();
-    void resetValues();  
+    void resetValues();
     void prepareEffect();
     void prepareFinal();
     void abortPreview();
@@ -70,8 +73,8 @@ private:
     void renderingFinished();
 
 private:
-    
-    enum SharpingMethods 
+
+    enum SharpingMethods
     {
         SimpleSharp=0,
         UnsharpMask,
@@ -79,7 +82,7 @@ private:
     };
 
     QWidgetStack    *m_stack;
-    
+
     QComboBox       *m_sharpMethod;
 
     KDcrawIface::RIntNumInput    *m_matrixSize;

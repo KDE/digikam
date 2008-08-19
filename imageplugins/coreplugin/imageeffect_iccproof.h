@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-12-21
- * Description : digiKam image editor tool to correct picture 
+ * Description : digiKam image editor tool to correct picture
  *               colors using an ICC color profile
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
@@ -15,12 +15,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef IMAGEEFFECT_ICCPROOF_H
@@ -40,7 +40,11 @@ class QPushButton;
 class QToolBox;
 
 class KURLRequester;
-class KDcrawIface::RIntNumInput;
+
+namespace KDcrawIface
+{
+class RIntNumInput;
+}
 
 namespace Digikam
 {
@@ -101,7 +105,7 @@ private slots:
     void slotEffect();
     void slotChannelChanged(int);
     void slotScaleChanged(int);
-    void slotSpotColorChanged(const Digikam::DColor &);    
+    void slotSpotColorChanged(const Digikam::DColor &);
     void slotColorSelectedFromTarget(const Digikam::DColor &);
     void slotToggledWidgets(bool);
     void slotInICCInfo();

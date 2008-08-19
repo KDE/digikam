@@ -57,6 +57,7 @@
 #include "imageeffect_border.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamBorderImagesPlugin
 {
 

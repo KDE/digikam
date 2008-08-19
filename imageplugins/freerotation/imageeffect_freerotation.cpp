@@ -58,6 +58,7 @@
 #include "imageeffect_freerotation.moc"
 
 using namespace KDcrawIface;
+
 namespace DigikamFreeRotationImagesPlugin
 {
 

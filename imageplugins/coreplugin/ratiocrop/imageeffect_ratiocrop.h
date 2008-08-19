@@ -36,9 +36,13 @@ class QPushButton;
 class QCheckBox;
 class QSpinBox;
 
-class KDcrawIface::RIntNumInput;
 class KIntSpinBox;
 class KColorButton;
+
+namespace KDcrawIface
+{
+class RIntNumInput;
+}
 
 namespace DigikamImagesPluginCore
 {
