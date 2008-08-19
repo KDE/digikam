@@ -34,6 +34,7 @@
 
 #include "imagedlgbase.h"
 
+class QComboBox;
 class QPushButton;
 class QLabel;
 class QPushButton;
@@ -129,11 +130,12 @@ private:
 
     int                           m_currentPreviewMode;
 
+    QComboBox                    *m_channelCB;
+
     QPushButton                  *m_pickTemperature;
     QPushButton                  *m_autoAdjustExposure;
 
     KDcrawIface::RComboBox       *m_temperaturePresetCB;
-    KDcrawIface::RComboBox       *m_channelCB;
 
     QHButtonGroup                *m_scaleBG;
 
