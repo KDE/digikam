@@ -66,6 +66,7 @@
 // LibKDcraw includes.
 
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/rcombobox.h>
 
 // Digikam includes.
 
@@ -225,11 +226,12 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                    "to the destination rendering media, e.g. the combination of paper and ink.</p>"));
 
     QLabel *intent = new QLabel(i18n("Rendering Intent:"), generalOptions);
-    m_renderingIntentsCB = new QComboBox(false, generalOptions);
+    m_renderingIntentsCB = new RComboBox(generalOptions);
     m_renderingIntentsCB->insertItem("Perceptual");
     m_renderingIntentsCB->insertItem("Absolute Colorimetric");
     m_renderingIntentsCB->insertItem("Relative Colorimetric");
     m_renderingIntentsCB->insertItem("Saturation");
+    m_renderingIntentsCB->setDefaultItem(0);
     QWhatsThis::add( m_renderingIntentsCB, i18n("<ul><li>Perceptual intent causes the full gamut "
                 "of the image to be compressed or expanded to fill the gamut of the destination media, "
                 "so that gray balance is preserved but colorimetric accuracy may not be preserved.<br>"
@@ -693,13 +695,17 @@ void ImageEffect_ICCProof::slotScaleChanged( int scale )
 void ImageEffect_ICCProof::resetValues()
 {
     m_cInput->blockSignals(true);
-    m_cInput->setValue(0);
+    m_renderingIntentsCB->blockSignals(true);
+
+    m_cInput->slotReset();
+    m_renderingIntentsCB->slotReset();
 
     for (int i = 0 ; i < 5 ; i++)
        m_curvesWidget->curves()->curvesChannelReset(i);
 
     m_curvesWidget->reset();
     m_cInput->blockSignals(false);
+    m_renderingIntentsCB->blockSignals(false);
 }
 
 void ImageEffect_ICCProof::slotEffect()

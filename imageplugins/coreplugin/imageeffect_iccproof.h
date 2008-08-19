@@ -44,6 +44,7 @@ class KURLRequester;
 namespace KDcrawIface
 {
 class RIntNumInput;
+class RComboBox;
 }
 
 namespace Digikam
@@ -145,7 +146,6 @@ private:
     uchar                          *m_destinationPreviewData;
 
     QComboBox                      *m_channelCB;
-    QComboBox                      *m_renderingIntentsCB;
 
     QCheckBox                      *m_doSoftProofBox;
     QCheckBox                      *m_checkGamutBox;
@@ -179,6 +179,8 @@ private:
     QToolBox                       *m_toolBoxWidgets;
 
     KDcrawIface::RIntNumInput      *m_cInput;
+
+    KDcrawIface::RComboBox         *m_renderingIntentsCB;
 
     KURLRequester                  *m_inProfilesPath;
     KURLRequester                  *m_spaceProfilePath;

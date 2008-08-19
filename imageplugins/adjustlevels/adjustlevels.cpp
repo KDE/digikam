@@ -211,8 +211,9 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
     m_hGradientMaxInput->installEventFilter(this);
 
-    m_minInput = new QSpinBox(0, m_histoSegments, 1, gboxSettings);
-    m_minInput->setValue(0);
+    m_minInput = new RIntNumInput(gboxSettings);
+    m_minInput->input()->setRange(0, m_histoSegments, 1, false);
+    m_minInput->setDefaultValue(0);
     QWhatsThis::add( m_minInput, i18n("<p>Select the minimal intensity input value of the histogram."));
     QToolTip::add( m_minInput, i18n( "Minimal intensity input." ) );
 
@@ -223,8 +224,9 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     QToolTip::add( m_gammaInput, i18n( "Gamma input value." ) );
     QWhatsThis::add( m_gammaInput, i18n("<p>Select the gamma input value."));
 
-    m_maxInput = new QSpinBox(0, m_histoSegments, 1, gboxSettings);
-    m_maxInput->setValue(m_histoSegments);
+    m_maxInput = new RIntNumInput(gboxSettings);
+    m_maxInput->input()->setRange(0, m_histoSegments, 1, false);
+    m_maxInput->setDefaultValue(m_histoSegments);
     QToolTip::add( m_maxInput, i18n( "Maximal intensity input." ) );
     QWhatsThis::add( m_maxInput, i18n("<p>Select the maximal intensity input value of the histogram."));
 
@@ -246,13 +248,15 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_hGradientMaxOutput->setMaxValue(m_histoSegments);
     m_hGradientMaxOutput->installEventFilter(this);
 
-    m_minOutput = new QSpinBox(0, m_histoSegments, 1, gboxSettings);
-    m_minOutput->setValue(0);
+    m_minOutput = new RIntNumInput(gboxSettings);
+    m_minOutput->input()->setRange(0, m_histoSegments, 1, false);
+    m_minOutput->setDefaultValue(0);
     QToolTip::add( m_minOutput, i18n( "Minimal intensity output." ) );
     QWhatsThis::add( m_minOutput, i18n("<p>Select the minimal intensity output value of the histogram."));
 
-    m_maxOutput = new QSpinBox(0, m_histoSegments, 1, gboxSettings);
-    m_maxOutput->setValue(m_histoSegments);
+    m_maxOutput = new RIntNumInput(gboxSettings);
+    m_maxOutput->input()->setRange(0, m_histoSegments, 1, false);
+    m_maxOutput->setDefaultValue(m_histoSegments);
     QToolTip::add( m_maxOutput, i18n( "Maximal intensity output." ) );
     QWhatsThis::add( m_maxOutput, i18n("<p>Select the maximal intensity output value of the histogram."));
 

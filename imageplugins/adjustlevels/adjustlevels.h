@@ -30,7 +30,6 @@
 #include "dimg.h"
 
 class QComboBox;
-class QSpinBox;
 class QPushButton;
 class QHButtonGroup;
 
@@ -40,6 +39,7 @@ class KGradientSelector;
 namespace KDcrawIface
 {
 class RDoubleNumInput;
+class RIntNumInput;
 }
 
 namespace Digikam
@@ -121,11 +121,6 @@ private:
 
     QComboBox                 *m_channelCB;
 
-    QSpinBox                  *m_minInput;
-    QSpinBox                  *m_maxInput;
-    QSpinBox                  *m_minOutput;
-    QSpinBox                  *m_maxOutput;
-
     QPushButton               *m_autoButton;
     QPushButton               *m_resetButton;
     QPushButton               *m_pickBlack;
@@ -135,12 +130,17 @@ private:
     QHButtonGroup             *m_pickerColorButtonGroup;
     QHButtonGroup             *m_scaleBG;
 
-    KDcrawIface::RDoubleNumInput *m_gammaInput;
-
     KGradientSelector         *m_hGradientMinInput;
     KGradientSelector         *m_hGradientMaxInput;
     KGradientSelector         *m_hGradientMinOutput;
     KGradientSelector         *m_hGradientMaxOutput;
+
+    KDcrawIface::RDoubleNumInput *m_gammaInput;
+
+    KDcrawIface::RIntNumInput *m_minInput;
+    KDcrawIface::RIntNumInput *m_maxInput;
+    KDcrawIface::RIntNumInput *m_minOutput;
+    KDcrawIface::RIntNumInput *m_maxOutput;
 
     Digikam::HistogramWidget  *m_levelsHistogramWidget;
     Digikam::HistogramWidget  *m_histogramWidget;
