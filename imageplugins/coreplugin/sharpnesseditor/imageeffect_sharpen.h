@@ -28,13 +28,13 @@
 
 #include "ctrlpaneldlg.h"
 
-class QComboBox;
 class QWidgetStack;
 
 namespace KDcrawIface
 {
 class RIntNumInput;
 class RDoubleNumInput;
+class RComboBox;
 }
 
 namespace Digikam
@@ -83,7 +83,7 @@ private:
 
     QWidgetStack    *m_stack;
 
-    QComboBox       *m_sharpMethod;
+    KDcrawIface::RComboBox       *m_sharpMethod;
 
     KDcrawIface::RIntNumInput    *m_matrixSize;
     KDcrawIface::RIntNumInput    *m_radiusInput;

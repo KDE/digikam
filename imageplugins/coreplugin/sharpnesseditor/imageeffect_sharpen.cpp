@@ -32,7 +32,6 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
-#include <qcombobox.h>
 #include <qwidgetstack.h>
 
 // KDE includes.
@@ -51,6 +50,7 @@
 // LibKDcraw includes.
 
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/rcombobox.h>
 
 // Local includes.
 
@@ -80,10 +80,11 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
 
     QLabel *label1 = new QLabel(i18n("Method:"), gboxSettings);
 
-    m_sharpMethod = new QComboBox( false, gboxSettings );
+    m_sharpMethod = new RComboBox(gboxSettings);
     m_sharpMethod->insertItem( i18n("Simple sharp") );
     m_sharpMethod->insertItem( i18n("Unsharp mask") );
     m_sharpMethod->insertItem( i18n("Refocus") );
+    m_sharpMethod->setDefaultItem(SimpleSharp);
     QWhatsThis::add( m_sharpMethod, i18n("<p>Select the sharpening method to apply to the image."));
 
     m_stack = new QWidgetStack(gboxSettings);
@@ -119,6 +120,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     QLabel *label2 = new QLabel(i18n("Radius:"), unsharpMaskSettings);
     m_radiusInput2 = new RIntNumInput(unsharpMaskSettings);
     m_radiusInput2->setRange(1, 120, 1);
+    m_radiusInput2->setDefaultValue(1);
     QWhatsThis::add( m_radiusInput2, i18n("<p>Radius value is the gaussian blur matrix radius value "
                                           "used to determines how much to blur the image.") );
 
@@ -126,6 +128,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     m_amountInput  = new RDoubleNumInput(unsharpMaskSettings);
     m_amountInput->setPrecision(1);
     m_amountInput->setRange(0.0, 5.0, 0.1);
+    m_amountInput->setDefaultValue(1.0);
     QWhatsThis::add( m_amountInput, i18n("<p>The value of the difference between the "
                                          "original and the blur image that is added back into the original.") );
 
@@ -133,6 +136,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     m_thresholdInput = new RDoubleNumInput(unsharpMaskSettings);
     m_thresholdInput->setPrecision(2);
     m_thresholdInput->setRange(0.0, 1.0, 0.01);
+    m_thresholdInput->setDefaultValue(0.05);
     QWhatsThis::add( m_thresholdInput, i18n("<p>The threshold, as a fraction of the maximum "
                                             "luminosity value, needed to apply the difference amount.") );
 
@@ -154,6 +158,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     m_radius       = new RDoubleNumInput(refocusSettings);
     m_radius->setPrecision(2);
     m_radius->setRange(0.0, 5.0, 0.01);
+    m_radius->setDefaultValue(1.0);
     QWhatsThis::add( m_radius, i18n("<p>This is the radius of the circular convolution. It is the most important "
                                     "parameter for using this plugin. For most images the default value of 1.0 "
                                     "should give good results. Select a higher value when your image is very blurred."));
@@ -162,6 +167,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     m_correlation  = new RDoubleNumInput(refocusSettings);
     m_correlation->setPrecision(2);
     m_correlation->setRange(0.0, 1.0, 0.01);
+    m_correlation->setDefaultValue(0.5);
     QWhatsThis::add( m_correlation, i18n("<p>Increasing the correlation may help to reduce artifacts. The correlation can "
                                          "range from 0-1. Useful values are 0.5 and values close to 1, e.g. 0.95 and 0.99. "
                                          "Using a high value for the correlation will reduce the sharpening effect of the "
@@ -171,6 +177,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     m_noise        = new RDoubleNumInput(refocusSettings);
     m_noise->setPrecision(3);
     m_noise->setRange(0.0, 1.0, 0.001);
+    m_noise->setDefaultValue(0.03);
     QWhatsThis::add( m_noise, i18n("<p>Increasing the noise filter parameter may help to reduce artifacts. The noise filter "
                                    "can range from 0-1 but values higher than 0.1 are rarely helpful. When the noise filter "
                                    "value is too low, e.g. 0.0 the image quality will be very poor. A useful value is 0.01. "
@@ -181,6 +188,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     m_gauss        = new RDoubleNumInput(refocusSettings);
     m_gauss->setPrecision(2);
     m_gauss->setRange(0.0, 1.0, 0.01);
+    m_gauss->setDefaultValue(0.0);
     QWhatsThis::add( m_gauss, i18n("<p>This is the sharpness for the gaussian convolution. Use this parameter when your "
                                    "blurring is of a Gaussian type. In most cases you should set this parameter to 0, because "
                                    "it causes nasty artifacts. When you use non-zero values, you will probably have to "
@@ -189,6 +197,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     QLabel *label9 = new QLabel(i18n("Matrix size:"), refocusSettings);
     m_matrixSize   = new RIntNumInput(refocusSettings);
     m_matrixSize->setRange(0, MAX_MATRIX_SIZE, 1);
+    m_matrixSize->setDefaultValue(5);
     QWhatsThis::add( m_matrixSize, i18n("<p>This parameter determines the size of the transformation matrix. "
                                         "Increasing the matrix width may give better results, especially when you have "
                                         "chosen large values for circular or gaussian sharpness."));
@@ -349,16 +358,18 @@ void ImageEffect_Sharpen::readUserSettings()
     m_correlation->blockSignals(true);
     m_noise->blockSignals(true);
     m_sharpMethod->blockSignals(true);
-    m_radiusInput->setValue(config->readNumEntry("SimpleSharpRadiusAjustment", 0));
-    m_radiusInput2->setValue(config->readNumEntry("UnsharpMaskRadiusAjustment", 1));
-    m_amountInput->setValue(config->readDoubleNumEntry("UnsharpMaskAmountAjustment", 1.0));
-    m_thresholdInput->setValue(config->readDoubleNumEntry("UnsharpMaskThresholdAjustment", 0.05));
-    m_matrixSize->setValue(config->readNumEntry("RefocusMatrixSize", 5));
-    m_radius->setValue(config->readDoubleNumEntry("RefocusRadiusAjustment", 1.0));
-    m_gauss->setValue(config->readDoubleNumEntry("RefocusGaussAjustment", 0.0));
-    m_correlation->setValue(config->readDoubleNumEntry("RefocusCorrelationAjustment", 0.5));
-    m_noise->setValue(config->readDoubleNumEntry("RefocusNoiseAjustment", 0.03));
+
+    m_radiusInput->setValue(config->readNumEntry("SimpleSharpRadiusAjustment", m_radiusInput->defaultValue()));
+    m_radiusInput2->setValue(config->readNumEntry("UnsharpMaskRadiusAjustment", m_radiusInput2->defaultValue()));
+    m_amountInput->setValue(config->readDoubleNumEntry("UnsharpMaskAmountAjustment", m_amountInput->defaultValue()));
+    m_thresholdInput->setValue(config->readDoubleNumEntry("UnsharpMaskThresholdAjustment", m_thresholdInput->defaultValue()));
+    m_matrixSize->setValue(config->readNumEntry("RefocusMatrixSize", m_matrixSize->defaultValue()));
+    m_radius->setValue(config->readDoubleNumEntry("RefocusRadiusAjustment", m_radius->defaultValue()));
+    m_gauss->setValue(config->readDoubleNumEntry("RefocusGaussAjustment", m_gauss->defaultValue()));
+    m_correlation->setValue(config->readDoubleNumEntry("RefocusCorrelationAjustment", m_correlation->defaultValue()));
+    m_noise->setValue(config->readDoubleNumEntry("RefocusNoiseAjustment", m_noise->defaultValue()));
     m_sharpMethod->setCurrentItem(config->readNumEntry("SharpenMethod", SimpleSharp));
+
     m_radiusInput->blockSignals(false);
     m_radiusInput2->blockSignals(false);
     m_amountInput->blockSignals(false);
@@ -369,6 +380,7 @@ void ImageEffect_Sharpen::readUserSettings()
     m_correlation->blockSignals(false);
     m_noise->blockSignals(false);
     m_sharpMethod->blockSignals(false);
+
     slotSharpMethodActived(m_sharpMethod->currentItem());
 }
 
@@ -396,7 +408,7 @@ void ImageEffect_Sharpen::resetValues(void)
     case SimpleSharp:
     {
         m_radiusInput->blockSignals(true);
-        m_radiusInput->setValue(0);
+        m_radiusInput->slotReset();
         m_radiusInput->blockSignals(false);
         break;
     }
@@ -406,9 +418,11 @@ void ImageEffect_Sharpen::resetValues(void)
         m_radiusInput2->blockSignals(true);
         m_amountInput->blockSignals(true);
         m_thresholdInput->blockSignals(true);
-        m_radiusInput2->setValue(1);
-        m_amountInput->setValue(1.0);
-        m_thresholdInput->setValue(0.05);
+
+        m_radiusInput2->slotReset();
+        m_amountInput->slotReset();
+        m_thresholdInput->slotReset();
+
         m_radiusInput2->blockSignals(false);
         m_amountInput->blockSignals(false);
         m_thresholdInput->blockSignals(false);
@@ -422,11 +436,13 @@ void ImageEffect_Sharpen::resetValues(void)
         m_gauss->blockSignals(true);
         m_correlation->blockSignals(true);
         m_noise->blockSignals(true);
-        m_matrixSize->setValue(5);
-        m_radius->setValue(1.0);
-        m_gauss->setValue(0.0);
-        m_correlation->setValue(0.5);
-        m_noise->setValue(0.03);
+
+        m_matrixSize->slotReset();
+        m_radius->slotReset();
+        m_gauss->slotReset();
+        m_correlation->slotReset();
+        m_noise->slotReset();
+
         m_matrixSize->blockSignals(false);
         m_radius->blockSignals(false);
         m_gauss->blockSignals(false);
