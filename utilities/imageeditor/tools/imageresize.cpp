@@ -59,6 +59,10 @@
 #include <knuminput.h>
 #include <kglobalsettings.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Digikam includes.
 
 #include "dimg.h"
@@ -73,6 +77,8 @@
 
 #include "imageresize.h"
 #include "imageresize.moc"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -97,7 +103,7 @@ public:
         wInput               = 0;
         hInput               = 0;
         wpInput              = 0;
-        hpInput              = 0;    
+        hpInput              = 0;
         progressBar          = 0;
         greycstorationIface  = 0;
         settingsWidget       = 0;
@@ -106,31 +112,31 @@ public:
     }
 
     int                   currentRenderingMode;
-    int                   orgWidth;    
-    int                   orgHeight;   
-    int                   prevW; 
-    int                   prevH; 
+    int                   orgWidth;
+    int                   orgHeight;
+    int                   prevW;
+    int                   prevH;
 
-    double                prevWP;    
-    double                prevHP;    
+    double                prevWP;
+    double                prevHP;
 
     QWidget              *parent;
 
     QLabel               *restorationTips;
-    
+
     QCheckBox            *preserveRatioBox;
     QCheckBox            *useGreycstorationBox;
-    
+
     QTabWidget           *mainTab;
 
-    KIntNumInput         *wInput;
-    KIntNumInput         *hInput;
+    RIntNumInput         *wInput;
+    RIntNumInput         *hInput;
 
-    KDoubleNumInput      *wpInput;
-    KDoubleNumInput      *hpInput;
-    
+    RDoubleNumInput      *wpInput;
+    RDoubleNumInput      *hpInput;
+
     KProgress            *progressBar;
-    
+
     KURLLabel            *cimgLogoLabel;
 
     GreycstorationIface  *greycstorationIface;
@@ -143,7 +149,7 @@ ImageResize::ImageResize(QWidget* parent)
                          parent, 0, true, false,
                          QString(),
                          i18n("&Save As..."),
-                         i18n("&Load..."))             
+                         i18n("&Load..."))
 {
     d = new ImageResizePriv;
     d->parent = parent;
@@ -172,26 +178,26 @@ ImageResize::ImageResize(QWidget* parent)
     d->mainTab->addTab( firstPage, i18n("New Size") );
 
     QLabel *label1 = new QLabel(i18n("Width:"), firstPage);
-    d->wInput      = new KIntNumInput(firstPage);
-    d->wInput->setRange(1, QMAX(d->orgWidth * 10, 9999), 1, true);
+    d->wInput      = new RIntNumInput(firstPage);
+    d->wInput->setRange(1, QMAX(d->orgWidth * 10, 9999), 1);
     d->wInput->setName("d->wInput");
     QWhatsThis::add( d->wInput, i18n("<p>Set here the new image width in pixels."));
 
     QLabel *label2 = new QLabel(i18n("Height:"), firstPage);
-    d->hInput      = new KIntNumInput(firstPage);
-    d->hInput->setRange(1, QMAX(d->orgHeight * 10, 9999), 1, true);
+    d->hInput      = new RIntNumInput(firstPage);
+    d->hInput->setRange(1, QMAX(d->orgHeight * 10, 9999), 1);
     d->hInput->setName("d->hInput");
     QWhatsThis::add( d->hInput, i18n("<p>Set here the new image height in pixels."));
 
     QLabel *label3 = new QLabel(i18n("Width (%):"), firstPage);
-    d->wpInput     = new KDoubleNumInput(firstPage);
-    d->wpInput->setRange(1.0, 999.0, 1.0, true);
+    d->wpInput     = new RDoubleNumInput(firstPage);
+    d->wpInput->setRange(1.0, 999.0, 1.0);
     d->wpInput->setName("d->wpInput");
     QWhatsThis::add( d->wpInput, i18n("<p>Set here the new image width in percent."));
 
     QLabel *label4 = new QLabel(i18n("Height (%):"), firstPage);
-    d->hpInput     = new KDoubleNumInput(firstPage);
-    d->hpInput->setRange(1.0, 999.0, 1.0, true);
+    d->hpInput     = new RDoubleNumInput(firstPage);
+    d->hpInput->setRange(1.0, 999.0, 1.0);
     d->hpInput->setName("d->hpInput");
     QWhatsThis::add( d->hpInput, i18n("<p>Set here the new image height in percent."));
 
@@ -212,7 +218,7 @@ ImageResize::ImageResize(QWidget* parent)
     QWhatsThis::add( d->useGreycstorationBox, i18n("<p>Enable this option to restore photograph content. "
                                                    "This way is usefull to scale-up an image to an huge size. "
                                                    "Warning: this process can take a while."));
-    
+
     d->restorationTips = new QLabel(i18n("<b>Note: use Restoration Mode to only scale-up an image to huge size. "
                                          "Warning, this process can take a while.</b>"), firstPage);
 
@@ -254,13 +260,13 @@ ImageResize::ImageResize(QWidget* parent)
 
     connect(d->wInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotValuesChanged()));
-            
+
     connect(d->hInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotValuesChanged()));
-            
+
     connect(d->wpInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotValuesChanged()));
-            
+
     connect(d->hpInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotValuesChanged()));
 
@@ -283,7 +289,7 @@ void ImageResize::slotRestorationToggled(bool b)
     d->cimgLogoLabel->setEnabled(b);
     enableButton(User2, b);
     enableButton(User3, b);
-}    
+}
 
 void ImageResize::readUserSettings()
 {
@@ -351,7 +357,7 @@ void ImageResize::writeUserSettings()
 void ImageResize::slotDefault()
 {
     GreycstorationSettings settings;
-    settings.setResizeDefaultSettings();   
+    settings.setResizeDefaultSettings();
     d->settingsWidget->setSettings(settings);
     d->useGreycstorationBox->setChecked(false);
     slotRestorationToggled(d->useGreycstorationBox->isChecked());
@@ -380,9 +386,9 @@ void ImageResize::slotValuesChanged()
     d->hInput->blockSignals(true);
     d->wpInput->blockSignals(true);
     d->hpInput->blockSignals(true);
-    
+
     QString s(sender()->name());
-    
+
     if (s == "d->wInput")
     {
         double val = d->wInput->value();
@@ -440,7 +446,7 @@ void ImageResize::slotValuesChanged()
     d->prevH  = d->hInput->value();
     d->prevWP = d->wpInput->value();
     d->prevHP = d->hpInput->value();
-    
+
     d->wInput->blockSignals(false);
     d->hInput->blockSignals(false);
     d->wpInput->blockSignals(false);
@@ -506,13 +512,13 @@ void ImageResize::slotOk()
     {
         d->progressBar->setValue(0);
         d->progressBar->setEnabled(true);
-        
+
         if (d->greycstorationIface)
         {
             delete d->greycstorationIface;
             d->greycstorationIface = 0;
         }
-        
+
         d->greycstorationIface = new GreycstorationIface(
                                  &image, d->settingsWidget->getSettings(),
                                  GreycstorationIface::Resize,
@@ -524,7 +530,7 @@ void ImageResize::slotOk()
     {
         // See B.K.O #152192: CImg resize() sound like bugous or unadapted
         // to resize image without good quality.
-    
+
         image.resize(d->wInput->value(), d->hInput->value());
         iface.putOriginalImage(i18n("Resize"), image.bits(),
                                image.width(), image.height());
@@ -554,7 +560,7 @@ void ImageResize::customEvent(QCustomEvent *event)
                 case ImageResizePriv::FinalRendering:
                 {
                     DDebug() << "Final resizing completed..." << endl;
-                    
+
                     ImageIface iface(0, 0);
                     DImg resizedImage = d->greycstorationIface->getTargetImage();
 
@@ -589,14 +595,14 @@ void ImageResize::slotUser3()
 
     QFile file(loadBlowupFile.path());
 
-    if ( file.open(IO_ReadOnly) )   
+    if ( file.open(IO_ReadOnly) )
     {
         if (!d->settingsWidget->loadSettings(file, QString("# Photograph Resizing Configuration File")))
         {
-           KMessageBox::error(this, 
+           KMessageBox::error(this,
                         i18n("\"%1\" is not a Photograph Resizing settings text file.")
                         .arg(loadBlowupFile.fileName()));
-           file.close();            
+           file.close();
            return;
         }
     }
@@ -616,7 +622,7 @@ void ImageResize::slotUser2()
 
     QFile file(saveBlowupFile.path());
 
-    if ( file.open(IO_WriteOnly) )   
+    if ( file.open(IO_WriteOnly) )
         d->settingsWidget->saveSettings(file, QString("# Photograph Resizing Configuration File"));
     else
         KMessageBox::error(this, i18n("Cannot save settings to the Photograph Resizing text file."));
