@@ -37,6 +37,7 @@ class QLabel;
 namespace KDcrawIface
 {
 class RIntNumInput;
+class RComboBox;
 }
 
 namespace Digikam
@@ -110,7 +111,6 @@ private:
     uchar                        *m_destinationPreviewData;
 
     QComboBox                    *m_channelCB;
-    QComboBox                    *m_effectType;
 
     QHButtonGroup                *m_scaleBG;
 
@@ -120,6 +120,8 @@ private:
 
     KDcrawIface::RIntNumInput    *m_levelInput;
     KDcrawIface::RIntNumInput    *m_iterationInput;
+
+    KDcrawIface::RComboBox       *m_effectType;
 
     Digikam::ImageWidget         *m_previewWidget;
 

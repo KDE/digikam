@@ -52,6 +52,7 @@
 // LibKDcraw includes.
 
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/rcombobox.h>
 
 // Local includes.
 
@@ -175,11 +176,12 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
 
     m_effectTypeLabel = new QLabel(i18n("Type:"), gboxSettings);
 
-    m_effectType = new QComboBox( false, gboxSettings );
+    m_effectType = new RComboBox(gboxSettings);
     m_effectType->insertItem( i18n("Solarize") );
     m_effectType->insertItem( i18n("Vivid") );
     m_effectType->insertItem( i18n("Neon") );
     m_effectType->insertItem( i18n("Find Edges") );
+    m_effectType->setDefaultItem(0);
     QWhatsThis::add( m_effectType, i18n("<p>Select the effect type to apply to the image here.<p>"
                                         "<b>Solarize</b>: simulates solarization of photograph.<p>"
                                         "<b>Vivid</b>: simulates the Velvia(tm) slide film colors.<p>"
@@ -194,6 +196,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     m_levelLabel = new QLabel(i18n("Level:"), gboxSettings);
     m_levelInput = new RIntNumInput(gboxSettings);
     m_levelInput->setRange(0, 100, 1);
+    m_levelInput->setDefaultValue(0);
     QWhatsThis::add( m_levelInput, i18n("<p>Set here the level of the effect."));
 
     gridSettings->addMultiCellWidget(m_levelLabel, 5, 5, 0, 4);
@@ -202,6 +205,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     m_iterationLabel = new QLabel(i18n("Iteration:"), gboxSettings);
     m_iterationInput = new RIntNumInput(gboxSettings);
     m_iterationInput->setRange(0, 100, 1);
+    m_iterationInput->setDefaultValue(0);
     QWhatsThis::add( m_iterationInput, i18n("<p>This value controls the number of iterations "
                                             "to use with the Neon and Find Edges effects."));
 
@@ -267,7 +271,17 @@ void ImageEffect_ColorFX::writeUserSettings()
 
 void ImageEffect_ColorFX::resetValues()
 {
-    m_levelInput->setValue(0);
+    m_levelInput->blockSignals(true);
+    m_iterationInput->blockSignals(true);
+    m_effectType->blockSignals(true);
+
+    m_levelInput->slotReset();
+    m_iterationInput->slotReset();
+    m_effectType->slotReset();
+
+    m_levelInput->blockSignals(false);
+    m_iterationInput->blockSignals(false);
+    m_effectType->blockSignals(false);
 }
 
 void ImageEffect_ColorFX::slotChannelChanged(int channel)
