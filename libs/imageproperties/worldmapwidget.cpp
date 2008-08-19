@@ -46,6 +46,8 @@
 #include "worldmapwidget.h"
 #include "worldmapwidget.moc"
 
+using namespace Marble;
+
 namespace Digikam
 {
 

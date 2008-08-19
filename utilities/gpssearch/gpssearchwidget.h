@@ -41,6 +41,8 @@
 #include <marble/MarbleWidget.h>
 #endif // HAVE_MARBLEWIDGET
 
+using namespace Marble;
+
 namespace Digikam
 {
 
