@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-12-01
- * Description : a widget di draw an histogram curve.
+ * Description : a widget to draw histogram curves
  *
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -111,11 +111,11 @@ protected slots:
 
 protected:
 
-    void paintEvent( QPaintEvent * );
-    void mousePressEvent ( QMouseEvent * e );
-    void mouseReleaseEvent ( QMouseEvent * e );
-    void mouseMoveEvent ( QMouseEvent * e );
-    void leaveEvent ( QEvent * );
+    void paintEvent(QPaintEvent*);
+    void mousePressEvent(QMouseEvent*);
+    void mouseReleaseEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
+    void leaveEvent(QEvent*);
 
 private:
 
@@ -124,7 +124,6 @@ private:
 private:
 
     CurvesWidgetPriv* d;
-
 };
 
 }  // NameSpace Digikam
