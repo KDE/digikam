@@ -358,11 +358,6 @@ AdjustCurveDialog::~AdjustCurveDialog()
 
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
-
-    delete m_histogramWidget;
-    delete m_curvesWidget;
-    delete m_previewWidget;
-    delete m_curvesWidget->curves();
 }
 
 void AdjustCurveDialog::slotPickerColorButtonActived()
