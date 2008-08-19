@@ -177,7 +177,6 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                      m_previewWidget(0),
                      m_histogramWidget(0),
                      m_curvesWidget(0),
-                     m_curves(0),
                      m_originalImage(0),
                      m_previewPixmapFactory(0)
 {
@@ -186,7 +185,6 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     Digikam::ImageIface iface(0, 0);
     m_originalImage  = iface.getOriginalImg();
     m_thumbnailImage = m_originalImage->smoothScale(128, 128, Qt::ScaleMin);
-    m_curves         = new Digikam::ImageCurves(m_originalImage->sixteenBit());
 
     // -------------------------------------------------------------
 
@@ -458,7 +456,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     m_curvesWidget = new Digikam::CurvesWidget(256, 256, m_originalImage->bits(), m_originalImage->width(),
                                                m_originalImage->height(), m_originalImage->sixteenBit(),
-                                               m_curves, curveBox);
+                                               curveBox);
     m_curvesWidget->setWhatsThis( i18n("<p>This is the curve adjustment of the image luminosity"));
 
     QLabel *spaceh = new QLabel(curveBox);
@@ -545,11 +543,6 @@ ImageEffect_BWSepia::~ImageEffect_BWSepia()
     m_histogramWidget->stopHistogramComputation();
 
     delete [] m_destinationPreviewData;
-
-    delete m_histogramWidget;
-    delete m_previewWidget;
-    delete m_curvesWidget;
-    delete m_curves;
 }
 
 void ImageEffect_BWSepia::updatePreviews()
@@ -604,11 +597,11 @@ QPixmap ImageEffect_BWSepia::getThumbnailForEffect(int type)
         blackAndWhiteConversion(thumb.bits(), w, h, sb, type);
     }
 
-    if (m_curves)   // in case we're called before the creator is done
+    if (m_curvesWidget->curves())   // in case we're called before the creator is done
     {
         uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
-        m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
-        m_curves->curvesLutProcess(thumb.bits(), targetData, w, h);
+        m_curvesWidget->curves()->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
+        m_curvesWidget->curves()->curvesLutProcess(thumb.bits(), targetData, w, h);
 
         Digikam::DImg preview(w, h, sb, a, targetData);
         Digikam::BCGModifier cmod;
@@ -685,9 +678,9 @@ void ImageEffect_BWSepia::readUserSettings()
     m_strengthInput->setValue(group.readEntry("StrengthAjustment", 1));
 
     for (int i = 0 ; i < 5 ; i++)
-        m_curves->curvesChannelReset(i);
+        m_curvesWidget->curves()->curvesChannelReset(i);
 
-    m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
+    m_curvesWidget->curves()->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
     m_curvesWidget->reset();
 
     for (int j = 0 ; j < 17 ; j++)
@@ -701,11 +694,11 @@ void ImageEffect_BWSepia::readUserSettings()
             p.setY(p.y()*255);
         }
 
-        m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, j, p);
+        m_curvesWidget->curves()->setCurvePoint(Digikam::ImageHistogram::ValueChannel, j, p);
     }
 
     for (int i = 0 ; i < 5 ; i++)
-        m_curves->curvesCalculateCurve(i);
+        m_curvesWidget->curves()->curvesCalculateCurve(i);
 
     slotChannelChanged(m_channelCB->currentIndex());
     slotScaleChanged(m_scaleBG->checkedId());
@@ -727,7 +720,7 @@ void ImageEffect_BWSepia::writeUserSettings()
 
     for (int j = 0 ; j < 17 ; j++)
     {
-        QPoint p = m_curves->getCurvePoint(Digikam::ImageHistogram::ValueChannel, j);
+        QPoint p = m_curvesWidget->curves()->getCurvePoint(Digikam::ImageHistogram::ValueChannel, j);
 
         if (m_originalImage->sixteenBit() && p.x() != -1)
         {
@@ -754,7 +747,7 @@ void ImageEffect_BWSepia::resetValues()
     m_cInput->setValue(0);
 
     for (int channel = 0 ; channel < 5 ; channel++)
-       m_curves->curvesChannelReset(channel);
+       m_curvesWidget->curves()->curvesChannelReset(channel);
 
     m_curvesWidget->reset();
 
@@ -800,8 +793,8 @@ void ImageEffect_BWSepia::slotEffect()
     // Calculate and apply the curve on image.
 
     uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
-    m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
-    m_curves->curvesLutProcess(m_destinationPreviewData, targetData, w, h);
+    m_curvesWidget->curves()->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
+    m_curvesWidget->curves()->curvesLutProcess(m_destinationPreviewData, targetData, w, h);
 
     // Adjust contrast.
 
@@ -861,8 +854,8 @@ void ImageEffect_BWSepia::finalRendering()
         // Calculate and apply the curve on image.
 
         uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
-        m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
-        m_curves->curvesLutProcess(data, targetData, w, h);
+        m_curvesWidget->curves()->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
+        m_curvesWidget->curves()->curvesLutProcess(data, targetData, w, h);
 
         // Adjust contrast.
 
@@ -1135,9 +1128,9 @@ void ImageEffect_BWSepia::slotUser3()
         m_cInput->setValue(stream.readLine().toInt());
 
         for (int i = 0 ; i < 5 ; i++)
-            m_curves->curvesChannelReset(i);
+            m_curvesWidget->curves()->curvesChannelReset(i);
 
-        m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
+        m_curvesWidget->curves()->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
         m_curvesWidget->reset();
 
         for (int j = 0 ; j < 17 ; j++)
@@ -1153,11 +1146,11 @@ void ImageEffect_BWSepia::slotUser3()
                 p.setY(p.y()*255);
             }
 
-            m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, j, p);
+            m_curvesWidget->curves()->setCurvePoint(Digikam::ImageHistogram::ValueChannel, j, p);
         }
 
         for (int i = 0 ; i < 5 ; i++)
-           m_curves->curvesCalculateCurve(i);
+           m_curvesWidget->curves()->curvesCalculateCurve(i);
 
         m_bwFilters->blockSignals(false);
         m_bwTone->blockSignals(false);
@@ -1199,7 +1192,7 @@ void ImageEffect_BWSepia::slotUser2()
 
         for (int j = 0 ; j < 17 ; j++)
         {
-            QPoint p = m_curves->getCurvePoint(Digikam::ImageHistogram::ValueChannel, j);
+            QPoint p = m_curvesWidget->curves()->getCurvePoint(Digikam::ImageHistogram::ValueChannel, j);
             if (m_originalImage->sixteenBit())
             {
                 p.setX(p.x()/255);

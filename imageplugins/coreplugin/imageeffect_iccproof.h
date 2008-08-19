@@ -15,12 +15,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef IMAGEEFFECT_ICCPROOF_H
@@ -46,7 +46,6 @@ class HistogramWidget;
 class ColorGradientWidget;
 class DColor;
 class ICCPreviewWidget;
-class ImageCurves;
 class CurvesWidget;
 }
 
@@ -122,7 +121,7 @@ private:
         GreenChannel,
         BlueChannel
     };
-    
+
     enum ICCSettingsTab
     {
         GENERALPAGE=0,
@@ -134,7 +133,7 @@ private:
 
     bool                            m_cmEnabled;
     bool                            m_hasICC;
-    
+
     uchar                          *m_destinationPreviewData;
 
     QComboBox                      *m_channelCB;
@@ -165,7 +164,7 @@ private:
     QButtonGroup                   *m_scaleBG;
     QButtonGroup                   *m_renderingIntentBG;
     QButtonGroup                   *m_profilesBG;
-    
+
     QByteArray                      m_embeddedICC;
 
     QToolBox                       *m_toolBoxWidgets;
@@ -175,12 +174,10 @@ private:
     KUrlRequester                  *m_inProfilesPath;
     KUrlRequester                  *m_spaceProfilePath;
     KUrlRequester                  *m_proofProfilePath;
-        
+
     Digikam::DImg                  *m_originalImage;
 
     Digikam::CurvesWidget          *m_curvesWidget;
-
-    Digikam::ImageCurves           *m_curves;
 
     Digikam::ImageWidget           *m_previewWidget;
 
