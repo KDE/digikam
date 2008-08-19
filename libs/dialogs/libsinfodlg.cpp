@@ -74,8 +74,6 @@ extern "C"
 #include "libsinfodlg.h"
 #include "libsinfodlg.moc"
 
-using namespace Marble;
-
 namespace Digikam
 {
 
