@@ -44,6 +44,7 @@
 #include "config-digikam.h"
 #ifdef HAVE_MARBLEWIDGET
 #include <marble/global.h>
+using namespace Marble;
 #endif // HAVE_MARBLEWIDGET
 
 // Libkexiv2 includes

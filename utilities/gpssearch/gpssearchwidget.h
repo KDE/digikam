@@ -39,9 +39,8 @@
 
 #ifdef HAVE_MARBLEWIDGET
 #include <marble/MarbleWidget.h>
-#endif // HAVE_MARBLEWIDGET
-
 using namespace Marble;
+#endif // HAVE_MARBLEWIDGET
 
 namespace Digikam
 {

@@ -38,6 +38,7 @@
 #include "config-digikam.h"
 #ifdef HAVE_MARBLEWIDGET
 #include <marble/MarbleWidget.h>
+using namespace Marble;
 #endif // HAVE_MARBLEWIDGET
 
 // Local includes.
@@ -46,7 +47,6 @@
 #include "worldmapwidget.h"
 #include "worldmapwidget.moc"
 
-using namespace Marble;
 
 namespace Digikam
 {
