@@ -225,21 +225,21 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
     connect(m_rSlider, SIGNAL(valueChanged(int)),
-            m_rInput, SLOT(setValue(int)));
+            m_rInput->input(), SLOT(setValue(int)));
     connect(m_rInput, SIGNAL(valueChanged (int)),
             m_rSlider, SLOT(setValue(int)));
     connect(m_rInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotTimer()));
 
     connect(m_gSlider, SIGNAL(valueChanged(int)),
-            m_gInput, SLOT(setValue(int)));
+            m_gInput->input(), SLOT(setValue(int)));
     connect(m_gInput, SIGNAL(valueChanged (int)),
             m_gSlider, SLOT(setValue(int)));
     connect(m_gInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotTimer()));
 
     connect(m_bSlider, SIGNAL(valueChanged(int)),
-            m_bInput, SLOT(setValue(int)));
+            m_bInput->input(), SLOT(setValue(int)));
     connect(m_bInput, SIGNAL(valueChanged (int)),
             m_bSlider, SLOT(setValue(int)));
     connect(m_bInput, SIGNAL(valueChanged (int)),
@@ -331,7 +331,11 @@ void ImageEffect_RGB::writeUserSettings()
 
 void ImageEffect_RGB::resetValues()
 {
-    adjustSliders(0, 0, 0);
+    int r = m_rInput->defaultValue();
+    int g = m_gInput->defaultValue();
+    int b = m_bInput->defaultValue();
+
+    adjustSliders(r, g, b);
 }
 
 void ImageEffect_RGB::adjustSliders(int r, int g, int b)

@@ -289,9 +289,11 @@ void ImageEffect_BCG::resetValues()
     m_bInput->blockSignals(true);
     m_cInput->blockSignals(true);
     m_gInput->blockSignals(true);
-    m_bInput->setValue(0);
-    m_cInput->setValue(0);
-    m_gInput->setValue(1.0);
+
+    m_bInput->slotReset();
+    m_cInput->slotReset();
+    m_gInput->slotReset();
+
     m_bInput->blockSignals(false);
     m_cInput->blockSignals(false);
     m_gInput->blockSignals(false);

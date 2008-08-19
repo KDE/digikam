@@ -350,11 +350,14 @@ void ImageEffect_HSL::resetValues()
     m_hInput->blockSignals(true);
     m_sInput->blockSignals(true);
     m_lInput->blockSignals(true);
-    m_hInput->setValue(0.0);
-    m_sInput->setValue(0.0);
-    m_lInput->setValue(0.0);
+
+    m_hInput->slotReset();
+    m_sInput->slotReset();
+    m_lInput->slotReset();
+
     slotHChanged(0.0);
     slotSChanged(0.0);
+
     m_hInput->blockSignals(false);
     m_sInput->blockSignals(false);
     m_lInput->blockSignals(false);

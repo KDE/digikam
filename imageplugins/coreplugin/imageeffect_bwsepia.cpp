@@ -717,7 +717,8 @@ void ImageEffect_BWSepia::resetValues()
     m_bwTone->setCurrentItem(0);
     m_bwTone->setSelected(0, true);
 
-    m_cInput->setValue(0);
+    m_cInput->slotReset();
+    m_strengthInput->slotReset();
 
     for (int channel = 0 ; channel < 5 ; channel++)
        m_curvesWidget->curves()->curvesChannelReset(channel);
