@@ -178,7 +178,7 @@ private:
 
     QToolBox                       *m_toolBoxWidgets;
 
-    KDcrawIface::RIntNumInput                   *m_cInput;
+    KDcrawIface::RIntNumInput      *m_cInput;
 
     KURLRequester                  *m_inProfilesPath;
     KURLRequester                  *m_spaceProfilePath;
