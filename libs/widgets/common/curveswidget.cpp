@@ -115,7 +115,7 @@ CurvesWidget::CurvesWidget(int w, int h, QWidget *parent, bool readOnly)
     setup(w, h, readOnly);
 }
 
-CurvesWidget::CurvesWidget(int w, int h, 
+CurvesWidget::CurvesWidget(int w, int h,
                            uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits,
                            QWidget *parent, bool readOnly)
             : QWidget(parent, 0, Qt::WDestructiveClose)
@@ -153,8 +153,8 @@ void CurvesWidget::setup(int w, int h, bool readOnly)
 
     d->blinkTimer = new QTimer( this );
 
-    connect( d->blinkTimer, SIGNAL(timeout()),
-             this, SLOT(slotBlinkTimerDone()) );
+    connect(d->blinkTimer, SIGNAL(timeout()),
+            this, SLOT(slotBlinkTimerDone()));
 }
 
 void CurvesWidget::updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits)
@@ -371,9 +371,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
     int    wWidth  = width();
     int    wHeight = height();
     double max;
-    class ImageHistogram *histogram;
-
-    histogram = m_imageHistogram;
+    class ImageHistogram *histogram = m_imageHistogram;
 
     x   = 0;
     y   = 0;
@@ -809,7 +807,9 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent *e)
                     m_imageHistogram->getHistogramSegment()-1 - (y1 + ((y2 - y1) * (i - x1)) / (x2 - x1)));
            }
            else
+           {
               d->curves->setCurveValue(m_channelType, x, m_imageHistogram->getHistogramSegment()-1 - y);
+           }
 
            d->grabPoint = x;
            d->last      = y;
