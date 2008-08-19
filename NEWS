@@ -29,6 +29,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 164622 : crash using timeline when switching from month to week to month view.
 021 ==> 141951 : Blank empty context right-click menus.
 022 ==> 116886 : Proposal for adding a new destripe/denoise technique.
-023 ==> 
+023 ==> 163602 : Race condition during image download from Camera/ USB device: image corruption and/or loss.
+024 ==> 
 
  
