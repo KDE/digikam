@@ -309,9 +309,9 @@ void ImageEffect_RGB::readUserSettings()
     config->setGroup("colorbalance Tool Dialog");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
-    int r = config->readNumEntry("RedAjustment", 0);
-    int g = config->readNumEntry("GreenAjustment", 0);
-    int b = config->readNumEntry("BlueAjustment", 0);
+    int r = config->readNumEntry("RedAjustment", m_rInput->defaultValue());
+    int g = config->readNumEntry("GreenAjustment", m_gInput->defaultValue());
+    int b = config->readNumEntry("BlueAjustment", m_bInput->defaultValue());
     adjustSliders(r, g, b);
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());

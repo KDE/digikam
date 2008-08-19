@@ -265,9 +265,9 @@ void ImageEffect_BCG::readUserSettings()
     config->setGroup("bcgadjust Tool Dialog");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
-    m_bInput->setValue(config->readNumEntry("BrightnessAjustment", 0));
-    m_cInput->setValue(config->readNumEntry("ContrastAjustment", 0));
-    m_gInput->setValue(config->readDoubleNumEntry("GammaAjustment", 1.0));
+    m_bInput->setValue(config->readNumEntry("BrightnessAjustment", m_bInput->defaultValue()));
+    m_cInput->setValue(config->readNumEntry("ContrastAjustment", m_cInput->defaultValue()));
+    m_gInput->setValue(config->readDoubleNumEntry("GammaAjustment", m_gInput->defaultValue()));
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
 }

@@ -199,6 +199,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     m_temperatureInput    = new RDoubleNumInput(gboxSettings);
     m_temperatureInput->setPrecision(1);
     m_temperatureInput->setRange(2000.0, 12000.0, 10.0);
+    m_temperatureInput->setDefaultValue(6500.0);
     QWhatsThis::add( m_temperatureInput, i18n("<p>Set here the white balance color temperature in Kelvin."));
 
     m_temperaturePresetLabel = new QLabel(i18n("Preset:"), gboxSettings);
@@ -748,14 +749,14 @@ void ImageEffect_WhiteBalance::readUserSettings()
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
 
-    m_darkInput->setValue(config->readDoubleNumEntry("Dark", 0.5));
-    m_blackInput->setValue(config->readDoubleNumEntry("Black", 0.0));
-    m_mainExposureInput->setValue(config->readDoubleNumEntry("MainExposure", 0.0));
-    m_fineExposureInput->setValue(config->readDoubleNumEntry("FineExposure", 0.0));
-    m_gammaInput->setValue(config->readDoubleNumEntry("Gamma", 1.0));
-    m_saturationInput->setValue(config->readDoubleNumEntry("Saturation", 1.0));
-    m_greenInput->setValue(config->readDoubleNumEntry("Green", 1.0));
-    m_temperatureInput->setValue(config->readDoubleNumEntry("Temperature", 6500.0));
+    m_darkInput->setValue(config->readDoubleNumEntry("Dark",m_darkInput->defaultValue()));
+    m_blackInput->setValue(config->readDoubleNumEntry("Black", m_blackInput->defaultValue()));
+    m_mainExposureInput->setValue(config->readDoubleNumEntry("MainExposure", m_mainExposureInput->defaultValue()));
+    m_fineExposureInput->setValue(config->readDoubleNumEntry("FineExposure", m_fineExposureInput->defaultValue()));
+    m_gammaInput->setValue(config->readDoubleNumEntry("Gamma", m_gammaInput->defaultValue()));
+    m_saturationInput->setValue(config->readDoubleNumEntry("Saturation", m_saturationInput->defaultValue()));
+    m_greenInput->setValue(config->readDoubleNumEntry("Green", m_greenInput->defaultValue()));
+    m_temperatureInput->setValue(config->readDoubleNumEntry("Temperature", m_temperatureInput->defaultValue()));
     slotTemperatureChanged(m_temperatureInput->value());
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());

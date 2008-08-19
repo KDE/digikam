@@ -570,7 +570,7 @@ void ImageEffect_ICCProof::readUserSettings()
     m_inProfilesPath->setURL(config->readPathEntry("InputProfilePath", defaultICCPath));
     m_proofProfilePath->setURL(config->readPathEntry("ProofProfilePath", defaultICCPath));
     m_spaceProfilePath->setURL(config->readPathEntry("SpaceProfilePath", defaultICCPath));
-    m_renderingIntentsCB->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
+    m_renderingIntentsCB->setCurrentItem(config->readNumEntry("RenderingIntent", m_renderingIntentsCB->defaultItem()));
     m_doSoftProofBox->setChecked(config->readBoolEntry("DoSoftProof", false));
     m_checkGamutBox->setChecked(config->readBoolEntry("CheckGamut", false));
     m_embeddProfileBox->setChecked(config->readBoolEntry("EmbeddProfile", true));
@@ -578,7 +578,7 @@ void ImageEffect_ICCProof::readUserSettings()
     m_inProfileBG->setButton(config->readNumEntry("InputProfileMethod", 0));
     m_spaceProfileBG->setButton(config->readNumEntry("SpaceProfileMethod", 0));
     m_proofProfileBG->setButton(config->readNumEntry("ProofProfileMethod", 0));
-    m_cInput->setValue(config->readNumEntry("ContrastAjustment", 0));
+    m_cInput->setValue(config->readNumEntry("ContrastAjustment", m_cInput->defaultValue()));
 
     for (int i = 0 ; i < 5 ; i++)
         m_curvesWidget->curves()->curvesChannelReset(i);

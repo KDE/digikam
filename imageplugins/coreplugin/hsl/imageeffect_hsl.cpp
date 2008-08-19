@@ -324,9 +324,9 @@ void ImageEffect_HSL::readUserSettings()
     config->setGroup("hsladjust Tool Dialog");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
-    m_hInput->setValue(config->readDoubleNumEntry("HueAjustment", 0.0));
-    m_sInput->setValue(config->readDoubleNumEntry("SaturationAjustment", 0.0));
-    m_lInput->setValue(config->readDoubleNumEntry("LighnessAjustment", 0.0));
+    m_hInput->setValue(config->readDoubleNumEntry("HueAjustment", m_hInput->defaultValue()));
+    m_sInput->setValue(config->readDoubleNumEntry("SaturationAjustment", m_sInput->defaultValue()));
+    m_lInput->setValue(config->readDoubleNumEntry("LighnessAjustment", m_lInput->defaultValue()));
     slotHChanged(m_hInput->value());
     slotSChanged(m_sInput->value());
     slotChannelChanged(m_channelCB->currentItem());

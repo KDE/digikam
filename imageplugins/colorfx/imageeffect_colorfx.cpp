@@ -253,9 +253,9 @@ void ImageEffect_ColorFX::readUserSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("coloreffect Tool Dialog");
-    m_effectType->setCurrentItem(config->readNumEntry("EffectType", ColorFX));
-    m_levelInput->setValue(config->readNumEntry("LevelAjustment", 0));
-    m_iterationInput->setValue(config->readNumEntry("IterationAjustment", 3));
+    m_effectType->setCurrentItem(config->readNumEntry("EffectType", m_effectType->defaultItem()));
+    m_levelInput->setValue(config->readNumEntry("LevelAjustment", m_levelInput->defaultValue()));
+    m_iterationInput->setValue(config->readNumEntry("IterationAjustment", m_iterationInput->defaultValue()));
     slotEffectTypeChanged(m_effectType->currentItem());  //check for enable/disable of iteration
 }
 

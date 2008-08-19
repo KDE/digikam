@@ -644,8 +644,8 @@ void ImageEffect_BWSepia::readUserSettings()
     m_bwFilters->setCurrentItem(config->readNumEntry("BW Filter", 0));
     m_bwFilm->setCurrentItem(config->readNumEntry("BW Film", 0));
     m_bwTone->setCurrentItem(config->readNumEntry("BW Tone", 0));
-    m_cInput->setValue(config->readNumEntry("ContrastAjustment", 0));
-    m_strengthInput->setValue(config->readNumEntry("StrengthAjustment", 1));
+    m_cInput->setValue(config->readNumEntry("ContrastAjustment", m_cInput->defaultValue()));
+    m_strengthInput->setValue(config->readNumEntry("StrengthAjustment", m_strengthInput->defaultValue()));
 
     for (int i = 0 ; i < 5 ; i++)
         m_curvesWidget->curves()->curvesChannelReset(i);
