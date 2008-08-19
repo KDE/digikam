@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-12-01
- * Description : a widget di draw an histogram curve.
+ * Description : a widget to draw histogram curves
  *
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -66,22 +66,31 @@ public:
 
 public:
 
+    CurvesWidget(int w, int h, QWidget *parent, bool readOnly=false);
+
     CurvesWidget(int w, int h,                         // Widget size.
                  uchar *i_data, uint i_w, uint i_h,    // Full image info.
                  bool i_sixteenBits,                   // 8 or 16 bits image.
-                 ImageCurves *curves,                  // Curves data instance to use.
                  QWidget *parent=0,                    // Parent widget instance.
                  bool readOnly=false);                 // If true : widget with full edition mode capabilities.
                                                        // If false : display curve data only without edition.
 
     ~CurvesWidget();
 
+    void setup(int w, int h, bool readOnly);
+    void updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits);
+
     // Stop current histogram computations.
     void stopHistogramComputation();
+
+    void setDataLoading();
+    void setLoadingFailed();
 
     void reset();
     void curveTypeChanged();
     void setCurveGuide(const DColor& color);
+
+    ImageCurves* curves() const;
 
 public:
 
@@ -105,11 +114,11 @@ protected slots:
 
 protected:
 
-    void paintEvent( QPaintEvent * );
-    void mousePressEvent ( QMouseEvent * e );
-    void mouseReleaseEvent ( QMouseEvent * e );
-    void mouseMoveEvent ( QMouseEvent * e );
-    void leaveEvent ( QEvent * );
+    void paintEvent(QPaintEvent*);
+    void mousePressEvent(QMouseEvent*);
+    void mouseReleaseEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
+    void leaveEvent(QEvent*);
 
 private:
 
