@@ -36,7 +36,6 @@
 
 class QPushButton;
 class QLabel;
-class QComboBox;
 class QPushButton;
 class QHButtonGroup;
 
@@ -45,6 +44,7 @@ class KActiveLabel;
 namespace KDcrawIface
 {
 class RDoubleNumInput;
+class RComboBox;
 }
 
 namespace Digikam
@@ -132,8 +132,8 @@ private:
     QPushButton                  *m_pickTemperature;
     QPushButton                  *m_autoAdjustExposure;
 
-    QComboBox                    *m_temperaturePresetCB;
-    QComboBox                    *m_channelCB;
+    KDcrawIface::RComboBox       *m_temperaturePresetCB;
+    KDcrawIface::RComboBox       *m_channelCB;
 
     QHButtonGroup                *m_scaleBG;
 

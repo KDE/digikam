@@ -62,6 +62,7 @@
 // LibKDcraw includes.
 
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/rcombobox.h>
 
 // Local includes.
 
@@ -129,7 +130,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, gboxSettings );
+    m_channelCB = new RComboBox(gboxSettings);
     m_channelCB->insertItem( i18n("Luminosity") );
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
@@ -201,7 +202,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     QWhatsThis::add( m_temperatureInput, i18n("<p>Set here the white balance color temperature in Kelvin."));
 
     m_temperaturePresetLabel = new QLabel(i18n("Preset:"), gboxSettings);
-    m_temperaturePresetCB = new QComboBox( false, gboxSettings );
+    m_temperaturePresetCB = new RComboBox(gboxSettings);
     m_temperaturePresetCB->insertItem( i18n("Candle") );
     m_temperaturePresetCB->insertItem( i18n("40W Lamp") );
     m_temperaturePresetCB->insertItem( i18n("100W Lamp") );
