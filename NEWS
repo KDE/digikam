@@ -3,6 +3,9 @@ digiKam 0.9.5-beta1 - Release date: 2008-??-??
 
 NEW FEATURES:
 
+General        : libkdcraw dependency updated to 0.1.5
+
+Image Editor   : All image plugin tool settings provide default buttons to reset values.
 Image Editor   : New Raw import tool to handle Raw pictures with customized decoding settings.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
