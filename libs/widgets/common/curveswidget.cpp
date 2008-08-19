@@ -36,10 +36,10 @@
 #include <qpen.h>
 #include <qevent.h>
 #include <qtimer.h>
-#include <qrect.h> 
+#include <qrect.h>
 #include <qcolor.h>
-#include <qfont.h> 
-#include <qfontmetrics.h> 
+#include <qfont.h>
+#include <qfontmetrics.h>
 
 // KDE includes.
 
@@ -196,7 +196,7 @@ void CurvesWidget::setDataLoading()
 {
     if (d->clearFlag != CurvesWidgetPriv::HistogramDataLoading)
     {
-        setCursor( KCursor::waitCursor() );
+        setCursor(KCursor::waitCursor());
         d->clearFlag = CurvesWidgetPriv::HistogramDataLoading;
         d->pos       = 0;
         d->blinkTimer->start( 100 );
@@ -209,7 +209,7 @@ void CurvesWidget::setLoadingFailed()
     d->pos       = 0;
     d->blinkTimer->stop();
     repaint(false);
-    setCursor( KCursor::arrowCursor() );
+    setCursor(KCursor::arrowCursor());
 }
 
 void CurvesWidget::setCurveGuide(const DColor& color)
@@ -221,7 +221,7 @@ void CurvesWidget::setCurveGuide(const DColor& color)
 
 void CurvesWidget::curveTypeChanged()
 {
-    switch ( d->curves->getCurveType(m_channelType) )
+    switch (d->curves->getCurveType(m_channelType))
     {
        case ImageCurves::CURVE_SMOOTH:
 
@@ -259,9 +259,9 @@ void CurvesWidget::customEvent(QCustomEvent *event)
 
     if (ed->starting)
     {
-        setCursor( KCursor::waitCursor() );
+        setCursor(KCursor::waitCursor());
         d->clearFlag = CurvesWidgetPriv::HistogramStarted;
-        d->blinkTimer->start( 200 );
+        d->blinkTimer->start(200);
         repaint(false);
     }
     else 
@@ -272,14 +272,14 @@ void CurvesWidget::customEvent(QCustomEvent *event)
             d->clearFlag = CurvesWidgetPriv::HistogramCompleted;
             d->blinkTimer->stop();
             repaint(false);
-            setCursor( KCursor::arrowCursor() );
+            setCursor(KCursor::arrowCursor());
         }
         else
         {
             d->clearFlag = CurvesWidgetPriv::HistogramFailed;
             d->blinkTimer->stop();
             repaint(false);
-            setCursor( KCursor::arrowCursor() );
+            setCursor(KCursor::arrowCursor());
             emit signalHistogramComputationFailed();
         }
     }
@@ -299,7 +299,7 @@ void CurvesWidget::stopHistogramComputation()
 void CurvesWidget::slotBlinkTimerDone()
 {
     repaint(false);
-    d->blinkTimer->start( 200 );
+    d->blinkTimer->start(200);
 }
 
 void CurvesWidget::paintEvent(QPaintEvent*)
@@ -368,10 +368,10 @@ void CurvesWidget::paintEvent(QPaintEvent*)
     if (!m_imageHistogram) return;
 
     int    x, y;
-    int    wWidth = width();
+    int    wWidth  = width();
     int    wHeight = height();
     double max;
-    class ImageHistogram *histogram; 
+    class ImageHistogram *histogram;
 
     histogram = m_imageHistogram;
 
@@ -610,7 +610,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
    bitBlt(this, 0, 0, &pm);
 }
 
-void CurvesWidget::mousePressEvent ( QMouseEvent * e )
+void CurvesWidget::mousePressEvent(QMouseEvent *e)
 {
    if (d->readOnlyMode || !m_imageHistogram) return;
 
@@ -699,7 +699,7 @@ void CurvesWidget::mousePressEvent ( QMouseEvent * e )
    repaint(false);
 }
 
-void CurvesWidget::mouseReleaseEvent ( QMouseEvent * e )
+void CurvesWidget::mouseReleaseEvent(QMouseEvent *e)
 {
    if (d->readOnlyMode || !m_imageHistogram) return;
 
@@ -713,7 +713,7 @@ void CurvesWidget::mouseReleaseEvent ( QMouseEvent * e )
    emit signalCurvesChanged();
 }
 
-void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
+void CurvesWidget::mouseMoveEvent(QMouseEvent *e)
 {
    if (d->readOnlyMode || !m_imageHistogram) return;
 
@@ -812,7 +812,7 @@ void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
               d->curves->setCurveValue(m_channelType, x, m_imageHistogram->getHistogramSegment()-1 - y);
 
            d->grabPoint = x;
-           d->last = y;
+           d->last      = y;
          }
 
          emit signalCurvesChanged();
@@ -827,7 +827,7 @@ void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
    repaint(false);
 }
 
-void CurvesWidget::leaveEvent( QEvent * )
+void CurvesWidget::leaveEvent(QEvent*)
 {
    d->xMouseOver = -1;
    d->yMouseOver = -1;
