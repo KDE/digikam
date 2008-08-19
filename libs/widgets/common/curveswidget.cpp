@@ -199,7 +199,7 @@ void CurvesWidget::setDataLoading()
         setCursor(KCursor::waitCursor());
         d->clearFlag = CurvesWidgetPriv::HistogramDataLoading;
         d->pos       = 0;
-        d->blinkTimer->start( 100 );
+        d->blinkTimer->start(100);
     }
 }
 
@@ -339,7 +339,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
 
        if (d->clearFlag == CurvesWidgetPriv::HistogramDataLoading)
            p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
-                       i18n("Loading image......"));
+                       i18n("Loading image..."));
        else
            p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
                        i18n("Histogram calculation..."));
@@ -375,7 +375,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
 
     histogram = m_imageHistogram;
 
-    x   = 0; 
+    x   = 0;
     y   = 0;
     max = 0.0;
 
@@ -470,17 +470,17 @@ void CurvesWidget::paintEvent(QPaintEvent*)
       switch (m_scaleType)
       {
          case CurvesWidget::LinScaleHistogram:
-           y = (int) ((wHeight * value) / max);
-           break;
+            y = (int) ((wHeight * value) / max);
+            break;
 
          case CurvesWidget::LogScaleHistogram:
-           if (value <= 0.0) value = 1.0;
-           y = (int) ((wHeight * log (value)) / max);
-           break;
+            if (value <= 0.0) value = 1.0;
+            y = (int) ((wHeight * log (value)) / max);
+            break;
 
          default:
-           y = 0;
-           break;
+            y = 0;
+            break;
       }
 
       // Drawing histogram
@@ -501,7 +501,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
 
    // Drawing curves points.
 
-   if ( !d->readOnlyMode && d->curves->getCurveType(m_channelType) == ImageCurves::CURVE_SMOOTH )
+   if (!d->readOnlyMode && d->curves->getCurveType(m_channelType) == ImageCurves::CURVE_SMOOTH)
    {
       p1.setPen(QPen(Qt::red, 3, Qt::SolidLine));
 
@@ -513,7 +513,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
          {
              p1.drawEllipse( ((curvePoint.x() * wWidth) / histogram->getHistogramSegment()) - 2, 
                              wHeight - 2 - ((curvePoint.y() * wHeight) / histogram->getHistogramSegment()),
-                             4, 4 ); 
+                             4, 4 );
          }
       }
    }
@@ -535,7 +535,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
    if (d->xMouseOver != -1 && d->yMouseOver != -1)
    {
         QString string = i18n("x:%1\ny:%2").arg(d->xMouseOver).arg(d->yMouseOver);
-        QFontMetrics fontMt( string );
+        QFontMetrics fontMt(string);
         QRect rect = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string);
         rect.moveRight(wWidth);
         rect.moveBottom(wHeight);
@@ -585,7 +585,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
           if (xGuide < wWidth/2)
           {
              rect.moveLeft(xGuide);
-             p1.fillRect(rect, QBrush(QColor(250, 250, 255)) );
+             p1.fillRect(rect, QBrush(QColor(250, 250, 255)));
              p1.drawRect(rect);
              rect.moveLeft(xGuide+3);
              p1.drawText(rect, Qt::AlignLeft, string);
@@ -593,7 +593,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
           else
           {
              rect.moveRight(xGuide);
-             p1.fillRect(rect, QBrush(QColor(250, 250, 255)) );
+             p1.fillRect(rect, QBrush(QColor(250, 250, 255)));
              p1.drawRect(rect);
              rect.moveRight(xGuide-3);
              p1.drawText(rect, Qt::AlignRight, string);
@@ -621,11 +621,11 @@ void CurvesWidget::mousePressEvent(QMouseEvent *e)
    if (e->button() != Qt::LeftButton || d->clearFlag == CurvesWidgetPriv::HistogramStarted)
       return;
 
-   int x = CLAMP( (int)(e->pos().x() * 
-                       ((float)(m_imageHistogram->getHistogramSegment()-1) / (float)width())),
+   int x = CLAMP((int)(e->pos().x() *
+                      ((float)(m_imageHistogram->getHistogramSegment()-1) / (float)width())),
                   0, m_imageHistogram->getHistogramSegment()-1 );
-   int y = CLAMP( (int)(e->pos().y() *
-                       ((float)(m_imageHistogram->getHistogramSegment()-1) / (float)height())),
+   int y = CLAMP((int)(e->pos().y() *
+                      ((float)(m_imageHistogram->getHistogramSegment()-1) / (float)height())),
                   0, m_imageHistogram->getHistogramSegment()-1 );
 
    distance = 65536;
@@ -638,7 +638,7 @@ void CurvesWidget::mousePressEvent(QMouseEvent *e)
       {
          if (abs (x - xcurvepoint) < distance)
          {
-            distance = abs (x - xcurvepoint);
+            distance      = abs (x - xcurvepoint);
             closest_point = i;
          }
       }
@@ -648,9 +648,9 @@ void CurvesWidget::mousePressEvent(QMouseEvent *e)
    if (distance > 8)
       closest_point = (x + delta/2) / delta;
 
-   setCursor( KCursor::crossCursor() );
+   setCursor(KCursor::crossCursor());
 
-   switch( d->curves->getCurveType(m_channelType) )
+   switch(d->curves->getCurveType(m_channelType))
    {
       case ImageCurves::CURVE_SMOOTH:
       {
@@ -680,7 +680,7 @@ void CurvesWidget::mousePressEvent(QMouseEvent *e)
 
          d->grabPoint = closest_point;
          d->curves->setCurvePoint(m_channelType, d->grabPoint,
-                                 QPoint(x, m_imageHistogram->getHistogramSegment() - y));
+                                  QPoint(x, m_imageHistogram->getHistogramSegment() - y));
 
          break;
       }
@@ -690,7 +690,7 @@ void CurvesWidget::mousePressEvent(QMouseEvent *e)
 
          d->curves->setCurveValue(m_channelType, x, m_imageHistogram->getHistogramSegment() - y);
          d->grabPoint = x;
-         d->last = y;
+         d->last      = y;
          break;
       }
    }
@@ -706,7 +706,7 @@ void CurvesWidget::mouseReleaseEvent(QMouseEvent *e)
    if (e->button() != Qt::LeftButton || d->clearFlag == CurvesWidgetPriv::HistogramStarted)
       return;
 
-   setCursor( KCursor::arrowCursor() );
+   setCursor(KCursor::arrowCursor());
    d->grabPoint = -1;
    d->curves->curvesCalculateCurve(m_channelType);
    repaint(false);
@@ -738,7 +738,7 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent *e)
       {
          if (abs (x - d->curves->getCurvePointX(m_channelType, i)) < distance)
          {
-            distance = abs (x - d->curves->getCurvePointX(m_channelType, i));
+            distance      = abs (x - d->curves->getCurvePointX(m_channelType, i));
             closest_point = i;
          }
       }
@@ -751,17 +751,17 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent *e)
    switch ( d->curves->getCurveType(m_channelType) )
    {
       case ImageCurves::CURVE_SMOOTH:
-      {  
+      {
          if (d->grabPoint == -1)   // If no point is grabbed...
          {
             if ( d->curves->getCurvePointX(m_channelType, closest_point) != -1 )
-               setCursor( KCursor::arrowCursor() );
+               setCursor(KCursor::arrowCursor());
             else
-               setCursor( KCursor::crossCursor() );
+               setCursor(KCursor::crossCursor());
          }
          else                      // Else, drag the grabbed point
          {
-            setCursor( KCursor::crossCursor() );
+            setCursor(KCursor::crossCursor());
 
             d->curves->setCurvePointX(m_channelType, d->grabPoint, -1);
 
