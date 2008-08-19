@@ -26,10 +26,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 160564 : No refresh of the number of pictures assigned to a tag after removing the tag from some pictures.
 015 ==> 158144 : Showfoto crashes in settings window.
 016 ==> 162845 : 'Ctrl+F6' Conflict with KDE global shortcut.
-017 ==> 159523 : Digikam crashes while downloading images from Olympus mju 810/Stylus 810 camera no xD card.
+017 ==> 159523 : Digikam crashes while downloading images from Olympus MJU 810/Stylus 810 camera no xD card.
 018 ==> 161369 : Quick filter indicator lamp is not working properly in recursive image folder view mode.
 019 ==> 147314 : Renaming like crazy with F2 slows down my system.
-020 ==> 164622 : crash using timeline when switching from month to week to month view.
+020 ==> 164622 : Crash using timeline when switching from month to week to month view.
 021 ==> 141951 : Blank empty context right-click menus.
 022 ==> 116886 : Proposal for adding a new destripe/denoise technique.
 023 ==> 163602 : Race condition during image download from Camera/ USB device: image corruption and/or loss.
