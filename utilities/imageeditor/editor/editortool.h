@@ -65,8 +65,8 @@ protected:
     void setToolView(QWidget *view);
     void setToolSettings(QWidget *settings);
 
-    virtual void readSettings();
-    virtual void saveSettings();
+    virtual void readSettings()=0;
+    virtual void saveSettings()=0;
     virtual void setBusy(bool)=0;
 
 private:

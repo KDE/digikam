@@ -105,12 +105,4 @@ void EditorTool::setToolSettings(QWidget *settings)
     d->settings = settings;
 }
 
-void EditorTool::readSettings()
-{
-}
-
-void EditorTool::saveSettings()
-{
-}
-
 }  // namespace Digikam
