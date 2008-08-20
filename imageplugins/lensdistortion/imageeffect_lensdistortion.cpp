@@ -113,6 +113,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     m_mainInput = new RDoubleNumInput(gboxSettings);
     m_mainInput->setPrecision(1);
     m_mainInput->setRange(-100.0, 100.0, 0.1);
+    m_mainInput->setDefaultValue(0.0);
     QWhatsThis::add( m_mainInput, i18n("<p>This value controls the amount of distortion. Negative values correct lens barrel "
                                        "distortion, while positive values correct lens pincushion distortion."));
 
@@ -126,6 +127,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     m_edgeInput = new RDoubleNumInput(gboxSettings);
     m_edgeInput->setPrecision(1);
     m_edgeInput->setRange(-100.0, 100.0, 0.1);
+    m_edgeInput->setDefaultValue(0.0);
     QWhatsThis::add( m_edgeInput, i18n("<p>This value controls in the same manner as the Main control, but has more effect "
                                        "at the edges of the image than at the center."));
 
@@ -139,6 +141,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     m_rescaleInput = new RDoubleNumInput(gboxSettings);
     m_rescaleInput->setPrecision(1);
     m_rescaleInput->setRange(-100.0, 100.0, 0.1);
+    m_rescaleInput->setDefaultValue(0.0);
     QWhatsThis::add( m_rescaleInput, i18n("<p>This value rescales the overall image size."));
 
     gridSettings->addMultiCellWidget(label3, 5, 5, 0, 1);
@@ -151,6 +154,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     m_brightenInput = new RDoubleNumInput(gboxSettings);
     m_brightenInput->setPrecision(1);
     m_brightenInput->setRange(-100.0, 100.0, 0.1);
+    m_brightenInput->setDefaultValue(0.0);
     QWhatsThis::add( m_brightenInput, i18n("<p>This value adjusts the brightness in image corners."));
 
     gridSettings->addMultiCellWidget(label4, 7, 7, 0, 1);
@@ -210,10 +214,10 @@ void ImageEffect_LensDistortion::readUserSettings(void)
     m_rescaleInput->blockSignals(true);
     m_brightenInput->blockSignals(true);
 
-    m_mainInput->setValue(config->readDoubleNumEntry("2nd Order Distortion", 0.0));
-    m_edgeInput->setValue(config->readDoubleNumEntry("4th Order Distortion",0.0));
-    m_rescaleInput->setValue(config->readDoubleNumEntry("Zoom Factor", 0.0));
-    m_brightenInput->setValue(config->readDoubleNumEntry("Brighten", 0.0));
+    m_mainInput->setValue(config->readDoubleNumEntry("2nd Order Distortion", m_mainInput->defaultValue()));
+    m_edgeInput->setValue(config->readDoubleNumEntry("4th Order Distortion",m_edgeInput->defaultValue()));
+    m_rescaleInput->setValue(config->readDoubleNumEntry("Zoom Factor", m_rescaleInput->defaultValue()));
+    m_brightenInput->setValue(config->readDoubleNumEntry("Brighten", m_brightenInput->defaultValue()));
 
     m_mainInput->blockSignals(false);
     m_edgeInput->blockSignals(false);
@@ -241,10 +245,10 @@ void ImageEffect_LensDistortion::resetValues()
     m_rescaleInput->blockSignals(true);
     m_brightenInput->blockSignals(true);
 
-    m_mainInput->setValue(0.0);
-    m_edgeInput->setValue(0.0);
-    m_rescaleInput->setValue(0.0);
-    m_brightenInput->setValue(0.0);
+    m_mainInput->slotReset();
+    m_edgeInput->slotReset();
+    m_rescaleInput->slotReset();
+    m_brightenInput->slotReset();
 
     m_mainInput->blockSignals(false);
     m_edgeInput->blockSignals(false);
