@@ -131,6 +131,7 @@ RawImport::RawImport(const KURL& url, QObject *parent)
 
 RawImport::~RawImport()
 {
+    saveSettings();
     delete d;
 }
 
@@ -149,7 +150,6 @@ void RawImport::readSettings()
 void RawImport::saveSettings()
 {
     d->settingsBox->saveSettings();
-    kapp->config()->sync();
 }
 
 DRawDecoding RawImport::rawDecodingSettings()
