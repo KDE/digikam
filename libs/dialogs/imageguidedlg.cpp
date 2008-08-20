@@ -32,7 +32,6 @@
 #include <qlayout.h>
 #include <qframe.h>
 #include <qtimer.h>
-#include <qspinbox.h>
 #include <qsplitter.h>
 #include <qhbox.h>
 
@@ -52,6 +51,10 @@
 #include <kconfig.h>
 #include <kseparator.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "ddebug.h"
@@ -60,6 +63,8 @@
 #include "dimginterface.h"
 #include "imageguidedlg.h"
 #include "imageguidedlg.moc"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -74,7 +79,7 @@ public:
         PreviewRendering,
         FinalRendering
     };
-    
+
     ImageGuideDlgPriv()
     {
         tryAction            = false;
@@ -96,27 +101,27 @@ public:
 
     bool          tryAction;
     bool          progress;
-    
+
     int           currentRenderingMode;
 
     QWidget      *parent;
     QWidget      *settings;
-    
+
     QTimer       *timer;
-    
+
     QString       name;
 
     QGridLayout  *mainLayout;
     QGridLayout  *settingsLayout;
-    
-    QSpinBox     *guideSize;
 
     QHBox        *hbox;
 
     QSplitter    *splitter;
 
+    RIntNumInput *guideSize;
+
     KProgress    *progressBar;
-        
+
     KColorButton *guideColorBt;
 
     KAboutData   *aboutData;
@@ -138,7 +143,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     setCaption(DImgInterface::defaultInterface()->getImageFileName() + QString(" - ") + title);
-    
+
     d = new ImageGuideDlgPriv;
     d->parent        = parent;
     d->name          = name;
@@ -183,14 +188,14 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     d->hbox              = new QHBox(plainPage());
     d->splitter          = new QSplitter(d->hbox);
-    m_imagePreviewWidget = new ImageWidget(d->name, d->splitter, desc, prevModeOptions, 
+    m_imagePreviewWidget = new ImageWidget(d->name, d->splitter, desc, prevModeOptions,
                                            guideMode, guideVisible, useImageSelection);
-    
+
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );
-    d->splitter->setFrameShape( QFrame::NoFrame );    
+    d->splitter->setFrameShape( QFrame::NoFrame );
     d->splitter->setOpaqueResize(false);
-    
+
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
     m_imagePreviewWidget->setSizePolicy(rightSzPolicy);
 
@@ -207,7 +212,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     d->settings          = new QWidget(plainPage());
     d->settingsLayout    = new QGridLayout( d->settings, 1, 0);
     QVBoxLayout *vLayout = new QVBoxLayout( spacingHint() );
-    
+
     // -------------------------------------------------------------
 
     QWidget *gboxGuideSettings = new QWidget(d->settings);
@@ -222,7 +227,8 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     grid->addMultiCellWidget(d->guideColorBt, 1, 1, 2, 2);
 
     QLabel *label6 = new QLabel(i18n("Guide width:"), gboxGuideSettings);
-    d->guideSize   = new QSpinBox( 1, 5, 1, gboxGuideSettings);
+    d->guideSize   = new RIntNumInput(gboxGuideSettings);
+    d->guideSize->input()->setRange(1, 5, 1, false);
     QWhatsThis::add( d->guideSize, i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
     grid->addMultiCellWidget(label6, 2, 2, 0, 0);
     grid->addMultiCellWidget(d->guideSize, 2, 2, 2, 2);
@@ -235,7 +241,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     QHBox *hbox    = new QHBox(d->settings);
     QLabel *space1 = new QLabel(hbox);
-    space1->setFixedWidth(spacingHint());    
+    space1->setFixedWidth(spacingHint());
     d->progressBar = new KProgress(100, hbox);
     d->progressBar->setMaximumHeight( fontMetrics().height() );
     QWhatsThis::add(d->progressBar ,i18n("<p>This is the percentage of the task which has been completed up to this point."));
@@ -243,15 +249,15 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     setProgressVisible(false);
     QLabel *space2 = new QLabel(hbox);
     space2->setFixedWidth(spacingHint());
-    
+
     vLayout->addWidget(hbox);
     vLayout->addStretch(10);
 
     d->settingsLayout->addMultiCellLayout(vLayout, 1, 1, 0, 0);
 
-    d->settingsSideBar->appendTab(d->settings, SmallIcon("configure"), i18n("Settings"));    
+    d->settingsSideBar->appendTab(d->settings, SmallIcon("configure"), i18n("Settings"));
     d->settingsSideBar->loadViewState();
-    
+
     // Reading splitter sizes here prevent flicker effect in dialog.
     KConfig *config = kapp->config();
     config->setGroup(d->name + QString(" Tool Dialog"));
@@ -274,9 +280,9 @@ ImageGuideDlg::~ImageGuideDlg()
 
     if (d->aboutData)
        delete d->aboutData;
-    
-    delete d->settingsSideBar;            
-    delete d;            
+
+    delete d->settingsSideBar;
+    delete d;
 }
 
 void ImageGuideDlg::readSettings(void)
@@ -403,7 +409,7 @@ void ImageGuideDlg::slotCancel()
 
        kapp->restoreOverrideCursor();
     }
-    
+
     writeSettings();
     done(Cancel);
 }
@@ -424,7 +430,7 @@ void ImageGuideDlg::closeEvent(QCloseEvent *e)
 
 void ImageGuideDlg::slotHelp()
 {
-    // If setAboutData() is called by plugin, well DigikamImagePlugins help is lauched, 
+    // If setAboutData() is called by plugin, well DigikamImagePlugins help is lauched,
     // else digiKam help. In this case, setHelp() method must be used to set anchor and handbook name.
 
     if (d->aboutData)
@@ -556,7 +562,7 @@ void ImageGuideDlg::customEvent(QCustomEvent *event)
     delete ed;
 }
 
-// Backport KDialog::keyPressEvent() implementation from KDELibs to ignore Enter/Return Key events 
+// Backport KDialog::keyPressEvent() implementation from KDELibs to ignore Enter/Return Key events
 // to prevent any conflicts between dialog keys events and SpinBox keys events.
 
 void ImageGuideDlg::keyPressEvent(QKeyEvent *e)
@@ -569,9 +575,9 @@ void ImageGuideDlg::keyPressEvent(QKeyEvent *e)
             e->accept();
             reject();
         break;
-        case Key_Enter:            
-        case Key_Return:     
-            e->ignore();              
+        case Key_Enter:
+        case Key_Return:
+            e->ignore();
         break;
         default:
             e->ignore();
