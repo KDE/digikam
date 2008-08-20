@@ -216,25 +216,27 @@ void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofil
 void DImgInterface::slotUseRawImportSettings()
 {
     RawImport *rawImport = (RawImport*)(sender());
+    if (rawImport)
+    {
+        d->thread->load(LoadingDescription(d->filename, rawImport->rawDecodingSettings()),
+                        SharedLoadSaveThread::AccessModeReadWrite,
+                        SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
 
-    d->thread->load(LoadingDescription(d->filename, rawImport->rawDecodingSettings()),
-                    SharedLoadSaveThread::AccessModeReadWrite,
-                    SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
-
-    EditorToolIface::editorToolIface()->unLoadTool(rawImport);
-    emit signalLoadingStarted(d->filename);
+        EditorToolIface::editorToolIface()->unLoadTool(rawImport);
+        emit signalLoadingStarted(d->filename);
+    }
 }
 
 void DImgInterface::slotUseDefaultSettings()
 {
-    RawImport *rawImport = (RawImport*)(sender());
-
     d->thread->load(LoadingDescription(d->filename, d->iofileSettings->rawDecodingSettings),
                     SharedLoadSaveThread::AccessModeReadWrite,
                     SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
-
-    EditorToolIface::editorToolIface()->unLoadTool(rawImport);
     emit signalLoadingStarted(d->filename);
+
+    RawImport *rawImport = (RawImport*)(sender());
+    if (rawImport)
+        EditorToolIface::editorToolIface()->unLoadTool(rawImport);
 }
 
 void DImgInterface::resetImage()
