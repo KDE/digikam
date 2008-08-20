@@ -61,7 +61,6 @@ EditorTool::EditorTool(QObject *parent)
 
 EditorTool::~EditorTool()
 {
-    saveSettings();
     delete d;
 }
 
@@ -103,14 +102,6 @@ QWidget* EditorTool::toolSettings() const
 void EditorTool::setToolSettings(QWidget *settings)
 {
     d->settings = settings;
-}
-
-void EditorTool::readSettings()
-{
-}
-
-void EditorTool::saveSettings()
-{
 }
 
 }  // namespace Digikam
