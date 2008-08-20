@@ -26,15 +26,14 @@
 // Qt includes.
 
 #include <qcheckbox.h>
-#include <qcombobox.h>
 #include <qframe.h>
 #include <qimage.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qpushbutton.h>
 #include <qrect.h>
 #include <qspinbox.h>
 #include <qtimer.h>
+#include <qtoolbutton.h>
 #include <qvgroupbox.h>
 #include <qwhatsthis.h>
 
@@ -50,6 +49,7 @@
 // LibKDcraw includes.
 
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/rcombobox.h>
 
 // Digikam includes.
 
@@ -104,7 +104,8 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     QGridLayout* grid = new QGridLayout( cropSelection, 6, 4, spacingHint());
 
     QLabel *label = new QLabel(i18n("Aspect ratio:"), cropSelection);
-    m_ratioCB     = new QComboBox( false, cropSelection );
+    m_ratioCB     = new RComboBox(cropSelection);
+    m_ratioCB->setDefaultItem(ImageSelectionWidget::RATIO03X04);
     setRatioCBText(ImageSelectionWidget::Landscape);
     QWhatsThis::add( m_ratioCB, i18n("<p>Select your constrained aspect ratio for cropping. "
                                      "Aspect Ratio Crop tool uses a relative ratio. That means it "
@@ -127,9 +128,10 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     QWhatsThis::add( m_preciseCrop, i18n("<p>Enable this option to force exact aspect ratio crop."));
 
     m_orientLabel = new QLabel(i18n("Orientation:"), cropSelection);
-    m_orientCB    = new QComboBox( false, cropSelection );
-    m_orientCB->insertItem( i18n("Landscape") );
-    m_orientCB->insertItem( i18n("Portrait") );
+    m_orientCB    = new RComboBox(cropSelection);
+    m_orientCB->insertItem( i18n("Landscape"));
+    m_orientCB->insertItem( i18n("Portrait"));
+    m_orientCB->setDefaultItem(ImageSelectionWidget::Landscape);
     QWhatsThis::add( m_orientCB, i18n("<p>Select constrained aspect ratio orientation."));
 
     m_autoOrientation = new QCheckBox(i18n("Auto"), cropSelection);
@@ -146,11 +148,15 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     m_customLabel1 = new QLabel(i18n("Custom ratio:"), cropSelection);
     m_customLabel1->setAlignment(AlignLeft|AlignVCenter);
-    m_customRatioNInput = new KIntSpinBox(1, 10000, 1, 1, 10, cropSelection);
+    m_customRatioNInput = new RIntNumInput(cropSelection);
+    m_customRatioNInput->input()->setRange(1, 10000, 1, false);
+    m_customRatioNInput->setDefaultValue(1);
     QWhatsThis::add( m_customRatioNInput, i18n("<p>Set here the desired custom aspect numerator value."));
     m_customLabel2 = new QLabel(" : ", cropSelection);
     m_customLabel2->setAlignment(AlignCenter|AlignVCenter);
-    m_customRatioDInput = new KIntSpinBox(1, 10000, 1, 1, 10, cropSelection);
+    m_customRatioDInput = new RIntNumInput(cropSelection);
+    m_customRatioDInput->input()->setRange(1, 10000, 1, false);
+    m_customRatioDInput->setDefaultValue(1);
     QWhatsThis::add( m_customRatioDInput, i18n("<p>Set here the desired custom aspect denominator value."));
 
     grid->addMultiCellWidget(m_customLabel1, 1, 1, 0, 0);
@@ -161,18 +167,20 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     // -------------------------------------------------------------
 
     m_xInput = new RIntNumInput(cropSelection);
-    QWhatsThis::add( m_xInput, i18n("<p>Set here the top left selection corner position for cropping."));
     m_xInput->input()->setLabel(i18n("X:"), AlignLeft|AlignVCenter);
     m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1);
+    m_xInput->setDefaultValue(50);
+    QWhatsThis::add( m_xInput, i18n("<p>Set here the top left selection corner position for cropping."));
 
     m_widthInput = new RIntNumInput(cropSelection);
     m_widthInput->input()->setLabel(i18n("Width:"), AlignLeft|AlignVCenter);
-    QWhatsThis::add( m_widthInput, i18n("<p>Set here the width selection for cropping."));
     m_widthInput->setRange(m_imageSelectionWidget->getMinWidthRange(),
                            m_imageSelectionWidget->getMaxWidthRange(),
                            m_imageSelectionWidget->getWidthStep());
+    m_widthInput->setDefaultValue(800);
+    QWhatsThis::add( m_widthInput, i18n("<p>Set here the width selection for cropping."));
 
-    m_centerWidth = new QPushButton(cropSelection);
+    m_centerWidth = new QToolButton(cropSelection);
     KGlobal::dirs()->addResourceType("centerwidth", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("centerwidth", "centerwidth.png");
     m_centerWidth->setPixmap( QPixmap( directory + "centerwidth.png" ) );
@@ -186,17 +194,19 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     m_yInput = new RIntNumInput(cropSelection);
     m_yInput->input()->setLabel(i18n("Y:"), AlignLeft|AlignVCenter);
-    QWhatsThis::add( m_yInput, i18n("<p>Set here the top left selection corner position for cropping."));
     m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageHeight(), 1);
+    m_yInput->setDefaultValue(50);
+    QWhatsThis::add( m_yInput, i18n("<p>Set here the top left selection corner position for cropping."));
 
     m_heightInput = new RIntNumInput(cropSelection);
     m_heightInput->input()->setLabel(i18n("Height:"), AlignLeft|AlignVCenter);
-    QWhatsThis::add( m_heightInput, i18n("<p>Set here the height selection for cropping."));
     m_heightInput->setRange(m_imageSelectionWidget->getMinHeightRange(),
                             m_imageSelectionWidget->getMaxHeightRange(),
                             m_imageSelectionWidget->getHeightStep());
+    m_heightInput->setDefaultValue(600);
+    QWhatsThis::add( m_heightInput, i18n("<p>Set here the height selection for cropping."));
 
-    m_centerHeight = new QPushButton(cropSelection);
+    m_centerHeight = new QToolButton(cropSelection);
     KGlobal::dirs()->addResourceType("centerheight", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("centerheight", "centerheight.png");
     m_centerHeight->setPixmap( QPixmap( directory + "centerheight.png" ) );
@@ -215,12 +225,12 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     compositionGuide->setFrameStyle(QFrame::Panel|QFrame::Sunken);
 
     QLabel *labelGuideLines = new QLabel(i18n("Composition guide:"), compositionGuide);
-    m_guideLinesCB = new QComboBox( false, compositionGuide );
-    m_guideLinesCB->insertItem( i18n("Rules of Thirds") );
-    m_guideLinesCB->insertItem( i18n("Harmonious Triangles") );
-    m_guideLinesCB->insertItem( i18n("Golden Mean") );
-    m_guideLinesCB->insertItem( i18n("None") );
-    m_guideLinesCB->setCurrentText( i18n("None") );
+    m_guideLinesCB = new RComboBox(compositionGuide);
+    m_guideLinesCB->insertItem( i18n("Rules of Thirds"));
+    m_guideLinesCB->insertItem( i18n("Harmonious Triangles"));
+    m_guideLinesCB->insertItem( i18n("Golden Mean"));
+    m_guideLinesCB->insertItem( i18n("None"));
+    m_guideLinesCB->setDefaultItem(ImageSelectionWidget::GuideNone);
     QWhatsThis::add( m_guideLinesCB, i18n("<p>With this option, you can display guide lines "
                                           "which help you to compose your photograph."));
 
@@ -244,7 +254,9 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     m_colorGuideLabel = new QLabel(i18n("Color and width:"), compositionGuide);
     m_guideColorBt = new KColorButton( QColor( 250, 250, 255 ), compositionGuide );
-    m_guideSize = new QSpinBox( 1, 5, 1, compositionGuide);
+    m_guideSize = new RIntNumInput(compositionGuide);
+    m_guideSize->input()->setRange(1, 5, 1, false);
+    m_guideSize->setDefaultValue(1);
     QWhatsThis::add( m_guideColorBt, i18n("<p>Set here the color used to draw composition guides."));
     QWhatsThis::add( m_guideSize, i18n("<p>Set here the width in pixels used to draw composition guides."));
 
@@ -359,7 +371,7 @@ void ImageEffect_RatioCrop::readSettings()
 
     // No guide lines per default.
     m_guideLinesCB->setCurrentItem( config->readNumEntry("Guide Lines Type",
-                                    ImageSelectionWidget::GuideNone) );
+                                    ImageSelectionWidget::GuideNone));
     m_goldenSectionBox->setChecked( config->readBoolEntry("Golden Section", true) );
     m_goldenSpiralSectionBox->setChecked( config->readBoolEntry("Golden Spiral Section", false) );
     m_goldenSpiralBox->setChecked( config->readBoolEntry("Golden Spiral", false) );
@@ -367,61 +379,51 @@ void ImageEffect_RatioCrop::readSettings()
     m_flipHorBox->setChecked( config->readBoolEntry("Golden Flip Horizontal", false) );
     m_flipVerBox->setChecked( config->readBoolEntry("Golden Flip Vertical", false) );
     m_guideColorBt->setColor(config->readColorEntry("Guide Color", &defaultGuideColor));
-    m_guideSize->setValue(config->readNumEntry("Guide Width", 1));
+    m_guideSize->setValue(config->readNumEntry("Guide Width", m_guideSize->defaultValue()));
     m_imageSelectionWidget->slotGuideLines(m_guideLinesCB->currentItem());
     m_imageSelectionWidget->slotChangeGuideColor(m_guideColorBt->color());
 
     m_preciseCrop->setChecked( config->readBoolEntry("Precise Aspect Ratio Crop", false) );
     m_imageSelectionWidget->setPreciseCrop( m_preciseCrop->isChecked() );
 
+    // Empty selection so it can be moved w/out size constraint
+    m_widthInput->setValue(0);
+    m_heightInput->setValue(0);
+
+    m_xInput->setValue(config->readNumEntry("Hor.Oriented Custom Aspect Ratio Xpos",
+                       m_xInput->defaultValue()));
+    m_yInput->setValue(config->readNumEntry("Hor.Oriented Custom Aspect Ratio Ypos",
+                       m_yInput->defaultValue()));
+
+    m_widthInput->setValue(config->readNumEntry("Hor.Oriented Custom Aspect Ratio Width",
+                           m_widthInput->defaultValue()));
+    m_heightInput->setValue(config->readNumEntry("Hor.Oriented Custom Aspect Ratio Height",
+                            m_heightInput->defaultValue()));
+
+    m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentItem());
+
+    m_customRatioNInput->setValue(config->readNumEntry("Hor.Oriented Custom Aspect Ratio Num",
+            m_customRatioNInput->defaultValue()));
+    m_customRatioDInput->setValue(config->readNumEntry("Hor.Oriented Custom Aspect Ratio Den",
+            m_customRatioDInput->defaultValue()));
+
+    m_ratioCB->setCurrentItem(config->readNumEntry("Hor.Oriented Aspect Ratio",
+            m_ratioCB->defaultItem()));
+
     if (m_originalIsLandscape)
     {
         m_orientCB->setCurrentItem( config->readNumEntry("Hor.Oriented Aspect Ratio Orientation",
-                                    ImageSelectionWidget::Landscape) );
-
-        m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentItem());
-
-        m_customRatioNInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Num", 1) );
-        m_customRatioDInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Den", 1) );
-        m_ratioCB->setCurrentItem( config->readNumEntry("Hor.Oriented Aspect Ratio",
-                                   ImageSelectionWidget::RATIO03X04) );
-
-        applyRatioChanges(m_ratioCB->currentItem());
-
-        // Empty selection so it can be moved w/out size constraint
-        m_widthInput->setValue( 0 );
-        m_heightInput->setValue( 0 );
-
-        m_xInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Xpos", 50) );
-        m_yInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Ypos", 50) );
-
-        m_widthInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Width", 800) );
-        m_heightInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Height", 600) );
+                                    ImageSelectionWidget::Landscape));
+        m_orientCB->setDefaultItem(ImageSelectionWidget::Landscape);
     }
     else
     {
         m_orientCB->setCurrentItem( config->readNumEntry("Ver.Oriented Aspect Ratio Orientation",
                                     ImageSelectionWidget::Portrait) );
-
-        m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentItem());
-
-        m_customRatioNInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Num", 1) );
-        m_customRatioDInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Den", 1) );
-        m_ratioCB->setCurrentItem( config->readNumEntry("Ver.Oriented Aspect Ratio",
-                                   ImageSelectionWidget::RATIO03X04) );
-
-        applyRatioChanges(m_ratioCB->currentItem());
-
-        // Empty selection so it can be moved w/out size constraint
-        m_widthInput->setValue( 0 );
-        m_heightInput->setValue( 0 );
-
-        m_xInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Xpos", 50) );
-        m_yInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Ypos", 50) );
-
-        m_widthInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Width", 800) );
-        m_heightInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Height", 600) );
+        m_orientCB->setDefaultItem(ImageSelectionWidget::Portrait);
     }
+
+    applyRatioChanges(m_ratioCB->currentItem());
 
     m_autoOrientation->setChecked( config->readBoolEntry("Auto Orientation", false) );
     slotAutoOrientChanged( m_autoOrientation->isChecked() );
@@ -526,7 +528,7 @@ void ImageEffect_RatioCrop::setRatioCBText(int orientation)
     int item = m_ratioCB->currentItem();
 
     m_ratioCB->blockSignals(true);
-    m_ratioCB->clear();
+    m_ratioCB->combo()->clear();
     m_ratioCB->insertItem( i18n("Custom") );
     m_ratioCB->insertItem( "1:1" );
     if ( orientation == ImageSelectionWidget::Landscape )
