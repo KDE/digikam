@@ -24,7 +24,6 @@
 
 // Qt includes.
 
-#include <qcombobox.h>
 #include <qimage.h>
 #include <qlabel.h>
 #include <qlayout.h>
@@ -42,6 +41,7 @@
 // LibKDcraw includes.
 
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/rcombobox.h>
 
 // Local includes.
 
@@ -91,23 +91,24 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 1, 0, spacingHint());
     QLabel *label1 = new QLabel(i18n("Type:"), gboxSettings);
 
-    m_textureType = new QComboBox( false, gboxSettings );
-    m_textureType->insertItem( i18n("Paper") );
-    m_textureType->insertItem( i18n("Paper 2") );
-    m_textureType->insertItem( i18n("Fabric") );
-    m_textureType->insertItem( i18n("Burlap") );
-    m_textureType->insertItem( i18n("Bricks") );
-    m_textureType->insertItem( i18n("Bricks 2") );
-    m_textureType->insertItem( i18n("Canvas") );
-    m_textureType->insertItem( i18n("Marble") );
-    m_textureType->insertItem( i18n("Marble 2") );
-    m_textureType->insertItem( i18n("Blue Jean") );
-    m_textureType->insertItem( i18n("Cell Wood") );
-    m_textureType->insertItem( i18n("Metal Wire") );
-    m_textureType->insertItem( i18n("Modern") );
-    m_textureType->insertItem( i18n("Wall") );
-    m_textureType->insertItem( i18n("Moss") );
-    m_textureType->insertItem( i18n("Stone") );
+    m_textureType = new RComboBox(gboxSettings);
+    m_textureType->insertItem(i18n("Paper"));
+    m_textureType->insertItem(i18n("Paper 2"));
+    m_textureType->insertItem(i18n("Fabric"));
+    m_textureType->insertItem(i18n("Burlap"));
+    m_textureType->insertItem(i18n("Bricks"));
+    m_textureType->insertItem(i18n("Bricks 2"));
+    m_textureType->insertItem(i18n("Canvas"));
+    m_textureType->insertItem(i18n("Marble"));
+    m_textureType->insertItem(i18n("Marble 2"));
+    m_textureType->insertItem(i18n("Blue Jean"));
+    m_textureType->insertItem(i18n("Cell Wood"));
+    m_textureType->insertItem(i18n("Metal Wire"));
+    m_textureType->insertItem(i18n("Modern"));
+    m_textureType->insertItem(i18n("Wall"));
+    m_textureType->insertItem(i18n("Moss"));
+    m_textureType->insertItem(i18n("Stone"));
+    m_textureType->setDefaultItem(PaperTexture);
     QWhatsThis::add( m_textureType, i18n("<p>Set here the texture type to apply to the image."));
 
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
@@ -150,10 +151,15 @@ void ImageEffect_Texture::readUserSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("texture Tool Dialog");
+
     m_textureType->blockSignals(true);
     m_blendGain->blockSignals(true);
-    m_textureType->setCurrentItem(config->readNumEntry("TextureType", PaperTexture));
-    m_blendGain->setValue(config->readNumEntry("BlendGain", 200));
+
+    m_textureType->setCurrentItem(config->readNumEntry("TextureType",
+                                  m_textureType->defaultItem()));
+    m_blendGain->setValue(config->readNumEntry("BlendGain",
+                          m_blendGain->defaultValue()));
+
     m_textureType->blockSignals(false);
     m_blendGain->blockSignals(false);
 }
@@ -171,8 +177,10 @@ void ImageEffect_Texture::resetValues()
 {
     m_textureType->blockSignals(true);
     m_blendGain->blockSignals(true);
-    m_textureType->setCurrentItem(PaperTexture);
-    m_blendGain->setValue(200);
+
+    m_textureType->slotReset();
+    m_blendGain->slotReset();
+
     m_textureType->blockSignals(false);
     m_blendGain->blockSignals(false);
 }

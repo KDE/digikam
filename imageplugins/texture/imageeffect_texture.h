@@ -33,11 +33,11 @@
 
 #include "ctrlpaneldlg.h"
 
-class QComboBox;
 
 namespace KDcrawIface
 {
 class RIntNumInput;
+class RComboBox;
 }
 
 namespace DigikamTextureImagesPlugin
@@ -92,7 +92,7 @@ private:
         StoneTexture
     };
 
-    QComboBox    *m_textureType;
+    KDcrawIface::RComboBox    *m_textureType;
 
     KDcrawIface::RIntNumInput *m_blendGain;
 };

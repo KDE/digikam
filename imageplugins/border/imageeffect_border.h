@@ -34,7 +34,6 @@
 
 #include "imageguidedlg.h"
 
-class QComboBox;
 class QLabel;
 class QCheckBox;
 class QColor;
@@ -44,6 +43,7 @@ class KColorButton;
 namespace KDcrawIface
 {
 class RIntNumInput;
+class RComboBox;
 }
 
 namespace DigikamBorderImagesPlugin
@@ -88,8 +88,6 @@ private:
     QLabel       *m_labelForeground;
     QLabel       *m_labelBackground;
 
-    QComboBox    *m_borderType;
-
     QCheckBox    *m_preserveAspectRatio;
 
     QColor        m_solidColor;
@@ -99,6 +97,8 @@ private:
     QColor        m_bevelLowerRightColor;
     QColor        m_decorativeFirstColor;
     QColor        m_decorativeSecondColor;
+
+    KDcrawIface::RComboBox    *m_borderType;
 
     KDcrawIface::RIntNumInput *m_borderPercent;
     KDcrawIface::RIntNumInput *m_borderWidth;

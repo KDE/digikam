@@ -26,18 +26,19 @@
 
 // Qt includes.
 
-#include <qcombobox.h>
 #include <qcheckbox.h>
+#include <qcombobox.h>
 #include <qfile.h>
 #include <qfont.h>
+#include <qfontdatabase.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qscrollbar.h>
+#include <qspinbox.h>
 #include <qstringlist.h>
-#include <qfontdatabase.h>
-#include <qwhatsthis.h>
 #include <qtooltip.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
@@ -47,21 +48,16 @@
 #include <kdialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <qlineedit.h>
 #include <klistbox.h>
 #include <klocale.h>
+#include <knuminput.h>
 #include <kstandarddirs.h>
-
-// LibKDcraw includes.
-
-#include <libkdcraw/rnuminput.h>
+#include <qlineedit.h>
 
 // Local includes.
 
 #include "fontchooserwidget.h"
 #include "fontchooserwidget.moc"
-
-using namespace KDcrawIface;
 
 namespace DigikamInsertTextImagesPlugin
 {
@@ -228,8 +224,8 @@ FontChooserWidget::FontChooserWidget(QWidget *parent, const char *name,
             this, SLOT(style_chosen_slot(const QString &)));
 
     sizeListBox = new KListBox( page, "sizeListBox");
-    sizeOfFont = new RIntNumInput(page);
-    sizeOfFont->input()->setMinValue(4);
+    sizeOfFont = new KIntNumInput( page, "sizeOfFont");
+    sizeOfFont->setMinValue(4);
 
     sizeListBox->setEnabled( !diff );
     sizeOfFont->setEnabled( !diff );

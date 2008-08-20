@@ -159,11 +159,11 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     // -------------------------------------------------------------
 
     QLabel *label1 = new QLabel(i18n("Rotation:"), gbox2);
-    m_textRotation = new QComboBox( false, gbox2 );
-    m_textRotation->insertItem( i18n("None") );
-    m_textRotation->insertItem( i18n("90 Degrees") );
-    m_textRotation->insertItem( i18n("180 Degrees") );
-    m_textRotation->insertItem( i18n("270 Degrees") );
+    m_textRotation = new QComboBox(false, gbox2);
+    m_textRotation->insertItem(i18n("None"));
+    m_textRotation->insertItem(i18n("90 Degrees"));
+    m_textRotation->insertItem(i18n("180 Degrees"));
+    m_textRotation->insertItem(i18n("270 Degrees"));
     QWhatsThis::add( m_textRotation, i18n("<p>Select the text rotation to use."));
     gridBox2->addMultiCellWidget(label1, 5, 5, 0, 0);
     gridBox2->addMultiCellWidget(m_textRotation, 5, 5, 1, 1);
@@ -237,7 +237,7 @@ void ImageEffect_InsertText::readUserSettings()
     else m_defaultSizeFont = (int)(orgW / 8.0);
 
     defaultFont.setPointSize(m_defaultSizeFont);
-    m_textRotation->setCurrentItem( config->readNumEntry("Text Rotation", 0) );
+    m_textRotation->setCurrentItem( config->readNumEntry("Text Rotation", 0));
     m_fontColorButton->setColor(config->readColorEntry("Font Color", &black));
     m_textEdit->setText(config->readEntry("Text String", i18n("Enter your text here!")));
     m_textFont = config->readFontEntry("Font Properties", &defaultFont);

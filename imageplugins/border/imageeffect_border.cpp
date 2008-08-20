@@ -25,26 +25,26 @@
 
 // Qt includes.
 
-#include <qlabel.h>
-#include <qwhatsthis.h>
-#include <qlayout.h>
-#include <qcombobox.h>
 #include <qcheckbox.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
-#include <kseparator.h>
-#include <klocale.h>
 #include <kaboutdata.h>
-#include <kiconloader.h>
 #include <kapplication.h>
-#include <kstandarddirs.h>
-#include <kconfig.h>
 #include <kcolorbutton.h>
+#include <kconfig.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kseparator.h>
+#include <kstandarddirs.h>
 
 // LibKDcraw includes.
 
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/rcombobox.h>
 
 // Local includes.
 
@@ -96,7 +96,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
 
     QLabel *label1 = new QLabel(i18n("Type:"), gboxSettings);
 
-    m_borderType = new QComboBox( false, gboxSettings );
+    m_borderType = new RComboBox(gboxSettings);
     m_borderType->insertItem( i18n("Solid") );
     // Niepce is Real name. This is the first guy in the world to have built a camera.
     m_borderType->insertItem( "Niepce" );
@@ -117,6 +117,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     m_borderType->insertItem( i18n("Decorative Granite") );
     m_borderType->insertItem( i18n("Decorative Rock") );
     m_borderType->insertItem( i18n("Decorative Wall") );
+    m_borderType->setDefaultItem(Border::SolidBorder);
     QWhatsThis::add( m_borderType, i18n("<p>Select the border type to add around the image."));
 
     KSeparator *line1 = new KSeparator(Horizontal, gboxSettings);
@@ -133,10 +134,12 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     m_labelBorderPercent  = new QLabel(i18n("Width (%):"), gboxSettings);
     m_borderPercent       = new RIntNumInput(gboxSettings);
     m_borderPercent->setRange(1, 50, 1);
+    m_borderPercent->setDefaultValue(10);
     QWhatsThis::add(m_borderPercent, i18n("<p>Set here the border width in percent of the image size."));
 
     m_labelBorderWidth = new QLabel(i18n("Width (pixels):"), gboxSettings);
     m_borderWidth      = new RIntNumInput(gboxSettings);
+    m_borderWidth->setDefaultValue(100);
     QWhatsThis::add(m_borderWidth, i18n("<p>Set here the border width in pixels to add around the image."));
 
     Digikam::ImageIface iface(0, 0);
@@ -212,10 +215,13 @@ void ImageEffect_Border::readUserSettings(void)
     KConfig *config = kapp->config();
     config->setGroup("border Tool Dialog");
 
-    m_borderType->setCurrentItem(config->readNumEntry("Border Type", Border::SolidBorder));
-    m_borderPercent->setValue(config->readNumEntry("Border Percent", 10) );
-    m_borderWidth->setValue(config->readNumEntry("Border Width", 100) );
-    m_preserveAspectRatio->setChecked(config->readBoolEntry("Preserve Aspect Ratio", true) );
+    m_borderType->setCurrentItem(config->readNumEntry("Border Type",
+                                 m_borderType->defaultItem()));
+    m_borderPercent->setValue(config->readNumEntry("Border Percent",
+                              m_borderPercent->defaultValue()));
+    m_borderWidth->setValue(config->readNumEntry("Border Width",
+                            m_borderWidth->defaultValue()));
+    m_preserveAspectRatio->setChecked(config->readBoolEntry("Preserve Aspect Ratio", true));
 
     QColor black(0, 0, 0);
     QColor white(255, 255, 255);
@@ -270,9 +276,9 @@ void ImageEffect_Border::resetValues()
     m_secondColorButton->blockSignals(true);
     m_preserveAspectRatio->blockSignals(true);
 
-    m_borderType->setCurrentItem(Border::SolidBorder);
-    m_borderPercent->setValue(10);
-    m_borderWidth->setValue(100);
+    m_borderType->slotReset();
+    m_borderPercent->slotReset();
+    m_borderWidth->slotReset();
     m_preserveAspectRatio->setChecked(true);
 
     m_solidColor            = QColor(0, 0, 0);

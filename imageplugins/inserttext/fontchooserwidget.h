@@ -38,11 +38,7 @@ class QLabel;
 class QStringList;
 
 class KListBox;
-
-namespace KDcrawIface
-{
-class RIntNumInput;
-}
+class KIntNumInput;
 
 namespace DigikamInsertTextImagesPlugin
 {
@@ -157,11 +153,11 @@ private:
 
     QLabel                 *sizeLabel;
 
+    KIntNumInput           *sizeOfFont;
+
     KListBox               *familyListBox;
     KListBox               *styleListBox;
     KListBox               *sizeListBox;
-
-    KDcrawIface::RIntNumInput *sizeOfFont;
 
 private:
 
