@@ -118,6 +118,9 @@ public:
         rawdecodingBox         = 0;
         brightnessLabel        = 0;
         brightnessInput        = 0;
+        importBtn              = 0;
+        useDefaultBtn          = 0;
+        resetBtn               = 0;
     }
 
     QWidget             *advExposureBox;
@@ -135,9 +138,14 @@ public:
 
     QHButtonGroup       *scaleBG;
 
+    QPushButton         *importBtn;
+    QPushButton         *useDefaultBtn;
+    QPushButton         *resetBtn;
     QPushButton         *abortBtn;
     QPushButton         *updateBtn;
+
     QToolButton         *resetCurveBtn;
+
     QToolBox            *postProcessSettingsBox;
 
     KTabWidget          *tabView;
@@ -167,7 +175,7 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    QGridLayout* gridSettings = new QGridLayout(this, 5, 4);
+    QGridLayout* gridSettings = new QGridLayout(this, 6, 4);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), this);
     label1->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
@@ -246,12 +254,14 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     KFileDialog *outputDlg = d->decodingSettingsBox->outputProfileUrlEdit()->fileDialog();
     outputDlg->setPreviewWidget(new ICCPreviewWidget(outputDlg));
 
-    d->abortBtn = new QPushButton(i18n("Abort"), d->rawdecodingBox);
+    d->abortBtn = new QPushButton(d->rawdecodingBox);
+    d->abortBtn->setText(i18n("Abort"));
     d->abortBtn->setIconSet(SmallIconSet("stop"));
     d->abortBtn->setEnabled(false);
     QToolTip::add(d->abortBtn, i18n("Abort the current Raw image preview."));
 
-    d->updateBtn = new QPushButton(i18n("Update"), d->rawdecodingBox);
+    d->updateBtn = new QPushButton(d->rawdecodingBox);
+    d->updateBtn->setText(i18n("Update"));
     d->updateBtn->setIconSet(SmallIconSet("reload_page"));
     d->updateBtn->setEnabled(false);
     QToolTip::add(d->updateBtn, i18n("Generate a Raw image preview using current settings."));
@@ -378,6 +388,29 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
 
     // ---------------------------------------------------------------
 
+    QHBox *btnBox = new QHBox(this);
+
+    d->resetBtn = new QPushButton(btnBox);
+    d->resetBtn->setText(i18n("Reset"));
+    d->resetBtn->setIconSet(SmallIconSet("reload_page"));
+    QToolTip::add(d->resetBtn, i18n("<p>Reset all settings to default values."));
+
+    QLabel *space2 = new QLabel(btnBox);
+
+    d->importBtn = new QPushButton(btnBox);
+    d->importBtn->setText(i18n("Import"));
+    d->importBtn->setIconSet(SmallIconSet("ok"));
+    QToolTip::add(d->importBtn, i18n("<p>Import image to editor using current settings."));
+
+    d->useDefaultBtn = new QPushButton(btnBox);
+    d->useDefaultBtn->setText(i18n("Use Default"));
+    d->useDefaultBtn->setIconSet(SmallIconSet("gohome"));
+    QToolTip::add(d->useDefaultBtn, i18n("<p>Use general Raw decoding settings to load this image in editor."));
+
+    btnBox->setStretchFactor(space2, 10);
+
+    // ---------------------------------------------------------------
+
     gridSettings->addMultiCellWidget(label1,       0, 0, 0, 0);
     gridSettings->addMultiCellWidget(d->channelCB, 0, 0, 1, 1);
     gridSettings->addMultiCellWidget(d->scaleBG,   0, 0, 4, 4);
@@ -385,7 +418,9 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     gridSettings->addMultiCellWidget(d->colorsCB,  1, 1, 1, 1);
     gridSettings->addMultiCellWidget(histoBox,     2, 3, 0, 4);
     gridSettings->addMultiCellWidget(d->tabView,   4, 4, 0, 4);
-    gridSettings->setRowStretch(5, 10);
+    gridSettings->addMultiCellWidget(btnBox,       5, 5, 0, 4);
+
+    gridSettings->setRowStretch(6, 10);
     gridSettings->setColStretch(2, 10);
     gridSettings->setSpacing(KDialog::spacingHint());
     gridSettings->setMargin(0);
@@ -430,12 +465,26 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
 
     connect(d->fineExposureInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalPostProcessingChanged()));
+
+    connect(d->resetBtn, SIGNAL(clicked()),
+            this, SLOT(slotReset()));
+
+    connect(d->importBtn, SIGNAL(clicked()),
+            this, SIGNAL(signalImportClicked()));
+
+    connect(d->useDefaultBtn, SIGNAL(clicked()),
+            this, SIGNAL(signalUseDefaultClicked()));
 }
 
 RawSettingsBox::~RawSettingsBox()
 {
     delete d->curveWidget;
     delete d;
+}
+
+void RawSettingsBox::slotReset()
+{
+    setDefaultSettings();
 }
 
 void RawSettingsBox::enableUpdateBtn(bool b)

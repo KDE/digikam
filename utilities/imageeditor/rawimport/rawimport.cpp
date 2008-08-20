@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2008-08-04
- * Description : Raw import dialog
+ * Date        : 2008-08-20
+ * Description : Raw import tool
  *
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -46,17 +46,17 @@
 #include "imagehistogram.h"
 #include "rawsettingsbox.h"
 #include "rawpreview.h"
-#include "rawimportdlg.h"
-#include "rawimportdlg.moc"
+#include "rawimport.h"
+#include "rawimport.moc"
 
 namespace Digikam
 {
 
-class RawImportDlgPriv
+class RawImportPriv
 {
 public:
 
-    RawImportDlgPriv()
+    RawImportPriv()
     {
         previewWidget = 0;
         settingsBox   = 0;
@@ -70,40 +70,19 @@ public:
     RawPreview     *previewWidget;
 };
 
-RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
-            : KDialogBase(parent, 0, false, QString(),
-                          Help|Default|Ok|Cancel, Cancel, true)
+RawImport::RawImport(const KURL& url, QObject *parent)
+         : EditorTool(parent)
 {
-    d = new RawImportDlgPriv;
-    d->timer = new QTimer(this);
+    d = new RawImportPriv;
 
-    setHelp("rawimport.anchor", "digikam");
-    setCaption(i18n("Raw Import - %1").arg(url.fileName()));
+    d->timer         = new QTimer(this);
+    d->previewWidget = new RawPreview(url, 0);
+    d->settingsBox   = new RawSettingsBox(url, 0);
 
-    setButtonText(Ok, i18n("&Import"));
-    setButtonTip(Ok, i18n("<p>Import image to editor using current settings."));
-
-    setButtonGuiItem(Cancel, KGuiItem(i18n("&Use Default"), "gohome"));
-    setButtonTip(Cancel, i18n("<p>Use general Raw decoding settings to load this image in editor."));
-
-    setButtonGuiItem(Default, KGuiItem(i18n("&Reset"), "reload_page"));
-    setButtonTip(Default, i18n("<p>Reset these settings to default values."));
-
-    QWidget *page = new QWidget(this);
-    setMainWidget(page);
-    QGridLayout *mainLayout = new QGridLayout(page, 1, 1);
-    d->previewWidget        = new RawPreview(url, page);
-    d->settingsBox          = new RawSettingsBox(url, page);
-
-    // ---------------------------------------------------------------
-
-    mainLayout->addMultiCellWidget(d->previewWidget, 0, 1, 0, 0);
-    mainLayout->addMultiCellWidget(d->settingsBox,   0, 0, 1, 1);
-    mainLayout->setColStretch(0, 10);
-    mainLayout->setRowStretch(1, 10);
-    mainLayout->setSpacing(spacingHint());
-    mainLayout->setMargin(0);
-
+    setToolView(d->previewWidget);
+    setToolSettings(d->settingsBox);
+    setToolName(i18n("Raw Import"));
+    setToolIcon(SmallIcon("kdcraw"));
     readSettings();
 
     // ---------------------------------------------------------------
@@ -129,6 +108,12 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     connect(d->settingsBox, SIGNAL(signalPostProcessingChanged()),
             this, SLOT(slotTimer()));
 
+    connect(d->settingsBox, SIGNAL(signalImportClicked()),
+            this, SIGNAL(okClicked()));
+
+    connect(d->settingsBox, SIGNAL(signalUseDefaultClicked()),
+            this, SIGNAL(cancelClicked()));
+
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotPostProcessing()));
 
@@ -144,66 +129,35 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     slotUpdatePreview();
 }
 
-RawImportDlg::~RawImportDlg()
+RawImport::~RawImport()
 {
     delete d;
 }
 
-void RawImportDlg::closeEvent(QCloseEvent *e)
-{
-    if (!e) return;
-    saveSettings();
-    e->accept();
-}
-
-void RawImportDlg::slotClose()
-{
-    saveSettings();
-    KDialogBase::slotClose();
-}
-
-void RawImportDlg::slotDefault()
-{
-    d->settingsBox->setDefaultSettings();
-}
-
-void RawImportDlg::slotOk()
-{
-    saveSettings();
-    KDialogBase::slotOk();
-}
-
-void RawImportDlg::setBusy(bool val)
+void RawImport::setBusy(bool val)
 {
     if (val) d->previewWidget->setCursor(KCursor::waitCursor());
     else d->previewWidget->unsetCursor();
     d->settingsBox->setBusy(val);
-    enableButton(Default, !val);
-    enableButton(Ok,      !val);
-    enableButton(Close,   !val);
 }
 
-void RawImportDlg::readSettings()
+void RawImport::readSettings()
 {
-    KConfig* config = kapp->config();
-    resize(configDialogSize(*config, QString("RAW Import Dialog")));
     d->settingsBox->readSettings();
 }
 
-void RawImportDlg::saveSettings()
+void RawImport::saveSettings()
 {
-    KConfig* config = kapp->config();
-    saveDialogSize(*config, QString("RAW Import Dialog"));
     d->settingsBox->saveSettings();
-    config->sync();
+    kapp->config()->sync();
 }
 
-DRawDecoding RawImportDlg::rawDecodingSettings()
+DRawDecoding RawImport::rawDecodingSettings()
 {
     return d->settingsBox->settings();
 }
 
-void RawImportDlg::slotUpdatePreview()
+void RawImport::slotUpdatePreview()
 {
     DRawDecoding settings = rawDecodingSettings();
     // We will load an half size image to speed up preview computing.
@@ -212,14 +166,14 @@ void RawImportDlg::slotUpdatePreview()
     d->previewWidget->setDecodingSettings(settings);
 }
 
-void RawImportDlg::slotAbortPreview()
+void RawImport::slotAbortPreview()
 {
     d->previewWidget->cancelLoading();
     d->settingsBox->histogram()->stopHistogramComputation();
     setBusy(false);
 }
 
-void RawImportDlg::slotLoadingStarted()
+void RawImport::slotLoadingStarted()
 {
     d->settingsBox->enableUpdateBtn(false);
     d->settingsBox->histogram()->setDataLoading();
@@ -227,34 +181,34 @@ void RawImportDlg::slotLoadingStarted()
     setBusy(true);
 }
 
-void RawImportDlg::slotDemosaicedImage()
+void RawImport::slotDemosaicedImage()
 {
     d->settingsBox->setDemosaicedImage(d->previewWidget->demosaicedImage());
 }
 
-void RawImportDlg::slotPostProcessedImage()
+void RawImport::slotPostProcessedImage()
 {
     d->settingsBox->setPostProcessedImage(d->previewWidget->postProcessedImage());
     setBusy(false);
 }
 
-void RawImportDlg::slotLoadingFailed()
+void RawImport::slotLoadingFailed()
 {
     d->settingsBox->histogram()->setLoadingFailed();
     setBusy(false);
 }
 
-void RawImportDlg::slotTimer()
+void RawImport::slotTimer()
 {
     d->timer->start(500, true);
 }
 
-void RawImportDlg::slotPostProcessing()
+void RawImport::slotPostProcessing()
 {
     d->previewWidget->setPostProcessingSettings(rawDecodingSettings());
 }
 
-void RawImportDlg::slotDemosaicingChanged()
+void RawImport::slotDemosaicingChanged()
 {
     d->settingsBox->enableUpdateBtn(true);
 }

@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2008-08-04
- * Description : Raw import dialog
+ * Date        : 2008-08-20
+ * Description : Raw import tool
  *
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -25,15 +25,13 @@
 
 // KDE includes.
 
-#include <kdialogbase.h>
 #include <kurl.h>
 
 // Local includes
 
+#include "editortool.h"
 #include "dimg.h"
 #include "digikam_export.h"
-
-class QCloseEvent;
 
 namespace KDcrawIface
 {
@@ -43,22 +41,18 @@ class RawDecodingSettings;
 namespace Digikam
 {
 
-class RawImportDlgPriv;
+class RawImportPriv;
 
-class DIGIKAM_EXPORT RawImportDlg : public KDialogBase
+class DIGIKAM_EXPORT RawImport : public EditorTool
 {
     Q_OBJECT
 
 public:
 
-    RawImportDlg(const KURL& url, QWidget *parent);
-    ~RawImportDlg();
+    RawImport(const KURL& url, QObject *parent);
+    ~RawImport();
 
     DRawDecoding rawDecodingSettings();
-
-protected:
-
-    void closeEvent(QCloseEvent *e);
 
 private:
 
@@ -74,9 +68,6 @@ private slots:
     void slotPostProcessedImage();
     void slotLoadingFailed();
 
-    void slotDefault();
-    void slotClose();
-    void slotOk();
     void slotUpdatePreview();
     void slotAbortPreview();
 
@@ -86,7 +77,7 @@ private slots:
 
 private:
 
-    RawImportDlgPriv *d;
+    RawImportPriv *d;
 };
 
 } // NameSpace Digikam

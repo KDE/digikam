@@ -69,6 +69,9 @@ public:
 
 signals:
 
+    void signalImportClicked();
+    void signalUseDefaultClicked();
+
     void signalUpdatePreview();
     void signalAbortPreview();
     void signalDemosaicingChanged();
@@ -81,6 +84,8 @@ private slots:
     void slotColorsChanged(int color);
 
     void slotResetCurve();
+
+    void slotReset();
 
 private:
 
