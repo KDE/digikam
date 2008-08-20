@@ -26,9 +26,9 @@
 
 // Qt includes.
 
-#include <qobject.h>
-#include <qstring.h>
-#include <qpixmap.h>
+#include <QObject>
+#include <QString>
+#include <QPixmap>
 
 // Local includes.
 
@@ -77,4 +77,3 @@ private:
 }  //namespace Digikam
 
 #endif /* IMAGEPLUGIN_H */
-

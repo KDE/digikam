@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <qobject.h>
+#include <QObject>
 
 // Locale includes.
 
