@@ -215,32 +215,26 @@ void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofil
 
 void DImgInterface::slotUseRawImportSettings()
 {
-    RawImport *rawImport = ::qt_cast<RawImport*>(sender());
-    if (rawImport)
-    {
-        d->thread->load(LoadingDescription(d->filename, rawImport->rawDecodingSettings()),
-                        SharedLoadSaveThread::AccessModeReadWrite,
-                        SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+    RawImport *rawImport = dynamic_cast<RawImport*>(EditorToolIface::editorToolIface()->currentTool());
 
-        EditorToolIface::editorToolIface()->unLoadTool(rawImport);
-        emit signalLoadingStarted(d->filename);
-        delete rawImport;
-    }
-}
-
-void DImgInterface::slotUseDefaultSettings()
-{
-    d->thread->load(LoadingDescription(d->filename, d->iofileSettings->rawDecodingSettings),
+    d->thread->load(LoadingDescription(d->filename, 
+                    rawImport->rawDecodingSettings()),
                     SharedLoadSaveThread::AccessModeReadWrite,
                     SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
     emit signalLoadingStarted(d->filename);
 
-    RawImport *rawImport = ::qt_cast<RawImport*>(sender());
-    if (rawImport)
-    {
-        EditorToolIface::editorToolIface()->unLoadTool(rawImport);
-        delete rawImport;
-    }
+    EditorToolIface::editorToolIface()->unLoadTool();
+}
+
+void DImgInterface::slotUseDefaultSettings()
+{
+    d->thread->load(LoadingDescription(d->filename, 
+                    d->iofileSettings->rawDecodingSettings),
+                    SharedLoadSaveThread::AccessModeReadWrite,
+                    SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+    emit signalLoadingStarted(d->filename);
+
+    EditorToolIface::editorToolIface()->unLoadTool();
 }
 
 void DImgInterface::resetImage()
