@@ -291,12 +291,12 @@ void ImageEffect_RedEye::readUserSettings()
     config->setGroup("redeye Tool Dialog");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0)); // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
-    m_redThreshold->setValue(config->readNumEntry("RedThreshold", 20));
-    m_smoothLevel->setValue(config->readNumEntry("SmoothLevel", 1));
+    m_redThreshold->setValue(config->readNumEntry("RedThreshold", m_redThreshold->defaultValue()));
+    m_smoothLevel->setValue(config->readNumEntry("SmoothLevel", m_smoothLevel->defaultValue()));
     m_HSSelector->setXValue(config->readNumEntry("HueColoringTint", 0));
     m_HSSelector->setYValue(config->readNumEntry("SatColoringTint", 0));
     m_VSelector->setValue(config->readNumEntry("ValColoringTint", 0));
-    m_tintLevel->setValue(config->readNumEntry("TintLevel", 128));
+    m_tintLevel->setValue(config->readNumEntry("TintLevel", m_tintLevel->defaultValue()));
 
     slotHSChanged(m_HSSelector->xValue(), m_HSSelector->yValue());
     slotChannelChanged(m_channelCB->currentItem());
@@ -325,15 +325,15 @@ void ImageEffect_RedEye::resetValues()
     m_VSelector->blockSignals(true);
     m_tintLevel->blockSignals(true);
 
-    m_redThreshold->setValue(20);
-    m_smoothLevel->setValue(1);
+    m_redThreshold->slotReset();
+    m_smoothLevel->slotReset();
 
     // Black color by default
     m_HSSelector->setXValue(0);
     m_HSSelector->setYValue(0);
     m_VSelector->setValue(0);
 
-    m_tintLevel->setValue(128);
+    m_tintLevel->slotReset();
 
     m_redThreshold->blockSignals(false);
     m_HSSelector->blockSignals(false);

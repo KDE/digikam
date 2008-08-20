@@ -86,7 +86,7 @@ void ImageEffect_Blur::readUserSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("gaussianblur Tool Dialog");
-    m_radiusInput->setValue(config->readNumEntry("RadiusAjustment", 0));
+    m_radiusInput->setValue(config->readNumEntry("RadiusAjustment", m_radiusInput->defaultValue()));
 }
 
 void ImageEffect_Blur::writeUserSettings()
@@ -100,7 +100,7 @@ void ImageEffect_Blur::writeUserSettings()
 void ImageEffect_Blur::resetValues(void)
 {
     m_radiusInput->blockSignals(true);
-    m_radiusInput->setValue(0);
+    m_radiusInput->slotReset();
     m_radiusInput->blockSignals(false);
 }
 
