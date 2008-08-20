@@ -6,21 +6,21 @@
  * Date        : 2005-03-27
  * Description : a digiKam image plugin for fixing dots produced by
  *               hot/stuck/dead pixels from a CCD.
- * 
+ *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef IMAGEEFFECT_HOTPIXELS_H
@@ -44,10 +44,14 @@
 
 #include "hotpixelfixer.h"
 
-class QComboBox;
 class QPushButton;
 
 class KProgress;
+
+namespace KDcrawIface
+{
+class RComboBox;
+}
 
 namespace DigikamHotPixelsImagesPlugin
 {
@@ -85,17 +89,17 @@ private:
 
 private:
 
-    QComboBox            *m_filterMethodCombo;
+    QPushButton            *m_blackFrameButton;
 
-    QPushButton          *m_blackFrameButton;
+    QValueList<HotPixel>    m_hotPixelsList;
 
-    QValueList<HotPixel>  m_hotPixelsList;
+    KURL                    m_blackFrameURL;
 
-    KURL                  m_blackFrameURL;
+    KProgress              *m_progressBar;
 
-    KProgress            *m_progressBar;
+    BlackFrameListView     *m_blackFrameListView;
 
-    BlackFrameListView   *m_blackFrameListView;
+    KDcrawIface::RComboBox *m_filterMethodCombo;
 };
 
 }  // NameSpace DigikamHotPixelsImagesPlugin

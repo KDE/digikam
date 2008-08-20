@@ -43,6 +43,10 @@
 #include <kfiledialog.h>
 #include <kprogress.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rcombobox.h>
+
 // Local includes.
 
 #include "daboutdata.h"
@@ -54,6 +58,8 @@
 #include "blackframelistview.h"
 #include "imageeffect_hotpixels.h"
 #include "imageeffect_hotpixels.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamHotPixelsImagesPlugin
 {
@@ -92,11 +98,12 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     QGridLayout* gridSettings = new QGridLayout(gboxSettings, 3, 2, 0, spacingHint());
 
     QLabel *filterMethodLabel = new QLabel(i18n("Filter:"), gboxSettings);
-    m_filterMethodCombo       = new QComboBox(gboxSettings);
+    m_filterMethodCombo       = new RComboBox(gboxSettings);
     m_filterMethodCombo->insertItem(i18n("Average"));
     m_filterMethodCombo->insertItem(i18n("Linear"));
     m_filterMethodCombo->insertItem(i18n("Quadratic"));
     m_filterMethodCombo->insertItem(i18n("Cubic"));
+    m_filterMethodCombo->setDefaultItem(HotPixelFixer::QUADRATIC_INTERPOLATION);
 
     m_blackFrameButton = new QPushButton(i18n("Black Frame..."), gboxSettings);
     setButtonWhatsThis( Apply, i18n("<p>Use this button to add a new black frame file which will "
@@ -137,7 +144,7 @@ void ImageEffect_HotPixels::readUserSettings()
     config->setGroup("hotpixels Tool Dialog");
     m_blackFrameURL = KURL(config->readEntry("Last Black Frame File", QString()));
     m_filterMethodCombo->setCurrentItem(config->readNumEntry("Filter Method",
-                                        HotPixelFixer::QUADRATIC_INTERPOLATION));
+                                        m_filterMethodCombo->defaultItem()));
 
     if (m_blackFrameURL.isValid())
     {
@@ -163,7 +170,7 @@ void ImageEffect_HotPixels::writeUserSettings()
 void ImageEffect_HotPixels::resetValues()
 {
     m_filterMethodCombo->blockSignals(true);
-    m_filterMethodCombo->setCurrentItem(HotPixelFixer::QUADRATIC_INTERPOLATION);
+    m_filterMethodCombo->slotReset();
     m_filterMethodCombo->blockSignals(false);
 }
 
