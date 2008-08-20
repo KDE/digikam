@@ -106,7 +106,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
 
     QLabel *typeLabel   = new QLabel(i18n("Filtering type:"), firstPage);
     typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_restorationTypeCB = new QComboBox( false, firstPage );
+    m_restorationTypeCB = new QComboBox(false, firstPage);
     m_restorationTypeCB->insertItem( i18n("None") );
     m_restorationTypeCB->insertItem( i18n("Reduce Uniform Noise") );
     m_restorationTypeCB->insertItem( i18n("Reduce JPEG Artefacts") );
@@ -135,6 +135,12 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
 
     connect(m_restorationTypeCB, SIGNAL(activated(int)),
             this, SLOT(slotResetValues(int)));
+
+    // -------------------------------------------------------------
+
+    Digikam::GreycstorationSettings defaults;
+    defaults.setRestorationDefaultSettings();
+    m_settingsWidget->setDefaultSettings(defaults);
 }
 
 ImageEffect_Restoration::~ImageEffect_Restoration()
@@ -153,20 +159,22 @@ void ImageEffect_Restoration::readUserSettings()
     config->setGroup("restoration Tool Dialog");
 
     Digikam::GreycstorationSettings settings;
-    settings.fastApprox = config->readBoolEntry("FastApprox", true);
-    settings.interp     = config->readNumEntry("Interpolation",
-                          Digikam::GreycstorationSettings::NearestNeighbor);
-    settings.amplitude  = config->readDoubleNumEntry("Amplitude", 60.0);
-    settings.sharpness  = config->readDoubleNumEntry("Sharpness", 0.7);
-    settings.anisotropy = config->readDoubleNumEntry("Anisotropy", 0.3);
-    settings.alpha      = config->readDoubleNumEntry("Alpha", 0.6);
-    settings.sigma      = config->readDoubleNumEntry("Sigma", 1.1);
-    settings.gaussPrec  = config->readDoubleNumEntry("GaussPrec", 2.0);
-    settings.dl         = config->readDoubleNumEntry("Dl", 0.8);
-    settings.da         = config->readDoubleNumEntry("Da", 30.0);
-    settings.nbIter     = config->readNumEntry("Iteration", 1);
-    settings.tile       = config->readNumEntry("Tile", 512);
-    settings.btile      = config->readNumEntry("BTile", 4);
+    Digikam::GreycstorationSettings defaults;
+    defaults.setRestorationDefaultSettings();
+
+    settings.fastApprox = config->readBoolEntry("FastApprox", defaults.fastApprox);
+    settings.interp     = config->readNumEntry("Interpolation", defaults.interp);
+    settings.amplitude  = config->readDoubleNumEntry("Amplitude", defaults.amplitude);
+    settings.sharpness  = config->readDoubleNumEntry("Sharpness", defaults.sharpness);
+    settings.anisotropy = config->readDoubleNumEntry("Anisotropy", defaults.anisotropy);
+    settings.alpha      = config->readDoubleNumEntry("Alpha", defaults.alpha);
+    settings.sigma      = config->readDoubleNumEntry("Sigma", defaults.sigma);
+    settings.gaussPrec  = config->readDoubleNumEntry("GaussPrec", defaults.gaussPrec);
+    settings.dl         = config->readDoubleNumEntry("Dl", defaults.dl);
+    settings.da         = config->readDoubleNumEntry("Da", defaults.da);
+    settings.nbIter     = config->readNumEntry("Iteration", defaults.nbIter);
+    settings.tile       = config->readNumEntry("Tile", defaults.tile);
+    settings.btile      = config->readNumEntry("BTile", defaults.btile);
     m_settingsWidget->setSettings(settings);
 
     int p = config->readNumEntry("Preset", NoPreset);

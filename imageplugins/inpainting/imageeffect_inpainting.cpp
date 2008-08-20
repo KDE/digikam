@@ -205,6 +205,12 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
 
     connect(m_inpaintingTypeCB, SIGNAL(activated(int)),
             this, SLOT(slotResetValues(int)));
+
+    // -------------------------------------------------------------
+
+    Digikam::GreycstorationSettings defaults;
+    defaults.setInpaintingDefaultSettings();
+    m_settingsWidget->setDefaultSettings(defaults);
 }
 
 ImageEffect_InPainting_Dialog::~ImageEffect_InPainting_Dialog()
@@ -222,21 +228,23 @@ void ImageEffect_InPainting_Dialog::readUserSettings()
     config->setGroup("inpainting Tool Dialog");
 
     Digikam::GreycstorationSettings settings;
-    settings.fastApprox = config->readBoolEntry("FastApprox", true);
-    settings.interp     = config->readNumEntry("Interpolation",
-                          Digikam::GreycstorationSettings::NearestNeighbor);
-    settings.amplitude  = config->readDoubleNumEntry("Amplitude", 20.0);
-    settings.sharpness  = config->readDoubleNumEntry("Sharpness", 0.3);
-    settings.anisotropy = config->readDoubleNumEntry("Anisotropy", 1.0);
-    settings.alpha      = config->readDoubleNumEntry("Alpha", 0.8);
-    settings.sigma      = config->readDoubleNumEntry("Sigma", 2.0);
-    settings.gaussPrec  = config->readDoubleNumEntry("GaussPrec", 2.0);
-    settings.dl         = config->readDoubleNumEntry("Dl", 0.8);
-    settings.da         = config->readDoubleNumEntry("Da", 30.0);
-    settings.nbIter     = config->readNumEntry("Iteration", 30);
-    settings.tile       = config->readNumEntry("Tile", 512);
-    settings.btile      = config->readNumEntry("BTile", 4);
-    m_settingsWidget->setDefaultSettings(settings);
+    Digikam::GreycstorationSettings defaults;
+    defaults.setInpaintingDefaultSettings();
+
+    settings.fastApprox = config->readBoolEntry("FastApprox", defaults.fastApprox);
+    settings.interp     = config->readNumEntry("Interpolation", defaults.interp);
+    settings.amplitude  = config->readDoubleNumEntry("Amplitude", defaults.amplitude);
+    settings.sharpness  = config->readDoubleNumEntry("Sharpness", defaults.sharpness);
+    settings.anisotropy = config->readDoubleNumEntry("Anisotropy", defaults.anisotropy);
+    settings.alpha      = config->readDoubleNumEntry("Alpha", defaults.alpha);
+    settings.sigma      = config->readDoubleNumEntry("Sigma", defaults.sigma);
+    settings.gaussPrec  = config->readDoubleNumEntry("GaussPrec", defaults.gaussPrec);
+    settings.dl         = config->readDoubleNumEntry("Dl", defaults.dl);
+    settings.da         = config->readDoubleNumEntry("Da", defaults.da);
+    settings.nbIter     = config->readNumEntry("Iteration", defaults.nbIter);
+    settings.tile       = config->readNumEntry("Tile", defaults.tile);
+    settings.btile      = config->readNumEntry("BTile", defaults.btile);
+    m_settingsWidget->setSettings(settings);
 
     int p = config->readNumEntry("Preset", NoPreset);
     m_inpaintingTypeCB->setCurrentItem(p);
