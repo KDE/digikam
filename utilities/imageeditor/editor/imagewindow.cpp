@@ -93,6 +93,7 @@
 #include "deletedialog.h"
 #include "metadatahub.h"
 #include "themeengine.h"
+#include "editorstackview.h"
 #include "imagewindow.h"
 #include "imagewindow.moc"
 
@@ -211,6 +212,11 @@ ImageWindow::~ImageWindow()
     delete d;
 }
 
+Sidebar* ImageWindow::rightSideBar() const
+{
+    return dynamic_cast<Sidebar*>(d->rightSidebar);
+}
+
 void ImageWindow::closeEvent(QCloseEvent* e)
 {
     if (!e)
@@ -271,7 +277,10 @@ void ImageWindow::setupUserArea()
     QHBoxLayout *lay = new QHBoxLayout(widget);
 
     m_splitter       = new QSplitter(widget);
-    m_canvas         = new Canvas(m_splitter);
+    m_stackView      = new EditorStackView(m_splitter);
+    m_canvas         = new Canvas(m_stackView);
+    m_stackView->setCanvas(m_canvas);
+    m_stackView->setViewMode(EditorStackView::CanvasMode);
 
     m_canvas->makeDefaultEditingCanvas();
 

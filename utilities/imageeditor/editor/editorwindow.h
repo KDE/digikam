@@ -37,6 +37,7 @@
 
 // Local includes.
 
+#include "sidebar.h"
 #include "digikam_export.h"
 
 class QSplitter;
@@ -51,6 +52,7 @@ class KSelectAction;
 namespace Digikam
 {
 
+class Sidebar;
 class DPopupMenu;
 class Canvas;
 class ImagePluginLoader;
@@ -58,6 +60,7 @@ class IOFileSettingsContainer;
 class SavingContextContainer;
 class StatusProgressBar;
 class SlideShowSettings;
+class EditorStackView;
 class EditorWindowPriv;
 
 class DIGIKAM_EXPORT EditorWindow : public KMainWindow
@@ -71,6 +74,9 @@ public:
 
     virtual void applySettings(){};
     virtual bool setup(bool iccSetupPage=false)=0;
+    virtual Sidebar *rightSideBar() const=0;
+
+    EditorStackView* editorStackView() const;
 
 signals:
 
@@ -107,6 +113,7 @@ protected:
     KToolBarPopupAction     *m_redoAction;
 
     DPopupMenu              *m_contextMenu;
+    EditorStackView         *m_stackView;
     Canvas                  *m_canvas;
     ImagePluginLoader       *m_imagePluginLoader;
     StatusProgressBar       *m_nameLabel;
@@ -178,6 +185,8 @@ protected slots:
     void slotEscapePressed();
 
     void slotSelected(bool);
+
+    void slotPrepareToLoad();
 
     void slotLoadingProgress(const QString& filePath, float progress);
     void slotSavingProgress(const QString& filePath, float progress);

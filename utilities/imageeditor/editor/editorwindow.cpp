@@ -104,6 +104,7 @@ extern "C"
 #include "slideshowsettings.h"
 #include "themeengine.h"
 #include "rawcameradlg.h"
+#include "editortooliface.h"
 #include "editorwindowprivate.h"
 #include "editorwindow.h"
 #include "editorwindow.moc"
@@ -136,6 +137,7 @@ EditorWindow::EditorWindow(const char *name)
     m_lastAction             = 0;
     m_undoAction             = 0;
     m_redoAction             = 0;
+    m_stackView              = 0;
     m_fullScreen             = false;
     m_rotatedOrFlipped       = false;
     m_setExifOrientationTag  = true;
@@ -145,6 +147,7 @@ EditorWindow::EditorWindow(const char *name)
 
     d->ICCSettings      = new ICCSettingsContainer();
     d->exposureSettings = new ExposureSettingsContainer();
+    d->toolIface        = new EditorToolIface(this);
     m_IOFileSettings    = new IOFileSettingsContainer();
     m_savingContext     = new SavingContextContainer();
 }
@@ -157,6 +160,11 @@ EditorWindow::~EditorWindow()
     delete d->ICCSettings;
     delete d->exposureSettings;
     delete d;
+}
+
+EditorStackView* EditorWindow::editorStackView() const
+{
+    return m_stackView;
 }
 
 void EditorWindow::setupContextMenu()
@@ -201,6 +209,9 @@ void EditorWindow::setupStandardConnections()
 
     connect(m_canvas, SIGNAL(signalSelected(bool)),
             this, SLOT(slotSelected(bool)));
+
+    connect(m_canvas, SIGNAL(signalPrepareToLoad()),
+            this, SLOT(slotPrepareToLoad()));
 
     connect(m_canvas, SIGNAL(signalLoadingStarted(const QString &)),
             this, SLOT(slotLoadingStarted(const QString &)));
@@ -1323,13 +1334,17 @@ void EditorWindow::showToolBars()
     }
 }
 
-void EditorWindow::slotLoadingStarted(const QString& /*filename*/)
+void EditorWindow::slotPrepareToLoad()
 {
-    setCursor( KCursor::waitCursor() );
-
     // Disable actions as appropriate during loading
     emit signalNoCurrentItem();
     toggleActions(false);
+    slotUpdateItemInfo();
+}
+
+void EditorWindow::slotLoadingStarted(const QString& /*filename*/)
+{
+    setCursor( KCursor::waitCursor() );
 
     m_nameLabel->progressBarMode(StatusProgressBar::ProgressBarMode, i18n("Loading: "));
 }

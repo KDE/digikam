@@ -2,14 +2,14 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libdimgeditor.la libshowfoto.la 
 
-libdimgeditor_la_SOURCES = editorwindow.cpp imageiface.cpp imagewindow.cpp   
+libdimgeditor_la_SOURCES = editorwindow.cpp imageiface.cpp imagewindow.cpp editorstackview.cpp editortooliface.cpp editortool.cpp 
 
 libdimgeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) 
 
 libdimgeditor_la_LIBADD = $(top_builddir)/digikam/utilities/imageeditor/tools/libdimgeditortools.la \
 	                      $(top_builddir)/digikam/utilities/imageeditor/rawimport/librawimport.la 
 
-libshowfoto_la_SOURCES = editorwindow.cpp imageiface.cpp 
+libshowfoto_la_SOURCES = editorwindow.cpp imageiface.cpp editorstackview.cpp editortooliface.cpp editortool.cpp 
 
 libshowfoto_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) 
 

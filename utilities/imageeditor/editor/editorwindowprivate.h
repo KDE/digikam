@@ -41,6 +41,7 @@ namespace Digikam
 
 class ICCSettingsContainer;
 class ExposureContainer;
+class EditorToolIface;
 
 class EditorWindowPriv
 {
@@ -83,6 +84,7 @@ public:
         selectNoneAction       = 0;
         rawCameraListAction    = 0;
         contributeAction       = 0;
+        toolIface              = 0;
     }
 
     ~EditorWindowPriv()
@@ -131,6 +133,8 @@ public:
     ICCSettingsContainer      *ICCSettings;
 
     ExposureSettingsContainer *exposureSettings;
+
+    EditorToolIface           *toolIface;
 };
 
 }  // NameSpace Digikam
