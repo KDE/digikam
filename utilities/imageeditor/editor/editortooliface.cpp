@@ -46,9 +46,12 @@ public:
     {
         prevTab = 0;
         editor  = 0;
+        tool    = 0;
     }
 
     QWidget      *prevTab;
+
+    EditorTool   *tool;
 
     EditorWindow *editor;
 };
@@ -75,21 +78,33 @@ EditorToolIface::~EditorToolIface()
         m_iface = 0;
 }
 
-void EditorToolIface::loadTool(EditorTool* tool)
+EditorTool* EditorToolIface::currentTool() const
 {
-    d->editor->editorStackView()->setToolView(tool->toolView());
-    d->editor->editorStackView()->setViewMode(EditorStackView::ToolViewMode);
-    d->prevTab = d->editor->rightSideBar()->getActiveTab();
-    d->editor->rightSideBar()->appendTab(tool->toolSettings(), tool->toolIcon(), tool->toolName());
-    d->editor->rightSideBar()->setActiveTab(tool->toolSettings());
+    return d->tool;
 }
 
-void EditorToolIface::unLoadTool(EditorTool* tool)
+void EditorToolIface::loadTool(EditorTool* tool)
 {
+    if (d->tool) unLoadTool();
+
+    d->tool = tool;
+    d->editor->editorStackView()->setToolView(d->tool->toolView());
+    d->editor->editorStackView()->setViewMode(EditorStackView::ToolViewMode);
+    d->prevTab = d->editor->rightSideBar()->getActiveTab();
+    d->editor->rightSideBar()->appendTab(d->tool->toolSettings(), d->tool->toolIcon(), d->tool->toolName());
+    d->editor->rightSideBar()->setActiveTab(d->tool->toolSettings());
+}
+
+void EditorToolIface::unLoadTool()
+{
+    if (!d->tool) return;
+
     d->editor->editorStackView()->setViewMode(EditorStackView::CanvasMode);
     d->editor->editorStackView()->setToolView(0);
-    d->editor->rightSideBar()->deleteTab(tool->toolSettings());
+    d->editor->rightSideBar()->deleteTab(d->tool->toolSettings());
     d->editor->rightSideBar()->setActiveTab(d->prevTab);
+    delete d->tool;
+    d->tool = 0;
 }
 
 }  // namespace Digikam

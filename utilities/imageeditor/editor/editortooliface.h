@@ -50,8 +50,10 @@ public:
     EditorToolIface(EditorWindow *editor);
     ~EditorToolIface();
 
+    EditorTool* currentTool() const;
+
     void loadTool(EditorTool* tool);
-    void unLoadTool(EditorTool* tool);
+    void unLoadTool();
 
 private:
 
