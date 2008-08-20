@@ -51,6 +51,7 @@ public:
     ~GreycstorationWidget();
 
     void setSettings(GreycstorationSettings settings);
+    void setDefaultSettings(GreycstorationSettings settings);
     GreycstorationSettings getSettings();
 
     bool loadSettings(QFile& file, const QString& header);

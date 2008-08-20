@@ -39,6 +39,7 @@
 // LibKDcraw includes.
 
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/rcombobox.h>
 
 // Local includes.
 
@@ -105,9 +106,9 @@ public:
 
     QCheckBox       *fastApproxCBox;
 
-    QComboBox       *interpolationBox;
-
     QTabWidget      *parent;
+
+    RComboBox       *interpolationBox;
 
     RDoubleNumInput *amplitudeInput;
     RDoubleNumInput *sharpnessInput;
@@ -237,7 +238,7 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     grid2->addMultiCellWidget(d->btileInput, 4, 4, 1, 1);
 
     d->interpolationLabel = new QLabel(i18n("Interpolation:"), d->advancedPage);
-    d->interpolationBox   = new QComboBox(false, d->advancedPage);
+    d->interpolationBox   = new RComboBox(d->advancedPage);
     d->interpolationBox->insertItem( i18n("Nearest Neighbor"), GreycstorationSettings::NearestNeighbor );
     d->interpolationBox->insertItem( i18n("Linear"),           GreycstorationSettings::Linear );
     d->interpolationBox->insertItem( i18n("Runge-Kutta"),      GreycstorationSettings::RungeKutta);
@@ -269,6 +270,25 @@ void GreycstorationWidget::setSettings(GreycstorationSettings settings)
     blockSignals(true);
     d->fastApproxCBox->setChecked(settings.fastApprox);
     d->interpolationBox->setCurrentItem(settings.interp);
+    d->amplitudeInput->setValue(settings.amplitude);
+    d->sharpnessInput->setValue(settings.sharpness);
+    d->anisotropyInput->setValue(settings.anisotropy);
+    d->alphaInput->setValue(settings.alpha);
+    d->sigmaInput->setValue(settings.sigma);
+    d->gaussianPrecInput->setValue(settings.gaussPrec);
+    d->dlInput->setValue(settings.dl);
+    d->daInput->setValue(settings.da);
+    d->iterationInput->setValue(settings.nbIter);
+    d->tileInput->setValue(settings.tile);
+    d->btileInput->setValue(settings.btile);
+    blockSignals(false);
+}
+
+void GreycstorationWidget::setDefaultSettings(GreycstorationSettings settings)
+{
+    blockSignals(true);
+    d->fastApproxCBox->setChecked(settings.fastApprox);
+    d->interpolationBox->setDefaultItem(settings.interp);
     d->amplitudeInput->setDefaultValue(settings.amplitude);
     d->sharpnessInput->setDefaultValue(settings.sharpness);
     d->anisotropyInput->setDefaultValue(settings.anisotropy);

@@ -236,7 +236,7 @@ void ImageEffect_InPainting_Dialog::readUserSettings()
     settings.nbIter     = config->readNumEntry("Iteration", 30);
     settings.tile       = config->readNumEntry("Tile", 512);
     settings.btile      = config->readNumEntry("BTile", 4);
-    m_settingsWidget->setSettings(settings);
+    m_settingsWidget->setDefaultSettings(settings);
 
     int p = config->readNumEntry("Preset", NoPreset);
     m_inpaintingTypeCB->setCurrentItem(p);
