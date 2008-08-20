@@ -485,6 +485,13 @@ SET(libdimgeditortools_SRCS
      ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageresize.cpp
    )
 
+SET(libdimgrawimport_SRCS
+     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawimport.cpp
+     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawpreview.cpp
+     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawsettingsbox.cpp
+     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawpostprocessing.cpp
+   )
+
 SET(libthemeengine_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/theme.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/texture.cpp
