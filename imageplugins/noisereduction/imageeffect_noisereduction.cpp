@@ -267,38 +267,6 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
     gridSettings2->setRowStretch(4, 10);
 
     m_imagePreviewWidget->setUserAreaWidget(mainTab);
-
-    // -------------------------------------------------------------
-
-//     connect(m_radiusInput, SIGNAL(valueChanged(double)),
-//             this, SLOT(slotTimer()));
-//
-//     connect(m_lumToleranceInput, SIGNAL(valueChanged(double)),
-//             this, SLOT(slotTimer()));
-//
-//     connect(m_thresholdInput, SIGNAL(valueChanged(double)),
-//             this, SLOT(slotTimer()));
-//
-//     connect(m_textureInput, SIGNAL(valueChanged(double)),
-//             this, SLOT(slotTimer()));
-//
-//     connect(m_sharpnessInput, SIGNAL(valueChanged(double)),
-//             this, SLOT(slotTimer()));
-//
-//     connect(m_csmoothInput, SIGNAL(valueChanged(double)),
-//             this, SLOT(slotTimer()));
-//
-//     connect(m_lookaheadInput, SIGNAL(valueChanged(double)),
-//             this, SLOT(slotTimer()));
-//
-//     connect(m_gammaInput, SIGNAL(valueChanged(double)),
-//             this, SLOT(slotTimer()));
-//
-//     connect(m_dampingInput, SIGNAL(valueChanged(double)),
-//             this, SLOT(slotTimer()));
-//
-//     connect(m_phaseInput, SIGNAL(valueChanged(double)),
-//             this, SLOT(slotTimer()));
 }
 
 ImageEffect_NoiseReduction::~ImageEffect_NoiseReduction()
@@ -323,16 +291,17 @@ void ImageEffect_NoiseReduction::readUserSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("noisereduction Tool Dialog");
-    m_radiusInput->setEnabled(true);
-    m_lumToleranceInput->setEnabled(true);
-    m_thresholdInput->setEnabled(true);
-    m_textureInput->setEnabled(true);
-    m_sharpnessInput->setEnabled(true);
-    m_csmoothInput->setEnabled(true);
-    m_lookaheadInput->setEnabled(true);
-    m_gammaInput->setEnabled(true);
-    m_dampingInput->setEnabled(true);
-    m_phaseInput->setEnabled(true);
+
+    m_radiusInput->setEnabled(false);
+    m_lumToleranceInput->setEnabled(false);
+    m_thresholdInput->setEnabled(false);
+    m_textureInput->setEnabled(false);
+    m_sharpnessInput->setEnabled(false);
+    m_csmoothInput->setEnabled(false);
+    m_lookaheadInput->setEnabled(false);
+    m_gammaInput->setEnabled(false);
+    m_dampingInput->setEnabled(false);
+    m_phaseInput->setEnabled(false);
 
     m_radiusInput->setValue(config->readDoubleNumEntry("RadiusAjustment", 1.0));
     m_lumToleranceInput->setValue(config->readDoubleNumEntry("LumToleranceAjustment", 1.0));
@@ -345,16 +314,16 @@ void ImageEffect_NoiseReduction::readUserSettings()
     m_dampingInput->setValue(config->readDoubleNumEntry("DampingAjustment", 5.0));
     m_phaseInput->setValue(config->readDoubleNumEntry("PhaseAjustment", 1.0));
 
-    m_radiusInput->setEnabled(false);
-    m_lumToleranceInput->setEnabled(false);
-    m_thresholdInput->setEnabled(false);
-    m_textureInput->setEnabled(false);
-    m_sharpnessInput->setEnabled(false);
-    m_csmoothInput->setEnabled(false);
-    m_lookaheadInput->setEnabled(false);
-    m_gammaInput->setEnabled(false);
-    m_dampingInput->setEnabled(false);
-    m_phaseInput->setEnabled(false);
+    m_radiusInput->setEnabled(true);
+    m_lumToleranceInput->setEnabled(true);
+    m_thresholdInput->setEnabled(true);
+    m_textureInput->setEnabled(true);
+    m_sharpnessInput->setEnabled(true);
+    m_csmoothInput->setEnabled(true);
+    m_lookaheadInput->setEnabled(true);
+    m_gammaInput->setEnabled(true);
+    m_dampingInput->setEnabled(true);
+    m_phaseInput->setEnabled(true);
 }
 
 void ImageEffect_NoiseReduction::writeUserSettings()
