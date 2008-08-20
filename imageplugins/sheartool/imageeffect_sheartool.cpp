@@ -188,10 +188,14 @@ void ImageEffect_ShearTool::readUserSettings(void)
 {
     KConfig *config = kapp->config();
     config->setGroup("sheartool Tool Dialog");
-    m_mainHAngleInput->setValue(config->readNumEntry("Main HAngle", 0));
-    m_mainVAngleInput->setValue(config->readNumEntry("Main VAngle", 0));
-    m_fineHAngleInput->setValue(config->readDoubleNumEntry("Fine HAngle", 0.0));
-    m_fineVAngleInput->setValue(config->readDoubleNumEntry("Fine VAngle", 0.0));
+    m_mainHAngleInput->setValue(config->readNumEntry("Main HAngle",
+                                m_mainHAngleInput->defaultValue()));
+    m_mainVAngleInput->setValue(config->readNumEntry("Main VAngle",
+                                m_mainVAngleInput->defaultValue()));
+    m_fineHAngleInput->setValue(config->readDoubleNumEntry("Fine HAngle",
+                                m_fineHAngleInput->defaultValue()));
+    m_fineVAngleInput->setValue(config->readDoubleNumEntry("Fine VAngle",
+                                m_fineVAngleInput->defaultValue()));
     m_antialiasInput->setChecked(config->readBoolEntry("Anti Aliasing", true));
     slotEffect();
 }
@@ -215,11 +219,13 @@ void ImageEffect_ShearTool::resetValues()
     m_fineHAngleInput->blockSignals(true);
     m_fineVAngleInput->blockSignals(true);
     m_antialiasInput->blockSignals(true);
-    m_mainHAngleInput->setValue(0);
-    m_mainVAngleInput->setValue(0);
-    m_fineHAngleInput->setValue(0.0);
-    m_fineVAngleInput->setValue(0.0);
+
+    m_mainHAngleInput->slotReset();
+    m_mainVAngleInput->slotReset();
+    m_fineHAngleInput->slotReset();
+    m_fineVAngleInput->slotReset();
     m_antialiasInput->setChecked(true);
+
     m_mainHAngleInput->blockSignals(false);
     m_mainVAngleInput->blockSignals(false);
     m_fineHAngleInput->blockSignals(false);

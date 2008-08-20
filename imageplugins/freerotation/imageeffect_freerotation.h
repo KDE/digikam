@@ -32,12 +32,12 @@
 class QFrame;
 class QLabel;
 class QCheckBox;
-class QComboBox;
 
 namespace KDcrawIface
 {
 class RIntNumInput;
 class RDoubleNumInput;
+class RComboBox;
 }
 
 namespace DigikamFreeRotationImagesPlugin
@@ -73,7 +73,7 @@ private:
 
     QCheckBox                    *m_antialiasInput;
 
-    QComboBox                    *m_autoCropCB;
+    KDcrawIface::RComboBox       *m_autoCropCB;
 
     KDcrawIface::RIntNumInput    *m_angleInput;
 

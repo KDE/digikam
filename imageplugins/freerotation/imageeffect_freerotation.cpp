@@ -24,27 +24,27 @@
 
 // Qt includes.
 
-#include <qlabel.h>
 #include <qcheckbox.h>
-#include <qwhatsthis.h>
-#include <qlayout.h>
 #include <qimage.h>
-#include <qcombobox.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
-#include <klocale.h>
 #include <kaboutdata.h>
-#include <kiconloader.h>
 #include <kapplication.h>
-#include <kstandarddirs.h>
-#include <kcursor.h>
-#include <kseparator.h>
 #include <kconfig.h>
+#include <kcursor.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kseparator.h>
+#include <kstandarddirs.h>
 
 // LibKDcraw includes.
 
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/rcombobox.h>
 
 // Local includes.
 
@@ -148,10 +148,11 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     gridSettings->addMultiCellWidget(m_antialiasInput, 7, 7, 0, 2);
 
     QLabel *label5 = new QLabel(i18n("Auto-crop:"), gboxSettings);
-    m_autoCropCB = new QComboBox(false, gboxSettings);
+    m_autoCropCB = new RComboBox(gboxSettings);
     m_autoCropCB->insertItem( i18n("None") );
     m_autoCropCB->insertItem( i18n("Widest Area") );
     m_autoCropCB->insertItem( i18n("Largest Area") );
+    m_autoCropCB->setDefaultItem(FreeRotation::NoAutoCrop);
     QWhatsThis::add( m_autoCropCB, i18n("<p>Select the method to process image auto-cropping "
                                             "to remove black frames around a rotated image."));
     gridSettings->addMultiCellWidget(label5, 8, 8, 0, 0);
@@ -182,9 +183,9 @@ void ImageEffect_FreeRotation::readUserSettings(void)
 {
     KConfig *config = kapp->config();
     config->setGroup("freerotation Tool Dialog");
-    m_angleInput->setValue(config->readNumEntry("Main Angle", 0));
-    m_fineAngleInput->setValue(config->readDoubleNumEntry("Fine Angle", 0.0));
-    m_autoCropCB->setCurrentItem(config->readNumEntry("Auto Crop Type", FreeRotation::NoAutoCrop));
+    m_angleInput->setValue(config->readNumEntry("Main Angle", m_angleInput->defaultValue()));
+    m_fineAngleInput->setValue(config->readDoubleNumEntry("Fine Angle", m_fineAngleInput->defaultValue()));
+    m_autoCropCB->setCurrentItem(config->readNumEntry("Auto Crop Type", m_autoCropCB->defaultItem()));
     m_antialiasInput->setChecked(config->readBoolEntry("Anti Aliasing", true));
     slotEffect();
 }
@@ -205,10 +206,12 @@ void ImageEffect_FreeRotation::resetValues()
     m_angleInput->blockSignals(true);
     m_antialiasInput->blockSignals(true);
     m_autoCropCB->blockSignals(true);
-    m_angleInput->setValue(0);
-    m_fineAngleInput->setValue(0.0);
+
+    m_angleInput->slotReset();
+    m_fineAngleInput->slotReset();
     m_antialiasInput->setChecked(true);
-    m_autoCropCB->setCurrentItem(FreeRotation::NoAutoCrop);
+    m_autoCropCB->slotReset();
+
     m_angleInput->blockSignals(false);
     m_antialiasInput->blockSignals(false);
     m_autoCropCB->blockSignals(false);

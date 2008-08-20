@@ -24,28 +24,31 @@
 
 // Qt includes.
 
-#include <qvgroupbox.h>
-#include <qlabel.h>
-#include <qspinbox.h>
-#include <qpushbutton.h>
-#include <qwhatsthis.h>
-#include <qlayout.h>
-#include <qframe.h>
 #include <qcheckbox.h>
+#include <qframe.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qpushbutton.h>
+#include <qvgroupbox.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
-#include <kcolorbutton.h>
-#include <kcursor.h>
-#include <kconfig.h>
-#include <klocale.h>
 #include <kaboutdata.h>
+#include <kapplication.h>
+#include <kcolorbutton.h>
+#include <kconfig.h>
+#include <kcursor.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
-#include <kapplication.h>
+#include <klocale.h>
 #include <kpopupmenu.h>
-#include <kstandarddirs.h>
 #include <kseparator.h>
+#include <kstandarddirs.h>
+
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
 
 // Local includes.
 
@@ -56,6 +59,8 @@
 #include "perspectivewidget.h"
 #include "imageeffect_perspective.h"
 #include "imageeffect_perspective.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamPerspectiveImagesPlugin
 {
@@ -164,7 +169,9 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     gridLayout->addMultiCellWidget(m_guideColorBt, 11, 11, 2, 2);
 
     QLabel *label8 = new QLabel(i18n("Guide width:"), gbox2);
-    m_guideSize    = new QSpinBox( 1, 5, 1, gbox2);
+    m_guideSize    = new RIntNumInput(gbox2);
+    m_guideSize->input()->setRange(1, 5, 1, false);
+    m_guideSize->setDefaultValue(1);
     QWhatsThis::add( m_guideSize, i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
     gridLayout->addMultiCellWidget(label8, 12, 12, 0, 0);
     gridLayout->addMultiCellWidget(m_guideSize, 12, 12, 2, 2);
@@ -204,7 +211,7 @@ void ImageEffect_Perspective::readUserSettings(void)
     m_drawWhileMovingCheckBox->setChecked(config->readBoolEntry("Draw While Moving", true));
     m_drawGridCheckBox->setChecked(config->readBoolEntry("Draw Grid", false));
     m_guideColorBt->setColor(config->readColorEntry("Guide Color", &defaultGuideColor));
-    m_guideSize->setValue(config->readNumEntry("Guide Width", 1));
+    m_guideSize->setValue(config->readNumEntry("Guide Width", m_guideSize->defaultValue()));
     m_previewWidget->slotToggleDrawWhileMoving(m_drawWhileMovingCheckBox->isChecked());
     m_previewWidget->slotToggleDrawGrid(m_drawGridCheckBox->isChecked());
     m_previewWidget->slotChangeGuideColor(m_guideColorBt->color());
