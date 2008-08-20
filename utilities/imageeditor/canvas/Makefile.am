@@ -17,6 +17,7 @@ INCLUDES = -I$(top_srcdir)/digikam/digikam \
 	       -I$(top_srcdir)/digikam/libs/histogram \
 	       -I$(top_srcdir)/digikam/libs/threadimageio \
 	       -I$(top_srcdir)/digikam/utilities/splashscreen \
+	       -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       -I$(top_srcdir)/digikam/utilities/imageeditor/rawimport \
 	       -I$(top_srcdir)/digikam/libs/widgets/imageplugins \
 	       -I$(top_srcdir)/digikam/libs/widgets/common \

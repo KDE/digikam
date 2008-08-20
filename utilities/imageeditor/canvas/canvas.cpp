@@ -5,7 +5,7 @@
  *
  * Date        : 2003-01-09
  * Description : image editor canvas management class
- * 
+ *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ includes.
@@ -28,7 +28,7 @@
 #include <cmath>
 
 // Qt includes.
- 
+
 #include <qtooltip.h>
 #include <qfile.h>
 #include <qstring.h>
@@ -153,7 +153,7 @@ Canvas::Canvas(QWidget *parent)
     d->im     = new DImgInterface();
     d->parent = parent;
     d->bgColor.setRgb(0, 0, 0);
-    
+
     d->qcheck.resize(16, 16);
     QPainter p(&d->qcheck);
     p.fillRect(0, 0, 8, 8, QColor(144, 144, 144));
@@ -182,12 +182,15 @@ Canvas::Canvas(QWidget *parent)
 
     connect(d->im, SIGNAL(signalColorManagementTool()),
             this, SIGNAL(signalColorManagementTool()));
-            
+
     connect(d->im, SIGNAL(signalModified()),
             this, SLOT(slotModified()));
 
     connect(d->im, SIGNAL(signalUndoStateChanged(bool, bool, bool)),
             this, SIGNAL(signalUndoStateChanged(bool, bool, bool)));
+
+    connect(d->im, SIGNAL(signalLoadingStarted(const QString&)),
+            this, SIGNAL(signalLoadingStarted(const QString&)));
 
     connect(d->im, SIGNAL(signalImageLoaded(const QString&, bool)),
             this, SLOT(slotImageLoaded(const QString&, bool)));
@@ -200,7 +203,7 @@ Canvas::Canvas(QWidget *parent)
 
     connect(d->im, SIGNAL(signalSavingProgress(const QString&, float)),
             this, SIGNAL(signalSavingProgress(const QString&, float)));
-            
+
     connect(this, SIGNAL(signalSelected(bool)),
             this, SLOT(slotSelected()));
 }
@@ -243,14 +246,15 @@ void Canvas::load(const QString& filename, IOFileSettingsContainer *IOFileSettin
     viewport()->setUpdatesEnabled(false);
 
     d->im->load( filename, IOFileSettings, d->parent );
-    emit signalLoadingStarted(filename);
+
+    emit signalPrepareToLoad();
 }
 
 void Canvas::slotImageLoaded(const QString& filePath, bool success)
 {
     d->zoom = 1.0;
     d->im->zoom(d->zoom);
-    
+
     if (d->autoZoom)
         updateAutoZoom();
 

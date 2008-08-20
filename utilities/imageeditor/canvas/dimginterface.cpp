@@ -7,7 +7,7 @@
  * Description : DImg interface for image editor
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,7 +60,8 @@
 #include "icctransform.h"
 #include "exposurecontainer.h"
 #include "iofilesettingscontainer.h"
-#include "rawimportdlg.h"
+#include "rawimport.h"
+#include "editortooliface.h"
 #include "sharedloadsavethread.h"
 #include "dmetadata.h"
 #include "dimginterface.h"
@@ -197,19 +198,43 @@ void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofil
 
     if (d->iofileSettings->useRAWImport && DImg::fileFormat(d->filename) == DImg::RAW)
     {
-        RawImportDlg importDlg(KURL(d->filename), parent);
-        if (importDlg.exec() == QDialog::Accepted)
-        {
-            d->thread->load(LoadingDescription(d->filename, importDlg.rawDecodingSettings()),
-                            SharedLoadSaveThread::AccessModeReadWrite,
-                            SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
-            return;
-        }
-    }
+        RawImport *rawImport = new RawImport(KURL(d->filename), this);
+        EditorToolIface::editorToolIface()->loadTool(rawImport);
 
-    d->thread->load(LoadingDescription(d->filename, iofileSettings->rawDecodingSettings),
+        connect(rawImport, SIGNAL(okClicked()),
+                this, SLOT(slotUseRawImportSettings()));
+
+        connect(rawImport, SIGNAL(cancelClicked()),
+                this, SLOT(slotUseDefaultSettings()));
+    }
+    else
+    {
+        slotUseDefaultSettings();
+    }
+}
+
+void DImgInterface::slotUseRawImportSettings()
+{
+    RawImport *rawImport = (RawImport*)(sender());
+
+    d->thread->load(LoadingDescription(d->filename, rawImport->rawDecodingSettings()),
                     SharedLoadSaveThread::AccessModeReadWrite,
                     SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+
+    EditorToolIface::editorToolIface()->unLoadTool(rawImport);
+    emit signalLoadingStarted(d->filename);
+}
+
+void DImgInterface::slotUseDefaultSettings()
+{
+    RawImport *rawImport = (RawImport*)(sender());
+
+    d->thread->load(LoadingDescription(d->filename, d->iofileSettings->rawDecodingSettings),
+                    SharedLoadSaveThread::AccessModeReadWrite,
+                    SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+
+    EditorToolIface::editorToolIface()->unLoadTool(rawImport);
+    emit signalLoadingStarted(d->filename);
 }
 
 void DImgInterface::resetImage()
