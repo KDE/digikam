@@ -224,6 +224,7 @@ void DImgInterface::slotUseRawImportSettings()
 
         EditorToolIface::editorToolIface()->unLoadTool(rawImport);
         emit signalLoadingStarted(d->filename);
+        delete rawImport;
     }
 }
 
@@ -236,7 +237,10 @@ void DImgInterface::slotUseDefaultSettings()
 
     RawImport *rawImport = ::qt_cast<RawImport*>(sender());
     if (rawImport)
+    {
         EditorToolIface::editorToolIface()->unLoadTool(rawImport);
+        delete rawImport;
+    }
 }
 
 void DImgInterface::resetImage()
