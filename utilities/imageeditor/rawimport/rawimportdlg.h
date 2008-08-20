@@ -65,7 +65,7 @@ private:
     void readSettings();
     void saveSettings();
 
-    void busy(bool busy);
+    void setBusy(bool busy);
 
 private slots:
 

@@ -144,7 +144,7 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    busy(true);
+    setBusy(true);
     slotUpdatePreview();
 }
 
@@ -177,7 +177,7 @@ void RawImportDlg::slotOk()
     KDialogBase::slotOk();
 }
 
-void RawImportDlg::busy(bool val)
+void RawImportDlg::setBusy(bool val)
 {
     if (val) d->previewWidget->setCursor(KCursor::waitCursor());
     else d->previewWidget->unsetCursor();
@@ -207,7 +207,6 @@ DRawDecoding RawImportDlg::rawDecodingSettings()
     return d->settingsBox->settings();
 }
 
-// User1
 void RawImportDlg::slotUpdatePreview()
 {
     DRawDecoding settings = rawDecodingSettings();
@@ -217,12 +216,11 @@ void RawImportDlg::slotUpdatePreview()
     d->previewWidget->setDecodingSettings(settings);
 }
 
-// User2
 void RawImportDlg::slotAbortPreview()
 {
     d->previewWidget->cancelLoading();
     d->settingsBox->histogram()->stopHistogramComputation();
-    busy(false);
+    setBusy(false);
 }
 
 void RawImportDlg::slotLoadingStarted()
@@ -230,7 +228,7 @@ void RawImportDlg::slotLoadingStarted()
     d->settingsBox->enableUpdateBtn(false);
     d->settingsBox->histogram()->setDataLoading();
     d->settingsBox->curve()->setDataLoading();
-    busy(true);
+    setBusy(true);
 }
 
 void RawImportDlg::slotDemosaicedImage()
@@ -241,13 +239,13 @@ void RawImportDlg::slotDemosaicedImage()
 void RawImportDlg::slotPostProcessedImage()
 {
     d->settingsBox->setPostProcessedImage(d->previewWidget->postProcessedImage());
-    busy(false);
+    setBusy(false);
 }
 
 void RawImportDlg::slotLoadingFailed()
 {
     d->settingsBox->histogram()->setLoadingFailed();
-    busy(false);
+    setBusy(false);
 }
 
 void RawImportDlg::slotTimer()
