@@ -37,10 +37,6 @@
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 
-// LibKDcraw includes.
-
-#include <libkdcraw/version.h>
-
 // Local includes.
 
 #include "ddebug.h"
