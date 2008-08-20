@@ -181,24 +181,28 @@ ImageResize::ImageResize(QWidget* parent)
     d->wInput      = new RIntNumInput(firstPage);
     d->wInput->setRange(1, QMAX(d->orgWidth * 10, 9999), 1);
     d->wInput->setName("d->wInput");
+    d->wInput->setDefaultValue(d->orgWidth);
     QWhatsThis::add( d->wInput, i18n("<p>Set here the new image width in pixels."));
 
     QLabel *label2 = new QLabel(i18n("Height:"), firstPage);
     d->hInput      = new RIntNumInput(firstPage);
     d->hInput->setRange(1, QMAX(d->orgHeight * 10, 9999), 1);
     d->hInput->setName("d->hInput");
+    d->hInput->setDefaultValue(d->orgHeight);
     QWhatsThis::add( d->hInput, i18n("<p>Set here the new image height in pixels."));
 
     QLabel *label3 = new QLabel(i18n("Width (%):"), firstPage);
     d->wpInput     = new RDoubleNumInput(firstPage);
     d->wpInput->setRange(1.0, 999.0, 1.0);
     d->wpInput->setName("d->wpInput");
+    d->wpInput->setDefaultValue(100.0);
     QWhatsThis::add( d->wpInput, i18n("<p>Set here the new image width in percent."));
 
     QLabel *label4 = new QLabel(i18n("Height (%):"), firstPage);
     d->hpInput     = new RDoubleNumInput(firstPage);
     d->hpInput->setRange(1.0, 999.0, 1.0);
     d->hpInput->setName("d->hpInput");
+    d->hpInput->setDefaultValue(100.0);
     QWhatsThis::add( d->hpInput, i18n("<p>Set here the new image height in percent."));
 
     d->preserveRatioBox = new QCheckBox(i18n("Maintain aspect ratio"), firstPage);
@@ -329,11 +333,13 @@ void ImageResize::readUserSettings()
     d->hInput->blockSignals(true);
     d->wpInput->blockSignals(true);
     d->hpInput->blockSignals(true);
+
     d->preserveRatioBox->setChecked(true);
-    d->wInput->setValue(d->orgWidth);
-    d->hInput->setValue(d->orgHeight);
-    d->wpInput->setValue(100);
-    d->hpInput->setValue(100);
+    d->wInput->slotReset();
+    d->hInput->slotReset();
+    d->wpInput->slotReset();
+    d->hpInput->slotReset();
+
     d->preserveRatioBox->blockSignals(false);
     d->wInput->blockSignals(false);
     d->hInput->blockSignals(false);
