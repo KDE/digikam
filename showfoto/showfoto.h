@@ -5,7 +5,7 @@
  *
  * Date        : 2004-11-22
  * Description : stand alone digiKam image editor GUI
- * 
+ *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl> 
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
@@ -16,7 +16,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -53,14 +53,16 @@ class ShowFotoPriv;
 class ShowFoto : public Digikam::EditorWindow
 {
     Q_OBJECT
-    
+
 public:
 
     ShowFoto(const KURL::List& urlList);
     ~ShowFoto();
-    
+
     virtual void show();
     bool setup(bool iccSetupPage=false);
+
+    Digikam::Sidebar* rightSideBar() const;
 
 private:
 
@@ -76,9 +78,9 @@ private:
     void applySettings();
 
     void toggleActions(bool val);
-    
+
     void toggleGUI2FullScreen();
-   
+
     void toggleNavigation(int index);
 
     bool save();
@@ -108,11 +110,11 @@ private slots:
 
     void slotToggleShowBar();
     void slotChangeBCG();
-    
+
     void slotChanged();
     void slotUndoStateChanged(bool, bool, bool);
     void slotUpdateItemInfo();
-        
+
     void slotDeleteCurrentItemResult( KIO::Job * job );
 
     void slotLoadingStarted(const QString &filename);
@@ -123,7 +125,7 @@ private slots:
     void slotRevert();
 
 private:
-    
+
     ShowFotoPriv* d;
 };
 
