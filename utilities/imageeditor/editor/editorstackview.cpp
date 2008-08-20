@@ -42,11 +42,12 @@ public:
     }
 
     QWidget *toolView;
+
     Canvas  *canvas;
 };
 
 EditorStackView::EditorStackView(QWidget *parent)
-               : QWidgetStack(parent, 0, Qt::WDestructiveClose)
+               : QStackedWidget(parent)
 {
     d = new EditorStackViewPriv;
 }
@@ -61,7 +62,7 @@ void EditorStackView::setCanvas(Canvas* canvas)
     if (d->canvas) return;
 
     d->canvas = canvas;
-    addWidget(d->canvas, CanvasMode);
+    insertWidget(CanvasMode, d->canvas);
 }
 
 Canvas* EditorStackView::canvas() const
@@ -77,7 +78,7 @@ void EditorStackView::setToolView(QWidget* view)
     d->toolView = view;
 
     if (d->toolView)
-        addWidget(d->toolView, ToolViewMode);
+        insertWidget(ToolViewMode, d->toolView);
 }
 
 QWidget* EditorStackView::toolView() const
@@ -87,7 +88,7 @@ QWidget* EditorStackView::toolView() const
 
 int EditorStackView::viewMode()
 {
-    return id(visibleWidget());
+    return indexOf(currentWidget());
 }
 
 void EditorStackView::setViewMode(int mode)
@@ -95,7 +96,7 @@ void EditorStackView::setViewMode(int mode)
     if (mode != CanvasMode && mode != ToolViewMode)
         return;
 
-    raiseWidget(mode);
+    setCurrentIndex(mode);
 }
 
 }  // namespace Digikam
