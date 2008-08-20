@@ -32,12 +32,12 @@
 
 #include "imageguidedlg.h"
 
-class QComboBox;
 class QLabel;
 
 namespace KDcrawIface
 {
 class RIntNumInput;
+class RComboBox;
 }
 
 namespace DigikamDistortionFXImagesPlugin
@@ -69,11 +69,12 @@ private:
 
 private:
 
-    QComboBox                 *m_effectType;
 
     QLabel                    *m_effectTypeLabel;
     QLabel                    *m_levelLabel;
     QLabel                    *m_iterationLabel;
+
+    KDcrawIface::RComboBox    *m_effectType;
 
     KDcrawIface::RIntNumInput *m_levelInput;
     KDcrawIface::RIntNumInput *m_iterationInput;

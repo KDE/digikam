@@ -29,12 +29,12 @@
 
 #include "ctrlpaneldlg.h"
 
-class QComboBox;
 class QLabel;
 
 namespace KDcrawIface
 {
 class RIntNumInput;
+class RComboBox;
 }
 
 namespace DigikamBlurFXImagesPlugin
@@ -67,11 +67,11 @@ private:
 
 private:
 
-    QComboBox    *m_effectType;
-
     QLabel       *m_effectTypeLabel;
     QLabel       *m_distanceLabel;
     QLabel       *m_levelLabel;
+
+    KDcrawIface::RComboBox    *m_effectType;
 
     KDcrawIface::RIntNumInput *m_distanceInput;
     KDcrawIface::RIntNumInput *m_levelInput;

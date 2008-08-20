@@ -95,6 +95,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     QLabel *label1   = new QLabel(i18n("Brush size:"), gboxSettings);
     m_brushSizeInput = new RIntNumInput(gboxSettings);
     m_brushSizeInput->setRange(1, 5, 1);
+    m_brushSizeInput->setDefaultValue(1);
     QWhatsThis::add( m_brushSizeInput, i18n("<p>Set here the brush size to use for "
                                             "simulating the oil painting.") );
 
@@ -106,6 +107,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     QLabel *label2 = new QLabel(i18n("Smooth:"), gboxSettings);
     m_smoothInput  = new RIntNumInput(gboxSettings);
     m_smoothInput->setRange(10, 255, 1);
+    m_smoothInput->setDefaultValue(30);
     QWhatsThis::add( m_smoothInput, i18n("<p>This value controls the smoothing effect "
                                          "of the brush under the canvas.") );
 
@@ -139,8 +141,12 @@ void ImageEffect_OilPaint::readUserSettings()
     config->setGroup("oilpaint Tool Dialog");
     m_brushSizeInput->blockSignals(true);
     m_smoothInput->blockSignals(true);
-    m_brushSizeInput->setValue(config->readNumEntry("BrushSize", 1));
-    m_smoothInput->setValue(config->readNumEntry("SmoothAjustment", 30));
+
+    m_brushSizeInput->setValue(config->readNumEntry("BrushSize",
+                               m_brushSizeInput->defaultValue()));
+    m_smoothInput->setValue(config->readNumEntry("SmoothAjustment",
+                            m_smoothInput->defaultValue()));
+
     m_brushSizeInput->blockSignals(false);
     m_smoothInput->blockSignals(false);
 }
@@ -158,8 +164,10 @@ void ImageEffect_OilPaint::resetValues()
 {
     m_brushSizeInput->blockSignals(true);
     m_smoothInput->blockSignals(true);
-    m_brushSizeInput->setValue(1);
-    m_smoothInput->setValue(30);
+
+    m_brushSizeInput->slotReset();
+    m_smoothInput->slotReset();
+
     m_brushSizeInput->blockSignals(false);
     m_smoothInput->blockSignals(false);
 }

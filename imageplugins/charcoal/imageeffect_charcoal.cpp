@@ -132,8 +132,12 @@ void ImageEffect_Charcoal::readUserSettings()
     config->setGroup("charcoal Tool Dialog");
     m_pencilInput->blockSignals(true);
     m_smoothInput->blockSignals(true);
-    m_pencilInput->setValue(config->readNumEntry("PencilAjustment", 5));
-    m_smoothInput->setValue(config->readNumEntry("SmoothAjustment", 10));
+
+    m_pencilInput->setValue(config->readNumEntry("PencilAjustment",
+                            m_pencilInput->defaultValue()));
+    m_smoothInput->setValue(config->readNumEntry("SmoothAjustment",
+                            m_smoothInput->defaultValue()));
+
     m_pencilInput->blockSignals(false);
     m_smoothInput->blockSignals(false);
 }
@@ -151,8 +155,10 @@ void ImageEffect_Charcoal::resetValues()
 {
     m_pencilInput->blockSignals(true);
     m_smoothInput->blockSignals(true);
-    m_pencilInput->setValue(5);
-    m_smoothInput->setValue(10);
+
+    m_pencilInput->slotReset();
+    m_smoothInput->slotReset();
+
     m_pencilInput->blockSignals(false);
     m_smoothInput->blockSignals(false);
 }

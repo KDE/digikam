@@ -91,6 +91,7 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
 
     m_depthInput = new RIntNumInput(gboxSettings);
     m_depthInput->setRange(10, 300, 1);
+    m_depthInput->setDefaultValue(30);
     QWhatsThis::add( m_depthInput, i18n("<p>Set here the depth of the embossing image effect.") );
 
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
@@ -118,7 +119,8 @@ void ImageEffect_Emboss::readUserSettings()
     KConfig* config = kapp->config();
     config->setGroup("emboss Tool Dialog");
     m_depthInput->blockSignals(true);
-    m_depthInput->setValue(config->readNumEntry("DepthAjustment", 30));
+    m_depthInput->setValue(config->readNumEntry("DepthAjustment",
+                           m_depthInput->defaultValue()));
     m_depthInput->blockSignals(false);
 }
 
@@ -133,7 +135,7 @@ void ImageEffect_Emboss::writeUserSettings()
 void ImageEffect_Emboss::resetValues()
 {
     m_depthInput->blockSignals(true);
-    m_depthInput->setValue(30);
+    m_depthInput->slotReset();
     m_depthInput->blockSignals(false);
 }
 

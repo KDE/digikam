@@ -165,9 +165,12 @@ void ImageEffect_RainDrop::readUserSettings(void)
     m_amountInput->blockSignals(true);
     m_coeffInput->blockSignals(true);
 
-    m_dropInput->setValue(config->readNumEntry("DropAdjustment", 80));
-    m_amountInput->setValue(config->readNumEntry("AmountAdjustment", 150));
-    m_coeffInput->setValue(config->readNumEntry("CoeffAdjustment", 30));
+    m_dropInput->setValue(config->readNumEntry("DropAdjustment",
+                          m_dropInput->defaultValue()));
+    m_amountInput->setValue(config->readNumEntry("AmountAdjustment",
+                            m_amountInput->defaultValue()));
+    m_coeffInput->setValue(config->readNumEntry("CoeffAdjustment",
+                           m_coeffInput->defaultValue()));
 
     m_dropInput->blockSignals(false);
     m_amountInput->blockSignals(false);
@@ -192,9 +195,9 @@ void ImageEffect_RainDrop::resetValues()
     m_amountInput->blockSignals(true);
     m_coeffInput->blockSignals(true);
 
-    m_dropInput->setValue(80);
-    m_amountInput->setValue(150);
-    m_coeffInput->setValue(30);
+    m_dropInput->slotReset();
+    m_amountInput->slotReset();
+    m_coeffInput->slotReset();
 
     m_dropInput->blockSignals(false);
     m_amountInput->blockSignals(false);

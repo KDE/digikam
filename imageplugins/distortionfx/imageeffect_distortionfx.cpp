@@ -27,28 +27,28 @@
 
 // Qt includes.
 
-#include <qlabel.h>
-#include <qwhatsthis.h>
-#include <qlayout.h>
 #include <qframe.h>
 #include <qimage.h>
+#include <qlabel.h>
+#include <qlayout.h>
 #include <qspinbox.h>
-#include <qcombobox.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
-#include <kconfig.h>
-#include <klocale.h>
-#include <kcursor.h>
 #include <kaboutdata.h>
-#include <khelpmenu.h>
 #include <kapplication.h>
-#include <kstandarddirs.h>
+#include <kconfig.h>
+#include <kcursor.h>
+#include <khelpmenu.h>
+#include <klocale.h>
 #include <kprogress.h>
+#include <kstandarddirs.h>
 
 // LibKDcraw includes.
 
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/rcombobox.h>
 
 // Local includes.
 
@@ -104,23 +104,24 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
 
     m_effectTypeLabel = new QLabel(i18n("Type:"), gboxSettings);
 
-    m_effectType = new QComboBox( false, gboxSettings );
-    m_effectType->insertItem( i18n("Fish Eyes") );
-    m_effectType->insertItem( i18n("Twirl") );
-    m_effectType->insertItem( i18n("Cylindrical Hor.") );
-    m_effectType->insertItem( i18n("Cylindrical Vert.") );
-    m_effectType->insertItem( i18n("Cylindrical H/V.") );
-    m_effectType->insertItem( i18n("Caricature") );
-    m_effectType->insertItem( i18n("Multiple Corners") );
-    m_effectType->insertItem( i18n("Waves Hor.") );
-    m_effectType->insertItem( i18n("Waves Vert.") );
-    m_effectType->insertItem( i18n("Block Waves 1") );
-    m_effectType->insertItem( i18n("Block Waves 2") );
-    m_effectType->insertItem( i18n("Circular Waves 1") );
-    m_effectType->insertItem( i18n("Circular Waves 2") );
-    m_effectType->insertItem( i18n("Polar Coordinates") );
-    m_effectType->insertItem( i18n("Unpolar Coordinates") );
-    m_effectType->insertItem( i18n("Tile") );
+    m_effectType = new RComboBox(gboxSettings);
+    m_effectType->insertItem(i18n("Fish Eyes"));
+    m_effectType->insertItem(i18n("Twirl"));
+    m_effectType->insertItem(i18n("Cylindrical Hor."));
+    m_effectType->insertItem(i18n("Cylindrical Vert."));
+    m_effectType->insertItem(i18n("Cylindrical H/V."));
+    m_effectType->insertItem(i18n("Caricature"));
+    m_effectType->insertItem(i18n("Multiple Corners"));
+    m_effectType->insertItem(i18n("Waves Hor."));
+    m_effectType->insertItem(i18n("Waves Vert."));
+    m_effectType->insertItem(i18n("Block Waves 1"));
+    m_effectType->insertItem(i18n("Block Waves 2"));
+    m_effectType->insertItem(i18n("Circular Waves 1"));
+    m_effectType->insertItem(i18n("Circular Waves 2"));
+    m_effectType->insertItem(i18n("Polar Coordinates"));
+    m_effectType->insertItem(i18n("Unpolar Coordinates"));
+    m_effectType->insertItem(i18n("Tile"));
+    m_effectType->setDefaultItem(DistortionFX::FishEye);
     QWhatsThis::add( m_effectType, i18n("<p>Here, select the type of effect to apply to the image.<p>"
                                         "<b>Fish Eyes</b>: warps the photograph around a 3D spherical shape to "
                                         "reproduce the common photograph 'Fish Eyes' effect.<p>"
@@ -151,6 +152,7 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
     m_levelLabel = new QLabel(i18n("Level:"), gboxSettings);
     m_levelInput = new RIntNumInput(gboxSettings);
     m_levelInput->setRange(0, 100, 1);
+    m_levelInput->setDefaultValue(50);
     QWhatsThis::add( m_levelInput, i18n("<p>Set here the level of the effect."));
 
     gridSettings->addMultiCellWidget(m_levelLabel, 2, 2, 0, 2);
@@ -159,6 +161,7 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
     m_iterationLabel = new QLabel(i18n("Iteration:"), gboxSettings);
     m_iterationInput = new RIntNumInput(gboxSettings);
     m_iterationInput->setRange(0, 100, 1);
+    m_iterationInput->setDefaultValue(10);
     QWhatsThis::add( m_iterationInput, i18n("<p>This value controls the iterations to use for Waves, "
                                             "Tile, and Neon effects."));
 
@@ -231,9 +234,12 @@ void ImageEffect_DistortionFX::readUserSettings(void)
     m_iterationInput->blockSignals(true);
     m_levelInput->blockSignals(true);
 
-    m_effectType->setCurrentItem(config->readNumEntry("EffectType", DistortionFX::FishEye));
-    m_iterationInput->setValue(config->readNumEntry("IterationAjustment", 10));
-    m_levelInput->setValue(config->readNumEntry("LevelAjustment", 50));
+    m_effectType->setCurrentItem(config->readNumEntry("EffectType",
+                                 m_effectType->defaultItem()));
+    m_iterationInput->setValue(config->readNumEntry("IterationAjustment",
+                               m_iterationInput->defaultValue()));
+    m_levelInput->setValue(config->readNumEntry("LevelAjustment",
+                           m_levelInput->defaultValue()));
 
     m_effectType->blockSignals(false);
     m_iterationInput->blockSignals(false);
@@ -255,9 +261,17 @@ void ImageEffect_DistortionFX::writeUserSettings(void)
 void ImageEffect_DistortionFX::resetValues()
 {
     m_effectType->blockSignals(true);
-    m_effectType->setCurrentItem(DistortionFX::FishEye);
-    slotEffectTypeChanged(DistortionFX::FishEye);
+    m_levelInput->blockSignals(true);
+    m_iterationInput->blockSignals(true);
+
+    m_levelInput->slotReset();
+    m_iterationInput->slotReset();
+    m_effectType->slotReset();
+    slotEffectTypeChanged(m_effectType->defaultItem());
+
     m_effectType->blockSignals(false);
+    m_levelInput->blockSignals(false);
+    m_iterationInput->blockSignals(false);
 }
 
 void ImageEffect_DistortionFX::slotEffectTypeChanged(int type)
