@@ -215,7 +215,7 @@ void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofil
 
 void DImgInterface::slotUseRawImportSettings()
 {
-    RawImport *rawImport = (RawImport*)(sender());
+    RawImport *rawImport = ::qt_cast<RawImport*>(sender());
     if (rawImport)
     {
         d->thread->load(LoadingDescription(d->filename, rawImport->rawDecodingSettings()),
@@ -234,7 +234,7 @@ void DImgInterface::slotUseDefaultSettings()
                     SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
     emit signalLoadingStarted(d->filename);
 
-    RawImport *rawImport = (RawImport*)(sender());
+    RawImport *rawImport = ::qt_cast<RawImport*>(sender());
     if (rawImport)
         EditorToolIface::editorToolIface()->unLoadTool(rawImport);
 }
