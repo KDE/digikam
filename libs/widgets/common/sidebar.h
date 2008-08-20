@@ -33,6 +33,7 @@
 // KDE includes.
 
 #include <kmultitabbar.h>
+#include <kconfiggroup.h>
 
 // Local includes.
 
