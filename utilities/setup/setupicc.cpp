@@ -24,7 +24,7 @@
 
 #include <config.h>
 
-// QT includes.
+// Qt includes.
 
 #include <qlayout.h>
 #include <qvbuttongroup.h>

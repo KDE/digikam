@@ -28,7 +28,7 @@
  *
  * ============================================================ */
 
-// Qt lib includes
+// Qt includes.
 
 #include <qobject.h>
 #include <qpixmap.h>

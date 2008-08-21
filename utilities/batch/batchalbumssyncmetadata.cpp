@@ -22,7 +22,7 @@
  * 
  * ============================================================ */
 
-// QT includes.
+// Qt includes.
 
 #include <qstring.h>
 #include <qtimer.h>

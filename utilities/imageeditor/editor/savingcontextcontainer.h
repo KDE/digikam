@@ -25,7 +25,7 @@
 #ifndef SAVINGCONTEXTCONTAINER_H
 #define SAVINGCONTEXTCONTAINER_H
 
-// QT includes.
+// Qt includes.
 
 #include <qstring.h>
 

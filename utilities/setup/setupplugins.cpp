@@ -25,7 +25,7 @@
 #include <config.h>
 #endif
 
-// QT includes.
+// Qt includes.
 
 #include <qlayout.h>
 #include <qstring.h>

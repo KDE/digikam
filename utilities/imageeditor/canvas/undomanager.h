@@ -25,7 +25,7 @@
 #ifndef UNDOMANAGER_H
 #define UNDOMANAGER_H
 
-// QT includes.
+// Qt includes.
 
 #include <qstringlist.h>
 

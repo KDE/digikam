@@ -25,7 +25,7 @@
 #ifndef IMAGEPRINT_H
 #define IMAGEPRINT_H
 
-// Qt lib includes
+// Qt includes.
 
 #include <qwidget.h>
 #include <qstring.h>

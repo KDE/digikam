@@ -25,7 +25,7 @@
 #ifndef UNDOCACHE_H
 #define UNDOCACHE_H
 
-// QT includes.
+// Qt includes.
 
 #include <qglobal.h>
 
