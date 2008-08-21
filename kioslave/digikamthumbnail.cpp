@@ -35,7 +35,7 @@
 #include <cstdio>
 #include <cstring>
 
-// Qt Includes.
+// Qt includes.
 
 #include <qcstring.h>
 #include <qstring.h>
@@ -72,7 +72,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #include <libkdcraw/kdcraw.h>
 
-// Local includes
+// Local includes.
 
 #include "dimg.h"
 #include "dmetadata.h"
