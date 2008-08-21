@@ -27,7 +27,7 @@
 #include <config.h>
 #endif
 
-// KDE includes
+// KDE includes.
 
 #include <kapplication.h>
 #include <kcmdlineargs.h>
