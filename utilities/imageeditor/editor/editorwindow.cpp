@@ -936,6 +936,8 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.medianFilterPasses      = group.readEntry("MedianFilterPasses", 0);
 #endif
 
+    m_IOFileSettings->useRAWImport                                = config->readBoolEntry("UseRawImportTool", false);
+
     // -- GUI Settings -------------------------------------------------------
 
     m_splitter->restoreState(group);
