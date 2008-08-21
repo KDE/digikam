@@ -31,7 +31,7 @@
 #include <QPixmap>
 #include <QPen>
 
-// KDE include.
+// KDE includes.
 
 #include <kcursor.h>
 #include <klocale.h>

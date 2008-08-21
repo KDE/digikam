@@ -24,18 +24,18 @@
 #ifndef EDITORWINDOW_H
 #define EDITORWINDOW_H
 
-// Qt includes
+// Qt includes.
 
 #include <QColor>
 #include <QRect>
 #include <QString>
 
-// KDE includes
+// KDE includes.
 
 #include <kxmlguiwindow.h>
 #include <kurl.h>
 
-// local includes
+// local includes.
 
 #include "digikam_export.h"
 

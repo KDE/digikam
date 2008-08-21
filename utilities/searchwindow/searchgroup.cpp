@@ -21,7 +21,7 @@
  * 
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QVBoxLayout>
 #include <QGridLayout>
@@ -30,13 +30,13 @@
 #include <QLabel>
 #include <QPainter>
 
-// KDE includes
+// KDE includes.
 
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "searchview.h"

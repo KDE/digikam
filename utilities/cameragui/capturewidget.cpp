@@ -28,7 +28,7 @@
 #include <qpixmap.h>
 #include <qrect.h>
 
-// KDE include.
+// KDE includes.
 
 #include <kcursor.h>
 #include <klocale.h>

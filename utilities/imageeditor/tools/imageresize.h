@@ -24,13 +24,13 @@
 #ifndef IMAGE_RESIZE_H
 #define IMAGE_RESIZE_H
 
-// Qt include.
+// Qt includes.
 
 #include <QString>
 #include <QCloseEvent>
 #include <QCustomEvent>
 
-// KDE include.
+// KDE includes.
 
 #include <kdialog.h>
 

@@ -24,17 +24,16 @@
 #ifndef SEARCHVIEW_H
 #define SEARCHVIEW_H
 
-// Qt includes
+// Qt includes.
 
 #include <QCache>
 #include <QList>
 #include <QRect>
 #include <QWidget>
 
-// KDE includes
+// KDE includes.
 
-// Local includes
-
+// Local includes.
 
 class QVBoxLayout;
 class QTimeLine;

@@ -25,12 +25,12 @@
 #ifndef KIPIUPLOADWIDGET_H
 #define KIPIUPLOADWIDGET_H
 
-// libKipi Includes.
+// libKipi includes.
 
 #include <libkipi/imagecollection.h>
 #include <libkipi/uploadwidget.h>
 
-// Local includes
+// Local includes.
 
 #include "albummanager.h"
 

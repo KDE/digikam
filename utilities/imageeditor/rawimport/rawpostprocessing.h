@@ -24,7 +24,7 @@
 #ifndef RAWPOSTPROCESSING_H
 #define RAWPOSTPROCESSING_H
 
-// Digikam Includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

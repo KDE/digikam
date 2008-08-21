@@ -21,7 +21,7 @@
  * 
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QAbstractItemView>
 #include <QAbstractListModel>
@@ -33,11 +33,11 @@
 #include <QTreeView>
 #include <QVBoxLayout>
 
-// KDE includes
+// KDE includes.
 
 #include <klocale.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "comboboxutilities.h"

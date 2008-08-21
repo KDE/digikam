@@ -25,7 +25,7 @@
 
 #include <cmath>
 
-// Qt includes
+// Qt includes.
 
 #include <QApplication>
 #include <QCheckBox>
@@ -39,14 +39,14 @@
 #include <QTimeEdit>
 #include <QTreeView>
 
-// KDE includes
+// KDE includes.
 
 #include <kiconloader.h>
 #include <klocale.h>
 #include <klineedit.h>
 #include <ksqueezedtextlabel.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "dimg.h"

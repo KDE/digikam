@@ -21,17 +21,17 @@
  * 
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QScrollArea>
 #include <QHBoxLayout>
 #include <QKeyEvent>
 
-// KDE includes
+// KDE includes.
 
 #include <klocale.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "themeengine.h"

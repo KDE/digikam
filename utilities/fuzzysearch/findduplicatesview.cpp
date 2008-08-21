@@ -33,7 +33,7 @@
 #include <QTreeWidget>
 #include <QHeaderView>
 
-// KDE include.
+// KDE includes.
 
 #include <klocale.h>
 #include <kdialog.h>

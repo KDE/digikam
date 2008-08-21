@@ -26,7 +26,7 @@
 
 #include <cstdio>
 
-// Qt includes
+// Qt includes.
 
 #include <QCloseEvent>
 #include <QDragMoveEvent>
@@ -41,7 +41,7 @@
 #include <QSplitter>
 #include <QTimer>
 
-// KDE includes
+// KDE includes.
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -67,7 +67,7 @@
 #include <ktoolbarpopupaction.h>
 #include <kwindowsystem.h>
 
-// local includes
+// local includes.
 
 #include "componentsinfo.h"
 #include "ddebug.h"

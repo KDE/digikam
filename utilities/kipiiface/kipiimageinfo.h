@@ -39,13 +39,13 @@
 
 #include <kurl.h>
 
-// libKipi Includes.
+// libKipi includes.
 
 #include <libkipi/interface.h>
 #include <libkipi/imageinfo.h>
 #include <libkipi/imageinfoshared.h>
 
-// Local includes
+// Local includes.
 
 #include "imageinfo.h"
 

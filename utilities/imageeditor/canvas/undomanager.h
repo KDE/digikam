@@ -26,7 +26,7 @@
 #ifndef UNDOMANAGER_H
 #define UNDOMANAGER_H
 
-//Qt includes.
+// Qt includes.
 
 #include <QStringList>
 

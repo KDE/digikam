@@ -65,7 +65,7 @@
 #include <kglobal.h>
 #include <kvbox.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "dimg.h"

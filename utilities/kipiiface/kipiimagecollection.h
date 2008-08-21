@@ -36,12 +36,12 @@
 
 #include <kurl.h>
 
-// libKipi Includes.
+// libKipi includes.
 
 #include <libkipi/imagecollection.h>
 #include <libkipi/imagecollectionshared.h>
 
-// Local includes
+// Local includes.
 
 #include "albummanager.h"
 

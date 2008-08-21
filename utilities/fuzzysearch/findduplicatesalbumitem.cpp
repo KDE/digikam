@@ -26,7 +26,7 @@
 #include <QPainter>
 #include <QTreeWidget>
 
-// KDE include.
+// KDE includes.
 
 #include <klocale.h>
 

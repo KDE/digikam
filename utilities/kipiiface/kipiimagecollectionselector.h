@@ -30,12 +30,12 @@
 #include <QList>
 #include <QString>
 
-// libKipi Includes.
+// libKipi includes.
 
 #include <libkipi/imagecollection.h>
 #include <libkipi/imagecollectionselector.h>
 
-// Local includes
+// Local includes.
 
 #include "albummanager.h"
 

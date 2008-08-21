@@ -21,7 +21,7 @@
  * 
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QAbstractListModel>
 #include <QItemDelegate>
@@ -37,7 +37,7 @@
 #include <QTimeLine>
 #include <QVBoxLayout>
 
-// KDE includes
+// KDE includes.
 
 #include <kdeversion.h>
 #include <kglobalsettings.h>
@@ -45,7 +45,7 @@
 #include <kstandardguiitem.h>
 #include <kpushbutton.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "constants.h"

@@ -21,7 +21,7 @@
  * 
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QGradient>
 #include <QPaintEvent>
@@ -29,14 +29,14 @@
 #include <QTimeLine>
 #include <QVBoxLayout>
 
-// KDE includes
+// KDE includes.
 
 #include <kdialogbuttonbox.h>
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <kstandardguiitem.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "searchxml.h"

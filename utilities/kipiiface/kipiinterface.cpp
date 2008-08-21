@@ -28,7 +28,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 
-// libKipi Includes.
+// libKipi includes.
 
 #include <libkipi/version.h>
 

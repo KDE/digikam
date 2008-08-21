@@ -21,15 +21,15 @@
  * 
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QLabel>
 
-// KDE includes
+// KDE includes.
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "themeengine.h"

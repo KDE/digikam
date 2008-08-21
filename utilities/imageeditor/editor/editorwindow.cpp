@@ -25,7 +25,7 @@
 
 #include <cmath>
 
-// Qt includes
+// Qt includes.
 
 #include <QByteArray>
 #include <QCursor>
@@ -43,7 +43,7 @@
 #include <QToolButton>
 #include <QWidgetAction>
 
-// KDE includes
+// KDE includes.
 
 #include <kaboutdata.h>
 #include <kaction.h>
@@ -85,7 +85,7 @@
 
 #include <libkdcraw/version.h>
 
-// local includes
+// local includes.
 
 #include "ddebug.h"
 #include "canvas.h"

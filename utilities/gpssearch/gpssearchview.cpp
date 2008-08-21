@@ -31,7 +31,7 @@
 #include <QStyle>
 #include <QToolButton>
 
-// KDE include.
+// KDE includes.
 
 #include <kapplication.h>
 #include <kconfig.h>

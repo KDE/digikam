@@ -34,7 +34,7 @@
 #include <QTimer>
 #include <QToolButton>
 
-// KDE include.
+// KDE includes.
 
 #include <kapplication.h>
 #include <kcolorvalueselector.h>

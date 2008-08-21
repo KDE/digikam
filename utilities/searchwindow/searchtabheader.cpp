@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QGroupBox>
 #include <QHBoxLayout>
@@ -32,7 +32,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
-// KDE includes
+// KDE includes.
 
 #include <kdialog.h>
 #include <kiconloader.h>
@@ -42,7 +42,7 @@
 #include <ksqueezedtextlabel.h>
 #include <kurllabel.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "album.h"
