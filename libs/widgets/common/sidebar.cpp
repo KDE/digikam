@@ -24,7 +24,7 @@
 
 /** @file sidebar.cpp */
 
-// QT includes.
+// Qt includes.
 
 #include <qsplitter.h>
 #include <qwidgetstack.h>

@@ -24,7 +24,7 @@
 #ifndef DCOLOR_H
 #define DCOLOR_H
 
-// QT includes.
+// Qt includes.
 
 #include <qcolor.h>
 

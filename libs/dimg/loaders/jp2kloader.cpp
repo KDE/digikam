@@ -36,7 +36,7 @@
 // files io. Uncomment this line only for debugging.
 //#define ENABLE_DEBUG_MESSAGES
 
-// QT includes.
+// Qt includes.
 
 #include <qfile.h>
 #include <qcstring.h>

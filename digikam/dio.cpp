@@ -34,7 +34,7 @@ extern "C"
 
 #include <cstdio>
 
-// QT includes.
+// Qt includes.
 
 #include <qfile.h>
 #include <qcstring.h>

@@ -27,7 +27,7 @@
 
 #include <cmath>
 
-// QT includes.
+// Qt includes.
 
 #include <qcstring.h>
 

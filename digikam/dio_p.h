@@ -24,7 +24,7 @@
 #ifndef DIO_P_H
 #define DIO_P_H
 
-// QT includes.
+// Qt includes.
 
 #include <qobject.h>
 

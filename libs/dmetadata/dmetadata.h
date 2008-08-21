@@ -25,7 +25,7 @@
 #ifndef DMETADATA_H
 #define DMETADATA_H
 
-// QT includes.
+// Qt includes.
 
 #include <qstring.h>
 

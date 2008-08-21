@@ -24,7 +24,7 @@
 
 #include <config.h>
 
-// QT includes.
+// Qt includes.
 
 #include <qstring.h>
 #include <qcstring.h>
