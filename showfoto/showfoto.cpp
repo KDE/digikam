@@ -412,9 +412,6 @@ void ShowFoto::setupUserArea()
         m_stackView       = new Digikam::EditorStackView(m_splitter);
         m_canvas          = new Digikam::Canvas(m_stackView);
         m_canvas->setSizePolicy(rightSzPolicy);
-        m_canvas->makeDefaultEditingCanvas();
-        m_stackView->setCanvas(m_canvas);
-        m_stackView->setViewMode(Digikam::EditorStackView::CanvasMode);
 
         d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter,
                                                                 Digikam::Sidebar::Right);
@@ -433,9 +430,6 @@ void ShowFoto::setupUserArea()
         d->thumbBar       = new Digikam::ThumbBarView(d->vSplitter, Digikam::ThumbBarView::Horizontal);
 
         m_canvas->setSizePolicy(rightSzPolicy);
-        m_canvas->makeDefaultEditingCanvas();
-        m_stackView->setCanvas(m_canvas);
-        m_stackView->setViewMode(Digikam::EditorStackView::CanvasMode);
 
         d->vSplitter->setFrameStyle( QFrame::NoFrame );
         d->vSplitter->setFrameShadow( QFrame::Plain );
@@ -450,6 +444,10 @@ void ShowFoto::setupUserArea()
         hlay->addWidget(m_splitter);
         hlay->addWidget(d->rightSidebar);
     }
+
+    m_canvas->makeDefaultEditingCanvas();
+    m_stackView->setCanvas(m_canvas);
+    m_stackView->setViewMode(Digikam::EditorStackView::CanvasMode);
 
     m_splitter->setFrameStyle( QFrame::NoFrame );
     m_splitter->setFrameShadow( QFrame::Plain );
