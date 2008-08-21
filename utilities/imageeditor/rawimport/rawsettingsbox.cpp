@@ -25,7 +25,7 @@
 #include <qstring.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+
 #include <qhbuttongroup.h>
 #include <qcombobox.h>
 #include <qlabel.h>
@@ -190,7 +190,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     d->channelCB->insertItem( i18n("Green") );
     d->channelCB->insertItem( i18n("Blue") );
     d->channelCB->insertItem( i18n("Colors") );
-    Q3WhatsThis::add(d->channelCB, i18n("<p>Select the histogram channel to display here:<p>"
+    d->channelCB->setWhatsThis( i18n("<p>Select the histogram channel to display here:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
                                        "<b>Green</b>: display the green image-channel values.<p>"
@@ -201,13 +201,13 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     d->scaleBG->setExclusive(true);
     d->scaleBG->setFrameShape(Q3Frame::NoFrame);
     d->scaleBG->setInsideMargin( 0 );
-    Q3WhatsThis::add(d->scaleBG, i18n("<p>Select the histogram scale here.<p>"
+    d->scaleBG->setWhatsThis( i18n("<p>Select the histogram scale here.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
 
     QPushButton *linHistoButton = new QPushButton( d->scaleBG );
-    QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
+    linHistoButton->setToolTip( i18n( "<p>Linear" ) );
     d->scaleBG->insert(linHistoButton, HistogramWidget::LinScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
@@ -215,7 +215,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     linHistoButton->setToggleButton(true);
 
     QPushButton *logHistoButton = new QPushButton( d->scaleBG );
-    QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
+    logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
     d->scaleBG->insert(logHistoButton, HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
@@ -229,7 +229,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     d->colorsCB->insertItem( i18n("Green") );
     d->colorsCB->insertItem( i18n("Blue") );
     d->colorsCB->setEnabled( false );
-    Q3WhatsThis::add( d->colorsCB, i18n("<p>Select the main color displayed with Colors Channel mode here:<p>"
+    d->colorsCB->setWhatsThis( i18n("<p>Select the main color displayed with Colors Channel mode here:<p>"
                                        "<b>Red</b>: Draw the red image channel in the foreground.<p>"
                                        "<b>Green</b>: Draw the green image channel in the foreground.<p>"
                                        "<b>Blue</b>: Draw the blue image channel in the foreground.<p>"));
@@ -238,7 +238,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
 
     Q3VBox *histoBox    = new Q3VBox(this);
     d->histogramWidget = new HistogramWidget(256, 140, histoBox, false, true, true);
-    Q3WhatsThis::add(d->histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
+    d->histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
                                              "settings changes."));
     QLabel *space = new QLabel(histoBox);
@@ -263,13 +263,13 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     d->abortBtn->setText(i18n("Abort"));
     d->abortBtn->setIconSet(SmallIconSet("stop"));
     d->abortBtn->setEnabled(false);
-    QToolTip::add(d->abortBtn, i18n("Abort the current Raw image preview."));
+    d->abortBtn->setToolTip( i18n("Abort the current Raw image preview."));
 
     d->updateBtn = new QPushButton(d->rawdecodingBox);
     d->updateBtn->setText(i18n("Update"));
     d->updateBtn->setIconSet(SmallIconSet("reload_page"));
     d->updateBtn->setEnabled(false);
-    QToolTip::add(d->updateBtn, i18n("Generate a Raw image preview using current settings."));
+    d->updateBtn->setToolTip( i18n("Generate a Raw image preview using current settings."));
 
     rawGrid->addMultiCellWidget(d->decodingSettingsBox, 0, 0, 0, 2);
     rawGrid->addMultiCellWidget(d->abortBtn,            1, 1, 0, 0);
@@ -293,34 +293,34 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     d->brightnessInput = new RIntNumInput(d->advExposureBox);
     d->brightnessInput->setRange(-100, 100, 1);
     d->brightnessInput->setDefaultValue(0);
-    Q3WhatsThis::add(d->brightnessInput->input(), i18n("<p>Set here the brightness adjustment of the image."));
+    d->brightnessInput->input()->setWhatsThis( i18n("<p>Set here the brightness adjustment of the image."));
 
     d->contrastLabel = new QLabel(i18n("Contrast:"), d->advExposureBox);
     d->contrastInput = new RIntNumInput(d->advExposureBox);
     d->contrastInput->setRange(-100, 100, 1);
     d->contrastInput->setDefaultValue(0);
-    Q3WhatsThis::add(d->contrastInput->input(), i18n("<p>Set here the contrast adjustment of the image."));
+    d->contrastInput->input()->setWhatsThis( i18n("<p>Set here the contrast adjustment of the image."));
 
     d->gammaLabel = new QLabel(i18n("Gamma:"), d->advExposureBox);
     d->gammaInput = new RDoubleNumInput(d->advExposureBox);
     d->gammaInput->setPrecision(2);
     d->gammaInput->setRange(0.1, 3.0, 0.01);
     d->gammaInput->setDefaultValue(1.0);
-    Q3WhatsThis::add(d->gammaInput->input(), i18n("Set here the gamma adjustement of the image"));
+    d->gammaInput->input()->setWhatsThis( i18n("Set here the gamma adjustement of the image"));
 
     d->saturationLabel = new QLabel(i18n("Saturation:"), d->advExposureBox);
     d->saturationInput = new RDoubleNumInput(d->advExposureBox);
     d->saturationInput->setPrecision(2);
     d->saturationInput->setRange(0.0, 2.0, 0.01);
     d->saturationInput->setDefaultValue(1.0);
-    Q3WhatsThis::add(d->saturationInput->input(), i18n("<p>Set here the color saturation correction."));
+    d->saturationInput->input()->setWhatsThis( i18n("<p>Set here the color saturation correction."));
 
     d->fineExposureLabel = new QLabel(i18n("Exposure (E.V):"), d->advExposureBox);
     d->fineExposureInput = new RDoubleNumInput(d->advExposureBox);
     d->fineExposureInput->setPrecision(2);
     d->fineExposureInput->setRange(-3.0, 3.0, 0.1);
     d->fineExposureInput->setDefaultValue(0.0);
-    Q3WhatsThis::add(d->fineExposureInput->input(), i18n("<p>This value in E.V will be used to perform "
+    d->fineExposureInput->input()->setWhatsThis( i18n("<p>This value in E.V will be used to perform "
                                                         "an exposure compensation of the image."));
 
     advExposureLayout->addMultiCellWidget(d->brightnessLabel,   0, 0, 0, 0);
@@ -349,14 +349,14 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     spacev->setFixedWidth(1);
 
     d->curveWidget = new CurvesWidget(256, 192, d->curveBox);
-    Q3WhatsThis::add(d->curveWidget, i18n("<p>This is the curve adjustment of the image luminosity"));
+    d->curveWidget->setWhatsThis( i18n("<p>This is the curve adjustment of the image luminosity"));
 
     d->resetCurveBtn = new QToolButton(d->curveBox);
     d->resetCurveBtn->setFixedSize(11, 11);
     d->resetCurveBtn->setIconSet(SmallIconSet("reload_page", 8));
     d->resetCurveBtn->setFocusPolicy(Qt::NoFocus);
     d->resetCurveBtn->setAutoRaise(true);
-    QToolTip::add(d->resetCurveBtn, i18n("Reset curve to linear"));
+    d->resetCurveBtn->setToolTip( i18n("Reset curve to linear"));
 
     QLabel *spaceh = new QLabel(d->curveBox);
     spaceh->setFixedHeight(1);
@@ -398,19 +398,19 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     d->resetBtn = new QPushButton(btnBox);
     d->resetBtn->setText(i18n("Reset"));
     d->resetBtn->setIconSet(SmallIconSet("reload_page"));
-    QToolTip::add(d->resetBtn, i18n("<p>Reset all settings to default values."));
+    d->resetBtn->setToolTip( i18n("<p>Reset all settings to default values."));
 
     QLabel *space2 = new QLabel(btnBox);
 
     d->importBtn = new QPushButton(btnBox);
     d->importBtn->setText(i18n("Import"));
     d->importBtn->setIconSet(SmallIconSet("ok"));
-    QToolTip::add(d->importBtn, i18n("<p>Import image to editor using current settings."));
+    d->importBtn->setToolTip( i18n("<p>Import image to editor using current settings."));
 
     d->useDefaultBtn = new QPushButton(btnBox);
     d->useDefaultBtn->setText(i18n("Use Default"));
     d->useDefaultBtn->setIconSet(SmallIconSet("gohome"));
-    QToolTip::add(d->useDefaultBtn, i18n("<p>Use general Raw decoding settings to load this image in editor."));
+    d->useDefaultBtn->setToolTip( i18n("<p>Use general Raw decoding settings to load this image in editor."));
 
     btnBox->setStretchFactor(space2, 10);
 
