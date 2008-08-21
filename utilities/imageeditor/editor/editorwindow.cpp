@@ -109,6 +109,7 @@
 #include "statusprogressbar.h"
 #include "themeengine.h"
 #include "thumbbar.h"
+#include "editorstackview.h"
 #include "editortooliface.h"
 #include "editorwindowprivate.h"
 #include "editorwindow.h"
@@ -215,8 +216,8 @@ void EditorWindow::setupStandardConnections()
     connect(m_canvas, SIGNAL(signalRightButtonClicked()),
             this, SLOT(slotContextMenu()));
 
-    connect(m_canvas, SIGNAL(signalZoomChanged(double)),
-            this, SLOT(slotZoomChanged(double)));
+    connect(m_stackView, SIGNAL(signalZoomChanged(bool, bool, double)),
+            this, SLOT(slotZoomChanged(bool, bool, double)));
 
     connect(m_canvas, SIGNAL(signalChanged()),
             this, SLOT(slotChanged()));
@@ -710,12 +711,12 @@ void EditorWindow::slotNewToolbarConfig()
 
 void EditorWindow::slotIncreaseZoom()
 {
-    m_canvas->slotIncreaseZoom();
+    m_stackView->increaseZoom();
 }
 
 void EditorWindow::slotDecreaseZoom()
 {
-    m_canvas->slotDecreaseZoom();
+    m_stackView->decreaseZoom();
 }
 
 void EditorWindow::slotToggleFitToWindow()
@@ -723,7 +724,7 @@ void EditorWindow::slotToggleFitToWindow()
     d->zoomPlusAction->setEnabled(true);
     d->zoomComboAction->setEnabled(true);
     d->zoomMinusAction->setEnabled(true);
-    m_canvas->toggleFitToWindow();
+    m_stackView->toggleFitToWindow();
 }
 
 void EditorWindow::slotFitToSelect()
@@ -731,7 +732,7 @@ void EditorWindow::slotFitToSelect()
     d->zoomPlusAction->setEnabled(true);
     d->zoomComboAction->setEnabled(true);
     d->zoomMinusAction->setEnabled(true);
-    m_canvas->fitToSelect();
+    m_stackView->fitToSelect();
 }
 
 void EditorWindow::slotZoomTo100Percents()
@@ -739,15 +740,7 @@ void EditorWindow::slotZoomTo100Percents()
     d->zoomPlusAction->setEnabled(true);
     d->zoomComboAction->setEnabled(true);
     d->zoomMinusAction->setEnabled(true);
-
-    if (m_canvas->zoomFactor()==1.0)
-    {
-        m_canvas->toggleFitToWindow();
-    }
-    else
-    {
-        m_canvas->setZoomFactor(1.0);
-    }
+    m_stackView->zoomTo100Percents();
 }
 
 void EditorWindow::slotZoomSelected()
@@ -762,13 +755,13 @@ void EditorWindow::slotZoomTextChanged(const QString &txt)
     bool r      = false;
     double zoom = KGlobal::locale()->readNumber(txt, &r) / 100.0;
     if (r && zoom > 0.0)
-        m_canvas->setZoomFactor(zoom);
+        m_stackView->setZoomFactor(zoom);
 }
 
-void EditorWindow::slotZoomChanged(double zoom)
+void EditorWindow::slotZoomChanged(bool isMax, bool isMin, double zoom)
 {
-    d->zoomPlusAction->setEnabled(!m_canvas->maxZoom());
-    d->zoomMinusAction->setEnabled(!m_canvas->minZoom());
+    d->zoomPlusAction->setEnabled(!isMax);
+    d->zoomMinusAction->setEnabled(!isMin);
 
     d->zoomCombo->blockSignals(true);
     d->zoomCombo->setItemText(d->zoomCombo->currentIndex(),
