@@ -27,11 +27,11 @@
 #ifndef SHOWFOTO_H
 #define SHOWFOTO_H
 
-// KDE includes
+// KDE includes.
 
 #include <kurl.h>
 
-// local includes
+// local includes.
 
 #include "editorwindow.h"
 

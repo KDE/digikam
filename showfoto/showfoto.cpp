@@ -36,7 +36,7 @@ extern "C"
 
 #include <cstdio>
 
-// Qt includes
+// Qt includes.
 
 #include <QCursor>
 #include <QDir>
@@ -51,7 +51,7 @@ extern "C"
 #include <QSplitter>
 #include <QVBoxLayout>
 
-// KDE includes
+// KDE includes.
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -78,11 +78,11 @@ extern "C"
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
 
-// Libkdcraw includes
+// Libkdcraw includes.
 
 #include <libkdcraw/dcrawbinary.h>
 
-// local includes
+// local includes.
 
 #include "ddebug.h"
 #include "canvas.h"
