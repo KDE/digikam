@@ -293,7 +293,6 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->vSelector->setMinimumSize(26, 96);
     d->vSelector->setChooserMode(ChooserValue);
     d->vSelector->setIndent(false);
-    d->vSelector->setArrowDirection(Qt::RightArrow);
     d->vSelector->setWhatsThis(tips);
 
     // ---------------------------------------------------------------
