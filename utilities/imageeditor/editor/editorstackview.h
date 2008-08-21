@@ -64,6 +64,21 @@ public:
     int  viewMode();
     void setViewMode(int mode);
 
+    void increaseZoom();
+    void decreaseZoom();
+    void toggleFitToWindow();
+    void fitToSelect();
+    void zoomTo100Percents();
+    void setZoomFactor(double zoom);
+
+signals:
+
+    void signalZoomChanged(bool isMax, bool isMin, double zoom);
+
+private slots:
+
+    void slotZoomChanged(double);
+
 private:
 
     EditorStackViewPriv* d;

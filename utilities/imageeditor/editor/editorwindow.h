@@ -224,7 +224,7 @@ private slots:
     void slotZoomTo100Percents();
     void slotZoomSelected();
     void slotZoomTextChanged(const QString &);
-    void slotZoomChanged(double zoom);
+    void slotZoomChanged(bool isMax, bool isMin, double zoom);
     void slotSelectionChanged(const QRect& sel);
     void slotToggleFitToWindow();
     void slotToggleOffFitToWindow();

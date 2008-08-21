@@ -23,6 +23,7 @@
 
 // Local includes.
 
+#include "previewwidget.h"
 #include "canvas.h"
 #include "editorstackview.h"
 #include "editorstackview.moc"
@@ -62,6 +63,9 @@ void EditorStackView::setCanvas(Canvas* canvas)
 
     d->canvas = canvas;
     addWidget(d->canvas, CanvasMode);
+
+    connect(d->canvas, SIGNAL(signalZoomChanged(double)),
+            this, SLOT(slotZoomChanged(double)));
 }
 
 Canvas* EditorStackView::canvas() const
@@ -78,6 +82,14 @@ void EditorStackView::setToolView(QWidget* view)
 
     if (d->toolView)
         addWidget(d->toolView, ToolViewMode);
+
+
+    PreviewWidget *preview = dynamic_cast<PreviewWidget*>(d->toolView);
+    if (preview)
+    {
+        connect(preview, SIGNAL(signalZoomFactorChanged(double)),
+                this, SLOT(slotZoomChanged(double)));
+    }
 }
 
 QWidget* EditorStackView::toolView() const
@@ -96,6 +108,114 @@ void EditorStackView::setViewMode(int mode)
         return;
 
     raiseWidget(mode);
+}
+
+void EditorStackView::increaseZoom()
+{
+    if (viewMode() == CanvasMode)
+    {
+        d->canvas->slotIncreaseZoom();
+    }
+    else
+    {
+        PreviewWidget *preview = dynamic_cast<PreviewWidget*>(d->toolView);
+        if (preview)
+            preview->slotIncreaseZoom();
+    }
+}
+
+void EditorStackView::decreaseZoom()
+{
+    if (viewMode() == CanvasMode)
+    {
+        d->canvas->slotDecreaseZoom();
+    }
+    else
+    {
+        PreviewWidget *preview = dynamic_cast<PreviewWidget*>(d->toolView);
+        if (preview)
+            preview->slotDecreaseZoom();
+    }
+}
+
+void EditorStackView::toggleFitToWindow()
+{
+    if (viewMode() == CanvasMode)
+    {
+        d->canvas->toggleFitToWindow();
+    }
+    else
+    {
+        PreviewWidget *preview = dynamic_cast<PreviewWidget*>(d->toolView);
+        if (preview)
+            preview->toggleFitToWindow();
+    }
+}
+
+void EditorStackView::fitToSelect()
+{
+    if (viewMode() == CanvasMode)
+    {
+        d->canvas->fitToSelect();
+    }
+}
+
+void EditorStackView::zoomTo100Percents()
+{
+    if (viewMode() == CanvasMode)
+    {
+        if (d->canvas->zoomFactor()==1.0)
+            d->canvas->toggleFitToWindow();
+        else
+            d->canvas->setZoomFactor(1.0);
+    }
+    else
+    {
+        PreviewWidget *preview = dynamic_cast<PreviewWidget*>(d->toolView);
+        if (preview)
+        {
+            if (preview->zoomFactor()==1.0)
+                preview->toggleFitToWindow();
+            else
+                preview->setZoomFactor(1.0);
+        }
+    }
+}
+
+void EditorStackView::setZoomFactor(double zoom)
+{
+    if (viewMode() == CanvasMode)
+    {
+        d->canvas->setZoomFactor(zoom);
+    }
+    else
+    {
+        PreviewWidget *preview = dynamic_cast<PreviewWidget*>(d->toolView);
+        if (preview)
+            preview->setZoomFactor(zoom);
+    }
+}
+
+void EditorStackView::slotZoomChanged(double zoom)
+{
+    bool max, min;
+
+    if (viewMode() == CanvasMode)
+    {
+        max = d->canvas->maxZoom();
+        min = d->canvas->minZoom();
+        emit signalZoomChanged(max, min, zoom);
+    }
+    else
+    {
+        PreviewWidget *preview = dynamic_cast<PreviewWidget*>(d->toolView);
+        if (preview)
+        {
+            max = preview->maxZoom();
+            min = preview->minZoom();
+            emit signalZoomChanged(max, min, zoom);
+        }
+    }
 }
 
 }  // namespace Digikam
