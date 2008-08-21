@@ -107,6 +107,7 @@ extern "C"
 #include "thumbbar.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
+#include "editorstackview.h"
 #include "showfoto.h"
 #include "showfoto.moc"
 
@@ -485,7 +486,7 @@ void ShowFoto::setupUserArea()
 
     m_canvas->makeDefaultEditingCanvas();
     m_stackView->setCanvas(m_canvas);
-    m_stackView->setViewMode(EditorStackView::CanvasMode);
+    m_stackView->setViewMode(Digikam::EditorStackView::CanvasMode);
 
     m_splitter->setFrameStyle( QFrame::NoFrame );
     m_splitter->setFrameShadow( QFrame::Plain );
