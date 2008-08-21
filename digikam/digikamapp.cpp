@@ -1853,6 +1853,10 @@ void DigikamApp::slotKipiPluginPlug()
 
         KActionPtrList actions = plugin->actions();
 
+        // List of obsolete kipi-plugins to not load.
+        QStringList pluginActionsDisabled;
+        pluginActionsDisabled << QString("raw_converter_single");  // Obsolete Since 0.9.5 and new Raw Import tool.
+
         for( KActionPtrList::Iterator it2 = actions.begin(); it2 != actions.end(); ++it2 )
         {
             if ( plugin->category(*it2) == KIPI::IMAGESPLUGIN )
@@ -1873,10 +1877,6 @@ void DigikamApp::slotKipiPluginPlug()
             else if ( plugin->category(*it2) == KIPI::COLLECTIONSPLUGIN )
                popup = &d->kipiAlbumActions;
 
-            // List of obsolete kipi-plugins to not load.
-
-            QStringList pluginActionsDisabled;
-            pluginActionsDisabled << QString("raw_converter_single");  // Obsolete Since 0.9.5 and new Raw Import tool.
             QString actionName((*it2)->name());
 
             // Plug the KIPI plugins actions in according with the KAction method.
