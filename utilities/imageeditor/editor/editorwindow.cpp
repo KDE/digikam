@@ -36,7 +36,7 @@
 #include <QImageReader>
 #include <QLabel>
 #include <QLayout>
-#include <QProgressBar>
+#include <Q3ProgressBar>
 #include <QSignalMapper>
 #include <QSplitter>
 #include <QTimer>
