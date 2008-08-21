@@ -26,7 +26,7 @@
 #ifndef IMAGEEFFECT_SUPERIMPOSE_H
 #define IMAGEEFFECT_SUPERIMPOSE_H
 
-// KDE include.
+// KDE includes.
 
 #include <kurl.h>
 

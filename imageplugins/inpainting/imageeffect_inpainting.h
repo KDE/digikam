@@ -26,7 +26,7 @@
 #ifndef IMAGEEFFECT_INPAINTING_H
 #define IMAGEEFFECT_INPAINTING_H
 
-// Qt include.
+// Qt includes.
 
 #include <QImage>
 #include <QRect>

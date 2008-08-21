@@ -35,7 +35,7 @@
 #include <QPixmap>
 #include <QMouseEvent>
 
-// KDE include.
+// KDE includes.
 
 #include <kstandarddirs.h>
 #include <kcursor.h>

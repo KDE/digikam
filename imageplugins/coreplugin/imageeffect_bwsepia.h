@@ -25,7 +25,7 @@
 #ifndef IMAGEEFFECT_BWSEPIA_H
 #define IMAGEEFFECT_BWSEPIA_H
 
-// Qt Includes.
+// Qt includes.
 
 #include <QString>
 

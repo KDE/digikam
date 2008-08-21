@@ -25,7 +25,7 @@
 #ifndef IMAGEEFFECT_RESTORATION_H
 #define IMAGEEFFECT_RESTORATION_H
 
-// Qt include.
+// Qt includes.
 
 #include <QString>
 

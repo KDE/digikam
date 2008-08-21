@@ -41,7 +41,7 @@
 
 #include "dimg.h"
 
-// Local includes
+// Local includes.
 
 #include "matrix.h"
 

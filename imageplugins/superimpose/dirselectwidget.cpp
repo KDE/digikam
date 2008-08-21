@@ -23,14 +23,14 @@
  *
  * ============================================================ */
 
-// Qt includes. 
+// Qt includes.
 
 #include <Q3Header>
 #include <Q3ListView>
 #include <QLayout>
 #include <QDir>
 
-// KDE includes
+// KDE includes.
 
 #include <klocale.h>
 #include <kfiletreebranch.h>

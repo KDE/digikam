@@ -22,7 +22,7 @@
 #ifndef IMAGEEFFECT_AUTOCORRECTION_H
 #define IMAGEEFFECT_AUTOCORRECTION_H
 
-// local includes.
+// Local includes.
 
 #include "dimg.h"
 #include "imageguidedlg.h"
