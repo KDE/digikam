@@ -36,6 +36,7 @@ INCLUDE_DIRECTORIES(
                      ../utilities/imageeditor/editor
                      ../utilities/imageeditor/canvas
                      ../utilities/imageeditor/tools
+                     ../utilities/imageeditor/rawimport
 
                      # specific libs and utilities
                      ../libs/themeengine
