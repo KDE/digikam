@@ -29,7 +29,7 @@
 #include "qhbox.h"
 #include "qstring.h"
 
-// local includes.
+// Local includes.
 
 #include "albumlister.h"
 
