@@ -100,6 +100,7 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("Multimedia files handling using KDE4 Phonon interface");
     newFeatures << i18n("Geolocation performed using KDE4 Marble interface");
     newFeatures << i18n("XMP metadata support");
+    newFeatures << i18n("TIFF/EP RAW files metadata editing");
     newFeatures << i18n("The database file can be stored on a customized place to support remote album library paths");
     newFeatures << i18n("Support of multiple roots album paths");
     newFeatures << i18n("Thumbnails-bar integration with preview mode and editor for easy navigation between images");
