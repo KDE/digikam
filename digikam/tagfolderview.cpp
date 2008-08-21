@@ -4,8 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2005-03-22
- * Descritpion : tags folder view.
- * 
+ * Description : tags folder view.
+ *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -710,7 +710,7 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
                              "Deleting this will also delete "
                              "the subtags. "
                              "Do you want to continue?",
-                             children, 
+                             children,
                              tag->title()));
 
         if(result != KMessageBox::Continue)
@@ -732,9 +732,9 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
         message = i18n("Delete '%1' tag?", tag->title());
     }
 
-    int result = KMessageBox::warningContinueCancel(0, message, 
+    int result = KMessageBox::warningContinueCancel(0, message,
                                                     i18n("Delete Tag"),
-                                                    KGuiItem(i18n("Delete"), 
+                                                    KGuiItem(i18n("Delete"),
                                                     "edit-delete"));
 
     if(result == KMessageBox::Continue)
@@ -929,7 +929,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         {
             KMenu popMenu(this);
             popMenu.addTitle(SmallIcon("digikam"), i18n("My Tags"));
-            QAction * assignAction = popMenu.addAction(SmallIcon("tag"), 
+            QAction * assignAction = popMenu.addAction(SmallIcon("tag"),
                                              i18n("Assign Tag '%1' to Items", destAlbum->prettyUrl()));
             popMenu.addSeparator();
             popMenu.addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
@@ -941,7 +941,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
 
         if (assign)
         {
-            emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+            emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                        i18n("Assigning image tags. Please wait..."));
 
             int i = 0;
