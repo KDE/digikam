@@ -27,7 +27,7 @@
 #include <cstring>
 #include <cmath>
 #include <cstdlib>
- 
+
 // Local includes.
 
 #include "ddebug.h"

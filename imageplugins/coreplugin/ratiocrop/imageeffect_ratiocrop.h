@@ -26,7 +26,7 @@
 #ifndef IMAGEEFFECT_RATIOCROP_H
 #define IMAGEEFFECT_RATIOCROP_H
 
-// Digikam include.
+// Digikam includes.
 
 #include "imagedlgbase.h"
 

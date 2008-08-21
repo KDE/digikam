@@ -26,7 +26,7 @@
 #ifndef IMAGEEFFECT_ICCPROOF_H
 #define IMAGEEFFECT_ICCPROOF_H
 
-// Digikam include.
+// Digikam includes.
 
 #include "imagedlgbase.h"
 

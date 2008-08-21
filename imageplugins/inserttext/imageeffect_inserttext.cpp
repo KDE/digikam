@@ -40,7 +40,6 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
-
 // KDE includes.
 
 #include <kaboutdata.h>
@@ -56,7 +55,6 @@
 #include <kmenu.h>
 #include <kstandarddirs.h>
 #include <ktextedit.h>
-
 
 // Local includes.
 

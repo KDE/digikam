@@ -24,7 +24,7 @@
 #ifndef IMAGEEFFECT_SHARPEN_H
 #define IMAGEEFFECT_SHARPEN_H
 
-// Digikam include.
+// Digikam includes.
 
 #include "ctrlpaneldlg.h"
 

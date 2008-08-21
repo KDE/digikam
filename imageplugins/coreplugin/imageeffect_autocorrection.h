@@ -29,7 +29,7 @@
 #include <QString>
 #include <QPixmap>
 
-// Digikam include.
+// Digikam includes.
 
 #include "imagedlgbase.h"
 

@@ -24,7 +24,7 @@
 #ifndef IMAGEEFFECT_RGB_H
 #define IMAGEEFFECT_RGB_H
 
-// Digikam include.
+// Digikam includes.
 
 #include "imagedlgbase.h"
 
