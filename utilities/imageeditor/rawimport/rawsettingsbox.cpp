@@ -25,14 +25,18 @@
 #include <qstring.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qhbuttongroup.h>
 #include <qcombobox.h>
 #include <qlabel.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qtoolbutton.h>
 #include <qtoolbox.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QPixmap>
+#include <Q3Frame>
 
 // KDE includes.
 
@@ -49,6 +53,7 @@
 
 #include <libkdcraw/dcrawsettingswidget.h>
 #include <libkdcraw/rnuminput.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -136,7 +141,7 @@ public:
     QLabel              *saturationLabel;
     QLabel              *fineExposureLabel;
 
-    QHButtonGroup       *scaleBG;
+    Q3HButtonGroup       *scaleBG;
 
     QPushButton         *importBtn;
     QPushButton         *useDefaultBtn;
@@ -168,14 +173,14 @@ public:
     DcrawSettingsWidget *decodingSettingsBox;
 };
 
-RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
+RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
               : QWidget(parent)
 {
     d = new RawSettingsBoxPriv;
 
     // ---------------------------------------------------------------
 
-    QGridLayout* gridSettings = new QGridLayout(this, 6, 4);
+    Q3GridLayout* gridSettings = new Q3GridLayout(this, 6, 4);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), this);
     label1->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
@@ -185,18 +190,18 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     d->channelCB->insertItem( i18n("Green") );
     d->channelCB->insertItem( i18n("Blue") );
     d->channelCB->insertItem( i18n("Colors") );
-    QWhatsThis::add(d->channelCB, i18n("<p>Select the histogram channel to display here:<p>"
+    Q3WhatsThis::add(d->channelCB, i18n("<p>Select the histogram channel to display here:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
                                        "<b>Green</b>: display the green image-channel values.<p>"
                                        "<b>Blue</b>: display the blue image-channel values.<p>"
                                        "<b>Colors</b>: Display all color channel values at the same time."));
 
-    d->scaleBG = new QHButtonGroup(this);
+    d->scaleBG = new Q3HButtonGroup(this);
     d->scaleBG->setExclusive(true);
-    d->scaleBG->setFrameShape(QFrame::NoFrame);
+    d->scaleBG->setFrameShape(Q3Frame::NoFrame);
     d->scaleBG->setInsideMargin( 0 );
-    QWhatsThis::add(d->scaleBG, i18n("<p>Select the histogram scale here.<p>"
+    Q3WhatsThis::add(d->scaleBG, i18n("<p>Select the histogram scale here.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
@@ -224,16 +229,16 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     d->colorsCB->insertItem( i18n("Green") );
     d->colorsCB->insertItem( i18n("Blue") );
     d->colorsCB->setEnabled( false );
-    QWhatsThis::add( d->colorsCB, i18n("<p>Select the main color displayed with Colors Channel mode here:<p>"
+    Q3WhatsThis::add( d->colorsCB, i18n("<p>Select the main color displayed with Colors Channel mode here:<p>"
                                        "<b>Red</b>: Draw the red image channel in the foreground.<p>"
                                        "<b>Green</b>: Draw the green image channel in the foreground.<p>"
                                        "<b>Blue</b>: Draw the blue image channel in the foreground.<p>"));
 
     // ---------------------------------------------------------------
 
-    QVBox *histoBox    = new QVBox(this);
+    Q3VBox *histoBox    = new Q3VBox(this);
     d->histogramWidget = new HistogramWidget(256, 140, histoBox, false, true, true);
-    QWhatsThis::add(d->histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
+    Q3WhatsThis::add(d->histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
                                              "settings changes."));
     QLabel *space = new QLabel(histoBox);
@@ -245,7 +250,7 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
 
     d->tabView             = new KTabWidget(this);
     d->rawdecodingBox      = new QWidget(d->tabView);
-    QGridLayout* rawGrid   = new QGridLayout(d->rawdecodingBox, 1, 2);
+    Q3GridLayout* rawGrid   = new Q3GridLayout(d->rawdecodingBox, 1, 2);
     d->decodingSettingsBox = new DcrawSettingsWidget(d->rawdecodingBox, true, true, false);
 
     KFileDialog *inputDlg  = d->decodingSettingsBox->inputProfileUrlEdit()->fileDialog();
@@ -282,40 +287,40 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     // ---------------------------------------------------------------
 
     d->advExposureBox              = new QWidget(d->postProcessSettingsBox);
-    QGridLayout* advExposureLayout = new QGridLayout(d->advExposureBox, 5, 2);
+    Q3GridLayout* advExposureLayout = new Q3GridLayout(d->advExposureBox, 5, 2);
 
     d->brightnessLabel = new QLabel(i18n("Brightness:"), d->advExposureBox);
     d->brightnessInput = new RIntNumInput(d->advExposureBox);
     d->brightnessInput->setRange(-100, 100, 1);
     d->brightnessInput->setDefaultValue(0);
-    QWhatsThis::add(d->brightnessInput->input(), i18n("<p>Set here the brightness adjustment of the image."));
+    Q3WhatsThis::add(d->brightnessInput->input(), i18n("<p>Set here the brightness adjustment of the image."));
 
     d->contrastLabel = new QLabel(i18n("Contrast:"), d->advExposureBox);
     d->contrastInput = new RIntNumInput(d->advExposureBox);
     d->contrastInput->setRange(-100, 100, 1);
     d->contrastInput->setDefaultValue(0);
-    QWhatsThis::add(d->contrastInput->input(), i18n("<p>Set here the contrast adjustment of the image."));
+    Q3WhatsThis::add(d->contrastInput->input(), i18n("<p>Set here the contrast adjustment of the image."));
 
     d->gammaLabel = new QLabel(i18n("Gamma:"), d->advExposureBox);
     d->gammaInput = new RDoubleNumInput(d->advExposureBox);
     d->gammaInput->setPrecision(2);
     d->gammaInput->setRange(0.1, 3.0, 0.01);
     d->gammaInput->setDefaultValue(1.0);
-    QWhatsThis::add(d->gammaInput->input(), i18n("Set here the gamma adjustement of the image"));
+    Q3WhatsThis::add(d->gammaInput->input(), i18n("Set here the gamma adjustement of the image"));
 
     d->saturationLabel = new QLabel(i18n("Saturation:"), d->advExposureBox);
     d->saturationInput = new RDoubleNumInput(d->advExposureBox);
     d->saturationInput->setPrecision(2);
     d->saturationInput->setRange(0.0, 2.0, 0.01);
     d->saturationInput->setDefaultValue(1.0);
-    QWhatsThis::add(d->saturationInput->input(), i18n("<p>Set here the color saturation correction."));
+    Q3WhatsThis::add(d->saturationInput->input(), i18n("<p>Set here the color saturation correction."));
 
     d->fineExposureLabel = new QLabel(i18n("Exposure (E.V):"), d->advExposureBox);
     d->fineExposureInput = new RDoubleNumInput(d->advExposureBox);
     d->fineExposureInput->setPrecision(2);
     d->fineExposureInput->setRange(-3.0, 3.0, 0.1);
     d->fineExposureInput->setDefaultValue(0.0);
-    QWhatsThis::add(d->fineExposureInput->input(), i18n("<p>This value in E.V will be used to perform "
+    Q3WhatsThis::add(d->fineExposureInput->input(), i18n("<p>This value in E.V will be used to perform "
                                                         "an exposure compensation of the image."));
 
     advExposureLayout->addMultiCellWidget(d->brightnessLabel,   0, 0, 0, 0);
@@ -335,7 +340,7 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     // ---------------------------------------------------------------
 
     d->curveBox              = new QWidget(d->postProcessSettingsBox);
-    QGridLayout* curveLayout = new QGridLayout(d->curveBox, 3, 2);
+    Q3GridLayout* curveLayout = new Q3GridLayout(d->curveBox, 3, 2);
 
     ColorGradientWidget* vGradient = new ColorGradientWidget(ColorGradientWidget::Vertical, 10, d->curveBox);
     vGradient->setColors( QColor( "white" ), QColor( "black" ) );
@@ -344,12 +349,12 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     spacev->setFixedWidth(1);
 
     d->curveWidget = new CurvesWidget(256, 192, d->curveBox);
-    QWhatsThis::add(d->curveWidget, i18n("<p>This is the curve adjustment of the image luminosity"));
+    Q3WhatsThis::add(d->curveWidget, i18n("<p>This is the curve adjustment of the image luminosity"));
 
     d->resetCurveBtn = new QToolButton(d->curveBox);
     d->resetCurveBtn->setFixedSize(11, 11);
     d->resetCurveBtn->setIconSet(SmallIconSet("reload_page", 8));
-    d->resetCurveBtn->setFocusPolicy(QWidget::NoFocus);
+    d->resetCurveBtn->setFocusPolicy(Qt::NoFocus);
     d->resetCurveBtn->setAutoRaise(true);
     QToolTip::add(d->resetCurveBtn, i18n("Reset curve to linear"));
 
@@ -388,7 +393,7 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    QHBox *btnBox = new QHBox(this);
+    Q3HBox *btnBox = new Q3HBox(this);
 
     d->resetBtn = new QPushButton(btnBox);
     d->resetBtn->setText(i18n("Reset"));
@@ -539,7 +544,7 @@ CurvesWidget* RawSettingsBox::curve() const
 
 void RawSettingsBox::readSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("RAW Import Settings");
 
     d->channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", RawSettingsBoxPriv::LuminosityChannel));
@@ -614,7 +619,7 @@ void RawSettingsBox::readSettings()
 
 void RawSettingsBox::saveSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("RAW Import Settings");
 
     config->writeEntry("Histogram Channel",          d->channelCB->currentItem());

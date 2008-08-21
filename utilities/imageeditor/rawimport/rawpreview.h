@@ -27,6 +27,9 @@
 // Qt includes.
 
 #include <qimage.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QResizeEvent>
 
 // KDE includes.
 
@@ -53,7 +56,7 @@ Q_OBJECT
 
 public:
 
-    RawPreview(const KURL& url, QWidget *parent);
+    RawPreview(const KUrl& url, QWidget *parent);
     ~RawPreview();
 
     DImg& demosaicedImage() const;

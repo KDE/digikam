@@ -29,12 +29,14 @@
 #include <qtooltip.h>
 #include <qpixmap.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <QResizeEvent>
 
 // KDE includes.
 
 #include <klocale.h>
 #include <kcursor.h>
-#include <kdatetbl.h>
+#include <kdatetable.h>
 #include <kiconloader.h>
 
 // Local includes.
@@ -71,7 +73,7 @@ public:
 
     KPopupFrame           *panIconPopup;
 
-    KURL                   url;
+    KUrl                   url;
 
     PanIconWidget         *panIconWidget;
 
@@ -86,7 +88,7 @@ public:
     LoadingDescription     loadingDesc;
 };
 
-RawPreview::RawPreview(const KURL& url, QWidget *parent)
+RawPreview::RawPreview(const KUrl& url, QWidget *parent)
           : PreviewWidget(parent)
 {
     d = new RawPreviewPriv;
@@ -148,7 +150,7 @@ DImg& RawPreview::demosaicedImage() const
 
 void RawPreview::setDecodingSettings(const DRawDecoding& settings)
 {
-    setCursor(KCursor::waitCursor());
+    setCursor(Qt::WaitCursor);
     // Save post processing settings.
     d->settings = settings;
 
@@ -163,7 +165,7 @@ void RawPreview::setDecodingSettings(const DRawDecoding& settings)
 
 void RawPreview::setPostProcessingSettings(const DRawDecoding& settings)
 {
-    setCursor(KCursor::waitCursor());
+    setCursor(Qt::WaitCursor);
     postProcessing(settings);
     unsetCursor();
 }
@@ -193,7 +195,7 @@ void RawPreview::slotImageLoaded(const LoadingDescription& description, const DI
         QPainter p(&pix);
         p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
-                   Qt::AlignCenter|Qt::WordBreak, 
+                   Qt::AlignCenter|Qt::TextWordWrap, 
                    i18n("Cannot decode RAW image for\n\"%1\"")
                    .arg(QFileInfo(d->loadingDesc.filePath).fileName()));
         p.end();
@@ -296,7 +298,7 @@ void RawPreview::resizeEvent(QResizeEvent* e)
 {
     if (!e) return;
 
-    QScrollView::resizeEvent(e);
+    Q3ScrollView::resizeEvent(e);
 
     if (!d->loadingDesc.filePath.isEmpty())
         d->cornerButton->hide(); 

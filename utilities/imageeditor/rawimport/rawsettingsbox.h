@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT RawSettingsBox : public QWidget
 
 public:
 
-    RawSettingsBox(const KURL& url, QWidget *parent);
+    RawSettingsBox(const KUrl& url, QWidget *parent);
     ~RawSettingsBox();
 
     void setDefaultSettings();
