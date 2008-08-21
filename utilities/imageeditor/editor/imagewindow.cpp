@@ -67,7 +67,7 @@
 #include <ktoolbarpopupaction.h>
 #include <kwindowsystem.h>
 
-// local includes.
+// Local includes.
 
 #include "componentsinfo.h"
 #include "ddebug.h"

@@ -82,7 +82,7 @@ extern "C"
 
 #include <libkdcraw/dcrawbinary.h>
 
-// local includes.
+// Local includes.
 
 #include "ddebug.h"
 #include "canvas.h"

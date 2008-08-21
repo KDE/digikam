@@ -35,7 +35,7 @@
 #include <kxmlguiwindow.h>
 #include <kurl.h>
 
-// local includes.
+// Local includes.
 
 #include "digikam_export.h"
 

@@ -85,7 +85,7 @@
 
 #include <libkdcraw/version.h>
 
-// local includes.
+// Local includes.
 
 #include "ddebug.h"
 #include "canvas.h"

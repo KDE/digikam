@@ -35,7 +35,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 
-// // Local includes.
+// Local includes.
 
 #include "setuptooltip.h"
 #include "setuptooltip.moc"

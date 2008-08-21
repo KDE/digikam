@@ -44,7 +44,7 @@
 #include <klineedit.h>
 #include <klistwidget.h>
 
-// // Local includes.
+// Local includes.
 
 #include "thumbnailsize.h"
 #include "albumsettings.h"

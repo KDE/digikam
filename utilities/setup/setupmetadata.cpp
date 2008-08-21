@@ -46,7 +46,7 @@
 
 #include <libkexiv2/kexiv2.h>
 
-// // Local includes.
+// Local includes.
 
 #include "albumsettings.h"
 #include "setupmetadata.h"
