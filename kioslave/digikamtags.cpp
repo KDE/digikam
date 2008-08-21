@@ -26,7 +26,7 @@
 
 #include <cstdlib>
 
-// Qt includes
+// Qt includes.
 
 #include <QCoreApplication>
 

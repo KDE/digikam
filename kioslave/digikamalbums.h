@@ -35,7 +35,7 @@
 #include <QDateTime>
 #include <QEventLoop>
 
-// KDE includes
+// KDE includes.
 
 #include <kio/slavebase.h>
 #include <kjob.h>
