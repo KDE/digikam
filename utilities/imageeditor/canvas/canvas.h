@@ -30,7 +30,7 @@
 #include <qscrollview.h>
 #include <qrect.h>
 
-// Local includes
+// Local includes.
 
 #include "digikam_export.h"
 #include "dimg.h"

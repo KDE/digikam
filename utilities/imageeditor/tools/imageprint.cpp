@@ -68,7 +68,7 @@
 #include <ktempfile.h>
 #include <kpropertiesdialog.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "dimg.h"

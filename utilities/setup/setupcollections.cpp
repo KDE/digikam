@@ -20,7 +20,7 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
- 
+
 // QT includes.
 
 #include <qlayout.h>

@@ -22,7 +22,7 @@
  * ============================================================ */
 
 // Local includes.
- 
+
 #include "imageplugin.h"
 
 namespace Digikam

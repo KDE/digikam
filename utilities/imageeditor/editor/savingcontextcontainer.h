@@ -29,7 +29,7 @@
 
 #include <qstring.h>
 
-// KDE includes
+// KDE includes.
 
 #include <kurl.h>
 #include <ktempfile.h>

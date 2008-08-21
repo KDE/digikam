@@ -21,7 +21,7 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
- 
+
 // Qt includes.
 
 #include <qtabwidget.h>

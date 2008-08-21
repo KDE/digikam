@@ -28,7 +28,7 @@
 
 #include <qwidget.h>
 
-// Local Includes.
+// Local includes.
 
 #include "digikam_export.h"
 

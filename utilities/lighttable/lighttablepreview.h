@@ -30,7 +30,7 @@
 #include <qimage.h>
 #include <qsize.h>
 
-// Local includes
+// Local includes.
 
 #include "imageinfo.h"
 #include "previewwidget.h"

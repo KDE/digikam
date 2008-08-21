@@ -24,11 +24,11 @@
 #ifndef IMAGE_RESIZE_H
 #define IMAGE_RESIZE_H
 
-// Qt include.
+// Qt includes.
 
 #include <qstring.h>
 
-// KDE include.
+// KDE includes.
 
 #include <kdialogbase.h>
 

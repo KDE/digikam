@@ -30,7 +30,7 @@
 
 #include <kdialogbase.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "thumbnailsize.h"
