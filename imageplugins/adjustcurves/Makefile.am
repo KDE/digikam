@@ -24,11 +24,10 @@ digikamimageplugin_adjustcurves_la_LIBADD = $(LIB_KPARTS) \
 	                                        $(top_builddir)/digikam/digikam/libdigikam.la
 
 digikamimageplugin_adjustcurves_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
-	              
+
 kde_services_DATA = digikamimageplugin_adjustcurves.desktop
 
 kde_module_LTLIBRARIES = digikamimageplugin_adjustcurves.la
 
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_adjustcurves_ui.rc
-
