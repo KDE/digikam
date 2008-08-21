@@ -19,7 +19,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 168846 : crash after playing with tags (seems to be rather a crash in Qt or kdelibs).
 007 ==> 166671 : Image filter dialog buttons are much too big.
 008 ==> 134486 : Keywords are not written to raw files even though they do embed iptc/exif.
-009 ==> 
+009 ==> 168839 : Digikam crashed after tagging.
+010 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta2 - Release date: 2008-07-31
