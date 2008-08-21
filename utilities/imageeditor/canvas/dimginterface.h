@@ -150,8 +150,8 @@ public:
 
     QByteArray            getEmbeddedICC();
     QByteArray            getExif();
-    QByteArray            getIptc();    
-    QByteArray            getXmp(); 
+    QByteArray            getIptc();
+    QByteArray            getXmp();
 
     ICCSettingsContainer *getICCSettings();
 
@@ -172,14 +172,20 @@ protected slots:
 signals:
 
     void   signalColorManagementTool();
-    
+
     void   signalModified();
     void   signalUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave);
 
+    void   signalLoadingStarted(const QString& filename);
     void   signalLoadingProgress(const QString& filePath, float progress);
     void   signalImageLoaded(const QString& filePath, bool success);
     void   signalSavingProgress(const QString& filePath, float progress);
     void   signalImageSaved(const QString& filePath, bool success);
+
+private slots:
+
+    void slotUseRawImportSettings();
+    void slotUseDefaultSettings();
 
 private:
 
@@ -189,7 +195,7 @@ private:
 private:
 
     static DImgInterface *m_defaultInterface;
-    
+
     DImgInterfacePrivate *d;
 };
 

@@ -338,6 +338,11 @@ ShowFoto::~ShowFoto()
     delete d;
 }
 
+Digikam::Sidebar* ShowFoto::rightSideBar() const
+{
+    return dynamic_cast<Digikam::Sidebar*>(d->rightSidebar);
+}
+
 bool ShowFoto::queryClose()
 {
     // wait if a save operation is currently running
@@ -432,7 +437,9 @@ void ShowFoto::setupUserArea()
         QHBoxLayout *hlay = new QHBoxLayout(widget);
         m_splitter        = new Digikam::SidebarSplitter(widget);
         d->thumbBar       = new Digikam::ThumbBarView(m_splitter, Qt::Vertical);
-        m_canvas          = new Digikam::Canvas(m_splitter);
+        m_stackView       = new Digikam::EditorStackView(m_splitter);
+        m_canvas          = new Digikam::Canvas(m_stackView);
+
         m_splitter->setStretchFactor(1, 10);      // set Canvas default size to max.
 
         d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, m_splitter, KMultiTabBar::Right);
@@ -449,7 +456,8 @@ void ShowFoto::setupUserArea()
         QWidget* widget2  = new QWidget(m_splitter);
         QVBoxLayout *vlay = new QVBoxLayout(widget2);
         m_vSplitter       = new QSplitter(Qt::Vertical, widget2);
-        m_canvas          = new Digikam::Canvas(m_vSplitter);
+        m_stackView       = new Digikam::EditorStackView(m_vSplitter);
+        m_canvas          = new Digikam::Canvas(m_stackView);
         d->thumbBar       = new Digikam::ThumbBarView(m_vSplitter, Qt::Horizontal);
 
         m_vSplitter->setFrameStyle( QFrame::NoFrame );
@@ -476,6 +484,8 @@ void ShowFoto::setupUserArea()
     }
 
     m_canvas->makeDefaultEditingCanvas();
+    m_stackView->setCanvas(m_canvas);
+    m_stackView->setViewMode(EditorStackView::CanvasMode);
 
     m_splitter->setFrameStyle( QFrame::NoFrame );
     m_splitter->setFrameShadow( QFrame::Plain );

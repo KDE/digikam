@@ -248,7 +248,7 @@ ADD_CUSTOM_TARGET(svnversion
 IF(CMAKE_COMPILER_IS_GNUCXX)
   EXEC_PROGRAM(${CMAKE_CXX_COMPILER} ARGS --version OUTPUT_VARIABLE VERSION_GCC_INFO)
   STRING(REGEX MATCH " [34]\\.[0-9]\\.[0-9]" GCC_VERSION "${VERSION_GCC_INFO}")
-  
+
   # gcc on mac just reports: "gcc (GCC) 3.3 20030304 ..." without the patch level, handle this here:
   IF(NOT GCC_VERSION)
     STRING(REGEX REPLACE ".*\\(GCC\\).* ([34]\\.[0-9]) .*" "\\1.0" GCC_VERSION "${VERSION_GCC_INFO}")
@@ -567,9 +567,9 @@ SET(libimagepropertiesdigikam_SRCS
  SET(libdimgeditor_SRCS
      ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp
      ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imageiface.cpp
-#     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editortool.cpp
-#     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorstackview.cpp
-#     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editortooliface.cpp
+     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editortool.cpp
+     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorstackview.cpp
+     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editortooliface.cpp
     )
 
  SET(libdimgimagewindow_SRCS
@@ -716,14 +716,14 @@ SET(libtimeline_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline/timelinewidget.cpp
    )
 
-ADD_SUBDIRECTORY( data )
-ADD_SUBDIRECTORY( libs )
-ADD_SUBDIRECTORY( utilities )
-ADD_SUBDIRECTORY( digikam )
-ADD_SUBDIRECTORY( kioslave )
-ADD_SUBDIRECTORY( showfoto )
-ADD_SUBDIRECTORY( imageplugins )
-ADD_SUBDIRECTORY( themedesigner )
+ADD_SUBDIRECTORY(data)
+ADD_SUBDIRECTORY(libs)
+ADD_SUBDIRECTORY(utilities)
+ADD_SUBDIRECTORY(digikam)
+ADD_SUBDIRECTORY(kioslave)
+ADD_SUBDIRECTORY(showfoto)
+ADD_SUBDIRECTORY(imageplugins)
+ADD_SUBDIRECTORY(themedesigner)
 
 INSTALL( FILES tips DESTINATION ${DATA_INSTALL_DIR}/digikam )
 

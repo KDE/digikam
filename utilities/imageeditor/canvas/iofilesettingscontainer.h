@@ -45,6 +45,7 @@ public:
         TIFFCompression     = false;
         JPEG2000Compression = 75;
         JPEG2000LossLess    = true;
+        useRAWImport        = true;
     };
 
     ~IOFileSettingsContainer(){};
@@ -68,6 +69,9 @@ public:
 
     // JPEG2000 lossless compression.
     bool JPEG2000LossLess;
+
+    // Use Raw Import tool to load a RAW picture.
+    bool useRAWImport;
 
     // ------------------------------------------------------
     // RAW File decoding options :

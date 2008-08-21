@@ -52,6 +52,7 @@ namespace Digikam
 
 class Canvas;
 class DPopupMenu;
+class EditorStackView;
 class EditorWindowPriv;
 class IOFileSettingsContainer;
 class ImagePluginLoader;
@@ -73,6 +74,9 @@ public:
 
     virtual void applySettings(){};
     virtual bool setup(bool iccSetupPage=false)=0;
+    virtual Sidebar *rightSideBar() const=0;
+
+    EditorStackView* editorStackView() const;
 
 signals:
 
@@ -113,6 +117,7 @@ protected:
     KToolBarPopupAction     *m_redoAction;
 
     DPopupMenu              *m_contextMenu;
+    EditorStackView         *m_stackView;
     Canvas                  *m_canvas;
     ImagePluginLoader       *m_imagePluginLoader;
     StatusProgressBar       *m_nameLabel;
@@ -234,6 +239,7 @@ private slots:
     void slotDecreaseZoom();
     void slotRawCameraList();
     void slotToggleShowBar();
+    void slotPrepareToLoad();
 
 private:
 

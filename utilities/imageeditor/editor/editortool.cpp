@@ -61,7 +61,6 @@ EditorTool::EditorTool(QObject *parent)
 
 EditorTool::~EditorTool()
 {
-    saveSettings();
     delete d;
 }
 

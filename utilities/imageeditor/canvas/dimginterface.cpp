@@ -64,6 +64,8 @@
 #include "iofilesettingscontainer.h"
 #include "sharedloadsavethread.h"
 #include "dmetadata.h"
+#include "rawimport.h"
+#include "editortooliface.h"
 #include "dimginterface.h"
 #include "dimginterface.moc"
 
@@ -196,9 +198,49 @@ void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofil
     d->iofileSettings = iofileSettings;
     d->parent         = parent;
 
-    d->thread->load( LoadingDescription(d->filename, iofileSettings->rawDecodingSettings),
-                     SharedLoadSaveThread::AccessModeReadWrite,
-                     SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+    if (d->iofileSettings->useRAWImport && DImg::fileFormat(d->filename) == DImg::RAW)
+    {
+/*FIXME
+        RawImport *rawImport = new RawImport(KURL(d->filename), this);
+        EditorToolIface::editorToolIface()->loadTool(rawImport);
+
+        connect(rawImport, SIGNAL(okClicked()),
+                this, SLOT(slotUseRawImportSettings()));
+
+        connect(rawImport, SIGNAL(cancelClicked()),
+                this, SLOT(slotUseDefaultSettings()));
+*/
+    }
+    else
+    {
+        slotUseDefaultSettings();
+    }
+}
+
+void DImgInterface::slotUseRawImportSettings()
+{
+/*  FIXME
+    RawImport *rawImport = dynamic_cast<RawImport*>(EditorToolIface::editorToolIface()->currentTool());
+
+    d->thread->load(LoadingDescription(d->filename,
+                    rawImport->rawDecodingSettings()),
+                    SharedLoadSaveThread::AccessModeReadWrite,
+                    SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+*/
+    emit signalLoadingStarted(d->filename);
+
+    EditorToolIface::editorToolIface()->unLoadTool();
+}
+
+void DImgInterface::slotUseDefaultSettings()
+{
+    d->thread->load(LoadingDescription(d->filename,
+                    d->iofileSettings->rawDecodingSettings),
+                    SharedLoadSaveThread::AccessModeReadWrite,
+                    SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+    emit signalLoadingStarted(d->filename);
+
+    EditorToolIface::editorToolIface()->unLoadTool();
 }
 
 void DImgInterface::resetImage()

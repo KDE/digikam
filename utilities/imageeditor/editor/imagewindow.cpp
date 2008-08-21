@@ -104,6 +104,7 @@
 #include "syncjob.h"
 #include "tagspopupmenu.h"
 #include "themeengine.h"
+#include "editorstackview.h"
 #include "imagewindow.h"
 #include "imagewindow.moc"
 
@@ -225,6 +226,11 @@ ImageWindow::~ImageWindow()
     delete d;
 }
 
+Sidebar* ImageWindow::rightSideBar() const
+{
+    return dynamic_cast<Sidebar*>(d->rightSidebar);
+}
+
 void ImageWindow::closeEvent(QCloseEvent* e)
 {
     if (!e)
@@ -297,7 +303,9 @@ void ImageWindow::setupUserArea()
         QHBoxLayout *hlay = new QHBoxLayout(widget);
         m_splitter        = new SidebarSplitter(widget);
         d->thumbBar       = new ImagePreviewBar(m_splitter, Qt::Vertical);
-        m_canvas          = new Canvas(m_splitter);
+        m_stackView       = new Digikam::EditorStackView(m_splitter);
+        m_canvas          = new Digikam::Canvas(m_stackView);
+
         m_splitter->setStretchFactor(1, 10);      // set Canvas default size to max.
 
         d->rightSidebar   = new ImagePropertiesSideBarDB(widget, m_splitter, KMultiTabBar::Right, true);
@@ -314,7 +322,8 @@ void ImageWindow::setupUserArea()
         QWidget* widget2  = new QWidget(m_splitter);
         QVBoxLayout *vlay = new QVBoxLayout(widget2);
         m_vSplitter       = new QSplitter(Qt::Vertical, widget2);
-        m_canvas          = new Canvas(m_vSplitter);
+        m_stackView       = new EditorStackView(m_vSplitter);
+        m_canvas          = new Canvas(m_stackView);
         d->thumbBar       = new ImagePreviewBar(m_vSplitter, Qt::Horizontal);
 
         m_vSplitter->setFrameStyle( QFrame::NoFrame );
@@ -341,6 +350,8 @@ void ImageWindow::setupUserArea()
     }
 
     m_canvas->makeDefaultEditingCanvas();
+    m_stackView->setCanvas(m_canvas);
+    m_stackView->setViewMode(EditorStackView::CanvasMode);
 
     m_splitter->setFrameStyle( QFrame::NoFrame );
     m_splitter->setFrameShadow( QFrame::Plain );

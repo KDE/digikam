@@ -2,7 +2,7 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2006-01-20
  * Description : main image editor GUI implementation
  *               private data.
@@ -38,6 +38,8 @@ class KToggleAction;
 namespace Digikam
 {
 
+class EditorToolIface;
+class ExposureSettingsContainer;
 class ICCSettingsContainer;
 
 class EditorWindowPriv
@@ -84,6 +86,7 @@ public:
         rawCameraListAction    = 0;
         libsInfoAction         = 0;
         contributeAction       = 0;
+        toolIface              = 0;
     }
 
     ~EditorWindowPriv()
@@ -124,6 +127,8 @@ public:
     QSignalMapper             *undoSignalMapper;
     QSignalMapper             *redoSignalMapper;
 
+    QEventLoop                *waitingLoop;
+
     KToggleAction             *zoomFitToWindowAction;
     KToggleAction             *viewCMViewAction;
     KToggleAction             *viewUnderExpoAction;
@@ -135,7 +140,7 @@ public:
 
     ExposureSettingsContainer *exposureSettings;
 
-    QEventLoop                *waitingLoop;
+    EditorToolIface           *toolIface;
 };
 
 }  // NameSpace Digikam

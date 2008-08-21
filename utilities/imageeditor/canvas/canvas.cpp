@@ -5,7 +5,7 @@
  *
  * Date        : 2003-01-09
  * Description : image editor canvas management class
- * 
+ *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ includes.
@@ -196,6 +196,9 @@ Canvas::Canvas(QWidget *parent)
     connect(d->im, SIGNAL(signalUndoStateChanged(bool, bool, bool)),
             this, SIGNAL(signalUndoStateChanged(bool, bool, bool)));
 
+    connect(d->im, SIGNAL(signalLoadingStarted(const QString&)),
+            this, SIGNAL(signalLoadingStarted(const QString&)));
+
     connect(d->im, SIGNAL(signalImageLoaded(const QString&, bool)),
             this, SLOT(slotImageLoaded(const QString&, bool)));
 
@@ -249,7 +252,7 @@ void Canvas::load(const QString& filename, IOFileSettingsContainer *IOFileSettin
     viewport()->setUpdatesEnabled(false);
 
     d->im->load( filename, IOFileSettings, d->parent );
-    emit signalLoadingStarted(filename);
+    emit signalPrepareToLoad();
 }
 
 void Canvas::slotImageLoaded(const QString& filePath, bool success)
