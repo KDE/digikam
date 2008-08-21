@@ -22,7 +22,7 @@
  * ============================================================ */
 
 // Qt includes.
- 
+
 #include <qcolor.h>
 #include <qgroupbox.h>
 #include <qhgroupbox.h>

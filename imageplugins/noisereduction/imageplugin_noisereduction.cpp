@@ -22,7 +22,7 @@
  * ============================================================ */
 
 // KDE includes.
-  
+
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>

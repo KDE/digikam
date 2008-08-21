@@ -41,7 +41,7 @@ extern "C"
 #include <cmath>
 
 // Qt includes.
- 
+
 #include <qglobal.h>
 #include <qstring.h>
 

@@ -30,7 +30,7 @@
 
 #include <qstring.h>
 
-// Digikam include.
+// Digikam includes.
 
 #include "imagedlgbase.h"
 

@@ -30,7 +30,7 @@
 
 #include <kpassivepopup.h>
 
-// Digikam include.
+// Digikam includes.
 
 #include "imagedlgbase.h"
 
