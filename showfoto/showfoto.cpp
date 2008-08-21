@@ -97,6 +97,7 @@ extern "C"
 #include "loadingcacheinterface.h"
 #include "savingcontextcontainer.h"
 #include "themeengine.h"
+#include "editorstackview.h"
 #include "showfoto.h"
 #include "showfoto.moc"
 
@@ -408,10 +409,12 @@ void ShowFoto::setupUserArea()
         QHBoxLayout *hlay = new QHBoxLayout(widget);
         m_splitter        = new QSplitter(widget);
         d->thumbBar       = new Digikam::ThumbBarView(m_splitter, Digikam::ThumbBarView::Vertical);
-        m_canvas          = new Digikam::Canvas(m_splitter);
-
+        m_stackView       = new Digikam::EditorStackView(m_splitter);
+        m_canvas          = new Digikam::Canvas(m_stackView);
         m_canvas->setSizePolicy(rightSzPolicy);
         m_canvas->makeDefaultEditingCanvas();
+        m_stackView->setCanvas(m_canvas);
+        m_stackView->setViewMode(Digikam::EditorStackView::CanvasMode);
 
         d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter,
                                                                 Digikam::Sidebar::Right);
@@ -425,11 +428,14 @@ void ShowFoto::setupUserArea()
         QWidget* widget2  = new QWidget(m_splitter);
         QVBoxLayout *vlay = new QVBoxLayout(widget2);
         d->vSplitter      = new QSplitter(Qt::Vertical, widget2);
-        m_canvas          = new Digikam::Canvas(d->vSplitter);
+        m_stackView       = new Digikam::EditorStackView(d->vSplitter);
+        m_canvas          = new Digikam::Canvas(m_stackView);
         d->thumbBar       = new Digikam::ThumbBarView(d->vSplitter, Digikam::ThumbBarView::Horizontal);
 
         m_canvas->setSizePolicy(rightSzPolicy);
         m_canvas->makeDefaultEditingCanvas();
+        m_stackView->setCanvas(m_canvas);
+        m_stackView->setViewMode(Digikam::EditorStackView::CanvasMode);
 
         d->vSplitter->setFrameStyle( QFrame::NoFrame );
         d->vSplitter->setFrameShadow( QFrame::Plain );
