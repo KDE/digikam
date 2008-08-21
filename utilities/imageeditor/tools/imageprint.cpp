@@ -50,7 +50,7 @@
 #include <QStyle>
 #include <QPushButton>
 
-// KDE lib includes
+// KDE includes.
 
 #include <klocale.h>
 #include <kmessagebox.h>

@@ -30,7 +30,7 @@
 #include <QStyle>
 #include <QCursor>
 
-// KDe includes.
+// KDE includes.
 
 #include <kmenu.h>
 #include <klocale.h>

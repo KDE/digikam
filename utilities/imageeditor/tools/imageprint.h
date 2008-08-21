@@ -30,7 +30,7 @@
 #include <QWidget>
 #include <QString>
 
-// KDE lib includes
+// KDE includes.
 
 #include <kurl.h>
 
