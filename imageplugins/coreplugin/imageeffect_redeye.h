@@ -34,8 +34,9 @@
 #include "imagedlgbase.h"
 
 class QButtonGroup;
-class QLabel;
+class QColor;
 class QComboBox;
+class QLabel;
 
 class KHueSaturationSelector;
 class KColorValueSelector;
@@ -43,11 +44,11 @@ class KIntNumInput;
 
 namespace Digikam
 {
-class HistogramWidget;
 class ColorGradientWidget;
-class ImageWidget;
 class DColor;
 class DImg;
+class HistogramWidget;
+class ImageWidget;
 }
 
 namespace DigikamImagesPluginCore
@@ -90,6 +91,7 @@ private slots:
     void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);
     void slotHSChanged(int h, int s);
+    void slotVChanged(int v);
 
 private:
 
@@ -98,6 +100,7 @@ private:
     void resetValues();
     void finalRendering();
     void redEyeFilter(Digikam::DImg& selection);
+    void setColor(QColor color);
 
 private:
 
@@ -122,6 +125,8 @@ private:
     };
 
     uchar                        *m_destinationPreviewData;
+
+    QColor                        m_selColor;
 
     QLabel                       *m_thresholdLabel;
     QLabel                       *m_smoothLabel;

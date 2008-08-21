@@ -168,14 +168,17 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
                                      "This leads to a more naturally looking pupil."));
 
     QLabel *label3 = new QLabel(i18n("Coloring Tint:"), gboxSettings);
+
     m_HSSelector   = new KHueSaturationSelector(gboxSettings);
-    m_VSelector    = new KColorValueSelector(gboxSettings);
     m_HSSelector->setWhatsThis(i18n("<p>Sets a custom color when re-colorizing the eyes."));
     m_HSSelector->setMinimumSize(200, 142);
     m_HSSelector->setChooserMode(ChooserValue);
     m_HSSelector->setColorValue(255);
+
+    m_VSelector    = new KColorValueSelector(gboxSettings);
     m_VSelector->setChooserMode(ChooserValue);
     m_VSelector->setMinimumSize(26, 142);
+    m_VSelector->setIndent(false);
 
     QLabel *label4 = new QLabel(i18n("Tint Level:"), gboxSettings);
     m_tintLevel    = new KIntNumInput(gboxSettings);
@@ -229,7 +232,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
             this, SLOT(slotHSChanged(int, int)));
 
     connect(m_VSelector, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));
+            this, SLOT(slotVChanged(int)));
 
     connect(m_tintLevel, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
@@ -248,13 +251,54 @@ ImageEffect_RedEye::~ImageEffect_RedEye()
 
 void ImageEffect_RedEye::slotHSChanged(int h, int s)
 {
-    m_VSelector->blockSignals(true);
-    m_VSelector->setHue(h);
-    m_VSelector->setSaturation(s);
-    m_VSelector->updateContents();
-    m_VSelector->repaint();
-    m_VSelector->blockSignals(false);
-    slotTimer();
+    QColor color;
+
+    int val = m_selColor.value();
+
+    color.setHsv(h, s, val);
+    setColor(color);
+}
+
+void ImageEffect_RedEye::slotVChanged(int v)
+{
+    QColor color;
+
+    int hue = m_selColor.hue();
+    int sat = m_selColor.saturation();
+
+    color.setHsv(hue, sat, v);
+    setColor(color);
+}
+
+void ImageEffect_RedEye::setColor(QColor c)
+{
+    if (c.isValid())
+    {
+        m_selColor = c;
+
+        // set values
+        m_HSSelector->setValues(c.hue(), c.saturation());
+        m_VSelector->setValue(c.value());
+
+        // set colors
+        m_HSSelector->blockSignals(true);
+        m_HSSelector->setHue(c.hue());
+        m_HSSelector->setSaturation(c.saturation());
+        m_HSSelector->setColorValue(c.value());
+        m_HSSelector->updateContents();
+        m_HSSelector->blockSignals(false);
+        m_HSSelector->repaint();
+
+        m_VSelector->blockSignals(true);
+        m_VSelector->setHue(c.hue());
+        m_VSelector->setSaturation(c.saturation());
+        m_VSelector->setColorValue(c.value());
+        m_VSelector->updateContents();
+        m_VSelector->blockSignals(false);
+        m_VSelector->repaint();
+
+        slotTimer();
+    }
 }
 
 void ImageEffect_RedEye::slotChannelChanged(int channel)
@@ -307,12 +351,17 @@ void ImageEffect_RedEye::readUserSettings()
 
     m_redThreshold->setValue(group.readEntry("RedThreshold", 20));
     m_smoothLevel->setValue(group.readEntry("SmoothLevel", 1));
-    m_HSSelector->setXValue(group.readEntry("HueColoringTint", 0));
-    m_HSSelector->setYValue(group.readEntry("SatColoringTint", 0));
-    m_VSelector->setValue(group.readEntry("ValColoringTint", 0));
+    m_HSSelector->setHue(group.readEntry("HueColoringTint", 0));
+    m_HSSelector->setSaturation(group.readEntry("SatColoringTint", 128));
+    m_VSelector->setValue(group.readEntry("ValColoringTint", 255));
     m_tintLevel->setValue(group.readEntry("TintLevel", 128));
 
-    slotHSChanged(m_HSSelector->xValue(), m_HSSelector->yValue());
+    QColor col;
+    col.setHsv(m_HSSelector->hue(),
+               m_HSSelector->saturation(),
+               m_VSelector->value());
+    setColor(col);
+
     slotChannelChanged(m_channelCB->currentIndex());
     slotScaleChanged(m_scaleBG->checkedId());
 }
@@ -325,8 +374,8 @@ void ImageEffect_RedEye::writeUserSettings()
     group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
     group.writeEntry("RedThreshold", m_redThreshold->value());
     group.writeEntry("SmoothLevel", m_smoothLevel->value());
-    group.writeEntry("HueColoringTint", m_HSSelector->xValue());
-    group.writeEntry("SatColoringTint", m_HSSelector->yValue());
+    group.writeEntry("HueColoringTint", m_HSSelector->hue());
+    group.writeEntry("SatColoringTint", m_HSSelector->saturation());
     group.writeEntry("ValColoringTint", m_VSelector->value());
     group.writeEntry("TintLevel", m_tintLevel->value());
     config->sync();
