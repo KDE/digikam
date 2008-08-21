@@ -82,12 +82,14 @@ private:
     bool checkName(QString& name);
     bool checkAlbum(const QString& name) const;
 
+    void setColor(QColor c);
+
 private slots:
 
     void slotTabChanged(int);
 
     void slotHSChanged(int h, int s);
-    void slotVChanged();
+    void slotVChanged(int v);
     void slotClearSketch();
     void slotSaveSketchSAlbum();
     void slotCheckNameEditSketchConditions();

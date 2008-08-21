@@ -116,6 +116,8 @@ public:
         fingerprintsChecked   = false;
     }
 
+    QColor                 selColor;
+
     QToolButton            *resetButton;
     QToolButton            *saveBtnSketch;
     QToolButton            *undoBtnSketch;
@@ -279,16 +281,19 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    d->hsSelector = new KHueSaturationSelector(sketchPanel);
-    d->vSelector  = new KColorValueSelector(sketchPanel);
-    d->hsSelector->setMinimumSize(200, 96);
-    d->vSelector->setMinimumSize(26, 96);
-    d->hsSelector->setChooserMode(ChooserValue);
-    d->vSelector->setChooserMode(ChooserValue);
-    d->hsSelector->setColorValue(255);
-
     QString tips(i18n("<p>Set here the brush color used to draw sketch."));
+
+    d->hsSelector = new KHueSaturationSelector(sketchPanel);
+    d->hsSelector->setMinimumSize(200, 96);
+    d->hsSelector->setChooserMode(ChooserValue);
+    d->hsSelector->setColorValue(255);
     d->hsSelector->setWhatsThis(tips);
+
+    d->vSelector  = new KColorValueSelector(sketchPanel);
+    d->vSelector->setMinimumSize(26, 96);
+    d->vSelector->setChooserMode(ChooserValue);
+    d->vSelector->setIndent(false);
+    d->vSelector->setArrowDirection(Qt::RightArrow);
     d->vSelector->setWhatsThis(tips);
 
     // ---------------------------------------------------------------
@@ -412,7 +417,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
             this, SLOT(slotHSChanged(int, int)));
 
     connect(d->vSelector, SIGNAL(valueChanged(int)),
-            this, SLOT(slotVChanged()));
+            this, SLOT(slotVChanged(int)));
 
     connect(d->penSize, SIGNAL(valueChanged(int)),
             d->sketchWidget, SLOT(setPenWidth(int)));
@@ -686,23 +691,56 @@ void FuzzySearchView::slotRenameAlbum(SAlbum* salbum)
 
 void FuzzySearchView::slotHSChanged(int h, int s)
 {
-    d->vSelector->blockSignals(true);
-    d->vSelector->setHue(h);
-    d->vSelector->setSaturation(s);
-    d->vSelector->updateContents();
-    d->vSelector->repaint();
-    d->vSelector->blockSignals(false);
-    slotVChanged();
+    QColor color;
+
+    int val = d->selColor.value();
+
+    color.setHsv(h, s, val);
+    setColor(color);
 }
 
-void FuzzySearchView::slotVChanged()
+void FuzzySearchView::slotVChanged(int v)
 {
-    int hue      = d->vSelector->hue();
-    int sat      = d->vSelector->saturation();
-    int val      = d->vSelector->value();
-    QColor color = QColor::fromHsv(hue, sat, val);
+    QColor color;
 
-    d->sketchWidget->setPenColor(color);
+    int hue = d->selColor.hue();
+    int sat = d->selColor.saturation();
+
+    DDebug() << "slotVChanged() h:" << hue << ", S:" << sat << endl;
+
+    color.setHsv(hue, sat, v);
+    setColor(color);
+}
+
+void FuzzySearchView::setColor(QColor c)
+{
+    if (c.isValid())
+    {
+        d->selColor = c;
+
+        // set values
+        d->hsSelector->setValues(c.hue(), c.saturation());
+        d->vSelector->setValue(c.value());
+
+        // set colors
+        d->hsSelector->blockSignals(true);
+        d->hsSelector->setHue(c.hue());
+        d->hsSelector->setSaturation(c.saturation());
+        d->hsSelector->setColorValue(c.value());
+        d->hsSelector->updateContents();
+        d->hsSelector->blockSignals(false);
+        d->hsSelector->repaint();
+
+        d->vSelector->blockSignals(true);
+        d->vSelector->setHue(c.hue());
+        d->vSelector->setSaturation(c.saturation());
+        d->vSelector->setColorValue(c.value());
+        d->vSelector->updateContents();
+        d->vSelector->blockSignals(false);
+        d->vSelector->repaint();
+
+        d->sketchWidget->setPenColor(c);
+    }
 }
 
 void FuzzySearchView::slotUndoRedoStateChanged(bool hasUndo, bool hasRedo)
