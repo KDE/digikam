@@ -2096,34 +2096,49 @@ void DigikamApp::slotKipiPluginPlug()
 
         QList<KAction*> actions = plugin->actions();
 
+        // List of obsolete kipi-plugins to not load.
+        QStringList pluginActionsDisabled;
+        pluginActionsDisabled << QString("raw_converter_single");  // Obsolete Since 0.9.5 and new Raw Import tool.
+
         for(QList<KAction*>::Iterator it2 = actions.begin(); it2 != actions.end(); ++it2)
         {
-            if (plugin->category(*it2) == KIPI::ImagesPlugin)
+            QString actionName((*it2)->objectName());
+
+            if (!pluginActionsDisabled.contains(actionName))
             {
-                d->kipiImageActions.append(*it2);
-            }
-            else if (plugin->category(*it2) == KIPI::ExportPlugin)
-            {
-                d->kipiFileActionsExport.append(*it2);
-            }
-            else if (plugin->category(*it2) == KIPI::ImportPlugin)
-            {
-                d->kipiFileActionsImport.append(*it2);
-            }
-            else if (plugin->category(*it2) == KIPI::ToolsPlugin)
-            {
-                d->kipiToolsActions.append(*it2);
-            }
-            else if (plugin->category(*it2) == KIPI::BatchPlugin)
-            {
-                d->kipiBatchActions.append(*it2);
-            }
-            else if (plugin->category(*it2) == KIPI::CollectionsPlugin)
-            {
-                d->kipiAlbumActions.append(*it2);
+                if (plugin->category(*it2) == KIPI::ImagesPlugin)
+                {
+                    d->kipiImageActions.append(*it2);
+                }
+                else if (plugin->category(*it2) == KIPI::ExportPlugin)
+                {
+                    d->kipiFileActionsExport.append(*it2);
+                }
+                else if (plugin->category(*it2) == KIPI::ImportPlugin)
+                {
+                    d->kipiFileActionsImport.append(*it2);
+                }
+                else if (plugin->category(*it2) == KIPI::ToolsPlugin)
+                {
+                    d->kipiToolsActions.append(*it2);
+                }
+                else if (plugin->category(*it2) == KIPI::BatchPlugin)
+                {
+                    d->kipiBatchActions.append(*it2);
+                }
+                else if (plugin->category(*it2) == KIPI::CollectionsPlugin)
+                {
+                    d->kipiAlbumActions.append(*it2);
+                }
+                else
+                {
+                    DDebug() << "No menu found for a plugin!!!" << endl;
+                }
             }
             else
-                DDebug() << "No menu found for a plugin!!!" << endl;
+            {
+                DDebug() << "Plugin '" << actionName << "' disabled." << endl;
+            }
         }
     }
 
