@@ -497,12 +497,18 @@ void FuzzySearchView::readConfig()
                                   (int)FuzzySearchViewPriv::SKETCH));
     d->penSize->setValue(group.readEntry("Pen Sketch Size", 10));
     d->resultsSketch->setValue(group.readEntry("Result Sketch items", 10));
-    d->hsSelector->setXValue(group.readEntry("Pen Sketch Hue", 180));
-    d->hsSelector->setYValue(group.readEntry("Pen Sketch Saturation", 128));
+    d->hsSelector->setHue(group.readEntry("Pen Sketch Hue", 180));
+    d->hsSelector->setSaturation(group.readEntry("Pen Sketch Saturation", 128));
     d->vSelector->setValue(group.readEntry("Pen Sketch Value", 255));
     d->levelImage->setValue(group.readEntry("Similars Threshold", 90));
     d->hsSelector->updateContents();
-    slotHSChanged(d->hsSelector->xValue(), d->hsSelector->yValue());
+
+    QColor col;
+    col.setHsv(d->hsSelector->hue(),
+               d->hsSelector->saturation(),
+               d->vSelector->value());
+    setColor(col);
+
     d->sketchWidget->setPenWidth(d->penSize->value());
 }
 
@@ -513,8 +519,8 @@ void FuzzySearchView::writeConfig()
     group.writeEntry("FuzzySearch Tab",        d->tabWidget->currentIndex());
     group.writeEntry("Pen Sketch Size",        d->penSize->value());
     group.writeEntry("Result Sketch items",    d->resultsSketch->value());
-    group.writeEntry("Pen Sketch Hue",         d->hsSelector->xValue());
-    group.writeEntry("Pen Sketch Saturation",  d->hsSelector->yValue());
+    group.writeEntry("Pen Sketch Hue",         d->hsSelector->hue());
+    group.writeEntry("Pen Sketch Saturation",  d->hsSelector->saturation());
     group.writeEntry("Pen Sketch Value",       d->vSelector->value());
     group.writeEntry("Similars Threshold",     d->levelImage->value());
     group.sync();
@@ -705,8 +711,6 @@ void FuzzySearchView::slotVChanged(int v)
 
     int hue = d->selColor.hue();
     int sat = d->selColor.saturation();
-
-    DDebug() << "slotVChanged() h:" << hue << ", S:" << sat << endl;
 
     color.setHsv(hue, sat, v);
     setColor(color);
