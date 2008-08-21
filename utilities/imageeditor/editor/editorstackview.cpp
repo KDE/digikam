@@ -83,7 +83,6 @@ void EditorStackView::setToolView(QWidget* view)
     if (d->toolView)
         addWidget(d->toolView, ToolViewMode);
 
-
     PreviewWidget *preview = dynamic_cast<PreviewWidget*>(d->toolView);
     if (preview)
     {
