@@ -21,7 +21,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 134486 : Keywords are not written to raw files even though they do embed iptc/exif.
 009 ==> 168839 : Digikam crashed after tagging.
 010 ==> 167085 : Color selection in sketch search tool looks plain black.
-011 ==> 
+011 ==> 168852 : Crash on profile application.
+012 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta2 - Release date: 2008-07-31
