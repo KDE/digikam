@@ -70,6 +70,7 @@ public:
         colorBox              = 0;
         sortOrderComboBox     = 0;
         sortReverse           = 0;
+        useRawImportTool      = 0;
     }
 
     KHBox        *colorBox;
@@ -83,6 +84,7 @@ public:
     QCheckBox    *exifRotateBox;
     QCheckBox    *exifSetOrientationBox;
     QCheckBox    *themebackgroundColor;
+    QCheckBox    *useRawImportTool;
 
     QComboBox    *sortOrderComboBox;
 
@@ -106,15 +108,15 @@ SetupEditor::SetupEditor(QWidget* parent )
     d->themebackgroundColor = new QCheckBox(i18n("&Use theme background color"),
                                             interfaceOptionsGroup);
 
-    d->themebackgroundColor->setWhatsThis(i18n("<p>Enable this option to use the background theme "
-                                               "color in the image editor area"));
+    d->themebackgroundColor->setWhatsThis(i18n("<p>Enable this option to use background theme "
+                                               "color in image editor area"));
 
     d->colorBox                  = new KHBox(interfaceOptionsGroup);
     QLabel *backgroundColorlabel = new QLabel( i18n("&Background color:"), d->colorBox);
     d->backgroundColor           = new KColorButton(d->colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
-    d->backgroundColor->setWhatsThis(i18n("<p>Select the background color to use "
-                                          "for the image editor area."));
+    d->backgroundColor->setWhatsThis(i18n("<p>Select background color to use "
+                                          "for image editor area."));
 
     d->hideToolBar        = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
     d->hideThumbBar       = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
@@ -125,6 +127,11 @@ SetupEditor::SetupEditor(QWidget* parent )
     d->useTrash   = new QCheckBox(i18n("&Deleting items should move them to trash"), interfaceOptionsGroup);
     d->showSplash = new QCheckBox(i18n("&Show splash screen at startup"), interfaceOptionsGroup);
 
+    d->useRawImportTool = new QCheckBox(i18n("Use Raw Import Tool to handle Raw image"), interfaceOptionsGroup);
+    d->useRawImportTool->setWhatsThis(i18n("<p>Set on this option to use Raw Import "
+                                           "tool before to load a Raw image, "
+                                           "to customize indeep decoding settings."));
+
     gLayout1->addWidget(d->themebackgroundColor);
     gLayout1->addWidget(d->colorBox);
     gLayout1->addWidget(d->hideToolBar);
@@ -132,6 +139,7 @@ SetupEditor::SetupEditor(QWidget* parent )
     gLayout1->addWidget(d->horizontalThumbBar);
     gLayout1->addWidget(d->useTrash);
     gLayout1->addWidget(d->showSplash);
+    gLayout1->addWidget(d->useRawImportTool);
     interfaceOptionsGroup->setLayout(gLayout1);
 
     // --------------------------------------------------------
@@ -143,15 +151,15 @@ SetupEditor::SetupEditor(QWidget* parent )
     QLabel *underExpoColorlabel = new QLabel( i18n("&Under-exposure color:"), underExpoBox);
     d->underExposureColor       = new KColorButton(underExpoBox);
     underExpoColorlabel->setBuddy(d->underExposureColor);
-    d->underExposureColor->setWhatsThis( i18n("<p>Customize the color used in the image editor to identify "
-                                              "the under-exposed pixels.") );
+    d->underExposureColor->setWhatsThis( i18n("<p>Customize color used in image editor to identify "
+                                              "under-exposed pixels.") );
 
     KHBox *overExpoBox         = new KHBox(exposureOptionsGroup);
     QLabel *overExpoColorlabel = new QLabel( i18n("&Over-exposure color:"), overExpoBox);
     d->overExposureColor       = new KColorButton(overExpoBox);
     overExpoColorlabel->setBuddy(d->overExposureColor);
-    d->overExposureColor->setWhatsThis( i18n("<p>Customize the color used in the image editor to identify "
-                                             "the over-exposed pixels.") );
+    d->overExposureColor->setWhatsThis( i18n("<p>Customize color used in image editor to identify "
+                                             "over-exposed pixels.") );
 
     gLayout2->addWidget(underExpoBox);
     gLayout2->addWidget(overExpoBox);
@@ -223,7 +231,7 @@ void SetupEditor::slotThemeBackgroundColor(bool e)
 void SetupEditor::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("ImageViewer Settings"));
+    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
     QColor Black(Qt::black);
     QColor White(Qt::white);
     d->themebackgroundColor->setChecked(group.readEntry("UseThemeBackgroundColor", true));
@@ -239,25 +247,27 @@ void SetupEditor::readSettings()
     d->overExposureColor->setColor(group.readEntry("OverExposureColor", Black));
     d->sortOrderComboBox->setCurrentIndex(group.readEntry("SortOrder", 0));
     d->sortReverse->setChecked(group.readEntry("ReverseSort", false));
+    d->useRawImportTool->setChecked(group.readEntry("UseRawImportTool", false));
 }
 
 void SetupEditor::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("ImageViewer Settings"));
+    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
     group.writeEntry("UseThemeBackgroundColor", d->themebackgroundColor->isChecked());
-    group.writeEntry("BackgroundColor", d->backgroundColor->color());
+    group.writeEntry("BackgroundColor",         d->backgroundColor->color());
     group.writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
-    group.writeEntry("FullScreenHideThumbBar", d->hideThumbBar->isChecked());
-    group.writeEntry("HorizontalThumbbar", d->horizontalThumbBar->isChecked());
-    group.writeEntry("DeleteItem2Trash", d->useTrash->isChecked());
-    group.writeEntry("ShowSplash", d->showSplash->isChecked());
-    group.writeEntry("EXIF Rotate", d->exifRotateBox->isChecked());
-    group.writeEntry("EXIF Set Orientation", d->exifSetOrientationBox->isChecked());
-    group.writeEntry("UnderExposureColor", d->underExposureColor->color());
-    group.writeEntry("OverExposureColor", d->overExposureColor->color());
-    group.writeEntry("SortOrder", d->sortOrderComboBox->currentIndex());
-    group.writeEntry("ReverseSort", d->sortReverse->isChecked());
+    group.writeEntry("FullScreenHideThumbBar",  d->hideThumbBar->isChecked());
+    group.writeEntry("HorizontalThumbbar",      d->horizontalThumbBar->isChecked());
+    group.writeEntry("DeleteItem2Trash",        d->useTrash->isChecked());
+    group.writeEntry("ShowSplash",              d->showSplash->isChecked());
+    group.writeEntry("EXIF Rotate",             d->exifRotateBox->isChecked());
+    group.writeEntry("EXIF Set Orientation",    d->exifSetOrientationBox->isChecked());
+    group.writeEntry("UnderExposureColor",      d->underExposureColor->color());
+    group.writeEntry("OverExposureColor",       d->overExposureColor->color());
+    group.writeEntry("SortOrder",               d->sortOrderComboBox->currentIndex());
+    group.writeEntry("ReverseSort",             d->sortReverse->isChecked());
+    group.writeEntry("UseRawImportTool",        d->useRawImportTool->isChecked());
     config->sync();
 }
 
