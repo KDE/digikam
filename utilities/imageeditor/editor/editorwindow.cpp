@@ -79,10 +79,6 @@ extern "C"
 #include <kwin.h>
 #include <kcombobox.h>
 
-// LibKDcraw includes.
-
-#include <libkdcraw/version.h>
-
 // Local includes.
 
 #include "ddebug.h"
@@ -950,11 +946,9 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.brightness              = config->readDoubleNumEntry("RAWBrightness", 1.0);
     m_IOFileSettings->rawDecodingSettings.enableBlackPoint        = config->readBoolEntry("EnableBlackPoint", false);
     m_IOFileSettings->rawDecodingSettings.blackPoint              = config->readNumEntry("BlackPoint", 0);
-#if KDCRAW_VERSION >= 0x000105
     m_IOFileSettings->rawDecodingSettings.enableWhitePoint        = config->readBoolEntry("EnableWhitePoint", false);
     m_IOFileSettings->rawDecodingSettings.whitePoint              = config->readNumEntry("WhitePoint", 0);
     m_IOFileSettings->rawDecodingSettings.medianFilterPasses      = config->readNumEntry("MedianFilterPasses", 0);
-#endif
 
     m_IOFileSettings->useRAWImport                                = config->readBoolEntry("UseRawImportTool", false);
 

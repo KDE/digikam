@@ -85,8 +85,8 @@ SetupEditor::SetupEditor(QWidget* parent )
 
     d->themebackgroundColor = new QCheckBox(i18n("&Use theme background color"), interfaceOptionsGroup);
 
-    QWhatsThis::add(d->themebackgroundColor, i18n("<p>Enable this option to use the background theme "
-                                             "color in the image editor area"));
+    QWhatsThis::add(d->themebackgroundColor, i18n("<p>Enable this option to use background theme "
+                                             "color in image editor area"));
 
     d->colorBox = new QHBox(interfaceOptionsGroup);
 
@@ -94,15 +94,15 @@ SetupEditor::SetupEditor(QWidget* parent )
 
     d->backgroundColor = new KColorButton(d->colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
-    QWhatsThis::add(d->backgroundColor, i18n("<p>Customize the background color to use "
-                                             "in the image editor area."));
+    QWhatsThis::add(d->backgroundColor, i18n("<p>Customize background color to use "
+                                             "in image editor area."));
 
     d->hideToolBar = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
 
     d->useRawImportTool = new QCheckBox(i18n("Use Raw Import Tool to handle Raw image"), interfaceOptionsGroup);
     QWhatsThis::add(d->useRawImportTool, i18n("<p>Set on this option to use Raw Import "
                                               "tool before to load a Raw image, "
-                                              "to customize indeep the decoding settings."));
+                                              "to customize indeep decoding settings."));
 
     // --------------------------------------------------------
 
@@ -112,15 +112,15 @@ SetupEditor::SetupEditor(QWidget* parent )
     QLabel *underExpoColorlabel = new QLabel( i18n("&Under-exposure color:"), underExpoBox);
     d->underExposureColor       = new KColorButton(underExpoBox);
     underExpoColorlabel->setBuddy(d->underExposureColor);
-    QWhatsThis::add(d->underExposureColor, i18n("<p>Customize the color used in the image editor to identify "
-                                                "the under-exposed pixels."));
+    QWhatsThis::add(d->underExposureColor, i18n("<p>Customize the color used in image editor to identify "
+                                                "under-exposed pixels."));
 
     QHBox *overExpoBox         = new QHBox(exposureOptionsGroup);
     QLabel *overExpoColorlabel = new QLabel( i18n("&Over-exposure color:"), overExpoBox);
     d->overExposureColor       = new KColorButton(overExpoBox);
     overExpoColorlabel->setBuddy(d->overExposureColor);
-    QWhatsThis::add(d->overExposureColor, i18n("<p>Customize the color used in the image editor to identify "
-                                               "the over-exposed pixels."));
+    QWhatsThis::add(d->overExposureColor, i18n("<p>Customize the color used in image editor to identify "
+                                               "over-exposed pixels."));
 
     // --------------------------------------------------------
 
@@ -165,11 +165,11 @@ void SetupEditor::applySettings()
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
     config->writeEntry("UseThemeBackgroundColor", d->themebackgroundColor->isChecked());
-    config->writeEntry("BackgroundColor", d->backgroundColor->color());
+    config->writeEntry("BackgroundColor",         d->backgroundColor->color());
     config->writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
-    config->writeEntry("UnderExposureColor", d->underExposureColor->color());
-    config->writeEntry("OverExposureColor", d->overExposureColor->color());
-    config->writeEntry("UseRawImportTool", d->useRawImportTool->isChecked());
+    config->writeEntry("UnderExposureColor",      d->underExposureColor->color());
+    config->writeEntry("OverExposureColor",       d->overExposureColor->color());
+    config->writeEntry("UseRawImportTool",        d->useRawImportTool->isChecked());
     config->sync();
 }
 
