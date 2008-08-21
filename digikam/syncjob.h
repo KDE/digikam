@@ -35,7 +35,7 @@
 #include <qobject.h>
 #include <qpixmap.h>
 
-// KDe includes.
+// KDE includes.
 
 #include <kurl.h>
 

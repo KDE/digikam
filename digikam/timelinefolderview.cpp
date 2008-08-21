@@ -28,7 +28,7 @@
 #include <qstyle.h>
 #include <qcursor.h>
 
-// KDe includes.
+// KDE includes.
 
 #include <kpopupmenu.h>
 #include <klocale.h>

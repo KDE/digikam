@@ -30,7 +30,7 @@
 #include <qlistview.h>
 #include <qheader.h>
 
-// KDElib includes.
+// KDE includes.
 
 #include <klocale.h>
 #include <kiconloader.h>
