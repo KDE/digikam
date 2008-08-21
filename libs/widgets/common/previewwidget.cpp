@@ -36,7 +36,7 @@
 #include <qtimer.h>
 #include <qguardedptr.h>
 
-// KDE include.
+// KDE includes.
 
 #include <kcursor.h>
 #include <klocale.h>

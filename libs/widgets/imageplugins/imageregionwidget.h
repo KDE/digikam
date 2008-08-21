@@ -28,7 +28,7 @@
 
 #include <qrect.h>
 
-// Local includes
+// Local includes.
 
 #include "previewwidget.h"
 #include "dimg.h"

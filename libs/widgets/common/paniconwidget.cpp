@@ -33,7 +33,7 @@
 #include <qpen.h>
 #include <qtimer.h>
 
-// KDE include.
+// KDE includes.
 
 #include <kcursor.h>
 

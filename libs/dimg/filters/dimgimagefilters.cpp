@@ -36,7 +36,7 @@
 #include <cstdlib>
 
 // Local includes.
- 
+
 #include "imagehistogram.h"
 #include "imagelevels.h"
 #include "dcolor.h"

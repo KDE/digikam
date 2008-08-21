@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-// Qt includes. 
+// Qt includes.
 
 #include <qrect.h>
 #include <qcolor.h>

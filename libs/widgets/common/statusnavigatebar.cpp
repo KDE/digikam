@@ -33,7 +33,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-// Local includes
+// Local includes.
 
 #include "statusnavigatebar.h"
 #include "statusnavigatebar.moc"

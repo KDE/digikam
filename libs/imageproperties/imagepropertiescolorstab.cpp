@@ -25,7 +25,7 @@
 
 #include <cmath>
 
-// Qt Includes.
+// Qt includes.
 
 #include <qlayout.h>
 #include <qspinbox.h>

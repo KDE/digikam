@@ -21,13 +21,13 @@
  * 
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <qfileinfo.h>
 
-// KDE includes
+// KDE includes.
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "imageinfo.h"

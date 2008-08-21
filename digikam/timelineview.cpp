@@ -35,7 +35,7 @@
 #include <qwhatsthis.h>
 #include <qtooltip.h>
 
-// KDE include.
+// KDE includes.
 
 #include <klocale.h>
 #include <kconfig.h>

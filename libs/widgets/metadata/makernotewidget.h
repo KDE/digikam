@@ -25,7 +25,7 @@
 #ifndef MARKERNOTEWIDGET_H
 #define MARKERNOTEWIDGET_H
 
-// Local includes
+// Local includes.
 
 #include "metadatawidget.h"
 #include "digikam_export.h"

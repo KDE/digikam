@@ -22,7 +22,7 @@
  * 
  * ============================================================ */
 
-// Qt include.
+// Qt includes.
 
 #include <qpalette.h>
 #include <qfont.h>

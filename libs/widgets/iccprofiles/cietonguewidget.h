@@ -39,14 +39,14 @@
 
 #include <kurl.h>
 
-// lcms includes
+// lcms includes.
 
 #include LCMS_HEADER
 #if LCMS_VERSION < 114
 #define cmsTakeCopyright(profile) "Unknown"
 #endif // LCMS_VERSION < 114
 
-// Local includes
+// Local includes.
 
 #include "digikam_export.h"
 

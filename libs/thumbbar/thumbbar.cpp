@@ -33,7 +33,7 @@ extern "C"
 
 #include <cmath>
 
-// Qt includes. 
+// Qt includes.
 
 #include <qdir.h>
 #include <qpixmap.h>

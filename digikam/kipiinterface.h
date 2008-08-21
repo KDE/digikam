@@ -41,7 +41,7 @@
 #include <kurl.h>
 #include <kio/job.h>
 
-// libKipi Includes.
+// libKipi includes.
 
 #include <libkipi/interface.h>
 #include <libkipi/imagecollection.h>

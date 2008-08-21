@@ -33,7 +33,7 @@
 
 #include <kapplication.h>
 
-// Local includes
+// Local includes.
 
 #include "dimg.h"
 #include "digikam_export.h"

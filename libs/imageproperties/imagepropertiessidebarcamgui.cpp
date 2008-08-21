@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-// Qt includes. 
- 
+// Qt includes.
+
 #include <qsplitter.h>
 
 // KDE includes.

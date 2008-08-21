@@ -26,7 +26,7 @@
 #ifndef LISTBOXPREVIEWITEM_H
 #define LISTBOXPREVIEWITEM_H
 
- // Qt includes.
+// Qt includes.
 
 #include <qmap.h>
 #include <qlistbox.h>

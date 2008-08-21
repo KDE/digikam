@@ -22,7 +22,7 @@
  * ============================================================ */
 
 // Qt includes.
- 
+
 #include <qlayout.h>
 #include <qfile.h>
 #include <qlabel.h>

@@ -22,7 +22,7 @@
  * ============================================================ */
 
 // Qt includes.
- 
+
 #include <qlayout.h>
 
 // KDE includes.
@@ -30,8 +30,8 @@
 #include <ksqueezedtextlabel.h>
 #include <kdialogbase.h>
 #include <klocale.h>
- 
-// Local includes
+
+// Local includes.
 
 #include "statusnavigatebar.h"
 #include "navigatebarwidget.h"

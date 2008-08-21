@@ -21,12 +21,12 @@
  * 
  * ============================================================ */
 
-// Qt includes. 
- 
+// Qt includes.
+
 #include <qimage.h>
 #include <qpainter.h>
 #include <qdrawutil.h>
- 
+
 // KDE includes.
 
 #include <kimageeffect.h>

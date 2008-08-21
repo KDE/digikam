@@ -24,13 +24,13 @@
 
 #include <config.h>
 
-// QT includes
+// QT includes.
 
 #include <qstring.h>
 #include <qcstring.h>
 #include <qfile.h>
 
-// KDE includes
+// KDE includes.
 
 #include <kconfig.h>
 #include <kapplication.h>
@@ -42,7 +42,7 @@
 #define cmsTakeCopyright(profile) "Unknown"
 #endif // LCMS_VERSION < 114
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "icctransform.h"

@@ -29,7 +29,7 @@
 #include <qfile.h>
 #include <qstring.h>
 
-// Local Includes.
+// Local includes.
 
 #include "digikam_export.h"
 #include "greycstorationsettings.h"

@@ -31,7 +31,7 @@
 #include <qrect.h>
 #include <qimage.h>
 
-// Local includes
+// Local includes.
 
 #include "dimg.h"
 

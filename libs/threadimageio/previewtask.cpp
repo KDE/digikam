@@ -26,7 +26,7 @@
 
 #include <cmath>
 
-// Qt includes
+// Qt includes.
 
 #include <qapplication.h>
 #include <qimage.h>
@@ -37,7 +37,7 @@
 
 #include <libkdcraw/kdcraw.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "dmetadata.h"

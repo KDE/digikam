@@ -24,11 +24,11 @@
 #ifndef IMAGEATTRIBUTESWATCH_H
 #define IMAGEATTRIBUTESWATCH_H
 
-// Qt includes
+// Qt includes.
 
 #include <qobject.h>
 
-// KDE includes
+// KDE includes.
 
 #include <kurl.h>
 

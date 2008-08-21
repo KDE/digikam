@@ -29,7 +29,7 @@
 #include <qwidget.h>
 #include <qstring.h>
 
-// Local includes
+// Local includes.
 
 #include "metadatawidget.h"
 #include "digikam_export.h"

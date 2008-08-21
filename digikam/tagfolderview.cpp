@@ -58,7 +58,7 @@
 #include "tagfolderview.h"
 #include "tagfolderview.moc"
 
-// X11 Includes.
+// X11 includes.
 
 extern "C"
 {

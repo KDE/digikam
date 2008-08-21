@@ -40,7 +40,6 @@ extern "C"
 #include <cstdio>
 #include <cerrno> 
 
-
 // Qt includes.
 
 #include <qfile.h>

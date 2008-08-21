@@ -24,12 +24,12 @@
 #ifndef TAGTHUMBNAILLOADER_H
 #define TAGTHUMBNAILLOADER_H
 
-// Qt includes
+// Qt includes.
 
 #include <qobject.h>
 #include <qpixmap.h>
 
-// KDE includes
+// KDE includes.
 
 #include <kurl.h>
 

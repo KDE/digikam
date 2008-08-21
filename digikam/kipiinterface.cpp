@@ -50,7 +50,7 @@ extern "C"
 #include <kfilemetainfo.h>
 #include <kio/netaccess.h>
 
-// libKipi Includes.
+// libKipi includes.
 
 #include <libkipi/version.h>
 

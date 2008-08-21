@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <qlayout.h>
 #include <qstringlist.h>
@@ -30,7 +30,7 @@
 #include <qlistview.h>
 #include <qheader.h>
 
-// KDElib includes
+// KDElib includes.
 
 #include <klocale.h>
 #include <kiconloader.h>

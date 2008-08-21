@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-// Qt includes. 
- 
+// Qt includes.
+
 #include <qrect.h>
 #include <qsplitter.h>
 

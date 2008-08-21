@@ -27,7 +27,7 @@
 #ifndef IMAGEDLGBASE_H
 #define IMAGEDLGBASE_H
 
-// Qt includes
+// Qt includes.
 
 #include <qstring.h>
 

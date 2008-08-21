@@ -26,7 +26,7 @@
  * ============================================================ */
 
 // Qt includes.
- 
+
 #include <qtooltip.h>
 #include <qfileinfo.h>
 #include <qlabel.h>
@@ -46,10 +46,10 @@
 #include <kglobal.h>
 #include <kdeversion.h>
 
-// LibKDcraw includes. 
- 
+// LibKDcraw includes.
+
 #include <libkdcraw/dcrawbinary.h>
- 
+
 // Local includes.
 
 #include "ddebug.h"

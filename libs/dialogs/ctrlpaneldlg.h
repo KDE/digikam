@@ -25,15 +25,15 @@
 #ifndef CTRLPANELDLG_H
 #define CTRLPANELDLG_H
 
-// Qt includes
+// Qt includes.
 
 #include <qstring.h>
 
-// KDE include.
+// KDE includes.
 
 #include <kdialogbase.h>
 
-// Local includes
+// Local includes.
 
 #include "imagepannelwidget.h"
 #include "digikam_export.h"

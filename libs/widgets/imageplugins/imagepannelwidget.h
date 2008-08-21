@@ -31,7 +31,7 @@
 #include <qrect.h>
 #include <qstring.h>
 
-// Local includes
+// Local includes.
 
 #include "dimg.h"
 #include "digikam_export.h"

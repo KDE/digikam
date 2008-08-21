@@ -34,7 +34,6 @@ extern "C"
 #include <ctime>
 #include <cstdlib>
 
-
 // Qt includes.
 
 #include <qapplication.h>

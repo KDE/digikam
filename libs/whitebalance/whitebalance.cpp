@@ -35,7 +35,6 @@
 
 #include <qcolor.h>
 
-
 // Local includes.
 
 #include "ddebug.h"

@@ -33,7 +33,7 @@
 #include <qfileinfo.h>
 #include <qfile.h>
 
-// KDE includes
+// KDE includes.
 
 #include <kcmdlineargs.h>
 #include <kapplication.h>
@@ -45,7 +45,7 @@
 #include <kdeversion.h>
 #include <kmessagebox.h>
 
-// KIPI Includes.
+// KIPI includes.
 
 #include <libkipi/version.h>
 #include <libkipi/interface.h>

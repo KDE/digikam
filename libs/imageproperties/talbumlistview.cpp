@@ -56,7 +56,7 @@
 #include "talbumlistview.h"
 #include "talbumlistview.moc"
 
-// X11 Includes.
+// X11 includes.
 
 extern "C"
 {

@@ -33,7 +33,7 @@
    Written by Denis Oliver Kropp <dok@directfb.org>,
               Andreas Hundt <andi@fischlustig.de>,
               Sven Neumann <neo@directfb.org>,
-              Ville Syrjälä <syrjala@sci.fi> and
+              Ville Syrjï¿½lï¿½ <syrjala@sci.fi> and
               Claudio Ciccani <klan@users.sf.net>.
 
 */
@@ -42,7 +42,7 @@
 
 #include <cmath>
 
-// Local includes
+// Local includes.
 
 #include "dcolorcomposer.h"
 

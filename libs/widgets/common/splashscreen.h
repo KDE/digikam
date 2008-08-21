@@ -30,7 +30,7 @@
 #include <ksplashscreen.h>
 #include <qpainter.h>
 
-// Local Includes.
+// Local includes.
 
 #include "digikam_export.h"
 

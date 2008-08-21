@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-// Qt Includes.
+// Qt includes.
 
 #include <qvbox.h>
 #include <qstring.h>

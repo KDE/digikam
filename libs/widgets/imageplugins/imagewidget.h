@@ -32,7 +32,7 @@
 #include <qcolor.h>
 #include <qstring.h>
 
-// Local includes
+// Local includes.
 
 #include "dcolor.h"
 #include "imageguidewidget.h"

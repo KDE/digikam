@@ -30,7 +30,7 @@
 #include <qpoint.h>
 #include <qcolor.h>
 
-// Local includes
+// Local includes.
 
 #include "dcolor.h"
 #include "digikam_export.h"

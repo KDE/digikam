@@ -37,7 +37,7 @@
 #include <kdialogbase.h>
 #include <kconfig.h>
 
-// Local includes
+// Local includes.
 
 #include "searchtextbar.h"
 #include "searchtextbar.moc"

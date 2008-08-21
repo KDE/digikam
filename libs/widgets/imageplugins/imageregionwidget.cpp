@@ -45,7 +45,7 @@
 #include <kglobal.h>
 #include <kapplication.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "imageiface.h"

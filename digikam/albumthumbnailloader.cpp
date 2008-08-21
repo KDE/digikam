@@ -21,23 +21,23 @@
  *
  * ============================================================ */
 
-// C includes
+// C includes.
 
 #include <math.h>
 
-// Qt includes
+// Qt includes.
 
 #include <qmap.h>
 #include <qpainter.h>
 #include <qvaluelist.h>
 
-// KDE includes
+// KDE includes.
 
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kdebug.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "thumbnailjob.h"

@@ -24,7 +24,7 @@
 #ifndef RAWCAMERADLG_H
 #define RAWCAMERADLG_H
 
-// KDElib includes
+// KDElib includes.
 
 #include <kdialogbase.h>
 

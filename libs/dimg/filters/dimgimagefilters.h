@@ -33,7 +33,7 @@
 
 #include <cmath>
 
-// Digikam Includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

@@ -26,7 +26,7 @@
 #ifndef _DELETEDIALOG_H
 #define _DELETEDIALOG_H
 
-// QT includes
+// QT includes.
 
 #include <qcheckbox.h>
 

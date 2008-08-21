@@ -25,11 +25,11 @@
 #ifndef IMAGEGUIDEDLG_H
 #define IMAGEGUIDEDLG_H
 
-// Qt includes
+// Qt includes.
 
 #include <qstring.h>
 
-// KDE include.
+// KDE includes.
 
 #include <kdialogbase.h>
 

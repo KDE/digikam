@@ -21,7 +21,7 @@
  * 
  * ============================================================ */
 
-// Local includes
+// Local includes.
 
 #include "imageattributeswatch.h"
 #include "imageattributeswatch.moc"
