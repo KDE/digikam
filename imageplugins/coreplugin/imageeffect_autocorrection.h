@@ -24,7 +24,7 @@
 #ifndef IMAGEEFFECT_AUTOCORRECTION_H
 #define IMAGEEFFECT_AUTOCORRECTION_H
 
-// Qt Includes.
+// Qt includes.
 
 #include <qstring.h>
 

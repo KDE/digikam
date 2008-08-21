@@ -26,7 +26,7 @@
 #ifndef IMAGEEFFECT_WHITEBALANCE_H
 #define IMAGEEFFECT_WHITEBALANCE_H
 
-// Qt include.
+// Qt includes.
 
 #include <qcolor.h>
 

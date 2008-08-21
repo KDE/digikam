@@ -5,21 +5,21 @@
  *
  * Date        : 2005-02-14
  * Description : a widget to insert a text over an image.
- * 
+ *
  * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ includes.
@@ -30,14 +30,14 @@
 // Qt includes.
 
 #include <qpainter.h>
-#include <qfont.h> 
-#include <qfontmetrics.h> 
+#include <qfont.h>
+#include <qfontmetrics.h>
 
-// KDE include.
+// KDE includes.
 
 #include <kstandarddirs.h>
 #include <kcursor.h>
-#include <kglobal.h> 
+#include <kglobal.h>
 
 // Digikam includes.
 
@@ -125,7 +125,7 @@ void InsertTextWidget::setText(QString text, QFont font, QColor color, int align
     // Center text if top left corner text area is not visible.
 
     /*
-    if ( m_textFont.pointSize() != font.pointSize() && 
+    if ( m_textFont.pointSize() != font.pointSize() &&
          !rect().contains( m_textRect.x(), m_textRect.y() ) )
     {
         m_textFont = font;
@@ -171,8 +171,8 @@ Digikam::DImg InsertTextWidget::makeInsertText(void)
 {
     int orgW = m_iface->originalWidth();
     int orgH = m_iface->originalHeight();
-    float ratioW = (float)orgW/(float)m_w;
-    float ratioH = (float)orgH/(float)m_h;
+    double ratioW = (double)orgW/(double)m_w;
+    double ratioH = (double)orgH/(double)m_h;
 
     int x, y;
     if (m_textRect.isValid())

@@ -24,7 +24,7 @@
 #ifndef SUPERIMPOSE_H
 #define SUPERIMPOSE_H
 
-// Qt includes
+// Qt includes.
 
 #include <qrect.h>
 

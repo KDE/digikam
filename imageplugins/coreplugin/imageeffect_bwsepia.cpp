@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
- // Qt includes.
+// Qt includes.
 
 #include <qcolor.h>
 #include <qcombobox.h>

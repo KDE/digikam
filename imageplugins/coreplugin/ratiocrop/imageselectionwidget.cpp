@@ -55,7 +55,7 @@
 #include <qtimer.h>
 #include <qsizepolicy.h>
 
-// KDE include.
+// KDE includes.
 
 #include <kstandarddirs.h>
 #include <kcursor.h>

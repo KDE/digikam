@@ -31,7 +31,7 @@
 
 #include <qpainter.h>
 
-// KDE include.
+// KDE includes.
 
 #include <kstandarddirs.h>
 #include <kcursor.h>

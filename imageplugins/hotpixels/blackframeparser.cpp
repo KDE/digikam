@@ -36,7 +36,7 @@
 #define REL_TO_ABS(n,m) \
     ((((n) / DENOM_SQRT) * (m) + ((n) % DENOM_SQRT) * (m) / DENOM_SQRT) / DENOM_SQRT)
 
-// QT includes.
+// Qt includes.
 
 #include <qimage.h>
 #include <qstringlist.h>
