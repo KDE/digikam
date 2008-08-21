@@ -154,9 +154,9 @@ public slots:
 
     void slotFlipHoriz();
     void slotFlipVert();
-    
+
     void slotCrop();
-    
+
     void slotRestore();
     void slotUndo(int steps=1);
     void slotRedo(int steps=1);
@@ -167,7 +167,7 @@ public slots:
     void slotSelectNone();
 
 protected:
-    
+
     void resizeEvent(QResizeEvent* e);
     void viewportPaintEvent(QPaintEvent *e);
     void contentsMousePressEvent(QMouseEvent *e);
@@ -199,10 +199,10 @@ private slots:
     void slotPanIconHiden();
 
 private:
-    
+
     CanvasPrivate *d;
 };
-    
+
 }  // namespace Digikam
 
 #endif /* CANVAS_H */

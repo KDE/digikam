@@ -186,8 +186,6 @@ protected slots:
 
     void slotSelected(bool);
 
-    void slotPrepareToLoad();
-
     void slotLoadingProgress(const QString& filePath, float progress);
     void slotSavingProgress(const QString& filePath, float progress);
 
@@ -234,6 +232,7 @@ private slots:
     void slotIncreaseZoom();
     void slotDecreaseZoom();
     void slotRawCameraList();
+    void slotPrepareToLoad();
 
 private:
 
