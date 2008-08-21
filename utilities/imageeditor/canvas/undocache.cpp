@@ -29,7 +29,7 @@ extern "C"
 #include <unistd.h>
 }
 
-// QT includes.
+// Qt includes.
 
 #include <QByteArray>
 #include <QString>

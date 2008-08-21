@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-// QT includes.
+// Qt includes.
 
 #include <QString>
 #include <QTimer>

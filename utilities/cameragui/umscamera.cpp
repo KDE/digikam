@@ -32,7 +32,7 @@ extern "C"
 #include <utime.h>
 }
 
-// QT includes.
+// Qt includes.
 
 #include <QDir>
 #include <QFileInfo>

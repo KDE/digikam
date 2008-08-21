@@ -25,7 +25,7 @@
 #ifndef SETUPCAMERA_H
 #define SETUPCAMERA_H
 
-// QT includes.
+// Qt includes.
 
 #include <QWidget>
 

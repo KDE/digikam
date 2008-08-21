@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-// QT includes.
+// Qt includes.
 
 #include <QButtonGroup>
 #include <QGroupBox>
