@@ -1,6 +1,3 @@
-//Added by qt3to4:
-#include <QEventLoop>
-#include <QLabel>
 /* ============================================================
  *
  * This file is a part of digiKam project

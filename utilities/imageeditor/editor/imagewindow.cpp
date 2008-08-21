@@ -31,17 +31,15 @@
 #include <QCloseEvent>
 #include <QDragMoveEvent>
 #include <QDropEvent>
-#include <Q3Frame>
-#include <Q3HBoxLayout>
+#include <QFrame>
+#include <QHBoxLayout>
 #include <QImage>
 #include <QLabel>
 #include <QPainter>
 #include <QPixmap>
-#include <Q3ProgressBar>
+#include <QProgressBar>
 #include <QSplitter>
 #include <QTimer>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
 
 // KDE includes
 
@@ -296,7 +294,7 @@ void ImageWindow::setupUserArea()
 
     if(!group.readEntry("HorizontalThumbbar", false)) // Vertical thumbbar layout
     {
-        Q3HBoxLayout *hlay = new Q3HBoxLayout(widget);
+        QHBoxLayout *hlay = new QHBoxLayout(widget);
         m_splitter        = new SidebarSplitter(widget);
         d->thumbBar       = new ImagePreviewBar(m_splitter, Qt::Vertical);
         m_canvas          = new Canvas(m_splitter);
@@ -314,21 +312,21 @@ void ImageWindow::setupUserArea()
     {
         m_splitter        = new SidebarSplitter(Qt::Horizontal, widget);
         QWidget* widget2  = new QWidget(m_splitter);
-        Q3VBoxLayout *vlay = new Q3VBoxLayout(widget2);
+        QVBoxLayout *vlay = new QVBoxLayout(widget2);
         m_vSplitter       = new QSplitter(Qt::Vertical, widget2);
         m_canvas          = new Canvas(m_vSplitter);
         d->thumbBar       = new ImagePreviewBar(m_vSplitter, Qt::Horizontal);
 
-        m_vSplitter->setFrameStyle( Q3Frame::NoFrame );
-        m_vSplitter->setFrameShadow( Q3Frame::Plain );
-        m_vSplitter->setFrameShape( Q3Frame::NoFrame );
+        m_vSplitter->setFrameStyle( QFrame::NoFrame );
+        m_vSplitter->setFrameShadow( QFrame::Plain );
+        m_vSplitter->setFrameShape( QFrame::NoFrame );
         m_vSplitter->setOpaqueResize(false);
 
         vlay->addWidget(m_vSplitter);
         vlay->setSpacing(0);
         vlay->setMargin(0);
 
-        Q3HBoxLayout *hlay = new Q3HBoxLayout(widget);
+        QHBoxLayout *hlay = new QHBoxLayout(widget);
         d->rightSidebar   = new ImagePropertiesSideBarDB(widget, m_splitter, KMultiTabBar::Right, true);
         d->rightSidebar->setObjectName("ImageEditor Right Sidebar");
 
@@ -344,9 +342,9 @@ void ImageWindow::setupUserArea()
 
     m_canvas->makeDefaultEditingCanvas();
 
-    m_splitter->setFrameStyle( Q3Frame::NoFrame );
-    m_splitter->setFrameShadow( Q3Frame::Plain );
-    m_splitter->setFrameShape( Q3Frame::NoFrame );
+    m_splitter->setFrameStyle( QFrame::NoFrame );
+    m_splitter->setFrameShadow( QFrame::Plain );
+    m_splitter->setFrameShape( QFrame::NoFrame );
     m_splitter->setOpaqueResize(false);
     setCentralWidget(widget);
 }
