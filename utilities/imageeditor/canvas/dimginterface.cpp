@@ -198,10 +198,10 @@ void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofil
     d->iofileSettings = iofileSettings;
     d->parent         = parent;
 
+/*FIXME
     if (d->iofileSettings->useRAWImport && DImg::fileFormat(d->filename) == DImg::RAW)
     {
-/*FIXME
-        RawImport *rawImport = new RawImport(KURL(d->filename), this);
+        RawImport *rawImport = new RawImport(KUrl(d->filename), this);
         EditorToolIface::editorToolIface()->loadTool(rawImport);
 
         connect(rawImport, SIGNAL(okClicked()),
@@ -209,9 +209,9 @@ void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofil
 
         connect(rawImport, SIGNAL(cancelClicked()),
                 this, SLOT(slotUseDefaultSettings()));
-*/
+
     }
-    else
+    else*/
     {
         slotUseDefaultSettings();
     }
