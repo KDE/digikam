@@ -39,9 +39,9 @@ class KAccel;
 namespace Digikam
 {
 
-class ICCSettingsContainer;
-class ExposureContainer;
 class EditorToolIface;
+class ExposureSettingsContainer;
+class ICCSettingsContainer;
 
 class EditorWindowPriv
 {
