@@ -53,7 +53,7 @@
 #include <qstyle.h>
 #include <qpushbutton.h>
 
-// KDE lib includes
+// KDE includes.
 
 #include <klocale.h>
 #include <kmessagebox.h>
