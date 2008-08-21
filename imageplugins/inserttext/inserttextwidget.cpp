@@ -171,8 +171,8 @@ Digikam::DImg InsertTextWidget::makeInsertText(void)
 {
     int orgW = m_iface->originalWidth();
     int orgH = m_iface->originalHeight();
-    double ratioW = (double)orgW/(double)m_w;
-    double ratioH = (double)orgH/(double)m_h;
+    float ratioW = (float)orgW/(float)m_w;
+    float ratioH = (float)orgH/(float)m_h;
 
     int x, y;
     if (m_textRect.isValid())
