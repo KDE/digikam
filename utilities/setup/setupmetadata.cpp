@@ -46,7 +46,7 @@
 #include <kstandarddirs.h>
 #include <kapplication.h>
 
-// // Local includes.
+// Local includes.
 
 #include "albumsettings.h"
 #include "setupmetadata.h"

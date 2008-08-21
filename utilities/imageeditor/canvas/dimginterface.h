@@ -30,7 +30,7 @@
 #include <qobject.h>
 #include <qstring.h>
 
-// Locale includes.
+// Local includes.
 
 #include "digikam_export.h"
 #include "dimg.h"

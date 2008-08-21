@@ -33,7 +33,7 @@
 #include <klocale.h>
 #include <kdialogbase.h>
 
-// // Local includes.
+// Local includes.
 
 #include "albumsettings.h"
 #include "setuptooltip.h"

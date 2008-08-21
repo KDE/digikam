@@ -48,7 +48,7 @@
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 
-// // Local includes.
+// Local includes.
 
 #include "albumsettings.h"
 #include "setupgeneral.h"

@@ -53,7 +53,7 @@
 #include <klineeditdlg.h>
 #endif
 
-// // Local includes.
+// Local includes.
 
 #include "thumbnailsize.h"
 #include "albumsettings.h"
