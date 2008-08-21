@@ -27,6 +27,7 @@ INCLUDE_DIRECTORIES( ../showfoto/setup
                      ../utilities/imageeditor/canvas 
                      ../utilities/imageeditor/editor 
                      ../utilities/imageeditor/tools 
+                     ../utilities/imageeditor/rawimport 
                      ../utilities/slideshow 
                      ../digikam 
                      ../
