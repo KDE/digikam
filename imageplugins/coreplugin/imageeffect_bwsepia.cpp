@@ -51,7 +51,6 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <knuminput.h>
 #include <kstandarddirs.h>
 #include <ktabwidget.h>
 #include <kvbox.h>
@@ -392,11 +391,11 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                             "This has the most natural tonal correction, and improves contrast. Ideal for "
                             "landscapes.</p>"));
 
-    m_strengthInput = new KIntNumInput(vbox);
-    m_strengthInput->setLabel(i18n("Strength:"), Qt::AlignLeft | Qt::AlignVCenter);
+    m_strengthInput = new RIntNumInput(vbox);
+    m_strengthInput->input()->setLabel(i18n("Strength:"), Qt::AlignLeft | Qt::AlignVCenter);
     m_strengthInput->setRange(1, 5, 1);
     m_strengthInput->setSliderEnabled(true);
-    m_strengthInput->setValue(1);
+    m_strengthInput->setDefaultValue(1);
     m_strengthInput->setWhatsThis(i18n("<p>Here, set the strength adjustment of the lens filter."));
 
     // -------------------------------------------------------------
@@ -473,11 +472,11 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                                                   10, curveBox );
     hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
-    m_cInput = new KIntNumInput(curveBox);
-    m_cInput->setLabel(i18n("Contrast:"), Qt::AlignLeft | Qt::AlignVCenter);
+    m_cInput = new RIntNumInput(curveBox);
+    m_cInput->input()->setLabel(i18n("Contrast:"), Qt::AlignLeft | Qt::AlignVCenter);
     m_cInput->setRange(-100, 100, 1);
     m_cInput->setSliderEnabled(true);
-    m_cInput->setValue(0);
+    m_cInput->setDefaultValue(0);
     m_cInput->setWhatsThis( i18n("<p>Set here the contrast adjustment of the image."));
 
     gridTab2->addWidget(vGradient,      0, 0, 1, 1);
@@ -680,8 +679,8 @@ void ImageEffect_BWSepia::readUserSettings()
     m_bwFilters->setCurrentRow(group.readEntry("BW Filter", 0));
     m_bwFilm->setCurrentRow(group.readEntry("BW Film", 0));
     m_bwTone->setCurrentRow(group.readEntry("BW Tone", 0));
-    m_cInput->setValue(group.readEntry("ContrastAjustment", 0));
-    m_strengthInput->setValue(group.readEntry("StrengthAjustment", 1));
+    m_cInput->setValue(group.readEntry("ContrastAjustment", m_cInput->defaultValue()));
+    m_strengthInput->setValue(group.readEntry("StrengthAjustment", m_strengthInput->defaultValue()));
 
     for (int i = 0 ; i < 5 ; i++)
         m_curvesWidget->curves()->curvesChannelReset(i);
@@ -750,7 +749,8 @@ void ImageEffect_BWSepia::resetValues()
     m_bwFilters->setCurrentRow(0);
     m_bwTone->setCurrentRow(0);
 
-    m_cInput->setValue(0);
+    m_cInput->slotReset();
+    m_strengthInput->slotReset();
 
     for (int channel = 0 ; channel < 5 ; channel++)
        m_curvesWidget->curves()->curvesChannelReset(channel);

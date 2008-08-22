@@ -56,7 +56,6 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <knuminput.h>
 #include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
 #include <ktabwidget.h>
@@ -68,6 +67,7 @@
 // LibKDcraw includes.
 
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/rcombobox.h>
 
 // Digikam includes.
 
@@ -227,11 +227,12 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                  "to the destination rendering media, e.g. the combination of paper and ink.</p>"));
 
     QLabel *intent       = new QLabel(i18n("Rendering Intent:"), generalOptions);
-    m_renderingIntentsCB = new QComboBox(generalOptions);
+    m_renderingIntentsCB = new RComboBox(generalOptions);
     m_renderingIntentsCB->addItem("Perceptual");
     m_renderingIntentsCB->addItem("Absolute Colorimetric");
     m_renderingIntentsCB->addItem("Relative Colorimetric");
     m_renderingIntentsCB->addItem("Saturation");
+    m_renderingIntentsCB->setDefaultIndex(0);
     m_renderingIntentsCB->setWhatsThis( i18n("<ul><li>Perceptual intent causes the full gamut "
                 "of the image to be compressed or expanded to fill the gamut of the destination media, "
                 "so that gray balance is preserved but colorimetric accuracy may not be preserved.<br>"
@@ -464,11 +465,11 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                                   10, lightnessadjust );
     hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
-    m_cInput = new KIntNumInput(lightnessadjust);
-    m_cInput->setLabel(i18n("Contrast:"), Qt::AlignLeft | Qt::AlignVCenter);
+    m_cInput = new RIntNumInput(lightnessadjust);
+    m_cInput->input()->setLabel(i18n("Contrast:"), Qt::AlignLeft | Qt::AlignVCenter);
     m_cInput->setRange(-100, 100, 1);
     m_cInput->setSliderEnabled(true);
-    m_cInput->setValue(0);
+    m_cInput->setDefaultValue(0);
     m_cInput->setWhatsThis( i18n("<p>Set here the contrast adjustment of the image."));
 
     fourPageLayout->addWidget(vGradient, 0, 0, 1, 1);
@@ -615,7 +616,7 @@ void ImageEffect_ICCProof::readUserSettings()
     m_inProfilesPath->setUrl(group.readPathEntry("InputProfilePath", defaultICCPath));
     m_proofProfilePath->setUrl(group.readPathEntry("ProofProfilePath", defaultICCPath));
     m_spaceProfilePath->setUrl(group.readPathEntry("SpaceProfilePath", defaultICCPath));
-    m_renderingIntentsCB->setCurrentIndex(group.readEntry("RenderingIntent", 0));
+    m_renderingIntentsCB->setCurrentIndex(group.readEntry("RenderingIntent", m_renderingIntentsCB->defaultIndex()));
     m_doSoftProofBox->setChecked(group.readEntry("DoSoftProof", false));
     m_checkGamutBox->setChecked(group.readEntry("CheckGamut", false));
     m_embeddProfileBox->setChecked(group.readEntry("EmbeddProfile", true));
@@ -623,7 +624,7 @@ void ImageEffect_ICCProof::readUserSettings()
     m_inProfileBG->button(group.readEntry("InputProfileMethod", 0))->setChecked(true);
     m_spaceProfileBG->button(group.readEntry("SpaceProfileMethod", 0))->setChecked(true);
     m_proofProfileBG->button(group.readEntry("ProofProfileMethod", 0))->setChecked(true);
-    m_cInput->setValue(group.readEntry("ContrastAjustment", 0));
+    m_cInput->setValue(group.readEntry("ContrastAjustment", m_cInput->defaultValue()));
 
     for (int i = 0 ; i < 5 ; i++)
         m_curvesWidget->curves()->curvesChannelReset(i);
@@ -740,7 +741,7 @@ void ImageEffect_ICCProof::slotScaleChanged( int scale )
 void ImageEffect_ICCProof::resetValues()
 {
     m_cInput->blockSignals(true);
-    m_cInput->setValue(0);
+    m_cInput->slotReset();
 
     for (int i = 0 ; i < 5 ; i++)
        m_curvesWidget->curves()->curvesChannelReset(i);

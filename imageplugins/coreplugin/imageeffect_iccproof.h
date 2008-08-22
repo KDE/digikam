@@ -37,10 +37,11 @@ class QRadioButton;
 class QToolBox;
 
 class KUrlRequester;
-class KIntNumInput;
 
 namespace KDcrawIface
 {
+class RIntNumInput;
+class RComboBox;
 }
 
 namespace Digikam
@@ -141,7 +142,6 @@ private:
     uchar                          *m_destinationPreviewData;
 
     QComboBox                      *m_channelCB;
-    QComboBox                      *m_renderingIntentsCB;
 
     QCheckBox                      *m_doSoftProofBox;
     QCheckBox                      *m_checkGamutBox;
@@ -173,11 +173,12 @@ private:
 
     QToolBox                       *m_toolBoxWidgets;
 
-    KIntNumInput                   *m_cInput;
-
     KUrlRequester                  *m_inProfilesPath;
     KUrlRequester                  *m_spaceProfilePath;
     KUrlRequester                  *m_proofProfilePath;
+
+    KDcrawIface::RIntNumInput      *m_cInput;
+    KDcrawIface::RComboBox         *m_renderingIntentsCB;
 
     Digikam::DImg                  *m_originalImage;
 
