@@ -221,25 +221,25 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
     m_hGradientMaxInput->installEventFilter(this);
 
-    m_minInput = new QSpinBox(gboxSettings);
-    m_minInput->setRange(0, m_histoSegments);
-    m_minInput->setSingleStep(1);
-    m_minInput->setValue(0);
+    m_minInput = new RIntNumInput(gboxSettings);
+    m_minInput->setRange(0, m_histoSegments, 1);
+    m_minInput->setSliderEnabled(false);
+    m_minInput->setDefaultValue(0);
     m_minInput->setWhatsThis( i18n("<p>Select the minimal intensity input "
                                    "value of the histogram here."));
     m_minInput->setToolTip( i18n( "Minimal intensity input." ) );
 
-    m_gammaInput = new KDoubleNumInput(gboxSettings);
+    m_gammaInput = new RDoubleNumInput(gboxSettings);
     m_gammaInput->setDecimals(2);
     m_gammaInput->setRange(0.1, 3.0, 0.01);
-    m_gammaInput->setValue(1.0);
+    m_gammaInput->setDefaultValue(1.0);
     m_gammaInput->setToolTip( i18n( "Gamma input value." ) );
     m_gammaInput->setWhatsThis( i18n("<p>Select the gamma input value here."));
 
-    m_maxInput = new QSpinBox(gboxSettings);
-    m_maxInput->setRange(0, m_histoSegments);
-    m_maxInput->setSingleStep(1);
-    m_maxInput->setValue(m_histoSegments);
+    m_maxInput = new RIntNumInput(gboxSettings);
+    m_maxInput->setRange(0, m_histoSegments, 1);
+    m_maxInput->setSliderEnabled(false);
+    m_maxInput->setDefaultValue(m_histoSegments);
     m_maxInput->setToolTip( i18n( "Maximal intensity input." ) );
     m_maxInput->setWhatsThis( i18n("<p>Select the maximal intensity input "
                                    "value of the histogram here."));
@@ -266,18 +266,18 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_hGradientMaxOutput->setMaximum(m_histoSegments);
     m_hGradientMaxOutput->installEventFilter(this);
 
-    m_minOutput = new QSpinBox(gboxSettings);
-    m_minOutput->setRange(0, m_histoSegments);
-    m_minOutput->setSingleStep(1);
-    m_minOutput->setValue(0);
+    m_minOutput = new RIntNumInput(gboxSettings);
+    m_minOutput->setRange(0, m_histoSegments, 1);
+    m_minOutput->setSliderEnabled(false);
+    m_minOutput->setDefaultValue(0);
     m_minOutput->setToolTip( i18n( "Minimal intensity output." ) );
     m_minOutput->setWhatsThis( i18n("<p>Select the minimal intensity output "
                                     "value of the histogram here."));
 
-    m_maxOutput = new QSpinBox(gboxSettings);
-    m_maxOutput->setRange(0, m_histoSegments);
-    m_maxOutput->setSingleStep(1);
-    m_maxOutput->setValue(m_histoSegments);
+    m_maxOutput = new RIntNumInput(gboxSettings);
+    m_maxOutput->setRange(0, m_histoSegments, 1);
+    m_maxOutput->setSliderEnabled(false);
+    m_maxOutput->setDefaultValue(m_histoSegments);
     m_maxOutput->setToolTip( i18n( "Maximal intensity output." ) );
     m_maxOutput->setWhatsThis( i18n("<p>Select the maximal intensity output "
                                     "value of the histogram here."));

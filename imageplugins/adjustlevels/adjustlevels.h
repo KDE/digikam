@@ -31,16 +31,16 @@
 
 class QWidget;
 class QComboBox;
-class QSpinBox;
 class QPushButton;
 class QToolButton;
 class QButtonGroup;
 
 class KGradientSelector;
-class KDoubleNumInput;
 
 namespace KDcrawIface
 {
+class RDoubleNumInput;
+class RIntNumInput;
 }
 
 namespace Digikam
@@ -124,11 +124,6 @@ private:
 
     QComboBox                 *m_channelCB;
 
-    QSpinBox                  *m_minInput;
-    QSpinBox                  *m_maxInput;
-    QSpinBox                  *m_minOutput;
-    QSpinBox                  *m_maxOutput;
-
     QPushButton               *m_resetButton;
     QToolButton               *m_autoButton;
     QToolButton               *m_pickBlack;
@@ -138,12 +133,17 @@ private:
     QButtonGroup              *m_pickerColorButtonGroup;
     QButtonGroup              *m_scaleBG;
 
-    KDoubleNumInput           *m_gammaInput;
-
     KGradientSelector         *m_hGradientMinInput;
     KGradientSelector         *m_hGradientMaxInput;
     KGradientSelector         *m_hGradientMinOutput;
     KGradientSelector         *m_hGradientMaxOutput;
+
+    KDcrawIface::RIntNumInput *m_minInput;
+    KDcrawIface::RIntNumInput *m_maxInput;
+    KDcrawIface::RIntNumInput *m_minOutput;
+    KDcrawIface::RIntNumInput *m_maxOutput;
+
+    KDcrawIface::RDoubleNumInput *m_gammaInput;
 
     Digikam::HistogramWidget  *m_levelsHistogramWidget;
     Digikam::HistogramWidget  *m_histogramWidget;
