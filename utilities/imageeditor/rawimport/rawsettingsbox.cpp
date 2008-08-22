@@ -254,13 +254,13 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
 
     d->abortBtn = new QPushButton(d->rawdecodingBox);
     d->abortBtn->setText(i18n("Abort"));
-    d->abortBtn->setIcon(SmallIcon("stop"));
+    d->abortBtn->setIcon(SmallIcon("dialog-cancel"));
     d->abortBtn->setEnabled(false);
     d->abortBtn->setToolTip(i18n("Abort the current Raw image preview."));
 
     d->updateBtn = new QPushButton(d->rawdecodingBox);
     d->updateBtn->setText(i18n("Update"));
-    d->updateBtn->setIcon(SmallIcon("reload_page"));
+    d->updateBtn->setIcon(SmallIcon("view-refresh"));
     d->updateBtn->setEnabled(false);
     d->updateBtn->setToolTip(i18n("Generate a Raw image preview using current settings."));
 
