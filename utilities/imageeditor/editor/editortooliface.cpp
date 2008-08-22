@@ -23,12 +23,13 @@
 
 // Qt includes.
 
-#include <QWidget>
+#include <qwidget.h>
 
 // Local includes.
 
 #include "sidebar.h"
 #include "editortool.h"
+#include "editortoolsettings.h"
 #include "editorstackview.h"
 #include "editorwindow.h"
 #include "editortooliface.h"

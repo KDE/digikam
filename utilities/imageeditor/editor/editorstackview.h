@@ -26,7 +26,7 @@
 
 // KDE includes.
 
-#include <QStackedWidget>
+#include <qwidgetstack.h>
 
 // Local includes.
 
@@ -38,7 +38,7 @@ namespace Digikam
 class Canvas;
 class EditorStackViewPriv;
 
-class DIGIKAM_EXPORT EditorStackView : public QStackedWidget
+class DIGIKAM_EXPORT EditorStackView : public QWidgetStack
 {
 Q_OBJECT
 

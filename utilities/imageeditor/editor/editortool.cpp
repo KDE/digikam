@@ -23,10 +23,12 @@
 
 // Qt includes.
 
-#include <QWidget>
+#include <qwidget.h>
+#include <qtimer.h>
 
 // Local includes.
 
+#include "editortoolsettings.h"
 #include "editortooliface.h"
 #include "editortool.h"
 #include "editortool.moc"
@@ -41,22 +43,30 @@ public:
 
     EditorToolPriv()
     {
+        timer    = 0;
         view     = 0;
         settings = 0;
     }
 
-    QString  name;
+    QString             name;
 
-    QWidget *view;
-    QWidget *settings;
+    QWidget            *view;
 
-    QPixmap  icon;
+    QPixmap             icon;
+
+    QTimer             *timer;
+
+    EditorToolSettings *settings;
 };
 
 EditorTool::EditorTool(QObject *parent)
           : QObject(parent)
 {
     d = new EditorToolPriv;
+    d->timer = new QTimer(this);
+
+    connect(d->timer, SIGNAL(timeout()),
+            this, SLOT(slotEffect()));
 }
 
 EditorTool::~EditorTool()
@@ -94,14 +104,53 @@ void EditorTool::setToolView(QWidget *view)
     d->view = view;
 }
 
-QWidget* EditorTool::toolSettings() const
+EditorToolSettings* EditorTool::toolSettings() const
 {
     return d->settings;
 }
 
-void EditorTool::setToolSettings(QWidget *settings)
+void EditorTool::setToolSettings(EditorToolSettings *settings)
 {
     d->settings = settings;
+
+    connect(d->settings, SIGNAL(signalOkClicked()),
+            this, SLOT(slotOk()));
+
+    connect(d->settings, SIGNAL(signalCancelClicked()),
+            this, SLOT(slotCancel()));
+}
+
+void EditorTool::readSettings()
+{
+    d->settings->readSettings();
+}
+
+void EditorTool::saveSettings()
+{
+    d->settings->saveSettings();
+}
+
+void EditorTool::resetSettings()
+{
+    d->settings->slotDefaultSettings();
+}
+
+void EditorTool::slotTimer()
+{
+    d->timer->start(500, true);
+}
+
+void EditorTool::slotOk()
+{
+    saveSettings();
+    finalRendering();
+    emit okClicked();
+}
+
+void EditorTool::slotCancel()
+{
+    saveSettings();
+    emit cancelClicked();
 }
 
 }  // namespace Digikam

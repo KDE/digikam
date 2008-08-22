@@ -26,9 +26,9 @@
 
 // Qt includes.
 
-#include <QObject>
-#include <QString>
-#include <QPixmap>
+#include <qobject.h>
+#include <qstring.h>
+#include <qpixmap.h>
 
 // Local includes.
 
@@ -37,6 +37,7 @@
 namespace Digikam
 {
 
+class EditorToolSettings;
 class EditorToolPriv;
 
 class DIGIKAM_EXPORT EditorTool : public QObject
@@ -48,10 +49,10 @@ public:
     EditorTool(QObject *parent);
     virtual ~EditorTool();
 
-    QString  toolName() const;
-    QPixmap  toolIcon() const;
-    QWidget* toolView() const;
-    QWidget* toolSettings() const;
+    QString             toolName() const;
+    QPixmap             toolIcon() const;
+    QWidget*            toolView() const;
+    EditorToolSettings* toolSettings() const;
 
 signals:
 
@@ -63,11 +64,23 @@ protected:
     void setToolName(const QString& name);
     void setToolIcon(const QPixmap& icon);
     void setToolView(QWidget *view);
-    void setToolSettings(QWidget *settings);
+    void setToolSettings(EditorToolSettings *settings);
 
-    virtual void readSettings()=0;
-    virtual void saveSettings()=0;
-    virtual void setBusy(bool)=0;
+    virtual void readSettings();
+    virtual void saveSettings();
+    virtual void resetSettings();
+    virtual void finalRendering(){};
+    virtual void setBusy(bool){};
+
+protected slots:
+
+    virtual void slotEffect(){};
+
+private slots:
+
+    void slotTimer();
+    void slotOk();
+    void slotCancel();
 
 private:
 
@@ -77,3 +90,4 @@ private:
 }  //namespace Digikam
 
 #endif /* IMAGEPLUGIN_H */
+

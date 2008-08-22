@@ -43,12 +43,11 @@ public:
     }
 
     QWidget *toolView;
-
     Canvas  *canvas;
 };
 
 EditorStackView::EditorStackView(QWidget *parent)
-               : QStackedWidget(parent)
+               : QWidgetStack(parent, 0, Qt::WDestructiveClose)
 {
     d = new EditorStackViewPriv;
 }
@@ -63,7 +62,7 @@ void EditorStackView::setCanvas(Canvas* canvas)
     if (d->canvas) return;
 
     d->canvas = canvas;
-    insertWidget(CanvasMode, d->canvas);
+    addWidget(d->canvas, CanvasMode);
 
     connect(d->canvas, SIGNAL(signalZoomChanged(double)),
             this, SLOT(slotZoomChanged(double)));
@@ -82,7 +81,7 @@ void EditorStackView::setToolView(QWidget* view)
     d->toolView = view;
 
     if (d->toolView)
-        insertWidget(ToolViewMode, d->toolView);
+        addWidget(d->toolView, ToolViewMode);
 
     PreviewWidget *preview = dynamic_cast<PreviewWidget*>(d->toolView);
     if (preview)
@@ -99,7 +98,7 @@ QWidget* EditorStackView::toolView() const
 
 int EditorStackView::viewMode()
 {
-    return indexOf(currentWidget());
+    return id(visibleWidget());
 }
 
 void EditorStackView::setViewMode(int mode)
@@ -107,7 +106,7 @@ void EditorStackView::setViewMode(int mode)
     if (mode != CanvasMode && mode != ToolViewMode)
         return;
 
-    setCurrentIndex(mode);
+    raiseWidget(mode);
 }
 
 void EditorStackView::increaseZoom()
