@@ -128,7 +128,7 @@ public:
         openFilesInFolderAction = 0;
         fileOpenAction          = 0;
         thumbBar                = 0;
-        rightSidebar            = 0;
+        rightSideBar            = 0;
         splash                  = 0;
         itemsNb                 = 0;
         vSplitter               = 0;
@@ -154,7 +154,7 @@ public:
     Digikam::ThumbnailLoadThread    *thumbLoadThread;
     Digikam::ThumbBarView           *thumbBar;
     Digikam::ThumbBarItem           *currentItem;
-    Digikam::ImagePropertiesSideBar *rightSidebar;
+    Digikam::ImagePropertiesSideBar *rightSideBar;
     Digikam::SplashScreen           *splash;
 };
 
@@ -284,7 +284,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     applySettings();
     setAutoSaveSettings("ImageViewer Settings", true);
 
-    d->rightSidebar->loadViewState();
+    d->rightSideBar->loadViewState();
 
     // -- Load current items ---------------------------
 
@@ -334,14 +334,14 @@ ShowFoto::~ShowFoto()
 
     delete m_imagePluginLoader;
     delete d->thumbBar;
-    delete d->rightSidebar;
+    delete d->rightSideBar;
     delete d->thumbLoadThread;
     delete d;
 }
 
 Digikam::Sidebar* ShowFoto::rightSideBar() const
 {
-    return dynamic_cast<Digikam::Sidebar*>(d->rightSidebar);
+    return dynamic_cast<Digikam::Sidebar*>(d->rightSideBar);
 }
 
 bool ShowFoto::queryClose()
@@ -420,10 +420,10 @@ void ShowFoto::setupConnections()
             this, SLOT(slotUpdateItemInfo()));
 
     connect(this, SIGNAL(signalSelectionChanged(const QRect &)),
-            d->rightSidebar, SLOT(slotImageSelectionChanged(const QRect &)));
+            d->rightSideBar, SLOT(slotImageSelectionChanged(const QRect &)));
 
     connect(this, SIGNAL(signalNoCurrentItem()),
-            d->rightSidebar, SLOT(slotNoCurrentItem()));
+            d->rightSideBar, SLOT(slotNoCurrentItem()));
 }
 
 void ShowFoto::setupUserArea()
@@ -443,11 +443,11 @@ void ShowFoto::setupUserArea()
 
         m_splitter->setStretchFactor(1, 10);      // set Canvas default size to max.
 
-        d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, m_splitter, KMultiTabBar::Right);
-        d->rightSidebar->setObjectName("ShowFoto Sidebar Right");
+        d->rightSideBar   = new Digikam::ImagePropertiesSideBar(widget, m_splitter, KMultiTabBar::Right);
+        d->rightSideBar->setObjectName("ShowFoto Sidebar Right");
 
         hlay->addWidget(m_splitter);
-        hlay->addWidget(d->rightSidebar);
+        hlay->addWidget(d->rightSideBar);
         hlay->setSpacing(0);
         hlay->setMargin(0);
     }
@@ -471,11 +471,11 @@ void ShowFoto::setupUserArea()
         vlay->setMargin(0);
 
         QHBoxLayout *hlay = new QHBoxLayout(widget);
-        d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, m_splitter, KMultiTabBar::Right);
-        d->rightSidebar->setObjectName("ShowFoto Sidebar Right");
+        d->rightSideBar   = new Digikam::ImagePropertiesSideBar(widget, m_splitter, KMultiTabBar::Right);
+        d->rightSideBar->setObjectName("ShowFoto Sidebar Right");
 
         hlay->addWidget(m_splitter);
-        hlay->addWidget(d->rightSidebar);
+        hlay->addWidget(d->rightSideBar);
         hlay->setSpacing(0);
         hlay->setMargin(0);
         hlay->setStretchFactor(m_splitter, 10);
@@ -641,9 +641,9 @@ Digikam::ThumbBarView *ShowFoto::thumbBar() const
     return d->thumbBar;
 }
 
-Digikam::Sidebar *ShowFoto::rightSidebar() const
+Digikam::Sidebar *ShowFoto::rightSideBar() const
 {
-    return (dynamic_cast<Digikam::Sidebar*>(d->rightSidebar));
+    return (dynamic_cast<Digikam::Sidebar*>(d->rightSideBar));
 }
 
 void ShowFoto::slotChangeBCG()
@@ -692,7 +692,7 @@ void ShowFoto::slotChanged()
         {
             QRect sel          = m_canvas->getSelectedArea();
             Digikam::DImg* img = m_canvas->interface()->getImg();
-            d->rightSidebar->itemChanged(d->currentItem->url(), sel, img);
+            d->rightSideBar->itemChanged(d->currentItem->url(), sel, img);
         }
     }
 }

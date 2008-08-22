@@ -128,7 +128,7 @@ public:
         fileDeletePermanentlyAction         = 0;
         fileDeletePermanentlyDirectlyAction = 0;
         fileTrashDirectlyAction             = 0;
-        rightSidebar                        = 0;
+        rightSideBar                        = 0;
         thumbBar                            = 0;
     }
 
@@ -157,7 +157,7 @@ public:
 
     ImagePreviewBar          *thumbBar;
 
-    ImagePropertiesSideBarDB *rightSidebar;
+    ImagePropertiesSideBarDB *rightSideBar;
 };
 
 ImageWindow* ImageWindow::m_instance = 0;
@@ -211,8 +211,8 @@ ImageWindow::ImageWindow()
 
     //-------------------------------------------------------------
 
-    d->rightSidebar->loadViewState();
-    d->rightSidebar->populateTags();
+    d->rightSideBar->loadViewState();
+    d->rightSideBar->populateTags();
 }
 
 ImageWindow::~ImageWindow()
@@ -221,14 +221,9 @@ ImageWindow::~ImageWindow()
 
     unLoadImagePlugins();
 
-    delete d->rightSidebar;
+    delete d->rightSideBar;
     delete d->thumbBar;
     delete d;
-}
-
-Sidebar* ImageWindow::rightSideBar() const
-{
-    return dynamic_cast<Sidebar*>(d->rightSidebar);
 }
 
 void ImageWindow::closeEvent(QCloseEvent* e)
@@ -267,17 +262,17 @@ void ImageWindow::setupConnections()
 
     // To toggle properly keyboards shortcuts from comments & tags side bar tab.
 
-    connect(d->rightSidebar, SIGNAL(signalNextItem()),
+    connect(d->rightSideBar, SIGNAL(signalNextItem()),
             this, SLOT(slotForward()));
 
-    connect(d->rightSidebar, SIGNAL(signalPrevItem()),
+    connect(d->rightSideBar, SIGNAL(signalPrevItem()),
             this, SLOT(slotBackward()));
 
     connect(this, SIGNAL(signalSelectionChanged( const QRect &)),
-            d->rightSidebar, SLOT(slotImageSelectionChanged( const QRect &)));
+            d->rightSideBar, SLOT(slotImageSelectionChanged( const QRect &)));
 
     connect(this, SIGNAL(signalNoCurrentItem()),
-            d->rightSidebar, SLOT(slotNoCurrentItem()));
+            d->rightSideBar, SLOT(slotNoCurrentItem()));
 
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
@@ -308,11 +303,11 @@ void ImageWindow::setupUserArea()
 
         m_splitter->setStretchFactor(1, 10);      // set Canvas default size to max.
 
-        d->rightSidebar   = new ImagePropertiesSideBarDB(widget, m_splitter, KMultiTabBar::Right, true);
-        d->rightSidebar->setObjectName("ImageEditor Right Sidebar");
+        d->rightSideBar   = new ImagePropertiesSideBarDB(widget, m_splitter, KMultiTabBar::Right, true);
+        d->rightSideBar->setObjectName("ImageEditor Right Sidebar");
 
         hlay->addWidget(m_splitter);
-        hlay->addWidget(d->rightSidebar);
+        hlay->addWidget(d->rightSideBar);
         hlay->setSpacing(0);
         hlay->setMargin(0);
     }
@@ -336,11 +331,11 @@ void ImageWindow::setupUserArea()
         vlay->setMargin(0);
 
         QHBoxLayout *hlay = new QHBoxLayout(widget);
-        d->rightSidebar   = new ImagePropertiesSideBarDB(widget, m_splitter, KMultiTabBar::Right, true);
-        d->rightSidebar->setObjectName("ImageEditor Right Sidebar");
+        d->rightSideBar   = new ImagePropertiesSideBarDB(widget, m_splitter, KMultiTabBar::Right, true);
+        d->rightSideBar->setObjectName("ImageEditor Right Sidebar");
 
         hlay->addWidget(m_splitter);
-        hlay->addWidget(d->rightSidebar);
+        hlay->addWidget(d->rightSideBar);
         hlay->setSpacing(0);
         hlay->setMargin(0);
         hlay->setStretchFactor(m_splitter, 10);
@@ -449,7 +444,7 @@ void ImageWindow::applySettings()
 
 void ImageWindow::refreshView()
 {
-    d->rightSidebar->refreshTagsView();
+    d->rightSideBar->refreshTagsView();
 }
 
 void ImageWindow::slotThumbBarItemSelected(const KUrl& url)
@@ -699,12 +694,12 @@ void ImageWindow::slotChanged()
 
         if (!d->imageInfoCurrent.isNull())
         {
-            d->rightSidebar->itemChanged(d->imageInfoCurrent,
+            d->rightSideBar->itemChanged(d->imageInfoCurrent,
                                          m_canvas->getSelectedArea(), img);
         }
         else
         {
-            d->rightSidebar->itemChanged(d->urlCurrent, m_canvas->getSelectedArea(), img);
+            d->rightSideBar->itemChanged(d->urlCurrent, m_canvas->getSelectedArea(), img);
         }
     }
 }
@@ -1350,9 +1345,9 @@ ThumbBarView *ImageWindow::thumbBar() const
     return (dynamic_cast<ThumbBarView*>(d->thumbBar));
 }
 
-Sidebar *ImageWindow::rightSidebar() const
+Sidebar *ImageWindow::rightSideBar() const
 {
-    return (dynamic_cast<Sidebar*>(d->rightSidebar));
+    return (dynamic_cast<Sidebar*>(d->rightSideBar));
 }
 
 void ImageWindow::slotComponentsInfo()
