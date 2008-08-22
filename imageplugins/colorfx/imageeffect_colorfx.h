@@ -102,7 +102,7 @@ private:
 
     enum ColorFXTypes
     {
-        ColorFX=0,
+        Solarize=0,
         Vivid,
         Neon,
         FindEdges

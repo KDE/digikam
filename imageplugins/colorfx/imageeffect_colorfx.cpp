@@ -182,7 +182,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     m_effectType->addItem(i18n("Vivid"));
     m_effectType->addItem(i18n("Neon"));
     m_effectType->addItem(i18n("Find Edges"));
-    m_effectType->setDefaultIndex(ColorFX);
+    m_effectType->setDefaultIndex(Solarize);
     m_effectType->setWhatsThis( i18n("<p>Select the effect type to apply to the image here.<p>"
                                      "<b>Solarize</b>: simulates solarization of photograph.<p>"
                                      "<b>Vivid</b>: simulates the Velvia(tm) slide film colors.<p>"
@@ -342,7 +342,7 @@ void ImageEffect_ColorFX::slotEffectTypeChanged(int type)
 
     switch (type)
        {
-       case ColorFX:
+       case Solarize:
           m_levelInput->setRange(0, 100, 1);
           m_levelInput->setSliderEnabled(true);
           m_levelInput->setValue(0);
@@ -420,7 +420,7 @@ void ImageEffect_ColorFX::finalRendering()
 
         switch (m_effectType->currentIndex())
         {
-            case ColorFX:
+            case Solarize:
                 name = i18n("ColorFX");
                 break;
 
@@ -449,7 +449,7 @@ void ImageEffect_ColorFX::colorEffect(uchar *data, int w, int h, bool sb)
 {
     switch (m_effectType->currentIndex())
     {
-        case ColorFX:
+        case Solarize:
             solarize(m_levelInput->value(), data, w, h, sb);
             break;
 
