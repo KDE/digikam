@@ -35,39 +35,39 @@
 
 // Qt includes.
 
-#include <qcolor.h>
-#include <qgroupbox.h>
-#include <qhgroupbox.h>
-#include <qvgroupbox.h>
-#include <qhbuttongroup.h>
-#include <qlabel.h>
-#include <qpainter.h>
-#include <qcombobox.h>
-#include <qspinbox.h>
-#include <qvbox.h>
-#include <qwhatsthis.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qframe.h>
-#include <qtimer.h>
 #include <qcheckbox.h>
+#include <qcolor.h>
+#include <qcombobox.h>
 #include <qfile.h>
+#include <qframe.h>
+#include <qgroupbox.h>
+#include <qhbuttongroup.h>
+#include <qhgroupbox.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qpainter.h>
+#include <qpushbutton.h>
+#include <qspinbox.h>
+#include <qtimer.h>
 #include <qtooltip.h>
+#include <qvbox.h>
+#include <qvgroupbox.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
 #include <kconfig.h>
+#include <kaboutdata.h>
+#include <kapplication.h>
 #include <kcursor.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kselect.h>
 #include <kfiledialog.h>
 #include <kglobalsettings.h>
-#include <kaboutdata.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
-#include <kapplication.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 #include <kpopupmenu.h>
+#include <kselect.h>
 #include <kstandarddirs.h>
 
 // LibKDcraw includes.
@@ -193,18 +193,21 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
     m_redGain = new RDoubleNumInput(gboxSettings);
     m_redGain->setPrecision(0);
     m_redGain->setRange(-200.0, 200.0, 1);
+    m_redGain->setDefaultValue(0);
     QWhatsThis::add( m_redGain, i18n("<p>Select the red color gain in percent for the current channel here."));
 
     QLabel *blueLabel = new QLabel(i18n("Blue:"), gboxSettings);
     m_greenGain = new RDoubleNumInput(gboxSettings);
     m_greenGain->setPrecision(0);
     m_greenGain->setRange(-200.0, 200.0, 1);
+    m_greenGain->setDefaultValue(0);
     QWhatsThis::add( m_greenGain, i18n("<p>Select the green color gain in percent for the current channel here."));
 
     QLabel *greenLabel = new QLabel(i18n("Green:"), gboxSettings);
     m_blueGain = new RDoubleNumInput(gboxSettings);
     m_blueGain->setPrecision(0);
     m_blueGain->setRange(-200.0, 200.0, 1);
+    m_blueGain->setDefaultValue(0);
     QWhatsThis::add( m_blueGain, i18n("<p>Select the blue color gain in percent for the current channel here."));
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);

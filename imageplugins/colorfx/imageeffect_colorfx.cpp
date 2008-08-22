@@ -177,10 +177,10 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     m_effectTypeLabel = new QLabel(i18n("Type:"), gboxSettings);
 
     m_effectType = new RComboBox(gboxSettings);
-    m_effectType->insertItem( i18n("Solarize") );
-    m_effectType->insertItem( i18n("Vivid") );
-    m_effectType->insertItem( i18n("Neon") );
-    m_effectType->insertItem( i18n("Find Edges") );
+    m_effectType->insertItem(i18n("Solarize"));
+    m_effectType->insertItem(i18n("Vivid"));
+    m_effectType->insertItem(i18n("Neon"));
+    m_effectType->insertItem(i18n("Find Edges"));
     m_effectType->setDefaultItem(0);
     QWhatsThis::add( m_effectType, i18n("<p>Select the effect type to apply to the image here.<p>"
                                         "<b>Solarize</b>: simulates solarization of photograph.<p>"
