@@ -340,6 +340,12 @@ AdjustCurveTool::AdjustCurveTool(QObject* parent)
 
     connect(m_pickerColorButtonGroup, SIGNAL(released(int)),
             this, SLOT(slotPickerColorButtonActived()));
+
+    connect(gboxSettings->button(EditorToolSettings::User2), SIGNAL(clicked()),
+            this, SLOT(slotUser2()));
+
+    connect(gboxSettings->button(EditorToolSettings::User3), SIGNAL(clicked()),
+            this, SLOT(slotUser3()));
 }
 
 AdjustCurveTool::~AdjustCurveTool()
