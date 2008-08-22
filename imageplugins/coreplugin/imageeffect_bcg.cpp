@@ -45,7 +45,6 @@
 #include <kcursor.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <knuminput.h>
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
@@ -155,24 +154,24 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     // -------------------------------------------------------------
 
     QLabel *label2 = new QLabel(i18n("Brightness:"), gboxSettings);
-    m_bInput       = new KIntNumInput(gboxSettings);
+    m_bInput       = new RIntNumInput(gboxSettings);
     m_bInput->setRange(-100, 100, 1);
     m_bInput->setSliderEnabled(true);
-    m_bInput->setValue(0);
+    m_bInput->setDefaultValue(0);
     m_bInput->setWhatsThis( i18n("<p>Set here the brightness adjustment of the image."));
 
     QLabel *label3 = new QLabel(i18n("Contrast:"), gboxSettings);
-    m_cInput       = new KIntNumInput(gboxSettings);
+    m_cInput       = new RIntNumInput(gboxSettings);
     m_cInput->setRange(-100, 100, 1);
     m_cInput->setSliderEnabled(true);
-    m_cInput->setValue(0);
+    m_cInput->setDefaultValue(0);
     m_cInput->setWhatsThis( i18n("<p>Set here the contrast adjustment of the image."));
 
     QLabel *label4 = new QLabel(i18n("Gamma:"), gboxSettings);
-    m_gInput = new KDoubleNumInput(gboxSettings);
+    m_gInput = new RDoubleNumInput(gboxSettings);
     m_gInput->setDecimals(2);
-    m_gInput->setRange(0.1, 3.0, 0.01, true);
-    m_gInput->setValue(1.0);
+    m_gInput->input()->setRange(0.1, 3.0, 0.01, true);
+    m_gInput->setDefaultValue(1.0);
     m_gInput->setWhatsThis( i18n("<p>Set here the gamma adjustment of the image."));
 
     // -------------------------------------------------------------
@@ -278,9 +277,9 @@ void ImageEffect_BCG::readUserSettings()
     m_scaleBG->button(group.readEntry("Histogram Scale",
                       (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
 
-    m_bInput->setValue(group.readEntry("BrightnessAjustment", 0));
-    m_cInput->setValue(group.readEntry("ContrastAjustment", 0));
-    m_gInput->setValue(group.readEntry("GammaAjustment", 1.0));
+    m_bInput->setValue(group.readEntry("BrightnessAjustment", m_bInput->defaultValue()));
+    m_cInput->setValue(group.readEntry("ContrastAjustment", m_cInput->defaultValue()));
+    m_gInput->setValue(group.readEntry("GammaAjustment", m_gInput->defaultValue()));
     slotChannelChanged(m_channelCB->currentIndex());
     slotScaleChanged(m_scaleBG->checkedId());
 }
@@ -302,9 +301,11 @@ void ImageEffect_BCG::resetValues()
     m_bInput->blockSignals(true);
     m_cInput->blockSignals(true);
     m_gInput->blockSignals(true);
-    m_bInput->setValue(0);
-    m_cInput->setValue(0);
-    m_gInput->setValue(1.0);
+
+    m_bInput->slotReset();
+    m_cInput->slotReset();
+    m_gInput->slotReset();
+
     m_bInput->blockSignals(false);
     m_cInput->blockSignals(false);
     m_gInput->blockSignals(false);

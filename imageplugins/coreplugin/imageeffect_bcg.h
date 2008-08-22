@@ -33,11 +33,11 @@
 class QComboBox;
 class QButtonGroup;
 
-class KIntNumInput;
-class KDoubleNumInput;
 
 namespace KDcrawIface
 {
+class RIntNumInput;
+class RDoubleNumInput;
 }
 
 namespace Digikam
@@ -96,9 +96,10 @@ private:
 
     QButtonGroup                 *m_scaleBG;
 
-    KIntNumInput                 *m_bInput;
-    KIntNumInput                 *m_cInput;
-    KDoubleNumInput              *m_gInput;
+    KDcrawIface::RIntNumInput    *m_bInput;
+    KDcrawIface::RIntNumInput    *m_cInput;
+
+    KDcrawIface::RDoubleNumInput *m_gInput;
 
     Digikam::ImageWidget         *m_previewWidget;
 

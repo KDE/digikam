@@ -46,7 +46,6 @@
 #include <kglobal.h>
 #include <khuesaturationselect.h>
 #include <klocale.h>
-#include <knuminput.h>
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
@@ -166,24 +165,24 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     m_HSPreview->setMinimumSize(256, 15);
 
     QLabel *label2 = new QLabel(i18n("Hue:"), gboxSettings);
-    m_hInput       = new KDoubleNumInput(gboxSettings);
+    m_hInput       = new RDoubleNumInput(gboxSettings);
     m_hInput->setDecimals(0);
-    m_hInput->setRange(-180.0, 180.0, 1.0, true);
-    m_hInput->setValue(0.0);
+    m_hInput->input()->setRange(-180.0, 180.0, 1.0, true);
+    m_hInput->setDefaultValue(0.0);
     m_hInput->setWhatsThis( i18n("<p>Set here the hue adjustment of the image."));
 
     QLabel *label3 = new QLabel(i18n("Saturation:"), gboxSettings);
-    m_sInput       = new KDoubleNumInput(gboxSettings);
+    m_sInput       = new RDoubleNumInput(gboxSettings);
     m_sInput->setDecimals(2);
-    m_sInput->setRange(-100.0, 100.0, 0.01, true);
-    m_sInput->setValue(0.0);
+    m_sInput->input()->setRange(-100.0, 100.0, 0.01, true);
+    m_sInput->setDefaultValue(0.0);
     m_sInput->setWhatsThis( i18n("<p>Set here the saturation adjustment of the image."));
 
     QLabel *label4 = new QLabel(i18n("Lightness:"), gboxSettings);
-    m_lInput       = new KDoubleNumInput(gboxSettings);
+    m_lInput       = new RDoubleNumInput(gboxSettings);
     m_lInput->setDecimals(2);
-    m_lInput->setRange(-100.0, 100.0, 0.01, true);
-    m_lInput->setValue(0.0);
+    m_lInput->input()->setRange(-100.0, 100.0, 0.01, true);
+    m_lInput->setDefaultValue(0.0);
     m_lInput->setWhatsThis( i18n("<p>Set here the lightness adjustment of the image."));
 
     // -------------------------------------------------------------
@@ -336,9 +335,9 @@ void ImageEffect_HSL::readUserSettings()
     m_scaleBG->button(group.readEntry("Histogram Scale",
                       (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
 
-    m_hInput->setValue(group.readEntry("HueAjustment", 0.0));
-    m_sInput->setValue(group.readEntry("SaturationAjustment", 0.0));
-    m_lInput->setValue(group.readEntry("LighnessAjustment", 0.0));
+    m_hInput->setValue(group.readEntry("HueAjustment", m_hInput->defaultValue()));
+    m_sInput->setValue(group.readEntry("SaturationAjustment", m_sInput->defaultValue()));
+    m_lInput->setValue(group.readEntry("LighnessAjustment", m_lInput->defaultValue()));
     slotHChanged(m_hInput->value());
     slotSChanged(m_sInput->value());
     slotChannelChanged(m_channelCB->currentIndex());
@@ -362,11 +361,14 @@ void ImageEffect_HSL::resetValues()
     m_hInput->blockSignals(true);
     m_sInput->blockSignals(true);
     m_lInput->blockSignals(true);
-    m_hInput->setValue(0.0);
-    m_sInput->setValue(0.0);
-    m_lInput->setValue(0.0);
-    slotHChanged(0.0);
-    slotSChanged(0.0);
+
+    m_hInput->slotReset();
+    m_sInput->slotReset();
+    m_lInput->slotReset();
+
+    slotHChanged(m_hInput->defaultValue());
+    slotSChanged(m_sInput->defaultValue());
+
     m_hInput->blockSignals(false);
     m_sInput->blockSignals(false);
     m_lInput->blockSignals(false);

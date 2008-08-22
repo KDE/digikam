@@ -32,11 +32,11 @@
 class QButtonGroup;
 class QComboBox;
 
-class KDoubleNumInput;
 class KHueSaturationSelector;
 
 namespace KDcrawIface
 {
+class RDoubleNumInput;
 }
 
 namespace Digikam
@@ -99,9 +99,9 @@ private:
 
     QButtonGroup                 *m_scaleBG;
 
-    KDoubleNumInput              *m_hInput;
-    KDoubleNumInput              *m_sInput;
-    KDoubleNumInput              *m_lInput;
+    KDcrawIface::RDoubleNumInput *m_hInput;
+    KDcrawIface::RDoubleNumInput *m_sInput;
+    KDcrawIface::RDoubleNumInput *m_lInput;
 
     KHueSaturationSelector       *m_HSSelector;
 
