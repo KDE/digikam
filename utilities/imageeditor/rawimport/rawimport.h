@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT RawImport : public EditorTool
 
 public:
 
-    RawImport(const KURL& url, QObject *parent);
+    RawImport(const KUrl& url, QObject *parent);
     ~RawImport();
 
     DRawDecoding rawDecodingSettings();
