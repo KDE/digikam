@@ -24,7 +24,7 @@
 
 #include <QString>
 #include <QLayout>
-#include <QHButtonGroup>
+#include <QButtonGroup>
 #include <QComboBox>
 #include <QLabel>
 #include <QToolButton>
@@ -130,7 +130,7 @@ public:
     QLabel              *saturationLabel;
     QLabel              *fineExposureLabel;
 
-    QHButtonGroup       *scaleBG;
+    QButtonGroup        *scaleBG;
 
     QPushButton         *abortBtn;
     QPushButton         *updateBtn;
@@ -170,12 +170,12 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
 
     QLabel *label1 = new QLabel(i18n("Channel:"), plainPage());
     label1->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-    d->channelCB   = new QComboBox(false, plainPage());
-    d->channelCB->insertItem( i18n("Luminosity") );
-    d->channelCB->insertItem( i18n("Red") );
-    d->channelCB->insertItem( i18n("Green") );
-    d->channelCB->insertItem( i18n("Blue") );
-    d->channelCB->insertItem( i18n("Colors") );
+    d->channelCB   = new QComboBox(plainPage());
+    d->channelCB->addItem( i18n("Luminosity") );
+    d->channelCB->addItem( i18n("Red") );
+    d->channelCB->addItem( i18n("Green") );
+    d->channelCB->addItem( i18n("Blue") );
+    d->channelCB->addItem( i18n("Colors") );
     d->channelCB->setWhatsThis(i18n("<p>Select the histogram channel to display here:<p>"
                                     "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                     "<b>Red</b>: display the red image-channel values.<p>"
@@ -183,37 +183,44 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
                                     "<b>Blue</b>: display the blue image-channel values.<p>"
                                     "<b>Colors</b>: Display all color channel values at the same time."));
 
-    d->scaleBG = new QHButtonGroup(plainPage());
+    // ---------------------------------------------------------------
+
+    QWidget *scaleBox = new QWidget(plainPage());
+    QHBoxLayout *hlay = new QHBoxLayout(scaleBox);
+    d->scaleBG        = new QButtonGroup(scaleBox);
+    scaleBox->setWhatsThis(i18n("<p>Select the histogram scale here.<p>"
+                                "If the image's maximal counts are small, you can use the linear scale.<p>"
+                                "Logarithmic scale can be used when the maximal counts are big; "
+                                "if it is used, all values (small and large) will be visible on the graph."));
+
+    QToolButton *linHistoButton = new QToolButton( scaleBox );
+    linHistoButton->setToolTip( i18n( "<p>Linear" ) );
+    linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
+    linHistoButton->setCheckable(true);
+    d->scaleBG->addButton(linHistoButton, Digikam::CurvesWidget::LinScaleHistogram);
+
+    QToolButton *logHistoButton = new QToolButton( scaleBox );
+    logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
+    logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
+    logHistoButton->setCheckable(true);
+    d->scaleBG->addButton(logHistoButton, Digikam::CurvesWidget::LogScaleHistogram);
+
+    hlay->setMargin(0);
+    hlay->setSpacing(0);
+    hlay->addWidget(linHistoButton);
+    hlay->addWidget(logHistoButton);
+
     d->scaleBG->setExclusive(true);
-    d->scaleBG->setFrameShape(QFrame::NoFrame);
-    d->scaleBG->setInsideMargin( 0 );
-    d->scaleBG->setWhatsThis(i18n("<p>Select the histogram scale here.<p>"
-                                  "If the image's maximal counts are small, you can use the linear scale.<p>"
-                                  "Logarithmic scale can be used when the maximal counts are big; "
-                                  "if it is used, all values (small and large) will be visible on the graph."));
+    logHistoButton->setChecked(true);
 
-    QPushButton *linHistoButton = new QPushButton( d->scaleBG );
-    linHistoButton->setToolTip(i18n( "<p>Linear" ) );
-    d->scaleBG->insert(linHistoButton, HistogramWidget::LinScaleHistogram);
-    KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
-    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
-    linHistoButton->setToggleButton(true);
-
-    QPushButton *logHistoButton = new QPushButton( d->scaleBG );
-    logHistoButton->setToolTip(i18n( "<p>Logarithmic" ) );
-    d->scaleBG->insert(logHistoButton, HistogramWidget::LogScaleHistogram);
-    KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
-    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
-    logHistoButton->setToggleButton(true);
+    // ---------------------------------------------------------------
 
     QLabel *label10 = new QLabel(i18n("Colors:"), plainPage());
     label10->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-    d->colorsCB = new QComboBox(false, plainPage());
-    d->colorsCB->insertItem( i18n("Red") );
-    d->colorsCB->insertItem( i18n("Green") );
-    d->colorsCB->insertItem( i18n("Blue") );
+    d->colorsCB = new QComboBox(plainPage());
+    d->colorsCB->addItem( i18n("Red") );
+    d->colorsCB->addItem( i18n("Green") );
+    d->colorsCB->addItem( i18n("Blue") );
     d->colorsCB->setEnabled( false );
     d->colorsCB->setWhatsThis(i18n("<p>Select the main color displayed with Colors Channel mode here:<p>"
                                    "<b>Red</b>: Draw the red image channel in the foreground.<p>"
@@ -236,7 +243,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
 
     d->tabView             = new KTabWidget(plainPage());
     d->rawdecodingBox      = new QWidget(d->tabView);
-    QGridLayout* rawGrid   = new QGridLayout(d->rawdecodingBox, 1, 2);
+    QGridLayout* rawGrid   = new QGridLayout(d->rawdecodingBox);
     d->decodingSettingsBox = new DcrawSettingsWidget(d->rawdecodingBox, true, true, false);
 
     KFileDialog *inputDlg  = d->decodingSettingsBox->inputProfileUrlEdit()->fileDialog();
@@ -247,20 +254,20 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
 
     d->abortBtn = new QPushButton(d->rawdecodingBox);
     d->abortBtn->setText(i18n("Abort"));
-    d->abortBtn->setIconSet(SmallIconSet("stop"));
+    d->abortBtn->setIcon(SmallIcon("stop"));
     d->abortBtn->setEnabled(false);
     d->abortBtn->setToolTip(i18n("Abort the current Raw image preview."));
 
     d->updateBtn = new QPushButton(d->rawdecodingBox);
     d->updateBtn->setText(i18n("Update"));
-    d->updateBtn->setIconSet(SmallIconSet("reload_page"));
+    d->updateBtn->setIcon(SmallIcon("reload_page"));
     d->updateBtn->setEnabled(false);
     d->updateBtn->setToolTip(i18n("Generate a Raw image preview using current settings."));
 
     rawGrid->addWidget(d->decodingSettingsBox, 0, 0, 1, 3);
     rawGrid->addWidget(d->abortBtn,            1, 0, 1, 1);
     rawGrid->addWidget(d->updateBtn,           1, 2, 1, 1);
-    rawGrid->setColStretch(1, 10);
+    rawGrid->setColumnStretch(1, 10);
     rawGrid->setSpacing(spacingHint());
     rawGrid->setMargin(spacingHint());
 
@@ -326,7 +333,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     // ---------------------------------------------------------------
 
     d->curveBox              = new QWidget(d->postProcessSettingsBox);
-    QGridLayout* curveLayout = new QGridLayout(d->curveBox, 3, 2);
+    QGridLayout* curveLayout = new QGridLayout(d->curveBox);
 
     ColorGradientWidget* vGradient = new ColorGradientWidget(ColorGradientWidget::Vertical, 10, d->curveBox);
     vGradient->setColors( QColor( "white" ), QColor( "black" ) );
@@ -339,8 +346,8 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
 
     d->resetCurveBtn = new QToolButton(d->curveBox);
     d->resetCurveBtn->setFixedSize(11, 11);
-    d->resetCurveBtn->setIconSet(SmallIconSet("reload_page", 8));
-    d->resetCurveBtn->setFocusPolicy(QWidget::NoFocus);
+    d->resetCurveBtn->setIcon(SmallIcon("reload_page", 8));
+    d->resetCurveBtn->setFocusPolicy(Qt::NoFocus);
     d->resetCurveBtn->setAutoRaise(true);
     d->resetCurveBtn->setToolTip(i18n("Reset curve to linear"));
 
@@ -364,13 +371,13 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
 
     d->postProcessSettingsBox->addItem(d->advExposureBox, i18n("Exposure"));
     d->postProcessSettingsBox->addItem(d->curveBox,       i18n("Luminosity Curve"));
-    d->postProcessSettingsBox->setItemIconSet(0, SmallIconSet("contrast"));
-    d->postProcessSettingsBox->setItemIconSet(1, SmallIconSet("adjustcurves"));
+    d->postProcessSettingsBox->setItemIcon(0, SmallIcon("contrast"));
+    d->postProcessSettingsBox->setItemIcon(1, SmallIcon("adjustcurves"));
 
-    d->decodingSettingsBox->setItemIconSet(DcrawSettingsWidget::DEMOSAICING,     SmallIconSet("kdcraw"));
-    d->decodingSettingsBox->setItemIconSet(DcrawSettingsWidget::WHITEBALANCE,    SmallIconSet("whitebalance"));
-    d->decodingSettingsBox->setItemIconSet(DcrawSettingsWidget::CORRECTIONS,     SmallIconSet("lensdistortion"));
-    d->decodingSettingsBox->setItemIconSet(DcrawSettingsWidget::COLORMANAGEMENT, SmallIconSet("colormanagement"));
+    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::DEMOSAICING,     SmallIcon("kdcraw"));
+    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::WHITEBALANCE,    SmallIcon("whitebalance"));
+    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::CORRECTIONS,     SmallIcon("lensdistortion"));
+    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::COLORMANAGEMENT, SmallIcon("colormanagement"));
     d->decodingSettingsBox->updateMinimumWidth();
 
     d->tabView->insertTab(d->rawdecodingBox,         i18n("Raw Decoding"),    0);
@@ -380,28 +387,28 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     // ---------------------------------------------------------------
 
     button(Default)->setText(i18n("Reset"));
-    button(Default)->setIconSet(SmallIconSet("reload_page"));
+    button(Default)->setIcon(KIcon(SmallIcon("reload_page")));
     button(Default)->setToolTip(i18n("<p>Reset all settings to default values."));
 
     button(Ok)->setText(i18n("Import"));
-    button(Ok)->setIconSet(SmallIconSet("ok"));
+    button(Ok)->setIcon(KIcon(SmallIcon("ok")));
     button(Ok)->setToolTip(i18n("<p>Import image to editor using current settings."));
 
     button(Cancel)->setText(i18n("Use Default"));
-    button(Cancel)->setIconSet(SmallIconSet("gohome"));
+    button(Cancel)->setIcon(KIcon(SmallIcon("gohome")));
     button(Cancel)->setToolTip(i18n("<p>Use general Raw decoding settings to load this image in editor."));
 
     // ---------------------------------------------------------------
 
     gridSettings->addWidget(label1,       0, 0, 1, 1);
     gridSettings->addWidget(d->channelCB, 0, 1, 1, 1);
-    gridSettings->addWidget(d->scaleBG,   0, 4, 1, 1);
+    gridSettings->addWidget(scaleBox,     0, 4, 1, 1);
     gridSettings->addWidget(label10,      1, 0, 1, 1);
     gridSettings->addWidget(d->colorsCB,  1, 1, 1, 1);
     gridSettings->addWidget(histoBox,     2, 0, 2, 5);
     gridSettings->addWidget(d->tabView,   4, 0, 1, 5);
     gridSettings->setRowStretch(5, 10);
-    gridSettings->setColStretch(2, 10);
+    gridSettings->setColumnStretch(2, 10);
     gridSettings->setSpacing(spacingHint());
     gridSettings->setMargin(0);
 
