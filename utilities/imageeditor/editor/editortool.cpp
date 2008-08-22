@@ -23,8 +23,8 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-#include <qtimer.h>
+#include <QWidget>
+#include <QTimer>
 
 // Local includes.
 
@@ -137,7 +137,8 @@ void EditorTool::resetSettings()
 
 void EditorTool::slotTimer()
 {
-    d->timer->start(500, true);
+    d->timer->setSingleShot(true);
+    d->timer->start(500);
 }
 
 void EditorTool::slotOk()
