@@ -220,4 +220,16 @@ void EditorToolSettings::slotDefaultSettings()
 {
 }
 
+void EditorToolSettings::setBusy(bool)
+{
+}
+
+void EditorToolSettings::saveSettings()
+{
+}
+
+void EditorToolSettings::readSettings()
+{
+}
+
 } // NameSpace Digikam

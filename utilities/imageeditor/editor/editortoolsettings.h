@@ -67,10 +67,9 @@ public:
 
     KPushButton* button(int buttonCode) const;
 
-    virtual void setBusy(bool b)=0;
-
-    virtual void saveSettings()=0;
-    virtual void readSettings()=0;
+    virtual void setBusy(bool);
+    virtual void saveSettings();
+    virtual void readSettings();
 
 signals:
 
@@ -82,7 +81,7 @@ signals:
     void signalUser2Clicked();
     void signalUser3Clicked();
 
-protected slots:
+public slots:
 
     /** Re-implement this slots to reset all settings to defaults values
         when Default button is clicked */
