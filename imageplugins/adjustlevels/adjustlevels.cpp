@@ -39,7 +39,6 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qpushbutton.h>
-#include <qspinbox.h>
 #include <qtimer.h>
 #include <qtooltip.h>
 #include <qvgroupbox.h>

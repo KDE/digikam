@@ -33,7 +33,6 @@ class QComboBox;
 class QPushButton;
 class QHButtonGroup;
 
-class KDoubleSpinBox;
 class KGradientSelector;
 
 namespace KDcrawIface
