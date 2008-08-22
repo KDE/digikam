@@ -26,7 +26,7 @@
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 #include "dimg.h"
 
 // Local includes.
@@ -46,20 +46,20 @@ class ImageWidget;
 namespace DigikamAdjustCurvesImagesPlugin
 {
 
-class AdjustCurveDialog : public Digikam::ImageDlgBase
+class AdjustCurveDialog : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    AdjustCurveDialog(QWidget *parent);
+    AdjustCurveDialog(QObject *parent);
     ~AdjustCurveDialog();
 
 private:
 
-    void readUserSettings();
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void saveSettings();
+    void resetSettings();
     void finalRendering();
 
 private slots:
