@@ -380,9 +380,9 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::COLORMANAGEMENT, SmallIcon("colormanagement"));
     d->decodingSettingsBox->updateMinimumWidth();
 
-    d->tabView->insertTab(d->rawdecodingBox,         i18n("Raw Decoding"),    0);
-    d->tabView->insertTab(d->postProcessSettingsBox, i18n("Post Processing"), 1);
-    d->tabView->insertTab(d->infoBox,                i18n("Info"),            2);
+    d->tabView->insertTab(0, d->rawdecodingBox,         i18n("Raw Decoding"));
+    d->tabView->insertTab(1, d->postProcessSettingsBox, i18n("Post Processing"));
+    d->tabView->insertTab(2, d->infoBox,                i18n("Info"));
 
     // ---------------------------------------------------------------
 
@@ -512,60 +512,61 @@ CurvesWidget* RawSettingsBox::curve() const
 
 void RawSettingsBox::readSettings()
 {
-    KConfig* config = kapp->config();
-    config->setGroup("RAW Import Settings");
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("RAW Import Settings");
 
-    d->channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", RawSettingsBoxPriv::LuminosityChannel));
-    d->scaleBG->setButton(config->readNumEntry("Histogram Scale", HistogramWidget::LogScaleHistogram));
-    d->colorsCB->setCurrentItem(config->readNumEntry("Histogram Color", RawSettingsBoxPriv::AllColorsRed));
+    d->channelCB->setCurrentItem(group.readEntry("Histogram Channel", (int)RawSettingsBoxPriv::LuminosityChannel));
+    d->scaleBG->button(group.readEntry("Histogram Scale",
+                      (int)Digikam::CurvesWidget::LogScaleHistogram))->setChecked(true);
+    d->colorsCB->setCurrentItem(group.readEntry("Histogram Color", (int)RawSettingsBoxPriv::AllColorsRed));
 
-    d->decodingSettingsBox->setSixteenBits(config->readBoolEntry("SixteenBitsImage", false));
+    d->decodingSettingsBox->setSixteenBits(group.readEntry("SixteenBitsImage", false));
     d->decodingSettingsBox->setWhiteBalance((DRawDecoding::WhiteBalance)
-                                            config->readNumEntry("White Balance",
-                                            DRawDecoding::CAMERA));
-    d->decodingSettingsBox->setCustomWhiteBalance(config->readNumEntry("Custom White Balance", 6500));
-    d->decodingSettingsBox->setCustomWhiteBalanceGreen(config->readDoubleNumEntry("Custom White Balance Green", 1.0));
-    d->decodingSettingsBox->setFourColor(config->readBoolEntry("Four Color RGB", false));
-    d->decodingSettingsBox->setUnclipColor(config->readNumEntry("Unclip Color", 0));
-    d->decodingSettingsBox->setDontStretchPixels(config->readBoolEntry("Dont Stretch Pixels", false));
-    d->decodingSettingsBox->setNoiseReduction(config->readBoolEntry("Use Noise Reduction", false));
-    d->decodingSettingsBox->setUseBlackPoint(config->readBoolEntry("Use Black Point", false));
-    d->decodingSettingsBox->setBlackPoint(config->readNumEntry("Black Point", 0));
-    d->decodingSettingsBox->setUseWhitePoint(config->readBoolEntry("Use White Point", false));
-    d->decodingSettingsBox->setWhitePoint(config->readNumEntry("White Point", 0));
-    d->decodingSettingsBox->setMedianFilterPasses(config->readNumEntry("Median Filter Passes", 0));
-    d->decodingSettingsBox->setNRThreshold(config->readNumEntry("NR Threshold", 100));
-    d->decodingSettingsBox->setUseCACorrection(config->readBoolEntry("EnableCACorrection", false));
-    d->decodingSettingsBox->setcaRedMultiplier(config->readDoubleNumEntry("caRedMultiplier", 1.0));
-    d->decodingSettingsBox->setcaBlueMultiplier(config->readDoubleNumEntry("caBlueMultiplier", 1.0));
+                                            group.readEntry("White Balance",
+                                            (int)DRawDecoding::CAMERA));
+    d->decodingSettingsBox->setCustomWhiteBalance(group.readEntry("Custom White Balance", 6500));
+    d->decodingSettingsBox->setCustomWhiteBalanceGreen(group.readEntry("Custom White Balance Green", 1.0));
+    d->decodingSettingsBox->setFourColor(group.readEntry("Four Color RGB", false));
+    d->decodingSettingsBox->setUnclipColor(group.readEntry("Unclip Color", 0));
+    d->decodingSettingsBox->setDontStretchPixels(group.readEntry("Dont Stretch Pixels", false));
+    d->decodingSettingsBox->setNoiseReduction(group.readEntry("Use Noise Reduction", false));
+    d->decodingSettingsBox->setUseBlackPoint(group.readEntry("Use Black Point", false));
+    d->decodingSettingsBox->setBlackPoint(group.readEntry("Black Point", 0));
+    d->decodingSettingsBox->setUseWhitePoint(group.readEntry("Use White Point", false));
+    d->decodingSettingsBox->setWhitePoint(group.readEntry("White Point", 0));
+    d->decodingSettingsBox->setMedianFilterPasses(group.readEntry("Median Filter Passes", 0));
+    d->decodingSettingsBox->setNRThreshold(group.readEntry("NR Threshold", 100));
+    d->decodingSettingsBox->setUseCACorrection(group.readEntry("EnableCACorrection", false));
+    d->decodingSettingsBox->setcaRedMultiplier(group.readEntry("caRedMultiplier", 1.0));
+    d->decodingSettingsBox->setcaBlueMultiplier(group.readEntry("caBlueMultiplier", 1.0));
 
     d->decodingSettingsBox->setQuality(
-        (DRawDecoding::DecodingQuality)config->readNumEntry("Decoding Quality",
+        (DRawDecoding::DecodingQuality)group.readEntry("Decoding Quality",
             (int)(DRawDecoding::BILINEAR)));
 
     d->decodingSettingsBox->setInputColorSpace(
-        (DRawDecoding::InputColorSpace)config->readNumEntry("Input Color Space",
+        (DRawDecoding::InputColorSpace)group.readEntry("Input Color Space",
             (int)(DRawDecoding::NOINPUTCS)));
 
     d->decodingSettingsBox->setOutputColorSpace(
-        (DRawDecoding::OutputColorSpace)config->readNumEntry("Output Color Space",
+        (DRawDecoding::OutputColorSpace)group.readEntry("Output Color Space",
             (int)(DRawDecoding::SRGB)));
 
-    d->decodingSettingsBox->setInputColorProfile(config->readPathEntry("Input Color Profile", QString()));
-    d->decodingSettingsBox->setOutputColorProfile(config->readPathEntry("Output Color Profile", QString()));
+    d->decodingSettingsBox->setInputColorProfile(group.readEntry("Input Color Profile", QString()));
+    d->decodingSettingsBox->setOutputColorProfile(group.readEntry("Output Color Profile", QString()));
 
-    d->brightnessInput->setValue(config->readNumEntry("Brightness", 0));
-    d->contrastInput->setValue(config->readNumEntry("Constrast", 0));
-    d->gammaInput->setValue(config->readDoubleNumEntry("Gamma", 1.0));
-    d->saturationInput->setValue(config->readDoubleNumEntry("Saturation", 1.0));
-    d->fineExposureInput->setValue(config->readDoubleNumEntry("FineExposure", 0.0));
+    d->brightnessInput->setValue(group.readEntry("Brightness", 0));
+    d->contrastInput->setValue(group.readEntry("Constrast", 0));
+    d->gammaInput->setValue(group.readEntry("Gamma", 1.0));
+    d->saturationInput->setValue(group.readEntry("Saturation", 1.0));
+    d->fineExposureInput->setValue(group.readEntry("FineExposure", 0.0));
 
     d->curveWidget->reset();
 
     for (int j = 0 ; j <= 17 ; j++)
     {
         QPoint disable(-1, -1);
-        QPoint p = config->readPointEntry(QString("CurveAjustmentPoint%1").arg(j), &disable);
+        QPoint p = group.readEntry(QString("CurveAjustmentPoint%1").arg(j), disable);
         if (!d->decodingSettingsBox->sixteenBits() && p != disable)
         {
             // Restore point as 16 bits depth.
@@ -576,52 +577,52 @@ void RawSettingsBox::readSettings()
     }
     d->curveWidget->curves()->curvesCalculateCurve(ImageHistogram::ValueChannel);
 
-    d->tabView->setCurrentPage(config->readNumEntry("Settings Page", 0));
-    d->decodingSettingsBox->setCurrentIndex(config->readNumEntry("Decoding Settings Tab", DcrawSettingsWidget::DEMOSAICING));
-    d->postProcessSettingsBox->setCurrentIndex(config->readNumEntry("Post Processing Settings Tab", 0));
+    d->tabView->setCurrentPage(group.readEntry("Settings Page", 0));
+    d->decodingSettingsBox->setCurrentIndex(group.readEntry("Decoding Settings Tab", (int)DcrawSettingsWidget::DEMOSAICING));
+    d->postProcessSettingsBox->setCurrentIndex(group.readEntry("Post Processing Settings Tab", 0));
 
     slotChannelChanged(d->channelCB->currentItem());
-    slotScaleChanged(d->scaleBG->selectedId());
+    slotScaleChanged(d->scaleBG->checkedId());
     slotColorsChanged(d->colorsCB->currentItem());
 }
 
 void RawSettingsBox::saveSettings()
 {
-    KConfig* config = kapp->config();
-    config->setGroup("RAW Import Settings");
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("RAW Import Settings");
 
-    config->writeEntry("Histogram Channel",          d->channelCB->currentItem());
-    config->writeEntry("Histogram Scale",            d->scaleBG->selectedId());
-    config->writeEntry("Histogram Color",            d->colorsCB->currentItem());
+    group.writeEntry("Histogram Channel",          d->channelCB->currentItem());
+    group.writeEntry("Histogram Scale",                  d->scaleBG->checkedId());
+    group.writeEntry("Histogram Color",            d->colorsCB->currentItem());
 
-    config->writeEntry("SixteenBitsImage",           d->decodingSettingsBox->sixteenBits());
-    config->writeEntry("White Balance",              d->decodingSettingsBox->whiteBalance());
-    config->writeEntry("Custom White Balance",       d->decodingSettingsBox->customWhiteBalance());
-    config->writeEntry("Custom White Balance Green", d->decodingSettingsBox->customWhiteBalanceGreen());
-    config->writeEntry("Four Color RGB",             d->decodingSettingsBox->useFourColor());
-    config->writeEntry("Unclip Color",               d->decodingSettingsBox->unclipColor());
-    config->writeEntry("Dont Stretch Pixels",        d->decodingSettingsBox->useDontStretchPixels());
-    config->writeEntry("Use Noise Reduction",        d->decodingSettingsBox->useNoiseReduction());
-    config->writeEntry("Use Black Point",            d->decodingSettingsBox->useBlackPoint());
-    config->writeEntry("Black Point",                d->decodingSettingsBox->blackPoint());
-    config->writeEntry("Use White Point",            d->decodingSettingsBox->useWhitePoint());
-    config->writeEntry("White Point",                d->decodingSettingsBox->whitePoint());
-    config->writeEntry("MedianFilterPasses",         d->decodingSettingsBox->medianFilterPasses());
-    config->writeEntry("NR Threshold",               d->decodingSettingsBox->NRThreshold());
-    config->writeEntry("EnableCACorrection",         d->decodingSettingsBox->useCACorrection());
-    config->writeEntry("caRedMultiplier",            d->decodingSettingsBox->caRedMultiplier());
-    config->writeEntry("caBlueMultiplier",           d->decodingSettingsBox->caBlueMultiplier());
-    config->writeEntry("Decoding Quality",           (int)d->decodingSettingsBox->quality());
-    config->writeEntry("Input Color Space",          (int)d->decodingSettingsBox->inputColorSpace());
-    config->writeEntry("Output Color Space",         (int)d->decodingSettingsBox->outputColorSpace());
-    config->writeEntry("Input Color Profile",        d->decodingSettingsBox->inputColorProfile());
-    config->writeEntry("Output Color Profile",       d->decodingSettingsBox->outputColorProfile());
+    group.writeEntry("SixteenBitsImage",           d->decodingSettingsBox->sixteenBits());
+    group.writeEntry("White Balance",              d->decodingSettingsBox->whiteBalance());
+    group.writeEntry("Custom White Balance",       d->decodingSettingsBox->customWhiteBalance());
+    group.writeEntry("Custom White Balance Green", d->decodingSettingsBox->customWhiteBalanceGreen());
+    group.writeEntry("Four Color RGB",             d->decodingSettingsBox->useFourColor());
+    group.writeEntry("Unclip Color",               d->decodingSettingsBox->unclipColor());
+    group.writeEntry("Dont Stretch Pixels",        d->decodingSettingsBox->useDontStretchPixels());
+    group.writeEntry("Use Noise Reduction",        d->decodingSettingsBox->useNoiseReduction());
+    group.writeEntry("Use Black Point",            d->decodingSettingsBox->useBlackPoint());
+    group.writeEntry("Black Point",                d->decodingSettingsBox->blackPoint());
+    group.writeEntry("Use White Point",            d->decodingSettingsBox->useWhitePoint());
+    group.writeEntry("White Point",                d->decodingSettingsBox->whitePoint());
+    group.writeEntry("MedianFilterPasses",         d->decodingSettingsBox->medianFilterPasses());
+    group.writeEntry("NR Threshold",               d->decodingSettingsBox->NRThreshold());
+    group.writeEntry("EnableCACorrection",         d->decodingSettingsBox->useCACorrection());
+    group.writeEntry("caRedMultiplier",            d->decodingSettingsBox->caRedMultiplier());
+    group.writeEntry("caBlueMultiplier",           d->decodingSettingsBox->caBlueMultiplier());
+    group.writeEntry("Decoding Quality",           (int)d->decodingSettingsBox->quality());
+    group.writeEntry("Input Color Space",          (int)d->decodingSettingsBox->inputColorSpace());
+    group.writeEntry("Output Color Space",         (int)d->decodingSettingsBox->outputColorSpace());
+    group.writeEntry("Input Color Profile",        d->decodingSettingsBox->inputColorProfile());
+    group.writeEntry("Output Color Profile",       d->decodingSettingsBox->outputColorProfile());
 
-    config->writeEntry("Brightness",                 d->brightnessInput->value());
-    config->writeEntry("Constrast",                  d->contrastInput->value());
-    config->writeEntry("Gamma",                      d->gammaInput->value());
-    config->writeEntry("Saturation",                 d->saturationInput->value());
-    config->writeEntry("FineExposure",               d->fineExposureInput->value());
+    group.writeEntry("Brightness",                 d->brightnessInput->value());
+    group.writeEntry("Constrast",                  d->contrastInput->value());
+    group.writeEntry("Gamma",                      d->gammaInput->value());
+    group.writeEntry("Saturation",                 d->saturationInput->value());
+    group.writeEntry("FineExposure",               d->fineExposureInput->value());
 
     for (int j = 0 ; j <= 17 ; j++)
     {
@@ -632,13 +633,13 @@ void RawSettingsBox::saveSettings()
             p.setX(p.x()*255);
             p.setY(p.y()*255);
         }
-        config->writeEntry(QString("CurveAjustmentPoint%1").arg(j), p);
+        group.writeEntry(QString("CurveAjustmentPoint%1").arg(j), p);
     }
 
-    config->writeEntry("Settings Page", d->tabView->currentPage());
-    config->writeEntry("Decoding Settings Tab", d->decodingSettingsBox->currentIndex());
-    config->writeEntry("Post Processing Settings Tab", d->postProcessSettingsBox->currentIndex());
-    config->sync();
+    group.writeEntry("Settings Page", d->tabView->currentPage());
+    group.writeEntry("Decoding Settings Tab", d->decodingSettingsBox->currentIndex());
+    group.writeEntry("Post Processing Settings Tab", d->postProcessSettingsBox->currentIndex());
+    group.sync();
 }
 
 DRawDecoding RawSettingsBox::settings()
@@ -714,13 +715,13 @@ void RawSettingsBox::slotChannelChanged(int channel)
             break;
     }
 
-    d->histogramWidget->repaint(false);
+    d->histogramWidget->repaint();
 }
 
 void RawSettingsBox::slotScaleChanged(int scale)
 {
     d->histogramWidget->m_scaleType = scale;
-    d->histogramWidget->repaint(false);
+    d->histogramWidget->repaint();
 }
 
 void RawSettingsBox::slotColorsChanged(int color)
@@ -740,7 +741,7 @@ void RawSettingsBox::slotColorsChanged(int color)
             break;
     }
 
-    d->histogramWidget->repaint(false);
+    d->histogramWidget->repaint();
 }
 
 } // NameSpace Digikam
