@@ -22,11 +22,9 @@
 
 // Qt includes.
 
-#include <qlabel.h>
-#include <qstring.h>
-#include <qlayout.h>
-#include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <QLabel>
+#include <QString>
+#include <QLayout>
 
 // KDE includes.
 
@@ -157,17 +155,17 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
     connect(d->tryBtn, SIGNAL(clicked()),
             this, SIGNAL(signalTryClicked()));
 
-    connect(d->user1Btn, SIGNAL(clicked()),
-            this, SIGNAL(signalUser1Clicked()));
-
-    connect(d->user2Btn, SIGNAL(clicked()),
-            this, SIGNAL(signalUser2Clicked()));
-
-    connect(d->user3Btn, SIGNAL(clicked()),
-            this, SIGNAL(signalUser3Clicked()));
-
     connect(d->defaultBtn, SIGNAL(clicked()),
             this, SLOT(slotDefaultSettings()));
+
+    connect(d->user1Btn, SIGNAL(clicked()),
+            this, SLOT(slotUser1()));
+
+    connect(d->user2Btn, SIGNAL(clicked()),
+            this, SLOT(slotUser2()));
+
+    connect(d->user3Btn, SIGNAL(clicked()),
+            this, SLOT(slotUser3()));
 }
 
 EditorToolSettings::~EditorToolSettings()
@@ -214,22 +212,6 @@ KPushButton* EditorToolSettings::button(int buttonCode) const
         return d->user3Btn;
 
     return 0;
-}
-
-void EditorToolSettings::slotDefaultSettings()
-{
-}
-
-void EditorToolSettings::setBusy(bool)
-{
-}
-
-void EditorToolSettings::saveSettings()
-{
-}
-
-void EditorToolSettings::readSettings()
-{
 }
 
 } // NameSpace Digikam
