@@ -26,7 +26,6 @@
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
-#include <qtimer.h>
 
 // KDE includes.
 
@@ -60,10 +59,7 @@ public:
     {
         previewWidget = 0;
         settingsBox   = 0;
-        timer         = 0;
     }
-
-    QTimer         *timer;
 
     RawSettingsBox *settingsBox;
 
@@ -74,8 +70,6 @@ RawImport::RawImport(const KURL& url, QObject *parent)
          : EditorTool(parent)
 {
     d = new RawImportPriv;
-
-    d->timer         = new QTimer(this);
     d->previewWidget = new RawPreview(url, 0);
     d->settingsBox   = new RawSettingsBox(url, 0);
 
@@ -108,9 +102,6 @@ RawImport::RawImport(const KURL& url, QObject *parent)
     connect(d->settingsBox, SIGNAL(signalPostProcessingChanged()),
             this, SLOT(slotTimer()));
 
-    connect(d->timer, SIGNAL(timeout()),
-            this, SLOT(slotPostProcessing()));
-
     connect(d->settingsBox, SIGNAL(signalUpdatePreview()),
             this, SLOT(slotUpdatePreview()));
 
@@ -125,7 +116,6 @@ RawImport::RawImport(const KURL& url, QObject *parent)
 
 RawImport::~RawImport()
 {
-    saveSettings();
     delete d;
 }
 
@@ -134,16 +124,6 @@ void RawImport::setBusy(bool val)
     if (val) d->previewWidget->setCursor(KCursor::waitCursor());
     else d->previewWidget->unsetCursor();
     d->settingsBox->setBusy(val);
-}
-
-void RawImport::readSettings()
-{
-    d->settingsBox->readSettings();
-}
-
-void RawImport::saveSettings()
-{
-    d->settingsBox->saveSettings();
 }
 
 DRawDecoding RawImport::rawDecodingSettings()
@@ -192,12 +172,7 @@ void RawImport::slotLoadingFailed()
     setBusy(false);
 }
 
-void RawImport::slotTimer()
-{
-    d->timer->start(500, true);
-}
-
-void RawImport::slotPostProcessing()
+void RawImport::slotEffect()
 {
     d->previewWidget->setPostProcessingSettings(rawDecodingSettings());
 }

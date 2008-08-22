@@ -56,9 +56,6 @@ public:
 
 private:
 
-    void readSettings();
-    void saveSettings();
-
     void setBusy(bool busy);
 
 private slots:
@@ -71,8 +68,7 @@ private slots:
     void slotUpdatePreview();
     void slotAbortPreview();
 
-    void slotTimer();
-    void slotPostProcessing();
+    void slotEffect();
     void slotDemosaicingChanged();
 
 private:
