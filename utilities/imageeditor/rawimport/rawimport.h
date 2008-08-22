@@ -49,15 +49,12 @@ class DIGIKAM_EXPORT RawImport : public EditorTool
 
 public:
 
-    RawImport(const KUrl& url, QObject *parent);
+    RawImport(const KURL& url, QObject *parent);
     ~RawImport();
 
     DRawDecoding rawDecodingSettings();
 
 private:
-
-    void readSettings();
-    void saveSettings();
 
     void setBusy(bool busy);
 
@@ -71,8 +68,7 @@ private slots:
     void slotUpdatePreview();
     void slotAbortPreview();
 
-    void slotTimer();
-    void slotPostProcessing();
+    void slotEffect();
     void slotDemosaicingChanged();
 
 private:
