@@ -143,7 +143,7 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
     gridSettings->addMultiCellWidget(d->btnBox2,   1, 1, 0, 1);
     gridSettings->addMultiCellWidget(d->btnBox1,   2, 2, 0, 1);
     gridSettings->setRowStretch(3, 10);
-    gridSettings->setSpacing(KDialog::spacingHint());
+    gridSettings->setSpacing(spacingHint());
     gridSettings->setMargin(0);
 
     // ---------------------------------------------------------------
