@@ -57,7 +57,6 @@
 #include <klocale.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
-#include <knuminput.h>
 #include <kseparator.h>
 #include <kstandarddirs.h>
 #include <kvbox.h>
@@ -65,6 +64,7 @@
 // LibKDcraw includes.
 
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/rcombobox.h>
 
 // Local includes.
 
@@ -198,13 +198,14 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     m_temperatureLabel    = new K3ActiveLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Color_temperature'>Color Temperature</a> "
                                                   " (K): </qt>"), gboxSettings);
     m_adjTemperatureLabel = new QLabel(i18n("Adjustment:"), gboxSettings);
-    m_temperatureInput    = new KDoubleNumInput(gboxSettings);
+    m_temperatureInput    = new RDoubleNumInput(gboxSettings);
     m_temperatureInput->setDecimals(1);
-    m_temperatureInput->setRange(2000.0, 12000.0, 10.0, true);
+    m_temperatureInput->input()->setRange(2000.0, 12000.0, 10.0);
+    m_temperatureInput->setDefaultValue(6500.0);
     m_temperatureInput->setWhatsThis( i18n("<p>Set here the white balance color temperature in Kelvin."));
 
     m_temperaturePresetLabel = new QLabel(i18n("Preset:"), gboxSettings);
-    m_temperaturePresetCB    = new QComboBox(gboxSettings);
+    m_temperaturePresetCB    = new RComboBox(gboxSettings);
     m_temperaturePresetCB->addItem( i18n("Candle") );
     m_temperaturePresetCB->addItem( i18n("40W Lamp") );
     m_temperaturePresetCB->addItem( i18n("100W Lamp") );
@@ -219,6 +220,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     m_temperaturePresetCB->addItem( i18n("Xenon Lamp") );
     m_temperaturePresetCB->addItem( i18n("Daylight D65") );
     m_temperaturePresetCB->addItem( i18n("None") );
+    m_temperaturePresetCB->setDefaultIndex(DaylightD65);
     m_temperaturePresetCB->setWhatsThis( i18n("<p>Select the white balance color temperature "
                                               "preset to use here:<p>"
                                               "<b>Candle</b>: candle light (1850K).<p>"
@@ -249,33 +251,38 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     // -------------------------------------------------------------
 
     m_blackLabel = new QLabel(i18n("Black point:"), gboxSettings);
-    m_blackInput = new KDoubleNumInput(gboxSettings);
+    m_blackInput = new RDoubleNumInput(gboxSettings);
     m_blackInput->setDecimals(2);
-    m_blackInput->setRange(0.0, 0.05, 0.01, true);
+    m_blackInput->input()->setRange(0.0, 0.05, 0.01, true);
     m_blackInput->setWhatsThis( i18n("<p>Set here the black level value."));
+    m_blackInput->setDefaultValue(0.0);
 
     m_darkLabel = new QLabel(i18n("Shadows:"), gboxSettings);
-    m_darkInput = new KDoubleNumInput(gboxSettings);
+    m_darkInput = new RDoubleNumInput(gboxSettings);
     m_darkInput->setDecimals(2);
-    m_darkInput->setRange(0.0, 1.0, 0.01, true);
+    m_darkInput->input()->setRange(0.0, 1.0, 0.01, true);
+    m_darkInput->setDefaultValue(0.5);
     m_darkInput->setWhatsThis( i18n("<p>Set here the shadows noise suppression level."));
 
     m_saturationLabel = new QLabel(i18n("Saturation:"), gboxSettings);
-    m_saturationInput = new KDoubleNumInput(gboxSettings);
+    m_saturationInput = new RDoubleNumInput(gboxSettings);
     m_saturationInput->setDecimals(2);
-    m_saturationInput->setRange(0.0, 2.0, 0.01, true);
+    m_saturationInput->input()->setRange(0.0, 2.0, 0.01, true);
+    m_saturationInput->setDefaultValue(1.0);
     m_saturationInput->setWhatsThis( i18n("<p>Set here the saturation value."));
 
     m_gammaLabel = new QLabel(i18n("Gamma:"), gboxSettings);
-    m_gammaInput = new KDoubleNumInput(gboxSettings);
+    m_gammaInput = new RDoubleNumInput(gboxSettings);
     m_gammaInput->setDecimals(2);
-    m_gammaInput->setRange(0.1, 3.0, 0.01, true);
+    m_gammaInput->input()->setRange(0.1, 3.0, 0.01, true);
+    m_gammaInput->setDefaultValue(1.0);
     m_gammaInput->setWhatsThis( i18n("<p>Set here the gamma correction value."));
 
     m_greenLabel = new QLabel(i18n("Green:"), gboxSettings);
-    m_greenInput = new KDoubleNumInput(gboxSettings);
+    m_greenInput = new RDoubleNumInput(gboxSettings);
     m_greenInput->setDecimals(2);
-    m_greenInput->setRange(0.2, 2.5, 0.01, true);
+    m_greenInput->input()->setRange(0.2, 2.5, 0.01, true);
+    m_greenInput->setDefaultValue(1.0);
     m_greenInput->setWhatsThis( i18n("<p>Set here the green component to set magenta color "
                                      "cast removal level."));
 
@@ -291,15 +298,17 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     m_autoAdjustExposure->setToolTip( i18n( "Auto exposure adjustments" ) );
     m_autoAdjustExposure->setWhatsThis( i18n("<p>With this button, you can automatically adjust Exposure "
                                              "and Black Point values."));
-    m_mainExposureInput = new KDoubleNumInput(gboxSettings);
+    m_mainExposureInput = new RDoubleNumInput(gboxSettings);
     m_mainExposureInput->setDecimals(2);
-    m_mainExposureInput->setRange(-6.0, 8.0, 0.1, true);
+    m_mainExposureInput->input()->setRange(-6.0, 8.0, 0.1, true);
+    m_mainExposureInput->setDefaultValue(0.0);
     m_mainExposureInput->setWhatsThis( i18n("<p>Set here the main exposure compensation value in E.V."));
 
     m_fineExposureLabel = new QLabel(i18n("Fine:"), gboxSettings);
-    m_fineExposureInput = new KDoubleNumInput(gboxSettings);
+    m_fineExposureInput = new RDoubleNumInput(gboxSettings);
     m_fineExposureInput->setDecimals(2);
-    m_fineExposureInput->setRange(-0.5, 0.5, 0.01, true);
+    m_fineExposureInput->input()->setRange(-0.5, 0.5, 0.01, true);
+    m_fineExposureInput->setDefaultValue(0.0);
     m_fineExposureInput->setWhatsThis( i18n("<p>This value in E.V will be added to main exposure "
                                             "compensation value to set fine exposure adjustment."));
 
@@ -699,25 +708,27 @@ void ImageEffect_WhiteBalance::finalRendering()
 
 void ImageEffect_WhiteBalance::resetValues()
 {
-    m_darkInput->blockSignals(true);
     m_blackInput->blockSignals(true);
-    m_mainExposureInput->blockSignals(true);
+    m_darkInput->blockSignals(true);
     m_fineExposureInput->blockSignals(true);
     m_gammaInput->blockSignals(true);
-    m_saturationInput->blockSignals(true);
     m_greenInput->blockSignals(true);
+    m_mainExposureInput->blockSignals(true);
+    m_saturationInput->blockSignals(true);
+    m_temperatureInput->blockSignals(true);
     m_temperaturePresetCB->blockSignals(true);
 
     // Neutral color temperature settings is D65.
-    m_darkInput->setValue(0.5);
-    m_blackInput->setValue(0.0);
-    m_mainExposureInput->setValue(0.0);
-    m_fineExposureInput->setValue(0.0);
-    m_gammaInput->setValue(1.0);
-    m_saturationInput->setValue(1.0);
-    m_greenInput->setValue(1.0);
-    m_temperaturePresetCB->setCurrentIndex(DaylightD65);
-    slotTemperaturePresetChanged(DaylightD65);
+    m_blackInput->slotReset();
+    m_darkInput->slotReset();
+    m_fineExposureInput->slotReset();
+    m_gammaInput->slotReset();
+    m_greenInput->slotReset();
+    m_mainExposureInput->slotReset();
+    m_saturationInput->slotReset();
+    m_temperaturePresetCB->slotReset();
+    slotTemperaturePresetChanged(m_temperaturePresetCB->defaultIndex());
+    m_temperatureInput->slotReset();
 
     m_previewWidget->resetSpotPosition();
     m_channelCB->setCurrentIndex(LuminosityChannel);
@@ -725,14 +736,16 @@ void ImageEffect_WhiteBalance::resetValues()
 
     m_histogramWidget->reset();
 
-    m_darkInput->blockSignals(false);
     m_blackInput->blockSignals(false);
-    m_mainExposureInput->blockSignals(false);
+    m_darkInput->blockSignals(false);
     m_fineExposureInput->blockSignals(false);
     m_gammaInput->blockSignals(false);
-    m_saturationInput->blockSignals(false);
     m_greenInput->blockSignals(false);
+    m_mainExposureInput->blockSignals(false);
+    m_saturationInput->blockSignals(false);
+    m_temperatureInput->blockSignals(false);
     m_temperaturePresetCB->blockSignals(false);
+
     slotEffect();
 }
 
@@ -744,14 +757,14 @@ void ImageEffect_WhiteBalance::readUserSettings()
     m_scaleBG->button(group.readEntry("Histogram Scale",
                       (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
 
-    m_darkInput->setValue(group.readEntry("Dark", 0.5));
-    m_blackInput->setValue(group.readEntry("Black", 0.0));
-    m_mainExposureInput->setValue(group.readEntry("MainExposure", 0.0));
-    m_fineExposureInput->setValue(group.readEntry("FineExposure", 0.0));
-    m_gammaInput->setValue(group.readEntry("Gamma", 1.0));
-    m_saturationInput->setValue(group.readEntry("Saturation", 1.0));
-    m_greenInput->setValue(group.readEntry("Green", 1.0));
-    m_temperatureInput->setValue(group.readEntry("Temperature", 6500.0));
+    m_blackInput->setValue(group.readEntry("Black", m_blackInput->defaultValue()));
+    m_mainExposureInput->setValue(group.readEntry("MainExposure", m_mainExposureInput->defaultValue()));
+    m_fineExposureInput->setValue(group.readEntry("FineExposure", m_fineExposureInput->defaultValue()));
+    m_gammaInput->setValue(group.readEntry("Gamma", m_gammaInput->defaultValue()));
+    m_saturationInput->setValue(group.readEntry("Saturation", m_saturationInput->defaultValue()));
+    m_greenInput->setValue(group.readEntry("Green", m_greenInput->defaultValue()));
+    m_temperatureInput->setValue(group.readEntry("Temperature", m_temperatureInput->defaultValue()));
+
     slotTemperatureChanged(m_temperatureInput->value());
     slotChannelChanged(m_channelCB->currentIndex());
     slotScaleChanged(m_scaleBG->checkedId());

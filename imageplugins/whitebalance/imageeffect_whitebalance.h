@@ -42,8 +42,13 @@ class QPushButton;
 class QToolButton;
 class QButtonGroup;
 
-class KDoubleNumInput;
 class K3ActiveLabel;
+
+namespace KDcrawIface
+{
+class RDoubleNumInput;
+class RComboBox;
+}
 
 namespace Digikam
 {
@@ -130,7 +135,6 @@ private:
     QToolButton                  *m_pickTemperature;
     QToolButton                  *m_autoAdjustExposure;
 
-    QComboBox                    *m_temperaturePresetCB;
     QComboBox                    *m_channelCB;
 
     QButtonGroup                 *m_scaleBG;
@@ -148,14 +152,16 @@ private:
     K3ActiveLabel                *m_exposureLabel;
     K3ActiveLabel                *m_temperatureLabel;
 
-    KDoubleNumInput              *m_temperatureInput;
-    KDoubleNumInput              *m_darkInput;
-    KDoubleNumInput              *m_blackInput;
-    KDoubleNumInput              *m_mainExposureInput;
-    KDoubleNumInput              *m_fineExposureInput;
-    KDoubleNumInput              *m_gammaInput;
-    KDoubleNumInput              *m_saturationInput;
-    KDoubleNumInput              *m_greenInput;
+    KDcrawIface::RComboBox       *m_temperaturePresetCB;
+
+    KDcrawIface::RDoubleNumInput *m_temperatureInput;
+    KDcrawIface::RDoubleNumInput *m_darkInput;
+    KDcrawIface::RDoubleNumInput *m_blackInput;
+    KDcrawIface::RDoubleNumInput *m_mainExposureInput;
+    KDcrawIface::RDoubleNumInput *m_fineExposureInput;
+    KDcrawIface::RDoubleNumInput *m_gammaInput;
+    KDcrawIface::RDoubleNumInput *m_saturationInput;
+    KDcrawIface::RDoubleNumInput *m_greenInput;
 
     Digikam::HistogramWidget     *m_histogramWidget;
 
