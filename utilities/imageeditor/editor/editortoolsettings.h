@@ -64,6 +64,13 @@ public:
     virtual void saveSettings(){};
     virtual void readSettings(){};
 
+    int marginHint();
+    int spacingHint();
+
+    QWidget *plainPage() const;
+
+    KPushButton* button(int buttonCode) const;
+
 signals:
 
     void signalOkClicked();
@@ -75,15 +82,6 @@ public slots:
     /** Re-implement this slots to reset all settings to defaults values
         when Default button is clicked */
     virtual void slotDefaultSettings(){};
-
-protected:
-
-    int marginHint();
-    int spacingHint();
-
-    QWidget *plainPage() const;
-
-    KPushButton* button(int buttonCode) const;
 
 protected slots:
 
