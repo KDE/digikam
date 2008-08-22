@@ -61,6 +61,7 @@
 #include <kapplication.h>
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
+#include <kpushbutton.h>
 
 // Local includes.
 
@@ -83,8 +84,8 @@ using namespace Digikam;
 namespace DigikamAdjustCurvesImagesPlugin
 {
 
-AdjustCurveDialog::AdjustCurveDialog(QObject* parent)
-                 : EditorTool(parent)
+AdjustCurveTool::AdjustCurveTool(QObject* parent)
+               : EditorTool(parent)
 {
     m_destinationPreviewData = 0L;
 
@@ -114,9 +115,22 @@ AdjustCurveDialog::AdjustCurveDialog(QObject* parent)
     // -------------------------------------------------------------
 
     EditorToolSettings *gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                                              EditorToolSettings::User2|
+                                                              EditorToolSettings::User3|
                                                               EditorToolSettings::Ok|
                                                               EditorToolSettings::Cancel);
-    QGridLayout* grid                = new QGridLayout(gboxSettings->plainPage(), 5, 5);
+
+    gboxSettings->button(EditorToolSettings::User2)->setText(i18n("Save As"));
+    gboxSettings->button(EditorToolSettings::User2)->setIconSet(SmallIconSet("filesaveas"));
+    QToolTip::add(gboxSettings->button(EditorToolSettings::User2), 
+                  i18n("<p>Save all filter parameters to settings text file."));
+
+    gboxSettings->button(EditorToolSettings::User3)->setText(i18n("Load"));
+    gboxSettings->button(EditorToolSettings::User3)->setIconSet(SmallIconSet("fileopen"));
+    QToolTip::add(gboxSettings->button(EditorToolSettings::User3), 
+                  i18n("<p>Load all filter parameters from settings text file."));
+
+    QGridLayout* grid = new QGridLayout(gboxSettings->plainPage(), 5, 5);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings->plainPage());
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -161,7 +175,7 @@ AdjustCurveDialog::AdjustCurveDialog(QObject* parent)
     m_scaleBG->setExclusive(true);
     m_scaleBG->setButton(CurvesWidget::LogScaleHistogram);
     m_scaleBG->setFrameShape(QFrame::NoFrame);
-    m_scaleBG->setInsideMargin( 0 );
+    m_scaleBG->setInsideMargin(0);
 
     QHBoxLayout* l1 = new QHBoxLayout();
     l1->addStretch(10);
@@ -328,7 +342,7 @@ AdjustCurveDialog::AdjustCurveDialog(QObject* parent)
             this, SLOT(slotPickerColorButtonActived()));
 }
 
-AdjustCurveDialog::~AdjustCurveDialog()
+AdjustCurveTool::~AdjustCurveTool()
 {
     m_histogramWidget->stopHistogramComputation();
 
@@ -340,14 +354,14 @@ AdjustCurveDialog::~AdjustCurveDialog()
     delete m_previewWidget;
 }
 
-void AdjustCurveDialog::slotPickerColorButtonActived()
+void AdjustCurveTool::slotPickerColorButtonActived()
 {
     // Save previous rendering mode and toggle to original image.
     m_currentPreviewMode = m_previewWidget->getRenderingPreviewMode();
     m_previewWidget->setRenderingPreviewMode(ImageGuideWidget::PreviewOriginalImage);
 }
 
-void AdjustCurveDialog::slotSpotColorChanged(const DColor &color)
+void AdjustCurveTool::slotSpotColorChanged(const DColor &color)
 {
     DColor sc = color;
 
@@ -400,12 +414,12 @@ void AdjustCurveDialog::slotSpotColorChanged(const DColor &color)
     slotEffect();
 }
 
-void AdjustCurveDialog::slotColorSelectedFromTarget( const DColor &color )
+void AdjustCurveTool::slotColorSelectedFromTarget( const DColor &color )
 {
     m_histogramWidget->setHistogramGuideByColor(color);
 }
 
-void AdjustCurveDialog::slotResetCurrentChannel()
+void AdjustCurveTool::slotResetCurrentChannel()
 {
     m_curvesWidget->curves()->curvesChannelReset(m_channelCB->currentItem());
 
@@ -414,7 +428,7 @@ void AdjustCurveDialog::slotResetCurrentChannel()
     m_histogramWidget->reset();
 }
 
-void AdjustCurveDialog::slotEffect()
+void AdjustCurveTool::slotEffect()
 {
     ImageIface* iface = m_previewWidget->imageIface();
     uchar *orgData             = iface->getPreviewImage();
@@ -444,7 +458,7 @@ void AdjustCurveDialog::slotEffect()
     delete [] orgData;
 }
 
-void AdjustCurveDialog::finalRendering()
+void AdjustCurveTool::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     ImageIface* iface = m_previewWidget->imageIface();
@@ -462,15 +476,14 @@ void AdjustCurveDialog::finalRendering()
     // Apply the lut to the image.
     m_curvesWidget->curves()->curvesLutProcess(orgData, desData, w, h);
 
-    iface->putOriginalImage(i18n("Adjust Curve"), desData);
+    iface->putOriginalImage(i18n("Adjust Curves"), desData);
     kapp->restoreOverrideCursor();
 
     delete [] orgData;
     delete [] desData;
-//FIXME    accept();
 }
 
-void AdjustCurveDialog::slotChannelChanged(int channel)
+void AdjustCurveTool::slotChannelChanged(int channel)
 {
     switch(channel)
     {
@@ -516,7 +529,7 @@ void AdjustCurveDialog::slotChannelChanged(int channel)
     m_histogramWidget->repaint(false);
 }
 
-void AdjustCurveDialog::slotScaleChanged(int scale)
+void AdjustCurveTool::slotScaleChanged(int scale)
 {
     m_curvesWidget->m_scaleType    = scale;
     m_histogramWidget->m_scaleType = scale;
@@ -524,7 +537,7 @@ void AdjustCurveDialog::slotScaleChanged(int scale)
     m_curvesWidget->repaint(false);
 }
 
-void AdjustCurveDialog::slotCurveTypeChanged(int type)
+void AdjustCurveTool::slotCurveTypeChanged(int type)
 {
     switch(type)
     {
@@ -546,10 +559,10 @@ void AdjustCurveDialog::slotCurveTypeChanged(int type)
     m_curvesWidget->curveTypeChanged();
 }
 
-void AdjustCurveDialog::readSettings()
+void AdjustCurveTool::readSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("adjustcurves Tool Dialog");
+    config->setGroup("adjustcurves Tool");
 
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", HistogramWidget::LogScaleHistogram));
@@ -583,10 +596,10 @@ void AdjustCurveDialog::readSettings()
     slotScaleChanged(m_scaleBG->selectedId());
 }
 
-void AdjustCurveDialog::saveSettings()
+void AdjustCurveTool::saveSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("adjustcurves Tool Dialog");
+    config->setGroup("adjustcurves Tool");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
 
@@ -611,7 +624,7 @@ void AdjustCurveDialog::saveSettings()
     config->sync();
 }
 
-void AdjustCurveDialog::resetSettings()
+void AdjustCurveTool::resetSettings()
 {
     for (int channel = 0 ; channel < 5 ; channel++)
        m_curvesWidget->curves()->curvesChannelReset(channel);
@@ -621,7 +634,7 @@ void AdjustCurveDialog::resetSettings()
 }
 
 // Load all settings.
-void AdjustCurveDialog::slotUser3()
+void AdjustCurveTool::slotUser3()
 {
     KURL loadCurvesFile;
 
@@ -643,7 +656,7 @@ void AdjustCurveDialog::slotUser3()
 }
 
 // Save all settings.
-void AdjustCurveDialog::slotUser2()
+void AdjustCurveTool::slotUser2()
 {
     KURL saveCurvesFile;
 

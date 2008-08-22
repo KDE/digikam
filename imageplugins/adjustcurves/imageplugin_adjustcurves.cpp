@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-12-01
- * Description : image histogram adjust curves. 
+ * Description : image histogram adjust curves.
  *
  * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -66,6 +66,6 @@ void ImagePlugin_AdjustCurves::setEnabledActions(bool enable)
 
 void ImagePlugin_AdjustCurves::slotCurvesAdjust()
 {
-    AdjustCurveDialog *curves = new AdjustCurveDialog(this);
+    AdjustCurveTool *curves = new AdjustCurveTool(this);
     loadTool(curves);
 }

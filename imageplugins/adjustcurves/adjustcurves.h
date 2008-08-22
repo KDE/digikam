@@ -46,14 +46,14 @@ class ImageWidget;
 namespace DigikamAdjustCurvesImagesPlugin
 {
 
-class AdjustCurveDialog : public Digikam::EditorTool
+class AdjustCurveTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    AdjustCurveDialog(QObject *parent);
-    ~AdjustCurveDialog();
+    AdjustCurveTool(QObject *parent);
+    ~AdjustCurveTool();
 
 private:
 
