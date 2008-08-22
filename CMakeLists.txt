@@ -485,7 +485,7 @@ SET(libdimgeditortools_SRCS
      ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageresize.cpp
    )
 
-SET(libdimgrawimport_SRCS
+SET(librawimport_SRCS
      ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawpostprocessing.cpp
      ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawimport.cpp
      ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawpreview.cpp
