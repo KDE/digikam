@@ -94,6 +94,7 @@ void EditorToolIface::loadTool(EditorTool* tool)
     d->prevTab = d->editor->rightSideBar()->getActiveTab();
     d->editor->rightSideBar()->appendTab(d->tool->toolSettings(), d->tool->toolIcon(), d->tool->toolName());
     d->editor->rightSideBar()->setActiveTab(d->tool->toolSettings());
+    d->editor->toggleActions(false);
 }
 
 void EditorToolIface::unLoadTool()
@@ -104,6 +105,7 @@ void EditorToolIface::unLoadTool()
     d->editor->editorStackView()->setToolView(0);
     d->editor->rightSideBar()->deleteTab(d->tool->toolSettings());
     d->editor->rightSideBar()->setActiveTab(d->prevTab);
+    d->editor->toggleActions(true);
     delete d->tool;
     d->tool = 0;
 }

@@ -74,9 +74,6 @@ public:
 
     virtual void applySettings(){};
     virtual bool setup(bool iccSetupPage=false)=0;
-    virtual Sidebar *rightSideBar() const=0;
-
-    EditorStackView* editorStackView() const;
 
 signals:
 
@@ -149,6 +146,8 @@ protected:
     bool checkPermissions(const KURL& url);
     bool moveFile();
 
+    EditorStackView* editorStackView() const;
+
     virtual void finishSaving(bool success);
 
     virtual void readSettings()               { readStandardSettings();     };
@@ -166,6 +165,8 @@ protected:
 
     virtual void saveIsComplete()=0;
     virtual void saveAsIsComplete()=0; 
+
+    virtual Sidebar *rightSideBar() const=0;
 
 protected slots:
 
@@ -246,6 +247,8 @@ private:
 private:
 
     EditorWindowPriv *d;
+
+    friend class EditorToolIface;
 };
 
 }  // namespace Digikam

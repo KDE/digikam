@@ -73,8 +73,6 @@ public:
 
     bool queryClose();
 
-    Sidebar* rightSideBar() const;
-
 signals:
 
     void signalFileDeleted(const KURL& url);
@@ -104,6 +102,8 @@ private:
     void deleteCurrentItem(bool ask, bool permanently);
 
     void slideShow(bool startWithCurrent, SlideShowSettings& settings);
+
+    Sidebar* rightSideBar() const;
 
     ImageWindow();
 
