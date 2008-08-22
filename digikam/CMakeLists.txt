@@ -93,6 +93,7 @@ SET(digikam_LIB_SRCS
                         ${libdimgcanvas_SRCS}
                         ${libdimgeditortools_SRCS}
                         ${libdimgeditor_SRCS}
+                        ${librawimport_SRCS}
    )
 
 KDE4_ADD_LIBRARY(digikam SHARED ${digikam_LIB_SRCS})
