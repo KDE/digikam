@@ -58,7 +58,7 @@ void RawPostProcessing::filterImage()
 }
 
 void RawPostProcessing::rawPostProcessing(uchar *data, int width, int height, bool sixteenBit, 
-                                          const DRawDecoding& settings)
+                                          const DRawDecoding& set)
 {
     if (!data || !width || !height)
     {
@@ -67,39 +67,41 @@ void RawPostProcessing::rawPostProcessing(uchar *data, int width, int height, bo
        return;
     }
 
-    if (!settings.postProcessingSettingsIsDirty())
+    DRawDecoding decoding = set;
+
+    if (!decoding.postProcessingSettingsIsDirty())
     {
        m_destImage = m_orgImage;
        return;
     }
 
-    if (settings.exposureComp != 0.0 || settings.saturation != 1.0)
+    if (decoding.exposureComp != 0.0 || decoding.saturation != 1.0)
     {
         WhiteBalance wb(sixteenBit);
         wb.whiteBalance(data, width, height, sixteenBit,
                         0.0,                     // black
-                        settings.exposureComp,   // exposure
+                        decoding.exposureComp,   // exposure
                         6500.0,                  // temperature (neutral)
                         1.0,                     // green
                         0.5,                     // dark
                         1.0,                     // gamma
-                        settings.saturation);    // saturation
+                        decoding.saturation);    // saturation
     }
 
-    if (settings.lightness != 0.0 || settings.contrast != 1.0 || settings.gamma != 1.0)
+    if (decoding.lightness != 0.0 || decoding.contrast != 1.0 || decoding.gamma != 1.0)
     {
         BCGModifier bcg;
-        bcg.setBrightness(settings.lightness);
-        bcg.setContrast(settings.contrast);
-        bcg.setGamma(settings.gamma);
+        bcg.setBrightness(decoding.lightness);
+        bcg.setContrast(decoding.contrast);
+        bcg.setGamma(decoding.gamma);
         bcg.applyBCG(data, width, height, sixteenBit);
     }
 
-    if (!settings.curveAdjust.isEmpty())
+    if (!decoding.curveAdjust.isEmpty())
     {
         DImg tmp(width, height, sixteenBit);
         ImageCurves curves(sixteenBit);
-        curves.setCurvePoints(ImageHistogram::ValueChannel, settings.curveAdjust);
+        curves.setCurvePoints(ImageHistogram::ValueChannel, decoding.curveAdjust);
         curves.curvesCalculateCurve(ImageHistogram::ValueChannel);
         curves.curvesLutSetup(ImageHistogram::AlphaChannel);
         curves.curvesLutProcess(data, tmp.bits(), width, height);
