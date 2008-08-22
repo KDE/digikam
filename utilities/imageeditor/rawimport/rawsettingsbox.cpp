@@ -217,7 +217,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
 
     QLabel *label10 = new QLabel(i18n("Colors:"), plainPage());
     label10->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-    d->colorsCB = new QComboBox(plainPage());
+    d->colorsCB     = new QComboBox(plainPage());
     d->colorsCB->addItem( i18n("Red") );
     d->colorsCB->addItem( i18n("Green") );
     d->colorsCB->addItem( i18n("Blue") );
@@ -515,10 +515,10 @@ void RawSettingsBox::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("RAW Import Settings");
 
-    d->channelCB->setCurrentItem(group.readEntry("Histogram Channel", (int)RawSettingsBoxPriv::LuminosityChannel));
+    d->channelCB->setCurrentIndex(group.readEntry("Histogram Channel", (int)RawSettingsBoxPriv::LuminosityChannel));
     d->scaleBG->button(group.readEntry("Histogram Scale",
-                      (int)Digikam::CurvesWidget::LogScaleHistogram))->setChecked(true);
-    d->colorsCB->setCurrentItem(group.readEntry("Histogram Color", (int)RawSettingsBoxPriv::AllColorsRed));
+                       (int)Digikam::CurvesWidget::LogScaleHistogram))->setChecked(true);
+    d->colorsCB->setCurrentIndex(group.readEntry("Histogram Color", (int)RawSettingsBoxPriv::AllColorsRed));
 
     d->decodingSettingsBox->setSixteenBits(group.readEntry("SixteenBitsImage", false));
     d->decodingSettingsBox->setWhiteBalance((DRawDecoding::WhiteBalance)
@@ -577,13 +577,13 @@ void RawSettingsBox::readSettings()
     }
     d->curveWidget->curves()->curvesCalculateCurve(ImageHistogram::ValueChannel);
 
-    d->tabView->setCurrentPage(group.readEntry("Settings Page", 0));
+    d->tabView->setCurrentIndex(group.readEntry("Settings Page", 0));
     d->decodingSettingsBox->setCurrentIndex(group.readEntry("Decoding Settings Tab", (int)DcrawSettingsWidget::DEMOSAICING));
     d->postProcessSettingsBox->setCurrentIndex(group.readEntry("Post Processing Settings Tab", 0));
 
-    slotChannelChanged(d->channelCB->currentItem());
+    slotChannelChanged(d->channelCB->currentIndex());
     slotScaleChanged(d->scaleBG->checkedId());
-    slotColorsChanged(d->colorsCB->currentItem());
+    slotColorsChanged(d->colorsCB->currentIndex());
 }
 
 void RawSettingsBox::saveSettings()
@@ -591,9 +591,9 @@ void RawSettingsBox::saveSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("RAW Import Settings");
 
-    group.writeEntry("Histogram Channel",          d->channelCB->currentItem());
-    group.writeEntry("Histogram Scale",                  d->scaleBG->checkedId());
-    group.writeEntry("Histogram Color",            d->colorsCB->currentItem());
+    group.writeEntry("Histogram Channel",          d->channelCB->currentIndex());
+    group.writeEntry("Histogram Scale",            d->scaleBG->checkedId());
+    group.writeEntry("Histogram Color",            d->colorsCB->currentIndex());
 
     group.writeEntry("SixteenBitsImage",           d->decodingSettingsBox->sixteenBits());
     group.writeEntry("White Balance",              (int)d->decodingSettingsBox->whiteBalance());
