@@ -387,15 +387,15 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     // ---------------------------------------------------------------
 
     button(Default)->setText(i18n("Reset"));
-    button(Default)->setIcon(KIcon(SmallIcon("reload_page")));
+    button(Default)->setIcon(KIcon(SmallIcon("document-revert")));
     button(Default)->setToolTip(i18n("<p>Reset all settings to default values."));
 
     button(Ok)->setText(i18n("Import"));
-    button(Ok)->setIcon(KIcon(SmallIcon("ok")));
+    button(Ok)->setIcon(KIcon(SmallIcon("dialog-ok")));
     button(Ok)->setToolTip(i18n("<p>Import image to editor using current settings."));
 
     button(Cancel)->setText(i18n("Use Default"));
-    button(Cancel)->setIcon(KIcon(SmallIcon("gohome")));
+    button(Cancel)->setIcon(KIcon(SmallIcon("go-home")));
     button(Cancel)->setToolTip(i18n("<p>Use general Raw decoding settings to load this image in editor."));
 
     // ---------------------------------------------------------------
@@ -417,7 +417,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     connect(d->channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
 
-    connect(d->scaleBG, SIGNAL(released(int)),
+    connect(d->scaleBG, SIGNAL(buttonReleased(int)),
             this, SLOT(slotScaleChanged(int)));
 
     connect(d->colorsCB, SIGNAL(activated(int)),
