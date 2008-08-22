@@ -73,8 +73,6 @@ public:
 
     bool queryClose();
 
-    Sidebar* rightSideBar() const;
-
 signals:
 
     void signalFileDeleted(const KUrl& url);

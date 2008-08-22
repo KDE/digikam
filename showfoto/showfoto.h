@@ -62,8 +62,6 @@ public:
     virtual void show();
     bool setup(bool iccSetupPage=false);
 
-    Digikam::Sidebar* rightSideBar() const;
-
 private:
 
     bool queryClose();

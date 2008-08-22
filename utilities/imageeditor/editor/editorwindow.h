@@ -74,13 +74,10 @@ public:
 
     virtual void applySettings(){};
     virtual bool setup(bool iccSetupPage=false)=0;
-    virtual Sidebar *rightSideBar() const=0;
-
-    EditorStackView* editorStackView() const;
 
 signals:
 
-    void signalSelectionChanged( const QRect & );
+    void signalSelectionChanged(const QRect&);
     void signalNoCurrentItem();
 
 protected:
@@ -148,6 +145,8 @@ protected:
     bool startingSaveAs(const KUrl& url);
     bool checkPermissions(const KUrl& url);
     bool moveFile();
+
+    EditorStackView* editorStackView() const;
 
     virtual void finishSaving(bool success);
 
@@ -254,6 +253,8 @@ private:
 private:
 
     EditorWindowPriv *d;
+
+    friend class EditorToolIface;
 };
 
 }  // namespace Digikam
