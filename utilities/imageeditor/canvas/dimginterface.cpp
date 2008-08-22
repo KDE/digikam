@@ -198,7 +198,6 @@ void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofil
     d->iofileSettings = iofileSettings;
     d->parent         = parent;
 
-/*FIXME
     if (d->iofileSettings->useRAWImport && DImg::fileFormat(d->filename) == DImg::RAW)
     {
         RawImport *rawImport = new RawImport(KUrl(d->filename), this);
@@ -211,7 +210,7 @@ void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofil
                 this, SLOT(slotUseDefaultSettings()));
 
     }
-    else*/
+    else
     {
         slotUseDefaultSettings();
     }
@@ -219,14 +218,13 @@ void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofil
 
 void DImgInterface::slotUseRawImportSettings()
 {
-/*  FIXME
     RawImport *rawImport = dynamic_cast<RawImport*>(EditorToolIface::editorToolIface()->currentTool());
 
     d->thread->load(LoadingDescription(d->filename,
                     rawImport->rawDecodingSettings()),
                     SharedLoadSaveThread::AccessModeReadWrite,
                     SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
-*/
+
     emit signalLoadingStarted(d->filename);
 
     EditorToolIface::editorToolIface()->unLoadTool();
