@@ -346,7 +346,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
 
     d->resetCurveBtn = new QToolButton(d->curveBox);
     d->resetCurveBtn->setFixedSize(11, 11);
-    d->resetCurveBtn->setIcon(SmallIcon("reload_page", 8));
+    d->resetCurveBtn->setIcon(SmallIcon("document-revert", 8));
     d->resetCurveBtn->setFocusPolicy(Qt::NoFocus);
     d->resetCurveBtn->setAutoRaise(true);
     d->resetCurveBtn->setToolTip(i18n("Reset curve to linear"));
