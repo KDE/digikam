@@ -705,25 +705,27 @@ void ImageEffect_WhiteBalance::finalRendering()
 
 void ImageEffect_WhiteBalance::resetValues()
 {
-    m_darkInput->blockSignals(true);
     m_blackInput->blockSignals(true);
-    m_mainExposureInput->blockSignals(true);
+    m_darkInput->blockSignals(true);
     m_fineExposureInput->blockSignals(true);
     m_gammaInput->blockSignals(true);
-    m_saturationInput->blockSignals(true);
     m_greenInput->blockSignals(true);
+    m_mainExposureInput->blockSignals(true);
+    m_saturationInput->blockSignals(true);
+    m_temperatureInput->blockSignals(true);
     m_temperaturePresetCB->blockSignals(true);
 
     // Neutral color temperature settings is D65
-    m_darkInput->slotReset();
     m_blackInput->slotReset();
-    m_mainExposureInput->slotReset();
+    m_darkInput->slotReset();
     m_fineExposureInput->slotReset();
     m_gammaInput->slotReset();
-    m_saturationInput->slotReset();
     m_greenInput->slotReset();
+    m_mainExposureInput->slotReset();
+    m_saturationInput->slotReset();
     m_temperaturePresetCB->slotReset();
     slotTemperaturePresetChanged(m_temperaturePresetCB->defaultItem());
+    m_temperatureInput->slotReset();
 
     m_previewWidget->resetSpotPosition();
     m_channelCB->setCurrentItem(LuminosityChannel);
@@ -731,14 +733,16 @@ void ImageEffect_WhiteBalance::resetValues()
 
     m_histogramWidget->reset();
 
-    m_darkInput->blockSignals(false);
     m_blackInput->blockSignals(false);
-    m_mainExposureInput->blockSignals(false);
+    m_darkInput->blockSignals(false);
     m_fineExposureInput->blockSignals(false);
     m_gammaInput->blockSignals(false);
-    m_saturationInput->blockSignals(false);
     m_greenInput->blockSignals(false);
+    m_mainExposureInput->blockSignals(false);
+    m_saturationInput->blockSignals(false);
+    m_temperatureInput->blockSignals(false);
     m_temperaturePresetCB->blockSignals(false);
+
     slotEffect();
 }
 
