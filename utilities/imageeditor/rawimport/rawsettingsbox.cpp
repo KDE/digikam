@@ -296,21 +296,21 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
 
     d->gammaLabel = new QLabel(i18n("Gamma:"), d->advExposureBox);
     d->gammaInput = new RDoubleNumInput(d->advExposureBox);
-    d->gammaInput->setPrecision(2);
+    d->gammaInput->setDecimals(2);
     d->gammaInput->setRange(0.1, 3.0, 0.01);
     d->gammaInput->setDefaultValue(1.0);
     d->gammaInput->input()->setWhatsThis(i18n("Set here the gamma adjustement of the image"));
 
     d->saturationLabel = new QLabel(i18n("Saturation:"), d->advExposureBox);
     d->saturationInput = new RDoubleNumInput(d->advExposureBox);
-    d->saturationInput->setPrecision(2);
+    d->saturationInput->setDecimals(2);
     d->saturationInput->setRange(0.0, 2.0, 0.01);
     d->saturationInput->setDefaultValue(1.0);
     d->saturationInput->input()->setWhatsThis(i18n("<p>Set here the color saturation correction."));
 
     d->fineExposureLabel = new QLabel(i18n("Exposure (E.V):"), d->advExposureBox);
     d->fineExposureInput = new RDoubleNumInput(d->advExposureBox);
-    d->fineExposureInput->setPrecision(2);
+    d->fineExposureInput->setDecimals(2);
     d->fineExposureInput->setRange(-3.0, 3.0, 0.1);
     d->fineExposureInput->setDefaultValue(0.0);
     d->fineExposureInput->input()->setWhatsThis(i18n("<p>This value in E.V will be used to perform "
@@ -596,7 +596,7 @@ void RawSettingsBox::saveSettings()
     group.writeEntry("Histogram Color",            d->colorsCB->currentItem());
 
     group.writeEntry("SixteenBitsImage",           d->decodingSettingsBox->sixteenBits());
-    group.writeEntry("White Balance",              d->decodingSettingsBox->whiteBalance());
+    group.writeEntry("White Balance",              (int)d->decodingSettingsBox->whiteBalance());
     group.writeEntry("Custom White Balance",       d->decodingSettingsBox->customWhiteBalance());
     group.writeEntry("Custom White Balance Green", d->decodingSettingsBox->customWhiteBalanceGreen());
     group.writeEntry("Four Color RGB",             d->decodingSettingsBox->useFourColor());
@@ -636,7 +636,7 @@ void RawSettingsBox::saveSettings()
         group.writeEntry(QString("CurveAjustmentPoint%1").arg(j), p);
     }
 
-    group.writeEntry("Settings Page", d->tabView->currentPage());
+    group.writeEntry("Settings Page", d->tabView->currentIndex());
     group.writeEntry("Decoding Settings Tab", d->decodingSettingsBox->currentIndex());
     group.writeEntry("Post Processing Settings Tab", d->postProcessSettingsBox->currentIndex());
     group.sync();
