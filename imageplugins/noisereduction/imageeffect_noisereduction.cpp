@@ -46,6 +46,10 @@
 #include <kconfig.h>
 #include <kglobal.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "version.h"
@@ -57,6 +61,8 @@
 #include "noisereduction.h"
 #include "imageeffect_noisereduction.h"
 #include "imageeffect_noisereduction.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamNoiseReductionImagesPlugin
 {

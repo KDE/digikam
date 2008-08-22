@@ -49,7 +49,6 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmenu.h>
-#include <knuminput.h>
 #include <kstandarddirs.h>
 #include <qprogressbar.h>
 

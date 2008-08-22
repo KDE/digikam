@@ -57,7 +57,6 @@
 #include <klocale.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
-#include <knuminput.h>
 #include <kselector.h>
 #include <kstandarddirs.h>
 

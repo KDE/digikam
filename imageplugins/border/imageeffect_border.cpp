@@ -43,6 +43,10 @@
 #include <kcolorbutton.h>
 #include <kglobal.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "version.h"
@@ -53,6 +57,8 @@
 #include "border.h"
 #include "imageeffect_border.h"
 #include "imageeffect_border.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamBorderImagesPlugin
 {

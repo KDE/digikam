@@ -38,6 +38,10 @@
 #include <kstandarddirs.h>
 #include <kglobal.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "version.h"
@@ -49,6 +53,8 @@
 #include "charcoal.h"
 #include "imageeffect_charcoal.h"
 #include "imageeffect_charcoal.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamCharcoalImagesPlugin
 {

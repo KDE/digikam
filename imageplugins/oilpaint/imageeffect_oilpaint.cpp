@@ -40,6 +40,10 @@
 #include <kconfig.h>
 #include <kglobal.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "version.h"
@@ -50,6 +54,8 @@
 #include "oilpaint.h"
 #include "imageeffect_oilpaint.h"
 #include "imageeffect_oilpaint.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamOilPaintImagesPlugin
 {

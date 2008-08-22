@@ -39,6 +39,10 @@ class QButtonGroup;
 class KGradientSelector;
 class KDoubleNumInput;
 
+namespace KDcrawIface
+{
+}
+
 namespace Digikam
 {
 class HistogramWidget;

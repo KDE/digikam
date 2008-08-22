@@ -50,6 +50,10 @@
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Digikam includes.
 
 #include "imageiface.h"
@@ -64,6 +68,8 @@
 #include "hspreviewwidget.h"
 #include "imageeffect_hsl.h"
 #include "imageeffect_hsl.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamImagesPluginCore
 {

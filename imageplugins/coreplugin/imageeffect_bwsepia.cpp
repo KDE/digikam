@@ -56,6 +56,10 @@
 #include <ktabwidget.h>
 #include <kvbox.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Digikam includes.
 
 #include "imageiface.h"
@@ -73,6 +77,8 @@
 
 #include "imageeffect_bwsepia.h"
 #include "imageeffect_bwsepia.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamImagesPluginCore
 {

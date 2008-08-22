@@ -42,6 +42,10 @@ class QCheckBox;
 class KComboBox;
 class KDoubleNumInput;
 
+namespace KDcrawIface
+{
+}
+
 namespace DigikamAutoCorrectionImagesPlugin
 {
 

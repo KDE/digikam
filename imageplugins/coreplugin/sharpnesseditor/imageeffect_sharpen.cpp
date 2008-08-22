@@ -49,6 +49,10 @@
 #include <kmessagebox.h>
 #include <kglobal.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "ddebug.h"
@@ -58,6 +62,8 @@
 #include "refocus.h"
 #include "imageeffect_sharpen.h"
 #include "imageeffect_sharpen.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamImagesPluginCore
 {

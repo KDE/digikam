@@ -44,6 +44,10 @@
 #include <kconfig.h>
 #include <kglobal.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "version.h"
@@ -55,6 +59,8 @@
 #include "freerotation.h"
 #include "imageeffect_freerotation.h"
 #include "imageeffect_freerotation.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamFreeRotationImagesPlugin
 {

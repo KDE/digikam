@@ -39,6 +39,10 @@
 #include <kconfig.h>
 #include <kglobal.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "version.h"
@@ -48,6 +52,8 @@
 #include "emboss.h"
 #include "imageeffect_emboss.h"
 #include "imageeffect_emboss.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamEmbossImagesPlugin
 {

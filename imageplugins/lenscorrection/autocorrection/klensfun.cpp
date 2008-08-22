@@ -35,6 +35,10 @@
 #include <kcombobox.h>
 #include <knuminput.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "ddebug.h"
@@ -43,6 +47,8 @@
 
 Q_DECLARE_METATYPE( DigikamAutoCorrectionImagesPlugin::KLFDeviceSelector::DevicePtr );
 Q_DECLARE_METATYPE( DigikamAutoCorrectionImagesPlugin::KLFDeviceSelector::LensPtr );
+
+using namespace KDcrawIface;
 
 namespace DigikamAutoCorrectionImagesPlugin
 {

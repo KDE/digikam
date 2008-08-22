@@ -36,6 +36,10 @@
 #include <kapplication.h>
 #include <kglobal.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Digikam includes.
 
 #include "ddebug.h"
@@ -46,6 +50,8 @@
 
 #include "imageeffect_blur.h"
 #include "imageeffect_blur.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamImagesPluginCore
 {

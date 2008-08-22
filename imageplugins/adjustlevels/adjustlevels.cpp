@@ -60,6 +60,10 @@
 #include <kselector.h>
 #include <kstandarddirs.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "version.h"
@@ -73,6 +77,8 @@
 #include "dimgimagefilters.h"
 #include "adjustlevels.h"
 #include "adjustlevels.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamAdjustLevelsImagesPlugin
 {

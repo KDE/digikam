@@ -41,6 +41,10 @@
 #include <kconfig.h>
 #include <kglobal.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "version.h"
@@ -52,6 +56,8 @@
 #include "sheartool.h"
 #include "imageeffect_sheartool.h"
 #include "imageeffect_sheartool.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamShearToolImagesPlugin
 {

@@ -46,6 +46,10 @@
 #include <knuminput.h>
 #include <kglobal.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "version.h"
@@ -56,6 +60,8 @@
 #include "lensdistortion.h"
 #include "imageeffect_lensdistortion.h"
 #include "imageeffect_lensdistortion.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamLensDistortionImagesPlugin
 {

@@ -71,6 +71,10 @@
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "version.h"
@@ -85,6 +89,8 @@
 #include "dimgimagefilters.h"
 #include "channelmixer.h"
 #include "channelmixer.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamChannelMixerImagesPlugin
 {

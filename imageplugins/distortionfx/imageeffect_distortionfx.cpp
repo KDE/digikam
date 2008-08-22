@@ -46,6 +46,10 @@
 #include <kstandarddirs.h>
 #include <kglobal.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "version.h"
@@ -57,6 +61,8 @@
 #include "distortionfx.h"
 #include "imageeffect_distortionfx.h"
 #include "imageeffect_distortionfx.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamDistortionFXImagesPlugin
 {

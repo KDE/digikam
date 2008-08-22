@@ -58,7 +58,6 @@
 #include <kfiledialog.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
-#include <knuminput.h>
 #include <kglobalsettings.h>
 #include <kpassivepopup.h>
 #include <kglobal.h>

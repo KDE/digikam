@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-12-21
- * Description : digiKam image editor tool to correct picture 
+ * Description : digiKam image editor tool to correct picture
  *               colors using an ICC color profile
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
@@ -38,6 +38,10 @@ class QToolBox;
 
 class KUrlRequester;
 class KIntNumInput;
+
+namespace KDcrawIface
+{
+}
 
 namespace Digikam
 {

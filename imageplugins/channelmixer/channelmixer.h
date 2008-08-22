@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef CHANNELMIXER_H
@@ -35,8 +35,12 @@ class QButtonGroup;
 
 class KDoubleNumInput;
 
+namespace KDcrawIface
+{
+}
+
 namespace Digikam
-{   
+{
 class HistogramWidget;
 class ColorGradientWidget;
 class ImageWidget;
@@ -62,7 +66,7 @@ private:
     void resetValues();
     void finalRendering();
     void adjustSliders();
-    
+
 private slots:
 
     void slotUser2();
@@ -73,11 +77,11 @@ private slots:
     void slotScaleChanged(int scale);
     void slotGainsChanged();
     void slotMonochromeActived(bool mono);
-    void slotColorSelectedFromTarget(const Digikam::DColor &color);    
+    void slotColorSelectedFromTarget(const Digikam::DColor &color);
 
 private:
 
-    enum ColorChannelGains 
+    enum ColorChannelGains
     {
         RedChannelGains=0,
         GreenChannelGains,
@@ -91,9 +95,9 @@ private:
     };
 
 private:
-    
+
     uchar                        *m_destinationPreviewData;
- 
+
     double                        m_redRedGain;
     double                        m_redGreenGain;
     double                        m_redBlueGain;
@@ -106,24 +110,24 @@ private:
     double                        m_blackRedGain;
     double                        m_blackGreenGain;
     double                        m_blackBlueGain;
-    
-    QComboBox                    *m_channelCB;    
-    
-    QButtonGroup                 *m_scaleBG;  
+
+    QComboBox                    *m_channelCB;
+
+    QButtonGroup                 *m_scaleBG;
 
     KDoubleNumInput              *m_redGain;
     KDoubleNumInput              *m_greenGain;
     KDoubleNumInput              *m_blueGain;
-    
+
     QPushButton                  *m_resetButton;
-    
+
     QCheckBox                    *m_preserveLuminosity;
     QCheckBox                    *m_monochrome;
-    
+
     Digikam::ColorGradientWidget *m_hGradient;
-    
+
     Digikam::HistogramWidget     *m_histogramWidget;
-    
+
     Digikam::ImageWidget         *m_previewWidget;
 };
 

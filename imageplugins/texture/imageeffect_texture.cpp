@@ -40,6 +40,10 @@
 #include <knuminput.h>
 #include <kglobal.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "version.h"
@@ -51,6 +55,8 @@
 #include "texture.h"
 #include "imageeffect_texture.h"
 #include "imageeffect_texture.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamTextureImagesPlugin
 {

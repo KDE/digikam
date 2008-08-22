@@ -51,6 +51,10 @@
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "version.h"
@@ -66,6 +70,8 @@
 #include "colorgradientwidget.h"
 #include "imageeffect_colorfx.h"
 #include "imageeffect_colorfx.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamColorFXImagesPlugin
 {

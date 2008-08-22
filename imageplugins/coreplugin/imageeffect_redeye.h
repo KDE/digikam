@@ -42,6 +42,10 @@ class KHueSaturationSelector;
 class KColorValueSelector;
 class KIntNumInput;
 
+namespace KDcrawIface
+{
+}
+
 namespace Digikam
 {
 class ColorGradientWidget;

@@ -65,6 +65,10 @@
 #include <kurlrequester.h>
 #include <kvbox.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Digikam includes.
 
 #include "ddebug.h"
@@ -86,6 +90,8 @@
 
 #include "imageeffect_iccproof.h"
 #include "imageeffect_iccproof.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamImagesPluginCore
 {

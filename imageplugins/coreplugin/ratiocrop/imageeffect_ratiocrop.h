@@ -40,6 +40,10 @@ class KIntNumInput;
 class KIntSpinBox;
 class KColorButton;
 
+namespace KDcrawIface
+{
+}
+
 namespace DigikamImagesPluginCore
 {
 

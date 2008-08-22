@@ -40,6 +40,10 @@
 #include <knuminput.h>
 #include <kglobal.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes.
 
 #include "version.h"
@@ -50,6 +54,8 @@
 #include "raindrop.h"
 #include "imageeffect_raindrop.h"
 #include "imageeffect_raindrop.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamRainDropImagesPlugin
 {
