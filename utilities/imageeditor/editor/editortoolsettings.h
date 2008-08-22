@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef RAWSETTINGSBOX_H
-#define RAWSETTINGSBOX_H
+#ifndef EDITORTOOLSETTINGS_H
+#define EDITORTOOLSETTINGS_H
 
 // Qt includes.
 
@@ -30,6 +30,8 @@
 // Local includes.
 
 #include "digikam_export.h"
+
+class KPushButton;
 
 namespace Digikam
 {
@@ -42,10 +44,29 @@ class DIGIKAM_EXPORT EditorToolSettings : public QWidget
 
 public:
 
-    EditorToolSettings(QWidget *parent);
+    enum ButtonCode
+    {
+        Default = 0x00000001,
+        Try     = 0x00000002,
+        Ok      = 0x00000004,
+        Cancel  = 0x00000008,
+        User1   = 0x00000010,
+        User2   = 0x00000020,
+        User3   = 0x00000040
+    };
+
+public:
+
+    EditorToolSettings(int buttonMask, QWidget *parent=0);
     ~EditorToolSettings();
 
-    virtual void setDefaultSettings()=0;
+    int marginHint();
+    int spacingHint();
+
+    QWidget *plainPage() const;
+
+    KPushButton* button(int buttonCode) const;
+
     virtual void setBusy(bool b)=0;
 
     virtual void saveSettings()=0;
@@ -57,6 +78,15 @@ signals:
     void signalCancelClicked();
     void signalTryClicked();
     void signalDefaultClicked();
+    void signalUser1Clicked();
+    void signalUser2Clicked();
+    void signalUser3Clicked();
+
+protected slots:
+
+    /** Re-implement this slots to reset all settings to defaults values
+        when Default button is clicked */
+    virtual void slotDefaultSettings();
 
 private:
 
@@ -65,4 +95,4 @@ private:
 
 } // NameSpace Digikam
 
-#endif // RAWSETTINGSBOX_H
+#endif // EDITORTOOLSETTINGS_H
