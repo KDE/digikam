@@ -257,9 +257,9 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     d->updateBtn->setEnabled(false);
     d->updateBtn->setToolTip(i18n("Generate a Raw image preview using current settings."));
 
-    rawGrid->addMultiCellWidget(d->decodingSettingsBox, 0, 0, 0, 2);
-    rawGrid->addMultiCellWidget(d->abortBtn,            1, 1, 0, 0);
-    rawGrid->addMultiCellWidget(d->updateBtn,           1, 1, 2, 2);
+    rawGrid->addWidget(d->decodingSettingsBox, 0, 0, 1, 3);
+    rawGrid->addWidget(d->abortBtn,            1, 0, 1, 1);
+    rawGrid->addWidget(d->updateBtn,           1, 2, 1, 1);
     rawGrid->setColStretch(1, 10);
     rawGrid->setSpacing(spacingHint());
     rawGrid->setMargin(spacingHint());
@@ -309,16 +309,16 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     d->fineExposureInput->input()->setWhatsThis(i18n("<p>This value in E.V will be used to perform "
                                                      "an exposure compensation of the image."));
 
-    advExposureLayout->addMultiCellWidget(d->brightnessLabel,   0, 0, 0, 0);
-    advExposureLayout->addMultiCellWidget(d->brightnessInput,   0, 0, 1, 2);
-    advExposureLayout->addMultiCellWidget(d->contrastLabel,     1, 1, 0, 0);
-    advExposureLayout->addMultiCellWidget(d->contrastInput,     1, 1, 1, 2);
-    advExposureLayout->addMultiCellWidget(d->gammaLabel,        2, 2, 0, 0);
-    advExposureLayout->addMultiCellWidget(d->gammaInput,        2, 2, 1, 2);
-    advExposureLayout->addMultiCellWidget(d->saturationLabel,   3, 3, 0, 0);
-    advExposureLayout->addMultiCellWidget(d->saturationInput,   3, 3, 1, 2);
-    advExposureLayout->addMultiCellWidget(d->fineExposureLabel, 4, 4, 0, 0);
-    advExposureLayout->addMultiCellWidget(d->fineExposureInput, 4, 4, 1, 2);
+    advExposureLayout->addWidget(d->brightnessLabel,   0, 0, 1, 1);
+    advExposureLayout->addWidget(d->brightnessInput,   0, 1, 1, 2);
+    advExposureLayout->addWidget(d->contrastLabel,     1, 0, 1, 1);
+    advExposureLayout->addWidget(d->contrastInput,     1, 1, 1, 2);
+    advExposureLayout->addWidget(d->gammaLabel,        2, 0, 1, 1);
+    advExposureLayout->addWidget(d->gammaInput,        2, 1, 1, 2);
+    advExposureLayout->addWidget(d->saturationLabel,   3, 0, 1, 1);
+    advExposureLayout->addWidget(d->saturationInput,   3, 1, 1, 2);
+    advExposureLayout->addWidget(d->fineExposureLabel, 4, 0, 1, 1);
+    advExposureLayout->addWidget(d->fineExposureInput, 4, 1, 1, 2);
     advExposureLayout->setRowStretch(5, 10);
     advExposureLayout->setSpacing(0);
     advExposureLayout->setMargin(spacingHint());
@@ -350,12 +350,12 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     ColorGradientWidget *hGradient = new ColorGradientWidget(ColorGradientWidget::Horizontal, 10, d->curveBox);
     hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
-    curveLayout->addMultiCellWidget(vGradient,        0, 0, 0, 0);
-    curveLayout->addMultiCellWidget(spacev,           0, 0, 1, 1);
-    curveLayout->addMultiCellWidget(d->curveWidget,   0, 0, 2, 2);
-    curveLayout->addMultiCellWidget(spaceh,           1, 1, 2, 2);
-    curveLayout->addMultiCellWidget(d->resetCurveBtn, 1, 2, 0, 1);
-    curveLayout->addMultiCellWidget(hGradient,        2, 2, 2, 2);
+    curveLayout->addWidget(vGradient,        0, 0, 1, 1);
+    curveLayout->addWidget(spacev,           0, 1, 1, 1);
+    curveLayout->addWidget(d->curveWidget,   0, 2, 1, 1);
+    curveLayout->addWidget(spaceh,           1, 2, 1, 1);
+    curveLayout->addWidget(d->resetCurveBtn, 1, 0, 2, 2);
+    curveLayout->addWidget(hGradient,        2, 2, 1, 1);
     curveLayout->setRowStretch(3, 10);
     curveLayout->setSpacing(0);
     curveLayout->setMargin(spacingHint());
@@ -393,13 +393,13 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    gridSettings->addMultiCellWidget(label1,       0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(d->channelCB, 0, 0, 1, 1);
-    gridSettings->addMultiCellWidget(d->scaleBG,   0, 0, 4, 4);
-    gridSettings->addMultiCellWidget(label10,      1, 1, 0, 0);
-    gridSettings->addMultiCellWidget(d->colorsCB,  1, 1, 1, 1);
-    gridSettings->addMultiCellWidget(histoBox,     2, 3, 0, 4);
-    gridSettings->addMultiCellWidget(d->tabView,   4, 4, 0, 4);
+    gridSettings->addWidget(label1,       0, 0, 1, 1);
+    gridSettings->addWidget(d->channelCB, 0, 1, 1, 1);
+    gridSettings->addWidget(d->scaleBG,   0, 4, 1, 1);
+    gridSettings->addWidget(label10,      1, 0, 1, 1);
+    gridSettings->addWidget(d->colorsCB,  1, 1, 1, 1);
+    gridSettings->addWidget(histoBox,     2, 0, 2, 5);
+    gridSettings->addWidget(d->tabView,   4, 0, 1, 5);
     gridSettings->setRowStretch(5, 10);
     gridSettings->setColStretch(2, 10);
     gridSettings->setSpacing(spacingHint());
