@@ -33,10 +33,10 @@ class QComboBox;
 class QPushButton;
 class QButtonGroup;
 
-class KDoubleNumInput;
 
 namespace KDcrawIface
 {
+class RDoubleNumInput;
 }
 
 namespace Digikam
@@ -115,14 +115,14 @@ private:
 
     QButtonGroup                 *m_scaleBG;
 
-    KDoubleNumInput              *m_redGain;
-    KDoubleNumInput              *m_greenGain;
-    KDoubleNumInput              *m_blueGain;
-
     QPushButton                  *m_resetButton;
 
     QCheckBox                    *m_preserveLuminosity;
     QCheckBox                    *m_monochrome;
+
+    KDcrawIface::RDoubleNumInput *m_redGain;
+    KDcrawIface::RDoubleNumInput *m_greenGain;
+    KDcrawIface::RDoubleNumInput *m_blueGain;
 
     Digikam::ColorGradientWidget *m_hGradient;
 

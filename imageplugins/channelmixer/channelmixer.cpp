@@ -66,7 +66,6 @@
 #include <klocale.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
-#include <knuminput.h>
 #include <kselector.h>
 #include <kstandarddirs.h>
 #include <kvbox.h>
@@ -193,23 +192,26 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     QLabel *redLabel = new QLabel(i18n("Red:"), gboxSettings);
-    m_redGain = new KDoubleNumInput(gboxSettings);
+    m_redGain = new RDoubleNumInput(gboxSettings);
     m_redGain->setDecimals(0);
-    m_redGain->setRange(-200.0, 200.0, 1, true);
+    m_redGain->setRange(-200.0, 200.0, 1);
+    m_redGain->setDefaultValue(0);
     m_redGain->setWhatsThis( i18n("<p>Select the red color gain in percent for "
                                   "the current channel here."));
 
     QLabel *blueLabel = new QLabel(i18n("Blue:"), gboxSettings);
-    m_greenGain = new KDoubleNumInput(gboxSettings);
+    m_greenGain = new RDoubleNumInput(gboxSettings);
     m_greenGain->setDecimals(0);
-    m_greenGain->setRange(-200.0, 200.0, 1, true);
+    m_greenGain->setRange(-200.0, 200.0, 1);
+    m_greenGain->setDefaultValue(0);
     m_greenGain->setWhatsThis( i18n("<p>Select the green color gain in percent "
                                     "for the current channel here."));
 
     QLabel *greenLabel = new QLabel(i18n("Green:"), gboxSettings);
-    m_blueGain = new KDoubleNumInput(gboxSettings);
+    m_blueGain = new RDoubleNumInput(gboxSettings);
     m_blueGain->setDecimals(0);
-    m_blueGain->setRange(-200.0, 200.0, 1, true);
+    m_blueGain->setRange(-200.0, 200.0, 1);
+    m_blueGain->setDefaultValue(0);
     m_blueGain->setWhatsThis( i18n("<p>Select the blue color gain in percent for "
                                    "the current channel here."));
 
