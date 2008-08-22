@@ -60,6 +60,24 @@ public:
     EditorToolSettings(int buttonMask, QWidget *parent=0);
     ~EditorToolSettings();
 
+    virtual void setBusy(bool){};
+    virtual void saveSettings(){};
+    virtual void readSettings(){};
+
+signals:
+
+    void signalOkClicked();
+    void signalCancelClicked();
+    void signalTryClicked();
+
+public slots:
+
+    /** Re-implement this slots to reset all settings to defaults values
+        when Default button is clicked */
+    virtual void slotDefaultSettings(){};
+
+protected:
+
     int marginHint();
     int spacingHint();
 
@@ -67,25 +85,11 @@ public:
 
     KPushButton* button(int buttonCode) const;
 
-    virtual void setBusy(bool);
-    virtual void saveSettings();
-    virtual void readSettings();
+protected slots:
 
-signals:
-
-    void signalOkClicked();
-    void signalCancelClicked();
-    void signalTryClicked();
-    void signalDefaultClicked();
-    void signalUser1Clicked();
-    void signalUser2Clicked();
-    void signalUser3Clicked();
-
-public slots:
-
-    /** Re-implement this slots to reset all settings to defaults values
-        when Default button is clicked */
-    virtual void slotDefaultSettings();
+    virtual void slotUser1(){};
+    virtual void slotUser2(){};
+    virtual void slotUser3(){};
 
 private:
 
