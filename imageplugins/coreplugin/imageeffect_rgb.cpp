@@ -225,21 +225,21 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
     connect(m_rSlider, SIGNAL(valueChanged(int)),
-            m_rInput->input(), SLOT(setValue(int)));
+            m_rInput, SLOT(setValue(int)));
     connect(m_rInput, SIGNAL(valueChanged (int)),
             m_rSlider, SLOT(setValue(int)));
     connect(m_rInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotTimer()));
 
     connect(m_gSlider, SIGNAL(valueChanged(int)),
-            m_gInput->input(), SLOT(setValue(int)));
+            m_gInput, SLOT(setValue(int)));
     connect(m_gInput, SIGNAL(valueChanged (int)),
             m_gSlider, SLOT(setValue(int)));
     connect(m_gInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotTimer()));
 
     connect(m_bSlider, SIGNAL(valueChanged(int)),
-            m_bInput->input(), SLOT(setValue(int)));
+            m_bInput, SLOT(setValue(int)));
     connect(m_bInput, SIGNAL(valueChanged (int)),
             m_bSlider, SLOT(setValue(int)));
     connect(m_bInput, SIGNAL(valueChanged (int)),
