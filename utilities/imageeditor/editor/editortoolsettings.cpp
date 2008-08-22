@@ -89,7 +89,7 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    QGridLayout* gridSettings = new QGridLayout(this, 3, 2);
+    QGridLayout* gridSettings = new QGridLayout(this);
 
     d->plainPage = new QWidget(this);
     d->btnBox1   = new KHBox(this);
@@ -104,8 +104,8 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
 
     d->tryBtn = new KPushButton(d->btnBox1);
     d->tryBtn->setText(i18n("Try"));
-    d->tryBtn->setIconSet(SmallIconSet("try"));
-    QToolTip::add(d->tryBtn, i18n("<p>Try all settings."));
+    d->tryBtn->setIcon(KIcon(SmallIcon("try")));
+    d->tryBtn->setToolTip(i18n("<p>Try all settings."));
     if (!(buttonMask & Try))
         d->tryBtn->hide();
 
