@@ -339,11 +339,6 @@ ShowFoto::~ShowFoto()
     delete d;
 }
 
-Digikam::Sidebar* ShowFoto::rightSideBar() const
-{
-    return dynamic_cast<Digikam::Sidebar*>(d->rightSideBar);
-}
-
 bool ShowFoto::queryClose()
 {
     // wait if a save operation is currently running
