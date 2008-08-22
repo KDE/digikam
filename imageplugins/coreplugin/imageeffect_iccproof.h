@@ -178,13 +178,13 @@ private:
 
     QToolBox                       *m_toolBoxWidgets;
 
-    KDcrawIface::RIntNumInput      *m_cInput;
-
-    KDcrawIface::RComboBox         *m_renderingIntentsCB;
-
     KURLRequester                  *m_inProfilesPath;
     KURLRequester                  *m_spaceProfilePath;
     KURLRequester                  *m_proofProfilePath;
+
+    KDcrawIface::RIntNumInput      *m_cInput;
+
+    KDcrawIface::RComboBox         *m_renderingIntentsCB;
 
     Digikam::DImg                  *m_originalImage;
 
