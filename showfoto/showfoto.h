@@ -91,7 +91,7 @@ private:
     void openFolder(const KUrl& url);
 
     Digikam::ThumbBarView *thumbBar() const;
-    Digikam::Sidebar *rightSidebar() const;
+    Digikam::Sidebar *rightSideBar() const;
 
 private slots:
 

@@ -103,7 +103,7 @@ private:
     void slideShow(bool startWithCurrent, SlideShowSettings& settings);
 
     ThumbBarView *thumbBar() const;
-    Sidebar *rightSidebar() const;
+    Sidebar *rightSideBar() const;
 
     ImageWindow();
 

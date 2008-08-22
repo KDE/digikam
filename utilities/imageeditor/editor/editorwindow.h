@@ -157,7 +157,7 @@ protected:
     void toggleGUI2FullScreen();
 
     virtual ThumbBarView *thumbBar() const=0;
-    virtual Sidebar *rightSidebar() const=0;
+    virtual Sidebar *rightSideBar() const=0;
 
     virtual void slideShow(bool startWithCurrent, SlideShowSettings& settings)=0;
 

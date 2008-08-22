@@ -1872,7 +1872,7 @@ void EditorWindow::toggleGUI2FullScreen()
 {
     if (m_fullScreen)
     {
-        rightSidebar()->restore();
+        rightSideBar()->restore();
 
         // If "Show Thumbnails" option is checked, restore the thumbbar.
         if (m_showBarAction->isChecked())
@@ -1880,7 +1880,7 @@ void EditorWindow::toggleGUI2FullScreen()
     }
     else
     {
-        rightSidebar()->backup();
+        rightSideBar()->backup();
 
         // If "Show Thumbnails" option is checked, catch it if necessary.
         if (m_showBarAction->isChecked())
