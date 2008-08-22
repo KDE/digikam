@@ -26,8 +26,7 @@
 
 // Qt includes.
 
-#include <qimage.h>
-//Added by qt3to4:
+#include <QImage>
 #include <QPixmap>
 #include <QResizeEvent>
 

@@ -22,17 +22,14 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <qlayout.h>
-#include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qhbuttongroup.h>
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qvbox.h>
-#include <qtoolbutton.h>
-#include <qtoolbox.h>
-#include <qpushbutton.h>
+#include <QString>
+#include <QLayout.h>
+#include <QHButtonGroup>
+#include <QComboBox>
+#include <QLabel>
+#include <QToolButton>
+#include <QToolBox>
+#include <QPushButton>
 
 // KDE includes.
 
@@ -43,6 +40,7 @@
 #include <kconfig.h>
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
+#include <kvbox.h>
 
 // LibKDcraw includes.
 

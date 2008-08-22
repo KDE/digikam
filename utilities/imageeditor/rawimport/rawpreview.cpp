@@ -23,13 +23,11 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <qpainter.h>
-#include <qtoolbutton.h>
-#include <qtooltip.h>
-#include <qpixmap.h>
-#include <qfileinfo.h>
-//Added by qt3to4:
+#include <QString>
+#include <QPainter>
+#include <QToolButton>
+#include <QPixmap>
+#include <QFileInfo>
 #include <QResizeEvent>
 
 // KDE includes.
