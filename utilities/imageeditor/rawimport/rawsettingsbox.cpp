@@ -38,7 +38,6 @@
 
 #include <kapplication.h>
 #include <ktabwidget.h>
-#include <kdialog.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kconfig.h>
@@ -118,9 +117,6 @@ public:
         rawdecodingBox         = 0;
         brightnessLabel        = 0;
         brightnessInput        = 0;
-        importBtn              = 0;
-        useDefaultBtn          = 0;
-        resetBtn               = 0;
     }
 
     QWidget             *advExposureBox;
@@ -138,9 +134,6 @@ public:
 
     QHButtonGroup       *scaleBG;
 
-    QPushButton         *importBtn;
-    QPushButton         *useDefaultBtn;
-    QPushButton         *resetBtn;
     QPushButton         *abortBtn;
     QPushButton         *updateBtn;
 
@@ -169,17 +162,17 @@ public:
 };
 
 RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
-              : QWidget(parent)
+              : EditorToolSettings(Default|Ok|Cancel, parent)
 {
     d = new RawSettingsBoxPriv;
 
     // ---------------------------------------------------------------
 
-    QGridLayout* gridSettings = new QGridLayout(this, 6, 4);
+    QGridLayout* gridSettings = new QGridLayout(plainPage(), 5, 4);
 
-    QLabel *label1 = new QLabel(i18n("Channel:"), this);
+    QLabel *label1 = new QLabel(i18n("Channel:"), plainPage());
     label1->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-    d->channelCB   = new QComboBox( false, this );
+    d->channelCB   = new QComboBox(false, plainPage());
     d->channelCB->insertItem( i18n("Luminosity") );
     d->channelCB->insertItem( i18n("Red") );
     d->channelCB->insertItem( i18n("Green") );
@@ -192,7 +185,7 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
                                        "<b>Blue</b>: display the blue image-channel values.<p>"
                                        "<b>Colors</b>: Display all color channel values at the same time."));
 
-    d->scaleBG = new QHButtonGroup(this);
+    d->scaleBG = new QHButtonGroup(plainPage());
     d->scaleBG->setExclusive(true);
     d->scaleBG->setFrameShape(QFrame::NoFrame);
     d->scaleBG->setInsideMargin( 0 );
@@ -217,9 +210,9 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
     logHistoButton->setToggleButton(true);
 
-    QLabel *label10 = new QLabel(i18n("Colors:"), this);
+    QLabel *label10 = new QLabel(i18n("Colors:"), plainPage());
     label10->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-    d->colorsCB = new QComboBox( false, this );
+    d->colorsCB = new QComboBox(false, plainPage());
     d->colorsCB->insertItem( i18n("Red") );
     d->colorsCB->insertItem( i18n("Green") );
     d->colorsCB->insertItem( i18n("Blue") );
@@ -231,7 +224,7 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    QVBox *histoBox    = new QVBox(this);
+    QVBox *histoBox    = new QVBox(plainPage());
     d->histogramWidget = new HistogramWidget(256, 140, histoBox, false, true, true);
     QWhatsThis::add(d->histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
@@ -243,7 +236,7 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    d->tabView             = new KTabWidget(this);
+    d->tabView             = new KTabWidget(plainPage());
     d->rawdecodingBox      = new QWidget(d->tabView);
     QGridLayout* rawGrid   = new QGridLayout(d->rawdecodingBox, 1, 2);
     d->decodingSettingsBox = new DcrawSettingsWidget(d->rawdecodingBox, true, true, false);
@@ -270,8 +263,8 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     rawGrid->addMultiCellWidget(d->abortBtn,            1, 1, 0, 0);
     rawGrid->addMultiCellWidget(d->updateBtn,           1, 1, 2, 2);
     rawGrid->setColStretch(1, 10);
-    rawGrid->setSpacing(KDialog::spacingHint());
-    rawGrid->setMargin(KDialog::spacingHint());
+    rawGrid->setSpacing(spacingHint());
+    rawGrid->setMargin(spacingHint());
 
     // ---------------------------------------------------------------
 
@@ -330,7 +323,7 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     advExposureLayout->addMultiCellWidget(d->fineExposureInput, 4, 4, 1, 2);
     advExposureLayout->setRowStretch(5, 10);
     advExposureLayout->setSpacing(0);
-    advExposureLayout->setMargin(KDialog::spacingHint());
+    advExposureLayout->setMargin(spacingHint());
 
     // ---------------------------------------------------------------
 
@@ -367,7 +360,7 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     curveLayout->addMultiCellWidget(hGradient,        2, 2, 2, 2);
     curveLayout->setRowStretch(3, 10);
     curveLayout->setSpacing(0);
-    curveLayout->setMargin(KDialog::spacingHint());
+    curveLayout->setMargin(spacingHint());
 
     // ---------------------------------------------------------------
 
@@ -388,26 +381,17 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    QHBox *btnBox = new QHBox(this);
+    button(Default)->setText(i18n("Reset"));
+    button(Default)->setIconSet(SmallIconSet("reload_page"));
+    QToolTip::add(button(Default), i18n("<p>Reset all settings to default values."));
 
-    d->resetBtn = new QPushButton(btnBox);
-    d->resetBtn->setText(i18n("Reset"));
-    d->resetBtn->setIconSet(SmallIconSet("reload_page"));
-    QToolTip::add(d->resetBtn, i18n("<p>Reset all settings to default values."));
+    button(Ok)->setText(i18n("Import"));
+    button(Ok)->setIconSet(SmallIconSet("ok"));
+    QToolTip::add(button(Ok), i18n("<p>Import image to editor using current settings."));
 
-    QLabel *space2 = new QLabel(btnBox);
-
-    d->importBtn = new QPushButton(btnBox);
-    d->importBtn->setText(i18n("Import"));
-    d->importBtn->setIconSet(SmallIconSet("ok"));
-    QToolTip::add(d->importBtn, i18n("<p>Import image to editor using current settings."));
-
-    d->useDefaultBtn = new QPushButton(btnBox);
-    d->useDefaultBtn->setText(i18n("Use Default"));
-    d->useDefaultBtn->setIconSet(SmallIconSet("gohome"));
-    QToolTip::add(d->useDefaultBtn, i18n("<p>Use general Raw decoding settings to load this image in editor."));
-
-    btnBox->setStretchFactor(space2, 10);
+    button(Cancel)->setText(i18n("Use Default"));
+    button(Cancel)->setIconSet(SmallIconSet("gohome"));
+    QToolTip::add(button(Cancel), i18n("<p>Use general Raw decoding settings to load this image in editor."));
 
     // ---------------------------------------------------------------
 
@@ -418,11 +402,9 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
     gridSettings->addMultiCellWidget(d->colorsCB,  1, 1, 1, 1);
     gridSettings->addMultiCellWidget(histoBox,     2, 3, 0, 4);
     gridSettings->addMultiCellWidget(d->tabView,   4, 4, 0, 4);
-    gridSettings->addMultiCellWidget(btnBox,       5, 5, 0, 4);
-
-    gridSettings->setRowStretch(6, 10);
+    gridSettings->setRowStretch(5, 10);
     gridSettings->setColStretch(2, 10);
-    gridSettings->setSpacing(KDialog::spacingHint());
+    gridSettings->setSpacing(spacingHint());
     gridSettings->setMargin(0);
 
     // ---------------------------------------------------------------
@@ -465,26 +447,12 @@ RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
 
     connect(d->fineExposureInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalPostProcessingChanged()));
-
-    connect(d->resetBtn, SIGNAL(clicked()),
-            this, SLOT(slotReset()));
-
-    connect(d->importBtn, SIGNAL(clicked()),
-            this, SIGNAL(signalImportClicked()));
-
-    connect(d->useDefaultBtn, SIGNAL(clicked()),
-            this, SIGNAL(signalUseDefaultClicked()));
 }
 
 RawSettingsBox::~RawSettingsBox()
 {
     delete d->curveWidget;
     delete d;
-}
-
-void RawSettingsBox::slotReset()
-{
-    setDefaultSettings();
 }
 
 void RawSettingsBox::enableUpdateBtn(bool b)
@@ -510,7 +478,7 @@ void RawSettingsBox::setPostProcessedImage(DImg& img)
     d->histogramWidget->updateData(img.bits(), img.width(), img.height(), img.sixteenBit());
 }
 
-void RawSettingsBox::setDefaultSettings()
+void RawSettingsBox::slotDefaultSettings()
 {
     d->decodingSettingsBox->setDefaultSettings();
     d->brightnessInput->slotReset();

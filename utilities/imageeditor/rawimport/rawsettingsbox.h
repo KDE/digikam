@@ -23,16 +23,13 @@
 #ifndef RAWSETTINGSBOX_H
 #define RAWSETTINGSBOX_H
 
-// Qt includes.
-
-#include <qwidget.h>
-
 // KDE includes.
 
 #include <kurl.h>
 
 // Local includes.
 
+#include "editortoolsettings.h"
 #include "dimg.h"
 #include "digikam_export.h"
 
@@ -43,7 +40,7 @@ class HistogramWidget;
 class CurvesWidget;
 class RawSettingsBoxPriv;
 
-class DIGIKAM_EXPORT RawSettingsBox : public QWidget
+class DIGIKAM_EXPORT RawSettingsBox : public EditorToolSettings
 {
     Q_OBJECT
 
@@ -52,7 +49,6 @@ public:
     RawSettingsBox(const KURL& url, QWidget *parent);
     ~RawSettingsBox();
 
-    void setDefaultSettings();
     void setBusy(bool b);
 
     HistogramWidget* histogram() const;
@@ -69,9 +65,6 @@ public:
 
 signals:
 
-    void signalImportClicked();
-    void signalUseDefaultClicked();
-
     void signalUpdatePreview();
     void signalAbortPreview();
     void signalDemosaicingChanged();
@@ -85,7 +78,7 @@ private slots:
 
     void slotResetCurve();
 
-    void slotReset();
+    void slotDefaultSettings();
 
 private:
 

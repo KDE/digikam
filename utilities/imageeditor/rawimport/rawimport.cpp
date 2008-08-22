@@ -108,12 +108,6 @@ RawImport::RawImport(const KURL& url, QObject *parent)
     connect(d->settingsBox, SIGNAL(signalPostProcessingChanged()),
             this, SLOT(slotTimer()));
 
-    connect(d->settingsBox, SIGNAL(signalImportClicked()),
-            this, SIGNAL(okClicked()));
-
-    connect(d->settingsBox, SIGNAL(signalUseDefaultClicked()),
-            this, SIGNAL(cancelClicked()));
-
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotPostProcessing()));
 
