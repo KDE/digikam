@@ -47,7 +47,7 @@ public:
 };
 
 EditorStackView::EditorStackView(QWidget *parent)
-               : QWidgetStack(parent, 0, Qt::WDestructiveClose)
+               : QStackedWidget(parent)
 {
     d = new EditorStackViewPriv;
 }
@@ -62,7 +62,7 @@ void EditorStackView::setCanvas(Canvas* canvas)
     if (d->canvas) return;
 
     d->canvas = canvas;
-    addWidget(d->canvas, CanvasMode);
+    insertWidget(CanvasMode, d->canvas);
 
     connect(d->canvas, SIGNAL(signalZoomChanged(double)),
             this, SLOT(slotZoomChanged(double)));
@@ -81,7 +81,7 @@ void EditorStackView::setToolView(QWidget* view)
     d->toolView = view;
 
     if (d->toolView)
-        addWidget(d->toolView, ToolViewMode);
+        insertWidget(ToolViewMode, d->toolView);
 
     PreviewWidget *preview = dynamic_cast<PreviewWidget*>(d->toolView);
     if (preview)
@@ -98,7 +98,7 @@ QWidget* EditorStackView::toolView() const
 
 int EditorStackView::viewMode()
 {
-    return id(visibleWidget());
+    return indexOf(currentWidget());
 }
 
 void EditorStackView::setViewMode(int mode)
@@ -106,7 +106,7 @@ void EditorStackView::setViewMode(int mode)
     if (mode != CanvasMode && mode != ToolViewMode)
         return;
 
-    raiseWidget(mode);
+    setCurrentIndex(mode);
 }
 
 void EditorStackView::increaseZoom()
@@ -163,7 +163,7 @@ void EditorStackView::zoomTo100Percents()
 {
     if (viewMode() == CanvasMode)
     {
-        if (d->canvas->zoomFactor()==1.0)
+        if (d->canvas->zoomFactor() == 1.0)
             d->canvas->toggleFitToWindow();
         else
             d->canvas->setZoomFactor(1.0);
@@ -173,7 +173,7 @@ void EditorStackView::zoomTo100Percents()
         PreviewWidget *preview = dynamic_cast<PreviewWidget*>(d->toolView);
         if (preview)
         {
-            if (preview->zoomFactor()==1.0)
+            if (preview->zoomFactor() == 1.0)
                 preview->toggleFitToWindow();
             else
                 preview->setZoomFactor(1.0);
