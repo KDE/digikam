@@ -35,7 +35,6 @@
 #include <QPixmap>
 #include <QPushButton>
 #include <QSlider>
-#include <QSpinBox>
 #include <QToolButton>
 
 // KDE includes.
@@ -47,6 +46,10 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kvbox.h>
+
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
 
 // Digikam includes.
 
@@ -61,6 +64,8 @@
 
 #include "imageeffect_rgb.h"
 #include "imageeffect_rgb.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamImagesPluginCore
 {
@@ -158,11 +163,10 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     QLabel *labelRed = new QLabel(i18n("Red"), gboxSettings);
     labelRed->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
 
-    m_rInput = new QSpinBox(gboxSettings);
-    m_rInput->setMinimum(-100);
-    m_rInput->setMaximum(100);
-    m_rInput->setSingleStep(1);
-    m_rInput->setValue(0);
+    m_rInput = new RIntNumInput(gboxSettings);
+    m_rInput->setRange(-100, 100, 1);
+    m_rInput->setSliderEnabled(false);
+    m_rInput->setDefaultValue(0);
 
     // -------------------------------------------------------------
 
@@ -180,11 +184,10 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     QLabel *labelGreen = new QLabel(i18n("Green"), gboxSettings);
     labelGreen->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
 
-    m_gInput = new QSpinBox(gboxSettings);
-    m_gInput->setMinimum(-100);
-    m_gInput->setMaximum(100);
-    m_gInput->setSingleStep(1);
-    m_gInput->setValue(0);
+    m_gInput = new RIntNumInput(gboxSettings);
+    m_gInput->setRange(-100, 100, 1);
+    m_gInput->setSliderEnabled(false);
+    m_gInput->setDefaultValue(0);
 
     // -------------------------------------------------------------
 
@@ -202,11 +205,10 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     QLabel *labelBlue = new QLabel(i18n("Blue"), gboxSettings);
     labelBlue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
 
-    m_bInput = new QSpinBox(gboxSettings);
-    m_bInput->setMinimum(-100);
-    m_bInput->setMaximum(100);
-    m_bInput->setSingleStep(1);
-    m_bInput->setValue(0);
+    m_bInput = new RIntNumInput(gboxSettings);
+    m_bInput->setRange(-100, 100, 1);
+    m_bInput->setSliderEnabled(false);
+    m_bInput->setDefaultValue(0);
 
     // -------------------------------------------------------------
 
@@ -329,9 +331,9 @@ void ImageEffect_RGB::readUserSettings()
     m_scaleBG->button(group.readEntry("Histogram Scale",
                       (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
 
-    int r = group.readEntry("RedAjustment", 0);
-    int g = group.readEntry("GreenAjustment", 0);
-    int b = group.readEntry("BlueAjustment", 0);
+    int r = group.readEntry("RedAjustment", m_rInput->defaultValue());
+    int g = group.readEntry("GreenAjustment", m_gInput->defaultValue());
+    int b = group.readEntry("BlueAjustment", m_bInput->defaultValue());
     adjustSliders(r, g, b);
     slotChannelChanged(m_channelCB->currentIndex());
     slotScaleChanged(m_scaleBG->checkedId());
@@ -351,7 +353,11 @@ void ImageEffect_RGB::writeUserSettings()
 
 void ImageEffect_RGB::resetValues()
 {
-    adjustSliders(0, 0, 0);
+    int r = m_rInput->defaultValue();
+    int g = m_gInput->defaultValue();
+    int b = m_bInput->defaultValue();
+
+    adjustSliders(r, g, b);
 }
 
 void ImageEffect_RGB::adjustSliders(int r, int g, int b)

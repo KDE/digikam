@@ -30,8 +30,12 @@
 
 class QButtonGroup;
 class QComboBox;
-class QSpinBox;
 class QSlider;
+
+namespace KDcrawIface
+{
+class RIntNumInput;
+}
 
 namespace Digikam
 {
@@ -54,13 +58,13 @@ public:
     ~ImageEffect_RGB();
 
 private:
-    
+
     void writeUserSettings();
     void readUserSettings();
     void resetValues();
     void adjustSliders(int r, int g, int b);
     void finalRendering();
-    
+
 private slots:
 
     void slotEffect();
@@ -86,23 +90,23 @@ private:
 
     uchar                        *m_destinationPreviewData;
 
-    QComboBox                    *m_channelCB;    
-    
-    QButtonGroup                 *m_scaleBG;  
+    QComboBox                    *m_channelCB;
 
-    QSpinBox                     *m_rInput;
-    QSpinBox                     *m_gInput;
-    QSpinBox                     *m_bInput;
-    
+    QButtonGroup                 *m_scaleBG;
+
     QSlider                      *m_rSlider;
     QSlider                      *m_gSlider;
     QSlider                      *m_bSlider;
-    
+
+    KDcrawIface::RIntNumInput    *m_rInput;
+    KDcrawIface::RIntNumInput    *m_gInput;
+    KDcrawIface::RIntNumInput    *m_bInput;
+
     Digikam::ImageWidget         *m_previewWidget;
 
     Digikam::ColorGradientWidget *m_hGradient;
-    
-    Digikam::HistogramWidget     *m_histogramWidget;    
+
+    Digikam::HistogramWidget     *m_histogramWidget;
 };
 
 }  // NameSpace DigikamImagesPluginCore
