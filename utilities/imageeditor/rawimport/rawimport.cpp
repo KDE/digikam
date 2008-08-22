@@ -25,7 +25,7 @@
 #include <qstring.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+#include <qwhatsthis.h>
 #include <qtimer.h>
 
 // KDE includes.
@@ -70,7 +70,7 @@ public:
     RawPreview     *previewWidget;
 };
 
-RawImport::RawImport(const KUrl& url, QObject *parent)
+RawImport::RawImport(const KURL& url, QObject *parent)
          : EditorTool(parent)
 {
     d = new RawImportPriv;
@@ -108,12 +108,6 @@ RawImport::RawImport(const KUrl& url, QObject *parent)
     connect(d->settingsBox, SIGNAL(signalPostProcessingChanged()),
             this, SLOT(slotTimer()));
 
-    connect(d->settingsBox, SIGNAL(signalImportClicked()),
-            this, SIGNAL(okClicked()));
-
-    connect(d->settingsBox, SIGNAL(signalUseDefaultClicked()),
-            this, SIGNAL(cancelClicked()));
-
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotPostProcessing()));
 
@@ -137,7 +131,7 @@ RawImport::~RawImport()
 
 void RawImport::setBusy(bool val)
 {
-    if (val) d->previewWidget->setCursor(Qt::WaitCursor);
+    if (val) d->previewWidget->setCursor(KCursor::waitCursor());
     else d->previewWidget->unsetCursor();
     d->settingsBox->setBusy(val);
 }
