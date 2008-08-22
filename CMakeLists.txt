@@ -565,11 +565,12 @@ SET(libimagepropertiesdigikam_SRCS
    )
 
  SET(libdimgeditor_SRCS
-     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp
      ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imageiface.cpp
      ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editortool.cpp
-     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorstackview.cpp
      ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editortooliface.cpp
+     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorstackview.cpp
+     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editortoolsettings.cpp
+     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp
     )
 
  SET(libdimgimagewindow_SRCS
