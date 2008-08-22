@@ -27,7 +27,6 @@
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
-#include <qhbox.h>
 
 // KDE includes.
 
@@ -37,7 +36,8 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
-#include <kstdguiitem.h>
+#include <kstandardguiitem.h>
+#include <khbox.h>
 
 // Local includes.
 
@@ -67,8 +67,8 @@ public:
         user3Btn   = 0;
     }
 
-    QHBox       *btnBox1;
-    QHBox       *btnBox2;
+    KHBox       *btnBox1;
+    KHBox       *btnBox2;
 
     QWidget     *plainPage;
 
@@ -92,13 +92,13 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
     QGridLayout* gridSettings = new QGridLayout(this, 3, 2);
 
     d->plainPage = new QWidget(this);
-    d->btnBox1   = new QHBox(this);
-    d->btnBox2   = new QHBox(this);
+    d->btnBox1   = new KHBox(this);
+    d->btnBox2   = new KHBox(this);
 
     // ---------------------------------------------------------------
 
     d->defaultBtn = new KPushButton(d->btnBox1);
-    d->defaultBtn->setGuiItem(KStdGuiItem::defaults());
+    d->defaultBtn->setGuiItem(KStandardGuiItem::defaults());
     if (!(buttonMask & Default))
         d->defaultBtn->hide();
 
@@ -112,12 +112,12 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
     QLabel *space2 = new QLabel(d->btnBox1);
 
     d->okBtn = new KPushButton(d->btnBox1);
-    d->okBtn->setGuiItem(KStdGuiItem::ok());
+    d->okBtn->setGuiItem(KStandardGuiItem::ok());
     if (!(buttonMask & Ok))
         d->okBtn->hide();
 
     d->cancelBtn = new KPushButton(d->btnBox1);
-    d->cancelBtn->setGuiItem(KStdGuiItem::cancel());
+    d->cancelBtn->setGuiItem(KStandardGuiItem::cancel());
     if (!(buttonMask & Cancel))
         d->cancelBtn->hide();
 
