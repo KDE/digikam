@@ -29,6 +29,7 @@
 
 #include "sidebar.h"
 #include "editortool.h"
+#include "editortoolsettings.h"
 #include "editorstackview.h"
 #include "editorwindow.h"
 #include "editortooliface.h"

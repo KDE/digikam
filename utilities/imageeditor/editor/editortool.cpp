@@ -27,6 +27,7 @@
 
 // Local includes.
 
+#include "editortoolsettings.h"
 #include "editortooliface.h"
 #include "editortool.h"
 #include "editortool.moc"
@@ -45,12 +46,13 @@ public:
         settings = 0;
     }
 
-    QString  name;
+    QString             name;
 
-    QWidget *view;
-    QWidget *settings;
+    QWidget            *view;
 
-    QPixmap  icon;
+    QPixmap             icon;
+
+    EditorToolSettings *settings;
 };
 
 EditorTool::EditorTool(QObject *parent)
@@ -94,14 +96,20 @@ void EditorTool::setToolView(QWidget *view)
     d->view = view;
 }
 
-QWidget* EditorTool::toolSettings() const
+EditorToolSettings* EditorTool::toolSettings() const
 {
     return d->settings;
 }
 
-void EditorTool::setToolSettings(QWidget *settings)
+void EditorTool::setToolSettings(EditorToolSettings *settings)
 {
     d->settings = settings;
+
+    connect(d->settings, SIGNAL(signalOkClicked()),
+            this, SIGNAL(okClicked()));
+
+    connect(d->settings, SIGNAL(signalCancelClicked()),
+            this, SIGNAL(cancelClicked()));
 }
 
 }  // namespace Digikam

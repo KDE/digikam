@@ -37,6 +37,7 @@
 namespace Digikam
 {
 
+class EditorToolSettings;
 class EditorToolPriv;
 
 class DIGIKAM_EXPORT EditorTool : public QObject
@@ -48,10 +49,10 @@ public:
     EditorTool(QObject *parent);
     virtual ~EditorTool();
 
-    QString  toolName() const;
-    QPixmap  toolIcon() const;
-    QWidget* toolView() const;
-    QWidget* toolSettings() const;
+    QString             toolName() const;
+    QPixmap             toolIcon() const;
+    QWidget*            toolView() const;
+    EditorToolSettings* toolSettings() const;
 
 signals:
 
@@ -63,7 +64,7 @@ protected:
     void setToolName(const QString& name);
     void setToolIcon(const QPixmap& icon);
     void setToolView(QWidget *view);
-    void setToolSettings(QWidget *settings);
+    void setToolSettings(EditorToolSettings *settings);
 
     virtual void readSettings()=0;
     virtual void saveSettings()=0;
