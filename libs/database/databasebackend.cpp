@@ -21,7 +21,7 @@
  * 
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QApplication>
 #include <QCoreApplication>
@@ -30,7 +30,7 @@
 #include <QSqlError>
 #include <QThread>
 
-// KDE includes
+// KDE includes.
 
 #include <kglobal.h>
 

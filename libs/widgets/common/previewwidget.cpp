@@ -41,7 +41,7 @@
 #include <QFrame>
 #include <QMouseEvent>
 
-// KDE include.
+// KDE includes.
 
 #include <kcursor.h>
 #include <klocale.h>

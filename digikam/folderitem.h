@@ -30,7 +30,7 @@
 #include <Q3ListView>
 #include <QStyleOptionQ3ListView>
 
-// Local includes
+// Local includes.
 
 #include "digikam_export.h"
 

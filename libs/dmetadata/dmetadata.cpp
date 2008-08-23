@@ -31,7 +31,7 @@
 #include <QDomDocument>
 #include <QFile>
 
-// KDE includes
+// KDE includes.
 
 #include <klocale.h>
 #include <kglobal.h>

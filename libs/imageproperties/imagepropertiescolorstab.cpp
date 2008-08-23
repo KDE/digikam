@@ -25,7 +25,7 @@
 
 #include <cmath>
 
-// Qt Includes.
+// Qt includes.
 
 #include <QButtonGroup>
 #include <QComboBox>

@@ -22,11 +22,11 @@
  * 
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QStringList>
 
-// Local includes
+// Local includes.
 
 #include "namefilter.h"
 

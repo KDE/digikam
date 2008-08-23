@@ -21,17 +21,17 @@
  * 
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QSharedData>
 #include <QSet>
 
-// KDE includes
+// KDE includes.
 
 #include <klocale.h>
 #include <kglobal.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "albumdb.h"

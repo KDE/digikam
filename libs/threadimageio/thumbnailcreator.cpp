@@ -23,13 +23,13 @@
  *
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QFileInfo>
 #include <QFile>
 #include <QPainter>
 
-// KDE includes
+// KDE includes.
 
 #include <kdebug.h>
 #include <kurl.h>
@@ -51,7 +51,7 @@
 #include <libkdcraw/rawfiles.h>
 #include <libkdcraw/kdcraw.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "dimg.h"

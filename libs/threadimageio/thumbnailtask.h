@@ -25,7 +25,7 @@
 #ifndef THUMBNAIL_TASK_H
 #define THUMBNAIL_TASK_H
 
-// Qt includes
+// Qt includes.
 
 #include <QImage>
 

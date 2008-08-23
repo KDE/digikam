@@ -10,7 +10,7 @@
  * Copyright (C) 2004-2006 by Daniele Franzoni
  * Copyright (C) 2004-2006 by Martin Desruisseaux
  * Copyright (C) 2003-2006 GeoTools Project Managment Committee (PMC), http://geotools.org
- * Copyright (C) 2001, Institut de Recherche pour le Développement
+ * Copyright (C) 2001, Institut de Recherche pour le Dï¿½veloppement
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,7 +30,7 @@
 #include <cstdlib>
 #include <cfloat>
 
-// Local includes
+// Local includes.
 
 #include "geodetictools.h"
 
@@ -489,7 +489,7 @@ bool GeodeticCalculator::computeDirection() {
 *         {@linkplain #getStartingGeographicPoint starting point} to the
 *         {@linkplain #getDestinationGeographicPoint destination point}.
 *
-* @todo We should check for cases where the path cross the 90°N, 90°S, 90°E or 90°W boundaries.
+* @todo We should check for cases where the path cross the 90ï¿½N, 90ï¿½S, 90ï¿½E or 90ï¿½W boundaries.
 * /
 public Shape getGeodeticCurve(const int numberOfPoints) {
     if (numberOfPoints < 0)

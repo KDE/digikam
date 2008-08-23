@@ -42,7 +42,7 @@
 
 #include <cmath>
 
-// Local includes
+// Local includes.
 
 #include "dcolorcomposer.h"
 

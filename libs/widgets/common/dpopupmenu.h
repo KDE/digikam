@@ -36,7 +36,7 @@
 #include <QPaintEvent>
 #include <QResizeEvent>
 
-// KDE includes
+// KDE includes.
 
 #include <kmenu.h>
 

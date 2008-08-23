@@ -21,13 +21,13 @@
  * 
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QCoreApplication>
 #include <QDir>
 #include <QThread>
 
-// KDE includes
+// KDE includes.
 
 #include <kglobal.h>
 #include <kcodecs.h>
@@ -41,7 +41,7 @@
 #include <solid/opticaldisc.h>
 #include <solid/predicate.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "databaseaccess.h"

@@ -22,12 +22,12 @@
  *
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QPainter>
 #include <QHash>
 
-// KDE includes
+// KDE includes.
 
 #include <kglobal.h>
 #include <kiconloader.h>

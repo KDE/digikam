@@ -24,11 +24,11 @@
 #ifndef DATABASEWATCH_H
 #define DATABASEWATCH_H
 
-// Qt includes
+// Qt includes.
 
 #include <QObject>
 
-// KDE includes
+// KDE includes.
 
 // Local includes.
 

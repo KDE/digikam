@@ -30,7 +30,7 @@
 #include <QImage>
 #include <QResizeEvent>
 
-// Local includes
+// Local includes.
 
 #include "dimg.h"
 #include "previewwidget.h"

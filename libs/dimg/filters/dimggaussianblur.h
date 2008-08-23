@@ -24,7 +24,7 @@
 #ifndef DIMGGAUSSIAN_BLUR_H
 #define DIMGGAUSSIAN_BLUR_H
 
-// Digikam Includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

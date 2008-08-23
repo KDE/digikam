@@ -22,14 +22,14 @@
  * 
  * ============================================================ */
 
-// Qt includes. 
+// Qt includes.
 
 #include <QFileInfo>
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <QFrame>
 
-// KDE includes
+// KDE includes.
 
 #include <kurl.h>
 

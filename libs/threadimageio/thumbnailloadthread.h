@@ -25,7 +25,7 @@
 #ifndef THUMBNAIL_LOAD_THREAD_H
 #define THUMBNAIL_LOAD_THREAD_H
 
-// Qt includes
+// Qt includes.
 
 #include <QPixmap>
 

@@ -24,7 +24,7 @@
 #ifndef IMAGEPOSITION_H
 #define IMAGEPOSITION_H
 
-// Qt includes
+// Qt includes.
 
 #include <QString>
 #include <QSharedDataPointer>

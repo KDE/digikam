@@ -28,12 +28,12 @@
 
 #include <cmath>
 
-// Qt includes
+// Qt includes.
 
 #include <QString>
 #include <QPointF>
 
-// Local includes
+// Local includes.
 
 #include "digikam_export.h"
 
@@ -153,7 +153,7 @@ public:
     /**
     * The ratio of the distance between the center and a focus of the ellipse
     * to the length of its semimajor axis. The eccentricity can alternately be
-    * computed from the equation: <code>e=sqrt(2f-f²)</code>.
+    * computed from the equation: <code>e=sqrt(2f-fï¿½)</code>.
     */
     double eccentricity() const;
 
@@ -309,8 +309,8 @@ public:
     * are discarded. They will need to be specified again.
     * Coordinates positive North and East.
     *
-    * @param  longitude The longitude in decimal degrees between -180 and +180°
-    * @param  latitude  The latitude  in decimal degrees between  -90 and  +90°
+    * @param  longitude The longitude in decimal degrees between -180 and +180ï¿½
+    * @param  latitude  The latitude  in decimal degrees between  -90 and  +90ï¿½
     */
     void setStartingGeographicPoint(double longitude, double latitude);
 
@@ -320,8 +320,8 @@ public:
     * {@link #getAzimuth()} or {@link #getOrthodromicDistance()} are invoked.
     * Coordinates positive North and East.
     *
-    * @param  longitude The longitude in decimal degrees between -180 and +180°
-    * @param  latitude  The latgitude in decimal degrees between  -90 and  +90°
+    * @param  longitude The longitude in decimal degrees between -180 and +180ï¿½
+    * @param  latitude  The latgitude in decimal degrees between  -90 and  +90ï¿½
     *
     */
     void setDestinationGeographicPoint(double longitude, double latitude);
@@ -344,9 +344,9 @@ public:
     * Set the azimuth and the distance from the {@linkplain #getStartingGeographicPoint
     * starting point}. The destination point will be updated as a side effect of this call.
     * It will be recomputed the next time {@link #getDestinationGeographicPoint()} is invoked.
-    * Azimuth 0° North.
+    * Azimuth 0ï¿½ North.
     *
-    * @param  azimuth The azimuth in decimal degrees from -180° to 180°.
+    * @param  azimuth The azimuth in decimal degrees from -180ï¿½ to 180ï¿½.
     * @param  distance The orthodromic distance in the same units as the ellipsoid axis.
     */
     void setDirection(double azimuth, double distance);
@@ -359,7 +359,7 @@ public:
     * azimuth will be computed from the {@linkplain #getStartingGeographicPoint starting point}
     * to the destination point.
     *
-    * @return The azimuth, in decimal degrees from -180° to +180°.
+    * @return The azimuth, in decimal degrees from -180ï¿½ to +180ï¿½.
     */
     double azimuth();
 

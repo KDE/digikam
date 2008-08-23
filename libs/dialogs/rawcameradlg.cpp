@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QStringList>
 #include <QString>
@@ -31,7 +31,7 @@
 #include <QTreeWidget>
 #include <QHeaderView>
 
-// KDElib includes
+// KDElib includes.
 
 #include <klocale.h>
 #include <kiconloader.h>

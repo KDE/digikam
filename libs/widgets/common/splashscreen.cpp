@@ -40,6 +40,7 @@
 #include <kcomponentdata.h>
 
 // Local includes.
+
 #include "ddebug.h"
 #include "splashscreen.h"
 #include "splashscreen.moc"

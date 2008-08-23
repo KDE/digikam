@@ -32,7 +32,7 @@
 #include <QResizeEvent>
 #include <QWheelEvent>
 
-// Local includes
+// Local includes.
 
 #include "previewwidget.h"
 #include "dimg.h"

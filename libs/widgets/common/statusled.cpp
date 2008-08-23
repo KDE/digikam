@@ -31,7 +31,7 @@
 #include <kglobalsettings.h>
 #include <kstandarddirs.h>
 
-// Local includes
+// Local includes.
 
 #include "statusled.h"
 #include "statusled.moc"

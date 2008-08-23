@@ -24,7 +24,7 @@
 #ifndef DIMGSHARPEN_H
 #define DIMGSHARPEN_H
 
-// Digikam Includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

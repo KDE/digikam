@@ -50,7 +50,7 @@
 
 #include <libkdcraw/dcrawbinary.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "albumdb.h"

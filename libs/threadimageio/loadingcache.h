@@ -24,7 +24,7 @@
 #ifndef LOADING_CACHE_H
 #define LOADING_CACHE_H
 
-// Qt includes
+// Qt includes.
 
 #include <QPixmap>
 

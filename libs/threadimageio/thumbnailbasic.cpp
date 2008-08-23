@@ -29,7 +29,7 @@
 #include <cstdio>
 #include <cstring>
 
-// Qt Includes.
+// Qt includes.
 
 #include <QImage>
 #include <QDir>
@@ -53,7 +53,7 @@ extern "C"
 #include <png.h>
 }
 
-// Local includes
+// Local includes.
 
 #include "thumbnailcreator.h"
 #include "thumbnailcreator_p.h"

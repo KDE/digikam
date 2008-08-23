@@ -21,11 +21,11 @@
  * 
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QList>
 
-// Local includes
+// Local includes.
 
 #include "imagelisterreceiver.h"
 

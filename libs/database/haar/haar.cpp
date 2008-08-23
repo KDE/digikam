@@ -33,12 +33,12 @@
 #include <cstdlib>
 #include <cmath>
 
-// Qt includes
+// Qt includes.
 
 #include <QImage>
 #include <QString>
 
-// Local includes
+// Local includes.
 
 #include "dimg.h"
 #include "haar.h"

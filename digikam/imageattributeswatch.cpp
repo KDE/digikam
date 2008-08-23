@@ -21,7 +21,7 @@
  * 
  * ============================================================ */
 
-// Local includes
+// Local includes.
 
 #include "databaseaccess.h"
 #include "databasewatch.h"

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QStringList>
 #include <QString>
@@ -33,7 +33,7 @@
 #include <QMimeData>
 #include <QClipboard>
 
-// KDElib includes
+// KDElib includes.
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -47,12 +47,12 @@
 using namespace Marble;
 #endif // HAVE_MARBLEWIDGET
 
-// Libkexiv2 includes
+// Libkexiv2 includes.
 
 #include <libkexiv2/version.h>
 #include <libkexiv2/kexiv2.h>
 
-// Libkdcraw includes
+// Libkdcraw includes.
 
 #include <libkdcraw/kdcraw.h>
 #include <libkdcraw/dcrawbinary.h>

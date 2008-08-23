@@ -21,16 +21,16 @@
  *
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QImageReader>
 
-// KDE includes
+// KDE includes.
 
 #include <kmimetype.h>
 #include <klocale.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "databaseurl.h"

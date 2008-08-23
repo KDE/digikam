@@ -24,11 +24,11 @@
 #ifndef ALBUMMODEL_H
 #define ALBUMMODEL_H
 
-// Qt includes
+// Qt includes.
 
 #include <QAbstractItemModel>
 
-// Local includes
+// Local includes.
 
 #include "album.h"
 

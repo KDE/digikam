@@ -21,11 +21,11 @@
  * 
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QStringList>
 
-// Local includes
+// Local includes.
 
 #include "collectionmanager.h"
 #include "collectionlocation.h"

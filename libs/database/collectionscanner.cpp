@@ -23,13 +23,13 @@
  * 
  * ============================================================ */
 
-// System includes
+// System includes.
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
-// Qt includes
+// Qt includes.
 
 #include <QDir>
 #include <QFileInfo>
@@ -40,7 +40,7 @@
 
 #include <libkdcraw/rawfiles.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "albumdb.h"

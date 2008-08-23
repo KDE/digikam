@@ -22,11 +22,11 @@
  *
  * ============================================================ */
 
-// C includes
+// C includes.
 
 #include <math.h>
 
-// Qt includes
+// Qt includes.
 
 #include <QApplication>
 #include <QImage>
@@ -37,7 +37,7 @@
 
 #include <libkdcraw/kdcraw.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "dmetadata.h"

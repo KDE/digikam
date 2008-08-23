@@ -34,7 +34,7 @@
 
 #include <queue>
 
-// Qt includes
+// Qt includes.
 
 #include <QtGlobal>
 

@@ -25,18 +25,18 @@
 #ifndef CTRLPANELDLG_H
 #define CTRLPANELDLG_H
 
-// Qt includes
+// Qt includes.
 
 #include <QString>
 #include <QEvent>
 #include <QKeyEvent>
 #include <QCloseEvent>
 
-// KDE include.
+// KDE includes.
 
 #include <kdialog.h>
 
-// Local includes
+// Local includes.
 
 #include "imagepannelwidget.h"
 #include "digikam_export.h"

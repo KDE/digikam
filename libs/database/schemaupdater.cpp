@@ -21,13 +21,13 @@
  * 
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QFileInfo>
 #include <QFile>
 #include <QDir>
 
-// KDE includes
+// KDE includes.
 
 #include <kio/job.h>
 #include <kio/netaccess.h>
@@ -39,7 +39,7 @@
 
 #include <libkdcraw/dcrawbinary.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "databasebackend.h"

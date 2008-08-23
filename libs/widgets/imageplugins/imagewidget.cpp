@@ -43,7 +43,7 @@
 #include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "imagewidget.h"

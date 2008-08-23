@@ -21,7 +21,7 @@
  * 
  * ============================================================ */
 
-// Local includes
+// Local includes.
 
 #include "databasechangesets.h"
 

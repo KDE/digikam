@@ -34,7 +34,7 @@
 
 #include <khtml_part.h>
 
-// Local includes
+// Local includes.
 
 #include "digikam_export.h"
 

@@ -25,14 +25,14 @@
 #ifndef IMAGEGUIDEDLG_H
 #define IMAGEGUIDEDLG_H
 
-// Qt includes
+// Qt includes.
 
 #include <QString>
 #include <QEvent>
 #include <QKeyEvent>
 #include <QCloseEvent>
 
-// KDE include.
+// KDE includes.
 
 #include <kdialog.h>
 

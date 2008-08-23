@@ -39,7 +39,7 @@
 #include <cerrno>
 
 // Local includes.
- 
+
 #include "ddebug.h"
 #include "imagehistogram.h"
 #include "imagelevels.h"

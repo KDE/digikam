@@ -21,11 +21,11 @@
  * 
  * ============================================================ */
 
-// Qt includes. 
- 
+// Qt includes.
+
 #include <QImage>
 #include <QPainter>
- 
+
 // KDE includes.
 
 // Local includes.

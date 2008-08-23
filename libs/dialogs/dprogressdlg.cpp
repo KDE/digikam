@@ -39,7 +39,7 @@
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "dprogressdlg.h"

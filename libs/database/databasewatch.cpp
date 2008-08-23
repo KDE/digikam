@@ -21,13 +21,13 @@
  * 
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QMetaType>
 #include <QtDBus>
 #include <QThread>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "databasewatch.h"

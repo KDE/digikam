@@ -31,7 +31,7 @@
 #include <QFile>
 #include <QSqlDatabase>
 
-// KDE includes
+// KDE includes.
 
 #include <kcmdlineargs.h>
 #include <kapplication.h>
@@ -44,7 +44,7 @@
 #include <kdeversion.h>
 #include <kmessagebox.h>
 
-// Libkexiv2 includes
+// Libkexiv2 includes.
 
 #include <libkexiv2/version.h>
 #include <libkexiv2/kexiv2.h>

@@ -37,7 +37,7 @@
 #include <QMouseEvent>
 #include <QHideEvent>
 
-// KDE include.
+// KDE includes.
 
 #include <kcursor.h>
 

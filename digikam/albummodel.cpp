@@ -21,15 +21,15 @@
  *
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QStringList>
 
-// KDE includes
+// KDE includes.
 
 #include <klocale.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "album.h"

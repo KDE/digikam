@@ -24,7 +24,7 @@
 #ifndef DOWNLOADHISTORY_H
 #define DOWNLOADHISTORY_H
 
-// Qt includes
+// Qt includes.
 
 #include <QString>
 #include <QDateTime>

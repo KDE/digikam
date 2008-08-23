@@ -22,11 +22,11 @@
  * 
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QFileInfo>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "imageinfo.h"

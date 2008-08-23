@@ -25,7 +25,7 @@
 
 #include <QDir>
 
-// KDE includes
+// KDE includes.
 
 #include <kcodecs.h>
 

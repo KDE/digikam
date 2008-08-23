@@ -36,7 +36,7 @@
 
 #include <khbox.h>
 
-// Local includes
+// Local includes.
 
 #include "dimg.h"
 #include "digikam_export.h"

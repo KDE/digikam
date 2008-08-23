@@ -28,7 +28,7 @@
 
 #include <QMap>
 
-// KDElib includes
+// KDElib includes.
 
 #include <kdialog.h>
 

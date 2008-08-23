@@ -43,7 +43,7 @@
 #include <kapplication.h>
 #include <klocale.h>
 
-// Local includes
+// Local includes.
 
 #include "ddebug.h"
 #include "imageiface.h"

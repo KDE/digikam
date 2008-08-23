@@ -29,7 +29,7 @@
 #include <cmath>
 #include <cstring>
 
-// QT Includes
+// QT includes.
 
 #include <QByteArray>
 #include <QDataStream>
@@ -37,7 +37,7 @@
 #include <QImageReader>
 #include <QMap>
 
-// KDE includes
+// KDE includes.
 
 #include <kurl.h>
 

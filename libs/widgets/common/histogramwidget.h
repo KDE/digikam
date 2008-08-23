@@ -31,7 +31,7 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 
-// Local includes
+// Local includes.
 
 #include "dcolor.h"
 #include "digikam_export.h"
