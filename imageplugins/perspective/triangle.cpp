@@ -20,7 +20,7 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
- 
+
 // C++ includes.
 
 #include <cstdio>
