@@ -50,9 +50,8 @@ public:
         Try     = 0x00000002,
         Ok      = 0x00000004,
         Cancel  = 0x00000008,
-        User1   = 0x00000010,
-        User2   = 0x00000020,
-        User3   = 0x00000040
+        SaveAs  = 0x00000010,
+        Load    = 0x00000020
     };
 
 public:
@@ -85,9 +84,8 @@ public slots:
 
 protected slots:
 
-    virtual void slotUser1(){};
-    virtual void slotUser2(){};
-    virtual void slotUser3(){};
+    virtual void slotSaveAs(){};
+    virtual void slotLoad(){};
 
 private:
 

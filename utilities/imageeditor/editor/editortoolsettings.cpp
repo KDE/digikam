@@ -62,9 +62,8 @@ public:
         plainPage  = 0;
         btnBox1    = 0;
         btnBox2    = 0;
-        user1Btn   = 0;
-        user2Btn   = 0;
-        user3Btn   = 0;
+        saveAsBtn  = 0;
+        loadBtn    = 0;
     }
 
     QHBox       *btnBox1;
@@ -72,14 +71,12 @@ public:
 
     QWidget     *plainPage;
 
-    KPushButton *user1Btn;
-    KPushButton *user2Btn;
-    KPushButton *user3Btn;
-
     KPushButton *okBtn;
     KPushButton *cancelBtn;
     KPushButton *tryBtn;
     KPushButton *defaultBtn;
+    KPushButton *saveAsBtn;
+    KPushButton *loadBtn;
 };
 
 EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
@@ -109,7 +106,7 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
     if (!(buttonMask & Try))
         d->tryBtn->hide();
 
-    QLabel *space2 = new QLabel(d->btnBox1);
+    QLabel *space = new QLabel(d->btnBox1);
 
     d->okBtn = new KPushButton(d->btnBox1);
     d->okBtn->setGuiItem(KStdGuiItem::ok());
@@ -121,21 +118,25 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
     if (!(buttonMask & Cancel))
         d->cancelBtn->hide();
 
-    d->btnBox1->setStretchFactor(space2, 10);
+    d->btnBox1->setStretchFactor(space, 10);
 
     // ---------------------------------------------------------------
 
-    d->user1Btn = new KPushButton(d->btnBox2);
-    if (!(buttonMask & User1))
-        d->user1Btn->hide();
+    d->loadBtn = new KPushButton(d->btnBox2);
+    d->loadBtn->setGuiItem(KStdGuiItem::open());
+    QToolTip::add(d->loadBtn, i18n("<p>Load all filter parameters from settings text file."));
+    if (!(buttonMask & Load))
+        d->loadBtn->hide();
 
-    d->user2Btn = new KPushButton(d->btnBox2);
-    if (!(buttonMask & User2))
-        d->user2Btn->hide();
+    QLabel *space2 = new QLabel(d->btnBox2);
 
-    d->user3Btn = new KPushButton(d->btnBox2);
-    if (!(buttonMask & User3))
-        d->user3Btn->hide();
+    d->saveAsBtn = new KPushButton(d->btnBox2);
+    d->saveAsBtn->setGuiItem(KStdGuiItem::saveAs());
+    QToolTip::add(d->saveAsBtn, i18n("<p>Save all filter parameters to settings text file."));
+    if (!(buttonMask & SaveAs))
+        d->saveAsBtn->hide();
+
+    d->btnBox1->setStretchFactor(space2, 10);
 
     // ---------------------------------------------------------------
 
@@ -160,14 +161,11 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
     connect(d->defaultBtn, SIGNAL(clicked()),
             this, SLOT(slotDefaultSettings()));
 
-    connect(d->user1Btn, SIGNAL(clicked()),
-            this, SLOT(slotUser1()));
+    connect(d->saveAsBtn, SIGNAL(clicked()),
+            this, SLOT(slotSaveAs()));
 
-    connect(d->user2Btn, SIGNAL(clicked()),
-            this, SLOT(slotUser2()));
-
-    connect(d->user3Btn, SIGNAL(clicked()),
-            this, SLOT(slotUser3()));
+    connect(d->loadBtn, SIGNAL(clicked()),
+            this, SLOT(slotLoad()));
 }
 
 EditorToolSettings::~EditorToolSettings()
@@ -204,14 +202,11 @@ KPushButton* EditorToolSettings::button(int buttonCode) const
     if (buttonCode & Cancel)
         return d->cancelBtn;
 
-    if (buttonCode & User1)
-        return d->user1Btn;
+    if (buttonCode & Load)
+        return d->loadBtn;
 
-    if (buttonCode & User2)
-        return d->user2Btn;
-
-    if (buttonCode & User3)
-        return d->user3Btn;
+    if (buttonCode & SaveAs)
+        return d->saveAsBtn;
 
     return 0;
 }
