@@ -28,10 +28,10 @@
 
 #include "ctrlpaneldlg.h"
 
-class KIntNumInput;
 
 namespace KDcrawIface
 {
+class RIntNumInput;
 }
 
 namespace DigikamImagesPluginCore
@@ -63,7 +63,7 @@ private:
 
 private:
 
-    KIntNumInput *m_radiusInput;
+    KDcrawIface::RIntNumInput *m_radiusInput;
 };
 
 }  // NameSpace DigikamImagesPluginCore

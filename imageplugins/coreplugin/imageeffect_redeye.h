@@ -40,10 +40,10 @@ class QLabel;
 
 class KHueSaturationSelector;
 class KColorValueSelector;
-class KIntNumInput;
 
 namespace KDcrawIface
 {
+class RIntNumInput;
 }
 
 namespace Digikam
@@ -139,12 +139,12 @@ private:
 
     QButtonGroup                 *m_scaleBG;
 
-    KIntNumInput                 *m_tintLevel;
-    KIntNumInput                 *m_redThreshold;
-    KIntNumInput                 *m_smoothLevel;
-
     KHueSaturationSelector       *m_HSSelector;
     KColorValueSelector          *m_VSelector;
+
+    KDcrawIface::RIntNumInput    *m_tintLevel;
+    KDcrawIface::RIntNumInput    *m_redThreshold;
+    KDcrawIface::RIntNumInput    *m_smoothLevel;
 
     Digikam::ImageWidget         *m_previewWidget;
 

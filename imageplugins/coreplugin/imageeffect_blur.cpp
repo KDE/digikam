@@ -23,18 +23,17 @@
 
 // Qt includes.
 
-#include <QLabel>
 #include <QGridLayout>
+#include <QLabel>
 
 // KDE includes.
 
 #include <kaboutdata.h>
-#include <knuminput.h>
+#include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
-#include <klocale.h>
-#include <kapplication.h>
 #include <kglobal.h>
+#include <klocale.h>
 
 // LibKDcraw includes.
 
@@ -67,10 +66,10 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
 
     QLabel *label = new QLabel(i18n("Smoothness:"), gboxSettings);
 
-    m_radiusInput = new KIntNumInput(gboxSettings);
+    m_radiusInput = new RIntNumInput(gboxSettings);
     m_radiusInput->setRange(0, 100, 1);
     m_radiusInput->setSliderEnabled(true);
-    m_radiusInput->setValue(0);
+    m_radiusInput->setDefaultValue(0);
     m_radiusInput->setWhatsThis( i18n("<p>A smoothness of 0 has no effect, "
                                       "1 and above determine the Gaussian blur matrix radius "
                                       "that determines how much to blur the image."));
@@ -91,7 +90,7 @@ void ImageEffect_Blur::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("gaussianblur Tool Dialog");
-    m_radiusInput->setValue(group.readEntry("RadiusAjustment", 0));
+    m_radiusInput->setValue(group.readEntry("RadiusAjustment", m_radiusInput->defaultValue()));
 }
 
 void ImageEffect_Blur::writeUserSettings()
@@ -105,7 +104,7 @@ void ImageEffect_Blur::writeUserSettings()
 void ImageEffect_Blur::resetValues(void)
 {
     m_radiusInput->blockSignals(true);
-    m_radiusInput->setValue(0);
+    m_radiusInput->slotReset();
     m_radiusInput->blockSignals(false);
 }
 

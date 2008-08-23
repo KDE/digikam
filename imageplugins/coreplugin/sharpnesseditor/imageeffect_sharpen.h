@@ -29,13 +29,13 @@
 #include "ctrlpaneldlg.h"
 
 class QStackedWidget;
-class QComboBox;
 
-class KIntNumInput;
-class KDoubleNumInput;
 
 namespace KDcrawIface
 {
+class RIntNumInput;
+class RDoubleNumInput;
+class RComboBox;
 }
 
 namespace Digikam
@@ -82,22 +82,22 @@ private:
         Refocus
     };
 
-    QStackedWidget  *m_stack;
+    QStackedWidget               *m_stack;
 
-    QComboBox       *m_sharpMethod;
+    KDcrawIface::RComboBox       *m_sharpMethod;
 
-    KIntNumInput    *m_matrixSize;
-    KIntNumInput    *m_radiusInput;
-    KIntNumInput    *m_radiusInput2;
+    KDcrawIface::RIntNumInput    *m_matrixSize;
+    KDcrawIface::RIntNumInput    *m_radiusInput;
+    KDcrawIface::RIntNumInput    *m_radiusInput2;
 
-    KDoubleNumInput *m_radius;
-    KDoubleNumInput *m_gauss;
-    KDoubleNumInput *m_correlation;
-    KDoubleNumInput *m_noise;
-    KDoubleNumInput *m_amountInput;
-    KDoubleNumInput *m_thresholdInput;
+    KDcrawIface::RDoubleNumInput *m_radius;
+    KDcrawIface::RDoubleNumInput *m_gauss;
+    KDcrawIface::RDoubleNumInput *m_correlation;
+    KDcrawIface::RDoubleNumInput *m_noise;
+    KDcrawIface::RDoubleNumInput *m_amountInput;
+    KDcrawIface::RDoubleNumInput *m_thresholdInput;
 
-    Digikam::DImg    m_img;
+    Digikam::DImg                 m_img;
 };
 
 }  // NameSpace DigikamImagesPluginCore

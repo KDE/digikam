@@ -46,7 +46,6 @@
 #include <kglobal.h>
 #include <khuesaturationselect.h>
 #include <klocale.h>
-#include <knuminput.h>
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
@@ -155,20 +154,20 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     // -------------------------------------------------------------
 
     m_thresholdLabel = new QLabel(i18n("Sensitivity:"), gboxSettings);
-    m_redThreshold   = new KIntNumInput(gboxSettings);
+    m_redThreshold   = new RIntNumInput(gboxSettings);
     m_redThreshold->setRange(10, 90, 1);
     m_redThreshold->setSliderEnabled(true);
-    m_redThreshold->setValue(20);
+    m_redThreshold->setDefaultValue(20);
     m_redThreshold->setWhatsThis(i18n("<p>Sets the red color pixels selection threshold. "
                                       "Low values will select more red color pixels (agressive correction), high "
                                       "values less (mild correction). Use low value if eye have been selected "
                                       "exactly. Use high value if other parts of the face are also selected."));
 
     m_smoothLabel = new QLabel(i18n("Smooth:"), gboxSettings);
-    m_smoothLevel = new KIntNumInput(gboxSettings);
+    m_smoothLevel = new RIntNumInput(gboxSettings);
     m_smoothLevel->setRange(0, 5, 1);
     m_smoothLevel->setSliderEnabled(true);
-    m_smoothLevel->setValue(1);
+    m_smoothLevel->setDefaultValue(1);
     m_smoothLevel->setWhatsThis(i18n("<p>Sets the smoothness value when blurring the border "
                                      "of the changed pixels. "
                                      "This leads to a more naturally looking pupil."));
@@ -187,10 +186,10 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_VSelector->setIndent(false);
 
     QLabel *label4 = new QLabel(i18n("Tint Level:"), gboxSettings);
-    m_tintLevel    = new KIntNumInput(gboxSettings);
+    m_tintLevel    = new RIntNumInput(gboxSettings);
     m_tintLevel->setRange(1, 200, 1);
     m_tintLevel->setSliderEnabled(true);
-    m_tintLevel->setValue(128);
+    m_tintLevel->setDefaultValue(128);
     m_tintLevel->setWhatsThis(i18n("<p>Set the tint level to adjust the luminosity of "
                                    "the new color of the pupil."));
 
@@ -355,12 +354,12 @@ void ImageEffect_RedEye::readUserSettings()
     m_scaleBG->button(group.readEntry("Histogram Scale",
                       (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
 
-    m_redThreshold->setValue(group.readEntry("RedThreshold", 20));
-    m_smoothLevel->setValue(group.readEntry("SmoothLevel", 1));
+    m_redThreshold->setValue(group.readEntry("RedThreshold", m_redThreshold->defaultValue()));
+    m_smoothLevel->setValue(group.readEntry("SmoothLevel", m_smoothLevel->defaultValue()));
     m_HSSelector->setHue(group.readEntry("HueColoringTint", 0));
     m_HSSelector->setSaturation(group.readEntry("SatColoringTint", 128));
     m_VSelector->setValue(group.readEntry("ValColoringTint", 255));
-    m_tintLevel->setValue(group.readEntry("TintLevel", 128));
+    m_tintLevel->setValue(group.readEntry("TintLevel", m_tintLevel->defaultValue()));
 
     QColor col;
     col.setHsv(m_HSSelector->hue(),
@@ -394,15 +393,14 @@ void ImageEffect_RedEye::resetValues()
     m_VSelector->blockSignals(true);
     m_tintLevel->blockSignals(true);
 
-    m_redThreshold->setValue(20);
-    m_smoothLevel->setValue(1);
+    m_redThreshold->slotReset();
+    m_smoothLevel->slotReset();
+    m_tintLevel->slotReset();
 
     // Black color by default
     m_HSSelector->setXValue(0);
     m_HSSelector->setYValue(0);
     m_VSelector->setValue(0);
-
-    m_tintLevel->setValue(128);
 
     m_redThreshold->blockSignals(false);
     m_HSSelector->blockSignals(false);
