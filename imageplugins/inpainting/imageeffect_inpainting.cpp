@@ -30,38 +30,38 @@
 
 // Qt includes.
 
-#include <QGroupBox>
-#include <QLabel>
-#include <QPushButton>
-#include <QFrame>
+#include <QBrush>
 #include <QCheckBox>
 #include <QComboBox>
+#include <QEvent>
+#include <QFile>
+#include <QFrame>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QPainter>
+#include <QPixmap>
+#include <QPushButton>
 #include <QTabWidget>
 #include <QTimer>
-#include <QEvent>
-#include <QPixmap>
-#include <QPainter>
-#include <QBrush>
-#include <QFile>
-#include <QGridLayout>
 
 // KDE includes.
 
-#include <kcursor.h>
-#include <kurllabel.h>
-#include <klocale.h>
 #include <kaboutdata.h>
+#include <kapplication.h>
+#include <kcursor.h>
+#include <kfiledialog.h>
+#include <kglobal.h>
+#include <kglobalsettings.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
-#include <kapplication.h>
+#include <klocale.h>
 #include <kmenu.h>
-#include <kfiledialog.h>
-#include <kstandarddirs.h>
 #include <kmessagebox.h>
-#include <kglobalsettings.h>
 #include <kpassivepopup.h>
-#include <kglobal.h>
+#include <kstandarddirs.h>
 #include <ktoolinvocation.h>
+#include <kurllabel.h>
 
 // Local includes.
 
@@ -207,6 +207,12 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
 
     connect(m_inpaintingTypeCB, SIGNAL(activated(int)),
             this, SLOT(slotResetValues(int)));
+
+    // -------------------------------------------------------------
+
+    Digikam::GreycstorationSettings defaults;
+    defaults.setInpaintingDefaultSettings();
+    m_settingsWidget->setDefaultSettings(defaults);
 }
 
 ImageEffect_InPainting_Dialog::~ImageEffect_InPainting_Dialog()
@@ -224,20 +230,21 @@ void ImageEffect_InPainting_Dialog::readUserSettings()
     KConfigGroup group        = config->group("inpainting Tool Dialog");
 
     Digikam::GreycstorationSettings settings;
-    settings.fastApprox = group.readEntry("FastApprox", true);
-    settings.interp     = group.readEntry("Interpolation",
-                          (int)Digikam::GreycstorationSettings::NearestNeighbor);
-    settings.amplitude  = group.readEntry("Amplitude", 20.0);
-    settings.sharpness  = group.readEntry("Sharpness", 0.3);
-    settings.anisotropy = group.readEntry("Anisotropy", 1.0);
-    settings.alpha      = group.readEntry("Alpha", 0.8);
-    settings.sigma      = group.readEntry("Sigma", 2.0);
-    settings.gaussPrec  = group.readEntry("GaussPrec", 2.0);
-    settings.dl         = group.readEntry("Dl", 0.8);
-    settings.da         = group.readEntry("Da", 30.0);
-    settings.nbIter     = group.readEntry("Iteration", 30);
-    settings.tile       = group.readEntry("Tile", 512);
-    settings.btile      = group.readEntry("BTile", 4);
+    Digikam::GreycstorationSettings defaults;
+    defaults.setInpaintingDefaultSettings();
+
+    settings.fastApprox = group.readEntry("FastApprox", defaults.fastApprox);
+    settings.interp     = group.readEntry("Interpolation", defaults.interp);
+    settings.amplitude  = group.readEntry("Amplitude", defaults.amplitude);
+    settings.sharpness  = group.readEntry("Sharpness", defaults.sharpness);
+    settings.anisotropy = group.readEntry("Anisotropy", defaults.anisotropy);
+    settings.alpha      = group.readEntry("Alpha", defaults.alpha);
+    settings.sigma      = group.readEntry("Sigma", defaults.sigma);
+    settings.gaussPrec  = group.readEntry("GaussPrec", defaults.gaussPrec);
+    settings.dl         = group.readEntry("Dl", defaults.dl);
+    settings.da         = group.readEntry("Iteration", defaults.nbIter);
+    settings.tile       = group.readEntry("Tile", defaults.tile);
+    settings.btile      = group.readEntry("BTile", defaults.btile);
     m_settingsWidget->setSettings(settings);
 
     int p = group.readEntry("Preset", (int)NoPreset);
