@@ -30,7 +30,7 @@
 #define NOISE_REDUCTION_H
 
 // C++ includes.
- 
+
 #include <cmath>
 
 // Digikam includes.

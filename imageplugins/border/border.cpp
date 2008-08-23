@@ -22,8 +22,8 @@
  * 
  * ============================================================ */
 
-// C++ includes. 
- 
+// C++ includes.
+
 #include <cmath>
 #include <cstdlib>
 

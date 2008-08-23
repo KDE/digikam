@@ -24,8 +24,8 @@
 // Degrees to radian convertion coeff (PI/180). To optimize computation.
 #define DEG2RAD 0.017453292519943
 
-// C++ includes. 
- 
+// C++ includes.
+
 #include <cmath>
 #include <cstdlib>
 

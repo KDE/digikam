@@ -27,9 +27,9 @@
 
 // Represents 1 
 #define ANGLE_RATIO  0.017453292519943295769236907685   
-  
-// C++ includes. 
- 
+
+// C++ includes.
+
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
