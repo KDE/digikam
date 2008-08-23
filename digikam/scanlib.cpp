@@ -29,7 +29,7 @@ extern "C"
 #include <sys/time.h>
 }
 
-// C++ includes
+// C++ includes.
 
 #include <ctime>
 #include <cstdlib>
