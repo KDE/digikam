@@ -26,10 +26,10 @@
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qwhatsthis.h>
-#include <qtooltip.h>
 #include <qtabwidget.h>
 #include <qtextstream.h>
+#include <qtooltip.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
@@ -58,48 +58,49 @@ public:
 
     GreycstorationWidgetPriv()
     {
-        amplitudeLabel     = 0;
-        iterationLabel     = 0;
-        sharpnessLabel     = 0;
-        anisotropyLabel    = 0;
-        alphaLabel         = 0;
-        sigmaLabel         = 0;
-        gaussianPrecLabel  = 0;
-        dlLabel            = 0;
-        daLabel            = 0;
-        tileLabel          = 0;
-        btileLabel         = 0;
-        interpolationLabel = 0;
-        fastApproxCBox     = 0;
-        interpolationBox   = 0;
-        amplitudeInput     = 0;
-        sharpnessInput     = 0;
-        anisotropyInput    = 0;
-        alphaInput         = 0;
-        sigmaInput         = 0;
-        gaussianPrecInput  = 0;
-        dlInput            = 0;
-        daInput            = 0;
-        iterationInput     = 0;
-        tileInput          = 0;
-        btileInput         = 0;
-        advancedPage       = 0;
-        generalPage        = 0;
         parent             = 0;
+
+        advancedPage       = 0;
+        alphaInput         = 0;
+        alphaLabel         = 0;
+        amplitudeInput     = 0;
+        amplitudeLabel     = 0;
+        anisotropyInput    = 0;
+        anisotropyLabel    = 0;
+        btileInput         = 0;
+        btileLabel         = 0;
+        daInput            = 0;
+        daLabel            = 0;
+        dlInput            = 0;
+        dlLabel            = 0;
+        fastApproxCBox     = 0;
+        gaussianPrecInput  = 0;
+        gaussianPrecLabel  = 0;
+        generalPage        = 0;
+        interpolationBox   = 0;
+        interpolationLabel = 0;
+        iterationInput     = 0;
+        iterationLabel     = 0;
+        sharpnessInput     = 0;
+        sharpnessLabel     = 0;
+        sigmaInput         = 0;
+        sigmaLabel         = 0;
+        tileInput          = 0;
+        tileLabel          = 0;
     }
 
+    QLabel          *alphaLabel;
     QLabel          *amplitudeLabel;
+    QLabel          *anisotropyLabel;
+    QLabel          *btileLabel;
+    QLabel          *daLabel;
+    QLabel          *dlLabel;
+    QLabel          *gaussianPrecLabel;
+    QLabel          *interpolationLabel;
     QLabel          *iterationLabel;
     QLabel          *sharpnessLabel;
-    QLabel          *anisotropyLabel;
-    QLabel          *alphaLabel;
     QLabel          *sigmaLabel;
-    QLabel          *gaussianPrecLabel;
-    QLabel          *dlLabel;
-    QLabel          *daLabel;
     QLabel          *tileLabel;
-    QLabel          *btileLabel;
-    QLabel          *interpolationLabel;
 
     QWidget         *advancedPage;
     QWidget         *generalPage;
@@ -110,18 +111,18 @@ public:
 
     RComboBox       *interpolationBox;
 
-    RDoubleNumInput *amplitudeInput;
-    RDoubleNumInput *sharpnessInput;
-    RDoubleNumInput *anisotropyInput;
     RDoubleNumInput *alphaInput;
-    RDoubleNumInput *sigmaInput;
-    RDoubleNumInput *gaussianPrecInput;
-    RDoubleNumInput *dlInput;
+    RDoubleNumInput *amplitudeInput;
+    RDoubleNumInput *anisotropyInput;
     RDoubleNumInput *daInput;
+    RDoubleNumInput *dlInput;
+    RDoubleNumInput *gaussianPrecInput;
+    RDoubleNumInput *sharpnessInput;
+    RDoubleNumInput *sigmaInput;
 
+    RIntNumInput    *btileInput;
     RIntNumInput    *iterationInput;
     RIntNumInput    *tileInput;
-    RIntNumInput    *btileInput;
 };
 
 GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
@@ -268,38 +269,38 @@ void GreycstorationWidget::setEnabled(bool b)
 void GreycstorationWidget::setSettings(GreycstorationSettings settings)
 {
     blockSignals(true);
-    d->fastApproxCBox->setChecked(settings.fastApprox);
-    d->interpolationBox->setCurrentItem(settings.interp);
-    d->amplitudeInput->setValue(settings.amplitude);
-    d->sharpnessInput->setValue(settings.sharpness);
-    d->anisotropyInput->setValue(settings.anisotropy);
     d->alphaInput->setValue(settings.alpha);
-    d->sigmaInput->setValue(settings.sigma);
-    d->gaussianPrecInput->setValue(settings.gaussPrec);
-    d->dlInput->setValue(settings.dl);
-    d->daInput->setValue(settings.da);
-    d->iterationInput->setValue(settings.nbIter);
-    d->tileInput->setValue(settings.tile);
+    d->amplitudeInput->setValue(settings.amplitude);
+    d->anisotropyInput->setValue(settings.anisotropy);
     d->btileInput->setValue(settings.btile);
+    d->daInput->setValue(settings.da);
+    d->dlInput->setValue(settings.dl);
+    d->fastApproxCBox->setChecked(settings.fastApprox);
+    d->gaussianPrecInput->setValue(settings.gaussPrec);
+    d->interpolationBox->setCurrentItem(settings.interp);
+    d->iterationInput->setValue(settings.nbIter);
+    d->sharpnessInput->setValue(settings.sharpness);
+    d->sigmaInput->setValue(settings.sigma);
+    d->tileInput->setValue(settings.tile);
     blockSignals(false);
 }
 
 void GreycstorationWidget::setDefaultSettings(GreycstorationSettings settings)
 {
     blockSignals(true);
-    d->fastApproxCBox->setChecked(settings.fastApprox);
-    d->interpolationBox->setDefaultItem(settings.interp);
-    d->amplitudeInput->setDefaultValue(settings.amplitude);
-    d->sharpnessInput->setDefaultValue(settings.sharpness);
-    d->anisotropyInput->setDefaultValue(settings.anisotropy);
     d->alphaInput->setDefaultValue(settings.alpha);
-    d->sigmaInput->setDefaultValue(settings.sigma);
-    d->gaussianPrecInput->setDefaultValue(settings.gaussPrec);
-    d->dlInput->setDefaultValue(settings.dl);
-    d->daInput->setDefaultValue(settings.da);
-    d->iterationInput->setDefaultValue(settings.nbIter);
-    d->tileInput->setDefaultValue(settings.tile);
+    d->amplitudeInput->setDefaultValue(settings.amplitude);
+    d->anisotropyInput->setDefaultValue(settings.anisotropy);
     d->btileInput->setDefaultValue(settings.btile);
+    d->daInput->setDefaultValue(settings.da);
+    d->dlInput->setDefaultValue(settings.dl);
+    d->fastApproxCBox->setChecked(settings.fastApprox);
+    d->gaussianPrecInput->setDefaultValue(settings.gaussPrec);
+    d->interpolationBox->setDefaultItem(settings.interp);
+    d->iterationInput->setDefaultValue(settings.nbIter);
+    d->sharpnessInput->setDefaultValue(settings.sharpness);
+    d->sigmaInput->setDefaultValue(settings.sigma);
+    d->tileInput->setDefaultValue(settings.tile);
     blockSignals(false);
 }
 

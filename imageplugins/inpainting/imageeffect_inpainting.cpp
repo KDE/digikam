@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-// C++ include.
+// C++ includes.
 
 #include <cstdio>
 #include <cmath>
@@ -30,40 +30,39 @@
 
 // Qt includes.
 
-#include <qvgroupbox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qlayout.h>
-#include <qframe.h>
+#include <qbrush.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
+#include <qevent.h>
+#include <qfile.h>
+#include <qframe.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qpainter.h>
+#include <qpixmap.h>
+#include <qpushbutton.h>
 #include <qtabwidget.h>
 #include <qtimer.h>
-#include <qevent.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qbrush.h>
-#include <qfile.h>
+#include <qtooltip.h>
+#include <qvgroupbox.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
-#include <kcursor.h>
-#include <kurllabel.h>
-#include <klocale.h>
 #include <kaboutdata.h>
+#include <kapplication.h>
+#include <kcursor.h>
+#include <kfiledialog.h>
+#include <kglobalsettings.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
-#include <kapplication.h>
-#include <kpopupmenu.h>
-#include <kfiledialog.h>
-#include <kstandarddirs.h>
-#include <kprogress.h>
+#include <klocale.h>
 #include <kmessagebox.h>
-#include <knuminput.h>
-#include <kglobalsettings.h>
 #include <kpassivepopup.h>
+#include <kpopupmenu.h>
+#include <kprogress.h>
+#include <kstandarddirs.h>
+#include <kurllabel.h>
 
 // Local includes.
 
