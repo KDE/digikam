@@ -217,6 +217,7 @@ void RawPreview::postProcessing(const DRawDecoding& settings)
 {
     DImg postImg = d->demosaicedImg;
     RawPostProcessing postProc(&postImg, 0, settings);
+    postProc.startFilterDirectly();       // Run filter without to use multithreading.
     setPostProcessedImage(postProc.getTargetImage());
     emit signalPostProcessedImage();
 }
