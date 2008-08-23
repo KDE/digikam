@@ -96,12 +96,14 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
 
     d->defaultBtn = new KPushButton(d->btnBox1);
     d->defaultBtn->setGuiItem(KStdGuiItem::defaults());
+    d->defaultBtn->setIconSet(SmallIconSet("reload_page"));
+    QToolTip::add(d->defaultBtn, i18n("<p>Reset all settings to their default values."));
     if (!(buttonMask & Default))
         d->defaultBtn->hide();
 
     d->tryBtn = new KPushButton(d->btnBox1);
+    d->tryBtn->setGuiItem(KStdGuiItem::apply());
     d->tryBtn->setText(i18n("Try"));
-    d->tryBtn->setIconSet(SmallIconSet("try"));
     QToolTip::add(d->tryBtn, i18n("<p>Try all settings."));
     if (!(buttonMask & Try))
         d->tryBtn->hide();
@@ -124,7 +126,7 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
 
     d->loadBtn = new KPushButton(d->btnBox2);
     d->loadBtn->setGuiItem(KStdGuiItem::open());
-    QToolTip::add(d->loadBtn, i18n("<p>Load all filter parameters from settings text file."));
+    QToolTip::add(d->loadBtn, i18n("<p>Load all parameters from settings text file."));
     if (!(buttonMask & Load))
         d->loadBtn->hide();
 
@@ -132,7 +134,7 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
 
     d->saveAsBtn = new KPushButton(d->btnBox2);
     d->saveAsBtn->setGuiItem(KStdGuiItem::saveAs());
-    QToolTip::add(d->saveAsBtn, i18n("<p>Save all filter parameters to settings text file."));
+    QToolTip::add(d->saveAsBtn, i18n("<p>Save all parameters to settings text file."));
     if (!(buttonMask & SaveAs))
         d->saveAsBtn->hide();
 
