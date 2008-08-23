@@ -25,23 +25,26 @@
 
 // Qt includes.
 
+#include <QGridLayout>
+#include <QLabel>
 #include <QPolygon>
 #include <QProgressBar>
-#include <QComboBox>
-#include <QLabel>
 #include <QPushButton>
-#include <QGridLayout>
 
 // KDE includes.
 
-#include <klocale.h>
-#include <kconfig.h>
-#include <kimageio.h>
 #include <kaboutdata.h>
 #include <kapplication.h>
-#include <kstandarddirs.h>
+#include <kconfig.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
+#include <kimageio.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
+
+// LibKDcraw includes.
+
+#include <libkdcraw/rcombobox.h>
 
 // Local includes.
 
@@ -55,6 +58,8 @@
 #include "blackframelistview.h"
 #include "imageeffect_hotpixels.h"
 #include "imageeffect_hotpixels.moc"
+
+using namespace KDcrawIface;
 
 namespace DigikamHotPixelsImagesPlugin
 {
@@ -90,14 +95,15 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings );
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings);
 
     QLabel *filterMethodLabel = new QLabel(i18n("Filter:"), gboxSettings);
-    m_filterMethodCombo       = new QComboBox(gboxSettings);
+    m_filterMethodCombo = new RComboBox(gboxSettings);
     m_filterMethodCombo->addItem(i18n("Average"));
     m_filterMethodCombo->addItem(i18n("Linear"));
     m_filterMethodCombo->addItem(i18n("Quadratic"));
     m_filterMethodCombo->addItem(i18n("Cubic"));
+    m_filterMethodCombo->setDefaultIndex(HotPixelFixer::QUADRATIC_INTERPOLATION);
 
     m_blackFrameButton = new QPushButton(i18n("Black Frame..."), gboxSettings);
     setButtonWhatsThis( Apply, i18n("<p>Use this button to add a new black frame file which will "
@@ -142,7 +148,7 @@ void ImageEffect_HotPixels::readUserSettings()
     KConfigGroup group        = config->group("hotpixels Tool Dialog");
     m_blackFrameURL = KUrl(group.readEntry("Last Black Frame File", QString()));
     m_filterMethodCombo->setCurrentIndex(group.readEntry("Filter Method",
-                                         (int)HotPixelFixer::QUADRATIC_INTERPOLATION));
+                                         m_filterMethodCombo->defaultIndex()));
 
     if (m_blackFrameURL.isValid())
     {
@@ -168,7 +174,7 @@ void ImageEffect_HotPixels::writeUserSettings()
 void ImageEffect_HotPixels::resetValues()
 {
     m_filterMethodCombo->blockSignals(true);
-    m_filterMethodCombo->setCurrentIndex(HotPixelFixer::QUADRATIC_INTERPOLATION);
+    m_filterMethodCombo->slotReset();
     m_filterMethodCombo->blockSignals(false);
 }
 
