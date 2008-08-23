@@ -28,7 +28,7 @@
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
 // C++ includes.
- 
+
 #include <cmath>
 
 // Qt includes.

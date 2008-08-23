@@ -36,7 +36,7 @@ extern "C"
 #include <stdarg.h>
 }
 
-// C++  includes.
+// C++ includes.
 
 #include <cstdlib>
 #include <cstdio>

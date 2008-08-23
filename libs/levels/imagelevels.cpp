@@ -30,8 +30,8 @@
 
 #include <qfile.h>
 
-// C++ includes. 
- 
+// C++ includes.
+
 #include <cstdio>
 #include <cmath>
 #include <cstring>
