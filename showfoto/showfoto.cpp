@@ -32,7 +32,7 @@ extern "C"
 #include <unistd.h>
 }
 
-// C++ includes
+// C++ includes.
 
 #include <cstdio>
 

@@ -72,7 +72,8 @@
 #include "editorwindow.h"
 #include "icctransform.h"
 #include "imageprint.h"
-//#include "imageprint.moc"
+
+// # includes.
 
 namespace Digikam
 {
