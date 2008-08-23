@@ -28,10 +28,10 @@
 
 #include "ctrlpaneldlg.h"
 
-class KDoubleNumInput;
 
 namespace KDcrawIface
 {
+class RDoubleNumInput;
 }
 
 namespace DigikamNoiseReductionImagesPlugin
@@ -67,17 +67,17 @@ private slots:
 
 private:
 
-    KDoubleNumInput *m_radiusInput;
-    KDoubleNumInput *m_lumToleranceInput;
-    KDoubleNumInput *m_thresholdInput;
-    KDoubleNumInput *m_textureInput;
-    KDoubleNumInput *m_sharpnessInput;
+    KDcrawIface::RDoubleNumInput *m_radiusInput;
+    KDcrawIface::RDoubleNumInput *m_lumToleranceInput;
+    KDcrawIface::RDoubleNumInput *m_thresholdInput;
+    KDcrawIface::RDoubleNumInput *m_textureInput;
+    KDcrawIface::RDoubleNumInput *m_sharpnessInput;
 
-    KDoubleNumInput *m_csmoothInput;
-    KDoubleNumInput *m_lookaheadInput;
-    KDoubleNumInput *m_gammaInput;
-    KDoubleNumInput *m_dampingInput;
-    KDoubleNumInput *m_phaseInput;
+    KDcrawIface::RDoubleNumInput *m_csmoothInput;
+    KDcrawIface::RDoubleNumInput *m_lookaheadInput;
+    KDcrawIface::RDoubleNumInput *m_gammaInput;
+    KDcrawIface::RDoubleNumInput *m_dampingInput;
+    KDcrawIface::RDoubleNumInput *m_phaseInput;
 };
 
 }  // NameSpace DigikamNoiseReductionImagesPlugin

@@ -23,28 +23,27 @@
 
 // Qt includes.
 
-#include <QLabel>
 #include <QCheckBox>
+#include <QFile>
+#include <QGridLayout>
+#include <QImage>
+#include <QLabel>
 #include <QString>
 #include <QTabWidget>
-#include <QImage>
-#include <QFile>
 #include <QTextStream>
-#include <QGridLayout>
 
 // KDE includes.
 
-#include <klocale.h>
 #include <kaboutdata.h>
-#include <kiconloader.h>
 #include <kapplication.h>
-#include <kstandarddirs.h>
-#include <knuminput.h>
-#include <kfiledialog.h>
-#include <kglobalsettings.h>
-#include <kmessagebox.h>
 #include <kconfig.h>
+#include <kfiledialog.h>
 #include <kglobal.h>
+#include <kglobalsettings.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kstandarddirs.h>
 
 // LibKDcraw includes.
 
@@ -101,9 +100,10 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
 
     QLabel *label1 = new QLabel(i18n("Radius:"), firstPage);
 
-    m_radiusInput  = new KDoubleNumInput(firstPage);
+    m_radiusInput  = new RDoubleNumInput(firstPage);
     m_radiusInput->setDecimals(1);
-    m_radiusInput->setRange(0.0, 10.0, 0.1, true);
+    m_radiusInput->input()->setRange(0.0, 10.0, 0.1, true);
+    m_radiusInput->setDefaultValue(1.0);
     m_radiusInput->setWhatsThis( i18n("<p><b>Radius</b>: this control selects the "
                                       "gliding window size used for the filter. Larger values do not increase "
                                       "the amount of time needed to filter each pixel in the image but "
@@ -117,9 +117,10 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
 
     QLabel *label3   = new QLabel(i18n("Threshold:"), firstPage);
 
-    m_thresholdInput = new KDoubleNumInput(firstPage);
+    m_thresholdInput = new RDoubleNumInput(firstPage);
     m_thresholdInput->setDecimals(2);
-    m_thresholdInput->setRange(0.0, 1.0, 0.01, true);
+    m_thresholdInput->input()->setRange(0.0, 1.0, 0.01, true);
+    m_thresholdInput->setDefaultValue(0.08);
     m_thresholdInput->setWhatsThis( i18n("<p><b>Threshold</b>: use the slider for coarse adjustment, "
                                          "and the spin control for fine adjustment to control edge detection sensitivity. "
                                          "This value should be set so that edges and details are clearly visible "
@@ -132,9 +133,10 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
 
     QLabel *label4 = new QLabel(i18n("Texture:"), firstPage);
 
-    m_textureInput = new KDoubleNumInput(firstPage);
+    m_textureInput = new RDoubleNumInput(firstPage);
     m_textureInput->setDecimals(2);
-    m_textureInput->setRange(-0.99, 0.99, 0.01, true);
+    m_textureInput->input()->setRange(-0.99, 0.99, 0.01, true);
+    m_textureInput->setDefaultValue(0.0);
     m_textureInput->setWhatsThis( i18n("<p><b>Texture</b>: this control sets the texture accuracy. "
                                        "This value can be used, to get more or less texture accuracy. When decreased, "
                                        "then noise and texture are blurred out, when increased then texture is "
@@ -144,9 +146,10 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
 
     QLabel *label7   = new QLabel(i18n("Sharpness:"), firstPage);  // Filter setting "Lookahead".
 
-    m_sharpnessInput = new KDoubleNumInput(firstPage);
+    m_sharpnessInput = new RDoubleNumInput(firstPage);
     m_sharpnessInput->setDecimals(2);
-    m_sharpnessInput->setRange(0.0, 1.0, 0.1, true);
+    m_sharpnessInput->input()->setRange(0.0, 1.0, 0.1, true);
+    m_sharpnessInput->setDefaultValue(0.25);
     m_sharpnessInput->setWhatsThis( i18n("<p><b>Sharpness</b>: "
                                          "This value improves the frequency response for the filter. "
                                          "When it is too strong then not all noise can be removed, or spike noise may appear. "
@@ -157,9 +160,10 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
 
     QLabel *label5   = new QLabel(i18n("Edge Lookahead:"), firstPage);     // Filter setting "Sharp".
 
-    m_lookaheadInput = new KDoubleNumInput(firstPage);
+    m_lookaheadInput = new RDoubleNumInput(firstPage);
     m_lookaheadInput->setDecimals(2);
-    m_lookaheadInput->setRange(0.01, 20.0, 0.01, true);
+    m_lookaheadInput->input()->setRange(0.01, 20.0, 0.01, true);
+    m_lookaheadInput->setDefaultValue(2.0);
     m_lookaheadInput->setWhatsThis( i18n("<p><b>Edge</b>: "
                                          "This value defines the pixel distance to which the filter looks ahead for edges. "
                                          "When this value is increased, then spike noise is erased. "
@@ -171,9 +175,10 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
 
     QLabel *label10 = new QLabel(i18n("Erosion:"), firstPage);
 
-    m_phaseInput    = new KDoubleNumInput(firstPage);
+    m_phaseInput    = new RDoubleNumInput(firstPage);
     m_phaseInput->setDecimals(1);
-    m_phaseInput->setRange(0.5, 20.0, 0.5, true);
+    m_phaseInput->input()->setRange(0.5, 20.0, 0.5, true);
+    m_phaseInput->setDefaultValue(1.0);
     m_phaseInput->setWhatsThis( i18n("<p><b>Erosion</b>: "
                                      "Use this to increase edge noise erosion and spike noise erosion "
                                      "(noise is removed by erosion)."));
@@ -203,9 +208,10 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
 
     QLabel *label2      = new QLabel(i18n("Luminance:"), secondPage);
 
-    m_lumToleranceInput = new KDoubleNumInput(secondPage);
+    m_lumToleranceInput = new RDoubleNumInput(secondPage);
     m_lumToleranceInput->setDecimals(1);
-    m_lumToleranceInput->setRange(0.0, 1.0, 0.1, true);
+    m_lumToleranceInput->input()->setRange(0.0, 1.0, 0.1, true);
+    m_lumToleranceInput->setDefaultValue(1.0);
     m_lumToleranceInput->setWhatsThis( i18n("<p><b>Luminance</b>: this control sets the luminance tolerance of the image."
                                             "We recommend using either the <b>Color</b> or the <b>Luminance</b> tolerance settings "
                                             "to make an image correction, not both at the same time. These settings "
@@ -216,9 +222,10 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
 
     QLabel *label6 = new QLabel(i18n("Color:"), secondPage);
 
-    m_csmoothInput = new KDoubleNumInput(secondPage);
+    m_csmoothInput = new RDoubleNumInput(secondPage);
     m_csmoothInput->setDecimals(1);
-    m_csmoothInput->setRange(0.0, 1.0, 0.1, true);
+    m_csmoothInput->input()->setRange(0.0, 1.0, 0.1, true);
+    m_csmoothInput->setDefaultValue(1.0);
     m_csmoothInput->setWhatsThis( i18n("<p><b>Color</b>: this control sets the color tolerance of the image. It is "
                                        "recommended using either the <b>Color</b> or the <b>Luminance</b> tolerance "
                                        "to make image correction, not both at the same time. These settings "
@@ -229,9 +236,10 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
 
     QLabel *label8 = new QLabel(i18n("Gamma:"), secondPage);
 
-    m_gammaInput   = new KDoubleNumInput(secondPage);
+    m_gammaInput   = new RDoubleNumInput(secondPage);
     m_gammaInput->setDecimals(1);
-    m_gammaInput->setRange(0.3, 3.0, 0.1, true);
+    m_gammaInput->input()->setRange(0.3, 3.0, 0.1, true);
+    m_gammaInput->setDefaultValue(1.4);
     m_gammaInput->setWhatsThis( i18n("<p><b>Gamma</b>: this control sets the gamma tolerance of the image. This value "
                                      "can be used to increase the tolerance values for darker areas (which commonly "
                                      "are noisier). This results in more blur for shadow areas."));
@@ -240,9 +248,10 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
 
     QLabel *label9 = new QLabel(i18n("Damping:"), secondPage);
 
-    m_dampingInput = new KDoubleNumInput(secondPage);
+    m_dampingInput = new RDoubleNumInput(secondPage);
     m_dampingInput->setDecimals(1);
-    m_dampingInput->setRange(0.5, 20.0, 0.5, true);
+    m_dampingInput->input()->setRange(0.5, 20.0, 0.5, true);
+    m_dampingInput->setDefaultValue(5.0);
     m_dampingInput->setWhatsThis( i18n("<p><b>Damping</b>: this control sets the phase-jitter damping adjustment. "
                                        "This value defines how fast the adaptive filter-radius reacts to luminance "
                                        "variations. If increased, then edges appear smoother; if too high, then blur "
@@ -289,38 +298,38 @@ void ImageEffect_NoiseReduction::readUserSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("noisereduction Tool Dialog");
 
-    m_radiusInput->setEnabled(false);
-    m_lumToleranceInput->setEnabled(false);
-    m_thresholdInput->setEnabled(false);
-    m_textureInput->setEnabled(false);
-    m_sharpnessInput->setEnabled(false);
     m_csmoothInput->setEnabled(false);
-    m_lookaheadInput->setEnabled(false);
-    m_gammaInput->setEnabled(false);
     m_dampingInput->setEnabled(false);
+    m_gammaInput->setEnabled(false);
+    m_lookaheadInput->setEnabled(false);
+    m_lumToleranceInput->setEnabled(false);
     m_phaseInput->setEnabled(false);
+    m_radiusInput->setEnabled(false);
+    m_sharpnessInput->setEnabled(false);
+    m_textureInput->setEnabled(false);
+    m_thresholdInput->setEnabled(false);
 
-    m_radiusInput->setValue(group.readEntry("RadiusAjustment", 1.0));
-    m_lumToleranceInput->setValue(group.readEntry("LumToleranceAjustment", 1.0));
-    m_thresholdInput->setValue(group.readEntry("ThresholdAjustment", 0.08));
-    m_textureInput->setValue(group.readEntry("TextureAjustment", 0.0));
-    m_sharpnessInput->setValue(group.readEntry("SharpnessAjustment", 0.25));
-    m_csmoothInput->setValue(group.readEntry("CsmoothAjustment", 1.0));
-    m_lookaheadInput->setValue(group.readEntry("LookAheadAjustment", 2.0));
-    m_gammaInput->setValue(group.readEntry("GammaAjustment", 1.4));
-    m_dampingInput->setValue(group.readEntry("DampingAjustment", 5.0));
-    m_phaseInput->setValue(group.readEntry("PhaseAjustment", 1.0));
+    m_csmoothInput->setValue(group.readEntry("CsmoothAjustment", m_csmoothInput->defaultValue()));
+    m_dampingInput->setValue(group.readEntry("DampingAjustment", m_dampingInput->defaultValue()));
+    m_gammaInput->setValue(group.readEntry("GammaAjustment", m_gammaInput->defaultValue()));
+    m_lookaheadInput->setValue(group.readEntry("LookAheadAjustment", m_lookaheadInput->defaultValue()));
+    m_lumToleranceInput->setValue(group.readEntry("LumToleranceAjustment", m_lumToleranceInput->defaultValue()));
+    m_phaseInput->setValue(group.readEntry("PhaseAjustment", m_phaseInput->defaultValue()));
+    m_radiusInput->setValue(group.readEntry("RadiusAjustment", m_radiusInput->defaultValue()));
+    m_sharpnessInput->setValue(group.readEntry("SharpnessAjustment", m_sharpnessInput->defaultValue()));
+    m_textureInput->setValue(group.readEntry("TextureAjustment", m_textureInput->defaultValue()));
+    m_thresholdInput->setValue(group.readEntry("ThresholdAjustment", m_thresholdInput->defaultValue()));
 
-    m_radiusInput->setEnabled(true);
-    m_lumToleranceInput->setEnabled(true);
-    m_thresholdInput->setEnabled(true);
-    m_textureInput->setEnabled(true);
-    m_sharpnessInput->setEnabled(true);
     m_csmoothInput->setEnabled(true);
-    m_lookaheadInput->setEnabled(true);
-    m_gammaInput->setEnabled(true);
     m_dampingInput->setEnabled(true);
+    m_gammaInput->setEnabled(true);
+    m_lookaheadInput->setEnabled(true);
+    m_lumToleranceInput->setEnabled(true);
     m_phaseInput->setEnabled(true);
+    m_radiusInput->setEnabled(true);
+    m_sharpnessInput->setEnabled(true);
+    m_textureInput->setEnabled(true);
+    m_thresholdInput->setEnabled(true);
 }
 
 void ImageEffect_NoiseReduction::writeUserSettings()
@@ -342,38 +351,38 @@ void ImageEffect_NoiseReduction::writeUserSettings()
 
 void ImageEffect_NoiseReduction::resetValues()
 {
-    m_radiusInput->setEnabled(true);
-    m_lumToleranceInput->setEnabled(true);
-    m_thresholdInput->setEnabled(true);
-    m_textureInput->setEnabled(true);
-    m_sharpnessInput->setEnabled(true);
     m_csmoothInput->setEnabled(true);
-    m_lookaheadInput->setEnabled(true);
-    m_gammaInput->setEnabled(true);
     m_dampingInput->setEnabled(true);
+    m_gammaInput->setEnabled(true);
+    m_lookaheadInput->setEnabled(true);
+    m_lumToleranceInput->setEnabled(true);
     m_phaseInput->setEnabled(true);
+    m_radiusInput->setEnabled(true);
+    m_sharpnessInput->setEnabled(true);
+    m_textureInput->setEnabled(true);
+    m_thresholdInput->setEnabled(true);
 
-    m_radiusInput->setValue(1.0);
-    m_lumToleranceInput->setValue(1.0);
-    m_thresholdInput->setValue(0.08);
-    m_textureInput->setValue(0.0);
-    m_sharpnessInput->setValue(0.25);
-    m_csmoothInput->setValue(1.0);
-    m_lookaheadInput->setValue(2.0);
-    m_gammaInput->setValue(1.4);
-    m_dampingInput->setValue(5.0);
-    m_phaseInput->setValue(1.0);
+    m_csmoothInput->slotReset();
+    m_dampingInput->slotReset();
+    m_gammaInput->slotReset();
+    m_lookaheadInput->slotReset();
+    m_lumToleranceInput->slotReset();
+    m_phaseInput->slotReset();
+    m_radiusInput->slotReset();
+    m_sharpnessInput->slotReset();
+    m_textureInput->slotReset();
+    m_thresholdInput->slotReset();
 
-    m_radiusInput->setEnabled(false);
-    m_lumToleranceInput->setEnabled(false);
-    m_thresholdInput->setEnabled(false);
-    m_textureInput->setEnabled(false);
-    m_sharpnessInput->setEnabled(false);
     m_csmoothInput->setEnabled(false);
-    m_lookaheadInput->setEnabled(false);
-    m_gammaInput->setEnabled(false);
     m_dampingInput->setEnabled(false);
+    m_gammaInput->setEnabled(false);
+    m_lookaheadInput->setEnabled(false);
+    m_lumToleranceInput->setEnabled(false);
     m_phaseInput->setEnabled(false);
+    m_radiusInput->setEnabled(false);
+    m_sharpnessInput->setEnabled(false);
+    m_textureInput->setEnabled(false);
+    m_thresholdInput->setEnabled(false);
 }
 
 void ImageEffect_NoiseReduction::prepareEffect()

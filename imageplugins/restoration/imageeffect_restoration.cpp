@@ -24,27 +24,27 @@
 
 // Qt includes.
 
-#include <QLabel>
 #include <QComboBox>
-#include <QTabWidget>
 #include <QFile>
-#include <QImage>
 #include <QGridLayout>
+#include <QImage>
+#include <QLabel>
 #include <QPixmap>
+#include <QTabWidget>
 
 // KDE includes.
 
-#include <kurllabel.h>
-#include <klocale.h>
 #include <kaboutdata.h>
-#include <kiconloader.h>
 #include <kapplication.h>
 #include <kfiledialog.h>
-#include <kglobalsettings.h>
-#include <kstandarddirs.h>
-#include <kmessagebox.h>
 #include <kglobal.h>
+#include <kglobalsettings.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kstandarddirs.h>
 #include <ktoolinvocation.h>
+#include <kurllabel.h>
 
 // Local includes.
 
@@ -137,6 +137,12 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
 
     connect(m_restorationTypeCB, SIGNAL(activated(int)),
             this, SLOT(slotResetValues(int)));
+
+    // -------------------------------------------------------------
+
+    Digikam::GreycstorationSettings defaults;
+    defaults.setRestorationDefaultSettings();
+    m_settingsWidget->setDefaultSettings(defaults);
 }
 
 ImageEffect_Restoration::~ImageEffect_Restoration()
@@ -155,20 +161,21 @@ void ImageEffect_Restoration::readUserSettings()
     KConfigGroup group = config->group("restoration Tool Dialog");
 
     Digikam::GreycstorationSettings settings;
-    settings.fastApprox = group.readEntry("FastApprox", true);
-    settings.interp     = group.readEntry("Interpolation",
-                          (int)Digikam::GreycstorationSettings::NearestNeighbor);
-    settings.amplitude  = group.readEntry("Amplitude", 60.0);
-    settings.sharpness  = group.readEntry("Sharpness", 0.7);
-    settings.anisotropy = group.readEntry("Anisotropy", 0.3);
-    settings.alpha      = group.readEntry("Alpha", 0.6);
-    settings.sigma      = group.readEntry("Sigma", 1.1);
-    settings.gaussPrec  = group.readEntry("GaussPrec", 2.0);
-    settings.dl         = group.readEntry("Dl", 0.8);
-    settings.da         = group.readEntry("Da", 30.0);
-    settings.nbIter     = group.readEntry("Iteration", 1);
-    settings.tile       = group.readEntry("Tile", 512);
-    settings.btile      = group.readEntry("BTile", 4);
+    Digikam::GreycstorationSettings defaults;
+    defaults.setRestorationDefaultSettings();
+
+    settings.fastApprox = group.readEntry("FastApprox", defaults.fastApprox);
+    settings.interp     = group.readEntry("Interpolation", defaults.interp);
+    settings.amplitude  = group.readEntry("Amplitude", defaults.amplitude);
+    settings.sharpness  = group.readEntry("Sharpness", defaults.sharpness);
+    settings.anisotropy = group.readEntry("Anisotropy", defaults.anisotropy);
+    settings.alpha      = group.readEntry("Alpha", defaults.alpha);
+    settings.sigma      = group.readEntry("Sigma", defaults.sigma);
+    settings.gaussPrec  = group.readEntry("GaussPrec", defaults.gaussPrec);
+    settings.dl         = group.readEntry("Dl", defaults.dl);
+    settings.da         = group.readEntry("Iteration", defaults.nbIter);
+    settings.tile       = group.readEntry("Tile", defaults.tile);
+    settings.btile      = group.readEntry("BTile", defaults.btile);
     m_settingsWidget->setSettings(settings);
 
     int p = group.readEntry("Preset", (int)NoPreset);
