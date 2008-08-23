@@ -22,13 +22,6 @@
  * 
  * ============================================================ */
 
-// C Ansi includes.
-
-extern "C"
-{
-#include <gphoto2.h>
-}
-
 // C++ includes.
 
 #include <cstdio>
@@ -46,6 +39,12 @@ extern "C"
 // KDE includes.
 
 #include <klocale.h>
+
+// C Ansi includes.
+extern "C"
+{
+#include <gphoto2.h>
+}
 
 // Local includes.
 
