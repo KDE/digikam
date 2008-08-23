@@ -27,7 +27,7 @@
 
 #define XMD_H
 
-// C++ Includes.
+// C++ includes.
 
 #include <cstdio>
 #include <cstdlib>

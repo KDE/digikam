@@ -24,7 +24,7 @@
 #ifndef GEODETICTOOLS_H
 #define GEODETICTOOLS_H
 
-// C++ includes
+// C++ includes.
 
 #include <cmath>
 

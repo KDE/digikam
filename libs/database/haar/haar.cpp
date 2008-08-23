@@ -27,7 +27,7 @@
  *
  * ============================================================ */
 
-// C++ includes
+// C++ includes.
 
 #include <cstring>
 #include <cstdlib>

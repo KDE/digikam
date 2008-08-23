@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-// C++ Includes
+// C++ includes.
 
 #include <fstream>
 #include <cmath>

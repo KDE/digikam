@@ -38,7 +38,7 @@
 
 */
 
-// C++ includes
+// C++ includes.
 
 #include <cmath>
 

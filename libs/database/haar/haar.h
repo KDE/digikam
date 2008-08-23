@@ -30,7 +30,7 @@
 #ifndef HAAR_H
 #define HAAR_H
 
-// C++ Includes
+// C++ includes.
 
 #include <queue>
 

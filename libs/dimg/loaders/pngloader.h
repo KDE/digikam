@@ -24,7 +24,7 @@
 #ifndef PNGLOADER_H
 #define PNGLOADER_H
 
-// C++ include.
+// C++ includes.
 
 #include <cstdarg>
 

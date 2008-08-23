@@ -27,8 +27,8 @@
 #define SQ2PI   2.50662827463100024161235523934010416269302368164062
 #define Epsilon 1.0e-12
 
-// C++ includes. 
- 
+// C++ includes.
+
 #include <cmath>
 #include <cstdlib>
 

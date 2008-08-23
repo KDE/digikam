@@ -21,7 +21,7 @@
  * GNU General Public License for more details.
  * ============================================================ */
 
-// C++ includes
+// C++ includes.
 
 #include <cmath>
 
