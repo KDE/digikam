@@ -40,7 +40,7 @@ extern "C"
 #include <cstdio>
 #include <cmath>
 
-// QT includes.
+// Qt includes.
 
 #include <QFile>
 #include <QImage>

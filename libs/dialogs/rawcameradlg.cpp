@@ -31,7 +31,7 @@
 #include <QTreeWidget>
 #include <QHeaderView>
 
-// KDElib includes.
+// KDE includes.
 
 #include <klocale.h>
 #include <kiconloader.h>

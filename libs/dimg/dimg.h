@@ -26,7 +26,7 @@
 #ifndef DIMG_H
 #define DIMG_H
 
-// QT includes.
+// Qt includes.
 
 #include <QByteArray>
 #include <QSize>

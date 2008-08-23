@@ -26,7 +26,7 @@
 
 #include <qapplication.h>
 
-// Locale includes.
+// Local includes.
 
 #include "ddebug.h"
 #include "loadsavethread.h"

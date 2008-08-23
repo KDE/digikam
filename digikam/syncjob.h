@@ -37,7 +37,7 @@
 #include <QObject>
 #include <QPixmap>
 
-// KDe includes.
+// KDE includes.
 
 #include <kurl.h>
 

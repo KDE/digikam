@@ -25,7 +25,7 @@
 #ifndef IMAGELISTERRECORD_H
 #define IMAGELISTERRECORD_H
 
-// QT includes.
+// Qt includes.
 
 #include <QString>
 #include <QDataStream>

@@ -24,7 +24,7 @@
 #ifndef STATUSSTATUSBAR_H
 #define STATUSSTATUSBAR_H
 
-// QT includes.
+// Qt includes.
 
 #include <QString>
 

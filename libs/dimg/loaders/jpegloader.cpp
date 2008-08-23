@@ -41,7 +41,7 @@ extern "C"
 #include <cstdio>
 #include <cstdlib>
 
-// QT includes.
+// Qt includes.
 
 #include <QFile>
 #include <QByteArray>

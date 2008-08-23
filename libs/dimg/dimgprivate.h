@@ -25,7 +25,7 @@
 #ifndef DIMGPRIVATE_H
 #define DIMGPRIVATE_H
 
-// QT includes.
+// Qt includes.
 
 #include <QString>
 #include <QByteArray>

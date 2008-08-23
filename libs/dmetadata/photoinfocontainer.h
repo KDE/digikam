@@ -24,7 +24,7 @@
 #ifndef PHOTOINFOCONTAINER_H
 #define PHOTOINFOCONTAINER_H
 
-// QT includes.
+// Qt includes.
 
 #include <QString>
 #include <QDateTime>

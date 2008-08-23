@@ -29,7 +29,7 @@
 #include <cmath>
 #include <cstring>
 
-// QT includes.
+// Qt includes.
 
 #include <QByteArray>
 #include <QDataStream>

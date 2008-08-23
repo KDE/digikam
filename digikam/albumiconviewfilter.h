@@ -32,7 +32,7 @@
 
 #include "khbox.h"
 
-// local includes.
+// Local includes.
 
 #include "albumlister.h"
 
