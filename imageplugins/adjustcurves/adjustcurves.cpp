@@ -115,20 +115,10 @@ AdjustCurveTool::AdjustCurveTool(QObject* parent)
     // -------------------------------------------------------------
 
     EditorToolSettings *gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                                              EditorToolSettings::User2|
-                                                              EditorToolSettings::User3|
+                                                              EditorToolSettings::Load|
+                                                              EditorToolSettings::SaveAs|
                                                               EditorToolSettings::Ok|
                                                               EditorToolSettings::Cancel);
-
-    gboxSettings->button(EditorToolSettings::User2)->setText(i18n("Save As"));
-    gboxSettings->button(EditorToolSettings::User2)->setIconSet(SmallIconSet("filesaveas"));
-    QToolTip::add(gboxSettings->button(EditorToolSettings::User2), 
-                  i18n("<p>Save all filter parameters to settings text file."));
-
-    gboxSettings->button(EditorToolSettings::User3)->setText(i18n("Load"));
-    gboxSettings->button(EditorToolSettings::User3)->setIconSet(SmallIconSet("fileopen"));
-    QToolTip::add(gboxSettings->button(EditorToolSettings::User3), 
-                  i18n("<p>Load all filter parameters from settings text file."));
 
     QGridLayout* grid = new QGridLayout(gboxSettings->plainPage(), 5, 5);
 
@@ -341,10 +331,10 @@ AdjustCurveTool::AdjustCurveTool(QObject* parent)
     connect(m_pickerColorButtonGroup, SIGNAL(released(int)),
             this, SLOT(slotPickerColorButtonActived()));
 
-    connect(gboxSettings->button(EditorToolSettings::User2), SIGNAL(clicked()),
+    connect(gboxSettings->button(EditorToolSettings::SaveAs), SIGNAL(clicked()),
             this, SLOT(slotUser2()));
 
-    connect(gboxSettings->button(EditorToolSettings::User3), SIGNAL(clicked()),
+    connect(gboxSettings->button(EditorToolSettings::Load), SIGNAL(clicked()),
             this, SLOT(slotUser3()));
 }
 
