@@ -189,6 +189,7 @@ void Sidebar::deleteTab(QWidget *w)
     if(tab == d->activeTab)
         d->activeTab = -1;
 
+    d->stack->removeWidget(d->stack->widget(tab));
     removeTab(tab);
     //TODO show another widget
 }
