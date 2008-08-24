@@ -1,5 +1,5 @@
 *********************************************************************************************************
-digiKam 0.10.0-beta3 - Release date: 2008-07-31
+digiKam 0.10.0-beta3 - Release date: 2008-08-??
 
 IMPORTANT: This is a beta release : do not use yet in production !!!
 ====================================================================
@@ -22,7 +22,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 168839 : Digikam crashed after tagging.
 010 ==> 167085 : Color selection in sketch search tool looks plain black.
 011 ==> 168852 : Crash on profile application.
-012 ==> 
+012 ==> 167867 : Album view is reset by changing settings.
+013 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta2 - Release date: 2008-07-31
