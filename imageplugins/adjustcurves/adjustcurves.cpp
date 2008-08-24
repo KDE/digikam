@@ -317,7 +317,7 @@ AdjustCurveTool::AdjustCurveTool(QObject* parent)
             this, SLOT(slotCurveTypeChanged(int)));
 
     // -------------------------------------------------------------
-    // Bouttons slots.
+    // Buttons slots.
 
     connect(m_resetButton, SIGNAL(clicked()),
             this, SLOT(slotResetCurrentChannel()));
