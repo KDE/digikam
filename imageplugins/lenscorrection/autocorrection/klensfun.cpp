@@ -21,23 +21,22 @@
 // Qt includes.
 
 #include <QByteArray>
-#include <QGridLayout>
-#include <QString>
 #include <QCheckBox>
-#include <QWidget>
+#include <QGridLayout>
 #include <QLabel>
+#include <QString>
 #include <QWhatsThis>
+#include <QWidget>
 
 // KDE includes.
 
 #include <kdialog.h>
 #include <klocale.h>
-#include <kcombobox.h>
-#include <knuminput.h>
 
 // LibKDcraw includes.
 
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/rcombobox.h>
 
 // Local includes.
 
@@ -61,7 +60,7 @@ KLensFun::KLensFun()
 
 KLensFun::~KLensFun()
 {
-    if ( m_init )
+    if (m_init)
     {
     }
 }
@@ -127,9 +126,16 @@ KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
     m_klf              = new KLensFun();
     QGridLayout* grid  = new QGridLayout(this);
     m_exifUsage        = new QCheckBox(i18n("Use Metadata"), this);
-    m_make             = new KComboBox(this);
-    m_model            = new KComboBox(this);
-    m_lens             = new KComboBox(this);
+
+    m_make             = new RComboBox(this);
+    m_make->setDefaultIndex(0);
+
+    m_model            = new RComboBox(this);
+    m_model->setDefaultIndex(0);
+
+    m_lens             = new RComboBox(this);
+    m_lens->setDefaultIndex(0);
+
     QLabel *makeLabel  = new QLabel(i18n("Make:"), this);
     QLabel *modelLabel = new QLabel(i18n("Model:"), this);
     QLabel *lensLabel  = new QLabel(i18n("Lens:"), this);
@@ -138,25 +144,28 @@ KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
     m_exifUsage->setCheckState(Qt::Unchecked);
     m_exifUsage->setWhatsThis(i18n("Set this option to try to guess the right camera/lens settings "
                                    "from the image metadata (as Exif or Xmp)."));
-    m_make->setInsertPolicy(QComboBox::InsertAlphabetically);
-    m_model->setInsertPolicy(QComboBox::InsertAlphabetically);
-    m_lens->setInsertPolicy(QComboBox::InsertAlphabetically);
+    m_make->combo()->setInsertPolicy(QComboBox::InsertAlphabetically);
+    m_model->combo()->setInsertPolicy(QComboBox::InsertAlphabetically);
+    m_lens->combo()->setInsertPolicy(QComboBox::InsertAlphabetically);
 
     QLabel *focalLabel = new QLabel(i18n("Focal Length:"), this);
     QLabel *aperLabel  = new QLabel(i18n("Aperture:"), this);
     QLabel *distLabel  = new QLabel(i18n("Subject Distance:"), this);
 
-    m_focal = new KDoubleNumInput(this);
+    m_focal = new RDoubleNumInput(this);
     m_focal->setDecimals(1);
-    m_focal->setRange(1.0, 1000.0, 0.01, true);
+    m_focal->input()->setRange(1.0, 1000.0, 0.01, true);
+    m_focal->setDefaultValue(1.0);
 
-    m_aperture = new KDoubleNumInput(this);
+    m_aperture = new RDoubleNumInput(this);
     m_aperture->setDecimals(1);
-    m_aperture->setRange(1.1, 64.0, 0.1, true);
+    m_aperture->input()->setRange(1.1, 64.0, 0.1, true);
+    m_aperture->setDefaultValue(1.1);
 
-    m_distance = new KDoubleNumInput(this);
+    m_distance = new RDoubleNumInput(this);
     m_distance->setDecimals(1);
-    m_distance->setRange(0.0, 100.0, 0.1, true);
+    m_distance->input()->setRange(0.0, 100.0, 0.1, true);
+    m_distance->setDefaultValue(0.0);
 
     grid->addWidget(m_exifUsage, 0, 0, 1, 3);
     grid->addWidget(makeLabel,   1, 0, 1, 3);
@@ -240,7 +249,7 @@ void KLFDeviceSelector::findFromMetadata()
 
     // ------------------------------------------------------------------------------------------------
 
-    int makerIdx = m_make->findText(make);
+    int makerIdx = m_make->combo()->findText(make);
     if (makerIdx >= 0)
     {
         m_make->setCurrentIndex(makerIdx);
@@ -248,7 +257,7 @@ void KLFDeviceSelector::findFromMetadata()
     }
 
     slotUpdateCombos();
-    int modelIdx = m_model->findText(model);
+    int modelIdx = m_model->combo()->findText(model);
     if (modelIdx >= 0)
     {
         m_model->setCurrentIndex(modelIdx);
@@ -260,9 +269,9 @@ void KLFDeviceSelector::findFromMetadata()
     // We use here the Camera Maker, because the Lens Maker seems not to be
     // part of the Exif data. This is of course bad for 3rd party lenses, but
     // they seem anyway not to have Exif entries ususally :/
-    int lensIdx = m_lens->findText(lens);
+    int lensIdx = m_lens->combo()->findText(lens);
     if (lensIdx < 0)
-       lensIdx = m_lens->findText(make + " " + lens);
+       lensIdx = m_lens->combo()->findText(make + " " + lens);
 
     if (lensIdx >= 0)
     {
@@ -278,7 +287,7 @@ void KLFDeviceSelector::findFromMetadata()
     }
 
     DDebug() << "Search for Lens: " << make << " :: " << lens
-             << "< and found: >" << m_lens->itemText(0) + "<";
+             << "< and found: >" << m_lens->combo()->itemText(0) + "<";
 
     QString temp = photoInfo.focalLength;
     if (!temp.isEmpty())
@@ -365,10 +374,10 @@ void KLFDeviceSelector::slotUpdateCombos()
     const lfCamera* const *it = m_klf->m_lfCameras;
 
     // reset box
-    m_model->clear();
+    m_model->combo()->clear();
 
     bool firstRun = false;
-    if ( m_make->count() == 0 )
+    if ( m_make->combo()->count() == 0 )
        firstRun = true;
 
     while ( *it )
@@ -379,18 +388,18 @@ void KLFDeviceSelector::slotUpdateCombos()
            if ( (*it)->Maker )
            {
                 QString t( (*it)->Maker );
-                if ( m_make->findText( t, Qt::MatchExactly ) < 0 )
+                if ( m_make->combo()->findText( t, Qt::MatchExactly ) < 0 )
                     m_make->addItem( t );
            }
        }
 
        // Fill models for current selected maker
-       if ( (*it)->Model && (*it)->Maker == m_make->currentText() )
+       if ( (*it)->Model && (*it)->Maker == m_make->combo()->currentText() )
        {
             KLFDeviceSelector::DevicePtr dev;
             dev        = *it;
             QVariant b = qVariantFromValue(dev);
-            m_model->addItem( (*it)->Model, b );
+            m_model->combo()->addItem( (*it)->Model, b );
        }
 
        it++;
@@ -402,9 +411,9 @@ void KLFDeviceSelector::slotUpdateCombos()
 
 void KLFDeviceSelector::slotUpdateLensCombo()
 {
-    m_lens->clear();
+    m_lens->combo()->clear();
 
-    QVariant v    = m_model->itemData( m_model->currentIndex() );
+    QVariant v    = m_model->combo()->itemData( m_model->currentIndex() );
     DevicePtr dev = v.value<KLFDeviceSelector::DevicePtr>();
     if (!dev)
     {
@@ -419,7 +428,7 @@ void KLFDeviceSelector::slotUpdateLensCombo()
     {
         KLFDeviceSelector::LensPtr lens = *lenses;
         QVariant b                      = qVariantFromValue(lens);
-        m_lens->addItem((*lenses)->Model, b);
+        m_lens->combo()->addItem((*lenses)->Model, b);
         lenses++;
     }
 
@@ -428,7 +437,7 @@ void KLFDeviceSelector::slotUpdateLensCombo()
 
 void KLFDeviceSelector::slotLensSelected()
 {
-    QVariant v        = m_lens->itemData( m_lens->currentIndex() );
+    QVariant v        = m_lens->combo()->itemData( m_lens->currentIndex() );
     m_klf->m_usedLens = v.value<KLFDeviceSelector::LensPtr>();
 
     if ( m_klf->m_cropFactor <= 0.0 ) // this should not happend

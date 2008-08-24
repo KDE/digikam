@@ -39,11 +39,11 @@ extern "C"
 #include "dimgthreadedfilter.h"
 
 class QCheckBox;
-class KComboBox;
-class KDoubleNumInput;
 
 namespace KDcrawIface
 {
+class RComboBox;
+class RDoubleNumInput;
 }
 
 namespace DigikamAutoCorrectionImagesPlugin
@@ -166,15 +166,15 @@ private:
 
 private:
 
-    QCheckBox           *m_exifUsage;
+    QCheckBox                    *m_exifUsage;
 
-    KComboBox           *m_make;
-    KComboBox           *m_model;
-    KComboBox           *m_lens;
+    KDcrawIface::RComboBox       *m_make;
+    KDcrawIface::RComboBox       *m_model;
+    KDcrawIface::RComboBox       *m_lens;
 
-    KDoubleNumInput     *m_focal;
-    KDoubleNumInput     *m_aperture;
-    KDoubleNumInput     *m_distance;
+    KDcrawIface::RDoubleNumInput *m_focal;
+    KDcrawIface::RDoubleNumInput *m_aperture;
+    KDcrawIface::RDoubleNumInput *m_distance;
 
     Digikam::DMetadata   m_metadata;
 
