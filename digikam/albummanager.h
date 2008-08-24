@@ -104,9 +104,17 @@ public:
      */
     //@{
     /**
-    * Initialize
+    * Initialize. Informs the user about failures.
+    * Returns true on success, false on failure.
+    * A return value of false during startup indicates termination of the program
+    * (user is informed)
     */
     bool setDatabase(const QString &dbPath, bool priority);
+
+    /**
+    * Checks if the given database path is equal to the current one
+    */
+    bool databaseEqual(const QString &dbPath) const;
 
     /**
     * starts scanning the libraryPath and listing the albums. If the
@@ -124,6 +132,11 @@ public:
     * @see startScan
     */
     void       refresh();
+
+    /**
+    * Ensures that valid item counts for physical and tag albums are available
+    */
+    void       prepareItemCounts();
     //@}
 
     /** @name List of Albums and current Album

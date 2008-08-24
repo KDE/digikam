@@ -305,6 +305,11 @@ AlbumManager::~AlbumManager()
     delete d;
 }
 
+bool AlbumManager::databaseEqual(const QString &dbPath) const
+{
+    return d->dbPath == dbPath;
+}
+
 bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
 {
     // This is to ensure that the setup does not overrule the command line.
@@ -319,6 +324,9 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
         // true means, dont exit()
         return true;
     }
+
+    if (d->dbPath == dbPath)
+        return true;
 
     d->dbPath  = dbPath;
     d->changed = true;
@@ -611,8 +619,19 @@ void AlbumManager::refresh()
     scanDAlbums();
 }
 
+void AlbumManager::prepareItemCounts()
+{
+    // There is no way to find out if any data we had collected
+    // previously is still valid - recompute
+    scanDAlbums();
+    getAlbumItemsCount();
+    getTagItemsCount();
+}
+
 void AlbumManager::scanPAlbums()
 {
+    d->scanPAlbumsTimer->stop();
+
     // first insert all the current normal PAlbums into a map for quick lookup
     QHash<int, PAlbum *> oldAlbums;
     AlbumIterator it(d->rootPAlbum);
@@ -752,6 +771,8 @@ void AlbumManager::scanPAlbums()
 
 void AlbumManager::getAlbumItemsCount()
 {
+    d->albumItemCountTimer->stop();
+
     if (!AlbumSettings::instance()->getShowFolderTreeViewItemsCount())
         return;
 
@@ -777,6 +798,8 @@ void AlbumManager::getAlbumItemsCount()
 
 void AlbumManager::scanTAlbums()
 {
+    d->scanTAlbumsTimer->stop();
+
     // list TAlbums directly from the db
     // first insert all the current TAlbums into a map for quick lookup
     typedef QMap<int, TAlbum*> TagMap;
@@ -865,7 +888,7 @@ void AlbumManager::scanTAlbums()
         // this will also delete all child albums
         delete rootTag;
     }
-    
+
     for (TagInfo::List::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         TagInfo info = *it;
@@ -901,6 +924,8 @@ void AlbumManager::scanTAlbums()
 
 void AlbumManager::getTagItemsCount()
 {
+    d->tagItemCountTimer->stop();
+
     if (!AlbumSettings::instance()->getShowFolderTreeViewItemsCount())
         return;
 
@@ -926,6 +951,8 @@ void AlbumManager::getTagItemsCount()
 
 void AlbumManager::scanSAlbums()
 {
+    d->scanSAlbumsTimer->stop();
+
     // list SAlbums directly from the db
     // first insert all the current SAlbums into a map for quick lookup
     typedef QMap<int, SAlbum*> SearchMap;
@@ -962,6 +989,8 @@ void AlbumManager::scanSAlbums()
 
 void AlbumManager::scanDAlbums()
 {
+    d->scanDAlbumsTimer->stop();
+
     // List dates using kioslave:
     // The kioslave has a special mode listing the dates
     // for which there are images in the DB.
