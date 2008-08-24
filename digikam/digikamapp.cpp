@@ -1903,11 +1903,14 @@ void DigikamApp::slotSetupChanged()
     //if(AlbumSettings::instance()->getAlbumLibraryPath() != AlbumManager::instance()->getLibraryPath())
       //  d->view->clearHistory();
 
-    if (AlbumManager::instance()->setDatabase(AlbumSettings::instance()->getDatabaseFilePath(), false))
-        AlbumManager::instance()->startScan();
+    if (!AlbumManager::instance()->databaseEqual(AlbumSettings::instance()->getDatabaseFilePath()))
+    {
+        if (AlbumManager::instance()->setDatabase(AlbumSettings::instance()->getDatabaseFilePath(), false))
+            AlbumManager::instance()->startScan();
+    }
 
     if(AlbumSettings::instance()->getShowFolderTreeViewItemsCount())
-        AlbumManager::instance()->refresh();
+        AlbumManager::instance()->prepareItemCounts();
 
     d->view->applySettings();
     d->albumIconViewFilter->readSettings();
