@@ -77,7 +77,6 @@ public:
      * Special case:
      * If all tags have been removed from an item, operation is RemovedAll,
      * and the tags list is empty. containsTag() will always return true in this case.
-     * The "combined" operation shall not be used,
      */
 
     enum Operation
@@ -113,7 +112,7 @@ public:
     bool tagsWereAdded() const
     { return operation() == Added; }
     bool tagsWereRemoved() const
-    { return operation() == Removed; }
+    { return operation() == Removed || operation() == RemovedAll; }
 
 private:
 
