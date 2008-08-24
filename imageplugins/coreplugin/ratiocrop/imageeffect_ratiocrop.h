@@ -31,17 +31,16 @@
 #include "imagedlgbase.h"
 
 class QCheckBox;
-class QComboBox;
 class QLabel;
 class QSpinBox;
 class QToolButton;
 
-class KIntNumInput;
-class KIntSpinBox;
 class KColorButton;
 
 namespace KDcrawIface
 {
+class RComboBox;
+class RIntNumInput;
 }
 
 namespace DigikamImagesPluginCore
@@ -99,10 +98,6 @@ private:
     QLabel               *m_orientLabel;
     QLabel               *m_colorGuideLabel;
 
-    QComboBox            *m_ratioCB;
-    QComboBox            *m_orientCB;
-    QComboBox            *m_guideLinesCB;
-
     QToolButton          *m_centerWidth;
     QToolButton          *m_centerHeight;
 
@@ -115,15 +110,17 @@ private:
     QCheckBox            *m_autoOrientation;
     QCheckBox            *m_preciseCrop;
 
-    QSpinBox             *m_guideSize;
+    KDcrawIface::RComboBox *m_ratioCB;
+    KDcrawIface::RComboBox *m_orientCB;
+    KDcrawIface::RComboBox *m_guideLinesCB;
 
-    KIntNumInput         *m_widthInput;
-    KIntNumInput         *m_heightInput;
-    KIntNumInput         *m_xInput;
-    KIntNumInput         *m_yInput;
-
-    KIntSpinBox          *m_customRatioNInput;
-    KIntSpinBox          *m_customRatioDInput;
+    KDcrawIface::RIntNumInput *m_customRatioDInput;
+    KDcrawIface::RIntNumInput *m_customRatioNInput;
+    KDcrawIface::RIntNumInput *m_guideSize;
+    KDcrawIface::RIntNumInput *m_heightInput;
+    KDcrawIface::RIntNumInput *m_widthInput;
+    KDcrawIface::RIntNumInput *m_xInput;
+    KDcrawIface::RIntNumInput *m_yInput;
 
     KColorButton         *m_guideColorBt;
 

@@ -27,40 +27,44 @@
 
 // Qt includes.
 
-#include <QGroupBox>
-#include <QLabel>
-#include <QPushButton>
-#include <QFrame>
+#include <QBrush>
 #include <QCheckBox>
+#include <QCloseEvent>
 #include <QComboBox>
+#include <QCustomEvent>
+#include <QEvent>
+#include <QFile>
+#include <QFrame>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QImage>
+#include <QLabel>
+#include <QPixmap>
+#include <QProgressBar>
+#include <QPushButton>
 #include <QTabWidget>
 #include <QTimer>
-#include <QEvent>
-#include <QPixmap>
-#include <QBrush>
-#include <QFile>
-#include <QImage>
-#include <QCustomEvent>
-#include <QCloseEvent>
-#include <QGridLayout>
 #include <QVBoxLayout>
-#include <QProgressBar>
 
 // KDE includes.
 
-#include <kseparator.h>
-#include <kcursor.h>
-#include <kurllabel.h>
-#include <klocale.h>
-#include <kiconloader.h>
 #include <kapplication.h>
+#include <kcursor.h>
 #include <kfiledialog.h>
-#include <kstandarddirs.h>
-#include <kmessagebox.h>
-#include <knuminput.h>
-#include <kglobalsettings.h>
 #include <kglobal.h>
+#include <kglobalsettings.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kseparator.h>
+#include <kstandarddirs.h>
 #include <ktoolinvocation.h>
+#include <kurllabel.h>
+
+
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
 
 // Digikam includes.
 
@@ -76,6 +80,8 @@
 
 #include "imageresize.h"
 #include "imageresize.moc"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -111,8 +117,8 @@ public:
     int                   currentRenderingMode;
     int                   orgWidth;
     int                   orgHeight;
-    int                   prevW; 
-    int                   prevH; 
+    int                   prevW;
+    int                   prevH;
 
     double                prevWP;
     double                prevHP;
@@ -128,13 +134,13 @@ public:
 
     QProgressBar         *progressBar;
 
-    KIntNumInput         *wInput;
-    KIntNumInput         *hInput;
-
-    KDoubleNumInput      *wpInput;
-    KDoubleNumInput      *hpInput;
-
     KUrlLabel            *cimgLogoLabel;
+
+    RIntNumInput         *wInput;
+    RIntNumInput         *hInput;
+
+    RDoubleNumInput      *wpInput;
+    RDoubleNumInput      *hpInput;
 
     GreycstorationIface  *greycstorationIface;
     GreycstorationWidget *settingsWidget;
@@ -181,28 +187,32 @@ ImageResize::ImageResize(QWidget* parent)
     d->mainTab->addTab( firstPage, i18n("New Size") );
 
     QLabel *label1 = new QLabel(i18n("Width:"), firstPage);
-    d->wInput      = new KIntNumInput(firstPage);
+    d->wInput      = new RIntNumInput(firstPage);
     d->wInput->setSliderEnabled(true);
     d->wInput->setRange(1, qMax(d->orgWidth * 10, 9999), 1);
+    d->wInput->setDefaultValue(d->orgWidth);
     d->wInput->setObjectName("d->wInput");
     d->wInput->setWhatsThis( i18n("<p>Set here the new image width in pixels."));
 
     QLabel *label2 = new QLabel(i18n("Height:"), firstPage);
-    d->hInput      = new KIntNumInput(firstPage);
+    d->hInput      = new RIntNumInput(firstPage);
     d->hInput->setSliderEnabled(true);
     d->hInput->setRange(1, qMax(d->orgHeight * 10, 9999), 1);
+    d->hInput->setDefaultValue(d->orgHeight);
     d->hInput->setObjectName("d->hInput");
     d->hInput->setWhatsThis( i18n("<p>Set here the new image height in pixels."));
 
     QLabel *label3 = new QLabel(i18n("Width (%):"), firstPage);
-    d->wpInput     = new KDoubleNumInput(firstPage);
-    d->wpInput->setRange(1.0, 999.0, 1.0, true);
+    d->wpInput     = new RDoubleNumInput(firstPage);
+    d->wpInput->input()->setRange(1.0, 999.0, 1.0, true);
+    d->wpInput->setDefaultValue(100.0);
     d->wpInput->setObjectName("d->wpInput");
     d->wpInput->setWhatsThis( i18n("<p>Set here the new image width in percent."));
 
     QLabel *label4 = new QLabel(i18n("Height (%):"), firstPage);
-    d->hpInput     = new KDoubleNumInput(firstPage);
-    d->hpInput->setRange(1.0, 999.0, 1.0, true);
+    d->hpInput     = new RDoubleNumInput(firstPage);
+    d->hpInput->input()->setRange(1.0, 999.0, 1.0, true);
+    d->hpInput->setDefaultValue(100.0);
     d->hpInput->setObjectName("d->hpInput");
     d->hpInput->setWhatsThis( i18n("<p>Set here the new image height in percent."));
 
@@ -247,7 +257,7 @@ ImageResize::ImageResize(QWidget* parent)
     grid->setRowStretch(8, 10);
     grid->setMargin(spacingHint());
     grid->setSpacing(spacingHint());
-    
+
     // -------------------------------------------------------------
 
     d->settingsWidget = new GreycstorationWidget(d->mainTab);
@@ -292,6 +302,12 @@ ImageResize::ImageResize(QWidget* parent)
 
     connect(this, SIGNAL(helpClicked()),
             this, SLOT(slotHelp()));
+
+    // -------------------------------------------------------------
+
+    Digikam::GreycstorationSettings defaults;
+    defaults.setResizeDefaultSettings();
+    d->settingsWidget->setDefaultSettings(defaults);
 }
 
 ImageResize::~ImageResize()
@@ -328,39 +344,24 @@ void ImageResize::readUserSettings()
     KConfigGroup group = config->group("resize Tool Dialog");
 
     GreycstorationSettings settings;
-    settings.fastApprox = group.readEntry("FastApprox", true);
-    settings.interp     = group.readEntry("Interpolation",
-                          (int)GreycstorationSettings::NearestNeighbor);
-    settings.amplitude  = group.readEntry("Amplitude", 20.0);
-    settings.sharpness  = group.readEntry("Sharpness", 0.2);
-    settings.anisotropy = group.readEntry("Anisotropy", 0.9);
-    settings.alpha      = group.readEntry("Alpha", 0.1);
-    settings.sigma      = group.readEntry("Sigma", 1.5);
-    settings.gaussPrec  = group.readEntry("GaussPrec", 2.0);
-    settings.dl         = group.readEntry("Dl", 0.8);
-    settings.da         = group.readEntry("Da", 30.0);
-    settings.nbIter     = group.readEntry("Iteration", 3);
-    settings.tile       = group.readEntry("Tile", 512);
-    settings.btile      = group.readEntry("BTile", 4);
-    d->settingsWidget->setSettings(settings);
-    d->useGreycstorationBox->setChecked(group.readEntry("RestorePhotograph", false));
-    slotRestorationToggled(d->useGreycstorationBox->isChecked());
+    GreycstorationSettings defaults;
+    defaults.setResizeDefaultSettings();
 
-    d->preserveRatioBox->blockSignals(true);
-    d->wInput->blockSignals(true);
-    d->hInput->blockSignals(true);
-    d->wpInput->blockSignals(true);
-    d->hpInput->blockSignals(true);
-    d->preserveRatioBox->setChecked(true);
-    d->wInput->setValue(d->orgWidth);
-    d->hInput->setValue(d->orgHeight);
-    d->wpInput->setValue(100);
-    d->hpInput->setValue(100);
-    d->preserveRatioBox->blockSignals(false);
-    d->wInput->blockSignals(false);
-    d->hInput->blockSignals(false);
-    d->wpInput->blockSignals(false);
-    d->hpInput->blockSignals(false);
+    settings.fastApprox = group.readEntry("FastApprox", defaults.fastApprox);
+    settings.interp     = group.readEntry("Interpolation", defaults.interp);
+    settings.amplitude  = group.readEntry("Amplitude", defaults.amplitude);
+    settings.sharpness  = group.readEntry("Sharpness", defaults.sharpness);
+    settings.anisotropy = group.readEntry("Anisotropy", defaults.anisotropy);
+    settings.alpha      = group.readEntry("Alpha", defaults.alpha);
+    settings.sigma      = group.readEntry("Sigma", defaults.sigma);
+    settings.gaussPrec  = group.readEntry("GaussPrec", defaults.gaussPrec);
+    settings.dl         = group.readEntry("Dl", defaults.dl);
+    settings.da         = group.readEntry("Iteration", defaults.nbIter);
+    settings.tile       = group.readEntry("Tile", defaults.tile);
+    settings.btile      = group.readEntry("BTile", defaults.btile);
+    d->settingsWidget->setSettings(settings);
+
+    slotDefault();
 }
 
 void ImageResize::writeUserSettings()
@@ -388,6 +389,7 @@ void ImageResize::slotDefault()
 {
     GreycstorationSettings settings;
     settings.setResizeDefaultSettings();
+
     d->settingsWidget->setSettings(settings);
     d->useGreycstorationBox->setChecked(false);
     slotRestorationToggled(d->useGreycstorationBox->isChecked());
@@ -397,11 +399,13 @@ void ImageResize::slotDefault()
     d->hInput->blockSignals(true);
     d->wpInput->blockSignals(true);
     d->hpInput->blockSignals(true);
+
     d->preserveRatioBox->setChecked(true);
-    d->wInput->setValue(d->orgWidth);
-    d->hInput->setValue(d->orgHeight);
-    d->wpInput->setValue(100.0);
-    d->hpInput->setValue(100.0);
+    d->wInput->slotReset();
+    d->hInput->slotReset();
+    d->wpInput->slotReset();
+    d->hpInput->slotReset();
+
     d->preserveRatioBox->blockSignals(false);
     d->wInput->blockSignals(false);
     d->hInput->blockSignals(false);
@@ -548,7 +552,7 @@ void ImageResize::slotOk()
             delete d->greycstorationIface;
             d->greycstorationIface = 0;
         }
-    
+
         d->greycstorationIface = new GreycstorationIface(
                                      &image,
                                      d->settingsWidget->getSettings(),
@@ -557,23 +561,23 @@ void ImageResize::slotOk()
                                      d->hInput->value(),
                                      QImage(),
                                      this);
-    
+
         connect(d->greycstorationIface, SIGNAL(started()),
                 this, SLOT(slotFilterStarted()));
-    
+
         connect(d->greycstorationIface, SIGNAL(finished(bool)),
                 this, SLOT(slotFilterFinished(bool)));
-    
+
         connect(d->greycstorationIface, SIGNAL(progress(int)),
                 this, SLOT(slotFilterProgress(int)));
-    
+
         d->greycstorationIface->startFilter();
     }
     else
     {
         // See B.K.O #152192: CImg resize() sound like bugous or unadapted
         // to resize image without good quality.
-    
+
         image.resize(d->wInput->value(), d->hInput->value());
         iface.putOriginalImage(i18n("Resize"), image.bits(),
                                image.width(), image.height());
@@ -637,7 +641,7 @@ void ImageResize::slotUser3()
     {
         if (!d->settingsWidget->loadSettings(file, QString("# Photograph Resizing Configuration File")))
         {
-           KMessageBox::error(this, 
+           KMessageBox::error(this,
                         i18n("\"%1\" is not a Photograph Resizing settings text file.",
                         loadBlowupFile.fileName()));
            file.close();
