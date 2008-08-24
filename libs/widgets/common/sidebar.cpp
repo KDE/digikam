@@ -7,7 +7,7 @@
  * Description : a widget to manage sidebar in gui.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>  
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>  
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -192,10 +192,11 @@ void Sidebar::deleteTab(QWidget *w)
     if(tab == d->activeTab)
         d->activeTab = -1;
 
+    d->stack->removeWidget(d->stack->widget(tab));
     removeTab(tab);
     //TODO show another widget
 }
- 
+
 void Sidebar::clicked(int tab)
 {
     if(tab >= d->tabs || tab < 0)
