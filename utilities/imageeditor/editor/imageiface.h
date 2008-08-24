@@ -74,20 +74,20 @@ public:
         (width, heigh, sixteen bit, alpha).
         Ownership of the returned buffer is passed to the caller.
     */
-    uchar* getPreviewImage();
+    uchar* getPreviewImage() const;
 
     /** Return image data for the current original image selection.
         The selectionWidth(), selectionHeight(), originalSixteenBit()
         and originalHasAlpha() methods provide the characteristics of the data.
         Ownership of the returned buffer is passed to the caller.
     */
-    uchar* getImageSelection();
+    uchar* getImageSelection() const;
 
     /** Return image data for the original image.
         The preview...() methods provide the characteristics of the data.
         Ownership of the returned buffer is passed to the caller.
     */
-    uchar* getOriginalImage();
+    uchar* getOriginalImage() const;
 
     /** Return a pointer to the DImg object representing the original image.
         This object may not be modified or stored. Make copies if you need.
@@ -160,7 +160,7 @@ public:
         The parameters are only hints, previewWidth() and previewHeight()
         may differ from w and h.
     */
-    uchar* setPreviewImageSize(int w, int h);
+    uchar* setPreviewImageSize(int w, int h) const;
 
     /** Standard methods to get image selection information.*/
     int  selectedWidth();
