@@ -146,7 +146,7 @@ DColor ImageIface::getColorInfoFromTargetPreviewImage(const QPoint& point)
     return d->targetPreviewImage.getPixelColor(point.x(), point.y());
 }
 
-uchar* ImageIface::setPreviewImageSize(int w, int h)
+uchar* ImageIface::setPreviewImageSize(int w, int h) const
 {
     d->previewImage.reset();
     d->targetPreviewImage.reset();
@@ -157,7 +157,7 @@ uchar* ImageIface::setPreviewImageSize(int w, int h)
     return (getPreviewImage());
 }
 
-uchar* ImageIface::getPreviewImage()
+uchar* ImageIface::getPreviewImage() const
 {
     if (d->previewImage.isNull())
     {
@@ -197,7 +197,7 @@ uchar* ImageIface::getPreviewImage()
     return previewData.stripImageData();
 }
 
-uchar* ImageIface::getOriginalImage()
+uchar* ImageIface::getOriginalImage() const
 {
     DImg *im = DImgInterface::defaultInterface()->getImg();
 
@@ -208,12 +208,12 @@ uchar* ImageIface::getOriginalImage()
     return origData.stripImageData();
 }
 
-DImg* ImageIface::getOriginalImg()
+DImg* ImageIface::getOriginalImg() const
 {
     return DImgInterface::defaultInterface()->getImg();
 }
 
-uchar* ImageIface::getImageSelection()
+uchar* ImageIface::getImageSelection() const
 {
     return DImgInterface::defaultInterface()->getImageSelection();
 }
@@ -412,11 +412,11 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
         {
             pixImage = d->targetPreviewImage.convertToPixmap();
         }
-        
+
         p.drawPixmap(0, 0, pixImage, 0, 0, w, h);
-        
+
         // Show the Over/Under exposure pixels indicators 
-    
+
         if (underExposure || overExposure)
         {
             ExposureSettingsContainer expoSettings;
@@ -446,4 +446,3 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
 }
 
 }   // namespace Digikam
-
