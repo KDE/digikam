@@ -75,6 +75,8 @@ namespace DigikamImagesPluginCore
 ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
                : EditorTool(parent)
 {
+    setToolName(i18n("Hue / Saturation / Lightness"));
+
     m_destinationPreviewData = 0;
 
     ImageIface iface(0, 0);
@@ -297,11 +299,23 @@ void ImageEffect_HSL::slotHSChanged(int h, int s)
 
     m_hInput->blockSignals(true);
     m_sInput->blockSignals(true);
+
     m_hInput->setValue(hue);
     m_sInput->setValue(sat);
+
     m_hInput->blockSignals(false);
     m_sInput->blockSignals(false);
+
+    // FIXME: this doesn't work anymore since slotTimer is private now
+    // how to do it?
+
+    // Gilles: what I don't understand: the slotTimer seems to be called when
+    // used in connect statement. Can connect also access private slots?
 //    slotTimer();
+
+    // right now slotEffect will do it, but then the color widget is not usable
+    slotEffect();
+
 }
 
 void ImageEffect_HSL::slotHChanged(double h)
