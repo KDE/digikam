@@ -132,6 +132,7 @@ private:
      */
     void saveViewState();
     bool eventFilter(QObject *o, QEvent *e);
+    void updateMinimumWidth();
 
 private slots:
 

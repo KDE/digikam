@@ -115,6 +115,19 @@ Sidebar::~Sidebar()
     delete d;
 }
 
+
+void Sidebar::updateMinimumWidth()
+{
+    int width = 0;
+    for (int i = 0; i < d->tabs; i++)
+    {
+        QWidget *w = d->stack->widget(i);
+        if (w && w->width() > width)
+            width = w->width();
+    }
+    d->stack->setMinimumWidth(width);
+}
+
 void Sidebar::loadViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
@@ -191,6 +204,9 @@ void Sidebar::deleteTab(QWidget *w)
 
     d->stack->removeWidget(d->stack->widget(tab));
     removeTab(tab);
+    d->tabs--;
+    updateMinimumWidth();
+
     //TODO show another widget
 }
 
