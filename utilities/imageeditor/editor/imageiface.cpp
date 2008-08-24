@@ -2,7 +2,7 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2004-02-14
  * Description : image data interface for image plugins
  *
@@ -70,7 +70,7 @@ public:
     QPixmap qcheck;
     QPixmap qpix;
     QBitmap qmask;
-    
+
     DImg    previewImage;
     DImg    targetPreviewImage;
 };
@@ -208,7 +208,7 @@ uchar* ImageIface::getOriginalImage()
     return origData.stripImageData();
 }
 
-DImg* ImageIface::getOriginalImg()
+DImg* ImageIface::getOriginalImg() const
 {
     return DImgInterface::defaultInterface()->getImg();
 }
@@ -384,7 +384,7 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
             p.drawTiledPixmap(0, 0, d->qpix.width(), d->qpix.height(), d->qcheck);
             p.end();
         }
-        
+
         QPixmap pixImage;
         ICCSettingsContainer *iccSettings = DImgInterface::defaultInterface()->getICCSettings();
 
@@ -406,11 +406,11 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
         {
             pixImage = d->targetPreviewImage.convertToPixmap();
         }
-        
+
         bitBlt(&d->qpix, 0, 0, &pixImage, 0, 0, w, h, Qt::CopyROP, false);
 
         // Show the Over/Under exposure pixels indicators 
-    
+
         if (underExposure || overExposure)
         {
             ExposureSettingsContainer expoSettings;

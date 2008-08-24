@@ -2,7 +2,7 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2004-02-14
  * Description : image data interface for image plugins
  *
@@ -61,9 +61,9 @@ public:
 
     /** Use this method to use the current selection in editor instead the full 
         image to render the preview.
-    */    
+    */
     void setPreviewType(bool useSelect=false);
- 
+
     /** Return 'true' if the preview is rendered using the current selection in editor.
         Return 'false' if the preview is rendered using the full image in editor.
     */
@@ -92,7 +92,7 @@ public:
     /** Return a pointer to the DImg object representing the original image.
         This object may not be modified or stored. Make copies if you need.
     */
-    DImg*  getOriginalImg();
+    DImg*  getOriginalImg() const;
 
     /** Replace the image data of the original image with the given data.
         The characteristics of the data must match the characteristics of
@@ -147,7 +147,7 @@ public:
     QByteArray getExifFromOriginalImage();
     QByteArray getIptcFromOriginalImage();
 
-    /** Get photograph information from original image.*/ 
+    /** Get photograph information from original image.*/
     PhotoInfoContainer getPhotographInformations() const;
 
     /** Standard methods to get/set preview information.*/
