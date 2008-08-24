@@ -455,7 +455,13 @@ void ImageWindow::slotThumbBarItemSelected(const KUrl& url)
     if (!promptUserSave(d->urlCurrent))
         return;
 
+    int index = d->urlList.indexOf(url);
+    if (index == -1)
+        return;
+
     d->urlCurrent = url;
+    if (!d->imageInfoList.isEmpty())
+        d->imageInfoCurrent = d->imageInfoList[index];
 
     m_saveAction->setEnabled(false);
     m_revertAction->setEnabled(false);
@@ -482,7 +488,6 @@ void ImageWindow::loadURL(const KUrl::List& urlList, const KUrl& urlCurrent,
 void ImageWindow::loadImageInfos(const ImageInfoList &imageInfoList, const ImageInfo &imageInfoCurrent,
                                  const QString& caption, bool allowSaving)
 {
-    // The ownership of objects of imageInfoList is passed to us.
     // imageInfoCurrent is contained in imageInfoList.
 
     // Very first thing is to check for changes, user may choose to cancel operation
@@ -574,7 +579,8 @@ void ImageWindow::slotForward()
         ++index;
         if (index != d->urlList.size())
         {
-           d->imageInfoCurrent = d->imageInfoList[index];
+           if (!d->imageInfoList.isEmpty())
+               d->imageInfoCurrent = d->imageInfoList[index];
            d->urlCurrent = d->urlList[index];
            slotLoadCurrent();
         }
@@ -594,7 +600,8 @@ void ImageWindow::slotBackward()
 
         if (index != d->urlList.size())
         {
-           d->imageInfoCurrent = d->imageInfoList[index];
+           if (!d->imageInfoList.isEmpty())
+               d->imageInfoCurrent = d->imageInfoList[index];
            d->urlCurrent = d->urlList[index];
            slotLoadCurrent();
         }
@@ -607,7 +614,8 @@ void ImageWindow::slotFirst()
         return;
 
     d->urlCurrent = d->urlList.first();
-    d->imageInfoCurrent = d->imageInfoList.first();
+    if (!d->imageInfoList.isEmpty())
+        d->imageInfoCurrent = d->imageInfoList.first();
     slotLoadCurrent();
 }
 
@@ -617,7 +625,8 @@ void ImageWindow::slotLast()
         return;
 
     d->urlCurrent = d->urlList.last();
-    d->imageInfoCurrent = d->imageInfoList.last();
+    if (!d->imageInfoList.isEmpty())
+        d->imageInfoCurrent = d->imageInfoList.last();
     slotLoadCurrent();
 }
 
