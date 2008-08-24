@@ -31,13 +31,13 @@
 
 class QLabel;
 class QCheckBox;
-class QComboBox;
 
-class KIntNumInput;
-class KDoubleNumInput;
 
 namespace KDcrawIface
 {
+class RComboBox;
+class RIntNumInput;
+class RDoubleNumInput;
 }
 
 namespace DigikamFreeRotationImagesPlugin
@@ -73,11 +73,11 @@ private:
 
     QCheckBox       *m_antialiasInput;
 
-    QComboBox       *m_autoCropCB;
+    KDcrawIface::RComboBox       *m_autoCropCB;
 
-    KIntNumInput    *m_angleInput;
+    KDcrawIface::RIntNumInput    *m_angleInput;
 
-    KDoubleNumInput *m_fineAngleInput;
+    KDcrawIface::RDoubleNumInput *m_fineAngleInput;
 };
 
 }  // NameSpace DigikamFreeRotationImagesPlugin

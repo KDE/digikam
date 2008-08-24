@@ -23,23 +23,22 @@
 
 // Qt includes.
 
-#include <QLabel>
 #include <QCheckBox>
-#include <QImage>
 #include <QGridLayout>
+#include <QImage>
+#include <QLabel>
 
 // KDE includes.
 
-#include <klocale.h>
 #include <kaboutdata.h>
-#include <kiconloader.h>
 #include <kapplication.h>
-#include <kstandarddirs.h>
-#include <knuminput.h>
-#include <kseparator.h>
-#include <kcursor.h>
 #include <kconfig.h>
+#include <kcursor.h>
 #include <kglobal.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kseparator.h>
+#include <kstandarddirs.h>
 
 // LibKDcraw includes.
 
@@ -117,29 +116,29 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     KSeparator *line = new KSeparator (Qt::Horizontal, gboxSettings);
 
     QLabel *label3    = new QLabel(i18n("Main horizontal angle:"), gboxSettings);
-    m_mainHAngleInput = new KIntNumInput(gboxSettings);
+    m_mainHAngleInput = new RIntNumInput(gboxSettings);
     m_mainHAngleInput->setRange(-45, 45, 1);
     m_mainHAngleInput->setSliderEnabled(true);
-    m_mainHAngleInput->setValue(0);
+    m_mainHAngleInput->setDefaultValue(0);
     m_mainHAngleInput->setWhatsThis( i18n("<p>The main horizontal shearing angle, in degrees."));
 
     QLabel *label4 = new QLabel(i18n("Fine horizontal angle:"), gboxSettings);
-    m_fineHAngleInput = new KDoubleNumInput(gboxSettings);
-    m_fineHAngleInput->setRange(-5.0, 5.0, 0.01, true);
-    m_fineHAngleInput->setValue(0);
+    m_fineHAngleInput = new RDoubleNumInput(gboxSettings);
+    m_fineHAngleInput->input()->setRange(-5.0, 5.0, 0.01, true);
+    m_fineHAngleInput->setDefaultValue(0);
     m_fineHAngleInput->setWhatsThis( i18n("<p>This value in degrees will be added to main "
                                           "horizontal angle value to set fine adjustments."));
     QLabel *label5 = new QLabel(i18n("Main vertical angle:"), gboxSettings);
-    m_mainVAngleInput = new KIntNumInput(gboxSettings);
+    m_mainVAngleInput = new RIntNumInput(gboxSettings);
     m_mainVAngleInput->setRange(-45, 45, 1);
     m_mainVAngleInput->setSliderEnabled(true);
-    m_mainVAngleInput->setValue(0);
+    m_mainVAngleInput->setDefaultValue(0);
     m_mainVAngleInput->setWhatsThis( i18n("<p>The main vertical shearing angle, in degrees."));
 
     QLabel *label6 = new QLabel(i18n("Fine vertical angle:"), gboxSettings);
-    m_fineVAngleInput = new KDoubleNumInput(gboxSettings);
-    m_fineVAngleInput->setRange(-5.0, 5.0, 0.01, true);
-    m_fineVAngleInput->setValue(0);
+    m_fineVAngleInput = new RDoubleNumInput(gboxSettings);
+    m_fineVAngleInput->input()->setRange(-5.0, 5.0, 0.01, true);
+    m_fineVAngleInput->setDefaultValue(0);
     m_fineVAngleInput->setWhatsThis( i18n("<p>This value in degrees will be added to main vertical "
                                           "angle value to set fine adjustments."));
 
@@ -195,10 +194,10 @@ void ImageEffect_ShearTool::readUserSettings(void)
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("sheartool Tool Dialog");
-    m_mainHAngleInput->setValue(group.readEntry("Main HAngle", 0));
-    m_mainVAngleInput->setValue(group.readEntry("Main VAngle", 0));
-    m_fineHAngleInput->setValue(group.readEntry("Fine HAngle", 0.0));
-    m_fineVAngleInput->setValue(group.readEntry("Fine VAngle", 0.0));
+    m_mainHAngleInput->setValue(group.readEntry("Main HAngle", m_mainHAngleInput->defaultValue()));
+    m_mainVAngleInput->setValue(group.readEntry("Main VAngle", m_mainVAngleInput->defaultValue()));
+    m_fineHAngleInput->setValue(group.readEntry("Fine HAngle", m_fineHAngleInput->defaultValue()));
+    m_fineVAngleInput->setValue(group.readEntry("Fine VAngle", m_fineVAngleInput->defaultValue()));
     m_antialiasInput->setChecked(group.readEntry("Anti Aliasing", true));
     slotEffect();
 }
@@ -222,11 +221,13 @@ void ImageEffect_ShearTool::resetValues()
     m_fineHAngleInput->blockSignals(true);
     m_fineVAngleInput->blockSignals(true);
     m_antialiasInput->blockSignals(true);
-    m_mainHAngleInput->setValue(0);
-    m_mainVAngleInput->setValue(0);
-    m_fineHAngleInput->setValue(0.0);
-    m_fineVAngleInput->setValue(0.0);
+
+    m_mainHAngleInput->slotReset();
+    m_mainVAngleInput->slotReset();
+    m_fineHAngleInput->slotReset();
+    m_fineVAngleInput->slotReset();
     m_antialiasInput->setChecked(true);
+
     m_mainHAngleInput->blockSignals(false);
     m_mainVAngleInput->blockSignals(false);
     m_fineHAngleInput->blockSignals(false);

@@ -31,11 +31,11 @@
 class QCheckBox;
 class QLabel;
 
-class KIntNumInput;
-class KDoubleNumInput;
 
 namespace KDcrawIface
 {
+class RIntNumInput;
+class RDoubleNumInput;
 }
 
 namespace DigikamShearToolImagesPlugin
@@ -71,11 +71,11 @@ private:
 
     QCheckBox       *m_antialiasInput;
 
-    KIntNumInput    *m_mainHAngleInput;
-    KIntNumInput    *m_mainVAngleInput;
+    KDcrawIface::RIntNumInput    *m_mainHAngleInput;
+    KDcrawIface::RIntNumInput    *m_mainVAngleInput;
 
-    KDoubleNumInput *m_fineHAngleInput;
-    KDoubleNumInput *m_fineVAngleInput;
+    KDcrawIface::RDoubleNumInput *m_fineHAngleInput;
+    KDcrawIface::RDoubleNumInput *m_fineVAngleInput;
 };
 
 }  // NameSpace DigikamShearToolImagesPlugin

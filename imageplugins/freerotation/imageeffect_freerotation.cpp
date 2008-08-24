@@ -24,29 +24,28 @@
 
 // Qt includes.
 
-#include <QLabel>
 #include <QCheckBox>
-#include <QLayout>
-#include <QImage>
-#include <QComboBox>
 #include <QGridLayout>
+#include <QImage>
+#include <QLabel>
+#include <QLayout>
 
 // KDE includes.
 
-#include <klocale.h>
 #include <kaboutdata.h>
-#include <kiconloader.h>
 #include <kapplication.h>
-#include <kstandarddirs.h>
-#include <knuminput.h>
-#include <kcursor.h>
-#include <kseparator.h>
 #include <kconfig.h>
+#include <kcursor.h>
 #include <kglobal.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kseparator.h>
+#include <kstandarddirs.h>
 
 // LibKDcraw includes.
 
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/rcombobox.h>
 
 // Local includes.
 
@@ -118,18 +117,18 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     KSeparator *line = new KSeparator(Qt::Horizontal, gboxSettings);
 
     QLabel *label3 = new QLabel(i18n("Main angle:"), gboxSettings);
-    m_angleInput   = new KIntNumInput(gboxSettings);
+    m_angleInput   = new RIntNumInput(gboxSettings);
     m_angleInput->setRange(-180, 180, 1);
     m_angleInput->setSliderEnabled(true);
-    m_angleInput->setValue(0);
+    m_angleInput->setDefaultValue(0);
     m_angleInput->setWhatsThis( i18n("<p>An angle in degrees by which to rotate the image. "
                                      "A positive angle rotates the image clockwise; "
                                      "a negative angle rotates it counter-clockwise."));
 
     QLabel *label4   = new QLabel(i18n("Fine angle:"), gboxSettings);
-    m_fineAngleInput = new KDoubleNumInput(gboxSettings);
-    m_fineAngleInput->setRange(-5.0, 5.0, 0.01, true);
-    m_fineAngleInput->setValue(0);
+    m_fineAngleInput = new RDoubleNumInput(gboxSettings);
+    m_fineAngleInput->input()->setRange(-5.0, 5.0, 0.01, true);
+    m_fineAngleInput->setDefaultValue(0);
     m_fineAngleInput->setWhatsThis( i18n("<p>This value in degrees will be added to main angle value "
                                          "to set fine target angle."));
 
@@ -139,10 +138,11 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
                                          "In order to smooth the target image, it will be blurred a little."));
 
     QLabel *label5 = new QLabel(i18n("Auto-crop:"), gboxSettings);
-    m_autoCropCB   = new QComboBox(gboxSettings);
+    m_autoCropCB   = new RComboBox(gboxSettings);
     m_autoCropCB->addItem( i18n("None") );
     m_autoCropCB->addItem( i18n("Widest Area") );
     m_autoCropCB->addItem( i18n("Largest Area") );
+    m_autoCropCB->setDefaultIndex(FreeRotation::NoAutoCrop);
     m_autoCropCB->setWhatsThis( i18n("<p>Select the method to process image auto-cropping "
                                      "to remove black frames around a rotated image here."));
 
@@ -188,9 +188,9 @@ void ImageEffect_FreeRotation::readUserSettings(void)
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("freerotation Tool Dialog");
-    m_angleInput->setValue(group.readEntry("Main Angle", 0));
-    m_fineAngleInput->setValue(group.readEntry("Fine Angle", 0.0));
-    m_autoCropCB->setCurrentIndex(group.readEntry("Auto Crop Type", (int)FreeRotation::NoAutoCrop));
+    m_angleInput->setValue(group.readEntry("Main Angle", m_angleInput->defaultValue()));
+    m_fineAngleInput->setValue(group.readEntry("Fine Angle", m_fineAngleInput->defaultValue()));
+    m_autoCropCB->setCurrentIndex(group.readEntry("Auto Crop Type", m_autoCropCB->defaultIndex()));
     m_antialiasInput->setChecked(group.readEntry("Anti Aliasing", true));
     slotEffect();
 }
@@ -211,10 +211,12 @@ void ImageEffect_FreeRotation::resetValues()
     m_angleInput->blockSignals(true);
     m_antialiasInput->blockSignals(true);
     m_autoCropCB->blockSignals(true);
-    m_angleInput->setValue(0);
-    m_fineAngleInput->setValue(0.0);
+
+    m_angleInput->slotReset();
+    m_fineAngleInput->slotReset();
     m_antialiasInput->setChecked(true);
-    m_autoCropCB->setCurrentIndex(FreeRotation::NoAutoCrop);
+    m_autoCropCB->slotReset();
+
     m_angleInput->blockSignals(false);
     m_antialiasInput->blockSignals(false);
     m_autoCropCB->blockSignals(false);
