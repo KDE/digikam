@@ -421,10 +421,10 @@ void AdjustCurveTool::slotResetCurrentChannel()
 void AdjustCurveTool::slotEffect()
 {
     ImageIface* iface = m_previewWidget->imageIface();
-    uchar *orgData             = iface->getPreviewImage();
-    int w                      = iface->previewWidth();
-    int h                      = iface->previewHeight();
-    bool sb                    = iface->previewSixteenBit();
+    uchar *orgData    = iface->getPreviewImage();
+    int w             = iface->previewWidth();
+    int h             = iface->previewHeight();
+    bool sb           = iface->previewSixteenBit();
 
     // Create the new empty destination image data space.
     m_histogramWidget->stopHistogramComputation();
@@ -452,10 +452,10 @@ void AdjustCurveTool::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     ImageIface* iface = m_previewWidget->imageIface();
-    uchar *orgData             = iface->getOriginalImage();
-    int w                      = iface->originalWidth();
-    int h                      = iface->originalHeight();
-    bool sb                    = iface->originalSixteenBit();
+    uchar *orgData    = iface->getOriginalImage();
+    int w             = iface->originalWidth();
+    int h             = iface->originalHeight();
+    bool sb           = iface->originalSixteenBit();
 
     // Create the new empty destination image data space.
     uchar* desData = new uchar[w*h*(sb ? 8 : 4)];
