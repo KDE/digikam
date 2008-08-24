@@ -23,7 +23,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 167085 : Color selection in sketch search tool looks plain black.
 011 ==> 168852 : Crash on profile application.
 012 ==> 167867 : Album view is reset by changing settings.
-013 ==> 
+013 ==> 168461 : info in Properties panel not updated after moving to other image.
+014 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta2 - Release date: 2008-07-31
