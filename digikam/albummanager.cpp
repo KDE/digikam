@@ -49,6 +49,7 @@ extern "C"
 #include <QByteArray>
 #include <QMultiHash>
 #include <QTextCodec>
+#include <QTimer>
 
 // KDE includes.
 
@@ -75,6 +76,7 @@ extern "C"
 #include "databaseaccess.h"
 #include "databaseurl.h"
 #include "databaseparameters.h"
+#include "databasewatch.h"
 #include "dio.h"
 #include "imagelister.h"
 #include "scancontroller.h"
@@ -145,6 +147,13 @@ public:
         rootDAlbum         = 0;
         rootSAlbum         = 0;
         currentAlbum       = 0;
+        changingDB         = false;
+        scanPAlbumsTimer   = 0;
+        scanTAlbumsTimer   = 0;
+        scanSAlbumsTimer   = 0;
+        scanDAlbumsTimer   = 0;
+        albumItemCountTimer= 0;
+        tagItemCountTimer  = 0;
     }
 
     bool                        changed;
@@ -175,6 +184,14 @@ public:
 
     Album                      *currentAlbum;
 
+    bool                        changingDB;
+    QTimer                     *scanPAlbumsTimer;
+    QTimer                     *scanTAlbumsTimer;
+    QTimer                     *scanSAlbumsTimer;
+    QTimer                     *scanDAlbumsTimer;
+    QTimer                     *albumItemCountTimer;
+    QTimer                     *tagItemCountTimer;
+
 
     QList<QDateTime> buildDirectoryModList(const QFileInfo &dbFile)
     {
@@ -192,6 +209,20 @@ public:
     }
 };
 
+class ChangingDB
+{
+public:
+    ChangingDB(AlbumManagerPriv *d) : d(d)
+    {
+        d->changingDB = true;
+    }
+    ~ChangingDB()
+    {
+        d->changingDB = false;
+    }
+    AlbumManagerPriv *d;
+};
+
 class AlbumManagerCreator { public: AlbumManager object; };
 K_GLOBAL_STATIC(AlbumManagerCreator, creator)
 
@@ -207,6 +238,40 @@ AlbumManager::AlbumManager()
 {
     d = new AlbumManagerPriv;
     internalInstance = this;
+
+    // these operations are pretty fast, no need for long queuing
+    d->scanPAlbumsTimer = new QTimer(this);
+    d->scanPAlbumsTimer->setInterval(50);
+    d->scanPAlbumsTimer->setSingleShot(true);
+    connect(d->scanPAlbumsTimer, SIGNAL(timeout()), this, SLOT(scanPAlbums()));
+
+    d->scanTAlbumsTimer = new QTimer(this);
+    d->scanTAlbumsTimer->setInterval(50);
+    d->scanTAlbumsTimer->setSingleShot(true);
+    connect(d->scanTAlbumsTimer, SIGNAL(timeout()), this, SLOT(scanTAlbums()));
+
+    d->scanSAlbumsTimer = new QTimer(this);
+    d->scanSAlbumsTimer->setInterval(50);
+    d->scanSAlbumsTimer->setSingleShot(true);
+    connect(d->scanSAlbumsTimer, SIGNAL(timeout()), this, SLOT(scanSAlbums()));
+
+    // this operation is much more expensive than the other scan methods
+    d->scanDAlbumsTimer = new QTimer(this);
+    d->scanDAlbumsTimer->setInterval(5000);
+    d->scanDAlbumsTimer->setSingleShot(true);
+    connect(d->scanDAlbumsTimer, SIGNAL(timeout()), this, SLOT(scanDAlbums()));
+
+    // moderately expensive
+    d->albumItemCountTimer = new QTimer(this);
+    d->albumItemCountTimer->setInterval(1000);
+    d->albumItemCountTimer->setSingleShot(true);
+    connect(d->albumItemCountTimer, SIGNAL(timeout()), this, SLOT(getAlbumItemsCount()));
+
+    // more expensive
+    d->tagItemCountTimer = new QTimer(this);
+    d->tagItemCountTimer->setInterval(2500);
+    d->tagItemCountTimer->setSingleShot(true);
+    connect(d->tagItemCountTimer, SIGNAL(timeout()), this, SLOT(getTagItemsCount()));
 }
 
 AlbumManager::~AlbumManager()
@@ -259,6 +324,8 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
     d->changed = true;
 
     disconnect(CollectionManager::instance(), 0, this, 0);
+    if (DatabaseAccess::databaseWatch())
+        disconnect(DatabaseAccess::databaseWatch(), 0, this, 0);
     d->dbPathModificationDateList.clear();
 
     if (d->dateListJob)
@@ -454,17 +521,30 @@ void AlbumManager::startScan()
 
     d->rootDAlbum = new DAlbum(QDate(), true);
 
-    // listen to location status changes
-    connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(const CollectionLocation &, int)),
-            this, SLOT(slotCollectionLocationStatusChanged(const CollectionLocation &, int)));
-
     // create albums for album roots
     QList<CollectionLocation> locations = CollectionManager::instance()->allAvailableLocations();
     foreach(const CollectionLocation location, locations)
         addAlbumRoot(location);
 
+    // listen to location status changes
+    connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(const CollectionLocation &, int)),
+            this, SLOT(slotCollectionLocationStatusChanged(const CollectionLocation &, int)));
+
     // reload albums
     refresh();
+
+    // listen to album database changes
+    connect(CollectionManager::instance(), SIGNAL(albumChange(const AlbumChangeset &changeset)),
+            this, SLOT(slotAlbumChange(const AlbumChangeset &changeset)));
+    connect(CollectionManager::instance(), SIGNAL(tagChange(const TagChangeset &changeset)),
+            this, SLOT(slotTagChange(const TagChangeset &changeset)));
+    connect(CollectionManager::instance(), SIGNAL(searchChange(const SearchChangeset &changeset)),
+            this, SLOT(slotSearchChange(const SearchChangeset &changeset)));
+    // listen to collection image changes
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
+            this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(const ImageTagChangeset &)),
+            this, SLOT(slotImageTagChange(const ImageTagChangeset &)));
 
     emit signalAllAlbumsLoaded();
 }
@@ -1179,6 +1259,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
         return 0;
     }
 
+    ChangingDB changing(d);
     int id = DatabaseAccess().db()->addAlbum(albumRootId, albumPath, caption, date, collection);
 
     if (id == -1)
@@ -1264,6 +1345,7 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
     album->setTitle(newName);
     {
         DatabaseAccess access;
+        ChangingDB changing(d);
         access.db()->renameAlbum(album->id(), album->albumPath(), false);
 
         Album* subAlbum = 0;
@@ -1308,6 +1390,7 @@ bool AlbumManager::updatePAlbumIcon(PAlbum *album, qlonglong iconID, QString& er
 
     {
         DatabaseAccess access;
+        ChangingDB changing(d);
         access.db()->setAlbumIcon(album->id(), iconID);
         QString iconRelativePath;
         int iconAlbumRootId;
@@ -1359,6 +1442,7 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
         child = child->m_next;
     }
 
+    ChangingDB changing(d);
     int id = DatabaseAccess().db()->addTag(parent->id(), name, iconkde, 0);
     if (id == -1)
     {
@@ -1408,6 +1492,7 @@ bool AlbumManager::deleteTAlbum(TAlbum* album, QString& errMsg)
 
     {
         DatabaseAccess access;
+        ChangingDB changing(d);
         access.db()->deleteTag(album->id());
 
         Album* subAlbum = 0;
@@ -1458,6 +1543,7 @@ bool AlbumManager::renameTAlbum(TAlbum* album, const QString& name,
         sibling = sibling->m_next;
     }
 
+    ChangingDB changing(d);
     DatabaseAccess().db()->setTagName(album->id(), name);
     album->setTitle(name);
     emit signalAlbumRenamed(album);
@@ -1479,6 +1565,7 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *newParent, QString &errMsg)
         return false;
     }
 
+    ChangingDB changing(d);
     DatabaseAccess().db()->setTagParentID(album->id(), newParent->id());
     album->parent()->removeChild(album);
     album->setParent(newParent);
@@ -1505,6 +1592,7 @@ bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& iconKDE,
 
     {
         DatabaseAccess access;
+        ChangingDB changing(d);
         access.db()->setTagIcon(album->id(), iconKDE, iconID);
         QString albumRelativePath, iconKDE;
         int albumRootId;
@@ -1580,6 +1668,7 @@ SAlbum* AlbumManager::createSAlbum(const QString &name, DatabaseSearch::Type typ
     // first iterate through all the search albums and see if there's an existing
     // SAlbum with same name. (Remember, SAlbums are arranged in a flat list)
     SAlbum *album = findSAlbum(name);
+    ChangingDB changing(d);
     if (album)
     {
         album->setSearch(type, query);
@@ -1613,6 +1702,7 @@ bool AlbumManager::updateSAlbum(SAlbum* album, const QString &changedQuery,
     QString newName = changedName.isNull() ? album->title() : changedName;
     DatabaseSearch::Type newType = (type == DatabaseSearch::UndefinedType) ? album->type() : type;
 
+    ChangingDB changing(d);
     DatabaseAccess().db()->updateSearch(album->id(), newType, newName, changedQuery);
 
     QString oldName = album->title();
@@ -1632,6 +1722,7 @@ bool AlbumManager::deleteSAlbum(SAlbum* album)
 
     emit signalAlbumAboutToBeDeleted(album);
 
+    ChangingDB changing(d);
     DatabaseAccess().db()->deleteSearch(album->id());
 
     d->allAlbumsIdHash.remove(album->globalID());
@@ -1945,6 +2036,106 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
 
     emit signalDAlbumsDirty(yearMonthMap);
     emit signalDatesMapDirty(datesStatMap);
+}
+
+void AlbumManager::slotAlbumChange(const AlbumChangeset &changeset)
+{
+    if (d->changingDB || !d->rootPAlbum)
+        return;
+
+    switch(changeset.operation())
+    {
+        case AlbumChangeset::Added:
+        case AlbumChangeset::Deleted:
+            if (!d->scanPAlbumsTimer->isActive())
+                d->scanPAlbumsTimer->start();
+            break;
+        case AlbumChangeset::Renamed:
+        case AlbumChangeset::PropertiesChanged:
+            //TODO
+            break;
+        case AlbumChangeset::Unknown:
+            break;
+    }
+}
+
+void AlbumManager::slotTagChange(const TagChangeset &changeset)
+{
+    if (d->changingDB || !d->rootTAlbum)
+        return;
+
+    switch(changeset.operation())
+    {
+        case TagChangeset::Added:
+        case TagChangeset::Deleted:
+        case TagChangeset::Reparented:
+            if (!d->scanTAlbumsTimer->isActive())
+                d->scanTAlbumsTimer->start();
+            break;
+        case TagChangeset::Renamed:
+        case TagChangeset::IconChanged:
+            //TODO
+            break;
+        case TagChangeset::Unknown:
+            break;
+    }
+}
+
+void AlbumManager::slotSearchChange(const SearchChangeset &changeset)
+{
+    if (d->changingDB || !d->rootSAlbum)
+        return;
+
+    switch(changeset.operation())
+    {
+        case SearchChangeset::Added:
+        case SearchChangeset::Deleted:
+            if (!d->scanSAlbumsTimer->isActive())
+                d->scanSAlbumsTimer->start();
+            break;
+        case SearchChangeset::Changed:
+            //TODO
+            break;
+        case SearchChangeset::Unknown:
+            break;
+    }
+}
+
+void AlbumManager::slotCollectionImageChange(const CollectionImageChangeset &changeset)
+{
+    if (!d->rootDAlbum)
+        return;
+
+    switch (changeset.operation())
+    {
+        case CollectionImageChangeset::Added:
+        case CollectionImageChangeset::Removed:
+        case CollectionImageChangeset::RemovedAll:
+            if (!d->scanDAlbumsTimer->isActive())
+                d->scanDAlbumsTimer->start();
+            if (!d->albumItemCountTimer->isActive())
+                d->albumItemCountTimer->start();
+            break;
+        default:
+            break;
+    }
+}
+
+void AlbumManager::slotImageTagChange(const ImageTagChangeset &changeset)
+{
+    if (!d->rootTAlbum)
+        return;
+    switch (changeset.operation())
+    {
+        case ImageTagChangeset::Added:
+        case ImageTagChangeset::Removed:
+        case ImageTagChangeset::RemovedAll:
+            if (!d->tagItemCountTimer->isActive())
+                d->tagItemCountTimer->start();
+            break;
+        default:
+            break;
+    }
 }
 
 void AlbumManager::slotDirty(const QString& path)

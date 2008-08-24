@@ -62,6 +62,11 @@ class TAlbum;
 class DAlbum;
 class SAlbum;
 class AlbumItemHandler;
+class AlbumChangeset;
+class TagChangeset;
+class SearchChangeset;
+class CollectionImageChangeset;
+class ImageTagChangeset;
 class AlbumManagerPriv;
 
 typedef QList<Album*> AlbumList;
@@ -457,6 +462,38 @@ private slots:
     void slotTagsJobData(KIO::Job* job, const QByteArray& data);
     void slotDirty(const QString& path);
     void slotCollectionLocationStatusChanged(const CollectionLocation &, int);
+    void slotAlbumChange(const AlbumChangeset &changeset);
+    void slotTagChange(const TagChangeset &changeset);
+    void slotSearchChange(const SearchChangeset &changeset);
+    void slotCollectionImageChange(const CollectionImageChangeset &changeset);
+    void slotImageTagChange(const ImageTagChangeset &changeset);
+
+    /**
+     * Scan albums directly from database and creates new PAlbums
+     * It only creates those PAlbums which haven't already been
+     * created
+     */
+    void scanPAlbums();
+    /**
+     * Scan tags directly from database and creates new TAlbums
+     * It only creates those TAlbums which haven't already been
+     * created
+     */
+    void scanTAlbums();
+    /**
+     * Scan searches directly from database and creates new SAlbums
+     * It only creates those SAlbums which haven't already been
+     * created
+     */
+    void scanSAlbums();
+    /**
+     * Scan dates from the database (via IOSlave) and
+     * updates the DAlbums.
+     */
+    void scanDAlbums();
+
+    void getAlbumItemsCount();
+    void getTagItemsCount();
 
 private:
 
@@ -473,37 +510,6 @@ private:
 
     void addAlbumRoot(const CollectionLocation &location);
     void removeAlbumRoot(const CollectionLocation &location);
-
-    /**
-     * Scan albums directly from database and creates new PAlbums
-     * It only create those PAlbums which haven't already been
-     * created
-     */
-    void scanPAlbums();
-
-    /**
-     * Scan tags directly from database and creates new TAlbums
-     * It only create those TAlbums which haven't already been
-     * created
-     */
-    void scanTAlbums();
-    
-    /**
-     * Scan searches directly from database and creates new SAlbums
-     * It only create those SAlbums which haven't already been
-     * created
-     */
-    void scanSAlbums();
-
-    /**
-     * Makes use of a KIO::Job to list dates from the database
-     * @see slotResult
-     * @see slotData
-     */
-    void scanDAlbums();
-
-    void getAlbumItemsCount();
-    void getTagItemsCount();
 
     template <class T> friend class AlbumPointer;
     friend class Album;
