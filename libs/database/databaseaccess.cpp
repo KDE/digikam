@@ -93,6 +93,7 @@ DatabaseAccessStaticPriv *DatabaseAccess::d = 0;
 
 DatabaseAccess::DatabaseAccess()
 {
+    Q_ASSERT(d/*You will want to call setParameters before constructing DatabaseAccess*/);
     d->mutex.lock();
     d->lockCount++;
     if (!d->backend->isOpen() && !d->initializing)
@@ -145,12 +146,16 @@ ImageInfoCache *DatabaseAccess::imageInfoCache() const
 
 DatabaseWatch *DatabaseAccess::databaseWatch()
 {
-    return d->databaseWatch;
+    if (d)
+        return d->databaseWatch;
+    return 0;
 }
 
 DatabaseParameters DatabaseAccess::parameters()
 {
-    return d->parameters;
+    if (d)
+        return d->parameters;
+    return DatabaseParameters();
 }
 
 void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
