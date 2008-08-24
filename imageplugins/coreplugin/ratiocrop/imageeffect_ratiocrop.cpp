@@ -152,6 +152,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_customRatioNInput->input()->setRange(1, 10000, 1, false);
     m_customRatioNInput->setDefaultValue(1);
     QWhatsThis::add( m_customRatioNInput, i18n("<p>Set here the desired custom aspect numerator value."));
+
     m_customLabel2 = new QLabel(" : ", cropSelection);
     m_customLabel2->setAlignment(AlignCenter|AlignVCenter);
     m_customRatioDInput = new RIntNumInput(cropSelection);
@@ -412,14 +413,14 @@ void ImageEffect_RatioCrop::readSettings()
 
     if (m_originalIsLandscape)
     {
-        m_orientCB->setCurrentItem( config->readNumEntry("Hor.Oriented Aspect Ratio Orientation",
-                                    ImageSelectionWidget::Landscape));
+        m_orientCB->setCurrentItem(config->readNumEntry("Hor.Oriented Aspect Ratio Orientation",
+                                   ImageSelectionWidget::Landscape));
         m_orientCB->setDefaultItem(ImageSelectionWidget::Landscape);
     }
     else
     {
-        m_orientCB->setCurrentItem( config->readNumEntry("Ver.Oriented Aspect Ratio Orientation",
-                                    ImageSelectionWidget::Portrait) );
+        m_orientCB->setCurrentItem(config->readNumEntry("Ver.Oriented Aspect Ratio Orientation",
+                                   ImageSelectionWidget::Portrait));
         m_orientCB->setDefaultItem(ImageSelectionWidget::Portrait);
     }
 
