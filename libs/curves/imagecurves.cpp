@@ -543,7 +543,7 @@ QPoint ImageCurves::getCurvePoint(int channel, int point)
 
 QPointArray ImageCurves::getCurvePoints(int channel)
 {
-    QPointArray array(17);
+    QPointArray array(18);
 
     if ( d->curves &&
          channel>=0 && channel<5)
@@ -613,7 +613,7 @@ void ImageCurves::setCurvePoints(int channel, const QPointArray& vals)
 {
     if ( d->curves &&
          channel>=0 && channel<5 && 
-         vals.size() == 17 )
+         vals.size() == 18 )
     {
         d->dirty = true;
         for (int j = 0 ; j <= 17 ; j++)
