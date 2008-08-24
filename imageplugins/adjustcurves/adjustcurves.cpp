@@ -87,18 +87,12 @@ namespace DigikamAdjustCurvesImagesPlugin
 AdjustCurveTool::AdjustCurveTool(QObject* parent)
                : EditorTool(parent)
 {
-    m_destinationPreviewData = 0L;
+    m_destinationPreviewData = 0;
 
     ImageIface iface(0, 0);
-    uchar *data     = iface.getOriginalImage();
-    int w           = iface.originalWidth();
-    int h           = iface.originalHeight();
-    bool sixteenBit = iface.originalSixteenBit();
-    bool hasAlpha   = iface.originalHasAlpha();
-    m_originalImage = DImg(w, h, sixteenBit, hasAlpha ,data);
-    delete [] data;
+    m_originalImage = iface.getOriginalImg();
 
-    m_histoSegments = m_originalImage.sixteenBit() ? 65535 : 255;
+    m_histoSegments = m_originalImage->sixteenBit() ? 65535 : 255;
 
     setName("adjustcurves");
     setToolName(i18n("Adjust Curves"));
@@ -191,8 +185,8 @@ AdjustCurveTool::AdjustCurveTool(QObject* parent)
     QLabel *spacev = new QLabel(curveBox);
     spacev->setFixedWidth(1);
 
-    m_curvesWidget = new CurvesWidget(256, 256, m_originalImage.bits(), m_originalImage.width(),
-                                                m_originalImage.height(), m_originalImage.sixteenBit(),
+    m_curvesWidget = new CurvesWidget(256, 256, m_originalImage->bits(), m_originalImage->width(),
+                                                m_originalImage->height(), m_originalImage->sixteenBit(),
                                                 curveBox);
     QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve drawing of the selected channel from "
                                           "original image"));
@@ -576,7 +570,7 @@ void AdjustCurveTool::readSettings()
             QPoint disable(-1, -1);
             QPoint p = config->readPointEntry(QString("CurveAjustmentChannel%1Point%2").arg(i).arg(j), &disable);
 
-            if (m_originalImage.sixteenBit() && p.x() != -1)
+            if (m_originalImage->sixteenBit() && p.x() != -1)
             {
                 p.setX(p.x()*255);
                 p.setY(p.y()*255);
@@ -607,7 +601,7 @@ void AdjustCurveTool::saveSettings()
         {
             QPoint p = m_curvesWidget->curves()->getCurvePoint(i, j);
 
-            if (m_originalImage.sixteenBit() && p.x() != -1)
+            if (m_originalImage->sixteenBit() && p.x() != -1)
             {
                 p.setX(p.x()/255);
                 p.setY(p.y()/255);

@@ -132,7 +132,7 @@ private:
 
     Digikam::ImageWidget         *m_previewWidget;
 
-    Digikam::DImg                 m_originalImage;
+    Digikam::DImg                *m_originalImage;
 };
 
 }  // NameSpace DigikamAdjustCurvesImagesPlugin
