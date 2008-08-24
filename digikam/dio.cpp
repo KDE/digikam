@@ -68,7 +68,7 @@ namespace DIO
 KIO::Job* copy(const KUrl& src, const KUrl& dest)
 {
     KIO::Job* job = KIO::copy(src, dest);
-    new Watch(job);
+    //new Watch(job);
 
     return job;
 }
@@ -76,7 +76,7 @@ KIO::Job* copy(const KUrl& src, const KUrl& dest)
 KIO::Job* copy(const KUrl::List& srcList, const KUrl& dest)
 {
     KIO::Job* job = KIO::copy(srcList, dest);
-    new Watch(job);
+    //new Watch(job);
 
     return job;
 }
@@ -84,7 +84,7 @@ KIO::Job* copy(const KUrl::List& srcList, const KUrl& dest)
 KIO::Job* move(const KUrl& src, const KUrl& dest)
 {
     KIO::Job* job = KIO::move(src, dest);
-    new Watch(job);
+    //new Watch(job);
 
     return job;
 }
@@ -92,7 +92,7 @@ KIO::Job* move(const KUrl& src, const KUrl& dest)
 KIO::Job* move(const KUrl::List& srcList, const KUrl& dest)
 {
     KIO::Job* job = KIO::move(srcList, dest);
-    new Watch(job);
+    //new Watch(job);
 
     return job;
 }
@@ -100,17 +100,17 @@ KIO::Job* move(const KUrl::List& srcList, const KUrl& dest)
 KIO::Job* del(const KUrl& src, bool useTrash)
 {
     KIO::Job* job = 0;
-    
+
     if (useTrash)
     {
         job = KIO::trash( src );
-    }   
+    }
     else
     {
-	job = KIO::del(src);
+        job = KIO::del(src);
     }
-    
-    new Watch(job);
+
+    //new Watch(job);
     return job;
 }
 
@@ -121,20 +121,20 @@ KIO::Job* del(const KUrl::List& srcList, bool useTrash)
     if (useTrash)
     {
         job = KIO::trash( srcList);
-    }   
+    }
     else
     {
         job = KIO::del(srcList);
     }
-    
-    new Watch(job);
+
+    //new Watch(job);
     return job;
 }
 
 KIO::CopyJob *rename(const KUrl& src, const KUrl& dest)
 {
     KIO::CopyJob * job = KIO::move(src, dest, KIO::HideProgressInfo);
-    new Watch(job);
+    //new Watch(job);
 
     return job;
 
