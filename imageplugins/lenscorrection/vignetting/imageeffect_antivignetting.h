@@ -31,11 +31,10 @@
 
 class QLabel;
 
-class KIntNumInput;
-class KDoubleNumInput;
-
 namespace KDcrawIface
 {
+class RIntNumInput;
+class RDoubleNumInput;
 }
 
 namespace DigikamAntiVignettingImagesPlugin
@@ -68,13 +67,13 @@ private:
 
     QLabel          *m_maskPreviewLabel;
 
-    KIntNumInput    *m_brightnessInput;
-    KIntNumInput    *m_contrastInput;
+    KDcrawIface::RIntNumInput    *m_brightnessInput;
+    KDcrawIface::RIntNumInput    *m_contrastInput;
 
-    KDoubleNumInput *m_gammaInput;
-    KDoubleNumInput *m_densityInput;
-    KDoubleNumInput *m_powerInput;
-    KDoubleNumInput *m_radiusInput;
+    KDcrawIface::RDoubleNumInput *m_gammaInput;
+    KDcrawIface::RDoubleNumInput *m_densityInput;
+    KDcrawIface::RDoubleNumInput *m_powerInput;
+    KDcrawIface::RDoubleNumInput *m_radiusInput;
 };
 
 }  // NameSpace DigikamAntiVignettingImagesPlugin

@@ -36,10 +36,9 @@
 
 class QLabel;
 
-class KDoubleNumInput;
-
 namespace KDcrawIface
 {
+class RDoubleNumInput;
 }
 
 namespace DigikamLensDistortionImagesPlugin
@@ -72,10 +71,10 @@ private:
 
     QLabel          *m_maskPreviewLabel;
 
-    KDoubleNumInput *m_mainInput;
-    KDoubleNumInput *m_edgeInput;
-    KDoubleNumInput *m_rescaleInput;
-    KDoubleNumInput *m_brightenInput;
+    KDcrawIface::RDoubleNumInput *m_mainInput;
+    KDcrawIface::RDoubleNumInput *m_edgeInput;
+    KDcrawIface::RDoubleNumInput *m_rescaleInput;
+    KDcrawIface::RDoubleNumInput *m_brightenInput;
 
     Digikam::DImg    m_previewRasterImage;
 };

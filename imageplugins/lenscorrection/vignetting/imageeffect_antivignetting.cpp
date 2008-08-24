@@ -24,25 +24,25 @@
 
 // Qt includes.
 
-#include <QLabel>
+#include <QGridLayout>
 #include <QImage>
-#include <QPixmap>
+#include <QLabel>
 #include <QPainter>
 #include <QPen>
+#include <QPixmap>
 #include <QTabWidget>
-#include <QGridLayout>
 
 // KDE includes.
 
-#include <kconfig.h>
-#include <klocale.h>
 #include <kaboutdata.h>
-#include <kiconloader.h>
 #include <kapplication.h>
-#include <kstandarddirs.h>
+#include <kconfig.h>
+#include <kglobal.h>
+#include <kiconloader.h>
+#include <klocale.h>
 #include <knuminput.h>
 #include <kseparator.h>
-#include <kglobal.h>
+#include <kstandarddirs.h>
 
 // LibKDcraw includes.
 
@@ -105,9 +105,10 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
 
     QLabel *label1 = new QLabel(i18n("Density:"), gboxSettings);
 
-    m_densityInput = new KDoubleNumInput(gboxSettings);
+    m_densityInput = new RDoubleNumInput(gboxSettings);
     m_densityInput->setDecimals(1);
-    m_densityInput->setRange(1.0, 20.0, 0.1, true);
+    m_densityInput->input()->setRange(1.0, 20.0, 0.1, true);
+    m_densityInput->setDefaultValue(2.0);
     m_densityInput->setWhatsThis(i18n("<p>This value controls the degree of intensity attenuation "
                                       "by the filter at its point of maximum density."));
 
@@ -115,9 +116,10 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
 
     QLabel *label2 = new QLabel(i18n("Power:"), gboxSettings);
 
-    m_powerInput = new KDoubleNumInput(gboxSettings);
+    m_powerInput = new RDoubleNumInput(gboxSettings);
     m_powerInput->setDecimals(1);
-    m_powerInput->setRange(0.1, 2.0, 0.1, true);
+    m_powerInput->input()->setRange(0.1, 2.0, 0.1, true);
+    m_powerInput->setDefaultValue(1.0);
     m_powerInput->setWhatsThis(i18n("<p>This value is used as the exponent controlling the "
                                     "fall-off in density from the center of the filter to the periphery."));
 
@@ -125,9 +127,10 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
 
     QLabel *label3 = new QLabel(i18n("Radius:"), gboxSettings);
 
-    m_radiusInput = new KDoubleNumInput(gboxSettings);
+    m_radiusInput = new RDoubleNumInput(gboxSettings);
     m_radiusInput->setDecimals(1);
-    m_radiusInput->setRange(-100.0, 100.0, 0.1, true);
+    m_radiusInput->input()->setRange(-100.0, 100.0, 0.1, true);
+    m_radiusInput->setDefaultValue(1.0);
     m_radiusInput->setWhatsThis(i18n("<p>This value is the radius of the center filter. It is a "
                                      "multiple of the half-diagonal measure of the image, at which "
                                      "the density of the filter falls to zero."));
@@ -138,28 +141,30 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
 
     QLabel *label4 = new QLabel(i18n("Brightness:"), gboxSettings);
 
-    m_brightnessInput = new KIntNumInput(gboxSettings);
+    m_brightnessInput = new RIntNumInput(gboxSettings);
     m_brightnessInput->setRange(0, 100, 1);
     m_brightnessInput->setSliderEnabled(true);
+    m_brightnessInput->setDefaultValue(0);
     m_brightnessInput->setWhatsThis(i18n("<p>Set here the brightness re-adjustment of the target image."));
 
     // -------------------------------------------------------------
 
     QLabel *label5 = new QLabel(i18n("Contrast:"), gboxSettings);
 
-    m_contrastInput = new KIntNumInput(gboxSettings);
+    m_contrastInput = new RIntNumInput(gboxSettings);
     m_contrastInput->setRange(0, 100, 1);
     m_contrastInput->setSliderEnabled(true);
+    m_contrastInput->setDefaultValue(0);
     m_contrastInput->setWhatsThis(i18n("<p>Set here the contrast re-adjustment of the target image."));
 
     // -------------------------------------------------------------
 
     QLabel *label6 = new QLabel(i18n("Gamma:"), gboxSettings);
 
-    m_gammaInput = new KDoubleNumInput(gboxSettings);
+    m_gammaInput = new RDoubleNumInput(gboxSettings);
     m_gammaInput->setDecimals(2);
-    m_gammaInput->setRange(0.1, 3.0, 0.01, true);
-    m_gammaInput->setValue(1.0);
+    m_gammaInput->input()->setRange(0.1, 3.0, 0.01, true);
+    m_gammaInput->setDefaultValue(1.0);
     m_gammaInput->setWhatsThis(i18n("<p>Set here the gamma re-adjustment of the target image."));
 
     // -------------------------------------------------------------
@@ -230,12 +235,12 @@ void ImageEffect_AntiVignetting::readUserSettings()
     m_contrastInput->blockSignals(true);
     m_gammaInput->blockSignals(true);
 
-    m_densityInput->setValue(group.readEntry("DensityAjustment", 2.0));
-    m_powerInput->setValue(group.readEntry("PowerAjustment", 1.0));
-    m_radiusInput->setValue(group.readEntry("RadiusAjustment", 1.0));
-    m_brightnessInput->setValue(group.readEntry("BrightnessAjustment", 0));
-    m_contrastInput->setValue(group.readEntry("ContrastAjustment", 0));
-    m_gammaInput->setValue(group.readEntry("GammaAjustment", 1.0));
+    m_densityInput->setValue(group.readEntry("DensityAjustment", m_densityInput->defaultValue()));
+    m_powerInput->setValue(group.readEntry("PowerAjustment", m_powerInput->defaultValue()));
+    m_radiusInput->setValue(group.readEntry("RadiusAjustment", m_radiusInput->defaultValue()));
+    m_brightnessInput->setValue(group.readEntry("BrightnessAjustment", m_brightnessInput->defaultValue()));
+    m_contrastInput->setValue(group.readEntry("ContrastAjustment", m_contrastInput->defaultValue()));
+    m_gammaInput->setValue(group.readEntry("GammaAjustment", m_gammaInput->defaultValue()));
 
     m_densityInput->blockSignals(false);
     m_powerInput->blockSignals(false);
@@ -269,12 +274,12 @@ void ImageEffect_AntiVignetting::resetValues()
     m_contrastInput->blockSignals(true);
     m_gammaInput->blockSignals(true);
 
-    m_densityInput->setValue(2.0);
-    m_powerInput->setValue(1.0);
-    m_radiusInput->setValue(1.0);
-    m_brightnessInput->setValue(0);
-    m_contrastInput->setValue(0);
-    m_gammaInput->setValue(1.0);
+    m_densityInput->slotReset();
+    m_powerInput->slotReset();
+    m_radiusInput->slotReset();
+    m_brightnessInput->slotReset();
+    m_contrastInput->slotReset();
+    m_gammaInput->slotReset();
 
     m_densityInput->blockSignals(false);
     m_powerInput->blockSignals(false);

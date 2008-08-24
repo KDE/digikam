@@ -24,34 +24,37 @@
 
 // Qt includes.
 
+#include <QFrame>
+#include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
-#include <QTimer>
-#include <QFrame>
-#include <QSpinBox>
-#include <QSplitter>
-#include <QGridLayout>
-#include <QVBoxLayout>
 #include <QProgressBar>
+#include <QSplitter>
+#include <QTimer>
+#include <QVBoxLayout>
 
 // KDE includes.
 
-#include <kpushbutton.h>
-#include <kcursor.h>
-#include <klocale.h>
 #include <kaboutdata.h>
-#include <khelpmenu.h>
-#include <kiconloader.h>
 #include <kapplication.h>
-#include <kmenu.h>
-#include <kstandarddirs.h>
-#include <kglobalsettings.h>
 #include <kcolorbutton.h>
 #include <kconfig.h>
-#include <kseparator.h>
+#include <kcursor.h>
 #include <kglobal.h>
+#include <kglobalsettings.h>
+#include <khelpmenu.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kmenu.h>
+#include <kpushbutton.h>
+#include <kseparator.h>
+#include <kstandarddirs.h>
 #include <ktoolinvocation.h>
 #include <kvbox.h>
+
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
 
 // Local includes.
 
@@ -61,6 +64,8 @@
 #include "dimginterface.h"
 #include "imageguidedlg.h"
 #include "imageguidedlg.moc"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -110,7 +115,7 @@ public:
     QGridLayout  *mainLayout;
     QGridLayout  *settingsLayout;
 
-    QSpinBox     *guideSize;
+    RIntNumInput *guideSize;
 
     KHBox        *hbox;
 
@@ -180,7 +185,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     d->hbox              = new KHBox(mainWidget());
     d->splitter          = new SidebarSplitter(d->hbox);
-    m_imagePreviewWidget = new ImageWidget(d->name, d->splitter, desc, prevModeOptions, 
+    m_imagePreviewWidget = new ImageWidget(d->name, d->splitter, desc, prevModeOptions,
                                            guideMode, guideVisible, useImageSelection);
 
     d->splitter->setFrameStyle( QFrame::NoFrame );
@@ -216,9 +221,9 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     d->guideColorBt->setWhatsThis(i18n("<p>Set here the color used to draw guides dashed-lines."));
 
     QLabel *label6 = new QLabel(i18n("Guide width:"), gboxGuideSettings);
-    d->guideSize   = new QSpinBox(gboxGuideSettings);
-    d->guideSize->setRange(1, 5);
-    d->guideSize->setSingleStep(1);
+    d->guideSize   = new RIntNumInput(gboxGuideSettings);
+    d->guideSize->setRange(1, 5, 1);
+    d->guideSize->setDefaultValue(1);
     d->guideSize->setWhatsThis(i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
 
     grid->addWidget(line, 0, 0, 1, 3);
@@ -472,7 +477,7 @@ void ImageGuideDlg::closeEvent(QCloseEvent *e)
 
 void ImageGuideDlg::slotHelp()
 {
-    // If setAboutData() is called by plugin, well DigikamImagePlugins help is lauched, 
+    // If setAboutData() is called by plugin, well DigikamImagePlugins help is lauched,
     // else digiKam help. In this case, setHelp() method must be used to set anchor and handbook name.
 
     if (d->aboutData)

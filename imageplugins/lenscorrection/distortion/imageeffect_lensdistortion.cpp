@@ -28,23 +28,22 @@
 
 // Qt includes.
 
-#include <QLabel>
-#include <QPixmap>
-#include <QPainter>
 #include <QBrush>
-#include <QPen>
 #include <QGridLayout>
+#include <QLabel>
+#include <QPainter>
+#include <QPen>
+#include <QPixmap>
 
 // KDE includes.
 
-#include <klocale.h>
-#include <kconfig.h>
 #include <kaboutdata.h>
-#include <kiconloader.h>
 #include <kapplication.h>
-#include <kstandarddirs.h>
-#include <knuminput.h>
+#include <kconfig.h>
 #include <kglobal.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
 
 // LibKDcraw includes.
 
@@ -108,9 +107,10 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
 
     QLabel *label1 = new QLabel(i18n("Main:"), gboxSettings);
 
-    m_mainInput = new KDoubleNumInput(gboxSettings);
+    m_mainInput = new RDoubleNumInput(gboxSettings);
     m_mainInput->setDecimals(1);
-    m_mainInput->setRange(-100.0, 100.0, 0.1, true);
+    m_mainInput->input()->setRange(-100.0, 100.0, 0.1, true);
+    m_mainInput->setDefaultValue(0.0);
     m_mainInput->setWhatsThis( i18n("<p>This value controls the amount of distortion. Negative values "
                                     "correct lens barrel distortion, while positive values correct lens "
                                     "pincushion distortion."));
@@ -119,9 +119,10 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
 
     QLabel *label2 = new QLabel(i18n("Edge:"), gboxSettings);
 
-    m_edgeInput = new KDoubleNumInput(gboxSettings);
+    m_edgeInput = new RDoubleNumInput(gboxSettings);
     m_edgeInput->setDecimals(1);
-    m_edgeInput->setRange(-100.0, 100.0, 0.1, true);
+    m_edgeInput->input()->setRange(-100.0, 100.0, 0.1, true);
+    m_edgeInput->setDefaultValue(0.0);
     m_edgeInput->setWhatsThis( i18n("<p>This value controls in the same manner as the Main control, "
                                     "but has more effect at the edges of the image than at the center."));
 
@@ -129,18 +130,20 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
 
     QLabel *label3 = new QLabel(i18n("Zoom:"), gboxSettings);
 
-    m_rescaleInput = new KDoubleNumInput(gboxSettings);
+    m_rescaleInput = new RDoubleNumInput(gboxSettings);
     m_rescaleInput->setDecimals(1);
-    m_rescaleInput->setRange(-100.0, 100.0, 0.1, true);
+    m_rescaleInput->input()->setRange(-100.0, 100.0, 0.1, true);
+    m_rescaleInput->setDefaultValue(0.0);
     m_rescaleInput->setWhatsThis( i18n("<p>This value rescales the overall image size."));
 
     // -------------------------------------------------------------
 
     QLabel *label4 = new QLabel(i18n("Brighten:"), gboxSettings);
 
-    m_brightenInput = new KDoubleNumInput(gboxSettings);
+    m_brightenInput = new RDoubleNumInput(gboxSettings);
     m_brightenInput->setDecimals(1);
-    m_brightenInput->setRange(-100.0, 100.0, 0.1, true);
+    m_brightenInput->input()->setRange(-100.0, 100.0, 0.1, true);
+    m_brightenInput->setDefaultValue(0.0);
     m_brightenInput->setWhatsThis( i18n("<p>This value adjusts the brightness in image corners."));
 
     // -------------------------------------------------------------
@@ -210,10 +213,10 @@ void ImageEffect_LensDistortion::readUserSettings()
     m_rescaleInput->blockSignals(true);
     m_brightenInput->blockSignals(true);
 
-    m_mainInput->setValue(group.readEntry("2nd Order Distortion", 0.0));
-    m_edgeInput->setValue(group.readEntry("4th Order Distortion",0.0));
-    m_rescaleInput->setValue(group.readEntry("Zoom Factor", 0.0));
-    m_brightenInput->setValue(group.readEntry("Brighten", 0.0));
+    m_mainInput->setValue(group.readEntry("2nd Order Distortion", m_mainInput->defaultValue()));
+    m_edgeInput->setValue(group.readEntry("4th Order Distortion", m_edgeInput->defaultValue()));
+    m_rescaleInput->setValue(group.readEntry("Zoom Factor", m_rescaleInput->defaultValue()));
+    m_brightenInput->setValue(group.readEntry("Brighten", m_brightenInput->defaultValue()));
 
     m_mainInput->blockSignals(false);
     m_edgeInput->blockSignals(false);
@@ -241,10 +244,10 @@ void ImageEffect_LensDistortion::resetValues()
     m_rescaleInput->blockSignals(true);
     m_brightenInput->blockSignals(true);
 
-    m_mainInput->setValue(0.0);
-    m_edgeInput->setValue(0.0);
-    m_rescaleInput->setValue(0.0);
-    m_brightenInput->setValue(0.0);
+    m_mainInput->slotReset();
+    m_edgeInput->slotReset();
+    m_rescaleInput->slotReset();
+    m_brightenInput->slotReset();
 
     m_mainInput->blockSignals(false);
     m_edgeInput->blockSignals(false);
