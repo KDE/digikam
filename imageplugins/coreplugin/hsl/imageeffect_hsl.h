@@ -27,7 +27,7 @@
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 
 class QComboBox;
 class QHButtonGroup;
@@ -45,13 +45,14 @@ class HistogramWidget;
 class ColorGradientWidget;
 class ImageWidget;
 class DColor;
+class DImg;
 }
 
 namespace DigikamImagesPluginCore
 {
 class HSPreviewWidget;
 
-class ImageEffect_HSL : public Digikam::ImageDlgBase
+class ImageEffect_HSL : public Digikam::EditorTool
 {
     Q_OBJECT
 
@@ -72,9 +73,9 @@ private slots:
 
 private:
 
-    void writeUserSettings();
-    void readUserSettings();
-    void resetValues();
+    void writeSettings();
+    void readSettings();
+    void resetSettings();
     void finalRendering();
 
 private:
@@ -112,6 +113,8 @@ private:
     Digikam::ColorGradientWidget *m_hGradient;
 
     Digikam::HistogramWidget     *m_histogramWidget;
+
+    Digikam::DImg                *m_originalImage;
 };
 
 }  // NameSpace DigikamImagesPluginCore

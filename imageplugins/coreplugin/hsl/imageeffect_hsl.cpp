@@ -25,75 +25,81 @@
 // Qt includes.
 
 #include <qcolor.h>
+#include <qcombobox.h>
+#include <qframe.h>
 #include <qgroupbox.h>
-#include <qhgroupbox.h>
-#include <qvgroupbox.h>
-#include <qvbox.h>
 #include <qhbuttongroup.h>
+#include <qhgroupbox.h>
+#include <qlabel.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qframe.h>
-#include <qlabel.h>
 #include <qpushbutton.h>
-#include <qcombobox.h>
-#include <qwhatsthis.h>
-#include <qtooltip.h>
 #include <qtimer.h>
+#include <qtooltip.h>
+#include <qvbox.h>
+#include <qvgroupbox.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
-#include <klocale.h>
 #include <kapplication.h>
+#include <kcolordialog.h>
 #include <kconfig.h>
 #include <kcursor.h>
+#include <klocale.h>
 #include <kstandarddirs.h>
-#include <kcolordialog.h>
 
 // LibKDcraw includes.
 
 #include <libkdcraw/rnuminput.h>
 
-// Digikam includes.
-
-#include "imageiface.h"
-#include "imagewidget.h"
-#include "histogramwidget.h"
-#include "colorgradientwidget.h"
-#include "hslmodifier.h"
-#include "dimg.h"
-
 // Local includes.
 
+#include "colorgradientwidget.h"
+#include "dimg.h"
+#include "histogramwidget.h"
+#include "hslmodifier.h"
 #include "hspreviewwidget.h"
+#include "editortoolsettings.h"
+#include "imageiface.h"
+#include "imagewidget.h"
 #include "imageeffect_hsl.h"
 #include "imageeffect_hsl.moc"
 
+using namespace Digikam;
 using namespace KDcrawIface;
 
 namespace DigikamImagesPluginCore
 {
 
 ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
-               : Digikam::ImageDlgBase(parent, i18n("Hue/Saturation/Lightness"), "hsladjust", false)
+               : EditorTool(parent)
 {
-    m_destinationPreviewData = 0L;
-    setHelp("hsladjusttool.anchor", "digikam");
+    m_destinationPreviewData = 0;
 
-    m_previewWidget = new Digikam::ImageWidget("hsladjust Tool Dialog", plainPage(),
-                                               i18n("<p>Here you can see the image "
-                                                    "Hue/Saturation/Lightness adjustments preview. "
-                                                    "You can pick color on image "
-                                                    "to see the color level corresponding on histogram."));
-    setPreviewAreaWidget(m_previewWidget);
+    ImageIface iface(0, 0);
+    m_originalImage = iface.getOriginalImg();
+
+//    setHelp("hsladjusttool.anchor", "digikam");
+
+    m_previewWidget = new ImageWidget("hsladjust Tool Dialog", 0,
+                                      i18n("<p>Here you can see the image "
+                                           "Hue/Saturation/Lightness adjustments preview. "
+                                           "You can pick color on image "
+                                           "to see the color level corresponding on histogram."));
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 11, 4, spacingHint());
+    EditorToolSettings *gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                                              EditorToolSettings::Ok|
+                                                              EditorToolSettings::Cancel);
 
-    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings->plainPage(), 11, 4);
+
+    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings->plainPage());
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, gboxSettings );
+    m_channelCB = new QComboBox( false, gboxSettings->plainPage());
     m_channelCB->insertItem( i18n("Luminosity") );
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
@@ -104,7 +110,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
                                        "<b>Green</b>: display the green image-channel values.<p>"
                                        "<b>Blue</b>: display the blue image-channel values.<p>"));
 
-    m_scaleBG = new QHButtonGroup(gboxSettings);
+    m_scaleBG = new QHButtonGroup(gboxSettings->plainPage());
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(QFrame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
@@ -139,7 +145,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QVBox *histoBox   = new QVBox(gboxSettings);
+    QVBox *histoBox   = new QVBox(gboxSettings->plainPage());
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
@@ -153,18 +159,18 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_HSSelector = new KHSSelector(gboxSettings);
+    m_HSSelector = new KHSSelector(gboxSettings->plainPage());
     QWhatsThis::add( m_HSSelector, i18n("<p>Select the hue and saturation adjustments of the image here."));
     m_HSSelector->setMinimumSize(256, 142);
     gridSettings->addMultiCellWidget(m_HSSelector, 3, 3, 0, 4);
 
-    m_HSPreview = new HSPreviewWidget(gboxSettings, spacingHint());
+    m_HSPreview = new HSPreviewWidget(gboxSettings->plainPage());
     QWhatsThis::add( m_HSPreview, i18n("<p>You can see here a color preview of the hue and "
                                        "saturation adjustments."));
     m_HSPreview->setMinimumSize(256, 15);
     gridSettings->addMultiCellWidget(m_HSPreview, 4, 4, 0, 4);
 
-    QLabel *label2 = new QLabel(i18n("Hue:"), gboxSettings);
+    QLabel *label2 = new QLabel(i18n("Hue:"), gboxSettings->plainPage());
     m_hInput       = new RDoubleNumInput(gboxSettings);
     m_hInput->setPrecision(0);
     m_hInput->setRange(-180.0, 180.0, 1.0);
@@ -173,7 +179,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     gridSettings->addMultiCellWidget(label2, 5, 5, 0, 4);
     gridSettings->addMultiCellWidget(m_hInput, 6, 6, 0, 4);
 
-    QLabel *label3 = new QLabel(i18n("Saturation:"), gboxSettings);
+    QLabel *label3 = new QLabel(i18n("Saturation:"), gboxSettings->plainPage());
     m_sInput       = new RDoubleNumInput(gboxSettings);
     m_sInput->setPrecision(2);
     m_sInput->setRange(-100.0, 100.0, 0.01);
@@ -182,8 +188,8 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     gridSettings->addMultiCellWidget(label3, 7, 7, 0, 4);
     gridSettings->addMultiCellWidget(m_sInput, 8, 8, 0, 4);
 
-    QLabel *label4 = new QLabel(i18n("Lightness:"), gboxSettings);
-    m_lInput       = new RDoubleNumInput(gboxSettings);
+    QLabel *label4 = new QLabel(i18n("Lightness:"), gboxSettings->plainPage());
+    m_lInput       = new RDoubleNumInput(gboxSettings->plainPage());
     m_lInput->setPrecision(2);
     m_lInput->setRange(-100.0, 100.0, 0.01);
     m_lInput->setDefaultValue(0.0);
@@ -192,7 +198,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     gridSettings->addMultiCellWidget(m_lInput, 10, 10, 0, 4);
 
     gridSettings->setRowStretch(11, 10);
-    setUserAreaWidget(gboxSettings);
+    setToolSettings(gboxSettings);
 
     // -------------------------------------------------------------
 
@@ -228,7 +234,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    enableButtonOK( false );
+//    enableButtonOK( false );
 }
 
 ImageEffect_HSL::~ImageEffect_HSL()
@@ -295,7 +301,7 @@ void ImageEffect_HSL::slotHSChanged(int h, int s)
     m_sInput->setValue(sat);
     m_hInput->blockSignals(false);
     m_sInput->blockSignals(false);
-    slotTimer();
+//    slotTimer();
 }
 
 void ImageEffect_HSL::slotHChanged(double h)
@@ -318,7 +324,7 @@ void ImageEffect_HSL::slotSChanged(double s)
     m_HSSelector->blockSignals(false);
 }
 
-void ImageEffect_HSL::readUserSettings()
+void ImageEffect_HSL::readSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("hsladjust Tool Dialog");
@@ -333,7 +339,7 @@ void ImageEffect_HSL::readUserSettings()
     slotScaleChanged(m_scaleBG->selectedId());
 }
 
-void ImageEffect_HSL::writeUserSettings()
+void ImageEffect_HSL::writeSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("hsladjust Tool Dialog");
@@ -345,7 +351,7 @@ void ImageEffect_HSL::writeUserSettings()
     config->sync();
 }
 
-void ImageEffect_HSL::resetValues()
+void ImageEffect_HSL::resetSettings()
 {
     m_hInput->blockSignals(true);
     m_sInput->blockSignals(true);
@@ -371,7 +377,7 @@ void ImageEffect_HSL::slotEffect()
     double sa  = m_sInput->value();
     double lu  = m_lInput->value();
 
-    enableButtonOK( hu != 0.0 || sa != 0.0 || lu != 0.0);
+//    enableButtonOK( hu != 0.0 || sa != 0.0 || lu != 0.0);
 
     m_HSPreview->setHS(hu, sa);
     m_histogramWidget->stopHistogramComputation();
@@ -429,7 +435,7 @@ void ImageEffect_HSL::finalRendering()
 
     iface->putOriginalImage(i18n("HSL Adjustments"), original.bits());
     kapp->restoreOverrideCursor();
-    accept();
+//    accept();
 }
 
 }  // NameSpace DigikamImagesPluginCore

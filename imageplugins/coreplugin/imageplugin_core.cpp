@@ -80,26 +80,26 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                       this, SLOT(slotBCG()),
                       actionCollection(), "implugcore_bcg");
 
-    m_HSLAction = new KAction(i18n("Hue/Saturation/Lightness..."), "adjusthsl", 
+    m_HSLAction = new KAction(i18n("Hue/Saturation/Lightness..."), "adjusthsl",
                       CTRL+Key_U,      // NOTE: Photoshop 7 use CTRL+U.
                       this, SLOT(slotHSL()),
                       actionCollection(), "implugcore_hsl");
 
-    m_RGBAction = new KAction(i18n("Color Balance..."), "adjustrgb", 
+    m_RGBAction = new KAction(i18n("Color Balance..."), "adjustrgb",
                       CTRL+Key_B,      // NOTE: Photoshop 7 use CTRL+B.
                       this, SLOT(slotRGB()),
                       actionCollection(), "implugcore_rgb");
 
-    m_autoCorrectionAction = new KAction(i18n("Auto-Correction..."), "autocorrection", 
+    m_autoCorrectionAction = new KAction(i18n("Auto-Correction..."), "autocorrection",
                                  CTRL+SHIFT+Key_B, // NOTE: Photoshop 7 use CTRL+SHIFT+B with 'Auto-Color' option.
                                  this, SLOT(slotAutoCorrection()),
                                  actionCollection(), "implugcore_autocorrection");
 
-    m_invertAction = new KAction(i18n("Invert"), "invertimage", 
+    m_invertAction = new KAction(i18n("Invert"), "invertimage",
                          CTRL+Key_I,      // NOTE: Photoshop 7 use CTRL+I.
                          this, SLOT(slotInvert()),
                          actionCollection(), "implugcore_invert");
-    
+
     m_convertTo8Bits = new KAction(i18n("8 bits"), "depth16to8", 0,
                            this, SLOT(slotConvertTo8Bits()),
                            actionCollection(), "implugcore_convertto8bits");
@@ -120,7 +120,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
 
     //-------------------------------
     // Transform menu actions.
-    
+
     m_aspectRatioCropAction = new KAction(i18n("Aspect Ratio Crop..."), "ratiocrop", 0,
                                   this, SLOT(slotRatioCrop()),
                                   actionCollection(), "implugcore_ratiocrop");
@@ -184,8 +184,8 @@ void ImagePlugin_Core::slotRGB()
 
 void ImagePlugin_Core::slotHSL()
 {
-    DigikamImagesPluginCore::ImageEffect_HSL dlg(parentWidget());
-    dlg.exec();
+    DigikamImagesPluginCore::ImageEffect_HSL *hsl = new DigikamImagesPluginCore::ImageEffect_HSL(parentWidget());
+    loadTool(hsl);
 }
 
 void ImagePlugin_Core::slotAutoCorrection()
@@ -197,7 +197,7 @@ void ImagePlugin_Core::slotAutoCorrection()
 void ImagePlugin_Core::slotInvert()
 {
     parentWidget()->setCursor( KCursor::waitCursor() );
-        
+
     Digikam::ImageIface iface(0, 0);
 
     uchar *data     = iface.getOriginalImage();
@@ -268,7 +268,7 @@ void ImagePlugin_Core::slotConvertTo8Bits()
                                                    "Do you want to continue?")) == KMessageBox::Cancel)
            return;
     }
-    
+
     parentWidget()->setCursor( KCursor::waitCursor() );
     iface.convertOriginalColorDepth(32);
     parentWidget()->unsetCursor();
@@ -277,13 +277,13 @@ void ImagePlugin_Core::slotConvertTo8Bits()
 void ImagePlugin_Core::slotConvertTo16Bits()
 {
     Digikam::ImageIface iface(0, 0);
-    
+
     if (iface.originalSixteenBit())
     {
        KMessageBox::error(parentWidget(), i18n("This image is already using a depth of 16 bits / color / pixel."));
        return;
     }
-    
+
     parentWidget()->setCursor( KCursor::waitCursor() );
     iface.convertOriginalColorDepth(64);
     parentWidget()->unsetCursor();
