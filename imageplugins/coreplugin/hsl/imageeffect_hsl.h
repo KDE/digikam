@@ -52,14 +52,14 @@ namespace DigikamImagesPluginCore
 {
 class HSPreviewWidget;
 
-class ImageEffect_HSL : public Digikam::EditorTool
+class HSLTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_HSL(QWidget *parent);
-    ~ImageEffect_HSL();
+    HSLTool(QWidget *parent);
+    ~HSLTool();
 
 private slots:
 

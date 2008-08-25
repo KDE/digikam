@@ -184,7 +184,7 @@ void ImagePlugin_Core::slotRGB()
 
 void ImagePlugin_Core::slotHSL()
 {
-    DigikamImagesPluginCore::ImageEffect_HSL *hsl = new DigikamImagesPluginCore::ImageEffect_HSL(parentWidget());
+    DigikamImagesPluginCore::HSLTool *hsl = new DigikamImagesPluginCore::HSLTool(parentWidget());
     loadTool(hsl);
 }
 

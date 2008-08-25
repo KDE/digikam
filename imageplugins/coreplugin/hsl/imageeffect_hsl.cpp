@@ -73,8 +73,8 @@ using namespace KDcrawIface;
 namespace DigikamImagesPluginCore
 {
 
-ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
-               : EditorTool(parent)
+HSLTool::HSLTool(QWidget* parent)
+       : EditorTool(parent)
 {
     setName("adjusthsl");
     setToolName(i18n("Hue / Saturation / Lightness"));
@@ -242,7 +242,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
 //    enableButtonOK( false );
 }
 
-ImageEffect_HSL::~ImageEffect_HSL()
+HSLTool::~HSLTool()
 {
     m_histogramWidget->stopHistogramComputation();
 
@@ -253,7 +253,7 @@ ImageEffect_HSL::~ImageEffect_HSL()
     delete m_previewWidget;
 }
 
-void ImageEffect_HSL::slotChannelChanged(int channel)
+void HSLTool::slotChannelChanged(int channel)
 {
     switch(channel)
     {
@@ -281,18 +281,18 @@ void ImageEffect_HSL::slotChannelChanged(int channel)
     m_histogramWidget->repaint(false);
 }
 
-void ImageEffect_HSL::slotScaleChanged(int scale)
+void HSLTool::slotScaleChanged(int scale)
 {
     m_histogramWidget->m_scaleType = scale;
     m_histogramWidget->repaint(false);
 }
 
-void ImageEffect_HSL::slotColorSelectedFromTarget( const Digikam::DColor &color )
+void HSLTool::slotColorSelectedFromTarget( const Digikam::DColor &color )
 {
     m_histogramWidget->setHistogramGuideByColor(color);
 }
 
-void ImageEffect_HSL::slotHSChanged(int h, int s)
+void HSLTool::slotHSChanged(int h, int s)
 {
     double hue = double(h);
     if (h >= 180 && h <= 359)
@@ -312,7 +312,7 @@ void ImageEffect_HSL::slotHSChanged(int h, int s)
     slotTimer();
 }
 
-void ImageEffect_HSL::slotHChanged(double h)
+void HSLTool::slotHChanged(double h)
 {
     int hue = int(h);
     if (h >= -180 && h < 0)
@@ -323,7 +323,7 @@ void ImageEffect_HSL::slotHChanged(double h)
     m_HSSelector->blockSignals(false);
 }
 
-void ImageEffect_HSL::slotSChanged(double s)
+void HSLTool::slotSChanged(double s)
 {
     int sat = (int)((s + 100.0) * (255.0/200.0));
 
@@ -332,7 +332,7 @@ void ImageEffect_HSL::slotSChanged(double s)
     m_HSSelector->blockSignals(false);
 }
 
-void ImageEffect_HSL::readSettings()
+void HSLTool::readSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("hsladjust Tool Dialog");
@@ -347,7 +347,7 @@ void ImageEffect_HSL::readSettings()
     slotScaleChanged(m_scaleBG->selectedId());
 }
 
-void ImageEffect_HSL::writeSettings()
+void HSLTool::writeSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("hsladjust Tool Dialog");
@@ -359,7 +359,7 @@ void ImageEffect_HSL::writeSettings()
     config->sync();
 }
 
-void ImageEffect_HSL::resetSettings()
+void HSLTool::resetSettings()
 {
     m_hInput->blockSignals(true);
     m_sInput->blockSignals(true);
@@ -377,7 +377,7 @@ void ImageEffect_HSL::resetSettings()
     m_lInput->blockSignals(false);
 }
 
-void ImageEffect_HSL::slotEffect()
+void HSLTool::slotEffect()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
@@ -418,7 +418,7 @@ void ImageEffect_HSL::slotEffect()
     kapp->restoreOverrideCursor();
 }
 
-void ImageEffect_HSL::finalRendering()
+void HSLTool::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
