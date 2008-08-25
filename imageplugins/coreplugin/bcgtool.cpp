@@ -79,7 +79,7 @@ BCGTool::BCGTool(QWidget* parent)
                : EditorTool(parent)
 {
     setName("bcgadjust");
-    setToolName(i18n("Brightness Contrast Gamma Adjustments"));
+    setToolName(i18n("Brightness / Contrast / Gamma"));
     setToolIcon(SmallIcon("contrast"));
 
     m_destinationPreviewData = 0;

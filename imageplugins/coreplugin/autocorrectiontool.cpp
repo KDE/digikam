@@ -76,7 +76,7 @@ AutoCorrectionTool::AutoCorrectionTool(QWidget* parent)
                   : EditorTool(parent)
 {
     setName("autocorrection");
-    setToolName(i18n("Auto Color Correction"));
+    setToolName(i18n("Auto-Correction"));
     setToolIcon(SmallIcon("autocorrection"));
 
 //    setHelp("autocolorcorrectiontool.anchor", "digikam");
