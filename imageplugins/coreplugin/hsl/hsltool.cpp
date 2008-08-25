@@ -85,8 +85,6 @@ HSLTool::HSLTool(QWidget* parent)
     ImageIface iface(0, 0);
     m_originalImage = iface.getOriginalImg();
 
-//    setHelp("hsladjusttool.anchor", "digikam");
-
     m_previewWidget = new ImageWidget("hsladjust Tool Dialog", 0,
                                       i18n("<p>Here you can see the image "
                                            "Hue/Saturation/Lightness adjustments preview. "
@@ -126,7 +124,7 @@ HSLTool::HSLTool(QWidget* parent)
 
     QPushButton *linHistoButton = new QPushButton( m_scaleBG );
     QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
-    m_scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
+    m_scaleBG->insert(linHistoButton, HistogramWidget::LinScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
     linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
@@ -134,7 +132,7 @@ HSLTool::HSLTool(QWidget* parent)
 
     QPushButton *logHistoButton = new QPushButton( m_scaleBG );
     QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
-    m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    m_scaleBG->insert(logHistoButton, HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
     logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
@@ -151,13 +149,13 @@ HSLTool::HSLTool(QWidget* parent)
     // -------------------------------------------------------------
 
     QVBox *histoBox   = new QVBox(m_gboxSettings->plainPage());
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
+    m_histogramWidget = new HistogramWidget(256, 140, histoBox, false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
                                              "settings changes."));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);
-    m_hGradient = new Digikam::ColorGradientWidget(Digikam::ColorGradientWidget::Horizontal, 10, histoBox);
+    m_hGradient = new ColorGradientWidget(ColorGradientWidget::Horizontal, 10, histoBox);
     m_hGradient->setColors(QColor("black"), QColor("white"));
 
     gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
@@ -216,8 +214,8 @@ HSLTool::HSLTool(QWidget* parent)
     connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const DColor &, const QPoint & )),
+            this, SLOT(slotColorSelectedFromTarget( const DColor & )));
 
     connect(m_hInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
@@ -255,22 +253,22 @@ void HSLTool::slotChannelChanged(int channel)
     switch(channel)
     {
         case LuminosityChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
+            m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
             break;
 
         case RedChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
+            m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
             break;
 
         case GreenChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
+            m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
             break;
 
         case BlueChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
+            m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
             break;
     }
@@ -284,7 +282,7 @@ void HSLTool::slotScaleChanged(int scale)
     m_histogramWidget->repaint(false);
 }
 
-void HSLTool::slotColorSelectedFromTarget( const Digikam::DColor &color )
+void HSLTool::slotColorSelectedFromTarget( const DColor &color )
 {
     m_histogramWidget->setHistogramGuideByColor(color);
 }
@@ -334,7 +332,7 @@ void HSLTool::readSettings()
     KConfig* config = kapp->config();
     config->setGroup("hsladjust Tool Dialog");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", HistogramWidget::LogScaleHistogram));
     m_hInput->setValue(config->readDoubleNumEntry("HueAjustment", m_hInput->defaultValue()));
     m_sInput->setValue(config->readDoubleNumEntry("SaturationAjustment", m_sInput->defaultValue()));
     m_lInput->setValue(config->readDoubleNumEntry("LighnessAjustment", m_lInput->defaultValue()));
@@ -393,15 +391,15 @@ void HSLTool::slotEffect()
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = m_previewWidget->imageIface();
     m_destinationPreviewData   = iface->getPreviewImage();
     int w                      = iface->previewWidth();
     int h                      = iface->previewHeight();
     bool a                     = iface->previewHasAlpha();
     bool sb                    = iface->previewSixteenBit();
 
-    Digikam::DImg preview(w, h, sb, a, m_destinationPreviewData);
-    Digikam::HSLModifier cmod;
+    DImg preview(w, h, sb, a, m_destinationPreviewData);
+    HSLModifier cmod;
     cmod.setHue(hu);
     cmod.setSaturation(sa);
     cmod.setLightness(lu);
@@ -426,16 +424,16 @@ void HSLTool::finalRendering()
     double sa  = m_sInput->value();
     double lu  = m_lInput->value();
 
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = m_previewWidget->imageIface();
     uchar *data                = iface->getOriginalImage();
     int w                      = iface->originalWidth();
     int h                      = iface->originalHeight();
     bool a                     = iface->originalHasAlpha();
     bool sb                    = iface->originalSixteenBit();
-    Digikam::DImg original(w, h, sb, a, data);
+    DImg original(w, h, sb, a, data);
     delete [] data;
 
-    Digikam::HSLModifier cmod;
+    HSLModifier cmod;
     cmod.setHue(hu);
     cmod.setSaturation(sa);
     cmod.setLightness(lu);

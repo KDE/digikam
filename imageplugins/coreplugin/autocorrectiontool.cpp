@@ -234,8 +234,8 @@ AutoCorrectionTool::AutoCorrectionTool(QWidget* parent)
     connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
-            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget(const DColor&, const QPoint&)),
+            this, SLOT(slotColorSelectedFromTarget(const DColor&)));
 
     connect(m_correctionTools, SIGNAL(highlighted(int)),
             this, SLOT(slotEffect()));
@@ -286,7 +286,7 @@ void AutoCorrectionTool::slotScaleChanged(int scale)
     m_histogramWidget->repaint(false);
 }
 
-void AutoCorrectionTool::slotColorSelectedFromTarget(const Digikam::DColor& color)
+void AutoCorrectionTool::slotColorSelectedFromTarget(const DColor& color)
 {
     m_histogramWidget->setHistogramGuideByColor(color);
 }
