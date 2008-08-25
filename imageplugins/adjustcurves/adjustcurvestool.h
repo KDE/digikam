@@ -64,8 +64,8 @@ private:
 
 private slots:
 
-    void slotUser2();
-    void slotUser3();
+    void slotSaveAsSettings();
+    void slotLoadSettings();
     void slotEffect();
     void slotResetSettings();
     void slotResetCurrentChannel();

@@ -325,12 +325,6 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
     connect(m_pickerColorButtonGroup, SIGNAL(released(int)),
             this, SLOT(slotPickerColorButtonActived()));
-
-    connect(gboxSettings->button(EditorToolSettings::SaveAs), SIGNAL(clicked()),
-            this, SLOT(slotUser2()));
-
-    connect(gboxSettings->button(EditorToolSettings::Load), SIGNAL(clicked()),
-            this, SLOT(slotUser3()));
 }
 
 AdjustCurvesTool::~AdjustCurvesTool()
@@ -625,8 +619,7 @@ void AdjustCurvesTool::slotResetSettings()
     m_histogramWidget->reset();
 }
 
-// Load all settings.
-void AdjustCurvesTool::slotUser3()
+void AdjustCurvesTool::slotLoadSettings()
 {
     KURL loadCurvesFile;
 
@@ -647,8 +640,7 @@ void AdjustCurvesTool::slotUser3()
     slotEffect();
 }
 
-// Save all settings.
-void AdjustCurvesTool::slotUser2()
+void AdjustCurvesTool::slotSaveAsSettings()
 {
     KURL saveCurvesFile;
 
