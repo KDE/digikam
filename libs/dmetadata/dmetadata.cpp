@@ -1208,7 +1208,7 @@ double DMetadata::apexApertureToFNumber(double aperture)
         return 22;
     else if (aperture == 10.0)
         return 32;
-    return exp2(aperture / 2.0);
+    return exp(log(2) * aperture / 2.0);
 }
 
 double DMetadata::apexShutterSpeedToExposureTime(double shutterSpeed)
@@ -1254,7 +1254,7 @@ double DMetadata::apexShutterSpeedToExposureTime(double shutterSpeed)
     else if (shutterSpeed == 13.0)
         return 0.000125; // 1/8000
 
-    return exp2( - shutterSpeed);
+    return exp( - log(2) * shutterSpeed);
 }
 
 /**
