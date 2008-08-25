@@ -315,16 +315,18 @@ void AutoCorrectionTool::writeSettings()
     config->sync();
 }
 
-void AutoCorrectionTool::resetSettings()
+void AutoCorrectionTool::slotResetSettings()
 {
     m_correctionTools->blockSignals(true);
     m_correctionTools->setCurrentItem(AutoLevelsCorrection);
     m_correctionTools->blockSignals(false);
+
+    slotEffect();
 }
 
 void AutoCorrectionTool::slotEffect()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor(KCursor::waitCursor());
 
     m_histogramWidget->stopHistogramComputation();
 

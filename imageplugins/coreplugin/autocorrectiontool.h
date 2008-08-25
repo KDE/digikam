@@ -65,6 +65,7 @@ protected:
 private slots:
 
     void slotEffect();
+    void slotResetSettings();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);
@@ -84,7 +85,6 @@ private:
 
     void readSettings();
     void writeSettings();
-    void resetSettings();
 
     void autoCorrection(uchar *data, int w, int h, bool sb, int type);
     QPixmap getThumbnailForEffect(AutoCorrectionType type);
