@@ -134,7 +134,7 @@ void EditorTool::readSettings()
     d->settings->readSettings();
 }
 
-void EditorTool::writteSettings()
+void EditorTool::writeSettings()
 {
     d->settings->writteSettings();
 }
@@ -151,14 +151,14 @@ void EditorTool::slotTimer()
 
 void EditorTool::slotOk()
 {
-    writteSettings();
+    writeSettings();
     finalRendering();
     emit okClicked();
 }
 
 void EditorTool::slotCancel()
 {
-    writteSettings();
+    writeSettings();
     emit cancelClicked();
 }
 
