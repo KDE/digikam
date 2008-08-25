@@ -136,7 +136,7 @@ void EditorTool::readSettings()
 
 void EditorTool::writeSettings()
 {
-    d->settings->writteSettings();
+    d->settings->writeSettings();
 }
 
 void EditorTool::slotResetSettings()

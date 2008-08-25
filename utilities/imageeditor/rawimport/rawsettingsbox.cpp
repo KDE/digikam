@@ -580,7 +580,7 @@ void RawSettingsBox::readSettings()
     slotColorsChanged(d->colorsCB->currentItem());
 }
 
-void RawSettingsBox::writteSettings()
+void RawSettingsBox::writeSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("RAW Import Settings");
