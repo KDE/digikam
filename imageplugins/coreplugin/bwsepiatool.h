@@ -37,6 +37,7 @@
 class QHButtonGroup;
 class QComboBox;
 class QButtonGroup;
+class QListBox;
 
 class KTabWidget;
 
