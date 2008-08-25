@@ -64,8 +64,8 @@
 
 // Local includes.
 
-#include "imageeffect_rgb.h"
-#include "imageeffect_rgb.moc"
+#include "rgbtool.h"
+#include "rgbtool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

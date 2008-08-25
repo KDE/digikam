@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_RGB_H
-#define IMAGEEFFECT_RGB_H
+#ifndef RGBTOOL_H
+#define RGBTOOL_H
 
 // Digikam includes.
 
@@ -115,4 +115,4 @@ private:
 
 }  // NameSpace DigikamImagesPluginCore
 
-#endif /* IMAGEEFFECT_RGB_H */
+#endif /* RGBTOOL_H */

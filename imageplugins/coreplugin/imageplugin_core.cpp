@@ -39,7 +39,7 @@
 #include "dimg.h"
 #include "dimgimagefilters.h"
 #include "imageiface.h"
-#include "imageeffect_rgb.h"
+#include "rgbtool.h"
 #include "hsltool.h"
 #include "bcgtool.h"
 #include "bwsepiatool.h"
