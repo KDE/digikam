@@ -542,12 +542,12 @@ void AlbumManager::startScan()
     refresh();
 
     // listen to album database changes
-    connect(CollectionManager::instance(), SIGNAL(albumChange(const AlbumChangeset &changeset)),
-            this, SLOT(slotAlbumChange(const AlbumChangeset &changeset)));
-    connect(CollectionManager::instance(), SIGNAL(tagChange(const TagChangeset &changeset)),
-            this, SLOT(slotTagChange(const TagChangeset &changeset)));
-    connect(CollectionManager::instance(), SIGNAL(searchChange(const SearchChangeset &changeset)),
-            this, SLOT(slotSearchChange(const SearchChangeset &changeset)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(albumChange(const AlbumChangeset &)),
+            this, SLOT(slotAlbumChange(const AlbumChangeset &)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(const TagChangeset &)),
+            this, SLOT(slotTagChange(const TagChangeset &)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(searchChange(const SearchChangeset &)),
+            this, SLOT(slotSearchChange(const SearchChangeset &)));
     // listen to collection image changes
     connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
             this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)));
