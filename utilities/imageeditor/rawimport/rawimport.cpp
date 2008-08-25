@@ -75,7 +75,7 @@ RawImport::RawImport(const KUrl& url, QObject *parent)
     setToolSettings(d->settingsBox);
     setToolName(i18n("Raw Import"));
     setToolIcon(SmallIcon("kdcraw"));
-    readSettings();
+    slotLoadSettings();
 
     // ---------------------------------------------------------------
 
