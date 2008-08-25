@@ -541,9 +541,6 @@ BWSepiaTool::~BWSepiaTool()
     m_histogramWidget->stopHistogramComputation();
 
     delete [] m_destinationPreviewData;
-    delete m_histogramWidget;
-    delete m_previewWidget;
-    delete m_curvesWidget;
 }
 
 void BWSepiaTool::slotFilterSelected(int filter)
