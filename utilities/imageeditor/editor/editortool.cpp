@@ -123,10 +123,10 @@ void EditorTool::setToolSettings(EditorToolSettings *settings)
             this, SLOT(slotResetSettings()));
 
     connect(d->settings, SIGNAL(signalSaveAsClicked()),
-            this, SLOT(slotSaveAs()));
+            this, SLOT(slotSaveAsSettings()));
 
     connect(d->settings, SIGNAL(signalLoadClicked()),
-            this, SLOT(slotLoad()));
+            this, SLOT(slotLoadSettings()));
 }
 
 void EditorTool::slotLoadSettings()
