@@ -63,6 +63,8 @@ public:
 
     void enableUpdateBtn(bool b);
 
+    void resetSettings();
+
 signals:
 
     void signalUpdatePreview();
@@ -77,8 +79,6 @@ private slots:
     void slotColorsChanged(int color);
 
     void slotResetCurve();
-
-    void slotDefaultSettings();
 
 private:
 
