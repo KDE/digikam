@@ -362,16 +362,16 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     connect(m_hGradientMinInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotAdjustMinInputSpinBox(int)));
 
-    connect(m_minInput, SIGNAL(valueChanged (int)),
+    connect(m_minInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotAdjustSliders()));
 
-    connect(m_gammaInput, SIGNAL(valueChanged (double)),
+    connect(m_gammaInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotGammaInputchanged(double)));
 
     connect(m_hGradientMaxInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotAdjustMaxInputSpinBox(int)));
 
-    connect(m_maxInput, SIGNAL(valueChanged (int)),
+    connect(m_maxInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotAdjustSliders()));
 
     connect(m_hGradientMinOutput, SIGNAL(valueChanged(int)),
@@ -383,7 +383,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     connect(m_hGradientMaxOutput, SIGNAL(valueChanged(int)),
             this, SLOT(slotAdjustMaxOutputSpinBox(int)));
 
-    connect(m_maxOutput, SIGNAL(valueChanged (int)),
+    connect(m_maxOutput, SIGNAL(valueChanged(int)),
             this, SLOT(slotAdjustSliders()));
 
     // -------------------------------------------------------------
@@ -685,7 +685,7 @@ void AdjustLevelsTool::slotScaleChanged(int scale)
     m_levelsHistogramWidget->repaint(false);
 }
 
-void AdjustLevelsTool::readUserSettings()
+void AdjustLevelsTool::readSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("adjustlevels Tool");
@@ -723,7 +723,7 @@ void AdjustLevelsTool::readUserSettings()
     m_maxOutput->setValue(m_levels->getLevelHighOutputValue(m_channelCB->currentItem()));
 }
 
-void AdjustLevelsTool::writeUserSettings()
+void AdjustLevelsTool::writteSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("adjustlevels Tool");
