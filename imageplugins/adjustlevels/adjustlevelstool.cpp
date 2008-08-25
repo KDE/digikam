@@ -334,7 +334,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     grid->setColSpacing(6, 5);
     grid->setColSpacing(7, gboxSettings->spacingHint());
     grid->setMargin(0);
-    grid->setSpacing(gboxSettings->spacingHint());
+    grid->setSpacing(0);
 
     setToolSettings(gboxSettings);
 
