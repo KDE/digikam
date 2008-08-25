@@ -66,6 +66,6 @@ void ImagePlugin_AdjustCurves::setEnabledActions(bool enable)
 
 void ImagePlugin_AdjustCurves::slotCurvesAdjust()
 {
-    AdjustCurveTool *curves = new AdjustCurveTool(this);
+    AdjustCurvesTool *curves = new AdjustCurvesTool(this);
     loadTool(curves);
 }

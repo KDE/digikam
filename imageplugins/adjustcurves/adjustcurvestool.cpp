@@ -84,7 +84,7 @@ using namespace Digikam;
 namespace DigikamAdjustCurvesImagesPlugin
 {
 
-AdjustCurveTool::AdjustCurveTool(QObject* parent)
+AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
                : EditorTool(parent)
 {
     m_destinationPreviewData = 0;
@@ -332,7 +332,7 @@ AdjustCurveTool::AdjustCurveTool(QObject* parent)
             this, SLOT(slotUser3()));
 }
 
-AdjustCurveTool::~AdjustCurveTool()
+AdjustCurvesTool::~AdjustCurvesTool()
 {
     m_histogramWidget->stopHistogramComputation();
 
@@ -344,14 +344,14 @@ AdjustCurveTool::~AdjustCurveTool()
     delete m_previewWidget;
 }
 
-void AdjustCurveTool::slotPickerColorButtonActived()
+void AdjustCurvesTool::slotPickerColorButtonActived()
 {
     // Save previous rendering mode and toggle to original image.
     m_currentPreviewMode = m_previewWidget->getRenderingPreviewMode();
     m_previewWidget->setRenderingPreviewMode(ImageGuideWidget::PreviewOriginalImage);
 }
 
-void AdjustCurveTool::slotSpotColorChanged(const DColor &color)
+void AdjustCurvesTool::slotSpotColorChanged(const DColor &color)
 {
     DColor sc = color;
 
@@ -404,12 +404,12 @@ void AdjustCurveTool::slotSpotColorChanged(const DColor &color)
     slotEffect();
 }
 
-void AdjustCurveTool::slotColorSelectedFromTarget( const DColor &color )
+void AdjustCurvesTool::slotColorSelectedFromTarget( const DColor &color )
 {
     m_histogramWidget->setHistogramGuideByColor(color);
 }
 
-void AdjustCurveTool::slotResetCurrentChannel()
+void AdjustCurvesTool::slotResetCurrentChannel()
 {
     m_curvesWidget->curves()->curvesChannelReset(m_channelCB->currentItem());
 
@@ -418,7 +418,7 @@ void AdjustCurveTool::slotResetCurrentChannel()
     m_histogramWidget->reset();
 }
 
-void AdjustCurveTool::slotEffect()
+void AdjustCurvesTool::slotEffect()
 {
     ImageIface* iface = m_previewWidget->imageIface();
     uchar *orgData    = iface->getPreviewImage();
@@ -448,7 +448,7 @@ void AdjustCurveTool::slotEffect()
     delete [] orgData;
 }
 
-void AdjustCurveTool::finalRendering()
+void AdjustCurvesTool::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     ImageIface* iface = m_previewWidget->imageIface();
@@ -473,7 +473,7 @@ void AdjustCurveTool::finalRendering()
     delete [] desData;
 }
 
-void AdjustCurveTool::slotChannelChanged(int channel)
+void AdjustCurvesTool::slotChannelChanged(int channel)
 {
     switch(channel)
     {
@@ -519,7 +519,7 @@ void AdjustCurveTool::slotChannelChanged(int channel)
     m_histogramWidget->repaint(false);
 }
 
-void AdjustCurveTool::slotScaleChanged(int scale)
+void AdjustCurvesTool::slotScaleChanged(int scale)
 {
     m_curvesWidget->m_scaleType    = scale;
     m_histogramWidget->m_scaleType = scale;
@@ -527,7 +527,7 @@ void AdjustCurveTool::slotScaleChanged(int scale)
     m_curvesWidget->repaint(false);
 }
 
-void AdjustCurveTool::slotCurveTypeChanged(int type)
+void AdjustCurvesTool::slotCurveTypeChanged(int type)
 {
     switch(type)
     {
@@ -549,7 +549,7 @@ void AdjustCurveTool::slotCurveTypeChanged(int type)
     m_curvesWidget->curveTypeChanged();
 }
 
-void AdjustCurveTool::readSettings()
+void AdjustCurvesTool::readSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("adjustcurves Tool");
@@ -586,7 +586,7 @@ void AdjustCurveTool::readSettings()
     slotScaleChanged(m_scaleBG->selectedId());
 }
 
-void AdjustCurveTool::saveSettings()
+void AdjustCurvesTool::saveSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("adjustcurves Tool");
@@ -614,7 +614,7 @@ void AdjustCurveTool::saveSettings()
     config->sync();
 }
 
-void AdjustCurveTool::slotResetSettings()
+void AdjustCurvesTool::slotResetSettings()
 {
     for (int channel = 0 ; channel < 5 ; channel++)
        m_curvesWidget->curves()->curvesChannelReset(channel);
@@ -625,7 +625,7 @@ void AdjustCurveTool::slotResetSettings()
 }
 
 // Load all settings.
-void AdjustCurveTool::slotUser3()
+void AdjustCurvesTool::slotUser3()
 {
     KURL loadCurvesFile;
 
@@ -647,7 +647,7 @@ void AdjustCurveTool::slotUser3()
 }
 
 // Save all settings.
-void AdjustCurveTool::slotUser2()
+void AdjustCurvesTool::slotUser2()
 {
     KURL saveCurvesFile;
 
