@@ -26,10 +26,10 @@ digikamimageplugin_core_la_SOURCES = imageplugin_core.cpp imageeffect_bwsepia.cp
 	                                 autocorrectiontool.cpp \
 	                                 imageeffect_rgb.cpp \
 	                                 imageeffect_redeye.cpp imageeffect_blur.cpp \
-	                                 imageeffect_iccproof.cpp imageeffect_bcg.cpp 
+	                                 imageeffect_iccproof.cpp bcgtool.cpp 
 
 noinst_HEADERS = autocorrectiontool.h imageeffect_blur.h \
-                 imageeffect_rgb.h imageeffect_bcg.h \
+                 imageeffect_rgb.h bcgtool.h \
                  imageeffect_bwsepia.h imageeffect_iccproof.h imageeffect_redeye.h 
 
 digikamimageplugin_core_la_LIBADD = $(LIB_KPARTS) \

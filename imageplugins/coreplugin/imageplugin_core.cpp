@@ -41,7 +41,7 @@
 #include "imageiface.h"
 #include "imageeffect_rgb.h"
 #include "hsltool.h"
-#include "imageeffect_bcg.h"
+#include "bcgtool.h"
 #include "imageeffect_bwsepia.h"
 #include "imageeffect_redeye.h"
 #include "imageeffect_blur.h"

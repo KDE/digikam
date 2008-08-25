@@ -66,8 +66,8 @@
 
 // Local includes.
 
-#include "imageeffect_bcg.h"
-#include "imageeffect_bcg.moc"
+#include "bcgtool.h"
+#include "bcgtool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

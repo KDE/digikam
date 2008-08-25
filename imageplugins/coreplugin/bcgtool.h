@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_BCG_H
-#define IMAGEEFFECT_BCG_H
+#ifndef BCGTOOL_H
+#define BCGTOOL_H
 
 // Digikam includes.
 
@@ -111,4 +111,4 @@ private:
 
 }  // NameSpace DigikamImagesPluginCore
 
-#endif /* IMAGEEFFECT_BCG_H */
+#endif /* BCGTOOL_H */
