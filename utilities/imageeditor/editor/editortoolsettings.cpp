@@ -86,7 +86,7 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    QGridLayout* gridSettings = new QGridLayout(this, 3, 2);
+    QGridLayout* gridSettings = new QGridLayout(this, 2, 2);
 
     d->plainPage = new QWidget(this);
     d->btnBox1   = new QHBox(this);
