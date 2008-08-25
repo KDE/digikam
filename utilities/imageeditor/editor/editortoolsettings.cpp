@@ -143,7 +143,6 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
     gridSettings->addWidget(d->plainPage, 0, 0, 1, 2);
     gridSettings->addWidget(d->btnBox2,   1, 0, 1, 2);
     gridSettings->addWidget(d->btnBox1,   2, 0, 1, 2);
-    gridSettings->setRowStretch(3, 10);
     gridSettings->setSpacing(spacingHint());
     gridSettings->setMargin(0);
 
