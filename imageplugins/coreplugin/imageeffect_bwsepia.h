@@ -32,7 +32,7 @@
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 
 class QHButtonGroup;
 class QComboBox;
@@ -60,14 +60,14 @@ namespace DigikamImagesPluginCore
 
 class PreviewPixmapFactory;
 
-class ImageEffect_BWSepia : public Digikam::ImageDlgBase
+class BWSepiaTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_BWSepia(QWidget *parent);
-    ~ImageEffect_BWSepia();
+    BWSepiaTool(QWidget *parent);
+    ~BWSepiaTool();
 
     friend class PreviewPixmapFactory;
 
@@ -76,19 +76,15 @@ protected:
     QPixmap getThumbnailForEffect(int type);
     void finalRendering();
 
-protected slots:
-
-    virtual void slotTimer();
-
 private:
 
-    void readUserSettings();
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void blackAndWhiteConversion(uchar *data, int w, int h, bool sb, int type);
 
 private slots:
 
+    void slotResetSettings();
     void slotUser2();
     void slotUser3();
     void slotEffect();
@@ -171,8 +167,8 @@ private:
     QListBox                     *m_bwFilm;
     QListBox                     *m_bwTone;
 
-    KDcrawIface::RIntNumInput                 *m_cInput;
-    KDcrawIface::RIntNumInput                 *m_strengthInput;
+    KDcrawIface::RIntNumInput    *m_cInput;
+    KDcrawIface::RIntNumInput    *m_strengthInput;
 
     KTabWidget                   *m_tab;
 

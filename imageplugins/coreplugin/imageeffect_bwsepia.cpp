@@ -51,6 +51,7 @@
 #include <kcursor.h>
 #include <kfiledialog.h>
 #include <kglobalsettings.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -62,16 +63,17 @@
 
 // Digikam includes.
 
-#include "imageiface.h"
-#include "imagehistogram.h"
-#include "dimgimagefilters.h"
-#include "imagewidget.h"
-#include "imagecurves.h"
-#include "histogramwidget.h"
-#include "curveswidget.h"
-#include "colorgradientwidget.h"
-#include "dimg.h"
 #include "bcgmodifier.h"
+#include "colorgradientwidget.h"
+#include "curveswidget.h"
+#include "dimg.h"
+#include "dimgimagefilters.h"
+#include "editortoolsettings.h"
+#include "histogramwidget.h"
+#include "imagecurves.h"
+#include "imagehistogram.h"
+#include "imageiface.h"
+#include "imagewidget.h"
 #include "listboxpreviewitem.h"
 
 // Local includes.
@@ -80,6 +82,7 @@
 #include "imageeffect_bwsepia.moc"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
@@ -88,7 +91,7 @@ class PreviewPixmapFactory : public QObject
 {
 public:
 
-    PreviewPixmapFactory(ImageEffect_BWSepia* bwSepia);
+    PreviewPixmapFactory(BWSepiaTool* bwSepia);
 
     void invalidate() { m_previewPixmapMap.clear(); }
 
@@ -99,10 +102,10 @@ private:
     QPixmap makePixmap(int id);
 
     QIntDict<QPixmap>    m_previewPixmapMap;
-    ImageEffect_BWSepia *m_bwSepia;
+    BWSepiaTool *m_bwSepia;
 };
 
-PreviewPixmapFactory::PreviewPixmapFactory(ImageEffect_BWSepia* bwSepia)
+PreviewPixmapFactory::PreviewPixmapFactory(BWSepiaTool* bwSepia)
                     : QObject(bwSepia), m_bwSepia(bwSepia)
 {
     m_previewPixmapMap.setAutoDelete(true);
@@ -156,23 +159,25 @@ const QPixmap* ListBoxBWPreviewItem::pixmap() const
 
 // -----------------------------------------------------------------------------------
 
-ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
-                   : Digikam::ImageDlgBase(parent, i18n("Convert to Black & White"),
-                                           "convertbw", true, false),
-                     m_destinationPreviewData(0L),
-                     m_channelCB(0),
-                     m_scaleBG(0),
-                     m_bwFilters(0),
-                     m_bwTone(0),
-                     m_cInput(0),
-                     m_tab(0),
-                     m_previewWidget(0),
-                     m_histogramWidget(0),
-                     m_curvesWidget(0),
-                     m_originalImage(0),
-                     m_previewPixmapFactory(0)
+BWSepiaTool::BWSepiaTool(QWidget* parent)
+                   : EditorTool(parent)
 {
-    setHelp("blackandwhitetool.anchor", "digikam");
+    setName("convertbw");
+    setToolName(i18n("Black && White"));
+    setToolIcon(SmallIcon("bwtonal"));
+
+    //    setHelp("blackandwhitetool.anchor", "digikam");
+
+    m_destinationPreviewData = 0;
+    m_channelCB = 0;
+    m_scaleBG = 0;
+    m_bwFilters = 0;
+    m_bwTone = 0;
+    m_cInput = 0;
+    m_tab = 0;
+    m_histogramWidget = 0;
+    m_curvesWidget = 0;
+    m_previewPixmapFactory = 0;
 
     Digikam::ImageIface iface(0, 0);
     m_originalImage  = iface.getOriginalImg();
@@ -180,20 +185,23 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new Digikam::ImageWidget("convertbw Tool Dialog", plainPage(),
+    m_previewWidget = new Digikam::ImageWidget("convertbw Tool Dialog", 0,
                                                i18n("<p>Here you can see the black and white conversion tool preview. "
                                                     "You can pick color on image "
                                                     "to see the color level corresponding on histogram."));
-    setPreviewAreaWidget(m_previewWidget);
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 4, 4, spacingHint());
+    EditorToolSettings *gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                                              EditorToolSettings::Ok|
+                                                              EditorToolSettings::Cancel);
 
-    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 4, 4);
+
+    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings->plainPage());
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, gboxSettings );
+    m_channelCB = new QComboBox( false, gboxSettings->plainPage() );
     m_channelCB->insertItem( i18n("Luminosity") );
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
@@ -204,7 +212,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                                        "<b>Green</b>: display the green image-channel values.<p>"
                                        "<b>Blue</b>: display the blue image-channel values.<p>"));
 
-    m_scaleBG = new QHButtonGroup(gboxSettings);
+    m_scaleBG = new QHButtonGroup(gboxSettings->plainPage());
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(QFrame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
@@ -239,7 +247,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QVBox *histoBox   = new QVBox(gboxSettings);
+    QVBox *histoBox   = new QVBox(gboxSettings->plainPage());
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
@@ -253,7 +261,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_tab = new KTabWidget(gboxSettings);
+    m_tab = new KTabWidget(gboxSettings->plainPage());
 
     m_bwFilm = new QListBox(m_tab);
     m_bwFilm->setColumnMode(1);
@@ -341,7 +349,6 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     // -------------------------------------------------------------
 
     QVBox *vbox = new QVBox(m_tab);
-    vbox->setSpacing(spacingHint());
 
     m_bwFilters = new QListBox(vbox);
     m_bwFilters->setColumnMode(1);
@@ -444,7 +451,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *curveBox     = new QWidget( m_tab );
-    QGridLayout *gridTab2 = new QGridLayout(curveBox, 5, 2, spacingHint(), 0);
+    QGridLayout *gridTab2 = new QGridLayout(curveBox, 5, 2, 0);
 
     Digikam::ColorGradientWidget* vGradient = new Digikam::ColorGradientWidget(
                                                   Digikam::ColorGradientWidget::Vertical,
@@ -479,7 +486,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     gridTab2->addMultiCellWidget(spaceh, 1, 1, 2, 2);
     gridTab2->addMultiCellWidget(hGradient, 2, 2, 2, 2);
     gridTab2->addMultiCellWidget(m_cInput, 4, 4, 0, 2);
-    gridTab2->setRowSpacing(3, spacingHint());
+//    gridTab2->setRowSpacing(3);
     gridTab2->setRowStretch(5, 10);
 
     // -------------------------------------------------------------
@@ -491,7 +498,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     gridSettings->addMultiCellWidget(m_tab, 3, 3, 0, 4);
     gridSettings->setRowStretch(3, 10);
-    setUserAreaWidget(gboxSettings);
+    setToolSettings(gboxSettings);
 
     // -------------------------------------------------------------
 
@@ -529,7 +536,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
             this, SLOT(slotEffect()));
 }
 
-ImageEffect_BWSepia::~ImageEffect_BWSepia()
+BWSepiaTool::~BWSepiaTool()
 {
     m_histogramWidget->stopHistogramComputation();
 
@@ -539,7 +546,7 @@ ImageEffect_BWSepia::~ImageEffect_BWSepia()
     delete m_curvesWidget;
 }
 
-void ImageEffect_BWSepia::slotFilterSelected(int filter)
+void BWSepiaTool::slotFilterSelected(int filter)
 {
     if (filter == BWNoFilter)
         m_strengthInput->setEnabled(false);
@@ -549,7 +556,7 @@ void ImageEffect_BWSepia::slotFilterSelected(int filter)
     slotEffect();
 }
 
-QPixmap ImageEffect_BWSepia::getThumbnailForEffect(int type)
+QPixmap BWSepiaTool::getThumbnailForEffect(int type)
 {
     Digikam::DImg thumb = m_thumbnailImage.copy();
     int w   = thumb.width();
@@ -587,7 +594,7 @@ QPixmap ImageEffect_BWSepia::getThumbnailForEffect(int type)
     return (thumb.convertToPixmap());
 }
 
-void ImageEffect_BWSepia::slotChannelChanged(int channel)
+void BWSepiaTool::slotChannelChanged(int channel)
 {
     switch(channel)
     {
@@ -615,7 +622,7 @@ void ImageEffect_BWSepia::slotChannelChanged(int channel)
     m_histogramWidget->repaint(false);
 }
 
-void ImageEffect_BWSepia::slotScaleChanged(int scale)
+void BWSepiaTool::slotScaleChanged(int scale)
 {
     m_histogramWidget->m_scaleType = scale;
     m_histogramWidget->repaint(false);
@@ -623,17 +630,17 @@ void ImageEffect_BWSepia::slotScaleChanged(int scale)
     m_curvesWidget->repaint(false);
 }
 
-void ImageEffect_BWSepia::slotSpotColorChanged(const Digikam::DColor &color)
+void BWSepiaTool::slotSpotColorChanged(const Digikam::DColor &color)
 {
     m_curvesWidget->setCurveGuide(color);
 }
 
-void ImageEffect_BWSepia::slotColorSelectedFromTarget( const Digikam::DColor &color )
+void BWSepiaTool::slotColorSelectedFromTarget( const Digikam::DColor &color )
 {
     m_histogramWidget->setHistogramGuideByColor(color);
 }
 
-void ImageEffect_BWSepia::readUserSettings()
+void BWSepiaTool::readSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("convertbw Tool Dialog");
@@ -675,7 +682,7 @@ void ImageEffect_BWSepia::readUserSettings()
     slotFilterSelected(m_bwFilters->currentItem());
 }
 
-void ImageEffect_BWSepia::writeUserSettings()
+void BWSepiaTool::writeSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("convertbw Tool Dialog");
@@ -704,7 +711,7 @@ void ImageEffect_BWSepia::writeUserSettings()
     config->sync();
 }
 
-void ImageEffect_BWSepia::resetValues()
+void BWSepiaTool::slotResetSettings()
 {
     m_bwFilters->blockSignals(true);
     m_bwTone->blockSignals(true);
@@ -736,8 +743,15 @@ void ImageEffect_BWSepia::resetValues()
     m_bwTone->triggerUpdate(false);
 }
 
-void ImageEffect_BWSepia::slotEffect()
+void BWSepiaTool::slotEffect()
 {
+//    if (m_previewPixmapFactory && m_bwFilters && m_bwTone)
+//    {
+//        m_previewPixmapFactory->invalidate();
+//        m_bwFilters->triggerUpdate(false);
+//        m_bwTone->triggerUpdate(false);
+//    }
+
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
     m_histogramWidget->stopHistogramComputation();
@@ -788,18 +802,7 @@ void ImageEffect_BWSepia::slotEffect()
     kapp->restoreOverrideCursor();
 }
 
-void ImageEffect_BWSepia::slotTimer()
-{
-    Digikam::ImageDlgBase::slotTimer();
-    if (m_previewPixmapFactory && m_bwFilters && m_bwTone)
-    {
-        m_previewPixmapFactory->invalidate();
-        m_bwFilters->triggerUpdate(false);
-        m_bwTone->triggerUpdate(false);
-    }
-}
-
-void ImageEffect_BWSepia::finalRendering()
+void BWSepiaTool::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
@@ -843,10 +846,9 @@ void ImageEffect_BWSepia::finalRendering()
     }
 
     kapp->restoreOverrideCursor();
-    accept();
 }
 
-void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, int type)
+void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, int type)
 {
     // Value to multiply RGB 8 bits component of mask used by changeTonality() method.
     int mul = sb ? 255 : 1;
@@ -1069,10 +1071,10 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, boo
 
 //-- Load all settings from file --------------------------------------
 
-void ImageEffect_BWSepia::slotUser3()
+void BWSepiaTool::slotUser3()
 {
     KURL loadFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
-                                            QString( "*" ), this,
+                                            QString( "*" ), 0,
                                             QString( i18n("Black & White Settings File to Load")) );
     if( loadFile.isEmpty() )
        return;
@@ -1085,7 +1087,7 @@ void ImageEffect_BWSepia::slotUser3()
 
         if ( stream.readLine() != "# Black & White Configuration File" )
         {
-           KMessageBox::error(this,
+           KMessageBox::error(0,
                         i18n("\"%1\" is not a Black & White settings text file.")
                         .arg(loadFile.fileName()));
            file.close();
@@ -1137,18 +1139,18 @@ void ImageEffect_BWSepia::slotUser3()
         slotEffect();
     }
     else
-        KMessageBox::error(this, i18n("Cannot load settings from the Black & White text file."));
+        KMessageBox::error(0, i18n("Cannot load settings from the Black & White text file."));
 
     file.close();
 }
 
 //-- Save all settings to file ---------------------------------------
 
-void ImageEffect_BWSepia::slotUser2()
+void BWSepiaTool::slotUser2()
 {
     KURL saveFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
-                                            QString( "*" ), this,
-                                            QString( i18n("Black & White Settings File to Save")) );
+                                            QString( "*" ), 0,
+                                            QString( i18n("Black & White Settings File to Save")));
     if( saveFile.isEmpty() )
        return;
 
@@ -1175,7 +1177,7 @@ void ImageEffect_BWSepia::slotUser2()
         }
     }
     else
-        KMessageBox::error(this, i18n("Cannot save settings to the Black & White text file."));
+        KMessageBox::error(0, i18n("Cannot save settings to the Black & White text file."));
 
     file.close();
 }

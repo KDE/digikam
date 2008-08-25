@@ -215,8 +215,8 @@ void ImagePlugin_Core::slotInvert()
 
 void ImagePlugin_Core::slotBW()
 {
-    DigikamImagesPluginCore::ImageEffect_BWSepia dlg(parentWidget());
-    dlg.exec();
+    DigikamImagesPluginCore::BWSepiaTool *bwsepia = new DigikamImagesPluginCore::BWSepiaTool(parentWidget());
+    loadTool(bwsepia);
 }
 
 void ImagePlugin_Core::slotRedEye()
