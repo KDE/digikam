@@ -221,6 +221,7 @@ AutoCorrectionTool::AutoCorrectionTool(QWidget* parent)
     gridSettings->addMultiCellLayout(l1,                0, 0, 0, 4);
     gridSettings->addMultiCellWidget(histoBox,          1, 1, 0, 4);
     gridSettings->addMultiCellWidget(m_correctionTools, 2, 2, 0, 4);
+    gridSettings->setRowStretch(2, 10);
     gridSettings->setSpacing(gboxSettings->spacingHint());
     gridSettings->setMargin(gboxSettings->spacingHint());
 
