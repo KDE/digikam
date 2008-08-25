@@ -78,11 +78,8 @@ signals:
     void signalCancelClicked();
     void signalTryClicked();
     void signalDefaultClicked();
-
-protected slots:
-
-    virtual void slotSaveAs(){};
-    virtual void slotLoad(){};
+    void signalSaveAsClicked();
+    void signalLoadClicked();
 
 private:
 

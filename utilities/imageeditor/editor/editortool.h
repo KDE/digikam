@@ -66,8 +66,6 @@ protected:
     void setToolView(QWidget *view);
     void setToolSettings(EditorToolSettings *settings);
 
-    virtual void readSettings();
-    virtual void saveSettings();
     virtual void finalRendering(){};
     virtual void setBusy(bool){};
 
@@ -77,6 +75,8 @@ protected slots:
     void slotOk();
     void slotCancel();
 
+    virtual void slotLoadSettings();
+    virtual void slotSaveAsSettings();
     virtual void slotResetSettings();
     virtual void slotEffect(){};
 
