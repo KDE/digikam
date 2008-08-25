@@ -28,7 +28,7 @@
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 
 class QCheckBox;
 class QComboBox;
@@ -61,14 +61,14 @@ class CurvesWidget;
 namespace DigikamImagesPluginCore
 {
 
-class ImageEffect_ICCProof : public Digikam::ImageDlgBase
+class ICCProofTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_ICCProof(QWidget* parent);
-    ~ImageEffect_ICCProof();
+    ICCProofTool(QWidget* parent);
+    ~ICCProofTool();
 
 protected:
 
@@ -76,9 +76,8 @@ protected:
 
 private:
 
-    void readUserSettings();
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
 
     void getICCInfo(const QString&);
     void getICCInfo(const QByteArray&);
@@ -104,6 +103,7 @@ private slots:
     void slotUser2();
     void slotUser3();
     void slotEffect();
+    void slotResetSettings();
     void slotChannelChanged(int);
     void slotScaleChanged(int);
     void slotSpotColorChanged(const Digikam::DColor &);
@@ -199,6 +199,8 @@ private:
     Digikam::ICCPreviewWidget      *m_iccInPreviewWidget;
     Digikam::ICCPreviewWidget      *m_iccSpacePreviewWidget;
     Digikam::ICCPreviewWidget      *m_iccProofPreviewWidget;
+
+    Digikam::EditorToolSettings    *m_gboxSettings;
 };
 
 }  // NameSpace DigikamImagesPluginCore

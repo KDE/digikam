@@ -248,8 +248,8 @@ void ImagePlugin_Core::slotRatioCrop()
 
 void ImagePlugin_Core::slotColorManagement()
 {
-    DigikamImagesPluginCore::ImageEffect_ICCProof dlg(parentWidget());
-    dlg.exec();
+    DigikamImagesPluginCore::ICCProofTool *iccproof = new DigikamImagesPluginCore::ICCProofTool(parentWidget());
+    loadTool(iccproof);
 }
 
 void ImagePlugin_Core::slotConvertTo8Bits()
