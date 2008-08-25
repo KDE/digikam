@@ -55,7 +55,7 @@ public:
     CurvesWidget*    curve()     const;
     DRawDecoding     settings();
 
-    void saveSettings();
+    void writteSettings();
     void readSettings();
 
     void setDemosaicedImage(DImg& img);

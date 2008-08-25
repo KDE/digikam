@@ -129,14 +129,14 @@ void EditorTool::setToolSettings(EditorToolSettings *settings)
             this, SLOT(slotLoadSettings()));
 }
 
-void EditorTool::slotLoadSettings()
+void EditorTool::readSettings()
 {
     d->settings->readSettings();
 }
 
-void EditorTool::slotSaveAsSettings()
+void EditorTool::writteSettings()
 {
-    d->settings->saveSettings();
+    d->settings->writteSettings();
 }
 
 void EditorTool::slotResetSettings()
@@ -151,14 +151,14 @@ void EditorTool::slotTimer()
 
 void EditorTool::slotOk()
 {
-    slotSaveAsSettings();
+    writeSettings();
     finalRendering();
     emit okClicked();
 }
 
 void EditorTool::slotCancel()
 {
-    slotSaveAsSettings();
+    writeSettings();
     emit cancelClicked();
 }
 
