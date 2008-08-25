@@ -225,9 +225,6 @@ BCGTool::~BCGTool()
 
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
-
-    delete m_histogramWidget;
-    delete m_previewWidget;
 }
 
 void BCGTool::slotChannelChanged(int channel)

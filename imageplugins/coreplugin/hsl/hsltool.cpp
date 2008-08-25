@@ -248,9 +248,6 @@ HSLTool::~HSLTool()
 
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
-
-    delete m_histogramWidget;
-    delete m_previewWidget;
 }
 
 void HSLTool::slotChannelChanged(int channel)

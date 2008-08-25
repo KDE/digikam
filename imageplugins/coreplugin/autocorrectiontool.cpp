@@ -250,9 +250,6 @@ AutoCorrectionTool::~AutoCorrectionTool()
 
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
-
-    delete m_histogramWidget;
-    delete m_previewWidget;
 }
 
 void AutoCorrectionTool::slotChannelChanged(int channel)
