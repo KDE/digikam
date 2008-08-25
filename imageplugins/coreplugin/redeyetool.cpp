@@ -67,8 +67,8 @@
 
 // Local includes.
 
-#include "imageeffect_redeye.h"
-#include "imageeffect_redeye.moc"
+#include "redeyetool.h"
+#include "redeyetool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

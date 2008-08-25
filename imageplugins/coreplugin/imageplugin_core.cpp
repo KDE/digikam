@@ -43,7 +43,7 @@
 #include "hsltool.h"
 #include "bcgtool.h"
 #include "bwsepiatool.h"
-#include "imageeffect_redeye.h"
+#include "redeyetool.h"
 #include "imageeffect_blur.h"
 #include "imageeffect_sharpen.h"
 #include "imageeffect_ratiocrop.h"
