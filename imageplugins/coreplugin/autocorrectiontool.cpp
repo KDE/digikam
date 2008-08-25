@@ -64,8 +64,8 @@
 
 // Local includes.
 
-#include "imageeffect_autocorrection.h"
-#include "imageeffect_autocorrection.moc"
+#include "autocorrectiontool.h"
+#include "autocorrectiontool.moc"
 
 using namespace Digikam;
 

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_AUTOCORRECTION_H
-#define IMAGEEFFECT_AUTOCORRECTION_H
+#ifndef AUTOCORRECTIONTOOL_H
+#define AUTOCORRECTIONTOOL_H
 
 // Qt includes.
 
@@ -124,4 +124,4 @@ private:
 
 }  // NameSpace DigikamImagesPluginCore
 
-#endif /* IMAGEEFFECT_AUTOCORRECTION_H */
+#endif /* AUTOCORRECTIONTOOL_H */
