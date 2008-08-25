@@ -236,8 +236,8 @@ void ImagePlugin_Core::slotRedEye()
         return;
     }
 
-    DigikamImagesPluginCore::ImageEffect_RedEye dlg(parentWidget());
-    dlg.exec();
+    DigikamImagesPluginCore::RedEyeTool *redeye = new DigikamImagesPluginCore::RedEyeTool(parentWidget());
+    loadTool(redeye);
 }
 
 void ImagePlugin_Core::slotRatioCrop()

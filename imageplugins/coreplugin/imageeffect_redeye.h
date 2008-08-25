@@ -32,7 +32,7 @@
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 
 class QLabel;
 class QComboBox;
@@ -81,18 +81,19 @@ private:
 
 // ----------------------------------------------------------------
 
-class ImageEffect_RedEye : public Digikam::ImageDlgBase
+class RedEyeTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_RedEye(QWidget *parent);
-    ~ImageEffect_RedEye();
+    RedEyeTool(QWidget *parent);
+    ~RedEyeTool();
 
 private slots:
 
     void slotEffect();
+    void slotResetSettings();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);
@@ -100,9 +101,8 @@ private slots:
 
 private:
 
-    void readUserSettings();
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void finalRendering();
     void redEyeFilter(Digikam::DImg& selection);
 
