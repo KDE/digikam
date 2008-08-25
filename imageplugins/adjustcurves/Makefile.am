@@ -18,7 +18,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes) 
 
 digikamimageplugin_adjustcurves_la_SOURCES = imageplugin_adjustcurves.cpp \
-	                                         adjustcurves.cpp 
+	                                         adjustcurvestool.cpp 
 
 digikamimageplugin_adjustcurves_la_LIBADD = $(LIB_KPARTS) \
 	                                        $(top_builddir)/digikam/digikam/libdigikam.la

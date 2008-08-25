@@ -32,7 +32,7 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "adjustcurves.h"
+#include "adjustcurvestool.h"
 #include "imageplugin_adjustcurves.h"
 #include "imageplugin_adjustcurves.moc"
 

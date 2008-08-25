@@ -76,8 +76,8 @@
 #include "curveswidget.h"
 #include "colorgradientwidget.h"
 #include "dimgimagefilters.h"
-#include "adjustcurves.h"
-#include "adjustcurves.moc"
+#include "adjustcurvestool.h"
+#include "adjustcurvestool.moc"
 
 using namespace Digikam;
 
