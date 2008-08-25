@@ -164,10 +164,10 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
             this, SIGNAL(signalDefaultClicked()));
 
     connect(d->saveAsBtn, SIGNAL(clicked()),
-            this, SLOT(slotSaveAs()));
+            this, SIGNAL(signalSaveAsClicked()));
 
     connect(d->loadBtn, SIGNAL(clicked()),
-            this, SLOT(slotLoad()));
+            this, SIGNAL(signalLoadClicked()));
 }
 
 EditorToolSettings::~EditorToolSettings()
