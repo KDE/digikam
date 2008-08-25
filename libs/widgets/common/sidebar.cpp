@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>  
+ * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,19 +68,19 @@ public:
         restoreSize      = 0;
     }
 
-    bool            minimizedDefault;
-    bool            minimized;
-    bool            isMinimized;      // Backup of minimized status (used with Fullscreen)
+    bool             minimizedDefault;
+    bool             minimized;
+    bool             isMinimized;      // Backup of minimized status (used with Fullscreen)
 
-    int             tabs;
-    int             activeTab;
-    int             dragSwitchId;
+    int              tabs;
+    int              activeTab;
+    int              dragSwitchId;
 
-    int             restoreSize;
+    int              restoreSize;
 
-    QStackedWidget *stack;
-    SidebarSplitter*splitter;
-    QTimer         *dragSwitchTimer;
+    QStackedWidget  *stack;
+    SidebarSplitter *splitter;
+    QTimer          *dragSwitchTimer;
 };
 
 class SidebarSplitterPriv
@@ -88,7 +89,6 @@ public:
 
     QList<Sidebar*> sidebars;
 };
-
 
 Sidebar::Sidebar(QWidget *parent, SidebarSplitter *sp, KMultiTabBarPosition side, bool minimizedDefault)
        : KMultiTabBar(side, parent)
@@ -115,6 +115,10 @@ Sidebar::~Sidebar()
     delete d;
 }
 
+SidebarSplitter* Sidebar::splitter() const
+{
+    return d->splitter;
+}
 
 void Sidebar::updateMinimumWidth()
 {
@@ -346,11 +350,10 @@ void Sidebar::slotDragSwitchTimer()
     clicked(d->dragSwitchId);
 }
 
-
-// ----------------------------------------------
+// -----------------------------------------------------------------------------
 
 SidebarSplitter::SidebarSplitter(QWidget *parent)
-    : QSplitter(parent)
+               : QSplitter(parent)
 {
     d = new SidebarSplitterPriv;
 
@@ -359,7 +362,7 @@ SidebarSplitter::SidebarSplitter(QWidget *parent)
 }
 
 SidebarSplitter::SidebarSplitter(Qt::Orientation orientation, QWidget *parent)
-    : QSplitter(orientation, parent)
+               : QSplitter(orientation, parent)
 {
     d = new SidebarSplitterPriv;
 
@@ -476,6 +479,5 @@ void SidebarSplitter::slotSplitterMoved(int pos, int index)
         }
     }
 }
-
 
 }  // namespace Digikam

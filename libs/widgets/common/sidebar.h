@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -71,6 +72,8 @@ public:
             bool mimimizedDefault=false);
 
     virtual ~Sidebar();
+
+    SidebarSplitter* splitter() const;
 
     /**
      * Appends a new tab to the sidebar
@@ -160,6 +163,8 @@ private:
     friend class SidebarSplitter;
     SidebarPriv* d;
 };
+
+// -----------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT SidebarSplitter : public QSplitter
 {
