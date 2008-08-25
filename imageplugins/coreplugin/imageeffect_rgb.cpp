@@ -97,11 +97,11 @@ RGBTool::RGBTool(QWidget* parent)
                                             EditorToolSettings::Ok|
                                             EditorToolSettings::Cancel);
 
-    QGridLayout* gridSettings = new QGridLayout(m_gboxSettings, 7, 4);
+    QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage(), 7, 4);
 
-    QLabel *label1 = new QLabel(i18n("Channel:"), m_gboxSettings);
+    QLabel *label1 = new QLabel(i18n("Channel:"), m_gboxSettings->plainPage());
     label1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_channelCB = new QComboBox(false, m_gboxSettings);
+    m_channelCB = new QComboBox(false, m_gboxSettings->plainPage());
     m_channelCB->insertItem(i18n("Luminosity"));
     m_channelCB->insertItem(i18n("Red"));
     m_channelCB->insertItem(i18n("Green"));
@@ -112,7 +112,7 @@ RGBTool::RGBTool(QWidget* parent)
                                        "<b>Green</b>: display the green image-channel values.<p>"
                                        "<b>Blue</b>: display the blue image-channel values.<p>"));
 
-    m_scaleBG = new QHButtonGroup(m_gboxSettings);
+    m_scaleBG = new QHButtonGroup(m_gboxSettings->plainPage());
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(QFrame::NoFrame);
     m_scaleBG->setInsideMargin(0);
@@ -147,7 +147,7 @@ RGBTool::RGBTool(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QVBox *histoBox   = new QVBox(m_gboxSettings);
+    QVBox *histoBox   = new QVBox(m_gboxSettings->plainPage());
     m_histogramWidget = new HistogramWidget(256, 140, histoBox, false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
@@ -161,15 +161,15 @@ RGBTool::RGBTool(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *labelLeft = new QLabel(i18n("Cyan"), m_gboxSettings);
+    QLabel *labelLeft = new QLabel(i18n("Cyan"), m_gboxSettings->plainPage());
     labelLeft->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_rSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, m_gboxSettings, "m_rSlider");
+    m_rSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, m_gboxSettings->plainPage(), "m_rSlider");
     m_rSlider->setTickmarks(QSlider::Below);
     m_rSlider->setTickInterval(20);
     QWhatsThis::add( m_rSlider, i18n("<p>Set here the cyan/red color adjustment of the image."));
-    QLabel *labelRight = new QLabel(i18n("Red"), m_gboxSettings);
+    QLabel *labelRight = new QLabel(i18n("Red"), m_gboxSettings->plainPage());
     labelRight->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
-    m_rInput = new RIntNumInput(m_gboxSettings);
+    m_rInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_rInput->setDefaultValue(0);
     m_rInput->input()->setRange(-100, 100, 1, false);
 
@@ -180,15 +180,15 @@ RGBTool::RGBTool(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    labelLeft = new QLabel(i18n("Magenta"), m_gboxSettings);
+    labelLeft = new QLabel(i18n("Magenta"), m_gboxSettings->plainPage());
     labelLeft->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_gSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, m_gboxSettings, "m_gSlider");
+    m_gSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, m_gboxSettings->plainPage(), "m_gSlider");
     m_gSlider->setTickmarks(QSlider::Below);
     m_gSlider->setTickInterval(20);
     QWhatsThis::add( m_gSlider, i18n("<p>Set here the magenta/green color adjustment of the image."));
-    labelRight = new QLabel(i18n("Green"), m_gboxSettings);
+    labelRight = new QLabel(i18n("Green"), m_gboxSettings->plainPage());
     labelRight->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    m_gInput = new RIntNumInput(m_gboxSettings);
+    m_gInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_gInput->setDefaultValue(0);
     m_gInput->input()->setRange(-100, 100, 1, false);
 
@@ -199,15 +199,15 @@ RGBTool::RGBTool(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    labelLeft = new QLabel(i18n("Yellow"), m_gboxSettings);
+    labelLeft = new QLabel(i18n("Yellow"), m_gboxSettings->plainPage());
     labelLeft->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_bSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, m_gboxSettings, "m_bSlider");
+    m_bSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, m_gboxSettings->plainPage(), "m_bSlider");
     m_bSlider->setTickmarks(QSlider::Below);
     m_bSlider->setTickInterval(20);
     QWhatsThis::add( m_bSlider, i18n("<p>Set here the yellow/blue color adjustment of the image."));
-    labelRight = new QLabel(i18n("Blue"), m_gboxSettings);
+    labelRight = new QLabel(i18n("Blue"), m_gboxSettings->plainPage());
     labelRight->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    m_bInput = new RIntNumInput(m_gboxSettings);
+    m_bInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_bInput->setDefaultValue(0);
     m_bInput->input()->setRange(-100, 100, 1, false);
 
