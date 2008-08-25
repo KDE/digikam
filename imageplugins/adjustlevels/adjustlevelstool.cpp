@@ -116,7 +116,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
                                                               EditorToolSettings::Ok|
                                                               EditorToolSettings::Cancel);
 
-    QGridLayout* grid = new QGridLayout(gboxSettings, 16, 8, gboxSettings->spacingHint(), 0);
+    QGridLayout* grid = new QGridLayout(gboxSettings->plainPage(), 16, 8);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings->plainPage());
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -333,6 +333,8 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     grid->setColSpacing(0, 5);
     grid->setColSpacing(6, 5);
     grid->setColSpacing(7, gboxSettings->spacingHint());
+    grid->setMargin(0);
+    grid->setSpacing(gboxSettings->spacingHint());
 
     setToolSettings(gboxSettings);
 
