@@ -62,6 +62,7 @@ public:
     virtual void setBusy(bool){};
     virtual void saveSettings(){};
     virtual void readSettings(){};
+    virtual void resetSettings(){};
 
     int marginHint();
     int spacingHint();
@@ -75,12 +76,7 @@ signals:
     void signalOkClicked();
     void signalCancelClicked();
     void signalTryClicked();
-
-public slots:
-
-    /** Re-implement this slots to reset all settings to defaults values
-        when Default button is clicked */
-    virtual void slotDefaultSettings(){};
+    void signalDefaultClicked();
 
 protected slots:
 

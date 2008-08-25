@@ -68,7 +68,6 @@ protected:
 
     virtual void readSettings();
     virtual void saveSettings();
-    virtual void resetSettings();
     virtual void finalRendering(){};
     virtual void setBusy(bool){};
 
@@ -78,6 +77,7 @@ protected slots:
     void slotOk();
     void slotCancel();
 
+    virtual void slotResetSettings();
     virtual void slotEffect(){};
 
 private:

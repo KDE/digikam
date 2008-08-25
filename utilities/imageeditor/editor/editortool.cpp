@@ -118,6 +118,9 @@ void EditorTool::setToolSettings(EditorToolSettings *settings)
 
     connect(d->settings, SIGNAL(signalCancelClicked()),
             this, SLOT(slotCancel()));
+
+    connect(d->settings, SIGNAL(signalDefaultClicked()),
+            this, SLOT(slotResetSettings()));
 }
 
 void EditorTool::readSettings()
@@ -130,9 +133,9 @@ void EditorTool::saveSettings()
     d->settings->saveSettings();
 }
 
-void EditorTool::resetSettings()
+void EditorTool::slotResetSettings()
 {
-    d->settings->slotDefaultSettings();
+    d->settings->resetSettings();
 }
 
 void EditorTool::slotTimer()
