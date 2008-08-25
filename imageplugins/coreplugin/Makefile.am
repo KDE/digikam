@@ -22,7 +22,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(LIBKDCRAW_CFLAGS) \
 	       $(all_includes) 
 
-digikamimageplugin_core_la_SOURCES = imageplugin_core.cpp imageeffect_bwsepia.cpp \
+digikamimageplugin_core_la_SOURCES = imageplugin_core.cpp bwsepiatool.cpp \
 	                                 autocorrectiontool.cpp \
 	                                 imageeffect_rgb.cpp \
 	                                 imageeffect_redeye.cpp imageeffect_blur.cpp \
@@ -30,7 +30,7 @@ digikamimageplugin_core_la_SOURCES = imageplugin_core.cpp imageeffect_bwsepia.cp
 
 noinst_HEADERS = autocorrectiontool.h imageeffect_blur.h \
                  imageeffect_rgb.h bcgtool.h \
-                 imageeffect_bwsepia.h imageeffect_iccproof.h imageeffect_redeye.h 
+                 bwsepiatool.h imageeffect_iccproof.h imageeffect_redeye.h 
 
 digikamimageplugin_core_la_LIBADD = $(LIB_KPARTS) \
                                     $(top_builddir)/digikam/imageplugins/coreplugin/sharpnesseditor/libsharpnesseditor.la \

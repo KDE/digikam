@@ -23,8 +23,8 @@
  * ============================================================ */
 
 
-#ifndef IMAGEEFFECT_BWSEPIA_H
-#define IMAGEEFFECT_BWSEPIA_H
+#ifndef BWSEPIATOOL_H
+#define BWSEPIATOOL_H
 
 // Qt includes.
 
@@ -188,4 +188,4 @@ private:
 
 }  // NameSpace DigikamImagesPluginCore
 
-#endif /* IMAGEEFFECT_BWSEPIA_H */
+#endif /* BWSEPIATOOL_H */

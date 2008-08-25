@@ -78,8 +78,8 @@
 
 // Local includes.
 
-#include "imageeffect_bwsepia.h"
-#include "imageeffect_bwsepia.moc"
+#include "bwsepiatool.h"
+#include "bwsepiatool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;
