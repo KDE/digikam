@@ -147,7 +147,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 
     QPushButton *linHistoButton = new QPushButton( m_scaleBG );
     QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
-    m_scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
+    m_scaleBG->insert(linHistoButton, HistogramWidget::LinScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
     linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
@@ -155,7 +155,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 
     QPushButton *logHistoButton = new QPushButton( m_scaleBG );
     QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
-    m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    m_scaleBG->insert(logHistoButton, HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
     logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
@@ -251,7 +251,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     // -------------------------------------------------------------
 
     m_pickerColorButtonGroup = new QHButtonGroup(m_gboxSettings->plainPage());
-    m_pickBlack = new QPushButton(m_pickerColorButtonGroup);
+    m_pickBlack              = new QPushButton(m_pickerColorButtonGroup);
     m_pickerColorButtonGroup->insert(m_pickBlack, BlackTonal);
     KGlobal::dirs()->addResourceType("color-picker-black", KGlobal::dirs()->kde_default("data") +
                                      "digikam/data");
@@ -563,11 +563,11 @@ void AdjustLevelsTool::slotAutoLevels()
 
 void AdjustLevelsTool::slotEffect()
 {
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
-    uchar *orgData             = iface->getPreviewImage();
-    int w                      = iface->previewWidth();
-    int h                      = iface->previewHeight();
-    bool sb                    = iface->previewSixteenBit();
+    ImageIface* iface = m_previewWidget->imageIface();
+    uchar *orgData    = iface->getPreviewImage();
+    int w             = iface->previewWidth();
+    int h             = iface->previewHeight();
+    bool sb           = iface->previewSixteenBit();
 
     // Create the new empty destination image data space.
     m_histogramWidget->stopHistogramComputation();
@@ -578,7 +578,7 @@ void AdjustLevelsTool::slotEffect()
     m_destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
 
     // Calculate the LUT to apply on the image.
-    m_levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel);
+    m_levels->levelsLutSetup(ImageHistogram::AlphaChannel);
 
     // Apply the lut to the image.
     m_levels->levelsLutProcess(orgData, m_destinationPreviewData, w, h);
@@ -595,17 +595,17 @@ void AdjustLevelsTool::slotEffect()
 void AdjustLevelsTool::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
-    uchar *orgData             = iface->getOriginalImage();
-    int w                      = iface->originalWidth();
-    int h                      = iface->originalHeight();
-    bool sb                    = iface->originalSixteenBit();
+    ImageIface* iface = m_previewWidget->imageIface();
+    uchar *orgData    = iface->getOriginalImage();
+    int w             = iface->originalWidth();
+    int h             = iface->originalHeight();
+    bool sb           = iface->originalSixteenBit();
 
     // Create the new empty destination image data space.
     uchar* desData = new uchar[w*h*(sb ? 8 : 4)];
 
     // Calculate the LUT to apply on the image.
-    m_levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel);
+    m_levels->levelsLutSetup(ImageHistogram::AlphaChannel);
 
     // Apply the lut to the image.
     m_levels->levelsLutProcess(orgData, desData, w, h);
@@ -622,8 +622,8 @@ void AdjustLevelsTool::slotChannelChanged(int channel)
     switch(channel)
     {
        case LuminosityChannel:
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
-          m_levelsHistogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
+          m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
+          m_levelsHistogramWidget->m_channelType = HistogramWidget::ValueHistogram;
           m_hGradientMinInput->setColors( QColor( "black" ), QColor( "white" ) );
           m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
           m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "white" ) );
@@ -631,8 +631,8 @@ void AdjustLevelsTool::slotChannelChanged(int channel)
           break;
 
        case RedChannel:
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
-          m_levelsHistogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
+          m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
+          m_levelsHistogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
           m_hGradientMinInput->setColors( QColor( "black" ), QColor( "red" ) );
           m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "red" ) );
           m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "red" ) );
@@ -640,8 +640,8 @@ void AdjustLevelsTool::slotChannelChanged(int channel)
           break;
 
        case GreenChannel:
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
-          m_levelsHistogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
+          m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
+          m_levelsHistogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
           m_hGradientMinInput->setColors( QColor( "black" ), QColor( "green" ) );
           m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "green" ) );
           m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "green" ) );
@@ -649,8 +649,8 @@ void AdjustLevelsTool::slotChannelChanged(int channel)
           break;
 
        case BlueChannel:
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
-          m_levelsHistogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
+          m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
+          m_levelsHistogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
           m_hGradientMinInput->setColors( QColor( "black" ), QColor( "blue" ) );
           m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "blue" ) );
           m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "blue" ) );
@@ -658,8 +658,8 @@ void AdjustLevelsTool::slotChannelChanged(int channel)
           break;
 
        case AlphaChannel:
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::AlphaChannelHistogram;
-          m_levelsHistogramWidget->m_channelType = Digikam::HistogramWidget::AlphaChannelHistogram;
+          m_histogramWidget->m_channelType = HistogramWidget::AlphaChannelHistogram;
+          m_levelsHistogramWidget->m_channelType = HistogramWidget::AlphaChannelHistogram;
           m_hGradientMinInput->setColors( QColor( "black" ), QColor( "white" ) );
           m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
           m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "white" ) );
@@ -691,7 +691,7 @@ void AdjustLevelsTool::readSettings()
     config->setGroup("adjustlevels Tool");
 
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", HistogramWidget::LogScaleHistogram));
 
     for (int i = 0 ; i < 5 ; i++)
     {
