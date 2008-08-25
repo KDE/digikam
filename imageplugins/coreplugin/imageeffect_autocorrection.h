@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef IMAGEEFFECT_AUTOCORRECTION_H
@@ -30,7 +30,7 @@
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 
 class QHButtonGroup;
 class QComboBox;
@@ -49,19 +49,19 @@ class DImg;
 namespace DigikamImagesPluginCore
 {
 
-class ImageEffect_AutoCorrection : public Digikam::ImageDlgBase
+class AutoCorrectionTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_AutoCorrection(QWidget *parent);
-    ~ImageEffect_AutoCorrection();
+    AutoCorrectionTool(QWidget *parent);
+    ~AutoCorrectionTool();
 
 protected:
 
     void finalRendering();
-   
+
 private slots:
 
     void slotEffect();
@@ -82,9 +82,9 @@ private:
 
 private:
 
-    void readUserSettings();
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
+    void resetSettings();
 
     void autoCorrection(uchar *data, int w, int h, bool sb, int type);
     QPixmap getThumbnailForEffect(AutoCorrectionType type);
@@ -106,9 +106,9 @@ private:
     };
 
     uchar                        *m_destinationPreviewData;
-    
+
     QComboBox                    *m_channelCB;
-    
+
     QHButtonGroup                *m_scaleBG;
 
     QListBox                     *m_correctionTools;
@@ -116,8 +116,8 @@ private:
     Digikam::ImageWidget         *m_previewWidget;
 
     Digikam::ColorGradientWidget *m_hGradient;
-    
-    Digikam::HistogramWidget     *m_histogramWidget;    
+
+    Digikam::HistogramWidget     *m_histogramWidget;
 
     Digikam::DImg                 m_thumbnailImage;
 };

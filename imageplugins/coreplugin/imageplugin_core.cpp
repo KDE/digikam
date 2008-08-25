@@ -190,8 +190,8 @@ void ImagePlugin_Core::slotHSL()
 
 void ImagePlugin_Core::slotAutoCorrection()
 {
-    DigikamImagesPluginCore::ImageEffect_AutoCorrection dlg(parentWidget());
-    dlg.exec();
+    DigikamImagesPluginCore::AutoCorrectionTool *autocorrection = new DigikamImagesPluginCore::AutoCorrectionTool(parentWidget());
+    loadTool(autocorrection);
 }
 
 void ImagePlugin_Core::slotInvert()
