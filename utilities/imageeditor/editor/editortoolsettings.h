@@ -60,7 +60,7 @@ public:
     ~EditorToolSettings();
 
     virtual void setBusy(bool){};
-    virtual void writteSettings(){};
+    virtual void writeSettings(){};
     virtual void readSettings(){};
     virtual void resetSettings(){};
 

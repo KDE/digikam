@@ -588,7 +588,7 @@ void RawSettingsBox::readSettings()
     slotColorsChanged(d->colorsCB->currentIndex());
 }
 
-void RawSettingsBox::saveSettings()
+void RawSettingsBox::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("RAW Import Settings");

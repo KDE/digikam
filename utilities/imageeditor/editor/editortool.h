@@ -67,7 +67,7 @@ protected:
     void setToolSettings(EditorToolSettings *settings);
 
     virtual void readSettings();
-    virtual void writteSettings();
+    virtual void writeSettings();
     virtual void finalRendering(){};
     virtual void setBusy(bool){};
 
