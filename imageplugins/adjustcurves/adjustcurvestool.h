@@ -59,7 +59,7 @@ public:
 private:
 
     void readSettings();
-    void saveSettings();
+    void writteSettings();
     void finalRendering();
 
 private slots:
