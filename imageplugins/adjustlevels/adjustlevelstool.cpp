@@ -110,17 +110,17 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    EditorToolSettings *gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                                              EditorToolSettings::Load|
-                                                              EditorToolSettings::SaveAs|
-                                                              EditorToolSettings::Ok|
-                                                              EditorToolSettings::Cancel);
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Load|
+                                            EditorToolSettings::SaveAs|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel);
 
-    QGridLayout* grid = new QGridLayout(gboxSettings->plainPage(), 16, 8);
+    QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage(), 16, 8);
 
-    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings->plainPage());
+    QLabel *label1 = new QLabel(i18n("Channel:"), m_gboxSettings->plainPage());
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, gboxSettings->plainPage() );
+    m_channelCB = new QComboBox( false, m_gboxSettings->plainPage() );
     m_channelCB->insertItem( i18n("Luminosity") );
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
@@ -136,7 +136,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
                                        "This channel corresponds to the transparency value and "
                                        "is supported by some image formats, such as PNG or TIF."));
 
-    m_scaleBG = new QHButtonGroup(gboxSettings->plainPage());
+    m_scaleBG = new QHButtonGroup(m_gboxSettings->plainPage());
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(QFrame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
@@ -169,19 +169,19 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_histogramWidget = new HistogramWidget(256, 140, gboxSettings->plainPage(), false, true, true);
+    m_histogramWidget = new HistogramWidget(256, 140, m_gboxSettings->plainPage(), false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing of the "
                                              "selected image channel. This one is re-computed at any levels "
                                              "settings changes."));
 
     m_levelsHistogramWidget = new HistogramWidget(256, 140, m_originalImage->bits(), m_originalImage->width(),
-                                                  m_originalImage->height(), m_originalImage->sixteenBit(), gboxSettings, false);
+                                                  m_originalImage->height(), m_originalImage->sixteenBit(), m_gboxSettings, false);
     QWhatsThis::add( m_levelsHistogramWidget, i18n("<p>This is the histogram drawing of the selected channel "
                                                    "from original image"));
 
     // -------------------------------------------------------------
 
-    m_hGradientMinInput = new KGradientSelector( KSelector::Horizontal, gboxSettings->plainPage() );
+    m_hGradientMinInput = new KGradientSelector( KSelector::Horizontal, m_gboxSettings->plainPage() );
     m_hGradientMinInput->setFixedHeight( 20 );
     m_hGradientMinInput->setMinValue(0);
     m_hGradientMinInput->setMaxValue(m_histoSegments);
@@ -190,7 +190,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     m_hGradientMinInput->setColors( QColor( "black" ), QColor( "white" ) );
     m_hGradientMinInput->installEventFilter(this);
 
-    m_hGradientMaxInput = new KGradientSelector( KSelector::Horizontal, gboxSettings->plainPage() );
+    m_hGradientMaxInput = new KGradientSelector( KSelector::Horizontal, m_gboxSettings->plainPage() );
     m_hGradientMaxInput->setFixedHeight( 20 );
     m_hGradientMaxInput->setMinValue(0);
     m_hGradientMaxInput->setMaxValue(m_histoSegments);
@@ -199,26 +199,26 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
     m_hGradientMaxInput->installEventFilter(this);
 
-    m_minInput = new RIntNumInput(gboxSettings->plainPage());
+    m_minInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_minInput->input()->setRange(0, m_histoSegments, 1, false);
     m_minInput->setDefaultValue(0);
     QWhatsThis::add( m_minInput, i18n("<p>Select the minimal intensity input value of the histogram."));
     QToolTip::add( m_minInput, i18n( "Minimal intensity input." ) );
 
-    m_gammaInput = new RDoubleNumInput(gboxSettings->plainPage());
+    m_gammaInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_gammaInput->setPrecision(2);
     m_gammaInput->setRange(0.1, 3.0, 0.01);
     m_gammaInput->setDefaultValue(1.0);
     QToolTip::add( m_gammaInput, i18n( "Gamma input value." ) );
     QWhatsThis::add( m_gammaInput, i18n("<p>Select the gamma input value."));
 
-    m_maxInput = new RIntNumInput(gboxSettings->plainPage());
+    m_maxInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_maxInput->input()->setRange(0, m_histoSegments, 1, false);
     m_maxInput->setDefaultValue(m_histoSegments);
     QToolTip::add( m_maxInput, i18n( "Maximal intensity input." ) );
     QWhatsThis::add( m_maxInput, i18n("<p>Select the maximal intensity input value of the histogram."));
 
-    m_hGradientMinOutput = new KGradientSelector( KSelector::Horizontal, gboxSettings->plainPage() );
+    m_hGradientMinOutput = new KGradientSelector( KSelector::Horizontal, m_gboxSettings->plainPage() );
     m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "white" ) );
     QWhatsThis::add( m_hGradientMinOutput, i18n("<p>Select the minimal intensity output value of the histogram."));
     QToolTip::add( m_hGradientMinOutput, i18n( "Minimal intensity output." ) );
@@ -227,7 +227,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     m_hGradientMinOutput->setMaxValue(m_histoSegments);
     m_hGradientMinOutput->installEventFilter(this);
 
-    m_hGradientMaxOutput = new KGradientSelector( KSelector::Horizontal, gboxSettings->plainPage() );
+    m_hGradientMaxOutput = new KGradientSelector( KSelector::Horizontal, m_gboxSettings->plainPage() );
     m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "white" ) );
     QWhatsThis::add( m_hGradientMaxOutput, i18n("<p>Select the maximal intensity output value of the histogram."));
     QToolTip::add( m_hGradientMaxOutput, i18n( "Maximal intensity output." ) );
@@ -236,13 +236,13 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     m_hGradientMaxOutput->setMaxValue(m_histoSegments);
     m_hGradientMaxOutput->installEventFilter(this);
 
-    m_minOutput = new RIntNumInput(gboxSettings->plainPage());
+    m_minOutput = new RIntNumInput(m_gboxSettings->plainPage());
     m_minOutput->input()->setRange(0, m_histoSegments, 1, false);
     m_minOutput->setDefaultValue(0);
     QToolTip::add( m_minOutput, i18n( "Minimal intensity output." ) );
     QWhatsThis::add( m_minOutput, i18n("<p>Select the minimal intensity output value of the histogram."));
 
-    m_maxOutput = new RIntNumInput(gboxSettings->plainPage());
+    m_maxOutput = new RIntNumInput(m_gboxSettings->plainPage());
     m_maxOutput->input()->setRange(0, m_histoSegments, 1, false);
     m_maxOutput->setDefaultValue(m_histoSegments);
     QToolTip::add( m_maxOutput, i18n( "Maximal intensity output." ) );
@@ -250,7 +250,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_pickerColorButtonGroup = new QHButtonGroup(gboxSettings->plainPage());
+    m_pickerColorButtonGroup = new QHButtonGroup(m_gboxSettings->plainPage());
     m_pickBlack = new QPushButton(m_pickerColorButtonGroup);
     m_pickerColorButtonGroup->insert(m_pickBlack, BlackTonal);
     KGlobal::dirs()->addResourceType("color-picker-black", KGlobal::dirs()->kde_default("data") +
@@ -284,20 +284,20 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     m_pickerColorButtonGroup->setExclusive(true);
     m_pickerColorButtonGroup->setFrameShape(QFrame::NoFrame);
 
-    m_autoButton = new QPushButton(gboxSettings->plainPage());
+    m_autoButton = new QPushButton(m_gboxSettings->plainPage());
     m_autoButton->setPixmap(kapp->iconLoader()->loadIcon("run", (KIcon::Group)KIcon::Toolbar));    QToolTip::add( m_autoButton, i18n( "Adjust all levels automatically." ) );
     QWhatsThis::add( m_autoButton, i18n("<p>If you press this button, all channel levels will be adjusted "
                                         "automatically."));
 
-    m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings->plainPage());
+    m_resetButton = new QPushButton(i18n("&Reset"), m_gboxSettings->plainPage());
     m_resetButton->setPixmap(kapp->iconLoader()->loadIcon("reload_page", (KIcon::Group)KIcon::Toolbar));
     QToolTip::add( m_resetButton, i18n( "Reset current channel levels' values." ) );
     QWhatsThis::add( m_resetButton, i18n("<p>If you press this button, all levels' values "
                                          "from the current selected channel "
                                          "will be reset to the default values."));
 
-    QLabel *space = new QLabel(gboxSettings->plainPage());
-    space->setFixedWidth(gboxSettings->spacingHint());
+    QLabel *space = new QLabel(m_gboxSettings->plainPage());
+    space->setFixedWidth(m_gboxSettings->spacingHint());
 
     QHBoxLayout* l3 = new QHBoxLayout();
     l3->addWidget(m_pickerColorButtonGroup);
@@ -309,34 +309,34 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     // -------------------------------------------------------------
 
     grid->addMultiCellLayout(l1,                      0, 0, 0, 6);
-    grid->setRowSpacing(1, gboxSettings->spacingHint());
+    grid->setRowSpacing(1, m_gboxSettings->spacingHint());
     grid->addMultiCellWidget(m_histogramWidget,       2, 2, 1, 5);
-    grid->setRowSpacing(3, gboxSettings->spacingHint());
+    grid->setRowSpacing(3, m_gboxSettings->spacingHint());
     grid->addMultiCellWidget(m_levelsHistogramWidget, 4, 4, 1, 5);
     grid->addMultiCellWidget(m_hGradientMinInput,     5, 5, 0, 6);
     grid->addMultiCellWidget(m_minInput,              5, 5, 8, 8);
-    grid->setRowSpacing(6, gboxSettings->spacingHint());
+    grid->setRowSpacing(6, m_gboxSettings->spacingHint());
     grid->addMultiCellWidget(m_hGradientMaxInput,     7, 7, 0, 6);
     grid->addMultiCellWidget(m_maxInput,              7, 7, 8, 8);
-    grid->setRowSpacing(8, gboxSettings->spacingHint());
+    grid->setRowSpacing(8, m_gboxSettings->spacingHint());
     grid->addMultiCellWidget(m_gammaInput,            9, 9, 0, 8);
-    grid->setRowSpacing(10, gboxSettings->spacingHint());
+    grid->setRowSpacing(10, m_gboxSettings->spacingHint());
     grid->addMultiCellWidget(m_hGradientMinOutput,    11, 11, 0, 6);
     grid->addMultiCellWidget(m_minOutput,             11, 11, 8, 8);
-    grid->setRowSpacing(12, gboxSettings->spacingHint());
+    grid->setRowSpacing(12, m_gboxSettings->spacingHint());
     grid->addMultiCellWidget(m_hGradientMaxOutput,    13, 13, 0, 6);
     grid->addMultiCellWidget(m_maxOutput,             13, 13, 8, 8);
-    grid->setRowSpacing(14, gboxSettings->spacingHint());
+    grid->setRowSpacing(14, m_gboxSettings->spacingHint());
     grid->addMultiCellLayout(l3,                      15, 15, 0, 8);
     grid->setRowStretch(16, 10);
     grid->setColStretch(2, 10);
     grid->setColSpacing(0, 5);
     grid->setColSpacing(6, 5);
-    grid->setColSpacing(7, gboxSettings->spacingHint());
+    grid->setColSpacing(7, m_gboxSettings->spacingHint());
     grid->setMargin(0);
     grid->setSpacing(0);
 
-    setToolSettings(gboxSettings);
+    setToolSettings(m_gboxSettings);
 
     // -------------------------------------------------------------
     // Channels and scale selection slots.

@@ -109,17 +109,17 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    EditorToolSettings *gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                                              EditorToolSettings::Load|
-                                                              EditorToolSettings::SaveAs|
-                                                              EditorToolSettings::Ok|
-                                                              EditorToolSettings::Cancel);
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Load|
+                                            EditorToolSettings::SaveAs|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel);
 
-    QGridLayout* grid = new QGridLayout(gboxSettings->plainPage(), 5, 5);
+    QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage(), 5, 5);
 
-    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings->plainPage());
+    QLabel *label1 = new QLabel(i18n("Channel:"), m_gboxSettings->plainPage());
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, gboxSettings->plainPage() );
+    m_channelCB = new QComboBox( false, m_gboxSettings->plainPage() );
     m_channelCB->insertItem( i18n("Luminosity") );
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
@@ -135,7 +135,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
                                        "This channel corresponds to the transparency value and "
                                        "is supported by some image formats, such as PNG or TIF."));
 
-    m_scaleBG = new QHButtonGroup(gboxSettings->plainPage());
+    m_scaleBG = new QHButtonGroup(m_gboxSettings->plainPage());
     QWhatsThis::add( m_scaleBG, i18n("<p>Select the histogram scale here.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
@@ -172,7 +172,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QWidget *curveBox = new QWidget(gboxSettings->plainPage());
+    QWidget *curveBox = new QWidget(m_gboxSettings->plainPage());
     QGridLayout* gl   = new QGridLayout(curveBox, 4, 2, 0);
 
     m_histogramWidget = new HistogramWidget(256, 140, curveBox, false, true, true);
@@ -204,13 +204,13 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     gl->addMultiCellWidget(m_curvesWidget,    2, 2, 2, 2);
     gl->addMultiCellWidget(spaceh,            3, 3, 2, 2);
     gl->addMultiCellWidget(m_hGradient,       4, 4, 2, 2);
-    gl->setRowSpacing(1, gboxSettings->spacingHint());
+    gl->setRowSpacing(1, m_gboxSettings->spacingHint());
 
     grid->addMultiCellWidget(curveBox, 2, 3, 0, 5);
 
     // -------------------------------------------------------------
 
-    m_curveType = new QHButtonGroup(gboxSettings->plainPage());
+    m_curveType = new QHButtonGroup(m_gboxSettings->plainPage());
     m_curveFree = new QPushButton(m_curveType);
     m_curveType->insert(m_curveFree, FreeDrawing);
     KGlobal::dirs()->addResourceType("curvefree", KGlobal::dirs()->kde_default("data") +
@@ -235,7 +235,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_pickerColorButtonGroup = new QHButtonGroup(gboxSettings->plainPage());
+    m_pickerColorButtonGroup = new QHButtonGroup(m_gboxSettings->plainPage());
     m_pickBlack = new QPushButton(m_pickerColorButtonGroup);
     m_pickerColorButtonGroup->insert(m_pickBlack, BlackTonal);
     KGlobal::dirs()->addResourceType("color-picker-black", KGlobal::dirs()->kde_default("data") +
@@ -271,7 +271,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings->plainPage());
+    m_resetButton = new QPushButton(i18n("&Reset"), m_gboxSettings->plainPage());
     m_resetButton->setPixmap( SmallIcon("reload_page", 18) );
     QToolTip::add( m_resetButton, i18n( "Reset current channel curves' values." ) );
     QWhatsThis::add( m_resetButton, i18n("<p>If you press this button, all curves' values "
@@ -286,10 +286,10 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
     grid->addMultiCellLayout(l3, 4, 4, 1, 5);
     grid->setMargin(0);
-    grid->setSpacing(gboxSettings->spacingHint());
+    grid->setSpacing(m_gboxSettings->spacingHint());
     grid->setRowStretch(5, 10);
 
-    setToolSettings(gboxSettings);
+    setToolSettings(m_gboxSettings);
 
     // -------------------------------------------------------------
 

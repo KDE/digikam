@@ -113,41 +113,43 @@ private:
         WhiteTonal
     };
 
-    uchar                     *m_destinationPreviewData;
+    uchar                        *m_destinationPreviewData;
 
-    int                        m_histoSegments;
-    int                        m_currentPreviewMode;
+    int                           m_histoSegments;
+    int                           m_currentPreviewMode;
 
-    QComboBox                 *m_channelCB;
+    QComboBox                    *m_channelCB;
 
-    QPushButton               *m_autoButton;
-    QPushButton               *m_resetButton;
-    QPushButton               *m_pickBlack;
-    QPushButton               *m_pickGray;
-    QPushButton               *m_pickWhite;
+    QPushButton                  *m_autoButton;
+    QPushButton                  *m_resetButton;
+    QPushButton                  *m_pickBlack;
+    QPushButton                  *m_pickGray;
+    QPushButton                  *m_pickWhite;
 
-    QHButtonGroup             *m_pickerColorButtonGroup;
-    QHButtonGroup             *m_scaleBG;
+    QHButtonGroup                *m_pickerColorButtonGroup;
+    QHButtonGroup                *m_scaleBG;
 
-    KGradientSelector         *m_hGradientMinInput;
-    KGradientSelector         *m_hGradientMaxInput;
-    KGradientSelector         *m_hGradientMinOutput;
-    KGradientSelector         *m_hGradientMaxOutput;
+    KGradientSelector            *m_hGradientMinInput;
+    KGradientSelector            *m_hGradientMaxInput;
+    KGradientSelector            *m_hGradientMinOutput;
+    KGradientSelector            *m_hGradientMaxOutput;
 
     KDcrawIface::RDoubleNumInput *m_gammaInput;
 
-    KDcrawIface::RIntNumInput *m_minInput;
-    KDcrawIface::RIntNumInput *m_maxInput;
-    KDcrawIface::RIntNumInput *m_minOutput;
-    KDcrawIface::RIntNumInput *m_maxOutput;
+    KDcrawIface::RIntNumInput    *m_minInput;
+    KDcrawIface::RIntNumInput    *m_maxInput;
+    KDcrawIface::RIntNumInput    *m_minOutput;
+    KDcrawIface::RIntNumInput    *m_maxOutput;
 
-    Digikam::HistogramWidget  *m_levelsHistogramWidget;
-    Digikam::HistogramWidget  *m_histogramWidget;
+    Digikam::HistogramWidget     *m_levelsHistogramWidget;
+    Digikam::HistogramWidget     *m_histogramWidget;
 
-    Digikam::ImageWidget      *m_previewWidget;
+    Digikam::ImageWidget         *m_previewWidget;
 
-    Digikam::ImageLevels      *m_levels;
-    Digikam::DImg             *m_originalImage;
+    Digikam::EditorToolSettings  *m_gboxSettings;
+
+    Digikam::ImageLevels         *m_levels;
+    Digikam::DImg                *m_originalImage;
 };
 
 }  // NameSpace DigikamAdjustLevelsImagesPlugin

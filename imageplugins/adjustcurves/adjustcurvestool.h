@@ -39,6 +39,7 @@ namespace Digikam
 class CurvesWidget;
 class HistogramWidget;
 class ColorGradientWidget;
+class EditorToolSettings;
 class ImageWidget;
 class DImg;
 class DColor;
@@ -132,6 +133,8 @@ private:
     Digikam::ColorGradientWidget *m_vGradient;
 
     Digikam::ImageWidget         *m_previewWidget;
+
+    Digikam::EditorToolSettings  *m_gboxSettings;
 
     Digikam::DImg                *m_originalImage;
 };
