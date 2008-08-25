@@ -67,6 +67,7 @@
 
 #include "daboutdata.h"
 #include "ddebug.h"
+#include "dimg.h"
 #include "imageiface.h"
 #include "imagewidget.h"
 #include "imagehistogram.h"

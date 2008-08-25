@@ -27,7 +27,6 @@
 // Digikam includes.
 
 #include "editortool.h"
-#include "dimg.h"
 
 // Local includes.
 
@@ -41,6 +40,8 @@ class CurvesWidget;
 class HistogramWidget;
 class ColorGradientWidget;
 class ImageWidget;
+class DImg;
+class DColor;
 }
 
 namespace DigikamAdjustCurvesImagesPlugin
