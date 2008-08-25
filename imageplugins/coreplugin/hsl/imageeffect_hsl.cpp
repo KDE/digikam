@@ -46,6 +46,7 @@
 #include <kcolordialog.h>
 #include <kconfig.h>
 #include <kcursor.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 
@@ -57,10 +58,10 @@
 
 #include "colorgradientwidget.h"
 #include "dimg.h"
+#include "editortoolsettings.h"
 #include "histogramwidget.h"
 #include "hslmodifier.h"
 #include "hspreviewwidget.h"
-#include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imagewidget.h"
 #include "imageeffect_hsl.h"
@@ -75,7 +76,9 @@ namespace DigikamImagesPluginCore
 ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
                : EditorTool(parent)
 {
+    setName("adjusthsl");
     setToolName(i18n("Hue / Saturation / Lightness"));
+    setToolIcon(SmallIcon("adjusthsl"));
 
     m_destinationPreviewData = 0;
 
