@@ -72,8 +72,8 @@ private slots:
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotCurveTypeChanged(int type);
-    void slotSpotColorChanged(const Digikam::DColor &color);
-    void slotColorSelectedFromTarget(const Digikam::DColor &color);
+    void slotSpotColorChanged(const Digikam::DColor& color);
+    void slotColorSelectedFromTarget(const Digikam::DColor& color);
     void slotPickerColorButtonActived();
 
 private:
