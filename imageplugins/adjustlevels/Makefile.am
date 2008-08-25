@@ -18,7 +18,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes) 
 
 digikamimageplugin_adjustlevels_la_SOURCES = imageplugin_adjustlevels.cpp \
-	                                         adjustlevels.cpp 
+	                                         adjustlevelstool.cpp 
 
 digikamimageplugin_adjustlevels_la_LIBADD = $(LIB_KPARTS) \
 	                                        $(top_builddir)/digikam/digikam/libdigikam.la 

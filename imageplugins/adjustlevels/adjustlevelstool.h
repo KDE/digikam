@@ -21,13 +21,12 @@
  *
  * ============================================================ */
 
-#ifndef ADJUSTLEVELS_H
-#define ADJUSTLEVELS_H
+#ifndef ADJUSTLEVELSTOOL_H
+#define ADJUSTLEVELSTOOL_H
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
-#include "dimg.h"
+#include "editortool.h"
 
 class QComboBox;
 class QPushButton;
@@ -46,34 +45,35 @@ namespace Digikam
 class HistogramWidget;
 class ImageWidget;
 class ImageLevels;
+class DImg;
+class DColor;
 }
 
 namespace DigikamAdjustLevelsImagesPlugin
 {
 
-class AdjustLevelDialog : public Digikam::ImageDlgBase
+class AdjustLevelsTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    AdjustLevelDialog(QWidget *parent);
-    ~AdjustLevelDialog();
+    AdjustLevelsTool(QObject *parent);
+    ~AdjustLevelsTool();
 
 private:
 
     void readUserSettings();
     void writeUserSettings();
-    void resetValues();
     void finalRendering();
     void adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
-    bool eventFilter(QObject *o, QEvent *e);
 
 private slots:
 
-    void slotUser2();
-    void slotUser3();
+    void slotLoadSettings();
+    void slotSaveAsSettings();
     void slotEffect();
+    void slotResetSettings();
     void slotResetCurrentChannel();
     void slotAutoLevels();
     void slotChannelChanged(int channel);
@@ -84,8 +84,8 @@ private slots:
     void slotAdjustMaxInputSpinBox(int val);
     void slotAdjustMinOutputSpinBox(int val);
     void slotAdjustMaxOutputSpinBox(int val);
-    void slotSpotColorChanged(const Digikam::DColor &color);
-    void slotColorSelectedFromTarget(const Digikam::DColor &color);
+    void slotSpotColorChanged(const Digikam::DColor& color);
+    void slotColorSelectedFromTarget(const Digikam::DColor& color);
     void slotPickerColorButtonActived();
     void slotShowHistogramGuide(int v);
 
@@ -147,9 +147,9 @@ private:
     Digikam::ImageWidget      *m_previewWidget;
 
     Digikam::ImageLevels      *m_levels;
-    Digikam::DImg              m_originalImage;
+    Digikam::DImg             *m_originalImage;
 };
 
 }  // NameSpace DigikamAdjustLevelsImagesPlugin
 
-#endif /* ADJUSTLEVELS_H */
+#endif /* ADJUSTLEVELSTOOL_H */

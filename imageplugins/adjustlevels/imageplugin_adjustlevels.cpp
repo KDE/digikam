@@ -4,21 +4,21 @@
  * http://www.digikam.org
  *
  * Date        : 2004-06-04
- * Description : image histogram adjust levels. 
- * 
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Description : image histogram adjust levels.
+ *
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // KDE includes.
@@ -32,12 +32,14 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "adjustlevels.h"
+#include "adjustlevelstool.h"
 #include "imageplugin_adjustlevels.h"
 #include "imageplugin_adjustlevels.moc"
 
-K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_adjustlevels,
-                            KGenericFactory<ImagePlugin_AdjustLevels>("digikamimageplugin_adjustlevels"))
+using namespace DigikamAdjustLevelsImagesPlugin;
+
+K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_adjustlevels,
+                           KGenericFactory<ImagePlugin_AdjustLevels>("digikamimageplugin_adjustlevels"))
 
 ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent, const char*,
                                                    const QStringList &)
@@ -49,7 +51,7 @@ ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent, const char*,
                                  actionCollection(), "imageplugin_adjustlevels");
 
     setXMLFile("digikamimageplugin_adjustlevels_ui.rc");
-    
+
     DDebug() << "ImagePlugin_AdjustLevels plugin loaded" << endl;
 }
 
@@ -64,7 +66,6 @@ void ImagePlugin_AdjustLevels::setEnabledActions(bool enable)
 
 void ImagePlugin_AdjustLevels::slotLevelsAdjust()
 {
-    DigikamAdjustLevelsImagesPlugin::AdjustLevelDialog dlg(parentWidget());
-    dlg.exec();
+    AdjustLevelsTool *levels = new AdjustLevelsTool(this);
+    loadTool(levels);
 }
-
