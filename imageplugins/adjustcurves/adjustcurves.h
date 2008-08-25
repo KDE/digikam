@@ -59,7 +59,6 @@ private:
 
     void readSettings();
     void saveSettings();
-    void resetSettings();
     void finalRendering();
 
 private slots:
@@ -67,6 +66,7 @@ private slots:
     void slotUser2();
     void slotUser3();
     void slotEffect();
+    void slotResetSettings();
     void slotResetCurrentChannel();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);

@@ -614,12 +614,13 @@ void AdjustCurveTool::saveSettings()
     config->sync();
 }
 
-void AdjustCurveTool::resetSettings()
+void AdjustCurveTool::slotResetSettings()
 {
     for (int channel = 0 ; channel < 5 ; channel++)
        m_curvesWidget->curves()->curvesChannelReset(channel);
 
     m_curvesWidget->reset();
+    slotEffect();
     m_histogramWidget->reset();
 }
 
