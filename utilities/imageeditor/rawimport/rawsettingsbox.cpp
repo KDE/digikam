@@ -485,7 +485,7 @@ void RawSettingsBox::setPostProcessedImage(DImg& img)
     d->histogramWidget->updateData(img.bits(), img.width(), img.height(), img.sixteenBit());
 }
 
-void RawSettingsBox::slotDefaultSettings()
+void RawSettingsBox::resetSettings()
 {
     d->decodingSettingsBox->setDefaultSettings();
     d->brightnessInput->slotReset();
