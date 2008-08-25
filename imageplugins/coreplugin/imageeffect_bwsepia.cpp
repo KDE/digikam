@@ -197,7 +197,7 @@ BWSepiaTool::BWSepiaTool(QWidget* parent)
                                                               EditorToolSettings::Ok|
                                                               EditorToolSettings::Cancel);
 
-    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 4, 4);
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings->plainPage(), 4, 4);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings->plainPage());
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -713,10 +713,14 @@ void BWSepiaTool::writeSettings()
 
 void BWSepiaTool::slotResetSettings()
 {
+    m_bwFilm->blockSignals(true);
     m_bwFilters->blockSignals(true);
     m_bwTone->blockSignals(true);
     m_cInput->blockSignals(true);
     m_strengthInput->blockSignals(true);
+
+    m_bwFilm->setCurrentItem(0);
+    m_bwFilm->setSelected(0, true);
 
     m_bwFilters->setCurrentItem(0);
     m_bwFilters->setSelected(0, true);
@@ -732,26 +736,22 @@ void BWSepiaTool::slotResetSettings()
 
     m_curvesWidget->reset();
 
-    m_cInput->blockSignals(false);
-    m_bwTone->blockSignals(false);
+    m_bwFilm->blockSignals(false);
     m_bwFilters->blockSignals(false);
+    m_bwTone->blockSignals(false);
+    m_cInput->blockSignals(false);
     m_strengthInput->blockSignals(false);
 
     m_histogramWidget->reset();
     m_previewPixmapFactory->invalidate();
     m_bwFilters->triggerUpdate(false);
     m_bwTone->triggerUpdate(false);
+
+    slotEffect();
 }
 
 void BWSepiaTool::slotEffect()
 {
-//    if (m_previewPixmapFactory && m_bwFilters && m_bwTone)
-//    {
-//        m_previewPixmapFactory->invalidate();
-//        m_bwFilters->triggerUpdate(false);
-//        m_bwTone->triggerUpdate(false);
-//    }
-
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
     m_histogramWidget->stopHistogramComputation();
