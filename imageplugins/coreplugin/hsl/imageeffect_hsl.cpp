@@ -443,7 +443,6 @@ void ImageEffect_HSL::finalRendering()
 
     iface->putOriginalImage(i18n("HSL Adjustments"), original.bits());
     kapp->restoreOverrideCursor();
-//    accept();
 }
 
 }  // NameSpace DigikamImagesPluginCore
