@@ -82,6 +82,8 @@ public:
     void setSplitter(QSplitter *sp);
     void setSplitterSizePolicy(QSizePolicy p);
 
+    QSplitter* splitter() const;
+
     /**
      * Appends a new tab to the sidebar
      * @param w widget which is activated by this tab

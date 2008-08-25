@@ -124,12 +124,18 @@ void Sidebar::setSplitter(QSplitter *sp)
     setStyle(KMultiTabBar::KDEV3);
 #endif
 
-    d->stack = new QWidgetStack(sp);
+    d->splitter = sp;
+    d->stack    = new QWidgetStack(d->splitter);
 
     if(d->side == Left)
         setPosition(KMultiTabBar::Left);
     else
         setPosition(KMultiTabBar::Right);
+}
+
+QSplitter* Sidebar::splitter() const
+{
+    return d->splitter;
 }
 
 void Sidebar::loadViewState()
