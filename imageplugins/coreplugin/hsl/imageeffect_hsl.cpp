@@ -157,8 +157,8 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
                                              "settings changes."));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);
-    m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
-    m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+    m_hGradient = new Digikam::ColorGradientWidget(Digikam::ColorGradientWidget::Horizontal, 10, histoBox);
+    m_hGradient->setColors(QColor("black"), QColor("white"));
 
     gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
 
@@ -309,16 +309,7 @@ void ImageEffect_HSL::slotHSChanged(int h, int s)
     m_hInput->blockSignals(false);
     m_sInput->blockSignals(false);
 
-    // FIXME: this doesn't work anymore since slotTimer is private now
-    // how to do it?
-
-    // Gilles: what I don't understand: the slotTimer seems to be called when
-    // used in connect statement. Can connect also access private slots?
-//    slotTimer();
-
-    // right now slotEffect will do it, but then the color widget is not usable
-    slotEffect();
-
+    slotTimer();
 }
 
 void ImageEffect_HSL::slotHChanged(double h)
