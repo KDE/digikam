@@ -723,7 +723,7 @@ void AdjustLevelsTool::readSettings()
     m_maxOutput->setValue(m_levels->getLevelHighOutputValue(m_channelCB->currentItem()));
 }
 
-void AdjustLevelsTool::writteSettings()
+void AdjustLevelsTool::writeSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("adjustlevels Tool");

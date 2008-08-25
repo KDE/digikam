@@ -64,7 +64,7 @@ public:
 private:
 
     void readSettings();
-    void writteSettings();
+    void writeSettings();
     void finalRendering();
     void adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
 

@@ -581,7 +581,7 @@ void AdjustCurvesTool::readSettings()
     slotScaleChanged(m_scaleBG->selectedId());
 }
 
-void AdjustCurvesTool::writteSettings()
+void AdjustCurvesTool::writeSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("adjustcurves Tool");
