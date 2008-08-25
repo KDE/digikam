@@ -80,8 +80,6 @@ RGBTool::RGBTool(QWidget* parent)
     setToolName(i18n("Color Balance"));
     setToolIcon(SmallIcon("adjustrgb"));
 
-//    setHelp("colorbalancetool.anchor", "digikam");
-
     m_destinationPreviewData = 0;
 
     m_previewWidget = new ImageWidget("colorbalance Tool Dialog", 0,
@@ -269,9 +267,6 @@ RGBTool::~RGBTool()
 
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
-
-    delete m_histogramWidget;
-    delete m_previewWidget;
 }
 
 void RGBTool::slotChannelChanged(int channel)
