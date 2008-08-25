@@ -172,8 +172,8 @@ void ImagePlugin_Core::slotSharpen()
 
 void ImagePlugin_Core::slotBCG()
 {
-    DigikamImagesPluginCore::ImageEffect_BCG dlg(parentWidget());
-    dlg.exec();
+    DigikamImagesPluginCore::BCGTool *bcg = new DigikamImagesPluginCore::BCGTool(parentWidget());
+    loadTool(bcg);
 }
 
 void ImagePlugin_Core::slotRGB()

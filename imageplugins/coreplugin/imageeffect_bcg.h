@@ -28,7 +28,7 @@
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 
 class QCheckBox;
 class QComboBox;
@@ -51,27 +51,27 @@ class DColor;
 namespace DigikamImagesPluginCore
 {
 
-class ImageEffect_BCG : public Digikam::ImageDlgBase
+class BCGTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_BCG(QWidget *parent);
-    ~ImageEffect_BCG();
+    BCGTool(QWidget *parent);
+    ~BCGTool();
 
 private slots:
 
     void slotEffect();
+    void slotResetSettings();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
 
 private:
 
-    void readUserSettings();
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void finalRendering();
 
 private:
@@ -105,6 +105,8 @@ private:
     Digikam::ColorGradientWidget *m_hGradient;
 
     Digikam::HistogramWidget     *m_histogramWidget;
+
+    Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
 }  // NameSpace DigikamImagesPluginCore
