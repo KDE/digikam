@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_HSL_H
-#define IMAGEEFFECT_HSL_H
+#ifndef HSLTOOL_H
+#define HSLTOOL_H
 
 // Digikam includes.
 
@@ -122,4 +122,4 @@ private:
 
 }  // NameSpace DigikamImagesPluginCore
 
-#endif /* IMAGEEFFECT_HSL_H */
+#endif /* HSLTOOL_H */

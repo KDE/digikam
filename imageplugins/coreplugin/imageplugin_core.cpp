@@ -40,7 +40,7 @@
 #include "dimgimagefilters.h"
 #include "imageiface.h"
 #include "imageeffect_rgb.h"
-#include "imageeffect_hsl.h"
+#include "hsltool.h"
 #include "imageeffect_bcg.h"
 #include "imageeffect_bwsepia.h"
 #include "imageeffect_redeye.h"

@@ -64,8 +64,8 @@
 #include "hspreviewwidget.h"
 #include "imageiface.h"
 #include "imagewidget.h"
-#include "imageeffect_hsl.h"
-#include "imageeffect_hsl.moc"
+#include "hsltool.h"
+#include "hsltool.moc"
 
 using namespace Digikam;
 using namespace KDcrawIface;

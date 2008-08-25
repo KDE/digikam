@@ -18,9 +18,9 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	   $(LIBKDCRAW_CFLAGS) \
 	   $(all_includes) 
 
-libhsl_la_SOURCES = imageeffect_hsl.cpp hspreviewwidget.cpp 
+libhsl_la_SOURCES = hsltool.cpp hspreviewwidget.cpp 
 
 libhsl_la_LDFLAGS = $(all_libraries)
 
-noinst_HEADERS = imageeffect_hsl.h hspreviewwidget.h 
+noinst_HEADERS = hsltool.h hspreviewwidget.h 
 
