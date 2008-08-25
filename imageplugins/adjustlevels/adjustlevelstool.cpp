@@ -265,8 +265,8 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     m_pickerColorButtonGroup->insert(m_pickGray, GrayTonal);
     KGlobal::dirs()->addResourceType("color-picker-gray", KGlobal::dirs()->kde_default("data") +
                                      "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("color-picker-gray", "color-picker-gray.png");
-    m_pickGray->setPixmap( QPixmap( directory + "color-picker-gray.png" ) );
+    directory = KGlobal::dirs()->findResourceDir("color-picker-grey", "color-picker-grey.png");
+    m_pickGray->setPixmap( QPixmap( directory + "color-picker-grey.png" ) );
     m_pickGray->setToggleButton(true);
     QToolTip::add( m_pickGray, i18n( "All channels middle tone color picker" ) );
     QWhatsThis::add( m_pickGray, i18n("<p>With this button, you can pick the color from original image used to set <b>Middle Tone</b> "
