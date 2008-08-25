@@ -47,6 +47,7 @@ namespace Digikam
 
 class ImageWindowPriv;
 class SlideShowSettings;
+class CollectionImageChangeset;
 
 class ImageWindow : public EditorWindow
 {
@@ -99,6 +100,7 @@ private:
     void saveAsIsComplete();
     void setViewToURL(const KUrl &url);
     void deleteCurrentItem(bool ask, bool permanently);
+    bool removeItem(int index);
 
     void slideShow(bool startWithCurrent, SlideShowSettings& settings);
 
@@ -141,6 +143,7 @@ private slots:
     void slotAssignRating(int rating);
 
     void slotFileMetadataChanged(const KUrl &);
+    void slotCollectionImageChange(const CollectionImageChangeset &);
 
     void slotChangeTheme(const QString& theme);
 

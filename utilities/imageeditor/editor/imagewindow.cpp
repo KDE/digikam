@@ -52,6 +52,8 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kimageio.h>
+#include <kio/job.h>
+#include <kio/jobuidelegate.h>
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
@@ -78,10 +80,13 @@
 #include "canvas.h"
 #include "constants.h"
 #include "databaseaccess.h"
+#include "databasewatch.h"
+#include "databasechangesets.h"
 #include "ddragobjects.h"
 #include "deletedialog.h"
 #include "dimg.h"
 #include "dimginterface.h"
+#include "dio.h"
 #include "dlogoaction.h"
 #include "dmetadata.h"
 #include "dpopupmenu.h"
@@ -278,6 +283,9 @@ void ImageWindow::setupConnections()
 
     connect(watch, SIGNAL(signalFileMetadataChanged(const KUrl &)),
             this, SLOT(slotFileMetadataChanged(const KUrl &)));
+
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
+            this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)));
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -1075,58 +1083,82 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
     if (useTrash)
         kioURL = fileURL;
 
-    SyncJobResult deleteResult = SyncJob::del(kioURL, useTrash);
-    if (!deleteResult)
+    int index = d->urlList.indexOf(d->urlCurrent);
+
+    if (d->imageInfoCurrent.isNull())
     {
-        KMessageBox::error(this, deleteResult.errorString);
-        return;
+        // no database information: Do it the old way
+
+        SyncJobResult deleteResult = SyncJob::del(kioURL, useTrash);
+        if (!deleteResult)
+        {
+            KMessageBox::error(this, deleteResult.errorString);
+            return;
+        }
+
+        emit signalFileDeleted(d->urlCurrent);
+
+    }
+    else
+    {
+        // We have database information, which means information will get through
+        // everywhere. Just do it asynchronously.
+
+        KIO::Job *job = DIO::del(kioURL, useTrash);
+        job->ui()->setWindow(this);
+        job->ui()->setAutoErrorHandlingEnabled(true);
     }
 
-    emit signalFileDeleted(d->urlCurrent);
+    if (removeItem(index))
+        QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
+}
+
+bool ImageWindow::removeItem(int index)
+{
+    if (index == -1 || index >= d->urlList.size())
+        return false;
+
+    KUrl url = d->urlList[index];
 
     // Remove item from Thumbbar.
     d->thumbBar->blockSignals(true);
-    d->thumbBar->removeItem(d->thumbBar->findItemByUrl(d->urlCurrent));
+    d->thumbBar->removeItem(d->thumbBar->findItemByUrl(url));
     d->thumbBar->blockSignals(false);
 
-    int index = d->urlList.indexOf(d->urlCurrent);
-
-    if (index != -1)
+    if (index + 1 != d->urlList.size())
     {
-        if (index + 1 != d->urlList.size())
-        {
-            // Try to get the next image in the current Album...
+        // Try to get the next image in the current Album...
 
-            ++index;
-            d->urlCurrent       = d->urlList[index];
-            d->imageInfoCurrent = d->imageInfoList[index];
-            d->urlList.removeAt(index);
-            d->imageInfoList.removeAt(index);
-            slotLoadCurrent();
-            return;
-        }
-        else if (index - 1 != 0)
-        {
-            // Try to get the previous image in the current Album.
+        ++index;
+        d->urlCurrent       = d->urlList[index];
+        d->imageInfoCurrent = d->imageInfoList[index];
+        d->urlList.removeAt(index-1);
+        if (!d->imageInfoList.isEmpty())
+            d->imageInfoList.removeAt(index-1);
+        return true;
+    }
+    else if (index - 1 != 0)
+    {
+        // Try to get the previous image in the current Album.
 
-            --index;
-            d->urlCurrent       = d->urlList[index];
-            d->imageInfoCurrent = d->imageInfoList[index];
-            d->urlList.removeAt(index);
-            d->imageInfoList.removeAt(index);
-            slotLoadCurrent();
-            return;
-        }
+        --index;
+        d->urlCurrent       = d->urlList[index];
+        d->imageInfoCurrent = d->imageInfoList[index];
+        d->urlList.removeAt(index+1);
+        if (!d->imageInfoList.isEmpty())
+            d->imageInfoList.removeAt(index+1);
+        return true;
     }
 
     // No image in the current Album -> Quit ImageEditor...
 
     KMessageBox::information(this,
-                             i18n("There is no image to show in the current album.\n"
-                                     "The image editor will be closed."),
-                             i18n("No Image in Current Album"));
+                            i18n("There is no image to show in the current album.\n"
+                                    "The image editor will be closed."),
+                            i18n("No Image in Current Album"));
 
     close();
+    return false;
 }
 
 void ImageWindow::slotFileMetadataChanged(const KUrl &url)
@@ -1135,6 +1167,41 @@ void ImageWindow::slotFileMetadataChanged(const KUrl &url)
     {
         m_canvas->readMetadataFromFile(url.path());
     }
+}
+
+void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset &changeset)
+{
+    bool needLoadCurrent = false;
+    switch(changeset.operation())
+    {
+        case CollectionImageChangeset::Removed:
+            for (int i=0;i<d->imageInfoList.size();i++)
+            {
+                if (changeset.containsImage(d->imageInfoList[i].id()))
+                {
+                    if (removeItem(i))
+                        needLoadCurrent = true;
+                    i--;
+                }
+            }
+            break;
+        case CollectionImageChangeset::RemovedAll:
+            for (int i=0;i<d->imageInfoList.size();i++)
+            {
+                if (changeset.containsAlbum(d->imageInfoList[i].albumId()))
+                {
+                    if (removeItem(i))
+                        needLoadCurrent = true;
+                    i--;
+                }
+            }
+            break;
+        default:
+            break;
+    }
+
+    if (needLoadCurrent)
+        QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
 }
 
 void ImageWindow::slotFilePrint()
