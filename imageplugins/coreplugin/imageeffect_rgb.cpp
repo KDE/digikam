@@ -31,7 +31,6 @@
 #include <qhbuttongroup.h>
 #include <qhgroupbox.h>
 #include <qlabel.h>
-#include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qslider.h>
@@ -45,6 +44,7 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 
@@ -54,12 +54,13 @@
 
 // Digikam includes.
 
-#include "imageiface.h"
-#include "imagewidget.h"
-#include "histogramwidget.h"
 #include "colorgradientwidget.h"
 #include "colormodifier.h"
 #include "dimg.h"
+#include "editortoolsettings.h"
+#include "histogramwidget.h"
+#include "imageiface.h"
+#include "imagewidget.h"
 
 // Local includes.
 
@@ -67,64 +68,73 @@
 #include "imageeffect_rgb.moc"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
 
-ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
-               : Digikam::ImageDlgBase(parent, i18n("Color Balance"), "colorbalance", false)
+RGBTool::RGBTool(QWidget* parent)
+               : EditorTool(parent)
 {
-    m_destinationPreviewData = 0L;
-    setHelp("colorbalancetool.anchor", "digikam");
+    setName("colorbalance");
+    setToolName(i18n("Color Balance"));
+    setToolIcon(SmallIcon("adjustrgb"));
 
-    m_previewWidget = new Digikam::ImageWidget("colorbalance Tool Dialog", plainPage(),
-                                               i18n("<p>Here you can see the image "
-                                                    "color-balance adjustments preview. "
-                                                    "You can pick color on image "
-                                                    "to see the color level corresponding on histogram."));
-    setPreviewAreaWidget(m_previewWidget);
+//    setHelp("colorbalancetool.anchor", "digikam");
+
+    m_destinationPreviewData = 0;
+
+    m_previewWidget = new ImageWidget("colorbalance Tool Dialog", 0,
+                                      i18n("<p>Here you can see the image "
+                                           "color-balance adjustments preview. "
+                                           "You can pick color on image "
+                                           "to see the color level corresponding on histogram."));
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 7, 4, spacingHint());
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel);
 
-    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
-    label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, gboxSettings );
-    m_channelCB->insertItem( i18n("Luminosity") );
-    m_channelCB->insertItem( i18n("Red") );
-    m_channelCB->insertItem( i18n("Green") );
-    m_channelCB->insertItem( i18n("Blue") );
+    QGridLayout* gridSettings = new QGridLayout(m_gboxSettings, 7, 4);
+
+    QLabel *label1 = new QLabel(i18n("Channel:"), m_gboxSettings);
+    label1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_channelCB = new QComboBox(false, m_gboxSettings);
+    m_channelCB->insertItem(i18n("Luminosity"));
+    m_channelCB->insertItem(i18n("Red"));
+    m_channelCB->insertItem(i18n("Green"));
+    m_channelCB->insertItem(i18n("Blue"));
     QWhatsThis::add( m_channelCB, i18n("<p>Select the histogram channel to display here:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
                                        "<b>Green</b>: display the green image-channel values.<p>"
                                        "<b>Blue</b>: display the blue image-channel values.<p>"));
 
-    m_scaleBG = new QHButtonGroup(gboxSettings);
+    m_scaleBG = new QHButtonGroup(m_gboxSettings);
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(QFrame::NoFrame);
-    m_scaleBG->setInsideMargin( 0 );
+    m_scaleBG->setInsideMargin(0);
     QWhatsThis::add( m_scaleBG, i18n("<p>Select the histogram scale here.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
 
-    QPushButton *linHistoButton = new QPushButton( m_scaleBG );
-    QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
-    m_scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
+    QPushButton *linHistoButton = new QPushButton(m_scaleBG);
+    QToolTip::add(linHistoButton, i18n("<p>Linear"));
+    m_scaleBG->insert(linHistoButton, HistogramWidget::LinScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
-    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
+    linHistoButton->setPixmap(QPixmap(directory + "histogram-lin.png"));
     linHistoButton->setToggleButton(true);
 
-    QPushButton *logHistoButton = new QPushButton( m_scaleBG );
-    QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
-    m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    QPushButton *logHistoButton = new QPushButton(m_scaleBG);
+    QToolTip::add(logHistoButton, i18n("<p>Logarithmic"));
+    m_scaleBG->insert(logHistoButton, HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
-    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
+    logHistoButton->setPixmap(QPixmap(directory + "histogram-log.png"));
     logHistoButton->setToggleButton(true);
 
     QHBoxLayout* l1 = new QHBoxLayout();
@@ -137,29 +147,29 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QVBox *histoBox   = new QVBox(gboxSettings);
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
+    QVBox *histoBox   = new QVBox(m_gboxSettings);
+    m_histogramWidget = new HistogramWidget(256, 140, histoBox, false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
                                              "settings changes."));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);
-    m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
-    m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+    m_hGradient = new ColorGradientWidget(ColorGradientWidget::Horizontal, 10, histoBox);
+    m_hGradient->setColors(QColor("black"), QColor("white"));
 
     gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
 
     // -------------------------------------------------------------
 
-    QLabel *labelLeft = new QLabel(i18n("Cyan"), gboxSettings);
+    QLabel *labelLeft = new QLabel(i18n("Cyan"), m_gboxSettings);
     labelLeft->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_rSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, gboxSettings, "m_rSlider");
+    m_rSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, m_gboxSettings, "m_rSlider");
     m_rSlider->setTickmarks(QSlider::Below);
     m_rSlider->setTickInterval(20);
     QWhatsThis::add( m_rSlider, i18n("<p>Set here the cyan/red color adjustment of the image."));
-    QLabel *labelRight = new QLabel(i18n("Red"), gboxSettings);
+    QLabel *labelRight = new QLabel(i18n("Red"), m_gboxSettings);
     labelRight->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
-    m_rInput = new RIntNumInput(gboxSettings);
+    m_rInput = new RIntNumInput(m_gboxSettings);
     m_rInput->setDefaultValue(0);
     m_rInput->input()->setRange(-100, 100, 1, false);
 
@@ -170,15 +180,15 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    labelLeft = new QLabel(i18n("Magenta"), gboxSettings);
-    labelLeft->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_gSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, gboxSettings, "m_gSlider");
+    labelLeft = new QLabel(i18n("Magenta"), m_gboxSettings);
+    labelLeft->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_gSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, m_gboxSettings, "m_gSlider");
     m_gSlider->setTickmarks(QSlider::Below);
     m_gSlider->setTickInterval(20);
     QWhatsThis::add( m_gSlider, i18n("<p>Set here the magenta/green color adjustment of the image."));
-    labelRight = new QLabel(i18n("Green"), gboxSettings);
-    labelRight->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
-    m_gInput = new RIntNumInput(gboxSettings);
+    labelRight = new QLabel(i18n("Green"), m_gboxSettings);
+    labelRight->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    m_gInput = new RIntNumInput(m_gboxSettings);
     m_gInput->setDefaultValue(0);
     m_gInput->input()->setRange(-100, 100, 1, false);
 
@@ -189,15 +199,15 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    labelLeft = new QLabel(i18n("Yellow"), gboxSettings);
+    labelLeft = new QLabel(i18n("Yellow"), m_gboxSettings);
     labelLeft->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_bSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, gboxSettings, "m_bSlider");
+    m_bSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, m_gboxSettings, "m_bSlider");
     m_bSlider->setTickmarks(QSlider::Below);
     m_bSlider->setTickInterval(20);
     QWhatsThis::add( m_bSlider, i18n("<p>Set here the yellow/blue color adjustment of the image."));
-    labelRight = new QLabel(i18n("Blue"), gboxSettings);
-    labelRight->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
-    m_bInput = new RIntNumInput(gboxSettings);
+    labelRight = new QLabel(i18n("Blue"), m_gboxSettings);
+    labelRight->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    m_bInput = new RIntNumInput(m_gboxSettings);
     m_bInput->setDefaultValue(0);
     m_bInput->input()->setRange(-100, 100, 1, false);
 
@@ -211,7 +221,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     m_bInput->setValue(0);
 
     gridSettings->setRowStretch(6, 10);
-    setUserAreaWidget(gboxSettings);
+    setToolSettings(m_gboxSettings);
 
     // -------------------------------------------------------------
 
@@ -221,8 +231,8 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const DColor &, const QPoint & )),
+            this, SLOT(slotColorSelectedFromTarget( const DColor & )));
 
     connect(m_rSlider, SIGNAL(valueChanged(int)),
             m_rInput, SLOT(setValue(int)));
@@ -250,10 +260,10 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    enableButtonOK( false );
+    m_gboxSettings->enableButton(EditorToolSettings::Ok, false);
 }
 
-ImageEffect_RGB::~ImageEffect_RGB()
+RGBTool::~RGBTool()
 {
     m_histogramWidget->stopHistogramComputation();
 
@@ -264,27 +274,27 @@ ImageEffect_RGB::~ImageEffect_RGB()
     delete m_previewWidget;
 }
 
-void ImageEffect_RGB::slotChannelChanged(int channel)
+void RGBTool::slotChannelChanged(int channel)
 {
     switch(channel)
     {
         case LuminosityChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
+            m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
             break;
 
         case RedChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
+            m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
             break;
 
         case GreenChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
+            m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
             break;
 
         case BlueChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
+            m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
             break;
     }
@@ -292,23 +302,23 @@ void ImageEffect_RGB::slotChannelChanged(int channel)
     m_histogramWidget->repaint(false);
 }
 
-void ImageEffect_RGB::slotScaleChanged(int scale)
+void RGBTool::slotScaleChanged(int scale)
 {
     m_histogramWidget->m_scaleType = scale;
     m_histogramWidget->repaint(false);
 }
 
-void ImageEffect_RGB::slotColorSelectedFromTarget( const Digikam::DColor &color )
+void RGBTool::slotColorSelectedFromTarget( const DColor &color )
 {
     m_histogramWidget->setHistogramGuideByColor(color);
 }
 
-void ImageEffect_RGB::readUserSettings()
+void RGBTool::readSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("colorbalance Tool Dialog");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", HistogramWidget::LogScaleHistogram));
     int r = config->readNumEntry("RedAjustment", m_rInput->defaultValue());
     int g = config->readNumEntry("GreenAjustment", m_gInput->defaultValue());
     int b = config->readNumEntry("BlueAjustment", m_bInput->defaultValue());
@@ -317,7 +327,7 @@ void ImageEffect_RGB::readUserSettings()
     slotScaleChanged(m_scaleBG->selectedId());
 }
 
-void ImageEffect_RGB::writeUserSettings()
+void RGBTool::writeSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("colorbalance Tool Dialog");
@@ -329,7 +339,7 @@ void ImageEffect_RGB::writeUserSettings()
     config->sync();
 }
 
-void ImageEffect_RGB::resetValues()
+void RGBTool::slotResetSettings()
 {
     int r = m_rInput->defaultValue();
     int g = m_gInput->defaultValue();
@@ -338,7 +348,7 @@ void ImageEffect_RGB::resetValues()
     adjustSliders(r, g, b);
 }
 
-void ImageEffect_RGB::adjustSliders(int r, int g, int b)
+void RGBTool::adjustSliders(int r, int g, int b)
 {
     m_rSlider->blockSignals(true);
     m_gSlider->blockSignals(true);
@@ -364,20 +374,21 @@ void ImageEffect_RGB::adjustSliders(int r, int g, int b)
     slotEffect();
 }
 
-void ImageEffect_RGB::slotEffect()
+void RGBTool::slotEffect()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
-    enableButtonOK(m_rInput->value() != 0 ||
-                   m_gInput->value() != 0 ||
-                   m_bInput->value() != 0);
+    m_gboxSettings->enableButton(EditorToolSettings::Ok,
+                                 (m_rInput->value() != 0 ||
+                                  m_gInput->value() != 0 ||
+                                  m_bInput->value() != 0));
 
     m_histogramWidget->stopHistogramComputation();
 
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = m_previewWidget->imageIface();
     m_destinationPreviewData   = iface->getPreviewImage();
     int w                      = iface->previewWidth();
     int h                      = iface->previewHeight();
@@ -389,8 +400,8 @@ void ImageEffect_RGB::slotEffect()
     double b = ((double)m_bInput->value() + 100.0)/100.0;
     double a = 1.0;
 
-    Digikam::DImg preview(w, h, sixteenBit, alpha, m_destinationPreviewData);
-    Digikam::ColorModifier cmod;
+    DImg preview(w, h, sixteenBit, alpha, m_destinationPreviewData);
+    ColorModifier cmod;
     cmod.applyColorModifier(preview, r, g, b, a);
     iface->putPreviewImage(preview.bits());
 
@@ -404,7 +415,7 @@ void ImageEffect_RGB::slotEffect()
     kapp->restoreOverrideCursor();
 }
 
-void ImageEffect_RGB::finalRendering()
+void RGBTool::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
@@ -413,21 +424,20 @@ void ImageEffect_RGB::finalRendering()
     double b = ((double)m_bInput->value() + 100.0)/100.0;
     double a = 1.0;
 
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = m_previewWidget->imageIface();
     uchar *data                = iface->getOriginalImage();
     int w                      = iface->originalWidth();
     int h                      = iface->originalHeight();
     bool alpha                 = iface->originalHasAlpha();
     bool sixteenBit            = iface->originalSixteenBit();
-    Digikam::DImg original(w, h, sixteenBit, alpha, data);
+    DImg original(w, h, sixteenBit, alpha, data);
     delete [] data;
 
-    Digikam::ColorModifier cmod;
+    ColorModifier cmod;
     cmod.applyColorModifier(original, r, g, b, a);
 
     iface->putOriginalImage(i18n("Color Balance"), original.bits());
     kapp->restoreOverrideCursor();
-    accept();
 }
 
 }  // NameSpace DigikamImagesPluginCore

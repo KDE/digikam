@@ -178,8 +178,8 @@ void ImagePlugin_Core::slotBCG()
 
 void ImagePlugin_Core::slotRGB()
 {
-    DigikamImagesPluginCore::ImageEffect_RGB dlg(parentWidget());
-    dlg.exec();
+    DigikamImagesPluginCore::RGBTool *rgb = new DigikamImagesPluginCore::RGBTool(parentWidget());
+    loadTool(rgb);
 }
 
 void ImagePlugin_Core::slotHSL()
