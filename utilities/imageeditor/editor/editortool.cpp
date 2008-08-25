@@ -151,14 +151,14 @@ void EditorTool::slotTimer()
 
 void EditorTool::slotOk()
 {
-    writeSettings();
+    writteSettings();
     finalRendering();
     emit okClicked();
 }
 
 void EditorTool::slotCancel()
 {
-    writeSettings();
+    writteSettings();
     emit cancelClicked();
 }
 
