@@ -163,12 +163,10 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     m_scaleBG->setInsideMargin(0);
 
     QHBoxLayout* l1 = new QHBoxLayout();
+    l1->addWidget(label1);
+    l1->addWidget(m_channelCB);
     l1->addStretch(10);
     l1->addWidget(m_scaleBG);
-
-    grid->addMultiCellWidget(label1,      0, 0, 1, 1);
-    grid->addMultiCellWidget(m_channelCB, 0, 0, 2, 2);
-    grid->addMultiCellLayout(l1,          0, 0, 4, 5);
 
     // -------------------------------------------------------------
 
@@ -205,8 +203,6 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     gl->addMultiCellWidget(spaceh,            3, 3, 2, 2);
     gl->addMultiCellWidget(m_hGradient,       4, 4, 2, 2);
     gl->setRowSpacing(1, m_gboxSettings->spacingHint());
-
-    grid->addMultiCellWidget(curveBox, 2, 3, 0, 5);
 
     // -------------------------------------------------------------
 
@@ -284,7 +280,9 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     l3->addWidget(m_resetButton);
     l3->addStretch(10);
 
-    grid->addMultiCellLayout(l3, 4, 4, 1, 5);
+    grid->addMultiCellLayout(l1,       0, 0, 1, 5);
+    grid->addMultiCellWidget(curveBox, 1, 3, 0, 5);
+    grid->addMultiCellLayout(l3,       4, 4, 1, 5);
     grid->setMargin(0);
     grid->setSpacing(m_gboxSettings->spacingHint());
     grid->setRowStretch(5, 10);
