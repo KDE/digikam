@@ -46,6 +46,7 @@ class ColorGradientWidget;
 class ImageWidget;
 class DColor;
 class DImg;
+class EditorToolSettings;
 }
 
 namespace DigikamImagesPluginCore
@@ -70,12 +71,12 @@ private slots:
     void slotHSChanged(int h, int s);
     void slotHChanged(double h);
     void slotSChanged(double s);
+    void slotResetSettings();
 
 private:
 
     void writeSettings();
     void readSettings();
-    void resetSettings();
     void finalRendering();
 
 private:
@@ -115,6 +116,8 @@ private:
     Digikam::HistogramWidget     *m_histogramWidget;
 
     Digikam::DImg                *m_originalImage;
+
+    Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
 }  // NameSpace DigikamImagesPluginCore

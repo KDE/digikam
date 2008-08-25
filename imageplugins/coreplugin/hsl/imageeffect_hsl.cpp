@@ -96,15 +96,15 @@ HSLTool::HSLTool(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    EditorToolSettings *gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                                              EditorToolSettings::Ok|
-                                                              EditorToolSettings::Cancel);
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel);
 
-    QGridLayout* gridSettings = new QGridLayout(gboxSettings->plainPage(), 11, 4);
+    QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage(), 11, 4);
 
-    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings->plainPage());
+    QLabel *label1 = new QLabel(i18n("Channel:"), m_gboxSettings->plainPage());
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, gboxSettings->plainPage());
+    m_channelCB = new QComboBox( false, m_gboxSettings->plainPage());
     m_channelCB->insertItem( i18n("Luminosity") );
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
@@ -115,7 +115,7 @@ HSLTool::HSLTool(QWidget* parent)
                                        "<b>Green</b>: display the green image-channel values.<p>"
                                        "<b>Blue</b>: display the blue image-channel values.<p>"));
 
-    m_scaleBG = new QHButtonGroup(gboxSettings->plainPage());
+    m_scaleBG = new QHButtonGroup(m_gboxSettings->plainPage());
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(QFrame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
@@ -150,7 +150,7 @@ HSLTool::HSLTool(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QVBox *histoBox   = new QVBox(gboxSettings->plainPage());
+    QVBox *histoBox   = new QVBox(m_gboxSettings->plainPage());
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
@@ -164,19 +164,19 @@ HSLTool::HSLTool(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_HSSelector = new KHSSelector(gboxSettings->plainPage());
+    m_HSSelector = new KHSSelector(m_gboxSettings->plainPage());
     QWhatsThis::add( m_HSSelector, i18n("<p>Select the hue and saturation adjustments of the image here."));
     m_HSSelector->setMinimumSize(256, 142);
     gridSettings->addMultiCellWidget(m_HSSelector, 3, 3, 0, 4);
 
-    m_HSPreview = new HSPreviewWidget(gboxSettings->plainPage());
+    m_HSPreview = new HSPreviewWidget(m_gboxSettings->plainPage());
     QWhatsThis::add( m_HSPreview, i18n("<p>You can see here a color preview of the hue and "
                                        "saturation adjustments."));
     m_HSPreview->setMinimumSize(256, 15);
     gridSettings->addMultiCellWidget(m_HSPreview, 4, 4, 0, 4);
 
-    QLabel *label2 = new QLabel(i18n("Hue:"), gboxSettings->plainPage());
-    m_hInput       = new RDoubleNumInput(gboxSettings);
+    QLabel *label2 = new QLabel(i18n("Hue:"), m_gboxSettings->plainPage());
+    m_hInput       = new RDoubleNumInput(m_gboxSettings);
     m_hInput->setPrecision(0);
     m_hInput->setRange(-180.0, 180.0, 1.0);
     m_hInput->setDefaultValue(0.0);
@@ -184,8 +184,8 @@ HSLTool::HSLTool(QWidget* parent)
     gridSettings->addMultiCellWidget(label2, 5, 5, 0, 4);
     gridSettings->addMultiCellWidget(m_hInput, 6, 6, 0, 4);
 
-    QLabel *label3 = new QLabel(i18n("Saturation:"), gboxSettings->plainPage());
-    m_sInput       = new RDoubleNumInput(gboxSettings);
+    QLabel *label3 = new QLabel(i18n("Saturation:"), m_gboxSettings->plainPage());
+    m_sInput       = new RDoubleNumInput(m_gboxSettings);
     m_sInput->setPrecision(2);
     m_sInput->setRange(-100.0, 100.0, 0.01);
     m_sInput->setDefaultValue(0.0);
@@ -193,8 +193,8 @@ HSLTool::HSLTool(QWidget* parent)
     gridSettings->addMultiCellWidget(label3, 7, 7, 0, 4);
     gridSettings->addMultiCellWidget(m_sInput, 8, 8, 0, 4);
 
-    QLabel *label4 = new QLabel(i18n("Lightness:"), gboxSettings->plainPage());
-    m_lInput       = new RDoubleNumInput(gboxSettings->plainPage());
+    QLabel *label4 = new QLabel(i18n("Lightness:"), m_gboxSettings->plainPage());
+    m_lInput       = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_lInput->setPrecision(2);
     m_lInput->setRange(-100.0, 100.0, 0.01);
     m_lInput->setDefaultValue(0.0);
@@ -203,7 +203,7 @@ HSLTool::HSLTool(QWidget* parent)
     gridSettings->addMultiCellWidget(m_lInput, 10, 10, 0, 4);
 
     gridSettings->setRowStretch(11, 10);
-    setToolSettings(gboxSettings);
+    setToolSettings(m_gboxSettings);
 
     // -------------------------------------------------------------
 
@@ -239,7 +239,7 @@ HSLTool::HSLTool(QWidget* parent)
 
     // -------------------------------------------------------------
 
-//    enableButtonOK( false );
+    m_gboxSettings->enableButton(EditorToolSettings::Ok, false);
 }
 
 HSLTool::~HSLTool()
@@ -359,7 +359,7 @@ void HSLTool::writeSettings()
     config->sync();
 }
 
-void HSLTool::resetSettings()
+void HSLTool::slotResetSettings()
 {
     m_hInput->blockSignals(true);
     m_sInput->blockSignals(true);
@@ -371,6 +371,8 @@ void HSLTool::resetSettings()
 
     slotHChanged(0.0);
     slotSChanged(0.0);
+
+    slotEffect();
 
     m_hInput->blockSignals(false);
     m_sInput->blockSignals(false);
@@ -385,7 +387,8 @@ void HSLTool::slotEffect()
     double sa  = m_sInput->value();
     double lu  = m_lInput->value();
 
-//    enableButtonOK( hu != 0.0 || sa != 0.0 || lu != 0.0);
+    m_gboxSettings->enableButton(EditorToolSettings::Ok,
+                                ( hu != 0.0 || sa != 0.0 || lu != 0.0));
 
     m_HSPreview->setHS(hu, sa);
     m_histogramWidget->stopHistogramComputation();
