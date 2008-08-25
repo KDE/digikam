@@ -74,13 +74,11 @@ protected:
 
 protected slots:
 
-    virtual void slotEffect(){};
-
-private slots:
-
     void slotTimer();
     void slotOk();
     void slotCancel();
+
+    virtual void slotEffect(){};
 
 private:
 
