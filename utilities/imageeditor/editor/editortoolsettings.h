@@ -70,6 +70,7 @@ public:
     QWidget *plainPage() const;
 
     KPushButton* button(int buttonCode) const;
+    void enableButton(int buttonCode, bool state);
 
 signals:
 

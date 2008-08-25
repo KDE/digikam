@@ -211,4 +211,10 @@ KPushButton* EditorToolSettings::button(int buttonCode) const
     return 0;
 }
 
+void EditorToolSettings::enableButton(int buttonCode, bool state)
+{
+    KPushButton *btn = button(buttonCode);
+    if (btn) btn->setEnabled(state);
+}
+
 } // NameSpace Digikam
