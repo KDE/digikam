@@ -555,7 +555,7 @@ void ICCProofTool::readSettings()
             QString message = i18n("The ICC profiles path seems to be invalid. You won't be able to use the \"Default profile\"\
                                     options.<p>Please fix this in the digiKam ICC setup.");
             slotToggledWidgets( false );
-            KMessageBox::information(0, message);
+            KMessageBox::information(kapp->activeWindow(), message);
         }
     }
 
@@ -744,8 +744,9 @@ void ICCProofTool::slotEffect()
         QFileInfo info(tmpInPath);
         if (!info.exists() || !info.isReadable() || !info.isFile())
         {
-            KMessageBox::information(0, i18n("<p>The selected ICC input profile path seems to be invalid.<p>"
-                "Please check it."));
+            KMessageBox::information(kapp->activeWindow(),
+                                     i18n("<p>The selected ICC input profile path seems to be invalid.<p>"
+                                          "Please check it."));
             return;
         }
     }
@@ -762,8 +763,9 @@ void ICCProofTool::slotEffect()
         QFileInfo info(tmpProofPath);
         if (!info.exists() || !info.isReadable() || !info.isFile())
         {
-            KMessageBox::information(0, i18n("<p>The selected ICC proof profile path seems to be invalid.<p>"
-                "Please check it."));
+            KMessageBox::information(kapp->activeWindow(),
+                                     i18n("<p>The selected ICC proof profile path seems to be invalid.<p>"
+                                          "Please check it."));
             return;
         }
     }
@@ -783,8 +785,9 @@ void ICCProofTool::slotEffect()
         QFileInfo info(tmpSpacePath);
         if (!info.exists() || !info.isReadable() || !info.isFile())
         {
-            KMessageBox::information(0, i18n("<p>Selected ICC workspace profile path seems to be invalid.<p>"
-                "Please check it."));
+            KMessageBox::information(kapp->activeWindow(),
+                                     i18n("<p>Selected ICC workspace profile path seems to be invalid.<p>"
+                                          "Please check it."));
             return;
         }
     }
@@ -827,7 +830,7 @@ void ICCProofTool::slotEffect()
                         "<li>A \"Workspace\" profile.</li></ul>"
                         "<p>If you want to do a \"soft-proof\" transform, in addition to these profiles "
                         "you need a \"Proof\" profile.</p>");
-        KMessageBox::information(0, error);
+        KMessageBox::information(kapp->activeWindow(), error);
         m_gboxSettings->enableButton(EditorToolSettings::Ok, false);
     }
     else
@@ -903,8 +906,9 @@ void ICCProofTool::finalRendering()
                 QFileInfo info(tmpInPath);
                 if (!info.exists() || !info.isReadable() || !info.isFile())
                 {
-                    KMessageBox::information(0, i18n("<p>Selected ICC input profile path seems "
-                                                     "to be invalid.<p>Please check it."));
+                    KMessageBox::information(kapp->activeWindow(),
+                                             i18n("<p>Selected ICC input profile path seems "
+                                                  "to be invalid.<p>Please check it."));
                     return;
                 }
             }
@@ -921,8 +925,9 @@ void ICCProofTool::finalRendering()
                 QFileInfo info(tmpProofPath);
                 if (!info.exists() || !info.isReadable() || !info.isFile())
                 {
-                    KMessageBox::information(0, i18n("<p>The selected ICC proof profile path seems "
-                                                     "to be invalid.<p>Please check it."));
+                    KMessageBox::information(kapp->activeWindow(),
+                                             i18n("<p>The selected ICC proof profile path seems "
+                                                  "to be invalid.<p>Please check it."));
                     return;
                 }
             }
@@ -942,8 +947,9 @@ void ICCProofTool::finalRendering()
                 QFileInfo info(tmpSpacePath);
                 if (!info.exists() || !info.isReadable() || !info.isFile())
                 {
-                    KMessageBox::information(0, i18n("<p>Selected ICC workspace profile path seems "
-                                                     "to be invalid.<p>Please check it."));
+                    KMessageBox::information(kapp->activeWindow(),
+                                             i18n("<p>Selected ICC workspace profile path seems "
+                                                  "to be invalid.<p>Please check it."));
                     return;
                 }
             }
@@ -1033,7 +1039,7 @@ void ICCProofTool::slotInICCInfo()
         QString message = i18n("<p>You have selected the \"Default builtin sRGB profile\"</p>");
         message.append(i18n("<p>This profile is built on the fly, so there is no relevant information "
                             "about it.</p>"));
-        KMessageBox::information(0, message);
+        KMessageBox::information(kapp->activeWindow(), message);
     }
     else if (useDefaultInProfile())
     {
@@ -1073,7 +1079,9 @@ void ICCProofTool::getICCInfo(const QString& profile)
 {
     if (profile.isEmpty())
     {
-        KMessageBox::error(0, i18n("Sorry, there is no selected profile"), i18n("Profile Error"));
+        KMessageBox::error(kapp->activeWindow(),
+                           i18n("Sorry, there is no selected profile"),
+                           i18n("Profile Error"));
         return;
     }
 
@@ -1085,8 +1093,9 @@ void ICCProofTool::getICCInfo(const QByteArray& profile)
 {
     if (profile.isNull())
     {
-        KMessageBox::error(0, i18n("Sorry, it seems there is no embedded profile"),
-                              i18n("Profile Error"));
+        KMessageBox::error(kapp->activeWindow(),
+                           i18n("Sorry, it seems there is no embedded profile"),
+                           i18n("Profile Error"));
         return;
     }
 
@@ -1100,7 +1109,7 @@ void ICCProofTool::slotCMDisabledWarning()
     {
         QString message = i18n("<p>You have not enabled Color Management in the digiKam preferences.</p>");
         message.append(i18n("<p>\"Use of default profile\" options will be disabled now.</p>"));
-        KMessageBox::information(0, message);
+        KMessageBox::information(kapp->activeWindow(), message);
         slotToggledWidgets(false);
     }
 }
@@ -1181,8 +1190,9 @@ void ICCProofTool::slotUser3()
 
         if (stream.readLine() != "# Color Management Configuration File")
         {
-            KMessageBox::error(0, i18n("\"%1\" is not a Color Management settings text file.")
-                                  .arg(loadColorManagementFile.fileName()));
+            KMessageBox::error(kapp->activeWindow(),
+                               i18n("\"%1\" is not a Color Management settings text file.")
+                               .arg(loadColorManagementFile.fileName()));
             file.close();
             return;
         }
@@ -1233,7 +1243,8 @@ void ICCProofTool::slotUser3()
         slotEffect();
     }
     else
-        KMessageBox::error(0,i18n("Cannot load settings from the Color Management text file."));
+        KMessageBox::error(kapp->activeWindow(),
+                           i18n("Cannot load settings from the Color Management text file."));
 
     file.close();
 }
@@ -1280,7 +1291,8 @@ void ICCProofTool::slotUser2()
         }
     }
     else
-        KMessageBox::error(0, i18n("Cannot save settings to the Color Management text file."));
+        KMessageBox::error(kapp->activeWindow(),
+                           i18n("Cannot save settings to the Color Management text file."));
 
     file.close();
 }
