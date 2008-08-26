@@ -25,59 +25,62 @@
 
 // Qt includes.
 
-#include <qhgroupbox.h>
-#include <qvgroupbox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qhbuttongroup.h>
-#include <qwhatsthis.h>
-#include <qlayout.h>
-#include <qframe.h>
 #include <qcombobox.h>
+#include <qfile.h>
+#include <qframe.h>
+#include <qhbuttongroup.h>
+#include <qhgroupbox.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qpixmap.h>
+#include <qpushbutton.h>
+#include <qtextstream.h>
 #include <qtimer.h>
 #include <qtooltip.h>
-#include <qpixmap.h>
-#include <qfile.h>
-#include <qtextstream.h>
 #include <qvbox.h>
+#include <qvgroupbox.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
-#include <kcursor.h>
-#include <klocale.h>
 #include <kaboutdata.h>
+#include <kactivelabel.h>
+#include <kapplication.h>
+#include <kconfig.h>
+#include <kcursor.h>
+#include <kfiledialog.h>
+#include <kglobalsettings.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
-#include <kapplication.h>
-#include <kpopupmenu.h>
-#include <kstandarddirs.h>
-#include <kprogress.h>
+#include <klocale.h>
 #include <kmessagebox.h>
-#include <kglobalsettings.h>
-#include <kfiledialog.h>
+#include <kpopupmenu.h>
+#include <kprogress.h>
 #include <kseparator.h>
-#include <kconfig.h>
-#include <kactivelabel.h>
+#include <kstandarddirs.h>
 
 // LibKDcraw includes.
 
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Local includes.
+// Digikam includes.
 
+#include "colorgradientwidget.h"
 #include "daboutdata.h"
+#include "dcolor.h"
 #include "ddebug.h"
 #include "dimg.h"
-#include "dcolor.h"
+#include "dimgimagefilters.h"
+#include "editortoolsettings.h"
+#include "histogramwidget.h"
+#include "imagehistogram.h"
 #include "imageiface.h"
 #include "imagewidget.h"
-#include "imagehistogram.h"
-#include "editortoolsettings.h"
 #include "whitebalance.h"
-#include "colorgradientwidget.h"
-#include "histogramwidget.h"
-#include "dimgimagefilters.h"
+
+// Local includes.
+
 #include "whitebalancetool.h"
 #include "whitebalancetool.moc"
 
