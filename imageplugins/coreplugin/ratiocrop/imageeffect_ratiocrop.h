@@ -28,7 +28,7 @@
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 
 class QLabel;
 class QToolButton;
@@ -47,14 +47,14 @@ namespace DigikamImagesPluginCore
 
 class ImageSelectionWidget;
 
-class ImageEffect_RatioCrop : public Digikam::ImageDlgBase
+class RatioCropTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_RatioCrop(QWidget *parent);
-    ~ImageEffect_RatioCrop();
+    RatioCropTool(QWidget *parent);
+    ~RatioCropTool();
 
 private:
 
@@ -67,7 +67,7 @@ private:
 private slots:
 
     void slotUser1();
-    void slotDefault();
+    void slotResetSettings();
     void slotOk();
 
     void slotCenterWidth();
@@ -125,6 +125,8 @@ private:
     KColorButton         *m_guideColorBt;
 
     ImageSelectionWidget *m_imageSelectionWidget;
+
+    Digikam::EditorToolSettings       *m_gboxSettings;
 };
 
 }  // NameSpace DigikamImagesPluginCore

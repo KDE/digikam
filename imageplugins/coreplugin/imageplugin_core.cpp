@@ -242,8 +242,8 @@ void ImagePlugin_Core::slotRedEye()
 
 void ImagePlugin_Core::slotRatioCrop()
 {
-    DigikamImagesPluginCore::ImageEffect_RatioCrop dlg(parentWidget());
-    dlg.exec();
+    DigikamImagesPluginCore::RatioCropTool *ratiocrop = new DigikamImagesPluginCore::RatioCropTool(parentWidget());
+    loadTool(ratiocrop);
 }
 
 void ImagePlugin_Core::slotColorManagement()
