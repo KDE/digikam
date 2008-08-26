@@ -68,6 +68,8 @@ EditorTool::EditorTool(QObject *parent)
 
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotEffect()));
+
+    QTimer::singleShot(0, this, SLOT(slotInit()));
 }
 
 EditorTool::~EditorTool()
@@ -175,6 +177,11 @@ void EditorTool::slotCancel()
 {
     writeSettings();
     emit cancelClicked();
+}
+
+void EditorTool::slotInit()
+{
+    readSettings();
 }
 
 }  // namespace Digikam

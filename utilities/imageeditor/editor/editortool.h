@@ -79,6 +79,7 @@ protected slots:
     void slotOk();
     void slotCancel();
 
+    virtual void slotInit();
     virtual void slotLoadSettings(){};
     virtual void slotSaveAsSettings(){};
     virtual void slotResetSettings();
