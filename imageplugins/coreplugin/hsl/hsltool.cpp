@@ -79,6 +79,7 @@ HSLTool::HSLTool(QWidget* parent)
     setName("adjusthsl");
     setToolName(i18n("Hue / Saturation / Lightness"));
     setToolIcon(SmallIcon("adjusthsl"));
+    setToolHelp("hsladjusttool.anchor");
 
     m_destinationPreviewData = 0;
 
