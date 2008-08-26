@@ -81,10 +81,9 @@ BCGTool::BCGTool(QWidget* parent)
     setName("bcgadjust");
     setToolName(i18n("Brightness / Contrast / Gamma"));
     setToolIcon(SmallIcon("contrast"));
+    setToolHelp("bcgadjusttool.anchor");
 
     m_destinationPreviewData = 0;
-
-//    setHelp("bcgadjusttool.anchor", "digikam");
 
     m_previewWidget = new ImageWidget("bcgadjust Tool Dialog", 0,
                                                i18n("<p>Here you can see the image "
