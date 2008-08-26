@@ -24,6 +24,7 @@
 
 #include <QLabel>
 #include <QString>
+#include <QLayout>
 
 // KDE includes.
 
@@ -35,7 +36,6 @@
 #include <kstandarddirs.h>
 #include <kstandardguiitem.h>
 #include <khbox.h>
-#include <kvbox.h>
 
 // Local includes.
 
@@ -88,11 +88,12 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    KVBox* vbox  = new KVBox(this);
-    d->plainPage = new QWidget(vbox);
-    d->btnBox3   = new KHBox(vbox);
-    d->btnBox2   = new KHBox(vbox);
-    d->btnBox1   = new KHBox(vbox);
+    QGridLayout* gridSettings = new QGridLayout(this);
+
+    d->plainPage = new QWidget(this);
+    d->btnBox1   = new KHBox(this);
+    d->btnBox2   = new KHBox(this);
+    d->btnBox3   = new KHBox(this);
 
     // ---------------------------------------------------------------
 
@@ -155,6 +156,15 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
         d->abortBtn->hide();
 
     d->btnBox3->setStretchFactor(space3, 10);
+
+    // ---------------------------------------------------------------
+
+    gridSettings->addWidget(d->plainPage, 0, 0, 1, 2);
+    gridSettings->addWidget(d->btnBox3,   1, 0, 1, 2);
+    gridSettings->addWidget(d->btnBox2,   2, 0, 1, 2);
+    gridSettings->addWidget(d->btnBox1,   3, 0, 1, 2);
+    gridSettings->setSpacing(spacingHint());
+    gridSettings->setMargin(0);
 
     // ---------------------------------------------------------------
 
