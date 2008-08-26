@@ -25,7 +25,7 @@
 
 // Qt includes.
 
-#include <qscrollview.h>
+#include <qwidget.h>
 
 // Local includes.
 
@@ -38,7 +38,7 @@ namespace Digikam
 
 class EditorToolSettingsPriv;
 
-class DIGIKAM_EXPORT EditorToolSettings : public QScrollView
+class DIGIKAM_EXPORT EditorToolSettings : public QWidget
 {
     Q_OBJECT
 
