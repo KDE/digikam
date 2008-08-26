@@ -123,7 +123,7 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
 
     d->loadBtn = new KPushButton(d->btnBox2);
     d->loadBtn->setGuiItem(KStdGuiItem::open());
-    d->loadBtn->setText(i18n("Load"));
+    d->loadBtn->setText(i18n("Load..."));
     QToolTip::add(d->loadBtn, i18n("<p>Load all parameters from settings text file."));
     if (!(buttonMask & Load))
         d->loadBtn->hide();
