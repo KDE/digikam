@@ -116,7 +116,7 @@ void EditorTool::setToolHelp(const QString& anchor)
 QString EditorTool::toolHelp() const
 {
     if (d->helpAnchor.isEmpty())
-        return (name() + QString(".anchor"));
+        return (objectName() + QString(".anchor"));
 
     return d->helpAnchor;
 }
