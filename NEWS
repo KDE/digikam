@@ -25,7 +25,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 167867 : Album view is reset by changing settings.
 013 ==> 168461 : Info in Properties panel not updated after moving to other image.
 014 ==> 169704 : Crash during RAW import.
-015 ==> 166437 : Deleting images in Image Editor not working properly
+015 ==> 166437 : Deleting images in Image Editor not working properly.
 016 ==> 
 
 *********************************************************************************************************
