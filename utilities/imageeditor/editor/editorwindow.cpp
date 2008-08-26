@@ -1897,4 +1897,22 @@ void EditorWindow::slotComponentsInfo()
     dlg.exec();
 }
 
+void EditorWindow::setToolStartProgress(const QString& toolName)
+{
+    m_nameLabel->setProgressValue(0);
+    m_nameLabel->progressBarMode(StatusProgressBar::ProgressBarMode, toolName);
+}
+
+void EditorWindow::setToolProgress(int progress)
+{
+    m_nameLabel->setProgressValue(progress);
+}
+
+void EditorWindow::setToolStopProgress()
+{
+    m_nameLabel->setProgressValue(0);
+    m_nameLabel->progressBarMode(StatusProgressBar::TextMode);
+    slotUpdateItemInfo();
+}
+
 }  // namespace Digikam

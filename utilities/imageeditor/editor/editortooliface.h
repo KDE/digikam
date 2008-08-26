@@ -55,6 +55,10 @@ public:
     void loadTool(EditorTool* tool);
     void unLoadTool();
 
+    void setToolStartProgress(const QString& toolName);
+    void setToolProgress(int progress);
+    void setToolStopProgress();
+
 private:
 
     static EditorToolIface *m_iface;
