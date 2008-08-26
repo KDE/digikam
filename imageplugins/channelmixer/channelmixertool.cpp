@@ -102,7 +102,7 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new ImageWidget("channelmixer Tool Dialog", 0,
+    m_previewWidget = new ImageWidget("channelmixer Tool", 0,
                           i18n("<p>You can see here the image's color channels' "
                                "gains adjustments preview. You can pick color on image "
                                "to see the color level corresponding on histogram."));
