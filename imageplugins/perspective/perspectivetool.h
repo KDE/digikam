@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-02-17
- * Description : a plugin to change image perspective .
+ * Description : a plugin to change image perspective.
  *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -30,7 +30,7 @@
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 
 class QLabel;
 class QCheckBox;
@@ -42,49 +42,56 @@ namespace KDcrawIface
 class RIntNumInput;
 }
 
+namespace Digikam
+{
+class EditorToolSettings;
+}
+
 namespace DigikamPerspectiveImagesPlugin
 {
 
 class PerspectiveWidget;
 
-class ImageEffect_Perspective : public Digikam::ImageDlgBase
+class PerspectiveTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_Perspective(QWidget* parent);
-    ~ImageEffect_Perspective();
+    PerspectiveTool(QObject* parent);
+    ~PerspectiveTool();
 
 private slots:
 
+    void slotResetSettings();
     void slotUpdateInfo(QRect newSize, float topLeftAngle, float topRightAngle,
                         float bottomLeftAngle, float bottomRightAngle);
 
 private:
 
-    void readUserSettings();
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void finalRendering();
 
 private:
 
-    QLabel            *m_newWidthLabel;
-    QLabel            *m_newHeightLabel;
-    QLabel            *m_topLeftAngleLabel;
-    QLabel            *m_topRightAngleLabel;
-    QLabel            *m_bottomLeftAngleLabel;
-    QLabel            *m_bottomRightAngleLabel;
+    QLabel                      *m_newWidthLabel;
+    QLabel                      *m_newHeightLabel;
+    QLabel                      *m_topLeftAngleLabel;
+    QLabel                      *m_topRightAngleLabel;
+    QLabel                      *m_bottomLeftAngleLabel;
+    QLabel                      *m_bottomRightAngleLabel;
 
-    QCheckBox         *m_drawWhileMovingCheckBox;
-    QCheckBox         *m_drawGridCheckBox;
+    QCheckBox                   *m_drawWhileMovingCheckBox;
+    QCheckBox                   *m_drawGridCheckBox;
 
-    KDcrawIface::RIntNumInput *m_guideSize;
+    KDcrawIface::RIntNumInput   *m_guideSize;
 
-    KColorButton      *m_guideColorBt;
+    KColorButton                *m_guideColorBt;
 
-    PerspectiveWidget *m_previewWidget;
+    PerspectiveWidget           *m_previewWidget;
+
+    Digikam::EditorToolSettings *m_gboxSettings;
 };
 
 }  // NameSpace DigikamPerspectiveImagesPlugin

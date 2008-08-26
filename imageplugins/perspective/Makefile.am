@@ -18,8 +18,8 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes)  
 
 digikamimageplugin_perspective_la_SOURCES = imageplugin_perspective.cpp \
-	                                        imageeffect_perspective.cpp \
-					                        perspectivewidget.cpp triangle.cpp matrix.cpp
+	                                        perspectivetool.cpp \
+					        perspectivewidget.cpp triangle.cpp matrix.cpp
 
 digikamimageplugin_perspective_la_LIBADD = $(LIB_KPARTS) \
 	                                       $(top_builddir)/digikam/digikam/libdigikam.la 

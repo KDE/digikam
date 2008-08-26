@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-02-17
- * Description : a plugin to change image perspective .
+ * Description : a plugin to change image perspective.
  *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -56,130 +56,118 @@
 #include "ddebug.h"
 #include "dimg.h"
 #include "imageiface.h"
+#include "editortoolsettings.h"
 #include "perspectivewidget.h"
-#include "imageeffect_perspective.h"
-#include "imageeffect_perspective.moc"
+#include "perspectivetool.h"
+#include "perspectivetool.moc"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamPerspectiveImagesPlugin
 {
 
-ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
-                       : Digikam::ImageDlgBase(parent, i18n("Adjust Photograph Perspective"),
-                                               "perspective", false, false)
+PerspectiveTool::PerspectiveTool(QObject* parent)
+               : EditorTool(parent)
 {
     QString whatsThis;
 
-    // About data and help button.
-
-    KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Perspective"),
-                                       digikam_version,
-                                       I18N_NOOP("A digiKam image plugin to process image perspective adjustment."),
-                                       KAboutData::License_GPL,
-                                       "(c) 2005-2006, Gilles Caulier\n"
-                                       "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg",
-                                       0,
-                                       Digikam::webProjectUrl());
-
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at gmail dot com");
-
-    about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
-                     "marcel dot wiesweg at gmx dot de");
-
-    setAboutData(about);
+    setName("perspective");
+    setToolName(i18n("Perspective"));
+    setToolIcon(SmallIcon("perspective"));
 
     // -------------------------------------------------------------
 
-    QFrame *frame = new QFrame(plainPage());
+    QFrame *frame   = new QFrame(0);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l  = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new PerspectiveWidget(525, 350, frame);
     l->addWidget(m_previewWidget);
-    QWhatsThis::add( m_previewWidget, i18n("<p>This is the perspective transformation operation preview. "
-                                           "You can use the mouse for dragging the corner to adjust the "
-                                           "perspective transformation area."));
-    setPreviewAreaWidget(frame);
+    QWhatsThis::add(m_previewWidget, i18n("<p>This is the perspective transformation operation preview. "
+                                          "You can use the mouse for dragging the corner to adjust the "
+                                          "perspective transformation area."));
+    setToolView(frame);
 
     // -------------------------------------------------------------
 
     QString temp;
     Digikam::ImageIface iface(0, 0);
 
-    QWidget *gbox2          = new QWidget(plainPage());
-    QGridLayout *gridLayout = new QGridLayout( gbox2, 13, 2, spacingHint());
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel);
 
-    QLabel *label1  = new QLabel(i18n("New width:"), gbox2);
-    m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"), gbox2);
+    QGridLayout *gridLayout = new QGridLayout( m_gboxSettings->plainPage(), 13, 2);
+
+    QLabel *label1  = new QLabel(i18n("New width:"), m_gboxSettings->plainPage());
+    m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"), m_gboxSettings->plainPage());
     m_newWidthLabel->setAlignment( AlignBottom | AlignRight );
 
-    QLabel *label2   = new QLabel(i18n("New height:"), gbox2);
-    m_newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"), gbox2);
+    QLabel *label2   = new QLabel(i18n("New height:"), m_gboxSettings->plainPage());
+    m_newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"), m_gboxSettings->plainPage());
     m_newHeightLabel->setAlignment( AlignBottom | AlignRight );
 
-    gridLayout->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridLayout->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 2);
-    gridLayout->addMultiCellWidget(label2, 1, 1, 0, 0);
-    gridLayout->addMultiCellWidget(m_newHeightLabel, 1, 1, 1, 2);
+    // -------------------------------------------------------------
+
+    KSeparator *line = new KSeparator (Horizontal, m_gboxSettings->plainPage());
+
+    QLabel *angleLabel = new QLabel(i18n("Angles (in degrees):"), m_gboxSettings->plainPage());
+    QLabel *label3 = new QLabel(i18n("  Top left:"), m_gboxSettings->plainPage());
+    m_topLeftAngleLabel = new QLabel(m_gboxSettings->plainPage());
+    QLabel *label4 = new QLabel(i18n("  Top right:"), m_gboxSettings->plainPage());
+    m_topRightAngleLabel = new QLabel(m_gboxSettings->plainPage());
+    QLabel *label5 = new QLabel(i18n("  Bottom left:"), m_gboxSettings->plainPage());
+    m_bottomLeftAngleLabel = new QLabel(m_gboxSettings->plainPage());
+    QLabel *label6 = new QLabel(i18n("  Bottom right:"), m_gboxSettings->plainPage());
+    m_bottomRightAngleLabel = new QLabel(m_gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
-    KSeparator *line = new KSeparator (Horizontal, gbox2);
+    KSeparator *line2 = new KSeparator (Horizontal, m_gboxSettings->plainPage());
 
-    QLabel *angleLabel = new QLabel(i18n("Angles (in degrees):"), gbox2);
-    QLabel *label3 = new QLabel(i18n("  Top left:"), gbox2);
-    m_topLeftAngleLabel = new QLabel(gbox2);
-    QLabel *label4 = new QLabel(i18n("  Top right:"), gbox2);
-    m_topRightAngleLabel = new QLabel(gbox2);
-    QLabel *label5 = new QLabel(i18n("  Bottom left:"), gbox2);
-    m_bottomLeftAngleLabel = new QLabel(gbox2);
-    QLabel *label6 = new QLabel(i18n("  Bottom right:"), gbox2);
-    m_bottomRightAngleLabel = new QLabel(gbox2);
-
-    gridLayout->addMultiCellWidget(line, 2, 2, 0, 2);
-    gridLayout->addMultiCellWidget(angleLabel, 3, 3, 0, 2);
-    gridLayout->addMultiCellWidget(label3, 4, 4, 0, 0);
-    gridLayout->addMultiCellWidget(m_topLeftAngleLabel, 4, 4, 1, 2);
-    gridLayout->addMultiCellWidget(label4, 5, 5, 0, 0);
-    gridLayout->addMultiCellWidget(m_topRightAngleLabel, 5, 5, 1, 2);
-    gridLayout->addMultiCellWidget(label5, 6, 6, 0, 0);
-    gridLayout->addMultiCellWidget(m_bottomLeftAngleLabel, 6, 6, 1, 2);
-    gridLayout->addMultiCellWidget(label6, 7, 7, 0, 0);
-    gridLayout->addMultiCellWidget(m_bottomRightAngleLabel, 7, 7, 1, 2);
-
-    // -------------------------------------------------------------
-
-    KSeparator *line2 = new KSeparator (Horizontal, gbox2);
-
-    m_drawWhileMovingCheckBox = new QCheckBox(i18n("Draw preview while moving"), gbox2);
+    m_drawWhileMovingCheckBox = new QCheckBox(i18n("Draw preview while moving"), m_gboxSettings->plainPage());
     gridLayout->addMultiCellWidget(line2, 8, 8, 0, 2);
     gridLayout->addMultiCellWidget(m_drawWhileMovingCheckBox, 9, 9, 0, 2);
 
-    m_drawGridCheckBox = new QCheckBox(i18n("Draw grid"), gbox2);
-    gridLayout->addMultiCellWidget(m_drawGridCheckBox, 10, 10, 0, 2);
+    m_drawGridCheckBox = new QCheckBox(i18n("Draw grid"), m_gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
-    QLabel *label7 = new QLabel(i18n("Guide color:"), gbox2);
-    m_guideColorBt = new KColorButton( QColor( Qt::red ), gbox2 );
+    QLabel *label7 = new QLabel(i18n("Guide color:"), m_gboxSettings->plainPage());
+    m_guideColorBt = new KColorButton( QColor( Qt::red ), m_gboxSettings->plainPage() );
     QWhatsThis::add( m_guideColorBt, i18n("<p>Set here the color used to draw guides dashed-lines."));
     gridLayout->addMultiCellWidget(label7, 11, 11, 0, 0);
     gridLayout->addMultiCellWidget(m_guideColorBt, 11, 11, 2, 2);
 
-    QLabel *label8 = new QLabel(i18n("Guide width:"), gbox2);
-    m_guideSize    = new RIntNumInput(gbox2);
+    QLabel *label8 = new QLabel(i18n("Guide width:"), m_gboxSettings->plainPage());
+    m_guideSize    = new RIntNumInput(m_gboxSettings->plainPage());
     m_guideSize->input()->setRange(1, 5, 1, false);
     m_guideSize->setDefaultValue(1);
     QWhatsThis::add( m_guideSize, i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
-    gridLayout->addMultiCellWidget(label8, 12, 12, 0, 0);
-    gridLayout->addMultiCellWidget(m_guideSize, 12, 12, 2, 2);
 
+    gridLayout->addMultiCellWidget(label1,                  0, 0, 0, 0);
+    gridLayout->addMultiCellWidget(m_newWidthLabel,         0, 0, 1, 2);
+    gridLayout->addMultiCellWidget(label2,                  1, 1, 0, 0);
+    gridLayout->addMultiCellWidget(m_newHeightLabel,        1, 1, 1, 2);
+    gridLayout->addMultiCellWidget(line,                    2, 2, 0, 2);
+    gridLayout->addMultiCellWidget(angleLabel,              3, 3, 0, 2);
+    gridLayout->addMultiCellWidget(label3,                  4, 4, 0, 0);
+    gridLayout->addMultiCellWidget(m_topLeftAngleLabel,     4, 4, 1, 2);
+    gridLayout->addMultiCellWidget(label4,                  5, 5, 0, 0);
+    gridLayout->addMultiCellWidget(m_topRightAngleLabel,    5, 5, 1, 2);
+    gridLayout->addMultiCellWidget(label5,                  6, 6, 0, 0);
+    gridLayout->addMultiCellWidget(m_bottomLeftAngleLabel,  6, 6, 1, 2);
+    gridLayout->addMultiCellWidget(label6,                  7, 7, 0, 0);
+    gridLayout->addMultiCellWidget(m_bottomRightAngleLabel, 7, 7, 1, 2);
+    gridLayout->addMultiCellWidget(m_drawGridCheckBox,      10, 10, 0, 2);
+    gridLayout->addMultiCellWidget(label8,                  12, 12, 0, 0);
+    gridLayout->addMultiCellWidget(m_guideSize,             12, 12, 2, 2);
     gridLayout->setColStretch(1, 10);
     gridLayout->setRowStretch(13, 10);
+    gridLayout->setMargin(m_gboxSettings->spacingHint());
+    gridLayout->setSpacing(m_gboxSettings->spacingHint());
 
-    setUserAreaWidget(gbox2);
+    setToolSettings(m_gboxSettings);
 
     // -------------------------------------------------------------
 
@@ -192,18 +180,18 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     connect(m_drawGridCheckBox, SIGNAL(toggled(bool)),
             m_previewWidget, SLOT(slotToggleDrawGrid(bool)));
 
-    connect(m_guideColorBt, SIGNAL(changed(const QColor &)),
-            m_previewWidget, SLOT(slotChangeGuideColor(const QColor &)));
+    connect(m_guideColorBt, SIGNAL(changed(const QColor&)),
+            m_previewWidget, SLOT(slotChangeGuideColor(const QColor&)));
 
     connect(m_guideSize, SIGNAL(valueChanged(int)),
             m_previewWidget, SLOT(slotChangeGuideSize(int)));
 }
 
-ImageEffect_Perspective::~ImageEffect_Perspective()
+PerspectiveTool::~PerspectiveTool()
 {
 }
 
-void ImageEffect_Perspective::readUserSettings(void)
+void PerspectiveTool::readSettings()
 {
     QColor defaultGuideColor(Qt::red);
     KConfig *config = kapp->config();
@@ -218,7 +206,7 @@ void ImageEffect_Perspective::readUserSettings(void)
     m_previewWidget->slotChangeGuideSize(m_guideSize->value());
 }
 
-void ImageEffect_Perspective::writeUserSettings(void)
+void PerspectiveTool::writeSettings()
 {
     KConfig *config = kapp->config();
     config->setGroup("perspective Tool Dialog");
@@ -229,20 +217,19 @@ void ImageEffect_Perspective::writeUserSettings(void)
     config->sync();
 }
 
-void ImageEffect_Perspective::resetValues()
+void PerspectiveTool::slotResetSettings()
 {
     m_previewWidget->reset();
 }
 
-void ImageEffect_Perspective::finalRendering()
+void PerspectiveTool::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     m_previewWidget->applyPerspectiveAdjustment();
-    accept();
     kapp->restoreOverrideCursor();
 }
 
-void ImageEffect_Perspective::slotUpdateInfo(QRect newSize, float topLeftAngle, float topRightAngle,
+void PerspectiveTool::slotUpdateInfo(QRect newSize, float topLeftAngle, float topRightAngle,
                                              float bottomLeftAngle, float bottomRightAngle)
 {
     QString temp;
@@ -256,4 +243,3 @@ void ImageEffect_Perspective::slotUpdateInfo(QRect newSize, float topLeftAngle, 
 }
 
 }  // NameSpace DigikamPerspectiveImagesPlugin
-
