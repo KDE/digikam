@@ -175,9 +175,9 @@ BWSepiaTool::BWSepiaTool(QWidget* parent)
     // -------------------------------------------------------------
 
     m_previewWidget = new ImageWidget("convertbw Tool Dialog", 0,
-                                               i18n("<p>Here you can see the black and white conversion tool preview. "
-                                                    "You can pick color on image "
-                                                    "to see the color level corresponding on histogram."));
+                                      i18n("<p>Here you can see the black and white conversion tool preview. "
+                                           "You can pick color on image "
+                                           "to see the color level corresponding on histogram."));
     setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
