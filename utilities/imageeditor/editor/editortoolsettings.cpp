@@ -60,12 +60,15 @@ public:
         plainPage  = 0;
         btnBox1    = 0;
         btnBox2    = 0;
+        btnBox3    = 0;
         saveAsBtn  = 0;
         loadBtn    = 0;
+        abortBtn   = 0;
     }
 
     KHBox       *btnBox1;
     KHBox       *btnBox2;
+    KHBox       *btnBox3;
 
     QWidget     *plainPage;
 
@@ -75,6 +78,7 @@ public:
     KPushButton *defaultBtn;
     KPushButton *saveAsBtn;
     KPushButton *loadBtn;
+    KPushButton *abortBtn;
 };
 
 EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
@@ -89,6 +93,7 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
     d->plainPage = new QWidget(this);
     d->btnBox1   = new KHBox(this);
     d->btnBox2   = new KHBox(this);
+    d->btnBox3   = new KHBox(this);
 
     // ---------------------------------------------------------------
 
@@ -98,13 +103,6 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
     d->defaultBtn->setToolTip(i18n("<p>Reset all settings to their default values."));
     if (!(buttonMask & Default))
         d->defaultBtn->hide();
-
-    d->tryBtn = new KPushButton(d->btnBox1);
-    d->tryBtn->setGuiItem(KStandardGuiItem::apply());
-    d->tryBtn->setText(i18n("Try"));
-    d->tryBtn->setToolTip(i18n("<p>Try all settings."));
-    if (!(buttonMask & Try))
-        d->tryBtn->hide();
 
     QLabel *space = new QLabel(d->btnBox1);
 
@@ -141,9 +139,30 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
 
     // ---------------------------------------------------------------
 
+    d->tryBtn = new KPushButton(d->btnBox3);
+    d->tryBtn->setGuiItem(KStandardGuiItem::apply());
+    d->tryBtn->setText(i18n("Try"));
+    d->tryBtn->setToolTip(i18n("<p>Try all settings."));
+    if (!(buttonMask & Try))
+        d->tryBtn->hide();
+
+    QLabel *space3 = new QLabel(d->btnBox3);
+
+    d->abortBtn = new KPushButton(d->btnBox3);
+    d->abortBtn->setGuiItem(KStandardGuiItem::stop());
+    d->abortBtn->setText(i18n("Abort"));
+    d->abortBtn->setToolTip(i18n("<p>Abort current image rendering."));
+    if (!(buttonMask & Abort))
+        d->abortBtn->hide();
+
+    d->btnBox3->setStretchFactor(space3, 10);
+
+    // ---------------------------------------------------------------
+
     gridSettings->addWidget(d->plainPage, 0, 0, 1, 2);
-    gridSettings->addWidget(d->btnBox2,   1, 0, 1, 2);
-    gridSettings->addWidget(d->btnBox1,   2, 0, 1, 2);
+    gridSettings->addWidget(d->btnBox3,   1, 0, 1, 2);
+    gridSettings->addWidget(d->btnBox2,   2, 0, 1, 2);
+    gridSettings->addWidget(d->btnBox1,   3, 0, 1, 2);
     gridSettings->setSpacing(spacingHint());
     gridSettings->setMargin(0);
 
@@ -166,6 +185,9 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
 
     connect(d->loadBtn, SIGNAL(clicked()),
             this, SIGNAL(signalLoadClicked()));
+
+    connect(d->abortBtn, SIGNAL(clicked()),
+            this, SIGNAL(signalAbortClicked()));
 }
 
 EditorToolSettings::~EditorToolSettings()
@@ -207,6 +229,9 @@ KPushButton* EditorToolSettings::button(int buttonCode) const
 
     if (buttonCode & SaveAs)
         return d->saveAsBtn;
+
+    if (buttonCode & Abort)
+        return d->abortBtn;
 
     return 0;
 }
