@@ -66,8 +66,8 @@ protected:
     void setToolHelp(const QString& anchor);
     void setToolName(const QString& name);
     void setToolIcon(const QPixmap& icon);
-    void setToolView(QWidget *view);
 
+    virtual void setToolView(QWidget *view);
     virtual void setToolSettings(EditorToolSettings *settings);
     virtual void readSettings();
     virtual void writeSettings();
@@ -111,6 +111,7 @@ protected:
 
     void customEvent(QCustomEvent *event);
 
+    virtual void setToolView(QWidget *view);
     virtual void setToolSettings(EditorToolSettings *settings);
     virtual void prepareEffect(){};
     virtual void prepareFinal(){};

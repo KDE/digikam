@@ -327,6 +327,14 @@ void EditorToolThreaded::customEvent(QCustomEvent *e)
     delete ed;
 }
 
+void EditorToolThreaded::setToolView(QWidget *view)
+{
+    EditorTool::setToolView(view);
+
+    connect(view, SIGNAL(signalResized()),
+            this, SLOT(slotResized()));
+}
+
 void EditorToolThreaded::setToolSettings(EditorToolSettings *settings)
 {
     EditorTool::setToolSettings(settings);
