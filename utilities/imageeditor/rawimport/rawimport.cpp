@@ -77,6 +77,15 @@ RawImport::RawImport(const KURL& url, QObject *parent)
     setToolSettings(d->settingsBox);
     setToolName(i18n("Raw Import"));
     setToolIcon(SmallIcon("kdcraw"));
+}
+
+RawImport::~RawImport()
+{
+    delete d;
+}
+
+void RawImport::slotInit()
+{
     readSettings();
 
     // ---------------------------------------------------------------
@@ -112,11 +121,6 @@ RawImport::RawImport(const KURL& url, QObject *parent)
 
     setBusy(true);
     slotUpdatePreview();
-}
-
-RawImport::~RawImport()
-{
-    delete d;
 }
 
 void RawImport::setBusy(bool val)
