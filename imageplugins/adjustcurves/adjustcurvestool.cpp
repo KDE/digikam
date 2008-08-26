@@ -101,7 +101,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new ImageWidget("adjustcurves Tool Dialog", 0,
+    m_previewWidget = new ImageWidget("adjustcurves Tool", 0,
                                       i18n("<p>This is the image's curve-adjustments preview. "
                                            "You can pick a spot on the image "
                                            "to see the corresponding level in the histogram."));
