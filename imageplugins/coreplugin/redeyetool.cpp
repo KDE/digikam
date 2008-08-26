@@ -83,6 +83,7 @@ RedEyeTool::RedEyeTool(QWidget* parent)
     setName("redeye");
     setToolName(i18n("Red Eye"));
     setToolIcon(SmallIcon("redeyes"));
+    setToolHelp("redeyecorrectiontool.anchor");
 
     m_destinationPreviewData = 0;
 
