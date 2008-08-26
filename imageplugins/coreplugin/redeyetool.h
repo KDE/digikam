@@ -137,9 +137,9 @@ private:
 
     QHButtonGroup                *m_scaleBG;
 
-    KDcrawIface::RIntNumInput                 *m_tintLevel;
-    KDcrawIface::RIntNumInput                 *m_redThreshold;
-    KDcrawIface::RIntNumInput                 *m_smoothLevel;
+    KDcrawIface::RIntNumInput    *m_tintLevel;
+    KDcrawIface::RIntNumInput    *m_redThreshold;
+    KDcrawIface::RIntNumInput    *m_smoothLevel;
 
     KHSSelector                  *m_HSSelector;
     KValueSelector               *m_VSelector;
