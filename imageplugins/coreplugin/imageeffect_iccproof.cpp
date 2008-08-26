@@ -526,11 +526,7 @@ ICCProofTool::ICCProofTool(QWidget* parent)
 ICCProofTool::~ICCProofTool()
 {
     m_histogramWidget->stopHistogramComputation();
-
     delete [] m_destinationPreviewData;
-    delete m_histogramWidget;
-    delete m_previewWidget;
-    delete m_curvesWidget;
 }
 
 void ICCProofTool::readSettings()
