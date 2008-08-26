@@ -52,6 +52,8 @@
 #include "imageplugin_core.h"
 #include "imageplugin_core.moc"
 
+using namespace DigikamImagesPluginCore;
+
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_core,
                             KGenericFactory<ImagePlugin_Core>("digikam"));
 
@@ -160,37 +162,37 @@ void ImagePlugin_Core::setEnabledActions(bool enable)
 
 void ImagePlugin_Core::slotBlur()
 {
-    DigikamImagesPluginCore::ImageEffect_Blur dlg(parentWidget());
+    ImageEffect_Blur dlg(parentWidget());
     dlg.exec();
 }
 
 void ImagePlugin_Core::slotSharpen()
 {
-    DigikamImagesPluginCore::ImageEffect_Sharpen dlg(parentWidget());
+    ImageEffect_Sharpen dlg(parentWidget());
     dlg.exec();
 }
 
 void ImagePlugin_Core::slotBCG()
 {
-    DigikamImagesPluginCore::BCGTool *bcg = new DigikamImagesPluginCore::BCGTool(parentWidget());
+    BCGTool *bcg = new BCGTool(parentWidget());
     loadTool(bcg);
 }
 
 void ImagePlugin_Core::slotRGB()
 {
-    DigikamImagesPluginCore::RGBTool *rgb = new DigikamImagesPluginCore::RGBTool(parentWidget());
+    RGBTool *rgb = new RGBTool(parentWidget());
     loadTool(rgb);
 }
 
 void ImagePlugin_Core::slotHSL()
 {
-    DigikamImagesPluginCore::HSLTool *hsl = new DigikamImagesPluginCore::HSLTool(parentWidget());
+    HSLTool *hsl = new HSLTool(parentWidget());
     loadTool(hsl);
 }
 
 void ImagePlugin_Core::slotAutoCorrection()
 {
-    DigikamImagesPluginCore::AutoCorrectionTool *autocorrection = new DigikamImagesPluginCore::AutoCorrectionTool(parentWidget());
+    AutoCorrectionTool *autocorrection = new AutoCorrectionTool(parentWidget());
     loadTool(autocorrection);
 }
 
@@ -215,7 +217,7 @@ void ImagePlugin_Core::slotInvert()
 
 void ImagePlugin_Core::slotBW()
 {
-    DigikamImagesPluginCore::BWSepiaTool *bwsepia = new DigikamImagesPluginCore::BWSepiaTool(parentWidget());
+    BWSepiaTool *bwsepia = new BWSepiaTool(parentWidget());
     loadTool(bwsepia);
 }
 
@@ -225,8 +227,8 @@ void ImagePlugin_Core::slotRedEye()
 
     if (!iface.selectedWidth() || !iface.selectedHeight())
     {
-        DigikamImagesPluginCore::RedEyePassivePopup* popup = new
-                                 DigikamImagesPluginCore::RedEyePassivePopup(parentWidget());
+        RedEyePassivePopup* popup = new
+                                 RedEyePassivePopup(parentWidget());
         popup->setView(i18n("Red-Eye Correction Tool"),
                        i18n("You need to select a region including the eyes to use "
                             "the red-eye correction tool"));
@@ -236,19 +238,19 @@ void ImagePlugin_Core::slotRedEye()
         return;
     }
 
-    DigikamImagesPluginCore::RedEyeTool *redeye = new DigikamImagesPluginCore::RedEyeTool(parentWidget());
+    RedEyeTool *redeye = new RedEyeTool(parentWidget());
     loadTool(redeye);
 }
 
 void ImagePlugin_Core::slotRatioCrop()
 {
-    DigikamImagesPluginCore::RatioCropTool *ratiocrop = new DigikamImagesPluginCore::RatioCropTool(parentWidget());
+    RatioCropTool *ratiocrop = new RatioCropTool(parentWidget());
     loadTool(ratiocrop);
 }
 
 void ImagePlugin_Core::slotColorManagement()
 {
-    DigikamImagesPluginCore::ICCProofTool *iccproof = new DigikamImagesPluginCore::ICCProofTool(parentWidget());
+    ICCProofTool *iccproof = new ICCProofTool(parentWidget());
     loadTool(iccproof);
 }
 
