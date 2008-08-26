@@ -106,15 +106,15 @@ RatioCropTool::RatioCropTool(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QGridLayout *gboxGrid = new QGridLayout(m_gboxSettings->plainPage(), 2, 2);
+    QVBoxLayout *gboxLayout = new QVBoxLayout(m_gboxSettings->plainPage());
 
-    QFrame *cropSelection = new QFrame(m_gboxSettings->plainPage());
+    QFrame *cropSelection   = new QFrame(m_gboxSettings->plainPage());
     cropSelection->setFrameStyle(QFrame::Panel | QFrame::Sunken);
 
-    QGridLayout* grid     = new QGridLayout(cropSelection, 6, 4);
+    QGridLayout* grid       = new QGridLayout(cropSelection, 7, 5);
 
-    QLabel *label         = new QLabel(i18n("Aspect ratio:"), cropSelection);
-    m_ratioCB             = new RComboBox(cropSelection);
+    QLabel *label           = new QLabel(i18n("Aspect ratio:"), cropSelection);
+    m_ratioCB               = new RComboBox(cropSelection);
     m_ratioCB->setDefaultItem(ImageSelectionWidget::RATIO03X04);
     setRatioCBText(ImageSelectionWidget::Landscape);
     QWhatsThis::add( m_ratioCB, i18n("<p>Select your constrained aspect ratio for cropping. "
@@ -218,16 +218,16 @@ RatioCropTool::RatioCropTool(QWidget* parent)
     grid->addMultiCellWidget(m_orientCB,            2, 2, 1, 3);
     grid->addMultiCellWidget(m_autoOrientation,     2, 2, 4, 4);
     grid->addMultiCellWidget(m_xInput,              3, 3, 0, 3);
-    grid->addMultiCellWidget(m_centerWidth,         3, 3, 4, 4);
     grid->addMultiCellWidget(m_widthInput,          4, 4, 0, 3);
+    grid->addMultiCellWidget(m_centerWidth,         4, 4, 4, 4);
     grid->addMultiCellWidget(m_yInput,              5, 5, 0, 3);
-    grid->addMultiCellWidget(m_centerHeight,        5, 5, 4, 4);
     grid->addMultiCellWidget(m_heightInput,         6, 6, 0, 3);
+    grid->addMultiCellWidget(m_centerHeight,        6, 6, 4, 4);
 
     // -------------------------------------------------------------
 
     QFrame* compositionGuide = new QFrame(m_gboxSettings->plainPage());
-    QGridLayout* grid2       = new QGridLayout( compositionGuide, 7, 2);
+    QGridLayout* grid2       = new QGridLayout( compositionGuide, 8, 3);
     compositionGuide->setFrameStyle(QFrame::Panel|QFrame::Sunken);
 
     QLabel *labelGuideLines = new QLabel(i18n("Composition guide:"), compositionGuide);
@@ -280,8 +280,8 @@ RatioCropTool::RatioCropTool(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    gboxGrid->addMultiCellWidget(cropSelection,             0, 0, 0, 1);
-    gboxGrid->addMultiCellWidget(compositionGuide,          1, 1, 0, 1);
+    gboxLayout->addWidget(cropSelection);
+    gboxLayout->addWidget(compositionGuide);
 
     setToolSettings(m_gboxSettings);
 
