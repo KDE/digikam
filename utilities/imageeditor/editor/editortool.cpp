@@ -48,6 +48,7 @@ public:
         settings = 0;
     }
 
+    QString             helpAnchor;
     QString             name;
 
     QWidget            *view;
@@ -92,6 +93,7 @@ QString EditorTool::toolName() const
 void EditorTool::setToolName(const QString& name)
 {
     d->name = name;
+    setToolHelp(d->name + QString(".anchor"));
 }
 
 QWidget* EditorTool::toolView() const
@@ -102,6 +104,12 @@ QWidget* EditorTool::toolView() const
 void EditorTool::setToolView(QWidget *view)
 {
     d->view = view;
+}
+
+void EditorTool::setToolHelp(const QString& anchor)
+{
+    d->helpAnchor = anchor;
+    // TODO: use this anchor with editor Help menu
 }
 
 EditorToolSettings* EditorTool::toolSettings() const
