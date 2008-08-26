@@ -110,4 +110,19 @@ void EditorToolIface::unLoadTool()
     d->tool = 0;
 }
 
+void EditorToolIface::setToolStartProgress(const QString& toolName)
+{
+    d->editor->setToolStartProgress(toolName);
+}
+
+void EditorToolIface::setToolProgress(int progress)
+{
+    d->editor->setToolProgress(progress);
+}
+
+void EditorToolIface::setToolStopProgress()
+{
+    d->editor->setToolStopProgress();
+}
+
 }  // namespace Digikam

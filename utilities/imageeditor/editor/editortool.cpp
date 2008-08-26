@@ -256,9 +256,9 @@ void EditorToolThreaded::slotResized()
 void EditorToolThreaded::slotAbort()
 {
     d->currentRenderingMode = EditorToolThreadedPriv::NoneRendering;
+    EditorToolIface::editorToolIface()->setToolStopProgress();
+
 /*FIXME
-    d->progressBar->setValue(0);
-    setProgressVisible(false);
     enableButton(Ok,      true);
     enableButton(User1,   false);
     enableButton(User2,   true);
@@ -279,9 +279,7 @@ void EditorToolThreaded::customEvent(QCustomEvent *e)
 
     if (ed->starting)           // Computation in progress !
     {
-/*FIXME
-        d->progressBar->setValue(ed->progress);
-*/
+        EditorToolIface::editorToolIface()->setToolProgress(ed->progress);
     }
     else
     {
@@ -358,8 +356,8 @@ void EditorToolThreaded::slotOk()
     enableButton(User3,   false);
     enableButton(Default, false);
     enableButton(Try,     false);
-    d->progressBar->setValue(0);
 */
+    EditorToolIface::editorToolIface()->setToolStartProgress(toolName());
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
     if (d->threadedFilter)
@@ -387,9 +385,8 @@ void EditorToolThreaded::slotEffect()
     enableButton(User3,   false);
     enableButton(Default, false);
     enableButton(Try,     false);
-    d->progressBar->setValue(0);
-    if (d->progress) setProgressVisible(true);
 */
+    EditorToolIface::editorToolIface()->setToolStartProgress(toolName());
 
     if (d->threadedFilter)
     {

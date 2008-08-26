@@ -244,6 +244,10 @@ private:
     void setUnderExposureToolTip(bool uei);
     void setOverExposureToolTip(bool oei);
 
+    void setToolStartProgress(const QString& toolName);
+    void setToolProgress(int progress);
+    void setToolStopProgress();
+
 private:
 
     EditorWindowPriv *d;
