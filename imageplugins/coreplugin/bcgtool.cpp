@@ -25,29 +25,28 @@
 
 // Qt includes.
 
-#include <qcolor.h>
-#include <qgroupbox.h>
-#include <qhgroupbox.h>
-#include <qvgroupbox.h>
-#include <qhbuttongroup.h>
-#include <qlabel.h>
-#include <qvbox.h>
-#include <qlayout.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
 #include <qcheckbox.h>
+#include <qcolor.h>
 #include <qcombobox.h>
-#include <qwhatsthis.h>
+#include <qframe.h>
+#include <qgroupbox.h>
+#include <qhbuttongroup.h>
+#include <qhgroupbox.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qpushbutton.h>
 #include <qtooltip.h>
+#include <qvbox.h>
+#include <qvgroupbox.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
-#include <klocale.h>
-#include <kiconloader.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
+#include <kiconloader.h>
+#include <klocale.h>
 #include <kstandarddirs.h>
 
 // LibKDcraw includes.
@@ -56,13 +55,13 @@
 
 // Digikam includes.
 
+#include "bcgmodifier.h"
+#include "colorgradientwidget.h"
+#include "dimg.h"
+#include "editortoolsettings.h"
+#include "histogramwidget.h"
 #include "imageiface.h"
 #include "imagewidget.h"
-#include "histogramwidget.h"
-#include "editortoolsettings.h"
-#include "colorgradientwidget.h"
-#include "bcgmodifier.h"
-#include "dimg.h"
 
 // Local includes.
 
@@ -101,12 +100,12 @@ BCGTool::BCGTool(QWidget* parent)
     QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage(), 9, 4);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), m_gboxSettings->plainPage());
-    label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, m_gboxSettings->plainPage() );
-    m_channelCB->insertItem( i18n("Luminosity") );
-    m_channelCB->insertItem( i18n("Red") );
-    m_channelCB->insertItem( i18n("Green") );
-    m_channelCB->insertItem( i18n("Blue") );
+    label1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_channelCB = new QComboBox(false, m_gboxSettings->plainPage());
+    m_channelCB->insertItem(i18n("Luminosity"));
+    m_channelCB->insertItem(i18n("Red"));
+    m_channelCB->insertItem(i18n("Green"));
+    m_channelCB->insertItem(i18n("Blue"));
     QWhatsThis::add( m_channelCB, i18n("<p>Select the histogram channel to display here:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
@@ -116,26 +115,26 @@ BCGTool::BCGTool(QWidget* parent)
     m_scaleBG = new QHButtonGroup(m_gboxSettings->plainPage());
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(QFrame::NoFrame);
-    m_scaleBG->setInsideMargin( 0 );
+    m_scaleBG->setInsideMargin(0);
     QWhatsThis::add( m_scaleBG, i18n("<p>Select the histogram scale here.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
 
-    QPushButton *linHistoButton = new QPushButton( m_scaleBG );
-    QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
+    QPushButton *linHistoButton = new QPushButton(m_scaleBG);
+    QToolTip::add(linHistoButton, i18n("<p>Linear"));
     m_scaleBG->insert(linHistoButton, HistogramWidget::LinScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
-    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
+    linHistoButton->setPixmap(QPixmap(directory + "histogram-lin.png"));
     linHistoButton->setToggleButton(true);
 
-    QPushButton *logHistoButton = new QPushButton( m_scaleBG );
-    QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
+    QPushButton *logHistoButton = new QPushButton(m_scaleBG);
+    QToolTip::add(logHistoButton, i18n("<p>Logarithmic"));
     m_scaleBG->insert(logHistoButton, HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
-    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
+    logHistoButton->setPixmap(QPixmap(directory + "histogram-log.png"));
     logHistoButton->setToggleButton(true);
 
     QHBoxLayout* l1 = new QHBoxLayout();
@@ -155,8 +154,8 @@ BCGTool::BCGTool(QWidget* parent)
                                              "settings changes."));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);
-    m_hGradient = new ColorGradientWidget( ColorGradientWidget::Horizontal, 10, histoBox );
-    m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+    m_hGradient = new ColorGradientWidget(ColorGradientWidget::Horizontal, 10, histoBox);
+    m_hGradient->setColors(QColor("black"), QColor("white"));
 
     gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
 
@@ -167,16 +166,16 @@ BCGTool::BCGTool(QWidget* parent)
     m_bInput->setRange(-100, 100, 1);
     m_bInput->setDefaultValue(0);
     QWhatsThis::add( m_bInput, i18n("<p>Set here the brightness adjustment of the image."));
-    gridSettings->addMultiCellWidget(label2, 3, 3, 0, 4);
-    gridSettings->addMultiCellWidget(m_bInput, 4, 4, 0, 4);
+    gridSettings->addMultiCellWidget(label2,    3, 3, 0, 4);
+    gridSettings->addMultiCellWidget(m_bInput,  4, 4, 0, 4);
 
     QLabel *label3 = new QLabel(i18n("Contrast:"), m_gboxSettings->plainPage());
     m_cInput       = new RIntNumInput(m_gboxSettings->plainPage());
     m_cInput->setRange(-100, 100, 1);
     m_cInput->setDefaultValue(0);
     QWhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
-    gridSettings->addMultiCellWidget(label3, 5, 5, 0, 4);
-    gridSettings->addMultiCellWidget(m_cInput, 6, 6, 0, 4);
+    gridSettings->addMultiCellWidget(label3,    5, 5, 0, 4);
+    gridSettings->addMultiCellWidget(m_cInput,  6, 6, 0, 4);
 
     QLabel *label4 = new QLabel(i18n("Gamma:"), m_gboxSettings->plainPage());
     m_gInput = new RDoubleNumInput(m_gboxSettings->plainPage());
@@ -184,8 +183,8 @@ BCGTool::BCGTool(QWidget* parent)
     m_gInput->setRange(0.1, 3.0, 0.01);
     m_gInput->setDefaultValue(1.0);
     QWhatsThis::add( m_gInput, i18n("<p>Set here the gamma adjustment of the image."));
-    gridSettings->addMultiCellWidget(label4, 7, 7, 0, 4);
-    gridSettings->addMultiCellWidget(m_gInput, 8, 8, 0, 4);
+    gridSettings->addMultiCellWidget(label4,    7, 7, 0, 4);
+    gridSettings->addMultiCellWidget(m_gInput,  8, 8, 0, 4);
 
     gridSettings->setRowStretch(9, 10);
     setToolSettings(m_gboxSettings);
@@ -198,8 +197,8 @@ BCGTool::BCGTool(QWidget* parent)
     connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromTarget( const DColor & )));
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
+            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
     connect(m_bInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
@@ -228,26 +227,26 @@ BCGTool::~BCGTool()
 
 void BCGTool::slotChannelChanged(int channel)
 {
-    switch(channel)
+    switch (channel)
     {
         case LuminosityChannel:
             m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+            m_hGradient->setColors(QColor("black"), QColor("white"));
             break;
 
         case RedChannel:
             m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
+            m_hGradient->setColors(QColor("black"), QColor("red"));
             break;
 
         case GreenChannel:
             m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
+            m_hGradient->setColors(QColor("black"), QColor("green"));
             break;
 
         case BlueChannel:
             m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
+            m_hGradient->setColors(QColor("black"), QColor("blue"));
             break;
     }
 
@@ -260,7 +259,7 @@ void BCGTool::slotScaleChanged(int scale)
     m_histogramWidget->repaint(false);
 }
 
-void BCGTool::slotColorSelectedFromTarget( const DColor &color )
+void BCGTool::slotColorSelectedFromTarget(const DColor &color)
 {
     m_histogramWidget->setHistogramGuideByColor(color);
 }
@@ -311,8 +310,8 @@ void BCGTool::slotEffect()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
-    double b = (double)m_bInput->value()/250.0;
-    double c = (double)(m_cInput->value()/100.0) + 1.00;
+    double b = (double) m_bInput->value() / 250.0;
+    double c = (double) (m_cInput->value() / 100.0) + 1.00;
     double g = m_gInput->value();
 
     m_gboxSettings->enableButton(EditorToolSettings::Ok,
@@ -350,11 +349,11 @@ void BCGTool::slotEffect()
 
 void BCGTool::finalRendering()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor(KCursor::waitCursor());
     ImageIface* iface = m_previewWidget->imageIface();
 
-    double b = (double)m_bInput->value()/250.0;
-    double c = (double)(m_cInput->value()/100.0) + 1.00;
+    double b = (double) m_bInput->value() / 250.0;
+    double c = (double) (m_cInput->value() / 100.0) + 1.00;
     double g = m_gInput->value();
 
     iface->setOriginalBCG(b, c, g);
