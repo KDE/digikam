@@ -258,14 +258,13 @@ void EditorToolThreaded::slotAbort()
     d->currentRenderingMode = EditorToolThreadedPriv::NoneRendering;
     EditorToolIface::editorToolIface()->setToolStopProgress();
 
-/*FIXME
-    enableButton(Ok,      true);
-    enableButton(User1,   false);
-    enableButton(User2,   true);
-    enableButton(User3,   true);
-    enableButton(Try,     true);
-    enableButton(Default, true);
-*/
+    toolSettings()->enableButton(EditorToolSettings::Ok,      true);
+    toolSettings()->enableButton(EditorToolSettings::Abort,   false);
+    toolSettings()->enableButton(EditorToolSettings::Load,    true);
+    toolSettings()->enableButton(EditorToolSettings::SaveAs,  true);
+    toolSettings()->enableButton(EditorToolSettings::Try,     true);
+    toolSettings()->enableButton(EditorToolSettings::Default, true);
+
     renderingFinished();
 }
 
@@ -349,14 +348,13 @@ void EditorToolThreaded::slotOk()
     DDebug() << "Final " << toolName() << " started..." << endl;
     writeSettings();
 
-/* FIXME
-    enableButton(Ok,      false);
-    enableButton(User1,   false);
-    enableButton(User2,   false);
-    enableButton(User3,   false);
-    enableButton(Default, false);
-    enableButton(Try,     false);
-*/
+    toolSettings()->enableButton(EditorToolSettings::Ok,      false);
+    toolSettings()->enableButton(EditorToolSettings::Abort,   false);
+    toolSettings()->enableButton(EditorToolSettings::SaveAs,  false);
+    toolSettings()->enableButton(EditorToolSettings::Load,    false);
+    toolSettings()->enableButton(EditorToolSettings::Default, false);
+    toolSettings()->enableButton(EditorToolSettings::Try,     false);
+
     EditorToolIface::editorToolIface()->setToolStartProgress(toolName());
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
@@ -378,14 +376,13 @@ void EditorToolThreaded::slotEffect()
     d->currentRenderingMode = EditorToolThreadedPriv::PreviewRendering;
     DDebug() << "Preview " << toolName() << " started..." << endl;
 
-/*FIXME
-    enableButton(Ok,      false);
-    enableButton(User1,   true);
-    enableButton(User2,   false);
-    enableButton(User3,   false);
-    enableButton(Default, false);
-    enableButton(Try,     false);
-*/
+    toolSettings()->enableButton(EditorToolSettings::Ok,      false);
+    toolSettings()->enableButton(EditorToolSettings::Abort,   true);
+    toolSettings()->enableButton(EditorToolSettings::SaveAs,  false);
+    toolSettings()->enableButton(EditorToolSettings::Load,    false);
+    toolSettings()->enableButton(EditorToolSettings::Default, false);
+    toolSettings()->enableButton(EditorToolSettings::Try,     false);
+
     EditorToolIface::editorToolIface()->setToolStartProgress(toolName());
 
     if (d->threadedFilter)
