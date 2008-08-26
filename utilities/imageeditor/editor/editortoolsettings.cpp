@@ -28,6 +28,7 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qhbox.h>
+#include <qvbox.h>
 
 // KDE includes.
 
@@ -84,18 +85,21 @@ public:
 };
 
 EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
-                  : QWidget(parent)
+                  : QScrollView(parent)
 {
     d = new EditorToolSettingsPriv;
 
+    viewport()->setBackgroundMode(Qt::PaletteBackground);
+
     // ---------------------------------------------------------------
 
-    QGridLayout* gridSettings = new QGridLayout(this, 2, 2);
+    QVBox* vbox = new QVBox(viewport());
+    addChild(vbox);
 
-    d->plainPage = new QWidget(this);
-    d->btnBox1   = new QHBox(this);
-    d->btnBox2   = new QHBox(this);
-    d->btnBox3   = new QHBox(this);
+    d->plainPage = new QWidget(vbox);
+    d->btnBox3   = new QHBox(vbox);
+    d->btnBox2   = new QHBox(vbox);
+    d->btnBox1   = new QHBox(vbox);
 
     // ---------------------------------------------------------------
 
@@ -158,15 +162,6 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
         d->abortBtn->hide();
 
     d->btnBox3->setStretchFactor(space3, 10);
-
-    // ---------------------------------------------------------------
-
-    gridSettings->addMultiCellWidget(d->plainPage, 0, 0, 0, 1);
-    gridSettings->addMultiCellWidget(d->btnBox3,   1, 1, 0, 1);
-    gridSettings->addMultiCellWidget(d->btnBox2,   2, 2, 0, 1);
-    gridSettings->addMultiCellWidget(d->btnBox1,   3, 3, 0, 1);
-    gridSettings->setSpacing(spacingHint());
-    gridSettings->setMargin(0);
 
     // ---------------------------------------------------------------
 
