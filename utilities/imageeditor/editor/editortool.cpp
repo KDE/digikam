@@ -26,9 +26,15 @@
 #include <qwidget.h>
 #include <qtimer.h>
 
+// KDE includes.
+
+#include <kcursor.h>
+
 // Local includes.
 
+#include "ddebug.h"
 #include "editortoolsettings.h"
+#include "dimgthreadedfilter.h"
 #include "editortooliface.h"
 #include "editortool.h"
 #include "editortool.moc"
@@ -182,6 +188,215 @@ void EditorTool::slotCancel()
 void EditorTool::slotInit()
 {
     readSettings();
+}
+
+// ----------------------------------------------------------------
+
+class EditorToolThreadedPriv
+{
+public:
+    enum RunningMode
+    {
+        NoneRendering=0,
+        PreviewRendering,
+        FinalRendering
+    };
+
+public:
+
+    EditorToolThreadedPriv()
+    {
+        threadedFilter       = 0;
+        currentRenderingMode = NoneRendering;
+    }
+
+    int                 currentRenderingMode;
+
+    DImgThreadedFilter *threadedFilter;
+};
+
+EditorToolThreaded::EditorToolThreaded(QObject *parent)
+                  : EditorTool(parent)
+{
+    d = new EditorToolThreadedPriv;
+}
+
+EditorToolThreaded::~EditorToolThreaded()
+{
+    delete d->threadedFilter;
+    delete d;
+}
+
+DImgThreadedFilter* EditorToolThreaded::filter() const
+{
+    return d->threadedFilter;
+}
+
+void EditorToolThreaded::setFilter(DImgThreadedFilter *filter)
+{
+    d->threadedFilter = filter;
+}
+
+void EditorToolThreaded::slotResized()
+{
+    if (d->currentRenderingMode == EditorToolThreadedPriv::FinalRendering)
+    {
+       toolView()->update();
+       return;
+    }
+    else if (d->currentRenderingMode == EditorToolThreadedPriv::PreviewRendering)
+    {
+       if (filter())
+          filter()->stopComputation();
+    }
+
+    QTimer::singleShot(0, this, SLOT(slotEffect()));
+}
+
+void EditorToolThreaded::slotAbort()
+{
+    d->currentRenderingMode = EditorToolThreadedPriv::NoneRendering;
+/*FIXME
+    d->progressBar->setValue(0);
+    setProgressVisible(false);
+    enableButton(Ok,      true);
+    enableButton(User1,   false);
+    enableButton(User2,   true);
+    enableButton(User3,   true);
+    enableButton(Try,     true);
+    enableButton(Default, true);
+*/
+    renderingFinished();
+}
+
+void EditorToolThreaded::customEvent(QCustomEvent *e)
+{
+    if (!e) return;
+
+    DImgThreadedFilter::EventData *ed = (DImgThreadedFilter::EventData*)e->data();
+
+    if (!ed) return;
+
+    if (ed->starting)           // Computation in progress !
+    {
+/*FIXME
+        d->progressBar->setValue(ed->progress);
+*/
+    }
+    else
+    {
+        if (ed->success)        // Computation Completed !
+        {
+            switch (d->currentRenderingMode)
+            {
+                case EditorToolThreadedPriv::PreviewRendering:
+                {
+                    DDebug() << "Preview " << toolName() << " completed..." << endl;
+                    putPreviewData();
+                    slotAbort();
+                    break;
+                }
+
+                case EditorToolThreadedPriv::FinalRendering:
+                {
+                    DDebug() << "Final" << toolName() << " completed..." << endl;
+                    putFinalData();
+                    kapp->restoreOverrideCursor();
+                    emit okClicked();
+                    break;
+                }
+            }
+        }
+        else                   // Computation Failed !
+        {
+            switch (d->currentRenderingMode)
+            {
+                case EditorToolThreadedPriv::PreviewRendering:
+                {
+                    DDebug() << "Preview " << toolName() << " failed..." << endl;
+                    slotAbort();
+                    break;
+                }
+
+                case EditorToolThreadedPriv::FinalRendering:
+                    break;
+            }
+        }
+    }
+
+    delete ed;
+}
+
+void EditorToolThreaded::setToolSettings(EditorToolSettings *settings)
+{
+    EditorTool::setToolSettings(settings);
+
+    connect(settings, SIGNAL(signalAbortClicked()),
+            this, SLOT(slotAbort()));
+}
+
+void EditorToolThreaded::slotOk()
+{
+    writeSettings();
+
+    d->currentRenderingMode = EditorToolThreadedPriv::FinalRendering;
+    DDebug() << "Final " << toolName() << " started..." << endl;
+    writeSettings();
+
+/* FIXME
+    enableButton(Ok,      false);
+    enableButton(User1,   false);
+    enableButton(User2,   false);
+    enableButton(User3,   false);
+    enableButton(Default, false);
+    enableButton(Try,     false);
+    d->progressBar->setValue(0);
+*/
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+
+    if (d->threadedFilter)
+    {
+        delete d->threadedFilter;
+        d->threadedFilter = 0;
+    }
+
+    prepareFinal();
+}
+
+void EditorToolThreaded::slotEffect()
+{
+    // Computation already in process.
+    if (d->currentRenderingMode != EditorToolThreadedPriv::NoneRendering)
+        return;
+
+    d->currentRenderingMode = EditorToolThreadedPriv::PreviewRendering;
+    DDebug() << "Preview " << toolName() << " started..." << endl;
+
+/*FIXME
+    enableButton(Ok,      false);
+    enableButton(User1,   true);
+    enableButton(User2,   false);
+    enableButton(User3,   false);
+    enableButton(Default, false);
+    enableButton(Try,     false);
+    d->progressBar->setValue(0);
+    if (d->progress) setProgressVisible(true);
+*/
+
+    if (d->threadedFilter)
+    {
+        delete d->threadedFilter;
+        d->threadedFilter = 0;
+    }
+
+    prepareEffect();
+}
+
+void EditorToolThreaded::slotCancel()
+{
+    writeSettings();
+    slotAbort();
+    emit cancelClicked();
 }
 
 }  // namespace Digikam
