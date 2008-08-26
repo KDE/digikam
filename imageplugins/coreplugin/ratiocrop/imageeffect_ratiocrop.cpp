@@ -106,7 +106,7 @@ RatioCropTool::RatioCropTool(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QVBoxLayout *gboxLayout = new QVBoxLayout(m_gboxSettings->plainPage());
+    QGridLayout *gboxLayout = new QGridLayout(m_gboxSettings->plainPage(), 3, 2);
 
     QFrame *cropSelection   = new QFrame(m_gboxSettings->plainPage());
     cropSelection->setFrameStyle(QFrame::Panel | QFrame::Sunken);
@@ -227,7 +227,7 @@ RatioCropTool::RatioCropTool(QWidget* parent)
     // -------------------------------------------------------------
 
     QFrame* compositionGuide = new QFrame(m_gboxSettings->plainPage());
-    QGridLayout* grid2       = new QGridLayout( compositionGuide, 8, 3);
+    QGridLayout* grid2       = new QGridLayout(compositionGuide, 8, 3);
     compositionGuide->setFrameStyle(QFrame::Panel|QFrame::Sunken);
 
     QLabel *labelGuideLines = new QLabel(i18n("Composition guide:"), compositionGuide);
@@ -280,8 +280,9 @@ RatioCropTool::RatioCropTool(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    gboxLayout->addWidget(cropSelection);
-    gboxLayout->addWidget(compositionGuide);
+    gboxLayout->addMultiCellWidget(cropSelection,           0, 0, 0, 1);
+    gboxLayout->addMultiCellWidget(compositionGuide,        1, 1, 0, 1);
+    gboxLayout->setRowStretch(2, 10);
 
     setToolSettings(m_gboxSettings);
 
@@ -785,7 +786,7 @@ void RatioCropTool::slotCustomRatioChanged()
     slotResetSettings();
 }
 
-void RatioCropTool::slotOk()
+void RatioCropTool::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
 

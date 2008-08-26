@@ -60,6 +60,7 @@ private:
 
     void readSettings();
     void writeSettings();
+    void finalRendering();
 
     void applyRatioChanges(int a);
     void setRatioCBText(int orientation);
@@ -68,7 +69,6 @@ private slots:
 
     void slotUser1();
     void slotResetSettings();
-    void slotOk();
 
     void slotCenterWidth();
     void slotCenterHeight();
