@@ -86,7 +86,7 @@ namespace DigikamAdjustCurvesImagesPlugin
 {
 
 AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
-               : EditorTool(parent)
+                : EditorTool(parent)
 {
     m_destinationPreviewData = 0;
 
