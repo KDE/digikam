@@ -61,6 +61,7 @@ signals:
 
 protected:
 
+    void setToolHelp(const QString& anchor);
     void setToolName(const QString& name);
     void setToolIcon(const QPixmap& icon);
     void setToolView(QWidget *view);
