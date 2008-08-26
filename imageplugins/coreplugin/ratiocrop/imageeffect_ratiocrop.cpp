@@ -96,13 +96,13 @@ RatioCropTool::RatioCropTool(QWidget* parent)
     QVBoxLayout* l = new QVBoxLayout(m_gboxSettings->plainPage(), 5, 0);
 
     l->addWidget(m_imageSelectionWidget);
-    QWhatsThis::add( m_imageSelectionWidget,
-                     i18n("<p>Here you can see the aspect ratio selection preview "
-                          "used for cropping. You can use the mouse to move and "
-                          "resize the crop area. "
-                          "Press and hold the CTRL key to move the opposite corner too. "
-                          "Press and hold the SHIFT key to move the closest corner to the "
-                          "mouse pointer."));
+    QWhatsThis::add(m_imageSelectionWidget,
+                    i18n("<p>Here you can see the aspect ratio selection preview "
+                         "used for cropping. You can use the mouse to move and "
+                         "resize the crop area. "
+                         "Press and hold the CTRL key to move the opposite corner too. "
+                         "Press and hold the SHIFT key to move the closest corner to the "
+                         "mouse pointer."));
 
     m_originalIsLandscape = m_imageSelectionWidget->getOriginalImageWidth() >
                             m_imageSelectionWidget->getOriginalImageHeight();
@@ -197,8 +197,8 @@ RatioCropTool::RatioCropTool(QWidget* parent)
     m_centerWidth = new QToolButton(cropSelection);
     KGlobal::dirs()->addResourceType("centerwidth", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("centerwidth", "centerwidth.png");
-    m_centerWidth->setPixmap( QPixmap( directory + "centerwidth.png" ) );
-    QWhatsThis::add( m_centerWidth, i18n("<p>Set width position to center."));
+    m_centerWidth->setPixmap(QPixmap(directory + "centerwidth.png"));
+    QWhatsThis::add(m_centerWidth, i18n("<p>Set width position to center."));
 
     grid->addMultiCellWidget(m_xInput,      3, 3, 0, 3);
     grid->addMultiCellWidget(m_widthInput,  4, 4, 0, 3);
@@ -207,13 +207,13 @@ RatioCropTool::RatioCropTool(QWidget* parent)
     // -------------------------------------------------------------
 
     m_yInput = new RIntNumInput(cropSelection);
-    m_yInput->input()->setLabel(i18n("Y:"), AlignLeft|AlignVCenter);
+    m_yInput->input()->setLabel(i18n("Y:"), AlignLeft | AlignVCenter);
     m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageHeight(), 1);
     m_yInput->setDefaultValue(50);
-    QWhatsThis::add( m_yInput, i18n("<p>Set here the top left selection corner position for cropping."));
+    QWhatsThis::add(m_yInput, i18n("<p>Set here the top left selection corner position for cropping."));
 
     m_heightInput = new RIntNumInput(cropSelection);
-    m_heightInput->input()->setLabel(i18n("Height:"), AlignLeft|AlignVCenter);
+    m_heightInput->input()->setLabel(i18n("Height:"), AlignLeft | AlignVCenter);
     m_heightInput->setRange(m_imageSelectionWidget->getMinHeightRange(),
                             m_imageSelectionWidget->getMaxHeightRange(),
                             m_imageSelectionWidget->getHeightStep());
@@ -223,8 +223,8 @@ RatioCropTool::RatioCropTool(QWidget* parent)
     m_centerHeight = new QToolButton(cropSelection);
     KGlobal::dirs()->addResourceType("centerheight", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("centerheight", "centerheight.png");
-    m_centerHeight->setPixmap( QPixmap( directory + "centerheight.png" ) );
-    QWhatsThis::add( m_centerHeight, i18n("<p>Set height position to center."));
+    m_centerHeight->setPixmap(QPixmap(directory + "centerheight.png"));
+    QWhatsThis::add(m_centerHeight, i18n("<p>Set height position to center."));
 
     grid->addMultiCellWidget(m_yInput,          5, 5, 0, 3);
     grid->addMultiCellWidget(m_heightInput,     6, 6, 0, 3);
@@ -266,9 +266,9 @@ RatioCropTool::RatioCropTool(QWidget* parent)
     m_flipVerBox = new QCheckBox(i18n("Flip vertically"), compositionGuide);
     QWhatsThis::add( m_flipVerBox, i18n("<p>Enable this option to flip vertically guidelines."));
 
-    m_colorGuideLabel = new QLabel(i18n("Color and width:"), compositionGuide);
-    m_guideColorBt = new KColorButton( QColor( 250, 250, 255 ), compositionGuide );
-    m_guideSize = new RIntNumInput(compositionGuide);
+    m_colorGuideLabel   = new QLabel(i18n("Color and width:"), compositionGuide);
+    m_guideColorBt      = new KColorButton(QColor(250, 250, 255), compositionGuide);
+    m_guideSize         = new RIntNumInput(compositionGuide);
     m_guideSize->input()->setRange(1, 5, 1, false);
     m_guideSize->setDefaultValue(1);
     QWhatsThis::add( m_guideColorBt, i18n("<p>Set here the color used to draw composition guides."));
@@ -384,21 +384,20 @@ void RatioCropTool::readSettings()
     config->setGroup("aspectratiocrop Tool Dialog");
 
     // No guide lines per default.
-    m_guideLinesCB->setCurrentItem( config->readNumEntry("Guide Lines Type",
-                                    ImageSelectionWidget::GuideNone));
-    m_goldenSectionBox->setChecked( config->readBoolEntry("Golden Section", true) );
-    m_goldenSpiralSectionBox->setChecked( config->readBoolEntry("Golden Spiral Section", false) );
-    m_goldenSpiralBox->setChecked( config->readBoolEntry("Golden Spiral", false) );
-    m_goldenTriangleBox->setChecked( config->readBoolEntry("Golden Triangle", false) );
-    m_flipHorBox->setChecked( config->readBoolEntry("Golden Flip Horizontal", false) );
-    m_flipVerBox->setChecked( config->readBoolEntry("Golden Flip Vertical", false) );
+    m_guideLinesCB->setCurrentItem(config->readNumEntry("Guide Lines Type", ImageSelectionWidget::GuideNone));
+    m_goldenSectionBox->setChecked(config->readBoolEntry("Golden Section", true));
+    m_goldenSpiralSectionBox->setChecked(config->readBoolEntry("Golden Spiral Section", false));
+    m_goldenSpiralBox->setChecked(config->readBoolEntry("Golden Spiral", false));
+    m_goldenTriangleBox->setChecked(config->readBoolEntry("Golden Triangle", false));
+    m_flipHorBox->setChecked(config->readBoolEntry("Golden Flip Horizontal", false));
+    m_flipVerBox->setChecked(config->readBoolEntry("Golden Flip Vertical", false));
     m_guideColorBt->setColor(config->readColorEntry("Guide Color", &defaultGuideColor));
     m_guideSize->setValue(config->readNumEntry("Guide Width", m_guideSize->defaultValue()));
     m_imageSelectionWidget->slotGuideLines(m_guideLinesCB->currentItem());
     m_imageSelectionWidget->slotChangeGuideColor(m_guideColorBt->color());
 
-    m_preciseCrop->setChecked( config->readBoolEntry("Precise Aspect Ratio Crop", false) );
-    m_imageSelectionWidget->setPreciseCrop( m_preciseCrop->isChecked() );
+    m_preciseCrop->setChecked(config->readBoolEntry("Precise Aspect Ratio Crop", false));
+    m_imageSelectionWidget->setPreciseCrop(m_preciseCrop->isChecked());
 
     // Empty selection so it can be moved w/out size constraint
     m_widthInput->setValue(0);
@@ -516,9 +515,11 @@ void RatioCropTool::slotSelectionChanged(QRect rect)
 
     m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth() - rect.width(), 1);
     m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageHeight() - rect.height(), 1);
+
     m_widthInput->setRange(m_imageSelectionWidget->getMinWidthRange(),
                            m_imageSelectionWidget->getMaxWidthRange(),
                            m_imageSelectionWidget->getWidthStep());
+
     m_heightInput->setRange(m_imageSelectionWidget->getMinHeightRange(),
                             m_imageSelectionWidget->getMaxHeightRange(),
                             m_imageSelectionWidget->getHeightStep());
