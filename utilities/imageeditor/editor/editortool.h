@@ -49,6 +49,7 @@ public:
     EditorTool(QObject *parent);
     virtual ~EditorTool();
 
+    QString             toolHelp() const;
     QString             toolName() const;
     QPixmap             toolIcon() const;
     QWidget*            toolView() const;
