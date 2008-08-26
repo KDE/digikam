@@ -22,12 +22,12 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_FREEROTATION_H
-#define IMAGEEFFECT_FREEROTATION_H
+#ifndef FREEROTATIONTOOL_H
+#define FREEROTATIONTOOL_H
 
 // Local includes.
 
-#include "imageguidedlg.h"
+#include "editortool.h"
 
 class QFrame;
 class QLabel;
@@ -40,26 +40,32 @@ class RDoubleNumInput;
 class RComboBox;
 }
 
+namespace Digikam
+{
+class EditorToolSettings;
+class ImageWidget;
+}
+
 namespace DigikamFreeRotationImagesPlugin
 {
 
-class ImageEffect_FreeRotation : public Digikam::ImageGuideDlg
+class FreeRotationTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_FreeRotation(QWidget *parent);
-    ~ImageEffect_FreeRotation();
+    FreeRotationTool(QObject *parent);
+    ~FreeRotationTool();
 
 private slots:
 
-    void readUserSettings(void);
+    void slotResetSettings();
 
 protected:
 
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
@@ -78,8 +84,12 @@ private:
     KDcrawIface::RIntNumInput    *m_angleInput;
 
     KDcrawIface::RDoubleNumInput *m_fineAngleInput;
+
+    Digikam::ImageWidget         *m_previewWidget;
+
+    Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
 }  // NameSpace DigikamFreeRotationImagesPlugin
 
-#endif /* IMAGEEFFECT_FREEROTATION_H */
+#endif /* FREEROTATIONTOOL_H */

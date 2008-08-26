@@ -18,7 +18,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes)
 
 digikamimageplugin_freerotation_la_SOURCES = imageplugin_freerotation.cpp \
-	                                         imageeffect_freerotation.cpp freerotation.cpp 
+	                                         freerotationtool.cpp freerotation.cpp 
 
 digikamimageplugin_freerotation_la_LIBADD = $(LIB_KPARTS) \
 	                                        $(top_builddir)/digikam/digikam/libdigikam.la 
