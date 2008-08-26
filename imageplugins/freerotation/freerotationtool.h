@@ -62,7 +62,7 @@ private slots:
 
     void slotResetSettings();
 
-protected:
+private:
 
     void readSettings();
     void writeSettings();
