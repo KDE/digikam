@@ -112,7 +112,7 @@ RatioCropTool::RatioCropTool(QWidget* parent)
     QWidget *gbox2        = new QWidget(m_gboxSettings->plainPage());
     QGridLayout *gridBox2 = new QGridLayout( gbox2, 2, 0);
 
-    QFrame *cropSelection = new QFrame( gbox2 );
+    QFrame *cropSelection = new QFrame(gbox2);
     cropSelection->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QGridLayout* grid = new QGridLayout( cropSelection, 6, 4);
 
