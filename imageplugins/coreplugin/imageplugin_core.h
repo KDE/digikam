@@ -7,7 +7,7 @@
  * Description : digiKam image editor plugin core
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,7 +35,7 @@ class KAction;
 class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_Core : public Digikam::ImagePlugin
 {
     Q_OBJECT
-    
+
 public:
 
     ImagePlugin_Core(QObject *parent, const char* name, const QStringList &args);
@@ -47,7 +47,7 @@ public:
 public slots:
 
     void slotColorManagement();
-   
+
 private slots:
 
     void slotBlur();
@@ -57,9 +57,9 @@ private slots:
     void slotHSL();
     void slotAutoCorrection();
     void slotInvert();
-    
+
     void slotBW();
-    
+
     void slotRedEye();
     void slotRatioCrop();
 
@@ -82,5 +82,5 @@ private:
     KAction *m_convertTo8Bits;
     KAction *m_convertTo16Bits;
 };
-    
+
 #endif /* IMAGEPLUGIN_CORE_H */
