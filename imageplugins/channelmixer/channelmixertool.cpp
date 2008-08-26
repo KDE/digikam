@@ -115,7 +115,7 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
                                             EditorToolSettings::SaveAs|
                                             EditorToolSettings::Ok|
                                             EditorToolSettings::Cancel);
-    QGridLayout* grid = new QGridLayout(m_gboxSettings, 9, 4);
+    QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage(), 9, 4);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), m_gboxSettings->plainPage());
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
