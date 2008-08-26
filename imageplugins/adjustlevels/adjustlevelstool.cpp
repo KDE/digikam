@@ -102,7 +102,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new ImageWidget("adjustlevels Tool Dialog", 0,
+    m_previewWidget = new ImageWidget("adjustlevels Tool", 0,
                                       i18n("<p>Here you can see the image's "
                                            "level-adjustments preview. You can pick a spot on the image "
                                            "to see the corresponding level in the histogram."));
