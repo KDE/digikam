@@ -18,7 +18,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes) 
 
 digikamimageplugin_channelmixer_la_SOURCES = imageplugin_channelmixer.cpp \
-	                                         channelmixer.cpp 
+	                                         channelmixertool.cpp 
 
 digikamimageplugin_channelmixer_la_LIBADD = $(LIB_KPARTS) \
 	                                        $(top_builddir)/digikam/digikam/libdigikam.la 

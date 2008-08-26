@@ -8,10 +8,6 @@
  *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
- * Load and save mixer gains methods inspired from
- * Gimp 2.2.3 and copyrighted 2002 by Martin Guldahl
- * <mguldahl at xmission dot com>.
- *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -85,52 +81,45 @@
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
 #include "dimgimagefilters.h"
-#include "channelmixer.h"
-#include "channelmixer.moc"
+#include "editortoolsettings.h"
+#include "channelmixertool.h"
+#include "channelmixertool.moc"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamChannelMixerImagesPlugin
 {
 
-ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
-                  : Digikam::ImageDlgBase(parent, i18n("Color Channel Mixer"),
-                    "channelmixer", true, false)
+ChannelMixerTool::ChannelMixerTool(QObject* parent)
+                : EditorTool(parent)
 {
-    m_destinationPreviewData = 0L;
+    m_destinationPreviewData = 0;
 
-    // About data and help button.
-
-    KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Color Channel Mixer"),
-                                       digikam_version,
-                                       I18N_NOOP("An image color channel mixer plugin for digiKam."),
-                                       KAboutData::License_GPL,
-                                       "(c) 2005-2008, Gilles Caulier",
-                                       0,
-                                       Digikam::webProjectUrl());
-
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at gmail dot com");
-
-    setAboutData(about);
+    setName("channelmixer");
+    setToolName(i18n("Channel Mixer"));
+    setToolIcon(SmallIcon("channelmixer"));
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new Digikam::ImageWidget("channelmixer Tool Dialog", plainPage(),
+    m_previewWidget = new ImageWidget("channelmixer Tool Dialog", 0,
                           i18n("<p>You can see here the image's color channels' "
                                "gains adjustments preview. You can pick color on image "
                                "to see the color level corresponding on histogram."));
-    setPreviewAreaWidget(m_previewWidget);
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* grid = new QGridLayout( gboxSettings, 9, 4, spacingHint());
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Load|
+                                            EditorToolSettings::SaveAs|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel);
+    QGridLayout* grid = new QGridLayout(m_gboxSettings, 9, 4);
 
-    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
+    QLabel *label1 = new QLabel(i18n("Channel:"), m_gboxSettings->plainPage());
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, gboxSettings );
+    m_channelCB = new QComboBox( false, m_gboxSettings->plainPage() );
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
     m_channelCB->insertItem( i18n("Blue") );
@@ -140,7 +129,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
                                        "<b>Green</b>: display the green image-channel values.<p>"
                                        "<b>Blue</b>: display the blue image-channel values.<p>"));
 
-    m_scaleBG = new QHButtonGroup(gboxSettings);
+    m_scaleBG = new QHButtonGroup(m_gboxSettings->plainPage());
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(QFrame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
@@ -151,7 +140,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
 
     QPushButton *linHistoButton = new QPushButton( m_scaleBG );
     QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
-    m_scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
+    m_scaleBG->insert(linHistoButton, HistogramWidget::LinScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
     linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
@@ -159,7 +148,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
 
     QPushButton *logHistoButton = new QPushButton( m_scaleBG );
     QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
-    m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    m_scaleBG->insert(logHistoButton, HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
     logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
@@ -171,70 +160,69 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
     l1->addStretch(10);
     l1->addWidget(m_scaleBG);
 
-    grid->addMultiCellLayout(l1, 0, 0, 0, 4);
-
     // -------------------------------------------------------------
 
-    QVBox *histoBox   = new QVBox(gboxSettings);
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
+    QVBox *histoBox   = new QVBox(m_gboxSettings->plainPage());
+    m_histogramWidget = new HistogramWidget(256, 140, histoBox, false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
                                              "mixer settings changes."));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);
-    m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
+    m_hGradient = new ColorGradientWidget( ColorGradientWidget::Horizontal, 10, histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
-
-    grid->addMultiCellWidget(histoBox, 1, 2, 0, 4);
 
     // -------------------------------------------------------------
 
-    QLabel *redLabel = new QLabel(i18n("Red:"), gboxSettings);
-    m_redGain = new RDoubleNumInput(gboxSettings);
+    QLabel *redLabel = new QLabel(i18n("Red:"), m_gboxSettings->plainPage());
+    m_redGain = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_redGain->setPrecision(0);
     m_redGain->setRange(-200.0, 200.0, 1);
     m_redGain->setDefaultValue(0);
     QWhatsThis::add( m_redGain, i18n("<p>Select the red color gain in percent for the current channel here."));
 
-    QLabel *blueLabel = new QLabel(i18n("Blue:"), gboxSettings);
-    m_greenGain = new RDoubleNumInput(gboxSettings);
+    QLabel *blueLabel = new QLabel(i18n("Blue:"), m_gboxSettings->plainPage());
+    m_greenGain = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_greenGain->setPrecision(0);
     m_greenGain->setRange(-200.0, 200.0, 1);
     m_greenGain->setDefaultValue(0);
     QWhatsThis::add( m_greenGain, i18n("<p>Select the green color gain in percent for the current channel here."));
 
-    QLabel *greenLabel = new QLabel(i18n("Green:"), gboxSettings);
-    m_blueGain = new RDoubleNumInput(gboxSettings);
+    QLabel *greenLabel = new QLabel(i18n("Green:"), m_gboxSettings->plainPage());
+    m_blueGain = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_blueGain->setPrecision(0);
     m_blueGain->setRange(-200.0, 200.0, 1);
     m_blueGain->setDefaultValue(0);
     QWhatsThis::add( m_blueGain, i18n("<p>Select the blue color gain in percent for the current channel here."));
 
-    m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
+    m_resetButton = new QPushButton(i18n("&Reset"), m_gboxSettings->plainPage());
     QWhatsThis::add( m_resetButton, i18n("Reset color channels' gains settings from the currently selected channel."));
-
-    grid->addMultiCellWidget(redLabel, 3, 3, 0, 0);
-    grid->addMultiCellWidget(greenLabel, 4, 4, 0, 0);
-    grid->addMultiCellWidget(blueLabel, 5, 5, 0, 0);
-    grid->addMultiCellWidget(m_redGain, 3, 3, 1, 4);
-    grid->addMultiCellWidget(m_greenGain, 4, 4, 1, 4);
-    grid->addMultiCellWidget(m_blueGain, 5, 5, 1, 4);
-    grid->addMultiCellWidget(m_resetButton, 6, 6, 0, 1);
 
     // -------------------------------------------------------------
 
-    m_monochrome = new QCheckBox( i18n("Monochrome"), gboxSettings);
+    m_monochrome = new QCheckBox( i18n("Monochrome"), m_gboxSettings->plainPage());
     QWhatsThis::add( m_monochrome, i18n("<p>Enable this option if you want the image rendered in monochrome mode. "
                                         "In this mode, the histogram will display only luminosity values."));
 
-    m_preserveLuminosity = new QCheckBox( i18n("Preserve luminosity"), gboxSettings);
+    m_preserveLuminosity = new QCheckBox( i18n("Preserve luminosity"), m_gboxSettings->plainPage());
     QWhatsThis::add( m_preserveLuminosity, i18n("<p>Enable this option is you want preserve the image luminosity."));
 
-    grid->addMultiCellWidget(m_monochrome, 7, 7, 0, 4);
+    grid->addMultiCellLayout(l1,                   0, 0, 0, 4);
+    grid->addMultiCellWidget(histoBox,             1, 2, 0, 4);
+    grid->addMultiCellWidget(redLabel,             3, 3, 0, 0);
+    grid->addMultiCellWidget(greenLabel,           4, 4, 0, 0);
+    grid->addMultiCellWidget(blueLabel,            5, 5, 0, 0);
+    grid->addMultiCellWidget(m_redGain,            3, 3, 1, 4);
+    grid->addMultiCellWidget(m_greenGain,          4, 4, 1, 4);
+    grid->addMultiCellWidget(m_blueGain,           5, 5, 1, 4);
+    grid->addMultiCellWidget(m_resetButton,        6, 6, 0, 1);
+    grid->addMultiCellWidget(m_monochrome,         7, 7, 0, 4);
     grid->addMultiCellWidget(m_preserveLuminosity, 8, 8, 0, 4);
     grid->setRowStretch(9, 10);
+    grid->setMargin(m_gboxSettings->spacingHint());
+    grid->setSpacing(m_gboxSettings->spacingHint());
 
-    setUserAreaWidget(gboxSettings);
+    setToolSettings(m_gboxSettings);
 
     // -------------------------------------------------------------
     // Channels and scale selection slots.
@@ -245,8 +233,8 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
     connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
 
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
@@ -276,17 +264,13 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
             this, SLOT(slotResetCurrentChannel()));
 }
 
-ChannelMixerDialog::~ChannelMixerDialog()
+ChannelMixerTool::~ChannelMixerTool()
 {
-    m_histogramWidget->stopHistogramComputation();
-
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
-
-    delete m_histogramWidget;
 }
 
-void ChannelMixerDialog::slotResetCurrentChannel()
+void ChannelMixerTool::slotResetCurrentChannel()
 {
     switch( m_channelCB->currentItem() )
     {
@@ -323,12 +307,12 @@ void ChannelMixerDialog::slotResetCurrentChannel()
     m_histogramWidget->reset();
 }
 
-void ChannelMixerDialog::slotColorSelectedFromTarget( const Digikam::DColor &color )
+void ChannelMixerTool::slotColorSelectedFromTarget(const DColor& color)
 {
     m_histogramWidget->setHistogramGuideByColor(color);
 }
 
-void ChannelMixerDialog::slotGainsChanged()
+void ChannelMixerTool::slotGainsChanged()
 {
     switch( m_channelCB->currentItem() )
     {
@@ -363,7 +347,7 @@ void ChannelMixerDialog::slotGainsChanged()
     slotTimer();
 }
 
-void ChannelMixerDialog::adjustSliders(void)
+void ChannelMixerTool::adjustSliders()
 {
     m_redGain->blockSignals(true);
     m_greenGain->blockSignals(true);
@@ -404,20 +388,20 @@ void ChannelMixerDialog::adjustSliders(void)
     m_blueGain->blockSignals(false);
 }
 
-void ChannelMixerDialog::slotMonochromeActived(bool mono)
+void ChannelMixerTool::slotMonochromeActived(bool mono)
 {
     m_channelCB->setEnabled(!mono);
     m_channelCB->setCurrentItem(RedChannelGains); // Red for monochrome.
     slotChannelChanged(RedChannelGains);          // Monochrome => display luminosity histogram value.
 }
 
-void ChannelMixerDialog::slotEffect()
+void ChannelMixerTool::slotEffect()
 {
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
-    uchar *data                = iface->getPreviewImage();
-    int w                      = iface->previewWidth();
-    int h                      = iface->previewHeight();
-    bool sb                    = iface->previewSixteenBit();
+    ImageIface* iface = m_previewWidget->imageIface();
+    uchar *data       = iface->getPreviewImage();
+    int w             = iface->previewWidth();
+    int h             = iface->previewHeight();
+    bool sb           = iface->previewSixteenBit();
 
     // Create the new empty destination image data space.
     m_histogramWidget->stopHistogramComputation();
@@ -426,7 +410,7 @@ void ChannelMixerDialog::slotEffect()
        delete [] m_destinationPreviewData;
 
     m_destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
-    Digikam::DImgImageFilters filter;
+    DImgImageFilters filter;
 
     if (m_monochrome->isChecked())
     {
@@ -456,16 +440,16 @@ void ChannelMixerDialog::slotEffect()
     delete [] data;
 }
 
-void ChannelMixerDialog::finalRendering()
+void ChannelMixerTool::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
-    uchar *data                = iface->getOriginalImage();
-    int w                      = iface->originalWidth();
-    int h                      = iface->originalHeight();
-    bool sb                    = iface->originalSixteenBit();
+    ImageIface* iface = m_previewWidget->imageIface();
+    uchar *data       = iface->getOriginalImage();
+    int w             = iface->originalWidth();
+    int h             = iface->originalHeight();
+    bool sb           = iface->originalSixteenBit();
 
-    Digikam::DImgImageFilters filter;
+    DImgImageFilters filter;
 
     if (m_monochrome->isChecked())
     {
@@ -489,32 +473,31 @@ void ChannelMixerDialog::finalRendering()
     iface->putOriginalImage(i18n("Channel Mixer"), data);
     delete [] data;
     kapp->restoreOverrideCursor();
-    accept();
 }
 
-void ChannelMixerDialog::slotChannelChanged(int channel)
+void ChannelMixerTool::slotChannelChanged(int channel)
 {
     switch(channel)
     {
        case GreenChannelGains:           // Green.
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
+          m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
           m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
           break;
 
        case BlueChannelGains:            // Blue.
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
+          m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
           m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
           break;
 
        default:          // Red or monochrome.
           if ( m_monochrome->isChecked() )
           {
-             m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
+             m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
              m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
           }
           else
           {
-             m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
+             m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
              m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
           }
           break;
@@ -525,19 +508,19 @@ void ChannelMixerDialog::slotChannelChanged(int channel)
     slotEffect();
 }
 
-void ChannelMixerDialog::slotScaleChanged(int scale)
+void ChannelMixerTool::slotScaleChanged(int scale)
 {
     m_histogramWidget->m_scaleType = scale;
     m_histogramWidget->repaint(false);
 }
 
-void ChannelMixerDialog::readUserSettings()
+void ChannelMixerTool::readSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("channelmixer Tool Dialog");
 
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", HistogramWidget::LogScaleHistogram));
 
     m_monochrome->setChecked(config->readBoolEntry("Monochrome", false));
     m_preserveLuminosity->setChecked(config->readNumEntry("PreserveLuminosity", false));
@@ -565,7 +548,7 @@ void ChannelMixerDialog::readUserSettings()
     slotScaleChanged(m_scaleBG->selectedId());
 }
 
-void ChannelMixerDialog::writeUserSettings()
+void ChannelMixerTool::writeSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("channelmixer Tool Dialog");
@@ -594,7 +577,7 @@ void ChannelMixerDialog::writeUserSettings()
     config->sync();
 }
 
-void ChannelMixerDialog::resetValues()
+void ChannelMixerTool::slotResetSettings()
 {
     m_monochrome->blockSignals(true);
     m_preserveLuminosity->blockSignals(true);
@@ -626,8 +609,7 @@ void ChannelMixerDialog::resetValues()
     slotChannelChanged(RedChannelGains);
 }
 
-// Load all gains.
-void ChannelMixerDialog::slotUser3()
+void ChannelMixerTool::slotLoadSettings()
 {
     KURL loadGainsFileUrl;
     FILE *fp = 0L;
@@ -635,7 +617,7 @@ void ChannelMixerDialog::slotUser3()
     bool monochrome;
 
     loadGainsFileUrl = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
-                                            QString( "*" ), this,
+                                            QString( "*" ), kapp->activeWindow(),
                                             QString( i18n("Select Gimp Gains Mixer File to Load")) );
     if( loadGainsFileUrl.isEmpty() )
        return;
@@ -708,19 +690,18 @@ void ChannelMixerDialog::slotUser3()
     }
     else
     {
-        KMessageBox::error(this, i18n("Cannot load settings from the Gains Mixer text file."));
+        KMessageBox::error(kapp->activeWindow(), i18n("Cannot load settings from the Gains Mixer text file."));
         return;
     }
 }
 
-// Save all gains.
-void ChannelMixerDialog::slotUser2()
+void ChannelMixerTool::slotSaveAsSettings()
 {
     KURL saveGainsFileUrl;
     FILE *fp = 0L;
 
     saveGainsFileUrl = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
-                                               QString( "*" ), this,
+                                               QString( "*" ), kapp->activeWindow(),
                                                QString( i18n("Gimp Gains Mixer File to Save")) );
     if( saveGainsFileUrl.isEmpty() )
        return;
@@ -783,10 +764,9 @@ void ChannelMixerDialog::slotUser2()
     }
     else
     {
-        KMessageBox::error(this, i18n("Cannot save settings to the Gains Mixer text file."));
+        KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the Gains Mixer text file."));
         return;
     }
 }
 
 }  // NameSpace DigikamChannelMixerImagesPlugin
-
