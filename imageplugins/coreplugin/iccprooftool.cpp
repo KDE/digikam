@@ -87,8 +87,8 @@
 
 // Local includes.
 
-#include "imageeffect_iccproof.h"
-#include "imageeffect_iccproof.moc"
+#include "iccprooftool.h"
+#include "iccprooftool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

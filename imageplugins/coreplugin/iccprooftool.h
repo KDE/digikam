@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_ICCPROOF_H
-#define IMAGEEFFECT_ICCPROOF_H
+#ifndef ICCPROOFTOOL_H
+#define ICCPROOFTOOL_H
 
 // Digikam includes.
 
@@ -205,4 +205,4 @@ private:
 
 }  // NameSpace DigikamImagesPluginCore
 
-#endif  // IMAGEEFFECT_ICCPROOF_H
+#endif  // ICCPROOFTOOL_H

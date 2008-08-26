@@ -48,7 +48,7 @@
 #include "imageeffect_sharpen.h"
 #include "imageeffect_ratiocrop.h"
 #include "autocorrectiontool.h"
-#include "imageeffect_iccproof.h"
+#include "iccprooftool.h"
 #include "imageplugin_core.h"
 #include "imageplugin_core.moc"
 
