@@ -171,10 +171,10 @@ RGBTool::RGBTool(QWidget* parent)
     m_rInput->setDefaultValue(0);
     m_rInput->input()->setRange(-100, 100, 1, false);
 
-    gridSettings->addMultiCellWidget(labelLeft, 3, 3, 0, 0);
-    gridSettings->addMultiCellWidget(m_rSlider, 3, 3, 1, 1);
-    gridSettings->addMultiCellWidget(labelRight, 3, 3, 2, 2);
-    gridSettings->addMultiCellWidget(m_rInput, 3, 3, 3, 3);
+    gridSettings->addMultiCellWidget(labelLeft,     3, 3, 0, 0);
+    gridSettings->addMultiCellWidget(m_rSlider,     3, 3, 1, 1);
+    gridSettings->addMultiCellWidget(labelRight,    3, 3, 2, 2);
+    gridSettings->addMultiCellWidget(m_rInput,      3, 3, 3, 3);
 
     // -------------------------------------------------------------
 
@@ -190,10 +190,10 @@ RGBTool::RGBTool(QWidget* parent)
     m_gInput->setDefaultValue(0);
     m_gInput->input()->setRange(-100, 100, 1, false);
 
-    gridSettings->addMultiCellWidget(labelLeft, 4, 4, 0, 0);
-    gridSettings->addMultiCellWidget(m_gSlider, 4, 4, 1, 1);
-    gridSettings->addMultiCellWidget(labelRight, 4, 4, 2, 2);
-    gridSettings->addMultiCellWidget(m_gInput, 4, 4, 3, 3);
+    gridSettings->addMultiCellWidget(labelLeft,     4, 4, 0, 0);
+    gridSettings->addMultiCellWidget(m_gSlider,     4, 4, 1, 1);
+    gridSettings->addMultiCellWidget(labelRight,    4, 4, 2, 2);
+    gridSettings->addMultiCellWidget(m_gInput,      4, 4, 3, 3);
 
     // -------------------------------------------------------------
 
@@ -209,10 +209,10 @@ RGBTool::RGBTool(QWidget* parent)
     m_bInput->setDefaultValue(0);
     m_bInput->input()->setRange(-100, 100, 1, false);
 
-    gridSettings->addMultiCellWidget(labelLeft, 5, 5, 0, 0);
-    gridSettings->addMultiCellWidget(m_bSlider, 5, 5, 1, 1);
-    gridSettings->addMultiCellWidget(labelRight, 5, 5, 2, 2);
-    gridSettings->addMultiCellWidget(m_bInput, 5, 5, 3, 3);
+    gridSettings->addMultiCellWidget(labelLeft,     5, 5, 0, 0);
+    gridSettings->addMultiCellWidget(m_bSlider,     5, 5, 1, 1);
+    gridSettings->addMultiCellWidget(labelRight,    5, 5, 2, 2);
+    gridSettings->addMultiCellWidget(m_bInput,      5, 5, 3, 3);
 
     m_rInput->setValue(0);
     m_gInput->setValue(0);
@@ -271,27 +271,27 @@ RGBTool::~RGBTool()
 
 void RGBTool::slotChannelChanged(int channel)
 {
-    switch(channel)
+    switch (channel)
     {
-        case LuminosityChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-            break;
+    case LuminosityChannel:
+        m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
+        m_hGradient->setColors(QColor("black"), QColor("white"));
+        break;
 
-        case RedChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
-            break;
+    case RedChannel:
+        m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
+        m_hGradient->setColors(QColor("black"), QColor("red"));
+        break;
 
-        case GreenChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
-            break;
+    case GreenChannel:
+        m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
+        m_hGradient->setColors(QColor("black"), QColor("green"));
+        break;
 
-        case BlueChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
-            break;
+    case BlueChannel:
+        m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
+        m_hGradient->setColors(QColor("black"), QColor("blue"));
+        break;
     }
 
     m_histogramWidget->repaint(false);
@@ -303,7 +303,7 @@ void RGBTool::slotScaleChanged(int scale)
     m_histogramWidget->repaint(false);
 }
 
-void RGBTool::slotColorSelectedFromTarget( const DColor &color )
+void RGBTool::slotColorSelectedFromTarget(const DColor &color)
 {
     m_histogramWidget->setHistogramGuideByColor(color);
 }
@@ -390,9 +390,9 @@ void RGBTool::slotEffect()
     bool alpha                 = iface->previewHasAlpha();
     bool sixteenBit            = iface->previewSixteenBit();
 
-    double r = ((double)m_rInput->value() + 100.0)/100.0;
-    double g = ((double)m_gInput->value() + 100.0)/100.0;
-    double b = ((double)m_bInput->value() + 100.0)/100.0;
+    double r = ((double) m_rInput->value() + 100.0) / 100.0;
+    double g = ((double) m_gInput->value() + 100.0) / 100.0;
+    double b = ((double) m_bInput->value() + 100.0) / 100.0;
     double a = 1.0;
 
     DImg preview(w, h, sixteenBit, alpha, m_destinationPreviewData);
@@ -414,9 +414,9 @@ void RGBTool::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
-    double r = ((double)m_rInput->value() + 100.0)/100.0;
-    double g = ((double)m_gInput->value() + 100.0)/100.0;
-    double b = ((double)m_bInput->value() + 100.0)/100.0;
+    double r = ((double) m_rInput->value() + 100.0) / 100.0;
+    double g = ((double) m_gInput->value() + 100.0) / 100.0;
+    double b = ((double) m_bInput->value() + 100.0) / 100.0;
     double a = 1.0;
 
     ImageIface* iface = m_previewWidget->imageIface();
