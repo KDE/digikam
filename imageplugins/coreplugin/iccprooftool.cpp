@@ -99,6 +99,11 @@ namespace DigikamImagesPluginCore
 ICCProofTool::ICCProofTool(QWidget* parent)
             : EditorTool(parent)
 {
+    setName("colormanagement");
+    setToolName(i18n("Color Management"));
+    setToolIcon(SmallIcon("colormanagement"));
+    setToolHelp("colormanagement.anchor");
+
     m_destinationPreviewData = 0;
     m_cmEnabled              = true;
     m_hasICC                 = false;
@@ -624,14 +629,14 @@ void ICCProofTool::writeSettings()
     config->writeEntry("ProofProfileMethod", m_proofProfileBG->selectedId());
     config->writeEntry("ContrastAjustment", m_cInput->value());
 
-    for (int j = 0 ; j < 17 ; j++)
+    for (int j = 0; j < 17; j++)
     {
         QPoint p = m_curvesWidget->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
 
         if (m_originalImage->sixteenBit() && p.x() != -1)
         {
-            p.setX(p.x()/255);
-            p.setY(p.y()/255);
+            p.setX(p.x() / 255);
+            p.setY(p.y() / 255);
         }
 
         config->writeEntry(QString("CurveAjustmentPoint%1").arg(j), p);
@@ -683,7 +688,7 @@ void ICCProofTool::slotChannelChanged( int channel )
     m_histogramWidget->repaint(false);
 }
 
-void ICCProofTool::slotScaleChanged( int scale )
+void ICCProofTool::slotScaleChanged(int scale)
 {
     m_histogramWidget->m_scaleType = scale;
     m_histogramWidget->repaint(false);
