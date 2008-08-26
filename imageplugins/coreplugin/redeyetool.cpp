@@ -306,6 +306,7 @@ void RedEyeTool::readSettings()
     m_tintLevel->setValue(config->readNumEntry("TintLevel", m_tintLevel->defaultValue()));
 
     slotHSChanged(m_HSSelector->xValue(), m_HSSelector->yValue());
+    m_histogramWidget->reset();
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
 }

@@ -229,8 +229,8 @@ RGBTool::RGBTool(QWidget* parent)
     connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromTarget( const DColor & )));
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
+            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
     connect(m_rSlider, SIGNAL(valueChanged(int)),
             m_rInput, SLOT(setValue(int)));
@@ -316,6 +316,7 @@ void RGBTool::readSettings()
     int g = config->readNumEntry("GreenAjustment", m_gInput->defaultValue());
     int b = config->readNumEntry("BlueAjustment", m_bInput->defaultValue());
     adjustSliders(r, g, b);
+    m_histogramWidget->reset();
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
 }

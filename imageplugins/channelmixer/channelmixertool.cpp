@@ -543,7 +543,6 @@ void ChannelMixerTool::readSettings()
 
     adjustSliders();
     m_histogramWidget->reset();
-
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
 }

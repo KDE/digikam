@@ -753,6 +753,7 @@ void WhiteBalanceTool::readSettings()
     m_temperatureInput->setValue(config->readDoubleNumEntry("Temperature", m_temperatureInput->defaultValue()));
 
     slotTemperatureChanged(m_temperatureInput->value());
+    m_histogramWidget->reset();
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
 }

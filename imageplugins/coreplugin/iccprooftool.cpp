@@ -605,6 +605,7 @@ void ICCProofTool::readSettings()
     for (int i = 0 ; i < 5 ; i++)
         m_curvesWidget->curves()->curvesCalculateCurve(i);
 
+    m_histogramWidget->reset();
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
 }

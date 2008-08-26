@@ -339,6 +339,9 @@ void HSLTool::readSettings()
     m_lInput->setValue(config->readDoubleNumEntry("LighnessAjustment", m_lInput->defaultValue()));
     slotHChanged(m_hInput->value());
     slotSChanged(m_sInput->value());
+
+    m_histogramWidget->reset();
+
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
 }

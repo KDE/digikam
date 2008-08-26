@@ -271,6 +271,7 @@ void BCGTool::readSettings()
     m_bInput->setValue(config->readNumEntry("BrightnessAjustment", m_bInput->defaultValue()));
     m_cInput->setValue(config->readNumEntry("ContrastAjustment", m_cInput->defaultValue()));
     m_gInput->setValue(config->readDoubleNumEntry("GammaAjustment", m_gInput->defaultValue()));
+    m_histogramWidget->reset();
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
 }

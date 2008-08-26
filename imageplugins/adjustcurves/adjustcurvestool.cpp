@@ -569,6 +569,7 @@ void AdjustCurvesTool::readSettings()
         m_curvesWidget->curves()->curvesCalculateCurve(i);
     }
 
+    m_histogramWidget->reset();
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
 }
