@@ -164,6 +164,7 @@ BWSepiaTool::BWSepiaTool(QWidget* parent)
     setName("convertbw");
     setToolName(i18n("Black && White"));
     setToolIcon(SmallIcon("bwtonal"));
+    setToolHelp("blackandwhitetool.anchor");
 
     m_destinationPreviewData = 0;
 
