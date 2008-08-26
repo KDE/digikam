@@ -33,7 +33,6 @@
 #include <qhgroupbox.h>
 #include <qintdict.h>
 #include <qlabel.h>
-#include <qlabel.h>
 #include <qlayout.h>
 #include <qlistbox.h>
 #include <qpushbutton.h>
@@ -167,15 +166,6 @@ BWSepiaTool::BWSepiaTool(QWidget* parent)
     setToolIcon(SmallIcon("bwtonal"));
 
     m_destinationPreviewData = 0;
-    m_channelCB = 0;
-    m_scaleBG = 0;
-    m_bwFilters = 0;
-    m_bwTone = 0;
-    m_cInput = 0;
-    m_tab = 0;
-    m_histogramWidget = 0;
-    m_curvesWidget = 0;
-    m_previewPixmapFactory = 0;
 
     ImageIface iface(0, 0);
     m_originalImage  = iface.getOriginalImg();
@@ -192,18 +182,20 @@ BWSepiaTool::BWSepiaTool(QWidget* parent)
     // -------------------------------------------------------------
 
     EditorToolSettings *gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                                              EditorToolSettings::Load|
+                                                              EditorToolSettings::SaveAs|
                                                               EditorToolSettings::Ok|
                                                               EditorToolSettings::Cancel);
 
     QGridLayout* gridSettings = new QGridLayout(gboxSettings->plainPage(), 4, 4);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings->plainPage());
-    label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, gboxSettings->plainPage() );
-    m_channelCB->insertItem( i18n("Luminosity") );
-    m_channelCB->insertItem( i18n("Red") );
-    m_channelCB->insertItem( i18n("Green") );
-    m_channelCB->insertItem( i18n("Blue") );
+    label1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_channelCB = new QComboBox(false, gboxSettings->plainPage());
+    m_channelCB->insertItem(i18n("Luminosity"));
+    m_channelCB->insertItem(i18n("Red"));
+    m_channelCB->insertItem(i18n("Green"));
+    m_channelCB->insertItem(i18n("Blue"));
     QWhatsThis::add( m_channelCB, i18n("<p>Select the histogram channel to display here:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
@@ -213,26 +205,26 @@ BWSepiaTool::BWSepiaTool(QWidget* parent)
     m_scaleBG = new QHButtonGroup(gboxSettings->plainPage());
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(QFrame::NoFrame);
-    m_scaleBG->setInsideMargin( 0 );
+    m_scaleBG->setInsideMargin(0);
     QWhatsThis::add( m_scaleBG, i18n("<p>Select the histogram scale here.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
 
-    QPushButton *linHistoButton = new QPushButton( m_scaleBG );
-    QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
+    QPushButton *linHistoButton = new QPushButton(m_scaleBG);
+    QToolTip::add(linHistoButton, i18n("<p>Linear"));
     m_scaleBG->insert(linHistoButton, HistogramWidget::LinScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
-    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
+    linHistoButton->setPixmap(QPixmap(directory + "histogram-lin.png"));
     linHistoButton->setToggleButton(true);
 
-    QPushButton *logHistoButton = new QPushButton( m_scaleBG );
-    QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
+    QPushButton *logHistoButton = new QPushButton(m_scaleBG);
+    QToolTip::add(logHistoButton, i18n("<p>Logarithmic"));
     m_scaleBG->insert(logHistoButton, HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
-    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
+    logHistoButton->setPixmap(QPixmap(directory + "histogram-log.png"));
     logHistoButton->setToggleButton(true);
 
     QHBoxLayout* l1 = new QHBoxLayout();
@@ -252,8 +244,8 @@ BWSepiaTool::BWSepiaTool(QWidget* parent)
                                              "settings changes."));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);
-    m_hGradient = new ColorGradientWidget( ColorGradientWidget::Horizontal, 10, histoBox );
-    m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+    m_hGradient = new ColorGradientWidget(ColorGradientWidget::Horizontal, 10, histoBox);
+    m_hGradient->setColors(QColor("black"), QColor("white"));
 
     gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
 
@@ -266,7 +258,7 @@ BWSepiaTool::BWSepiaTool(QWidget* parent)
     m_bwFilm->setVariableWidth(false);
     m_bwFilm->setVariableHeight(false);
     ListBoxWhatsThis* whatsThis2 = new ListBoxWhatsThis(m_bwFilm);
-    m_previewPixmapFactory                = new PreviewPixmapFactory(this);
+    m_previewPixmapFactory       = new PreviewPixmapFactory(this);
 
     int type = BWGeneric;
 
@@ -453,8 +445,8 @@ BWSepiaTool::BWSepiaTool(QWidget* parent)
 
     ColorGradientWidget* vGradient = new ColorGradientWidget(
                                                   ColorGradientWidget::Vertical,
-                                                  10, curveBox );
-    vGradient->setColors( QColor( "white" ), QColor( "black" ) );
+                                                  10, curveBox);
+    vGradient->setColors(QColor("white"), QColor("black"));
 
     QLabel *spacev = new QLabel(curveBox);
     spacev->setFixedWidth(1);
@@ -469,8 +461,8 @@ BWSepiaTool::BWSepiaTool(QWidget* parent)
 
     ColorGradientWidget *hGradient = new ColorGradientWidget(
                                                   ColorGradientWidget::Horizontal,
-                                                  10, curveBox );
-    hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+                                                  10, curveBox);
+    hGradient->setColors(QColor("black"), QColor("white"));
 
     m_cInput = new RIntNumInput(curveBox);
     m_cInput->input()->setLabel(i18n("Contrast:"), AlignLeft | AlignVCenter);
@@ -478,12 +470,12 @@ BWSepiaTool::BWSepiaTool(QWidget* parent)
     m_cInput->setDefaultValue(0);
     QWhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
 
-    gridTab2->addMultiCellWidget(vGradient, 0, 0, 0, 0);
-    gridTab2->addMultiCellWidget(spacev, 0, 0, 1, 1);
-    gridTab2->addMultiCellWidget(m_curvesWidget, 0, 0, 2, 2);
-    gridTab2->addMultiCellWidget(spaceh, 1, 1, 2, 2);
-    gridTab2->addMultiCellWidget(hGradient, 2, 2, 2, 2);
-    gridTab2->addMultiCellWidget(m_cInput, 4, 4, 0, 2);
+    gridTab2->addMultiCellWidget(vGradient,         0, 0, 0, 0);
+    gridTab2->addMultiCellWidget(spacev,            0, 0, 1, 1);
+    gridTab2->addMultiCellWidget(m_curvesWidget,    0, 0, 2, 2);
+    gridTab2->addMultiCellWidget(spaceh,            1, 1, 2, 2);
+    gridTab2->addMultiCellWidget(hGradient,         2, 2, 2, 2);
+    gridTab2->addMultiCellWidget(m_cInput,          4, 4, 0, 2);
 //    gridTab2->setRowSpacing(3);
     gridTab2->setRowStretch(5, 10);
 
@@ -591,26 +583,26 @@ QPixmap BWSepiaTool::getThumbnailForEffect(int type)
 
 void BWSepiaTool::slotChannelChanged(int channel)
 {
-    switch(channel)
+    switch (channel)
     {
         case LuminosityChannel:
             m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+            m_hGradient->setColors(QColor("black"), QColor("white"));
             break;
 
         case RedChannel:
             m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
+            m_hGradient->setColors(QColor("black"), QColor("red"));
             break;
 
         case GreenChannel:
             m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
+            m_hGradient->setColors(QColor("black"), QColor("green"));
             break;
 
         case BlueChannel:
             m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
+            m_hGradient->setColors(QColor("black"), QColor("blue"));
             break;
     }
 
@@ -630,7 +622,7 @@ void BWSepiaTool::slotSpotColorChanged(const DColor &color)
     m_curvesWidget->setCurveGuide(color);
 }
 
-void BWSepiaTool::slotColorSelectedFromTarget( const DColor &color )
+void BWSepiaTool::slotColorSelectedFromTarget(const DColor &color)
 {
     m_histogramWidget->setHistogramGuideByColor(color);
 }
@@ -726,8 +718,8 @@ void BWSepiaTool::slotResetSettings()
     m_cInput->slotReset();
     m_strengthInput->slotReset();
 
-    for (int channel = 0 ; channel < 5 ; channel++)
-       m_curvesWidget->curves()->curvesChannelReset(channel);
+    for (int channel = 0; channel < 5; channel++)
+        m_curvesWidget->curves()->curvesChannelReset(channel);
 
     m_curvesWidget->reset();
 
@@ -799,7 +791,7 @@ void BWSepiaTool::slotEffect()
 
 void BWSepiaTool::finalRendering()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor(KCursor::waitCursor());
     ImageIface* iface = m_previewWidget->imageIface();
     uchar *data                = iface->getOriginalImage();
     int w                      = iface->originalWidth();
@@ -852,43 +844,43 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
 
     switch (type)
     {
-       case BWNoFilter:
-          m_redAttn   = 0.0;
-          m_greenAttn = 0.0;
-          m_blueAttn  = 0.0;
-          break;
+        case BWNoFilter:
+            m_redAttn = 0.0;
+            m_greenAttn = 0.0;
+            m_blueAttn = 0.0;
+            break;
 
-       case BWGreenFilter:
-          m_redAttn   = -0.20 * strength;
-          m_greenAttn = +0.11 * strength;
-          m_blueAttn  = +0.09 * strength;
-          break;
+        case BWGreenFilter:
+            m_redAttn = -0.20 * strength;
+            m_greenAttn = +0.11 * strength;
+            m_blueAttn = +0.09 * strength;
+            break;
 
-       case BWOrangeFilter:
-          m_redAttn   = +0.48 * strength;
-          m_greenAttn = -0.37 * strength;
-          m_blueAttn  = -0.11 * strength;
-          break;
+        case BWOrangeFilter:
+            m_redAttn = +0.48 * strength;
+            m_greenAttn = -0.37 * strength;
+            m_blueAttn = -0.11 * strength;
+            break;
 
-       case BWRedFilter:
-          m_redAttn   = +0.60 * strength;
-          m_greenAttn = -0.49 * strength;
-          m_blueAttn  = -0.11 * strength;
-          break;
+        case BWRedFilter:
+            m_redAttn = +0.60 * strength;
+            m_greenAttn = -0.49 * strength;
+            m_blueAttn = -0.11 * strength;
+            break;
 
-       case BWYellowFilter:
-          m_redAttn   = +0.30 * strength;
-          m_greenAttn = -0.31 * strength;
-          m_blueAttn  = +0.01 * strength;
-          break;
+        case BWYellowFilter:
+            m_redAttn = +0.30 * strength;
+            m_greenAttn = -0.31 * strength;
+            m_blueAttn = +0.01 * strength;
+            break;
 
-       // --------------------------------------------------------------------------------
+            // --------------------------------------------------------------------------------
 
-       case BWGeneric:
-       case BWNoTone:
-          m_redMult   = 0.24;
-          m_greenMult = 0.68;
-          m_blueMult  = 0.08;
+        case BWGeneric:
+        case BWNoTone:
+            m_redMult = 0.24;
+            m_greenMult = 0.68;
+            m_blueMult = 0.08;
           filter.channelMixerImage(data, w, h, sb, true, true,
                  m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn,
                  0.0, 1.0, 0.0,
@@ -1066,25 +1058,25 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
 
 //-- Load all settings from file --------------------------------------
 
-void BWSepiaTool::slotUser3()
+void BWSepiaTool::slotLoadSettings()
 {
     KURL loadFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
-                                            QString( "*" ), 0,
+                                            QString( "*" ), kapp->activeWindow(),
                                             QString( i18n("Black & White Settings File to Load")) );
     if( loadFile.isEmpty() )
        return;
 
     QFile file(loadFile.path());
 
-    if ( file.open(IO_ReadOnly) )
+    if (file.open(IO_ReadOnly))
     {
-        QTextStream stream( &file );
+        QTextStream stream(&file);
 
-        if ( stream.readLine() != "# Black & White Configuration File" )
+        if (stream.readLine() != "# Black & White Configuration File")
         {
-           KMessageBox::error(0,
-                        i18n("\"%1\" is not a Black & White settings text file.")
-                        .arg(loadFile.fileName()));
+           KMessageBox::error(kapp->activeWindow(),
+                              i18n("\"%1\" is not a Black & White settings text file.")
+                              .arg(loadFile.fileName()));
            file.close();
            return;
         }
@@ -1103,12 +1095,12 @@ void BWSepiaTool::slotUser3()
         m_curvesWidget->curves()->setCurveType(m_curvesWidget->m_channelType, ImageCurves::CURVE_SMOOTH);
         m_curvesWidget->reset();
 
-        for (int j = 0 ; j < 17 ; j++)
+        for (int j = 0; j < 17; j++)
         {
             QPoint disable(-1, -1);
             QPoint p;
-            p.setX( stream.readLine().toInt() );
-            p.setY( stream.readLine().toInt() );
+            p.setX(stream.readLine().toInt());
+            p.setY(stream.readLine().toInt());
 
             if (m_originalImage->sixteenBit() && p != disable)
             {
@@ -1134,45 +1126,47 @@ void BWSepiaTool::slotUser3()
         slotEffect();
     }
     else
-        KMessageBox::error(0, i18n("Cannot load settings from the Black & White text file."));
+        KMessageBox::error(kapp->activeWindow(),
+                           i18n("Cannot load settings from the Black & White text file."));
 
     file.close();
 }
 
 //-- Save all settings to file ---------------------------------------
 
-void BWSepiaTool::slotUser2()
+void BWSepiaTool::slotSaveAsSettings()
 {
     KURL saveFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
-                                            QString( "*" ), 0,
+                                            QString( "*" ), kapp->activeWindow(),
                                             QString( i18n("Black & White Settings File to Save")));
     if( saveFile.isEmpty() )
        return;
 
     QFile file(saveFile.path());
 
-    if ( file.open(IO_WriteOnly) )
+    if (file.open(IO_WriteOnly))
     {
-        QTextStream stream( &file );
+        QTextStream stream(&file);
         stream << "# Black & White Configuration File\n";
         stream << m_bwFilters->currentItem() << "\n";
         stream << m_bwTone->currentItem() << "\n";
         stream << m_cInput->value() << "\n";
 
-        for (int j = 0 ; j < 17 ; j++)
+        for (int j = 0; j < 17; j++)
         {
             QPoint p = m_curvesWidget->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
             if (m_originalImage->sixteenBit())
             {
-                p.setX(p.x()/255);
-                p.setY(p.y()/255);
+                p.setX(p.x() / 255);
+                p.setY(p.y() / 255);
             }
             stream << p.x() << "\n";
             stream << p.y() << "\n";
         }
     }
     else
-        KMessageBox::error(0, i18n("Cannot save settings to the Black & White text file."));
+        KMessageBox::error(kapp->activeWindow(),
+                           i18n("Cannot save settings to the Black & White text file."));
 
     file.close();
 }
