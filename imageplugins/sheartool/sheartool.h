@@ -21,12 +21,12 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_SHEARTOOL_H
-#define IMAGEEFFECT_SHEARTOOL_H
+#ifndef SHEARTOOL_H
+#define SHEARTOOL_H
 
 // Local includes.
 
-#include "imageguidedlg.h"
+#include "editortool.h"
 
 class QFrame;
 class QPushButton;
@@ -39,31 +39,37 @@ class RIntNumInput;
 class RDoubleNumInput;
 }
 
+namespace Digikam
+{
+class EditorToolSettings;
+class ImageWidget;
+}
+
 namespace DigikamShearToolImagesPlugin
 {
 
-class ImageEffect_ShearTool : public Digikam::ImageGuideDlg
+class ShearTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_ShearTool(QWidget* parent);
-    ~ImageEffect_ShearTool();
+    ShearTool(QObject* parent);
+    ~ShearTool();
 
 private slots:
 
-    void readUserSettings(void);
+    void slotResetSettings();
 
-protected:
+private:
 
-    void writeUserSettings(void);
-    void prepareEffect(void);
-    void prepareFinal(void);
-    void putPreviewData(void);
-    void putFinalData(void);
-    void resetValues(void);
-    void renderingFinished(void);
+    void readSettings();
+    void writeSettings();
+    void prepareEffect();
+    void prepareFinal();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
 
 private:
 
@@ -77,8 +83,12 @@ private:
 
     KDcrawIface::RDoubleNumInput *m_fineHAngleInput;
     KDcrawIface::RDoubleNumInput *m_fineVAngleInput;
+
+    Digikam::ImageWidget         *m_previewWidget;
+
+    Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
 }  // NameSpace DigikamShearToolImagesPlugin
 
-#endif /* IMAGEEFFECT_SHEARTOOL_H */
+#endif /* SHEARTOOL_H */

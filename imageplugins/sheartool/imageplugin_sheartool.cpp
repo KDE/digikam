@@ -32,9 +32,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_sheartool.h"
+#include "sheartool.h"
 #include "imageplugin_sheartool.h"
 #include "imageplugin_sheartool.moc"
+
+using namespace DigikamShearToolImagesPlugin;
 
 K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_sheartool,
                            KGenericFactory<ImagePlugin_ShearTool>("digikamimageplugin_sheartool"));
@@ -62,6 +64,6 @@ void ImagePlugin_ShearTool::setEnabledActions(bool enable)
 
 void ImagePlugin_ShearTool::slotShearTool()
 {
-    DigikamShearToolImagesPlugin::ImageEffect_ShearTool dlg(parentWidget());
-    dlg.exec();
+    ShearTool *tool = new ShearTool(this);
+    loadTool(tool);
 }

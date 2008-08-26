@@ -18,7 +18,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes)  
 
 digikamimageplugin_sheartool_la_SOURCES = imageplugin_sheartool.cpp shear.cpp \
-	                                      imageeffect_sheartool.cpp  
+	                                      sheartool.cpp 
 
 digikamimageplugin_sheartool_la_LIBADD = $(LIB_KPARTS) \
 	                                     $(top_builddir)/digikam/digikam/libdigikam.la 
