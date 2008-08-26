@@ -60,6 +60,8 @@ private:
 
 private slots:
 
+    void slotInit();
+
     void slotLoadingStarted();
     void slotDemosaicedImage();
     void slotPostProcessedImage();
