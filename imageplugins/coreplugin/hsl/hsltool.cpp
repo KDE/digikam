@@ -245,8 +245,6 @@ HSLTool::HSLTool(QWidget* parent)
 
 HSLTool::~HSLTool()
 {
-    m_histogramWidget->stopHistogramComputation();
-
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 }

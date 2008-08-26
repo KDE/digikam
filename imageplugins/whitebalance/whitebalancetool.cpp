@@ -400,8 +400,6 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
 
 WhiteBalanceTool::~WhiteBalanceTool()
 {
-    m_histogramWidget->stopHistogramComputation();
-
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 }

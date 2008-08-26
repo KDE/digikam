@@ -263,8 +263,6 @@ RGBTool::RGBTool(QWidget* parent)
 
 RGBTool::~RGBTool()
 {
-    m_histogramWidget->stopHistogramComputation();
-
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 }

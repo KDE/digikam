@@ -219,8 +219,6 @@ BCGTool::BCGTool(QWidget* parent)
 
 BCGTool::~BCGTool()
 {
-    m_histogramWidget->stopHistogramComputation();
-
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 }

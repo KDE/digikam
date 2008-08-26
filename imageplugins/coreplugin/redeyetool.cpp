@@ -238,8 +238,6 @@ RedEyeTool::RedEyeTool(QWidget* parent)
 
 RedEyeTool::~RedEyeTool()
 {
-    m_histogramWidget->stopHistogramComputation();
-
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 }

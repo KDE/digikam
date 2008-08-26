@@ -529,9 +529,8 @@ BWSepiaTool::BWSepiaTool(QWidget* parent)
 
 BWSepiaTool::~BWSepiaTool()
 {
-    m_histogramWidget->stopHistogramComputation();
-
-    delete [] m_destinationPreviewData;
+    if (m_destinationPreviewData)
+        delete [] m_destinationPreviewData;
 }
 
 void BWSepiaTool::slotFilterSelected(int filter)

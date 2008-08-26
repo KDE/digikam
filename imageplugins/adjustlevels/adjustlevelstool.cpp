@@ -401,8 +401,6 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 
 AdjustLevelsTool::~AdjustLevelsTool()
 {
-    m_histogramWidget->stopHistogramComputation();
-
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 
