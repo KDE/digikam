@@ -1245,12 +1245,12 @@ void ICCProofTool::slotUser2()
     KURL saveColorManagementFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                                 QString( "*" ), 0,
                                                 QString(i18n("Color Management Settings File to Save")));
-    if( saveColorManagementFile.isEmpty() )
-       return;
+    if (saveColorManagementFile.isEmpty())
+        return;
 
     QFile file(saveColorManagementFile.path());
 
-    if ( file.open(IO_WriteOnly) )
+    if (file.open(IO_WriteOnly))
     {
         QTextStream stream(&file);
         stream << "# Color Management Configuration File\n";
