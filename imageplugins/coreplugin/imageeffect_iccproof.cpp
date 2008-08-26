@@ -98,7 +98,6 @@ namespace DigikamImagesPluginCore
 
 ICCProofTool::ICCProofTool(QWidget* parent)
             : EditorTool(parent)
-//                                            "colormanagement", true, false)
 {
     m_destinationPreviewData = 0;
     m_cmEnabled              = true;
@@ -137,27 +136,27 @@ ICCProofTool::ICCProofTool(QWidget* parent)
     m_scaleBG = new QHButtonGroup(m_gboxSettings->plainPage());
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(QFrame::NoFrame);
-    m_scaleBG->setInsideMargin( 0 );
-    QWhatsThis::add( m_scaleBG, i18n("<p>Select the histogram scale here.<p>"
-                                     "If the image's maximal values are small, you can use the linear scale.<p>"
-                                     "Logarithmic scale can be used when the maximal values are big; "
-                                     "if it is used, all values (small and large) will be visible on the "
-                                     "graph."));
+    m_scaleBG->setInsideMargin(0);
+    QWhatsThis::add(m_scaleBG, i18n("<p>Select the histogram scale here.<p>"
+                                    "If the image's maximal values are small, you can use the linear scale.<p>"
+                                    "Logarithmic scale can be used when the maximal values are big; "
+                                    "if it is used, all values (small and large) will be visible on the "
+                                    "graph."));
 
-    QPushButton *linHistoButton = new QPushButton( m_scaleBG );
-    QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
+    QPushButton *linHistoButton = new QPushButton(m_scaleBG);
+    QToolTip::add(linHistoButton, i18n("<p>Linear"));
     m_scaleBG->insert(linHistoButton, HistogramWidget::LinScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
-    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
+    linHistoButton->setPixmap(QPixmap(directory + "histogram-lin.png"));
     linHistoButton->setToggleButton(true);
 
-    QPushButton *logHistoButton = new QPushButton( m_scaleBG );
-    QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
+    QPushButton *logHistoButton = new QPushButton(m_scaleBG);
+    QToolTip::add(logHistoButton, i18n("<p>Logarithmic"));
     m_scaleBG->insert(logHistoButton, HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
-    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
+    logHistoButton->setPixmap(QPixmap(directory + "histogram-log.png"));
     logHistoButton->setToggleButton(true);
 
     QHBoxLayout* l1 = new QHBoxLayout();
@@ -222,7 +221,7 @@ ICCProofTool::ICCProofTool(QWidget* parent)
     QWhatsThis::add(m_BPCBox, i18n("<p>The Black Point Compensation (BPC) feature does work in conjunction "
                                    "with Relative Colorimetric Intent. Perceptual intent should make no "
                                    "difference, since BPC is always on, and in Absolute Colorimetric "
-                   "Intent it is always turned off.</p>"
+                                   "Intent it is always turned off.</p>"
                                    "<p>BPC does compensate for a lack of ICC profiles in the dark tone rendering. "
                                    "With BPC the dark tones are optimally mapped (no clipping) from original media "
                                    "to the destination rendering media, e.g. the combination of paper and ink.</p>"));
@@ -261,21 +260,21 @@ ICCProofTool::ICCProofTool(QWidget* parent)
                 "specific color.</li></ul>"));
 
     KURLLabel *lcmsLogoLabel = new KURLLabel(generalOptions);
-    lcmsLogoLabel->setAlignment( AlignTop | AlignRight );
+    lcmsLogoLabel->setAlignment(AlignTop | AlignRight);
     lcmsLogoLabel->setText(QString());
     lcmsLogoLabel->setURL("http://www.littlecms.com");
     KGlobal::dirs()->addResourceType("logo-lcms", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("logo-lcms", "logo-lcms.png");
-    lcmsLogoLabel->setPixmap( QPixmap( directory + "logo-lcms.png" ) );
+    lcmsLogoLabel->setPixmap(QPixmap(directory + "logo-lcms.png"));
     QToolTip::add(lcmsLogoLabel, i18n("Visit Little CMS project website"));
 
-    zeroPageLayout->addMultiCellWidget(m_doSoftProofBox, 0, 0, 0, 0);
-    zeroPageLayout->addMultiCellWidget(m_checkGamutBox, 1, 1, 0, 0);
-    zeroPageLayout->addMultiCellWidget(m_embeddProfileBox, 2, 2, 0, 0);
-    zeroPageLayout->addMultiCellWidget(lcmsLogoLabel, 0, 2, 1, 1);
-    zeroPageLayout->addMultiCellWidget(m_BPCBox, 3, 3, 0, 0);
-    zeroPageLayout->addMultiCellWidget(intent, 4, 4, 0, 0);
-    zeroPageLayout->addMultiCellWidget(m_renderingIntentsCB, 4, 4, 1, 1);
+    zeroPageLayout->addMultiCellWidget(m_doSoftProofBox,        0, 0, 0, 0);
+    zeroPageLayout->addMultiCellWidget(m_checkGamutBox,         1, 1, 0, 0);
+    zeroPageLayout->addMultiCellWidget(m_embeddProfileBox,      2, 2, 0, 0);
+    zeroPageLayout->addMultiCellWidget(lcmsLogoLabel,           0, 2, 1, 1);
+    zeroPageLayout->addMultiCellWidget(m_BPCBox,                3, 3, 0, 0);
+    zeroPageLayout->addMultiCellWidget(intent,                  4, 4, 0, 0);
+    zeroPageLayout->addMultiCellWidget(m_renderingIntentsCB,    4, 4, 1, 1);
     zeroPageLayout->setRowStretch(5, 10);
 
     //---------- "Input" Page Setup ----------------------------------
@@ -320,10 +319,10 @@ ICCProofTool::ICCProofTool(QWidget* parent)
     make->setText(iface.getPhotographInformations().make);
     model->setText(iface.getPhotographInformations().model);
 
-    firstPageLayout->addMultiCellWidget(m_inProfileBG, 0, 1, 0, 0);
-    firstPageLayout->addMultiCellWidget(inProfilesInfo, 0, 0, 2, 2);
-    firstPageLayout->addMultiCellWidget(m_inProfilesPath, 2, 2, 0, 2);
-    firstPageLayout->addMultiCellWidget(pictureInfo, 3, 3, 0, 2);
+    firstPageLayout->addMultiCellWidget(m_inProfileBG,      0, 1, 0, 0);
+    firstPageLayout->addMultiCellWidget(inProfilesInfo,     0, 0, 2, 2);
+    firstPageLayout->addMultiCellWidget(m_inProfilesPath,   2, 2, 0, 2);
+    firstPageLayout->addMultiCellWidget(pictureInfo,        3, 3, 0, 2);
     firstPageLayout->setColStretch(1, 10);
     firstPageLayout->setRowStretch(4, 10);
 
@@ -355,9 +354,9 @@ ICCProofTool::ICCProofTool(QWidget* parent)
 
     QPushButton *spaceProfilesInfo = new QPushButton(i18n("Info..."), spaceProfiles);
 
-    secondPageLayout->addMultiCellWidget(m_spaceProfileBG, 0, 1, 0, 0);
-    secondPageLayout->addMultiCellWidget(spaceProfilesInfo, 0, 0, 2, 2);
-    secondPageLayout->addMultiCellWidget(m_spaceProfilePath, 2, 2, 0, 2);
+    secondPageLayout->addMultiCellWidget(m_spaceProfileBG,      0, 1, 0, 0);
+    secondPageLayout->addMultiCellWidget(spaceProfilesInfo,     0, 0, 2, 2);
+    secondPageLayout->addMultiCellWidget(m_spaceProfilePath,    2, 2, 0, 2);
     secondPageLayout->setColStretch(1, 10);
     secondPageLayout->setRowStretch(3, 10);
 
@@ -389,8 +388,8 @@ ICCProofTool::ICCProofTool(QWidget* parent)
 
     QPushButton *proofProfilesInfo = new QPushButton(i18n("Info..."), proofProfiles);
 
-    thirdPageLayout->addMultiCellWidget(m_proofProfileBG, 0, 1, 0, 0);
-    thirdPageLayout->addMultiCellWidget(proofProfilesInfo, 0, 0, 2, 2);
+    thirdPageLayout->addMultiCellWidget(m_proofProfileBG,   0, 1, 0, 0);
+    thirdPageLayout->addMultiCellWidget(proofProfilesInfo,  0, 0, 2, 2);
     thirdPageLayout->addMultiCellWidget(m_proofProfilePath, 2, 2, 0, 2);
     thirdPageLayout->setColStretch(1, 10);
     thirdPageLayout->setRowStretch(3, 10);
@@ -403,10 +402,9 @@ ICCProofTool::ICCProofTool(QWidget* parent)
 
     QGridLayout *fourPageLayout = new QGridLayout( lightnessadjust, 5, 2);
 
-    ColorGradientWidget* vGradient = new ColorGradientWidget(
-                                                  ColorGradientWidget::Vertical,
-                                                  10, lightnessadjust );
-    vGradient->setColors( QColor( "white" ), QColor( "black" ) );
+    ColorGradientWidget* vGradient = new ColorGradientWidget(ColorGradientWidget::Vertical,
+                                                             10, lightnessadjust );
+    vGradient->setColors(QColor("white"), QColor("black"));
 
     QLabel *spacev = new QLabel(lightnessadjust);
     spacev->setFixedWidth(1);
@@ -423,7 +421,7 @@ ICCProofTool::ICCProofTool(QWidget* parent)
                                                              10,
                                                              lightnessadjust);
 
-    hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+    hGradient->setColors(QColor("black"), QColor("white"));
 
     m_cInput = new RIntNumInput(lightnessadjust);
     m_cInput->input()->setLabel(i18n("Contrast:"), AlignLeft | AlignVCenter);
@@ -431,12 +429,12 @@ ICCProofTool::ICCProofTool(QWidget* parent)
     m_cInput->setDefaultValue(0);
     QWhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
 
-    fourPageLayout->addMultiCellWidget(vGradient, 0, 0, 0, 0);
-    fourPageLayout->addMultiCellWidget(spacev, 0, 0, 1, 1);
-    fourPageLayout->addMultiCellWidget(m_curvesWidget, 0, 0, 2, 2);
-    fourPageLayout->addMultiCellWidget(spaceh, 1, 1, 2, 2);
-    fourPageLayout->addMultiCellWidget(hGradient, 2, 2, 2, 2);
-    fourPageLayout->addMultiCellWidget(m_cInput, 4, 4, 0, 2);
+    fourPageLayout->addMultiCellWidget(vGradient,       0, 0, 0, 0);
+    fourPageLayout->addMultiCellWidget(spacev,          0, 0, 1, 1);
+    fourPageLayout->addMultiCellWidget(m_curvesWidget,  0, 0, 2, 2);
+    fourPageLayout->addMultiCellWidget(spaceh,          1, 1, 2, 2);
+    fourPageLayout->addMultiCellWidget(hGradient,       2, 2, 2, 2);
+    fourPageLayout->addMultiCellWidget(m_cInput,        4, 4, 0, 2);
 //    fourPageLayout->setRowSpacing(3);
     fourPageLayout->setRowStretch(5, 10);
 
@@ -563,7 +561,7 @@ void ICCProofTool::readSettings()
 
     // Plugin settings.
     config->setGroup("colormanagement Tool Dialog");
-    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
+    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0)); // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", HistogramWidget::LogScaleHistogram));
     m_toolBoxWidgets->setCurrentIndex(config->readNumEntry("Settings Tab", GENERALPAGE));
     m_inProfilesPath->setURL(config->readPathEntry("InputProfilePath", defaultICCPath));
@@ -659,27 +657,27 @@ void ICCProofTool::slotColorSelectedFromTarget( const DColor &color )
 
 void ICCProofTool::slotChannelChanged( int channel )
 {
-    switch(channel)
+    switch (channel)
     {
-        case LuminosityChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-            break;
+    case LuminosityChannel:
+        m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
+        m_hGradient->setColors(QColor("black"), QColor("white"));
+        break;
 
-        case RedChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
-            break;
+    case RedChannel:
+        m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
+        m_hGradient->setColors(QColor("black"), QColor("red"));
+        break;
 
-        case GreenChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
-            break;
+    case GreenChannel:
+        m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
+        m_hGradient->setColors(QColor("black"), QColor("green"));
+        break;
 
-        case BlueChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
-            break;
+    case BlueChannel:
+        m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
+        m_hGradient->setColors(QColor("black"), QColor("blue"));
+        break;
     }
 
     m_histogramWidget->repaint(false);
@@ -744,11 +742,10 @@ void ICCProofTool::slotEffect()
     {
         tmpInPath = m_inProfilesPath->url();
         QFileInfo info(tmpInPath);
-        if (!info.exists() || !info.isReadable() || !info.isFile() )
+        if (!info.exists() || !info.isReadable() || !info.isFile())
         {
-            KMessageBox::information(0,
-                                     i18n("<p>The selected ICC input profile path seems to be invalid.<p>"
-                                          "Please check it."));
+            KMessageBox::information(0, i18n("<p>The selected ICC input profile path seems to be invalid.<p>"
+                "Please check it."));
             return;
         }
     }
@@ -763,11 +760,10 @@ void ICCProofTool::slotEffect()
     {
         tmpProofPath = m_proofProfilePath->url();
         QFileInfo info(tmpProofPath);
-        if (!info.exists() || !info.isReadable() || !info.isFile() )
+        if (!info.exists() || !info.isReadable() || !info.isFile())
         {
-            KMessageBox::information(0,
-                                     i18n("<p>The selected ICC proof profile path seems to be invalid.<p>"
-                                          "Please check it."));
+            KMessageBox::information(0, i18n("<p>The selected ICC proof profile path seems to be invalid.<p>"
+                "Please check it."));
             return;
         }
     }
@@ -785,11 +781,10 @@ void ICCProofTool::slotEffect()
     {
         tmpSpacePath = m_spaceProfilePath->url();
         QFileInfo info(tmpSpacePath);
-        if (!info.exists() || !info.isReadable() || !info.isFile() )
+        if (!info.exists() || !info.isReadable() || !info.isFile())
         {
-            KMessageBox::information(0,
-                                     i18n("<p>Selected ICC workspace profile path seems to be invalid.<p>"
-                                          "Please check it."));
+            KMessageBox::information(0, i18n("<p>Selected ICC workspace profile path seems to be invalid.<p>"
+                "Please check it."));
             return;
         }
     }
@@ -804,22 +799,22 @@ void ICCProofTool::slotEffect()
     {
         if (m_useEmbeddedProfile->isChecked())
         {
-            transform.setProfiles( tmpSpacePath, tmpProofPath, true );
+            transform.setProfiles(tmpSpacePath, tmpProofPath, true);
         }
         else
         {
-            transform.setProfiles( tmpInPath, tmpSpacePath, tmpProofPath);
+            transform.setProfiles(tmpInPath, tmpSpacePath, tmpProofPath);
         }
     }
     else
     {
         if (m_useEmbeddedProfile->isChecked())
         {
-            transform.setProfiles( tmpSpacePath );
+            transform.setProfiles(tmpSpacePath);
         }
         else
         {
-            transform.setProfiles( tmpInPath, tmpSpacePath );
+            transform.setProfiles(tmpInPath, tmpSpacePath);
         }
     }
 
@@ -906,11 +901,10 @@ void ICCProofTool::finalRendering()
             {
                 tmpInPath = m_inProfilesPath->url();
                 QFileInfo info(tmpInPath);
-                if (!info.exists() || !info.isReadable() || !info.isFile() )
+                if (!info.exists() || !info.isReadable() || !info.isFile())
                 {
-                    KMessageBox::information(0,
-                                             i18n("<p>Selected ICC input profile path seems "
-                                                  "to be invalid.<p>Please check it."));
+                    KMessageBox::information(0, i18n("<p>Selected ICC input profile path seems "
+                                                     "to be invalid.<p>Please check it."));
                     return;
                 }
             }
@@ -925,11 +919,10 @@ void ICCProofTool::finalRendering()
             {
                 tmpProofPath = m_proofProfilePath->url();
                 QFileInfo info(tmpProofPath);
-                if (!info.exists() || !info.isReadable() || !info.isFile() )
+                if (!info.exists() || !info.isReadable() || !info.isFile())
                 {
-                    KMessageBox::information(0,
-                                             i18n("<p>The selected ICC proof profile path seems "
-                                                  "to be invalid.<p>Please check it."));
+                    KMessageBox::information(0, i18n("<p>The selected ICC proof profile path seems "
+                                                     "to be invalid.<p>Please check it."));
                     return;
                 }
             }
@@ -947,11 +940,10 @@ void ICCProofTool::finalRendering()
             {
                 tmpSpacePath = m_spaceProfilePath->url();
                 QFileInfo info(tmpSpacePath);
-                if (!info.exists() || !info.isReadable() || !info.isFile() )
+                if (!info.exists() || !info.isReadable() || !info.isFile())
                 {
-                    KMessageBox::information(0,
-                                             i18n("<p>Selected ICC workspace profile path seems "
-                                                  "to be invalid.<p>Please check it."));
+                    KMessageBox::information(0, i18n("<p>Selected ICC workspace profile path seems "
+                                                     "to be invalid.<p>Please check it."));
                     return;
                 }
             }
@@ -999,7 +991,7 @@ void ICCProofTool::finalRendering()
 
             if (m_embeddProfileBox->isChecked())
             {
-                iface->setEmbeddedICCToOriginalImage( tmpSpacePath );
+                iface->setEmbeddedICCToOriginalImage(tmpSpacePath);
                 DDebug() << k_funcinfo << QFile::encodeName(tmpSpacePath) << endl;
             }
 
@@ -1036,7 +1028,7 @@ void ICCProofTool::slotInICCInfo()
     {
         getICCInfo(m_embeddedICC);
     }
-    else if(useBuiltinProfile())
+    else if (useBuiltinProfile())
     {
         QString message = i18n("<p>You have selected the \"Default builtin sRGB profile\"</p>");
         message.append(i18n("<p>This profile is built on the fly, so there is no relevant information "
@@ -1081,9 +1073,7 @@ void ICCProofTool::getICCInfo(const QString& profile)
 {
     if (profile.isEmpty())
     {
-        KMessageBox::error(0,
-                           i18n("Sorry, there is no selected profile"),
-                           i18n("Profile Error"));
+        KMessageBox::error(0, i18n("Sorry, there is no selected profile"), i18n("Profile Error"));
         return;
     }
 
@@ -1095,9 +1085,8 @@ void ICCProofTool::getICCInfo(const QByteArray& profile)
 {
     if (profile.isNull())
     {
-        KMessageBox::error(0,
-                           i18n("Sorry, it seems there is no embedded profile"),
-                           i18n("Profile Error"));
+        KMessageBox::error(0, i18n("Sorry, it seems there is no embedded profile"),
+                              i18n("Profile Error"));
         return;
     }
 
@@ -1110,7 +1099,7 @@ void ICCProofTool::slotCMDisabledWarning()
     if (!m_cmEnabled)
     {
         QString message = i18n("<p>You have not enabled Color Management in the digiKam preferences.</p>");
-        message.append( i18n("<p>\"Use of default profile\" options will be disabled now.</p>"));
+        message.append(i18n("<p>\"Use of default profile\" options will be disabled now.</p>"));
         KMessageBox::information(0, message);
         slotToggledWidgets(false);
     }
@@ -1179,40 +1168,39 @@ bool ICCProofTool::useDefaultProofProfile()
 void ICCProofTool::slotUser3()
 {
     KURL loadColorManagementFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
-                                                QString( "*" ), 0,
-                                                QString( i18n("Color Management Settings File to Load")) );
-    if( loadColorManagementFile.isEmpty() )
-       return;
+                                                           QString("*"), 0,
+                                                           QString(i18n("Color Management Settings File to Load")));
+    if (loadColorManagementFile.isEmpty())
+        return;
 
     QFile file(loadColorManagementFile.path());
 
-    if ( file.open(IO_ReadOnly) )
+    if (file.open(IO_ReadOnly))
     {
-        QTextStream stream( &file );
+        QTextStream stream(&file);
 
-        if ( stream.readLine() != "# Color Management Configuration File" )
+        if (stream.readLine() != "# Color Management Configuration File")
         {
-           KMessageBox::error(0,
-                        i18n("\"%1\" is not a Color Management settings text file.")
-                        .arg(loadColorManagementFile.fileName()));
-           file.close();
-           return;
+            KMessageBox::error(0, i18n("\"%1\" is not a Color Management settings text file.")
+                                  .arg(loadColorManagementFile.fileName()));
+            file.close();
+            return;
         }
 
         blockSignals(true);
 
-        m_renderingIntentsCB->setCurrentItem( stream.readLine().toInt() );
-        m_doSoftProofBox->setChecked( (bool)(stream.readLine().toUInt()) );
-        m_checkGamutBox->setChecked( (bool)(stream.readLine().toUInt()) );
-        m_embeddProfileBox->setChecked( (bool)(stream.readLine().toUInt()) );
-        m_BPCBox->setChecked( (bool)(stream.readLine().toUInt()) );
-        m_inProfileBG->setButton( stream.readLine().toInt() );
-        m_spaceProfileBG->setButton( stream.readLine().toInt() );
-        m_proofProfileBG->setButton( stream.readLine().toInt() );
-        m_inProfilesPath->setURL( stream.readLine() );
-        m_proofProfilePath->setURL( stream.readLine() );
-        m_spaceProfilePath->setURL( stream.readLine() );
-        m_cInput->setValue( stream.readLine().toInt() );
+        m_renderingIntentsCB->setCurrentItem(stream.readLine().toInt());
+        m_doSoftProofBox->setChecked((bool) (stream.readLine().toUInt()));
+        m_checkGamutBox->setChecked((bool) (stream.readLine().toUInt()));
+        m_embeddProfileBox->setChecked((bool) (stream.readLine().toUInt()));
+        m_BPCBox->setChecked((bool) (stream.readLine().toUInt()));
+        m_inProfileBG->setButton(stream.readLine().toInt());
+        m_spaceProfileBG->setButton(stream.readLine().toInt());
+        m_proofProfileBG->setButton(stream.readLine().toInt());
+        m_inProfilesPath->setURL(stream.readLine());
+        m_proofProfilePath->setURL(stream.readLine());
+        m_spaceProfilePath->setURL(stream.readLine());
+        m_cInput->setValue(stream.readLine().toInt());
 
         for (int i = 0 ; i < 5 ; i++)
             m_curvesWidget->curves()->curvesChannelReset(i);
@@ -1220,17 +1208,17 @@ void ICCProofTool::slotUser3()
         m_curvesWidget->curves()->setCurveType(m_curvesWidget->m_channelType, ImageCurves::CURVE_SMOOTH);
         m_curvesWidget->reset();
 
-        for (int j = 0 ; j < 17 ; j++)
+        for (int j = 0; j < 17; j++)
         {
             QPoint disable(-1, -1);
             QPoint p;
-            p.setX( stream.readLine().toInt() );
-            p.setY( stream.readLine().toInt() );
+            p.setX(stream.readLine().toInt());
+            p.setY(stream.readLine().toInt());
 
             if (m_originalImage->sixteenBit() && p != disable)
             {
-                p.setX(p.x()*255);
-                p.setY(p.y()*255);
+                p.setX(p.x() * 255);
+                p.setY(p.y() * 255);
             }
 
             m_curvesWidget->curves()->setCurvePoint(ImageHistogram::ValueChannel, j, p);
@@ -1256,7 +1244,7 @@ void ICCProofTool::slotUser2()
 {
     KURL saveColorManagementFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                                 QString( "*" ), 0,
-                                                QString( i18n("Color Management Settings File to Save")) );
+                                                QString(i18n("Color Management Settings File to Save")));
     if( saveColorManagementFile.isEmpty() )
        return;
 
@@ -1264,7 +1252,7 @@ void ICCProofTool::slotUser2()
 
     if ( file.open(IO_WriteOnly) )
     {
-        QTextStream stream( &file );
+        QTextStream stream(&file);
         stream << "# Color Management Configuration File\n";
         stream << m_renderingIntentsCB->currentItem() << "\n";
         stream << m_doSoftProofBox->isChecked() << "\n";
@@ -1279,13 +1267,13 @@ void ICCProofTool::slotUser2()
         stream << m_spaceProfilePath->url() << "\n";
         stream << m_cInput->value() << "\n";
 
-        for (int j = 0 ; j < 17 ; j++)
+        for (int j = 0; j < 17; j++)
         {
             QPoint p = m_curvesWidget->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
             if (m_originalImage->sixteenBit())
             {
-                p.setX(p.x()/255);
-                p.setY(p.y()/255);
+                p.setX(p.x() / 255);
+                p.setY(p.y() / 255);
             }
             stream << p.x() << "\n";
             stream << p.y() << "\n";
