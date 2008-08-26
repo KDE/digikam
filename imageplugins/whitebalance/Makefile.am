@@ -18,7 +18,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes) 
 
 digikamimageplugin_whitebalance_la_SOURCES = imageplugin_whitebalance.cpp \
-	                                         imageeffect_whitebalance.cpp 
+	                                         whitebalancetool.cpp 
 
 digikamimageplugin_whitebalance_la_LIBADD = $(LIB_KPARTS) \
 	                                        $(top_builddir)/digikam/digikam/libdigikam.la  
@@ -31,4 +31,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_whitebalance.la
 
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_whitebalance_ui.rc
-

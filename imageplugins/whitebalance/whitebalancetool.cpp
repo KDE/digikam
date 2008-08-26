@@ -73,64 +73,53 @@
 #include "imageiface.h"
 #include "imagewidget.h"
 #include "imagehistogram.h"
+#include "editortoolsettings.h"
 #include "whitebalance.h"
 #include "colorgradientwidget.h"
 #include "histogramwidget.h"
 #include "dimgimagefilters.h"
-#include "imageeffect_whitebalance.h"
-#include "imageeffect_whitebalance.moc"
+#include "whitebalancetool.h"
+#include "whitebalancetool.moc"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamWhiteBalanceImagesPlugin
 {
 
-ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
-                        : Digikam::ImageDlgBase(parent, i18n("White Color Balance Correction"),
-                                                "whitebalance", true, false)
+WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
+                : EditorTool(parent)
 {
     QString whatsThis;
 
-    Digikam::ImageIface iface(0, 0);
+    m_destinationPreviewData = 0;
 
-    m_destinationPreviewData = 0L;
-
-    // About data and help button.
-
-    KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("White Color Balance Correction"),
-                                       digikam_version,
-                                       I18N_NOOP("A digiKam image plugin to correct white color balance."),
-                                       KAboutData::License_GPL,
-                                       "(c) 2005-2008, Gilles Caulier",
-                                       0,
-                                       "http://wwww.digikam.org");
-
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at gmail dot com");
-
-    about->addAuthor("Pawel T. Jochym", I18N_NOOP("White color balance correction algorithm"),
-                     "jochym at ifj edu pl");
-
-    setAboutData(about);
+    setName("whitebalance");
+    setToolName(i18n("White Balance"));
+    setToolIcon(SmallIcon("whitebalance"));
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new Digikam::ImageWidget("whitebalance Tool Dialog", plainPage(),
-                                               i18n("<p>You can see here the image's white-balance "
-                                                    "adjustments preview. You can pick color on image to "
-                                                    "see the color level corresponding on histogram."));
-    setPreviewAreaWidget(m_previewWidget);
+    m_previewWidget = new ImageWidget("whitebalance Tool Dialog", 0,
+                                      i18n("<p>You can see here the image's white-balance "
+                                           "adjustments preview. You can pick color on image to "
+                                           "see the color level corresponding on histogram."));
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings = new QWidget(plainPage());
-    QVBoxLayout* layout2  = new QVBoxLayout( gboxSettings, spacingHint() );
-    QGridLayout *grid     = new QGridLayout( layout2, 2, 4, spacingHint());
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Load|
+                                            EditorToolSettings::SaveAs|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel);
 
-    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
+    QVBoxLayout* layout2  = new QVBoxLayout(m_gboxSettings->plainPage(), m_gboxSettings->spacingHint());
+    QGridLayout *grid     = new QGridLayout(layout2, 2, 4);
+
+    QLabel *label1 = new QLabel(i18n("Channel:"), m_gboxSettings->plainPage());
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, gboxSettings );
+    m_channelCB = new QComboBox( false, m_gboxSettings->plainPage() );
     m_channelCB->insertItem( i18n("Luminosity") );
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
@@ -141,7 +130,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
                                        "<b>Green</b>: display the green image-channel values.<p>"
                                        "<b>Blue</b>: display the blue image-channel values.<p>"));
 
-    m_scaleBG = new QHButtonGroup(gboxSettings);
+    m_scaleBG = new QHButtonGroup(m_gboxSettings->plainPage());
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(QFrame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
@@ -153,7 +142,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
 
     QPushButton *linHistoButton = new QPushButton( m_scaleBG );
     QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
-    m_scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
+    m_scaleBG->insert(linHistoButton, HistogramWidget::LinScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
     linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
@@ -161,7 +150,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
 
     QPushButton *logHistoButton = new QPushButton( m_scaleBG );
     QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
-    m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    m_scaleBG->insert(logHistoButton, HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
     logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
@@ -173,37 +162,38 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     l1->addStretch(10);
     l1->addWidget(m_scaleBG);
 
-    grid->addMultiCellLayout(l1, 0, 0, 0, 4);
-
     // -------------------------------------------------------------
 
-    QVBox *histoBox   = new QVBox(gboxSettings);
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
+    QVBox *histoBox   = new QVBox(m_gboxSettings->plainPage());
+    m_histogramWidget = new HistogramWidget(256, 140, histoBox, false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram "
                                              "drawing of the selected image channel. This one is "
                                              "re-computed at any filter settings changes."));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);
-    m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
+    m_hGradient = new ColorGradientWidget( ColorGradientWidget::Horizontal, 10, histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
+    grid->addMultiCellLayout(l1,       0, 0, 0, 4);
     grid->addMultiCellWidget(histoBox, 1, 2, 0, 4);
+    grid->setMargin(m_gboxSettings->spacingHint());
+    grid->setSpacing(m_gboxSettings->spacingHint());
 
     // -------------------------------------------------------------
 
-    QGridLayout *grid2 = new QGridLayout(layout2, 13, 5, spacingHint());
+    QGridLayout *grid2 = new QGridLayout(layout2, 13, 5);
 
     m_temperatureLabel    = new KActiveLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Color_temperature'>Color Temperature</a> "
-                                                  " (K): </qt>"), gboxSettings);
-    m_adjTemperatureLabel = new QLabel(i18n("Adjustment:"), gboxSettings);
-    m_temperatureInput    = new RDoubleNumInput(gboxSettings);
+                                                  " (K): </qt>"), m_gboxSettings->plainPage());
+    m_adjTemperatureLabel = new QLabel(i18n("Adjustment:"), m_gboxSettings->plainPage());
+    m_temperatureInput    = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_temperatureInput->setPrecision(1);
     m_temperatureInput->setRange(2000.0, 12000.0, 10.0);
     m_temperatureInput->setDefaultValue(6500.0);
     QWhatsThis::add( m_temperatureInput, i18n("<p>Set here the white balance color temperature in Kelvin."));
 
-    m_temperaturePresetLabel = new QLabel(i18n("Preset:"), gboxSettings);
-    m_temperaturePresetCB = new RComboBox(gboxSettings);
+    m_temperaturePresetLabel = new QLabel(i18n("Preset:"), m_gboxSettings->plainPage());
+    m_temperaturePresetCB = new RComboBox(m_gboxSettings->plainPage());
     m_temperaturePresetCB->insertItem( i18n("Candle") );
     m_temperaturePresetCB->insertItem( i18n("40W Lamp") );
     m_temperaturePresetCB->insertItem( i18n("100W Lamp") );
@@ -236,7 +226,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
                                                  "<b>Xenon Lamp</b>: xenon lamp or light arc (6420K).<p>"
                                                  "<b>Daylight D65</b>: overcast sky light (6500K).<p>"
                                                  "<b>None</b>: no preset value."));
-    m_pickTemperature = new QPushButton(gboxSettings);
+    m_pickTemperature = new QPushButton(m_gboxSettings->plainPage());
     KGlobal::dirs()->addResourceType("color-picker-grey", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("color-picker-grey", "color-picker-grey.png");
     m_pickTemperature->setPixmap( QPixmap( directory + "color-picker-grey.png" ) );
@@ -246,66 +236,66 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
                                              "image used to set white color balance temperature and "
                                              "green component."));
 
-    KSeparator *line = new KSeparator (Horizontal, gboxSettings);
+    KSeparator *line = new KSeparator (Horizontal, m_gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
-    m_blackLabel = new QLabel(i18n("Black point:"), gboxSettings);
-    m_blackInput = new RDoubleNumInput(gboxSettings);
+    m_blackLabel = new QLabel(i18n("Black point:"), m_gboxSettings->plainPage());
+    m_blackInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_blackInput->setPrecision(2);
     m_blackInput->setRange(0.0, 0.05, 0.01);
     m_blackInput->setDefaultValue(0.0);
     QWhatsThis::add( m_blackInput, i18n("<p>Set here the black level value."));
 
-    m_darkLabel = new QLabel(i18n("Shadows:"), gboxSettings);
-    m_darkInput = new RDoubleNumInput(gboxSettings);
+    m_darkLabel = new QLabel(i18n("Shadows:"), m_gboxSettings->plainPage());
+    m_darkInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_darkInput->setPrecision(2);
     m_darkInput->setRange(0.0, 1.0, 0.01);
     m_darkInput->setDefaultValue(0.5);
     QWhatsThis::add( m_darkInput, i18n("<p>Set here the shadows noise suppresion level."));
 
-    m_saturationLabel = new QLabel(i18n("Saturation:"), gboxSettings);
-    m_saturationInput = new RDoubleNumInput(gboxSettings);
+    m_saturationLabel = new QLabel(i18n("Saturation:"), m_gboxSettings->plainPage());
+    m_saturationInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_saturationInput->setPrecision(2);
     m_saturationInput->setRange(0.0, 2.0, 0.01);
     m_saturationInput->setDefaultValue(1.0);
     QWhatsThis::add( m_saturationInput, i18n("<p>Set here the saturation value."));
 
-    m_gammaLabel = new QLabel(i18n("Gamma:"), gboxSettings);
-    m_gammaInput = new RDoubleNumInput(gboxSettings);
+    m_gammaLabel = new QLabel(i18n("Gamma:"), m_gboxSettings->plainPage());
+    m_gammaInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_gammaInput->setPrecision(2);
     m_gammaInput->setRange(0.1, 3.0, 0.01);
     m_gammaInput->setDefaultValue(1.0);
     QWhatsThis::add( m_gammaInput, i18n("<p>Set here the gamma correction value."));
 
-    m_greenLabel = new QLabel(i18n("Green:"), gboxSettings);
-    m_greenInput = new RDoubleNumInput(gboxSettings);
+    m_greenLabel = new QLabel(i18n("Green:"), m_gboxSettings->plainPage());
+    m_greenInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_greenInput->setPrecision(2);
     m_greenInput->setRange(0.2, 2.5, 0.01);
     m_greenInput->setDefaultValue(1.0);
     QWhatsThis::add(m_greenInput, i18n("<p>Set here the green component to set magenta color "
                                        "cast removal level."));
 
-    KSeparator *line2 = new KSeparator (Horizontal, gboxSettings);
+    KSeparator *line2 = new KSeparator (Horizontal, m_gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
     m_exposureLabel      = new KActiveLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Exposure_value'>Exposure Compensation</a> "
-                                                 " (E.V): </qt>"), gboxSettings);
-    m_mainExposureLabel  = new QLabel(i18n("Main:"), gboxSettings);
-    m_autoAdjustExposure = new QPushButton(gboxSettings);
+                                                 " (E.V): </qt>"), m_gboxSettings->plainPage());
+    m_mainExposureLabel  = new QLabel(i18n("Main:"), m_gboxSettings->plainPage());
+    m_autoAdjustExposure = new QPushButton(m_gboxSettings->plainPage());
     m_autoAdjustExposure->setPixmap(kapp->iconLoader()->loadIcon("run", (KIcon::Group)KIcon::Toolbar));
     QToolTip::add( m_autoAdjustExposure, i18n( "Auto exposure adjustments" ) );
     QWhatsThis::add( m_autoAdjustExposure, i18n("<p>With this button, you can automatically adjust Exposure "
                                                 "and Black Point values."));
-    m_mainExposureInput = new RDoubleNumInput(gboxSettings);
+    m_mainExposureInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_mainExposureInput->setPrecision(2);
     m_mainExposureInput->setRange(-6.0, 8.0, 0.1);
     m_mainExposureInput->setDefaultValue(0.0);
     QWhatsThis::add( m_mainExposureInput, i18n("<p>Set here the main exposure compensation value in E.V."));
 
-    m_fineExposureLabel = new QLabel(i18n("Fine:"), gboxSettings);
-    m_fineExposureInput = new RDoubleNumInput(gboxSettings);
+    m_fineExposureLabel = new QLabel(i18n("Fine:"), m_gboxSettings->plainPage());
+    m_fineExposureInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_fineExposureInput->setPrecision(2);
     m_fineExposureInput->setRange(-0.5, 0.5, 0.01);
     m_fineExposureInput->setDefaultValue(0.0);
@@ -314,37 +304,39 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    grid2->addMultiCellWidget(m_temperatureLabel, 0, 0, 0, 5);
-    grid2->addMultiCellWidget(m_adjTemperatureLabel, 1, 1, 0, 0);
-    grid2->addMultiCellWidget(m_pickTemperature, 1, 1, 1, 1);
-    grid2->addMultiCellWidget(m_temperatureInput, 1, 1, 2, 5);
+    grid2->addMultiCellWidget(m_temperatureLabel,       0, 0, 0, 5);
+    grid2->addMultiCellWidget(m_adjTemperatureLabel,    1, 1, 0, 0);
+    grid2->addMultiCellWidget(m_pickTemperature,        1, 1, 1, 1);
+    grid2->addMultiCellWidget(m_temperatureInput,       1, 1, 2, 5);
     grid2->addMultiCellWidget(m_temperaturePresetLabel, 2, 2, 0, 0);
-    grid2->addMultiCellWidget(m_temperaturePresetCB, 2, 2, 2, 5);
+    grid2->addMultiCellWidget(m_temperaturePresetCB,    2, 2, 2, 5);
 
-    grid2->addMultiCellWidget(line, 3, 3, 0, 5);
+    grid2->addMultiCellWidget(line,                     3, 3, 0, 5);
 
-    grid2->addMultiCellWidget(m_blackLabel, 4, 4, 0, 0);
-    grid2->addMultiCellWidget(m_blackInput, 4, 4, 1, 5);
-    grid2->addMultiCellWidget(m_darkLabel, 5, 5, 0, 0);
-    grid2->addMultiCellWidget(m_darkInput, 5, 5, 1, 5);
-    grid2->addMultiCellWidget(m_saturationLabel, 6, 6, 0, 0);
-    grid2->addMultiCellWidget(m_saturationInput, 6, 6, 1, 5);
-    grid2->addMultiCellWidget(m_gammaLabel, 7, 7, 0, 0);
-    grid2->addMultiCellWidget(m_gammaInput, 7, 7, 1, 5);
-    grid2->addMultiCellWidget(m_greenLabel, 8, 8, 0, 0);
-    grid2->addMultiCellWidget(m_greenInput, 8, 8, 1, 5);
+    grid2->addMultiCellWidget(m_blackLabel,             4, 4, 0, 0);
+    grid2->addMultiCellWidget(m_blackInput,             4, 4, 1, 5);
+    grid2->addMultiCellWidget(m_darkLabel,              5, 5, 0, 0);
+    grid2->addMultiCellWidget(m_darkInput,              5, 5, 1, 5);
+    grid2->addMultiCellWidget(m_saturationLabel,        6, 6, 0, 0);
+    grid2->addMultiCellWidget(m_saturationInput,        6, 6, 1, 5);
+    grid2->addMultiCellWidget(m_gammaLabel,             7, 7, 0, 0);
+    grid2->addMultiCellWidget(m_gammaInput,             7, 7, 1, 5);
+    grid2->addMultiCellWidget(m_greenLabel,             8, 8, 0, 0);
+    grid2->addMultiCellWidget(m_greenInput,             8, 8, 1, 5);
 
-    grid2->addMultiCellWidget(line2, 9, 9, 0, 5);
+    grid2->addMultiCellWidget(line2,                    9, 9, 0, 5);
 
-    grid2->addMultiCellWidget(m_exposureLabel, 10, 10, 0, 5);
-    grid2->addMultiCellWidget(m_mainExposureLabel, 11, 11, 0, 0);
-    grid2->addMultiCellWidget(m_autoAdjustExposure, 11, 11, 1, 1);
-    grid2->addMultiCellWidget(m_mainExposureInput, 11, 11, 2, 5);
-    grid2->addMultiCellWidget(m_fineExposureLabel, 12, 12, 0, 1);
-    grid2->addMultiCellWidget(m_fineExposureInput, 12, 12, 2, 5);
+    grid2->addMultiCellWidget(m_exposureLabel,          10, 10, 0, 5);
+    grid2->addMultiCellWidget(m_mainExposureLabel,      11, 11, 0, 0);
+    grid2->addMultiCellWidget(m_autoAdjustExposure,     11, 11, 1, 1);
+    grid2->addMultiCellWidget(m_mainExposureInput,      11, 11, 2, 5);
+    grid2->addMultiCellWidget(m_fineExposureLabel,      12, 12, 0, 1);
+    grid2->addMultiCellWidget(m_fineExposureInput,      12, 12, 2, 5);
     grid2->setRowStretch(13, 10);
+    grid2->setMargin(m_gboxSettings->spacingHint());
+    grid2->setSpacing(m_gboxSettings->spacingHint());
 
-    setUserAreaWidget(gboxSettings);
+    setToolSettings(m_gboxSettings);
 
     // -------------------------------------------------------------
 
@@ -354,11 +346,11 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromOriginal( const Digikam::DColor & )));
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotColorSelectedFromOriginal(const Digikam::DColor&)));
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
 
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
@@ -403,17 +395,15 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
             this, SLOT(slotPickerColorButtonActived()));
 }
 
-ImageEffect_WhiteBalance::~ImageEffect_WhiteBalance()
+WhiteBalanceTool::~WhiteBalanceTool()
 {
     m_histogramWidget->stopHistogramComputation();
 
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
-
-    delete m_histogramWidget;
 }
 
-void ImageEffect_WhiteBalance::slotTemperatureChanged(double temperature)
+void WhiteBalanceTool::slotTemperatureChanged(double temperature)
 {
    switch((uint)temperature)
    {
@@ -477,7 +467,7 @@ void ImageEffect_WhiteBalance::slotTemperatureChanged(double temperature)
     slotTimer();
 }
 
-void ImageEffect_WhiteBalance::slotTemperaturePresetChanged(int tempPreset)
+void WhiteBalanceTool::slotTemperaturePresetChanged(int tempPreset)
 {
    switch(tempPreset)
    {
@@ -540,22 +530,22 @@ void ImageEffect_WhiteBalance::slotTemperaturePresetChanged(int tempPreset)
     slotEffect();
 }
 
-void ImageEffect_WhiteBalance::slotPickerColorButtonActived()
+void WhiteBalanceTool::slotPickerColorButtonActived()
 {
     // Save previous rendering mode and toggle to original image.
     m_currentPreviewMode = m_previewWidget->getRenderingPreviewMode();
-    m_previewWidget->setRenderingPreviewMode(Digikam::ImageGuideWidget::PreviewOriginalImage);
+    m_previewWidget->setRenderingPreviewMode(ImageGuideWidget::PreviewOriginalImage);
 }
 
-void ImageEffect_WhiteBalance::slotColorSelectedFromOriginal(const Digikam::DColor &color)
+void WhiteBalanceTool::slotColorSelectedFromOriginal(const DColor &color)
 {
     if ( m_pickTemperature->isOn() )
     {
-        Digikam::DColor dc = color;
+        DColor dc = color;
         QColor tc = dc.getQColor();
         double temperatureLevel, greenLevel;
 
-        Digikam::WhiteBalance::autoWBAdjustementFromColor(tc, temperatureLevel, greenLevel);
+        WhiteBalance::autoWBAdjustementFromColor(tc, temperatureLevel, greenLevel);
 
         m_temperatureInput->setValue(temperatureLevel);
         m_greenInput->setValue(greenLevel);
@@ -570,38 +560,38 @@ void ImageEffect_WhiteBalance::slotColorSelectedFromOriginal(const Digikam::DCol
     slotEffect();
 }
 
-void ImageEffect_WhiteBalance::slotColorSelectedFromTarget( const Digikam::DColor &color )
+void WhiteBalanceTool::slotColorSelectedFromTarget(const DColor& color)
 {
     m_histogramWidget->setHistogramGuideByColor(color);
 }
 
-void ImageEffect_WhiteBalance::slotScaleChanged(int scale)
+void WhiteBalanceTool::slotScaleChanged(int scale)
 {
     m_histogramWidget->m_scaleType = scale;
     m_histogramWidget->repaint(false);
 }
 
-void ImageEffect_WhiteBalance::slotChannelChanged(int channel)
+void WhiteBalanceTool::slotChannelChanged(int channel)
 {
     switch(channel)
     {
        case LuminosityChannel:
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
+          m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
           m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
           break;
 
        case RedChannel:
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
+          m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
           m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
           break;
 
        case GreenChannel:
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
+          m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
           m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
           break;
 
        case BlueChannel:
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
+          m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
           m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
           break;
     }
@@ -609,11 +599,11 @@ void ImageEffect_WhiteBalance::slotChannelChanged(int channel)
     m_histogramWidget->repaint(false);
 }
 
-void ImageEffect_WhiteBalance::slotAutoAdjustExposure()
+void WhiteBalanceTool::slotAutoAdjustExposure()
 {
-    parentWidget()->setCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( KCursor::waitCursor() );
 
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = m_previewWidget->imageIface();
     uchar *data                = iface->getOriginalImage();
     int width                  = iface->originalWidth();
     int height                 = iface->originalHeight();
@@ -622,24 +612,24 @@ void ImageEffect_WhiteBalance::slotAutoAdjustExposure()
     double blackLevel;
     double exposureLevel;
 
-    Digikam::WhiteBalance::autoExposureAdjustement(data, width, height, sb, blackLevel, exposureLevel);
+    WhiteBalance::autoExposureAdjustement(data, width, height, sb, blackLevel, exposureLevel);
     delete [] data;
 
     m_blackInput->setValue(blackLevel);
     m_mainExposureInput->setValue(exposureLevel);
     m_fineExposureInput->setValue(0.0);
 
-    parentWidget()->unsetCursor();
+    kapp->restoreOverrideCursor();
     slotEffect();
 }
 
-void ImageEffect_WhiteBalance::slotEffect()
+void WhiteBalanceTool::slotEffect()
 {
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
-    uchar *data                = iface->getPreviewImage();
-    int w                      = iface->previewWidth();
-    int h                      = iface->previewHeight();
-    bool sb                    = iface->previewSixteenBit();
+    ImageIface* iface = m_previewWidget->imageIface();
+    uchar *data       = iface->getPreviewImage();
+    int w             = iface->previewWidth();
+    int h             = iface->previewHeight();
+    bool sb           = iface->previewSixteenBit();
 
     // Create the new empty destination image data space.
     m_histogramWidget->stopHistogramComputation();
@@ -658,7 +648,7 @@ void ImageEffect_WhiteBalance::slotEffect()
     double saturation   = m_saturationInput->value();
     double green        = m_greenInput->value();
 
-    Digikam::WhiteBalance wbFilter(sb);
+    WhiteBalance wbFilter(sb);
     wbFilter.whiteBalance(data, w, h, sb,
                           black, mainExposure + fineExposure,
                           temperature, green, dark,
@@ -673,14 +663,14 @@ void ImageEffect_WhiteBalance::slotEffect()
     delete [] data;
 }
 
-void ImageEffect_WhiteBalance::finalRendering()
+void WhiteBalanceTool::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
-    uchar *data                = iface->getOriginalImage();
-    int w                      = iface->originalWidth();
-    int h                      = iface->originalHeight();
-    bool sb                    = iface->originalSixteenBit();
+    ImageIface* iface = m_previewWidget->imageIface();
+    uchar *data       = iface->getOriginalImage();
+    int w             = iface->originalWidth();
+    int h             = iface->originalHeight();
+    bool sb           = iface->originalSixteenBit();
 
     double temperature  = m_temperatureInput->value();
     double dark         = m_darkInput->value();
@@ -691,7 +681,7 @@ void ImageEffect_WhiteBalance::finalRendering()
     double saturation   = m_saturationInput->value();
     double green        = m_greenInput->value();
 
-    Digikam::WhiteBalance wbFilter(sb);
+    WhiteBalance wbFilter(sb);
     wbFilter.whiteBalance(data, w, h, sb,
                           black, mainExposure + fineExposure,
                           temperature, green, dark,
@@ -700,10 +690,9 @@ void ImageEffect_WhiteBalance::finalRendering()
     iface->putOriginalImage(i18n("White Balance"), data);
     delete [] data;
     kapp->restoreOverrideCursor();
-    accept();
 }
 
-void ImageEffect_WhiteBalance::resetValues()
+void WhiteBalanceTool::slotResetSettings()
 {
     m_blackInput->blockSignals(true);
     m_darkInput->blockSignals(true);
@@ -746,12 +735,12 @@ void ImageEffect_WhiteBalance::resetValues()
     slotEffect();
 }
 
-void ImageEffect_WhiteBalance::readUserSettings()
+void WhiteBalanceTool::readSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("whitebalance Tool Dialog");
+    config->setGroup("whitebalance Tool");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", HistogramWidget::LogScaleHistogram));
 
     m_darkInput->setValue(config->readDoubleNumEntry("Dark",m_darkInput->defaultValue()));
     m_blackInput->setValue(config->readDoubleNumEntry("Black", m_blackInput->defaultValue()));
@@ -761,15 +750,16 @@ void ImageEffect_WhiteBalance::readUserSettings()
     m_saturationInput->setValue(config->readDoubleNumEntry("Saturation", m_saturationInput->defaultValue()));
     m_greenInput->setValue(config->readDoubleNumEntry("Green", m_greenInput->defaultValue()));
     m_temperatureInput->setValue(config->readDoubleNumEntry("Temperature", m_temperatureInput->defaultValue()));
+
     slotTemperatureChanged(m_temperatureInput->value());
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
 }
 
-void ImageEffect_WhiteBalance::writeUserSettings()
+void WhiteBalanceTool::writeSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("whitebalance Tool Dialog");
+    config->setGroup("whitebalance Tool");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
 
@@ -784,11 +774,10 @@ void ImageEffect_WhiteBalance::writeUserSettings()
     config->sync();
 }
 
-// Load all settings.
-void ImageEffect_WhiteBalance::slotUser3()
+void WhiteBalanceTool::slotLoadSettings()
 {
     KURL loadWhiteBalanceFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
-                                             QString( "*" ), this,
+                                             QString( "*" ), kapp->activeWindow(),
                                              QString( i18n("White Color Balance Settings File to Load")) );
     if( loadWhiteBalanceFile.isEmpty() )
        return;
@@ -801,7 +790,7 @@ void ImageEffect_WhiteBalance::slotUser3()
 
         if ( stream.readLine() != "# White Color Balance Configuration File V2" )
         {
-           KMessageBox::error(this,
+           KMessageBox::error(kapp->activeWindow(),
                         i18n("\"%1\" is not a White Color Balance settings text file.")
                         .arg(loadWhiteBalanceFile.fileName()));
            file.close();
@@ -822,16 +811,15 @@ void ImageEffect_WhiteBalance::slotUser3()
         slotEffect();
     }
     else
-        KMessageBox::error(this, i18n("Cannot load settings from the White Color Balance text file."));
+        KMessageBox::error(kapp->activeWindow(), i18n("Cannot load settings from the White Color Balance text file."));
 
     file.close();
 }
 
-// Save all settings.
-void ImageEffect_WhiteBalance::slotUser2()
+void WhiteBalanceTool::slotSaveAsSettings()
 {
     KURL saveWhiteBalanceFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
-                                             QString( "*" ), this,
+                                             QString( "*" ), kapp->activeWindow(),
                                              QString( i18n("White Color Balance Settings File to Save")) );
     if( saveWhiteBalanceFile.isEmpty() )
        return;
@@ -852,10 +840,9 @@ void ImageEffect_WhiteBalance::slotUser2()
         stream << m_greenInput->value() << "\n";
     }
     else
-        KMessageBox::error(this, i18n("Cannot save settings to the White Color Balance text file."));
+        KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the White Color Balance text file."));
 
     file.close();
 }
 
 }  // NameSpace DigikamWhiteBalanceImagesPlugin
-
