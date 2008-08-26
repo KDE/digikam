@@ -51,7 +51,7 @@
 #include "dimg.h"
 #include "imageiface.h"
 #include "imagewidget.h"
-#include "sheartool.h"
+#include "shear.h"
 #include "imageeffect_sheartool.h"
 #include "imageeffect_sheartool.moc"
 
@@ -257,7 +257,7 @@ void ImageEffect_ShearTool::prepareEffect()
     delete [] data;
 
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
-                       new ShearTool(&image, this, hAngle, vAngle, antialiasing, background, orgW, orgH));
+                       new Shear(&image, this, hAngle, vAngle, antialiasing, background, orgW, orgH));
 }
 
 void ImageEffect_ShearTool::prepareFinal()
@@ -283,7 +283,7 @@ void ImageEffect_ShearTool::prepareFinal()
     delete [] data;
 
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
-                       new ShearTool(&orgImage, this, hAngle, vAngle, antialiasing, background, orgW, orgH));
+                       new Shear(&orgImage, this, hAngle, vAngle, antialiasing, background, orgW, orgH));
 }
 
 void ImageEffect_ShearTool::putPreviewData(void)
@@ -304,7 +304,7 @@ void ImageEffect_ShearTool::putPreviewData(void)
                                                iface->previewHeight())).bits());
 
     m_imagePreviewWidget->updatePreview();
-    QSize newSize = dynamic_cast<ShearTool *>(m_threadedFilter)->getNewSize();
+    QSize newSize = dynamic_cast<Shear*>(m_threadedFilter)->getNewSize();
     QString temp;
     m_newWidthLabel->setText(temp.setNum( newSize.width()) + i18n(" px") );
     m_newHeightLabel->setText(temp.setNum( newSize.height()) + i18n(" px") );
@@ -330,4 +330,3 @@ void ImageEffect_ShearTool::renderingFinished()
 }
 
 }  // NameSpace DigikamShearToolImagesPlugin
-

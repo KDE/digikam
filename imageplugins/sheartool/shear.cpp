@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2005-07-18
- * Description : Shear tool threaded image filter.
+ * Description : Shear threaded image filter.
  * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Original Shear algorithms copyrighted 2005 by 
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -36,14 +36,14 @@
 
 #include "dimg.h"
 #include "dimgimagefilters.h"
-#include "sheartool.h"
+#include "shear.h"
 
 namespace DigikamShearToolImagesPlugin
 {
 
-ShearTool::ShearTool(Digikam::DImg *orgImage, QObject *parent, float hAngle, float vAngle,
+Shear::Shear(Digikam::DImg *orgImage, QObject *parent, float hAngle, float vAngle,
                      bool antialiasing, QColor backgroundColor, int orgW, int orgH)
-         : Digikam::DImgThreadedFilter(orgImage, parent, "sheartool")
+     : Digikam::DImgThreadedFilter(orgImage, parent, "sheartool")
 { 
     m_hAngle          = hAngle;
     m_vAngle          = vAngle;
@@ -51,11 +51,11 @@ ShearTool::ShearTool(Digikam::DImg *orgImage, QObject *parent, float hAngle, flo
     m_orgH            = orgH;
     m_antiAlias       = antialiasing;
     m_backgroundColor = backgroundColor;
-            
+
     initFilter();
 }
 
-void ShearTool::filterImage(void)
+void Shear::filterImage(void)
 {
     int          progress;
     register int x, y, p = 0, pt;
@@ -67,10 +67,10 @@ void ShearTool::filterImage(void)
 
     int nWidth  = m_orgImage.width();
     int nHeight = m_orgImage.height();
-    
+
     uchar *pBits            = m_orgImage.bits();
     unsigned short *pBits16 = (unsigned short*)m_orgImage.bits();
-    
+
     // get beta ( complementary ) angle for horizontal and vertical angles
     horz_beta_angle = ( ( ( m_hAngle < 0.0 ) ? 180.0 : 90.0 ) - m_hAngle ) * DEG2RAD;
     vert_beta_angle = ( ( ( m_vAngle < 0.0 ) ? 180.0 : 90.0 ) - m_vAngle ) * DEG2RAD;
@@ -120,7 +120,7 @@ void ShearTool::filterImage(void)
     // allocates a new image with the new size
 
     bool sixteenBit = m_orgImage.sixteenBit();
-    
+
     m_destImage = Digikam::DImg(new_width, new_height, sixteenBit, m_orgImage.hasAlpha());
     m_destImage.fill( Digikam::DColor(m_backgroundColor.rgb(), sixteenBit) );
 
@@ -128,7 +128,7 @@ void ShearTool::filterImage(void)
     unsigned short *pResBits16 = (unsigned short *)m_destImage.bits();
 
     Digikam::DImgImageFilters filters;
-    
+
     for( y = 0; y < new_height; y++) 
     {
         for( x = 0; x < new_width; x++, p += 4 ) 
@@ -138,7 +138,7 @@ void ShearTool::filterImage(void)
             ny = y + dy + x * vert_factor;
 
             // if is inside the source image
-            if (isInside (nWidth, nHeight, ROUND( nx ), ROUND( ny )))            
+            if (isInside (nWidth, nHeight, ROUND( nx ), ROUND( ny )))
             {
                 if( m_antiAlias ) 
                 {
@@ -169,15 +169,15 @@ void ShearTool::filterImage(void)
         // Update the progress bar in dialog.
         progress = (int)(((double)y * 100.0) / new_height);
         if (progress%5 == 0)
-            postProgress( progress );            
+            postProgress( progress );
     }
-        
-    // To compute the rotated destination image size using original image dimensions.           
+
+    // To compute the rotated destination image size using original image dimensions.
     int W = (int)(fabs(m_orgH * ( ( m_hAngle < 0.0 ) ? sin( horz_beta_angle ) : cos( horz_beta_angle ))))+
             m_orgW;
     int H = (int)(fabs(m_orgW * ( ( m_vAngle < 0.0 ) ? sin( vert_beta_angle ) : cos( vert_beta_angle ))))+
             m_orgH;
-    
+
     m_newSize.setWidth(W);
     m_newSize.setHeight(H);
 }

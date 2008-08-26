@@ -16,9 +16,9 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       -I$(top_srcdir)/digikam/digikam \
 	       $(LIBKDCRAW_CFLAGS) \
 	       $(all_includes)  
-        
-digikamimageplugin_sheartool_la_SOURCES = imageplugin_sheartool.cpp \
-	                                      imageeffect_sheartool.cpp sheartool.cpp 
+
+digikamimageplugin_sheartool_la_SOURCES = imageplugin_sheartool.cpp shear.cpp \
+	                                      imageeffect_sheartool.cpp  
 
 digikamimageplugin_sheartool_la_LIBADD = $(LIB_KPARTS) \
 	                                     $(top_builddir)/digikam/digikam/libdigikam.la 
@@ -31,4 +31,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_sheartool.la
 
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_sheartool_ui.rc
-
