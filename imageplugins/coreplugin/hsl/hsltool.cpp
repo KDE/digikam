@@ -31,7 +31,6 @@
 #include <qhbuttongroup.h>
 #include <qhgroupbox.h>
 #include <qlabel.h>
-#include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qtimer.h>
@@ -54,7 +53,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "colorgradientwidget.h"
 #include "dimg.h"
@@ -64,11 +63,14 @@
 #include "hspreviewwidget.h"
 #include "imageiface.h"
 #include "imagewidget.h"
+
+// Local includes.
+
 #include "hsltool.h"
 #include "hsltool.moc"
 
-using namespace Digikam;
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
@@ -102,12 +104,12 @@ HSLTool::HSLTool(QWidget* parent)
     QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage(), 11, 4);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), m_gboxSettings->plainPage());
-    label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, m_gboxSettings->plainPage());
-    m_channelCB->insertItem( i18n("Luminosity") );
-    m_channelCB->insertItem( i18n("Red") );
-    m_channelCB->insertItem( i18n("Green") );
-    m_channelCB->insertItem( i18n("Blue") );
+    label1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_channelCB = new QComboBox(false, m_gboxSettings->plainPage());
+    m_channelCB->insertItem(i18n("Luminosity"));
+    m_channelCB->insertItem(i18n("Red"));
+    m_channelCB->insertItem(i18n("Green"));
+    m_channelCB->insertItem(i18n("Blue"));
     QWhatsThis::add( m_channelCB, i18n("<p>Select the histogram channel to display here:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
@@ -123,20 +125,20 @@ HSLTool::HSLTool(QWidget* parent)
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
 
-    QPushButton *linHistoButton = new QPushButton( m_scaleBG );
-    QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
+    QPushButton *linHistoButton = new QPushButton(m_scaleBG);
+    QToolTip::add(linHistoButton, i18n("<p>Linear"));
     m_scaleBG->insert(linHistoButton, HistogramWidget::LinScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
-    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
+    linHistoButton->setPixmap(QPixmap(directory + "histogram-lin.png"));
     linHistoButton->setToggleButton(true);
 
-    QPushButton *logHistoButton = new QPushButton( m_scaleBG );
-    QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
+    QPushButton *logHistoButton = new QPushButton(m_scaleBG);
+    QToolTip::add(logHistoButton, i18n("<p>Logarithmic"));
     m_scaleBG->insert(logHistoButton, HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
-    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
+    logHistoButton->setPixmap(QPixmap(directory + "histogram-log.png"));
     logHistoButton->setToggleButton(true);
 
     QHBoxLayout* l1 = new QHBoxLayout();
@@ -180,8 +182,8 @@ HSLTool::HSLTool(QWidget* parent)
     m_hInput->setRange(-180.0, 180.0, 1.0);
     m_hInput->setDefaultValue(0.0);
     QWhatsThis::add( m_hInput, i18n("<p>Set here the hue adjustment of the image."));
-    gridSettings->addMultiCellWidget(label2, 5, 5, 0, 4);
-    gridSettings->addMultiCellWidget(m_hInput, 6, 6, 0, 4);
+    gridSettings->addMultiCellWidget(label2,    5, 5, 0, 4);
+    gridSettings->addMultiCellWidget(m_hInput,  6, 6, 0, 4);
 
     QLabel *label3 = new QLabel(i18n("Saturation:"), m_gboxSettings->plainPage());
     m_sInput       = new RDoubleNumInput(m_gboxSettings);
@@ -189,8 +191,8 @@ HSLTool::HSLTool(QWidget* parent)
     m_sInput->setRange(-100.0, 100.0, 0.01);
     m_sInput->setDefaultValue(0.0);
     QWhatsThis::add( m_sInput, i18n("<p>Set here the saturation adjustment of the image."));
-    gridSettings->addMultiCellWidget(label3, 7, 7, 0, 4);
-    gridSettings->addMultiCellWidget(m_sInput, 8, 8, 0, 4);
+    gridSettings->addMultiCellWidget(label3,    7, 7, 0, 4);
+    gridSettings->addMultiCellWidget(m_sInput,  8, 8, 0, 4);
 
     QLabel *label4 = new QLabel(i18n("Lightness:"), m_gboxSettings->plainPage());
     m_lInput       = new RDoubleNumInput(m_gboxSettings->plainPage());
@@ -198,7 +200,7 @@ HSLTool::HSLTool(QWidget* parent)
     m_lInput->setRange(-100.0, 100.0, 0.01);
     m_lInput->setDefaultValue(0.0);
     QWhatsThis::add( m_lInput, i18n("<p>Set here the lightness adjustment of the image."));
-    gridSettings->addMultiCellWidget(label4, 9, 9, 0, 4);
+    gridSettings->addMultiCellWidget(label4,    9,  9, 0, 4);
     gridSettings->addMultiCellWidget(m_lInput, 10, 10, 0, 4);
 
     gridSettings->setRowStretch(11, 10);
@@ -215,8 +217,8 @@ HSLTool::HSLTool(QWidget* parent)
     connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromTarget( const DColor & )));
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
+            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
     connect(m_hInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
@@ -251,27 +253,27 @@ HSLTool::~HSLTool()
 
 void HSLTool::slotChannelChanged(int channel)
 {
-    switch(channel)
+    switch (channel)
     {
-        case LuminosityChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-            break;
+    case LuminosityChannel:
+        m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
+        m_hGradient->setColors(QColor("black"), QColor("white"));
+        break;
 
-        case RedChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
-            break;
+    case RedChannel:
+        m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
+        m_hGradient->setColors(QColor("black"), QColor("red"));
+        break;
 
-        case GreenChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
-            break;
+    case GreenChannel:
+        m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
+        m_hGradient->setColors(QColor("black"), QColor("green"));
+        break;
 
-        case BlueChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
-            break;
+    case BlueChannel:
+        m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
+        m_hGradient->setColors(QColor("black"), QColor("blue"));
+        break;
     }
 
     m_histogramWidget->repaint(false);
@@ -294,7 +296,7 @@ void HSLTool::slotHSChanged(int h, int s)
     if (h >= 180 && h <= 359)
         hue = double(h) - 359.0;
 
-    double sat = ((double)s * (200.0/255.0)) - 100.0;
+    double sat = ((double) s * (200.0 / 255.0)) - 100.0;
 
     m_hInput->blockSignals(true);
     m_sInput->blockSignals(true);
@@ -321,7 +323,7 @@ void HSLTool::slotHChanged(double h)
 
 void HSLTool::slotSChanged(double s)
 {
-    int sat = (int)((s + 100.0) * (255.0/200.0));
+    int sat = (int) ((s + 100.0) * (255.0 / 200.0));
 
     m_HSSelector->blockSignals(true);
     m_HSSelector->setYValue(sat);
@@ -419,7 +421,7 @@ void HSLTool::slotEffect()
 
 void HSLTool::finalRendering()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor(KCursor::waitCursor());
 
     double hu  = m_hInput->value();
     double sa  = m_sInput->value();
