@@ -85,17 +85,6 @@ RatioCropTool::RatioCropTool(QWidget* parent)
     // -------------------------------------------------------------
 
     m_imageSelectionWidget = new ImageSelectionWidget(480, 320);
-    setToolView(m_imageSelectionWidget);
-
-    // -------------------------------------------------------------
-
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel);
-
-    QVBoxLayout* l = new QVBoxLayout(m_gboxSettings->plainPage(), 5, 0);
-
-    l->addWidget(m_imageSelectionWidget);
     QWhatsThis::add(m_imageSelectionWidget,
                     i18n("<p>Here you can see the aspect ratio selection preview "
                          "used for cropping. You can use the mouse to move and "
@@ -104,20 +93,28 @@ RatioCropTool::RatioCropTool(QWidget* parent)
                          "Press and hold the SHIFT key to move the closest corner to the "
                          "mouse pointer."));
 
-    m_originalIsLandscape = m_imageSelectionWidget->getOriginalImageWidth() >
-                            m_imageSelectionWidget->getOriginalImageHeight();
+    m_originalIsLandscape = ((m_imageSelectionWidget->getOriginalImageWidth()) >
+                             (m_imageSelectionWidget->getOriginalImageHeight()));
+
+    setToolView(m_imageSelectionWidget);
 
     // -------------------------------------------------------------
 
-    QWidget *gbox2        = new QWidget(m_gboxSettings->plainPage());
-    QGridLayout *gridBox2 = new QGridLayout( gbox2, 2, 0);
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel);
 
-    QFrame *cropSelection = new QFrame(gbox2);
-    cropSelection->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QGridLayout* grid = new QGridLayout( cropSelection, 6, 4);
+    // -------------------------------------------------------------
 
-    QLabel *label = new QLabel(i18n("Aspect ratio:"), cropSelection);
-    m_ratioCB     = new RComboBox(cropSelection);
+    QGridLayout *gboxGrid = new QGridLayout(m_gboxSettings->plainPage(), 2, 2);
+
+    QFrame *cropSelection = new QFrame(m_gboxSettings->plainPage());
+    cropSelection->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+
+    QGridLayout* grid     = new QGridLayout(cropSelection, 6, 4);
+
+    QLabel *label         = new QLabel(i18n("Aspect ratio:"), cropSelection);
+    m_ratioCB             = new RComboBox(cropSelection);
     m_ratioCB->setDefaultItem(ImageSelectionWidget::RATIO03X04);
     setRatioCBText(ImageSelectionWidget::Landscape);
     QWhatsThis::add( m_ratioCB, i18n("<p>Select your constrained aspect ratio for cropping. "
@@ -150,13 +147,6 @@ RatioCropTool::RatioCropTool(QWidget* parent)
     m_autoOrientation = new QCheckBox(i18n("Auto"), cropSelection);
     QWhatsThis::add( m_autoOrientation, i18n("<p>Enable this option to automatically set the orientation."));
 
-    grid->addMultiCellWidget(label,             0, 0, 0, 0);
-    grid->addMultiCellWidget(m_ratioCB,         0, 0, 1, 3);
-    grid->addMultiCellWidget(m_preciseCrop,     0, 0, 4, 4);
-    grid->addMultiCellWidget(m_orientLabel,     2, 2, 0, 0);
-    grid->addMultiCellWidget(m_orientCB,        2, 2, 1, 3);
-    grid->addMultiCellWidget(m_autoOrientation, 2, 2, 4, 4);
-
     // -------------------------------------------------------------
 
     m_customLabel1 = new QLabel(i18n("Custom ratio:"), cropSelection);
@@ -172,11 +162,6 @@ RatioCropTool::RatioCropTool(QWidget* parent)
     m_customRatioDInput->input()->setRange(1, 10000, 1, false);
     m_customRatioDInput->setDefaultValue(1);
     QWhatsThis::add( m_customRatioDInput, i18n("<p>Set here the desired custom aspect denominator value."));
-
-    grid->addMultiCellWidget(m_customLabel1,        1, 1, 0, 0);
-    grid->addMultiCellWidget(m_customRatioNInput,   1, 1, 1, 1);
-    grid->addMultiCellWidget(m_customLabel2,        1, 1, 2, 2);
-    grid->addMultiCellWidget(m_customRatioDInput,   1, 1, 3, 3);
 
     // -------------------------------------------------------------
 
@@ -200,10 +185,6 @@ RatioCropTool::RatioCropTool(QWidget* parent)
     m_centerWidth->setPixmap(QPixmap(directory + "centerwidth.png"));
     QWhatsThis::add(m_centerWidth, i18n("<p>Set width position to center."));
 
-    grid->addMultiCellWidget(m_xInput,      3, 3, 0, 3);
-    grid->addMultiCellWidget(m_widthInput,  4, 4, 0, 3);
-    grid->addMultiCellWidget(m_centerWidth, 3, 3, 4, 4);
-
     // -------------------------------------------------------------
 
     m_yInput = new RIntNumInput(cropSelection);
@@ -226,15 +207,26 @@ RatioCropTool::RatioCropTool(QWidget* parent)
     m_centerHeight->setPixmap(QPixmap(directory + "centerheight.png"));
     QWhatsThis::add(m_centerHeight, i18n("<p>Set height position to center."));
 
-    grid->addMultiCellWidget(m_yInput,          5, 5, 0, 3);
-    grid->addMultiCellWidget(m_heightInput,     6, 6, 0, 3);
-    grid->addMultiCellWidget(m_centerHeight,    5, 5, 4, 4);
-
-    gridBox2->addMultiCellWidget(cropSelection, 0, 0, 0, 0);
+    grid->addMultiCellWidget(label,                 0, 0, 0, 0);
+    grid->addMultiCellWidget(m_ratioCB,             0, 0, 1, 3);
+    grid->addMultiCellWidget(m_preciseCrop,         0, 0, 4, 4);
+    grid->addMultiCellWidget(m_customLabel1,        1, 1, 0, 0);
+    grid->addMultiCellWidget(m_customRatioNInput,   1, 1, 1, 1);
+    grid->addMultiCellWidget(m_customLabel2,        1, 1, 2, 2);
+    grid->addMultiCellWidget(m_customRatioDInput,   1, 1, 3, 3);
+    grid->addMultiCellWidget(m_orientLabel,         2, 2, 0, 0);
+    grid->addMultiCellWidget(m_orientCB,            2, 2, 1, 3);
+    grid->addMultiCellWidget(m_autoOrientation,     2, 2, 4, 4);
+    grid->addMultiCellWidget(m_xInput,              3, 3, 0, 3);
+    grid->addMultiCellWidget(m_centerWidth,         3, 3, 4, 4);
+    grid->addMultiCellWidget(m_widthInput,          4, 4, 0, 3);
+    grid->addMultiCellWidget(m_yInput,              5, 5, 0, 3);
+    grid->addMultiCellWidget(m_centerHeight,        5, 5, 4, 4);
+    grid->addMultiCellWidget(m_heightInput,         6, 6, 0, 3);
 
     // -------------------------------------------------------------
 
-    QFrame* compositionGuide = new QFrame( gbox2 );
+    QFrame* compositionGuide = new QFrame(m_gboxSettings->plainPage());
     QGridLayout* grid2       = new QGridLayout( compositionGuide, 7, 2);
     compositionGuide->setFrameStyle(QFrame::Panel|QFrame::Sunken);
 
@@ -286,8 +278,10 @@ RatioCropTool::RatioCropTool(QWidget* parent)
     grid2->addMultiCellWidget(m_guideColorBt,               7, 7, 1, 1);
     grid2->addMultiCellWidget(m_guideSize,                  7, 7, 2, 2);
 
-    gridBox2->addMultiCellWidget(compositionGuide,          1, 1, 0, 0);
-    gridBox2->setRowStretch(2, 10);
+    // -------------------------------------------------------------
+
+    gboxGrid->addMultiCellWidget(cropSelection,             0, 0, 0, 1);
+    gboxGrid->addMultiCellWidget(compositionGuide,          1, 1, 0, 1);
 
     setToolSettings(m_gboxSettings);
 
