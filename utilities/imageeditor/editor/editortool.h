@@ -37,6 +37,7 @@
 namespace Digikam
 {
 
+class DImgThreadedFilter;
 class EditorToolSettings;
 class EditorToolPriv;
 
@@ -65,9 +66,9 @@ protected:
     void setToolHelp(const QString& anchor);
     void setToolName(const QString& name);
     void setToolIcon(const QPixmap& icon);
-    void setToolView(QWidget *view);
-    void setToolSettings(EditorToolSettings *settings);
 
+    virtual void setToolView(QWidget *view);
+    virtual void setToolSettings(EditorToolSettings *settings);
     virtual void readSettings();
     virtual void writeSettings();
     virtual void finalRendering(){};
@@ -76,9 +77,9 @@ protected:
 protected slots:
 
     void slotTimer();
-    void slotOk();
-    void slotCancel();
 
+    virtual void slotOk();
+    virtual void slotCancel();
     virtual void slotInit();
     virtual void slotLoadSettings(){};
     virtual void slotSaveAsSettings(){};
@@ -88,6 +89,52 @@ protected slots:
 private:
 
     EditorToolPriv *d;
+};
+
+// -----------------------------------------------------------------
+
+class EditorToolThreadedPriv;
+
+class DIGIKAM_EXPORT EditorToolThreaded : public EditorTool
+{
+    Q_OBJECT
+
+public:
+
+    EditorToolThreaded(QObject *parent);
+    virtual ~EditorToolThreaded();
+
+protected:
+
+    DImgThreadedFilter* filter() const;
+    void setFilter(DImgThreadedFilter *filter);
+
+    virtual void setToolView(QWidget *view);
+    virtual void setToolSettings(EditorToolSettings *settings);
+    virtual void prepareEffect(){};
+    virtual void prepareFinal(){};
+    virtual void putPreviewData(){};
+    virtual void putFinalData(){};
+    virtual void renderingFinished(){};
+
+protected slots:
+
+    virtual void slotAbort();
+    virtual void slotOk();
+    virtual void slotCancel();
+    virtual void slotEffect();
+
+    void slotFilterStarted();
+    void slotFilterFinished(bool success);
+    void slotFilterProgress(int progress);
+
+private slots:
+
+    void slotResized();
+
+private:
+
+    EditorToolThreadedPriv *d;
 };
 
 }  //namespace Digikam
