@@ -74,7 +74,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     setToolIcon(SmallIcon("freerotation"));
 
     m_previewWidget = new ImageWidget("freerotation Tool", 0, 
-                                      i18n("<p>This is the free image operation preview. "
+                                      i18n("<p>This is the free rotation operation preview. "
                                            "If you move the mouse cursor on this preview, "
                                            "a vertical and horizontal dashed line will be drawn "
                                            "to guide you in adjusting the free rotation correction. "
@@ -91,7 +91,8 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
                                             EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel);
+                                            EditorToolSettings::Cancel,
+                                            EditorToolSettings::ColorGuide);
     QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage(), 9, 2);
 
     QLabel *label1  = new QLabel(i18n("New width:"), m_gboxSettings->plainPage());
@@ -164,20 +165,35 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     connect(m_autoCropCB, SIGNAL(activated(int)),
             this, SLOT(slotEffect()));
+
+    connect(m_gboxSettings, SIGNAL(signalColorGuideChanged()),
+            this, SLOT(slotColorGuideChanged()));
+
 }
 
 FreeRotationTool::~FreeRotationTool()
 {
 }
 
+void FreeRotationTool::slotColorGuideChanged()
+{
+    m_previewWidget->slotChangeGuideColor(m_gboxSettings->guideColor());
+    m_previewWidget->slotChangeGuideSize(m_gboxSettings->guideSize());
+}
+
 void FreeRotationTool::readSettings()
 {
+    QColor defaultGuideColor(Qt::red);
     KConfig *config = kapp->config();
     config->setGroup("freerotation Tool");
     m_angleInput->setValue(config->readNumEntry("Main Angle", m_angleInput->defaultValue()));
     m_fineAngleInput->setValue(config->readDoubleNumEntry("Fine Angle", m_fineAngleInput->defaultValue()));
     m_autoCropCB->setCurrentItem(config->readNumEntry("Auto Crop Type", m_autoCropCB->defaultItem()));
     m_antialiasInput->setChecked(config->readBoolEntry("Anti Aliasing", true));
+    m_gboxSettings->setGuideColor(config->readColorEntry("Guide Color", &defaultGuideColor));
+    m_gboxSettings->setGuideSize(config->readNumEntry("Guide Width", 1));
+
+    slotColorGuideChanged();
     slotEffect();
 }
 
@@ -189,6 +205,8 @@ void FreeRotationTool::writeSettings()
     config->writeEntry("Fine Angle", m_fineAngleInput->value());
     config->writeEntry("Auto Crop Type", m_autoCropCB->currentItem());
     config->writeEntry("Anti Aliasing", m_antialiasInput->isChecked());
+    config->writeEntry("Guide Color", m_gboxSettings->guideColor());
+    config->writeEntry("Guide Width", m_gboxSettings->guideSize());
     config->sync();
 }
 
