@@ -162,7 +162,7 @@ public:
 };
 
 RawSettingsBox::RawSettingsBox(const KURL& url, QWidget *parent)
-              : EditorToolSettings(Default|Ok|Cancel, parent)
+              : EditorToolSettings(Default|Ok|Cancel, NoTool, parent)
 {
     d = new RawSettingsBoxPriv;
 
