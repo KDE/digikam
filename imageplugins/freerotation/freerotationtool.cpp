@@ -183,14 +183,13 @@ void FreeRotationTool::slotColorGuideChanged()
 
 void FreeRotationTool::readSettings()
 {
-    QColor defaultGuideColor(Qt::red);
     KConfig *config = kapp->config();
     config->setGroup("freerotation Tool");
     m_angleInput->setValue(config->readNumEntry("Main Angle", m_angleInput->defaultValue()));
     m_fineAngleInput->setValue(config->readDoubleNumEntry("Fine Angle", m_fineAngleInput->defaultValue()));
     m_autoCropCB->setCurrentItem(config->readNumEntry("Auto Crop Type", m_autoCropCB->defaultItem()));
     m_antialiasInput->setChecked(config->readBoolEntry("Anti Aliasing", true));
-    m_gboxSettings->setGuideColor(config->readColorEntry("Guide Color", &defaultGuideColor));
+    m_gboxSettings->setGuideColor(config->readColorEntry("Guide Color", &Qt::red));
     m_gboxSettings->setGuideSize(config->readNumEntry("Guide Width", 1));
 
     slotColorGuideChanged();

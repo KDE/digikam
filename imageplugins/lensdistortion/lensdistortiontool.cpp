@@ -167,6 +167,9 @@ LensDistortionTool::LensDistortionTool(QObject* parent)
     connect(m_brightenInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 
+    connect(m_gboxSettings, SIGNAL(signalColorGuideChanged()),
+            this, SLOT(slotColorGuideChanged()));
+
     // -------------------------------------------------------------
 
     /* Calc transform preview.
@@ -195,6 +198,12 @@ LensDistortionTool::~LensDistortionTool()
 {
 }
 
+void LensDistortionTool::slotColorGuideChanged()
+{
+    m_previewWidget->slotChangeGuideColor(m_gboxSettings->guideColor());
+    m_previewWidget->slotChangeGuideSize(m_gboxSettings->guideSize());
+}
+
 void LensDistortionTool::readSettings()
 {
     KConfig *config = kapp->config();
@@ -209,12 +218,15 @@ void LensDistortionTool::readSettings()
     m_edgeInput->setValue(config->readDoubleNumEntry("4th Order Distortion",m_edgeInput->defaultValue()));
     m_rescaleInput->setValue(config->readDoubleNumEntry("Zoom Factor", m_rescaleInput->defaultValue()));
     m_brightenInput->setValue(config->readDoubleNumEntry("Brighten", m_brightenInput->defaultValue()));
+    m_gboxSettings->setGuideColor(config->readColorEntry("Guide Color", &Qt::red));
+    m_gboxSettings->setGuideSize(config->readNumEntry("Guide Width", 1));
 
     m_mainInput->blockSignals(false);
     m_edgeInput->blockSignals(false);
     m_rescaleInput->blockSignals(false);
     m_brightenInput->blockSignals(false);
 
+    slotColorGuideChanged();
     slotEffect();
 }
 
@@ -226,6 +238,8 @@ void LensDistortionTool::writeSettings()
     config->writeEntry("4th Order Distortion", m_edgeInput->value());
     config->writeEntry("Zoom Factor", m_rescaleInput->value());
     config->writeEntry("Brighten", m_brightenInput->value());
+    config->writeEntry("Guide Color", m_gboxSettings->guideColor());
+    config->writeEntry("Guide Width", m_gboxSettings->guideSize());
     config->sync();
 }
 

@@ -58,6 +58,7 @@ public:
 private slots:
 
     void slotResetSettings();
+    void slotColorGuideChanged();
 
 private:
 

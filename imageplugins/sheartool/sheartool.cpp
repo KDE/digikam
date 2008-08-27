@@ -187,7 +187,6 @@ void ShearTool::slotColorGuideChanged()
 
 void ShearTool::readSettings()
 {
-    QColor defaultGuideColor(Qt::red);
     KConfig *config = kapp->config();
     config->setGroup("sheartool Tool");
     m_mainHAngleInput->setValue(config->readNumEntry("Main HAngle", m_mainHAngleInput->defaultValue()));
@@ -195,7 +194,7 @@ void ShearTool::readSettings()
     m_fineHAngleInput->setValue(config->readDoubleNumEntry("Fine HAngle", m_fineHAngleInput->defaultValue()));
     m_fineVAngleInput->setValue(config->readDoubleNumEntry("Fine VAngle", m_fineVAngleInput->defaultValue()));
     m_antialiasInput->setChecked(config->readBoolEntry("Anti Aliasing", true));
-    m_gboxSettings->setGuideColor(config->readColorEntry("Guide Color", &defaultGuideColor));
+    m_gboxSettings->setGuideColor(config->readColorEntry("Guide Color", &Qt::red));
     m_gboxSettings->setGuideSize(config->readNumEntry("Guide Width", 1));
 
     slotColorGuideChanged();
