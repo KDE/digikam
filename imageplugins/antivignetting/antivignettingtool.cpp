@@ -54,84 +54,72 @@
 #include "bcgmodifier.h"
 #include "imageiface.h"
 #include "imagewidget.h"
+#include "editortoolsettings.h"
 #include "dimgimagefilters.h"
 #include "antivignetting.h"
-#include "imageeffect_antivignetting.h"
-#include "imageeffect_antivignetting.moc"
+#include "antivignettingtool.h"
+#include "antivignettingtool.moc"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamAntiVignettingImagesPlugin
 {
 
-ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
-                          : Digikam::ImageGuideDlg(parent, i18n("Vignetting Correction"),
-                            "antivignettings", false, true, false,
-                            Digikam::ImageGuideWidget::HVGuideMode, 0, true)
+AntiVignettingTool::AntiVignettingTool(QObject* parent)
+                  : EditorToolThreaded(parent)
 {
     QString whatsThis;
 
-    KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Vignetting Correction"),
-                                       digikam_version,
-                                       I18N_NOOP("A digiKam image plugin to reduce image vignetting."),
-                                       KAboutData::License_GPL,
-                                       "(c) 2004-2008, Gilles Caulier",
-                                       0,
-                                       Digikam::webProjectUrl());
+    setName("antivignettings");
+    setToolName(i18n("Vignetting Correction"));
+    setToolIcon(SmallIcon("antivignetting"));
 
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at gmail dot com");
+    m_previewWidget = new ImageWidget("antivignetting Tool", 0, QString(), 
+                                      false, ImageGuideWidget::HVGuideMode, false);
 
-    about->addAuthor("John Walker", I18N_NOOP("Anti Vignetting algorithm"), 0,
-                     "http://www.fourmilab.ch/netpbm/pnmctrfilt");
-
-    setAboutData(about);
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 13, 2, spacingHint());
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Abort|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel);
+    QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage(), 14, 2);
 
-    m_maskPreviewLabel = new QLabel( gboxSettings );
+    m_maskPreviewLabel = new QLabel( m_gboxSettings->plainPage() );
     m_maskPreviewLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
     QWhatsThis::add( m_maskPreviewLabel, i18n("<p>You can see here a thumbnail preview of the anti-vignetting "
                                               "mask applied to the image.") );
-    gridSettings->addMultiCellWidget(m_maskPreviewLabel, 0, 0, 0, 2);
 
     // -------------------------------------------------------------
 
-    QLabel *label1 = new QLabel(i18n("Density:"), gboxSettings);
+    QLabel *label1 = new QLabel(i18n("Density:"), m_gboxSettings->plainPage());
 
-    m_densityInput = new RDoubleNumInput(gboxSettings);
+    m_densityInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_densityInput->setPrecision(1);
     m_densityInput->setRange(1.0, 20.0, 0.1);
     m_densityInput->setDefaultValue(2.0);
     QWhatsThis::add( m_densityInput, i18n("<p>This value controls the degree of intensity attenuation by the filter "
                                           "at its point of maximum density."));
 
-    gridSettings->addMultiCellWidget(label1, 1, 1, 0, 2);
-    gridSettings->addMultiCellWidget(m_densityInput, 2, 2, 0, 2);
-
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Power:"), gboxSettings);
+    QLabel *label2 = new QLabel(i18n("Power:"), m_gboxSettings->plainPage());
 
-    m_powerInput = new RDoubleNumInput(gboxSettings);
+    m_powerInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_powerInput->setPrecision(1);
     m_powerInput->setRange(0.1, 2.0, 0.1);
     m_powerInput->setDefaultValue(1.0);
     QWhatsThis::add( m_powerInput, i18n("<p>This value is used as the exponent controlling the fall-off in density "
                                         "from the center of the filter to the periphery."));
 
-    gridSettings->addMultiCellWidget(label2, 3, 3, 0, 2);
-    gridSettings->addMultiCellWidget(m_powerInput, 4, 4, 0, 2);
-
     // -------------------------------------------------------------
 
-    QLabel *label3 = new QLabel(i18n("Radius:"), gboxSettings);
+    QLabel *label3 = new QLabel(i18n("Radius:"), m_gboxSettings->plainPage());
 
-    m_radiusInput = new RDoubleNumInput(gboxSettings);
+    m_radiusInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_radiusInput->setPrecision(1);
     m_radiusInput->setRange(-100.0, 100.0, 0.1);
     m_radiusInput->setDefaultValue(1.0);
@@ -139,77 +127,82 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
                                           "half-diagonal measure of the image, at which the density of the filter falls "
                                           "to zero."));
 
-    gridSettings->addMultiCellWidget(label3, 5, 5, 0, 2);
-    gridSettings->addMultiCellWidget(m_radiusInput, 6, 6, 0, 2);
-
-    KSeparator *line = new KSeparator (Horizontal, gboxSettings);
-    gridSettings->addMultiCellWidget(line, 7, 7, 0, 2);
+    KSeparator *line = new KSeparator (Horizontal, m_gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
-    QLabel *label4 = new QLabel(i18n("Brightness:"), gboxSettings);
+    QLabel *label4 = new QLabel(i18n("Brightness:"), m_gboxSettings->plainPage());
 
-    m_brightnessInput = new RIntNumInput(gboxSettings);
+    m_brightnessInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_brightnessInput->setRange(0, 100, 1);
     m_brightnessInput->setDefaultValue(0);
     QWhatsThis::add( m_brightnessInput, i18n("<p>Set here the brightness re-adjustment of the target image."));
 
-    gridSettings->addMultiCellWidget(label4, 8, 8, 0, 2);
-    gridSettings->addMultiCellWidget(m_brightnessInput, 9, 9, 0, 2);
-
     // -------------------------------------------------------------
 
-    QLabel *label5 = new QLabel(i18n("Contrast:"), gboxSettings);
+    QLabel *label5 = new QLabel(i18n("Contrast:"), m_gboxSettings->plainPage());
 
-    m_contrastInput = new RIntNumInput(gboxSettings);
+    m_contrastInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_contrastInput->setRange(0, 100, 1);
     m_contrastInput->setDefaultValue(0);
     QWhatsThis::add( m_contrastInput, i18n("<p>Set here the contrast re-adjustment of the target image."));
 
-    gridSettings->addMultiCellWidget(label5, 10, 10, 0, 2);
-    gridSettings->addMultiCellWidget(m_contrastInput, 11, 11, 0, 2);
-
     // -------------------------------------------------------------
 
-    QLabel *label6 = new QLabel(i18n("Gamma:"), gboxSettings);
+    QLabel *label6 = new QLabel(i18n("Gamma:"), m_gboxSettings->plainPage());
 
-    m_gammaInput = new RDoubleNumInput(gboxSettings);
+    m_gammaInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_gammaInput->setPrecision(2);
     m_gammaInput->setRange(0.1, 3.0, 0.01);
     m_gammaInput->setDefaultValue(1.0);
     QWhatsThis::add( m_gammaInput, i18n("<p>Set here the gamma re-adjustment of the target image."));
 
-    gridSettings->addMultiCellWidget(label6, 12, 12, 0, 2);
-    gridSettings->addMultiCellWidget(m_gammaInput, 13, 13, 0, 2);
+    grid->addMultiCellWidget(m_maskPreviewLabel, 0, 0, 0, 2);
+    grid->addMultiCellWidget(label1,             1, 1, 0, 2);
+    grid->addMultiCellWidget(m_densityInput,     2, 2, 0, 2);
+    grid->addMultiCellWidget(label2,             3, 3, 0, 2);
+    grid->addMultiCellWidget(m_powerInput,       4, 4, 0, 2);
+    grid->addMultiCellWidget(label3,             5, 5, 0, 2);
+    grid->addMultiCellWidget(m_radiusInput,      6, 6, 0, 2);
+    grid->addMultiCellWidget(line,               7, 7, 0, 2);
+    grid->addMultiCellWidget(label4,             8, 8, 0, 2);
+    grid->addMultiCellWidget(m_brightnessInput,  9, 9, 0, 2);
+    grid->addMultiCellWidget(label5,             10, 10, 0, 2);
+    grid->addMultiCellWidget(m_contrastInput,    11, 11, 0, 2);
+    grid->addMultiCellWidget(label6,             12, 12, 0, 2);
+    grid->addMultiCellWidget(m_gammaInput,       13, 13, 0, 2);
+    grid->setRowStretch(14, 10);
+    grid->setMargin(m_gboxSettings->spacingHint());
+    grid->setSpacing(m_gboxSettings->spacingHint());
 
-    setUserAreaWidget(gboxSettings);
+    setToolSettings(m_gboxSettings);
 
     // -------------------------------------------------------------
 
-    connect(m_densityInput, SIGNAL(valueChanged (double)),
+    connect(m_densityInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 
-    connect(m_powerInput, SIGNAL(valueChanged (double)),
+    connect(m_powerInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 
-    connect(m_radiusInput, SIGNAL(valueChanged (double)),
+    connect(m_radiusInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 
-    connect(m_brightnessInput, SIGNAL(valueChanged (int)),
+    connect(m_brightnessInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
-    connect(m_contrastInput, SIGNAL(valueChanged (int)),
+    connect(m_contrastInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
-    connect(m_gammaInput, SIGNAL(valueChanged (double)),
+    connect(m_gammaInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 }
 
-ImageEffect_AntiVignetting::~ImageEffect_AntiVignetting()
+AntiVignettingTool::~AntiVignettingTool()
 {
 }
 
-void ImageEffect_AntiVignetting::renderingFinished()
+void AntiVignettingTool::renderingFinished()
 {
     m_densityInput->setEnabled(true);
     m_powerInput->setEnabled(true);
@@ -219,10 +212,10 @@ void ImageEffect_AntiVignetting::renderingFinished()
     m_gammaInput->setEnabled(true);
 }
 
-void ImageEffect_AntiVignetting::readUserSettings()
+void AntiVignettingTool::readSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("antivignettings Tool Dialog");
+    config->setGroup("antivignettings Tool");
 
     m_densityInput->blockSignals(true);
     m_powerInput->blockSignals(true);
@@ -248,10 +241,10 @@ void ImageEffect_AntiVignetting::readUserSettings()
     slotEffect();
 }
 
-void ImageEffect_AntiVignetting::writeUserSettings()
+void AntiVignettingTool::writeSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("antivignettings Tool Dialog");
+    config->setGroup("antivignettings Tool");
     config->writeEntry("DensityAjustment", m_densityInput->value());
     config->writeEntry("PowerAjustment", m_powerInput->value());
     config->writeEntry("RadiusAjustment", m_radiusInput->value());
@@ -261,7 +254,7 @@ void ImageEffect_AntiVignetting::writeUserSettings()
     config->sync();
 }
 
-void ImageEffect_AntiVignetting::resetValues()
+void AntiVignettingTool::slotResetSettings()
 {
     m_densityInput->blockSignals(true);
     m_powerInput->blockSignals(true);
@@ -285,7 +278,7 @@ void ImageEffect_AntiVignetting::resetValues()
     m_gammaInput->blockSignals(false);
 }
 
-void ImageEffect_AntiVignetting::prepareEffect()
+void AntiVignettingTool::prepareEffect()
 {
     m_densityInput->setEnabled(false);
     m_powerInput->setEnabled(false);
@@ -298,15 +291,15 @@ void ImageEffect_AntiVignetting::prepareEffect()
     double p = m_powerInput->value();
     double r = m_radiusInput->value();
 
-    Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
-    uchar *data   = iface->getOriginalImage();
-    int orgWidth  = iface->originalWidth();
-    int orgHeight = iface->originalHeight();
+    ImageIface* iface = m_previewWidget->imageIface();
+    uchar *data       = iface->getOriginalImage();
+    int orgWidth      = iface->originalWidth();
+    int orgHeight     = iface->originalHeight();
     QSize ps(orgWidth, orgHeight);
     ps.scale( QSize(120, 120), QSize::ScaleMin );
 
     // Calc mask preview.
-    Digikam::DImg preview(ps.width(), ps.height(), false);
+    DImg preview(ps.width(), ps.height(), false);
     memset(preview.bits(), 255, preview.numBytes());
     AntiVignetting maskPreview(&preview, 0L, d, p, r, 0, 0, false);
     QPixmap pix = maskPreview.getTargetImage().convertToPixmap();
@@ -316,15 +309,14 @@ void ImageEffect_AntiVignetting::prepareEffect()
     pt.end();
     m_maskPreviewLabel->setPixmap( pix );
 
-    Digikam::DImg orgImage(orgWidth, orgHeight, iface->originalSixteenBit(),
+    DImg orgImage(orgWidth, orgHeight, iface->originalSixteenBit(),
                            iface->originalHasAlpha(), data);
     delete [] data;
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
-                       new AntiVignetting(&orgImage, this, d, p, r, 0, 0, true));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new AntiVignetting(&orgImage, this, d, p, r, 0, 0, true)));
 }
 
-void ImageEffect_AntiVignetting::prepareFinal()
+void AntiVignettingTool::prepareFinal()
 {
     m_densityInput->setEnabled(false);
     m_powerInput->setEnabled(false);
@@ -337,22 +329,20 @@ void ImageEffect_AntiVignetting::prepareFinal()
     double p = m_powerInput->value();
     double r = m_radiusInput->value();
 
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
 
     uchar *data = iface.getOriginalImage();
-    Digikam::DImg orgImage(iface.originalWidth(), iface.originalHeight(), iface.originalSixteenBit(),
+    DImg orgImage(iface.originalWidth(), iface.originalHeight(), iface.originalSixteenBit(),
                            iface.originalHasAlpha(), data);
     delete [] data;
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
-                       new AntiVignetting(&orgImage, this, d, p, r, 0, 0, true));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new AntiVignetting(&orgImage, this, d, p, r, 0, 0, true)));
 }
 
-void ImageEffect_AntiVignetting::putPreviewData(void)
+void AntiVignettingTool::putPreviewData(void)
 {
-    Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
-
-    Digikam::DImg imDest = m_threadedFilter->getTargetImage();
+    ImageIface* iface = m_previewWidget->imageIface();
+    DImg imDest       = filter()->getTargetImage();
 
     // Adjust Image BCG.
 
@@ -360,7 +350,7 @@ void ImageEffect_AntiVignetting::putPreviewData(void)
     double c = (double)(m_contrastInput->value()   / 100.0) + (double)(1.00);
     double g = m_gammaInput->value();
 
-    Digikam::BCGModifier cmod;
+    BCGModifier cmod;
     cmod.setGamma(g);
     cmod.setBrightness(b);
     cmod.setContrast(c);
@@ -368,15 +358,15 @@ void ImageEffect_AntiVignetting::putPreviewData(void)
 
     iface->putPreviewImage((imDest.smoothScale(iface->previewWidth(),
                                                iface->previewHeight())).bits());
-    m_imagePreviewWidget->updatePreview();
+    m_previewWidget->updatePreview();
 }
 
-void ImageEffect_AntiVignetting::putFinalData(void)
+void AntiVignettingTool::putFinalData(void)
 {
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
 
     iface.putOriginalImage(i18n("Vignetting Correction"),
-                           m_threadedFilter->getTargetImage().bits());
+                           filter()->getTargetImage().bits());
 
     double b = (double)(m_brightnessInput->value() / 100.0);
     double c = (double)(m_contrastInput->value()   / 100.0) + (double)(1.00);
@@ -387,4 +377,3 @@ void ImageEffect_AntiVignetting::putFinalData(void)
 }
 
 }  // NameSpace DigikamAntiVignettingImagesPlugin
-

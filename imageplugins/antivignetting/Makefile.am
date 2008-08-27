@@ -18,8 +18,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes) 
 
 digikamimageplugin_antivignetting_la_SOURCES = imageplugin_antivignetting.cpp \
-	                                           imageeffect_antivignetting.cpp \
-					                           antivignetting.cpp 
+	                                           antivignettingtool.cpp antivignetting.cpp 
 
 digikamimageplugin_antivignetting_la_LIBADD = $(LIB_KPARTS) \
 	                                          $(top_builddir)/digikam/digikam/libdigikam.la 
