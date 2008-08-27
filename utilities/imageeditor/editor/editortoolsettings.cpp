@@ -62,34 +62,36 @@ public:
 
     EditorToolSettingsPriv()
     {
-        okBtn      = 0;
-        cancelBtn  = 0;
-        tryBtn     = 0;
-        defaultBtn = 0;
-        plainPage  = 0;
-        btnBox1    = 0;
-        btnBox2    = 0;
-        btnBox3    = 0;
-        saveAsBtn  = 0;
-        loadBtn    = 0;
-        abortBtn   = 0;
-        guideBox   = 0;
+        okBtn        = 0;
+        cancelBtn    = 0;
+        tryBtn       = 0;
+        defaultBtn   = 0;
+        plainPage    = 0;
+        btnBox1      = 0;
+        btnBox2      = 0;
+        btnBox3      = 0;
+        saveAsBtn    = 0;
+        loadBtn      = 0;
+        abortBtn     = 0;
+        guideBox     = 0;
+        guideColorBt = 0;
+        guideSize    = 0;
     }
 
-    QHBox       *btnBox1;
-    QHBox       *btnBox2;
-    QHBox       *btnBox3;
-    QHBox       *guideBox;
+    QHBox        *btnBox1;
+    QHBox        *btnBox2;
+    QHBox        *btnBox3;
+    QHBox        *guideBox;
 
-    QWidget     *plainPage;
+    QWidget      *plainPage;
 
-    KPushButton *okBtn;
-    KPushButton *cancelBtn;
-    KPushButton *tryBtn;
-    KPushButton *defaultBtn;
-    KPushButton *saveAsBtn;
-    KPushButton *loadBtn;
-    KPushButton *abortBtn;
+    KPushButton  *okBtn;
+    KPushButton  *cancelBtn;
+    KPushButton  *tryBtn;
+    KPushButton  *defaultBtn;
+    KPushButton  *saveAsBtn;
+    KPushButton  *loadBtn;
+    KPushButton  *abortBtn;
 
     KColorButton *guideColorBt;
 
