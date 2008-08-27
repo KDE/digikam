@@ -90,6 +90,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     Digikam::ImageIface iface(0, 0);
 
     m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Abort|
                                             EditorToolSettings::Ok|
                                             EditorToolSettings::Cancel,
                                             EditorToolSettings::ColorGuide);
