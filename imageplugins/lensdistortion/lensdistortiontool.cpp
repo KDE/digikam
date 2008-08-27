@@ -70,7 +70,7 @@ namespace DigikamLensDistortionImagesPlugin
 {
 
 LensDistortionTool::LensDistortionTool(QObject* parent)
-                          : EditorToolThreaded(parent)
+                  : EditorToolThreaded(parent)
 {
     QString whatsThis;
 
@@ -79,7 +79,7 @@ LensDistortionTool::LensDistortionTool(QObject* parent)
     setToolIcon(SmallIcon("lensdistortion"));
 
     m_previewWidget = new ImageWidget("lensdistortion Tool", 0, QString(), 
-                                      false, ImageGuideWidget::HVGuideMode, false);
+                                      false, ImageGuideWidget::HVGuideMode);
 
     setToolView(m_previewWidget);
 
