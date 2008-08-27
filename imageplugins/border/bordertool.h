@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_BORDER_H
-#define IMAGEEFFECT_BORDER_H
+#ifndef BORDERTOOL_H
+#define BORDERTOOL_H
 
 // Qt includes.
 
@@ -119,4 +119,4 @@ private:
 
 }  // NameSpace DigikamBorderImagesPlugin
 
-#endif /* IMAGEEFFECT_BORDER_H */
+#endif /* BORDERTOOL_H */
