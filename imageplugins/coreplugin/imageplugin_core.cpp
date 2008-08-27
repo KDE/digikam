@@ -7,7 +7,7 @@
  * Description : digiKam image editor plugin core
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -177,7 +177,7 @@ void ImagePlugin_Core::setEnabledActions(bool enable)
 void ImagePlugin_Core::slotInvert()
 {
     parentWidget()->setCursor( Qt::WaitCursor );
-        
+
     Digikam::ImageIface iface(0, 0);
 
     uchar *data     = iface.getOriginalImage();
@@ -209,7 +209,7 @@ void ImagePlugin_Core::slotConvertTo8Bits()
                                                    "Do you want to continue?")) == KMessageBox::Cancel)
            return;
     }
-    
+
     parentWidget()->setCursor( Qt::WaitCursor );
     iface.convertOriginalColorDepth(32);
     parentWidget()->unsetCursor();
@@ -218,13 +218,13 @@ void ImagePlugin_Core::slotConvertTo8Bits()
 void ImagePlugin_Core::slotConvertTo16Bits()
 {
     Digikam::ImageIface iface(0, 0);
-    
+
     if (iface.originalSixteenBit())
     {
        KMessageBox::error(parentWidget(), i18n("This image is already using a depth of 16 bits / color / pixel."));
        return;
     }
-    
+
     parentWidget()->setCursor( Qt::WaitCursor );
     iface.convertOriginalColorDepth(64);
     parentWidget()->unsetCursor();
@@ -272,12 +272,6 @@ void ImagePlugin_Core::slotRedEye()
     }
 
     DigikamImagesPluginCore::ImageEffect_RedEye dlg(parentWidget());
-    dlg.exec();
-}
-
-void ImagePlugin_Core::slotColorManagement()
-{
-    DigikamImagesPluginCore::ImageEffect_ICCProof dlg(parentWidget());
     dlg.exec();
 }
 

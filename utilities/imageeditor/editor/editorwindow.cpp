@@ -270,15 +270,6 @@ void EditorWindow::setupStandardConnections()
 
     connect(m_nameLabel, SIGNAL(signalCancelButtonPressed()),
             this, SLOT(slotNameLabelCancelButtonPressed()));
-
-    // -- Core plugin connections -------------------------------------
-
-    ImagePlugin *corePlugin = m_imagePluginLoader->corePluginInstance();
-    if ( corePlugin )
-    {
-        connect(m_canvas, SIGNAL(signalColorManagementTool()),
-                corePlugin, SLOT(slotColorManagement()));
-    }
 }
 
 void EditorWindow::setupStandardActions()
@@ -860,7 +851,6 @@ void EditorWindow::applyStandardSettings()
     d->ICCSettings->workspaceSetting      = group.readEntry("WorkProfileFile", QString());
     d->ICCSettings->monitorSetting        = group.readEntry("MonitorProfileFile", QString());
     d->ICCSettings->proofSetting          = group.readEntry("ProofProfileFile", QString());
-    d->ICCSettings->CMInRawLoadingSetting = group.readEntry("CMInRawLoading", false);
 
     d->viewCMViewAction->setEnabled(d->ICCSettings->enableCMSetting);
     d->viewCMViewAction->setChecked(d->ICCSettings->managedViewSetting);

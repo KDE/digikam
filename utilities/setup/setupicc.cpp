@@ -95,7 +95,6 @@ public:
         infoMonitorProfiles   = 0;
         infoInProfiles        = 0;
         infoProofProfiles     = 0;
-        cmToolInRawLoading    = 0;
         behaviourGB           = 0;
         defaultPathGB         = 0;
         profilesGB            = 0;
@@ -110,7 +109,6 @@ public:
     QCheckBox              *enableColorManagement;
     QCheckBox              *bpcAlgorithm;
     QCheckBox              *managedView;
-    QCheckBox              *cmToolInRawLoading;
 
     QRadioButton           *defaultApplyICC;
     QRadioButton           *defaultAskICC;
@@ -187,23 +185,14 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
                      "as the workspace profile.</p>"));
     behaviourOptions->addButton(d->defaultAskICC);
 
-    KHBox *hbox   = new KHBox(d->behaviourGB);
-    QLabel *space = new QLabel(hbox);
-    space->setFixedWidth(15);
-    d->cmToolInRawLoading = new QCheckBox(hbox);
-    d->cmToolInRawLoading->setText(i18n("Launch Color Management plugin with RAW files"));
-    d->cmToolInRawLoading->setWhatsThis( i18n("Enable this option if you want to launch the color "
-                     "management image plugin when a RAW file is loaded in the editor."));
-
     vlay3->addWidget(d->defaultApplyICC);
     vlay3->addWidget(d->defaultAskICC);
-    vlay3->addWidget(hbox);
     vlay3->setMargin(KDialog::spacingHint());
     vlay3->setSpacing(0);
 
     grid->addWidget(d->enableColorManagement, 0, 0, 1, 1);
     grid->addWidget(lcmsLogoLabel,            0, 2, 1, 1);
-    grid->addWidget(d->behaviourGB,           1, 0, 1, 3 );
+    grid->addWidget(d->behaviourGB,           1, 0, 1, 3);
     grid->setColumnStretch(1, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(0);
@@ -293,7 +282,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->infoProofProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected soft proof profile.</p>"));
 
-    grid2->addWidget(d->managedView,         0, 0, 1, 4 );
+    grid2->addWidget(d->managedView,         0, 0, 1, 4);
     grid2->addWidget(d->monitorIcon,         1, 0, 1, 1);
     grid2->addWidget(d->monitorProfiles,     1, 1, 1, 1);
     grid2->addWidget(d->monitorProfilesKC,   1, 2, 1, 1);
@@ -397,9 +386,6 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     connect(d->defaultPathKU, SIGNAL(urlSelected(const KUrl&)),
             this, SLOT(slotFillCombos(const KUrl&)));
 
-    connect(d->defaultAskICC, SIGNAL(toggled(bool)),
-            d->cmToolInRawLoading, SLOT(setEnabled(bool)));
-
     // --------------------------------------------------------
 
     adjustSize();
@@ -433,7 +419,6 @@ void SetupICC::applySettings()
     else
         group.writeEntry("BehaviourICC", false);
 
-    group.writeEntry("CMInRawLoading", d->cmToolInRawLoading->isChecked());
     group.writeEntry("DefaultPath", d->defaultPathKU->url().path());
     group.writeEntry("WorkSpaceProfile", d->workProfilesKC->currentIndex());
     group.writeEntry("MonitorProfile", d->monitorProfilesKC->currentIndex());
@@ -481,8 +466,6 @@ void SetupICC::readSettings(bool restore)
         d->defaultApplyICC->setChecked(true);
     else
         d->defaultAskICC->setChecked(true);
-
-    d->cmToolInRawLoading->setChecked(group.readEntry("CMInRawLoading", true));
 
     KUrl url = d->defaultPathKU->url();
     fillCombos(url.path(), false);

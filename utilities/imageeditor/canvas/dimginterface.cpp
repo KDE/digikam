@@ -315,12 +315,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
 
         if (d->cmSettings->enableCMSetting)
         {
-            if ((d->image.attribute("format").toString() == QString("RAW"))  && (d->cmSettings->CMInRawLoadingSetting) )
-            {
-                // With RAW files, we load the Color Management image plugin.
-                emit signalColorManagementTool();
-            }
-            else if (QFile::exists(d->cmSettings->workspaceSetting))
+            if (QFile::exists(d->cmSettings->workspaceSetting))
             {
                 IccTransform trans;
                 QByteArray fakeProfile;
