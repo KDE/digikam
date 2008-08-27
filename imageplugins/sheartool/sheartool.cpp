@@ -88,7 +88,8 @@ ShearTool::ShearTool(QObject* parent)
 
     m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
                                             EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel);
+                                            EditorToolSettings::Cancel,
+                                            EditorToolSettings::ColorGuide);
     QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage(), 12, 2);
 
     QLabel *label1 = new QLabel(i18n("New width:"), m_gboxSettings->plainPage());
@@ -168,25 +169,35 @@ ShearTool::ShearTool(QObject* parent)
 
     connect(m_antialiasInput, SIGNAL(toggled(bool)),
             this, SLOT(slotEffect()));
+
+    connect(m_gboxSettings, SIGNAL(signalColorGuideChanged()),
+            this, SLOT(slotColorGuideChanged()));
 }
 
 ShearTool::~ShearTool()
 {
 }
 
+void ShearTool::slotColorGuideChanged()
+{
+    m_previewWidget->slotChangeGuideColor(m_gboxSettings->guideColor());
+    m_previewWidget->slotChangeGuideSize(m_gboxSettings->guideSize());
+}
+
 void ShearTool::readSettings()
 {
+    QColor defaultGuideColor(Qt::red);
     KConfig *config = kapp->config();
     config->setGroup("sheartool Tool");
-    m_mainHAngleInput->setValue(config->readNumEntry("Main HAngle",
-                                m_mainHAngleInput->defaultValue()));
-    m_mainVAngleInput->setValue(config->readNumEntry("Main VAngle",
-                                m_mainVAngleInput->defaultValue()));
-    m_fineHAngleInput->setValue(config->readDoubleNumEntry("Fine HAngle",
-                                m_fineHAngleInput->defaultValue()));
-    m_fineVAngleInput->setValue(config->readDoubleNumEntry("Fine VAngle",
-                                m_fineVAngleInput->defaultValue()));
+    m_mainHAngleInput->setValue(config->readNumEntry("Main HAngle", m_mainHAngleInput->defaultValue()));
+    m_mainVAngleInput->setValue(config->readNumEntry("Main VAngle", m_mainVAngleInput->defaultValue()));
+    m_fineHAngleInput->setValue(config->readDoubleNumEntry("Fine HAngle", m_fineHAngleInput->defaultValue()));
+    m_fineVAngleInput->setValue(config->readDoubleNumEntry("Fine VAngle", m_fineVAngleInput->defaultValue()));
     m_antialiasInput->setChecked(config->readBoolEntry("Anti Aliasing", true));
+    m_gboxSettings->setGuideColor(config->readColorEntry("Guide Color", &defaultGuideColor));
+    m_gboxSettings->setGuideSize(config->readNumEntry("Guide Width", 1));
+
+    slotColorGuideChanged();
     slotEffect();
 }
 
@@ -199,6 +210,8 @@ void ShearTool::writeSettings()
     config->writeEntry("Fine HAngle", m_fineHAngleInput->value());
     config->writeEntry("Fine VAngle", m_fineVAngleInput->value());
     config->writeEntry("Anti Aliasing", m_antialiasInput->isChecked());
+    config->writeEntry("Guide Color", m_gboxSettings->guideColor());
+    config->writeEntry("Guide Width", m_gboxSettings->guideSize());
     config->sync();
 }
 
