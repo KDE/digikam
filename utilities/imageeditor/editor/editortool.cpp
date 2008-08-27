@@ -296,6 +296,7 @@ void EditorToolThreaded::slotFilterFinished(bool success)
             {
                 DDebug() << "Final" << toolName() << " completed..." << endl;
                 putFinalData();
+                EditorToolIface::editorToolIface()->setToolStopProgress();
                 kapp->restoreOverrideCursor();
                 emit okClicked();
                 break;

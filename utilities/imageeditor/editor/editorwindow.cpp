@@ -1900,7 +1900,7 @@ void EditorWindow::slotComponentsInfo()
 void EditorWindow::setToolStartProgress(const QString& toolName)
 {
     m_nameLabel->setProgressValue(0);
-    m_nameLabel->progressBarMode(StatusProgressBar::ProgressBarMode, toolName);
+    m_nameLabel->progressBarMode(StatusProgressBar::ProgressBarMode, QString("%1: ").arg(toolName));
 }
 
 void EditorWindow::setToolProgress(int progress)
