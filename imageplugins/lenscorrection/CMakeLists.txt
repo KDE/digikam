@@ -30,7 +30,16 @@ ENDIF(LENSFUN_LIBRARY)
 
 KDE4_ADD_PLUGIN(digikamimageplugin_lenscorrection ${digikamimageplugin_lenscorrection_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(digikamimageplugin_lenscorrection digikam)
+TARGET_LINK_LIBRARIES(
+    digikamimageplugin_lenscorrection
+    digikam
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KIO_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
+    ${KDCRAW_LIBRARIES}    
+    )
 
 IF(LENSFUN_LIBRARY)
    TARGET_LINK_LIBRARIES(digikamimageplugin_lenscorrection lensfun)

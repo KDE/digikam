@@ -9,7 +9,18 @@ SET(digikamimageplugin_superimpose_PART_SRCS superimposewidget.cpp
 
 KDE4_ADD_PLUGIN(digikamimageplugin_superimpose ${digikamimageplugin_superimpose_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(digikamimageplugin_superimpose digikam ${KDE4_KFILE_LIBS})
+TARGET_LINK_LIBRARIES(
+    digikamimageplugin_superimpose
+    digikam
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KIO_LIBS}
+    ${KDE4_KDE3SUPPORT_LIBS}
+    ${KDE4_KFILE_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 INSTALL(TARGETS digikamimageplugin_superimpose DESTINATION ${PLUGIN_INSTALL_DIR})
 
