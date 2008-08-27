@@ -16,6 +16,9 @@ KDE4_ADD_PLUGIN(kio_digikamtags ${kio_digikamtags_PART_SRCS})
 TARGET_LINK_LIBRARIES(kio_digikamtags
                       digikam
                       digikamdatabase
+                      ${KDE4_KDECORE_LIBS}
+                      ${KDE4_KIO_LIBS}
+                      ${QT_QTCORE_LIBRARY}
                      )
 
 # # digiKam Albums kio slave #########################################################
@@ -27,6 +30,8 @@ KDE4_ADD_PLUGIN(kio_digikamalbums ${kio_digikamalbums_PART_SRCS})
 TARGET_LINK_LIBRARIES(kio_digikamalbums
                       digikam
                       digikamdatabase
+                      ${KDE4_KIO_LIBS}
+                      ${QT_QTCORE_LIBRARY}
                      )
 
 # # digiKam Date kio slave ###########################################################
@@ -38,6 +43,9 @@ KDE4_ADD_PLUGIN(kio_digikamdates ${kio_digikamdates_PART_SRCS})
 TARGET_LINK_LIBRARIES(kio_digikamdates
                       digikam
                       digikamdatabase
+                      ${KDE4_KDECORE_LIBS}
+                      ${KDE4_KIO_LIBS}
+                      ${QT_QTCORE_LIBRARY}
                      )
 
 # # digiKam Search kio slave #########################################################
@@ -50,6 +58,9 @@ KDE4_ADD_PLUGIN(kio_digikamsearch ${kio_digikamsearch_PART_SRCS})
 TARGET_LINK_LIBRARIES(kio_digikamsearch
                       digikam
                       digikamdatabase
+                      ${KDE4_KDECORE_LIBS}
+                      ${KDE4_KIO_LIBS}
+                      ${QT_QTCORE_LIBRARY}
                      )
 
 # Files to install #################################################################
