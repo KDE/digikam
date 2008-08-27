@@ -122,7 +122,6 @@ public:
 
 signals:
 
-    void signalColorManagementTool();
     void signalZoomChanged(double zoom);
     void signalMaxZoom();
     void signalMinZoom();

@@ -44,10 +44,6 @@ public:
     void setEnabledSelectionActions(bool enable);
     void setEnabledActions(bool enable);
 
-public slots:
-
-    void slotColorManagement();
-
 private slots:
 
     void slotBlur();

@@ -249,15 +249,6 @@ void EditorWindow::setupStandardConnections()
 
     connect(m_nameLabel, SIGNAL(signalCancelButtonPressed()),
             this, SLOT(slotNameLabelCancelButtonPressed()));
-
-    // -- Core plugin connections -------------------------------------
-
-    ImagePlugin *corePlugin = m_imagePluginLoader->pluginInstance("digikamimageplugin_core");
-    if ( corePlugin )
-    {
-        connect(m_canvas, SIGNAL(signalColorManagementTool()),
-                corePlugin, SLOT(slotColorManagement()));
-    }
 }
 
 void EditorWindow::setupStandardActions()
@@ -868,16 +859,15 @@ void EditorWindow::applyStandardSettings()
 
     config->setGroup("Color Management");
 
-    d->ICCSettings->enableCMSetting       = config->readBoolEntry("EnableCM", false);
-    d->ICCSettings->askOrApplySetting     = config->readBoolEntry("BehaviourICC", false);
-    d->ICCSettings->BPCSetting            = config->readBoolEntry("BPCAlgorithm",false);
-    d->ICCSettings->managedViewSetting    = config->readBoolEntry("ManagedView", false);
-    d->ICCSettings->renderingSetting      = config->readNumEntry("RenderingIntent");
-    d->ICCSettings->inputSetting          = config->readPathEntry("InProfileFile", QString());
-    d->ICCSettings->workspaceSetting      = config->readPathEntry("WorkProfileFile", QString());
-    d->ICCSettings->monitorSetting        = config->readPathEntry("MonitorProfileFile", QString());
-    d->ICCSettings->proofSetting          = config->readPathEntry("ProofProfileFile", QString());
-    d->ICCSettings->CMInRawLoadingSetting = config->readBoolEntry("CMInRawLoading", false);
+    d->ICCSettings->enableCMSetting    = config->readBoolEntry("EnableCM", false);
+    d->ICCSettings->askOrApplySetting  = config->readBoolEntry("BehaviourICC", false);
+    d->ICCSettings->BPCSetting         = config->readBoolEntry("BPCAlgorithm",false);
+    d->ICCSettings->managedViewSetting = config->readBoolEntry("ManagedView", false);
+    d->ICCSettings->renderingSetting   = config->readNumEntry("RenderingIntent");
+    d->ICCSettings->inputSetting       = config->readPathEntry("InProfileFile", QString());
+    d->ICCSettings->workspaceSetting   = config->readPathEntry("WorkProfileFile", QString());
+    d->ICCSettings->monitorSetting     = config->readPathEntry("MonitorProfileFile", QString());
+    d->ICCSettings->proofSetting       = config->readPathEntry("ProofProfileFile", QString());
 
     d->viewCMViewAction->setEnabled(d->ICCSettings->enableCMSetting);
     d->viewCMViewAction->setChecked(d->ICCSettings->managedViewSetting);

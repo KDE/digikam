@@ -302,21 +302,16 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
 
         if (d->image.attribute("format").toString() == QString("RAW"))
             d->rotatedOrFlipped = true;
-    
+
         if (d->exifOrient && 
-	    (d->image.attribute("format").toString() == QString("JPEG") ||
-	     d->image.attribute("format").toString() == QString("PNG")  ||
-	     d->image.attribute("format").toString() == QString("TIFF")))
-    	    exifRotate(d->filename);
-        
+            (d->image.attribute("format").toString() == QString("JPEG") ||
+             d->image.attribute("format").toString() == QString("PNG")  ||
+             d->image.attribute("format").toString() == QString("TIFF")))
+            exifRotate(d->filename);
+
         if (d->cmSettings->enableCMSetting)
         {
-            if ((d->image.attribute("format").toString() == QString("RAW"))  && (d->cmSettings->CMInRawLoadingSetting) )
-            {
-                // With RAW files, we load the Color Management image plugin.
-                emit signalColorManagementTool();        
-            }
-            else if (QFile::exists(d->cmSettings->workspaceSetting))
+            if (QFile::exists(d->cmSettings->workspaceSetting))
             {
                 IccTransform trans;
                 QByteArray fakeProfile;
@@ -343,7 +338,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                     {
                         // To repaint image in canvas before to ask about to apply ICC profile.
                         emit signalImageLoaded(d->filename, valRet);
-    
+
                         DImg preview = d->image.smoothScale(240, 180, QSize::ScaleMin);
                         trans.setProfiles(QFile::encodeName(d->cmSettings->inputSetting),
                                           QFile::encodeName(d->cmSettings->workspaceSetting));
@@ -353,7 +348,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                         {
                             case QDialog::Accepted:
                                 if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
-        
+
                                 // NOTE: If Input color profile do not exist, using built-in sRGB intead.
                                 trans.apply(d->image, fakeProfile, d->cmSettings->renderingSetting,
                                             d->cmSettings->BPCSetting, false, 
@@ -375,7 +370,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                 else
                 {
                     trans.getEmbeddedProfile( d->image );
-    
+
                     // Ask or apply?
                     if (d->cmSettings->askOrApplySetting)
                     {
@@ -391,16 +386,16 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                             != trans.getProfileDescription( d->cmSettings->workspaceSetting ))
                         {
                             // Embedded profile and default workspace profile are different: ask to user!
-                        
+
                             DDebug() << "Embedded profile: " << trans.getEmbeddedProfileDescriptor() << endl;
-    
+
                             // To repaint image in canvas before to ask about to apply ICC profile.
                             emit signalImageLoaded(d->filename, valRet);
-    
+
                             DImg preview = d->image.smoothScale(240, 180, QSize::ScaleMin);
                             trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
                             ColorCorrectionDlg dlg(d->parent, &preview, &trans, fileName);
-    
+
                             switch (dlg.exec())
                             {
                                 case QDialog::Accepted:

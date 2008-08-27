@@ -180,9 +180,6 @@ Canvas::Canvas(QWidget *parent)
     connect(d->cornerButton, SIGNAL(pressed()),
             this, SLOT(slotCornerButtonPressed()));
 
-    connect(d->im, SIGNAL(signalColorManagementTool()),
-            this, SIGNAL(signalColorManagementTool()));
-
     connect(d->im, SIGNAL(signalModified()),
             this, SLOT(slotModified()));
 

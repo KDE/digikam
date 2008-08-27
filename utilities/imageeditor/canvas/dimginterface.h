@@ -169,8 +169,6 @@ protected slots:
 
 signals:
 
-    void   signalColorManagementTool();
-
     void   signalModified();
     void   signalUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave);
     void   signalLoadingStarted(const QString& filename);

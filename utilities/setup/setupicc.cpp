@@ -5,21 +5,21 @@
  *
  * Date        : 2005-11-24
  * Description : Color management setup tab.
- * 
+ *
  * Copyright (C) 2005-2007 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #include <config.h>
@@ -99,7 +99,6 @@ public:
         infoMonitorProfiles   = 0;
         infoInProfiles        = 0;
         infoProofProfiles     = 0;
-        cmToolInRawLoading    = 0;
         behaviourGB           = 0;
         defaultPathGB         = 0;
         profilesGB            = 0;
@@ -114,8 +113,7 @@ public:
     QCheckBox              *enableColorManagement;
     QCheckBox              *bpcAlgorithm;
     QCheckBox              *managedView;
-    QCheckBox              *cmToolInRawLoading;
-    
+
     QRadioButton           *defaultApplyICC;
     QRadioButton           *defaultAskICC;
 
@@ -134,7 +132,7 @@ public:
     QMap<QString, QString>  workICCPath;
     QMap<QString, QString>  proofICCPath;
     QMap<QString, QString>  monitorICCPath;
-    
+
     KURLRequester          *defaultPathKU;
 
     KComboBox              *renderingIntentKC;
@@ -155,15 +153,15 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint());
 
     // --------------------------------------------------------
-    
+
     QGroupBox *colorPolicy = new QGroupBox(0, Qt::Horizontal, i18n("Color Management Policy"), parent);
     QGridLayout* grid = new QGridLayout( colorPolicy->layout(), 1, 2, KDialog::spacingHint());
-    
+
     d->enableColorManagement = new QCheckBox(colorPolicy);
     d->enableColorManagement->setText(i18n("Enable Color Management"));
     QWhatsThis::add( d->enableColorManagement, i18n("<ul><li>Checked: Color Management is enabled</li>"
                                                     "<li>Unchecked: Color Management is disabled</li></ul>"));
-    
+
     KURLLabel *lcmsLogoLabel = new KURLLabel(colorPolicy);
     lcmsLogoLabel->setText(QString());
     lcmsLogoLabel->setURL("http://www.littlecms.com");
@@ -182,7 +180,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     QWhatsThis::add( d->defaultApplyICC, i18n("<p>If this option is enabled, digiKam applies the "
                      "Workspace default color profile to an image, without prompting you about missing "
                      "embedded profiles or embedded profiles different from the workspace profile.</p>"));
-    
+
     d->defaultAskICC = new QRadioButton(behaviourOptions);
     d->defaultAskICC->setText(i18n("Ask when opening an image in the Image Editor"));
     QWhatsThis::add( d->defaultAskICC, i18n("<p>If this option is enabled, digiKam asks to user "
@@ -190,36 +188,28 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
                      "embedded profile or, if the image has an embedded profile, when it's not the same "
                      "as the workspace profile.</p>"));
 
-    QHBox *hbox   = new QHBox(d->behaviourGB);
-    QLabel *space = new QLabel(hbox);
-    space->setFixedWidth(15);
-    d->cmToolInRawLoading = new QCheckBox(hbox);
-    d->cmToolInRawLoading->setText(i18n("Launch Color Management plugin with RAW files"));
-    QWhatsThis::add( d->cmToolInRawLoading, i18n("Enable this option if you want to launch the color "
-                     "management image plugin when a RAW file is loaded in the editor."));
-
     grid->addMultiCellWidget(d->enableColorManagement, 0, 0, 0, 0);
     grid->addMultiCellWidget(lcmsLogoLabel, 0, 0, 2, 2);
     grid->addMultiCellWidget(d->behaviourGB, 1, 1, 0, 2);
     grid->setColStretch(1, 10);
 
     layout->addWidget(colorPolicy);
-    
+
     // --------------------------------------------------------
-    
+
     d->defaultPathGB = new QHGroupBox(parent);
     d->defaultPathGB->setTitle(i18n("Color Profiles Directory"));
-    
+
     d->defaultPathKU = new KURLRequester(d->defaultPathGB);
     d->defaultPathKU->lineEdit()->setReadOnly(true);
-    d->defaultPathKU->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);    
+    d->defaultPathKU->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);
     QWhatsThis::add( d->defaultPathKU, i18n("<p>Default path to the color profiles folder. "
                      "You must store all your color profiles in this directory.</p>"));
-    
+
     layout->addWidget(d->defaultPathGB);
 
     // --------------------------------------------------------
-    
+
     d->profilesGB      = new QGroupBox(0, Qt::Horizontal, i18n("ICC Profiles Settings"), parent);
     QGridLayout* grid2 = new QGridLayout( d->profilesGB->layout(), 4, 3, KDialog::spacingHint());
     grid2->setColStretch(2, 10);
@@ -242,7 +232,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->infoMonitorProfiles = new QPushButton(i18n("Info..."), d->profilesGB);
     QWhatsThis::add( d->infoMonitorProfiles, i18n("<p>You can use this button to get more detailed "
                      "information about the selected monitor profile.</p>"));
-    
+
     grid2->addMultiCellWidget(d->managedView, 0, 0, 0, 3);
     grid2->addMultiCellWidget(d->monitorIcon, 1, 1, 0, 0);
     grid2->addMultiCellWidget(d->monitorProfiles, 1, 1, 1, 1);
@@ -276,7 +266,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->infoInProfiles = new QPushButton(i18n("Info..."), d->profilesGB);
     QWhatsThis::add( d->infoInProfiles, i18n("<p>You can use this button to get more detailed "
                      "information about the selected input profile.</p>"));
-    
+
     grid2->addMultiCellWidget(inIcon, 3, 3, 0, 0);
     grid2->addMultiCellWidget(inProfiles, 3, 3, 1, 1);
     grid2->addMultiCellWidget(d->inProfilesKC, 3, 3, 2, 2);
@@ -293,7 +283,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->infoProofProfiles = new QPushButton(i18n("Info..."), d->profilesGB);
     QWhatsThis::add( d->infoProofProfiles, i18n("<p>You can use this button to get more detailed "
                      "information about the selected soft proof profile.</p>"));
-    
+
     grid2->addMultiCellWidget(proofIcon, 4, 4, 0, 0);
     grid2->addMultiCellWidget(proofProfiles, 4, 4, 1, 1);
     grid2->addMultiCellWidget(d->proofProfilesKC, 4, 4, 2, 2);
@@ -302,7 +292,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     layout->addWidget(d->profilesGB);
 
      // --------------------------------------------------------
-    
+
     d->advancedSettingsGB = new QVGroupBox(i18n("Advanced Settings"), parent);
 
     d->bpcAlgorithm = new QCheckBox(d->advancedSettingsGB);
@@ -346,12 +336,12 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
 
     layout->addWidget(d->advancedSettingsGB);
     layout->addStretch();
-    
+
     // --------------------------------------------------------
-    
+
     connect(d->managedView, SIGNAL(toggled(bool)),
             this, SLOT(slotToggleManagedView(bool)));
-                    
+
     connect(lcmsLogoLabel, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(processLCMSURL(const QString&)));
 
@@ -369,12 +359,9 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
 
     connect(d->infoWorkProfiles, SIGNAL(clicked()),
             this, SLOT(slotClickedWork()));
-            
+
     connect(d->defaultPathKU, SIGNAL(urlSelected(const QString&)),
             this, SLOT(slotFillCombos(const QString&)));
-
-    connect(d->defaultAskICC, SIGNAL(toggled(bool)),
-            d->cmToolInRawLoading, SLOT(setEnabled(bool)));
 
     // --------------------------------------------------------
 
@@ -400,7 +387,7 @@ void SetupICC::applySettings()
     config->setGroup("Color Management");
 
     config->writeEntry("EnableCM", d->enableColorManagement->isChecked());
-    
+
     if (!d->enableColorManagement->isChecked())
         return;          // No need to write settings in this case.
 
@@ -409,7 +396,6 @@ void SetupICC::applySettings()
     else
         config->writeEntry("BehaviourICC", false);
 
-    config->writeEntry("CMInRawLoading", d->cmToolInRawLoading->isChecked());
     config->writePathEntry("DefaultPath", d->defaultPathKU->url());
     config->writeEntry("WorkSpaceProfile", d->workProfilesKC->currentItem());
     config->writeEntry("MonitorProfile", d->monitorProfilesKC->currentItem());
@@ -441,13 +427,11 @@ void SetupICC::readSettings(bool restore)
     d->bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
     d->renderingIntentKC->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
     d->managedView->setChecked(config->readBoolEntry("ManagedView", false));
-    
+
     if (config->readBoolEntry("BehaviourICC"))
         d->defaultApplyICC->setChecked(true);
     else
         d->defaultAskICC->setChecked(true);
-
-    d->cmToolInRawLoading->setChecked(config->readBoolEntry("CMInRawLoading", true));
 
     fillCombos(d->defaultPathKU->url(), false);
 
@@ -482,10 +466,10 @@ void SetupICC::fillCombos(const QString& path, bool report)
         if (report)
             KMessageBox::sorry(this, i18n("<p>You must set a correct default "
                                           "path for your ICC color profiles files.</p>"));
-    
+
         d->mainDialog->enableButtonOK(false);
         return;
-    }    
+    }
     d->mainDialog->enableButtonOK(true);
 
     // Look the ICC profile path repository set by user.
@@ -502,7 +486,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
             message.append(i18n("</p>"));
             KMessageBox::sorry(this, message);
         }
-        
+
         DDebug() << "No ICC profile files found!!!" << endl;
         d->mainDialog->enableButtonOK(false);
         return;
@@ -516,7 +500,6 @@ void SetupICC::fillCombos(const QString& path, bool report)
     DDebug() << "Scanning ICC profiles included with digiKam: " << digiKamProfilesPath << endl;
     parseProfilesfromDir(digiKamFiles);
 
-
     d->monitorProfilesKC->insertSqueezedList(d->monitorICCPath.keys(), 0);
     if (d->monitorICCPath.keys().isEmpty())
     {
@@ -527,7 +510,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
     {
         d->managedView->setEnabled(true);
     }
-    
+
     d->inProfilesKC->insertSqueezedList(d->inICCPath.keys(), 0);
     d->proofProfilesKC->insertSqueezedList(d->proofICCPath.keys(), 0);
 
@@ -580,12 +563,12 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList* files)
                             KMessageBox::information(this, i18n("<p>digiKam has failed to remove the invalid color profile</p><p>You have to do it manually</p>"));
                         }
                     }
-                    
+
                     continue;
                 }
-                
+
                 QString profileDescription = QString((cmsTakeProductDesc(tmpProfile)));
-    
+
                 switch ((int)cmsGetDeviceClass(tmpProfile))
                 {
                     case icSigInputClass:
@@ -594,14 +577,14 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList* files)
                             d->inICCPath.insert(fileName, fileName);
                         else
                             d->inICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
-                        
+
                         DDebug() << "ICC file: " << fileName << " ==> Input device class (" 
                                  << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                         findIccFiles = true;
                         break;
                     }
                     case icSigDisplayClass:
-                    {    
+                    {
                         if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
                         {
                             d->monitorICCPath.insert(fileName, fileName);
@@ -612,7 +595,7 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList* files)
                             d->monitorICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
                             d->workICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
                         }
-    
+
                         DDebug() << "ICC file: " << fileName << " ==> Monitor device class (" 
                                  << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                         findIccFiles = true;
@@ -624,7 +607,7 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList* files)
                             d->proofICCPath.insert(fileName, fileName);
                         else
                             d->proofICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
-    
+
                         DDebug() << "ICC file: " << fileName << " ==> Output device class (" 
                                  << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                         findIccFiles = true;
@@ -642,7 +625,7 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList* files)
                             d->inICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
                             d->workICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
                         }
-    
+
                         DDebug() << "ICC file: " << fileName << " ==> WorkingSpace device class (" 
                                  << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                         findIccFiles = true;
@@ -655,13 +638,13 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList* files)
                         break;
                     }
                 }
-    
+
                 cmsCloseProfile(tmpProfile);
             }
             ++it;
         }
     }
-    
+
     return findIccFiles;
 }
 
@@ -740,6 +723,5 @@ bool SetupICC::iccRepositoryIsValid()
 
     return false;
 }
-            
-}  // namespace Digikam
 
+}  // namespace Digikam
