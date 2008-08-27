@@ -19,7 +19,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes) 
 
 digikamimageplugin_border_la_SOURCES = imageplugin_border.cpp \
-	                                   imageeffect_border.cpp border.cpp 
+	                                   bordertool.cpp border.cpp 
 
 digikamimageplugin_border_la_LIBADD = $(LIB_KPARTS) \
 	                                  $(top_builddir)/digikam/digikam/libdigikam.la 
@@ -32,5 +32,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_border.la
 
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_border_ui.rc
-
-

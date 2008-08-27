@@ -32,7 +32,7 @@
 
 // Digikam includes.
 
-#include "imageguidedlg.h"
+#include "editortool.h"
 
 class QLabel;
 class QCheckBox;
@@ -46,17 +46,23 @@ class RIntNumInput;
 class RComboBox;
 }
 
+namespace Digikam
+{
+class EditorToolSettings;
+class ImageWidget;
+}
+
 namespace DigikamBorderImagesPlugin
 {
 
-class ImageEffect_Border : public Digikam::ImageGuideDlg
+class BorderTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_Border(QWidget *parent);
-    ~ImageEffect_Border();
+    BorderTool(QObject *parent);
+    ~BorderTool();
 
 private:
 
@@ -68,12 +74,12 @@ private slots:
     void slotBorderTypeChanged(int borderType);
     void slotColorForegroundChanged(const QColor &color);
     void slotColorBackgroundChanged(const QColor &color);
-    void readUserSettings();
+    void slotResetSettings();
 
 private:
 
-    void writeUserSettings();
-    void resetValues();
+    void writeSettings();
+    void readSettings();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
@@ -83,28 +89,32 @@ private:
 
 private:
 
-    QLabel       *m_labelBorderPercent;
-    QLabel       *m_labelBorderWidth;
-    QLabel       *m_labelForeground;
-    QLabel       *m_labelBackground;
+    QLabel                      *m_labelBorderPercent;
+    QLabel                      *m_labelBorderWidth;
+    QLabel                      *m_labelForeground;
+    QLabel                      *m_labelBackground;
 
-    QCheckBox    *m_preserveAspectRatio;
+    QCheckBox                   *m_preserveAspectRatio;
 
-    QColor        m_solidColor;
-    QColor        m_niepceBorderColor;
-    QColor        m_niepceLineColor;
-    QColor        m_bevelUpperLeftColor;
-    QColor        m_bevelLowerRightColor;
-    QColor        m_decorativeFirstColor;
-    QColor        m_decorativeSecondColor;
+    QColor                       m_solidColor;
+    QColor                       m_niepceBorderColor;
+    QColor                       m_niepceLineColor;
+    QColor                       m_bevelUpperLeftColor;
+    QColor                       m_bevelLowerRightColor;
+    QColor                       m_decorativeFirstColor;
+    QColor                       m_decorativeSecondColor;
 
-    KDcrawIface::RComboBox    *m_borderType;
+    KDcrawIface::RComboBox      *m_borderType;
 
-    KDcrawIface::RIntNumInput *m_borderPercent;
-    KDcrawIface::RIntNumInput *m_borderWidth;
+    KDcrawIface::RIntNumInput   *m_borderPercent;
+    KDcrawIface::RIntNumInput   *m_borderWidth;
 
-    KColorButton *m_firstColorButton;
-    KColorButton *m_secondColorButton;
+    KColorButton                *m_firstColorButton;
+    KColorButton                *m_secondColorButton;
+
+    Digikam::ImageWidget        *m_previewWidget;
+
+    Digikam::EditorToolSettings *m_gboxSettings;
 };
 
 }  // NameSpace DigikamBorderImagesPlugin
