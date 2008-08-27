@@ -72,8 +72,8 @@ BorderTool::BorderTool(QObject* parent)
     setToolName(i18n("Add Border"));
     setToolIcon(SmallIcon("bordertool"));
 
-    m_previewWidget = new ImageWidget("freerotation Tool", 0, QString(), 
-                                      false, ImageGuideWidget::HVGuideMode);
+    m_previewWidget = new ImageWidget("bordertool Tool", 0, QString(), 
+                                      false, ImageGuideWidget::HVGuideMode, false);
 
     setToolView(m_previewWidget);
 
@@ -206,14 +206,11 @@ void BorderTool::readSettings()
     m_preserveAspectRatio->blockSignals(true);
 
     KConfig *config = kapp->config();
-    config->setGroup("border Tool Dialog");
+    config->setGroup("border Tool");
 
-    m_borderType->setCurrentItem(config->readNumEntry("Border Type",
-                                 m_borderType->defaultItem()));
-    m_borderPercent->setValue(config->readNumEntry("Border Percent",
-                              m_borderPercent->defaultValue()));
-    m_borderWidth->setValue(config->readNumEntry("Border Width",
-                            m_borderWidth->defaultValue()));
+    m_borderType->setCurrentItem(config->readNumEntry("Border Type", m_borderType->defaultItem()));
+    m_borderPercent->setValue(config->readNumEntry("Border Percent", m_borderPercent->defaultValue()));
+    m_borderWidth->setValue(config->readNumEntry("Border Width", m_borderWidth->defaultValue()));
     m_preserveAspectRatio->setChecked(config->readBoolEntry("Preserve Aspect Ratio", true));
 
     QColor black(0, 0, 0);
@@ -221,12 +218,12 @@ void BorderTool::readSettings()
     QColor gray1(192, 192, 192);
     QColor gray2(128, 128, 128);
 
-    m_solidColor = config->readColorEntry("Solid Color", &black);
-    m_niepceBorderColor = config->readColorEntry("Niepce Border Color", &white);
-    m_niepceLineColor = config->readColorEntry("Niepce Line Color", &black);
-    m_bevelUpperLeftColor = config->readColorEntry("Bevel Upper Left Color", &gray1);
-    m_bevelLowerRightColor = config->readColorEntry("Bevel Lower Right Color", &gray2);
-    m_decorativeFirstColor = config->readColorEntry("Decorative First Color", &black);
+    m_solidColor            = config->readColorEntry("Solid Color", &black);
+    m_niepceBorderColor     = config->readColorEntry("Niepce Border Color", &white);
+    m_niepceLineColor       = config->readColorEntry("Niepce Line Color", &black);
+    m_bevelUpperLeftColor   = config->readColorEntry("Bevel Upper Left Color", &gray1);
+    m_bevelLowerRightColor  = config->readColorEntry("Bevel Lower Right Color", &gray2);
+    m_decorativeFirstColor  = config->readColorEntry("Decorative First Color", &black);
     m_decorativeSecondColor = config->readColorEntry("Decorative Second Color", &black);
 
     m_borderType->blockSignals(false);
@@ -242,7 +239,7 @@ void BorderTool::readSettings()
 void BorderTool::writeSettings()
 {
     KConfig *config = kapp->config();
-    config->setGroup("border Tool Dialog");
+    config->setGroup("border Tool");
 
     config->writeEntry("Border Type", m_borderType->currentItem());
     config->writeEntry("Border Percent", m_borderPercent->value());
@@ -345,7 +342,7 @@ void BorderTool::slotColorForegroundChanged(const QColor &color)
 void BorderTool::slotColorBackgroundChanged(const QColor &color)
 {
     switch (m_borderType->currentItem())
-       {
+    {
        case Border::SolidBorder:
           m_solidColor = color;
           break;
@@ -376,7 +373,7 @@ void BorderTool::slotColorBackgroundChanged(const QColor &color)
        case Border::WallBorder:
           m_decorativeSecondColor = color;
           break;
-       }
+    }
 
     slotEffect();
 }
@@ -394,7 +391,7 @@ void BorderTool::slotBorderTypeChanged(int borderType)
     m_borderPercent->setEnabled(true);
 
     switch (borderType)
-       {
+    {
        case Border::SolidBorder:
           m_firstColorButton->setColor( m_solidColor );
           m_secondColorButton->setEnabled(false);
@@ -436,7 +433,7 @@ void BorderTool::slotBorderTypeChanged(int borderType)
           m_firstColorButton->setColor( m_decorativeFirstColor );
           m_secondColorButton->setColor( m_decorativeSecondColor );
           break;
-       }
+    }
 
     slotEffect();
 }
@@ -458,7 +455,7 @@ void BorderTool::prepareEffect()
     bool sixteenBit   = iface->previewSixteenBit();
     uchar *data       = iface->getPreviewImage();
     DImg previewImage(w, h, sixteenBit,
-                               iface->previewHasAlpha(), data);
+                      iface->previewHasAlpha(), data);
     delete [] data;
 
     int borderType  = m_borderType->currentItem();
@@ -548,8 +545,8 @@ void BorderTool::prepareFinal()
 void BorderTool::putPreviewData()
 {
     ImageIface* iface = m_previewWidget->imageIface();
-    int w = iface->previewWidth();
-    int h = iface->previewHeight();
+    int w             = iface->previewWidth();
+    int h             = iface->previewHeight();
 
     DImg imTemp = filter()->getTargetImage().smoothScale(w, h, QSize::ScaleMin);
     DImg imDest( w, h, filter()->getTargetImage().sixteenBit(),
