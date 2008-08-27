@@ -55,9 +55,15 @@ public:
         Abort   = 0x00000040
     };
 
+    enum ToolCode
+    {
+        NoTool     = 0x00000001,
+        ColorGuide = 0x00000002
+    };
+
 public:
 
-    EditorToolSettings(int buttonMask, QWidget *parent=0);
+    EditorToolSettings(int buttonMask, int toolMask=NoTool, QWidget *parent=0);
     ~EditorToolSettings();
 
     virtual void setBusy(bool){};
@@ -69,6 +75,12 @@ public:
     int spacingHint();
 
     QWidget *plainPage() const;
+
+    QColor guideColor() const;
+    void setGuideColor(const QColor& color);
+
+    int guideSize() const;
+    void setGuideSize(int size);
 
     KPushButton* button(int buttonCode) const;
     void enableButton(int buttonCode, bool state);
@@ -82,6 +94,7 @@ signals:
     void signalSaveAsClicked();
     void signalLoadClicked();
     void signalAbortClicked();
+    void signalColorGuideChanged();
 
 private:
 
