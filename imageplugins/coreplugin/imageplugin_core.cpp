@@ -275,6 +275,12 @@ void ImagePlugin_Core::slotRedEye()
     dlg.exec();
 }
 
+void ImagePlugin_Core::slotColorManagement()
+{
+    DigikamImagesPluginCore::ImageEffect_ICCProof dlg(parentWidget());
+    dlg.exec();
+}
+
 void ImagePlugin_Core::slotBW()
 {
     DigikamImagesPluginCore::ImageEffect_BWSepia dlg(parentWidget());
