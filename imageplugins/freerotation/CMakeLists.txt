@@ -7,7 +7,16 @@ set(digikamimageplugin_freerotation_PART_SRCS freerotation.cpp
 
 KDE4_ADD_PLUGIN(digikamimageplugin_freerotation ${digikamimageplugin_freerotation_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(digikamimageplugin_freerotation digikam)
+TARGET_LINK_LIBRARIES(
+    digikamimageplugin_freerotation
+    digikam
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KIO_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
+    ${KDCRAW_LIBRARIES}    
+    )
 
 INSTALL(TARGETS digikamimageplugin_freerotation DESTINATION ${PLUGIN_INSTALL_DIR} )
 

@@ -7,7 +7,13 @@ SET(digikamimageplugin_charcoal_PART_SRCS  imageplugin_charcoal.cpp
 
 KDE4_ADD_PLUGIN(digikamimageplugin_charcoal ${digikamimageplugin_charcoal_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(digikamimageplugin_charcoal digikam)
+TARGET_LINK_LIBRARIES(
+    digikamimageplugin_charcoal
+    digikam
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    )
 
 INSTALL(TARGETS digikamimageplugin_charcoal DESTINATION ${PLUGIN_INSTALL_DIR})
 

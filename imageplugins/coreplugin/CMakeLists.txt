@@ -67,7 +67,16 @@ SET(digikamimageplugin_core_PART_SRCS
 
 KDE4_ADD_PLUGIN(digikamimageplugin_core ${digikamimageplugin_core_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(digikamimageplugin_core digikam)
+TARGET_LINK_LIBRARIES(
+    digikamimageplugin_core
+    digikam
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KIO_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
+    ${KDCRAW_LIBRARIES}
+    )
 
 INSTALL(TARGETS digikamimageplugin_core DESTINATION ${PLUGIN_INSTALL_DIR})
 

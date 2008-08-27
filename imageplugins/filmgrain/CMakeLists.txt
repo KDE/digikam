@@ -7,7 +7,14 @@ SET(digikamimageplugin_filmgrain_PART_SRCS imageplugin_filmgrain.cpp
 
 KDE4_ADD_PLUGIN(digikamimageplugin_filmgrain ${digikamimageplugin_filmgrain_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(digikamimageplugin_filmgrain digikam)
+TARGET_LINK_LIBRARIES(
+    digikamimageplugin_filmgrain
+    digikam
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
+    )
 
 INSTALL(TARGETS digikamimageplugin_filmgrain DESTINATION ${PLUGIN_INSTALL_DIR})
 
