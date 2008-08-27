@@ -298,6 +298,7 @@ void EditorToolThreaded::customEvent(QCustomEvent *e)
                 {
                     DDebug() << "Final" << toolName() << " completed..." << endl;
                     putFinalData();
+                    EditorToolIface::editorToolIface()->setToolStopProgress();
                     kapp->restoreOverrideCursor();
                     emit okClicked();
                     break;
