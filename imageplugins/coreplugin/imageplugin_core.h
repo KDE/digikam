@@ -62,6 +62,8 @@ private slots:
     void slotConvertTo8Bits();
     void slotConvertTo16Bits();
 
+    void slotColorManagement();
+
 private:
 
     KAction *m_redeyeAction;

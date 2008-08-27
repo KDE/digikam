@@ -242,6 +242,12 @@ void ImagePlugin_Core::slotRedEye()
     loadTool(redeye);
 }
 
+void ImagePlugin_Core::slotColorManagement()
+{
+    ImageEffect_ICCProof dlg(parentWidget());
+    dlg.exec();
+}
+
 void ImagePlugin_Core::slotRatioCrop()
 {
     RatioCropTool *ratiocrop = new RatioCropTool(parentWidget());
