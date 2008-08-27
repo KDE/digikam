@@ -120,7 +120,8 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
     d->guideColorBt = new KColorButton(QColor(Qt::red), d->guideBox);
     QWhatsThis::add(d->guideColorBt, i18n("<p>Set here the color used to draw guides dashed-lines."));
     d->guideSize    = new RIntNumInput(d->guideBox);
-    d->guideSize->input()->setRange(1, 5, 1, false);
+    d->guideSize->setRange(1, 5, 1);
+    d->guideSize->setDefaultValue(1);
     QWhatsThis::add(d->guideSize, i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
 
     d->guideBox->setStretchFactor(space4, 10);
