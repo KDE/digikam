@@ -81,7 +81,6 @@ private:
     KDcrawIface::RDoubleNumInput *m_powerInput;
     KDcrawIface::RDoubleNumInput *m_radiusInput;
 
-
     Digikam::ImageWidget         *m_previewWidget;
 
     Digikam::EditorToolSettings  *m_gboxSettings;
