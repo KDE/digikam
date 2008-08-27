@@ -244,8 +244,8 @@ void ImagePlugin_Core::slotRedEye()
 
 void ImagePlugin_Core::slotColorManagement()
 {
-    ImageEffect_ICCProof dlg(parentWidget());
-    dlg.exec();
+    ICCProofTool *tool = new ICCProofTool(parentWidget());
+    loadTool(tool);
 }
 
 void ImagePlugin_Core::slotRatioCrop()
