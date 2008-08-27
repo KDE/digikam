@@ -18,7 +18,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes) 
 
 digikamimageplugin_lensdistortion_la_SOURCES = imageplugin_lensdistortion.cpp \
-	                                           imageeffect_lensdistortion.cpp \
+	                                           lensdistortiontool.cpp \
 	                                           lensdistortion.cpp pixelaccess.cpp 
 
 digikamimageplugin_lensdistortion_la_LIBADD = $(LIB_KPARTS) \
@@ -32,4 +32,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_lensdistortion.la
 
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_lensdistortion_ui.rc
-       
