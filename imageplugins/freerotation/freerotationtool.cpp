@@ -169,7 +169,6 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     connect(m_gboxSettings, SIGNAL(signalColorGuideChanged()),
             this, SLOT(slotColorGuideChanged()));
-
 }
 
 FreeRotationTool::~FreeRotationTool()
