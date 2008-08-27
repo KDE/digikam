@@ -38,12 +38,19 @@
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <kstdguiitem.h>
+#include <kcolorbutton.h>
+
+// LibKDcraw includes.
+
+#include <libkdcraw/rnuminput.h>
 
 // Local includes.
 
 #include "ddebug.h"
 #include "editortoolsettings.h"
 #include "editortoolsettings.moc"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -66,11 +73,13 @@ public:
         saveAsBtn  = 0;
         loadBtn    = 0;
         abortBtn   = 0;
+        guideBox   = 0;
     }
 
     QHBox       *btnBox1;
     QHBox       *btnBox2;
     QHBox       *btnBox3;
+    QHBox       *guideBox;
 
     QWidget     *plainPage;
 
@@ -81,21 +90,41 @@ public:
     KPushButton *saveAsBtn;
     KPushButton *loadBtn;
     KPushButton *abortBtn;
+
+    KColorButton *guideColorBt;
+
+    RIntNumInput *guideSize;
 };
 
-EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
+EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *parent)
                   : QWidget(parent)
 {
     d = new EditorToolSettingsPriv;
 
     // ---------------------------------------------------------------
 
-    QGridLayout* gridSettings = new QGridLayout(this, 2, 2);
+    QGridLayout* gridSettings = new QGridLayout(this, 4, 2);
 
     d->plainPage = new QWidget(this);
+    d->guideBox  = new QHBox(this);
     d->btnBox1   = new QHBox(this);
     d->btnBox2   = new QHBox(this);
     d->btnBox3   = new QHBox(this);
+
+    // ---------------------------------------------------------------
+
+    new QLabel(i18n("Guide:"), d->guideBox);
+    QLabel *space4  = new QLabel(d->guideBox);
+    d->guideColorBt = new KColorButton(QColor(Qt::red), d->guideBox);
+    QWhatsThis::add(d->guideColorBt, i18n("<p>Set here the color used to draw guides dashed-lines."));
+    d->guideSize    = new RIntNumInput(d->guideBox);
+    d->guideSize->input()->setRange(1, 5, 1, false);
+    QWhatsThis::add(d->guideSize, i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
+
+    d->guideBox->setStretchFactor(space4, 10);
+
+    if (!(toolMask & ColorGuide))
+        d->guideBox->hide();
 
     // ---------------------------------------------------------------
 
@@ -162,9 +191,10 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
     // ---------------------------------------------------------------
 
     gridSettings->addMultiCellWidget(d->plainPage, 0, 0, 0, 1);
-    gridSettings->addMultiCellWidget(d->btnBox3,   1, 1, 0, 1);
-    gridSettings->addMultiCellWidget(d->btnBox2,   2, 2, 0, 1);
-    gridSettings->addMultiCellWidget(d->btnBox1,   3, 3, 0, 1);
+    gridSettings->addMultiCellWidget(d->guideBox,  1, 1, 0, 1);
+    gridSettings->addMultiCellWidget(d->btnBox3,   2, 2, 0, 1);
+    gridSettings->addMultiCellWidget(d->btnBox2,   3, 3, 0, 1);
+    gridSettings->addMultiCellWidget(d->btnBox1,   4, 4, 0, 1);
     gridSettings->setSpacing(spacingHint());
     gridSettings->setMargin(0);
 
@@ -190,6 +220,12 @@ EditorToolSettings::EditorToolSettings(int buttonMask, QWidget *parent)
 
     connect(d->abortBtn, SIGNAL(clicked()),
             this, SIGNAL(signalAbortClicked()));
+
+    connect(d->guideColorBt, SIGNAL(changed(const QColor&)),
+            this, SIGNAL(signalColorGuideChanged()));
+
+    connect(d->guideSize, SIGNAL(valueChanged(int)),
+            this, SIGNAL(signalColorGuideChanged()));
 }
 
 EditorToolSettings::~EditorToolSettings()
@@ -242,6 +278,26 @@ void EditorToolSettings::enableButton(int buttonCode, bool state)
 {
     KPushButton *btn = button(buttonCode);
     if (btn) btn->setEnabled(state);
+}
+
+QColor EditorToolSettings::guideColor() const
+{
+    return d->guideColorBt->color();
+}
+
+void EditorToolSettings::setGuideColor(const QColor& color)
+{
+    d->guideColorBt->setColor(color);
+}
+
+int EditorToolSettings::guideSize() const
+{
+    return d->guideSize->value();
+}
+
+void EditorToolSettings::setGuideSize(int size)
+{
+    d->guideSize->setValue(size);
 }
 
 } // NameSpace Digikam

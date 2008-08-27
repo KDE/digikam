@@ -33,8 +33,8 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "editortoolsettings.h"
 #include "dimgthreadedfilter.h"
+#include "editortoolsettings.h"
 #include "editortooliface.h"
 #include "editortool.h"
 #include "editortool.moc"
