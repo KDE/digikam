@@ -270,6 +270,9 @@ void EditorWindow::setupStandardConnections()
 
     connect(m_nameLabel, SIGNAL(signalCancelButtonPressed()),
             this, SLOT(slotNameLabelCancelButtonPressed()));
+
+    connect(m_nameLabel, SIGNAL(signalCancelButtonPressed()),
+            d->toolIface, SLOT(slotToolAborted()));
 }
 
 void EditorWindow::setupStandardActions()
@@ -554,7 +557,6 @@ void EditorWindow::setupStatusBar()
     m_nameLabel->setAlignment(Qt::AlignCenter);
     m_nameLabel->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(m_nameLabel, 100);
-    d->toolIface->setProgressBar(m_nameLabel);
 
     d->selectLabel = new QLabel(i18n("No selection"), statusBar());
     d->selectLabel->setAlignment(Qt::AlignCenter);

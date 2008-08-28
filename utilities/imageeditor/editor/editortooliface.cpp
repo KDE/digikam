@@ -85,12 +85,6 @@ EditorTool* EditorToolIface::currentTool() const
     return d->tool;
 }
 
-void EditorToolIface::setProgressBar(StatusProgressBar* bar)
-{
-    connect(bar, SIGNAL(signalCancelButtonPressed()),
-            this, SLOT(slotToolAborted()));
-}
-
 void EditorToolIface::loadTool(EditorTool* tool)
 {
     if (d->tool) unLoadTool();
