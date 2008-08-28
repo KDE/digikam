@@ -116,7 +116,6 @@ protected:
     void customEvent(QCustomEvent *event);
 
     virtual void setToolView(QWidget *view);
-    virtual void setToolSettings(EditorToolSettings *settings);
     virtual void prepareEffect(){};
     virtual void prepareFinal(){};
     virtual void putPreviewData(){};
