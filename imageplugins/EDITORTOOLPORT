@@ -7,7 +7,7 @@ blurfx                      CtrlPanelDlg
 border                      ImageGuideDlg       DONE
 channelmixer                ImageDlgBase        DONE
 charcoal                    CtrlPanelDlg
-colorfx                     ImageDlgBase		A
+colorfx                     ImageDlgBase        A
 
 coreplugin
   \---autocorrection        ImageDlgBase        DONE
@@ -21,7 +21,7 @@ coreplugin
   \---rgbtool               ImageDlgBase        DONE
   \---sharpnesseditor       CtrlPanelDlg
 
-distortionfx                ImageGuideDlg		A
+distortionfx                ImageGuideDlg       A
 emboss                      CtrlPanelDlg
 filmgrain                   CtrlPanelDlg
 freerotation                ImageGuideDlg       DONE
@@ -33,7 +33,7 @@ lensdistortion              ImageGuideDlg       DONE
 noisereduction              CtrlPanelDlg
 oilpaint                    CtrlPanelDlg
 perspective                 ImageDlgBase        DONE
-raindrop                    ImageGuideDlg		A
+raindrop                    ImageGuideDlg       A
 restoration                 CtrlPanelDlg
 sheartool                   ImageGuideDlg       DONE
 superimpose                 ImageDlgBase
