@@ -27,7 +27,7 @@ filmgrain                   CtrlPanelDlg
 freerotation                ImageGuideDlg       DONE
 hotpixels                   CtrlPanelDlg
 infrared                    CtrlPanelDlg
-inpainting                  ImageGuideDlg       G
+inpainting                  ImageGuideDlg       DONE
 inserttext                  ImageDlgBase
 lensdistortion              ImageGuideDlg       DONE
 noisereduction              CtrlPanelDlg
