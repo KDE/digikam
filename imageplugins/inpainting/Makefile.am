@@ -19,7 +19,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes) 
 
 digikamimageplugin_inpainting_la_SOURCES = imageplugin_inpainting.cpp \
-	                                       imageeffect_inpainting.cpp 
+	                                       inpaintingtool.cpp 
 
 digikamimageplugin_inpainting_la_LIBADD = $(LIB_KPARTS) \
 	                                      $(top_builddir)/digikam/digikam/libdigikam.la  
@@ -31,5 +31,4 @@ kde_services_DATA = digikamimageplugin_inpainting.desktop
 kde_module_LTLIBRARIES = digikamimageplugin_inpainting.la
 
 rcdir = $(kde_datadir)/digikam
-rc_DATA = digikamimageplugin_inpainting_ui.rc        
-
+rc_DATA = digikamimageplugin_inpainting_ui.rc
