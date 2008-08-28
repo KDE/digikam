@@ -25,7 +25,7 @@ distortionfx                ImageGuideDlg       DONE
 freerotation                ImageGuideDlg       DONE
 inpainting                  ImageGuideDlg       DONE
 lensdistortion              ImageGuideDlg       DONE
-raindrop                    ImageGuideDlg       A
+raindrop                    ImageGuideDlg       DONE
 sheartool                   ImageGuideDlg       DONE
 
 coreplugin
