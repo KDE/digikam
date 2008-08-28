@@ -332,14 +332,6 @@ void EditorToolThreaded::setToolView(QWidget *view)
             this, SLOT(slotResized()));
 }
 
-void EditorToolThreaded::setToolSettings(EditorToolSettings *settings)
-{
-    EditorTool::setToolSettings(settings);
-
-    connect(settings, SIGNAL(signalAbortClicked()),
-            this, SLOT(slotAbort()));
-}
-
 void EditorToolThreaded::slotOk()
 {
     writeSettings();

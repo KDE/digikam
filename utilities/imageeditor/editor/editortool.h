@@ -114,7 +114,6 @@ protected:
     void setFilter(DImgThreadedFilter *filter);
 
     virtual void setToolView(QWidget *view);
-    virtual void setToolSettings(EditorToolSettings *settings);
     virtual void prepareEffect(){};
     virtual void prepareFinal(){};
     virtual void putPreviewData(){};
