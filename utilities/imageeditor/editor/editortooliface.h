@@ -35,6 +35,7 @@
 namespace Digikam
 {
 
+class StatusProgressBar;
 class EditorTool;
 class EditorWindow;
 class EditorToolIfacePriv;
@@ -51,6 +52,8 @@ public:
     ~EditorToolIface();
 
     EditorTool* currentTool() const;
+
+    void setProgressBar(StatusProgressBar* bar);
 
     void loadTool(EditorTool* tool);
     void unLoadTool();

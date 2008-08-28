@@ -71,9 +71,6 @@ EditorToolIface::EditorToolIface(EditorWindow *editor)
     d = new EditorToolIfacePriv;
     d->editor = editor;
     m_iface   = this;
-
-    connect(d->editor->m_nameLabel, SIGNAL(signalCancelButtonPressed()),
-            this, SLOT(slotToolAborted()));
 }
 
 EditorToolIface::~EditorToolIface()
@@ -81,6 +78,12 @@ EditorToolIface::~EditorToolIface()
     delete d;
     if (m_iface == this)
         m_iface = 0;
+}
+
+void EditorToolIface::setProgressBar(StatusProgressBar* bar)
+{
+    connect(bar, SIGNAL(signalCancelButtonPressed()),
+            this, SLOT(slotToolAborted()));
 }
 
 EditorTool* EditorToolIface::currentTool() const
