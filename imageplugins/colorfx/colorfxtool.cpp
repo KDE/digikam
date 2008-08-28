@@ -85,25 +85,6 @@ ColorFXTool::ColorFXTool(QWidget* parent)
 
     m_destinationPreviewData = 0;
 
-    // About data and help button.
-
-//    KAboutData *about = new KAboutData("digikam",
-//                            I18N_NOOP("Color Effects"),
-//                            digikam_version,
-//                            I18N_NOOP("A digiKam plugin to apply special color effects to an image."),
-//                            KAboutData::License_GPL,
-//                            "(c) 2004-2005, Renchi Raju\n(c) 2006-2008, Gilles Caulier",
-//                            0,
-//                            webProjectUrl());
-//
-//    about->addAuthor("Renchi Raju", I18N_NOOP("Original Author"),
-//                     "renchi@pooh.tam.uiuc.edu");
-//
-//    about->addAuthor("Caulier Gilles", I18N_NOOP("Maintainer"),
-//                     "caulier dot gilles at gmail dot com");
-//
-//    setAboutData(about);
-
     // -------------------------------------------------------------
 
     m_previewWidget = new ImageWidget("coloreffect Tool Dialog", 0,

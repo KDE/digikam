@@ -76,29 +76,6 @@ DistortionFXTool::DistortionFXTool(QWidget* parent)
     setToolName(i18n("Distortion Effects"));
     setToolIcon(SmallIcon("distortionfx"));
 
-    // About data and help button.
-
-//    KAboutData* about = new KAboutData("digikam",
-//                                       I18N_NOOP("Distortion Effects"),
-//                                       digikam_version,
-//                                       I18N_NOOP("A digiKam image plugin to apply distortion effects to an image."),
-//                                       KAboutData::License_GPL,
-//                                       "(c) 2005, Gilles Caulier\n"
-//                                       "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg",
-//                                       0,
-//                                       webProjectUrl());
-//
-//    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-//                     "caulier dot gilles at gmail dot com");
-//
-//    about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Distortion algorithms"),
-//                     "pieter dot voloshyn at gmail dot com");
-//
-//    about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
-//                     "marcel dot wiesweg at gmx dot de");
-//
-//    setAboutData(about);
-
     m_previewWidget = new ImageWidget("distortionfx Tool", 0,
                                       i18n("<p>This is the preview of the distortion effect "
                                            "applied to the photograph."),
