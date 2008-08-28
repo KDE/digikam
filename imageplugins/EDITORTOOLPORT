@@ -7,7 +7,7 @@ blurfx                      CtrlPanelDlg
 border                      ImageGuideDlg       DONE
 channelmixer                ImageDlgBase        DONE
 charcoal                    CtrlPanelDlg
-colorfx                     ImageDlgBase        A
+colorfx                     ImageDlgBase        DONE
 
 coreplugin
   \---autocorrection        ImageDlgBase        DONE
