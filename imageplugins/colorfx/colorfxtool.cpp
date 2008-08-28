@@ -120,12 +120,12 @@ ColorFXTool::ColorFXTool(QWidget* parent)
     QGridLayout* gridSettings        = new QGridLayout(gboxSettings->plainPage(), 9, 4);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings->plainPage());
-    label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, gboxSettings->plainPage() );
-    m_channelCB->insertItem( i18n("Luminosity") );
-    m_channelCB->insertItem( i18n("Red") );
-    m_channelCB->insertItem( i18n("Green") );
-    m_channelCB->insertItem( i18n("Blue") );
+    label1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_channelCB = new QComboBox(false, gboxSettings->plainPage());
+    m_channelCB->insertItem(i18n("Luminosity"));
+    m_channelCB->insertItem(i18n("Red"));
+    m_channelCB->insertItem(i18n("Green"));
+    m_channelCB->insertItem(i18n("Blue"));
     QWhatsThis::add( m_channelCB, i18n("<p>Select the histogram channel to display here:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
@@ -135,26 +135,26 @@ ColorFXTool::ColorFXTool(QWidget* parent)
     m_scaleBG = new QHButtonGroup(gboxSettings->plainPage());
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(QFrame::NoFrame);
-    m_scaleBG->setInsideMargin( 0 );
+    m_scaleBG->setInsideMargin(0);
     QWhatsThis::add( m_scaleBG, i18n("<p>Select the histogram scale here.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
 
-    QPushButton *linHistoButton = new QPushButton( m_scaleBG );
-    QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
+    QPushButton *linHistoButton = new QPushButton(m_scaleBG);
+    QToolTip::add(linHistoButton, i18n("<p>Linear"));
     m_scaleBG->insert(linHistoButton, HistogramWidget::LinScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
-    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
+    linHistoButton->setPixmap(QPixmap(directory + "histogram-lin.png"));
     linHistoButton->setToggleButton(true);
 
-    QPushButton *logHistoButton = new QPushButton( m_scaleBG );
-    QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
+    QPushButton *logHistoButton = new QPushButton(m_scaleBG);
+    QToolTip::add(logHistoButton, i18n("<p>Logarithmic"));
     m_scaleBG->insert(logHistoButton, HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
-    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
+    logHistoButton->setPixmap(QPixmap(directory + "histogram-log.png"));
     logHistoButton->setToggleButton(true);
 
     QHBoxLayout* l1 = new QHBoxLayout();
@@ -264,6 +264,10 @@ void ColorFXTool::readSettings()
     m_levelInput->setValue(config->readNumEntry("LevelAjustment", m_levelInput->defaultValue()));
     m_iterationInput->setValue(config->readNumEntry("IterationAjustment", m_iterationInput->defaultValue()));
     slotEffectTypeChanged(m_effectType->currentItem());  //check for enable/disable of iteration
+
+    m_histogramWidget->reset();
+    slotChannelChanged(m_channelCB->currentItem());
+    slotScaleChanged(m_scaleBG->selectedId());
 }
 
 void ColorFXTool::writeSettings()
@@ -295,26 +299,26 @@ void ColorFXTool::slotResetSettings()
 
 void ColorFXTool::slotChannelChanged(int channel)
 {
-    switch(channel)
+    switch (channel)
     {
         case LuminosityChannel:
             m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+            m_hGradient->setColors(QColor("black"), QColor("white"));
             break;
 
         case RedChannel:
             m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
+            m_hGradient->setColors(QColor("black"), QColor("red"));
             break;
 
         case GreenChannel:
             m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
+            m_hGradient->setColors(QColor("black"), QColor("green"));
             break;
 
         case BlueChannel:
             m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
+            m_hGradient->setColors(QColor("black"), QColor("blue"));
             break;
     }
 
@@ -327,7 +331,7 @@ void ColorFXTool::slotScaleChanged(int scale)
     m_histogramWidget->repaint(false);
 }
 
-void ColorFXTool::slotColorSelectedFromTarget( const DColor &color )
+void ColorFXTool::slotColorSelectedFromTarget(const DColor &color)
 {
     m_histogramWidget->setHistogramGuideByColor(color);
 }
@@ -343,31 +347,31 @@ void ColorFXTool::slotEffectTypeChanged(int type)
     m_levelInput->setValue(25);
 
     switch (type)
-       {
-       case Solarize:
-          m_levelInput->setRange(0, 100, 1);
-          m_levelInput->setValue(0);
-          m_iterationInput->setEnabled(false);
-          m_iterationLabel->setEnabled(false);
-          break;
+    {
+        case Solarize:
+            m_levelInput->setRange(0, 100, 1);
+            m_levelInput->setValue(0);
+            m_iterationInput->setEnabled(false);
+            m_iterationLabel->setEnabled(false);
+            break;
 
-       case Vivid:
-          m_levelInput->setRange(0, 50, 1);
-          m_levelInput->setValue(5);
-          m_iterationInput->setEnabled(false);
-          m_iterationLabel->setEnabled(false);
-          break;
+        case Vivid:
+            m_levelInput->setRange(0, 50, 1);
+            m_levelInput->setValue(5);
+            m_iterationInput->setEnabled(false);
+            m_iterationLabel->setEnabled(false);
+            break;
 
-       case Neon:
-       case FindEdges:
-          m_levelInput->setRange(0, 5, 1);
-          m_levelInput->setValue(3);
-          m_iterationInput->setEnabled(true);
-          m_iterationLabel->setEnabled(true);
-          m_iterationInput->setRange(0, 5, 1);
-          m_iterationInput->setValue(2);
-          break;
-       }
+        case Neon:
+        case FindEdges:
+            m_levelInput->setRange(0, 5, 1);
+            m_levelInput->setValue(3);
+            m_iterationInput->setEnabled(true);
+            m_iterationLabel->setEnabled(true);
+            m_iterationInput->setRange(0, 5, 1);
+            m_iterationInput->setValue(2);
+            break;
+    }
 
     m_levelInput->blockSignals(false);
     m_iterationInput->blockSignals(false);
@@ -436,7 +440,7 @@ void ColorFXTool::finalRendering()
         }
 
         iface->putOriginalImage(name, data);
-        delete [] data;
+        delete[] data;
     }
 
     kapp->restoreOverrideCursor();
