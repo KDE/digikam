@@ -62,9 +62,6 @@ namespace DigikamRainDropImagesPlugin
 
 RainDropTool::RainDropTool(QWidget* parent)
             : EditorToolThreaded(parent)
-//            , i18n("Add Raindrops to Photograph"),
-//                                             "raindrops", false, true, false,
-//                                             ImageGuideWidget::HVGuideMode)
 {
     setName("raindrops");
     setToolName(i18n("Raindrops"));
@@ -234,8 +231,8 @@ void RainDropTool::prepareEffect()
     ImageIface* iface = m_previewWidget->imageIface();
 
     // Selected data from the image
-    QRect selection( iface->selectedXOrg(), iface->selectedYOrg(),
-                     iface->selectedWidth(), iface->selectedHeight() );
+    QRect selection(iface->selectedXOrg(), iface->selectedYOrg(),
+                    iface->selectedWidth(), iface->selectedHeight());
 
     setFilter(dynamic_cast<DImgThreadedFilter *>
                 (new RainDrop(iface->getOriginalImg(), this, d, a, c, &selection)));
@@ -254,8 +251,8 @@ void RainDropTool::prepareFinal()
     ImageIface iface(0, 0);
 
     // Selected data from the image
-    QRect selection( iface.selectedXOrg(), iface.selectedYOrg(),
-                     iface.selectedWidth(), iface.selectedHeight() );
+    QRect selection(iface.selectedXOrg(), iface.selectedYOrg(),
+                    iface.selectedWidth(), iface.selectedHeight());
 
     setFilter(dynamic_cast<DImgThreadedFilter *>
                 (new RainDrop(iface.getOriginalImg(), this, d, a, c, &selection)));
