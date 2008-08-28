@@ -18,7 +18,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes) 
 
 digikamimageplugin_distortionfx_la_SOURCES = imageplugin_distortionfx.cpp \
-	                                         imageeffect_distortionfx.cpp distortionfx.cpp
+	                                         distortionfxtool.cpp distortionfx.cpp
 
 digikamimageplugin_distortionfx_la_LIBADD = $(LIB_KPARTS) \
 	                                        $(top_builddir)/digikam/digikam/libdigikam.la
