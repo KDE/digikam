@@ -35,7 +35,6 @@
 namespace Digikam
 {
 
-class StatusProgressBar;
 class EditorTool;
 class EditorWindow;
 class EditorToolIfacePriv;
