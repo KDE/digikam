@@ -1,0 +1,43 @@
+(A) : Andi
+(G) : Gilles
+
+coreplugin
+  \---autocorrection        ImageDlgBase
+  \---bcg                   ImageDlgBase
+  \---bwsepia               ImageDlgBase
+  \---hsl                   ImageDlgBase
+  \---iccproof              ImageDlgBase
+  \---ratiocrop             ImageDlgBase
+  \---redeye                ImageDlgBase
+  \---rgbtool               ImageDlgBase
+adjustcurves                ImageDlgBase
+adjustlevels                ImageDlgBase
+channelmixer                ImageDlgBase
+colorfx                     ImageDlgBase
+inserttext                  ImageDlgBase
+perspective                 ImageDlgBase
+whitebalance                ImageDlgBase
+superimpose                 ImageDlgBase
+
+antivignetting              ImageGuideDlg
+border                      ImageGuideDlg
+distortionfx                ImageGuideDlg
+freerotation                ImageGuideDlg
+inpainting                  ImageGuideDlg
+lensdistortion              ImageGuideDlg
+raindrop                    ImageGuideDlg
+sheartool                   ImageGuideDlg
+
+coreplugin
+  \---sharpnesseditor       CtrlPanelDlg
+  \---blur                  CtrlPanelDlg
+charcoal                    CtrlPanelDlg
+blurfx                      CtrlPanelDlg
+emboss                      CtrlPanelDlg
+filmgrain                   CtrlPanelDlg
+hotpixels                   CtrlPanelDlg
+infrared                    CtrlPanelDlg
+noisereduction              CtrlPanelDlg
+oilpaint                    CtrlPanelDlg
+restoration                 CtrlPanelDlg
+texture                     CtrlPanelDlg
