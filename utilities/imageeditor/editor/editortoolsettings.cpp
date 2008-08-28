@@ -103,7 +103,7 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
 
     // ---------------------------------------------------------------
 
-    QGridLayout* gridSettings = new QGridLayout(this, 4, 2);
+    QGridLayout* gridSettings = new QGridLayout(this, 3, 2);
 
     d->plainPage = new QWidget(this);
     d->guideBox  = new QHBox(this);
@@ -122,12 +122,11 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
     QWhatsThis::add(d->guideSize, i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
 
     d->guideBox->setStretchFactor(space4, 10);
+    d->guideBox->setSpacing(spacingHint());
+    d->guideBox->setMargin(0);
 
     if (!(toolMask & ColorGuide))
         d->guideBox->hide();
-
-    d->guideBox->setSpacing(spacingHint());
-    d->guideBox->setMargin(0);
 
     // ---------------------------------------------------------------
 
@@ -186,8 +185,8 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
 
     gridSettings->addMultiCellWidget(d->plainPage, 0, 0, 0, 1);
     gridSettings->addMultiCellWidget(d->guideBox,  1, 1, 0, 1);
-    gridSettings->addMultiCellWidget(d->btnBox2,   3, 3, 0, 1);
-    gridSettings->addMultiCellWidget(d->btnBox1,   4, 4, 0, 1);
+    gridSettings->addMultiCellWidget(d->btnBox2,   2, 2, 0, 1);
+    gridSettings->addMultiCellWidget(d->btnBox1,   3, 3, 0, 1);
     gridSettings->setSpacing(spacingHint());
     gridSettings->setMargin(0);
 
