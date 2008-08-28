@@ -17,9 +17,8 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(LIBKDCRAW_CFLAGS) \
 	       $(all_includes)   
 
-digikamimageplugin_inserttext_la_SOURCES = imageplugin_inserttext.cpp \
-	                                       imageeffect_inserttext.cpp \
-	                                       inserttextwidget.cpp fontchooserwidget.cpp 
+digikamimageplugin_inserttext_la_SOURCES = imageplugin_inserttext.cpp inserttextwidget.cpp \
+	                                       inserttexttool.cpp fontchooserwidget.cpp 
 
 digikamimageplugin_inserttext_la_LIBADD = $(LIB_KPARTS) \
 	                                      $(top_builddir)/digikam/digikam/libdigikam.la 
