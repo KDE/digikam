@@ -60,8 +60,8 @@
 
 // Local includes.
 
-#include "imageeffect_ratiocrop.h"
-#include "imageeffect_ratiocrop.moc"
+#include "ratiocroptool.h"
+#include "ratiocroptool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -223,6 +223,8 @@ RatioCropTool::RatioCropTool(QWidget* parent)
     grid->addMultiCellWidget(m_yInput,              5, 5, 0, 3);
     grid->addMultiCellWidget(m_heightInput,         6, 6, 0, 3);
     grid->addMultiCellWidget(m_centerHeight,        6, 6, 4, 4);
+    grid->setMargin(m_gboxSettings->spacingHint());
+    grid->setSpacing(m_gboxSettings->spacingHint());
 
     // -------------------------------------------------------------
 
@@ -277,12 +279,17 @@ RatioCropTool::RatioCropTool(QWidget* parent)
     grid2->addMultiCellWidget(m_colorGuideLabel,            7, 7, 0, 0);
     grid2->addMultiCellWidget(m_guideColorBt,               7, 7, 1, 1);
     grid2->addMultiCellWidget(m_guideSize,                  7, 7, 2, 2);
+    grid2->setMargin(m_gboxSettings->spacingHint());
+    grid2->setSpacing(m_gboxSettings->spacingHint());
+
 
     // -------------------------------------------------------------
 
     gboxLayout->addMultiCellWidget(cropSelection,           0, 0, 0, 1);
     gboxLayout->addMultiCellWidget(compositionGuide,        1, 1, 0, 1);
     gboxLayout->setRowStretch(2, 10);
+    gboxLayout->setMargin(m_gboxSettings->spacingHint());
+    gboxLayout->setSpacing(m_gboxSettings->spacingHint());
 
     setToolSettings(m_gboxSettings);
 

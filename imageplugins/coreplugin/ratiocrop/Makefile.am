@@ -18,9 +18,9 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	   $(LIBKDCRAW_CFLAGS) \
 	   $(all_includes) 
 
-libratiocrop_la_SOURCES = imageeffect_ratiocrop.cpp imageselectionwidget.cpp 
+libratiocrop_la_SOURCES = ratiocroptool.cpp imageselectionwidget.cpp 
 
 libratiocrop_la_LDFLAGS = $(all_libraries)
 
-noinst_HEADERS = imageeffect_ratiocrop.h imageselectionwidget.h 
+noinst_HEADERS = ratiocroptool.h imageselectionwidget.h 
 

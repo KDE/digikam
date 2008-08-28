@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_RATIOCROP_H
-#define IMAGEEFFECT_RATIOCROP_H
+#ifndef RATIOCROPTOOL_H
+#define RATIOCROPTOOL_H
 
 // Digikam includes.
 
@@ -131,4 +131,4 @@ private:
 
 }  // NameSpace DigikamImagesPluginCore
 
-#endif /* IMAGEEFFECT_RATIOCROP_H */
+#endif /* RATIOCROPTOOL_H */

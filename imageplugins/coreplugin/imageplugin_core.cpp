@@ -46,7 +46,7 @@
 #include "redeyetool.h"
 #include "imageeffect_blur.h"
 #include "imageeffect_sharpen.h"
-#include "imageeffect_ratiocrop.h"
+#include "ratiocroptool.h"
 #include "autocorrectiontool.h"
 #include "iccprooftool.h"
 #include "imageplugin_core.h"
