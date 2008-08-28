@@ -1,13 +1,5 @@
-(A) : Will be done by Andi today
-
-adjustcurves                ImageDlgBase        DONE
-adjustlevels                ImageDlgBase        DONE
-antivignetting              ImageGuideDlg       DONE
-blurfx                      CtrlPanelDlg
-border                      ImageGuideDlg       DONE
-channelmixer                ImageDlgBase        DONE
-charcoal                    CtrlPanelDlg
-colorfx                     ImageDlgBase        DONE
+(A) : Andi
+(G) : Gilles
 
 coreplugin
   \---autocorrection        ImageDlgBase        DONE
@@ -15,27 +7,37 @@ coreplugin
   \---bwsepia               ImageDlgBase        DONE
   \---hsl                   ImageDlgBase        DONE
   \---iccproof              ImageDlgBase        DONE
-  \---blur                  CtrlPanelDlg
   \---ratiocrop             ImageDlgBase        DONE
   \---redeye                ImageDlgBase        DONE
   \---rgbtool               ImageDlgBase        DONE
-  \---sharpnesseditor       CtrlPanelDlg
+adjustcurves                ImageDlgBase        DONE
+adjustlevels                ImageDlgBase        DONE
+channelmixer                ImageDlgBase        DONE
+colorfx                     ImageDlgBase        DONE
+inserttext                  ImageDlgBase        G
+perspective                 ImageDlgBase        DONE
+whitebalance                ImageDlgBase        DONE
+superimpose                 ImageDlgBase        DONE
 
+antivignetting              ImageGuideDlg       DONE
+border                      ImageGuideDlg       DONE
 distortionfx                ImageGuideDlg       DONE
+freerotation                ImageGuideDlg       DONE
+inpainting                  ImageGuideDlg       DONE
+lensdistortion              ImageGuideDlg       DONE
+raindrop                    ImageGuideDlg       A
+sheartool                   ImageGuideDlg       DONE
+
+coreplugin
+  \---sharpnesseditor       CtrlPanelDlg
+  \---blur                  CtrlPanelDlg
+charcoal                    CtrlPanelDlg
+blurfx                      CtrlPanelDlg
 emboss                      CtrlPanelDlg
 filmgrain                   CtrlPanelDlg
-freerotation                ImageGuideDlg       DONE
 hotpixels                   CtrlPanelDlg
 infrared                    CtrlPanelDlg
-inpainting                  ImageGuideDlg       DONE
-inserttext                  ImageDlgBase
-lensdistortion              ImageGuideDlg       DONE
 noisereduction              CtrlPanelDlg
 oilpaint                    CtrlPanelDlg
-perspective                 ImageDlgBase        DONE
-raindrop                    ImageGuideDlg       A
 restoration                 CtrlPanelDlg
-sheartool                   ImageGuideDlg       DONE
-superimpose                 ImageDlgBase        DONE
 texture                     CtrlPanelDlg
-whitebalance                ImageDlgBase        DONE
