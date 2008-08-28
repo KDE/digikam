@@ -22,38 +22,43 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_RAINDROP_H
-#define IMAGEEFFECT_RAINDROP_H
+#ifndef RAINDROPTOOL_H
+#define RAINDROPTOOL_H
 
 // Digikam includes.
 
-#include "imageguidedlg.h"
+#include "editortool.h"
 
 namespace KDcrawIface
 {
 class RIntNumInput;
 }
 
+namespace Digikam
+{
+class ImageWidget;
+}
+
 namespace DigikamRainDropImagesPlugin
 {
 
-class ImageEffect_RainDrop : public Digikam::ImageGuideDlg
+class RainDropTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_RainDrop(QWidget *parent);
-    ~ImageEffect_RainDrop();
+    RainDropTool(QWidget *parent);
+    ~RainDropTool();
 
 private slots:
 
-    void readUserSettings();
+    void slotResetSettings();
 
 private:
 
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
@@ -62,11 +67,15 @@ private:
 
 private:
 
-    KDcrawIface::RIntNumInput *m_dropInput;
-    KDcrawIface::RIntNumInput *m_amountInput;
-    KDcrawIface::RIntNumInput *m_coeffInput;
+    KDcrawIface::RIntNumInput   *m_dropInput;
+    KDcrawIface::RIntNumInput   *m_amountInput;
+    KDcrawIface::RIntNumInput   *m_coeffInput;
+
+    Digikam::ImageWidget        *m_previewWidget;
+
+    Digikam::EditorToolSettings *m_gboxSettings;
 };
 
 }  // NameSpace DigikamRainDropImagesPlugin
 
-#endif /* IMAGEEFFECT_RAINDROP_H */
+#endif /* RAINDROPTOOL_H */

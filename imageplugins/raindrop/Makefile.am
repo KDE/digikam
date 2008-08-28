@@ -18,7 +18,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes) 
 
 digikamimageplugin_raindrop_la_SOURCES = imageplugin_raindrop.cpp \
-	                                     imageeffect_raindrop.cpp raindrop.cpp 
+	                                     raindroptool.cpp raindrop.cpp 
 
 digikamimageplugin_raindrop_la_LIBADD = $(LIB_KPARTS) \
 	                                    $(top_builddir)/digikam/digikam/libdigikam.la
