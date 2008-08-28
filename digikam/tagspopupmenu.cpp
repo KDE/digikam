@@ -76,9 +76,13 @@ public:
     void setSpecialChecked(bool checked);
     bool isChecked() const;
 
+    void setCheckBoxHidden(bool hidden);
+    bool isCheckBoxHidden() const;
+
 private:
 
     bool m_checked;
+    bool m_checkBoxHidden;
 };
 
 class TagToggleMenuWidget : public QWidget
@@ -175,9 +179,9 @@ void TagToggleMenuWidget::paintEvent(QPaintEvent *)
 
     // draw a check indicator like the one used in a treeview
     QRect checkRect = checkIndicatorSize(&menuOpt);
-    // draw only if action is checkable
     viewOpt.rect = checkRect;
-    style()->drawPrimitive(QStyle::PE_IndicatorViewItemCheck, &viewOpt, &p, this);
+    if (!m_action->isCheckBoxHidden())
+        style()->drawPrimitive(QStyle::PE_IndicatorViewItemCheck, &viewOpt, &p, this);
 
     // move by size of check indicator
     if (menuOpt.direction == Qt::RightToLeft)
@@ -194,8 +198,7 @@ void TagToggleMenuWidget::paintEvent(QPaintEvent *)
     style()->drawControl(QStyle::CE_MenuItem, &menuOpt, &p, this);
 
     // draw the frame on the right
-    // TODO: Frame is not displayed
-    if (frameMargin) 
+    if (frameMargin)
     {
         QRegion borderReg;
         borderReg += QRect(width()-frameMargin, 0, frameMargin, height()); //right
@@ -226,7 +229,10 @@ void TagToggleMenuWidget::initMenuStyleOption(QStyleOptionMenuItem *option) cons
     // it is an "Assign Tags" menu. To signal this, we change the pallette.
     // But only if there is no submenu...
     if (m_action->isChecked() && !m_action->menu())
+    {
         option->palette.setCurrentColorGroup(QPalette::Disabled);
+        option->state &= ~QStyle::State_Enabled;
+    }
 
     // set options from m_action
     option->font = m_action->font();
@@ -294,6 +300,7 @@ TagToggleAction::TagToggleAction(const QString &text, QObject *parent)
                : QWidgetAction(parent)
 {
     m_checked = false;
+    m_checkBoxHidden = false;
     setText(text);
     setCheckable(true);
 }
@@ -328,6 +335,16 @@ void TagToggleAction::setSpecialChecked(bool checked)
 bool TagToggleAction::isChecked() const
 {
     return m_checked || QWidgetAction::isChecked();
+}
+
+void TagToggleAction::setCheckBoxHidden(bool hidden)
+{
+    m_checkBoxHidden = hidden;
+}
+
+bool TagToggleAction::isCheckBoxHidden() const
+{
+    return m_checkBoxHidden;
 }
 
 // ------------------------------------------------------------------------
@@ -460,9 +477,10 @@ void TagsPopupMenu::slotAboutToShow()
     if (d->mode == ASSIGN)
     {
         addSeparator();
-        QAction *action = addAction(d->addTagPix, i18n("Add New Tag..."));
+        TagToggleAction *action = new TagToggleAction(KIcon(d->addTagPix), i18n("Add New Tag..."), d->addTagActions);
         action->setData(0); // root id
-        d->addTagActions->addAction(action);
+        action->setCheckBoxHidden(true);
+        addAction(action);
     }
 }
 
@@ -494,17 +512,17 @@ void TagsPopupMenu::iterateAndBuildMenu(QMenu *menu, TAlbum *album)
         QString t = a->title();
         t.replace('&',"&&");
 
-        QAction *action;
+        TagToggleAction *action;
         if (d->mode == ASSIGN)
         {
-            TagToggleAction *toggleAction = new TagToggleAction(t, d->toggleTagActions);
+            action = new TagToggleAction(t, d->toggleTagActions);
             if (d->assignedTags.contains(a->id()))
-                toggleAction->setSpecialChecked(true);
-            action = toggleAction;
+                action->setSpecialChecked(true);
         }
         else     // REMOVE or DISPLAY mode
         {
-            action = new KToggleAction(t, d->toggleTagActions);
+            action = new TagToggleAction(t, d->toggleTagActions);
+            action->setCheckBoxHidden(true);
         }
 
         action->setData(a->id());
@@ -530,18 +548,21 @@ QMenu* TagsPopupMenu::buildSubMenu(int tagid)
 
     if (d->mode == ASSIGN && !d->assignedTags.contains(album->id()))
     {
-        QAction *action = new KToggleAction(i18n("Assign This Tag"), d->toggleTagActions);
+        TagToggleAction *action = new TagToggleAction(i18n("Assign this Tag"), d->toggleTagActions);
         action->setData(album->id());
+        action->setCheckBoxHidden(true);
         setAlbumIcon(action, album);
         popup->addAction(action);
         popup->addSeparator();
     }
     else if (d->mode == REMOVE)
     {
-        QAction *action = new KToggleAction(i18n("Remove This Tag"), d->toggleTagActions);
+        TagToggleAction *action = new TagToggleAction(i18n("Remove this Tag"), d->toggleTagActions);
         action->setData(album->id());
+        action->setCheckBoxHidden(true);
         setAlbumIcon(action, album);
         popup->addAction(action);
+        d->toggleTagActions->addAction(action);
     }
 
     iterateAndBuildMenu(popup, album);
@@ -550,9 +571,10 @@ QMenu* TagsPopupMenu::buildSubMenu(int tagid)
     {
         popup->addSeparator();
 
-        QAction *action = popup->addAction(d->addTagPix, i18n("Add New Tag..."));
+        TagToggleAction *action = new TagToggleAction(KIcon(d->addTagPix), i18n("Add New Tag..."), d->addTagActions);
         action->setData(album->id());
-        d->addTagActions->addAction(action);
+        action->setCheckBoxHidden(true);
+        popup->addAction(action);
     }
 
     return popup;
