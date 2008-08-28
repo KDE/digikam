@@ -18,7 +18,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes) 
 
 digikamimageplugin_colorfx_la_SOURCES = imageplugin_colorfx.cpp \
-	                                    imageeffect_colorfx.cpp 
+	                                    colorfxtool.cpp 
 
 digikamimageplugin_colorfx_la_LIBADD = $(LIB_KPARTS) \
 	                                   $(top_builddir)/digikam/digikam/libdigikam.la 

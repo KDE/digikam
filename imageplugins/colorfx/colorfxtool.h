@@ -23,12 +23,12 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_COLORFX_H
-#define IMAGEEFFECT_COLORFX_H
+#ifndef COLORFXTOOL_H
+#define COLORFXTOOL_H
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 
 class QHButtonGroup;
 class QComboBox;
@@ -51,20 +51,19 @@ class DColor;
 namespace DigikamColorFXImagesPlugin
 {
 
-class ImageEffect_ColorFX : public Digikam::ImageDlgBase
+class ColorFXTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_ColorFX(QWidget *parent);
-    ~ImageEffect_ColorFX();
+    ColorFXTool(QWidget *parent);
+    ~ColorFXTool();
 
 private:
 
-    void readUserSettings();
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void finalRendering();
     void colorEffect(uchar *data, int w, int h, bool sb);
     void solarize(int factor, uchar *data, int w, int h, bool sb);
@@ -80,6 +79,7 @@ private slots:
 
     void slotEffectTypeChanged(int type);
     void slotEffect();
+    void slotResetSettings();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);
@@ -132,4 +132,4 @@ private:
 
 }  // NameSpace DigikamColorFXImagesPlugin
 
-#endif /* IMAGEEFFECT_COLORFX_H */
+#endif /* COLORFXTOOL_H */

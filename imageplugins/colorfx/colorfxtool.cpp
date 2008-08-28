@@ -25,27 +25,27 @@
 
 // Qt includes.
 
-#include <qvgroupbox.h>
-#include <qhgroupbox.h>
-#include <qhbuttongroup.h>
 #include <qcombobox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qwhatsthis.h>
-#include <qlayout.h>
 #include <qframe.h>
-#include <qvbox.h>
+#include <qhbuttongroup.h>
+#include <qhgroupbox.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qpushbutton.h>
 #include <qtooltip.h>
+#include <qvbox.h>
+#include <qvgroupbox.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
-#include <kconfig.h>
-#include <klocale.h>
-#include <kcursor.h>
 #include <kaboutdata.h>
+#include <kapplication.h>
+#include <kconfig.h>
+#include <kcursor.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
-#include <kapplication.h>
+#include <klocale.h>
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
 
@@ -56,65 +56,72 @@
 
 // Local includes.
 
+#include "colorgradientwidget.h"
 #include "daboutdata.h"
 #include "ddebug.h"
 #include "dimg.h"
 #include "dimgimagefilters.h"
-#include "imageiface.h"
-#include "imagewidget.h"
+#include "editortoolsettings.h"
+#include "histogramwidget.h"
 #include "imagecurves.h"
 #include "imagehistogram.h"
-#include "histogramwidget.h"
-#include "colorgradientwidget.h"
-#include "imageeffect_colorfx.h"
-#include "imageeffect_colorfx.moc"
+#include "imageiface.h"
+#include "imagewidget.h"
+#include "colorfxtool.h"
+#include "colorfxtool.moc"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamColorFXImagesPlugin
 {
 
-ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
-                    : Digikam::ImageDlgBase(parent,
-                      i18n("Apply Color Special Effects to Photograph"),
-                      "coloreffect", false, false)
+ColorFXTool::ColorFXTool(QWidget* parent)
+                   : EditorTool(parent)
 {
+    setName("coloreffects");
+    setToolName(i18n("Color Effect"));
+    setToolIcon(SmallIcon("colorfx"));
+
     m_destinationPreviewData = 0;
 
     // About data and help button.
 
-    KAboutData *about = new KAboutData("digikam",
-                            I18N_NOOP("Color Effects"),
-                            digikam_version,
-                            I18N_NOOP("A digiKam plugin to apply special color effects to an image."),
-                            KAboutData::License_GPL,
-                            "(c) 2004-2005, Renchi Raju\n(c) 2006-2008, Gilles Caulier",
-                            0,
-                            Digikam::webProjectUrl());
-
-    about->addAuthor("Renchi Raju", I18N_NOOP("Original Author"),
-                     "renchi@pooh.tam.uiuc.edu");
-
-    about->addAuthor("Caulier Gilles", I18N_NOOP("Maintainer"),
-                     "caulier dot gilles at gmail dot com");
-
-    setAboutData(about);
+//    KAboutData *about = new KAboutData("digikam",
+//                            I18N_NOOP("Color Effects"),
+//                            digikam_version,
+//                            I18N_NOOP("A digiKam plugin to apply special color effects to an image."),
+//                            KAboutData::License_GPL,
+//                            "(c) 2004-2005, Renchi Raju\n(c) 2006-2008, Gilles Caulier",
+//                            0,
+//                            webProjectUrl());
+//
+//    about->addAuthor("Renchi Raju", I18N_NOOP("Original Author"),
+//                     "renchi@pooh.tam.uiuc.edu");
+//
+//    about->addAuthor("Caulier Gilles", I18N_NOOP("Maintainer"),
+//                     "caulier dot gilles at gmail dot com");
+//
+//    setAboutData(about);
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new Digikam::ImageWidget("coloreffect Tool Dialog", plainPage(),
+    m_previewWidget = new ImageWidget("coloreffect Tool Dialog", 0,
                           i18n("<p>This is the color effect preview"));
 
-    setPreviewAreaWidget(m_previewWidget);
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 9, 4, spacingHint());
+    EditorToolSettings *gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                                              EditorToolSettings::Ok|
+                                                              EditorToolSettings::Cancel);
 
-    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
+    QGridLayout* gridSettings        = new QGridLayout(gboxSettings->plainPage(), 9, 4);
+
+    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings->plainPage());
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, gboxSettings );
+    m_channelCB = new QComboBox( false, gboxSettings->plainPage() );
     m_channelCB->insertItem( i18n("Luminosity") );
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
@@ -125,7 +132,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
                                        "<b>Green</b>: display the green image-channel values.<p>"
                                        "<b>Blue</b>: display the blue image-channel values.<p>"));
 
-    m_scaleBG = new QHButtonGroup(gboxSettings);
+    m_scaleBG = new QHButtonGroup(gboxSettings->plainPage());
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(QFrame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
@@ -136,7 +143,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
 
     QPushButton *linHistoButton = new QPushButton( m_scaleBG );
     QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
-    m_scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
+    m_scaleBG->insert(linHistoButton, HistogramWidget::LinScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
     linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
@@ -144,7 +151,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
 
     QPushButton *logHistoButton = new QPushButton( m_scaleBG );
     QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
-    m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    m_scaleBG->insert(logHistoButton, HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
     logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
@@ -160,23 +167,23 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QVBox *histoBox   = new QVBox(gboxSettings);
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
+    QVBox *histoBox   = new QVBox(gboxSettings->plainPage());
+    m_histogramWidget = new HistogramWidget(256, 140, histoBox, false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
                                              "settings changes."));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);
-    m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
+    m_hGradient = new ColorGradientWidget( ColorGradientWidget::Horizontal, 10, histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
     gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
 
     // -------------------------------------------------------------
 
-    m_effectTypeLabel = new QLabel(i18n("Type:"), gboxSettings);
+    m_effectTypeLabel = new QLabel(i18n("Type:"), gboxSettings->plainPage());
 
-    m_effectType = new RComboBox(gboxSettings);
+    m_effectType = new RComboBox(gboxSettings->plainPage());
     m_effectType->insertItem(i18n("Solarize"));
     m_effectType->insertItem(i18n("Vivid"));
     m_effectType->insertItem(i18n("Neon"));
@@ -193,8 +200,8 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     gridSettings->addMultiCellWidget(m_effectTypeLabel, 3, 3, 0, 4);
     gridSettings->addMultiCellWidget(m_effectType, 4, 4, 0, 4);
 
-    m_levelLabel = new QLabel(i18n("Level:"), gboxSettings);
-    m_levelInput = new RIntNumInput(gboxSettings);
+    m_levelLabel = new QLabel(i18n("Level:"), gboxSettings->plainPage());
+    m_levelInput = new RIntNumInput(gboxSettings->plainPage());
     m_levelInput->setRange(0, 100, 1);
     m_levelInput->setDefaultValue(0);
     QWhatsThis::add( m_levelInput, i18n("<p>Set here the level of the effect."));
@@ -202,8 +209,8 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     gridSettings->addMultiCellWidget(m_levelLabel, 5, 5, 0, 4);
     gridSettings->addMultiCellWidget(m_levelInput, 6, 6, 0, 4);
 
-    m_iterationLabel = new QLabel(i18n("Iteration:"), gboxSettings);
-    m_iterationInput = new RIntNumInput(gboxSettings);
+    m_iterationLabel = new QLabel(i18n("Iteration:"), gboxSettings->plainPage());
+    m_iterationInput = new RIntNumInput(gboxSettings->plainPage());
     m_iterationInput->setRange(0, 100, 1);
     m_iterationInput->setDefaultValue(0);
     QWhatsThis::add( m_iterationInput, i18n("<p>This value controls the number of iterations "
@@ -213,7 +220,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     gridSettings->addMultiCellWidget(m_iterationInput, 8, 8, 0, 4);
 
     gridSettings->setRowStretch(9, 10);
-    setUserAreaWidget(gboxSettings);
+    setToolSettings(gboxSettings);
 
     // -------------------------------------------------------------
 
@@ -223,8 +230,8 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const DColor &, const QPoint & )),
+            this, SLOT(slotColorSelectedFromTarget( const DColor & )));
 
     connect(m_levelInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
@@ -239,7 +246,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
             this, SLOT(slotEffectTypeChanged(int)));
 }
 
-ImageEffect_ColorFX::~ImageEffect_ColorFX()
+ColorFXTool::~ColorFXTool()
 {
     m_histogramWidget->stopHistogramComputation();
 
@@ -249,7 +256,7 @@ ImageEffect_ColorFX::~ImageEffect_ColorFX()
     delete m_previewWidget;
 }
 
-void ImageEffect_ColorFX::readUserSettings()
+void ColorFXTool::readSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("coloreffect Tool Dialog");
@@ -259,7 +266,7 @@ void ImageEffect_ColorFX::readUserSettings()
     slotEffectTypeChanged(m_effectType->currentItem());  //check for enable/disable of iteration
 }
 
-void ImageEffect_ColorFX::writeUserSettings()
+void ColorFXTool::writeSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("coloreffect Tool Dialog");
@@ -269,7 +276,7 @@ void ImageEffect_ColorFX::writeUserSettings()
     config->sync();
 }
 
-void ImageEffect_ColorFX::resetValues()
+void ColorFXTool::slotResetSettings()
 {
     m_levelInput->blockSignals(true);
     m_iterationInput->blockSignals(true);
@@ -282,29 +289,31 @@ void ImageEffect_ColorFX::resetValues()
     m_levelInput->blockSignals(false);
     m_iterationInput->blockSignals(false);
     m_effectType->blockSignals(false);
+
+    slotEffect();
 }
 
-void ImageEffect_ColorFX::slotChannelChanged(int channel)
+void ColorFXTool::slotChannelChanged(int channel)
 {
     switch(channel)
     {
         case LuminosityChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
+            m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
             break;
 
         case RedChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
+            m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
             break;
 
         case GreenChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
+            m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
             break;
 
         case BlueChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
+            m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
             break;
     }
@@ -312,18 +321,18 @@ void ImageEffect_ColorFX::slotChannelChanged(int channel)
     m_histogramWidget->repaint(false);
 }
 
-void ImageEffect_ColorFX::slotScaleChanged(int scale)
+void ColorFXTool::slotScaleChanged(int scale)
 {
     m_histogramWidget->m_scaleType = scale;
     m_histogramWidget->repaint(false);
 }
 
-void ImageEffect_ColorFX::slotColorSelectedFromTarget( const Digikam::DColor &color )
+void ColorFXTool::slotColorSelectedFromTarget( const DColor &color )
 {
     m_histogramWidget->setHistogramGuideByColor(color);
 }
 
-void ImageEffect_ColorFX::slotEffectTypeChanged(int type)
+void ColorFXTool::slotEffectTypeChanged(int type)
 {
     m_levelInput->setEnabled(true);
     m_levelLabel->setEnabled(true);
@@ -366,7 +375,7 @@ void ImageEffect_ColorFX::slotEffectTypeChanged(int type)
     slotEffect();
 }
 
-void ImageEffect_ColorFX::slotEffect()
+void ColorFXTool::slotEffect()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
@@ -375,7 +384,7 @@ void ImageEffect_ColorFX::slotEffect()
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 
-    Digikam::ImageIface* iface      = m_previewWidget->imageIface();
+    ImageIface* iface      = m_previewWidget->imageIface();
     uchar *m_destinationPreviewData = iface->getPreviewImage();
     int w                           = iface->previewWidth();
     int h                           = iface->previewHeight();
@@ -393,10 +402,10 @@ void ImageEffect_ColorFX::slotEffect()
     kapp->restoreOverrideCursor();
 }
 
-void ImageEffect_ColorFX::finalRendering()
+void ColorFXTool::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = m_previewWidget->imageIface();
     uchar *data                = iface->getOriginalImage();
     int w                      = iface->originalWidth();
     int h                      = iface->originalHeight();
@@ -431,10 +440,9 @@ void ImageEffect_ColorFX::finalRendering()
     }
 
     kapp->restoreOverrideCursor();
-    accept();
 }
 
-void ImageEffect_ColorFX::colorEffect(uchar *data, int w, int h, bool sb)
+void ColorFXTool::colorEffect(uchar *data, int w, int h, bool sb)
 {
     switch (m_effectType->currentItem())
     {
@@ -456,7 +464,7 @@ void ImageEffect_ColorFX::colorEffect(uchar *data, int w, int h, bool sb)
     }
 }
 
-void ImageEffect_ColorFX::solarize(int factor, uchar *data, int w, int h, bool sb)
+void ColorFXTool::solarize(int factor, uchar *data, int w, int h, bool sb)
 {
     bool stretch = true;
 
@@ -538,11 +546,11 @@ void ImageEffect_ColorFX::solarize(int factor, uchar *data, int w, int h, bool s
     }
 }
 
-void ImageEffect_ColorFX::vivid(int factor, uchar *data, int w, int h, bool sb)
+void ColorFXTool::vivid(int factor, uchar *data, int w, int h, bool sb)
 {
     float amount = factor/100.0;
 
-    Digikam::DImgImageFilters filter;
+    DImgImageFilters filter;
 
     // Apply Channel Mixer adjustments.
 
@@ -561,25 +569,25 @@ void ImageEffect_ColorFX::vivid(int factor, uchar *data, int w, int h, bool sb)
 
     // And now apply the curve correction.
 
-    Digikam::ImageCurves Curves(sb);
+    ImageCurves Curves(sb);
 
     if (!sb)        // 8 bits image.
     {
-        Curves.setCurvePoint(Digikam::ImageHistogram::ValueChannel, 0,  QPoint(0,   0));
-        Curves.setCurvePoint(Digikam::ImageHistogram::ValueChannel, 5,  QPoint(63,  60));
-        Curves.setCurvePoint(Digikam::ImageHistogram::ValueChannel, 10, QPoint(191, 194));
-        Curves.setCurvePoint(Digikam::ImageHistogram::ValueChannel, 16, QPoint(255, 255));
+        Curves.setCurvePoint(ImageHistogram::ValueChannel, 0,  QPoint(0,   0));
+        Curves.setCurvePoint(ImageHistogram::ValueChannel, 5,  QPoint(63,  60));
+        Curves.setCurvePoint(ImageHistogram::ValueChannel, 10, QPoint(191, 194));
+        Curves.setCurvePoint(ImageHistogram::ValueChannel, 16, QPoint(255, 255));
     }
     else                    // 16 bits image.
     {
-        Curves.setCurvePoint(Digikam::ImageHistogram::ValueChannel, 0,  QPoint(0,     0));
-        Curves.setCurvePoint(Digikam::ImageHistogram::ValueChannel, 5,  QPoint(16128, 15360));
-        Curves.setCurvePoint(Digikam::ImageHistogram::ValueChannel, 10, QPoint(48896, 49664));
-        Curves.setCurvePoint(Digikam::ImageHistogram::ValueChannel, 16, QPoint(65535, 65535));
+        Curves.setCurvePoint(ImageHistogram::ValueChannel, 0,  QPoint(0,     0));
+        Curves.setCurvePoint(ImageHistogram::ValueChannel, 5,  QPoint(16128, 15360));
+        Curves.setCurvePoint(ImageHistogram::ValueChannel, 10, QPoint(48896, 49664));
+        Curves.setCurvePoint(ImageHistogram::ValueChannel, 16, QPoint(65535, 65535));
    }
 
-    Curves.curvesCalculateCurve(Digikam::ImageHistogram::AlphaChannel);   // Calculate cure on all channels.
-    Curves.curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);         // ... and apply it on all channels
+    Curves.curvesCalculateCurve(ImageHistogram::AlphaChannel);   // Calculate cure on all channels.
+    Curves.curvesLutSetup(ImageHistogram::AlphaChannel);         // ... and apply it on all channels
     Curves.curvesLutProcess(data, dest, w, h);
 
     memcpy(data, dest, w*h*(sb ? 8 : 4));
@@ -598,7 +606,7 @@ void ImageEffect_ColorFX::vivid(int factor, uchar *data, int w, int h, bool sb)
  *                     like this on PSC. Is very similar to Growing Edges (photoshop)
  *                     Some pictures will be very interesting
  */
-void ImageEffect_ColorFX::neon(uchar *data, int w, int h, bool sb, int Intensity, int BW)
+void ColorFXTool::neon(uchar *data, int w, int h, bool sb, int Intensity, int BW)
 {
     neonFindEdges(data, w, h, sb, true, Intensity, BW);
 }
@@ -615,13 +623,13 @@ void ImageEffect_ColorFX::neon(uchar *data, int w, int h, bool sb, int Intensity
  *                     Neon effect ? This is the same engine, but is inversed with
  *                     255 - color.
  */
-void ImageEffect_ColorFX::findEdges(uchar *data, int w, int h, bool sb, int Intensity, int BW)
+void ColorFXTool::findEdges(uchar *data, int w, int h, bool sb, int Intensity, int BW)
 {
     neonFindEdges(data, w, h, sb, false, Intensity, BW);
 }
 
 // Implementation of neon and FindEdges. They share 99% of their code.
-void ImageEffect_ColorFX::neonFindEdges(uchar *data, int w, int h, bool sb, bool neon, int Intensity, int BW)
+void ColorFXTool::neonFindEdges(uchar *data, int w, int h, bool sb, bool neon, int Intensity, int BW)
 {
     int Width       = w;
     int Height      = h;
@@ -693,12 +701,12 @@ void ImageEffect_ColorFX::neonFindEdges(uchar *data, int w, int h, bool sb, bool
     delete [] pResBits;
 }
 
-int ImageEffect_ColorFX::getOffset(int Width, int X, int Y, int bytesDepth)
+int ColorFXTool::getOffset(int Width, int X, int Y, int bytesDepth)
 {
     return (Y * Width * bytesDepth) + (X * bytesDepth);
 }
 
-inline int ImageEffect_ColorFX::Lim_Max(int Now, int Up, int Max)
+inline int ColorFXTool::Lim_Max(int Now, int Up, int Max)
 {
     --Max;
     while (Now > Max - Up) --Up;
