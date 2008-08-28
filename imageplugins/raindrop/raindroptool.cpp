@@ -67,34 +67,6 @@ RainDropTool::RainDropTool(QWidget* parent)
     setToolName(i18n("Raindrops"));
     setToolIcon(SmallIcon("raindrop"));
 
-//    QString whatsThis;
-//
-//    KAboutData* about = new KAboutData("digikam",
-//                                       I18N_NOOP("Raindrops"),
-//                                       digikam_version,
-//                                       I18N_NOOP("A digiKam image plugin to add raindrops to an image."),
-//                                       KAboutData::License_GPL,
-//                                       "(c) 2004-2005, Gilles Caulier\n"
-//                                       "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg",
-//                                       0,
-//                                       webProjectUrl());
-//
-//    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-//                     "caulier dot gilles at gmail dot com");
-//
-//    about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Raindrops algorithm"),
-//                     "pieter dot voloshyn at gmail dot com");
-//
-//    about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
-//                     "marcel dot wiesweg at gmx dot de");
-//
-//    setAboutData(about);
-//
-//    QWhatsThis::add( m_imagePreviewWidget, i18n("<p>This is the preview of the Raindrop effect."
-//                                           "<p>Note: if you have previously selected an area in the editor, "
-//                                           "this will be unaffected by the filter. You can use this method to "
-//                                           "disable the Raindrops effect on a human face, for example.") );
-
     m_previewWidget = new ImageWidget("raindrops Tool", 0,
                                       i18n("<p>This is the preview of the Raindrop effect."
                                            "<p>Note: if you have previously selected an area in the editor, "
