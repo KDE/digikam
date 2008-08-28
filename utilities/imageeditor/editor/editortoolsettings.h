@@ -51,8 +51,7 @@ public:
         Ok      = 0x00000004,
         Cancel  = 0x00000008,
         SaveAs  = 0x00000010,
-        Load    = 0x00000020,
-        Abort   = 0x00000040
+        Load    = 0x00000020
     };
 
     enum ToolCode
@@ -93,7 +92,6 @@ signals:
     void signalDefaultClicked();
     void signalSaveAsClicked();
     void signalLoadClicked();
-    void signalAbortClicked();
     void signalColorGuideChanged();
 
 private:

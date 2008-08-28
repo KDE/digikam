@@ -104,6 +104,10 @@ public:
     EditorToolThreaded(QObject *parent);
     virtual ~EditorToolThreaded();
 
+public slots:
+
+    virtual void slotAbort();
+
 protected:
 
     DImgThreadedFilter* filter() const;
@@ -119,7 +123,6 @@ protected:
 
 protected slots:
 
-    virtual void slotAbort();
     virtual void slotOk();
     virtual void slotCancel();
     virtual void slotEffect();

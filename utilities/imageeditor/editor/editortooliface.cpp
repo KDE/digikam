@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-08-20
- * Description : Image editor tool interface.
+ * Description : Image editor interface used by editor tools.
  *
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -28,6 +28,7 @@
 // Local includes.
 
 #include "sidebar.h"
+#include "statusprogressbar.h"
 #include "editortool.h"
 #include "editortoolsettings.h"
 #include "editorstackview.h"
@@ -70,6 +71,9 @@ EditorToolIface::EditorToolIface(EditorWindow *editor)
     d = new EditorToolIfacePriv;
     d->editor = editor;
     m_iface   = this;
+
+    connect(d->editor->m_nameLabel, SIGNAL(signalCancelButtonPressed()),
+            this, SLOT(slotToolAborted()));
 }
 
 EditorToolIface::~EditorToolIface()
@@ -123,6 +127,12 @@ void EditorToolIface::setToolProgress(int progress)
 void EditorToolIface::setToolStopProgress()
 {
     d->editor->setToolStopProgress();
+}
+
+void EditorToolIface::slotToolAborted()
+{
+    EditorToolThreaded *tool = dynamic_cast<EditorToolThreaded*>(d->tool);
+    if (tool) tool->slotAbort();
 }
 
 }  // namespace Digikam
