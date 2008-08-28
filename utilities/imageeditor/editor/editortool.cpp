@@ -150,6 +150,9 @@ void EditorTool::setToolSettings(EditorToolSettings *settings)
 
     connect(d->settings, SIGNAL(signalLoadClicked()),
             this, SLOT(slotLoadSettings()));
+
+    connect(d->settings, SIGNAL(signalTryClicked()),
+            this, SLOT(slotEffect()));
 }
 
 void EditorTool::readSettings()
