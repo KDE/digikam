@@ -67,6 +67,7 @@ private:
     void writeSettings();
     void finalRendering();
     void adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
+    bool eventFilter(QObject *o, QEvent *e);
 
 private slots:
 

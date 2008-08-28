@@ -797,6 +797,105 @@ void AdjustLevelsTool::slotSaveAsSettings()
     slotChannelChanged(m_channelCB->currentItem());
 }
 
+// See B.K.O #146636: use event filter with all level slider to display a
+// guide over level histogram.
+bool AdjustLevelsTool::eventFilter(QObject *obj, QEvent *ev)
+{
+    if ( obj == m_hGradientMinInput )
+    {
+        if ( ev->type() == QEvent::MouseButtonPress)
+        {
+            connect(m_minInput, SIGNAL(valueChanged(int)),
+                    this, SLOT(slotShowHistogramGuide(int)));
+
+            return false;
+        }
+        if ( ev->type() == QEvent::MouseButtonRelease)
+        {
+            disconnect(m_minInput, SIGNAL(valueChanged(int)),
+                       this, SLOT(slotShowHistogramGuide(int)));
+
+            m_levelsHistogramWidget->reset();
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    if ( obj == m_hGradientMaxInput )
+    {
+        if ( ev->type() == QEvent::MouseButtonPress)
+        {
+            connect(m_maxInput, SIGNAL(valueChanged(int)),
+                    this, SLOT(slotShowHistogramGuide(int)));
+
+            return false;
+        }
+        if ( ev->type() == QEvent::MouseButtonRelease)
+        {
+            disconnect(m_maxInput, SIGNAL(valueChanged(int)),
+                       this, SLOT(slotShowHistogramGuide(int)));
+
+            m_levelsHistogramWidget->reset();
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    if ( obj == m_hGradientMinOutput )
+    {
+        if ( ev->type() == QEvent::MouseButtonPress)
+        {
+            connect(m_minOutput, SIGNAL(valueChanged(int)),
+                    this, SLOT(slotShowHistogramGuide(int)));
+
+            return false;
+        }
+        if ( ev->type() == QEvent::MouseButtonRelease)
+        {
+            disconnect(m_minOutput, SIGNAL(valueChanged(int)),
+                       this, SLOT(slotShowHistogramGuide(int)));
+
+            m_levelsHistogramWidget->reset();
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    if ( obj == m_hGradientMaxOutput )
+    {
+        if ( ev->type() == QEvent::MouseButtonPress)
+        {
+            connect(m_maxOutput, SIGNAL(valueChanged(int)),
+                    this, SLOT(slotShowHistogramGuide(int)));
+
+            return false;
+        }
+        if ( ev->type() == QEvent::MouseButtonRelease)
+        {
+            disconnect(m_maxOutput, SIGNAL(valueChanged(int)),
+                       this, SLOT(slotShowHistogramGuide(int)));
+
+            m_levelsHistogramWidget->reset();
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        // pass the event on to the parent class
+        return EditorTool::eventFilter(obj, ev);
+    }
+}
+
 void AdjustLevelsTool::slotShowHistogramGuide(int v)
 {
     DColor color(v, v, v, v, m_originalImage->sixteenBit());
