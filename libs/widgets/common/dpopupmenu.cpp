@@ -173,30 +173,32 @@ void DPopupMenu::resize(int width, int height)
 
 void DPopupMenu::paintEvent( QPaintEvent* e )
 {
-    generateSidePixmap();
-
-    QPainter p(this);
-    p.setClipRegion(e->region());
-
-    QStyleOptionFrame frOpt;
-    frOpt.init(this);
-    frOpt.lineWidth    = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, this);
-    frOpt.midLineWidth = 0;
-    style()->drawPrimitive(QStyle::PE_FrameMenu, &frOpt, &p, this);
-
-    QRect r = sideImageRect();
-    r.setTop(r.bottom()-s_dpopupmenu_sidePixmap.height()+1);
-    if (r.intersects( e->rect()))
     {
-        QRect drawRect = r.intersect(e->rect()).intersect( sideImageRect());
-        QRect pixRect  = drawRect;
-        pixRect.translate(-r.left(), -r.top());
-        p.drawImage(drawRect.topLeft(), s_dpopupmenu_sidePixmap, pixRect);
+        // scope for QPainter object
+
+        generateSidePixmap();
+
+        QPainter p(this);
+        p.setClipRegion(e->region());
+
+        QStyleOptionFrame frOpt;
+        frOpt.init(this);
+        frOpt.lineWidth    = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, this);
+        frOpt.midLineWidth = 0;
+        style()->drawPrimitive(QStyle::PE_FrameMenu, &frOpt, &p, this);
+
+        QRect r = sideImageRect();
+        r.setTop(r.bottom()-s_dpopupmenu_sidePixmap.height()+1);
+        if (r.intersects( e->rect()))
+        {
+            QRect drawRect = r.intersect(e->rect()).intersect( sideImageRect());
+            QRect pixRect  = drawRect;
+            pixRect.translate(-r.left(), -r.top());
+            p.drawImage(drawRect.topLeft(), s_dpopupmenu_sidePixmap, pixRect);
+        }
     }
 
     KMenu::paintEvent(e);
-
-    p.setClipRegion(e->region());
 }
 
 }  // namespace Digikam
