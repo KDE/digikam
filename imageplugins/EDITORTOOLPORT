@@ -36,6 +36,6 @@ perspective                 ImageDlgBase        DONE
 raindrop                    ImageGuideDlg       A
 restoration                 CtrlPanelDlg
 sheartool                   ImageGuideDlg       DONE
-superimpose                 ImageDlgBase
+superimpose                 ImageDlgBase        G
 texture                     CtrlPanelDlg
 whitebalance                ImageDlgBase        DONE
