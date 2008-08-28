@@ -14,7 +14,7 @@ coreplugin
   \---hsl                   ImageDlgBase        DONE
   \---iccproof              ImageDlgBase        DONE
   \---blur                  CtrlPanelDlg
-  \---ratiocrop             ImageDlgBase        DONE
+  \---ratiocrop             ImageDlgBase        DONE (not yet completely)
   \---redeye                ImageDlgBase        DONE
   \---rgbtool               ImageDlgBase        DONE
   \---sharpnesseditor       CtrlPanelDlg
