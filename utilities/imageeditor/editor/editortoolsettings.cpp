@@ -47,6 +47,7 @@
 // Local includes.
 
 #include "ddebug.h"
+#include "imagepaniconwidget.h"
 #include "editortoolsettings.h"
 #include "editortoolsettings.moc"
 
@@ -75,25 +76,28 @@ public:
         guideBox     = 0;
         guideColorBt = 0;
         guideSize    = 0;
+        panIconView  = 0;
     }
 
-    QHBox        *btnBox1;
-    QHBox        *btnBox2;
-    QHBox        *btnBox3;
-    QHBox        *guideBox;
+    QHBox              *btnBox1;
+    QHBox              *btnBox2;
+    QHBox              *btnBox3;
+    QHBox              *guideBox;
 
-    QWidget      *plainPage;
+    QWidget            *plainPage;
 
-    KPushButton  *okBtn;
-    KPushButton  *cancelBtn;
-    KPushButton  *tryBtn;
-    KPushButton  *defaultBtn;
-    KPushButton  *saveAsBtn;
-    KPushButton  *loadBtn;
+    KPushButton        *okBtn;
+    KPushButton        *cancelBtn;
+    KPushButton        *tryBtn;
+    KPushButton        *defaultBtn;
+    KPushButton        *saveAsBtn;
+    KPushButton        *loadBtn;
 
-    KColorButton *guideColorBt;
+    KColorButton       *guideColorBt;
 
-    RIntNumInput *guideSize;
+    ImagePanIconWidget *panIconView;
+
+    RIntNumInput       *guideSize;
 };
 
 EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *parent)
@@ -103,12 +107,27 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
 
     // ---------------------------------------------------------------
 
-    QGridLayout* gridSettings = new QGridLayout(this, 3, 2);
+    QGridLayout* gridSettings = new QGridLayout(this, 4, 2);
 
     d->plainPage = new QWidget(this);
     d->guideBox  = new QHBox(this);
     d->btnBox1   = new QHBox(this);
     d->btnBox2   = new QHBox(this);
+
+    // ---------------------------------------------------------------
+
+    QFrame *frame     = new QFrame(this);
+    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QVBoxLayout* vlay = new QVBoxLayout(frame, 5, 0);
+    d->panIconView    = new ImagePanIconWidget(360, 240, frame);
+    QWhatsThis::add(d->panIconView, i18n("<p>Here you can see the original image panel "
+                                         "which can help you to select the clip preview."
+                                         "<p>Click and drag the mouse cursor in the "
+                                         "red rectangle to change the clip focus."));
+    vlay->addWidget(d->panIconView, 0, Qt::AlignCenter);
+
+    if (!(toolMask & PanIcon))
+        frame->hide();
 
     // ---------------------------------------------------------------
 
@@ -183,10 +202,11 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
 
     // ---------------------------------------------------------------
 
-    gridSettings->addMultiCellWidget(d->plainPage, 0, 0, 0, 1);
-    gridSettings->addMultiCellWidget(d->guideBox,  1, 1, 0, 1);
-    gridSettings->addMultiCellWidget(d->btnBox2,   2, 2, 0, 1);
-    gridSettings->addMultiCellWidget(d->btnBox1,   3, 3, 0, 1);
+    gridSettings->addMultiCellWidget(frame,        0, 0, 0, 1);
+    gridSettings->addMultiCellWidget(d->plainPage, 1, 1, 0, 1);
+    gridSettings->addMultiCellWidget(d->guideBox,  2, 2, 0, 1);
+    gridSettings->addMultiCellWidget(d->btnBox2,   3, 3, 0, 1);
+    gridSettings->addMultiCellWidget(d->btnBox1,   4, 4, 0, 1);
     gridSettings->setSpacing(spacingHint());
     gridSettings->setMargin(0);
 

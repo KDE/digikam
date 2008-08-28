@@ -57,7 +57,8 @@ public:
     enum ToolCode
     {
         NoTool     = 0x00000001,
-        ColorGuide = 0x00000002
+        ColorGuide = 0x00000002,
+        PanIcon    = 0x00000004
     };
 
 public:
