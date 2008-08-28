@@ -113,7 +113,7 @@ RatioCropTool::RatioCropTool(QWidget* parent)
 
     QGridLayout* grid       = new QGridLayout(cropSelection, 7, 5);
 
-    QLabel *label           = new QLabel(i18n("Aspect ratio:"), cropSelection);
+    QLabel *label           = new QLabel(i18n("Ratio:"), cropSelection);
     m_ratioCB               = new RComboBox(cropSelection);
     m_ratioCB->setDefaultItem(ImageSelectionWidget::RATIO03X04);
     setRatioCBText(ImageSelectionWidget::Landscape);
@@ -149,7 +149,7 @@ RatioCropTool::RatioCropTool(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_customLabel1 = new QLabel(i18n("Custom ratio:"), cropSelection);
+    m_customLabel1 = new QLabel(i18n("Custom:"), cropSelection);
     m_customLabel1->setAlignment(AlignLeft|AlignVCenter);
     m_customRatioNInput = new RIntNumInput(cropSelection);
     m_customRatioNInput->input()->setRange(1, 10000, 1, false);

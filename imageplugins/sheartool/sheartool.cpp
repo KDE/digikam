@@ -23,22 +23,22 @@
 
 // Qt includes.
 
-#include <qlabel.h>
 #include <qcheckbox.h>
-#include <qwhatsthis.h>
-#include <qlayout.h>
 #include <qimage.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
-#include <klocale.h>
 #include <kaboutdata.h>
-#include <kiconloader.h>
 #include <kapplication.h>
-#include <kstandarddirs.h>
-#include <kseparator.h>
-#include <kcursor.h>
 #include <kconfig.h>
+#include <kcursor.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kseparator.h>
+#include <kstandarddirs.h>
 
 // LibKDcraw includes.
 
@@ -49,9 +49,9 @@
 #include "daboutdata.h"
 #include "ddebug.h"
 #include "dimg.h"
+#include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imagewidget.h"
-#include "editortoolsettings.h"
 #include "shear.h"
 #include "sheartool.h"
 #include "sheartool.moc"
@@ -70,13 +70,13 @@ ShearTool::ShearTool(QObject* parent)
     setToolName(i18n("Shear Tool"));
     setToolIcon(SmallIcon("sheartool"));
 
-    m_previewWidget = new ImageWidget("sheartool Tool", 0, 
+    m_previewWidget = new ImageWidget("sheartool Tool", 0,
                                       i18n("<p>This is the shear operation preview. "
                                            "If you move the mouse cursor on this preview, "
                                            "a vertical and horizontal dashed line will be drawn "
                                            "to guide you in adjusting the free rotation correction. "
                                            "Release the left mouse button to freeze the dashed "
-                                           "line's position."), 
+                                           "line's position."),
                                       false, ImageGuideWidget::HVGuideMode);
 
     setToolView(m_previewWidget);
@@ -256,7 +256,7 @@ void ShearTool::prepareEffect()
                iface->previewHasAlpha(), data);
     delete [] data;
 
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new Shear(&image, this, hAngle, vAngle, antialiasing, 
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new Shear(&image, this, hAngle, vAngle, antialiasing,
                                                 background, orgW, orgH)));
 }
 
@@ -281,7 +281,7 @@ void ShearTool::prepareFinal()
     DImg orgImage(orgW, orgH, iface.originalSixteenBit(), iface.originalHasAlpha(), data);
     delete [] data;
 
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new Shear(&orgImage, this, hAngle, vAngle, antialiasing, 
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new Shear(&orgImage, this, hAngle, vAngle, antialiasing,
                                                           background, orgW, orgH)));
 }
 
