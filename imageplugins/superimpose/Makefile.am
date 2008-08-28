@@ -19,7 +19,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes) 
 
 digikamimageplugin_superimpose_la_SOURCES = superimposewidget.cpp superimpose.cpp dirselectwidget.cpp \
-	                                        imageplugin_superimpose.cpp imageeffect_superimpose.cpp 
+	                                        imageplugin_superimpose.cpp superimposetool.cpp 
 	                                        
 
 digikamimageplugin_superimpose_la_LIBADD = $(LIB_KPARTS) \
@@ -33,4 +33,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_superimpose.la
 
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_superimpose_ui.rc
-

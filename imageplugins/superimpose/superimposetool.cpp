@@ -62,50 +62,36 @@
 #include "ddebug.h"
 #include "dimg.h"
 #include "imageiface.h"
+#include "editortoolsettings.h"
 #include "thumbbar.h"
 #include "superimposewidget.h"
 #include "dirselectwidget.h"
-#include "imageeffect_superimpose.h"
-#include "imageeffect_superimpose.moc"
+#include "superimposetool.h"
+#include "superimposetool.moc"
+
+using namespace Digikam;
 
 namespace DigikamSuperImposeImagesPlugin
 {
 
-ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
-                       : Digikam::ImageDlgBase(parent, i18n("Template Superimpose to Photograph"),
-                                               "superimpose", false, false)
+SuperImposeTool::SuperImposeTool(QObject* parent)
+               : EditorTool(parent)
 {
     QString whatsThis;
 
     // About data and help button.
 
-    KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Template Superimpose"),
-                                       digikam_version,
-                                       I18N_NOOP("A digiKam image plugin to superimpose a template onto a photograph."),
-                                       KAboutData::License_GPL,
-                                       "(c) 2005-2006, Gilles Caulier\n"
-                                       "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg",
-                                       0,
-                                       Digikam::webProjectUrl());
-
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at gmail dot com");
-
-    about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
-                     "marcel dot wiesweg at gmx dot de");
-
-    setAboutData(about);
+    setName("superimpose");
+    setToolName(i18n("Template Superimpose"));
+    setToolIcon(SmallIcon("superimpose"));
 
     // -------------------------------------------------------------
 
-    QFrame *frame = new QFrame(plainPage());
+    QFrame *frame = new QFrame(0);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
 
-    QGridLayout* gridFrame = new QGridLayout( frame, 1, 2, spacingHint());
+    QGridLayout* gridFrame = new QGridLayout(frame, 1, 2);
     m_previewWidget        = new SuperImposeWidget(400, 300, frame);
-    gridFrame->addMultiCellWidget(m_previewWidget, 0, 0, 0, 2);
-    gridFrame->setRowStretch(0, 10);
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the template "
                                            "superimposed onto the image.") );
 
@@ -135,28 +121,37 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     bGroup->addSpace(20);
     bGroup->setExclusive(true);
     bGroup->setFrameShape(QFrame::NoFrame);
-    gridFrame->addMultiCellWidget(bGroup, 1, 1, 1, 1);
+
+    gridFrame->addMultiCellWidget(m_previewWidget, 0, 0, 0, 2);
+    gridFrame->addMultiCellWidget(bGroup,          1, 1, 1, 1);
+    gridFrame->setRowStretch(0, 10);
     gridFrame->setColStretch(0, 10);
     gridFrame->setColStretch(2, 10);
+    gridFrame->setMargin(0);
+    gridFrame->setSpacing(0);
 
-    setPreviewAreaWidget(frame);
+    setToolView(frame);
 
     // -------------------------------------------------------------
 
-    QWidget *gbox2    = new QWidget(plainPage());
-    QGridLayout* grid = new QGridLayout( gbox2, 1, 1, marginHint(), spacingHint());
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel);
+    QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage(), 1, 1);
 
-    m_thumbnailsBar = new Digikam::ThumbBarView(gbox2);
-    m_dirSelect     = new DirSelectWidget(gbox2);
-    QPushButton *templateDirButton = new QPushButton( i18n("Root Directory..."), gbox2 );
+    m_thumbnailsBar = new ThumbBarView(m_gboxSettings->plainPage());
+    m_dirSelect     = new DirSelectWidget(m_gboxSettings->plainPage());
+    QPushButton *templateDirButton = new QPushButton( i18n("Root Directory..."), m_gboxSettings->plainPage() );
     QWhatsThis::add( templateDirButton, i18n("<p>Set here the current templates' root directory.") );
 
-    grid->addMultiCellWidget(m_thumbnailsBar, 0, 1, 0, 0);
-    grid->addMultiCellWidget(m_dirSelect, 0, 0, 1, 1);
+    grid->addMultiCellWidget(m_thumbnailsBar,   0, 1, 0, 0);
+    grid->addMultiCellWidget(m_dirSelect,       0, 0, 1, 1);
     grid->addMultiCellWidget(templateDirButton, 1, 1, 1, 1);
+    grid->setMargin(0);
+    grid->setSpacing(m_gboxSettings->spacingHint());
     grid->setColStretch(1, 10);
 
-    setUserAreaWidget(gbox2);
+    setToolSettings(m_gboxSettings);
 
     // -------------------------------------------------------------
 
@@ -177,11 +172,11 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     populateTemplates();
 }
 
-ImageEffect_SuperImpose::~ImageEffect_SuperImpose()
+SuperImposeTool::~SuperImposeTool()
 {
 }
 
-void ImageEffect_SuperImpose::populateTemplates(void)
+void SuperImposeTool::populateTemplates()
 {
     m_thumbnailsBar->clear(true);
 
@@ -204,37 +199,38 @@ void ImageEffect_SuperImpose::populateTemplates(void)
 
     while( (fi = it.current() ) )
     {
-        new Digikam::ThumbBarItem( m_thumbnailsBar, KURL(fi->filePath()) );
+        new ThumbBarItem( m_thumbnailsBar, KURL(fi->filePath()) );
         ++it;
     }
 }
 
-void ImageEffect_SuperImpose::readUserSettings()
+void SuperImposeTool::readSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("Album Settings");
     KURL albumDBUrl( config->readPathEntry("Album Path", KGlobalSettings::documentPath()) );
-    config->setGroup("superimpose Tool Dialog");
+    config->setGroup("superimpose Tool");
     config->setGroup("Template Superimpose Tool Settings");
     m_templatesRootUrl.setPath( config->readEntry("Templates Root URL", albumDBUrl.path()) );
     m_templatesUrl.setPath( config->readEntry("Templates URL", albumDBUrl.path()) );
     m_dirSelect->setRootPath(m_templatesRootUrl, m_templatesUrl);
 }
 
-void ImageEffect_SuperImpose::writeUserSettings()
+void SuperImposeTool::writeSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("superimpose Tool Dialog");
+    config->setGroup("superimpose Tool");
     config->writeEntry( "Templates Root URL", m_dirSelect->rootPath().path() );
     config->writeEntry( "Templates URL", m_templatesUrl.path() );
-    config->sync();}
+    config->sync();
+}
 
-void ImageEffect_SuperImpose::resetValues()
+void SuperImposeTool::slotResetSettings()
 {
     m_previewWidget->resetEdit();
 }
 
-void ImageEffect_SuperImpose::slotRootTemplateDirChanged(void)
+void SuperImposeTool::slotRootTemplateDirChanged()
 {
     KURL url = KFileDialog::getExistingDirectory(m_templatesRootUrl.path(), kapp->activeWindow(),
                                                  i18n("Select Template Root Directory to Use"));
@@ -248,7 +244,7 @@ void ImageEffect_SuperImpose::slotRootTemplateDirChanged(void)
     }
 }
 
-void ImageEffect_SuperImpose::slotTemplateDirChanged(const KURL& url)
+void SuperImposeTool::slotTemplateDirChanged(const KURL& url)
 {
     if( url.isValid() )
     {
@@ -257,24 +253,22 @@ void ImageEffect_SuperImpose::slotTemplateDirChanged(const KURL& url)
     }
 }
 
-void ImageEffect_SuperImpose::finalRendering()
+void SuperImposeTool::finalRendering()
 {
-    setCursor(KCursor::waitCursor());
+    kapp->setOverrideCursor(KCursor::waitCursor());
     m_previewWidget->setEnabled(false);
     m_dirSelect->setEnabled(false);
     m_thumbnailsBar->setEnabled(false);
 
-    Digikam::ImageIface iface(0, 0);
-    Digikam::DImg img = m_previewWidget->makeSuperImpose();
+    ImageIface iface(0, 0);
+    DImg img = m_previewWidget->makeSuperImpose();
     iface.putOriginalImage(i18n("Super Impose"), img.bits(),
                            img.width(), img.height() );
 
     m_previewWidget->setEnabled(true);
     m_dirSelect->setEnabled(true);
     m_thumbnailsBar->setEnabled(true);
-    unsetCursor();
-    accept();
+    kapp->restoreOverrideCursor();
 }
 
 }  // NameSpace DigikamSuperImposeImagesPlugin
-

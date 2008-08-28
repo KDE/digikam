@@ -34,9 +34,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_superimpose.h"
+#include "superimposetool.h"
 #include "imageplugin_superimpose.h"
 #include "imageplugin_superimpose.moc"
+
+using namespace DigikamSuperImposeImagesPlugin;
 
 K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_superimpose,
                            KGenericFactory<ImagePlugin_SuperImpose>("digikamimageplugin_superimpose"));
@@ -48,8 +50,8 @@ ImagePlugin_SuperImpose::ImagePlugin_SuperImpose(QObject *parent, const char*, c
                               this, SLOT(slotSuperImpose()),
                               actionCollection(), "imageplugin_superimpose");
 
-    setXMLFile("digikamimageplugin_superimpose_ui.rc");        
-                                    
+    setXMLFile("digikamimageplugin_superimpose_ui.rc");
+
     DDebug() << "ImagePlugin_SuperImpose plugin loaded" << endl;
 }
 
@@ -64,7 +66,6 @@ void ImagePlugin_SuperImpose::setEnabledActions(bool enable)
 
 void ImagePlugin_SuperImpose::slotSuperImpose()
 {
-    DigikamSuperImposeImagesPlugin::ImageEffect_SuperImpose dlg(parentWidget());
-    dlg.exec();
+    SuperImposeTool *tool = new SuperImposeTool(this);
+    loadTool(tool);
 }
-

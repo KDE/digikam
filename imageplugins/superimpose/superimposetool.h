@@ -32,13 +32,14 @@
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 
 class QPushButton;
 
 namespace Digikam
 {
 class ThumbBarView;
+class EditorToolSettings;
 }
 
 namespace DigikamSuperImposeImagesPlugin
@@ -47,38 +48,40 @@ namespace DigikamSuperImposeImagesPlugin
 class DirSelectWidget;
 class SuperImposeWidget;
 
-class ImageEffect_SuperImpose : public Digikam::ImageDlgBase
+class SuperImposeTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_SuperImpose(QWidget* parent);
-    ~ImageEffect_SuperImpose();
+    SuperImposeTool(QObject* parent);
+    ~SuperImposeTool();
 
 private slots:
 
     void slotTemplateDirChanged(const KURL& url);
-    void slotRootTemplateDirChanged(void);
+    void slotRootTemplateDirChanged();
+    void slotResetSettings();
 
 private:
 
-    void readUserSettings();
-    void writeUserSettings();
-    void resetValues();
-    void populateTemplates(void);
-    void finalRendering();    
-    
-private:
-    
-    KURL                   m_templatesUrl;
-    KURL                   m_templatesRootUrl;
+    void readSettings();
+    void writeSettings();
+    void populateTemplates();
+    void finalRendering();
 
-    Digikam::ThumbBarView *m_thumbnailsBar;
-    
-    SuperImposeWidget     *m_previewWidget;
-    
-    DirSelectWidget       *m_dirSelect;
+private:
+
+    KURL                         m_templatesUrl;
+    KURL                         m_templatesRootUrl;
+
+    Digikam::ThumbBarView       *m_thumbnailsBar;
+
+    Digikam::EditorToolSettings *m_gboxSettings;
+
+    SuperImposeWidget           *m_previewWidget;
+
+    DirSelectWidget             *m_dirSelect;
 };
 
 }  // NameSpace DigikamSuperImposeImagesPlugin
