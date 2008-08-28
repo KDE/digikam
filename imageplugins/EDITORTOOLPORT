@@ -1,0 +1,39 @@
+adjustcurves                ImageDlgBase        DONE
+adjustlevels                ImageDlgBase        DONE
+antivignetting              ImageGuideDlg       DONE
+blurfx                      CtrlPanelDlg
+border                      ImageGuideDlg       DONE
+channelmixer                ImageDlgBase        DONE
+charcoal                    CtrlPanelDlg
+colorfx                     ImageDlgBase
+
+coreplugin
+  \---autocorrection        ImageDlgBase        DONE
+  \---bcg                   ImageDlgBase        DONE
+  \---bwsepia               ImageDlgBase        DONE
+  \---hsl                   ImageDlgBase        DONE
+  \---iccproof              ImageDlgBase        DONE
+  \---blur                  CtrlPanelDlg
+  \---ratiocrop             ImageDlgBase        DONE
+  \---redeye                ImageDlgBase        DONE
+  \---rgbtool               ImageDlgBase        DONE
+  \---sharpnesseditor       CtrlPanelDlg
+
+distortionfx                ImageGuideDlg
+emboss                      CtrlPanelDlg
+filmgrain                   CtrlPanelDlg
+freerotation                ImageGuideDlg       DONE
+hotpixels                   CtrlPanelDlg
+infrared                    CtrlPanelDlg
+inpainting                  ImageGuideDlg
+inserttext                  ImageDlgBase
+lensdistortion              ImageGuideDlg       DONE
+noisereduction              CtrlPanelDlg
+oilpaint                    CtrlPanelDlg
+perspective                 ImageDlgBase        DONE
+raindrop                    ImageGuideDlg
+restoration                 CtrlPanelDlg
+sheartool                   ImageGuideDlg       DONE
+superimpose                 ImageDlgBase
+texture                     CtrlPanelDlg
+whitebalance                ImageDlgBase        DONE
