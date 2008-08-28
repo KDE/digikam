@@ -1,3 +1,5 @@
+(A) : Will be done by Andi today
+
 adjustcurves                ImageDlgBase        DONE
 adjustlevels                ImageDlgBase        DONE
 antivignetting              ImageGuideDlg       DONE
@@ -5,7 +7,7 @@ blurfx                      CtrlPanelDlg
 border                      ImageGuideDlg       DONE
 channelmixer                ImageDlgBase        DONE
 charcoal                    CtrlPanelDlg
-colorfx                     ImageDlgBase
+colorfx                     ImageDlgBase		A
 
 coreplugin
   \---autocorrection        ImageDlgBase        DONE
@@ -14,12 +16,12 @@ coreplugin
   \---hsl                   ImageDlgBase        DONE
   \---iccproof              ImageDlgBase        DONE
   \---blur                  CtrlPanelDlg
-  \---ratiocrop             ImageDlgBase        DONE (not yet completely)
+  \---ratiocrop             ImageDlgBase        A (not yet completely)
   \---redeye                ImageDlgBase        DONE
   \---rgbtool               ImageDlgBase        DONE
   \---sharpnesseditor       CtrlPanelDlg
 
-distortionfx                ImageGuideDlg
+distortionfx                ImageGuideDlg		A
 emboss                      CtrlPanelDlg
 filmgrain                   CtrlPanelDlg
 freerotation                ImageGuideDlg       DONE
@@ -31,7 +33,7 @@ lensdistortion              ImageGuideDlg       DONE
 noisereduction              CtrlPanelDlg
 oilpaint                    CtrlPanelDlg
 perspective                 ImageDlgBase        DONE
-raindrop                    ImageGuideDlg
+raindrop                    ImageGuideDlg		A
 restoration                 CtrlPanelDlg
 sheartool                   ImageGuideDlg       DONE
 superimpose                 ImageDlgBase
