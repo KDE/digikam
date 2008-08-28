@@ -83,7 +83,6 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     // -------------------------------------------------------------
 
     m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Abort|
                                             EditorToolSettings::Ok|
                                             EditorToolSettings::Cancel);
     QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage(), 14, 2);
