@@ -1016,9 +1016,6 @@ void AlbumIconView::slotDeleteSelectedItems(bool deletePermanently)
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotDIOResult(KJob*)));
-
-    // The AlbumManager KDirWatch will trigger a DIO::scan.
-    // When this is completed, DIO will call AlbumLister::instance()->refresh().
 }
 
 void AlbumIconView::slotDeleteSelectedItemsDirectly(bool useTrash)
@@ -1124,14 +1121,14 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
 
     imview->disconnect(this);
 
-    connect(imview, SIGNAL(signalFileAdded(const KUrl&)),
-            this, SLOT(slotFilesModified()));
+    //connect(imview, SIGNAL(signalFileAdded(const KUrl&)),
+      //      this, SLOT(slotFilesModified()));
 
     connect(imview, SIGNAL(signalFileModified(const KUrl&)),
             this, SLOT(slotFilesModified(const KUrl&)));
 
-    connect(imview, SIGNAL(signalFileDeleted(const KUrl&)),
-            this, SLOT(slotFilesModified()));
+    //connect(imview, SIGNAL(signalFileDeleted(const KUrl&)),
+      //      this, SLOT(slotFilesModified()));
 
     connect(imview, SIGNAL(signalURLChanged(const KUrl&)),
             this, SLOT(slotImageWindowURLChanged(const KUrl &)));
