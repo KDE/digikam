@@ -21,7 +21,7 @@ coreplugin
   \---rgbtool               ImageDlgBase        DONE
   \---sharpnesseditor       CtrlPanelDlg
 
-distortionfx                ImageGuideDlg       A
+distortionfx                ImageGuideDlg       DONE
 emboss                      CtrlPanelDlg
 filmgrain                   CtrlPanelDlg
 freerotation                ImageGuideDlg       DONE
