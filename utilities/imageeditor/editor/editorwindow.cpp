@@ -1896,7 +1896,7 @@ void EditorWindow::slotChangeTheme(const QString& theme)
 void EditorWindow::setToolStartProgress(const QString& toolName)
 {
     m_nameLabel->setProgressValue(0);
-    m_nameLabel->progressBarMode(StatusProgressBar::ProgressBarMode, QString("%1: ").arg(toolName));
+    m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode, QString("%1: ").arg(toolName));
 }
 
 void EditorWindow::setToolProgress(int progress)

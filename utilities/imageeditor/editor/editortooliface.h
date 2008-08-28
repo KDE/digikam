@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-08-20
- * Description : Image editor tool interface.
+ * Description : Image editor interface used by editor tools.
  *
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -58,6 +58,10 @@ public:
     void setToolStartProgress(const QString& toolName);
     void setToolProgress(int progress);
     void setToolStopProgress();
+
+private slots:
+
+    void slotToolAborted();
 
 private:
 

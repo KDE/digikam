@@ -259,7 +259,6 @@ void EditorToolThreaded::slotAbort()
     EditorToolIface::editorToolIface()->setToolStopProgress();
 
     toolSettings()->enableButton(EditorToolSettings::Ok,      true);
-    toolSettings()->enableButton(EditorToolSettings::Abort,   false);
     toolSettings()->enableButton(EditorToolSettings::Load,    true);
     toolSettings()->enableButton(EditorToolSettings::SaveAs,  true);
     toolSettings()->enableButton(EditorToolSettings::Try,     true);
@@ -350,7 +349,6 @@ void EditorToolThreaded::slotOk()
     writeSettings();
 
     toolSettings()->enableButton(EditorToolSettings::Ok,      false);
-    toolSettings()->enableButton(EditorToolSettings::Abort,   false);
     toolSettings()->enableButton(EditorToolSettings::SaveAs,  false);
     toolSettings()->enableButton(EditorToolSettings::Load,    false);
     toolSettings()->enableButton(EditorToolSettings::Default, false);
@@ -378,7 +376,6 @@ void EditorToolThreaded::slotEffect()
     DDebug() << "Preview " << toolName() << " started..." << endl;
 
     toolSettings()->enableButton(EditorToolSettings::Ok,      false);
-    toolSettings()->enableButton(EditorToolSettings::Abort,   true);
     toolSettings()->enableButton(EditorToolSettings::SaveAs,  false);
     toolSettings()->enableButton(EditorToolSettings::Load,    false);
     toolSettings()->enableButton(EditorToolSettings::Default, false);

@@ -72,7 +72,6 @@ public:
         btnBox3      = 0;
         saveAsBtn    = 0;
         loadBtn      = 0;
-        abortBtn     = 0;
         guideBox     = 0;
         guideColorBt = 0;
         guideSize    = 0;
@@ -91,7 +90,6 @@ public:
     KPushButton  *defaultBtn;
     KPushButton  *saveAsBtn;
     KPushButton  *loadBtn;
-    KPushButton  *abortBtn;
 
     KColorButton *guideColorBt;
 
@@ -111,7 +109,6 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
     d->guideBox  = new QHBox(this);
     d->btnBox1   = new QHBox(this);
     d->btnBox2   = new QHBox(this);
-    d->btnBox3   = new QHBox(this);
 
     // ---------------------------------------------------------------
 
@@ -128,6 +125,9 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
 
     if (!(toolMask & ColorGuide))
         d->guideBox->hide();
+
+    d->guideBox->setSpacing(spacingHint());
+    d->guideBox->setMargin(0);
 
     // ---------------------------------------------------------------
 
@@ -151,6 +151,8 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
         d->cancelBtn->hide();
 
     d->btnBox1->setStretchFactor(space, 10);
+    d->btnBox1->setSpacing(spacingHint());
+    d->btnBox1->setMargin(0);
 
     // ---------------------------------------------------------------
 
@@ -161,41 +163,29 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
     if (!(buttonMask & Load))
         d->loadBtn->hide();
 
-    QLabel *space2 = new QLabel(d->btnBox2);
-
     d->saveAsBtn = new KPushButton(d->btnBox2);
     d->saveAsBtn->setGuiItem(KStdGuiItem::saveAs());
     QToolTip::add(d->saveAsBtn, i18n("<p>Save all parameters to settings text file."));
     if (!(buttonMask & SaveAs))
         d->saveAsBtn->hide();
 
-    d->btnBox2->setStretchFactor(space2, 10);
+    QLabel *space2 = new QLabel(d->btnBox2);
 
-    // ---------------------------------------------------------------
-
-    d->tryBtn = new KPushButton(d->btnBox3);
+    d->tryBtn = new KPushButton(d->btnBox2);
     d->tryBtn->setGuiItem(KStdGuiItem::apply());
     d->tryBtn->setText(i18n("Try"));
     QToolTip::add(d->tryBtn, i18n("<p>Try all settings."));
     if (!(buttonMask & Try))
         d->tryBtn->hide();
 
-    QLabel *space3 = new QLabel(d->btnBox3);
-
-    d->abortBtn = new KPushButton(d->btnBox3);
-    d->abortBtn->setGuiItem(KStdGuiItem::stop());
-    d->abortBtn->setText(i18n("Abort"));
-    QToolTip::add(d->abortBtn, i18n("<p>Abort current image rendering."));
-    if (!(buttonMask & Abort))
-        d->abortBtn->hide();
-
-    d->btnBox3->setStretchFactor(space3, 10);
+    d->btnBox2->setStretchFactor(space2, 10);
+    d->btnBox2->setSpacing(spacingHint());
+    d->btnBox2->setMargin(0);
 
     // ---------------------------------------------------------------
 
     gridSettings->addMultiCellWidget(d->plainPage, 0, 0, 0, 1);
     gridSettings->addMultiCellWidget(d->guideBox,  1, 1, 0, 1);
-    gridSettings->addMultiCellWidget(d->btnBox3,   2, 2, 0, 1);
     gridSettings->addMultiCellWidget(d->btnBox2,   3, 3, 0, 1);
     gridSettings->addMultiCellWidget(d->btnBox1,   4, 4, 0, 1);
     gridSettings->setSpacing(spacingHint());
@@ -220,9 +210,6 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
 
     connect(d->loadBtn, SIGNAL(clicked()),
             this, SIGNAL(signalLoadClicked()));
-
-    connect(d->abortBtn, SIGNAL(clicked()),
-            this, SIGNAL(signalAbortClicked()));
 
     connect(d->guideColorBt, SIGNAL(changed(const QColor&)),
             this, SIGNAL(signalColorGuideChanged()));
@@ -270,9 +257,6 @@ KPushButton* EditorToolSettings::button(int buttonCode) const
 
     if (buttonCode & SaveAs)
         return d->saveAsBtn;
-
-    if (buttonCode & Abort)
-        return d->abortBtn;
 
     return 0;
 }
