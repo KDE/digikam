@@ -21,29 +21,35 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_NOISEREDUCTION_H
-#define IMAGEEFFECT_NOISEREDUCTION_H
+#ifndef NOISEREDUCTIONTOOL_H
+#define NOISEREDUCTIONTOOL_H
 
 // Local includes.
 
-#include "ctrlpaneldlg.h"
+#include "editortool.h"
 
 namespace KDcrawIface
 {
 class RDoubleNumInput;
 }
 
+namespace Digikam
+{
+class EditorToolSettings;
+class ImagePanelWidget;
+}
+
 namespace DigikamNoiseReductionImagesPlugin
 {
 
-class ImageEffect_NoiseReduction : public Digikam::CtrlPanelDlg
+class NoiseReductionTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_NoiseReduction(QWidget* parent);
-    ~ImageEffect_NoiseReduction();
+    NoiseReductionTool(QObject* parent);
+    ~NoiseReductionTool();
 
 private slots:
 
@@ -51,8 +57,8 @@ private slots:
 
 private:
 
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
@@ -61,8 +67,9 @@ private:
 
 private slots:
 
-    void slotUser2();
-    void slotUser3();
+    void slotSaveAsSettings();
+    void slotLoadSettings();
+    void slotResetSettings();
 
 private:
 
@@ -77,8 +84,12 @@ private:
     KDcrawIface::RDoubleNumInput *m_gammaInput;
     KDcrawIface::RDoubleNumInput *m_dampingInput;
     KDcrawIface::RDoubleNumInput *m_phaseInput;
+
+    Digikam::ImagePanelWidget    *m_previewWidget;
+
+    Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
 }  // NameSpace DigikamNoiseReductionImagesPlugin
 
-#endif /* IMAGEEFFECT_NOISEREDUCTION_H */
+#endif /* NOISEREDUCTIONTOOL_H */

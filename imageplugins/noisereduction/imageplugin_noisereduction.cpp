@@ -33,9 +33,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_noisereduction.h"
+#include "noisereductiontool.h"
 #include "imageplugin_noisereduction.h"
 #include "imageplugin_noisereduction.moc"
+
+using namespace DigikamNoiseReductionImagesPlugin;
 
 K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_noisereduction,
                            KGenericFactory<ImagePlugin_NoiseReduction>("digikamimageplugin_noisereduction"));
@@ -63,6 +65,6 @@ void ImagePlugin_NoiseReduction::setEnabledActions(bool enable)
 
 void ImagePlugin_NoiseReduction::slotNoiseReduction()
 {
-    DigikamNoiseReductionImagesPlugin::ImageEffect_NoiseReduction dlg(kapp->activeWindow());
-    dlg.exec();
+    NoiseReductionTool *hsl = new NoiseReductionTool(this);
+    loadTool(hsl);
 }

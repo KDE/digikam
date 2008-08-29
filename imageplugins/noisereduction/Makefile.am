@@ -18,7 +18,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes) 
 
 digikamimageplugin_noisereduction_la_SOURCES = imageplugin_noisereduction.cpp \
-	                                           imageeffect_noisereduction.cpp noisereduction.cpp
+	                                           noisereductiontool.cpp noisereduction.cpp
 
 digikamimageplugin_noisereduction_la_LIBADD = $(LIB_KPARTS) \
 	                                          $(top_builddir)/digikam/digikam/libdigikam.la 
