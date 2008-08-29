@@ -54,7 +54,7 @@ class DistortionFXTool : public Digikam::EditorToolThreaded
 
 public:
 
-    DistortionFXTool(QWidget *parent);
+    DistortionFXTool(QObject *parent);
     ~DistortionFXTool();
 
 private slots:

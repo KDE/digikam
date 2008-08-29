@@ -69,7 +69,7 @@ using namespace Digikam;
 namespace DigikamDistortionFXImagesPlugin
 {
 
-DistortionFXTool::DistortionFXTool(QWidget* parent)
+DistortionFXTool::DistortionFXTool(QObject* parent)
                 : EditorToolThreaded(parent)
 {
     setName("distortionfx");

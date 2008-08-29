@@ -6,7 +6,7 @@
  * Date        : 2005-02-11
  * Description : a plugin to apply Distortion FX to an image.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Original Distortion algorithms copyrighted 2004-2005 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -67,7 +67,6 @@ void ImagePlugin_DistortionFX::setEnabledActions(bool enable)
 
 void ImagePlugin_DistortionFX::slotDistortionFX()
 {
-    DistortionFXTool *distortionfx = new DistortionFXTool(parentWidget());
+    DistortionFXTool *distortionfx = new DistortionFXTool(this);
     loadTool(distortionfx);
 }
-
