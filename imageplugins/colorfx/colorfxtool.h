@@ -57,7 +57,7 @@ class ColorFXTool : public Digikam::EditorTool
 
 public:
 
-    ColorFXTool(QWidget *parent);
+    ColorFXTool(QObject *parent);
     ~ColorFXTool();
 
 private:

@@ -76,8 +76,8 @@ using namespace Digikam;
 namespace DigikamColorFXImagesPlugin
 {
 
-ColorFXTool::ColorFXTool(QWidget* parent)
-                   : EditorTool(parent)
+ColorFXTool::ColorFXTool(QObject* parent)
+           : EditorTool(parent)
 {
     setName("coloreffects");
     setToolName(i18n("Color Effect"));
