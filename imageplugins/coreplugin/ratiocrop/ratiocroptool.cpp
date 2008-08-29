@@ -376,6 +376,10 @@ RatioCropTool::RatioCropTool(QWidget* parent)
     connect(m_centerHeight, SIGNAL(clicked()),
             this, SLOT(slotCenterHeight()));
 
+    // we need to disconnect the standard connection of the Try button first
+    disconnect(m_gboxSettings, SIGNAL(signalTryClicked()),
+               this, SLOT(slotEffect()));
+
     connect(m_gboxSettings, SIGNAL(signalTryClicked()),
             this, SLOT(slotMaxAspectRatio()));
 
