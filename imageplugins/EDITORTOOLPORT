@@ -2,7 +2,7 @@
 (G) : Gilles
 
 coreplugin
-  \---autocorrection        ImageDlgBase        A
+  \---autocorrection        ImageDlgBase        DONE
   \---bcg                   ImageDlgBase        A
   \---bwsepia               ImageDlgBase        A
   \---hsl                   ImageDlgBase        A
