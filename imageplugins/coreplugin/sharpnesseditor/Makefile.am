@@ -24,9 +24,9 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 
 libsharpnesseditor_la_LIBADD = $(top_builddir)/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/liblapack.la 
 
-libsharpnesseditor_la_SOURCES = imageeffect_sharpen.cpp unsharp.cpp matrix.cpp refocus.cpp 
+libsharpnesseditor_la_SOURCES = sharpentool.cpp unsharp.cpp matrix.cpp refocus.cpp 
 
 libsharpnesseditor_la_LDFLAGS = $(all_libraries)
 
-noinst_HEADERS = imageeffect_sharpen.h unsharp.h matrix.h refocus.h 
+noinst_HEADERS = sharpentool.h unsharp.h matrix.h refocus.h 
 

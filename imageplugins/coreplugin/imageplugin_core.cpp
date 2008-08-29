@@ -46,7 +46,7 @@
 #include "bwsepiatool.h"
 #include "redeyetool.h"
 #include "blurtool.h"
-#include "imageeffect_sharpen.h"
+#include "sharpentool.h"
 #include "ratiocroptool.h"
 #include "autocorrectiontool.h"
 #include "iccprooftool.h"
@@ -56,10 +56,10 @@
 using namespace DigikamImagesPluginCore;
 using namespace Digikam;
 
-K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_core,
-                            KGenericFactory<ImagePlugin_Core>("digikam"));
+K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_core,
+                           KGenericFactory<ImagePlugin_Core>("digikam"));
 
-ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*, const QStringList &)
+ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*, const QStringList&)
                 : ImagePlugin(parent, "ImagePlugin_Core")
 {
     //-------------------------------
@@ -169,8 +169,8 @@ void ImagePlugin_Core::slotBlur()
 
 void ImagePlugin_Core::slotSharpen()
 {
-    ImageEffect_Sharpen dlg(kapp->activeWindow());
-    dlg.exec();
+    SharpenTool *tool = new SharpenTool(this);
+    loadTool(tool);
 }
 
 void ImagePlugin_Core::slotBCG()

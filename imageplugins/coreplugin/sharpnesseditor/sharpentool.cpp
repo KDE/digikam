@@ -6,7 +6,7 @@
  * Date        : 2004-07-09
  * Description : a tool to sharp an image
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,6 +43,7 @@
 #include <kseparator.h>
 #include <kconfig.h>
 #include <kurl.h>
+#include <kiconloader.h>
 #include <kfiledialog.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
@@ -56,48 +57,59 @@
 
 #include "ddebug.h"
 #include "imageiface.h"
+#include "imagepanelwidget.h"
+#include "editortoolsettings.h"
 #include "dimgsharpen.h"
 #include "unsharp.h"
 #include "refocus.h"
-#include "imageeffect_sharpen.h"
-#include "imageeffect_sharpen.moc"
+#include "sharpentool.h"
+#include "sharpentool.moc"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
 
-ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
-        : Digikam::CtrlPanelDlg(parent, i18n("Sharpening Photograph"), "sharpen",
-                                true, true, true)
+SharpenTool::SharpenTool(QObject* parent)
+           : EditorToolThreaded(parent)
 {
-    setHelp("blursharpentool.anchor", "digikam");
+    setName("sharpen");
+    setToolName(i18n("Sharpen"));
+    setToolIcon(SmallIcon("sharpenimage"));
+    setToolHelp("blursharpentool.anchor");
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 1, 0, spacingHint());
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel|
+                                            EditorToolSettings::Try,
+                                            EditorToolSettings::PanIcon);
+    QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage(), 2, 1);
 
-    QLabel *label1 = new QLabel(i18n("Method:"), gboxSettings);
+    QLabel *label1 = new QLabel(i18n("Method:"), m_gboxSettings->plainPage());
 
-    m_sharpMethod = new RComboBox(gboxSettings);
+    m_sharpMethod = new RComboBox(m_gboxSettings->plainPage());
     m_sharpMethod->insertItem( i18n("Simple sharp") );
     m_sharpMethod->insertItem( i18n("Unsharp mask") );
     m_sharpMethod->insertItem( i18n("Refocus") );
     m_sharpMethod->setDefaultItem(SimpleSharp);
     QWhatsThis::add( m_sharpMethod, i18n("<p>Select the sharpening method to apply to the image."));
 
-    m_stack = new QWidgetStack(gboxSettings);
+    m_stack = new QWidgetStack(m_gboxSettings->plainPage());
 
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_sharpMethod, 0, 0, 1, 1);
-    gridSettings->addMultiCellWidget(new KSeparator(gboxSettings), 1, 1, 0, 1);
-    gridSettings->addMultiCellWidget(m_stack, 2, 2, 0, 1);
+    grid->addMultiCellWidget(label1,                                      0, 0, 0, 0);
+    grid->addMultiCellWidget(m_sharpMethod,                               0, 0, 1, 1);
+    grid->addMultiCellWidget(new KSeparator(m_gboxSettings->plainPage()), 1, 1, 0, 1);
+    grid->addMultiCellWidget(m_stack,                                     2, 2, 0, 1);
+    grid->setMargin(m_gboxSettings->spacingHint());
+    grid->setSpacing(m_gboxSettings->spacingHint());
 
     // -------------------------------------------------------------
 
     QWidget *simpleSharpSettings = new QWidget(m_stack);
-    QGridLayout* grid1           = new QGridLayout( simpleSharpSettings, 2, 1, 0, spacingHint());
+    QGridLayout* grid1           = new QGridLayout( simpleSharpSettings, 2, 1);
 
     QLabel *label = new QLabel(i18n("Sharpness:"), simpleSharpSettings);
     m_radiusInput = new RIntNumInput(simpleSharpSettings);
@@ -107,15 +119,18 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
                                          "1 and above determine the sharpen matrix radius "
                                          "that determines how much to sharpen the image."));
 
-    grid1->addMultiCellWidget(label, 0, 0, 0, 1);
+    grid1->addMultiCellWidget(label,         0, 0, 0, 1);
     grid1->addMultiCellWidget(m_radiusInput, 1, 1, 0, 1);
     grid1->setRowStretch(2, 10);
+    grid1->setMargin(m_gboxSettings->spacingHint());
+    grid1->setSpacing(m_gboxSettings->spacingHint());
+
     m_stack->addWidget(simpleSharpSettings, SimpleSharp);
 
     // -------------------------------------------------------------
 
     QWidget *unsharpMaskSettings = new QWidget(m_stack);
-    QGridLayout* grid2           = new QGridLayout( unsharpMaskSettings, 6, 1, 0, spacingHint());
+    QGridLayout* grid2           = new QGridLayout( unsharpMaskSettings, 6, 1);
 
     QLabel *label2 = new QLabel(i18n("Radius:"), unsharpMaskSettings);
     m_radiusInput2 = new RIntNumInput(unsharpMaskSettings);
@@ -140,19 +155,22 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     QWhatsThis::add( m_thresholdInput, i18n("<p>The threshold, as a fraction of the maximum "
                                             "luminosity value, needed to apply the difference amount.") );
 
-    grid2->addMultiCellWidget(label2, 0, 0, 0, 1);
-    grid2->addMultiCellWidget(m_radiusInput2, 1, 1, 0, 1);
-    grid2->addMultiCellWidget(label3, 2, 2, 0, 1);
-    grid2->addMultiCellWidget(m_amountInput, 3, 3, 0, 1);
-    grid2->addMultiCellWidget(label4, 4, 4, 0, 1);
+    grid2->addMultiCellWidget(label2,           0, 0, 0, 1);
+    grid2->addMultiCellWidget(m_radiusInput2,   1, 1, 0, 1);
+    grid2->addMultiCellWidget(label3,           2, 2, 0, 1);
+    grid2->addMultiCellWidget(m_amountInput,    3, 3, 0, 1);
+    grid2->addMultiCellWidget(label4,           4, 4, 0, 1);
     grid2->addMultiCellWidget(m_thresholdInput, 5, 5, 0, 1);
     grid2->setRowStretch(6, 10);
+    grid2->setMargin(m_gboxSettings->spacingHint());
+    grid2->setSpacing(m_gboxSettings->spacingHint());
+
     m_stack->addWidget(unsharpMaskSettings, UnsharpMask);
 
     // -------------------------------------------------------------
 
     QWidget *refocusSettings = new QWidget(m_stack);
-    QGridLayout* grid3       = new QGridLayout(refocusSettings, 10, 1, 0, spacingHint());
+    QGridLayout* grid3       = new QGridLayout(refocusSettings, 10, 1);
 
     QLabel *label5 = new QLabel(i18n("Circular sharpness:"), refocusSettings);
     m_radius       = new RDoubleNumInput(refocusSettings);
@@ -202,20 +220,27 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
                                         "Increasing the matrix width may give better results, especially when you have "
                                         "chosen large values for circular or gaussian sharpness."));
 
-    grid3->addMultiCellWidget(label5, 0, 0, 0, 1);
-    grid3->addMultiCellWidget(m_radius, 1, 1, 0, 1);
-    grid3->addMultiCellWidget(label6, 2, 2, 0, 1);
+    grid3->addMultiCellWidget(label5,        0, 0, 0, 1);
+    grid3->addMultiCellWidget(m_radius,      1, 1, 0, 1);
+    grid3->addMultiCellWidget(label6,        2, 2, 0, 1);
     grid3->addMultiCellWidget(m_correlation, 3, 3, 0, 1);
-    grid3->addMultiCellWidget(label7, 4, 4, 0, 1);
-    grid3->addMultiCellWidget(m_noise, 5, 5, 0, 1);
-    grid3->addMultiCellWidget(label8, 6, 6, 0, 1);
-    grid3->addMultiCellWidget(m_gauss, 7, 7, 0, 1);
-    grid3->addMultiCellWidget(label9, 8, 8, 0, 1);
-    grid3->addMultiCellWidget(m_matrixSize, 9, 9, 0, 1);
+    grid3->addMultiCellWidget(label7,        4, 4, 0, 1);
+    grid3->addMultiCellWidget(m_noise,       5, 5, 0, 1);
+    grid3->addMultiCellWidget(label8,        6, 6, 0, 1);
+    grid3->addMultiCellWidget(m_gauss,       7, 7, 0, 1);
+    grid3->addMultiCellWidget(label9,        8, 8, 0, 1);
+    grid3->addMultiCellWidget(m_matrixSize,  9, 9, 0, 1);
     grid3->setRowStretch(10, 10);
+    grid3->setMargin(m_gboxSettings->spacingHint());
+    grid3->setSpacing(m_gboxSettings->spacingHint());
+
     m_stack->addWidget(refocusSettings, Refocus);
 
-    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
+    setToolSettings(m_gboxSettings);
+
+    m_previewWidget = new ImagePanelWidget(470, 350, "sharpen Tool", m_gboxSettings->panIconView());
+
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
@@ -228,7 +253,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     // it before to apply deconvolution filter on original image border pixels including
     // on matrix size area. This way limit artifacts on image border.
 
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
 
     uchar* data = iface.getOriginalImage();
     int    w    = iface.originalWidth();
@@ -236,118 +261,118 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     bool   sb   = iface.originalSixteenBit();
     bool   a    = iface.originalHasAlpha();
 
-    m_img = Digikam::DImg( w + 4*MAX_MATRIX_SIZE, h + 4*MAX_MATRIX_SIZE, sb, a);
+    m_img = DImg( w + 4*MAX_MATRIX_SIZE, h + 4*MAX_MATRIX_SIZE, sb, a);
 
-    Digikam::DImg tmp;
-    Digikam::DImg org(w, h, sb, a, data);
+    DImg tmp;
+    DImg org(w, h, sb, a, data);
 
     // Copy original.
     m_img.bitBltImage(&org, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
 
     // Create dummy top border
     tmp = org.copy(0, 0, w, 2*MAX_MATRIX_SIZE);
-    tmp.flip(Digikam::DImg::VERTICAL);
+    tmp.flip(DImg::VERTICAL);
     m_img.bitBltImage(&tmp, 2*MAX_MATRIX_SIZE, 0);
 
     // Create dummy bottom border
     tmp = org.copy(0, h-2*MAX_MATRIX_SIZE, w, 2*MAX_MATRIX_SIZE);
-    tmp.flip(Digikam::DImg::VERTICAL);
+    tmp.flip(DImg::VERTICAL);
     m_img.bitBltImage(&tmp, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE+h);
 
     // Create dummy left border
     tmp = org.copy(0, 0, 2*MAX_MATRIX_SIZE, h);
-    tmp.flip(Digikam::DImg::HORIZONTAL);
+    tmp.flip(DImg::HORIZONTAL);
     m_img.bitBltImage(&tmp, 0, 2*MAX_MATRIX_SIZE);
 
     // Create dummy right border
     tmp = org.copy(w-2*MAX_MATRIX_SIZE, 0, 2*MAX_MATRIX_SIZE, h);
-    tmp.flip(Digikam::DImg::HORIZONTAL);
+    tmp.flip(DImg::HORIZONTAL);
     m_img.bitBltImage(&tmp, w+2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
 
     // Create dummy top/left corner
     tmp = org.copy(0, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
-    tmp.flip(Digikam::DImg::HORIZONTAL);
-    tmp.flip(Digikam::DImg::VERTICAL);
+    tmp.flip(DImg::HORIZONTAL);
+    tmp.flip(DImg::VERTICAL);
     m_img.bitBltImage(&tmp, 0, 0);
 
     // Create dummy top/right corner
     tmp = org.copy(w-2*MAX_MATRIX_SIZE, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
-    tmp.flip(Digikam::DImg::HORIZONTAL);
-    tmp.flip(Digikam::DImg::VERTICAL);
+    tmp.flip(DImg::HORIZONTAL);
+    tmp.flip(DImg::VERTICAL);
     m_img.bitBltImage(&tmp, w+2*MAX_MATRIX_SIZE, 0);
 
     // Create dummy bottom/left corner
     tmp = org.copy(0, h-2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
-    tmp.flip(Digikam::DImg::HORIZONTAL);
-    tmp.flip(Digikam::DImg::VERTICAL);
+    tmp.flip(DImg::HORIZONTAL);
+    tmp.flip(DImg::VERTICAL);
     m_img.bitBltImage(&tmp, 0, h+2*MAX_MATRIX_SIZE);
 
     // Create dummy bottom/right corner
     tmp = org.copy(w-2*MAX_MATRIX_SIZE, h-2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
-    tmp.flip(Digikam::DImg::HORIZONTAL);
-    tmp.flip(Digikam::DImg::VERTICAL);
+    tmp.flip(DImg::HORIZONTAL);
+    tmp.flip(DImg::VERTICAL);
     m_img.bitBltImage(&tmp, w+2*MAX_MATRIX_SIZE, h+2*MAX_MATRIX_SIZE);
 
     delete [] data;
 }
 
-ImageEffect_Sharpen::~ImageEffect_Sharpen()
+SharpenTool::~SharpenTool()
 {
 }
 
-void ImageEffect_Sharpen::renderingFinished(void)
+void SharpenTool::renderingFinished()
 {
     switch (m_stack->id(m_stack->visibleWidget()))
     {
-    case SimpleSharp:
-    {
-        m_radiusInput->setEnabled(true);
-        enableButton(User2, false);
-        enableButton(User3, false);
-        break;
-    }
+        case SimpleSharp:
+        {
+            m_radiusInput->setEnabled(true);
+            m_gboxSettings->enableButton(EditorToolSettings::Load, false);
+            m_gboxSettings->enableButton(EditorToolSettings::SaveAs, false);
+            break;
+        }
 
-    case UnsharpMask:
-    {
-        m_radiusInput2->setEnabled(true);
-        m_amountInput->setEnabled(true);
-        m_thresholdInput->setEnabled(true);
-        enableButton(User2, false);
-        enableButton(User3, false);
-        break;
-    }
+        case UnsharpMask:
+        {
+            m_radiusInput2->setEnabled(true);
+            m_amountInput->setEnabled(true);
+            m_thresholdInput->setEnabled(true);
+            m_gboxSettings->enableButton(EditorToolSettings::Load, false);
+            m_gboxSettings->enableButton(EditorToolSettings::SaveAs, false);
+            break;
+        }
 
-    case Refocus:
-    {
-        m_matrixSize->setEnabled(true);
-        m_radius->setEnabled(true);
-        m_gauss->setEnabled(true);
-        m_correlation->setEnabled(true);
-        m_noise->setEnabled(true);
-        break;
-    }
+        case Refocus:
+        {
+            m_matrixSize->setEnabled(true);
+            m_radius->setEnabled(true);
+            m_gauss->setEnabled(true);
+            m_correlation->setEnabled(true);
+            m_noise->setEnabled(true);
+            break;
+        }
     }
 }
 
-void ImageEffect_Sharpen::slotSharpMethodActived(int w)
+void SharpenTool::slotSharpMethodActived(int w)
 {
     m_stack->raiseWidget(w);
     if (w == Refocus)
     {
-        enableButton(User2, true);
-        enableButton(User3, true);
+        m_gboxSettings->enableButton(EditorToolSettings::Load, true);
+        m_gboxSettings->enableButton(EditorToolSettings::SaveAs, true);
     }
     else
     {
-        enableButton(User2, false);
-        enableButton(User3, false);
+        m_gboxSettings->enableButton(EditorToolSettings::Load, false);
+        m_gboxSettings->enableButton(EditorToolSettings::SaveAs, false);
     }
 }
 
-void ImageEffect_Sharpen::readUserSettings()
+void SharpenTool::readSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("sharpen Tool Dialog");
+    config->setGroup("sharpen Tool");
     m_radiusInput->blockSignals(true);
     m_radiusInput2->blockSignals(true);
     m_amountInput->blockSignals(true);
@@ -384,10 +409,10 @@ void ImageEffect_Sharpen::readUserSettings()
     slotSharpMethodActived(m_sharpMethod->currentItem());
 }
 
-void ImageEffect_Sharpen::writeUserSettings()
+void SharpenTool::writeSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("sharpen Tool Dialog");
+    config->setGroup("sharpen Tool");
     config->writeEntry("SimpleSharpRadiusAjustment", m_radiusInput->value());
     config->writeEntry("UnsharpMaskRadiusAjustment", m_radiusInput2->value());
     config->writeEntry("UnsharpMaskAmountAjustment", m_amountInput->value());
@@ -401,261 +426,255 @@ void ImageEffect_Sharpen::writeUserSettings()
     config->sync();
 }
 
-void ImageEffect_Sharpen::resetValues(void)
+void SharpenTool::slotResetSettings()
 {
     switch (m_stack->id(m_stack->visibleWidget()))
     {
-    case SimpleSharp:
-    {
-        m_radiusInput->blockSignals(true);
-        m_radiusInput->slotReset();
-        m_radiusInput->blockSignals(false);
-        break;
-    }
+        case SimpleSharp:
+        {
+            m_radiusInput->blockSignals(true);
+            m_radiusInput->slotReset();
+            m_radiusInput->blockSignals(false);
+            break;
+        }
 
-    case UnsharpMask:
-    {
-        m_radiusInput2->blockSignals(true);
-        m_amountInput->blockSignals(true);
-        m_thresholdInput->blockSignals(true);
+        case UnsharpMask:
+        {
+            m_radiusInput2->blockSignals(true);
+            m_amountInput->blockSignals(true);
+            m_thresholdInput->blockSignals(true);
 
-        m_radiusInput2->slotReset();
-        m_amountInput->slotReset();
-        m_thresholdInput->slotReset();
+            m_radiusInput2->slotReset();
+            m_amountInput->slotReset();
+            m_thresholdInput->slotReset();
 
-        m_radiusInput2->blockSignals(false);
-        m_amountInput->blockSignals(false);
-        m_thresholdInput->blockSignals(false);
-        break;
-    }
+            m_radiusInput2->blockSignals(false);
+            m_amountInput->blockSignals(false);
+            m_thresholdInput->blockSignals(false);
+            break;
+        }
 
-    case Refocus:
-    {
-        m_matrixSize->blockSignals(true);
-        m_radius->blockSignals(true);
-        m_gauss->blockSignals(true);
-        m_correlation->blockSignals(true);
-        m_noise->blockSignals(true);
+        case Refocus:
+        {
+            m_matrixSize->blockSignals(true);
+            m_radius->blockSignals(true);
+            m_gauss->blockSignals(true);
+            m_correlation->blockSignals(true);
+            m_noise->blockSignals(true);
 
-        m_matrixSize->slotReset();
-        m_radius->slotReset();
-        m_gauss->slotReset();
-        m_correlation->slotReset();
-        m_noise->slotReset();
+            m_matrixSize->slotReset();
+            m_radius->slotReset();
+            m_gauss->slotReset();
+            m_correlation->slotReset();
+            m_noise->slotReset();
 
-        m_matrixSize->blockSignals(false);
-        m_radius->blockSignals(false);
-        m_gauss->blockSignals(false);
-        m_correlation->blockSignals(false);
-        m_noise->blockSignals(false);
-        break;
-    }
+            m_matrixSize->blockSignals(false);
+            m_radius->blockSignals(false);
+            m_gauss->blockSignals(false);
+            m_correlation->blockSignals(false);
+            m_noise->blockSignals(false);
+            break;
+        }
     }
 }
 
-void ImageEffect_Sharpen::prepareEffect()
+void SharpenTool::prepareEffect()
 {
     switch (m_stack->id(m_stack->visibleWidget()))
     {
-    case SimpleSharp:
-    {
-        m_radiusInput->setEnabled(false);
+        case SimpleSharp:
+        {
+            m_radiusInput->setEnabled(false);
 
-        Digikam::DImg img = m_imagePreviewWidget->getOriginalRegionImage();
+            DImg img = m_previewWidget->getOriginalRegionImage();
 
-        double radius = m_radiusInput->value()/10.0;
-        double sigma;
+            double radius = m_radiusInput->value()/10.0;
+            double sigma;
 
-        if (radius < 1.0) sigma = radius;
-        else sigma = sqrt(radius);
+            if (radius < 1.0) sigma = radius;
+            else sigma = sqrt(radius);
 
-        m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
-                           (new Digikam::DImgSharpen(&img, this, radius, sigma ));
-        break;
-    }
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgSharpen(&img, this, radius, sigma )));
+            break;
+        }
 
-    case UnsharpMask:
-    {
-        m_radiusInput2->setEnabled(false);
-        m_amountInput->setEnabled(false);
-        m_thresholdInput->setEnabled(false);
+        case UnsharpMask:
+        {
+            m_radiusInput2->setEnabled(false);
+            m_amountInput->setEnabled(false);
+            m_thresholdInput->setEnabled(false);
 
-        Digikam::DImg img = m_imagePreviewWidget->getOriginalRegionImage();
+            DImg img = m_previewWidget->getOriginalRegionImage();
 
-        int    r  = m_radiusInput2->value();
-        double a  = m_amountInput->value();
-        double th = m_thresholdInput->value();
+            int    r  = m_radiusInput2->value();
+            double a  = m_amountInput->value();
+            double th = m_thresholdInput->value();
 
-        m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
-                           (new DigikamImagesPluginCore::UnsharpMask(&img, this, r, a, th));
-        break;
-    }
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new DigikamImagesPluginCore::UnsharpMask(&img, this, r, a, th)));
+            break;
+        }
 
-    case Refocus:
-    {
-        m_matrixSize->setEnabled(false);
-        m_radius->setEnabled(false);
-        m_gauss->setEnabled(false);
-        m_correlation->setEnabled(false);
-        m_noise->setEnabled(false);
+        case Refocus:
+        {
+            m_matrixSize->setEnabled(false);
+            m_radius->setEnabled(false);
+            m_gauss->setEnabled(false);
+            m_correlation->setEnabled(false);
+            m_noise->setEnabled(false);
 
-        int    ms     = m_matrixSize->value();
-        double r      = m_radius->value();
-        double g      = m_gauss->value();
-        double c      = m_correlation->value();
-        double n      = m_noise->value();
+            int    ms     = m_matrixSize->value();
+            double r      = m_radius->value();
+            double g      = m_gauss->value();
+            double c      = m_correlation->value();
+            double n      = m_noise->value();
 
-        QRect area    = m_imagePreviewWidget->getOriginalImageRegionToRender();
-        QRect tmpRect;
-        tmpRect.setLeft(area.left()-2*ms);
-        tmpRect.setRight(area.right()+2*ms);
-        tmpRect.setTop(area.top()-2*ms);
-        tmpRect.setBottom(area.bottom()+2*ms);
-        tmpRect.moveBy(2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
-        Digikam::DImg imTemp = m_img.copy(tmpRect);
+            QRect area    = m_previewWidget->getOriginalImageRegionToRender();
+            QRect tmpRect;
+            tmpRect.setLeft(area.left()-2*ms);
+            tmpRect.setRight(area.right()+2*ms);
+            tmpRect.setTop(area.top()-2*ms);
+            tmpRect.setBottom(area.bottom()+2*ms);
+            tmpRect.moveBy(2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+            DImg imTemp = m_img.copy(tmpRect);
 
-        m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
-                           (new DigikamImagesPluginCore::Refocus(&imTemp, this, ms, r, g, c, n));
-        break;
-    }
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new DigikamImagesPluginCore::Refocus(&imTemp, this, ms, r, g, c, n)));
+            break;
+        }
     }
 }
 
-void ImageEffect_Sharpen::prepareFinal()
+void SharpenTool::prepareFinal()
 {
     switch (m_stack->id(m_stack->visibleWidget()))
     {
-    case SimpleSharp:
-    {
-        m_radiusInput->setEnabled(false);
+        case SimpleSharp:
+        {
+            m_radiusInput->setEnabled(false);
 
-        double radius = m_radiusInput->value()/10.0;
-        double sigma;
+            double radius = m_radiusInput->value()/10.0;
+            double sigma;
 
-        if (radius < 1.0) sigma = radius;
-        else sigma = sqrt(radius);
+            if (radius < 1.0) sigma = radius;
+            else sigma = sqrt(radius);
 
-        Digikam::ImageIface iface(0, 0);
-        uchar *data     = iface.getOriginalImage();
-        int w           = iface.originalWidth();
-        int h           = iface.originalHeight();
-        bool sixteenBit = iface.originalSixteenBit();
-        bool hasAlpha   = iface.originalHasAlpha();
-        Digikam::DImg orgImage = Digikam::DImg(w, h, sixteenBit, hasAlpha ,data);
-        delete [] data;
-        m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
-                           (new Digikam::DImgSharpen(&orgImage, this, radius, sigma ));
-        break;
-    }
+            ImageIface iface(0, 0);
+            uchar *data     = iface.getOriginalImage();
+            int w           = iface.originalWidth();
+            int h           = iface.originalHeight();
+            bool sixteenBit = iface.originalSixteenBit();
+            bool hasAlpha   = iface.originalHasAlpha();
+            DImg orgImage = DImg(w, h, sixteenBit, hasAlpha ,data);
+            delete [] data;
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgSharpen(&orgImage, this, radius, sigma )));
+            break;
+        }
 
-    case UnsharpMask:
-    {
-        m_radiusInput2->setEnabled(false);
-        m_amountInput->setEnabled(false);
-        m_thresholdInput->setEnabled(false);
+        case UnsharpMask:
+        {
+            m_radiusInput2->setEnabled(false);
+            m_amountInput->setEnabled(false);
+            m_thresholdInput->setEnabled(false);
 
-        int    r  = m_radiusInput2->value();
-        double a  = m_amountInput->value();
-        double th = m_thresholdInput->value();
+            int    r  = m_radiusInput2->value();
+            double a  = m_amountInput->value();
+            double th = m_thresholdInput->value();
 
-        Digikam::ImageIface iface(0, 0);
-        uchar *data     = iface.getOriginalImage();
-        int w           = iface.originalWidth();
-        int h           = iface.originalHeight();
-        bool sixteenBit = iface.originalSixteenBit();
-        bool hasAlpha   = iface.originalHasAlpha();
-        Digikam::DImg orgImage = Digikam::DImg(w, h, sixteenBit, hasAlpha ,data);
-        delete [] data;
-        m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
-                           (new DigikamImagesPluginCore::UnsharpMask(&orgImage, this, r, a, th));
-        break;
-    }
+            ImageIface iface(0, 0);
+            uchar *data     = iface.getOriginalImage();
+            int w           = iface.originalWidth();
+            int h           = iface.originalHeight();
+            bool sixteenBit = iface.originalSixteenBit();
+            bool hasAlpha   = iface.originalHasAlpha();
+            DImg orgImage = DImg(w, h, sixteenBit, hasAlpha ,data);
+            delete [] data;
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new DigikamImagesPluginCore::UnsharpMask(&orgImage, this, r, a, th)));
+            break;
+        }
 
-    case Refocus:
-    {
+        case Refocus:
+        {
 
-        m_matrixSize->setEnabled(false);
-        m_radius->setEnabled(false);
-        m_gauss->setEnabled(false);
-        m_correlation->setEnabled(false);
-        m_noise->setEnabled(false);
+            m_matrixSize->setEnabled(false);
+            m_radius->setEnabled(false);
+            m_gauss->setEnabled(false);
+            m_correlation->setEnabled(false);
+            m_noise->setEnabled(false);
 
-        int    ms   = m_matrixSize->value();
-        double r    = m_radius->value();
-        double g    = m_gauss->value();
-        double c    = m_correlation->value();
-        double n    = m_noise->value();
+            int    ms   = m_matrixSize->value();
+            double r    = m_radius->value();
+            double g    = m_gauss->value();
+            double c    = m_correlation->value();
+            double n    = m_noise->value();
 
-        m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
-                           (new DigikamImagesPluginCore::Refocus(&m_img, this, ms, r, g, c, n));
-        break;
-    }
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new DigikamImagesPluginCore::Refocus(&m_img, this, ms, r, g, c, n)));
+            break;
+        }
     }
 }
 
-void ImageEffect_Sharpen::putPreviewData(void)
+void SharpenTool::putPreviewData()
 {
     switch (m_stack->id(m_stack->visibleWidget()))
     {
-    case SimpleSharp:
-    case UnsharpMask:
-    {
-        Digikam::DImg imDest = m_threadedFilter->getTargetImage();
-        m_imagePreviewWidget->setPreviewImage(imDest);
-        break;
-    }
+        case SimpleSharp:
+        case UnsharpMask:
+        {
+            DImg imDest = filter()->getTargetImage();
+            m_previewWidget->setPreviewImage(imDest);
+            break;
+        }
 
-    case Refocus:
-    {
-        int   ms   = m_matrixSize->value();
-        QRect area = m_imagePreviewWidget->getOriginalImageRegionToRender();
+        case Refocus:
+        {
+            int   ms   = m_matrixSize->value();
+            QRect area = m_previewWidget->getOriginalImageRegionToRender();
 
-        Digikam::DImg imDest = m_threadedFilter->getTargetImage()
-                               .copy(2*ms, 2*ms, area.width(), area.height());
-        m_imagePreviewWidget->setPreviewImage(imDest);
-        break;
-    }
+            DImg imDest = filter()->getTargetImage()
+                          .copy(2*ms, 2*ms, area.width(), area.height());
+            m_previewWidget->setPreviewImage(imDest);
+            break;
+        }
     }
 }
 
-void ImageEffect_Sharpen::putFinalData(void)
+void SharpenTool::putFinalData()
 {
-    Digikam::ImageIface iface(0, 0);
-    Digikam::DImg imDest = m_threadedFilter->getTargetImage();
+    ImageIface iface(0, 0);
+    DImg imDest = filter()->getTargetImage();
 
     switch (m_stack->id(m_stack->visibleWidget()))
     {
-    case SimpleSharp:
-    {
-        iface.putOriginalImage(i18n("Sharpen"), imDest.bits());
-        break;
-    }
+        case SimpleSharp:
+        {
+            iface.putOriginalImage(i18n("Sharpen"), imDest.bits());
+            break;
+        }
 
-    case UnsharpMask:
-    {
-        iface.putOriginalImage(i18n("Unsharp Mask"), imDest.bits());
-        break;
-    }
+        case UnsharpMask:
+        {
+            iface.putOriginalImage(i18n("Unsharp Mask"), imDest.bits());
+            break;
+        }
 
-    case Refocus:
-    {
-        QRect area = m_imagePreviewWidget->getOriginalImageRegionToRender();
-        Digikam::ImageIface iface(0, 0);
+        case Refocus:
+        {
+            QRect area = m_previewWidget->getOriginalImageRegionToRender();
+            ImageIface iface(0, 0);
 
-        iface.putOriginalImage(i18n("Refocus"), m_threadedFilter->getTargetImage()
-                               .copy(2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE,
-                                     iface.originalWidth(),
-                                     iface.originalHeight())
-                               .bits());
-        break;
-    }
+            iface.putOriginalImage(i18n("Refocus"), filter()->getTargetImage()
+                                .copy(2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE,
+                                        iface.originalWidth(),
+                                        iface.originalHeight())
+                                .bits());
+            break;
+        }
     }
 }
 
-void ImageEffect_Sharpen::slotUser3()
+void SharpenTool::slotLoadSettings()
 {
     KURL loadRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
-                               QString( "*" ), this,
+                               QString( "*" ), kapp->activeWindow(),
                                QString( i18n("Photograph Refocus Settings File to Load")) );
     if ( loadRestorationFile.isEmpty() )
         return;
@@ -667,7 +686,7 @@ void ImageEffect_Sharpen::slotUser3()
         QTextStream stream( &file );
         if ( stream.readLine() != "# Photograph Refocus Configuration File" )
         {
-            KMessageBox::error(this,
+            KMessageBox::error(kapp->activeWindow(),
                                i18n("\"%1\" is not a Photograph Refocus settings text file.")
                                .arg(loadRestorationFile.fileName()));
             file.close();
@@ -683,15 +702,15 @@ void ImageEffect_Sharpen::slotUser3()
         blockSignals(false);
     }
     else
-        KMessageBox::error(this, i18n("Cannot load settings from the Photograph Refocus text file."));
+        KMessageBox::error(kapp->activeWindow(), i18n("Cannot load settings from the Photograph Refocus text file."));
 
     file.close();
 }
 
-void ImageEffect_Sharpen::slotUser2()
+void SharpenTool::slotSaveAsSettings()
 {
     KURL saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
-                               QString( "*" ), this,
+                               QString( "*" ), kapp->activeWindow(),
                                QString( i18n("Photograph Refocus Settings File to Save")) );
     if ( saveRestorationFile.isEmpty() )
         return;
@@ -709,7 +728,7 @@ void ImageEffect_Sharpen::slotUser2()
         stream << m_noise->value() << "\n";
     }
     else
-        KMessageBox::error(this, i18n("Cannot save settings to the Photograph Refocus text file."));
+        KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the Photograph Refocus text file."));
 
     file.close();
 }
