@@ -114,13 +114,15 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
 
     QFrame *frame     = new QFrame(this);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* vlay = new QVBoxLayout(frame, 5, 0);
+    QVBoxLayout* vlay = new QVBoxLayout(frame);
     d->panIconView    = new ImagePanIconWidget(360, 240, frame);
     d->panIconView->setWhatsThis(i18n("<p>Here you can see the original image panel "
                                       "which can help you to select the clip preview."
                                       "<p>Click and drag the mouse cursor in the "
                                       "red rectangle to change the clip focus."));
     vlay->addWidget(d->panIconView, 0, Qt::AlignCenter);
+    vlay->setSpacing(0);
+    vlay->setMargin(5);
 
     if (!(toolMask & PanIcon))
         frame->hide();
