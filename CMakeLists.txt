@@ -443,6 +443,7 @@ SET(libimagepluginswidgets_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imageplugins/imageregionwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imageplugins/imageguidewidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imageplugins/imagewidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imageplugins/imagepanelwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imageplugins/imagepannelwidget.cpp
    )
 
