@@ -23,12 +23,12 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_BCG_H
-#define IMAGEEFFECT_BCG_H
+#ifndef BCGTOOL_H
+#define BCGTOOL_H
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 
 class QComboBox;
 class QButtonGroup;
@@ -42,36 +42,37 @@ class RDoubleNumInput;
 
 namespace Digikam
 {
-class HistogramWidget;
 class ColorGradientWidget;
-class ImageWidget;
 class DColor;
+class EditorToolSettings;
+class HistogramWidget;
+class ImageWidget;
 }
 
 namespace DigikamImagesPluginCore
 {
 
-class ImageEffect_BCG : public Digikam::ImageDlgBase
+class BCGTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_BCG(QWidget *parent);
-    ~ImageEffect_BCG();
+    BCGTool(QObject *parent);
+    ~BCGTool();
 
 private slots:
 
     void slotEffect();
+    void slotResetSettings();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
 
 private:
 
-    void readUserSettings();
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void finalRendering();
 
 private:
@@ -106,8 +107,10 @@ private:
     Digikam::ColorGradientWidget *m_hGradient;
 
     Digikam::HistogramWidget     *m_histogramWidget;
+
+    Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
 }  // NameSpace DigikamImagesPluginCore
 
-#endif /* IMAGEEFFECT_BCG_H */
+#endif /* BCGTOOL_H */

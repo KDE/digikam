@@ -42,8 +42,11 @@
 
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kcursor.h>
 #include <kglobal.h>
+#include <kicon.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kvbox.h>
@@ -54,49 +57,56 @@
 
 // Digikam includes.
 
+#include "bcgmodifier.h"
+#include "colorgradientwidget.h"
+#include "dimg.h"
+#include "editortoolsettings.h"
+#include "histogramwidget.h"
 #include "imageiface.h"
 #include "imagewidget.h"
-#include "histogramwidget.h"
-#include "colorgradientwidget.h"
-#include "bcgmodifier.h"
-#include "dimg.h"
 
 // Local includes.
 
-#include "imageeffect_bcg.h"
-#include "imageeffect_bcg.moc"
+#include "bcgtool.h"
+#include "bcgtool.moc"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
 
-ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
-               : Digikam::ImageDlgBase(parent, i18n("Brightness Contrast Gamma Adjustments"),
-                                       "bcgadjust", false)
+BCGTool::BCGTool(QObject* parent)
+       : EditorTool(parent)
 {
-    m_destinationPreviewData = 0L;
-    setHelp("bcgadjusttool.anchor", "digikam");
+    setToolName(i18n("Brightness / Contrast / Gamma"));
+    setToolIcon(SmallIcon("contrast"));
+    setToolHelp("bcgadjusttool.anchor");
 
-    m_previewWidget = new Digikam::ImageWidget("bcgadjust Tool Dialog", mainWidget(),
-                                               i18n("<p>Here you can see the image "
-                                               "brightness-contrast-gamma adjustments preview. "
-                                               "You can pick color on image "
-                                               "to see the color level corresponding on histogram."));
-    setPreviewAreaWidget(m_previewWidget);
+    m_destinationPreviewData = 0;
+
+    m_previewWidget = new ImageWidget("bcgadjust Tool", 0,
+                                      i18n("<p>Here you can see the image "
+                                           "brightness-contrast-gamma adjustments preview. "
+                                           "You can pick color on image "
+                                           "to see the color level corresponding on histogram."));
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings     = new QWidget(mainWidget());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings );
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel);
 
-    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
-    label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( gboxSettings );
-    m_channelCB->addItem( i18n("Luminosity") );
-    m_channelCB->addItem( i18n("Red") );
-    m_channelCB->addItem( i18n("Green") );
-    m_channelCB->addItem( i18n("Blue") );
+    QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
+
+    QLabel *label1 = new QLabel(i18n("Channel:"), m_gboxSettings->plainPage());
+    label1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_channelCB = new QComboBox(m_gboxSettings->plainPage());
+    m_channelCB->addItem(i18n("Luminosity"));
+    m_channelCB->addItem(i18n("Red"));
+    m_channelCB->addItem(i18n("Green"));
+    m_channelCB->addItem(i18n("Blue"));
     m_channelCB->setWhatsThis( i18n("<p>Select the histogram channel to display:<p>"
                                     "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                     "<b>Red</b>: display the red image-channel values.<p>"
@@ -105,7 +115,7 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QWidget *scaleBox = new QWidget(gboxSettings);
+    QWidget *scaleBox = new QWidget(m_gboxSettings->plainPage());
     QHBoxLayout *hlay = new QHBoxLayout(scaleBox);
     m_scaleBG         = new QButtonGroup(scaleBox);
     scaleBox->setWhatsThis(i18n("<p>Select the histogram scale.<p>"
@@ -117,13 +127,13 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
     linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
     linHistoButton->setCheckable(true);
-    m_scaleBG->addButton(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
+    m_scaleBG->addButton(linHistoButton, HistogramWidget::LinScaleHistogram);
 
     QToolButton *logHistoButton = new QToolButton( scaleBox );
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
     logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
     logHistoButton->setCheckable(true);
-    m_scaleBG->addButton(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    m_scaleBG->addButton(logHistoButton, HistogramWidget::LogScaleHistogram);
 
     hlay->setMargin(0);
     hlay->setSpacing(0);
@@ -141,34 +151,34 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    KVBox *histoBox   = new KVBox(gboxSettings);
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
+    KVBox *histoBox   = new KVBox(m_gboxSettings->plainPage());
+    m_histogramWidget = new HistogramWidget(256, 140, histoBox, false, true, true);
     m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram drawing "
                                           "of the selected image channel. This one is re-computed at any "
                                           "settings changes."));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);
-    m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
+    m_hGradient = new ColorGradientWidget( ColorGradientWidget::Horizontal, 10, histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Brightness:"), gboxSettings);
-    m_bInput       = new RIntNumInput(gboxSettings);
+    QLabel *label2 = new QLabel(i18n("Brightness:"), m_gboxSettings->plainPage());
+    m_bInput       = new RIntNumInput(m_gboxSettings->plainPage());
     m_bInput->setRange(-100, 100, 1);
     m_bInput->setSliderEnabled(true);
     m_bInput->setDefaultValue(0);
     m_bInput->setWhatsThis( i18n("<p>Set here the brightness adjustment of the image."));
 
-    QLabel *label3 = new QLabel(i18n("Contrast:"), gboxSettings);
-    m_cInput       = new RIntNumInput(gboxSettings);
+    QLabel *label3 = new QLabel(i18n("Contrast:"), m_gboxSettings->plainPage());
+    m_cInput       = new RIntNumInput(m_gboxSettings->plainPage());
     m_cInput->setRange(-100, 100, 1);
     m_cInput->setSliderEnabled(true);
     m_cInput->setDefaultValue(0);
     m_cInput->setWhatsThis( i18n("<p>Set here the contrast adjustment of the image."));
 
-    QLabel *label4 = new QLabel(i18n("Gamma:"), gboxSettings);
-    m_gInput = new RDoubleNumInput(gboxSettings);
+    QLabel *label4 = new QLabel(i18n("Gamma:"), m_gboxSettings->plainPage());
+    m_gInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_gInput->setDecimals(2);
     m_gInput->input()->setRange(0.1, 3.0, 0.01, true);
     m_gInput->setDefaultValue(1.0);
@@ -185,10 +195,10 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     gridSettings->addWidget(label4, 7, 0, 1, 5 );
     gridSettings->addWidget(m_gInput, 8, 0, 1, 5 );
     gridSettings->setRowStretch(9, 10);
-    gridSettings->setMargin(spacingHint());
-    gridSettings->setSpacing(spacingHint());
+    gridSettings->setMargin(m_gboxSettings->spacingHint());
+    gridSettings->setSpacing(m_gboxSettings->spacingHint());
 
-    setUserAreaWidget(gboxSettings);
+    setToolSettings(m_gboxSettings);
 
     // -------------------------------------------------------------
 
@@ -215,10 +225,10 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    enableButtonOk( false );
+    m_gboxSettings->enableButton(EditorToolSettings::Ok, false);
 }
 
-ImageEffect_BCG::~ImageEffect_BCG()
+BCGTool::~BCGTool()
 {
     m_histogramWidget->stopHistogramComputation();
 
@@ -229,53 +239,53 @@ ImageEffect_BCG::~ImageEffect_BCG()
     delete m_previewWidget;
 }
 
-void ImageEffect_BCG::slotChannelChanged(int channel)
+void BCGTool::slotChannelChanged(int channel)
 {
-    switch(channel)
+    switch (channel)
     {
         case LuminosityChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+            m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
+            m_hGradient->setColors(QColor("black"), QColor("white"));
             break;
 
         case RedChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
+            m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
+            m_hGradient->setColors(QColor("black"), QColor("red"));
             break;
 
         case GreenChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
+            m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
+            m_hGradient->setColors(QColor("black"), QColor("green"));
             break;
 
         case BlueChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
+            m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
+            m_hGradient->setColors(QColor("black"), QColor("blue"));
             break;
     }
 
     m_histogramWidget->repaint();
 }
 
-void ImageEffect_BCG::slotScaleChanged(int scale)
+void BCGTool::slotScaleChanged(int scale)
 {
     m_histogramWidget->m_scaleType = scale;
     m_histogramWidget->repaint();
 }
 
-void ImageEffect_BCG::slotColorSelectedFromTarget( const Digikam::DColor &color )
+void BCGTool::slotColorSelectedFromTarget( const DColor &color )
 {
     m_histogramWidget->setHistogramGuideByColor(color);
 }
 
-void ImageEffect_BCG::readUserSettings()
+void BCGTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("bcgadjust Tool Dialog");
+    KConfigGroup group        = config->group("bcgadjust Tool");
 
     m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->button(group.readEntry("Histogram Scale",
-                      (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
+                      (int)HistogramWidget::LogScaleHistogram))->setChecked(true);
 
     m_bInput->setValue(group.readEntry("BrightnessAjustment", m_bInput->defaultValue()));
     m_cInput->setValue(group.readEntry("ContrastAjustment", m_cInput->defaultValue()));
@@ -284,10 +294,10 @@ void ImageEffect_BCG::readUserSettings()
     slotScaleChanged(m_scaleBG->checkedId());
 }
 
-void ImageEffect_BCG::writeUserSettings()
+void BCGTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("bcgadjust Tool Dialog");
+    KConfigGroup group        = config->group("bcgadjust Tool");
     group.writeEntry("Histogram Channel", m_channelCB->currentIndex());
     group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
     group.writeEntry("BrightnessAjustment", m_bInput->value());
@@ -296,7 +306,7 @@ void ImageEffect_BCG::writeUserSettings()
     config->sync();
 }
 
-void ImageEffect_BCG::resetValues()
+void BCGTool::slotResetSettings()
 {
     m_bInput->blockSignals(true);
     m_cInput->blockSignals(true);
@@ -309,9 +319,11 @@ void ImageEffect_BCG::resetValues()
     m_bInput->blockSignals(false);
     m_cInput->blockSignals(false);
     m_gInput->blockSignals(false);
+
+    slotEffect();
 }
 
-void ImageEffect_BCG::slotEffect()
+void BCGTool::slotEffect()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
 
@@ -319,22 +331,23 @@ void ImageEffect_BCG::slotEffect()
     double c = (double)(m_cInput->value()/100.0) + 1.00;
     double g = m_gInput->value();
 
-    enableButtonOk( b != 0.0 || c != 1.0 || g != 1.0 );
+    m_gboxSettings->enableButton(EditorToolSettings::Ok,
+                                 ( b != 0.0 || c != 1.0 || g != 1.0 ));
 
     m_histogramWidget->stopHistogramComputation();
 
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = m_previewWidget->imageIface();
     m_destinationPreviewData   = iface->getPreviewImage();
     int w                      = iface->previewWidth();
     int h                      = iface->previewHeight();
     bool a                     = iface->previewHasAlpha();
     bool sb                    = iface->previewSixteenBit();
 
-    Digikam::DImg preview(w, h, sb, a, m_destinationPreviewData);
-    Digikam::BCGModifier cmod;
+    DImg preview(w, h, sb, a, m_destinationPreviewData);
+    BCGModifier cmod;
     cmod.setGamma(g);
     cmod.setBrightness(b);
     cmod.setContrast(c);
@@ -351,10 +364,10 @@ void ImageEffect_BCG::slotEffect()
     kapp->restoreOverrideCursor();
 }
 
-void ImageEffect_BCG::finalRendering()
+void BCGTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = m_previewWidget->imageIface();
 
     double b = (double)m_bInput->value()/250.0;
     double c = (double)(m_cInput->value()/100.0) + 1.00;
@@ -362,7 +375,6 @@ void ImageEffect_BCG::finalRendering()
 
     iface->setOriginalBCG(b, c, g);
     kapp->restoreOverrideCursor();
-    accept();
 }
 
 }  // NameSpace DigikamImagesPluginCore

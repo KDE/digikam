@@ -46,22 +46,22 @@ ENDFOREACH(_curentfile ${libclapack_SRCS})
 
 SET(digikamimageplugin_core_PART_SRCS 
     ${libclapack_SRCS} 
-    ../../imageplugins/coreplugin/imageplugin_core.cpp 
     ../../imageplugins/coreplugin/autocorrectiontool.cpp 
-    ../../imageplugins/coreplugin/imageeffect_bcg.cpp 
-    ../../imageplugins/coreplugin/imageeffect_rgb.cpp 
-    ../../imageplugins/coreplugin/imageeffect_blur.cpp 
-    ../../imageplugins/coreplugin/imageeffect_redeye.cpp 
-    ../../imageplugins/coreplugin/imageeffect_iccproof.cpp 
-    ../../imageplugins/coreplugin/imageeffect_bwsepia.cpp 
+    ../../imageplugins/coreplugin/bcgtool.cpp 
     ../../imageplugins/coreplugin/hsl/hspreviewwidget.cpp
     ../../imageplugins/coreplugin/hsl/imageeffect_hsl.cpp 
+    ../../imageplugins/coreplugin/imageeffect_blur.cpp 
+    ../../imageplugins/coreplugin/imageeffect_bwsepia.cpp 
+    ../../imageplugins/coreplugin/imageeffect_iccproof.cpp 
+    ../../imageplugins/coreplugin/imageeffect_redeye.cpp 
+    ../../imageplugins/coreplugin/imageeffect_rgb.cpp 
+    ../../imageplugins/coreplugin/imageplugin_core.cpp 
+    ../../imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp 
+    ../../imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp
+    ../../imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.cpp 
     ../../imageplugins/coreplugin/sharpnesseditor/matrix.cpp
     ../../imageplugins/coreplugin/sharpnesseditor/refocus.cpp
     ../../imageplugins/coreplugin/sharpnesseditor/unsharp.cpp
-    ../../imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.cpp 
-    ../../imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp
-    ../../imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp 
    )
 
 

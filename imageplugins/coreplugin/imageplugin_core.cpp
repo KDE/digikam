@@ -41,7 +41,7 @@
 #include "imageiface.h"
 #include "imageeffect_rgb.h"
 #include "imageeffect_hsl.h"
-#include "imageeffect_bcg.h"
+#include "bcgtool.h"
 #include "imageeffect_bwsepia.h"
 #include "imageeffect_redeye.h"
 #include "imageeffect_blur.h"
@@ -236,8 +236,8 @@ void ImagePlugin_Core::slotConvertTo16Bits()
 
 void ImagePlugin_Core::slotBCG()
 {
-    ImageEffect_BCG dlg(kapp->activeWindow());
-    dlg.exec();
+    BCGTool *tool = new BCGTool(kapp->activeWindow());
+    loadTool(tool);
 }
 
 void ImagePlugin_Core::slotRGB()
