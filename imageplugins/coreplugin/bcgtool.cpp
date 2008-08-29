@@ -79,6 +79,7 @@ namespace DigikamImagesPluginCore
 BCGTool::BCGTool(QObject* parent)
        : EditorTool(parent)
 {
+    setObjectName("bcgadjust");
     setToolName(i18n("Brightness / Contrast / Gamma"));
     setToolIcon(SmallIcon("contrast"));
     setToolHelp("bcgadjusttool.anchor");
