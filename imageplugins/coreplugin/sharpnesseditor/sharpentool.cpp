@@ -84,8 +84,8 @@ SharpenTool::SharpenTool(QObject* parent)
     m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
                                             EditorToolSettings::Ok|
                                             EditorToolSettings::Cancel|
-                                            EditorToolSettings::Load,
-                                            EditorToolSettings::SaveAs,
+                                            EditorToolSettings::Load|
+                                            EditorToolSettings::SaveAs|
                                             EditorToolSettings::Try,
                                             EditorToolSettings::PanIcon);
     QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage(), 3, 1);
