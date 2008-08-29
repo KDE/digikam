@@ -42,7 +42,7 @@
 #include "imageeffect_rgb.h"
 #include "imageeffect_hsl.h"
 #include "bcgtool.h"
-#include "imageeffect_bwsepia.h"
+#include "bwsepiatool.h"
 #include "imageeffect_redeye.h"
 #include "imageeffect_blur.h"
 #include "imageeffect_sharpen.h"
@@ -287,8 +287,8 @@ void ImagePlugin_Core::slotColorManagement()
 
 void ImagePlugin_Core::slotBW()
 {
-    ImageEffect_BWSepia dlg(kapp->activeWindow());
-    dlg.exec();
+    BWSepiaTool *tool = new BWSepiaTool(kapp->activeWindow());
+    loadTool(tool);
 }
 
 void ImagePlugin_Core::slotHSL()

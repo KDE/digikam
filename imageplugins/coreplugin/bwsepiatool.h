@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_BWSEPIA_H
-#define IMAGEEFFECT_BWSEPIA_H
+#ifndef BWSEPIATOOL_H
+#define BWSEPIATOOL_H
 
 // Qt includes.
 
@@ -31,7 +31,7 @@
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 
 class QListWidget;
 class QButtonGroup;
@@ -59,38 +59,31 @@ namespace DigikamImagesPluginCore
 
 class PreviewPixmapFactory;
 
-class ImageEffect_BWSepia : public Digikam::ImageDlgBase
+class BWSepiaTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_BWSepia(QWidget *parent);
-    ~ImageEffect_BWSepia();
+    BWSepiaTool(QObject *parent);
+    ~BWSepiaTool();
 
     friend class PreviewPixmapFactory;
 
-protected:
-
-    QPixmap getThumbnailForEffect(int type);
-    void finalRendering();
-
-protected slots:
-
-    virtual void slotTimer();
-
 private:
 
-    void readUserSettings();
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void blackAndWhiteConversion(uchar *data, int w, int h, bool sb, int type);
     void updatePreviews();
+    void finalRendering();
+    QPixmap getThumbnailForEffect(int type);
 
 private slots:
 
-    void slotUser2();
-    void slotUser3();
+    void slotResetSettings();
+    void slotSaveAsSettings();
+    void slotLoadSettings();
     void slotEffect();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
@@ -192,4 +185,4 @@ private:
 
 }  // NameSpace DigikamImagesPluginCore
 
-#endif /* IMAGEEFFECT_BWSEPIA_H */
+#endif /* BWSEPIATOOL_H */
