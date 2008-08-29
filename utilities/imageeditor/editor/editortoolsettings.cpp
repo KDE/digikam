@@ -22,23 +22,23 @@
 
 // Qt includes.
 
+#include <qhbox.h>
 #include <qlabel.h>
-#include <qstring.h>
 #include <qlayout.h>
+#include <qstring.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
-#include <qhbox.h>
 
 // KDE includes.
 
-#include <kpushbutton.h>
 #include <kapplication.h>
+#include <kcolorbutton.h>
 #include <kdialog.h>
-#include <klocale.h>
 #include <kiconloader.h>
+#include <klocale.h>
+#include <kpushbutton.h>
 #include <kstandarddirs.h>
 #include <kstdguiitem.h>
-#include <kcolorbutton.h>
 
 // LibKDcraw includes.
 
