@@ -152,7 +152,7 @@ void InfraredTool::renderingFinished()
 void InfraredTool::readSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("infrared Tool Dialog");
+    config->setGroup("infrared Tool");
     m_sensibilitySlider->blockSignals(true);
     m_addFilmGrain->blockSignals(true);
     m_sensibilitySlider->setValue(config->readNumEntry("SensitivityAjustment", 1));
@@ -165,7 +165,7 @@ void InfraredTool::readSettings()
 void InfraredTool::writeSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("infrared Tool Dialog");
+    config->setGroup("infrared Tool");
     config->writeEntry("SensitivityAjustment", m_sensibilitySlider->value());
     config->writeEntry("AddFilmGrain", m_addFilmGrain->isChecked());
     config->sync();
