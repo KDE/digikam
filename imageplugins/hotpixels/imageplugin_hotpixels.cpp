@@ -48,9 +48,9 @@ ImagePlugin_HotPixels::ImagePlugin_HotPixels(QObject *parent, const char*, const
     m_hotpixelsAction = new KAction(i18n("Hot Pixels..."), "hotpixels", 0, 
                             this, SLOT(slotHotPixels()),
                             actionCollection(), "imageplugin_hotpixels");
-    
-    setXMLFile("digikamimageplugin_hotpixels_ui.rc");            
-        
+
+    setXMLFile("digikamimageplugin_hotpixels_ui.rc");
+
     DDebug() << "ImagePlugin_HotPixels plugin loaded" << endl;
 }
 
