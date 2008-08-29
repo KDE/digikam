@@ -29,6 +29,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kcursor.h>
+#include <kapplication.h>
 
 // Local includes.
 
@@ -67,6 +68,6 @@ void ImagePlugin_InsertText::setEnabledActions(bool enable)
 
 void ImagePlugin_InsertText::slotInsertText()
 {
-    DigikamInsertTextImagesPlugin::ImageEffect_InsertText dlg(parentWidget());
+    DigikamInsertTextImagesPlugin::ImageEffect_InsertText dlg(kapp->activeWindow());
     dlg.exec();
 }
