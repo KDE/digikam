@@ -51,10 +51,6 @@ public:
     NoiseReductionTool(QObject* parent);
     ~NoiseReductionTool();
 
-private slots:
-
-    void readUserSettings();
-
 private:
 
     void readSettings();
