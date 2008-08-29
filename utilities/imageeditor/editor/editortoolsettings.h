@@ -36,6 +36,7 @@ class KPushButton;
 namespace Digikam
 {
 
+class ImagePanIconWidget;
 class EditorToolSettingsPriv;
 
 class DIGIKAM_EXPORT EditorToolSettings : public QWidget
