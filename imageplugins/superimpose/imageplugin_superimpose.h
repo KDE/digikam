@@ -36,7 +36,7 @@ class KAction;
 class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_SuperImpose : public Digikam::ImagePlugin
 {
     Q_OBJECT
-    
+
 public:
 
     ImagePlugin_SuperImpose(QObject *parent, const QVariantList &args);
@@ -52,5 +52,5 @@ private:
 
     KAction *m_superimposeAction;
 };
-    
+
 #endif /* IMAGEPLUGIN_SUPERIMPOSE_H */

@@ -31,6 +31,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kcursor.h>
+#include <kapplication.h>
 
 // Local includes.
 
@@ -47,12 +48,12 @@ ImagePlugin_SuperImpose::ImagePlugin_SuperImpose(QObject *parent, const QVariant
 {
     m_superimposeAction  = new KAction(KIcon("superimpose"), i18n("Template Superimpose..."), this);
     actionCollection()->addAction("imageplugin_superimpose", m_superimposeAction );
- 
+
     connect(m_superimposeAction, SIGNAL(triggered(bool)), 
             this, SLOT(slotSuperImpose()));
 
-    setXMLFile("digikamimageplugin_superimpose_ui.rc");        
-                                    
+    setXMLFile("digikamimageplugin_superimpose_ui.rc");
+
     DDebug() << "ImagePlugin_SuperImpose plugin loaded" << endl;
 }
 
@@ -67,6 +68,6 @@ void ImagePlugin_SuperImpose::setEnabledActions(bool enable)
 
 void ImagePlugin_SuperImpose::slotSuperImpose()
 {
-    DigikamSuperImposeImagesPlugin::ImageEffect_SuperImpose dlg(parentWidget());
+    DigikamSuperImposeImagesPlugin::ImageEffect_SuperImpose dlg(kapp->activeWindow());
     dlg.exec();
 }
