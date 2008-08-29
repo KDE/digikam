@@ -37,7 +37,7 @@ emboss                      CtrlPanelDlg
 filmgrain                   CtrlPanelDlg
 hotpixels                   CtrlPanelDlg
 infrared                    CtrlPanelDlg
-noisereduction              CtrlPanelDlg
+noisereduction              CtrlPanelDlg        G
 oilpaint                    CtrlPanelDlg
 restoration                 CtrlPanelDlg
 texture                     CtrlPanelDlg
