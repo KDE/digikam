@@ -76,7 +76,6 @@ namespace DigikamImagesPluginCore
 AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                   : EditorTool(parent)
 {
-    setName("autocorrection");
     setToolName(i18n("Auto Correction"));
     setToolIcon(SmallIcon("autocorrection"));
     setToolHelp("autocolorcorrectiontool.anchor");
