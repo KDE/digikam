@@ -48,7 +48,7 @@ class RainDropTool : public Digikam::EditorToolThreaded
 
 public:
 
-    RainDropTool(QWidget *parent);
+    RainDropTool(QObject *parent);
     ~RainDropTool();
 
 private slots:

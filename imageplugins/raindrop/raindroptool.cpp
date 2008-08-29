@@ -60,7 +60,7 @@ using namespace Digikam;
 namespace DigikamRainDropImagesPlugin
 {
 
-RainDropTool::RainDropTool(QWidget* parent)
+RainDropTool::RainDropTool(QObject* parent)
             : EditorToolThreaded(parent)
 {
     setName("raindrops");
