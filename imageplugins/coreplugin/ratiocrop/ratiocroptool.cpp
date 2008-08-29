@@ -381,8 +381,6 @@ RatioCropTool::RatioCropTool(QWidget* parent)
 
     // Sets current region selection
     slotSelectionChanged(m_imageSelectionWidget->getRegionSelection());
-
-    readSettings();
 }
 
 RatioCropTool::~RatioCropTool()
