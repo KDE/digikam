@@ -79,8 +79,6 @@ SuperImposeTool::SuperImposeTool(QObject* parent)
 {
     QString whatsThis;
 
-    // About data and help button.
-
     setName("superimpose");
     setToolName(i18n("Template Superimpose"));
     setToolIcon(SmallIcon("superimpose"));
