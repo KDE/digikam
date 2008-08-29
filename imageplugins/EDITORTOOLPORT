@@ -4,7 +4,7 @@
 coreplugin
   \---autocorrection        ImageDlgBase        DONE
   \---bcg                   ImageDlgBase        DONE
-  \---bwsepia               ImageDlgBase        A
+  \---bwsepia               ImageDlgBase        DONE
   \---hsl                   ImageDlgBase        A
   \---iccproof              ImageDlgBase
   \---ratiocrop             ImageDlgBase
