@@ -31,6 +31,7 @@
 #include <kactioncollection.h>
 #include <kcursor.h>
 #include <kmessagebox.h>
+#include <kapplication.h>
 
 // Local includes.
 
@@ -51,11 +52,14 @@
 #include "imageplugin_core.h"
 #include "imageplugin_core.moc"
 
+using namespace DigikamImagesPluginCore;
+using namespace Digikam;
+
 K_PLUGIN_FACTORY( CorePluginFactory, registerPlugin<ImagePlugin_Core>(); )
 K_EXPORT_PLUGIN ( CorePluginFactory("digikamimageplugin_core") )
 
 ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
-                : Digikam::ImagePlugin(parent, "ImagePlugin_Core")
+                : ImagePlugin(parent, "ImagePlugin_Core")
 {
     //-------------------------------
     // Fix and Colors menu actions
@@ -114,12 +118,12 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     actionCollection()->addAction("implugcore_convertto8bits", m_convertTo8Bits );
     connect(m_convertTo8Bits, SIGNAL(triggered(bool) ), 
             this, SLOT(slotConvertTo8Bits()));
-    
+
     m_convertTo16Bits = new KAction(KIcon("depth8to16"), i18n("16 bits"), this);
     actionCollection()->addAction("implugcore_convertto16bits", m_convertTo16Bits );
     connect(m_convertTo16Bits, SIGNAL(triggered(bool) ), 
             this, SLOT(slotConvertTo16Bits()));
-    
+
     m_colorManagementAction = new KAction(KIcon("colormanagement"), i18n("Color Management..."), this);
     actionCollection()->addAction("implugcore_colormanagement", m_colorManagementAction );
     connect(m_colorManagementAction, SIGNAL(triggered(bool) ), 
@@ -176,92 +180,92 @@ void ImagePlugin_Core::setEnabledActions(bool enable)
 
 void ImagePlugin_Core::slotInvert()
 {
-    parentWidget()->setCursor( Qt::WaitCursor );
+    kapp->activeWindow()->setCursor( Qt::WaitCursor );
 
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
 
     uchar *data     = iface.getOriginalImage();
     int w           = iface.originalWidth();
     int h           = iface.originalHeight();
     bool sixteenBit = iface.originalSixteenBit();
 
-    Digikam::DImgImageFilters filter;
+    DImgImageFilters filter;
     filter.invertImage(data, w, h, sixteenBit);
     iface.putOriginalImage(i18n("Invert"), data);
     delete [] data;
 
-    parentWidget()->unsetCursor();
+    kapp->activeWindow()->unsetCursor();
 }
 
 void ImagePlugin_Core::slotConvertTo8Bits()
 {
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
 
     if (!iface.originalSixteenBit())
     {
-       KMessageBox::error(parentWidget(), i18n("This image is already using a depth of 8 bits / color / pixel."));
+       KMessageBox::error(kapp->activeWindow(), i18n("This image is already using a depth of 8 bits / color / pixel."));
        return;
     }
     else
     {
-       if (KMessageBox::warningContinueCancel(parentWidget(),
+       if (KMessageBox::warningContinueCancel(kapp->activeWindow(),
                                               i18n("Performing this operation will reduce image color quality. "
                                                    "Do you want to continue?")) == KMessageBox::Cancel)
            return;
     }
 
-    parentWidget()->setCursor( Qt::WaitCursor );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     iface.convertOriginalColorDepth(32);
-    parentWidget()->unsetCursor();
+    kapp->restoreOverrideCursor();
 }
 
 void ImagePlugin_Core::slotConvertTo16Bits()
 {
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
 
     if (iface.originalSixteenBit())
     {
-       KMessageBox::error(parentWidget(), i18n("This image is already using a depth of 16 bits / color / pixel."));
+       KMessageBox::error(kapp->activeWindow(), i18n("This image is already using a depth of 16 bits / color / pixel."));
        return;
     }
 
-    parentWidget()->setCursor( Qt::WaitCursor );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     iface.convertOriginalColorDepth(64);
-    parentWidget()->unsetCursor();
+    kapp->restoreOverrideCursor();
 }
 
 void ImagePlugin_Core::slotBCG()
 {
-    DigikamImagesPluginCore::ImageEffect_BCG dlg(parentWidget());
+    ImageEffect_BCG dlg(kapp->activeWindow());
     dlg.exec();
 }
 
 void ImagePlugin_Core::slotRGB()
 {
-    DigikamImagesPluginCore::ImageEffect_RGB dlg(parentWidget());
+    ImageEffect_RGB dlg(kapp->activeWindow());
     dlg.exec();
 }
 
 void ImagePlugin_Core::slotBlur()
 {
-    DigikamImagesPluginCore::ImageEffect_Blur dlg(parentWidget());
+    ImageEffect_Blur dlg(kapp->activeWindow());
     dlg.exec();
 }
 
 void ImagePlugin_Core::slotAutoCorrection()
 {
-    DigikamImagesPluginCore::ImageEffect_AutoCorrection dlg(parentWidget());
+    ImageEffect_AutoCorrection dlg(kapp->activeWindow());
     dlg.exec();
 }
 
 void ImagePlugin_Core::slotRedEye()
 {
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
 
     if (!iface.selectedWidth() || !iface.selectedHeight())
     {
-        DigikamImagesPluginCore::RedEyePassivePopup* popup = new
-                                 DigikamImagesPluginCore::RedEyePassivePopup(parentWidget());
+        RedEyePassivePopup* popup = new
+                                 RedEyePassivePopup(kapp->activeWindow());
         popup->setView(i18n("Red-Eye Correction Tool"),
                        i18n("You need to select a region including the eyes to use "
                             "the red-eye correction tool"));
@@ -271,36 +275,36 @@ void ImagePlugin_Core::slotRedEye()
         return;
     }
 
-    DigikamImagesPluginCore::ImageEffect_RedEye dlg(parentWidget());
+    ImageEffect_RedEye dlg(kapp->activeWindow());
     dlg.exec();
 }
 
 void ImagePlugin_Core::slotColorManagement()
 {
-    DigikamImagesPluginCore::ImageEffect_ICCProof dlg(parentWidget());
+    ImageEffect_ICCProof dlg(kapp->activeWindow());
     dlg.exec();
 }
 
 void ImagePlugin_Core::slotBW()
 {
-    DigikamImagesPluginCore::ImageEffect_BWSepia dlg(parentWidget());
+    ImageEffect_BWSepia dlg(kapp->activeWindow());
     dlg.exec();
 }
 
 void ImagePlugin_Core::slotHSL()
 {
-    DigikamImagesPluginCore::ImageEffect_HSL dlg(parentWidget());
+    ImageEffect_HSL dlg(kapp->activeWindow());
     dlg.exec();
 }
 
 void ImagePlugin_Core::slotSharpen()
 {
-    DigikamImagesPluginCore::ImageEffect_Sharpen dlg(parentWidget());
+    ImageEffect_Sharpen dlg(kapp->activeWindow());
     dlg.exec();
 }
 
 void ImagePlugin_Core::slotRatioCrop()
 {
-    DigikamImagesPluginCore::ImageEffect_RatioCrop dlg(parentWidget());
+    ImageEffect_RatioCrop dlg(kapp->activeWindow());
     dlg.exec();
 }

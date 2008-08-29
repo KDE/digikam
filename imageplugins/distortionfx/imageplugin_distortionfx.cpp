@@ -6,7 +6,7 @@
  * Date        : 2005-02-11
  * Description : a plugin to apply Distortion FX to an image.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Original Distortion algorithms copyrighted 2004-2005 by 
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -16,12 +16,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */ 
 
 // KDE includes.
@@ -32,6 +32,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kcursor.h>
+#include <kapplication.h>
 
 // Local includes.
 
@@ -51,9 +52,9 @@ ImagePlugin_DistortionFX::ImagePlugin_DistortionFX(QObject *parent, const QVaria
 
     connect(m_distortionfxAction, SIGNAL(triggered(bool) ), 
             this, SLOT(slotDistortionFX()));
-                
-    setXMLFile( "digikamimageplugin_distortionfx_ui.rc" );    
-        
+
+    setXMLFile( "digikamimageplugin_distortionfx_ui.rc" );
+
     DDebug() << "ImagePlugin_DistortionFX plugin loaded" << endl;
 }
 
@@ -68,6 +69,6 @@ void ImagePlugin_DistortionFX::setEnabledActions(bool enable)
 
 void ImagePlugin_DistortionFX::slotDistortionFX()
 {
-    DigikamDistortionFXImagesPlugin::ImageEffect_DistortionFX dlg(parentWidget());
+    DigikamDistortionFXImagesPlugin::ImageEffect_DistortionFX dlg(kapp->activeWindow());
     dlg.exec();
 }
