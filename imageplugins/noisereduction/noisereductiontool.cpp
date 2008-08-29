@@ -87,11 +87,11 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
                                             EditorToolSettings::Try,
                                             EditorToolSettings::PanIcon);
 
-    QTabWidget *mainTab = new QTabWidget(m_gboxSettings->plainPage());
+    QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage(), 1, 1);
 
-    QWidget* firstPage = new QWidget( mainTab );
-    QGridLayout* grid  = new QGridLayout(firstPage, 6, 1);
-    mainTab->addTab( firstPage, i18n("Details") );
+    QTabWidget *mainTab = new QTabWidget(m_gboxSettings->plainPage());
+    QWidget* firstPage  = new QWidget( mainTab );
+    QGridLayout* grid1  = new QGridLayout(firstPage, 6, 1);
 
     QLabel *label1 = new QLabel(i18n("Radius:"), firstPage);
 
@@ -178,28 +178,29 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
                                         "Use this to increase edge noise erosion and spike noise erosion "
                                         "(noise is removed by erosion)."));
 
-    grid->addMultiCellWidget(label1,           0, 0, 0, 0);
-    grid->addMultiCellWidget(m_radiusInput,    0, 0, 1, 1);
-    grid->addMultiCellWidget(label3,           1, 1, 0, 0);
-    grid->addMultiCellWidget(m_thresholdInput, 1, 1, 1, 1);
-    grid->addMultiCellWidget(label4,           2, 2, 0, 0);
-    grid->addMultiCellWidget(m_textureInput,   2, 2, 1, 1);
-    grid->addMultiCellWidget(label7,           3, 3, 0, 0);
-    grid->addMultiCellWidget(m_sharpnessInput, 3, 3, 1, 1);
-    grid->addMultiCellWidget(label5,           4, 4, 0, 0);
-    grid->addMultiCellWidget(m_lookaheadInput, 4, 4, 1, 1);
-    grid->addMultiCellWidget(label10,          5, 5, 0, 0);
-    grid->addMultiCellWidget(m_phaseInput,     5, 5, 1, 1);
-    grid->setMargin(m_gboxSettings->spacingHint());
-    grid->setSpacing(m_gboxSettings->spacingHint());
-    grid->setColStretch(1, 10);
-    grid->setRowStretch(6, 10);
+    grid1->addMultiCellWidget(label1,           0, 0, 0, 0);
+    grid1->addMultiCellWidget(m_radiusInput,    0, 0, 1, 1);
+    grid1->addMultiCellWidget(label3,           1, 1, 0, 0);
+    grid1->addMultiCellWidget(m_thresholdInput, 1, 1, 1, 1);
+    grid1->addMultiCellWidget(label4,           2, 2, 0, 0);
+    grid1->addMultiCellWidget(m_textureInput,   2, 2, 1, 1);
+    grid1->addMultiCellWidget(label7,           3, 3, 0, 0);
+    grid1->addMultiCellWidget(m_sharpnessInput, 3, 3, 1, 1);
+    grid1->addMultiCellWidget(label5,           4, 4, 0, 0);
+    grid1->addMultiCellWidget(m_lookaheadInput, 4, 4, 1, 1);
+    grid1->addMultiCellWidget(label10,          5, 5, 0, 0);
+    grid1->addMultiCellWidget(m_phaseInput,     5, 5, 1, 1);
+    grid1->setMargin(m_gboxSettings->spacingHint());
+    grid1->setSpacing(m_gboxSettings->spacingHint());
+    grid1->setColStretch(1, 10);
+    grid1->setRowStretch(6, 10);
+
+    mainTab->addTab( firstPage, i18n("Details") );
 
     // -------------------------------------------------------------
 
     QWidget* secondPage = new QWidget( mainTab );
-    QGridLayout* grid2  = new QGridLayout( secondPage, 4, 1);
-    mainTab->addTab( secondPage, i18n("Advanced") );
+    QGridLayout* grid12  = new QGridLayout( secondPage, 4, 1);
 
     QLabel *label2 = new QLabel(i18n("Luminance:"), secondPage);
 
@@ -254,18 +255,25 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
                                           "can suppress spike noise when increased, and this is the preferred method to "
                                           "remove it."));
 
-    grid2->addMultiCellWidget(label2,              0, 0, 0, 0);
-    grid2->addMultiCellWidget(m_lumToleranceInput, 0, 0, 1, 1);
-    grid2->addMultiCellWidget(label6,              1, 1, 0, 0);
-    grid2->addMultiCellWidget(m_csmoothInput,      1, 1, 1, 1);
-    grid2->addMultiCellWidget(label8,              2, 2, 0, 0);
-    grid2->addMultiCellWidget(m_gammaInput,        2, 2, 1, 1);
-    grid2->addMultiCellWidget(label9,              3, 3, 0, 0);
-    grid2->addMultiCellWidget(m_dampingInput,      3, 3, 1, 1);
-    grid2->setMargin(m_gboxSettings->spacingHint());
-    grid2->setSpacing(m_gboxSettings->spacingHint());
-    grid2->setColStretch(1, 10);
-    grid2->setRowStretch(4, 10);
+    grid12->addMultiCellWidget(label2,              0, 0, 0, 0);
+    grid12->addMultiCellWidget(m_lumToleranceInput, 0, 0, 1, 1);
+    grid12->addMultiCellWidget(label6,              1, 1, 0, 0);
+    grid12->addMultiCellWidget(m_csmoothInput,      1, 1, 1, 1);
+    grid12->addMultiCellWidget(label8,              2, 2, 0, 0);
+    grid12->addMultiCellWidget(m_gammaInput,        2, 2, 1, 1);
+    grid12->addMultiCellWidget(label9,              3, 3, 0, 0);
+    grid12->addMultiCellWidget(m_dampingInput,      3, 3, 1, 1);
+    grid12->setMargin(m_gboxSettings->spacingHint());
+    grid12->setSpacing(m_gboxSettings->spacingHint());
+    grid12->setColStretch(1, 10);
+    grid12->setRowStretch(4, 10);
+
+    mainTab->addTab( secondPage, i18n("Advanced") );
+
+    grid->addMultiCellWidget(mainTab, 0, 0, 0, 1);
+    grid->setRowStretch(1, 10);
+    grid->setMargin(m_gboxSettings->spacingHint());
+    grid->setSpacing(m_gboxSettings->spacingHint());
 
     setToolSettings(m_gboxSettings);
 
