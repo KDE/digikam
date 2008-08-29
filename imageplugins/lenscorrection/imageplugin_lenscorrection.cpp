@@ -28,6 +28,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kcursor.h>
+#include <kapplication.h>
 
 // Local includes.
 
@@ -92,19 +93,19 @@ void ImagePlugin_LensCorrection::setEnabledActions(bool enable)
 void ImagePlugin_LensCorrection::slotAutoCorrection()
 {
 #ifdef HAVE_LENSFUN
-    DigikamAutoCorrectionImagesPlugin::ImageEffect_AutoCorrection dlg(parentWidget());
+    DigikamAutoCorrectionImagesPlugin::ImageEffect_AutoCorrection dlg(kapp->activeWindow());
     dlg.exec();
 #endif // HAVE_LENSFUN
 }
 
 void ImagePlugin_LensCorrection::slotLensDistortion()
 {
-    DigikamLensDistortionImagesPlugin::ImageEffect_LensDistortion dlg(parentWidget());
+    DigikamLensDistortionImagesPlugin::ImageEffect_LensDistortion dlg(kapp->activeWindow());
     dlg.exec();
 }
 
 void ImagePlugin_LensCorrection::slotAntiVignetting()
 {
-    DigikamAntiVignettingImagesPlugin::ImageEffect_AntiVignetting dlg(parentWidget());
+    DigikamAntiVignettingImagesPlugin::ImageEffect_AntiVignetting dlg(kapp->activeWindow());
     dlg.exec();
 }
