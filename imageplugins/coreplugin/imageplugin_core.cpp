@@ -44,7 +44,7 @@
 #include "bcgtool.h"
 #include "bwsepiatool.h"
 #include "redeyetool.h"
-#include "imageeffect_blur.h"
+#include "blurtool.h"
 #include "imageeffect_sharpen.h"
 #include "ratiocroptool.h"
 #include "autocorrectiontool.h"
@@ -162,8 +162,8 @@ void ImagePlugin_Core::setEnabledActions(bool enable)
 
 void ImagePlugin_Core::slotBlur()
 {
-    ImageEffect_Blur dlg(parentWidget());
-    dlg.exec();
+    BlurTool *tool = new BlurTool(this);
+    loadTool(tool);
 }
 
 void ImagePlugin_Core::slotSharpen()

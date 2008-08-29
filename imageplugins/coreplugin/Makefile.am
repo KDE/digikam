@@ -25,10 +25,10 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 digikamimageplugin_core_la_SOURCES = imageplugin_core.cpp bwsepiatool.cpp \
 	                                 autocorrectiontool.cpp \
 	                                 rgbtool.cpp \
-	                                 redeyetool.cpp imageeffect_blur.cpp \
+	                                 redeyetool.cpp blurtool.cpp \
 	                                 iccprooftool.cpp bcgtool.cpp 
 
-noinst_HEADERS = autocorrectiontool.h imageeffect_blur.h \
+noinst_HEADERS = autocorrectiontool.h blurtool.h \
                  rgbtool.h bcgtool.h \
                  bwsepiatool.h iccprooftool.h redeyetool.h 
 
