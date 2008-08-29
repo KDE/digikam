@@ -785,7 +785,6 @@ void EditorWindow::loadImagePlugins()
         if (plugin)
         {
             guiFactory()->addClient(plugin);
-            plugin->setParentWidget(this);
             plugin->setEnabledSelectionActions(false);
         }
         else
@@ -802,7 +801,6 @@ void EditorWindow::unLoadImagePlugins()
         if (plugin)
         {
             guiFactory()->removeClient(plugin);
-            plugin->setParentWidget(0);
             plugin->setEnabledSelectionActions(false);
         }
     }
