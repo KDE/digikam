@@ -171,6 +171,9 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
     d->btnBox1->setSpacing(spacingHint());
     d->btnBox1->setMargin(0);
 
+    if (!(buttonMask & Default) && !(buttonMask & Ok) && !(buttonMask & Cancel))
+        d->btnBox1->hide();
+
     // ---------------------------------------------------------------
 
     d->loadBtn = new KPushButton(d->btnBox2);
@@ -198,6 +201,9 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
     d->btnBox2->setStretchFactor(space2, 10);
     d->btnBox2->setSpacing(spacingHint());
     d->btnBox2->setMargin(0);
+
+    if (!(buttonMask & Load) && !(buttonMask & SaveAs) && !(buttonMask & Try))
+        d->btnBox2->hide();
 
     // ---------------------------------------------------------------
 
