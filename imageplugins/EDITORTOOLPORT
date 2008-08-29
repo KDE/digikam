@@ -29,8 +29,8 @@ raindrop                    ImageGuideDlg       DONE
 sheartool                   ImageGuideDlg       DONE
 
 coreplugin
-  \---sharpnesseditor       CtrlPanelDlg
-  \---blur                  CtrlPanelDlg        G
+  \---sharpnesseditor       CtrlPanelDlg        G
+  \---blur                  CtrlPanelDlg        DONE
 charcoal                    CtrlPanelDlg
 blurfx                      CtrlPanelDlg
 emboss                      CtrlPanelDlg
