@@ -5,20 +5,20 @@
  *
  * Date        : 2005-03-10
  * Description : a plugin to apply texture over an image
- * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * 
+ *
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // KDE includes.
@@ -28,6 +28,7 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
+#include <kapplication.h>
 
 // Local includes.
 
@@ -45,9 +46,9 @@ ImagePlugin_Texture::ImagePlugin_Texture(QObject *parent, const char*, const QSt
     m_textureAction = new KAction(i18n("Apply Texture..."), "texture", 0, 
                           this, SLOT(slotTexture()),
                           actionCollection(), "imageplugin_texture");
-                
-    setXMLFile( "digikamimageplugin_texture_ui.rc" );                                
-    
+
+    setXMLFile( "digikamimageplugin_texture_ui.rc" );
+
     DDebug() << "ImagePlugin_Texture plugin loaded" << endl;
 }
 
@@ -62,7 +63,6 @@ void ImagePlugin_Texture::setEnabledActions(bool enable)
 
 void ImagePlugin_Texture::slotTexture()
 {
-    DigikamTextureImagesPlugin::ImageEffect_Texture dlg(parentWidget());
+    DigikamTextureImagesPlugin::ImageEffect_Texture dlg(kapp->activeWindow());
     dlg.exec();
 }
-
