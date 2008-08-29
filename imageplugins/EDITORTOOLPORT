@@ -30,7 +30,7 @@ sheartool                   ImageGuideDlg       DONE
 
 coreplugin
   \---sharpnesseditor       CtrlPanelDlg
-  \---blur                  CtrlPanelDlg
+  \---blur                  CtrlPanelDlg        G
 charcoal                    CtrlPanelDlg
 blurfx                      CtrlPanelDlg
 emboss                      CtrlPanelDlg
