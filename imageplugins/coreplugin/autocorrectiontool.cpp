@@ -328,6 +328,8 @@ void AutoCorrectionTool::slotResetSettings()
     m_correctionTools->blockSignals(true);
     m_correctionTools->setCurrentRow(AutoLevelsCorrection);
     m_correctionTools->blockSignals(false);
+
+    slotEffect();
 }
 
 void AutoCorrectionTool::slotEffect()
