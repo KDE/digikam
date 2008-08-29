@@ -6,20 +6,20 @@
  * Date        : 2004-11-28
  * Description : a digiKam image editor plugin to process image
  *               free rotation.
- * 
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * 
+ *
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // KDE includes.
@@ -30,6 +30,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kcursor.h>
+#include <kapplication.h>
 
 // Local includes.
 
@@ -50,9 +51,9 @@ ImagePlugin_FreeRotation::ImagePlugin_FreeRotation(QObject *parent, const QVaria
             this, SLOT(slotFreeRotation()));
 
     actionCollection()->addAction("imageplugin_freerotation", m_freerotationAction );
-    
-    setXMLFile("digikamimageplugin_freerotation_ui.rc");         
-                                    
+
+    setXMLFile("digikamimageplugin_freerotation_ui.rc");
+
     DDebug() << "ImagePlugin_FreeRotation plugin loaded" << endl;
 }
 
@@ -67,6 +68,6 @@ void ImagePlugin_FreeRotation::setEnabledActions(bool enable)
 
 void ImagePlugin_FreeRotation::slotFreeRotation()
 {
-    DigikamFreeRotationImagesPlugin::ImageEffect_FreeRotation dlg(parentWidget());
+    DigikamFreeRotationImagesPlugin::ImageEffect_FreeRotation dlg(kapp->activeWindow());
     dlg.exec();
 }
