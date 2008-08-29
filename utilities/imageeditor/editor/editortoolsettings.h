@@ -36,6 +36,7 @@ class KPushButton;
 namespace Digikam
 {
 
+class ImagePanIconWidget;
 class EditorToolSettingsPriv;
 
 class DIGIKAM_EXPORT EditorToolSettings : public QWidget
@@ -82,6 +83,7 @@ public:
     int guideSize() const;
     void setGuideSize(int size);
 
+    ImagePanIconWidget* panIconView() const;
     KPushButton* button(int buttonCode) const;
     void enableButton(int buttonCode, bool state);
 

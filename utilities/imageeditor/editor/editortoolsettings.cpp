@@ -257,6 +257,11 @@ QWidget *EditorToolSettings::plainPage() const
     return d->plainPage;
 }
 
+ImagePanIconWidget* EditorToolSettings::panIconView() const
+{
+    return d->panIconView;
+}
+
 KPushButton* EditorToolSettings::button(int buttonCode) const
 {
     if (buttonCode & Default)
