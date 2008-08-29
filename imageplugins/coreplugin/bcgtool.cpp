@@ -84,7 +84,7 @@ BCGTool::BCGTool(QObject* parent)
 
     m_destinationPreviewData = 0;
 
-    m_previewWidget = new ImageWidget("bcgadjust Tool Dialog", 0,
+    m_previewWidget = new ImageWidget("bcgadjust Tool", 0,
                                                i18n("<p>Here you can see the image "
                                                "brightness-contrast-gamma adjustments preview. "
                                                "You can pick color on image "
@@ -265,7 +265,7 @@ void BCGTool::slotColorSelectedFromTarget(const DColor &color)
 void BCGTool::readSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("bcgadjust Tool Dialog");
+    config->setGroup("bcgadjust Tool");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", HistogramWidget::LogScaleHistogram));
     m_bInput->setValue(config->readNumEntry("BrightnessAjustment", m_bInput->defaultValue()));
@@ -279,7 +279,7 @@ void BCGTool::readSettings()
 void BCGTool::writeSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("bcgadjust Tool Dialog");
+    config->setGroup("bcgadjust Tool");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
     config->writeEntry("BrightnessAjustment", m_bInput->value());

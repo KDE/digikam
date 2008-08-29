@@ -82,7 +82,7 @@ RGBTool::RGBTool(QObject* parent)
 
     m_destinationPreviewData = 0;
 
-    m_previewWidget = new ImageWidget("colorbalance Tool Dialog", 0,
+    m_previewWidget = new ImageWidget("colorbalance Tool", 0,
                                       i18n("<p>Here you can see the image "
                                            "color-balance adjustments preview. "
                                            "You can pick color on image "
@@ -309,7 +309,7 @@ void RGBTool::slotColorSelectedFromTarget(const DColor &color)
 void RGBTool::readSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("colorbalance Tool Dialog");
+    config->setGroup("colorbalance Tool");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", HistogramWidget::LogScaleHistogram));
     int r = config->readNumEntry("RedAjustment", m_rInput->defaultValue());
@@ -324,7 +324,7 @@ void RGBTool::readSettings()
 void RGBTool::writeSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("colorbalance Tool Dialog");
+    config->setGroup("colorbalance Tool");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
     config->writeEntry("RedAjustment", m_rSlider->value());

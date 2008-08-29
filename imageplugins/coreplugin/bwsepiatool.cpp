@@ -174,7 +174,7 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new ImageWidget("convertbw Tool Dialog", 0,
+    m_previewWidget = new ImageWidget("convertbw Tool", 0,
                                       i18n("<p>Here you can see the black and white conversion tool preview. "
                                            "You can pick color on image "
                                            "to see the color level corresponding on histogram."));
@@ -630,7 +630,7 @@ void BWSepiaTool::slotColorSelectedFromTarget(const DColor &color)
 void BWSepiaTool::readSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("convertbw Tool Dialog");
+    config->setGroup("convertbw Tool");
 
     m_tab->setCurrentPage(config->readNumEntry("Settings Tab", BWFiltersTab));
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
@@ -673,7 +673,7 @@ void BWSepiaTool::readSettings()
 void BWSepiaTool::writeSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("convertbw Tool Dialog");
+    config->setGroup("convertbw Tool");
     config->writeEntry("Settings Tab", m_tab->currentPageIndex());
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());

@@ -397,7 +397,7 @@ void RatioCropTool::readSettings()
 {
     QColor defaultGuideColor(250, 250, 255);
     KConfig *config = kapp->config();
-    config->setGroup("aspectratiocrop Tool Dialog");
+    config->setGroup("aspectratiocrop Tool");
 
     // No guide lines per default.
     m_guideLinesCB->setCurrentItem(config->readNumEntry("Guide Lines Type", ImageSelectionWidget::GuideNone));
@@ -461,7 +461,7 @@ void RatioCropTool::readSettings()
 void RatioCropTool::writeSettings()
 {
     KConfig *config = kapp->config();
-    config->setGroup("aspectratiocrop Tool Dialog");
+    config->setGroup("aspectratiocrop Tool");
 
     if (m_originalIsLandscape)
     {

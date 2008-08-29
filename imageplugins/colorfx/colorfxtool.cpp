@@ -87,7 +87,7 @@ ColorFXTool::ColorFXTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new ImageWidget("coloreffect Tool Dialog", 0,
+    m_previewWidget = new ImageWidget("coloreffect Tool", 0,
                           i18n("<p>This is the color effect preview"));
 
     setToolView(m_previewWidget);
@@ -240,7 +240,7 @@ ColorFXTool::~ColorFXTool()
 void ColorFXTool::readSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("coloreffect Tool Dialog");
+    config->setGroup("coloreffect Tool");
     m_effectType->setCurrentItem(config->readNumEntry("EffectType", m_effectType->defaultItem()));
     m_levelInput->setValue(config->readNumEntry("LevelAjustment", m_levelInput->defaultValue()));
     m_iterationInput->setValue(config->readNumEntry("IterationAjustment", m_iterationInput->defaultValue()));
@@ -254,7 +254,7 @@ void ColorFXTool::readSettings()
 void ColorFXTool::writeSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("coloreffect Tool Dialog");
+    config->setGroup("coloreffect Tool");
     config->writeEntry("EffectType", m_effectType->currentItem());
     config->writeEntry("LevelAjustment", m_levelInput->value());
     config->writeEntry("IterationAjustment", m_iterationInput->value());

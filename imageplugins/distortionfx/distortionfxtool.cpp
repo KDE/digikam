@@ -228,7 +228,7 @@ void DistortionFXTool::renderingFinished()
 void DistortionFXTool::readSettings(void)
 {
     KConfig *config = kapp->config();
-    config->setGroup("distortionfx Tool Dialog");
+    config->setGroup("distortionfx Tool");
 
     m_effectType->blockSignals(true);
     m_iterationInput->blockSignals(true);
@@ -251,7 +251,7 @@ void DistortionFXTool::readSettings(void)
 void DistortionFXTool::writeSettings(void)
 {
     KConfig *config = kapp->config();
-    config->setGroup("distortionfx Tool Dialog");
+    config->setGroup("distortionfx Tool");
     config->writeEntry("EffectType", m_effectType->currentItem());
     config->writeEntry("IterationAjustment", m_iterationInput->value());
     config->writeEntry("LevelAjustment", m_levelInput->value());

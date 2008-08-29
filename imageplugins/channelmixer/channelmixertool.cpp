@@ -517,7 +517,7 @@ void ChannelMixerTool::slotScaleChanged(int scale)
 void ChannelMixerTool::readSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("channelmixer Tool Dialog");
+    config->setGroup("channelmixer Tool");
 
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", HistogramWidget::LogScaleHistogram));
@@ -550,7 +550,7 @@ void ChannelMixerTool::readSettings()
 void ChannelMixerTool::writeSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("channelmixer Tool Dialog");
+    config->setGroup("channelmixer Tool");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
 

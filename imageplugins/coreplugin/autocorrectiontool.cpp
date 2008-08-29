@@ -82,7 +82,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new ImageWidget("autocorrection Tool Dialog", 0,
+    m_previewWidget = new ImageWidget("autocorrection Tool", 0,
                                       i18n("<p>Here you can see the auto-color correction tool "
                                            "preview. You can pick color on image "
                                            "to see the color level corresponding on histogram."));
@@ -292,7 +292,7 @@ void AutoCorrectionTool::slotColorSelectedFromTarget(const DColor& color)
 void AutoCorrectionTool::readSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("autocorrection Tool Dialog");
+    config->setGroup("autocorrection Tool");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", HistogramWidget::LogScaleHistogram));
     m_correctionTools->setCurrentItem(config->readNumEntry("Auto Correction Filter", AutoLevelsCorrection));
@@ -304,7 +304,7 @@ void AutoCorrectionTool::readSettings()
 void AutoCorrectionTool::writeSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("autocorrection Tool Dialog");
+    config->setGroup("autocorrection Tool");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
     config->writeEntry("Auto Correction Filter", m_correctionTools->currentItem());

@@ -112,7 +112,7 @@ ICCProofTool::ICCProofTool(QObject* parent)
     m_originalImage = iface.getOriginalImg();
     m_embeddedICC   = iface.getEmbeddedICCFromOriginalImage();
 
-    m_previewWidget = new ImageWidget("colormanagement Tool Dialog",0,
+    m_previewWidget = new ImageWidget("colormanagement Tool",0,
                                       i18n("<p>Here you can see the image preview after "
                                            "applying a color profile</p>"));
     setToolView(m_previewWidget);
@@ -565,7 +565,7 @@ void ICCProofTool::readSettings()
     }
 
     // Plugin settings.
-    config->setGroup("colormanagement Tool Dialog");
+    config->setGroup("colormanagement Tool");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0)); // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", HistogramWidget::LogScaleHistogram));
     m_toolBoxWidgets->setCurrentIndex(config->readNumEntry("Settings Tab", GENERALPAGE));
@@ -613,7 +613,7 @@ void ICCProofTool::readSettings()
 void ICCProofTool::writeSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("colormanagement Tool Dialog");
+    config->setGroup("colormanagement Tool");
     config->writeEntry("Settings Tab", m_toolBoxWidgets->currentIndex());
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());

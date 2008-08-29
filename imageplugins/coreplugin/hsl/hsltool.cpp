@@ -88,7 +88,7 @@ HSLTool::HSLTool(QObject* parent)
     ImageIface iface(0, 0);
     m_originalImage = iface.getOriginalImg();
 
-    m_previewWidget = new ImageWidget("hsladjust Tool Dialog", 0,
+    m_previewWidget = new ImageWidget("hsladjust Tool", 0,
                                       i18n("<p>Here you can see the image "
                                            "Hue/Saturation/Lightness adjustments preview. "
                                            "You can pick color on image "
@@ -331,7 +331,7 @@ void HSLTool::slotSChanged(double s)
 void HSLTool::readSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("hsladjust Tool Dialog");
+    config->setGroup("hsladjust Tool");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", HistogramWidget::LogScaleHistogram));
     m_hInput->setValue(config->readDoubleNumEntry("HueAjustment", m_hInput->defaultValue()));
@@ -349,7 +349,7 @@ void HSLTool::readSettings()
 void HSLTool::writeSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("hsladjust Tool Dialog");
+    config->setGroup("hsladjust Tool");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
     config->writeEntry("HueAjustment", m_hInput->value());

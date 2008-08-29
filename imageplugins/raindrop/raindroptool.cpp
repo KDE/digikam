@@ -146,7 +146,7 @@ void RainDropTool::renderingFinished()
 void RainDropTool::readSettings(void)
 {
     KConfig *config = kapp->config();
-    config->setGroup("raindrops Tool Dialog");
+    config->setGroup("raindrops Tool");
 
     m_dropInput->blockSignals(true);
     m_amountInput->blockSignals(true);
@@ -166,7 +166,7 @@ void RainDropTool::readSettings(void)
 void RainDropTool::writeSettings(void)
 {
     KConfig *config = kapp->config();
-    config->setGroup("raindrops Tool Dialog");
+    config->setGroup("raindrops Tool");
     config->writeEntry("DropAdjustment",    m_dropInput->value());
     config->writeEntry("AmountAdjustment",  m_amountInput->value());
     config->writeEntry("CoeffAdjustment",   m_coeffInput->value());

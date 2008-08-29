@@ -195,7 +195,7 @@ void PerspectiveTool::readSettings()
 {
     QColor defaultGuideColor(Qt::red);
     KConfig *config = kapp->config();
-    config->setGroup("perspective Tool Dialog");
+    config->setGroup("perspective Tool");
     m_drawWhileMovingCheckBox->setChecked(config->readBoolEntry("Draw While Moving", true));
     m_drawGridCheckBox->setChecked(config->readBoolEntry("Draw Grid", false));
     m_guideColorBt->setColor(config->readColorEntry("Guide Color", &defaultGuideColor));
@@ -209,7 +209,7 @@ void PerspectiveTool::readSettings()
 void PerspectiveTool::writeSettings()
 {
     KConfig *config = kapp->config();
-    config->setGroup("perspective Tool Dialog");
+    config->setGroup("perspective Tool");
     config->writeEntry("Draw While Moving", m_drawWhileMovingCheckBox->isChecked());
     config->writeEntry("Draw Grid", m_drawGridCheckBox->isChecked());
     config->writeEntry("Guide Color", m_guideColorBt->color());

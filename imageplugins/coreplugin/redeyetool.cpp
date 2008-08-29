@@ -86,7 +86,7 @@ RedEyeTool::RedEyeTool(QObject* parent)
 
     m_destinationPreviewData = 0;
 
-    m_previewWidget = new ImageWidget("redeye Tool Dialog", 0,
+    m_previewWidget = new ImageWidget("redeye Tool", 0,
                                       i18n("<p>Here you can see the image selection preview with "
                                            "red eye reduction applied."),
                                            true, ImageGuideWidget::PickColorMode, true, true);
@@ -294,7 +294,7 @@ void RedEyeTool::slotColorSelectedFromTarget(const DColor& color)
 void RedEyeTool::readSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("redeye Tool Dialog");
+    config->setGroup("redeye Tool");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0)); // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", HistogramWidget::LogScaleHistogram));
     m_redThreshold->setValue(config->readNumEntry("RedThreshold", m_redThreshold->defaultValue()));
@@ -313,7 +313,7 @@ void RedEyeTool::readSettings()
 void RedEyeTool::writeSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("redeye Tool Dialog");
+    config->setGroup("redeye Tool");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
     config->writeEntry("RedThreshold", m_redThreshold->value());
