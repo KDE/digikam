@@ -18,7 +18,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes) 
 
 digikamimageplugin_infrared_la_SOURCES = imageplugin_infrared.cpp \
-	                                     imageeffect_infrared.cpp infrared.cpp 
+	                                     infraredtool.cpp infrared.cpp 
 
 digikamimageplugin_infrared_la_LIBADD = $(LIB_KPARTS) \
 	                                    $(top_builddir)/digikam/digikam/libdigikam.la

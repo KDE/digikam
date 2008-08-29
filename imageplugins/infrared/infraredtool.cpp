@@ -49,51 +49,43 @@
 #include "ddebug.h"
 #include "dimg.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imagepanelwidget.h"
+#include "editortoolsettings.h"
 #include "infrared.h"
-#include "imageeffect_infrared.h"
-#include "imageeffect_infrared.moc"
+#include "infraredtool.h"
+#include "infraredtool.moc"
+
+using namespace Digikam;
 
 namespace DigikamInfraredImagesPlugin
 {
 
-ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
-    : Digikam::CtrlPanelDlg(parent, i18n("Simulate Infrared Film to Photograph"),
-                            "infrared", false, false, true,
-                            Digikam::ImagePannelWidget::SeparateViewAll)
+InfraredTool::InfraredTool(QObject* parent)
+            : EditorToolThreaded(parent)
 {
     QString whatsThis;
 
-    KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Infrared Film"),
-                                       digikam_version,
-                                       I18N_NOOP("A digiKam image plugin to simulate infrared film."),
-                                       KAboutData::License_GPL,
-                                       "(c) 2005, Gilles Caulier\n"
-                                       "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg",
-                                       0,
-                                       Digikam::webProjectUrl());
-
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at gmail dot com");
-
-    about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
-                     "marcel dot wiesweg at gmx dot de");
-
-    setAboutData(about);
+    setName("infrared");
+    setToolName(i18n("Infrared"));
+    setToolIcon(SmallIcon("infrared"));
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 1, 0, spacingHint());
-    QLabel *label1            = new QLabel(i18n("Sensitivity (ISO):"), gboxSettings);
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel|
+                                            EditorToolSettings::Try,
+                                            EditorToolSettings::PanIcon);
 
-    m_sensibilitySlider = new QSlider(1, 25, 1, 1, Qt::Horizontal, gboxSettings);
+    QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage(), 3, 1);
+    QLabel *label1    = new QLabel(i18n("Sensitivity (ISO):"), m_gboxSettings->plainPage());
+
+    m_sensibilitySlider = new QSlider(1, 25, 1, 1, Qt::Horizontal, m_gboxSettings->plainPage());
     m_sensibilitySlider->setTracking ( false );
     m_sensibilitySlider->setTickInterval(1);
     m_sensibilitySlider->setTickmarks(QSlider::Below);
 
-    m_sensibilityLCDValue = new QLCDNumber (4, gboxSettings);
+    m_sensibilityLCDValue = new QLCDNumber (4, m_gboxSettings->plainPage());
     m_sensibilityLCDValue->setSegmentStyle ( QLCDNumber::Flat );
     m_sensibilityLCDValue->display( QString::number(200) );
     whatsThis = i18n("<p>Set here the ISO-sensitivity of the simulated infrared film. "
@@ -107,19 +99,28 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
     QWhatsThis::add( m_sensibilityLCDValue, whatsThis);
     QWhatsThis::add( m_sensibilitySlider, whatsThis);
 
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
-    gridSettings->addMultiCellWidget(m_sensibilitySlider, 1, 1, 0, 0);
-    gridSettings->addMultiCellWidget(m_sensibilityLCDValue, 1, 1, 1, 1);
-
     // -------------------------------------------------------------
 
-    m_addFilmGrain = new QCheckBox( i18n("Add film grain"), gboxSettings);
+    m_addFilmGrain = new QCheckBox( i18n("Add film grain"), m_gboxSettings->plainPage());
     m_addFilmGrain->setChecked( true );
     QWhatsThis::add( m_addFilmGrain, i18n("<p>This option adds infrared film grain to "
                                           "the image depending on ISO-sensitivity."));
-    gridSettings->addMultiCellWidget(m_addFilmGrain, 2, 2, 0, 1);
 
-    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
+    grid->addMultiCellWidget(label1,                0, 0, 0, 1);
+    grid->addMultiCellWidget(m_sensibilitySlider,   1, 1, 0, 0);
+    grid->addMultiCellWidget(m_sensibilityLCDValue, 1, 1, 1, 1);
+    grid->addMultiCellWidget(m_addFilmGrain,        2, 2, 0, 1);
+    grid->setRowStretch(3, 10);
+    grid->setMargin(m_gboxSettings->spacingHint());
+    grid->setSpacing(m_gboxSettings->spacingHint());
+
+    setToolSettings(m_gboxSettings);
+
+    // -------------------------------------------------------------
+
+    m_previewWidget = new ImagePanelWidget(470, 350, "infrared Tool", m_gboxSettings->panIconView());
+
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
@@ -138,17 +139,17 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
              this, SLOT(slotEffect()) );
 }
 
-ImageEffect_Infrared::~ImageEffect_Infrared()
+InfraredTool::~InfraredTool()
 {
 }
 
-void ImageEffect_Infrared::renderingFinished()
+void InfraredTool::renderingFinished()
 {
     m_sensibilitySlider->setEnabled(true);
     m_addFilmGrain->setEnabled(true);
 }
 
-void ImageEffect_Infrared::readUserSettings()
+void InfraredTool::readSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("infrared Tool Dialog");
@@ -161,7 +162,7 @@ void ImageEffect_Infrared::readUserSettings()
     slotSliderMoved(m_sensibilitySlider->value());
 }
 
-void ImageEffect_Infrared::writeUserSettings()
+void InfraredTool::writeSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("infrared Tool Dialog");
@@ -170,7 +171,7 @@ void ImageEffect_Infrared::writeUserSettings()
     config->sync();
 }
 
-void ImageEffect_Infrared::resetValues()
+void InfraredTool::slotResetSettings()
 {
     m_sensibilitySlider->blockSignals(true);
     m_addFilmGrain->blockSignals(true);
@@ -180,25 +181,24 @@ void ImageEffect_Infrared::resetValues()
     m_addFilmGrain->blockSignals(false);
 }
 
-void ImageEffect_Infrared::slotSliderMoved(int v)
+void InfraredTool::slotSliderMoved(int v)
 {
     m_sensibilityLCDValue->display( QString::number(100 + 100 * v) );
 }
 
-void ImageEffect_Infrared::prepareEffect()
+void InfraredTool::prepareEffect()
 {
     m_addFilmGrain->setEnabled(false);
     m_sensibilitySlider->setEnabled(false);
 
-    Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
+    DImg image = m_previewWidget->getOriginalRegionImage();
     int  s = 100 + 100 * m_sensibilitySlider->value();
     bool  g = m_addFilmGrain->isChecked();
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
-                       new Infrared(&image, this, s, g));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new Infrared(&image, this, s, g)));
 }
 
-void ImageEffect_Infrared::prepareFinal()
+void InfraredTool::prepareFinal()
 {
     m_addFilmGrain->setEnabled(false);
     m_sensibilitySlider->setEnabled(false);
@@ -206,22 +206,20 @@ void ImageEffect_Infrared::prepareFinal()
     int  s = 100 + 100 * m_sensibilitySlider->value();
     bool g = m_addFilmGrain->isChecked();
 
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
-                       new Infrared(iface.getOriginalImg(), this, s, g));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new Infrared(iface.getOriginalImg(), this, s, g)));
 }
 
-void ImageEffect_Infrared::putPreviewData(void)
+void InfraredTool::putPreviewData()
 {
-    m_imagePreviewWidget->setPreviewImage(m_threadedFilter->getTargetImage());
+    m_previewWidget->setPreviewImage(filter()->getTargetImage());
 }
 
-void ImageEffect_Infrared::putFinalData(void)
+void InfraredTool::putFinalData()
 {
-    Digikam::ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Infrared"), m_threadedFilter->getTargetImage().bits());
+    ImageIface iface(0, 0);
+    iface.putOriginalImage(i18n("Infrared"), filter()->getTargetImage().bits());
 }
 
 }  // NameSpace DigikamInfraredImagesPlugin
-
