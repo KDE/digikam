@@ -34,6 +34,7 @@
 #include <qspinbox.h>
 #include <qtimer.h>
 #include <qtoolbutton.h>
+#include <qtooltip.h>
 #include <qvgroupbox.h>
 #include <qwhatsthis.h>
 
@@ -107,9 +108,10 @@ RatioCropTool::RatioCropTool(QWidget* parent)
     m_gboxSettings->button(EditorToolSettings::Try)->setGuiItem(KStdGuiItem::Test);
     // now we can set the correct text for the button
     m_gboxSettings->button(EditorToolSettings::Try)->setText(i18n("Max. Aspect"));
-    QWhatsThis::add(m_gboxSettings->button(EditorToolSettings::Try),
-                    i18n("<p>Set selection area to the maximum size according "
-                         "to the current ratio."));
+
+    QToolTip::add(m_gboxSettings->button(EditorToolSettings::Try),
+                  i18n("<p>Set selection area to the maximum size according "
+                       "to the current ratio."));
 
     // -------------------------------------------------------------
 
