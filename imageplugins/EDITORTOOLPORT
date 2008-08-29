@@ -2,14 +2,14 @@
 (G) : Gilles
 
 coreplugin
-  \---autocorrection        ImageDlgBase
-  \---bcg                   ImageDlgBase
-  \---bwsepia               ImageDlgBase
-  \---hsl                   ImageDlgBase
+  \---autocorrection        ImageDlgBase        A
+  \---bcg                   ImageDlgBase        A
+  \---bwsepia               ImageDlgBase        A
+  \---hsl                   ImageDlgBase        A
   \---iccproof              ImageDlgBase
   \---ratiocrop             ImageDlgBase
   \---redeye                ImageDlgBase
-  \---rgbtool               ImageDlgBase
+  \---rgbtool               ImageDlgBase        A
 adjustcurves                ImageDlgBase
 adjustlevels                ImageDlgBase
 channelmixer                ImageDlgBase
