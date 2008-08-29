@@ -73,8 +73,8 @@ using namespace Digikam;
 namespace DigikamImagesPluginCore
 {
 
-RGBTool::RGBTool(QWidget* parent)
-               : EditorTool(parent)
+RGBTool::RGBTool(QObject* parent)
+       : EditorTool(parent)
 {
     setName("colorbalance");
     setToolName(i18n("Color Balance"));

@@ -35,7 +35,6 @@ namespace Digikam
 ImagePlugin::ImagePlugin(QObject *parent, const char* name)
            : QObject(parent, name)
 {
-    m_parentWidget = 0;
 }
 
 ImagePlugin::~ImagePlugin()
@@ -48,16 +47,6 @@ void ImagePlugin::setEnabledSelectionActions(bool)
 
 void ImagePlugin::setEnabledActions(bool)
 {
-}
-
-void ImagePlugin::setParentWidget(QWidget* parent)
-{
-    m_parentWidget = parent;
-}
-
-QWidget* ImagePlugin::parentWidget() const
-{
-    return m_parentWidget;
 }
 
 void ImagePlugin::loadTool(EditorTool* tool)

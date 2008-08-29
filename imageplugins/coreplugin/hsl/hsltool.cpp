@@ -75,7 +75,7 @@ using namespace Digikam;
 namespace DigikamImagesPluginCore
 {
 
-HSLTool::HSLTool(QWidget* parent)
+HSLTool::HSLTool(QObject* parent)
        : EditorTool(parent)
 {
     setName("adjusthsl");

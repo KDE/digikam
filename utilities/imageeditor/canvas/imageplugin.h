@@ -56,19 +56,11 @@ public:
     virtual void setEnabledSelectionActions(bool enable);
     virtual void setEnabledActions(bool enable);
 
-    void     setParentWidget(QWidget* parent);
-
-    QWidget *parentWidget() const;
-
     void loadTool(EditorTool* tool);
 
 private slots:
 
     void slotToolDone();
-
-private:
-
-    QWidget *m_parentWidget;
 };
 
 }  //namespace Digikam

@@ -32,6 +32,7 @@
 #include <kaction.h>
 #include <kcursor.h>
 #include <kmessagebox.h>
+#include <kapplication.h>
 
 // Local includes.
 
@@ -53,13 +54,13 @@
 #include "imageplugin_core.moc"
 
 using namespace DigikamImagesPluginCore;
+using namespace Digikam;
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_core,
                             KGenericFactory<ImagePlugin_Core>("digikam"));
 
-ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
-                                   const QStringList &)
-                : Digikam::ImagePlugin(parent, "ImagePlugin_Core")
+ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*, const QStringList &)
+                : ImagePlugin(parent, "ImagePlugin_Core")
 {
     //-------------------------------
     // Fix and Colors menu actions
@@ -168,67 +169,66 @@ void ImagePlugin_Core::slotBlur()
 
 void ImagePlugin_Core::slotSharpen()
 {
-    ImageEffect_Sharpen dlg(parentWidget());
+    ImageEffect_Sharpen dlg(kapp->activeWindow());
     dlg.exec();
 }
 
 void ImagePlugin_Core::slotBCG()
 {
-    BCGTool *bcg = new BCGTool(parentWidget());
+    BCGTool *bcg = new BCGTool(this);
     loadTool(bcg);
 }
 
 void ImagePlugin_Core::slotRGB()
 {
-    RGBTool *rgb = new RGBTool(parentWidget());
+    RGBTool *rgb = new RGBTool(this);
     loadTool(rgb);
 }
 
 void ImagePlugin_Core::slotHSL()
 {
-    HSLTool *hsl = new HSLTool(parentWidget());
+    HSLTool *hsl = new HSLTool(this);
     loadTool(hsl);
 }
 
 void ImagePlugin_Core::slotAutoCorrection()
 {
-    AutoCorrectionTool *autocorrection = new AutoCorrectionTool(parentWidget());
+    AutoCorrectionTool *autocorrection = new AutoCorrectionTool(this);
     loadTool(autocorrection);
 }
 
 void ImagePlugin_Core::slotInvert()
 {
-    parentWidget()->setCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( KCursor::waitCursor() );
 
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
 
     uchar *data     = iface.getOriginalImage();
     int w           = iface.originalWidth();
     int h           = iface.originalHeight();
     bool sixteenBit = iface.originalSixteenBit();
 
-    Digikam::DImgImageFilters filter;
+    DImgImageFilters filter;
     filter.invertImage(data, w, h, sixteenBit);
     iface.putOriginalImage(i18n("Invert"), data);
     delete [] data;
 
-    parentWidget()->unsetCursor();
+    kapp->restoreOverrideCursor();
 }
 
 void ImagePlugin_Core::slotBW()
 {
-    BWSepiaTool *bwsepia = new BWSepiaTool(parentWidget());
+    BWSepiaTool *bwsepia = new BWSepiaTool(this);
     loadTool(bwsepia);
 }
 
 void ImagePlugin_Core::slotRedEye()
 {
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
 
     if (!iface.selectedWidth() || !iface.selectedHeight())
     {
-        RedEyePassivePopup* popup = new
-                                 RedEyePassivePopup(parentWidget());
+        RedEyePassivePopup* popup = new RedEyePassivePopup(kapp->activeWindow());
         popup->setView(i18n("Red-Eye Correction Tool"),
                        i18n("You need to select a region including the eyes to use "
                             "the red-eye correction tool"));
@@ -238,55 +238,55 @@ void ImagePlugin_Core::slotRedEye()
         return;
     }
 
-    RedEyeTool *redeye = new RedEyeTool(parentWidget());
+    RedEyeTool *redeye = new RedEyeTool(this);
     loadTool(redeye);
 }
 
 void ImagePlugin_Core::slotColorManagement()
 {
-    ICCProofTool *tool = new ICCProofTool(parentWidget());
+    ICCProofTool *tool = new ICCProofTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Core::slotRatioCrop()
 {
-    RatioCropTool *ratiocrop = new RatioCropTool(parentWidget());
+    RatioCropTool *ratiocrop = new RatioCropTool(this);
     loadTool(ratiocrop);
 }
 
 void ImagePlugin_Core::slotConvertTo8Bits()
 {
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
 
     if (!iface.originalSixteenBit())
     {
-       KMessageBox::error(parentWidget(), i18n("This image is already using a depth of 8 bits / color / pixel."));
+       KMessageBox::error(kapp->activeWindow(), i18n("This image is already using a depth of 8 bits / color / pixel."));
        return;
     }
     else
     {
-       if (KMessageBox::warningContinueCancel(parentWidget(),
+       if (KMessageBox::warningContinueCancel(kapp->activeWindow(),
                                               i18n("Performing this operation will reduce image color quality. "
                                                    "Do you want to continue?")) == KMessageBox::Cancel)
            return;
     }
 
-    parentWidget()->setCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     iface.convertOriginalColorDepth(32);
-    parentWidget()->unsetCursor();
+    kapp->restoreOverrideCursor();
 }
 
 void ImagePlugin_Core::slotConvertTo16Bits()
 {
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
 
     if (iface.originalSixteenBit())
     {
-       KMessageBox::error(parentWidget(), i18n("This image is already using a depth of 16 bits / color / pixel."));
+       KMessageBox::error(kapp->activeWindow(), i18n("This image is already using a depth of 16 bits / color / pixel."));
        return;
     }
 
-    parentWidget()->setCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     iface.convertOriginalColorDepth(64);
-    parentWidget()->unsetCursor();
+    kapp->restoreOverrideCursor();
 }

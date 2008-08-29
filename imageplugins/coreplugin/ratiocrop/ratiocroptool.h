@@ -53,7 +53,7 @@ class RatioCropTool : public Digikam::EditorTool
 
 public:
 
-    RatioCropTool(QWidget *parent);
+    RatioCropTool(QObject *parent);
     ~RatioCropTool();
 
 private:

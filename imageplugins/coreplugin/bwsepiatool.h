@@ -67,7 +67,7 @@ class BWSepiaTool : public Digikam::EditorTool
 
 public:
 
-    BWSepiaTool(QWidget *parent);
+    BWSepiaTool(QObject *parent);
     ~BWSepiaTool();
 
     friend class PreviewPixmapFactory;

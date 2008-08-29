@@ -59,7 +59,7 @@ class HSLTool : public Digikam::EditorTool
 
 public:
 
-    HSLTool(QWidget *parent);
+    HSLTool(QObject *parent);
     ~HSLTool();
 
 private slots:

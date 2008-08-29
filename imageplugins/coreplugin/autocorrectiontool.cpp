@@ -72,7 +72,7 @@ using namespace Digikam;
 namespace DigikamImagesPluginCore
 {
 
-AutoCorrectionTool::AutoCorrectionTool(QWidget* parent)
+AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                   : EditorTool(parent)
 {
     setName("autocorrection");

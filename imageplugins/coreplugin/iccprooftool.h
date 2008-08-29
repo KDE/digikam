@@ -67,7 +67,7 @@ class ICCProofTool : public Digikam::EditorTool
 
 public:
 
-    ICCProofTool(QWidget* parent);
+    ICCProofTool(QObject* parent);
     ~ICCProofTool();
 
 protected:

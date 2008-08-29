@@ -71,7 +71,7 @@ using namespace Digikam;
 namespace DigikamImagesPluginCore
 {
 
-RatioCropTool::RatioCropTool(QWidget* parent)
+RatioCropTool::RatioCropTool(QObject* parent)
              : EditorTool(parent)
 {
     setName("aspectratiocrop");

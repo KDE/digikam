@@ -55,7 +55,7 @@ class RGBTool : public Digikam::EditorTool
 
 public:
 
-    RGBTool(QWidget *parent);
+    RGBTool(QObject *parent);
     ~RGBTool();
 
 private:

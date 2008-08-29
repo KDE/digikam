@@ -76,9 +76,8 @@ using namespace Digikam;
 namespace DigikamImagesPluginCore
 {
 
-RedEyeTool::RedEyeTool(QWidget* parent)
+RedEyeTool::RedEyeTool(QObject* parent)
           : EditorTool(parent)
-//          , i18n("Red Eye Reduction"), "redeye", false)
 {
     setName("redeye");
     setToolName(i18n("Red Eye"));

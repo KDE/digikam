@@ -87,7 +87,7 @@ class RedEyeTool : public Digikam::EditorTool
 
 public:
 
-    RedEyeTool(QWidget *parent);
+    RedEyeTool(QObject *parent);
     ~RedEyeTool();
 
 private slots:

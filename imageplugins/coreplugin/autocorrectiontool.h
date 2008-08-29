@@ -55,7 +55,7 @@ class AutoCorrectionTool : public Digikam::EditorTool
 
 public:
 
-    AutoCorrectionTool(QWidget *parent);
+    AutoCorrectionTool(QObject *parent);
     ~AutoCorrectionTool();
 
 protected:

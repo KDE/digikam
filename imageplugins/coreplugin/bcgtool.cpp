@@ -74,7 +74,7 @@ using namespace Digikam;
 namespace DigikamImagesPluginCore
 {
 
-BCGTool::BCGTool(QWidget* parent)
+BCGTool::BCGTool(QObject* parent)
                : EditorTool(parent)
 {
     setName("bcgadjust");

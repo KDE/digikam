@@ -158,7 +158,7 @@ const QPixmap* ListBoxBWPreviewItem::pixmap() const
 
 // -----------------------------------------------------------------------------------
 
-BWSepiaTool::BWSepiaTool(QWidget* parent)
+BWSepiaTool::BWSepiaTool(QObject* parent)
                    : EditorTool(parent)
 {
     setName("convertbw");

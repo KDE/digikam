@@ -96,7 +96,7 @@ using namespace Digikam;
 namespace DigikamImagesPluginCore
 {
 
-ICCProofTool::ICCProofTool(QWidget* parent)
+ICCProofTool::ICCProofTool(QObject* parent)
             : EditorTool(parent)
 {
     setName("colormanagement");

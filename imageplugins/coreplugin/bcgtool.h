@@ -57,7 +57,7 @@ class BCGTool : public Digikam::EditorTool
 
 public:
 
-    BCGTool(QWidget *parent);
+    BCGTool(QObject *parent);
     ~BCGTool();
 
 private slots:
