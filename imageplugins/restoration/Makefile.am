@@ -19,7 +19,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes) 
 
 digikamimageplugin_restoration_la_SOURCES = imageplugin_restoration.cpp \
-	                                        imageeffect_restoration.cpp 
+	                                        restorationtool.cpp 
 
 digikamimageplugin_restoration_la_LIBADD = $(LIB_KPARTS) \
 	                                       $(top_builddir)/digikam/digikam/libdigikam.la 
