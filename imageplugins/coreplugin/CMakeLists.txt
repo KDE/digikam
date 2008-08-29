@@ -47,10 +47,10 @@ ENDFOREACH(_curentfile ${libclapack_SRCS})
 SET(digikamimageplugin_core_PART_SRCS 
     ${libclapack_SRCS} 
     ../../imageplugins/coreplugin/imageplugin_core.cpp 
+    ../../imageplugins/coreplugin/autocorrectiontool.cpp 
     ../../imageplugins/coreplugin/imageeffect_bcg.cpp 
     ../../imageplugins/coreplugin/imageeffect_rgb.cpp 
     ../../imageplugins/coreplugin/imageeffect_blur.cpp 
-    ../../imageplugins/coreplugin/imageeffect_autocorrection.cpp 
     ../../imageplugins/coreplugin/imageeffect_redeye.cpp 
     ../../imageplugins/coreplugin/imageeffect_iccproof.cpp 
     ../../imageplugins/coreplugin/imageeffect_bwsepia.cpp 

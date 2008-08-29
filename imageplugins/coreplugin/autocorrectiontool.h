@@ -13,16 +13,16 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_AUTOCORRECTION_H
-#define IMAGEEFFECT_AUTOCORRECTION_H
+#ifndef AUTOCORRECTIONTOOL_H
+#define AUTOCORRECTIONTOOL_H
 
 // Qt includes.
 
@@ -31,40 +31,37 @@
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 
-class QListWidget;
 class QButtonGroup;
 class QComboBox;
+class QListWidget;
 
 namespace Digikam
 {
-class HistogramWidget;
 class ColorGradientWidget;
-class ImageWidget;
 class DColor;
 class DImg;
+class HistogramWidget;
+class ImageWidget;
 }
 
 namespace DigikamImagesPluginCore
 {
 
-class ImageEffect_AutoCorrection : public Digikam::ImageDlgBase
+class AutoCorrectionTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_AutoCorrection(QWidget *parent);
-    ~ImageEffect_AutoCorrection();
+    AutoCorrectionTool(QObject *parent);
+    ~AutoCorrectionTool();
 
-protected:
-
-    void finalRendering();
-   
 private slots:
 
     void slotEffect();
+    void slotResetSettings();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);
@@ -82,9 +79,9 @@ private:
 
 private:
 
-    void readUserSettings();
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
+    void finalRendering();
 
     void autoCorrection(uchar *data, int w, int h, bool sb, int type);
     QPixmap getThumbnailForEffect(AutoCorrectionType type);
@@ -106,9 +103,9 @@ private:
     };
 
     uchar                        *m_destinationPreviewData;
-    
+
     QComboBox                    *m_channelCB;
-    
+
     QButtonGroup                 *m_scaleBG;
 
     QListWidget                  *m_correctionTools;
@@ -116,12 +113,12 @@ private:
     Digikam::ImageWidget         *m_previewWidget;
 
     Digikam::ColorGradientWidget *m_hGradient;
-    
-    Digikam::HistogramWidget     *m_histogramWidget;    
+
+    Digikam::HistogramWidget     *m_histogramWidget;
 
     Digikam::DImg                 m_thumbnailImage;
 };
 
 }  // NameSpace DigikamImagesPluginCore
 
-#endif /* IMAGEEFFECT_AUTOCORRECTION_H */
+#endif /* AUTOCORRECTIONTOOL_H */

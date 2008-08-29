@@ -47,7 +47,7 @@
 #include "imageeffect_blur.h"
 #include "imageeffect_sharpen.h"
 #include "imageeffect_ratiocrop.h"
-#include "imageeffect_autocorrection.h"
+#include "autocorrectiontool.h"
 #include "imageeffect_iccproof.h"
 #include "imageplugin_core.h"
 #include "imageplugin_core.moc"
@@ -66,67 +66,67 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
 
     m_blurAction = new KAction(KIcon("blurimage"), i18n("Blur..."), this);
     actionCollection()->addAction("implugcore_blur", m_blurAction );
-    connect(m_blurAction, SIGNAL(triggered(bool) ), 
+    connect(m_blurAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotBlur()));
 
     m_sharpenAction = new KAction(KIcon("sharpenimage"), i18n("Sharpen..."), this);
     actionCollection()->addAction("implugcore_sharpen", m_sharpenAction );
-    connect(m_sharpenAction, SIGNAL(triggered(bool) ), 
+    connect(m_sharpenAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotSharpen()));
 
     m_redeyeAction = new KAction(KIcon("redeyes"), i18n("Red Eye..."), this);
     m_redeyeAction->setWhatsThis( i18n( "This filter can be used to correct red eyes in a photo. "
                                         "Select a region including the eyes to use this option.") );
     actionCollection()->addAction("implugcore_redeye", m_redeyeAction );
-    connect(m_redeyeAction, SIGNAL(triggered(bool) ), 
+    connect(m_redeyeAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotRedEye()));
 
     m_BCGAction = new KAction(KIcon("contrast"), i18n("Brightness/Contrast/Gamma..."), this);
     actionCollection()->addAction("implugcore_bcg", m_BCGAction );
-    connect(m_BCGAction, SIGNAL(triggered(bool) ), 
+    connect(m_BCGAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotBCG()));
 
     // NOTE: Photoshop 7 use CTRL+U.
     m_HSLAction = new KAction(KIcon("adjusthsl"), i18n("Hue/Saturation/Lightness..."), this);
-    m_HSLAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_U));      
+    m_HSLAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_U));
     actionCollection()->addAction("implugcore_hsl", m_HSLAction );
-    connect(m_HSLAction, SIGNAL(triggered(bool) ), 
+    connect(m_HSLAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotHSL()));
 
     // NOTE: Photoshop 7 use CTRL+B.
     m_RGBAction = new KAction(KIcon("adjustrgb"), i18n("Color Balance..."), this);
-    m_RGBAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_B));      
+    m_RGBAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_B));
     actionCollection()->addAction("implugcore_rgb", m_RGBAction );
-    connect(m_RGBAction, SIGNAL(triggered(bool) ), 
+    connect(m_RGBAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotRGB()));
 
     // NOTE: Photoshop 7 use CTRL+SHIFT+B with
     m_autoCorrectionAction = new KAction(KIcon("autocorrection"), i18n("Auto-Correction..."), this);
     m_autoCorrectionAction->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
     actionCollection()->addAction("implugcore_autocorrection", m_autoCorrectionAction );
-    connect(m_autoCorrectionAction, SIGNAL(triggered(bool) ), 
+    connect(m_autoCorrectionAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotAutoCorrection()));
 
     // NOTE: Photoshop 7 use CTRL+I.
     m_invertAction = new KAction(KIcon("invertimage"), i18n("Invert"), this);
-    m_invertAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_I));      
+    m_invertAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_I));
     actionCollection()->addAction("implugcore_invert", m_invertAction );
-    connect(m_invertAction, SIGNAL(triggered(bool) ), 
+    connect(m_invertAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotInvert()));
 
     m_convertTo8Bits = new KAction(KIcon("depth16to8"), i18n("8 bits"), this);
     actionCollection()->addAction("implugcore_convertto8bits", m_convertTo8Bits );
-    connect(m_convertTo8Bits, SIGNAL(triggered(bool) ), 
+    connect(m_convertTo8Bits, SIGNAL(triggered(bool) ),
             this, SLOT(slotConvertTo8Bits()));
 
     m_convertTo16Bits = new KAction(KIcon("depth8to16"), i18n("16 bits"), this);
     actionCollection()->addAction("implugcore_convertto16bits", m_convertTo16Bits );
-    connect(m_convertTo16Bits, SIGNAL(triggered(bool) ), 
+    connect(m_convertTo16Bits, SIGNAL(triggered(bool) ),
             this, SLOT(slotConvertTo16Bits()));
 
     m_colorManagementAction = new KAction(KIcon("colormanagement"), i18n("Color Management..."), this);
     actionCollection()->addAction("implugcore_colormanagement", m_colorManagementAction );
-    connect(m_colorManagementAction, SIGNAL(triggered(bool) ), 
+    connect(m_colorManagementAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotColorManagement()));
 
     //-------------------------------
@@ -134,7 +134,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
 
     m_BWAction = new KAction(KIcon("bwtonal"), i18n("Black && White..."), this);
     actionCollection()->addAction("implugcore_blackwhite", m_BWAction );
-    connect(m_BWAction, SIGNAL(triggered(bool) ), 
+    connect(m_BWAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotBW()));
 
     //-------------------------------
@@ -142,7 +142,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
 
     m_aspectRatioCropAction = new KAction(KIcon("ratiocrop"), i18n("Aspect Ratio Crop..."), this);
     actionCollection()->addAction("implugcore_ratiocrop", m_aspectRatioCropAction );
-    connect(m_aspectRatioCropAction, SIGNAL(triggered(bool) ), 
+    connect(m_aspectRatioCropAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotRatioCrop()));
 
     //-------------------------------
@@ -254,8 +254,8 @@ void ImagePlugin_Core::slotBlur()
 
 void ImagePlugin_Core::slotAutoCorrection()
 {
-    ImageEffect_AutoCorrection dlg(kapp->activeWindow());
-    dlg.exec();
+    AutoCorrectionTool *tool = new AutoCorrectionTool(kapp->activeWindow());
+    loadTool(tool);
 }
 
 void ImagePlugin_Core::slotRedEye()
