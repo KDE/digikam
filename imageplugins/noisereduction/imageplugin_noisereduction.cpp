@@ -65,6 +65,6 @@ void ImagePlugin_NoiseReduction::setEnabledActions(bool enable)
 
 void ImagePlugin_NoiseReduction::slotNoiseReduction()
 {
-    NoiseReductionTool *hsl = new NoiseReductionTool(this);
-    loadTool(hsl);
+    NoiseReductionTool *tool = new NoiseReductionTool(this);
+    loadTool(tool);
 }
