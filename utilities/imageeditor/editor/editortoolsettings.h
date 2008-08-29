@@ -57,7 +57,8 @@ public:
     enum ToolCode
     {
         NoTool     = 0x00000001,
-        ColorGuide = 0x00000002
+        ColorGuide = 0x00000002,
+        PanIcon    = 0x00000004
     };
 
 public:
@@ -81,6 +82,7 @@ public:
     int guideSize() const;
     void setGuideSize(int size);
 
+    ImagePanIconWidget* panIconView() const;
     KPushButton* button(int buttonCode) const;
     void enableButton(int buttonCode, bool state);
 

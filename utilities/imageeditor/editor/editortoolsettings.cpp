@@ -45,6 +45,7 @@
 // Local includes.
 
 #include "ddebug.h"
+#include "imagepaniconwidget.h"
 #include "editortoolsettings.h"
 #include "editortoolsettings.moc"
 
@@ -72,24 +73,27 @@ public:
         guideBox     = 0;
         guideColorBt = 0;
         guideSize    = 0;
+        panIconView  = 0;
     }
 
-    KHBox        *btnBox1;
-    KHBox        *btnBox2;
-    KHBox        *guideBox;
+    KHBox              *btnBox1;
+    KHBox              *btnBox2;
+    KHBox              *guideBox;
 
-    QWidget      *plainPage;
+    QWidget            *plainPage;
 
-    KPushButton  *okBtn;
-    KPushButton  *cancelBtn;
-    KPushButton  *tryBtn;
-    KPushButton  *defaultBtn;
-    KPushButton  *saveAsBtn;
-    KPushButton  *loadBtn;
+    KPushButton        *okBtn;
+    KPushButton        *cancelBtn;
+    KPushButton        *tryBtn;
+    KPushButton        *defaultBtn;
+    KPushButton        *saveAsBtn;
+    KPushButton        *loadBtn;
 
-    KColorButton *guideColorBt;
+    KColorButton       *guideColorBt;
 
-    RIntNumInput *guideSize;
+    ImagePanIconWidget *panIconView;
+
+    RIntNumInput       *guideSize;
 };
 
 EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *parent)
@@ -105,6 +109,21 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
     d->guideBox  = new KHBox(this);
     d->btnBox1   = new KHBox(this);
     d->btnBox2   = new KHBox(this);
+
+    // ---------------------------------------------------------------
+
+    QFrame *frame     = new QFrame(this);
+    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QVBoxLayout* vlay = new QVBoxLayout(frame, 5, 0);
+    d->panIconView    = new ImagePanIconWidget(360, 240, frame);
+    d->panIconView->setWhatsThis(i18n("<p>Here you can see the original image panel "
+                                      "which can help you to select the clip preview."
+                                      "<p>Click and drag the mouse cursor in the "
+                                      "red rectangle to change the clip focus."));
+    vlay->addWidget(d->panIconView, 0, Qt::AlignCenter);
+
+    if (!(toolMask & PanIcon))
+        frame->hide();
 
     // ---------------------------------------------------------------
 
@@ -180,10 +199,11 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
 
     // ---------------------------------------------------------------
 
-    gridSettings->addWidget(d->plainPage, 0, 0, 1, 2);
-    gridSettings->addWidget(d->guideBox,  1, 0, 1, 2);
-    gridSettings->addWidget(d->btnBox2,   2, 0, 1, 2);
-    gridSettings->addWidget(d->btnBox1,   3, 0, 1, 2);
+    gridSettings->addWidget(frame,        0, 0, 1, 2);
+    gridSettings->addWidget(d->plainPage, 1, 0, 1, 2);
+    gridSettings->addWidget(d->guideBox,  2, 0, 1, 2);
+    gridSettings->addWidget(d->btnBox2,   3, 0, 1, 2);
+    gridSettings->addWidget(d->btnBox1,   4, 0, 1, 2);
     gridSettings->setSpacing(spacingHint());
     gridSettings->setMargin(0);
 
@@ -232,6 +252,11 @@ int EditorToolSettings::spacingHint()
 QWidget *EditorToolSettings::plainPage() const
 {
     return d->plainPage;
+}
+
+ImagePanIconWidget* EditorToolSettings::panIconView() const
+{
+    return d->panIconView;
 }
 
 KPushButton* EditorToolSettings::button(int buttonCode) const
