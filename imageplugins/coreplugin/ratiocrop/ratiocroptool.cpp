@@ -45,6 +45,7 @@
 #include <kcursor.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kpushbutton.h>
 #include <kstandarddirs.h>
 
 // LibKDcraw includes.
@@ -77,11 +78,6 @@ RatioCropTool::RatioCropTool(QWidget* parent)
     setToolIcon(SmallIcon("ratiocrop"));
     setToolHelp("ratiocroptool.anchor");
 
-//    setButtonWhatsThis ( User1, i18n("<p>Set selection area to the maximum size according "
-//                                     "to the current ratio.") );
-//    setButtonText(User1, i18n("&Max. Aspect"));
-//    showButton(User1, true);
-
     // -------------------------------------------------------------
 
     m_imageSelectionWidget = new ImageSelectionWidget(480, 320);
@@ -102,7 +98,18 @@ RatioCropTool::RatioCropTool(QWidget* parent)
 
     m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
                                             EditorToolSettings::Ok|
+                                            EditorToolSettings::Try|
                                             EditorToolSettings::Cancel);
+
+    // -------------------------------------------------------------
+
+    // need to set the button to a KStdGuiItem that has no icon
+    m_gboxSettings->button(EditorToolSettings::Try)->setGuiItem(KStdGuiItem::Test);
+    // now we can set the correct text for the button
+    m_gboxSettings->button(EditorToolSettings::Try)->setText(i18n("Max. Aspect"));
+    QWhatsThis::add(m_gboxSettings->button(EditorToolSettings::Try),
+                    i18n("<p>Set selection area to the maximum size according "
+                         "to the current ratio."));
 
     // -------------------------------------------------------------
 
@@ -367,6 +374,9 @@ RatioCropTool::RatioCropTool(QWidget* parent)
     connect(m_centerHeight, SIGNAL(clicked()),
             this, SLOT(slotCenterHeight()));
 
+    connect(m_gboxSettings, SIGNAL(signalTryClicked()),
+            this, SLOT(slotMaxAspectRatio()));
+
     // -------------------------------------------------------------
 
     // Sets current region selection
@@ -493,7 +503,7 @@ void RatioCropTool::slotResetSettings()
     m_imageSelectionWidget->resetSelection();
 }
 
-void RatioCropTool::slotUser1()
+void RatioCropTool::slotMaxAspectRatio()
 {
     m_imageSelectionWidget->maxAspectSelection();
 }

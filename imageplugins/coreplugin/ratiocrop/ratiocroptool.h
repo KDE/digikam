@@ -67,7 +67,7 @@ private:
 
 private slots:
 
-    void slotUser1();
+    void slotMaxAspectRatio();
     void slotResetSettings();
 
     void slotCenterWidth();
