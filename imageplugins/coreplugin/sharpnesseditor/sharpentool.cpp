@@ -86,7 +86,7 @@ SharpenTool::SharpenTool(QObject* parent)
                                             EditorToolSettings::Cancel|
                                             EditorToolSettings::Try,
                                             EditorToolSettings::PanIcon);
-    QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage(), 2, 1);
+    QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage(), 3, 1);
 
     QLabel *label1 = new QLabel(i18n("Method:"), m_gboxSettings->plainPage());
 
@@ -103,6 +103,7 @@ SharpenTool::SharpenTool(QObject* parent)
     grid->addMultiCellWidget(m_sharpMethod,                               0, 0, 1, 1);
     grid->addMultiCellWidget(new KSeparator(m_gboxSettings->plainPage()), 1, 1, 0, 1);
     grid->addMultiCellWidget(m_stack,                                     2, 2, 0, 1);
+    grid->setRowStretch(3, 10);
     grid->setMargin(m_gboxSettings->spacingHint());
     grid->setSpacing(m_gboxSettings->spacingHint());
 
