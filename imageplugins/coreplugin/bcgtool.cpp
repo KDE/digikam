@@ -75,7 +75,7 @@ namespace DigikamImagesPluginCore
 {
 
 BCGTool::BCGTool(QObject* parent)
-               : EditorTool(parent)
+       : EditorTool(parent)
 {
     setName("bcgadjust");
     setToolName(i18n("Brightness / Contrast / Gamma"));
@@ -85,10 +85,10 @@ BCGTool::BCGTool(QObject* parent)
     m_destinationPreviewData = 0;
 
     m_previewWidget = new ImageWidget("bcgadjust Tool", 0,
-                                               i18n("<p>Here you can see the image "
-                                               "brightness-contrast-gamma adjustments preview. "
-                                               "You can pick color on image "
-                                               "to see the color level corresponding on histogram."));
+                                      i18n("<p>Here you can see the image "
+                                           "brightness-contrast-gamma adjustments preview. "
+                                           "You can pick color on image "
+                                           "to see the color level corresponding on histogram."));
     setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
@@ -143,8 +143,6 @@ BCGTool::BCGTool(QObject* parent)
     l1->addStretch(10);
     l1->addWidget(m_scaleBG);
 
-    gridSettings->addMultiCellLayout(l1, 0, 0, 0, 4);
-
     // -------------------------------------------------------------
 
     QVBox *histoBox   = new QVBox(m_gboxSettings->plainPage());
@@ -157,8 +155,6 @@ BCGTool::BCGTool(QObject* parent)
     m_hGradient = new ColorGradientWidget(ColorGradientWidget::Horizontal, 10, histoBox);
     m_hGradient->setColors(QColor("black"), QColor("white"));
 
-    gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
-
     // -------------------------------------------------------------
 
     QLabel *label2 = new QLabel(i18n("Brightness:"), m_gboxSettings->plainPage());
@@ -166,16 +162,12 @@ BCGTool::BCGTool(QObject* parent)
     m_bInput->setRange(-100, 100, 1);
     m_bInput->setDefaultValue(0);
     QWhatsThis::add( m_bInput, i18n("<p>Set here the brightness adjustment of the image."));
-    gridSettings->addMultiCellWidget(label2,    3, 3, 0, 4);
-    gridSettings->addMultiCellWidget(m_bInput,  4, 4, 0, 4);
 
     QLabel *label3 = new QLabel(i18n("Contrast:"), m_gboxSettings->plainPage());
     m_cInput       = new RIntNumInput(m_gboxSettings->plainPage());
     m_cInput->setRange(-100, 100, 1);
     m_cInput->setDefaultValue(0);
     QWhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
-    gridSettings->addMultiCellWidget(label3,    5, 5, 0, 4);
-    gridSettings->addMultiCellWidget(m_cInput,  6, 6, 0, 4);
 
     QLabel *label4 = new QLabel(i18n("Gamma:"), m_gboxSettings->plainPage());
     m_gInput = new RDoubleNumInput(m_gboxSettings->plainPage());
@@ -183,10 +175,19 @@ BCGTool::BCGTool(QObject* parent)
     m_gInput->setRange(0.1, 3.0, 0.01);
     m_gInput->setDefaultValue(1.0);
     QWhatsThis::add( m_gInput, i18n("<p>Set here the gamma adjustment of the image."));
+
+    // -------------------------------------------------------------
+
+    gridSettings->addMultiCellLayout(l1,        0, 0, 0, 4);
+    gridSettings->addMultiCellWidget(histoBox,  1, 2, 0, 4);
+    gridSettings->addMultiCellWidget(label2,    3, 3, 0, 4);
+    gridSettings->addMultiCellWidget(m_bInput,  4, 4, 0, 4);
+    gridSettings->addMultiCellWidget(label3,    5, 5, 0, 4);
+    gridSettings->addMultiCellWidget(m_cInput,  6, 6, 0, 4);
     gridSettings->addMultiCellWidget(label4,    7, 7, 0, 4);
     gridSettings->addMultiCellWidget(m_gInput,  8, 8, 0, 4);
-
     gridSettings->setRowStretch(9, 10);
+
     setToolSettings(m_gboxSettings);
 
     // -------------------------------------------------------------
@@ -307,7 +308,7 @@ void BCGTool::slotResetSettings()
 
 void BCGTool::slotEffect()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor(KCursor::waitCursor());
 
     double b = (double) m_bInput->value() / 250.0;
     double c = (double) (m_cInput->value() / 100.0) + 1.00;
