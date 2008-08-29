@@ -39,5 +39,5 @@ hotpixels                   CtrlPanelDlg
 infrared                    CtrlPanelDlg
 noisereduction              CtrlPanelDlg        DONE
 oilpaint                    CtrlPanelDlg
-restoration                 CtrlPanelDlg
+restoration                 CtrlPanelDlg        G
 texture                     CtrlPanelDlg
