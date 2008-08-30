@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_TEXTURE_H
-#define IMAGEEFFECT_TEXTURE_H
+#ifndef TEXTURETOOL_H
+#define TEXTURETOOL_H
 
 // Qt includes.
 
@@ -31,7 +31,7 @@
 
 // Digikam includes.
 
-#include "ctrlpaneldlg.h"
+#include "editortool.h"
 
 
 namespace KDcrawIface
@@ -40,17 +40,23 @@ class RIntNumInput;
 class RComboBox;
 }
 
+namespace Digikam
+{
+class EditorToolSettings;
+class ImagePanelWidget;
+}
+
 namespace DigikamTextureImagesPlugin
 {
 
-class ImageEffect_Texture : public Digikam::CtrlPanelDlg
+class TextureTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_Texture(QWidget* parent);
-    ~ImageEffect_Texture();
+    TextureTool(QObject* parent);
+    ~TextureTool();
 
 private:
 
@@ -58,12 +64,12 @@ private:
 
 private slots:
 
-    void readUserSettings();
+    void slotResetSettings();
 
 private:
 
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
@@ -92,11 +98,15 @@ private:
         StoneTexture
     };
 
-    KDcrawIface::RComboBox    *m_textureType;
+    KDcrawIface::RComboBox      *m_textureType;
 
-    KDcrawIface::RIntNumInput *m_blendGain;
+    KDcrawIface::RIntNumInput   *m_blendGain;
+
+    Digikam::ImagePanelWidget   *m_previewWidget;
+
+    Digikam::EditorToolSettings *m_gboxSettings;
 };
 
 }  // NameSpace DigikamTextureImagesPlugin
 
-#endif /* IMAGEEFFECT_TEXTURE_H */
+#endif /* TEXTURETOOL_H */

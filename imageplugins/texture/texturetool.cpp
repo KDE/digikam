@@ -49,49 +49,38 @@
 #include "ddebug.h"
 #include "dimg.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imagepanelwidget.h"
+#include "editortoolsettings.h"
 #include "texture.h"
-#include "imageeffect_texture.h"
-#include "imageeffect_texture.moc"
+#include "texturetool.h"
+#include "texturetool.moc"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamTextureImagesPlugin
 {
 
-ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
-                   : Digikam::CtrlPanelDlg(parent, i18n("Apply Texture"),
-                                           "texture", false, false, true,
-                                           Digikam::ImagePannelWidget::SeparateViewAll)
+TextureTool::TextureTool(QObject* parent)
+           : EditorToolThreaded(parent)
 {
     QString whatsThis;
 
-    KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Apply Texture"),
-                                       digikam_version,
-                                       I18N_NOOP("A digiKam image plugin to apply a decorative "
-                                       "texture to an image."),
-                                       KAboutData::License_GPL,
-                                       "(c) 2005, Gilles Caulier\n"
-                                       "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg",
-                                       0,
-                                       Digikam::webProjectUrl());
-
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at gmail dot com");
-
-    about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
-                     "marcel dot wiesweg at gmx dot de");
-
-    setAboutData(about);
+    setName("texture");
+    setToolName(i18n("Texture"));
+    setToolIcon(SmallIcon("texture"));
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 1, 0, spacingHint());
-    QLabel *label1 = new QLabel(i18n("Type:"), gboxSettings);
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel|
+                                            EditorToolSettings::Try,
+                                            EditorToolSettings::PanIcon);
+    QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage(), 3, 1);
+    QLabel *label1    = new QLabel(i18n("Type:"), m_gboxSettings->plainPage());
 
-    m_textureType = new RComboBox(gboxSettings);
+    m_textureType = new RComboBox(m_gboxSettings->plainPage());
     m_textureType->insertItem(i18n("Paper"));
     m_textureType->insertItem(i18n("Paper 2"));
     m_textureType->insertItem(i18n("Fabric"));
@@ -111,22 +100,30 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
     m_textureType->setDefaultItem(PaperTexture);
     QWhatsThis::add( m_textureType, i18n("<p>Set here the texture type to apply to the image."));
 
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_textureType, 0, 0, 1, 1);
-
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Relief:"), gboxSettings);
+    QLabel *label2 = new QLabel(i18n("Relief:"), m_gboxSettings->plainPage());
 
-    m_blendGain = new RIntNumInput(gboxSettings);
+    m_blendGain = new RIntNumInput(m_gboxSettings->plainPage());
     m_blendGain->setRange(1, 255, 1);
     m_blendGain->setDefaultValue(200);
     QWhatsThis::add( m_blendGain, i18n("<p>Set here the relief gain used to merge texture and image."));
 
-    gridSettings->addMultiCellWidget(label2, 1, 1, 0, 1);
-    gridSettings->addMultiCellWidget(m_blendGain, 2, 2, 0, 1);
+    grid->addMultiCellWidget(label1,        0, 0, 0, 0);
+    grid->addMultiCellWidget(m_textureType, 0, 0, 1, 1);
+    grid->addMultiCellWidget(label2,        1, 1, 0, 1);
+    grid->addMultiCellWidget(m_blendGain,   2, 2, 0, 1);
+    grid->setRowStretch(3, 10);
+    grid->setMargin(m_gboxSettings->spacingHint());
+    grid->setSpacing(m_gboxSettings->spacingHint());
 
-    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
+    setToolSettings(m_gboxSettings);
+
+    // -------------------------------------------------------------
+
+    m_previewWidget = new ImagePanelWidget(470, 350, "texture Tool", m_gboxSettings->panIconView());
+
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
@@ -137,43 +134,41 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
             this, SLOT(slotTimer()));
 }
 
-ImageEffect_Texture::~ImageEffect_Texture()
+TextureTool::~TextureTool()
 {
 }
 
-void ImageEffect_Texture::renderingFinished()
+void TextureTool::renderingFinished()
 {
     m_textureType->setEnabled(true);
     m_blendGain->setEnabled(true);
 }
 
-void ImageEffect_Texture::readUserSettings()
+void TextureTool::readSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("texture Tool Dialog");
+    config->setGroup("texture Tool");
 
     m_textureType->blockSignals(true);
     m_blendGain->blockSignals(true);
 
-    m_textureType->setCurrentItem(config->readNumEntry("TextureType",
-                                  m_textureType->defaultItem()));
-    m_blendGain->setValue(config->readNumEntry("BlendGain",
-                          m_blendGain->defaultValue()));
+    m_textureType->setCurrentItem(config->readNumEntry("TextureType", m_textureType->defaultItem()));
+    m_blendGain->setValue(config->readNumEntry("BlendGain", m_blendGain->defaultValue()));
 
     m_textureType->blockSignals(false);
     m_blendGain->blockSignals(false);
 }
 
-void ImageEffect_Texture::writeUserSettings()
+void TextureTool::writeSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("texture Tool Dialog");
+    config->setGroup("texture Tool");
     config->writeEntry("TextureType", m_textureType->currentItem());
     config->writeEntry("BlendGain", m_blendGain->value());
     config->sync();
 }
 
-void ImageEffect_Texture::resetValues()
+void TextureTool::slotResetSettings()
 {
     m_textureType->blockSignals(true);
     m_blendGain->blockSignals(true);
@@ -185,46 +180,44 @@ void ImageEffect_Texture::resetValues()
     m_blendGain->blockSignals(false);
 }
 
-void ImageEffect_Texture::prepareEffect()
+void TextureTool::prepareEffect()
 {
     m_textureType->setEnabled(false);
     m_blendGain->setEnabled(false);
 
-    Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
+    DImg image = m_previewWidget->getOriginalRegionImage();
     QString texture = getTexturePath( m_textureType->currentItem() );
 
     int b = 255 - m_blendGain->value();
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
-                       new Texture(&image, this, b, texture));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new Texture(&image, this, b, texture)));
 }
 
-void ImageEffect_Texture::prepareFinal()
+void TextureTool::prepareFinal()
 {
     m_textureType->setEnabled(false);
     m_blendGain->setEnabled(false);
 
     int b = 255 - m_blendGain->value();
 
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
     QString texture = getTexturePath( m_textureType->currentItem() );
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
-                       new Texture(iface.getOriginalImg(), this, b, texture));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new Texture(iface.getOriginalImg(), this, b, texture)));
 }
 
-void ImageEffect_Texture::putPreviewData(void)
+void TextureTool::putPreviewData()
 {
-    m_imagePreviewWidget->setPreviewImage(m_threadedFilter->getTargetImage());
+    m_previewWidget->setPreviewImage(filter()->getTargetImage());
 }
 
-void ImageEffect_Texture::putFinalData(void)
+void TextureTool::putFinalData()
 {
-    Digikam::ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Texture"), m_threadedFilter->getTargetImage().bits());
+    ImageIface iface(0, 0);
+    iface.putOriginalImage(i18n("Texture"), filter()->getTargetImage().bits());
 }
 
-QString ImageEffect_Texture::getTexturePath(int texture)
+QString TextureTool::getTexturePath(int texture)
 {
     QString pattern;
 
@@ -295,10 +288,8 @@ QString ImageEffect_Texture::getTexturePath(int texture)
           break;
        }
 
-    KGlobal::dirs()->addResourceType(pattern.ascii(), KGlobal::dirs()->kde_default("data") +
-                                     "digikam/data");
+    KGlobal::dirs()->addResourceType(pattern.ascii(), KGlobal::dirs()->kde_default("data") + "digikam/data");
     return (KGlobal::dirs()->findResourceDir(pattern.ascii(), pattern + ".png") + pattern + ".png" );
 }
 
 }  // NameSpace DigikamTextureImagesPlugin
-

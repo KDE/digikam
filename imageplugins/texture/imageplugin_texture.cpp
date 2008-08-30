@@ -33,9 +33,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_texture.h"
+#include "texturetool.h"
 #include "imageplugin_texture.h"
 #include "imageplugin_texture.moc"
+
+using namespace DigikamTextureImagesPlugin;
 
 K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_texture,
                            KGenericFactory<ImagePlugin_Texture>("digikamimageplugin_texture"));
@@ -63,6 +65,6 @@ void ImagePlugin_Texture::setEnabledActions(bool enable)
 
 void ImagePlugin_Texture::slotTexture()
 {
-    DigikamTextureImagesPlugin::ImageEffect_Texture dlg(kapp->activeWindow());
-    dlg.exec();
+    TextureTool *tool = new TextureTool(this);
+    loadTool(tool);
 }

@@ -19,7 +19,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes) 
 
 digikamimageplugin_texture_la_SOURCES = imageplugin_texture.cpp \
-	                                    imageeffect_texture.cpp texture.cpp 
+	                                    texturetool.cpp texture.cpp 
 
 digikamimageplugin_texture_la_LIBADD = $(LIB_KPARTS) \
 	                                   $(top_builddir)/digikam/digikam/libdigikam.la  
