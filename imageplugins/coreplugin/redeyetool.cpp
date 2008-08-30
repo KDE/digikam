@@ -261,9 +261,6 @@ RedEyeTool::~RedEyeTool()
 
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
-
-    delete m_histogramWidget;
-    delete m_previewWidget;
 }
 
 void RedEyeTool::slotHSChanged(int h, int s)

@@ -290,9 +290,6 @@ RGBTool::~RGBTool()
 
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
-
-    delete m_histogramWidget;
-    delete m_previewWidget;
 }
 
 void RGBTool::slotChannelChanged(int channel)

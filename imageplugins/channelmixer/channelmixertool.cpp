@@ -291,8 +291,6 @@ ChannelMixerTool::~ChannelMixerTool()
 
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
-
-    delete m_histogramWidget;
 }
 
 void ChannelMixerTool::slotResetCurrentChannel()
