@@ -8,7 +8,7 @@ coreplugin
   \---hsl                   ImageDlgBase        DONE
   \---iccproof              ImageDlgBase
   \---ratiocrop             ImageDlgBase
-  \---redeye                ImageDlgBase        A
+  \---redeye                ImageDlgBase        DONE
   \---rgbtool               ImageDlgBase        DONE
 adjustcurves                ImageDlgBase        A
 adjustlevels                ImageDlgBase        A
