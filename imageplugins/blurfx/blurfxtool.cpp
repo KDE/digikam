@@ -74,8 +74,7 @@ BlurFXTool::BlurFXTool(QObject* parent)
 
     m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
                                             EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel|
-                                            EditorToolSettings::Try,
+                                            EditorToolSettings::Cancel,
                                             EditorToolSettings::PanIcon);
     QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage(), 6, 1);
 
