@@ -11,21 +11,21 @@ coreplugin
   \---redeye                ImageDlgBase        DONE
   \---rgbtool               ImageDlgBase        DONE
 adjustcurves                ImageDlgBase        DONE
-adjustlevels                ImageDlgBase        A
+adjustlevels                ImageDlgBase        DONE
 channelmixer                ImageDlgBase        DONE
-colorfx                     ImageDlgBase
-inserttext                  ImageDlgBase
-perspective                 ImageDlgBase
-whitebalance                ImageDlgBase
-superimpose                 ImageDlgBase
+colorfx                     ImageDlgBase        A
+inserttext                  ImageDlgBase        A
+perspective                 ImageDlgBase        A
+whitebalance                ImageDlgBase        A
+superimpose                 ImageDlgBase        A
 
-antivignetting              ImageGuideDlg
-border                      ImageGuideDlg
-distortionfx                ImageGuideDlg
+antivignetting              ImageGuideDlg       A
+border                      ImageGuideDlg       A
+distortionfx                ImageGuideDlg       A
 freerotation                ImageGuideDlg
-inpainting                  ImageGuideDlg
+inpainting                  ImageGuideDlg       A
 lensdistortion              ImageGuideDlg
-raindrop                    ImageGuideDlg
+raindrop                    ImageGuideDlg       A
 sheartool                   ImageGuideDlg
 
 coreplugin
