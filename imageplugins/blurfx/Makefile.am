@@ -18,7 +18,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes) 
 
 digikamimageplugin_blurfx_la_SOURCES = imageplugin_blurfx.cpp \
-	                                   imageeffect_blurfx.cpp blurfx.cpp 
+	                                   blurfxtool.cpp blurfx.cpp 
 
 digikamimageplugin_blurfx_la_LIBADD = $(LIB_KPARTS) \
 	                                  $(top_builddir)/digikam/digikam/libdigikam.la 

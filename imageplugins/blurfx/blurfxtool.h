@@ -22,12 +22,12 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_BLURFX_H
-#define IMAGEEFFECT_BLURFX_H
+#ifndef BLURFXTOOL_H
+#define BLURFXTOOL_H
 
 // Digikam includes.
 
-#include "ctrlpaneldlg.h"
+#include "editortool.h"
 
 class QLabel;
 
@@ -37,27 +37,33 @@ class RIntNumInput;
 class RComboBox;
 }
 
+namespace Digikam
+{
+class EditorToolSettings;
+class ImagePanelWidget;
+}
+
 namespace DigikamBlurFXImagesPlugin
 {
 
-class ImageEffect_BlurFX : public Digikam::CtrlPanelDlg
+class BlurFXTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_BlurFX(QWidget *parent);
-    ~ImageEffect_BlurFX();
+    BlurFXTool(QObject *parent);
+    ~BlurFXTool();
 
 private slots:
 
     void slotEffectTypeChanged(int type);
-    void readUserSettings();
+    void slotResetSettings();
 
 private:
 
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void prepareEffect();
     void prepareFinal();
     void abortPreview();
@@ -67,16 +73,20 @@ private:
 
 private:
 
-    QLabel       *m_effectTypeLabel;
-    QLabel       *m_distanceLabel;
-    QLabel       *m_levelLabel;
+    QLabel                      *m_effectTypeLabel;
+    QLabel                      *m_distanceLabel;
+    QLabel                      *m_levelLabel;
 
-    KDcrawIface::RComboBox    *m_effectType;
+    KDcrawIface::RComboBox      *m_effectType;
 
-    KDcrawIface::RIntNumInput *m_distanceInput;
-    KDcrawIface::RIntNumInput *m_levelInput;
+    KDcrawIface::RIntNumInput   *m_distanceInput;
+    KDcrawIface::RIntNumInput   *m_levelInput;
+
+    Digikam::ImagePanelWidget   *m_previewWidget;
+
+    Digikam::EditorToolSettings *m_gboxSettings;
 };
 
 }  // NameSpace DigikamBlurFXImagesPlugin
 
-#endif /* IMAGEEFFECT_BLURFX_H */
+#endif /* BLURFXTOOL_H */
