@@ -18,7 +18,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes) 
 
 digikamimageplugin_emboss_la_SOURCES = imageplugin_emboss.cpp \
-	                                   imageeffect_emboss.cpp emboss.cpp 
+	                                   embosstool.cpp emboss.cpp 
 
 digikamimageplugin_emboss_la_LIBADD = $(LIB_KPARTS) \
 	                                  $(top_builddir)/digikam/digikam/libdigikam.la 

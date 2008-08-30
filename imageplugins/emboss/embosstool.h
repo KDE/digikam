@@ -23,38 +23,44 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_EMBOSS_H
-#define IMAGEEFFECT_EMBOSS_H
+#ifndef EMBOSSTOOL_H
+#define EMBOSSTOOL_H
 
 // Digikam includes.
 
-#include "ctrlpaneldlg.h"
+#include "editortool.h"
 
 namespace KDcrawIface
 {
 class RIntNumInput;
 }
 
+namespace Digikam
+{
+class EditorToolSettings;
+class ImagePanelWidget;
+}
+
 namespace DigikamEmbossImagesPlugin
 {
 
-class ImageEffect_Emboss : public Digikam::CtrlPanelDlg
+class EmbossTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_Emboss(QWidget* parent);
-    ~ImageEffect_Emboss();
+    EmbossTool(QObject* parent);
+    ~EmbossTool();
 
 private slots:
 
-    void readUserSettings();
+    void slotResetSettings();
 
 private:
 
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
@@ -63,9 +69,13 @@ private:
 
 private:
 
-    KDcrawIface::RIntNumInput *m_depthInput;
+    KDcrawIface::RIntNumInput   *m_depthInput;
+
+    Digikam::ImagePanelWidget   *m_previewWidget;
+
+    Digikam::EditorToolSettings *m_gboxSettings;
 };
 
 }  // NameSpace DigikamEmbossImagesPlugin
 
-#endif /* IMAGEEFFECT_EMBOSS_H */
+#endif /* EMBOSSTOOL_H */
