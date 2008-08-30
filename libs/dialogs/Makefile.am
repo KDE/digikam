@@ -11,7 +11,6 @@ libdialogshowfoto_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 # Dialogs collection used by digiKam.
 
 libdialog_la_SOURCES = deletedialogbase.ui imagedialog.cpp rawcameradlg.cpp \
-	                   ctrlpaneldlg.cpp \
 	                   iccprofileinfodlg.cpp deletedialog.cpp dprogressdlg.cpp 
 
 libdialog_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
@@ -30,6 +29,5 @@ INCLUDES = -I$(top_srcdir)/digikam/digikam \
 	       $(LIBKEXIV2_CFLAGS) \
 	       $(all_includes)
 
-digikaminclude_HEADERS = ctrlpaneldlg.h \
-	                     iccprofileinfodlg.h dprogressdlg.h imagedialog.h rawcameradlg.h 
+digikaminclude_HEADERS = iccprofileinfodlg.h dprogressdlg.h imagedialog.h rawcameradlg.h 
 digikamincludedir = $(includedir)/digikam
