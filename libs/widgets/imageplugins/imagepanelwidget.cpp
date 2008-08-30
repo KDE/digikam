@@ -227,6 +227,11 @@ ImagePanelWidget::~ImagePanelWidget()
     delete d;
 }
 
+ImageRegionWidget *ImagePanelWidget::previewWidget() const
+{
+    return d->imageRegionWidget;
+}
+
 void ImagePanelWidget::readSettings()
 {
     KConfig *config = kapp->config();

@@ -74,6 +74,8 @@ public:
 
     void   setPanIconHighLightPoints(const QPointArray& pt);
 
+    ImageRegionWidget *previewWidget() const;
+
 signals:
 
     void signalOriginalClipFocusChanged();
