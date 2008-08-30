@@ -18,7 +18,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes) 
 
 digikamimageplugin_charcoal_la_SOURCES = imageplugin_charcoal.cpp \
-	                                     imageeffect_charcoal.cpp charcoal.cpp 
+	                                     charcoaltool.cpp charcoal.cpp 
 
 digikamimageplugin_charcoal_la_LIBADD = $(LIB_KPARTS) \
 	                                    $(top_builddir)/digikam/digikam/libdigikam.la

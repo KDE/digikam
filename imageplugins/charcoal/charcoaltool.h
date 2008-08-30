@@ -22,38 +22,44 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_CHARCOAL_H
-#define IMAGEEFFECT_CHARCOAL_H
+#ifndef CHARCOALTOOL_H
+#define CHARCOALTOOL_H
 
 // Local includes.
 
-#include "ctrlpaneldlg.h"
+#include "editortool.h"
 
 namespace KDcrawIface
 {
 class RIntNumInput;
 }
 
+namespace Digikam
+{
+class EditorToolSettings;
+class ImagePanelWidget;
+}
+
 namespace DigikamCharcoalImagesPlugin
 {
 
-class ImageEffect_Charcoal : public Digikam::CtrlPanelDlg
+class CharcoalTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_Charcoal(QWidget* parent);
-    ~ImageEffect_Charcoal();
+    CharcoalTool(QObject* parent);
+    ~CharcoalTool();
 
 private slots:
 
-    void readUserSettings();
+    void slotResetSettings();
 
 private:
 
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
@@ -62,10 +68,14 @@ private:
 
 private:
 
-    KDcrawIface::RIntNumInput *m_pencilInput;
-    KDcrawIface::RIntNumInput *m_smoothInput;
+    KDcrawIface::RIntNumInput   *m_pencilInput;
+    KDcrawIface::RIntNumInput   *m_smoothInput;
+
+    Digikam::ImagePanelWidget   *m_previewWidget;
+
+    Digikam::EditorToolSettings *m_gboxSettings;
 };
 
 }  // NameSpace DigikamCharcoalImagesPlugin
 
-#endif /* IMAGEEFFECT_CHARCOAL_H */
+#endif /* CHARCOALTOOL_H */

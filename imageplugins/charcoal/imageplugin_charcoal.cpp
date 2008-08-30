@@ -34,9 +34,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_charcoal.h"
+#include "charcoaltool.h"
 #include "imageplugin_charcoal.h"
 #include "imageplugin_charcoal.moc"
+
+using namespace DigikamCharcoalImagesPlugin;
 
 K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_charcoal,
                            KGenericFactory<ImagePlugin_Charcoal>("digikamimageplugin_charcoal"));
@@ -65,6 +67,6 @@ void ImagePlugin_Charcoal::setEnabledActions(bool enable)
 
 void ImagePlugin_Charcoal::slotCharcoal()
 {
-    DigikamCharcoalImagesPlugin::ImageEffect_Charcoal dlg(kapp->activeWindow());
-    dlg.exec();
+    CharcoalTool *tool = new CharcoalTool(this);
+    loadTool(tool);
 }
