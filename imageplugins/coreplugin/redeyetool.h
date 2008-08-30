@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_REDEYE_H
-#define IMAGEEFFECT_REDEYE_H
+#ifndef REDEYETOOL_H
+#define REDEYETOOL_H
 
 // KDE includes.
 
@@ -155,4 +155,4 @@ private:
 
 }  // NameSpace DigikamImagesPluginCore
 
-#endif /* IMAGEEFFECT_REDEYE_H */
+#endif /* REDEYETOOL_H */
