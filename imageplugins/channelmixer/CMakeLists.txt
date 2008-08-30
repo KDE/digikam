@@ -1,6 +1,6 @@
 
 SET(digikamimageplugin_channelmixer_PART_SRCS imageplugin_channelmixer.cpp
-                                              channelmixer.cpp
+                                              channelmixertool.cpp
    )
 
 

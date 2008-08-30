@@ -21,12 +21,12 @@
  *
  * ============================================================ */
 
-#ifndef CHANNELMIXER_H
-#define CHANNELMIXER_H
+#ifndef CHANNELMIXERTOOL_H
+#define CHANNELMIXERTOOL_H
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 
 class QCheckBox;
 class QComboBox;
@@ -45,33 +45,34 @@ class HistogramWidget;
 class ColorGradientWidget;
 class ImageWidget;
 class DColor;
+class EditorToolSettings;
 }
 
 namespace DigikamChannelMixerImagesPlugin
 {
 
-class ChannelMixerDialog : public Digikam::ImageDlgBase
+class ChannelMixerTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ChannelMixerDialog(QWidget *parent);
-    ~ChannelMixerDialog();
+    ChannelMixerTool(QObject *parent);
+    ~ChannelMixerTool();
 
 private:
 
-    void readUserSettings();
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void finalRendering();
     void adjustSliders();
 
 private slots:
 
-    void slotUser2();
-    void slotUser3();
+    void slotSaveAsSettings();
+    void slotLoadSettings();
     void slotResetCurrentChannel();
+    void slotResetSettings();
     void slotEffect();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
@@ -129,8 +130,10 @@ private:
     Digikam::HistogramWidget     *m_histogramWidget;
 
     Digikam::ImageWidget         *m_previewWidget;
+
+    Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
 }  // NameSpace DigikamChannelMixerImagesPlugin
 
-#endif /* CHANNELMIXER_H */
+#endif /* CHANNELMIXERTOOL_H */

@@ -34,9 +34,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "channelmixer.h"
+#include "channelmixertool.h"
 #include "imageplugin_channelmixer.h"
 #include "imageplugin_channelmixer.moc"
+
+using namespace DigikamChannelMixerImagesPlugin;
 
 K_PLUGIN_FACTORY( ChannelMixerFactory, registerPlugin<ImagePlugin_ChannelMixer>(); )
 K_EXPORT_PLUGIN ( ChannelMixerFactory("digikamimageplugin_channelmixer") )
@@ -48,11 +50,11 @@ ImagePlugin_ChannelMixer::ImagePlugin_ChannelMixer(QObject *parent, const QVaria
     m_channelMixerAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_H));
     actionCollection()->addAction("imageplugin_channelmixer", m_channelMixerAction );
 
-    connect(m_channelMixerAction, SIGNAL(triggered(bool)), 
+    connect(m_channelMixerAction, SIGNAL(triggered(bool)),
             this, SLOT(slotChannelMixer()));
 
     setXMLFile("digikamimageplugin_channelmixer_ui.rc");
-    
+
     DDebug() << "ImagePlugin_ChannelMixer plugin loaded" << endl;
 }
 
@@ -67,6 +69,6 @@ void ImagePlugin_ChannelMixer::setEnabledActions(bool enable)
 
 void ImagePlugin_ChannelMixer::slotChannelMixer()
 {
-    DigikamChannelMixerImagesPlugin::ChannelMixerDialog dlg(kapp->activeWindow());
-    dlg.exec();
+    ChannelMixerTool *tool = new ChannelMixerTool(kapp->activeWindow());
+    loadTool(tool);
 }
