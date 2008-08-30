@@ -12,7 +12,7 @@ coreplugin
   \---rgbtool               ImageDlgBase        DONE
 adjustcurves                ImageDlgBase        A
 adjustlevels                ImageDlgBase        A
-channelmixer                ImageDlgBase        A
+channelmixer                ImageDlgBase        DONE
 colorfx                     ImageDlgBase
 inserttext                  ImageDlgBase
 perspective                 ImageDlgBase
