@@ -47,52 +47,42 @@
 #include "ddebug.h"
 #include "dimg.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imagepanelwidget.h"
+#include "editortoolsettings.h"
 #include "filmgrain.h"
-#include "imageeffect_filmgrain.h"
-#include "imageeffect_filmgrain.moc"
+#include "filmgraintool.h"
+#include "filmgraintool.moc"
+
+using namespace Digikam;
 
 namespace DigikamFilmGrainImagesPlugin
 {
 
-ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
-                     : Digikam::CtrlPanelDlg(parent, i18n("Add Film Grain to Photograph"),
-                                             "filmgrain", false, false, true,
-                                             Digikam::ImagePannelWidget::SeparateViewAll)
+FilmGrainTool::FilmGrainTool(QObject* parent)
+            : EditorToolThreaded(parent)
 {
     QString whatsThis;
 
-    KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Film Grain"),
-                                       digikam_version,
-                                       I18N_NOOP("A digiKam image plugin to apply a film grain "
-                                                 "effect to an image."),
-                                       KAboutData::License_GPL,
-                                       "(c) 2004-2005, Gilles Caulier\n"
-                                       "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg",
-                                       0,
-                                       Digikam::webProjectUrl());
-
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at gmail dot com");
-
-    about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
-                     "marcel dot wiesweg at gmx dot de");
-
-    setAboutData(about);
+    setName("filmgrain");
+    setToolName(i18n("Film Grain"));
+    setToolIcon(SmallIcon("filmgrain"));
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 1, 0, spacingHint());
-    QLabel *label1 = new QLabel(i18n("Sensitivity (ISO):"), gboxSettings);
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel|
+                                            EditorToolSettings::Try,
+                                            EditorToolSettings::PanIcon);
+    QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage(), 2, 1);
+    QLabel *label1            = new QLabel(i18n("Sensitivity (ISO):"), m_gboxSettings->plainPage());
 
-    m_sensibilitySlider = new QSlider(2, 30, 1, 12, Qt::Horizontal, gboxSettings);
+    m_sensibilitySlider = new QSlider(2, 30, 1, 12, Qt::Horizontal, m_gboxSettings->plainPage());
     m_sensibilitySlider->setTracking ( false );
     m_sensibilitySlider->setTickInterval(1);
     m_sensibilitySlider->setTickmarks(QSlider::Below);
 
-    m_sensibilityLCDValue = new QLCDNumber (4, gboxSettings);
+    m_sensibilityLCDValue = new QLCDNumber (4, m_gboxSettings->plainPage());
     m_sensibilityLCDValue->setSegmentStyle ( QLCDNumber::Flat );
     m_sensibilityLCDValue->display( QString::number(2400) );
     whatsThis = i18n("<p>Set here the film ISO-sensitivity to use for simulating the film graininess.");
@@ -100,11 +90,20 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     QWhatsThis::add( m_sensibilityLCDValue, whatsThis);
     QWhatsThis::add( m_sensibilitySlider, whatsThis);
 
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
-    gridSettings->addMultiCellWidget(m_sensibilitySlider, 1, 1, 0, 0);
-    gridSettings->addMultiCellWidget(m_sensibilityLCDValue, 1, 1, 1, 1);
+    grid->addMultiCellWidget(label1, 0, 0, 0, 1);
+    grid->addMultiCellWidget(m_sensibilitySlider, 1, 1, 0, 0);
+    grid->addMultiCellWidget(m_sensibilityLCDValue, 1, 1, 1, 1);
+    grid->setRowStretch(2, 10);
+    grid->setMargin(m_gboxSettings->spacingHint());
+    grid->setSpacing(m_gboxSettings->spacingHint());
 
-    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
+    setToolSettings(m_gboxSettings);
+
+    // -------------------------------------------------------------
+
+    m_previewWidget = new ImagePanelWidget(470, 350, "filmgrain Tool", m_gboxSettings->panIconView());
+
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
@@ -120,75 +119,75 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
              this, SLOT(slotSliderMoved(int)) );
 }
 
-ImageEffect_FilmGrain::~ImageEffect_FilmGrain()
+FilmGrainTool::~FilmGrainTool()
 {
 }
 
-void ImageEffect_FilmGrain::renderingFinished()
+void FilmGrainTool::renderingFinished()
 {
     m_sensibilitySlider->setEnabled(true);
 }
 
-void ImageEffect_FilmGrain::readUserSettings()
+void FilmGrainTool::readSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("filmgrain Tool Dialog");
+    config->setGroup("filmgrain Tool");
     m_sensibilitySlider->blockSignals(true);
     m_sensibilitySlider->setValue(config->readNumEntry("SensitivityAjustment", 12));
     m_sensibilitySlider->blockSignals(false);
     slotSliderMoved(m_sensibilitySlider->value());
 }
 
-void ImageEffect_FilmGrain::writeUserSettings()
+void FilmGrainTool::writeSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("filmgrain Tool Dialog");
+    config->setGroup("filmgrain Tool");
     config->writeEntry("SensitivityAjustment", m_sensibilitySlider->value());
     config->sync();
 }
 
-void ImageEffect_FilmGrain::resetValues()
+void FilmGrainTool::slotResetSettings()
 {
     m_sensibilitySlider->blockSignals(true);
     m_sensibilitySlider->setValue(12);
     m_sensibilitySlider->blockSignals(false);
 }
 
-void ImageEffect_FilmGrain::slotSliderMoved(int v)
+void FilmGrainTool::slotSliderMoved(int v)
 {
     m_sensibilityLCDValue->display( QString::number(400+200*v) );
 }
 
-void ImageEffect_FilmGrain::prepareEffect()
+void FilmGrainTool::prepareEffect()
 {
     m_sensibilitySlider->setEnabled(false);
 
-    Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
+    DImg image = m_previewWidget->getOriginalRegionImage();
     int s = 400 + 200 * m_sensibilitySlider->value();
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new FilmGrain(&image, this, s));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new FilmGrain(&image, this, s)));
 }
 
-void ImageEffect_FilmGrain::prepareFinal()
+void FilmGrainTool::prepareFinal()
 {
     m_sensibilitySlider->setEnabled(false);
 
     int s = 400 + 200 * m_sensibilitySlider->value();
 
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new FilmGrain(iface.getOriginalImg(), this, s));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new FilmGrain(iface.getOriginalImg(), this, s)));
 }
 
-void ImageEffect_FilmGrain::putPreviewData(void)
+void FilmGrainTool::putPreviewData()
 {
-    m_imagePreviewWidget->setPreviewImage(m_threadedFilter->getTargetImage());
+    m_previewWidget->setPreviewImage(filter()->getTargetImage());
 }
 
-void ImageEffect_FilmGrain::putFinalData(void)
+void FilmGrainTool::putFinalData()
 {
-    Digikam::ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Film Grain"), m_threadedFilter->getTargetImage().bits());
+    ImageIface iface(0, 0);
+    iface.putOriginalImage(i18n("Film Grain"), filter()->getTargetImage().bits());
 }
 
 }  // NameSpace DigikamFilmGrainImagesPlugin

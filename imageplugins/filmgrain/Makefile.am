@@ -18,7 +18,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes) 
 
 digikamimageplugin_filmgrain_la_SOURCES = imageplugin_filmgrain.cpp \
-	                                      imageeffect_filmgrain.cpp filmgrain.cpp 
+	                                      filmgraintool.cpp filmgrain.cpp 
 
 digikamimageplugin_filmgrain_la_LIBADD = $(LIB_KPARTS) \
 	                                     $(top_builddir)/digikam/digikam/libdigikam.la 

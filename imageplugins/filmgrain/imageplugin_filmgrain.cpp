@@ -34,9 +34,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_filmgrain.h"
+#include "filmgraintool.h"
 #include "imageplugin_filmgrain.h"
 #include "imageplugin_filmgrain.moc"
+
+using namespace DigikamFilmGrainImagesPlugin;
 
 K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_filmgrain,
                            KGenericFactory<ImagePlugin_FilmGrain>("digikamimageplugin_filmgrain"));
@@ -64,6 +66,6 @@ void ImagePlugin_FilmGrain::setEnabledActions(bool enable)
 
 void ImagePlugin_FilmGrain::slotFilmGrain()
 {
-    DigikamFilmGrainImagesPlugin::ImageEffect_FilmGrain dlg(kapp->activeWindow());
-    dlg.exec();
+    FilmGrainTool *tool = new FilmGrainTool(this);
+    loadTool(tool);
 }
