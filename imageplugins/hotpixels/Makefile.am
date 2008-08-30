@@ -20,7 +20,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
         
 digikamimageplugin_hotpixels_la_SOURCES = blackframeparser.cpp weights.cpp \
 	                                      hotpixelfixer.cpp imageplugin_hotpixels.cpp \
-					                      blackframelistview.cpp imageeffect_hotpixels.cpp 
+					      blackframelistview.cpp hotpixelstool.cpp 
 
 digikamimageplugin_hotpixels_la_LIBADD = $(LIB_KPARTS) \
 	                                     $(top_builddir)/digikam/digikam/libdigikam.la 

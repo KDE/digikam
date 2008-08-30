@@ -38,7 +38,7 @@
 
 // Digikam includes.
 
-#include "ctrlpaneldlg.h"
+#include "editortool.h"
 
 // Local includes.
 
@@ -46,11 +46,15 @@
 
 class QPushButton;
 
-class KProgress;
-
 namespace KDcrawIface
 {
 class RComboBox;
+}
+
+namespace Digikam
+{
+class EditorToolSettings;
+class ImagePanelWidget;
 }
 
 namespace DigikamHotPixelsImagesPlugin
@@ -58,28 +62,27 @@ namespace DigikamHotPixelsImagesPlugin
 
 class BlackFrameListView;
 
-class ImageEffect_HotPixels : public Digikam::CtrlPanelDlg
+class HotPixelsTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_HotPixels(QWidget *parent);
-    ~ImageEffect_HotPixels();
+    HotPixelsTool(QObject *parent);
+    ~HotPixelsTool();
 
 private slots:
 
-    void slotLoadingProgress(float v);
-    void slotLoadingComplete();
-
     void slotBlackFrame(QValueList<HotPixel> hpList, const KURL& blackFrameURL);
+    void slotResetSettings();
     void slotAddBlackFrame();
-    void readUserSettings();
+    void slotLoadingProgress(float);
+    void slotLoadingComplete();
 
 private:
 
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void prepareEffect();
     void prepareFinal();
     void abortPreview();
@@ -89,17 +92,19 @@ private:
 
 private:
 
-    QPushButton            *m_blackFrameButton;
+    QPushButton                 *m_blackFrameButton;
 
-    QValueList<HotPixel>    m_hotPixelsList;
+    QValueList<HotPixel>         m_hotPixelsList;
 
-    KURL                    m_blackFrameURL;
+    KURL                         m_blackFrameURL;
 
-    KProgress              *m_progressBar;
+    BlackFrameListView          *m_blackFrameListView;
 
-    BlackFrameListView     *m_blackFrameListView;
+    KDcrawIface::RComboBox      *m_filterMethodCombo;
 
-    KDcrawIface::RComboBox *m_filterMethodCombo;
+    Digikam::ImagePanelWidget   *m_previewWidget;
+
+    Digikam::EditorToolSettings *m_gboxSettings;
 };
 
 }  // NameSpace DigikamHotPixelsImagesPlugin
