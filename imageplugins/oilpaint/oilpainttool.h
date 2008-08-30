@@ -22,38 +22,44 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_OILPAINT_H
-#define IMAGEEFFECT_OILPAINT_H
+#ifndef OILPAINTTOOL_H
+#define OILPAINTTOOL_H
 
 // Digikam includes.
 
-#include "ctrlpaneldlg.h"
+#include "editortool.h"
 
 namespace KDcrawIface
 {
 class RIntNumInput;
 }
 
+namespace Digikam
+{
+class EditorToolSettings;
+class ImagePanelWidget;
+}
+
 namespace DigikamOilPaintImagesPlugin
 {
 
-class ImageEffect_OilPaint : public Digikam::CtrlPanelDlg
+class OilPaintTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_OilPaint(QWidget* parent);
-    ~ImageEffect_OilPaint();
+    OilPaintTool(QObject* parent);
+    ~OilPaintTool();
 
 private slots:
 
-    void readUserSettings();
+    void slotResetSettings();
 
 private:
 
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
@@ -62,10 +68,14 @@ private:
 
 private:
 
-    KDcrawIface::RIntNumInput *m_brushSizeInput;
-    KDcrawIface::RIntNumInput *m_smoothInput;
+    KDcrawIface::RIntNumInput   *m_brushSizeInput;
+    KDcrawIface::RIntNumInput   *m_smoothInput;
+
+    Digikam::ImagePanelWidget   *m_previewWidget;
+
+    Digikam::EditorToolSettings *m_gboxSettings;
 };
 
 }  // NameSpace DigikamOilPaintImagesPlugin
 
-#endif /* IMAGEEFFECT_OILPAINT_H */
+#endif /* OILPAINTTOOL_H */

@@ -49,72 +49,68 @@
 #include "ddebug.h"
 #include "dimg.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imagepanelwidget.h"
+#include "editortoolsettings.h"
 #include "oilpaint.h"
-#include "imageeffect_oilpaint.h"
-#include "imageeffect_oilpaint.moc"
+#include "oilpainttool.h"
+#include "oilpainttool.moc"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamOilPaintImagesPlugin
 {
 
-ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
-                    : Digikam::CtrlPanelDlg(parent, i18n("Apply Oil Paint Effect"),
-                                            "oilpaint", false, false, true,
-                                            Digikam::ImagePannelWidget::SeparateViewAll)
+OilPaintTool::OilPaintTool(QObject* parent)
+            : EditorToolThreaded(parent)
 {
     QString whatsThis;
 
-    KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Oil Paint"),
-                                       digikam_version,
-                                       I18N_NOOP("An oil painting image effect plugin for digiKam."),
-                                       KAboutData::License_GPL,
-                                       "(c) 2004-2005, Gilles Caulier\n"
-                                       "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg",
-                                       0,
-                                       "http://wwww.digikam.org");
-
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at gmail dot com");
-
-    about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Oil paint algorithm"),
-                     "pieter dot voloshyn at gmail dot com");
-
-    about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
-                     "marcel dot wiesweg at gmx dot de");
-
-    setAboutData(about);
+    setName("oilpaint");
+    setToolName(i18n("Oil Paint"));
+    setToolIcon(SmallIcon("oilpaint"));
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 1, 0, spacingHint());
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel|
+                                            EditorToolSettings::Try,
+                                            EditorToolSettings::PanIcon);
+    QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage(), 4, 1);
 
-    QLabel *label1   = new QLabel(i18n("Brush size:"), gboxSettings);
-    m_brushSizeInput = new RIntNumInput(gboxSettings);
+    QLabel *label1   = new QLabel(i18n("Brush size:"), m_gboxSettings->plainPage());
+    m_brushSizeInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_brushSizeInput->setRange(1, 5, 1);
     m_brushSizeInput->setDefaultValue(1);
     QWhatsThis::add( m_brushSizeInput, i18n("<p>Set here the brush size to use for "
                                             "simulating the oil painting.") );
 
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
-    gridSettings->addMultiCellWidget(m_brushSizeInput, 1, 1, 0, 1);
-
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Smooth:"), gboxSettings);
-    m_smoothInput  = new RIntNumInput(gboxSettings);
+    QLabel *label2 = new QLabel(i18n("Smooth:"), m_gboxSettings->plainPage());
+    m_smoothInput  = new RIntNumInput(m_gboxSettings->plainPage());
     m_smoothInput->setRange(10, 255, 1);
     m_smoothInput->setDefaultValue(30);
     QWhatsThis::add( m_smoothInput, i18n("<p>This value controls the smoothing effect "
                                          "of the brush under the canvas.") );
 
-    gridSettings->addMultiCellWidget(label2, 2, 2, 0, 1);
-    gridSettings->addMultiCellWidget(m_smoothInput, 3, 3, 0, 1);
 
-    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
+    grid->addMultiCellWidget(label1,           0, 0, 0, 1);
+    grid->addMultiCellWidget(m_brushSizeInput, 1, 1, 0, 1);
+    grid->addMultiCellWidget(label2,           2, 2, 0, 1);
+    grid->addMultiCellWidget(m_smoothInput,    3, 3, 0, 1);
+    grid->setRowStretch(4, 10);
+    grid->setMargin(m_gboxSettings->spacingHint());
+    grid->setSpacing(m_gboxSettings->spacingHint());
+
+    setToolSettings(m_gboxSettings);
+
+    // -------------------------------------------------------------
+
+    m_previewWidget = new ImagePanelWidget(470, 350, "oilpaint Tool", m_gboxSettings->panIconView());
+
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
@@ -125,42 +121,40 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
             this, SLOT(slotTimer()));
 }
 
-ImageEffect_OilPaint::~ImageEffect_OilPaint()
+OilPaintTool::~OilPaintTool()
 {
 }
 
-void ImageEffect_OilPaint::renderingFinished()
+void OilPaintTool::renderingFinished()
 {
     m_brushSizeInput->setEnabled(true);
     m_smoothInput->setEnabled(true);
 }
 
-void ImageEffect_OilPaint::readUserSettings()
+void OilPaintTool::readSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("oilpaint Tool Dialog");
+    config->setGroup("oilpaint Tool");
     m_brushSizeInput->blockSignals(true);
     m_smoothInput->blockSignals(true);
 
-    m_brushSizeInput->setValue(config->readNumEntry("BrushSize",
-                               m_brushSizeInput->defaultValue()));
-    m_smoothInput->setValue(config->readNumEntry("SmoothAjustment",
-                            m_smoothInput->defaultValue()));
+    m_brushSizeInput->setValue(config->readNumEntry("BrushSize", m_brushSizeInput->defaultValue()));
+    m_smoothInput->setValue(config->readNumEntry("SmoothAjustment", m_smoothInput->defaultValue()));
 
     m_brushSizeInput->blockSignals(false);
     m_smoothInput->blockSignals(false);
 }
 
-void ImageEffect_OilPaint::writeUserSettings()
+void OilPaintTool::writeSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("oilpaint Tool Dialog");
+    config->setGroup("oilpaint Tool");
     config->writeEntry("BrushSize", m_brushSizeInput->value());
     config->writeEntry("SmoothAjustment", m_smoothInput->value());
     config->sync();
 }
 
-void ImageEffect_OilPaint::resetValues()
+void OilPaintTool::slotResetSettings()
 {
     m_brushSizeInput->blockSignals(true);
     m_smoothInput->blockSignals(true);
@@ -172,20 +166,20 @@ void ImageEffect_OilPaint::resetValues()
     m_smoothInput->blockSignals(false);
 }
 
-void ImageEffect_OilPaint::prepareEffect()
+void OilPaintTool::prepareEffect()
 {
     m_brushSizeInput->setEnabled(false);
     m_smoothInput->setEnabled(false);
 
-    Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
+    DImg image = m_previewWidget->getOriginalRegionImage();
 
     int b = m_brushSizeInput->value();
     int s = m_smoothInput->value();
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new OilPaint(&image, this, b, s));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new OilPaint(&image, this, b, s)));
 }
 
-void ImageEffect_OilPaint::prepareFinal()
+void OilPaintTool::prepareFinal()
 {
     m_brushSizeInput->setEnabled(false);
     m_smoothInput->setEnabled(false);
@@ -193,21 +187,19 @@ void ImageEffect_OilPaint::prepareFinal()
     int b = m_brushSizeInput->value();
     int s = m_smoothInput->value();
 
-    Digikam::ImageIface iface(0, 0);
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new OilPaint(iface.getOriginalImg(), this, b, s));
+    ImageIface iface(0, 0);
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new OilPaint(iface.getOriginalImg(), this, b, s)));
 }
 
-void ImageEffect_OilPaint::putPreviewData(void)
+void OilPaintTool::putPreviewData()
 {
-    m_imagePreviewWidget->setPreviewImage(m_threadedFilter->getTargetImage());
+    m_previewWidget->setPreviewImage(filter()->getTargetImage());
 }
 
-void ImageEffect_OilPaint::putFinalData(void)
+void OilPaintTool::putFinalData()
 {
-    Digikam::ImageIface iface(0, 0);
-
-    iface.putOriginalImage(i18n("Oil Paint"),
-                        m_threadedFilter->getTargetImage().bits());
+    ImageIface iface(0, 0);
+    iface.putOriginalImage(i18n("Oil Paint"), filter()->getTargetImage().bits());
 }
 
 }  // NameSpace DigikamOilPaintImagesPlugin
