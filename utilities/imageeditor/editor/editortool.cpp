@@ -249,6 +249,8 @@ void EditorToolThreaded::setFilter(DImgThreadedFilter *filter)
 
     connect(d->threadedFilter, SIGNAL(progress(int)),
             this, SLOT(slotFilterProgress(int)));
+
+    d->threadedFilter->startFilter();
 }
 
 void EditorToolThreaded::slotResized()
