@@ -35,6 +35,7 @@
 namespace Digikam
 {
 
+class PreviewWidget;
 class Canvas;
 class EditorStackViewPriv;
 
@@ -78,6 +79,14 @@ signals:
 private slots:
 
     void slotZoomChanged(double);
+
+private:
+
+    /** Two widgets are embedded in Editor Tool to perform preview with panning and zooming:
+        a PreviewWidget derivated class or ImagePanelWidget. 
+        This method try to find the right PreviewWidget instance accordingly else return 0.
+     */
+    PreviewWidget* previewWidget() const;
 
 private:
 
