@@ -98,7 +98,6 @@ private slots:
     void slotPanIconTakeFocus();
     void slotInitGui();
     void slotZoomSliderChanged(int);
-    void slotZoomFactorChanged(double);
 
 private:
 
