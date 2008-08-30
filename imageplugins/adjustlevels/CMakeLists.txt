@@ -1,6 +1,6 @@
 
 SET(digikamimageplugin_adjustlevels_PART_SRCS imageplugin_adjustlevels.cpp
-                                              adjustlevels.cpp 
+                                              adjustlevelstool.cpp 
    )
 
 

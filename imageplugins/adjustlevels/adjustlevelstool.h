@@ -21,12 +21,12 @@
  *
  * ============================================================ */
 
-#ifndef ADJUSTLEVELS_H
-#define ADJUSTLEVELS_H
+#ifndef ADJUSTLEVELSTOOL_H
+#define ADJUSTLEVELSTOOL_H
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 #include "dimg.h"
 
 class QWidget;
@@ -48,33 +48,34 @@ namespace Digikam
 class HistogramWidget;
 class ImageWidget;
 class ImageLevels;
+class EditorToolSettings;
 }
 
 namespace DigikamAdjustLevelsImagesPlugin
 {
 
-class AdjustLevelDialog : public Digikam::ImageDlgBase
+class AdjustLevelTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    AdjustLevelDialog(QWidget *parent);
-    ~AdjustLevelDialog();
+    AdjustLevelTool(QObject *parent);
+    ~AdjustLevelTool();
 
 private:
 
-    void readUserSettings();
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void finalRendering();
     void adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
     bool eventFilter(QObject *obj, QEvent *ev);
 
 private slots:
 
-    void slotUser2();
-    void slotUser3();
+    void slotSaveAsSettings();
+    void slotLoadSettings();
+    void slotResetSettings();
     void slotEffect();
     void slotResetCurrentChannel();
     void slotAutoLevels();
@@ -151,9 +152,12 @@ private:
     Digikam::ImageWidget      *m_previewWidget;
 
     Digikam::ImageLevels      *m_levels;
-    Digikam::DImg              m_originalImage;
+
+    Digikam::DImg             *m_originalImage;
+
+    Digikam::EditorToolSettings *m_gboxSettings;
 };
 
 }  // NameSpace DigikamAdjustLevelsImagesPlugin
 
-#endif /* ADJUSTLEVELS_H */
+#endif /* ADJUSTLEVELSTOOL_H */

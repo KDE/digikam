@@ -51,6 +51,7 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <khelpmenu.h>
+#include <kicon.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmenu.h>
@@ -73,82 +74,72 @@
 #include "imagelevels.h"
 #include "histogramwidget.h"
 #include "dimgimagefilters.h"
-#include "adjustlevels.h"
-#include "adjustlevels.moc"
+#include "editortoolsettings.h"
+#include "adjustlevelstool.h"
+#include "adjustlevelstool.moc"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamAdjustLevelsImagesPlugin
 {
 
-AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
-                 : Digikam::ImageDlgBase(parent, i18n("Adjust Color Levels"),
-                   "adjustlevels", true, false)
+AdjustLevelTool::AdjustLevelTool(QObject* parent)
+               : EditorTool(parent)
 {
-    m_destinationPreviewData = 0L;
+    setObjectName("adjustlevels");
+    setToolName(i18n("Adjust Levels"));
+    setToolIcon(SmallIcon("adjustlevels"));
 
-    Digikam::ImageIface iface(0, 0);
-    uchar *data     = iface.getOriginalImage();
-    int w           = iface.originalWidth();
-    int h           = iface.originalHeight();
-    bool sixteenBit = iface.originalSixteenBit();
-    bool hasAlpha   = iface.originalHasAlpha();
-    m_originalImage = Digikam::DImg(w, h, sixteenBit, hasAlpha ,data);
-    delete [] data;
+    m_destinationPreviewData = 0;
 
-    m_histoSegments = m_originalImage.sixteenBit() ? 65535 : 255;
-    m_levels = new Digikam::ImageLevels(m_originalImage.sixteenBit());
+    ImageIface iface(0, 0);
+    m_originalImage = iface.getOriginalImg();
 
-    // About data and help button.
+    m_histoSegments = m_originalImage->sixteenBit() ? 65535 : 255;
+    m_levels        = new ImageLevels(m_originalImage->sixteenBit());
 
-    KAboutData* about = new KAboutData("digikam", 0,
-                                       ki18n("Adjust Color Levels"),
-                                       digiKamVersion().toAscii(),
-                                       ki18n("An image-histogram-levels adjustment plugin for digiKam."),
-                                       KAboutData::License_GPL,
-                                       ki18n("(c) 2004-2008, Gilles Caulier"),
-                                       KLocalizedString(),
-                                       Digikam::webProjectUrl().url().toUtf8());
-
-    about->addAuthor(ki18n("Gilles Caulier"), ki18n("Author and maintainer"),
-                     "caulier dot gilles at gmail dot com");
-
-    setAboutData(about);
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new Digikam::ImageWidget("adjustlevels Tool Dialog", mainWidget(),
-                                               i18n("<p>Here you can see the image's "
-                                                    "level-adjustments preview. You can pick a spot on the image "
-                                                    "to see the corresponding level in the histogram."));
-    setPreviewAreaWidget(m_previewWidget);
+    m_previewWidget = new ImageWidget("adjustlevels Tool", 0,
+            i18n("<p>Here you can see the image's "
+                 "level-adjustments preview. You can pick a spot on the image "
+                 "to see the corresponding level in the histogram."));
+
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings = new QWidget(mainWidget());
-    QGridLayout* grid     = new QGridLayout(gboxSettings);
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Load|
+                                            EditorToolSettings::SaveAs|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel);
 
-    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
-    label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( gboxSettings );
-    m_channelCB->addItem( i18n("Luminosity") );
-    m_channelCB->addItem( i18n("Red") );
-    m_channelCB->addItem( i18n("Green") );
-    m_channelCB->addItem( i18n("Blue") );
-    m_channelCB->addItem( i18n("Alpha") );
-    m_channelCB->setCurrentIndex( 0 );
-    m_channelCB->setWhatsThis( i18n("<p>Select the histogram channel to display here:<p>"
-                                    "<b>Luminosity</b>: display the image's luminosity values.<p>"
-                                    "<b>Red</b>: display the red image-channel values.<p>"
-                                    "<b>Green</b>: display the green image-channel values.<p>"
-                                    "<b>Blue</b>: display the blue image-channel values.<p>"
-                                    "<b>Alpha</b>: display the alpha image-channel values. "
-                                    "This channel corresponds to the transparency value and "
-                                    "is supported by some image formats, such as PNG or TIF."));
+    QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage());
+
+    QLabel *label1 = new QLabel(i18n("Channel:"), m_gboxSettings->plainPage());
+    label1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_channelCB = new QComboBox(m_gboxSettings->plainPage());
+    m_channelCB->addItem(i18n("Luminosity"));
+    m_channelCB->addItem(i18n("Red"));
+    m_channelCB->addItem(i18n("Green"));
+    m_channelCB->addItem(i18n("Blue"));
+    m_channelCB->addItem(i18n("Alpha"));
+    m_channelCB->setCurrentIndex(0);
+    m_channelCB->setWhatsThis(i18n("<p>Select the histogram channel to display here:<p>"
+                                   "<b>Luminosity</b>: display the image's luminosity values.<p>"
+                                   "<b>Red</b>: display the red image-channel values.<p>"
+                                   "<b>Green</b>: display the green image-channel values.<p>"
+                                   "<b>Blue</b>: display the blue image-channel values.<p>"
+                                   "<b>Alpha</b>: display the alpha image-channel values. "
+                                   "This channel corresponds to the transparency value and "
+                                   "is supported by some image formats, such as PNG or TIF."));
 
     // -------------------------------------------------------------
 
-    QWidget *scaleBox = new QWidget(gboxSettings);
+    QWidget *scaleBox = new QWidget(m_gboxSettings->plainPage());
     QHBoxLayout *hlay = new QHBoxLayout(scaleBox);
     m_scaleBG         = new QButtonGroup(scaleBox);
     scaleBox->setWhatsThis(i18n("<p>Select the histogram scale here.<p>"
@@ -160,13 +151,13 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
     linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
     linHistoButton->setCheckable(true);
-    m_scaleBG->addButton(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
+    m_scaleBG->addButton(linHistoButton, HistogramWidget::LinScaleHistogram);
 
     QToolButton *logHistoButton = new QToolButton( scaleBox );
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
     logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
     logHistoButton->setCheckable(true);
-    m_scaleBG->addButton(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    m_scaleBG->addButton(logHistoButton, HistogramWidget::LogScaleHistogram);
 
     hlay->setMargin(0);
     hlay->setSpacing(0);
@@ -184,20 +175,22 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, gboxSettings, false, true, true);
+    m_histogramWidget = new HistogramWidget(256, 140, m_gboxSettings->plainPage(), false, true, true);
     m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram "
                                           "drawing of the selected image channel. This one is "
                                           "re-computed at any levels settings changes."));
 
-    m_levelsHistogramWidget = new Digikam::HistogramWidget(256, 140, m_originalImage.bits(),
-                                                           m_originalImage.width(), m_originalImage.height(),
-                                                           m_originalImage.sixteenBit(), gboxSettings, false);
+    m_levelsHistogramWidget = new HistogramWidget(256, 140, m_originalImage->bits(),
+                                                            m_originalImage->width(),
+                                                            m_originalImage->height(),
+                                                            m_originalImage->sixteenBit(),
+                                                            m_gboxSettings->plainPage(), false);
     m_levelsHistogramWidget->setWhatsThis( i18n("<p>This is the histogram drawing of the selected channel "
                                                 "from original image"));
 
     // -------------------------------------------------------------
 
-    m_hGradientMinInput = new KGradientSelector( Qt::Horizontal, gboxSettings );
+    m_hGradientMinInput = new KGradientSelector( Qt::Horizontal, m_gboxSettings->plainPage() );
     m_hGradientMinInput->setIndent(false);
     m_hGradientMinInput->setFixedHeight( 16 );
     m_hGradientMinInput->setMinimum(0);
@@ -208,7 +201,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_hGradientMinInput->setColors( QColor( "black" ), QColor( "white" ) );
     m_hGradientMinInput->installEventFilter(this);
 
-    m_hGradientMaxInput = new KGradientSelector( Qt::Horizontal, gboxSettings );
+    m_hGradientMaxInput = new KGradientSelector( Qt::Horizontal, m_gboxSettings->plainPage() );
     m_hGradientMaxInput->setIndent(false);
     m_hGradientMaxInput->setFixedHeight( 16 );
     m_hGradientMaxInput->setMinimum(0);
@@ -219,7 +212,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
     m_hGradientMaxInput->installEventFilter(this);
 
-    m_minInput = new RIntNumInput(gboxSettings);
+    m_minInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_minInput->setRange(0, m_histoSegments, 1);
     m_minInput->setSliderEnabled(false);
     m_minInput->setDefaultValue(0);
@@ -227,14 +220,14 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
                                    "value of the histogram here."));
     m_minInput->setToolTip( i18n( "Minimal intensity input." ) );
 
-    m_gammaInput = new RDoubleNumInput(gboxSettings);
+    m_gammaInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_gammaInput->setDecimals(2);
     m_gammaInput->setRange(0.1, 3.0, 0.01);
     m_gammaInput->setDefaultValue(1.0);
     m_gammaInput->setToolTip( i18n( "Gamma input value." ) );
     m_gammaInput->setWhatsThis( i18n("<p>Select the gamma input value here."));
 
-    m_maxInput = new RIntNumInput(gboxSettings);
+    m_maxInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_maxInput->setRange(0, m_histoSegments, 1);
     m_maxInput->setSliderEnabled(false);
     m_maxInput->setDefaultValue(m_histoSegments);
@@ -242,7 +235,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_maxInput->setWhatsThis( i18n("<p>Select the maximal intensity input "
                                    "value of the histogram here."));
 
-    m_hGradientMinOutput = new KGradientSelector( Qt::Horizontal, gboxSettings );
+    m_hGradientMinOutput = new KGradientSelector( Qt::Horizontal, m_gboxSettings->plainPage() );
     m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "white" ) );
     m_hGradientMinOutput->setWhatsThis(i18n("<p>Select the minimal intensity output "
                                              "value of the histogram here."));
@@ -253,7 +246,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_hGradientMinOutput->setMaximum(m_histoSegments);
     m_hGradientMinOutput->installEventFilter(this);
 
-    m_hGradientMaxOutput = new KGradientSelector( Qt::Horizontal, gboxSettings );
+    m_hGradientMaxOutput = new KGradientSelector( Qt::Horizontal, m_gboxSettings->plainPage() );
     m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "white" ) );
     m_hGradientMaxOutput->setWhatsThis(i18n("<p>Select the maximal intensity output "
                                             "value of the histogram here."));
@@ -264,7 +257,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_hGradientMaxOutput->setMaximum(m_histoSegments);
     m_hGradientMaxOutput->installEventFilter(this);
 
-    m_minOutput = new RIntNumInput(gboxSettings);
+    m_minOutput = new RIntNumInput(m_gboxSettings->plainPage());
     m_minOutput->setRange(0, m_histoSegments, 1);
     m_minOutput->setSliderEnabled(false);
     m_minOutput->setDefaultValue(0);
@@ -272,7 +265,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_minOutput->setWhatsThis( i18n("<p>Select the minimal intensity output "
                                     "value of the histogram here."));
 
-    m_maxOutput = new RIntNumInput(gboxSettings);
+    m_maxOutput = new RIntNumInput(m_gboxSettings->plainPage());
     m_maxOutput->setRange(0, m_histoSegments, 1);
     m_maxOutput->setSliderEnabled(false);
     m_maxOutput->setDefaultValue(m_histoSegments);
@@ -282,7 +275,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_pickerBox              = new QWidget(gboxSettings);
+    m_pickerBox              = new QWidget(m_gboxSettings->plainPage());
     QHBoxLayout *hlay3       = new QHBoxLayout(m_pickerBox);
     m_pickerColorButtonGroup = new QButtonGroup(m_pickerBox);
 
@@ -323,21 +316,21 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_autoButton = new QToolButton(gboxSettings);
+    m_autoButton = new QToolButton(m_gboxSettings->plainPage());
     m_autoButton->setIcon(KIconLoader::global()->loadIcon("system-run", KIconLoader::Toolbar));
     m_autoButton->setToolTip( i18n( "Adjust all levels automatically." ) );
     m_autoButton->setWhatsThis( i18n("<p>If you press this button, all channel levels will be adjusted "
                                      "automatically."));
 
-    m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
+    m_resetButton = new QPushButton(i18n("&Reset"), m_gboxSettings->plainPage());
     m_resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
     m_resetButton->setToolTip( i18n( "Reset current channel levels' values." ) );
     m_resetButton->setWhatsThis( i18n("<p>If you press this button, all levels' values "
                                       "from the current selected channel "
                                       "will be reset to the default values."));
 
-    QLabel *space = new QLabel(gboxSettings);
-    space->setFixedWidth(spacingHint());
+    QLabel *space = new QLabel(m_gboxSettings->plainPage());
+    space->setFixedWidth(m_gboxSettings->spacingHint());
 
     QHBoxLayout* l3 = new QHBoxLayout();
     l3->addWidget(m_pickerBox);
@@ -348,35 +341,39 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    grid->addLayout(l1, 0, 0, 1, 6+1);
-    grid->setRowMinimumHeight(1, spacingHint());
-    grid->addWidget(m_histogramWidget, 2, 1, 1, 5);
-    grid->setRowMinimumHeight(3, spacingHint());
-    grid->addWidget(m_levelsHistogramWidget, 4, 1, 1, 5);
-    grid->addWidget(m_hGradientMinInput, 5, 0, 1, 6+1);
-    grid->addWidget(m_minInput, 5, 8, 1, 1);
-    grid->setRowMinimumHeight(6, spacingHint());
-    grid->addWidget(m_hGradientMaxInput, 7, 0, 1, 6+1);
-    grid->addWidget(m_maxInput, 7, 8, 1, 1);
-    grid->setRowMinimumHeight(8, spacingHint());
-    grid->addWidget(m_gammaInput, 9, 0, 1, 8+1);
-    grid->setRowMinimumHeight(10, spacingHint());
-    grid->addWidget(m_hGradientMinOutput, 11, 0, 1, 6+1);
-    grid->addWidget(m_minOutput, 11, 8, 1, 1);
-    grid->setRowMinimumHeight(12, spacingHint());
-    grid->addWidget(m_hGradientMaxOutput, 13, 0, 1, 6+1);
-    grid->addWidget(m_maxOutput, 13, 8, 1, 1);
-    grid->setRowMinimumHeight(14, spacingHint());
-    grid->addLayout(l3, 15, 0, 1, 8+1);
-    grid->setRowStretch(16, 10);
-    grid->setColumnStretch(2, 10);
+    grid->addLayout(l1,                         0, 0, 1, 6+1);
+    grid->addWidget(m_histogramWidget,          2, 1, 1, 5);
+    grid->addWidget(m_levelsHistogramWidget,    4, 1, 1, 5);
+    grid->addWidget(m_hGradientMinInput,        5, 0, 1, 6+1);
+    grid->addWidget(m_minInput,                 5, 8, 1, 1);
+    grid->addWidget(m_hGradientMaxInput,        7, 0, 1, 6+1);
+    grid->addWidget(m_maxInput,                 7, 8, 1, 1);
+    grid->addWidget(m_gammaInput,               9, 0, 1, 8+1);
+    grid->addWidget(m_hGradientMinOutput,      11, 0, 1, 6+1);
+    grid->addWidget(m_minOutput,               11, 8, 1, 1);
+    grid->addWidget(m_hGradientMaxOutput,      13, 0, 1, 6+1);
+    grid->addWidget(m_maxOutput,               13, 8, 1, 1);
+    grid->addLayout(l3,                        15, 0, 1, 8+1);
+
+    grid->setRowMinimumHeight(1,   m_gboxSettings->spacingHint());
+    grid->setRowMinimumHeight(3,   m_gboxSettings->spacingHint());
+    grid->setRowMinimumHeight(6,   m_gboxSettings->spacingHint());
+    grid->setRowMinimumHeight(8,   m_gboxSettings->spacingHint());
+    grid->setRowMinimumHeight(10,  m_gboxSettings->spacingHint());
+    grid->setRowMinimumHeight(12,  m_gboxSettings->spacingHint());
+    grid->setRowMinimumHeight(14,  m_gboxSettings->spacingHint());
+
     grid->setColumnMinimumWidth(0, 5);
     grid->setColumnMinimumWidth(6, 5);
-    grid->setColumnMinimumWidth(7, spacingHint());
-    grid->setMargin(spacingHint());
+    grid->setColumnMinimumWidth(7, m_gboxSettings->spacingHint());
+
+    grid->setRowStretch(16, 10);
+    grid->setColumnStretch(2, 10);
+
+    grid->setMargin(m_gboxSettings->spacingHint());
     grid->setSpacing(0);
 
-    setUserAreaWidget(gboxSettings);
+    setToolSettings(m_gboxSettings);
 
     // -------------------------------------------------------------
     // Channels and scale selection slots.
@@ -440,7 +437,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
 }
 
-AdjustLevelDialog::~AdjustLevelDialog()
+AdjustLevelTool::~AdjustLevelTool()
 {
     m_histogramWidget->stopHistogramComputation();
 
@@ -452,14 +449,14 @@ AdjustLevelDialog::~AdjustLevelDialog()
     delete m_levels;
 }
 
-void AdjustLevelDialog::slotPickerColorButtonActived()
+void AdjustLevelTool::slotPickerColorButtonActived()
 {
     // Save previous rendering mode and toggle to original image.
     m_currentPreviewMode = m_previewWidget->getRenderingPreviewMode();
-    m_previewWidget->setRenderingPreviewMode(Digikam::ImageGuideWidget::PreviewOriginalImage);
+    m_previewWidget->setRenderingPreviewMode(ImageGuideWidget::PreviewOriginalImage);
 }
 
-void AdjustLevelDialog::slotSpotColorChanged(const Digikam::DColor &color)
+void AdjustLevelTool::slotSpotColorChanged(const DColor &color)
 {
     if ( m_pickBlack->isChecked() )
     {
@@ -494,12 +491,12 @@ void AdjustLevelDialog::slotSpotColorChanged(const Digikam::DColor &color)
     slotEffect();
 }
 
-void AdjustLevelDialog::slotColorSelectedFromTarget( const Digikam::DColor &color )
+void AdjustLevelTool::slotColorSelectedFromTarget( const DColor &color )
 {
     m_histogramWidget->setHistogramGuideByColor(color);
 }
 
-void AdjustLevelDialog::slotGammaInputchanged(double val)
+void AdjustLevelTool::slotGammaInputchanged(double val)
 {
     blockSignals(true);
     m_levels->setLevelGammaValue(m_channelCB->currentIndex(), val);
@@ -507,7 +504,7 @@ void AdjustLevelDialog::slotGammaInputchanged(double val)
     slotTimer();
 }
 
-void AdjustLevelDialog::slotAdjustMinInputSpinBox(int val)
+void AdjustLevelTool::slotAdjustMinInputSpinBox(int val)
 {
     blockSignals(true);
 
@@ -521,7 +518,7 @@ void AdjustLevelDialog::slotAdjustMinInputSpinBox(int val)
     slotTimer();
 }
 
-void AdjustLevelDialog::slotAdjustMaxInputSpinBox(int val)
+void AdjustLevelTool::slotAdjustMaxInputSpinBox(int val)
 {
     blockSignals(true);
 
@@ -535,7 +532,7 @@ void AdjustLevelDialog::slotAdjustMaxInputSpinBox(int val)
     slotTimer();
 }
 
-void AdjustLevelDialog::slotAdjustMinOutputSpinBox(int val)
+void AdjustLevelTool::slotAdjustMinOutputSpinBox(int val)
 {
     blockSignals(true);
 
@@ -549,7 +546,7 @@ void AdjustLevelDialog::slotAdjustMinOutputSpinBox(int val)
     slotTimer();
 }
 
-void AdjustLevelDialog::slotAdjustMaxOutputSpinBox(int val)
+void AdjustLevelTool::slotAdjustMaxOutputSpinBox(int val)
 {
     blockSignals(true);
 
@@ -563,14 +560,14 @@ void AdjustLevelDialog::slotAdjustMaxOutputSpinBox(int val)
     slotTimer();
 }
 
-void AdjustLevelDialog::slotAdjustSliders()
+void AdjustLevelTool::slotAdjustSliders()
 {
     adjustSliders(m_minInput->value(), m_gammaInput->value(),
                   m_maxInput->value(), m_minOutput->value(),
                   m_maxOutput->value());
 }
 
-void AdjustLevelDialog::adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut)
+void AdjustLevelTool::adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut)
 {
     m_hGradientMinInput->setValue(minIn);
     m_hGradientMaxInput->setValue(maxIn);
@@ -579,7 +576,7 @@ void AdjustLevelDialog::adjustSliders(int minIn, double gamIn, int maxIn, int mi
     m_hGradientMaxOutput->setValue(maxOut);
 }
 
-void AdjustLevelDialog::slotResetCurrentChannel()
+void AdjustLevelTool::slotResetCurrentChannel()
 {
     m_levels->levelsChannelReset(m_channelCB->currentIndex());
 
@@ -591,7 +588,7 @@ void AdjustLevelDialog::slotResetCurrentChannel()
     m_histogramWidget->reset();
 }
 
-void AdjustLevelDialog::slotAutoLevels()
+void AdjustLevelTool::slotAutoLevels()
 {
     // Calculate Auto levels.
     m_levels->levelsAuto(m_levelsHistogramWidget->m_imageHistogram);
@@ -602,9 +599,9 @@ void AdjustLevelDialog::slotAutoLevels()
     slotEffect();
 }
 
-void AdjustLevelDialog::slotEffect()
+void AdjustLevelTool::slotEffect()
 {
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = m_previewWidget->imageIface();
     uchar *orgData             = iface->getPreviewImage();
     int w                      = iface->previewWidth();
     int h                      = iface->previewHeight();
@@ -619,7 +616,7 @@ void AdjustLevelDialog::slotEffect()
     m_destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
 
     // Calculate the LUT to apply on the image.
-    m_levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel);
+    m_levels->levelsLutSetup(ImageHistogram::AlphaChannel);
 
     // Apply the lut to the image.
     m_levels->levelsLutProcess(orgData, m_destinationPreviewData, w, h);
@@ -633,10 +630,10 @@ void AdjustLevelDialog::slotEffect()
     delete [] orgData;
 }
 
-void AdjustLevelDialog::finalRendering()
+void AdjustLevelTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = m_previewWidget->imageIface();
     uchar *orgData             = iface->getOriginalImage();
     int w                      = iface->originalWidth();
     int h                      = iface->originalHeight();
@@ -646,7 +643,7 @@ void AdjustLevelDialog::finalRendering()
     uchar* desData = new uchar[w*h*(sb ? 8 : 4)];
 
     // Calculate the LUT to apply on the image.
-    m_levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel);
+    m_levels->levelsLutSetup(ImageHistogram::AlphaChannel);
 
     // Apply the lut to the image.
     m_levels->levelsLutProcess(orgData, desData, w, h);
@@ -656,16 +653,15 @@ void AdjustLevelDialog::finalRendering()
 
     delete [] orgData;
     delete [] desData;
-    accept();
 }
 
-void AdjustLevelDialog::slotChannelChanged(int channel)
+void AdjustLevelTool::slotChannelChanged(int channel)
 {
     switch(channel)
     {
        case LuminosityChannel:
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
-          m_levelsHistogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
+          m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
+          m_levelsHistogramWidget->m_channelType = HistogramWidget::ValueHistogram;
           m_hGradientMinInput->setColors( QColor( "black" ), QColor( "white" ) );
           m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
           m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "white" ) );
@@ -673,8 +669,8 @@ void AdjustLevelDialog::slotChannelChanged(int channel)
           break;
 
        case RedChannel:
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
-          m_levelsHistogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
+          m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
+          m_levelsHistogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
           m_hGradientMinInput->setColors( QColor( "black" ), QColor( "red" ) );
           m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "red" ) );
           m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "red" ) );
@@ -682,8 +678,8 @@ void AdjustLevelDialog::slotChannelChanged(int channel)
           break;
 
        case GreenChannel:
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
-          m_levelsHistogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
+          m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
+          m_levelsHistogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
           m_hGradientMinInput->setColors( QColor( "black" ), QColor( "green" ) );
           m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "green" ) );
           m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "green" ) );
@@ -691,8 +687,8 @@ void AdjustLevelDialog::slotChannelChanged(int channel)
           break;
 
        case BlueChannel:
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
-          m_levelsHistogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
+          m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
+          m_levelsHistogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
           m_hGradientMinInput->setColors( QColor( "black" ), QColor( "blue" ) );
           m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "blue" ) );
           m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "blue" ) );
@@ -700,8 +696,8 @@ void AdjustLevelDialog::slotChannelChanged(int channel)
           break;
 
        case AlphaChannel:
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::AlphaChannelHistogram;
-          m_levelsHistogramWidget->m_channelType = Digikam::HistogramWidget::AlphaChannelHistogram;
+          m_histogramWidget->m_channelType = HistogramWidget::AlphaChannelHistogram;
+          m_levelsHistogramWidget->m_channelType = HistogramWidget::AlphaChannelHistogram;
           m_hGradientMinInput->setColors( QColor( "black" ), QColor( "white" ) );
           m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
           m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "white" ) );
@@ -719,7 +715,7 @@ void AdjustLevelDialog::slotChannelChanged(int channel)
     m_histogramWidget->repaint();
 }
 
-void AdjustLevelDialog::slotScaleChanged(int scale)
+void AdjustLevelTool::slotScaleChanged(int scale)
 {
     m_levelsHistogramWidget->m_scaleType = scale;
     m_histogramWidget->m_scaleType       = scale;
@@ -727,18 +723,18 @@ void AdjustLevelDialog::slotScaleChanged(int scale)
     m_levelsHistogramWidget->repaint();
 }
 
-void AdjustLevelDialog::readUserSettings()
+void AdjustLevelTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("adjustlevels Tool Dialog");
+    KConfigGroup group = config->group("adjustlevels Tool");
 
     m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->button(group.readEntry("Histogram Scale",
-                      (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
+                      (int)HistogramWidget::LogScaleHistogram))->setChecked(true);
 
     for (int i = 0 ; i < 5 ; i++)
     {
-        bool sb        = m_originalImage.sixteenBit();
+        bool sb        = m_originalImage->sixteenBit();
         int max        = sb ? 65535 : 255;
         double gamma   = group.readEntry(QString("GammaChannel%1").arg(i), 1.0);
         int lowInput   = group.readEntry(QString("LowInputChannel%1").arg(i), 0);
@@ -766,16 +762,16 @@ void AdjustLevelDialog::readUserSettings()
     m_maxOutput->setValue(m_levels->getLevelHighOutputValue(m_channelCB->currentIndex()));
 }
 
-void AdjustLevelDialog::writeUserSettings()
+void AdjustLevelTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("adjustlevels Tool Dialog");
+    KConfigGroup group = config->group("adjustlevels Tool");
     group.writeEntry("Histogram Channel", m_channelCB->currentIndex());
     group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
 
     for (int i = 0 ; i < 5 ; i++)
     {
-        bool sb        = m_originalImage.sixteenBit();
+        bool sb        = m_originalImage->sixteenBit();
         double gamma   = m_levels->getLevelGammaValue(i);
         int lowInput   = m_levels->getLevelLowInputValue(i);
         int lowOutput  = m_levels->getLevelLowOutputValue(i);
@@ -792,7 +788,7 @@ void AdjustLevelDialog::writeUserSettings()
     config->sync();
 }
 
-void AdjustLevelDialog::resetValues()
+void AdjustLevelTool::slotResetSettings()
 {
     for (int channel = 0 ; channel < 5 ; ++channel)
        m_levels->levelsChannelReset(channel);
@@ -804,19 +800,20 @@ void AdjustLevelDialog::resetValues()
 }
 
 // Load all settings.
-void AdjustLevelDialog::slotUser3()
+void AdjustLevelTool::slotLoadSettings()
 {
     KUrl loadLevelsFile;
 
     loadLevelsFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-                                             QString( "*" ), this,
+                                             QString( "*" ), kapp->activeWindow(),
                                              QString( i18n("Select Gimp Levels File to Load")) );
     if( loadLevelsFile.isEmpty() )
        return;
 
     if ( m_levels->loadLevelsFromGimpLevelsFile( loadLevelsFile ) == false )
     {
-       KMessageBox::error(this, i18n("Cannot load from the Gimp levels text file."));
+       KMessageBox::error(kapp->activeWindow(),
+                          i18n("Cannot load from the Gimp levels text file."));
        return;
     }
 
@@ -825,19 +822,20 @@ void AdjustLevelDialog::slotUser3()
 }
 
 // Save all settings.
-void AdjustLevelDialog::slotUser2()
+void AdjustLevelTool::slotSaveAsSettings()
 {
     KUrl saveLevelsFile;
 
     saveLevelsFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-                                             QString( "*" ), this,
+                                             QString( "*" ), kapp->activeWindow(),
                                              QString( i18n("Gimp Levels File to Save")) );
     if( saveLevelsFile.isEmpty() )
        return;
 
     if ( m_levels->saveLevelsToGimpLevelsFile( saveLevelsFile ) == false )
     {
-       KMessageBox::error(this, i18n("Cannot save to the Gimp levels text file."));
+       KMessageBox::error(kapp->activeWindow(),
+                          i18n("Cannot save to the Gimp levels text file."));
        return;
     }
 
@@ -847,7 +845,7 @@ void AdjustLevelDialog::slotUser2()
 
 // See B.K.O #146636: use event filter with all level slider to display a
 // guide over level histogram.
-bool AdjustLevelDialog::eventFilter(QObject *obj, QEvent *ev)
+bool AdjustLevelTool::eventFilter(QObject *obj, QEvent *ev)
 {
     if ( obj == m_hGradientMinInput )
     {
@@ -940,13 +938,13 @@ bool AdjustLevelDialog::eventFilter(QObject *obj, QEvent *ev)
     else
     {
         // pass the event on to the parent class
-        return KDialog::eventFilter(obj, ev);
+        return EditorTool::eventFilter(obj, ev);
     }
 }
 
-void AdjustLevelDialog::slotShowHistogramGuide(int v)
+void AdjustLevelTool::slotShowHistogramGuide(int v)
 {
-    Digikam::DColor color(v, v, v, v, m_originalImage.sixteenBit());
+    DColor color(v, v, v, v, m_originalImage->sixteenBit());
     m_levelsHistogramWidget->setHistogramGuideByColor(color);
 }
 

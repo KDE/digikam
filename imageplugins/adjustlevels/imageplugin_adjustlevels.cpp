@@ -34,9 +34,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "adjustlevels.h"
+#include "adjustlevelstool.h"
 #include "imageplugin_adjustlevels.h"
 #include "imageplugin_adjustlevels.moc"
+
+using namespace DigikamAdjustLevelsImagesPlugin;
 
 K_PLUGIN_FACTORY( AdjustLevelsFactory, registerPlugin<ImagePlugin_AdjustLevels>(); )
 K_EXPORT_PLUGIN ( AdjustLevelsFactory("digikamimageplugin_adjustlevels") )
@@ -67,6 +69,6 @@ void ImagePlugin_AdjustLevels::setEnabledActions(bool enable)
 
 void ImagePlugin_AdjustLevels::slotLevelsAdjust()
 {
-    DigikamAdjustLevelsImagesPlugin::AdjustLevelDialog dlg(kapp->activeWindow());
-    dlg.exec();
+    AdjustLevelTool *tool = new AdjustLevelTool(kapp->activeWindow());
+    loadTool(tool);
 }
