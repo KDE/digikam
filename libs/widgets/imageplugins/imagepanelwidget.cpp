@@ -244,7 +244,7 @@ void ImagePanelWidget::writeSettings()
 
 void ImagePanelWidget::slotOriginalImageRegionChanged(bool target)
 {
-    slotZoomFactorChanged(d->imageRegionWidget->zoomFactor());
+    d->imagePanIconWidget->slotZoomFactorChanged(d->imageRegionWidget->zoomFactor());
     QRect rect = getOriginalImageRegion();
     d->imagePanIconWidget->setRegionSelection(rect);
     updateSelectionInfo(rect);
@@ -254,11 +254,6 @@ void ImagePanelWidget::slotOriginalImageRegionChanged(bool target)
         d->imageRegionWidget->backupPixmapRegion();
         emit signalOriginalClipFocusChanged();
     }
-}
-
-void ImagePanelWidget::slotZoomFactorChanged(double zoom)
-{
-    d->imagePanIconWidget->slotZoomFactorChanged(zoom);
 }
 
 void ImagePanelWidget::slotZoomSliderChanged(int size)
