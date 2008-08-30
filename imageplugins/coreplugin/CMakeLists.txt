@@ -48,10 +48,10 @@ SET(digikamimageplugin_core_PART_SRCS
     ${libclapack_SRCS} 
     ../../imageplugins/coreplugin/autocorrectiontool.cpp 
     ../../imageplugins/coreplugin/bcgtool.cpp 
-    ../../imageplugins/coreplugin/hsl/hspreviewwidget.cpp
-    ../../imageplugins/coreplugin/hsl/imageeffect_hsl.cpp 
-    ../../imageplugins/coreplugin/imageeffect_blur.cpp 
     ../../imageplugins/coreplugin/bwsepiatool.cpp 
+    ../../imageplugins/coreplugin/hsl/hsltool.cpp 
+    ../../imageplugins/coreplugin/hsl/hspreviewwidget.cpp
+    ../../imageplugins/coreplugin/imageeffect_blur.cpp 
     ../../imageplugins/coreplugin/imageeffect_iccproof.cpp 
     ../../imageplugins/coreplugin/imageeffect_redeye.cpp 
     ../../imageplugins/coreplugin/imageeffect_rgb.cpp 

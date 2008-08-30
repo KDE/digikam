@@ -55,49 +55,58 @@
 
 // Digikam includes.
 
+#include "colorgradientwidget.h"
+#include "dimg.h"
+#include "editortoolsettings.h"
+#include "histogramwidget.h"
+#include "hslmodifier.h"
 #include "imageiface.h"
 #include "imagewidget.h"
-#include "histogramwidget.h"
-#include "colorgradientwidget.h"
-#include "hslmodifier.h"
-#include "dimg.h"
 
 // Local includes.
 
 #include "hspreviewwidget.h"
-#include "imageeffect_hsl.h"
-#include "imageeffect_hsl.moc"
+#include "hsltool.h"
+#include "hsltool.moc"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
 
-ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
-               : Digikam::ImageDlgBase(parent, i18n("Hue/Saturation/Lightness"), "hsladjust", false)
+HSLTool::HSLTool(QObject* parent)
+       : EditorTool(parent)
 {
-    m_destinationPreviewData = 0L;
-    setHelp("hsladjusttool.anchor", "digikam");
+    setObjectName("adjusthsl");
+    setToolName(i18n("Hue / Saturation / Lightness"));
+    setToolIcon(SmallIcon("adjusthsl"));
+    setToolHelp("hsladjusttool.anchor");
 
-    m_previewWidget = new Digikam::ImageWidget("hsladjust Tool Dialog", mainWidget(),
-                                               i18n("<p>Here you can see the image "
-                                                    "Hue/Saturation/Lightness adjustments preview. "
-                                                    "You can pick color on image "
-                                                    "to see the color level corresponding on histogram."));
-    setPreviewAreaWidget(m_previewWidget);
+    m_destinationPreviewData = 0;
+
+    m_previewWidget = new ImageWidget("hsladjust Tool", 0,
+                                      i18n("<p>Here you can see the image "
+                                           "Hue/Saturation/Lightness adjustments preview. "
+                                           "You can pick color on image "
+                                           "to see the color level corresponding on histogram."));
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings     = new QWidget(mainWidget());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings );
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel);
 
-    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
-    label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( gboxSettings );
-    m_channelCB->addItem( i18n("Luminosity") );
-    m_channelCB->addItem( i18n("Red") );
-    m_channelCB->addItem( i18n("Green") );
-    m_channelCB->addItem( i18n("Blue") );
+    QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
+
+    QLabel *label1 = new QLabel(i18n("Channel:"), m_gboxSettings->plainPage());
+    label1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_channelCB = new QComboBox(m_gboxSettings->plainPage());
+    m_channelCB->addItem(i18n("Luminosity"));
+    m_channelCB->addItem(i18n("Red"));
+    m_channelCB->addItem(i18n("Green"));
+    m_channelCB->addItem(i18n("Blue"));
     m_channelCB->setWhatsThis( i18n("<p>Select the histogram channel to display:<p>"
                                     "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                     "<b>Red</b>: display the red image-channel values.<p>"
@@ -106,7 +115,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QWidget *scaleBox = new QWidget(gboxSettings);
+    QWidget *scaleBox = new QWidget(m_gboxSettings->plainPage());
     QHBoxLayout *hlay = new QHBoxLayout(scaleBox);
     m_scaleBG         = new QButtonGroup(scaleBox);
     scaleBox->setWhatsThis(i18n("<p>Select the histogram scale.<p>"
@@ -114,17 +123,17 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
                                 "Logarithmic scale can be used when the maximal counts are big; "
                                 "if it is used, all values (small and large) will be visible on the graph."));
 
-    QToolButton *linHistoButton = new QToolButton( scaleBox );
-    linHistoButton->setToolTip( i18n( "<p>Linear" ) );
+    QToolButton *linHistoButton = new QToolButton(scaleBox);
+    linHistoButton->setToolTip(i18n("<p>Linear"));
     linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
     linHistoButton->setCheckable(true);
-    m_scaleBG->addButton(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
+    m_scaleBG->addButton(linHistoButton, HistogramWidget::LinScaleHistogram);
 
-    QToolButton *logHistoButton = new QToolButton( scaleBox );
-    logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
+    QToolButton *logHistoButton = new QToolButton(scaleBox);
+    logHistoButton->setToolTip(i18n("<p>Logarithmic"));
     logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
     logHistoButton->setCheckable(true);
-    m_scaleBG->addButton(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    m_scaleBG->addButton(logHistoButton, HistogramWidget::LogScaleHistogram);
 
     hlay->setMargin(0);
     hlay->setSpacing(0);
@@ -142,44 +151,44 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    KVBox *histoBox   = new KVBox(gboxSettings);
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
+    KVBox *histoBox   = new KVBox(m_gboxSettings->plainPage());
+    m_histogramWidget = new HistogramWidget(256, 140, histoBox, false, true, true);
     m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram drawing "
                                           "of the selected image channel. This one is re-computed at any "
                                           "settings changes."));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);
-    m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
-    m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+    m_hGradient = new ColorGradientWidget(ColorGradientWidget::Horizontal, 10, histoBox);
+    m_hGradient->setColors(QColor("black"), QColor("white"));
 
 
     // -------------------------------------------------------------
 
-    m_HSSelector = new KHueSaturationSelector(gboxSettings);
-    m_HSSelector->setWhatsThis( i18n("<p>Select the hue and saturation adjustments of the image."));
+    m_HSSelector = new KHueSaturationSelector(m_gboxSettings->plainPage());
+    m_HSSelector->setWhatsThis(i18n("<p>Select the hue and saturation adjustments of the image."));
     m_HSSelector->setMinimumSize(256, 142);
 
-    m_HSPreview = new HSPreviewWidget(gboxSettings, spacingHint());
-    m_HSPreview->setWhatsThis( i18n("<p>You can see here a colour preview of the hue and "
-                                    "saturation adjustments."));
+    m_HSPreview = new HSPreviewWidget(m_gboxSettings->plainPage(), m_gboxSettings->spacingHint());
+    m_HSPreview->setWhatsThis(i18n("<p>You can see here a colour preview of the hue and "
+                                   "saturation adjustments."));
     m_HSPreview->setMinimumSize(256, 15);
 
-    QLabel *label2 = new QLabel(i18n("Hue:"), gboxSettings);
-    m_hInput       = new RDoubleNumInput(gboxSettings);
+    QLabel *label2 = new QLabel(i18n("Hue:"), m_gboxSettings->plainPage());
+    m_hInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_hInput->setDecimals(0);
     m_hInput->input()->setRange(-180.0, 180.0, 1.0, true);
     m_hInput->setDefaultValue(0.0);
-    m_hInput->setWhatsThis( i18n("<p>Set here the hue adjustment of the image."));
+    m_hInput->setWhatsThis(i18n("<p>Set here the hue adjustment of the image."));
 
-    QLabel *label3 = new QLabel(i18n("Saturation:"), gboxSettings);
-    m_sInput       = new RDoubleNumInput(gboxSettings);
+    QLabel *label3 = new QLabel(i18n("Saturation:"), m_gboxSettings->plainPage());
+    m_sInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_sInput->setDecimals(2);
     m_sInput->input()->setRange(-100.0, 100.0, 0.01, true);
     m_sInput->setDefaultValue(0.0);
     m_sInput->setWhatsThis( i18n("<p>Set here the saturation adjustment of the image."));
 
-    QLabel *label4 = new QLabel(i18n("Lightness:"), gboxSettings);
-    m_lInput       = new RDoubleNumInput(gboxSettings);
+    QLabel *label4 = new QLabel(i18n("Lightness:"), m_gboxSettings->plainPage());
+    m_lInput       = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_lInput->setDecimals(2);
     m_lInput->input()->setRange(-100.0, 100.0, 0.01, true);
     m_lInput->setDefaultValue(0.0);
@@ -198,10 +207,10 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     gridSettings->addWidget(label4,       9, 0, 1, 5);
     gridSettings->addWidget(m_lInput,    10, 0, 1, 5);
     gridSettings->setRowStretch(11, 10);
-    gridSettings->setMargin(spacingHint());
-    gridSettings->setSpacing(spacingHint());
+    gridSettings->setMargin(m_gboxSettings->spacingHint());
+    gridSettings->setSpacing(m_gboxSettings->spacingHint());
 
-    setUserAreaWidget(gboxSettings);
+    setToolSettings(m_gboxSettings);
 
     // -------------------------------------------------------------
 
@@ -237,10 +246,10 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    enableButtonOk( false );
+    m_gboxSettings->enableButton(EditorToolSettings::Ok, false);
 }
 
-ImageEffect_HSL::~ImageEffect_HSL()
+HSLTool::~HSLTool()
 {
     m_histogramWidget->stopHistogramComputation();
 
@@ -251,46 +260,46 @@ ImageEffect_HSL::~ImageEffect_HSL()
     delete m_previewWidget;
 }
 
-void ImageEffect_HSL::slotChannelChanged(int channel)
+void HSLTool::slotChannelChanged(int channel)
 {
-    switch(channel)
+    switch (channel)
     {
         case LuminosityChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+            m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
+            m_hGradient->setColors(QColor("black"), QColor("white"));
             break;
 
         case RedChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
+            m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
+            m_hGradient->setColors(QColor("black"), QColor("red"));
             break;
 
         case GreenChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
+            m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
+            m_hGradient->setColors(QColor("black"), QColor("green"));
             break;
 
         case BlueChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
+            m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
+            m_hGradient->setColors(QColor("black"), QColor("blue"));
             break;
     }
 
     m_histogramWidget->repaint();
 }
 
-void ImageEffect_HSL::slotScaleChanged(int scale)
+void HSLTool::slotScaleChanged(int scale)
 {
     m_histogramWidget->m_scaleType = scale;
     m_histogramWidget->repaint();
 }
 
-void ImageEffect_HSL::slotColorSelectedFromTarget( const Digikam::DColor &color )
+void HSLTool::slotColorSelectedFromTarget(const DColor &color)
 {
     m_histogramWidget->setHistogramGuideByColor(color);
 }
 
-void ImageEffect_HSL::slotHSChanged(int h, int s)
+void HSLTool::slotHSChanged(int h, int s)
 {
     double hue = double(h);
     if (h >= 180 && h <= 359)
@@ -307,7 +316,7 @@ void ImageEffect_HSL::slotHSChanged(int h, int s)
     slotTimer();
 }
 
-void ImageEffect_HSL::slotHChanged(double h)
+void HSLTool::slotHChanged(double h)
 {
     int hue = int(h);
     if (h >= -180 && h < 0)
@@ -318,7 +327,7 @@ void ImageEffect_HSL::slotHChanged(double h)
     m_HSSelector->blockSignals(false);
 }
 
-void ImageEffect_HSL::slotSChanged(double s)
+void HSLTool::slotSChanged(double s)
 {
     int sat = (int)((s + 100.0) * (255.0/200.0));
 
@@ -327,13 +336,13 @@ void ImageEffect_HSL::slotSChanged(double s)
     m_HSSelector->blockSignals(false);
 }
 
-void ImageEffect_HSL::readUserSettings()
+void HSLTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("hsladjust Tool Dialog");
+    KConfigGroup group        = config->group("hsladjust Tool");
     m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->button(group.readEntry("Histogram Scale",
-                      (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
+                      (int)HistogramWidget::LogScaleHistogram))->setChecked(true);
 
     m_hInput->setValue(group.readEntry("HueAjustment", m_hInput->defaultValue()));
     m_sInput->setValue(group.readEntry("SaturationAjustment", m_sInput->defaultValue()));
@@ -344,10 +353,10 @@ void ImageEffect_HSL::readUserSettings()
     slotScaleChanged(m_scaleBG->checkedId());
 }
 
-void ImageEffect_HSL::writeUserSettings()
+void HSLTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("hsladjust Tool Dialog");
+    KConfigGroup group        = config->group("hsladjust Tool");
     group.writeEntry("Histogram Channel", m_channelCB->currentIndex());
     group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
     group.writeEntry("HueAjustment", m_hInput->value());
@@ -356,7 +365,7 @@ void ImageEffect_HSL::writeUserSettings()
     config->sync();
 }
 
-void ImageEffect_HSL::resetValues()
+void HSLTool::slotResetSettings()
 {
     m_hInput->blockSignals(true);
     m_sInput->blockSignals(true);
@@ -372,9 +381,11 @@ void ImageEffect_HSL::resetValues()
     m_hInput->blockSignals(false);
     m_sInput->blockSignals(false);
     m_lInput->blockSignals(false);
+
+    slotEffect();
 }
 
-void ImageEffect_HSL::slotEffect()
+void HSLTool::slotEffect()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
 
@@ -382,7 +393,8 @@ void ImageEffect_HSL::slotEffect()
     double sa  = m_sInput->value();
     double lu  = m_lInput->value();
 
-    enableButtonOk( hu != 0.0 || sa != 0.0 || lu != 0.0);
+    m_gboxSettings->enableButton(EditorToolSettings::Ok,
+                                (hu != 0.0 || sa != 0.0 || lu != 0.0));
 
     m_HSPreview->setHS(hu, sa);
     m_histogramWidget->stopHistogramComputation();
@@ -390,15 +402,15 @@ void ImageEffect_HSL::slotEffect()
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = m_previewWidget->imageIface();
     m_destinationPreviewData   = iface->getPreviewImage();
     int w                      = iface->previewWidth();
     int h                      = iface->previewHeight();
     bool a                     = iface->previewHasAlpha();
     bool sb                    = iface->previewSixteenBit();
 
-    Digikam::DImg preview(w, h, sb, a, m_destinationPreviewData);
-    Digikam::HSLModifier cmod;
+    DImg preview(w, h, sb, a, m_destinationPreviewData);
+    HSLModifier cmod;
     cmod.setHue(hu);
     cmod.setSaturation(sa);
     cmod.setLightness(lu);
@@ -415,7 +427,7 @@ void ImageEffect_HSL::slotEffect()
     kapp->restoreOverrideCursor();
 }
 
-void ImageEffect_HSL::finalRendering()
+void HSLTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
 
@@ -423,16 +435,16 @@ void ImageEffect_HSL::finalRendering()
     double sa  = m_sInput->value();
     double lu  = m_lInput->value();
 
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = m_previewWidget->imageIface();
     uchar *data                = iface->getOriginalImage();
     int w                      = iface->originalWidth();
     int h                      = iface->originalHeight();
     bool a                     = iface->originalHasAlpha();
     bool sb                    = iface->originalSixteenBit();
-    Digikam::DImg original(w, h, sb, a, data);
+    DImg original(w, h, sb, a, data);
     delete [] data;
 
-    Digikam::HSLModifier cmod;
+    HSLModifier cmod;
     cmod.setHue(hu);
     cmod.setSaturation(sa);
     cmod.setLightness(lu);
@@ -440,7 +452,6 @@ void ImageEffect_HSL::finalRendering()
 
     iface->putOriginalImage(i18n("HSL Adjustments"), original.bits());
     kapp->restoreOverrideCursor();
-    accept();
 }
 
 }  // NameSpace DigikamImagesPluginCore

@@ -24,14 +24,14 @@
 
 // KDE includes.
 
-#include <klocale.h>
-#include <kgenericfactory.h>
-#include <klibloader.h>
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kcursor.h>
-#include <kmessagebox.h>
 #include <kapplication.h>
+#include <kcursor.h>
+#include <kgenericfactory.h>
+#include <klibloader.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 
 // Local includes.
 
@@ -39,16 +39,16 @@
 #include "dimg.h"
 #include "dimgimagefilters.h"
 #include "imageiface.h"
-#include "imageeffect_rgb.h"
-#include "imageeffect_hsl.h"
+#include "autocorrectiontool.h"
 #include "bcgtool.h"
 #include "bwsepiatool.h"
-#include "imageeffect_redeye.h"
+#include "hsltool.h"
 #include "imageeffect_blur.h"
-#include "imageeffect_sharpen.h"
-#include "imageeffect_ratiocrop.h"
-#include "autocorrectiontool.h"
 #include "imageeffect_iccproof.h"
+#include "imageeffect_ratiocrop.h"
+#include "imageeffect_redeye.h"
+#include "imageeffect_rgb.h"
+#include "imageeffect_sharpen.h"
 #include "imageplugin_core.h"
 #include "imageplugin_core.moc"
 
@@ -293,8 +293,8 @@ void ImagePlugin_Core::slotBW()
 
 void ImagePlugin_Core::slotHSL()
 {
-    ImageEffect_HSL dlg(kapp->activeWindow());
-    dlg.exec();
+    HSLTool *tool = new HSLTool(kapp->activeWindow());
+    loadTool(tool);
 }
 
 void ImagePlugin_Core::slotSharpen()

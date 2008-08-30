@@ -22,12 +22,12 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_HSL_H
-#define IMAGEEFFECT_HSL_H
+#ifndef HSLTOOL_H
+#define HSLTOOL_H
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 
 class QButtonGroup;
 class QComboBox;
@@ -41,28 +41,30 @@ class RDoubleNumInput;
 
 namespace Digikam
 {
-class HistogramWidget;
 class ColorGradientWidget;
-class ImageWidget;
 class DColor;
+class EditorToolSettings;
+class HistogramWidget;
+class ImageWidget;
 }
 
 namespace DigikamImagesPluginCore
 {
 class HSPreviewWidget;
 
-class ImageEffect_HSL : public Digikam::ImageDlgBase
+class HSLTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_HSL(QWidget *parent);
-    ~ImageEffect_HSL();
+    HSLTool(QObject *parent);
+    ~HSLTool();
 
 private slots:
 
     void slotEffect();
+    void slotResetSettings();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
@@ -72,9 +74,8 @@ private slots:
 
 private:
 
-    void writeUserSettings();
-    void readUserSettings();
-    void resetValues();
+    void writeSettings();
+    void readSettings();
     void finalRendering();
 
 private:
@@ -112,8 +113,10 @@ private:
     Digikam::ColorGradientWidget *m_hGradient;
 
     Digikam::HistogramWidget     *m_histogramWidget;
+
+    Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
 }  // NameSpace DigikamImagesPluginCore
 
-#endif /* IMAGEEFFECT_HSL_H */
+#endif /* HSLTOOL_H */
