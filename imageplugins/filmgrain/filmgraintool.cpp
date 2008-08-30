@@ -59,7 +59,7 @@ namespace DigikamFilmGrainImagesPlugin
 {
 
 FilmGrainTool::FilmGrainTool(QObject* parent)
-            : EditorToolThreaded(parent)
+             : EditorToolThreaded(parent)
 {
     QString whatsThis;
 
@@ -191,4 +191,3 @@ void FilmGrainTool::putFinalData()
 }
 
 }  // NameSpace DigikamFilmGrainImagesPlugin
-
