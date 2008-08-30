@@ -8,11 +8,11 @@ coreplugin
   \---hsl                   ImageDlgBase        DONE
   \---iccproof              ImageDlgBase
   \---ratiocrop             ImageDlgBase
-  \---redeye                ImageDlgBase
+  \---redeye                ImageDlgBase        A
   \---rgbtool               ImageDlgBase        DONE
-adjustcurves                ImageDlgBase
-adjustlevels                ImageDlgBase
-channelmixer                ImageDlgBase
+adjustcurves                ImageDlgBase        A
+adjustlevels                ImageDlgBase        A
+channelmixer                ImageDlgBase        A
 colorfx                     ImageDlgBase
 inserttext                  ImageDlgBase
 perspective                 ImageDlgBase
