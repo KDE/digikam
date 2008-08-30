@@ -79,6 +79,7 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
     // -------------------------------------------------------------
 
     m_gboxSettings = new EditorToolSettings(EditorToolSettings::Ok|
+                                            EditorToolSettings::Try
                                             EditorToolSettings::Cancel,
                                             EditorToolSettings::PanIcon);
     QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage());
@@ -237,7 +238,7 @@ void HotPixelsTool::prepareFinal()
     int interpolationMethod = m_filterMethodCombo->currentIndex();
 
     ImageIface iface(0, 0);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new HotPixelFixer(iface.getOriginalImg(), this,m_hotPixelsList,interpolationMethod)));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new HotPixelFixer(iface.getOriginalImg(), this, m_hotPixelsList, interpolationMethod)));
 }
 
 void HotPixelsTool::putPreviewData()
