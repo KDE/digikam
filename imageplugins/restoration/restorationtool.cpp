@@ -123,7 +123,7 @@ RestorationTool::RestorationTool(QObject* parent)
     gridSettings->addMultiCellWidget(new QLabel(m_gboxSettings->plainPage()), 1, 1, 1, 1);
     gridSettings->setMargin(m_gboxSettings->spacingHint());
     gridSettings->setSpacing(m_gboxSettings->spacingHint());
-    gridSettings->setRowStretch(1, 10);
+    gridSettings->setRowStretch(2, 10);
 
     setToolSettings(m_gboxSettings);
 
@@ -280,7 +280,7 @@ void RestorationTool::prepareFinal()
     ImageIface iface(0, 0);
     uchar *data = iface.getOriginalImage();
     DImg originalImage(iface.originalWidth(), iface.originalHeight(),
-                                iface.originalSixteenBit(), iface.originalHasAlpha(), data);
+                       iface.originalSixteenBit(), iface.originalHasAlpha(), data);
 
     setFilter(dynamic_cast<DImgThreadedFilter*>(new GreycstorationIface(&originalImage, 
                                                 m_settingsWidget->getSettings(), GreycstorationIface::Restore,
