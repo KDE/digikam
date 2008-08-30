@@ -69,10 +69,10 @@ protected:
 
     virtual void setToolView(QWidget *view);
     virtual void setToolSettings(EditorToolSettings *settings);
+    virtual void setBusy(bool);
     virtual void readSettings();
     virtual void writeSettings();
     virtual void finalRendering(){};
-    virtual void setBusy(bool){};
 
 protected slots:
 

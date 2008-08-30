@@ -151,6 +151,11 @@ void EditorTool::setToolSettings(EditorToolSettings *settings)
             this, SLOT(slotEffect()));
 }
 
+void EditorTool::setBusy(bool state)
+{
+    d->settings->setBusy(state);
+}
+
 void EditorTool::readSettings()
 {
     d->settings->readSettings();
