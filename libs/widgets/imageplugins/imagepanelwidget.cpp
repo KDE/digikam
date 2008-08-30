@@ -40,18 +40,14 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <kcursor.h>
-#include <kprogress.h>
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
-#include <kseparator.h>
 
 // Local includes.
 
 #include "ddebug.h"
-#include "sidebar.h"
-#include "statuszoombar.h"
 #include "thumbnailsize.h"
 #include "imageregionwidget.h"
 #include "imagepaniconwidget.h"
@@ -70,7 +66,6 @@ public:
         imagePanIconWidget = 0;
         imageRegionWidget  = 0;
         separateView       = 0;
-        zoomBar            = 0;
     }
 
     QString             settingsSection;
@@ -80,8 +75,6 @@ public:
     ImagePanIconWidget *imagePanIconWidget;
 
     ImageRegionWidget  *imageRegionWidget;
-
-    StatusZoomBar      *zoomBar;
 };
 
 ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSection,
@@ -105,11 +98,6 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
                                                 "<p>Click and drag the mouse cursor in the "
                                                 "image to change the clip focus."));
     l1->addWidget(d->imageRegionWidget, 0);
-
-    // -------------------------------------------------------------
-
-    d->zoomBar = new StatusZoomBar(this);
-    QWhatsThis::add( d->zoomBar, i18n("<p>Here set the zoom factor of the preview area.") );
 
     // -------------------------------------------------------------
 
@@ -183,7 +171,6 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
     // -------------------------------------------------------------
 
     grid->addMultiCellWidget(preview,         0, 1, 0, 3);
-    grid->addMultiCellWidget(d->zoomBar,      2, 2, 0, 0);
     grid->addMultiCellWidget(d->separateView, 2, 2, 3, 3);
     grid->setRowStretch(1, 10);
     grid->setColStretch(1, 10);
@@ -210,15 +197,6 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
 
     connect(d->separateView, SIGNAL(released(int)),
             d->imageRegionWidget, SLOT(slotSeparateViewToggled(int)));
-
-    connect(d->zoomBar, SIGNAL(signalZoomMinusClicked()),
-            d->imageRegionWidget, SLOT(slotDecreaseZoom()));
-
-    connect(d->zoomBar, SIGNAL(signalZoomPlusClicked()),
-            d->imageRegionWidget, SLOT(slotIncreaseZoom()));
-
-    connect(d->zoomBar, SIGNAL(signalZoomSliderReleased(int)),
-            this, SLOT(slotZoomSliderChanged(int)));
 }
 
 ImagePanelWidget::~ImagePanelWidget()
@@ -275,26 +253,6 @@ void ImagePanelWidget::slotOriginalImageRegionChanged(bool target)
 
 void ImagePanelWidget::slotZoomFactorChanged(double zoom)
 {
-    double h    = (double)ThumbnailSize::Huge;
-    double s    = (double)ThumbnailSize::Small;
-    double zmin = d->imageRegionWidget->zoomMin();
-    double zmax = d->imageRegionWidget->zoomMax();
-    double b    = (zmin-(zmax*s/h))/(1-s/h);
-    double a    = (zmax-b)/h;
-    int size    = (int)((zoom - b) /a); 
-
-    d->zoomBar->setZoomSliderValue(size);
-    d->zoomBar->setZoomTrackerText(i18n("zoom: %1%").arg((int)(zoom*100.0)));
-
-    d->zoomBar->setEnableZoomPlus(true);
-    d->zoomBar->setEnableZoomMinus(true);
-
-    if (d->imageRegionWidget->maxZoom())
-        d->zoomBar->setEnableZoomPlus(false);
-
-    if (d->imageRegionWidget->minZoom())
-        d->zoomBar->setEnableZoomMinus(false);
-
     d->imagePanIconWidget->slotZoomFactorChanged(zoom);
 }
 
@@ -338,7 +296,6 @@ void ImagePanelWidget::setEnable(bool b)
 {
     d->imageRegionWidget->setEnabled(b);
     d->separateView->setEnabled(b);
-    d->zoomBar->setEnabled(b);
 }
 
 QRect ImagePanelWidget::getOriginalImageRegion()
