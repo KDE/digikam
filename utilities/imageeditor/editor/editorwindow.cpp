@@ -1898,6 +1898,14 @@ void EditorWindow::setToolStartProgress(const QString& toolName)
 {
     m_nameLabel->setProgressValue(0);
     m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode, QString("%1: ").arg(toolName));
+
+    // When a tool is busy, disable Zooming options.
+    d->zoomPlusAction->setEnabled(false);
+    d->zoomMinusAction->setEnabled(false);
+    d->zoomTo100percents->setEnabled(false);
+    d->zoomFitToWindowAction->setEnabled(false);
+    d->zoomFitToSelectAction->setEnabled(false);
+    d->zoomCombo->setEnabled(false);
 }
 
 void EditorWindow::setToolProgress(int progress)
@@ -1910,6 +1918,14 @@ void EditorWindow::setToolStopProgress()
     m_nameLabel->setProgressValue(0);
     m_nameLabel->progressBarMode(StatusProgressBar::TextMode);
     slotUpdateItemInfo();
+
+    // Re-enable Zooming options.
+    d->zoomPlusAction->setEnabled(true);
+    d->zoomMinusAction->setEnabled(true);
+    d->zoomTo100percents->setEnabled(true);
+    d->zoomFitToWindowAction->setEnabled(true);
+    d->zoomFitToSelectAction->setEnabled(true);
+    d->zoomCombo->setEnabled(true);
 }
 
 }  // namespace Digikam
