@@ -21,12 +21,12 @@
  *
  * ============================================================ */
 
-#ifndef ADJUSTCURVES_H
-#define ADJUSTCURVES_H
+#ifndef ADJUSTCURVESTOOL_H
+#define ADJUSTCURVESTOOL_H
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 #include "dimg.h"
 
 // Local includes.
@@ -43,32 +43,33 @@ class CurvesWidget;
 class HistogramWidget;
 class ColorGradientWidget;
 class ImageWidget;
+class EditorToolSettings;
 }
 
 namespace DigikamAdjustCurvesImagesPlugin
 {
 
-class AdjustCurveDialog : public Digikam::ImageDlgBase
+class AdjustCurvesTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    AdjustCurveDialog(QWidget *parent);
-    ~AdjustCurveDialog();
+    AdjustCurvesTool(QObject *parent);
+    ~AdjustCurvesTool();
 
 private:
 
-    void readUserSettings();
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void finalRendering();
 
 private slots:
 
-    void slotUser2();
-    void slotUser3();
+    void slotSaveAsSettings();
+    void slotLoadSettings();
     void slotEffect();
+    void slotResetSettings();
     void slotResetCurrentChannel();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
@@ -136,9 +137,11 @@ private:
 
     Digikam::ImageWidget         *m_previewWidget;
 
-    Digikam::DImg                 m_originalImage;
+    Digikam::DImg                *m_originalImage;
+
+    Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
 }  // NameSpace DigikamAdjustCurvesImagesPlugin
 
-#endif /* ADJUSTCURVES_H */
+#endif /* ADJUSTCURVESTOOL_H */

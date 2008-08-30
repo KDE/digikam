@@ -1,6 +1,6 @@
 
 SET(digikamimageplugin_adjustcurves_PART_SRCS imageplugin_adjustcurves.cpp
-                                              adjustcurves.cpp 
+                                              adjustcurvestool.cpp 
    )
 
 
