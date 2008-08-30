@@ -7,7 +7,7 @@
  * Description : a digiKam image editor plugin to restore
  *               a photograph
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,50 +49,42 @@
 // Local includes.
 
 #include "version.h"
-#include "daboutdata.h"
 #include "ddebug.h"
 #include "imageiface.h"
+#include "imagepanelwidget.h"
+#include "editortoolsettings.h"
 #include "greycstorationsettings.h"
 #include "greycstorationwidget.h"
 #include "greycstorationiface.h"
-#include "imageeffect_restoration.h"
-#include "imageeffect_restoration.moc"
+#include "restorationtool.h"
+#include "restorationtool.moc"
+
+using namespace Digikam;
 
 namespace DigikamRestorationImagesPlugin
 {
 
-ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
-                       : Digikam::CtrlPanelDlg(parent, i18n("Photograph Restoration"),
-                                               "restoration", true, true, true,
-                                               Digikam::ImagePannelWidget::SeparateViewAll)
+RestorationTool::RestorationTool(QObject* parent)
+               : EditorToolThreaded(parent)
 {
     QString whatsThis;
 
-    // About data and help button.
-
-    KAboutData* about = new KAboutData("digikam", 0,
-                                       ki18n("Photograph Restoration"),
-                                       digiKamVersion().toAscii(),
-                                       ki18n("A digiKam image plugin to restore a photograph."),
-                                       KAboutData::License_GPL,
-                                       ki18n("(c) 2005-2008, Gilles Caulier"),
-                                       KLocalizedString(),
-                                       Digikam::webProjectUrl().url().toUtf8());
-
-    about->addAuthor(ki18n("Gilles Caulier"), ki18n("Author and maintainer"),
-                     "caulier dot gilles at gmail dot com");
-
-    about->addAuthor(ki18n("David Tschumperle"), ki18n("CImg library"), 0,
-                     "http://cimg.sourceforge.net");
-
-    about->addAuthor(ki18n("Gerhard Kulzer"), ki18n("Feedback and plugin polishing"),
-                     "gerhard at kulzer.net");
-
-    setAboutData(about);
+    setObjectName("restoration");
+    setToolName(i18n("Restoration"));
+    setToolIcon(SmallIcon("restoration"));
 
     // -------------------------------------------------------------
 
-    m_mainTab = new QTabWidget( m_imagePreviewWidget );
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel|
+                                            EditorToolSettings::Load|
+                                            EditorToolSettings::SaveAs|
+                                            EditorToolSettings::Try,
+                                            EditorToolSettings::PanIcon);
+
+    QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
+    m_mainTab = new QTabWidget( m_gboxSettings->plainPage() );
 
     QWidget* firstPage = new QWidget( m_mainTab );
     QGridLayout* grid  = new QGridLayout(firstPage);
@@ -118,17 +110,29 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
                                             "<b>Reduce Texturing</b>: reduce image artifacts like paper texture or Moire patterns "
                                             "of a scanned image.<p>"));
 
-    grid->setMargin(spacingHint());
-    grid->setSpacing(0);
-    grid->addWidget(cimgLogoLabel, 0, 1, 1, 1);
-    grid->addWidget(typeLabel, 1, 0, 1, 1);
+    grid->addWidget(cimgLogoLabel,       0, 1, 1, 1);
+    grid->addWidget(typeLabel,           1, 0, 1, 1);
     grid->addWidget(m_restorationTypeCB, 1, 1, 1, 1);
     grid->setRowStretch(1, 10);
+    grid->setMargin(m_gboxSettings->spacingHint());
+    grid->setSpacing(0);
 
     // -------------------------------------------------------------
 
-    m_settingsWidget = new Digikam::GreycstorationWidget( m_mainTab );
-    m_imagePreviewWidget->setUserAreaWidget(m_mainTab);
+    m_settingsWidget = new GreycstorationWidget( m_mainTab );
+    gridSettings->addWidget(m_mainTab,                               0, 1, 1, 1);
+    gridSettings->addWidget(new QLabel(m_gboxSettings->plainPage()), 1, 1, 1, 1);
+    gridSettings->setMargin(m_gboxSettings->spacingHint());
+    gridSettings->setSpacing(m_gboxSettings->spacingHint());
+    gridSettings->setRowStretch(2, 10);
+
+    setToolSettings(m_gboxSettings);
+
+    // -------------------------------------------------------------
+
+    m_previewWidget = new ImagePanelWidget(470, 350, "restoration Tool", m_gboxSettings->panIconView());
+
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
@@ -140,28 +144,28 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    Digikam::GreycstorationSettings defaults;
+    GreycstorationSettings defaults;
     defaults.setRestorationDefaultSettings();
     m_settingsWidget->setDefaultSettings(defaults);
 }
 
-ImageEffect_Restoration::~ImageEffect_Restoration()
+RestorationTool::~RestorationTool()
 {
 }
 
-void ImageEffect_Restoration::renderingFinished()
+void RestorationTool::renderingFinished()
 {
-    m_imagePreviewWidget->setEnable(true);
+    m_previewWidget->setEnable(true);
     m_mainTab->setEnabled(true);
 }
 
-void ImageEffect_Restoration::readUserSettings()
+void RestorationTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("restoration Tool Dialog");
+    KConfigGroup group        = config->group("restoration Tool");
 
-    Digikam::GreycstorationSettings settings;
-    Digikam::GreycstorationSettings defaults;
+    GreycstorationSettings settings;
+    GreycstorationSettings defaults;
     defaults.setRestorationDefaultSettings();
 
     settings.fastApprox = group.readEntry("FastApprox", defaults.fastApprox);
@@ -186,11 +190,11 @@ void ImageEffect_Restoration::readUserSettings()
         m_settingsWidget->setEnabled(false);
 }
 
-void ImageEffect_Restoration::writeUserSettings()
+void RestorationTool::writeSettings()
 {
-    Digikam::GreycstorationSettings settings = m_settingsWidget->getSettings();
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("restoration Tool Dialog");
+    GreycstorationSettings settings = m_settingsWidget->getSettings();
+    KSharedConfig::Ptr config       = KGlobal::config();
+    KConfigGroup group = config->group("restoration Tool");
     group.writeEntry("Preset", m_restorationTypeCB->currentIndex());
     group.writeEntry("FastApprox", settings.fastApprox);
     group.writeEntry("Interpolation", settings.interp);
@@ -208,19 +212,19 @@ void ImageEffect_Restoration::writeUserSettings()
     group.sync();
 }
 
-void ImageEffect_Restoration::slotResetValues(int i)
+void RestorationTool::slotResetValues(int i)
 {
     if (i == NoPreset)
         m_settingsWidget->setEnabled(true);
     else
         m_settingsWidget->setEnabled(false);
 
-    resetValues();
+    slotResetSettings();
 }
 
-void ImageEffect_Restoration::resetValues()
+void RestorationTool::slotResetSettings()
 {
-    Digikam::GreycstorationSettings settings;
+    GreycstorationSettings settings;
     settings.setRestorationDefaultSettings();
 
     switch(m_restorationTypeCB->currentIndex())
@@ -253,60 +257,54 @@ void ImageEffect_Restoration::resetValues()
     m_settingsWidget->setSettings(settings);
 }
 
-void ImageEffect_Restoration::processCImgUrl(const QString& url)
+void RestorationTool::processCImgUrl(const QString& url)
 {
     KToolInvocation::invokeBrowser(url);
 }
 
-void ImageEffect_Restoration::prepareEffect()
+void RestorationTool::prepareEffect()
 {
     m_mainTab->setEnabled(false);
 
-    Digikam::DImg previewImage = m_imagePreviewWidget->getOriginalRegionImage();
+    DImg previewImage = m_previewWidget->getOriginalRegionImage();
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
-                       new Digikam::GreycstorationIface(
-                                    &previewImage, m_settingsWidget->getSettings(),
-                                    Digikam::GreycstorationIface::Restore,
-                                    0, 0, QImage(), this));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new GreycstorationIface(&previewImage, 
+                                                m_settingsWidget->getSettings(), GreycstorationIface::Restore,
+                                                0, 0, QImage(), this)));
 }
 
-void ImageEffect_Restoration::prepareFinal()
+void RestorationTool::prepareFinal()
 {
     m_mainTab->setEnabled(false);
 
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
     uchar *data = iface.getOriginalImage();
-    Digikam::DImg originalImage(iface.originalWidth(), iface.originalHeight(),
-                                iface.originalSixteenBit(), iface.originalHasAlpha(), data);
+    DImg originalImage(iface.originalWidth(), iface.originalHeight(),
+                       iface.originalSixteenBit(), iface.originalHasAlpha(), data);
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
-                       new Digikam::GreycstorationIface(
-                                    &originalImage, m_settingsWidget->getSettings(),
-                                    Digikam::GreycstorationIface::Restore,
-                                    0, 0, QImage(), this));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new GreycstorationIface(&originalImage, 
+                                                m_settingsWidget->getSettings(), GreycstorationIface::Restore,
+                                                0, 0, QImage(), this)));
 
     delete [] data;
 }
 
-void ImageEffect_Restoration::putPreviewData(void)
+void RestorationTool::putPreviewData()
 {
-    Digikam::DImg imDest = m_threadedFilter->getTargetImage();
-    m_imagePreviewWidget->setPreviewImage(imDest);
+    DImg imDest = filter()->getTargetImage();
+    m_previewWidget->setPreviewImage(imDest);
 }
 
-void ImageEffect_Restoration::putFinalData(void)
+void RestorationTool::putFinalData()
 {
-    Digikam::ImageIface iface(0, 0);
-
-    iface.putOriginalImage(i18n("Restoration"),
-                           m_threadedFilter->getTargetImage().bits());
+    ImageIface iface(0, 0);
+    iface.putOriginalImage(i18n("Restoration"), filter()->getTargetImage().bits());
 }
 
-void ImageEffect_Restoration::slotUser3()
+void RestorationTool::slotLoadSettings()
 {
     KUrl loadRestorationFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-                                            QString( "*" ), this,
+                                            QString( "*" ), kapp->activeWindow(),
                                             QString( i18n("Photograph Restoration Settings File to Load")) );
     if( loadRestorationFile.isEmpty() )
        return;
@@ -317,7 +315,7 @@ void ImageEffect_Restoration::slotUser3()
     {
         if (!m_settingsWidget->loadSettings(file, QString("# Photograph Restoration Configuration File V2")))
         {
-           KMessageBox::error(this,
+           KMessageBox::error(kapp->activeWindow(),
                         i18n("\"%1\" is not a Photograph Restoration settings text file.",
                              loadRestorationFile.fileName()));
            file.close();
@@ -327,7 +325,7 @@ void ImageEffect_Restoration::slotUser3()
         slotEffect();
     }
     else
-        KMessageBox::error(this, i18n("Cannot load settings from the Photograph Restoration text file."));
+        KMessageBox::error(kapp->activeWindow(), i18n("Cannot load settings from the Photograph Restoration text file."));
 
     file.close();
     m_restorationTypeCB->blockSignals(true);
@@ -336,10 +334,10 @@ void ImageEffect_Restoration::slotUser3()
     m_settingsWidget->setEnabled(true);
 }
 
-void ImageEffect_Restoration::slotUser2()
+void RestorationTool::slotSaveAsSettings()
 {
     KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-                                            QString( "*" ), this,
+                                            QString( "*" ), kapp->activeWindow(),
                                             QString( i18n("Photograph Restoration Settings File to Save")) );
     if( saveRestorationFile.isEmpty() )
        return;
@@ -349,7 +347,7 @@ void ImageEffect_Restoration::slotUser2()
     if ( file.open(QIODevice::WriteOnly) )
         m_settingsWidget->saveSettings(file, QString("# Photograph Restoration Configuration File V2"));
     else
-        KMessageBox::error(this, i18n("Cannot save settings to the Photograph Restoration text file."));
+        KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the Photograph Restoration text file."));
 
     file.close();
 }

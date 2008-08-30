@@ -35,9 +35,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_restoration.h"
+#include "restorationtool.h"
 #include "imageplugin_restoration.h"
 #include "imageplugin_restoration.moc"
+
+using namespace DigikamRestorationImagesPlugin;
 
 K_PLUGIN_FACTORY( RestorationFactory, registerPlugin<ImagePlugin_Restoration>(); )
 K_EXPORT_PLUGIN ( RestorationFactory("digikamimageplugin_restoration") )
@@ -67,6 +69,6 @@ void ImagePlugin_Restoration::setEnabledActions(bool enable)
 
 void ImagePlugin_Restoration::slotRestoration()
 {
-    DigikamRestorationImagesPlugin::ImageEffect_Restoration dlg(kapp->activeWindow());
-    dlg.exec();
+    RestorationTool *tool = new RestorationTool(this);
+    loadTool(tool);
 }

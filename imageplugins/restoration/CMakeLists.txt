@@ -1,6 +1,6 @@
 
 SET(digikamimageplugin_restoration_PART_SRCS imageplugin_restoration.cpp
-                                             imageeffect_restoration.cpp 
+                                             restorationtool.cpp 
    )
 
 
