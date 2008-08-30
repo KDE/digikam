@@ -36,9 +36,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_hotpixels.h"
+#include "hotpixelstool.h"
 #include "imageplugin_hotpixels.h"
 #include "imageplugin_hotpixels.moc"
+
+using namespace DigikamHotPixelsImagesPlugin;
 
 K_PLUGIN_FACTORY( HotPixelsFactory, registerPlugin<ImagePlugin_HotPixels>(); )
 K_EXPORT_PLUGIN ( HotPixelsFactory("digikamimageplugin_hotpixels") )
@@ -68,6 +70,6 @@ void ImagePlugin_HotPixels::setEnabledActions(bool enable)
 
 void ImagePlugin_HotPixels::slotHotPixels()
 {
-    DigikamHotPixelsImagesPlugin::ImageEffect_HotPixels dlg(kapp->activeWindow());
-    dlg.exec();
+    HotPixelsTool *tool = new HotPixelsTool(this);
+    loadTool(tool);
 }
