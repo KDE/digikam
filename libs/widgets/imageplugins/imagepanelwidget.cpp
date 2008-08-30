@@ -231,6 +231,11 @@ ImagePanelWidget::~ImagePanelWidget()
     delete d;
 }
 
+ImageRegionWidget *ImagePanelWidget::previewWidget() const
+{
+    return d->imageRegionWidget;
+}
+
 void ImagePanelWidget::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();

@@ -76,6 +76,8 @@ public:
 
     void   setPanIconHighLightPoints(const QPolygon& pt);
 
+    ImageRegionWidget *previewWidget() const;
+
 signals:
 
     void signalOriginalClipFocusChanged();
