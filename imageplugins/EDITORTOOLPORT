@@ -32,7 +32,7 @@ coreplugin
   \---sharpnesseditor       CtrlPanelDlg        DONE
   \---blur                  CtrlPanelDlg        DONE
 charcoal                    CtrlPanelDlg
-blurfx                      CtrlPanelDlg        G
+blurfx                      CtrlPanelDlg        DONE
 emboss                      CtrlPanelDlg
 filmgrain                   CtrlPanelDlg
 hotpixels                   CtrlPanelDlg        DONE
