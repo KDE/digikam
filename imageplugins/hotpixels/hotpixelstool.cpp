@@ -79,7 +79,7 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
     // -------------------------------------------------------------
 
     m_gboxSettings = new EditorToolSettings(EditorToolSettings::Ok|
-                                            EditorToolSettings::Try
+                                            EditorToolSettings::Try|
                                             EditorToolSettings::Cancel,
                                             EditorToolSettings::PanIcon);
     QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage());
