@@ -9,7 +9,7 @@ coreplugin
   \---iccproof              ImageDlgBase
   \---ratiocrop             ImageDlgBase
   \---redeye                ImageDlgBase
-  \---rgbtool               ImageDlgBase        A
+  \---rgbtool               ImageDlgBase        DONE
 adjustcurves                ImageDlgBase
 adjustlevels                ImageDlgBase
 channelmixer                ImageDlgBase
