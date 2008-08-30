@@ -81,6 +81,7 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
     // -------------------------------------------------------------
 
     m_gboxSettings = new EditorToolSettings(EditorToolSettings::Ok|
+                                            EditorToolSettings::Try|
                                             EditorToolSettings::Cancel,
                                             EditorToolSettings::PanIcon);
 
