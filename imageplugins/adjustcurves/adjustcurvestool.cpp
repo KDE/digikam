@@ -592,6 +592,8 @@ void AdjustCurvesTool::readSettings()
 
     slotChannelChanged(m_channelCB->currentIndex());
     slotScaleChanged(m_scaleBG->checkedId());
+
+    slotEffect();
 }
 
 void AdjustCurvesTool::writeSettings()
