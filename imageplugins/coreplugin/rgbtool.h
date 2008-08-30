@@ -21,12 +21,12 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_RGB_H
-#define IMAGEEFFECT_RGB_H
+#ifndef RGBTOOL_H
+#define RGBTOOL_H
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 
 class QButtonGroup;
 class QComboBox;
@@ -43,25 +43,26 @@ class HistogramWidget;
 class ColorGradientWidget;
 class ImageWidget;
 class DColor;
+class EditorToolSettings;
 }
 
 namespace DigikamImagesPluginCore
 {
 
-class ImageEffect_RGB : public Digikam::ImageDlgBase
+class RGBTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_RGB(QWidget *parent);
-    ~ImageEffect_RGB();
+    RGBTool(QObject* parent);
+    ~RGBTool();
 
 private:
 
-    void writeUserSettings();
-    void readUserSettings();
-    void resetValues();
+    void writeSettings();
+    void readSettings();
+    void slotResetSettings();
     void adjustSliders(int r, int g, int b);
     void finalRendering();
 
@@ -107,8 +108,10 @@ private:
     Digikam::ColorGradientWidget *m_hGradient;
 
     Digikam::HistogramWidget     *m_histogramWidget;
+
+    Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
 }  // NameSpace DigikamImagesPluginCore
 
-#endif /* IMAGEEFFECT_RGB_H */
+#endif /* RGBTOOL_H */

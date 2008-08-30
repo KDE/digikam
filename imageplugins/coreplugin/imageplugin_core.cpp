@@ -47,8 +47,8 @@
 #include "imageeffect_iccproof.h"
 #include "imageeffect_ratiocrop.h"
 #include "imageeffect_redeye.h"
-#include "imageeffect_rgb.h"
 #include "imageeffect_sharpen.h"
+#include "rgbtool.h"
 #include "imageplugin_core.h"
 #include "imageplugin_core.moc"
 
@@ -242,8 +242,8 @@ void ImagePlugin_Core::slotBCG()
 
 void ImagePlugin_Core::slotRGB()
 {
-    ImageEffect_RGB dlg(kapp->activeWindow());
-    dlg.exec();
+    RGBTool *tool = new RGBTool(kapp->activeWindow());
+    loadTool(tool);
 }
 
 void ImagePlugin_Core::slotBlur()

@@ -54,10 +54,10 @@ SET(digikamimageplugin_core_PART_SRCS
     ../../imageplugins/coreplugin/imageeffect_blur.cpp 
     ../../imageplugins/coreplugin/imageeffect_iccproof.cpp 
     ../../imageplugins/coreplugin/imageeffect_redeye.cpp 
-    ../../imageplugins/coreplugin/imageeffect_rgb.cpp 
     ../../imageplugins/coreplugin/imageplugin_core.cpp 
     ../../imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp 
     ../../imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp
+    ../../imageplugins/coreplugin/rgbtool.cpp 
     ../../imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.cpp 
     ../../imageplugins/coreplugin/sharpnesseditor/matrix.cpp
     ../../imageplugins/coreplugin/sharpnesseditor/refocus.cpp
