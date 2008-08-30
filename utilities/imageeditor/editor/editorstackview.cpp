@@ -24,6 +24,8 @@
 // Local includes.
 
 #include "previewwidget.h"
+#include "imageregionwidget.h"
+#include "imagepanelwidget.h"
 #include "canvas.h"
 #include "editorstackview.h"
 #include "editorstackview.moc"
@@ -83,7 +85,7 @@ void EditorStackView::setToolView(QWidget* view)
     if (d->toolView)
         insertWidget(ToolViewMode, d->toolView);
 
-    PreviewWidget *preview = dynamic_cast<PreviewWidget*>(d->toolView);
+    PreviewWidget *preview = previewWidget();
     if (preview)
     {
         connect(preview, SIGNAL(signalZoomFactorChanged(double)),
@@ -117,7 +119,7 @@ void EditorStackView::increaseZoom()
     }
     else
     {
-        PreviewWidget *preview = dynamic_cast<PreviewWidget*>(d->toolView);
+        PreviewWidget *preview = previewWidget();
         if (preview)
             preview->slotIncreaseZoom();
     }
@@ -131,7 +133,7 @@ void EditorStackView::decreaseZoom()
     }
     else
     {
-        PreviewWidget *preview = dynamic_cast<PreviewWidget*>(d->toolView);
+        PreviewWidget *preview = previewWidget();
         if (preview)
             preview->slotDecreaseZoom();
     }
@@ -145,7 +147,7 @@ void EditorStackView::toggleFitToWindow()
     }
     else
     {
-        PreviewWidget *preview = dynamic_cast<PreviewWidget*>(d->toolView);
+        PreviewWidget *preview = previewWidget();
         if (preview)
             preview->toggleFitToWindow();
     }
@@ -170,7 +172,7 @@ void EditorStackView::zoomTo100Percents()
     }
     else
     {
-        PreviewWidget *preview = dynamic_cast<PreviewWidget*>(d->toolView);
+        PreviewWidget *preview = previewWidget();
         if (preview)
         {
             if (preview->zoomFactor() == 1.0)
@@ -189,7 +191,7 @@ void EditorStackView::setZoomFactor(double zoom)
     }
     else
     {
-        PreviewWidget *preview = dynamic_cast<PreviewWidget*>(d->toolView);
+        PreviewWidget *preview = previewWidget();
         if (preview)
             preview->setZoomFactor(zoom);
     }
@@ -207,7 +209,7 @@ void EditorStackView::slotZoomChanged(double zoom)
     }
     else
     {
-        PreviewWidget *preview = dynamic_cast<PreviewWidget*>(d->toolView);
+        PreviewWidget *preview = previewWidget();
         if (preview)
         {
             max = preview->maxZoom();
@@ -215,6 +217,18 @@ void EditorStackView::slotZoomChanged(double zoom)
             emit signalZoomChanged(max, min, zoom);
         }
     }
+}
+
+
+PreviewWidget* EditorStackView::previewWidget() const
+{
+    PreviewWidget *preview = dynamic_cast<PreviewWidget*>(d->toolView);
+    if (preview) return preview;
+
+    ImagePanelWidget *panel = dynamic_cast<ImagePanelWidget*>(d->toolView);
+    if (panel) return (dynamic_cast<PreviewWidget*>(panel->previewWidget()));
+
+    return 0;
 }
 
 }  // namespace Digikam
