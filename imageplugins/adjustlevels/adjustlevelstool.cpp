@@ -443,10 +443,6 @@ AdjustLevelTool::~AdjustLevelTool()
 
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
-
-    delete m_histogramWidget;
-    delete m_levelsHistogramWidget;
-    delete m_levels;
 }
 
 void AdjustLevelTool::slotPickerColorButtonActived()
