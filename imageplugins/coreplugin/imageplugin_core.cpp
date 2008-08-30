@@ -46,8 +46,8 @@
 #include "imageeffect_blur.h"
 #include "imageeffect_iccproof.h"
 #include "imageeffect_ratiocrop.h"
-#include "imageeffect_redeye.h"
 #include "imageeffect_sharpen.h"
+#include "redeyetool.h"
 #include "rgbtool.h"
 #include "imageplugin_core.h"
 #include "imageplugin_core.moc"
@@ -275,8 +275,8 @@ void ImagePlugin_Core::slotRedEye()
         return;
     }
 
-    ImageEffect_RedEye dlg(kapp->activeWindow());
-    dlg.exec();
+    RedEyeTool *tool = new RedEyeTool(kapp->activeWindow());
+    loadTool(tool);
 }
 
 void ImagePlugin_Core::slotColorManagement()

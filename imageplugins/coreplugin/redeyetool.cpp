@@ -42,9 +42,12 @@
 #include <kcolordialog.h>
 #include <kcolorvalueselector.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kcursor.h>
 #include <kglobal.h>
 #include <khuesaturationselect.h>
+#include <kicon.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kvbox.h>
@@ -55,44 +58,53 @@
 
 // Digikam includes.
 
-#include "imageiface.h"
-#include "imagewidget.h"
-#include "histogramwidget.h"
-#include "colorgradientwidget.h"
 #include "bcgmodifier.h"
+#include "colorgradientwidget.h"
 #include "dimg.h"
 #include "dimgimagefilters.h"
+#include "editortoolsettings.h"
+#include "histogramwidget.h"
+#include "imageiface.h"
+#include "imagewidget.h"
 
 // Local includes.
 
-#include "imageeffect_redeye.h"
-#include "imageeffect_redeye.moc"
+#include "redeyetool.h"
+#include "redeyetool.moc"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
 
-ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
-                  : Digikam::ImageDlgBase(parent, i18n("Red Eye Reduction"), "redeye", false)
+RedEyeTool::RedEyeTool(QObject* parent)
+          : EditorTool(parent)
 {
-    m_destinationPreviewData = 0L;
-    setHelp("redeyecorrectiontool.anchor", "digikam");
+    setObjectName("redeye");
+    setToolName(i18n("Red Eye"));
+    setToolIcon(SmallIcon("redeyes"));
+    setToolHelp("redeyecorrectiontool.anchor");
 
-    m_previewWidget = new Digikam::ImageWidget("redeye Tool Dialog", mainWidget(),
-                                               i18n("<p>Here you can see the image selection preview with "
-                                                    "red eye reduction applied."),
-                                               true, Digikam::ImageGuideWidget::PickColorMode, true, true);
-    setPreviewAreaWidget(m_previewWidget);
+    m_destinationPreviewData = 0;
+
+    m_previewWidget = new ImageWidget("redeye Tool", 0,
+                                      i18n("<p>Here you can see the image selection preview with "
+                                           "red eye reduction applied."),
+                                      true, ImageGuideWidget::PickColorMode, true, true);
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings     = new QWidget(mainWidget());
-    QGridLayout* gridSettings = new QGridLayout(gboxSettings);
+    EditorToolSettings *gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                                              EditorToolSettings::Ok|
+                                                              EditorToolSettings::Cancel);
 
-    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings->plainPage());
+
+    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings->plainPage());
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( gboxSettings );
+    m_channelCB = new QComboBox( gboxSettings->plainPage() );
     m_channelCB->addItem( i18n("Luminosity") );
     m_channelCB->addItem( i18n("Red") );
     m_channelCB->addItem( i18n("Green") );
@@ -105,7 +117,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QWidget *scaleBox = new QWidget(gboxSettings);
+    QWidget *scaleBox = new QWidget(gboxSettings->plainPage());
     QHBoxLayout *hlay = new QHBoxLayout(scaleBox);
     m_scaleBG         = new QButtonGroup(scaleBox);
     scaleBox->setWhatsThis(i18n("<p>Select the histogram scale.<p>"
@@ -117,13 +129,13 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
     linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
     linHistoButton->setCheckable(true);
-    m_scaleBG->addButton(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
+    m_scaleBG->addButton(linHistoButton, HistogramWidget::LinScaleHistogram);
 
     QToolButton *logHistoButton = new QToolButton( scaleBox );
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
     logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
     logHistoButton->setCheckable(true);
-    m_scaleBG->addButton(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    m_scaleBG->addButton(logHistoButton, HistogramWidget::LogScaleHistogram);
 
     hlay->setMargin(0);
     hlay->setSpacing(0);
@@ -141,20 +153,20 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    KVBox *histoBox   = new KVBox(gboxSettings);
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
+    KVBox *histoBox   = new KVBox(gboxSettings->plainPage());
+    m_histogramWidget = new HistogramWidget(256, 140, histoBox, false, true, true);
     m_histogramWidget->setWhatsThis(i18n("<p>Here you can see the target preview image histogram "
                                          "of the selected image channel. It is "
                                          "updated upon setting changes."));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);
-    m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox);
+    m_hGradient = new ColorGradientWidget( ColorGradientWidget::Horizontal, 10, histoBox);
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
     // -------------------------------------------------------------
 
-    m_thresholdLabel = new QLabel(i18n("Sensitivity:"), gboxSettings);
-    m_redThreshold   = new RIntNumInput(gboxSettings);
+    m_thresholdLabel = new QLabel(i18n("Sensitivity:"), gboxSettings->plainPage());
+    m_redThreshold   = new RIntNumInput(gboxSettings->plainPage());
     m_redThreshold->setRange(10, 90, 1);
     m_redThreshold->setSliderEnabled(true);
     m_redThreshold->setDefaultValue(20);
@@ -163,8 +175,8 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
                                       "values less (mild correction). Use low value if eye have been selected "
                                       "exactly. Use high value if other parts of the face are also selected."));
 
-    m_smoothLabel = new QLabel(i18n("Smooth:"), gboxSettings);
-    m_smoothLevel = new RIntNumInput(gboxSettings);
+    m_smoothLabel = new QLabel(i18n("Smooth:"), gboxSettings->plainPage());
+    m_smoothLevel = new RIntNumInput(gboxSettings->plainPage());
     m_smoothLevel->setRange(0, 5, 1);
     m_smoothLevel->setSliderEnabled(true);
     m_smoothLevel->setDefaultValue(1);
@@ -172,21 +184,21 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
                                      "of the changed pixels. "
                                      "This leads to a more naturally looking pupil."));
 
-    QLabel *label3 = new QLabel(i18n("Coloring Tint:"), gboxSettings);
+    QLabel *label3 = new QLabel(i18n("Coloring Tint:"), gboxSettings->plainPage());
 
-    m_HSSelector   = new KHueSaturationSelector(gboxSettings);
+    m_HSSelector   = new KHueSaturationSelector(gboxSettings->plainPage());
     m_HSSelector->setWhatsThis(i18n("<p>Sets a custom color when re-colorizing the eyes."));
     m_HSSelector->setMinimumSize(200, 142);
     m_HSSelector->setChooserMode(ChooserValue);
     m_HSSelector->setColorValue(255);
 
-    m_VSelector    = new KColorValueSelector(gboxSettings);
+    m_VSelector    = new KColorValueSelector(gboxSettings->plainPage());
     m_VSelector->setChooserMode(ChooserValue);
     m_VSelector->setMinimumSize(26, 142);
     m_VSelector->setIndent(false);
 
-    QLabel *label4 = new QLabel(i18n("Tint Level:"), gboxSettings);
-    m_tintLevel    = new RIntNumInput(gboxSettings);
+    QLabel *label4 = new QLabel(i18n("Tint Level:"), gboxSettings->plainPage());
+    m_tintLevel    = new RIntNumInput(gboxSettings->plainPage());
     m_tintLevel->setRange(1, 200, 1);
     m_tintLevel->setSliderEnabled(true);
     m_tintLevel->setDefaultValue(128);
@@ -208,10 +220,10 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     gridSettings->addWidget(m_tintLevel,     10, 0, 1, 5);
     gridSettings->setRowStretch(11, 10);
     gridSettings->setColumnStretch(3, 10);
-    gridSettings->setMargin(spacingHint());
-    gridSettings->setSpacing(spacingHint());
+    gridSettings->setMargin(gboxSettings->spacingHint());
+    gridSettings->setSpacing(gboxSettings->spacingHint());
 
-    setUserAreaWidget(gboxSettings);
+    setToolSettings(gboxSettings);
 
     // -------------------------------------------------------------
 
@@ -243,7 +255,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
             this, SLOT(slotTimer()));
 }
 
-ImageEffect_RedEye::~ImageEffect_RedEye()
+RedEyeTool::~RedEyeTool()
 {
     m_histogramWidget->stopHistogramComputation();
 
@@ -254,7 +266,7 @@ ImageEffect_RedEye::~ImageEffect_RedEye()
     delete m_previewWidget;
 }
 
-void ImageEffect_RedEye::slotHSChanged(int h, int s)
+void RedEyeTool::slotHSChanged(int h, int s)
 {
     QColor color;
 
@@ -264,7 +276,7 @@ void ImageEffect_RedEye::slotHSChanged(int h, int s)
     setColor(color);
 }
 
-void ImageEffect_RedEye::slotVChanged(int v)
+void RedEyeTool::slotVChanged(int v)
 {
     QColor color;
 
@@ -275,7 +287,7 @@ void ImageEffect_RedEye::slotVChanged(int v)
     setColor(color);
 }
 
-void ImageEffect_RedEye::setColor(QColor c)
+void RedEyeTool::setColor(QColor c)
 {
     if (c.isValid())
     {
@@ -306,27 +318,27 @@ void ImageEffect_RedEye::setColor(QColor c)
     }
 }
 
-void ImageEffect_RedEye::slotChannelChanged(int channel)
+void RedEyeTool::slotChannelChanged(int channel)
 {
     switch(channel)
     {
         case LuminosityChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
+            m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
             break;
 
         case RedChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
+            m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
             break;
 
         case GreenChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
+            m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
             break;
 
         case BlueChannel:
-           m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
+           m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
             break;
     }
@@ -334,25 +346,25 @@ void ImageEffect_RedEye::slotChannelChanged(int channel)
     m_histogramWidget->repaint();
 }
 
-void ImageEffect_RedEye::slotScaleChanged(int scale)
+void RedEyeTool::slotScaleChanged(int scale)
 {
     m_histogramWidget->m_scaleType = scale;
     m_histogramWidget->repaint();
 }
 
-void ImageEffect_RedEye::slotColorSelectedFromTarget(const Digikam::DColor& color)
+void RedEyeTool::slotColorSelectedFromTarget(const DColor& color)
 {
     m_histogramWidget->setHistogramGuideByColor(color);
 }
 
-void ImageEffect_RedEye::readUserSettings()
+void RedEyeTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("redeye Tool Dialog");
+    KConfigGroup group        = config->group("redeye Tool");
 
     m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0)); // Luminosity.
     m_scaleBG->button(group.readEntry("Histogram Scale",
-                      (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
+                      (int)HistogramWidget::LogScaleHistogram))->setChecked(true);
 
     m_redThreshold->setValue(group.readEntry("RedThreshold", m_redThreshold->defaultValue()));
     m_smoothLevel->setValue(group.readEntry("SmoothLevel", m_smoothLevel->defaultValue()));
@@ -371,10 +383,10 @@ void ImageEffect_RedEye::readUserSettings()
     slotScaleChanged(m_scaleBG->checkedId());
 }
 
-void ImageEffect_RedEye::writeUserSettings()
+void RedEyeTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("redeye Tool Dialog");
+    KConfigGroup group        = config->group("redeye Tool");
     group.writeEntry("Histogram Channel", m_channelCB->currentIndex());
     group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
     group.writeEntry("RedThreshold", m_redThreshold->value());
@@ -386,7 +398,7 @@ void ImageEffect_RedEye::writeUserSettings()
     config->sync();
 }
 
-void ImageEffect_RedEye::resetValues()
+void RedEyeTool::slotResetSettings()
 {
     m_redThreshold->blockSignals(true);
     m_HSSelector->blockSignals(true);
@@ -398,17 +410,19 @@ void ImageEffect_RedEye::resetValues()
     m_tintLevel->slotReset();
 
     // Black color by default
-    m_HSSelector->setXValue(0);
-    m_HSSelector->setYValue(0);
-    m_VSelector->setValue(0);
+    QColor col;
+    col.setHsv(0, 0, 0);
+    setColor(col);
 
     m_redThreshold->blockSignals(false);
     m_HSSelector->blockSignals(false);
     m_VSelector->blockSignals(false);
     m_tintLevel->blockSignals(false);
+
+    slotEffect();
 }
 
-void ImageEffect_RedEye::slotEffect()
+void RedEyeTool::slotEffect()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
 
@@ -420,17 +434,17 @@ void ImageEffect_RedEye::slotEffect()
     // Here, we need to use the real selection image data because we will apply
     // a Gaussian blur filter on pixels and we cannot use directly the preview scaled image
     // else the blur radius will not give the same result between preview and final rendering.
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = m_previewWidget->imageIface();
     m_destinationPreviewData   = iface->getImageSelection();
     int w                      = iface->selectedWidth();
     int h                      = iface->selectedHeight();
     bool sb                    = iface->originalSixteenBit();
     bool a                     = iface->originalHasAlpha();
-    Digikam::DImg selection(w, h, sb, a, m_destinationPreviewData);
+    DImg selection(w, h, sb, a, m_destinationPreviewData);
 
     redEyeFilter(selection);
 
-    Digikam::DImg preview = selection.smoothScale(iface->previewWidth(), iface->previewHeight());
+    DImg preview = selection.smoothScale(iface->previewWidth(), iface->previewHeight());
 
     iface->putPreviewImage(preview.bits());
     m_previewWidget->updatePreview();
@@ -443,17 +457,17 @@ void ImageEffect_RedEye::slotEffect()
     kapp->restoreOverrideCursor();
 }
 
-void ImageEffect_RedEye::finalRendering()
+void RedEyeTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
 
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = m_previewWidget->imageIface();
     uchar *data                = iface->getImageSelection();
     int w                      = iface->selectedWidth();
     int h                      = iface->selectedHeight();
     bool sixteenBit            = iface->originalSixteenBit();
     bool hasAlpha              = iface->originalHasAlpha();
-    Digikam::DImg selection(w, h, sixteenBit, hasAlpha, data);
+    DImg selection(w, h, sixteenBit, hasAlpha, data);
     delete [] data;
 
     redEyeFilter(selection);
@@ -461,12 +475,11 @@ void ImageEffect_RedEye::finalRendering()
     iface->putImageSelection(i18n("Red Eyes Correction"), selection.bits());
 
     kapp->restoreOverrideCursor();
-    accept();
 }
 
-void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
+void RedEyeTool::redEyeFilter(DImg& selection)
 {
-    Digikam::DImg mask(selection.width(), selection.height(), selection.sixteenBit(), true,
+    DImg mask(selection.width(), selection.height(), selection.sixteenBit(), true,
                        selection.bits(), true);
 
     selection          = mask.copy();
@@ -587,8 +600,8 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
 
     // Now, we will blur only the transparency pixels from the mask.
 
-    Digikam::DImg mask2 = mask.copy();
-    Digikam::DImgImageFilters filter;
+    DImg mask2 = mask.copy();
+    DImgImageFilters filter;
     filter.gaussianBlurImage(mask2.bits(), mask2.width(), mask2.height(),
                              mask2.sixteenBit(), m_smoothLevel->value());
 
@@ -633,7 +646,7 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
 
     // - Perform pixels blending using alpha channel between the mask and the selection.
 
-    Digikam::DColorComposer *composer = Digikam::DColorComposer::getComposer(Digikam::DColorComposer::PorterDuffSrcOver);
+    DColorComposer *composer = DColorComposer::getComposer(DColorComposer::PorterDuffSrcOver);
 
     // NOTE: 'mask' is the Source image, 'selection' is the Destination image.
 
