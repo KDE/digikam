@@ -586,7 +586,7 @@ void BWSepiaTool::slotFilterSelected()
 
 QPixmap BWSepiaTool::getThumbnailForEffect(int type)
 {
-    DImg thumb = m_thumbnailImage.copy();
+    DImg thumb          = m_thumbnailImage.copy();
     int w               = thumb.width();
     int h               = thumb.height();
     bool sb             = thumb.sixteenBit();
