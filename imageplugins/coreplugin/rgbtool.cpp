@@ -337,7 +337,7 @@ void RGBTool::slotColorSelectedFromTarget( const DColor &color )
 void RGBTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("colorbalance Tool Dialog");
+    KConfigGroup group        = config->group("colorbalance Tool");
 
     m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->button(group.readEntry("Histogram Scale",
@@ -354,7 +354,7 @@ void RGBTool::readSettings()
 void RGBTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("colorbalance Tool Dialog");
+    KConfigGroup group        = config->group("colorbalance Tool");
     group.writeEntry("Histogram Channel", m_channelCB->currentIndex());
     group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
     group.writeEntry("RedAjustment", m_rSlider->value());
