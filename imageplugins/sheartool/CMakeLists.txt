@@ -1,7 +1,7 @@
 
 SET(digikamimageplugin_sheartool_PART_SRCS imageplugin_sheartool.cpp
                                            imageeffect_sheartool.cpp
-                                           sheartool.cpp 
+                                           shear.cpp 
    )
 
 

@@ -52,7 +52,7 @@
 #include "dimg.h"
 #include "imageiface.h"
 #include "imagewidget.h"
-#include "sheartool.h"
+#include "shear.h"
 #include "imageeffect_sheartool.h"
 #include "imageeffect_sheartool.moc"
 
