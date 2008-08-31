@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-01-04
- * Description : a Digikam image editor plugin for superimpose a 
+ * Description : a Digikam image editor plugin for superimpose a
  *               template to an image.
  *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -36,9 +36,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_superimpose.h"
+#include "superimposetool.h"
 #include "imageplugin_superimpose.h"
 #include "imageplugin_superimpose.moc"
+
+using namespace DigikamSuperImposeImagesPlugin;
 
 K_PLUGIN_FACTORY( SuperImposeFactory, registerPlugin<ImagePlugin_SuperImpose>(); )
 K_EXPORT_PLUGIN ( SuperImposeFactory("digikamimageplugin_superimpose") )
@@ -49,7 +51,7 @@ ImagePlugin_SuperImpose::ImagePlugin_SuperImpose(QObject *parent, const QVariant
     m_superimposeAction  = new KAction(KIcon("superimpose"), i18n("Template Superimpose..."), this);
     actionCollection()->addAction("imageplugin_superimpose", m_superimposeAction );
 
-    connect(m_superimposeAction, SIGNAL(triggered(bool)), 
+    connect(m_superimposeAction, SIGNAL(triggered(bool)),
             this, SLOT(slotSuperImpose()));
 
     setXMLFile("digikamimageplugin_superimpose_ui.rc");
@@ -68,6 +70,6 @@ void ImagePlugin_SuperImpose::setEnabledActions(bool enable)
 
 void ImagePlugin_SuperImpose::slotSuperImpose()
 {
-    DigikamSuperImposeImagesPlugin::ImageEffect_SuperImpose dlg(kapp->activeWindow());
-    dlg.exec();
+    SuperImposeTool *tool = new SuperImposeTool(kapp->activeWindow());
+    loadTool(tool);
 }

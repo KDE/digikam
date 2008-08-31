@@ -3,7 +3,7 @@ SET(digikamimageplugin_superimpose_PART_SRCS superimposewidget.cpp
                                              superimpose.cpp 
                                              dirselectwidget.cpp
                                              imageplugin_superimpose.cpp
-                                             imageeffect_superimpose.cpp 
+                                             superimposetool.cpp 
    )
 
 

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-01-04
- * Description : a Digikam image editor plugin for superimpose a 
+ * Description : a Digikam image editor plugin for superimpose a
  *               template to an image.
  *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -32,12 +32,13 @@
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 
 
 namespace Digikam
 {
 class ThumbBarView;
+class EditorToolSettings;
 }
 
 namespace DigikamSuperImposeImagesPlugin
@@ -46,38 +47,40 @@ namespace DigikamSuperImposeImagesPlugin
 class DirSelectWidget;
 class SuperImposeWidget;
 
-class ImageEffect_SuperImpose : public Digikam::ImageDlgBase
+class SuperImposeTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_SuperImpose(QWidget* parent);
-    ~ImageEffect_SuperImpose();
+    SuperImposeTool(QObject* parent);
+    ~SuperImposeTool();
 
 private slots:
 
+    void slotResetSettings();
     void slotTemplateDirChanged(const KUrl& url);
     void slotRootTemplateDirChanged(void);
 
 private:
 
-    void readUserSettings();
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void populateTemplates(void);
-    void finalRendering();    
-    
-private:
-    
-    KUrl                   m_templatesUrl;
-    KUrl                   m_templatesRootUrl;
+    void finalRendering();
 
-    Digikam::ThumbBarView *m_thumbnailsBar;
-    
-    SuperImposeWidget     *m_previewWidget;
-    
-    DirSelectWidget       *m_dirSelect;
+private:
+
+    KUrl                         m_templatesUrl;
+    KUrl                         m_templatesRootUrl;
+
+    Digikam::ThumbBarView       *m_thumbnailsBar;
+
+    Digikam::EditorToolSettings *m_gboxSettings;
+
+    SuperImposeWidget           *m_previewWidget;
+
+    DirSelectWidget             *m_dirSelect;
 };
 
 }  // NameSpace DigikamSuperImposeImagesPlugin
