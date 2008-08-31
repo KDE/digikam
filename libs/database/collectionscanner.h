@@ -221,6 +221,10 @@ signals:
 protected:
 
     void markDatabaseAsScanned();
+    void updateRemovedItemsTime();
+    void incrementDeleteRemovedCompleteScanCount();
+    void resetDeleteRemovedSettings();
+    bool checkDeleteRemoved();
     void loadNameFilters();
     int countItemsInFolder(const QString& directory);
     DatabaseItem::Category category(const QFileInfo &info);

@@ -71,6 +71,11 @@ public:
     QSet<QString>     audioFilterSet;
     QList<int>        scannedAlbums;
     bool              wantSignals;
+
+    QDateTime         removedItemsTime;
+
+    void resetRemovedItemsTime() { removedItemsTime = QDateTime(); }
+    void removedItems() { removedItemsTime = QDateTime::currentDateTime(); }
 };
 
 CollectionScanner::CollectionScanner()
@@ -115,6 +120,7 @@ void CollectionScanner::completeScan()
     DatabaseTransaction transaction;
 
     loadNameFilters();
+    d->resetRemovedItemsTime();
 
     //TODO: Implement a mechanism to watch for album root changes while we keep this list
     QList<CollectionLocation> allLocations = CollectionManager::instance()->allAvailableLocations();
@@ -137,9 +143,21 @@ void CollectionScanner::completeScan()
     foreach (const CollectionLocation &location, allLocations)
         scanAlbumRoot(location);
 
-    // Definitely delete items which are marked as removed.
-    // Only do this in a complete scan!
-    DatabaseAccess().db()->deleteRemovedItems(d->scannedAlbums);
+    updateRemovedItemsTime();
+    // Items may be set to status removed, without being definitely deleted.
+    // This deletion shall be done after a certain time, as checked by checkedDeleteRemoved
+    if (checkDeleteRemoved())
+    {
+        // Definitely delete items which are marked as removed.
+        // Only do this in a complete scan!
+        DatabaseAccess().db()->deleteRemovedItems(d->scannedAlbums);
+        resetDeleteRemovedSettings();
+    }
+    else
+    {
+        // increment the count of complete scans during which removed items were not deleted
+        incrementDeleteRemovedCompleteScanCount();
+    }
 
     markDatabaseAsScanned();
 
@@ -173,6 +191,7 @@ void CollectionScanner::partialScan(const QString &albumRoot, const QString& alb
     }
 
     loadNameFilters();
+    d->resetRemovedItemsTime();
 
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
 
@@ -189,6 +208,8 @@ void CollectionScanner::partialScan(const QString &albumRoot, const QString& alb
         scanAlbumRoot(location);
     else
         scanAlbum(location, album);
+
+    updateRemovedItemsTime();
 }
 
 void CollectionScanner::scanFile(const QString &albumRoot, const QString &album, const QString &fileName)
@@ -283,6 +304,7 @@ void CollectionScanner::scanForStaleAlbums(QList<CollectionLocation> locations)
         {
             access.db()->removeItemsFromAlbum(albumId);
             access.db()->deleteAlbum(albumId);
+            d->removedItems();
         }
     }
 
@@ -406,7 +428,11 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
     }
 
     // Mark items in the db which we did not see on disk.
-    DatabaseAccess().db()->removeItems(itemIdSet.toList(), QList<int>() << albumID);
+    if (!itemIdSet.isEmpty())
+    {
+        DatabaseAccess().db()->removeItems(itemIdSet.toList(), QList<int>() << albumID);
+        d->removedItems();
+    }
 
     if (d->wantSignals)
         emit finishedScanningAlbum(location.albumRootPath(), album, list.count());
@@ -457,6 +483,72 @@ void CollectionScanner::markDatabaseAsScanned()
     access.db()->setSetting("Scanned", QDateTime::currentDateTime().toString(Qt::ISODate));
 }
 
+void CollectionScanner::updateRemovedItemsTime()
+{
+    // Called after a complete or partial scan finishes, to write the value
+    // held in d->removedItemsTime to the database
+    if (!d->removedItemsTime.isNull())
+    {
+        DatabaseAccess().db()->setSetting("RemovedItemsTime", d->removedItemsTime.toString(Qt::ISODate));
+        d->removedItemsTime = QDateTime();
+    }
+}
+
+void CollectionScanner::incrementDeleteRemovedCompleteScanCount()
+{
+    DatabaseAccess access;
+    int count = access.db()->getSetting("DeleteRemovedCompleteScanCount").toInt();
+    count++;
+    access.db()->setSetting("DeleteRemovedCompleteScanCount", QString::number(count));
+}
+
+void CollectionScanner::resetDeleteRemovedSettings()
+{
+    DatabaseAccess().db()->setSetting("RemovedItemsTime", QString());
+    DatabaseAccess().db()->setSetting("DeleteRemovedTime", QDateTime::currentDateTime().toString(Qt::ISODate));
+    DatabaseAccess().db()->setSetting("DeleteRemovedCompleteScanCount", QString::number(0));
+}
+
+bool CollectionScanner::checkDeleteRemoved()
+{
+    // returns true if removed items shall be deleted
+    DatabaseAccess access;
+    // retrieve last time an item was removed (not deleted, but set to status removed)
+    QString removedItemsTimeString = access.db()->getSetting("RemovedItemsTime");
+
+    if (removedItemsTimeString.isNull())
+        return false;
+
+    // retrieve last time removed items were (definitely) deleted from db
+    QString deleteRemovedTimeString = access.db()->getSetting("DeleteRemovedTime");
+    QDateTime removedItemsTime, deleteRemovedTime;
+    if (!removedItemsTimeString.isNull())
+        removedItemsTime = QDateTime::fromString(removedItemsTimeString, Qt::ISODate);
+    if (!deleteRemovedTimeString.isNull())
+        deleteRemovedTime = QDateTime::fromString(deleteRemovedTimeString, Qt::ISODate);
+    QDateTime now = QDateTime::currentDateTime();
+
+    // retrieve number of complete collection scans since the last time that removed items were deleted
+    int completeScans = access.db()->getSetting("DeleteRemovedCompleteScanCount").toInt();
+
+    // No removed items? No need to delete any
+    if (!removedItemsTime.isValid())
+        return false;
+
+    // give at least a week between removed item deletions
+    if (deleteRemovedTime.isValid())
+    {
+        if (deleteRemovedTime.daysTo(now) <= 7)
+            return false;
+    }
+
+    // Now look at time since items were removed, and the number of complete scans
+    // since removed items were deleted. Values arbitrarily chosen.
+    int daysPast = removedItemsTime.daysTo(now);
+    return (daysPast > 7 && completeScans > 2)
+        || (daysPast > 30 && completeScans > 0)
+        || (completeScans > 30);
+}
 
 
 
