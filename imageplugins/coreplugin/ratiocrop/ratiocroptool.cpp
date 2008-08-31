@@ -474,40 +474,40 @@ void RatioCropTool::writeSettings()
 
     if (m_originalIsLandscape)
     {
-       group.writeEntry( "Hor.Oriented Aspect Ratio", m_ratioCB->currentIndex() );
-       group.writeEntry( "Hor.Oriented Aspect Ratio Orientation", m_orientCB->currentIndex() );
-       group.writeEntry( "Hor.Oriented Custom Aspect Ratio Num", m_customRatioNInput->value() );
-       group.writeEntry( "Hor.Oriented Custom Aspect Ratio Den", m_customRatioDInput->value() );
+        group.writeEntry("Hor.Oriented Aspect Ratio", m_ratioCB->currentIndex());
+        group.writeEntry("Hor.Oriented Aspect Ratio Orientation", m_orientCB->currentIndex());
+        group.writeEntry("Hor.Oriented Custom Aspect Ratio Num", m_customRatioNInput->value());
+        group.writeEntry("Hor.Oriented Custom Aspect Ratio Den", m_customRatioDInput->value());
 
-       group.writeEntry( "Hor.Oriented Custom Aspect Ratio Xpos", m_xInput->value() );
-       group.writeEntry( "Hor.Oriented Custom Aspect Ratio Ypos", m_yInput->value() );
-       group.writeEntry( "Hor.Oriented Custom Aspect Ratio Width", m_widthInput->value() );
-       group.writeEntry( "Hor.Oriented Custom Aspect Ratio Height", m_heightInput->value() );
+        group.writeEntry("Hor.Oriented Custom Aspect Ratio Xpos", m_xInput->value());
+        group.writeEntry("Hor.Oriented Custom Aspect Ratio Ypos", m_yInput->value());
+        group.writeEntry("Hor.Oriented Custom Aspect Ratio Width", m_widthInput->value());
+        group.writeEntry("Hor.Oriented Custom Aspect Ratio Height", m_heightInput->value());
     }
     else
     {
-       group.writeEntry( "Ver.Oriented Aspect Ratio", m_ratioCB->currentIndex() );
-       group.writeEntry( "Ver.Oriented Aspect Ratio Orientation", m_orientCB->currentIndex() );
-       group.writeEntry( "Ver.Oriented Custom Aspect Ratio Num", m_customRatioNInput->value() );
-       group.writeEntry( "Ver.Oriented Custom Aspect Ratio Den", m_customRatioDInput->value() );
+        group.writeEntry("Ver.Oriented Aspect Ratio", m_ratioCB->currentIndex());
+        group.writeEntry("Ver.Oriented Aspect Ratio Orientation", m_orientCB->currentIndex());
+        group.writeEntry("Ver.Oriented Custom Aspect Ratio Num", m_customRatioNInput->value());
+        group.writeEntry("Ver.Oriented Custom Aspect Ratio Den", m_customRatioDInput->value());
 
-       group.writeEntry( "Ver.Oriented Custom Aspect Ratio Xpos", m_xInput->value() );
-       group.writeEntry( "Ver.Oriented Custom Aspect Ratio Ypos", m_yInput->value() );
-       group.writeEntry( "Ver.Oriented Custom Aspect Ratio Width", m_widthInput->value() );
-       group.writeEntry( "Ver.Oriented Custom Aspect Ratio Height", m_heightInput->value() );
+        group.writeEntry("Ver.Oriented Custom Aspect Ratio Xpos", m_xInput->value());
+        group.writeEntry("Ver.Oriented Custom Aspect Ratio Ypos", m_yInput->value());
+        group.writeEntry("Ver.Oriented Custom Aspect Ratio Width", m_widthInput->value());
+        group.writeEntry("Ver.Oriented Custom Aspect Ratio Height", m_heightInput->value());
     }
 
-    group.writeEntry( "Precise Aspect Ratio Crop", m_preciseCrop->isChecked() );
-    group.writeEntry( "Auto Orientation", m_autoOrientation->isChecked() );
-    group.writeEntry( "Guide Lines Type", m_guideLinesCB->currentIndex() );
-    group.writeEntry( "Golden Section", m_goldenSectionBox->isChecked() );
-    group.writeEntry( "Golden Spiral Section", m_goldenSpiralSectionBox->isChecked() );
-    group.writeEntry( "Golden Spiral", m_goldenSpiralBox->isChecked() );
-    group.writeEntry( "Golden Triangle", m_goldenTriangleBox->isChecked() );
-    group.writeEntry( "Golden Flip Horizontal", m_flipHorBox->isChecked() );
-    group.writeEntry( "Golden Flip Vertical", m_flipVerBox->isChecked() );
-    group.writeEntry( "Guide Color", m_guideColorBt->color() );
-    group.writeEntry( "Guide Width", m_guideSize->value() );
+    group.writeEntry("Precise Aspect Ratio Crop", m_preciseCrop->isChecked());
+    group.writeEntry("Auto Orientation", m_autoOrientation->isChecked());
+    group.writeEntry("Guide Lines Type", m_guideLinesCB->currentIndex());
+    group.writeEntry("Golden Section", m_goldenSectionBox->isChecked());
+    group.writeEntry("Golden Spiral Section", m_goldenSpiralSectionBox->isChecked());
+    group.writeEntry("Golden Spiral", m_goldenSpiralBox->isChecked());
+    group.writeEntry("Golden Triangle", m_goldenTriangleBox->isChecked());
+    group.writeEntry("Golden Flip Horizontal", m_flipHorBox->isChecked());
+    group.writeEntry("Golden Flip Vertical", m_flipVerBox->isChecked());
+    group.writeEntry("Guide Color", m_guideColorBt->color());
+    group.writeEntry("Guide Width", m_guideSize->value());
     group.sync();
 }
 
@@ -568,27 +568,27 @@ void RatioCropTool::setRatioCBText(int orientation)
     int item = m_ratioCB->currentIndex();
     m_ratioCB->blockSignals(true);
     m_ratioCB->combo()->clear();
-    m_ratioCB->addItem( i18n("Custom") );
-    m_ratioCB->addItem( "1:1" );
-    if ( orientation == ImageSelectionWidget::Landscape )
+    m_ratioCB->addItem(i18n("Custom"));
+    m_ratioCB->addItem("1:1");
+    if (orientation == ImageSelectionWidget::Landscape)
     {
-        m_ratioCB->addItem( "3:2" );
-        m_ratioCB->addItem( "4:3" );
-        m_ratioCB->addItem( "5:4" );
-        m_ratioCB->addItem( "7:5" );
-        m_ratioCB->addItem( "10:7" );
+        m_ratioCB->addItem("3:2");
+        m_ratioCB->addItem("4:3");
+        m_ratioCB->addItem("5:4");
+        m_ratioCB->addItem("7:5");
+        m_ratioCB->addItem("10:7");
     }
     else
     {
-        m_ratioCB->addItem( "2:3" );
-        m_ratioCB->addItem( "3:4" );
-        m_ratioCB->addItem( "4:5" );
-        m_ratioCB->addItem( "5:7" );
-        m_ratioCB->addItem( "7:10" );
+        m_ratioCB->addItem("2:3");
+        m_ratioCB->addItem("3:4");
+        m_ratioCB->addItem("4:5");
+        m_ratioCB->addItem("5:7");
+        m_ratioCB->addItem("7:10");
     }
-    m_ratioCB->addItem( i18n("Golden Ratio") );
-    m_ratioCB->addItem( i18n("None") );
-    m_ratioCB->setCurrentIndex( item );
+    m_ratioCB->addItem(i18n("Golden Ratio"));
+    m_ratioCB->addItem(i18n("None"));
+    m_ratioCB->setCurrentIndex(item);
     m_ratioCB->blockSignals(false);
 }
 
@@ -613,8 +613,8 @@ void RatioCropTool::slotSelectionOrientationChanged(int newOrientation)
         m_customRatioDInput->blockSignals(true);
 
         int tmp = m_customRatioNInput->value();
-        m_customRatioNInput->setValue( m_customRatioDInput->value() );
-        m_customRatioDInput->setValue( tmp );
+        m_customRatioNInput->setValue(m_customRatioDInput->value());
+        m_customRatioDInput->setValue(tmp);
 
         m_customRatioNInput->blockSignals(false);
         m_customRatioDInput->blockSignals(false);
@@ -672,88 +672,88 @@ void RatioCropTool::applyRatioChanges(int a)
 {
     m_imageSelectionWidget->setSelectionAspectRatioType(a);
 
-    if ( a == ImageSelectionWidget::RATIOCUSTOM )
+    if (a == ImageSelectionWidget::RATIOCUSTOM)
     {
-       m_customLabel1->setEnabled(true);
-       m_customLabel2->setEnabled(true);
-       m_customRatioNInput->setEnabled(true);
-       m_customRatioDInput->setEnabled(true);
-       m_orientLabel->setEnabled(true);
-       m_orientCB->setEnabled(! m_autoOrientation->isChecked());
-       m_autoOrientation->setEnabled(true);
-       slotCustomRatioChanged();
+        m_customLabel1->setEnabled(true);
+        m_customLabel2->setEnabled(true);
+        m_customRatioNInput->setEnabled(true);
+        m_customRatioDInput->setEnabled(true);
+        m_orientLabel->setEnabled(true);
+        m_orientCB->setEnabled(!m_autoOrientation->isChecked());
+        m_autoOrientation->setEnabled(true);
+        slotCustomRatioChanged();
     }
-    else if ( a == ImageSelectionWidget::RATIONONE )
+    else if (a == ImageSelectionWidget::RATIONONE)
     {
-       m_orientLabel->setEnabled(false);
-       m_orientCB->setEnabled(false);
-       m_autoOrientation->setEnabled(false);
-       m_customLabel1->setEnabled(false);
-       m_customLabel2->setEnabled(false);
-       m_customRatioNInput->setEnabled(false);
-       m_customRatioDInput->setEnabled(false);
+        m_orientLabel->setEnabled(false);
+        m_orientCB->setEnabled(false);
+        m_autoOrientation->setEnabled(false);
+        m_customLabel1->setEnabled(false);
+        m_customLabel2->setEnabled(false);
+        m_customRatioNInput->setEnabled(false);
+        m_customRatioDInput->setEnabled(false);
     }
-    else        // Pre-config ratio selected.
+    else // Pre-config ratio selected.
     {
-       m_orientLabel->setEnabled(true);
-       m_orientCB->setEnabled(! m_autoOrientation->isChecked());
-       m_autoOrientation->setEnabled(true);
-       m_customLabel1->setEnabled(false);
-       m_customLabel2->setEnabled(false);
-       m_customRatioNInput->setEnabled(false);
-       m_customRatioDInput->setEnabled(false);
+        m_orientLabel->setEnabled(true);
+        m_orientCB->setEnabled(!m_autoOrientation->isChecked());
+        m_autoOrientation->setEnabled(true);
+        m_customLabel1->setEnabled(false);
+        m_customLabel2->setEnabled(false);
+        m_customRatioNInput->setEnabled(false);
+        m_customRatioDInput->setEnabled(false);
     }
 }
 
 void RatioCropTool::slotGuideTypeChanged(int t)
 {
-    if ( t == ImageSelectionWidget::GuideNone )
+    if (t == ImageSelectionWidget::GuideNone)
     {
-       m_goldenSectionBox->setEnabled(false);
-       m_goldenSpiralSectionBox->setEnabled(false);
-       m_goldenSpiralBox->setEnabled(false);
-       m_goldenTriangleBox->setEnabled(false);
-       m_flipHorBox->setEnabled(false);
-       m_flipVerBox->setEnabled(false);
-       m_colorGuideLabel->setEnabled(false);
-       m_guideColorBt->setEnabled(false);
-       m_guideSize->setEnabled(false);
+        m_goldenSectionBox->setEnabled(false);
+        m_goldenSpiralSectionBox->setEnabled(false);
+        m_goldenSpiralBox->setEnabled(false);
+        m_goldenTriangleBox->setEnabled(false);
+        m_flipHorBox->setEnabled(false);
+        m_flipVerBox->setEnabled(false);
+        m_colorGuideLabel->setEnabled(false);
+        m_guideColorBt->setEnabled(false);
+        m_guideSize->setEnabled(false);
     }
-    else if ( t == ImageSelectionWidget::RulesOfThirds )
+    else if (t == ImageSelectionWidget::RulesOfThirds)
     {
-       m_goldenSectionBox->setEnabled(false);
-       m_goldenSpiralSectionBox->setEnabled(false);
-       m_goldenSpiralBox->setEnabled(false);
-       m_goldenTriangleBox->setEnabled(false);
-       m_flipHorBox->setEnabled(false);
-       m_flipVerBox->setEnabled(false);
-       m_colorGuideLabel->setEnabled(true);
-       m_guideColorBt->setEnabled(true);
-       m_guideSize->setEnabled(true);
+        m_goldenSectionBox->setEnabled(false);
+        m_goldenSpiralSectionBox->setEnabled(false);
+        m_goldenSpiralBox->setEnabled(false);
+        m_goldenTriangleBox->setEnabled(false);
+        m_flipHorBox->setEnabled(false);
+        m_flipVerBox->setEnabled(false);
+        m_colorGuideLabel->setEnabled(true);
+        m_guideColorBt->setEnabled(true);
+        m_guideSize->setEnabled(true);
     }
-    else if ( t == ImageSelectionWidget::HarmoniousTriangles )
+    else if (t == ImageSelectionWidget::HarmoniousTriangles)
     {
-       m_goldenSectionBox->setEnabled(false);
-       m_goldenSpiralSectionBox->setEnabled(false);
-       m_goldenSpiralBox->setEnabled(false);
-       m_goldenTriangleBox->setEnabled(false);
-       m_flipHorBox->setEnabled(true);
-       m_flipVerBox->setEnabled(true);
-       m_colorGuideLabel->setEnabled(true);
-       m_guideColorBt->setEnabled(true);
-       m_guideSize->setEnabled(true);
+        m_goldenSectionBox->setEnabled(false);
+        m_goldenSpiralSectionBox->setEnabled(false);
+        m_goldenSpiralBox->setEnabled(false);
+        m_goldenTriangleBox->setEnabled(false);
+        m_flipHorBox->setEnabled(true);
+        m_flipVerBox->setEnabled(true);
+        m_colorGuideLabel->setEnabled(true);
+        m_guideColorBt->setEnabled(true);
+        m_guideSize->setEnabled(true);
     }
     else
     {
-       m_goldenSectionBox->setEnabled(true);
-       m_goldenSpiralSectionBox->setEnabled(true);
-       m_goldenSpiralBox->setEnabled(true);
-       m_goldenTriangleBox->setEnabled(true);
-       m_flipHorBox->setEnabled(true);
-       m_flipVerBox->setEnabled(true);
-       m_colorGuideLabel->setEnabled(true);
-       m_guideColorBt->setEnabled(true);
-       m_guideSize->setEnabled(true);
+        m_goldenSectionBox->setEnabled(true);
+        m_goldenSpiralSectionBox->setEnabled(true);
+        m_goldenSpiralBox->setEnabled(true);
+        m_goldenTriangleBox->setEnabled(true);
+        m_flipHorBox->setEnabled(true);
+        m_flipVerBox->setEnabled(true);
+        m_colorGuideLabel->setEnabled(true);
+        m_guideColorBt->setEnabled(true);
+        m_guideSize->setEnabled(true);
     }
 
     m_imageSelectionWidget->setGoldenGuideTypes(m_goldenSectionBox->isChecked(),
