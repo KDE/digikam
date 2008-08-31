@@ -24,34 +24,34 @@
 
 // Qt includes.
 
-#include <qvgroupbox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qwhatsthis.h>
-#include <qlayout.h>
-#include <qframe.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qpixmap.h>
-#include <qpainter.h>
 #include <qbrush.h>
-#include <qpen.h>
-#include <qtimer.h>
+#include <qcheckbox.h>
+#include <qcombobox.h>
+#include <qframe.h>
 #include <qhbuttongroup.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qpainter.h>
+#include <qpen.h>
+#include <qpixmap.h>
+#include <qpushbutton.h>
+#include <qtimer.h>
 #include <qtooltip.h>
+#include <qvgroupbox.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
-#include <klocale.h>
-#include <kcursor.h>
 #include <kaboutdata.h>
+#include <kapplication.h>
+#include <kcolorbutton.h>
+#include <kconfig.h>
+#include <kcursor.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
-#include <kapplication.h>
+#include <klocale.h>
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
-#include <kconfig.h>
-#include <kcolorbutton.h>
 #include <ktextedit.h>
 
 // Local includes.
@@ -59,10 +59,10 @@
 #include "daboutdata.h"
 #include "ddebug.h"
 #include "dimg.h"
-#include "imageiface.h"
 #include "editortoolsettings.h"
-#include "inserttextwidget.h"
 #include "fontchooserwidget.h"
+#include "imageiface.h"
+#include "inserttextwidget.h"
 #include "inserttexttool.h"
 #include "inserttexttool.moc"
 
@@ -96,12 +96,12 @@ InsertTextTool::InsertTextTool(QObject* parent)
     m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
                                             EditorToolSettings::Ok|
                                             EditorToolSettings::Cancel);
-    QGridLayout *grid = new QGridLayout( m_gboxSettings->plainPage(), 9, 1);
+    QGridLayout *grid = new QGridLayout(m_gboxSettings->plainPage(), 9, 1);
 
     m_textEdit = new KTextEdit(m_gboxSettings->plainPage());
     m_textEdit->setCheckSpellingEnabled(true);
     m_textEdit->setWordWrap(QTextEdit::NoWrap);
-    QWhatsThis::add( m_textEdit, i18n("<p>Here, enter the text you want to insert in your image."));
+    QWhatsThis::add(m_textEdit, i18n("<p>Here, enter the text you want to insert in your image."));
 
     // -------------------------------------------------------------
 
@@ -202,7 +202,7 @@ InsertTextTool::InsertTextTool(QObject* parent)
     connect(m_textRotation, SIGNAL(activated(int)),
             this, SLOT(slotUpdatePreview()));
 
-    connect(this, SIGNAL(signalUpdatePreview()), 
+    connect(this, SIGNAL(signalUpdatePreview()),
             this, SLOT(slotUpdatePreview()));
 
     // -------------------------------------------------------------
