@@ -23,20 +23,22 @@
 
 // KDE includes.
 
-#include <klocale.h>
-#include <kgenericfactory.h>
-#include <klibloader.h>
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kcursor.h>
 #include <kapplication.h>
+#include <kcursor.h>
+#include <kgenericfactory.h>
+#include <klibloader.h>
+#include <klocale.h>
 
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_perspective.h"
+#include "perspectivetool.h"
 #include "imageplugin_perspective.h"
 #include "imageplugin_perspective.moc"
+
+using namespace DigikamPerspectiveImagesPlugin;
 
 K_PLUGIN_FACTORY( PerspectiveFactory, registerPlugin<ImagePlugin_Perspective>(); )
 K_EXPORT_PLUGIN ( PerspectiveFactory("digikamimageplugin_perspective") )
@@ -47,7 +49,7 @@ ImagePlugin_Perspective::ImagePlugin_Perspective(QObject *parent, const QVariant
     m_perspectiveAction  = new KAction(KIcon("perspective"), i18n("Perspective Adjustment..."), this);
     actionCollection()->addAction("imageplugin_perspective", m_perspectiveAction );
 
-    connect(m_perspectiveAction, SIGNAL(triggered(bool)), 
+    connect(m_perspectiveAction, SIGNAL(triggered(bool)),
             this, SLOT(slotPerspective()));
 
     setXMLFile("digikamimageplugin_perspective_ui.rc");
@@ -66,6 +68,6 @@ void ImagePlugin_Perspective::setEnabledActions(bool enable)
 
 void ImagePlugin_Perspective::slotPerspective()
 {
-    DigikamPerspectiveImagesPlugin::ImageEffect_Perspective dlg(kapp->activeWindow());
-    dlg.exec();
+    PerspectiveTool *tool = new PerspectiveTool(kapp->activeWindow());
+    loadTool(tool);
 }

@@ -1,6 +1,6 @@
 
 SET(digikamimageplugin_perspective_PART_SRCS imageplugin_perspective.cpp
-                                             imageeffect_perspective.cpp
+                                             perspectivetool.cpp
                                              perspectivewidget.cpp 
                                              triangle.cpp 
                                              matrix.cpp 
