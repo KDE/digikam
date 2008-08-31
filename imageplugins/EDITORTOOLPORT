@@ -16,7 +16,7 @@ channelmixer                ImageDlgBase        DONE
 colorfx                     ImageDlgBase        DONE
 inserttext                  ImageDlgBase        DONE
 perspective                 ImageDlgBase        DONE
-superimpose                 ImageDlgBase        A
+superimpose                 ImageDlgBase        DONE
 whitebalance                ImageDlgBase        A
 
 lenscorrection
