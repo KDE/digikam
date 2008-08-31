@@ -25,7 +25,6 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QString>
-#include <QWhatsThis>
 #include <QWidget>
 
 // KDE includes.
