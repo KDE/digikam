@@ -1,6 +1,6 @@
 
 SET(digikamimageplugin_colorfx_PART_SRCS imageplugin_colorfx.cpp 
-                                         imageeffect_colorfx.cpp 
+                                         colorfxtool.cpp 
    )
 
 

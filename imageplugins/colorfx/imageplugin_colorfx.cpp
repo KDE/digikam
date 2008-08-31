@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-02-14
- * Description : a digiKam image plugin for to apply a color 
+ * Description : a digiKam image plugin for to apply a color
  *               effect to an image.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
@@ -36,9 +36,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_colorfx.h"
+#include "colorfxtool.h"
 #include "imageplugin_colorfx.h"
 #include "imageplugin_colorfx.moc"
+
+using namespace DigikamColorFXImagesPlugin;
 
 K_PLUGIN_FACTORY( ColorFXFactory, registerPlugin<ImagePlugin_ColorFX>(); )
 K_EXPORT_PLUGIN ( ColorFXFactory("digikamimageplugin_colorfx") )
@@ -68,6 +70,6 @@ void ImagePlugin_ColorFX::setEnabledActions(bool enable)
 
 void ImagePlugin_ColorFX::slotColorFX()
 {
-    DigikamColorFXImagesPlugin::ImageEffect_ColorFX dlg(kapp->activeWindow());
-    dlg.exec();
+    ColorFXTool *tool = new ColorFXTool(kapp->activeWindow());
+    loadTool(tool);
 }
