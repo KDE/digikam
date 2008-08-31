@@ -13,16 +13,16 @@ coreplugin
 adjustcurves                ImageDlgBase        DONE
 adjustlevels                ImageDlgBase        DONE
 channelmixer                ImageDlgBase        DONE
-colorfx                     ImageDlgBase        A
+colorfx                     ImageDlgBase        DONE
 inserttext                  ImageDlgBase        A
 perspective                 ImageDlgBase        A
-whitebalance                ImageDlgBase        A
 superimpose                 ImageDlgBase        A
+whitebalance                ImageDlgBase        A
 
 lenscorrection
+  \---antivignetting        ImageGuideDlg       A
   \---autocorrection        ImageGuideDlg
   \---distortion            ImageGuideDlg
-  \---antivignetting        ImageGuideDlg       A
 border                      ImageGuideDlg       A
 distortionfx                ImageGuideDlg       A
 freerotation                ImageGuideDlg
@@ -31,10 +31,10 @@ raindrop                    ImageGuideDlg       A
 sheartool                   ImageGuideDlg
 
 coreplugin
-  \---sharpnesseditor       CtrlPanelDlg
   \---blur                  CtrlPanelDlg
-charcoal                    CtrlPanelDlg
+  \---sharpnesseditor       CtrlPanelDlg
 blurfx                      CtrlPanelDlg
+charcoal                    CtrlPanelDlg
 emboss                      CtrlPanelDlg
 filmgrain                   CtrlPanelDlg
 hotpixels                   CtrlPanelDlg        DONE
