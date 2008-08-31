@@ -1,6 +1,6 @@
 
 SET(digikamimageplugin_whitebalance_PART_SRCS imageplugin_whitebalance.cpp 
-                                              imageeffect_whitebalance.cpp
+                                              whitebalancetool.cpp
    )
 
 

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_WHITEBALANCE_H
-#define IMAGEEFFECT_WHITEBALANCE_H
+#ifndef WHITEBALANCETOOL_H
+#define WHITEBALANCETOOL_H
 
 // Qt includes.
 
@@ -33,7 +33,7 @@
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 
 class QPushButton;
 class QLabel;
@@ -56,28 +56,27 @@ class HistogramWidget;
 class ColorGradientWidget;
 class ImageWidget;
 class DColor;
+class EditorToolSettings;
 }
 
 namespace DigikamWhiteBalanceImagesPlugin
 {
 
-class ImageEffect_WhiteBalance : public Digikam::ImageDlgBase
+class WhiteBalanceTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_WhiteBalance(QWidget* parent);
-    ~ImageEffect_WhiteBalance();
+    WhiteBalanceTool(QObject* parent);
+    ~WhiteBalanceTool();
 
-protected:
-
-    void finalRendering();
 
 private slots:
 
-    void slotUser2();
-    void slotUser3();
+    void slotSaveAsSettings();
+    void slotLoadSettings();
+    void slotResetSettings();
     void slotEffect();
     void slotColorSelectedFromOriginal(const Digikam::DColor &color);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);
@@ -92,7 +91,7 @@ private:
 
     void readUserSettings();
     void writeUserSettings();
-    void resetValues();
+    void finalRendering();
 
 private:
 
@@ -168,8 +167,10 @@ private:
     Digikam::ColorGradientWidget *m_hGradient;
 
     Digikam::ImageWidget         *m_previewWidget;
+
+    Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
 }  // NameSpace DigikamWhiteBalanceImagesPlugin
 
-#endif /* IMAGEEFFECT_WHITEBALANCE_H */
+#endif /* WHITEBALANCETOOL_H */

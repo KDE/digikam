@@ -4,8 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2005-03-11
- * Description : a digiKam image editor plugin to correct 
- *               image white balance 
+ * Description : a digiKam image editor plugin to correct
+ *               image white balance
  *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -35,9 +35,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_whitebalance.h"
+#include "whitebalancetool.h"
 #include "imageplugin_whitebalance.h"
 #include "imageplugin_whitebalance.moc"
+
+using namespace DigikamWhiteBalanceImagesPlugin;
 
 K_PLUGIN_FACTORY( WhiteBalanceFactory, registerPlugin<ImagePlugin_WhiteBalance>(); )
 K_EXPORT_PLUGIN ( WhiteBalanceFactory("digikamimageplugin_whitebalance") )
@@ -69,6 +71,6 @@ void ImagePlugin_WhiteBalance::setEnabledActions(bool enable)
 
 void ImagePlugin_WhiteBalance::slotWhiteBalance()
 {
-    DigikamWhiteBalanceImagesPlugin::ImageEffect_WhiteBalance dlg(kapp->activeWindow());
-    dlg.exec();
+    WhiteBalanceTool *tool = new WhiteBalanceTool(kapp->activeWindow());
+    loadTool(tool);
 }
