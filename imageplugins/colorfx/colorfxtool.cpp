@@ -87,8 +87,8 @@ ColorFXTool::ColorFXTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new ImageWidget("coloreffect Tool", 0,
-                          i18n("<p>This is the color effect preview"));
+    m_previewWidget = new ImageWidget("coloreffects Tool", 0,
+                          i18n("<p>This is the color effects preview"));
 
     setToolView(m_previewWidget);
 
