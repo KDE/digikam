@@ -23,7 +23,7 @@ superimpose                 ImageDlgBase        DONE            DONE
 whitebalance                ImageDlgBase        DONE            DONE
 
 lenscorrection
-  \---antivignetting        ImageGuideDlg       A               DONE
+  \---antivignetting        ImageGuideDlg       DONE            DONE
   \---autocorrection        ImageGuideDlg       A               DONE
   \---distortion            ImageGuideDlg       A               DONE
 border                      ImageGuideDlg       DONE            DONE

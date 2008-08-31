@@ -38,10 +38,14 @@
 #endif // HAVE_LENSFUN
 
 #include "ddebug.h"
-#include "imageeffect_antivignetting.h"
+#include "antivignettingtool.h"
 #include "imageeffect_lensdistortion.h"
 #include "imageplugin_lenscorrection.h"
 #include "imageplugin_lenscorrection.moc"
+
+using namespace DigikamAntiVignettingImagesPlugin;
+using namespace DigikamAutoCorrectionImagesPlugin;
+using namespace DigikamLensDistortionImagesPlugin;
 
 K_PLUGIN_FACTORY( LensCorrectionFactory, registerPlugin<ImagePlugin_LensCorrection>(); )
 K_EXPORT_PLUGIN ( LensCorrectionFactory("digikamimageplugin_lenscorrection") )
@@ -106,6 +110,6 @@ void ImagePlugin_LensCorrection::slotLensDistortion()
 
 void ImagePlugin_LensCorrection::slotAntiVignetting()
 {
-    DigikamAntiVignettingImagesPlugin::ImageEffect_AntiVignetting dlg(kapp->activeWindow());
-    dlg.exec();
+    AntiVignettingTool *tool = new AntiVignettingTool(this);
+    loadTool(tool);
 }

@@ -22,12 +22,12 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_ANTIVIGNETTING_H
-#define IMAGEEFFECT_ANTIVIGNETTING_H
+#ifndef ANTIVIGNETTINGTOOL_H
+#define ANTIVIGNETTINGTOOL_H
 
 // Digikam includes.
 
-#include "imageguidedlg.h"
+#include "editortool.h"
 
 class QLabel;
 
@@ -37,26 +37,32 @@ class RIntNumInput;
 class RDoubleNumInput;
 }
 
+namespace Digikam
+{
+class EditorToolSettings;
+class ImageWidget;
+}
+
 namespace DigikamAntiVignettingImagesPlugin
 {
 
-class ImageEffect_AntiVignetting : public Digikam::ImageGuideDlg
+class AntiVignettingTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_AntiVignetting(QWidget *parent);
-    ~ImageEffect_AntiVignetting();
+    AntiVignettingTool(QObject *parent);
+    ~AntiVignettingTool();
 
 private slots:
 
-    void readUserSettings();
+    void slotResetSettings();
 
 private:
 
-    void writeUserSettings();
-    void resetValues();
+    void writeSettings();
+    void readSettings();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
@@ -65,7 +71,7 @@ private:
 
 private:
 
-    QLabel          *m_maskPreviewLabel;
+    QLabel                       *m_maskPreviewLabel;
 
     KDcrawIface::RIntNumInput    *m_brightnessInput;
     KDcrawIface::RIntNumInput    *m_contrastInput;
@@ -74,8 +80,12 @@ private:
     KDcrawIface::RDoubleNumInput *m_densityInput;
     KDcrawIface::RDoubleNumInput *m_powerInput;
     KDcrawIface::RDoubleNumInput *m_radiusInput;
+
+    Digikam::ImageWidget         *m_previewWidget;
+
+    Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
 }  // NameSpace DigikamAntiVignettingImagesPlugin
 
-#endif /* IMAGEEFFECT_ANTIVIGNETTING_H */
+#endif /* ANTIVIGNETTINGTOOL_H */

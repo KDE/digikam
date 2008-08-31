@@ -14,7 +14,7 @@ SET(distortion_SRCS distortion/imageeffect_lensdistortion.cpp
                     distortion/pixelaccess.cpp
    )
 
-SET(vignetting_SRCS vignetting/imageeffect_antivignetting.cpp
+SET(vignetting_SRCS vignetting/antivignettingtool.cpp
                     vignetting/antivignetting.cpp)
 
 IF(LENSFUN_LIBRARY)
