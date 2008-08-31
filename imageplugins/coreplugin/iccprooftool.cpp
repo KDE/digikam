@@ -510,11 +510,11 @@ ICCProofTool::ICCProofTool(QObject* parent)
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal( const DColor &, const QPoint & )),
-            this, SLOT(slotSpotColorChanged( const DColor & )));
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
+            this, SLOT(slotSpotColorChanged( const Digikam::DColor & )));
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromTarget( const DColor & )));
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
+            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
     //-- ICC profile preview connections -----------------------------
 
