@@ -17,7 +17,7 @@ colorfx                     ImageDlgBase        DONE
 inserttext                  ImageDlgBase        DONE
 perspective                 ImageDlgBase        DONE
 superimpose                 ImageDlgBase        DONE
-whitebalance                ImageDlgBase        A
+whitebalance                ImageDlgBase        DONE
 
 lenscorrection
   \---antivignetting        ImageGuideDlg       A
