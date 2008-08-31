@@ -28,10 +28,10 @@ lenscorrection
   \---distortion            ImageGuideDlg       A               DONE
 border                      ImageGuideDlg       DONE            DONE
 distortionfx                ImageGuideDlg       DONE            DONE
-freerotation                ImageGuideDlg                       DONE
+freerotation                ImageGuideDlg       A               DONE
 inpainting                  ImageGuideDlg       DONE            DONE
 raindrop                    ImageGuideDlg       DONE            DONE
-sheartool                   ImageGuideDlg                       DONE
+sheartool                   ImageGuideDlg       A               DONE
 
 coreplugin
   \---blur                  CtrlPanelDlg                        DONE
