@@ -6,8 +6,8 @@ coreplugin
   \---bcg                   ImageDlgBase        DONE
   \---bwsepia               ImageDlgBase        DONE
   \---hsl                   ImageDlgBase        DONE
-  \---iccproof              ImageDlgBase
-  \---ratiocrop             ImageDlgBase
+  \---iccproof              ImageDlgBase        A
+  \---ratiocrop             ImageDlgBase        A
   \---redeye                ImageDlgBase        DONE
   \---rgbtool               ImageDlgBase        DONE
 adjustcurves                ImageDlgBase        DONE
