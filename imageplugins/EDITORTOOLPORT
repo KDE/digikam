@@ -14,7 +14,7 @@ adjustcurves                ImageDlgBase        DONE
 adjustlevels                ImageDlgBase        DONE
 channelmixer                ImageDlgBase        DONE
 colorfx                     ImageDlgBase        DONE
-inserttext                  ImageDlgBase        A
+inserttext                  ImageDlgBase        DONE
 perspective                 ImageDlgBase        A
 superimpose                 ImageDlgBase        A
 whitebalance                ImageDlgBase        A
