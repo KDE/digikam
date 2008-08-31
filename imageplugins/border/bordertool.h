@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_BORDER_H
-#define IMAGEEFFECT_BORDER_H
+#ifndef BORDERTOOL_H
+#define BORDERTOOL_H
 
 // Qt includes.
 
@@ -32,48 +32,51 @@
 
 // Digikam includes.
 
-#include "imageguidedlg.h"
+#include "editortool.h"
 
 class QComboBox;
 class QLabel;
 class QCheckBox;
 class QColor;
 
-class KIntNumInput;
 class KColorButton;
 
 namespace KDcrawIface
 {
+class RIntNumInput;
+class RComboBox;
+}
+
+namespace Digikam
+{
+class ImageWidget;
+class EditorToolSettings;
 }
 
 namespace DigikamBorderImagesPlugin
 {
 
-class ImageEffect_Border : public Digikam::ImageGuideDlg
+class BorderTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_Border(QWidget *parent);
-    ~ImageEffect_Border();
-
-private:
-
-    QString getBorderPath(int border);
+    BorderTool(QObject *parent);
+    ~BorderTool();
 
 private slots:
 
+    void slotResetSettings();
     void slotPreserveAspectRatioToggled(bool);
     void slotBorderTypeChanged(int borderType);
     void slotColorForegroundChanged(const QColor &color);
     void slotColorBackgroundChanged(const QColor &color);
-    void readUserSettings();
 
 private:
 
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
@@ -81,32 +84,38 @@ private:
     void renderingFinished();
     void toggleBorderSlider(bool b);
 
+    QString getBorderPath(int border);
+
 private:
 
-    QLabel       *m_labelBorderPercent;
-    QLabel       *m_labelBorderWidth;
-    QLabel       *m_labelForeground;
-    QLabel       *m_labelBackground;
+    QLabel                      *m_labelBorderPercent;
+    QLabel                      *m_labelBorderWidth;
+    QLabel                      *m_labelForeground;
+    QLabel                      *m_labelBackground;
 
-    QComboBox    *m_borderType;
+    QCheckBox                   *m_preserveAspectRatio;
 
-    QCheckBox    *m_preserveAspectRatio;
+    QColor                       m_solidColor;
+    QColor                       m_niepceBorderColor;
+    QColor                       m_niepceLineColor;
+    QColor                       m_bevelUpperLeftColor;
+    QColor                       m_bevelLowerRightColor;
+    QColor                       m_decorativeFirstColor;
+    QColor                       m_decorativeSecondColor;
 
-    QColor        m_solidColor;
-    QColor        m_niepceBorderColor;
-    QColor        m_niepceLineColor;
-    QColor        m_bevelUpperLeftColor;
-    QColor        m_bevelLowerRightColor;
-    QColor        m_decorativeFirstColor;
-    QColor        m_decorativeSecondColor;
+    KDcrawIface::RComboBox      *m_borderType;
 
-    KIntNumInput *m_borderPercent;
-    KIntNumInput *m_borderWidth;
+    KDcrawIface::RIntNumInput   *m_borderPercent;
+    KDcrawIface::RIntNumInput   *m_borderWidth;
 
-    KColorButton *m_firstColorButton;
-    KColorButton *m_secondColorButton;
+    KColorButton                *m_firstColorButton;
+    KColorButton                *m_secondColorButton;
+
+    Digikam::ImageWidget        *m_previewWidget;
+
+    Digikam::EditorToolSettings *m_gboxSettings;
 };
 
 }  // NameSpace DigikamBorderImagesPlugin
 
-#endif /* IMAGEEFFECT_BORDER_H */
+#endif /* BORDERTOOL_H */

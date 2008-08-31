@@ -35,9 +35,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_border.h"
+#include "bordertool.h"
 #include "imageplugin_border.h"
 #include "imageplugin_border.moc"
+
+using namespace DigikamBorderImagesPlugin;
 
 K_PLUGIN_FACTORY( BorderFactory, registerPlugin<ImagePlugin_Border>(); )
 K_EXPORT_PLUGIN ( BorderFactory("digikamimageplugin_border") )
@@ -48,7 +50,7 @@ ImagePlugin_Border::ImagePlugin_Border(QObject *parent, const QVariantList &)
     m_borderAction  = new KAction(KIcon("bordertool"), i18n("Add Border..."), this);
     actionCollection()->addAction("imageplugin_border", m_borderAction );
 
-    connect(m_borderAction, SIGNAL(triggered(bool)), 
+    connect(m_borderAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBorder()));
 
     setXMLFile("digikamimageplugin_border_ui.rc");
@@ -67,6 +69,6 @@ void ImagePlugin_Border::setEnabledActions(bool enable)
 
 void ImagePlugin_Border::slotBorder()
 {
-    DigikamBorderImagesPlugin::ImageEffect_Border dlg(kapp->activeWindow());
-    dlg.exec();
+    BorderTool *tool = new BorderTool(kapp->activeWindow());
+    loadTool(tool);
 }

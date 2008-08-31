@@ -2,7 +2,7 @@
 ADD_SUBDIRECTORY( patterns )
 
 SET(digikamimageplugin_border_PART_SRCS imageplugin_border.cpp
-                                        imageeffect_border.cpp 
+                                        bordertool.cpp 
                                         border.cpp 
    )
 

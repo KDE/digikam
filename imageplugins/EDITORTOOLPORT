@@ -26,7 +26,7 @@ lenscorrection
   \---antivignetting        ImageGuideDlg       A               DONE
   \---autocorrection        ImageGuideDlg       A               DONE
   \---distortion            ImageGuideDlg       A               DONE
-border                      ImageGuideDlg       A
+border                      ImageGuideDlg       DONE            DONE
 distortionfx                ImageGuideDlg       A
 freerotation                ImageGuideDlg                       DONE
 inpainting                  ImageGuideDlg       A               DONE
