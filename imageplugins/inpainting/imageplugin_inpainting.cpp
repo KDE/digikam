@@ -35,9 +35,13 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_inpainting.h"
+#include "imageiface.h"
+#include "inpaintingtool.h"
 #include "imageplugin_inpainting.h"
 #include "imageplugin_inpainting.moc"
+
+using namespace DigikamInPaintingImagesPlugin;
+using namespace Digikam;
 
 K_PLUGIN_FACTORY( InPaintingFactory, registerPlugin<ImagePlugin_InPainting>(); )
 K_EXPORT_PLUGIN ( InPaintingFactory("digikamimageplugin_inpainting") )
@@ -71,5 +75,26 @@ void ImagePlugin_InPainting::setEnabledActions(bool enable)
 
 void ImagePlugin_InPainting::slotInPainting()
 {
-    DigikamInPaintingImagesPlugin::ImageEffect_InPainting::inPainting(kapp->activeWindow());
+
+    ImageIface iface(0, 0);
+
+    int w = iface.selectedWidth();
+    int h = iface.selectedHeight();
+
+    if (!w || !h)
+    {
+        InPaintingPassivePopup* popup = new InPaintingPassivePopup(kapp->activeWindow());
+        popup->setView(i18n("Inpainting Photograph Tool"),
+                       i18n("You need to select a region to inpaint to use "
+                            "this tool"));
+        popup->setAutoDelete(true);
+        popup->setTimeout(2500);
+        popup->show();
+        return;
+    }
+
+    // -- run the dlg ----------------------------------------------
+
+    InPaintingTool *tool = new InPaintingTool(this);
+    loadTool(tool);
 }

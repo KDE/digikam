@@ -1,6 +1,6 @@
 
 SET(digikamimageplugin_inpainting_PART_SRCS imageplugin_inpainting.cpp
-                                            imageeffect_inpainting.cpp 
+                                            inpaintingtool.cpp 
    )
 
 
