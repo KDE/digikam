@@ -24,21 +24,22 @@
 
 // Qt includes.
 
-#include <QLabel>
 #include <QFrame>
-#include <QImage>
 #include <QGridLayout>
+#include <QImage>
+#include <QLabel>
 
 // KDE includes.
 
-#include <kconfig.h>
-#include <klocale.h>
 #include <kaboutdata.h>
-#include <kiconloader.h>
 #include <kapplication.h>
-#include <kstandarddirs.h>
-#include <knuminput.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kglobal.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <knuminput.h>
+#include <kstandarddirs.h>
 
 // LibKDcraw includes.
 
@@ -46,97 +47,86 @@
 
 // Local includes.
 
-#include "version.h"
 #include "daboutdata.h"
 #include "ddebug.h"
+#include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imagewidget.h"
+#include "version.h"
 #include "raindrop.h"
-#include "imageeffect_raindrop.h"
-#include "imageeffect_raindrop.moc"
+#include "raindroptool.h"
+#include "raindroptool.moc"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamRainDropImagesPlugin
 {
 
-ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
-                    : Digikam::ImageGuideDlg(parent, i18n("Add Raindrops to Photograph"),
-                                             "raindrops", false, true, false,
-                                             Digikam::ImageGuideWidget::HVGuideMode)
+RainDropTool::RainDropTool(QObject* parent)
+            : EditorToolThreaded(parent)
 {
-    QString whatsThis;
+    setObjectName("raindrops");
+    setToolName(i18n("Raindrops"));
+    setToolIcon(SmallIcon("raindrop"));
 
-    KAboutData* about = new KAboutData("digikam", 0,
-                                       ki18n("Raindrops"),
-                                       digiKamVersion().toAscii(),
-                                       ki18n("A digiKam image plugin to add raindrops to an image."),
-                                       KAboutData::License_GPL,
-                                       ki18n("(c) 2004-2005, Gilles Caulier\n"
-                                       "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg"),
-                                       KLocalizedString(),
-                                       Digikam::webProjectUrl().url().toUtf8());
-
-    about->addAuthor(ki18n("Gilles Caulier"), ki18n("Author and maintainer"),
-                     "caulier dot gilles at gmail dot com");
-
-    about->addAuthor(ki18n("Pieter Z. Voloshyn"), ki18n("Raindrops algorithm"),
-                     "pieter dot voloshyn at gmail dot com");
-
-    about->addAuthor(ki18n("Marcel Wiesweg"), ki18n("Developer"),
-                     "marcel dot wiesweg at gmx dot de");
-
-    setAboutData(about);
-
-    m_imagePreviewWidget->setWhatsThis( i18n("<p>This previews the Raindrop effect."
+    m_previewWidget = new ImageWidget("raindrops Tool", 0,
+                                      i18n("<p>This is the preview of the Raindrop effect."
                                            "<p>Note: if you have previously selected an area in the editor, "
                                            "this will be unaffected by the filter. You can use this method to "
-                                           "disable the Raindrops effect on a human face, for example.") );
+                                           "disable the Raindrops effect on a human face, for example."),
+                                      false);
+
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings     = new QWidget(mainWidget());
-    QGridLayout* gridSettings = new QGridLayout(gboxSettings);
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel);
 
-    QLabel *label1 = new QLabel(i18n("Drop size:"), gboxSettings);
+    QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
 
-    m_dropInput = new KIntNumInput(gboxSettings);
+    QLabel *label1 = new QLabel(i18n("Drop size:"), m_gboxSettings->plainPage());
+
+    m_dropInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_dropInput->setRange(0, 200, 1);
     m_dropInput->setSliderEnabled(true);
-    m_dropInput->setValue(80);
+    m_dropInput->setDefaultValue(80);
     m_dropInput->setWhatsThis( i18n("<p>Set here the raindrops' size."));
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Number:"), gboxSettings);
+    QLabel *label2 = new QLabel(i18n("Number:"), m_gboxSettings->plainPage());
 
-    m_amountInput = new KIntNumInput(gboxSettings);
+    m_amountInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_amountInput->setRange(1, 500, 1);
     m_amountInput->setSliderEnabled(true);
-    m_amountInput->setValue(150);
+    m_amountInput->setDefaultValue(150);
     m_amountInput->setWhatsThis( i18n("<p>This value controls the maximum number of raindrops."));
 
     // -------------------------------------------------------------
 
-    QLabel *label3 = new QLabel(i18n("Fish eyes:"), gboxSettings);
+    QLabel *label3 = new QLabel(i18n("Fish eyes:"), m_gboxSettings->plainPage());
 
-    m_coeffInput = new KIntNumInput(gboxSettings);
+    m_coeffInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_coeffInput->setRange(1, 100, 1);
     m_coeffInput->setSliderEnabled(true);
-    m_coeffInput->setValue(30);
+    m_coeffInput->setDefaultValue(30);
     m_coeffInput->setWhatsThis( i18n("<p>This value is the fish-eye-effect optical "
                                      "distortion coefficient."));
 
-    gridSettings->addWidget(label1, 0, 0, 1, 3 );
-    gridSettings->addWidget(m_dropInput, 1, 0, 1, 3 );
-    gridSettings->addWidget(label2, 2, 0, 1, 3 );
-    gridSettings->addWidget(m_amountInput, 3, 0, 1, 3 );
-    gridSettings->addWidget(label3, 4, 0, 1, 3 );
-    gridSettings->addWidget(m_coeffInput, 5, 0, 1, 3 );
-    gridSettings->setMargin(spacingHint());
+    gridSettings->addWidget(label1,         0, 0, 1, 3 );
+    gridSettings->addWidget(m_dropInput,    1, 0, 1, 3 );
+    gridSettings->addWidget(label2,         2, 0, 1, 3 );
+    gridSettings->addWidget(m_amountInput,  3, 0, 1, 3 );
+    gridSettings->addWidget(label3,         4, 0, 1, 3 );
+    gridSettings->addWidget(m_coeffInput,   5, 0, 1, 3 );
+    gridSettings->setRowStretch(6, 10);
+    gridSettings->setMargin(m_gboxSettings->spacingHint());
     gridSettings->setSpacing(0);
 
-    setUserAreaWidget(gboxSettings);
+    setToolSettings(m_gboxSettings);
 
     // -------------------------------------------------------------
 
@@ -150,29 +140,29 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
             this, SLOT(slotTimer()));
 }
 
-ImageEffect_RainDrop::~ImageEffect_RainDrop()
+RainDropTool::~RainDropTool()
 {
 }
 
-void ImageEffect_RainDrop::renderingFinished()
+void RainDropTool::renderingFinished()
 {
     m_dropInput->setEnabled(true);
     m_amountInput->setEnabled(true);
     m_coeffInput->setEnabled(true);
 }
 
-void ImageEffect_RainDrop::readUserSettings(void)
+void RainDropTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("raindrops Tool Dialog");
+    KConfigGroup group = config->group("raindrops Tool");
 
     m_dropInput->blockSignals(true);
     m_amountInput->blockSignals(true);
     m_coeffInput->blockSignals(true);
 
-    m_dropInput->setValue(group.readEntry("DropAdjustment", 80));
-    m_amountInput->setValue(group.readEntry("AmountAdjustment", 150));
-    m_coeffInput->setValue(group.readEntry("CoeffAdjustment", 30));
+    m_dropInput->setValue(group.readEntry("DropAdjustment", m_dropInput->defaultValue()));
+    m_amountInput->setValue(group.readEntry("AmountAdjustment", m_amountInput->defaultValue()));
+    m_coeffInput->setValue(group.readEntry("CoeffAdjustment", m_coeffInput->defaultValue()));
 
     m_dropInput->blockSignals(false);
     m_amountInput->blockSignals(false);
@@ -181,32 +171,34 @@ void ImageEffect_RainDrop::readUserSettings(void)
     slotEffect();
 }
 
-void ImageEffect_RainDrop::writeUserSettings(void)
+void RainDropTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("raindrops Tool Dialog");
+    KConfigGroup group = config->group("raindrops Tool");
     group.writeEntry("DropAdjustment", m_dropInput->value());
     group.writeEntry("AmountAdjustment", m_amountInput->value());
     group.writeEntry("CoeffAdjustment", m_coeffInput->value());
     group.sync();
 }
 
-void ImageEffect_RainDrop::resetValues()
+void RainDropTool::slotResetSettings()
 {
     m_dropInput->blockSignals(true);
     m_amountInput->blockSignals(true);
     m_coeffInput->blockSignals(true);
 
-    m_dropInput->setValue(80);
-    m_amountInput->setValue(150);
-    m_coeffInput->setValue(30);
+    m_dropInput->slotReset();
+    m_amountInput->slotReset();
+    m_coeffInput->slotReset();
 
     m_dropInput->blockSignals(false);
     m_amountInput->blockSignals(false);
     m_coeffInput->blockSignals(false);
+
+    slotEffect();
 }
 
-void ImageEffect_RainDrop::prepareEffect()
+void RainDropTool::prepareEffect()
 {
     m_dropInput->setEnabled(false);
     m_amountInput->setEnabled(false);
@@ -216,17 +208,17 @@ void ImageEffect_RainDrop::prepareEffect()
     int a        = m_amountInput->value();
     int c        = m_coeffInput->value();
 
-    Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
+    ImageIface* iface = m_previewWidget->imageIface();
 
     // Selected data from the image
     QRect selection( iface->selectedXOrg(), iface->selectedYOrg(),
                      iface->selectedWidth(), iface->selectedHeight() );
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
-                       new RainDrop(iface->getOriginalImg(), this, d, a, c, &selection));
+    setFilter(dynamic_cast<DImgThreadedFilter *>(
+                       new RainDrop(iface->getOriginalImg(), this, d, a, c, &selection)));
 }
 
-void ImageEffect_RainDrop::prepareFinal()
+void RainDropTool::prepareFinal()
 {
     m_dropInput->setEnabled(false);
     m_amountInput->setEnabled(false);
@@ -236,33 +228,33 @@ void ImageEffect_RainDrop::prepareFinal()
     int a       = m_amountInput->value();
     int c       = m_coeffInput->value();
 
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
 
     // Selected data from the image
     QRect selection( iface.selectedXOrg(), iface.selectedYOrg(),
                      iface.selectedWidth(), iface.selectedHeight() );
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
-                       new RainDrop(iface.getOriginalImg(), this, d, a, c, &selection));
+    setFilter(dynamic_cast<DImgThreadedFilter *>(
+                       new RainDrop(iface.getOriginalImg(), this, d, a, c, &selection)));
 }
 
-void ImageEffect_RainDrop::putPreviewData(void)
+void RainDropTool::putPreviewData(void)
 {
-    Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
+    ImageIface* iface = m_previewWidget->imageIface();
 
-    Digikam::DImg imDest = m_threadedFilter->getTargetImage()
+    DImg imDest = filter()->getTargetImage()
             .smoothScale(iface->previewWidth(), iface->previewHeight());
     iface->putPreviewImage(imDest.bits());
 
-    m_imagePreviewWidget->updatePreview();
+    m_previewWidget->updatePreview();
 }
 
-void ImageEffect_RainDrop::putFinalData(void)
+void RainDropTool::putFinalData(void)
 {
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
 
     iface.putOriginalImage(i18n("RainDrop"),
-                           m_threadedFilter->getTargetImage().bits());
+                           filter()->getTargetImage().bits());
 }
 
 }  // NameSpace DigikamRainDropImagesPlugin

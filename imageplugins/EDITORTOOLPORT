@@ -30,7 +30,7 @@ border                      ImageGuideDlg       DONE            DONE
 distortionfx                ImageGuideDlg       DONE            DONE
 freerotation                ImageGuideDlg                       DONE
 inpainting                  ImageGuideDlg       A               DONE
-raindrop                    ImageGuideDlg       A
+raindrop                    ImageGuideDlg       DONE            DONE
 sheartool                   ImageGuideDlg                       DONE
 
 coreplugin

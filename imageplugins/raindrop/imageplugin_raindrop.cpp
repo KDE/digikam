@@ -34,9 +34,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_raindrop.h"
+#include "raindroptool.h"
 #include "imageplugin_raindrop.h"
 #include "imageplugin_raindrop.moc"
+
+using namespace DigikamRainDropImagesPlugin;
 
 K_PLUGIN_FACTORY( RainDropFactory, registerPlugin<ImagePlugin_RainDrop>(); )
 K_EXPORT_PLUGIN ( RainDropFactory("digikamimageplugin_raindrop") )
@@ -47,7 +49,7 @@ ImagePlugin_RainDrop::ImagePlugin_RainDrop(QObject *parent, const QVariantList &
     m_raindropAction  = new KAction(KIcon("raindrop"), i18n("Raindrops..."), this);
     actionCollection()->addAction("imageplugin_raindrop", m_raindropAction );
 
-    connect(m_raindropAction, SIGNAL(triggered(bool) ), 
+    connect(m_raindropAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotRainDrop()));
 
     setXMLFile( "digikamimageplugin_raindrop_ui.rc" );
@@ -66,6 +68,6 @@ void ImagePlugin_RainDrop::setEnabledActions(bool enable)
 
 void ImagePlugin_RainDrop::slotRainDrop()
 {
-    DigikamRainDropImagesPlugin::ImageEffect_RainDrop dlg(kapp->activeWindow());
-    dlg.exec();
+    RainDropTool *tool = new RainDropTool(kapp->activeWindow());
+    loadTool(tool);
 }

@@ -1,6 +1,6 @@
 
 SET(digikamimageplugin_raindrop_PART_SRCS imageplugin_raindrop.cpp
-                                          imageeffect_raindrop.cpp 
+                                          raindroptool.cpp 
                                           raindrop.cpp 
    )
 
