@@ -45,7 +45,7 @@
 #include "hsltool.h"
 #include "iccprooftool.h"
 #include "imageeffect_blur.h"
-#include "imageeffect_ratiocrop.h"
+#include "ratiocroptool.h"
 #include "imageeffect_sharpen.h"
 #include "redeyetool.h"
 #include "rgbtool.h"
@@ -305,6 +305,6 @@ void ImagePlugin_Core::slotSharpen()
 
 void ImagePlugin_Core::slotRatioCrop()
 {
-    ImageEffect_RatioCrop dlg(kapp->activeWindow());
-    dlg.exec();
+    RatioCropTool *tool = new RatioCropTool(kapp->activeWindow());
+    loadTool(tool);
 }

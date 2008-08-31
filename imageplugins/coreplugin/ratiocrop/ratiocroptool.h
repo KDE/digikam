@@ -23,12 +23,12 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_RATIOCROP_H
-#define IMAGEEFFECT_RATIOCROP_H
+#ifndef RATIOCROPTOOL_H
+#define RATIOCROPTOOL_H
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 
 class QCheckBox;
 class QLabel;
@@ -43,19 +43,24 @@ class RComboBox;
 class RIntNumInput;
 }
 
+namespace Digikam
+{
+class EditorToolSettings;
+}
+
 namespace DigikamImagesPluginCore
 {
 
 class ImageSelectionWidget;
 
-class ImageEffect_RatioCrop : public Digikam::ImageDlgBase
+class RatioCropTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_RatioCrop(QWidget *parent);
-    ~ImageEffect_RatioCrop();
+    RatioCropTool(QObject *parent);
+    ~RatioCropTool();
 
 private:
 
@@ -68,8 +73,8 @@ private:
 
 private slots:
 
-    void slotUser1();
-    void slotDefault();
+    void slotMaxAspectRatio();
+    void slotResetSettings();
 
     void slotCenterWidth();
     void slotCenterHeight();
@@ -91,42 +96,44 @@ private slots:
 
 private:
 
-    bool                  m_originalIsLandscape;
+    bool                         m_originalIsLandscape;
 
-    QLabel               *m_customLabel1;
-    QLabel               *m_customLabel2;
-    QLabel               *m_orientLabel;
-    QLabel               *m_colorGuideLabel;
+    QLabel                      *m_customLabel1;
+    QLabel                      *m_customLabel2;
+    QLabel                      *m_orientLabel;
+    QLabel                      *m_colorGuideLabel;
 
-    QToolButton          *m_centerWidth;
-    QToolButton          *m_centerHeight;
+    QToolButton                 *m_centerWidth;
+    QToolButton                 *m_centerHeight;
 
-    QCheckBox            *m_goldenSectionBox;
-    QCheckBox            *m_goldenSpiralSectionBox;
-    QCheckBox            *m_goldenSpiralBox;
-    QCheckBox            *m_goldenTriangleBox;
-    QCheckBox            *m_flipHorBox;
-    QCheckBox            *m_flipVerBox;
-    QCheckBox            *m_autoOrientation;
-    QCheckBox            *m_preciseCrop;
+    QCheckBox                   *m_goldenSectionBox;
+    QCheckBox                   *m_goldenSpiralSectionBox;
+    QCheckBox                   *m_goldenSpiralBox;
+    QCheckBox                   *m_goldenTriangleBox;
+    QCheckBox                   *m_flipHorBox;
+    QCheckBox                   *m_flipVerBox;
+    QCheckBox                   *m_autoOrientation;
+    QCheckBox                   *m_preciseCrop;
 
-    KDcrawIface::RComboBox *m_ratioCB;
-    KDcrawIface::RComboBox *m_orientCB;
-    KDcrawIface::RComboBox *m_guideLinesCB;
+    KDcrawIface::RComboBox      *m_ratioCB;
+    KDcrawIface::RComboBox      *m_orientCB;
+    KDcrawIface::RComboBox      *m_guideLinesCB;
 
-    KDcrawIface::RIntNumInput *m_customRatioDInput;
-    KDcrawIface::RIntNumInput *m_customRatioNInput;
-    KDcrawIface::RIntNumInput *m_guideSize;
-    KDcrawIface::RIntNumInput *m_heightInput;
-    KDcrawIface::RIntNumInput *m_widthInput;
-    KDcrawIface::RIntNumInput *m_xInput;
-    KDcrawIface::RIntNumInput *m_yInput;
+    KDcrawIface::RIntNumInput   *m_customRatioDInput;
+    KDcrawIface::RIntNumInput   *m_customRatioNInput;
+    KDcrawIface::RIntNumInput   *m_guideSize;
+    KDcrawIface::RIntNumInput   *m_heightInput;
+    KDcrawIface::RIntNumInput   *m_widthInput;
+    KDcrawIface::RIntNumInput   *m_xInput;
+    KDcrawIface::RIntNumInput   *m_yInput;
 
-    KColorButton         *m_guideColorBt;
+    KColorButton                *m_guideColorBt;
 
-    ImageSelectionWidget *m_imageSelectionWidget;
+    ImageSelectionWidget        *m_imageSelectionWidget;
+
+    Digikam::EditorToolSettings *m_gboxSettings;
 };
 
 }  // NameSpace DigikamImagesPluginCore
 
-#endif /* IMAGEEFFECT_RATIOCROP_H */
+#endif /* RATIOCROPTOOL_H */

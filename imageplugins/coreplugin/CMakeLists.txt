@@ -51,11 +51,11 @@ SET(digikamimageplugin_core_PART_SRCS
     ../../imageplugins/coreplugin/bwsepiatool.cpp 
     ../../imageplugins/coreplugin/hsl/hsltool.cpp 
     ../../imageplugins/coreplugin/hsl/hspreviewwidget.cpp
-    ../../imageplugins/coreplugin/imageeffect_blur.cpp 
     ../../imageplugins/coreplugin/iccprooftool.cpp 
+    ../../imageplugins/coreplugin/imageeffect_blur.cpp 
     ../../imageplugins/coreplugin/imageplugin_core.cpp 
-    ../../imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp 
     ../../imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp
+    ../../imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp 
     ../../imageplugins/coreplugin/redeyetool.cpp 
     ../../imageplugins/coreplugin/rgbtool.cpp 
     ../../imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.cpp 
