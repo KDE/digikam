@@ -98,7 +98,7 @@ ColorFXTool::ColorFXTool(QObject* parent)
                                                               EditorToolSettings::Ok|
                                                               EditorToolSettings::Cancel);
 
-    QGridLayout* gridSettings        = new QGridLayout(gboxSettings->plainPage(), 9, 4);
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings->plainPage(), 9, 4);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings->plainPage());
     label1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -144,8 +144,6 @@ ColorFXTool::ColorFXTool(QObject* parent)
     l1->addStretch(10);
     l1->addWidget(m_scaleBG);
 
-    gridSettings->addMultiCellLayout(l1, 0, 0, 0, 4);
-
     // -------------------------------------------------------------
 
     QVBox *histoBox   = new QVBox(gboxSettings->plainPage());
@@ -157,8 +155,6 @@ ColorFXTool::ColorFXTool(QObject* parent)
     space->setFixedHeight(1);
     m_hGradient = new ColorGradientWidget( ColorGradientWidget::Horizontal, 10, histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-
-    gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
 
     // -------------------------------------------------------------
 
@@ -178,17 +174,12 @@ ColorFXTool::ColorFXTool(QObject* parent)
                                         "<b>Find Edges</b>: detects the edges in a photograph "
                                         "and their strength."
                                         ));
-    gridSettings->addMultiCellWidget(m_effectTypeLabel, 3, 3, 0, 4);
-    gridSettings->addMultiCellWidget(m_effectType, 4, 4, 0, 4);
 
     m_levelLabel = new QLabel(i18n("Level:"), gboxSettings->plainPage());
     m_levelInput = new RIntNumInput(gboxSettings->plainPage());
     m_levelInput->setRange(0, 100, 1);
     m_levelInput->setDefaultValue(0);
     QWhatsThis::add( m_levelInput, i18n("<p>Set here the level of the effect."));
-
-    gridSettings->addMultiCellWidget(m_levelLabel, 5, 5, 0, 4);
-    gridSettings->addMultiCellWidget(m_levelInput, 6, 6, 0, 4);
 
     m_iterationLabel = new QLabel(i18n("Iteration:"), gboxSettings->plainPage());
     m_iterationInput = new RIntNumInput(gboxSettings->plainPage());
@@ -197,10 +188,16 @@ ColorFXTool::ColorFXTool(QObject* parent)
     QWhatsThis::add( m_iterationInput, i18n("<p>This value controls the number of iterations "
                                             "to use with the Neon and Find Edges effects."));
 
-    gridSettings->addMultiCellWidget(m_iterationLabel, 7, 7, 0, 4);
-    gridSettings->addMultiCellWidget(m_iterationInput, 8, 8, 0, 4);
-
+    gridSettings->addMultiCellLayout(l1,                0, 0, 0, 4);
+    gridSettings->addMultiCellWidget(histoBox,          1, 2, 0, 4);
+    gridSettings->addMultiCellWidget(m_effectTypeLabel, 3, 3, 0, 4);
+    gridSettings->addMultiCellWidget(m_effectType,      4, 4, 0, 4);
+    gridSettings->addMultiCellWidget(m_levelLabel,      5, 5, 0, 4);
+    gridSettings->addMultiCellWidget(m_levelInput,      6, 6, 0, 4);
+    gridSettings->addMultiCellWidget(m_iterationLabel,  7, 7, 0, 4);
+    gridSettings->addMultiCellWidget(m_iterationInput,  8, 8, 0, 4);
     gridSettings->setRowStretch(9, 10);
+
     setToolSettings(gboxSettings);
 
     // -------------------------------------------------------------
@@ -233,8 +230,6 @@ ColorFXTool::~ColorFXTool()
 
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
-
-    delete m_previewWidget;
 }
 
 void ColorFXTool::readSettings()
