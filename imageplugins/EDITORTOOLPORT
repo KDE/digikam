@@ -1,45 +1,48 @@
 (A) : Andi
 (G) : Gilles
 
+
+Plugin Name                 Type                Status          R*NumInput Widgets
+==================================================================================
 coreplugin
-  \---autocorrection        ImageDlgBase        DONE
-  \---bcg                   ImageDlgBase        DONE
-  \---bwsepia               ImageDlgBase        DONE
-  \---hsl                   ImageDlgBase        DONE
-  \---iccproof              ImageDlgBase        DONE
-  \---ratiocrop             ImageDlgBase        DONE
-  \---redeye                ImageDlgBase        DONE
-  \---rgbtool               ImageDlgBase        DONE
-adjustcurves                ImageDlgBase        DONE
-adjustlevels                ImageDlgBase        DONE
-channelmixer                ImageDlgBase        DONE
-colorfx                     ImageDlgBase        DONE
-inserttext                  ImageDlgBase        DONE
-perspective                 ImageDlgBase        DONE
-superimpose                 ImageDlgBase        DONE
-whitebalance                ImageDlgBase        DONE
+  \---autocorrection        ImageDlgBase        DONE            DONE
+  \---bcg                   ImageDlgBase        DONE            DONE
+  \---bwsepia               ImageDlgBase        DONE            DONE
+  \---hsl                   ImageDlgBase        DONE            DONE
+  \---iccproof              ImageDlgBase        DONE            DONE
+  \---ratiocrop             ImageDlgBase        DONE            DONE
+  \---redeye                ImageDlgBase        DONE            DONE
+  \---rgbtool               ImageDlgBase        DONE            DONE
+adjustcurves                ImageDlgBase        DONE            DONE
+adjustlevels                ImageDlgBase        DONE            DONE
+channelmixer                ImageDlgBase        DONE            DONE
+colorfx                     ImageDlgBase        DONE            DONE
+inserttext                  ImageDlgBase        DONE            DONE
+perspective                 ImageDlgBase        DONE            DONE
+superimpose                 ImageDlgBase        DONE            DONE
+whitebalance                ImageDlgBase        DONE            DONE
 
 lenscorrection
-  \---antivignetting        ImageGuideDlg       A
-  \---autocorrection        ImageGuideDlg       A
-  \---distortion            ImageGuideDlg       A
+  \---antivignetting        ImageGuideDlg       A               DONE
+  \---autocorrection        ImageGuideDlg       A               DONE
+  \---distortion            ImageGuideDlg       A               DONE
 border                      ImageGuideDlg       A
 distortionfx                ImageGuideDlg       A
-freerotation                ImageGuideDlg
-inpainting                  ImageGuideDlg       A
+freerotation                ImageGuideDlg                       DONE
+inpainting                  ImageGuideDlg       A               DONE
 raindrop                    ImageGuideDlg       A
-sheartool                   ImageGuideDlg
+sheartool                   ImageGuideDlg                       DONE
 
 coreplugin
-  \---blur                  CtrlPanelDlg
-  \---sharpnesseditor       CtrlPanelDlg
+  \---blur                  CtrlPanelDlg                        DONE
+  \---sharpnesseditor       CtrlPanelDlg                        DONE
 blurfx                      CtrlPanelDlg
 charcoal                    CtrlPanelDlg
 emboss                      CtrlPanelDlg
-filmgrain                   CtrlPanelDlg
-hotpixels                   CtrlPanelDlg        DONE
-infrared                    CtrlPanelDlg
-noisereduction              CtrlPanelDlg
+filmgrain                   CtrlPanelDlg                        DONE
+hotpixels                   CtrlPanelDlg        DONE            DONE
+infrared                    CtrlPanelDlg                        DONE
+noisereduction              CtrlPanelDlg                        DONE
 oilpaint                    CtrlPanelDlg
-restoration                 CtrlPanelDlg        DONE
+restoration                 CtrlPanelDlg        DONE            DONE
 texture                     CtrlPanelDlg
