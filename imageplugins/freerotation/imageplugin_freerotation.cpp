@@ -35,9 +35,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_freerotation.h"
+#include "freerotationtool.h"
 #include "imageplugin_freerotation.h"
 #include "imageplugin_freerotation.moc"
+
+using namespace DigikamFreeRotationImagesPlugin;
 
 K_PLUGIN_FACTORY( FreeRotationFactory, registerPlugin<ImagePlugin_FreeRotation>(); )
 K_EXPORT_PLUGIN ( FreeRotationFactory("digikamimageplugin_freerotation") )
@@ -68,6 +70,6 @@ void ImagePlugin_FreeRotation::setEnabledActions(bool enable)
 
 void ImagePlugin_FreeRotation::slotFreeRotation()
 {
-    DigikamFreeRotationImagesPlugin::ImageEffect_FreeRotation dlg(kapp->activeWindow());
-    dlg.exec();
+    FreeRotationTool *tool = new FreeRotationTool(this);
+    loadTool(tool);
 }

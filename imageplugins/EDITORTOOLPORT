@@ -28,7 +28,7 @@ lenscorrection
   \---distortion            ImageGuideDlg       A               DONE
 border                      ImageGuideDlg       DONE            DONE
 distortionfx                ImageGuideDlg       DONE            DONE
-freerotation                ImageGuideDlg       A               DONE
+freerotation                ImageGuideDlg       DONE            DONE
 inpainting                  ImageGuideDlg       DONE            DONE
 raindrop                    ImageGuideDlg       DONE            DONE
 sheartool                   ImageGuideDlg       DONE            DONE

@@ -35,6 +35,7 @@
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kcursor.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -55,69 +56,59 @@
 #include "dimg.h"
 #include "imageiface.h"
 #include "imagewidget.h"
+#include "editortoolsettings.h"
 #include "freerotation.h"
-#include "imageeffect_freerotation.h"
-#include "imageeffect_freerotation.moc"
+#include "freerotationtool.h"
+#include "freerotationtool.moc"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamFreeRotationImagesPlugin
 {
 
-ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
-                        : Digikam::ImageGuideDlg(parent, i18n("Free Rotation"), "freerotation",
-                          false, true, true, Digikam::ImageGuideWidget::HVGuideMode)
+FreeRotationTool::FreeRotationTool(QObject* parent)
+                        : EditorToolThreaded(parent)
 {
-    // No need Abort button action.
-    showButton(User1, false);
+    setObjectName("freerotation");
+    setToolName(i18n("Free Rotation"));
+    setToolIcon(SmallIcon("freerotation"));
 
-    QString whatsThis;
-
-    KAboutData* about = new KAboutData("digikam", 0,
-                                       ki18n("Free Rotation"),
-                                       digiKamVersion().toAscii(),
-                                       ki18n("A digiKam image plugin to process free image "
-                                       "rotation."),
-                                       KAboutData::License_GPL,
-                                       ki18n("(c) 2004-2008, Gilles Caulier"),
-                                       KLocalizedString(),
-                                       Digikam::webProjectUrl().url().toUtf8());
-
-    about->addAuthor(ki18n("Gilles Caulier"), ki18n("Author and maintainer"),
-                     "caulier dot gilles at gmail dot com");
-
-    about->addAuthor(ki18n("Pieter Z. Voloshyn"), ki18n("Free Rotation algorithm"),
-                     "pieter dot voloshyn at gmail dot com");
-
-    setAboutData(about);
-
-    m_imagePreviewWidget->setWhatsThis( i18n("<p>This is the free image operation preview. "
+    m_previewWidget = new ImageWidget("freerotation Tool", 0,
+                                      i18n("<p>This is the free rotation operation preview. "
                                            "If you move the mouse cursor on this preview, "
                                            "a vertical and horizontal dashed line will be drawn "
                                            "to guide you in adjusting the free rotation correction. "
                                            "Release the left mouse button to freeze the dashed "
-                                           "line's position."));
+                                           "line's position."),
+                                      false, ImageGuideWidget::HVGuideMode);
+
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
     QString temp;
     Digikam::ImageIface iface(0, 0);
 
-    QWidget *gboxSettings     = new QWidget(mainWidget());
-    QGridLayout* gridSettings = new QGridLayout(gboxSettings);
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel,
+                                            EditorToolSettings::ColorGuide);
 
-    QLabel *label1  = new QLabel(i18n("New width:"), gboxSettings);
-    m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"), gboxSettings);
+    QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
+
+    QLabel *label1  = new QLabel(i18n("New width:"), m_gboxSettings->plainPage());
+    m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"), m_gboxSettings->plainPage());
     m_newWidthLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
-    QLabel *label2   = new QLabel(i18n("New height:"), gboxSettings);
-    m_newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"), gboxSettings);
+    QLabel *label2   = new QLabel(i18n("New height:"), m_gboxSettings->plainPage());
+    m_newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"), m_gboxSettings->plainPage());
     m_newHeightLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
-    KSeparator *line = new KSeparator(Qt::Horizontal, gboxSettings);
+    KSeparator *line = new KSeparator(Qt::Horizontal, m_gboxSettings->plainPage());
 
-    QLabel *label3 = new QLabel(i18n("Main angle:"), gboxSettings);
-    m_angleInput   = new RIntNumInput(gboxSettings);
+    QLabel *label3 = new QLabel(i18n("Main angle:"), m_gboxSettings->plainPage());
+    m_angleInput   = new RIntNumInput(m_gboxSettings->plainPage());
     m_angleInput->setRange(-180, 180, 1);
     m_angleInput->setSliderEnabled(true);
     m_angleInput->setDefaultValue(0);
@@ -125,20 +116,20 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
                                      "A positive angle rotates the image clockwise; "
                                      "a negative angle rotates it counter-clockwise."));
 
-    QLabel *label4   = new QLabel(i18n("Fine angle:"), gboxSettings);
-    m_fineAngleInput = new RDoubleNumInput(gboxSettings);
+    QLabel *label4   = new QLabel(i18n("Fine angle:"), m_gboxSettings->plainPage());
+    m_fineAngleInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_fineAngleInput->input()->setRange(-5.0, 5.0, 0.01, true);
     m_fineAngleInput->setDefaultValue(0);
     m_fineAngleInput->setWhatsThis( i18n("<p>This value in degrees will be added to main angle value "
                                          "to set fine target angle."));
 
-    m_antialiasInput = new QCheckBox(i18n("Anti-Aliasing"), gboxSettings);
+    m_antialiasInput = new QCheckBox(i18n("Anti-Aliasing"), m_gboxSettings->plainPage());
     m_antialiasInput->setWhatsThis( i18n("<p>Enable this option to apply the anti-aliasing filter "
                                          "to the rotated image. "
                                          "In order to smooth the target image, it will be blurred a little."));
 
-    QLabel *label5 = new QLabel(i18n("Auto-crop:"), gboxSettings);
-    m_autoCropCB   = new RComboBox(gboxSettings);
+    QLabel *label5 = new QLabel(i18n("Auto-crop:"), m_gboxSettings->plainPage());
+    m_autoCropCB   = new RComboBox(m_gboxSettings->plainPage());
     m_autoCropCB->addItem( i18n("None") );
     m_autoCropCB->addItem( i18n("Widest Area") );
     m_autoCropCB->addItem( i18n("Largest Area") );
@@ -148,57 +139,69 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    gridSettings->addWidget(label1, 0, 0, 1, 1);
-    gridSettings->addWidget(m_newWidthLabel, 0, 1, 1, 2);
-    gridSettings->addWidget(label2, 1, 0, 1, 1);
-    gridSettings->addWidget(m_newHeightLabel, 1, 1, 1, 2);
-    gridSettings->addWidget(line, 2, 0, 1, 3 );
-    gridSettings->addWidget(label3, 3, 0, 1, 3 );
-    gridSettings->addWidget(m_angleInput, 4, 0, 1, 3 );
-    gridSettings->addWidget(label4, 5, 0, 1, 3 );
-    gridSettings->addWidget(m_fineAngleInput, 6, 0, 1, 3 );
-    gridSettings->addWidget(m_antialiasInput, 7, 0, 1, 3 );
-    gridSettings->addWidget(label5, 8, 0, 1, 1);
-    gridSettings->addWidget(m_autoCropCB, 8, 1, 1, 2);
-    gridSettings->setMargin(spacingHint());
+    gridSettings->addWidget(label1,             0, 0, 1, 1);
+    gridSettings->addWidget(m_newWidthLabel,    0, 1, 1, 2);
+    gridSettings->addWidget(label2,             1, 0, 1, 1);
+    gridSettings->addWidget(m_newHeightLabel,   1, 1, 1, 2);
+    gridSettings->addWidget(line,               2, 0, 1, 3);
+    gridSettings->addWidget(label3,             3, 0, 1, 3);
+    gridSettings->addWidget(m_angleInput,       4, 0, 1, 3);
+    gridSettings->addWidget(label4,             5, 0, 1, 3);
+    gridSettings->addWidget(m_fineAngleInput,   6, 0, 1, 3);
+    gridSettings->addWidget(m_antialiasInput,   7, 0, 1, 3);
+    gridSettings->addWidget(label5,             8, 0, 1, 1);
+    gridSettings->addWidget(m_autoCropCB,       8, 1, 1, 2);
+    gridSettings->setRowStretch(9, 10);
+    gridSettings->setMargin(m_gboxSettings->spacingHint());
     gridSettings->setSpacing(0);
 
-    setUserAreaWidget(gboxSettings);
+    setToolSettings(m_gboxSettings);
 
     // -------------------------------------------------------------
 
-    connect(m_angleInput, SIGNAL(valueChanged (int)),
+    connect(m_angleInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
-    connect(m_fineAngleInput, SIGNAL(valueChanged (double)),
+    connect(m_fineAngleInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 
-    connect(m_antialiasInput, SIGNAL(toggled (bool)),
+    connect(m_antialiasInput, SIGNAL(toggled(bool)),
             this, SLOT(slotEffect()));
 
     connect(m_autoCropCB, SIGNAL(activated(int)),
             this, SLOT(slotEffect()));
+
+    connect(m_gboxSettings, SIGNAL(signalColorGuideChanged()),
+            this, SLOT(slotColorGuideChanged()));
 }
 
-ImageEffect_FreeRotation::~ImageEffect_FreeRotation()
+FreeRotationTool::~FreeRotationTool()
 {
 }
 
-void ImageEffect_FreeRotation::readUserSettings(void)
+void FreeRotationTool::slotColorGuideChanged()
+{
+    m_previewWidget->slotChangeGuideColor(m_gboxSettings->guideColor());
+    m_previewWidget->slotChangeGuideSize(m_gboxSettings->guideSize());
+}
+
+void FreeRotationTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("freerotation Tool Dialog");
+    KConfigGroup group = config->group("freerotation Tool");
     m_angleInput->setValue(group.readEntry("Main Angle", m_angleInput->defaultValue()));
     m_fineAngleInput->setValue(group.readEntry("Fine Angle", m_fineAngleInput->defaultValue()));
     m_autoCropCB->setCurrentIndex(group.readEntry("Auto Crop Type", m_autoCropCB->defaultIndex()));
     m_antialiasInput->setChecked(group.readEntry("Anti Aliasing", true));
+
+    slotColorGuideChanged();
     slotEffect();
 }
 
-void ImageEffect_FreeRotation::writeUserSettings(void)
+void FreeRotationTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("freerotation Tool Dialog");
+    KConfigGroup group = config->group("freerotation Tool");
     group.writeEntry("Main Angle", m_angleInput->value());
     group.writeEntry("Fine Angle", m_fineAngleInput->value());
     group.writeEntry( "Auto Crop Type", m_autoCropCB->currentIndex() );
@@ -206,7 +209,7 @@ void ImageEffect_FreeRotation::writeUserSettings(void)
     group.sync();
 }
 
-void ImageEffect_FreeRotation::resetValues()
+void FreeRotationTool::slotResetSettings()
 {
     m_angleInput->blockSignals(true);
     m_antialiasInput->blockSignals(true);
@@ -220,36 +223,38 @@ void ImageEffect_FreeRotation::resetValues()
     m_angleInput->blockSignals(false);
     m_antialiasInput->blockSignals(false);
     m_autoCropCB->blockSignals(false);
+
+    slotEffect();
 }
 
-void ImageEffect_FreeRotation::prepareEffect()
+void FreeRotationTool::prepareEffect()
 {
-    kapp->setOverrideCursor( Qt::WaitCursor );
+    kapp->setOverrideCursor(Qt::WaitCursor);
     m_angleInput->setEnabled(false);
     m_fineAngleInput->setEnabled(false);
     m_antialiasInput->setEnabled(false);
     m_autoCropCB->setEnabled(false);
 
-    double angle      = m_angleInput->value() + m_fineAngleInput->value();
+    double angle = m_angleInput->value() + m_fineAngleInput->value();
     bool antialiasing = m_antialiasInput->isChecked();
-    int autocrop      = m_autoCropCB->currentIndex();
-    QColor background = palette().color(QPalette::Background);
+    int autocrop = m_autoCropCB->currentIndex();
+    QColor background = toolView()->backgroundRole();
 
-    Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
+    ImageIface* iface = m_previewWidget->imageIface();
     int orgW = iface->originalWidth();
     int orgH = iface->originalHeight();
 
     uchar *data = iface->getPreviewImage();
-    Digikam::DImg image(iface->previewWidth(), iface->previewHeight(), iface->previewSixteenBit(),
+    DImg image(iface->previewWidth(), iface->previewHeight(), iface->previewSixteenBit(),
                         iface->previewHasAlpha(), data);
     delete [] data;
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
+    setFilter(dynamic_cast<DImgThreadedFilter *>(
                        new FreeRotation(&image, this, angle, antialiasing, autocrop,
-                                        background, orgW, orgH));
+                                        background, orgW, orgH)));
 }
 
-void ImageEffect_FreeRotation::prepareFinal()
+void FreeRotationTool::prepareFinal()
 {
     m_angleInput->setEnabled(false);
     m_fineAngleInput->setEnabled(false);
@@ -261,54 +266,54 @@ void ImageEffect_FreeRotation::prepareFinal()
     int autocrop      = m_autoCropCB->currentIndex();
     QColor background = Qt::black;
 
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
     int orgW = iface.originalWidth();
     int orgH = iface.originalHeight();
 
     uchar *data = iface.getOriginalImage();
-    Digikam::DImg orgImage(orgW, orgH, iface.originalSixteenBit(),
+    DImg orgImage(orgW, orgH, iface.originalSixteenBit(),
                            iface.originalHasAlpha(), data);
     delete [] data;
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
+    setFilter(dynamic_cast<DImgThreadedFilter *>(
                        new FreeRotation(&orgImage, this, angle, antialiasing, autocrop,
-                                        background, orgW, orgH));
+                                        background, orgW, orgH)));
 }
 
-void ImageEffect_FreeRotation::putPreviewData(void)
+void FreeRotationTool::putPreviewData(void)
 {
-    Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
+    ImageIface* iface = m_previewWidget->imageIface();
     int w = iface->previewWidth();
     int h = iface->previewHeight();
 
-    Digikam::DImg imTemp = m_threadedFilter->getTargetImage().smoothScale(w, h, Qt::ScaleMin);
-    Digikam::DImg imDest( w, h, m_threadedFilter->getTargetImage().sixteenBit(),
-                                m_threadedFilter->getTargetImage().hasAlpha() );
+    DImg imTemp = filter()->getTargetImage().smoothScale(w, h, Qt::ScaleMin);
+    DImg imDest( w, h, filter()->getTargetImage().sixteenBit(),
+                                filter()->getTargetImage().hasAlpha() );
 
-    imDest.fill( Digikam::DColor(palette().color(QPalette::Background),
-                                 m_threadedFilter->getTargetImage().sixteenBit()) );
+    QColor background = toolView()->backgroundRole();
+    imDest.fill( DColor(background, filter()->getTargetImage().sixteenBit()) );
     imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
 
     iface->putPreviewImage((imDest.smoothScale(iface->previewWidth(),
                                                iface->previewHeight())).bits());
 
-    m_imagePreviewWidget->updatePreview();
-    QSize newSize = dynamic_cast<FreeRotation *>(m_threadedFilter)->getNewSize();
+    m_previewWidget->updatePreview();
+    QSize newSize = dynamic_cast<FreeRotation *>(filter())->getNewSize();
     QString temp;
     m_newWidthLabel->setText(temp.setNum( newSize.width()) + i18n(" px") );
     m_newHeightLabel->setText(temp.setNum( newSize.height()) + i18n(" px") );
 }
 
-void ImageEffect_FreeRotation::putFinalData(void)
+void FreeRotationTool::putFinalData(void)
 {
-    Digikam::ImageIface iface(0, 0);
-    Digikam::DImg targetImage = m_threadedFilter->getTargetImage();
+    ImageIface iface(0, 0);
+    DImg targetImage = filter()->getTargetImage();
     iface.putOriginalImage(i18n("Free Rotation"),
                            targetImage.bits(),
                            targetImage.width(), targetImage.height());
 }
 
-void ImageEffect_FreeRotation::renderingFinished()
+void FreeRotationTool::renderingFinished()
 {
     m_angleInput->setEnabled(true);
     m_fineAngleInput->setEnabled(true);
