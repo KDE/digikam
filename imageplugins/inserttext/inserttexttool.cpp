@@ -39,7 +39,6 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QVBoxLayout>
-#include <QWhatsThis>
 
 // KDE includes.
 
