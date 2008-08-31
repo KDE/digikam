@@ -21,101 +21,91 @@
 
 // Qt includes.
 
-#include <QCheckBox>
-#include <QLabel>
-#include <QPixmap>
-#include <QPainter>
-#include <QBrush>
-#include <QPen>
-#include <QGridLayout>
-#include <QTabWidget>
 #include <QBitmap>
+#include <QBrush>
+#include <QCheckBox>
+#include <QGridLayout>
+#include <QLabel>
+#include <QPainter>
+#include <QPen>
+#include <QPixmap>
+#include <QTabWidget>
 
 // KDE includes.
 
+#include <kaboutdata.h>
+#include <kapplication.h>
+#include <kcombobox.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kglobal.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kseparator.h>
-#include <kconfig.h>
-#include <kaboutdata.h>
-#include <kiconloader.h>
-#include <kapplication.h>
 #include <kstandarddirs.h>
-#include <kcombobox.h>
-#include <kglobal.h>
 
 // Local includes.
 
-#include "version.h"
 #include "daboutdata.h"
 #include "ddebug.h"
 #include "dmetadata.h"
+#include "editortoolsettings.h"
 #include "imageiface.h"
+#include "imagewidget.h"
 #include "klensfun.h"
-#include "imageeffect_autocorrection.h"
-#include "imageeffect_autocorrection.moc"
+#include "version.h"
+#include "autocorrectiontool.h"
+#include "autocorrectiontool.moc"
+
+using namespace Digikam;
 
 namespace DigikamAutoCorrectionImagesPlugin
 {
 
-ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
-                          : Digikam::ImageGuideDlg(parent, i18n("Lens Auto-Correction"),
-                                                   "lensautocorrection", false, true, true,
-                                                   Digikam::ImageGuideWidget::HVGuideMode,
-                                                   true)
+AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
+                  : EditorToolThreaded(parent)
 {
-    QString whatsThis;
+    setObjectName("lensautocorrection");
+    setToolName(i18n("Lens Auto-Correction"));
+    setToolIcon(SmallIcon("lensdistortion"));
 
-    KAboutData* about = new KAboutData("digikam", 0,
-                                       ki18n("Lens Auto-Correction"),
-                                       digiKamVersion().toAscii(),
-                                       ki18n("A digiKam image plugin to automatically fix "
-                                             "lens aberrations using LensFun library."),
-                                       KAboutData::License_GPL,
-                                       ki18n("(c) 2008, Adrian Schroeter\n"
-                                       "(c) 2008, Gilles Caulier"),
-                                       KLocalizedString(),
-                                       Digikam::webProjectUrl().url().toUtf8());
+    m_previewWidget = new ImageWidget("antivignetting Tool", 0, QString(),
+                                      false, ImageGuideWidget::HVGuideMode, false);
 
-    about->addAuthor(ki18n("Adrian Schroeter"), ki18n("Author and maintainer"),
-                     "adrian at suse dot de");
-
-    about->addAuthor(ki18n("Gilles Caulier"), ki18n("Developer"),
-                     "caulier dot gilles at gmail dot com");
-
-    about->addAuthor(ki18n("Andrew Zabolotny"), ki18n("LensFun library author."),
-                     "zap at homelink dot ru");
-
-    setAboutData(about);
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
-    m_settingsWidget  = new QWidget(mainWidget());
-    QGridLayout *grid = new QGridLayout(m_settingsWidget);
-    m_cameraSelector  = new KLFDeviceSelector(m_settingsWidget);
-    KSeparator *line  = new KSeparator(Qt::Horizontal, m_settingsWidget);
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel);
+
+    QGridLayout *grid = new QGridLayout(m_gboxSettings->plainPage());
+    m_cameraSelector  = new KLFDeviceSelector(m_gboxSettings->plainPage());
+    KSeparator *line  = new KSeparator(Qt::Horizontal, m_gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
-    m_showGrid   = new QCheckBox(i18n("Show grid"), m_settingsWidget);
+    m_showGrid   = new QCheckBox(i18n("Show grid"), m_gboxSettings->plainPage());
     m_showGrid->setWhatsThis(i18n("Set this option to visualize correction grid to be applied."));
 
-    m_filterCCA  = new QCheckBox(i18n("Chromatic Aberration"), m_settingsWidget);
+    m_filterCCA  = new QCheckBox(i18n("Chromatic Aberration"), m_gboxSettings->plainPage());
     m_filterCCA->setWhatsThis(i18n("Chromatic aberration is easily recognised as color fringes "
                                    "towards the image corners. CA is due to a variing lens focus "
                                    "for different colors."));
-    m_filterVig  = new QCheckBox(i18n("Vignetting"), m_settingsWidget);
+    m_filterVig  = new QCheckBox(i18n("Vignetting"), m_gboxSettings->plainPage());
     m_filterVig->setWhatsThis(i18n("Vignetting refers to an image darkening, mostly in the corners. "
                                    "Optical and natural vignetting can be cancelled out with this option, "
                                    "whereas mechanical vignetting will not be cured."));
-    m_filterCCI  = new QCheckBox(i18n("Color Correction"), m_settingsWidget);
+    m_filterCCI  = new QCheckBox(i18n("Color Correction"), m_gboxSettings->plainPage());
     m_filterCCI->setWhatsThis(i18n("All lenses have a slight color tinge to them, "
                                    "mostly due to the anti-reflective coating. "
                                    "The tinge can be cancelled when the respective data is known for the lens."));
-    m_filterDist = new QCheckBox(i18n("Distortion"), m_settingsWidget);
+    m_filterDist = new QCheckBox(i18n("Distortion"), m_gboxSettings->plainPage());
     m_filterDist->setWhatsThis(i18n("Distortion refers to an image deformation, which is most pronounced "
                                     "towards the corners. These Seidel aberrations are known as pincushion "
                                     "and barrel distorsions."));
-    m_filterGeom = new QCheckBox(i18n("Geometry"), m_settingsWidget);
+    m_filterGeom = new QCheckBox(i18n("Geometry"), m_gboxSettings->plainPage());
     m_filterGeom->setWhatsThis(i18n("Four geometries are handeled here: Rectilinear (99 percent of all lenses), "
                                     "Fisheye, Cylindrical, Equirectangular."));
 
@@ -127,10 +117,11 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     grid->addWidget(m_filterCCI,      5, 0, 1, 2);
     grid->addWidget(m_filterDist,     6, 0, 1, 2);
     grid->addWidget(m_filterGeom,     7, 0, 1, 2);
-    grid->setMargin(spacingHint());
-    grid->setSpacing(spacingHint());
+    grid->setRowStretch(8, 10);
+    grid->setMargin(m_gboxSettings->spacingHint());
+    grid->setSpacing(m_gboxSettings->spacingHint());
 
-    setUserAreaWidget(m_settingsWidget);
+    setToolSettings(m_gboxSettings);
 
     // -------------------------------------------------------------
 
@@ -156,17 +147,11 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
             this, SLOT(slotSetFilters()));
 }
 
-ImageEffect_AutoCorrection::~ImageEffect_AutoCorrection()
+AutoCorrectionTool::~AutoCorrectionTool()
 {
 }
 
-void ImageEffect_AutoCorrection::slotInit()
-{
-    resetValues(); // for checking Exif data
-    readUserSettings();
-}
-
-void ImageEffect_AutoCorrection::slotLensChanged()
+void AutoCorrectionTool::slotLensChanged()
 {
     m_filterCCA->setEnabled(m_cameraSelector->getKLFObject()->supportsCCA());
     m_filterVig->setEnabled(m_cameraSelector->getKLFObject()->supportsVig());
@@ -176,7 +161,7 @@ void ImageEffect_AutoCorrection::slotLensChanged()
     slotSetFilters();
 }
 
-void ImageEffect_AutoCorrection::slotSetFilters()
+void AutoCorrectionTool::slotSetFilters()
 {
     m_cameraSelector->getKLFObject()->setCorrection(
         (m_filterCCA->checkState()  == Qt::Checked && m_filterCCA->isEnabled())  ? true : false,
@@ -189,11 +174,11 @@ void ImageEffect_AutoCorrection::slotSetFilters()
     slotTimer();
 }
 
-void ImageEffect_AutoCorrection::readUserSettings()
+void AutoCorrectionTool::readSettings()
 {
-    m_settingsWidget->blockSignals(true);
+    m_gboxSettings->blockSignals(true);
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Lens Auto-Correction Tool Dialog");
+    KConfigGroup group        = config->group("Lens Auto-Correction Tool");
 
     m_filterCCA->setCheckState(group.readEntry("CCA", true)         ? Qt::Checked : Qt::Unchecked);
     m_filterVig->setCheckState(group.readEntry("Vignetting", true)  ? Qt::Checked : Qt::Unchecked);
@@ -201,14 +186,14 @@ void ImageEffect_AutoCorrection::readUserSettings()
     m_filterDist->setCheckState(group.readEntry("Distortion", true) ? Qt::Checked : Qt::Unchecked);
     m_filterGeom->setCheckState(group.readEntry("Geometry", true)   ? Qt::Checked : Qt::Unchecked);
 
-    m_settingsWidget->blockSignals(false);
+    m_gboxSettings->blockSignals(false);
     slotSetFilters();
 }
 
-void ImageEffect_AutoCorrection::writeUserSettings()
+void AutoCorrectionTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Lens Auto-Correction Tool Dialog");
+    KConfigGroup group        = config->group("Lens Auto-Correction Tool");
     if ( m_filterCCA->isEnabled() )
         group.writeEntry("CCA",        (m_filterCCA->checkState() == Qt::Checked)  ? true : false);
     if ( m_filterVig->isEnabled() )
@@ -222,32 +207,32 @@ void ImageEffect_AutoCorrection::writeUserSettings()
     group.sync();
 }
 
-void ImageEffect_AutoCorrection::resetValues()
+void AutoCorrectionTool::slotResetSettings()
 {
-    m_settingsWidget->blockSignals(true);
+    m_gboxSettings->blockSignals(true);
 
     // Read Exif informations ...
-    Digikam::DImg      *img = m_imagePreviewWidget->imageIface()->getOriginalImg();
-    Digikam::DMetadata  meta;
+    DImg      *img = m_previewWidget->imageIface()->getOriginalImg();
+    DMetadata  meta;
     meta.setExif(img->getExif());
     meta.setIptc(img->getIptc());
     meta.setXmp(img->getXmp());
     m_cameraSelector->findFromMetadata(meta);
 
-    m_settingsWidget->blockSignals(false);
+    m_gboxSettings->blockSignals(false);
 }
 
-void ImageEffect_AutoCorrection::prepareEffect()
+void AutoCorrectionTool::prepareEffect()
 {
-    m_settingsWidget->setEnabled(false);
+    m_gboxSettings->setEnabled(false);
 
-    Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
+    ImageIface* iface          = m_previewWidget->imageIface();
     uchar *data                = iface->getPreviewImage();
     int w                      = iface->previewWidth();
     int h                      = iface->previewHeight();
     bool sb                    = iface->previewSixteenBit();
 
-    Digikam::DImg image(w, h, sb, false, data);
+    DImg image(w, h, sb, false, data);
 
     if (m_showGrid->isChecked())
     {
@@ -265,51 +250,51 @@ void ImageEffect_AutoCorrection::prepareEffect()
         p2.setPen(QPen(Qt::gray, 1));
         p2.fillRect(0, 0, pix.width(), pix.height(), QBrush(pattern));
         p2.end();
-        Digikam::DImg grid(pix.toImage());
+        DImg grid(pix.toImage());
 
-        Digikam::DColorComposer *composer = Digikam::DColorComposer::getComposer(Digikam::DColorComposer::PorterDuffNone);
-        Digikam::DColorComposer::MultiplicationFlags flags = Digikam::DColorComposer::NoMultiplication;
+        DColorComposer *composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
+        DColorComposer::MultiplicationFlags flags = DColorComposer::NoMultiplication;
 
         // Do alpha blending of template on dest image
         image.bitBlendImage(composer, &grid, 0, 0, w, h, 0, 0, flags);
     }
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
-                       (new KLensFunFilter(&image, this, m_cameraSelector->getKLFObject()));
+    setFilter(dynamic_cast<DImgThreadedFilter *>
+                       (new KLensFunFilter(&image, this, m_cameraSelector->getKLFObject())));
 
 }
 
-void ImageEffect_AutoCorrection::prepareFinal()
+void AutoCorrectionTool::prepareFinal()
 {
-    m_settingsWidget->setEnabled(false);
+    m_gboxSettings->setEnabled(false);
 
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
     uchar *data = iface.getOriginalImage();
-    Digikam::DImg originalImage(iface.originalWidth(), iface.originalHeight(),
+    DImg originalImage(iface.originalWidth(), iface.originalHeight(),
                                 iface.originalSixteenBit(), iface.originalHasAlpha(), data);
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
-                       (new KLensFunFilter( &originalImage, this, m_cameraSelector->getKLFObject()));
+    setFilter(dynamic_cast<DImgThreadedFilter *>
+                       (new KLensFunFilter( &originalImage, this, m_cameraSelector->getKLFObject())));
 
     delete [] data;
 }
 
-void ImageEffect_AutoCorrection::putPreviewData()
+void AutoCorrectionTool::putPreviewData()
 {
-    Digikam::DImg imDest = m_threadedFilter->getTargetImage();
-    m_imagePreviewWidget->imageIface()->putPreviewImage(imDest.bits());
-    m_imagePreviewWidget->updatePreview();
+    DImg imDest = filter()->getTargetImage();
+    m_previewWidget->imageIface()->putPreviewImage(imDest.bits());
+    m_previewWidget->updatePreview();
 }
 
-void ImageEffect_AutoCorrection::putFinalData()
+void AutoCorrectionTool::putFinalData()
 {
-    Digikam::ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Lens Auto-Correction"), m_threadedFilter->getTargetImage().bits());
+    ImageIface iface(0, 0);
+    iface.putOriginalImage(i18n("Lens Auto-Correction"), filter()->getTargetImage().bits());
 }
 
-void ImageEffect_AutoCorrection::renderingFinished()
+void AutoCorrectionTool::renderingFinished()
 {
-    m_settingsWidget->setEnabled(true);
+    m_gboxSettings->setEnabled(true);
 }
 
 }  // NameSpace DigikamAutoCorrectionImagesPlugin

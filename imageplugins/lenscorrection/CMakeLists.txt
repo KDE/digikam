@@ -5,7 +5,7 @@ INCLUDE_DIRECTORIES(autocorrection
                    )
 
 
-SET(autocorrection_SRCS autocorrection/imageeffect_autocorrection.cpp 
+SET(autocorrection_SRCS autocorrection/autocorrectiontool.cpp 
                         autocorrection/klensfun.cpp
    )
 

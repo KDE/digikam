@@ -34,7 +34,7 @@
 
 #include "config-digikam.h"
 #ifdef HAVE_LENSFUN
-#include "imageeffect_autocorrection.h"
+#include "autocorrectiontool.h"
 #endif // HAVE_LENSFUN
 
 #include "ddebug.h"
@@ -97,8 +97,8 @@ void ImagePlugin_LensCorrection::setEnabledActions(bool enable)
 void ImagePlugin_LensCorrection::slotAutoCorrection()
 {
 #ifdef HAVE_LENSFUN
-    DigikamAutoCorrectionImagesPlugin::ImageEffect_AutoCorrection dlg(kapp->activeWindow());
-    dlg.exec();
+    AutoCorrectionTool *tool = new AutoCorrectionTool(this);
+    loadTool(tool);
 #endif // HAVE_LENSFUN
 }
 

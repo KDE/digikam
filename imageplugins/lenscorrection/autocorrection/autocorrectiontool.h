@@ -19,13 +19,13 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_AUTOCORRECTION_H
-#define IMAGEEFFECT_AUTOCORRECTION_H
+#ifndef AUTOCORRECTIONTOOL_H
+#define AUTOCORRECTIONTOOL_H
 
 // Local includes.
 
 #include "dimg.h"
-#include "imageguidedlg.h"
+#include "editortool.h"
 
 class QCheckBox;
 class QLabel;
@@ -33,28 +33,34 @@ class QWidget;
 
 class KLFDeviceSelector;
 
+namespace Digikam
+{
+class EditorToolSettings;
+class ImageWidget;
+}
+
 namespace DigikamAutoCorrectionImagesPlugin
 {
 
-class ImageEffect_AutoCorrection : public Digikam::ImageGuideDlg
+class AutoCorrectionTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_AutoCorrection(QWidget *parent);
-    ~ImageEffect_AutoCorrection();
+    AutoCorrectionTool(QObject *parent);
+    ~AutoCorrectionTool();
 
 private slots:
 
-    void readUserSettings();
     void slotSetFilters();
     void slotLensChanged();
+    void slotResetSettings();
 
 private:
 
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
@@ -63,29 +69,22 @@ private:
 
 private:
 
-    QLabel            *m_maskPreviewLabel;
+    QLabel                      *m_maskPreviewLabel;
 
-    QWidget           *m_settingsWidget;
+    QCheckBox                   *m_showGrid;
+    QCheckBox                   *m_filterCCA;
+    QCheckBox                   *m_filterVig;
+    QCheckBox                   *m_filterCCI;
+    QCheckBox                   *m_filterDist;
+    QCheckBox                   *m_filterGeom;
 
-    QCheckBox         *m_showGrid;
-    QCheckBox         *m_filterCCA;
-    QCheckBox         *m_filterVig;
-    QCheckBox         *m_filterCCI;
-    QCheckBox         *m_filterDist;
-    QCheckBox         *m_filterGeom;
+    KLFDeviceSelector           *m_cameraSelector;
 
-    KLFDeviceSelector *m_cameraSelector;
+    Digikam::ImageWidget        *m_previewWidget;
 
-private slots:
-
-//    virtual void slotDefault(){};
-//    virtual void slotCancel(){};
-//    virtual void slotUser1(){};
-//    void readUserSettings();
-    void slotInit();
-
+    Digikam::EditorToolSettings *m_gboxSettings;
 };
 
 }  // NameSpace DigikamAutoCorrectionImagesPlugin
 
-#endif /* IMAGEEFFECT_AUTOCORRECTION_H */
+#endif /* AUTOCORRECTIONTOOL_H */
