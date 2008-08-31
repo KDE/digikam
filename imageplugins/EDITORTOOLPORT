@@ -15,7 +15,7 @@ adjustlevels                ImageDlgBase        DONE
 channelmixer                ImageDlgBase        DONE
 colorfx                     ImageDlgBase        DONE
 inserttext                  ImageDlgBase        DONE
-perspective                 ImageDlgBase        A
+perspective                 ImageDlgBase        DONE
 superimpose                 ImageDlgBase        A
 whitebalance                ImageDlgBase        A
 
