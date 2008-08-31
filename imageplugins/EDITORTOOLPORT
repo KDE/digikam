@@ -31,7 +31,7 @@ distortionfx                ImageGuideDlg       DONE            DONE
 freerotation                ImageGuideDlg       A               DONE
 inpainting                  ImageGuideDlg       DONE            DONE
 raindrop                    ImageGuideDlg       DONE            DONE
-sheartool                   ImageGuideDlg       A               DONE
+sheartool                   ImageGuideDlg       DONE            DONE
 
 coreplugin
   \---blur                  CtrlPanelDlg                        DONE

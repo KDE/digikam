@@ -34,9 +34,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_sheartool.h"
+#include "sheartool.h"
 #include "imageplugin_sheartool.h"
 #include "imageplugin_sheartool.moc"
+
+using namespace DigikamShearToolImagesPlugin;
 
 K_PLUGIN_FACTORY( ShearToolFactory, registerPlugin<ImagePlugin_ShearTool>(); )
 K_EXPORT_PLUGIN ( ShearToolFactory("digikamimageplugin_sheartool") )
@@ -47,7 +49,7 @@ ImagePlugin_ShearTool::ImagePlugin_ShearTool(QObject *parent, const QVariantList
     m_sheartoolAction  = new KAction(KIcon("shear"), i18n("Shear..."), this);
     actionCollection()->addAction("imageplugin_sheartool", m_sheartoolAction );
 
-    connect(m_sheartoolAction, SIGNAL(triggered(bool)), 
+    connect(m_sheartoolAction, SIGNAL(triggered(bool)),
             this, SLOT(slotShearTool()));
 
     setXMLFile("digikamimageplugin_sheartool_ui.rc");
@@ -66,6 +68,6 @@ void ImagePlugin_ShearTool::setEnabledActions(bool enable)
 
 void ImagePlugin_ShearTool::slotShearTool()
 {
-    DigikamShearToolImagesPlugin::ImageEffect_ShearTool dlg(kapp->activeWindow());
-    dlg.exec();
+    ShearTool *tool = new ShearTool(kapp->activeWindow());
+    loadTool(tool);
 }

@@ -41,9 +41,9 @@
 namespace DigikamShearToolImagesPlugin
 {
 
-ShearTool::ShearTool(Digikam::DImg *orgImage, QObject *parent, float hAngle, float vAngle,
-                     bool antialiasing, QColor backgroundColor, int orgW, int orgH)
-         : Digikam::DImgThreadedFilter(orgImage, parent, "sheartool")
+Shear::Shear(Digikam::DImg *orgImage, QObject *parent, float hAngle, float vAngle,
+             bool antialiasing, QColor backgroundColor, int orgW, int orgH)
+     : Digikam::DImgThreadedFilter(orgImage, parent, "sheartool")
 {
     m_hAngle          = hAngle;
     m_vAngle          = vAngle;
@@ -55,7 +55,7 @@ ShearTool::ShearTool(Digikam::DImg *orgImage, QObject *parent, float hAngle, flo
     initFilter();
 }
 
-void ShearTool::filterImage(void)
+void Shear::filterImage(void)
 {
     int          progress;
     register int x, y, p = 0, pt;
