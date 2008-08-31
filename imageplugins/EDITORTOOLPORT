@@ -21,8 +21,8 @@ whitebalance                ImageDlgBase        A
 
 lenscorrection
   \---antivignetting        ImageGuideDlg       A
-  \---autocorrection        ImageGuideDlg
-  \---distortion            ImageGuideDlg
+  \---autocorrection        ImageGuideDlg       A
+  \---distortion            ImageGuideDlg       A
 border                      ImageGuideDlg       A
 distortionfx                ImageGuideDlg       A
 freerotation                ImageGuideDlg
