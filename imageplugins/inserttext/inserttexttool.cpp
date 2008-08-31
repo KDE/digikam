@@ -39,6 +39,7 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QWhatsThis>
 
 // KDE includes.
 
@@ -46,11 +47,13 @@
 #include <kapplication.h>
 #include <kcolorbutton.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kcursor.h>
 #include <kfontchooser.h>
 #include <kglobal.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
+#include <kicon.h>
 #include <klocale.h>
 #include <kmenu.h>
 #include <kstandarddirs.h>
@@ -58,77 +61,64 @@
 
 // Local includes.
 
-#include "version.h"
 #include "daboutdata.h"
 #include "ddebug.h"
 #include "dimg.h"
+#include "editortoolsettings.h"
 #include "imageiface.h"
+#include "version.h"
 #include "inserttextwidget.h"
-#include "imageeffect_inserttext.h"
-#include "imageeffect_inserttext.moc"
+#include "inserttexttool.h"
+#include "inserttexttool.moc"
+
+using namespace Digikam;
 
 namespace DigikamInsertTextImagesPlugin
 {
 
-ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
-                      : Digikam::ImageDlgBase(parent, i18n("Insert Text on Photograph"),
-                                              "inserttext", false, false)
+InsertTextTool::InsertTextTool(QObject* parent)
+              : EditorTool(parent)
 {
-    QString whatsThis;
-
-    // About data and help button.
-
-    KAboutData* about = new KAboutData("digikam", 0,
-                                       ki18n("Insert Text"),
-                                       digiKamVersion().toAscii(),
-                                       ki18n("A digiKam image plugin for inserting text on a photograph."),
-                                       KAboutData::License_GPL,
-                                       ki18n("(c) 2005-2006, Gilles Caulier\n"
-                                       "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg"),
-                                       KLocalizedString(),
-                                       Digikam::webProjectUrl().url().toUtf8());
-
-    about->addAuthor(ki18n("Gilles Caulier"), ki18n("Author and maintainer"),
-                     "caulier dot gilles at gmail dot com");
-
-    about->addAuthor(ki18n("Marcel Wiesweg"), ki18n("Developer"),
-                     "marcel dot wiesweg at gmx dot de");
-
-    setAboutData(about);
+    setObjectName("inserttext");
+    setToolName(i18n("Insert Text"));
+    setToolIcon(SmallIcon("inserttext"));
 
     // -------------------------------------------------------------
 
-    QFrame *frame   = new QFrame(mainWidget());
+    QFrame *frame   = new QFrame(0);
+    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l  = new QVBoxLayout(frame);
     m_previewWidget = new InsertTextWidget(480, 320, frame);
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     l->addWidget(m_previewWidget);
-    l->setMargin(5);
-    l->setSpacing(0);
-    m_previewWidget->setWhatsThis( i18n("<p>This previews the text inserted in the image. "
-                                           "You can use the mouse to move the text to the right location."));
-    setPreviewAreaWidget(frame);
+    m_previewWidget->setWhatsThis(i18n("<p>This previews the text inserted in the image. "
+                                       "You can use the mouse to move the text to the right location."));
+    setToolView(frame);
 
     // -------------------------------------------------------------
 
-    QWidget *gbox2        = new QWidget(mainWidget());
-    QGridLayout *gridBox2 = new QGridLayout( gbox2 );
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel);
 
-    m_textEdit = new KTextEdit(gbox2);
+    // -------------------------------------------------------------
+
+    QGridLayout *grid = new QGridLayout(m_gboxSettings->plainPage());
+
+    m_textEdit = new KTextEdit(m_gboxSettings->plainPage());
     m_textEdit->setCheckSpellingEnabled(true);
     m_textEdit->setWordWrapMode(QTextOption::NoWrap);
     m_textEdit->setWhatsThis( i18n("<p>Here, enter the text you want to insert in your image."));
 
     // -------------------------------------------------------------
 
-    m_fontChooserWidget = new KFontChooser(gbox2, KFontChooser::NoDisplayFlags);
+    m_fontChooserWidget = new KFontChooser(m_gboxSettings->plainPage(), KFontChooser::NoDisplayFlags);
     m_fontChooserWidget->setSampleBoxVisible(false);
     m_fontChooserWidget->setWhatsThis( i18n("<p>Here you can choose the font to be used."));
 
     // -------------------------------------------------------------
 
     KIconLoader icon;
-    QWidget *alignBox  = new QWidget(gbox2);
+    QWidget *alignBox  = new QWidget(m_gboxSettings->plainPage());
     QHBoxLayout *hlay  = new QHBoxLayout(alignBox);
     m_alignButtonGroup = new QButtonGroup(alignBox);
     m_alignButtonGroup->setExclusive(true);
@@ -166,8 +156,8 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label1 = new QLabel(i18n("Rotation:"), gbox2);
-    m_textRotation = new QComboBox( gbox2 );
+    QLabel *label1 = new QLabel(i18n("Rotation:"), m_gboxSettings->plainPage());
+    m_textRotation = new QComboBox( m_gboxSettings->plainPage() );
     m_textRotation->addItem( i18n("None") );
     m_textRotation->addItem( i18n("90 Degrees") );
     m_textRotation->addItem( i18n("180 Degrees") );
@@ -176,34 +166,34 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2    = new QLabel(i18n("Color:"), gbox2);
-    m_fontColorButton = new KColorButton( Qt::black, gbox2 );
+    QLabel *label2    = new QLabel(i18n("Color:"), m_gboxSettings->plainPage());
+    m_fontColorButton = new KColorButton( Qt::black, m_gboxSettings->plainPage() );
     m_fontColorButton->setWhatsThis( i18n("<p>Set here the font color to use."));
 
     // -------------------------------------------------------------
 
-    m_borderText = new QCheckBox( i18n( "Add border"), gbox2 );
+    m_borderText = new QCheckBox( i18n( "Add border"), m_gboxSettings->plainPage() );
     m_borderText->setToolTip( i18n( "Add a solid border around text using current text color" ) );
 
-    m_transparentText = new QCheckBox( i18n( "Semi-transparent"), gbox2 );
+    m_transparentText = new QCheckBox( i18n( "Semi-transparent"), m_gboxSettings->plainPage() );
     m_transparentText->setToolTip( i18n( "Use semi-transparent text background under image" ) );
 
     // -------------------------------------------------------------
 
-    gridBox2->addWidget(m_textEdit, 0, 0, 3, 2 );
-    gridBox2->addWidget(m_fontChooserWidget, 3, 0, 1, 2 );
-    gridBox2->addWidget(alignBox, 4, 0, 1, 2 );
-    gridBox2->addWidget(label1, 5, 0, 1, 1);
-    gridBox2->addWidget(m_textRotation, 5, 1, 1, 1);
-    gridBox2->addWidget(label2, 6, 0, 1, 1);
-    gridBox2->addWidget(m_fontColorButton, 6, 1, 1, 1);
-    gridBox2->addWidget(m_borderText, 7, 0, 1, 2 );
-    gridBox2->addWidget(m_transparentText, 8, 0, 1, 2 );
-    gridBox2->setRowStretch(9, 10);
-    gridBox2->setMargin(spacingHint());
-    gridBox2->setSpacing(spacingHint());
+    grid->addWidget(m_textEdit,             0, 0, 3, 2);
+    grid->addWidget(m_fontChooserWidget,    3, 0, 1, 2);
+    grid->addWidget(alignBox,               4, 0, 1, 2);
+    grid->addWidget(label1,                 5, 0, 1, 1);
+    grid->addWidget(m_textRotation,         5, 1, 1, 1);
+    grid->addWidget(label2,                 6, 0, 1, 1);
+    grid->addWidget(m_fontColorButton,      6, 1, 1, 1);
+    grid->addWidget(m_borderText,           7, 0, 1, 2);
+    grid->addWidget(m_transparentText,      8, 0, 1, 2);
+    grid->setRowStretch(9, 10);
+    grid->setMargin(m_gboxSettings->spacingHint());
+    grid->setSpacing(m_gboxSettings->spacingHint());
 
-    setUserAreaWidget(gbox2);
+    setToolSettings(m_gboxSettings);
 
     // -------------------------------------------------------------
 
@@ -236,14 +226,14 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     slotUpdatePreview();
 }
 
-ImageEffect_InsertText::~ImageEffect_InsertText()
+InsertTextTool::~InsertTextTool()
 {
 }
 
-void ImageEffect_InsertText::readUserSettings()
+void InsertTextTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group =  config->group("inserttext Tool Dialog");
+    KConfigGroup group =  config->group("inserttext Tool");
     QColor black(0, 0, 0);
     QFont  defaultFont;
 
@@ -268,10 +258,10 @@ void ImageEffect_InsertText::readUserSettings()
     slotAlignModeChanged(m_alignTextMode);
 }
 
-void ImageEffect_InsertText::writeUserSettings()
+void InsertTextTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("inserttext Tool Dialog");
+    KConfigGroup group = config->group("inserttext Tool");
 
     group.writeEntry( "Text Rotation", m_textRotation->currentIndex() );
     group.writeEntry( "Font Color", m_fontColorButton->color() );
@@ -285,7 +275,7 @@ void ImageEffect_InsertText::writeUserSettings()
     config->sync();
 }
 
-void ImageEffect_InsertText::resetValues()
+void InsertTextTool::slotResetSettings()
 {
     m_fontColorButton->blockSignals(true);
     m_alignButtonGroup->blockSignals(true);
@@ -308,7 +298,7 @@ void ImageEffect_InsertText::resetValues()
     slotAlignModeChanged(ALIGN_LEFT);
 }
 
-void ImageEffect_InsertText::slotAlignModeChanged(int mode)
+void InsertTextTool::slotAlignModeChanged(int mode)
 {
     m_alignTextMode = mode;
     m_textEdit->selectAll();
@@ -336,26 +326,25 @@ void ImageEffect_InsertText::slotAlignModeChanged(int mode)
     emit signalUpdatePreview();
 }
 
-void ImageEffect_InsertText::slotFontPropertiesChanged(const QFont &font)
+void InsertTextTool::slotFontPropertiesChanged(const QFont &font)
 {
     m_textFont = font;
     emit signalUpdatePreview();
 }
 
-void ImageEffect_InsertText::slotUpdatePreview()
+void InsertTextTool::slotUpdatePreview()
 {
     m_previewWidget->setText(m_textEdit->document()->toPlainText(), m_textFont, m_fontColorButton->color(), m_alignTextMode,
                              m_borderText->isChecked(), m_transparentText->isChecked(),
                              m_textRotation->currentIndex());
 }
 
-void ImageEffect_InsertText::finalRendering()
+void InsertTextTool::finalRendering()
 {
-    accept();
     kapp->setOverrideCursor( Qt::WaitCursor );
 
-    Digikam::ImageIface iface(0, 0);
-    Digikam::DImg dest = m_previewWidget->makeInsertText();
+    ImageIface iface(0, 0);
+    DImg dest = m_previewWidget->makeInsertText();
     iface.putOriginalImage(i18n("Insert Text"), dest.bits(), dest.width(), dest.height());
 
     kapp->restoreOverrideCursor();

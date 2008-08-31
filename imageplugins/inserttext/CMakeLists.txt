@@ -1,7 +1,7 @@
 
 SET(digikamimageplugin_inserttext_PART_SRCS inserttextwidget.cpp
                                             imageplugin_inserttext.cpp
-                                            imageeffect_inserttext.cpp
+                                            inserttexttool.cpp
    )
 
 

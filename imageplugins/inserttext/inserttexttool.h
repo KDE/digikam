@@ -5,24 +5,24 @@
  *
  * Date        : 2005-02-14
  * Description : a plugin to insert a text over an image.
- * 
+ *
  * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_INSERTEXT_H
-#define IMAGEEFFECT_INSERTEXT_H
+#ifndef INSERTEXTTOOL_H
+#define INSERTEXTTOOL_H
 
 // Qt includes.
 
@@ -31,7 +31,7 @@
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 
 class QFont;
 class QButtonGroup;
@@ -47,14 +47,14 @@ namespace DigikamInsertTextImagesPlugin
 
 class InsertTextWidget;
 
-class ImageEffect_InsertText : public Digikam::ImageDlgBase
+class InsertTextTool : public Digikam::EditorTool
 {
     Q_OBJECT
-    
+
 public:
 
-    ImageEffect_InsertText(QWidget *parent);
-    ~ImageEffect_InsertText();
+    InsertTextTool(QObject *parent);
+    ~InsertTextTool();
 
 signals:
 
@@ -62,40 +62,42 @@ signals:
 
 private slots:
 
+    void slotResetSettings();
     void slotFontPropertiesChanged(const QFont &font);
     void slotUpdatePreview();
     void slotAlignModeChanged(int mode);
 
 private:
 
-    void readUserSettings();
-    void writeUserSettings();
-    void resetValues();
-    void finalRendering();    
+    void readSettings();
+    void writeSettings();
+    void finalRendering();
 
 private:
-    
-    int               m_alignTextMode;
-    int               m_defaultSizeFont;
-        
-    QComboBox        *m_textRotation;
-    
-    QCheckBox        *m_borderText;    
-    QCheckBox        *m_transparentText;
-    
-    QButtonGroup     *m_alignButtonGroup;
-        
-    QFont             m_textFont;
-    
-    KColorButton     *m_fontColorButton;
-    
-    KFontChooser     *m_fontChooserWidget;
-    
-    KTextEdit        *m_textEdit;
-    
-    InsertTextWidget *m_previewWidget;
+
+    int                          m_alignTextMode;
+    int                          m_defaultSizeFont;
+
+    QComboBox                   *m_textRotation;
+
+    QCheckBox                   *m_borderText;
+    QCheckBox                   *m_transparentText;
+
+    QButtonGroup                *m_alignButtonGroup;
+
+    QFont                        m_textFont;
+
+    KColorButton                *m_fontColorButton;
+
+    KFontChooser                *m_fontChooserWidget;
+
+    KTextEdit                   *m_textEdit;
+
+    InsertTextWidget            *m_previewWidget;
+
+    Digikam::EditorToolSettings *m_gboxSettings;
 };
 
 }  // NameSpace DigikamInsertTextImagesPlugin
 
-#endif /* IMAGEEFFECT_INSERTEXT_H */
+#endif /* INSERTEXTTOOL_H */

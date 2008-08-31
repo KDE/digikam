@@ -34,9 +34,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_inserttext.h"
+#include "inserttexttool.h"
 #include "imageplugin_inserttext.h"
 #include "imageplugin_inserttext.moc"
+
+using namespace DigikamInsertTextImagesPlugin;
 
 K_PLUGIN_FACTORY( InsertTextFactory, registerPlugin<ImagePlugin_InsertText>(); )
 K_EXPORT_PLUGIN ( InsertTextFactory("digikamimageplugin_inserttext") )
@@ -68,6 +70,6 @@ void ImagePlugin_InsertText::setEnabledActions(bool enable)
 
 void ImagePlugin_InsertText::slotInsertText()
 {
-    DigikamInsertTextImagesPlugin::ImageEffect_InsertText dlg(kapp->activeWindow());
-    dlg.exec();
+    InsertTextTool *tool = new InsertTextTool(kapp->activeWindow());
+    loadTool(tool);
 }
