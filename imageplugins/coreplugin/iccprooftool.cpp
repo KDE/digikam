@@ -120,6 +120,8 @@ ICCProofTool::ICCProofTool(QObject* parent)
     // -------------------------------------------------------------------
 
     m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Load|
+                                            EditorToolSettings::SaveAs|
                                             EditorToolSettings::Ok|
                                             EditorToolSettings::Cancel);
 
@@ -1180,10 +1182,10 @@ bool ICCProofTool::useDefaultProofProfile()
 
 //-- Load all settings from file --------------------------------------
 
-void ICCProofTool::slotUser3()
+void ICCProofTool::slotLoadSettings()
 {
     KURL loadColorManagementFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
-                                                           QString("*"), 0,
+                                                           QString("*"), kapp->activeWindow(),
                                                            QString(i18n("Color Management Settings File to Load")));
     if (loadColorManagementFile.isEmpty())
         return;
@@ -1257,10 +1259,10 @@ void ICCProofTool::slotUser3()
 
 //-- Save all settings to file ---------------------------------------
 
-void ICCProofTool::slotUser2()
+void ICCProofTool::slotSaveAsSettings()
 {
     KURL saveColorManagementFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
-                                                QString( "*" ), 0,
+                                                QString( "*" ), kapp->activeWindow(),
                                                 QString(i18n("Color Management Settings File to Save")));
     if (saveColorManagementFile.isEmpty())
         return;
