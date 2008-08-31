@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
- * Original Distortion algorithms copyrighted 2004-2005 by 
+ * Original Distortion algorithms copyrighted 2004-2005 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
  *
  * This program is free software; you can redistribute it
@@ -22,7 +22,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * ============================================================ */ 
+ * ============================================================ */
 
 // KDE includes.
 
@@ -37,9 +37,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_distortionfx.h"
+#include "distortionfxtool.h"
 #include "imageplugin_distortionfx.h"
 #include "imageplugin_distortionfx.moc"
+
+using namespace DigikamDistortionFXImagesPlugin;
 
 K_PLUGIN_FACTORY( DistortionFXFactory, registerPlugin<ImagePlugin_DistortionFX>(); )
 K_EXPORT_PLUGIN ( DistortionFXFactory("digikamimageplugin_distortionfx") )
@@ -50,7 +52,7 @@ ImagePlugin_DistortionFX::ImagePlugin_DistortionFX(QObject *parent, const QVaria
     m_distortionfxAction  = new KAction(KIcon("distortionfx"), i18n("Distortion Effects..."), this);
     actionCollection()->addAction("imageplugin_distortionfx", m_distortionfxAction );
 
-    connect(m_distortionfxAction, SIGNAL(triggered(bool) ), 
+    connect(m_distortionfxAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotDistortionFX()));
 
     setXMLFile( "digikamimageplugin_distortionfx_ui.rc" );
@@ -69,6 +71,6 @@ void ImagePlugin_DistortionFX::setEnabledActions(bool enable)
 
 void ImagePlugin_DistortionFX::slotDistortionFX()
 {
-    DigikamDistortionFXImagesPlugin::ImageEffect_DistortionFX dlg(kapp->activeWindow());
-    dlg.exec();
+    DistortionFXTool *tool = new DistortionFXTool(kapp->activeWindow());
+    loadTool(tool);
 }

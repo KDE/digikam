@@ -1,6 +1,6 @@
 
 SET(digikamimageplugin_distortionfx_PART_SRCS imageplugin_distortionfx.cpp
-                                              imageeffect_distortionfx.cpp
+                                              distortionfxtool.cpp
                                               distortionfx.cpp
    )
 

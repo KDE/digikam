@@ -25,43 +25,48 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_DISTORTIONFX_H
-#define IMAGEEFFECT_DISTORTIONFX_H
+#ifndef DISTORTIONFXTOOL_H
+#define DISTORTIONFXTOOL_H
 
 // Digikam includes.
 
-#include "imageguidedlg.h"
+#include "editortool.h"
 
-class QComboBox;
 class QLabel;
-
-class KIntNumInput;
 
 namespace KDcrawIface
 {
+class RComboBox;
+class RIntNumInput;
+}
+
+namespace Digikam
+{
+class EditorToolSettings;
+class ImageWidget;
 }
 
 namespace DigikamDistortionFXImagesPlugin
 {
 
-class ImageEffect_DistortionFX : public Digikam::ImageGuideDlg
+class DistortionFXTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_DistortionFX(QWidget *parent);
-    ~ImageEffect_DistortionFX();
+    DistortionFXTool(QObject *parent);
+    ~DistortionFXTool();
 
 private slots:
 
     void slotEffectTypeChanged(int type);
-    void readUserSettings();
+    void slotResetSettings();
 
 private:
 
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
@@ -70,16 +75,20 @@ private:
 
 private:
 
-    QComboBox    *m_effectType;
+    QLabel                      *m_effectTypeLabel;
+    QLabel                      *m_levelLabel;
+    QLabel                      *m_iterationLabel;
 
-    QLabel       *m_effectTypeLabel;
-    QLabel       *m_levelLabel;
-    QLabel       *m_iterationLabel;
+    KDcrawIface::RComboBox      *m_effectType;
 
-    KIntNumInput *m_levelInput;
-    KIntNumInput *m_iterationInput;
+    KDcrawIface::RIntNumInput   *m_levelInput;
+    KDcrawIface::RIntNumInput   *m_iterationInput;
+
+    Digikam::ImageWidget        *m_previewWidget;
+
+    Digikam::EditorToolSettings *m_gboxSettings;
 };
 
 }  // NameSpace DigikamDistortionFXImagesPlugin
 
-#endif /* IMAGEEFFECT_DISTORTIONFX_H */
+#endif /* DISTORTIONFXTOOL_H */

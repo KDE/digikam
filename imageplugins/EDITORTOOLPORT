@@ -27,7 +27,7 @@ lenscorrection
   \---autocorrection        ImageGuideDlg       A               DONE
   \---distortion            ImageGuideDlg       A               DONE
 border                      ImageGuideDlg       DONE            DONE
-distortionfx                ImageGuideDlg       A
+distortionfx                ImageGuideDlg       DONE            DONE
 freerotation                ImageGuideDlg                       DONE
 inpainting                  ImageGuideDlg       A               DONE
 raindrop                    ImageGuideDlg       A
