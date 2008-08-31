@@ -43,8 +43,8 @@
 #include "bcgtool.h"
 #include "bwsepiatool.h"
 #include "hsltool.h"
+#include "iccprooftool.h"
 #include "imageeffect_blur.h"
-#include "imageeffect_iccproof.h"
 #include "imageeffect_ratiocrop.h"
 #include "imageeffect_sharpen.h"
 #include "redeyetool.h"
@@ -281,8 +281,8 @@ void ImagePlugin_Core::slotRedEye()
 
 void ImagePlugin_Core::slotColorManagement()
 {
-    ImageEffect_ICCProof dlg(kapp->activeWindow());
-    dlg.exec();
+    ICCProofTool *tool = new ICCProofTool(kapp->activeWindow());
+    loadTool(tool);
 }
 
 void ImagePlugin_Core::slotBW()

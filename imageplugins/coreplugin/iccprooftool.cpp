@@ -71,62 +71,71 @@
 
 // Digikam includes.
 
-#include "ddebug.h"
 #include "bcgmodifier.h"
-#include "imageiface.h"
-#include "imagewidget.h"
-#include "imagehistogram.h"
-#include "imagecurves.h"
-#include "curveswidget.h"
-#include "histogramwidget.h"
 #include "colorgradientwidget.h"
+#include "curveswidget.h"
+#include "ddebug.h"
 #include "dimg.h"
 #include "dimgimagefilters.h"
+#include "editortoolsettings.h"
+#include "histogramwidget.h"
 #include "iccpreviewwidget.h"
-#include "icctransform.h"
 #include "iccprofileinfodlg.h"
+#include "icctransform.h"
+#include "imagecurves.h"
+#include "imagehistogram.h"
+#include "imageiface.h"
+#include "imagewidget.h"
 
 // Local includes.
 
-#include "imageeffect_iccproof.h"
-#include "imageeffect_iccproof.moc"
+#include "iccprooftool.h"
+#include "iccprooftool.moc"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
 
-ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
-                    : Digikam::ImageDlgBase(parent,i18n("Color Management"),
-                                            "colormanagement", true, false)
+ICCProofTool::ICCProofTool(QObject* parent)
+            : EditorTool(parent)
 {
+    setObjectName("colormanagement");
+    setToolName(i18n("Color Management"));
+    setToolIcon(SmallIcon("colormanagement"));
+
     m_destinationPreviewData = 0;
     m_cmEnabled              = true;
     m_hasICC                 = false;
 
-    setHelp("colormanagement.anchor", "digikam");
-
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
     m_originalImage = iface.getOriginalImg();
     m_embeddedICC   = iface.getEmbeddedICCFromOriginalImage();
 
-    m_previewWidget = new Digikam::ImageWidget("colormanagement Tool Dialog", mainWidget(),
-                                               i18n("<p>Here you can see the image preview after "
-                                                    "applying a color profile</p>"));
-    setPreviewAreaWidget(m_previewWidget);
+    m_previewWidget = new ImageWidget("colormanagement Tool",0,
+                                      i18n("<p>Here you can see the image preview after "
+                                           "applying a color profile</p>"));
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------------
 
-    QWidget *gboxSettings     = new QWidget(mainWidget());
-    QGridLayout *gridSettings = new QGridLayout( gboxSettings );
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Load|
+                                            EditorToolSettings::SaveAs|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel);
 
-    QLabel *label1 = new QLabel(i18n("Channel: "), gboxSettings);
+
+    QGridLayout *gridSettings = new QGridLayout(m_gboxSettings->plainPage());
+
+    QLabel *label1 = new QLabel(i18n("Channel: "), m_gboxSettings->plainPage());
     label1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_channelCB = new QComboBox( gboxSettings );
-    m_channelCB->addItem( i18n("Luminosity") );
-    m_channelCB->addItem( i18n("Red") );
-    m_channelCB->addItem( i18n("Green") );
-    m_channelCB->addItem( i18n("Blue") );
+    m_channelCB = new QComboBox(m_gboxSettings->plainPage());
+    m_channelCB->addItem(i18n("Luminosity"));
+    m_channelCB->addItem(i18n("Red"));
+    m_channelCB->addItem(i18n("Green"));
+    m_channelCB->addItem(i18n("Blue"));
     m_channelCB->setWhatsThis( i18n("<p>Select the histogram channel to display:<p>"
                                     "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                     "<b>Red</b>: display the red image-channel values.<p>"
@@ -135,7 +144,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QWidget *scaleBox = new QWidget(gboxSettings);
+    QWidget *scaleBox = new QWidget(m_gboxSettings->plainPage());
     QHBoxLayout *hlay = new QHBoxLayout(scaleBox);
     m_scaleBG         = new QButtonGroup(scaleBox);
     scaleBox->setWhatsThis(i18n("<p>Select the histogram scale.<p>"
@@ -143,17 +152,17 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                 "Logarithmic scale can be used when the maximal counts are big; "
                                 "if it is used, all values (small and large) will be visible on the graph."));
 
-    QToolButton *linHistoButton = new QToolButton( scaleBox );
-    linHistoButton->setToolTip( i18n( "<p>Linear" ) );
+    QToolButton *linHistoButton = new QToolButton(scaleBox);
+    linHistoButton->setToolTip(i18n("<p>Linear"));
     linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
     linHistoButton->setCheckable(true);
-    m_scaleBG->addButton(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
+    m_scaleBG->addButton(linHistoButton, HistogramWidget::LinScaleHistogram);
 
-    QToolButton *logHistoButton = new QToolButton( scaleBox );
-    logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
+    QToolButton *logHistoButton = new QToolButton(scaleBox);
+    logHistoButton->setToolTip(i18n("<p>Logarithmic"));
     logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
     logHistoButton->setCheckable(true);
-    m_scaleBG->addButton(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    m_scaleBG->addButton(logHistoButton, HistogramWidget::LogScaleHistogram);
 
     hlay->setMargin(0);
     hlay->setSpacing(0);
@@ -171,20 +180,19 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    KVBox *histoBox   = new KVBox(gboxSettings);
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
+    KVBox *histoBox   = new KVBox(m_gboxSettings->plainPage());
+    m_histogramWidget = new HistogramWidget(256, 140, histoBox, false, true, true);
     m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram "
                                           "of the selected image channel. "
                                           "This one is updated after setting changes."));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);
-    m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10,
-                                                    histoBox );
-    m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+    m_hGradient = new ColorGradientWidget(ColorGradientWidget::Horizontal, 10, histoBox);
+    m_hGradient->setColors(QColor("black"), QColor("white"));
 
     // -------------------------------------------------------------
 
-    m_toolBoxWidgets         = new QToolBox(gboxSettings);
+    m_toolBoxWidgets         = new QToolBox(m_gboxSettings->plainPage());
     QWidget *generalOptions  = new QWidget(m_toolBoxWidgets);
     QWidget *inProfiles      = new QWidget(m_toolBoxWidgets);
     QWidget *spaceProfiles   = new QWidget(m_toolBoxWidgets);
@@ -265,16 +273,16 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     lcmsLogoLabel->setPixmap( QPixmap( KStandardDirs::locate("data", "digikam/data/logo-lcms.png" ) ));
     lcmsLogoLabel->setToolTip(i18n("Visit Little CMS project website"));
 
-    zeroPageLayout->addWidget(m_doSoftProofBox, 0, 0, 1, 1);
-    zeroPageLayout->addWidget(m_checkGamutBox, 1, 0, 1, 1);
-    zeroPageLayout->addWidget(m_embeddProfileBox, 2, 0, 1, 1);
-    zeroPageLayout->addWidget(lcmsLogoLabel, 0, 1, 3, 1);
-    zeroPageLayout->addWidget(m_BPCBox, 3, 0, 1, 1);
-    zeroPageLayout->addWidget(intent, 4, 0, 1, 1);
+    zeroPageLayout->addWidget(m_doSoftProofBox,     0, 0, 1, 1);
+    zeroPageLayout->addWidget(m_checkGamutBox,      1, 0, 1, 1);
+    zeroPageLayout->addWidget(m_embeddProfileBox,   2, 0, 1, 1);
+    zeroPageLayout->addWidget(lcmsLogoLabel,        0, 1, 3, 1);
+    zeroPageLayout->addWidget(m_BPCBox,             3, 0, 1, 1);
+    zeroPageLayout->addWidget(intent,               4, 0, 1, 1);
     zeroPageLayout->addWidget(m_renderingIntentsCB, 4, 1, 1, 1);
     zeroPageLayout->setRowStretch(5, 10);
-    zeroPageLayout->setMargin(spacingHint());
-    zeroPageLayout->setSpacing(spacingHint());
+    zeroPageLayout->setMargin(m_gboxSettings->spacingHint());
+    zeroPageLayout->setSpacing(m_gboxSettings->spacingHint());
 
     //---------- "Input" Page Setup ----------------------------------
 
@@ -317,7 +325,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_inProfilesPath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
 
     KFileDialog *inProfiles_dialog = m_inProfilesPath->fileDialog();
-    m_iccInPreviewWidget = new Digikam::ICCPreviewWidget(inProfiles_dialog);
+    m_iccInPreviewWidget = new ICCPreviewWidget(inProfiles_dialog);
     inProfiles_dialog->setPreviewWidget(m_iccInPreviewWidget);
 
     QPushButton *inProfilesInfo = new QPushButton(i18n("Info..."), inProfiles);
@@ -336,17 +344,17 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     infoGrid->addWidget(make2,  0, 1, 1, 1);
     infoGrid->addWidget(model1, 1, 0, 1, 1);
     infoGrid->addWidget(model2, 1, 1, 1, 1);
-    infoGrid->setMargin(spacingHint());
+    infoGrid->setMargin(m_gboxSettings->spacingHint());
     infoGrid->setSpacing(0);
 
-    firstPageLayout->addWidget(box1, 0, 0, 2, 1);
-    firstPageLayout->addWidget(inProfilesInfo, 0, 2, 1, 1);
-    firstPageLayout->addWidget(m_inProfilesPath, 2, 0, 1, 3 );
-    firstPageLayout->addWidget(pictureInfo, 3, 0, 1, 3 );
+    firstPageLayout->addWidget(box1,                0, 0, 2, 1);
+    firstPageLayout->addWidget(inProfilesInfo,      0, 2, 1, 1);
+    firstPageLayout->addWidget(m_inProfilesPath,    2, 0, 1, 3 );
+    firstPageLayout->addWidget(pictureInfo,         3, 0, 1, 3 );
     firstPageLayout->setColumnStretch(1, 10);
     firstPageLayout->setRowStretch(4, 10);
-    firstPageLayout->setMargin(spacingHint());
-    firstPageLayout->setSpacing(spacingHint());
+    firstPageLayout->setMargin(m_gboxSettings->spacingHint());
+    firstPageLayout->setSpacing(m_gboxSettings->spacingHint());
 
     //---------- "Workspace" Page Setup ---------------------------------
 
@@ -379,18 +387,18 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_spaceProfilePath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
 
     KFileDialog *spaceProfiles_dialog = m_spaceProfilePath->fileDialog();
-    m_iccSpacePreviewWidget = new Digikam::ICCPreviewWidget(spaceProfiles_dialog);
+    m_iccSpacePreviewWidget = new ICCPreviewWidget(spaceProfiles_dialog);
     spaceProfiles_dialog->setPreviewWidget(m_iccSpacePreviewWidget);
 
     QPushButton *spaceProfilesInfo = new QPushButton(i18n("Info..."), box2);
 
-    secondPageLayout->addWidget(box2, 0, 0, 2, 1);
-    secondPageLayout->addWidget(spaceProfilesInfo, 0, 2, 1, 1);
+    secondPageLayout->addWidget(box2,               0, 0, 2, 1);
+    secondPageLayout->addWidget(spaceProfilesInfo,  0, 2, 1, 1);
     secondPageLayout->addWidget(m_spaceProfilePath, 2, 0, 1, 3 );
     secondPageLayout->setColumnStretch(1, 10);
     secondPageLayout->setRowStretch(3, 10);
-    secondPageLayout->setMargin(spacingHint());
-    secondPageLayout->setSpacing(spacingHint());
+    secondPageLayout->setMargin(m_gboxSettings->spacingHint());
+    secondPageLayout->setSpacing(m_gboxSettings->spacingHint());
 
     //---------- "Proofing" Page Setup ---------------------------------
 
@@ -423,18 +431,18 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_proofProfilePath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
 
     KFileDialog *proofProfiles_dialog = m_proofProfilePath->fileDialog();
-    m_iccProofPreviewWidget = new Digikam::ICCPreviewWidget(proofProfiles_dialog);
+    m_iccProofPreviewWidget = new ICCPreviewWidget(proofProfiles_dialog);
     proofProfiles_dialog->setPreviewWidget(m_iccProofPreviewWidget);
 
     QPushButton *proofProfilesInfo = new QPushButton(i18n("Info..."), box3);
 
-    thirdPageLayout->addWidget(box3, 0, 0, 2, 1);
-    thirdPageLayout->addWidget(proofProfilesInfo, 0, 2, 1, 1);
-    thirdPageLayout->addWidget(m_proofProfilePath, 2, 0, 1, 3 );
+    thirdPageLayout->addWidget(box3,                0, 0, 2, 1);
+    thirdPageLayout->addWidget(proofProfilesInfo,   0, 2, 1, 1);
+    thirdPageLayout->addWidget(m_proofProfilePath,  2, 0, 1, 3 );
     thirdPageLayout->setColumnStretch(1, 10);
     thirdPageLayout->setRowStretch(3, 10);
-    thirdPageLayout->setMargin(spacingHint());
-    thirdPageLayout->setSpacing(spacingHint());
+    thirdPageLayout->setMargin(m_gboxSettings->spacingHint());
+    thirdPageLayout->setSpacing(m_gboxSettings->spacingHint());
 
     //---------- "Lightness" Page Setup ----------------------------------
 
@@ -444,15 +452,15 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     QGridLayout *fourPageLayout = new QGridLayout( lightnessadjust );
 
-    Digikam::ColorGradientWidget* vGradient = new Digikam::ColorGradientWidget(
-                                                  Digikam::ColorGradientWidget::Vertical,
+    ColorGradientWidget* vGradient = new ColorGradientWidget(
+                                                  ColorGradientWidget::Vertical,
                                                   10, lightnessadjust );
     vGradient->setColors( QColor( "white" ), QColor( "black" ) );
 
     QLabel *spacev = new QLabel(lightnessadjust);
     spacev->setFixedWidth(1);
 
-    m_curvesWidget = new Digikam::CurvesWidget(256, 192, m_originalImage->bits(), m_originalImage->width(),
+    m_curvesWidget = new CurvesWidget(256, 192, m_originalImage->bits(), m_originalImage->width(),
                                                m_originalImage->height(), m_originalImage->sixteenBit(),
                                                lightnessadjust);
     m_curvesWidget->setWhatsThis( i18n("<p>This is the curve adjustment of the image luminosity"));
@@ -460,8 +468,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QLabel *spaceh = new QLabel(lightnessadjust);
     spaceh->setFixedHeight(1);
 
-    Digikam::ColorGradientWidget *hGradient = new Digikam::ColorGradientWidget(
-                                                  Digikam::ColorGradientWidget::Horizontal,
+    ColorGradientWidget *hGradient = new ColorGradientWidget(
+                                                  ColorGradientWidget::Horizontal,
                                                   10, lightnessadjust );
     hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
@@ -472,27 +480,27 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_cInput->setDefaultValue(0);
     m_cInput->setWhatsThis( i18n("<p>Set here the contrast adjustment of the image."));
 
-    fourPageLayout->addWidget(vGradient, 0, 0, 1, 1);
-    fourPageLayout->addWidget(spacev, 0, 1, 1, 1);
-    fourPageLayout->addWidget(m_curvesWidget, 0, 2, 1, 1);
-    fourPageLayout->addWidget(spaceh, 1, 2, 1, 1);
-    fourPageLayout->addWidget(hGradient, 2, 2, 1, 1);
-    fourPageLayout->addWidget(m_cInput, 4, 0, 1, 3 );
-    fourPageLayout->setRowMinimumHeight(3, spacingHint());
+    fourPageLayout->addWidget(vGradient,        0, 0, 1, 1);
+    fourPageLayout->addWidget(spacev,           0, 1, 1, 1);
+    fourPageLayout->addWidget(m_curvesWidget,   0, 2, 1, 1);
+    fourPageLayout->addWidget(spaceh,           1, 2, 1, 1);
+    fourPageLayout->addWidget(hGradient,        2, 2, 1, 1);
+    fourPageLayout->addWidget(m_cInput,         4, 0, 1, 3 );
+    fourPageLayout->setRowMinimumHeight(3, m_gboxSettings->spacingHint());
     fourPageLayout->setRowStretch(5, 10);
-    fourPageLayout->setMargin(spacingHint());
+    fourPageLayout->setMargin(m_gboxSettings->spacingHint());
     fourPageLayout->setSpacing(0);
 
     // -------------------------------------------------------------
 
-    gridSettings->addLayout(l1, 0, 0, 1, 3 );
-    gridSettings->addWidget(histoBox, 1, 0, 2, 3 );
-    gridSettings->addWidget(m_toolBoxWidgets, 3, 0, 1, 3 );
-    gridSettings->setMargin(spacingHint());
-    gridSettings->setSpacing(spacingHint());
+    gridSettings->addLayout(l1,                 0, 0, 1, 3 );
+    gridSettings->addWidget(histoBox,           1, 0, 2, 3 );
+    gridSettings->addWidget(m_toolBoxWidgets,   3, 0, 1, 3 );
+    gridSettings->setMargin(m_gboxSettings->spacingHint());
+    gridSettings->setSpacing(m_gboxSettings->spacingHint());
 
-    setUserAreaWidget(gboxSettings);
-    enableButtonOk(false);
+    setToolSettings(m_gboxSettings);
+    m_gboxSettings->enableButton(EditorToolSettings::Ok, false);
 
     // -------------------------------------------------------------
 
@@ -570,14 +578,14 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
             this, SLOT(slotProofICCInfo()));
 }
 
-ImageEffect_ICCProof::~ImageEffect_ICCProof()
+ICCProofTool::~ICCProofTool()
 {
     m_histogramWidget->stopHistogramComputation();
 
     delete [] m_destinationPreviewData;
 }
 
-void ImageEffect_ICCProof::readUserSettings()
+void ICCProofTool::readSettings()
 {
     QString defaultICCPath = KGlobalSettings::documentPath();
     KSharedConfig::Ptr config = KGlobal::config();
@@ -605,7 +613,7 @@ void ImageEffect_ICCProof::readUserSettings()
             QString message = i18n("The ICC profiles path seems to be invalid. You'll not be able to use \"Default profile\"\
                                     options.<p>Please fix this in digiKam ICC setup.");
             slotToggledWidgets( false );
-            KMessageBox::information(this, message);
+            KMessageBox::information(kapp->activeWindow(), message);
         }
     }
 
@@ -629,7 +637,7 @@ void ImageEffect_ICCProof::readUserSettings()
     for (int i = 0 ; i < 5 ; i++)
         m_curvesWidget->curves()->curvesChannelReset(i);
 
-    m_curvesWidget->curves()->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
+    m_curvesWidget->curves()->setCurveType(m_curvesWidget->m_channelType, ImageCurves::CURVE_SMOOTH);
     m_curvesWidget->reset();
 
     for (int j = 0 ; j < 17 ; j++)
@@ -643,7 +651,7 @@ void ImageEffect_ICCProof::readUserSettings()
             p.setY(p.y()*255);
         }
 
-        m_curvesWidget->curves()->setCurvePoint(Digikam::ImageHistogram::ValueChannel, j, p);
+        m_curvesWidget->curves()->setCurvePoint(ImageHistogram::ValueChannel, j, p);
     }
 
     for (int i = 0 ; i < 5 ; i++)
@@ -653,7 +661,7 @@ void ImageEffect_ICCProof::readUserSettings()
     slotScaleChanged(m_scaleBG->checkedId());
 }
 
-void ImageEffect_ICCProof::writeUserSettings()
+void ICCProofTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("colormanagement Tool Dialog");
@@ -675,7 +683,7 @@ void ImageEffect_ICCProof::writeUserSettings()
 
     for (int j = 0 ; j < 17 ; j++)
     {
-        QPoint p = m_curvesWidget->curves()->getCurvePoint(Digikam::ImageHistogram::ValueChannel, j);
+        QPoint p = m_curvesWidget->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
 
         if (m_originalImage->sixteenBit() && p.x() != -1)
         {
@@ -689,42 +697,42 @@ void ImageEffect_ICCProof::writeUserSettings()
     group.sync();
 }
 
-void ImageEffect_ICCProof::processLCMSUrl(const QString& url)
+void ICCProofTool::processLCMSUrl(const QString& url)
 {
     KToolInvocation::invokeBrowser(url);
 }
 
-void ImageEffect_ICCProof::slotSpotColorChanged(const Digikam::DColor &color)
+void ICCProofTool::slotSpotColorChanged(const DColor &color)
 {
     m_curvesWidget->setCurveGuide(color);
 }
 
-void ImageEffect_ICCProof::slotColorSelectedFromTarget( const Digikam::DColor &color )
+void ICCProofTool::slotColorSelectedFromTarget( const DColor &color )
 {
     m_histogramWidget->setHistogramGuideByColor(color);
 }
 
-void ImageEffect_ICCProof::slotChannelChanged( int channel )
+void ICCProofTool::slotChannelChanged( int channel )
 {
     switch(channel)
     {
         case LuminosityChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
+            m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
             break;
 
         case RedChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
+            m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
             break;
 
         case GreenChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
+            m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
             break;
 
         case BlueChannel:
-            m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
+            m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
             break;
     }
@@ -732,13 +740,13 @@ void ImageEffect_ICCProof::slotChannelChanged( int channel )
     m_histogramWidget->repaint();
 }
 
-void ImageEffect_ICCProof::slotScaleChanged( int scale )
+void ICCProofTool::slotScaleChanged( int scale )
 {
     m_histogramWidget->m_scaleType = scale;
     m_histogramWidget->repaint();
 }
 
-void ImageEffect_ICCProof::resetValues()
+void ICCProofTool::slotResetSettings()
 {
     m_cInput->blockSignals(true);
     m_cInput->slotReset();
@@ -748,27 +756,29 @@ void ImageEffect_ICCProof::resetValues()
 
     m_curvesWidget->reset();
     m_cInput->blockSignals(false);
+
+    slotEffect();
 }
 
-void ImageEffect_ICCProof::slotEffect()
+void ICCProofTool::slotEffect()
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
-    enableButtonOk(true);
+    m_gboxSettings->enableButton(EditorToolSettings::Ok, true);
     m_histogramWidget->stopHistogramComputation();
 
-    Digikam::IccTransform transform;
+    IccTransform transform;
 
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 
-    Digikam::ImageIface *iface = m_previewWidget->imageIface();
+    ImageIface *iface = m_previewWidget->imageIface();
     m_destinationPreviewData   = iface->getPreviewImage();
     int  w                     = iface->previewWidth();
     int  h                     = iface->previewHeight();
     bool a                     = iface->previewHasAlpha();
     bool sb                    = iface->previewSixteenBit();
 
-    Digikam::DImg preview(w, h, sb, a, m_destinationPreviewData);
+    DImg preview(w, h, sb, a, m_destinationPreviewData);
 
     QString tmpInPath    = QString();
     QString tmpProofPath = QString();
@@ -789,8 +799,9 @@ void ImageEffect_ICCProof::slotEffect()
         QFileInfo info(tmpInPath);
         if (!info.exists() || !info.isReadable() || !info.isFile() )
         {
-            KMessageBox::information(this, i18n("<p>The selected ICC input profile path seems to be invalid.<p>"
-                                                "Please check it."));
+            KMessageBox::information(kapp->activeWindow(),
+                                     i18n("<p>The selected ICC input profile path seems to be invalid.<p>"
+                                          "Please check it."));
             return;
         }
     }
@@ -807,8 +818,9 @@ void ImageEffect_ICCProof::slotEffect()
         QFileInfo info(tmpProofPath);
         if (!info.exists() || !info.isReadable() || !info.isFile() )
         {
-            KMessageBox::information(this, i18n("<p>The selected ICC proof profile path seems to be invalid.<p>"
-                                                "Please check it."));
+            KMessageBox::information(kapp->activeWindow(),
+                                     i18n("<p>The selected ICC proof profile path seems to be invalid.<p>"
+                                          "Please check it."));
             return;
         }
     }
@@ -828,8 +840,9 @@ void ImageEffect_ICCProof::slotEffect()
         QFileInfo info(tmpSpacePath);
         if (!info.exists() || !info.isReadable() || !info.isFile() )
         {
-            KMessageBox::information(this, i18n("<p>The selected ICC workspace profile path seems to be invalid.<p>"
-                                                "Please check it."));
+            KMessageBox::information(kapp->activeWindow(),
+                                     i18n("<p>The selected ICC workspace profile path seems to be invalid.<p>"
+                                          "Please check it."));
             return;
         }
     }
@@ -872,8 +885,8 @@ void ImageEffect_ICCProof::slotEffect()
                         "<li>A \"Workspace\" profile.</li></ul>"
                         "<p>If you want to do a \"soft-proof\" transform, in addition to these profiles "
                         "you need a \"Proof\" profile.</p>");
-        KMessageBox::information(this, error);
-        enableButtonOk(false);
+        KMessageBox::information(kapp->activeWindow(), error);
+        m_gboxSettings->enableButton(EditorToolSettings::Ok, false);
     }
     else
     {
@@ -891,13 +904,13 @@ void ImageEffect_ICCProof::slotEffect()
 
         //-- Calculate and apply the curve on image after transformation -------------
 
-        Digikam::DImg preview2(w, h, sb, a, 0, false);
-        m_curvesWidget->curves()->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
+        DImg preview2(w, h, sb, a, 0, false);
+        m_curvesWidget->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
         m_curvesWidget->curves()->curvesLutProcess(preview.bits(), preview2.bits(), w, h);
 
         //-- Adjust contrast ---------------------------------------------------------
 
-        Digikam::BCGModifier cmod;
+        BCGModifier cmod;
         cmod.setContrast((double)(m_cInput->value()/100.0) + 1.00);
         cmod.applyBCG(preview2);
 
@@ -912,13 +925,13 @@ void ImageEffect_ICCProof::slotEffect()
     }
 }
 
-void ImageEffect_ICCProof::finalRendering()
+void ICCProofTool::finalRendering()
 {
     if (!m_doSoftProofBox->isChecked())
     {
         kapp->setOverrideCursor( Qt::WaitCursor );
 
-        Digikam::ImageIface *iface = m_previewWidget->imageIface();
+        ImageIface *iface = m_previewWidget->imageIface();
         uchar *data                = iface->getOriginalImage();
         int w                      = iface->originalWidth();
         int h                      = iface->originalHeight();
@@ -927,9 +940,9 @@ void ImageEffect_ICCProof::finalRendering()
 
         if (data)
         {
-            Digikam::IccTransform transform;
+            IccTransform transform;
 
-            Digikam::DImg img(w, h, sb, a, data);
+            DImg img(w, h, sb, a, data);
 
             QString tmpInPath;
             QString tmpProofPath;
@@ -948,8 +961,9 @@ void ImageEffect_ICCProof::finalRendering()
                 QFileInfo info(tmpInPath);
                 if (!info.exists() || !info.isReadable() || !info.isFile() )
                 {
-                    KMessageBox::information(this, i18n("<p>The selected ICC input profile path seems "
-                                                        "to be invalid.<p>Please check it."));
+                    KMessageBox::information(kapp->activeWindow(),
+                                             i18n("<p>The selected ICC input profile path seems "
+                                                  "to be invalid.<p>Please check it."));
                     return;
                 }
             }
@@ -966,8 +980,9 @@ void ImageEffect_ICCProof::finalRendering()
                 QFileInfo info(tmpProofPath);
                 if (!info.exists() || !info.isReadable() || !info.isFile() )
                 {
-                    KMessageBox::information(this, i18n("<p>The selected ICC proof profile path seems "
-                                                        "to be invalid.<p>Please check it."));
+                    KMessageBox::information(kapp->activeWindow(),
+                                             i18n("<p>The selected ICC proof profile path seems "
+                                                  "to be invalid.<p>Please check it."));
                     return;
                 }
             }
@@ -987,8 +1002,9 @@ void ImageEffect_ICCProof::finalRendering()
                 QFileInfo info(tmpSpacePath);
                 if (!info.exists() || !info.isReadable() || !info.isFile() )
                 {
-                    KMessageBox::information(this, i18n("<p>The selected ICC workspace profile path seems "
-                                                        "to be invalid.<p>Please check it."));
+                    KMessageBox::information(kapp->activeWindow(),
+                                             i18n("<p>The selected ICC workspace profile path seems "
+                                                  "to be invalid.<p>Please check it."));
                     return;
                 }
             }
@@ -1042,13 +1058,13 @@ void ImageEffect_ICCProof::finalRendering()
 
             //-- Calculate and apply the curve on image after transformation -------------
 
-            Digikam::DImg img2(w, h, sb, a, 0, false);
-            m_curvesWidget->curves()->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
+            DImg img2(w, h, sb, a, 0, false);
+            m_curvesWidget->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
             m_curvesWidget->curves()->curvesLutProcess(img.bits(), img2.bits(), w, h);
 
             //-- Adjust contrast ---------------------------------------------------------
 
-            Digikam::BCGModifier cmod;
+            BCGModifier cmod;
             cmod.setContrast((double)(m_cInput->value()/100.0) + 1.00);
             cmod.applyBCG(img2);
 
@@ -1058,18 +1074,16 @@ void ImageEffect_ICCProof::finalRendering()
 
         kapp->restoreOverrideCursor();
     }
-
-    accept();
 }
 
-void ImageEffect_ICCProof::slotToggledWidgets( bool t)
+void ICCProofTool::slotToggledWidgets( bool t)
 {
     m_useInDefaultProfile->setEnabled(t);
     m_useProofDefaultProfile->setEnabled(t);
     m_useSpaceDefaultProfile->setEnabled(t);
 }
 
-void ImageEffect_ICCProof::slotInICCInfo()
+void ICCProofTool::slotInICCInfo()
 {
     if (useEmbeddedProfile())
     {
@@ -1080,7 +1094,7 @@ void ImageEffect_ICCProof::slotInICCInfo()
         QString message = i18n("<p>You have selected the \"Default builtin sRGB profile\"</p>");
         message.append(i18n("<p>This profile is built on the fly, so there is no relevant information "
                             "about it.</p>"));
-        KMessageBox::information(this, message);
+        KMessageBox::information(kapp->activeWindow(), message);
     }
     else if (useDefaultInProfile())
     {
@@ -1092,7 +1106,7 @@ void ImageEffect_ICCProof::slotInICCInfo()
     }
 }
 
-void ImageEffect_ICCProof::slotProofICCInfo()
+void ICCProofTool::slotProofICCInfo()
 {
     if (useDefaultProofProfile())
     {
@@ -1104,7 +1118,7 @@ void ImageEffect_ICCProof::slotProofICCInfo()
     }
 }
 
-void ImageEffect_ICCProof::slotSpaceICCInfo()
+void ICCProofTool::slotSpaceICCInfo()
 {
     if (useDefaultSpaceProfile())
     {
@@ -1116,105 +1130,108 @@ void ImageEffect_ICCProof::slotSpaceICCInfo()
     }
 }
 
-void ImageEffect_ICCProof::getICCInfo(const QString& profile)
+void ICCProofTool::getICCInfo(const QString& profile)
 {
     if (profile.isEmpty())
     {
-        KMessageBox::error(this, i18n("Sorry, there is no selected profile"), i18n("Profile Error"));
+        KMessageBox::error(kapp->activeWindow(),
+                           i18n("Sorry, there is no selected profile"),
+                           i18n("Profile Error"));
         return;
     }
 
-    Digikam::ICCProfileInfoDlg infoDlg(this, profile);
+    ICCProfileInfoDlg infoDlg(kapp->activeWindow(), profile);
     infoDlg.exec();
 }
 
-void ImageEffect_ICCProof::getICCInfo(const QByteArray& profile)
+void ICCProofTool::getICCInfo(const QByteArray& profile)
 {
     if (profile.isNull())
     {
-        KMessageBox::error(this, i18n("Sorry, it seems there is no embedded profile"), i18n("Profile Error"));
+        KMessageBox::error(kapp->activeWindow(),
+                           i18n("Sorry, it seems there is no embedded profile"), i18n("Profile Error"));
         return;
     }
 
-    Digikam::ICCProfileInfoDlg infoDlg(this, QString(), profile);
+    ICCProfileInfoDlg infoDlg(kapp->activeWindow(), QString(), profile);
     infoDlg.exec();
 }
 
-void ImageEffect_ICCProof::slotCMDisabledWarning()
+void ICCProofTool::slotCMDisabledWarning()
 {
     if (!m_cmEnabled)
     {
         QString message = i18n("<p>You have not enabled Color Management in the digiKam preferences.</p>");
         message.append( i18n("<p>\"Use of default profile\" options will be disabled now.</p>"));
-        KMessageBox::information(this, message);
+        KMessageBox::information(kapp->activeWindow(), message);
         slotToggledWidgets(false);
     }
 }
 
 //-- General Tab ---------------------------
 
-bool ImageEffect_ICCProof::useBPC()
+bool ICCProofTool::useBPC()
 {
     return m_BPCBox->isChecked();
 }
 
-bool ImageEffect_ICCProof::doProof()
+bool ICCProofTool::doProof()
 {
     return m_doSoftProofBox->isChecked();
 }
 
-bool ImageEffect_ICCProof::checkGamut()
+bool ICCProofTool::checkGamut()
 {
     return m_checkGamutBox->isChecked();
 }
 
-bool ImageEffect_ICCProof::embedProfile()
+bool ICCProofTool::embedProfile()
 {
     return m_embeddProfileBox->isChecked();
 }
 
 //-- Input Tab ---------------------------
 
-bool ImageEffect_ICCProof::useEmbeddedProfile()
+bool ICCProofTool::useEmbeddedProfile()
 {
     return m_useEmbeddedProfile->isChecked();
 }
 
-bool ImageEffect_ICCProof::useBuiltinProfile()
+bool ICCProofTool::useBuiltinProfile()
 {
     return m_useSRGBDefaultProfile->isChecked();
 }
 
-bool ImageEffect_ICCProof::useDefaultInProfile()
+bool ICCProofTool::useDefaultInProfile()
 {
     return m_useInDefaultProfile->isChecked();
 }
 
-bool ImageEffect_ICCProof::useSelectedInProfile()
+bool ICCProofTool::useSelectedInProfile()
 {
     return m_useInSelectedProfile->isChecked();
 }
 
 //-- Workspace Tab ---------------------------
 
-bool ImageEffect_ICCProof::useDefaultSpaceProfile()
+bool ICCProofTool::useDefaultSpaceProfile()
 {
     return m_useSpaceDefaultProfile->isChecked();
 }
 
 //-- Proofing Tab ---------------------------
 
-bool ImageEffect_ICCProof::useDefaultProofProfile()
+bool ICCProofTool::useDefaultProofProfile()
 {
     return m_useProofDefaultProfile->isChecked();
 }
 
 //-- Load all settings from file --------------------------------------
 
-void ImageEffect_ICCProof::slotUser3()
+void ICCProofTool::slotLoadSettings()
 {
     KUrl loadColorManagementFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-                                                QString( "*" ), this,
+                                                QString( "*" ), kapp->activeWindow(),
                                                 QString( i18n("Color Management Settings File to Load")) );
     if( loadColorManagementFile.isEmpty() )
        return;
@@ -1227,7 +1244,7 @@ void ImageEffect_ICCProof::slotUser3()
 
         if ( stream.readLine() != "# Color Management Configuration File" )
         {
-           KMessageBox::error(this,
+           KMessageBox::error(kapp->activeWindow(),
                         i18n("\"%1\" is not a Color Management settings text file.",
                              loadColorManagementFile.fileName()));
            file.close();
@@ -1252,7 +1269,7 @@ void ImageEffect_ICCProof::slotUser3()
         for (int i = 0 ; i < 5 ; i++)
             m_curvesWidget->curves()->curvesChannelReset(i);
 
-        m_curvesWidget->curves()->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
+        m_curvesWidget->curves()->setCurveType(m_curvesWidget->m_channelType, ImageCurves::CURVE_SMOOTH);
         m_curvesWidget->reset();
 
         for (int j = 0 ; j < 17 ; j++)
@@ -1268,7 +1285,7 @@ void ImageEffect_ICCProof::slotUser3()
                 p.setY(p.y()*255);
             }
 
-            m_curvesWidget->curves()->setCurvePoint(Digikam::ImageHistogram::ValueChannel, j, p);
+            m_curvesWidget->curves()->setCurvePoint(ImageHistogram::ValueChannel, j, p);
         }
 
         blockSignals(false);
@@ -1280,17 +1297,18 @@ void ImageEffect_ICCProof::slotUser3()
         slotEffect();
     }
     else
-        KMessageBox::error(this, i18n("Cannot load settings from the Color Management text file."));
+        KMessageBox::error(kapp->activeWindow(),
+                           i18n("Cannot load settings from the Color Management text file."));
 
     file.close();
 }
 
 //-- Save all settings to file ---------------------------------------
 
-void ImageEffect_ICCProof::slotUser2()
+void ICCProofTool::slotSaveAsSettings()
 {
     KUrl saveColorManagementFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-                                                QString( "*" ), this,
+                                                QString( "*" ), kapp->activeWindow(),
                                                 QString( i18n("Color Management Settings File to Save")) );
     if( saveColorManagementFile.isEmpty() )
        return;
@@ -1316,7 +1334,7 @@ void ImageEffect_ICCProof::slotUser2()
 
         for (int j = 0 ; j < 17 ; j++)
         {
-            QPoint p = m_curvesWidget->curves()->getCurvePoint(Digikam::ImageHistogram::ValueChannel, j);
+            QPoint p = m_curvesWidget->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
             if (m_originalImage->sixteenBit())
             {
                 p.setX(p.x()/255);
@@ -1327,7 +1345,8 @@ void ImageEffect_ICCProof::slotUser2()
         }
     }
     else
-        KMessageBox::error(this, i18n("Cannot save settings to the Color Management text file."));
+        KMessageBox::error(kapp->activeWindow(),
+                           i18n("Cannot save settings to the Color Management text file."));
 
     file.close();
 }

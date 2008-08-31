@@ -23,12 +23,12 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_ICCPROOF_H
-#define IMAGEEFFECT_ICCPROOF_H
+#ifndef ICCPROOFTOOL_H
+#define ICCPROOFTOOL_H
 
 // Digikam includes.
 
-#include "imagedlgbase.h"
+#include "editortool.h"
 
 class QButtonGroup;
 class QCheckBox;
@@ -52,29 +52,26 @@ class ColorGradientWidget;
 class DColor;
 class ICCPreviewWidget;
 class CurvesWidget;
+class EditorToolSettings;
 }
 
 namespace DigikamImagesPluginCore
 {
 
-class ImageEffect_ICCProof : public Digikam::ImageDlgBase
+class ICCProofTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_ICCProof(QWidget* parent);
-    ~ImageEffect_ICCProof();
-
-protected:
-
-    void finalRendering();
+    ICCProofTool(QObject* parent);
+    ~ICCProofTool();
 
 private:
 
-    void readUserSettings();
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
+    void finalRendering();
 
     void getICCInfo(const QString&);
     void getICCInfo(const QByteArray&);
@@ -97,8 +94,9 @@ private:
 
 private slots:
 
-    void slotUser2();
-    void slotUser3();
+    void slotSaveAsSettings();
+    void slotLoadSettings();
+    void slotResetSettings();
     void slotEffect();
     void slotChannelChanged(int);
     void slotScaleChanged(int);
@@ -193,8 +191,10 @@ private:
     Digikam::ICCPreviewWidget      *m_iccInPreviewWidget;
     Digikam::ICCPreviewWidget      *m_iccSpacePreviewWidget;
     Digikam::ICCPreviewWidget      *m_iccProofPreviewWidget;
+
+    Digikam::EditorToolSettings    *m_gboxSettings;
 };
 
 }  // NameSpace DigikamImagesPluginCore
 
-#endif  // IMAGEEFFECT_ICCPROOF_H
+#endif  // ICCPROOFTOOL_H
