@@ -74,7 +74,7 @@ ShearTool::ShearTool(QObject* parent)
                                       i18n("<p>This is the shear operation preview. "
                                            "If you move the mouse cursor on this preview, "
                                            "a vertical and horizontal dashed line will be drawn "
-                                           "to guide you in adjusting the free rotation correction. "
+                                           "to guide you in adjusting the shear correction. "
                                            "Release the left mouse button to freeze the dashed "
                                            "line's position."),
                                       false, ImageGuideWidget::HVGuideMode);
