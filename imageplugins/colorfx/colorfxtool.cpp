@@ -80,7 +80,7 @@ ColorFXTool::ColorFXTool(QObject* parent)
            : EditorTool(parent)
 {
     setName("coloreffects");
-    setToolName(i18n("Color Effect"));
+    setToolName(i18n("Color Effects"));
     setToolIcon(SmallIcon("colorfx"));
 
     m_destinationPreviewData = 0;
