@@ -44,6 +44,7 @@
 #include "curveswidget.h"
 #include "imagehistogram.h"
 #include "rawsettingsbox.h"
+#include "editortooliface.h"
 #include "rawpreview.h"
 #include "rawimport.h"
 #include "rawimport.moc"
@@ -102,6 +103,9 @@ void RawImport::slotInit()
     connect(d->previewWidget, SIGNAL(signalLoadingStarted()),
             this, SLOT(slotLoadingStarted()));
 
+    connect(d->previewWidget, SIGNAL(signalLoadingProgress(float)),
+            this, SLOT(slotLoadingProgress(float)));
+
     connect(d->previewWidget, SIGNAL(signalLoadingFailed()),
             this, SLOT(slotLoadingFailed()));
 
@@ -156,6 +160,7 @@ void RawImport::slotLoadingStarted()
     d->settingsBox->enableUpdateBtn(false);
     d->settingsBox->histogram()->setDataLoading();
     d->settingsBox->curve()->setDataLoading();
+    EditorToolIface::editorToolIface()->setToolStartProgress(i18n("Demosaicing: "));
     setBusy(true);
 }
 
@@ -167,12 +172,14 @@ void RawImport::slotDemosaicedImage()
 void RawImport::slotPostProcessedImage()
 {
     d->settingsBox->setPostProcessedImage(d->previewWidget->postProcessedImage());
+    EditorToolIface::editorToolIface()->setToolStopProgress();
     setBusy(false);
 }
 
 void RawImport::slotLoadingFailed()
 {
     d->settingsBox->histogram()->setLoadingFailed();
+    EditorToolIface::editorToolIface()->setToolStopProgress();
     setBusy(false);
 }
 
@@ -184,6 +191,11 @@ void RawImport::slotEffect()
 void RawImport::slotDemosaicingChanged()
 {
     d->settingsBox->enableUpdateBtn(true);
+}
+
+void RawImport::slotLoadingProgress(float v)
+{
+    EditorToolIface::editorToolIface()->setToolProgress((int)(v*100));
 }
 
 } // NameSpace Digikam

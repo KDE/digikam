@@ -66,6 +66,7 @@ private slots:
     void slotDemosaicedImage();
     void slotPostProcessedImage();
     void slotLoadingFailed();
+    void slotLoadingProgress(float);
 
     void slotUpdatePreview();
     void slotAbortPreview();
