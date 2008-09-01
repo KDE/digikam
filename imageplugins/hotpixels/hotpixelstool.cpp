@@ -70,8 +70,6 @@ namespace DigikamHotPixelsImagesPlugin
 HotPixelsTool::HotPixelsTool(QObject* parent)
              : EditorToolThreaded(parent)
 {
-    QString whatsThis;
-
     setObjectName("hotpixels");
     setToolName(i18n("Hot Pixels"));
     setToolIcon(SmallIcon("hotpixels"));
@@ -112,7 +110,7 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new ImagePanelWidget(470, 350, "hotpixels Tool", m_gboxSettings->panIconView(), 
+    m_previewWidget = new ImagePanelWidget(470, 350, "hotpixels Tool", m_gboxSettings->panIconView(),
                                            0, ImagePanelWidget::SeparateViewDuplicate);
 
     setToolView(m_previewWidget);
