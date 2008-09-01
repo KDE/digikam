@@ -25,20 +25,19 @@
 
 // Qt includes.
 
-#include <QLabel>
 #include <QGridLayout>
+#include <QLabel>
 
 // KDE includes.
 
-#include <klocale.h>
 #include <kaboutdata.h>
-#include <kiconloader.h>
 #include <kapplication.h>
-#include <kstandarddirs.h>
-#include <knuminput.h>
 #include <kconfig.h>
-#include <kglobal.h>
 #include <kconfiggroup.h>
+#include <kglobal.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
 
 // LibKDcraw includes.
 
@@ -46,10 +45,10 @@
 
 // Local includes.
 
-#include "version.h"
+#include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imagepanelwidget.h"
-#include "editortoolsettings.h"
+#include "version.h"
 #include "emboss.h"
 #include "embosstool.h"
 #include "embosstool.moc"
@@ -74,14 +73,13 @@ EmbossTool::EmbossTool(QObject* parent)
     m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
                                             EditorToolSettings::Ok|
                                             EditorToolSettings::Cancel|
-                                            EditorToolSettings::Try,
                                             EditorToolSettings::PanIcon);
 
     QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage() );
 
     QLabel *label1 = new QLabel(i18n("Depth:"), m_gboxSettings->plainPage());
 
-    m_depthInput   = new KIntNumInput(m_gboxSettings->plainPage());
+    m_depthInput   = new RIntNumInput(m_gboxSettings->plainPage());
     m_depthInput->setRange(10, 300, 1);
     m_depthInput->setSliderEnabled(true);
     m_depthInput->setWhatsThis( i18n("<p>Set here the depth of the embossing image effect.") );
@@ -139,6 +137,8 @@ void EmbossTool::slotResetSettings()
     m_depthInput->blockSignals(true);
     m_depthInput->setValue(30);
     m_depthInput->blockSignals(false);
+
+    slotEffect();
 }
 
 void EmbossTool::prepareEffect()

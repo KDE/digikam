@@ -30,8 +30,6 @@
 
 #include "editortool.h"
 
-class KIntNumInput;
-
 namespace KDcrawIface
 {
 class RIntNumInput;
@@ -71,7 +69,7 @@ private:
 
 private:
 
-    KIntNumInput                *m_depthInput;
+    KDcrawIface::RIntNumInput   *m_depthInput;
 
     Digikam::ImagePanelWidget   *m_previewWidget;
 
