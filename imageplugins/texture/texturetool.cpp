@@ -73,7 +73,6 @@ TextureTool::TextureTool(QObject* parent)
     m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
                                             EditorToolSettings::Ok|
                                             EditorToolSettings::Cancel|
-                                            EditorToolSettings::Try,
                                             EditorToolSettings::PanIcon);
     QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage(), 3, 1);
     QLabel *label1    = new QLabel(i18n("Type:"), m_gboxSettings->plainPage());
