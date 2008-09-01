@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_LENSDISTORTION_H
-#define IMAGEEFFECT_LENSDISTORTION_H
+#ifndef LENSDISTORTIONTOOL_H
+#define LENSDISTORTIONTOOL_H
 
 // Qt includes.
 
@@ -92,4 +92,4 @@ private:
 
 }  // NameSpace DigikamLensDistortionImagesPlugin
 
-#endif /* IMAGEEFFECT_LENSDISTORTION_H */
+#endif /* LENSDISTORTIONTOOL_H */
