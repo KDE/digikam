@@ -33,10 +33,6 @@
 
 #include "editortool.h"
 
-class QComboBox;
-
-class KIntNumInput;
-
 namespace KDcrawIface
 {
 class RIntNumInput;
@@ -81,7 +77,7 @@ private:
 
 private:
 
-    enum TextureTypes 
+    enum TextureTypes
     {
         PaperTexture=0,
         Paper2Texture,
@@ -101,9 +97,9 @@ private:
         StoneTexture
     };
 
-    QComboBox                   *m_textureType;
+    KDcrawIface::RComboBox      *m_textureType;
 
-    KIntNumInput                *m_blendGain;
+    KDcrawIface::RIntNumInput   *m_blendGain;
 
     Digikam::ImagePanelWidget   *m_previewWidget;
 

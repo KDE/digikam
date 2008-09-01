@@ -24,37 +24,37 @@
 
 // Qt includes.
 
-#include <QLabel>
-#include <QComboBox>
-#include <QImage>
 #include <QGridLayout>
+#include <QImage>
+#include <QLabel>
 
 // KDE includes.
 
-#include <kconfig.h>
-#include <klocale.h>
 #include <kaboutdata.h>
-#include <kiconloader.h>
 #include <kapplication.h>
-#include <kstandarddirs.h>
-#include <knuminput.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <kconfiggroup.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <knuminput.h>
+#include <kstandarddirs.h>
 
 // LibKDcraw includes.
 
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/rcombobox.h>
 
 // Local includes.
 
-#include "version.h"
 #include "daboutdata.h"
 #include "ddebug.h"
 #include "dimg.h"
+#include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imagepanelwidget.h"
-#include "editortoolsettings.h"
+#include "version.h"
 #include "texture.h"
 #include "texturetool.h"
 #include "texturetool.moc"
@@ -77,39 +77,39 @@ TextureTool::TextureTool(QObject* parent)
     m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
                                             EditorToolSettings::Ok|
                                             EditorToolSettings::Cancel|
-                                            EditorToolSettings::Try,
                                             EditorToolSettings::PanIcon);
     QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage());
 
     QLabel *label1 = new QLabel(i18n("Type:"), m_gboxSettings->plainPage());
 
-    m_textureType = new QComboBox( m_gboxSettings->plainPage() );
-    m_textureType->addItem( i18n("Paper") );
-    m_textureType->addItem( i18n("Paper 2") );
-    m_textureType->addItem( i18n("Fabric") );
-    m_textureType->addItem( i18n("Burlap") );
-    m_textureType->addItem( i18n("Bricks") );
-    m_textureType->addItem( i18n("Bricks 2") );
-    m_textureType->addItem( i18n("Canvas") );
-    m_textureType->addItem( i18n("Marble") );
-    m_textureType->addItem( i18n("Marble 2") );
-    m_textureType->addItem( i18n("Blue Jean") );
-    m_textureType->addItem( i18n("Cell Wood") );
-    m_textureType->addItem( i18n("Metal Wire") );
-    m_textureType->addItem( i18n("Modern") );
-    m_textureType->addItem( i18n("Wall") );
-    m_textureType->addItem( i18n("Moss") );
-    m_textureType->addItem( i18n("Stone") );
+    m_textureType = new RComboBox(m_gboxSettings->plainPage());
+    m_textureType->addItem(i18n("Paper"));
+    m_textureType->addItem(i18n("Paper 2"));
+    m_textureType->addItem(i18n("Fabric"));
+    m_textureType->addItem(i18n("Burlap"));
+    m_textureType->addItem(i18n("Bricks"));
+    m_textureType->addItem(i18n("Bricks 2"));
+    m_textureType->addItem(i18n("Canvas"));
+    m_textureType->addItem(i18n("Marble"));
+    m_textureType->addItem(i18n("Marble 2"));
+    m_textureType->addItem(i18n("Blue Jean"));
+    m_textureType->addItem(i18n("Cell Wood"));
+    m_textureType->addItem(i18n("Metal Wire"));
+    m_textureType->addItem(i18n("Modern"));
+    m_textureType->addItem(i18n("Wall"));
+    m_textureType->addItem(i18n("Moss"));
+    m_textureType->addItem(i18n("Stone"));
+    m_textureType->setDefaultIndex(PaperTexture);
     m_textureType->setWhatsThis( i18n("<p>Set here the texture type to apply to image."));
 
     // -------------------------------------------------------------
 
     QLabel *label2 = new QLabel(i18n("Relief:"), m_gboxSettings->plainPage());
 
-    m_blendGain    = new KIntNumInput(m_gboxSettings->plainPage());
+    m_blendGain    = new RIntNumInput(m_gboxSettings->plainPage());
     m_blendGain->setRange(1, 255, 1);
     m_blendGain->setSliderEnabled(true);
-    m_blendGain->setValue(200);
+    m_blendGain->setDefaultValue(200);
     m_blendGain->setWhatsThis( i18n("<p>Set here the relief gain used to merge "
                                     "texture and image."));
 
@@ -156,8 +156,8 @@ void TextureTool::readSettings()
     KConfigGroup group = config->group("texture Tool");
     m_textureType->blockSignals(true);
     m_blendGain->blockSignals(true);
-    m_textureType->setCurrentIndex(group.readEntry("TextureType", (int)PaperTexture));
-    m_blendGain->setValue(group.readEntry("BlendGain", 200));
+    m_textureType->setCurrentIndex(group.readEntry("TextureType", m_textureType->defaultIndex()));
+    m_blendGain->setValue(group.readEntry("BlendGain", m_blendGain->defaultValue()));
     m_textureType->blockSignals(false);
     m_blendGain->blockSignals(false);
 }
@@ -175,10 +175,14 @@ void TextureTool::slotResetSettings()
 {
     m_textureType->blockSignals(true);
     m_blendGain->blockSignals(true);
-    m_textureType->setCurrentIndex(PaperTexture);
-    m_blendGain->setValue(200);
+
+    m_textureType->slotReset();
+    m_blendGain->slotReset();
+
     m_textureType->blockSignals(false);
     m_blendGain->blockSignals(false);
+
+    slotEffect();
 }
 
 void TextureTool::prepareEffect()
