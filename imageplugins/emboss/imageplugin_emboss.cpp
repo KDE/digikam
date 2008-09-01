@@ -35,9 +35,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_emboss.h"
+#include "embosstool.h"
 #include "imageplugin_emboss.h"
 #include "imageplugin_emboss.moc"
+
+using namespace DigikamEmbossImagesPlugin;
 
 K_PLUGIN_FACTORY( EmbossFactory, registerPlugin<ImagePlugin_Emboss>(); )
 K_EXPORT_PLUGIN ( EmbossFactory("digikamimageplugin_emboss") )
@@ -68,6 +70,6 @@ void ImagePlugin_Emboss::setEnabledActions(bool enable)
 
 void ImagePlugin_Emboss::slotEmboss()
 {
-    DigikamEmbossImagesPlugin::ImageEffect_Emboss dlg(kapp->activeWindow());
-    dlg.exec();
+    EmbossTool *tool = new EmbossTool(this);
+    loadTool(tool);
 }

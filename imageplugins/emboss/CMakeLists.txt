@@ -1,6 +1,6 @@
 
 SET(digikamimageplugin_emboss_PART_SRCS imageplugin_emboss.cpp
-                                        imageeffect_emboss.cpp 
+                                        embosstool.cpp 
                                         emboss.cpp 
    )
 
