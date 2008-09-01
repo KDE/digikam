@@ -6,7 +6,7 @@
  * Date        : 2004-07-09
  * Description : a tool to sharp an image
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,15 +21,14 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_SHARPEN_H
-#define IMAGEEFFECT_SHARPEN_H
+#ifndef SHARPENTOOL_H
+#define SHARPENTOOL_H
 
 // Digikam includes.
 
-#include "ctrlpaneldlg.h"
+#include "editortool.h"
 
 class QStackedWidget;
-
 
 namespace KDcrawIface
 {
@@ -40,32 +39,34 @@ class RComboBox;
 
 namespace Digikam
 {
-    class DImg;
+class DImg;
+class EditorToolSettings;
+class ImagePanelWidget;
 }
 
 namespace DigikamImagesPluginCore
 {
 
-class ImageEffect_Sharpen : public Digikam::CtrlPanelDlg
+class SharpenTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_Sharpen(QWidget *parent);
-    ~ImageEffect_Sharpen();
+    SharpenTool(QObject *parent);
+    ~SharpenTool();
 
 private slots:
 
-    void slotUser2();
-    void slotUser3();
-    void readUserSettings();
+    void slotSaveAsSettings();
+    void slotLoadSettings();
+    void slotResetSettings();
     void slotSharpMethodActived(int);
 
 private:
 
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void prepareEffect();
     void prepareFinal();
     void abortPreview();
@@ -98,8 +99,12 @@ private:
     KDcrawIface::RDoubleNumInput *m_thresholdInput;
 
     Digikam::DImg                 m_img;
+
+    Digikam::ImagePanelWidget    *m_previewWidget;
+
+    Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
 }  // NameSpace DigikamImagesPluginCore
 
-#endif /* IMAGEEFFECT_SHARPEN_H */
+#endif /* SHARPENTOOL_H */

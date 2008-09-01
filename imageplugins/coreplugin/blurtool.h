@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_BLUR_H
-#define IMAGEEFFECT_BLUR_H
+#ifndef BLURTOOL_H
+#define BLURTOOL_H
 
 // Digikam includes.
 
@@ -77,4 +77,4 @@ private:
 
 }  // NameSpace DigikamImagesPluginCore
 
-#endif /* IMAGEEFFECT_BLUR_H */
+#endif /* BLURTOOL_H */

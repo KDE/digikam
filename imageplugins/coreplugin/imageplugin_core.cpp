@@ -46,7 +46,7 @@
 #include "iccprooftool.h"
 #include "blurtool.h"
 #include "ratiocroptool.h"
-#include "imageeffect_sharpen.h"
+#include "sharpentool.h"
 #include "redeyetool.h"
 #include "rgbtool.h"
 #include "imageplugin_core.h"
@@ -254,7 +254,7 @@ void ImagePlugin_Core::slotBlur()
 
 void ImagePlugin_Core::slotAutoCorrection()
 {
-    AutoCorrectionTool *tool = new AutoCorrectionTool(kapp->activeWindow());
+    AutoCorrectionTool *tool = new AutoCorrectionTool(this);
     loadTool(tool);
 }
 
@@ -299,8 +299,8 @@ void ImagePlugin_Core::slotHSL()
 
 void ImagePlugin_Core::slotSharpen()
 {
-    ImageEffect_Sharpen dlg(kapp->activeWindow());
-    dlg.exec();
+    SharpenTool *tool = new SharpenTool(this);
+    loadTool(tool);
 }
 
 void ImagePlugin_Core::slotRatioCrop()

@@ -58,7 +58,7 @@ SET(digikamimageplugin_core_PART_SRCS
     ../../imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp 
     ../../imageplugins/coreplugin/redeyetool.cpp 
     ../../imageplugins/coreplugin/rgbtool.cpp 
-    ../../imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.cpp 
+    ../../imageplugins/coreplugin/sharpnesseditor/sharpentool.cpp 
     ../../imageplugins/coreplugin/sharpnesseditor/matrix.cpp
     ../../imageplugins/coreplugin/sharpnesseditor/refocus.cpp
     ../../imageplugins/coreplugin/sharpnesseditor/unsharp.cpp
