@@ -7,7 +7,7 @@ General        : libkdcraw dependency updated to 0.1.5
 
 Image Editor   : All image plugin tool settings provide default buttons to reset values.
 Image Editor   : New Raw import tool to handle Raw pictures with customized decoding settings.
-Image Editor   : All image plugin dialogs are removed. all tolls are embedded in editor window.
+Image Editor   : All image plugin dialogs are removed. all tools are embedded in editor window.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
