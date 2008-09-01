@@ -24,23 +24,22 @@
 
 // Qt includes.
 
-#include <QLabel>
-#include <QImage>
 #include <QGridLayout>
+#include <QImage>
+#include <QLabel>
 
 // KDE includes.
 
-#include <kcursor.h>
-#include <klocale.h>
 #include <kaboutdata.h>
-#include <kiconloader.h>
 #include <kapplication.h>
-#include <kstandarddirs.h>
-#include <knuminput.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcursor.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <kconfiggroup.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
 
 // LibKDcraw includes.
 
@@ -48,12 +47,12 @@
 
 // Local includes.
 
-#include "version.h"
 #include "ddebug.h"
 #include "dimg.h"
+#include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imagepanelwidget.h"
-#include "editortoolsettings.h"
+#include "version.h"
 #include "oilpaint.h"
 #include "oilpainttool.h"
 #include "oilpainttool.moc"
@@ -67,8 +66,6 @@ namespace DigikamOilPaintImagesPlugin
 OilPaintTool::OilPaintTool(QObject* parent)
             : EditorToolThreaded(parent)
 {
-    QString whatsThis;
-
     setObjectName("oilpaint");
     setToolName(i18n("Oil Paint"));
     setToolIcon(SmallIcon("oilpaint"));
@@ -83,25 +80,27 @@ OilPaintTool::OilPaintTool(QObject* parent)
     QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage());
 
     QLabel *label1   = new QLabel(i18n("Brush size:"), m_gboxSettings->plainPage());
-    m_brushSizeInput = new KIntNumInput(m_gboxSettings->plainPage());
+    m_brushSizeInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_brushSizeInput->setRange(1, 5, 1);
     m_brushSizeInput->setSliderEnabled(true);
+    m_brushSizeInput->setDefaultValue(1);
     m_brushSizeInput->setWhatsThis( i18n("<p>Set here the brush size to use for "
                                          "simulating the oil painting.") );
 
     // -------------------------------------------------------------
 
     QLabel *label2 = new QLabel(i18n("Smooth:"), m_gboxSettings->plainPage());
-    m_smoothInput  = new KIntNumInput(m_gboxSettings->plainPage());
+    m_smoothInput  = new RIntNumInput(m_gboxSettings->plainPage());
     m_smoothInput->setRange(10, 255, 1);
     m_smoothInput->setSliderEnabled(true);
+    m_smoothInput->setDefaultValue(30);
     m_smoothInput->setWhatsThis( i18n("<p>This value controls the smoothing effect "
                                       "of the brush under the canvas.") );
 
-    grid->addWidget(label1,           0, 0, 1, 2 );
-    grid->addWidget(m_brushSizeInput, 1, 0, 1, 2 );
-    grid->addWidget(label2,           2, 0, 1, 2 );
-    grid->addWidget(m_smoothInput,    3, 0, 1, 2 );
+    grid->addWidget(label1,           0, 0, 1, 2);
+    grid->addWidget(m_brushSizeInput, 1, 0, 1, 2);
+    grid->addWidget(label2,           2, 0, 1, 2);
+    grid->addWidget(m_smoothInput,    3, 0, 1, 2);
     grid->setRowStretch(4, 10);
     grid->setMargin(m_gboxSettings->spacingHint());
     grid->setSpacing(m_gboxSettings->spacingHint());
@@ -116,11 +115,13 @@ OilPaintTool::OilPaintTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(m_brushSizeInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotTimer()));
+    // this filter is relative slow, so we should use the try button instead right now
 
-    connect(m_smoothInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotTimer()));
+    //    connect(m_brushSizeInput, SIGNAL(valueChanged (int)),
+    //            this, SLOT(slotTimer()));
+    //
+    //    connect(m_smoothInput, SIGNAL(valueChanged (int)),
+    //            this, SLOT(slotTimer()));
 }
 
 OilPaintTool::~OilPaintTool()
@@ -139,8 +140,8 @@ void OilPaintTool::readSettings()
     KConfigGroup group        = config->group("oilpaint Tool");
     m_brushSizeInput->blockSignals(true);
     m_smoothInput->blockSignals(true);
-    m_brushSizeInput->setValue(group.readEntry("BrushSize", 1));
-    m_smoothInput->setValue(group.readEntry("SmoothAjustment", 30));
+    m_brushSizeInput->setValue(group.readEntry("BrushSize", m_brushSizeInput->defaultValue()));
+    m_smoothInput->setValue(group.readEntry("SmoothAjustment", m_smoothInput->defaultValue()));
     m_brushSizeInput->blockSignals(false);
     m_smoothInput->blockSignals(false);
 }
@@ -158,10 +159,14 @@ void OilPaintTool::slotResetSettings()
 {
     m_brushSizeInput->blockSignals(true);
     m_smoothInput->blockSignals(true);
-    m_brushSizeInput->setValue(1);
-    m_smoothInput->setValue(30);
+
+    m_brushSizeInput->slotReset();
+    m_smoothInput->slotReset();
+
     m_brushSizeInput->blockSignals(false);
     m_smoothInput->blockSignals(false);
+
+    slotEffect();
 }
 
 void OilPaintTool::prepareEffect()

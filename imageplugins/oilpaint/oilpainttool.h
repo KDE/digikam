@@ -29,8 +29,6 @@
 
 #include "editortool.h"
 
-class KIntNumInput;
-
 namespace KDcrawIface
 {
 class RIntNumInput;
@@ -70,8 +68,8 @@ private:
 
 private:
 
-    KIntNumInput                *m_brushSizeInput;
-    KIntNumInput                *m_smoothInput;
+    KDcrawIface::RIntNumInput   *m_brushSizeInput;
+    KDcrawIface::RIntNumInput   *m_smoothInput;
 
     Digikam::ImagePanelWidget   *m_previewWidget;
 
