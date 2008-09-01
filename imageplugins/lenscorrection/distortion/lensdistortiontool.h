@@ -32,7 +32,7 @@
 // Digikam includes.
 
 #include "dimg.h"
-#include "imageguidedlg.h"
+#include "editortool.h"
 
 class QLabel;
 
@@ -41,26 +41,33 @@ namespace KDcrawIface
 class RDoubleNumInput;
 }
 
+namespace Digikam
+{
+class EditorToolSettings;
+class ImageWidget;
+}
+
 namespace DigikamLensDistortionImagesPlugin
 {
 
-class ImageEffect_LensDistortion : public Digikam::ImageGuideDlg
+class LensDistortionTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_LensDistortion(QWidget *parent);
-    ~ImageEffect_LensDistortion();
+    LensDistortionTool(QObject *parent);
+    ~LensDistortionTool();
 
 private slots:
 
-    void readUserSettings();
+    void slotResetSettings();
+    void slotColorGuideChanged();
 
 private:
 
-    void writeUserSettings();
-    void resetValues();
+    void writeSettings();
+    void readSettings();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
@@ -69,14 +76,18 @@ private:
 
 private:
 
-    QLabel          *m_maskPreviewLabel;
+    QLabel                       *m_maskPreviewLabel;
 
     KDcrawIface::RDoubleNumInput *m_mainInput;
     KDcrawIface::RDoubleNumInput *m_edgeInput;
     KDcrawIface::RDoubleNumInput *m_rescaleInput;
     KDcrawIface::RDoubleNumInput *m_brightenInput;
 
-    Digikam::DImg    m_previewRasterImage;
+    Digikam::DImg                 m_previewRasterImage;
+
+    Digikam::ImageWidget         *m_previewWidget;
+
+    Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
 }  // NameSpace DigikamLensDistortionImagesPlugin

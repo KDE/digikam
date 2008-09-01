@@ -25,7 +25,7 @@ whitebalance                ImageDlgBase        DONE            DONE
 lenscorrection
   \---antivignetting        ImageGuideDlg       DONE            DONE
   \---autocorrection        ImageGuideDlg       DONE            DONE
-  \---distortion            ImageGuideDlg       A               DONE
+  \---distortion            ImageGuideDlg       DONE            DONE
 border                      ImageGuideDlg       DONE            DONE
 distortionfx                ImageGuideDlg       DONE            DONE
 freerotation                ImageGuideDlg       DONE            DONE
@@ -34,7 +34,7 @@ raindrop                    ImageGuideDlg       DONE            DONE
 sheartool                   ImageGuideDlg       DONE            DONE
 
 coreplugin
-  \---blur                  CtrlPanelDlg        G                DONE
+  \---blur                  CtrlPanelDlg        G               DONE
   \---sharpnesseditor       CtrlPanelDlg                        DONE
 blurfx                      CtrlPanelDlg
 charcoal                    CtrlPanelDlg

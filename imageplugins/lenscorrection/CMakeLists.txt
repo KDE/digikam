@@ -9,7 +9,7 @@ SET(autocorrection_SRCS autocorrection/autocorrectiontool.cpp
                         autocorrection/klensfun.cpp
    )
 
-SET(distortion_SRCS distortion/imageeffect_lensdistortion.cpp
+SET(distortion_SRCS distortion/lensdistortiontool.cpp
                     distortion/lensdistortion.cpp
                     distortion/pixelaccess.cpp
    )
