@@ -39,9 +39,9 @@ coreplugin
 blurfx                      CtrlPanelDlg        DONE
 charcoal                    CtrlPanelDlg
 emboss                      CtrlPanelDlg
-filmgrain                   CtrlPanelDlg                        DONE
+filmgrain                   CtrlPanelDlg        G               DONE
 hotpixels                   CtrlPanelDlg        DONE            DONE
-infrared                    CtrlPanelDlg        G               DONE
+infrared                    CtrlPanelDlg        DONE            DONE
 noisereduction              CtrlPanelDlg        DONE            DONE
 oilpaint                    CtrlPanelDlg        DONE
 restoration                 CtrlPanelDlg        DONE            DONE
