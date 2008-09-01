@@ -80,20 +80,20 @@ CharcoalTool::CharcoalTool(QObject* parent)
 
     QLabel *label1 = new QLabel(i18n("Pencil size:"), m_gboxSettings->plainPage());
 
-    m_pencilInput  = new KIntNumInput(m_gboxSettings->plainPage());
+    m_pencilInput  = new RIntNumInput(m_gboxSettings->plainPage());
     m_pencilInput->setRange(1, 100, 1);
     m_pencilInput->setSliderEnabled(true);
-    m_pencilInput->setValue(5);
+    m_pencilInput->setDefaultValue(5);
     m_pencilInput->setWhatsThis( i18n("<p>Set here the charcoal pencil size used to simulate the drawing."));
 
     // -------------------------------------------------------------
 
     QLabel *label2 = new QLabel(i18n("Smooth:"), m_gboxSettings->plainPage());
 
-    m_smoothInput = new KIntNumInput(m_gboxSettings->plainPage());
+    m_smoothInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_smoothInput->setRange(1, 100, 1);
     m_smoothInput->setSliderEnabled(true);
-    m_smoothInput->setValue(10);
+    m_smoothInput->setDefaultValue(10);
     m_smoothInput->setWhatsThis( i18n("<p>This value controls the smoothing effect of the pencil "
                                       "under the canvas."));
 
@@ -140,8 +140,8 @@ void CharcoalTool::readSettings()
     KConfigGroup group        = config->group("charcoal Tool");
     m_pencilInput->blockSignals(true);
     m_smoothInput->blockSignals(true);
-    m_pencilInput->setValue(group.readEntry("PencilAjustment", 5));
-    m_smoothInput->setValue(group.readEntry("SmoothAjustment", 10));
+    m_pencilInput->setValue(group.readEntry("PencilAjustment", m_pencilInput->defaultValue()));
+    m_smoothInput->setValue(group.readEntry("SmoothAjustment", m_smoothInput->defaultValue()));
     m_pencilInput->blockSignals(false);
     m_smoothInput->blockSignals(false);
 }
@@ -159,8 +159,8 @@ void CharcoalTool::slotResetSettings()
 {
     m_pencilInput->blockSignals(true);
     m_smoothInput->blockSignals(true);
-    m_pencilInput->setValue(5);
-    m_smoothInput->setValue(10);
+    m_pencilInput->slotReset();
+    m_smoothInput->slotReset();
     m_pencilInput->blockSignals(false);
     m_smoothInput->blockSignals(false);
 }
