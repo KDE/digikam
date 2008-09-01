@@ -1,6 +1,6 @@
 
 SET(digikamimageplugin_filmgrain_PART_SRCS imageplugin_filmgrain.cpp
-                                           imageeffect_filmgrain.cpp
+                                           filmgraintool.cpp
                                            filmgrain.cpp
    )
 
