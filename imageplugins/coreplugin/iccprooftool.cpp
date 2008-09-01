@@ -1093,7 +1093,7 @@ void ICCProofTool::getICCInfo(const QString& profile)
         return;
     }
 
-    ICCProfileInfoDlg infoDlg(0, profile);
+    ICCProfileInfoDlg infoDlg(kapp->activeWindow(), profile);
     infoDlg.exec();
 }
 
@@ -1107,7 +1107,7 @@ void ICCProofTool::getICCInfo(const QByteArray& profile)
         return;
     }
 
-    ICCProfileInfoDlg infoDlg(0, QString(), profile);
+    ICCProfileInfoDlg infoDlg(kapp->activeWindow(), QString(), profile);
     infoDlg.exec();
 }
 
