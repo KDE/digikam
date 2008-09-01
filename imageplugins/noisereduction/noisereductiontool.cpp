@@ -267,7 +267,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     grid2->setMargin(m_gboxSettings->spacingHint());
     grid2->setSpacing(m_gboxSettings->spacingHint());
 
-    grid->addMultiCellWidget(mainTab, 0, 0, 1, 1);
+    grid->addWidget(mainTab, 0, 0, 1, 1);
     grid->setRowStretch(1, 10);
     grid->setMargin(m_gboxSettings->spacingHint());
     grid->setSpacing(m_gboxSettings->spacingHint());
