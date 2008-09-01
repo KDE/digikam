@@ -35,14 +35,14 @@ sheartool                   ImageGuideDlg       DONE            DONE
 
 coreplugin
   \---blur                  CtrlPanelDlg        DONE            DONE
-  \---sharpnesseditor       CtrlPanelDlg        G                DONE
+  \---sharpnesseditor       CtrlPanelDlg        DONE            DONE
 blurfx                      CtrlPanelDlg
 charcoal                    CtrlPanelDlg
 emboss                      CtrlPanelDlg
 filmgrain                   CtrlPanelDlg                        DONE
 hotpixels                   CtrlPanelDlg        DONE            DONE
 infrared                    CtrlPanelDlg                        DONE
-noisereduction              CtrlPanelDlg                        DONE
+noisereduction              CtrlPanelDlg        G               DONE
 oilpaint                    CtrlPanelDlg
 restoration                 CtrlPanelDlg        DONE            DONE
 texture                     CtrlPanelDlg
