@@ -34,9 +34,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_oilpaint.h"
+#include "oilpainttool.h"
 #include "imageplugin_oilpaint.h"
 #include "imageplugin_oilpaint.moc"
+
+using namespace DigikamOilPaintImagesPlugin;
 
 K_PLUGIN_FACTORY( OilPaintFactory, registerPlugin<ImagePlugin_OilPaint>(); )
 K_EXPORT_PLUGIN ( OilPaintFactory("digikamimageplugin_oilpaint") )
@@ -66,6 +68,6 @@ void ImagePlugin_OilPaint::setEnabledActions(bool enable)
 
 void ImagePlugin_OilPaint::slotOilPaint()
 {
-    DigikamOilPaintImagesPlugin::ImageEffect_OilPaint dlg(kapp->activeWindow());
-    dlg.exec();
+    OilPaintTool *tool = new OilPaintTool(this);
+    loadTool(tool);
 }
