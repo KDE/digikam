@@ -112,11 +112,13 @@ OilPaintTool::OilPaintTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(m_brushSizeInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotTimer()));
+    // this filter is relative slow, so we should use the try button instead right now
 
-    connect(m_smoothInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotTimer()));
+    //    connect(m_brushSizeInput, SIGNAL(valueChanged (int)),
+    //            this, SLOT(slotTimer()));
+    //
+    //    connect(m_smoothInput, SIGNAL(valueChanged (int)),
+    //            this, SLOT(slotTimer()));
 }
 
 OilPaintTool::~OilPaintTool()
