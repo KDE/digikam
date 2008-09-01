@@ -1,6 +1,6 @@
 
 SET(digikamimageplugin_infrared_PART_SRCS imageplugin_infrared.cpp
-                                          imageeffect_infrared.cpp 
+                                          infraredtool.cpp 
                                           infrared.cpp 
    )
 

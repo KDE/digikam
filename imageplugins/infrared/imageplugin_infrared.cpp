@@ -35,9 +35,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_infrared.h"
+#include "infraredtool.h"
 #include "imageplugin_infrared.h"
 #include "imageplugin_infrared.moc"
+
+using namespace DigikamInfraredImagesPlugin;
 
 K_PLUGIN_FACTORY( InfraredFactory, registerPlugin<ImagePlugin_Infrared>(); )
 K_EXPORT_PLUGIN ( InfraredFactory("digikamimageplugin_infrared") )
@@ -68,6 +70,6 @@ void ImagePlugin_Infrared::setEnabledActions(bool enable)
 
 void ImagePlugin_Infrared::slotInfrared()
 {
-    DigikamInfraredImagesPlugin::ImageEffect_Infrared dlg(kapp->activeWindow());
-    dlg.exec();
+    InfraredTool *tool = new InfraredTool(this);
+    loadTool(tool);
 }
