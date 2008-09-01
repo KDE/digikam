@@ -187,26 +187,26 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     m_adjTemperatureLabel = new QLabel(i18n("Adjustment:"), m_gboxSettings->plainPage());
     m_temperatureInput    = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_temperatureInput->setDecimals(1);
-    m_temperatureInput->input()->setRange(2000.0, 12000.0, 10.0);
+    m_temperatureInput->input()->setRange(1750.0, 12000.0, 10.0);
     m_temperatureInput->setDefaultValue(6500.0);
     m_temperatureInput->setWhatsThis( i18n("<p>Set here the white balance color temperature in Kelvin."));
 
     m_temperaturePresetLabel = new QLabel(i18n("Preset:"), m_gboxSettings->plainPage());
     m_temperaturePresetCB    = new RComboBox(m_gboxSettings->plainPage());
-    m_temperaturePresetCB->addItem( i18n("Candle") );
-    m_temperaturePresetCB->addItem( i18n("40W Lamp") );
-    m_temperaturePresetCB->addItem( i18n("100W Lamp") );
-    m_temperaturePresetCB->addItem( i18n("200W Lamp") );
-    m_temperaturePresetCB->addItem( i18n("Sunrise") );
-    m_temperaturePresetCB->addItem( i18n("Studio Lamp") );
-    m_temperaturePresetCB->addItem( i18n("Moonlight") );
-    m_temperaturePresetCB->addItem( i18n("Neutral") );
-    m_temperaturePresetCB->addItem( i18n("Daylight D50") );
-    m_temperaturePresetCB->addItem( i18n("Photo Flash") );
-    m_temperaturePresetCB->addItem( i18n("Sun") );
-    m_temperaturePresetCB->addItem( i18n("Xenon Lamp") );
-    m_temperaturePresetCB->addItem( i18n("Daylight D65") );
-    m_temperaturePresetCB->addItem( i18n("None") );
+    m_temperaturePresetCB->addItem(i18n("Candle"));
+    m_temperaturePresetCB->addItem(i18n("40W Lamp"));
+    m_temperaturePresetCB->addItem(i18n("100W Lamp"));
+    m_temperaturePresetCB->addItem(i18n("200W Lamp"));
+    m_temperaturePresetCB->addItem(i18n("Sunrise"));
+    m_temperaturePresetCB->addItem(i18n("Studio Lamp"));
+    m_temperaturePresetCB->addItem(i18n("Moonlight"));
+    m_temperaturePresetCB->addItem(i18n("Neutral"));
+    m_temperaturePresetCB->addItem(i18n("Daylight D50"));
+    m_temperaturePresetCB->addItem(i18n("Photo Flash"));
+    m_temperaturePresetCB->addItem(i18n("Sun"));
+    m_temperaturePresetCB->addItem(i18n("Xenon Lamp"));
+    m_temperaturePresetCB->addItem(i18n("Daylight D65"));
+    m_temperaturePresetCB->addItem(i18n("None"));
     m_temperaturePresetCB->setDefaultIndex(DaylightD65);
     m_temperaturePresetCB->setWhatsThis( i18n("<p>Select the white balance color temperature "
                                               "preset to use here:<p>"
