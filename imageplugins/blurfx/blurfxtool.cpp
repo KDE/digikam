@@ -64,8 +64,6 @@ namespace DigikamBlurFXImagesPlugin
 BlurFXTool::BlurFXTool(QObject* parent)
           : EditorToolThreaded(parent)
 {
-    QString whatsThis;
-
     setName("blurfx");
     setToolName(i18n("Blur FX"));
     setToolIcon(SmallIcon("blurfx"));

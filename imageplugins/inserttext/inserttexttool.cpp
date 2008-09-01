@@ -74,8 +74,6 @@ namespace DigikamInsertTextImagesPlugin
 InsertTextTool::InsertTextTool(QObject* parent)
               : EditorTool(parent)
 {
-    QString whatsThis;
-
     setName("inserttext");
     setToolName(i18n("Insert Text"));
     setToolIcon(SmallIcon("inserttext"));

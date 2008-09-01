@@ -93,13 +93,11 @@ namespace DigikamWhiteBalanceImagesPlugin
 WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
                 : EditorTool(parent)
 {
-    QString whatsThis;
-
-    m_destinationPreviewData = 0;
-
     setName("whitebalance");
     setToolName(i18n("White Balance"));
     setToolIcon(SmallIcon("whitebalance"));
+
+    m_destinationPreviewData = 0;
 
     // -------------------------------------------------------------
 

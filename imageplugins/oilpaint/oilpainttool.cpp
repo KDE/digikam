@@ -64,8 +64,6 @@ namespace DigikamOilPaintImagesPlugin
 OilPaintTool::OilPaintTool(QObject* parent)
             : EditorToolThreaded(parent)
 {
-    QString whatsThis;
-
     setName("oilpaint");
     setToolName(i18n("Oil Paint"));
     setToolIcon(SmallIcon("oilpaint"));

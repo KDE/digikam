@@ -61,8 +61,6 @@ namespace DigikamEmbossImagesPlugin
 EmbossTool::EmbossTool(QObject* parent)
           : EditorToolThreaded(parent)
 {
-    QString whatsThis;
-
     setName("emboss");
     setToolName(i18n("Emboss"));
     setToolIcon(SmallIcon("embosstool"));

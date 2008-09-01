@@ -64,8 +64,6 @@ namespace DigikamTextureImagesPlugin
 TextureTool::TextureTool(QObject* parent)
            : EditorToolThreaded(parent)
 {
-    QString whatsThis;
-
     setName("texture");
     setToolName(i18n("Texture"));
     setToolIcon(SmallIcon("texture"));

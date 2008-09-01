@@ -77,8 +77,6 @@ namespace DigikamSuperImposeImagesPlugin
 SuperImposeTool::SuperImposeTool(QObject* parent)
                : EditorTool(parent)
 {
-    QString whatsThis;
-
     setName("superimpose");
     setToolName(i18n("Template Superimpose"));
     setToolIcon(SmallIcon("superimpose"));

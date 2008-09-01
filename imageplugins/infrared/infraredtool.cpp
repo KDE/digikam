@@ -63,8 +63,6 @@ namespace DigikamInfraredImagesPlugin
 InfraredTool::InfraredTool(QObject* parent)
             : EditorToolThreaded(parent)
 {
-    QString whatsThis;
-
     setName("infrared");
     setToolName(i18n("Infrared"));
     setToolIcon(SmallIcon("infrared"));
@@ -77,32 +75,32 @@ InfraredTool::InfraredTool(QObject* parent)
                                             EditorToolSettings::Try,
                                             EditorToolSettings::PanIcon);
 
-    QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage(), 3, 1);
-    QLabel *label1    = new QLabel(i18n("Sensitivity (ISO):"), m_gboxSettings->plainPage());
+    QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage(), 3, 1);
+    QLabel *label1 = new QLabel(i18n("Sensitivity (ISO):"), m_gboxSettings->plainPage());
 
     m_sensibilitySlider = new QSlider(1, 25, 1, 1, Qt::Horizontal, m_gboxSettings->plainPage());
-    m_sensibilitySlider->setTracking ( false );
+    m_sensibilitySlider->setTracking(false);
     m_sensibilitySlider->setTickInterval(1);
     m_sensibilitySlider->setTickmarks(QSlider::Below);
 
-    m_sensibilityLCDValue = new QLCDNumber (4, m_gboxSettings->plainPage());
-    m_sensibilityLCDValue->setSegmentStyle ( QLCDNumber::Flat );
-    m_sensibilityLCDValue->display( QString::number(200) );
-    whatsThis = i18n("<p>Set here the ISO-sensitivity of the simulated infrared film. "
-                     "Increasing this value will increase the proportion of green color in the mix. "
-                     "It will also increase the halo effect on the hightlights, and the film "
-                     "graininess (if that box is checked).</p>"
-                     "<p>Note: to simulate an <b>Ilford SFX200</b> infrared film, use a sensitivity excursion of 200 to 800. "
-                     "A sensitivity over 800 simulates <b>Kodak HIE</b> high-speed infrared film. This last one creates a more "
-                     "dramatic photographic style.</p>");
+    m_sensibilityLCDValue = new QLCDNumber(4, m_gboxSettings->plainPage());
+    m_sensibilityLCDValue->setSegmentStyle(QLCDNumber::Flat);
+    m_sensibilityLCDValue->display(QString::number(200));
+    QString whatsThis = i18n("<p>Set here the ISO-sensitivity of the simulated infrared film. "
+                             "Increasing this value will increase the proportion of green color in the mix. "
+                             "It will also increase the halo effect on the hightlights, and the film "
+                             "graininess (if that box is checked).</p>"
+                             "<p>Note: to simulate an <b>Ilford SFX200</b> infrared film, use a sensitivity excursion of 200 to 800. "
+                             "A sensitivity over 800 simulates <b>Kodak HIE</b> high-speed infrared film. This last one creates a more "
+                             "dramatic photographic style.</p>");
 
-    QWhatsThis::add( m_sensibilityLCDValue, whatsThis);
-    QWhatsThis::add( m_sensibilitySlider, whatsThis);
+    QWhatsThis::add(m_sensibilityLCDValue,  whatsThis);
+    QWhatsThis::add(m_sensibilitySlider,    whatsThis);
 
     // -------------------------------------------------------------
 
-    m_addFilmGrain = new QCheckBox( i18n("Add film grain"), m_gboxSettings->plainPage());
-    m_addFilmGrain->setChecked( true );
+    m_addFilmGrain = new QCheckBox(i18n("Add film grain"), m_gboxSettings->plainPage());
+    m_addFilmGrain->setChecked(true);
     QWhatsThis::add( m_addFilmGrain, i18n("<p>This option adds infrared film grain to "
                                           "the image depending on ISO-sensitivity."));
 

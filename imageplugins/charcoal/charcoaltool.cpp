@@ -62,8 +62,6 @@ namespace DigikamCharcoalImagesPlugin
 CharcoalTool::CharcoalTool(QObject* parent)
             : EditorToolThreaded(parent)
 {
-    QString whatsThis;
-
     setName("charcoal");
     setToolName(i18n("Charcoal"));
     setToolIcon(SmallIcon("charcoaltool"));

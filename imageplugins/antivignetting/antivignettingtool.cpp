@@ -69,13 +69,11 @@ namespace DigikamAntiVignettingImagesPlugin
 AntiVignettingTool::AntiVignettingTool(QObject* parent)
                   : EditorToolThreaded(parent)
 {
-    QString whatsThis;
-
     setName("antivignettings");
     setToolName(i18n("Vignetting Correction"));
     setToolIcon(SmallIcon("antivignetting"));
 
-    m_previewWidget = new ImageWidget("antivignetting Tool", 0, QString(), 
+    m_previewWidget = new ImageWidget("antivignetting Tool", 0, QString(),
                                       false, ImageGuideWidget::HVGuideMode, false);
 
     setToolView(m_previewWidget);

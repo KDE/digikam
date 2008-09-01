@@ -65,7 +65,6 @@ namespace DigikamShearToolImagesPlugin
 ShearTool::ShearTool(QObject* parent)
          : EditorToolThreaded(parent)
 {
-    QString whatsThis;
     setName("sheartool");
     setToolName(i18n("Shear Tool"));
     setToolIcon(SmallIcon("sheartool"));

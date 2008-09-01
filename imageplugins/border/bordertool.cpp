@@ -66,13 +66,11 @@ namespace DigikamBorderImagesPlugin
 BorderTool::BorderTool(QObject* parent)
                   : EditorToolThreaded(parent)
 {
-    QString whatsThis;
-
     setName("border");
     setToolName(i18n("Add Border"));
     setToolIcon(SmallIcon("bordertool"));
 
-    m_previewWidget = new ImageWidget("bordertool Tool", 0, QString(), 
+    m_previewWidget = new ImageWidget("bordertool Tool", 0, QString(),
                                       false, ImageGuideWidget::HVGuideMode, false);
 
     setToolView(m_previewWidget);

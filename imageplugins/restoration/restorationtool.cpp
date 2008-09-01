@@ -66,8 +66,6 @@ namespace DigikamRestorationImagesPlugin
 RestorationTool::RestorationTool(QObject* parent)
                : EditorToolThreaded(parent)
 {
-    QString whatsThis;
-
     setName("restoration");
     setToolName(i18n("Restoration"));
     setToolIcon(SmallIcon("restoration"));
@@ -268,7 +266,7 @@ void RestorationTool::prepareEffect()
 
     DImg previewImage = m_previewWidget->getOriginalRegionImage();
 
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new GreycstorationIface(&previewImage, 
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new GreycstorationIface(&previewImage,
                                                 m_settingsWidget->getSettings(), GreycstorationIface::Restore,
                                                 0, 0, 0, this)));
 }
@@ -282,7 +280,7 @@ void RestorationTool::prepareFinal()
     DImg originalImage(iface.originalWidth(), iface.originalHeight(),
                        iface.originalSixteenBit(), iface.originalHasAlpha(), data);
 
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new GreycstorationIface(&originalImage, 
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new GreycstorationIface(&originalImage,
                                                 m_settingsWidget->getSettings(), GreycstorationIface::Restore,
                                                 0, 0, 0, this)));
 

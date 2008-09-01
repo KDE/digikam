@@ -70,8 +70,6 @@ namespace DigikamPerspectiveImagesPlugin
 PerspectiveTool::PerspectiveTool(QObject* parent)
                : EditorTool(parent)
 {
-    QString whatsThis;
-
     setName("perspective");
     setToolName(i18n("Perspective"));
     setToolIcon(SmallIcon("perspective"));

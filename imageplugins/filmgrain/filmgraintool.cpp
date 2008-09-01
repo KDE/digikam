@@ -61,8 +61,6 @@ namespace DigikamFilmGrainImagesPlugin
 FilmGrainTool::FilmGrainTool(QObject* parent)
              : EditorToolThreaded(parent)
 {
-    QString whatsThis;
-
     setName("filmgrain");
     setToolName(i18n("Film Grain"));
     setToolIcon(SmallIcon("filmgrain"));
@@ -74,21 +72,23 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
                                             EditorToolSettings::Cancel|
                                             EditorToolSettings::Try,
                                             EditorToolSettings::PanIcon);
+
     QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage(), 2, 1);
     QLabel *label1            = new QLabel(i18n("Sensitivity (ISO):"), m_gboxSettings->plainPage());
 
     m_sensibilitySlider = new QSlider(2, 30, 1, 12, Qt::Horizontal, m_gboxSettings->plainPage());
-    m_sensibilitySlider->setTracking ( false );
+    m_sensibilitySlider->setTracking(false);
     m_sensibilitySlider->setTickInterval(1);
     m_sensibilitySlider->setTickmarks(QSlider::Below);
 
-    m_sensibilityLCDValue = new QLCDNumber (4, m_gboxSettings->plainPage());
-    m_sensibilityLCDValue->setSegmentStyle ( QLCDNumber::Flat );
-    m_sensibilityLCDValue->display( QString::number(2400) );
-    whatsThis = i18n("<p>Set here the film ISO-sensitivity to use for simulating the film graininess.");
+    m_sensibilityLCDValue = new QLCDNumber(4, m_gboxSettings->plainPage());
+    m_sensibilityLCDValue->setSegmentStyle(QLCDNumber::Flat);
+    m_sensibilityLCDValue->display(QString::number(2400));
+    QString whatsThis = i18n("<p>Set here the film ISO-sensitivity to "
+                             "use for simulating the film graininess.");
 
-    QWhatsThis::add( m_sensibilityLCDValue, whatsThis);
-    QWhatsThis::add( m_sensibilitySlider, whatsThis);
+    QWhatsThis::add(m_sensibilityLCDValue,  whatsThis);
+    QWhatsThis::add(m_sensibilitySlider,    whatsThis);
 
     grid->addMultiCellWidget(label1, 0, 0, 0, 1);
     grid->addMultiCellWidget(m_sensibilitySlider, 1, 1, 0, 0);

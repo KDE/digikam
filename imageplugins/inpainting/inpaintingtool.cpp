@@ -84,12 +84,11 @@ namespace DigikamInPaintingImagesPlugin
 InPaintingTool::InPaintingTool(QObject* parent)
               : EditorToolThreaded(parent)
 {
-    m_isComputed = false;
-    QString whatsThis;
-
     setName("inpainting");
     setToolName(i18n("Inpainting"));
     setToolIcon(SmallIcon("inpainting"));
+
+    m_isComputed = false;
 
     m_previewWidget = new ImageWidget("inpainting Tool", 0,
                                       i18n("<p>Here you can see the image selection preview with "

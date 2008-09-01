@@ -67,19 +67,17 @@ namespace DigikamFreeRotationImagesPlugin
 FreeRotationTool::FreeRotationTool(QObject* parent)
                 : EditorToolThreaded(parent)
 {
-    QString whatsThis;
-
     setName("freerotation");
     setToolName(i18n("Free Rotation"));
     setToolIcon(SmallIcon("freerotation"));
 
-    m_previewWidget = new ImageWidget("freerotation Tool", 0, 
+    m_previewWidget = new ImageWidget("freerotation Tool", 0,
                                       i18n("<p>This is the free rotation operation preview. "
                                            "If you move the mouse cursor on this preview, "
                                            "a vertical and horizontal dashed line will be drawn "
                                            "to guide you in adjusting the free rotation correction. "
                                            "Release the left mouse button to freeze the dashed "
-                                           "line's position."), 
+                                           "line's position."),
                                       false, ImageGuideWidget::HVGuideMode);
 
     setToolView(m_previewWidget);
@@ -245,7 +243,7 @@ void FreeRotationTool::prepareEffect()
                iface->previewHasAlpha(), data);
     delete [] data;
 
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new FreeRotation(&image, this, angle, antialiasing, 
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new FreeRotation(&image, this, angle, antialiasing,
                                                 autocrop, background, orgW, orgH)));
 }
 
@@ -269,7 +267,7 @@ void FreeRotationTool::prepareFinal()
     DImg orgImage(orgW, orgH, iface.originalSixteenBit(), iface.originalHasAlpha(), data);
     delete [] data;
 
-    setFilter(dynamic_cast<DImgThreadedFilter *>(new FreeRotation(&orgImage, this, angle, antialiasing, 
+    setFilter(dynamic_cast<DImgThreadedFilter *>(new FreeRotation(&orgImage, this, angle, antialiasing,
                                                  autocrop, background, orgW, orgH)));
 }
 

@@ -71,8 +71,6 @@ namespace DigikamNoiseReductionImagesPlugin
 NoiseReductionTool::NoiseReductionTool(QObject* parent)
                   : EditorToolThreaded(parent)
 {
-    QString whatsThis;
-
     setName("noisereduction");
     setToolName(i18n("Noise Reduction"));
     setToolIcon(SmallIcon("noisereduction"));
