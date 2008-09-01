@@ -618,7 +618,7 @@ void ICCProofTool::readSettings()
     }
 
     // Plugin settings.
-    group = config->group("colormanagement Tool Dialog");
+    group = config->group("colormanagement Tool");
     m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
     m_toolBoxWidgets->setCurrentIndex(group.readEntry("Settings Tab", (int)GENERALPAGE));
     m_inProfilesPath->setUrl(group.readPathEntry("InputProfilePath", defaultICCPath));
@@ -664,7 +664,7 @@ void ICCProofTool::readSettings()
 void ICCProofTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("colormanagement Tool Dialog");
+    KConfigGroup group = config->group("colormanagement Tool");
     group.writeEntry("Settings Tab", m_toolBoxWidgets->currentIndex());
     group.writeEntry("Histogram Channel", m_channelCB->currentIndex());
     group.writeEntry("Histogram Scale", m_scaleBG->checkedId());

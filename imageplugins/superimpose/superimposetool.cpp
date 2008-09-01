@@ -215,7 +215,7 @@ void SuperImposeTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("Album Settings");
     KUrl albumDBUrl( group.readEntry("Album Path", KGlobalSettings::documentPath()) );
-    group = config->group("superimpose Tool Dialog");
+    group = config->group("superimpose Tool");
     group = config->group("Template Superimpose Tool Settings");
     m_templatesRootUrl.setPath( group.readEntry("Templates Root URL", albumDBUrl.path()) );
     m_templatesUrl.setPath( group.readEntry("Templates URL", albumDBUrl.path()) );
@@ -225,7 +225,7 @@ void SuperImposeTool::readSettings()
 void SuperImposeTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("superimpose Tool Dialog");
+    KConfigGroup group = config->group("superimpose Tool");
     group.writeEntry( "Templates Root URL", m_dirSelect->rootPath().path() );
     group.writeEntry( "Templates URL", m_templatesUrl.path() );
     group.sync();

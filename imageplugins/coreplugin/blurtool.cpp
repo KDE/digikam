@@ -127,9 +127,7 @@ void BlurTool::slotResetSettings()
 void BlurTool::prepareEffect()
 {
     m_radiusInput->setEnabled(false);
-
     DImg img = m_previewWidget->getOriginalRegionImage();
-
     setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgGaussianBlur(&img, this, m_radiusInput->value())));
 }
 
