@@ -189,26 +189,26 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     m_adjTemperatureLabel = new QLabel(i18n("Adjustment:"), m_gboxSettings->plainPage());
     m_temperatureInput    = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_temperatureInput->setPrecision(1);
-    m_temperatureInput->setRange(2000.0, 12000.0, 10.0);
+    m_temperatureInput->setRange(1750.0, 12000.0, 10.0);
     m_temperatureInput->setDefaultValue(6500.0);
     QWhatsThis::add( m_temperatureInput, i18n("<p>Set here the white balance color temperature in Kelvin."));
 
     m_temperaturePresetLabel = new QLabel(i18n("Preset:"), m_gboxSettings->plainPage());
     m_temperaturePresetCB = new RComboBox(m_gboxSettings->plainPage());
-    m_temperaturePresetCB->insertItem( i18n("Candle") );
-    m_temperaturePresetCB->insertItem( i18n("40W Lamp") );
-    m_temperaturePresetCB->insertItem( i18n("100W Lamp") );
-    m_temperaturePresetCB->insertItem( i18n("200W Lamp") );
-    m_temperaturePresetCB->insertItem( i18n("Sunrise") );
-    m_temperaturePresetCB->insertItem( i18n("Studio Lamp") );
-    m_temperaturePresetCB->insertItem( i18n("Moonlight") );
-    m_temperaturePresetCB->insertItem( i18n("Neutral") );
-    m_temperaturePresetCB->insertItem( i18n("Daylight D50") );
-    m_temperaturePresetCB->insertItem( i18n("Photo Flash") );
-    m_temperaturePresetCB->insertItem( i18n("Sun") );
-    m_temperaturePresetCB->insertItem( i18n("Xenon Lamp") );
-    m_temperaturePresetCB->insertItem( i18n("Daylight D65") );
-    m_temperaturePresetCB->insertItem( i18n("None") );
+    m_temperaturePresetCB->insertItem(i18n("Candle"));
+    m_temperaturePresetCB->insertItem(i18n("40W Lamp"));
+    m_temperaturePresetCB->insertItem(i18n("100W Lamp"));
+    m_temperaturePresetCB->insertItem(i18n("200W Lamp"));
+    m_temperaturePresetCB->insertItem(i18n("Sunrise"));
+    m_temperaturePresetCB->insertItem(i18n("Studio Lamp"));
+    m_temperaturePresetCB->insertItem(i18n("Moonlight"));
+    m_temperaturePresetCB->insertItem(i18n("Neutral"));
+    m_temperaturePresetCB->insertItem(i18n("Daylight D50"));
+    m_temperaturePresetCB->insertItem(i18n("Photo Flash"));
+    m_temperaturePresetCB->insertItem(i18n("Sun"));
+    m_temperaturePresetCB->insertItem(i18n("Xenon Lamp"));
+    m_temperaturePresetCB->insertItem(i18n("Daylight D65"));
+    m_temperaturePresetCB->insertItem(i18n("None"));
     m_temperaturePresetCB->setDefaultItem(DaylightD65);
     QWhatsThis::add( m_temperaturePresetCB, i18n("<p>Select the white balance color temperature "
                                                  "preset to use here:<p>"
@@ -305,34 +305,34 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    grid2->addMultiCellWidget(m_temperatureLabel,       0, 0, 0, 5);
-    grid2->addMultiCellWidget(m_adjTemperatureLabel,    1, 1, 0, 0);
-    grid2->addMultiCellWidget(m_pickTemperature,        1, 1, 1, 1);
-    grid2->addMultiCellWidget(m_temperatureInput,       1, 1, 2, 5);
-    grid2->addMultiCellWidget(m_temperaturePresetLabel, 2, 2, 0, 0);
-    grid2->addMultiCellWidget(m_temperaturePresetCB,    2, 2, 2, 5);
+    grid2->addMultiCellWidget(m_temperatureLabel,       0,  0, 0, 5);
+    grid2->addMultiCellWidget(m_adjTemperatureLabel,    1,  1, 0, 0);
+    grid2->addMultiCellWidget(m_pickTemperature,        1,  1, 1, 1);
+    grid2->addMultiCellWidget(m_temperatureInput,       1,  1, 2, 5);
+    grid2->addMultiCellWidget(m_temperaturePresetLabel, 2,  2, 0, 0);
+    grid2->addMultiCellWidget(m_temperaturePresetCB,    2,  2, 2, 5);
 
-    grid2->addMultiCellWidget(line,                     3, 3, 0, 5);
+    grid2->addMultiCellWidget(line,                     3,  3, 0, 5);
 
-    grid2->addMultiCellWidget(m_blackLabel,             4, 4, 0, 0);
-    grid2->addMultiCellWidget(m_blackInput,             4, 4, 1, 5);
-    grid2->addMultiCellWidget(m_darkLabel,              5, 5, 0, 0);
-    grid2->addMultiCellWidget(m_darkInput,              5, 5, 1, 5);
-    grid2->addMultiCellWidget(m_saturationLabel,        6, 6, 0, 0);
-    grid2->addMultiCellWidget(m_saturationInput,        6, 6, 1, 5);
-    grid2->addMultiCellWidget(m_gammaLabel,             7, 7, 0, 0);
-    grid2->addMultiCellWidget(m_gammaInput,             7, 7, 1, 5);
-    grid2->addMultiCellWidget(m_greenLabel,             8, 8, 0, 0);
-    grid2->addMultiCellWidget(m_greenInput,             8, 8, 1, 5);
+    grid2->addMultiCellWidget(m_blackLabel,             4,  4, 0, 0);
+    grid2->addMultiCellWidget(m_blackInput,             4,  4, 1, 5);
+    grid2->addMultiCellWidget(m_darkLabel,              5,  5, 0, 0);
+    grid2->addMultiCellWidget(m_darkInput,              5,  5, 1, 5);
+    grid2->addMultiCellWidget(m_saturationLabel,        6,  6, 0, 0);
+    grid2->addMultiCellWidget(m_saturationInput,        6,  6, 1, 5);
+    grid2->addMultiCellWidget(m_gammaLabel,             7,  7, 0, 0);
+    grid2->addMultiCellWidget(m_gammaInput,             7,  7, 1, 5);
+    grid2->addMultiCellWidget(m_greenLabel,             8,  8, 0, 0);
+    grid2->addMultiCellWidget(m_greenInput,             8,  8, 1, 5);
 
-    grid2->addMultiCellWidget(line2,                    9, 9, 0, 5);
+    grid2->addMultiCellWidget(line2,                    9,  9, 0, 5);
 
-    grid2->addMultiCellWidget(m_exposureLabel,          10, 10, 0, 5);
-    grid2->addMultiCellWidget(m_mainExposureLabel,      11, 11, 0, 0);
-    grid2->addMultiCellWidget(m_autoAdjustExposure,     11, 11, 1, 1);
-    grid2->addMultiCellWidget(m_mainExposureInput,      11, 11, 2, 5);
-    grid2->addMultiCellWidget(m_fineExposureLabel,      12, 12, 0, 1);
-    grid2->addMultiCellWidget(m_fineExposureInput,      12, 12, 2, 5);
+    grid2->addMultiCellWidget(m_exposureLabel,         10, 10, 0, 5);
+    grid2->addMultiCellWidget(m_mainExposureLabel,     11, 11, 0, 0);
+    grid2->addMultiCellWidget(m_autoAdjustExposure,    11, 11, 1, 1);
+    grid2->addMultiCellWidget(m_mainExposureInput,     11, 11, 2, 5);
+    grid2->addMultiCellWidget(m_fineExposureLabel,     12, 12, 0, 1);
+    grid2->addMultiCellWidget(m_fineExposureInput,     12, 12, 2, 5);
     grid2->setRowStretch(13, 10);
     grid2->setMargin(m_gboxSettings->spacingHint());
     grid2->setSpacing(m_gboxSettings->spacingHint());
