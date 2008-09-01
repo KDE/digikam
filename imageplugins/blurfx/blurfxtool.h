@@ -6,8 +6,8 @@
  * Date        : 2005-02-09
  * Description : a plugin to apply Blur FX to images
  *
- * Copyright 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,12 +22,12 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_BLURFX_H
-#define IMAGEEFFECT_BLURFX_H
+#ifndef BLURFXTOOL_H
+#define BLURFXTOOL_H
 
 // Digikam includes.
 
-#include "ctrlpaneldlg.h"
+#include "editortool.h"
 
 class QComboBox;
 class QLabel;
@@ -36,29 +36,37 @@ class KIntNumInput;
 
 namespace KDcrawIface
 {
+class RIntNumInput;
+class RComboBox;
+}
+
+namespace Digikam
+{
+class EditorToolSettings;
+class ImagePanelWidget;
 }
 
 namespace DigikamBlurFXImagesPlugin
 {
 
-class ImageEffect_BlurFX : public Digikam::CtrlPanelDlg
+class BlurFXTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_BlurFX(QWidget *parent);
-    ~ImageEffect_BlurFX();
+    BlurFXTool(QObject *parent);
+    ~BlurFXTool();
 
 private slots:
 
     void slotEffectTypeChanged(int type);
-    void readUserSettings();
+    void slotResetSettings();
 
 private:
 
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void prepareEffect();
     void prepareFinal();
     void abortPreview();
@@ -68,16 +76,20 @@ private:
 
 private:
 
-    QComboBox    *m_effectType;
+    QComboBox                   *m_effectType;
 
-    QLabel       *m_effectTypeLabel;
-    QLabel       *m_distanceLabel;
-    QLabel       *m_levelLabel;
+    QLabel                      *m_effectTypeLabel;
+    QLabel                      *m_distanceLabel;
+    QLabel                      *m_levelLabel;
 
-    KIntNumInput *m_distanceInput;
-    KIntNumInput *m_levelInput;
+    KIntNumInput                *m_distanceInput;
+    KIntNumInput                *m_levelInput;
+
+    Digikam::ImagePanelWidget   *m_previewWidget;
+
+    Digikam::EditorToolSettings *m_gboxSettings;
 };
 
 }  // NameSpace DigikamBlurFXImagesPlugin
 
-#endif /* IMAGEEFFECT_BLURFX_H */
+#endif /* BLURFXTOOL_H */

@@ -34,9 +34,11 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "imageeffect_blurfx.h"
+#include "blurfxtool.h"
 #include "imageplugin_blurfx.h"
 #include "imageplugin_blurfx.moc"
+
+using namespace DigikamBlurFXImagesPlugin;
 
 K_PLUGIN_FACTORY( BlurFXFactory, registerPlugin<ImagePlugin_BlurFX>(); )
 K_EXPORT_PLUGIN ( BlurFXFactory("digikamimageplugin_blurfx") )
@@ -66,6 +68,6 @@ void ImagePlugin_BlurFX::setEnabledActions(bool enable)
 
 void ImagePlugin_BlurFX::slotBlurFX()
 {
-    DigikamBlurFXImagesPlugin::ImageEffect_BlurFX dlg(kapp->activeWindow());
-    dlg.exec();
+    BlurFXTool *tool = new BlurFXTool(this);
+    loadTool(tool);
 }

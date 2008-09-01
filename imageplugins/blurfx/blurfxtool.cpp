@@ -6,8 +6,8 @@
  * Date        : 2005-02-09
  * Description : a plugin to apply Blur FX to images
  *
- * Copyright 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,10 +39,13 @@
 #include <kapplication.h>
 #include <knuminput.h>
 #include <kglobal.h>
+#include <kiconloader.h>
+#include <kconfiggroup.h>
 
 // LibKDcraw includes.
 
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/rcombobox.h>
 
 // Local includes.
 
@@ -50,53 +53,40 @@
 #include "daboutdata.h"
 #include "ddebug.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imagepanelwidget.h"
+#include "editortoolsettings.h"
 #include "blurfx.h"
-#include "imageeffect_blurfx.h"
-#include "imageeffect_blurfx.moc"
+#include "blurfxtool.h"
+#include "blurfxtool.moc"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamBlurFXImagesPlugin
 {
 
-ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
-                  : Digikam::CtrlPanelDlg(parent, i18n("Assortment of blurring special effects"),
-                                          "blurfx", false, false, true,
-                                          Digikam::ImagePannelWidget::SeparateViewAll)
+BlurFXTool::BlurFXTool(QObject* parent)
+          : EditorToolThreaded(parent)
 {
     QString whatsThis;
 
-    KAboutData* about = new KAboutData("digikam", 0,
-                                       ki18n("Blur Effects"),
-                                       digiKamVersion().toAscii(),
-                                       ki18n("A digiKam image plugin to apply blurring special effects "
-                                       "to an image."),
-                                       KAboutData::License_GPL,
-                                       ki18n("(c) 2005, Gilles Caulier\n"
-                                       "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg"),
-                                       KLocalizedString(),
-                                       Digikam::webProjectUrl().url().toUtf8());
-
-    about->addAuthor(ki18n("Gilles Caulier"), ki18n("Author and maintainer"),
-                     "caulier dot gilles at gmail dot com");
-
-    about->addAuthor(ki18n("Pieter Z. Voloshyn"), ki18n("Blurring algorithms"),
-                     "pieter dot voloshyn at gmail dot com");
-
-    about->addAuthor(ki18n("Marcel Wiesweg"), ki18n("Developer"),
-                     "marcel dot wiesweg at gmx dot de");
-
-    setAboutData(about);
+    setObjectName("blurfx");
+    setToolName(i18n("Blur FX"));
+    setToolIcon(SmallIcon("blurfx"));
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings );
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel|
+                                            EditorToolSettings::Try,
+                                            EditorToolSettings::PanIcon);
 
-    m_effectTypeLabel = new QLabel(i18n("Type:"), gboxSettings);
+    QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage() );
 
-    m_effectType      = new QComboBox( gboxSettings );
+    m_effectTypeLabel = new QLabel(i18n("Type:"), m_gboxSettings->plainPage());
+
+    m_effectType      = new QComboBox( m_gboxSettings->plainPage() );
     m_effectType->addItem( i18n("Zoom Blur") );
     m_effectType->addItem( i18n("Radial Blur") );
     m_effectType->addItem( i18n("Far Blur") );
@@ -131,30 +121,37 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
                                      "<b>Mosaic</b>: divides the photograph into rectangular cells and then "
                                      "recreates it by filling those cells with average pixel value."));
 
-    m_distanceLabel = new QLabel(i18n("Distance:"), gboxSettings);
-    m_distanceInput = new KIntNumInput(gboxSettings);
+    m_distanceLabel = new QLabel(i18n("Distance:"), m_gboxSettings->plainPage());
+    m_distanceInput = new KIntNumInput(m_gboxSettings->plainPage());
     m_distanceInput->setRange(0, 100, 1);
     m_distanceInput->setSliderEnabled(true);
     m_distanceInput->setWhatsThis( i18n("<p>Set here the blur distance in pixels."));
 
-    m_levelLabel = new QLabel(i18n("Level:"), gboxSettings);
-    m_levelInput = new KIntNumInput(gboxSettings);
+    m_levelLabel = new QLabel(i18n("Level:"), m_gboxSettings->plainPage());
+    m_levelInput = new KIntNumInput(m_gboxSettings->plainPage());
     m_levelInput->setRange(0, 360, 1);
     m_levelInput->setSliderEnabled(true);
     m_levelInput->setWhatsThis( i18n("<p>This value controls the level to use with the current effect."));
 
     // -------------------------------------------------------------
 
-    gridSettings->addWidget(m_effectTypeLabel, 0, 0, 1, 2 );
-    gridSettings->addWidget(m_effectType, 1, 0, 1, 2 );
-    gridSettings->addWidget(m_distanceLabel, 2, 0, 1, 2 );
-    gridSettings->addWidget(m_distanceInput, 3, 0, 1, 2 );
-    gridSettings->addWidget(m_levelLabel, 4, 0, 1, 2 );
-    gridSettings->addWidget(m_levelInput, 5, 0, 1, 2 );
-    gridSettings->setMargin(spacingHint());
-    gridSettings->setSpacing(spacingHint());
+    grid->addWidget(m_effectTypeLabel, 0, 0, 1, 2);
+    grid->addWidget(m_effectType,      1, 0, 1, 2);
+    grid->addWidget(m_distanceLabel,   2, 0, 1, 2);
+    grid->addWidget(m_distanceInput,   3, 0, 1, 2);
+    grid->addWidget(m_levelLabel,      4, 0, 1, 2);
+    grid->addWidget(m_levelInput,      5, 0, 1, 2);
+    grid->setRowStretch(6, 10);
+    grid->setMargin(m_gboxSettings->spacingHint());
+    grid->setSpacing(m_gboxSettings->spacingHint());
 
-    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
+    setToolSettings(m_gboxSettings);
+
+    // -------------------------------------------------------------
+
+    m_previewWidget = new ImagePanelWidget(470, 350, "blurfx Tool", m_gboxSettings->panIconView());
+
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
@@ -168,11 +165,11 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
             this, SLOT(slotTimer()));
 }
 
-ImageEffect_BlurFX::~ImageEffect_BlurFX()
+BlurFXTool::~BlurFXTool()
 {
 }
 
-void ImageEffect_BlurFX::renderingFinished(void)
+void BlurFXTool::renderingFinished()
 {
 
     m_effectTypeLabel->setEnabled(true);
@@ -204,10 +201,10 @@ void ImageEffect_BlurFX::renderingFinished(void)
     }
 }
 
-void ImageEffect_BlurFX::readUserSettings()
+void BlurFXTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("blurfx Tool Dialog");
+    KConfigGroup group        = config->group("blurfx Tool");
     m_effectType->blockSignals(true);
     m_distanceInput->blockSignals(true);
     m_levelInput->blockSignals(true);
@@ -219,23 +216,23 @@ void ImageEffect_BlurFX::readUserSettings()
     m_levelInput->blockSignals(false);
 }
 
-void ImageEffect_BlurFX::writeUserSettings()
+void BlurFXTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("blurfx Tool Dialog");
+    KConfigGroup group        = config->group("blurfx Tool");
     group.writeEntry("EffectType", m_effectType->currentIndex());
     group.writeEntry("DistanceAjustment", m_distanceInput->value());
     group.writeEntry("LevelAjustment", m_levelInput->value());
     group.sync();
 }
 
-void ImageEffect_BlurFX::resetValues()
+void BlurFXTool::slotResetSettings()
 {
     m_effectType->setCurrentIndex(BlurFX::ZoomBlur);
     slotEffectTypeChanged(BlurFX::ZoomBlur);
 }
 
-void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
+void BlurFXTool::slotEffectTypeChanged(int type)
 {
     m_distanceInput->setEnabled(true);
     m_distanceLabel->setEnabled(true);
@@ -315,7 +312,7 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
     slotEffect();
 }
 
-void ImageEffect_BlurFX::prepareEffect()
+void BlurFXTool::prepareEffect()
 {
     m_effectTypeLabel->setEnabled(false);
     m_effectType->setEnabled(false);
@@ -324,7 +321,7 @@ void ImageEffect_BlurFX::prepareEffect()
     m_levelInput->setEnabled(false);
     m_levelLabel->setEnabled(false);
 
-    Digikam::DImg image;
+    DImg image;
 
     switch (m_effectType->currentIndex())
     {
@@ -332,7 +329,7 @@ void ImageEffect_BlurFX::prepareEffect()
        case BlurFX::RadialBlur:
        case BlurFX::FocusBlur:
        {
-            Digikam::ImageIface iface(0, 0);
+            ImageIface iface(0, 0);
             image = *iface.getOriginalImg();
             break;
        }
@@ -344,7 +341,7 @@ void ImageEffect_BlurFX::prepareEffect()
        case BlurFX::SmartBlur:
        case BlurFX::FrostGlass:
        case BlurFX::Mosaic:
-           image = m_imagePreviewWidget->getOriginalRegionImage();
+           image = m_previewWidget->getOriginalRegionImage();
            break;
     }
 
@@ -352,10 +349,10 @@ void ImageEffect_BlurFX::prepareEffect()
     int d = m_distanceInput->value();
     int l = m_levelInput->value();
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new BlurFX(&image, this, t, d, l));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new BlurFX(&image, this, t, d, l)));
 }
 
-void ImageEffect_BlurFX::prepareFinal()
+void BlurFXTool::prepareFinal()
 {
     m_effectTypeLabel->setEnabled(false);
     m_effectType->setEnabled(false);
@@ -368,11 +365,11 @@ void ImageEffect_BlurFX::prepareFinal()
     int d = m_distanceInput->value();
     int l = m_levelInput->value();
 
-    Digikam::ImageIface iface(0, 0);
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new BlurFX(iface.getOriginalImg(), this, t, d, l));
+    ImageIface iface(0, 0);
+    setFilter(dynamic_cast<DImgThreadedFilter *>(new BlurFX(iface.getOriginalImg(), this, t, d, l)));
 }
 
-void ImageEffect_BlurFX::putPreviewData(void)
+void BlurFXTool::putPreviewData()
 {
     switch (m_effectType->currentIndex())
     {
@@ -380,9 +377,9 @@ void ImageEffect_BlurFX::putPreviewData(void)
         case BlurFX::RadialBlur:
         case BlurFX::FocusBlur:
         {
-            QRect pRect    = m_imagePreviewWidget->getOriginalImageRegionToRender();
-            Digikam::DImg destImg = m_threadedFilter->getTargetImage().copy(pRect);
-            m_imagePreviewWidget->setPreviewImage(destImg);
+            QRect pRect    = m_previewWidget->getOriginalImageRegionToRender();
+            DImg destImg = filter()->getTargetImage().copy(pRect);
+            m_previewWidget->setPreviewImage(destImg);
             break;
         }
         case BlurFX::FarBlur:
@@ -392,17 +389,15 @@ void ImageEffect_BlurFX::putPreviewData(void)
         case BlurFX::SmartBlur:
         case BlurFX::FrostGlass:
         case BlurFX::Mosaic:
-            m_imagePreviewWidget->setPreviewImage(m_threadedFilter->getTargetImage());
+            m_previewWidget->setPreviewImage(filter()->getTargetImage());
             break;
     }
 }
 
-void ImageEffect_BlurFX::putFinalData(void)
+void BlurFXTool::putFinalData()
 {
-    Digikam::ImageIface iface(0, 0);
-
-    iface.putOriginalImage(i18n("Blur Effects"),
-                           m_threadedFilter->getTargetImage().bits());
+    ImageIface iface(0, 0);
+    iface.putOriginalImage(i18n("Blur Effects"), filter()->getTargetImage().bits());
 }
 
 }  // NameSpace DigikamBlurFXImagesPlugin

@@ -1,6 +1,6 @@
 
 SET(digikamimageplugin_blurfx_PART_SRCS imageplugin_blurfx.cpp
-                                        imageeffect_blurfx.cpp 
+                                        blurfxtool.cpp 
                                         blurfx.cpp 
    )
 
