@@ -69,6 +69,6 @@ void ImagePlugin_Border::setEnabledActions(bool enable)
 
 void ImagePlugin_Border::slotBorder()
 {
-    BorderTool *tool = new BorderTool(kapp->activeWindow());
+    BorderTool *tool = new BorderTool(this);
     loadTool(tool);
 }

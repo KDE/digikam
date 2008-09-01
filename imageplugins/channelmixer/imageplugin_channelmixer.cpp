@@ -69,6 +69,6 @@ void ImagePlugin_ChannelMixer::setEnabledActions(bool enable)
 
 void ImagePlugin_ChannelMixer::slotChannelMixer()
 {
-    ChannelMixerTool *tool = new ChannelMixerTool(kapp->activeWindow());
+    ChannelMixerTool *tool = new ChannelMixerTool(this);
     loadTool(tool);
 }

@@ -70,6 +70,6 @@ void ImagePlugin_AdjustCurves::setEnabledActions(bool enable)
 
 void ImagePlugin_AdjustCurves::slotCurvesAdjust()
 {
-    AdjustCurvesTool *tool = new AdjustCurvesTool(kapp->activeWindow());
+    AdjustCurvesTool *tool = new AdjustCurvesTool(this);
     loadTool(tool);
 }

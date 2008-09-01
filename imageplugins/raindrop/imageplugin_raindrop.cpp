@@ -68,6 +68,6 @@ void ImagePlugin_RainDrop::setEnabledActions(bool enable)
 
 void ImagePlugin_RainDrop::slotRainDrop()
 {
-    RainDropTool *tool = new RainDropTool(kapp->activeWindow());
+    RainDropTool *tool = new RainDropTool(this);
     loadTool(tool);
 }

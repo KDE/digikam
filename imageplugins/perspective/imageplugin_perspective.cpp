@@ -68,6 +68,6 @@ void ImagePlugin_Perspective::setEnabledActions(bool enable)
 
 void ImagePlugin_Perspective::slotPerspective()
 {
-    PerspectiveTool *tool = new PerspectiveTool(kapp->activeWindow());
+    PerspectiveTool *tool = new PerspectiveTool(this);
     loadTool(tool);
 }

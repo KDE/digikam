@@ -71,6 +71,6 @@ void ImagePlugin_DistortionFX::setEnabledActions(bool enable)
 
 void ImagePlugin_DistortionFX::slotDistortionFX()
 {
-    DistortionFXTool *tool = new DistortionFXTool(kapp->activeWindow());
+    DistortionFXTool *tool = new DistortionFXTool(this);
     loadTool(tool);
 }

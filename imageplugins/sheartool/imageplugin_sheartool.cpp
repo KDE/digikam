@@ -68,6 +68,6 @@ void ImagePlugin_ShearTool::setEnabledActions(bool enable)
 
 void ImagePlugin_ShearTool::slotShearTool()
 {
-    ShearTool *tool = new ShearTool(kapp->activeWindow());
+    ShearTool *tool = new ShearTool(this);
     loadTool(tool);
 }

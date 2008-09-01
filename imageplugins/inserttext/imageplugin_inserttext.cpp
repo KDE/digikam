@@ -70,6 +70,6 @@ void ImagePlugin_InsertText::setEnabledActions(bool enable)
 
 void ImagePlugin_InsertText::slotInsertText()
 {
-    InsertTextTool *tool = new InsertTextTool(kapp->activeWindow());
+    InsertTextTool *tool = new InsertTextTool(this);
     loadTool(tool);
 }

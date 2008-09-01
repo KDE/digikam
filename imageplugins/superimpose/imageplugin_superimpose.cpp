@@ -70,6 +70,6 @@ void ImagePlugin_SuperImpose::setEnabledActions(bool enable)
 
 void ImagePlugin_SuperImpose::slotSuperImpose()
 {
-    SuperImposeTool *tool = new SuperImposeTool(kapp->activeWindow());
+    SuperImposeTool *tool = new SuperImposeTool(this);
     loadTool(tool);
 }

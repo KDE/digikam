@@ -69,6 +69,6 @@ void ImagePlugin_AdjustLevels::setEnabledActions(bool enable)
 
 void ImagePlugin_AdjustLevels::slotLevelsAdjust()
 {
-    AdjustLevelTool *tool = new AdjustLevelTool(kapp->activeWindow());
+    AdjustLevelTool *tool = new AdjustLevelTool(this);
     loadTool(tool);
 }

@@ -71,6 +71,6 @@ void ImagePlugin_WhiteBalance::setEnabledActions(bool enable)
 
 void ImagePlugin_WhiteBalance::slotWhiteBalance()
 {
-    WhiteBalanceTool *tool = new WhiteBalanceTool(kapp->activeWindow());
+    WhiteBalanceTool *tool = new WhiteBalanceTool(this);
     loadTool(tool);
 }

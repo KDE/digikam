@@ -70,6 +70,6 @@ void ImagePlugin_ColorFX::setEnabledActions(bool enable)
 
 void ImagePlugin_ColorFX::slotColorFX()
 {
-    ColorFXTool *tool = new ColorFXTool(kapp->activeWindow());
+    ColorFXTool *tool = new ColorFXTool(this);
     loadTool(tool);
 }
