@@ -70,7 +70,6 @@ EmbossTool::EmbossTool(QObject* parent)
     m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
                                             EditorToolSettings::Ok|
                                             EditorToolSettings::Cancel|
-                                            EditorToolSettings::Try,
                                             EditorToolSettings::PanIcon);
     QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage(), 2, 1);
     QLabel *label1    = new QLabel(i18n("Depth:"), m_gboxSettings->plainPage());
