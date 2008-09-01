@@ -33,7 +33,6 @@
 
 #include "editortool.h"
 
-
 namespace KDcrawIface
 {
 class RIntNumInput;
