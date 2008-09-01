@@ -43,6 +43,6 @@ filmgrain                   CtrlPanelDlg                        DONE
 hotpixels                   CtrlPanelDlg        DONE            DONE
 infrared                    CtrlPanelDlg                        DONE
 noisereduction              CtrlPanelDlg        DONE            DONE
-oilpaint                    CtrlPanelDlg        G
+oilpaint                    CtrlPanelDlg        DONE
 restoration                 CtrlPanelDlg        DONE            DONE
-texture                     CtrlPanelDlg
+texture                     CtrlPanelDlg        G
