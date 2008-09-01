@@ -7,7 +7,7 @@
  * Description : a digikam image editor plugin to
  *               simulate charcoal drawing.
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,6 +37,7 @@
 #include <knuminput.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
+#include <kconfiggroup.h>
 
 // LibKDcraw includes.
 
@@ -49,45 +50,37 @@
 #include "ddebug.h"
 #include "dimg.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imagepanelwidget.h"
+#include "editortoolsettings.h"
 #include "charcoal.h"
-#include "imageeffect_charcoal.h"
-#include "imageeffect_charcoal.moc"
+#include "charcoaltool.h"
+#include "charcoaltool.moc"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamCharcoalImagesPlugin
 {
 
-ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
-                    : Digikam::CtrlPanelDlg(parent, i18n("Charcoal Drawing"),
-                                            "charcoal", false, false, true,
-                                            Digikam::ImagePannelWidget::SeparateViewAll)
+CharcoalTool::CharcoalTool(QObject* parent)
+            : EditorToolThreaded(parent)
 {
-    QString whatsThis;
-
-    KAboutData* about = new KAboutData("digikam", 0,
-                                       ki18n("Charcoal Drawing"),
-                                       digiKamVersion().toAscii(),
-                                       ki18n("A digiKam charcoal drawing image effect plugin."),
-                                       KAboutData::License_GPL,
-                                       ki18n("(c) 2004-2008, Gilles Caulier"),
-                                       KLocalizedString(),
-                                       Digikam::webProjectUrl().url().toUtf8());
-
-    about->addAuthor(ki18n("Gilles Caulier"), ki18n("Author and maintainer"),
-                     "caulier dot gilles at gmail dot com");
-
-    setAboutData(about);
+    setObjectName("charcoal");
+    setToolName(i18n("Charcoal"));
+    setToolIcon(SmallIcon("charcoaltool"));
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings );
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel|
+                                            EditorToolSettings::Try,
+                                            EditorToolSettings::PanIcon);
+    QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage() );
 
-    QLabel *label1 = new QLabel(i18n("Pencil size:"), gboxSettings);
+    QLabel *label1 = new QLabel(i18n("Pencil size:"), m_gboxSettings->plainPage());
 
-    m_pencilInput  = new KIntNumInput(gboxSettings);
+    m_pencilInput  = new KIntNumInput(m_gboxSettings->plainPage());
     m_pencilInput->setRange(1, 100, 1);
     m_pencilInput->setSliderEnabled(true);
     m_pencilInput->setValue(5);
@@ -95,9 +88,9 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Smooth:"), gboxSettings);
+    QLabel *label2 = new QLabel(i18n("Smooth:"), m_gboxSettings->plainPage());
 
-    m_smoothInput = new KIntNumInput(gboxSettings);
+    m_smoothInput = new KIntNumInput(m_gboxSettings->plainPage());
     m_smoothInput->setRange(1, 100, 1);
     m_smoothInput->setSliderEnabled(true);
     m_smoothInput->setValue(10);
@@ -106,14 +99,21 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    gridSettings->addWidget(label1, 0, 0, 1, 2 );
-    gridSettings->addWidget(m_pencilInput, 1, 0, 1, 2 );
-    gridSettings->addWidget(label2, 2, 0, 1, 2 );
-    gridSettings->addWidget(m_smoothInput, 3, 0, 1, 2 );
-    gridSettings->setMargin(spacingHint());
-    gridSettings->setSpacing(spacingHint());
+    grid->addWidget(label1,        0, 0, 1, 2);
+    grid->addWidget(m_pencilInput, 1, 0, 1, 2);
+    grid->addWidget(label2,        2, 0, 1, 2);
+    grid->addWidget(m_smoothInput, 3, 0, 1, 2);
+    grid->setRowStretch(4, 10);
+    grid->setMargin(m_gboxSettings->spacingHint());
+    grid->setSpacing(m_gboxSettings->spacingHint());
 
-    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
+    setToolSettings(m_gboxSettings);
+
+    // -------------------------------------------------------------
+
+    m_previewWidget = new ImagePanelWidget(470, 350, "charcoal Tool", m_gboxSettings->panIconView());
+
+    setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
 
@@ -124,20 +124,20 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
             this, SLOT(slotTimer()));
 }
 
-ImageEffect_Charcoal::~ImageEffect_Charcoal()
+CharcoalTool::~CharcoalTool()
 {
 }
 
-void ImageEffect_Charcoal::renderingFinished()
+void CharcoalTool::renderingFinished()
 {
     m_pencilInput->setEnabled(true);
     m_smoothInput->setEnabled(true);
 }
 
-void ImageEffect_Charcoal::readUserSettings()
+void CharcoalTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("charcoal Tool Dialog");
+    KConfigGroup group        = config->group("charcoal Tool");
     m_pencilInput->blockSignals(true);
     m_smoothInput->blockSignals(true);
     m_pencilInput->setValue(group.readEntry("PencilAjustment", 5));
@@ -146,16 +146,16 @@ void ImageEffect_Charcoal::readUserSettings()
     m_smoothInput->blockSignals(false);
 }
 
-void ImageEffect_Charcoal::writeUserSettings()
+void CharcoalTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("charcoal Tool Dialog");
+    KConfigGroup group        = config->group("charcoal Tool");
     group.writeEntry("PencilAjustment", m_pencilInput->value());
     group.writeEntry("SmoothAjustment", m_smoothInput->value());
     config->sync();
 }
 
-void ImageEffect_Charcoal::resetValues()
+void CharcoalTool::slotResetSettings()
 {
     m_pencilInput->blockSignals(true);
     m_smoothInput->blockSignals(true);
@@ -165,7 +165,19 @@ void ImageEffect_Charcoal::resetValues()
     m_smoothInput->blockSignals(false);
 }
 
-void ImageEffect_Charcoal::prepareEffect()
+void CharcoalTool::prepareEffect()
+{
+    m_pencilInput->setEnabled(false);
+    m_smoothInput->setEnabled(false);
+
+    double pencil = (double)m_pencilInput->value()/10.0;
+    double smooth = (double)m_smoothInput->value();
+    DImg image    = m_previewWidget->getOriginalRegionImage();
+
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new Charcoal(&image, this, pencil, smooth)));
+}
+
+void CharcoalTool::prepareFinal()
 {
     m_pencilInput->setEnabled(false);
     m_smoothInput->setEnabled(false);
@@ -173,33 +185,19 @@ void ImageEffect_Charcoal::prepareEffect()
     double pencil = (double)m_pencilInput->value()/10.0;
     double smooth = (double)m_smoothInput->value();
 
-    Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
-
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new Charcoal(&image, this, pencil, smooth));
+    ImageIface iface(0, 0);
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new Charcoal(iface.getOriginalImg(), this, pencil, smooth)));
 }
 
-void ImageEffect_Charcoal::prepareFinal()
+void CharcoalTool::putPreviewData()
 {
-    m_pencilInput->setEnabled(false);
-    m_smoothInput->setEnabled(false);
-
-    double pencil = (double)m_pencilInput->value()/10.0;
-    double smooth = (double)m_smoothInput->value();
-
-    Digikam::ImageIface iface(0, 0);
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new Charcoal(iface.getOriginalImg(),
-                                                                   this, pencil, smooth));
+    m_previewWidget->setPreviewImage(filter()->getTargetImage());
 }
 
-void ImageEffect_Charcoal::putPreviewData(void)
+void CharcoalTool::putFinalData()
 {
-    m_imagePreviewWidget->setPreviewImage(m_threadedFilter->getTargetImage());
-}
-
-void ImageEffect_Charcoal::putFinalData(void)
-{
-    Digikam::ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Charcoal"), m_threadedFilter->getTargetImage().bits());
+    ImageIface iface(0, 0);
+    iface.putOriginalImage(i18n("Charcoal"), filter()->getTargetImage().bits());
 }
 
 }  // NameSpace DigikamCharcoalImagesPlugin

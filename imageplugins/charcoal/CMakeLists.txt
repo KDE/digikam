@@ -1,6 +1,6 @@
 
 SET(digikamimageplugin_charcoal_PART_SRCS  imageplugin_charcoal.cpp
-                                           imageeffect_charcoal.cpp 
+                                           charcoaltool.cpp 
                                            charcoal.cpp
    )
 

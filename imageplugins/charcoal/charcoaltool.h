@@ -7,7 +7,7 @@
  * Description : a digikam image editor plugin to
  *               simulate charcoal drawing.
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,39 +22,46 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_CHARCOAL_H
-#define IMAGEEFFECT_CHARCOAL_H
+#ifndef CHARCOALTOOL_H
+#define CHARCOALTOOL_H
 
 // Local includes.
 
-#include "ctrlpaneldlg.h"
+#include "editortool.h"
 
 class KIntNumInput;
 
 namespace KDcrawIface
 {
+class RIntNumInput;
+}
+
+namespace Digikam
+{
+class EditorToolSettings;
+class ImagePanelWidget;
 }
 
 namespace DigikamCharcoalImagesPlugin
 {
 
-class ImageEffect_Charcoal : public Digikam::CtrlPanelDlg
+class CharcoalTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_Charcoal(QWidget* parent);
-    ~ImageEffect_Charcoal();
+    CharcoalTool(QObject* parent);
+    ~CharcoalTool();
 
 private slots:
 
-    void readUserSettings();
+    void slotResetSettings();
 
 private:
 
-    void writeUserSettings();
-    void resetValues();
+    void readSettings();
+    void writeSettings();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
@@ -63,10 +70,14 @@ private:
 
 private:
 
-    KIntNumInput *m_pencilInput;
-    KIntNumInput *m_smoothInput;
+    KIntNumInput                *m_pencilInput;
+    KIntNumInput                *m_smoothInput;
+
+    Digikam::ImagePanelWidget   *m_previewWidget;
+
+    Digikam::EditorToolSettings *m_gboxSettings;
 };
 
 }  // NameSpace DigikamCharcoalImagesPlugin
 
-#endif /* IMAGEEFFECT_CHARCOAL_H */
+#endif /* CHARCOALTOOL_H */
