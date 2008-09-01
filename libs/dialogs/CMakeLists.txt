@@ -1,3 +1,3 @@
-INSTALL( FILES ctrlpaneldlg.h imagedlgbase.h imageguidedlg.h iccprofileinfodlg.h dprogressdlg.h imagedialog.h rawcameradlg.h libsinfodlg.h
+INSTALL( FILES ctrlpaneldlg.h imageguidedlg.h iccprofileinfodlg.h dprogressdlg.h imagedialog.h rawcameradlg.h libsinfodlg.h
          DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel)
 

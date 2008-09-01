@@ -513,7 +513,6 @@ SET(libshowfotosetup_SRCS
 
 SET(libdialogs_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/iccprofileinfodlg.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/imagedlgbase.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/imageguidedlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/ctrlpaneldlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/dprogressdlg.cpp
