@@ -44,7 +44,7 @@
 #include "bwsepiatool.h"
 #include "hsltool.h"
 #include "iccprooftool.h"
-#include "imageeffect_blur.h"
+#include "blurtool.h"
 #include "ratiocroptool.h"
 #include "imageeffect_sharpen.h"
 #include "redeyetool.h"
@@ -236,20 +236,20 @@ void ImagePlugin_Core::slotConvertTo16Bits()
 
 void ImagePlugin_Core::slotBCG()
 {
-    BCGTool *tool = new BCGTool(kapp->activeWindow());
+    BCGTool *tool = new BCGTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Core::slotRGB()
 {
-    RGBTool *tool = new RGBTool(kapp->activeWindow());
+    RGBTool *tool = new RGBTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Core::slotBlur()
 {
-    ImageEffect_Blur dlg(kapp->activeWindow());
-    dlg.exec();
+    BlurTool *tool = new BlurTool(this);
+    loadTool(tool);
 }
 
 void ImagePlugin_Core::slotAutoCorrection()
@@ -275,25 +275,25 @@ void ImagePlugin_Core::slotRedEye()
         return;
     }
 
-    RedEyeTool *tool = new RedEyeTool(kapp->activeWindow());
+    RedEyeTool *tool = new RedEyeTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Core::slotColorManagement()
 {
-    ICCProofTool *tool = new ICCProofTool(kapp->activeWindow());
+    ICCProofTool *tool = new ICCProofTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Core::slotBW()
 {
-    BWSepiaTool *tool = new BWSepiaTool(kapp->activeWindow());
+    BWSepiaTool *tool = new BWSepiaTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Core::slotHSL()
 {
-    HSLTool *tool = new HSLTool(kapp->activeWindow());
+    HSLTool *tool = new HSLTool(this);
     loadTool(tool);
 }
 
@@ -305,6 +305,6 @@ void ImagePlugin_Core::slotSharpen()
 
 void ImagePlugin_Core::slotRatioCrop()
 {
-    RatioCropTool *tool = new RatioCropTool(kapp->activeWindow());
+    RatioCropTool *tool = new RatioCropTool(this);
     loadTool(tool);
 }

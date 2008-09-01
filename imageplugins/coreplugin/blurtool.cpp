@@ -6,7 +6,7 @@
  * Date        : 2004-07-09
  * Description : a tool to blur an image
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,6 +34,8 @@
 #include <kcursor.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kiconloader.h>
+#include <kconfiggroup.h>
 
 // LibKDcraw includes.
 
@@ -43,30 +45,39 @@
 
 #include "ddebug.h"
 #include "imageiface.h"
+#include "imagepanelwidget.h"
+#include "editortoolsettings.h"
 #include "dimggaussianblur.h"
 
 // Local includes.
 
-#include "imageeffect_blur.h"
-#include "imageeffect_blur.moc"
+#include "blurtool.h"
+#include "blurtool.moc"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
 
-ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
-        : Digikam::CtrlPanelDlg(parent, i18n("Apply Gaussian Blur on Photograph"),
-                                "gaussianblur", false, true, true)
+BlurTool::BlurTool(QObject* parent)
+        : EditorToolThreaded(parent)
 {
-    setHelp("blursharpentool.anchor", "digikam");
+    setObjectName("gaussianblur");
+    setToolName(i18n("Blur"));
+    setToolIcon(SmallIcon("blurimage"));
+    setToolHelp("blursharpentool.anchor");
 
-    QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings );
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel|
+                                            EditorToolSettings::Try,
+                                            EditorToolSettings::PanIcon);
+    QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage() );
 
-    QLabel *label = new QLabel(i18n("Smoothness:"), gboxSettings);
+    QLabel *label = new QLabel(i18n("Smoothness:"), m_gboxSettings->plainPage());
 
-    m_radiusInput = new RIntNumInput(gboxSettings);
+    m_radiusInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_radiusInput->setRange(0, 100, 1);
     m_radiusInput->setSliderEnabled(true);
     m_radiusInput->setDefaultValue(0);
@@ -74,80 +85,83 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
                                       "1 and above determine the Gaussian blur matrix radius "
                                       "that determines how much to blur the image."));
 
-    gridSettings->addWidget(label, 0, 0, 1, 2 );
-    gridSettings->addWidget(m_radiusInput, 1, 0, 1, 2 );
-    gridSettings->setMargin(spacingHint());
-    gridSettings->setSpacing(spacingHint());
+    grid->addWidget(label,         0, 0, 1, 2 );
+    grid->addWidget(m_radiusInput, 1, 0, 1, 2 );
+    grid->setRowStretch(2, 10);
+    grid->setMargin(m_gboxSettings->spacingHint());
+    grid->setSpacing(m_gboxSettings->spacingHint());
 
-    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
+    setToolSettings(m_gboxSettings);
+
+    m_previewWidget = new ImagePanelWidget(470, 350, "gaussianblur Tool", m_gboxSettings->panIconView());
+
+    setToolView(m_previewWidget);
 }
 
-ImageEffect_Blur::~ImageEffect_Blur()
+BlurTool::~BlurTool()
 {
 }
 
-void ImageEffect_Blur::readUserSettings()
+void BlurTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("gaussianblur Tool Dialog");
+    KConfigGroup group        = config->group("gaussianblur Tool");
     m_radiusInput->setValue(group.readEntry("RadiusAjustment", m_radiusInput->defaultValue()));
 }
 
-void ImageEffect_Blur::writeUserSettings()
+void BlurTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("gaussianblur Tool Dialog");
+    KConfigGroup group        = config->group("gaussianblur Tool");
     group.writeEntry("RadiusAjustment", m_radiusInput->value());
     config->sync();
 }
 
-void ImageEffect_Blur::resetValues(void)
+void BlurTool::slotResetSettings()
 {
     m_radiusInput->blockSignals(true);
     m_radiusInput->slotReset();
     m_radiusInput->blockSignals(false);
 }
 
-void ImageEffect_Blur::prepareEffect()
+void BlurTool::prepareEffect()
 {
     m_radiusInput->setEnabled(false);
 
-    Digikam::DImg img = m_imagePreviewWidget->getOriginalRegionImage();
+    DImg img = m_previewWidget->getOriginalRegionImage();
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
-                       (new Digikam::DImgGaussianBlur(&img, this, m_radiusInput->value()));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgGaussianBlur(&img, this, m_radiusInput->value())));
 }
 
-void ImageEffect_Blur::prepareFinal()
+void BlurTool::prepareFinal()
 {
     m_radiusInput->setEnabled(false);
 
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
     uchar *data            = iface.getOriginalImage();
     int w                  = iface.originalWidth();
     int h                  = iface.originalHeight();
     bool sixteenBit        = iface.originalSixteenBit();
     bool hasAlpha          = iface.originalHasAlpha();
-    Digikam::DImg orgImage = Digikam::DImg(w, h, sixteenBit, hasAlpha ,data);
+    DImg orgImage = DImg(w, h, sixteenBit, hasAlpha ,data);
     delete [] data;
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
-                       (new Digikam::DImgGaussianBlur(&orgImage, this, m_radiusInput->value()));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgGaussianBlur(&orgImage, this, m_radiusInput->value())));
 }
 
-void ImageEffect_Blur::putPreviewData(void)
+void BlurTool::putPreviewData()
 {
-    Digikam::DImg imDest = m_threadedFilter->getTargetImage();
-    m_imagePreviewWidget->setPreviewImage(imDest);
+    DImg imDest = filter()->getTargetImage();
+    m_previewWidget->setPreviewImage(imDest);
 }
 
-void ImageEffect_Blur::putFinalData(void)
+void BlurTool::putFinalData()
 {
-    Digikam::ImageIface iface(0, 0);
-    Digikam::DImg imDest = m_threadedFilter->getTargetImage();
+    ImageIface iface(0, 0);
+    DImg imDest = filter()->getTargetImage();
     iface.putOriginalImage(i18n("Gaussian Blur"), imDest.bits());
 }
 
-void ImageEffect_Blur::renderingFinished(void)
+void BlurTool::renderingFinished(void)
 {
     m_radiusInput->setEnabled(true);
 }

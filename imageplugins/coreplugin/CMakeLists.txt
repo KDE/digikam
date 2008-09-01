@@ -52,7 +52,7 @@ SET(digikamimageplugin_core_PART_SRCS
     ../../imageplugins/coreplugin/hsl/hsltool.cpp 
     ../../imageplugins/coreplugin/hsl/hspreviewwidget.cpp
     ../../imageplugins/coreplugin/iccprooftool.cpp 
-    ../../imageplugins/coreplugin/imageeffect_blur.cpp 
+    ../../imageplugins/coreplugin/blurtool.cpp 
     ../../imageplugins/coreplugin/imageplugin_core.cpp 
     ../../imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp
     ../../imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp 
