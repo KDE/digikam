@@ -5,25 +5,25 @@
  *
  * Date        : 2005-03-10
  * Description : a plugin to apply texture over an image
- * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * 
+ *
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_TEXTURE_H
-#define IMAGEEFFECT_TEXTURE_H
+#ifndef TEXTURETOOL_H
+#define TEXTURETOOL_H
 
 // Qt includes.
 
@@ -31,23 +31,35 @@
 
 // Digikam includes.
 
-#include "ctrlpaneldlg.h"
+#include "editortool.h"
 
 class QComboBox;
 
 class KIntNumInput;
 
+namespace KDcrawIface
+{
+class RIntNumInput;
+class RComboBox;
+}
+
+namespace Digikam
+{
+class EditorToolSettings;
+class ImagePanelWidget;
+}
+
 namespace DigikamTextureImagesPlugin
 {
 
-class ImageEffect_Texture : public Digikam::CtrlPanelDlg
+class TextureTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_Texture(QWidget* parent);
-    ~ImageEffect_Texture();
+    TextureTool(QObject* parent);
+    ~TextureTool();
 
 private:
 
@@ -55,12 +67,12 @@ private:
 
 private slots:
 
-    void readUserSettings();
+    void slotResetSettings();
 
 private:
 
-    void writeUserSettings();
-    void resetValues();    
+    void readSettings();
+    void writeSettings();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
@@ -89,11 +101,15 @@ private:
         StoneTexture
     };
 
-    QComboBox    *m_textureType;
+    QComboBox                   *m_textureType;
 
-    KIntNumInput *m_blendGain;
+    KIntNumInput                *m_blendGain;
+
+    Digikam::ImagePanelWidget   *m_previewWidget;
+
+    Digikam::EditorToolSettings *m_gboxSettings;
 };
 
 }  // NameSpace DigikamTextureImagesPlugin
 
-#endif /* IMAGEEFFECT_TEXTURE_H */
+#endif /* TEXTURETOOL_H */

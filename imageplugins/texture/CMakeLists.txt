@@ -2,7 +2,7 @@
 ADD_SUBDIRECTORY( patterns )
 
 SET(digikamimageplugin_texture_PART_SRCS imageplugin_texture.cpp
-                                         imageeffect_texture.cpp 
+                                         texturetool.cpp 
                                          texture.cpp 
    )
 
