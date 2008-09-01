@@ -194,8 +194,6 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     grid1->addWidget(m_phaseInput,     5, 1, 1, 1);
     grid1->setMargin(m_gboxSettings->spacingHint());
     grid1->setSpacing(m_gboxSettings->spacingHint());
-    grid1->setMargin(spacingHint());
-    grid1->setSpacing(0);
 
     // -------------------------------------------------------------
 
@@ -404,18 +402,17 @@ void NoiseReductionTool::prepareEffect()
     m_dampingInput->setEnabled(false);
     m_phaseInput->setEnabled(false);
 
-    double r  = m_radiusInput->value();
-    double l  = m_lumToleranceInput->value();
-    double th = m_thresholdInput->value();
-    double tx = m_textureInput->value();
-    double s  = m_sharpnessInput->value();
-    double c  = m_csmoothInput->value();
-    double a  = m_lookaheadInput->value();
-    double g  = m_gammaInput->value();
-    double d  = m_dampingInput->value();
-    double p  = m_phaseInput->value();
-
-    DImg image = m_gboxSettings->plainPage()->getOriginalRegionImage();
+    double r   = m_radiusInput->value();
+    double l   = m_lumToleranceInput->value();
+    double th  = m_thresholdInput->value();
+    double tx  = m_textureInput->value();
+    double s   = m_sharpnessInput->value();
+    double c   = m_csmoothInput->value();
+    double a   = m_lookaheadInput->value();
+    double g   = m_gammaInput->value();
+    double d   = m_dampingInput->value();
+    double p   = m_phaseInput->value();
+    DImg image = m_previewWidget->getOriginalRegionImage();
 
     setFilter(dynamic_cast<DImgThreadedFilter*>(new NoiseReduction(&image, this, r, l, th, tx, s, c, a, g, d, p)));
 }
@@ -445,12 +442,12 @@ void NoiseReductionTool::prepareFinal()
     double p  = m_phaseInput->value();
 
     ImageIface iface(0, 0);
-    msetFilter(dynamic_cast<DImgThreadedFilter *>(new NoiseReduction(iface.getOriginalImg(), this, r, l, th, tx, s, c, a, g, d, p)));
+    setFilter(dynamic_cast<DImgThreadedFilter *>(new NoiseReduction(iface.getOriginalImg(), this, r, l, th, tx, s, c, a, g, d, p)));
 }
 
 void NoiseReductionTool::putPreviewData()
 {
-    m_gboxSettings->plainPage()->setPreviewImage(filter()->getTargetImage());
+    m_previewWidget->setPreviewImage(filter()->getTargetImage());
 }
 
 void NoiseReductionTool::putFinalData()
