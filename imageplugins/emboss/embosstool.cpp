@@ -82,6 +82,7 @@ EmbossTool::EmbossTool(QObject* parent)
     m_depthInput   = new RIntNumInput(m_gboxSettings->plainPage());
     m_depthInput->setRange(10, 300, 1);
     m_depthInput->setSliderEnabled(true);
+    m_depthInput->setDefaultValue(30);
     m_depthInput->setWhatsThis( i18n("<p>Set here the depth of the embossing image effect.") );
 
     // -------------------------------------------------------------
@@ -120,7 +121,7 @@ void EmbossTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("emboss Tool");
     m_depthInput->blockSignals(true);
-    m_depthInput->setValue(group.readEntry("DepthAjustment", 30));
+    m_depthInput->setValue(group.readEntry("DepthAjustment", m_depthInput->defaultValue()));
     m_depthInput->blockSignals(false);
 }
 
@@ -135,7 +136,7 @@ void EmbossTool::writeSettings()
 void EmbossTool::slotResetSettings()
 {
     m_depthInput->blockSignals(true);
-    m_depthInput->setValue(30);
+    m_depthInput->slotReset();
     m_depthInput->blockSignals(false);
 
     slotEffect();
