@@ -152,6 +152,7 @@ void RawImport::slotAbortPreview()
 {
     d->previewWidget->cancelLoading();
     d->settingsBox->histogram()->stopHistogramComputation();
+    EditorToolIface::editorToolIface()->setToolStopProgress();
     setBusy(false);
 }
 
