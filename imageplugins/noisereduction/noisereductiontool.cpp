@@ -200,7 +200,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     // -------------------------------------------------------------
 
     QWidget* secondPage = new QWidget( mainTab );
-    QGridLayout* grid12  = new QGridLayout( secondPage, 4, 1);
+    QGridLayout* grid2  = new QGridLayout( secondPage, 4, 1);
 
     QLabel *label2 = new QLabel(i18n("Luminance:"), secondPage);
 
@@ -255,18 +255,18 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
                                           "can suppress spike noise when increased, and this is the preferred method to "
                                           "remove it."));
 
-    grid12->addMultiCellWidget(label2,              0, 0, 0, 0);
-    grid12->addMultiCellWidget(m_lumToleranceInput, 0, 0, 1, 1);
-    grid12->addMultiCellWidget(label6,              1, 1, 0, 0);
-    grid12->addMultiCellWidget(m_csmoothInput,      1, 1, 1, 1);
-    grid12->addMultiCellWidget(label8,              2, 2, 0, 0);
-    grid12->addMultiCellWidget(m_gammaInput,        2, 2, 1, 1);
-    grid12->addMultiCellWidget(label9,              3, 3, 0, 0);
-    grid12->addMultiCellWidget(m_dampingInput,      3, 3, 1, 1);
-    grid12->setMargin(m_gboxSettings->spacingHint());
-    grid12->setSpacing(m_gboxSettings->spacingHint());
-    grid12->setColStretch(1, 10);
-    grid12->setRowStretch(4, 10);
+    grid2->addMultiCellWidget(label2,              0, 0, 0, 0);
+    grid2->addMultiCellWidget(m_lumToleranceInput, 0, 0, 1, 1);
+    grid2->addMultiCellWidget(label6,              1, 1, 0, 0);
+    grid2->addMultiCellWidget(m_csmoothInput,      1, 1, 1, 1);
+    grid2->addMultiCellWidget(label8,              2, 2, 0, 0);
+    grid2->addMultiCellWidget(m_gammaInput,        2, 2, 1, 1);
+    grid2->addMultiCellWidget(label9,              3, 3, 0, 0);
+    grid2->addMultiCellWidget(m_dampingInput,      3, 3, 1, 1);
+    grid2->setMargin(m_gboxSettings->spacingHint());
+    grid2->setSpacing(m_gboxSettings->spacingHint());
+    grid2->setColStretch(1, 10);
+    grid2->setRowStretch(4, 10);
 
     mainTab->addTab( secondPage, i18n("Advanced") );
 
