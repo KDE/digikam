@@ -32,8 +32,6 @@
 class QComboBox;
 class QLabel;
 
-class KIntNumInput;
-
 namespace KDcrawIface
 {
 class RIntNumInput;
@@ -76,14 +74,14 @@ private:
 
 private:
 
-    QComboBox                   *m_effectType;
-
     QLabel                      *m_effectTypeLabel;
     QLabel                      *m_distanceLabel;
     QLabel                      *m_levelLabel;
 
-    KIntNumInput                *m_distanceInput;
-    KIntNumInput                *m_levelInput;
+    KDcrawIface::RComboBox      *m_effectType;
+
+    KDcrawIface::RIntNumInput   *m_distanceInput;
+    KDcrawIface::RIntNumInput   *m_levelInput;
 
     Digikam::ImagePanelWidget   *m_previewWidget;
 

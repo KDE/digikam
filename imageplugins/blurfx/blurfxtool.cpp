@@ -24,23 +24,22 @@
 
 // Qt includes.
 
-#include <QLabel>
-#include <QSlider>
-#include <QImage>
-#include <QComboBox>
 #include <QDateTime>
 #include <QGridLayout>
+#include <QImage>
+#include <QLabel>
+#include <QSlider>
 
 // KDE includes.
 
-#include <kconfig.h>
-#include <klocale.h>
 #include <kaboutdata.h>
 #include <kapplication.h>
-#include <knuminput.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <kconfiggroup.h>
+#include <klocale.h>
+#include <knuminput.h>
 
 // LibKDcraw includes.
 
@@ -49,12 +48,12 @@
 
 // Local includes.
 
-#include "version.h"
 #include "daboutdata.h"
 #include "ddebug.h"
+#include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imagepanelwidget.h"
-#include "editortoolsettings.h"
+#include "version.h"
 #include "blurfx.h"
 #include "blurfxtool.h"
 #include "blurfxtool.moc"
@@ -84,17 +83,18 @@ BlurFXTool::BlurFXTool(QObject* parent)
 
     m_effectTypeLabel = new QLabel(i18n("Type:"), m_gboxSettings->plainPage());
 
-    m_effectType      = new QComboBox( m_gboxSettings->plainPage() );
-    m_effectType->addItem( i18n("Zoom Blur") );
-    m_effectType->addItem( i18n("Radial Blur") );
-    m_effectType->addItem( i18n("Far Blur") );
-    m_effectType->addItem( i18n("Motion Blur") );
-    m_effectType->addItem( i18n("Softener Blur") );
-    m_effectType->addItem( i18n("Skake Blur") );
-    m_effectType->addItem( i18n("Focus Blur") );
-    m_effectType->addItem( i18n("Smart Blur") );
-    m_effectType->addItem( i18n("Frost Glass") );
-    m_effectType->addItem( i18n("Mosaic") );
+    m_effectType      = new RComboBox(m_gboxSettings->plainPage());
+    m_effectType->addItem(i18n("Zoom Blur"));
+    m_effectType->addItem(i18n("Radial Blur"));
+    m_effectType->addItem(i18n("Far Blur"));
+    m_effectType->addItem(i18n("Motion Blur"));
+    m_effectType->addItem(i18n("Softener Blur"));
+    m_effectType->addItem(i18n("Skake Blur"));
+    m_effectType->addItem(i18n("Focus Blur"));
+    m_effectType->addItem(i18n("Smart Blur"));
+    m_effectType->addItem(i18n("Frost Glass"));
+    m_effectType->addItem(i18n("Mosaic"));
+    m_effectType->setDefaultIndex(BlurFX::ZoomBlur);
     m_effectType->setWhatsThis( i18n("<p>Select the blurring effect to apply to image.<p>"
                                      "<b>Zoom Blur</b>:  blurs the image along radial lines starting from "
                                      "a specified center point. This simulates the blur of a zooming camera.<p>"
@@ -120,15 +120,17 @@ BlurFXTool::BlurFXTool(QObject* parent)
                                      "recreates it by filling those cells with average pixel value."));
 
     m_distanceLabel = new QLabel(i18n("Distance:"), m_gboxSettings->plainPage());
-    m_distanceInput = new KIntNumInput(m_gboxSettings->plainPage());
+    m_distanceInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_distanceInput->setRange(0, 100, 1);
     m_distanceInput->setSliderEnabled(true);
+    m_distanceInput->setDefaultValue(3);
     m_distanceInput->setWhatsThis( i18n("<p>Set here the blur distance in pixels."));
 
     m_levelLabel = new QLabel(i18n("Level:"), m_gboxSettings->plainPage());
-    m_levelInput = new KIntNumInput(m_gboxSettings->plainPage());
+    m_levelInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_levelInput->setRange(0, 360, 1);
     m_levelInput->setSliderEnabled(true);
+    m_levelInput->setDefaultValue(128);
     m_levelInput->setWhatsThis( i18n("<p>This value controls the level to use with the current effect."));
 
     // -------------------------------------------------------------
@@ -153,14 +155,14 @@ BlurFXTool::BlurFXTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(m_effectType, SIGNAL(activated(int)),
-            this, SLOT(slotEffectTypeChanged(int)));
-
-    connect(m_distanceInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));
-
-    connect(m_levelInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));
+    //    connect(m_effectType, SIGNAL(activated(int)),
+    //            this, SLOT(slotEffectTypeChanged(int)));
+    //
+    //    connect(m_distanceInput, SIGNAL(valueChanged(int)),
+    //            this, SLOT(slotTimer()));
+    //
+    //    connect(m_levelInput, SIGNAL(valueChanged(int)),
+    //            this, SLOT(slotTimer()));
 }
 
 BlurFXTool::~BlurFXTool()
@@ -206,9 +208,11 @@ void BlurFXTool::readSettings()
     m_effectType->blockSignals(true);
     m_distanceInput->blockSignals(true);
     m_levelInput->blockSignals(true);
-    m_effectType->setCurrentIndex(group.readEntry("EffectType", (int)BlurFX::ZoomBlur));
-    m_distanceInput->setValue(group.readEntry("DistanceAjustment", 3));
-    m_levelInput->setValue(group.readEntry("LevelAjustment", 128));
+
+    m_effectType->setCurrentIndex(group.readEntry("EffectType", m_effectType->defaultIndex()));
+    m_distanceInput->setValue(group.readEntry("DistanceAjustment", m_distanceInput->defaultValue()));
+    m_levelInput->setValue(group.readEntry("LevelAjustment",m_levelInput->defaultValue()));
+
     m_effectType->blockSignals(false);
     m_distanceInput->blockSignals(false);
     m_levelInput->blockSignals(false);
@@ -226,8 +230,19 @@ void BlurFXTool::writeSettings()
 
 void BlurFXTool::slotResetSettings()
 {
-    m_effectType->setCurrentIndex(BlurFX::ZoomBlur);
-    slotEffectTypeChanged(BlurFX::ZoomBlur);
+    m_effectType->blockSignals(true);
+    m_distanceInput->blockSignals(true);
+    m_levelInput->blockSignals(true);
+
+    m_effectType->slotReset();
+    m_distanceInput->slotReset();
+    m_levelInput->slotReset();
+
+    m_effectType->blockSignals(false);
+    m_distanceInput->blockSignals(false);
+    m_levelInput->blockSignals(false);
+
+    slotEffectTypeChanged(m_effectType->defaultIndex());
 }
 
 void BlurFXTool::slotEffectTypeChanged(int type)
@@ -237,6 +252,7 @@ void BlurFXTool::slotEffectTypeChanged(int type)
 
     m_distanceInput->blockSignals(true);
     m_levelInput->blockSignals(true);
+
     m_distanceInput->setRange(0, 200, 1);
     m_distanceInput->setSliderEnabled(true);
     m_distanceInput->setValue(100);
@@ -262,7 +278,7 @@ void BlurFXTool::slotEffectTypeChanged(int type)
        case BlurFX::FarBlur:
           m_distanceInput->setRange(0, 20, 1);
           m_distanceInput->setSliderEnabled(true);
-          m_distanceInput->setMaximum(20);
+          m_distanceInput->input()->setMaximum(20);
           m_distanceInput->setValue(10);
           break;
 
