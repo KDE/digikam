@@ -7,7 +7,7 @@
  * Description : a progress bar used to display file access
  *               progress or a text in status bar.
  *
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -110,7 +110,7 @@ StatusProgressBar::~StatusProgressBar()
     delete d;
 }
 
-void StatusProgressBar::setText( const QString& text )
+void StatusProgressBar::setText(const QString& text)
 {
     d->textLabel->setText(text);
 }
@@ -125,7 +125,7 @@ int StatusProgressBar::progressValue()
     return d->progressBar->progress();
 }
 
-void StatusProgressBar::setProgressValue( int v )
+void StatusProgressBar::setProgressValue(int v)
 {
     d->progressBar->setProgress(v);
 }
@@ -140,13 +140,13 @@ int StatusProgressBar::progressTotalSteps()
     return d->progressBar->totalSteps();
 }
 
-void StatusProgressBar::setProgressText( const QString& text )
+void StatusProgressBar::setProgressText(const QString& text)
 {
     d->progressBar->setFormat( text + QString ("%p%") );
     d->progressBar->update();
 }
 
-void StatusProgressBar::progressBarMode( int mode, const QString& text )
+void StatusProgressBar::progressBarMode(int mode, const QString& text)
 {
     if ( mode == TextMode)
     {
