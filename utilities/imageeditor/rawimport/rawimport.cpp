@@ -42,6 +42,7 @@
 #include "curveswidget.h"
 #include "imagehistogram.h"
 #include "rawsettingsbox.h"
+#include "rawpostprocessing.h"
 #include "editortooliface.h"
 #include "rawpreview.h"
 #include "rawimport.h"
@@ -66,7 +67,7 @@ public:
 };
 
 RawImport::RawImport(const KUrl& url, QObject *parent)
-         : EditorTool(parent)
+         : EditorToolThreaded(parent)
 {
     d = new RawImportPriv;
     d->previewWidget = new RawPreview(url, 0);
@@ -76,6 +77,7 @@ RawImport::RawImport(const KUrl& url, QObject *parent)
     setToolSettings(d->settingsBox);
     setToolName(i18n("Raw Import"));
     setToolIcon(SmallIcon("kdcraw"));
+    setProgressMessage(i18n("Post Processing"));
 }
 
 RawImport::~RawImport()
@@ -94,9 +96,6 @@ void RawImport::slotInit()
 
     connect(d->previewWidget, SIGNAL(signalDemosaicedImage()),
             this, SLOT(slotDemosaicedImage()));
-
-    connect(d->previewWidget, SIGNAL(signalPostProcessedImage()),
-            this, SLOT(slotPostProcessedImage()));
 
     connect(d->previewWidget, SIGNAL(signalLoadingStarted()),
             this, SLOT(slotLoadingStarted()));
@@ -159,17 +158,25 @@ void RawImport::slotLoadingStarted()
     d->settingsBox->enableUpdateBtn(false);
     d->settingsBox->histogram()->setDataLoading();
     d->settingsBox->curve()->setDataLoading();
-    EditorToolIface::editorToolIface()->setToolStartProgress(i18n("Loading"));
+    EditorToolIface::editorToolIface()->setToolStartProgress(i18n("Raw Decoding"));
     setBusy(true);
 }
 
 void RawImport::slotDemosaicedImage()
 {
     d->settingsBox->setDemosaicedImage(d->previewWidget->demosaicedImage());
+    slotEffect();
 }
 
-void RawImport::slotPostProcessedImage()
+void RawImport::prepareEffect()
 {
+    DImg postImg = d->previewWidget->demosaicedImage();
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new RawPostProcessing(&postImg, this, rawDecodingSettings())));
+}
+
+void RawImport::putPreviewData()
+{
+    d->previewWidget->setPostProcessedImage(filter()->getTargetImage());
     d->settingsBox->setPostProcessedImage(d->previewWidget->postProcessedImage());
     EditorToolIface::editorToolIface()->setToolStopProgress();
     setBusy(false);
@@ -180,11 +187,6 @@ void RawImport::slotLoadingFailed()
     d->settingsBox->histogram()->setLoadingFailed();
     EditorToolIface::editorToolIface()->setToolStopProgress();
     setBusy(false);
-}
-
-void RawImport::slotEffect()
-{
-    d->previewWidget->setPostProcessingSettings(rawDecodingSettings());
 }
 
 void RawImport::slotDemosaicingChanged()

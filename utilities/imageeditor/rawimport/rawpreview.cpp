@@ -44,7 +44,6 @@
 #include "managedloadsavethread.h"
 #include "loadingdescription.h"
 #include "themeengine.h"
-#include "rawpostprocessing.h"
 #include "rawpreview.h"
 #include "rawpreview.moc"
 
@@ -148,7 +147,6 @@ DImg& RawPreview::demosaicedImage() const
 
 void RawPreview::setDecodingSettings(const DRawDecoding& settings)
 {
-    setCursor(Qt::WaitCursor);
     // Save post processing settings.
     d->settings = settings;
 
@@ -205,21 +203,8 @@ void RawPreview::slotImageLoaded(const LoadingDescription& description, const DI
     {
         d->demosaicedImg = image;
         emit signalDemosaicedImage();
-
-        // Now, we will apply all Raw post processing corrections.
-        postProcessing(d->settings);
+        // NOTE: we will apply all Raw post processing corrections into RawImport class.
     }
-
-    unsetCursor();
-}
-
-void RawPreview::postProcessing(const DRawDecoding& settings)
-{
-    DImg postImg = d->demosaicedImg;
-    RawPostProcessing postProc(&postImg, 0, settings);
-    postProc.startFilterDirectly();       // Run filter without to use multithreading.
-    setPostProcessedImage(postProc.getTargetImage());
-    emit signalPostProcessedImage();
 }
 
 void RawPreview::slotThemeChanged()

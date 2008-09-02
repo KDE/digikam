@@ -62,7 +62,7 @@ public:
     DImg& postProcessedImage() const;
 
     void setDecodingSettings(const DRawDecoding& settings);
-    void setPostProcessingSettings(const DRawDecoding& settings);
+    void setPostProcessedImage(const DImg& image);
 
     void cancelLoading();
 
@@ -89,7 +89,6 @@ private slots:
 
 private:
 
-    void setPostProcessedImage(const DImg& image);
     void setdemosaicedImg(const DImg& image);
     void postProcessing(const DRawDecoding& settings);
     int  previewWidth();

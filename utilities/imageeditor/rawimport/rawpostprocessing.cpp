@@ -63,7 +63,7 @@ void RawPostProcessing::rawPostProcessing(uchar *data, int width, int height, bo
     if (!data || !width || !height)
     {
        DWarning() << ("RawPostProcessing::rawPostProcessing: no image data available!")
-                   << endl;
+                  << endl;
        return;
     }
 
@@ -74,6 +74,8 @@ void RawPostProcessing::rawPostProcessing(uchar *data, int width, int height, bo
        m_destImage = m_orgImage;
        return;
     }
+
+    postProgress(10);
 
     if (decoding.exposureComp != 0.0 || decoding.saturation != 1.0)
     {
@@ -87,6 +89,7 @@ void RawPostProcessing::rawPostProcessing(uchar *data, int width, int height, bo
                         1.0,                     // gamma
                         decoding.saturation);    // saturation
     }
+    postProgress(25);
 
     if (decoding.lightness != 0.0 || decoding.contrast != 1.0 || decoding.gamma != 1.0)
     {
@@ -96,6 +99,7 @@ void RawPostProcessing::rawPostProcessing(uchar *data, int width, int height, bo
         bcg.setGamma(decoding.gamma);
         bcg.applyBCG(data, width, height, sixteenBit);
     }
+    postProgress(50);
 
     if (!decoding.curveAdjust.isEmpty())
     {
@@ -108,8 +112,11 @@ void RawPostProcessing::rawPostProcessing(uchar *data, int width, int height, bo
 
         memcpy(data, tmp.bits(), tmp.numBytes());
     }
+    postProgress(75);
 
     m_destImage = m_orgImage;
+
+    postProgress(100);
 }
 
 }  // NameSpace Digikam
