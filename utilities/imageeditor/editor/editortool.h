@@ -104,6 +104,11 @@ public:
     EditorToolThreaded(QObject *parent);
     virtual ~EditorToolThreaded();
 
+    /** Set the small text to show in editor status progress bar during 
+        tool computation. If it's not set, tool name is used instead.
+     */
+    void setProgressMessage(const QString& mess);
+
 public slots:
 
     virtual void slotAbort();

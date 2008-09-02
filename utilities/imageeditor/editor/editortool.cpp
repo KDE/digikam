@@ -217,6 +217,8 @@ public:
 
     int                 currentRenderingMode;
 
+    QString             progressMess;
+
     DImgThreadedFilter *threadedFilter;
 };
 
@@ -230,6 +232,11 @@ EditorToolThreaded::~EditorToolThreaded()
 {
     delete d->threadedFilter;
     delete d;
+}
+
+void EditorToolThreaded::setProgressMessage(const QString& mess)
+{
+    d->progressMess = mess;
 }
 
 DImgThreadedFilter* EditorToolThreaded::filter() const
@@ -356,7 +363,7 @@ void EditorToolThreaded::slotOk()
     toolSettings()->enableButton(EditorToolSettings::Default, false);
     toolSettings()->enableButton(EditorToolSettings::Try,     false);
 
-    EditorToolIface::editorToolIface()->setToolStartProgress(toolName());
+    EditorToolIface::editorToolIface()->setToolStartProgress(d->progressMess.isEmpty() ? toolName() : d->progressMess);
     kapp->setOverrideCursor( Qt::WaitCursor );
 
     if (d->threadedFilter)
@@ -383,7 +390,7 @@ void EditorToolThreaded::slotEffect()
     toolSettings()->enableButton(EditorToolSettings::Default, false);
     toolSettings()->enableButton(EditorToolSettings::Try,     false);
 
-    EditorToolIface::editorToolIface()->setToolStartProgress(toolName());
+    EditorToolIface::editorToolIface()->setToolStartProgress(d->progressMess.isEmpty() ? toolName() : d->progressMess);
 
     if (d->threadedFilter)
     {
