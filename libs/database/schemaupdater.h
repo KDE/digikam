@@ -74,6 +74,7 @@ private:
     void preAlpha010Update1();
     void preAlpha010Update2();
     void preAlpha010Update3();
+    void beta010Update1();
 
 };
 

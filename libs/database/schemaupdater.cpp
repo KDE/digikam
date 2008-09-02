@@ -249,22 +249,28 @@ bool SchemaUpdater::makeUpdates()
             }
             DDebug() << "Success updating to v5" << endl;
             m_access->backend()->commitTransaction();
-            // REMOVE BEFORE ALPHA VERSION
+            // REMOVE BEFORE FINAL VERSION
             m_access->db()->setSetting("preAlpha010Update1", "true");
             m_access->db()->setSetting("preAlpha010Update2", "true");
             m_access->db()->setSetting("preAlpha010Update3", "true");
             // END REMOVE
+            // REMOVE BEFORE NEXT SCHEMA UPDATE
+            m_access->db()->setSetting("beta010Update1", "true");
+            // END REMOVE
         }
         // add future updates here
     }
-    // REMOVE BEFORE ALPHA VERSION
     else
     {
+        // REMOVE BEFORE FINAL VERSION
         preAlpha010Update1();
         preAlpha010Update2();
         preAlpha010Update3();
+        // END REMOVE
+        // REMOVE BEFORE NEXT SCHEMA UPDATE
+        beta010Update1();
+        // END REMOVE
     }
-    // END REMOVE
     return true;
 }
 
@@ -324,6 +330,9 @@ bool SchemaUpdater::createDatabase()
         m_access->db()->setSetting("preAlpha010Update1", "true");
         m_access->db()->setSetting("preAlpha010Update2", "true");
         m_access->db()->setSetting("preAlpha010Update3", "true");
+        // END REMOVE
+        // REMOVE BEFORE NEXT SCHEMA UPDATE
+        m_access->db()->setSetting("beta010Update1", "true");
         // END REMOVE
         m_currentVersion = 5;
         return true;
@@ -572,10 +581,13 @@ bool SchemaUpdater::createTriggersV5()
             "END;");
 
     // if Image has been deleted
+    // NOTE: For update to v6, merge in beta010Update1
     m_access->backend()->execSql(
             "CREATE TRIGGER delete_image DELETE ON Images\n"
             "BEGIN\n"
             "  DELETE FROM ImageTags\n"
+            "    WHERE imageid=OLD.id;\n"
+            "  DELETE From ImageHaarMatrix\n "
             "    WHERE imageid=OLD.id;\n"
             "  DELETE From ImageInformation\n "
             "    WHERE imageid=OLD.id;\n"
@@ -1145,6 +1157,43 @@ void SchemaUpdater::preAlpha010Update3()
                                 );
 
     m_access->db()->setSetting("preAlpha010Update3", "true");
+}
+
+void SchemaUpdater::beta010Update1()
+{
+    QString hasUpdate = m_access->db()->getSetting("beta010Update1");
+    if (!hasUpdate.isNull())
+        return;
+
+    // if Image has been deleted
+    m_access->backend()->execSql("DROP TRIGGER delete_image;");
+    m_access->backend()->execSql(
+            "CREATE TRIGGER delete_image DELETE ON Images\n"
+            "BEGIN\n"
+            "  DELETE FROM ImageTags\n"
+            "    WHERE imageid=OLD.id;\n"
+            "  DELETE From ImageHaarMatrix\n "
+            "    WHERE imageid=OLD.id;\n"
+            "  DELETE From ImageInformation\n "
+            "    WHERE imageid=OLD.id;\n"
+            "  DELETE From ImageMetadata\n "
+            "    WHERE imageid=OLD.id;\n"
+            "  DELETE From ImagePositions\n "
+            "    WHERE imageid=OLD.id;\n"
+            "  DELETE From ImageComments\n "
+            "    WHERE imageid=OLD.id;\n"
+            "  DELETE From ImageCopyright\n "
+            "    WHERE imageid=OLD.id;\n"
+            "  DELETE From ImageProperties\n "
+            "    WHERE imageid=OLD.id;\n"
+            "  UPDATE Albums SET icon=null \n "
+            "    WHERE icon=OLD.id;\n"
+            "  UPDATE Tags SET icon=null \n "
+            "    WHERE icon=OLD.id;\n"
+            "END;");
+
+
+    m_access->db()->setSetting("beta010Update1", "true");
 }
 
 
