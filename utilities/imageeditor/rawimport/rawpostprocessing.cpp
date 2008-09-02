@@ -48,7 +48,7 @@ RawPostProcessing::RawPostProcessing(DImgThreadedFilter *parentFilter,
                                      parentFilter->filterName() + ": RawPostProcessing")
 {
     m_customRawSettings = settings;
-    initFilter();
+    filterImage();
 }
 
 void RawPostProcessing::filterImage()
