@@ -43,7 +43,7 @@ namespace Digikam
 
 class RawImportPriv;
 
-class DIGIKAM_EXPORT RawImport : public EditorTool
+class DIGIKAM_EXPORT RawImport : public EditorToolThreaded
 {
     Q_OBJECT
 
@@ -57,6 +57,8 @@ public:
 private:
 
     void setBusy(bool busy);
+    void prepareEffect();
+    void putPreviewData();
 
 private slots:
 
@@ -64,14 +66,12 @@ private slots:
 
     void slotLoadingStarted();
     void slotDemosaicedImage();
-    void slotPostProcessedImage();
     void slotLoadingFailed();
     void slotLoadingProgress(float);
 
     void slotUpdatePreview();
     void slotAbortPreview();
 
-    void slotEffect();
     void slotDemosaicingChanged();
 
 private:

@@ -48,7 +48,7 @@ RawPostProcessing::RawPostProcessing(DImgThreadedFilter *parentFilter,
                                      parentFilter->filterName() + ": RawPostProcessing")
 {
     m_customRawSettings = settings;
-    filterImage();
+    initFilter();
 }
 
 void RawPostProcessing::filterImage()
@@ -63,15 +63,17 @@ void RawPostProcessing::rawPostProcessing(uchar *data, int width, int height, bo
     if (!data || !width || !height)
     {
        DWarning() << ("RawPostProcessing::rawPostProcessing: no image data available!")
-                   << endl;
+                  << endl;
        return;
     }
 
     if (!settings.postProcessingSettingsIsDirty())
     {
-       m_destImage = m_orgImage;
-       return;
+        m_destImage = m_orgImage;
+        return;
     }
+
+    postProgress(10);
 
     if (settings.exposureComp != 0.0 || settings.saturation != 1.0)
     {
@@ -85,6 +87,7 @@ void RawPostProcessing::rawPostProcessing(uchar *data, int width, int height, bo
                         1.0,                     // gamma
                         settings.saturation);    // saturation
     }
+    postProgress(25);
 
     if (settings.lightness != 0.0 || settings.contrast != 1.0 || settings.gamma != 1.0)
     {
@@ -94,6 +97,7 @@ void RawPostProcessing::rawPostProcessing(uchar *data, int width, int height, bo
         bcg.setGamma(settings.gamma);
         bcg.applyBCG(data, width, height, sixteenBit);
     }
+    postProgress(50);
 
     if (!settings.curveAdjust.isEmpty())
     {
@@ -103,11 +107,13 @@ void RawPostProcessing::rawPostProcessing(uchar *data, int width, int height, bo
         curves.curvesCalculateCurve(ImageHistogram::ValueChannel);
         curves.curvesLutSetup(ImageHistogram::AlphaChannel);
         curves.curvesLutProcess(data, tmp.bits(), width, height);
-
         memcpy(data, tmp.bits(), tmp.numBytes());
     }
+    postProgress(75);
 
     m_destImage = m_orgImage;
+
+    postProgress(100);
 }
 
 }  // NameSpace Digikam
