@@ -74,6 +74,9 @@ private slots:
 
     void slotDemosaicingChanged();
 
+    void slotOk();
+    void slotCancel();
+
 private:
 
     RawImportPriv *d;

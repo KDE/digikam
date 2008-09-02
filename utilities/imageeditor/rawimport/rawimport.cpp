@@ -199,4 +199,14 @@ void RawImport::slotLoadingProgress(float v)
     EditorToolIface::editorToolIface()->setToolProgress((int)(v*100));
 }
 
+void RawImport::slotOk()
+{
+    EditorTool::slotOk();
+}
+
+void RawImport::slotCancel()
+{
+    EditorTool::slotCancel();
+}
+
 } // NameSpace Digikam
