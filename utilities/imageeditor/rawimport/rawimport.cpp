@@ -161,7 +161,7 @@ void RawImport::slotLoadingStarted()
     d->settingsBox->enableUpdateBtn(false);
     d->settingsBox->histogram()->setDataLoading();
     d->settingsBox->curve()->setDataLoading();
-    EditorToolIface::editorToolIface()->setToolStartProgress(i18n("Demosaicing"));
+    EditorToolIface::editorToolIface()->setToolStartProgress(i18n("Loading"));
     setBusy(true);
 }
 
