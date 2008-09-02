@@ -30,6 +30,9 @@
 
 #include "ddebug.h"
 #include "dimgthreadedfilter.h"
+#include "imagewidget.h"
+#include "imageguidewidget.h"
+#include "imagepanelwidget.h"
 #include "editortoolsettings.h"
 #include "editortooliface.h"
 #include "editortool.h"
@@ -345,8 +348,12 @@ void EditorToolThreaded::setToolView(QWidget *view)
 {
     EditorTool::setToolView(view);
 
-    connect(view, SIGNAL(signalResized()),
-            this, SLOT(slotResized()));
+    if (dynamic_cast<ImageWidget*>(view) || dynamic_cast<ImageGuideWidget*>(view) ||
+        dynamic_cast<ImagePanelWidget*>(view))
+    {
+        connect(view, SIGNAL(signalResized()),
+                this, SLOT(slotResized()));
+    }
 }
 
 void EditorToolThreaded::slotOk()
