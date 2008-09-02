@@ -159,11 +159,6 @@ void RawPreview::setDecodingSettings(const DRawDecoding& settings)
     emit signalLoadingStarted();
 }
 
-void RawPreview::setPostProcessingSettings(const DRawDecoding& settings)
-{
-//    postProcessing(settings);
-}
-
 void RawPreview::cancelLoading()
 {
     d->thread->stopLoading(d->loadingDesc.filePath);
