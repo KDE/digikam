@@ -156,9 +156,7 @@ void kio_digikamalbums::put(const KUrl& url, int permissions, KIO::JobFlags flag
     if (m_eventLoop->exec() != 0)
         return;
 
-    // Necessary?
-    //CollectionScanner scanner;
-    //scanner.scanFile(dbUrl.albumRootId(), dbUrl.album(), dbUrl.name())
+    // Let CollectionScanner do the database part
 
     // We have done our job => finish
     finished();
@@ -211,6 +209,7 @@ void kio_digikamalbums::copy( const KUrl &src, const KUrl &dst, int mode, KIO::J
         return;
     }
 
+    //TODO: Implement move hints for album.
     // if the filename is .digikam_properties, we have been asked to copy the
     // metadata of the src album to the dst album
     if (src.fileName() == ".digikam_properties")
@@ -225,6 +224,7 @@ void kio_digikamalbums::copy( const KUrl &src, const KUrl &dst, int mode, KIO::J
     if (m_eventLoop->exec() != 0)
         return;
 
+    // TODO:Let CollectionScanner do the database part
     // now copy the metadata over
     access.db()->copyItem(srcAlbumID, dbUrlSrc.fileName(), dstAlbumID, dbUrlSrc.fileName());
 
@@ -235,7 +235,7 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
 {
     kDebug() << "Src: " << src << ", Dst: " << dst;
 
-    // if the filename is .digikam_properties fake that we renamed it
+    // if the filename is .digikam_properties ignore it
     if (src.fileName() == ".digikam_properties")
     {
         finished();
@@ -295,6 +295,7 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
         return;
 
     // renaming done. now update the database
+    // TODO: Let CollectionScanner do the database part. Implement move hints for album.
     if (renamingAlbum)
     {
         // rename subalbums as well
@@ -322,7 +323,8 @@ void kio_digikamalbums::mkdir( const KUrl& url, int permissions )
     if (m_eventLoop->exec() != 0)
         return;
 
-    access.db()->addAlbum(dbUrl.albumRootId(), dbUrl.album(), QString(), QDate::currentDate(), QString());
+    // Let CollectionScanner do the database part
+    //access.db()->addAlbum(dbUrl.albumRootId(), dbUrl.album(), QString(), QDate::currentDate(), QString());
 
     finished();
 }
@@ -345,7 +347,7 @@ void kio_digikamalbums::del( const KUrl& url, bool isFile)
 {
     kDebug() << " : " << url.url();
 
-    // if the filename is .digikam_properties fake that we deleted it
+    // if the filename is .digikam_properties ignore it
     if (isFile && url.fileName() == ".digikam_properties")
     {
         finished();
@@ -394,6 +396,9 @@ void kio_digikamalbums::del( const KUrl& url, bool isFile)
     if (m_eventLoop->exec() != 0)
         return;
 
+    // Let CollectionScanner do the database part
+
+    /*
     if (isFile)
     {
         // successful deletion. now remove file entry from the database
@@ -404,6 +409,7 @@ void kio_digikamalbums::del( const KUrl& url, bool isFile)
         // successful deletion. now remove album entry from the database
         access.db()->deleteAlbum(albumID);
     }
+    */
 
     finished();
 }
@@ -427,8 +433,8 @@ void kio_digikamalbums::listDir( const KUrl& url )
     Digikam::DatabaseUrl dbUrl(url);
 
     KIO::UDSEntry entry;
-    createDigikamPropsUDSEntry(entry);
-    listEntry(entry, false);
+    //createDigikamPropsUDSEntry(entry);
+    //listEntry(entry, false);
 
     KIO::ListJob *job = KIO::listDir(dbUrl.fileUrl(), KIO::HideProgressInfo);
     connectListJob(job);
@@ -438,6 +444,7 @@ void kio_digikamalbums::listDir( const KUrl& url )
     finished();
 }
 
+/*
 void kio_digikamalbums::createDigikamPropsUDSEntry(KIO::UDSEntry& entry)
 {
     entry.clear();
@@ -449,6 +456,7 @@ void kio_digikamalbums::createDigikamPropsUDSEntry(KIO::UDSEntry& entry)
     entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, QDateTime::currentDateTime().toTime_t());
     entry.insert(KIO::UDSEntry::UDS_NAME, QString(".digikam_properties"));
 }
+*/
 
 
 
