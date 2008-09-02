@@ -96,7 +96,7 @@ RawPreview::RawPreview(const KUrl& url, QWidget *parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     d->cornerButton = new QToolButton(this);
-    d->cornerButton->setIconSet(SmallIcon("move"));
+    d->cornerButton->setIcon(SmallIcon("move"));
     d->cornerButton->hide();
     d->cornerButton->setToolTip(i18n("Pan the image to a region"));
     setCornerWidget(d->cornerButton);
@@ -159,13 +159,6 @@ void RawPreview::setDecodingSettings(const DRawDecoding& settings)
     emit signalLoadingStarted();
 }
 
-void RawPreview::setPostProcessingSettings(const DRawDecoding& settings)
-{
-    setCursor(Qt::WaitCursor);
-    postProcessing(settings);
-    unsetCursor();
-}
-
 void RawPreview::cancelLoading()
 {
     d->thread->stopLoading(d->loadingDesc.filePath);
@@ -196,7 +189,7 @@ void RawPreview::slotImageLoaded(const LoadingDescription& description, const DI
                    .arg(QFileInfo(d->loadingDesc.filePath).fileName()));
         p.end();
         // three copies - but the image is small
-        setPostProcessedImage(DImg(pix.convertToImage()));
+        setPostProcessedImage(DImg(pix.toImage()));
         emit signalLoadingFailed();
     }
     else
@@ -209,7 +202,9 @@ void RawPreview::slotImageLoaded(const LoadingDescription& description, const DI
 
 void RawPreview::slotThemeChanged()
 {
-    setBackgroundColor(ThemeEngine::instance()->baseColor());
+    QPalette plt(palette());
+    plt.setColor(backgroundRole(), ThemeEngine::instance()->baseColor());
+    setPalette(plt);
 }
 
 void RawPreview::slotCornerButtonPressed()
@@ -337,7 +332,9 @@ void RawPreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
 {
     DImg img     = d->postProcessedImg.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());
     QPixmap pix2 = img.convertToPixmap();
-    bitBlt(pix, 0, 0, &pix2, 0, 0);
+    QPainter p(pix);
+    p.drawPixmap(0, 0, pix2);
+    p.end();
 }
 
 }  // NameSpace Digikam
