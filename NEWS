@@ -1,15 +1,19 @@
 *********************************************************************************************************
-digiKam 0.10.0-beta3 - Release date: 2008-09-??
+digiKam 0.10.0-beta3 - Release date: 2008-09-02
 
 IMPORTANT: This is a beta release : do not use yet in production !!!
 ====================================================================
 
 NEW FEATURES:
 
+General        : libkdcraw dependency updated to 0.3.0
+
+Image Editor   : All image plugin tool settings provide default buttons to reset values.
+Image Editor   : New Raw import tool to handle Raw pictures with customized decoding settings.
+Image Editor   : All image plugin dialogs are removed. All tools are embedded in editor window.
+
 General        : Raw metadata can be edited, changed, added to TIFF/EP like RAW file formats (require Exiv2 >= 0.18).
                  Currently DNG, NEF, and PEF raw files are supported. More will be added in the future.
-
-Image Editor   : All image plugin dialogs are removed. All tools are embedded in editor window.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
