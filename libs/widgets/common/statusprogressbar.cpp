@@ -143,6 +143,7 @@ int StatusProgressBar::progressTotalSteps()
 void StatusProgressBar::setProgressText( const QString& text )
 {
     d->progressBar->setFormat( text + QString ("%p%") );
+    d->progressBar->update();
 }
 
 void StatusProgressBar::progressBarMode( int mode, const QString& text )
