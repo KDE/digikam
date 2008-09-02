@@ -69,17 +69,58 @@ protected:
 
 protected slots:
 
+    //NOTE:
+    // The full qualification with "Digikam::" for the changeset types in the following
+    // signals and slots are required to make moc pick them up.
+    // If moc does not get the namespace in its literal, DBus connections will silently break.
+
     // DBus slots, for internal use
-    void slotDBusChangeset(const QString &databaseIdentifier,
+    void slotImageChangeDBus(const QString &databaseIdentifier,
                            const QString &applicationIdentifier,
-                           const QDBusVariant &changeset);
+                           const Digikam::ImageChangeset &changeset);
+    void slotImageTagChangeDBus(const QString &databaseIdentifier,
+                           const QString &applicationIdentifier,
+                           const Digikam::ImageTagChangeset &changeset);
+    void slotCollectionImageChangeDBus(const QString &databaseIdentifier,
+                           const QString &applicationIdentifier,
+                           const Digikam::CollectionImageChangeset &changeset);
+    void slotAlbumChangeDBus(const QString &databaseIdentifier,
+                           const QString &applicationIdentifier,
+                           const Digikam::AlbumChangeset &changeset);
+    void slotTagChangeDBus(const QString &databaseIdentifier,
+                           const QString &applicationIdentifier,
+                           const Digikam::TagChangeset &changeset);
+    void slotAlbumRootChangeDBus(const QString &databaseIdentifier,
+                           const QString &applicationIdentifier,
+                           const Digikam::AlbumRootChangeset &changeset);
+    void slotSearchChangeDBus(const QString &databaseIdentifier,
+                           const QString &applicationIdentifier,
+                           const Digikam::SearchChangeset &changeset);
 
 signals:
 
     // DBus signals, for internal use
-    void changeset(const QString &databaseIdentifier,
-                   const QString &applicationIdentifier,
-                   const QDBusVariant &changeset);
+    void imageChange(const QString &databaseIdentifier,
+                           const QString &applicationIdentifier,
+                           const Digikam::ImageChangeset &changeset);
+    void imageTagChange(const QString &databaseIdentifier,
+                           const QString &applicationIdentifier,
+                           const Digikam::ImageTagChangeset &changeset);
+    void collectionImageChange(const QString &databaseIdentifier,
+                           const QString &applicationIdentifier,
+                           const Digikam::CollectionImageChangeset &changeset);
+    void albumChange(const QString &databaseIdentifier,
+                           const QString &applicationIdentifier,
+                           const Digikam::AlbumChangeset &changeset);
+    void tagChange(const QString &databaseIdentifier,
+                           const QString &applicationIdentifier,
+                           const Digikam::TagChangeset &changeset);
+    void albumRootChange(const QString &databaseIdentifier,
+                           const QString &applicationIdentifier,
+                           const Digikam::AlbumRootChangeset &changeset);
+    void searchChange(const QString &databaseIdentifier,
+                           const QString &applicationIdentifier,
+                           const Digikam::SearchChangeset &changeset);
 
 public:
 

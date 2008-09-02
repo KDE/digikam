@@ -36,14 +36,14 @@
 #include "databasewatchadaptor.moc"
 #include "databasewatch.moc"
 
-namespace Digikam
-{
-
-DatabaseWatchAdaptor::DatabaseWatchAdaptor(DatabaseWatch *watch)
+Digikam_DatabaseWatchAdaptor::Digikam_DatabaseWatchAdaptor(Digikam::DatabaseWatch *watch)
     : QDBusAbstractAdaptor(watch)
 {
     setAutoRelaySignals(true);
 }
+
+namespace Digikam
+{
 
 // ------------------- //
 
@@ -52,12 +52,29 @@ class DatabaseWatchPriv
 public:
     DatabaseWatchPriv()
     {
-        mode = DatabaseWatch::DatabaseSlave;
+        mode    = DatabaseWatch::DatabaseSlave;
+        adaptor = 0;
     }
 
-    DatabaseWatch::DatabaseMode mode;
-    QString                     databaseId;
-    QString                     applicationId;
+    DatabaseWatch::DatabaseMode   mode;
+    QString                       databaseId;
+    QString                       applicationId;
+
+    Digikam_DatabaseWatchAdaptor *adaptor;
+
+    void connectWithDBus(const char *dbusSignal, QObject *obj, const char *slot)
+    {
+        // connect to slave signals
+        QDBusConnection::sessionBus().connect(QString(), "/ChangesetRelay",
+                                              "org.digikam.DatabaseChangesetRelay",
+                                              dbusSignal,
+                                              obj, slot);
+        // connect to master signals
+        QDBusConnection::sessionBus().connect(QString(), "/ChangesetRelayForPeers",
+                                              "org.digikam.DatabaseChangesetRelay",
+                                              dbusSignal,
+                                              obj, slot);
+    }
 };
 
 // ------------------- //
@@ -84,6 +101,9 @@ void DatabaseWatch::initializeRemote(DatabaseMode mode)
     qRegisterMetaType<AlbumRootChangeset>("AlbumRootChangeset");
     qRegisterMetaType<SearchChangeset>("SearchChangeset");
 
+    //NOTE: The literal for registration with DBus here will include namespace qualifier.
+    //      Therefore, the header file declaration for DBus signals and slots
+    //      must contain the full qualifier as well, so that moc picks them up.
     qDBusRegisterMetaType<ImageChangeset>();
     qDBusRegisterMetaType<ImageTagChangeset>();
     qDBusRegisterMetaType<CollectionImageChangeset>();
@@ -98,30 +118,30 @@ void DatabaseWatch::initializeRemote(DatabaseMode mode)
 
     if (d->mode == DatabaseSlave)
     {
-        new DatabaseWatchAdaptor(this);
+        d->adaptor = new Digikam_DatabaseWatchAdaptor(this);
         QDBusConnection::sessionBus().registerObject("/ChangesetRelay", this);
     }
     else
     {
-        new DatabaseWatchAdaptor(this);
+        d->adaptor = new Digikam_DatabaseWatchAdaptor(this);
         QDBusConnection::sessionBus().registerObject("/ChangesetRelayForPeers", this);
 
-        // connect to slave signals
-        QDBusConnection::sessionBus().connect(QString(), "/ChangesetRelay",
-                                              "org.digikam.DatabaseChangesetRelay",
-                                              "changeset",
-                                              this, SLOT(slotDBusChangeset(const QString &,
-                                                                             const QString &,
-                                                                             const QDBusVariant &)));
-
-        // connect to master signals
-        QDBusConnection::sessionBus().connect(QString(), "/ChangesetRelayForPeers",
-                                              "org.digikam.DatabaseChangesetRelay",
-                                              "changeset",
-                                              this, SLOT(slotDBusChangeset(const QString &,
-                                                                             const QString &,
-                                                                             const QDBusVariant &)));
-
+        // connect DBus signals from slave or peer to our application
+        d->connectWithDBus("imageChange", this,
+                           SLOT(slotImageChangeDBus(const QString &, const QString &, const Digikam::ImageChangeset &)));
+        d->connectWithDBus("imageTagChange", this,
+                           SLOT(slotImageTagChangeDBus(const QString &, const QString &, const Digikam::ImageTagChangeset &)));
+        d->connectWithDBus("collectionImageChange", this,
+                           SLOT(slotCollectionImageChangeDBus(const QString &,
+                                const QString &, const Digikam::CollectionImageChangeset &)));
+        d->connectWithDBus("albumChange", this,
+                           SLOT(slotAlbumChangeDBus(const QString &, const QString &, const Digikam::AlbumChangeset &)));
+        d->connectWithDBus("tagChange", this,
+                           SLOT(slotTagChangeDBus(const QString &, const QString &, const Digikam::TagChangeset &)));
+        d->connectWithDBus("albumRootChange", this,
+                           SLOT(slotAlbumRootChangeDBus(const QString &, const QString &, const Digikam::AlbumRootChangeset &)));
+        d->connectWithDBus("searchChange", this,
+                           SLOT(slotSearchChangeDBus(const QString &, const QString &, const Digikam::SearchChangeset &)));
     }
 }
 
@@ -135,47 +155,6 @@ void DatabaseWatch::setApplicationIdentifier(const QString &identifier)
     d->applicationId = identifier;
 }
 
-// --- methods to dispatch from slave or peer to local listeners ---
-
-void DatabaseWatch::slotDBusChangeset(const QString &databaseIdentifier,
-                                      const QString &applicationIdentifier,
-                                      const QDBusVariant &v)
-{
-    // We only want to process messages that 1) were not sent by ourselves, 2) are sent for our database
-    if (applicationIdentifier != d->applicationId &&
-        databaseIdentifier == d->databaseId)
-    {
-        QVariant var = v.variant();
-        if (var.canConvert<ImageChangeset>())
-        {
-            emit imageChange(var.value<ImageChangeset>());
-        }
-        else if (var.canConvert<ImageTagChangeset>())
-        {
-            emit imageTagChange(var.value<ImageTagChangeset>());
-        }
-        else if (var.canConvert<CollectionImageChangeset>())
-        {
-            emit collectionImageChange(var.value<CollectionImageChangeset>());
-        }
-        else if (var.canConvert<AlbumChangeset>())
-        {
-            emit albumChange(var.value<AlbumChangeset>());
-        }
-        else if (var.canConvert<TagChangeset>())
-        {
-            emit tagChange(var.value<TagChangeset>());
-        }
-        else if (var.canConvert<AlbumRootChangeset>())
-        {
-            emit albumRootChange(var.value<AlbumRootChangeset>());
-        }
-        else if (var.canConvert<SearchChangeset>())
-        {
-            emit searchChange(var.value<SearchChangeset>());
-        }
-    }
-}
 
 // --- methods to dispatch changes from database to listeners (local and remote) ---
 
@@ -184,52 +163,110 @@ void DatabaseWatch::sendImageChange(const ImageChangeset &cset)
     // send local signal
     emit imageChange(cset);
     // send DBUS signal
-    emit changeset(d->databaseId, d->applicationId,
-                   QDBusVariant(QVariant::fromValue<ImageChangeset>(cset)));
+    emit imageChange(d->databaseId, d->applicationId, cset);
 }
 
 void DatabaseWatch::sendImageTagChange(const ImageTagChangeset &cset)
 {
     emit imageTagChange(cset);
-    emit changeset(d->databaseId, d->applicationId,
-                   QDBusVariant(QVariant::fromValue<ImageTagChangeset>(cset)));
+    emit imageTagChange(d->databaseId, d->applicationId, cset);
 }
 
 void DatabaseWatch::sendCollectionImageChange(const CollectionImageChangeset &cset)
 {
     emit collectionImageChange(cset);
-    emit changeset(d->databaseId, d->applicationId,
-                     QDBusVariant(QVariant::fromValue<CollectionImageChangeset>(cset)));
+    emit collectionImageChange(d->databaseId, d->applicationId, cset);
 }
 
 void DatabaseWatch::sendAlbumChange(const AlbumChangeset &cset)
 {
     emit albumChange(cset);
-    emit changeset(d->databaseId, d->applicationId,
-                     QDBusVariant(QVariant::fromValue<AlbumChangeset>(cset)));
+    emit albumChange(d->databaseId, d->applicationId, cset);
 }
 
 void DatabaseWatch::sendTagChange(const TagChangeset &cset)
 {
     emit tagChange(cset);
-    emit changeset(d->databaseId, d->applicationId,
-                     QDBusVariant(QVariant::fromValue<TagChangeset>(cset)));
+    emit tagChange(d->databaseId, d->applicationId, cset);
 }
 
 void DatabaseWatch::sendAlbumRootChange(const AlbumRootChangeset &cset)
 {
     emit albumRootChange(cset);
-    emit changeset(d->databaseId, d->applicationId,
-                     QDBusVariant(QVariant::fromValue<AlbumRootChangeset>(cset)));
+    emit albumRootChange(d->databaseId, d->applicationId, cset);
 }
 
 void DatabaseWatch::sendSearchChange(const SearchChangeset &cset)
 {
     emit searchChange(cset);
-    emit changeset(d->databaseId, d->applicationId,
-                     QDBusVariant(QVariant::fromValue<SearchChangeset>(cset)));
+    emit searchChange(d->databaseId, d->applicationId, cset);
 }
 
+
+// --- methods to dispatch from slave or peer to local listeners ---
+
+void DatabaseWatch::slotImageChangeDBus(const QString &databaseIdentifier,
+                                        const QString &applicationIdentifier,
+                                        const ImageChangeset &changeset)
+{
+    if (applicationIdentifier != d->applicationId &&
+        databaseIdentifier == d->databaseId)
+        emit imageChange(changeset);
+}
+
+void DatabaseWatch::slotImageTagChangeDBus(const QString &databaseIdentifier,
+                                           const QString &applicationIdentifier,
+                                           const ImageTagChangeset &changeset)
+{
+    if (applicationIdentifier != d->applicationId &&
+        databaseIdentifier == d->databaseId)
+        emit imageTagChange(changeset);
+}
+
+void DatabaseWatch::slotCollectionImageChangeDBus(const QString &databaseIdentifier,
+                                                  const QString &applicationIdentifier,
+                                                  const CollectionImageChangeset &changeset)
+{
+    if (applicationIdentifier != d->applicationId &&
+        databaseIdentifier == d->databaseId)
+        emit collectionImageChange(changeset);
+}
+
+void DatabaseWatch::slotAlbumChangeDBus(const QString &databaseIdentifier,
+                                        const QString &applicationIdentifier,
+                                        const AlbumChangeset &changeset)
+{
+    if (applicationIdentifier != d->applicationId &&
+        databaseIdentifier == d->databaseId)
+        emit albumChange(changeset);
+}
+
+void DatabaseWatch::slotTagChangeDBus(const QString &databaseIdentifier,
+                                      const QString &applicationIdentifier,
+                                      const TagChangeset &changeset)
+{
+    if (applicationIdentifier != d->applicationId &&
+        databaseIdentifier == d->databaseId)
+        emit tagChange(changeset);
+}
+
+void DatabaseWatch::slotAlbumRootChangeDBus(const QString &databaseIdentifier,
+                                            const QString &applicationIdentifier,
+                                            const AlbumRootChangeset &changeset)
+{
+    if (applicationIdentifier != d->applicationId &&
+        databaseIdentifier == d->databaseId)
+        emit albumRootChange(changeset);
+}
+
+void DatabaseWatch::slotSearchChangeDBus(const QString &databaseIdentifier,
+                                         const QString &applicationIdentifier,
+                                         const SearchChangeset &changeset)
+{
+    if (applicationIdentifier != d->applicationId &&
+        databaseIdentifier == d->databaseId)
+        emit searchChange(changeset);
+}
 
 
 

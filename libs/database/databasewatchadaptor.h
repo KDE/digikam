@@ -29,28 +29,51 @@
 #include <QObject>
 #include <QDBusVariant>
 
-namespace Digikam
-{
-
 // qdbuscpp2xml -S -M databasewatchadaptor.h -o org.digikam.DatabaseChangesetRelay.xml
 
-class DatabaseWatchAdaptor : public QDBusAbstractAdaptor
+class Digikam_DatabaseWatchAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.digikam.DatabaseChangesetRelay")
 
 public:
 
-    DatabaseWatchAdaptor(DatabaseWatch *watch);
+    Digikam_DatabaseWatchAdaptor(Digikam::DatabaseWatch *watch);
 
 signals:
 
-    void changeset(const QString &databaseIdentifier,
-                   const QString &applicationIdentifier,
-                   const QDBusVariant &changeset);
+    // These signals are the same as declared in DatabaseWatch, setAutoRelaySignals will
+    // automatically connect the DatabaseWatch signals to these, which are then sent over DBus.
+
+    //NOTE:
+    // The full qualification with "Digikam::" for the changeset types in the following
+    // signals and slots are required to make moc pick them up.
+    // If moc does not get the namespace in its literal, DBus connections will silently break.
+
+    void imageChange(const QString &databaseIdentifier,
+                           const QString &applicationIdentifier,
+                           const Digikam::ImageChangeset &changeset);
+    void imageTagChange(const QString &databaseIdentifier,
+                           const QString &applicationIdentifier,
+                           const Digikam::ImageTagChangeset &changeset);
+    void collectionImageChange(const QString &databaseIdentifier,
+                           const QString &applicationIdentifier,
+                           const Digikam::CollectionImageChangeset &changeset);
+    void albumChange(const QString &databaseIdentifier,
+                           const QString &applicationIdentifier,
+                           const Digikam::AlbumChangeset &changeset);
+    void tagChange(const QString &databaseIdentifier,
+                           const QString &applicationIdentifier,
+                           const Digikam::TagChangeset &changeset);
+    void albumRootChange(const QString &databaseIdentifier,
+                           const QString &applicationIdentifier,
+                           const Digikam::AlbumRootChangeset &changeset);
+    void searchChange(const QString &databaseIdentifier,
+                           const QString &applicationIdentifier,
+                           const Digikam::SearchChangeset &changeset);
+
 };
 
-}
 
 #endif
 
