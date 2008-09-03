@@ -344,10 +344,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
 AdjustCurvesTool::~AdjustCurvesTool()
 {
-    m_histogramWidget->stopHistogramComputation();
-
-    if (m_destinationPreviewData)
-       delete [] m_destinationPreviewData;
+    delete [] m_destinationPreviewData;
 }
 
 void AdjustCurvesTool::slotPickerColorButtonActived()
