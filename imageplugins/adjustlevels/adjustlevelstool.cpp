@@ -116,7 +116,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
                                             EditorToolSettings::Ok|
                                             EditorToolSettings::Cancel);
 
-    QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage(), 16, 8);
+    QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage(), 20, 6);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), m_gboxSettings->plainPage());
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -207,7 +207,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 
     m_gammaInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_gammaInput->setPrecision(2);
-    m_gammaInput->setRange(0.1, 3.0, 0.01);
+    m_gammaInput->setRange(0.1, 3.0, 0.01, true);
     m_gammaInput->setDefaultValue(1.0);
     QToolTip::add( m_gammaInput, i18n( "Gamma input value." ) );
     QWhatsThis::add( m_gammaInput, i18n("<p>Select the gamma input value."));
@@ -309,32 +309,22 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     // -------------------------------------------------------------
 
     grid->addMultiCellLayout(l1,                      0, 0, 0, 6);
-    grid->setRowSpacing(1, m_gboxSettings->spacingHint());
     grid->addMultiCellWidget(m_histogramWidget,       2, 2, 1, 5);
-    grid->setRowSpacing(3, m_gboxSettings->spacingHint());
     grid->addMultiCellWidget(m_levelsHistogramWidget, 4, 4, 1, 5);
     grid->addMultiCellWidget(m_hGradientMinInput,     5, 5, 0, 6);
-    grid->addMultiCellWidget(m_minInput,              5, 5, 8, 8);
-    grid->setRowSpacing(6, m_gboxSettings->spacingHint());
     grid->addMultiCellWidget(m_hGradientMaxInput,     7, 7, 0, 6);
-    grid->addMultiCellWidget(m_maxInput,              7, 7, 8, 8);
-    grid->setRowSpacing(8, m_gboxSettings->spacingHint());
-    grid->addMultiCellWidget(m_gammaInput,            9, 9, 0, 8);
-    grid->setRowSpacing(10, m_gboxSettings->spacingHint());
-    grid->addMultiCellWidget(m_hGradientMinOutput,    11, 11, 0, 6);
-    grid->addMultiCellWidget(m_minOutput,             11, 11, 8, 8);
-    grid->setRowSpacing(12, m_gboxSettings->spacingHint());
-    grid->addMultiCellWidget(m_hGradientMaxOutput,    13, 13, 0, 6);
-    grid->addMultiCellWidget(m_maxOutput,             13, 13, 8, 8);
-    grid->setRowSpacing(14, m_gboxSettings->spacingHint());
-    grid->addMultiCellLayout(l3,                      15, 15, 0, 8);
-    grid->setRowStretch(16, 10);
-    grid->setColStretch(2, 10);
-    grid->setColSpacing(0, 5);
-    grid->setColSpacing(6, 5);
-    grid->setColSpacing(7, m_gboxSettings->spacingHint());
+    grid->addMultiCellWidget(m_minInput,              9, 9, 1, 1);
+    grid->addMultiCellWidget(m_maxInput,              9, 9, 5, 5);
+    grid->addMultiCellWidget(m_gammaInput,            11, 11, 0, 6);
+    grid->addMultiCellWidget(m_hGradientMinOutput,    13, 13, 0, 6);
+    grid->addMultiCellWidget(m_hGradientMaxOutput,    15, 15, 0, 6);
+    grid->addMultiCellWidget(m_minOutput,             17, 17, 1, 1);
+    grid->addMultiCellWidget(m_maxOutput,             17, 17, 5, 5);
+    grid->addMultiCellLayout(l3,                      19, 19, 0, 6);
+    grid->setRowStretch(20, 10);
+    grid->setColStretch(3, 10);
     grid->setMargin(0);
-    grid->setSpacing(0);
+    grid->setSpacing(5);
 
     setToolSettings(m_gboxSettings);
 
@@ -401,9 +391,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 
 AdjustLevelsTool::~AdjustLevelsTool()
 {
-    if (m_destinationPreviewData)
-       delete [] m_destinationPreviewData;
-
+    delete [] m_destinationPreviewData;
     delete m_levels;
 }
 
