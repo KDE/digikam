@@ -35,8 +35,6 @@ class QPushButton;
 class QToolButton;
 class QButtonGroup;
 
-class KGradientSelector;
-
 namespace KDcrawIface
 {
 class RDoubleNumInput;
@@ -49,6 +47,7 @@ class HistogramWidget;
 class ImageWidget;
 class ImageLevels;
 class EditorToolSettings;
+class DGradientSlider;
 }
 
 namespace DigikamAdjustLevelsImagesPlugin
@@ -69,7 +68,7 @@ private:
     void writeSettings();
     void finalRendering();
     void adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
-    bool eventFilter(QObject *obj, QEvent *ev);
+    bool eventFilter(QObject*, QEvent*);
 
 private slots:
 
@@ -83,14 +82,14 @@ private slots:
     void slotScaleChanged(int scale);
     void slotAdjustSliders();
     void slotGammaInputchanged(double val);
-    void slotAdjustMinInputSpinBox(int val);
-    void slotAdjustMaxInputSpinBox(int val);
-    void slotAdjustMinOutputSpinBox(int val);
-    void slotAdjustMaxOutputSpinBox(int val);
-    void slotSpotColorChanged(const Digikam::DColor &color);
-    void slotColorSelectedFromTarget(const Digikam::DColor &color);
+    void slotAdjustMinInputSpinBox(double val);
+    void slotAdjustMaxInputSpinBox(double val);
+    void slotAdjustMinOutputSpinBox(double val);
+    void slotAdjustMaxOutputSpinBox(double val);
+    void slotSpotColorChanged(const Digikam::DColor& color);
+    void slotColorSelectedFromTarget(const Digikam::DColor& color);
     void slotPickerColorButtonActived();
-    void slotShowHistogramGuide(int v);
+    void slotShowHistogramGuide(double v);
 
 private:
 
@@ -116,46 +115,44 @@ private:
         WhiteTonal
     };
 
-    uchar                     *m_destinationPreviewData;
+    uchar                        *m_destinationPreviewData;
 
-    int                        m_histoSegments;
-    int                        m_currentPreviewMode;
+    int                           m_histoSegments;
+    int                           m_currentPreviewMode;
 
-    QWidget                   *m_pickerBox;
+    QWidget                      *m_pickerBox;
 
-    QComboBox                 *m_channelCB;
+    QComboBox                    *m_channelCB;
 
-    QPushButton               *m_resetButton;
-    QToolButton               *m_autoButton;
-    QToolButton               *m_pickBlack;
-    QToolButton               *m_pickGray;
-    QToolButton               *m_pickWhite;
+    QPushButton                  *m_resetButton;
+    QToolButton                  *m_autoButton;
+    QToolButton                  *m_pickBlack;
+    QToolButton                  *m_pickGray;
+    QToolButton                  *m_pickWhite;
 
-    QButtonGroup              *m_pickerColorButtonGroup;
-    QButtonGroup              *m_scaleBG;
+    QButtonGroup                 *m_pickerColorButtonGroup;
+    QButtonGroup                 *m_scaleBG;
 
-    KGradientSelector         *m_hGradientMinInput;
-    KGradientSelector         *m_hGradientMaxInput;
-    KGradientSelector         *m_hGradientMinOutput;
-    KGradientSelector         *m_hGradientMaxOutput;
-
-    KDcrawIface::RIntNumInput *m_minInput;
-    KDcrawIface::RIntNumInput *m_maxInput;
-    KDcrawIface::RIntNumInput *m_minOutput;
-    KDcrawIface::RIntNumInput *m_maxOutput;
+    KDcrawIface::RIntNumInput    *m_minInput;
+    KDcrawIface::RIntNumInput    *m_maxInput;
+    KDcrawIface::RIntNumInput    *m_minOutput;
+    KDcrawIface::RIntNumInput    *m_maxOutput;
 
     KDcrawIface::RDoubleNumInput *m_gammaInput;
 
-    Digikam::HistogramWidget  *m_levelsHistogramWidget;
-    Digikam::HistogramWidget  *m_histogramWidget;
+    Digikam::HistogramWidget     *m_levelsHistogramWidget;
+    Digikam::HistogramWidget     *m_histogramWidget;
 
-    Digikam::ImageWidget      *m_previewWidget;
+    Digikam::DGradientSlider     *m_inputLevels;
+    Digikam::DGradientSlider     *m_outputLevels;
 
-    Digikam::ImageLevels      *m_levels;
+    Digikam::ImageWidget         *m_previewWidget;
 
-    Digikam::DImg             *m_originalImage;
+    Digikam::ImageLevels         *m_levels;
 
-    Digikam::EditorToolSettings *m_gboxSettings;
+    Digikam::DImg                *m_originalImage;
+
+    Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
 }  // NameSpace DigikamAdjustLevelsImagesPlugin

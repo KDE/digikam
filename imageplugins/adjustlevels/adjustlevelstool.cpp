@@ -56,7 +56,6 @@
 #include <klocale.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
-#include <kselector.h>
 #include <kstandarddirs.h>
 
 // LibKDcraw includes.
@@ -72,6 +71,7 @@
 #include "imagewidget.h"
 #include "imagehistogram.h"
 #include "imagelevels.h"
+#include "dgradientslider.h"
 #include "histogramwidget.h"
 #include "dimgimagefilters.h"
 #include "editortoolsettings.h"
@@ -190,27 +190,17 @@ AdjustLevelTool::AdjustLevelTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_hGradientMinInput = new KGradientSelector( Qt::Horizontal, m_gboxSettings->plainPage() );
-    m_hGradientMinInput->setIndent(false);
-    m_hGradientMinInput->setFixedHeight( 16 );
-    m_hGradientMinInput->setMinimum(0);
-    m_hGradientMinInput->setMaximum(m_histoSegments);
-    m_hGradientMinInput->setWhatsThis( i18n("<p>Select the minimal intensity "
-                                            "input value of the histogram here."));
-    m_hGradientMinInput->setToolTip( i18n( "Minimal intensity input." ) );
-    m_hGradientMinInput->setColors( QColor( "black" ), QColor( "white" ) );
-    m_hGradientMinInput->installEventFilter(this);
+    m_inputLevels = new DGradientSlider(m_gboxSettings->plainPage());
+    m_inputLevels->setWhatsThis( i18n("<p>Select the inputs intensity "
+                                      "of the histogram here."));
+    m_inputLevels->setToolTip( i18n( "Intensity inputs." ) );
+    m_inputLevels->installEventFilter(this);
 
-    m_hGradientMaxInput = new KGradientSelector( Qt::Horizontal, m_gboxSettings->plainPage() );
-    m_hGradientMaxInput->setIndent(false);
-    m_hGradientMaxInput->setFixedHeight( 16 );
-    m_hGradientMaxInput->setMinimum(0);
-    m_hGradientMaxInput->setMaximum(m_histoSegments);
-    m_hGradientMaxInput->setWhatsThis( i18n("<p>Select the maximal intensity input "
-                                            "value of the histogram here."));
-    m_hGradientMaxInput->setToolTip( i18n( "Maximal intensity input." ) );
-    m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
-    m_hGradientMaxInput->installEventFilter(this);
+    m_outputLevels = new DGradientSlider(m_gboxSettings->plainPage());
+    m_outputLevels->setWhatsThis( i18n("<p>Select the outputs intensity "
+                                       "of the histogram here."));
+    m_outputLevels->setToolTip( i18n( "Intensity outputs." ) );
+    m_outputLevels->installEventFilter(this);
 
     m_minInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_minInput->setRange(0, m_histoSegments, 1);
@@ -234,28 +224,6 @@ AdjustLevelTool::AdjustLevelTool(QObject* parent)
     m_maxInput->setToolTip( i18n( "Maximal intensity input." ) );
     m_maxInput->setWhatsThis( i18n("<p>Select the maximal intensity input "
                                    "value of the histogram here."));
-
-    m_hGradientMinOutput = new KGradientSelector( Qt::Horizontal, m_gboxSettings->plainPage() );
-    m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "white" ) );
-    m_hGradientMinOutput->setWhatsThis(i18n("<p>Select the minimal intensity output "
-                                             "value of the histogram here."));
-    m_hGradientMinOutput->setToolTip( i18n( "Minimal intensity output." ) );
-    m_hGradientMinOutput->setIndent(false);
-    m_hGradientMinOutput->setFixedHeight( 16 );
-    m_hGradientMinOutput->setMinimum(0);
-    m_hGradientMinOutput->setMaximum(m_histoSegments);
-    m_hGradientMinOutput->installEventFilter(this);
-
-    m_hGradientMaxOutput = new KGradientSelector( Qt::Horizontal, m_gboxSettings->plainPage() );
-    m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "white" ) );
-    m_hGradientMaxOutput->setWhatsThis(i18n("<p>Select the maximal intensity output "
-                                            "value of the histogram here."));
-    m_hGradientMaxOutput->setToolTip( i18n( "Maximal intensity output." ) );
-    m_hGradientMaxOutput->setIndent(false);
-    m_hGradientMaxOutput->setFixedHeight( 16 );
-    m_hGradientMaxOutput->setMinimum(0);
-    m_hGradientMaxOutput->setMaximum(m_histoSegments);
-    m_hGradientMaxOutput->installEventFilter(this);
 
     m_minOutput = new RIntNumInput(m_gboxSettings->plainPage());
     m_minOutput->setRange(0, m_histoSegments, 1);
@@ -341,37 +309,22 @@ AdjustLevelTool::AdjustLevelTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    grid->addLayout(l1,                         0, 0, 1, 6+1);
-    grid->addWidget(m_histogramWidget,          2, 1, 1, 5);
-    grid->addWidget(m_levelsHistogramWidget,    4, 1, 1, 5);
-    grid->addWidget(m_hGradientMinInput,        5, 0, 1, 6+1);
-    grid->addWidget(m_minInput,                 5, 8, 1, 1);
-    grid->addWidget(m_hGradientMaxInput,        7, 0, 1, 6+1);
-    grid->addWidget(m_maxInput,                 7, 8, 1, 1);
-    grid->addWidget(m_gammaInput,               9, 0, 1, 8+1);
-    grid->addWidget(m_hGradientMinOutput,      11, 0, 1, 6+1);
-    grid->addWidget(m_minOutput,               11, 8, 1, 1);
-    grid->addWidget(m_hGradientMaxOutput,      13, 0, 1, 6+1);
-    grid->addWidget(m_maxOutput,               13, 8, 1, 1);
-    grid->addLayout(l3,                        15, 0, 1, 8+1);
-
-    grid->setRowMinimumHeight(1,   m_gboxSettings->spacingHint());
-    grid->setRowMinimumHeight(3,   m_gboxSettings->spacingHint());
-    grid->setRowMinimumHeight(6,   m_gboxSettings->spacingHint());
-    grid->setRowMinimumHeight(8,   m_gboxSettings->spacingHint());
-    grid->setRowMinimumHeight(10,  m_gboxSettings->spacingHint());
-    grid->setRowMinimumHeight(12,  m_gboxSettings->spacingHint());
-    grid->setRowMinimumHeight(14,  m_gboxSettings->spacingHint());
-
-    grid->setColumnMinimumWidth(0, 5);
-    grid->setColumnMinimumWidth(6, 5);
-    grid->setColumnMinimumWidth(7, m_gboxSettings->spacingHint());
-
-    grid->setRowStretch(16, 10);
-    grid->setColumnStretch(2, 10);
-
     grid->setMargin(m_gboxSettings->spacingHint());
-    grid->setSpacing(0);
+    grid->setSpacing(3);
+    grid->addLayout(l1,                      0, 0, 1, 7);
+    grid->addWidget(m_histogramWidget,       1, 1, 1, 5);
+    grid->addWidget(m_levelsHistogramWidget, 2, 1, 1, 5);
+    grid->addWidget(m_inputLevels,           3, 0, 1, 7);
+    grid->addWidget(m_minInput,              4, 1, 1, 1);
+    grid->addWidget(m_maxInput,              4, 5, 1, 1);
+    grid->addWidget(m_gammaInput,            5, 0, 1, 7);
+    grid->addWidget(m_outputLevels,          6, 0, 1, 7);
+    grid->addWidget(m_minOutput,             7, 1, 1, 1);
+    grid->addWidget(m_maxOutput,             7, 5, 1, 1);
+    grid->addLayout(l3,                      8, 0, 1, 7);
+    grid->setRowStretch(9, 10);
+    grid->setColumnStretch(2, 10);
+    grid->setColumnStretch(4, 10);
 
     setToolSettings(m_gboxSettings);
 
@@ -384,11 +337,11 @@ AdjustLevelTool::AdjustLevelTool(QObject* parent)
     connect(m_scaleBG, SIGNAL(buttonReleased(int)),
             this, SLOT(slotScaleChanged(int)));
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotSpotColorChanged( const Digikam::DColor & )));
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotSpotColorChanged(const Digikam::DColor&)));
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
 
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
@@ -396,31 +349,31 @@ AdjustLevelTool::AdjustLevelTool(QObject* parent)
     // -------------------------------------------------------------
     // Color sliders and spinbox slots.
 
-    connect(m_hGradientMinInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotAdjustMinInputSpinBox(int)));
+    connect(m_inputLevels, SIGNAL(leftValueChanged(double)),
+            this, SLOT(slotAdjustMinInputSpinBox(double)));
 
-    connect(m_minInput, SIGNAL(valueChanged (int)),
+    connect(m_minInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotAdjustSliders()));
 
-    connect(m_gammaInput, SIGNAL(valueChanged (double)),
+    connect(m_gammaInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotGammaInputchanged(double)));
 
-    connect(m_hGradientMaxInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotAdjustMaxInputSpinBox(int)));
+    connect(m_inputLevels, SIGNAL(rightValueChanged(double)),
+            this, SLOT(slotAdjustMaxInputSpinBox(double)));
 
-    connect(m_maxInput, SIGNAL(valueChanged (int)),
+    connect(m_maxInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotAdjustSliders()));
 
-    connect(m_hGradientMinOutput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotAdjustMinOutputSpinBox(int)));
+    connect(m_outputLevels, SIGNAL(leftValueChanged(double)),
+            this, SLOT(slotAdjustMinOutputSpinBox(double)));
 
-    connect(m_minOutput, SIGNAL(valueChanged (int)),
+    connect(m_minOutput, SIGNAL(valueChanged(int)),
             this, SLOT(slotAdjustSliders()));
 
-    connect(m_hGradientMaxOutput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotAdjustMaxOutputSpinBox(int)));
+    connect(m_outputLevels, SIGNAL(rightValueChanged(double)),
+            this, SLOT(slotAdjustMaxOutputSpinBox(double)));
 
-    connect(m_maxOutput, SIGNAL(valueChanged (int)),
+    connect(m_maxOutput, SIGNAL(valueChanged(int)),
             this, SLOT(slotAdjustSliders()));
 
     // -------------------------------------------------------------
@@ -432,17 +385,13 @@ AdjustLevelTool::AdjustLevelTool(QObject* parent)
     connect(m_resetButton, SIGNAL(clicked()),
             this, SLOT(slotResetCurrentChannel()));
 
-    connect(m_pickerColorButtonGroup, SIGNAL(released(int)),
+    connect(m_pickerColorButtonGroup, SIGNAL(buttonReleased(int)),
             this, SLOT(slotPickerColorButtonActived()));
-
 }
 
 AdjustLevelTool::~AdjustLevelTool()
 {
-    m_histogramWidget->stopHistogramComputation();
-
-    if (m_destinationPreviewData)
-       delete [] m_destinationPreviewData;
+    delete [] m_destinationPreviewData;
 }
 
 void AdjustLevelTool::slotPickerColorButtonActived()
@@ -500,59 +449,43 @@ void AdjustLevelTool::slotGammaInputchanged(double val)
     slotTimer();
 }
 
-void AdjustLevelTool::slotAdjustMinInputSpinBox(int val)
+void AdjustLevelTool::slotAdjustMinInputSpinBox(double val)
 {
-    blockSignals(true);
-
-    if ( val > m_hGradientMaxInput->value() )
-       val = m_hGradientMaxInput->value();
-
-    m_minInput->setValue(val);
-    m_hGradientMinInput->setValue( val );
-    m_levels->setLevelLowInputValue(m_channelCB->currentIndex(), val);
-    blockSignals(false);
+    m_minInput->blockSignals(true);
+    int newVal = val*m_histoSegments;
+    m_minInput->setValue(newVal);
+    m_levels->setLevelLowInputValue(m_channelCB->currentIndex(), newVal);
+    m_minInput->blockSignals(false);
     slotTimer();
 }
 
-void AdjustLevelTool::slotAdjustMaxInputSpinBox(int val)
+void AdjustLevelTool::slotAdjustMaxInputSpinBox(double val)
 {
-    blockSignals(true);
-
-    if ( val < m_hGradientMinInput->value() )
-       val = m_hGradientMinInput->value();
-
-    m_maxInput->setValue(val);
-    m_hGradientMaxInput->setValue( val );
-    m_levels->setLevelHighInputValue(m_channelCB->currentIndex(), val);
-    blockSignals(false);
+    m_maxInput->blockSignals(true);
+    int newVal = val*m_histoSegments;
+    m_maxInput->setValue(newVal);
+    m_levels->setLevelHighInputValue(m_channelCB->currentIndex(), newVal);
+    m_maxInput->blockSignals(false);
     slotTimer();
 }
 
-void AdjustLevelTool::slotAdjustMinOutputSpinBox(int val)
+void AdjustLevelTool::slotAdjustMinOutputSpinBox(double val)
 {
-    blockSignals(true);
-
-    if ( val > m_hGradientMaxOutput->value() )
-       val = m_hGradientMaxOutput->value();
-
-    m_minOutput->setValue(val);
-    m_hGradientMinOutput->setValue( val );
-    m_levels->setLevelLowOutputValue(m_channelCB->currentIndex(), val);
-    blockSignals(false);
+    m_minOutput->blockSignals(true);
+    int newVal = val*m_histoSegments;
+    m_minOutput->setValue(newVal);
+    m_levels->setLevelLowOutputValue(m_channelCB->currentIndex(), newVal);
+    m_minOutput->blockSignals(false);
     slotTimer();
 }
 
-void AdjustLevelTool::slotAdjustMaxOutputSpinBox(int val)
+void AdjustLevelTool::slotAdjustMaxOutputSpinBox(double val)
 {
-    blockSignals(true);
-
-    if ( val < m_hGradientMinOutput->value() )
-       val = m_hGradientMinOutput->value();
-
-    m_maxOutput->setValue(val);
-    m_hGradientMaxOutput->setValue( val );
-    m_levels->setLevelHighOutputValue(m_channelCB->currentIndex(), val);
-    blockSignals(false);
+    m_maxOutput->blockSignals(true);
+    int newVal = val*m_histoSegments;
+    m_maxOutput->setValue(newVal);
+    m_levels->setLevelHighOutputValue(m_channelCB->currentIndex(), newVal);
+    m_maxOutput->blockSignals(false);
     slotTimer();
 }
 
@@ -565,11 +498,11 @@ void AdjustLevelTool::slotAdjustSliders()
 
 void AdjustLevelTool::adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut)
 {
-    m_hGradientMinInput->setValue(minIn);
-    m_hGradientMaxInput->setValue(maxIn);
+    m_inputLevels->setLeftValue((double)minIn/(double)m_histoSegments);
+    m_inputLevels->setRightValue((double)maxIn/(double)m_histoSegments);
     m_gammaInput->setValue(gamIn);
-    m_hGradientMinOutput->setValue(minOut);
-    m_hGradientMaxOutput->setValue(maxOut);
+    m_outputLevels->setLeftValue((double)minOut/(double)m_histoSegments);
+    m_outputLevels->setRightValue((double)maxOut/(double)m_histoSegments);
 }
 
 void AdjustLevelTool::slotResetCurrentChannel()
@@ -598,10 +531,10 @@ void AdjustLevelTool::slotAutoLevels()
 void AdjustLevelTool::slotEffect()
 {
     ImageIface* iface = m_previewWidget->imageIface();
-    uchar *orgData             = iface->getPreviewImage();
-    int w                      = iface->previewWidth();
-    int h                      = iface->previewHeight();
-    bool sb                    = iface->previewSixteenBit();
+    uchar *orgData    = iface->getPreviewImage();
+    int w             = iface->previewWidth();
+    int h             = iface->previewHeight();
+    bool sb           = iface->previewSixteenBit();
 
     // Create the new empty destination image data space.
     m_histogramWidget->stopHistogramComputation();
@@ -630,10 +563,10 @@ void AdjustLevelTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
     ImageIface* iface = m_previewWidget->imageIface();
-    uchar *orgData             = iface->getOriginalImage();
-    int w                      = iface->originalWidth();
-    int h                      = iface->originalHeight();
-    bool sb                    = iface->originalSixteenBit();
+    uchar *orgData    = iface->getOriginalImage();
+    int w             = iface->originalWidth();
+    int h             = iface->originalHeight();
+    bool sb           = iface->originalSixteenBit();
 
     // Create the new empty destination image data space.
     uchar* desData = new uchar[w*h*(sb ? 8 : 4)];
@@ -658,46 +591,46 @@ void AdjustLevelTool::slotChannelChanged(int channel)
        case LuminosityChannel:
           m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
           m_levelsHistogramWidget->m_channelType = HistogramWidget::ValueHistogram;
-          m_hGradientMinInput->setColors( QColor( "black" ), QColor( "white" ) );
-          m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
-          m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "white" ) );
-          m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "white" ) );
+          m_inputLevels->setColors( QColor( "black" ), QColor( "white" ) );
+          m_inputLevels->setColors( QColor( "black" ), QColor( "white" ) );
+          m_outputLevels->setColors( QColor( "black" ), QColor( "white" ) );
+          m_outputLevels->setColors( QColor( "black" ), QColor( "white" ) );
           break;
 
        case RedChannel:
           m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
           m_levelsHistogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
-          m_hGradientMinInput->setColors( QColor( "black" ), QColor( "red" ) );
-          m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "red" ) );
-          m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "red" ) );
-          m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "red" ) );
+          m_inputLevels->setColors( QColor( "black" ), QColor( "red" ) );
+          m_inputLevels->setColors( QColor( "black" ), QColor( "red" ) );
+          m_outputLevels->setColors( QColor( "black" ), QColor( "red" ) );
+          m_outputLevels->setColors( QColor( "black" ), QColor( "red" ) );
           break;
 
        case GreenChannel:
           m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
           m_levelsHistogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
-          m_hGradientMinInput->setColors( QColor( "black" ), QColor( "green" ) );
-          m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "green" ) );
-          m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "green" ) );
-          m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "green" ) );
+          m_inputLevels->setColors( QColor( "black" ), QColor( "green" ) );
+          m_inputLevels->setColors( QColor( "black" ), QColor( "green" ) );
+          m_outputLevels->setColors( QColor( "black" ), QColor( "green" ) );
+          m_outputLevels->setColors( QColor( "black" ), QColor( "green" ) );
           break;
 
        case BlueChannel:
           m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
           m_levelsHistogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
-          m_hGradientMinInput->setColors( QColor( "black" ), QColor( "blue" ) );
-          m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "blue" ) );
-          m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "blue" ) );
-          m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "blue" ) );
+          m_inputLevels->setColors( QColor( "black" ), QColor( "blue" ) );
+          m_inputLevels->setColors( QColor( "black" ), QColor( "blue" ) );
+          m_outputLevels->setColors( QColor( "black" ), QColor( "blue" ) );
+          m_outputLevels->setColors( QColor( "black" ), QColor( "blue" ) );
           break;
 
        case AlphaChannel:
           m_histogramWidget->m_channelType = HistogramWidget::AlphaChannelHistogram;
           m_levelsHistogramWidget->m_channelType = HistogramWidget::AlphaChannelHistogram;
-          m_hGradientMinInput->setColors( QColor( "black" ), QColor( "white" ) );
-          m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
-          m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "white" ) );
-          m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "white" ) );
+          m_inputLevels->setColors( QColor( "black" ), QColor( "white" ) );
+          m_inputLevels->setColors( QColor( "black" ), QColor( "white" ) );
+          m_outputLevels->setColors( QColor( "black" ), QColor( "white" ) );
+          m_outputLevels->setColors( QColor( "black" ), QColor( "white" ) );
           break;
     }
 
@@ -722,7 +655,7 @@ void AdjustLevelTool::slotScaleChanged(int scale)
 void AdjustLevelTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("adjustlevels Tool");
+    KConfigGroup group        = config->group("adjustlevels Tool");
 
     m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->button(group.readEntry("Histogram Scale",
@@ -756,12 +689,13 @@ void AdjustLevelTool::readSettings()
     m_minOutput->setValue(m_levels->getLevelLowOutputValue(m_channelCB->currentIndex()));
     m_maxInput->setValue(m_levels->getLevelHighInputValue(m_channelCB->currentIndex()));
     m_maxOutput->setValue(m_levels->getLevelHighOutputValue(m_channelCB->currentIndex()));
+    slotAdjustSliders();
 }
 
 void AdjustLevelTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("adjustlevels Tool");
+    KConfigGroup group        = config->group("adjustlevels Tool");
     group.writeEntry("Histogram Channel", m_channelCB->currentIndex());
     group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
 
@@ -843,19 +777,25 @@ void AdjustLevelTool::slotSaveAsSettings()
 // guide over level histogram.
 bool AdjustLevelTool::eventFilter(QObject *obj, QEvent *ev)
 {
-    if ( obj == m_hGradientMinInput )
+    if ( obj == m_inputLevels )
     {
         if ( ev->type() == QEvent::MouseButtonPress)
         {
-            connect(m_minInput, SIGNAL(valueChanged(int)),
-                    this, SLOT(slotShowHistogramGuide(int)));
+            connect(m_inputLevels, SIGNAL(leftValueChanged(double)),
+                    this, SLOT(slotShowHistogramGuide(double)));
+
+            connect(m_inputLevels, SIGNAL(rightValueChanged(double)),
+                    this, SLOT(slotShowHistogramGuide(double)));
 
             return false;
         }
         if ( ev->type() == QEvent::MouseButtonRelease)
         {
-            disconnect(m_minInput, SIGNAL(valueChanged(int)),
-                       this, SLOT(slotShowHistogramGuide(int)));
+            disconnect(m_minInput, SIGNAL(leftValueChanged(double)),
+                       this, SLOT(slotShowHistogramGuide(double)));
+
+            disconnect(m_maxInput, SIGNAL(rightValueChanged(double)),
+                       this, SLOT(slotShowHistogramGuide(double)));
 
             m_levelsHistogramWidget->reset();
             return false;
@@ -865,63 +805,25 @@ bool AdjustLevelTool::eventFilter(QObject *obj, QEvent *ev)
             return false;
         }
     }
-    if ( obj == m_hGradientMaxInput )
+    if ( obj == m_outputLevels )
     {
         if ( ev->type() == QEvent::MouseButtonPress)
         {
-            connect(m_maxInput, SIGNAL(valueChanged(int)),
-                    this, SLOT(slotShowHistogramGuide(int)));
+            connect(m_outputLevels, SIGNAL(leftValueChanged(double)),
+                    this, SLOT(slotShowHistogramGuide(double)));
+
+            connect(m_outputLevels, SIGNAL(rightValueChanged(double)),
+                    this, SLOT(slotShowHistogramGuide(double)));
 
             return false;
         }
         if ( ev->type() == QEvent::MouseButtonRelease)
         {
-            disconnect(m_maxInput, SIGNAL(valueChanged(int)),
-                       this, SLOT(slotShowHistogramGuide(int)));
+            disconnect(m_outputLevels, SIGNAL(leftValueChanged(double)),
+                       this, SLOT(slotShowHistogramGuide(double)));
 
-            m_levelsHistogramWidget->reset();
-            return false;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    if ( obj == m_hGradientMinOutput )
-    {
-        if ( ev->type() == QEvent::MouseButtonPress)
-        {
-            connect(m_minOutput, SIGNAL(valueChanged(int)),
-                    this, SLOT(slotShowHistogramGuide(int)));
-
-            return false;
-        }
-        if ( ev->type() == QEvent::MouseButtonRelease)
-        {
-            disconnect(m_minOutput, SIGNAL(valueChanged(int)),
-                       this, SLOT(slotShowHistogramGuide(int)));
-
-            m_levelsHistogramWidget->reset();
-            return false;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    if ( obj == m_hGradientMaxOutput )
-    {
-        if ( ev->type() == QEvent::MouseButtonPress)
-        {
-            connect(m_maxOutput, SIGNAL(valueChanged(int)),
-                    this, SLOT(slotShowHistogramGuide(int)));
-
-            return false;
-        }
-        if ( ev->type() == QEvent::MouseButtonRelease)
-        {
-            disconnect(m_maxOutput, SIGNAL(valueChanged(int)),
-                       this, SLOT(slotShowHistogramGuide(int)));
+            disconnect(m_outputLevels, SIGNAL(rightValueChanged(double)),
+                       this, SLOT(slotShowHistogramGuide(double)));
 
             m_levelsHistogramWidget->reset();
             return false;
@@ -938,9 +840,10 @@ bool AdjustLevelTool::eventFilter(QObject *obj, QEvent *ev)
     }
 }
 
-void AdjustLevelTool::slotShowHistogramGuide(int v)
+void AdjustLevelTool::slotShowHistogramGuide(double v)
 {
-    DColor color(v, v, v, v, m_originalImage->sixteenBit());
+    int val = v * m_histoSegments;
+    DColor color(val, val, val, val, m_originalImage->sixteenBit());
     m_levelsHistogramWidget->setHistogramGuideByColor(color);
 }
 
