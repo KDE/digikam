@@ -96,7 +96,7 @@ RawPreview::RawPreview(const KUrl& url, QWidget *parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     d->cornerButton = new QToolButton(this);
-    d->cornerButton->setIcon(SmallIcon("move"));
+    d->cornerButton->setIcon(SmallIcon("transform-move"));
     d->cornerButton->hide();
     d->cornerButton->setToolTip(i18n("Pan the image to a region"));
     setCornerWidget(d->cornerButton);
@@ -212,7 +212,7 @@ void RawPreview::slotCornerButtonPressed()
     if (d->panIconPopup)
     {
         d->panIconPopup->hide();
-        delete d->panIconPopup;
+        d->panIconPopup->deleteLater();
         d->panIconPopup = 0;
     }
 
@@ -255,7 +255,7 @@ void RawPreview::slotPanIconSelectionMoved(const QRect& r, bool b)
     if (b)
     {
         d->panIconPopup->hide();
-        delete d->panIconPopup;
+        d->panIconPopup->deleteLater();
         d->panIconPopup = 0;
         slotPanIconHiden();
     }
@@ -322,8 +322,8 @@ bool RawPreview::previewIsNull()
 
 void RawPreview::resetPreview()
 {
-    d->postProcessedImg     = DImg();
-    d->loadingDesc = LoadingDescription();
+    d->postProcessedImg = DImg();
+    d->loadingDesc      = LoadingDescription();
 
     updateZoomAndSize(false);
 }
