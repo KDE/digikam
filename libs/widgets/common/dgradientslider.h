@@ -29,8 +29,8 @@
 
 #include <QWidget>
 #include <QColor>
-#include <QList>
-#include <QPair>
+
+// Local includes.
 
 #include "digikam_export.h"
 
