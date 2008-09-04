@@ -46,10 +46,6 @@
 #include <kmimetype.h>
 #include <kdebug.h>
 
-// LibKDcraw includes.
-
-#include <libkdcraw/dcrawbinary.h>
-
 // Local includes.
 
 #include "ddebug.h"
