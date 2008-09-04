@@ -45,10 +45,6 @@
 #include <kglobal.h>
 #include <kdeversion.h>
 
-// LibKDcraw includes.
-
-#include <libkdcraw/dcrawbinary.h>
-
 // Local includes.
 
 #include "ddebug.h"
