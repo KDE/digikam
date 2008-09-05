@@ -6,7 +6,7 @@
  * Date        : 2004-07-20
  * Description : image histogram adjust levels.
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -89,7 +89,8 @@ private slots:
     void slotSpotColorChanged(const Digikam::DColor& color);
     void slotColorSelectedFromTarget(const Digikam::DColor& color);
     void slotPickerColorButtonActived();
-    void slotShowHistogramGuide(double v);
+    void slotShowInputHistogramGuide(int v);
+    void slotShowOutputHistogramGuide(int v);
 
 private:
 

@@ -6,7 +6,7 @@
  * Date        : 2004-07-20
  * Description : image histogram adjust levels.
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -782,20 +782,20 @@ bool AdjustLevelTool::eventFilter(QObject *obj, QEvent *ev)
         if ( ev->type() == QEvent::MouseButtonPress)
         {
             connect(m_inputLevels, SIGNAL(leftValueChanged(double)),
-                    this, SLOT(slotShowHistogramGuide(double)));
+                    this, SLOT(slotShowInputHistogramGuide(double)));
 
             connect(m_inputLevels, SIGNAL(rightValueChanged(double)),
-                    this, SLOT(slotShowHistogramGuide(double)));
+                    this, SLOT(slotShowInputHistogramGuide(double)));
 
             return false;
         }
         if ( ev->type() == QEvent::MouseButtonRelease)
         {
-            disconnect(m_minInput, SIGNAL(leftValueChanged(double)),
-                       this, SLOT(slotShowHistogramGuide(double)));
+            disconnect(m_inputLevels, SIGNAL(leftValueChanged(double)),
+                       this, SLOT(slotShowInputHistogramGuide(double)));
 
-            disconnect(m_maxInput, SIGNAL(rightValueChanged(double)),
-                       this, SLOT(slotShowHistogramGuide(double)));
+            disconnect(m_inputLevels, SIGNAL(rightValueChanged(double)),
+                       this, SLOT(slotShowInputHistogramGuide(double)));
 
             m_levelsHistogramWidget->reset();
             return false;
@@ -810,22 +810,22 @@ bool AdjustLevelTool::eventFilter(QObject *obj, QEvent *ev)
         if ( ev->type() == QEvent::MouseButtonPress)
         {
             connect(m_outputLevels, SIGNAL(leftValueChanged(double)),
-                    this, SLOT(slotShowHistogramGuide(double)));
+                    this, SLOT(slotShowOutputHistogramGuide(double)));
 
             connect(m_outputLevels, SIGNAL(rightValueChanged(double)),
-                    this, SLOT(slotShowHistogramGuide(double)));
+                    this, SLOT(slotShowOutputHistogramGuide(double)));
 
             return false;
         }
         if ( ev->type() == QEvent::MouseButtonRelease)
         {
             disconnect(m_outputLevels, SIGNAL(leftValueChanged(double)),
-                       this, SLOT(slotShowHistogramGuide(double)));
+                       this, SLOT(slotShowOutputHistogramGuide(double)));
 
             disconnect(m_outputLevels, SIGNAL(rightValueChanged(double)),
-                       this, SLOT(slotShowHistogramGuide(double)));
+                       this, SLOT(slotShowOutputHistogramGuide(double)));
 
-            m_levelsHistogramWidget->reset();
+            m_histogramWidget->reset();
             return false;
         }
         else
@@ -840,11 +840,18 @@ bool AdjustLevelTool::eventFilter(QObject *obj, QEvent *ev)
     }
 }
 
-void AdjustLevelTool::slotShowHistogramGuide(double v)
+void AdjustLevelTool::slotShowInputHistogramGuide(double v)
 {
     int val = v * m_histoSegments;
     DColor color(val, val, val, val, m_originalImage->sixteenBit());
     m_levelsHistogramWidget->setHistogramGuideByColor(color);
+}
+
+void AdjustLevelsTool::slotShowOutputHistogramGuide(int v)
+{
+    int val = v * m_histoSegments;
+    DColor color(val, val, val, val, m_originalImage->sixteenBit());
+    m_histogramWidget->setHistogramGuideByColor(color);
 }
 
 }  // NameSpace DigikamAdjustLevelsImagesPlugin
