@@ -5,22 +5,22 @@
  *
  * Date        : 2004-07-29
  * Description : image levels manipulation methods.
- * 
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
- 
+
 #ifndef IMAGELEVELS_H
 #define IMAGELEVELS_H
 
@@ -55,12 +55,14 @@ class DIGIKAM_EXPORT ImageLevels
 {
 
 public:
-    
+
     ImageLevels(bool sixteenBit);
     ~ImageLevels();
 
-    // Methods for to manipulate the levels data.        
-    
+    bool   isSixteenBits();
+
+    // Methods for to manipulate the levels data.
+
     void   levelsChannelReset(int channel);
     void   levelsAuto(ImageHistogram *hist);
     void   levelsChannelAuto(ImageHistogram *hist, int channel);
@@ -74,27 +76,27 @@ public:
     void   levelsLutProcess(uchar *srcPR, uchar *destPR, int w, int h);
 
     // Methods for to set manually the levels values.
-    
+
     void   setLevelGammaValue(int Channel, double val);
     void   setLevelLowInputValue(int Channel, int val);
     void   setLevelHighInputValue(int Channel, int val);
     void   setLevelLowOutputValue(int Channel, int val);
-    void   setLevelHighOutputValue(int Channel, int val);    
-    
+    void   setLevelHighOutputValue(int Channel, int val);
+
     double getLevelGammaValue(int Channel);
     int    getLevelLowInputValue(int Channel);
     int    getLevelHighInputValue(int Channel);
     int    getLevelLowOutputValue(int Channel);
-    int    getLevelHighOutputValue(int Channel);    
+    int    getLevelHighOutputValue(int Channel);
 
-    // Methods for to save/load the levels values to/from a Gimp levels text file.        
-    
+    // Methods for to save/load the levels values to/from a Gimp levels text file.
+
     bool   saveLevelsToGimpLevelsFile(const KUrl& fileUrl);
     bool   loadLevelsFromGimpLevelsFile(const KUrl& fileUrl);
 
 private:
 
-    ImageLevelsPriv* d;    
+    ImageLevelsPriv* d;
 };
 
 }  // NameSpace Digikam
