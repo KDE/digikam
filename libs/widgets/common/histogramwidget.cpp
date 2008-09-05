@@ -450,7 +450,7 @@ void HistogramWidget::slotBlinkTimerDone()
     d->blinkTimer->start( 200 );
 }
 
-void HistogramWidget::paintEvent( QPaintEvent * )
+void HistogramWidget::paintEvent(QPaintEvent*)
 {
     // Widget is disabled, not initialized,
     // or loading, but no message shall be drawn:
@@ -976,20 +976,38 @@ void HistogramWidget::paintEvent( QPaintEvent * )
              break;
 
           case HistogramWidget::ValueHistogram:
-             guidePos = qMax(qMax(d->colorGuide.red(), d->colorGuide.green()), d->colorGuide.blue());
+             guidePos = QMAX(QMAX(d->colorGuide.red(), d->colorGuide.green()), d->colorGuide.blue());
              break;
 
-          default:                                     // Alpha.
-             guidePos = -1;
+          case HistogramWidget::ColorChannelsHistogram:
+          {
+             switch(m_channelType)
+             {
+                 case HistogramWidget::RedChannelHistogram:
+                     guidePos = d->colorGuide.red();
+                     break;
+
+                 case HistogramWidget::GreenChannelHistogram:
+                     guidePos = d->colorGuide.green();
+                     break;
+
+                 case HistogramWidget::BlueChannelHistogram:
+                     guidePos = d->colorGuide.blue();
+                     break;
+             }
+          }
+
+          default:
+             guidePos = d->colorGuide.alpha();
              break;
        }
 
        if (guidePos != -1)
        {
           int xGuide = (guidePos * wWidth) / histogram->getHistogramSegment();
-          p1.drawLine(xGuide, 0, xGuide, wHeight);  
+          p1.drawLine(xGuide, 0, xGuide, wHeight);
 
-          QString string = i18n("x:%1",guidePos);
+          QString string = i18n("x:%1", guidePos);
           QFontMetrics fontMt( string );
           QRect rect = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string); 
           p1.setPen(QPen(Qt::red, 1, Qt::SolidLine));
