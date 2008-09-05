@@ -41,7 +41,6 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "dcolor.h"
 #include "imagehistogram.h"
 #include "imagelevels.h"
 
