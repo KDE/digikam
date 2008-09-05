@@ -1421,6 +1421,69 @@ QStringList AlbumDB::getDirtyOrMissingFingerprintURLs()
     return urls;
 }
 
+QList<ItemScanInfo> AlbumDB::getIdenticalFiles(qlonglong id)
+{
+    if (!id)
+        return QList<ItemScanInfo>();
+
+    QList<QVariant> values;
+
+    // retrieve unique hash and file size
+    d->db->execSql( QString("SELECT uniqueHash, fileSize FROM Images WHERE id=?; "),
+                    id,
+                    &values );
+
+    if (values.isEmpty())
+        return QList<ItemScanInfo>();
+
+    QString uniqueHash = values[0].toString();
+    int fileSize       = values[1].toInt();
+
+    return getIdenticalFiles(fileSize, uniqueHash);
+}
+
+QList<ItemScanInfo> AlbumDB::getIdenticalFiles(int fileSize, const QString& uniqueHash)
+{
+    // enforce validity
+    if (uniqueHash.isEmpty() || fileSize <= 0)
+        return QList<ItemScanInfo>();
+
+    QList<QVariant> values;
+
+    // find items with same fingerprint
+    d->db->execSql( QString("SELECT id, album, name, status, category, modificationDate FROM Images "
+                            " WHERE fileSize=? AND uniqueHash=?; "),
+                    fileSize, uniqueHash,
+                    &values );
+
+    QList<ItemScanInfo> list;
+    for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
+    {
+        ItemScanInfo info;
+
+        info.id               = (*it).toLongLong();
+        ++it;
+        info.albumID          = (*it).toInt();
+        ++it;
+        info.itemName         = (*it).toString();
+        ++it;
+        info.status           = (DatabaseItem::Status)(*it).toInt();
+        ++it;
+        info.category         = (DatabaseItem::Category)(*it).toInt();
+        ++it;
+        info.modificationDate = ((*it).isNull() ? QDateTime()
+                                    : QDateTime::fromString( (*it).toString(), Qt::ISODate ));
+        ++it;
+
+        // same for all here, per definition
+        info.uniqueHash       = uniqueHash;
+
+        list << info;
+    }
+
+    return list;
+}
+
 QStringList AlbumDB::imagesFieldList(DatabaseFields::Images fields)
 {
     // adds no spaces at beginning or end
@@ -2414,23 +2477,27 @@ ItemScanInfo AlbumDB::getItemScanInfo(qlonglong imageID)
                     &values );
 
     ItemScanInfo info;
-    QList<QVariant>::iterator it = values.begin();
 
-    info.id               = (*it).toLongLong();
-    ++it;
-    info.albumID          = (*it).toInt();
-    ++it;
-    info.itemName         = (*it).toString();
-    ++it;
-    info.status           = (DatabaseItem::Status)(*it).toInt();
-    ++it;
-    info.category         = (DatabaseItem::Category)(*it).toInt();
-    ++it;
-    info.modificationDate = ((*it).isNull() ? QDateTime()
-                                : QDateTime::fromString( (*it).toString(), Qt::ISODate ));
-    ++it;
-    info.uniqueHash       = (*it).toString();
-    ++it;
+    if (!values.isEmpty())
+    {
+        QList<QVariant>::iterator it = values.begin();
+
+        info.id               = (*it).toLongLong();
+        ++it;
+        info.albumID          = (*it).toInt();
+        ++it;
+        info.itemName         = (*it).toString();
+        ++it;
+        info.status           = (DatabaseItem::Status)(*it).toInt();
+        ++it;
+        info.category         = (DatabaseItem::Category)(*it).toInt();
+        ++it;
+        info.modificationDate = ((*it).isNull() ? QDateTime()
+            : QDateTime::fromString( (*it).toString(), Qt::ISODate ));
+        ++it;
+        info.uniqueHash       = (*it).toString();
+        ++it;
+    }
 
     return info;
 }
@@ -2577,7 +2644,8 @@ QDate AlbumDB::getAlbumAverageDate(int albumID)
 
     for (QList<QVariant>::iterator it = values.begin(); it != values.end(); ++it)
     {
-        QDateTime itemDateTime = QDateTime::fromString( (*it).toString(), Qt::ISODate );
+        QDateTime itemDateTime = (*it).isNull() ? QDateTime()
+            : QDateTime::fromString( (*it).toString(), Qt::ISODate );
         if (itemDateTime.isValid())
         {
             ++amountOfImages;

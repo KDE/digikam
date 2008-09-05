@@ -846,6 +846,13 @@ public:
     QStringList getDirtyOrMissingFingerprintURLs();
 
     /**
+     * Find items that are, with reasonable certainty, identical
+     * to the file pointed to by id.
+     * Criteria: Unique Hash, file size.
+     */
+    QList<ItemScanInfo> getIdenticalFiles(qlonglong id);
+    QList<ItemScanInfo> getIdenticalFiles(int fileSize, const QString& uniqueHash);
+    /**
      * Get the datetime for the item
      * @param imageID the ID of the item
      * @return the datetime for the item
