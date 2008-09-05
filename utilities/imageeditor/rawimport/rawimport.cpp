@@ -94,17 +94,14 @@ void RawImport::slotInit()
     connect(d->previewWidget, SIGNAL(signalLoadingStarted()),
             this, SLOT(slotLoadingStarted()));
 
-    connect(d->previewWidget, SIGNAL(signalDemosaicedImage()),
-            this, SLOT(slotDemosaicedImage()));
-
-    connect(d->previewWidget, SIGNAL(signalLoadingStarted()),
-            this, SLOT(slotLoadingStarted()));
-
     connect(d->previewWidget, SIGNAL(signalLoadingProgress(float)),
             this, SLOT(slotLoadingProgress(float)));
 
     connect(d->previewWidget, SIGNAL(signalLoadingFailed()),
             this, SLOT(slotLoadingFailed()));
+
+    connect(d->previewWidget, SIGNAL(signalDemosaicedImage()),
+            this, SLOT(slotDemosaicedImage()));
 
     connect(d->settingsBox, SIGNAL(signalDemosaicingChanged()),
             this, SLOT(slotDemosaicingChanged()));
