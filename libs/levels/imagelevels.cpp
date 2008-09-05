@@ -5,8 +5,8 @@
  *
  * Date        : 2004-07-29
  * Description : image levels manipulation methods.
- * 
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Some code parts are inspired from gimp 2.0
  * app/base/levels.c, gimplut.c, and app/base/gimpleveltool.c 
@@ -18,12 +18,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -49,28 +49,28 @@ namespace Digikam
 
 class ImageLevelsPriv
 {
-    
+
 public:
 
     enum PixelType
     {
-        RedPixel = 0,  
+        RedPixel = 0,
         GreenPixel,
-        BluePixel, 
+        BluePixel,
         AlphaPixel
     };
-    
+
     struct _Levels
     {
         double  gamma[5];
-        
+
         int     low_input[5];
         int     high_input[5];
-        
+
         int     low_output[5];
         int     high_output[5];
     };
-    
+
     struct _Lut
     {
         unsigned short **luts;
@@ -87,7 +87,7 @@ public:
 
     // Levels data.
     struct _Levels *levels;
-    
+
     // Lut data.
     struct _Lut    *lut;
 
@@ -95,13 +95,13 @@ public:
 };
 
 ImageLevels::ImageLevels(bool sixteenBit)
-{ 
+{
     d = new ImageLevelsPriv;
     d->lut        = new ImageLevelsPriv::_Lut;
     d->levels     = new ImageLevelsPriv::_Levels;
     d->sixteenBit = sixteenBit;
-    
-    memset(d->levels, 0, sizeof(struct ImageLevelsPriv::_Levels));    
+
+    memset(d->levels, 0, sizeof(struct ImageLevelsPriv::_Levels));
     d->lut->luts      = NULL;
     d->lut->nchannels = 0;
 
@@ -120,14 +120,19 @@ ImageLevels::~ImageLevels()
 
           delete [] d->lut->luts;
        }
-       
+
        delete d->lut;
     }
-    
+
     if (d->levels)
        delete d->levels;
 
     delete d;
+}
+
+bool ImageLevels::isSixteenBits()
+{
+    return d->sixteenBit;
 }
 
 void ImageLevels::levelsChannelReset(int channel)
@@ -175,8 +180,8 @@ void ImageLevels::levelsChannelAuto(ImageHistogram *hist, int channel)
     }
     else
     {
-       //  Set the low input  
-       
+       //  Set the low input
+
        new_count = 0.0;
 
        for (i = 0 ; i < (d->sixteenBit ? 65535 : 255) ; i++)
@@ -184,24 +189,24 @@ void ImageLevels::levelsChannelAuto(ImageHistogram *hist, int channel)
           new_count       += hist->getValue(channel, i);
           percentage      = new_count / count;
           next_percentage = (new_count + hist->getValue(channel, i + 1)) / count;
-      
+
           if (fabs (percentage - 0.006) < fabs (next_percentage - 0.006))
           {
              d->levels->low_input[channel] = i + 1;
              break;
           }
        }
-      
-       //  Set the high input  
-       
+
+       //  Set the high input
+
        new_count = 0.0;
-      
+
        for (i = (d->sixteenBit ? 65535 : 255) ; i > 0 ; i--)
        {
           new_count       += hist->getValue(channel, i);
           percentage      = new_count / count;
           next_percentage = (new_count + hist->getValue(channel, i - 1)) / count;
-          
+
           if (fabs (percentage - 0.006) < fabs (next_percentage - 0.006))
           {
              d->levels->high_input[channel] = i - 1;
@@ -217,13 +222,13 @@ int ImageLevels::levelsInputFromColor(int channel, DColor color)
     {
        case ImageHistogram::ValueChannel:
           return QMAX (QMAX (color.red(), color.green()), color.blue());
-       
+
        case ImageHistogram::RedChannel:
           return color.red();
-       
+
        case ImageHistogram::GreenChannel:
           return color.green();
-    
+
        case ImageHistogram::BlueChannel:
           return color.blue();
     }
@@ -256,23 +261,23 @@ void ImageLevels::levelsGrayToneAdjustByColors(int channel, DColor color)
     unsigned short lightness;
 
     // Calculate lightness value.
-       
+
     lightness = (unsigned short)LEVELS_RGB_INTENSITY (color.red(), color.green(), color.blue());
 
     input     = levelsInputFromColor(channel, color);
 
     range     = d->levels->high_input[channel] - d->levels->low_input[channel];
-      
+
     if (range <= 0)
        return;
 
     input -= d->levels->low_input[channel];
-       
+
     if (input < 0)
        return;
 
     // Normalize input and lightness.
-       
+
     inten     = (double) input / (double) range;
     out_light = (double) lightness/ (double) range;
 
@@ -280,9 +285,9 @@ void ImageLevels::levelsGrayToneAdjustByColors(int channel, DColor color)
        return;
 
     // Map selected color to corresponding lightness.
-       
+
     d->levels->gamma[channel] = log (inten) / log (out_light); 
-} 
+}
 
 void ImageLevels::levelsCalculateTransfers()
 {
@@ -292,13 +297,13 @@ void ImageLevels::levelsCalculateTransfers()
     if (!d->levels) return;
 
     // Recalculate the levels arrays.
-    
+
     for (j = 0 ; j < 5 ; j++)
     {
       for (i = 0; i <= (d->sixteenBit ? 65535 : 255); i++)
       {
           //  determine input intensity.
-          
+
           if (d->levels->high_input[j] != d->levels->low_input[j])
           {
              inten = ((double) (i - d->levels->low_input[j]) /
@@ -323,7 +328,7 @@ float ImageLevels::levelsLutFunc(int n_channels, int channel, float value)
     int    j;
 
     if (!d->levels) return 0.0;
-    
+
     if (n_channels == 1)
        j = 0;
     else
@@ -336,17 +341,17 @@ float ImageLevels::levelsLutFunc(int n_channels, int channel, float value)
     //
     // For bw images this runs through the loop with j = 0 the first and
     // only time.
-  
+
     for ( ; j >= 0 ; j -= (channel + 1) )
     {
        // Don't apply the overall curve to the alpha channel.
-      
+
        if (j == 0 && (n_channels == 2 || n_channels == 4)
           && channel == n_channels -1)
           return inten;
 
        //  Determine input intensity.
-       
+
        if (d->levels->high_input[j] != d->levels->low_input[j])
           inten = ((double) ((float)(d->sixteenBit ? 65535 : 255) * inten - d->levels->low_input[j]) /
                   (double) (d->levels->high_input[j] - d->levels->low_input[j]));
@@ -362,11 +367,11 @@ float ImageLevels::levelsLutFunc(int n_channels, int channel, float value)
        }
 
        //  determine the output intensity.
-      
+
        if (d->levels->high_output[j] >= d->levels->low_output[j])
           inten = (double) (inten * (d->levels->high_output[j] -
                   d->levels->low_output[j]) + d->levels->low_output[j]);
-                 
+
        else if (d->levels->high_output[j] < d->levels->low_output[j])
           inten = (double) (d->levels->low_output[j] - inten *
                   (d->levels->low_output[j] - d->levels->high_output[j]));
@@ -393,7 +398,7 @@ void ImageLevels::levelsLutSetup(int nchannels)
 
     d->lut->nchannels = nchannels;
     d->lut->luts      = new unsigned short*[d->lut->nchannels];
-    
+
     for (i = 0 ; i < d->lut->nchannels ; i++)
     {
        d->lut->luts[i] = new unsigned short[(d->sixteenBit ? 65535 : 255) + 1];
@@ -415,7 +420,7 @@ void ImageLevels::levelsLutProcess(uchar *srcPR, uchar *destPR, int w, int h)
     unsigned short *lut0 = NULL, *lut1 = NULL, *lut2 = NULL, *lut3 = NULL;
 
     int   i;
-    
+
     if (d->lut->nchannels > 0)
        lut0 = d->lut->luts[0];
     if (d->lut->nchannels > 1)
@@ -430,26 +435,26 @@ void ImageLevels::levelsLutProcess(uchar *srcPR, uchar *destPR, int w, int h)
         uchar red, green, blue, alpha;
         uchar *ptr = srcPR;
         uchar *dst = destPR;
-        
+
         for (i = 0 ; i < w*h ; i++)
         {
             blue  = ptr[0];
             green = ptr[1];
             red   = ptr[2];
             alpha = ptr[3];
-        
+
             if ( d->lut->nchannels > 0 )
                red = lut0[red];
-            
+
             if ( d->lut->nchannels > 1 )
                green = lut1[green];
-            
+
             if ( d->lut->nchannels > 2 )
                blue = lut2[blue];
-        
+
             if ( d->lut->nchannels > 3 )
                alpha = lut3[alpha];
-                                
+
             dst[0] = blue;
             dst[1] = green;
             dst[2] = red;
@@ -471,19 +476,19 @@ void ImageLevels::levelsLutProcess(uchar *srcPR, uchar *destPR, int w, int h)
             green = ptr[1];
             red   = ptr[2];
             alpha = ptr[3];
-        
+
             if ( d->lut->nchannels > 0 )
                red = lut0[red];
-            
+
             if ( d->lut->nchannels > 1 )
                green = lut1[green];
-            
+
             if ( d->lut->nchannels > 2 )
                blue = lut2[blue];
-        
+
             if ( d->lut->nchannels > 3 )
                alpha = lut3[alpha];
-                                
+
             dst[0] = blue;
             dst[1] = green;
             dst[2] = red;
@@ -529,7 +534,7 @@ double ImageLevels::getLevelGammaValue(int Channel)
 {
     if ( d->levels && Channel>=0 && Channel<5 )
        return (d->levels->gamma[Channel]);
-    
+
     return 0.0;
 }
 
@@ -537,7 +542,7 @@ int ImageLevels::getLevelLowInputValue(int Channel)
 {
     if ( d->levels && Channel>=0 && Channel<5 )
        return (d->levels->low_input[Channel]);
-    
+
     return 0;
 }
 
@@ -545,7 +550,7 @@ int ImageLevels::getLevelHighInputValue(int Channel)
 {
     if ( d->levels && Channel>=0 && Channel<5 )
        return (d->levels->high_input[Channel]);
-    
+
     return 0;
 }
 
@@ -553,7 +558,7 @@ int ImageLevels::getLevelLowOutputValue(int Channel)
 {
     if ( d->levels && Channel>=0 && Channel<5 )
        return (d->levels->low_output[Channel]);
-    
+
     return 0;
 }
 
@@ -561,14 +566,14 @@ int ImageLevels::getLevelHighOutputValue(int Channel)
 {
     if ( d->levels && Channel>=0 && Channel<5 )
        return (d->levels->high_output[Channel]);
-    
+
     return 0;
 }
 
 bool ImageLevels::loadLevelsFromGimpLevelsFile(const KURL& fileUrl)
 {
     // TODO : support KURL !
-    
+
     FILE   *file;
     int     low_input[5];
     int     high_input[5];
@@ -580,10 +585,10 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(const KURL& fileUrl)
     char   *nptr;
 
     file = fopen(QFile::encodeName(fileUrl.path()), "r");
-    
+
     if (!file)
        return false;
-    
+
     if (! fgets (buf, sizeof (buf), file))
     {
        fclose(file);
@@ -644,12 +649,12 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(const KURL& fileUrl)
 bool ImageLevels::saveLevelsToGimpLevelsFile(const KURL& fileUrl)
 {
     // TODO : support KURL !
-  
+
     FILE *file;
     int   i;
 
     file = fopen(QFile::encodeName(fileUrl.path()), "w");
-    
+
     if (!file)
        return false;
 
@@ -659,7 +664,7 @@ bool ImageLevels::saveLevelsToGimpLevelsFile(const KURL& fileUrl)
     {
        char buf[256];
        sprintf (buf, "%f", getLevelGammaValue(i));
-      
+
        fprintf (file, "%d %d %d %d %s\n",
                 d->sixteenBit ? getLevelLowInputValue(i)/255 : getLevelLowInputValue(i),
                 d->sixteenBit ? getLevelHighInputValue(i)/255 : getLevelHighInputValue(i),
@@ -670,7 +675,7 @@ bool ImageLevels::saveLevelsToGimpLevelsFile(const KURL& fileUrl)
 
     fflush(file);
     fclose(file);
-  
+
     return true;
 }
 
