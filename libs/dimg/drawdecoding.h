@@ -28,6 +28,7 @@
 
 // Qt includes.
 
+#include <QList>
 #include <QPolygon>
 
 // LibKDcraw includes.
@@ -114,6 +115,10 @@ public:
     /** Luminosity curve adjustements.
     */
     QPolygon curveAdjust;
+
+    /** Levels adjustements: 4 channels (L, R, G, B * 2 values).
+    */
+    QList<int> levelsAdjust;
 };
 
 }  // namespace Digikam
