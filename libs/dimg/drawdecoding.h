@@ -28,6 +28,7 @@
 
 // Qt includes.
 
+#include <qvaluelist.h>
 #include <qpointarray.h>
 
 // LibKDcraw includes.
@@ -75,6 +76,7 @@ public:
         saturation   = 1.0;
         exposureComp = 0.0;
         curveAdjust  = QPointArray();
+        levelsAdjust = QValueList<int>();
     };
 
     /** Method to check is a post-processing setting have been changed 
@@ -86,7 +88,8 @@ public:
                 gamma        != 1.0    ||
                 saturation   != 1.0    ||
                 exposureComp != 0.0    ||
-                !curveAdjust.isEmpty());
+                !curveAdjust.isEmpty() ||
+                !levelsAdjust.isEmpty());
     }
 
 public:
@@ -114,6 +117,10 @@ public:
     /** Luminosity curve adjustements.
     */
     QPointArray curveAdjust;
+
+    /** Levels adjustements: 4 channels (L, R, G, B * 2 values).
+    */
+    QValueList<int> levelsAdjust;
 };
 
 }  // namespace Digikam
