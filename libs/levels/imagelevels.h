@@ -59,6 +59,7 @@ public:
     ImageLevels(bool sixteenBit);
     ~ImageLevels();
 
+    bool   isDirty();
     bool   isSixteenBits();
 
     // Methods for to manipulate the levels data.
@@ -66,10 +67,10 @@ public:
     void   levelsChannelReset(int channel);
     void   levelsAuto(ImageHistogram *hist);
     void   levelsChannelAuto(ImageHistogram *hist, int channel);
-    int    levelsInputFromColor(int channel, DColor color);
-    void   levelsBlackToneAdjustByColors(int channel, DColor color);
-    void   levelsGrayToneAdjustByColors(int channel, DColor color);
-    void   levelsWhiteToneAdjustByColors(int channel, DColor color);
+    int    levelsInputFromColor(int channel, const DColor& color);
+    void   levelsBlackToneAdjustByColors(int channel, const DColor& color);
+    void   levelsGrayToneAdjustByColors(int channel, const DColor& color);
+    void   levelsWhiteToneAdjustByColors(int channel, const DColor& color);
     void   levelsCalculateTransfers();
     float  levelsLutFunc(int n_channels, int channel, float value);
     void   levelsLutSetup(int nchannels);
