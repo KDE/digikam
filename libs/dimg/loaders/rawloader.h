@@ -69,7 +69,7 @@ private:
 
     void setWaitingDataProgress(double value);
     void setReceivingDataProgress(double value);
-    void postProcessing();
+    void postProcessing(DImgLoaderObserver *observer);
 
 private:
 

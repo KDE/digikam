@@ -42,6 +42,7 @@
 #include "dimgloaderobserver.h"
 #include "imagehistogram.h"
 #include "imagecurves.h"
+#include "imagelevels.h"
 #include "bcgmodifier.h"
 #include "whitebalance.h"
 #include "rawloader.h"
@@ -137,7 +138,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
                 {
                     return false;
                 }
-                observer->progressInfo(m_image, 0.7 + 0.3*(((float)h)/((float)height)) );
+                observer->progressInfo(m_image, 0.7 + 0.2*(((float)h)/((float)height)) );
             }
 
             for (int w = 0; w < width; w++)
@@ -229,7 +230,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
                 {
                     return false;
                 }
-                observer->progressInfo(m_image, 0.7 + 0.3*(((float)h)/((float)height)) );
+                observer->progressInfo(m_image, 0.7 + 0.2*(((float)h)/((float)height)) );
             }
 
             for (int w = 0; w < width; w++)
@@ -292,12 +293,12 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
     imageSetAttribute("originalColorModel", DImg::COLORMODELRAW);
     imageSetAttribute("originalBitDepth", 16);
 
-    postProcessing();
+    postProcessing(observer);
 
     return true;
 }
 
-void RAWLoader::postProcessing()
+void RAWLoader::postProcessing(DImgLoaderObserver *observer)
 {
     if (!m_customRawSettings.postProcessingSettingsIsDirty())
         return;
@@ -314,6 +315,7 @@ void RAWLoader::postProcessing()
                         1.0,                                // gamma
                         m_customRawSettings.saturation);    // saturation
     }
+    if (observer) observer->progressInfo(m_image, 0.92);
 
     if (m_customRawSettings.lightness != 0.0 ||
         m_customRawSettings.contrast  != 1.0 ||
@@ -325,6 +327,7 @@ void RAWLoader::postProcessing()
         bcg.setGamma(m_customRawSettings.gamma);
         bcg.applyBCG(imageData(), imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage);
     }
+    if (observer) observer->progressInfo(m_image, 0.94);
 
     if (!m_customRawSettings.curveAdjust.isEmpty())
     {
@@ -334,9 +337,28 @@ void RAWLoader::postProcessing()
         curves.curvesCalculateCurve(ImageHistogram::ValueChannel);
         curves.curvesLutSetup(ImageHistogram::AlphaChannel);
         curves.curvesLutProcess(imageData(), tmp.bits(), imageWidth(), imageHeight());
-
         memcpy(imageData(), tmp.bits(), tmp.numBytes());
     }
+    if (observer) observer->progressInfo(m_image, 0.96);
+
+    if (!m_customRawSettings.levelsAdjust.isEmpty())
+    {
+        DImg tmp(imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage);
+        ImageLevels levels(m_rawDecodingSettings.sixteenBitsImage);
+        int j=0;
+        for (int i = 0 ; i < 4; i++)
+        {
+            levels.setLevelLowInputValue(i,   m_customRawSettings.levelsAdjust[j++]);
+            levels.setLevelHighInputValue(i,  m_customRawSettings.levelsAdjust[j++]);
+            levels.setLevelLowOutputValue(i,  m_customRawSettings.levelsAdjust[j++]);
+            levels.setLevelHighOutputValue(i, m_customRawSettings.levelsAdjust[j++]);
+        }
+
+        levels.levelsLutSetup(ImageHistogram::AlphaChannel);
+        levels.levelsLutProcess(imageData(), tmp.bits(), imageWidth(), imageHeight());
+        memcpy(imageData(), tmp.bits(), tmp.numBytes());
+    }
+    if (observer) observer->progressInfo(m_image, 0.98);
 }
 
 }  // NameSpace Digikam
