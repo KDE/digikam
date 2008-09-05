@@ -85,7 +85,8 @@ void ImageScanner::newFile(int albumId)
 {
     loadFromDisk();
     addImage(albumId);
-    scanFile();
+    if (!scanFromIdenticalFile())
+        scanFile();
 }
 
 void ImageScanner::fullScan()
@@ -137,6 +138,43 @@ void ImageScanner::scanFile()
             scanTags();
         }
     }
+}
+
+bool lessThanForIdentity(const ItemScanInfo &a, const ItemScanInfo &b)
+{
+    if (a.status == b.status)
+    {
+        // use the one with a younger modification date
+        return a.modificationDate > b.modificationDate;
+    }
+    else
+    {
+        // First: sort by status
+
+        // put UndefinedStatus to back
+        if (a.status == DatabaseItem::UndefinedStatus)
+            return false;
+        // enum values are in the order we want it
+        return a.status < b.status;
+    }
+}
+
+bool ImageScanner::scanFromIdenticalFile()
+{
+    QList<ItemScanInfo> candidates = DatabaseAccess().db()->getIdenticalFiles((int)m_fileInfo.size(), m_scanInfo.uniqueHash);
+    if (!candidates.isEmpty())
+    {
+        // Sort by priority, as implemented by custom lessThan()
+        qStableSort(candidates.begin(), candidates.end(), lessThanForIdentity);
+
+        DDebug() << "Recognized" << m_fileInfo.filePath() << "as identical to item" << candidates.first().id;
+
+        // Copy attributes.
+        // Todo for the future is to worry about syncing identical files.
+        DatabaseAccess().db()->copyImageAttributes(candidates.first().id, m_scanInfo.id);
+        return true;
+    }
+    return false;
 }
 
 void ImageScanner::updateHardInfos()

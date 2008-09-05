@@ -117,6 +117,7 @@ protected:
 
     void addImage(int albumId);
     void updateImage();
+    bool scanFromIdenticalFile();
     void scanImageInformation();
     void updateImageInformation();
     void scanImageMetadata();
