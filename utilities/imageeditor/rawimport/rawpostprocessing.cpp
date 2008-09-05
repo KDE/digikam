@@ -53,21 +53,19 @@ RawPostProcessing::RawPostProcessing(DImgThreadedFilter *parentFilter,
 
 void RawPostProcessing::filterImage()
 {
-    rawPostProcessing(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
-                      m_orgImage.sixteenBit(), m_customRawSettings);
+    rawPostProcessing();
 }
 
-void RawPostProcessing::rawPostProcessing(uchar *data, int width, int height, bool sixteenBit, 
-                                          const DRawDecoding& settings)
+void RawPostProcessing::rawPostProcessing()
 {
-    if (!data || !width || !height)
+    if (!m_orgImage.bits() || !m_orgImage.width() || !m_orgImage.height())
     {
-       DWarning() << ("RawPostProcessing::rawPostProcessing: no image data available!")
+       DWarning() << ("RawPostProcessing::rawPostProcessing: no image m_orgImage.bits() available!")
                   << endl;
        return;
     }
 
-    if (!settings.postProcessingSettingsIsDirty())
+    if (!m_customRawSettings.postProcessingSettingsIsDirty())
     {
         m_destImage = m_orgImage;
         return;
@@ -75,39 +73,39 @@ void RawPostProcessing::rawPostProcessing(uchar *data, int width, int height, bo
 
     postProgress(10);
 
-    if (settings.exposureComp != 0.0 || settings.saturation != 1.0)
+    if (m_customRawSettings.exposureComp != 0.0 || m_customRawSettings.saturation != 1.0)
     {
-        WhiteBalance wb(sixteenBit);
-        wb.whiteBalance(data, width, height, sixteenBit,
-                        0.0,                     // black
-                        settings.exposureComp,   // exposure
-                        6500.0,                  // temperature (neutral)
-                        1.0,                     // green
-                        0.5,                     // dark
-                        1.0,                     // gamma
-                        settings.saturation);    // saturation
+        WhiteBalance wb(m_orgImage.sixteenBit());
+        wb.whiteBalance(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(),
+                        0.0,                                // black
+                        m_customRawSettings.exposureComp,   // exposure
+                        6500.0,                             // temperature (neutral)
+                        1.0,                                // green
+                        0.5,                                // dark
+                        1.0,                                // gamma
+                        m_customRawSettings.saturation);    // saturation
     }
     postProgress(25);
 
-    if (settings.lightness != 0.0 || settings.contrast != 1.0 || settings.gamma != 1.0)
+    if (m_customRawSettings.lightness != 0.0 || m_customRawSettings.contrast != 1.0 || m_customRawSettings.gamma != 1.0)
     {
         BCGModifier bcg;
-        bcg.setBrightness(settings.lightness);
-        bcg.setContrast(settings.contrast);
-        bcg.setGamma(settings.gamma);
-        bcg.applyBCG(data, width, height, sixteenBit);
+        bcg.setBrightness(m_customRawSettings.lightness);
+        bcg.setContrast(m_customRawSettings.contrast);
+        bcg.setGamma(m_customRawSettings.gamma);
+        bcg.applyBCG(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit());
     }
     postProgress(50);
 
-    if (!settings.curveAdjust.isEmpty())
+    if (!m_customRawSettings.curveAdjust.isEmpty())
     {
-        DImg tmp(width, height, sixteenBit);
-        ImageCurves curves(sixteenBit);
-        curves.setCurvePoints(ImageHistogram::ValueChannel, settings.curveAdjust);
+        DImg tmp(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit());
+        ImageCurves curves(m_orgImage.sixteenBit());
+        curves.setCurvePoints(ImageHistogram::ValueChannel, m_customRawSettings.curveAdjust);
         curves.curvesCalculateCurve(ImageHistogram::ValueChannel);
         curves.curvesLutSetup(ImageHistogram::AlphaChannel);
-        curves.curvesLutProcess(data, tmp.bits(), width, height);
-        memcpy(data, tmp.bits(), tmp.numBytes());
+        curves.curvesLutProcess(m_orgImage.bits(), tmp.bits(), m_orgImage.width(), m_orgImage.height());
+        memcpy(m_orgImage.bits(), tmp.bits(), tmp.numBytes());
     }
     postProgress(75);
 
