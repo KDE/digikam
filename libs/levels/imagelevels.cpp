@@ -41,6 +41,7 @@
 // Local includes.
 
 #include "ddebug.h"
+#include "dcolor.h"
 #include "imagehistogram.h"
 #include "imagelevels.h"
 
@@ -83,6 +84,7 @@ public:
     {
         levels = 0;
         lut    = 0;
+        dirty  = false;
     }
 
     // Levels data.
@@ -92,6 +94,7 @@ public:
     struct _Lut    *lut;
 
     bool            sixteenBit;
+    bool            dirty;
 };
 
 ImageLevels::ImageLevels(bool sixteenBit)
@@ -130,6 +133,11 @@ ImageLevels::~ImageLevels()
     delete d;
 }
 
+bool ImageLevels::isDirty()
+{
+    return d->dirty;
+}
+
 bool ImageLevels::isSixteenBits()
 {
     return d->sixteenBit;
@@ -144,6 +152,7 @@ void ImageLevels::levelsChannelReset(int channel)
     d->levels->high_input[channel]  = d->sixteenBit ? 65535 : 255;
     d->levels->low_output[channel]  = 0;
     d->levels->high_output[channel] = d->sixteenBit ? 65535 : 255;
+    d->dirty = false;
 }
 
 void ImageLevels::levelsAuto(ImageHistogram *hist)
@@ -158,6 +167,7 @@ void ImageLevels::levelsAuto(ImageHistogram *hist)
     {
        levelsChannelAuto(hist, channel);
     }
+    d->dirty = true;
 }
 
 void ImageLevels::levelsChannelAuto(ImageHistogram *hist, int channel)
@@ -214,9 +224,10 @@ void ImageLevels::levelsChannelAuto(ImageHistogram *hist, int channel)
           }
        }
     }
+    d->dirty = true;
 }
 
-int ImageLevels::levelsInputFromColor(int channel, DColor color)
+int ImageLevels::levelsInputFromColor(int channel, const DColor& color)
 {
     switch (channel)
     {
@@ -236,21 +247,23 @@ int ImageLevels::levelsInputFromColor(int channel, DColor color)
     return 0;  // just to please the compiler.
 }
 
-void ImageLevels::levelsBlackToneAdjustByColors(int channel, DColor color)
+void ImageLevels::levelsBlackToneAdjustByColors(int channel, const DColor& color)
 {
     if (!d->levels) return;
 
     d->levels->low_input[channel] = levelsInputFromColor(channel, color);
+    d->dirty = true;
 }
 
-void ImageLevels::levelsWhiteToneAdjustByColors(int channel, DColor color)
+void ImageLevels::levelsWhiteToneAdjustByColors(int channel, const DColor& color)
 {
     if (!d->levels) return;
 
     d->levels->high_input[channel] = levelsInputFromColor(channel, color);
+    d->dirty = true;
 }
 
-void ImageLevels::levelsGrayToneAdjustByColors(int channel, DColor color)
+void ImageLevels::levelsGrayToneAdjustByColors(int channel, const DColor& color)
 {
     if (!d->levels) return;
 
@@ -286,7 +299,8 @@ void ImageLevels::levelsGrayToneAdjustByColors(int channel, DColor color)
 
     // Map selected color to corresponding lightness.
 
-    d->levels->gamma[channel] = log (inten) / log (out_light); 
+    d->levels->gamma[channel] = log (inten) / log (out_light);
+    d->dirty = true;
 } 
 
 void ImageLevels::levelsCalculateTransfers()
@@ -503,31 +517,46 @@ void ImageLevels::levelsLutProcess(uchar *srcPR, uchar *destPR, int w, int h)
 void ImageLevels::setLevelGammaValue(int Channel, double val)
 {
     if ( d->levels && Channel>=0 && Channel<5 )
-       d->levels->gamma[Channel] = val;
+    {
+        d->levels->gamma[Channel] = val;
+        d->dirty = true;
+    }
 }
 
 void ImageLevels::setLevelLowInputValue(int Channel, int val)
 {
     if ( d->levels && Channel>=0 && Channel<5 )
-       d->levels->low_input[Channel] = val;
+    {
+        d->levels->low_input[Channel] = val;
+        d->dirty = true;
+    }
 }
 
 void ImageLevels::setLevelHighInputValue(int Channel, int val)
 {
     if ( d->levels && Channel>=0 && Channel<5 )
-       d->levels->high_input[Channel] = val;
+    {
+        d->levels->high_input[Channel] = val;
+        d->dirty = true;
+    }
 }
 
 void ImageLevels::setLevelLowOutputValue(int Channel, int val)
 {
     if ( d->levels && Channel>=0 && Channel<5 )
-       d->levels->low_output[Channel] = val;
+    {
+        d->levels->low_output[Channel] = val;
+        d->dirty = true;
+    }
 }
 
 void ImageLevels::setLevelHighOutputValue(int Channel, int val)
 {
     if ( d->levels && Channel>=0 && Channel<5 )
-       d->levels->high_output[Channel] = val;
+    {
+        d->levels->high_output[Channel] = val;
+        d->dirty = true;
+    }
 }
 
 double ImageLevels::getLevelGammaValue(int Channel)
