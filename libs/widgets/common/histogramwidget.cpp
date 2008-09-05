@@ -37,9 +37,9 @@
 #include <qtimer.h>
 #include <qcolor.h>
 #include <qbrush.h>
-#include <qrect.h> 
-#include <qfont.h> 
-#include <qfontmetrics.h> 
+#include <qrect.h>
+#include <qfont.h>
+#include <qfontmetrics.h>
 #include <qtooltip.h>
 
 // KDE includes.
@@ -883,8 +883,26 @@ void HistogramWidget::paintEvent(QPaintEvent*)
              guidePos = QMAX(QMAX(d->colorGuide.red(), d->colorGuide.green()), d->colorGuide.blue());
              break;
 
-          default:                                     // Alpha.
-             guidePos = -1;
+          case HistogramWidget::ColorChannelsHistogram:
+          {
+             switch(m_channelType)
+             {
+                 case HistogramWidget::RedChannelHistogram:
+                     guidePos = d->colorGuide.red();
+                     break;
+
+                 case HistogramWidget::GreenChannelHistogram:
+                     guidePos = d->colorGuide.green();
+                     break;
+
+                 case HistogramWidget::BlueChannelHistogram:
+                     guidePos = d->colorGuide.blue();
+                     break;
+             }
+          }
+
+          default:
+             guidePos = d->colorGuide.alpha();
              break;
        }
 
