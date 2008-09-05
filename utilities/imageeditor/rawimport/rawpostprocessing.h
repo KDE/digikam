@@ -44,15 +44,14 @@ public:
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
     RawPostProcessing(DImgThreadedFilter *parentFilter, const DImg &orgImage, const DImg &destImage,
-                     int progressBegin=0, int progressEnd=100, const DRawDecoding& settings=DRawDecoding());
+                      int progressBegin=0, int progressEnd=100, const DRawDecoding& settings=DRawDecoding());
 
     ~RawPostProcessing(){};
 
 private:
 
     virtual void filterImage();
-
-    void rawPostProcessing(uchar *data, int width, int height, bool sixteenBit, const DRawDecoding& settings);
+    void rawPostProcessing();
 
 private:
 
