@@ -60,6 +60,7 @@ public:
 
     bool   isDirty();
     bool   isSixteenBits();
+    void   reset();
 
     // Methods for to manipulate the levels data.
 

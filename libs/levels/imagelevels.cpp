@@ -107,8 +107,7 @@ ImageLevels::ImageLevels(bool sixteenBit)
     d->lut->luts      = NULL;
     d->lut->nchannels = 0;
 
-    for (int channel = 0 ; channel < 5 ; channel++)
-       levelsChannelReset(channel);
+    reset();
 }
 
 ImageLevels::~ImageLevels()
@@ -140,6 +139,12 @@ bool ImageLevels::isDirty()
 bool ImageLevels::isSixteenBits()
 {
     return d->sixteenBit;
+}
+
+void ImageLevels::reset()
+{
+    for (int channel = 0 ; channel < 5 ; channel++)
+       levelsChannelReset(channel);
 }
 
 void ImageLevels::levelsChannelReset(int channel)
