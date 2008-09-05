@@ -794,14 +794,14 @@ bool AdjustLevelsTool::eventFilter(QObject *obj, QEvent *ev)
         if ( ev->type() == QEvent::MouseButtonPress)
         {
             connect(m_minInput, SIGNAL(valueChanged(int)),
-                    this, SLOT(slotShowHistogramGuide(int)));
+                    this, SLOT(slotShowInputHistogramGuide(int)));
 
             return false;
         }
         if ( ev->type() == QEvent::MouseButtonRelease)
         {
             disconnect(m_minInput, SIGNAL(valueChanged(int)),
-                       this, SLOT(slotShowHistogramGuide(int)));
+                       this, SLOT(slotShowInputHistogramGuide(int)));
 
             m_levelsHistogramWidget->reset();
             return false;
@@ -816,14 +816,14 @@ bool AdjustLevelsTool::eventFilter(QObject *obj, QEvent *ev)
         if ( ev->type() == QEvent::MouseButtonPress)
         {
             connect(m_maxInput, SIGNAL(valueChanged(int)),
-                    this, SLOT(slotShowHistogramGuide(int)));
+                    this, SLOT(slotShowInputHistogramGuide(int)));
 
             return false;
         }
         if ( ev->type() == QEvent::MouseButtonRelease)
         {
             disconnect(m_maxInput, SIGNAL(valueChanged(int)),
-                       this, SLOT(slotShowHistogramGuide(int)));
+                       this, SLOT(slotShowInputHistogramGuide(int)));
 
             m_levelsHistogramWidget->reset();
             return false;
@@ -838,16 +838,16 @@ bool AdjustLevelsTool::eventFilter(QObject *obj, QEvent *ev)
         if ( ev->type() == QEvent::MouseButtonPress)
         {
             connect(m_minOutput, SIGNAL(valueChanged(int)),
-                    this, SLOT(slotShowHistogramGuide(int)));
+                    this, SLOT(slotShowOutputHistogramGuide(int)));
 
             return false;
         }
         if ( ev->type() == QEvent::MouseButtonRelease)
         {
             disconnect(m_minOutput, SIGNAL(valueChanged(int)),
-                       this, SLOT(slotShowHistogramGuide(int)));
+                       this, SLOT(slotShowOutputHistogramGuide(int)));
 
-            m_levelsHistogramWidget->reset();
+            m_histogramWidget->reset();
             return false;
         }
         else
@@ -860,16 +860,16 @@ bool AdjustLevelsTool::eventFilter(QObject *obj, QEvent *ev)
         if ( ev->type() == QEvent::MouseButtonPress)
         {
             connect(m_maxOutput, SIGNAL(valueChanged(int)),
-                    this, SLOT(slotShowHistogramGuide(int)));
+                    this, SLOT(slotShowOutputHistogramGuide(int)));
 
             return false;
         }
         if ( ev->type() == QEvent::MouseButtonRelease)
         {
             disconnect(m_maxOutput, SIGNAL(valueChanged(int)),
-                       this, SLOT(slotShowHistogramGuide(int)));
+                       this, SLOT(slotShowOutputHistogramGuide(int)));
 
-            m_levelsHistogramWidget->reset();
+            m_histogramWidget->reset();
             return false;
         }
         else
@@ -884,10 +884,16 @@ bool AdjustLevelsTool::eventFilter(QObject *obj, QEvent *ev)
     }
 }
 
-void AdjustLevelsTool::slotShowHistogramGuide(int v)
+void AdjustLevelsTool::slotShowInputHistogramGuide(int v)
 {
     DColor color(v, v, v, v, m_originalImage->sixteenBit());
     m_levelsHistogramWidget->setHistogramGuideByColor(color);
+}
+
+void AdjustLevelsTool::slotShowOutputHistogramGuide(int v)
+{
+    DColor color(v, v, v, v, m_originalImage->sixteenBit());
+    m_histogramWidget->setHistogramGuideByColor(color);
 }
 
 }  // NameSpace DigikamAdjustLevelsImagesPlugin
