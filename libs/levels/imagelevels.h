@@ -49,7 +49,6 @@ namespace Digikam
 
 class ImageLevelsPriv;
 class ImageHistogram;
-class DColor;
 
 class DIGIKAM_EXPORT ImageLevels
 {
