@@ -84,7 +84,7 @@ using namespace Digikam;
 namespace DigikamAdjustLevelsImagesPlugin
 {
 
-AdjustLevelTool::AdjustLevelTool(QObject* parent)
+AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
                : EditorTool(parent)
 {
     setObjectName("adjustlevels");
@@ -389,19 +389,19 @@ AdjustLevelTool::AdjustLevelTool(QObject* parent)
             this, SLOT(slotPickerColorButtonActived()));
 }
 
-AdjustLevelTool::~AdjustLevelTool()
+AdjustLevelsTool::~AdjustLevelsTool()
 {
     delete [] m_destinationPreviewData;
 }
 
-void AdjustLevelTool::slotPickerColorButtonActived()
+void AdjustLevelsTool::slotPickerColorButtonActived()
 {
     // Save previous rendering mode and toggle to original image.
     m_currentPreviewMode = m_previewWidget->getRenderingPreviewMode();
     m_previewWidget->setRenderingPreviewMode(ImageGuideWidget::PreviewOriginalImage);
 }
 
-void AdjustLevelTool::slotSpotColorChanged(const DColor &color)
+void AdjustLevelsTool::slotSpotColorChanged(const DColor &color)
 {
     if ( m_pickBlack->isChecked() )
     {
@@ -436,12 +436,12 @@ void AdjustLevelTool::slotSpotColorChanged(const DColor &color)
     slotEffect();
 }
 
-void AdjustLevelTool::slotColorSelectedFromTarget( const DColor &color )
+void AdjustLevelsTool::slotColorSelectedFromTarget( const DColor &color )
 {
     m_histogramWidget->setHistogramGuideByColor(color);
 }
 
-void AdjustLevelTool::slotGammaInputchanged(double val)
+void AdjustLevelsTool::slotGammaInputchanged(double val)
 {
     blockSignals(true);
     m_levels->setLevelGammaValue(m_channelCB->currentIndex(), val);
@@ -449,7 +449,7 @@ void AdjustLevelTool::slotGammaInputchanged(double val)
     slotTimer();
 }
 
-void AdjustLevelTool::slotAdjustMinInputSpinBox(double val)
+void AdjustLevelsTool::slotAdjustMinInputSpinBox(double val)
 {
     m_minInput->blockSignals(true);
     int newVal = val*m_histoSegments;
@@ -459,7 +459,7 @@ void AdjustLevelTool::slotAdjustMinInputSpinBox(double val)
     slotTimer();
 }
 
-void AdjustLevelTool::slotAdjustMaxInputSpinBox(double val)
+void AdjustLevelsTool::slotAdjustMaxInputSpinBox(double val)
 {
     m_maxInput->blockSignals(true);
     int newVal = val*m_histoSegments;
@@ -469,7 +469,7 @@ void AdjustLevelTool::slotAdjustMaxInputSpinBox(double val)
     slotTimer();
 }
 
-void AdjustLevelTool::slotAdjustMinOutputSpinBox(double val)
+void AdjustLevelsTool::slotAdjustMinOutputSpinBox(double val)
 {
     m_minOutput->blockSignals(true);
     int newVal = val*m_histoSegments;
@@ -479,7 +479,7 @@ void AdjustLevelTool::slotAdjustMinOutputSpinBox(double val)
     slotTimer();
 }
 
-void AdjustLevelTool::slotAdjustMaxOutputSpinBox(double val)
+void AdjustLevelsTool::slotAdjustMaxOutputSpinBox(double val)
 {
     m_maxOutput->blockSignals(true);
     int newVal = val*m_histoSegments;
@@ -489,14 +489,14 @@ void AdjustLevelTool::slotAdjustMaxOutputSpinBox(double val)
     slotTimer();
 }
 
-void AdjustLevelTool::slotAdjustSliders()
+void AdjustLevelsTool::slotAdjustSliders()
 {
     adjustSliders(m_minInput->value(), m_gammaInput->value(),
                   m_maxInput->value(), m_minOutput->value(),
                   m_maxOutput->value());
 }
 
-void AdjustLevelTool::adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut)
+void AdjustLevelsTool::adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut)
 {
     m_inputLevels->setLeftValue((double)minIn/(double)m_histoSegments);
     m_inputLevels->setRightValue((double)maxIn/(double)m_histoSegments);
@@ -505,7 +505,7 @@ void AdjustLevelTool::adjustSliders(int minIn, double gamIn, int maxIn, int minO
     m_outputLevels->setRightValue((double)maxOut/(double)m_histoSegments);
 }
 
-void AdjustLevelTool::slotResetCurrentChannel()
+void AdjustLevelsTool::slotResetCurrentChannel()
 {
     m_levels->levelsChannelReset(m_channelCB->currentIndex());
 
@@ -517,7 +517,7 @@ void AdjustLevelTool::slotResetCurrentChannel()
     m_histogramWidget->reset();
 }
 
-void AdjustLevelTool::slotAutoLevels()
+void AdjustLevelsTool::slotAutoLevels()
 {
     // Calculate Auto levels.
     m_levels->levelsAuto(m_levelsHistogramWidget->m_imageHistogram);
@@ -528,7 +528,7 @@ void AdjustLevelTool::slotAutoLevels()
     slotEffect();
 }
 
-void AdjustLevelTool::slotEffect()
+void AdjustLevelsTool::slotEffect()
 {
     ImageIface* iface = m_previewWidget->imageIface();
     uchar *orgData    = iface->getPreviewImage();
@@ -559,7 +559,7 @@ void AdjustLevelTool::slotEffect()
     delete [] orgData;
 }
 
-void AdjustLevelTool::finalRendering()
+void AdjustLevelsTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
     ImageIface* iface = m_previewWidget->imageIface();
@@ -584,7 +584,7 @@ void AdjustLevelTool::finalRendering()
     delete [] desData;
 }
 
-void AdjustLevelTool::slotChannelChanged(int channel)
+void AdjustLevelsTool::slotChannelChanged(int channel)
 {
     switch(channel)
     {
@@ -644,7 +644,7 @@ void AdjustLevelTool::slotChannelChanged(int channel)
     m_histogramWidget->repaint();
 }
 
-void AdjustLevelTool::slotScaleChanged(int scale)
+void AdjustLevelsTool::slotScaleChanged(int scale)
 {
     m_levelsHistogramWidget->m_scaleType = scale;
     m_histogramWidget->m_scaleType       = scale;
@@ -652,7 +652,7 @@ void AdjustLevelTool::slotScaleChanged(int scale)
     m_levelsHistogramWidget->repaint();
 }
 
-void AdjustLevelTool::readSettings()
+void AdjustLevelsTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("adjustlevels Tool");
@@ -692,7 +692,7 @@ void AdjustLevelTool::readSettings()
     slotAdjustSliders();
 }
 
-void AdjustLevelTool::writeSettings()
+void AdjustLevelsTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("adjustlevels Tool");
@@ -718,7 +718,7 @@ void AdjustLevelTool::writeSettings()
     config->sync();
 }
 
-void AdjustLevelTool::slotResetSettings()
+void AdjustLevelsTool::slotResetSettings()
 {
     for (int channel = 0 ; channel < 5 ; ++channel)
        m_levels->levelsChannelReset(channel);
@@ -730,7 +730,7 @@ void AdjustLevelTool::slotResetSettings()
 }
 
 // Load all settings.
-void AdjustLevelTool::slotLoadSettings()
+void AdjustLevelsTool::slotLoadSettings()
 {
     KUrl loadLevelsFile;
 
@@ -752,7 +752,7 @@ void AdjustLevelTool::slotLoadSettings()
 }
 
 // Save all settings.
-void AdjustLevelTool::slotSaveAsSettings()
+void AdjustLevelsTool::slotSaveAsSettings()
 {
     KUrl saveLevelsFile;
 
@@ -775,7 +775,7 @@ void AdjustLevelTool::slotSaveAsSettings()
 
 // See B.K.O #146636: use event filter with all level slider to display a
 // guide over level histogram.
-bool AdjustLevelTool::eventFilter(QObject *obj, QEvent *ev)
+bool AdjustLevelsTool::eventFilter(QObject *obj, QEvent *ev)
 {
     if ( obj == m_inputLevels )
     {
@@ -840,7 +840,7 @@ bool AdjustLevelTool::eventFilter(QObject *obj, QEvent *ev)
     }
 }
 
-void AdjustLevelTool::slotShowInputHistogramGuide(double v)
+void AdjustLevelsTool::slotShowInputHistogramGuide(int v)
 {
     int val = v * m_histoSegments;
     DColor color(val, val, val, val, m_originalImage->sixteenBit());

@@ -69,6 +69,6 @@ void ImagePlugin_AdjustLevels::setEnabledActions(bool enable)
 
 void ImagePlugin_AdjustLevels::slotLevelsAdjust()
 {
-    AdjustLevelTool *tool = new AdjustLevelTool(this);
+    AdjustLevelsTool *tool = new AdjustLevelsTool(this);
     loadTool(tool);
 }

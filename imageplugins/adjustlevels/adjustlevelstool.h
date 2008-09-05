@@ -53,14 +53,14 @@ class DGradientSlider;
 namespace DigikamAdjustLevelsImagesPlugin
 {
 
-class AdjustLevelTool : public Digikam::EditorTool
+class AdjustLevelsTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
 public:
 
-    AdjustLevelTool(QObject *parent);
-    ~AdjustLevelTool();
+    AdjustLevelsTool(QObject *parent);
+    ~AdjustLevelsTool();
 
 private:
 
