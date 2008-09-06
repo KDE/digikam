@@ -11,6 +11,7 @@ INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	  -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	  -I$(top_srcdir)/digikam/libs/histogram \
 	  -I$(top_srcdir)/digikam/libs/curves \
+	  -I$(top_srcdir)/digikam/libs/levels \
 	  -I$(top_srcdir)/digikam/libs/whitebalance \
 	  -I$(top_srcdir)/digikam/libs/dmetadata \
 	  -I$(top_srcdir)/digikam/libs/curves \
