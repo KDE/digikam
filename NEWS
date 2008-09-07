@@ -37,6 +37,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 024 ==> 165857 : Unreliable import when photo root is on network share.
 025 ==> 147435 : Resize slider in sharpness dialog doesn't work correct.
 026 ==> 168844 : Make the selection rectangle draggable over the image (not only resizable).
-027 ==> 
+027 ==> 147151 : Compile error: multiple definition of `jpeg_suppress_tables'.
+028 ==> 
 
  
