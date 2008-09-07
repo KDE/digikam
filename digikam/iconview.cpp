@@ -51,6 +51,7 @@
 // Local includes.
 
 #include "ddebug.h"
+#include "q3scrollviewrubberband.h"
 #include "iconitem.h"
 #include "icongroupitem.h"
 #include "iconview.h"
@@ -100,7 +101,8 @@ public:
     QSet<IconItem*>      selectedItems;
     QSet<IconItem*>      prevSelectedItems;
 
-    QRubberBand         *rubber;
+    Q3ScrollViewRubberBand
+                         *rubber;
 
     QPoint               dragStartPos;
 
@@ -150,8 +152,7 @@ IconView::IconView(QWidget* parent, const char* name)
     d = new IconViewPriv;
     d->rearrangeTimer  = new QTimer(this);
     d->toolTipTimer    = new QTimer(this);
-    d->rubber          = new QRubberBand(QRubberBand::Rectangle, this);
-    d->rubber->hide();
+    d->rubber          = new Q3ScrollViewRubberBand(this);
 
     connect(d->rearrangeTimer, SIGNAL(timeout()),
             this, SLOT(slotRearrange()));
@@ -933,7 +934,7 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
     slotToolTip();
 
     // Clear any existing rubber -------------------------------
-    d->rubber->hide();
+    d->rubber->setActive(false);
 
     if (e->button() == Qt::RightButton)
     {
@@ -1051,8 +1052,7 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
         d->prevSelectedItems = d->selectedItems;
     }
 
-    d->rubber->setGeometry(QRect(e->pos(), QSize()));
-    d->rubber->show();
+    d->rubber->setFirstPointOnViewport(e->pos());
 }
 
 void IconView::contentsMouseMoveEvent(QMouseEvent* e)
@@ -1117,17 +1117,15 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
         return;
     }
 
-    if (!d->rubber->isVisible())
+    if (!d->rubber->isActive())
         return;
 
-    QRect oldRubber = d->rubber->geometry();
-    QRect newRubber = oldRubber;
-    newRubber.setRight(e->pos().x());
-    newRubber.setBottom(e->pos().y());
-    d->rubber->setGeometry(newRubber);
+    QRect oldArea = d->rubber->rubberBandAreaOnContents();
 
-    QRect nr          = d->rubber->geometry().normalized();
-    QRect rubberUnion = nr.unite(oldRubber.normalized());
+    d->rubber->setSecondPointOnViewport(e->pos());
+
+    QRect newArea     = d->rubber->rubberBandAreaOnContents();
+    QRect rubberUnion = oldArea.unite(newArea);
     bool changed      = false;
 
     QRegion paintRegion;
@@ -1141,7 +1139,7 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
         {
             foreach(IconItem *item, c->items)
             {
-                if (nr.intersects(item->rect()))
+                if (newArea.intersects(item->rect()))
                 {
                     if (!item->isSelected())
                     {
@@ -1166,10 +1164,6 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
     blockSignals(false);
     viewport()->setUpdatesEnabled(true);
 
-    QRect r = d->rubber->geometry();
-
-    d->rubber->setGeometry(oldRubber);
-    d->rubber->show();
 
     if (changed)
     {
@@ -1178,9 +1172,6 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
     }
 
     ensureVisible(e->pos().x(), e->pos().y());
-
-    d->rubber->setGeometry(r);
-    d->rubber->show();
 
     d->pressedMoved = true;
 
@@ -1193,8 +1184,8 @@ void IconView::contentsMouseReleaseEvent(QMouseEvent* e)
     d->dragging = false;
     d->prevSelectedItems.clear();
 
-    if (d->rubber->isVisible())
-        d->rubber->hide();
+    if (d->rubber->isActive())
+        d->rubber->setActive(false);
 
     if (e->button() == Qt::LeftButton
         && e->buttons() == Qt::NoButton
