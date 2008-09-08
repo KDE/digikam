@@ -10,7 +10,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 169814 : compilation error: no exp2().
 002 ==> 165345 : Selecting images from bottom right to top left does not work.
-003 ==> 
+003 ==> 170693 : Enable geotagging of Olympus orf images.
+004 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta3 - Release date: 2008-09-03
