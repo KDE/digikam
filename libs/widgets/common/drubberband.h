@@ -24,7 +24,7 @@
 #ifndef DRUBBERBAND
 #define DRUBBERBAND
 
-// Qt includes
+// Qt includes.
 
 #include <QRubberBand>
 #include <Q3ScrollView>

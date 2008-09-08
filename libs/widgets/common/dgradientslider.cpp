@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-// Qt includes
+// Qt includes.
 
 #include <QPainter>
 #include <QPoint>
