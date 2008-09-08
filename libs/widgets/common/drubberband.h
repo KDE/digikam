@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef Q3SCROLLVIEWRUBBERBAND
-#define Q3SCROLLVIEWRUBBERBAND
+#ifndef DRUBBERBAND
+#define DRUBBERBAND
 
 // Qt includes
 
@@ -36,11 +36,11 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT Q3ScrollViewRubberBand : public QRubberBand
+class DIGIKAM_EXPORT DRubberBand : public QRubberBand
 {
 public:
 
-    Q3ScrollViewRubberBand(Q3ScrollView *parent);
+    DRubberBand(Q3ScrollView *parent);
 
     QRect rubberBandAreaOnContents();
 

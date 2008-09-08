@@ -431,7 +431,7 @@ SET(libcommonwidgets_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/searchtextbar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dgradientslider.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/q3scrollviewrubberband.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/drubberband.cpp
    )
 
 SET(libiccprofileswidgets_SRCS

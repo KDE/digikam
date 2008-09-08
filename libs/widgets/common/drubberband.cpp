@@ -22,31 +22,31 @@
  * ============================================================ */
 
 
-#include "q3scrollviewrubberband.h"
+#include "drubberband.h"
 #include "ddebug.h"
 
 namespace Digikam
 {
 
-Q3ScrollViewRubberBand::Q3ScrollViewRubberBand(Q3ScrollView *scrollView)
+DRubberBand::DRubberBand(Q3ScrollView *scrollView)
     : QRubberBand(QRubberBand::Rectangle, scrollView->viewport()),
       m_scrollView(scrollView), m_active(false)
 {
     hide();
 }
 
-QRect Q3ScrollViewRubberBand::rubberBandAreaOnContents()
+QRect DRubberBand::rubberBandAreaOnContents()
 {
     QRect rubber = QRect(m_firstPoint, m_secondPoint);
     return rubber.normalized();
 }
 
-bool Q3ScrollViewRubberBand::isActive() const
+bool DRubberBand::isActive() const
 {
     return m_active;
 }
 
-void Q3ScrollViewRubberBand::setActive(bool active)
+void DRubberBand::setActive(bool active)
 {
     m_active = active;
     if (m_active)
@@ -55,18 +55,18 @@ void Q3ScrollViewRubberBand::setActive(bool active)
         hide();
 }
 
-void Q3ScrollViewRubberBand::setFirstPointOnViewport(const QPoint &p)
+void DRubberBand::setFirstPointOnViewport(const QPoint &p)
 {
     m_firstPoint = p;
     m_active = true;
 }
 
-void Q3ScrollViewRubberBand::setFirstPointOnContents(const QPoint &p)
+void DRubberBand::setFirstPointOnContents(const QPoint &p)
 {
     setFirstPointOnViewport(m_scrollView->contentsToViewport(p));
 }
 
-void Q3ScrollViewRubberBand::setSecondPointOnViewport(const QPoint &p)
+void DRubberBand::setSecondPointOnViewport(const QPoint &p)
 {
     m_secondPoint = p;
 
@@ -76,12 +76,12 @@ void Q3ScrollViewRubberBand::setSecondPointOnViewport(const QPoint &p)
         show();
 }
 
-void Q3ScrollViewRubberBand::setSecondPointOnContents(const QPoint &p)
+void DRubberBand::setSecondPointOnContents(const QPoint &p)
 {
     setSecondPointOnViewport(m_scrollView->contentsToViewport(p));
 }
 
-void Q3ScrollViewRubberBand::updateForContentsPosition(int contentsX, int contentsY)
+void DRubberBand::updateForContentsPosition(int contentsX, int contentsY)
 {
     QRect rubber(m_firstPoint, m_secondPoint);
     rubber = rubber.normalized();

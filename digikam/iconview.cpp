@@ -51,7 +51,7 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "q3scrollviewrubberband.h"
+#include "drubberband.h"
 #include "iconitem.h"
 #include "icongroupitem.h"
 #include "iconview.h"
@@ -101,7 +101,7 @@ public:
     QSet<IconItem*>      selectedItems;
     QSet<IconItem*>      prevSelectedItems;
 
-    Q3ScrollViewRubberBand
+    DRubberBand
                          *rubber;
 
     QPoint               dragStartPos;
@@ -152,7 +152,7 @@ IconView::IconView(QWidget* parent, const char* name)
     d = new IconViewPriv;
     d->rearrangeTimer  = new QTimer(this);
     d->toolTipTimer    = new QTimer(this);
-    d->rubber          = new Q3ScrollViewRubberBand(this);
+    d->rubber          = new DRubberBand(this);
 
     connect(d->rearrangeTimer, SIGNAL(timeout()),
             this, SLOT(slotRearrange()));
