@@ -89,7 +89,12 @@ extern "C"
 
 // LibKDcraw includes.
 
+#include <libkdcraw/version.h>
+#include <libkdcraw/kdcraw.h>
+
+#if KDCRAW_VERSION < 0x000400
 #include <libkdcraw/dcrawbinary.h>
+#endif
 
 // Local includes.
 
@@ -1076,12 +1081,18 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
     QString imagefilter = settings->getImageFileFilter().toLower() +
                           settings->getImageFileFilter().toUpper();
 
+#if KDCRAW_VERSION < 0x000400
     if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
     {
         // add raw files only if dcraw is available
         imagefilter += settings->getRawFileFilter().toLower() +
                        settings->getRawFileFilter().toUpper();
     }
+#else
+    // add raw files only if dcraw is available
+    imagefilter += settings->getRawFileFilter().toLower() +
+                   settings->getRawFileFilter().toUpper();
+#endif
 
     // If the current item is not an image file.
     if ( !imagefilter.contains(currentFileExtension) )
