@@ -36,11 +36,14 @@
 namespace Digikam
 {
 
+class DRubberBandPrivate;
+
 class DIGIKAM_EXPORT DRubberBand : public QRubberBand
 {
 public:
 
     DRubberBand(Q3ScrollView *parent);
+    ~DRubberBand();
 
     QRect rubberBandAreaOnContents();
 
@@ -72,14 +75,21 @@ public:
     /** Same as above, coordinates are viewport coordinates of the scrollview. */
     void setSecondPointOnViewport(const QPoint &p);
 
+    /** Installs a restriction which the rubber band cannot exceed.
+     *  Any point set as first or second point outside the restriction will be cut to
+     *  the restriction borders.
+     *  Call with a null rectangle to reset.*/
+    void setRestrictionOnContents(const QRect &rect);
+
+    /** Combines setFirstPoint and setSecondPoint */
+    void setRectOnViewport(const QRect &rect);
+    void setRectOnContents(const QRect &rect);
+
 protected:
 
     void updateForContentsPosition(int contentsX, int contentsY);
 
-    Q3ScrollView *m_scrollView;
-    bool          m_active;
-    QPoint        m_firstPoint;
-    QPoint        m_secondPoint;
+    DRubberBandPrivate *d;
 };
 
 

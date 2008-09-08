@@ -28,28 +28,54 @@
 namespace Digikam
 {
 
-DRubberBand::DRubberBand(Q3ScrollView *scrollView)
-    : QRubberBand(QRubberBand::Rectangle, scrollView->viewport()),
-      m_scrollView(scrollView), m_active(false)
+class DRubberBandPrivate
 {
+public:
+
+    DRubberBandPrivate()
+    {
+        scrollView = 0;
+        active = false;
+    }
+
+    Q3ScrollView *scrollView;
+    bool          active;
+    QPoint        firstPoint;
+    QPoint        secondPoint;
+    QRect         restriction;
+};
+
+DRubberBand::DRubberBand(Q3ScrollView *scrollView)
+    : QRubberBand(QRubberBand::Rectangle, scrollView->viewport())
+{
+    d = new DRubberBandPrivate;
+    d->scrollView = scrollView;
     hide();
+}
+
+DRubberBand::~DRubberBand()
+{
+    delete d;
 }
 
 QRect DRubberBand::rubberBandAreaOnContents()
 {
-    QRect rubber = QRect(m_firstPoint, m_secondPoint);
-    return rubber.normalized();
+    QRect rubber = QRect(d->firstPoint, d->secondPoint);
+    rubber = rubber.normalized();
+    if (!d->restriction.isNull())
+        rubber = rubber.intersected(d->restriction);
+    return rubber;
 }
 
 bool DRubberBand::isActive() const
 {
-    return m_active;
+    return d->active;
 }
 
 void DRubberBand::setActive(bool active)
 {
-    m_active = active;
-    if (m_active)
+    d->active = active;
+    if (d->active)
         show();
     else
         hide();
@@ -57,34 +83,50 @@ void DRubberBand::setActive(bool active)
 
 void DRubberBand::setFirstPointOnViewport(const QPoint &p)
 {
-    m_firstPoint = p;
-    m_active = true;
+    d->firstPoint = p;
+    d->active = true;
 }
 
 void DRubberBand::setFirstPointOnContents(const QPoint &p)
 {
-    setFirstPointOnViewport(m_scrollView->contentsToViewport(p));
+    setFirstPointOnViewport(d->scrollView->contentsToViewport(p));
 }
 
 void DRubberBand::setSecondPointOnViewport(const QPoint &p)
 {
-    m_secondPoint = p;
+    d->secondPoint = p;
 
-    updateForContentsPosition(m_scrollView->contentsX(), m_scrollView->contentsY());
+    updateForContentsPosition(d->scrollView->contentsX(), d->scrollView->contentsY());
 
-    if (m_active)
+    if (d->active)
         show();
 }
 
 void DRubberBand::setSecondPointOnContents(const QPoint &p)
 {
-    setSecondPointOnViewport(m_scrollView->contentsToViewport(p));
+    setSecondPointOnViewport(d->scrollView->contentsToViewport(p));
+}
+
+void DRubberBand::setRestrictionOnContents(const QRect &rect)
+{
+    d->restriction = rect;
+}
+
+void DRubberBand::setRectOnContents(const QRect &rect)
+{
+    setFirstPointOnContents(rect.topLeft());
+    setSecondPointOnContents(rect.bottomRight());
+}
+
+void DRubberBand::setRectOnViewport(const QRect &rect)
+{
+    setFirstPointOnViewport(rect.topLeft());
+    setSecondPointOnViewport(rect.bottomRight());
 }
 
 void DRubberBand::updateForContentsPosition(int contentsX, int contentsY)
 {
-    QRect rubber(m_firstPoint, m_secondPoint);
-    rubber = rubber.normalized();
+    QRect rubber = rubberBandAreaOnContents();
     rubber.translate( - contentsX, - contentsY);
 
     move(rubber.x(), rubber.y());
