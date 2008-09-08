@@ -40,7 +40,12 @@
 
 // LibKDcraw includes.
 
+#include <libkdcraw/version.h>
+#include <libkdcraw/kdcraw.h>
+
+#if KDCRAW_VERSION < 0x000400
 #include <libkdcraw/dcrawbinary.h>
+#endif
 
 // Local includes.
 
@@ -186,7 +191,11 @@ void ImagePropertiesSideBar::setImagePropertiesInformations(const KUrl& url)
 
     QSize   dims;
     QString compression, bitDepth, colorMode;
+#if KDCRAW_VERSION < 0x000400
     QString rawFilesExt(KDcrawIface::DcrawBinary::instance()->rawFiles());
+#else
+    QString rawFilesExt(KDcrawIface::KDcraw::rawFiles());
+#endif
     QString ext = fileInfo.suffix().toUpper();
 
     if (!ext.isEmpty() && rawFilesExt.toUpper().contains(ext))
