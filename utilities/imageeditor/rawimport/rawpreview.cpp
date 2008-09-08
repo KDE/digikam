@@ -185,8 +185,8 @@ void RawPreview::slotImageLoaded(const LoadingDescription& description, const DI
         p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
                    Qt::AlignCenter|Qt::TextWordWrap, 
-                   i18n("Cannot decode RAW image for\n\"%1\"")
-                   .arg(QFileInfo(d->loadingDesc.filePath).fileName()));
+                   i18n("Cannot decode RAW image for\n\"%1\"",
+                   QFileInfo(d->loadingDesc.filePath).fileName()));
         p.end();
         // three copies - but the image is small
         setPostProcessedImage(DImg(pix.toImage()));
