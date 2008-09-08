@@ -41,8 +41,12 @@
 
 // LibKDcraw includes.
 
+#include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
+
+#if KDCRAW_VERSION < 0x000400
 #include <libkdcraw/dcrawbinary.h>
+#endif
 
 // Local includes.
 
@@ -83,9 +87,15 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
     setMainWidget(page);
     QGridLayout* grid = new QGridLayout(page);
 
+#if KDCRAW_VERSION < 0x000400
     QStringList list      = KDcrawIface::DcrawBinary::instance()->supportedCamera();
     QString     dcrawVer  = KDcrawIface::DcrawBinary::instance()->internalVersion();
     QString     KDcrawVer = KDcrawIface::KDcraw::version();
+#else
+    QStringList list      = KDcrawIface::KDcraw::supportedCamera();
+    QString     librawVer = KDcrawIface::KDcraw::librawVersion();
+    QString     KDcrawVer = KDcrawIface::KDcraw::version();
+#endif
 
     // --------------------------------------------------------
 
@@ -100,10 +110,17 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
     // --------------------------------------------------------
 
     QLabel *header = new QLabel(page);
+#if KDCRAW_VERSION < 0x000400
     header->setText(i18n("<p>Using KDcraw library version %1"
                          "<p>Using Dcraw program version %2"
                          "<p>%3 models in the list",
                          KDcrawVer, dcrawVer, list.count()));
+#else
+    header->setText(i18n("<p>Using KDcraw library version %1"
+                         "<p>Using LibRaw version %2"
+                         "<p>%3 models in the list",
+                         KDcrawVer, librawVer, list.count()));
+#endif
 
     // --------------------------------------------------------
 
