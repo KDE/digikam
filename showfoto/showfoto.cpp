@@ -80,7 +80,12 @@ extern "C"
 
 // Libkdcraw includes.
 
+#include <libkdcraw/version.h>
+#include <libkdcraw/kdcraw.h>
+
+#if KDCRAW_VERSION < 0x000400
 #include <libkdcraw/dcrawbinary.h>
+#endif
 
 // Local includes.
 
@@ -194,12 +199,14 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     d->validIccPath = Digikam::SetupICC::iccRepositoryIsValid();
 
+#if KDCRAW_VERSION < 0x000400
     // Check witch dcraw version available
 
     if(d->splash)
         d->splash->message(i18n("Checking dcraw version"), Qt::AlignLeft, Qt::white);
 
     KDcrawIface::DcrawBinary::instance()->checkSystem();
+#endif
 
     // Populate Themes
 
@@ -399,9 +406,10 @@ void ShowFoto::show()
         }
     }
 
+#if KDCRAW_VERSION < 0x000400
     // Report errors from dcraw detection.
-
     KDcrawIface::DcrawBinary::instance()->checkReport();
+#endif
 }
 
 void ShowFoto::setupConnections()
@@ -820,7 +828,11 @@ void ShowFoto::openFolder(const KUrl& url)
     // Added RAW files estentions supported by dcraw program and
     // defines to digikam/libs/dcraw/rawfiles.h
     filter.append (" ");
+#if KDCRAW_VERSION < 0x000400
     filter.append ( QString(KDcrawIface::DcrawBinary::instance()->rawFiles()) );
+#else
+    filter.append ( QString(KDcrawIface::KDcraw::rawFiles()) );
+#endif
     filter.append (" ");
 
     QString patterns = filter.toLower();
