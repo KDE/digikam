@@ -34,7 +34,12 @@
 
 // LibKDcraw includes.
 
+#include <libkdcraw/version.h>
+#include <libkdcraw/kdcraw.h>
+
+#if KDCRAW_VERSION < 0x000400
 #include <libkdcraw/dcrawbinary.h>
+#endif
 
 // Local includes.
 
@@ -566,7 +571,12 @@ QString AlbumSettings::getAudioFileFilter() const
 
 QString AlbumSettings::getRawFileFilter() const
 {
+#if KDCRAW_VERSION < 0x000400
     QStringList supportedRaws = KDcrawIface::DcrawBinary::rawFilesList();
+#else
+    QStringList supportedRaws = KDcrawIface::KDcraw::rawFilesList();
+#endif
+
     QStringList imageSettings;
     DatabaseAccess().db()->getFilterSettings(&imageSettings, 0, 0);
 
