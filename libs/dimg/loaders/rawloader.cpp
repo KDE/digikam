@@ -35,6 +35,10 @@
 
 #include <kstandarddirs.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/version.h>
+
 // Local includes.
 
 #include "ddebug.h"
@@ -143,9 +147,15 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
             for (int w = 0; w < width; w++)
             {
+#if KDCRAW_VERSION < 0x000400
                 dst[0] = (unsigned short)((src[4]*256 + src[5]) * fac);      // Blue
                 dst[1] = (unsigned short)((src[2]*256 + src[3]) * fac);      // Green
                 dst[2] = (unsigned short)((src[0]*256 + src[1]) * fac);      // Red
+#else
+                dst[0] = (unsigned short)((src[5]*256 + src[4]) * fac);      // Blue
+                dst[1] = (unsigned short)((src[3]*256 + src[2]) * fac);      // Green
+                dst[2] = (unsigned short)((src[1]*256 + src[0]) * fac);      // Red
+#endif
                 dst[3] = 0xFFFF;
 
                 dst += 4;
