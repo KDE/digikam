@@ -54,8 +54,12 @@ using namespace Marble;
 
 // Libkdcraw includes.
 
+#include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
+
+#if KDCRAW_VERSION < 0x000400
 #include <libkdcraw/dcrawbinary.h>
+#endif
 
 // C ANSI includes
 
@@ -161,7 +165,11 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
     list.insert(i18n("LibQt"),                      qVersion());
     list.insert(i18n("LibKDE"),                     KDE::versionString());
     list.insert(i18n("LibKdcraw"),                  KDcrawIface::KDcraw::version());
+#if KDCRAW_VERSION < 0x000400
     list.insert(i18n("Dcraw program"),              KDcrawIface::DcrawBinary::internalVersion());
+#else
+    list.insert(i18n("LibRaw"),              KDcrawIface::KDcraw::librawVersion());
+#endif
     list.insert(i18n("LibKExiv2"),                  KExiv2Iface::KExiv2::version());
     list.insert(i18n("LibExiv2"),                   KExiv2Iface::KExiv2::Exiv2Version());
     list.insert(i18n("Exiv2 support XMP metadata"), KExiv2Iface::KExiv2::supportXmp() ?
