@@ -89,7 +89,7 @@ RedEyeTool::RedEyeTool(QObject* parent)
     m_destinationPreviewData = 0;
 
     m_previewWidget = new ImageWidget("redeye Tool", 0,
-                                      i18n("<p>Here you can see the image selection preview with "
+                                      i18n("Here you can see the image selection preview with "
                                            "red eye reduction applied."),
                                       true, ImageGuideWidget::PickColorMode, true, true);
     setToolView(m_previewWidget);
@@ -170,24 +170,25 @@ RedEyeTool::RedEyeTool(QObject* parent)
     m_redThreshold->setRange(10, 90, 1);
     m_redThreshold->setSliderEnabled(true);
     m_redThreshold->setDefaultValue(20);
-    m_redThreshold->setWhatsThis(i18n("<p>Sets the red color pixels selection threshold. "
-                                      "Low values will select more red color pixels (agressive correction), high "
-                                      "values less (mild correction). Use low value if eye have been selected "
-                                      "exactly. Use high value if other parts of the face are also selected."));
+    m_redThreshold->setWhatsThis(i18n("<p>Sets the red color pixels selection threshold.</p>"
+                                      "<p>Low values will select more red color pixels "
+                                      "(aggressive correction), high values less (mild correction). "
+                                      "Use low value if eye have been selected exactly. "
+                                      "Use high value if other parts of the face are also selected.</p>"));
 
     m_smoothLabel = new QLabel(i18n("Smooth:"), gboxSettings->plainPage());
     m_smoothLevel = new RIntNumInput(gboxSettings->plainPage());
     m_smoothLevel->setRange(0, 5, 1);
     m_smoothLevel->setSliderEnabled(true);
     m_smoothLevel->setDefaultValue(1);
-    m_smoothLevel->setWhatsThis(i18n("<p>Sets the smoothness value when blurring the border "
+    m_smoothLevel->setWhatsThis(i18n("Sets the smoothness value when blurring the border "
                                      "of the changed pixels. "
                                      "This leads to a more naturally looking pupil."));
 
     QLabel *label3 = new QLabel(i18n("Coloring Tint:"), gboxSettings->plainPage());
 
     m_HSSelector   = new KHueSaturationSelector(gboxSettings->plainPage());
-    m_HSSelector->setWhatsThis(i18n("<p>Sets a custom color when re-colorizing the eyes."));
+    m_HSSelector->setWhatsThis(i18n("Sets a custom color when re-colorizing the eyes."));
     m_HSSelector->setMinimumSize(200, 142);
     m_HSSelector->setChooserMode(ChooserValue);
     m_HSSelector->setColorValue(255);
@@ -202,7 +203,7 @@ RedEyeTool::RedEyeTool(QObject* parent)
     m_tintLevel->setRange(1, 200, 1);
     m_tintLevel->setSliderEnabled(true);
     m_tintLevel->setDefaultValue(128);
-    m_tintLevel->setWhatsThis(i18n("<p>Set the tint level to adjust the luminosity of "
+    m_tintLevel->setWhatsThis(i18n("Set the tint level to adjust the luminosity of "
                                    "the new color of the pupil."));
 
     // -------------------------------------------------------------
