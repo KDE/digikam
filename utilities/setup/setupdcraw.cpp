@@ -52,6 +52,8 @@
 #include "setupdcraw.h"
 #include "setupdcraw.moc"
 
+using namespace KDcrawIface;
+
 namespace Digikam
 {
 
@@ -73,12 +75,10 @@ SetupDcraw::SetupDcraw(QWidget* parent )
 {
     d = new SetupDcrawPriv;
     QVBoxLayout *layout = new QVBoxLayout(parent, 0, KDialog::spacingHint());
-    d->dcrawSettings    = new KDcrawIface::DcrawSettingsWidget(parent, true, false);
-#if KDCRAW_VERSION >= 0x000105
+    d->dcrawSettings    = new DcrawSettingsWidget(this, DcrawSettingsWidget::SIXTEENBITS);
     d->dcrawSettings->setItemIconSet(0, SmallIconSet("kdcraw"));
     d->dcrawSettings->setItemIconSet(1, SmallIconSet("whitebalance"));
     d->dcrawSettings->setItemIconSet(2, SmallIconSet("lensdistortion"));
-#endif
     layout->addWidget(d->dcrawSettings);
     layout->addStretch();
 
@@ -95,11 +95,9 @@ SetupDcraw::~SetupDcraw()
 
 void SetupDcraw::slotSixteenBitsImageToggled(bool)
 {
-#if KDCRAW_VERSION >= 0x000105
     // Dcraw do not provide a way to set brigness of image in 16 bits color depth.
     // We always set on this option. We drive brightness adjustment in digiKam Raw image loader.
     d->dcrawSettings->setEnabledBrightnessSettings(true);
-#endif
 }
 
 void SetupDcraw::applySettings()
@@ -122,11 +120,9 @@ void SetupDcraw::applySettings()
     config->writeEntry("RAWQuality",              d->dcrawSettings->quality());
     config->writeEntry("EnableBlackPoint",        d->dcrawSettings->useBlackPoint());
     config->writeEntry("BlackPoint",              d->dcrawSettings->blackPoint());
-#if KDCRAW_VERSION >= 0x000105
     config->writeEntry("EnableWhitePoint",        d->dcrawSettings->useWhitePoint());
     config->writeEntry("WhitePoint",              d->dcrawSettings->whitePoint());
     config->writeEntry("MedianFilterPasses",      d->dcrawSettings->medianFilterPasses());
-#endif
     config->sync();
 }
 
@@ -154,11 +150,9 @@ void SetupDcraw::readSettings()
     d->dcrawSettings->setBrightness(config->readDoubleNumEntry("RAWBrightness", 1.0));
     d->dcrawSettings->setUseBlackPoint(config->readBoolEntry("EnableBlackPoint", false));
     d->dcrawSettings->setBlackPoint(config->readNumEntry("BlackPoint", 0));
-#if KDCRAW_VERSION >= 0x000105
     d->dcrawSettings->setUseWhitePoint(config->readBoolEntry("EnableWhitePoint", false));
     d->dcrawSettings->setWhitePoint(config->readNumEntry("WhitePoint", 0));
     d->dcrawSettings->setMedianFilterPasses(config->readNumEntry("MedianFilterPasses", 0));
-#endif
 }
 
 }  // namespace Digikam
