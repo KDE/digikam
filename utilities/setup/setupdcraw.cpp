@@ -68,12 +68,10 @@ SetupDcraw::SetupDcraw(QWidget* parent )
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setSpacing(0);
     layout->setMargin(0);
-    d->dcrawSettings    = new KDcrawIface::DcrawSettingsWidget(this, true, false);
-#if KDCRAW_VERSION >= 0x000300
+    d->dcrawSettings    = new KDcrawIface::DcrawSettingsWidget(this, DcrawSettingsWidget::SIXTEENBITS);
     d->dcrawSettings->setItemIcon(0, SmallIcon("kdcraw"));
     d->dcrawSettings->setItemIcon(1, SmallIcon("whitebalance"));
     d->dcrawSettings->setItemIcon(2, SmallIcon("lensdistortion"));
-#endif
     layout->addWidget(d->dcrawSettings);
     layout->addStretch();
 
