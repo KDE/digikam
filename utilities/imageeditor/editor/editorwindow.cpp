@@ -912,13 +912,7 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.caMultiplier[0]         = group.readEntry("caRedMultiplier", 1.0);
     m_IOFileSettings->rawDecodingSettings.caMultiplier[1]         = group.readEntry("caBlueMultiplier", 1.0);
     m_IOFileSettings->rawDecodingSettings.brightness              = group.readEntry("RAWBrightness", 1.0);
-    m_IOFileSettings->rawDecodingSettings.enableBlackPoint        = group.readEntry("EnableBlackPoint", false);
-    m_IOFileSettings->rawDecodingSettings.blackPoint              = group.readEntry("BlackPoint", 0);
-#if KDCRAW_VERSION >= 0x000300
-    m_IOFileSettings->rawDecodingSettings.enableWhitePoint        = group.readEntry("EnableWhitePoint", false);
-    m_IOFileSettings->rawDecodingSettings.whitePoint              = group.readEntry("WhitePoint", 0);
     m_IOFileSettings->rawDecodingSettings.medianFilterPasses      = group.readEntry("MedianFilterPasses", 0);
-#endif
 
     m_IOFileSettings->useRAWImport                                = group.readEntry("UseRawImportTool", false);
 
