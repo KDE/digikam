@@ -928,10 +928,6 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.caMultiplier[0]         = config->readDoubleNumEntry("caRedMultiplier", 1.0);
     m_IOFileSettings->rawDecodingSettings.caMultiplier[1]         = config->readDoubleNumEntry("caBlueMultiplier", 1.0);
     m_IOFileSettings->rawDecodingSettings.brightness              = config->readDoubleNumEntry("RAWBrightness", 1.0);
-    m_IOFileSettings->rawDecodingSettings.enableBlackPoint        = config->readBoolEntry("EnableBlackPoint", false);
-    m_IOFileSettings->rawDecodingSettings.blackPoint              = config->readNumEntry("BlackPoint", 0);
-    m_IOFileSettings->rawDecodingSettings.enableWhitePoint        = config->readBoolEntry("EnableWhitePoint", false);
-    m_IOFileSettings->rawDecodingSettings.whitePoint              = config->readNumEntry("WhitePoint", 0);
     m_IOFileSettings->rawDecodingSettings.medianFilterPasses      = config->readNumEntry("MedianFilterPasses", 0);
 
     m_IOFileSettings->useRAWImport                                = config->readBoolEntry("UseRawImportTool", false);
