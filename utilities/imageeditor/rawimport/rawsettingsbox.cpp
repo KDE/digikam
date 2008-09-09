@@ -244,7 +244,8 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     d->tabView             = new KTabWidget(plainPage());
     d->rawdecodingBox      = new QWidget(d->tabView);
     QGridLayout* rawGrid   = new QGridLayout(d->rawdecodingBox);
-    d->decodingSettingsBox = new DcrawSettingsWidget(d->rawdecodingBox, true, true, false);
+    d->decodingSettingsBox = new DcrawSettingsWidget(d->rawdecodingBox, 
+                                 DcrawSettingsWidget::SIXTEENBITS | DcrawSettingsWidget::COLORSPACE);
 
     KFileDialog *inputDlg  = d->decodingSettingsBox->inputProfileUrlEdit()->fileDialog();
     inputDlg->setPreviewWidget(new ICCPreviewWidget(inputDlg));
