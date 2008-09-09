@@ -45,6 +45,8 @@
 #include "setupdcraw.h"
 #include "setupdcraw.moc"
 
+using namespace KDcrawIface;
+
 namespace Digikam
 {
 
@@ -58,7 +60,7 @@ public:
         dcrawSettings = 0;
     }
 
-    KDcrawIface::DcrawSettingsWidget *dcrawSettings;
+    DcrawSettingsWidget *dcrawSettings;
 };
 
 SetupDcraw::SetupDcraw(QWidget* parent )
@@ -68,7 +70,7 @@ SetupDcraw::SetupDcraw(QWidget* parent )
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setSpacing(0);
     layout->setMargin(0);
-    d->dcrawSettings    = new KDcrawIface::DcrawSettingsWidget(this, DcrawSettingsWidget::SIXTEENBITS);
+    d->dcrawSettings    = new DcrawSettingsWidget(this, DcrawSettingsWidget::SIXTEENBITS);
     d->dcrawSettings->setItemIcon(0, SmallIcon("kdcraw"));
     d->dcrawSettings->setItemIcon(1, SmallIcon("whitebalance"));
     d->dcrawSettings->setItemIcon(2, SmallIcon("lensdistortion"));
@@ -98,7 +100,7 @@ void SetupDcraw::slotSixteenBitsImageToggled(bool)
 void SetupDcraw::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("ImageViewer Settings"));
+    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
     group.writeEntry("SixteenBitsImage",        d->dcrawSettings->sixteenBits());
     group.writeEntry("WhiteBalance",            (int)d->dcrawSettings->whiteBalance());
     group.writeEntry("CustomWhiteBalance",      d->dcrawSettings->customWhiteBalance());
@@ -115,18 +117,16 @@ void SetupDcraw::applySettings()
     group.writeEntry("RAWQuality",              (int)d->dcrawSettings->quality());
     group.writeEntry("EnableBlackPoint",        d->dcrawSettings->useBlackPoint());
     group.writeEntry("BlackPoint",              d->dcrawSettings->blackPoint());
-#if KDCRAW_VERSION >= 0x000300
     group.writeEntry("EnableWhitePoint",        d->dcrawSettings->useWhitePoint());
     group.writeEntry("WhitePoint",              d->dcrawSettings->whitePoint());
     group.writeEntry("MedianFilterPasses",      d->dcrawSettings->medianFilterPasses());
-#endif
     config->sync();
 }
 
 void SetupDcraw::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("ImageViewer Settings"));
+    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
     d->dcrawSettings->setSixteenBits(group.readEntry("SixteenBitsImage", false));
     d->dcrawSettings->setNoiseReduction(group.readEntry("EnableNoiseReduction", false));
     d->dcrawSettings->setNRThreshold(group.readEntry("NRThreshold", 100));
@@ -147,11 +147,9 @@ void SetupDcraw::readSettings()
     d->dcrawSettings->setBrightness(group.readEntry("RAWBrightness", 1.0));
     d->dcrawSettings->setUseBlackPoint(group.readEntry("EnableBlackPoint", false));
     d->dcrawSettings->setBlackPoint(group.readEntry("BlackPoint", 0));
-#if KDCRAW_VERSION >= 0x000300
     d->dcrawSettings->setUseWhitePoint(group.readEntry("EnableWhitePoint", false));
     d->dcrawSettings->setWhitePoint(group.readEntry("WhitePoint", 0));
     d->dcrawSettings->setMedianFilterPasses(group.readEntry("MedianFilterPasses", 0));
-#endif
 }
 
 }  // namespace Digikam
