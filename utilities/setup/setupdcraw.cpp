@@ -118,10 +118,6 @@ void SetupDcraw::applySettings()
     config->writeEntry("UnclipColors",            d->dcrawSettings->unclipColor());
     config->writeEntry("RAWBrightness",           d->dcrawSettings->brightness());
     config->writeEntry("RAWQuality",              d->dcrawSettings->quality());
-    config->writeEntry("EnableBlackPoint",        d->dcrawSettings->useBlackPoint());
-    config->writeEntry("BlackPoint",              d->dcrawSettings->blackPoint());
-    config->writeEntry("EnableWhitePoint",        d->dcrawSettings->useWhitePoint());
-    config->writeEntry("WhitePoint",              d->dcrawSettings->whitePoint());
     config->writeEntry("MedianFilterPasses",      d->dcrawSettings->medianFilterPasses());
     config->sync();
 }
@@ -148,10 +144,6 @@ void SetupDcraw::readSettings()
                                   config->readNumEntry("RAWQuality",
                                   DRawDecoding::BILINEAR));
     d->dcrawSettings->setBrightness(config->readDoubleNumEntry("RAWBrightness", 1.0));
-    d->dcrawSettings->setUseBlackPoint(config->readBoolEntry("EnableBlackPoint", false));
-    d->dcrawSettings->setBlackPoint(config->readNumEntry("BlackPoint", 0));
-    d->dcrawSettings->setUseWhitePoint(config->readBoolEntry("EnableWhitePoint", false));
-    d->dcrawSettings->setWhitePoint(config->readNumEntry("WhitePoint", 0));
     d->dcrawSettings->setMedianFilterPasses(config->readNumEntry("MedianFilterPasses", 0));
 }
 
