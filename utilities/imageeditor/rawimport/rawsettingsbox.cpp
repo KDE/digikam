@@ -533,10 +533,6 @@ void RawSettingsBox::readSettings()
     d->decodingSettingsBox->setUnclipColor(group.readEntry("Unclip Color", 0));
     d->decodingSettingsBox->setDontStretchPixels(group.readEntry("Dont Stretch Pixels", false));
     d->decodingSettingsBox->setNoiseReduction(group.readEntry("Use Noise Reduction", false));
-    d->decodingSettingsBox->setUseBlackPoint(group.readEntry("Use Black Point", false));
-    d->decodingSettingsBox->setBlackPoint(group.readEntry("Black Point", 0));
-    d->decodingSettingsBox->setUseWhitePoint(group.readEntry("Use White Point", false));
-    d->decodingSettingsBox->setWhitePoint(group.readEntry("White Point", 0));
     d->decodingSettingsBox->setMedianFilterPasses(group.readEntry("Median Filter Passes", 0));
     d->decodingSettingsBox->setNRThreshold(group.readEntry("NR Threshold", 100));
     d->decodingSettingsBox->setUseCACorrection(group.readEntry("EnableCACorrection", false));
@@ -606,10 +602,6 @@ void RawSettingsBox::writeSettings()
     group.writeEntry("Unclip Color",               d->decodingSettingsBox->unclipColor());
     group.writeEntry("Dont Stretch Pixels",        d->decodingSettingsBox->useDontStretchPixels());
     group.writeEntry("Use Noise Reduction",        d->decodingSettingsBox->useNoiseReduction());
-    group.writeEntry("Use Black Point",            d->decodingSettingsBox->useBlackPoint());
-    group.writeEntry("Black Point",                d->decodingSettingsBox->blackPoint());
-    group.writeEntry("Use White Point",            d->decodingSettingsBox->useWhitePoint());
-    group.writeEntry("White Point",                d->decodingSettingsBox->whitePoint());
     group.writeEntry("MedianFilterPasses",         d->decodingSettingsBox->medianFilterPasses());
     group.writeEntry("NR Threshold",               d->decodingSettingsBox->NRThreshold());
     group.writeEntry("EnableCACorrection",         d->decodingSettingsBox->useCACorrection());
@@ -656,10 +648,6 @@ DRawDecoding RawSettingsBox::settings()
     settings.unclipColors            = d->decodingSettingsBox->unclipColor();
     settings.DontStretchPixels       = d->decodingSettingsBox->useDontStretchPixels();
     settings.enableNoiseReduction    = d->decodingSettingsBox->useNoiseReduction();
-    settings.enableBlackPoint        = d->decodingSettingsBox->useBlackPoint();
-    settings.blackPoint              = d->decodingSettingsBox->blackPoint();
-    settings.enableWhitePoint        = d->decodingSettingsBox->useWhitePoint();
-    settings.whitePoint              = d->decodingSettingsBox->whitePoint();
     settings.medianFilterPasses      = d->decodingSettingsBox->medianFilterPasses();
     settings.NRThreshold             = d->decodingSettingsBox->NRThreshold();
     settings.enableCACorrection      = d->decodingSettingsBox->useCACorrection();
