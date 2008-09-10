@@ -69,6 +69,7 @@ extern "C"
 #include <tiffvers.h>
 #include <jpeglib.h>
 #include <jasper/jas_version.h>
+#include <lcms.h>
 }
 
 // Local includes.
@@ -168,7 +169,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
 #if KDCRAW_VERSION < 0x000400
     list.insert(i18n("Dcraw program"),              KDcrawIface::DcrawBinary::internalVersion());
 #else
-    list.insert(i18n("LibRaw"),              KDcrawIface::KDcraw::librawVersion());
+    list.insert(i18n("LibRaw"),                     KDcrawIface::KDcraw::librawVersion());
 #endif
     list.insert(i18n("LibKExiv2"),                  KExiv2Iface::KExiv2::version());
     list.insert(i18n("LibExiv2"),                   KExiv2Iface::KExiv2::Exiv2Version());
@@ -190,9 +191,10 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
     list.insert(i18n("LibJPEG"),                    QString::number(JPEG_LIB_VERSION));
     list.insert(i18n("LibJasper"),                  QString(jas_getversion()));
     list.insert(i18n("LibCImg"),                    GreycstorationIface::cimgVersionString());
+    list.insert(i18n("LibLCMS"),                    QString::number(LCMS_VERSION));
 
 #ifdef HAVE_MARBLEWIDGET
-    list.insert(i18n("Marble widget"),                    QString(MARBLE_VERSION_STRING));
+    list.insert(i18n("Marble widget"),              QString(MARBLE_VERSION_STRING));
 #endif //HAVE_MARBLEWIDGET
 
     setComponentsInfoMap(list);
