@@ -85,7 +85,8 @@ LensDistortionTool::LensDistortionTool(QObject* parent)
 
     m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
                                             EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel);
+                                            EditorToolSettings::Cancel,
+                                            EditorToolSettings::ColorGuide);
     QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage(), 9, 1);
 
     m_maskPreviewLabel = new QLabel( m_gboxSettings->plainPage() );

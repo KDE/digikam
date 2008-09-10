@@ -62,8 +62,8 @@ private slots:
 
 private:
 
-    void writeSettings();
     void readSettings();
+    void writeSettings();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
