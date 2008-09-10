@@ -163,6 +163,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             }
         }
 
+#if KDCRAW_VERSION < 0x000400
         // ----------------------------------------------------------
 
         // Special case: if Color Management is not used here, output color space is in sRGB* color space
@@ -218,7 +219,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
                 im += 4;
             }
         }
-
+#endif
         // ----------------------------------------------------------
 
         imageData() = (uchar *)image;
