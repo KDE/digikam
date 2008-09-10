@@ -52,12 +52,12 @@
 
 // Local includes.
 
-#include "version.h"
 #include "daboutdata.h"
 #include "ddebug.h"
-#include "imageiface.h"
 #include "editortoolsettings.h"
+#include "imageiface.h"
 #include "imagewidget.h"
+#include "version.h"
 #include "lensdistortion.h"
 #include "lensdistortiontool.h"
 #include "lensdistortiontool.moc"
@@ -84,7 +84,8 @@ LensDistortionTool::LensDistortionTool(QObject* parent)
 
     m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
                                             EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel);
+                                            EditorToolSettings::Cancel,
+                                            EditorToolSettings::ColorGuide);
 
     QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
 
@@ -167,6 +168,9 @@ LensDistortionTool::LensDistortionTool(QObject* parent)
     connect(m_brightenInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
 
+    connect(m_gboxSettings, SIGNAL(signalColorGuideChanged()),
+                this, SLOT(slotColorGuideChanged()));
+
     // -------------------------------------------------------------
 
     /* Calc transform preview.
@@ -220,6 +224,7 @@ void LensDistortionTool::readSettings()
     m_rescaleInput->blockSignals(false);
     m_brightenInput->blockSignals(false);
 
+    slotColorGuideChanged();
     slotEffect();
 }
 
