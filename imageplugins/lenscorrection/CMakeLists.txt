@@ -43,7 +43,7 @@ TARGET_LINK_LIBRARIES(
     )
 
 IF(LENSFUN_LIBRARY)
-   TARGET_LINK_LIBRARIES(digikamimageplugin_lenscorrection lensfun)
+   TARGET_LINK_LIBRARIES(digikamimageplugin_lenscorrection ${LENSFUN_LIBRARY})
 ENDIF(LENSFUN_LIBRARY)
 
 INSTALL(TARGETS digikamimageplugin_lenscorrection DESTINATION ${PLUGIN_INSTALL_DIR})
