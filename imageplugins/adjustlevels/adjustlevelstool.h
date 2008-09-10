@@ -89,8 +89,8 @@ private slots:
     void slotSpotColorChanged(const Digikam::DColor& color);
     void slotColorSelectedFromTarget(const Digikam::DColor& color);
     void slotPickerColorButtonActived();
-    void slotShowInputHistogramGuide(int v);
-    void slotShowOutputHistogramGuide(int v);
+    void slotShowInputHistogramGuide(double v);
+    void slotShowOutputHistogramGuide(double v);
 
 private:
 

@@ -840,14 +840,14 @@ bool AdjustLevelsTool::eventFilter(QObject *obj, QEvent *ev)
     }
 }
 
-void AdjustLevelsTool::slotShowInputHistogramGuide(int v)
+void AdjustLevelsTool::slotShowInputHistogramGuide(double v)
 {
     int val = v * m_histoSegments;
     DColor color(val, val, val, val, m_originalImage->sixteenBit());
     m_levelsHistogramWidget->setHistogramGuideByColor(color);
 }
 
-void AdjustLevelsTool::slotShowOutputHistogramGuide(int v)
+void AdjustLevelsTool::slotShowOutputHistogramGuide(double v)
 {
     int val = v * m_histoSegments;
     DColor color(val, val, val, val, m_originalImage->sixteenBit());
