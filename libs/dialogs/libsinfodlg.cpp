@@ -101,7 +101,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
     setDefaultButton(Ok);
     setModal(true);
     setHelp("digikam");
-    setCaption(i18n("Shared Libraries and Components Informations"));
+    setCaption(i18n("Shared Libraries and Components Information"));
     setButtonText(User1, i18n("Copy to Clipboard"));
 
     d = new LibsInfoDlgPriv;
@@ -160,7 +160,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
     resize(400, 500);
 
     // --------------------------------------------------------
-    // By default set a list of common components informations used by Showfoto and digiKam.
+    // By default set a list of common components information used by Showfoto and digiKam.
 
     QMap<QString, QString> list;
     list.insert(i18n("LibQt"),                      qVersion());

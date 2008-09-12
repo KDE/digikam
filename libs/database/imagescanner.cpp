@@ -71,7 +71,7 @@ ImageScanner::ImageScanner(qlonglong imageid)
 
 void ImageScanner::setCategory(DatabaseItem::Category category)
 {
-    // we dont have the necessary information in this class, but in CollectionScanner
+    // we don't have the necessary information in this class, but in CollectionScanner
     m_scanInfo.category = category;
 }
 

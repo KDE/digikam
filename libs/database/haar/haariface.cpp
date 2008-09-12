@@ -64,7 +64,7 @@ namespace Digikam
  *  that can be stored as a BLOB in the database.
  *
  *  Reading and writing is done in a platform-independent manner, which
- *  induces a certain overhead, but which is necessary IMO. 
+ *  induces a certain overhead, but which is necessary IMO.
  */
 class DatabaseBlob
 {
@@ -77,7 +77,7 @@ public:
 
     DatabaseBlob(){}
 
-    /** Read the QByteArray into the Haar::SignatureData. 
+    /** Read the QByteArray into the Haar::SignatureData.
      */
     void read(const QByteArray &array, Haar::SignatureData *data)
     {
@@ -517,7 +517,7 @@ void HaarIface::getBestAndWorstPossibleScore(Haar::SignatureData *sig, SketchTyp
     double score = 0;
 
     // In the first step, the score is initialized with the weighted color channel averages.
-    // We dont know the target channel average here, we only now its not negative => assume 0
+    // We don't know the target channel average here, we only now its not negative => assume 0
     for (int channel=0; channel<3; channel++)
     {
         score += weights.weightForAverage(channel) * fabs( sig->avg[channel] /*- targetSig.avg[channel]*/ );

@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -970,7 +970,7 @@ void CollectionManager::updateLocations()
             //TODO: Network locations (NFS, Samba etc.)
 
             // set values in location
-            // dont touch location->status, do not interfer with "hidden" setting
+            // Don't touch location->status, do not interfere with "hidden" setting
             location->available = available;
             location->setAbsolutePath(volumePath + location->specificPath);
             DDebug() << "location for " << volumePath + location->specificPath << " is available " << available << endl;

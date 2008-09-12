@@ -59,7 +59,7 @@ class PreviewWidgetPriv
 public:
 
     PreviewWidgetPriv() :
-        tileSize(128), zoomMultiplier(1.2) 
+        tileSize(128), zoomMultiplier(1.2)
     {
         midButtonX = 0;
         midButtonY = 0;
@@ -113,7 +113,7 @@ PreviewWidget::PreviewWidget(QWidget *parent)
     verticalScrollBar()->setSingleStep(1);
     verticalScrollBar()->setPageStep(1);
 
-    setFrameStyle(QFrame::StyledPanel|QFrame::Plain); 
+    setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
     setMargin(0);
     setLineWidth(1);
 }
@@ -191,7 +191,7 @@ double PreviewWidget::snapZoom(double zoom)
     snapValues.append(1.0);
     snapValues.append(fit);
 
-    if (d->zoom < zoom) 
+    if (d->zoom < zoom)
         qStableSort(snapValues);
     else
         qStableSort(snapValues.begin(), snapValues.end(), qGreater<double>());
@@ -226,15 +226,15 @@ void PreviewWidget::slotDecreaseZoom()
 void PreviewWidget::setZoomFactorSnapped(double zoom)
 {
     double fit = calcAutoZoomFactor(ZoomInOrOut);
-    if (fabs(zoom-1.0) < 0.05) 
+    if (fabs(zoom-1.0) < 0.05)
     {
         zoom = 1.0;
     }
-    if (fabs(zoom-0.5) < 0.05) 
+    if (fabs(zoom-0.5) < 0.05)
     {
         zoom = 0.5;
     }
-    if (fabs(zoom-fit) < 0.05) 
+    if (fabs(zoom-fit) < 0.05)
     {
         zoom = fit;
     }
@@ -315,7 +315,7 @@ void PreviewWidget::setZoomFactor(double zoom, bool centerView)
 
 double PreviewWidget::zoomFactor()
 {
-    return d->zoom; 
+    return d->zoom;
 }
 
 bool PreviewWidget::isFitToWindow()
@@ -352,7 +352,7 @@ void PreviewWidget::toggleFitToWindow()
 void PreviewWidget::toggleFitToWindowOr100()
 {
     // If the current zoom is 100%, then fit to window.
-    if (d->zoom == 1.0) 
+    if (d->zoom == 1.0)
     {
         fitToWindow();
     }
@@ -387,7 +387,7 @@ double PreviewWidget::calcAutoZoomFactor(AutoZoomMode mode)
         // fit to available space, scale up or down
         return zoom;
     else
-        // ZoomInOnly: accept that an image is smaller than available space, dont scale up
+        // ZoomInOnly: accept that an image is smaller than available space, don't scale up
         return qMin(1.0, zoom);
 }
 
@@ -433,10 +433,10 @@ void PreviewWidget::resizeEvent(QResizeEvent* e)
 
     updateContentsSize();
 
-    // No need to repaint. its called   
+    // No need to repaint. its called
     // automatically after resize
 
-    // To be sure than corner widget used to pan image will be hide/show 
+    // To be sure than corner widget used to pan image will be hide/show
     // accordinly with resize event.
     zoomFactorChanged(d->zoom);
 }
@@ -474,7 +474,7 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
 
         QPixmap pix(d->tileSize, d->tileSize);
         int sx, sy, sw, sh;
-        int step = (int)floor(d->tileSize / d->zoom); 
+        int step = (int)floor(d->tileSize / d->zoom);
 
         for (int j = y1 ; j < y2 ; j += d->tileSize)
         {

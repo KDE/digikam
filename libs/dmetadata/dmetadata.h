@@ -73,9 +73,9 @@ public:
     bool setImageCredits(const QString& credit, const QString& source, const QString& copyright) const;
 
     /** Return a string with Lens mounted on the front of camera.
-        There no standard Exif tag for Lens informations.
+        There no standard Exif tag for Lens information.
         Camera makernotes and Xmp tags are parsed. 
-        Take a care : lens informations are not standardized and string content is not homogenous between 
+        Take a care : lens information are not standardized and string content is not homogenous between 
         camera model/maker.
      */
     QString getLensDescription() const;

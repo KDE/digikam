@@ -175,7 +175,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformations(const KUrl& url)
     QFileInfo fileInfo(url.path());
     DMetadata metaData(url.path());
 
-    // -- File system informations -----------------------------------------
+    // -- File system information -----------------------------------------
 
     QDateTime modifiedDate = fileInfo.lastModified();
     str = KGlobal::locale()->formatDateTime(modifiedDate, KLocale::ShortDate, true);
@@ -230,7 +230,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformations(const KUrl& url)
         }
 
 /*          TODO: KDE4PORT: KFileMetaInfo API as Changed.
-                            Check if new method to search informations is enough.
+                            Check if new method to search information is enough.
 
         if (meta.isValid())
         {

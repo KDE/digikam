@@ -166,7 +166,7 @@ void WorldMapWidget::setGPSPositions(const GPSInfoList& list)
 #else // MARBLE_VERSION
 
     // For Marble 0.5.1, there is no method to place a mark over the map using string.
-    // The only way is to use a temp file with all KML informations.
+    // The only way is to use a temp file with all KML information.
     KTemporaryFile KMLFile;
     KMLFile.setSuffix(".kml");
     KMLFile.setAutoRemove(true);

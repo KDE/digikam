@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef IMAGECOPYRIGHT_H
@@ -140,8 +140,8 @@ public:
      *  " Identifies the original owner of the copyright for the intellectual content of the news object.
      *    This could be an agency, a member of an agency or an individual. Source could be
      *    different from Creator and from the entities in the CopyrightNotice.
-     *    As the orginal owner can not change the content of this property should never be changed
-     *    or deleted after the information is entered following the news object's inital creation."
+     *    As the original owner can not change the content of this property should never be changed
+     *    or deleted after the information is entered following the news object's initial creation."
      */
     QString source();
     void setSource(const QString &source);

@@ -435,7 +435,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformations(const KUrl& url)
             QString unavailable(i18n("<i>unavailable</i>"));
             KFileItem fi(KFileItem::Unknown, KFileItem::Unknown, url);
 
-            // -- File system informations -----------------------------------------
+            // -- File system information -----------------------------------------
 
             ImageCommonContainer commonInfo  = info.imageCommonContainer();
             ImageMetadataContainer photoInfo = info.imageMetadataContainer();

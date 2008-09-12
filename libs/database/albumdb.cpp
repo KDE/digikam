@@ -426,7 +426,7 @@ int AlbumDB::addTag(int parentTagID, const QString& name, const QString& iconKDE
     QVariant id;
     if (!d->db->execSql( QString("INSERT INTO Tags (pid, name) "
                                  "VALUES( ?, ?);"),
-                         parentTagID, 
+                         parentTagID,
                          name,
                          0, &id) )
     {
@@ -1747,7 +1747,7 @@ void AlbumDB::addTagsToItems(QList<qlonglong> imageIDs, QList<int> tagIDs)
 
 QList<int> AlbumDB::getRecentlyAssignedTags() const
 {
-    return d->recentlyAssignedTags;    
+    return d->recentlyAssignedTags;
 }
 
 void AlbumDB::removeItemTag(qlonglong imageID, int tagID)
@@ -2321,7 +2321,7 @@ QStringList AlbumDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
                                  "ORDER BY Images.name COLLATE NOCASE;");
             break;
         case ByItemPath:
-            // Dont collate on the path - this is to maintain the same behaviour
+            // Don't collate on the path - this is to maintain the same behavior
             // that happens when sort order is "By Path"
             sqlString = QString("SELECT Albums.relativePath, Images.name "
                                  "FROM Images "

@@ -278,7 +278,7 @@ class DIGIKAM_EXPORT GeodeticCalculator
  *   Point located at a given distance and azimuth from an other point.
  *
  *
- * The calculation use the following informations:
+ * The calculation use the following information:
  *
  *
  *   The starting position (setStartingPosition), which is always considered valid.

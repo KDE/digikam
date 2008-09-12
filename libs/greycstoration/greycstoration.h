@@ -52,7 +52,7 @@
 #define cimg_plugin_greycstoration
 
 //------------------------------------------------------------------------------
-// GREYCstoration parameter structure, storing important informations about
+// GREYCstoration parameter structure, storing important information about
 // algorithm parameters and computing threads.
 // ** This structure has not to be manipulated by the API user, so please just
 // ignore it if you want to **

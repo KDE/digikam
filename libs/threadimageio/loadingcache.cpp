@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -47,7 +47,7 @@ public:
 
     LoadingCachePriv()
     {
-        // Note: Dont make the mutex recursive, we need to use a wait condition on it
+        // Note: Don't make the mutex recursive, we need to use a wait condition on it
         watch = 0;
     }
 

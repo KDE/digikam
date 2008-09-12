@@ -386,7 +386,7 @@ public:
             if (relation == SearchXml::Like && value.contains("*"))
             {
                 // Handle special case: * denotes the place if the wildcard,
-                // dont automatically prepend and append %
+                // Don't automatically prepend and append %
                 sql += " (" + name + " ";
                 ImageQueryBuilder::addSqlRelation(sql, SearchXml::Like);
                 sql += " ?) ";

@@ -74,7 +74,7 @@ static const char* StandardXmpEntryList[] =
      "xmpRights",       // Rights Management schema.
      "xmpTPg",          // Paged-Text schema.
      "MicrosoftPhoto",  // Microsoft schema.
-     "digiKam",         // Our Xmp schema used to store private informations (see DMetadata class for details).
+     "digiKam",         // Our Xmp schema used to store private information (see DMetadata class for details).
      "-1"
 };
 

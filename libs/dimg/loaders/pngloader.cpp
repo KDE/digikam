@@ -826,7 +826,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     imageSetAttribute("savedformat", "PNG");
 
-    // Here there is no writeMetadata() call until Exiv2 will support PNG in writting mode.
+    // Here there is no writeMetadata() call until Exiv2 will support PNG in writing mode.
 
     return true;
 }

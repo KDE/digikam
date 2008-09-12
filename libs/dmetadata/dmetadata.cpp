@@ -572,7 +572,7 @@ QString DMetadata::getLensDescription() const
     // TODO : add Fuji, Olympus, Sony Cameras Makernotes.
 
     // -------------------------------------------------------------------
-    // Try to get Lens Data informations from Exif.
+    // Try to get Lens Data information from Exif.
 
     for (QStringList::Iterator it = lensExifTags.begin(); it != lensExifTags.end(); ++it)
     {
@@ -582,7 +582,7 @@ QString DMetadata::getLensDescription() const
     }
 
     // -------------------------------------------------------------------
-    // Try to get Lens Data informations from XMP.
+    // Try to get Lens Data information from XMP.
     // XMP aux tags.
     lens = getXmpTagString("Xmp.aux.Lens");
     if (lens.isEmpty())
