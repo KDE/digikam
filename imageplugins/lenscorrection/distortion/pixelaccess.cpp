@@ -4,22 +4,22 @@
  * http://www.digikam.org
  *
  * Date        : 2004-12-27
- * Description : acess pixels method for lens distortion algorithm.
- * 
+ * Description : access pixels method for lens distortion algorithm.
+ *
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ includes.
@@ -48,7 +48,7 @@ PixelAccess::PixelAccess(Digikam::DImg *srcImage)
     m_imageHeight = m_image->height();
     m_sixteenBit  = m_image->sixteenBit();
 
-    for ( int i = 0 ; i < PixelAccessRegions ; i++ ) 
+    for ( int i = 0 ; i < PixelAccessRegions ; i++ )
     {
         m_buffer[i] = new Digikam::DImg(m_image->copy(0, 0, m_width, m_height));
 
@@ -61,7 +61,7 @@ PixelAccess::PixelAccess(Digikam::DImg *srcImage)
 
 PixelAccess::~PixelAccess()
 {
-    for( int i = 0 ; i < PixelAccessRegions ; i++ ) 
+    for( int i = 0 ; i < PixelAccessRegions ; i++ )
        delete m_buffer[i];
 }
 
@@ -83,7 +83,7 @@ void PixelAccess::pixelAccessSelectRegion(int n)
     c    = m_tileMinY[n];
     d    = m_tileMaxY[n];
 
-    for( i = n ; i > 0 ; i--) 
+    for( i = n ; i > 0 ; i--)
     {
         m_buffer[i]   = m_buffer[i-1];
         m_tileMinX[i] = m_tileMinX[i-1];
@@ -113,7 +113,7 @@ void PixelAccess::pixelAccessDoEdge(int i, int j)
     if (lineEnd > m_imageWidth) lineEnd = m_imageWidth;
     lineWidth = lineEnd - lineStart;
 
-    if( lineStart >= lineEnd ) 
+    if( lineStart >= lineEnd )
        return;
 
     rowStart = j;
@@ -121,7 +121,7 @@ void PixelAccess::pixelAccessDoEdge(int i, int j)
     rowEnd = j + m_height;
     if (rowEnd > m_imageHeight) rowEnd = m_imageHeight;
 
-    for( int y = rowStart ; y < rowEnd ; y++ ) 
+    for( int y = rowStart ; y < rowEnd ; y++ )
     {
         line = pixelAccessAddress(lineStart, y);
         memcpy(line, m_image->scanLine(y) + lineStart * m_depth, lineWidth * m_depth);
@@ -141,9 +141,9 @@ void PixelAccess::pixelAccessReposition(int xInt, int yInt)
 
 
     if ( (newStartX < 0) || ((newStartX + m_width) >= m_imageWidth) ||
-          (newStartY < 0) || ((newStartY + m_height) >= m_imageHeight) ) 
+          (newStartY < 0) || ((newStartY + m_height) >= m_imageHeight) )
     {
-        // some data is off edge of image 
+        // some data is off edge of image
 
         m_buffer[0]->fill(Digikam::DColor(0,0,0,0, m_sixteenBit));
 
@@ -152,9 +152,9 @@ void PixelAccess::pixelAccessReposition(int xInt, int yInt)
         //m_buffer[0]->bitBltImage(m_image, newStartX, newStartY, m_width, m_height, 0, 0);
 
         if ( ((newStartX + m_width) < 0) || (newStartX >= m_imageWidth) ||
-               ((newStartY + m_height) < 0) || (newStartY >= m_imageHeight) ) 
+               ((newStartY + m_height) < 0) || (newStartY >= m_imageHeight) )
         {
-          // totally outside, just leave it. 
+          // totally outside, just leave it.
         }
         else
         {
@@ -178,25 +178,25 @@ void PixelAccess::pixelAccessGetCubic(double srcX, double srcY, double brighten,
     yInt = (int)floor(srcY);
     dy   = srcY - yInt;
 
-    // We need 4x4 pixels, xInt-1 to xInt+2 horz, yInt-1 to yInt+2 vert 
-    // they're probably in the last place we looked... 
+    // We need 4x4 pixels, xInt-1 to xInt+2 horz, yInt-1 to yInt+2 vert
+    // they're probably in the last place we looked...
 
     if ((xInt >= m_tileMinX[0]) && (xInt < m_tileMaxX[0]) &&
-         (yInt >= m_tileMinY[0]) && (yInt < m_tileMaxY[0]) ) 
+         (yInt >= m_tileMinY[0]) && (yInt < m_tileMaxY[0]) )
     {
         corner = pixelAccessAddress(xInt - 1, yInt - 1);
         cubicInterpolate(corner, m_depth * m_width, dst, m_sixteenBit, dx, dy, brighten);
         return;
     }
 
-    // Or maybe it was a while back... 
+    // Or maybe it was a while back...
 
-    for ( int i = 1 ; i < PixelAccessRegions ; i++) 
+    for ( int i = 1 ; i < PixelAccessRegions ; i++)
     {
         if ((xInt >= m_tileMinX[i]) && (xInt < m_tileMaxX[i]) &&
-             (yInt >= m_tileMinY[i]) && (yInt < m_tileMaxY[i]) ) 
+             (yInt >= m_tileMinY[i]) && (yInt < m_tileMaxY[i]) )
         {
-            // Check here first next time 
+            // Check here first next time
 
             pixelAccessSelectRegion(i);
             corner = pixelAccessAddress(xInt - 1, yInt - 1);
@@ -262,7 +262,7 @@ void PixelAccess::cubicInterpolate(uchar* src, int rowStride, uchar* dst,
         for (c = 0 ; c < numberOfComponents ; c++)
         {
             float result;
-            result = um1 * verts[c] + u * verts[c+numberOfComponents] 
+            result = um1 * verts[c] + u * verts[c+numberOfComponents]
                      + up1 * verts[c+numberOfComponents*2] + up2 * verts[c+numberOfComponents*3];
             result *= brighten;
 

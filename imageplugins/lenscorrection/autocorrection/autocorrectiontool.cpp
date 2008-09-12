@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * Date        : 2008-02-10
- * Description : a plugin to fix automaticaly camera lens aberrations
+ * Description : a plugin to fix automatically camera lens aberrations
  *
  * Copyright (C) 2008 by Adrian Schroeter <adrian at suse dot de>
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -211,7 +211,7 @@ void AutoCorrectionTool::slotResetSettings()
 {
     m_gboxSettings->blockSignals(true);
 
-    // Read Exif informations ...
+    // Read Exif information ...
     DImg      *img = m_previewWidget->imageIface()->getOriginalImg();
     DMetadata  meta;
     meta.setExif(img->getExif());
