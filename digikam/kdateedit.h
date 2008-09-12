@@ -2,7 +2,7 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2002-01-10
  * Description : a combo box to list date.
  *               this widget come from libkdepim.
@@ -49,8 +49,8 @@ namespace Digikam
 
   This widget also supports advanced features like allowing the user
   to type in the day name to get the date. The following keywords
-  are supported (in the native language): tomorrow, yesturday, today,
-  monday, tuesday, wednesday, thursday, friday, saturday, sunday.
+  are supported (in the native language): tomorrow, yesterday, today,
+  Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday.
 
   @image html kdateedit.png "This is how it looks"
 

@@ -88,7 +88,7 @@ public:
 
     bool                            untaggedFilter;
 
-    int                             ratingFilter; 
+    int                             ratingFilter;
     int                             recurseAlbums;
     int                             recurseTags;
 
@@ -204,7 +204,7 @@ void AlbumLister::refresh()
 void AlbumLister::slotNextRefresh()
 {
     // Refresh, unless job is running, then postpone restart until job is finished
-    // Rationale: Let the job run, dont stop it possibly several times
+    // Rationale: Let the job run, don't stop it possibly several times
     if (d->job)
         d->refreshTimer->start(50);
     else

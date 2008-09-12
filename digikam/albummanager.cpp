@@ -2,10 +2,10 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2004-06-15
  * Description : Albums manager interface.
- * 
+ *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -15,12 +15,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C Ansi includes.
@@ -37,7 +37,7 @@ extern "C"
 #include <clocale>
 #include <cstdlib>
 #include <cstdio>
-#include <cerrno> 
+#include <cerrno>
 
 // Qt includes.
 
@@ -279,7 +279,7 @@ AlbumManager::~AlbumManager()
     if (d->dateListJob)
     {
         d->dateListJob->kill();
-        d->dateListJob = 0; 
+        d->dateListJob = 0;
     }
 
     if (d->albumListJob)
@@ -321,7 +321,7 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
     else if (d->hasPriorizedDbPath && !d->dbPath.isNull())
     {
         // ignore change without priority
-        // true means, dont exit()
+        // true means, don't exit()
         return true;
     }
 
@@ -420,7 +420,7 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
 
     // guilty until proven innocent
     bool localeChanged = true;
-    
+
     if (dbLocale.isNull())
     {
         DDebug() << "No locale found in database" << endl;
@@ -435,7 +435,7 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
             dbLocale = group.readEntry("Locale", QString());
 
             // this hack is necessary, as we used to store the entire
-            // locale info LC_ALL (for eg: en_US.UTF-8) earlier, 
+            // locale info LC_ALL (for eg: en_US.UTF-8) earlier,
             // we now save only the encoding (UTF-8)
 
             QString oldConfigLocale = ::setlocale(0, 0);
@@ -902,7 +902,7 @@ void AlbumManager::scanTAlbums()
         if (iter == tmap.end())
         {
             DWarning() << "Failed to find parent tag for tag "
-                       << info.name 
+                       << info.name
                        << " with pid "
                        << info.pid << endl;
             continue;
@@ -1025,7 +1025,7 @@ AlbumList AlbumManager::allPAlbums() const
         list.append(*it);
         ++it;
     }
-    
+
     return list;
 }
 
@@ -1041,7 +1041,7 @@ AlbumList AlbumManager::allTAlbums() const
         list.append(*it);
         ++it;
     }
-    
+
     return list;
 }
 
@@ -1057,7 +1057,7 @@ AlbumList AlbumManager::allSAlbums() const
         list.append(*it);
         ++it;
     }
-    
+
     return list;
 }
 
@@ -1073,7 +1073,7 @@ AlbumList AlbumManager::allDAlbums() const
         list.append(*it);
         ++it;
     }
-    
+
     return list;
 }
 
@@ -1452,13 +1452,13 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
         errMsg = i18n("Tag name cannot be empty");
         return 0;
     }
-    
+
     if (name.contains("/"))
     {
         errMsg = i18n("Tag name cannot contain '/'");
         return 0;
     }
-    
+
     // first check if we have another album with the same name
     Album *child = parent->m_firstChild;
     while (child)
@@ -1478,12 +1478,12 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
         errMsg = i18n("Failed to add tag to database");
         return 0;
     }
-    
+
     TAlbum *album = new TAlbum(name, id, false);
     album->m_icon = iconkde;
 
     insertTAlbum(album, parent);
-    
+
     return album;
 }
 
@@ -1859,12 +1859,12 @@ void AlbumManager::notifyAlbumDeletion(Album *album)
 
 void AlbumManager::emitAlbumItemsSelected(bool val)
 {
-    emit signalAlbumItemsSelected(val);    
+    emit signalAlbumItemsSelected(val);
 }
 
 void AlbumManager::setItemHandler(AlbumItemHandler *handler)
 {
-    d->itemHandler = handler;    
+    d->itemHandler = handler;
 }
 
 AlbumItemHandler* AlbumManager::getItemHandler()
@@ -2040,7 +2040,7 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
     }
 
     // Now the items contained in the maps are the ones which
-    // have been deleted. 
+    // have been deleted.
     for (QMap<QDate, DAlbum*>::iterator it = mAlbumMap.begin();
          it != mAlbumMap.end(); ++it)
     {

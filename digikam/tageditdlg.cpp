@@ -5,7 +5,7 @@
  *
  * Date        : 2004-07-01
  * Description : dialog to edit and create digiKam Tags
- * 
+ *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -141,7 +141,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
                            "<li>If a tag hierarchy starts with '/', root tag album is used as parent.</li></ul></p></qt>"
                            ));
 
-    if (d->create) 
+    if (d->create)
     {
         AlbumList tList = AlbumManager::instance()->allTAlbums();
         for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
@@ -245,7 +245,7 @@ void TagEditDlg::slotIconChanged()
 void TagEditDlg::slotTitleChanged(const QString& newtitle)
 {
     QString tagName = d->mainRootAlbum->tagPath();
-    if (tagName.endsWith("/") && !d->mainRootAlbum->isRoot()) 
+    if (tagName.endsWith("/") && !d->mainRootAlbum->isRoot())
         tagName.truncate(tagName.length()-1);
 
     if (d->create)
@@ -307,7 +307,7 @@ AlbumList TagEditDlg::createTAlbum(TAlbum *mainRootAlbum, const QString& tagStr,
     // Ex: /Country/France/people,/City/France/Paris
 
     QStringList tagsHierarchies = tagStr.split(",", QString::SkipEmptyParts);
-    if (tagsHierarchies.isEmpty()) 
+    if (tagsHierarchies.isEmpty())
         return createdTagsList;
 
     for (QStringList::const_iterator it = tagsHierarchies.begin(); it != tagsHierarchies.end(); ++it)
@@ -397,7 +397,7 @@ TagsListCreationErrorDialog::TagsListCreationErrorDialog(QWidget* parent, const 
     setMainWidget(box);
     QVBoxLayout* vLay = new QVBoxLayout(box);
 
-    QLabel *label       = new QLabel(i18n("Error been occured during Tag creation:"), box);
+    QLabel *label       = new QLabel(i18n("Error been occurred during Tag creation:"), box);
     QTreeWidget *listView = new QTreeWidget(box);
     listView->setHeaderLabels(QStringList() << i18n("Tag Path") << i18n("Error"));
     listView->setRootIsDecorated(false);

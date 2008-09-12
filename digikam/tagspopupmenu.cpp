@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-09-07
- * Description : a pop-up menu implementation to display a 
+ * Description : a pop-up menu implementation to display a
  *               hierarchical view of digiKam tags.
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
@@ -19,12 +19,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -244,7 +244,7 @@ void TagToggleMenuWidget::initMenuStyleOption(QStyleOptionMenuItem *option) cons
     option->menuHasCheckableItems = false;
     option->checkType = QStyleOptionMenuItem::NotCheckable;
 
-    // dont forget the submenu indicator
+    // Don't forget the submenu indicator
     if (m_action->menu())
         option->menuItemType = QStyleOptionMenuItem::SubMenu;
     else

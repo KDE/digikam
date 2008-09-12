@@ -5,7 +5,7 @@
  *
  * Date        : 2006-21-12
  * Description : a embedded view to show the image preview widget.
- * 
+ *
  * Copyright (C) 2006-2008 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -167,7 +167,7 @@ ImagePreviewView::ImagePreviewView(QWidget *parent, AlbumWidgetStack *stack)
 
     // ------------------------------------------------------------
 
-    slotReset(); 
+    slotReset();
 }
 
 ImagePreviewView::~ImagePreviewView()
@@ -247,7 +247,7 @@ void ImagePreviewView::setImagePath(const QString& path)
 void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description, const DImg& preview)
 {
     if (description.filePath != d->path)
-        return;   
+        return;
 
     if (preview.isNull())
     {
@@ -258,7 +258,7 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
         QFileInfo info(d->path);
         p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
-                   Qt::AlignCenter|Qt::TextWordWrap, 
+                   Qt::AlignCenter|Qt::TextWordWrap,
                    i18n("Cannot display preview for\n\"%1\"",
                    info.fileName()));
         p.end();
@@ -566,7 +566,7 @@ void ImagePreviewView::slotCornerButtonPressed()
     QPoint g = mapToGlobal(viewport()->pos());
     g.setX(g.x()+ viewport()->size().width());
     g.setY(g.y()+ viewport()->size().height());
-    d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(), 
+    d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(),
                                   g.y() - d->panIconPopup->height()));
 
     pan->setCursorToLocalRegionSelectionCenter();
@@ -618,7 +618,7 @@ void ImagePreviewView::resizeEvent(QResizeEvent* e)
 
 void ImagePreviewView::updateZoomAndSize(bool alwaysFitToWindow)
 {
-    // Set zoom for fit-in-window as minimum, but dont scale up images
+    // Set zoom for fit-in-window as minimum, but don't scale up images
     // that are smaller than the available space, only scale down.
     double zoom = calcAutoZoomFactor(ZoomInOnly);
     setZoomMin(zoom);

@@ -1729,8 +1729,8 @@ void DigikamApp::fillSolidMenus()
                 driveType = i18n("xD-Picture Card Reader");
                 break;
             case Solid::StorageDrive::HardDisk:
-                // We dont want to list HardDisk partitions, but USB Mass Storage devices.
-                // Dont know what is the exact difference between removable and hotpluggable.
+                // We don't want to list HardDisk partitions, but USB Mass Storage devices.
+                // Don't know what is the exact difference between removable and hotpluggable.
                 if (drive->isRemovable() || drive->isHotpluggable())
                 {
                     isHarddisk = true;
