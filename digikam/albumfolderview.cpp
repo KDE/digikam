@@ -231,9 +231,9 @@ int AlbumFolderViewItem::count()
 {
     return m_count;
 }
- 
+
 // -----------------------------------------------------------------------------
- 
+
 class AlbumFolderViewPriv
 {
 public:
@@ -664,7 +664,7 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     AlbumSettings* settings = AlbumSettings::instance();
     if(!settings)
     {
-        DWarning() << "AlbumFolderView: Couldn't get Album Settings" << endl;
+        DWarning() << "AlbumFolderView: Could not get Album Settings" << endl;
         return;
     }
 
@@ -738,7 +738,7 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     {
         if(item)
             item->setOpen(true);
-            
+
         ensureItemVisible(newItem);
         setSelected(newItem, true);
     }
@@ -830,7 +830,7 @@ void AlbumFolderView::albumRename(AlbumFolderViewItem* item)
     QString oldTitle(album->title());
     bool    ok;
 
-    QString title = KInputDialog::getText(i18n("Rename Album (%1)",oldTitle), 
+    QString title = KInputDialog::getText(i18n("Rename Album (%1)",oldTitle),
                                           i18n("Enter new album name:"),
                                           oldTitle, &ok, this);
     if (!ok)
@@ -1196,9 +1196,9 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         {
             KMenu popMenu(this);
             popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
-            QAction *downAction    = popMenu.addAction(SmallIcon("file-export"), 
+            QAction *downAction    = popMenu.addAction(SmallIcon("file-export"),
                                                        i18n("Download from camera"));
-            QAction *downDelAction = popMenu.addAction(SmallIcon("file-export"), 
+            QAction *downDelAction = popMenu.addAction(SmallIcon("file-export"),
                                                        i18n("Download && Delete from camera"));
             popMenu.addSeparator();
             popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
