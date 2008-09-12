@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -135,7 +135,7 @@ LightTablePreview::LightTablePreview(QWidget *parent)
         d->previewSize = 2560;
 
     viewport()->setAcceptDrops(true);
-    setAcceptDrops(true); 
+    setAcceptDrops(true);
 
     slotThemeChanged();
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -162,7 +162,7 @@ LightTablePreview::LightTablePreview(QWidget *parent)
 
     // ------------------------------------------------------------
 
-    slotReset(); 
+    slotReset();
 }
 
 LightTablePreview::~LightTablePreview()
@@ -280,7 +280,7 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription &descriptio
         QFileInfo info(d->path);
         p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
-                   Qt::AlignCenter|Qt::TextWordWrap, 
+                   Qt::AlignCenter|Qt::TextWordWrap,
                    i18n("Unable to display preview for\n\"%1\"",
                    info.fileName()));
         p.end();
@@ -549,7 +549,7 @@ void LightTablePreview::slotCornerButtonPressed()
     QPoint g = mapToGlobal(viewport()->pos());
     g.setX(g.x()+ viewport()->size().width());
     g.setY(g.y()+ viewport()->size().height());
-    d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(), 
+    d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(),
                                   g.y() - d->panIconPopup->height()));
 
     pan->setCursorToLocalRegionSelectionCenter();
@@ -582,7 +582,7 @@ void LightTablePreview::zoomFactorChanged(double zoom)
     if (horizontalScrollBar()->isVisible() || verticalScrollBar()->isVisible())
         d->cornerButton->show();
     else
-        d->cornerButton->hide();        
+        d->cornerButton->hide();
 
     PreviewWidget::zoomFactorChanged(zoom);
 }
@@ -604,7 +604,7 @@ void LightTablePreview::resizeEvent(QResizeEvent* e)
 
 void LightTablePreview::updateZoomAndSize(bool alwaysFitToWindow)
 {
-    // Set zoom for fit-in-window as minimum, but dont scale up images
+    // Set zoom for fit-in-window as minimum, but don't scale up images
     // that are smaller than the available space, only scale down.
     double zoom = calcAutoZoomFactor(ZoomInOnly);
     setZoomMin(zoom);
@@ -764,7 +764,7 @@ void LightTablePreview::drawFrame(QPainter *p)
         qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->thumbSelColor(), lineWidth());
         qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->textSelColor(), 2);
     }
-    else 
+    else
         qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->baseColor(), lineWidth());
 }
 

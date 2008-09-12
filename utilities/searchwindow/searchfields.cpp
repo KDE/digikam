@@ -5,7 +5,7 @@
  *
  * Date        : 2008-01-20
  * Description : User interface for searches
- * 
+ *
  * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ includes.
@@ -463,7 +463,7 @@ void SearchField::setup(QGridLayout *layout, int line)
     } else {
         m_clearButton->setPixmap(SmallIcon("edit-clear-locationbar-ltr", 0, KIconLoader::DefaultState));
     }
-    // Important: Dont cause relayouting when button gets hidden/shown!
+    // Important: Don't cause re-layouting when button gets hidden/shown!
     m_clearButton->stayVisibleWhenAnimatedOut(true);
     m_clearButton->setToolTip(i18n("Reset contents"));
 

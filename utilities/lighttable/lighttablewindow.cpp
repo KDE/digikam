@@ -107,7 +107,7 @@ LightTableWindow::LightTableWindow()
 
     setWindowFlags(Qt::Window);
     setCaption(i18n("Light Table"));
-    // We dont want to be deleted on close
+    // We don't want to be deleted on close
     setAttribute(Qt::WA_DeleteOnClose, false);
 
     // -- Build the GUI -------------------------------
@@ -1144,7 +1144,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo &info)
     }
 
     // Make sure that new_linfo and new_rinfo exist.
-    // This addresses a crash occuring if the last image is removed
+    // This addresses a crash occurring if the last image is removed
     // in the navigate by pairs mode.
     if (!d->barView->findItemByInfo(new_linfo))
     {

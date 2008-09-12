@@ -4,8 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2004-08-02
- * Description : class to get/set image collection 
- *               informations/properties using digiKam album database.
+ * Description : class to get/set image collection
+ *               information/properties using digiKam album database.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well.com>
@@ -16,12 +16,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // KDE includes.
@@ -127,7 +127,7 @@ KUrl::List KipiImageCollection::images()
             {
                 return imagesFromTAlbum(dynamic_cast<TAlbum*>(m_album));
             }
-            else if (m_album->type() == Album::DATE || 
+            else if (m_album->type() == Album::DATE ||
                     m_album->type() == Album::SEARCH)
             {
                 AlbumItemHandler* handler = AlbumManager::instance()->getItemHandler();

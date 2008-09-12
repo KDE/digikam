@@ -166,7 +166,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     // --------------------------------------------------------
 
-    QLabel *note = new QLabel(i18n("<b>Note: These informations are used to set "
+    QLabel *note = new QLabel(i18n("<b>Note: These information are used to set "
                    "<b><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>XMP</a></b> "
                    "and <b><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a></b> tags contents. "
                    "There is no limitation with XMP, but take a care than IPTC text tags "

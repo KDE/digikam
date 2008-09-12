@@ -185,7 +185,7 @@ ImageWindow::ImageWindow()
 {
     d = new ImageWindowPriv;
     m_instance = this;
-    // We dont want to be deleted on close
+    // We don't want to be deleted on close
     setAttribute(Qt::WA_DeleteOnClose, false);
     setAcceptDrops(true);
 

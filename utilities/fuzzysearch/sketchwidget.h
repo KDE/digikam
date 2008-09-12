@@ -58,9 +58,9 @@ public:
     void sketchImageToXML(QXmlStreamWriter &writer);
     QString sketchImageToXML();
 
-    /** This method set sketch image using XML data based 
+    /** This method set sketch image using XML data based
      *  on drawing line history.
-     *  Retrun true if data are imported sucessfully.
+     *  Return true if data are imported successfully.
      */
     bool setSketchImageFromXML(QXmlStreamReader &reader);
     bool setSketchImageFromXML(const QString &xml);

@@ -337,7 +337,7 @@ void SearchTabHeader::selectedSearchChanged(SAlbum *album)
 {
     // Signal from SearchFolderView that a search has been selected.
 
-    // Dont check on d->currentAlbum == album, rather update status (which may have changed on same album)
+    // Don't check on d->currentAlbum == album, rather update status (which may have changed on same album)
 
     d->currentAlbum = album;
 

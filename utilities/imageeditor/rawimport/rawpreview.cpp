@@ -184,7 +184,7 @@ void RawPreview::slotImageLoaded(const LoadingDescription& description, const DI
         QPainter p(&pix);
         p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
-                   Qt::AlignCenter|Qt::TextWordWrap, 
+                   Qt::AlignCenter|Qt::TextWordWrap,
                    i18n("Cannot decode RAW image for\n\"%1\"",
                    QFileInfo(d->loadingDesc.filePath).fileName()));
         p.end();
@@ -235,7 +235,7 @@ void RawPreview::slotCornerButtonPressed()
     QPoint g = mapToGlobal(viewport()->pos());
     g.setX(g.x()+ viewport()->size().width());
     g.setY(g.y()+ viewport()->size().height());
-    d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(), 
+    d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(),
                                   g.y() - d->panIconPopup->height()));
 
     pan->setCursorToLocalRegionSelectionCenter();
@@ -280,14 +280,14 @@ void RawPreview::resizeEvent(QResizeEvent* e)
     Q3ScrollView::resizeEvent(e);
 
     if (!d->loadingDesc.filePath.isEmpty())
-        d->cornerButton->hide(); 
+        d->cornerButton->hide();
 
     updateZoomAndSize(false);
 }
 
 void RawPreview::updateZoomAndSize(bool alwaysFitToWindow)
 {
-    // Set zoom for fit-in-window as minimum, but dont scale up images
+    // Set zoom for fit-in-window as minimum, but don't scale up images
     // that are smaller than the available space, only scale down.
     double zoom = calcAutoZoomFactor(ZoomInOnly);
     setZoomMin(zoom);

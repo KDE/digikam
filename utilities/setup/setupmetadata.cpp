@@ -5,7 +5,7 @@
  *
  * Date        : 2003-08-03
  * Description : setup Metadata tab.
- * 
+ *
  * Copyright (C) 2003-2004 by Ralf Holzer <ralf at well.com>
  * Copyright (C) 2003-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -147,7 +147,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     gLayout2->addWidget(d->saveTagsBox);
     gLayout2->addWidget(d->savePhotographerIdBox);
-    gLayout2->addWidget(d->saveCreditsBox);    
+    gLayout2->addWidget(d->saveCreditsBox);
     gLayout2->addWidget(d->saveCommentsBox);
     gLayout2->addWidget(d->saveDateTimeBox);
     gLayout2->addWidget(d->saveRatingBox);
@@ -171,10 +171,10 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     explanation->setWordWrap(true);
     QString txt = i18n("<p><b><a href='http://en.wikipedia.org/wiki/Exif'>EXIF</a></b> is "
                        "a standard used by most digital cameras today to store technical "
-                       "informations about photograph.</p>"
+                       "information about photograph.</p>"
                        "<p><b><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a></b> is "
                        "an old standard used in digital photography to store "
-                       "photographer informations in pictures.</p>");
+                       "photographer information in pictures.</p>");
 
     if (KExiv2Iface::KExiv2::supportXmp())
         txt.append(i18n("<p><b><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>"

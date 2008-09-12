@@ -5,7 +5,7 @@
  *
  * Date        : 2008-03-14
  * Description : User interface for searches
- * 
+ *
  * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -439,8 +439,8 @@ void AnimatedClearButton::animateVisible(bool visible)
 
 void AnimatedClearButton::setDirectlyVisible(bool visible)
 {
-    // We dont overload setVisible() here. QWidget::setVisible is virtual,
-    // and we dont want to replace it in all occurrences.
+    // We don't overload setVisible() here. QWidget::setVisible is virtual,
+    // and we don't want to replace it in all occurrences.
     // Most notably, we want to call the QWidget version from animateVisible above.
 
     if (visible) {
@@ -500,12 +500,12 @@ void AnimatedClearButton::paintEvent(QPaintEvent *event)
     Q_UNUSED(event)
 
 #if KDE_IS_VERSION(4,0,64)
-    if (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) 
+    if (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects)
 #else
     if (true)
 #endif
     {
-        if (m_pixmap.isNull() || m_timeline->currentTime() == 0) 
+        if (m_pixmap.isNull() || m_timeline->currentTime() == 0)
         {
             return;
         }

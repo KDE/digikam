@@ -228,7 +228,7 @@ ImageResize::ImageResize(QWidget* parent)
 
     d->useGreycstorationBox = new QCheckBox(i18n("Restore photograph (slow)"), firstPage);
     d->useGreycstorationBox->setWhatsThis( i18n("<p>Enable this option to restore photograph content. "
-                                                "This way is usefull to scale-up an image to an huge size. "
+                                                "This way is useful to scale-up an image to an huge size. "
                                                 "Warning: this process can take a while."));
 
     d->restorationTips = new QLabel(i18n("<b>Note: use Restoration Mode to only scale-up an image to huge size. "
