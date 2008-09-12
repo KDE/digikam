@@ -105,7 +105,7 @@ BlurFXTool::BlurFXTool(QObject* parent)
                                      "<b>Motion Blur</b>: blurs the image by moving the pixels horizontally. "
                                      "This simulates the blur of a linear moving camera.<p>"
                                      "<b>Softener Blur</b>: blurs the image softly in dark tones and hardly in light "
-                                     "tones. This gives images a dreamy and glossy soft focus effect. It's ideal "
+                                     "tones. This gives images a dreamy and glossy soft focus effect. It is ideal "
                                      "for creating romantic portraits, glamour photographs, or giving images a warm "
                                      "and subtle glow.<p>"
                                      "<b>Skake Blur</b>: blurs the image by skaking randomly the pixels. "

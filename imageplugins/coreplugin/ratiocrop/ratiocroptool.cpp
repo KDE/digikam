@@ -134,7 +134,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
     setRatioCBText(ImageSelectionWidget::Landscape);
     m_ratioCB->setWhatsThis( i18n("<p>Select your constrained aspect ratio for cropping. "
                                   "Aspect Ratio Crop tool uses a relative ratio. That means it "
-                                  "is the same if you use centimeters or inches and it doesn't "
+                                  "is the same if you use centimeters or inches and it does not "
                                   "specify the physical size.<p>"
                                   "You can see below a correspondence list of traditional photographic "
                                   "paper sizes and aspect ratio crop:<p>"
