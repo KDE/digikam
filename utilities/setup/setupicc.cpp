@@ -181,7 +181,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->defaultAskICC->setText(i18n("Ask when opening an image in the Image Editor"));
     d->defaultAskICC->setWhatsThis( i18n("<p>If this option is enabled, digiKam asks the user "
                      "before it applies the Workspace default color profile to an image which has no "
-                     "embedded profile or, if the image has an embedded profile, when it's not the same "
+                     "embedded profile or, if the image has an embedded profile, when it is not the same "
                      "as the workspace profile.</p>"));
     behaviourOptions->addButton(d->defaultAskICC);
 

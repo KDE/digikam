@@ -2,11 +2,11 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2006-05-15
- * Description : a dialog to see preview ICC color correction 
+ * Description : a dialog to see preview ICC color correction
  *               before to apply color profile.
- * 
+ *
  * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview, 
+ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
                                        IccTransform *iccTrans, const QString& file)
                   : KDialog(parent)
 {
@@ -70,11 +70,11 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     setButtonToolTip(Cancel, i18n("Do not change the image"));
     setButtonText(Apply,     i18n("Assign"));
     setButtonToolTip(Apply,  i18n("Only embed the color workspace profile in the image, "
-                                  "don't change the image"));
+                                  "do not change the image"));
 
     QFileInfo fi(file);
     setCaption(fi.fileName());
-    
+
     QWidget *page     = new QWidget(this);
     QGridLayout* grid = new QGridLayout(page);
     setMainWidget(page);
@@ -94,12 +94,12 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
                                                .arg(m_iccTrans->getEmbeddedProfileDescriptor()), page);
     QPushButton *embeddedProfInfo = new QPushButton(i18n("Info..."), page);
     KSeparator *line              = new KSeparator(Qt::Horizontal, page);
-    
+
     if (m_iccTrans->embeddedProfile().isEmpty())
     {
         message->setText(i18n("<p>This image has not been assigned a color profile.</p>"
                               "<p>Do you want to convert it to your workspace color profile?</p>"));
-                              
+
         line->hide();
         embeddedProfileTitle->hide();
         embeddedProfileDesc->hide();
@@ -124,12 +124,12 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     previewTarget->setPixmap(preview->convertToPixmap(m_iccTrans));
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                             .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    
+
     QHBoxLayout *hlay1 = new QHBoxLayout();
     hlay1->setSpacing( KDialog::spacingHint() );
     hlay1->addWidget(currentProfInfo);
     hlay1->addStretch();
-   
+
     QHBoxLayout *hlay2 = new QHBoxLayout();
     hlay2->setSpacing( KDialog::spacingHint() );
     hlay2->addWidget(embeddedProfInfo);
@@ -145,29 +145,29 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     vlay->addLayout(hlay1);
     vlay->addWidget(line);
     vlay->addWidget(embeddedProfileTitle);
-    vlay->addWidget(embeddedProfileDesc);    
+    vlay->addWidget(embeddedProfileDesc);
     vlay->addLayout(hlay2);
     vlay->addStretch();
-    
+
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
     grid->addWidget(originalTitle, 0, 0, 1, 1);
     grid->addWidget(previewOriginal, 1, 0, 1, 1);
     grid->addWidget(targetTitle, 2, 0, 1, 1);
     grid->addWidget(previewTarget, 3, 0, 1, 1);
-    grid->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+    grid->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
                       QSizePolicy::Minimum, QSizePolicy::Expanding), 0, 1, 3, 1);
     grid->addLayout(vlay, 0, 2, 4, 1);
-    
+
     // --------------------------------------------------------------------
-    
+
     connect(currentProfInfo, SIGNAL(clicked()),
             this, SLOT(slotCurrentProfInfo()) );
-    
+
     connect(embeddedProfInfo, SIGNAL(clicked()),
             this, SLOT(slotEmbeddedProfInfo()) );
-            
-    connect(this, SIGNAL(applyClicked()), 
+
+    connect(this, SIGNAL(applyClicked()),
             this, SLOT(slotApplyClicked()));
 }
 

@@ -7,7 +7,7 @@
  * Description : USB Mass Storage camera interface
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,7 +59,7 @@ extern "C"
 namespace Digikam
 {
 
-UMSCamera::UMSCamera(const QString& title, const QString& model, 
+UMSCamera::UMSCamera(const QString& title, const QString& model,
                      const QString& port, const QString& path)
          : DKCamera(title, model, port, path)
 {
@@ -155,7 +155,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
 #warning "TODO: kde4 port it";
                     /* TODO: KDE4PORT: KFileMetaInfo API as Changed.
                              Check if new method to search "Dimensions" information is enough.
-        
+
                     if (meta.isValid())
                     {
                         if (meta.containsGroup("Jpeg EXIF Data"))
@@ -165,7 +165,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
                         else if (meta.containsGroup("Technical"))
                             dims = meta.group("Technical").item("Dimensions").value().toSize();
                     }*/
-        
+
                     if (meta.isValid() && meta.item("Dimensions").isValid())
                     {
                         dims = meta.item("Dimensions").value().toSize();
@@ -208,8 +208,8 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
     if (!thumbnail.isNull())
         return true;
 
-    // THM files: try to get thumbnail from '.thm' files if we didn't manage to get 
-    // thumbnail from Exif. Any cameras provides *.thm files like JPEG files with RAW files. 
+    // THM files: try to get thumbnail from '.thm' files if we didn't manage to get
+    // thumbnail from Exif. Any cameras provides *.thm files like JPEG files with RAW files.
     // Using this way is always speed up than ultimate loading using DImg.
     // Nota: the thumbnail extracted with this method can be in poor quality.
     // 2006/27/01 - Gilles - Tested with my Minolta Dynax 5D USM camera.
@@ -307,19 +307,19 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
 
 bool UMSCamera::setLockItem(const QString& folder, const QString& itemName, bool lock)
 {
-    QString src  = folder + QString("/") + itemName;   
+    QString src  = folder + QString("/") + itemName;
 
     if (lock)
     {
         // Lock the file to set read only flag
         if (::chmod(QFile::encodeName(src), S_IREAD) == -1)
-            return false; 
+            return false;
     }
     else
     {
         // Unlock the file to set read/write flag
         if (::chmod(QFile::encodeName(src), S_IREAD | S_IWRITE) == -1)
-            return false; 
+            return false;
     }
 
     return true;
@@ -424,7 +424,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
 #warning "TODO: kde4 port it";
                 /* TODO: KDE4PORT: KFileMetaInfo API as Changed.
                          Check if new method to search "Dimensions" information is enough.
-        
+
                 if (meta.isValid())
                 {
                     if (meta.containsGroup("Jpeg EXIF Data"))
@@ -434,7 +434,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
                     else if (meta.containsGroup("Technical"))
                         dims = meta.group("Technical").item("Dimensions").value().toSize();
                 }*/
-        
+
                 if (meta.isValid() && meta.item("Dimensions").isValid())
                 {
                     dims = meta.item("Dimensions").value().toSize();
@@ -523,7 +523,7 @@ bool UMSCamera::cameraAbout(QString& about)
 {
     about = QString(i18n("The <b>Mounted Camera</b> driver is a simple interface to a camera disk "
                          "mounted locally on your system.<br><br>"
-                         "It doesn't use libgphoto2 drivers.<br><br>"
+                         "It does not use libgphoto2 drivers.<br><br>"
                          "To report any problems with this driver, please contact the digiKam team at:<br><br>"
                          "http://www.digikam.org/?q=contact"));
     return true;

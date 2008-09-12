@@ -5,7 +5,7 @@
  *
  * Date        : 2003-01-23
  * Description : A widget to display a list of camera folders.
- * 
+ *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,12 +14,12 @@
  * Public License as published bythe Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // KDE includes.
@@ -107,7 +107,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
     DDebug() << "CameraFolderView: Adding Subfolder " << subFolder
              << " of folder " << folder << endl;
 
-    if (parentItem) 
+    if (parentItem)
     {
         QString path(folder);
 
@@ -124,9 +124,9 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
         item->setExpanded(true);
         return item;
     }
-    else 
+    else
     {
-        DWarning() << "CameraFolderView: Couldn't find parent for subFolder "
+        DWarning() << "CameraFolderView: Could not find parent for subFolder "
                    << subFolder << " of folder " << folder << endl;
         return 0;
     }
@@ -154,7 +154,7 @@ CameraFolderItem* CameraFolderView::findFolder(const QString& folderPath)
 
 void CameraFolderView::slotCurrentChanged(QTreeWidgetItem* item, int)
 {
-    if (!item) 
+    if (!item)
         emit signalFolderChanged(0);
     else
         emit signalFolderChanged(dynamic_cast<CameraFolderItem *>(item));

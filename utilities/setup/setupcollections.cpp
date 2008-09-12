@@ -536,7 +536,7 @@ void SetupCollections::slotChangeAlbumPath(const KUrl &result)
 {
     if (KUrl(result).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutTrailingSlash))
     {
-        KMessageBox::sorry(0, i18n("Sorry you can't use your home directory as root album path."));
+        KMessageBox::sorry(0, i18n("Sorry you can not use your home directory as root album path."));
     }
     else
     {
