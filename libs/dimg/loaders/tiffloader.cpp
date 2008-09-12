@@ -5,9 +5,9 @@
  *
  * Date        : 2005-06-17
  * Description : A TIFF IO file for DImg framework
- * 
+ *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Specifications & references:
  * - TIFF 6.0  : http://partners.adobe.com/public/developer/en/tiff/TIFF6.pdf
@@ -42,7 +42,7 @@
 // This line must be commented to prevent any latency time
 // when we use threaded image loader interface for each image
 // files io. Uncomment this line only for debugging.
-//#define ENABLE_DEBUG_MESSAGES 
+//#define ENABLE_DEBUG_MESSAGES
 
 // C ansi includes.
 
@@ -112,7 +112,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     readMetadata(filePath, DImg::TIFF);
 
     // -------------------------------------------------------------------
-    // TIFF error handling. If an errors/warnings occurs during reading, 
+    // TIFF error handling. If an errors/warnings occurs during reading,
     // libtiff will call these methods
 
     TIFFSetWarningHandler(dimg_tiff_warning);
@@ -152,7 +152,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     if (TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip) == 0
         || rows_per_strip == 0 || rows_per_strip == (unsigned int)-1)
     {
-        DWarning()  << "TIFF loader: Cannot handle non-stripped images. Loading file " 
+        DWarning()  << "TIFF loader: Cannot handle non-stripped images. Loading file "
                     << filePath << endl;
         TIFFClose(tif);
         return false;
@@ -172,17 +172,17 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         return false;
     }
 
-    // TODO: check others TIFF color-spaces here. Actually, only RGB and MINISBLACK 
+    // TODO: check others TIFF color-spaces here. Actually, only RGB and MINISBLACK
     // have been tested.
-    // Complete description of TIFFTAG_PHOTOMETRIC tag can be found at this url: 
+    // Complete description of TIFFTAG_PHOTOMETRIC tag can be found at this url:
     // http://www.awaresystems.be/imaging/tiff/tifftags/photometricinterpretation.html
 
     TIFFGetFieldDefaulted(tif, TIFFTAG_PHOTOMETRIC, &photometric);
-    if (photometric != PHOTOMETRIC_RGB && 
+    if (photometric != PHOTOMETRIC_RGB &&
         photometric != PHOTOMETRIC_MINISBLACK &&
         m_loadFlags & LoadImageData)
     {
-        DWarning() << "Can't handle image without RGB color-space: " 
+        DWarning() << "Can not handle image without RGB color-space: "
                     << photometric << endl;
         TIFFClose(tif);
         return false;
@@ -518,7 +518,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     uchar  *data = imageData();
 
     // -------------------------------------------------------------------
-    // TIFF error handling. If an errors/warnings occurs during reading, 
+    // TIFF error handling. If an errors/warnings occurs during reading,
     // libtiff will call these methods
 
     TIFFSetWarningHandler(dimg_tiff_warning);
@@ -558,7 +558,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         //        usually leads to better compression.
         //        See this url for more details:
         //        http://www.awaresystems.be/imaging/tiff/tifftags/predictor.html
-        TIFFSetField(tif, TIFFTAG_PREDICTOR,   2); 
+        TIFFSetField(tif, TIFFTAG_PREDICTOR,   2);
     }
     else
         TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
@@ -579,7 +579,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,  TIFFDefaultStripSize(tif, 0));
 
     // -------------------------------------------------------------------
-    // Write meta-data Tags contents. 
+    // Write meta-data Tags contents.
 
     DMetadata metaData;
     metaData.setExif(m_image->getExif());
@@ -589,7 +589,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     // Standard IPTC tag (available with libtiff 3.6.1)
 
     QByteArray ba = metaData.getIptc(true);
-    if (!ba.isEmpty()) 
+    if (!ba.isEmpty())
     {
 #if defined(TIFFTAG_PHOTOSHOP)
         TIFFSetField (tif, TIFFTAG_PHOTOSHOP, (uint32)ba.size(), (uchar *)ba.data());
@@ -687,7 +687,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
                 if (imageHasAlpha())
                 {
-                    // TIFF makes you pre-mutiply the rgb components by alpha 
+                    // TIFF makes you pre-mutiply the rgb components by alpha
 
                     a16          = (uint16)(pixel[6]+256*pixel[7]);
                     alpha_factor = ((double)a16 / 65535.0);
@@ -696,7 +696,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
                     b16          = (uint16)(b16*alpha_factor);
                 }
 
-                // This might be endian dependent 
+                // This might be endian dependent
 
                 buf[i++] = (uint8)(r16);
                 buf[i++] = (uint8)(r16 >> 8);
@@ -719,7 +719,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
                 if (imageHasAlpha())
                 {
-                    // TIFF makes you pre-mutiply the rgb components by alpha 
+                    // TIFF makes you pre-mutiply the rgb components by alpha
 
                     a8           = (uint8)(pixel[3]);
                     alpha_factor = ((double)a8 / 255.0);
@@ -728,7 +728,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
                     b8           = (uint8)(b8*alpha_factor);
                 }
 
-                // This might be endian dependent 
+                // This might be endian dependent
 
                 buf[i++] = r8;
                 buf[i++] = g8;
@@ -786,7 +786,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         {
             pixelThumb = &dataThumb[((y * thumb.width()) + x) * 4];
 
-            // This might be endian dependent 
+            // This might be endian dependent
             bufThumb[i++] = (uint8)pixelThumb[2];
             bufThumb[i++] = (uint8)pixelThumb[1];
             bufThumb[i++] = (uint8)pixelThumb[0];
@@ -826,7 +826,7 @@ bool TIFFLoader::sixteenBit() const
     return m_sixteenBit;
 }
 
-void TIFFLoader::tiffSetExifAsciiTag(TIFF* tif, ttag_t tiffTag, 
+void TIFFLoader::tiffSetExifAsciiTag(TIFF* tif, ttag_t tiffTag,
                                      const DMetadata &metaData, const char* exifTagName)
 {
     QByteArray tag = metaData.getExifTagData(exifTagName);
@@ -837,7 +837,7 @@ void TIFFLoader::tiffSetExifAsciiTag(TIFF* tif, ttag_t tiffTag,
     }
 }
 
-void TIFFLoader::tiffSetExifDataTag(TIFF* tif, ttag_t tiffTag, 
+void TIFFLoader::tiffSetExifDataTag(TIFF* tif, ttag_t tiffTag,
                                     const DMetadata &metaData, const char* exifTagName)
 {
     QByteArray tag = metaData.getExifTagData(exifTagName);
