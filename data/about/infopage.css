@@ -44,31 +44,25 @@ a:hover {
 #header {
   background-image: url(%8);      /* top-middle.png */
   width: 100%;
-  height: 131px;
 }
 
 #headerL {
-  position: absolute;
+  float: left;
   background-image: url(%9);      /* top-left-digikam.png */
   margin-left: 2%;
-  left: 0px;
   height: 131px;
   width: 147px;
   z-index: 1;
 }
 
 #headerR {
-  position: absolute;
-  right: 0px;
+  float: right;
 }
 
 /* title and tagline are part of the header diff */
 #title {
-  position: absolute;
-  top: 63px;
-  right: 0px;
-  margin-top: -1em;
   margin-right: 2%;
+  margin-top: 20px;
   text-align: right;
   font-size: xx-large;
   font-weight: bold;
@@ -78,11 +72,9 @@ a:hover {
 }
 
 #tagline {
-  position: absolute;
-  top: 70px;
-  right: 0px;
   margin-right: 2%;
-  margin-left: 200px;
+  margin-top: 35px;
+  margin-left: 160px;
   text-align: right;
   font-size: large;
   font-weight: bold;
