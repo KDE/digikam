@@ -134,27 +134,27 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->timeUnitCB->addItem(i18n("Year"),  TimeLineWidget::Year);
     d->timeUnitCB->setCurrentIndex((int)TimeLineWidget::Month);
     d->timeUnitCB->setFocusPolicy(Qt::NoFocus);
-    d->timeUnitCB->setWhatsThis(i18n("<p>Select the histogram time unit.<p>"
-                                     "You can change the graph decade to zoom in or zoom out over time."));
+    d->timeUnitCB->setWhatsThis(i18n("<p>Select the histogram time unit.</p>"
+                                     "<p>You can change the graph decade to zoom in or zoom out over time.</p>"));
 
     QWidget *scaleBox  = new QWidget(hbox1);
     QHBoxLayout *hlay2 = new QHBoxLayout(scaleBox);
     d->scaleBG         = new QButtonGroup(scaleBox);
     d->scaleBG->setExclusive(true);
-    scaleBox->setWhatsThis( i18n("<p>Select the histogram scale.<p>"
-                                  "If the date count's maximal values are small, you can use the linear scale.<p>"
-                                  "Logarithmic scale can be used when the maximal values are big; "
+    scaleBox->setWhatsThis( i18n("<p>Select the histogram scale.</p>"
+                                  "<p>If the date count's maximal values are small, you can use the linear scale.</p>"
+                                  "<p>Logarithmic scale can be used when the maximal values are big; "
                                   "if it is used, all values (small and large) will be visible on the "
-                                  "graph."));
+                                  "graph.</p>"));
 
     QToolButton *linHistoButton = new QToolButton(scaleBox);
-    linHistoButton->setToolTip( i18n( "<p>Linear" ) );
+    linHistoButton->setToolTip( i18n( "Linear" ) );
     linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
     linHistoButton->setCheckable(true);
     d->scaleBG->addButton(linHistoButton, TimeLineWidget::LinScale);
 
     QToolButton *logHistoButton = new QToolButton(scaleBox);
-    logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
+    logHistoButton->setToolTip( i18n( "Logarithmic" ) );
     logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
     logHistoButton->setCheckable(true);
     d->scaleBG->addButton(logHistoButton, TimeLineWidget::LogScale);
@@ -192,22 +192,18 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->resetButton = new QToolButton(hbox2);
     d->resetButton->setIcon(SmallIcon("document-revert"));
     d->resetButton->setToolTip(i18n("Clear current selection"));
-    d->resetButton->setWhatsThis(i18n("<p>If you press this button, current "
-                                      "dates selection from time-line will be "
-                                      "clear."));
+    d->resetButton->setWhatsThis(i18n("If you press this button, current dates selection from time-line will be clear."));
     d->nameEdit    = new KLineEdit(hbox2);
     d->nameEdit->setClearButtonShown(true);
-    d->nameEdit->setWhatsThis(i18n("<p>Enter the name of the current dates search to save in the "
+    d->nameEdit->setWhatsThis(i18n("Enter the name of the current dates search to save in the "
                                    "\"My Date Searches\" view"));
 
     d->saveButton  = new QToolButton(hbox2);
     d->saveButton->setIcon(SmallIcon("document-save"));
     d->saveButton->setEnabled(false);
     d->saveButton->setToolTip(i18n("Save current selection to a new virtual Album"));
-    d->saveButton->setWhatsThis(i18n("<p>If you press this button, current "
-                                     "dates selection from time-line will be "
-                                     "saved to a new search virtual Album using name "
-                                     "set on the left side."));
+    d->saveButton->setWhatsThis(i18n("If you press this button, current dates selection from time-line will be "
+                                     "saved to a new search virtual Album using name set on the left side."));
 
     // ---------------------------------------------------------------
 

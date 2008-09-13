@@ -117,9 +117,9 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
     QVBoxLayout* vlay = new QVBoxLayout(frame);
     d->panIconView    = new ImagePanIconWidget(360, 240, frame);
     d->panIconView->setWhatsThis(i18n("<p>Here you can see the original image panel "
-                                      "which can help you to select the clip preview."
+                                      "which can help you to select the clip preview.</p>"
                                       "<p>Click and drag the mouse cursor in the "
-                                      "red rectangle to change the clip focus."));
+                                      "red rectangle to change the clip focus.</p>"));
     vlay->addWidget(d->panIconView, 0, Qt::AlignCenter);
     vlay->setSpacing(0);
     vlay->setMargin(5);
@@ -132,12 +132,12 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
     new QLabel(i18n("Guide:"), d->guideBox);
     QLabel *space4  = new QLabel(d->guideBox);
     d->guideColorBt = new KColorButton(QColor(Qt::red), d->guideBox);
-    d->guideColorBt->setWhatsThis(i18n("<p>Set here the color used to draw guides dashed-lines."));
+    d->guideColorBt->setWhatsThis(i18n("Set here the color used to draw guides dashed-lines."));
     d->guideSize    = new RIntNumInput(d->guideBox);
     d->guideSize->setRange(1, 5, 1);
     d->guideSize->setSliderEnabled(true);
     d->guideSize->setDefaultValue(1);
-    d->guideSize->setWhatsThis(i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
+    d->guideSize->setWhatsThis(i18n("Set here the width in pixels used to draw guides dashed-lines."));
 
     d->guideBox->setStretchFactor(space4, 10);
     d->guideBox->setSpacing(spacingHint());
@@ -151,7 +151,7 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
     d->defaultBtn = new KPushButton(d->btnBox1);
     d->defaultBtn->setGuiItem(KStandardGuiItem::defaults());
     d->defaultBtn->setIcon(KIcon(SmallIcon("document-revert")));
-    d->defaultBtn->setToolTip(i18n("<p>Reset all settings to their default values."));
+    d->defaultBtn->setToolTip(i18n("Reset all settings to their default values."));
     if (!(buttonMask & Default))
         d->defaultBtn->hide();
 
@@ -179,13 +179,13 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
     d->loadBtn = new KPushButton(d->btnBox2);
     d->loadBtn->setGuiItem(KStandardGuiItem::open());
     d->loadBtn->setText(i18n("Load..."));
-    d->loadBtn->setToolTip(i18n("<p>Load all parameters from settings text file."));
+    d->loadBtn->setToolTip(i18n("Load all parameters from settings text file."));
     if (!(buttonMask & Load))
         d->loadBtn->hide();
 
     d->saveAsBtn = new KPushButton(d->btnBox2);
     d->saveAsBtn->setGuiItem(KStandardGuiItem::saveAs());
-    d->saveAsBtn->setToolTip(i18n("<p>Save all parameters to settings text file."));
+    d->saveAsBtn->setToolTip(i18n("Save all parameters to settings text file."));
     if (!(buttonMask & SaveAs))
         d->saveAsBtn->hide();
 
@@ -194,7 +194,7 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
     d->tryBtn = new KPushButton(d->btnBox2);
     d->tryBtn->setGuiItem(KStandardGuiItem::apply());
     d->tryBtn->setText(i18n("Try"));
-    d->tryBtn->setToolTip(i18n("<p>Try all settings."));
+    d->tryBtn->setToolTip(i18n("Try all settings."));
     if (!(buttonMask & Try))
         d->tryBtn->hide();
 

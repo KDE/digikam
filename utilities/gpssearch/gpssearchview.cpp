@@ -116,14 +116,14 @@ GPSSearchView::GPSSearchView(QWidget *parent)
 
     d->nameEdit = new KLineEdit(hbox);
     d->nameEdit->setClearButtonShown(true);
-    d->nameEdit->setWhatsThis(i18n("<p>Enter the name of the current map search to save in the "
+    d->nameEdit->setWhatsThis(i18n("Enter the name of the current map search to save in the "
                                    "\"My Map Searches\" view"));
 
     d->saveBtn  = new QToolButton(hbox);
     d->saveBtn->setIcon(SmallIcon("document-save"));
     d->saveBtn->setEnabled(false);
     d->saveBtn->setToolTip(i18n("Save current map search to a new virtual album"));
-    d->saveBtn->setWhatsThis(i18n("<p>If you press this button, current map search "
+    d->saveBtn->setWhatsThis(i18n("If you press this button, current map search "
                                   "will be saved to a new search "
                                   "virtual album using name "
                                   "set on the left side."));

@@ -218,7 +218,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->levelImage->setRange(1, 100);
     d->levelImage->setSingleStep(1);
     d->levelImage->setValue(90);
-    d->levelImage->setWhatsThis(i18n("<p><p>Select here the approximate threshold "
+    d->levelImage->setWhatsThis(i18n("Select here the approximate threshold "
                                      "value, as a percentage. "
                                      "This value is used by the algorithm to distinguish two "
                                      "similar images. The default value is 90."));
@@ -235,14 +235,14 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     d->nameEditImage = new KLineEdit(hbox4);
     d->nameEditImage->setClearButtonShown(true);
-    d->nameEditImage->setWhatsThis(i18n("<p>Enter the name of the current similar image search to save in the "
+    d->nameEditImage->setWhatsThis(i18n("Enter the name of the current similar image search to save in the "
                                         "\"My Fuzzy Searches\" view"));
 
     d->saveBtnImage  = new QToolButton(hbox4);
     d->saveBtnImage->setIcon(SmallIcon("document-save"));
     d->saveBtnImage->setEnabled(false);
     d->saveBtnImage->setToolTip(i18n("Save current similar image search to a new virtual Album"));
-    d->saveBtnImage->setWhatsThis(i18n("<p>If you press this button, current "
+    d->saveBtnImage->setWhatsThis(i18n("If you press this button, current "
                                        "similar image search will be saved to a new search "
                                        "virtual album using name "
                                        "set on the left side."));
@@ -281,7 +281,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    QString tips(i18n("<p>Set here the brush color used to draw sketch."));
+    QString tips(i18n("Set here the brush color used to draw sketch."));
 
     d->hsSelector = new KHueSaturationSelector(sketchPanel);
     d->hsSelector->setMinimumSize(200, 96);
@@ -303,14 +303,14 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->undoBtnSketch->setAutoRepeat(true);
     d->undoBtnSketch->setIcon(SmallIcon("edit-undo"));
     d->undoBtnSketch->setToolTip(i18n("Undo last draw on sketch"));
-    d->undoBtnSketch->setWhatsThis(i18n("<p>Use this button to undo last drawing action on sketch."));
+    d->undoBtnSketch->setWhatsThis(i18n("Use this button to undo last drawing action on sketch."));
     d->undoBtnSketch->setEnabled(false);
 
     d->redoBtnSketch   = new QToolButton(hbox);
     d->redoBtnSketch->setAutoRepeat(true);
     d->redoBtnSketch->setIcon(SmallIcon("edit-redo"));
     d->redoBtnSketch->setToolTip(i18n("Redo last draw on sketch"));
-    d->redoBtnSketch->setWhatsThis(i18n("<p>Use this button to redo last drawing action on sketch."));
+    d->redoBtnSketch->setWhatsThis(i18n("Use this button to redo last drawing action on sketch."));
     d->redoBtnSketch->setEnabled(false);
 
     QLabel *brushLabel = new QLabel(i18n("Pen:"), hbox);
@@ -318,14 +318,14 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->penSize->setRange(1, 40);
     d->penSize->setSingleStep(1);
     d->penSize->setValue(10);
-    d->penSize->setWhatsThis(i18n("<p>Set here the brush size in pixels used to draw sketch."));
+    d->penSize->setWhatsThis(i18n("Set here the brush size in pixels used to draw sketch."));
 
     QLabel *resultsLabel = new QLabel(i18n("Items:"), hbox);
     d->resultsSketch     = new QSpinBox(hbox);
     d->resultsSketch->setRange(1, 50);
     d->resultsSketch->setSingleStep(1);
     d->resultsSketch->setValue(10);
-    d->resultsSketch->setWhatsThis(i18n("<p>Set here the number of items to find using sketch."));
+    d->resultsSketch->setWhatsThis(i18n("Set here the number of items to find using sketch."));
 
     hbox->setStretchFactor(brushLabel, 10);
     hbox->setStretchFactor(resultsLabel, 10);
@@ -341,18 +341,18 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->resetButton    = new QToolButton(hbox2);
     d->resetButton->setIcon(SmallIcon("document-revert"));
     d->resetButton->setToolTip(i18n("Clear sketch"));
-    d->resetButton->setWhatsThis(i18n("<p>Use this button to clear sketch contents."));
+    d->resetButton->setWhatsThis(i18n("Use this button to clear sketch contents."));
 
     d->nameEditSketch = new KLineEdit(hbox2);
     d->nameEditSketch->setClearButtonShown(true);
-    d->nameEditSketch->setWhatsThis(i18n("<p>Enter the name of the current sketch search to save in the "
+    d->nameEditSketch->setWhatsThis(i18n("Enter the name of the current sketch search to save in the "
                                          "\"My Fuzzy Searches\" view"));
 
     d->saveBtnSketch  = new QToolButton(hbox2);
     d->saveBtnSketch->setIcon(SmallIcon("document-save"));
     d->saveBtnSketch->setEnabled(false);
     d->saveBtnSketch->setToolTip(i18n("Save current sketch search to a new virtual Album"));
-    d->saveBtnSketch->setWhatsThis(i18n("<p>If you press this button, current sketch "
+    d->saveBtnSketch->setWhatsThis(i18n("If you press this button, current sketch "
                                         "fuzzy search will be saved to a new search "
                                         "virtual album using name "
                                         "set on the left side."));

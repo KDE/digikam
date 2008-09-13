@@ -96,16 +96,16 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     d->listView->setColumnCount(2);
     d->listView->setHeaderLabels(QStringList() << i18n("Ref. images") << i18n("Items"));
     d->listView->header()->setResizeMode(QHeaderView::Stretch);
-    d->listView->setWhatsThis(i18n("<p>This shows all duplicates items found in whole collections."));
+    d->listView->setWhatsThis(i18n("This shows all duplicates items found in whole collections."));
 
     d->updateFingerPrtBtn = new QPushButton(i18n("Update finger-prints"), this);
     d->updateFingerPrtBtn->setIcon(KIcon("run-build"));
-    d->updateFingerPrtBtn->setWhatsThis(i18n("<p>Use this button to scan whole collection to find all "
+    d->updateFingerPrtBtn->setWhatsThis(i18n("Use this button to scan whole collection to find all "
                                               "duplicates items."));
 
     d->scanDuplicatesBtn = new QPushButton(i18n("Find duplicates"), this);
     d->scanDuplicatesBtn->setIcon(KIcon("system-search"));
-    d->scanDuplicatesBtn->setWhatsThis(i18n("<p>Use this button to scan whole collection to find all "
+    d->scanDuplicatesBtn->setWhatsThis(i18n("Use this button to scan whole collection to find all "
                                             "duplicates items."));
 
     d->progressBar = new QProgressBar(this);

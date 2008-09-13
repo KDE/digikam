@@ -217,13 +217,13 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
 
     QHBoxLayout *hbox1 = new QHBoxLayout;
     d->saveNameEdit    = new KLineEdit;
-    d->saveNameEdit->setWhatsThis(i18n("<p>Enter a name for the current search to save it in the "
+    d->saveNameEdit->setWhatsThis(i18n("Enter a name for the current search to save it in the "
                                        "\"Searches\" view"));
 
     d->saveButton      = new QToolButton;
     d->saveButton->setIcon(SmallIcon("document-save"));
     d->saveButton->setToolTip(i18n("Save current search to a new virtual Album"));
-    d->saveButton->setWhatsThis(i18n("<p>If you press this button, the current search "
+    d->saveButton->setWhatsThis(i18n("If you press this button, the current search "
                                      "will be saved to a new virtual Search Album using the name "
                                      "set on the left side."));
 

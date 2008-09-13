@@ -15,12 +15,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -144,7 +144,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     d->renameDefault = new QRadioButton(i18n("Camera filenames"), this);
     d->buttonGroup->addButton(d->renameDefault);
-    d->renameDefault->setWhatsThis(i18n("<p>Turn on this option to use the camera "
+    d->renameDefault->setWhatsThis(i18n("Turn on this option to use the camera "
                                         "provided image filenames without modifications."));
 
     d->renameDefaultBox     = new QWidget(this);
@@ -158,9 +158,9 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->renameDefaultCaseType->insertItem(1, i18n("Upper"));
     d->renameDefaultCaseType->insertItem(2, i18n("Lower"));
     d->renameDefaultCaseType->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-    d->renameDefaultCaseType->setWhatsThis( i18n("<p>Set the method to use to change the case "
+    d->renameDefaultCaseType->setWhatsThis( i18n("Set the method to use to change the case "
                                                  "of the image filenames."));
-                                           
+
     boxLayout1->setMargin(KDialog::spacingHint());
     boxLayout1->setSpacing(KDialog::spacingHint());
     boxLayout1->addSpacing(10);
@@ -171,7 +171,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     d->renameCustom = new QRadioButton(i18n("Customize"), this);
     d->buttonGroup->addButton(d->renameCustom);
-    d->renameCustom->setWhatsThis(i18n("<p>Turn on this option to customize the image filenames "
+    d->renameCustom->setWhatsThis(i18n("Turn on this option to customize the image filenames "
                                        "during download."));
 
     d->renameCustomBox                 = new QWidget(this);
@@ -180,16 +180,16 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     QLabel* prefixLabel   = new QLabel(i18n("Prefix:"), d->renameCustomBox);
     d->renameCustomPrefix = new KLineEdit(d->renameCustomBox);
     d->focusedWidget = d->renameCustomPrefix;
-    d->renameCustomPrefix->setWhatsThis( i18n("<p>Set the prefix which will be added to "
+    d->renameCustomPrefix->setWhatsThis( i18n("Set the prefix which will be added to "
                                               "the image filenames."));
 
     QLabel* suffixLabel   = new QLabel(i18n("Suffix:"), d->renameCustomBox);
     d->renameCustomSuffix = new KLineEdit(d->renameCustomBox);
-    d->renameCustomSuffix->setWhatsThis( i18n("<p>Set the suffix which will be added to "
+    d->renameCustomSuffix->setWhatsThis( i18n("Set the suffix which will be added to "
                                               "the image filenames."));
 
     d->addDateTimeBox = new QCheckBox( i18n("Add Date && Time"), d->renameCustomBox );
-    d->addDateTimeBox->setWhatsThis( i18n("<p>Set this option to add the camera provided date and time."));
+    d->addDateTimeBox->setWhatsThis( i18n("Set this option to add the camera provided date and time."));
 
     QWidget *dateTimeWidget = new QWidget(d->renameCustomBox);
     QHBoxLayout *boxLayout2 = new QHBoxLayout(dateTimeWidget);
@@ -204,7 +204,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
                     "creating the new albums. The options available are:</p>"
                     "<p><b>Standard</b>: the date format that has been used as a standard by digiKam. "
                     "E.g.: <i>20060824T142618</i></p>"
-                    "<p/><b>ISO</b>: the date format according to ISO 8601 "
+                    "<p><b>ISO</b>: the date format according to ISO 8601 "
                     "(YYYY-MM-DD). E.g.: <i>2006-08-24T14:26:18</i></p>"
                     "<p><b>Full Text</b>: the date format is a user-readable string. "
                     "E.g.: <i>Thu Aug 24 14:26:18 2006</i></p>"
@@ -223,17 +223,17 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     boxLayout2->setSpacing(KDialog::spacingHint());
 
     d->addCameraNameBox = new QCheckBox(i18n("Add Camera Name"), d->renameCustomBox);
-    d->addCameraNameBox->setWhatsThis(i18n("<p>Set this option to add the camera name."));
+    d->addCameraNameBox->setWhatsThis(i18n("Set this option to add the camera name."));
 
     d->addSeqNumberBox = new QCheckBox(i18n("Add Sequence Number"), d->renameCustomBox);
-    d->addSeqNumberBox->setWhatsThis(i18n("<p>Set this option to add a sequence number "
+    d->addSeqNumberBox->setWhatsThis(i18n("Set this option to add a sequence number "
                                           "starting with the index set below."));
 
     d->startIndexLabel = new QLabel(i18n("Start Index:"), d->renameCustomBox);
     d->startIndexInput = new KIntNumInput(1, d->renameCustomBox);
     d->startIndexInput->setRange(1, 900000, 1);
     d->startIndexInput->setSliderEnabled(false);
-    d->startIndexInput->setWhatsThis(i18n("<p>Set the starting index value used to rename "
+    d->startIndexInput->setWhatsThis(i18n("Set the starting index value used to rename "
                                           "files with a sequence number."));
 
     renameCustomBoxLayout->addWidget(prefixLabel, 0, 1, 1, 1);
@@ -265,7 +265,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     connect(d->buttonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(slotRadioButtonClicked(int)));
-            
+
     connect(d->renameCustomPrefix, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotRenameOptionsChanged()));
 
@@ -410,7 +410,7 @@ void RenameCustomizer::slotRenameOptionsChanged()
         d->startIndexInput->setEnabled(false);
         d->startIndexLabel->setEnabled(false);
     }
-    
+
     d->changedTimer->setSingleShot(true);
     d->changedTimer->start(500);
 }
@@ -468,7 +468,7 @@ void RenameCustomizer::slotDateTimeButtonClicked()
 void RenameCustomizer::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    
+
     KConfigGroup group = config->group("Camera Settings");
     bool def         = group.readEntry("Rename Use Default", true);
     bool addSeqNumb  = group.readEntry("Add Sequence Number", true);
