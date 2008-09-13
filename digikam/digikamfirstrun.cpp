@@ -82,7 +82,7 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
                              "created in <b>My Albums</b> view from left side-bar. "
                              "Below, please select which folder you would like "
                              "digiKam to use as first root album path from your local "
-                             "file system.</p>" 
+                             "file system.</p>"
                              "<p><b>Note: you can set other root album paths later using "
                              "digiKam settings panel. Removable medias and shared files system are "
                              "supported.</b></p>") );
@@ -94,7 +94,7 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
 
     QLabel *textLabel3 = new QLabel(widget);
     textLabel3->setWordWrap(true);
-    textLabel3->setText(i18n("<p>Below, set the location on your computer "
+    textLabel3->setText(i18n("Below, set the location on your computer "
                              "where the digiKam database file will be stored. "
                              "Write access is required to be able to edit image "
                              "properties.\nPlease note that you cannot use a "
@@ -195,7 +195,7 @@ bool DigikamFirstRun::checkRootAlbum(QString& rootAlbumFolder)
 
     QFileInfo path(rootAlbumFolder);
 
-    if (!path.isWritable()) 
+    if (!path.isWritable())
     {
         KMessageBox::information(this, i18n("No write access for root album path.\n"
                                             "Warning: the comment and tag features "
@@ -257,11 +257,11 @@ bool DigikamFirstRun::checkDatabase(QString& dbFolder)
 
     QFileInfo path(dbFolder);
 
-    if (!path.isWritable()) 
+    if (!path.isWritable())
     {
-        KMessageBox::information(this, i18n("No write access for path used to host database file.\n"
-                                            "Please select a different location."
-                                            "<p><b>%1</b></p></qt>", dbFolder),
+        KMessageBox::information(this, i18n("<p>No write access for path used to host database file.<br/>"
+                                            "Please select a different location.</p>"
+                                            "<p><b>%1</b></p>", dbFolder),
                                  i18n("No Database Write Access"));
         return false;
     }

@@ -130,24 +130,41 @@ QString WelcomePageView::infoPage()
 
         "<h2 style='margin-top: 0px;'>"
         "Welcome to digiKam %1"
-        "</h2><p>"
-        "digiKam is an open source photo management program. "
-        "It is designed to import, organize, enhance, search and export your digital photographs on your computer.</p>"
+        "</h2>"
+
+        "<p>digiKam is an open source photo management program. "
+        "It is designed to import, organize, enhance, search and export your "
+        "digital photographs on your computer.</p>"
+
         "<p>You are currently in the Album view mode of digiKam. The Albums are the real "
         "containers where your files are stored, they are identical with the folders "
-        "on disk.</p>\n<ul><li>"
-        "digiKam has many powerful features which are described in the "
-        "<a href=\"%2\">documentation</a></li>\n"
-        "<li>The <a href=\"%3\">digiKam homepage</A> provides information about "
-        "new versions of digiKam</li></ul>\n"
-        "%7\n<p>"
-        "Some of the new features in this release of digiKam include "
-        "(compared to digiKam %4):</p>\n"
-        "<ul>\n%5</ul>\n"
-        "%6\n"
-        "<p>We hope that you will enjoy digiKam.</p>\n"
-        "<p>Thank you,</p>\n"
-        "<p style='margin-bottom: 0px'>&nbsp; &nbsp; The digiKam team</p>",
+        "on disk.</p>"
+
+        "<ul>"
+            "<li>"
+                "digiKam has many powerful features which are described in the "
+                "<a href=\"%2\">documentation</a>"
+            "</li>"
+            "<li>"
+                "The <a href=\"%3\">digiKam homepage</A> provides information about "
+                "new versions of digiKam"
+            "</li>"
+        "</ul>"
+
+        "<p>%7</p>"
+
+        "<p>Some of the new features in this release of digiKam include "
+            "(compared to digiKam %4):</p>"
+
+        "<ul>%5</ul>"
+
+        "<p>%6</p>"
+
+        "<p>We hope that you will enjoy digiKam.</p>"
+
+        "<p>Thank you,</p>"
+
+        "<p style='margin-bottom: 0px; margin-left:20px;'>The digiKam team</p>",
 
     QString(digikam_version),            // %1 : current digiKam version
     "help:/digikam/index.html",          // %2 : digiKam help:// Url
