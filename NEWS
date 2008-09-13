@@ -12,7 +12,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 165345 : Selecting images from bottom right to top left does not work.
 003 ==> 170693 : Enable geotagging of Olympus orf images.
 004 ==> 170711 : Write single Keywords instead of Hirachy into IPTC.
-005 ==> 
+005 ==> 168569 : New Album Folders are not detected in displayed in GUI until restart.
+006 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta3 - Release date: 2008-09-03
