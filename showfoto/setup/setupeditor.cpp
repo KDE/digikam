@@ -5,7 +5,7 @@
  *
  * Date        : 2005-04-02
  * Description : setup showfoto tab.
- * 
+ *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008 by Arnd Baecker <arnd dot baecker at web dot de>
  *
@@ -108,27 +108,27 @@ SetupEditor::SetupEditor(QWidget* parent )
     d->themebackgroundColor = new QCheckBox(i18n("&Use theme background color"),
                                             interfaceOptionsGroup);
 
-    d->themebackgroundColor->setWhatsThis(i18n("<p>Enable this option to use background theme "
+    d->themebackgroundColor->setWhatsThis(i18n("Enable this option to use background theme "
                                                "color in image editor area"));
 
     d->colorBox                  = new KHBox(interfaceOptionsGroup);
     QLabel *backgroundColorlabel = new QLabel( i18n("&Background color:"), d->colorBox);
     d->backgroundColor           = new KColorButton(d->colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
-    d->backgroundColor->setWhatsThis(i18n("<p>Select background color to use "
+    d->backgroundColor->setWhatsThis(i18n("Select background color to use "
                                           "for image editor area."));
 
     d->hideToolBar        = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
     d->hideThumbBar       = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
     d->horizontalThumbBar = new QCheckBox(i18n("Use &horizontal thumbbar (need to restart showFoto)"), interfaceOptionsGroup);
-    d->horizontalThumbBar->setWhatsThis( i18n("<p>If this option is enabled, the thumbnails bar will be displayed "
+    d->horizontalThumbBar->setWhatsThis( i18n("If this option is enabled, the thumbnails bar will be displayed "
                                               "horizontally behind the image area. You need to restart showFoto "
-                                              "for this option take effect.<p>"));
+                                              "for this option take effect."));
     d->useTrash   = new QCheckBox(i18n("&Deleting items should move them to trash"), interfaceOptionsGroup);
     d->showSplash = new QCheckBox(i18n("&Show splash screen at startup"), interfaceOptionsGroup);
 
     d->useRawImportTool = new QCheckBox(i18n("Use Raw Import Tool to handle Raw image"), interfaceOptionsGroup);
-    d->useRawImportTool->setWhatsThis(i18n("<p>Set on this option to use Raw Import "
+    d->useRawImportTool->setWhatsThis(i18n("Set on this option to use Raw Import "
                                            "tool before to load a Raw image, "
                                            "to customize indeep decoding settings."));
 
@@ -151,14 +151,14 @@ SetupEditor::SetupEditor(QWidget* parent )
     QLabel *underExpoColorlabel = new QLabel( i18n("&Under-exposure color:"), underExpoBox);
     d->underExposureColor       = new KColorButton(underExpoBox);
     underExpoColorlabel->setBuddy(d->underExposureColor);
-    d->underExposureColor->setWhatsThis( i18n("<p>Customize color used in image editor to identify "
+    d->underExposureColor->setWhatsThis( i18n("Customize color used in image editor to identify "
                                               "under-exposed pixels.") );
 
     KHBox *overExpoBox         = new KHBox(exposureOptionsGroup);
     QLabel *overExpoColorlabel = new QLabel( i18n("&Over-exposure color:"), overExpoBox);
     d->overExposureColor       = new KColorButton(overExpoBox);
     overExpoColorlabel->setBuddy(d->overExposureColor);
-    d->overExposureColor->setWhatsThis( i18n("<p>Customize color used in image editor to identify "
+    d->overExposureColor->setWhatsThis( i18n("Customize color used in image editor to identify "
                                              "over-exposed pixels.") );
 
     gLayout2->addWidget(underExpoBox);
@@ -191,11 +191,11 @@ SetupEditor::SetupEditor(QWidget* parent )
     d->sortOrderComboBox->insertItem(0, i18n("File Date"));
     d->sortOrderComboBox->insertItem(1, i18n("File Name"));
     d->sortOrderComboBox->insertItem(2, i18n("File size"));
-    d->sortOrderComboBox->setWhatsThis(i18n("<p>Here, select whether newly-loaded "
+    d->sortOrderComboBox->setWhatsThis(i18n("Here, select whether newly-loaded "
                                             "images are sorted by file-date, file-name, or file-size."));
 
     d->sortReverse = new QCheckBox(i18n("Reverse ordering"), sortOptionsGroup);
-    d->sortReverse->setWhatsThis(i18n("<p>If this option is enabled, newly-loaded "
+    d->sortReverse->setWhatsThis(i18n("If this option is enabled, newly-loaded "
                                       "images will be sorted in descending order."));
 
     gLayout4->addWidget(sortBox);
