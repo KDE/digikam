@@ -219,8 +219,7 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->listView->setAllColumnsShowFocus(true);
     d->listView->setColumnCount(4);
-    d->listView->setWhatsThis(i18n("<p>This shows all root album paths used by digiKam "
-                                   "as collections."));
+    d->listView->setWhatsThis(i18n("This shows all root album paths used by digiKam as collections."));
 
     QStringList labels;
     labels.append( i18n("Name") );

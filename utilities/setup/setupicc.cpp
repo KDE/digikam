@@ -521,9 +521,8 @@ void SetupICC::fillCombos(const QString& path, bool report)
     {
         if (report)
         {
-            QString message = i18n("<p>Sorry, there are no ICC profiles files in ");
+            QString message = i18n("Sorry, there are no ICC profiles files in ");
             message.append(path);
-            message.append(i18n("</p>"));
             KMessageBox::sorry(this, message);
         }
 

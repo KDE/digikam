@@ -5,7 +5,7 @@
  *
  * Date        : 2003-02-10
  * Description : camera setup tab.
- * 
+ *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -90,7 +90,7 @@ SetupCamera::SetupCamera( QWidget* parent )
     d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
     d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->listView->setAllColumnsShowFocus(true);
-    d->listView->setWhatsThis( i18n("<p>Here you can see the digital camera list used by digiKam "
+    d->listView->setWhatsThis( i18n("Here you can see the digital camera list used by digiKam "
                                     "via the Gphoto interface."));
 
     QStringList labels;
@@ -169,12 +169,12 @@ SetupCamera::SetupCamera( QWidget* parent )
 
     CameraList* clist = CameraList::defaultList();
 
-    if (clist) 
+    if (clist)
     {
         Q3PtrList<CameraType>* cl = clist->cameraList();
 
         for (CameraType *ctype = cl->first(); ctype;
-             ctype = cl->next()) 
+             ctype = cl->next())
         {
             QStringList labels;
             labels.append(ctype->title());
@@ -200,7 +200,7 @@ void SetupCamera::slotProcessGphotoUrl(const QString& url)
 void SetupCamera::slotSelectionChanged()
 {
     QTreeWidgetItem *item = d->listView->currentItem();
-    if (!item) 
+    if (!item)
     {
         d->removeButton->setEnabled(false);
         d->editButton->setEnabled(false);
@@ -215,9 +215,9 @@ void SetupCamera::slotAddCamera()
 {
     CameraSelection *select = new CameraSelection;
 
-    connect(select, SIGNAL(signalOkClicked(const QString&, const QString&, 
+    connect(select, SIGNAL(signalOkClicked(const QString&, const QString&,
                                            const QString&, const QString&)),
-            this,   SLOT(slotAddedCamera(const QString&, const QString&, 
+            this,   SLOT(slotAddedCamera(const QString&, const QString&,
                                          const QString&, const QString&)));
 
     select->show();
@@ -239,9 +239,9 @@ void SetupCamera::slotEditCamera()
     CameraSelection *select = new CameraSelection;
     select->setCamera(item->text(0), item->text(1), item->text(2), item->text(3));
 
-    connect(select, SIGNAL(signalOkClicked(const QString&, const QString&, 
+    connect(select, SIGNAL(signalOkClicked(const QString&, const QString&,
                                            const QString&, const QString&)),
-            this,   SLOT(slotEditedCamera(const QString&, const QString&, 
+            this,   SLOT(slotEditedCamera(const QString&, const QString&,
                                           const QString&, const QString&)));
 
     select->show();
@@ -255,7 +255,7 @@ void SetupCamera::slotAutoDetectCamera()
     int ret = GPCamera::autoDetect(model, port);
     kapp->restoreOverrideCursor();
 
-    if (ret != 0) 
+    if (ret != 0)
     {
         KMessageBox::error(this,i18n("Failed to auto-detect camera.\n"
                                      "Please check if your camera is turned on "
@@ -271,7 +271,7 @@ void SetupCamera::slotAutoDetectCamera()
     {
         KMessageBox::information(this, i18n("Camera '%1' (%2) is already in list.", model, port));
     }
-    else 
+    else
     {
         KMessageBox::information(this, i18n("Found camera '%1' (%2) and added it to the list.", model, port));
         QStringList labels;
@@ -312,7 +312,7 @@ void SetupCamera::applySettings()
 {
     CameraList* clist = CameraList::defaultList();
 
-    if (clist) 
+    if (clist)
     {
         clist->clear();
 
@@ -327,7 +327,7 @@ void SetupCamera::applySettings()
                 if (!item->text(4).isEmpty())
                     lastAccess = QDateTime::fromString(item->text(4), Qt::ISODate);
 
-                CameraType *ctype = new CameraType(item->text(0), item->text(1), item->text(2), 
+                CameraType *ctype = new CameraType(item->text(0), item->text(1), item->text(2),
                                                    item->text(3), lastAccess);
                 clist->insert(ctype);
             }

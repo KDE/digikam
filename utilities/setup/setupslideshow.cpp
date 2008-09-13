@@ -85,35 +85,35 @@ SetupSlideShow::SetupSlideShow(QWidget* parent)
     d->delayInput->setRange(1, 3600, 1);
     d->delayInput->setSliderEnabled(true);
     d->delayInput->setLabel( i18n("&Delay between images:"), Qt::AlignLeft|Qt::AlignTop );
-    d->delayInput->setWhatsThis(i18n("<p>The delay, in seconds, between images."));
+    d->delayInput->setWhatsThis(i18n("The delay, in seconds, between images."));
 
     d->startWithCurrent = new QCheckBox(i18n("Start with current image"), this);
-    d->startWithCurrent->setWhatsThis( i18n("<p>If this option is enabled, the Slideshow will be started "
+    d->startWithCurrent->setWhatsThis( i18n("If this option is enabled, the Slideshow will be started "
                                             "with the current image selected in the images list."));
 
     d->loopMode = new QCheckBox(i18n("Display in loop"), this);
-    d->loopMode->setWhatsThis( i18n("<p>Run the slideshow in a loop."));
+    d->loopMode->setWhatsThis( i18n("Run the slideshow in a loop."));
 
     d->printName = new QCheckBox(i18n("Print image file name"), this);
-    d->printName->setWhatsThis( i18n("<p>Print the image file name at the bottom of the screen."));
+    d->printName->setWhatsThis( i18n("Print the image file name at the bottom of the screen."));
 
     d->printDate = new QCheckBox(i18n("Print image creation date"), this);
-    d->printDate->setWhatsThis( i18n("<p>Print the image creation time/date at the bottom of the screen."));
+    d->printDate->setWhatsThis( i18n("Print the image creation time/date at the bottom of the screen."));
 
     d->printApertureFocal = new QCheckBox(i18n("Print camera aperture and focal length"), this);
-    d->printApertureFocal->setWhatsThis( i18n("<p>Print the camera aperture and focal length at the bottom of the screen."));
+    d->printApertureFocal->setWhatsThis( i18n("Print the camera aperture and focal length at the bottom of the screen."));
 
     d->printExpoSensitivity = new QCheckBox(i18n("Print camera exposure and sensitivity"), this);
-    d->printExpoSensitivity->setWhatsThis( i18n("<p>Print the camera exposure and sensitivity at the bottom of the screen."));
+    d->printExpoSensitivity->setWhatsThis( i18n("Print the camera exposure and sensitivity at the bottom of the screen."));
 
     d->printMakeModel = new QCheckBox(i18n("Print camera make and model"), this);
-    d->printMakeModel->setWhatsThis( i18n("<p>Print the camera make and model at the bottom of the screen."));
+    d->printMakeModel->setWhatsThis( i18n("Print the camera make and model at the bottom of the screen."));
 
     d->printComment = new QCheckBox(i18n("Print image caption"), this);
-    d->printComment->setWhatsThis( i18n("<p>Print the image caption at the bottom of the screen."));
+    d->printComment->setWhatsThis( i18n("Print the image caption at the bottom of the screen."));
 
     d->printRating = new QCheckBox(i18n("Print image rating"), this);
-    d->printRating->setWhatsThis( i18n("<p>Print the digiKam image rating at the bottom of the screen."));
+    d->printRating->setWhatsThis( i18n("Print the digiKam image rating at the bottom of the screen."));
 
     // Only digiKam support this feature. Showfoto do not support digiKam database information.
     if (kapp->applicationName() == "showfoto")

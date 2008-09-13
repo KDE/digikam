@@ -115,34 +115,34 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     d->saveTagsBox = new QCheckBox(commonGroup);
     d->saveTagsBox->setText(i18n("&Save image tags as \"Keywords\" tag"));
-    d->saveTagsBox->setWhatsThis( i18n("<p>Turn this option on to store the image tags "
+    d->saveTagsBox->setWhatsThis( i18n("Turn this option on to store the image tags "
                                        "in the XMP and IPTC tags."));
 
     d->savePhotographerIdBox = new QCheckBox(commonGroup);
     d->savePhotographerIdBox->setText(i18n("&Save default photographer identity as tags"));
-    d->savePhotographerIdBox->setWhatsThis( i18n("<p>Turn this option on to store the default "
+    d->savePhotographerIdBox->setWhatsThis( i18n("Turn this option on to store the default "
                                                  "photographer identity in the XMP and the IPTC tags. "
                                                  "You can set this value in the Identity setup page."));
 
     d->saveCreditsBox = new QCheckBox(commonGroup);
     d->saveCreditsBox->setText(i18n("&Save default credit and copyright identity as tags"));
-    d->saveCreditsBox->setWhatsThis( i18n("<p>Turn this option on to store the default "
+    d->saveCreditsBox->setWhatsThis( i18n("Turn this option on to store the default "
                                           "credit and copyright identity in the XMP and the IPTC tags. "
                                           "You can set this value in the Identity setup page."));
 
     d->saveCommentsBox = new QCheckBox(commonGroup);
     d->saveCommentsBox->setText(i18n("&Save image captions as embedded text"));
-    d->saveCommentsBox->setWhatsThis( i18n("<p>Turn this option on to store image captions "
+    d->saveCommentsBox->setWhatsThis( i18n("Turn this option on to store image captions "
                                            "in the JFIF Comment section, the EXIF tag, the XMP tag, and the IPTC tag."));
 
     d->saveDateTimeBox = new QCheckBox(commonGroup);
     d->saveDateTimeBox->setText(i18n("&Save image timestamps as tags"));
-    d->saveDateTimeBox->setWhatsThis( i18n("<p>Turn this option on to store the image date and time "
+    d->saveDateTimeBox->setWhatsThis( i18n("Turn this option on to store the image date and time "
                                            "in the EXIF, XMP, and IPTC tags."));
 
     d->saveRatingBox = new QCheckBox(commonGroup);
     d->saveRatingBox->setText(i18n("&Save image rating as tags"));
-    d->saveRatingBox->setWhatsThis( i18n("<p>Turn this option on to store the image rating "
+    d->saveRatingBox->setWhatsThis( i18n("Turn this option on to store the image rating "
                                          "in the EXIF tag and the XMP tags."));
 
     gLayout2->addWidget(d->saveTagsBox);

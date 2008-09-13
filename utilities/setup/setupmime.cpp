@@ -97,7 +97,7 @@ SetupMime::SetupMime(QWidget* parent)
     explanationLabel->setWordWrap(true);
 
     // --------------------------------------------------------
-    
+
     QGroupBox *imageFileFilterBox = new QGroupBox(i18n("Image Files"), this);
     QGridLayout* grid1            = new QGridLayout(imageFileFilterBox);
 
@@ -105,9 +105,9 @@ SetupMime::SetupMime(QWidget* parent)
     logoLabel1->setPixmap(DesktopIcon("image-jpeg2000"));
 
     d->imageFileFilterLabel = new QLabel(imageFileFilterBox);
-    d->imageFileFilterLabel->setText(i18n("<qt>Customize &image file extensions (<a href=image>Current settings</a>):"));
-    
-    KHBox *hbox1 = new KHBox(imageFileFilterBox);    
+    d->imageFileFilterLabel->setText(i18n("Customize &image file extensions (<a href=image>Current settings</a>):"));
+
+    KHBox *hbox1 = new KHBox(imageFileFilterBox);
     d->imageFileFilterEdit = new QLineEdit(hbox1);
     d->imageFileFilterEdit->setWhatsThis( i18n("<p>Here you can add extra extensions of image files (including RAW files) "
                                                "to be displayed in Albums. Just write \"xyz abc\" "
@@ -142,7 +142,7 @@ SetupMime::SetupMime(QWidget* parent)
     d->movieFileFilterLabel = new QLabel(movieFileFilterBox);
     d->movieFileFilterLabel->setText(i18n("Customize &movie file extensions (<a href=video>Current settings</a>):"));
 
-    KHBox *hbox2 = new KHBox(movieFileFilterBox);    
+    KHBox *hbox2 = new KHBox(movieFileFilterBox);
     d->movieFileFilterEdit = new QLineEdit(hbox2);
     d->movieFileFilterEdit->setWhatsThis( i18n("<p>Here you can add extra extensions of video files "
                                                "to be displayed in Albums. Just write \"xyz abc\" "
@@ -177,7 +177,7 @@ SetupMime::SetupMime(QWidget* parent)
     d->audioFileFilterLabel = new QLabel(audioFileFilterBox);
     d->audioFileFilterLabel->setText(i18n("Customize &audio file extensions (<a href=audio>Current settings</a>):"));
 
-    KHBox *hbox3 = new KHBox(audioFileFilterBox);  
+    KHBox *hbox3 = new KHBox(audioFileFilterBox);
     d->audioFileFilterEdit = new QLineEdit(hbox3);
     d->audioFileFilterEdit->setWhatsThis( i18n("<p>Here you can add extra extensions of audio files "
                                                "to be displayed in Albums. Just write \"xyz abc\" "
@@ -212,8 +212,8 @@ SetupMime::SetupMime(QWidget* parent)
 
     QLabel *rawFileFilterLabel = new QLabel(rawFileFilterBox);
     rawFileFilterLabel->setText(i18n("Show only &RAW files with extensions:"));
-    
-    KHBox *hbox4 = new KHBox(rawFileFilterBox);  
+
+    KHBox *hbox4 = new KHBox(rawFileFilterBox);
     d->rawFileFilterEdit = new QLineEdit(hbox4);
     d->rawFileFilterEdit->setWhatsThis( i18n("<p>Here you can set the extensions of the RAW image files "
                                              "to be displayed in Albums (such as CRW, for Canon cameras, "
@@ -339,7 +339,7 @@ void SetupMime::slotShowCurrentImageSettings()
     QStringList imageList;
     DatabaseAccess().db()->getFilterSettings(&imageList, 0, 0);
     QString text = i18n("<p>Files with these extensions will be recognized as images "
-                        "and included into the database:<br> <code>%1</code></p>",
+                        "and included into the database:<br/> <code>%1</code></p>",
                         imageList.join(" "));
     QWhatsThis::showText(d->imageFileFilterLabel->mapToGlobal(QPoint(0,0)), text, d->imageFileFilterLabel);
 }
@@ -349,7 +349,7 @@ void SetupMime::slotShowCurrentMovieSettings()
     QStringList movieList;
     DatabaseAccess().db()->getFilterSettings(0, &movieList, 0);
     QString text = i18n("<p>Files with these extensions will be recognized as movie files "
-                        "and included into the database:<br> <code>%1</code></p>",
+                        "and included into the database:<br/> <code>%1</code></p>",
                         movieList.join(" "));
     QWhatsThis::showText(d->movieFileFilterLabel->mapToGlobal(QPoint(0,0)), text, d->movieFileFilterLabel);
 }
@@ -359,7 +359,7 @@ void SetupMime::slotShowCurrentAudioSettings()
     QStringList audioList;
     DatabaseAccess().db()->getFilterSettings(0, 0, &audioList);
     QString text = i18n("<p>Files with these extensions will be recognized as audio files "
-                        "and included into the database:<br> <code>%1</code></p>",
+                        "and included into the database:<br/> <code>%1</code></p>",
                         audioList.join(" "));
     QWhatsThis::showText(d->audioFileFilterLabel->mapToGlobal(QPoint(0,0)), text, d->audioFileFilterLabel);
 }

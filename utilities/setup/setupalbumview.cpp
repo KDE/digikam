@@ -2,7 +2,7 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2003-02-01
  * Description : album view configuration setup tab
  *
@@ -98,33 +98,33 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     QVBoxLayout *gLayout2    = new QVBoxLayout(iconTextGroup);
 
     d->iconShowNameBox = new QCheckBox(i18n("Show file &name"), iconTextGroup);
-    d->iconShowNameBox->setWhatsThis( i18n("<p>Set this option to show the file name below the image thumbnail."));
+    d->iconShowNameBox->setWhatsThis( i18n("Set this option to show the file name below the image thumbnail."));
 
     d->iconShowSizeBox = new QCheckBox(i18n("Show file si&ze"), iconTextGroup);
-    d->iconShowSizeBox->setWhatsThis( i18n("<p>Set this option to show the file size below the image thumbnail."));
+    d->iconShowSizeBox->setWhatsThis( i18n("Set this option to show the file size below the image thumbnail."));
 
     d->iconShowDateBox = new QCheckBox(i18n("Show camera creation &date"), iconTextGroup);
-    d->iconShowDateBox->setWhatsThis( i18n("<p>Set this option to show the camera creation date "
+    d->iconShowDateBox->setWhatsThis( i18n("Set this option to show the camera creation date "
                                            "below the image thumbnail."));
 
     d->iconShowModDateBox = new QCheckBox(i18n("Show file &modification date"), iconTextGroup);
-    d->iconShowModDateBox->setWhatsThis( i18n("<p>Set this option to show the file modification date "
+    d->iconShowModDateBox->setWhatsThis( i18n("Set this option to show the file modification date "
                                               "below the image thumbnail."));
 
     d->iconShowCommentsBox = new QCheckBox(i18n("Show digiKam &captions"), iconTextGroup);
-    d->iconShowCommentsBox->setWhatsThis( i18n("<p>Set this option to show the digiKam captions "
+    d->iconShowCommentsBox->setWhatsThis( i18n("Set this option to show the digiKam captions "
                                                "below the image thumbnail."));
 
     d->iconShowTagsBox = new QCheckBox(i18n("Show digiKam &tags"), iconTextGroup);
-    d->iconShowTagsBox->setWhatsThis( i18n("<p>Set this option to show the digiKam tags "
+    d->iconShowTagsBox->setWhatsThis( i18n("Set this option to show the digiKam tags "
                                            "below the image thumbnail."));
 
     d->iconShowRatingBox = new QCheckBox(i18n("Show digiKam &rating"), iconTextGroup);
-    d->iconShowRatingBox->setWhatsThis( i18n("<p>Set this option to show the digiKam rating "
+    d->iconShowRatingBox->setWhatsThis( i18n("Set this option to show the digiKam rating "
                                              "below the image thumbnail."));
 
     d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions"), iconTextGroup);
-    d->iconShowResolutionBox->setWhatsThis( i18n("<p>Set this option to show the image size in pixels "
+    d->iconShowResolutionBox->setWhatsThis( i18n("Set this option to show the image size in pixels "
                                                  "below the image thumbnail."));
 
     gLayout2->addWidget(d->iconShowNameBox);
@@ -149,7 +149,7 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     d->iconTreeThumbSize->addItem(QString("22"));
     d->iconTreeThumbSize->addItem(QString("32"));
     d->iconTreeThumbSize->addItem(QString("48"));
-    d->iconTreeThumbSize->setToolTip(i18n("<p>Set this option to configure the size "
+    d->iconTreeThumbSize->setToolTip(i18n("Set this option to configure the size "
                                           "in pixels of the thumbnails in digiKam's sidebars. "
                                           "This option will take effect when you restart "
                                           "digiKam."));
@@ -160,11 +160,11 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     d->rightClickActionComboBox = new QComboBox(interfaceOptionsGroup);
     d->rightClickActionComboBox->addItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
     d->rightClickActionComboBox->addItem(i18n("Start image editor"), AlbumSettings::StartEditor);
-    d->rightClickActionComboBox->setToolTip(i18n("<p>Here, choose what should happen when you "
+    d->rightClickActionComboBox->setToolTip(i18n("Here, choose what should happen when you "
                                                  "click on a thumbnail."));
 
     d->previewLoadFullImageSize = new QCheckBox(i18n("Embedded preview loads full image size"), interfaceOptionsGroup);
-    d->previewLoadFullImageSize->setWhatsThis( i18n("<p>Set this option to load the full image size "
+    d->previewLoadFullImageSize->setWhatsThis( i18n("Set this option to load the full image size "
                      "with an embedded preview, instead of a reduced size. Because this option will take more time "
                      "to load images, use it only if you have a fast computer."));
 
@@ -231,7 +231,7 @@ void SetupAlbumView::readSettings()
         d->iconTreeThumbSize->setCurrentIndex(1);
     else if (settings->getDefaultTreeIconSize() == 32)
         d->iconTreeThumbSize->setCurrentIndex(2);
-    else 
+    else
         d->iconTreeThumbSize->setCurrentIndex(3);
 
     d->iconShowNameBox->setChecked(settings->getIconShowName());

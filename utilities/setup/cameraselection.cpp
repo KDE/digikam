@@ -5,7 +5,7 @@
  *
  * Date        : 2003-02-10
  * Description : Camera type selection dialog
- * 
+ *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -215,21 +215,21 @@ CameraSelection::CameraSelection( QWidget* parent )
                             .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QLabel* link = new QLabel(box2);
-    link->setText(i18n("<p>To set a <b>USB Mass Storage</b> camera<br>"
-                       "(which looks like a removable drive when mounted<br>"
-                       "on your desktop), please use<br>"
-                       "<a href=\"umscamera\">%1</a> from camera list.</p>", 
+    link->setText(i18n("<p>To set a <b>USB Mass Storage</b> camera<br/>"
+                       "(which looks like a removable drive when mounted<br/>"
+                       "on your desktop), please use<br/>"
+                       "<a href=\"umscamera\">%1</a> from camera list.</p>",
                        d->UMSCameraNameShown));
 
     QLabel* link2 = new QLabel(box2);
-    link2->setText(i18n("<p>To set a <b>Generic PTP USB Device</b><br>"
-                        "(which uses Picture Transfer Protocol), please<br>"
+    link2->setText(i18n("<p>To set a <b>Generic PTP USB Device</b><br/>"
+                        "(which uses Picture Transfer Protocol), please<br/>"
                         "use <a href=\"ptpcamera\">%1</a> from the camera list.</p>",
                         d->PTPCameraNameShown));
 
     QLabel* explanation = new QLabel(box2);
     explanation->setOpenExternalLinks(true);
-    explanation->setText(i18n("<p>A complete list of camera settings to use is<br>"
+    explanation->setText(i18n("<p>A complete list of camera settings to use is<br/>"
                  "available at <a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>"
                  "this url</a>.</p>"));
 
@@ -337,13 +337,13 @@ void CameraSelection::setCamera(const QString& title, const QString& model,
         {
             d->usbButton->setChecked(true);
         }
-        else if (port.contains("serial")) 
+        else if (port.contains("serial"))
         {
             d->serialButton->setChecked(true);
 
-            for (int i=0 ; i < d->portPathComboBox->count() ; i++) 
+            for (int i=0 ; i < d->portPathComboBox->count() ; i++)
             {
-                if (port == d->portPathComboBox->itemText(i)) 
+                if (port == d->portPathComboBox->itemText(i))
                 {
                     d->portPathComboBox->setCurrentIndex(i);
                     break;
@@ -363,7 +363,7 @@ void CameraSelection::getCameraList()
 
     GPCamera::getSupportedCameras(count, clist);
 
-    for (int i = 0 ; i < count ; i++) 
+    for (int i = 0 ; i < count ; i++)
     {
         cname = clist[i];
         if (cname == d->UMSCameraNameActual)
@@ -381,7 +381,7 @@ void CameraSelection::getSerialPortList()
 
     d->serialPortList.clear();
 
-    for (int i = 0; i < plist.count() ; i++) 
+    for (int i = 0; i < plist.count() ; i++)
     {
         if ((plist[i]).startsWith("serial:"))
             d->serialPortList.append(plist[i]);
@@ -394,7 +394,7 @@ void CameraSelection::slotSelectionChanged(QTreeWidgetItem *item, int)
 
     QString model(item->text(0));
 
-    if (model == d->UMSCameraNameShown) 
+    if (model == d->UMSCameraNameShown)
     {
         model = d->UMSCameraNameActual;
 
@@ -415,7 +415,7 @@ void CameraSelection::slotSelectionChanged(QTreeWidgetItem *item, int)
         d->umsMountURL->setUrl(QString("/mnt/camera"));
         return;
     }
-    else 
+    else
     {
         d->umsMountURL->setEnabled(true);
         d->umsMountURL->clear();
@@ -428,24 +428,24 @@ void CameraSelection::slotSelectionChanged(QTreeWidgetItem *item, int)
     QStringList plist;
     GPCamera::getCameraSupportedPorts(model, plist);
 
-    if (plist.contains("serial")) 
+    if (plist.contains("serial"))
     {
         d->serialButton->setEnabled(true);
         d->serialButton->setChecked(true);
     }
-    else 
+    else
     {
         d->serialButton->setEnabled(true);
         d->serialButton->setChecked(false);
         d->serialButton->setEnabled(false);
     }
 
-    if (plist.contains("usb")) 
+    if (plist.contains("usb"))
     {
         d->usbButton->setEnabled(true);
         d->usbButton->setChecked(true);
     }
-    else 
+    else
     {
         d->usbButton->setEnabled(true);
         d->usbButton->setChecked(false);
@@ -457,7 +457,7 @@ void CameraSelection::slotSelectionChanged(QTreeWidgetItem *item, int)
 
 void CameraSelection::slotPortChanged()
 {
-    if (d->usbButton->isChecked()) 
+    if (d->usbButton->isChecked())
     {
         d->portPathComboBox->setEnabled(true);
         d->portPathComboBox->clear();
@@ -466,7 +466,7 @@ void CameraSelection::slotPortChanged()
         return;
     }
 
-    if (d->serialButton->isChecked()) 
+    if (d->serialButton->isChecked())
     {
         d->portPathComboBox->setEnabled(true);
         d->portPathComboBox->clear();
