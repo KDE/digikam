@@ -62,7 +62,12 @@
 
 // LibKDcraw includes.
 
+#include <libkdcraw/version.h>
+#include <libkdcraw/kdcraw.h>
+
+#if KDCRAW_VERSION < 0x000106
 #include <libkdcraw/dcrawbinary.h>
+#endif
 
 // Local includes.
 
@@ -158,12 +163,14 @@ DigikamApp::DigikamApp()
 
     d->validIccPath = SetupICC::iccRepositoryIsValid();
 
+#if KDCRAW_VERSION < 0x000106
     // Check witch dcraw version available
 
     if(d->splashScreen)
         d->splashScreen->message(i18n("Checking dcraw version"), AlignLeft, white);
 
     KDcrawIface::DcrawBinary::instance()->checkSystem();
+#endif
 
     if(d->splashScreen)
         d->splashScreen->message(i18n("Scan Albums"), AlignLeft, white);
@@ -221,7 +228,9 @@ DigikamApp::~DigikamApp()
 
     ImageAttributesWatch::cleanUp();
     LoadingCacheInterface::cleanUp();
+#if KDCRAW_VERSION < 0x000106
     KDcrawIface::DcrawBinary::cleanUp();
+#endif
     AlbumThumbnailLoader::cleanUp();
 
     m_instance = 0;
@@ -275,8 +284,10 @@ void DigikamApp::show()
         }
     }
 
+#if KDCRAW_VERSION < 0x000106
     // Report errors from dcraw detection.
     KDcrawIface::DcrawBinary::instance()->checkReport();
+#endif
 
     // Init album icon view zoom factor.
     slotThumbSizeChanged(d->albumSettings->getDefaultIconSize());
