@@ -28,6 +28,7 @@
 
 // LibKDcraw includes.
 
+#include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
 
 // Local includes.
@@ -65,7 +66,9 @@ private:
                          DImgLoaderObserver *observer);
 
     bool checkToCancelWaitingData();
+#if KDCRAW_VERSION < 0x000400
     bool checkToCancelReceivingData();
+#endif
 
     void setWaitingDataProgress(double value);
     void setReceivingDataProgress(double value);

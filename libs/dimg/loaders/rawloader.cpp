@@ -35,10 +35,6 @@
 
 #include <kstandarddirs.h>
 
-// LibKDcraw includes.
-
-#include <libkdcraw/version.h>
-
 // Local includes.
 
 #include "ddebug.h"
@@ -102,10 +98,12 @@ bool RAWLoader::checkToCancelWaitingData()
     return (m_observer ? !m_observer->continueQuery(m_image) : false);
 }
 
+#if KDCRAW_VERSION < 0x000400
 bool RAWLoader::checkToCancelReceivingData()
 {
     return (m_observer ? m_observer->isShuttingDown() : false);
 }
+#endif
 
 void RAWLoader::setWaitingDataProgress(double value)
 {
