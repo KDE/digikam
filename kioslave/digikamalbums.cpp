@@ -72,7 +72,12 @@ extern "C"
 
 // LibKDcraw includes.
 
+#include <libkdcraw/version.h>
+#include <libkdcraw/kdcraw.h>
+
+#if KDCRAW_VERSION < 0x000106
 #include <libkdcraw/dcrawbinary.h>
+#endif
 
 // Local includes.
 
@@ -280,7 +285,11 @@ void kio_digikamalbums::special(const QByteArray& data)
                 if (getDimensions)
                 {
                     QFileInfo fileInfo(base + name);
+#if KDCRAW_VERSION < 0x000106
                     QString rawFilesExt(KDcrawIface::DcrawBinary::instance()->rawFiles());
+#else
+                    QString rawFilesExt(KDcrawIface::KDcraw::rawFiles());
+#endif
                     QString ext = fileInfo.extension(false).upper();
 
                     if (!ext.isEmpty() && rawFilesExt.upper().contains(ext))
