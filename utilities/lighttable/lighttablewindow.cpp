@@ -40,7 +40,12 @@
 
 // LibKDcraw includes.
 
+#include <libkdcraw/version.h>
+#include <libkdcraw/kdcraw.h>
+
+#if KDCRAW_VERSION < 0x000106
 #include <libkdcraw/dcrawbinary.h>
+#endif
 
 // Local includes.
 
@@ -575,12 +580,17 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list,
     QString imagefilter = settings->getImageFileFilter().lower() +
                           settings->getImageFileFilter().upper();
 
+#if KDCRAW_VERSION < 0x000106
     if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
     {
         // add raw files only if dcraw is available
         imagefilter += settings->getRawFileFilter().lower() +
                        settings->getRawFileFilter().upper();
     }
+#else
+    imagefilter += settings->getRawFileFilter().lower() +
+                   settings->getRawFileFilter().upper();
+#endif
 
     d->barView->blockSignals(true);
     for (QPtrList<ImageInfo>::const_iterator it = l.begin(); it != l.end(); ++it)
