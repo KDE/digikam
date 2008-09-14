@@ -47,8 +47,12 @@ extern "C"
 
 // Libkdcraw includes.
 
+#include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
+
+#if KDCRAW_VERSION < 0x000106
 #include <libkdcraw/dcrawbinary.h>
+#endif
 
 // KDE includes.
 
@@ -64,7 +68,11 @@ namespace Digikam
 {
 static inline QString libraryInfo()
 {
+#if KDCRAW_VERSION < 0x000106
     QString DcrawVer    = KDcrawIface::DcrawBinary::internalVersion();
+#else
+    QString librawVer   = KDcrawIface::KDcraw::librawVersion();
+#endif
 
     QString Exiv2Ver    = KExiv2Iface::KExiv2::Exiv2Version();
 
@@ -83,7 +91,11 @@ static inline QString libraryInfo()
         QString("\n") +
         QString(I18N_NOOP("Using KDcraw library version %1")).arg(KDcrawIface::KDcraw::version()) +
         QString("\n") +
+#if KDCRAW_VERSION < 0x000106
         QString(I18N_NOOP("Using Dcraw program version %1")).arg(DcrawVer) +
+#else
+        QString(I18N_NOOP("Using LibRaw version %1")).arg(librawVer) +
+#endif
         QString("\n") +
         QString(I18N_NOOP("Using PNG library version %1")).arg(PNG_LIBPNG_VER_STRING);
 
