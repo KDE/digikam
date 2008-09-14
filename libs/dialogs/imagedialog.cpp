@@ -39,7 +39,12 @@
 
 // LibKDcraw includes.
 
+#include <libkdcraw/version.h>
+#include <libkdcraw/kdcraw.h>
+
+#if KDCRAW_VERSION < 0x000106
 #include <libkdcraw/dcrawbinary.h>
+#endif
 
 // Local includes.
 
@@ -266,21 +271,27 @@ ImageDialog::ImageDialog(QWidget* parent, const KURL &url, bool singleSelect, co
     // All Images from list must been always the first entry given by KDE API
     QString allPictures = patternList[0];
 
+#if KDCRAW_VERSION < 0x000106
     // Add other files format witch are missing to All Images" type mime provided by KDE and remplace current.
     if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
     {
         allPictures.insert(allPictures.find("|"), QString(KDcrawIface::DcrawBinary::instance()->rawFiles()) + QString(" *.JPE *.TIF"));
         patternList.remove(patternList[0]);
         patternList.prepend(allPictures);
-    }
-
-    // Added RAW file formats supported by dcraw program like a type mime. 
-    // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete 
-    // or unavailable(dcraw_0)(see file #121242 in B.K.O).
-    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
-    {
+        // Added RAW file formats supported by dcraw program like a type mime. 
+        // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete 
+        // or unavailable (see file #121242 in B.K.O).
         patternList.append(i18n("\n%1|Camera RAW files").arg(QString(KDcrawIface::DcrawBinary::instance()->rawFiles())));
     }
+#else
+    allPictures.insert(allPictures.find("|"), QString(KDcrawIface::KDcraw::rawFiles()) + QString(" *.JPE *.TIF"));
+    patternList.remove(patternList[0]);
+    patternList.prepend(allPictures);
+    // Added RAW file formats supported by dcraw program like a type mime. 
+    // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete 
+    // or unavailable (see file #121242 in B.K.O).
+    patternList.append(i18n("\n%1|Camera RAW files").arg(QString(KDcrawIface::KDcraw::rawFiles())));
+#endif
 
     d->fileformats = patternList.join("\n");
 
