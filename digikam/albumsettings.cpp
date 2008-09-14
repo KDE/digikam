@@ -36,7 +36,12 @@
 
 // LibKDcraw includes.
 
+#include <libkdcraw/version.h>
+#include <libkdcraw/kdcraw.h>
+
+#if KDCRAW_VERSION < 0x000106
 #include <libkdcraw/dcrawbinary.h>
+#endif
 
 // Local includes.
 
@@ -176,15 +181,19 @@ void AlbumSettings::init()
                                       "*.jp2 *.jpx *.jpc *.pgx "          // JPEG-2000
                                       "*.tif *.tiff "                     // TIFF
                                       "*.png *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
-			 
+
     d->defaultMovieFilefilter       = "*.mpeg *.mpg *.mpo *.mpe "         // MPEG
                                       "*.avi *.mov *.wmf *.asf *.mp4 *.3gp";
-			 
+
     d->defaultAudioFilefilter       = "*.ogg *.mp3 *.wma *.wav";
 
     // RAW files estentions supported by dcraw program and 
     // defines to digikam/libs/dcraw/rawfiles.h
+#if KDCRAW_VERSION < 0x000106
     d->defaultRawFilefilter         = QString(KDcrawIface::DcrawBinary::instance()->rawFiles());
+#else
+    d->defaultRawFilefilter         = QString(KDcrawIface::KDcraw::rawFiles());
+#endif
 
     d->imageFilefilter              = d->defaultImageFilefilter;
     d->movieFilefilter              = d->defaultMovieFilefilter;
