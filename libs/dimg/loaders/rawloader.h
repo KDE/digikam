@@ -66,13 +66,13 @@ private:
                          DImgLoaderObserver *observer);
 
     bool checkToCancelWaitingData();
+    void setWaitingDataProgress(double value);
+    void postProcessing(DImgLoaderObserver *observer);
+
 #if KDCRAW_VERSION < 0x000106
     bool checkToCancelRecievingData();
-#endif
-
-    void setWaitingDataProgress(double value);
     void setRecievingDataProgress(double value);
-    void postProcessing(DImgLoaderObserver *observer);
+#endif
 
 private:
 
