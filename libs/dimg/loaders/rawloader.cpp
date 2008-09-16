@@ -98,17 +98,16 @@ bool RAWLoader::checkToCancelWaitingData()
     return (m_observer ? !m_observer->continueQuery(m_image) : false);
 }
 
-#if KDCRAW_VERSION < 0x000400
-bool RAWLoader::checkToCancelReceivingData()
-{
-    return (m_observer ? m_observer->isShuttingDown() : false);
-}
-#endif
-
 void RAWLoader::setWaitingDataProgress(double value)
 {
     if (m_observer)
         m_observer->progressInfo(m_image, value);
+}
+
+#if KDCRAW_VERSION < 0x000400
+bool RAWLoader::checkToCancelReceivingData()
+{
+    return (m_observer ? m_observer->isShuttingDown() : false);
 }
 
 void RAWLoader::setReceivingDataProgress(double value)
@@ -116,6 +115,7 @@ void RAWLoader::setReceivingDataProgress(double value)
     if (m_observer)
         m_observer->progressInfo(m_image, value);
 }
+#endif
 
 bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbmax,
                                 DImgLoaderObserver *observer)
