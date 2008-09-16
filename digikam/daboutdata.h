@@ -131,6 +131,10 @@ static inline void authorsRegistration(KAboutData& aboutData)
                           ki18n("Developer"),
                           "gregory dot kokanosky at free dot fr");
 
+    aboutData.addCredit ( ki18n("Gerhard Kulzer"),
+                          ki18n("Handbook writer, alpha tester, webmaster"),
+                          "gerhard at kulzer dot net");
+
     aboutData.addCredit ( ki18n("Rune Laursen"),
                           ki18n("Danish translations"),
                           "runerl at skjoldhoej dot dk");
