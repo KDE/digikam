@@ -244,7 +244,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     d->tabView             = new KTabWidget(plainPage());
     d->rawdecodingBox      = new QWidget(d->tabView);
     QGridLayout* rawGrid   = new QGridLayout(d->rawdecodingBox);
-    d->decodingSettingsBox = new DcrawSettingsWidget(d->rawdecodingBox, 
+    d->decodingSettingsBox = new DcrawSettingsWidget(d->rawdecodingBox,
                                  DcrawSettingsWidget::SIXTEENBITS | DcrawSettingsWidget::COLORSPACE);
 
     KFileDialog *inputDlg  = d->decodingSettingsBox->inputProfileUrlEdit()->fileDialog();
@@ -555,7 +555,7 @@ void RawSettingsBox::readSettings()
     d->decodingSettingsBox->setOutputColorProfile(group.readEntry("Output Color Profile", QString()));
 
     d->brightnessInput->setValue(group.readEntry("Brightness", 0));
-    d->contrastInput->setValue(group.readEntry("Constrast", 0));
+    d->contrastInput->setValue(group.readEntry("Contrast", 0));
     d->gammaInput->setValue(group.readEntry("Gamma", 1.0));
     d->saturationInput->setValue(group.readEntry("Saturation", 1.0));
     d->fineExposureInput->setValue(group.readEntry("FineExposure", 0.0));
@@ -614,7 +614,7 @@ void RawSettingsBox::writeSettings()
     group.writeEntry("Output Color Profile",       d->decodingSettingsBox->outputColorProfile());
 
     group.writeEntry("Brightness",                 d->brightnessInput->value());
-    group.writeEntry("Constrast",                  d->contrastInput->value());
+    group.writeEntry("Contrast",                   d->contrastInput->value());
     group.writeEntry("Gamma",                      d->gammaInput->value());
     group.writeEntry("Saturation",                 d->saturationInput->value());
     group.writeEntry("FineExposure",               d->fineExposureInput->value());
