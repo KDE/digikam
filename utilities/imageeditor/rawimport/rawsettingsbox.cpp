@@ -550,7 +550,7 @@ void RawSettingsBox::readSettings()
     d->decodingSettingsBox->setOutputColorProfile(config->readPathEntry("Output Color Profile", QString()));
 
     d->brightnessInput->setValue(config->readNumEntry("Brightness", 0));
-    d->contrastInput->setValue(config->readNumEntry("Constrast", 0));
+    d->contrastInput->setValue(config->readNumEntry("Contrast", 0));
     d->gammaInput->setValue(config->readDoubleNumEntry("Gamma", 1.0));
     d->saturationInput->setValue(config->readDoubleNumEntry("Saturation", 1.0));
     d->fineExposureInput->setValue(config->readDoubleNumEntry("FineExposure", 0.0));
@@ -613,7 +613,7 @@ void RawSettingsBox::writeSettings()
     config->writeEntry("Output Color Profile",       d->decodingSettingsBox->outputColorProfile());
 
     config->writeEntry("Brightness",                 d->brightnessInput->value());
-    config->writeEntry("Constrast",                  d->contrastInput->value());
+    config->writeEntry("Contrast",                   d->contrastInput->value());
     config->writeEntry("Gamma",                      d->gammaInput->value());
     config->writeEntry("Saturation",                 d->saturationInput->value());
     config->writeEntry("FineExposure",               d->fineExposureInput->value());
