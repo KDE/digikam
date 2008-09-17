@@ -32,6 +32,7 @@
 
 // Local includes.
 
+#include "dbusutilities.h"
 #include "digikam_export.h"
 #include "databasefields.h"
 
@@ -324,21 +325,7 @@ private:
 
 } // namespace Digikam
 
-#define DECLARE_METATYPE_FOR_DBUS(x) \
-Q_DECLARE_METATYPE(x)\
-\
-inline QDBusArgument &operator<<(QDBusArgument &argument, const x &changeset) \
-{ \
-    changeset >> argument; \
-    return argument; \
-} \
-\
-inline const QDBusArgument &operator>>(const QDBusArgument &argument, x &changeset) \
-{ \
-    changeset << argument; \
-    return argument; \
-}
-
+// custom macro from our dbusutilities.h
 DECLARE_METATYPE_FOR_DBUS(Digikam::ImageChangeset)
 DECLARE_METATYPE_FOR_DBUS(Digikam::ImageTagChangeset)
 DECLARE_METATYPE_FOR_DBUS(Digikam::CollectionImageChangeset)
