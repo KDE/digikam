@@ -50,6 +50,7 @@ namespace Digikam
 {
 
 class CollectionImageChangeset;
+class SearchChangeset;
 class Album;
 class AlbumListerPriv;
 
@@ -147,6 +148,7 @@ private slots:
 
     void slotNextRefresh();
     void slotCollectionImageChange(const CollectionImageChangeset &changeset);
+    void slotSearchChange(const SearchChangeset &changeset);
 
 private:
 

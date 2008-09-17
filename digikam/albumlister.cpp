@@ -150,6 +150,9 @@ AlbumLister::AlbumLister()
 
     connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
             this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)));
+
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(searchChange(const SearchChangeset &)),
+            this, SLOT(slotSearchChange(const SearchChangeset &)));
 }
 
 AlbumLister::~AlbumLister()
@@ -671,6 +674,23 @@ void AlbumLister::slotCollectionImageChange(const CollectionImageChangeset &chan
     if (doRefresh)
     {
         // use timer: there may be several signals in a row
+        if (!d->refreshTimer->isActive())
+            d->refreshTimer->start(100);
+    }
+}
+
+void AlbumLister::slotSearchChange(const SearchChangeset &changeset)
+{
+    if (!d->currAlbum)
+        return;
+
+    if (changeset.operation() != SearchChangeset::Changed)
+        return;
+
+    SAlbum *album = AlbumManager::instance()->findSAlbum(changeset.searchId());
+
+    if (album && d->currAlbum == album)
+    {
         if (!d->refreshTimer->isActive())
             d->refreshTimer->start(100);
     }
