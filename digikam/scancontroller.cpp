@@ -48,12 +48,16 @@
 
 #include "ddebug.h"
 #include "collectionscanner.h"
+#include "collectionscannerhints.h"
 #include "databaseaccess.h"
+#include "collectionmanager.h"
+#include "collectionlocation.h"
 #include "dprogressdlg.h"
 #include "dmetadata.h"
 #include "albumsettings.h"
 #include "albumdb.h"
 #include "albummanager.h"
+#include "album.h"
 #include "splashscreen.h"
 #include "scancontroller.h"
 #include "scancontroller.moc"
@@ -73,6 +77,7 @@ public:
         needsInitialization = false;
         needsCompleteScan   = false;
         scanSuspended       = 0;
+        idle                = false;
         eventLoop           = 0;
         showTimer           = 0;
         advice              = ScanController::Success;
@@ -84,6 +89,8 @@ public:
     int                  scanSuspended;
 
     QStringList          scanTasks;
+
+    bool                 idle;
 
     QMutex               mutex;
     QWaitCondition       condVar;
@@ -102,6 +109,10 @@ public:
     SplashScreen        *splash;
 
     ScanController::Advice advice;
+
+    QList<AlbumCopyMoveHint> albumHints;
+    QList<ItemCopyMoveHint>  itemHints;
+    QDateTime                lastHintAdded;
 
     QPixmap albumPixmap()
     {
@@ -129,6 +140,20 @@ public:
         if (errorPix.isNull())
             errorPix = KIconLoader::global()->loadIcon("dialog-error", KIconLoader::NoGroup, 32);
         return errorPix;
+    }
+
+    void garbageCollectHints(bool setAccessTime)
+    {
+        // called with locked mutex
+        QDateTime current = QDateTime::currentDateTime();
+        if (idle &&
+            lastHintAdded.isValid() && lastHintAdded.secsTo(current) > 5*60)
+        {
+            itemHints.clear();
+            albumHints.clear();
+        }
+        if (setAccessTime)
+            lastHintAdded = current;
     }
 
 };
@@ -314,7 +339,11 @@ void ScanController::run()
                 task = d->scanTasks.takeFirst();
             }
             else
+            {
+                d->idle = true;
                 d->condVar.wait(&d->mutex);
+                d->idle = false;
+            }
         }
 
         if (doInit)
@@ -330,12 +359,16 @@ void ScanController::run()
         {
             CollectionScanner scanner;
             connectCollectionScanner(&scanner);
+            scanner.recordHints(d->albumHints);
+            scanner.recordHints(d->itemHints);
             scanner.completeScan();
             emit completeScanDone();
         }
         else if (doPartialScan)
         {
             CollectionScanner scanner;
+            scanner.recordHints(d->albumHints);
+            scanner.recordHints(d->itemHints);
             connectCollectionScanner(&scanner);
             scanner.partialScan(task);
         }
@@ -475,6 +508,79 @@ void ScanController::slotErrorFromInitialization(const QString &errorMessage)
         d->progressDialog->addedAction(d->errorPixmap(), message);
 
     KMessageBox::error(d->progressDialog, errorMessage);
+}
+
+static AlbumCopyMoveHint hintForAlbum(const PAlbum *album, int dstAlbumRootId, const QString &relativeDstPath,
+                                      const QString &albumName)
+{
+    QString dstAlbumPath;
+    if (relativeDstPath == "/")
+        dstAlbumPath = relativeDstPath + albumName;
+    else
+        dstAlbumPath = relativeDstPath + "/" + albumName;
+
+    return AlbumCopyMoveHint(album->albumRootId(), album->id(),
+                             dstAlbumRootId, dstAlbumPath);
+}
+
+static QList<AlbumCopyMoveHint> hintsForAlbum(const PAlbum *album, int dstAlbumRootId, QString relativeDstPath,
+                                              const QString &albumName)
+{
+    QList<AlbumCopyMoveHint> newHints;
+
+    newHints << hintForAlbum(album, dstAlbumRootId, relativeDstPath, albumName);
+
+    for (AlbumIterator it(const_cast<PAlbum*>(album)); *it; ++it)
+    {
+        newHints << hintForAlbum((PAlbum*)*it, dstAlbumRootId, relativeDstPath, albumName);
+    }
+
+    return newHints;
+}
+
+void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum *album, const QString &dstPath, const QString &newAlbumName)
+{
+    // get album root and album from dst path
+    CollectionLocation location = CollectionManager::instance()->locationForPath(dstPath);
+    if (location.isNull())
+    {
+        DWarning() << "hintAtMoveOrCopyOfAlbum: Destination path" << dstPath << "does not point to an available location.";
+        return;
+    }
+    QString relativeDstPath = CollectionManager::instance()->album(location, dstPath);
+
+    QList<AlbumCopyMoveHint> newHints = hintsForAlbum(album, location.id(), relativeDstPath,
+                                                      newAlbumName.isNull() ? album->title() : newAlbumName);
+
+    QMutexLocker lock(&d->mutex);
+    d->albumHints << newHints;
+}
+
+void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum *album, const PAlbum *dstAlbum, const QString &newAlbumName)
+{
+    QList<AlbumCopyMoveHint> newHints = hintsForAlbum(album, dstAlbum->albumRootId(), dstAlbum->albumPath(),
+                                                      newAlbumName.isNull() ? album->title() : newAlbumName);
+
+    QMutexLocker lock(&d->mutex);
+    d->albumHints << newHints;
+}
+
+void ScanController::hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const PAlbum *dstAlbum, QStringList itemNames)
+{
+    ItemCopyMoveHint hint(ids, dstAlbum->albumRootId(), dstAlbum->id(), itemNames);
+
+    QMutexLocker lock(&d->mutex);
+    d->garbageCollectHints(true);
+    d->itemHints << hint;
+}
+
+void ScanController::hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum *dstAlbum, QString itemName)
+{
+    ItemCopyMoveHint hint(QList<qlonglong>() << id, dstAlbum->albumRootId(), dstAlbum->id(), QStringList() << itemName);
+
+    QMutexLocker lock(&d->mutex);
+    d->garbageCollectHints(true);
+    d->itemHints << hint;
 }
 
 

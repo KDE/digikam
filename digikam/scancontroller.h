@@ -46,6 +46,7 @@ namespace Digikam
 
 class CollectionScanner;
 class SplashScreen;
+class PAlbum;
 class ScanControllerPriv;
 
 class DIGIKAM_EXPORT ScanController : public QThread, public InitializationObserver
@@ -93,6 +94,25 @@ public:
      */
     void suspendCollectionScan();
     void resumeCollectionScan();
+
+    /** Hint at the imminent copy, move or rename of an album, so that the
+     *  collection scanner is informed about this.
+     *  If the album is renamed, give the new name in newAlbumName.
+     *  DstAlbum is the new parent album /
+     *  dstPath is the new parent directory of the album, so
+     *  do not include the album name to dstPath.
+     */
+    void hintAtMoveOrCopyOfAlbum(const PAlbum *album, const PAlbum *dstAlbum, const QString &newAlbumName = QString());
+    void hintAtMoveOrCopyOfAlbum(const PAlbum *album, const QString &dstPath, const QString &newAlbumName = QString());
+
+    /** Hint at the imminent copy, move or rename of items, so that the
+     *  collection scanner is informed about this.
+     *  Give the list of existing items, specify the destination with dstAlbum,
+     *  and give the names at destination in itemNames (Unless for rename, names wont usually change.
+     *  Give them nevertheless.)
+     */
+    void hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const PAlbum *dstAlbum, QStringList itemNames);
+    void hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum *dstAlbum, QString itemName);
 
 signals:
 
