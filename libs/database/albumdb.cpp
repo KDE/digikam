@@ -155,7 +155,9 @@ AlbumInfo::List AlbumDB::scanAlbums()
     d->db->execSql( "SELECT A.albumRoot, A.id, A.relativePath, A.date, A.caption, A.collection, B.albumRoot, B.relativePath, I.name \n "
                     "FROM Albums AS A \n "
                     "  LEFT OUTER JOIN Images AS I ON A.icon=I.id \n"
-                    "  LEFT OUTER JOIN Albums AS B ON B.id=I.album;", &values);
+                    "  LEFT OUTER JOIN Albums AS B ON B.id=I.album \n"
+                    " WHERE A.albumRoot != 0;", // exclude stale albums
+                    &values);
 
     QString iconAlbumUrl, iconName;
 
@@ -418,6 +420,20 @@ void AlbumDB::deleteAlbum(int albumID)
     d->db->execSql( QString("DELETE FROM Albums WHERE id=?;"),
                     albumID );
     d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::Deleted));
+}
+
+void AlbumDB::makeStaleAlbum(int albumID)
+{
+    d->db->execSql( QString("UPDATE Albums SET albumRoot=0 WHERE id=?;"),
+                    albumID );
+    // for now, we make no distinction to deleteAlbums wrt to changeset
+    d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::Deleted));
+}
+
+void AlbumDB::deleteStaleAlbums()
+{
+    d->db->execSql( QString("DELETE FROM Albums WHERE albumRoot=0;") );
+    // deliberately no changeset here, is done above
 }
 
 int AlbumDB::addTag(int parentTagID, const QString& name, const QString& iconKDE,
@@ -2731,7 +2747,7 @@ void AlbumDB::deleteRemovedItems(QList<int> albumIds)
     d->db->recordChangeset(CollectionImageChangeset(QList<qlonglong>(), albumIds, CollectionImageChangeset::RemovedDeleted));
 }
 
-void AlbumDB::renameAlbum(int albumID, const QString& newRelativePath, bool renameSubalbums)
+void AlbumDB::renameAlbum(int albumID, int newAlbumRoot, const QString& newRelativePath)
 {
     int albumRoot  = getAlbumRootId(albumID);
     QString oldUrl = getAlbumRelativePath(albumID);
@@ -2743,11 +2759,12 @@ void AlbumDB::renameAlbum(int albumID, const QString& newRelativePath, bool rena
     d->db->execSql( QString("DELETE FROM Albums WHERE relativePath=? AND albumRoot=?;"),
                     newRelativePath, albumRoot );
 
-    // now update the album url
-    d->db->execSql( QString("UPDATE Albums SET relativePath = ? WHERE id = ? AND albumRoot=?;"),
-                    newRelativePath, albumID, albumRoot );
+    // now update the album
+    d->db->execSql( QString("UPDATE Albums SET albumRoot=?, relativePath=? WHERE id=? AND albumRoot=?;"),
+                    newAlbumRoot, newRelativePath, albumID, albumRoot );
     d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::Renamed));
 
+    /*
     if (renameSubalbums)
     {
         // now find the list of all subalbums which need to be updated
@@ -2764,11 +2781,12 @@ void AlbumDB::renameAlbum(int albumID, const QString& newRelativePath, bool rena
             newChildURL = (*it).toString();
             ++it;
             newChildURL.replace(oldUrl, newRelativePath);
-            d->db->execSql(QString("UPDATE Albums SET url=? WHERE albumRoot=? AND url=?"),
-                           newChildURL, albumRoot, (*it) );
+            d->db->execSql(QString("UPDATE Albums SET albumRoot=?, relativePath=? WHERE albumRoot=? AND relativePath=?"),
+                           newAlbumRoot, newChildURL, albumRoot, (*it) );
             d->db->recordChangeset(AlbumChangeset(childAlbumId, AlbumChangeset::Renamed));
         }
     }
+    */
 }
 
 void AlbumDB::setTagName(int tagID, const QString& name)

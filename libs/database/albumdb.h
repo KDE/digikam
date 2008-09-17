@@ -237,6 +237,17 @@ public:
      */
     void deleteAlbum(int albumID);
 
+    /** Makes the album a stale entry by setting the albumRoot to 0.
+     *  Emits the same changeset as deleteAlbum()
+     */
+    void makeStaleAlbum(int albumID);
+
+    /**
+     * Deletes albums from the database that were previously removed
+     * with makeStaleAlbum()
+     */
+    void deleteStaleAlbums();
+
     /**
      * Copy the properties of the given srcAlbum to the dstAlbum.
      * Both albums must exist.
@@ -245,13 +256,9 @@ public:
     bool copyAlbumProperties(int srcAlbumID, int dstAlbumID);
 
     /**
-     * Set a new url for the album. This will not affect the url
-     * of the subalbums.
-     * @param albumID the id of the album
-     * @param url     the new url for the album
-     * @param renameSubalbums change the url of all subalbums as well
+     * Give an existing album a new relativePath and a newAlbumRootId
      */
-    void renameAlbum(int albumID, const QString& url, bool renameSubalbums);
+    void renameAlbum(int albumID, int newAlbumRootId, const QString& newRelativePath);
 
     /**
      * Set a caption for the album.
