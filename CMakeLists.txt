@@ -600,6 +600,7 @@ SET(libdatabase_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasetransaction.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseurl.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasechangesets.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionscannerhints.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfolist.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfocache.cpp
