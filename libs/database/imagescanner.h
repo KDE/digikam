@@ -91,6 +91,15 @@ public:
     void newFile(int albumId);
 
     /**
+     * Similar to newFile.
+     * Call this when you want ImageScanner to add a new file to the database
+     * which is a copy of another file, copying attributes from the src
+     * and rescanning other attributes as appropriate.
+     * Give the id of the album of the new file, and the id of the src file.
+     */
+    void copiedFrom(int albumId, qlonglong srcId);
+
+    /**
      * Returns containers with user-presentable information.
      * These methods provide the reverse service: Not writing into the db, but reading from the db.
      */
@@ -118,6 +127,7 @@ protected:
     void addImage(int albumId);
     void updateImage();
     bool scanFromIdenticalFile();
+    bool copyFromSource(qlonglong src);
     void scanImageInformation();
     void updateImageInformation();
     void scanImageMetadata();

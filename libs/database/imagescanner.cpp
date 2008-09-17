@@ -96,6 +96,18 @@ void ImageScanner::fullScan()
     scanFile();
 }
 
+void ImageScanner::copiedFrom(int albumId, qlonglong srcId)
+{
+    loadFromDisk();
+    addImage(albumId);
+    // first check if we can establish identity
+    if (!scanFromIdenticalFile())
+        // use source, if it exists
+        if (!copyFromSource(srcId))
+            // scan newly
+            scanFile();
+}
+
 void ImageScanner::addImage(int albumId)
 {
     // there is a limit here for file size <2TB
@@ -175,6 +187,17 @@ bool ImageScanner::scanFromIdenticalFile()
         return true;
     }
     return false;
+}
+
+bool ImageScanner::copyFromSource(qlonglong srcId)
+{
+    DatabaseAccess access;
+    // some basic validity checking
+    ItemScanInfo info = access.db()->getItemScanInfo(srcId);
+    if (!info.id)
+        return false;
+    access.db()->copyImageAttributes(srcId, m_scanInfo.id);
+    return true;
 }
 
 void ImageScanner::updateHardInfos()
