@@ -1328,8 +1328,9 @@ void AlbumIconView::startDrag()
     drag->exec();
 }
 
-void AlbumIconView::contentsDragMoveEvent(QDragMoveEvent *e)
+void AlbumIconView::contentsDragEnterEvent(QDragEnterEvent *e)
 {
+    DDebug() << "contentsDragEnterEvent" << e->mimeData()->formats() << DTagDrag::canDecode(e->mimeData());
     if (!d->currentAlbum || (DAlbumDrag::canDecode(e->mimeData()) ||
                             (!KUrl::List::canDecode(e->mimeData())          &&
                              !DCameraDragObject::canDecode(e->mimeData())   &&
@@ -1338,10 +1339,9 @@ void AlbumIconView::contentsDragMoveEvent(QDragMoveEvent *e)
                              !DCameraItemListDrag::canDecode(e->mimeData()) &&
                              !DItemDrag::canDecode(e->mimeData()))))
     {
-        e->ignore();
         return;
     }
-    e->accept();
+    e->acceptProposedAction();
 }
 
 void AlbumIconView::contentsDropEvent(QDropEvent *e)
@@ -1458,10 +1458,9 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
     }
     else if(DTagDrag::canDecode(e->mimeData()))
     {
-        QByteArray ba = e->encodedData("digikam/tag-id");
-        QDataStream ds(&ba, QIODevice::ReadOnly);
         int tagID;
-        ds >> tagID;
+        if (!DTagDrag::decode(e->mimeData(), tagID))
+            return;
 
         AlbumManager* man = AlbumManager::instance();
         TAlbum* talbum    = man->findTAlbum(tagID);
@@ -1540,10 +1539,8 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
     }
     else if(DTagListDrag::canDecode(e->mimeData()))
     {
-        QByteArray ba = e->encodedData("digikam/taglist");
-        QDataStream ds(&ba, QIODevice::ReadOnly);
         QList<int> tagIDs;
-        ds >> tagIDs;
+        DTagListDrag::decode(e->mimeData(), tagIDs);
 
         QMenu popMenu(this);
 

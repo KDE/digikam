@@ -170,7 +170,7 @@ protected:
 
     // DnD
     void startDrag();
-    void contentsDragMoveEvent(QDragMoveEvent *e);
+    void contentsDragEnterEvent(QDragEnterEvent *e);
     void contentsDropEvent(QDropEvent *e);
 
     void prepareRepaint(const QList<IconItem *> &itemsToRepaint);
