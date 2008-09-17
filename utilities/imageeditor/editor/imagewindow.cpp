@@ -1363,10 +1363,9 @@ void ImageWindow::dropEvent(QDropEvent *e)
     }
     else if(DTagDrag::canDecode(e->mimeData()))
     {
-        QByteArray ba = e->encodedData("digikam/tag-id");
-        QDataStream ds(&ba, QIODevice::ReadOnly);
         int tagID;
-        ds >> tagID;
+        if (!DTagDrag::decode(e->mimeData(), tagID))
+            return;
 
         AlbumManager* man        = AlbumManager::instance();
         QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);

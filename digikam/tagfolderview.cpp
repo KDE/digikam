@@ -810,10 +810,9 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
 
     if(DTagDrag::canDecode(e->mimeData()))
     {
-        QByteArray ba = e->encodedData("digikam/tag-id");
-        QDataStream ds(&ba, QIODevice::ReadOnly);
         int tagID;
-        ds >> tagID;
+        if (!DTagDrag::decode(e->mimeData(), tagID))
+            return;
 
         TAlbum* talbum = d->albumMan->findTAlbum(tagID);
 

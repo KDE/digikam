@@ -593,10 +593,9 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
     }
     else if(DTagDrag::canDecode(e->mimeData()))
     {
-        QByteArray  ba = e->encodedData("digikam/tag-id");
-        QDataStream ds(ba);
         int tagID;
-        ds >> tagID;
+        if (!DTagDrag::decode(e->mimeData(), tagID))
+            return;
 
         QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
         ImageInfoList imageInfoList;
