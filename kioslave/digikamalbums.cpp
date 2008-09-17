@@ -209,24 +209,25 @@ void kio_digikamalbums::copy( const KUrl &src, const KUrl &dst, int mode, KIO::J
         return;
     }
 
-    //TODO: Implement move hints for album.
     // if the filename is .digikam_properties, we have been asked to copy the
     // metadata of the src album to the dst album
+    //NOTE: Feature old and currently unused
+    /*
     if (src.fileName() == ".digikam_properties")
     {
         access.db()->copyAlbumProperties(srcAlbumID, dstAlbumID);
         finished();
         return;
     }
+    */
 
     KIO::Job *job = KIO::file_copy(dbUrlSrc.fileUrl(), dbUrlDst.fileUrl(), mode, flags | KIO::HideProgressInfo );
     connectJob(job);
     if (m_eventLoop->exec() != 0)
         return;
 
-    // TODO:Let CollectionScanner do the database part
-    // now copy the metadata over
-    access.db()->copyItem(srcAlbumID, dbUrlSrc.fileName(), dstAlbumID, dbUrlSrc.fileName());
+    // Let CollectionScanner do the database part
+    //access.db()->copyItem(srcAlbumID, dbUrlSrc.fileName(), dstAlbumID, dbUrlSrc.fileName());
 
     finished();
 }
@@ -294,8 +295,8 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
     if (m_eventLoop->exec() != 0)
         return;
 
-    // renaming done. now update the database
-    // TODO: Let CollectionScanner do the database part. Implement move hints for album.
+    // Let CollectionScanner do the database part.
+    /*
     if (renamingAlbum)
     {
         // rename subalbums as well
@@ -306,6 +307,7 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
         access.db()->moveItem(srcAlbumID, dbUrlSrc.fileName(),
                               dstAlbumID, dbUrlDst.fileName());
     }
+    */
 
     finished();
 }
