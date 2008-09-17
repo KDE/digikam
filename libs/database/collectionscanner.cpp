@@ -50,11 +50,31 @@
 #include "databasebackend.h"
 #include "databasetransaction.h"
 #include "imagescanner.h"
+#include "collectionscannerhints.h"
 #include "collectionscanner.h"
 #include "collectionscanner.moc"
 
 namespace Digikam
 {
+
+class NewlyAppearedFile
+{
+public:
+    NewlyAppearedFile() : albumId(0) {}
+    NewlyAppearedFile(int albumId, const QString &fileName)
+    : albumId(albumId), fileName(fileName) {}
+
+    bool operator==(const NewlyAppearedFile &other) const
+    { return albumId == other.albumId && fileName == other.fileName; }
+
+    int albumId;
+    QString fileName;
+};
+
+inline uint qHash(const NewlyAppearedFile &file)
+{
+    return ::qHash(file.albumId) ^ ::qHash(file.fileName);
+}
 
 class CollectionScannerPriv
 {
@@ -74,6 +94,12 @@ public:
 
     QDateTime         removedItemsTime;
 
+    QHash<CollectionScannerHints::DstPath, CollectionScannerHints::Album>
+                      albumHints;
+    QHash<NewlyAppearedFile, qlonglong>
+                      itemHints;
+    QHash<int,int>    establishedSourceAlbums;
+
     void resetRemovedItemsTime() { removedItemsTime = QDateTime(); }
     void removedItems() { removedItemsTime = QDateTime::currentDateTime(); }
 };
@@ -91,6 +117,24 @@ CollectionScanner::~CollectionScanner()
 void CollectionScanner::setSignalsEnabled(bool on)
 {
     d->wantSignals = on;
+}
+
+void CollectionScanner::recordHints(const QList<AlbumCopyMoveHint> &hints)
+{
+    foreach(const AlbumCopyMoveHint &hint, hints)
+        // automagic casting to src and dst
+        d->albumHints[hint] = hint;
+}
+
+void CollectionScanner::recordHints(const QList<ItemCopyMoveHint> &hints)
+{
+    foreach(const ItemCopyMoveHint &hint, hints)
+    {
+        QList<qlonglong> ids = hint.srcIds();
+        QStringList dstNames = hint.dstNames();
+        for(int i=0;i<ids.size();i++)
+            d->itemHints[NewlyAppearedFile(hint.albumIdDst(), dstNames[i])] = ids[i];
+    }
 }
 
 void CollectionScanner::loadNameFilters()
@@ -134,6 +178,11 @@ void CollectionScanner::completeScan()
 
         emit totalFilesToScan(count);
     }
+
+    // if we have no hints to follow, clean up all stale albums
+    // (usually the case at application startup)
+    if (d->albumHints.isEmpty())
+        DatabaseAccess().db()->deleteStaleAlbums();
 
     scanForStaleAlbums(allLocations);
 
@@ -234,16 +283,12 @@ void CollectionScanner::scanFile(const QString &albumRoot, const QString &album,
     loadNameFilters();
     if (imageId == -1)
     {
-        ImageScanner scanner(info);
-        scanner.setCategory(category(info));
-        scanner.newFile(albumId);
+        scanNewFile(info, albumId);
     }
     else
     {
         ItemScanInfo scanInfo = DatabaseAccess().db()->getItemScanInfo(imageId);
-        ImageScanner scanner((info), scanInfo);
-        scanner.setCategory(category(info));
-        scanner.fileModified();
+        scanModifiedFile(info, scanInfo);
     }
 }
 
@@ -297,13 +342,48 @@ void CollectionScanner::scanForStaleAlbums(QList<CollectionLocation> locations)
         }
     }
 
+    // At this point, it is important to handle album renames.
+    // We can still copy over album attributes later, but we cannot identify
+    // the former album of removed images.
+    // Just renaming the album is also much cheaper than rescanning all files.
+    if (!toBeDeleted.isEmpty() && !d->albumHints.isEmpty())
+    {
+        // go through all album copy/move hints
+        QHash<CollectionScannerHints::DstPath, CollectionScannerHints::Album>::const_iterator it;
+        int toBeDeletedIndex;
+        for (it = d->albumHints.begin(); it != d->albumHints.end(); ++it)
+        {
+            // if the src entry of a hint is found in toBeDeleted, we have a move/rename, no copy. Handle these here.
+            toBeDeletedIndex = toBeDeleted.indexOf(it.value().albumId);
+            if (toBeDeletedIndex != -1)
+            {
+                // check for existence of target
+                CollectionLocation location = albumRoots.value(it.key().albumRootId);
+                if (!location.isNull())
+                {
+                    QFileInfo fileInfo(location.albumRootPath() + it.key().relativePath);
+                    if (fileInfo.exists() && fileInfo.isDir())
+                    {
+                        // Just set a new root/relativePath to the album. Further scanning will care for all cases or error.
+                        DatabaseAccess().db()->renameAlbum(it.value().albumId, it.key().albumRootId, it.key().relativePath);
+                        // No need any more to delete the album
+                        toBeDeleted.removeAt(toBeDeletedIndex);
+                    }
+                }
+            }
+        }
+    }
+
+    // For all albums in toBeDeleted:
+    // Remove the items (orphan items, detach them from the album, but keep entries for a certain time)
+    // Make album orphan (no album root, keep entries until next application start)
     {
         DatabaseAccess access;
         DatabaseTransaction transaction(&access);
         foreach (int albumId, toBeDeleted)
         {
             access.db()->removeItemsFromAlbum(albumId);
-            access.db()->deleteAlbum(albumId);
+            access.db()->makeStaleAlbum(albumId);
             d->removedItems();
         }
     }
@@ -317,11 +397,22 @@ int CollectionScanner::checkAlbum(const CollectionLocation &location, const QStr
     // get album id if album exists
     int albumID = DatabaseAccess().db()->getAlbumForPath(location.id(), album, false);
 
+    d->establishedSourceAlbums.remove(albumID);
+
     // create if necessary
     if (albumID == -1)
     {
         QFileInfo fi(location.albumRootPath() + album);
         albumID = DatabaseAccess().db()->addAlbum(location.id(), album, QString(), fi.lastModified().date(), QString());
+
+        // have album this one was copied from?
+        CollectionScannerHints::Album src = d->albumHints.value(CollectionScannerHints::DstPath(location.id(), album));
+        if (!src.isNull())
+        {
+            //DDebug() << "Identified album" << src.albumId << "as source of new album" << fi.filePath();
+            DatabaseAccess().db()->copyAlbumProperties(src.albumId, albumID);
+            d->establishedSourceAlbums[albumID] = src.albumId;
+        }
     }
 
     return albumID;
@@ -394,9 +485,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
                         if (abs(diff) > 1)
                         {
                             // file has been modified
-                            ImageScanner scanner((*fi), scanInfos[index]);
-                            scanner.setCategory(category(*fi));
-                            scanner.fileModified();
+                            scanModifiedFile(*fi, scanInfos[index]);
                         }
                     }
                 }
@@ -408,11 +497,9 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
             }
             else
             {
-                DDebug() << "Adding item " << fi->fileName() << endl;
+                //DDebug() << "Adding item " << fi->fileName() << endl;
 
-                ImageScanner scanner(*fi);
-                scanner.setCategory(category(*fi));
-                scanner.newFile(albumID);
+                scanNewFile(*fi, albumID);
             }
         }
         else if ( fi->isDir() )
@@ -436,6 +523,38 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
 
     if (d->wantSignals)
         emit finishedScanningAlbum(location.albumRootPath(), album, list.count());
+}
+
+void CollectionScanner::scanNewFile(const QFileInfo &info, int albumId)
+{
+    ImageScanner scanner(info);
+    scanner.setCategory(category(info));
+
+    // Check copy/move hints for single items
+    qlonglong srcId = d->itemHints.value(NewlyAppearedFile(albumId, info.fileName()));
+    if (srcId != 0)
+        scanner.copiedFrom(albumId, srcId);
+    else
+    {
+        // Check copy/move hints for whole albums
+        int srcAlbum = d->establishedSourceAlbums.value(albumId);
+        if (srcAlbum)
+            // if we have one source album, find out if there is a file with the same name
+            srcId = DatabaseAccess().db()->getImageId(srcAlbum, info.fileName());
+
+        if (srcId != 0)
+            scanner.copiedFrom(albumId, srcId);
+        else
+            // Establishing identity with the unique hsah 
+            scanner.newFile(albumId);
+    }
+}
+
+void CollectionScanner::scanModifiedFile(const QFileInfo &info, const ItemScanInfo &scanInfo)
+{
+    ImageScanner scanner(info, scanInfo);
+    scanner.setCategory(category(info));
+    scanner.fileModified();
 }
 
 int CollectionScanner::countItemsInFolder(const QString& directory)

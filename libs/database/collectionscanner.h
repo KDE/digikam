@@ -38,11 +38,15 @@
 #include "databaseaccess.h"
 #include "albuminfo.h"
 
+class QFileInfo;
+
 namespace Digikam
 {
 
 class CollectionLocation;
 class CollectionScannerPriv;
+class AlbumCopyMoveHint;
+class ItemCopyMoveHint;
 
 class DIGIKAM_EXPORT CollectionScanner : public QObject
 {
@@ -85,12 +89,20 @@ public:
      */
     void setSignalsEnabled(bool on);
 
+    /**
+     * Record hints for the collection scanner.
+     */
+    void recordHints(const QList<AlbumCopyMoveHint> &hint);
+    void recordHints(const QList<ItemCopyMoveHint> &hint);
+
 protected:
 
     void scanForStaleAlbums(QList<CollectionLocation> locations);
     void scanAlbumRoot(const CollectionLocation &location);
     void scanAlbum(const CollectionLocation &location, const QString &album);
     int checkAlbum(const CollectionLocation &location, const QString &album);
+    void scanNewFile(const QFileInfo &info, int albumId);
+    void scanModifiedFile(const QFileInfo &info, const ItemScanInfo &scanInfo);
 
 #if 0
     /**
