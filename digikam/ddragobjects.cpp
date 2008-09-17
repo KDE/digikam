@@ -40,6 +40,7 @@ DItemDrag::DItemDrag(const KUrl::List &urls,
                      const char* name)
          : QMimeData()
 {
+    // Digikam specific mime data
     setObjectName(name);
     QByteArray ba;
     QDataStream ds(&ba, QIODevice::WriteOnly);
@@ -60,6 +61,9 @@ DItemDrag::DItemDrag(const KUrl::List &urls,
     QDataStream ds4(&ba4, QIODevice::WriteOnly);
     ds4 << imageIDs;
     setData("digikam/image-ids", ba4);
+
+    // commonly accessible mime data
+    urls.populateMimeData(this);
 }
 
 bool DItemDrag::canDecode(const QMimeData* e)
