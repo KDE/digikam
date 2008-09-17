@@ -60,8 +60,7 @@ public:
     DItemDrag(const KUrl::List& urls, 
               const KUrl::List& kioURLs,
               const QList<int>& albumIDs,
-              const QList<int>& imageIDs,
-              const char* name=0);
+              const QList<int>& imageIDs);
 
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e,
@@ -69,11 +68,6 @@ public:
                        KUrl::List &kioURLs,
                        QList<int>& albumIDs,
                        QList<int>& imageIDs);
-
-protected:
-
-    virtual const char* format(int i) const;
-    virtual QByteArray encodedData(const char* mime) const;
 };
 
 // ------------------------------------------------------------------------
@@ -88,13 +82,9 @@ class DTagDrag : public QMimeData
 {
 public:
 
-    DTagDrag(int albumid, const char *name=0);
+    DTagDrag(int albumid);
     static bool canDecode(const QMimeData* e);
-
-protected:
-
-    QByteArray  encodedData(const char* mime) const;
-    const char* format(int i) const;
+    static bool decode(const QMimeData* e, int &tagID);
 };
 
 // ------------------------------------------------------------------------
@@ -109,14 +99,9 @@ class DAlbumDrag : public QMimeData
 {
 public:
 
-    DAlbumDrag(const KUrl &url, int albumid, const char *name=0);
+    DAlbumDrag(const KUrl &url, int albumid);
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, KUrl::List &urls, int &albumID);
-
-protected:
-
-    QByteArray  encodedData(const char* mime) const;
-    const char* format(int i) const;
 };
 
 // ------------------------------------------------------------------------
@@ -131,13 +116,9 @@ class DTagListDrag : public QMimeData
 {
 public:
 
-    DTagListDrag(const QList<int>& tagIDs, const char *name=0);
+    DTagListDrag(const QList<int>& tagIDs);
     static bool canDecode(const QMimeData* e);
-
-protected:
-
-    QByteArray  encodedData(const char* mime) const;
-    const char* format(int i) const;
+    static bool decode(const QMimeData* e, QList<int> &tagIDs);
 };
 
 // ------------------------------------------------------------------------
@@ -152,13 +133,9 @@ class DCameraItemListDrag : public QMimeData
 {
 public:
 
-    DCameraItemListDrag(const QStringList& cameraItemPaths, const char *name=0);
+    DCameraItemListDrag(const QStringList& cameraItemPaths);
     static bool canDecode(const QMimeData* e);
-
-protected:
-
-    QByteArray  encodedData(const char* mime) const;
-    const char* format(int i) const;
+    static bool decode(const QMimeData* e, QStringList &cameraItemPaths);
 };
 
 // ------------------------------------------------------------------------
@@ -174,14 +151,9 @@ class DCameraDragObject : public QMimeData
 
 public:
 
-    DCameraDragObject(const CameraType& ctype, const char *name=0);
+    DCameraDragObject(const CameraType& ctype);
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, CameraType& ctype);
-
-protected:
-
-    QByteArray  encodedData(const char* mime) const;
-    const char* format(int i) const;
 };
 
 }  // namespace Digikam

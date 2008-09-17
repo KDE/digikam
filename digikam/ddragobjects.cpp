@@ -36,12 +36,10 @@ namespace Digikam
 DItemDrag::DItemDrag(const KUrl::List &urls,
                      const KUrl::List &kioUrls,
                      const QList<int>& albumIDs,
-                     const QList<int>& imageIDs,
-                     const char* name)
+                     const QList<int>& imageIDs)
          : QMimeData()
 {
     // Digikam specific mime data
-    setObjectName(name);
     QByteArray ba;
     QDataStream ds(&ba, QIODevice::WriteOnly);
     ds << urls;
@@ -88,7 +86,7 @@ bool DItemDrag::decode(const QMimeData* e,
     QByteArray ba = e->data("digikam/item-ids");
     if (ba.size())
     {
-        QDataStream ds(&ba, QIODevice::ReadOnly);
+        QDataStream ds(ba);
         if (!ds.atEnd())
         {
             ds >> urls;
@@ -103,20 +101,20 @@ bool DItemDrag::decode(const QMimeData* e,
 
         if (albumarray.size() && imagearray.size() && kioarray.size())
         {
-            QDataStream dsAlbums(&albumarray, QIODevice::ReadOnly);
+            QDataStream dsAlbums(albumarray);
             if (!dsAlbums.atEnd())
             {
                 dsAlbums >> albumIDs;
             }
 
-            QDataStream dsImages(&imagearray, QIODevice::ReadOnly);
+            QDataStream dsImages(imagearray);
             if (!dsImages.atEnd())
             {
                 dsImages >> imageIDs;
             }
 
             KUrl u;
-            QDataStream dsKio(&kioarray, QIODevice::ReadOnly);
+            QDataStream dsKio(kioarray);
             if (!dsKio.atEnd())
             {
                 dsKio >> kioUrls;
@@ -129,33 +127,11 @@ bool DItemDrag::decode(const QMimeData* e,
     return false;
 }
 
-const char* DItemDrag::format(int i) const
-{
-    if (i == 0)
-        return "text/uri-list";
-    else if (i == 1)
-        return "digikam/item-ids";
-    else if (i == 2)
-        return "digikam/album-ids";
-    else if (i == 3)
-        return "digikam/image-ids";
-    else if (i == 4)
-        return "digikam/digikamalbums";
-    else
-        return 0;
-}
-
-QByteArray DItemDrag::encodedData(const char* mime) const
-{
-    return data(mime);
-}
-
 // ------------------------------------------------------------------------
 
-DTagDrag::DTagDrag(int albumid, const char *name)
+DTagDrag::DTagDrag(int albumid)
         : QMimeData()
 {
-    setObjectName(name);
     QByteArray ba;
     QDataStream ds(&ba, QIODevice::WriteOnly);
     ds << albumid;
@@ -167,25 +143,30 @@ bool DTagDrag::canDecode(const QMimeData *e)
     return e->hasFormat("digikam/tag-id");
 }
 
-const char* DTagDrag::format(int i) const
+bool DTagDrag::decode(const QMimeData* e, int &tagID)
 {
-    if (i == 0)
-        return "digikam/tag-id";
+    tagID = 0;
 
-    return 0;
-}
+    QByteArray ba = e->data("digikam/tag-id");
+    if (ba.size())
+    {
+        QDataStream ds(ba);
+        if (!ds.atEnd())
+        {
+            ds >> tagID;
+        }
 
-QByteArray DTagDrag::encodedData(const char* mime) const
-{
-    return data(mime);
+        return true;
+    }
+
+    return false;
 }
 
 // ------------------------------------------------------------------------
 
-DAlbumDrag::DAlbumDrag(const KUrl &url, int albumid, const char *name) 
+DAlbumDrag::DAlbumDrag(const KUrl &url, int albumid) 
           : QMimeData()
 {
-    setObjectName(name);
     QByteArray ba;
     QDataStream ds(&ba, QIODevice::WriteOnly);
     ds << url;
@@ -211,7 +192,7 @@ bool DAlbumDrag::decode(const QMimeData* e, KUrl::List &urls, int &albumID)
     QByteArray ba = e->data("text/uri-list");
     if (ba.size())
     {
-        QDataStream ds(&ba, QIODevice::ReadOnly);
+        QDataStream ds(ba);
         if(!ds.atEnd())
         {
             ds >> urls;
@@ -223,7 +204,7 @@ bool DAlbumDrag::decode(const QMimeData* e, KUrl::List &urls, int &albumID)
         QByteArray ba2 = e->data("digikam/album-id");
         if (ba2.size())
         {
-            QDataStream ds2(&ba2, QIODevice::ReadOnly);
+            QDataStream ds2(ba2);
             if(!ds2.atEnd())
             {
                 ds2 >> albumID;
@@ -235,27 +216,11 @@ bool DAlbumDrag::decode(const QMimeData* e, KUrl::List &urls, int &albumID)
     return false;
 }
 
-const char* DAlbumDrag::format(int i) const
-{
-    if (i == 0)
-        return "text/uri-list";
-    else if ( i == 1 )
-        return "digikam/album-id";
-
-    return 0;
-}
-
-QByteArray DAlbumDrag::encodedData(const char *mime) const
-{
-    return data(mime);
-}
-
 // ------------------------------------------------------------------------
 
-DTagListDrag::DTagListDrag(const QList<int>& tagIDs, const char *name)
+DTagListDrag::DTagListDrag(const QList<int>& tagIDs)
             : QMimeData()
 {
-    setObjectName(name);
     QByteArray ba;
     QDataStream ds(&ba, QIODevice::WriteOnly);
     ds << tagIDs;
@@ -267,25 +232,30 @@ bool DTagListDrag::canDecode(const QMimeData* e)
     return e->hasFormat("digikam/taglist");
 }
 
-QByteArray DTagListDrag::encodedData(const char* mime) const
+bool DTagListDrag::decode(const QMimeData* e, QList<int> &tagIDs)
 {
-    return data(mime);
-}
+    tagIDs.clear();
 
-const char* DTagListDrag::format(int i) const
-{
-    if (i == 0)
-        return "digikam/taglist";
+    QByteArray ba = e->data("digikam/taglist");
+    if (ba.size())
+    {
+        QDataStream ds(ba);
+        if (!ds.atEnd())
+        {
+            ds >> tagIDs;
+        }
 
-    return 0;
+        return true;
+    }
+
+    return false;
 }
 
 // ------------------------------------------------------------------------
 
-DCameraItemListDrag::DCameraItemListDrag(const QStringList& cameraItemPaths, const char *name)
+DCameraItemListDrag::DCameraItemListDrag(const QStringList& cameraItemPaths)
                    : QMimeData()
 {
-    setObjectName(name);
     QByteArray ba;
     QDataStream ds(&ba, QIODevice::WriteOnly);
     ds << cameraItemPaths;
@@ -297,25 +267,30 @@ bool DCameraItemListDrag::canDecode(const QMimeData* e)
     return e->hasFormat("digikam/cameraItemlist");
 }
 
-QByteArray DCameraItemListDrag::encodedData(const char* mime) const
+bool DCameraItemListDrag::decode(const QMimeData* e, QStringList &cameraItemPaths)
 {
-    return data(mime);
-}
+    cameraItemPaths.clear();
 
-const char* DCameraItemListDrag::format(int i) const
-{
-    if (i == 0)
-        return "digikam/cameraItemlist";
+    QByteArray ba = e->data("digikam/cameraItemlist");
+    if (ba.size())
+    {
+        QDataStream ds(ba);
+        if (!ds.atEnd())
+        {
+            ds >> cameraItemPaths;
+        }
 
-    return 0;
+        return true;
+    }
+
+    return false;
 }
 
 // ------------------------------------------------------------------------
 
-DCameraDragObject::DCameraDragObject(const CameraType& ctype, const char *name)
+DCameraDragObject::DCameraDragObject(const CameraType& ctype)
                  : QMimeData()
 {
-    setObjectName(name);
     QByteArray ba;
     QDataStream ds(&ba, QIODevice::WriteOnly);
     ds << ctype.title();
@@ -339,7 +314,7 @@ bool DCameraDragObject::decode(const QMimeData* e, CameraType& ctype)
         QString   title, model, port, path;
         QDateTime lastAccess;
 
-        QDataStream ds(&ba, QIODevice::ReadOnly);
+        QDataStream ds(ba);
         ds >> title;
         ds >> model;
         ds >> port;
@@ -352,19 +327,6 @@ bool DCameraDragObject::decode(const QMimeData* e, CameraType& ctype)
     }
     else
         return false;
-}
-
-const char* DCameraDragObject::format(int i) const
-{
-    if (i == 0)
-        return "camera/unknown";
-
-    return 0;
-}
-
-QByteArray DCameraDragObject::encodedData(const char* mime) const
-{
-    return data(mime);
 }
 
 }  // namespace Digikam
