@@ -191,6 +191,7 @@ public:
     QTimer                     *scanDAlbumsTimer;
     QTimer                     *albumItemCountTimer;
     QTimer                     *tagItemCountTimer;
+    QSet<int>                   changedPAlbums;
 
 
     QList<QDateTime> buildDirectoryModList(const QFileInfo &dbFile)
@@ -659,10 +660,19 @@ void AlbumManager::scanPAlbums()
         // check that location of album is available
         if (CollectionManager::instance()->locationForAlbumRootId(info.albumRootId).isAvailable())
         {
-            if (oldAlbums.contains(info.id))
-                oldAlbums.remove(info.id);
-            else
+            if (d->changedPAlbums.contains(info.id))
+            {
+                // marked as changed: delete old object, create new from scratch
                 newAlbums << info;
+                d->changedPAlbums.remove(info.id);
+            }
+            else
+            {
+                if (oldAlbums.contains(info.id))
+                    oldAlbums.remove(info.id);
+                else
+                    newAlbums << info;
+            }
         }
     }
 
@@ -1375,13 +1385,13 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
     {
         DatabaseAccess access;
         ChangingDB changing(d);
-        access.db()->renameAlbum(album->id(), album->albumPath(), false);
+        access.db()->renameAlbum(album->id(), album->albumRootId(), album->albumPath());
 
-        Album* subAlbum = 0;
+        PAlbum* subAlbum = 0;
         AlbumIterator it(album);
-        while ((subAlbum = it.current()) != 0)
+        while ((subAlbum = static_cast<PAlbum*>(it.current())) != 0)
         {
-            access.db()->renameAlbum(subAlbum->id(), ((PAlbum*)subAlbum)->albumPath(), false);
+            access.db()->renameAlbum(subAlbum->id(), subAlbum->albumRootId(), subAlbum->albumPath());
             ++it;
         }
     }
@@ -2076,12 +2086,13 @@ void AlbumManager::slotAlbumChange(const AlbumChangeset &changeset)
     {
         case AlbumChangeset::Added:
         case AlbumChangeset::Deleted:
-            if (!d->scanPAlbumsTimer->isActive())
-                d->scanPAlbumsTimer->start();
             break;
         case AlbumChangeset::Renamed:
         case AlbumChangeset::PropertiesChanged:
-            //TODO
+            // mark for rescan
+            d->changedPAlbums << changeset.albumId();
+            if (!d->scanPAlbumsTimer->isActive())
+                d->scanPAlbumsTimer->start();
             break;
         case AlbumChangeset::Unknown:
             break;
@@ -2123,7 +2134,6 @@ void AlbumManager::slotSearchChange(const SearchChangeset &changeset)
                 d->scanSAlbumsTimer->start();
             break;
         case SearchChangeset::Changed:
-            //TODO
             break;
         case SearchChangeset::Unknown:
             break;
