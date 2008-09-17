@@ -2374,10 +2374,7 @@ void DigikamApp::slotImportAddFolders()
     PAlbum *pAlbum = dynamic_cast<PAlbum*>(album);
     if (!pAlbum) return;
 
-    KUrl albumUrl;
-    albumUrl.setPath(pAlbum->folderPath());
-
-    KIO::Job* job = DIO::copy(urls, albumUrl);
+    KIO::Job* job = DIO::copy(urls, pAlbum);
 
     connect(job, SIGNAL(result(KJob *)),
             this, SLOT(slotDIOResult(KJob *)));
