@@ -202,7 +202,7 @@ bool DMetadata::setImageComment(const QString& comment) const
     /*if (comment.isEmpty())
           return false;*/
 
-    DDebug() << getFilePath() << " ==> Comment: " << comment << endl;
+    DDebug(50003) << getFilePath() << " ==> Comment: " << comment << endl;
 
     // In first we set image comments, outside of Exif, Xmp, and Iptc.
 
@@ -320,11 +320,11 @@ bool DMetadata::setImageRating(int rating) const
 
     if (rating < RatingMin || rating > RatingMax)
     {
-        DDebug() << "Rating value to write is out of range!" << endl;
+        DDebug(50003) << "Rating value to write is out of range!" << endl;
         return false;
     }
 
-    DDebug() << getFilePath() << " ==> Rating: " << rating << endl;
+    DDebug(50003) << getFilePath() << " ==> Rating: " << rating << endl;
 
     if (!setProgramId())
         return false;
@@ -603,7 +603,7 @@ bool DMetadata::setIptcTag(const QString& text, int maxLength,
 {
     QString truncatedText = text;
     truncatedText.truncate(maxLength);
-    DDebug() << getFilePath() << " ==> " << debugLabel << ": " << truncatedText << endl;
+    DDebug(50003) << getFilePath() << " ==> " << debugLabel << ": " << truncatedText << endl;
     return setIptcTagString(tagKey, truncatedText);    // returns false if failed
 }
 
@@ -1294,8 +1294,8 @@ bool DMetadata::getXMLImageProperties(QString& comments, QDateTime& date,
     int row, col;
     if (!xmlDoc.setContent(doc, true, &error, &row, &col))
     {
-        DDebug() << doc << endl;
-        DDebug() << error << " :: row=" << row << " , col=" << col << endl;
+        DDebug(50003) << doc << endl;
+        DDebug(50003) << error << " :: row=" << row << " , col=" << col << endl;
         return false;
     }
 

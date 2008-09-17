@@ -142,17 +142,17 @@ CameraController::CameraController(QWidget* parent,
     if (path.startsWith("camera:/"))
     {
         KUrl url(path);
-        DDebug() << "path " << path << " " << url <<  " " << url.host() << endl;
+        DDebug(50003) << "path " << path << " " << url <<  " " << url.host() << endl;
         QString xport = url.host();
         if (xport.startsWith("usb:"))
         {
-            DDebug() << "xport " << xport << endl;
+            DDebug(50003) << "xport " << xport << endl;
             QRegExp x = QRegExp("(usb:[0-9,]*)");
 
             if (x.indexIn(xport) != -1) 
             {
                 QString usbport = x.cap(1);
-                DDebug() << "USB " << xport << " " << usbport << endl;
+                DDebug(50003) << "USB " << xport << " " << usbport << endl;
                 // if ((xport == usbport) || ((count == 1) && (xport == "usb:"))) {
                 //   model = xmodel;
                 d->camera = new GPCamera(title, url.user(), "usb:", "/");
@@ -485,7 +485,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
                 {
                     if (autoRotate)
                     {
-                        DDebug() << "Exif autorotate: " << file << " using (" << tempURL.path() << ")" << endl;
+                        DDebug(50003) << "Exif autorotate: " << file << " using (" << tempURL.path() << ")" << endl;
                         sendInfo(i18n("EXIF rotating file %1...", file));
                         exifRotate(tempURL.path(), file);
                     }
@@ -952,7 +952,7 @@ void CameraController::upload(const QFileInfo& srcFileInfo, const QString& destF
     cmd->map.insert("destFile", QVariant(destFile));
     cmd->map.insert("destFolder", QVariant(destFolder));
     addCommand(cmd);
-    DDebug() << "Uploading '" << srcFileInfo.filePath() << "' into camera : '" << destFolder << 
+    DDebug(50003) << "Uploading '" << srcFileInfo.filePath() << "' into camera : '" << destFolder << 
                  "' (" << destFile << ")" << endl;
 }
 

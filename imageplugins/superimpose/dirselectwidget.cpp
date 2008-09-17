@@ -110,7 +110,7 @@ void DirSelectWidget::load()
     
     if ( !branch ) 
     {
-        DDebug() << "Unable to open " << d->m_handled << endl;
+        DDebug(50006) << "Unable to open " << d->m_handled << endl;
     }
     else
     {

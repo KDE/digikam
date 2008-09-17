@@ -230,7 +230,7 @@ void RefocusMatrix::print_c_mat (const CMat * const mat)
             output.append( num.setNum( c_mat_elt (mat, x, y) ) );
         }
         
-        DDebug() << output << endl;
+        DDebug(50006) << output << endl;
     }
 }
 
@@ -247,7 +247,7 @@ void RefocusMatrix::print_matrix (Mat * matrix)
             output.append( num.setNum( mat_elt (matrix, row_idx, col_idx) ) );
         }
         
-        DDebug() << output << endl;
+        DDebug(50006) << output << endl;
     }
 }
 
@@ -410,11 +410,11 @@ CMat *RefocusMatrix::compute_g (const CMat * const convolution, const int m, con
     }
     
 #ifdef RF_DEBUG
-    DDebug() << "Convolution:" << endl;
+    DDebug(50006) << "Convolution:" << endl;
     print_c_mat (convolution);
-    DDebug() << "h_conv_ruv:" << endl;
+    DDebug(50006) << "h_conv_ruv:" << endl;
     print_c_mat (&h_conv_ruv);
-    DDebug() << "Value of s:" << endl;
+    DDebug(50006) << "Value of s:" << endl;
     print_matrix (s);
 #endif
     
@@ -432,7 +432,7 @@ CMat *RefocusMatrix::compute_g (const CMat * const convolution, const int m, con
     }
     
 #ifdef RF_DEBUG
-    DDebug() << "Deconvolution:" << endl;
+    DDebug(50006) << "Deconvolution:" << endl;
     print_c_mat (result);
 #endif
     
@@ -449,9 +449,9 @@ CMat *RefocusMatrix::compute_g_matrix (const CMat * const convolution, const int
                                        const double musq, const bool symmetric)
 {
 #ifdef RF_DEBUG
-    DDebug() << "matrix size: " << m << endl;
-    DDebug() << "correlation: " << gamma << endl;
-    DDebug() << "noise: " << noise_factor << endl;
+    DDebug(50006) << "matrix size: " << m << endl;
+    DDebug(50006) << "correlation: " << gamma << endl;
+    DDebug(50006) << "noise: " << noise_factor << endl;
 #endif
     
     CMat *g = compute_g (convolution, m, gamma, noise_factor, musq, symmetric);
@@ -515,7 +515,7 @@ void RefocusMatrix::make_gaussian_convolution (const double gradius, CMat * conv
     register int x, y;
     
 #ifdef RF_DEBUG
-    DDebug() << "gauss: " << gradius << endl;
+    DDebug(50006) << "gauss: " << gradius << endl;
 #endif
     
     init_c_mat (convolution, m);
@@ -640,7 +640,7 @@ double RefocusMatrix::circle_intensity (const int x, const int y, const double r
 void RefocusMatrix::make_circle_convolution (const double radius, CMat * convolution, const int m)
 {
 #ifdef RF_DEBUG
-    DDebug() << "radius: " << radius << endl;
+    DDebug(50006) << "radius: " << radius << endl;
 #endif
     
     fill_matrix (convolution, m, circle_intensity, radius);

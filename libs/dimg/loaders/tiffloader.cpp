@@ -79,7 +79,7 @@ void TIFFLoader::dimg_tiff_warning(const char* module, const char* format, va_li
 #ifdef ENABLE_DEBUG_MESSAGES
     char message[4096];
     vsnprintf(message, 4096, format, warnings);
-    DDebug() << module <<  "::" <<  message << endl;
+    DDebug(50003) << module <<  "::" <<  message << endl;
 #else
     Q_UNUSED(module);
     Q_UNUSED(format);
@@ -92,7 +92,7 @@ void TIFFLoader::dimg_tiff_error(const char* module, const char* format, va_list
 #ifdef ENABLE_DEBUG_MESSAGES
     char message[4096];
     vsnprintf(message, 4096, format, errors);
-    DDebug() << module << "::" << message << endl;
+    DDebug(50003) << module << "::" << message << endl;
 #else
     Q_UNUSED(module);
     Q_UNUSED(format);
@@ -124,7 +124,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     TIFF* tif = TIFFOpen(QFile::encodeName(filePath), "r");
     if (!tif)
     {
-        DDebug() << "Cannot open image file." << endl;
+        DDebug(50003) << "Cannot open image file." << endl;
         return false;
     }
 
@@ -296,7 +296,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                 if (bytesRead == -1)
                 {
-                    DDebug() << "Failed to read strip" << endl;
+                    DDebug(50003) << "Failed to read strip" << endl;
                     delete [] data;
                     TIFFClose(tif);
                     return false;
@@ -410,7 +410,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
             if (!TIFFRGBAImageOK(tif, emsg) || !TIFFRGBAImageBegin(&img, tif, 0, emsg))
             {
-                DDebug() << "Failed to set up RGBA reading of image, filename "
+                DDebug(50003) << "Failed to set up RGBA reading of image, filename "
                         << TIFFFileName(tif) <<  " error message from Libtiff: " << emsg << endl;
                 delete [] data;
                 delete [] strip;
@@ -448,7 +448,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                 if (TIFFRGBAImageGet(&img, (uint32*)strip, img.width, rows_to_read ) == -1)
                 {
-                    DDebug() << "Failed to read image data" << endl;
+                    DDebug(50003) << "Failed to read image data" << endl;
                     delete [] data;
                     delete [] strip;
                     TIFFClose(tif);
@@ -530,7 +530,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     TIFF *tif = TIFFOpen(QFile::encodeName(filePath), "w");
     if (!tif)
     {
-        DDebug() << "Cannot open target image file." << endl;
+        DDebug(50003) << "Cannot open target image file." << endl;
         return false;
     }
 
@@ -651,7 +651,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     uint8 *buf = (uint8 *)_TIFFmalloc(TIFFScanlineSize(tif));
     if (!buf)
     {
-        DDebug() << "Cannot allocate memory buffer for main image." << endl;
+        DDebug(50003) << "Cannot allocate memory buffer for main image." << endl;
         TIFFClose(tif);
         return false;
     }
@@ -741,7 +741,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
         if (!TIFFWriteScanline(tif, buf, y, 0))
         {
-            DDebug() << "Cannot write main image to target file." << endl;
+            DDebug(50003) << "Cannot write main image to target file." << endl;
             _TIFFfree(buf);
             TIFFClose(tif);
             return false;
@@ -773,7 +773,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     if (!bufThumb)
     {
-        DDebug() << "Cannot allocate memory buffer for thumbnail." << endl;
+        DDebug(50003) << "Cannot allocate memory buffer for thumbnail." << endl;
         TIFFClose(tif);
         return false;
     }
@@ -794,7 +794,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
         if (!TIFFWriteScanline(tif, bufThumb, y, 0))
         {
-            DDebug() << "Cannot write thumbnail to target file." << endl;
+            DDebug(50003) << "Cannot write thumbnail to target file." << endl;
             _TIFFfree(bufThumb);
             TIFFClose(tif);
             return false;

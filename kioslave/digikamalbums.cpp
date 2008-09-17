@@ -6,7 +6,7 @@
  * Date        : 2005-04-21
  * Description : a kio-slave to process file operations on 
  *               digiKam albums. 
- * 
+ *
  * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
@@ -19,12 +19,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -82,7 +82,7 @@ void kio_digikamalbums::special(const QByteArray& data)
     QDataStream ds(data);
     ds >> kurl;
 
-    kDebug() << "kio_digikamalbums::special " << kurl;
+    kDebug(50004) << "kio_digikamalbums::special " << kurl;
 
     Digikam::DatabaseUrl dbUrl(kurl);
     Digikam::DatabaseAccess::setParameters(dbUrl);
@@ -120,7 +120,7 @@ void kio_digikamalbums::special(const QByteArray& data)
 
 void kio_digikamalbums::get( const KUrl& url )
 {
-    kDebug() << " : " << url;
+    kDebug(50004) << " : " << url;
 
     // no need to open the db. we don't need to read/write to it
 
@@ -136,7 +136,7 @@ void kio_digikamalbums::get( const KUrl& url )
 
 void kio_digikamalbums::put(const KUrl& url, int permissions, KIO::JobFlags flags)
 {
-    kDebug() << " : " << url.url();
+    kDebug(50004) << " : " << url.url();
 
     Digikam::DatabaseUrl dbUrl(url);
     Digikam::DatabaseAccess::setParameters(dbUrl);
@@ -164,7 +164,7 @@ void kio_digikamalbums::put(const KUrl& url, int permissions, KIO::JobFlags flag
 
 void kio_digikamalbums::copy( const KUrl &src, const KUrl &dst, int mode, KIO::JobFlags flags )
 {
-    kDebug() << "Src: " << src.path() << ", Dst: " << dst.path();
+    kDebug(50004) << "Src: " << src.path() << ", Dst: " << dst.path();
 
     Digikam::DatabaseUrl dbUrlSrc(src);
     Digikam::DatabaseUrl dbUrlDst(dst);
@@ -234,7 +234,7 @@ void kio_digikamalbums::copy( const KUrl &src, const KUrl &dst, int mode, KIO::J
 
 void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags flags )
 {
-    kDebug() << "Src: " << src << ", Dst: " << dst;
+    kDebug(50004) << "Src: " << src << ", Dst: " << dst;
 
     // if the filename is .digikam_properties ignore it
     if (src.fileName() == ".digikam_properties")
@@ -314,7 +314,7 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
 
 void kio_digikamalbums::mkdir( const KUrl& url, int permissions )
 {
-    kDebug() << " : " << url.url();
+    kDebug(50004) << " : " << url.url();
 
     Digikam::DatabaseUrl dbUrl(url);
     Digikam::DatabaseAccess::setParameters(dbUrl);
@@ -333,7 +333,7 @@ void kio_digikamalbums::mkdir( const KUrl& url, int permissions )
 
 void kio_digikamalbums::chmod( const KUrl& url, int permissions )
 {
-    kDebug() << " : " << url.url();
+    kDebug(50004) << " : " << url.url();
 
     Digikam::DatabaseUrl dbUrl(url);
 
@@ -347,7 +347,7 @@ void kio_digikamalbums::chmod( const KUrl& url, int permissions )
 
 void kio_digikamalbums::del( const KUrl& url, bool isFile)
 {
-    kDebug() << " : " << url.url();
+    kDebug(50004) << " : " << url.url();
 
     // if the filename is .digikam_properties ignore it
     if (isFile && url.fileName() == ".digikam_properties")
@@ -430,7 +430,7 @@ void kio_digikamalbums::stat( const KUrl& url )
 
 void kio_digikamalbums::listDir( const KUrl& url )
 {
-    kDebug() << " : " << url.path();
+    kDebug(50004) << " : " << url.path();
 
     Digikam::DatabaseUrl dbUrl(url);
 
@@ -629,7 +629,7 @@ extern "C"
         KGlobal::locale();
 
         if (argc != 4) {
-            kDebug() << "Usage: kio_digikamalbums  protocol domain-socket1 domain-socket2"
+            kDebug(50004) << "Usage: kio_digikamalbums  protocol domain-socket1 domain-socket2"
                       << endl;
             exit(-1);
         }

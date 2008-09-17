@@ -839,7 +839,7 @@ void ShowFoto::openFolder(const KUrl& url)
     patterns.append (" ");
     patterns.append (filter.toUpper());
 
-    DDebug() << "patterns=" << patterns << endl;
+    DDebug(50005) << "patterns=" << patterns << endl;
 
     // Get all image files from directory.
 

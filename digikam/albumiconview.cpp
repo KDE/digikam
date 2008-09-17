@@ -646,7 +646,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
         if (plugin && (*it)->name() == "JPEGLossless")
         {
-            DDebug() << "Found JPEGLossless plugin" << endl;
+            DDebug(50003) << "Found JPEGLossless plugin" << endl;
 
             QList<KAction*> actionList = plugin->actions();
 
@@ -1330,7 +1330,7 @@ void AlbumIconView::startDrag()
 
 void AlbumIconView::contentsDragEnterEvent(QDragEnterEvent *e)
 {
-    DDebug() << "contentsDragEnterEvent" << e->mimeData()->formats() << DTagDrag::canDecode(e->mimeData());
+    DDebug(50003) << "contentsDragEnterEvent" << e->mimeData()->formats() << DTagDrag::canDecode(e->mimeData());
     if (!d->currentAlbum || (DAlbumDrag::canDecode(e->mimeData()) ||
                             (!KUrl::List::canDecode(e->mimeData())          &&
                              !DCameraDragObject::canDecode(e->mimeData())   &&
@@ -1858,7 +1858,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
 
     for( it = urlList.begin(); it != urlList.end(); ++it )
     {
-        DDebug() << "Setting Exif Orientation tag to " << orientation << endl;
+        DDebug(50003) << "Setting Exif Orientation tag to " << orientation << endl;
 
         DMetadata metadata((*it).path());
         DMetadata::ImageOrientation o = (DMetadata::ImageOrientation)orientation;

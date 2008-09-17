@@ -56,7 +56,7 @@ ImagePlugin_InsertText::ImagePlugin_InsertText(QObject *parent, const QVariantLi
 
     setXMLFile("digikamimageplugin_inserttext_ui.rc");
 
-    DDebug() << "ImagePlugin_InsertText plugin loaded" << endl;
+    DDebug(50006) << "ImagePlugin_InsertText plugin loaded" << endl;
 }
 
 ImagePlugin_InsertText::~ImagePlugin_InsertText()

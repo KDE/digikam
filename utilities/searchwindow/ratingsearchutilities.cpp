@@ -265,7 +265,7 @@ void RatingComboBoxWidget::paintEvent(QPaintEvent *e)
 {
     if (m_value >= RatingComboBox::Rating0)
     {
-        //DDebug() << "m_value" << m_value << "defaulting paint to parent" << this;
+        //DDebug(50003) << "m_value" << m_value << "defaulting paint to parent" << this;
         RatingWidget::paintEvent(e);
     }
     else if (m_value == RatingComboBox::NoRating)

@@ -266,7 +266,7 @@ void Border::pattern(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth,
     }
 
     Digikam::DImg tmp2(width, height, tmp.sixteenBit(), tmp.hasAlpha());
-    DDebug() << "Border File:" << m_borderPath << endl;
+    DDebug(50006) << "Border File:" << m_borderPath << endl;
     Digikam::DImg border(m_borderPath);
     if ( border.isNull() )
         return;
@@ -364,7 +364,7 @@ void Border::pattern2(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth,
     int w = m_orgWidth + borderWidth*2;
     int h = m_orgHeight + borderWidth*2;
 
-    DDebug() << "Border File:" << m_borderPath << endl;
+    DDebug(50006) << "Border File:" << m_borderPath << endl;
     Digikam::DImg border(m_borderPath);
     if ( border.isNull() )
         return;

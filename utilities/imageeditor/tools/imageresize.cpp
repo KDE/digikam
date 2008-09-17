@@ -599,7 +599,7 @@ void ImageResize::slotFilterFinished(bool success)
         {
             case ImageResizePriv::FinalRendering:
             {
-                DDebug() << "Final resizing completed..." << endl;
+                DDebug(50003) << "Final resizing completed..." << endl;
 
                 ImageIface iface(0, 0);
                 DImg resizedImage = d->greycstorationIface->getTargetImage();

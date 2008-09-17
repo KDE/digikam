@@ -424,7 +424,7 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
 
     if (dbLocale.isNull())
     {
-        DDebug() << "No locale found in database" << endl;
+        DDebug(50003) << "No locale found in database" << endl;
 
         // Copy an existing locale from the settings file (used < 0.8)
         // to the database.
@@ -432,7 +432,7 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
         KConfigGroup group = config->group("General Settings");
         if (group.hasKey("Locale"))
         {
-            DDebug() << "Locale found in configfile" << endl;
+            DDebug(50003) << "Locale found in configfile" << endl;
             dbLocale = group.readEntry("Locale", QString());
 
             // this hack is necessary, as we used to store the entire
@@ -450,7 +450,7 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
         }
         else
         {
-            DDebug() << "No locale found in config file"  << endl;
+            DDebug(50003) << "No locale found in config file"  << endl;
             dbLocale = currLocale;
 
             localeChanged = false;
@@ -517,7 +517,7 @@ void AlbumManager::startScan()
         mName = QString("Stat");
     else if (m == KDirWatch::INotify)
         mName = QString("INotify");
-    DDebug() << "KDirWatch method = " << mName << endl;
+    DDebug(50003) << "KDirWatch method = " << mName << endl;
 
     // create root albums
     d->rootPAlbum = new PAlbum(i18n("My Albums"));
@@ -2179,7 +2179,7 @@ void AlbumManager::slotImageTagChange(const ImageTagChangeset &changeset)
 
 void AlbumManager::slotDirty(const QString& path)
 {
-    DDebug() << "AlbumManager::slotDirty" << path << endl;
+    DDebug(50003) << "AlbumManager::slotDirty" << path << endl;
 
     // Filter out dirty signals triggered by changes on the database file
     DatabaseParameters params = DatabaseAccess::parameters();
@@ -2197,7 +2197,7 @@ void AlbumManager::slotDirty(const QString& path)
             // check for equality
             if (modList == d->dbPathModificationDateList)
             {
-                DDebug() << "Filtering out db-file-triggered dir watch signal" << endl;
+                DDebug(50003) << "Filtering out db-file-triggered dir watch signal" << endl;
                 // we can skip the signal
                 return;
             }

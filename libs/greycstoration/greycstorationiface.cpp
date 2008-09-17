@@ -108,7 +108,7 @@ GreycstorationIface::GreycstorationIface(DImg *orgImage,
     {
         m_destImage = Digikam::DImg(newWidth, newHeight,
                                     m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
-        DDebug() << "GreycstorationIface::Resize: new size: ("
+        DDebug(50003) << "GreycstorationIface::Resize: new size: ("
                  << newWidth << ", " << newHeight << ")" << endl;
     }
     else
@@ -148,7 +148,7 @@ void GreycstorationIface::cancelFilter()
     if (d->img.greycstoration_is_running())
     {
         // If the user abort, we stop the algorithm.
-        DDebug() << "Stop Greycstoration computation..." << endl;
+        DDebug(50003) << "Stop Greycstoration computation..." << endl;
         d->img.greycstoration_stop();
     }
 
@@ -160,7 +160,7 @@ void GreycstorationIface::filterImage()
 {
     register int x, y;
 
-    DDebug() << "GreycstorationIface::Initialization..." << endl;
+    DDebug(50003) << "GreycstorationIface::Initialization..." << endl;
 
     // Copy the src image data into a CImg type image with three channels and no alpha.
 
@@ -202,7 +202,7 @@ void GreycstorationIface::filterImage()
         }
     }
 
-    DDebug() << "GreycstorationIface::Process Computation..." << endl;
+    DDebug(50003) << "GreycstorationIface::Process Computation..." << endl;
 
     try
     {
@@ -227,7 +227,7 @@ void GreycstorationIface::filterImage()
     }
     catch(...)         // Everything went wrong.
     {
-       DDebug() << "GreycstorationIface::Error during Greycstoration filter computation!" << endl;
+       DDebug(50003) << "GreycstorationIface::Error during Greycstoration filter computation!" << endl;
 
        if (m_parent)
            emit finished(false);
@@ -240,7 +240,7 @@ void GreycstorationIface::filterImage()
 
     // Copy CImg onto destination.
 
-    DDebug() << "GreycstorationIface::Finalization..." << endl;
+    DDebug(50003) << "GreycstorationIface::Finalization..." << endl;
 
     uchar* newData = m_destImage.bits();
     int newWidth   = m_destImage.width();
@@ -334,7 +334,7 @@ void GreycstorationIface::inpainting()
     }
     else
     {
-        DDebug() << "Inpainting image: mask is null!" << endl;
+        DDebug(50003) << "Inpainting image: mask is null!" << endl;
         m_cancel = true;
         return;
     }

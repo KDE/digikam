@@ -325,7 +325,7 @@ AlbumList TagEditDlg::createTAlbum(TAlbum *mainRootAlbum, const QString& tagStr,
                 root = mainRootAlbum;
 
             QStringList tagsList = hierarchy.split("/", QString::SkipEmptyParts);
-            DDebug() << tagsList << endl;
+            DDebug(50003) << tagsList << endl;
 
             if (!tagsList.isEmpty())
             {
@@ -338,7 +338,7 @@ AlbumList TagEditDlg::createTAlbum(TAlbum *mainRootAlbum, const QString& tagStr,
                     else
                         tagPath = QString("%1/%2").arg(root->tagPath()).arg(tag);
 
-                    DDebug() << tag << " :: " << tagPath << endl;
+                    DDebug(50003) << tag << " :: " << tagPath << endl;
 
                     if (!tag.isEmpty())
                     {

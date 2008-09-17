@@ -56,7 +56,7 @@ ImagePlugin_Emboss::ImagePlugin_Emboss(QObject *parent, const QVariantList &)
 
     setXMLFile( "digikamimageplugin_emboss_ui.rc" );
 
-    DDebug() << "ImagePlugin_Emboss plugin loaded" << endl;
+    DDebug(50006) << "ImagePlugin_Emboss plugin loaded" << endl;
 }
 
 ImagePlugin_Emboss::~ImagePlugin_Emboss()

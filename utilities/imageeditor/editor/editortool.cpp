@@ -305,7 +305,7 @@ void EditorToolThreaded::slotFilterFinished(bool success)
         {
             case EditorToolThreadedPriv::PreviewRendering:
             {
-                DDebug() << "Preview " << toolName() << " completed..." << endl;
+                DDebug(50003) << "Preview " << toolName() << " completed..." << endl;
                 putPreviewData();
                 slotAbort();
                 break;
@@ -313,7 +313,7 @@ void EditorToolThreaded::slotFilterFinished(bool success)
 
             case EditorToolThreadedPriv::FinalRendering:
             {
-                DDebug() << "Final" << toolName() << " completed..." << endl;
+                DDebug(50003) << "Final" << toolName() << " completed..." << endl;
                 putFinalData();
                 EditorToolIface::editorToolIface()->setToolStopProgress();
                 kapp->restoreOverrideCursor();
@@ -328,7 +328,7 @@ void EditorToolThreaded::slotFilterFinished(bool success)
         {
             case EditorToolThreadedPriv::PreviewRendering:
             {
-                DDebug() << "Preview " << toolName() << " failed..." << endl;
+                DDebug(50003) << "Preview " << toolName() << " failed..." << endl;
                 slotAbort();
                 break;
             }
@@ -361,7 +361,7 @@ void EditorToolThreaded::slotOk()
     writeSettings();
 
     d->currentRenderingMode = EditorToolThreadedPriv::FinalRendering;
-    DDebug() << "Final " << toolName() << " started..." << endl;
+    DDebug(50003) << "Final " << toolName() << " started..." << endl;
     writeSettings();
 
     toolSettings()->enableButton(EditorToolSettings::Ok,      false);
@@ -389,7 +389,7 @@ void EditorToolThreaded::slotEffect()
         return;
 
     d->currentRenderingMode = EditorToolThreadedPriv::PreviewRendering;
-    DDebug() << "Preview " << toolName() << " started..." << endl;
+    DDebug(50003) << "Preview " << toolName() << " started..." << endl;
 
     toolSettings()->enableButton(EditorToolSettings::Ok,      false);
     toolSettings()->enableButton(EditorToolSettings::SaveAs,  false);

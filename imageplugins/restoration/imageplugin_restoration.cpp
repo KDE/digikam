@@ -55,7 +55,7 @@ ImagePlugin_Restoration::ImagePlugin_Restoration(QObject *parent, const QVariant
 
     setXMLFile( "digikamimageplugin_restoration_ui.rc" );
 
-    DDebug() << "ImagePlugin_Restoration plugin loaded" << endl;
+    DDebug(50006) << "ImagePlugin_Restoration plugin loaded" << endl;
 }
 
 ImagePlugin_Restoration::~ImagePlugin_Restoration()

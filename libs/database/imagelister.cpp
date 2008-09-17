@@ -374,7 +374,7 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
     ImageQueryBuilder builder;
     ImageQueryPostHooks hooks;
     sqlQuery += builder.buildQuery(xml, &boundValues, &hooks);
-    DDebug() << "Search query:\n" << sqlQuery;
+    DDebug(50003) << "Search query:\n" << sqlQuery;
 
     if (limit > 0)
         sqlQuery += QString(" ) LIMIT %1; ").arg(limit);
@@ -394,7 +394,7 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
         receiver->error(errMsg);
         return;
     }
-    DDebug() << "Search result:" << values.size();
+    DDebug(50003) << "Search result:" << values.size();
 
     int width, height;
     double lat,lon;

@@ -71,7 +71,7 @@ QList<double> GPSSearchWidget::selectionCoordinates() const
 void GPSSearchWidget::setSelectionCoordinates(const QList<double>& sel)
 {
     d->selection = sel;
-    DDebug() << "Set new selection area: " << d->selection << endl;
+    DDebug(50003) << "Set new selection area: " << d->selection << endl;
     // TODO : set selection area in marble widget.
 }
 

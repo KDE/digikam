@@ -288,7 +288,7 @@ bool ICCProfileWidget::decodeMetadata()
 
     if (!hProfile)
     {
-        DDebug() << "Cannot parse ICC profile tags using LCMS" << endl;
+        DDebug(50003) << "Cannot parse ICC profile tags using LCMS" << endl;
         return false;
     }
 

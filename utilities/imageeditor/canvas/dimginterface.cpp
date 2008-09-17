@@ -365,7 +365,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                                 if (d->parent) d->parent->setCursor( Qt::WaitCursor );
                                 d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
                                 if (d->parent) d->parent->unsetCursor();
-                                DDebug() << "dimginterface.cpp: Apply pressed" << endl;
+                                DDebug(50003) << "dimginterface.cpp: Apply pressed" << endl;
                             break;
                         }
                     }
@@ -391,7 +391,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                         {
                             // Embedded profile and default workspace profile are different: ask to user!
 
-                            DDebug() << "Embedded profile: " << trans.getEmbeddedProfileDescriptor() << endl;
+                            DDebug(50003) << "Embedded profile: " << trans.getEmbeddedProfileDescriptor() << endl;
 
                             // To repaint image in canvas before to ask about to apply ICC profile.
                             emit signalImageLoaded(d->filename, valRet);
@@ -413,7 +413,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                                     if (d->parent) d->parent->setCursor( Qt::WaitCursor );
                                     d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
                                     if (d->parent) d->parent->unsetCursor();
-                                    DDebug() << "dimginterface.cpp: Apply pressed" << endl;
+                                    DDebug(50003) << "dimginterface.cpp: Apply pressed" << endl;
                                 break;
                             }
                         }
@@ -581,7 +581,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     if (mimeType.isEmpty())
         mimeType = getImageFormat();
 
-    DDebug() << "Saving to :" << QFile::encodeName(fileName).data() << " (" 
+    DDebug(50003) << "Saving to :" << QFile::encodeName(fileName).data() << " (" 
              << mimeType << ")" << endl;
 
     // JPEG file format.
@@ -1161,7 +1161,7 @@ void DImgInterface::putImage(uchar* data, int w, int h, bool sixteenBit)
         d->origHeight = h;
     }
 
-    //DDebug() << data << " " << w << " " << h << endl;
+    //DDebug(50003) << data << " " << w << " " << h << endl;
     d->image.putImageData(w, h, sixteenBit, d->image.hasAlpha(), data);
 
     setModified();
@@ -1175,7 +1175,7 @@ void DImgInterface::setEmbeddedICCToOriginalImage( QString profilePath)
         return;
     }
 
-     DDebug() << "Embedding profile: " << profilePath << endl;
+     DDebug(50003) << "Embedding profile: " << profilePath << endl;
      d->image.getICCProfilFromFile( QFile::encodeName(profilePath));
      setModified();
 }

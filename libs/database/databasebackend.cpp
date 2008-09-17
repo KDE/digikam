@@ -440,7 +440,7 @@ bool DatabaseBackend::exec(QSqlQuery &query)
             if (!app)
             {
                 int limit = 10;
-                DDebug() << "Detected locked database file. Waiting 10s trying again.";
+                DDebug(50003) << "Detected locked database file. Waiting 10s trying again.";
 
                 do
                 {
@@ -454,10 +454,10 @@ bool DatabaseBackend::exec(QSqlQuery &query)
             else
                 DWarning() << "Detected locked database file. There is an active transaction.";
         }
-        DDebug() << "Failure executing query: " << endl;
-        DDebug() << query.executedQuery() << endl;
-        DDebug() << query.lastError().text() << query.lastError().number() << endl;
-        DDebug() << "Bound values: " << query.boundValues().values() << endl;
+        DDebug(50003) << "Failure executing query: " << endl;
+        DDebug(50003) << query.executedQuery() << endl;
+        DDebug(50003) << query.lastError().text() << query.lastError().number() << endl;
+        DDebug(50003) << "Bound values: " << query.boundValues().values() << endl;
         return false;
     }
     return true;
@@ -468,10 +468,10 @@ bool DatabaseBackend::execBatch(QSqlQuery &query)
     if (!query.execBatch())
     {
         // Use DatabaseAccess::lastError?
-        DDebug() << "Failure executing batch query: " << endl;
-        DDebug() << query.executedQuery() << endl;
-        DDebug() << query.lastError().text() << query.lastError().number() << endl;
-        DDebug() << "Bound values: " << query.boundValues().values() << endl;
+        DDebug(50003) << "Failure executing batch query: " << endl;
+        DDebug(50003) << query.executedQuery() << endl;
+        DDebug(50003) << query.lastError().text() << query.lastError().number() << endl;
+        DDebug(50003) << "Bound values: " << query.boundValues().values() << endl;
         return false;
     }
     return true;

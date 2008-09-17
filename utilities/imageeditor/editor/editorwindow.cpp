@@ -788,7 +788,7 @@ void EditorWindow::loadImagePlugins()
             plugin->setEnabledSelectionActions(false);
         }
         else
-            DDebug() << "Invalid plugin to add!" << endl;
+            DDebug(50003) << "Invalid plugin to add!" << endl;
     }
 }
 
@@ -1325,7 +1325,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
             return;
         }
 
-        DDebug() << "renaming to " << m_savingContext->destinationURL.path() << endl;
+        DDebug(50003) << "renaming to " << m_savingContext->destinationURL.path() << endl;
 
         if (!moveFile())
         {
@@ -1368,7 +1368,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
 
         // Only try to write exif if both src and destination are jpeg files
 
-        DDebug() << "renaming to " << m_savingContext->destinationURL.path() << endl;
+        DDebug(50003) << "renaming to " << m_savingContext->destinationURL.path() << endl;
 
         if (!moveFile())
         {

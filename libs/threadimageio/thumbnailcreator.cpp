@@ -289,7 +289,7 @@ QImage ThumbnailCreator::loadImagePreview(const QString& path)
     DMetadata metadata(path);
     if (metadata.getImagePreview(image))
     {
-        DDebug() << "Use Exif/Iptc preview extraction. Size of image: "
+        DDebug(50003) << "Use Exif/Iptc preview extraction. Size of image: "
                   << image.width() << "x" << image.height() << endl;
     }
 

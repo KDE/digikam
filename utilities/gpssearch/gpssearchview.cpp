@@ -253,7 +253,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     // as left/top, right/bottom rectangle.
     QList<double> coordinates = d->gpsSearchWidget->selectionCoordinates();
 
-    DDebug() << "West, North, East, South: " << coordinates << endl;
+    DDebug(50003) << "West, North, East, South: " << coordinates << endl;
 
     SearchXmlWriter writer;
     writer.writeGroup();

@@ -132,8 +132,8 @@ int main(int argc, char *argv[])
         albumPath = group.readEntry("Album Path", QString());
     }
 
-    DDebug() << "Root Album Path: " << albumPath << endl;
-    DDebug() << "Database Path: " << dbPath << endl;
+    DDebug(50003) << "Root Album Path: " << albumPath << endl;
+    DDebug(50003) << "Database Path: " << dbPath << endl;
 
     // Check if SQLite Qt4 plugin is available.
 

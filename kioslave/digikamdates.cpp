@@ -111,7 +111,7 @@ extern "C"
         KGlobal::locale();
 
         if (argc != 4) {
-            kDebug() << "Usage: kio_digikamdates  protocol domain-socket1 domain-socket2"
+            kDebug(50004) << "Usage: kio_digikamdates  protocol domain-socket1 domain-socket2"
                       << endl;
             exit(-1);
         }

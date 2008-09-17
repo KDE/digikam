@@ -420,8 +420,8 @@ bool ThemeEngine::loadTheme()
     int row, col;
     if (!xmlDoc.setContent(&themeFile, true, &error, &row, &col))
     {
-        DDebug() << "Theme file: " << t->filePath << endl;
-        DDebug() << error << " :: row=" << row << " , col=" << col << endl; 
+        DDebug(50003) << "Theme file: " << t->filePath << endl;
+        DDebug(50003) << error << " :: row=" << row << " , col=" << col << endl; 
         return false;
     }
 
@@ -679,7 +679,7 @@ bool ThemeEngine::loadTheme()
         t->listSelBorderColor = resource;
     }
 
-    DDebug() << "Theme file loaded: " << t->filePath << endl;
+    DDebug(50003) << "Theme file loaded: " << t->filePath << endl;
     return true;
 }
 

@@ -96,7 +96,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
 
     #ifdef NFS_HACK
     newDB = locateLocal("appdata", KIO::encodeFileName(QDir::cleanPath(newDB)));
-    DDebug() << "NFS: " << newDB << endl;
+    DDebug(50003) << "NFS: " << newDB << endl;
     #endif
 
     AlbumDB db3;
@@ -118,7 +118,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
     /*
     #ifdef NFS_HACK
     dbPath = locateLocal("appdata", KIO::encodeFileName(QDir::cleanPath(dbPath)));
-    DDebug() << "From NFS: " << dbPath << endl;
+    DDebug(50003) << "From NFS: " << dbPath << endl;
     #endif
     */
 
@@ -126,7 +126,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
 
     if (!fi.exists())
     {
-        DDebug() << "No old database present. Not upgrading" << endl;
+        DDebug(50003) << "No old database present. Not upgrading" << endl;
         access.db()->setSetting("UpgradedFromSqlite2", "yes");
         return true;
     }
@@ -135,7 +135,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
     db2.setDBPath( dbPath );
     if (!db2.isValid())
     {
-        DDebug() << "Failed to initialize Old Album Database" << endl;
+        DDebug(50003) << "Failed to initialize Old Album Database" << endl;
         return false;
     }
 
@@ -311,8 +311,8 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         AlbumMap::iterator it1 = albumMap.find(url);
         if (it1 == albumMap.end())
         {
-            DDebug() << "Could not find album with url: " << url << endl;
-            DDebug() << "Most likely an external directory. Rejecting." << endl;
+            DDebug(50003) << "Could not find album with url: " << url << endl;
+            DDebug(50003) << "Most likely an external directory. Rejecting." << endl;
             continue;
         }
 
@@ -332,15 +332,15 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
     // -- update setting entry ------------------------------------------
     access.db()->setSetting("UpgradedFromSqlite2", "yes");
 
-    DDebug() << "Successfully upgraded database to sqlite3 " << endl;
+    DDebug(50003) << "Successfully upgraded database to sqlite3 " << endl;
 
     // -- Check for db consistency ----------------------------------------
 
     /*
-    DDebug() << "Checking database consistency" << endl;
+    DDebug(50003) << "Checking database consistency" << endl;
 
 
-    DDebug() << "Checking Albums.................." << endl;
+    DDebug(50003) << "Checking Albums.................." << endl;
     values.clear();
     db2.execSql("SELECT id, url, date, caption, collection FROM Albums;", &values);
     for (QStringList::iterator it = values.begin(); it != values.end();)
@@ -378,10 +378,10 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
             return false;
         }
     }
-    DDebug() << " (" << values.count()/5 << " Albums) "  << "OK" << endl;
+    DDebug(50003) << " (" << values.count()/5 << " Albums) "  << "OK" << endl;
 
 
-    DDebug() << "Checking Tags...................." << endl;
+    DDebug(50003) << "Checking Tags...................." << endl;
     values.clear();
     db2.execSql("SELECT id, pid, name FROM Tags;", &values);
     for (QStringList::iterator it = values.begin(); it != values.end();)
@@ -411,10 +411,10 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
             return false;
         }
     }
-    DDebug() << " (" << values.count()/3 << " Tags) "  << "OK" << endl;
+    DDebug(50003) << " (" << values.count()/3 << " Tags) "  << "OK" << endl;
 
 
-    DDebug() << "Checking Images.................." << endl;
+    DDebug(50003) << "Checking Images.................." << endl;
     values.clear();
     db2.execSql("SELECT Albums.url, Images.name, Images.caption "
             "FROM Images, Albums WHERE Albums.id=Images.dirid;", &values);
@@ -446,10 +446,10 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
             return false;
         }
     }
-    DDebug() << " (" << values.count()/3 << " Images) " << "OK" << endl;
+    DDebug(50003) << " (" << values.count()/3 << " Images) " << "OK" << endl;
 
 
-    DDebug() << "Checking ImageTags..............." << endl;
+    DDebug(50003) << "Checking ImageTags..............." << endl;
     values.clear();
     db2.execSql("SELECT Albums.url, ImageTags.name, ImageTags.tagid "
             "FROM ImageTags, Albums WHERE \n "
@@ -483,9 +483,9 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
             return false;
         }
     }
-    DDebug() << " (" << values.count()/3 << " ImageTags) " << "OK" << endl;
+    DDebug(50003) << " (" << values.count()/3 << " ImageTags) " << "OK" << endl;
 
-    DDebug() << "Checking Album icons ..............." << endl;
+    DDebug(50003) << "Checking Album icons ..............." << endl;
     values.clear();
     db2.execSql("SELECT url, icon FROM Albums;", &values);
     for (QStringList::iterator it = values.begin(); it != values.end();)
@@ -516,10 +516,10 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
             return false;
         }
     }
-    DDebug() << " (" << values.count()/2 << " Album Icons) " << "OK" << endl;
+    DDebug(50003) << " (" << values.count()/2 << " Album Icons) " << "OK" << endl;
 
 
-    DDebug() << "Checking Tag icons ..............." << endl;
+    DDebug(50003) << "Checking Tag icons ..............." << endl;
     values.clear();
     db2.execSql("SELECT id, icon FROM Tags;", &values);
     for (QStringList::iterator it = values.begin(); it != values.end();)
@@ -592,10 +592,10 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
 
         }
     }
-    DDebug() << " (" << values.count()/2 << " Tag Icons) " << "OK" << endl;
+    DDebug(50003) << " (" << values.count()/2 << " Tag Icons) " << "OK" << endl;
 
-    DDebug() << "" << endl;
-    DDebug() << "All Tests: A-OK" << endl;
+    DDebug(50003) << "" << endl;
+    DDebug(50003) << "All Tests: A-OK" << endl;
     */
 
     return true;

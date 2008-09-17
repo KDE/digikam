@@ -82,7 +82,7 @@ static void jpegutils_jpeg_error_exit(j_common_ptr cinfo)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 #ifdef ENABLE_DEBUG_MESSAGES
-    DDebug() << buffer << endl;
+    DDebug(50003) << buffer << endl;
 #endif
 
     longjmp(myerr->setjmp_buffer, 1);
@@ -95,7 +95,7 @@ static void jpegutils_jpeg_emit_message(j_common_ptr cinfo, int msg_level)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 #ifdef ENABLE_DEBUG_MESSAGES
-    DDebug() << buffer << " (" << msg_level << ")" << endl;
+    DDebug(50003) << buffer << " (" << msg_level << ")" << endl;
 #endif
 }
 
@@ -105,7 +105,7 @@ static void jpegutils_jpeg_output_message(j_common_ptr cinfo)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 #ifdef ENABLE_DEBUG_MESSAGES
-    DDebug() << buffer << endl;
+    DDebug(50003) << buffer << endl;
 #endif
 }
 
@@ -249,7 +249,7 @@ bool exifRotate(const QString& file, const QString& documentName)
     QFileInfo fi(file);
     if (!fi.exists())
     {
-        DDebug() << "ExifRotate: file do not exist: " << file << endl;
+        DDebug(50003) << "ExifRotate: file do not exist: " << file << endl;
         return false;
     }
         
@@ -258,7 +258,7 @@ bool exifRotate(const QString& file, const QString& documentName)
         DMetadata metaData;
         if (!metaData.load(file))
         {
-            DDebug() << "ExifRotate: no Exif data found: " << file << endl;
+            DDebug(50003) << "ExifRotate: no Exif data found: " << file << endl;
             return true;
         }
 
@@ -321,7 +321,7 @@ bool exifRotate(const QString& file, const QString& documentName)
     
         if (transformoption.transform == JXFORM_NONE)
         {
-            DDebug() << "ExifRotate: no rotation to perform: " << file << endl;
+            DDebug(50003) << "ExifRotate: no rotation to perform: " << file << endl;
             return true;
         }
     
@@ -413,7 +413,7 @@ bool exifRotate(const QString& file, const QString& documentName)
         // -- Metadata operations ------------------------------------------------------
 
         // Reset the Exif orientation tag of the temp image to normal
-        DDebug() << "ExifRotate: set Orientation tag to normal: " << file << endl;
+        DDebug(50003) << "ExifRotate: set Orientation tag to normal: " << file << endl;
 
         metaData.load(temp);
         metaData.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
@@ -460,7 +460,7 @@ bool exifRotate(const QString& file, const QString& documentName)
     }
     
     // Not a jpeg image.
-    DDebug() << "ExifRotate: not a JPEG file: " << file << endl;
+    DDebug(50003) << "ExifRotate: not a JPEG file: " << file << endl;
     return false;
 }
 
@@ -469,7 +469,7 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
     QFileInfo fi(src);
     if (!fi.exists())
     {
-        DDebug() << "JpegConvert: file do not exist: " << src << endl;
+        DDebug(50003) << "JpegConvert: file do not exist: " << src << endl;
         return false;
     }
         
@@ -525,7 +525,7 @@ bool isJpegImage(const QString& file)
 {
     // Check if the file is an JPEG image
     QString format = QString(QImageReader::imageFormat(file)).toUpper();
-    DDebug() << "mimetype = " << format << endl;
+    DDebug(50003) << "mimetype = " << format << endl;
     if (format !="JPEG") return false;
 
     return true;

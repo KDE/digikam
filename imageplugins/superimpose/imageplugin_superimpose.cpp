@@ -56,7 +56,7 @@ ImagePlugin_SuperImpose::ImagePlugin_SuperImpose(QObject *parent, const QVariant
 
     setXMLFile("digikamimageplugin_superimpose_ui.rc");
 
-    DDebug() << "ImagePlugin_SuperImpose plugin loaded" << endl;
+    DDebug(50006) << "ImagePlugin_SuperImpose plugin loaded" << endl;
 }
 
 ImagePlugin_SuperImpose::~ImagePlugin_SuperImpose()
