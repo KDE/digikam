@@ -858,22 +858,64 @@ void AlbumIconView::slotPaste()
     if (!album)
         album = d->currentAlbum;
 
-    if (d->currentAlbum->type() == Album::PHYSICAL && KUrl::List::canDecode(data))
+    if (d->currentAlbum->type() == Album::PHYSICAL)
     {
-        PAlbum* palbum = (PAlbum*)album;
+        if (DItemDrag::canDecode(data))
+        {
+            // Drag & drop inside of digiKam
 
-        // B.K.O #119205: do not handle root album.
-        if (palbum->isRoot())
-            return;
+            PAlbum* palbum = (PAlbum*)album;
 
-        KUrl destURL(palbum->databaseUrl());
+            // B.K.O #119205: do not handle root album.
+            if (palbum->isRoot())
+                return;
 
-        KUrl::List srcURLs;
-        srcURLs.fromMimeData(data);
+            KUrl::List urls;
+            KUrl::List kioURLs;
+            QList<int> albumIDs;
+            QList<int> imageIDs;
 
-        KIO::Job* job = DIO::copy(srcURLs, destURL);
-        connect(job, SIGNAL(result(KJob*)),
-                this, SLOT(slotDIOResult(KJob*)));
+            if (!DItemDrag::decode(data, urls, kioURLs, albumIDs, imageIDs))
+                return;
+
+            if (urls.isEmpty() || kioURLs.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
+                return;
+
+            // Check if items dropped come from outside current album.
+            KUrl::List extUrls;
+            QList<qlonglong> extImageIDs;
+            for (QList<int>::iterator it = imageIDs.begin(); it != imageIDs.end(); ++it)
+            {
+                ImageInfo info(*it);
+                if (info.albumId() != album->id())
+                {
+                    extUrls << info.databaseUrl();
+                    extImageIDs << *it;
+                }
+            }
+
+            if(extUrls.isEmpty())
+                return;
+
+            KIO::Job* job = DIO::copy(kioURLs, extImageIDs, palbum);
+            connect(job, SIGNAL(result(KJob*)),
+                    this, SLOT(slotDIOResult(KJob*)));
+        }
+        else if (KUrl::List::canDecode(data))
+        {
+            PAlbum* palbum = (PAlbum*)album;
+
+            // B.K.O #119205: do not handle root album.
+            if (palbum->isRoot())
+                return;
+
+            KUrl::List srcURLs;
+            srcURLs.fromMimeData(data);
+
+            KIO::Job* job = DIO::copy(srcURLs, palbum);
+            connect(job, SIGNAL(result(KJob*)),
+                    this, SLOT(slotDIOResult(KJob*)));
+        }
     }
     else if(d->currentAlbum->type() == Album::TAG && DItemDrag::canDecode(data))
     {
@@ -954,11 +996,7 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
     if (!ok)
         return;
 
-    KUrl oldURL = renameInfo.databaseUrl();
-    KUrl newURL = oldURL;
-    newURL.setFileName(newName + ext);
-
-    KIO::CopyJob* job = DIO::rename(oldURL, newURL);
+    KIO::CopyJob* job = DIO::rename(renameInfo, newName + ext);
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotDIOResult(KJob*)));
@@ -966,6 +1004,7 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
     connect(job, SIGNAL(copyingDone(KIO::Job *, const KUrl &, const KUrl &, bool, bool)),
             this, SLOT(slotRenamed(KIO::Job*, const KUrl &, const KUrl&)));
 
+    //TODO: The explanation is outdated. Check if we can safely remove.
     // The AlbumManager KDirWatch will trigger a DIO::scan.
     // When this is completed, DIO will call AlbumLister::instance()->refresh().
     // Usually the AlbumLister will ignore changes to already listed items.
@@ -1347,14 +1386,14 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
 
         // Check if items dropped come from outside current album.
         KUrl::List extUrls;
-        ImageInfoList extImgInfList;
+        QList<qlonglong> extImageIDs;
         for (QList<int>::iterator it = imageIDs.begin(); it != imageIDs.end(); ++it)
         {
             ImageInfo info(*it);
             if (info.albumId() != album->id())
             {
-                extUrls.append(info.databaseUrl());
-                extImgInfList.append(info);
+                extUrls << info.databaseUrl();
+                extImageIDs << *it;
             }
         }
 
@@ -1366,9 +1405,6 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
         else if (album->type() == Album::PHYSICAL)
         {
             PAlbum* palbum = (PAlbum*)album;
-            KUrl destURL(palbum->databaseUrl());
-
-            KUrl::List srcURLs = KUrl::List::fromMimeData(e->mimeData());
 
             QMenu popMenu(this);
             QAction *moveAction = popMenu.addAction( SmallIcon("go-jump"), i18n("&Move Here"));
@@ -1380,13 +1416,13 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
             QAction *choice = popMenu.exec(QCursor::pos());
             if (choice == moveAction)
             {
-                KIO::Job* job = DIO::move(srcURLs, destURL);
+                KIO::Job* job = DIO::move(extUrls, extImageIDs, palbum);
                 connect(job, SIGNAL(result(KJob*)),
                         this, SLOT(slotDIOResult(KJob*)));
             }
             else if (choice == copyAction)
             {
-                KIO::Job* job = DIO::copy(srcURLs, destURL);
+                KIO::Job* job = DIO::copy(extUrls, extImageIDs, palbum);
                 connect(job, SIGNAL(result(KJob*)),
                         this, SLOT(slotDIOResult(KJob*)));
             }
@@ -1396,7 +1432,6 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
     {
         // Drag & drop outside of digiKam
         PAlbum* palbum = (PAlbum*)album;
-        KUrl destURL(palbum->databaseUrl());
 
         KUrl::List srcURLs = KUrl::List::fromMimeData(e->mimeData());
 
@@ -1410,13 +1445,13 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
         QAction *choice = popMenu.exec(QCursor::pos());
         if (choice == moveAction)
         {
-            KIO::Job* job = DIO::move(srcURLs, destURL);
+            KIO::Job* job = DIO::move(srcURLs, palbum);
             connect(job, SIGNAL(result(KJob*)),
                     this, SLOT(slotDIOResult(KJob*)));
         }
         else if (choice == copyAction)
         {
-            KIO::Job* job = DIO::copy(srcURLs, destURL);
+            KIO::Job* job = DIO::copy(srcURLs, palbum);
             connect(job, SIGNAL(result(KJob*)),
                     this, SLOT(slotDIOResult(KJob*)));
         }
