@@ -24,7 +24,6 @@
 // Qt includes.
 
 #include <QButtonGroup>
-#include <QComboBox>
 #include <QFrame>
 #include <QLayout>
 #include <QMap>
@@ -36,6 +35,7 @@
 // KDE includes.
 
 #include <kapplication.h>
+#include <kcombobox.h>
 #include <kconfig.h>
 #include <kdialog.h>
 #include <khbox.h>
@@ -87,7 +87,7 @@ public:
 
     QTimer             *timer;
 
-    QComboBox          *timeUnitCB;
+    KComboBox          *timeUnitCB;
 
     QButtonGroup       *scaleBG;
 
@@ -127,7 +127,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     QHBoxLayout *hlay = new QHBoxLayout(hbox1);
 
     QLabel *label1 = new QLabel(i18n("Time Unit:"), hbox1);
-    d->timeUnitCB  = new QComboBox(hbox1);
+    d->timeUnitCB  = new KComboBox(hbox1);
     d->timeUnitCB->addItem(i18n("Day"),   TimeLineWidget::Day);
     d->timeUnitCB->addItem(i18n("Week"),  TimeLineWidget::Week);
     d->timeUnitCB->addItem(i18n("Month"), TimeLineWidget::Month);

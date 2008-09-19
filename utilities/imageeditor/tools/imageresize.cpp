@@ -42,7 +42,6 @@
 #include <QPixmap>
 #include <QProgressBar>
 #include <QPushButton>
-#include <QTabWidget>
 #include <QTimer>
 #include <QVBoxLayout>
 
@@ -58,6 +57,7 @@
 #include <kmessagebox.h>
 #include <kseparator.h>
 #include <kstandarddirs.h>
+#include <ktabwidget.h>
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 
@@ -130,7 +130,7 @@ public:
     QCheckBox            *preserveRatioBox;
     QCheckBox            *useGreycstorationBox;
 
-    QTabWidget           *mainTab;
+    KTabWidget           *mainTab;
 
     QProgressBar         *progressBar;
 
@@ -180,7 +180,7 @@ ImageResize::ImageResize(QWidget* parent)
     vlay->setSpacing(spacingHint());
     page->setLayout(vlay);
 
-    d->mainTab         = new QTabWidget( page );
+    d->mainTab         = new KTabWidget( page );
     QWidget* firstPage = new QWidget( d->mainTab );
     QGridLayout* grid  = new QGridLayout(firstPage);
 

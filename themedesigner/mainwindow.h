@@ -30,7 +30,7 @@
 #include <QWidget>
 #include <QMap>
 
-class QComboBox;
+class KComboBox;
 class QCheckBox;
 class QLabel;
 class KColorButton;
@@ -98,9 +98,9 @@ private:
     QLabel             *m_endColorLabel;
     QLabel             *m_borderColorLabel;
 
-    QComboBox          *m_propertyCombo;
-    QComboBox          *m_bevelCombo;
-    QComboBox          *m_gradientCombo;
+    KComboBox          *m_propertyCombo;
+    KComboBox          *m_bevelCombo;
+    KComboBox          *m_gradientCombo;
 
     QCheckBox          *m_addBorderCheck;
 

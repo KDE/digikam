@@ -24,22 +24,22 @@
 
 // Qt includes.
 
+#include <QCheckBox>
 #include <QColor>
 #include <QGroupBox>
 #include <QLabel>
-#include <QCheckBox>
 #include <QVBoxLayout>
-#include <QComboBox>
 
 // KDE includes.
 
-#include <klocale.h>
-#include <kdialog.h>
-#include <kcolorbutton.h>
-#include <knuminput.h>
-#include <kconfig.h>
 #include <kapplication.h>
+#include <kcolorbutton.h>
+#include <kcombobox.h>
+#include <kconfig.h>
+#include <kdialog.h>
 #include <kglobal.h>
+#include <klocale.h>
+#include <knuminput.h>
 #include <kvbox.h>
 
 // Local includes.
@@ -86,7 +86,7 @@ public:
     QCheckBox    *themebackgroundColor;
     QCheckBox    *useRawImportTool;
 
-    QComboBox    *sortOrderComboBox;
+    KComboBox    *sortOrderComboBox;
 
     KColorButton *backgroundColor;
     KColorButton *underExposureColor;
@@ -187,7 +187,7 @@ SetupEditor::SetupEditor(QWidget* parent )
 
     KHBox* sortBox       = new KHBox(sortOptionsGroup);
     new QLabel(i18n("Sort images by:"), sortBox);
-    d->sortOrderComboBox = new QComboBox(sortBox);
+    d->sortOrderComboBox = new KComboBox(sortBox);
     d->sortOrderComboBox->insertItem(0, i18n("File Date"));
     d->sortOrderComboBox->insertItem(1, i18n("File Name"));
     d->sortOrderComboBox->insertItem(2, i18n("File size"));

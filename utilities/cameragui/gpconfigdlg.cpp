@@ -235,7 +235,7 @@ void GPConfigDlg::appendWidget(QWidget *parent, CameraWidget *widget)
 		{
 			gp_widget_get_value(widget, &widget_value_string);
 
-			QComboBox *comboBox = new QComboBox(parent);
+			QComboBox *comboBox = new KComboBox(parent);
 			parent->layout()->addWidget(comboBox);
 			comboBox->clear();
 			for(int i = 0; i < gp_widget_count_choices(widget); ++i) {

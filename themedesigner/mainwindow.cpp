@@ -5,7 +5,7 @@
  *
  * Date        : 2005-07-14
  * Description : main digiKam theme designer window
- * 
+ *
  * Copyright (C) 2005 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
  * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,28 +24,28 @@
 
 // Qt includes.
 
-#include <QFrame>
-#include <QPushButton>
-#include <QGroupBox>
-#include <QLabel>
-#include <QComboBox>
 #include <QCheckBox>
-#include <QSplitter>
-#include <QFileInfo>
-#include <QTextStream>
 #include <QDateTime>
-#include <QHBoxLayout>
+#include <QFileInfo>
+#include <QFrame>
 #include <QGridLayout>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QSplitter>
+#include <QTextStream>
 #include <QVBoxLayout>
 
 // KDE includes.
 
-#include <klocale.h>
-#include <kcolordialog.h>
-#include <kcolorbutton.h>
 #include <kapplication.h>
-#include <kiconloader.h>
+#include <kcolorbutton.h>
+#include <kcolordialog.h>
+#include <kcombobox.h>
 #include <kfiledialog.h>
+#include <kiconloader.h>
+#include <klocale.h>
 #include <kmessagebox.h>
 #include <kuser.h>
 
@@ -96,13 +96,13 @@ MainWindow::MainWindow()
     QVBoxLayout* vlay   = new QVBoxLayout(groupBox);
 
     QLabel* label1  = new QLabel(i18n("Property: "), groupBox);
-    m_propertyCombo = new QComboBox(groupBox);
+    m_propertyCombo = new KComboBox(groupBox);
 
     m_bevelLabel = new QLabel(i18n("Bevel: "), groupBox);
-    m_bevelCombo = new QComboBox(groupBox);
+    m_bevelCombo = new KComboBox(groupBox);
 
     m_gradientLabel = new QLabel(i18n("Gradient: "), groupBox);
-    m_gradientCombo = new QComboBox(groupBox);
+    m_gradientCombo = new KComboBox(groupBox);
 
     m_begColorLabel = new QLabel(i18n("Start Color: "), groupBox);
     m_begColorBtn   = new KColorButton(groupBox);
@@ -192,7 +192,7 @@ MainWindow::MainWindow()
 
     buttonLayout->setMargin(5);
     buttonLayout->setSpacing(5);
-    buttonLayout->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum)); 
+    buttonLayout->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum));
     buttonLayout->addWidget(loadButton);
     buttonLayout->addWidget(saveButton);
     buttonLayout->addWidget(closeButton);
@@ -421,16 +421,16 @@ void MainWindow::slotPropertyChanged()
             m_begColorLabel->setEnabled(true);
             m_endColorLabel->setEnabled(true);
             m_borderColorLabel->setEnabled(true);
-    
+
             m_bevelCombo->setCurrentIndex(m_bevelReverseMap[m_theme->thumbSelBevel]);
             m_gradientCombo->setCurrentIndex(m_gradientReverseMap[m_theme->thumbSelGrad]);
-            
+
             m_begColorBtn->setColor(m_theme->thumbSelColor);
             m_endColorBtn->setColor(m_theme->thumbSelColorTo);
-    
+
             m_addBorderCheck->setChecked(m_theme->thumbSelBorder);
             m_borderColorBtn->setColor(m_theme->thumbSelBorderColor);
-    
+
             break;
         }
         case(LISTVIEWREGULAR):
@@ -446,16 +446,16 @@ void MainWindow::slotPropertyChanged()
             m_begColorLabel->setEnabled(true);
             m_endColorLabel->setEnabled(true);
             m_borderColorLabel->setEnabled(true);
-    
+
             m_bevelCombo->setCurrentIndex(m_bevelReverseMap[m_theme->listRegBevel]);
             m_gradientCombo->setCurrentIndex(m_gradientReverseMap[m_theme->listRegGrad]);
-            
+
             m_begColorBtn->setColor(m_theme->listRegColor);
             m_endColorBtn->setColor(m_theme->listRegColorTo);
-    
+
             m_addBorderCheck->setChecked(m_theme->listRegBorder);
             m_borderColorBtn->setColor(m_theme->listRegBorderColor);
-    
+
             break;
         }
         case(LISTVIEWSELECTED):
@@ -471,16 +471,16 @@ void MainWindow::slotPropertyChanged()
             m_begColorLabel->setEnabled(true);
             m_endColorLabel->setEnabled(true);
             m_borderColorLabel->setEnabled(true);
-    
+
             m_bevelCombo->setCurrentIndex(m_bevelReverseMap[m_theme->listSelBevel]);
             m_gradientCombo->setCurrentIndex(m_gradientReverseMap[m_theme->listSelGrad]);
-    
+
             m_begColorBtn->setColor(m_theme->listSelColor);
             m_endColorBtn->setColor(m_theme->listSelColorTo);
-    
+
             m_addBorderCheck->setChecked(m_theme->listSelBorder);
             m_borderColorBtn->setColor(m_theme->listSelBorderColor);
-    
+
             break;
         }
     };
@@ -526,65 +526,65 @@ void MainWindow::slotUpdateTheme()
         {
             m_theme->bannerBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentIndex()];
             m_theme->bannerGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentIndex()];
-    
+
             m_theme->bannerColor   = m_begColorBtn->color();
             m_theme->bannerColorTo = m_endColorBtn->color();
-    
+
             m_theme->bannerBorder      = m_addBorderCheck->isChecked();
             m_theme->bannerBorderColor = m_borderColorBtn->color();
-    
+
             break;
         }
         case(THUMBNAILREGULAR):
         {
             m_theme->thumbRegBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentIndex()];
             m_theme->thumbRegGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentIndex()];
-    
+
             m_theme->thumbRegColor   = m_begColorBtn->color();
             m_theme->thumbRegColorTo = m_endColorBtn->color();
-    
+
             m_theme->thumbRegBorder      = m_addBorderCheck->isChecked();
             m_theme->thumbRegBorderColor = m_borderColorBtn->color();
-    
+
             break;
         }
         case(THUMBNAILSELECTED):
         {
             m_theme->thumbSelBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentIndex()];
             m_theme->thumbSelGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentIndex()];
-    
+
             m_theme->thumbSelColor   = m_begColorBtn->color();
             m_theme->thumbSelColorTo = m_endColorBtn->color();
-    
+
             m_theme->thumbSelBorder      = m_addBorderCheck->isChecked();
             m_theme->thumbSelBorderColor = m_borderColorBtn->color();
-    
+
             break;
         }
         case(LISTVIEWREGULAR):
         {
             m_theme->listRegBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentIndex()];
             m_theme->listRegGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentIndex()];
-    
+
             m_theme->listRegColor   = m_begColorBtn->color();
             m_theme->listRegColorTo = m_endColorBtn->color();
-    
+
             m_theme->listRegBorder      = m_addBorderCheck->isChecked();
             m_theme->listRegBorderColor = m_borderColorBtn->color();
-    
+
             break;
         }
         case(LISTVIEWSELECTED):
         {
             m_theme->listSelBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentIndex()];
             m_theme->listSelGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentIndex()];
-    
+
             m_theme->listSelColor   = m_begColorBtn->color();
             m_theme->listSelColorTo = m_endColorBtn->color();
-    
+
             m_theme->listSelBorder      = m_addBorderCheck->isChecked();
             m_theme->listSelBorderColor = m_borderColorBtn->color();
-    
+
             break;
         }
     };

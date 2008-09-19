@@ -29,7 +29,6 @@
 
 #include <QButtonGroup>
 #include <QColor>
-#include <QComboBox>
 #include <QFrame>
 #include <QGridLayout>
 #include <QGroupBox>
@@ -45,6 +44,7 @@
 
 #include <kaboutdata.h>
 #include <kapplication.h>
+#include <kcombobox.h>
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kfiledialog.h>
@@ -121,7 +121,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 
     QLabel *label1 = new QLabel(i18n("Channel:"), m_gboxSettings->plainPage());
     label1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_channelCB = new QComboBox(m_gboxSettings->plainPage());
+    m_channelCB = new KComboBox(m_gboxSettings->plainPage());
     m_channelCB->addItem(i18n("Luminosity"));
     m_channelCB->addItem(i18n("Red"));
     m_channelCB->addItem(i18n("Green"));

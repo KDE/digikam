@@ -25,29 +25,29 @@
 
 // Qt includes.
 
-#include <QDateTime>
-#include <QRadioButton>
 #include <QButtonGroup>
 #include <QCheckBox>
-#include <QComboBox>
+#include <QDateTime>
+#include <QFrame>
+#include <QGridLayout>
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <QRadioButton>
 #include <QTimer>
-#include <QHBoxLayout>
-#include <QGridLayout>
-#include <QFrame>
 
 // KDE includes.
 
-#include <khbox.h>
-#include <klocale.h>
-#include <kconfig.h>
 #include <kapplication.h>
-#include <kiconloader.h>
-#include <klineedit.h>
-#include <knuminput.h>
+#include <kcombobox.h>
+#include <kconfig.h>
 #include <kdialog.h>
+#include <khbox.h>
+#include <kiconloader.h>
 #include <kinputdialog.h>
+#include <klineedit.h>
+#include <klocale.h>
+#include <knuminput.h>
 
 // Local includes.
 
@@ -108,8 +108,8 @@ public:
     QLabel       *startIndexLabel;
     QLabel       *dateTimeLabel;
 
-    QComboBox    *renameDefaultCaseType;
-    QComboBox    *dateTimeFormat;
+    KComboBox    *renameDefaultCaseType;
+    KComboBox    *dateTimeFormat;
 
     QCheckBox    *addDateTimeBox;
     QCheckBox    *addCameraNameBox;
@@ -153,7 +153,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->renameDefaultCase = new QLabel(i18n("Change case to:"), d->renameDefaultBox);
     d->renameDefaultCase->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 
-    d->renameDefaultCaseType = new QComboBox(d->renameDefaultBox);
+    d->renameDefaultCaseType = new KComboBox(d->renameDefaultBox);
     d->renameDefaultCaseType->insertItem(0, i18n("Leave as Is"));
     d->renameDefaultCaseType->insertItem(1, i18n("Upper"));
     d->renameDefaultCaseType->insertItem(2, i18n("Lower"));
@@ -194,7 +194,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     QWidget *dateTimeWidget = new QWidget(d->renameCustomBox);
     QHBoxLayout *boxLayout2 = new QHBoxLayout(dateTimeWidget);
     d->dateTimeLabel        = new QLabel(i18n("Date format:"), dateTimeWidget);
-    d->dateTimeFormat       = new QComboBox(dateTimeWidget);
+    d->dateTimeFormat       = new KComboBox(dateTimeWidget);
     d->dateTimeFormat->insertItem(RenameCustomizerPriv::DigikamStandard, i18n("Standard"));
     d->dateTimeFormat->insertItem(RenameCustomizerPriv::IsoDateFormat,   i18n("ISO"));
     d->dateTimeFormat->insertItem(RenameCustomizerPriv::TextDateFormat,  i18n("Full Text"));

@@ -28,22 +28,22 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 // Qt includes.
 
-#include <QPushButton>
-#include <QMap>
 #include <QFile>
-#include <QComboBox>
-#include <QGroupBox>
-#include <QGridLayout>
 #include <QFrame>
+#include <QGridLayout>
+#include <QGroupBox>
 #include <QLabel>
+#include <QMap>
+#include <QPushButton>
 
 // KDE includes.
 
-#include <khbox.h>
+#include <kcombobox.h>
 #include <kdialog.h>
+#include <khbox.h>
 #include <klocale.h>
-#include <ktoolinvocation.h>
 #include <ksqueezedtextlabel.h>
+#include <ktoolinvocation.h>
 
 // Local includes.
 
@@ -118,7 +118,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     QWidget* box2           = new QWidget(this);
     QHBoxLayout* box2Layout = new QHBoxLayout(box2);
 
-    d->detailsCombo  = new QComboBox(box2);
+    d->detailsCombo  = new KComboBox(box2);
     d->detailsButton = new QPushButton(i18n("More Info..."), box2);
     d->detailsButton->setMaximumHeight( fontMetrics().height()+4 );
     d->detailsCombo->setMaximumHeight( fontMetrics().height()+4 );
@@ -189,7 +189,7 @@ void ImagePropertiesGPSTab::slotGPSDetails()
             break;
         }
 
-        case GoogleMaps: 
+        case GoogleMaps:
         {
             url.append("http://maps.google.com/?q=");
             url.append(val.setNum(d->map->getLatitude(), 'g', 12));
@@ -199,7 +199,7 @@ void ImagePropertiesGPSTab::slotGPSDetails()
             break;
         }
 
-        case MsnMaps:  
+        case MsnMaps:
         {
             url.append("http://maps.msn.com/map.aspx?");
             url.append("&lats1=");
@@ -285,7 +285,7 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSInfoList& list)
         d->altitude->setText(QString("%1 m").arg(QString::number(list.first().altitude)));
         d->latitude->setText(QString::number(list.first().latitude));
         d->longitude->setText(QString::number(list.first().longitude));
-        d->date->setText(KGlobal::locale()->formatDateTime(list.first().dateTime, 
+        d->date->setText(KGlobal::locale()->formatDateTime(list.first().dateTime,
                                                            KLocale::ShortDate, true));
         setEnabled(true);
     }

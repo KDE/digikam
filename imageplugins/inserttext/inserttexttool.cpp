@@ -27,7 +27,6 @@
 #include <QBrush>
 #include <QButtonGroup>
 #include <QCheckBox>
-#include <QComboBox>
 #include <QFont>
 #include <QFrame>
 #include <QGridLayout>
@@ -45,6 +44,7 @@
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcolorbutton.h>
+#include <kcombobox.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>
@@ -156,7 +156,7 @@ InsertTextTool::InsertTextTool(QObject* parent)
     // -------------------------------------------------------------
 
     QLabel *label1 = new QLabel(i18n("Rotation:"), m_gboxSettings->plainPage());
-    m_textRotation = new QComboBox( m_gboxSettings->plainPage() );
+    m_textRotation = new KComboBox( m_gboxSettings->plainPage() );
     m_textRotation->addItem( i18n("None") );
     m_textRotation->addItem( i18n("90 Degrees") );
     m_textRotation->addItem( i18n("180 Degrees") );

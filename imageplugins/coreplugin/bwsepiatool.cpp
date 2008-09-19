@@ -26,7 +26,6 @@
 
 #include <QButtonGroup>
 #include <QColor>
-#include <QComboBox>
 #include <QFile>
 #include <QFrame>
 #include <QGridLayout>
@@ -44,6 +43,7 @@
 // KDE includes.
 
 #include <kapplication.h>
+#include <kcombobox.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>
@@ -208,7 +208,7 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings->plainPage());
     label1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_channelCB = new QComboBox(gboxSettings->plainPage());
+    m_channelCB = new KComboBox(gboxSettings->plainPage());
     m_channelCB->addItem(i18n("Luminosity"));
     m_channelCB->addItem(i18n("Red"));
     m_channelCB->addItem(i18n("Green"));

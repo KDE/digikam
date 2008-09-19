@@ -5,7 +5,7 @@
  *
  * Date        : 2008-01-20
  * Description : User interface for searches
- * 
+ *
  * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -13,27 +13,27 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
 
-#include <QVBoxLayout>
 #include <QGridLayout>
-#include <QComboBox>
-#include <QRadioButton>
 #include <QLabel>
 #include <QPainter>
+#include <QRadioButton>
+#include <QVBoxLayout>
 
 // KDE includes.
 
-#include <klocale.h>
+#include <kcombobox.h>
 #include <kiconloader.h>
+#include <klocale.h>
 #include <kstandarddirs.h>
 
 // Local includes.
@@ -357,7 +357,7 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGrou
     }
     else
     {
-        m_groupOpBox = new QComboBox;
+        m_groupOpBox = new KComboBox;
         m_groupOpBox->addItem("- OR -", SearchXml::Or);
         m_groupOpBox->addItem("- AND -", SearchXml::And);
         m_groupOpBox->addItem("- AND NOT -", SearchXml::AndNot);

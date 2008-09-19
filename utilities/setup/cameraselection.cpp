@@ -24,31 +24,31 @@
 
 // Qt includes.
 
-#include <QComboBox>
+#include <QButtonGroup>
+#include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
 #include <QPushButton>
 #include <QRadioButton>
-#include <QButtonGroup>
-#include <QGridLayout>
 #include <QTreeWidget>
 
 // KDE includes.
 
-#include <kiconloader.h>
-#include <kglobalsettings.h>
-#include <kurlrequester.h>
-#include <klocale.h>
-#include <klineedit.h>
-#include <kcursor.h>
-#include <kvbox.h>
 #include <kapplication.h>
+#include <kcombobox.h>
+#include <kcursor.h>
+#include <kglobalsettings.h>
+#include <kiconloader.h>
+#include <klineedit.h>
+#include <klocale.h>
 #include <kstandarddirs.h>
+#include <kurlrequester.h>
+#include <kvbox.h>
 
 // Local includes.
 
-#include "searchtextbar.h"
 #include "gpcamera.h"
+#include "searchtextbar.h"
 #include "cameraselection.h"
 #include "cameraselection.moc"
 
@@ -79,7 +79,7 @@ public:
 
     QLabel        *portPathLabel;
 
-    QComboBox     *portPathComboBox;
+    KComboBox     *portPathComboBox;
 
     QString        UMSCameraNameActual;
     QString        UMSCameraNameShown;
@@ -176,7 +176,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     d->portPathLabel = new QLabel( portPathBox);
     d->portPathLabel->setText(i18n("Note: only for serial port camera"));
 
-    d->portPathComboBox = new QComboBox( portPathBox );
+    d->portPathComboBox = new KComboBox( portPathBox );
     d->portPathComboBox->setDuplicatesEnabled( false );
     d->portPathComboBox->setWhatsThis( i18n("<p>Select the serial port to use on your computer here. "
                      "This option is only required if you use a serial camera.</p>"));

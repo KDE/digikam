@@ -25,55 +25,55 @@
 
 // Qt includes.
 
-#include <QMenu>
-#include <QGroupBox>
-#include <QPushButton>
-#include <QToolButton>
-#include <QSplitter>
-#include <QPixmap>
-#include <QComboBox>
-#include <QToolBox>
-#include <QFrame>
-#include <QRadioButton>
 #include <QCheckBox>
-#include <QLineEdit>
-#include <QTimer>
+#include <QCloseEvent>
 #include <QFile>
 #include <QFileInfo>
-#include <QLabel>
-#include <QCloseEvent>
+#include <QFrame>
 #include <QGridLayout>
-#include <QKeyEvent>
+#include <QGroupBox>
 #include <QHBoxLayout>
+#include <QKeyEvent>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMenu>
+#include <QPixmap>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QSplitter>
+#include <QTimer>
+#include <QToolBox>
+#include <QToolButton>
 #include <QVBoxLayout>
 
 // KDE includes.
 
-#include <ktoolinvocation.h>
-#include <kdialog.h>
-#include <kfiledialog.h>
-#include <kimageio.h>
 #include <kaboutdata.h>
-#include <kmessagebox.h>
-#include <kglobal.h>
-#include <klocale.h>
-#include <kconfig.h>
+#include <kactioncollection.h>
 #include <kapplication.h>
+#include <kcalendarsystem.h>
+#include <kcombobox.h>
+#include <kconfig.h>
+#include <kdialog.h>
+#include <kedittoolbar.h>
+#include <kfiledialog.h>
+#include <kglobal.h>
+#include <khelpmenu.h>
 #include <kiconloader.h>
+#include <kimageio.h>
+#include <kinputdialog.h>
+#include <kio/global.h>
+#include <klocale.h>
 #include <kmenu.h>
 #include <kmenubar.h>
-#include <kstandarddirs.h>
-#include <khelpmenu.h>
-#include <kcalendarsystem.h>
-#include <kurllabel.h>
-#include <kinputdialog.h>
-#include <kvbox.h>
-#include <kactioncollection.h>
-#include <kstatusbar.h>
+#include <kmessagebox.h>
 #include <kshortcutsdialog.h>
-#include <kedittoolbar.h>
+#include <kstandarddirs.h>
+#include <kstatusbar.h>
 #include <ktoolbar.h>
-#include <kio/global.h>
+#include <ktoolinvocation.h>
+#include <kurllabel.h>
+#include <kvbox.h>
 
 // Libkdcraw includes.
 
@@ -198,7 +198,7 @@ void CameraUI::setupUserArea()
     d->autoAlbumDateCheck  = new QCheckBox(i18n("Date-based sub-albums"), albumBox);
     KHBox *hbox1           = new KHBox(albumBox);
     d->folderDateLabel     = new QLabel(i18n("Date format:"), hbox1);
-    d->folderDateFormat    = new QComboBox(hbox1);
+    d->folderDateFormat    = new KComboBox(hbox1);
     d->folderDateFormat->insertItem(CameraUIPriv::IsoDateFormat,   i18n("ISO"));
     d->folderDateFormat->insertItem(CameraUIPriv::TextDateFormat,  i18n("Full Text"));
     d->folderDateFormat->insertItem(CameraUIPriv::LocalDateFormat, i18n("Local Settings"));
@@ -240,7 +240,7 @@ void CameraUI::setupUserArea()
     d->convertJpegCheck    = new QCheckBox(i18n("Convert to lossless file format"), onFlyBox);
     KHBox *hbox2           = new KHBox(onFlyBox);
     d->formatLabel         = new QLabel(i18n("New image format:"), hbox2);
-    d->losslessFormat      = new QComboBox(hbox2);
+    d->losslessFormat      = new KComboBox(hbox2);
     d->losslessFormat->insertItem(0, "PNG");
 
     onFlyVlay->addWidget(d->setPhotographerId);

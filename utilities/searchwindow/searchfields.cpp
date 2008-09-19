@@ -39,11 +39,13 @@
 #include <QTimeEdit>
 #include <QTreeView>
 
+
 // KDE includes.
 
+#include <kcombobox.h>
 #include <kiconloader.h>
-#include <klocale.h>
 #include <klineedit.h>
+#include <klocale.h>
 #include <ksqueezedtextlabel.h>
 
 // Local includes.
@@ -1840,7 +1842,7 @@ SearchFieldColorDepth::SearchFieldColorDepth(QObject *parent)
 
 void SearchFieldColorDepth::setupValueWidgets(QGridLayout *layout, int row, int column)
 {
-    m_comboBox = new QComboBox;
+    m_comboBox = new KComboBox;
     m_comboBox->setEditable(false);
     layout->addWidget(m_comboBox, row, column);
 

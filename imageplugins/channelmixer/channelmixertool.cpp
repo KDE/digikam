@@ -38,7 +38,6 @@
 #include <QButtonGroup>
 #include <QCheckBox>
 #include <QColor>
-#include <QComboBox>
 #include <QFile>
 #include <QFrame>
 #include <QGridLayout>
@@ -56,6 +55,7 @@
 
 #include <kaboutdata.h>
 #include <kapplication.h>
+#include <kcombobox.h>
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kfiledialog.h>
@@ -126,7 +126,7 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
 
     QLabel *label1 = new QLabel(i18n("Channel:"), m_gboxSettings->plainPage());
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( m_gboxSettings->plainPage() );
+    m_channelCB = new KComboBox( m_gboxSettings->plainPage() );
     m_channelCB->addItem( i18n("Red") );
     m_channelCB->addItem( i18n("Green") );
     m_channelCB->addItem( i18n("Blue") );

@@ -23,17 +23,17 @@
 
 // Qt includes.
 
-#include <QString>
-#include <QLabel>
-#include <QLayout>
 #include <QFrame>
 #include <QGridLayout>
-#include <QComboBox>
+#include <QLabel>
+#include <QLayout>
+#include <QString>
 
 // KDE includes.
 
-#include <klocale.h>
+#include <kcombobox.h>
 #include <kdialog.h>
+#include <klocale.h>
 #include <knuminput.h>
 
 // Local includes.
@@ -103,7 +103,7 @@ JPEGSettings::JPEGSettings(QWidget *parent)
 
     d->labelSubSampling = new QLabel(i18n("Chroma subsampling:"), this);
 
-    d->subSamplingCB = new QComboBox(this);
+    d->subSamplingCB = new KComboBox(this);
     d->subSamplingCB->insertItem(0, i18n("None"));    // 1x1, 1x1, 1x1 (4:4:4)
     d->subSamplingCB->insertItem(1, i18n("Medium"));  // 2x1, 1x1, 1x1 (4:2:2)
     d->subSamplingCB->insertItem(2, i18n("High"));    // 2x2, 1x1, 1x1 (4:1:1)

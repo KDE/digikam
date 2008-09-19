@@ -24,7 +24,6 @@
 
 // Qt includes.
 
-#include <QComboBox>
 #include <QFile>
 #include <QGridLayout>
 #include <QImage>
@@ -36,6 +35,7 @@
 
 #include <kaboutdata.h>
 #include <kapplication.h>
+#include <kcombobox.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -96,7 +96,7 @@ RestorationTool::RestorationTool(QObject* parent)
 
     QLabel *typeLabel   = new QLabel(i18n("Filtering type:"), firstPage);
     typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_restorationTypeCB = new QComboBox(firstPage);
+    m_restorationTypeCB = new KComboBox(firstPage);
     m_restorationTypeCB->addItem( i18n("None") );
     m_restorationTypeCB->addItem( i18n("Reduce Uniform Noise") );
     m_restorationTypeCB->addItem( i18n("Reduce JPEG Artefacts") );

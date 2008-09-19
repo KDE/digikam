@@ -22,24 +22,24 @@
 
 // Qt includes.
 
-#include <QString>
-#include <QLayout>
 #include <QButtonGroup>
-#include <QComboBox>
 #include <QLabel>
-#include <QToolButton>
-#include <QToolBox>
+#include <QLayout>
 #include <QPushButton>
+#include <QString>
+#include <QToolBox>
+#include <QToolButton>
 
 // KDE includes.
 
 #include <kapplication.h>
-#include <ktabwidget.h>
-#include <klocale.h>
-#include <kiconloader.h>
+#include <kcombobox.h>
 #include <kconfig.h>
-#include <kstandarddirs.h>
 #include <kfiledialog.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
+#include <ktabwidget.h>
 #include <kvbox.h>
 
 // LibKDcraw includes.
@@ -121,8 +121,8 @@ public:
     QWidget             *curveBox;
     QWidget             *rawdecodingBox;
 
-    QComboBox           *channelCB;
-    QComboBox           *colorsCB;
+    KComboBox           *channelCB;
+    KComboBox           *colorsCB;
 
     QLabel              *brightnessLabel;
     QLabel              *contrastLabel;
@@ -170,7 +170,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
 
     QLabel *label1 = new QLabel(i18n("Channel:"), plainPage());
     label1->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-    d->channelCB   = new QComboBox(plainPage());
+    d->channelCB   = new KComboBox(plainPage());
     d->channelCB->addItem( i18n("Luminosity") );
     d->channelCB->addItem( i18n("Red") );
     d->channelCB->addItem( i18n("Green") );
@@ -217,7 +217,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
 
     QLabel *label10 = new QLabel(i18n("Colors:"), plainPage());
     label10->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-    d->colorsCB     = new QComboBox(plainPage());
+    d->colorsCB     = new KComboBox(plainPage());
     d->colorsCB->addItem( i18n("Red") );
     d->colorsCB->addItem( i18n("Green") );
     d->colorsCB->addItem( i18n("Blue") );

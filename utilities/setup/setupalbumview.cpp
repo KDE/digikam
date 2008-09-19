@@ -24,19 +24,19 @@
 
 // Qt includes.
 
-#include <QComboBox>
 #include <QButtonGroup>
-#include <QGroupBox>
-#include <QRadioButton>
 #include <QCheckBox>
-#include <QLabel>
 #include <QGridLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QRadioButton>
 #include <QVBoxLayout>
 
 // KDE includes.
 
-#include <klocale.h>
+#include <kcombobox.h>
 #include <kdialog.h>
+#include <klocale.h>
 
 // Local includes.
 
@@ -81,8 +81,8 @@ public:
     QCheckBox     *previewLoadFullImageSize;
     QCheckBox     *showFolderTreeViewItemsCount;
 
-    QComboBox     *iconTreeThumbSize;
-    QComboBox     *rightClickActionComboBox;
+    KComboBox     *iconTreeThumbSize;
+    KComboBox     *rightClickActionComboBox;
 };
 
 SetupAlbumView::SetupAlbumView(QWidget* parent)
@@ -144,7 +144,7 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     QGridLayout* ifaceSettingsLayout = new QGridLayout(interfaceOptionsGroup);
 
     d->iconTreeThumbLabel = new QLabel(i18n("Sidebar thumbnail size:"), interfaceOptionsGroup);
-    d->iconTreeThumbSize  = new QComboBox(interfaceOptionsGroup);
+    d->iconTreeThumbSize  = new KComboBox(interfaceOptionsGroup);
     d->iconTreeThumbSize->addItem(QString("16"));
     d->iconTreeThumbSize->addItem(QString("22"));
     d->iconTreeThumbSize->addItem(QString("32"));
@@ -157,7 +157,7 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     d->showFolderTreeViewItemsCount = new QCheckBox(i18n("Show count of items in all tree-view"), interfaceOptionsGroup);
 
     QLabel *rightClickLabel     = new QLabel(i18n("Thumbnail click action:"), interfaceOptionsGroup);
-    d->rightClickActionComboBox = new QComboBox(interfaceOptionsGroup);
+    d->rightClickActionComboBox = new KComboBox(interfaceOptionsGroup);
     d->rightClickActionComboBox->addItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
     d->rightClickActionComboBox->addItem(i18n("Start image editor"), AlbumSettings::StartEditor);
     d->rightClickActionComboBox->setToolTip(i18n("Here, choose what should happen when you "

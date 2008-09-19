@@ -32,7 +32,6 @@
 
 #include <QBrush>
 #include <QCheckBox>
-#include <QComboBox>
 #include <QEvent>
 #include <QFile>
 #include <QFrame>
@@ -49,6 +48,7 @@
 
 #include <kaboutdata.h>
 #include <kapplication.h>
+#include <kcombobox.h>
 #include <kcursor.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -120,7 +120,7 @@ InPaintingTool::InPaintingTool(QObject* parent)
 
     QLabel *typeLabel  = new QLabel(i18n("Filtering type:"), firstPage);
     typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_inpaintingTypeCB = new QComboBox( firstPage );
+    m_inpaintingTypeCB = new KComboBox( firstPage );
     m_inpaintingTypeCB->addItem( i18n("None") );
     m_inpaintingTypeCB->addItem( i18n("Remove Small Artefact") );
     m_inpaintingTypeCB->addItem( i18n("Remove Medium Artefact") );

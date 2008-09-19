@@ -28,7 +28,6 @@
 // Qt includes.
 
 #include <QButtonGroup>
-#include <QComboBox>
 #include <QFrame>
 #include <QGridLayout>
 #include <QGroupBox>
@@ -42,6 +41,7 @@
 // KDE includes.
 
 #include <kapplication.h>
+#include <kcombobox.h>
 #include <kconfig.h>
 #include <kdialog.h>
 #include <kglobal.h>
@@ -152,7 +152,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     QLabel *label1         = new QLabel(i18n("Channel:"), histogramPage);
     label1->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
 
-    d->channelCB = new QComboBox(histogramPage );
+    d->channelCB = new KComboBox(histogramPage );
     d->channelCB->insertItem( LuminosityChannel, i18n("Luminosity") );
     d->channelCB->insertItem( RedChannel,        i18n("Red") );
     d->channelCB->insertItem( GreenChannel,      i18n("Green") );
@@ -202,7 +202,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
 
     QLabel *label10 = new QLabel(i18n("Colors:"), histogramPage);
     label10->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    d->colorsCB = new QComboBox( histogramPage );
+    d->colorsCB = new KComboBox( histogramPage );
     d->colorsCB->insertItem( AllColorsRed,   i18n("Red") );
     d->colorsCB->insertItem( AllColorsGreen, i18n("Green") );
     d->colorsCB->insertItem( AllColorsBlue,  i18n("Blue") );
