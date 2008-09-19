@@ -56,9 +56,13 @@ public slots:
 
     void slotSeparateViewToggled(int t);
 
+protected:
+
+    void paintEvent(QPaintEvent*);
+
 private:
 
-    void updatePixmap();
+    void setImage();
 
 private:
 

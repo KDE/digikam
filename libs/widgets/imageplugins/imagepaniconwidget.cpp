@@ -51,11 +51,8 @@ public:
     ImagePanIconWidgetPriv()
     {
         iface        = 0;
-        data         = 0;
         separateView = ImageRegionWidget::SeparateViewNone;
     }
-
-    uchar      *data;
 
     int         separateView;
 
@@ -70,51 +67,61 @@ ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent,
 {
     d = new ImagePanIconWidgetPriv;
 
-    d->iface          = new ImageIface(w, h);
-    d->data           = d->iface->getPreviewImage();
+    d->iface = new ImageIface(w, h);
+    setImage();
+}
+
+ImagePanIconWidget::~ImagePanIconWidget()
+{
+    delete d->iface;
+    delete d;
+}
+
+void ImagePanIconWidget::setImage()
+{
+    // create preview data, do not store
+    uchar *data = d->iface->getPreviewImage();
+    delete[] data;
+
     m_width           = d->iface->previewWidth();
     m_height          = d->iface->previewHeight();
     m_orgWidth        = d->iface->originalWidth();
     m_orgHeight       = d->iface->originalHeight();
     m_zoomedOrgWidth  = d->iface->originalWidth();
     m_zoomedOrgHeight = d->iface->originalHeight();
-    m_pixmap          = new QPixmap(w, h);
+    m_pixmap          = QPixmap(m_width, m_height);
 
     setFixedSize(m_width, m_height);
 
     m_rect = QRect(width()/2-m_width/2, height()/2-m_height/2, m_width, m_height);
-    updatePixmap();
-    m_timerID = startTimer(800);
-}
 
-ImagePanIconWidget::~ImagePanIconWidget()
-{
-    delete d->iface;
-    delete [] d->data;
-    delete d;
+    // draw to pixmap
+    m_pixmap.fill(palette().color(QPalette::Background));
+    d->iface->paint(&m_pixmap, m_rect.x(), m_rect.y(), m_rect.width(), m_rect.height());
+
+    update();
 }
 
 void ImagePanIconWidget::setHighLightPoints(const QPolygon& pointsList)
 {
     d->hightlightPoints = pointsList;
-    updatePixmap();
-    repaint();
+    update();
 }
 
-void ImagePanIconWidget::updatePixmap()
+void ImagePanIconWidget::paintEvent(QPaintEvent*)
 {
     // Drawing background and image.
-    m_pixmap->fill(palette().color(QPalette::Background));
-    d->iface->paint(m_pixmap, m_rect.x(), m_rect.y(), m_rect.width(), m_rect.height());
-    
-    QPainter p(m_pixmap);
-   
+
+    QPainter p(this);
+
+    p.drawPixmap(m_rect.x(), m_rect.y(), m_pixmap);
+
     // Drawing HighLighted points.
-    
+
     if (!d->hightlightPoints.isEmpty())
     {
        QPoint pt;
-       
+
        for (int i = 0 ; i < d->hightlightPoints.count() ; i++)
        {
           pt = d->hightlightPoints.point(i);
@@ -129,8 +136,8 @@ void ImagePanIconWidget::updatePixmap()
           p.drawPoint(pt.x()-1, pt.y()+1);
           p.drawPoint(pt.x()+1, pt.y()-1);
        }
-    }   
-    
+    }
+
     // Drawing selection border
 
     if (m_flicker) p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
@@ -148,7 +155,7 @@ void ImagePanIconWidget::updatePixmap()
                m_localRegionSelection.y(),
                m_localRegionSelection.width(), 
                m_localRegionSelection.height());
-    
+
     if (d->separateView == ImageRegionWidget::SeparateViewVertical)
     {
         if (m_flicker) p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
@@ -171,7 +178,7 @@ void ImagePanIconWidget::updatePixmap()
     {
         if (m_flicker) p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
         else p.setPen(QPen(Qt::red, 1, Qt::SolidLine));
-        
+
         p.drawLine(m_localRegionSelection.topLeft().x(),
                    m_localRegionSelection.topLeft().y() + m_localRegionSelection.height()/2,
                    m_localRegionSelection.topRight().x(),
@@ -185,15 +192,12 @@ void ImagePanIconWidget::updatePixmap()
                    m_localRegionSelection.topRight().x() - 1,
                    m_localRegionSelection.topRight().y() + m_localRegionSelection.height()/2);
     }
-
-    p.end();
 }
 
 void ImagePanIconWidget::slotSeparateViewToggled(int t)
 {
     d->separateView = t;
-    updatePixmap();
-    repaint();
+    update();
 }
 
 }  // NameSpace Digikam
