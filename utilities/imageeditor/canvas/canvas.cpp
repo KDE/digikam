@@ -1281,7 +1281,7 @@ void Canvas::slotCornerButtonPressed()
     connect(pan, SIGNAL(signalSelectionMoved(const QRect&, bool)),
             this, SLOT(slotPanIconSelectionMoved(const QRect&, bool)));
 
-    connect(pan, SIGNAL(signalHiden()),
+    connect(pan, SIGNAL(signalHidden()),
             this, SLOT(slotPanIconHiden()));
 
     QPoint g = mapToGlobal(viewport()->pos());

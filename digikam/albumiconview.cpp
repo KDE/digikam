@@ -1330,7 +1330,6 @@ void AlbumIconView::startDrag()
 
 void AlbumIconView::contentsDragEnterEvent(QDragEnterEvent *e)
 {
-    DDebug(50003) << "contentsDragEnterEvent" << e->mimeData()->formats() << DTagDrag::canDecode(e->mimeData());
     if (!d->currentAlbum || (DAlbumDrag::canDecode(e->mimeData()) ||
                             (!KUrl::List::canDecode(e->mimeData())          &&
                              !DCameraDragObject::canDecode(e->mimeData())   &&
