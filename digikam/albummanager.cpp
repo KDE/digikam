@@ -2086,6 +2086,8 @@ void AlbumManager::slotAlbumChange(const AlbumChangeset &changeset)
     {
         case AlbumChangeset::Added:
         case AlbumChangeset::Deleted:
+            if (!d->scanPAlbumsTimer->isActive())
+                d->scanPAlbumsTimer->start();
             break;
         case AlbumChangeset::Renamed:
         case AlbumChangeset::PropertiesChanged:
