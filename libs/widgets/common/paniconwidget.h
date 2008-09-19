@@ -74,7 +74,7 @@ signals:
 
     void signalSelectionTakeFocus();
 
-    void signalHiden();
+    void signalHidden();
 
 public slots:
 
@@ -82,23 +82,24 @@ public slots:
 
 protected:
 
+    void showEvent(QShowEvent*);
     void hideEvent(QHideEvent*);
     void paintEvent(QPaintEvent*);
     void mousePressEvent(QMouseEvent*);
     void mouseReleaseEvent(QMouseEvent*);
     void mouseMoveEvent(QMouseEvent*);
-    void timerEvent(QTimerEvent*);
 
     /** Recalculate the target selection position and emit 'signalSelectionMoved'.*/
     void regionSelectionMoved(bool targetDone);
 
-    virtual void updatePixmap();
+protected slots:
+
+    void slotFlickerTimer();
 
 protected:
 
     bool     m_flicker;
 
-    int      m_timerID;
     int      m_width;
     int      m_height;
     int      m_zoomedOrgWidth;
@@ -111,7 +112,7 @@ protected:
     QRect    m_rect;
     QRect    m_localRegionSelection;    // Thumbnail size selection.
 
-    QPixmap *m_pixmap;
+    QPixmap  m_pixmap;
 
 private:
 
