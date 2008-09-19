@@ -14,7 +14,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 170711 : Write single Keywords instead of Hirachy into IPTC.
 005 ==> 168569 : New Album Folders are not detected in displayed in GUI until restart.
 006 ==> 165337 : Text overlapping box on welcome page.
-007 ==> 
+007 ==> 171310 : No preview photos shown clicking on imported albums.
+008 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta3 - Release date: 2008-09-03
