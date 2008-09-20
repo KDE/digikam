@@ -29,7 +29,6 @@
 #include <QPainter>
 #include <QPen>
 #include <QPixmap>
-#include <QTabWidget>
 
 // KDE includes.
 

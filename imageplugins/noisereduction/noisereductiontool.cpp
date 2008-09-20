@@ -29,7 +29,6 @@
 #include <QImage>
 #include <QLabel>
 #include <QString>
-#include <QTabWidget>
 #include <QTextStream>
 
 // KDE includes.
@@ -44,6 +43,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+#include <ktabwidget.h>
 
 // LibKDcraw includes.
 
@@ -87,7 +87,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
 
     QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage() );
 
-    QTabWidget *mainTab       = new QTabWidget(m_gboxSettings->plainPage());
+    KTabWidget *mainTab       = new KTabWidget(m_gboxSettings->plainPage());
     QWidget* firstPage        = new QWidget( mainTab );
     QGridLayout* grid1 = new QGridLayout(firstPage);
 

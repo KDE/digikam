@@ -29,7 +29,6 @@
 #include <QImage>
 #include <QLabel>
 #include <QPixmap>
-#include <QTabWidget>
 
 // KDE includes.
 
@@ -43,6 +42,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+#include <ktabwidget.h>
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 
@@ -82,7 +82,7 @@ RestorationTool::RestorationTool(QObject* parent)
                                             EditorToolSettings::PanIcon);
 
     QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
-    m_mainTab = new QTabWidget( m_gboxSettings->plainPage() );
+    m_mainTab = new KTabWidget( m_gboxSettings->plainPage() );
 
     QWidget* firstPage = new QWidget( m_mainTab );
     QGridLayout* grid  = new QGridLayout(firstPage);

@@ -33,9 +33,8 @@
 
 #include "editortool.h"
 
-class QTabWidget;
-
 class KComboBox;
+class KTabWidget;
 
 namespace Digikam
 {
@@ -84,7 +83,7 @@ private:
         ReduceTexturing
     };
 
-    QTabWidget                    *m_mainTab;
+    KTabWidget                    *m_mainTab;
 
     KComboBox                     *m_restorationTypeCB;
 

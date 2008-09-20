@@ -41,7 +41,6 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QPushButton>
-#include <QTabWidget>
 #include <QTimer>
 
 // KDE includes.
@@ -60,6 +59,7 @@
 #include <kmessagebox.h>
 #include <kpassivepopup.h>
 #include <kstandarddirs.h>
+#include <ktabwidget.h>
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 
@@ -106,7 +106,7 @@ InPaintingTool::InPaintingTool(QObject* parent)
                                             EditorToolSettings::Ok|
                                             EditorToolSettings::Cancel);
     QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
-    m_mainTab                 = new QTabWidget( m_gboxSettings->plainPage() );
+    m_mainTab                 = new KTabWidget( m_gboxSettings->plainPage() );
 
     QWidget* firstPage = new QWidget( m_mainTab );
     QGridLayout* grid  = new QGridLayout(firstPage);

@@ -40,9 +40,9 @@
 #include "dimg.h"
 #include "editortool.h"
 
-class QTabWidget;
 
 class KComboBox;
+class KTabWidget;
 
 namespace Digikam
 {
@@ -114,7 +114,7 @@ private:
 
     QImage                         m_maskImage;
 
-    QTabWidget                    *m_mainTab;
+    KTabWidget                    *m_mainTab;
 
     KComboBox                     *m_inpaintingTypeCB;
 
