@@ -29,7 +29,6 @@
 
 #include "editortool.h"
 
-class QComboBox;
 class QLabel;
 
 namespace KDcrawIface

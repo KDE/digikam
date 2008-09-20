@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-03-26
- * Description : a digiKam image editor plugin to restore 
+ * Description : a digiKam image editor plugin to restore
  *               a photograph
  *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -33,8 +33,9 @@
 
 #include "editortool.h"
 
-class QComboBox;
 class QTabWidget;
+
+class KComboBox;
 
 namespace Digikam
 {
@@ -85,7 +86,7 @@ private:
 
     QTabWidget                    *m_mainTab;
 
-    QComboBox                     *m_restorationTypeCB;
+    KComboBox                     *m_restorationTypeCB;
 
     Digikam::GreycstorationWidget *m_settingsWidget;
 

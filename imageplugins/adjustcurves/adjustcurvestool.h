@@ -32,10 +32,11 @@
 // Local includes.
 
 class QWidget;
-class QComboBox;
 class QPushButton;
 class QToolButton;
 class QButtonGroup;
+
+class KComboBox;
 
 namespace Digikam
 {
@@ -115,8 +116,6 @@ private:
 
     QWidget                      *m_pickerBox;
 
-    QComboBox                    *m_channelCB;
-
     QPushButton                  *m_resetButton;
     QToolButton                  *m_pickBlack;
     QToolButton                  *m_pickGray;
@@ -127,6 +126,8 @@ private:
     QButtonGroup                 *m_pickerColorButtonGroup;
     QButtonGroup                 *m_scaleBG;
     QButtonGroup                 *m_curveType;
+
+    KComboBox                    *m_channelCB;
 
     Digikam::CurvesWidget        *m_curvesWidget;
 

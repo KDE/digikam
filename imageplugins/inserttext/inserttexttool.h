@@ -33,14 +33,14 @@
 
 #include "editortool.h"
 
-class QFont;
 class QButtonGroup;
-class QComboBox;
 class QCheckBox;
+class QFont;
 
-class KTextEdit;
 class KColorButton;
+class KComboBox;
 class KFontChooser;
+class KTextEdit;
 
 namespace DigikamInsertTextImagesPlugin
 {
@@ -78,14 +78,14 @@ private:
     int                          m_alignTextMode;
     int                          m_defaultSizeFont;
 
-    QComboBox                   *m_textRotation;
-
     QCheckBox                   *m_borderText;
     QCheckBox                   *m_transparentText;
 
     QButtonGroup                *m_alignButtonGroup;
 
     QFont                        m_textFont;
+
+    KComboBox                   *m_textRotation;
 
     KColorButton                *m_fontColorButton;
 

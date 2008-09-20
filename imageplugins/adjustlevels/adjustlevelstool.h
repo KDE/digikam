@@ -30,10 +30,11 @@
 #include "dimg.h"
 
 class QWidget;
-class QComboBox;
 class QPushButton;
 class QToolButton;
 class QButtonGroup;
+
+class KComboBox;
 
 namespace KDcrawIface
 {
@@ -123,8 +124,6 @@ private:
 
     QWidget                      *m_pickerBox;
 
-    QComboBox                    *m_channelCB;
-
     QPushButton                  *m_resetButton;
     QToolButton                  *m_autoButton;
     QToolButton                  *m_pickBlack;
@@ -133,6 +132,8 @@ private:
 
     QButtonGroup                 *m_pickerColorButtonGroup;
     QButtonGroup                 *m_scaleBG;
+
+    KComboBox                    *m_channelCB;
 
     KDcrawIface::RIntNumInput    *m_minInput;
     KDcrawIface::RIntNumInput    *m_maxInput;

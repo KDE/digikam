@@ -32,10 +32,10 @@
 
 class QButtonGroup;
 class QCheckBox;
-class QComboBox;
 class QRadioButton;
 class QToolBox;
 
+class KComboBox;
 class KUrlRequester;
 
 namespace KDcrawIface
@@ -139,8 +139,6 @@ private:
 
     uchar                          *m_destinationPreviewData;
 
-    QComboBox                      *m_channelCB;
-
     QCheckBox                      *m_doSoftProofBox;
     QCheckBox                      *m_checkGamutBox;
     QCheckBox                      *m_embeddProfileBox;
@@ -170,6 +168,8 @@ private:
     QByteArray                      m_embeddedICC;
 
     QToolBox                       *m_toolBoxWidgets;
+
+    KComboBox                      *m_channelCB;
 
     KUrlRequester                  *m_inProfilesPath;
     KUrlRequester                  *m_spaceProfilePath;

@@ -26,7 +26,6 @@
 // Qt includes.
 
 #include <QButtonGroup>
-#include <QComboBox>
 #include <QFrame>
 #include <QGridLayout>
 #include <QGroupBox>
@@ -40,6 +39,7 @@
 
 #include <kaboutdata.h>
 #include <kapplication.h>
+#include <kcombobox.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>

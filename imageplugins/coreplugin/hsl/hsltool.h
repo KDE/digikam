@@ -30,8 +30,8 @@
 #include "editortool.h"
 
 class QButtonGroup;
-class QComboBox;
 
+class KComboBox;
 class KHueSaturationSelector;
 
 namespace KDcrawIface
@@ -96,15 +96,15 @@ private:
 
     uchar                        *m_destinationPreviewData;
 
-    QComboBox                    *m_channelCB;
-
     QButtonGroup                 *m_scaleBG;
+
+    KComboBox                    *m_channelCB;
+
+    KHueSaturationSelector       *m_HSSelector;
 
     KDcrawIface::RDoubleNumInput *m_hInput;
     KDcrawIface::RDoubleNumInput *m_sInput;
     KDcrawIface::RDoubleNumInput *m_lInput;
-
-    KHueSaturationSelector       *m_HSSelector;
 
     HSPreviewWidget              *m_HSPreview;
 

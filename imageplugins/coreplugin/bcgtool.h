@@ -30,9 +30,9 @@
 
 #include "editortool.h"
 
-class QComboBox;
 class QButtonGroup;
 
+class KComboBox;
 
 namespace KDcrawIface
 {
@@ -93,9 +93,9 @@ private:
 
     uchar                        *m_destinationPreviewData;
 
-    QComboBox                    *m_channelCB;
-
     QButtonGroup                 *m_scaleBG;
+
+    KComboBox                    *m_channelCB;
 
     KDcrawIface::RIntNumInput    *m_bInput;
     KDcrawIface::RIntNumInput    *m_cInput;

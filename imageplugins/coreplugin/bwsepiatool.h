@@ -35,8 +35,8 @@
 
 class QListWidget;
 class QButtonGroup;
-class QComboBox;
 
+class KComboBox;
 class KTabWidget;
 
 namespace KDcrawIface
@@ -156,18 +156,18 @@ private:
 
     uchar                        *m_destinationPreviewData;
 
-    QComboBox                    *m_channelCB;
-
     QButtonGroup                 *m_scaleBG;
 
     QListWidget                  *m_bwFilters;
     QListWidget                  *m_bwFilm;
     QListWidget                  *m_bwTone;
 
-    KDcrawIface::RIntNumInput    *m_cInput;
-    KDcrawIface::RIntNumInput    *m_strengthInput;
+    KComboBox                    *m_channelCB;
 
     KTabWidget                   *m_tab;
+
+    KDcrawIface::RIntNumInput    *m_cInput;
+    KDcrawIface::RIntNumInput    *m_strengthInput;
 
     Digikam::ImageWidget         *m_previewWidget;
 

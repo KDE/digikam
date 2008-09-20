@@ -29,10 +29,10 @@
 #include "editortool.h"
 
 class QCheckBox;
-class QComboBox;
 class QPushButton;
 class QButtonGroup;
 
+class KComboBox;
 
 namespace KDcrawIface
 {
@@ -112,14 +112,14 @@ private:
     double                        m_blackGreenGain;
     double                        m_blackBlueGain;
 
-    QComboBox                    *m_channelCB;
-
     QButtonGroup                 *m_scaleBG;
 
     QPushButton                  *m_resetButton;
 
     QCheckBox                    *m_preserveLuminosity;
     QCheckBox                    *m_monochrome;
+
+    KComboBox                    *m_channelCB;
 
     KDcrawIface::RDoubleNumInput *m_redGain;
     KDcrawIface::RDoubleNumInput *m_greenGain;

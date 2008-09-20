@@ -29,8 +29,9 @@
 #include "editortool.h"
 
 class QButtonGroup;
-class QComboBox;
 class QSlider;
+
+class KComboBox;
 
 namespace KDcrawIface
 {
@@ -91,13 +92,13 @@ private:
 
     uchar                        *m_destinationPreviewData;
 
-    QComboBox                    *m_channelCB;
-
     QButtonGroup                 *m_scaleBG;
 
     QSlider                      *m_rSlider;
     QSlider                      *m_gSlider;
     QSlider                      *m_bSlider;
+
+    KComboBox                    *m_channelCB;
 
     KDcrawIface::RIntNumInput    *m_rInput;
     KDcrawIface::RIntNumInput    *m_gInput;

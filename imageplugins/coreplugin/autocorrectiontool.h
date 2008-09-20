@@ -34,8 +34,9 @@
 #include "editortool.h"
 
 class QButtonGroup;
-class QComboBox;
 class QListWidget;
+
+class KComboBox;
 
 namespace Digikam
 {
@@ -104,11 +105,11 @@ private:
 
     uchar                        *m_destinationPreviewData;
 
-    QComboBox                    *m_channelCB;
-
     QButtonGroup                 *m_scaleBG;
 
     QListWidget                  *m_correctionTools;
+
+    KComboBox                    *m_channelCB;
 
     Digikam::ImageWidget         *m_previewWidget;
 

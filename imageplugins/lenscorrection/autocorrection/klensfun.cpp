@@ -29,6 +29,7 @@
 
 // KDE includes.
 
+#include <kcombobox.h>
 #include <kdialog.h>
 #include <klocale.h>
 
@@ -143,9 +144,9 @@ KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
     m_exifUsage->setCheckState(Qt::Unchecked);
     m_exifUsage->setWhatsThis(i18n("Set this option to try to guess the right camera/lens settings "
                                    "from the image metadata (as Exif or Xmp)."));
-    m_make->combo()->setInsertPolicy(QComboBox::InsertAlphabetically);
-    m_model->combo()->setInsertPolicy(QComboBox::InsertAlphabetically);
-    m_lens->combo()->setInsertPolicy(QComboBox::InsertAlphabetically);
+    m_make->combo()->setInsertPolicy(KComboBox::InsertAlphabetically);
+    m_model->combo()->setInsertPolicy(KComboBox::InsertAlphabetically);
+    m_lens->combo()->setInsertPolicy(KComboBox::InsertAlphabetically);
 
     QLabel *focalLabel = new QLabel(i18n("Focal Length:"), this);
     QLabel *aperLabel  = new QLabel(i18n("Aperture:"), this);

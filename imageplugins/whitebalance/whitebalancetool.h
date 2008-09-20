@@ -37,12 +37,12 @@
 
 class QPushButton;
 class QLabel;
-class QComboBox;
 class QPushButton;
 class QToolButton;
 class QButtonGroup;
 
 class K3ActiveLabel;
+class KComboBox;
 
 namespace KDcrawIface
 {
@@ -134,8 +134,6 @@ private:
     QToolButton                  *m_pickTemperature;
     QToolButton                  *m_autoAdjustExposure;
 
-    QComboBox                    *m_channelCB;
-
     QButtonGroup                 *m_scaleBG;
 
     QLabel                       *m_adjTemperatureLabel;
@@ -147,6 +145,8 @@ private:
     QLabel                       *m_gammaLabel;
     QLabel                       *m_saturationLabel;
     QLabel                       *m_greenLabel;
+
+    KComboBox                    *m_channelCB;
 
     K3ActiveLabel                *m_exposureLabel;
     K3ActiveLabel                *m_temperatureLabel;

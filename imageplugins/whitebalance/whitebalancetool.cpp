@@ -26,7 +26,6 @@
 // Qt includes.
 
 #include <QButtonGroup>
-#include <QComboBox>
 #include <QFile>
 #include <QFrame>
 #include <QGridLayout>
@@ -46,6 +45,7 @@
 #include <k3activelabel.h>
 #include <kaboutdata.h>
 #include <kapplication.h>
+#include <kcombobox.h>
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kfiledialog.h>

@@ -34,7 +34,6 @@
 
 #include "editortool.h"
 
-class QComboBox;
 class QLabel;
 class QCheckBox;
 class QColor;

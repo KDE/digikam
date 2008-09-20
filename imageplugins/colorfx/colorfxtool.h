@@ -31,8 +31,9 @@
 #include "editortool.h"
 
 class QButtonGroup;
-class QComboBox;
 class QLabel;
+
+class KComboBox;
 
 namespace KDcrawIface
 {
@@ -110,13 +111,13 @@ private:
 
     uchar                        *m_destinationPreviewData;
 
-    QComboBox                    *m_channelCB;
-
     QButtonGroup                 *m_scaleBG;
 
     QLabel                       *m_effectTypeLabel;
     QLabel                       *m_levelLabel;
     QLabel                       *m_iterationLabel;
+
+    KComboBox                    *m_channelCB;
 
     KDcrawIface::RComboBox       *m_effectType;
 

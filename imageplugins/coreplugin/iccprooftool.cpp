@@ -28,7 +28,6 @@
 #include <QButtonGroup>
 #include <QCheckBox>
 #include <QColor>
-#include <QComboBox>
 #include <QFile>
 #include <QFrame>
 #include <QGridLayout>
@@ -47,6 +46,7 @@
 // KDE includes.
 
 #include <kapplication.h>
+#include <kcombobox.h>
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kfile.h>

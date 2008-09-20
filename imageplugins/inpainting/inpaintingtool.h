@@ -41,7 +41,8 @@
 #include "editortool.h"
 
 class QTabWidget;
-class QComboBox;
+
+class KComboBox;
 
 namespace Digikam
 {
@@ -113,9 +114,9 @@ private:
 
     QImage                         m_maskImage;
 
-    QComboBox                     *m_inpaintingTypeCB;  
-
     QTabWidget                    *m_mainTab;
+
+    KComboBox                     *m_inpaintingTypeCB;
 
     Digikam::DImg                  m_originalImage;
     Digikam::DImg                  m_cropImage;

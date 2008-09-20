@@ -35,9 +35,9 @@
 
 class QButtonGroup;
 class QColor;
-class QComboBox;
 class QLabel;
 
+class KComboBox;
 class KHueSaturationSelector;
 class KColorValueSelector;
 
@@ -135,9 +135,9 @@ private:
     QLabel                       *m_thresholdLabel;
     QLabel                       *m_smoothLabel;
 
-    QComboBox                    *m_channelCB;
-
     QButtonGroup                 *m_scaleBG;
+
+    KComboBox                    *m_channelCB;
 
     KHueSaturationSelector       *m_HSSelector;
     KColorValueSelector          *m_VSelector;
