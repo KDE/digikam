@@ -271,7 +271,7 @@ void KLFDeviceSelector::findFromMetadata()
     // they seem anyway not to have Exif entries ususally :/
     int lensIdx = m_lens->combo()->findText(lens);
     if (lensIdx < 0)
-       lensIdx = m_lens->combo()->findText(make + " " + lens);
+       lensIdx = m_lens->combo()->findText(make + ' ' + lens);
 
     if (lensIdx >= 0)
     {
@@ -287,7 +287,7 @@ void KLFDeviceSelector::findFromMetadata()
     }
 
     DDebug(50006) << "Search for Lens: " << make << " :: " << lens
-             << "< and found: >" << m_lens->combo()->itemText(0) + "<";
+             << "< and found: >" << m_lens->combo()->itemText(0) + '<';
 
     QString temp = photoInfo.focalLength;
     if (!temp.isEmpty())
