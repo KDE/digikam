@@ -4,8 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2005-07-15
- * Description : themed icon item 
- * 
+ * Description : themed icon item
+ *
  * Copyright (C) 2005 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -55,10 +55,10 @@ static void dateToString(const QDateTime& datetime, QString& str)
 static QString squeezedText(QPainter* p, int width, const QString& text)
 {
     QString fullText(text);
-    fullText.replace("\n"," ");
+    fullText.replace('\n', ' ');
     QFontMetrics fm(p->fontMetrics());
     int textWidth = fm.width(fullText);
-    if (textWidth > width) 
+    if (textWidth > width)
     {
         // start with the dots only
         QString squeezedText = "...";
@@ -70,50 +70,50 @@ static QString squeezedText(QPainter* p, int width, const QString& text)
         squeezedText = fullText.left(letters) + "...";
         squeezedWidth = fm.width(squeezedText);
 
-        if (squeezedWidth < width) 
+        if (squeezedWidth < width)
         {
             // we estimated too short
             // add letters while text < label
-            do 
+            do
             {
                 letters++;
-                squeezedText = fullText.left(letters) + "..."; 
+                squeezedText = fullText.left(letters) + "...";
                 squeezedWidth = fm.width(squeezedText);
             }
             while (squeezedWidth < width);
 
             letters--;
-            squeezedText = fullText.left(letters) + "..."; 
-        } 
-        else if (squeezedWidth > width) 
+            squeezedText = fullText.left(letters) + "...";
+        }
+        else if (squeezedWidth > width)
         {
             // we estimated too long
             // remove letters while text > label
-            do 
+            do
             {
                 letters--;
                 squeezedText = fullText.left(letters) + "...";
                 squeezedWidth = fm.width(squeezedText);
-            } 
+            }
             while (letters && squeezedWidth > width);
         }
 
-        if (letters >= 5) 
+        if (letters >= 5)
         {
             return squeezedText;
         }
     }
-    
-    return fullText;   
+
+    return fullText;
 }
 
 ThemedIconItem::ThemedIconItem(IconGroupItem* parent)
               : IconItem(parent)
-{    
+{
 }
 
 ThemedIconItem::~ThemedIconItem()
-{    
+{
 }
 
 void ThemedIconItem::paintItem()
@@ -122,22 +122,22 @@ void ThemedIconItem::paintItem()
 
     QPixmap pix;
     QRect   r;
-    
+
     if (isSelected())
         pix = *(view->itemBaseSelPixmap());
     else
         pix = *(view->itemBaseRegPixmap());
 
     ThemeEngine* te = ThemeEngine::instance();
-    
+
     QPainter p(&pix);
     p.setPen(isSelected() ? te->textSelColor() : te->textRegColor());
 
     {
         r = view->itemPixmapRect();
-        KIconLoader *iconLoader = KIconLoader::global();    
+        KIconLoader *iconLoader = KIconLoader::global();
         QPixmap thumbnail = iconLoader->loadIcon("image-jpeg", KIconLoader::NoGroup, 128);
-        
+
         p.drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
                      r.y() + (r.height()-thumbnail.height())/2,
                      thumbnail);
@@ -155,7 +155,7 @@ void ThemedIconItem::paintItem()
     {
         QDateTime date = QDateTime::currentDateTime();
 
-        r = view->itemDateRect();    
+        r = view->itemDateRect();
         p.setFont(view->itemFontXtra());
         QString str;
         dateToString(date, str);
@@ -167,12 +167,12 @@ void ThemedIconItem::paintItem()
 
     {
         QString tags = i18n("Events, Places, Vacation");
-        
-        r = view->itemTagRect();    
-        p.drawText(r, Qt::AlignCenter, 
+
+        r = view->itemTagRect();
+        p.drawText(r, Qt::AlignCenter,
                    squeezedText(&p, r.width(), tags));
     }
-    
+
 
     if (this == view->currentItem())
     {
@@ -180,9 +180,9 @@ void ThemedIconItem::paintItem()
                       0, Qt::DotLine));
         p.drawRect(1, 1, pix.width()-2, pix.height()-2);
     }
-    
+
     p.end();
-    
+
     r = rect();
     r = QRect(view->contentsToViewport(QPoint(r.x(), r.y())),
               QSize(r.width(), r.height()));

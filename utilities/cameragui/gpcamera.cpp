@@ -5,7 +5,7 @@
  *
  * Date        : 2003-01-21
  * Description : Gphoto2 camera interface
- * 
+ *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -15,12 +15,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C Ansi includes.
@@ -61,14 +61,14 @@ class GPStatus
 
 public:
 
-    GPStatus() 
+    GPStatus()
     {
         context = gp_context_new();
         cancel  = false;
         gp_context_set_cancel_func(context, cancel_func, 0);
     }
 
-    ~GPStatus() 
+    ~GPStatus()
     {
         gp_context_unref(context);
         cancel = false;
@@ -77,11 +77,11 @@ public:
     GPContext   *context;
     static bool  cancel;
 
-    static GPContextFeedback cancel_func(GPContext *, void *) 
+    static GPContextFeedback cancel_func(GPContext *, void *)
     {
         return (cancel ? GP_CONTEXT_FEEDBACK_CANCEL :
                 GP_CONTEXT_FEEDBACK_OK);
-    }            
+    }
 };
 
 bool GPStatus::cancel = false;
@@ -95,7 +95,7 @@ public:
     {
         status            = 0;
         camera            = 0;
-        cameraInitialized = false;    
+        cameraInitialized = false;
     }
 
     bool             cameraInitialized;
@@ -107,7 +107,7 @@ public:
     GPStatus        *status;
 };
 
-GPCamera::GPCamera(const QString& title, const QString& model, 
+GPCamera::GPCamera(const QString& title, const QString& model,
                    const QString& port, const QString& path)
         : DKCamera(title, model, port, path)
 {
@@ -116,7 +116,7 @@ GPCamera::GPCamera(const QString& title, const QString& model,
 
 GPCamera::~GPCamera()
 {
-    if (d->camera) 
+    if (d->camera)
     {
         gp_camera_unref(d->camera);
         d->camera = 0;
@@ -130,27 +130,27 @@ bool GPCamera::doConnect()
     int errorCode;
 
     // -- first step - setup the camera --------------------
-    
-    if (d->camera) 
+
+    if (d->camera)
     {
         gp_camera_unref(d->camera);
         d->camera = 0;
     }
-    
+
     CameraAbilitiesList *abilList;
     GPPortInfoList      *infoList;
     GPPortInfo           info;
 
     gp_camera_new(&d->camera);
 
-    if (d->status) 
+    if (d->status)
     {
         delete d->status;
         d->status = 0;
     }
-            
+
     d->status = new GPStatus();
-    
+
     gp_abilities_list_new(&abilList);
     gp_abilities_list_load(abilList, d->status->context);
     gp_port_info_list_new(&infoList);
@@ -164,9 +164,9 @@ bool GPCamera::doConnect()
     portNum  = gp_port_info_list_lookup_path (infoList, m_port.toLatin1());
 
     gp_abilities_list_get_abilities(abilList, modelNum, &d->cameraAbilities);
-    
-    errorCode = gp_camera_set_abilities(d->camera, d->cameraAbilities); 
-    if (errorCode != GP_OK) 
+
+    errorCode = gp_camera_set_abilities(d->camera, d->cameraAbilities);
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to set camera Abilities!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -177,11 +177,11 @@ bool GPCamera::doConnect()
         return false;
     }
 
-    if (m_model != "Directory Browse") 
+    if (m_model != "Directory Browse")
     {
         gp_port_info_list_get_info(infoList, portNum, &info);
         errorCode = gp_camera_set_port_info(d->camera, info);
-        if (errorCode != GP_OK) 
+        if (errorCode != GP_OK)
         {
             DDebug(50003) << "Failed to set camera port!" << endl;
             printGphotoErrorDescription(errorCode);
@@ -225,7 +225,7 @@ bool GPCamera::doConnect()
     d->status = new GPStatus();
 
     errorCode = gp_camera_init(d->camera, d->status->context);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to initialize camera!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -238,7 +238,7 @@ bool GPCamera::doConnect()
 
     delete d->status;
     d->status = 0;
-    d->cameraInitialized = true;    
+    d->cameraInitialized = true;
     return true;
 }
 
@@ -255,7 +255,7 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
     int                       nrofsinfos;
     CameraStorageInformation *sinfos;
 
-    if (d->status) 
+    if (d->status)
     {
         delete d->status;
         d->status = 0;
@@ -263,7 +263,7 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
     d->status = new GPStatus();
 
     int errorCode = gp_camera_get_storageinfo (d->camera, &sinfos, &nrofsinfos, d->status->context);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Getting storage information not supported for this camera!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -272,11 +272,11 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
         return false;
     }
 
-    for (int i = 0 ; i < nrofsinfos ; i++) 
+    for (int i = 0 ; i < nrofsinfos ; i++)
     {
-        if (sinfos[i].fields & GP_STORAGEINFO_FILESYSTEMTYPE) 
+        if (sinfos[i].fields & GP_STORAGEINFO_FILESYSTEMTYPE)
         {
-            switch (sinfos[i].fstype) 
+            switch (sinfos[i].fstype)
             {
                 case GP_STORAGEINFO_FST_DCF:       // Camera layout (DCIM)
                 {
@@ -286,10 +286,10 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
                         DDebug(50003) << "Storage description: " << QString(sinfos[i].description) << endl;
                     if (sinfos[i].fields & GP_STORAGEINFO_BASE)
                         DDebug(50003) << "Storage base-dir: " << QString(sinfos[i].basedir) << endl;
-            
-                    if (sinfos[i].fields & GP_STORAGEINFO_ACCESS) 
+
+                    if (sinfos[i].fields & GP_STORAGEINFO_ACCESS)
                     {
-                        switch (sinfos[i].access) 
+                        switch (sinfos[i].access)
                         {
                             case GP_STORAGEINFO_AC_READWRITE:
                                 DDebug(50003) << "Storage access: R/W" << endl;
@@ -304,10 +304,10 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
                                 break;
                         }
                     }
-            
-                    if (sinfos[i].fields & GP_STORAGEINFO_STORAGETYPE) 
+
+                    if (sinfos[i].fields & GP_STORAGEINFO_STORAGETYPE)
                     {
-                        switch (sinfos[i].type) 
+                        switch (sinfos[i].type)
                         {
                             case GP_STORAGEINFO_ST_FIXED_ROM:
                                 DDebug(50003) << "Storage type: fixed ROM" << endl;
@@ -339,7 +339,7 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
                         d->status = 0;
                         return false;
                     }
-            
+
                     if (sinfos[i].fields & GP_STORAGEINFO_FREESPACEKBYTES)
                     {
                         kBAvail = sinfos[i].freekbytes;
@@ -374,19 +374,19 @@ bool GPCamera::getPreview(QImage& preview)
     CameraFile        *cfile;
     const char        *data;
     unsigned long int  size;
-    
+
     gp_file_new(&cfile);
-    
-    if (d->status) 
+
+    if (d->status)
     {
         delete d->status;
         d->status = 0;
     }
-    
+
     d->status = new GPStatus;
 
     errorCode = gp_camera_capture_preview(d->camera, cfile, d->status->context);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to initialize camera preview mode!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -400,7 +400,7 @@ bool GPCamera::getPreview(QImage& preview)
     d->status = 0;
 
     errorCode = gp_file_get_data_and_size(cfile, &data, &size);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to get preview from camera!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -419,16 +419,16 @@ bool GPCamera::capture(GPItemInfo& itemInfo)
     int            errorCode;
     CameraFilePath path;
 
-    if (d->status) 
+    if (d->status)
     {
         delete d->status;
         d->status = 0;
     }
-    
+
     d->status = new GPStatus;
 
     errorCode = gp_camera_capture(d->camera, GP_CAPTURE_IMAGE, &path, d->status->context);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to take camera capture!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -441,12 +441,12 @@ bool GPCamera::capture(GPItemInfo& itemInfo)
 
     itemInfo.folder = QString(path.folder);
     itemInfo.name   = QString(path.name);
-    
+
     CameraFileInfo info;
     errorCode = gp_camera_file_get_info(d->camera, QFile::encodeName(itemInfo.folder),
-                                        QFile::encodeName(itemInfo.name), &info, 
+                                        QFile::encodeName(itemInfo.name), &info,
                                         d->status->context);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to get camera item information!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -463,7 +463,7 @@ bool GPCamera::capture(GPItemInfo& itemInfo)
     itemInfo.downloaded       = GPItemInfo::DownloadUnknow;
     itemInfo.readPermissions  = -1;
     itemInfo.writePermissions = -1;
-    
+
     /* The mime type returned by Gphoto2 is dummy with all RAW files.
     if (info.file.fields & GP_FILE_INFO_TYPE)
         itemInfo.mime = info.file.type;*/
@@ -471,7 +471,7 @@ bool GPCamera::capture(GPItemInfo& itemInfo)
     itemInfo.mime = mimeType(itemInfo.name.section('.', -1).toLower());
 
     if (info.file.fields & GP_FILE_INFO_MTIME)
-        itemInfo.mtime = QDateTime::fromTime_t(info.file.mtime);      
+        itemInfo.mtime = QDateTime::fromTime_t(info.file.mtime);
 
     if (info.file.fields & GP_FILE_INFO_SIZE)
         itemInfo.size = info.file.size;
@@ -482,15 +482,15 @@ bool GPCamera::capture(GPItemInfo& itemInfo)
     if (info.file.fields & GP_FILE_INFO_HEIGHT)
         itemInfo.height = info.file.height;
 
-    if (info.file.fields & GP_FILE_INFO_STATUS) 
+    if (info.file.fields & GP_FILE_INFO_STATUS)
     {
         if (info.file.status == GP_FILE_STATUS_DOWNLOADED)
             itemInfo.downloaded = GPItemInfo::DownloadedYes;
         else
             itemInfo.downloaded = GPItemInfo::DownloadedNo;
     }
-    
-    if (info.file.fields & GP_FILE_INFO_PERMISSIONS) 
+
+    if (info.file.fields & GP_FILE_INFO_PERMISSIONS)
     {
         if (info.file.permissions & GP_FILE_PERM_READ)
             itemInfo.readPermissions = 1;
@@ -516,7 +516,7 @@ void GPCamera::getAllFolders(const QString& rootFolder,
     for (QStringList::iterator it = subfolders.begin();
          it != subfolders.end(); ++it)
     {
-        *it = rootFolder + QString(rootFolder.endsWith("/") ? "" : "/") + (*it);
+        *it = rootFolder + QString(rootFolder.endsWith('/') ? "" : "/") + (*it);
         folderList.append(*it);
     }
 
@@ -533,7 +533,7 @@ bool GPCamera::getSubFolders(const QString& folder, QStringList& subFolderList)
     CameraList *clist;
     gp_list_new(&clist);
 
-    if (d->status) 
+    if (d->status)
     {
         delete d->status;
         d->status = 0;
@@ -541,7 +541,7 @@ bool GPCamera::getSubFolders(const QString& folder, QStringList& subFolderList)
     d->status = new GPStatus();
 
     errorCode = gp_camera_folder_list_folders(d->camera, QFile::encodeName(folder), clist, d->status->context);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to get folders list from camera!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -555,11 +555,11 @@ bool GPCamera::getSubFolders(const QString& folder, QStringList& subFolderList)
     d->status = 0;
 
     int count = gp_list_count(clist);
-    for (int i = 0 ; i < count ; i++) 
+    for (int i = 0 ; i < count ; i++)
     {
         const char* subFolder;
         errorCode = gp_list_get_name(clist, i, &subFolder);
-        if (errorCode != GP_OK) 
+        if (errorCode != GP_OK)
         {
             DDebug(50003) << "Failed to get folder name from camera!" << endl;
             printGphotoErrorDescription(errorCode);
@@ -580,17 +580,17 @@ bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
     CameraList *clist;
     const char *cname;
 
-    if (d->status) 
+    if (d->status)
     {
         delete d->status;
         d->status = 0;
     }
     d->status = new GPStatus;
-    
+
     gp_list_new(&clist);
 
     errorCode = gp_camera_folder_list_files(d->camera, QFile::encodeName(folder), clist, d->status->context);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to get folder files list from camera!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -617,8 +617,8 @@ bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
         itemsList.append(QFile::decodeName(cname));
     }
 
-    gp_list_unref(clist);        
-    
+    gp_list_unref(clist);
+
     delete d->status;
     d->status = 0;
 
@@ -631,17 +631,17 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items, bo
     CameraList *clist;
     const char *cname;
 
-    if (d->status) 
+    if (d->status)
     {
         delete d->status;
         d->status = 0;
     }
     d->status = new GPStatus;
-    
+
     gp_list_new(&clist);
-    
+
     errorCode = gp_camera_folder_list_files(d->camera, QFile::encodeName(folder), clist, d->status->context);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to get folder files list from camera!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -682,7 +682,7 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items, bo
         itemInfo.downloaded       = GPItemInfo::DownloadUnknow;
         itemInfo.readPermissions  = -1;
         itemInfo.writePermissions = -1;
-        
+
         /* The mime type returned by Gphoto2 is dummy with all RAW files.
         if (info.file.fields & GP_FILE_INFO_TYPE)
             itemInfo.mime = info.file.type;*/
@@ -690,7 +690,7 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items, bo
         itemInfo.mime = mimeType(itemInfo.name.section('.', -1).toLower());
 
         if (info.file.fields & GP_FILE_INFO_MTIME)
-            itemInfo.mtime = QDateTime::fromTime_t(info.file.mtime);      
+            itemInfo.mtime = QDateTime::fromTime_t(info.file.mtime);
 
         if (info.file.fields & GP_FILE_INFO_SIZE)
             itemInfo.size = info.file.size;
@@ -701,13 +701,13 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items, bo
         if (info.file.fields & GP_FILE_INFO_HEIGHT)
             itemInfo.height = info.file.height;
 
-        if (info.file.fields & GP_FILE_INFO_STATUS) 
+        if (info.file.fields & GP_FILE_INFO_STATUS)
         {
             if (info.file.status == GP_FILE_STATUS_DOWNLOADED)
                 itemInfo.downloaded = GPItemInfo::DownloadedYes;
         }
-        
-        if (info.file.fields & GP_FILE_INFO_PERMISSIONS) 
+
+        if (info.file.fields & GP_FILE_INFO_PERMISSIONS)
         {
             if (info.file.permissions & GP_FILE_PERM_READ)
                 itemInfo.readPermissions = 1;
@@ -722,8 +722,8 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items, bo
         items.append(itemInfo);
     }
 
-    gp_list_unref(clist);        
-    
+    gp_list_unref(clist);
+
     delete d->status;
     d->status = 0;
 
@@ -736,22 +736,22 @@ bool GPCamera::getThumbnail(const QString& folder, const QString& itemName, QIma
     CameraFile        *cfile;
     const char        *data;
     unsigned long int  size;
-    
+
     gp_file_new(&cfile);
-    
-    if (d->status) 
+
+    if (d->status)
     {
         delete d->status;
         d->status = 0;
     }
-    
+
     d->status = new GPStatus;
 
     errorCode = gp_camera_file_get(d->camera, QFile::encodeName(folder),
                                    QFile::encodeName(itemName),
                                    GP_FILE_TYPE_PREVIEW,
                                    cfile, d->status->context);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to get camera item!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -765,7 +765,7 @@ bool GPCamera::getThumbnail(const QString& folder, const QString& itemName, QIma
     d->status = 0;
 
     errorCode = gp_file_get_data_and_size(cfile, &data, &size);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to get thumbnail from camera item!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -786,22 +786,22 @@ bool GPCamera::getExif(const QString& folder, const QString& itemName,
     CameraFile        *cfile;
     const char        *data;
     unsigned long int  size;
-    
+
     gp_file_new(&cfile);
-    
-    if (d->status) 
+
+    if (d->status)
     {
         delete d->status;
         d->status = 0;
     }
-    
+
     d->status = new GPStatus;
 
     errorCode = gp_camera_file_get(d->camera, QFile::encodeName(folder),
                                    QFile::encodeName(itemName),
                                    GP_FILE_TYPE_EXIF,
                                    cfile, d->status->context);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to get camera item!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -813,9 +813,9 @@ bool GPCamera::getExif(const QString& folder, const QString& itemName,
 
     delete d->status;
     d->status = 0;
-    
+
     errorCode = gp_file_get_data_and_size(cfile, &data, &size);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to get Exif data from camera item!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -838,20 +838,20 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
     CameraFile *cfile;
 
     gp_file_new(&cfile);
-    
-    if (d->status) 
+
+    if (d->status)
     {
         delete d->status;
         d->status = 0;
     }
-    
+
     d->status = new GPStatus;
-    
+
     errorCode = gp_camera_file_get(d->camera, QFile::encodeName(folder),
                                    QFile::encodeName(itemName),
                                    GP_FILE_TYPE_NORMAL, cfile,
                                    d->status->context);
-    if ( errorCode != GP_OK) 
+    if ( errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to get camera item!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -860,19 +860,19 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
         d->status = 0;
         return false;
     }
-    
+
     delete d->status;
     d->status = 0;
 
     errorCode = gp_file_save(cfile, QFile::encodeName(saveFile));
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to save camera item!" << endl;
         printGphotoErrorDescription(errorCode);
         gp_file_unref(cfile);
         return false;
     }
-    
+
     gp_file_unref(cfile);
     return true;
 }
@@ -880,18 +880,18 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
 bool GPCamera::setLockItem(const QString& folder, const QString& itemName, bool lock)
 {
     int errorCode;
-    if (d->status) 
+    if (d->status)
     {
         delete d->status;
         d->status = 0;
     }
-    
+
     d->status = new GPStatus;
 
     CameraFileInfo info;
     errorCode = gp_camera_file_get_info(d->camera, QFile::encodeName(folder),
                                 QFile::encodeName(itemName), &info, d->status->context);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to get camera item properties!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -900,7 +900,7 @@ bool GPCamera::setLockItem(const QString& folder, const QString& itemName, bool 
         return false;
     }
 
-    if (info.file.fields & GP_FILE_INFO_PERMISSIONS) 
+    if (info.file.fields & GP_FILE_INFO_PERMISSIONS)
     {
         if (lock)
         {
@@ -913,15 +913,15 @@ bool GPCamera::setLockItem(const QString& folder, const QString& itemName, bool 
             info.file.permissions = (CameraFilePermissions)(GP_FILE_PERM_READ | GP_FILE_PERM_DELETE);
         }
     }
-    
+
     // Some gphoto2 drivers need to have only the right flag at on to process properties update in camera.
     info.file.fields    = GP_FILE_INFO_PERMISSIONS;
-    info.preview.fields = GP_FILE_INFO_NONE; 
+    info.preview.fields = GP_FILE_INFO_NONE;
     info.audio.fields   = GP_FILE_INFO_NONE;
 
     errorCode = gp_camera_file_set_info(d->camera, QFile::encodeName(folder),
                                         QFile::encodeName(itemName), info, d->status->context);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to set camera item lock properties!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -938,18 +938,18 @@ bool GPCamera::setLockItem(const QString& folder, const QString& itemName, bool 
 bool GPCamera::deleteItem(const QString& folder, const QString& itemName)
 {
     int errorCode;
-    if (d->status) 
+    if (d->status)
     {
         delete d->status;
         d->status = 0;
     }
-    
+
     d->status = new GPStatus;
 
     errorCode = gp_camera_file_delete(d->camera, QFile::encodeName(folder),
                                       QFile::encodeName(itemName),
                                       d->status->context);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to delete camera item!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -972,31 +972,31 @@ bool GPCamera::deleteAllItems(const QString& folder)
     // Get all subfolders in this folder
     getSubFolders(folder, folderList);
 
-    if (folderList.count() > 0) 
+    if (folderList.count() > 0)
     {
-        for (int i = 0 ; i < folderList.count() ; i++) 
+        for (int i = 0 ; i < folderList.count() ; i++)
         {
             QString subFolder(folder);
 
-            if (!subFolder.endsWith("/"))
+            if (!subFolder.endsWith('/'))
                 subFolder += '/';
 
             subFolder += folderList[i];
             deleteAllItems(subFolder);
         }
     }
-    
-    if (d->status) 
+
+    if (d->status)
     {
         delete d->status;
         d->status = 0;
     }
-    
+
     d->status = new GPStatus;
-    
+
     errorCode = gp_camera_folder_delete_all(d->camera, QFile::encodeName(folder),
                                             d->status->context);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to delete camera folder!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -1004,7 +1004,7 @@ bool GPCamera::deleteAllItems(const QString& folder)
         d->status = 0;
         return false;
     }
-    
+
     delete d->status;
     d->status = 0;
     return true;
@@ -1017,7 +1017,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     CameraFile *cfile;
 
     errorCode = gp_file_new(&cfile);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to init new camera file instance!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -1025,7 +1025,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     }
 
     errorCode = gp_file_open(cfile, QFile::encodeName(localFile));
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to open file!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -1034,7 +1034,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     }
 
     errorCode = gp_file_set_name(cfile, QFile::encodeName(itemName));
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to rename item from camera!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -1042,19 +1042,19 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
         return false;
     }
 
-    if (d->status) 
+    if (d->status)
     {
         delete d->status;
         d->status = 0;
     }
-    
+
     d->status = new GPStatus;
 
     errorCode = gp_camera_folder_put_file(d->camera,
                                           QFile::encodeName(folder),
                                           cfile,
                                           d->status->context);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to upload item to camera!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -1072,7 +1072,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     CameraFileInfo info;
     errorCode = gp_camera_file_get_info(d->camera, QFile::encodeName(folder),
                                         QFile::encodeName(itemName), &info, d->status->context);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to get camera item information!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -1090,7 +1090,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     itemInfo.downloaded       = GPItemInfo::DownloadUnknow;
     itemInfo.readPermissions  = -1;
     itemInfo.writePermissions = -1;
-    
+
     /* The mime type returned by Gphoto2 is dummy with all RAW files.
     if (info.file.fields & GP_FILE_INFO_TYPE)
         itemInfo.mime = info.file.type;*/
@@ -1098,7 +1098,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     itemInfo.mime = mimeType(itemInfo.name.section('.', -1).toLower());
 
     if (info.file.fields & GP_FILE_INFO_MTIME)
-        itemInfo.mtime = QDateTime::fromTime_t(info.file.mtime);      
+        itemInfo.mtime = QDateTime::fromTime_t(info.file.mtime);
 
     if (info.file.fields & GP_FILE_INFO_SIZE)
         itemInfo.size = info.file.size;
@@ -1109,15 +1109,15 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     if (info.file.fields & GP_FILE_INFO_HEIGHT)
         itemInfo.height = info.file.height;
 
-    if (info.file.fields & GP_FILE_INFO_STATUS) 
+    if (info.file.fields & GP_FILE_INFO_STATUS)
     {
         if (info.file.status == GP_FILE_STATUS_DOWNLOADED)
             itemInfo.downloaded = GPItemInfo::DownloadedYes;
         else
             itemInfo.downloaded = GPItemInfo::DownloadedNo;
     }
-    
-    if (info.file.fields & GP_FILE_INFO_PERMISSIONS) 
+
+    if (info.file.fields & GP_FILE_INFO_PERMISSIONS)
     {
         if (info.file.permissions & GP_FILE_PERM_READ)
             itemInfo.readPermissions = 1;
@@ -1140,7 +1140,7 @@ bool GPCamera::cameraSummary(QString& summary)
     int        errorCode;
     CameraText sum;
 
-    if (d->status) 
+    if (d->status)
     {
         delete d->status;
         d->status = 0;
@@ -1149,7 +1149,7 @@ bool GPCamera::cameraSummary(QString& summary)
     d->status = new GPStatus;
 
     errorCode = gp_camera_get_summary(d->camera, &sum, d->status->context);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to get camera summary!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -1192,7 +1192,7 @@ bool GPCamera::cameraManual(QString& manual)
     int        errorCode;
     CameraText man;
 
-    if (d->status) 
+    if (d->status)
     {
         delete d->status;
         d->status = 0;
@@ -1201,7 +1201,7 @@ bool GPCamera::cameraManual(QString& manual)
     d->status = new GPStatus;
 
     errorCode = gp_camera_get_manual(d->camera, &man, d->status->context);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to get camera manual!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -1222,7 +1222,7 @@ bool GPCamera::cameraAbout(QString& about)
     int        errorCode;
     CameraText abt;
 
-    if (d->status) 
+    if (d->status)
     {
         delete d->status;
         d->status = 0;
@@ -1231,7 +1231,7 @@ bool GPCamera::cameraAbout(QString& about)
     d->status = new GPStatus;
 
     errorCode = gp_camera_get_about(d->camera, &abt, d->status->context);
-    if (errorCode != GP_OK) 
+    if (errorCode != GP_OK)
     {
         DDebug(50003) << "Failed to get information about camera!" << endl;
         printGphotoErrorDescription(errorCode);
@@ -1253,7 +1253,7 @@ bool GPCamera::cameraAbout(QString& about)
 
 void GPCamera::printGphotoErrorDescription(int errorCode)
 {
-    DDebug(50003) << "Libgphoto2 error: " << gp_result_as_string(errorCode) 
+    DDebug(50003) << "Libgphoto2 error: " << gp_result_as_string(errorCode)
              << " (" << errorCode << ")" << endl;
 }
 
@@ -1267,21 +1267,21 @@ void GPCamera::getSupportedCameras(int& count, QStringList& clist)
     GPContext           *context;
 
     context = gp_context_new();
- 
+
     gp_abilities_list_new( &abilList );
     gp_abilities_list_load( abilList, context );
 
     count = gp_abilities_list_count( abilList );
-    if ( count < 0 ) 
+    if ( count < 0 )
     {
         DDebug(50003) << "Failed to get list of cameras!" << endl;
         printGphotoErrorDescription(count);
         gp_context_unref( context );
         return;
     }
-    else 
+    else
     {
-        for (int i = 0 ; i < count ; i++) 
+        for (int i = 0 ; i < count ; i++)
         {
             gp_abilities_list_get_abilities( abilList, i, &abil );
             const char *cname = abil.model;
@@ -1304,16 +1304,16 @@ void GPCamera::getSupportedPorts(QStringList& plist)
     gp_port_info_list_load( list );
 
     int numPorts = gp_port_info_list_count( list );
-    if ( numPorts < 0) 
+    if ( numPorts < 0)
     {
         DDebug(50003) << "Failed to get list of port!" << endl;
         printGphotoErrorDescription(numPorts);
         gp_port_info_list_free( list );
         return;
     }
-    else 
+    else
     {
-        for (int i = 0 ; i < numPorts ; i++) 
+        for (int i = 0 ; i < numPorts ; i++)
         {
             gp_port_info_list_get_info( list, i, &info );
             plist.append( info.path );
@@ -1342,7 +1342,7 @@ void GPCamera::getCameraSupportedPorts(const QString& model, QStringList& plist)
 
     if (abilities.port & GP_PORT_SERIAL)
         plist.append("serial");
-        
+
     if (abilities.port & GP_PORT_USB)
         plist.append("usb");
 
@@ -1372,7 +1372,7 @@ int GPCamera::autoDetect(QString& model, QString& port)
 
     int count = gp_list_count(camList);
 
-    if (count <= 0) 
+    if (count <= 0)
     {
         DDebug(50003) << "Failed to autodetect camera!" << endl;
         printGphotoErrorDescription(count);
@@ -1430,7 +1430,7 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
     gp_port_info_list_load( list );
 
     int numPorts = gp_port_info_list_count( list );
-    for (int i = 0 ; i < numPorts ; i++) 
+    for (int i = 0 ; i < numPorts ; i++)
     {
         // create a port object from info
         gp_port_info_list_get_info( list, i, &info );
@@ -1449,7 +1449,7 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
             gp_port_info_list_new( &portinfo );
             gp_abilities_list_new( &abilList );
 
-            // append one port info to 
+            // append one port info to
             gp_port_info_list_append(portinfo, info);
             // get list of all supported cameras
             gp_abilities_list_load(abilList, context);

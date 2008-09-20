@@ -187,7 +187,7 @@ public:
     inline QString prepareForLike(const QString &str)
     {
         if (relation == SearchXml::Like || relation == SearchXml::NotLike)
-            return "%" + str + "%";
+            return '%' + str + '%';
         else return str;
     }
 
@@ -371,8 +371,8 @@ public:
                 {
                     ImageQueryBuilder::addSqlOperator(sql, SearchXml::Or, firstCondition);
                     firstCondition = false;
-                    wildcard.replace("*", "%");
-                    sql += " " + name + " ";
+                    wildcard.replace('*', '%');
+                    sql += ' ' + name + ' ';
                     ImageQueryBuilder::addSqlRelation(sql, SearchXml::Like);
                     sql += " ? ";
                     *boundValues << wildcard;
@@ -387,11 +387,11 @@ public:
             {
                 // Handle special case: * denotes the place if the wildcard,
                 // Don't automatically prepend and append %
-                sql += " (" + name + " ";
+                sql += " (" + name + ' ';
                 ImageQueryBuilder::addSqlRelation(sql, SearchXml::Like);
                 sql += " ?) ";
                 QString wildcard = reader.value();
-                wildcard.replace("*", "%");
+                wildcard.replace('*', '%');
                 *boundValues << wildcard;
             }
             else
@@ -662,7 +662,7 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader,
     }
     else if (name == "tagname")
     {
-        QString tagname = "%" + reader.value() + "%";
+        QString tagname = '%' + reader.value() + '%';
         if (relation == SearchXml::Equal || relation == SearchXml::Like)
         {
             sql += " (Images.id IN "
@@ -955,7 +955,7 @@ void ImageQueryBuilder::addSqlRelation(QString &sql, SearchXml::Relation rel)
     {
         default:
         case SearchXml::Equal:
-            sql += "=";
+            sql += '=';
             break;
         case SearchXml::Unequal:
             sql += "<>";
@@ -967,10 +967,10 @@ void ImageQueryBuilder::addSqlRelation(QString &sql, SearchXml::Relation rel)
             sql += "NOT LIKE";
             break;
         case SearchXml::LessThan:
-            sql += "<";
+            sql += '<';
             break;
         case SearchXml::GreaterThan:
-            sql += ">";
+            sql += '>';
             break;
         case SearchXml::LessThanOrEqual:
             sql += "<=";
@@ -1336,7 +1336,7 @@ QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
     QString val = passedVal;
 
     if (op == LIKE || op == NLIKE)
-        val = "%" + val + "%";
+        val = '%' + val + '%';
 
     switch (key)
     {

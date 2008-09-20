@@ -5,7 +5,7 @@
  *
  * Date        : 2004-09-18
  * Description : camera icon view
- * 
+ *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -161,18 +161,18 @@ void CameraIconView::addItem(const GPItemInfo& info)
     QImage thumb;
 
     // Just to have a generic image thumb from desktop with KDE < 3.5.0
-    KMimeType::Ptr mime = KMimeType::mimeType(info.mime == QString("image/x-raw") ? 
+    KMimeType::Ptr mime = KMimeType::mimeType(info.mime == QString("image/x-raw") ?
                                               QString("image/tiff") : info.mime);
 
     if (mime)
     {
-        thumb = iconLoader->loadIcon(mime->iconName(), KIconLoader::Desktop, 
+        thumb = iconLoader->loadIcon(mime->iconName(), KIconLoader::Desktop,
                                      ThumbnailSize::Huge, KIconLoader::DefaultState)
                                      .toImage();
     }
     else
     {
-        thumb = iconLoader->loadIcon("empty", KIconLoader::Desktop, 
+        thumb = iconLoader->loadIcon("empty", KIconLoader::Desktop,
                                      ThumbnailSize::Huge, KIconLoader::DefaultState)
                                      .toImage();
     }
@@ -215,13 +215,13 @@ CameraIconViewItem* CameraIconView::findItem(const QString& folder, const QStrin
 int CameraIconView::countItemsByFolder(QString folder)
 {
     int count = 0;
-    if (folder.endsWith("/")) folder.truncate(folder.length()-1);
+    if (folder.endsWith('/')) folder.truncate(folder.length()-1);
 
     for (IconItem* item = firstItem(); item; item = item->nextItem())
     {
         CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
         QString itemFolder = iconItem->itemInfo()->folder;
-        if (itemFolder.endsWith("/")) itemFolder.truncate(itemFolder.length()-1);
+        if (itemFolder.endsWith('/')) itemFolder.truncate(itemFolder.length()-1);
 
         if (folder == itemFolder)
             count++;
@@ -643,7 +643,7 @@ void CameraIconView::setThumbnailSize(int size)
             d->thumbSize = ThumbnailSize::Huge;
         else if (size < ThumbnailSize::Small)
             d->thumbSize = ThumbnailSize::Small;
-        else 
+        else
             d->thumbSize = size;
 
         updateItemRectsPixmap();

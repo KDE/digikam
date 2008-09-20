@@ -111,7 +111,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
     {
         QString path(folder);
 
-        if (!folder.endsWith("/"))
+        if (!folder.endsWith('/'))
             path += '/';
 
         path += subFolder;

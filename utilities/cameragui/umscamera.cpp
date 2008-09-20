@@ -174,7 +174,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
             }
 
             info.name             = fi->fileName();
-            info.folder           = !folder.endsWith("/") ? folder + QString("/") : folder;
+            info.folder           = !folder.endsWith('/') ? folder + QString('/') : folder;
             info.mime             = mime;
             info.mtime            = fi->lastModified();
             info.size             = fi->size();
@@ -443,7 +443,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
         }
 
         itemInfo.name             = fi.fileName();
-        itemInfo.folder           = !folder.endsWith("/") ? folder + QString("/") : folder;
+        itemInfo.folder           = !folder.endsWith('/') ? folder + QString('/') : folder;
         itemInfo.mime             = mime;
         itemInfo.mtime            = fi.lastModified();
         itemInfo.size             = fi.size();
@@ -476,7 +476,7 @@ void UMSCamera::listFolders(const QString& folder, QStringList& subFolderList)
         if (fi->fileName() == "." || fi->fileName() == "..")
             continue;
 
-        QString subfolder = folder + QString(folder.endsWith("/") ? "" : "/") + fi->fileName();
+        QString subfolder = folder + QString(folder.endsWith('/') ? "" : "/") + fi->fileName();
         subFolderList.append(subfolder);
         listFolders(subfolder, subFolderList);
     }

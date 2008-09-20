@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#define MAXSTRINGLEN 80 
+#define MAXSTRINGLEN 80
 
 // Qt includes.
 
@@ -123,7 +123,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
     d = new SlideShowPriv;
     d->settings = settings;
     setAttribute(Qt::WA_DeleteOnClose);
-    setWindowFlags(Qt::X11BypassWindowManagerHint | 
+    setWindowFlags(Qt::X11BypassWindowManagerHint |
                    Qt::WindowStaysOnTopHint | Qt::Popup);
 
     // ---------------------------------------------------------------
@@ -177,7 +177,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
     connect(d->mouseMoveTimer, SIGNAL(timeout()),
             this, SLOT(slotMouseMoveTimeOut()));
 
-    connect(d->timer, SIGNAL(timeout()), 
+    connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotTimeOut()));
 
     d->timer->setSingleShot(true);
@@ -214,13 +214,13 @@ void SlideShow::setCurrent(const KUrl& url)
 void SlideShow::setupRatingPixmap(const QColor& ratingColor)
 {
     QColor color = ratingColor;
-    if (!color.isValid()) 
+    if (!color.isValid())
         color = palette().color(QPalette::Active, QPalette::HighlightedText);
 
     d->regPixmap = QPixmap(15, 15);
-    d->regPixmap.fill(Qt::transparent); 
+    d->regPixmap.fill(Qt::transparent);
     d->selPixmap = QPixmap(15, 15);
-    d->selPixmap.fill(Qt::transparent); 
+    d->selPixmap.fill(Qt::transparent);
 
     QPainter p1(&d->regPixmap);
     p1.setRenderHint(QPainter::Antialiasing, true);
@@ -497,7 +497,7 @@ void SlideShow::updatePixmap()
 
             p.setPen(Qt::white);
             p.drawText(0, 0, d->pixmap.width(), d->pixmap.height(),
-                       Qt::AlignCenter|Qt::TextWordWrap, 
+                       Qt::AlignCenter|Qt::TextWordWrap,
                        i18n("Cannot display image\n\"%1\"",
                        d->currentImage.fileName()));
         }
@@ -549,7 +549,7 @@ void SlideShow::printComments(QPainter &p, int &offset, const QString& comments)
 
     while (commentsIndex < (uint)comments.length())
     {
-        QString newLine; 
+        QString newLine;
         bool breakLine = false; // End Of Line found
         uint currIndex;         // Comments QString current index
 
@@ -557,21 +557,21 @@ void SlideShow::printComments(QPainter &p, int &offset, const QString& comments)
 
         uint commentsLinesLengthLocal = MAXSTRINGLEN;
 
-        for (currIndex = commentsIndex ; 
+        for (currIndex = commentsIndex ;
              currIndex < (uint)comments.length() && !breakLine ; currIndex++ )
         {
-            if( comments[currIndex] == QChar('\n') || comments[currIndex].isSpace() ) 
+            if( comments[currIndex] == QChar('\n') || comments[currIndex].isSpace() )
                 breakLine = true;
         }
 
-        if (commentsLinesLengthLocal <= (currIndex - commentsIndex)) 
+        if (commentsLinesLengthLocal <= (currIndex - commentsIndex))
             commentsLinesLengthLocal = (currIndex - commentsIndex);
 
         breakLine = false;
 
-        for (currIndex = commentsIndex ; 
+        for (currIndex = commentsIndex ;
              currIndex <= commentsIndex + commentsLinesLengthLocal &&
-             currIndex < (uint)comments.length() && !breakLine ; 
+             currIndex < (uint)comments.length() && !breakLine ;
              currIndex++ )
             {
                 breakLine = (comments[currIndex] == QChar('\n')) ? true : false;
@@ -586,7 +586,7 @@ void SlideShow::printComments(QPainter &p, int &offset, const QString& comments)
 
         if (commentsIndex != (uint)comments.length())
         {
-            while (!newLine.endsWith(" "))
+            while (!newLine.endsWith(' '))
             {
                 newLine.truncate(newLine.length() - 1);
                 commentsIndex--;
@@ -596,7 +596,7 @@ void SlideShow::printComments(QPainter &p, int &offset, const QString& comments)
         commentsByLines.prepend(newLine.trimmed());
     }
 
-    for (int i = 0 ; i < (int)commentsByLines.count() ; i++ ) 
+    for (int i = 0 ; i < (int)commentsByLines.count() ; i++ )
     {
         printInfoText(p, offset, commentsByLines[i]);
     }

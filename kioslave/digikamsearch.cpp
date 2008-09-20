@@ -2,7 +2,7 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2005-04-21
  * Description : a kio-slave to process search on digiKam albums
  *
@@ -106,7 +106,7 @@ void kio_digikamsearch::special(const QByteArray& data)
         QString thresholdString = metaData("threshold");
 
         // get albums to scan
-        QStringList idsStringList = idsString.split(",");
+        QStringList idsStringList = idsString.split(',');
         QList<int> albumIds;
         foreach(const QString &idString, idsStringList)
         {
@@ -172,7 +172,7 @@ extern "C"
         KComponentData componentData( "kio_digikamsearch" );
         KGlobal::locale();
 
-        if (argc != 4) 
+        if (argc != 4)
         {
             kDebug(50004) << "Usage: kio_digikamsearch  protocol domain-socket1 domain-socket2"
                       << endl;

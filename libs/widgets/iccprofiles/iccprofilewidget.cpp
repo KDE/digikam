@@ -90,7 +90,7 @@ public:
 private:
 
     QString m_title;
-    QString m_description; 
+    QString m_description;
 };
 
 typedef QMap<QString, ICCTagInfo> ICCTagInfoMap;
@@ -105,7 +105,7 @@ public:
         cieTongue = 0;
     }
 
-    QByteArray       profileData; 
+    QByteArray       profileData;
 
     QStringList      tagsfilter;
     QStringList      keysFilter;
@@ -122,32 +122,32 @@ ICCProfileWidget::ICCProfileWidget(QWidget* parent, int w, int h)
 
     d = new ICCProfileWidgetPriv;
 
-    // Set the translated ICC tags titles/descriptions list 
+    // Set the translated ICC tags titles/descriptions list
     d->iccTagsDescription["Icc.Header.Name"]            = ICCTagInfo(i18n("Name"),
                                                           i18n("The ICC profile product name"));
-    d->iccTagsDescription["Icc.Header.Description"]     = ICCTagInfo(i18n("Description"),  
+    d->iccTagsDescription["Icc.Header.Description"]     = ICCTagInfo(i18n("Description"),
                                                           i18n("The ICC profile product description"));
-    d->iccTagsDescription["Icc.Header.Information"]     = ICCTagInfo(i18n("Information"),  
+    d->iccTagsDescription["Icc.Header.Information"]     = ICCTagInfo(i18n("Information"),
                                                           i18n("Additional ICC profile information"));
-    d->iccTagsDescription["Icc.Header.Manufacturer"]    = ICCTagInfo(i18n("Manufacturer"), 
+    d->iccTagsDescription["Icc.Header.Manufacturer"]    = ICCTagInfo(i18n("Manufacturer"),
                                                           i18n("Raw information about the ICC profile manufacturer"));
-    d->iccTagsDescription["Icc.Header.Model"]           = ICCTagInfo(i18n("Model"), 
+    d->iccTagsDescription["Icc.Header.Model"]           = ICCTagInfo(i18n("Model"),
                                                           i18n("Raw information about the ICC profile model"));
-    d->iccTagsDescription["Icc.Header.Copyright"]       = ICCTagInfo(i18n("Copyright"), 
+    d->iccTagsDescription["Icc.Header.Copyright"]       = ICCTagInfo(i18n("Copyright"),
                                                           i18n("Raw information about the ICC profile copyright"));
-    d->iccTagsDescription["Icc.Header.ProfileID"]       = ICCTagInfo(i18n("Profile ID"), 
+    d->iccTagsDescription["Icc.Header.ProfileID"]       = ICCTagInfo(i18n("Profile ID"),
                                                           i18n("The ICC profile ID number"));
-    d->iccTagsDescription["Icc.Header.ColorSpace"]      = ICCTagInfo(i18n("Color Space"), 
+    d->iccTagsDescription["Icc.Header.ColorSpace"]      = ICCTagInfo(i18n("Color Space"),
                                                           i18n("The color space used by the ICC profile"));
-    d->iccTagsDescription["Icc.Header.ConnectionSpace"] = ICCTagInfo(i18n("Connection Space"), 
+    d->iccTagsDescription["Icc.Header.ConnectionSpace"] = ICCTagInfo(i18n("Connection Space"),
                                                           i18n("The connection space used by the ICC profile"));
-    d->iccTagsDescription["Icc.Header.DeviceClass"]     = ICCTagInfo(i18n("Device Class"), 
+    d->iccTagsDescription["Icc.Header.DeviceClass"]     = ICCTagInfo(i18n("Device Class"),
                                                           i18n("The ICC profile device class"));
-    d->iccTagsDescription["Icc.Header.RenderingIntent"] = ICCTagInfo(i18n("Rendering Intent"), 
+    d->iccTagsDescription["Icc.Header.RenderingIntent"] = ICCTagInfo(i18n("Rendering Intent"),
                                                           i18n("The ICC profile rendering intent"));
-    d->iccTagsDescription["Icc.Header.ProfileVersion"]  = ICCTagInfo(i18n("Profile Version"), 
+    d->iccTagsDescription["Icc.Header.ProfileVersion"]  = ICCTagInfo(i18n("Profile Version"),
                                                           i18n("The ICC version used to record the profile"));
-    d->iccTagsDescription["Icc.Header.CMMFlags"]        = ICCTagInfo(i18n("CMM Flags"), 
+    d->iccTagsDescription["Icc.Header.CMMFlags"]        = ICCTagInfo(i18n("CMM Flags"),
                                                           i18n("The ICC profile color management flags"));
 
     // Set the list of keys and tags filters.
@@ -240,7 +240,7 @@ bool ICCProfileWidget::loadFromURL(const KUrl& url)
     else
     {
         QFile file(url.path());
-        if ( !file.open(QIODevice::ReadOnly) ) 
+        if ( !file.open(QIODevice::ReadOnly) )
         {
             setProfileData();
             d->cieTongue->setProfileData();
@@ -295,22 +295,22 @@ bool ICCProfileWidget::decodeMetadata()
     DMetadata::MetaDataMap metaDataMap;
 
     if ( !QString(cmsTakeProductName(hProfile)).isEmpty() )
-        metaDataMap.insert("Icc.Header.Name", QString(cmsTakeProductName(hProfile)).replace("\n", " "));
+        metaDataMap.insert("Icc.Header.Name", QString(cmsTakeProductName(hProfile)).replace('\n', ' '));
 
     if ( !QString(cmsTakeProductDesc(hProfile)).isEmpty() )
-        metaDataMap.insert("Icc.Header.Description", QString(cmsTakeProductDesc(hProfile)).replace("\n", " "));
+        metaDataMap.insert("Icc.Header.Description", QString(cmsTakeProductDesc(hProfile)).replace('\n', ' '));
 
     if ( !QString(cmsTakeProductInfo(hProfile)).isEmpty() )
-        metaDataMap.insert("Icc.Header.Information", QString(cmsTakeProductInfo(hProfile)).replace("\n", " "));
+        metaDataMap.insert("Icc.Header.Information", QString(cmsTakeProductInfo(hProfile)).replace('\n', ' '));
 
     if ( !QString(cmsTakeManufacturer(hProfile)).isEmpty() )
-        metaDataMap.insert("Icc.Header.Manufacturer", QString(cmsTakeManufacturer(hProfile)).replace("\n", " "));
+        metaDataMap.insert("Icc.Header.Manufacturer", QString(cmsTakeManufacturer(hProfile)).replace('\n', ' '));
 
     if ( !QString(cmsTakeModel(hProfile)).isEmpty() )
-        metaDataMap.insert("Icc.Header.Model", QString(cmsTakeModel(hProfile)).replace("\n", " "));
+        metaDataMap.insert("Icc.Header.Model", QString(cmsTakeModel(hProfile)).replace('\n', ' '));
 
     if ( !QString(cmsTakeCopyright(hProfile)).isEmpty() )
-        metaDataMap.insert("Icc.Header.Copyright", QString(cmsTakeCopyright(hProfile)).replace("\n", " "));
+        metaDataMap.insert("Icc.Header.Copyright", QString(cmsTakeCopyright(hProfile)).replace('\n', ' '));
 
     metaDataMap.insert("Icc.Header.ProfileID",      QString::number((uint)*cmsTakeProfileID(hProfile)));
     metaDataMap.insert("Icc.Header.ProfileVersion", QString::number((uint)cmsGetProfileICCversion(hProfile)));
@@ -465,7 +465,7 @@ QString ICCProfileWidget::getTagTitle(const QString& key)
 
 void ICCProfileWidget::slotSaveMetadataToFile()
 {
-    KUrl url = saveMetadataToFile(i18n("ICC color profile File to Save"), 
+    KUrl url = saveMetadataToFile(i18n("ICC color profile File to Save"),
                                   QString("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)")));
     storeMetadataToFile(url, d->profileData);
 }

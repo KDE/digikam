@@ -709,11 +709,11 @@ static QStringList cleanUserFilterString(const QString &filterString)
         if (f.startsWith(wildcard))
             filterList << f.mid(2).trimmed().toLower();
         else if (f.startsWith(minusWildcard))
-            filterList << "-" + f.mid(3).trimmed().toLower();
+            filterList << '-' + f.mid(3).trimmed().toLower();
         else if (f.startsWith(dot))
             filterList << f.mid(1).trimmed().toLower();
         else if (f.startsWith(minusDot))
-            filterList << "-" + f.mid(2).trimmed().toLower();
+            filterList << '-' + f.mid(2).trimmed().toLower();
         else
             filterList << f.trimmed().toLower();
     }
@@ -1431,7 +1431,7 @@ QStringList AlbumDB::getDirtyOrMissingFingerprintURLs()
         if (relativePath == "/")
             urls << albumRootPath + relativePath + name;
         else
-            urls << albumRootPath + relativePath + "/" + name;
+            urls << albumRootPath + relativePath + '/' + name;
     }
 
     return urls;
@@ -2383,7 +2383,7 @@ QStringList AlbumDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
         if (relativePath == "/")
             urls << albumRootPath + relativePath + name;
         else
-            urls << albumRootPath + relativePath + "/" + name;
+            urls << albumRootPath + relativePath + '/' + name;
     }
 
     return urls;
@@ -2438,7 +2438,7 @@ QMap<qlonglong, QString> AlbumDB::getItemIDsAndURLsInAlbum(int albumID)
         if (relativePath == "/")
             path = albumRootPath + relativePath + name;
         else
-            path = albumRootPath + relativePath + "/" + name;
+            path = albumRootPath + relativePath + '/' + name;
 
         itemsMap.insert(id, path);
     };
@@ -2556,7 +2556,7 @@ QStringList AlbumDB::getItemURLsInTag(int tagID, bool recursive)
         if (relativePath == "/")
             urls << albumRootPath + relativePath + name;
         else
-            urls << albumRootPath + relativePath + "/" + name;
+            urls << albumRootPath + relativePath + '/' + name;
     }
 
     return urls;

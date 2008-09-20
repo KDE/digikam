@@ -286,8 +286,8 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
 
         SolidVolumeInfo info;
         info.path = access->filePath();
-        if (!info.path.endsWith("/"))
-            info.path += "/";
+        if (!info.path.endsWith('/'))
+            info.path += '/';
         info.uuid = volume->uuid();
         info.label = volume->label();
         info.isRemovable = drive->isRemovable();
@@ -844,7 +844,7 @@ QString CollectionManager::album(const QString &filePath)
             else
             {
                 QString album = filePath.mid(absolutePath.length());
-                if (album.endsWith("/"))
+                if (album.endsWith('/'))
                     album.chop(1);
                 return album;
             }
@@ -868,7 +868,7 @@ QString CollectionManager::album(const CollectionLocation &location, const QStri
     else
     {
         QString album = filePath.mid(absolutePath.length());
-        if (album.endsWith("/"))
+        if (album.endsWith('/'))
             album.chop(1);
         return album;
     }

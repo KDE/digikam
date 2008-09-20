@@ -518,7 +518,7 @@ void SetupCollections::slotChangeDatabasePath(const KUrl &result)
 
 void SetupCollections::slotDatabasePathEdited(const QString& newPath)
 {
-    if (!newPath.isEmpty() && !newPath.startsWith("/"))
+    if (!newPath.isEmpty() && !newPath.startsWith('/'))
     {
         d->databasePathEdit->setUrl(QDir::homePath() + '/' + newPath);
     }
@@ -557,7 +557,7 @@ void SetupCollections::slotAlbumPathEdited(const QString& newPath)
     {
         d->replaceButton->setEnabled(false);
     }
-    else if (!newPath.startsWith("/"))
+    else if (!newPath.startsWith('/'))
     {
         d->pathEdit->setUrl(QDir::homePath() + '/' + newPath);
     }
