@@ -780,9 +780,9 @@ void ICCProofTool::slotEffect()
 
     DImg preview(w, h, sb, a, m_destinationPreviewData);
 
-    QString tmpInPath    = QString();
-    QString tmpProofPath = QString();
-    QString tmpSpacePath = QString();
+    QString tmpInPath;
+    QString tmpProofPath;
+    QString tmpSpacePath;
 
     bool proofCondition = false;
     bool spaceCondition = false;
