@@ -37,7 +37,6 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QPushButton>
-#include <QToolButton>
 #include <QSpinBox>
 #include <QTimer>
 #include <QToolButton>

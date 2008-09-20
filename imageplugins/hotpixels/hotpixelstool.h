@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_HOTPIXELS_H
-#define IMAGEEFFECT_HOTPIXELS_H
+#ifndef HOTPIXELSTOOL_H
+#define HOTPIXELSTOOL_H
 
 #define MAX_PIXEL_DEPTH 4
 
@@ -36,12 +36,9 @@
 
 #include <kurl.h>
 
-// Digikam includes.
-
-#include "editortool.h"
-
 // Local includes.
 
+#include "editortool.h"
 #include "hotpixelfixer.h"
 
 class QPushButton;
@@ -112,4 +109,4 @@ private:
 
 }  // NameSpace DigikamHotPixelsImagesPlugin
 
-#endif /* IMAGEEFFECT_HOTPIXELS_H */
+#endif /* HOTPIXELSTOOL_H */

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef INSERTEXTTOOL_H
-#define INSERTEXTTOOL_H
+#ifndef INSERTTEXTTOOL_H
+#define INSERTTEXTTOOL_H
 
 // Qt includes.
 
@@ -100,4 +100,4 @@ private:
 
 }  // NameSpace DigikamInsertTextImagesPlugin
 
-#endif /* INSERTEXTTOOL_H */
+#endif /* INSERTTEXTTOOL_H */

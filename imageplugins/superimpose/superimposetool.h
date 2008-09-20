@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_SUPERIMPOSE_H
-#define IMAGEEFFECT_SUPERIMPOSE_H
+#ifndef SUPERIMPOSETOOL_H
+#define SUPERIMPOSETOOL_H
 
 // KDE includes.
 
@@ -85,4 +85,4 @@ private:
 
 }  // NameSpace DigikamSuperImposeImagesPlugin
 
-#endif /* IMAGEEFFECT_SUPERIMPOSE_H */
+#endif /* SUPERIMPOSETOOL_H */
