@@ -274,7 +274,7 @@ PAlbum::PAlbum(int albumRoot, const QString &parentPath, const QString& title, i
     setTitle(title);
     m_albumRootId = albumRoot;
     m_isAlbumRootAlbum = false;
-    m_parentPath  = parentPath + "/";
+    m_parentPath  = parentPath + '/';
     m_path        = title;
     m_date        = QDate::currentDate();
 }
@@ -453,7 +453,7 @@ DAlbum::DAlbum(const QDate& date, bool root, Range range)
 
     if (m_range == Month)
         dateTitle = m_date.toString("MMMM yyyy");
-    else 
+    else
         dateTitle = m_date.toString("yyyy");
 
     setTitle(dateTitle);

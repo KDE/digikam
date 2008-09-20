@@ -1644,7 +1644,7 @@ void DigikamApp::fillSolidMenus()
 
         QStringList drivers = camera->supportedDrivers();
 
-        DDebug(50003) << "fillSolidMenus: Found Camera " << cameraDevice.vendor() + " " + cameraDevice.product() << " protocols " << camera->supportedProtocols() << " drivers " << camera->supportedDrivers("ptp") << endl;
+        DDebug(50003) << "fillSolidMenus: Found Camera " << cameraDevice.vendor() + ' ' + cameraDevice.product() << " protocols " << camera->supportedProtocols() << " drivers " << camera->supportedDrivers("ptp") << endl;
 
         // We handle gphoto2 cameras in this loop
         if (! (camera->supportedDrivers().contains("gphoto") || camera->supportedProtocols().contains("ptp")) )
@@ -1666,7 +1666,7 @@ void DigikamApp::fillSolidMenus()
             continue;
         }
 
-        QString label = cameraDevice.vendor() + " " + cameraDevice.product();
+        QString label = cameraDevice.vendor() + ' ' + cameraDevice.product();
         QString iconName = cameraDevice.icon();
         if (iconName.isEmpty())
             iconName = "camera-photo";
@@ -1766,7 +1766,7 @@ void DigikamApp::fillSolidMenus()
 
         if (isCamera)
         {
-            label = accessDevice.vendor() + " " + accessDevice.product();
+            label = accessDevice.vendor() + ' ' + accessDevice.product();
         }
         else
         {
@@ -1778,7 +1778,7 @@ void DigikamApp::fillSolidMenus()
                 label += "\"" + volume->label() + "\" ";
 
             if (!access->filePath().isEmpty())
-                label += "at " + access->filePath() + " ";
+                label += "at " + access->filePath() + ' ';
 
             if (volume->size())
             {
@@ -1792,16 +1792,16 @@ void DigikamApp::fillSolidMenus()
                         if (size > 1024)
                         {
                             size /= 1024;
-                            label += "(" + QString::number(size) + " TB)";
+                            label += '(' + QString::number(size) + " TB)";
                         }
                         else
-                            label += "(" + QString::number(size) + " MB)";
+                            label += '(' + QString::number(size) + " MB)";
                     }
                     else
-                        label += "(" + QString::number(size) + " KB)";
+                        label += '(' + QString::number(size) + " KB)";
                 }
                 else
-                    label += "(" + QString::number(size) + " Bytes)";
+                    label += '(' + QString::number(size) + " Bytes)";
             }
         }
 

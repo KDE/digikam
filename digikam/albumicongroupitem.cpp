@@ -108,7 +108,7 @@ void AlbumIconGroupItem::paintBanner(QPainter *p)
         if (!album->caption().isEmpty())
         {
             QString caption = album->caption();
-            dateAndComments += " - " + caption.replace("\n", " ");
+            dateAndComments += " - " + caption.replace('\n', ' ');
         }
 
         prettyUrl = album->prettyUrl();

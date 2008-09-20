@@ -184,7 +184,7 @@ bool AlbumThumbnailLoader::getTagThumbnail(TAlbum *album, QPixmap &icon)
 
     if(!album->icon().isEmpty())
     {
-        if(album->icon().startsWith("/"))
+        if(album->icon().startsWith('/'))
         {
             KUrl iconKURL;
             iconKURL.setPath(album->icon());
@@ -221,7 +221,7 @@ QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum *album, bool blendI
                 return *it;
         }
 
-        if(album->icon().startsWith("/"))
+        if(album->icon().startsWith('/'))
         {
             KUrl iconKURL;
             iconKURL.setPath(album->icon());

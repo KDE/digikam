@@ -245,12 +245,12 @@ void TagEditDlg::slotIconChanged()
 void TagEditDlg::slotTitleChanged(const QString& newtitle)
 {
     QString tagName = d->mainRootAlbum->tagPath();
-    if (tagName.endsWith("/") && !d->mainRootAlbum->isRoot())
+    if (tagName.endsWith('/') && !d->mainRootAlbum->isRoot())
         tagName.truncate(tagName.length()-1);
 
     if (d->create)
     {
-        if (d->titleEdit->text().startsWith("/"))
+        if (d->titleEdit->text().startsWith('/'))
         {
             d->topLabel->setText(i18n("<qt><b>Create New Tag</b></qt>"));
         }
@@ -306,7 +306,7 @@ AlbumList TagEditDlg::createTAlbum(TAlbum *mainRootAlbum, const QString& tagStr,
     // Check if new tags are include in a list of tags hierarchy separated by ','.
     // Ex: /Country/France/people,/City/France/Paris
 
-    QStringList tagsHierarchies = tagStr.split(",", QString::SkipEmptyParts);
+    QStringList tagsHierarchies = tagStr.split(',', QString::SkipEmptyParts);
     if (tagsHierarchies.isEmpty())
         return createdTagsList;
 
@@ -319,12 +319,12 @@ AlbumList TagEditDlg::createTAlbum(TAlbum *mainRootAlbum, const QString& tagStr,
 
             TAlbum *root = 0;
 
-            if (hierarchy.startsWith("/") || !mainRootAlbum)
+            if (hierarchy.startsWith('/') || !mainRootAlbum)
                 root = AlbumManager::instance()->findTAlbum(0);
             else
                 root = mainRootAlbum;
 
-            QStringList tagsList = hierarchy.split("/", QString::SkipEmptyParts);
+            QStringList tagsList = hierarchy.split('/', QString::SkipEmptyParts);
             DDebug(50003) << tagsList << endl;
 
             if (!tagsList.isEmpty())

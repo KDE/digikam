@@ -1154,7 +1154,7 @@ Album* AlbumManager::findAlbum(int gid) const
 TAlbum* AlbumManager::findTAlbum(const QString &tagPath) const
 {
     // handle gracefully with or without leading slash
-    bool withLeadingSlash = tagPath.startsWith("/");
+    bool withLeadingSlash = tagPath.startsWith('/');
     AlbumIterator it(d->rootTAlbum);
     while (it.current())
     {
@@ -1273,7 +1273,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
         return 0;
     }
 
-    QString albumPath     = parent->albumPath() + "/" + name;
+    QString albumPath     = parent->albumPath() + '/' + name;
     int albumRootId       = parent->albumRootId();
 
     // first check if we have a sibling album with the same name

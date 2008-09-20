@@ -5,7 +5,7 @@
  *
  * Date        : 2003-04-25
  * Description : implementation to render album icon item.
- * 
+ *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2003-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -96,11 +96,11 @@ AlbumIconItem::~AlbumIconItem()
 QString AlbumIconItem::squeezedText(QPainter* p, int width, const QString& text)
 {
     QString fullText(text);
-    fullText.replace("\n"," ");
+    fullText.replace('\n',' ');
     QFontMetrics fm(p->fontMetrics());
     int textWidth = fm.width(fullText);
-    
-    if (textWidth > width) 
+
+    if (textWidth > width)
     {
         // start with the dots only
         QString squeezedText = "...";
@@ -112,26 +112,26 @@ QString AlbumIconItem::squeezedText(QPainter* p, int width, const QString& text)
         squeezedText = fullText.left(letters) + "...";
         squeezedWidth = fm.width(squeezedText);
 
-        if (squeezedWidth < width) 
+        if (squeezedWidth < width)
         {
             // we estimated too short
             // add letters while text < label
-            do 
+            do
             {
                 letters++;
-                squeezedText = fullText.left(letters) + "..."; 
+                squeezedText = fullText.left(letters) + "...";
                 squeezedWidth = fm.width(squeezedText);
             }
             while (squeezedWidth < width);
 
             letters--;
-            squeezedText = fullText.left(letters) + "..."; 
+            squeezedText = fullText.left(letters) + "...";
         }
-        else if (squeezedWidth > width) 
+        else if (squeezedWidth > width)
         {
             // we estimated too long
             // remove letters while text > label
-            do 
+            do
             {
                 letters--;
                 squeezedText = fullText.left(letters) + "...";
@@ -140,13 +140,13 @@ QString AlbumIconItem::squeezedText(QPainter* p, int width, const QString& text)
             while (letters && squeezedWidth > width);
         }
 
-        if (letters >= 5) 
+        if (letters >= 5)
         {
             return squeezedText;
         }
     }
-    
-    return fullText;   
+
+    return fullText;
 }
 
 bool AlbumIconItem::isDirty()
@@ -168,7 +168,7 @@ int AlbumIconItem::compare(IconItem *item)
 {
     const AlbumSettings *settings = d->view->settings();
     AlbumIconItem *iconItem = static_cast<AlbumIconItem*>(item);
-    
+
     switch (settings->getImageSortOrder())
     {
         case(AlbumSettings::ByIName):
@@ -219,7 +219,7 @@ QRect AlbumIconItem::clickToOpenRect()
 {
     if (d->tightPixmapRect.isNull())
         return rect();
-    
+
     QRect pixmapRect = d->tightPixmapRect;
     QRect r          = rect();
 
@@ -310,7 +310,7 @@ void AlbumIconItem::paintItem(QPainter *p)
     {
         QDateTime date(d->info.modDateTime());
 
-        r = d->view->itemModDateRect();    
+        r = d->view->itemModDateRect();
         p->setFont(d->view->itemFontXtra());
         QString str;
         dateToString(date, str);

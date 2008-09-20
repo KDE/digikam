@@ -5,7 +5,7 @@
  *
  * Date        : 2005-01-01
  * Description : scan pictures interface.
- * 
+ *
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
@@ -15,12 +15,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -412,7 +412,7 @@ void ScanController::slotStartScanningAlbum(const QString &albumRoot, const QStr
 {
     Q_UNUSED(albumRoot);
     if (d->progressDialog)
-        d->progressDialog->addedAction(d->albumPixmap(), " " + album);
+        d->progressDialog->addedAction(d->albumPixmap(), ' ' + album);
 }
 
 void ScanController::slotFinishedScanningAlbum(const QString &, const QString &, int filesScanned)
@@ -517,7 +517,7 @@ static AlbumCopyMoveHint hintForAlbum(const PAlbum *album, int dstAlbumRootId, c
     if (relativeDstPath == "/")
         dstAlbumPath = relativeDstPath + albumName;
     else
-        dstAlbumPath = relativeDstPath + "/" + albumName;
+        dstAlbumPath = relativeDstPath + '/' + albumName;
 
     return AlbumCopyMoveHint(album->albumRootId(), album->id(),
                              dstAlbumRootId, dstAlbumPath);

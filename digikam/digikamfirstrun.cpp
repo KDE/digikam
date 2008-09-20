@@ -154,7 +154,7 @@ bool DigikamFirstRun::checkRootAlbum(QString& rootAlbumFolder)
         return false;
     }
 
-    if (!rootAlbumFolder.startsWith("/"))
+    if (!rootAlbumFolder.startsWith('/'))
     {
         rootAlbumFolder.prepend(QDir::homePath());
     }
@@ -216,7 +216,7 @@ bool DigikamFirstRun::checkDatabase(QString& dbFolder)
         return false;
     }
 
-    if (!dbFolder.startsWith("/"))
+    if (!dbFolder.startsWith('/'))
     {
         dbFolder.prepend(QDir::homePath());
     }
