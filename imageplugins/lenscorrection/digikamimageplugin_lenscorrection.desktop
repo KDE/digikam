@@ -1,10 +1,34 @@
 [Desktop Entry]
 Name=ImagePlugin_LensCorrection
-Name[xx]=xxImagePlugin_LensCorrectionxx
+Name[de]=Bildmodul_Linsenkorrektur
+Name[el]=ΠρόσθετοΕικόνας_ΠαραμόρφωσηΦακών
+Name[it]=Distorsione lenticolare
+Name[lv]=ImagePlugin_LensDistortion
+Name[nl]=Afbeeldingsplugin_Lenscorrectie
+Name[sv]=Insticksprogram för linskorrigering
+Name[tr]=ResimEklentisi_MercekDüzeltme
+Name[x-test]=xxImagePlugin_LensCorrectionxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Lens aberrations correction tools
+Comment[ca]=Eines de correcció d'aberracions dels objectius
+Comment[de]=digiKam-Modul zur Korrektur von Linsenabweichungen
+Comment[el]=Εργαλεία διόρθωσης σφαλμάτων φακού
+Comment[et]=Läätsemoonutuse parandamise tööriistad
+Comment[gl]=Ferramentas de correción da aberración das lentes
+Comment[it]=Strumenti di correzione dell'aberrazione lenticolare
+Comment[ja]=レンズ収差補正ツール
+Comment[km]=ឧបករណ៍​កែ​កញ្ចប់​ប្លែកៗ
+Comment[lv]=Lēcu aberācijas korekcijas rīki
+Comment[nds]=Richtmodulen för Linsvertarren
+Comment[pt]=Ferramentas de correcção da aberração das lentes
+Comment[pt_BR]=Ferramentas de correcção da aberração das lentes
+Comment[sv]=Korrigeringsverktyg för linsförvrängningar
+Comment[tr]=Mercek hata düzeltme araçları
+Comment[uk]=Інструмент для виправлення аберації
+Comment[x-test]=xxLens aberrations correction toolsxx
+Comment[zh_CN]=镜头扭曲校正工具
 
 X-KDE-Library=digikamimageplugin_lenscorrection
 author=Gilles Caulier, caulier dot gilles at gmail dot com
