@@ -646,7 +646,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
         if (plugin && (*it)->name() == "JPEGLossless")
         {
-            DDebug(50003) << "Found JPEGLossless plugin" << endl;
+            kDebug(50003) << "Found JPEGLossless plugin" << endl;
 
             QList<KAction*> actionList = plugin->actions();
 
@@ -1857,7 +1857,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
 
     for( it = urlList.begin(); it != urlList.end(); ++it )
     {
-        DDebug(50003) << "Setting Exif Orientation tag to " << orientation << endl;
+        kDebug(50003) << "Setting Exif Orientation tag to " << orientation << endl;
 
         DMetadata metadata((*it).path());
         DMetadata::ImageOrientation o = (DMetadata::ImageOrientation)orientation;

@@ -56,7 +56,7 @@ ImagePlugin_ColorFX::ImagePlugin_ColorFX(QObject *parent, const QVariantList &)
 
     setXMLFile( "digikamimageplugin_colorfx_ui.rc" );
 
-    DDebug(50006) << "ImagePlugin_ColorFX plugin loaded" << endl;
+    kDebug(50006) << "ImagePlugin_ColorFX plugin loaded" << endl;
 }
 
 ImagePlugin_ColorFX::~ImagePlugin_ColorFX()

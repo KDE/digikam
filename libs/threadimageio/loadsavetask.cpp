@@ -139,7 +139,7 @@ void SharedLoadingTask::execute()
                 lock.wakeAll();
                 // set to 0, as checked in setStatus
                 m_usedProcess = 0;
-                //DDebug(50003) << "SharedLoadingTask " << this << ": waited" << endl;
+                //kDebug(50003) << "SharedLoadingTask " << this << ": waited" << endl;
                 return;
             }
             else
@@ -184,7 +184,7 @@ void SharedLoadingTask::execute()
 
     {
         LoadingCache::CacheLock lock(cache);
-        //DDebug(50003) << "SharedLoadingTask " << this << ": image loaded, " << img.isNull() << endl;
+        //kDebug(50003) << "SharedLoadingTask " << this << ": image loaded, " << img.isNull() << endl;
         // indicate that loading has finished so that listeners can stop waiting
         m_completed = true;
 

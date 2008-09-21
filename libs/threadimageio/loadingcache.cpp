@@ -154,13 +154,13 @@ void LoadingCache::slotFileDirty(const QString &path)
 {
     // Signal comes from main thread, we need to lock ourselves.
     CacheLock lock(this);
-    //DDebug(50003) << "LoadingCache slotFileDirty " << path << endl;
+    //kDebug(50003) << "LoadingCache slotFileDirty " << path << endl;
     QList<QString> keys = d->imageCache.keys();
     foreach(const QString &cacheKey, keys)
     {
         if (d->imageCache[cacheKey]->attribute("loadingCacheFilePath").toString() == path)
         {
-            //DDebug(50003) << " removing watch and cache entry for " << path << endl;
+            //kDebug(50003) << " removing watch and cache entry for " << path << endl;
             d->imageCache.remove(cacheKey);
             d->watch->removeFile(path);
             d->watchedFiles.removeAll(path);
@@ -191,14 +191,14 @@ void LoadingCache::slotUpdateDirWatch()
 
     for (QStringList::iterator it = toBeRemoved.begin(); it != toBeRemoved.end(); ++it)
     {
-        //DDebug(50003) << "removing watch for " << *it << endl;
+        //kDebug(50003) << "removing watch for " << *it << endl;
         d->watch->removeFile(*it);
         d->watchedFiles.removeAll(*it);
     }
 
     for (QStringList::iterator it = toBeAdded.begin(); it != toBeAdded.end(); ++it)
     {
-        //DDebug(50003) << "adding watch for " << *it << endl;
+        //kDebug(50003) << "adding watch for " << *it << endl;
         d->watch->addFile(*it);
         d->watchedFiles.append(*it);
     }

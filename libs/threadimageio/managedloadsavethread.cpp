@@ -120,7 +120,7 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loa
     LoadingTask *loadingTask = 0;
     LoadingTask *existingTask = findExistingTask(description);
 
-    //DDebug(50003) << "ManagedLoadSaveThread::load " << description.filePath << ", policy " << policy << endl;
+    //kDebug(50003) << "ManagedLoadSaveThread::load " << description.filePath << ", policy " << policy << endl;
     switch(policy)
     {
         case LoadingPolicyFirstRemovePrevious:
@@ -135,7 +135,7 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loa
                 if ( (loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterAll)) )
                     loadingTask->setStatus(LoadingTask::LoadingTaskStatusStopping);
             }
-            //DDebug(50003) << "LoadingPolicyFirstRemovePrevious, Existing task " << existingTask <<
+            //kDebug(50003) << "LoadingPolicyFirstRemovePrevious, Existing task " << existingTask <<
              //", m_currentTask " << m_currentTask << ", loadingTask " << loadingTask << endl;
             // remove all loading tasks
             for (int i=0; i < m_todo.size(); i++)
@@ -143,7 +143,7 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loa
                 LoadSaveTask *task = m_todo[i];
                 if (task != existingTask && checkLoadingTask(task, LoadingTaskFilterAll))
                 {
-                    //DDebug(50003) << "Removing task " << task << " from list" << endl;
+                    //kDebug(50003) << "Removing task " << task << " from list" << endl;
                     delete m_todo.takeAt(i--);
                 }
             }
@@ -166,7 +166,7 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loa
                     load(loadingTask->filePath(), LoadingPolicyPreload);
                 }
             }
-            //DDebug(50003) << "LoadingPolicyPrepend, Existing task " << existingTask << ", m_currentTask " << m_currentTask << endl;
+            //kDebug(50003) << "LoadingPolicyPrepend, Existing task " << existingTask << ", m_currentTask " << m_currentTask << endl;
             // prepend new loading task
             if (existingTask)
                 break;
@@ -188,7 +188,7 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loa
             }
             if (existingTask)
                 break;
-            //DDebug(50003) << "LoadingPolicyAppend, Existing task " << existingTask << ", m_currentTask " << m_currentTask << endl;
+            //kDebug(50003) << "LoadingPolicyAppend, Existing task " << existingTask << ", m_currentTask " << m_currentTask << endl;
             // append new loading task, put it in front of preloading tasks
             int i;
             for (i = 0; i<m_todo.count(); i++)
@@ -200,7 +200,7 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loa
             break;
         case LoadingPolicyPreload:
             // append to the very end of the list
-            //DDebug(50003) << "LoadingPolicyPreload, Existing task " << existingTask << endl;
+            //kDebug(50003) << "LoadingPolicyPreload, Existing task " << existingTask << endl;
             if (existingTask)
                 break;
             m_todo.append(createLoadingTask(description, true, loadingMode, accessMode));
@@ -239,7 +239,7 @@ void ManagedLoadSaveThread::loadPreview(LoadingDescription description)
             delete m_todo.takeAt(i--);
         }
     }
-    //DDebug(50003)<<"loadPreview for " << description.filePath << " existingTask " << existingTask << " currentTask " << m_currentTask << endl;
+    //kDebug(50003)<<"loadPreview for " << description.filePath << " existingTask " << existingTask << " currentTask " << m_currentTask << endl;
     // append new loading task
     if (existingTask)
         return;

@@ -138,7 +138,7 @@ void WhiteBalance::autoWBAdjustementFromColor(const QColor &tc, double &temperat
     double tmin, tmax, mBR;
     float mr, mg, mb;
 
-    DDebug(50003) << "Sums:  R:" << tc.red() << " G:" << tc.green() << " B:" << tc.blue() << endl;
+    kDebug(50003) << "Sums:  R:" << tc.red() << " G:" << tc.green() << " B:" << tc.blue() << endl;
 
     /* This is a dichotomic search based on Blue and Red layers ratio
        to find the matching temperature
@@ -150,7 +150,7 @@ void WhiteBalance::autoWBAdjustementFromColor(const QColor &tc, double &temperat
     green = 1.0;
     for (temperature = (tmin+tmax)/2; tmax-tmin > 10; temperature = (tmin+tmax)/2)
     {
-        DDebug(50003) << "Intermediate Temperature (K):" << temperature << endl;
+        kDebug(50003) << "Intermediate Temperature (K):" << temperature << endl;
         setRGBmult(temperature, green, mr, mg, mb);
         if (mr/mb > mBR)
             tmax = temperature;
@@ -160,8 +160,8 @@ void WhiteBalance::autoWBAdjustementFromColor(const QColor &tc, double &temperat
     // Calculate the green level to neutralize picture
     green = (mr / mg) / ((double)tc.green() / (double)tc.red());
 
-    DDebug(50003) << "Temperature (K):" << temperature << endl;
-    DDebug(50003) << "Green component:" << green << endl;
+    kDebug(50003) << "Temperature (K):" << temperature << endl;
+    kDebug(50003) << "Green component:" << green << endl;
 }
 
 void WhiteBalance::autoExposureAdjustement(uchar* data, int width, int height, bool sb,
@@ -186,7 +186,7 @@ void WhiteBalance::autoExposureAdjustement(uchar* data, int width, int height, b
         sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
     
     expo = -log((float)(i+1) / rgbMax) / log(2);
-    DDebug(50003) << "White level at:" << i << endl;
+    kDebug(50003) << "White level at:" << i << endl;
     
     for (i = 1, sum = 0; (i < (int)rgbMax) && (sum < stop); i++)
         sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
@@ -194,7 +194,7 @@ void WhiteBalance::autoExposureAdjustement(uchar* data, int width, int height, b
     black = (double)i / rgbMax;
     black /= 2;
     
-    DDebug(50003) << "Black:" << black << "  Exposition:" << expo << endl;
+    kDebug(50003) << "Black:" << black << "  Exposition:" << expo << endl;
 
     delete histogram;
 }
@@ -276,7 +276,7 @@ void WhiteBalance::setLUTv()
     
     if (d->WP - d->BP < 1) d->WP = d->BP + 1;
 
-    DDebug(50003) << "T(K): " << d->temperature
+    kDebug(50003) << "T(K): " << d->temperature
              << " => R:" << d->mr
              << " G:"    << d->mg
              << " B:"    << d->mb

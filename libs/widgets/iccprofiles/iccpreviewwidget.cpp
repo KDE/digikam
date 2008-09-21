@@ -63,12 +63,12 @@ void ICCPreviewWidget::showPreview( const KUrl &url)
     
     if ( url.isLocalFile() && fInfo.isFile() && fInfo.isReadable() )
     {
-        DDebug(50003) << url << " is a readble local file" << endl;
+        kDebug(50003) << url << " is a readble local file" << endl;
         m_iccProfileWidget->loadFromURL(url);
     }
     else
     {
-        DDebug(50003) << url << " is not a readable local file" << endl;
+        kDebug(50003) << url << " is not a readable local file" << endl;
     }
 }
 

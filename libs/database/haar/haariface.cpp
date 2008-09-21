@@ -361,7 +361,7 @@ QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData *querySig, int numbe
 
 /*
     for (QMap<double, qlonglong>::iterator it = bestMatches.begin(); it != bestMatches.end(); ++it)
-        DDebug(50003) << it.key() << it.value();
+        kDebug(50003) << it.key() << it.value();
 */
     return bestMatches.values();
 }
@@ -393,10 +393,10 @@ QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData *queryS
     // Debug output
     if (bestMatches.count() > 1)
     {
-        DDebug(50003) << "Duplicates with id and score:";
+        kDebug(50003) << "Duplicates with id and score:";
         for (QMultiMap<double, qlonglong>::iterator it = bestMatches.begin(); it != bestMatches.end(); ++it)
         {
-            DDebug(50003) << it.value() << QString::number(it.key() * 100)+QChar('%');
+            kDebug(50003) << it.value() << QString::number(it.key() * 100)+QChar('%');
         }
     }
     // We may want to return the map itself, or a list with pairs id - percentage

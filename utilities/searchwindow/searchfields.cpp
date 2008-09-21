@@ -1640,7 +1640,7 @@ void SearchFieldAlbum::read(SearchXmlCachingReader &reader)
             a = AlbumManager::instance()->findTAlbum(id);
 
         if (!a)
-            DDebug(50003) << "Search: Did not find album for ID" << id << "given in Search XML";
+            kDebug(50003) << "Search: Did not find album for ID" << id << "given in Search XML";
 
         m_model->setChecked(a, true);
     }

@@ -150,7 +150,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
 
     setXMLFile("digikamimageplugin_core_ui.rc");
 
-    DDebug(50006) << "ImagePlugin_Core plugin loaded" << endl;
+    kDebug(50006) << "ImagePlugin_Core plugin loaded" << endl;
 }
 
 ImagePlugin_Core::~ImagePlugin_Core()

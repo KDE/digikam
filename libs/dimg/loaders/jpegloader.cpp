@@ -78,7 +78,7 @@ void JPEGLoader::dimg_jpeg_emit_message(j_common_ptr cinfo, int msg_level)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 #ifdef ENABLE_DEBUG_MESSAGES
-    DDebug(50003) << buffer << " (" << msg_level << ")" << endl;
+    kDebug(50003) << buffer << " (" << msg_level << ")" << endl;
 #else
     Q_UNUSED(msg_level);
 #endif
@@ -90,7 +90,7 @@ void JPEGLoader::dimg_jpeg_output_message(j_common_ptr cinfo)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 #ifdef ENABLE_DEBUG_MESSAGES
-    DDebug(50003) << buffer << endl;
+    kDebug(50003) << buffer << endl;
 #endif
 }
 
@@ -250,7 +250,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         {
             jpeg_destroy_decompress(&cinfo);
             fclose(file);
-            DDebug(50003) << "Height of JPEG scanline buffer out of range!" << endl;
+            kDebug(50003) << "Height of JPEG scanline buffer out of range!" << endl;
             return false;
         }
 
@@ -262,7 +262,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         {
             jpeg_destroy_decompress(&cinfo);
             fclose(file);
-            DDebug(50003) 
+            kDebug(50003) 
                     << "JPEG colorspace ("
                     << cinfo.out_color_space
                     << ") or Number of JPEG color components ("
@@ -277,7 +277,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         {
             jpeg_destroy_decompress(&cinfo);
             fclose(file);
-            DDebug(50003) << "Cannot allocate memory!" << endl;
+            kDebug(50003) << "Cannot allocate memory!" << endl;
             return false;
         }
 
@@ -288,7 +288,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             delete [] data;
             jpeg_destroy_decompress(&cinfo);
             fclose(file);
-            DDebug(50003) << "Cannot allocate memory!" << endl;
+            kDebug(50003) << "Cannot allocate memory!" << endl;
             return false;
         }
 
@@ -555,7 +555,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     {
         case 1:  // 2x1, 1x1, 1x1 (4:2:2) : Medium
         {
-            DDebug(50003) << "Using LibJPEG medium chroma-subsampling (4:2:2)" << endl;
+            kDebug(50003) << "Using LibJPEG medium chroma-subsampling (4:2:2)" << endl;
             cinfo.comp_info[0].h_samp_factor = 2;
             cinfo.comp_info[0].v_samp_factor = 1;
             cinfo.comp_info[1].h_samp_factor = 1;
@@ -566,7 +566,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         }
         case 2:  // 2x2, 1x1, 1x1 (4:1:1) : High
         {
-            DDebug(50003) << "Using LibJPEG high chroma-subsampling (4:1:1)" << endl;
+            kDebug(50003) << "Using LibJPEG high chroma-subsampling (4:1:1)" << endl;
             cinfo.comp_info[0].h_samp_factor = 2;
             cinfo.comp_info[0].v_samp_factor = 2;
             cinfo.comp_info[1].h_samp_factor = 1;
@@ -577,7 +577,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         }
         default:  // 1x1 1x1 1x1 (4:4:4) : None
         {
-            DDebug(50003) << "Using LibJPEG none chroma-subsampling (4:4:4)" << endl;
+            kDebug(50003) << "Using LibJPEG none chroma-subsampling (4:4:4)" << endl;
             cinfo.comp_info[0].h_samp_factor = 1;
             cinfo.comp_info[0].v_samp_factor = 1;
             cinfo.comp_info[1].h_samp_factor = 1;
@@ -591,7 +591,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     jpeg_set_quality(&cinfo, quality, true);
     jpeg_start_compress(&cinfo, true);
 
-    DDebug(50003) << "Using LibJPEG quality compression value: " << quality << endl;
+    kDebug(50003) << "Using LibJPEG quality compression value: " << quality << endl;
 
     if (observer)
         observer->progressInfo(m_image, 0.1);

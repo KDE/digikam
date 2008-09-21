@@ -179,7 +179,7 @@ bool ImageScanner::scanFromIdenticalFile()
         // Sort by priority, as implemented by custom lessThan()
         qStableSort(candidates.begin(), candidates.end(), lessThanForIdentity);
 
-        DDebug(50003) << "Recognized" << m_fileInfo.filePath() << "as identical to item" << candidates.first().id;
+        kDebug(50003) << "Recognized" << m_fileInfo.filePath() << "as identical to item" << candidates.first().id;
 
         // Copy attributes.
         // Todo for the future is to worry about syncing identical files.

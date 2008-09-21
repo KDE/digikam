@@ -55,7 +55,7 @@ ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent, const QVaria
 
     setXMLFile("digikamimageplugin_adjustlevels_ui.rc");
 
-    DDebug(50006) << "ImagePlugin_AdjustLevels plugin loaded" << endl;
+    kDebug(50006) << "ImagePlugin_AdjustLevels plugin loaded" << endl;
 }
 
 ImagePlugin_AdjustLevels::~ImagePlugin_AdjustLevels()

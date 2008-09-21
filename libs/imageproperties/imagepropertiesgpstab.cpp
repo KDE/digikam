@@ -224,7 +224,7 @@ void ImagePropertiesGPSTab::slotGPSDetails()
         }
     }
 
-    DDebug(50003) << url << endl;
+    kDebug(50003) << url << endl;
     KToolInvocation::self()->invokeBrowser(url);
 }
 

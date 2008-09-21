@@ -515,7 +515,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
     userProfilesDir.setFilter(QDir::Files);
 
     QFileInfoList usersFiles = userProfilesDir.entryInfoList();
-    DDebug(50003) << "Scanning ICC profiles from user repository: " << path << endl;
+    kDebug(50003) << "Scanning ICC profiles from user repository: " << path << endl;
 
     if ( !parseProfilesfromDir(usersFiles) )
     {
@@ -526,7 +526,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
             KMessageBox::sorry(this, message);
         }
 
-        DDebug(50003) << "No ICC profile files found!!!" << endl;
+        kDebug(50003) << "No ICC profile files found!!!" << endl;
         d->mainDialog->enableButtonOk(false);
         return;
     }
@@ -538,7 +538,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
     libkdcrawProfilesDir.setFilter(QDir::Files);
 
     QFileInfoList libkdcrawFiles = libkdcrawProfilesDir.entryInfoList();
-    DDebug(50003) << "Scanning ICC profiles included with libkdcraw: " << libkdcrawProfilesPath << endl;
+    kDebug(50003) << "Scanning ICC profiles included with libkdcraw: " << libkdcrawProfilesPath << endl;
     parseProfilesfromDir(libkdcrawFiles);
 
     d->monitorProfilesKC->insertSqueezedList(d->monitorICCPath.keys(), 0);
@@ -589,7 +589,7 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
 
                 if (tmpProfile == NULL)
                 {
-                    DDebug(50003) << "Error: Parsed profile  is NULL (invalid profile); " << QFile::encodeName(fileName) << endl;
+                    kDebug(50003) << "Error: Parsed profile  is NULL (invalid profile); " << QFile::encodeName(fileName) << endl;
                     cmsCloseProfile(tmpProfile);
                     ++it;
                     QString message = i18n("<p>The following profile is invalid:</p><p><b>");
@@ -622,7 +622,7 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
                         else
                             d->inICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
 
-                        DDebug(50003) << "ICC file: " << fileName << " ==> Input device class ("
+                        kDebug(50003) << "ICC file: " << fileName << " ==> Input device class ("
                                  << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                         findIccFiles = true;
                         break;
@@ -640,7 +640,7 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
                             d->workICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
                         }
 
-                        DDebug(50003) << "ICC file: " << fileName << " ==> Monitor device class ("
+                        kDebug(50003) << "ICC file: " << fileName << " ==> Monitor device class ("
                                  << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                         findIccFiles = true;
                         break;
@@ -652,7 +652,7 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
                         else
                             d->proofICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
 
-                        DDebug(50003) << "ICC file: " << fileName << " ==> Output device class ("
+                        kDebug(50003) << "ICC file: " << fileName << " ==> Output device class ("
                                  << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                         findIccFiles = true;
                         break;
@@ -670,14 +670,14 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
                             d->workICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
                         }
 
-                        DDebug(50003) << "ICC file: " << fileName << " ==> WorkingSpace device class ("
+                        kDebug(50003) << "ICC file: " << fileName << " ==> WorkingSpace device class ("
                                  << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                         findIccFiles = true;
                         break;
                     }
                     default:
                     {
-                        DDebug(50003) << "ICC file: " << fileName << " ==> UNKNOW device class ("
+                        kDebug(50003) << "ICC file: " << fileName << " ==> UNKNOW device class ("
                                  << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                         break;
                     }
@@ -764,7 +764,7 @@ bool SetupICC::iccRepositoryIsValid()
     // To be valid, the ICC profiles repository must exist and be readable.
 
     QDir tmpPath(group.readEntry("DefaultPath", QString()));
-    DDebug(50003) << "ICC profiles repository is: " << tmpPath.dirName() << endl;
+    kDebug(50003) << "ICC profiles repository is: " << tmpPath.dirName() << endl;
 
     if ( tmpPath.exists() && tmpPath.isReadable() )
         return true;

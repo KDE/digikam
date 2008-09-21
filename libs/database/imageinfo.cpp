@@ -516,7 +516,7 @@ void ImageInfo::addTagPaths(const QStringList &tagPaths)
 ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString &dstFileName)
 {
     DatabaseAccess access;
-    //DDebug(50003) << "ImageInfo::copyItem " << m_data->albumId << " " << m_data->name << " to " << dstAlbumID << " " << dstFileName << endl;
+    //kDebug(50003) << "ImageInfo::copyItem " << m_data->albumId << " " << m_data->name << " to " << dstAlbumID << " " << dstFileName << endl;
 
     if (dstAlbumID == m_data->albumId && dstFileName == m_data->name)
         return (*this);

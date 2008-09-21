@@ -55,7 +55,7 @@ ImagePlugin_Border::ImagePlugin_Border(QObject *parent, const QVariantList &)
 
     setXMLFile("digikamimageplugin_border_ui.rc");
 
-    DDebug(50006) << "ImagePlugin_Border plugin loaded" << endl;
+    kDebug(50006) << "ImagePlugin_Border plugin loaded" << endl;
 }
 
 ImagePlugin_Border::~ImagePlugin_Border()

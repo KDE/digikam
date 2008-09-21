@@ -89,7 +89,7 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
                       const bool debug)
 {
     if ( debug )
-        DDebug(50003) << "SQL-query: " << sql << endl;
+        kDebug(50003) << "SQL-query: " << sql << endl;
 
     if ( !m_db ) {
         DWarning() << "SQLite pointer == NULL"

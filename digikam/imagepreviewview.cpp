@@ -389,7 +389,7 @@ void ImagePreviewView::slotContextMenu()
 
         if (plugin && (*it)->name() == "JPEGLossless")
         {
-            //DDebug(50003) << "Found JPEGLossless plugin" << endl;
+            //kDebug(50003) << "Found JPEGLossless plugin" << endl;
 
             QList<KAction*> actionList = plugin->actions();
 

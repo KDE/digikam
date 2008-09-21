@@ -322,7 +322,7 @@ SearchWindow *SearchTabHeader::searchWindow()
 {
     if (!d->searchWindow)
     {
-        DDebug(50003) << "Creating search window";
+        kDebug(50003) << "Creating search window";
         // Create the advanced search edit window, deferred from contructor
         d->searchWindow = new SearchWindow;
 

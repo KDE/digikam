@@ -81,7 +81,7 @@ SchemaUpdater::SchemaUpdater(DatabaseAccess *access)
 
 bool SchemaUpdater::update()
 {
-    DDebug(50003) << "SchemaUpdater update" << endl;
+    kDebug(50003) << "SchemaUpdater update" << endl;
     bool success = startUpdates();
     // even on failure, try to set current version - it may have incremented
     m_access->db()->setSetting("DBVersion",QString::number(m_currentVersion));
@@ -110,7 +110,7 @@ bool SchemaUpdater::startUpdates()
         // Find out schema version of db file
         QString version = m_access->db()->getSetting("DBVersion");
         QString versionRequired = m_access->db()->getSetting("DBVersionRequired");
-        DDebug(50003) << "Have a database structure version " << version << endl;
+        kDebug(50003) << "Have a database structure version " << version << endl;
 
         // We absolutely require the DBVersion setting
         if (version.isEmpty())
@@ -166,7 +166,7 @@ bool SchemaUpdater::startUpdates()
     }
     else
     {
-        DDebug(50003) << "No database file available" << endl;
+        kDebug(50003) << "No database file available" << endl;
         // Legacy handling?
 
         // first test if there are older files that need to be upgraded.
@@ -227,7 +227,7 @@ bool SchemaUpdater::startUpdates()
 
 bool SchemaUpdater::makeUpdates()
 {
-    DDebug(50003) << "makeUpdates " << m_currentVersion << " to " << schemaVersion() << endl;
+    kDebug(50003) << "makeUpdates " << m_currentVersion << " to " << schemaVersion() << endl;
     //DatabaseTransaction transaction(m_access);
     if (m_currentVersion < schemaVersion())
     {
@@ -252,7 +252,7 @@ bool SchemaUpdater::makeUpdates()
                 }
                 return false;
             }
-            DDebug(50003) << "Success updating to v5" << endl;
+            kDebug(50003) << "Success updating to v5" << endl;
             m_access->backend()->commitTransaction();
             // REMOVE BEFORE FINAL VERSION
             m_access->db()->setSetting("preAlpha010Update1", "true");
@@ -787,7 +787,7 @@ static QStringList cleanUserFilterString(const QString &filterString)
 
 bool SchemaUpdater::updateV4toV5()
 {
-    DDebug(50003) << "updateV4toV5" << endl;
+    kDebug(50003) << "updateV4toV5" << endl;
     if (m_observer)
         m_observer->moreSchemaUpdateSteps(11);
 
@@ -804,7 +804,7 @@ bool SchemaUpdater::updateV4toV5()
     if (!m_access->backend()->execSql(QString("ALTER TABLE Searches RENAME TO SearchesV3;")))
         return false;
 
-    DDebug(50003) << "Moved tables" << endl;
+    kDebug(50003) << "Moved tables" << endl;
     // --- Drop some triggers and indices ---
 
     // Don't check for errors here. The "IF EXISTS" clauses seem not supported in SQLite
@@ -819,7 +819,7 @@ bool SchemaUpdater::updateV4toV5()
 
     if (m_observer)
         m_observer->schemaUpdateProgress(i18n("Prepared table creation"));
-    DDebug(50003) << "Dropped triggers" << endl;
+    kDebug(50003) << "Dropped triggers" << endl;
 
     // --- Create new tables ---
 
@@ -861,7 +861,7 @@ bool SchemaUpdater::updateV4toV5()
 
     if (m_observer)
         m_observer->schemaUpdateProgress(i18n("Configured one album root"));
-    DDebug(50003) << "Inserted album root" << endl;
+    kDebug(50003) << "Inserted album root" << endl;
 
     // --- With the album root, populate albums ---
 
@@ -877,7 +877,7 @@ bool SchemaUpdater::updateV4toV5()
 
     if (m_observer)
         m_observer->schemaUpdateProgress(i18n("Imported albums"));
-    DDebug(50003) << "Populated albums" << endl;
+    kDebug(50003) << "Populated albums" << endl;
 
     // --- Add images ---
 
@@ -897,7 +897,7 @@ bool SchemaUpdater::updateV4toV5()
     if (m_observer)
         m_observer->schemaUpdateProgress(i18n("Imported images information"));
 
-    DDebug(50003) << "Populated Images" << endl;
+    kDebug(50003) << "Populated Images" << endl;
 
     // --- Port searches ---
 
@@ -937,7 +937,7 @@ bool SchemaUpdater::updateV4toV5()
 
     if (!createTriggersV5())
         return false;
-    DDebug(50003) << "Created triggers" << endl;
+    kDebug(50003) << "Created triggers" << endl;
 
     // --- Populate name filters ---
 
@@ -961,7 +961,7 @@ bool SchemaUpdater::updateV4toV5()
     configAudioFilter.subtract(defaultAudioFilter.toSet());
 
     m_access->db()->setUserFilterSettings(configImageFilter.toList(), configVideoFilter.toList(), configAudioFilter.toList());
-    DDebug(50003) << "Set initial filter settings with user settings" << configImageFilter << endl;
+    kDebug(50003) << "Set initial filter settings with user settings" << configImageFilter << endl;
 
     if (m_observer)
         m_observer->schemaUpdateProgress(i18n("Initialized and imported file suffix filter"));
@@ -1031,7 +1031,7 @@ bool SchemaUpdater::updateV4toV5()
         m_observer->schemaUpdateProgress(i18n("Dropped v3 tables"));
 
     m_currentVersion = 5;
-    DDebug(50003) << "Returning true from updating to 5" << endl;
+    kDebug(50003) << "Returning true from updating to 5" << endl;
     return true;
 }
 

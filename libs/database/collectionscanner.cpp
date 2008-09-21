@@ -409,7 +409,7 @@ int CollectionScanner::checkAlbum(const CollectionLocation &location, const QStr
         CollectionScannerHints::Album src = d->albumHints.value(CollectionScannerHints::DstPath(location.id(), album));
         if (!src.isNull())
         {
-            //DDebug(50003) << "Identified album" << src.albumId << "as source of new album" << fi.filePath();
+            //kDebug(50003) << "Identified album" << src.albumId << "as source of new album" << fi.filePath();
             DatabaseAccess().db()->copyAlbumProperties(src.albumId, albumID);
             d->establishedSourceAlbums[albumID] = src.albumId;
         }
@@ -497,7 +497,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
             }
             else
             {
-                //DDebug(50003) << "Adding item " << fi->fileName() << endl;
+                //kDebug(50003) << "Adding item " << fi->fileName() << endl;
 
                 scanNewFile(*fi, albumID);
             }
@@ -726,7 +726,7 @@ void CollectionScanner::removeStaleAlbums()
     QList<AlbumShortInfo>::const_iterator it;
     for (it = m_foldersToBeDeleted.constBegin(); it != m_foldersToBeDeleted.constEnd(); ++it)
     {
-        DDebug(50003) << "Removing album " << (*it).albumRoot + '/' + (*it).url << endl;
+        kDebug(50003) << "Removing album " << (*it).albumRoot + '/' + (*it).url << endl;
         access.db()->deleteAlbum((*it).id);
     }
 }
@@ -754,7 +754,7 @@ void CollectionScanner::removeStaleFiles()
     QList< QPair<QString,int> >::const_iterator it;
     for (it = m_filesToBeDeleted.constBegin(); it != m_filesToBeDeleted.constEnd(); ++it)
     {
-        DDebug(50003) << "Removing: " << (*it).first << " in "
+        kDebug(50003) << "Removing: " << (*it).first << " in "
                 << (*it).second << endl;
         access.db()->deleteItem( (*it).second, (*it).first );
     }
@@ -892,7 +892,7 @@ void CollectionScanner::scanAlbum(const QString &albumRoot, const QString& album
             }
             else
             {
-                DDebug(50003) << "Adding item " << fi->fileName() << endl;
+                kDebug(50003) << "Adding item " << fi->fileName() << endl;
                 addItem(albumID, albumRoot, album, fi->fileName());
             }
         }
@@ -1085,7 +1085,7 @@ void CollectionScanner::scanAlbum(const QString &albumRoot, const QString &album
 
 void CollectionScanner::scanOneAlbum(const QString &albumRoot, const QString &album)
 {
-    DDebug(50003) << "CollectionScanner::scanOneAlbum " << albumRoot << "/" << album << endl;
+    kDebug(50003) << "CollectionScanner::scanOneAlbum " << albumRoot << "/" << album << endl;
     QDir dir(albumRoot + album);
     if (!dir.exists() || !dir.isReadable())
     {
@@ -1099,7 +1099,7 @@ void CollectionScanner::scanOneAlbum(const QString &albumRoot, const QString &al
 
         // get sub albums, but only direct subalbums (Album/ *, not Album/ * / *)
         currAlbumList = DatabaseAccess().db()->getSubalbumsForPath(albumRoot, album, true);
-        DDebug(50003) << "currAlbumList is " << currAlbumList << endl;
+        kDebug(50003) << "currAlbumList is " << currAlbumList << endl;
 
         const QFileInfoList* infoList = dir.entryInfoList(QDir::Dirs);
         if (!infoList)
@@ -1131,7 +1131,7 @@ void CollectionScanner::scanOneAlbum(const QString &albumRoot, const QString &al
         for (QStringList::iterator it = newAlbumList.begin();
              it != newAlbumList.end(); ++it)
         {
-            DDebug(50003) << "New Album: " << *it << endl;
+            kDebug(50003) << "New Album: " << *it << endl;
 
             QFileInfo fi(albumRoot + *it);
             DatabaseAccess().db()->addAlbum(albumRoot, *it, QString(), fi.lastModified().date(), QString());
@@ -1212,7 +1212,7 @@ void CollectionScanner::removeInvalidAlbums(const QString &albumRoot)
     DatabaseTransaction transaction(&access);
     for (QValueList<AlbumShortInfo>::iterator it = toBeDeleted.begin(); it != toBeDeleted.end(); ++it)
     {
-        DDebug(50003) << "Removing album " << (*it).albumRoot + '/' + (*it).url << endl;
+        kDebug(50003) << "Removing album " << (*it).albumRoot + '/' + (*it).url << endl;
         access.db()->deleteAlbum((*it).id);
     }
 }

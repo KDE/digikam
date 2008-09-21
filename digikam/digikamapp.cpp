@@ -1507,7 +1507,7 @@ void DigikamApp::slotOpenSolidCamera(QAction *action)
         QString model, port;
         if (CameraList::findConnectedCamera(vendorId, productId, model, port))
         {
-            DDebug(50003) << "Found camera from ids " << vendorId << " " << productId << " camera is: " << model << " at " << port << endl;
+            kDebug(50003) << "Found camera from ids " << vendorId << " " << productId << " camera is: " << model << " at " << port << endl;
             // the CameraUI will delete itself when it has finished
             CameraUI* cgui = new CameraUI(this, action->text(), model,
                                           port, "/", QDateTime());
@@ -1644,7 +1644,7 @@ void DigikamApp::fillSolidMenus()
 
         QStringList drivers = camera->supportedDrivers();
 
-        DDebug(50003) << "fillSolidMenus: Found Camera " << cameraDevice.vendor() + ' ' + cameraDevice.product() << " protocols " << camera->supportedProtocols() << " drivers " << camera->supportedDrivers("ptp") << endl;
+        kDebug(50003) << "fillSolidMenus: Found Camera " << cameraDevice.vendor() + ' ' + cameraDevice.product() << " protocols " << camera->supportedProtocols() << " drivers " << camera->supportedDrivers("ptp") << endl;
 
         // We handle gphoto2 cameras in this loop
         if (! (camera->supportedDrivers().contains("gphoto") || camera->supportedProtocols().contains("ptp")) )
@@ -2142,12 +2142,12 @@ void DigikamApp::slotKipiPluginPlug()
                 }
                 else
                 {
-                    DDebug(50003) << "No menu found for a plugin!!!" << endl;
+                    kDebug(50003) << "No menu found for a plugin!!!" << endl;
                 }
             }
             else
             {
-                DDebug(50003) << "Plugin '" << actionName << "' disabled." << endl;
+                kDebug(50003) << "Plugin '" << actionName << "' disabled." << endl;
             }
         }
     }

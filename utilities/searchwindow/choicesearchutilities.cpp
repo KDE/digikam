@@ -226,7 +226,7 @@ void ChoiceSearchComboBox::setLabelText(const QString &text)
 
 void ChoiceSearchComboBox::labelClicked()
 {
-    DDebug(50003) << "labelClicked";
+    kDebug(50003) << "labelClicked";
     showPopup();
 }
 

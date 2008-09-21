@@ -788,7 +788,7 @@ void EditorWindow::loadImagePlugins()
             plugin->setEnabledSelectionActions(false);
         }
         else
-            DDebug(50003) << "Invalid plugin to add!" << endl;
+            kDebug(50003) << "Invalid plugin to add!" << endl;
     }
 }
 
@@ -1325,7 +1325,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
             return;
         }
 
-        DDebug(50003) << "renaming to " << m_savingContext->destinationURL.path() << endl;
+        kDebug(50003) << "renaming to " << m_savingContext->destinationURL.path() << endl;
 
         if (!moveFile())
         {
@@ -1368,7 +1368,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
 
         // Only try to write exif if both src and destination are jpeg files
 
-        DDebug(50003) << "renaming to " << m_savingContext->destinationURL.path() << endl;
+        kDebug(50003) << "renaming to " << m_savingContext->destinationURL.path() << endl;
 
         if (!moveFile())
         {
@@ -1459,7 +1459,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     writableMimetypes.insert(2, "image/tiff");
     writableMimetypes.insert(3, "image/jpeg2000");
 
-    DDebug () << "startingSaveAs: Offered mimetypes: " << writableMimetypes << endl;
+    kDebug(50003) << "startingSaveAs: Offered mimetypes: " << writableMimetypes << endl;
 
     // Determine the default mime type.
     // Determine mime type from image format of the src image

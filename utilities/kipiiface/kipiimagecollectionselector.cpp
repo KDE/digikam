@@ -306,7 +306,7 @@ QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollectio
          ++it3;
     }
 
-    DDebug(50003) << list.count() << " collection items selected" << endl;
+    kDebug(50003) << list.count() << " collection items selected" << endl;
 
     return list;
 }

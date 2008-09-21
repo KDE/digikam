@@ -28,12 +28,12 @@
 
 // Local includes.
 
-#include "ddebug.h"
-#include "albummanager.h"
 #include "albumdb.h"
+#include "albummanager.h"
 #include "collectionmanager.h"
 #include "databaseaccess.h"
 #include "databaseurl.h"
+#include "ddebug.h"
 #include "album.h"
 
 namespace Digikam

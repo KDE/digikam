@@ -1053,7 +1053,7 @@ void ICCProofTool::finalRendering()
             if (m_embeddProfileBox->isChecked())
             {
                 iface->setEmbeddedICCToOriginalImage( tmpSpacePath );
-                DDebug(50006) << QFile::encodeName(tmpSpacePath) << endl;
+                kDebug(50006) << QFile::encodeName(tmpSpacePath) << endl;
             }
 
             //-- Calculate and apply the curve on image after transformation -------------

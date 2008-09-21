@@ -54,7 +54,7 @@ ImagePlugin_RainDrop::ImagePlugin_RainDrop(QObject *parent, const QVariantList &
 
     setXMLFile( "digikamimageplugin_raindrop_ui.rc" );
 
-    DDebug(50006) << "ImagePlugin_RainDrop plugin loaded" << endl;
+    kDebug(50006) << "ImagePlugin_RainDrop plugin loaded" << endl;
 }
 
 ImagePlugin_RainDrop::~ImagePlugin_RainDrop()
