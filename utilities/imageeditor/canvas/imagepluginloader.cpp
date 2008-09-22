@@ -5,7 +5,7 @@
  *
  * Date        : 2004-06-04
  * Description : image plugins loader for image editor.
- * 
+ *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -44,12 +44,12 @@
 namespace Digikam
 {
 
-// List of obsolete image plugins name. 
+// List of obsolete image plugins name.
 
 static const char* ObsoleteImagePluginsList[] =
 {
-     "digikamimageplugin_blowup",         // Merged with "Resize" tool since 0.9.2.  
-     "digikamimageplugin_solarize",       // Renamed "ColorFx" since 0.9.2.  
+     "digikamimageplugin_blowup",         // Merged with "Resize" tool since 0.9.2.
+     "digikamimageplugin_solarize",       // Renamed "ColorFx" since 0.9.2.
      "digikamimageplugin_unsharp",        // Merged with "Sharpen" tool since 0.9.2.
      "digikamimageplugin_refocus",        // Merged with "Sharpen" tool since 0.9.2.
      "digikamimageplugin_despeckle",      // Renamed "Noise Reduction" since 0.9.2.
@@ -155,11 +155,11 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
         }
         else
         {
-            DWarning() << "ImagePluginLoader: createInstance returned 0 for "
-                       << corePlugin->name()
-                       << " (" << corePlugin->library() << ")"
-                       << " with error: "
-                       << error << endl;
+            kWarning(50003) << "ImagePluginLoader: createInstance returned 0 for "
+                            << corePlugin->name()
+                            << " (" << corePlugin->library() << ")"
+                            << " with error: "
+                            << error << endl;
         }
     }
 
@@ -188,17 +188,17 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
             }
             else
             {
-                DWarning() << "ImagePluginLoader: createInstance returned 0 for "
-                           << service->name()
-                           << " (" << service->library() << ")"
-                           << " with error: "
-                           << error << endl;
+                kWarning(50003) << "ImagePluginLoader: createInstance returned 0 for "
+                                << service->name()
+                                << " (" << service->library() << ")"
+                                << " with error: "
+                                << error << endl;
             }
         }
     }
 
     d->splash = 0;       // Splashcreen is only displayed at the first time.
-                         // If user change plugins list to use in setup, don't try to 
+                         // If user change plugins list to use in setup, don't try to
                          // use the old splashscreen instance.
 }
 

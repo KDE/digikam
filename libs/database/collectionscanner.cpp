@@ -15,12 +15,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // System includes.
@@ -227,7 +227,7 @@ void CollectionScanner::partialScan(const QString &albumRoot, const QString& alb
     if (album.isEmpty())
     {
         // If you want to scan the album root, pass "/"
-        DWarning() << "partialScan(QString, QString) called with empty album";
+        kWarning(50003) << "partialScan(QString, QString) called with empty album" << endl;
         return;
     }
 
@@ -246,7 +246,7 @@ void CollectionScanner::partialScan(const QString &albumRoot, const QString& alb
 
     if (location.isNull())
     {
-        DWarning() << "Did not find a CollectionLocation for album root path " << albumRoot << endl;
+        kWarning(50003) << "Did not find a CollectionLocation for album root path " << albumRoot << endl;
         return;
     }
 
@@ -267,7 +267,7 @@ void CollectionScanner::scanFile(const QString &albumRoot, const QString &album,
 
     if (location.isNull())
     {
-        DWarning() << "Did not find a CollectionLocation for album root path " << albumRoot << endl;
+        kWarning(50003) << "Did not find a CollectionLocation for album root path " << albumRoot << endl;
         return;
     }
 
@@ -429,8 +429,8 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
 
     if ( !dir.exists() or !dir.isReadable() )
     {
-        DWarning() << "Folder does not exist or is not readable: "
-                    << dir.path() << endl;
+        kWarning(50003) << "Folder does not exist or is not readable: "
+                        << dir.path() << endl;
         return;
     }
 
@@ -545,7 +545,7 @@ void CollectionScanner::scanNewFile(const QFileInfo &info, int albumId)
         if (srcId != 0)
             scanner.copiedFrom(albumId, srcId);
         else
-            // Establishing identity with the unique hsah 
+            // Establishing identity with the unique hsah
             scanner.newFile(albumId);
     }
 }
@@ -792,7 +792,7 @@ void CollectionScanner::scan(const QString& folderPath)
 
     if (albumRoot.isNull())
     {
-        DWarning() << "scanAlbums(QString): folder " << folderPath << " not found in collection." << endl;
+        kWarning(50003) << "scanAlbums(QString): folder " << folderPath << " not found in collection." << endl;
         return;
     }
 
@@ -848,8 +848,8 @@ void CollectionScanner::scanAlbum(const QString &albumRoot, const QString& album
     QDir dir( albumRoot + album );
     if ( !dir.exists() or !dir.isReadable() )
     {
-        DWarning() << "Folder does not exist or is not readable: "
-                    << dir.path() << endl;
+        kWarning(50003) << "Folder does not exist or is not readable: "
+                        << dir.path() << endl;
         return;
     }
 
@@ -941,7 +941,7 @@ void CollectionScanner::updateItemsWithoutDate()
 
             if (albumID <= 0)
             {
-                DWarning() << "Album ID == -1: " << albumURL << endl;
+                kWarning(50003) << "Album ID == -1: " << albumURL << endl;
             }
 
             if (fi.exists())
@@ -1027,7 +1027,7 @@ void CollectionScanner::addItem(Digikam::DatabaseAccess &access, int albumID,
 
     datetime = metadata.getImageDateTime();
 
-    // Try to get image rating from IPTC Urgency tag 
+    // Try to get image rating from IPTC Urgency tag
     // else use file system time stamp.
     rating = metadata.getImageRating();
 

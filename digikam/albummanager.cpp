@@ -874,10 +874,10 @@ void AlbumManager::scanTAlbums()
             }
             else
             {
-                DWarning() << "Failed to find parent tag for tag "
-                           << album->m_title
-                           << " with pid "
-                           << album->m_pid << endl;
+                kWarning(50003) << "Failed to find parent tag for tag "
+                                << album->m_title
+                                << " with pid "
+                                << album->m_pid << endl;
             }
         }
 
@@ -911,10 +911,10 @@ void AlbumManager::scanTAlbums()
         TagMap::iterator iter = tmap.find(info.pid);
         if (iter == tmap.end())
         {
-            DWarning() << "Failed to find parent tag for tag "
-                       << info.name
-                       << " with pid "
-                       << info.pid << endl;
+            kWarning(50003) << "Failed to find parent tag for tag "
+                            << info.name
+                            << " with pid "
+                            << info.pid << endl;
             continue;
         }
 
@@ -1896,7 +1896,7 @@ void AlbumManager::slotAlbumsJobResult(KJob* job)
 
     if (job->error())
     {
-        DWarning() << k_funcinfo << "Failed to list albums" << endl;
+        kWarning(50003) << k_funcinfo << "Failed to list albums" << endl;
         return;
     }
 }
@@ -1920,7 +1920,7 @@ void AlbumManager::slotTagsJobResult(KJob* job)
 
     if (job->error())
     {
-        DWarning() << k_funcinfo << "Failed to list tags" << endl;
+        kWarning(50003) << k_funcinfo << "Failed to list tags" << endl;
         return;
     }
 }
@@ -1944,7 +1944,7 @@ void AlbumManager::slotDatesJobResult(KJob* job)
 
     if (job->error())
     {
-        DWarning() << "Failed to list dates" << endl;
+        kWarning(50003) << "Failed to list dates" << endl;
         return;
     }
 

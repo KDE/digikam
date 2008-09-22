@@ -1172,7 +1172,7 @@ QMap<int, QString> DMetadata::possibleValuesForEnumField(MetadataInfo::Field fie
             //more: TODO?
             return map;
         default:
-            DWarning() << "Unsupported field " << field << " in DMetadata::possibleValuesForEnumField" << endl;
+            kWarning(50003) << "Unsupported field " << field << " in DMetadata::possibleValuesForEnumField" << endl;
             return map;
     }
 

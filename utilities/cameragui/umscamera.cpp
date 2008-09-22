@@ -245,7 +245,7 @@ bool UMSCamera::getExif(const QString&, const QString&, char **, int&)
 {
     // not necessary to implement this. read it directly from the file
     // (done in camera controller)
-    DWarning() << "exif implemented yet in camera controller" << endl;
+    kWarning(50003) << "exif implemented yet in camera controller" << endl;
     return false;
 }
 
@@ -261,16 +261,16 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
 
     if ( !sFile.open(QIODevice::ReadOnly) )
     {
-        DWarning() << "Failed to open source file for reading: "
-                    << src << endl;
+        kWarning(50003) << "Failed to open source file for reading: "
+                        << src << endl;
         return false;
     }
 
     if ( !dFile.open(QIODevice::WriteOnly) )
     {
         sFile.close();
-        DWarning() << "Failed to open dest file for writing: "
-                    << dest << endl;
+        kWarning(50003) << "Failed to open dest file for writing: "
+                        << dest << endl;
         return false;
     }
 
@@ -360,16 +360,16 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
 
     if ( !sFile.open(QIODevice::ReadOnly) )
     {
-        DWarning() << "Failed to open source file for reading: "
-                    << src << endl;
+        kWarning(50003) << "Failed to open source file for reading: "
+                        << src << endl;
         return false;
     }
 
     if ( !dFile.open(QIODevice::WriteOnly) )
     {
         sFile.close();
-        DWarning() << "Failed to open dest file for writing: "
-                    << dest << endl;
+        kWarning(50003) << "Failed to open dest file for writing: "
+                        << dest << endl;
         return false;
     }
 

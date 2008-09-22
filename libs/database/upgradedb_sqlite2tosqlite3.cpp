@@ -103,7 +103,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
     access.db()->setDBPath(newDB);
     if (!access.db()->isValid())
     {
-        DWarning() << "Failed to open new Album Database" << endl;
+        kWarning(50003) << "Failed to open new Album Database" << endl;
         return false;
     }
     */
@@ -372,8 +372,8 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         if (list.size() != 1)
         {
             DError() << "Failed" << endl;
-            DWarning() << "" << endl;
-            DWarning() << "Consistency check failed for Album: "
+            kWarning(50003) << "" << endl;
+            kWarning(50003) << "Consistency check failed for Album: "
                        << album.url << endl;
             return false;
         }
@@ -405,8 +405,8 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         if (list.size() != 1)
         {
             DError() << "Failed" << endl;
-            DWarning() << "" << endl;
-            DWarning() << "Consistency check failed for Tag: "
+            kWarning(50003) << "" << endl;
+            kWarning(50003) << "Consistency check failed for Tag: "
                        << name << endl;
             return false;
         }
@@ -440,8 +440,8 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         if (list.size() != 1)
         {
             DError() << "Failed" << endl;
-            DWarning() << "" << endl;
-            DWarning() << "Consistency check failed for Image: "
+            kWarning(50003) << "" << endl;
+            kWarning(50003) << "Consistency check failed for Image: "
                        << url << ", " << name << ", " << caption  << endl;
             return false;
         }
@@ -477,8 +477,8 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         if (list.size() != 1)
         {
             DError() << "Failed" << endl;
-            DWarning() << "" << endl;
-            DWarning() << "Consistency check failed for ImageTag: "
+            kWarning(50003) << "" << endl;
+            kWarning(50003) << "Consistency check failed for ImageTag: "
                        << url << ", " << name << ", " << tagid << endl;
             return false;
         }
@@ -509,8 +509,8 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         if (list.size() != 1)
         {
             DError() << "Failed" << endl;
-            DWarning() << "" << endl;
-            DWarning() << "Consistency check failed for Album Icon: "
+            kWarning(50003) << "" << endl;
+            kWarning(50003) << "Consistency check failed for Album Icon: "
                        << url << ", " << icon << endl;
 
             return false;
@@ -544,8 +544,8 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
             if (list.size() != 1)
             {
                 DError() << "Failed" << endl;
-                DWarning() << "" << endl;
-                DWarning() << "Consistency check failed for Tag Icon: "
+                kWarning(50003) << "" << endl;
+                kWarning(50003) << "Consistency check failed for Tag Icon: "
                            << id << ", " << icon << endl;
 
                 return false;
@@ -566,8 +566,8 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
                     .arg(access.backend()->escapeString(url)), &list);
             if (list.isEmpty())
             {
-                DWarning() << "Tag icon not in Album Library Path, Rejecting " << endl;
-                DWarning() << "(" << icon << ")" << endl;
+                kWarning(50003) << "Tag icon not in Album Library Path, Rejecting " << endl;
+                kWarning(50003) << "(" << icon << ")" << endl;
                 continue;
             }
 
@@ -583,8 +583,8 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
             if (list.size() != 1)
             {
                 DError() << "Failed." << endl;
-                DWarning() << "" << endl;
-                DWarning() << "Consistency check failed for Tag Icon: "
+                kWarning(50003) << "" << endl;
+                kWarning(50003) << "Consistency check failed for Tag Icon: "
                            << id << ", " << icon << endl;
 
                 return false;

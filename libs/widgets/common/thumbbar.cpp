@@ -412,9 +412,9 @@ bool ThumbBarView::pixmapForItem(ThumbBarItem *item, QPixmap &pix) const
         bool hasPixmap = d->thumbLoadThread->find(item->url().path(), pix, d->maxTileSize);
         if (hasPixmap)
         {
-            DWarning() << "Thumbbar: Requested thumbnail size" << d->tileSize
-                       << "is larger than the maximum thumbnail size" << d->maxTileSize
-                       << ". Returning a scaled-up image.";
+            kWarning(50003) << "Thumbbar: Requested thumbnail size" << d->tileSize
+                            << "is larger than the maximum thumbnail size" << d->maxTileSize
+                            << ". Returning a scaled-up image." << endl;
             pix = pix.scaled(d->tileSize, d->tileSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
             return true;
         }

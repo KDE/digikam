@@ -330,8 +330,8 @@ void TagFolderView::slotAlbumAdded(Album *album)
 
         if (!parent)
         {
-            DWarning() << " Failed to find parent for Tag "
-                       << tag->title() << endl;
+            kWarning(50003) << " Failed to find parent for Tag "
+                            << tag->title() << endl;
             return;
         }
 
@@ -880,8 +880,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         srcAlbum = d->albumMan->findTAlbum(albumID);
         if (!srcAlbum)
         {
-            DWarning() << "Could not find source album of drag"
-                       << endl;
+            kWarning(50003) << "Could not find source album of drag" << endl;
             return;
         }
 

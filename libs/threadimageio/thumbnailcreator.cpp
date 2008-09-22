@@ -137,7 +137,7 @@ QImage ThumbnailCreator::load(const QString &path)
     if (d->cachedSize <= 0)
     {
         d->error = i18n("No or invalid size specified");
-        DWarning() << "No or invalid size specified" << endl;
+        kWarning(50003) << "No or invalid size specified" << endl;
         return QImage();
     }
 
@@ -230,7 +230,7 @@ QImage ThumbnailCreator::load(const QString &path)
         if (qimage.isNull())
         {
             d->error = i18n("Cannot create thumbnail for %1", path);
-            DWarning() << "Cannot create thumbnail for " << path << endl;
+            kWarning(50003) << "Cannot create thumbnail for " << path << endl;
             return QImage();
         }
 
@@ -266,7 +266,7 @@ QImage ThumbnailCreator::load(const QString &path)
     if (qimage.isNull())
     {
         d->error = i18n("Thumbnail is null");
-        DWarning() << "Thumbnail is null for " << path << endl;
+        kWarning(50003) << "Thumbnail is null for " << path << endl;
     }
 
     return qimage;

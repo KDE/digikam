@@ -210,7 +210,7 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
             TreeAlbumCheckListItem* pitem = (TreeAlbumCheckListItem*)(album->parent()->extraData(view));
             if (!pitem)
             {
-                DWarning() << "Failed to find parent for Album " << album->title() << endl;
+                kWarning(50003) << "Failed to find parent for Album " << album->title() << endl;
                 continue;
             }
 

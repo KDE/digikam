@@ -5,29 +5,29 @@
  *
  * Date        : 2005-24-01
  * Description : misc image filters
- * 
+ *
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Original Equalise and StretchContrast Algorithms copyright 2002
  * by Daniel M. Duley <mosfet@kde.org> from KImageEffect API.
  *
- * Original Normalize Image algorithm copyrighted 1997 by 
+ * Original Normalize Image algorithm copyrighted 1997 by
  * Adam D. Moss <adam@foxbox.org> from Gimp 2.0 implementation.
  *
- * Original channel mixer algorithm copyrighted 2002 by 
- * Martin Guldahl <mguldahl at xmission dot com> from Gimp 2.2 
- * 
+ * Original channel mixer algorithm copyrighted 2002 by
+ * Martin Guldahl <mguldahl at xmission dot com> from Gimp 2.2
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ includes.
@@ -61,7 +61,7 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
 {
     if (!data || !w || !h)
     {
-       DWarning() << ("DImgImageFilters::equalizeImage: no image data available!") << endl;
+       kWarning(50003) << ("DImgImageFilters::equalizeImage: no image data available!") << endl;
        return;
     }
 
@@ -89,7 +89,7 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
        if(equalize_map)
            delete [] equalize_map;
 
-       DWarning() << ("DImgImageFilters::equalizeImage: Unable to allocate memory!") << endl;
+       kWarning(50003) << ("DImgImageFilters::equalizeImage: Unable to allocate memory!") << endl;
        return;
     }
 
@@ -211,7 +211,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 {
     if (!data || !w || !h)
     {
-       DWarning() << ("DImgImageFilters::stretchContrastImage: no image data available!") << endl;
+       kWarning(50003) << ("DImgImageFilters::stretchContrastImage: no image data available!") << endl;
        return;
     }
 
@@ -236,7 +236,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        if(normalize_map)
            delete [] normalize_map;
 
-       DWarning() << ("DImgImageFilters::stretchContrastImage: Unable to allocate memory!") << endl;
+       kWarning(50003) << ("DImgImageFilters::stretchContrastImage: Unable to allocate memory!") << endl;
        return;
     }
 
@@ -248,7 +248,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
     memset(&high, 0, sizeof(struct double_packet));
     memset(&low,  0, sizeof(struct double_packet));
 
-    // Red. 
+    // Red.
 
     memset(&intensity, 0, sizeof(struct double_packet));
 
@@ -497,8 +497,8 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
     delete [] normalize_map;
 }
 
-/** This method scales brightness values across the active 
-    image so that the darkest point becomes black, and the 
+/** This method scales brightness values across the active
+    image so that the darkest point becomes black, and the
     brightest point becomes as bright as possible without
     altering its hue. This is often a magic fix for
     images that are dim or washed out.*/
@@ -622,15 +622,14 @@ void DImgImageFilters::normalizeImage(uchar *data, int w, int h, bool sixteenBit
 
 /** Performs histogram auto correction of levels.
     This method maximizes the tonal range in the Red,
-    Green, and Blue channels. It search the image shadow and highlight 
+    Green, and Blue channels. It search the image shadow and highlight
     limit values and adjust the Red, Green, and Blue channels
     to a full histogram range.*/
 void DImgImageFilters::autoLevelsCorrectionImage(uchar *data, int w, int h, bool sixteenBit)
 {
     if (!data || !w || !h)
     {
-       DWarning() << ("DImgImageFilters::autoLevelsCorrectionImage: no image data available!")
-                   << endl;
+       kWarning(50003) << ("DImgImageFilters::autoLevelsCorrectionImage: no image data available!") << endl;
        return;
     }
     uchar* desData;
@@ -673,8 +672,7 @@ void DImgImageFilters::invertImage(uchar *data, int w, int h, bool sixteenBit)
 {
     if (!data || !w || !h)
     {
-       DWarning() << ("DImgImageFilters::invertImage: no image data available!")
-                   << endl;
+       kWarning(50003) << ("DImgImageFilters::invertImage: no image data available!") << endl;
        return;
     }
 
@@ -715,8 +713,7 @@ void DImgImageFilters::channelMixerImage(uchar *data, int Width, int Height, boo
 {
     if (!data || !Width || !Height)
     {
-       DWarning() << ("DImgImageFilters::channelMixerImage: no image data available!")
-                  << endl;
+       kWarning(50003) << ("DImgImageFilters::channelMixerImage: no image data available!") << endl;
        return;
     }
 
@@ -739,20 +736,20 @@ void DImgImageFilters::channelMixerImage(uchar *data, int Width, int Height, boo
 
             if (bMonochrome)
             {
-                nGray = MixPixel (rrGain, rgGain, rbGain, 
+                nGray = MixPixel (rrGain, rgGain, rbGain,
                                   (unsigned short)red, (unsigned short)green, (unsigned short)blue,
                                   sixteenBit, rnorm);
                 ptr[0] = ptr[1] = ptr[2] = nGray;
             }
             else
             {
-                ptr[0] = (uchar)MixPixel (brGain, bgGain, bbGain, 
+                ptr[0] = (uchar)MixPixel (brGain, bgGain, bbGain,
                                           (unsigned short)red, (unsigned short)green, (unsigned short)blue,
                                           sixteenBit, bnorm);
-                ptr[1] = (uchar)MixPixel (grGain, ggGain, gbGain, 
+                ptr[1] = (uchar)MixPixel (grGain, ggGain, gbGain,
                                           (unsigned short)red, (unsigned short)green, (unsigned short)blue,
                                           sixteenBit, gnorm);
-                ptr[2] = (uchar)MixPixel (rrGain, rgGain, rbGain, 
+                ptr[2] = (uchar)MixPixel (rrGain, rgGain, rbGain,
                                           (unsigned short)red, (unsigned short)green, (unsigned short)blue,
                                           sixteenBit, rnorm);
             }
@@ -794,8 +791,7 @@ void DImgImageFilters::changeTonality(uchar *data, int width, int height, bool s
 {
     if (!data || !width || !height)
     {
-       DWarning() << ("DImgImageFilters::changeTonality: no image data available!")
-                   << endl;
+       kWarning(50003) << ("DImgImageFilters::changeTonality: no image data available!") << endl;
        return;
     }
 
@@ -848,8 +844,7 @@ void DImgImageFilters::gaussianBlurImage(uchar *data, int width, int height, boo
 {
     if (!data || !width || !height)
     {
-       DWarning() << ("DImgImageFilters::gaussianBlurImage: no image data available!")
-                   << endl;
+       kWarning(50003) << ("DImgImageFilters::gaussianBlurImage: no image data available!") << endl;
        return;
     }
 
@@ -869,8 +864,7 @@ void DImgImageFilters::sharpenImage(uchar *data, int width, int height, bool six
 {
     if (!data || !width || !height)
     {
-       DWarning() << ("DImgImageFilters::sharpenImage: no image data available!")
-                   << endl;
+       kWarning(50003) << ("DImgImageFilters::sharpenImage: no image data available!") << endl;
        return;
     }
 

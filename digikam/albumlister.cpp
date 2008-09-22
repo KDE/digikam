@@ -552,7 +552,7 @@ void AlbumLister::slotResult(KJob* job)
 
     if (job->error())
     {
-        DWarning() << "Failed to list url: " << job->errorString() << endl;
+        kWarning(50003) << "Failed to list url: " << job->errorString() << endl;
         d->itemMap.clear();
         d->invalidatedItems.clear();
         return;

@@ -57,7 +57,7 @@ KipiImageCollection::KipiImageCollection(Type tp, Album *album, const QString& f
 
     if (!album)
     {
-        DWarning() << "This should not happen. No album specified" << endl;
+        kWarning(50003) << "This should not happen. No album specified" << endl;
     }
 }
 
@@ -141,7 +141,7 @@ KUrl::List KipiImageCollection::images()
         }
             else
             {
-                DWarning() << "Unknown album type" << endl;
+                kWarning(50003) << "Unknown album type" << endl;
                 return KUrl::List();
             }
 
@@ -239,7 +239,7 @@ KUrl KipiImageCollection::path()
     }
     else
     {
-        DWarning() << "Requesting kurl from a virtual album" << endl;
+        kWarning(50003) << "Requesting kurl from a virtual album" << endl;
         return QString();
     }
 }
@@ -255,7 +255,7 @@ KUrl KipiImageCollection::uploadPath()
     }
     else
     {
-        DWarning() << "Requesting kurl from a virtual album" << endl;
+        kWarning(50003) << "Requesting kurl from a virtual album" << endl;
         return KUrl();
     }
 }

@@ -1270,7 +1270,7 @@ void EditorWindow::slotLoadingFinished(const QString& filename, bool success)
         QFileInfo fi(filename);
         QString message = i18n("Failed to load image \"%1\"",fi.fileName());
         KMessageBox::error(this, message);
-        DWarning() << "Failed to load image " << fi.fileName() << endl;
+        kWarning(50003) << "Failed to load image " << fi.fileName() << endl;
     }
 }
 
@@ -1551,7 +1551,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
             if ( !imgExtList.contains( m_savingContext->format.toUpper() ) )
             {
                 KMessageBox::error(this, i18n("Target image file format \"%1\" unsupported.", m_savingContext->format));
-                DWarning() << "target image file format " << m_savingContext->format << " unsupported!" << endl;
+                kWarning(50003) << "target image file format " << m_savingContext->format << " unsupported!" << endl;
                 return false;
             }
         }
@@ -1562,7 +1562,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to\n\"%2\".",
                                       newURL.fileName(),
                                       newURL.path().section('/', -2, -2)));
-        DWarning() << "target URL is not valid !" << endl;
+        kWarning(50003) << "target URL is not valid !" << endl;
         return false;
     }
 
@@ -1688,7 +1688,7 @@ bool EditorWindow::moveFile()
     // restore permissions
     if (::chmod(dstFileName, filePermissions) != 0)
     {
-        DWarning() << "Failed to restore file permissions for file " << dstFileName << endl;
+        kWarning(50003) << "Failed to restore file permissions for file " << dstFileName << endl;
     }
 
     return true;

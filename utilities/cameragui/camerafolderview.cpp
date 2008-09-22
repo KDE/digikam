@@ -126,8 +126,8 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
     }
     else
     {
-        DWarning() << "CameraFolderView: Could not find parent for subFolder "
-                   << subFolder << " of folder " << folder << endl;
+        kWarning(50003) << "CameraFolderView: Could not find parent for subFolder "
+                        << subFolder << " of folder " << folder << endl;
         return 0;
     }
 }

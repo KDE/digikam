@@ -668,7 +668,7 @@ void DImgInterface::slotImageSaved(const QString& filePath, bool success)
         return;
 
     if (!success)
-        DWarning() << "error saving image '" << QFile::encodeName(filePath).data() << endl;
+        kWarning(50003) << "error saving image '" << QFile::encodeName(filePath).data() << endl;
 
     emit signalImageSaved(filePath, success);
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
@@ -1100,7 +1100,7 @@ DImg* DImgInterface::getImg()
     }
     else
     {
-        DWarning() << "d->image is NULL" << endl;
+        kWarning(50003) << "d->image is NULL" << endl;
         return 0;
     }
 }
@@ -1113,7 +1113,7 @@ uchar* DImgInterface::getImage()
     }
     else
     {
-        DWarning() << "d->image is NULL" << endl;
+        kWarning(50003) << "d->image is NULL" << endl;
         return 0;
     }
 }
@@ -1138,13 +1138,13 @@ void DImgInterface::putImage(uchar* data, int w, int h, bool sixteenBit)
 {
     if (d->image.isNull())
     {
-       DWarning() << "d->image is NULL" << endl;
+       kWarning(50003) << "d->image is NULL" << endl;
        return;
     }
 
     if (!data)
     {
-       DWarning() << "New image is NULL" << endl;
+       kWarning(50003) << "New image is NULL" << endl;
        return;
     }
 
@@ -1171,7 +1171,7 @@ void DImgInterface::setEmbeddedICCToOriginalImage( QString profilePath)
 {
     if (d->image.isNull())
     {
-        DWarning() << "d->image is NULL" << endl;
+        kWarning(50003) << "d->image is NULL" << endl;
         return;
     }
 
@@ -1255,7 +1255,7 @@ QString DImgInterface::getImageFormat()
     // It is a bug in the loader if format attribute is not given
     if (mimeType.isEmpty())
     {
-        DWarning() << "DImg object does not contain attribute \"format\"" << endl;
+        kWarning(50003) << "DImg object does not contain attribute \"format\"" << endl;
         mimeType = QImageReader::imageFormat(d->filename);
     }
     return mimeType;

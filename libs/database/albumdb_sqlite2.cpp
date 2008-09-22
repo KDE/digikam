@@ -5,7 +5,7 @@
  *
  * Date        : 2004-06-18
  * Description : SQlite version 2 database interface.
- * 
+ *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
 
  * This program is free software; you can redistribute it
@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C Ansi includes.
@@ -74,8 +74,7 @@ void AlbumDB_Sqlite2::setDBPath(const QString& path)
     m_db = sqlite_open(QFile::encodeName(path), 0, &errMsg);
     if (m_db == 0)
     {
-        DWarning() << "Cannot open database: "
-                    << errMsg << endl;
+        kWarning(50003) << "Cannot open database: " << errMsg << endl;
         free(errMsg);
         return;
     }
@@ -92,8 +91,7 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
         kDebug(50003) << "SQL-query: " << sql << endl;
 
     if ( !m_db ) {
-        DWarning() << "SQLite pointer == NULL"
-                    << endl;
+        kWarning(50003) << "SQLite pointer == NULL" << endl;
         return false;
     }
 
@@ -101,14 +99,14 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
     sqlite_vm* vm;
     char* errorStr;
     int error;
-    
+
     //compile SQL program to virtual machine
     error = sqlite_compile( m_db, QFile::encodeName(sql), &tail, &vm, &errorStr );
 
     if ( error != SQLITE_OK ) {
-        DWarning() << "sqlite_compile error: "
-                    << errorStr 
-                    << " on query: " << sql << endl;
+        kWarning(50003) << "sqlite_compile error: "
+                        << errorStr
+                        << " on query: " << sql << endl;
         sqlite_freemem( errorStr );
         return false;
     }
@@ -126,14 +124,14 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
             *values << QString::fromLocal8Bit( value [i] );
         }
     }
-    
+
     //deallocate vm resources
     sqlite_finalize( vm, &errorStr );
 
     if ( error != SQLITE_DONE ) {
-        DWarning() << "sqlite_step error: "
-                    << errorStr
-                    << " on query: " << sql << endl;
+        kWarning(50003) << "sqlite_step error: "
+                        << errorStr
+                        << " on query: " << sql << endl;
         return false;
     }
 

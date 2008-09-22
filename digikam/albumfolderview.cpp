@@ -383,8 +383,8 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
     AlbumFolderViewItem* parent = findParent(palbum, failed);
     if (failed)
     {
-        DWarning() << " Failed to find Album parent "
-                   << palbum->albumPath() << endl;
+        kWarning(50003) << " Failed to find Album parent "
+                        << palbum->albumPath() << endl;
         return;
     }
 
@@ -664,7 +664,7 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     AlbumSettings* settings = AlbumSettings::instance();
     if(!settings)
     {
-        DWarning() << "AlbumFolderView: Could not get Album Settings" << endl;
+        kWarning(50003) << "AlbumFolderView: Could not get Album Settings" << endl;
         return;
     }
 

@@ -194,7 +194,7 @@ void KipiInterface::delImage( const KUrl& url )
     KUrl rootURL(CollectionManager::instance()->albumRoot(url));
     if ( !rootURL.isParentOf(url) )
     {
-        DWarning() << "URL not in the album library" << endl;
+        kWarning(50003) << "URL not in the album library" << endl;
     }
 
     // Is there a PAlbum for this url
@@ -208,7 +208,7 @@ void KipiInterface::delImage( const KUrl& url )
     }
     else
     {
-        DWarning() << "Cannot find Parent album in the album library" << endl;
+        kWarning(50003) << "Cannot find Parent album in the album library" << endl;
     }
 }
 

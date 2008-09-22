@@ -189,7 +189,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     d->recentTagsBtn      = new QToolButton(tagsSearch);
     QMenu *recentTagsMenu = new QMenu(d->recentTagsBtn);
     d->recentTagsBtn->setToolTip( i18n("Recent Tags"));
-    d->recentTagsBtn->setIcon(KIconLoader::global()->loadIcon("tag-recents", 
+    d->recentTagsBtn->setIcon(KIconLoader::global()->loadIcon("tag-recents",
                               KIconLoader::NoGroup, KIconLoader::SizeSmall));
     d->recentTagsBtn->setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
     d->recentTagsBtn->setMenu(recentTagsMenu);
@@ -345,7 +345,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group(QString("Tag List View"));
-    d->toggleAutoTags = (TagFilterView::ToggleAutoTags)(group.readEntry("Toggle Auto Tags", 
+    d->toggleAutoTags = (TagFilterView::ToggleAutoTags)(group.readEntry("Toggle Auto Tags",
                                                        (int)TagFilterView::NoToggleAuto));
 }
 
@@ -479,7 +479,7 @@ void ImageDescEditTab::slotApplyAllChanges()
     // remove before final release
     if (d->ignoreImageAttributesWatch)
     {
-        DWarning() << "ImageDescEditTab::slotApplyAllChanges(): re-entering from event loop!" << endl;
+        kWarning(50003) << "ImageDescEditTab::slotApplyAllChanges(): re-entering from event loop!" << endl;
     }
 
     // we are now changing attributes ourselves
@@ -598,7 +598,7 @@ void ImageDescEditTab::setInfos(const ImageInfoList &infos)
 
 void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
 {
-    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                i18n("Reading metadata from files. Please wait..."));
 
     d->ignoreImageAttributesWatch = true;
@@ -630,7 +630,7 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
 
 void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
 {
-    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                i18n("Writing metadata to files. Please wait..."));
     MetadataWriteSettings writeSettings = MetadataHub::defaultWriteSettings();
 
@@ -1155,7 +1155,7 @@ void ImageDescEditTab::tagDelete(TAlbum *album)
                              "Deleting this will also delete "
                              "the subtags. "
                              "Do you want to continue?",
-                             children, 
+                             children,
                              album->title()));
 
         if(result != KMessageBox::Continue)
@@ -1179,7 +1179,7 @@ void ImageDescEditTab::tagDelete(TAlbum *album)
 
     int result = KMessageBox::warningContinueCancel(this, message,
                                                     i18n("Delete Tag"),
-                                                    KGuiItem(i18n("Delete"), 
+                                                    KGuiItem(i18n("Delete"),
                                                     "edit-delete"));
 
     if (result == KMessageBox::Continue)
@@ -1242,8 +1242,7 @@ void ImageDescEditTab::slotAlbumAdded(Album* a)
         TAlbumCheckListItem* parent = (TAlbumCheckListItem*)(tag->parent()->extraData(d->tagsView));
         if (!parent)
         {
-            DWarning() << "Failed to find parent for Tag " << tag->title()
-                       << endl;
+            kWarning(50003) << "Failed to find parent for Tag " << tag->title() << endl;
             return;
         }
 
@@ -1330,8 +1329,8 @@ void ImageDescEditTab::slotAlbumRenamed(Album* a)
     TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)(album->extraData(d->tagsView));
     if (!viewItem)
     {
-        DWarning() << "Failed to find view item for Tag "
-                   << album->title() << endl;
+        kWarning(50003) << "Failed to find view item for Tag "
+                        << album->title() << endl;
         return;
     }
 
@@ -1708,7 +1707,7 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
             {
                 if (!tag->isRoot())
                 {
-                    // only if the current item is not marked as tagged, check all children 
+                    // only if the current item is not marked as tagged, check all children
                     MetadataHub::TagStatus status = d->hub.tagStatus(item->album());
                     bool tagAssigned = (status == MetadataHub::MetadataAvailable && status.hasTag)
                                         || status == MetadataHub::MetadataDisjoint;
@@ -1730,7 +1729,7 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
                             }
                             ++tmpIt;
                         }
-                        if (!somethingIsSet) 
+                        if (!somethingIsSet)
                         {
                             item->setVisible(false);
                         }
@@ -1764,7 +1763,7 @@ void ImageDescEditTab::slotCreateNewTag()
 
     TAlbum *mainRootAlbum     = 0;
     TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(d->tagsView->selectedItem());
-    if (item) 
+    if (item)
         mainRootAlbum = item->album();
 
     QMap<QString, QString> errMap;

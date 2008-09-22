@@ -161,7 +161,7 @@ void MetadataHub::load(const ImageInfo &info)
             TAlbum *album = man->findTAlbum(*it);
             if (!album)
             {
-                DWarning() << "Tag id " << *it << " not found in database." << endl;
+                kWarning(50003) << "Tag id " << *it << " not found in database." << endl;
                 continue;
             }
             loadedTags << album;
@@ -223,7 +223,7 @@ void MetadataHub::load(const DMetadata &metadata)
                 TAlbum *album = man->findTAlbum(*it);
                 if (!album)
                 {
-                    DWarning() << "Tag id " << *it << " not found in database. Use NewTagsImport mode?" << endl;
+                    kWarning(50003) << "Tag id " << *it << " not found in database. Use NewTagsImport mode?" << endl;
                     continue;
                 }
                 loadedTags << album;
@@ -857,7 +857,7 @@ void MetadataHub::setTag(int albumID, bool hasTag, Status status)
     TAlbum *album = AlbumManager::instance()->findTAlbum(albumID);
     if (!album)
     {
-        DWarning() << "Tag ID " << albumID << " not found in database." << endl;
+        kWarning(50003) << "Tag ID " << albumID << " not found in database." << endl;
         return;
     }
     setTag(album, hasTag, status);

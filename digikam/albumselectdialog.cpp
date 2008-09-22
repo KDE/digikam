@@ -6,7 +6,7 @@
  * Date        : 2005-06-16
  * Description : a dialog to select a target album to download
  *               pictures from camera
- * 
+ *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -185,7 +185,7 @@ void AlbumSelectDialog::populateTreeView(PAlbum *albumToSelect)
             TreeAlbumItem* pitem = (TreeAlbumItem*)(album->parent()->extraData(d->folderView));
             if (!pitem)
             {
-                DWarning() << "Failed to find parent for Album " << album->title() << endl;
+                kWarning(50003) << "Failed to find parent for Album " << album->title() << endl;
                 continue;
             }
 
@@ -217,8 +217,8 @@ void AlbumSelectDialog::slotAlbumAdded(Album* album)
 
     if (!parentItem)
     {
-        DWarning() << "Failed to find parent for Album "
-                   << album->title() << endl;
+        kWarning(50003) << "Failed to find parent for Album "
+                        << album->title() << endl;
         return;
     }
 

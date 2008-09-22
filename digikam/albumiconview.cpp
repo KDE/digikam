@@ -400,8 +400,8 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
         PAlbum *album = AlbumManager::instance()->findPAlbum(it->albumId());
         if (!album)
         {
-            DWarning() << "No album for item: " << it->name()
-                       << ", albumID: " << it->albumId() << endl;
+            kWarning(50003) << "No album for item: " << it->name()
+                            << ", albumID: " << it->albumId() << endl;
             continue;
         }
 

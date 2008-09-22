@@ -451,7 +451,7 @@ void ImageRegionWidget::setContentsSize()
             break;
         }
         default:
-            DWarning() << "Unknown separation view specified" << endl;
+            kWarning(50003) << "Unknown separation view specified" << endl;
     }
 }
 

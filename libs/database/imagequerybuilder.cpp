@@ -921,7 +921,7 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader,
     }
     else if (name == "similarity")
     {
-        DWarning() << "Search field \"similarity\" is not supported by ImageQueryBuilder";
+        kWarning(50003) << "Search field \"similarity\" is not supported by ImageQueryBuilder" << endl;
     }
 }
 
@@ -1229,8 +1229,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *b
         }
         else
         {
-            DWarning() << "Unknown rule type: " << key << " passed to kioslave"
-                        << endl;
+            kWarning(50003) << "Unknown rule type: " << key << " passed to kioslave" << endl;
             continue;
         }
 
@@ -1252,8 +1251,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *b
             rule.op = NLIKE;
         else
         {
-            DWarning() << "Unknown op type: " << op << " passed to kioslave"
-                        << endl;
+            kWarning(50003) << "Unknown op type: " << op << " passed to kioslave" << endl;
             continue;
         }
 
@@ -1433,7 +1431,7 @@ QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
         }
         case (KEYWORD):
         {
-            DWarning() << "KEYWORD Detected which is not possible" << endl;
+            kWarning(50003) << "KEYWORD Detected which is not possible" << endl;
             break;
         }
         case(RATING):

@@ -182,7 +182,7 @@ void ImageHistogram::calculate()
 
     if ( !d->histogram )
     {
-        DWarning() << ("HistogramWidget::calcHistogramValues: Unable to allocate memory!") << endl;
+        kWarning(50003) << ("HistogramWidget::calcHistogramValues: Unable to allocate memory!") << endl;
         emit calculationFinished(this, false);
         return;
     }

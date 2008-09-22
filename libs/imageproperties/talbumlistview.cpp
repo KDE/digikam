@@ -318,8 +318,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         srcAlbum    = AlbumManager::instance()->findTAlbum(albumID);
         if (!srcAlbum)
         {
-            DWarning() << "Could not find source album of drag"
-                       << endl;
+            kWarning(50003) << "Could not find source album of drag" << endl;
             return;
         }
 
@@ -379,7 +378,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
 
         if (assign)
         {
-            emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+            emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                        i18n("Assign tag to images. Please wait..."));
 
             int i = 0;

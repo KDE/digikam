@@ -349,7 +349,7 @@ bool exifRotate(const QString& file, const QString& documentName)
         input_file = fopen(in, "rb");
         if (!input_file)
         {
-            DWarning() << "ExifRotate: Error in opening input file: " << input_file << endl;
+            kWarning(50003) << "ExifRotate: Error in opening input file: " << input_file << endl;
             return false;
         }
     
@@ -357,7 +357,7 @@ bool exifRotate(const QString& file, const QString& documentName)
         if (!output_file)
         {
             fclose(input_file);
-            DWarning() << "ExifRotate: Error in opening output file: " << output_file  << endl;
+            kWarning(50003) << "ExifRotate: Error in opening output file: " << output_file  << endl;
             return false;
         }
     

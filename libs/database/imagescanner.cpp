@@ -544,7 +544,7 @@ QString ImageScanner::detectFormat()
                 }
             }
             else
-                DWarning() << "Detecting file format: KMimeType for" << m_fileInfo.path() << "is null";
+                kWarning(50003) << "Detecting file format: KMimeType for" << m_fileInfo.path() << "is null" << endl;
 
             QByteArray format = QImageReader::imageFormat(m_fileInfo.fileName());
             if (!format.isEmpty())

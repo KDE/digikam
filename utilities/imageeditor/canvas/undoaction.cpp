@@ -82,7 +82,7 @@ void UndoActionRotate::rollBack()
             m_iface->rotate90(false);
             return;
         default:
-            DWarning() << "Unknown rotate angle specified" << endl;
+            kWarning(50003) << "Unknown rotate angle specified" << endl;
     }
 }
 
@@ -100,7 +100,7 @@ void UndoActionRotate::execute()
             m_iface->rotate270(false);
             return;
         default:
-            DWarning() << "Unknown rotate angle specified" << endl;
+            kWarning(50003) << "Unknown rotate angle specified" << endl;
     }
 }
 
@@ -129,7 +129,7 @@ void UndoActionFlip::rollBack()
             m_iface->flipVert(false);
             return;
         default:
-            DWarning() << "Unknown flip direction specified" << endl;
+            kWarning(50003) << "Unknown flip direction specified" << endl;
     }
 }
 

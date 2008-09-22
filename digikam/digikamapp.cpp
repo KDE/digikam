@@ -1653,7 +1653,7 @@ void DigikamApp::fillSolidMenus()
         QVariant driverHandle = camera->driverHandle("gphoto");
         if (!driverHandle.canConvert(QVariant::List))
         {
-            DWarning() << "Solid returns unsupported driver handle for gphoto2" << endl;
+            kWarning(50003) << "Solid returns unsupported driver handle for gphoto2" << endl;
             continue;
         }
         QList<QVariant> driverHandleList = driverHandle.toList();
@@ -1662,7 +1662,7 @@ void DigikamApp::fillSolidMenus()
             || !driverHandleList[2].canConvert(QVariant::Int)
            )
         {
-            DWarning() << "Solid returns unsupported driver handle for gphoto2" << endl;
+            kWarning(50003) << "Solid returns unsupported driver handle for gphoto2" << endl;
             continue;
         }
 

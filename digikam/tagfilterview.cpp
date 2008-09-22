@@ -120,7 +120,7 @@ TagFilterViewItem::TagFilterViewItem(Q3ListView* parent, TAlbum* album, bool unt
 }
 
 TagFilterViewItem::TagFilterViewItem(Q3ListViewItem* parent, TAlbum* album)
-                 : FolderCheckListItem(parent, album->title(), 
+                 : FolderCheckListItem(parent, album->title(),
                                        Q3CheckListItem::CheckBox/*Controller*/)
 {
     m_album    = album;
@@ -164,8 +164,8 @@ void TagFilterViewItem::stateChange(bool val)
 {
     Q3CheckListItem::stateChange(val);
 
-/* NOTE G.Caulier 2007/01/08: this code is now disable because TagFilterViewItem 
-                        have been changed from QCheckListItem::CheckBoxController 
+/* NOTE G.Caulier 2007/01/08: this code is now disable because TagFilterViewItem
+                        have been changed from QCheckListItem::CheckBoxController
                         to QCheckListItem::CheckBox.
 
     // All TagFilterViewItems are CheckBoxControllers. If they have no children,
@@ -335,7 +335,7 @@ TagFilterView::TagFilterView(QWidget* parent)
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("Tag Filters View");
-    d->matchingCond = (AlbumLister::MatchingCondition)(group.readEntry("Matching Condition", 
+    d->matchingCond = (AlbumLister::MatchingCondition)(group.readEntry("Matching Condition",
                                                        (int)AlbumLister::OrCondition));
 
     d->toggleAutoTags = (ToggleAutoTags)(group.readEntry("Toggle Auto Tags", (int)NoToggleAuto));
@@ -620,7 +620,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
 
         if (assignTag)
         {
-            emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+            emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                        i18n("Assigning image tags. Please wait..."));
 
             AlbumLister::instance()->blockSignals(true);
@@ -674,8 +674,8 @@ void TagFilterView::slotTagAdded(Album* album)
         TagFilterViewItem* parent = (TagFilterViewItem*)(tag->parent()->extraData(this));
         if (!parent)
         {
-            DWarning() << " Failed to find parent for Tag "
-                       << tag->tagPath() << endl;
+            kWarning(50003) << " Failed to find parent for Tag "
+                            << tag->tagPath() << endl;
             return;
         }
 
@@ -1233,7 +1233,7 @@ void TagFilterView::tagDelete(TagFilterViewItem* item)
 
     int result = KMessageBox::warningContinueCancel(0, message,
                                                     i18n("Delete Tag"),
-                                                    KGuiItem(i18n("Delete"), 
+                                                    KGuiItem(i18n("Delete"),
                                                     "edit-delete"));
 
     if (result == KMessageBox::Continue)
@@ -1249,7 +1249,7 @@ void TagFilterView::toggleChildTags(TagFilterViewItem* tItem, bool b)
     if (!tItem)
         return;
 
-    TAlbum *album = tItem->album(); 
+    TAlbum *album = tItem->album();
     if (!album)
         return;
 
@@ -1270,7 +1270,7 @@ void TagFilterView::toggleParentTags(TagFilterViewItem* tItem, bool b)
     if (!tItem)
         return;
 
-    TAlbum *album = tItem->album(); 
+    TAlbum *album = tItem->album();
     if (!album)
         return;
 

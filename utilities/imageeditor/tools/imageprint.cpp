@@ -113,7 +113,7 @@ bool ImagePrint::printImageWithQt()
 {
     if ( d->image.isNull() )
     {
-        DWarning() << "Supplied Image for printing is null" << endl;
+        kWarning(50003) << "Supplied Image for printing is null" << endl;
         return false;
     }
 
