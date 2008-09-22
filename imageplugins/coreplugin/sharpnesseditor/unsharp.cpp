@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ includes.
@@ -26,9 +26,12 @@
 #include <cmath>
 #include <cstdlib>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "dimg.h"
 #include "dcolor.h"
 #include "dimgimagefilters.h"
@@ -38,10 +41,10 @@
 namespace DigikamImagesPluginCore
 {
 
-UnsharpMask::UnsharpMask(Digikam::DImg *orgImage, QObject *parent, int radius, 
+UnsharpMask::UnsharpMask(Digikam::DImg *orgImage, QObject *parent, int radius,
                          double amount, double threshold)
            : DImgThreadedFilter(orgImage, parent, "UnsharpMask")
-{ 
+{
     m_radius    = radius;
     m_amount    = amount;
     m_threshold = threshold;
@@ -54,7 +57,7 @@ void UnsharpMask::filterImage(void)
     int    quantum;
     double quantumThreshold;
     double value;
-    Digikam::DColor p; 
+    Digikam::DColor p;
     Digikam::DColor q;
 
     if (m_orgImage.isNull())
@@ -77,37 +80,37 @@ void UnsharpMask::filterImage(void)
 
             // Red channel.
             value = (double)(p.red())-(double)(q.red());
-    
+
             if (fabs(2.0*value) < quantumThreshold)
                 value = (double)(p.red());
             else
                 value = (double)(p.red()) + value*m_amount;
 
             q.setRed(CLAMP(ROUND(value), 0, quantum));
-    
+
             // Green Channel.
             value = (double)(p.green())-(double)(q.green());
-    
+
             if (fabs(2.0*value) < quantumThreshold)
                 value = (double)(p.green());
             else
                 value = (double)(p.green()) + value*m_amount;
 
             q.setGreen(CLAMP(ROUND(value), 0, quantum));
-            
+
             // Blue Channel.
             value = (double)(p.blue())-(double)(q.blue());
-    
+
             if (fabs(2.0*value) < quantumThreshold)
                 value = (double)(p.blue());
             else
                 value = (double)(p.blue()) + value*m_amount;
 
             q.setBlue(CLAMP(ROUND(value), 0, quantum));
-        
+
             // Alpha Channel.
             value = (double)(p.alpha())-(double)(q.alpha());
-    
+
             if (fabs(2.0*value) < quantumThreshold)
                 value = (double)(p.alpha());
             else
@@ -115,12 +118,12 @@ void UnsharpMask::filterImage(void)
 
             q.setAlpha(CLAMP(ROUND(value), 0, quantum));
 
-            m_destImage.setPixelColor(x, y, q);        
+            m_destImage.setPixelColor(x, y, q);
         }
 
         progress = (int)(10.0 + ((double)y * 90.0) / m_destImage.height());
         if ( progress%5 == 0 )
-           postProgress( progress );   
+           postProgress( progress );
     }
 }
 

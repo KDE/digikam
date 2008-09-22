@@ -42,12 +42,12 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kcursor.h>
 #include <klocale.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "previewwidget.h"
 #include "previewwidget.moc"
 

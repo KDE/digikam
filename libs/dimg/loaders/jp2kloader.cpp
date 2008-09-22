@@ -42,9 +42,12 @@
 #include <QByteArray>
 #include <QTextStream>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "jp2kloader.h"
@@ -285,7 +288,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 	    for (i = 0 ; i < (long)number_components; i++)
 	    {
 		int ret = jas_image_readcmpt(jp2_image, (short)components[i], 0,
-					    ((unsigned int) y)            / y_step[i], 
+					    ((unsigned int) y)            / y_step[i],
 					    ((unsigned int) imageWidth()) / x_step[i],
 					    1, pixels[i]);
 		if (ret != 0)
@@ -317,7 +320,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 		    break;
 		}
 		case 3: // RGB.
-		{ 
+		{
 		    if (!m_sixteenBit)   // 8 bits image.
 		    {
 			for (x = 0 ; x < (long)imageWidth() ; x++)
@@ -327,7 +330,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 			    // Green
 			    dst[1] = (uchar)(scale[1]*jas_matrix_getv(pixels[1], x/x_step[1]));
 			    // Red
-			    dst[2] = (uchar)(scale[0]*jas_matrix_getv(pixels[0], x/x_step[0])); 
+			    dst[2] = (uchar)(scale[0]*jas_matrix_getv(pixels[0], x/x_step[0]));
 			    // Alpha
 			    dst[3] = 0xFF;
 
@@ -631,7 +634,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
 	for (i = 0 ; i < (long)number_components ; i++)
 	{
-	    int ret = jas_image_writecmpt(jp2_image, (short) i, 0, (unsigned int)y, 
+	    int ret = jas_image_writecmpt(jp2_image, (short) i, 0, (unsigned int)y,
 					(unsigned int)imageWidth(), 1, pixels[i]);
 	    if (ret != 0)
 	    {

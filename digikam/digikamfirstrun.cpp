@@ -33,6 +33,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kconfig.h>
 #include <klocale.h>
 #include <kapplication.h>
@@ -45,7 +46,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "version.h"
 #include "digikamfirstrun.h"
 #include "digikamfirstrun.moc"

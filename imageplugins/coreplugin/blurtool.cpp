@@ -36,6 +36,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kconfiggroup.h>
+#include <kdebug.h>
 
 // LibKDcraw includes.
 
@@ -43,7 +44,6 @@
 
 // Digikam includes.
 
-#include "ddebug.h"
 #include "imageiface.h"
 #include "imagepanelwidget.h"
 #include "editortoolsettings.h"

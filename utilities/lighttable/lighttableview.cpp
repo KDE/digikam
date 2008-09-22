@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-03-05
- * Description : a widget to display 2 preview image on 
+ * Description : a widget to display 2 preview image on
  *               lightable to compare pictures.
  *
  * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -28,11 +28,11 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kdialog.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "thumbnailsize.h"
 #include "lighttablepreview.h"
 #include "lighttableview.h"
@@ -146,8 +146,8 @@ LightTableView::~LightTableView()
 
 void LightTableView::setLoadFullImageSize(bool b)
 {
-    d->leftPreview->setLoadFullImageSize(b); 
-    d->rightPreview->setLoadFullImageSize(b); 
+    d->leftPreview->setLoadFullImageSize(b);
+    d->rightPreview->setLoadFullImageSize(b);
 }
 
 void LightTableView::setSyncPreview(bool sync)
@@ -155,14 +155,14 @@ void LightTableView::setSyncPreview(bool sync)
     d->syncPreview = sync;
 
     // Left panel like a reference to resync preview.
-    if (d->syncPreview)    
+    if (d->syncPreview)
         slotLeftContentsMoved(d->leftPreview->contentsX(), d->leftPreview->contentsY());
 }
 
 void LightTableView::setNavigateByPair(bool b)
 {
-    d->leftPreview->setDragAndDropEnabled(!b); 
-    d->rightPreview->setDragAndDropEnabled(!b); 
+    d->leftPreview->setDragAndDropEnabled(!b);
+    d->rightPreview->setDragAndDropEnabled(!b);
 }
 
 void LightTableView::slotDecreaseZoom()
@@ -182,7 +182,7 @@ void LightTableView::slotDecreaseZoom()
 void LightTableView::slotIncreaseZoom()
 {
     if (d->syncPreview)
-    { 
+    {
         slotIncreaseLeftZoom();
         return;
     }
@@ -195,46 +195,46 @@ void LightTableView::slotIncreaseZoom()
 
 void LightTableView::slotDecreaseLeftZoom()
 {
-    d->leftPreview->slotDecreaseZoom(); 
+    d->leftPreview->slotDecreaseZoom();
 }
 
 void LightTableView::slotIncreaseLeftZoom()
 {
-    d->leftPreview->slotIncreaseZoom(); 
+    d->leftPreview->slotIncreaseZoom();
 }
 
 void LightTableView::slotDecreaseRightZoom()
 {
-    d->rightPreview->slotDecreaseZoom(); 
+    d->rightPreview->slotDecreaseZoom();
 }
 
 void LightTableView::slotIncreaseRightZoom()
 {
-    d->rightPreview->slotIncreaseZoom(); 
+    d->rightPreview->slotIncreaseZoom();
 }
 
 void LightTableView::setLeftZoomFactor(double z)
 {
-    d->leftPreview->setZoomFactor(z); 
+    d->leftPreview->setZoomFactor(z);
 }
 
 void LightTableView::setRightZoomFactor(double z)
 {
-    d->rightPreview->setZoomFactor(z); 
+    d->rightPreview->setZoomFactor(z);
 }
 
 void LightTableView::fitToWindow()
 {
-    d->leftPreview->fitToWindow(); 
-    d->rightPreview->fitToWindow(); 
+    d->leftPreview->fitToWindow();
+    d->rightPreview->fitToWindow();
 }
 
 void LightTableView::toggleFitToWindowOr100()
 {
     //  If we are currently precisely at 100%, then fit to window,
     //  otherwise zoom to a centered 100% view.
-    if ((d->leftPreview->zoomFactor()==1.0) && 
-        (d->rightPreview->zoomFactor()==1.0)) 
+    if ((d->leftPreview->zoomFactor()==1.0) &&
+        (d->rightPreview->zoomFactor()==1.0))
     {
         fitToWindow();
     }
@@ -247,42 +247,42 @@ void LightTableView::toggleFitToWindowOr100()
 
 double LightTableView::leftZoomMax()
 {
-    return d->leftPreview->zoomMax(); 
+    return d->leftPreview->zoomMax();
 }
 
 double LightTableView::leftZoomMin()
 {
-    return d->leftPreview->zoomMin(); 
+    return d->leftPreview->zoomMin();
 }
 
 bool LightTableView::leftMaxZoom()
 {
-    return d->leftPreview->maxZoom(); 
+    return d->leftPreview->maxZoom();
 }
 
 bool LightTableView::leftMinZoom()
 {
-    return d->leftPreview->minZoom(); 
+    return d->leftPreview->minZoom();
 }
 
 double LightTableView::rightZoomMax()
 {
-    return d->rightPreview->zoomMax(); 
+    return d->rightPreview->zoomMax();
 }
 
 double LightTableView::rightZoomMin()
 {
-    return d->rightPreview->zoomMin(); 
+    return d->rightPreview->zoomMin();
 }
 
 bool LightTableView::rightMaxZoom()
 {
-    return d->rightPreview->maxZoom(); 
+    return d->rightPreview->maxZoom();
 }
 
 bool LightTableView::rightMinZoom()
 {
-    return d->rightPreview->minZoom(); 
+    return d->rightPreview->minZoom();
 }
 
 void LightTableView::slotLeftZoomSliderChanged(int size)
@@ -293,7 +293,7 @@ void LightTableView::slotLeftZoomSliderChanged(int size)
     double zmax = d->leftPreview->zoomMax();
     double b    = (zmin-(zmax*s/h))/(1-s/h);
     double a    = (zmax-b)/h;
-    double z    = a*size+b; 
+    double z    = a*size+b;
 
     d->leftPreview->setZoomFactorSnapped(z);
 }
@@ -306,7 +306,7 @@ void LightTableView::slotRightZoomSliderChanged(int size)
     double zmax = d->rightPreview->zoomMax();
     double b    = (zmin-(zmax*s/h))/(1-s/h);
     double a    = (zmax-b)/h;
-    double z    = a*size+b; 
+    double z    = a*size+b;
 
     d->rightPreview->setZoomFactorSnapped(z);
 }
@@ -392,7 +392,7 @@ void LightTableView::slotLeftPreviewLoaded(bool success)
 {
     checkForSyncPreview();
     d->leftLoading = false;
-    slotRightContentsMoved(d->rightPreview->contentsX(), 
+    slotRightContentsMoved(d->rightPreview->contentsX(),
                            d->rightPreview->contentsY());
 
     emit signalLeftPreviewLoaded(success);
@@ -402,7 +402,7 @@ void LightTableView::slotRightPreviewLoaded(bool success)
 {
     checkForSyncPreview();
     d->rightLoading = false;
-    slotLeftContentsMoved(d->leftPreview->contentsX(), 
+    slotLeftContentsMoved(d->leftPreview->contentsX(),
                           d->leftPreview->contentsY());
 
     emit signalRightPreviewLoaded(success);
@@ -410,7 +410,7 @@ void LightTableView::slotRightPreviewLoaded(bool success)
 
 void LightTableView::checkForSyncPreview()
 {
-    if (!d->leftPreview->getImageInfo().isNull() && 
+    if (!d->leftPreview->getImageInfo().isNull() &&
         !d->rightPreview->getImageInfo().isNull() &&
         d->leftPreview->getImageSize() == d->rightPreview->getImageSize())
     {
@@ -419,9 +419,9 @@ void LightTableView::checkForSyncPreview()
     else
     {
         d->syncPreview = false;
-    } 
+    }
 
-    emit signalToggleOnSyncPreview(d->syncPreview); 
+    emit signalToggleOnSyncPreview(d->syncPreview);
 }
 
 void LightTableView::checkForSelection(const ImageInfo &info)

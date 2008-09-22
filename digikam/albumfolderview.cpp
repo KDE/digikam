@@ -36,6 +36,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -62,7 +63,6 @@
 #include "cameraui.h"
 #include "collectionmanager.h"
 #include "deletedialog.h"
-#include "ddebug.h"
 #include "digikamapp.h"
 #include "dio.h"
 #include "ddragobjects.h"

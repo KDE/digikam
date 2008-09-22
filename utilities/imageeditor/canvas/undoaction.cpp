@@ -5,7 +5,7 @@
  *
  * Date        : 2005-02-06
  * Description : undo actions manager for image editor.
- * 
+ *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005 by Joern Ahrens <joern.ahrens@kdemail.net>
  *
@@ -14,17 +14,20 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
+
+// KDE includes.
+
+#include <kdebug.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dimginterface.h"
 #include "undoaction.h"
 
@@ -146,7 +149,7 @@ UndoActionBCG::UndoActionBCG(DImgInterface* iface,
                m_oldContrast(oldContrast), m_newGamma(newGamma), m_newBrightness(newBrightness),
                m_newContrast(newContrast)
 {
-    m_title = i18n("Brightness,Contrast,Gamma");    
+    m_title = i18n("Brightness,Contrast,Gamma");
 }
 
 UndoActionBCG::~UndoActionBCG()

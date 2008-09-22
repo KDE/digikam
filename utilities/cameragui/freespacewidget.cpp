@@ -5,7 +5,7 @@
  *
  * Date        : 2007-08-31
  * Description : a widget to display free space for a mount-point.
- * 
+ *
  * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -28,12 +28,13 @@
 #include <QPalette>
 #include <QColor>
 #include <QTimer>
-#include <QFont> 
+#include <QFont>
 #include <QBoxLayout>
-#include <QFontMetrics> 
+#include <QFontMetrics>
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kurl.h>
 #include <klocale.h>
 #include <kdiskfreespace.h>
@@ -43,7 +44,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "albumsettings.h"
 #include "freespacewidget.h"
 #include "freespacewidget.moc"
@@ -68,19 +68,19 @@ public:
     }
 
     bool                            isValid;
-    
+
     int                             percentUsed;
 
     unsigned long                   dSizeKb;
     unsigned long                   kBSize;
     unsigned long                   kBUsed;
     unsigned long                   kBAvail;
-    
+
     QString                         mountPoint;
     QString                         path;
 
     QTimer                         *timer;
-    
+
     QPixmap                         pix;
     QPixmap                         iconPix;
 
@@ -95,7 +95,7 @@ FreeSpaceWidget::FreeSpaceWidget(QWidget* parent, int width)
     setFixedWidth(width);
     setMaximumHeight(fontMetrics().height()+4);
     d->timer = new QTimer(this);
-        
+
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotTimeout()));
 }
@@ -139,7 +139,7 @@ void FreeSpaceWidget::refresh()
 }
 
 void FreeSpaceWidget::setInformations(unsigned long kBSize,
-                                      unsigned long kBUsed, unsigned long kBAvail, 
+                                      unsigned long kBUsed, unsigned long kBAvail,
                                       const QString& mountPoint)
 {
     d->mountPoint = mountPoint;
@@ -178,7 +178,7 @@ bool FreeSpaceWidget::isValid()
     return d->isValid;
 }
 
-int FreeSpaceWidget::percentUsed() 
+int FreeSpaceWidget::percentUsed()
 {
     return d->percentUsed;
 }
@@ -211,7 +211,7 @@ void FreeSpaceWidget::updatePixmap()
     QPainter p(&d->pix);
     p.setPen(palette().mid().color());
     p.drawRect(0, 0, d->pix.width()-1, d->pix.height()-1);
-    p.drawPixmap(2, d->pix.height()/2-d->iconPix.height()/2, 
+    p.drawPixmap(2, d->pix.height()/2-d->iconPix.height()/2,
                  d->iconPix, 0, 0, d->iconPix.width(), d->iconPix.height());
 
     if (isValid())
@@ -222,20 +222,20 @@ void FreeSpaceWidget::updatePixmap()
         int pClamp            = peUsed > 100 ? 100 : peUsed;
         p.setBrush(peUsed > 95 ? Qt::red : Qt::darkGreen);
         p.setPen(Qt::white);
-        QRect gRect(d->iconPix.height()+2, 1, 
-                    (int)(((double)d->pix.width()-3.0-d->iconPix.width()-2.0)*(pClamp/100.0)), 
+        QRect gRect(d->iconPix.height()+2, 1,
+                    (int)(((double)d->pix.width()-3.0-d->iconPix.width()-2.0)*(pClamp/100.0)),
                     d->pix.height()-3);
         p.drawRect(gRect);
-    
+
         QRect tRect(d->iconPix.height()+2, 1, d->pix.width()-3-d->iconPix.width()-2, d->pix.height()-3);
         QString text        = QString("%1%").arg(peUsed);
         QFontMetrics fontMt = p.fontMetrics();
-        QRect fontRect      = fontMt.boundingRect(tRect.x(), tRect.y(), 
+        QRect fontRect      = fontMt.boundingRect(tRect.x(), tRect.y(),
                                                 tRect.width(), tRect.height(), 0, text);
         p.setPen(palette().text().color());
         p.drawText(tRect, Qt::AlignCenter, text);
-    
-        QString tipText, value; 
+
+        QString tipText, value;
         QString header = i18n("Camera Media");
         if (d->mode == FreeSpaceWidget::AlbumLibrary) header = i18n("Album Library");
         QString headBeg("<tr bgcolor=\"#73CAE6\"><td colspan=\"2\">"
@@ -272,9 +272,9 @@ void FreeSpaceWidget::updatePixmap()
         setWhatsThis(tipText);
         setToolTip(tipText);
     }
-    
+
     p.end();
-}    
+}
 
 void FreeSpaceWidget::paintEvent(QPaintEvent*)
 {
@@ -296,7 +296,7 @@ void FreeSpaceWidget::slotTimeout()
     }
 }
 
-void FreeSpaceWidget::slotAvailableFreeSpace(QString mountPoint, quint64 kBSize, 
+void FreeSpaceWidget::slotAvailableFreeSpace(QString mountPoint, quint64 kBSize,
                                              quint64 kBUsed, quint64 kBAvail)
 {
     setInformations(kBSize, kBUsed, kBAvail, mountPoint);

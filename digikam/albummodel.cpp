@@ -27,11 +27,11 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumthumbnailloader.h"

@@ -7,7 +7,7 @@
  * Description : digital camera controller
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -44,15 +44,15 @@ extern "C"
 
 // KDE includes.
 
-#include <klocale.h>
-#include <kurl.h>
-#include <kmessagebox.h>
+#include <kdebug.h>
 #include <kio/renamedialog.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 #include <kstandarddirs.h>
+#include <kurl.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "thumbnailsize.h"
 #include "imagewindow.h"
 #include "gpcamera.h"
@@ -130,7 +130,7 @@ public:
     QList<CameraCommand*>   commands;
 };
 
-CameraController::CameraController(QWidget* parent, 
+CameraController::CameraController(QWidget* parent,
                                    const QString& title, const QString& model,
                                    const QString& port, const QString& path)
                 : QThread(parent)
@@ -149,7 +149,7 @@ CameraController::CameraController(QWidget* parent,
             kDebug(50003) << "xport " << xport << endl;
             QRegExp x = QRegExp("(usb:[0-9,]*)");
 
-            if (x.indexIn(xport) != -1) 
+            if (x.indexIn(xport) != -1)
             {
                 QString usbport = x.cap(1);
                 kDebug(50003) << "USB " << xport << " " << usbport << endl;
@@ -649,7 +649,7 @@ void CameraController::sendInfo(const QString& msg)
         emit signalInfoMsg(msg);
 }
 
-void CameraController::slotCheckRename(const QString &folder, const QString &file, 
+void CameraController::slotCheckRename(const QString &folder, const QString &file,
                                        const QString &destination, const QString &temp)
 {
     bool skip      = false;
@@ -671,7 +671,7 @@ void CameraController::slotCheckRename(const QString &folder, const QString &fil
                 break;
             }
 
-            KIO::RenameDialog dlg(d->parent, i18n("Rename File"), 
+            KIO::RenameDialog dlg(d->parent, i18n("Rename File"),
                                   folder + QString("/") + file, dest,
                                   KIO::RenameDialog_Mode(KIO::M_MULTI | KIO::M_OVERWRITE | KIO::M_SKIP));
 
@@ -952,7 +952,7 @@ void CameraController::upload(const QFileInfo& srcFileInfo, const QString& destF
     cmd->map.insert("destFile", QVariant(destFile));
     cmd->map.insert("destFolder", QVariant(destFolder));
     addCommand(cmd);
-    kDebug(50003) << "Uploading '" << srcFileInfo.filePath() << "' into camera : '" << destFolder << 
+    kDebug(50003) << "Uploading '" << srcFileInfo.filePath() << "' into camera : '" << destFolder <<
                  "' (" << destFile << ")" << endl;
 }
 

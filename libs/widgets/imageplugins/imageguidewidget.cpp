@@ -40,13 +40,13 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kcursor.h>
-#include <kglobal.h> 
+#include <kglobal.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dimg.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
@@ -102,8 +102,8 @@ public:
 };
 
 ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
-                                   bool spotVisible, int guideMode, 
-                                   const QColor& guideColor, int guideSize, 
+                                   bool spotVisible, int guideMode,
+                                   const QColor& guideColor, int guideSize,
                                    bool blink, bool useImageSelection)
                 : QWidget(parent)
 {
@@ -256,13 +256,13 @@ void ImageGuideWidget::updatePixmap()
     else if (d->renderingPreviewMode == PreviewTargetImage || d->renderingPreviewMode == NoPreviewMode ||
             (d->renderingPreviewMode == PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled == true ))
     {
-        d->iface->paint(d->pixmap, 
-                        d->rect.x(), 
+        d->iface->paint(d->pixmap,
+                        d->rect.x(),
                         d->rect.y(),
-                        d->rect.width(), 
-                        d->rect.height(), 
-                        d->underExposureIndicator, 
-                        d->overExposureIndicator, 
+                        d->rect.width(),
+                        d->rect.height(),
+                        d->underExposureIndicator,
+                        d->overExposureIndicator,
                         &p);
 
         if (d->renderingPreviewMode == PreviewTargetImage ||
@@ -277,7 +277,7 @@ void ImageGuideWidget::updatePixmap()
             p.drawText(textRect, Qt::AlignCenter, text);
         }
     }
-    else if (d->renderingPreviewMode == PreviewBothImagesVert || 
+    else if (d->renderingPreviewMode == PreviewBothImagesVert ||
              d->renderingPreviewMode == PreviewBothImagesVertCont)
     {
         if (d->renderingPreviewMode == PreviewBothImagesVert)
@@ -290,9 +290,9 @@ void ImageGuideWidget::updatePixmap()
                             d->rect.x()+d->rect.width()/2,
                             d->rect.y(),
                             d->rect.width()/2,
-                            d->rect.height(), 
-                            d->underExposureIndicator, 
-                            d->overExposureIndicator, 
+                            d->rect.height(),
+                            d->underExposureIndicator,
+                            d->overExposureIndicator,
                             &p);
         }
         else
@@ -302,9 +302,9 @@ void ImageGuideWidget::updatePixmap()
                             d->rect.x(),
                             d->rect.y(),
                             d->rect.width(),
-                            d->rect.height(), 
-                            d->underExposureIndicator, 
-                            d->overExposureIndicator, 
+                            d->rect.height(),
+                            d->underExposureIndicator,
+                            d->overExposureIndicator,
                             &p);
 
             // Drawing the original image under the target.
@@ -358,8 +358,8 @@ void ImageGuideWidget::updatePixmap()
                             d->rect.x(),
                             d->rect.y()+d->rect.height()/2,
                             d->rect.width(),
-                            d->rect.height()/2, 
-                            d->underExposureIndicator, 
+                            d->rect.height()/2,
+                            d->underExposureIndicator,
                             d->overExposureIndicator,
                             &p);
         }
@@ -370,8 +370,8 @@ void ImageGuideWidget::updatePixmap()
                             d->rect.x(),
                             d->rect.y(),
                             d->rect.width(),
-                            d->rect.height(), 
-                            d->underExposureIndicator, 
+                            d->rect.height(),
+                            d->underExposureIndicator,
                             d->overExposureIndicator,
                             &p);
 
@@ -573,7 +573,7 @@ void ImageGuideWidget::mouseReleaseEvent(QMouseEvent *e)
             if (d->spot.y() > d->rect.height()/2)
             {
                 color = getSpotColor(TargetPreviewImage);
-                emit spotPositionChangedFromTarget(color, QPoint(d->spot.x(), 
+                emit spotPositionChangedFromTarget(color, QPoint(d->spot.x(),
                                                    d->spot.y() - d->rect.height()/2 ));
             }
             else

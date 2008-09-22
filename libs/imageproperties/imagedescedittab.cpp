@@ -37,6 +37,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kurl.h>
@@ -54,7 +55,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dmetadata.h"
 #include "kdatetimeedit.h"
 #include "albumiconitem.h"

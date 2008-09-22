@@ -23,17 +23,17 @@
 
 // KDE includes.
 
-#include <klocale.h>
-#include <kgenericfactory.h>
-#include <klibloader.h>
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kcursor.h>
 #include <kapplication.h>
+#include <kcursor.h>
+#include <kdebug.h>
+#include <kgenericfactory.h>
+#include <klibloader.h>
+#include <klocale.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "adjustcurvestool.h"
 #include "imageplugin_adjustcurves.h"
 #include "imageplugin_adjustcurves.moc"

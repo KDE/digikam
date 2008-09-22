@@ -27,12 +27,12 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kmimetype.h>
 #include <klocale.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "databaseurl.h"
 #include "databaseaccess.h"
 #include "albumdb.h"

@@ -35,12 +35,15 @@
 #include <cstring>
 #include <cstdlib>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
 #include "imagehistogram.h"
 #include "imagelevels.h"
 #include "dcolor.h"
-#include "ddebug.h"
 #include "dimggaussianblur.h"
 #include "dimgsharpen.h"
 #include "dimgimagefilters.h"

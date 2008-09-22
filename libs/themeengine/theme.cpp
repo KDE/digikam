@@ -5,7 +5,7 @@
  *
  * Date        : 2004-08-02
  * Description : theme manager
- * 
+ *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,17 +14,20 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
+
+// KDE includes.
+
+#include <kdebug.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "theme.h"
 
 namespace Digikam
@@ -56,14 +59,14 @@ Theme::Theme(const Theme& theme)
         thumbRegColor       =  theme.thumbRegColor;
         thumbRegColorTo     =  theme.thumbRegColorTo;
         thumbRegBevel       =  theme.thumbRegBevel;
-        thumbRegGrad        =  theme.thumbRegGrad; 
+        thumbRegGrad        =  theme.thumbRegGrad;
         thumbRegBorder      =  theme.thumbRegBorder;
         thumbRegBorderColor =  theme.thumbRegBorderColor;
 
         thumbSelColor       =  theme.thumbSelColor;
         thumbSelColorTo     =  theme.thumbSelColorTo;
         thumbSelBevel       =  theme.thumbSelBevel;
-        thumbSelGrad        =  theme.thumbSelGrad; 
+        thumbSelGrad        =  theme.thumbSelGrad;
         thumbSelBorder      =  theme.thumbSelBorder;
         thumbSelBorderColor =  theme.thumbSelBorderColor;
 

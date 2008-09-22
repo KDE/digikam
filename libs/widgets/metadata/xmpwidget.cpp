@@ -28,11 +28,11 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dmetadata.h"
 #include "xmpwidget.h"
 #include "xmpwidget.moc"
@@ -59,7 +59,7 @@ static const char* XmpHumanList[] =
 
 static const char* StandardXmpEntryList[] =
 {
-     "aux",             // Schema for Additional Exif Properties.   
+     "aux",             // Schema for Additional Exif Properties.
      "crs",             // Camera Raw schema.
      "dc",              // Dublin Core schema.
      "exif",            // Schema for Exif-specific Properties.

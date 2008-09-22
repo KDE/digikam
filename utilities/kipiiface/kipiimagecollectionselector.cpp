@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-26-02
- * Description : a widget to select image collections using 
+ * Description : a widget to select image collections using
  *               digiKam album folder views
  *
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -30,15 +30,15 @@
 
 // KDE includes.
 
-#include <ktabwidget.h>
+#include <kdebug.h>
 #include <kdialog.h>
 #include <klocale.h>
+#include <ktabwidget.h>
 #include <kvbox.h>
 
 // Local includes.
 
 #include "constants.h"
-#include "ddebug.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumthumbnailloader.h"
@@ -78,7 +78,7 @@ public:
 
     KTabWidget    *tab;
 
-    KipiInterface *iface; 
+    KipiInterface *iface;
 
     SearchTextBar *albumsSearchBar;
     SearchTextBar *tagsSearchBar;
@@ -173,7 +173,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, Q
             this, SLOT(slotSearchesSearchTextChanged(const QString&)));
 }
 
-KipiImageCollectionSelector::~KipiImageCollectionSelector() 
+KipiImageCollectionSelector::~KipiImageCollectionSelector()
 {
     delete d;
 }
@@ -215,7 +215,7 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
             }
 
             SAlbum* salbum = dynamic_cast<SAlbum*>(album);
-            if (salbum && 
+            if (salbum &&
                 (salbum->title() == SearchFolderView::currentSearchViewSearchName()       ||
                  salbum->title() == TimeLineFolderView::currentTimeLineSearchName()       ||
                  salbum->title() == FuzzySearchFolderView::currentFuzzySketchSearchName() ||
@@ -268,7 +268,7 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
 QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollections() const
 {
     QString ext = d->iface->fileExtensions();
-    QList<KIPI::ImageCollection> list; 
+    QList<KIPI::ImageCollection> list;
 
     QTreeWidgetItemIterator it(d->albumsView, QTreeWidgetItemIterator::Checked);
     while (*it)

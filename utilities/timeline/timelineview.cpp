@@ -37,6 +37,7 @@
 #include <kapplication.h>
 #include <kcombobox.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <kdialog.h>
 #include <khbox.h>
 #include <kiconloader.h>
@@ -51,7 +52,6 @@
 
 #include "album.h"
 #include "albummanager.h"
-#include "ddebug.h"
 #include "searchtextbar.h"
 #include "searchxml.h"
 #include "timelinefolderview.h"

@@ -4,13 +4,13 @@
  * http://www.digikam.org
  *
  * Date        : 2004-08-19
- * Description : Album item file tip adapted from kfiletip 
+ * Description : Album item file tip adapted from kfiletip
  *               (konqueror - konq_iconviewwidget.cc)
  *
  * Copyright (C) 1998-1999 by Torben Weis <weis@kde.org>
  * Copyright (C) 2000-2002 by David Faure <david@mandrakesoft.com>
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,6 +38,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kfileitem.h>
 #include <kmimetype.h>
@@ -47,7 +48,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dmetadata.h"
 #include "albumiconview.h"
 #include "albumiconitem.h"
@@ -63,7 +63,7 @@ class AlbumFileTipPriv
 {
 public:
 
-    AlbumFileTipPriv() : 
+    AlbumFileTipPriv() :
         maxStringLen(30), tipBorder(5)
     {
         corner   = 0;
@@ -121,7 +121,7 @@ void AlbumFileTip::setIconItem(AlbumIconItem* iconItem)
 {
     d->iconItem = iconItem;
 
-    if (!d->iconItem || 
+    if (!d->iconItem ||
         !AlbumSettings::instance()->showToolTipsIsValid())
     {
         hide();
@@ -159,12 +159,12 @@ void AlbumFileTip::reposition()
     if (rect.center().x() + width() > desk.right())
     {
         // to the left
-        if (pos.x() - width() < 0) 
+        if (pos.x() - width() < 0)
         {
             pos.setX(0);
             d->corner = 4;
-        } 
-        else 
+        }
+        else
         {
             pos.setX( pos.x() - width() );
             d->corner = 1;
@@ -418,7 +418,7 @@ void AlbumFileTip::updateText()
 
                 if (photoInfo.focalLength35.isEmpty())
                     str += QString(" / %1").arg(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
-                else 
+                else
                     str += QString(" / %1").arg(i18n("%1 (35mm: %2)",photoInfo.focalLength,photoInfo.focalLength35));
 
                 if (str.length() > d->maxStringLen) str = str.left(d->maxStringLen-3) + "...";
@@ -442,7 +442,7 @@ void AlbumFileTip::updateText()
                     str = photoInfo.exposureMode;
                 else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
                     str = photoInfo.exposureProgram;
-                else 
+                else
                     str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
                 if (str.length() > d->maxStringLen) str = str.left(d->maxStringLen-3) + "...";
                 metaStr += cellBeg + i18n("Mode/Program:") + cellMid + Qt::escape( str ) + cellEnd;

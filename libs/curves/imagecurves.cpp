@@ -9,7 +9,7 @@
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Some code parts are inspired from gimp 2.0
- * app/base/curves.c, gimplut.c, and app/base/gimpcurvetool.c 
+ * app/base/curves.c, gimplut.c, and app/base/gimpcurvetool.c
  * source files.
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
  *
@@ -40,9 +40,12 @@
 
 #include <QFile>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "imagecurves.h"
 
 namespace Digikam
@@ -225,7 +228,7 @@ void ImageCurves::curvesCalculateCurve(int channel)
              curvesPlotCurve(channel, p1, p2, p3, p4);
           }
 
-          // Ensure that the control points are used exactly 
+          // Ensure that the control points are used exactly
 
           for (i = 0 ; i < num_pts ; i++)
           {
@@ -405,7 +408,7 @@ void ImageCurves::curvesCRCompose(CRMatrix a, CRMatrix b, CRMatrix ab)
 
 void ImageCurves::curvesLutSetup(int nchannels)
 {
-    int    i; 
+    int    i;
     uint   v;
     double val;
 
@@ -426,7 +429,7 @@ void ImageCurves::curvesLutSetup(int nchannels)
 
        for (v = 0 ; v <= (uint)d->segmentMax ; v++)
        {
-          // To add gamma correction use func(v ^ g) ^ 1/g instead. 
+          // To add gamma correction use func(v ^ g) ^ 1/g instead.
 
           val = (float)(d->segmentMax) * curvesLutFunc( d->lut->nchannels, i, v / (float)(d->segmentMax)) + 0.5;
 
@@ -523,7 +526,7 @@ void ImageCurves::curvesLutProcess(uchar *srcPR, uchar *destPR, int w, int h)
 int ImageCurves::getCurveValue(int channel, int bin)
 {
     if ( d->curves &&
-         channel>=0 && channel<5 && 
+         channel>=0 && channel<5 &&
          bin>=0 && bin<=d->segmentMax )
        return(d->curves->curve[channel][bin]);
 
@@ -533,7 +536,7 @@ int ImageCurves::getCurveValue(int channel, int bin)
 QPoint ImageCurves::getCurvePoint(int channel, int point)
 {
     if ( d->curves &&
-         channel>=0 && channel<5 && 
+         channel>=0 && channel<5 &&
          point>=0 && point<=17 )
        return(QPoint(d->curves->points[channel][point][0],
                      d->curves->points[channel][point][1]) );
@@ -558,7 +561,7 @@ QPolygon ImageCurves::getCurvePoints(int channel)
 int ImageCurves::getCurvePointX(int channel, int point)
 {
     if ( d->curves &&
-         channel>=0 && channel<5 && 
+         channel>=0 && channel<5 &&
          point>=0 && point<=17 )
        return(d->curves->points[channel][point][0]);
 
@@ -568,7 +571,7 @@ int ImageCurves::getCurvePointX(int channel, int point)
 int ImageCurves::getCurvePointY(int channel, int point)
 {
     if ( d->curves &&
-         channel>=0 && channel<5 && 
+         channel>=0 && channel<5 &&
          point>=0 && point<=17 )
        return(d->curves->points[channel][point][1]);
 
@@ -587,7 +590,7 @@ int ImageCurves::getCurveType(int channel)
 void ImageCurves::setCurveValue(int channel, int bin, int val)
 {
     if ( d->curves &&
-         channel>=0 && channel<5 && 
+         channel>=0 && channel<5 &&
          bin>=0 && bin<=d->segmentMax )
     {
        d->dirty = true;
@@ -598,7 +601,7 @@ void ImageCurves::setCurveValue(int channel, int bin, int val)
 void ImageCurves::setCurvePoint(int channel, int point, const QPoint& val)
 {
     if ( d->curves &&
-         channel>=0 && channel<5 && 
+         channel>=0 && channel<5 &&
          point>=0 && point<=17 &&
          val.x()>=-1 && val.x()<=d->segmentMax && // x can be egal to -1
          val.y()>=0 && val.y()<=d->segmentMax)    // if the current point is disable !!!
@@ -612,7 +615,7 @@ void ImageCurves::setCurvePoint(int channel, int point, const QPoint& val)
 void ImageCurves::setCurvePoints(int channel, const QPolygon& vals)
 {
     if ( d->curves &&
-         channel>=0 && channel<5 && 
+         channel>=0 && channel<5 &&
          vals.size() == 18 )
     {
         d->dirty = true;
@@ -624,7 +627,7 @@ void ImageCurves::setCurvePoints(int channel, const QPolygon& vals)
 void ImageCurves::setCurvePointX(int channel, int point, int x)
 {
     if ( d->curves &&
-         channel>=0 && channel<5 && 
+         channel>=0 && channel<5 &&
          point>=0 && point<=17 &&
          x>=-1 && x<=d->segmentMax) // x can be egal to -1 if the current point is disable !!!
     {
@@ -636,7 +639,7 @@ void ImageCurves::setCurvePointX(int channel, int point, int x)
 void ImageCurves::setCurvePointY(int channel, int point, int y)
 {
     if ( d->curves &&
-         channel>=0 && channel<5 && 
+         channel>=0 && channel<5 &&
          point>=0 && point<=17 &&
          y>=0 && y<=d->segmentMax)
     {
@@ -648,7 +651,7 @@ void ImageCurves::setCurvePointY(int channel, int point, int y)
 void ImageCurves::setCurveType(int channel, CurveType type)
 {
     if ( d->curves &&
-         channel>=0 && channel<5 && 
+         channel>=0 && channel<5 &&
          type>=CURVE_SMOOTH && type<=CURVE_FREE )
        d->curves->curve_type[channel] = type;
 }

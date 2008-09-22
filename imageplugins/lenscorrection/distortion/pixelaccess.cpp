@@ -28,9 +28,12 @@
 #include <cmath>
 #include <cstdlib>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "pixelaccess.h"
 
 namespace DigikamLensDistortionImagesPlugin

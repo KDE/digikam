@@ -34,6 +34,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kapplication.h>
@@ -55,7 +56,6 @@
 #include "albumthumbnailloader.h"
 #include "databasetransaction.h"
 #include "ddragobjects.h"
-#include "ddebug.h"
 #include "folderitem.h"
 #include "imageattributeswatch.h"
 #include "imageinfo.h"

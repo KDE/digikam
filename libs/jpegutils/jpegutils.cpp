@@ -5,24 +5,24 @@
  *
  * Date        : 2004-09-29
  * Description : perform lossless rotation/flip to JPEG file
- * 
+ *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Parts of the loading code is taken from qjpeghandler.cpp, copyright follows:
  * Copyright (C) 1992-2007 Trolltech ASA. All rights reserved.
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #define XMD_H
@@ -47,13 +47,16 @@ extern "C"
 // Qt includes.
 
 #include <QImageReader>
-#include <QByteArray> 
+#include <QByteArray>
 #include <QFile>
 #include <QFileInfo>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "dmetadata.h"
 #include "transupp.h"
 #include "jpegutils.h"
@@ -126,7 +129,7 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
     cinfo.err->emit_message   = jpegutils_jpeg_emit_message;
     cinfo.err->output_message = jpegutils_jpeg_output_message;
 
-    if (setjmp(jerr.setjmp_buffer)) 
+    if (setjmp(jerr.setjmp_buffer))
     {
         jpeg_destroy_decompress(&cinfo);
         fclose(inputFile);
@@ -180,7 +183,7 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
         return false;
     }
 
-    switch(cinfo.output_components) 
+    switch(cinfo.output_components)
     {
         case 3:
         case 4:
@@ -252,7 +255,7 @@ bool exifRotate(const QString& file, const QString& documentName)
         kDebug(50003) << "ExifRotate: file do not exist: " << file << endl;
         return false;
     }
-        
+
     if (isJpegImage(file))
     {
         DMetadata metaData;
@@ -264,19 +267,19 @@ bool exifRotate(const QString& file, const QString& documentName)
 
         QString temp(fi.absolutePath() + "/.digikam-exifrotate-");
         temp += QString::number(getpid());
-        
+
         QByteArray in  = QFile::encodeName(file);
         QByteArray out = QFile::encodeName(temp);
-        
+
         JCOPY_OPTION copyoption = JCOPYOPT_ALL;
         jpeg_transform_info transformoption;
-    
+
         transformoption.force_grayscale = false;
         transformoption.trim            = false;
         transformoption.transform       = JXFORM_NONE;
-            
+
         // we have the exif info. check the orientation
-    
+
         switch(metaData.getImageOrientation())
         {
             case(DMetadata::ORIENTATION_UNSPECIFIED):
@@ -317,42 +320,42 @@ bool exifRotate(const QString& file, const QString& documentName)
                 transformoption.transform = JXFORM_ROT_270;
                 break;
             }
-        }            
-    
+        }
+
         if (transformoption.transform == JXFORM_NONE)
         {
             kDebug(50003) << "ExifRotate: no rotation to perform: " << file << endl;
             return true;
         }
-    
+
         struct jpeg_decompress_struct srcinfo;
         struct jpeg_compress_struct   dstinfo;
         struct jpegutils_jpeg_error_mgr jsrcerr, jdsterr;
         jvirt_barray_ptr* src_coef_arrays;
         jvirt_barray_ptr* dst_coef_arrays;
-    
+
         // Initialize the JPEG decompression object with default error handling
         srcinfo.err                 = jpeg_std_error(&jsrcerr);
         srcinfo.err->error_exit     = jpegutils_jpeg_error_exit;
         srcinfo.err->emit_message   = jpegutils_jpeg_emit_message;
         srcinfo.err->output_message = jpegutils_jpeg_output_message;
-    
+
         // Initialize the JPEG compression object with default error handling
         dstinfo.err                 = jpeg_std_error(&jdsterr);
         dstinfo.err->error_exit     = jpegutils_jpeg_error_exit;
         dstinfo.err->emit_message   = jpegutils_jpeg_emit_message;
         dstinfo.err->output_message = jpegutils_jpeg_output_message;
-    
+
         FILE *input_file;
         FILE *output_file;
-        
+
         input_file = fopen(in, "rb");
         if (!input_file)
         {
             kWarning(50003) << "ExifRotate: Error in opening input file: " << input_file << endl;
             return false;
         }
-    
+
         output_file = fopen(out, "wb");
         if (!output_file)
         {
@@ -360,7 +363,7 @@ bool exifRotate(const QString& file, const QString& documentName)
             kWarning(50003) << "ExifRotate: Error in opening output file: " << output_file  << endl;
             return false;
         }
-    
+
         if (setjmp(jsrcerr.setjmp_buffer) || setjmp(jdsterr.setjmp_buffer))
         {
             jpeg_destroy_decompress(&srcinfo);
@@ -372,35 +375,35 @@ bool exifRotate(const QString& file, const QString& documentName)
 
         jpeg_create_decompress(&srcinfo);
         jpeg_create_compress(&dstinfo);
-        
+
         jpeg_stdio_src(&srcinfo, input_file);
         jcopy_markers_setup(&srcinfo, copyoption);
-        
+
         (void) jpeg_read_header(&srcinfo, true);
-    
+
         jtransform_request_workspace(&srcinfo, &transformoption);
-    
+
         // Read source file as DCT coefficients
         src_coef_arrays = jpeg_read_coefficients(&srcinfo);
-    
+
         // Initialize destination compression parameters from source values
         jpeg_copy_critical_parameters(&srcinfo, &dstinfo);
-    
+
         dst_coef_arrays = jtransform_adjust_parameters(&srcinfo, &dstinfo,
                                                         src_coef_arrays, &transformoption);
-    
+
         // Specify data destination for compression
         jpeg_stdio_dest(&dstinfo, output_file);
-    
+
         // Start compressor (note no image data is actually written here)
         jpeg_write_coefficients(&dstinfo, dst_coef_arrays);
-        
+
         // Copy to the output file any extra markers that we want to preserve
         jcopy_markers_execute(&srcinfo, &dstinfo, copyoption);
-    
+
         jtransform_execute_transformation(&srcinfo, &dstinfo,
                                             src_coef_arrays, &transformoption);
-    
+
         // Finish compression and release memory
         jpeg_finish_compress(&dstinfo);
         jpeg_destroy_compress(&dstinfo);
@@ -419,7 +422,7 @@ bool exifRotate(const QString& file, const QString& documentName)
         metaData.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
         QImage img(temp);
 
-        // Get the new image dimension of the temp image. Using a dummy QImage objet here 
+        // Get the new image dimension of the temp image. Using a dummy QImage objet here
         // has a sense because the Exif dimension information can be missing from original image.
         // Get new dimensions with QImage will always work...
         metaData.setImageDimensions(img.size());
@@ -443,9 +446,9 @@ bool exifRotate(const QString& file, const QString& documentName)
         struct utimbuf ut;
         ut.modtime = st.st_mtime;
         ut.actime  = st.st_atime;
-        
+
         utime(out, &ut);
-                
+
         // now overwrite the original file
         if (rename(out, in) == 0)
         {
@@ -458,7 +461,7 @@ bool exifRotate(const QString& file, const QString& documentName)
             return false;
         }
     }
-    
+
     // Not a jpeg image.
     kDebug(50003) << "ExifRotate: not a JPEG file: " << file << endl;
     return false;
@@ -472,28 +475,28 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
         kDebug(50003) << "JpegConvert: file do not exist: " << src << endl;
         return false;
     }
-        
+
     if (isJpegImage(src))
     {
         DImg image(src);
-    
+
         // Get image Exif/Iptc data.
         DMetadata meta;
         meta.setExif(image.getExif());
         meta.setIptc(image.getIptc());
-    
+
         // Update Iptc preview.
         QImage preview = image.smoothScale(1280, 1024, Qt::KeepAspectRatio).copyQImage();
-    
+
         // TODO: see B.K.O #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
         // bigger than 64K duing of image preview tag size, the target JPEG image will be
         // broken. Note that IPTC image preview tag is limited to 256K!!!
-        // Temp. solution to disable IPTC preview record in JPEG file until a right solution 
+        // Temp. solution to disable IPTC preview record in JPEG file until a right solution
         // will be found into Exiv2.
         // Note : There is no limitation with TIFF and PNG about IPTC byte array size.
 
-        if (format.toUpper() != QString("JPG") && format.toUpper() != QString("JPEG") && 
-            format.toUpper() != QString("JPE")) 
+        if (format.toUpper() != QString("JPG") && format.toUpper() != QString("JPEG") &&
+            format.toUpper() != QString("JPE"))
             meta.setImagePreview(preview);
 
         // Update Exif thumbnail.
@@ -509,10 +512,10 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
 
         // And now save the image to a new file format.
 
-        if ( format.toUpper() == QString("PNG") ) 
+        if ( format.toUpper() == QString("PNG") )
             image.setAttribute("quality", 9);
 
-        if ( format.toUpper() == QString("TIFF") || format.toUpper() == QString("TIF") ) 
+        if ( format.toUpper() == QString("TIFF") || format.toUpper() == QString("TIF") )
             image.setAttribute("compress", true);
 
         return (image.save(dest, format));

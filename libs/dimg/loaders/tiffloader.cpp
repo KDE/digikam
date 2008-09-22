@@ -60,10 +60,13 @@ extern "C"
 #include <QFile>
 #include <QByteArray>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
 #include "version.h"
-#include "ddebug.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "dmetadata.h"

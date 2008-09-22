@@ -44,6 +44,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kcodecs.h>
 #include <kfileitem.h>
 #include <kapplication.h>
@@ -64,7 +65,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dmetadata.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"

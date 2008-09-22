@@ -4,33 +4,33 @@
  * http://www.digikam.org
  *
  * Date        : 2005-21-11
- * Description : A 16 bits/color/pixel PPM IO file for 
+ * Description : A 16 bits/color/pixel PPM IO file for
  *               DImg framework
- * 
+ *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // This line must be commented to prevent any latency time
 // when we use threaded image loader interface for each image
 // files io. Uncomment this line only for debugging.
-//#define ENABLE_DEBUG_MESSAGES 
+//#define ENABLE_DEBUG_MESSAGES
 
 // C ansi includes.
 
-extern "C" 
+extern "C"
 {
 #include <unistd.h>
 }
@@ -45,9 +45,12 @@ extern "C"
 #include <QFile>
 #include <QImage>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "ppmloader.h"
@@ -65,7 +68,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     //TODO: progress information
     int	 width, height, rgbmax;
     char nl;
-    
+
     FILE *file = fopen(QFile::encodeName(filePath), "rb");
     if (!file)
     {
@@ -99,21 +102,21 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     }
 
     rewind(file);
-    
-    if (fscanf (file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) != 4) 
+
+    if (fscanf (file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) != 4)
     {
         kDebug(50003) << "Corrupted PPM file." << endl;
         pclose (file);
         return false;
     }
-    
+
     if (rgbmax <= 255)
     {
         kDebug(50003) << "Not a 16 bits per color per pixel PPM file." << endl;
         pclose (file);
         return false;
     }
-    
+
     if (observer)
         observer->progressInfo(m_image, 0.1);
 

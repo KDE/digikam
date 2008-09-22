@@ -37,6 +37,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kjob.h>
 #include <kio/job.h>
 #include <kio/deletejob.h>
@@ -48,7 +49,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "albumsettings.h"
 #include "thumbnailsize.h"
 #include "albumthumbnailloader.h"

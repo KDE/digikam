@@ -61,6 +61,7 @@ extern "C"
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kurl.h>
 #include <kapplication.h>
 #include <klocale.h>
@@ -99,7 +100,6 @@ extern "C"
 // Local includes.
 
 #include "constants.h"
-#include "ddebug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"

@@ -26,8 +26,9 @@
 
 // KDE includes.
 
-#include <klocale.h>
 #include <kconfig.h>
+#include <kdebug.h>
+#include <klocale.h>
 
 // libKipi includes.
 
@@ -36,7 +37,6 @@
 // Local includes.
 
 #include "constants.h"
-#include "ddebug.h"
 #include "albumitemhandler.h"
 #include "album.h"
 #include "albumdb.h"

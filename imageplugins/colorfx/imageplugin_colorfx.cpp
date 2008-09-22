@@ -30,12 +30,12 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kactioncollection.h>
+#include <kdebug.h>
 #include <kcursor.h>
 #include <kapplication.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "colorfxtool.h"
 #include "imageplugin_colorfx.h"
 #include "imageplugin_colorfx.moc"

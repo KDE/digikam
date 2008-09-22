@@ -39,11 +39,11 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kurl.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "jpegutils.h"
 #include "dimg.h"
 #include "imageinfo.h"

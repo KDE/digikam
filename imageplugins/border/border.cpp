@@ -5,7 +5,7 @@
  *
  * Date        : 2005-05-25
  * Description : border threaded image filter.
- * 
+ *
  * Copyright 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ includes.
@@ -33,10 +33,13 @@
 #include <QPoint>
 #include <QRegion>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
 #include "dimg.h"
-#include "ddebug.h"
 #include "border.h"
 
 namespace DigikamBorderImagesPlugin
@@ -44,15 +47,15 @@ namespace DigikamBorderImagesPlugin
 
 Border::Border(Digikam::DImg *image, QObject *parent, int orgWidth, int orgHeight,
                QString borderPath, int borderType, float borderPercent,
-               Digikam::DColor solidColor, 
+               Digikam::DColor solidColor,
                Digikam::DColor niepceBorderColor,
-               Digikam::DColor niepceLineColor, 
+               Digikam::DColor niepceLineColor,
                Digikam::DColor bevelUpperLeftColor,
-               Digikam::DColor bevelLowerRightColor, 
+               Digikam::DColor bevelLowerRightColor,
                Digikam::DColor decorativeFirstColor,
                Digikam::DColor decorativeSecondColor)
       : Digikam::DImgThreadedFilter(image, parent, "Border")
-{ 
+{
     m_orgWidth        = orgWidth;
     m_orgHeight       = orgHeight;
     m_orgRatio        = (float)m_orgWidth / (float)m_orgHeight;
@@ -61,10 +64,10 @@ Border::Border(Digikam::DImg *image, QObject *parent, int orgWidth, int orgHeigh
     int size          = (image->width() > image->height()) ? image->height() : image->width();
     m_borderMainWidth = (int)(size * borderPercent);
     m_border2ndWidth  = (int)(size * 0.005);
-    
-    // Clamp internal border with to 1 pixel to be visible with small image.    
-    if (m_border2ndWidth < 1) m_border2ndWidth = 1; 
-    
+
+    // Clamp internal border with to 1 pixel to be visible with small image.
+    if (m_border2ndWidth < 1) m_border2ndWidth = 1;
+
     m_solidColor            = solidColor;
     m_niepceBorderColor     = niepceBorderColor;
     m_niepceLineColor       = niepceLineColor;
@@ -73,23 +76,23 @@ Border::Border(Digikam::DImg *image, QObject *parent, int orgWidth, int orgHeigh
     m_decorativeFirstColor  = decorativeFirstColor;
     m_decorativeSecondColor = decorativeSecondColor;
 
-    m_preserveAspectRatio   = true;    
+    m_preserveAspectRatio   = true;
 
     initFilter();
 }
 
 Border::Border(Digikam::DImg *orgImage, QObject *parent, int orgWidth, int orgHeight,
-               QString borderPath, int borderType, 
+               QString borderPath, int borderType,
                int borderWidth1, int borderWidth2, int borderWidth3, int borderWidth4,
-               Digikam::DColor solidColor, 
+               Digikam::DColor solidColor,
                Digikam::DColor niepceBorderColor,
-               Digikam::DColor niepceLineColor, 
+               Digikam::DColor niepceLineColor,
                Digikam::DColor bevelUpperLeftColor,
-               Digikam::DColor bevelLowerRightColor, 
+               Digikam::DColor bevelLowerRightColor,
                Digikam::DColor decorativeFirstColor,
                Digikam::DColor decorativeSecondColor)
       : Digikam::DImgThreadedFilter(orgImage, parent, "Border")
-{ 
+{
     m_orgWidth              = orgWidth;
     m_orgHeight             = orgHeight;
 
@@ -98,7 +101,7 @@ Border::Border(Digikam::DImg *orgImage, QObject *parent, int orgWidth, int orgHe
     m_borderWidth2          = borderWidth2;
     m_borderWidth3          = borderWidth3;
     m_borderWidth4          = borderWidth4;
-    
+
     m_solidColor            = solidColor;
     m_niepceBorderColor     = niepceBorderColor;
     m_niepceLineColor       = niepceLineColor;
@@ -106,11 +109,11 @@ Border::Border(Digikam::DImg *orgImage, QObject *parent, int orgWidth, int orgHe
     m_bevelLowerRightColor  = bevelLowerRightColor;
     m_decorativeFirstColor  = decorativeFirstColor;
     m_decorativeSecondColor = decorativeSecondColor;
-    
+
     m_borderPath            = borderPath;
 
-    m_preserveAspectRatio   = false;    
-    
+    m_preserveAspectRatio   = false;
+
     initFilter();
 }
 
@@ -124,16 +127,16 @@ void Border::filterImage(void)
             else
                 solid2(m_orgImage, m_destImage, m_solidColor, m_borderWidth1);
             break;
-        
+
         case NiepceBorder:
             if (m_preserveAspectRatio)
-                niepce(m_orgImage, m_destImage, m_niepceBorderColor, m_borderMainWidth, 
+                niepce(m_orgImage, m_destImage, m_niepceBorderColor, m_borderMainWidth,
                        m_niepceLineColor, m_border2ndWidth);
             else
-                niepce2(m_orgImage, m_destImage, m_niepceBorderColor, m_borderWidth1, 
+                niepce2(m_orgImage, m_destImage, m_niepceBorderColor, m_borderWidth1,
                         m_niepceLineColor, m_borderWidth4);
             break;
-    
+
         case BeveledBorder:
             if (m_preserveAspectRatio)
                 bevel(m_orgImage, m_destImage, m_bevelUpperLeftColor,
@@ -142,13 +145,13 @@ void Border::filterImage(void)
                 bevel2(m_orgImage, m_destImage, m_bevelUpperLeftColor,
                        m_bevelLowerRightColor, m_borderWidth1);
             break;
-    
+
         case PineBorder:
-        case WoodBorder: 
-        case PaperBorder: 
-        case ParqueBorder: 
+        case WoodBorder:
+        case PaperBorder:
+        case ParqueBorder:
         case IceBorder:
-        case LeafBorder: 
+        case LeafBorder:
         case MarbleBorder:
         case RainBorder:
         case CratersBorder:
@@ -160,11 +163,11 @@ void Border::filterImage(void)
         case RockBorder:
         case WallBorder:
             if (m_preserveAspectRatio)
-                pattern(m_orgImage, m_destImage, m_borderMainWidth, 
+                pattern(m_orgImage, m_destImage, m_borderMainWidth,
                         m_decorativeFirstColor, m_decorativeSecondColor,
                         m_border2ndWidth, m_border2ndWidth);
             else
-                pattern2(m_orgImage, m_destImage, m_borderWidth1, 
+                pattern2(m_orgImage, m_destImage, m_borderWidth1,
                          m_decorativeFirstColor, m_decorativeSecondColor,
                          m_borderWidth2, m_borderWidth2);
             break;
@@ -191,7 +194,7 @@ void Border::solid(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColo
     }
 }
 
-void Border::niepce(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, 
+void Border::niepce(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg,
                     int borderWidth, const Digikam::DColor &bg, int lineWidth)
 {
     Digikam::DImg tmp;
@@ -199,7 +202,7 @@ void Border::niepce(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DCol
     solid(tmp, dest, fg, borderWidth);
 }
 
-void Border::bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &topColor, 
+void Border::bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &topColor,
                    const Digikam::DColor &btmColor, int borderWidth)
 {
     int width, height;
@@ -244,13 +247,13 @@ void Border::bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColo
 }
 
 void Border::pattern(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth,
-                     const Digikam::DColor &firstColor, const Digikam::DColor &secondColor, 
+                     const Digikam::DColor &firstColor, const Digikam::DColor &secondColor,
                      int firstWidth, int secondWidth)
 {
     // Original image with the first solid border around.
-    Digikam::DImg tmp; 
+    Digikam::DImg tmp;
     solid(src, tmp, firstColor, firstWidth);
-  
+
     // Border tiled image using pattern with second solid border around.
     int width, height;
 
@@ -270,13 +273,13 @@ void Border::pattern(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth,
     Digikam::DImg border(m_borderPath);
     if ( border.isNull() )
         return;
-    
+
     border.convertToDepthOfImage(&tmp2);
 
     for (int x = 0 ; x < width ; x+=border.width())
         for (int y = 0 ; y < height ; y+=border.height())
             tmp2.bitBltImage(&border, x, y);
-      
+
     solid(tmp2, dest, secondColor, secondWidth);
 
     // Merge both images to one.
@@ -295,13 +298,13 @@ void Border::pattern(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth,
 
 void Border::solid2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth)
 {
-    dest = Digikam::DImg(src.width() + borderWidth*2, src.height() + borderWidth*2, 
+    dest = Digikam::DImg(src.width() + borderWidth*2, src.height() + borderWidth*2,
                          src.sixteenBit(), src.hasAlpha());
     dest.fill(fg);
     dest.bitBltImage(&src, borderWidth, borderWidth);
 }
 
-void Border::niepce2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth, 
+void Border::niepce2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth,
                      const Digikam::DColor &bg, int lineWidth)
 {
     Digikam::DImg tmp;
@@ -309,14 +312,14 @@ void Border::niepce2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DCo
     solid2(tmp, dest, fg, borderWidth);
 }
 
-void Border::bevel2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &topColor, 
+void Border::bevel2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &topColor,
                     const Digikam::DColor &btmColor, int borderWidth)
 {
     int x, y;
     int wc;
 
-    dest = Digikam::DImg(src.width() + borderWidth*2, 
-                         src.height() + borderWidth*2, 
+    dest = Digikam::DImg(src.width() + borderWidth*2,
+                         src.height() + borderWidth*2,
                          src.sixteenBit(), src.hasAlpha());
 
     // top
@@ -356,7 +359,7 @@ void Border::bevel2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DCol
 }
 
 void Border::pattern2(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth,
-                      const Digikam::DColor &firstColor, const Digikam::DColor &secondColor, 
+                      const Digikam::DColor &firstColor, const Digikam::DColor &secondColor,
                       int firstWidth, int secondWidth)
 {
     // Border tile.

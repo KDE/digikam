@@ -5,21 +5,21 @@
  *
  * Date        : 2005-05-25
  * Description : FilmGrain threaded image filter.
- * 
+ *
  * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ includes.
@@ -29,11 +29,14 @@
 
 // Qt includes.
 
-#include <QDateTime> 
+#include <QDateTime>
+
+// KDE includes.
+
+#include <kdebug.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dimg.h"
 #include "dimggaussianblur.h"
 #include "imagecurves.h"
@@ -56,7 +59,7 @@ void FilmGrain::filterImage(void)
     filmgrainImage(&m_orgImage, m_sensibility);
 }
 
-// This method is based on the Simulate Film grain tutorial from GimpGuru.org web site 
+// This method is based on the Simulate Film grain tutorial from GimpGuru.org web site
 // available at this url : http://www.gimpguru.org/Tutorials/FilmGrain
 
 void FilmGrain::filmgrainImage(Digikam::DImg *orgImage, int Sensibility)
@@ -130,7 +133,7 @@ void FilmGrain::filmgrainImage(Digikam::DImg *orgImage, int Sensibility)
     // Smooth grain mask using gaussian blur with radius 1.
     Digikam::DImgGaussianBlur(this, grain, grain, 25, 30, 1);
 
-    // Normally, film grain tends to be most noticeable in the midtones, and much less 
+    // Normally, film grain tends to be most noticeable in the midtones, and much less
     // so in the shadows and highlights. Adjust histogram curve to adjust grain like this.
 
     Digikam::ImageCurves *grainCurves = new Digikam::ImageCurves(sixteenBit);

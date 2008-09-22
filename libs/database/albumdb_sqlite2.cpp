@@ -39,9 +39,12 @@ extern "C"
 
 #include <QFile>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "albumdb_sqlite2.h"
 
 namespace Digikam

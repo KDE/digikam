@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-22-01
- * Description : digikamalbum KIO slave interface to get image 
+ * Description : digikamalbum KIO slave interface to get image
  *               info from database.
  *
  * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -29,12 +29,12 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kio/job.h>
 #include <kurl.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"

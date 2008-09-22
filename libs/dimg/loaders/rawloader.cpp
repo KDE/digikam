@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-11-01
- * Description : A digital camera RAW files loader for DImg 
+ * Description : A digital camera RAW files loader for DImg
  *               framework using an external dcraw instance.
  *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -33,11 +33,11 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kstandarddirs.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "imagehistogram.h"
@@ -65,8 +65,8 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     readMetadata(filePath, DImg::RAW);
 
-    // NOTE: Here, we don't check a possible embedded work-space color profile using 
-    // the method checkExifWorkingColorSpace() like with JPEG, PNG, and TIFF loaders, 
+    // NOTE: Here, we don't check a possible embedded work-space color profile using
+    // the method checkExifWorkingColorSpace() like with JPEG, PNG, and TIFF loaders,
     // because RAW file are always in linear mode.
 
     if (m_loadFlags & LoadImageData)
@@ -165,7 +165,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
         // ----------------------------------------------------------
 
         // Special case: if Color Management is not used here, output color space is in sRGB* color space
-        // RAW decoded image is a linear-histogram image with 16 bits color depth. 
+        // RAW decoded image is a linear-histogram image with 16 bits color depth.
         // No auto white balance and no gamma adjustemnts are performed. Image is a black hole.
         // We need to reproduce all dcraw 8 bits color depth adjustements here.
 
@@ -186,7 +186,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             {
                 total = 0;
                 for (val = 65535 ; val > 256 ; --val)
-                    if ((total += (int)histogram.getValue(c, val)) > perc) 
+                    if ((total += (int)histogram.getValue(c, val)) > perc)
                         break;
 
                 if (white < val) white = (float)val;
@@ -198,7 +198,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
             // Compute the Gamma lut accordingly.
 
-            for (int i=0; i < 65536; i++) 
+            for (int i=0; i < 65536; i++)
             {
                 r = i / white;
                 val = (int)(65536.0 * (r <= 0.018 ? r*4.5 : pow(r, 1.0/gamma) * 1.099-0.099));

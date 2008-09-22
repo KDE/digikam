@@ -31,6 +31,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klineedit.h>
 #include <klocale.h>
 #include <kicondialog.h>
@@ -43,7 +44,6 @@
 // Local includes.
 
 #include "album.h"
-#include "ddebug.h"
 #include "syncjob.h"
 #include "searchtextbar.h"
 #include "tageditdlg.h"

@@ -22,13 +22,14 @@
 
 // KDE includes.
 
-#include <klocale.h>
-#include <kgenericfactory.h>
-#include <klibloader.h>
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kcursor.h>
 #include <kapplication.h>
+#include <kcursor.h>
+#include <kdebug.h>
+#include <kgenericfactory.h>
+#include <klibloader.h>
+#include <klocale.h>
 
 // Local includes.
 
@@ -38,7 +39,6 @@
 using namespace DigikamAutoCorrectionImagesPlugin;
 #endif // HAVE_LENSFUN
 
-#include "ddebug.h"
 #include "antivignettingtool.h"
 #include "lensdistortiontool.h"
 #include "imageplugin_lenscorrection.h"

@@ -33,6 +33,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kmimetypetrader.h>
 #include <kdialog.h>
 #include <klocale.h>
@@ -54,7 +55,6 @@
 // Local includes.
 
 #include "dimg.h"
-#include "ddebug.h"
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"

@@ -5,21 +5,21 @@
  *
  * Date        : 2005-05-25
  * Description : Infrared threaded image filter.
- * 
+ *
  * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ includes.
@@ -31,9 +31,12 @@
 
 #include <QDateTime>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "dimg.h"
 #include "dimggaussianblur.h"
 #include "imagecurves.h"
@@ -46,7 +49,7 @@ namespace DigikamInfraredImagesPlugin
 
 Infrared::Infrared(Digikam::DImg *orgImage, QObject *parent, int sensibility, bool grain)
         : Digikam::DImgThreadedFilter(orgImage, parent, "Infrared")
-{ 
+{
     m_sensibility = sensibility;
     m_grain       = grain;
     initFilter();
@@ -57,7 +60,7 @@ void Infrared::filterImage(void)
     infraredImage(&m_orgImage, m_sensibility, m_grain);
 }
 
-// This method is based on the Simulate Infrared Film tutorial from GimpGuru.org web site 
+// This method is based on the Simulate Infrared Film tutorial from GimpGuru.org web site
 // available at this url : http://www.gimpguru.org/Tutorials/SimulatedInfrared/
 
 inline static int intMult8(uint a, uint b)
@@ -72,7 +75,7 @@ inline static int intMult16(uint a, uint b)
     return ((t >> 16) + t) >> 16;
 }
 
-/* More info about IR film can be seen at this url : 
+/* More info about IR film can be seen at this url :
 
 http://www.pauck.de/marco/photo/infrared/comparison_of_films/comparison_of_films.html
 */
@@ -101,7 +104,7 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
     if (sixteenBit)
         Noise = (Noise + 1) * 256 - 1;
 
-    int   blurRadius = (int)((Sensibility / 200.0) + 1.0);   // Gaussian blur infrared hightlight effect 
+    int   blurRadius = (int)((Sensibility / 200.0) + 1.0);   // Gaussian blur infrared hightlight effect
                                                              // [2 to 5].
     float greenBoost = 2.1 - (Sensibility / 2000.0);         // Infrared green color boost [1.7 to 2.0].
 
@@ -120,7 +123,7 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
     // 1 - Create GrayScale green boosted image.
     //------------------------------------------
 
-    // Convert to gray scale with boosting Green channel. 
+    // Convert to gray scale with boosting Green channel.
     // Infrared film increase green color.
 
     Digikam::DImg BWImage(Width, Height, sixteenBit);   // Black and White conversion.
@@ -198,7 +201,7 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
                 postProgress( progress );
         }
 
-        // Smooth grain mask using gaussian blur.    
+        // Smooth grain mask using gaussian blur.
 
         Digikam::DImgImageFilters().gaussianBlurImage(pGrainBits, Width, Height, sixteenBit, 1);
 
@@ -217,8 +220,8 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
         return;
     }
 
-    // Normally, film grain tends to be most noticeable in the midtones, and much less 
-    // so in the shadows and highlights. Adjust histogram curve to adjust grain like this. 
+    // Normally, film grain tends to be most noticeable in the midtones, and much less
+    // so in the shadows and highlights. Adjust histogram curve to adjust grain like this.
 
     if (Grain)
     {
@@ -321,7 +324,7 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
     //------------------------------------------
 
     // Merge overlay and gray scale image using 'Overlay' Gimp method for increase the highlight.
-    // The result is usually a brighter picture. 
+    // The result is usually a brighter picture.
     // Overlay mode composite value computation is D =  A * (B + (2 * B) * (255 - A)).
 
     outData.setSixteenBit(sixteenBit);
@@ -359,7 +362,7 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
 
     delete [] pGrainBits;
     delete [] pMaskBits;
-    
+
     if (Grain)
         delete [] pOverlayBits;
 }

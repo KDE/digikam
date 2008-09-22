@@ -35,6 +35,7 @@
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcombobox.h>
+#include <kdebug.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -49,7 +50,6 @@
 // Local includes.
 
 #include "version.h"
-#include "ddebug.h"
 #include "imageiface.h"
 #include "imagepanelwidget.h"
 #include "editortoolsettings.h"

@@ -41,6 +41,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcolorbutton.h>
@@ -61,7 +62,6 @@
 // Local includes.
 
 #include "daboutdata.h"
-#include "ddebug.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"

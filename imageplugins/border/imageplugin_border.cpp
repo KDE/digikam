@@ -24,6 +24,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -34,7 +35,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "bordertool.h"
 #include "imageplugin_border.h"
 #include "imageplugin_border.moc"

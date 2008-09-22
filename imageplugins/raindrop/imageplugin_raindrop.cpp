@@ -29,11 +29,11 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kcursor.h>
+#include <kdebug.h>
 #include <kapplication.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "raindroptool.h"
 #include "imageplugin_raindrop.h"
 #include "imageplugin_raindrop.moc"

@@ -35,8 +35,9 @@
 
 // KDE includes.
 
-#include <klocale.h>
+#include <kdebug.h>
 #include <kdialog.h>
+#include <klocale.h>
 
 // Local includes.
 
@@ -44,7 +45,6 @@
 #include "albummanager.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
-#include "ddebug.h"
 #include "imagelister.h"
 #include "findduplicatesalbumitem.h"
 #include "findduplicatesview.h"

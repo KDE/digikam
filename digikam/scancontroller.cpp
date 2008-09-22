@@ -39,6 +39,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
 #include <klocale.h>
@@ -46,7 +47,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "collectionscanner.h"
 #include "collectionscannerhints.h"
 #include "databaseaccess.h"

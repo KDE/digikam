@@ -30,6 +30,10 @@
 
 #include <cassert>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
 #define cimg_plugin "greycstoration.h"
@@ -44,7 +48,7 @@
 #include <pthread.h>
 #endif
 
-/** Number of children threads used to run Greystoration algorithm */ 
+/** Number of children threads used to run Greystoration algorithm */
 #define COMPUTATION_THREAD 2
 
 /** Uncomment this line if you use future GreycStoration implementation with GFact parameter */
@@ -52,7 +56,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "greycstorationsettings.h"
 #include "greycstorationiface.h"
 
@@ -376,9 +379,9 @@ void GreycstorationIface::resize()
 
     d->mask.assign(d->img.dimx(), d->img.dimy(), 1, 1, 255);
 
-    if (!anchor) 
-        d->mask.resize(w, h, 1, 1, 1); 
-    else 
+    if (!anchor)
+        d->mask.resize(w, h, 1, 1, 1);
+    else
         d->mask = !d->mask.resize(w, h, 1, 1, 4);
 
     d->img.resize(w, h, 1, -100, init);
@@ -451,7 +454,7 @@ void GreycstorationIface::iterationLoop(uint iter)
     }
     while (d->img.greycstoration_is_running() && !m_cancel);
 
-    // A delay is require here. I suspect a sync problem between threads 
+    // A delay is require here. I suspect a sync problem between threads
     // used by GreycStoration algorithm.
     usleep(100000);
 }

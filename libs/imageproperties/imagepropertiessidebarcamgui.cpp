@@ -28,6 +28,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kapplication.h>
@@ -37,7 +38,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dmetadata.h"
 #include "gpiteminfo.h"
 #include "cameraiconview.h"

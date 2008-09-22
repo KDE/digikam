@@ -34,6 +34,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>
@@ -42,7 +43,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "databaseaccess.h"
 #include "albumdb.h"
 #include "geodetictools.h"

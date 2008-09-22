@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -30,10 +30,10 @@
 
 #include <kstandarddirs.h>
 #include <kcodecs.h> // for KMD5
+#include <kdebug.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dimgprivate.h"
 #include "dmetadata.h"
 #include "dimgloaderobserver.h"
@@ -204,8 +204,8 @@ bool DImgLoader::checkExifWorkingColorSpace()
 
         case DMetadata::WORKSPACE_ADOBERGB:
         {
-            kDebug(50003) << "Exif color-space tag is AdobeRGB. Using default AdobeRGB ICC profile." << endl;       
-            m_image->getICCProfilFromFile(directory + QString("adobergb.icm"));            
+            kDebug(50003) << "Exif color-space tag is AdobeRGB. Using default AdobeRGB ICC profile." << endl;
+            m_image->getICCProfilFromFile(directory + QString("adobergb.icm"));
             return true;
             break;
         }

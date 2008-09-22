@@ -33,6 +33,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <khbox.h>
 #include <kdialog.h>
 #include <klocale.h>
@@ -47,7 +48,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "metadatalistview.h"
 #include "cietonguewidget.h"
 #include "iccprofilewidget.h"

@@ -27,13 +27,13 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcursor.h>
+#include <kdebug.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocale.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "perspectivetool.h"
 #include "imageplugin_perspective.h"
 #include "imageplugin_perspective.moc"

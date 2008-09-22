@@ -23,6 +23,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -33,7 +34,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "channelmixertool.h"
 #include "imageplugin_channelmixer.h"
 #include "imageplugin_channelmixer.moc"

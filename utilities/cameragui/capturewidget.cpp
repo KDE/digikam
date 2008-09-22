@@ -5,7 +5,7 @@
  *
  * Date        : 2007-09-06
  * Description : a widget to display camera capture preview.
- * 
+ *
  * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -31,11 +31,11 @@
 // KDE includes.
 
 #include <kcursor.h>
+#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "capturewidget.h"
 #include "capturewidget.moc"
 
@@ -84,7 +84,7 @@ void CaptureWidget::updatePixmap()
 
     if (!d->preview.isNull())
     {
-        QPixmap pix = QPixmap::fromImage(d->preview.scaled(contentsRect().size(), 
+        QPixmap pix = QPixmap::fromImage(d->preview.scaled(contentsRect().size(),
                                          Qt::KeepAspectRatio, Qt::SmoothTransformation));
         p.drawPixmap((contentsRect().width()-pix.width())/2,
                      (contentsRect().height()-pix.height())/2, pix,
@@ -94,10 +94,10 @@ void CaptureWidget::updatePixmap()
     {
         p.setPen(QPen(palette().text().color()));
         p.drawText(0, 0, d->pixmap.width(), d->pixmap.height(),
-                   Qt::AlignCenter|Qt::WordBreak, 
+                   Qt::AlignCenter|Qt::WordBreak,
                    i18n("Cannot display camera preview"));
     }
-    
+
     p.end();
 }
 

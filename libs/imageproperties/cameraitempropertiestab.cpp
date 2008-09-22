@@ -30,6 +30,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kapplication.h>
 #include <kconfig.h>
@@ -41,7 +42,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dmetadata.h"
 #include "gpiteminfo.h"
 #include "cameraitempropertiestab.h"
@@ -262,8 +262,8 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent)
     // --------------------------------------------------
 
     settingsLayout->addWidget(d->title,                  0, 0, 1, 2);
-    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 
+    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding),
                                                          1, 1, 0, 1);
     settingsLayout->addWidget(d->file,                   2, 0, 1, 1);
     settingsLayout->addWidget(d->labelFile,              2, 1, 1, 1);
@@ -287,16 +287,16 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent)
     settingsLayout->addWidget(d->labelAlreadyDownloaded, 11, 1, 1, 1);
 
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding),
                                                          12, 0, 0, 1);
     settingsLayout->addWidget(line,                      13, 0, 1, 2);
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding),
                                                          14, 0, 0, 1);
 
     settingsLayout->addWidget(d->title2,                 15, 0, 1, 2);
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding),
                                                          16, 0, 0, 1);
     settingsLayout->addWidget(d->make,                   17, 0, 1, 1);
     settingsLayout->addWidget(d->labelPhotoMake,         17, 1, 1, 1);
@@ -394,7 +394,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
     d->labelFileIsWritable->setText(str);
 
     if (itemInfo->mtime.isValid())
-        d->labelFileDate->setText(KGlobal::locale()->formatDateTime(itemInfo->mtime, 
+        d->labelFileDate->setText(KGlobal::locale()->formatDateTime(itemInfo->mtime,
                                                                     KLocale::ShortDate, true));
     else
         d->labelFileDate->setText(unknown);
@@ -405,7 +405,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
 
     // -- Image Properties --------------------------------------------------
 
-    d->labelImageMime->setText( (itemInfo->mime == QString("image/x-raw")) ? 
+    d->labelImageMime->setText( (itemInfo->mime == QString("image/x-raw")) ?
                                i18n("RAW Image") : KMimeType::mimeType(itemInfo->mime)->comment() );
 
     QString mpixels;
@@ -447,7 +447,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
         dims = QSize(itemInfo->width, itemInfo->height);
     }
     mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
-    str = (!dims.isValid()) ? unknown : i18n("%1x%2 (%3Mpx)", 
+    str = (!dims.isValid()) ? unknown : i18n("%1x%2 (%3Mpx)",
            dims.width(), dims.height(), mpixels);
     d->labelImageDimensions->setText(str);
 
@@ -539,9 +539,9 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
 
     if (photoInfo.focalLength35mm.isEmpty())
         d->labelPhotoFocalLenght->setText(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
-    else 
+    else
     {
-        str = i18n("%1 (35mm: %2)", photoInfo.focalLength, 
+        str = i18n("%1 (35mm: %2)", photoInfo.focalLength,
                    photoInfo.focalLength35mm);
         d->labelPhotoFocalLenght->setText(str);
     }

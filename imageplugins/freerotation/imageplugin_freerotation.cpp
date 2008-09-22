@@ -24,6 +24,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -34,7 +35,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "freerotationtool.h"
 #include "imageplugin_freerotation.h"
 #include "imageplugin_freerotation.moc"

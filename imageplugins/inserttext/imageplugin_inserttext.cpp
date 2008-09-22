@@ -23,6 +23,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -33,7 +34,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "inserttexttool.h"
 #include "imageplugin_inserttext.h"
 #include "imageplugin_inserttext.moc"

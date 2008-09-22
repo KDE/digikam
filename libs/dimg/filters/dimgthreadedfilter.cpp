@@ -5,7 +5,7 @@
  *
  * Date        : 2005-05-25
  * Description : threaded image filter class.
- * 
+ *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -14,28 +14,31 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
 
 #include <QObject>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "dimgthreadedfilter.h"
 #include "dimgthreadedfilter.moc"
 
 namespace Digikam
 {
 
-DImgThreadedFilter::DImgThreadedFilter(DImg *orgImage, QObject *parent, 
+DImgThreadedFilter::DImgThreadedFilter(DImg *orgImage, QObject *parent,
                                        const QString& name)
                   : QThread()
 {
@@ -52,8 +55,8 @@ DImgThreadedFilter::DImgThreadedFilter(DImg *orgImage, QObject *parent,
     m_progressSpan  = 100;
 }
 
-DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter *master, const DImg &orgImage, 
-                                       const DImg &destImage, int progressBegin, int progressEnd, 
+DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter *master, const DImg &orgImage,
+                                       const DImg &destImage, int progressBegin, int progressEnd,
                                        const QString& name)
 {
     m_orgImage      = orgImage;

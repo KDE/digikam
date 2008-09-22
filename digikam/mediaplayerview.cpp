@@ -30,6 +30,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kdialog.h>
 #include <klocale.h>
 #include <phonon/seekslider.h>
@@ -38,7 +39,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "themeengine.h"
 #include "mediaplayerview.h"
 #include "mediaplayerview.moc"

@@ -5,7 +5,7 @@
  *
  * Date        : 2005-05-07
  * Description : a dialog to delete item.
- * 
+ *
  * Copyright (C) 2004 by Michael Pyne <michael.pyne@kdemail.net>
  * Copyright (C) 2006 by Ian Monroe <ian@monroe.nu>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
@@ -16,12 +16,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -34,6 +34,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klistwidget.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
@@ -42,7 +43,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "albumsettings.h"
 #include "deletedialog.h"
 #include "deletedialog.moc"
@@ -108,7 +108,7 @@ DeleteWidget::DeleteWidget(QWidget *parent)
                                       "undelete deleted files reliably.</p></qt>"));
     m_shouldDelete->setText(i18n("&Delete files instead of moving them to the trash"));
 
-    connect(m_shouldDelete, SIGNAL(toggled(bool)), 
+    connect(m_shouldDelete, SIGNAL(toggled(bool)),
             this, SLOT(slotShouldDelete(bool)));
 
     m_doNotShowAgain = new QCheckBox(m_checkBoxStack);
@@ -247,7 +247,7 @@ void DeleteWidget::updateText()
 
 //----------------------------------------------------------------------------
 
-DeleteDialog::DeleteDialog(QWidget *parent) 
+DeleteDialog::DeleteDialog(QWidget *parent)
             : KDialog(parent),
               m_saveShouldDeleteUserPreference(true),
               m_saveDoNotShowAgain(false),
@@ -265,7 +265,7 @@ DeleteDialog::DeleteDialog(QWidget *parent)
 
     slotShouldDelete(shouldDelete());
 
-    connect(m_widget->m_shouldDelete, SIGNAL(toggled(bool)), 
+    connect(m_widget->m_shouldDelete, SIGNAL(toggled(bool)),
             this, SLOT(slotShouldDelete(bool)));
 }
 
@@ -310,9 +310,9 @@ void DeleteDialog::accept()
     KDialog::accept();
 }
 
-bool DeleteDialog::shouldDelete() const 
-{ 
-    return m_widget->m_shouldDelete->isChecked(); 
+bool DeleteDialog::shouldDelete() const
+{
+    return m_widget->m_shouldDelete->isChecked();
 }
 
 void DeleteDialog::slotShouldDelete(bool shouldDelete)

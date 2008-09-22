@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2002-16-10
- * Description : implementation of album view interface. 
+ * Description : implementation of album view interface.
  *
  * Copyright (C) 2002-2005 by Renchi Raju  <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2002-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -39,6 +39,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kpushbutton.h>
 #include <klocale.h>
 #include <kapplication.h>
@@ -57,7 +58,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dmetadata.h"
 #include "albummanager.h"
 #include "album.h"
@@ -966,11 +966,11 @@ void DigikamView::slotGotoAlbumAndItem(AlbumIconItem* iconItem)
     // considered as a feature, because it highlights that the view was changed.
     d->leftSideBar->setActiveTab(d->folderBox);
 
-    // Set the activate item url to find in the Album View after  
+    // Set the activate item url to find in the Album View after
     // all items have be reloaded.
     d->iconView->setAlbumItemToFind(url);
 
-    // And finally toggle album manager to handle album history and 
+    // And finally toggle album manager to handle album history and
     // reload all items.
     d->albumManager->setCurrentAlbum(album);
 }
@@ -988,12 +988,12 @@ void DigikamView::slotGotoDateAndItem(AlbumIconItem* iconItem)
     // considered as a feature, because it highlights that the view was changed.
     d->leftSideBar->setActiveTab(d->dateFolderView);
 
-    // Set the activate item url to find in the Album View after  
+    // Set the activate item url to find in the Album View after
     // all items have be reloaded.
     d->iconView->setAlbumItemToFind(url);
 
     // Change the year and month of the iconItem (day is unused).
-    d->dateFolderView->gotoDate(date); 
+    d->dateFolderView->gotoDate(date);
 }
 
 void DigikamView::slotGotoTagAndItem(int tagID)
@@ -1013,10 +1013,10 @@ void DigikamView::slotGotoTagAndItem(int tagID)
     // Set the current tag in the tag folder view.
     d->tagFolderView->selectItem(tagID);
 
-    // Set the activate item url to find in the Tag View after  
+    // Set the activate item url to find in the Tag View after
     // all items have be reloaded.
     // FIXME: see above
-    // d->iconView->setAlbumItemToFind(url);  
+    // d->iconView->setAlbumItemToFind(url);
 }
 
 void DigikamView::slotAlbumSelected(Album* album)
@@ -1044,12 +1044,12 @@ void DigikamView::slotAlbumSelected(Album* album)
 
     d->albumHistory->addAlbum(album, d->leftSideBar->getActiveTab());
     d->parent->enableAlbumBackwardHistory(!d->albumHistory->isBackwardEmpty());
-    d->parent->enableAlbumForwardHistory(!d->albumHistory->isForwardEmpty());    
+    d->parent->enableAlbumForwardHistory(!d->albumHistory->isForwardEmpty());
 
     d->iconView->setAlbum(album);
     if (album->isRoot())
         d->albumWidgetStack->setPreviewMode(AlbumWidgetStack::WelcomePageMode);
-    else 
+    else
         d->albumWidgetStack->setPreviewMode(AlbumWidgetStack::PreviewAlbumMode);
 }
 
@@ -1125,7 +1125,7 @@ void DigikamView::setThumbSize(int size)
         double zmax = d->albumWidgetStack->zoomMax();
         double b    = (zmin-(zmax*s/h))/(1-s/h);
         double a    = (zmax-b)/h;
-        double z    = a*size+b; 
+        double z    = a*size+b;
         d->albumWidgetStack->setZoomFactorSnapped(z);
     }
     else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
@@ -1134,7 +1134,7 @@ void DigikamView::setThumbSize(int size)
             d->thumbSize = ThumbnailSize::Huge;
         else if (size < ThumbnailSize::Small)
             d->thumbSize = ThumbnailSize::Small;
-        else 
+        else
             d->thumbSize = size;
 
         emit signalThumbSizeChanged(d->thumbSize);
@@ -1213,7 +1213,7 @@ void DigikamView::slotZoomOut()
         setThumbSize(d->thumbSize - ThumbnailSize::Step);
         toggleZoomActions();
         emit signalThumbSizeChanged(d->thumbSize);
-    }  
+    }
     else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
     {
         d->albumWidgetStack->decreaseZoom();
@@ -1246,7 +1246,7 @@ void DigikamView::slotZoomFactorChanged(double zoom)
     double zmax = d->albumWidgetStack->zoomMax();
     double b    = (zmin-(zmax*s/h))/(1-s/h);
     double a    = (zmax-b)/h;
-    int size    = (int)((zoom - b) /a); 
+    int size    = (int)((zoom - b) /a);
 
     emit signalZoomChanged(zoom, size);
 }
@@ -1403,7 +1403,7 @@ void DigikamView::slotImageLightTable()
 {
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
-        // put images into an emptied light table 
+        // put images into an emptied light table
         d->iconView->insertSelectionToLightTable(false);
     }
     else
@@ -1411,7 +1411,7 @@ void DigikamView::slotImageLightTable()
         ImageInfoList list;
         ImageInfo info = d->albumWidgetStack->imagePreviewView()->getImageInfo();
         list.append(info);
-        // put images into an emptied light table 
+        // put images into an emptied light table
         d->iconView->insertToLightTable(list, info, false);
     }
 }
@@ -1420,7 +1420,7 @@ void DigikamView::slotImageAddToLightTable()
 {
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
-        // add images to the existing images in the light table 
+        // add images to the existing images in the light table
         d->iconView->insertSelectionToLightTable(true);
     }
     else
@@ -1428,7 +1428,7 @@ void DigikamView::slotImageAddToLightTable()
         ImageInfoList list;
         ImageInfo info = d->albumWidgetStack->imagePreviewView()->getImageInfo();
         list.append(info);
-        // add images to the existing images in the light table 
+        // add images to the existing images in the light table
         d->iconView->insertToLightTable(list, info, true);
     }
 }
@@ -1548,7 +1548,7 @@ void DigikamView::slotSlideShowAll()
 {
     ImageInfoList infoList;
     AlbumIconItem* item = dynamic_cast<AlbumIconItem*>(d->iconView->firstItem());
-    while (item) 
+    while (item)
     {
         infoList.append(item->imageInfo());
         item = dynamic_cast<AlbumIconItem*>(item->nextItem());
@@ -1561,7 +1561,7 @@ void DigikamView::slotSlideShowSelection()
 {
     ImageInfoList infoList;
     AlbumIconItem* item = dynamic_cast<AlbumIconItem*>(d->iconView->firstItem());
-    while (item) 
+    while (item)
     {
         if (item->isSelected())
             infoList.append(item->imageInfo());
@@ -1594,7 +1594,7 @@ void DigikamView::slotSlideShowRecursive()
 
 void DigikamView::slotItemsInfoFromAlbums(const ImageInfoList& infoList)
 {
-    ImageInfoList list = infoList; 
+    ImageInfoList list = infoList;
     slideShow(list);
 }
 
@@ -1606,7 +1606,7 @@ void DigikamView::slideShow(ImageInfoList &infoList)
 
     int     i = 0;
     float cnt = (float)infoList.count();
-    emit signalProgressBarMode(StatusProgressBar::CancelProgressBarMode, 
+    emit signalProgressBarMode(StatusProgressBar::CancelProgressBarMode,
                                i18n("Preparing slideshow of %1 images. Please wait...", infoList.count()));
 
     SlideShowSettings settings;
@@ -1623,7 +1623,7 @@ void DigikamView::slideShow(ImageInfoList &infoList)
     settings.loop                 = group.readEntry("SlideShowLoop", false);
 
     d->cancelSlideShow = false;
-    for (ImageInfoList::iterator it = infoList.begin() ; 
+    for (ImageInfoList::iterator it = infoList.begin() ;
          !d->cancelSlideShow && (it != infoList.end()) ; ++it)
     {
         ImageInfo info = *it;
@@ -1638,7 +1638,7 @@ void DigikamView::slideShow(ImageInfoList &infoList)
         kapp->processEvents();
     }
 
-    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());   
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
 
     if (!d->cancelSlideShow)
     {
@@ -1646,7 +1646,7 @@ void DigikamView::slideShow(ImageInfoList &infoList)
         if (startWithCurrent)
         {
             AlbumIconItem* current = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
-            if (current) 
+            if (current)
                 slide->setCurrent(current->imageInfo().fileUrl());
         }
 

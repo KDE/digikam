@@ -25,9 +25,12 @@
 
 #include <QByteArray>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "ddragobjects.h"
 
 namespace Digikam
@@ -66,16 +69,16 @@ DItemDrag::DItemDrag(const KUrl::List &urls,
 
 bool DItemDrag::canDecode(const QMimeData* e)
 {
-    return e->hasFormat("digikam/item-ids")  || 
+    return e->hasFormat("digikam/item-ids")  ||
            e->hasFormat("digikam/album-ids") ||
            e->hasFormat("digikam/image-ids") ||
            e->hasFormat("digikam/digikamalbums");
 }
 
-bool DItemDrag::decode(const QMimeData* e, 
-                       KUrl::List &urls, 
+bool DItemDrag::decode(const QMimeData* e,
+                       KUrl::List &urls,
                        KUrl::List &kioUrls,
-                       QList<int>& albumIDs, 
+                       QList<int>& albumIDs,
                        QList<int>& imageIDs)
 {
     urls.clear();
@@ -164,7 +167,7 @@ bool DTagDrag::decode(const QMimeData* e, int &tagID)
 
 // ------------------------------------------------------------------------
 
-DAlbumDrag::DAlbumDrag(const KUrl &url, int albumid) 
+DAlbumDrag::DAlbumDrag(const KUrl &url, int albumid)
           : QMimeData()
 {
     QByteArray ba;
@@ -309,7 +312,7 @@ bool DCameraDragObject::canDecode(const QMimeData* e)
 bool DCameraDragObject::decode(const QMimeData* e, CameraType& ctype)
 {
     QByteArray ba = e->data("camera/unknown");
-    if (ba.size()) 
+    if (ba.size())
     {
         QString   title, model, port, path;
         QDateTime lastAccess;

@@ -29,6 +29,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kcombobox.h>
 #include <kdialog.h>
 #include <klocale.h>
@@ -40,7 +41,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "klensfun.h"
 #include "klensfun.moc"
 

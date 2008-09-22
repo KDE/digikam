@@ -29,11 +29,11 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "albumdb.h"
 #include "imageinfocache.h"
 #include "schemaupdater.h"

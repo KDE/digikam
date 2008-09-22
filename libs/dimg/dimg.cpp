@@ -7,7 +7,7 @@
  * Description : digiKam 8/16 bits image management API
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
@@ -36,12 +36,16 @@ extern "C"
 
 // Qt includes.
 
-#include <QtCore> 
+#include <QtCore>
 #include <QFile>
 #include <QFileInfo>
 #include <QMap>
 #include <QPixmap>
 #include <QSysInfo>
+
+// KDE includes.
+
+#include <kdebug.h>
 
 // LibKDcraw includes.
 
@@ -63,7 +67,6 @@ extern "C"
 #include "qimageloader.h"
 #include "icctransform.h"
 #include "exposurecontainer.h"
-#include "ddebug.h"
 #include "dimgprivate.h"
 #include "dimgloaderobserver.h"
 #include "dimg.h"
@@ -122,24 +125,24 @@ DImg::DImg(const QImage& image)
     if (!image.isNull())
     {
         QImage target = image.convertToFormat(QImage::Format_ARGB32);
-        
+
         uint w      = target.width();
         uint h      = target.height();
         uchar* data = new uchar[w*h*4];
         uint*  sptr = (uint*)target.bits();
         uchar* dptr = data;
-        
+
         for (uint i = 0 ; i < w*h ; i++)
         {
             dptr[0] = qBlue(*sptr);
             dptr[1] = qGreen(*sptr);
             dptr[2] = qRed(*sptr);
             dptr[3] = qAlpha(*sptr);
-            
+
             dptr += 4;
             sptr++;
         }
-    
+
         putImageData(w, h, false, image.hasAlphaChannel(), data, false);
     }
 }
@@ -269,7 +272,7 @@ void DImg::copyMetaData(const DImgPrivate *src)
          it != src->metaData.end(); ++it)
     {
         // Insert a deep copy...
-        m_priv->metaData.insert(it.key(), QByteArray(it.value()));  
+        m_priv->metaData.insert(it.key(), QByteArray(it.value()));
     }
 }
 
@@ -579,7 +582,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
         char nl;
         FILE *file = fopen(QFile::encodeName(filePath), "rb");
 
-        if (fscanf (file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) == 4) 
+        if (fscanf (file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) == 4)
         {
             if (rgbmax > 255)
             {
@@ -593,8 +596,8 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     else if (KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, filePath)
               && dcrawIdentify.isDecodable)
     {
-        // RAW File test using dcraw::identify method.  
-        // Need to test it before TIFF because any RAW file 
+        // RAW File test using dcraw::identify method.
+        // Need to test it before TIFF because any RAW file
         // formats using TIFF header.
         return RAW;
     }
@@ -651,7 +654,7 @@ uchar* DImg::scanLine(uint i) const
     uchar *data = bits() + (width() * bytesDepth() * i);
     return data;
 }
-    
+
 bool DImg::hasAlpha() const
 {
     return m_priv->alpha;
@@ -691,9 +694,9 @@ DImg::FORMAT DImg::fileFormat() const
 bool DImg::getICCProfilFromFile(const QString& filePath)
 {
     QFile file(filePath);
-    if ( !file.open(QIODevice::ReadOnly) ) 
+    if ( !file.open(QIODevice::ReadOnly) )
         return false;
-    
+
     QByteArray data;
     data.resize(file.size());
     QDataStream stream( &file );
@@ -706,9 +709,9 @@ bool DImg::getICCProfilFromFile(const QString& filePath)
 bool DImg::setICCProfilToFile(const QString& filePath)
 {
     QFile file(filePath);
-    if ( !file.open(QIODevice::WriteOnly) ) 
+    if ( !file.open(QIODevice::WriteOnly) )
         return false;
-    
+
     QByteArray data(getICCProfil());
     QDataStream stream( &file );
     stream.writeRawData(data.data(), data.size());
@@ -1047,7 +1050,7 @@ void DImg::bitBlt (const uchar *src, uchar *dest,
 
     int scurY = sy;
     int dcurY = dy;
-    for (int j = 0 ; j < h ; j++, scurY++, dcurY++) 
+    for (int j = 0 ; j < h ; j++, scurY++, dcurY++)
     {
         sptr  = &src [ scurY * slinelength ] + sx * sdepth;
         dptr  = &dest[ dcurY * dlinelength ] + dx * ddepth;
@@ -1095,7 +1098,7 @@ void DImg::bitBlend (DColorComposer *composer, const uchar *src, uchar *dest,
 
     int scurY = sy;
     int dcurY = dy;
-    for (int j = 0 ; j < h ; j++, scurY++, dcurY++) 
+    for (int j = 0 ; j < h ; j++, scurY++, dcurY++)
     {
         sptr  = &src [ scurY * slinelength ] + sx * sdepth;
         dptr  = &dest[ dcurY * dlinelength ] + dx * ddepth;
@@ -1217,16 +1220,16 @@ QPixmap DImg::convertToPixmap(IccTransform *monitorICCtrans)
         kDebug(50003) << " : no monitor ICC profile available!" << endl;
         return convertToPixmap();
     }
-    
+
     DImg img = copy();
 
     // Without embedded profile
     if (img.getICCProfil().isNull())
     {
-        QByteArray fakeProfile; 
+        QByteArray fakeProfile;
         monitorICCtrans->apply(img, fakeProfile, monitorICCtrans->getRenderingIntent(),
-                               monitorICCtrans->getUseBPC(), false, 
-                               monitorICCtrans->inputProfile().isNull()); 
+                               monitorICCtrans->getUseBPC(), false,
+                               monitorICCtrans->inputProfile().isNull());
     }
     // With embedded profile.
     else
@@ -1260,8 +1263,8 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
         {
             pix   = getPixelColor(x, y);
             index = y*img.bytesPerLine() + x*4;
-    
-            if (expoSettings->underExposureIndicator && 
+
+            if (expoSettings->underExposureIndicator &&
                 pix.red() == 0 && pix.green() == 0 && pix.blue() == 0)
             {
                 bits[index    ] = expoSettings->underExposureColor.blue();
@@ -1270,7 +1273,7 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
                 bits[index + 3] = 0xFF;
             }
 
-            if (expoSettings->overExposureIndicator && 
+            if (expoSettings->overExposureIndicator &&
                 pix.red() == max && pix.green() == max && pix.blue() == max)
             {
                 bits[index    ] = expoSettings->overExposureColor.blue();
@@ -1328,7 +1331,7 @@ void DImg::rotate(ANGLE angle)
 {
     if (isNull())
         return;
-    
+
     switch (angle)
     {
     case(ROT90):
@@ -1339,14 +1342,14 @@ void DImg::rotate(ANGLE angle)
         if (sixteenBit())
         {
             ullong* newData = new ullong[w*h];
-        
+
             ullong *from = (ullong*) m_priv->data;
             ullong *to;
-        
+
             for (int y = w-1; y >=0; y--)
             {
                 to = newData + y;
-                
+
                 for (uint x=0; x < h; x++)
                 {
                     *to = *from++;
@@ -1362,14 +1365,14 @@ void DImg::rotate(ANGLE angle)
         else
         {
             uint* newData = new uint[w*h];
-        
+
             uint *from = (uint*) m_priv->data;
             uint *to;
-        
+
             for (int y = w-1; y >=0; y--)
             {
                 to = newData + y;
-                
+
                 for (uint x=0; x < h; x++)
                 {
                     *to = *from++;
@@ -1382,7 +1385,7 @@ void DImg::rotate(ANGLE angle)
             delete [] m_priv->data;
             m_priv->data = (uchar*)newData;
         }
-        
+
         break;
     }
     case(ROT180):
@@ -1401,7 +1404,7 @@ void DImg::rotate(ANGLE angle)
 
             ullong* data = (ullong*) bits();
             ullong  tmp;
-        
+
             // can be done inplace
             for (uint y = 0; y < (h+1)/2; y++)
             {
@@ -1427,13 +1430,13 @@ void DImg::rotate(ANGLE angle)
 
             uint* data = (uint*) bits();
             uint  tmp;
-        
+
             // can be done inplace
             for (uint y = 0; y < (h+1)/2; y++)
             {
                 line1 = data + y * w;
                 line2 = data + (h-y) * w;
-                
+
                 for (uint x=0; x < w; x++)
                 {
                     tmp    = *line1;
@@ -1447,7 +1450,7 @@ void DImg::rotate(ANGLE angle)
                 }
             }
         }
-        
+
         break;
     }
     case(ROT270):
@@ -1458,14 +1461,14 @@ void DImg::rotate(ANGLE angle)
         if (sixteenBit())
         {
             ullong* newData = new ullong[w*h];
-        
+
             ullong *from = (ullong*) m_priv->data;
             ullong *to;
-        
+
             for (uint y = 0; y < w; y++)
             {
                 to = newData + y + w*(h-1);
-                
+
                 for (uint x=0; x < h; x++)
                 {
                     *to = *from++;
@@ -1481,14 +1484,14 @@ void DImg::rotate(ANGLE angle)
         else
         {
             uint* newData = new uint[w*h];
-        
+
             uint *from = (uint*) m_priv->data;
             uint *to;
-        
+
             for (uint y = 0; y < w; y++)
             {
                 to = newData + y + w*(h-1);
-                
+
                 for (uint x=0; x < h; x++)
                 {
                     *to = *from++;
@@ -1501,7 +1504,7 @@ void DImg::rotate(ANGLE angle)
             delete [] m_priv->data;
             m_priv->data = (uchar*)newData;
         }
-        
+
         break;
     }
     default:
@@ -1515,34 +1518,34 @@ void DImg::flip(FLIP direction)
 {
     if (isNull())
         return;
-    
+
     switch (direction)
     {
         case(HORIZONTAL):
         {
             uint w  = width();
             uint h  = height();
-    
+
             if (sixteenBit())
             {
                 unsigned short  tmp[4];
                 unsigned short *beg;
                 unsigned short *end;
-    
+
                 unsigned short * data = (unsigned short *)bits();
-    
+
                 // can be done inplace
                 for (uint y = 0 ; y < h ; y++)
                 {
                     beg = data + y * w * 4;
                     end = beg  + (w-1) * 4;
-    
+
                     for (uint x=0 ; x < (w/2) ; x++)
                     {
                         memcpy(&tmp, beg, 8);
                         memcpy(beg, end, 8);
                         memcpy(end, &tmp, 8);
-    
+
                         beg+=4;
                         end-=4;
                     }
@@ -1553,15 +1556,15 @@ void DImg::flip(FLIP direction)
                 uchar  tmp[4];
                 uchar *beg;
                 uchar *end;
-    
+
                 uchar* data = bits();
-    
+
                 // can be done inplace
                 for (uint y = 0 ; y < h ; y++)
                 {
                     beg = data + y * w * 4;
                     end = beg  + (w-1) * 4;
-    
+
                     for (uint x=0 ; x < (w/2) ; x++)
                     {
                         memcpy(&tmp, beg, 4);
@@ -1573,28 +1576,28 @@ void DImg::flip(FLIP direction)
                     }
                 }
             }
-    
+
             break;
         }
         case(VERTICAL):
         {
             uint w  = width();
             uint h  = height();
-    
+
             if (sixteenBit())
             {
                 unsigned short  tmp[4];
                 unsigned short *line1;
                 unsigned short *line2;
-    
+
                 unsigned short* data = (unsigned short*) bits();
-            
+
                 // can be done inplace
                 for (uint y = 0 ; y < (h/2) ; y++)
                 {
                     line1 = data + y * w * 4;
                     line2 = data + (h-y-1) * w * 4;
-                    
+
                     for (uint x=0 ; x < w ; x++)
                     {
                         memcpy(&tmp, line1, 8);
@@ -1611,15 +1614,15 @@ void DImg::flip(FLIP direction)
                 uchar  tmp[4];
                 uchar *line1;
                 uchar *line2;
-    
+
                 uchar* data = bits();
-            
+
                 // can be done inplace
                 for (uint y = 0 ; y < (h/2) ; y++)
                 {
                     line1 = data + y * w * 4;
                     line2 = data + (h-y-1) * w * 4;
-                    
+
                     for (uint x=0 ; x < w ; x++)
                     {
                         memcpy(&tmp, line1, 4);
@@ -1631,7 +1634,7 @@ void DImg::flip(FLIP direction)
                     }
                 }
             }
-            
+
             break;
         }
         default:
@@ -1725,7 +1728,7 @@ void DImg::fill(DColor color)
     else
     {
         uchar *imgData = m_priv->data;
-        
+
         for (uint i = 0 ; i < width()*height()*4 ; i+=4)
         {
             imgData[ i ] = (uchar)color.blue();

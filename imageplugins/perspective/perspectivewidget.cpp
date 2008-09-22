@@ -5,10 +5,10 @@
  *
  * Date  : 2005-01-18
  * Description : a widget class to edit perspective.
- * 
+ *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * 
+ *
  * Matrix3 implementation inspired from gimp 2.0
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
  *
@@ -17,12 +17,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ includes.
@@ -47,13 +47,13 @@
 
 #include <kstandarddirs.h>
 #include <kcursor.h>
-#include <kglobal.h> 
+#include <kdebug.h>
+#include <kglobal.h>
 #include <kapplication.h>
 
 // Local includes.
 
 #include "triangle.h"
-#include "ddebug.h"
 #include "imageiface.h"
 #include "dimgimagefilters.h"
 #include "perspectivewidget.h"
@@ -210,7 +210,7 @@ void PerspectiveWidget::applyPerspectiveAdjustment()
 
 void PerspectiveWidget::slotToggleAntiAliasing(bool a)
 {
-    m_antiAlias = a; 
+    m_antiAlias = a;
     updatePixmap();
     repaint();
 }
@@ -328,7 +328,7 @@ void PerspectiveWidget::updatePixmap()
         {
             // Horizontal line.
             p.drawLine(m_grid.point(i)+m_rect.topLeft(), m_grid.point(i+1)+m_rect.topLeft());
-            
+
             // Vertical line.
             p.drawLine(m_grid.point(i+2)+m_rect.topLeft(), m_grid.point(i+3)+m_rect.topLeft());
         }
@@ -337,8 +337,8 @@ void PerspectiveWidget::updatePixmap()
     // Drawing transformed center.
 
     p.setPen(QPen(QColor(255, 64, 64), 3, Qt::SolidLine));
-    p.drawEllipse( m_transformedCenter.x()+m_rect.topLeft().x()-2, 
-                   m_transformedCenter.y()+m_rect.topLeft().y()-2, 4, 4 ); 
+    p.drawEllipse( m_transformedCenter.x()+m_rect.topLeft().x()-2,
+                   m_transformedCenter.y()+m_rect.topLeft().y()-2, 4, 4 );
 
     // Drawing vertical and horizontal guide lines.
 
@@ -406,7 +406,7 @@ QPoint PerspectiveWidget::buildPerspective(QPoint orignTopLeft, QPoint orignBott
     dy2 = ty3 - ty4;
     dy3 = ty1 - ty2 + ty4 - ty3;
 
-    //  Is the mapping affine?  
+    //  Is the mapping affine?
 
     if ((dx3 == 0.0) && (dy3 == 0.0))
     {
@@ -464,7 +464,7 @@ QPoint PerspectiveWidget::buildPerspective(QPoint orignTopLeft, QPoint orignBott
     {
         transform.transformPoint(m_grid.point(i).x(), m_grid.point(i).y(), &newX, &newY);
         m_grid.setPoint(i, lround(newX), lround(newY));
-    }   
+    }
 
     // Calculate and return new image center.
     double newCenterX, newCenterY;
@@ -478,11 +478,11 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
 {
     Matrix      m(matrix), inv(matrix);
 
-    int         x1, y1, x2, y2;        // target bounding box 
-    int         x, y;                  // target coordinates 
-    int         u1, v1, u2, v2;        // source bounding box 
+    int         x1, y1, x2, y2;        // target bounding box
+    int         x, y;                  // target coordinates
+    int         u1, v1, u2, v2;        // source bounding box
     double      uinc, vinc, winc;      // increments in source coordinates
-                                       // pr horizontal target coordinate 
+                                       // pr horizontal target coordinate
 
     double      u[5],v[5];             // source coordinates,
                                        //   2
@@ -491,7 +491,7 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
                                        //  \ /    direction (in target space)
                                        //   4
 
-    double      tu[5],tv[5],tw[5];     // undivided source coordinates and divisor 
+    double      tu[5],tv[5],tw[5];     // undivided source coordinates and divisor
 
     uchar      *data, *newData;
     bool        sixteenBit;
@@ -542,7 +542,7 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
 
     for (y = y1; y < y2; y++)
     {
-       // set up inverse transform steps 
+       // set up inverse transform steps
 
         tu[0] = uinc * (x1 + 0.5) + m.coeff[0][1] * (y + 0.5) + m.coeff[0][2] - 0.5;
         tv[0] = vinc * (x1 + 0.5) + m.coeff[1][1] * (y + 0.5) + m.coeff[1][2] - 0.5;
@@ -572,14 +572,14 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
                 }
             }
 
-            //  Set the destination pixels  
+            //  Set the destination pixels
 
             int   iu = lround( u [0] );
             int   iv = lround( v [0] );
 
             if (iu >= u1 && iu < u2 && iv >= v1 && iv < v2)
             {
-                // u, v coordinates into source  
+                // u, v coordinates into source
 
                 int u = iu - u1;
                 int v = iv - v1;
@@ -815,7 +815,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
                 setCursor( Qt::SizeFDiagCursor );
             }
 
-            else 
+            else
             {
                 m_spot.setX(e->x()-m_rect.x());
                 m_spot.setY(e->y()-m_rect.y());

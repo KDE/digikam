@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-08-26
- * Description : a digikam image editor plugin to 
+ * Description : a digikam image editor plugin to
  *               simulate charcoal drawing.
  *
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -29,12 +29,12 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kactioncollection.h>
+#include <kdebug.h>
 #include <kcursor.h>
 #include <kapplication.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "charcoaltool.h"
 #include "imageplugin_charcoal.h"
 #include "imageplugin_charcoal.moc"
@@ -50,7 +50,7 @@ ImagePlugin_Charcoal::ImagePlugin_Charcoal(QObject *parent, const QVariantList &
     m_charcoalAction  = new KAction(KIcon("charcoaltool"), i18n("Charcoal Drawing..."), this);
     actionCollection()->addAction("imageplugin_charcoal", m_charcoalAction  );
 
-    connect(m_charcoalAction, SIGNAL(triggered(bool)), 
+    connect(m_charcoalAction, SIGNAL(triggered(bool)),
             this, SLOT(slotCharcoal()));
 
     setXMLFile( "digikamimageplugin_charcoal_ui.rc" );

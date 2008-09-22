@@ -27,16 +27,16 @@
 
 // KDE includes.
 
-#include <kcursor.h>
-#include <klocale.h>
-#include <kconfig.h>
 #include <kapplication.h>
+#include <kconfig.h>
+#include <kcursor.h>
+#include <kdebug.h>
 #include <kiconloader.h>
+#include <klocale.h>
 #include <kstandarddirs.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "drawdecoding.h"
 #include "histogramwidget.h"
 #include "curveswidget.h"

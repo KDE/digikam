@@ -26,9 +26,12 @@
 #include <QWidget>
 #include <QTimer>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "dimgthreadedfilter.h"
 #include "imagewidget.h"
 #include "imageguidewidget.h"

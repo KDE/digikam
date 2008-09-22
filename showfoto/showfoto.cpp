@@ -59,6 +59,7 @@ extern "C"
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
+#include <kdebug.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -89,7 +90,6 @@ extern "C"
 
 // Local includes.
 
-#include "ddebug.h"
 #include "canvas.h"
 #include "dimginterface.h"
 #include "dmetadata.h"

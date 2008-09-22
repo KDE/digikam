@@ -40,20 +40,21 @@
 
 // KDE includes.
 
-#include <klocale.h>
-#include <kpagedialog.h>
-#include <kurlrequester.h>
-#include <klineedit.h>
-#include <kconfig.h>
 #include <kcombobox.h>
-#include <kmessagebox.h>
-#include <kurllabel.h>
-#include <kiconloader.h>
-#include <kglobalsettings.h>
-#include <kstandarddirs.h>
+#include <kconfig.h>
+#include <kdebug.h>
 #include <kglobal.h>
-#include <kvbox.h>
+#include <kglobalsettings.h>
+#include <kiconloader.h>
+#include <klineedit.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kpagedialog.h>
+#include <kstandarddirs.h>
 #include <ktoolinvocation.h>
+#include <kurllabel.h>
+#include <kurlrequester.h>
+#include <kvbox.h>
 
 // lcms includes.
 
@@ -64,7 +65,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "squeezedcombobox.h"
 #include "iccprofileinfodlg.h"
 #include "albumsettings.h"

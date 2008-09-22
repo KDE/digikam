@@ -35,6 +35,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kiconloader.h>
@@ -48,7 +49,6 @@
 
 #include "version.h"
 #include "daboutdata.h"
-#include "ddebug.h"
 #include "dimg.h"
 #include "imageiface.h"
 #include "imagepanelwidget.h"

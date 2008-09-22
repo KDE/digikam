@@ -46,12 +46,12 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kcursor.h>
 #include <klocale.h>
 
 // Digikam includes.
 
-#include "ddebug.h"
 #include "imagehistogram.h"
 #include "imagecurves.h"
 
@@ -190,7 +190,7 @@ void CurvesWidget::updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenB
 
 void CurvesWidget::reset()
 {
-    if (d->curves) 
+    if (d->curves)
         d->curves->curvesReset();
 
     d->grabPoint    = -1;
@@ -244,7 +244,7 @@ void CurvesWidget::curveTypeChanged()
                                   0, m_imageHistogram->getHistogramSegment()-1);
 
                 d->curves->setCurvePoint( m_channelType,
-                                        i * 2, QPoint(index, 
+                                        i * 2, QPoint(index,
                                                d->curves->getCurveValue(m_channelType,
                                                index)) );
             }
@@ -630,7 +630,7 @@ void CurvesWidget::mousePressEvent(QMouseEvent *e)
     if (e->button() != Qt::LeftButton || d->clearFlag == CurvesWidgetPriv::HistogramStarted)
         return;
 
-    int x = CLAMP((int)(e->pos().x() * 
+    int x = CLAMP((int)(e->pos().x() *
                        ((float)(m_imageHistogram->getHistogramSegment()-1) / (float)width())),
                     0, m_imageHistogram->getHistogramSegment()-1 );
     int y = CLAMP((int)(e->pos().y() *

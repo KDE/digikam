@@ -23,17 +23,17 @@
 
 // KDE includes.
 
-#include <klocale.h>
-#include <kgenericfactory.h>
-#include <klibloader.h>
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kcursor.h>
 #include <kapplication.h>
+#include <kcursor.h>
+#include <kdebug.h>
+#include <kgenericfactory.h>
+#include <klibloader.h>
+#include <klocale.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "noisereductiontool.h"
 #include "imageplugin_noisereduction.h"
 #include "imageplugin_noisereduction.moc"
@@ -49,7 +49,7 @@ ImagePlugin_NoiseReduction::ImagePlugin_NoiseReduction(QObject *parent, const QV
     m_noiseReductionAction  = new KAction(KIcon("noisereduction"), i18n("Noise Reduction..."), this);
     actionCollection()->addAction("imageplugin_noisereduction", m_noiseReductionAction );
 
-    connect(m_noiseReductionAction, SIGNAL(triggered(bool)), 
+    connect(m_noiseReductionAction, SIGNAL(triggered(bool)),
             this, SLOT(slotNoiseReduction()));
 
     setXMLFile("digikamimageplugin_noisereduction_ui.rc");

@@ -52,6 +52,7 @@
 #include <kcombobox.h>
 #include <kconfig.h>
 #include <kcursor.h>
+#include <kdebug.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -87,7 +88,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "canvas.h"
 #include "dimginterface.h"
 #include "dpopupmenu.h"

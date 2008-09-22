@@ -5,7 +5,7 @@
  *
  * Date        : 2006-02-20
  * Description : A widget to display IPTC metadata
- * 
+ *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -28,11 +28,11 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dmetadata.h"
 #include "iptcwidget.h"
 #include "iptcwidget.moc"
@@ -93,7 +93,7 @@ bool IptcWidget::loadFromURL(const KUrl& url)
         return false;
     }
     else
-    {    
+    {
         DMetadata metadata(url.path());
 
         if (!metadata.hasIptc())

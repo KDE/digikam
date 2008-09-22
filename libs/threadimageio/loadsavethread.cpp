@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,9 +22,12 @@
  *
  * ============================================================ */
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "dmetadata.h"
 #include "managedloadsavethread.h"
 #include "sharedloadsavethread.h"
@@ -278,7 +281,7 @@ bool LoadSaveThread::exifRotate(DImg &image, const QString& filePath)
 
     if(orientation != DMetadata::ORIENTATION_NORMAL)
     {
-        switch (orientation) 
+        switch (orientation)
         {
             case DMetadata::ORIENTATION_NORMAL:
             case DMetadata::ORIENTATION_UNSPECIFIED:

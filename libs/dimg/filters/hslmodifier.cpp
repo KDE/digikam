@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
@@ -30,9 +30,12 @@
 #include <cstdio>
 #include <cmath>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "dcolor.h"
 #include "dimg.h"
 #include "hslmodifier.h"
@@ -50,11 +53,11 @@ public:
     }
 
     bool modified;
-    
+
     int  htransfer[256];
     int  ltransfer[256];
     int  stransfer[256];
-    
+
     int  htransfer16[65536];
     int  ltransfer16[65536];
     int  stransfer16[65536];
@@ -62,7 +65,7 @@ public:
 
 HSLModifier::HSLModifier()
 {
-    d = new HSLModifierPriv;  
+    d = new HSLModifierPriv;
     reset();
 }
 
@@ -73,7 +76,7 @@ HSLModifier::~HSLModifier()
 
 bool HSLModifier::modified() const
 {
-    return d->modified;    
+    return d->modified;
 }
 
 void HSLModifier::reset()
@@ -93,7 +96,7 @@ void HSLModifier::reset()
         d->ltransfer[i] = i;
         d->stransfer[i] = i;
     }
-    
+
     d->modified = false;
 }
 
@@ -160,7 +163,7 @@ void HSLModifier::setHue(double val)
     for (int i = 0; i < 65536; i++)
     {
        value = lround(val * 65535.0 / 360.0);
-      
+
        if ((i + value) < 0)
           d->htransfer16[i] = 65535 + (i + value);
        else if ((i + value) > 65535)
@@ -172,7 +175,7 @@ void HSLModifier::setHue(double val)
     for (int i = 0; i < 256; i++)
     {
        value = lround(val * 255.0 / 360.0);
-      
+
        if ((i + value) < 0)
           d->htransfer[i] = 255 + (i + value);
        else if ((i + value) > 255)
@@ -180,7 +183,7 @@ void HSLModifier::setHue(double val)
        else
           d->htransfer[i] = i + value;
     }
-    
+
     d->modified = true;
 }
 

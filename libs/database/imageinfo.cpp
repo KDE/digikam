@@ -30,9 +30,12 @@
 #include <QFileInfo>
 #include <QHash>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "collectionmanager.h"

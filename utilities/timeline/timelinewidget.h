@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef TIMELINEWIDGET_H
@@ -35,9 +35,9 @@
 #include <QResizeEvent>
 #include <QMouseEvent>
 
-// Local includes.
+// KDE includes.
 
-#include "ddebug.h"
+#include <kdebug.h>
 
 namespace Digikam
 {
@@ -53,7 +53,7 @@ Q_OBJECT
 
 public:
 
-    enum TimeUnit 
+    enum TimeUnit
     {
         Day = 0,
         Week,
@@ -131,7 +131,7 @@ private:
     void          updatePixmap();
     void          paintEvent(QPaintEvent*);
     void          resizeEvent(QResizeEvent*);
-    void          wheelEvent(QWheelEvent*); 
+    void          wheelEvent(QWheelEvent*);
 
     void          mousePressEvent(QMouseEvent*);
     void          mouseMoveEvent(QMouseEvent*);

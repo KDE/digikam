@@ -32,14 +32,14 @@
 
 // KDE includes.
 
-#include <klocale.h>
 #include <kcursor.h>
 #include <kdatetable.h>
+#include <kdebug.h>
 #include <kiconloader.h>
+#include <klocale.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "paniconwidget.h"
 #include "managedloadsavethread.h"
 #include "loadingdescription.h"

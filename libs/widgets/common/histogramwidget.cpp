@@ -37,21 +37,21 @@
 #include <qtimer.h>
 #include <qcolor.h>
 #include <qbrush.h>
-#include <qrect.h> 
-#include <qfont.h> 
-#include <qfontmetrics.h> 
+#include <qrect.h>
+#include <qfont.h>
+#include <qfontmetrics.h>
 #include <qtooltip.h>
 #include <QPaintEvent>
 #include <QMouseEvent>
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kcursor.h>
 #include <klocale.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "imagehistogram.h"
 #include "histogramwidget.h"
 #include "histogramwidget.moc"
@@ -113,7 +113,7 @@ public:
 
 // Constructor without image data (needed to use updateData() method after instance created).
 
-HistogramWidget::HistogramWidget(int w, int h, 
+HistogramWidget::HistogramWidget(int w, int h,
                                  QWidget *parent, bool selectMode,
                                  bool showProgress, bool statisticsVisible)
                : QWidget(parent)
@@ -150,7 +150,7 @@ HistogramWidget::HistogramWidget(int w, int h,
 
 // Constructor with image selection.
 
-HistogramWidget::HistogramWidget(int w, int h, 
+HistogramWidget::HistogramWidget(int w, int h,
                                  uchar *i_data, uint i_w, uint i_h,
                                  uchar *s_data, uint s_w, uint s_h,
                                  bool i_sixteenBits,
@@ -522,7 +522,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
        if (d->clearFlag == HistogramWidgetPriv::HistogramDataLoading)
            p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
                        i18n("Loading image..."));
-       else 
+       else
            p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
                        i18n("Histogram calculation..."));
        p1.end();
@@ -559,11 +559,11 @@ void HistogramWidget::paintEvent(QPaintEvent*)
     int    wWidth = width();
     int    wHeight = height();
     double max;
-    class  ImageHistogram *histogram; 
+    class  ImageHistogram *histogram;
 
     if (d->renderingType == ImageSelectionHistogram && m_selectionHistogram)
        histogram = m_selectionHistogram;
-    else 
+    else
        histogram = m_imageHistogram;
 
     if (!histogram)
@@ -627,7 +627,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
 
     for (x = 0 ; x < wWidth ; x++)
     {
-      double value = 0.0; 
+      double value = 0.0;
       double value_r = 0.0, value_g = 0.0, value_b = 0.0; // For all color channels.
       int    i, j;
 
@@ -676,7 +676,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
              if (v > value)
                 value = v;
           }
-          else 
+          else
           {
              if (vr > value_r)
                 value_r = vr;
@@ -746,7 +746,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
                p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
                p1.drawLine(x, wHeight, x, wHeight - y);
             }
-            else 
+            else
             {
                p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
                p1.drawLine(x, wHeight, x, wHeight - y);
@@ -785,7 +785,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
                p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
 
                // Witch color must be used on the foreground with all colors channel mode?
-               switch (m_colorType) 
+               switch (m_colorType)
                {
                   case HistogramWidget::RedColor:
                     p1.drawLine(x, wHeight, x, wHeight - yr);
@@ -800,10 +800,10 @@ void HistogramWidget::paintEvent(QPaintEvent*)
                     break;
                }
             }
-            else 
+            else
             {
                // Which color must be used on the foreground with all colors channel mode?
-               switch (m_colorType) 
+               switch (m_colorType)
                {
                   case HistogramWidget::RedColor:
                     p1.setPen(QPen(Qt::green, 1, Qt::SolidLine));
@@ -876,10 +876,10 @@ void HistogramWidget::paintEvent(QPaintEvent*)
                }
             }
          }
-         else 
+         else
          {
             // Which color must be used on the foreground with all colors channel mode?
-            switch (m_colorType) 
+            switch (m_colorType)
             {
                case HistogramWidget::RedColor:
                  p1.setPen(QPen(Qt::green, 1, Qt::SolidLine));
@@ -1009,7 +1009,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
 
           QString string = i18n("x:%1", guidePos);
           QFontMetrics fontMt( string );
-          QRect rect = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string); 
+          QRect rect = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string);
           p1.setPen(QPen(Qt::red, 1, Qt::SolidLine));
           rect.moveTop(1);
 
@@ -1098,7 +1098,7 @@ void HistogramWidget::mousePressEvent ( QMouseEvent * e )
 
 void HistogramWidget::mouseReleaseEvent ( QMouseEvent * )
 {
-    if ( d->selectMode == true  && d->clearFlag == HistogramWidgetPriv::HistogramCompleted ) 
+    if ( d->selectMode == true  && d->clearFlag == HistogramWidgetPriv::HistogramCompleted )
     {
         d->inSelected = false;
         // Only single click without mouse move? Remove selection.
@@ -1115,7 +1115,7 @@ void HistogramWidget::mouseReleaseEvent ( QMouseEvent * )
 
 void HistogramWidget::mouseMoveEvent ( QMouseEvent * e )
 {
-    if ( d->selectMode == true && d->clearFlag == HistogramWidgetPriv::HistogramCompleted ) 
+    if ( d->selectMode == true && d->clearFlag == HistogramWidgetPriv::HistogramCompleted )
     {
        setCursor( Qt::CrossCursor );
 
@@ -1169,7 +1169,7 @@ void HistogramWidget::slotMinValueChanged(int min)
 
 void HistogramWidget::slotMaxValueChanged(int max)
 {
-    if ( d->selectMode == true && d->clearFlag == HistogramWidgetPriv::HistogramCompleted ) 
+    if ( d->selectMode == true && d->clearFlag == HistogramWidgetPriv::HistogramCompleted )
     {
         if (d->xmin == 0.0 && max == d->range)
         {

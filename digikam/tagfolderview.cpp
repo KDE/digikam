@@ -30,6 +30,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -38,7 +39,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"

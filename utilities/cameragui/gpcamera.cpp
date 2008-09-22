@@ -47,10 +47,10 @@ extern "C"
 // KDE includes.
 
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "gpcamera.h"
 
 namespace Digikam

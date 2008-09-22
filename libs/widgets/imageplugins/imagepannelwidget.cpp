@@ -39,6 +39,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
@@ -51,7 +52,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "sidebar.h"
 #include "statuszoombar.h"
 #include "thumbnailsize.h"

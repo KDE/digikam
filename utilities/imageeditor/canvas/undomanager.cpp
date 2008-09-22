@@ -5,7 +5,7 @@
  *
  * Date   : 2005-02-06
  * Description : an image editor actions undo/redo manager
- * 
+ *
  * Copyright (C) 2005-2006 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2006 Joern Ahrens <joern.ahrens@kdemail.net>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -15,12 +15,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ includes.
@@ -32,9 +32,12 @@
 
 #include <QList>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "dimginterface.h"
 #include "undoaction.h"
 #include "undocache.h"
@@ -45,7 +48,7 @@ namespace Digikam
 
 class UndoManagerPriv
 {
-    
+
 public:
 
     UndoManagerPriv()
@@ -58,9 +61,9 @@ public:
     QList<UndoAction*>  undoActions;
     QList<UndoAction*>  redoActions;
     int                 origin;
-    
+
     UndoCache          *undoCache;
-    
+
     DImgInterface      *dimgiface;
 };
 
@@ -85,7 +88,7 @@ void UndoManager::addAction(UndoAction* action)
 
     // All redo actions are invalid now
     clearRedoActions();
-   
+
     d->undoActions.push_back(action);
 
     if (typeid(*action) == typeid(UndoActionIrreversible))
@@ -94,7 +97,7 @@ void UndoManager::addAction(UndoAction* action)
         int h          = d->dimgiface->origHeight();
         int bytesDepth = d->dimgiface->bytesDepth();
         uchar* data    = d->dimgiface->getImage();
-        
+
         d->undoCache->putData(d->undoActions.size(), w, h, bytesDepth, data);
     }
 
@@ -123,7 +126,7 @@ void UndoManager::undo()
         uchar* data    = d->dimgiface->getImage();
 
         d->undoCache->putData(d->undoActions.size() + 1, w, h, bytesDepth, data);
-        
+
         // And now, undo the action
 
         int    newW, newH, newBytesDepth;
@@ -138,7 +141,7 @@ void UndoManager::undo()
     {
         action->rollBack();
     }
-    
+
     d->undoActions.pop_back();
     d->redoActions.push_back(action);
     d->origin--;
@@ -148,9 +151,9 @@ void UndoManager::redo()
 {
     if(d->redoActions.isEmpty())
         return;
-    
+
     UndoAction *action = d->redoActions.back();
-    
+
     if(typeid(*action) == typeid(UndoActionIrreversible))
     {
         int    w, h, bytesDepth;
@@ -165,7 +168,7 @@ void UndoManager::redo()
     {
         action->execute();
     }
-    
+
     d->redoActions.pop_back();
     d->undoActions.push_back(action);
     d->origin++;
@@ -185,7 +188,7 @@ void UndoManager::clearUndoActions()
 {
     UndoAction *action;
     QList<UndoAction*>::iterator it;
-    
+
     for(it = d->undoActions.begin(); it != d->undoActions.end(); ++it)
     {
         action = *it;

@@ -7,7 +7,7 @@
  * Description : a widget to manage sidebar in gui.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>  
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -35,6 +35,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdeversion.h>
@@ -44,7 +45,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "sidebar.h"
 #include "sidebar.moc"
 
@@ -168,7 +168,7 @@ void Sidebar::backup()
 {
     d->isMinimized = d->minimized;
 
-    if (!d->isMinimized) 
+    if (!d->isMinimized)
         shrink();
 
     KMultiTabBar::hide();
@@ -176,7 +176,7 @@ void Sidebar::backup()
 
 void Sidebar::restore()
 {
-    if (!d->isMinimized) 
+    if (!d->isMinimized)
         expand();
 
     KMultiTabBar::show();
@@ -294,7 +294,7 @@ void Sidebar::expand()
 
 bool Sidebar::isExpanded()
 {
-    return !d->minimized; 
+    return !d->minimized;
 }
 
 bool Sidebar::eventFilter(QObject *obj, QEvent *ev)

@@ -42,6 +42,7 @@ extern "C"
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kfilemetainfo.h>
 
@@ -51,7 +52,6 @@ extern "C"
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dimg.h"
 #include "dmetadata.h"
 #include "umscamera.h"

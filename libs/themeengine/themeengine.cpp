@@ -4,8 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2004-08-02
- * Description : theme engine methods 
- * 
+ * Description : theme engine methods
+ *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -37,6 +37,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -46,7 +47,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "theme.h"
 #include "texture.h"
 #include "themeengine.h"
@@ -99,8 +99,8 @@ ThemeEngine::ThemeEngine()
 
 ThemeEngine::~ThemeEngine()
 {
-    // Delete all hash items 
-    while (!d->themeHash.isEmpty()) 
+    // Delete all hash items
+    while (!d->themeHash.isEmpty())
     {
         Theme *value = *d->themeHash.begin();
         d->themeHash.erase(d->themeHash.begin());
@@ -191,7 +191,7 @@ void ThemeEngine::scanThemes()
     d->themeHash.clear();
     d->currTheme = 0;
 
-    QStringList themes = KGlobal::dirs()->findAllResources("themes", QString(), 
+    QStringList themes = KGlobal::dirs()->findAllResources("themes", QString(),
                                           KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
 
     for (QStringList::iterator it=themes.begin(); it != themes.end(); ++it)
@@ -421,7 +421,7 @@ bool ThemeEngine::loadTheme()
     if (!xmlDoc.setContent(&themeFile, true, &error, &row, &col))
     {
         kDebug(50003) << "Theme file: " << t->filePath << endl;
-        kDebug(50003) << error << " :: row=" << row << " , col=" << col << endl; 
+        kDebug(50003) << error << " :: row=" << row << " , col=" << col << endl;
         return false;
     }
 
@@ -686,16 +686,16 @@ bool ThemeEngine::loadTheme()
 QString ThemeEngine::resourceValue(const QDomElement &rootElem, const QString& key)
 {
     for (QDomNode node = rootElem.firstChild();
-         !node.isNull(); node = node.nextSibling()) 
+         !node.isNull(); node = node.nextSibling())
     {
         QDomElement e = node.toElement();
-        QString name  = e.tagName(); 
-        QString val   = e.attribute(QString::fromLatin1("value")); 
+        QString name  = e.tagName();
+        QString val   = e.attribute(QString::fromLatin1("value"));
 
         if (key == name)
         {
             return val;
-        } 
+        }
     }
 
     return QString("");
@@ -757,7 +757,7 @@ bool ThemeEngine::saveTheme()
 
     xmlDoc.appendChild(xmlDoc.createComment(banner));
 
-    QDomElement themeElem = xmlDoc.createElement(QString::fromLatin1("digikamtheme")); 
+    QDomElement themeElem = xmlDoc.createElement(QString::fromLatin1("digikamtheme"));
     xmlDoc.appendChild(themeElem);
 
     // base props --------------------------------------------------------------

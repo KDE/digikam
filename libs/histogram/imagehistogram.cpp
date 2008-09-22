@@ -36,11 +36,11 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kapplication.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dimg.h"
 #include "imagehistogram.h"
 #include "imagehistogram.moc"
@@ -50,7 +50,7 @@ namespace Digikam
 
 class ImageHistogramPriv
 {
-    
+
 public:
 
     // Using a structure instead a class is more fast
@@ -208,9 +208,9 @@ void ImageHistogram::calculate()
 
             max = (blue > green) ? blue : green;
 
-            if (red > max) 
+            if (red > max)
                 d->histogram[red].value++;
-            else 
+            else
                 d->histogram[max].value++;
         }
     }
@@ -233,9 +233,9 @@ void ImageHistogram::calculate()
 
             max = (blue > green) ? blue : green;
 
-            if (red > max) 
+            if (red > max)
                 d->histogram[red].value++;
-            else 
+            else
                 d->histogram[max].value++;
         }
     }
@@ -396,7 +396,7 @@ int ImageHistogram::getMedian(int channel, int start, int end)
             break;
 
         case ImageHistogram::AlphaChannel:
-            for (i = start ; i <= end ; i++) 
+            for (i = start ; i <= end ; i++)
             {
                 sum += d->histogram[i].alpha;
                 if (sum * 2 > count) return i;

@@ -29,13 +29,13 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kio/previewjob.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "thumbnailsize.h"
 #include "thumbnailtask.h"
 #include "thumbnailcreator.h"

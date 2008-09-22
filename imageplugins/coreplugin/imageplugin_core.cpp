@@ -28,6 +28,7 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcursor.h>
+#include <kdebug.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocale.h>
@@ -35,7 +36,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dimg.h"
 #include "dimgimagefilters.h"
 #include "imageiface.h"

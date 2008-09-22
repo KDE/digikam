@@ -32,13 +32,13 @@
 // KDE includes.
 
 #include <kcombobox.h>
+#include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "searchview.h"
 #include "searchfields.h"
 #include "searchfieldgroup.h"

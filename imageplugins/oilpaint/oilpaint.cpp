@@ -5,11 +5,11 @@
  *
  * Date        : 2005-05-25
  * Description : Oil Painting threaded image filter.
- * 
+ *
  * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * 
- * Original OilPaint algorithm copyrighted 2004 by 
+ *
+ * Original OilPaint algorithm copyrighted 2004 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
  *
  * This program is free software; you can redistribute it
@@ -17,12 +17,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ includes.
@@ -30,9 +30,12 @@
 #include <cmath>
 #include <cstdlib>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "dimg.h"
 #include "dimggaussianblur.h"
 #include "dimgimagefilters.h"
@@ -56,18 +59,18 @@ void OilPaint::filterImage(void)
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
 
-/* Function to apply the OilPaint effect.                
- *                                                                                    
- * data             => The image data in RGBA mode.                            
- * w                => Width of image.                          
- * h                => Height of image.                          
+/* Function to apply the OilPaint effect.
+ *
+ * data             => The image data in RGBA mode.
+ * w                => Width of image.
+ * h                => Height of image.
  * BrushSize        => Brush size.
- * Smoothness       => Smooth value.                                                
- *                                                                                  
- * Theory           => Using MostFrequentColor function we take the main color in  
- *                     a matrix and simply write at the original position.            
- */                                                                                 
-    
+ * Smoothness       => Smooth value.
+ *
+ * Theory           => Using MostFrequentColor function we take the main color in
+ *                     a matrix and simply write at the original position.
+ */
+
 void OilPaint::oilpaintImage(Digikam::DImg &orgImage, Digikam::DImg &destImage, int BrushSize, int Smoothness)
 {
     int    progress;
@@ -111,18 +114,18 @@ void OilPaint::oilpaintImage(Digikam::DImg &orgImage, Digikam::DImg &destImage, 
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
 
-/* Function to determine the most frequent color in a matrix                        
- *                                                                                
- * Bits             => Bits array                                                    
- * Width            => Image width                                                   
- * Height           => Image height                                                 
- * X                => Position horizontal                                           
- * Y                => Position vertical                                            
- * Radius           => Is the radius of the matrix to be analized                  
- * Intensity        => Intensity to calcule                                         
- *                                                                                  
- * Theory           => This function creates a matrix with the analized pixel in   
- *                     the center of this matrix and find the most frequenty color   
+/* Function to determine the most frequent color in a matrix
+ *
+ * Bits             => Bits array
+ * Width            => Image width
+ * Height           => Image height
+ * X                => Position horizontal
+ * Y                => Position vertical
+ * Radius           => Is the radius of the matrix to be analized
+ * Intensity        => Intensity to calcule
+ *
+ * Theory           => This function creates a matrix with the analized pixel in
+ *                     the center of this matrix and find the most frequenty color
  */
 
 Digikam::DColor OilPaint::MostFrequentColor(Digikam::DImg &src, int X, int Y, int Radius, int Intensity)

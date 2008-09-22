@@ -36,13 +36,16 @@
 #include <QStringList>
 #include <QSet>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // LibKDcraw includes.
 
 #include <libkdcraw/rawfiles.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "albumdb.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"

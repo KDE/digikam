@@ -5,21 +5,21 @@
  *
  * Date        : 2005-06-14
  * Description : A QImage loader for DImg framework.
- * 
+ *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Caulier Gilles <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2007 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -27,9 +27,12 @@
 #include <QImage>
 #include <QByteArray>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "qimageloader.h"
@@ -88,20 +91,20 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     m_hasAlpha    = image.hasAlphaChannel();
     QImage target = image.convertToFormat(QImage::Format_ARGB32);
-    
+
     uint w      = target.width();
     uint h      = target.height();
     uchar* data = new uchar[w*h*4];
     uint*  sptr = (uint*)target.bits();
     uchar* dptr = data;
-    
+
     for (uint i = 0 ; i < w*h ; i++)
     {
         dptr[0] = qBlue(*sptr);
         dptr[1] = qGreen(*sptr);
         dptr[2] = qRed(*sptr);
         dptr[3] = qAlpha(*sptr);
-        
+
         dptr += 4;
         sptr++;
     }
@@ -125,7 +128,7 @@ bool QImageLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 {
     QVariant qualityAttr = imageGetAttribute("quality");
     int quality = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
-    
+
     if (quality < 0)
         quality = 90;
     if (quality > 100)

@@ -46,6 +46,7 @@ extern "C"
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kapplication.h>
 #include <kcursor.h>
 #include <kio/job.h>
@@ -53,7 +54,6 @@ extern "C"
 
 // Local includes.
 
-#include "ddebug.h"
 #include "databaseaccess.h"
 #include "databasewatch.h"
 #include "imagelister.h"

@@ -53,6 +53,7 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
+#include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -74,7 +75,6 @@
 #include "bcgmodifier.h"
 #include "colorgradientwidget.h"
 #include "curveswidget.h"
-#include "ddebug.h"
 #include "dimg.h"
 #include "dimgimagefilters.h"
 #include "editortoolsettings.h"

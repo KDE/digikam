@@ -29,6 +29,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kglobal.h>
 #include <kcodecs.h>
 #include <klocale.h>
@@ -41,9 +42,9 @@
 #include <solid/opticaldisc.h>
 #include <solid/predicate.h>
 
+
 // Local includes.
 
-#include "ddebug.h"
 #include "databaseaccess.h"
 #include "albumdb.h"
 #include "collectionlocation.h"

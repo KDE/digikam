@@ -49,6 +49,7 @@
 #include <kapplication.h>
 #include <kcombobox.h>
 #include <kcursor.h>
+#include <kdebug.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -67,7 +68,6 @@
 
 #include "version.h"
 #include "daboutdata.h"
-#include "ddebug.h"
 #include "imageiface.h"
 #include "imagewidget.h"
 #include "editortoolsettings.h"

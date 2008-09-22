@@ -33,9 +33,12 @@
 #include <QPen>
 #include <QTimer>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
 #include "imagepaniconwidget.h"
@@ -61,7 +64,7 @@ public:
     ImageIface *iface;
 };
 
-ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent, 
+ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent,
                                        Qt::WidgetAttribute attribute)
                   : PanIconWidget(parent, attribute)
 {
@@ -125,7 +128,7 @@ void ImagePanIconWidget::paintEvent(QPaintEvent*)
        for (int i = 0 ; i < d->hightlightPoints.count() ; i++)
        {
           pt = d->hightlightPoints.point(i);
-          pt.setX((int)(pt.x() * (float)(m_width)  / (float)d->iface->originalWidth())); 
+          pt.setX((int)(pt.x() * (float)(m_width)  / (float)d->iface->originalWidth()));
           pt.setY((int)(pt.y() * (float)(m_height) / (float)d->iface->originalHeight()));
           p.setPen(QPen(Qt::black, 1, Qt::SolidLine));
           p.drawLine(pt.x(), pt.y()-1, pt.x(), pt.y()+1);
@@ -143,17 +146,17 @@ void ImagePanIconWidget::paintEvent(QPaintEvent*)
     if (m_flicker) p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
     else p.setPen(QPen(Qt::red, 1, Qt::SolidLine));
 
-    p.drawRect(m_localRegionSelection.x(), 
+    p.drawRect(m_localRegionSelection.x(),
                m_localRegionSelection.y(),
-               m_localRegionSelection.width(), 
+               m_localRegionSelection.width(),
                m_localRegionSelection.height());
 
     if (m_flicker) p.setPen(QPen(Qt::red, 1, Qt::DotLine));
     else p.setPen(QPen(Qt::white, 1, Qt::DotLine));
 
-    p.drawRect(m_localRegionSelection.x(), 
+    p.drawRect(m_localRegionSelection.x(),
                m_localRegionSelection.y(),
-               m_localRegionSelection.width(), 
+               m_localRegionSelection.width(),
                m_localRegionSelection.height());
 
     if (d->separateView == ImageRegionWidget::SeparateViewVertical)

@@ -33,14 +33,14 @@
 
 // KDE includes.
 
-#include <kcodecs.h>
-#include <klocale.h>
 #include <kapplication.h>
+#include <kcodecs.h>
+#include <kdebug.h>
+#include <klocale.h>
 #include <kstandardguiitem.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dimg.h"
 #include "album.h"
 #include "albumdb.h"

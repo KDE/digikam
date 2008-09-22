@@ -7,7 +7,7 @@
  * Description : a class to apply ICC color correction to image.
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,6 +30,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kglobal.h>
@@ -44,7 +45,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "icctransform.h"
 
 namespace Digikam
@@ -61,7 +61,7 @@ public:
     }
 
     bool       do_proof_profile;
-    bool       has_embedded_profile; 
+    bool       has_embedded_profile;
 
     QByteArray embedded_profile;
     QByteArray input_profile;
@@ -173,7 +173,7 @@ void IccTransform::setProfiles(const QString& input_profile, const QString& outp
     d->output_profile = loadICCProfilFile(output_profile);
 }
 
-void IccTransform::setProfiles(const QString& input_profile, const QString& output_profile, 
+void IccTransform::setProfiles(const QString& input_profile, const QString& output_profile,
                                const QString& proof_profile)
 {
     d->input_profile  = loadICCProfilFile(input_profile);
@@ -283,7 +283,7 @@ bool IccTransform::apply(DImg& image)
 //     }
 //     else
 //     {
-        outprofile = cmsOpenProfileFromMem(d->output_profile.data(), 
+        outprofile = cmsOpenProfileFromMem(d->output_profile.data(),
                                            (DWORD)d->output_profile.size());
 //     }
 
@@ -412,7 +412,7 @@ bool IccTransform::apply(DImg& image)
     }
     else
     {
-        proofprofile = cmsOpenProfileFromMem(d->proof_profile.data(), 
+        proofprofile = cmsOpenProfileFromMem(d->proof_profile.data(),
                                              (DWORD)d->proof_profile.size());
 
         if (proofprofile == NULL)

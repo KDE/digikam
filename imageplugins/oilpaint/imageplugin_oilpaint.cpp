@@ -23,9 +23,10 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
 #include <klibloader.h>
+#include <kgenericfactory.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kcursor.h>
@@ -33,7 +34,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "oilpainttool.h"
 #include "imageplugin_oilpaint.h"
 #include "imageplugin_oilpaint.moc"
@@ -49,7 +49,7 @@ ImagePlugin_OilPaint::ImagePlugin_OilPaint(QObject *parent, const QVariantList &
     m_oilpaintAction  = new KAction(KIcon("oilpaint"), i18n("Oil Paint..."), this);
     actionCollection()->addAction("imageplugin_oilpaint", m_oilpaintAction);
 
-    connect(m_oilpaintAction, SIGNAL(triggered(bool) ), 
+    connect(m_oilpaintAction, SIGNAL(triggered(bool) ),
             this ,SLOT(slotOilPaint()));
 
     setXMLFile( "digikamimageplugin_oilpaint_ui.rc" );

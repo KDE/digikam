@@ -2,10 +2,10 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2007-01-05
  * Description : Metadata handling
- * 
+ *
  * Copyright (C) 2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,21 +14,24 @@
  * Public License as published by the Free Software Foundation
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
 
 #include <QFileInfo>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "imageinfo.h"
 #include "album.h"
 #include "albummanager.h"
@@ -192,7 +195,7 @@ void MetadataHub::load(const DMetadata &metadata)
     comment = metadata.getImageComment();
 
     // Try to get date and time from image :
-    // In first, from Exif date & time tags, 
+    // In first, from Exif date & time tags,
     // In second, from Xmp date & time tags, or
     // In third, from Iptc date & time tags.
     // else use file system time stamp.
@@ -203,7 +206,7 @@ void MetadataHub::load(const DMetadata &metadata)
         datetime = info.lastModified();
     }
 
-    // Try to get image rating from Xmp tag, or Iptc Urgency tag 
+    // Try to get image rating from Xmp tag, or Iptc Urgency tag
     rating = metadata.getImageRating();
 
     load(datetime, comment, rating);
@@ -228,7 +231,7 @@ void MetadataHub::load(const DMetadata &metadata)
                 }
                 loadedTags << album;
             }
-    
+
             loadTags(loadedTags);
         }
     }
@@ -544,7 +547,7 @@ bool MetadataHub::write(DMetadata &metadata, WriteMode writeMode, const Metadata
                     oldKeywords.append(it.key()->title());
                 }
             }
-        }        
+        }
 
         // We set Iptc keywords using tags name.
         dirty |= metadata.setIptcKeywords(oldKeywords, newKeywords);

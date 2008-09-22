@@ -28,15 +28,16 @@
 
 // KDE includes.
 
-#include <kpushbutton.h>
 #include <kapplication.h>
+#include <kcolorbutton.h>
+#include <kdebug.h>
 #include <kdialog.h>
-#include <klocale.h>
+#include <khbox.h>
 #include <kiconloader.h>
+#include <klocale.h>
+#include <kpushbutton.h>
 #include <kstandarddirs.h>
 #include <kstandardguiitem.h>
-#include <khbox.h>
-#include <kcolorbutton.h>
 
 // LibKDcraw includes.
 
@@ -44,7 +45,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "imagepaniconwidget.h"
 #include "editortoolsettings.h"
 #include "editortoolsettings.moc"

@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ includes.
@@ -39,11 +39,11 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kcursor.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "paniconwidget.h"
 #include "paniconwidget.moc"
 
@@ -161,7 +161,7 @@ void PanIconWidget::setCursorToLocalRegionSelectionCenter()
 
 void PanIconWidget::setCenterSelection()
 {
-    setRegionSelection(QRect( 
+    setRegionSelection(QRect(
              (int)(((float)m_zoomedOrgWidth  / 2.0) - ((float)d->regionSelection.width()  / 2.0)),
              (int)(((float)m_zoomedOrgHeight / 2.0) - ((float)d->regionSelection.height() / 2.0)),
              d->regionSelection.width(),
@@ -206,9 +206,9 @@ void PanIconWidget::paintEvent(QPaintEvent*)
     else
         p.setPen(QPen(Qt::red, 1, Qt::SolidLine));
 
-    p.drawRect(m_localRegionSelection.x(), 
+    p.drawRect(m_localRegionSelection.x(),
                m_localRegionSelection.y(),
-               m_localRegionSelection.width(), 
+               m_localRegionSelection.width(),
                m_localRegionSelection.height());
 
     if (m_flicker)
@@ -216,9 +216,9 @@ void PanIconWidget::paintEvent(QPaintEvent*)
     else
         p.setPen(QPen(Qt::white, 1, Qt::DotLine));
 
-    p.drawRect(m_localRegionSelection.x(), 
+    p.drawRect(m_localRegionSelection.x(),
                m_localRegionSelection.y(),
-               m_localRegionSelection.width(), 
+               m_localRegionSelection.width(),
                m_localRegionSelection.height());
 }
 
@@ -261,14 +261,14 @@ void PanIconWidget::mousePressEvent ( QMouseEvent * e )
         d->xpos          = e->x();
         d->ypos          = e->y();
         d->moveSelection = true;
-        setCursor( Qt::SizeAllCursor );           
+        setCursor( Qt::SizeAllCursor );
         emit signalSelectionTakeFocus();
     }
 }
 
 void PanIconWidget::mouseMoveEvent ( QMouseEvent * e )
 {
-    if ( d->moveSelection && 
+    if ( d->moveSelection &&
          (e->buttons() == Qt::LeftButton || e->buttons() == Qt::MidButton) )
     {
         int newxpos = e->x();
@@ -297,7 +297,7 @@ void PanIconWidget::mouseMoveEvent ( QMouseEvent * e )
         regionSelectionMoved(false);
         return;
     }
-    else 
+    else
     {
         if ( m_localRegionSelection.contains( e->x(), e->y() ) )
             setCursor( Qt::PointingHandCursor );

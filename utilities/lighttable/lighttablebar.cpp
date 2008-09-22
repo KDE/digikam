@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -38,16 +38,16 @@
 
 // KDE includes.
 
-#include <klocale.h>
+#include <kdebug.h>
 #include <kfileitem.h>
-#include <kmimetype.h>
-#include <kiconloader.h>
 #include <kglobal.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kmimetype.h>
 #include <kstandarddirs.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
@@ -305,7 +305,7 @@ void LightTableBar::removeItem(const ImageInfo &info)
     if (info.isNull()) return;
 
     ImagePreviewBarItem* ltItem = findItemByInfo(info);
-    ThumbBarItem *item          = dynamic_cast<ThumbBarItem*>(ltItem);  
+    ThumbBarItem *item          = dynamic_cast<ThumbBarItem*>(ltItem);
     if (item) ThumbBarView::removeItem(item);
 }
 
@@ -383,16 +383,16 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
 
                         if (ltItem->isOnLeftPanel())
                         {
-                            QPixmap lPix = SmallIcon("arrow-left"); 
+                            QPixmap lPix = SmallIcon("arrow-left");
                             p.drawPixmap(getMargin(), getMargin(), lPix);
                         }
                         if (ltItem->isOnRightPanel())
                         {
-                            QPixmap rPix = SmallIcon("arrow-right"); 
+                            QPixmap rPix = SmallIcon("arrow-right");
                             p.drawPixmap(tile.width() - getMargin() - rPix.width(), getMargin(), rPix);
                         }
 
-                        QRect r(0, tile.height()-getMargin()-ratingPixmap().height(), 
+                        QRect r(0, tile.height()-getMargin()-ratingPixmap().height(),
                                 tile.width(), ratingPixmap().height());
                         int rating = ltItem->info().rating();
                         int xr     = (r.width() - rating * ratingPixmap().width())/2;
@@ -440,16 +440,16 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
 
                         if (ltItem->isOnLeftPanel())
                         {
-                            QPixmap lPix = SmallIcon("arrow-left"); 
+                            QPixmap lPix = SmallIcon("arrow-left");
                             p.drawPixmap(getMargin(), getMargin(), lPix);
                         }
                         if (ltItem->isOnRightPanel())
                         {
-                            QPixmap rPix = SmallIcon("arrow-right"); 
+                            QPixmap rPix = SmallIcon("arrow-right");
                             p.drawPixmap(tile.width() - getMargin() - rPix.width(), getMargin(), rPix);
                         }
 
-                        QRect r(0, tile.height()-getMargin()-ratingPixmap().height(), 
+                        QRect r(0, tile.height()-getMargin()-ratingPixmap().height(),
                                 tile.width(), ratingPixmap().height());
                         int rating = ltItem->info().rating();
                         int xr     = (r.width() - rating * ratingPixmap().width())/2;
@@ -483,7 +483,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
         QPainter p4(&bgPix);
         p4.setPen(QPen(te->textRegColor()));
         p4.drawText(0, 0, bgPix.width(), bgPix.height(),
-                    Qt::AlignCenter|Qt::TextWordWrap, 
+                    Qt::AlignCenter|Qt::TextWordWrap,
                     i18n("Drag and drop images here"));
         p4.end();
 
@@ -613,7 +613,7 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
         emit signalDroppedItems(imageInfoList);
         e->accept();
     }
-    else 
+    else
     {
         e->ignore();
     }

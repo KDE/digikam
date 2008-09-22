@@ -29,25 +29,26 @@
 
 // KDE includes.
 
-#include <kshortcutsdialog.h>
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kselectaction.h>
-#include <kstandardaction.h>
-#include <kstandardshortcut.h>
-#include <kxmlguifactory.h>
-#include <kedittoolbar.h>
-#include <ktoolinvocation.h>
-#include <ktoggleaction.h>
-#include <klocale.h>
-#include <kwindowsystem.h>
-#include <kmessagebox.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kstatusbar.h>
-#include <kmenubar.h>
+#include <kdebug.h>
+#include <kedittoolbar.h>
 #include <kglobal.h>
+#include <klocale.h>
+#include <kmenubar.h>
+#include <kmessagebox.h>
+#include <kselectaction.h>
+#include <kshortcutsdialog.h>
+#include <kstandardaction.h>
+#include <kstandardshortcut.h>
+#include <kstatusbar.h>
+#include <ktoggleaction.h>
 #include <ktoolbar.h>
+#include <ktoolinvocation.h>
+#include <kwindowsystem.h>
+#include <kxmlguifactory.h>
 
 // Libkdcraw includes.
 
@@ -61,7 +62,6 @@
 // Local includes.
 
 #include "componentsinfo.h"
-#include "ddebug.h"
 #include "digikamapp.h"
 #include "themeengine.h"
 #include "dimg.h"

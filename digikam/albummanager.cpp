@@ -53,6 +53,7 @@ extern "C"
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kconfig.h>
 #include <klocale.h>
 #include <kdeversion.h>
@@ -66,7 +67,6 @@ extern "C"
 
 // Local includes.
 
-#include "ddebug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albumitemhandler.h"

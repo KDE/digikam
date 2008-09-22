@@ -38,16 +38,16 @@
 
 // KDE includes.
 
-#include <kmenu.h>
-#include <kmimetype.h>
-#include <klocale.h>
-#include <kiconloader.h>
 #include <kaction.h>
 #include <kapplication.h>
+#include <kdebug.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kmenu.h>
+#include <kmimetype.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "themeengine.h"
 #include "thumbnailsize.h"
 #include "gpiteminfo.h"

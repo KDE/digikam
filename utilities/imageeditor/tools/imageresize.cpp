@@ -49,6 +49,7 @@
 
 #include <kapplication.h>
 #include <kcursor.h>
+#include <kdebug.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -61,7 +62,6 @@
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 
-
 // LibKDcraw includes.
 
 #include <libkdcraw/rnuminput.h>
@@ -69,7 +69,6 @@
 // Digikam includes.
 
 #include "dimg.h"
-#include "ddebug.h"
 #include "imageiface.h"
 #include "dimgthreadedfilter.h"
 #include "greycstorationiface.h"

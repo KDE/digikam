@@ -23,12 +23,12 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "mimefilter.h"
 #include "mimefilter.moc"
 

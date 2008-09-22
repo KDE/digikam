@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-26-02
- * Description : a widget to select an image collection 
+ * Description : a widget to select an image collection
  *               to upload new items using digiKam album folder views
  *
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -30,13 +30,13 @@
 
 // KDE includes.
 
-#include <klocale.h>
 #include <kdialog.h>
+#include <kdebug.h>
+#include <klocale.h>
 
 // Local includes.
 
 #include "constants.h"
-#include "ddebug.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumthumbnailloader.h"
@@ -63,7 +63,7 @@ public:
 
     QTreeWidget   *albumsView;
 
-    KipiInterface *iface; 
+    KipiInterface *iface;
 
     SearchTextBar *searchBar;
 };
@@ -90,7 +90,7 @@ KipiUploadWidget::KipiUploadWidget(KipiInterface* iface, QWidget *parent)
 
     // ------------------------------------------------------------------------------------
 
-    populateTreeView(AlbumManager::instance()->allPAlbums(), d->albumsView); 
+    populateTreeView(AlbumManager::instance()->allPAlbums(), d->albumsView);
 
     // ------------------------------------------------------------------------------------
 
@@ -101,7 +101,7 @@ KipiUploadWidget::KipiUploadWidget(KipiInterface* iface, QWidget *parent)
             this, SLOT(slotSearchTextChanged(const QString&)));
 }
 
-KipiUploadWidget::~KipiUploadWidget() 
+KipiUploadWidget::~KipiUploadWidget()
 {
     delete d;
 }
@@ -155,7 +155,7 @@ void KipiUploadWidget::populateTreeView(const AlbumList& aList, QTreeWidget *vie
 KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
 {
     QString ext = d->iface->fileExtensions();
-    KIPI::ImageCollection collection; 
+    KIPI::ImageCollection collection;
 
     TreeAlbumItem* item = dynamic_cast<TreeAlbumItem*>(d->albumsView->currentItem());
     if (item)

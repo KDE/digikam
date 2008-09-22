@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -38,6 +38,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kfileitem.h>
 #include <kmimetype.h>
@@ -47,7 +48,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
@@ -104,7 +104,7 @@ ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRota
     // -- Load rating Pixmap ------------------------------------------
 
     d->ratingPixmap = QPixmap(15, 15);
-    d->ratingPixmap.fill(Qt::transparent); 
+    d->ratingPixmap.fill(Qt::transparent);
 
     QPainter painter(&d->ratingPixmap);
     painter.setRenderHint(QPainter::Antialiasing, true);
@@ -177,7 +177,7 @@ ImageInfoList ImagePreviewBar::itemsImageInfoList()
     for (ThumbBarItem *item = firstItem(); item; item = item->next())
     {
         ImagePreviewBarItem *ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
-        if (ltItem) 
+        if (ltItem)
         {
             list << ltItem->info();
         }
@@ -309,7 +309,7 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
 
                         ImagePreviewBarItem *ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
 
-                        QRect r(0, tile.height()-getMargin()-d->ratingPixmap.height(), 
+                        QRect r(0, tile.height()-getMargin()-d->ratingPixmap.height(),
                                 tile.width(), d->ratingPixmap.height());
                         int rating = ltItem->info().rating();
                         int xr     = (r.width() - rating * d->ratingPixmap.width())/2;
@@ -355,7 +355,7 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
 
                         ImagePreviewBarItem *ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
 
-                        QRect r(0, tile.height()-getMargin()-d->ratingPixmap.height(), 
+                        QRect r(0, tile.height()-getMargin()-d->ratingPixmap.height(),
                                 tile.width(), d->ratingPixmap.height());
                         int rating = ltItem->info().rating();
                         int xr     = (r.width() - rating * d->ratingPixmap.width())/2;
@@ -543,7 +543,7 @@ QString ImagePreviewBarToolTip::tipContents(ThumbBarItem* item) const
 
                 if (photoInfo.focalLength35.isEmpty())
                     str += QString(" / %1").arg(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
-                else 
+                else
                     str += QString(" / %1").arg(i18n("%1 (35mm: %2)",photoInfo.focalLength,photoInfo.focalLength35));
 
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
@@ -567,7 +567,7 @@ QString ImagePreviewBarToolTip::tipContents(ThumbBarItem* item) const
                     str = photoInfo.exposureMode;
                 else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
                     str = photoInfo.exposureProgram;
-                else 
+                else
                     str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
                 metaStr += m_cellBeg + i18n("Mode/Program:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
@@ -602,7 +602,7 @@ QString ImagePreviewBarToolTip::tipContents(ThumbBarItem* item) const
         {
             PAlbum* album = AlbumManager::instance()->findPAlbum(info.albumId());
             if (album)
-                tip += m_cellSpecBeg + i18n("Album:") + m_cellSpecMid + 
+                tip += m_cellSpecBeg + i18n("Album:") + m_cellSpecMid +
                         album->albumPath().remove(0, 1) + m_cellSpecEnd;
         }
 

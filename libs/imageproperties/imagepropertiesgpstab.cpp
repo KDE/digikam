@@ -38,6 +38,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kcombobox.h>
 #include <kdialog.h>
 #include <khbox.h>
@@ -47,7 +48,6 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 // Local includes.
 
-#include "ddebug.h"
 #include "imagepropertiesgpstab.h"
 #include "imagepropertiesgpstab.moc"
 

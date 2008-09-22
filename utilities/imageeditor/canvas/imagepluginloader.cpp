@@ -29,6 +29,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kservicetypetrader.h>
 #include <klibloader.h>
 #include <kapplication.h>
@@ -37,7 +38,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "splashscreen.h"
 #include "imagepluginloader.h"
 

@@ -23,13 +23,13 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kdeversion.h>
 #include <kdialog.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "albumsettings.h"
 #include "searchtextbar.h"
 #include "ratingfilter.h"
@@ -53,8 +53,8 @@ public:
         led          = 0;
     }
 
-/* NOTE: There is a problem with Qt4.3 and KDE < 4.1.0 if statusbar host a KLineEdit: 
-         digiKam crash. Text Filter bar is replaced by a simple QLineEdit in this case. 
+/* NOTE: There is a problem with Qt4.3 and KDE < 4.1.0 if statusbar host a KLineEdit:
+         digiKam crash. Text Filter bar is replaced by a simple QLineEdit in this case.
  */
 #if KDE_IS_VERSION(4,1,0)
     SearchTextBar *textFilter;

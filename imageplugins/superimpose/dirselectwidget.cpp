@@ -32,12 +32,12 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kfiletreebranch.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dirselectwidget.h"
 #include "dirselectwidget.moc"
 

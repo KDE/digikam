@@ -46,11 +46,11 @@ extern "C"
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "databasebackend.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"

@@ -33,6 +33,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
 
@@ -45,7 +46,6 @@
 
 #include "constants.h"
 #include "version.h"
-#include "ddebug.h"
 #include "dmetadata.h"
 
 namespace Digikam

@@ -48,6 +48,7 @@
 #include <kcombobox.h>
 #include <kconfig.h>
 #include <kcursor.h>
+#include <kdebug.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -65,7 +66,6 @@
 #include "colorgradientwidget.h"
 #include "curveswidget.h"
 #include "daboutdata.h"
-#include "ddebug.h"
 #include "dimgimagefilters.h"
 #include "editortoolsettings.h"
 #include "histogramwidget.h"

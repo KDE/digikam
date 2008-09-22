@@ -39,15 +39,15 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kdeversion.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
-#include <kstandardguiitem.h>
 #include <kpushbutton.h>
+#include <kstandardguiitem.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "constants.h"
 #include "albummodel.h"
 #include "ratingwidget.h"

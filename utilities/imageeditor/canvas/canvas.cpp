@@ -55,6 +55,7 @@
 // KDE includes.
 
 #include <kcursor.h>
+#include <kdebug.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdatetable.h>
@@ -62,7 +63,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "imagehistogram.h"
 #include "imagepaniconwidget.h"
 #include "dimginterface.h"
@@ -82,8 +82,8 @@ class CanvasPrivate
 
 public:
 
-    CanvasPrivate() : 
-        tileSize(128), minZoom(0.1), maxZoom(12.0), zoomMultiplier(1.2) 
+    CanvasPrivate() :
+        tileSize(128), minZoom(0.1), maxZoom(12.0), zoomMultiplier(1.2)
     {
         pressedMoved     = false;
         pressedMoving    = false;
@@ -354,7 +354,7 @@ QString Canvas::currentImageFilePath()
 
 int Canvas::imageWidth()
 {
-    return d->im->origWidth();  
+    return d->im->origWidth();
 }
 
 int Canvas::imageHeight()
@@ -473,10 +473,10 @@ void Canvas::resizeEvent(QResizeEvent* e)
 
     updateContentsSize(false);
 
-    // No need to repaint. its called   
+    // No need to repaint. its called
     // automatically after resize
 
-    // To be sure than corner widget used to pan image will be hide/show 
+    // To be sure than corner widget used to pan image will be hide/show
     // accordinly with resize event.
     slotZoomChanged(d->zoom);
 }
@@ -551,12 +551,12 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                     }
 
                     // NOTE : with implementations <= 0.9.1, the canvas doesn't work properly using high zoom level (> 500).
-                    // The sx, sy, sw, sh values haven't be computed properly and "tile" artefacts been appears 
+                    // The sx, sy, sw, sh values haven't be computed properly and "tile" artefacts been appears
                     // over the image. Look the example here:
                     // http://digikam3rdparty.free.fr/Screenshots/editorhighzoomartefact.png
                     // Note than these "tile" artifacts are not the real tiles of canvas.
-                    // The new implementation below fix this problem to handle properly the areas to 
-                    // use from the source image to generate the canvas pixmap tiles.  
+                    // The new implementation below fix this problem to handle properly the areas to
+                    // use from the source image to generate the canvas pixmap tiles.
 
                     sx = (int)floor((double)i / d->tileSize) * step;
                     sy = (int)floor((double)j / d->tileSize) * step;
@@ -869,7 +869,7 @@ double Canvas::snapZoom(double zoom)
     snapValues.append(1.0);
     snapValues.append(fit);
 
-    if (d->zoom < zoom) 
+    if (d->zoom < zoom)
         qStableSort(snapValues);
     else
         qStableSort(snapValues.begin(), snapValues.end(), qGreater<double>());
@@ -956,7 +956,7 @@ void Canvas::setZoomFactor(double zoom)
 
     // Zoom using center of canvas and given zoom factor.
 
-    double cpx = contentsX() + visibleWidth()  / 2.0; 
+    double cpx = contentsX() + visibleWidth()  / 2.0;
     double cpy = contentsY() + visibleHeight() / 2.0;
 
     cpx = (cpx / d->tileSize) * floor(d->tileSize / d->zoom);
@@ -968,7 +968,7 @@ void Canvas::setZoomFactor(double zoom)
     updateContentsSize(false);
 
     viewport()->setUpdatesEnabled(false);
-    center((int)((cpx * d->tileSize) / floor(d->tileSize / d->zoom)), 
+    center((int)((cpx * d->tileSize) / floor(d->tileSize / d->zoom)),
            (int)((cpy * d->tileSize) / floor(d->tileSize / d->zoom)));
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
@@ -981,11 +981,11 @@ void Canvas::fitToSelect()
     int xSel, ySel, wSel, hSel;
     d->im->getSelectedArea(xSel, ySel, wSel, hSel);
 
-    if (wSel && hSel )   
-    {   
+    if (wSel && hSel )
+    {
         // If selected area, use center of selection
         // and recompute zoom factor accordinly.
-        double cpx = xSel + wSel / 2.0; 
+        double cpx = xSel + wSel / 2.0;
         double cpy = ySel + hSel / 2.0;
 
         double srcWidth  = wSel;
@@ -1001,7 +1001,7 @@ void Canvas::fitToSelect()
         updateContentsSize(true);
 
         viewport()->setUpdatesEnabled(false);
-        center((int)((cpx * d->tileSize) / floor(d->tileSize / d->zoom)), 
+        center((int)((cpx * d->tileSize) / floor(d->tileSize / d->zoom)),
                (int)((cpy * d->tileSize) / floor(d->tileSize / d->zoom)));
         viewport()->setUpdatesEnabled(true);
         viewport()->update();
@@ -1086,14 +1086,14 @@ void Canvas::setBackgroundColor(const QColor& color)
 void Canvas::setICCSettings(ICCSettingsContainer *cmSettings)
 {
     d->im->setICCSettings(cmSettings);
-    d->tileCache.clear();    
+    d->tileCache.clear();
     viewport()->update();
 }
 
 void Canvas::setExposureSettings(ExposureSettingsContainer *expoSettings)
 {
     d->im->setExposureSettings(expoSettings);
-    d->tileCache.clear();    
+    d->tileCache.clear();
     viewport()->update();
 }
 
@@ -1105,43 +1105,43 @@ void Canvas::setExifOrient(bool exifOrient)
 
 void Canvas::increaseGamma()
 {
-    d->im->changeGamma(1);    
-    d->tileCache.clear();    
+    d->im->changeGamma(1);
+    d->tileCache.clear();
     viewport()->update();
 }
 
 void Canvas::decreaseGamma()
 {
-    d->im->changeGamma(-1);    
-    d->tileCache.clear();    
+    d->im->changeGamma(-1);
+    d->tileCache.clear();
     viewport()->update();
 }
 
 void Canvas::increaseBrightness()
 {
-    d->im->changeBrightness(1);    
-    d->tileCache.clear();    
+    d->im->changeBrightness(1);
+    d->tileCache.clear();
     viewport()->update();
 }
 
 void Canvas::decreaseBrightness()
 {
-    d->im->changeBrightness(-1);    
-    d->tileCache.clear();    
+    d->im->changeBrightness(-1);
+    d->tileCache.clear();
     viewport()->update();
 }
 
 void Canvas::increaseContrast()
 {
-    d->im->changeContrast(5);    
-    d->tileCache.clear();    
+    d->im->changeContrast(5);
+    d->tileCache.clear();
     viewport()->update();
 }
 
 void Canvas::decreaseContrast()
 {
-    d->im->changeContrast(-5);    
-    d->tileCache.clear();    
+    d->im->changeContrast(-5);
+    d->tileCache.clear();
     viewport()->update();
 }
 
@@ -1219,13 +1219,13 @@ QRect Canvas::calcSelectedArea()
     int x=0, y=0, w=0, h=0;
     QRect r(d->rubber->rubberBandAreaOnContents());
 
-    if (r.isValid()) 
+    if (r.isValid())
     {
         r.translate(- d->pixmapRect.x(), - d->pixmapRect.y());
 
         x = (int)(((double)r.x()      / d->tileSize) * floor(d->tileSize / d->zoom));
         y = (int)(((double)r.y()      / d->tileSize) * floor(d->tileSize / d->zoom));
-        w = (int)(((double)r.width()  / d->tileSize) * floor(d->tileSize / d->zoom));   
+        w = (int)(((double)r.width()  / d->tileSize) * floor(d->tileSize / d->zoom));
         h = (int)(((double)r.height() / d->tileSize) * floor(d->tileSize / d->zoom));
 
         x = qMin(imageWidth(),  qMax(x, 0));
@@ -1241,7 +1241,7 @@ QRect Canvas::calcSelectedArea()
             h = 1;
     }
 
-    return QRect(x, y, w, h); 
+    return QRect(x, y, w, h);
 }
 
 void Canvas::slotModified()
@@ -1253,7 +1253,7 @@ void Canvas::slotModified()
     updateContentsSize(true);
     viewport()->update();
 
-    // To be sure than corner widget used to pan image will be hide/show 
+    // To be sure than corner widget used to pan image will be hide/show
     // accordinly with new image size (if changed).
     slotZoomChanged(d->zoom);
 
@@ -1287,7 +1287,7 @@ void Canvas::slotCornerButtonPressed()
     QPoint g = mapToGlobal(viewport()->pos());
     g.setX(g.x()+ viewport()->size().width());
     g.setY(g.y()+ viewport()->size().height());
-    d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(), 
+    d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(),
                                   g.y() - d->panIconPopup->height()));
 
     pan->setCursorToLocalRegionSelectionCenter();

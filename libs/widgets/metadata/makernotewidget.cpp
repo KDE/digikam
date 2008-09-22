@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -29,11 +29,11 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dmetadata.h"
 #include "makernotewidget.h"
 #include "makernotewidget.moc"
@@ -61,7 +61,7 @@ static const char* MakerNoteHumanList[] =
      "FlashMode",
      "FlashType",
      "FlashDevice",
-     "FNumber", 
+     "FNumber",
      "Focus"
      "FocusDistance",
      "FocusMode",
@@ -71,7 +71,7 @@ static const char* MakerNoteHumanList[] =
      "HueAdjustment",
      "ImageStabilizer",
      "ImageStabilization",
-     "InternalFlash", 
+     "InternalFlash",
      "ISOSelection",
      "ISOSpeed",
      "Lens",
@@ -135,7 +135,7 @@ bool MakerNoteWidget::loadFromURL(const KUrl& url)
         return false;
     }
     else
-    {    
+    {
         DMetadata metadata(url.path());
 
         if (!metadata.hasExif())

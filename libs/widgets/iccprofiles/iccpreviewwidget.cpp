@@ -6,7 +6,7 @@
  * Date        : 2006-01-12
  * Description : a widget to display ICC profiles descriptions
  *               in file dialog preview.
- * 
+ *
  * Copyright (C) 2006-2007 by Francisco J. Cruz <fj.cruz@supercable.es>
  *
  * This program is free software; you can redistribute it
@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -31,16 +31,16 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kurl.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "iccprofilewidget.h"
 #include "iccpreviewwidget.h"
 #include "iccpreviewwidget.moc"
 
-namespace Digikam 
+namespace Digikam
 {
 
 ICCPreviewWidget::ICCPreviewWidget(QWidget *parent)
@@ -60,7 +60,7 @@ void ICCPreviewWidget::showPreview( const KUrl &url)
 {
     clearPreview();
     QFileInfo fInfo(url.path());
-    
+
     if ( url.isLocalFile() && fInfo.isFile() && fInfo.isReadable() )
     {
         kDebug(50003) << url << " is a readble local file" << endl;

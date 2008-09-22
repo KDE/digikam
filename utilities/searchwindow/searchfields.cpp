@@ -43,6 +43,7 @@
 // KDE includes.
 
 #include <kcombobox.h>
+#include <kdebug.h>
 #include <kiconloader.h>
 #include <klineedit.h>
 #include <klocale.h>
@@ -50,7 +51,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dimg.h"
 #include "albummanager.h"
 #include "album.h"

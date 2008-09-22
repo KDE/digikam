@@ -35,6 +35,7 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <kdebug.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -48,7 +49,6 @@
 // Local includes.
 
 #include "daboutdata.h"
-#include "ddebug.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imagewidget.h"

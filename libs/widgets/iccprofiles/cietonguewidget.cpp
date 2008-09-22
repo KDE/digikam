@@ -40,11 +40,11 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "lcmsprf.h"
 #include "cietonguewidget.h"
 #include "cietonguewidget.moc"
@@ -58,7 +58,7 @@ namespace Digikam
     wavelengths  \lambda  at 5 nanometre increments from 380 nm through
     780 nm.  This table is used in conjunction with  Planck's  law  for
     the  energy spectrum of a black body at a given temperature to plot
-    the black body curve on the CIE chart. 
+    the black body curve on the CIE chart.
 
     The following table gives the  spectral  chromaticity  co-ordinates
     x(\lambda) and y(\lambda) for wavelengths in 5 nanometre increments
@@ -69,7 +69,7 @@ namespace Digikam
     */
     static const double spectral_chromaticity[81][3] =
     {
-        { 0.1741, 0.0050 },               // 380 nm 
+        { 0.1741, 0.0050 },               // 380 nm
         { 0.1740, 0.0050 },
         { 0.1738, 0.0049 },
         { 0.1736, 0.0049 },
@@ -149,7 +149,7 @@ namespace Digikam
         { 0.7347, 0.2653 },
         { 0.7347, 0.2653 },
         { 0.7347, 0.2653 },
-        { 0.7347, 0.2653 }  // 780 nm 
+        { 0.7347, 0.2653 }  // 780 nm
     };
 
 class CIETongueWidgetPriv
@@ -419,7 +419,7 @@ void CIETongueWidget::outlineTongue()
     {
         int ix = (x - 380) / 5;
 
-        cmsCIExyY p = {spectral_chromaticity[ix][0], 
+        cmsCIExyY p = {spectral_chromaticity[ix][0],
                        spectral_chromaticity[ix][1], 1};
 
         int icx, icy;
@@ -453,7 +453,7 @@ void CIETongueWidget::fillTongue()
     {
         int xe = 0;
 
-        // Find horizontal extents of tongue on this line. 
+        // Find horizontal extents of tongue on this line.
 
         for (x = 0; x < d->pxcols; x++)
         {
@@ -560,7 +560,7 @@ void CIETongueWidget::drawLabels()
         mapPoint(icx, icy, &p);
 
         tx = icx + ((x < 520) ? grids(-2) : ((x >= 535) ? grids(2) : 0));
-        ty = icy + ((x < 520) ? 0 : ((x >= 535) ? grids(-1) : grids(-2))); 
+        ty = icy + ((x < 520) ? 0 : ((x >= 535) ? grids(-1) : grids(-2)));
 
         d->painter.setPen(qRgb(255, 255, 255));
         biasedLine(icx, icy, tx, ty);

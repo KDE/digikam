@@ -45,12 +45,12 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kcursor.h>
 #include <kglobalsettings.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "drubberband.h"
 #include "iconitem.h"
 #include "icongroupitem.h"
@@ -248,7 +248,7 @@ IconGroupItem* IconView::findGroup(const QPoint& pos)
 
         rect.setBottom(bottom);
 
-        if ( rect.contains(p) ) 
+        if ( rect.contains(p) )
         {
             return group;
         }
@@ -413,9 +413,9 @@ void IconView::selectItem(IconItem* item, bool select)
     emit signalSelectionChanged();
 }
 
-void IconView::setStoredVisibleItem(IconItem *item) 
-{ 
-    d->storedVisibleItem = item; 
+void IconView::setStoredVisibleItem(IconItem *item)
+{
+    d->storedVisibleItem = item;
 }
 
 void IconView::insertGroup(IconGroupItem* group)
@@ -524,7 +524,7 @@ void IconView::takeItem(IconItem* item)
     // Remove from selected item list
     d->selectedItems.remove(item);
     // See bug 161084
-    if (d->selectedItems.count() || item->isSelected()) 
+    if (d->selectedItems.count() || item->isSelected())
         d->needEmitSelectionChanged = true;
 
     if (d->toolTipItem == item)

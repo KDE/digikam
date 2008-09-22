@@ -5,7 +5,7 @@
  *
  * Date        : 2006-02-20
  * Description : a widget to display Standard Exif metadata
- * 
+ *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -28,11 +28,11 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dmetadata.h"
 #include "metadatalistview.h"
 #include "exifwidget.h"
@@ -107,14 +107,14 @@ QString ExifWidget::getMetadataTitle()
 bool ExifWidget::loadFromURL(const KUrl& url)
 {
     setFileName(url.path());
-    
+
     if (url.isEmpty())
     {
         setMetadata();
         return false;
     }
     else
-    {    
+    {
         DMetadata metadata(url.path());
 
         if (!metadata.hasExif())
@@ -141,7 +141,7 @@ bool ExifWidget::decodeMetadata()
 }
 
 void ExifWidget::buildView()
-{    
+{
     if (getMode() == SIMPLE)
     {
         setIfdList(getMetadataMap(), m_keysFilter, m_tagsfilter);

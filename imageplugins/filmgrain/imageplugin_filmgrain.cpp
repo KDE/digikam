@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-10-01
- * Description : a digiKam image editor plugin for add film 
+ * Description : a digiKam image editor plugin for add film
  *               grain on an image.
  *
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -24,6 +24,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -34,7 +35,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "filmgraintool.h"
 #include "imageplugin_filmgrain.h"
 #include "imageplugin_filmgrain.moc"
@@ -50,7 +50,7 @@ ImagePlugin_FilmGrain::ImagePlugin_FilmGrain(QObject *parent, const QVariantList
     m_filmgrainAction  = new KAction(KIcon("filmgrain"), i18n("Add Film Grain..."), this);
     actionCollection()->addAction("imageplugin_filmgrain", m_filmgrainAction );
 
-    connect(m_filmgrainAction, SIGNAL(triggered(bool)), 
+    connect(m_filmgrainAction, SIGNAL(triggered(bool)),
             this, SLOT(slotFilmGrain()));
 
     setXMLFile( "digikamimageplugin_filmgrain_ui.rc" );

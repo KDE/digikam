@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-08-02
- * Description : class to get/set image information/properties 
+ * Description : class to get/set image information/properties
  *               in a digiKam album.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
@@ -16,18 +16,19 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // KDE includes.
 
-#include <klocale.h>
 #include <kconfig.h>
+#include <kdebug.h>
+#include <klocale.h>
 
 // libKipi includes.
 
@@ -36,7 +37,6 @@
 // Local includes.
 
 #include "constants.h"
-#include "ddebug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
@@ -76,7 +76,7 @@ QString KipiImageInfo::description()
 
 void KipiImageInfo::setTitle( const QString& newName )
 {
-    // Here we get informed that a plugin has renamed the file 
+    // Here we get informed that a plugin has renamed the file
 
     PAlbum* p = parentAlbum();
 
@@ -167,7 +167,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
     {
         QMap<QString, QVariant> attributes = res;
 
-        // Set digiKam Tags Path list of picture into database. 
+        // Set digiKam Tags Path list of picture into database.
         // Ex.: "City/Paris/Monuments/Notre Dame"
         if (attributes.find("tagspath") != attributes.end())
         {
@@ -228,8 +228,8 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
         // TODO: add here a kipi-plugins access to future picture attributes stored by digiKam database
     }
 
-    // To update sidebar content. Some kipi-plugins use this way to refresh sidebar 
-    // using an empty QMap(). 
+    // To update sidebar content. Some kipi-plugins use this way to refresh sidebar
+    // using an empty QMap().
     ImageAttributesWatch::instance()->fileMetadataChanged(_url);
 }
 
@@ -264,7 +264,7 @@ void KipiImageInfo::delAttributes(const QStringList& res)
         // TODO: add here a kipi-plugins access to future picture attributes stored by digiKam database
     }
 
-    // To update sidebar content. Some kipi-plugins use this way to refresh sidebar 
+    // To update sidebar content. Some kipi-plugins use this way to refresh sidebar
     // using an empty QMap().
     ImageAttributesWatch::instance()->fileMetadataChanged(_url);
 }
@@ -289,7 +289,7 @@ int KipiImageInfo::angle()
         DMetadata metadata(_url.path());
         DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
 
-        switch (orientation) 
+        switch (orientation)
         {
             case DMetadata::ORIENTATION_ROT_180:
                 return 180;

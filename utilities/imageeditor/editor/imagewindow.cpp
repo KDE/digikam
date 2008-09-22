@@ -48,6 +48,7 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
+#include <kdebug.h>
 #include <kdeversion.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -72,7 +73,6 @@
 // Local includes.
 
 #include "componentsinfo.h"
-#include "ddebug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"

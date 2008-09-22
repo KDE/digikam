@@ -41,16 +41,16 @@
 // KDE includes.
 
 #include <kapplication.h>
-#include <kiconloader.h>
-#include <klocale.h>
+#include <kdebug.h>
 #include <kdeversion.h>
 #include <kglobalsettings.h>
+#include <kiconloader.h>
+#include <klocale.h>
 #include <kstandarddirs.h>
 
 // Local includes.
 
 #include "constants.h"
-#include "ddebug.h"
 #include "dimg.h"
 #include "toolbar.h"
 #include "previewloadthread.h"

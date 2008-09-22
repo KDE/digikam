@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -31,6 +31,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kdialog.h>
 #include <ksqueezedtextlabel.h>
@@ -38,7 +39,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "imagepropertiestab.h"
 #include "imagepropertiestab.moc"
 
@@ -275,8 +275,8 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
     // --------------------------------------------------
 
     settingsLayout->addWidget(d->title,                  0, 0, 1, 2);
-    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 
+    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding),
                                                          1, 0, 1, 2);
     settingsLayout->addWidget(d->file,                   2, 0, 1, 1);
     settingsLayout->addWidget(d->labelFile,              2, 1, 1, 1);
@@ -292,16 +292,16 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
     settingsLayout->addWidget(d->labelFilePermissions,   7, 1, 1, 1);
 
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding),
                                                          8, 0, 1, 2);
     settingsLayout->addWidget(line,                      9, 0, 1, 2);
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding),
                                                          10, 0, 1, 2);
 
     settingsLayout->addWidget(d->title2,                 11, 0, 1, 2);
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding),
                                                          12, 0, 1, 2);
     settingsLayout->addWidget(d->mime,                   13, 0, 1, 1);
     settingsLayout->addWidget(d->labelImageMime,         13, 1, 1, 1);
@@ -315,16 +315,16 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
     settingsLayout->addWidget(d->labelImageColorMode,    17, 1, 1, 1);
 
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding),
                                                          18, 0, 1, 2);
     settingsLayout->addWidget(line2,                     19, 0, 1, 2);
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding),
                                                          20, 0, 1, 2);
 
     settingsLayout->addWidget(d->title3,                 21, 0, 1, 2);
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding),
                                                          22, 0, 1, 2);
     settingsLayout->addWidget(d->make,                   23, 0, 1, 1);
     settingsLayout->addWidget(d->labelPhotoMake,         23, 1, 1, 1);

@@ -30,11 +30,11 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kdirwatch.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "loadingcache.h"
 #include "loadingcache.moc"
 

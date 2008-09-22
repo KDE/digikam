@@ -37,22 +37,22 @@
 
 // KDE includes.
 
-#include <kmimetypetrader.h>
-#include <kdialog.h>
-#include <klocale.h>
-#include <kservice.h>
-#include <krun.h>
-#include <kmenu.h>
-#include <kmimetype.h>
+#include <kapplication.h>
 #include <kcursor.h>
 #include <kdatetable.h>
+#include <kdebug.h>
+#include <kdialog.h>
 #include <kiconloader.h>
-#include <kapplication.h>
+#include <klocale.h>
+#include <kmenu.h>
+#include <kmimetype.h>
+#include <kmimetypetrader.h>
+#include <krun.h>
+#include <kservice.h>
 
 // Local includes.
 
 #include "dimg.h"
-#include "ddebug.h"
 #include "albumdb.h"
 #include "constants.h"
 #include "albummanager.h"

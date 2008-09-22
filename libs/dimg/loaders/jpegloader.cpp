@@ -7,7 +7,7 @@
  * Description : A JPEG IO file for DImg framework
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#define XMD_H 
+#define XMD_H
 
 // This line must be commented to prevent any latency time
 // when we use threaded image loader interface for each image
@@ -31,7 +31,7 @@
 
 // C ansi includes.
 
-extern "C" 
+extern "C"
 {
 #include "iccjpeg.h"
 }
@@ -46,9 +46,12 @@ extern "C"
 #include <QFile>
 #include <QByteArray>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "jpegloader.h"
@@ -141,7 +144,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     // If an error occurs during reading, libjpeg will jump here
 
-    if (setjmp(jerr.setjmp_buffer)) 
+    if (setjmp(jerr.setjmp_buffer))
     {
         jpeg_destroy_decompress(&cinfo);
         fclose(file);
@@ -262,7 +265,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         {
             jpeg_destroy_decompress(&cinfo);
             fclose(file);
-            kDebug(50003) 
+            kDebug(50003)
                     << "JPEG colorspace ("
                     << cinfo.out_color_space
                     << ") or Number of JPEG color components ("
@@ -455,7 +458,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
         read_icc_profile (&cinfo, &profile_data, &profile_size);
 
-        if (profile_data != NULL) 
+        if (profile_data != NULL)
         {
             QByteArray profile_rawdata;
             profile_rawdata.resize(profile_size);
@@ -498,53 +501,53 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         return false;
 
     struct jpeg_compress_struct  cinfo;
-    struct dimg_jpeg_error_mgr jerr;    
+    struct dimg_jpeg_error_mgr jerr;
 
     // -------------------------------------------------------------------
-    // JPEG error handling. 
-    
+    // JPEG error handling.
+
     cinfo.err                 = jpeg_std_error(&jerr);
     cinfo.err->error_exit     = dimg_jpeg_error_exit;
     cinfo.err->emit_message   = dimg_jpeg_emit_message;
     cinfo.err->output_message = dimg_jpeg_output_message;
-    
+
     // If an error occurs during writing, libjpeg will jump here
-    
-    if (setjmp(jerr.setjmp_buffer)) 
+
+    if (setjmp(jerr.setjmp_buffer))
     {
         jpeg_destroy_compress(&cinfo);
         fclose(file);
         return false;
     }
-    
+
     // -------------------------------------------------------------------
     // Set JPEG compressor instance
-    
+
     jpeg_create_compress(&cinfo);
     jpeg_stdio_dest(&cinfo, file);
 
     uint&              w   = imageWidth();
     uint&              h   = imageHeight();
     unsigned char*& data   = imageData();
-    
+
     // Size of image.
     cinfo.image_width      = w;
     cinfo.image_height     = h;
 
     // Color components of image in RGB.
     cinfo.input_components = 3;
-    cinfo.in_color_space   = JCS_RGB;    
+    cinfo.in_color_space   = JCS_RGB;
 
     QVariant qualityAttr = imageGetAttribute("quality");
     int quality = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
-    
+
     if (quality < 0)
         quality = 90;
     if (quality > 100)
         quality = 100;
-    
+
     QVariant subSamplingAttr = imageGetAttribute("subsampling");
-    int subsampling = subSamplingAttr.isValid() ? subSamplingAttr.toInt() : 1;  // Medium    
+    int subsampling = subSamplingAttr.isValid() ? subSamplingAttr.toInt() : 1;  // Medium
 
     jpeg_set_defaults(&cinfo);
 
@@ -598,20 +601,20 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     // -------------------------------------------------------------------
     // Write ICC profil.
-    
+
     QByteArray profile_rawdata = m_image->getICCProfil();
-    
+
     if (!profile_rawdata.isEmpty())
     {
         write_icc_profile (&cinfo, (JOCTET *)profile_rawdata.data(), profile_rawdata.size());
-    }    
-        
+    }
+
     if (observer)
         observer->progressInfo(m_image, 0.2);
-    
+
     // -------------------------------------------------------------------
     // Write Image data.
-    
+
     uchar* line       = new uchar[w*3];
     uchar* dstPtr     = 0;
     uint   checkPoint = 0;
@@ -639,13 +642,13 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             }
 
             dstPtr = line;
-            
+
             for (uint i = 0; i < w; i++)
             {
                 dstPtr[2] = srcPtr[0];  // Blue
                 dstPtr[1] = srcPtr[1];  // Green
                 dstPtr[0] = srcPtr[2];  // Red
-        
+
                 srcPtr += 4;
                 dstPtr += 3;
             }
@@ -675,17 +678,17 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             }
 
             dstPtr = line;
-            
+
             for (uint i = 0; i < w; i++)
             {
                 dstPtr[2] = (srcPtr[0] * 255UL)/65535UL;    // Blue
                 dstPtr[1] = (srcPtr[1] * 255UL)/65535UL;    // Green
                 dstPtr[0] = (srcPtr[2] * 255UL)/65535UL;    // Red
-        
+
                 srcPtr += 4;
                 dstPtr += 3;
             }
-    
+
             jpeg_write_scanlines(&cinfo, &line, 1);
         }
     }
@@ -693,15 +696,15 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     delete [] line;
 
     // -------------------------------------------------------------------
-    
+
     jpeg_finish_compress(&cinfo);
     jpeg_destroy_compress(&cinfo);
     fclose(file);
-    
+
     imageSetAttribute("savedformat", "JPEG");
-    
+
     saveMetadata(filePath);
-    
+
     return true;
 }
 

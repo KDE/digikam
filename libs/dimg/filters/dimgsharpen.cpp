@@ -32,9 +32,12 @@
 #include <cmath>
 #include <cstdlib>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "dimgimagefilters.h"
 #include "dimgsharpen.h"
 

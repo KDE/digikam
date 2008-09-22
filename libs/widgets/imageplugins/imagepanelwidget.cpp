@@ -39,6 +39,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
@@ -50,7 +51,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "thumbnailsize.h"
 #include "imageregionwidget.h"
 #include "imagepaniconwidget.h"

@@ -25,6 +25,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -35,7 +36,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "hotpixelstool.h"
 #include "imageplugin_hotpixels.h"
 #include "imageplugin_hotpixels.moc"
@@ -51,7 +51,7 @@ ImagePlugin_HotPixels::ImagePlugin_HotPixels(QObject *parent, const QVariantList
     m_hotpixelsAction  = new KAction(KIcon("hotpixels"), i18n("Hot Pixels..."), this);
     actionCollection()->addAction("imageplugin_hotpixels", m_hotpixelsAction );
 
-    connect(m_hotpixelsAction, SIGNAL(triggered(bool) ), 
+    connect(m_hotpixelsAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotHotPixels()));
 
     setXMLFile("digikamimageplugin_hotpixels_ui.rc");

@@ -28,12 +28,12 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes.
 
 #include "album.h"
-#include "ddebug.h"
 #include "searchxml.h"
 #include "findduplicatesalbumitem.h"
 

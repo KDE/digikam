@@ -24,12 +24,12 @@
 
 // KDE includes.
 
-#include <klocale.h>
+#include <kdebug.h>
 #include <kiconloader.h>
+#include <klocale.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "camerafolderitem.h"
 #include "camerafolderview.h"
 #include "camerafolderview.moc"

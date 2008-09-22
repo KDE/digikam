@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-08-26
- * Description : a digiKam image editor plugin to emboss 
+ * Description : a digiKam image editor plugin to emboss
  *               an image.
  *
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -20,10 +20,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * ============================================================ */ 
+ * ============================================================ */
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -34,7 +35,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "embosstool.h"
 #include "imageplugin_emboss.h"
 #include "imageplugin_emboss.moc"
@@ -51,7 +51,7 @@ ImagePlugin_Emboss::ImagePlugin_Emboss(QObject *parent, const QVariantList &)
     m_embossAction  = new KAction(KIcon("embosstool"), i18n("Emboss..."), this);
     actionCollection()->addAction("imageplugin_emboss", m_embossAction );
 
-    connect(m_embossAction, SIGNAL(triggered(bool)), 
+    connect(m_embossAction, SIGNAL(triggered(bool)),
             this, SLOT(slotEmboss()));
 
     setXMLFile( "digikamimageplugin_emboss_ui.rc" );

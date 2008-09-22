@@ -47,6 +47,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kapplication.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -57,7 +58,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "metadatalistview.h"
 #include "metadatalistviewitem.h"
 #include "mdkeylistviewitem.h"

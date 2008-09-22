@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-02-22
- * Description : a digiKam image editor plugin for simulate 
+ * Description : a digiKam image editor plugin for simulate
  *               infrared film.
  *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -24,6 +24,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -34,7 +35,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "infraredtool.h"
 #include "imageplugin_infrared.h"
 #include "imageplugin_infrared.moc"
@@ -51,7 +51,7 @@ ImagePlugin_Infrared::ImagePlugin_Infrared(QObject *parent, const QVariantList &
     m_infraredAction = new KAction(KIcon("infrared"), i18n("Infrared Film..."), this);
     actionCollection()->addAction("imageplugin_infrared", m_infraredAction );
 
-    connect(m_infraredAction, SIGNAL(triggered(bool)), 
+    connect(m_infraredAction, SIGNAL(triggered(bool)),
             this, SLOT(slotInfrared()));
 
     setXMLFile( "digikamimageplugin_infrared_ui.rc" );

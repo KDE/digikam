@@ -25,6 +25,7 @@
 
 #include <klocale.h>
 #include <kgenericfactory.h>
+#include <kdebug.h>
 #include <klibloader.h>
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -33,7 +34,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "texturetool.h"
 #include "imageplugin_texture.h"
 #include "imageplugin_texture.moc"
@@ -50,7 +50,7 @@ ImagePlugin_Texture::ImagePlugin_Texture(QObject *parent, const QVariantList &)
     m_textureAction  = new KAction(KIcon("texture"), i18n("Apply Texture..."), this);
     actionCollection()->addAction("imageplugin_texture", m_textureAction );
 
-    connect(m_textureAction, SIGNAL(triggered(bool)), 
+    connect(m_textureAction, SIGNAL(triggered(bool)),
             this, SLOT(slotTexture()));
 
     setXMLFile( "digikamimageplugin_texture_ui.rc" );

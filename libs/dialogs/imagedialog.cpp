@@ -5,15 +5,15 @@
  *
  * Date        : 2008-03-13
  * Description : image files selector dialog.
- * 
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ *
+ * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,6 +28,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
@@ -44,7 +45,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dmetadata.h"
 #include "loadingdescription.h"
 #include "thumbnailsize.h"
@@ -55,7 +55,7 @@
 namespace Digikam
 {
 
-class ImageDialogPreviewPrivate 
+class ImageDialogPreviewPrivate
 {
 
 public:
@@ -102,7 +102,7 @@ ImageDialogPreview::ImageDialogPreview(QWidget *parent)
             this, SLOT(slotThumbnail(const LoadingDescription&, const QPixmap&)));
 }
 
-ImageDialogPreview::~ImageDialogPreview() 
+ImageDialogPreview::~ImageDialogPreview()
 {
     delete d;
 }
@@ -126,13 +126,13 @@ void ImageDialogPreview::showPreview()
 
 void ImageDialogPreview::showPreview(const KUrl& url)
 {
-    if (!url.isValid()) 
+    if (!url.isValid())
     {
         clearPreview();
         return;
     }
 
-    if (url != d->currentURL) 
+    if (url != d->currentURL)
     {
         clearPreview();
         d->currentURL = url;
@@ -158,16 +158,16 @@ void ImageDialogPreview::showPreview(const KUrl& url)
             if (!info.dateTime.isValid()) dateTime = unavailable;
             else dateTime = KGlobal::locale()->formatDateTime(info.dateTime, KLocale::ShortDate, true);
 
-            if (info.aperture.isEmpty()) aperture = unavailable; 
+            if (info.aperture.isEmpty()) aperture = unavailable;
             else aperture = info.aperture;
 
-            if (info.focalLength.isEmpty()) focalLength = unavailable; 
+            if (info.focalLength.isEmpty()) focalLength = unavailable;
             else focalLength = info.focalLength;
 
-            if (info.exposureTime.isEmpty()) exposureTime = unavailable; 
+            if (info.exposureTime.isEmpty()) exposureTime = unavailable;
             else exposureTime = info.exposureTime;
 
-            if (info.sensitivity.isEmpty()) sensitivity = unavailable; 
+            if (info.sensitivity.isEmpty()) sensitivity = unavailable;
             else sensitivity = i18n("%1 ISO", info.sensitivity);
 
             identify = "<table cellspacing=0 cellpadding=0>";
@@ -196,7 +196,7 @@ void ImageDialogPreview::slotThumbnail(const LoadingDescription& desc, const QPi
 
         if (s.width() < pix.width() || s.height() < pix.height())
             pixmap = pix.scaled(s, Qt::KeepAspectRatio);
-        else 
+        else
             pixmap = pix;
 
         d->imageLabel->setPixmap(pixmap);
@@ -212,7 +212,7 @@ void ImageDialogPreview::clearPreview()
 
 // ------------------------------------------------------------------------
 
-class ImageDialogPrivate 
+class ImageDialogPrivate
 {
 
 public:
@@ -248,7 +248,7 @@ ImageDialog::ImageDialog(QWidget* parent, const KUrl& url, bool singleSelect, co
         patternList.removeAll(patternList[0]);
         patternList.prepend(allPictures);
         // Added RAW file formats supported by dcraw program like a type mime.
-        // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete 
+        // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete
         // or unavailable(see file #121242 in B.K.O).
         patternList.append(i18n("\n%1|Camera RAW files", QString(KDcrawIface::DcrawBinary::instance()->rawFiles())));
     }
@@ -257,7 +257,7 @@ ImageDialog::ImageDialog(QWidget* parent, const KUrl& url, bool singleSelect, co
     patternList.removeAll(patternList[0]);
     patternList.prepend(allPictures);
     // Added RAW file formats supported by dcraw program like a type mime.
-    // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete 
+    // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete
     // or unavailable(see file #121242 in B.K.O).
     patternList.append(i18n("\n%1|Camera RAW files", QString(KDcrawIface::KDcraw::rawFiles())));
 #endif
@@ -289,17 +289,17 @@ ImageDialog::ImageDialog(QWidget* parent, const KUrl& url, bool singleSelect, co
     }
 }
 
-ImageDialog::~ImageDialog() 
+ImageDialog::~ImageDialog()
 {
     delete d;
 }
 
-bool ImageDialog::singleSelect() const 
+bool ImageDialog::singleSelect() const
 {
     return d->singleSelect;
 }
 
-QString ImageDialog::fileFormats() const 
+QString ImageDialog::fileFormats() const
 {
     return d->fileFormats;
 }

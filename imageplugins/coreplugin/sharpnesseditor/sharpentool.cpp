@@ -43,6 +43,7 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
+#include <kdebug.h>
 #include <kmessagebox.h>
 #include <kseparator.h>
 #include <kurl.h>
@@ -54,7 +55,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "imageiface.h"
 #include "imagepanelwidget.h"
 #include "editortoolsettings.h"

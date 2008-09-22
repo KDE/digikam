@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-11-17
- * Description : image properties side bar using data from 
+ * Description : image properties side bar using data from
  *               digiKam database.
  *
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -31,6 +31,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kfileitem.h>
 #include <klocale.h>
 #include <kconfig.h>
@@ -41,7 +42,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dimg.h"
 #include "imageinfo.h"
 #include "databasewatch.h"
@@ -195,7 +195,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
 {
     setCursor(Qt::WaitCursor);
 
-    // No database data available, for example in the case of image editor is 
+    // No database data available, for example in the case of image editor is
     // started from camera GUI.
     if (d->currentInfos.isEmpty())
     {
@@ -491,7 +491,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformations(const KUrl& url)
 
             if (photoInfo.focalLength35.isEmpty())
                 m_propertiesTab->setPhotoFocalLength(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
-            else 
+            else
             {
                 str = i18n("%1 (35mm: %2)", photoInfo.focalLength, photoInfo.focalLength35);
                 m_propertiesTab->setPhotoFocalLength(str);
@@ -506,7 +506,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformations(const KUrl& url)
                 m_propertiesTab->setPhotoExposureMode(photoInfo.exposureMode);
             else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
                 m_propertiesTab->setPhotoExposureMode(photoInfo.exposureProgram);
-            else 
+            else
             {
                 str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
                 m_propertiesTab->setPhotoExposureMode(str);

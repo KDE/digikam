@@ -15,18 +15,19 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // KDE includes.
 
-#include <klocale.h>
 #include <kconfig.h>
+#include <kdebug.h>
+#include <klocale.h>
 
 // libKipi includes.
 
@@ -35,7 +36,6 @@
 // Local includes.
 
 #include "constants.h"
-#include "ddebug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albumsettings.h"
@@ -77,7 +77,7 @@ KIPI::ImageCollection KipiInterface::currentAlbum()
     Album* currAlbum = m_albumManager->currentAlbum();
     if ( currAlbum )
     {
-        return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::AllItems, 
+        return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::AllItems,
                                          currAlbum, fileExtensions()));
     }
     else

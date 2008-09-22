@@ -54,6 +54,7 @@
 #include <kcalendarsystem.h>
 #include <kcombobox.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <kdialog.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
@@ -87,7 +88,6 @@
 // Local includes.
 
 #include "componentsinfo.h"
-#include "ddebug.h"
 #include "statuszoombar.h"
 #include "statusprogressbar.h"
 #include "statusnavigatebar.h"

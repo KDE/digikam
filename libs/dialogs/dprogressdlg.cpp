@@ -34,6 +34,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -41,7 +42,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dprogressdlg.h"
 #include "dprogressdlg.moc"
 

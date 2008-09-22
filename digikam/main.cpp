@@ -33,6 +33,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kcmdlineargs.h>
 #include <kapplication.h>
 #include <kaboutdata.h>
@@ -51,7 +52,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "daboutdata.h"
 #include "albummanager.h"
 #include "databaseaccess.h"

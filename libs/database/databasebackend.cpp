@@ -32,11 +32,11 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kglobal.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "schemaupdater.h"
 #include "databasewatch.h"
 #include "databasebackend.h"

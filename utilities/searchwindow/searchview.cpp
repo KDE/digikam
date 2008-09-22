@@ -31,6 +31,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kdialogbuttonbox.h>
 #include <klocale.h>
 #include <kpushbutton.h>
@@ -38,7 +39,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "searchxml.h"
 #include "themeengine.h"
 #include "searchwindow.h"

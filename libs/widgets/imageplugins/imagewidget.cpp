@@ -34,6 +34,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdialog.h>
@@ -45,7 +46,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "imagewidget.h"
 #include "imagewidget.moc"
 

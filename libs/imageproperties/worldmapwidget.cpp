@@ -32,6 +32,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <ktemporaryfile.h>
 
@@ -43,7 +44,6 @@ using namespace Marble;
 
 // Local includes.
 
-#include "ddebug.h"
 #include "worldmapwidget.h"
 #include "worldmapwidget.moc"
 
@@ -173,7 +173,7 @@ void WorldMapWidget::setGPSPositions(const GPSInfoList& list)
     KMLFile.open();
     QFile file(KMLFile.fileName());
     file.open(QIODevice::WriteOnly);
-    QTextStream stream(&file); 
+    QTextStream stream(&file);
     stream << kmlDocument.toString();
     file.close();
 

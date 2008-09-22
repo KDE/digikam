@@ -48,7 +48,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databasebackend.h"

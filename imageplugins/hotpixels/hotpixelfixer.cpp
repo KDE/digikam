@@ -34,10 +34,13 @@
 #include <QRegExp>
 #include <QStringList>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
 #include "dimg.h"
-#include "ddebug.h"
 #include "hotpixelfixer.h"
 
 #ifdef HAVE_FLOAT_H
@@ -56,7 +59,7 @@
 namespace DigikamHotPixelsImagesPlugin
 {
 
-HotPixelFixer::HotPixelFixer(Digikam::DImg *orgImage, QObject *parent, const QList<HotPixel>& hpList, 
+HotPixelFixer::HotPixelFixer(Digikam::DImg *orgImage, QObject *parent, const QList<HotPixel>& hpList,
                              int interpolationMethod)
              : Digikam::DImgThreadedFilter(orgImage, parent, "HotPixels")
 {
@@ -74,7 +77,7 @@ HotPixelFixer::~HotPixelFixer()
 void HotPixelFixer::filterImage()
 {
     QList <HotPixel>::ConstIterator it;
-    QList <HotPixel>::ConstIterator end(m_hpList.end()); 
+    QList <HotPixel>::ConstIterator end(m_hpList.end());
     for (it = m_hpList.begin() ; it != end ; ++it)
     {
         HotPixel hp = *it;
@@ -184,7 +187,7 @@ void HotPixelFixer::weightPixels (Digikam::DImg &img, HotPixel &px, int method, 
 
     for (int iComp = 0; iComp < 3; ++iComp)
     {
-        // Obtain weight data block.  
+        // Obtain weight data block.
 
         Weights w;
         int polynomeOrder=-1;
@@ -206,7 +209,7 @@ void HotPixelFixer::weightPixels (Digikam::DImg &img, HotPixel &px, int method, 
         if (polynomeOrder<0) return;
 
         // In the one-dimensional case, the width must be 1,
-        // and the size must be stored in height 
+        // and the size must be stored in height
 
         w.setWidth(dir == TWODIM_DIRECTION ? px.width() : 1);
         w.setHeight(dir == HORIZONTAL_DIRECTION ? px.width() : px.height());
@@ -225,7 +228,7 @@ void HotPixelFixer::weightPixels (Digikam::DImg &img, HotPixel &px, int method, 
 
         //}
 
-        // Calculate weighted pixel sum.  
+        // Calculate weighted pixel sum.
         for (int y = 0; y<px.height(); ++y)
         {
             for (int x = 0; x < px.width(); ++x)
@@ -237,10 +240,10 @@ void HotPixelFixer::weightPixels (Digikam::DImg &img, HotPixel &px, int method, 
 
                     for (i = 0; i < (size_t)w.positions().count(); ++i)
                     {
-                        // In the one-dimensional case, only the y coordinate is used.  
-                        const int xx = px.x()+(dir == VERTICAL_DIRECTION ? x : 
+                        // In the one-dimensional case, only the y coordinate is used.
+                        const int xx = px.x()+(dir == VERTICAL_DIRECTION ? x :
                                   dir== HORIZONTAL_DIRECTION ? w.positions()[i].y() : w.positions()[i].x());
-                        const int yy = px.y()+(dir == HORIZONTAL_DIRECTION ? y : 
+                        const int yy = px.y()+(dir == HORIZONTAL_DIRECTION ? y :
                                   w.positions()[i].y());
 
                         if (validPoint (img,QPoint(xx, yy)))
@@ -273,7 +276,7 @@ void HotPixelFixer::weightPixels (Digikam::DImg &img, HotPixel &px, int method, 
                     if (fabs (v) <= DBL_MIN)
                         component=0;
                     else if (sum_weight >= DBL_MIN)
-                    {	
+                    {
                         component=(int) (v/sum_weight);
                         //Clamp value
                         if (component<0) component=0;

@@ -31,9 +31,12 @@
 
 #include <cmath>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "dimg.h"
 #include "dimggaussianblur.h"
 #include "dimgimagefilters.h"

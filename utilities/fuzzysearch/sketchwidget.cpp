@@ -35,11 +35,11 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "sketchwidget.h"
 
 namespace Digikam
@@ -424,7 +424,7 @@ void SketchWidget::setSketchImage(const QImage& image)
 
 void SketchWidget::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::LeftButton) 
+    if (e->button() == Qt::LeftButton)
     {
         if (d->isClear)
         {

@@ -39,6 +39,7 @@
 #include <kapplication.h>
 #include <kcolorvalueselector.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <kdialog.h>
 #include <khbox.h>
 #include <khuesaturationselect.h>
@@ -57,7 +58,6 @@
 #include "albummanager.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
-#include "ddebug.h"
 #include "ddragobjects.h"
 #include "imageinfo.h"
 #include "haariface.h"

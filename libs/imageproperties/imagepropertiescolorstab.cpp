@@ -40,6 +40,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kapplication.h>
 #include <kcombobox.h>
 #include <kconfig.h>
@@ -52,7 +53,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "dimg.h"
 #include "imagehistogram.h"
 #include "histogramwidget.h"

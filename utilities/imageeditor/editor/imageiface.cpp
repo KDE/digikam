@@ -2,12 +2,12 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2004-02-14
  * Description : image data interface for image plugins
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,9 +30,12 @@
 #include <QBitmap>
 #include <QPainter>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "exposurecontainer.h"
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
@@ -105,7 +108,7 @@ ImageIface::~ImageIface()
 
 void ImageIface::setPreviewType(bool useSelect)
 {
-    d->usePreviewSelection = useSelect; 
+    d->usePreviewSelection = useSelect;
 }
 
 bool ImageIface::previewType()
@@ -165,14 +168,14 @@ uchar* ImageIface::getPreviewImage() const
 
         if (!d->usePreviewSelection)
             im = DImgInterface::defaultInterface()->getImg();
-        else 
+        else
         {
             int    x, y, w, h;
             bool   s    = DImgInterface::defaultInterface()->sixteenBit();
             bool   a    = DImgInterface::defaultInterface()->hasAlpha();
             uchar *data = DImgInterface::defaultInterface()->getImageSelection();
             DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
-            im = new DImg(w, h, s, a, data, true); 
+            im = new DImg(w, h, s, a, data, true);
             delete [] data;
         }
 
@@ -415,7 +418,7 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
 
         p.drawPixmap(0, 0, pixImage, 0, 0, w, h);
 
-        // Show the Over/Under exposure pixels indicators 
+        // Show the Over/Under exposure pixels indicators
 
         if (underExposure || overExposure)
         {
@@ -426,7 +429,7 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
             expoSettings.overExposureColor      = DImgInterface::defaultInterface()->overExposureColor();
 
             QImage pureColorMask = d->targetPreviewImage.pureColorMask(&expoSettings);
-            QPixmap pixMask = QPixmap::fromImage(pureColorMask); 
+            QPixmap pixMask = QPixmap::fromImage(pureColorMask);
             p.drawPixmap(0, 0, pixMask, 0, 0, w, h);
         }
     }

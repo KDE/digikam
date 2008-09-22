@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,6 +29,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kcursor.h>
 #include <kapplication.h>
@@ -41,7 +42,6 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
-#include "ddebug.h"
 #include "themeengine.h"
 #include "folderitem.h"
 #include "folderview.h"
@@ -123,20 +123,20 @@ QRect FolderView::itemRect(Q3ListViewItem *item) const
 {
     if(!item)
         return QRect();
-    
+
     QRect r = Q3ListView::itemRect(item);
     r.setLeft(r.left()+(item->depth()+(rootIsDecorated() ? 1 : 0))*treeStepSize());
-    return r;    
+    return r;
 }
 
 QPixmap FolderView::itemBasePixmapRegular() const
 {
-    return d->itemRegPix;    
+    return d->itemRegPix;
 }
 
 QPixmap FolderView::itemBasePixmapSelected() const
 {
-    return d->itemSelPix;    
+    return d->itemSelPix;
 }
 
 void FolderView::resizeEvent(QResizeEvent* e)
@@ -185,7 +185,7 @@ void FolderView::contentsMouseMoveEvent(QMouseEvent *e)
         return;
     }
 
-    if(d->dragItem && 
+    if(d->dragItem &&
        (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
     {
         QPoint vp            = contentsToViewport(e->pos());
@@ -215,7 +215,7 @@ void FolderView::contentsMousePressEvent(QMouseEvent *e)
 
     Q3ListView::contentsMousePressEvent(e);
 
-    if(item && e->button() == Qt::LeftButton) 
+    if(item && e->button() == Qt::LeftButton)
     {
         // Prepare D&D if necessary
         d->dragStartPos = e->pos();
@@ -356,7 +356,7 @@ bool FolderView::mouseInItemRect(Q3ListViewItem* item, int x) const
 
     int boxsize = 0;
     FolderCheckListItem* citem = dynamic_cast<FolderCheckListItem*>(item);
-    if (citem && 
+    if (citem &&
         ((citem->type() == Q3CheckListItem::CheckBox) || (citem->type() == Q3CheckListItem::CheckBoxController)))
         boxsize = style()->pixelMetric(QStyle::PM_CheckListButtonSize, 0, this);
 

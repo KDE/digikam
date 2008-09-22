@@ -35,6 +35,7 @@
 
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <kdialog.h>
 #include <khbox.h>
 #include <khbox.h>
@@ -48,7 +49,6 @@
 
 #include "album.h"
 #include "albummanager.h"
-#include "ddebug.h"
 #include "imageinfo.h"
 #include "searchxml.h"
 #include "searchtextbar.h"

@@ -9,7 +9,7 @@
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Some code parts are inspired from gimp 2.0
- * app/base/levels.c, gimplut.c, and app/base/gimpleveltool.c 
+ * app/base/levels.c, gimplut.c, and app/base/gimpleveltool.c
  * source files.
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
  *
@@ -38,9 +38,12 @@
 #include <cstdlib>
 #include <cerrno>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
-#include "ddebug.h"
 #include "imagehistogram.h"
 #include "imagelevels.h"
 
@@ -194,7 +197,7 @@ void ImageLevels::levelsChannelAuto(ImageHistogram *hist, int channel)
     }
     else
     {
-       //  Set the low input  
+       //  Set the low input
 
        new_count = 0.0;
 
@@ -211,7 +214,7 @@ void ImageLevels::levelsChannelAuto(ImageHistogram *hist, int channel)
           }
        }
 
-       //  Set the high input  
+       //  Set the high input
 
        new_count = 0.0;
 
@@ -305,7 +308,7 @@ void ImageLevels::levelsGrayToneAdjustByColors(int channel, const DColor& color)
 
     d->levels->gamma[channel] = log (inten) / log (out_light);
     d->dirty = true;
-} 
+}
 
 void ImageLevels::levelsCalculateTransfers()
 {
@@ -402,7 +405,7 @@ float ImageLevels::levelsLutFunc(int n_channels, int channel, float value)
 
 void ImageLevels::levelsLutSetup(int nchannels)
 {
-    int    i; 
+    int    i;
     uint   v;
     double val;
 

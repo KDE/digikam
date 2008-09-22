@@ -7,7 +7,7 @@
  * Description : DImg interface for image editor
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,11 +49,11 @@
 // KDE includes.
 
 #include <kcursor.h>
+#include <kdebug.h>
 #include <kmessagebox.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "bcgmodifier.h"
 #include "colorcorrectiondlg.h"
 #include "undomanager.h"
@@ -301,13 +301,13 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
         valRet        = true;
 
         // Raw files are already rotated properlly by dcraw. Only perform auto-rotation with JPEG/PNG/TIFF file.
-        // We don't have a feedback from dcraw about auto-rotated RAW file during decoding. Well set transformed 
+        // We don't have a feedback from dcraw about auto-rotated RAW file during decoding. Well set transformed
         // flag as well.
 
         if (d->image.attribute("format").toString() == QString("RAW"))
             d->rotatedOrFlipped = true;
 
-        if (d->exifOrient && 
+        if (d->exifOrient &&
             (d->image.attribute("format").toString() == QString("JPEG") ||
              d->image.attribute("format").toString() == QString("PNG")  ||
              d->image.attribute("format").toString() == QString("TIFF")))
@@ -332,8 +332,8 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
 
                         // NOTE: If Input color profile do not exist, using built-in sRGB intead.
                         trans.apply(d->image, fakeProfile, d->cmSettings->renderingSetting,
-                                    d->cmSettings->BPCSetting, false, 
-                                    QFile::exists(d->cmSettings->inputSetting)); 
+                                    d->cmSettings->BPCSetting, false,
+                                    QFile::exists(d->cmSettings->inputSetting));
 
                         d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
                         if (d->parent) d->parent->unsetCursor();
@@ -355,8 +355,8 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
 
                                 // NOTE: If Input color profile do not exist, using built-in sRGB intead.
                                 trans.apply(d->image, fakeProfile, d->cmSettings->renderingSetting,
-                                            d->cmSettings->BPCSetting, false, 
-                                            QFile::exists(d->cmSettings->inputSetting)); 
+                                            d->cmSettings->BPCSetting, false,
+                                            QFile::exists(d->cmSettings->inputSetting));
 
                                 d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
                                 if (d->parent) d->parent->unsetCursor();
@@ -381,7 +381,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                         if (d->parent) d->parent->setCursor( Qt::WaitCursor );
                         trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
                         trans.apply(d->image, fakeProfile, d->cmSettings->renderingSetting,
-                                    d->cmSettings->BPCSetting, false, false); 
+                                    d->cmSettings->BPCSetting, false, false);
                         if (d->parent) d->parent->unsetCursor();
                     }
                     else
@@ -405,7 +405,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                                 case QDialog::Accepted:
                                     if (d->parent) d->parent->setCursor( Qt::WaitCursor );
                                     trans.apply(d->image, fakeProfile, d->cmSettings->renderingSetting,
-                                                d->cmSettings->BPCSetting, false, false); 
+                                                d->cmSettings->BPCSetting, false, false);
                                     d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
                                     if (d->parent) d->parent->unsetCursor();
                                 break;
@@ -458,9 +458,9 @@ void DImgInterface::exifRotate(const QString& filename)
     DMetadata metadata(filename);
     DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
 
-    if(orientation != DMetadata::ORIENTATION_NORMAL) 
+    if(orientation != DMetadata::ORIENTATION_NORMAL)
     {
-        switch (orientation) 
+        switch (orientation)
         {
             case DMetadata::ORIENTATION_NORMAL:
             case DMetadata::ORIENTATION_UNSPECIFIED:
@@ -562,7 +562,7 @@ void DImgInterface::save(const QString& file, IOFileSettingsContainer *iofileSet
 void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iofileSettings,
                            bool setExifOrientationTag, const QString& givenMimeType)
 {
-    // No need to toggle off undo, redo or save action during saving using 
+    // No need to toggle off undo, redo or save action during saving using
     // signalUndoStateChanged(), this is will done by GUI implementation directly.
 
     if (d->changedBCG)
@@ -581,29 +581,29 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     if (mimeType.isEmpty())
         mimeType = getImageFormat();
 
-    kDebug(50003) << "Saving to :" << QFile::encodeName(fileName).data() << " (" 
+    kDebug(50003) << "Saving to :" << QFile::encodeName(fileName).data() << " ("
              << mimeType << ")" << endl;
 
     // JPEG file format.
-    if ( mimeType.toUpper() == QString("JPG") || mimeType.toUpper() == QString("JPEG") || 
-         mimeType.toUpper() == QString("JPE")) 
+    if ( mimeType.toUpper() == QString("JPG") || mimeType.toUpper() == QString("JPEG") ||
+         mimeType.toUpper() == QString("JPE"))
     {
        d->image.setAttribute("quality",     iofileSettings->JPEGCompression);
        d->image.setAttribute("subsampling", iofileSettings->JPEGSubSampling);
     }
 
     // PNG file format.
-    if ( mimeType.toUpper() == QString("PNG") ) 
+    if ( mimeType.toUpper() == QString("PNG") )
        d->image.setAttribute("quality", iofileSettings->PNGCompression);
 
     // TIFF file format.
-    if ( mimeType.toUpper() == QString("TIFF") || mimeType.toUpper() == QString("TIF") ) 
+    if ( mimeType.toUpper() == QString("TIFF") || mimeType.toUpper() == QString("TIF") )
        d->image.setAttribute("compress", iofileSettings->TIFFCompression);
 
     // JPEG 2000 file format.
-    if ( mimeType.toUpper() == QString("JP2") || mimeType.toUpper() == QString("JPX") || 
+    if ( mimeType.toUpper() == QString("JP2") || mimeType.toUpper() == QString("JPX") ||
          mimeType.toUpper() == QString("JPC") || mimeType.toUpper() == QString("PGX"))
-    { 
+    {
         if (iofileSettings->JPEG2000LossLess)
             d->image.setAttribute("quality", 100);    // LossLess compression
         else
@@ -626,8 +626,8 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
 
     QImage preview = d->image.smoothScale(1280, 1024, Qt::KeepAspectRatio).copyQImage();
 
-    if ( mimeType.toUpper() != QString("JPG") && mimeType.toUpper() != QString("JPEG") && 
-         mimeType.toUpper() != QString("JPE")) 
+    if ( mimeType.toUpper() != QString("JPG") && mimeType.toUpper() != QString("JPEG") &&
+         mimeType.toUpper() != QString("JPE"))
     {
         // Non JPEG file, we update IPTC preview
         meta.setImagePreview(preview);
@@ -827,12 +827,12 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
         painter.drawPixmap(dx, dy, pix, 0, 0, pix.width(), pix.height());
     }
 
-    // Show the Over/Under exposure pixels indicators 
+    // Show the Over/Under exposure pixels indicators
 
     if (d->expoSettings->underExposureIndicator || d->expoSettings->overExposureIndicator)
     {
         QImage pureColorMask = d->image.copy(sx, sy, sw, sh).pureColorMask(d->expoSettings);
-        QPixmap pixMask = QPixmap::fromImage(pureColorMask.scaled(dw, dh)); 
+        QPixmap pixMask = QPixmap::fromImage(pureColorMask.scaled(dw, dh));
         painter.drawPixmap(dx, dy, pixMask, 0, 0, pixMask.width(), pixMask.height());
     }
 
@@ -890,12 +890,12 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
         painter.drawPixmap(dx, dy, pix, 0, 0, pix.width(), pix.height());
     }
 
-    // Show the Over/Under exposure pixels indicators 
+    // Show the Over/Under exposure pixels indicators
 
     if (d->expoSettings->underExposureIndicator || d->expoSettings->overExposureIndicator)
     {
         QImage pureColorMask = d->image.copy(sx, sy, sw, sh).pureColorMask(d->expoSettings);
-        QPixmap pixMask = QPixmap::fromImage(pureColorMask.scaled(dw, dh)); 
+        QPixmap pixMask = QPixmap::fromImage(pureColorMask.scaled(dw, dh));
         painter.drawPixmap(dx, dy, pixMask, 0, 0, pixMask.width(), pixMask.height());
     }
 

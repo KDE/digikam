@@ -35,6 +35,7 @@
 #include <kapplication.h>
 #include <kcombobox.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <kfiledialog.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -49,7 +50,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "imagedialog.h"
 #include "imagehistogram.h"
 #include "imagecurves.h"

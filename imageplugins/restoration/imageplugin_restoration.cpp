@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-03-26
- * Description : a digiKam image editor plugin to restore 
+ * Description : a digiKam image editor plugin to restore
  *               a photograph
  *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -24,6 +24,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -34,7 +35,6 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "restorationtool.h"
 #include "imageplugin_restoration.h"
 #include "imageplugin_restoration.moc"
@@ -50,7 +50,7 @@ ImagePlugin_Restoration::ImagePlugin_Restoration(QObject *parent, const QVariant
     m_restorationAction  = new KAction(KIcon("restoration"), i18n("Restoration..."), this);
     actionCollection()->addAction("imageplugin_restoration", m_restorationAction );
 
-    connect(m_restorationAction, SIGNAL(triggered(bool)), 
+    connect(m_restorationAction, SIGNAL(triggered(bool)),
             this, SLOT(slotRestoration()));
 
     setXMLFile( "digikamimageplugin_restoration_ui.rc" );

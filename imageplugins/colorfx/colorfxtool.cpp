@@ -43,6 +43,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>
+#include <kdebug.h>
 #include <kglobal.h>
 #include <khelpmenu.h>
 #include <kicon.h>
@@ -61,7 +62,6 @@
 
 #include "colorgradientwidget.h"
 #include "daboutdata.h"
-#include "ddebug.h"
 #include "dimg.h"
 #include "dimgimagefilters.h"
 #include "editortoolsettings.h"

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-22-01
- * Description : batch sync pictures metadata from all Albums 
+ * Description : batch sync pictures metadata from all Albums
  *               with digiKam database
  *
  * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -32,13 +32,13 @@
 
 // KDE includes.
 
-#include <klocale.h>
 #include <kapplication.h>
+#include <kdebug.h>
 #include <kiconloader.h>
+#include <klocale.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "album.h"
 #include "albummanager.h"
 #include "imageinfojob.h"
