@@ -161,7 +161,7 @@ void RawPreview::setDecodingSettings(const DRawDecoding& settings)
 
 void RawPreview::cancelLoading()
 {
-    d->thread->stopLoading(d->loadingDesc.filePath);
+    d->thread->stopLoading(d->loadingDesc);
 }
 
 void RawPreview::slotLoadingProgress(const LoadingDescription& description, float progress)
