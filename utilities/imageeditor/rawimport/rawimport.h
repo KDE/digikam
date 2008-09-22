@@ -70,7 +70,7 @@ private slots:
     void slotLoadingProgress(float);
 
     void slotUpdatePreview();
-    void slotAbort();
+    void slotAbortPreview();
 
     void slotDemosaicingChanged();
 
