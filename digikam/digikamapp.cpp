@@ -1524,7 +1524,7 @@ void DigikamApp::slotOpenSolidCamera(QAction *action)
         }
         else
         {
-            DError() << "Failed to detect camera with GPhoto2 from Solid information" << endl;
+            kError(50003) << "Failed to detect camera with GPhoto2 from Solid information" << endl;
         }
     }
 }

@@ -506,7 +506,7 @@ void KLensFunFilter::filterImage()
 
     if (!m_lfModifier)
     {
-        DError() << "ERROR: cannot initialize LensFun Modifier.";
+        kError(50006) << "ERROR: cannot initialize LensFun Modifier." << endl;
         return;
     }
 

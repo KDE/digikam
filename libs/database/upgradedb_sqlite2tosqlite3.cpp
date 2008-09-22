@@ -371,7 +371,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
                 .arg(access.backend()->escapeString(album.collection)), &list, false);
         if (list.size() != 1)
         {
-            DError() << "Failed" << endl;
+            kError(50003) << "Failed" << endl;
             kWarning(50003) << "" << endl;
             kWarning(50003) << "Consistency check failed for Album: "
                        << album.url << endl;
@@ -404,7 +404,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         &list, false);
         if (list.size() != 1)
         {
-            DError() << "Failed" << endl;
+            kError(50003) << "Failed" << endl;
             kWarning(50003) << "" << endl;
             kWarning(50003) << "Consistency check failed for Tag: "
                        << name << endl;
@@ -439,7 +439,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         &list, false);
         if (list.size() != 1)
         {
-            DError() << "Failed" << endl;
+            kError(50003) << "Failed" << endl;
             kWarning(50003) << "" << endl;
             kWarning(50003) << "Consistency check failed for Image: "
                        << url << ", " << name << ", " << caption  << endl;
@@ -476,7 +476,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         &list, false);
         if (list.size() != 1)
         {
-            DError() << "Failed" << endl;
+            kError(50003) << "Failed" << endl;
             kWarning(50003) << "" << endl;
             kWarning(50003) << "Consistency check failed for ImageTag: "
                        << url << ", " << name << ", " << tagid << endl;
@@ -508,7 +508,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
 
         if (list.size() != 1)
         {
-            DError() << "Failed" << endl;
+            kError(50003) << "Failed" << endl;
             kWarning(50003) << "" << endl;
             kWarning(50003) << "Consistency check failed for Album Icon: "
                        << url << ", " << icon << endl;
@@ -543,7 +543,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
 
             if (list.size() != 1)
             {
-                DError() << "Failed" << endl;
+                kError(50003) << "Failed" << endl;
                 kWarning(50003) << "" << endl;
                 kWarning(50003) << "Consistency check failed for Tag Icon: "
                            << id << ", " << icon << endl;
@@ -582,7 +582,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
                     .arg(id), &list);
             if (list.size() != 1)
             {
-                DError() << "Failed." << endl;
+                kError(50003) << "Failed." << endl;
                 kWarning(50003) << "" << endl;
                 kWarning(50003) << "Consistency check failed for Tag Icon: "
                            << id << ", " << icon << endl;

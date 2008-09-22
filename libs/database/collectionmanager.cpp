@@ -472,7 +472,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl &url, cons
 
     if (!volumeMatch)
     {
-        DError() << "Failed to detect a storage volume for path " << path << " with Solid" << endl;
+        kError(50003) << "Failed to detect a storage volume for path " << path << " with Solid" << endl;
     }
 
     return volume;

@@ -66,7 +66,7 @@ void JPEGLoader::dimg_jpeg_error_exit(j_common_ptr cinfo)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 //#ifdef ENABLE_DEBUG_MESSAGES
-    DError() << buffer << endl;
+    kError(50003) << buffer << endl;
 //#endif
 
     longjmp(myerr->setjmp_buffer, 1);

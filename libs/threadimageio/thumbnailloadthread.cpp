@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -280,13 +280,13 @@ bool ThumbnailLoadThread::checkSize(int size)
 {
     if (size <= 0)
     {
-        DError() << "ThumbnailLoadThread::load: No thumbnail size specified. Refusing to load thumbnail." << endl;
+        kError(50003) << "ThumbnailLoadThread::load: No thumbnail size specified. Refusing to load thumbnail." << endl;
         return false;
     }
     else if (size > ThumbnailSize::Huge)
     {
-        DError() << "ThumbnailLoadThread::load: Thumbnail size " << size
-                 << " is larger than " << ThumbnailSize::Huge << ". Refusing to load." << endl;
+        kError(50003) << "ThumbnailLoadThread::load: Thumbnail size " << size
+                      << " is larger than " << ThumbnailSize::Huge << ". Refusing to load." << endl;
         return false;
     }
     return true;

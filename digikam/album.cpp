@@ -178,7 +178,7 @@ int Album::globalID() const
         case(SEARCH):
             return m_id | (1 << 30);
         default:
-            DError() << "Unknown album type" << endl;
+            kError(50003) << "Unknown album type" << endl;
             return -1;
     }
 }

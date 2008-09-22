@@ -721,7 +721,7 @@ void AlbumManager::scanPAlbums()
 
             if (!album)
             {
-                DError() << "Did not find album root album in hash";
+                kError(50003) << "Did not find album root album in hash" << endl;
                 continue;
             }
 
@@ -751,8 +751,8 @@ void AlbumManager::scanPAlbums()
 
             if (!parent)
             {
-                DError() <<  "Could not find parent with url: "
-                         << parentPath << " for: " << info.relativePath << endl;
+                kError(50003) <<  "Could not find parent with url: "
+                              << parentPath << " for: " << info.relativePath << endl;
                 continue;
             }
 

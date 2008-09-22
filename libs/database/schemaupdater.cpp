@@ -116,7 +116,7 @@ bool SchemaUpdater::startUpdates()
         if (version.isEmpty())
         {
             // Something is damaged. Give up.
-            DError() << "DBVersion not available! Giving up schema upgrading." << endl;
+            kError(50003) << "DBVersion not available! Giving up schema upgrading." << endl;
             QString errorMsg = i18n(
                     "The database is not valid: "
                     "the \"DBVersion\" setting does not exist. "
@@ -855,7 +855,7 @@ bool SchemaUpdater::updateV4toV5()
             CollectionManager::instance()->addLocation(KUrl::fromPath(albumLibraryPath));
     if (location.isNull())
     {
-        DError() << "Failure to create a collection location. Aborting update." << endl;
+        kError(50003) << "Failure to create a collection location. Aborting update." << endl;
         return false;
     }
 
