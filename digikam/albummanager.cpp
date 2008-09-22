@@ -45,9 +45,11 @@ extern "C"
 #include <qfile.h>
 #include <qdir.h>
 #include <qdict.h>
+#include <qlist.h>
 #include <qintdict.h>
 #include <qcstring.h>
 #include <qtextcodec.h>
+#include <qdatetime.h>
 
 // KDE includes.
 
@@ -80,6 +82,7 @@ namespace Digikam
 
 typedef QDict<PAlbum>    PAlbumDict;
 typedef QIntDict<Album>  AlbumIntDict;
+typedef QValueList<QDateTime> DDateList;
 
 class AlbumManagerPriv
 {
@@ -107,6 +110,8 @@ public:
     QString           libraryPath;
     QStringList       dirtyAlbums;
 
+    DDateList         dbPathModificationDateList;
+
     KDirWatch        *dirWatch;
 
     KIO::TransferJob *albumListJob;
@@ -124,6 +129,29 @@ public:
     Album            *currentAlbum;
     AlbumDB          *db;
     AlbumItemHandler *itemHandler;
+
+    QValueList<QDateTime> buildDirectoryModList(const QFileInfo &dbFile)
+    {
+        // retrieve modification dates of all files in the database-file dir
+        QValueList<QDateTime> modList;
+        const QFileInfoList *fileInfoList = dbFile.dir().entryInfoList(QDir::Files | QDir::Dirs );
+
+        // build list
+        QFileInfoListIterator it(*fileInfoList);
+        QFileInfo *fi;
+
+        while ( (fi = it.current()) != 0 )
+        {
+            if ( fi->fileName() != dbFile.fileName())
+            {
+                modList << fi->lastModified();
+            }
+            ++it;
+        }
+
+        return modList;
+    }
+
 };
 
 AlbumManager* AlbumManager::m_instance = 0;
@@ -318,6 +346,11 @@ void AlbumManager::setLibraryPath(const QString& path, SplashScreen *splash)
         exit(0);
     }
     
+    // set an initial modification list to filter out KDirWatch signals
+    // caused by database operations
+    QFileInfo dbFile(dbPath);
+    d->dbPathModificationDateList = d->buildDirectoryModList(dbFile);
+
     // -- Check if we need to do scanning -------------------------------------
 
     KConfig* config = KGlobal::config();
@@ -1610,6 +1643,25 @@ void AlbumManager::slotDirty(const QString& path)
 
     if (d->dirtyAlbums.contains(url))
         return;
+
+    // is the signal for the directory containing the database file?
+    if (url == "/")
+    {
+        // retrieve modification dates
+        QFileInfo dbFile(d->libraryPath);
+        QValueList<QDateTime> modList = d->buildDirectoryModList(dbFile);
+
+        // check for equality
+        if (modList == d->dbPathModificationDateList)
+        {
+            DDebug() << "Filtering out db-file-triggered dir watch signal" << endl;
+            // we can skip the signal
+            return;
+        }
+
+        // set new list
+        d->dbPathModificationDateList = modList;
+    }
 
     d->dirtyAlbums.append(url);
 
