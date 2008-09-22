@@ -118,7 +118,7 @@ void RawImport::slotInit()
             this, SLOT(slotUpdatePreview()));
 
     connect(d->settingsBox, SIGNAL(signalAbortPreview()),
-            this, SLOT(slotAbortPreview()));
+            this, SLOT(slotAbort()));
 
     // ---------------------------------------------------------------
 
@@ -147,12 +147,19 @@ void RawImport::slotUpdatePreview()
     d->previewWidget->setDecodingSettings(settings);
 }
 
-void RawImport::slotAbortPreview()
+void RawImport::slotAbort()
 {
-    d->previewWidget->cancelLoading();
-    d->settingsBox->histogram()->stopHistogramComputation();
-    EditorToolIface::editorToolIface()->setToolStopProgress();
-    setBusy(false);
+    // If preview loading, don't play with threaded filter interface.
+    if (renderingMode() == EditorToolThreaded::NoneRendering)
+    {
+        d->previewWidget->cancelLoading();
+        d->settingsBox->histogram()->stopHistogramComputation();
+        EditorToolIface::editorToolIface()->setToolStopProgress();
+        setBusy(false);
+        return;
+    }
+
+    EditorToolThreaded::slotAbort();
 }
 
 void RawImport::slotLoadingStarted()
