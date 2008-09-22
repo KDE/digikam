@@ -336,6 +336,12 @@ void ManagedLoadSaveThread::stopLoading(const QString& filePath, LoadingTaskFilt
     removeLoadingTasks(LoadingDescription(filePath), filter);
 }
 
+void ManagedLoadSaveThread::stopLoading(const LoadingDescription& desc, LoadingTaskFilter filter)
+{
+    QMutexLocker lock(&m_mutex);
+    removeLoadingTasks(desc, filter);
+}
+
 void ManagedLoadSaveThread::stopSaving(const QString& filePath)
 {
     QMutexLocker lock(&m_mutex);

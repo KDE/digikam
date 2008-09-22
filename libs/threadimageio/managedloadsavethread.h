@@ -97,9 +97,14 @@ public:
     // Only loading tasks will - if required by the policy - be stopped or removed,
     // saving tasks will not be touched.
     void load(LoadingDescription description, LoadingPolicy policy = LoadingPolicyAppend);
+
     // Stop and remove tasks filtered by filePath and policy.
     // If filePath isNull, applies to all file paths.
     void stopLoading(const QString& filePath = QString(), LoadingTaskFilter filter = LoadingTaskFilterAll);
+
+    // Same than previous method, but Stop and remove tasks filtered by LoadingDescription.
+    void stopLoading(const LoadingDescription& desc, LoadingTaskFilter filter = LoadingTaskFilterAll);
+
     // Stop and remove saving tasks filtered by filePath.
     // If filePath isNull, applies to all file paths.
     void stopSaving(const QString& filePath = QString());
