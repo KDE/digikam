@@ -205,27 +205,20 @@ void EditorTool::slotInit()
 
 class EditorToolThreadedPriv
 {
-public:
-    enum RunningMode
-    {
-        NoneRendering=0,
-        PreviewRendering,
-        FinalRendering
-    };
 
 public:
 
     EditorToolThreadedPriv()
     {
         threadedFilter       = 0;
-        currentRenderingMode = NoneRendering;
+        currentRenderingMode = EditorToolThreaded::NoneRendering;
     }
 
-    int                 currentRenderingMode;
+    EditorToolThreaded::RenderingMode  currentRenderingMode;
 
-    QString             progressMess;
+    QString                            progressMess;
 
-    DImgThreadedFilter *threadedFilter;
+    DImgThreadedFilter                *threadedFilter;
 };
 
 EditorToolThreaded::EditorToolThreaded(QObject *parent)
@@ -238,6 +231,11 @@ EditorToolThreaded::~EditorToolThreaded()
 {
     delete d->threadedFilter;
     delete d;
+}
+
+EditorToolThreaded::RenderingMode EditorToolThreaded::renderingMode() const
+{
+    return d->currentRenderingMode;
 }
 
 void EditorToolThreaded::setProgressMessage(const QString& mess)
@@ -257,12 +255,12 @@ void EditorToolThreaded::setFilter(DImgThreadedFilter *filter)
 
 void EditorToolThreaded::slotResized()
 {
-    if (d->currentRenderingMode == EditorToolThreadedPriv::FinalRendering)
+    if (d->currentRenderingMode == EditorToolThreaded::FinalRendering)
     {
        toolView()->update();
        return;
     }
-    else if (d->currentRenderingMode == EditorToolThreadedPriv::PreviewRendering)
+    else if (d->currentRenderingMode == EditorToolThreaded::PreviewRendering)
     {
        if (filter())
           filter()->stopComputation();
@@ -273,7 +271,7 @@ void EditorToolThreaded::slotResized()
 
 void EditorToolThreaded::slotAbort()
 {
-    d->currentRenderingMode = EditorToolThreadedPriv::NoneRendering;
+    d->currentRenderingMode = EditorToolThreaded::NoneRendering;
     EditorToolIface::editorToolIface()->setToolStopProgress();
 
     toolSettings()->enableButton(EditorToolSettings::Ok,      true);
@@ -303,7 +301,7 @@ void EditorToolThreaded::customEvent(QCustomEvent *e)
         {
             switch (d->currentRenderingMode)
             {
-                case EditorToolThreadedPriv::PreviewRendering:
+                case EditorToolThreaded::PreviewRendering:
                 {
                     DDebug() << "Preview " << toolName() << " completed..." << endl;
                     putPreviewData();
@@ -311,7 +309,7 @@ void EditorToolThreaded::customEvent(QCustomEvent *e)
                     break;
                 }
 
-                case EditorToolThreadedPriv::FinalRendering:
+                case EditorToolThreaded::FinalRendering:
                 {
                     DDebug() << "Final" << toolName() << " completed..." << endl;
                     putFinalData();
@@ -320,20 +318,24 @@ void EditorToolThreaded::customEvent(QCustomEvent *e)
                     emit okClicked();
                     break;
                 }
+
+                default:
+                    break;
             }
         }
         else                   // Computation Failed !
         {
             switch (d->currentRenderingMode)
             {
-                case EditorToolThreadedPriv::PreviewRendering:
+                case EditorToolThreaded::PreviewRendering:
                 {
                     DDebug() << "Preview " << toolName() << " failed..." << endl;
                     slotAbort();
                     break;
                 }
 
-                case EditorToolThreadedPriv::FinalRendering:
+                case EditorToolThreaded::FinalRendering:
+                default:
                     break;
             }
         }
@@ -358,7 +360,7 @@ void EditorToolThreaded::slotOk()
 {
     writeSettings();
 
-    d->currentRenderingMode = EditorToolThreadedPriv::FinalRendering;
+    d->currentRenderingMode = EditorToolThreaded::FinalRendering;
     DDebug() << "Final " << toolName() << " started..." << endl;
     writeSettings();
 
@@ -383,10 +385,10 @@ void EditorToolThreaded::slotOk()
 void EditorToolThreaded::slotEffect()
 {
     // Computation already in process.
-    if (d->currentRenderingMode != EditorToolThreadedPriv::NoneRendering)
+    if (d->currentRenderingMode != EditorToolThreaded::NoneRendering)
         return;
 
-    d->currentRenderingMode = EditorToolThreadedPriv::PreviewRendering;
+    d->currentRenderingMode = EditorToolThreaded::PreviewRendering;
     DDebug() << "Preview " << toolName() << " started..." << endl;
 
     toolSettings()->enableButton(EditorToolSettings::Ok,      false);

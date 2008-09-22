@@ -101,6 +101,15 @@ class DIGIKAM_EXPORT EditorToolThreaded : public EditorTool
 
 public:
 
+    enum RenderingMode
+    {
+        NoneRendering=0,
+        PreviewRendering,
+        FinalRendering
+    };
+
+public:
+
     EditorToolThreaded(QObject *parent);
     virtual ~EditorToolThreaded();
 
@@ -108,6 +117,10 @@ public:
         tool computation. If it's not set, tool name is used instead.
      */
     void setProgressMessage(const QString& mess);
+
+    /** return the current tool rendering mode.
+     */
+    RenderingMode renderingMode() const;
 
 public slots:
 
