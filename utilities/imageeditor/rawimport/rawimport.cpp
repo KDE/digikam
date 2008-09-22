@@ -113,7 +113,7 @@ void RawImport::slotInit()
             this, SLOT(slotUpdatePreview()));
 
     connect(d->settingsBox, SIGNAL(signalAbortPreview()),
-            this, SLOT(slotAbort()));
+            this, SLOT(slotAbortPreview()));
 
     // ---------------------------------------------------------------
 
@@ -142,7 +142,7 @@ void RawImport::slotUpdatePreview()
     d->previewWidget->setDecodingSettings(settings);
 }
 
-void RawImport::slotAbort()
+void RawImport::slotAbortPreview()
 {
     d->previewWidget->cancelLoading();
     d->settingsBox->histogram()->stopHistogramComputation();
