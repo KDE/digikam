@@ -84,7 +84,6 @@ int main(int argc, char *argv[])
     w->show();
 
     int ret = app.exec();
-    delete w;
 
 #if KEXIV2_VERSION >= 0x000300
     KExiv2Iface::KExiv2::cleanupExiv2();
