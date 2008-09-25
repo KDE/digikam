@@ -49,6 +49,9 @@ class DatabaseBackendPriv
 public:
 
     DatabaseBackendPriv(DatabaseBackend *backend)
+        : imageChangesetContainer(this), imageTagChangesetContainer(this),
+          collectionImageChangesetContainer(this), albumChangesetContainer(this),
+          tagChangesetContainer(this), albumRootChangesetContainer(this), searchChangesetContainer(this)
     {
         q               = backend;
         status          = DatabaseBackend::Unavailable;
@@ -147,6 +150,68 @@ public:
     {
         QThread *thread = QThread::currentThread();
         return !--transactionCount[thread];
+    }
+
+    void sendToWatch(const ImageChangeset changeset)
+    { watch->sendImageChange(changeset); }
+    void sendToWatch(const ImageTagChangeset changeset)
+    { watch->sendImageTagChange(changeset); }
+    void sendToWatch(const CollectionImageChangeset changeset)
+    { watch->sendCollectionImageChange(changeset); }
+    void sendToWatch(const AlbumChangeset changeset)
+    { watch->sendAlbumChange(changeset); }
+    void sendToWatch(const TagChangeset changeset)
+    { watch->sendTagChange(changeset); }
+    void sendToWatch(const AlbumRootChangeset changeset)
+    { watch->sendAlbumRootChange(changeset); }
+    void sendToWatch(const SearchChangeset changeset)
+    { watch->sendSearchChange(changeset); }
+
+    template <class T>
+    class ChangesetContainer
+    {
+    public:
+        ChangesetContainer(DatabaseBackendPriv *d)
+        : d(d)
+        {
+        }
+
+        void recordChangeset(const T &changeset)
+        {
+            if (d->isInTransaction)
+                changesets << changeset;
+            else
+                d->sendToWatch(changeset);
+        }
+
+        void sendOut()
+        {
+            foreach(const T &changeset, changesets)
+                d->sendToWatch(changeset);
+            changesets.clear();
+        }
+
+        QList<T> changesets;
+        DatabaseBackendPriv *d;
+    };
+
+    ChangesetContainer<ImageChangeset>           imageChangesetContainer;
+    ChangesetContainer<ImageTagChangeset>        imageTagChangesetContainer;
+    ChangesetContainer<CollectionImageChangeset> collectionImageChangesetContainer;
+    ChangesetContainer<AlbumChangeset>           albumChangesetContainer;
+    ChangesetContainer<TagChangeset>             tagChangesetContainer;
+    ChangesetContainer<AlbumRootChangeset>       albumRootChangesetContainer;
+    ChangesetContainer<SearchChangeset>          searchChangesetContainer;
+
+    void sendOutStoredChangesets()
+    {
+        imageChangesetContainer.sendOut();
+        imageTagChangesetContainer.sendOut();
+        collectionImageChangesetContainer.sendOut();
+        albumChangesetContainer.sendOut();
+        tagChangesetContainer.sendOut();
+        albumRootChangesetContainer.sendOut();
+        searchChangesetContainer.sendOut();
     }
 
     // this is always accessed in mutex context, no need for QThreadStorage
@@ -502,6 +567,7 @@ void DatabaseBackend::commitTransaction()
     {
         d->databaseForThread().commit();
         d->isInTransaction = false;
+        d->sendOutStoredChangesets();
     }
 }
 
@@ -529,37 +595,37 @@ QString DatabaseBackend::lastError()
 void DatabaseBackend::recordChangeset(const ImageChangeset changeset)
 {
     // if we want to do compression of changesets, think about doing this here
-    d->watch->sendImageChange(changeset);
+    d->imageChangesetContainer.recordChangeset(changeset);
 }
 
 void DatabaseBackend::recordChangeset(const ImageTagChangeset changeset)
 {
-    d->watch->sendImageTagChange(changeset);
+    d->imageTagChangesetContainer.recordChangeset(changeset);
 }
 
 void DatabaseBackend::recordChangeset(const CollectionImageChangeset changeset)
 {
-    d->watch->sendCollectionImageChange(changeset);
+    d->collectionImageChangesetContainer.recordChangeset(changeset);
 }
 
 void DatabaseBackend::recordChangeset(const AlbumChangeset changeset)
 {
-    d->watch->sendAlbumChange(changeset);
+    d->albumChangesetContainer.recordChangeset(changeset);
 }
 
 void DatabaseBackend::recordChangeset(const TagChangeset changeset)
 {
-    d->watch->sendTagChange(changeset);
+    d->tagChangesetContainer.recordChangeset(changeset);
 }
 
 void DatabaseBackend::recordChangeset(const AlbumRootChangeset changeset)
 {
-    d->watch->sendAlbumRootChange(changeset);
+    d->albumRootChangesetContainer.recordChangeset(changeset);
 }
 
 void DatabaseBackend::recordChangeset(const SearchChangeset changeset)
 {
-    d->watch->sendSearchChange(changeset);
+    d->searchChangesetContainer.recordChangeset(changeset);
 }
 
 
