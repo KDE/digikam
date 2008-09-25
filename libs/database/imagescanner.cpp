@@ -155,12 +155,7 @@ void ImageScanner::scanFile()
 
 bool lessThanForIdentity(const ItemScanInfo &a, const ItemScanInfo &b)
 {
-    if (a.status == b.status)
-    {
-        // use the one with a younger modification date
-        return a.modificationDate > b.modificationDate;
-    }
-    else
+    if (a.status != b.status)
     {
         // First: sort by status
 
@@ -170,11 +165,19 @@ bool lessThanForIdentity(const ItemScanInfo &a, const ItemScanInfo &b)
         // enum values are in the order we want it
         return a.status < b.status;
     }
+    else
+    {
+        // Second: sort by modification date, descending
+        return a.modificationDate > b.modificationDate;
+    }
 }
 
 bool ImageScanner::scanFromIdenticalFile()
 {
-    QList<ItemScanInfo> candidates = DatabaseAccess().db()->getIdenticalFiles((int)m_fileInfo.size(), m_scanInfo.uniqueHash);
+    // Get a list of other images that are identical. Source image shall not be included.
+    QList<ItemScanInfo> candidates =
+            DatabaseAccess().db()->getIdenticalFiles((int)m_fileInfo.size(), m_scanInfo.uniqueHash, m_scanInfo.id);
+
     if (!candidates.isEmpty())
     {
         // Sort by priority, as implemented by custom lessThan()
@@ -193,10 +196,14 @@ bool ImageScanner::scanFromIdenticalFile()
 bool ImageScanner::copyFromSource(qlonglong srcId)
 {
     DatabaseAccess access;
+
     // some basic validity checking
+    if (srcId == m_scanInfo.id)
+        return false;
     ItemScanInfo info = access.db()->getItemScanInfo(srcId);
     if (!info.id)
         return false;
+
     kDebug(50003) << "Recognized" << m_fileInfo.filePath() << "as copied from" << srcId;
     access.db()->copyImageAttributes(srcId, m_scanInfo.id);
     return true;
