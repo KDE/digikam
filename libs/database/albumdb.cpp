@@ -424,8 +424,28 @@ void AlbumDB::deleteAlbum(int albumID)
 
 void AlbumDB::makeStaleAlbum(int albumID)
 {
-    d->db->execSql( QString("UPDATE Albums SET albumRoot=0 WHERE id=?;"),
-                    albumID );
+    // We need to work around the table constraint, no we want to delete older stale albums with
+    // the same relativePath, and adjust relativePaths depending on albumRoot.
+    QList<QVariant> values;
+
+    // retrieve information
+    d->db->execSql( QString("SELECT Albums.albumRoot, Albums.relativePath from Albums WHERE id=?;"),
+                    albumID, &values);
+
+    if (values.isEmpty())
+        return;
+
+    // prepend albumRootId to relativePath. relativePath is unused and officially undefined after this call.
+    QString newRelativePath = values[0].toString() + '-' + values[1].toString();
+
+    // delete older stale albums
+    d->db->execSql( QString("DELETE FROM Albums WHERE albumRoot=0 AND relativePath=?;"),
+                    newRelativePath );
+
+    // now do our update
+    d->db->execSql( QString("UPDATE Albums SET albumRoot=0, relativePath=? WHERE id=?;"),
+                    newRelativePath, albumID );
+
     // for now, we make no distinction to deleteAlbums wrt to changeset
     d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::Deleted));
 }

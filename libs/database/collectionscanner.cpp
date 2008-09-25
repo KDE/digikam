@@ -183,7 +183,6 @@ void CollectionScanner::completeScan()
     }
 
     // if we have no hints to follow, clean up all stale albums
-    // (usually the case at application startup)
     if (d->albumHints.isEmpty())
         DatabaseAccess().db()->deleteStaleAlbums();
 
@@ -252,6 +251,11 @@ void CollectionScanner::partialScan(const QString &albumRoot, const QString& alb
         kWarning(50003) << "Did not find a CollectionLocation for album root path " << albumRoot << endl;
         return;
     }
+
+    // if we have no hints to follow, clean up all stale albums
+    // Hint: Rethink with next major db update
+    if (d->albumHints.isEmpty())
+        DatabaseAccess().db()->deleteStaleAlbums();
 
     //TODO: This can be optimized, no need to always scan the whole location
     scanForStaleAlbums(QList<CollectionLocation>() << location);
