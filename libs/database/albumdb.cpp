@@ -1475,10 +1475,10 @@ QList<ItemScanInfo> AlbumDB::getIdenticalFiles(qlonglong id)
     QString uniqueHash = values[0].toString();
     int fileSize       = values[1].toInt();
 
-    return getIdenticalFiles(fileSize, uniqueHash);
+    return getIdenticalFiles(fileSize, uniqueHash, id);
 }
 
-QList<ItemScanInfo> AlbumDB::getIdenticalFiles(int fileSize, const QString& uniqueHash)
+QList<ItemScanInfo> AlbumDB::getIdenticalFiles(int fileSize, const QString& uniqueHash, qlonglong sourceId)
 {
     // enforce validity
     if (uniqueHash.isEmpty() || fileSize <= 0)
@@ -1510,6 +1510,10 @@ QList<ItemScanInfo> AlbumDB::getIdenticalFiles(int fileSize, const QString& uniq
         info.modificationDate = ((*it).isNull() ? QDateTime()
                                     : QDateTime::fromString( (*it).toString(), Qt::ISODate ));
         ++it;
+
+        // exclude one source id from list
+        if (sourceId == info.id)
+            continue;
 
         // same for all here, per definition
         info.uniqueHash       = uniqueHash;

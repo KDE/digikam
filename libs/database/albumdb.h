@@ -856,9 +856,12 @@ public:
      * Find items that are, with reasonable certainty, identical
      * to the file pointed to by id.
      * Criteria: Unique Hash, file size.
+     * The first variant will not return an ItemScanInfo for id.
+     * The second allows to pass one id as source id for exclusion from the list.
+     * If this is -1, no id is excluded.
      */
     QList<ItemScanInfo> getIdenticalFiles(qlonglong id);
-    QList<ItemScanInfo> getIdenticalFiles(int fileSize, const QString& uniqueHash);
+    QList<ItemScanInfo> getIdenticalFiles(int fileSize, const QString& uniqueHash, qlonglong sourceId = -1);
     /**
      * Get the datetime for the item
      * @param imageID the ID of the item
