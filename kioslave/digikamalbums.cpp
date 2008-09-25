@@ -146,8 +146,7 @@ void kio_digikamalbums::put(const KUrl& url, int permissions, KIO::JobFlags flag
     int albumID = access.db()->getAlbumForPath(dbUrl.albumRootId(), dbUrl.album(), false);
     if (albumID == -1)
     {
-        error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database")
-              .arg(url.directory()));
+        error(KIO::ERR_UNKNOWN, i18n("Destination album %1 not found in database", url.directory()));
         return;
     }
 
@@ -204,8 +203,7 @@ void kio_digikamalbums::copy( const KUrl &src, const KUrl &dst, int mode, KIO::J
 
     if (access.db()->getImageId(srcAlbumID, dbUrlSrc.fileName()) == -1)
     {
-        error(KIO::ERR_UNKNOWN, i18n("Source image %1 not found in database")
-                .arg(dbUrlSrc.fileName()));
+        error(KIO::ERR_UNKNOWN, i18n("Source image %1 not found in database", dbUrlSrc.fileName()));
         return;
     }
 
@@ -266,8 +264,7 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
         srcAlbumID = access.db()->getAlbumForPath(dbUrlSrc.albumRootId(), dbUrlSrc.album(), false);
         if (srcAlbumID == -1)
         {
-            error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database")
-                  .arg(src.url()));
+            error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database", src.url()));
             return;
         }
     }
@@ -276,16 +273,14 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
         srcAlbumID = access.db()->getAlbumForPath(dbUrlSrc.albumRootId(), dbUrlSrc.album(), false);
         if (srcAlbumID == -1)
         {
-            error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database")
-                  .arg(src.directory()));
+            error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database", src.directory()));
             return;
         }
 
         dstAlbumID = access.db()->getAlbumForPath(dbUrlDst.albumRootId(), dbUrlDst.album(), false);
         if (dstAlbumID == -1)
         {
-            error(KIO::ERR_UNKNOWN, i18n("Destination album %1 not found in database")
-                  .arg(dst.directory()));
+            error(KIO::ERR_UNKNOWN, i18n("Destination album %1 not found in database", dst.directory()));
             return;
         }
     }
@@ -317,6 +312,8 @@ void kio_digikamalbums::mkdir( const KUrl& url, int permissions )
     kDebug(50004) << " : " << url.url();
 
     Digikam::DatabaseUrl dbUrl(url);
+    // DatabaseUrl has a strong opinion there should be a slash, KDE does not
+    dbUrl.adjustPath(KUrl::AddTrailingSlash);
     Digikam::DatabaseAccess::setParameters(dbUrl);
     Digikam::DatabaseAccess access;
 
@@ -325,8 +322,9 @@ void kio_digikamalbums::mkdir( const KUrl& url, int permissions )
     if (m_eventLoop->exec() != 0)
         return;
 
-    // Let CollectionScanner do the database part
-    //access.db()->addAlbum(dbUrl.albumRootId(), dbUrl.album(), QString(), QDate::currentDate(), QString());
+    // We need to do this here, and not let CollectionScanner do this,
+    // because the scanner might take time and put() will be called before
+    access.db()->addAlbum(dbUrl.albumRootId(), dbUrl.album(), QString(), QDate::currentDate(), QString());
 
     finished();
 }
@@ -368,8 +366,7 @@ void kio_digikamalbums::del( const KUrl& url, bool isFile)
         albumID = access.db()->getAlbumForPath(dbUrl.albumRootId(), dbUrl.album(), false);
         if (albumID == -1)
         {
-            error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database")
-                    .arg(url.directory()));
+            error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database", url.directory()));
             return;
         }
     }
@@ -379,8 +376,7 @@ void kio_digikamalbums::del( const KUrl& url, bool isFile)
         albumID = access.db()->getAlbumForPath(dbUrl.albumRootId(), dbUrl.album(), false);
         if (albumID == -1)
         {
-            error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database")
-                  .arg(url.path()));
+            error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database", url.path()));
             return;
         }
     }
