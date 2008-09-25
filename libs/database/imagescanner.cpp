@@ -100,10 +100,10 @@ void ImageScanner::copiedFrom(int albumId, qlonglong srcId)
 {
     loadFromDisk();
     addImage(albumId);
-    // first check if we can establish identity
-    if (!scanFromIdenticalFile())
-        // use source, if it exists
-        if (!copyFromSource(srcId))
+    // first use source, if it exists
+    if (!copyFromSource(srcId))
+        // check if we can establish identity
+        if (!scanFromIdenticalFile())
             // scan newly
             scanFile();
 }
@@ -120,6 +120,7 @@ void ImageScanner::addImage(int albumId)
     // the QByteArray is an ASCII hex string
     m_scanInfo.uniqueHash = QString(m_img.getUniqueHash());
 
+    kDebug(50003) << "Adding new item" << m_fileInfo.filePath();
     m_scanInfo.id = DatabaseAccess().db()->addItem(m_scanInfo.albumID, m_scanInfo.itemName, m_scanInfo.status, m_scanInfo.category,
                                                    m_scanInfo.modificationDate, fileSize, m_scanInfo.uniqueHash);
 }
@@ -196,6 +197,7 @@ bool ImageScanner::copyFromSource(qlonglong srcId)
     ItemScanInfo info = access.db()->getItemScanInfo(srcId);
     if (!info.id)
         return false;
+    kDebug(50003) << "Recognized" << m_fileInfo.filePath() << "as copied from" << srcId;
     access.db()->copyImageAttributes(srcId, m_scanInfo.id);
     return true;
 }
