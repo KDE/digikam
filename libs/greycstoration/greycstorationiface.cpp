@@ -48,11 +48,12 @@
 #include <pthread.h>
 #endif
 
-/** Number of children threads used to run Greystoration algorithm */
-#define COMPUTATION_THREAD 2
-
 /** Uncomment this line if you use future GreycStoration implementation with GFact parameter */
 #define GREYSTORATION_USING_GFACT 1
+
+// KDE includes.
+
+#include <solid/device.h>
 
 // Local includes.
 
@@ -75,20 +76,22 @@ public:
 
     GreycstorationIfacePriv()
     {
-        mode  = GreycstorationIface::Restore;
-        gfact = 1.0;
+        mode               = GreycstorationIface::Restore;
+        gfact              = 1.0;
+        computationThreads = 2;
     }
 
     float                  gfact;
 
-    int                    mode;            // The interface running mode.
+    int                    computationThreads;  // Number of threads used by CImg during computation.
+    int                    mode;                // The interface running mode.
 
-    QImage                 inPaintingMask;  // Mask for inpainting.
+    QImage                 inPaintingMask;      // Mask for inpainting.
 
-    GreycstorationSettings settings;        // Current Greycstoraion algorithm settings.
+    GreycstorationSettings settings;            // Current Greycstoraion algorithm settings.
 
-    CImg<>                 img;             // Main image.
-    CImg<uchar>            mask;            // The mask used with inpaint or resize mode
+    CImg<>                 img;                 // Main image.
+    CImg<uchar>            mask;                // The mask used with inpaint or resize mode
 };
 
 GreycstorationIface::GreycstorationIface(DImg *orgImage,
@@ -103,6 +106,13 @@ GreycstorationIface::GreycstorationIface(DImg *orgImage,
     d->settings       = settings;
     d->mode           = mode;
     d->inPaintingMask = inPaintingMask;
+
+    // Check number of CPU with Solid interface.
+
+    const int numProcs    = qMax(Solid::Device::listFromType(Solid::DeviceInterface::Processor).count(), 1);
+    const int maxThreads  = 16;
+    d->computationThreads = qMin(maxThreads, 2 + ((numProcs - 1) * 2));
+    kDebug(50003) << "GreycstorationIface::Computation threads: " << d->computationThreads << endl;
 
     if (m_orgImage.sixteenBit())           // 16 bits image.
         d->gfact = 1.0/256.0;
@@ -307,7 +317,7 @@ void GreycstorationIface::restoration()
                                   d->settings.fastApprox,
                                   d->settings.tile,
                                   d->settings.btile,
-                                  COMPUTATION_THREAD);
+                                  d->computationThreads);
 
         iterationLoop(iter);
     }
@@ -363,7 +373,7 @@ void GreycstorationIface::inpainting()
                                   d->settings.fastApprox,
                                   d->settings.tile,
                                   d->settings.btile,
-                                  COMPUTATION_THREAD);
+                                  d->computationThreads);
 
         iterationLoop(iter);
     }
@@ -407,7 +417,7 @@ void GreycstorationIface::resize()
                                   d->settings.fastApprox,
                                   d->settings.tile,
                                   d->settings.btile,
-                                  COMPUTATION_THREAD);
+                                  d->computationThreads);
 
         iterationLoop(iter);
     }
