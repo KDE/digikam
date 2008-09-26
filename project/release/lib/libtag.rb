@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-#
 # Generic ruby library for KDE extragear/playground releases
 #
 # Copyright (C) 2008 Harald Sitter <harald@getamarok.com>
@@ -42,20 +40,26 @@ end
 # * Svn cp from fetched translations (libl10n)
 # TODO: optionalify depend on libl10n
 def tagTranslations()
-    Dir.chdir( BASEPATH + "/" + @folder )
-    `svn co -N #{@tag1} tagging`
+    unless @translations == nil
+        @name = NAME.split("-").join
 
-    tag = "#{@protocol}://#{@user}.kde.org/home/kde/tags/#{NAME}/#{@version}/po"
+        Dir.chdir( BASEPATH + "/" + @folder )
+        `svn co -N #{@tag1} tagging`
 
-    `svn mkdir -m "Create tag #{NAME} #{@version} po directory" #{tag}`
-    `svn up tagging/po`
-    for translation in @translations do
-        `svn mkdir tagging/po/#{translation}`
-        `svn cp po/#{translation}/#{NAME}.po tagging/po/#{translation}/#{NAME}.po`
+        tag = "#{@protocol}://#{@user}.kde.org/home/kde/tags/#{NAME}/#{@version}/po"
+
+        `svn mkdir -m "Create tag #{NAME} #{@version} po directory" #{tag}`
+        `svn up tagging/po`
+        for translation in @translations do
+            `svn mkdir tagging/po/#{translation}`
+            for f in Dir.glob("po/#{translation}/#{@name.chop}*.po")
+                `svn cp #{f} tagging/po/#{translation}/`
+            end
+        end
+        `svn ci -m "Tag #{NAME} #{@version} - translations." tagging/po`
+
+        FileUtils.rm_rf("tagging")
     end
-    `svn ci -m "Tag #{NAME} #{@version} - translations." tagging/po`
-
-    FileUtils.rm_rf("tagging")
 end
 
 # Tags documentation - 3rd step
@@ -64,19 +68,21 @@ end
 # * Svn mkdir doc
 # * Svn cp DOC for all DOCS (provided by libl10n. So, if no translation fetching did happen, it's going o break here)
 def tagDocumentations()
-    Dir.chdir( BASEPATH + "/" + @folder )
-    `svn co -N #{@tag1} tagging`
+    unless @docs == nil
+        Dir.chdir( BASEPATH + "/" + @folder )
+        `svn co -N #{@tag1} tagging`
 
-    tag = "#{@protocol}://#{@user}.kde.org/home/kde/tags/#{NAME}/#{@version}/po"
+        tag = "#{@protocol}://#{@user}.kde.org/home/kde/tags/#{NAME}/#{@version}/po"
 
-    `svn mkdir -m "Create tag #{NAME} #{@version} doc directory" #{tag}`
-    `svn up tagging/doc`
-    for doc in @docs do
-        `svn cp doc/#{doc} tagging/doc/`
+        `svn mkdir -m "Create tag #{NAME} #{@version} doc directory" #{tag}`
+        `svn up tagging/doc`
+        for doc in @docs do
+            `svn cp doc/#{doc} tagging/doc/`
+        end
+        `svn ci -m "Tag #{NAME} #{@version} - documentations." tagging/doc`
+
+        FileUtils.rm_rf( "tagging" )
     end
-    `svn ci -m "Tag #{NAME} #{@version} - documentations." tagging/doc`
-
-    FileUtils.rm_rf( "tagging" )
 end
 
 # Tagging wrapper

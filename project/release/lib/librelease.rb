@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-#
 # Generic ruby library for KDE extragear/playground releases
 #
 # Copyright (C) 2007-2008 Harald Sitter <harald@getamarok.com>

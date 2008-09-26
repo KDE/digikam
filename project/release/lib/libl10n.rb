@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-#
 # Generic ruby library for KDE extragear/playground releases
 #
 # Copyright (C) 2007-2008 Harald Sitter <harald@getamarok.com>
@@ -25,6 +23,7 @@ require 'lib/libkdialog.rb'
 @dlg = KDialog.new("#{NAME} release script","start-here")
 
 def fetchTranslations()
+    @name = NAME.split("-").join #strip hyphens (required for kipi-plugins)
     srcDir()
     Dir.mkdir("l10n")
     Dir.mkdir("po")
@@ -40,12 +39,12 @@ def fetchTranslations()
         # TODO: ruby-svn
         FileUtils.rm_rf("l10n")
         %x[svn co #{@repo}/#{pofilename} l10n 2> /dev/null]
-        next unless FileTest.exists?( "l10n/#{NAME}.po" )
+        next unless FileTest.exists?( "l10n/#{@name}.po" )
 
         dest = "po/#{lang}"
         Dir.mkdir( dest )
-        puts("Copying #{lang}\'s #{NAME}.po over ...")
-        FileUtils.mv( "l10n/#{NAME}.po", dest )
+        puts("Copying #{lang}\'s #{@name}.po over ...")
+        FileUtils.mv( Dir.glob("l10n/#{@name.chop}*.po"), dest ) #.chop last char because of kipiplugins
         FileUtils.mv( "l10n/.svn", dest )
 
         # create lang's cmake files
@@ -227,13 +226,14 @@ def createTranslationStats()
     end
 
     def stats( lang )
+        @name = NAME.split("-").join #strip hyphens (required for kipi-plugins)
         srcDir()
         values = nil
 
         Dir.chdir("po/#{lang}")
 
         # grab statistics data
-        system("msgfmt --statistics #{NAME}.po 2> tmp.txt")
+        system("msgfmt --statistics #{@name}.po 2> tmp.txt")
         term = `cat tmp.txt`
         File.delete("tmp.txt")
 
@@ -279,7 +279,7 @@ def createTranslationStats()
         </font></td>
         <td align="center" valign="middle" width="163" height="12">
         <font color="#{fcolor}">
-        #{if per == 0 then "0 %" else per.to_i.to_s + " %" end}
+        #{if per == 0 or per == nil then "0 %" else per.to_i.to_s + " %" end}
         </font></td></tr>" >> #{@file}`
 
         # update counting variables
