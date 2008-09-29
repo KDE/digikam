@@ -122,6 +122,8 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     setToolSettings(m_gboxSettings);
 
+    slotResetSettings();
+
     // -------------------------------------------------------------
 
     connect(m_cameraSelector, SIGNAL(signalLensSettingsChanged()),
