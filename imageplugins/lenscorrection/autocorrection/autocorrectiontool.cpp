@@ -69,7 +69,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     setToolIcon(SmallIcon("lensdistortion"));
 
     m_previewWidget = new ImageWidget("antivignetting Tool", 0, QString(),
-                                      false, ImageGuideWidget::HVGuideMode, false);
+                                      true, ImageGuideWidget::HVGuideMode, true);
 
     setToolView(m_previewWidget);
 
