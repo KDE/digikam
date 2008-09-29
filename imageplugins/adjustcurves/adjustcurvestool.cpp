@@ -415,7 +415,7 @@ void AdjustCurvesTool::slotResetCurrentChannel()
 {
     m_curvesWidget->curves()->curvesChannelReset(m_channelCB->currentIndex());
 
-    m_curvesWidget->reset();
+    m_curvesWidget->repaint();
     slotEffect();
     m_histogramWidget->reset();
 }
