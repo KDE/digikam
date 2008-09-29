@@ -15,7 +15,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 168569 : New Album Folders are not detected in displayed in GUI until restart.
 006 ==> 165337 : Text overlapping box on welcome page.
 007 ==> 171310 : No preview photos shown clicking on imported albums.
-008 ==> 
+008 ==> 171778 : digiKam does not load photos in its database.
+009 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta3 - Release date: 2008-09-03
