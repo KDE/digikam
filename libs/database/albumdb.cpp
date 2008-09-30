@@ -2512,7 +2512,7 @@ ItemScanInfo AlbumDB::getItemScanInfo(qlonglong imageID)
     QList<QVariant> values;
 
     d->db->execSql( QString("SELECT id, album, name, status, category, modificationDate, uniqueHash "
-                            "FROM Images WHERE imageid=?;"),
+                            "FROM Images WHERE id=?;"),
                     imageID,
                     &values );
 
