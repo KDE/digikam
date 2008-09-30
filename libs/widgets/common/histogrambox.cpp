@@ -31,6 +31,7 @@
 #include <QPair>
 #include <QString>
 #include <QToolButton>
+#include <QVBoxLayout>
 #include <QWidget>
 
 // KDE includes.
@@ -80,8 +81,8 @@ HistogramBox::HistogramBox(QWidget *parent, int histogramType, bool selectMode)
 {
     d = new HistogramBoxPriv;
 
-    QGridLayout* histoBoxLayout = new QGridLayout(this);
-    QLabel *channelLabel        = new QLabel(i18n("Channel:"), this);
+    QGridLayout* gridLayout = new QGridLayout(this);
+    QLabel *channelLabel    = new QLabel(i18n("Channel:"), this);
     channelLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     d->channelCB = new KComboBox(this);
@@ -244,23 +245,32 @@ HistogramBox::HistogramBox(QWidget *parent, int histogramType, bool selectMode)
     colorsLabel->hide();
     d->colorsCB->hide();
 
-    d->histogramWidget = new HistogramWidget(256, 140, this, selectMode, true, true);
+    QWidget *histoBox = new QWidget;
+    QVBoxLayout *histoBoxLayout = new QVBoxLayout;
+
+    d->histogramWidget = new HistogramWidget(256, 140, histoBox, selectMode, true, true);
     d->histogramWidget->setWhatsThis(i18n("Here you can see the target preview image histogram drawing "
                                           "of the selected image channel. This one is re-computed at any "
                                           "settings changes."));
 
-    d->hGradient = new ColorGradientWidget(ColorGradientWidget::Horizontal, 10, this);
+    d->hGradient = new ColorGradientWidget(ColorGradientWidget::Horizontal, 10, histoBox);
     d->hGradient->setColors(QColor("black"), QColor("white"));
 
-    histoBoxLayout->addWidget(channelLabel,         0, 0, 1, 1);
-    histoBoxLayout->addWidget(d->channelCB,         0, 1, 1, 1);
-    histoBoxLayout->addWidget(scaleBox,             0, 3, 1, 2);
-    histoBoxLayout->addWidget(colorsLabel,          1, 0, 1, 1);
-    histoBoxLayout->addWidget(d->colorsCB,          1, 1, 1, 1);
-    histoBoxLayout->addWidget(d->histogramWidget,   2, 0, 1, 5);
-    histoBoxLayout->addWidget(d->hGradient,         3, 0, 1, 5);
-    histoBoxLayout->setColumnStretch(2, 10);
+    histoBoxLayout->addWidget(d->histogramWidget);
+    histoBoxLayout->addWidget(d->hGradient);
     histoBoxLayout->setSpacing(1);
+    histoBoxLayout->setMargin(0);
+    histoBox->setLayout(histoBoxLayout);
+
+    gridLayout->addWidget(channelLabel,     0, 0, 1, 1);
+    gridLayout->addWidget(d->channelCB,     0, 1, 1, 1);
+    gridLayout->addWidget(scaleBox,         0, 3, 1, 2);
+    gridLayout->addWidget(colorsLabel,      1, 0, 1, 1);
+    gridLayout->addWidget(d->colorsCB,      1, 1, 1, 1);
+    gridLayout->addWidget(histoBox,         2, 0, 1, 5);
+    gridLayout->setColumnStretch(2, 10);
+    gridLayout->setSpacing(5);
+    gridLayout->setMargin(0);
 
     switch (histogramType)
     {
