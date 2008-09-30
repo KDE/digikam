@@ -155,6 +155,26 @@
     <projectname>project</projectname>
     <projectname>project</projectname>
     <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
   </general>
   <kdevfileview>
     <groups>
@@ -253,7 +273,7 @@
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>/opt/kde4/bin/digikam</mainprogram>
+      <mainprogram>/home/gilles/Documents/devel/SVN/trunk/graphics/kipi-plugins/dngconverter/test/raw2dng</mainprogram>
       <programargs/>
       <terminal>false</terminal>
       <autocompile>false</autocompile>
@@ -268,8 +288,8 @@
         <envvar value="/usr/lib/qt4" name="QTDIR" />
         <envvar value="/opt/kde4/lib/kde4/plugins" name="QT_PLUGIN_PATH" />
       </envvars>
-      <globaldebugarguments/>
-      <globalcwd/>
+      <globaldebugarguments>/home/gilles/Documents/devel/SVN/trunk/graphics/kipi-plugins/dngconverter/test/MINOLTA-DYNAX5D-02.MRW</globaldebugarguments>
+      <globalcwd>/mnt/data/devel/SVN/trunk/graphics/digikam/project/../..</globalcwd>
       <useglobalprogram>true</useglobalprogram>
       <autoinstall>false</autoinstall>
       <autokdesu>false</autokdesu>
