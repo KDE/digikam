@@ -111,14 +111,14 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
 
     QLabel *header = new QLabel(page);
 #if KDCRAW_VERSION < 0x000400
-    header->setText(i18n("<p>Using KDcraw library version %1"
-                         "<p>Using Dcraw program version %2"
-                         "<p>%3 models in the list",
+    header->setText(i18n("<p>Using KDcraw library version %1</p>"
+                         "<p>Using Dcraw program version %2</p>"
+                         "<p>%3 models in the list</p>",
                          KDcrawVer, dcrawVer, list.count()));
 #else
-    header->setText(i18n("<p>Using KDcraw library version %1"
-                         "<p>Using LibRaw version %2"
-                         "<p>%3 models in the list",
+    header->setText(i18n("<p>Using KDcraw library version %1</p>"
+                         "<p>Using LibRaw version %2</p>"
+                         "<p>%3 models in the list</p>",
                          KDcrawVer, librawVer, list.count()));
 #endif
 

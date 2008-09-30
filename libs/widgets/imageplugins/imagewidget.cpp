@@ -110,7 +110,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     hlay->addWidget(previewOriginalButton);
     previewOriginalButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/original.png")));
     previewOriginalButton->setCheckable(true);
-    previewOriginalButton->setWhatsThis( i18n( "<p>If you enable this option, you will see "
+    previewOriginalButton->setWhatsThis( i18n( "If you enable this option, you will see "
                                                "the original image." ) );
 
     QToolButton *previewBothButtonVert = new QToolButton( d->prevBBox );
@@ -118,7 +118,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     hlay->addWidget(previewBothButtonVert);
     previewBothButtonVert->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/bothvert.png")));
     previewBothButtonVert->setCheckable(true);
-    previewBothButtonVert->setWhatsThis( i18n( "<p>If you enable this option, the preview area will "
+    previewBothButtonVert->setWhatsThis( i18n( "If you enable this option, the preview area will "
                                                "split vertically. "
                                                "A contiguous area of the image will be shown, "
                                                "with one half from the original image, "
@@ -129,7 +129,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     hlay->addWidget(previewBothButtonHorz);
     previewBothButtonHorz->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/bothhorz.png")));
     previewBothButtonHorz->setCheckable(true);
-    previewBothButtonHorz->setWhatsThis( i18n( "<p>If you enable this option, the preview area will "
+    previewBothButtonHorz->setWhatsThis( i18n( "If you enable this option, the preview area will "
                                                "split horizontally. "
                                                "A contiguous area of the image will be shown, "
                                                "with one half from the original image, "
@@ -140,7 +140,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     hlay->addWidget(previewDuplicateBothButtonVert);
     previewDuplicateBothButtonVert->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/duplicatebothvert.png")));
     previewDuplicateBothButtonVert->setCheckable(true);
-    previewDuplicateBothButtonVert->setWhatsThis( i18n( "<p>If you enable this option, the preview area will "
+    previewDuplicateBothButtonVert->setWhatsThis( i18n( "If you enable this option, the preview area will "
                                                         "split vertically. "
                                                         "The same part of the original and the target image "
                                                         "will be shown side by side.") );
@@ -150,7 +150,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     hlay->addWidget(previewDupplicateBothButtonHorz);
     previewDupplicateBothButtonHorz->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/duplicatebothhorz.png")));
     previewDupplicateBothButtonHorz->setCheckable(true);
-    previewDupplicateBothButtonHorz->setWhatsThis( i18n( "<p>If you enable this option, the preview area will "
+    previewDupplicateBothButtonHorz->setWhatsThis( i18n( "If you enable this option, the preview area will "
                                                          "split horizontally. "
                                                          "The same part of the original and the target image "
                                                          "will be shown side by side.") );
@@ -160,7 +160,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     hlay->addWidget(previewtargetButton);
     previewtargetButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/target.png")));
     previewtargetButton->setCheckable(true);
-    previewtargetButton->setWhatsThis( i18n( "<p>If you enable this option, you will see "
+    previewtargetButton->setWhatsThis( i18n( "If you enable this option, you will see "
                                              "the target image." ) );
 
     QToolButton *previewToggleMouseOverButton = new QToolButton( d->prevBBox );
@@ -168,7 +168,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     hlay->addWidget(previewToggleMouseOverButton);
     previewToggleMouseOverButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/togglemouseover.png")));
     previewToggleMouseOverButton->setCheckable(true);
-    previewToggleMouseOverButton->setWhatsThis( i18n( "<p>If you enable this option, you will see "
+    previewToggleMouseOverButton->setWhatsThis( i18n( "If you enable this option, you will see "
                                                       "the original image when the mouse is over image area, "
                                                       "else the target image." ) );
 
@@ -185,7 +185,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     hlay2->addWidget(d->underExposureButton);
     d->underExposureButton->setIcon(SmallIcon("underexposure"));
     d->underExposureButton->setCheckable(true);
-    d->underExposureButton->setWhatsThis( i18n("<p>Set this option to display black "
+    d->underExposureButton->setWhatsThis( i18n("Set this option to display black "
                                                "overlaid on the preview. This will help you to avoid "
                                                "under-exposing the image." ) );
 
@@ -194,7 +194,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     hlay2->addWidget(d->overExposureButton);
     d->overExposureButton->setIcon(SmallIcon("overexposure"));
     d->overExposureButton->setCheckable(true);
-    d->overExposureButton->setWhatsThis( i18n("<p>Set this option to display white "
+    d->overExposureButton->setWhatsThis( i18n("Set this option to display white "
                                               "overlaid on the preview. This will help you to avoid "
                                               "over-exposing the image." ) );
 

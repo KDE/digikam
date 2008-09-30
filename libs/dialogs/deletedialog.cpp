@@ -99,13 +99,12 @@ DeleteWidget::DeleteWidget(QWidget *parent)
     m_shouldDelete->setGeometry(QRect(0, 0, 542, 32));
     m_shouldDelete->setToolTip(i18n("If checked, files will be permanently removed instead of being placed "
                                     "in the Trash Bin"));
-    m_shouldDelete->setWhatsThis(i18n("<qt><p>If this box is checked, files will be "
+    m_shouldDelete->setWhatsThis(i18n("<p>If this box is checked, files will be "
                                       "<b>permanently removed</b> instead of "
-                                      "being placed in the Trash Bin.</p>\n"
-                                      "    \n"
-                                      "    <p><em>Use this option with caution</em>: most filesystems "
+                                      "being placed in the Trash Bin.</p>"
+                                      "<p><em>Use this option with caution</em>: most filesystems "
                                       "are unable to "
-                                      "undelete deleted files reliably.</p></qt>"));
+                                      "undelete deleted files reliably.</p>"));
     m_shouldDelete->setText(i18n("&Delete files instead of moving them to the trash"));
 
     connect(m_shouldDelete, SIGNAL(toggled(bool)),
@@ -115,8 +114,8 @@ DeleteWidget::DeleteWidget(QWidget *parent)
     m_doNotShowAgain->setGeometry(QRect(0, 0, 100, 30));
     m_doNotShowAgain->setToolTip(i18n("If checked, this dialog will no longer be shown, and files will "
                                       "be directly moved to the Trash Bin"));
-    m_doNotShowAgain->setWhatsThis(i18n("<qt><p>If this box is checked, this dialog will no longer be shown, "
-                                        "and files will be directly moved to the Trash Bin</p>"));
+    m_doNotShowAgain->setWhatsThis(i18n("If this box is checked, this dialog will no longer be shown, "
+                                        "and files will be directly moved to the Trash Bin"));
     m_doNotShowAgain->setText(i18n("Do not &ask again"));
 
     QVBoxLayout *vbox = new QVBoxLayout(this);
@@ -179,8 +178,8 @@ void DeleteWidget::updateText()
 
             if (m_deleteMode == DeleteDialogMode::DeletePermanently)
             {
-                m_deleteText->setText(i18n("<qt>These items will be <b>permanently "
-                                           "deleted</b> from your hard disk.</qt>"));
+                m_deleteText->setText(i18n("These items will be <b>permanently "
+                                           "deleted</b> from your hard disk."));
                 m_warningIcon->setPixmap(KIconLoader::global()->loadIcon("dialog-warning",
                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
             }
@@ -200,14 +199,14 @@ void DeleteWidget::updateText()
 
             if (m_deleteMode == DeleteDialogMode::DeletePermanently)
             {
-                m_deleteText->setText(i18n("<qt>These albums will be <b>permanently "
-                                           "deleted</b> from your hard disk.</qt>"));
+                m_deleteText->setText(i18n("These albums will be <b>permanently "
+                                           "deleted</b> from your hard disk."));
                 m_warningIcon->setPixmap(KIconLoader::global()->loadIcon("dialog-warning",
                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
             }
             else
             {
-                m_deleteText->setText(i18n("<qt>These albums will be moved to Trash.</qt>"));
+                m_deleteText->setText(i18n("These albums will be moved to Trash."));
                 m_warningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
             }
@@ -221,20 +220,20 @@ void DeleteWidget::updateText()
 
             if (m_deleteMode == DeleteDialogMode::DeletePermanently)
             {
-                m_deleteText->setText(i18n("<qt>These albums will be <b>permanently "
-                                           "deleted</b> from your hard disk.<br>"
-                                           "Note that <b>all subalbums</b> "
+                m_deleteText->setText(i18n("<p>These albums will be <b>permanently "
+                                           "deleted</b> from your hard disk.</p>"
+                                           "<p>Note that <b>all subalbums</b> "
                                            "are included in this list and will "
-                                           "be deleted permanently as well.</qt>"));
+                                           "be deleted permanently as well.</p>"));
                 m_warningIcon->setPixmap(KIconLoader::global()->loadIcon("dialog-warning",
                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
             }
             else
             {
-                m_deleteText->setText(i18n("<qt>These albums will be moved to Trash.<br>"
-                                           "Note that <b>all subalbums</b> "
+                m_deleteText->setText(i18n("<p>These albums will be moved to Trash.</p>"
+                                           "<p>Note that <b>all subalbums</b> "
                                            "are included in this list and will "
-                                           "be moved to Trash as well.</qt>"));
+                                           "be moved to Trash as well.</p>"));
                 m_warningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
             }

@@ -408,28 +408,28 @@ void ImageDescEditTab::slotChangingItems()
         if (changedFields == 1)
         {
             if (d->hub.commentChanged())
-                text = i18np("<qt><p>You have edited the image caption. ",
-                             "<qt><p>You have edited the captions of %1 images. ",
+                text = i18np("You have edited the image caption. ",
+                             "You have edited the captions of %1 images. ",
                              d->currInfos.count());
             else if (d->hub.dateTimeChanged())
-                text = i18np("<qt><p>You have edited the date of the image. ",
-                             "<qt><p>You have edited the date of %1 images. ",
+                text = i18np("You have edited the date of the image. ",
+                             "You have edited the date of %1 images. ",
                              d->currInfos.count());
             else if (d->hub.ratingChanged())
-                text = i18np("<qt><p>You have edited the rating of the image. ",
-                             "<qt><p>You have edited the rating of %1 images. ",
+                text = i18np("You have edited the rating of the image. ",
+                             "You have edited the rating of %1 images. ",
                              d->currInfos.count());
             else if (d->hub.tagsChanged())
-                text = i18np("<qt><p>You have edited the tags of the image. ",
-                             "<qt><p>You have edited the tags of %1 images. ",
+                text = i18np("You have edited the tags of the image. ",
+                             "You have edited the tags of %1 images. ",
                              d->currInfos.count());
 
-            text += i18n("Do you want to apply your changes?</p></qt>");
+            text += i18n("Do you want to apply your changes?");
         }
         else
         {
-            text = i18np("<qt><p>You have edited the metadata of the image: </p><ul>",
-                         "<qt><p>You have edited the metadata of %1 images: </p><ul>",
+            text = i18np("<p>You have edited the metadata of the image: </p><p><ul>",
+                         "<p>You have edited the metadata of %1 images: </p><p><ul>",
                          d->currInfos.count());
 
             if (d->hub.commentChanged())
@@ -441,9 +441,9 @@ void ImageDescEditTab::slotChangingItems()
             if (d->hub.tagsChanged())
                 text += i18n("<li>tags</li>");
 
-            text += "</ul><p>";
+            text += "</ul></p>";
 
-            text += i18n("Do you want to apply your changes?</p></qt>");
+            text += i18n("<p>Do you want to apply your changes?</p>");
         }
 
         bool alwaysApply = false;

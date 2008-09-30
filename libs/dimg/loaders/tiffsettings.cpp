@@ -67,11 +67,11 @@ TIFFSettings::TIFFSettings(QWidget *parent)
     d->TIFFGrid        = new QGridLayout(this);
     d->TIFFcompression = new QCheckBox(i18n("Compress TIFF files"), this);
 
-    d->TIFFcompression->setWhatsThis( i18n("<p>Toggle compression for TIFF images.<p>"
-                                           "If you enable this option, you can reduce "
+    d->TIFFcompression->setWhatsThis( i18n("<p>Toggle compression for TIFF images.</p>"
+                                           "<p>If you enable this option, you can reduce "
                                            "the final file size of the TIFF image.</p>"
                                            "<p>A lossless compression format (Deflate) "
-                                           "is used to save the file.<p>"));
+                                           "is used to save the file.</p>"));
 
     d->TIFFGrid->addWidget(d->TIFFcompression, 0, 0, 1, 2 );
     d->TIFFGrid->setColumnStretch(1, 10);

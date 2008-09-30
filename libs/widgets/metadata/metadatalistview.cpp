@@ -125,9 +125,9 @@ void MetadataListView::slotSelectionChanged(QTreeWidgetItem *item, int)
         tagValue.append("...");
     }
 
-    this->setWhatsThis( i18n("<b>Title: </b><p>%1<p>"
-                             "<b>Value: </b><p>%2<p>"
-                             "<b>Description: </b><p>%3",
+    this->setWhatsThis( i18n("<b>Title: </b><p>%1</p>"
+                             "<b>Value: </b><p>%2</p>"
+                             "<b>Description: </b><p>%3</p>",
                              tagTitle, tagValue, tagDesc));
 }
 

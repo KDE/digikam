@@ -167,12 +167,12 @@ ICCProfileWidget::ICCProfileWidget(QWidget* parent, int w, int h)
                     "triangle that is superimposed on the diagram outlined in white. "
                     "This triangle represents the outer boundaries of the color space "
                     "of the device that is characterized by the inspected profile. "
-                    "This is called the device gamut.<p>"
-                    "In addition there are black dots and yellow lines on the diagram. "
+                    "This is called the device gamut.</p>"
+                    "<p>In addition there are black dots and yellow lines on the diagram. "
                     "Each black dot represents one of the measurement points that were "
                     "used to create this profile. The yellow line represents the "
                     "amount that each point is corrected by the profile, and the "
-                    "direction of this correction."));
+                    "direction of this correction.</p>"));
 
     setUserAreaWidget(d->cieTongue);
     decodeMetadata();

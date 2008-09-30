@@ -124,7 +124,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
 
     QLabel *header = new QLabel(page);
     header->setWordWrap(true);
-    header->setText(i18n("<font size=\"5\">%1</font><br><b>Version %2</b>"
+    header->setText(i18n("<font size=\"5\">%1</font><br/><b>Version %2</b>"
                          "<p>%3</p>",
                     KGlobal::mainComponent().aboutData()->programName(),
                     KGlobal::mainComponent().aboutData()->version(),

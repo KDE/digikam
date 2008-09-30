@@ -103,9 +103,9 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
     d->imageRegionWidget->setFrameStyle(QFrame::NoFrame);
     preview->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     d->imageRegionWidget->setWhatsThis( i18n("<p>Here you can see the original clip image "
-                                             "which will be used for the preview computation."
+                                             "which will be used for the preview computation.</p>"
                                              "<p>Click and drag the mouse cursor in the "
-                                             "image to change the clip focus."));
+                                             "image to change the clip focus.</p>"));
     l1->addWidget(d->imageRegionWidget, 0);
 
     // -------------------------------------------------------------
@@ -125,7 +125,7 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
        hlay->addWidget(duplicateHorButton);
        duplicateHorButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/duplicatebothhorz.png")));
        duplicateHorButton->setCheckable(true);
-       duplicateHorButton->setWhatsThis( i18n("<p>If you enable this option, you will separate the preview area "
+       duplicateHorButton->setWhatsThis( i18n("If you enable this option, you will separate the preview area "
                                               "horizontally, displaying the original and target image "
                                               "at the same time. The target is duplicated from the original "
                                               "below the red dashed line." ) );
@@ -135,7 +135,7 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
        hlay->addWidget(duplicateVerButton);
        duplicateVerButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/duplicatebothvert.png")));
        duplicateVerButton->setCheckable(true);
-       duplicateVerButton->setWhatsThis( i18n("<p>If you enable this option, you will separate the preview area "
+       duplicateVerButton->setWhatsThis( i18n("If you enable this option, you will separate the preview area "
                                               "vertically, displaying the original and target image "
                                               "at the same time. The target is duplicated from the original to "
                                               "the right of the red dashed line." ) );
@@ -149,7 +149,7 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
        hlay->addWidget(separateHorButton);
        separateHorButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/bothhorz.png")));
        separateHorButton->setCheckable(true);
-       separateHorButton->setWhatsThis( i18n( "<p>If you enable this option, you will separate the preview area "
+       separateHorButton->setWhatsThis( i18n( "If you enable this option, you will separate the preview area "
                                               "horizontally, displaying the original and target image "
                                               "at the same time. The original is above the "
                                               "red dashed line, the target below it." ) );
@@ -159,7 +159,7 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
        hlay->addWidget(separateVerButton);
        separateVerButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/bothvert.png")));
        separateVerButton->setCheckable(true);
-       separateVerButton->setWhatsThis( i18n( "<p>If you enable this option, you will separate the preview area "
+       separateVerButton->setWhatsThis( i18n( "If you enable this option, you will separate the preview area "
                                               "vertically, displaying the original and target image "
                                               "at the same time. The original is to the left of the "
                                               "red dashed line, the target to the right of it." ) );
@@ -170,7 +170,7 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
     hlay->addWidget(noSeparateButton);
     noSeparateButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/target.png")));
     noSeparateButton->setCheckable(true);
-    noSeparateButton->setWhatsThis( i18n( "<p>If you enable this option, the preview area will not "
+    noSeparateButton->setWhatsThis( i18n( "If you enable this option, the preview area will not "
                                           "be separated." ) );
 
     // -------------------------------------------------------------

@@ -141,7 +141,7 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->sharpnessInput = new RDoubleNumInput(d->generalPage);
     d->sharpnessInput->setDecimals(2);
     d->sharpnessInput->input()->setRange(0.01, 1.0, 0.1, true);
-    d->sharpnessInput->setWhatsThis( i18n("<p>Preservation of details to set the sharpening level "
+    d->sharpnessInput->setWhatsThis( i18n("Preservation of details to set the sharpening level "
                                              "of the small features in the target image. "
                                              "Higher values leave details sharp."));
 
@@ -149,14 +149,14 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->anisotropyInput = new RDoubleNumInput(d->generalPage);
     d->anisotropyInput->setDecimals(2);
     d->anisotropyInput->input()->setRange(0.0, 1.0, 0.1, true);
-    d->anisotropyInput->setWhatsThis( i18n("<p>Anisotropic (directional) modifier of the details. "
+    d->anisotropyInput->setWhatsThis( i18n("Anisotropic (directional) modifier of the details. "
                                               "Keep it small for Gaussian noise."));
 
     d->amplitudeLabel = new QLabel(i18n("Smoothing:"), d->generalPage);
     d->amplitudeInput = new RDoubleNumInput(d->generalPage);
     d->amplitudeInput->setDecimals(2);
     d->amplitudeInput->input()->setRange(0.01, 500.0, 0.1, true);
-    d->amplitudeInput->setWhatsThis( i18n("<p>Total smoothing power: if the Detail Factor sets the relative "
+    d->amplitudeInput->setWhatsThis( i18n("Total smoothing power: if the Detail Factor sets the relative "
                                              "smoothing and the Anisotropy Factor the direction, "
                                              "the Smoothing Factor sets the overall effect."));
 
@@ -164,7 +164,7 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->sigmaInput = new RDoubleNumInput(d->generalPage);
     d->sigmaInput->setDecimals(2);
     d->sigmaInput->input()->setRange(0.0, 10.0, 0.1, true);
-    d->sigmaInput->setWhatsThis( i18n("<p>This value controls the evenness of smoothing to the image. "
+    d->sigmaInput->setWhatsThis( i18n("This value controls the evenness of smoothing to the image. "
                                       "Do not use a high value here, or the "
                                       "target image will be completely blurred."));
 
@@ -172,13 +172,13 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->iterationInput = new RIntNumInput(d->generalPage);
     d->iterationInput->setRange(1, 5000, 1);
     d->iterationInput->setSliderEnabled(true);
-    d->iterationInput->setWhatsThis( i18n("<p>Sets the number of times the filter is applied to the image."));
+    d->iterationInput->setWhatsThis( i18n("Sets the number of times the filter is applied to the image."));
 
     d->alphaLabel = new QLabel(i18n("Noise:"), d->generalPage);
     d->alphaInput = new RDoubleNumInput(d->generalPage);
     d->alphaInput->setDecimals(2);
     d->alphaInput->input()->setRange(0.01, 1.0, 0.1, true);
-    d->alphaInput->setWhatsThis( i18n("<p>Sets the noise scale."));
+    d->alphaInput->setWhatsThis( i18n("Sets the noise scale."));
 
     grid1->addWidget(d->sharpnessLabel, 0, 0, 1, 1);
     grid1->addWidget(d->sharpnessInput, 0, 1, 1, 1);
@@ -206,43 +206,43 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->daInput = new RDoubleNumInput(d->advancedPage);
     d->daInput->setDecimals(2);
     d->daInput->input()->setRange(0.0, 90.0, 1.0, true);
-    d->daInput->setWhatsThis( i18n("<p>Set here the angular integration step (in degrees) "
+    d->daInput->setWhatsThis( i18n("Set here the angular integration step (in degrees) "
                                    "analogous to anisotropy."));
 
     d->dlLabel = new QLabel(i18n("Integral step:"), d->advancedPage);
     d->dlInput = new RDoubleNumInput(d->advancedPage);
     d->dlInput->setDecimals(2);
     d->dlInput->input()->setRange(0.0, 1.0, 0.1, true);
-    d->dlInput->setWhatsThis( i18n("<p>Set here the spatial integral step."));
+    d->dlInput->setWhatsThis( i18n("Set here the spatial integral step."));
 
     d->gaussianPrecLabel = new QLabel(i18n("Gaussian:"), d->advancedPage);
     d->gaussianPrecInput = new RDoubleNumInput(d->advancedPage);
     d->gaussianPrecInput->setDecimals(2);
     d->gaussianPrecInput->input()->setRange(0.01, 20.0, 0.01, true);
-    d->gaussianPrecInput->setWhatsThis( i18n("<p>Set here the precision of the Gaussian function."));
+    d->gaussianPrecInput->setWhatsThis( i18n("Set here the precision of the Gaussian function."));
 
     d->tileLabel = new QLabel(i18n("Tile size:"), d->advancedPage);
     d->tileInput = new RIntNumInput(d->advancedPage);
     d->tileInput->setRange(0, 2000, 1);
     d->tileInput->setSliderEnabled(true);
-    d->tileInput->setWhatsThis( i18n("<p>Sets the tile size."));
+    d->tileInput->setWhatsThis( i18n("Sets the tile size."));
 
     d->btileLabel = new QLabel(i18n("Tile border:"), d->advancedPage);
     d->btileInput = new RIntNumInput(d->advancedPage);
     d->btileInput->setRange(1, 20, 1);
     d->btileInput->setSliderEnabled(true);
-    d->btileInput->setWhatsThis( i18n("<p>Sets the size of each tile border."));
+    d->btileInput->setWhatsThis( i18n("Sets the size of each tile border."));
 
     d->interpolationLabel = new QLabel(i18n("Interpolation:"), d->advancedPage);
     d->interpolationBox   = new RComboBox(d->advancedPage);
     d->interpolationBox->insertItem(GreycstorationSettings::NearestNeighbor, i18n("Nearest Neighbor"));
     d->interpolationBox->insertItem(GreycstorationSettings::Linear, i18n("Linear"));
     d->interpolationBox->insertItem(GreycstorationSettings::RungeKutta, i18n("Runge-Kutta"));
-    d->interpolationBox->setWhatsThis( i18n("<p>Select the right interpolation method for the "
+    d->interpolationBox->setWhatsThis( i18n("Select the right interpolation method for the "
                                             "desired image quality."));
 
     d->fastApproxCBox = new QCheckBox(i18n("Fast approximation"), d->advancedPage);
-    d->fastApproxCBox->setWhatsThis( i18n("<p>Enable fast approximation when rendering images."));
+    d->fastApproxCBox->setWhatsThis( i18n("Enable fast approximation when rendering images."));
 
     grid2->addWidget(d->daLabel, 0, 0, 1, 1);
     grid2->addWidget(d->daInput, 0, 1, 1, 1);
