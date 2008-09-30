@@ -51,6 +51,16 @@
 namespace Digikam
 {
 
+class SidebarState
+{
+public:
+    SidebarState() : activeWidget(0),size(0) {}
+    SidebarState(QWidget *w, int size) : activeWidget(w),size(size) {}
+
+    QWidget *activeWidget;
+    int      size;
+};
+
 class SidebarPriv
 {
 public:
@@ -81,6 +91,9 @@ public:
     QStackedWidget  *stack;
     SidebarSplitter *splitter;
     QTimer          *dragSwitchTimer;
+
+    QHash<QWidget*, SidebarState>
+                     appendedTabsStateCache;
 };
 
 class SidebarSplitterPriv
@@ -118,18 +131,6 @@ Sidebar::~Sidebar()
 SidebarSplitter* Sidebar::splitter() const
 {
     return d->splitter;
-}
-
-void Sidebar::updateMinimumWidth()
-{
-    int width = 0;
-    for (int i = 0; i < d->tabs; i++)
-    {
-        QWidget *w = d->stack->widget(i);
-        if (w && w->width() > width)
-            width = w->width();
-    }
-    d->stack->setMinimumWidth(width);
 }
 
 void Sidebar::loadViewState()
@@ -184,6 +185,11 @@ void Sidebar::restore()
 
 void Sidebar::appendTab(QWidget *w, const QPixmap &pic, const QString &title)
 {
+    // Store state (but not on initialization)
+    if (isVisible())
+        d->appendedTabsStateCache[w] = SidebarState(d->stack->currentWidget(), d->splitter->size(this));
+
+    // Add tab
     w->setParent(d->stack);
     KMultiTabBar::appendTab(pic, d->tabs, title);
     d->stack->insertWidget(d->tabs, w);
@@ -203,15 +209,48 @@ void Sidebar::deleteTab(QWidget *w)
     if(tab < 0)
         return;
 
-    if(tab == d->activeTab)
+    bool removingActiveTab = (tab == d->activeTab);
+    if (removingActiveTab)
         d->activeTab = -1;
 
     d->stack->removeWidget(d->stack->widget(tab));
+    // delete widget
     removeTab(tab);
     d->tabs--;
-    updateMinimumWidth();
 
-    //TODO show another widget
+    // restore or reset active tab and width
+    if (!d->minimized)
+    {
+        // restore to state before adding tab
+        // using a hash is simple, but does not handle well multiple add/removal operations at a time
+        SidebarState state = d->appendedTabsStateCache.take(w);
+        if (state.activeWidget)
+        {
+            int tab = d->stack->indexOf(state.activeWidget);
+            if(tab != -1)
+            {
+                switchTabAndStackToTab(tab);
+                emit signalChangedTab(d->stack->currentWidget());
+
+                if (state.size == 0)
+                {
+                    d->minimized = true;
+                    setTab(d->activeTab, false);
+                }
+                d->splitter->setSize(this, state.size);
+            }
+        }
+        else
+        {
+            if (removingActiveTab)
+                clicked(d->tabs - 1);
+            d->splitter->setSize(this, -1);
+        }
+    }
+    else
+    {
+        d->restoreSize = -1;
+    }
 }
 
 void Sidebar::clicked(int tab)
@@ -225,12 +264,7 @@ void Sidebar::clicked(int tab)
     }
     else
     {
-        if(d->activeTab >= 0)
-            setTab(d->activeTab, false);
-
-        d->activeTab = tab;
-        setTab(d->activeTab, true);
-        d->stack->setCurrentIndex(d->activeTab);
+        switchTabAndStackToTab(tab);
 
         if(d->minimized)
             expand();
@@ -245,17 +279,22 @@ void Sidebar::setActiveTab(QWidget *w)
     if(tab < 0)
         return;
 
+    switchTabAndStackToTab(tab);
+
+    if(d->minimized)
+        expand();
+
+    emit signalChangedTab(d->stack->currentWidget());
+}
+
+void Sidebar::switchTabAndStackToTab(int tab)
+{
     if(d->activeTab >= 0)
         setTab(d->activeTab, false);
 
     d->activeTab = tab;
     setTab(d->activeTab, true);
     d->stack->setCurrentIndex(d->activeTab);
-
-    if(d->minimized)
-        expand();
-
-    emit signalChangedTab(d->stack->currentWidget());
 }
 
 QWidget* Sidebar::getActiveTab()

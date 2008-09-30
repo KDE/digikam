@@ -135,7 +135,7 @@ private:
      */
     void saveViewState();
     bool eventFilter(QObject *o, QEvent *e);
-    void updateMinimumWidth();
+    void switchTabAndStackToTab(int tab);
 
 private slots:
 
