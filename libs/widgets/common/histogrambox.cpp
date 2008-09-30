@@ -343,12 +343,12 @@ void HistogramBox::setColorsEnabled(bool enabled)
     d->colorsCB->setEnabled(enabled);
 }
 
-int HistogramBox::colors() const
+int HistogramBox::colorsChannel() const
 {
     return d->colorsCB->currentIndex();
 }
 
-void HistogramBox::setColors(int color)
+void HistogramBox::setColorsChannel(int color)
 {
     d->colorsCB->setCurrentIndex(color);
     slotColorsChanged();
@@ -424,7 +424,7 @@ void HistogramBox::slotScaleChanged()
 
 void HistogramBox::slotColorsChanged()
 {
-    switch (colors())
+    switch (colorsChannel())
     {
         case HistogramWidget::GreenColor:
             d->histogramWidget->m_colorType = HistogramWidget::GreenColor;

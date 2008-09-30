@@ -310,7 +310,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
                                 (int)HistogramBox::LuminosityChannel));
     d->histogramBox->setScale(group.readEntry("Histogram Scale",
                                 (int)HistogramBox::Logarithmic));
-    d->histogramBox->setColors(group.readEntry("Histogram Color", 0));
+    d->histogramBox->setColorsChannel(group.readEntry("Histogram Color", 0));
 
     d->regionBG->button(group.readEntry("Histogram Rendering",
                                         (int)HistogramWidget::FullImageHistogram))->setChecked(true);
@@ -364,7 +364,7 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
     group.writeEntry("ImagePropertiesColors Tab", currentIndex());
     group.writeEntry("Histogram Channel", d->histogramBox->channel());
     group.writeEntry("Histogram Scale", d->histogramBox->scale());
-    group.writeEntry("Histogram Color", d->histogramBox->colors());
+    group.writeEntry("Histogram Color", d->histogramBox->colorsChannel());
     group.writeEntry("Histogram Rendering", d->regionBG->checkedId());
     group.writeEntry("ICC Level", d->iccProfileWidget->getMode());
     group.writeEntry("Current ICC Item", d->iccProfileWidget->getCurrentItemKey());
@@ -657,7 +657,7 @@ void ImagePropertiesColorsTab::updateStatistics()
     int channel = d->histogramBox->channel();
 
     if ( channel == HistogramWidget::ColorChannelsHistogram )
-        channel = d->histogramBox->colors()+1;
+        channel = d->histogramBox->colorsChannel()+1;
 
     double mean = d->histogramBox->histogram()->m_imageHistogram->getMean(channel, min, max);
     d->labelMeanValue->setText(value.setNum(mean, 'f', 1));

@@ -83,8 +83,8 @@ public:
     void setChannel(int channel);
     void setChannelEnabled(bool enabled);
 
-    int  colors() const;
-    void setColors(int color);
+    int  colorsChannel() const;
+    void setColorsChannel(int color);
     void setColorsEnabled(bool enabled);
 
     int  scale() const;
