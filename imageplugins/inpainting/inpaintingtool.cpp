@@ -92,7 +92,7 @@ InPaintingTool::InPaintingTool(QObject* parent)
     m_isComputed = false;
 
     m_previewWidget = new ImageWidget("inpainting Tool", 0,
-                                      i18n("<p>Here you can see the image selection preview with "
+                                      i18n("Here you can see the image selection preview with "
                                            "inpainting applied."),
                                            true, ImageGuideWidget::HVGuideMode, false, true);
     setToolView(m_previewWidget);
@@ -125,11 +125,11 @@ InPaintingTool::InPaintingTool(QObject* parent)
     m_inpaintingTypeCB->addItem( i18n("Remove Small Artefact") );
     m_inpaintingTypeCB->addItem( i18n("Remove Medium Artefact") );
     m_inpaintingTypeCB->addItem( i18n("Remove Large Artefact") );
-    m_inpaintingTypeCB->setWhatsThis( i18n("<p>Select the filter preset to use for photograph restoration here:<p>"
-                                           "<b>None</b>: Most common values. Puts settings to default.<p>"
-                                           "<b>Remove Small Artefact</b>: inpaint small image artefact like image glitch.<p>"
-                                           "<b>Remove Medium Artefact</b>: inpaint medium image artefact.<p>"
-                                           "<b>Remove Large Artefact</b>: inpaint image artefact like unwanted object.<p>"));
+    m_inpaintingTypeCB->setWhatsThis( i18n("<p>Select the filter preset to use for photograph restoration here:</p>"
+                                           "<p><b>None</b>: Most common values. Puts settings to default.<br/>"
+                                           "<b>Remove Small Artefact</b>: inpaint small image artefact like image glitch.<br/>"
+                                           "<b>Remove Medium Artefact</b>: inpaint medium image artefact.<br/>"
+                                           "<b>Remove Large Artefact</b>: inpaint image artefact like unwanted object.</p>"));
 
     grid->addWidget(cimgLogoLabel,      0, 1, 1, 1);
     grid->addWidget(typeLabel,          1, 0, 1, 1);

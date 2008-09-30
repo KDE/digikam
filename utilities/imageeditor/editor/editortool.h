@@ -85,6 +85,9 @@ protected slots:
     virtual void slotSaveAsSettings(){};
     virtual void slotResetSettings();
     virtual void slotEffect(){};
+    virtual void slotChannelChanged(){};
+    virtual void slotScaleChanged(){};
+    virtual void slotColorsChanged(){};
 
 private:
 
@@ -113,7 +116,7 @@ public:
     EditorToolThreaded(QObject *parent);
     virtual ~EditorToolThreaded();
 
-    /** Set the small text to show in editor status progress bar during 
+    /** Set the small text to show in editor status progress bar during
         tool computation. If it's not set, tool name is used instead.
      */
     void setProgressMessage(const QString& mess);

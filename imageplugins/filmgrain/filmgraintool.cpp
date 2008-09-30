@@ -90,7 +90,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
     m_sensibilityLCDValue = new QLCDNumber(4, m_gboxSettings->plainPage());
     m_sensibilityLCDValue->setSegmentStyle( QLCDNumber::Flat );
     m_sensibilityLCDValue->display( QString::number(2400) );
-    QString whatsThis = i18n("<p>Set here the film ISO-sensitivity to use for "
+    QString whatsThis = i18n("Set here the film ISO-sensitivity to use for "
                              "simulating the film graininess.");
 
     m_sensibilityLCDValue->setWhatsThis( whatsThis);

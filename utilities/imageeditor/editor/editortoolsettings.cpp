@@ -7,6 +7,7 @@
  * Description : Editor tool settings template box
  *
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,14 +23,20 @@
 
 // Qt includes.
 
+#include <QButtonGroup>
 #include <QLabel>
-#include <QString>
 #include <QLayout>
+#include <QMap>
+#include <QPair>
+#include <QString>
+#include <QToolButton>
+#include <QVariant>
 
 // KDE includes.
 
 #include <kapplication.h>
 #include <kcolorbutton.h>
+#include <kcombobox.h>
 #include <kdebug.h>
 #include <kdialog.h>
 #include <khbox.h>
@@ -38,6 +45,7 @@
 #include <kpushbutton.h>
 #include <kstandarddirs.h>
 #include <kstandardguiitem.h>
+#include <kvbox.h>
 
 // LibKDcraw includes.
 
@@ -45,6 +53,9 @@
 
 // Local includes.
 
+#include "colorgradientwidget.h"
+#include "histogramwidget.h"
+#include "histogrambox.h"
 #include "imagepaniconwidget.h"
 #include "editortoolsettings.h"
 #include "editortoolsettings.moc"
@@ -61,42 +72,59 @@ public:
 
     EditorToolSettingsPriv()
     {
-        okBtn        = 0;
-        cancelBtn    = 0;
-        tryBtn       = 0;
-        defaultBtn   = 0;
-        plainPage    = 0;
-        btnBox1      = 0;
-        btnBox2      = 0;
-        saveAsBtn    = 0;
-        loadBtn      = 0;
-        guideBox     = 0;
-        guideColorBt = 0;
-        guideSize    = 0;
-        panIconView  = 0;
+        okBtn           = 0;
+        cancelBtn       = 0;
+        tryBtn          = 0;
+        defaultBtn      = 0;
+        plainPage       = 0;
+        btnBox1         = 0;
+        btnBox2         = 0;
+        saveAsBtn       = 0;
+        loadBtn         = 0;
+        guideBox        = 0;
+        guideColorBt    = 0;
+        guideSize       = 0;
+        panIconView     = 0;
+        channelCB       = 0;
+        colorsCB        = 0;
+        scaleBG         = 0;
+        histogramBox    = 0;
+        hGradient       = 0;
     }
 
-    KHBox              *btnBox1;
-    KHBox              *btnBox2;
-    KHBox              *guideBox;
+    QButtonGroup        *scaleBG;
 
-    QWidget            *plainPage;
+    QToolButton         *linHistoButton;
+    QToolButton         *logHistoButton;
 
-    KPushButton        *okBtn;
-    KPushButton        *cancelBtn;
-    KPushButton        *tryBtn;
-    KPushButton        *defaultBtn;
-    KPushButton        *saveAsBtn;
-    KPushButton        *loadBtn;
+    QWidget             *plainPage;
 
-    KColorButton       *guideColorBt;
+    KHBox               *btnBox1;
+    KHBox               *btnBox2;
+    KHBox               *guideBox;
 
-    ImagePanIconWidget *panIconView;
+    KComboBox           *channelCB;
+    KComboBox           *colorsCB;
 
-    RIntNumInput       *guideSize;
+    KPushButton         *okBtn;
+    KPushButton         *cancelBtn;
+    KPushButton         *tryBtn;
+    KPushButton         *defaultBtn;
+    KPushButton         *saveAsBtn;
+    KPushButton         *loadBtn;
+
+    KColorButton        *guideColorBt;
+
+    ColorGradientWidget *hGradient;
+
+    ImagePanIconWidget  *panIconView;
+
+    HistogramBox        *histogramBox;
+
+    RIntNumInput        *guideSize;
 };
 
-EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *parent)
+EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, int histogramType, QWidget *parent)
                   : QWidget(parent)
 {
     d = new EditorToolSettingsPriv;
@@ -105,10 +133,11 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
 
     QGridLayout* gridSettings = new QGridLayout(this);
 
-    d->plainPage = new QWidget(this);
-    d->guideBox  = new KHBox(this);
-    d->btnBox1   = new KHBox(this);
-    d->btnBox2   = new KHBox(this);
+    d->plainPage    = new QWidget(this);
+    d->guideBox     = new KHBox(this);
+    d->btnBox1      = new KHBox(this);
+    d->btnBox2      = new KHBox(this);
+    d->histogramBox = new HistogramBox(this, histogramType);
 
     // ---------------------------------------------------------------
 
@@ -155,7 +184,7 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
     if (!(buttonMask & Default))
         d->defaultBtn->hide();
 
-    QLabel *space = new QLabel(d->btnBox1);
+    QLabel *space2 = new QLabel(d->btnBox1);
 
     d->okBtn = new KPushButton(d->btnBox1);
     d->okBtn->setGuiItem(KStandardGuiItem::ok());
@@ -167,7 +196,7 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
     if (!(buttonMask & Cancel))
         d->cancelBtn->hide();
 
-    d->btnBox1->setStretchFactor(space, 10);
+    d->btnBox1->setStretchFactor(space2, 10);
     d->btnBox1->setSpacing(spacingHint());
     d->btnBox1->setMargin(0);
 
@@ -189,7 +218,7 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
     if (!(buttonMask & SaveAs))
         d->saveAsBtn->hide();
 
-    QLabel *space2 = new QLabel(d->btnBox2);
+    QLabel *space3 = new QLabel(d->btnBox2);
 
     d->tryBtn = new KPushButton(d->btnBox2);
     d->tryBtn->setGuiItem(KStandardGuiItem::apply());
@@ -198,7 +227,7 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
     if (!(buttonMask & Try))
         d->tryBtn->hide();
 
-    d->btnBox2->setStretchFactor(space2, 10);
+    d->btnBox2->setStretchFactor(space3, 10);
     d->btnBox2->setSpacing(spacingHint());
     d->btnBox2->setMargin(0);
 
@@ -207,11 +236,17 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
 
     // ---------------------------------------------------------------
 
-    gridSettings->addWidget(frame,        0, 0, 1, 2);
-    gridSettings->addWidget(d->plainPage, 1, 0, 1, 2);
-    gridSettings->addWidget(d->guideBox,  2, 0, 1, 2);
-    gridSettings->addWidget(d->btnBox2,   3, 0, 1, 2);
-    gridSettings->addWidget(d->btnBox1,   4, 0, 1, 2);
+    if (!(toolMask & Histogram))
+        d->histogramBox->hide();
+
+    // ---------------------------------------------------------------
+
+    gridSettings->addWidget(d->histogramBox,  0, 0, 2, 2);
+    gridSettings->addWidget(frame,            2, 0, 1, 2);
+    gridSettings->addWidget(d->plainPage,     3, 0, 1, 2);
+    gridSettings->addWidget(d->guideBox,      4, 0, 1, 2);
+    gridSettings->addWidget(d->btnBox2,       5, 0, 1, 2);
+    gridSettings->addWidget(d->btnBox1,       6, 0, 1, 2);
     gridSettings->setSpacing(spacingHint());
     gridSettings->setMargin(0);
 
@@ -240,6 +275,15 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
 
     connect(d->guideSize, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalColorGuideChanged()));
+
+    connect(d->histogramBox, SIGNAL(signalChannelChanged()),
+            this, SIGNAL(signalChannelChanged()));
+
+    connect(d->histogramBox, SIGNAL(signalColorsChanged()),
+            this, SIGNAL(signalColorsChanged()));
+
+    connect(d->histogramBox, SIGNAL(signalScaleChanged()),
+            this, SIGNAL(signalScaleChanged()));
 }
 
 EditorToolSettings::~EditorToolSettings()
@@ -265,6 +309,11 @@ QWidget *EditorToolSettings::plainPage() const
 ImagePanIconWidget* EditorToolSettings::panIconView() const
 {
     return d->panIconView;
+}
+
+HistogramBox* EditorToolSettings::histogramBox() const
+{
+    return d->histogramBox;
 }
 
 KPushButton* EditorToolSettings::button(int buttonCode) const

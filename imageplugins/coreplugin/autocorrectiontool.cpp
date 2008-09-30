@@ -23,7 +23,6 @@
 
 // Qt includes.
 
-#include <QButtonGroup>
 #include <QCheckBox>
 #include <QColor>
 #include <QFrame>
@@ -41,7 +40,6 @@
 // KDE includes.
 
 #include <kapplication.h>
-#include <kcombobox.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>
@@ -59,6 +57,7 @@
 #include "dimgimagefilters.h"
 #include "editortoolsettings.h"
 #include "histogramwidget.h"
+#include "histogrambox.h"
 #include "imageiface.h"
 #include "imagewidget.h"
 #include "whitebalance.h"
@@ -86,7 +85,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     // -------------------------------------------------------------
 
     m_previewWidget = new ImageWidget("autocorrection Tool", 0,
-                                      i18n("<p>Here you can see the auto-color correction tool "
+                                      i18n("Here you can see the auto-color correction tool "
                                            "preview. You can pick color on image "
                                            "to see the color level corresponding on histogram."));
     setToolView(m_previewWidget);
@@ -96,76 +95,16 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     ImageIface iface(0, 0);
     m_thumbnailImage = iface.getOriginalImg()->smoothScale(128, 128, Qt::ScaleMin);
 
-    EditorToolSettings *gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                                              EditorToolSettings::Ok|
-                                                              EditorToolSettings::Cancel);
+    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                            EditorToolSettings::Ok|
+                                            EditorToolSettings::Cancel,
+                                            EditorToolSettings::Histogram);
 
-    QGridLayout* gridSettings = new QGridLayout(gboxSettings->plainPage());
-
-    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings->plainPage());
-    label1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_channelCB = new KComboBox(gboxSettings->plainPage());
-    m_channelCB->addItem(i18n("Luminosity"));
-    m_channelCB->addItem(i18n("Red"));
-    m_channelCB->addItem(i18n("Green"));
-    m_channelCB->addItem(i18n("Blue"));
-    m_channelCB->setWhatsThis( i18n("<p>Select the histogram channel to display:<p>"
-                                    "<b>Luminosity</b>: display the image's luminosity values.<p>"
-                                    "<b>Red</b>: display the red image-channel values.<p>"
-                                    "<b>Green</b>: display the green image-channel values.<p>"
-                                    "<b>Blue</b>: display the blue image-channel values.<p>"));
+    QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
-    QWidget *scaleBox = new QWidget(gboxSettings->plainPage());
-    QHBoxLayout *hlay = new QHBoxLayout(scaleBox);
-    m_scaleBG         = new QButtonGroup(scaleBox);
-    scaleBox->setWhatsThis(i18n("<p>Select the histogram scale.<p>"
-                                "If the image's maximal counts are small, you can use the linear scale.<p>"
-                                "Logarithmic scale can be used when the maximal counts are big; "
-                                "if it is used, all values (small and large) will be visible on the graph."));
-
-    QToolButton *linHistoButton = new QToolButton( scaleBox );
-    linHistoButton->setToolTip( i18n( "<p>Linear" ) );
-    linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
-    linHistoButton->setCheckable(true);
-    m_scaleBG->addButton(linHistoButton, HistogramWidget::LinScaleHistogram);
-
-    QToolButton *logHistoButton = new QToolButton( scaleBox );
-    logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
-    logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
-    logHistoButton->setCheckable(true);
-    m_scaleBG->addButton(logHistoButton, HistogramWidget::LogScaleHistogram);
-
-    hlay->setMargin(0);
-    hlay->setSpacing(0);
-    hlay->addWidget(linHistoButton);
-    hlay->addWidget(logHistoButton);
-
-    m_scaleBG->setExclusive(true);
-    logHistoButton->setChecked(true);
-
-    QHBoxLayout* l1 = new QHBoxLayout();
-    l1->addWidget(label1);
-    l1->addWidget(m_channelCB);
-    l1->addStretch(10);
-    l1->addWidget(scaleBox);
-
-    // -------------------------------------------------------------
-
-    KVBox *histoBox   = new KVBox(gboxSettings->plainPage());
-    m_histogramWidget = new HistogramWidget(256, 140, histoBox, false, true, true);
-    m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram drawing "
-                                          "of the selected image channel. This one is re-computed at any "
-                                          "settings changes."));
-    QLabel *space = new QLabel(histoBox);
-    space->setFixedHeight(1);
-    m_hGradient = new ColorGradientWidget( ColorGradientWidget::Horizontal, 10, histoBox );
-    m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-
-    // -------------------------------------------------------------
-
-    m_correctionTools = new QListWidget(gboxSettings->plainPage());
+    m_correctionTools = new QListWidget(m_gboxSettings->plainPage());
     m_correctionTools->setIconSize(QSize(128, 128));
 
     QPixmap pix = getThumbnailForEffect(AutoLevelsCorrection);
@@ -222,22 +161,14 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     m_correctionTools->setFocus();
 
-    gridSettings->addLayout(l1,                0, 0, 1, 5);
-    gridSettings->addWidget(histoBox,          1, 0, 2, 5);
-    gridSettings->addWidget(m_correctionTools, 3, 0, 1, 5);
-    gridSettings->setRowStretch(3, 10);
-    gridSettings->setMargin(gboxSettings->spacingHint());
-    gridSettings->setSpacing(gboxSettings->spacingHint());
+    gridSettings->addWidget(m_correctionTools, 0, 0, 1, 5);
+    gridSettings->setRowStretch(0, 10);
+    gridSettings->setMargin(m_gboxSettings->spacingHint());
+    gridSettings->setSpacing(m_gboxSettings->spacingHint());
 
-    setToolSettings(gboxSettings);
+    setToolSettings(m_gboxSettings);
 
     // -------------------------------------------------------------
-
-    connect(m_channelCB, SIGNAL(activated(int)),
-            this, SLOT(slotChannelChanged(int)));
-
-    connect(m_scaleBG, SIGNAL(buttonReleased(int)),
-            this, SLOT(slotScaleChanged(int)));
 
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
@@ -251,49 +182,15 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
 AutoCorrectionTool::~AutoCorrectionTool()
 {
-    m_histogramWidget->stopHistogramComputation();
+    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 }
 
-void AutoCorrectionTool::slotChannelChanged(int channel)
-{
-    switch (channel)
-    {
-        case LuminosityChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
-            m_hGradient->setColors(QColor("black"), QColor("white"));
-            break;
-
-        case RedChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
-            m_hGradient->setColors(QColor("black"), QColor("red"));
-            break;
-
-        case GreenChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
-            m_hGradient->setColors(QColor("black"), QColor("green"));
-            break;
-
-        case BlueChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
-            m_hGradient->setColors(QColor("black"), QColor("blue"));
-            break;
-    }
-
-    m_histogramWidget->repaint();
-}
-
-void AutoCorrectionTool::slotScaleChanged(int scale)
-{
-    m_histogramWidget->m_scaleType = scale;
-    m_histogramWidget->repaint();
-}
-
 void AutoCorrectionTool::slotColorSelectedFromTarget(const DColor &color)
 {
-    m_histogramWidget->setHistogramGuideByColor(color);
+    m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
 
 void AutoCorrectionTool::readSettings()
@@ -301,21 +198,20 @@ void AutoCorrectionTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("autocorrection Tool");
 
-    m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->button(group.readEntry("Histogram Scale",
-                      (int)HistogramWidget::LogScaleHistogram))->setChecked(true);
+    m_gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+                        (int)EditorToolSettings::LuminosityChannel));
+    m_gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+                        (int)HistogramWidget::LogScaleHistogram));
 
     m_correctionTools->setCurrentRow(group.readEntry("Auto Correction Filter", (int)AutoLevelsCorrection));
-    slotChannelChanged(m_channelCB->currentIndex());
-    slotScaleChanged(m_scaleBG->checkedId());
 }
 
 void AutoCorrectionTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("autocorrection Tool");
-    group.writeEntry("Histogram Channel", m_channelCB->currentIndex());
-    group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
+    group.writeEntry("Histogram Channel", m_gboxSettings->histogramBox()->channel());
+    group.writeEntry("Histogram Scale", m_gboxSettings->histogramBox()->scale());
     group.writeEntry("Auto Correction Filter", m_correctionTools->currentRow());
     config->sync();
 }
@@ -333,7 +229,7 @@ void AutoCorrectionTool::slotEffect()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
 
-    m_histogramWidget->stopHistogramComputation();
+    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
@@ -351,7 +247,7 @@ void AutoCorrectionTool::slotEffect()
 
     // Update histogram.
 
-    m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
+    m_gboxSettings->histogramBox()->histogram()->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
 
     kapp->restoreOverrideCursor();
 }

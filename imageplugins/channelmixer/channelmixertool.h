@@ -30,9 +30,6 @@
 
 class QCheckBox;
 class QPushButton;
-class QButtonGroup;
-
-class KComboBox;
 
 namespace KDcrawIface
 {
@@ -74,26 +71,10 @@ private slots:
     void slotResetCurrentChannel();
     void slotResetSettings();
     void slotEffect();
-    void slotChannelChanged(int channel);
-    void slotScaleChanged(int scale);
+    void slotChannelChanged();
     void slotGainsChanged();
     void slotMonochromeActived(bool mono);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);
-
-private:
-
-    enum ColorChannelGains
-    {
-        RedChannelGains=0,
-        GreenChannelGains,
-        BlueChannelGains
-    };
-
-    enum HistogramScale
-    {
-        Linear=0,
-        Logarithmic
-    };
 
 private:
 
@@ -112,22 +93,14 @@ private:
     double                        m_blackGreenGain;
     double                        m_blackBlueGain;
 
-    QButtonGroup                 *m_scaleBG;
-
     QPushButton                  *m_resetButton;
 
     QCheckBox                    *m_preserveLuminosity;
     QCheckBox                    *m_monochrome;
 
-    KComboBox                    *m_channelCB;
-
     KDcrawIface::RDoubleNumInput *m_redGain;
     KDcrawIface::RDoubleNumInput *m_greenGain;
     KDcrawIface::RDoubleNumInput *m_blueGain;
-
-    Digikam::ColorGradientWidget *m_hGradient;
-
-    Digikam::HistogramWidget     *m_histogramWidget;
 
     Digikam::ImageWidget         *m_previewWidget;
 

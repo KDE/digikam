@@ -65,17 +65,17 @@ public:
 private:
 
     void loadImageFromUrl(const KUrl& url);
-    void updateInformations();
-    void updateStatistiques();
+    void updateInformation();
+    void updateStatistics();
     void getICCData();
 
 private slots:
 
     void slotRefreshOptions(bool sixteenBit);
     void slotHistogramComputationFailed(void);
-    void slotChannelChanged(int channel);
-    void slotScaleChanged(int scale);
-    void slotColorsChanged(int color);
+    void slotChannelChanged();
+    void slotScaleChanged();
+    void slotColorsChanged();
     void slotRenderingChanged(int rendering);
     void slotMinValueChanged(int);
     void slotMaxValueChanged(int);

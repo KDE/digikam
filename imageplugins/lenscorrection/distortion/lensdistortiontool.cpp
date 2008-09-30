@@ -91,7 +91,7 @@ LensDistortionTool::LensDistortionTool(QObject* parent)
 
     m_maskPreviewLabel = new QLabel(m_gboxSettings->plainPage());
     m_maskPreviewLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
-    m_maskPreviewLabel->setWhatsThis( i18n("<p>You can see here a thumbnail preview of the "
+    m_maskPreviewLabel->setWhatsThis( i18n("You can see here a thumbnail preview of the "
                                            "distortion correction applied to a cross pattern.") );
 
     // -------------------------------------------------------------
@@ -102,7 +102,7 @@ LensDistortionTool::LensDistortionTool(QObject* parent)
     m_mainInput->setDecimals(1);
     m_mainInput->input()->setRange(-100.0, 100.0, 0.1, true);
     m_mainInput->setDefaultValue(0.0);
-    m_mainInput->setWhatsThis( i18n("<p>This value controls the amount of distortion. Negative values "
+    m_mainInput->setWhatsThis( i18n("This value controls the amount of distortion. Negative values "
                                     "correct lens barrel distortion, while positive values correct lens "
                                     "pincushion distortion."));
 
@@ -114,7 +114,7 @@ LensDistortionTool::LensDistortionTool(QObject* parent)
     m_edgeInput->setDecimals(1);
     m_edgeInput->input()->setRange(-100.0, 100.0, 0.1, true);
     m_edgeInput->setDefaultValue(0.0);
-    m_edgeInput->setWhatsThis( i18n("<p>This value controls in the same manner as the Main control, "
+    m_edgeInput->setWhatsThis( i18n("This value controls in the same manner as the Main control, "
                                     "but has more effect at the edges of the image than at the center."));
 
     // -------------------------------------------------------------
@@ -125,7 +125,7 @@ LensDistortionTool::LensDistortionTool(QObject* parent)
     m_rescaleInput->setDecimals(1);
     m_rescaleInput->input()->setRange(-100.0, 100.0, 0.1, true);
     m_rescaleInput->setDefaultValue(0.0);
-    m_rescaleInput->setWhatsThis( i18n("<p>This value rescales the overall image size."));
+    m_rescaleInput->setWhatsThis( i18n("This value rescales the overall image size."));
 
     // -------------------------------------------------------------
 
@@ -135,7 +135,7 @@ LensDistortionTool::LensDistortionTool(QObject* parent)
     m_brightenInput->setDecimals(1);
     m_brightenInput->input()->setRange(-100.0, 100.0, 0.1, true);
     m_brightenInput->setDefaultValue(0.0);
-    m_brightenInput->setWhatsThis( i18n("<p>This value adjusts the brightness in image corners."));
+    m_brightenInput->setWhatsThis( i18n("This value adjusts the brightness in image corners."));
 
     // -------------------------------------------------------------
 

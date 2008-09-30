@@ -72,7 +72,7 @@ ShearTool::ShearTool(QObject* parent)
     setToolIcon(SmallIcon("shear"));
 
     m_previewWidget = new ImageWidget("sheartool Tool", 0,
-                                      i18n("<p>This is the shear operation preview. "
+                                      i18n("This is the shear operation preview. "
                                            "If you move the mouse cursor on this preview, "
                                            "a vertical and horizontal dashed line will be drawn "
                                            "to guide you in adjusting the shear correction. "
@@ -109,30 +109,30 @@ ShearTool::ShearTool(QObject* parent)
     m_mainHAngleInput->setRange(-45, 45, 1);
     m_mainHAngleInput->setSliderEnabled(true);
     m_mainHAngleInput->setDefaultValue(0);
-    m_mainHAngleInput->setWhatsThis( i18n("<p>The main horizontal shearing angle, in degrees."));
+    m_mainHAngleInput->setWhatsThis( i18n("The main horizontal shearing angle, in degrees."));
 
     QLabel *label4 = new QLabel(i18n("Fine horizontal angle:"), m_gboxSettings->plainPage());
     m_fineHAngleInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_fineHAngleInput->input()->setRange(-5.0, 5.0, 0.01, true);
     m_fineHAngleInput->setDefaultValue(0);
-    m_fineHAngleInput->setWhatsThis( i18n("<p>This value in degrees will be added to main "
+    m_fineHAngleInput->setWhatsThis( i18n("This value in degrees will be added to main "
                                           "horizontal angle value to set fine adjustments."));
     QLabel *label5 = new QLabel(i18n("Main vertical angle:"), m_gboxSettings->plainPage());
     m_mainVAngleInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_mainVAngleInput->setRange(-45, 45, 1);
     m_mainVAngleInput->setSliderEnabled(true);
     m_mainVAngleInput->setDefaultValue(0);
-    m_mainVAngleInput->setWhatsThis( i18n("<p>The main vertical shearing angle, in degrees."));
+    m_mainVAngleInput->setWhatsThis( i18n("The main vertical shearing angle, in degrees."));
 
     QLabel *label6 = new QLabel(i18n("Fine vertical angle:"), m_gboxSettings->plainPage());
     m_fineVAngleInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_fineVAngleInput->input()->setRange(-5.0, 5.0, 0.01, true);
     m_fineVAngleInput->setDefaultValue(0);
-    m_fineVAngleInput->setWhatsThis( i18n("<p>This value in degrees will be added to main vertical "
+    m_fineVAngleInput->setWhatsThis( i18n("This value in degrees will be added to main vertical "
                                           "angle value to set fine adjustments."));
 
     m_antialiasInput = new QCheckBox(i18n("Anti-Aliasing"), m_gboxSettings->plainPage());
-    m_antialiasInput->setWhatsThis( i18n("<p>Enable this option to apply the anti-aliasing filter "
+    m_antialiasInput->setWhatsThis( i18n("Enable this option to apply the anti-aliasing filter "
                                          "to the sheared image. "
                                          "To smooth the target image, it will be blurred a little."));
 

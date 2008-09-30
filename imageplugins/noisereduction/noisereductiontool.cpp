@@ -99,7 +99,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     m_radiusInput->setDecimals(1);
     m_radiusInput->input()->setRange(0.0, 10.0, 0.1, true);
     m_radiusInput->setDefaultValue(1.0);
-    m_radiusInput->setWhatsThis( i18n("<p><b>Radius</b>: this control selects the "
+    m_radiusInput->setWhatsThis( i18n("<b>Radius</b>: this control selects the "
                                       "gliding window size used for the filter. Larger values do not increase "
                                       "the amount of time needed to filter each pixel in the image but "
                                       "can cause blurring. This window moves across the image, and the "
@@ -116,7 +116,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     m_thresholdInput->setDecimals(2);
     m_thresholdInput->input()->setRange(0.0, 1.0, 0.01, true);
     m_thresholdInput->setDefaultValue(0.08);
-    m_thresholdInput->setWhatsThis( i18n("<p><b>Threshold</b>: use the slider for coarse adjustment, "
+    m_thresholdInput->setWhatsThis( i18n("<b>Threshold</b>: use the slider for coarse adjustment, "
                                          "and the spin control for fine adjustment to control edge detection sensitivity. "
                                          "This value should be set so that edges and details are clearly visible "
                                          "and noise is smoothed out. "
@@ -132,7 +132,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     m_textureInput->setDecimals(2);
     m_textureInput->input()->setRange(-0.99, 0.99, 0.01, true);
     m_textureInput->setDefaultValue(0.0);
-    m_textureInput->setWhatsThis( i18n("<p><b>Texture</b>: this control sets the texture accuracy. "
+    m_textureInput->setWhatsThis( i18n("<b>Texture</b>: this control sets the texture accuracy. "
                                        "This value can be used, to get more or less texture accuracy. When decreased, "
                                        "then noise and texture are blurred out, when increased then texture is "
                                        "amplified, but also noise will increase. It has almost no effect on image edges."));
@@ -145,7 +145,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     m_sharpnessInput->setDecimals(2);
     m_sharpnessInput->input()->setRange(0.0, 1.0, 0.1, true);
     m_sharpnessInput->setDefaultValue(0.25);
-    m_sharpnessInput->setWhatsThis( i18n("<p><b>Sharpness</b>: "
+    m_sharpnessInput->setWhatsThis( i18n("<b>Sharpness</b>: "
                                          "This value improves the frequency response for the filter. "
                                          "When it is too strong then not all noise can be removed, or spike noise may appear. "
                                          "Set it near to maximum, if you want to remove very weak noise or JPEG-artifacts, "
@@ -159,7 +159,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     m_lookaheadInput->setDecimals(2);
     m_lookaheadInput->input()->setRange(0.01, 20.0, 0.01, true);
     m_lookaheadInput->setDefaultValue(2.0);
-    m_lookaheadInput->setWhatsThis( i18n("<p><b>Edge</b>: "
+    m_lookaheadInput->setWhatsThis( i18n("<b>Edge</b>: "
                                          "This value defines the pixel distance to which the filter looks ahead for edges. "
                                          "When this value is increased, then spike noise is erased. "
                                          "You can eventually re-adjust the <b>Edge</b> filter, when you have changed this setting. "
@@ -174,7 +174,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     m_phaseInput->setDecimals(1);
     m_phaseInput->input()->setRange(0.5, 20.0, 0.5, true);
     m_phaseInput->setDefaultValue(1.0);
-    m_phaseInput->setWhatsThis( i18n("<p><b>Erosion</b>: "
+    m_phaseInput->setWhatsThis( i18n("<b>Erosion</b>: "
                                      "Use this to increase edge noise erosion and spike noise erosion "
                                      "(noise is removed by erosion)."));
 
@@ -205,7 +205,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     m_lumToleranceInput->setDecimals(1);
     m_lumToleranceInput->input()->setRange(0.0, 1.0, 0.1, true);
     m_lumToleranceInput->setDefaultValue(1.0);
-    m_lumToleranceInput->setWhatsThis( i18n("<p><b>Luminance</b>: this control sets the luminance tolerance of the image."
+    m_lumToleranceInput->setWhatsThis( i18n("<b>Luminance</b>: this control sets the luminance tolerance of the image."
                                             "We recommend using either the <b>Color</b> or the <b>Luminance</b> tolerance settings "
                                             "to make an image correction, not both at the same time. These settings "
                                             "do not influence the main smoothing process controlled by the <b>Details</b> "
@@ -219,7 +219,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     m_csmoothInput->setDecimals(1);
     m_csmoothInput->input()->setRange(0.0, 1.0, 0.1, true);
     m_csmoothInput->setDefaultValue(1.0);
-    m_csmoothInput->setWhatsThis( i18n("<p><b>Color</b>: this control sets the color tolerance of the image. It is "
+    m_csmoothInput->setWhatsThis( i18n("<b>Color</b>: this control sets the color tolerance of the image. It is "
                                        "recommended using either the <b>Color</b> or the <b>Luminance</b> tolerance "
                                        "to make image correction, not both at the same time. These settings "
                                        "do not influence the main smoothing process controlled by the <b>Details</b> "
@@ -233,7 +233,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     m_gammaInput->setDecimals(1);
     m_gammaInput->input()->setRange(0.3, 3.0, 0.1, true);
     m_gammaInput->setDefaultValue(1.4);
-    m_gammaInput->setWhatsThis( i18n("<p><b>Gamma</b>: this control sets the gamma tolerance of the image. This value "
+    m_gammaInput->setWhatsThis( i18n("<b>Gamma</b>: this control sets the gamma tolerance of the image. This value "
                                      "can be used to increase the tolerance values for darker areas (which commonly "
                                      "are noisier). This results in more blur for shadow areas."));
 
@@ -245,7 +245,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     m_dampingInput->setDecimals(1);
     m_dampingInput->input()->setRange(0.5, 20.0, 0.5, true);
     m_dampingInput->setDefaultValue(5.0);
-    m_dampingInput->setWhatsThis( i18n("<p><b>Damping</b>: this control sets the phase-jitter damping adjustment. "
+    m_dampingInput->setWhatsThis( i18n("<b>Damping</b>: this control sets the phase-jitter damping adjustment. "
                                        "This value defines how fast the adaptive filter-radius reacts to luminance "
                                        "variations. If increased, then edges appear smoother; if too high, then blur "
                                        "may occur. If at minimum, then noise and phase jitter at the edges can occur. It "

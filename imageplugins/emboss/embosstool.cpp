@@ -83,7 +83,7 @@ EmbossTool::EmbossTool(QObject* parent)
     m_depthInput->setRange(10, 300, 1);
     m_depthInput->setSliderEnabled(true);
     m_depthInput->setDefaultValue(30);
-    m_depthInput->setWhatsThis( i18n("<p>Set here the depth of the embossing image effect.") );
+    m_depthInput->setWhatsThis( i18n("Set here the depth of the embossing image effect.") );
 
     // -------------------------------------------------------------
 

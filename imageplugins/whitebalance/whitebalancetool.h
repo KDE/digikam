@@ -39,10 +39,8 @@ class QPushButton;
 class QLabel;
 class QPushButton;
 class QToolButton;
-class QButtonGroup;
 
 class K3ActiveLabel;
-class KComboBox;
 
 namespace KDcrawIface
 {
@@ -80,8 +78,6 @@ private slots:
     void slotEffect();
     void slotColorSelectedFromOriginal(const Digikam::DColor &color);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);
-    void slotScaleChanged(int scale);
-    void slotChannelChanged(int channel);
     void slotTemperatureChanged(double temperature);
     void slotTemperaturePresetChanged(int tempPreset);
     void slotAutoAdjustExposure(void);
@@ -89,25 +85,11 @@ private slots:
 
 private:
 
-    void readUserSettings();
-    void writeUserSettings();
+    void readSettings();
+    void writeSettings();
     void finalRendering();
 
 private:
-
-    enum HistogramScale
-    {
-        Linear=0,
-        Logarithmic
-    };
-
-    enum ColorChannel
-    {
-        LuminosityChannel=0,
-        RedChannel,
-        GreenChannel,
-        BlueChannel
-    };
 
     enum TemperaturePreset
     {
@@ -134,8 +116,6 @@ private:
     QToolButton                  *m_pickTemperature;
     QToolButton                  *m_autoAdjustExposure;
 
-    QButtonGroup                 *m_scaleBG;
-
     QLabel                       *m_adjTemperatureLabel;
     QLabel                       *m_temperaturePresetLabel;
     QLabel                       *m_darkLabel;
@@ -145,8 +125,6 @@ private:
     QLabel                       *m_gammaLabel;
     QLabel                       *m_saturationLabel;
     QLabel                       *m_greenLabel;
-
-    KComboBox                    *m_channelCB;
 
     K3ActiveLabel                *m_exposureLabel;
     K3ActiveLabel                *m_temperatureLabel;
@@ -161,10 +139,6 @@ private:
     KDcrawIface::RDoubleNumInput *m_gammaInput;
     KDcrawIface::RDoubleNumInput *m_saturationInput;
     KDcrawIface::RDoubleNumInput *m_greenInput;
-
-    Digikam::HistogramWidget     *m_histogramWidget;
-
-    Digikam::ColorGradientWidget *m_hGradient;
 
     Digikam::ImageWidget         *m_previewWidget;
 

@@ -99,7 +99,7 @@ TextureTool::TextureTool(QObject* parent)
     m_textureType->addItem(i18n("Moss"));
     m_textureType->addItem(i18n("Stone"));
     m_textureType->setDefaultIndex(PaperTexture);
-    m_textureType->setWhatsThis( i18n("<p>Set here the texture type to apply to image."));
+    m_textureType->setWhatsThis( i18n("Set here the texture type to apply to image."));
 
     // -------------------------------------------------------------
 
@@ -109,7 +109,7 @@ TextureTool::TextureTool(QObject* parent)
     m_blendGain->setRange(1, 255, 1);
     m_blendGain->setSliderEnabled(true);
     m_blendGain->setDefaultValue(200);
-    m_blendGain->setWhatsThis( i18n("<p>Set here the relief gain used to merge "
+    m_blendGain->setWhatsThis( i18n("Set here the relief gain used to merge "
                                     "texture and image."));
 
     // -------------------------------------------------------------

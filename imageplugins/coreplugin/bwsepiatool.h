@@ -34,9 +34,7 @@
 #include "editortool.h"
 
 class QListWidget;
-class QButtonGroup;
 
-class KComboBox;
 class KTabWidget;
 
 namespace KDcrawIface
@@ -52,6 +50,7 @@ class ImageWidget;
 class DColor;
 class DImg;
 class CurvesWidget;
+class EditorToolSettings;
 }
 
 namespace DigikamImagesPluginCore
@@ -85,8 +84,7 @@ private slots:
     void slotSaveAsSettings();
     void slotLoadSettings();
     void slotEffect();
-    void slotChannelChanged(int channel);
-    void slotScaleChanged(int scale);
+    void slotScaleChanged();
     void slotSpotColorChanged(const Digikam::DColor &color);
     void slotColorSelectedFromTarget(const Digikam::DColor& color);
     void slotFilterSelected();
@@ -126,20 +124,6 @@ private:
         BWGreenTone
     };
 
-    enum HistogramScale
-    {
-        Linear=0,
-        Logarithmic
-    };
-
-    enum ColorChannel
-    {
-        LuminosityChannel=0,
-        RedChannel,
-        GreenChannel,
-        BlueChannel
-    };
-
     enum SettingsTab
     {
         FilmTab=0,
@@ -156,13 +140,9 @@ private:
 
     uchar                        *m_destinationPreviewData;
 
-    QButtonGroup                 *m_scaleBG;
-
     QListWidget                  *m_bwFilters;
     QListWidget                  *m_bwFilm;
     QListWidget                  *m_bwTone;
-
-    KComboBox                    *m_channelCB;
 
     KTabWidget                   *m_tab;
 
@@ -171,11 +151,9 @@ private:
 
     Digikam::ImageWidget         *m_previewWidget;
 
-    Digikam::ColorGradientWidget *m_hGradient;
-
-    Digikam::HistogramWidget     *m_histogramWidget;
-
     Digikam::CurvesWidget        *m_curvesWidget;
+
+    Digikam::EditorToolSettings  *m_gboxSettings;
 
     Digikam::DImg                *m_originalImage;
     Digikam::DImg                 m_thumbnailImage;

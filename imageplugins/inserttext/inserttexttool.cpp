@@ -89,7 +89,7 @@ InsertTextTool::InsertTextTool(QObject* parent)
     QVBoxLayout* l  = new QVBoxLayout(frame);
     m_previewWidget = new InsertTextWidget(480, 320, frame);
     l->addWidget(m_previewWidget);
-    m_previewWidget->setWhatsThis(i18n("<p>This previews the text inserted in the image. "
+    m_previewWidget->setWhatsThis(i18n("This previews the text inserted in the image. "
                                        "You can use the mouse to move the text to the right location."));
     setToolView(frame);
 
@@ -106,13 +106,13 @@ InsertTextTool::InsertTextTool(QObject* parent)
     m_textEdit = new KTextEdit(m_gboxSettings->plainPage());
     m_textEdit->setCheckSpellingEnabled(true);
     m_textEdit->setWordWrapMode(QTextOption::NoWrap);
-    m_textEdit->setWhatsThis( i18n("<p>Here, enter the text you want to insert in your image."));
+    m_textEdit->setWhatsThis( i18n("Here, enter the text you want to insert in your image."));
 
     // -------------------------------------------------------------
 
     m_fontChooserWidget = new KFontChooser(m_gboxSettings->plainPage(), KFontChooser::NoDisplayFlags);
     m_fontChooserWidget->setSampleBoxVisible(false);
-    m_fontChooserWidget->setWhatsThis( i18n("<p>Here you can choose the font to be used."));
+    m_fontChooserWidget->setWhatsThis( i18n("Here you can choose the font to be used."));
 
     // -------------------------------------------------------------
 
@@ -161,18 +161,18 @@ InsertTextTool::InsertTextTool(QObject* parent)
     m_textRotation->addItem( i18n("90 Degrees") );
     m_textRotation->addItem( i18n("180 Degrees") );
     m_textRotation->addItem( i18n("270 Degrees") );
-    m_textRotation->setWhatsThis( i18n("<p>Select the text rotation to use here."));
+    m_textRotation->setWhatsThis( i18n("Select the text rotation to use here."));
 
     // -------------------------------------------------------------
 
     QLabel *label2    = new QLabel(i18n("Color:"), m_gboxSettings->plainPage());
-    m_fontColorButton = new KColorButton( Qt::black, m_gboxSettings->plainPage() );
-    m_fontColorButton->setWhatsThis( i18n("<p>Set here the font color to use."));
+    m_fontColorButton = new KColorButton(Qt::black, m_gboxSettings->plainPage());
+    m_fontColorButton->setWhatsThis(i18n("Set here the font color to use."));
 
     // -------------------------------------------------------------
 
-    m_borderText = new QCheckBox( i18n( "Add border"), m_gboxSettings->plainPage() );
-    m_borderText->setToolTip( i18n( "Add a solid border around text using current text color" ) );
+    m_borderText = new QCheckBox(i18n("Add border"), m_gboxSettings->plainPage());
+    m_borderText->setToolTip(i18n("Add a solid border around text using current text color"));
 
     m_transparentText = new QCheckBox( i18n( "Semi-transparent"), m_gboxSettings->plainPage() );
     m_transparentText->setToolTip( i18n( "Use semi-transparent text background under image" ) );

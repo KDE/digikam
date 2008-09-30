@@ -75,7 +75,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     setToolIcon(SmallIcon("freerotation"));
 
     m_previewWidget = new ImageWidget("freerotation Tool", 0,
-                                      i18n("<p>This is the free rotation operation preview. "
+                                      i18n("This is the free rotation operation preview. "
                                            "If you move the mouse cursor on this preview, "
                                            "a vertical and horizontal dashed line will be drawn "
                                            "to guide you in adjusting the free rotation correction. "
@@ -112,7 +112,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     m_angleInput->setRange(-180, 180, 1);
     m_angleInput->setSliderEnabled(true);
     m_angleInput->setDefaultValue(0);
-    m_angleInput->setWhatsThis( i18n("<p>An angle in degrees by which to rotate the image. "
+    m_angleInput->setWhatsThis( i18n("An angle in degrees by which to rotate the image. "
                                      "A positive angle rotates the image clockwise; "
                                      "a negative angle rotates it counter-clockwise."));
 
@@ -120,11 +120,11 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     m_fineAngleInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_fineAngleInput->input()->setRange(-5.0, 5.0, 0.01, true);
     m_fineAngleInput->setDefaultValue(0);
-    m_fineAngleInput->setWhatsThis( i18n("<p>This value in degrees will be added to main angle value "
+    m_fineAngleInput->setWhatsThis( i18n("This value in degrees will be added to main angle value "
                                          "to set fine target angle."));
 
     m_antialiasInput = new QCheckBox(i18n("Anti-Aliasing"), m_gboxSettings->plainPage());
-    m_antialiasInput->setWhatsThis( i18n("<p>Enable this option to apply the anti-aliasing filter "
+    m_antialiasInput->setWhatsThis( i18n("Enable this option to apply the anti-aliasing filter "
                                          "to the rotated image. "
                                          "In order to smooth the target image, it will be blurred a little."));
 
@@ -134,7 +134,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     m_autoCropCB->addItem( i18n("Widest Area") );
     m_autoCropCB->addItem( i18n("Largest Area") );
     m_autoCropCB->setDefaultIndex(FreeRotation::NoAutoCrop);
-    m_autoCropCB->setWhatsThis( i18n("<p>Select the method to process image auto-cropping "
+    m_autoCropCB->setWhatsThis( i18n("Select the method to process image auto-cropping "
                                      "to remove black frames around a rotated image here."));
 
     // -------------------------------------------------------------

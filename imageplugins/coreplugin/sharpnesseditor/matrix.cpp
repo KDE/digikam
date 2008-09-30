@@ -42,7 +42,6 @@ extern "C"
 
 // Qt includes.
 
-#include <QtCore>
 #include <QString>
 
 // KDE includes.

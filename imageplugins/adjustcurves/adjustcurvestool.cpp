@@ -69,6 +69,7 @@
 #include "dimgimagefilters.h"
 #include "editortoolsettings.h"
 #include "histogramwidget.h"
+#include "histogrambox.h"
 #include "imagecurves.h"
 #include "imagehistogram.h"
 #include "imageiface.h"
@@ -99,7 +100,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     // -------------------------------------------------------------
 
     m_previewWidget = new ImageWidget("adjustcurves Tool", 0,
-                                      i18n("<p>This is the image's curve-adjustments preview. "
+                                      i18n("This is the image's curve-adjustments preview. "
                                            "You can pick a spot on the image "
                                            "to see the corresponding level in the histogram."));
     setToolView(m_previewWidget);
@@ -110,98 +111,44 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
                                             EditorToolSettings::Load|
                                             EditorToolSettings::SaveAs|
                                             EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel);
+                                            EditorToolSettings::Cancel,
+                                            EditorToolSettings::Histogram,
+                                            HistogramBox::LRGBA);
+
+    m_gboxSettings->histogramBox()->histogram()->setWhatsThis(i18n("Here you can see the target preview "
+                                                   "image histogram drawing of the selected image "
+                                                   "channel. This one is re-computed at any curves "
+                                                   "settings changes."));
+
+    // we don't need to use the Gradient widget in this tool
+    m_gboxSettings->histogramBox()->setGradientVisible(false);
 
     QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage());
-
-    QLabel *label1 = new QLabel(i18n("Channel:"), m_gboxSettings->plainPage());
-    label1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_channelCB = new KComboBox(m_gboxSettings->plainPage());
-    m_channelCB->addItem(i18n("Luminosity"));
-    m_channelCB->addItem(i18n("Red"));
-    m_channelCB->addItem(i18n("Green"));
-    m_channelCB->addItem(i18n("Blue"));
-    m_channelCB->addItem(i18n("Alpha"));
-    m_channelCB->setCurrentIndex(0);
-    m_channelCB->setWhatsThis( i18n("<p>Select the histogram channel to display here:<p>"
-                                    "<b>Luminosity</b>: display the image's luminosity values.<p>"
-                                    "<b>Red</b>: display the red image-channel values.<p>"
-                                    "<b>Green</b>: display the green image-channel values.<p>"
-                                    "<b>Blue</b>: display the blue image-channel values.<p>"
-                                    "<b>Alpha</b>: display the alpha image-channel values. "
-                                    "This channel corresponds to the transparency value and "
-                                    "is supported by some image formats, such as PNG or TIF."));
-
-    // -------------------------------------------------------------
-
-    QWidget *scaleBox = new QWidget(m_gboxSettings->plainPage());
-    QHBoxLayout *hlay = new QHBoxLayout(scaleBox);
-    m_scaleBG         = new QButtonGroup(scaleBox);
-    scaleBox->setWhatsThis(i18n("<p>Select the histogram scale here.<p>"
-                                "If the image's maximal counts are small, you can use the linear scale.<p>"
-                                "Logarithmic scale can be used when the maximal counts are big; "
-                                "if it is used, all values (small and large) will be visible on the graph."));
-
-    QToolButton *linHistoButton = new QToolButton( scaleBox );
-    linHistoButton->setToolTip( i18n( "<p>Linear" ) );
-    linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
-    linHistoButton->setCheckable(true);
-    m_scaleBG->addButton(linHistoButton, CurvesWidget::LinScaleHistogram);
-
-    QToolButton *logHistoButton = new QToolButton( scaleBox );
-    logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
-    logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
-    logHistoButton->setCheckable(true);
-    m_scaleBG->addButton(logHistoButton, CurvesWidget::LogScaleHistogram);
-
-    hlay->setMargin(0);
-    hlay->setSpacing(0);
-    hlay->addWidget(linHistoButton);
-    hlay->addWidget(logHistoButton);
-
-    m_scaleBG->setExclusive(true);
-    logHistoButton->setChecked(true);
-
-    // -------------------------------------------------------------
-
-    QHBoxLayout* l1 = new QHBoxLayout();
-    l1->addStretch(10);
-    l1->addWidget(scaleBox);
 
     // -------------------------------------------------------------
 
     QWidget *curveBox = new QWidget(m_gboxSettings->plainPage());
     QGridLayout* gl   = new QGridLayout(curveBox);
 
-    m_histogramWidget = new HistogramWidget(256, 140, curveBox, false, true, true);
-    m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram drawing "
-                                          "of the selected image channel. This one is re-computed at any "
-                                          "curves settings changes."));
-
-    m_vGradient = new ColorGradientWidget( ColorGradientWidget::Vertical, 10, curveBox );
-    m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
-
-    QLabel *spacev = new QLabel(curveBox);
-    spacev->setFixedWidth(1);
+    m_vGradient = new ColorGradientWidget(ColorGradientWidget::Vertical, 10, curveBox);
+    m_vGradient->setColors(QColor("white"), QColor("black"));
 
     m_curvesWidget = new CurvesWidget(256, 256, m_originalImage->bits(), m_originalImage->width(),
-                                               m_originalImage->height(), m_originalImage->sixteenBit(),
-                                               curveBox);
-    m_curvesWidget->setWhatsThis( i18n("<p>This is the curve drawing of the selected channel from "
-                                       "original image"));
+                                                m_originalImage->height(), m_originalImage->sixteenBit(),
+                                                curveBox);
+    m_curvesWidget->setWhatsThis(i18n("This is the curve drawing of the selected channel from "
+                                      "original image"));
 
     QLabel *spaceh = new QLabel(curveBox);
     spaceh->setFixedHeight(1);
 
-    m_hGradient = new ColorGradientWidget( ColorGradientWidget::Horizontal, 10, curveBox );
-    m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+    m_hGradient = new ColorGradientWidget(ColorGradientWidget::Horizontal, 10, curveBox);
+    m_hGradient->setColors(QColor("black"), QColor("white"));
 
-    gl->addWidget(m_histogramWidget,    0, 2, 1, 1);
-    gl->addWidget(m_vGradient,          2, 0, 1, 1);
-    gl->addWidget(spacev,               2, 1, 1, 1);
-    gl->addWidget(m_curvesWidget,       2, 2, 1, 1);
-    gl->addWidget(spaceh,               3, 2, 1, 1);
-    gl->addWidget(m_hGradient,          4, 2, 1, 1);
+    gl->addWidget(m_vGradient,          0, 0, 1, 1);
+    gl->addWidget(m_curvesWidget,       0, 2, 1, 1);
+    gl->addWidget(spaceh,               1, 2, 1, 1);
+    gl->addWidget(m_hGradient,          2, 2, 1, 1);
     gl->setRowMinimumHeight(1, m_gboxSettings->spacingHint());
     gl->setMargin(0);
     gl->setSpacing(0);
@@ -215,16 +162,16 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     m_curveFree = new QToolButton(typeBox);
     m_curveFree->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/curvefree.png")));
     m_curveFree->setCheckable(true);
-    m_curveFree->setToolTip( i18n( "Curve free mode" ) );
-    m_curveFree->setWhatsThis( i18n("<p>With this button, you can draw your curve free-hand "
+    m_curveFree->setToolTip(i18n("Curve free mode"));
+    m_curveFree->setWhatsThis( i18n("With this button, you can draw your curve free-hand "
                                     "with the mouse."));
     m_curveType->addButton(m_curveFree, FreeDrawing);
 
     m_curveSmooth = new QToolButton(typeBox);
     m_curveSmooth->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/curvemooth.png")));
     m_curveSmooth->setCheckable(true);
-    m_curveSmooth->setToolTip( i18n( "Curve smooth mode" ) );
-    m_curveSmooth->setWhatsThis( i18n("<p>With this button, you constrains the curve type "
+    m_curveSmooth->setToolTip(i18n("Curve smooth mode"));
+    m_curveSmooth->setWhatsThis( i18n("With this button, you constrains the curve type "
                                       "to a smooth line with tension."));
     m_curveType->addButton(m_curveSmooth, SmoothDrawing);
 
@@ -246,17 +193,17 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     m_pickerColorButtonGroup->addButton(m_pickBlack, BlackTonal);
     m_pickBlack->setIcon(KIcon("color-picker-black"));
     m_pickBlack->setCheckable(true);
-    m_pickBlack->setToolTip( i18n( "All channels shadow tone color picker" ) );
-    m_pickBlack->setWhatsThis( i18n("<p>With this button, you can pick the color from original "
+    m_pickBlack->setToolTip(i18n("All channels shadow tone color picker"));
+    m_pickBlack->setWhatsThis( i18n("With this button, you can pick the color from original "
                                     "image used to set <b>Shadow Tone</b> "
                                     "smooth curves point on Red, Green, Blue, and Luminosity channels."));
 
-    m_pickGray  = new QToolButton(m_pickerBox);
+    m_pickGray = new QToolButton(m_pickerBox);
     m_pickerColorButtonGroup->addButton(m_pickGray, GrayTonal);
     m_pickGray->setIcon(KIcon("color-picker-grey"));
     m_pickGray->setCheckable(true);
-    m_pickGray->setToolTip( i18n( "All channels middle tone color picker" ) );
-    m_pickGray->setWhatsThis( i18n("<p>With this button, you can pick the color from original "
+    m_pickGray->setToolTip(i18n("All channels middle tone color picker"));
+    m_pickGray->setWhatsThis( i18n("With this button, you can pick the color from original "
                                    "image used to set <b>Middle Tone</b> "
                                    "smooth curves point on Red, Green, Blue, and Luminosity channels."));
 
@@ -265,7 +212,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     m_pickWhite->setIcon(KIcon("color-picker-white"));
     m_pickWhite->setCheckable(true);
     m_pickWhite->setToolTip( i18n( "All channels highlight tone color picker" ) );
-    m_pickWhite->setWhatsThis( i18n("<p>With this button, you can pick the color from original "
+    m_pickWhite->setWhatsThis( i18n("With this button, you can pick the color from original "
                                     "image used to set <b>Highlight Tone</b> "
                                     "smooth curves point on Red, Green, Blue, and Luminosity channels."));
 
@@ -280,11 +227,11 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     // -------------------------------------------------------------
 
     m_resetButton = new QPushButton(i18n("&Reset"), m_gboxSettings->plainPage());
-    m_resetButton->setIcon( KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar) );
-    m_resetButton->setToolTip( i18n( "Reset current channel curves' values." ) );
-    m_resetButton->setWhatsThis( i18n("<p>If you press this button, all curves' values "
-                                      "from the current selected channel "
-                                      "will be reset to the default values."));
+    m_resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
+    m_resetButton->setToolTip(i18n("Reset current channel curves' values."));
+    m_resetButton->setWhatsThis(i18n("If you press this button, all curves' values "
+                                     "from the current selected channel "
+                                     "will be reset to the default values."));
 
     QHBoxLayout* l3 = new QHBoxLayout();
     l3->addWidget(typeBox);
@@ -294,12 +241,9 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    grid->addWidget(label1,         0, 1, 1, 1);
-    grid->addWidget(m_channelCB,    0, 2, 1, 1);
-    grid->addLayout(l1,             0, 4, 1, 5- 4+1);
-    grid->addWidget(curveBox,       1, 0, 3, 5+1);
-    grid->addLayout(l3,             4, 1, 1, 5);
-    grid->setRowStretch(5, 10);
+    grid->addWidget(curveBox,       0, 0, 3, 6);
+    grid->addLayout(l3,             3, 1, 1, 4);
+    grid->setRowStretch(4, 10);
     grid->setMargin(m_gboxSettings->spacingHint());
     grid->setSpacing(m_gboxSettings->spacingHint());
 
@@ -322,17 +266,11 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     // -------------------------------------------------------------
     // ComboBox slots.
 
-    connect(m_channelCB, SIGNAL(activated(int)),
-            this, SLOT(slotChannelChanged(int)));
-
-    connect(m_scaleBG, SIGNAL(buttonReleased(int)),
-            this, SLOT(slotScaleChanged(int)));
-
     connect(m_curveType, SIGNAL(buttonClicked(int)),
             this, SLOT(slotCurveTypeChanged(int)));
 
     // -------------------------------------------------------------
-    // Bouttons slots.
+    // Buttons slots.
 
     connect(m_resetButton, SIGNAL(clicked()),
             this, SLOT(slotResetCurrentChannel()));
@@ -408,28 +346,28 @@ void AdjustCurvesTool::slotSpotColorChanged(const DColor &color)
 
 void AdjustCurvesTool::slotColorSelectedFromTarget( const DColor &color )
 {
-    m_histogramWidget->setHistogramGuideByColor(color);
+    m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
 
 void AdjustCurvesTool::slotResetCurrentChannel()
 {
-    m_curvesWidget->curves()->curvesChannelReset(m_channelCB->currentIndex());
+    m_curvesWidget->curves()->curvesChannelReset(m_gboxSettings->histogramBox()->channel());
 
     m_curvesWidget->repaint();
     slotEffect();
-    m_histogramWidget->reset();
+    m_gboxSettings->histogramBox()->histogram()->reset();
 }
 
 void AdjustCurvesTool::slotEffect()
 {
     ImageIface* iface = m_previewWidget->imageIface();
-    uchar *orgData             = iface->getPreviewImage();
-    int w                      = iface->previewWidth();
-    int h                      = iface->previewHeight();
-    bool sb                    = iface->previewSixteenBit();
+    uchar *orgData    = iface->getPreviewImage();
+    int w             = iface->previewWidth();
+    int h             = iface->previewHeight();
+    bool sb           = iface->previewSixteenBit();
 
     // Create the new empty destination image data space.
-    m_histogramWidget->stopHistogramComputation();
+    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
@@ -446,7 +384,7 @@ void AdjustCurvesTool::slotEffect()
     m_previewWidget->updatePreview();
 
     // Update histogram.
-    m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
+    m_gboxSettings->histogramBox()->histogram()->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
     delete [] orgData;
 }
 
@@ -475,57 +413,50 @@ void AdjustCurvesTool::finalRendering()
     delete [] desData;
 }
 
-void AdjustCurvesTool::slotChannelChanged(int channel)
+void AdjustCurvesTool::slotChannelChanged()
 {
-    switch(channel)
+    int channel = m_gboxSettings->histogramBox()->channel();
+    switch (channel)
     {
-       case LuminosityChannel:
-          m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
-          m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-          m_curvesWidget->m_channelType = CurvesWidget::ValueHistogram;
-          m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
-          break;
+        case EditorToolSettings::LuminosityChannel:
+            m_curvesWidget->m_channelType = CurvesWidget::ValueHistogram;
+            m_hGradient->setColors(QColor("white"), QColor("black"));
+            m_vGradient->setColors(QColor("white"), QColor("black"));
+            break;
 
-        case RedChannel:
-          m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
-          m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
-          m_curvesWidget->m_channelType = CurvesWidget::RedChannelHistogram;
-          m_vGradient->setColors( QColor( "red" ), QColor( "black" ) );
-          break;
+        case EditorToolSettings::RedChannel:
+            m_curvesWidget->m_channelType = CurvesWidget::RedChannelHistogram;
+            m_hGradient->setColors(QColor("red"), QColor("black"));
+            m_vGradient->setColors(QColor("red"), QColor("black"));
+            break;
 
-       case GreenChannel:
-          m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
-          m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
-          m_curvesWidget->m_channelType = CurvesWidget::GreenChannelHistogram;
-          m_vGradient->setColors( QColor( "green" ), QColor( "black" ) );
-          break;
+        case EditorToolSettings::GreenChannel:
+            m_curvesWidget->m_channelType = CurvesWidget::GreenChannelHistogram;
+            m_hGradient->setColors(QColor("green"), QColor("black"));
+            m_vGradient->setColors(QColor("green"), QColor("black"));
+            break;
 
-       case BlueChannel:
-          m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
-          m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
-          m_curvesWidget->m_channelType = CurvesWidget::BlueChannelHistogram;
-          m_vGradient->setColors( QColor( "blue" ), QColor( "black" ) );
-          break;
+        case EditorToolSettings::BlueChannel:
+            m_curvesWidget->m_channelType = CurvesWidget::BlueChannelHistogram;
+            m_hGradient->setColors(QColor("blue"), QColor("black"));
+            m_vGradient->setColors(QColor("blue"), QColor("black"));
+            break;
 
-       case AlphaChannel:
-          m_histogramWidget->m_channelType = HistogramWidget::AlphaChannelHistogram;
-          m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-          m_curvesWidget->m_channelType = CurvesWidget::AlphaChannelHistogram;
-          m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
-          break;
+        case EditorToolSettings::AlphaChannel:
+            m_curvesWidget->m_channelType = CurvesWidget::AlphaChannelHistogram;
+            m_hGradient->setColors(QColor("white"), QColor("black"));
+            m_vGradient->setColors(QColor("white"), QColor("black"));
+            break;
     }
 
     m_curveType->button(m_curvesWidget->curves()->getCurveType(channel))->setChecked(true);
-
     m_curvesWidget->repaint();
-    m_histogramWidget->repaint();
+    m_gboxSettings->histogramBox()->slotChannelChanged();
 }
 
-void AdjustCurvesTool::slotScaleChanged(int scale)
+void AdjustCurvesTool::slotScaleChanged()
 {
-    m_curvesWidget->m_scaleType = scale;
-    m_histogramWidget->m_scaleType = scale;
-    m_histogramWidget->repaint();
+    m_curvesWidget->m_scaleType = m_gboxSettings->histogramBox()->scale();
     m_curvesWidget->repaint();
 }
 
@@ -556,10 +487,6 @@ void AdjustCurvesTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("adjustcurves Tool");
 
-    m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->button(group.readEntry("Histogram Scale",
-                      (int)CurvesWidget::LogScaleHistogram))->setChecked(true);
-
     m_curvesWidget->reset();
 
     for (int i = 0 ; i < 5 ; i++)
@@ -586,8 +513,11 @@ void AdjustCurvesTool::readSettings()
         m_curvesWidget->curves()->curvesCalculateCurve(i);
     }
 
-    slotChannelChanged(m_channelCB->currentIndex());
-    slotScaleChanged(m_scaleBG->checkedId());
+    // we need to call the set methods here, otherwise the curve will not be updated correctly
+    m_gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+                    (int)EditorToolSettings::LuminosityChannel));
+    m_gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+                    (int)CurvesWidget::LogScaleHistogram));
 
     slotEffect();
 }
@@ -596,8 +526,8 @@ void AdjustCurvesTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("adjustcurves Tool");
-    group.writeEntry("Histogram Channel", m_channelCB->currentIndex());
-    group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
+    group.writeEntry("Histogram Channel", m_gboxSettings->histogramBox()->channel());
+    group.writeEntry("Histogram Scale", m_gboxSettings->histogramBox()->scale());
 
     for (int i = 0 ; i < 5 ; i++)
     {
@@ -626,12 +556,11 @@ void AdjustCurvesTool::slotResetSettings()
        m_curvesWidget->curves()->curvesChannelReset(channel);
 
     m_curvesWidget->reset();
-    m_histogramWidget->reset();
+    m_gboxSettings->histogramBox()->histogram()->reset();
 
     slotEffect();
 }
 
-// Load all settings.
 void AdjustCurvesTool::slotLoadSettings()
 {
     KUrl loadCurvesFile;
@@ -650,11 +579,10 @@ void AdjustCurvesTool::slotLoadSettings()
     }
 
     // Refresh the current curves config.
-    slotChannelChanged(m_channelCB->currentIndex());
+    slotChannelChanged();
     slotEffect();
 }
 
-// Save all settings.
 void AdjustCurvesTool::slotSaveAsSettings()
 {
     KUrl saveCurvesFile;
@@ -673,7 +601,7 @@ void AdjustCurvesTool::slotSaveAsSettings()
     }
 
     // Refresh the current curves config.
-    slotChannelChanged(m_channelCB->currentIndex());
+    slotChannelChanged();
 }
 
 }  // NameSpace DigikamAdjustCurvesImagesPlugin

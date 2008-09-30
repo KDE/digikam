@@ -34,8 +34,6 @@ class QPushButton;
 class QToolButton;
 class QButtonGroup;
 
-class KComboBox;
-
 namespace KDcrawIface
 {
 class RDoubleNumInput;
@@ -79,8 +77,8 @@ private slots:
     void slotEffect();
     void slotResetCurrentChannel();
     void slotAutoLevels();
-    void slotChannelChanged(int channel);
-    void slotScaleChanged(int scale);
+    void slotChannelChanged();
+    void slotScaleChanged();
     void slotAdjustSliders();
     void slotGammaInputchanged(double val);
     void slotAdjustMinInputSpinBox(double val);
@@ -94,21 +92,6 @@ private slots:
     void slotShowOutputHistogramGuide(double v);
 
 private:
-
-    enum HistogramScale
-    {
-        Linear=0,
-        Logarithmic
-    };
-
-    enum ColorChannel
-    {
-        LuminosityChannel=0,
-        RedChannel,
-        GreenChannel,
-        BlueChannel,
-        AlphaChannel
-    };
 
     enum ColorPicker
     {
@@ -131,9 +114,6 @@ private:
     QToolButton                  *m_pickWhite;
 
     QButtonGroup                 *m_pickerColorButtonGroup;
-    QButtonGroup                 *m_scaleBG;
-
-    KComboBox                    *m_channelCB;
 
     KDcrawIface::RIntNumInput    *m_minInput;
     KDcrawIface::RIntNumInput    *m_maxInput;
@@ -143,7 +123,6 @@ private:
     KDcrawIface::RDoubleNumInput *m_gammaInput;
 
     Digikam::HistogramWidget     *m_levelsHistogramWidget;
-    Digikam::HistogramWidget     *m_histogramWidget;
 
     Digikam::DGradientSlider     *m_inputLevels;
     Digikam::DGradientSlider     *m_outputLevels;

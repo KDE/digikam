@@ -41,7 +41,6 @@ class KComboBox;
 namespace Digikam
 {
 class CurvesWidget;
-class HistogramWidget;
 class ColorGradientWidget;
 class ImageWidget;
 class EditorToolSettings;
@@ -72,12 +71,12 @@ private slots:
     void slotEffect();
     void slotResetSettings();
     void slotResetCurrentChannel();
-    void slotChannelChanged(int channel);
-    void slotScaleChanged(int scale);
     void slotCurveTypeChanged(int type);
     void slotSpotColorChanged(const Digikam::DColor &color);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);
     void slotPickerColorButtonActived();
+    void slotChannelChanged();
+    void slotScaleChanged();
 
 private:
 
@@ -88,25 +87,10 @@ private:
         WhiteTonal
     };
 
-    enum ColorChannel
-    {
-        LuminosityChannel=0,
-        RedChannel,
-        GreenChannel,
-        BlueChannel,
-        AlphaChannel
-    };
-
     enum CurvesDrawingType
     {
         SmoothDrawing=0,
         FreeDrawing
-    };
-
-    enum HistogramScale
-    {
-        Linear=0,
-        Logarithmic
     };
 
     uchar                        *m_destinationPreviewData;
@@ -124,14 +108,11 @@ private:
     QToolButton                  *m_curveSmooth;
 
     QButtonGroup                 *m_pickerColorButtonGroup;
-    QButtonGroup                 *m_scaleBG;
     QButtonGroup                 *m_curveType;
 
     KComboBox                    *m_channelCB;
 
     Digikam::CurvesWidget        *m_curvesWidget;
-
-    Digikam::HistogramWidget     *m_histogramWidget;
 
     Digikam::ColorGradientWidget *m_hGradient;
     Digikam::ColorGradientWidget *m_vGradient;

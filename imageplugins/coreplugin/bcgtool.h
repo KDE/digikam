@@ -30,10 +30,6 @@
 
 #include "editortool.h"
 
-class QButtonGroup;
-
-class KComboBox;
-
 namespace KDcrawIface
 {
 class RIntNumInput;
@@ -42,10 +38,8 @@ class RDoubleNumInput;
 
 namespace Digikam
 {
-class ColorGradientWidget;
 class DColor;
 class EditorToolSettings;
-class HistogramWidget;
 class ImageWidget;
 }
 
@@ -65,8 +59,6 @@ private slots:
 
     void slotEffect();
     void slotResetSettings();
-    void slotChannelChanged(int channel);
-    void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
 
 private:
@@ -77,25 +69,7 @@ private:
 
 private:
 
-    enum HistogramScale
-    {
-        Linear=0,
-        Logarithmic
-    };
-
-    enum ColorChannel
-    {
-        LuminosityChannel=0,
-        RedChannel,
-        GreenChannel,
-        BlueChannel
-    };
-
     uchar                        *m_destinationPreviewData;
-
-    QButtonGroup                 *m_scaleBG;
-
-    KComboBox                    *m_channelCB;
 
     KDcrawIface::RIntNumInput    *m_bInput;
     KDcrawIface::RIntNumInput    *m_cInput;
@@ -103,10 +77,6 @@ private:
     KDcrawIface::RDoubleNumInput *m_gInput;
 
     Digikam::ImageWidget         *m_previewWidget;
-
-    Digikam::ColorGradientWidget *m_hGradient;
-
-    Digikam::HistogramWidget     *m_histogramWidget;
 
     Digikam::EditorToolSettings  *m_gboxSettings;
 };

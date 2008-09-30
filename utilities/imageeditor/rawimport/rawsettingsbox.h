@@ -51,7 +51,6 @@ public:
 
     void setBusy(bool b);
 
-    HistogramWidget* histogram() const;
     CurvesWidget*    curve()     const;
     DRawDecoding     settings();
 
@@ -73,10 +72,6 @@ signals:
     void signalPostProcessingChanged();
 
 private slots:
-
-    void slotChannelChanged(int channel);
-    void slotScaleChanged(int scale);
-    void slotColorsChanged(int color);
 
     void slotResetCurve();
 

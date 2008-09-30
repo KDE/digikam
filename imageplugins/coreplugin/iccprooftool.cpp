@@ -46,7 +46,6 @@
 // KDE includes.
 
 #include <kapplication.h>
-#include <kcombobox.h>
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kfile.h>
@@ -79,6 +78,7 @@
 #include "dimgimagefilters.h"
 #include "editortoolsettings.h"
 #include "histogramwidget.h"
+#include "histogrambox.h"
 #include "iccpreviewwidget.h"
 #include "iccprofileinfodlg.h"
 #include "icctransform.h"
@@ -124,71 +124,11 @@ ICCProofTool::ICCProofTool(QObject* parent)
                                             EditorToolSettings::Load|
                                             EditorToolSettings::SaveAs|
                                             EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel);
+                                            EditorToolSettings::Cancel,
+                                            EditorToolSettings::Histogram);
 
 
     QGridLayout *gridSettings = new QGridLayout(m_gboxSettings->plainPage());
-
-    QLabel *label1 = new QLabel(i18n("Channel: "), m_gboxSettings->plainPage());
-    label1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_channelCB = new KComboBox(m_gboxSettings->plainPage());
-    m_channelCB->addItem(i18n("Luminosity"));
-    m_channelCB->addItem(i18n("Red"));
-    m_channelCB->addItem(i18n("Green"));
-    m_channelCB->addItem(i18n("Blue"));
-    m_channelCB->setWhatsThis( i18n("<p>Select the histogram channel to display:<p>"
-                                    "<b>Luminosity</b>: display the image's luminosity values.<p>"
-                                    "<b>Red</b>: display the red image-channel values.<p>"
-                                    "<b>Green</b>: display the green image-channel values.<p>"
-                                    "<b>Blue</b>: display the blue image-channel values.<p>"));
-
-    // -------------------------------------------------------------
-
-    QWidget *scaleBox = new QWidget(m_gboxSettings->plainPage());
-    QHBoxLayout *hlay = new QHBoxLayout(scaleBox);
-    m_scaleBG         = new QButtonGroup(scaleBox);
-    scaleBox->setWhatsThis(i18n("<p>Select the histogram scale.<p>"
-                                "If the image's maximal counts are small, you can use the linear scale.<p>"
-                                "Logarithmic scale can be used when the maximal counts are big; "
-                                "if it is used, all values (small and large) will be visible on the graph."));
-
-    QToolButton *linHistoButton = new QToolButton(scaleBox);
-    linHistoButton->setToolTip(i18n("<p>Linear"));
-    linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
-    linHistoButton->setCheckable(true);
-    m_scaleBG->addButton(linHistoButton, HistogramWidget::LinScaleHistogram);
-
-    QToolButton *logHistoButton = new QToolButton(scaleBox);
-    logHistoButton->setToolTip(i18n("<p>Logarithmic"));
-    logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
-    logHistoButton->setCheckable(true);
-    m_scaleBG->addButton(logHistoButton, HistogramWidget::LogScaleHistogram);
-
-    hlay->setMargin(0);
-    hlay->setSpacing(0);
-    hlay->addWidget(linHistoButton);
-    hlay->addWidget(logHistoButton);
-
-    m_scaleBG->setExclusive(true);
-    logHistoButton->setChecked(true);
-
-    QHBoxLayout* l1 = new QHBoxLayout();
-    l1->addWidget(label1);
-    l1->addWidget(m_channelCB);
-    l1->addStretch(10);
-    l1->addWidget(scaleBox);
-
-    // -------------------------------------------------------------
-
-    KVBox *histoBox   = new KVBox(m_gboxSettings->plainPage());
-    m_histogramWidget = new HistogramWidget(256, 140, histoBox, false, true, true);
-    m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram "
-                                          "of the selected image channel. "
-                                          "This one is updated after setting changes."));
-    QLabel *space = new QLabel(histoBox);
-    space->setFixedHeight(1);
-    m_hGradient = new ColorGradientWidget(ColorGradientWidget::Horizontal, 10, histoBox);
-    m_hGradient->setColors(QColor("black"), QColor("white"));
 
     // -------------------------------------------------------------
 
@@ -209,20 +149,20 @@ ICCProofTool::ICCProofTool(QObject* parent)
 
     m_doSoftProofBox = new QCheckBox(generalOptions);
     m_doSoftProofBox->setText(i18n("Soft-proofing"));
-    m_doSoftProofBox->setWhatsThis( i18n("<p>Rendering emulation of the device described "
+    m_doSoftProofBox->setWhatsThis( i18n("Rendering emulation of the device described "
                                          "by the \"Proofing\" profile. Useful to preview the final "
-                                         "result without rendering to a physical medium.</p>"));
+                                         "result without rendering to a physical medium."));
 
     m_checkGamutBox = new QCheckBox(generalOptions);
     m_checkGamutBox->setText(i18n("Check gamut"));
-    m_checkGamutBox->setWhatsThis( i18n("<p>You can use this option if you want to show "
-                                        "the colors that are outside the printer's gamut<p>"));
+    m_checkGamutBox->setWhatsThis( i18n("You can use this option if you want to show "
+                                        "the colors that are outside the printer's gamut"));
 
     m_embeddProfileBox = new QCheckBox(generalOptions);
     m_embeddProfileBox->setChecked(true);
     m_embeddProfileBox->setText(i18n("Assign profile"));
-    m_embeddProfileBox->setWhatsThis( i18n("<p>You can use this option to embed "
-                                           "the selected workspace color profile into the image.</p>"));
+    m_embeddProfileBox->setWhatsThis( i18n("You can use this option to embed "
+                                           "the selected workspace color profile into the image."));
 
     m_BPCBox = new QCheckBox(generalOptions);
     m_BPCBox->setText(i18n("Use BPC"));
@@ -463,7 +403,7 @@ ICCProofTool::ICCProofTool(QObject* parent)
     m_curvesWidget = new CurvesWidget(256, 192, m_originalImage->bits(), m_originalImage->width(),
                                                m_originalImage->height(), m_originalImage->sixteenBit(),
                                                lightnessadjust);
-    m_curvesWidget->setWhatsThis( i18n("<p>This is the curve adjustment of the image luminosity"));
+    m_curvesWidget->setWhatsThis( i18n("This is the curve adjustment of the image luminosity"));
 
     QLabel *spaceh = new QLabel(lightnessadjust);
     spaceh->setFixedHeight(1);
@@ -478,7 +418,7 @@ ICCProofTool::ICCProofTool(QObject* parent)
     m_cInput->setRange(-100, 100, 1);
     m_cInput->setSliderEnabled(true);
     m_cInput->setDefaultValue(0);
-    m_cInput->setWhatsThis( i18n("<p>Set here the contrast adjustment of the image."));
+    m_cInput->setWhatsThis( i18n("Set here the contrast adjustment of the image."));
 
     fourPageLayout->addWidget(vGradient,        0, 0, 1, 1);
     fourPageLayout->addWidget(spacev,           0, 1, 1, 1);
@@ -493,9 +433,7 @@ ICCProofTool::ICCProofTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    gridSettings->addLayout(l1,                 0, 0, 1, 3 );
-    gridSettings->addWidget(histoBox,           1, 0, 2, 3 );
-    gridSettings->addWidget(m_toolBoxWidgets,   3, 0, 1, 3 );
+    gridSettings->addWidget(m_toolBoxWidgets,   0, 0, 1, 3 );
     gridSettings->setMargin(m_gboxSettings->spacingHint());
     gridSettings->setSpacing(m_gboxSettings->spacingHint());
 
@@ -506,12 +444,6 @@ ICCProofTool::ICCProofTool(QObject* parent)
 
     connect(lcmsLogoLabel, SIGNAL(leftClickedUrl(const QString&)),
             this, SLOT(processLCMSUrl(const QString&)));
-
-    connect(m_channelCB, SIGNAL(activated(int)),
-            this, SLOT(slotChannelChanged(int)));
-
-    connect(m_scaleBG, SIGNAL(buttonReleased(int)),
-            this, SLOT(slotScaleChanged(int)));
 
     connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
             this, SLOT(slotTimer()));
@@ -580,7 +512,7 @@ ICCProofTool::ICCProofTool(QObject* parent)
 
 ICCProofTool::~ICCProofTool()
 {
-    m_histogramWidget->stopHistogramComputation();
+    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     delete [] m_destinationPreviewData;
 }
@@ -610,16 +542,18 @@ void ICCProofTool::readSettings()
         }
         else
         {
-            QString message = i18n("The ICC profiles path seems to be invalid. You'll not be able to use \"Default profile\"\
-                                    options.<p>Please fix this in digiKam ICC setup.");
-            slotToggledWidgets( false );
+            QString message = i18n("<p>The ICC profiles path seems to be invalid. "
+                                   "You'll not be able to use \"Default profile\" options.</p>"
+                                   "<p>Please fix this in digiKam ICC setup.</p>");
+            slotToggledWidgets(false);
             KMessageBox::information(kapp->activeWindow(), message);
         }
     }
 
     // Plugin settings.
     group = config->group("colormanagement Tool");
-    m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
+
+
     m_toolBoxWidgets->setCurrentIndex(group.readEntry("Settings Tab", (int)GENERALPAGE));
     m_inProfilesPath->setUrl(group.readPathEntry("InputProfilePath", defaultICCPath));
     m_proofProfilePath->setUrl(group.readPathEntry("ProofProfilePath", defaultICCPath));
@@ -657,8 +591,11 @@ void ICCProofTool::readSettings()
     for (int i = 0 ; i < 5 ; i++)
         m_curvesWidget->curves()->curvesCalculateCurve(i);
 
-    slotChannelChanged(m_channelCB->currentIndex());
-    slotScaleChanged(m_scaleBG->checkedId());
+    // we need to call the set methods here, otherwise the curve will not be updated correctly
+    m_gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+                    (int)EditorToolSettings::LuminosityChannel));
+    m_gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+                    (int)CurvesWidget::LogScaleHistogram));
 }
 
 void ICCProofTool::writeSettings()
@@ -666,8 +603,8 @@ void ICCProofTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("colormanagement Tool");
     group.writeEntry("Settings Tab", m_toolBoxWidgets->currentIndex());
-    group.writeEntry("Histogram Channel", m_channelCB->currentIndex());
-    group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
+    group.writeEntry("Histogram Channel", m_gboxSettings->histogramBox()->channel());
+    group.writeEntry("Histogram Scale", m_gboxSettings->histogramBox()->scale());
     group.writeEntry("InputProfilePath", m_inProfilesPath->url());
     group.writeEntry("ProofProfilePath", m_proofProfilePath->url());
     group.writeEntry("SpaceProfilePath", m_spaceProfilePath->url());
@@ -709,41 +646,7 @@ void ICCProofTool::slotSpotColorChanged(const DColor &color)
 
 void ICCProofTool::slotColorSelectedFromTarget( const DColor &color )
 {
-    m_histogramWidget->setHistogramGuideByColor(color);
-}
-
-void ICCProofTool::slotChannelChanged( int channel )
-{
-    switch(channel)
-    {
-        case LuminosityChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-            break;
-
-        case RedChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
-            break;
-
-        case GreenChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
-            break;
-
-        case BlueChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
-            m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
-            break;
-    }
-
-    m_histogramWidget->repaint();
-}
-
-void ICCProofTool::slotScaleChanged( int scale )
-{
-    m_histogramWidget->m_scaleType = scale;
-    m_histogramWidget->repaint();
+    m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
 
 void ICCProofTool::slotResetSettings()
@@ -764,7 +667,7 @@ void ICCProofTool::slotEffect()
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
     m_gboxSettings->enableButton(EditorToolSettings::Ok, true);
-    m_histogramWidget->stopHistogramComputation();
+    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     IccTransform transform;
 
@@ -800,8 +703,8 @@ void ICCProofTool::slotEffect()
         if (!info.exists() || !info.isReadable() || !info.isFile() )
         {
             KMessageBox::information(kapp->activeWindow(),
-                                     i18n("<p>The selected ICC input profile path seems to be invalid.<p>"
-                                          "Please check it."));
+                                     i18n("<p>The selected ICC input profile path seems to be invalid.</p>"
+                                          "<p>Please check it.</p>"));
             return;
         }
     }
@@ -819,8 +722,8 @@ void ICCProofTool::slotEffect()
         if (!info.exists() || !info.isReadable() || !info.isFile() )
         {
             KMessageBox::information(kapp->activeWindow(),
-                                     i18n("<p>The selected ICC proof profile path seems to be invalid.<p>"
-                                          "Please check it."));
+                                     i18n("<p>The selected ICC proof profile path seems to be invalid.</p>"
+                                          "<p>Please check it.</p>"));
             return;
         }
     }
@@ -841,8 +744,8 @@ void ICCProofTool::slotEffect()
         if (!info.exists() || !info.isReadable() || !info.isFile() )
         {
             KMessageBox::information(kapp->activeWindow(),
-                                     i18n("<p>The selected ICC workspace profile path seems to be invalid.<p>"
-                                          "Please check it."));
+                                     i18n("<p>The selected ICC workspace profile path seems to be invalid.</p>"
+                                          "<p>Please check it.</p>"));
             return;
         }
     }
@@ -920,7 +823,7 @@ void ICCProofTool::slotEffect()
         //-- Update histogram --------------------------------------------------------
 
         memcpy(m_destinationPreviewData, preview2.bits(), preview2.numBytes());
-        m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
+        m_gboxSettings->histogramBox()->histogram()->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
         kapp->restoreOverrideCursor();
     }
 }
@@ -962,8 +865,8 @@ void ICCProofTool::finalRendering()
                 if (!info.exists() || !info.isReadable() || !info.isFile() )
                 {
                     KMessageBox::information(kapp->activeWindow(),
-                                             i18n("<p>The selected ICC input profile path seems "
-                                                  "to be invalid.<p>Please check it."));
+                                             i18n("<p>The selected ICC input profile path seems to be invalid.</p>"
+                                                  "<p>Please check it.</p>"));
                     return;
                 }
             }
@@ -981,8 +884,8 @@ void ICCProofTool::finalRendering()
                 if (!info.exists() || !info.isReadable() || !info.isFile() )
                 {
                     KMessageBox::information(kapp->activeWindow(),
-                                             i18n("<p>The selected ICC proof profile path seems "
-                                                  "to be invalid.<p>Please check it."));
+                                             i18n("<p>The selected ICC proof profile path seems to be invalid.</p>"
+                                                  "<p>Please check it.</p>"));
                     return;
                 }
             }
@@ -1003,8 +906,8 @@ void ICCProofTool::finalRendering()
                 if (!info.exists() || !info.isReadable() || !info.isFile() )
                 {
                     KMessageBox::information(kapp->activeWindow(),
-                                             i18n("<p>The selected ICC workspace profile path seems "
-                                                  "to be invalid.<p>Please check it."));
+                                             i18n("<p>The selected ICC workspace profile path seems to be invalid.</p>"
+                                                   "<p>Please check it.</p>"));
                     return;
                 }
             }
@@ -1293,7 +1196,7 @@ void ICCProofTool::slotLoadSettings()
         for (int i = 0 ; i < 5 ; i++)
            m_curvesWidget->curves()->curvesCalculateCurve(i);
 
-        m_histogramWidget->reset();
+        m_gboxSettings->histogramBox()->histogram()->reset();
         slotEffect();
     }
     else

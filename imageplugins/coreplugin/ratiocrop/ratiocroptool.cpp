@@ -85,10 +85,10 @@ RatioCropTool::RatioCropTool(QObject* parent)
     m_imageSelectionWidget = new ImageSelectionWidget(480, 320);
     m_imageSelectionWidget->setWhatsThis(i18n("<p>Here you can see the aspect ratio selection preview "
                                               "used for cropping. You can use the mouse to move and "
-                                              "resize the crop area. "
-                                              "Press and hold the CTRL key to move the opposite corner too. "
-                                              "Press and hold the SHIFT key to move the closest corner to the "
-                                              "mouse pointer."));
+                                              "resize the crop area.</p>"
+                                              "<p>Press and hold the <b>CTRL</b> key to move the opposite corner too.</p>"
+                                              "<p>Press and hold the <b>SHIFT</b> key to move the closest corner to the "
+                                              "mouse pointer.</p>"));
 
     m_originalIsLandscape = ((m_imageSelectionWidget->getOriginalImageWidth()) >
     (m_imageSelectionWidget->getOriginalImageHeight()));
@@ -108,7 +108,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
     KPushButton *tryBtn = m_gboxSettings->button(EditorToolSettings::Try);
     tryBtn->setGuiItem(KStandardGuiItem::Test);
     tryBtn->setText(i18n("Max. Aspect"));
-    tryBtn->setToolTip(i18n("<p>Set selection area to the maximum size according "
+    tryBtn->setToolTip(i18n("Set selection area to the maximum size according "
                             "to the current ratio."));
 
     // -------------------------------------------------------------
@@ -135,31 +135,31 @@ RatioCropTool::RatioCropTool(QObject* parent)
     m_ratioCB->setWhatsThis( i18n("<p>Select your constrained aspect ratio for cropping. "
                                   "Aspect Ratio Crop tool uses a relative ratio. That means it "
                                   "is the same if you use centimeters or inches and it does not "
-                                  "specify the physical size.<p>"
-                                  "You can see below a correspondence list of traditional photographic "
-                                  "paper sizes and aspect ratio crop:<p>"
-                                  "<b>2:3</b>: 10x15cm, 20x30cm, 30x45cm, 4x6\", 8x12\", "
-                                  "12x18\", 16x24\", 20x30\"<p>"
-                                  "<b>3:4</b>: 6x8cm, 15x20cm, 18x24cm, 30x40cm, 3.75x5\", 4.5x6\", "
-                                  "6x8\", 7.5x10\", 9x12\"<p>"
-                                  "<b>4:5</b>: 20x25cm, 40x50cm, 8x10\", 16x20\"<p>"
-                                  "<b>5:7</b>: 15x21cm, 30x42cm, 5x7\"<p>"
-                                  "<b>7:10</b>: 21x30cm, 42x60cm, 3.5x5\"<p>"
-                                  "The <b>Golden Ratio</b> is 1:1.618. A composition following this rule "
+                                  "specify the physical size.</p>"
+                                  "<p>You can see below a correspondence list of traditional photographic "
+                                  "paper sizes and aspect ratio crop:</p>"
+                                  "<p><b>2:3</b>: 10x15cm, 20x30cm, 30x45cm, 4x6\", 8x12\", "
+                                  "12x18\", 16x24\", 20x30\"</p>"
+                                  "<p><b>3:4</b>: 6x8cm, 15x20cm, 18x24cm, 30x40cm, 3.75x5\", 4.5x6\", "
+                                  "6x8\", 7.5x10\", 9x12\"</p>"
+                                  "<p><b>4:5</b>: 20x25cm, 40x50cm, 8x10\", 16x20\"</p>"
+                                  "<p><b>5:7</b>: 15x21cm, 30x42cm, 5x7\"</p>"
+                                  "<p><b>7:10</b>: 21x30cm, 42x60cm, 3.5x5\"</p>"
+                                  "<p>The <b>Golden Ratio</b> is 1:1.618. A composition following this rule "
                                   "is considered visually harmonious but can be unadapted to print on "
-                                  "standard photographic paper."));
+                                  "standard photographic paper.</p>"));
 
     m_preciseCrop = new QCheckBox(i18n("Exact"), cropSelection);
-    m_preciseCrop->setWhatsThis( i18n("<p>Enable this option to force exact aspect ratio crop."));
+    m_preciseCrop->setWhatsThis( i18n("Enable this option to force exact aspect ratio crop."));
 
     m_orientLabel = new QLabel(i18n("Orientation:"), cropSelection);
     m_orientCB    = new RComboBox( cropSelection );
     m_orientCB->addItem( i18n("Landscape") );
     m_orientCB->addItem( i18n("Portrait") );
-    m_orientCB->setWhatsThis( i18n("<p>Select constrained aspect ratio orientation."));
+    m_orientCB->setWhatsThis( i18n("Select constrained aspect ratio orientation."));
 
     m_autoOrientation = new QCheckBox(i18n("Auto"), cropSelection);
-    m_autoOrientation->setWhatsThis( i18n("<p>Enable this option to automatically set the orientation."));
+    m_autoOrientation->setWhatsThis( i18n("Enable this option to automatically set the orientation."));
 
     // -------------------------------------------------------------
 
@@ -169,7 +169,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
     m_customRatioNInput->setRange(1, 10000, 1);
     m_customRatioNInput->setDefaultValue(1);
     m_customRatioNInput->setSliderEnabled(false);
-    m_customRatioNInput->setWhatsThis( i18n("<p>Set here the desired custom aspect numerator value."));
+    m_customRatioNInput->setWhatsThis( i18n("Set here the desired custom aspect numerator value."));
 
     m_customLabel2 = new QLabel(" : ", cropSelection);
     m_customLabel2->setAlignment(Qt::AlignCenter|Qt::AlignVCenter);
@@ -177,12 +177,12 @@ RatioCropTool::RatioCropTool(QObject* parent)
     m_customRatioDInput->setRange(1, 10000, 1);
     m_customRatioDInput->setDefaultValue(1);
     m_customRatioDInput->setSliderEnabled(false);
-    m_customRatioDInput->setWhatsThis( i18n("<p>Set here the desired custom aspect denominator value."));
+    m_customRatioDInput->setWhatsThis( i18n("Set here the desired custom aspect denominator value."));
 
     // -------------------------------------------------------------
 
     m_xInput = new RIntNumInput(cropSelection);
-    m_xInput->setWhatsThis( i18n("<p>Set here the top left selection corner position for cropping."));
+    m_xInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
     m_xInput->input()->setLabel(i18n("X:"), Qt::AlignLeft|Qt::AlignVCenter);
     m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1);
     m_xInput->setSliderEnabled(true);
@@ -190,7 +190,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     m_widthInput = new RIntNumInput(cropSelection);
     m_widthInput->input()->setLabel(i18n("Width:"), Qt::AlignLeft|Qt::AlignVCenter);
-    m_widthInput->setWhatsThis( i18n("<p>Set here the width selection for cropping."));
+    m_widthInput->setWhatsThis( i18n("Set here the width selection for cropping."));
     m_widthInput->setRange(m_imageSelectionWidget->getMinWidthRange(),
                            m_imageSelectionWidget->getMaxWidthRange(),
                            m_imageSelectionWidget->getWidthStep());
@@ -199,20 +199,20 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     m_centerWidth = new QToolButton(cropSelection);
     m_centerWidth->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/centerwidth.png")));
-    m_centerWidth->setWhatsThis( i18n("<p>Set width position to center."));
+    m_centerWidth->setWhatsThis( i18n("Set width position to center."));
 
     // -------------------------------------------------------------
 
     m_yInput = new RIntNumInput(cropSelection);
     m_yInput->input()->setLabel(i18n("Y:"), Qt::AlignLeft|Qt::AlignVCenter);
-    m_yInput->setWhatsThis( i18n("<p>Set here the top left selection corner position for cropping."));
+    m_yInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
     m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1);
     m_yInput->setSliderEnabled(true);
     m_yInput->setDefaultValue(50);
 
     m_heightInput = new RIntNumInput(cropSelection);
     m_heightInput->input()->setLabel(i18n("Height:"), Qt::AlignLeft|Qt::AlignVCenter);
-    m_heightInput->setWhatsThis( i18n("<p>Set here the height selection for cropping."));
+    m_heightInput->setWhatsThis( i18n("Set here the height selection for cropping."));
     m_heightInput->setRange(m_imageSelectionWidget->getMinHeightRange(),
                             m_imageSelectionWidget->getMaxHeightRange(),
                             m_imageSelectionWidget->getHeightStep());
@@ -221,7 +221,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     m_centerHeight = new QToolButton(cropSelection);
     m_centerHeight->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/centerheight.png")));
-    m_centerHeight->setWhatsThis( i18n("<p>Set height position to center."));
+    m_centerHeight->setWhatsThis( i18n("Set height position to center."));
 
     // -------------------------------------------------------------
 
@@ -237,26 +237,26 @@ RatioCropTool::RatioCropTool(QObject* parent)
     m_guideLinesCB->addItem(i18n("None"));
     m_guideLinesCB->setDefaultIndex(ImageSelectionWidget::GuideNone);
     m_guideLinesCB->setCurrentIndex(3);
-    m_guideLinesCB->setWhatsThis( i18n("<p>With this option, you can display guide lines "
+    m_guideLinesCB->setWhatsThis( i18n("With this option, you can display guide lines "
                                        "which help you to compose your photograph."));
 
     m_goldenSectionBox = new QCheckBox(i18n("Golden sections"), compositionGuide);
-    m_goldenSectionBox->setWhatsThis(i18n("<p>Enable this option to show golden sections."));
+    m_goldenSectionBox->setWhatsThis(i18n("Enable this option to show golden sections."));
 
     m_goldenSpiralSectionBox = new QCheckBox(i18n("Golden spiral sections"), compositionGuide);
-    m_goldenSpiralSectionBox->setWhatsThis(i18n("<p>Enable this option to show golden spiral sections."));
+    m_goldenSpiralSectionBox->setWhatsThis(i18n("Enable this option to show golden spiral sections."));
 
     m_goldenSpiralBox = new QCheckBox(i18n("Golden spiral"), compositionGuide);
-    m_goldenSpiralBox->setWhatsThis(i18n("<p>Enable this option to show golden spiral guide."));
+    m_goldenSpiralBox->setWhatsThis(i18n("Enable this option to show golden spiral guide."));
 
     m_goldenTriangleBox = new QCheckBox(i18n("Golden triangles"), compositionGuide);
-    m_goldenTriangleBox->setWhatsThis(i18n("<p>Enable this option to show golden triangles."));
+    m_goldenTriangleBox->setWhatsThis(i18n("Enable this option to show golden triangles."));
 
     m_flipHorBox = new QCheckBox(i18n("Flip horizontally"), compositionGuide);
-    m_flipHorBox->setWhatsThis(i18n("<p>Enable this option to flip horizontally guidelines."));
+    m_flipHorBox->setWhatsThis(i18n("Enable this option to flip horizontally guidelines."));
 
     m_flipVerBox = new QCheckBox(i18n("Flip vertically"), compositionGuide);
-    m_flipVerBox->setWhatsThis(i18n("<p>Enable this option to flip vertically guidelines."));
+    m_flipVerBox->setWhatsThis(i18n("Enable this option to flip vertically guidelines."));
 
     m_colorGuideLabel = new QLabel(i18n("Color and width:"), compositionGuide);
     m_guideColorBt    = new KColorButton( QColor( 250, 250, 255 ), compositionGuide );
@@ -264,8 +264,8 @@ RatioCropTool::RatioCropTool(QObject* parent)
     m_guideSize->setRange(1, 5, 1);
     m_guideSize->setSliderEnabled(false);
     m_guideSize->setDefaultValue(1);
-    m_guideColorBt->setWhatsThis(i18n("<p>Set here the color used to draw composition guides."));
-    m_guideSize->setWhatsThis(i18n("<p>Set here the width in pixels used to draw composition guides."));
+    m_guideColorBt->setWhatsThis(i18n("Set here the color used to draw composition guides."));
+    m_guideSize->setWhatsThis(i18n("Set here the width in pixels used to draw composition guides."));
 
     // -------------------------------------------------------------
 

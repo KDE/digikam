@@ -39,6 +39,7 @@
 
 #include "drawdecoding.h"
 #include "histogramwidget.h"
+#include "histogrambox.h"
 #include "curveswidget.h"
 #include "imagehistogram.h"
 #include "rawsettingsbox.h"
@@ -148,7 +149,7 @@ void RawImport::slotAbort()
     if (renderingMode() == EditorToolThreaded::NoneRendering)
     {
         d->previewWidget->cancelLoading();
-        d->settingsBox->histogram()->stopHistogramComputation();
+        d->settingsBox->histogramBox()->histogram()->stopHistogramComputation();
         EditorToolIface::editorToolIface()->setToolStopProgress();
         setBusy(false);
         return;
@@ -160,7 +161,7 @@ void RawImport::slotAbort()
 void RawImport::slotLoadingStarted()
 {
     d->settingsBox->enableUpdateBtn(false);
-    d->settingsBox->histogram()->setDataLoading();
+    d->settingsBox->histogramBox()->histogram()->setDataLoading();
     d->settingsBox->curve()->setDataLoading();
     EditorToolIface::editorToolIface()->setToolStartProgress(i18n("Raw Decoding"));
     setBusy(true);
@@ -188,7 +189,7 @@ void RawImport::putPreviewData()
 
 void RawImport::slotLoadingFailed()
 {
-    d->settingsBox->histogram()->setLoadingFailed();
+    d->settingsBox->histogramBox()->histogram()->setLoadingFailed();
     EditorToolIface::editorToolIface()->setToolStopProgress();
     setBusy(false);
 }

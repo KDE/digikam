@@ -33,10 +33,7 @@
 
 #include "editortool.h"
 
-class QButtonGroup;
 class QListWidget;
-
-class KComboBox;
 
 namespace Digikam
 {
@@ -63,8 +60,6 @@ private slots:
 
     void slotEffect();
     void slotResetSettings();
-    void slotChannelChanged(int channel);
-    void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);
 
 private:
@@ -89,33 +84,13 @@ private:
 
 private:
 
-    enum HistogramScale
-    {
-        Linear=0,
-        Logarithmic
-    };
-
-    enum ColorChannel
-    {
-        LuminosityChannel=0,
-        RedChannel,
-        GreenChannel,
-        BlueChannel
-    };
-
     uchar                        *m_destinationPreviewData;
-
-    QButtonGroup                 *m_scaleBG;
 
     QListWidget                  *m_correctionTools;
 
-    KComboBox                    *m_channelCB;
-
     Digikam::ImageWidget         *m_previewWidget;
 
-    Digikam::ColorGradientWidget *m_hGradient;
-
-    Digikam::HistogramWidget     *m_histogramWidget;
+    Digikam::EditorToolSettings  *m_gboxSettings;
 
     Digikam::DImg                 m_thumbnailImage;
 };

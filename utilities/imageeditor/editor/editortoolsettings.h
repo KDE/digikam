@@ -7,6 +7,7 @@
  * Description : Editor tool settings template box
  *
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,12 +31,13 @@
 // Local includes.
 
 #include "digikam_export.h"
+#include "histogrambox.h"
 
 class KPushButton;
 
 namespace Digikam
 {
-
+class HistogramBox;
 class ImagePanIconWidget;
 class EditorToolSettingsPriv;
 
@@ -57,14 +59,25 @@ public:
 
     enum ToolCode
     {
-        NoTool     = 0x00000001,
-        ColorGuide = 0x00000002,
-        PanIcon    = 0x00000004
+        NoTool          = 0x00000001,
+        ColorGuide      = 0x00000002,
+        PanIcon         = 0x00000004,
+        Histogram       = 0x00000008
+    };
+
+    enum ColorChannel
+    {
+        LuminosityChannel=0,
+        RedChannel,
+        GreenChannel,
+        BlueChannel,
+        AlphaChannel,
+        ColorChannels
     };
 
 public:
 
-    EditorToolSettings(int buttonMask, int toolMask=NoTool, QWidget *parent=0);
+    EditorToolSettings(int buttonMask, int toolMask=NoTool, int histogramType=HistogramBox::LRGB, QWidget *parent=0);
     ~EditorToolSettings();
 
     virtual void setBusy(bool){};
@@ -75,7 +88,9 @@ public:
     int marginHint();
     int spacingHint();
 
-    QWidget *plainPage() const;
+    QWidget* plainPage() const;
+    HistogramBox* histogramBox() const;
+    ImagePanIconWidget* panIconView() const;
 
     QColor guideColor() const;
     void setGuideColor(const QColor& color);
@@ -83,7 +98,6 @@ public:
     int guideSize() const;
     void setGuideSize(int size);
 
-    ImagePanIconWidget* panIconView() const;
     KPushButton* button(int buttonCode) const;
     void enableButton(int buttonCode, bool state);
 
@@ -96,6 +110,9 @@ signals:
     void signalSaveAsClicked();
     void signalLoadClicked();
     void signalColorGuideChanged();
+    void signalChannelChanged();
+    void signalScaleChanged();
+    void signalColorsChanged();
 
 private:
 

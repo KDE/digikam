@@ -111,7 +111,7 @@ BorderTool::BorderTool(QObject* parent)
     m_borderType->addItem( i18n("Decorative Rock") );
     m_borderType->addItem( i18n("Decorative Wall") );
     m_borderType->setDefaultIndex(Border::SolidBorder);
-    m_borderType->setWhatsThis( i18n("<p>Select the border type to add around the image here."));
+    m_borderType->setWhatsThis( i18n("Select the border type to add around the image here."));
 
     KSeparator *line1 = new KSeparator(Qt::Horizontal, m_gboxSettings->plainPage());
 
@@ -129,13 +129,13 @@ BorderTool::BorderTool(QObject* parent)
     m_borderPercent->setRange(1, 50, 1);
     m_borderPercent->setSliderEnabled(true);
     m_borderPercent->setDefaultValue(10);
-    m_borderPercent->setWhatsThis( i18n("<p>Set here the border width in percent of the image size."));
+    m_borderPercent->setWhatsThis( i18n("Set here the border width in percent of the image size."));
 
     m_labelBorderWidth = new QLabel(i18n("Width (pixels):"), m_gboxSettings->plainPage());
     m_borderWidth      = new RIntNumInput(m_gboxSettings->plainPage());
     m_borderWidth->setSliderEnabled(true);
     m_borderWidth->setDefaultValue(100);
-    m_borderWidth->setWhatsThis( i18n("<p>Set here the border width in pixels to add around the image."));
+    m_borderWidth->setWhatsThis( i18n("Set here the border width in pixels to add around the image."));
 
     ImageIface iface(0, 0);
     int w = iface.originalWidth();
@@ -387,8 +387,8 @@ void BorderTool::slotBorderTypeChanged(int borderType)
 {
     m_labelForeground->setText(i18n("First:"));
     m_labelBackground->setText(i18n("Second:"));
-    m_firstColorButton->setWhatsThis(i18n("<p>Set here the foreground color of the border."));
-    m_secondColorButton->setWhatsThis(i18n("<p>Set here the Background color of the border."));
+    m_firstColorButton->setWhatsThis(i18n("Set here the foreground color of the border."));
+    m_secondColorButton->setWhatsThis(i18n("Set here the Background color of the border."));
     m_firstColorButton->setEnabled(true);
     m_secondColorButton->setEnabled(true);
     m_labelForeground->setEnabled(true);
@@ -404,15 +404,15 @@ void BorderTool::slotBorderTypeChanged(int borderType)
             break;
 
         case Border::NiepceBorder:
-            m_firstColorButton->setWhatsThis(i18n("<p>Set here the color of the main border."));
-            m_secondColorButton->setWhatsThis(i18n("<p>Set here the color of the line."));
+            m_firstColorButton->setWhatsThis(i18n("Set here the color of the main border."));
+            m_secondColorButton->setWhatsThis(i18n("Set here the color of the line."));
             m_firstColorButton->setColor(m_niepceBorderColor);
             m_secondColorButton->setColor(m_niepceLineColor);
             break;
 
         case Border::BeveledBorder:
-            m_firstColorButton->setWhatsThis(i18n("<p>Set here the color of the upper left area."));
-            m_secondColorButton->setWhatsThis(i18n("<p>Set here the color of the lower right area."));
+            m_firstColorButton->setWhatsThis(i18n("Set here the color of the upper left area."));
+            m_secondColorButton->setWhatsThis(i18n("Set here the color of the lower right area."));
             m_firstColorButton->setColor(m_bevelUpperLeftColor);
             m_secondColorButton->setColor(m_bevelLowerRightColor);
             break;
@@ -433,8 +433,8 @@ void BorderTool::slotBorderTypeChanged(int borderType)
         case Border::GraniteBorder:
         case Border::RockBorder:
         case Border::WallBorder:
-            m_firstColorButton->setWhatsThis(i18n("<p>Set here the color of the first line."));
-            m_secondColorButton->setWhatsThis(i18n("<p>Set here the color of the second line."));
+            m_firstColorButton->setWhatsThis(i18n("Set here the color of the first line."));
+            m_secondColorButton->setWhatsThis(i18n("Set here the color of the second line."));
             m_firstColorButton->setColor(m_decorativeFirstColor);
             m_secondColorButton->setColor(m_decorativeSecondColor);
             break;

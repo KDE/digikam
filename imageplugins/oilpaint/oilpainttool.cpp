@@ -83,18 +83,16 @@ OilPaintTool::OilPaintTool(QObject* parent)
     m_brushSizeInput->setRange(1, 5, 1);
     m_brushSizeInput->setSliderEnabled(true);
     m_brushSizeInput->setDefaultValue(1);
-    m_brushSizeInput->setWhatsThis( i18n("<p>Set here the brush size to use for "
-                                         "simulating the oil painting.") );
+    m_brushSizeInput->setWhatsThis(i18n("Set here the brush size to use for simulating the oil painting."));
 
     // -------------------------------------------------------------
 
     QLabel *label2 = new QLabel(i18n("Smooth:"), m_gboxSettings->plainPage());
-    m_smoothInput  = new RIntNumInput(m_gboxSettings->plainPage());
+    m_smoothInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_smoothInput->setRange(10, 255, 1);
     m_smoothInput->setSliderEnabled(true);
     m_smoothInput->setDefaultValue(30);
-    m_smoothInput->setWhatsThis( i18n("<p>This value controls the smoothing effect "
-                                      "of the brush under the canvas.") );
+    m_smoothInput->setWhatsThis(i18n("This value controls the smoothing effect of the brush under the canvas."));
 
     grid->addWidget(label1,           0, 0, 1, 2);
     grid->addWidget(m_brushSizeInput, 1, 0, 1, 2);
@@ -111,16 +109,6 @@ OilPaintTool::OilPaintTool(QObject* parent)
     m_previewWidget = new ImagePanelWidget(470, 350, "oilpaint Tool", m_gboxSettings->panIconView());
 
     setToolView(m_previewWidget);
-
-    // -------------------------------------------------------------
-
-    // this filter is relative slow, so we should use the try button instead right now
-
-    //    connect(m_brushSizeInput, SIGNAL(valueChanged (int)),
-    //            this, SLOT(slotTimer()));
-    //
-    //    connect(m_smoothInput, SIGNAL(valueChanged (int)),
-    //            this, SLOT(slotTimer()));
 }
 
 OilPaintTool::~OilPaintTool()

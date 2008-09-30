@@ -84,7 +84,7 @@ CharcoalTool::CharcoalTool(QObject* parent)
     m_pencilInput->setRange(1, 100, 1);
     m_pencilInput->setSliderEnabled(true);
     m_pencilInput->setDefaultValue(5);
-    m_pencilInput->setWhatsThis( i18n("<p>Set here the charcoal pencil size used to simulate the drawing."));
+    m_pencilInput->setWhatsThis( i18n("Set here the charcoal pencil size used to simulate the drawing."));
 
     // -------------------------------------------------------------
 
@@ -94,7 +94,7 @@ CharcoalTool::CharcoalTool(QObject* parent)
     m_smoothInput->setRange(1, 100, 1);
     m_smoothInput->setSliderEnabled(true);
     m_smoothInput->setDefaultValue(10);
-    m_smoothInput->setWhatsThis( i18n("<p>This value controls the smoothing effect of the pencil "
+    m_smoothInput->setWhatsThis( i18n("This value controls the smoothing effect of the pencil "
                                       "under the canvas."));
 
     // -------------------------------------------------------------

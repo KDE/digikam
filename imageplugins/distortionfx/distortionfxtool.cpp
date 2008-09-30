@@ -79,7 +79,7 @@ DistortionFXTool::DistortionFXTool(QObject* parent)
     setToolIcon(SmallIcon("distortionfx"));
 
     m_previewWidget = new ImageWidget("distortionfx Tool", 0,
-                                      i18n("<p>This is the preview of the distortion effect "
+                                      i18n("This is the preview of the distortion effect "
                                            "applied to the photograph."),
                                       false, ImageGuideWidget::HVGuideMode);
 
@@ -115,29 +115,29 @@ DistortionFXTool::DistortionFXTool(QObject* parent)
     m_effectType->addItem(i18n("Unpolar Coordinates"));
     m_effectType->addItem(i18n("Tile"));
     m_effectType->setDefaultIndex(DistortionFX::FishEye);
-    m_effectType->setWhatsThis( i18n("<p>Here, select the type of effect to apply to an image.<p>"
-                                     "<b>Fish Eyes</b>: warps the photograph around a 3D spherical shape to "
-                                     "reproduce the common photograph 'Fish Eyes' effect.<p>"
-                                     "<b>Twirl</b>: spins the photograph to produce a Twirl pattern.<p>"
-                                     "<b>Cylinder Hor.</b>: warps the photograph around a horizontal cylinder.<p>"
-                                     "<b>Cylinder Vert.</b>: warps the photograph around a vertical cylinder.<p>"
-                                     "<b>Cylinder H/V.</b>: warps the photograph around 2 cylinders, vertical "
-                                     "and horizontal.<p>"
-                                     "<b>Caricature</b>: distorts the photograph with the 'Fish Eyes' effect inverted.<p>"
-                                     "<b>Multiple Corners</b>: splits the photograph like a multiple corners pattern.<p>"
-                                     "<b>Waves Horizontal</b>: distorts the photograph with horizontal waves.<p>"
-                                     "<b>Waves Vertical</b>: distorts the photograph with vertical waves.<p>"
-                                     "<b>Block Waves 1</b>: divides the image into cells and makes it look as "
-                                     "if it is being viewed through glass blocks.<p>"
-                                     "<b>Block Waves 2</b>: like Block Waves 1 but with another version "
-                                     "of glass blocks distortion.<p>"
-                                     "<b>Circular Waves 1</b>: distorts the photograph with circular waves.<p>"
-                                     "<b>Circular Waves 2</b>: another variation of the Circular Waves effect.<p>"
-                                     "<b>Polar Coordinates</b>: converts the photograph from rectangular "
-                                     "to polar coordinates.<p>"
-                                     "<b>Unpolar Coordinates</b>: the Polar Coordinate effect inverted.<p>"
-                                     "<b>Tile</b>: splits the photograph into square blocks and moves "
-                                     "them randomly inside the image.<p>"
+    m_effectType->setWhatsThis( i18n("<p>Here, select the type of effect to apply to an image.</p>"
+                                     "<p><b>Fish Eyes</b>: warps the photograph around a 3D spherical shape to "
+                                            "reproduce the common photograph 'Fish Eyes' effect.</p>"
+                                     "<p><b>Twirl</b>: spins the photograph to produce a Twirl pattern.</p>"
+                                     "<p><b>Cylinder Hor.</b>: warps the photograph around a horizontal cylinder.</p>"
+                                     "<p><b>Cylinder Vert.</b>: warps the photograph around a vertical cylinder.</p>"
+                                     "<p><b>Cylinder H/V.</b>: warps the photograph around 2 cylinders, vertical "
+                                            "and horizontal.</p>"
+                                     "<p><b>Caricature</b>: distorts the photograph with the 'Fish Eyes' effect inverted.</p>"
+                                     "<p><b>Multiple Corners</b>: splits the photograph like a multiple corners pattern.</p>"
+                                     "<p><b>Waves Horizontal</b>: distorts the photograph with horizontal waves.</p>"
+                                     "<p><b>Waves Vertical</b>: distorts the photograph with vertical waves.</p>"
+                                     "<p><b>Block Waves 1</b>: divides the image into cells and makes it look as "
+                                            "if it is being viewed through glass blocks.</p>"
+                                     "<p><b>Block Waves 2</b>: like Block Waves 1 but with another version "
+                                            "of glass blocks distortion.</p>"
+                                     "<p><b>Circular Waves 1</b>: distorts the photograph with circular waves.</p>"
+                                     "<p><b>Circular Waves 2</b>: another variation of the Circular Waves effect.</p>"
+                                     "<p><b>Polar Coordinates</b>: converts the photograph from rectangular "
+                                            "to polar coordinates.</p>"
+                                     "<p><b>Unpolar Coordinates</b>: the Polar Coordinate effect inverted.</p>"
+                                     "<p><b>Tile</b>: splits the photograph into square blocks and moves "
+                                            "them randomly inside the image.</p>"
                                      ));
 
     m_levelLabel = new QLabel(i18n("Level:"), m_gboxSettings->plainPage());
@@ -145,14 +145,14 @@ DistortionFXTool::DistortionFXTool(QObject* parent)
     m_levelInput->setRange(0, 100, 1);
     m_levelInput->setSliderEnabled(true);
     m_levelInput->setDefaultValue(50);
-    m_levelInput->setWhatsThis( i18n("<p>Set here the level of the effect."));
+    m_levelInput->setWhatsThis( i18n("Set here the level of the effect."));
 
     m_iterationLabel = new QLabel(i18n("Iteration:"), m_gboxSettings->plainPage());
     m_iterationInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_iterationInput->setRange(0, 100, 1);
     m_iterationInput->setSliderEnabled(true);
     m_iterationInput->setDefaultValue(10);
-    m_iterationInput->setWhatsThis( i18n("<p>This value controls the iterations to use for Waves, "
+    m_iterationInput->setWhatsThis( i18n("This value controls the iterations to use for Waves, "
                                          "Tile, and Neon effects."));
 
     // -------------------------------------------------------------

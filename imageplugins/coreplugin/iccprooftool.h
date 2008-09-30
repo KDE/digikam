@@ -35,7 +35,6 @@ class QCheckBox;
 class QRadioButton;
 class QToolBox;
 
-class KComboBox;
 class KUrlRequester;
 
 namespace KDcrawIface
@@ -98,8 +97,6 @@ private slots:
     void slotLoadSettings();
     void slotResetSettings();
     void slotEffect();
-    void slotChannelChanged(int);
-    void slotScaleChanged(int);
     void slotSpotColorChanged(const Digikam::DColor &);
     void slotColorSelectedFromTarget(const Digikam::DColor &);
     void slotToggledWidgets(bool);
@@ -110,20 +107,6 @@ private slots:
     void processLCMSUrl(const QString&);
 
 private:
-
-    enum HistogramScale
-    {
-        Linear = 0,
-        Logarithmic
-    };
-
-    enum ColorChannel
-    {
-        LuminosityChannel = 0,
-        RedChannel,
-        GreenChannel,
-        BlueChannel
-    };
 
     enum ICCSettingsTab
     {
@@ -161,15 +144,12 @@ private:
     QButtonGroup                   *m_inProfileBG;
     QButtonGroup                   *m_spaceProfileBG;
     QButtonGroup                   *m_proofProfileBG;
-    QButtonGroup                   *m_scaleBG;
     QButtonGroup                   *m_renderingIntentBG;
     QButtonGroup                   *m_profilesBG;
 
     QByteArray                      m_embeddedICC;
 
     QToolBox                       *m_toolBoxWidgets;
-
-    KComboBox                      *m_channelCB;
 
     KUrlRequester                  *m_inProfilesPath;
     KUrlRequester                  *m_spaceProfilePath;
@@ -183,10 +163,6 @@ private:
     Digikam::CurvesWidget          *m_curvesWidget;
 
     Digikam::ImageWidget           *m_previewWidget;
-
-    Digikam::ColorGradientWidget   *m_hGradient;
-
-    Digikam::HistogramWidget       *m_histogramWidget;
 
     Digikam::ICCPreviewWidget      *m_iccInPreviewWidget;
     Digikam::ICCPreviewWidget      *m_iccSpacePreviewWidget;

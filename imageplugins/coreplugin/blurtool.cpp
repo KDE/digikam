@@ -81,7 +81,7 @@ BlurTool::BlurTool(QObject* parent)
     m_radiusInput->setRange(0, 100, 1);
     m_radiusInput->setSliderEnabled(true);
     m_radiusInput->setDefaultValue(0);
-    m_radiusInput->setWhatsThis( i18n("<p>A smoothness of 0 has no effect, "
+    m_radiusInput->setWhatsThis( i18n("A smoothness of 0 has no effect, "
                                       "1 and above determine the Gaussian blur matrix radius "
                                       "that determines how much to blur the image."));
 

@@ -41,7 +41,6 @@ class RIntNumInput;
 namespace Digikam
 {
 class HistogramWidget;
-class ColorGradientWidget;
 class ImageWidget;
 class DColor;
 class EditorToolSettings;
@@ -70,29 +69,11 @@ private:
 private slots:
 
     void slotEffect();
-    void slotChannelChanged(int channel);
-    void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
 
 private:
 
-    enum HistogramScale
-    {
-        Linear=0,
-        Logarithmic
-    };
-
-    enum ColorChannel
-    {
-        LuminosityChannel=0,
-        RedChannel,
-        GreenChannel,
-        BlueChannel
-    };
-
     uchar                        *m_destinationPreviewData;
-
-    QButtonGroup                 *m_scaleBG;
 
     QSlider                      *m_rSlider;
     QSlider                      *m_gSlider;
@@ -105,10 +86,6 @@ private:
     KDcrawIface::RIntNumInput    *m_bInput;
 
     Digikam::ImageWidget         *m_previewWidget;
-
-    Digikam::ColorGradientWidget *m_hGradient;
-
-    Digikam::HistogramWidget     *m_histogramWidget;
 
     Digikam::EditorToolSettings  *m_gboxSettings;
 };

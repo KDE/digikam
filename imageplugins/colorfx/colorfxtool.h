@@ -30,10 +30,7 @@
 
 #include "editortool.h"
 
-class QButtonGroup;
 class QLabel;
-
-class KComboBox;
 
 namespace KDcrawIface
 {
@@ -47,6 +44,7 @@ class ImageWidget;
 class ColorGradientWidget;
 class HistogramWidget;
 class DColor;
+class EditorToolSettings;
 }
 
 namespace DigikamColorFXImagesPlugin
@@ -81,25 +79,9 @@ private slots:
     void slotEffectTypeChanged(int type);
     void slotEffect();
     void slotResetSettings();
-    void slotChannelChanged(int channel);
-    void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);
 
 private:
-
-    enum HistogramScale
-    {
-        Linear=0,
-        Logarithmic
-    };
-
-    enum ColorChannel
-    {
-        LuminosityChannel=0,
-        RedChannel,
-        GreenChannel,
-        BlueChannel
-    };
 
     enum ColorFXTypes
     {
@@ -111,13 +93,9 @@ private:
 
     uchar                        *m_destinationPreviewData;
 
-    QButtonGroup                 *m_scaleBG;
-
     QLabel                       *m_effectTypeLabel;
     QLabel                       *m_levelLabel;
     QLabel                       *m_iterationLabel;
-
-    KComboBox                    *m_channelCB;
 
     KDcrawIface::RComboBox       *m_effectType;
 
@@ -126,9 +104,7 @@ private:
 
     Digikam::ImageWidget         *m_previewWidget;
 
-    Digikam::ColorGradientWidget *m_hGradient;
-
-    Digikam::HistogramWidget     *m_histogramWidget;
+    Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
 }  // NameSpace DigikamColorFXImagesPlugin

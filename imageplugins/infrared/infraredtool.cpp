@@ -110,7 +110,7 @@ InfraredTool::InfraredTool(QObject* parent)
 
     m_addFilmGrain = new QCheckBox( i18n("Add film grain"), m_gboxSettings->plainPage());
     m_addFilmGrain->setChecked( true );
-    m_addFilmGrain->setWhatsThis( i18n("<p>This option adds infrared film grain to "
+    m_addFilmGrain->setWhatsThis( i18n("This option adds infrared film grain to "
                                        "the image depending on ISO-sensitivity."));
 
     // -------------------------------------------------------------

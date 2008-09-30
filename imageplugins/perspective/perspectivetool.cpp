@@ -80,7 +80,7 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
     QVBoxLayout* l  = new QVBoxLayout(frame);
     m_previewWidget = new PerspectiveWidget(525, 350, frame);
     l->addWidget(m_previewWidget);
-    m_previewWidget->setWhatsThis(i18n("<p>This is the perspective transformation operation preview. "
+    m_previewWidget->setWhatsThis(i18n("This is the perspective transformation operation preview. "
                                        "You can use the mouse for dragging the corner to adjust the "
                                        "perspective transformation area."));
     setToolView(frame);
@@ -128,7 +128,7 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
 
     QLabel *label7 = new QLabel(i18n("Guide color:"), m_gboxSettings->plainPage());
     m_guideColorBt = new KColorButton(QColor(Qt::red), m_gboxSettings->plainPage());
-    m_guideColorBt->setWhatsThis(i18n("<p>Set here the color used to draw guides dashed-lines."));
+    m_guideColorBt->setWhatsThis(i18n("Set here the color used to draw guides dashed-lines."));
 
     QLabel *space  = new QLabel(m_gboxSettings->plainPage());
     space->setFixedHeight(m_gboxSettings->spacingHint());
@@ -137,7 +137,7 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
     m_guideSize = new QSpinBox(m_gboxSettings->plainPage());
     m_guideSize->setRange(1, 5);
     m_guideSize->setSingleStep(1);
-    m_guideSize->setWhatsThis(i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
+    m_guideSize->setWhatsThis(i18n("Set here the width in pixels used to draw guides dashed-lines."));
 
     gridLayout->setMargin(m_gboxSettings->spacingHint());
     gridLayout->setSpacing(0);

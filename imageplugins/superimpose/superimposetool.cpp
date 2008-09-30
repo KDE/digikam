@@ -85,8 +85,7 @@ SuperImposeTool::SuperImposeTool(QObject* parent)
 
     QGridLayout* gridFrame = new QGridLayout(frame);
     m_previewWidget        = new SuperImposeWidget(400, 300, frame);
-    m_previewWidget->setWhatsThis( i18n("<p>This previews the template "
-                                        "superimposed onto the image."));
+    m_previewWidget->setWhatsThis( i18n("This previews the template superimposed onto the image."));
 
     // -------------------------------------------------------------
 
@@ -148,7 +147,7 @@ SuperImposeTool::SuperImposeTool(QObject* parent)
     m_thumbnailsBar   = new ThumbBarView(m_gboxSettings->plainPage());
     m_dirSelect       = new DirSelectWidget(m_gboxSettings->plainPage());
     QPushButton *templateDirButton = new QPushButton(i18n("Root Directory..."), m_gboxSettings->plainPage());
-    templateDirButton->setWhatsThis(i18n("<p>Set here the current templates' root directory."));
+    templateDirButton->setWhatsThis(i18n("Set here the current templates' root directory."));
 
     // -------------------------------------------------------------
 

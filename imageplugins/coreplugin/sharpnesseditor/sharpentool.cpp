@@ -96,7 +96,7 @@ SharpenTool::SharpenTool(QObject* parent)
     m_sharpMethod->addItem(i18n("Unsharp mask"));
     m_sharpMethod->addItem(i18n("Refocus"));
     m_sharpMethod->setDefaultIndex(SimpleSharp);
-    m_sharpMethod->setWhatsThis( i18n("<p>Select the sharpening method to apply to the image."));
+    m_sharpMethod->setWhatsThis( i18n("Select the sharpening method to apply to the image."));
 
     m_stack = new QStackedWidget(m_gboxSettings->plainPage());
 
@@ -118,7 +118,7 @@ SharpenTool::SharpenTool(QObject* parent)
     m_radiusInput->setRange(0, 100, 1);
     m_radiusInput->setSliderEnabled(true);
     m_radiusInput->setDefaultValue(0);
-    m_radiusInput->setWhatsThis( i18n("<p>A sharpness of 0 has no effect, "
+    m_radiusInput->setWhatsThis( i18n("A sharpness of 0 has no effect, "
                                       "1 and above determine the sharpen matrix radius "
                                       "that determines how much to sharpen the image."));
 
@@ -140,7 +140,7 @@ SharpenTool::SharpenTool(QObject* parent)
     m_radiusInput2->setRange(1, 120, 1);
     m_radiusInput2->setSliderEnabled(true);
     m_radiusInput2->setDefaultValue(1);
-    m_radiusInput2->setWhatsThis( i18n("<p>Radius value is the gaussian blur matrix radius value "
+    m_radiusInput2->setWhatsThis( i18n("Radius value is the gaussian blur matrix radius value "
                                        "used to determines how much to blur the image.") );
 
     QLabel *label3 = new QLabel(i18n("Amount:"), unsharpMaskSettings);
@@ -148,7 +148,7 @@ SharpenTool::SharpenTool(QObject* parent)
     m_amountInput->setDecimals(1);
     m_amountInput->input()->setRange(0.0, 5.0, 0.1, true);
     m_amountInput->setDefaultValue(1.0);
-    m_amountInput->setWhatsThis( i18n("<p>The value of the difference between the "
+    m_amountInput->setWhatsThis( i18n("The value of the difference between the "
                                       "original and the blur image that is added back into the original.") );
 
     QLabel *label4   = new QLabel(i18n("Threshold:"), unsharpMaskSettings);
@@ -156,7 +156,7 @@ SharpenTool::SharpenTool(QObject* parent)
     m_thresholdInput->setDecimals(2);
     m_thresholdInput->input()->setRange(0.0, 1.0, 0.01, true);
     m_thresholdInput->setDefaultValue(0.05);
-    m_thresholdInput->setWhatsThis( i18n("<p>The threshold, as a fraction of the maximum "
+    m_thresholdInput->setWhatsThis( i18n("The threshold, as a fraction of the maximum "
                                          "luminosity value, needed to apply the difference amount.") );
 
     grid2->addWidget(label2,           0, 0, 1, 2);
@@ -181,7 +181,7 @@ SharpenTool::SharpenTool(QObject* parent)
     m_radius->setDecimals(2);
     m_radius->input()->setRange(0.0, 5.0, 0.01, true);
     m_radius->setDefaultValue(1.0);
-    m_radius->setWhatsThis( i18n("<p>This is the radius of the circular convolution. It is the most important "
+    m_radius->setWhatsThis( i18n("This is the radius of the circular convolution. It is the most important "
                                  "parameter for using this plugin. For most images the default value of 1.0 "
                                  "should give good results. Select a higher value when your image is very blurred."));
 
@@ -190,7 +190,7 @@ SharpenTool::SharpenTool(QObject* parent)
     m_correlation->setDecimals(2);
     m_correlation->input()->setRange(0.0, 1.0, 0.01, true);
     m_correlation->setDefaultValue(0.5);
-    m_correlation->setWhatsThis( i18n("<p>Increasing the correlation may help to reduce artifacts. The correlation can "
+    m_correlation->setWhatsThis( i18n("Increasing the correlation may help to reduce artifacts. The correlation can "
                                       "range from 0-1. Useful values are 0.5 and values close to 1, e.g. 0.95 and 0.99. "
                                       "Using a high value for the correlation will reduce the sharpening effect of the "
                                       "plugin."));
@@ -200,7 +200,7 @@ SharpenTool::SharpenTool(QObject* parent)
     m_noise->setDecimals(3);
     m_noise->input()->setRange(0.0, 1.0, 0.001, true);
     m_noise->setDefaultValue(0.03);
-    m_noise->setWhatsThis( i18n("<p>Increasing the noise filter parameter may help to reduce artifacts. The noise filter "
+    m_noise->setWhatsThis( i18n("Increasing the noise filter parameter may help to reduce artifacts. The noise filter "
                                 "can range from 0-1 but values higher than 0.1 are rarely helpful. When the noise filter "
                                 "value is too low, e.g. 0.0 the image quality will be very poor. A useful value is 0.01. "
                                 "Using a high value for the noise filter will reduce the sharpening "
@@ -211,7 +211,7 @@ SharpenTool::SharpenTool(QObject* parent)
     m_gauss->setDecimals(2);
     m_gauss->input()->setRange(0.0, 1.0, 0.01, true);
     m_gauss->setDefaultValue(0.0);
-    m_gauss->setWhatsThis( i18n("<p>This is the sharpness for the gaussian convolution. Use this parameter when your "
+    m_gauss->setWhatsThis( i18n("This is the sharpness for the gaussian convolution. Use this parameter when your "
                                 "blurring is of a Gaussian type. In most cases you should set this parameter to 0, because "
                                 "it causes nasty artifacts. When you use non-zero values, you will probably also have to "
                                 "increase the correlation and/or noise filter parameters."));
@@ -221,7 +221,7 @@ SharpenTool::SharpenTool(QObject* parent)
     m_matrixSize->setRange(0, MAX_MATRIX_SIZE, 1);
     m_matrixSize->setSliderEnabled(true);
     m_matrixSize->setDefaultValue(5);
-    m_matrixSize->setWhatsThis( i18n("<p>This parameter determines the size of the transformation matrix. "
+    m_matrixSize->setWhatsThis( i18n("This parameter determines the size of the transformation matrix. "
                                      "Increasing the matrix width may give better results, especially when you have "
                                      "chosen large values for circular or gaussian sharpness."));
 

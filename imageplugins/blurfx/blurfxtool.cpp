@@ -95,43 +95,43 @@ BlurFXTool::BlurFXTool(QObject* parent)
     m_effectType->addItem(i18n("Frost Glass"));
     m_effectType->addItem(i18n("Mosaic"));
     m_effectType->setDefaultIndex(BlurFX::ZoomBlur);
-    m_effectType->setWhatsThis( i18n("<p>Select the blurring effect to apply to image.<p>"
-                                     "<b>Zoom Blur</b>:  blurs the image along radial lines starting from "
-                                     "a specified center point. This simulates the blur of a zooming camera.<p>"
-                                     "<b>Radial Blur</b>: blurs the image by rotating the pixels around "
-                                     "the specified center point. This simulates the blur of a rotating camera.<p>"
-                                     "<b>Far Blur</b>: blurs the image by using far pixels. This simulates the blur "
-                                     "of an unfocalized camera lens.<p>"
-                                     "<b>Motion Blur</b>: blurs the image by moving the pixels horizontally. "
-                                     "This simulates the blur of a linear moving camera.<p>"
-                                     "<b>Softener Blur</b>: blurs the image softly in dark tones and hardly in light "
+    m_effectType->setWhatsThis( i18n("<p>Select the blurring effect to apply to image.</p>"
+                                     "<p><b>Zoom Blur</b>:  blurs the image along radial lines starting from "
+                                     "a specified center point. This simulates the blur of a zooming camera.</p>"
+                                     "<p><b>Radial Blur</b>: blurs the image by rotating the pixels around "
+                                     "the specified center point. This simulates the blur of a rotating camera.</p>"
+                                     "<p><b>Far Blur</b>: blurs the image by using far pixels. This simulates the blur "
+                                     "of an unfocalized camera lens.</p>"
+                                     "<p><b>Motion Blur</b>: blurs the image by moving the pixels horizontally. "
+                                     "This simulates the blur of a linear moving camera.</p>"
+                                     "<p><b>Softener Blur</b>: blurs the image softly in dark tones and hardly in light "
                                      "tones. This gives images a dreamy and glossy soft focus effect. It is ideal "
                                      "for creating romantic portraits, glamour photographs, or giving images a warm "
-                                     "and subtle glow.<p>"
-                                     "<b>Skake Blur</b>: blurs the image by skaking randomly the pixels. "
-                                     "This simulates the blur of a random moving camera.<p>"
-                                     "<b>Focus Blur</b>: blurs the image corners to reproduce the astigmatism distortion "
-                                     "of a lens.<p>"
-                                     "<b>Smart Blur</b>: finds the edges of color in your image and blurs them without "
-                                     "muddying the rest of the image.<p>"
-                                     "<b>Frost Glass</b>: blurs the image by randomly disperse light coming through "
-                                     "a frosted glass.<p>"
-                                     "<b>Mosaic</b>: divides the photograph into rectangular cells and then "
-                                     "recreates it by filling those cells with average pixel value."));
+                                     "and subtle glow.</p>"
+                                     "<p><b>Skake Blur</b>: blurs the image by skaking randomly the pixels. "
+                                     "This simulates the blur of a random moving camera.</p>"
+                                     "<p><b>Focus Blur</b>: blurs the image corners to reproduce the astigmatism distortion "
+                                     "of a lens.</p>"
+                                     "<p><b>Smart Blur</b>: finds the edges of color in your image and blurs them without "
+                                     "muddying the rest of the image.</p>"
+                                     "<p><b>Frost Glass</b>: blurs the image by randomly disperse light coming through "
+                                     "a frosted glass.</p>"
+                                     "<p><b>Mosaic</b>: divides the photograph into rectangular cells and then "
+                                     "recreates it by filling those cells with average pixel value.</p>"));
 
     m_distanceLabel = new QLabel(i18n("Distance:"), m_gboxSettings->plainPage());
     m_distanceInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_distanceInput->setRange(0, 100, 1);
     m_distanceInput->setSliderEnabled(true);
     m_distanceInput->setDefaultValue(3);
-    m_distanceInput->setWhatsThis( i18n("<p>Set here the blur distance in pixels."));
+    m_distanceInput->setWhatsThis( i18n("Set here the blur distance in pixels."));
 
     m_levelLabel = new QLabel(i18n("Level:"), m_gboxSettings->plainPage());
     m_levelInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_levelInput->setRange(0, 360, 1);
     m_levelInput->setSliderEnabled(true);
     m_levelInput->setDefaultValue(128);
-    m_levelInput->setWhatsThis( i18n("<p>This value controls the level to use with the current effect."));
+    m_levelInput->setWhatsThis( i18n("This value controls the level to use with the current effect."));
 
     // -------------------------------------------------------------
 

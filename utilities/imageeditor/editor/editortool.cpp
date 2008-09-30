@@ -36,6 +36,8 @@
 #include "imagewidget.h"
 #include "imageguidewidget.h"
 #include "imagepanelwidget.h"
+#include "histogramwidget.h"
+#include "histogrambox.h"
 #include "editortoolsettings.h"
 #include "editortooliface.h"
 #include "editortool.h"
@@ -155,6 +157,15 @@ void EditorTool::setToolSettings(EditorToolSettings *settings)
 
     connect(d->settings, SIGNAL(signalTryClicked()),
             this, SLOT(slotEffect()));
+
+    connect(d->settings, SIGNAL(signalChannelChanged()),
+            this, SLOT(slotChannelChanged()));
+
+    connect(d->settings, SIGNAL(signalColorsChanged()),
+            this, SLOT(slotColorsChanged()));
+
+    connect(d->settings, SIGNAL(signalScaleChanged()),
+            this, SLOT(slotScaleChanged()));
 }
 
 void EditorTool::setBusy(bool state)

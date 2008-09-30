@@ -33,7 +33,6 @@
 // KDE includes.
 
 #include <kapplication.h>
-#include <kcombobox.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
@@ -50,6 +49,7 @@
 
 // Local includes.
 
+#include "histogrambox.h"
 #include "imagedialog.h"
 #include "imagehistogram.h"
 #include "imagecurves.h"
@@ -69,15 +69,6 @@ class RawSettingsBoxPriv
 {
 public:
 
-    enum ColorChannel
-    {
-        LuminosityChannel=0,
-        RedChannel,
-        GreenChannel,
-        BlueChannel,
-        ColorChannels
-    };
-
     enum AllColorsColorType
     {
         AllColorsRed=0,
@@ -89,11 +80,6 @@ public:
 
     RawSettingsBoxPriv()
     {
-        channelCB              = 0;
-        colorsCB               = 0;
-        scaleBG                = 0;
-        hGradient              = 0;
-        histogramWidget        = 0;
         infoBox                = 0;
         advExposureBox         = 0;
         gammaLabel             = 0;
@@ -121,16 +107,11 @@ public:
     QWidget             *curveBox;
     QWidget             *rawdecodingBox;
 
-    KComboBox           *channelCB;
-    KComboBox           *colorsCB;
-
     QLabel              *brightnessLabel;
     QLabel              *contrastLabel;
     QLabel              *gammaLabel;
     QLabel              *saturationLabel;
     QLabel              *fineExposureLabel;
-
-    QButtonGroup        *scaleBG;
 
     QPushButton         *abortBtn;
     QPushButton         *updateBtn;
@@ -141,11 +122,7 @@ public:
 
     KTabWidget          *tabView;
 
-    ColorGradientWidget *hGradient;
-
     CurvesWidget        *curveWidget;
-
-    HistogramWidget     *histogramWidget;
 
     ImageDialogPreview  *infoBox;
 
@@ -160,86 +137,13 @@ public:
 };
 
 RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
-              : EditorToolSettings(Default|Ok|Cancel, NoTool, parent)
+              : EditorToolSettings(Default|Ok|Cancel, Histogram, HistogramBox::LRGBC, parent)
 {
     d = new RawSettingsBoxPriv;
 
     // ---------------------------------------------------------------
 
     QGridLayout* gridSettings = new QGridLayout(plainPage());
-
-    QLabel *label1 = new QLabel(i18n("Channel:"), plainPage());
-    label1->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-    d->channelCB   = new KComboBox(plainPage());
-    d->channelCB->addItem( i18n("Luminosity") );
-    d->channelCB->addItem( i18n("Red") );
-    d->channelCB->addItem( i18n("Green") );
-    d->channelCB->addItem( i18n("Blue") );
-    d->channelCB->addItem( i18n("Colors") );
-    d->channelCB->setWhatsThis(i18n("<p>Select the histogram channel to display here:<p>"
-                                    "<b>Luminosity</b>: display the image's luminosity values.<p>"
-                                    "<b>Red</b>: display the red image-channel values.<p>"
-                                    "<b>Green</b>: display the green image-channel values.<p>"
-                                    "<b>Blue</b>: display the blue image-channel values.<p>"
-                                    "<b>Colors</b>: Display all color channel values at the same time."));
-
-    // ---------------------------------------------------------------
-
-    QWidget *scaleBox = new QWidget(plainPage());
-    QHBoxLayout *hlay = new QHBoxLayout(scaleBox);
-    d->scaleBG        = new QButtonGroup(scaleBox);
-    scaleBox->setWhatsThis(i18n("<p>Select the histogram scale here.<p>"
-                                "If the image's maximal counts are small, you can use the linear scale.<p>"
-                                "Logarithmic scale can be used when the maximal counts are big; "
-                                "if it is used, all values (small and large) will be visible on the graph."));
-
-    QToolButton *linHistoButton = new QToolButton( scaleBox );
-    linHistoButton->setToolTip( i18n( "<p>Linear" ) );
-    linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
-    linHistoButton->setCheckable(true);
-    d->scaleBG->addButton(linHistoButton, Digikam::CurvesWidget::LinScaleHistogram);
-
-    QToolButton *logHistoButton = new QToolButton( scaleBox );
-    logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
-    logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
-    logHistoButton->setCheckable(true);
-    d->scaleBG->addButton(logHistoButton, Digikam::CurvesWidget::LogScaleHistogram);
-
-    hlay->setMargin(0);
-    hlay->setSpacing(0);
-    hlay->addWidget(linHistoButton);
-    hlay->addWidget(logHistoButton);
-
-    d->scaleBG->setExclusive(true);
-    logHistoButton->setChecked(true);
-
-    // ---------------------------------------------------------------
-
-    QLabel *label10 = new QLabel(i18n("Colors:"), plainPage());
-    label10->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-    d->colorsCB     = new KComboBox(plainPage());
-    d->colorsCB->addItem( i18n("Red") );
-    d->colorsCB->addItem( i18n("Green") );
-    d->colorsCB->addItem( i18n("Blue") );
-    d->colorsCB->setEnabled( false );
-    d->colorsCB->setWhatsThis(i18n("<p>Select the main color displayed with Colors Channel mode here:<p>"
-                                   "<b>Red</b>: Draw the red image channel in the foreground.<p>"
-                                   "<b>Green</b>: Draw the green image channel in the foreground.<p>"
-                                   "<b>Blue</b>: Draw the blue image channel in the foreground.<p>"));
-
-    // ---------------------------------------------------------------
-
-    KVBox *histoBox    = new KVBox(plainPage());
-    d->histogramWidget = new HistogramWidget(256, 140, histoBox, false, true, true);
-    d->histogramWidget->setWhatsThis(i18n("<p>Here you can see the target preview image histogram drawing "
-                                          "of the selected image channel. This one is re-computed at any "
-                                          "settings changes."));
-    QLabel *space = new QLabel(histoBox);
-    space->setFixedHeight(1);
-    d->hGradient  = new ColorGradientWidget( ColorGradientWidget::Horizontal, 10, histoBox );
-    d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-
-    // ---------------------------------------------------------------
 
     d->tabView             = new KTabWidget(plainPage());
     d->rawdecodingBox      = new QWidget(d->tabView);
@@ -288,14 +192,14 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     d->brightnessInput->setRange(-100, 100, 1);
     d->brightnessInput->setDefaultValue(0);
     d->brightnessInput->setSliderEnabled(true);
-    d->brightnessInput->input()->setWhatsThis(i18n("<p>Set here the brightness adjustment of the image."));
+    d->brightnessInput->input()->setWhatsThis(i18n("Set here the brightness adjustment of the image."));
 
     d->contrastLabel = new QLabel(i18n("Contrast:"), d->advExposureBox);
     d->contrastInput = new RIntNumInput(d->advExposureBox);
     d->contrastInput->setRange(-100, 100, 1);
     d->contrastInput->setDefaultValue(0);
     d->contrastInput->setSliderEnabled(true);
-    d->contrastInput->input()->setWhatsThis(i18n("<p>Set here the contrast adjustment of the image."));
+    d->contrastInput->input()->setWhatsThis(i18n("Set here the contrast adjustment of the image."));
 
     d->gammaLabel = new QLabel(i18n("Gamma:"), d->advExposureBox);
     d->gammaInput = new RDoubleNumInput(d->advExposureBox);
@@ -309,14 +213,14 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     d->saturationInput->setDecimals(2);
     d->saturationInput->setRange(0.0, 2.0, 0.01);
     d->saturationInput->setDefaultValue(1.0);
-    d->saturationInput->input()->setWhatsThis(i18n("<p>Set here the color saturation correction."));
+    d->saturationInput->input()->setWhatsThis(i18n("Set here the color saturation correction."));
 
     d->fineExposureLabel = new QLabel(i18n("Exposure (E.V):"), d->advExposureBox);
     d->fineExposureInput = new RDoubleNumInput(d->advExposureBox);
     d->fineExposureInput->setDecimals(2);
     d->fineExposureInput->setRange(-3.0, 3.0, 0.1);
     d->fineExposureInput->setDefaultValue(0.0);
-    d->fineExposureInput->input()->setWhatsThis(i18n("<p>This value in E.V will be used to perform "
+    d->fineExposureInput->input()->setWhatsThis(i18n("This value in E.V will be used to perform "
                                                      "an exposure compensation of the image."));
 
     advExposureLayout->addWidget(d->brightnessLabel,   0, 0, 1, 1);
@@ -345,7 +249,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     spacev->setFixedWidth(1);
 
     d->curveWidget = new CurvesWidget(256, 192, d->curveBox);
-    d->curveWidget->setWhatsThis(i18n("<p>This is the curve adjustment of the image luminosity"));
+    d->curveWidget->setWhatsThis(i18n("This is the curve adjustment of the image luminosity"));
 
     d->resetCurveBtn = new QToolButton(d->curveBox);
     d->resetCurveBtn->setFixedSize(11, 11);
@@ -391,40 +295,25 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
 
     button(Default)->setText(i18n("Reset"));
     button(Default)->setIcon(KIcon(SmallIcon("document-revert")));
-    button(Default)->setToolTip(i18n("<p>Reset all settings to default values."));
+    button(Default)->setToolTip(i18n("Reset all settings to default values."));
 
     button(Ok)->setText(i18n("Import"));
     button(Ok)->setIcon(KIcon(SmallIcon("dialog-ok")));
-    button(Ok)->setToolTip(i18n("<p>Import image to editor using current settings."));
+    button(Ok)->setToolTip(i18n("Import image to editor using current settings."));
 
     button(Cancel)->setText(i18n("Use Default"));
     button(Cancel)->setIcon(KIcon(SmallIcon("go-home")));
-    button(Cancel)->setToolTip(i18n("<p>Use general Raw decoding settings to load this image in editor."));
+    button(Cancel)->setToolTip(i18n("Use general Raw decoding settings to load this image in editor."));
 
     // ---------------------------------------------------------------
 
-    gridSettings->addWidget(label1,       0, 0, 1, 1);
-    gridSettings->addWidget(d->channelCB, 0, 1, 1, 1);
-    gridSettings->addWidget(scaleBox,     0, 4, 1, 1);
-    gridSettings->addWidget(label10,      1, 0, 1, 1);
-    gridSettings->addWidget(d->colorsCB,  1, 1, 1, 1);
-    gridSettings->addWidget(histoBox,     2, 0, 2, 5);
-    gridSettings->addWidget(d->tabView,   4, 0, 1, 5);
-    gridSettings->setRowStretch(5, 10);
+    gridSettings->addWidget(d->tabView,   0, 0, 1, 5);
+    gridSettings->setRowStretch(1, 10);
     gridSettings->setColumnStretch(2, 10);
     gridSettings->setSpacing(spacingHint());
     gridSettings->setMargin(0);
 
     // ---------------------------------------------------------------
-
-    connect(d->channelCB, SIGNAL(activated(int)),
-            this, SLOT(slotChannelChanged(int)));
-
-    connect(d->scaleBG, SIGNAL(buttonReleased(int)),
-            this, SLOT(slotScaleChanged(int)));
-
-    connect(d->colorsCB, SIGNAL(activated(int)),
-            this, SLOT(slotColorsChanged(int)));
 
     connect(d->resetCurveBtn, SIGNAL(clicked()),
             this, SLOT(slotResetCurve()));
@@ -482,8 +371,8 @@ void RawSettingsBox::setDemosaicedImage(DImg& img)
 
 void RawSettingsBox::setPostProcessedImage(DImg& img)
 {
-    d->histogramWidget->stopHistogramComputation();
-    d->histogramWidget->updateData(img.bits(), img.width(), img.height(), img.sixteenBit());
+    histogramBox()->histogram()->stopHistogramComputation();
+    histogramBox()->histogram()->updateData(img.bits(), img.width(), img.height(), img.sixteenBit());
 }
 
 void RawSettingsBox::resetSettings()
@@ -503,11 +392,6 @@ void RawSettingsBox::slotResetCurve()
     emit signalPostProcessingChanged();
 }
 
-HistogramWidget* RawSettingsBox::histogram() const
-{
-   return d->histogramWidget;
-}
-
 CurvesWidget* RawSettingsBox::curve() const
 {
     return d->curveWidget;
@@ -518,10 +402,12 @@ void RawSettingsBox::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("RAW Import Settings");
 
-    d->channelCB->setCurrentIndex(group.readEntry("Histogram Channel", (int)RawSettingsBoxPriv::LuminosityChannel));
-    d->scaleBG->button(group.readEntry("Histogram Scale",
-                       (int)Digikam::CurvesWidget::LogScaleHistogram))->setChecked(true);
-    d->colorsCB->setCurrentIndex(group.readEntry("Histogram Color", (int)RawSettingsBoxPriv::AllColorsRed));
+    histogramBox()->setChannel(group.readEntry("Histogram Channel",
+                            (int)EditorToolSettings::LuminosityChannel));
+    histogramBox()->setScale(group.readEntry("Histogram Scale",
+                            (int)HistogramWidget::LogScaleHistogram));
+
+//    d->colorsCB->setCurrentIndex(group.readEntry("Histogram Color", (int)RawSettingsBoxPriv::AllColorsRed));
 
     d->decodingSettingsBox->setSixteenBits(group.readEntry("SixteenBitsImage", false));
     d->decodingSettingsBox->setWhiteBalance((DRawDecoding::WhiteBalance)
@@ -580,9 +466,9 @@ void RawSettingsBox::readSettings()
     d->decodingSettingsBox->setCurrentIndex(group.readEntry("Decoding Settings Tab", (int)DcrawSettingsWidget::DEMOSAICING));
     d->postProcessSettingsBox->setCurrentIndex(group.readEntry("Post Processing Settings Tab", 0));
 
-    slotChannelChanged(d->channelCB->currentIndex());
-    slotScaleChanged(d->scaleBG->checkedId());
-    slotColorsChanged(d->colorsCB->currentIndex());
+//    slotChannelChanged();
+//    slotScaleChanged(histogramScale());
+//    slotColorsChanged(d->colorsCB->currentIndex());
 }
 
 void RawSettingsBox::writeSettings()
@@ -590,9 +476,9 @@ void RawSettingsBox::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("RAW Import Settings");
 
-    group.writeEntry("Histogram Channel",          d->channelCB->currentIndex());
-    group.writeEntry("Histogram Scale",            d->scaleBG->checkedId());
-    group.writeEntry("Histogram Color",            d->colorsCB->currentIndex());
+    group.writeEntry("Histogram Channel",          histogramBox()->channel());
+    group.writeEntry("Histogram Scale",            histogramBox()->scale());
+//    group.writeEntry("Histogram Color",            d->colorsCB->currentIndex());
 
     group.writeEntry("SixteenBitsImage",           d->decodingSettingsBox->sixteenBits());
     group.writeEntry("White Balance",              (int)d->decodingSettingsBox->whiteBalance());
@@ -669,70 +555,6 @@ DRawDecoding RawSettingsBox::settings()
         settings.curveAdjust         = d->curveWidget->curves()->getCurvePoints(ImageHistogram::ValueChannel);
 
     return settings;
-}
-
-void RawSettingsBox::slotChannelChanged(int channel)
-{
-    switch(channel)
-    {
-        case RawSettingsBoxPriv::LuminosityChannel:
-            d->histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
-            d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-            d->colorsCB->setEnabled(false);
-            break;
-
-        case RawSettingsBoxPriv::RedChannel:
-            d->histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
-            d->hGradient->setColors( QColor( "black" ), QColor( "red" ) );
-            d->colorsCB->setEnabled(false);
-            break;
-
-        case RawSettingsBoxPriv::GreenChannel:
-            d->histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
-            d->hGradient->setColors( QColor( "black" ), QColor( "green" ) );
-            d->colorsCB->setEnabled(false);
-            break;
-
-        case RawSettingsBoxPriv::BlueChannel:
-            d->histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
-            d->hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
-            d->colorsCB->setEnabled(false);
-            break;
-
-        case RawSettingsBoxPriv::ColorChannels:
-            d->histogramWidget->m_channelType = HistogramWidget::ColorChannelsHistogram;
-            d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-            d->colorsCB->setEnabled(true);
-            break;
-    }
-
-    d->histogramWidget->repaint();
-}
-
-void RawSettingsBox::slotScaleChanged(int scale)
-{
-    d->histogramWidget->m_scaleType = scale;
-    d->histogramWidget->repaint();
-}
-
-void RawSettingsBox::slotColorsChanged(int color)
-{
-    switch(color)
-    {
-        case RawSettingsBoxPriv::AllColorsGreen:
-            d->histogramWidget->m_colorType = HistogramWidget::GreenColor;
-            break;
-
-        case RawSettingsBoxPriv::AllColorsBlue:
-            d->histogramWidget->m_colorType = HistogramWidget::BlueColor;
-            break;
-
-        default:          // Red.
-            d->histogramWidget->m_colorType = HistogramWidget::RedColor;
-            break;
-    }
-
-    d->histogramWidget->repaint();
 }
 
 } // NameSpace Digikam

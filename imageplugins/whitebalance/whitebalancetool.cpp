@@ -74,6 +74,7 @@
 #include "dimgimagefilters.h"
 #include "editortoolsettings.h"
 #include "histogramwidget.h"
+#include "histogrambox.h"
 #include "imagehistogram.h"
 #include "imageiface.h"
 #include "imagewidget.h"
@@ -100,7 +101,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     // -------------------------------------------------------------
 
     m_previewWidget = new ImageWidget("whitebalance Tool", 0,
-                                      i18n("<p>You can see here the image's white-balance "
+                                      i18n("You can see here the image's white-balance "
                                            "adjustments preview. You can pick color on image to "
                                            "see the color level corresponding on histogram."));
     setToolView(m_previewWidget);
@@ -111,76 +112,12 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
                                             EditorToolSettings::Load|
                                             EditorToolSettings::SaveAs|
                                             EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel);
-
-
-    QVBoxLayout* layout2  = new QVBoxLayout(m_gboxSettings->plainPage());
-    QGridLayout *grid     = new QGridLayout();
-
-    QLabel *label1 = new QLabel(i18n("Channel:"), m_gboxSettings->plainPage());
-    label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new KComboBox( m_gboxSettings->plainPage() );
-    m_channelCB->addItem( i18n("Luminosity") );
-    m_channelCB->addItem( i18n("Red") );
-    m_channelCB->addItem( i18n("Green") );
-    m_channelCB->addItem( i18n("Blue") );
-    m_channelCB->setWhatsThis( i18n("<p>Select the histogram channel to display here:<p>"
-                                    "<b>Luminosity</b>: display the image's luminosity values.<p>"
-                                    "<b>Red</b>: display the red image-channel values.<p>"
-                                    "<b>Green</b>: display the green image-channel values.<p>"
-                                    "<b>Blue</b>: display the blue image-channel values.<p>"));
-
-    QWidget *scaleBox  = new QWidget(m_gboxSettings->plainPage());
-    QHBoxLayout *hlay1 = new QHBoxLayout(scaleBox);
-    m_scaleBG          = new QButtonGroup(scaleBox);
-    m_scaleBG->setExclusive(true);
-    scaleBox->setWhatsThis( i18n("<p>Select the histogram scale here.<p>"
-                                 "If the image's maximal counts are small, you can use the linear scale.<p>"
-                                 "Logarithmic scale can be used when the maximal counts are big; "
-                                 "if it is used, all values (small and large) will be visible on the "
-                                 "graph."));
-
-    QToolButton *linHistoButton = new QToolButton( scaleBox );
-    linHistoButton->setToolTip( i18n( "<p>Linear" ) );
-    m_scaleBG->addButton(linHistoButton, HistogramWidget::LinScaleHistogram);
-    linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
-    linHistoButton->setCheckable(true);
-    hlay1->addWidget(linHistoButton);
-
-    QToolButton *logHistoButton = new QToolButton( scaleBox );
-    logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
-    m_scaleBG->addButton(logHistoButton, HistogramWidget::LogScaleHistogram);
-    logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
-    logHistoButton->setCheckable(true);
-    hlay1->addWidget(logHistoButton);
-    hlay1->setMargin(0);
-
-    QHBoxLayout* l1 = new QHBoxLayout();
-    l1->addWidget(label1);
-    l1->addWidget(m_channelCB);
-    l1->addStretch(10);
-    l1->addWidget(scaleBox);
+                                            EditorToolSettings::Cancel,
+                                            EditorToolSettings::Histogram);
 
     // -------------------------------------------------------------
 
-    KVBox *histoBox   = new KVBox(m_gboxSettings->plainPage());
-    m_histogramWidget = new HistogramWidget(256, 140, histoBox, false, true, true);
-    m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram "
-                                          "drawing of the selected image channel. This one is "
-                                          "re-computed at any filter settings changes."));
-    QLabel *space = new QLabel(histoBox);
-    space->setFixedHeight(1);
-    m_hGradient = new ColorGradientWidget( ColorGradientWidget::Horizontal, 10, histoBox );
-    m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-
-    grid->setMargin(m_gboxSettings->spacingHint());
-    grid->setSpacing(m_gboxSettings->spacingHint());
-    grid->addLayout(l1, 0, 0, 1, 5 );
-    grid->addWidget(histoBox, 1, 0, 2, 5 );
-
-    // -------------------------------------------------------------
-
-    QGridLayout *grid2 = new QGridLayout();
+    QGridLayout *grid = new QGridLayout(m_gboxSettings->plainPage());
 
     m_temperatureLabel    = new K3ActiveLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Color_temperature'>Color Temperature</a> "
                                                   " (K): </qt>"), m_gboxSettings->plainPage());
@@ -189,7 +126,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     m_temperatureInput->setDecimals(1);
     m_temperatureInput->input()->setRange(1750.0, 12000.0, 10.0);
     m_temperatureInput->setDefaultValue(6500.0);
-    m_temperatureInput->setWhatsThis( i18n("<p>Set here the white balance color temperature in Kelvin."));
+    m_temperatureInput->setWhatsThis( i18n("Set here the white balance color temperature in Kelvin."));
 
     m_temperaturePresetLabel = new QLabel(i18n("Preset:"), m_gboxSettings->plainPage());
     m_temperaturePresetCB    = new RComboBox(m_gboxSettings->plainPage());
@@ -209,27 +146,27 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     m_temperaturePresetCB->addItem(i18n("None"));
     m_temperaturePresetCB->setDefaultIndex(DaylightD65);
     m_temperaturePresetCB->setWhatsThis( i18n("<p>Select the white balance color temperature "
-                                              "preset to use here:<p>"
-                                              "<b>Candle</b>: candle light (1850K).<p>"
-                                              "<b>40W Lamp</b>: 40 Watt incandescent lamp (2680K).<p>"
-                                              "<b>100W Lamp</b>: 100 Watt incandescent lamp (2800K).<p>"
-                                              "<b>200W Lamp</b>: 200 Watt incandescent lamp (3000K).<p>"
-                                              "<b>Sunrise</b>: sunrise or sunset light (3200K).<p>"
-                                              "<b>Studio Lamp</b>: tungsten lamp used in photo studio "
-                                              "or light at 1 hour from dusk/dawn (3400K).<p>"
-                                              "<b>Moonlight</b>: moon light (4100K).<p>"
-                                              "<b>Neutral</b>: neutral color temperature (4750K).<p>"
-                                              "<b>Daylight D50</b>: sunny daylight around noon (5000K).<p>"
-                                              "<b>Photo Flash</b>: electronic photo flash (5500K).<p>"
-                                              "<b>Sun</b>: effective sun temperature (5770K).<p>"
-                                              "<b>Xenon Lamp</b>: xenon lamp or light arc (6420K).<p>"
-                                              "<b>Daylight D65</b>: overcast sky light (6500K).<p>"
-                                              "<b>None</b>: no preset value."));
+                                              "preset to use here:</p>"
+                                              "<p><b>Candle</b>: candle light (1850K).</p>"
+                                              "<p><b>40W Lamp</b>: 40 Watt incandescent lamp (2680K).</p>"
+                                              "<p><b>100W Lamp</b>: 100 Watt incandescent lamp (2800K).</p>"
+                                              "<p><b>200W Lamp</b>: 200 Watt incandescent lamp (3000K).</p>"
+                                              "<p><b>Sunrise</b>: sunrise or sunset light (3200K).</p>"
+                                              "<p><b>Studio Lamp</b>: tungsten lamp used in photo studio or "
+                                                     "light at 1 hour from dusk/dawn (3400K).</p>"
+                                              "<p><b>Moonlight</b>: moon light (4100K).</p>"
+                                              "<p><b>Neutral</b>: neutral color temperature (4750K).</p>"
+                                              "<p><b>Daylight D50</b>: sunny daylight around noon (5000K).</p>"
+                                              "<p><b>Photo Flash</b>: electronic photo flash (5500K).</p>"
+                                              "<p><b>Sun</b>: effective sun temperature (5770K).</p>"
+                                              "<p><b>Xenon Lamp</b>: xenon lamp or light arc (6420K).</p>"
+                                              "<p><b>Daylight D65</b>: overcast sky light (6500K).</p>"
+                                              "<p><b>None</b>: no preset value.</p>"));
     m_pickTemperature = new QToolButton(m_gboxSettings->plainPage());
     m_pickTemperature->setIcon(KIcon("color-picker-grey"));
     m_pickTemperature->setCheckable(true);
     m_pickTemperature->setToolTip( i18n( "Temperature tone color picker." ) );
-    m_pickTemperature->setWhatsThis( i18n("<p>With this button, you can pick the color from original "
+    m_pickTemperature->setWhatsThis( i18n("With this button, you can pick the color from original "
                                           "image used to set white color balance temperature and "
                                           "green component."));
 
@@ -241,7 +178,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     m_blackInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_blackInput->setDecimals(2);
     m_blackInput->input()->setRange(0.0, 0.05, 0.01, true);
-    m_blackInput->setWhatsThis( i18n("<p>Set here the black level value."));
+    m_blackInput->setWhatsThis( i18n("Set here the black level value."));
     m_blackInput->setDefaultValue(0.0);
 
     m_darkLabel = new QLabel(i18n("Shadows:"), m_gboxSettings->plainPage());
@@ -249,28 +186,28 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     m_darkInput->setDecimals(2);
     m_darkInput->input()->setRange(0.0, 1.0, 0.01, true);
     m_darkInput->setDefaultValue(0.5);
-    m_darkInput->setWhatsThis( i18n("<p>Set here the shadows noise suppression level."));
+    m_darkInput->setWhatsThis( i18n("Set here the shadows noise suppression level."));
 
     m_saturationLabel = new QLabel(i18n("Saturation:"), m_gboxSettings->plainPage());
     m_saturationInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_saturationInput->setDecimals(2);
     m_saturationInput->input()->setRange(0.0, 2.0, 0.01, true);
     m_saturationInput->setDefaultValue(1.0);
-    m_saturationInput->setWhatsThis( i18n("<p>Set here the saturation value."));
+    m_saturationInput->setWhatsThis( i18n("Set here the saturation value."));
 
     m_gammaLabel = new QLabel(i18n("Gamma:"), m_gboxSettings->plainPage());
     m_gammaInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_gammaInput->setDecimals(2);
     m_gammaInput->input()->setRange(0.1, 3.0, 0.01, true);
     m_gammaInput->setDefaultValue(1.0);
-    m_gammaInput->setWhatsThis( i18n("<p>Set here the gamma correction value."));
+    m_gammaInput->setWhatsThis( i18n("Set here the gamma correction value."));
 
     m_greenLabel = new QLabel(i18n("Green:"), m_gboxSettings->plainPage());
     m_greenInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_greenInput->setDecimals(2);
     m_greenInput->input()->setRange(0.2, 2.5, 0.01, true);
     m_greenInput->setDefaultValue(1.0);
-    m_greenInput->setWhatsThis( i18n("<p>Set here the green component to set magenta color "
+    m_greenInput->setWhatsThis( i18n("Set here the green component to set magenta color "
                                      "cast removal level."));
 
     KSeparator *line2 = new KSeparator(Qt::Horizontal, m_gboxSettings->plainPage());
@@ -283,66 +220,55 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     m_autoAdjustExposure = new QToolButton(m_gboxSettings->plainPage());
     m_autoAdjustExposure->setIcon(KIconLoader::global()->loadIcon("system-run", KIconLoader::Toolbar));
     m_autoAdjustExposure->setToolTip( i18n( "Auto exposure adjustments" ) );
-    m_autoAdjustExposure->setWhatsThis( i18n("<p>With this button, you can automatically adjust Exposure "
+    m_autoAdjustExposure->setWhatsThis( i18n("With this button, you can automatically adjust Exposure "
                                              "and Black Point values."));
     m_mainExposureInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_mainExposureInput->setDecimals(2);
     m_mainExposureInput->input()->setRange(-6.0, 8.0, 0.1, true);
     m_mainExposureInput->setDefaultValue(0.0);
-    m_mainExposureInput->setWhatsThis( i18n("<p>Set here the main exposure compensation value in E.V."));
+    m_mainExposureInput->setWhatsThis( i18n("Set here the main exposure compensation value in E.V."));
 
     m_fineExposureLabel = new QLabel(i18n("Fine:"), m_gboxSettings->plainPage());
     m_fineExposureInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_fineExposureInput->setDecimals(2);
     m_fineExposureInput->input()->setRange(-0.5, 0.5, 0.01, true);
     m_fineExposureInput->setDefaultValue(0.0);
-    m_fineExposureInput->setWhatsThis( i18n("<p>This value in E.V will be added to main exposure "
+    m_fineExposureInput->setWhatsThis( i18n("This value in E.V will be added to main exposure "
                                             "compensation value to set fine exposure adjustment."));
 
     // -------------------------------------------------------------
 
-    layout2->setMargin(0);
-    layout2->setSpacing(m_gboxSettings->spacingHint());
-    layout2->addLayout(grid);
-    layout2->addLayout(grid2);
-
-    grid2->setMargin(m_gboxSettings->spacingHint());
-    grid2->setSpacing(m_gboxSettings->spacingHint());
-    grid2->addWidget(m_temperatureLabel,        0, 0, 1, 5+1);
-    grid2->addWidget(m_adjTemperatureLabel,     1, 0, 1, 1);
-    grid2->addWidget(m_pickTemperature,         1, 1, 1, 1);
-    grid2->addWidget(m_temperatureInput,        1, 2, 1, 5-2+1);
-    grid2->addWidget(m_temperaturePresetLabel,  2, 0, 1, 1);
-    grid2->addWidget(m_temperaturePresetCB,     2, 2, 1, 5-2+1);
-    grid2->addWidget(line,                      3, 0, 1, 5+1);
-    grid2->addWidget(m_blackLabel,              4, 0, 1, 1);
-    grid2->addWidget(m_blackInput,              4, 1, 1, 5);
-    grid2->addWidget(m_darkLabel,               5, 0, 1, 1);
-    grid2->addWidget(m_darkInput,               5, 1, 1, 5);
-    grid2->addWidget(m_saturationLabel,         6, 0, 1, 1);
-    grid2->addWidget(m_saturationInput,         6, 1, 1, 5);
-    grid2->addWidget(m_gammaLabel,              7, 0, 1, 1);
-    grid2->addWidget(m_gammaInput,              7, 1, 1, 5);
-    grid2->addWidget(m_greenLabel,              8, 0, 1, 1);
-    grid2->addWidget(m_greenInput,              8, 1, 1, 5);
-    grid2->addWidget(line2,                     9, 0, 1, 5+1);
-    grid2->addWidget(m_exposureLabel,          10, 0, 1, 5+1);
-    grid2->addWidget(m_mainExposureLabel,      11, 0, 1, 1);
-    grid2->addWidget(m_autoAdjustExposure,     11, 1, 1, 1);
-    grid2->addWidget(m_mainExposureInput,      11, 2, 1, 5- 2+1);
-    grid2->addWidget(m_fineExposureLabel,      12, 0, 1, 2 );
-    grid2->addWidget(m_fineExposureInput,      12, 2, 1, 5- 2+1);
-    grid2->setRowStretch(13, 10);
+    grid->setMargin(m_gboxSettings->spacingHint());
+    grid->setSpacing(m_gboxSettings->spacingHint());
+    grid->addWidget(m_temperatureLabel,        0, 0, 1, 5+1);
+    grid->addWidget(m_adjTemperatureLabel,     1, 0, 1, 1);
+    grid->addWidget(m_pickTemperature,         1, 1, 1, 1);
+    grid->addWidget(m_temperatureInput,        1, 2, 1, 5-2+1);
+    grid->addWidget(m_temperaturePresetLabel,  2, 0, 1, 1);
+    grid->addWidget(m_temperaturePresetCB,     2, 2, 1, 5-2+1);
+    grid->addWidget(line,                      3, 0, 1, 5+1);
+    grid->addWidget(m_blackLabel,              4, 0, 1, 1);
+    grid->addWidget(m_blackInput,              4, 1, 1, 5);
+    grid->addWidget(m_darkLabel,               5, 0, 1, 1);
+    grid->addWidget(m_darkInput,               5, 1, 1, 5);
+    grid->addWidget(m_saturationLabel,         6, 0, 1, 1);
+    grid->addWidget(m_saturationInput,         6, 1, 1, 5);
+    grid->addWidget(m_gammaLabel,              7, 0, 1, 1);
+    grid->addWidget(m_gammaInput,              7, 1, 1, 5);
+    grid->addWidget(m_greenLabel,              8, 0, 1, 1);
+    grid->addWidget(m_greenInput,              8, 1, 1, 5);
+    grid->addWidget(line2,                     9, 0, 1, 5+1);
+    grid->addWidget(m_exposureLabel,          10, 0, 1, 5+1);
+    grid->addWidget(m_mainExposureLabel,      11, 0, 1, 1);
+    grid->addWidget(m_autoAdjustExposure,     11, 1, 1, 1);
+    grid->addWidget(m_mainExposureInput,      11, 2, 1, 5- 2+1);
+    grid->addWidget(m_fineExposureLabel,      12, 0, 1, 2 );
+    grid->addWidget(m_fineExposureInput,      12, 2, 1, 5- 2+1);
+    grid->setRowStretch(13, 10);
 
     setToolSettings(m_gboxSettings);
 
     // -------------------------------------------------------------
-
-    connect(m_channelCB, SIGNAL(activated(int)),
-            this, SLOT(slotChannelChanged(int)));
-
-    connect(m_scaleBG, SIGNAL(buttonReleased(int)),
-            this, SLOT(slotScaleChanged(int)));
 
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromOriginal( const Digikam::DColor & )));
@@ -395,7 +321,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
 
 WhiteBalanceTool::~WhiteBalanceTool()
 {
-    m_histogramWidget->stopHistogramComputation();
+    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
@@ -560,41 +486,7 @@ void WhiteBalanceTool::slotColorSelectedFromOriginal(const DColor &color)
 
 void WhiteBalanceTool::slotColorSelectedFromTarget( const DColor &color )
 {
-    m_histogramWidget->setHistogramGuideByColor(color);
-}
-
-void WhiteBalanceTool::slotScaleChanged(int scale)
-{
-    m_histogramWidget->m_scaleType = scale;
-    m_histogramWidget->repaint();
-}
-
-void WhiteBalanceTool::slotChannelChanged(int channel)
-{
-    switch (channel)
-    {
-        case LuminosityChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
-            m_hGradient->setColors(QColor("black"), QColor("white"));
-            break;
-
-        case RedChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
-            m_hGradient->setColors(QColor("black"), QColor("red"));
-            break;
-
-        case GreenChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
-            m_hGradient->setColors(QColor("black"), QColor("green"));
-            break;
-
-        case BlueChannel:
-            m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
-            m_hGradient->setColors(QColor("black"), QColor("blue"));
-            break;
-    }
-
-    m_histogramWidget->repaint();
+    m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
 
 void WhiteBalanceTool::slotAutoAdjustExposure()
@@ -630,7 +522,7 @@ void WhiteBalanceTool::slotEffect()
     bool sb                    = iface->previewSixteenBit();
 
     // Create the new empty destination image data space.
-    m_histogramWidget->stopHistogramComputation();
+    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
@@ -657,7 +549,7 @@ void WhiteBalanceTool::slotEffect()
 
     // Update histogram.
     memcpy (m_destinationPreviewData, data, w*h*(sb ? 8 : 4));
-    m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
+    m_gboxSettings->histogramBox()->histogram()->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
     delete [] data;
 }
 
@@ -715,10 +607,8 @@ void WhiteBalanceTool::slotResetSettings()
     m_temperatureInput->slotReset();
 
     m_previewWidget->resetSpotPosition();
-    m_channelCB->setCurrentIndex(LuminosityChannel);
-    slotChannelChanged(LuminosityChannel);
-
-    m_histogramWidget->reset();
+    m_gboxSettings->histogramBox()->setChannel(EditorToolSettings::LuminosityChannel);
+    m_gboxSettings->histogramBox()->histogram()->reset();
 
     m_blackInput->blockSignals(false);
     m_darkInput->blockSignals(false);
@@ -733,13 +623,15 @@ void WhiteBalanceTool::slotResetSettings()
     slotEffect();
 }
 
-void WhiteBalanceTool::readUserSettings()
+void WhiteBalanceTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("whitebalance Tool");
-    m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->button(group.readEntry("Histogram Scale",
-                      (int)HistogramWidget::LogScaleHistogram))->setChecked(true);
+
+    m_gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+                        (int)EditorToolSettings::LuminosityChannel));
+    m_gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+                        (int)HistogramWidget::LogScaleHistogram));
 
     m_blackInput->setValue(group.readEntry("Black", m_blackInput->defaultValue()));
     m_mainExposureInput->setValue(group.readEntry("MainExposure", m_mainExposureInput->defaultValue()));
@@ -750,16 +642,14 @@ void WhiteBalanceTool::readUserSettings()
     m_temperatureInput->setValue(group.readEntry("Temperature", m_temperatureInput->defaultValue()));
 
     slotTemperatureChanged(m_temperatureInput->value());
-    slotChannelChanged(m_channelCB->currentIndex());
-    slotScaleChanged(m_scaleBG->checkedId());
 }
 
-void WhiteBalanceTool::writeUserSettings()
+void WhiteBalanceTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("whitebalance Tool");
-    group.writeEntry("Histogram Channel", m_channelCB->currentIndex());
-    group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
+    group.writeEntry("Histogram Channel", m_gboxSettings->histogramBox()->channel());
+    group.writeEntry("Histogram Scale", m_gboxSettings->histogramBox()->scale());
 
     group.writeEntry("Dark", m_darkInput->value());
     group.writeEntry("Black", m_blackInput->value());
@@ -805,7 +695,7 @@ void WhiteBalanceTool::slotLoadSettings()
         m_gammaInput->setValue(stream.readLine().toDouble());
         m_saturationInput->setValue(stream.readLine().toDouble());
         m_greenInput->setValue(stream.readLine().toDouble());
-        m_histogramWidget->reset();
+        m_gboxSettings->histogramBox()->histogram()->reset();
         blockSignals(false);
         slotEffect();
     }

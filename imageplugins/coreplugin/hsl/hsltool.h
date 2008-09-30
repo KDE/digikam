@@ -29,9 +29,6 @@
 
 #include "editortool.h"
 
-class QButtonGroup;
-
-class KComboBox;
 class KHueSaturationSelector;
 
 namespace KDcrawIface
@@ -44,7 +41,6 @@ namespace Digikam
 class ColorGradientWidget;
 class DColor;
 class EditorToolSettings;
-class HistogramWidget;
 class ImageWidget;
 }
 
@@ -65,8 +61,6 @@ private slots:
 
     void slotEffect();
     void slotResetSettings();
-    void slotChannelChanged(int channel);
-    void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
     void slotHSChanged(int h, int s);
     void slotHChanged(double h);
@@ -80,25 +74,7 @@ private:
 
 private:
 
-    enum HistogramScale
-    {
-        Linear=0,
-        Logarithmic
-    };
-
-    enum ColorChannel
-    {
-        LuminosityChannel=0,
-        RedChannel,
-        GreenChannel,
-        BlueChannel
-    };
-
     uchar                        *m_destinationPreviewData;
-
-    QButtonGroup                 *m_scaleBG;
-
-    KComboBox                    *m_channelCB;
 
     KHueSaturationSelector       *m_HSSelector;
 
@@ -109,10 +85,6 @@ private:
     HSPreviewWidget              *m_HSPreview;
 
     Digikam::ImageWidget         *m_previewWidget;
-
-    Digikam::ColorGradientWidget *m_hGradient;
-
-    Digikam::HistogramWidget     *m_histogramWidget;
 
     Digikam::EditorToolSettings  *m_gboxSettings;
 };

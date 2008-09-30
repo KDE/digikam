@@ -91,7 +91,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     m_maskPreviewLabel = new QLabel(m_gboxSettings->plainPage());
     m_maskPreviewLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     m_maskPreviewLabel->setPixmap(QPixmap(120, 120));
-    m_maskPreviewLabel->setWhatsThis(i18n("<p>You can see here a thumbnail preview of the anti-vignetting "
+    m_maskPreviewLabel->setWhatsThis(i18n("You can see here a thumbnail preview of the anti-vignetting "
                                           "mask applied to the image."));
 
     // -------------------------------------------------------------
@@ -102,7 +102,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     m_densityInput->setDecimals(1);
     m_densityInput->input()->setRange(1.0, 20.0, 0.1, true);
     m_densityInput->setDefaultValue(2.0);
-    m_densityInput->setWhatsThis(i18n("<p>This value controls the degree of intensity attenuation "
+    m_densityInput->setWhatsThis(i18n("This value controls the degree of intensity attenuation "
                                       "by the filter at its point of maximum density."));
 
     // -------------------------------------------------------------
@@ -113,7 +113,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     m_powerInput->setDecimals(1);
     m_powerInput->input()->setRange(0.1, 2.0, 0.1, true);
     m_powerInput->setDefaultValue(1.0);
-    m_powerInput->setWhatsThis(i18n("<p>This value is used as the exponent controlling the "
+    m_powerInput->setWhatsThis(i18n("This value is used as the exponent controlling the "
                                     "fall-off in density from the center of the filter to the periphery."));
 
     // -------------------------------------------------------------
@@ -124,7 +124,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     m_radiusInput->setDecimals(1);
     m_radiusInput->input()->setRange(-100.0, 100.0, 0.1, true);
     m_radiusInput->setDefaultValue(1.0);
-    m_radiusInput->setWhatsThis(i18n("<p>This value is the radius of the center filter. It is a "
+    m_radiusInput->setWhatsThis(i18n("This value is the radius of the center filter. It is a "
                                      "multiple of the half-diagonal measure of the image, at which "
                                      "the density of the filter falls to zero."));
 
@@ -138,7 +138,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     m_brightnessInput->setRange(0, 100, 1);
     m_brightnessInput->setSliderEnabled(true);
     m_brightnessInput->setDefaultValue(0);
-    m_brightnessInput->setWhatsThis(i18n("<p>Set here the brightness re-adjustment of the target image."));
+    m_brightnessInput->setWhatsThis(i18n("Set here the brightness re-adjustment of the target image."));
 
     // -------------------------------------------------------------
 
@@ -148,7 +148,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     m_contrastInput->setRange(0, 100, 1);
     m_contrastInput->setSliderEnabled(true);
     m_contrastInput->setDefaultValue(0);
-    m_contrastInput->setWhatsThis(i18n("<p>Set here the contrast re-adjustment of the target image."));
+    m_contrastInput->setWhatsThis(i18n("Set here the contrast re-adjustment of the target image."));
 
     // -------------------------------------------------------------
 
@@ -158,7 +158,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     m_gammaInput->setDecimals(2);
     m_gammaInput->input()->setRange(0.1, 3.0, 0.01, true);
     m_gammaInput->setDefaultValue(1.0);
-    m_gammaInput->setWhatsThis(i18n("<p>Set here the gamma re-adjustment of the target image."));
+    m_gammaInput->setWhatsThis(i18n("Set here the gamma re-adjustment of the target image."));
 
     // -------------------------------------------------------------
 

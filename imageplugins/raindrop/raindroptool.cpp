@@ -71,10 +71,10 @@ RainDropTool::RainDropTool(QObject* parent)
     setToolIcon(SmallIcon("raindrop"));
 
     m_previewWidget = new ImageWidget("raindrops Tool", 0,
-                                      i18n("<p>This is the preview of the Raindrop effect."
+                                      i18n("This is the preview of the Raindrop effect."
                                            "<p>Note: if you have previously selected an area in the editor, "
                                            "this will be unaffected by the filter. You can use this method to "
-                                           "disable the Raindrops effect on a human face, for example."),
+                                           "disable the Raindrops effect on a human face, for example.</p>"),
                                       false);
 
     setToolView(m_previewWidget);
@@ -93,7 +93,7 @@ RainDropTool::RainDropTool(QObject* parent)
     m_dropInput->setRange(0, 200, 1);
     m_dropInput->setSliderEnabled(true);
     m_dropInput->setDefaultValue(80);
-    m_dropInput->setWhatsThis( i18n("<p>Set here the raindrops' size."));
+    m_dropInput->setWhatsThis( i18n("Set here the raindrops' size."));
 
     // -------------------------------------------------------------
 
@@ -103,7 +103,7 @@ RainDropTool::RainDropTool(QObject* parent)
     m_amountInput->setRange(1, 500, 1);
     m_amountInput->setSliderEnabled(true);
     m_amountInput->setDefaultValue(150);
-    m_amountInput->setWhatsThis( i18n("<p>This value controls the maximum number of raindrops."));
+    m_amountInput->setWhatsThis( i18n("This value controls the maximum number of raindrops."));
 
     // -------------------------------------------------------------
 
@@ -113,7 +113,7 @@ RainDropTool::RainDropTool(QObject* parent)
     m_coeffInput->setRange(1, 100, 1);
     m_coeffInput->setSliderEnabled(true);
     m_coeffInput->setDefaultValue(30);
-    m_coeffInput->setWhatsThis( i18n("<p>This value is the fish-eye-effect optical "
+    m_coeffInput->setWhatsThis( i18n("This value is the fish-eye-effect optical "
                                      "distortion coefficient."));
 
     gridSettings->addWidget(label1,         0, 0, 1, 3 );
