@@ -135,41 +135,9 @@ static inline void authorsRegistration(KAboutData& aboutData)
                           ki18n("Handbook writer, alpha tester, webmaster"),
                           "gerhard at kulzer dot net");
 
-    aboutData.addCredit ( ki18n("Rune Laursen"),
-                          ki18n("Danish translations"),
-                          "runerl at skjoldhoej dot dk");
-
-    aboutData.addCredit ( ki18n("Stefano Rivoir"),
-                          ki18n("Italian translations"),
-                          "s dot rivoir at gts dot it");
-
-    aboutData.addCredit ( ki18n("Jan Toenjes"),
-                          ki18n("German translations"),
-                          "jan dot toenjes at web dot de");
-
     aboutData.addCredit ( ki18n("Oliver Doerr"),
-                          ki18n("German translations and beta tester"),
+                          ki18n("Beta tester"),
                           "oliver at doerr-privat dot de");
-
-    aboutData.addCredit ( ki18n("Quique"),
-                          ki18n("Spanish translations"),
-                          "quique at sindominio dot net");
-
-    aboutData.addCredit ( ki18n("Marcus Meissner"),
-                          ki18n("Czech translations"),
-                          "marcus at jet dot franken dot de");
-
-    aboutData.addCredit ( ki18n("Janos Tamasi"),
-                          ki18n("Hungarian translations"),
-                          "janusz at vnet dot hu");
-
-    aboutData.addCredit ( ki18n("Jasper van der Marel"),
-                          ki18n("Dutch translations"),
-                          "jasper dot van dot der dot marel at wanadoo dot nl");
-
-    aboutData.addCredit ( ki18n("Anna Sawicka"),
-                          ki18n("Polish translations"),
-                          "ania at kajak dot org dot pl");
 
     aboutData.addCredit ( ki18n("Charles Bouveyron"),
                           ki18n("Beta tester"),
