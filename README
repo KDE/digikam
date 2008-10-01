@@ -96,10 +96,14 @@ libkdcraw       >= 0.3.0                        http://www.kipi-plugins.org
 liblcms         >= 1.14.x                       http://www.littlecms.com
 libtiff         >= 3.8.2                        http://www.remotesensing.org/libtiff
 libpng          >= 1.2.x                        http://www.libpng.org/pub/png/libpng.html
+libjpeg         >= 6b                           http://www.ijg.org
 libjasper       >= 1.7.x                        http://www.ece.uvic.ca/~mdadams/jasper
-libkdepimlibs   >= 4.0.x                        http://pim.kde.org                           Optional to support KAddressBook entries.
-libmarblewidget >= 0.5.1                        http://edu.kde.org/marble                    Optional to support Geolocation using Marble Widget.
-liblensfun      >= 0.1.0                        http://lensfun.berlios.de                    Optional to support LensCorrection editor plugin.
+
+Optional :
+
+libkdepimlibs   >= 4.0.x                        http://pim.kde.org                           To support KAddressBook entries.
+libmarblewidget >= 0.5.1                        http://edu.kde.org/marble                    To support Geolocation using Marble Widget.
+liblensfun      >= 0.1.0                        http://lensfun.berlios.de                    To support LensCorrection editor plugin.
 
 Note : all library dependencies require development and binary packages installed on your
 computer to compile digiKam.
