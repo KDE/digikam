@@ -478,8 +478,6 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
 
 BWSepiaTool::~BWSepiaTool()
 {
-    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
-
     delete [] m_destinationPreviewData;
 }
 

@@ -182,8 +182,6 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
 AutoCorrectionTool::~AutoCorrectionTool()
 {
-    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
-
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 }

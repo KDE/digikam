@@ -164,8 +164,6 @@ BCGTool::BCGTool(QObject* parent)
 
 BCGTool::~BCGTool()
 {
-    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
-
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 }

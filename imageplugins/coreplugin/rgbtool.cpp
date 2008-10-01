@@ -219,8 +219,6 @@ RGBTool::RGBTool(QObject* parent)
 
 RGBTool::~RGBTool()
 {
-    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
-
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 }

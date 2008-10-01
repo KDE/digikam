@@ -189,8 +189,6 @@ RedEyeTool::RedEyeTool(QObject* parent)
 
 RedEyeTool::~RedEyeTool()
 {
-    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
-
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 }

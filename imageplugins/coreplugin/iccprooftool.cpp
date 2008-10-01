@@ -512,8 +512,6 @@ ICCProofTool::ICCProofTool(QObject* parent)
 
 ICCProofTool::~ICCProofTool()
 {
-    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
-
     delete [] m_destinationPreviewData;
 }
 

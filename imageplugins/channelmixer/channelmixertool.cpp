@@ -220,8 +220,6 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
 
 ChannelMixerTool::~ChannelMixerTool()
 {
-    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
-
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 }

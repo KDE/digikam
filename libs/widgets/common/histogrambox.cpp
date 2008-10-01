@@ -306,6 +306,7 @@ HistogramBox::HistogramBox(QWidget *parent, int histogramType, bool selectMode)
 
 HistogramBox::~HistogramBox()
 {
+    histogram()->stopHistogramComputation();
     delete d;
 }
 

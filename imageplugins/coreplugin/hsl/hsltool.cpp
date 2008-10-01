@@ -182,8 +182,6 @@ HSLTool::HSLTool(QObject* parent)
 
 HSLTool::~HSLTool()
 {
-    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
-
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 }

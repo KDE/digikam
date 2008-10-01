@@ -171,8 +171,6 @@ ColorFXTool::ColorFXTool(QObject* parent)
 
 ColorFXTool::~ColorFXTool()
 {
-    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
-
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 }
