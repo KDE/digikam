@@ -213,10 +213,10 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
 
     // -------------------------------------------------------------
 
-    grid->addWidget(d->prevBBox, 1, 0, 1, 1);
-    grid->addWidget(d->spotInfoLabel, 1, 1, 1, 1);
-    grid->addWidget(d->expoBBox, 1, 3, 1, 1);
-    grid->addWidget(frame, 3, 0, 1, 4 );
+    grid->addWidget(d->prevBBox,        1, 0, 1, 1);
+    grid->addWidget(d->spotInfoLabel,   1, 1, 1, 1);
+    grid->addWidget(d->expoBBox,        1, 3, 1, 1);
+    grid->addWidget(frame,              3, 0, 1, 4 );
     grid->setColumnMinimumWidth(2, KDialog::spacingHint());
     grid->setColumnMinimumWidth(1, KDialog::spacingHint());
     grid->setRowMinimumHeight(0, KDialog::spacingHint());

@@ -172,17 +172,17 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     // --------------------------------------------------------
 
-    topLayout->addWidget( topLabel, 0, 0, 1, 2 );
-    topLayout->addWidget( topLine, 1, 0, 1, 2 );
-    topLayout->addWidget( titleLabel, 2, 0, 1, 1);
-    topLayout->addWidget( d->titleEdit, 2, 1, 1, 1);
-    topLayout->addWidget( collectionLabel, 3, 0, 1, 1);
-    topLayout->addWidget( d->collectionCombo, 3, 1, 1, 1);
-    topLayout->addWidget( commentsLabel, 4, 0, 1, 1, Qt::AlignLeft|Qt::AlignTop );
-    topLayout->addWidget( d->commentsEdit, 4, 1, 1, 1);
-    topLayout->addWidget( dateLabel, 5, 0, 1, 1, Qt::AlignLeft|Qt::AlignTop );
-    topLayout->addWidget( d->datePicker, 5, 1, 1, 1);
-    topLayout->addWidget( buttonRow, 6, 1, 1, 1);
+    topLayout->addWidget(topLabel,              0, 0, 1, 2);
+    topLayout->addWidget(topLine,               1, 0, 1, 2);
+    topLayout->addWidget(titleLabel,            2, 0, 1, 1);
+    topLayout->addWidget(d->titleEdit,          2, 1, 1, 1);
+    topLayout->addWidget(collectionLabel,       3, 0, 1, 1);
+    topLayout->addWidget(d->collectionCombo,    3, 1, 1, 1);
+    topLayout->addWidget(commentsLabel,         4, 0, 1, 1, Qt::AlignLeft | Qt::AlignTop);
+    topLayout->addWidget(d->commentsEdit,       4, 1, 1, 1);
+    topLayout->addWidget(dateLabel,             5, 0, 1, 1, Qt::AlignLeft | Qt::AlignTop);
+    topLayout->addWidget(d->datePicker,         5, 1, 1, 1);
+    topLayout->addWidget(buttonRow,             6, 1, 1, 1);
     topLayout->setMargin(0);
     topLayout->setSpacing(KDialog::spacingHint());
 

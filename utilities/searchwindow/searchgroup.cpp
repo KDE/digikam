@@ -349,10 +349,10 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGrou
         logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                 .scaled(96, 96, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-        m_layout->addWidget(mainLabel, 0, 0, 1, 1);
-        m_layout->addWidget(m_allBox,  1, 0, 1, 1);
-        m_layout->addWidget(m_anyBox,  2, 0, 1, 1);
-        m_layout->addWidget(logo,      0, 2, 3, 1);
+        m_layout->addWidget(mainLabel,      0, 0, 1, 1);
+        m_layout->addWidget(m_allBox,       1, 0, 1, 1);
+        m_layout->addWidget(m_anyBox,       2, 0, 1, 1);
+        m_layout->addWidget(logo,           0, 2, 3, 1);
         m_layout->setColumnStretch(1, 10);
     }
     else
@@ -367,11 +367,11 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGrou
         connect(m_removeLabel, SIGNAL(leftClicked()),
                 this, SIGNAL(removeClicked()));
 
-        m_layout->addWidget(m_groupOpBox, 0, 0, 1, 1);
-        m_layout->addWidget(m_allBox,  1, 0, 1, 1);
-        m_layout->addWidget(m_anyBox,  2, 0, 1, 1);
+        m_layout->addWidget(m_groupOpBox,   0, 0, 1, 1);
+        m_layout->addWidget(m_allBox,       1, 0, 1, 1);
+        m_layout->addWidget(m_anyBox,       2, 0, 1, 1);
+        m_layout->addWidget(m_removeLabel,  0, 2, 1, 1); //, Qt::AlignRight | Qt::AlignTop);
         m_layout->setColumnStretch(1, 10);
-        m_layout->addWidget(m_removeLabel, 0, 2, 1, 1); //, Qt::AlignRight | Qt::AlignTop);
     }
 
     setLayout(m_layout);

@@ -106,25 +106,25 @@ InPaintingTool::InPaintingTool(QObject* parent)
                                             EditorToolSettings::Ok|
                                             EditorToolSettings::Cancel);
     QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
-    m_mainTab                 = new KTabWidget( m_gboxSettings->plainPage() );
+    m_mainTab                 = new KTabWidget( m_gboxSettings->plainPage());
 
-    QWidget* firstPage = new QWidget( m_mainTab );
-    QGridLayout* grid  = new QGridLayout(firstPage);
-    m_mainTab->addTab( firstPage, i18n("Preset") );
+    QWidget* firstPage = new QWidget(m_mainTab);
+    QGridLayout* grid = new QGridLayout(firstPage);
+    m_mainTab->addTab(firstPage, i18n("Preset"));
 
     KUrlLabel *cimgLogoLabel = new KUrlLabel(firstPage);
     cimgLogoLabel->setText(QString());
     cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
     cimgLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-cimg.png")));
-    cimgLogoLabel->setToolTip( i18n("Visit CImg library website"));
+    cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
-    QLabel *typeLabel  = new QLabel(i18n("Filtering type:"), firstPage);
-    typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_inpaintingTypeCB = new KComboBox( firstPage );
-    m_inpaintingTypeCB->addItem( i18n("None") );
-    m_inpaintingTypeCB->addItem( i18n("Remove Small Artefact") );
-    m_inpaintingTypeCB->addItem( i18n("Remove Medium Artefact") );
-    m_inpaintingTypeCB->addItem( i18n("Remove Large Artefact") );
+    QLabel *typeLabel = new QLabel(i18n("Filtering type:"), firstPage);
+    typeLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_inpaintingTypeCB = new KComboBox(firstPage);
+    m_inpaintingTypeCB->addItem(i18n("None"));
+    m_inpaintingTypeCB->addItem(i18n("Remove Small Artefact"));
+    m_inpaintingTypeCB->addItem(i18n("Remove Medium Artefact"));
+    m_inpaintingTypeCB->addItem(i18n("Remove Large Artefact"));
     m_inpaintingTypeCB->setWhatsThis( i18n("<p>Select the filter preset to use for photograph restoration here:</p>"
                                            "<p><b>None</b>: Most common values. Puts settings to default.<br/>"
                                            "<b>Remove Small Artefact</b>: inpaint small image artefact like image glitch.<br/>"

@@ -90,26 +90,26 @@ BorderTool::BorderTool(QObject* parent)
     QLabel *label1 = new QLabel(i18n("Type:"), m_gboxSettings->plainPage());
 
     m_borderType   = new RComboBox( m_gboxSettings->plainPage() );
-    m_borderType->addItem( i18n("Solid") );
+    m_borderType->addItem(i18n("Solid"));
     // NOTE: Niepce is Real name. This is the first guy in the world to have built a camera.
-    m_borderType->addItem( "Niepce" );
-    m_borderType->addItem( i18n("Beveled") );
-    m_borderType->addItem( i18n("Decorative Pine") );
-    m_borderType->addItem( i18n("Decorative Wood") );
-    m_borderType->addItem( i18n("Decorative Paper") );
-    m_borderType->addItem( i18n("Decorative Parquet") );
-    m_borderType->addItem( i18n("Decorative Ice") );
-    m_borderType->addItem( i18n("Decorative Leaf") );
-    m_borderType->addItem( i18n("Decorative Marble") );
-    m_borderType->addItem( i18n("Decorative Rain") );
-    m_borderType->addItem( i18n("Decorative Craters") );
-    m_borderType->addItem( i18n("Decorative Dried") );
-    m_borderType->addItem( i18n("Decorative Pink") );
-    m_borderType->addItem( i18n("Decorative Stone") );
-    m_borderType->addItem( i18n("Decorative Chalk") );
-    m_borderType->addItem( i18n("Decorative Granite") );
-    m_borderType->addItem( i18n("Decorative Rock") );
-    m_borderType->addItem( i18n("Decorative Wall") );
+    m_borderType->addItem("Niepce");
+    m_borderType->addItem(i18n("Beveled"));
+    m_borderType->addItem(i18n("Decorative Pine"));
+    m_borderType->addItem(i18n("Decorative Wood"));
+    m_borderType->addItem(i18n("Decorative Paper"));
+    m_borderType->addItem(i18n("Decorative Parquet"));
+    m_borderType->addItem(i18n("Decorative Ice"));
+    m_borderType->addItem(i18n("Decorative Leaf"));
+    m_borderType->addItem(i18n("Decorative Marble"));
+    m_borderType->addItem(i18n("Decorative Rain"));
+    m_borderType->addItem(i18n("Decorative Craters"));
+    m_borderType->addItem(i18n("Decorative Dried"));
+    m_borderType->addItem(i18n("Decorative Pink"));
+    m_borderType->addItem(i18n("Decorative Stone"));
+    m_borderType->addItem(i18n("Decorative Chalk"));
+    m_borderType->addItem(i18n("Decorative Granite"));
+    m_borderType->addItem(i18n("Decorative Rock"));
+    m_borderType->addItem(i18n("Decorative Wall"));
     m_borderType->setDefaultIndex(Border::SolidBorder);
     m_borderType->setWhatsThis( i18n("Select the border type to add around the image here."));
 
@@ -157,19 +157,19 @@ BorderTool::BorderTool(QObject* parent)
 
     // -------------------------------------------------------------------
 
-    gridSettings->addWidget(label1, 0, 0, 1, 3 );
-    gridSettings->addWidget(m_borderType, 1, 0, 1, 3 );
-    gridSettings->addWidget(line1, 2, 0, 1, 3 );
-    gridSettings->addWidget(m_preserveAspectRatio, 3, 0, 1, 3 );
-    gridSettings->addWidget(m_labelBorderPercent, 4, 0, 1, 3 );
-    gridSettings->addWidget(m_borderPercent, 5, 0, 1, 3 );
-    gridSettings->addWidget(m_labelBorderWidth, 6, 0, 1, 3 );
-    gridSettings->addWidget(m_borderWidth, 7, 0, 1, 3 );
-    gridSettings->addWidget(line2, 8, 0, 1, 3 );
-    gridSettings->addWidget(m_labelForeground, 9, 0, 1, 1);
-    gridSettings->addWidget(m_firstColorButton, 9, 1, 1, 2);
-    gridSettings->addWidget(m_labelBackground, 10, 0, 1, 1);
-    gridSettings->addWidget(m_secondColorButton, 10, 1, 1, 2);
+    gridSettings->addWidget(label1,                 0, 0, 1, 3);
+    gridSettings->addWidget(m_borderType,           1, 0, 1, 3);
+    gridSettings->addWidget(line1,                  2, 0, 1, 3);
+    gridSettings->addWidget(m_preserveAspectRatio,  3, 0, 1, 3);
+    gridSettings->addWidget(m_labelBorderPercent,   4, 0, 1, 3);
+    gridSettings->addWidget(m_borderPercent,        5, 0, 1, 3);
+    gridSettings->addWidget(m_labelBorderWidth,     6, 0, 1, 3);
+    gridSettings->addWidget(m_borderWidth,          7, 0, 1, 3);
+    gridSettings->addWidget(line2,                  8, 0, 1, 3);
+    gridSettings->addWidget(m_labelForeground,      9, 0, 1, 1);
+    gridSettings->addWidget(m_firstColorButton,     9, 1, 1, 2);
+    gridSettings->addWidget(m_labelBackground,     10, 0, 1, 1);
+    gridSettings->addWidget(m_secondColorButton,   10, 1, 1, 2);
     gridSettings->setRowStretch(11, 10);
     gridSettings->setMargin(m_gboxSettings->spacingHint());
     gridSettings->setSpacing(m_gboxSettings->spacingHint());

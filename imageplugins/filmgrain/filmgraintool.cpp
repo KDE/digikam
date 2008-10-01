@@ -83,7 +83,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
     m_sensibilitySlider->setMaximum(30);
     m_sensibilitySlider->setPageStep(1);
     m_sensibilitySlider->setValue(12);
-    m_sensibilitySlider->setTracking ( false );
+    m_sensibilitySlider->setTracking(false);
     m_sensibilitySlider->setTickInterval(1);
     m_sensibilitySlider->setTickPosition(QSlider::TicksBelow);
 
@@ -115,16 +115,16 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect( m_sensibilitySlider, SIGNAL(valueChanged(int)),
-             this, SLOT(slotTimer()) );
+    connect(m_sensibilitySlider, SIGNAL(valueChanged(int)),
+            this, SLOT(slotTimer()) );
 
     // this connection is necessary to change the LCD display when
     // the value is changed by single clicking on the slider
-    connect( m_sensibilitySlider, SIGNAL(valueChanged(int)),
-             this, SLOT(slotSliderMoved(int)) );
+    connect(m_sensibilitySlider, SIGNAL(valueChanged(int)),
+            this, SLOT(slotSliderMoved(int)) );
 
-    connect( m_sensibilitySlider, SIGNAL(sliderMoved(int)),
-             this, SLOT(slotSliderMoved(int)) );
+    connect(m_sensibilitySlider, SIGNAL(sliderMoved(int)),
+            this, SLOT(slotSliderMoved(int)) );
 }
 
 FilmGrainTool::~FilmGrainTool()

@@ -75,9 +75,9 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
                           "where you want to upload the images.</p>"));
     message->setWordWrap(true);
 
-    grid->addWidget(logo, 0, 0, 1, 1);
-    grid->addWidget(message, 1, 0, 1, 1);
-    grid->addWidget(m_folderView, 0, 1, 3, 1);
+    grid->addWidget(logo,           0, 0, 1, 1);
+    grid->addWidget(message,        1, 0, 1, 1);
+    grid->addWidget(m_folderView,   0, 1, 3, 1);
     grid->setRowStretch(2, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());

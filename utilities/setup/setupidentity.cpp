@@ -97,9 +97,9 @@ SetupIdentity::SetupIdentity(QWidget* parent )
                                               "Photographer. Since this is a qualifier for the Author field, the Author field must also "
                                               "be filled out. \nThis field is limited to 32 ASCII characters.</p>"));
 
-    grid->addWidget(label1, 0, 0, 1, 1);
-    grid->addWidget(d->authorEdit, 0, 1, 1, 1);
-    grid->addWidget(label2, 1, 0, 1, 1);
+    grid->addWidget(label1,             0, 0, 1, 1);
+    grid->addWidget(d->authorEdit,      0, 1, 1, 1);
+    grid->addWidget(label2,             1, 0, 1, 1);
     grid->addWidget(d->authorTitleEdit, 1, 1, 1, 1);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
@@ -155,12 +155,12 @@ SetupIdentity::SetupIdentity(QWidget* parent )
                                          "(a) the word, Copyright; (b) year of the first publication; and (c) name of the author. "
                                          "You may also wish to include the phrase \"all rights reserved.\"\n"
                                          "This field is limited to 128 ASCII characters.</p>"));
-    grid2->addWidget(label3, 0, 0, 1, 1);
-    grid2->addWidget(d->creditEdit, 0, 1, 1, 1);
-    grid2->addWidget(label4, 1, 0, 1, 1);
-    grid2->addWidget(d->sourceEdit, 1, 1, 1, 1);
-    grid2->addWidget(label5, 2, 0, 1, 1);
-    grid2->addWidget(d->copyrightEdit, 2, 1, 1, 1);
+    grid2->addWidget(label3,            0, 0, 1, 1);
+    grid2->addWidget(d->creditEdit,     0, 1, 1, 1);
+    grid2->addWidget(label4,            1, 0, 1, 1);
+    grid2->addWidget(d->sourceEdit,     1, 1, 1, 1);
+    grid2->addWidget(label5,            2, 0, 1, 1);
+    grid2->addWidget(d->copyrightEdit,  2, 1, 1, 1);
     grid2->setMargin(KDialog::spacingHint());
     grid2->setSpacing(KDialog::spacingHint());
 

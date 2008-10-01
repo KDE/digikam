@@ -48,7 +48,7 @@ ICCPreviewWidget::ICCPreviewWidget(QWidget *parent)
 {
     QVBoxLayout *layout = new QVBoxLayout();
     m_iccProfileWidget  = new ICCProfileWidget(this);
-    layout->addWidget( m_iccProfileWidget );
+    layout->addWidget(m_iccProfileWidget);
     setLayout(layout);
 }
 

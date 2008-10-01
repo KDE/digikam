@@ -151,10 +151,10 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
 
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
-    grid->addWidget(originalTitle, 0, 0, 1, 1);
-    grid->addWidget(previewOriginal, 1, 0, 1, 1);
-    grid->addWidget(targetTitle, 2, 0, 1, 1);
-    grid->addWidget(previewTarget, 3, 0, 1, 1);
+    grid->addWidget(originalTitle,      0, 0, 1, 1);
+    grid->addWidget(previewOriginal,    1, 0, 1, 1);
+    grid->addWidget(targetTitle,        2, 0, 1, 1);
+    grid->addWidget(previewTarget,      3, 0, 1, 1);
     grid->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
                       QSizePolicy::Minimum, QSizePolicy::Expanding), 0, 1, 3, 1);
     grid->addLayout(vlay, 0, 2, 4, 1);

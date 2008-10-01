@@ -122,29 +122,29 @@ InsertTextTool::InsertTextTool(QObject* parent)
     m_alignButtonGroup = new QButtonGroup(alignBox);
     m_alignButtonGroup->setExclusive(true);
 
-    QToolButton *alignLeft = new QToolButton( alignBox );
+    QToolButton *alignLeft = new QToolButton(alignBox);
     m_alignButtonGroup->addButton(alignLeft, ALIGN_LEFT);
     alignLeft->setIcon(SmallIcon("format-justify-left"));
     alignLeft->setCheckable(true);
-    alignLeft->setToolTip( i18n( "Align text to the left" ) );
+    alignLeft->setToolTip(i18n("Align text to the left"));
 
-    QToolButton *alignRight = new QToolButton( alignBox );
+    QToolButton *alignRight = new QToolButton(alignBox);
     m_alignButtonGroup->addButton(alignRight, ALIGN_RIGHT);
     alignRight->setIcon(SmallIcon("format-justify-right"));
     alignRight->setCheckable(true);
-    alignRight->setToolTip( i18n( "Align text to the right" ) );
+    alignRight->setToolTip(i18n("Align text to the right"));
 
-    QToolButton *alignCenter = new QToolButton( alignBox );
+    QToolButton *alignCenter = new QToolButton(alignBox);
     m_alignButtonGroup->addButton(alignCenter, ALIGN_CENTER);
     alignCenter->setIcon(SmallIcon("format-justify-center"));
     alignCenter->setCheckable(true);
-    alignCenter->setToolTip( i18n( "Align text to center" ) );
+    alignCenter->setToolTip(i18n("Align text to center"));
 
-    QToolButton *alignBlock = new QToolButton( alignBox );
+    QToolButton *alignBlock = new QToolButton(alignBox);
     m_alignButtonGroup->addButton(alignBlock, ALIGN_BLOCK);
     alignBlock->setIcon(SmallIcon("format-justify-fill"));
     alignBlock->setCheckable(true);
-    alignBlock->setToolTip( i18n( "Align text to a block" ) );
+    alignBlock->setToolTip(i18n("Align text to a block"));
 
     hlay->setMargin(0);
     hlay->setSpacing(0);
@@ -156,16 +156,16 @@ InsertTextTool::InsertTextTool(QObject* parent)
     // -------------------------------------------------------------
 
     QLabel *label1 = new QLabel(i18n("Rotation:"), m_gboxSettings->plainPage());
-    m_textRotation = new KComboBox( m_gboxSettings->plainPage() );
-    m_textRotation->addItem( i18n("None") );
-    m_textRotation->addItem( i18n("90 Degrees") );
-    m_textRotation->addItem( i18n("180 Degrees") );
-    m_textRotation->addItem( i18n("270 Degrees") );
-    m_textRotation->setWhatsThis( i18n("Select the text rotation to use here."));
+    m_textRotation = new KComboBox(m_gboxSettings->plainPage());
+    m_textRotation->addItem(i18n("None"));
+    m_textRotation->addItem(i18n("90 Degrees"));
+    m_textRotation->addItem(i18n("180 Degrees"));
+    m_textRotation->addItem(i18n("270 Degrees"));
+    m_textRotation->setWhatsThis(i18n("Select the text rotation to use here."));
 
     // -------------------------------------------------------------
 
-    QLabel *label2    = new QLabel(i18n("Color:"), m_gboxSettings->plainPage());
+    QLabel *label2 = new QLabel(i18n("Color:"), m_gboxSettings->plainPage());
     m_fontColorButton = new KColorButton(Qt::black, m_gboxSettings->plainPage());
     m_fontColorButton->setWhatsThis(i18n("Set here the font color to use."));
 
@@ -174,8 +174,8 @@ InsertTextTool::InsertTextTool(QObject* parent)
     m_borderText = new QCheckBox(i18n("Add border"), m_gboxSettings->plainPage());
     m_borderText->setToolTip(i18n("Add a solid border around text using current text color"));
 
-    m_transparentText = new QCheckBox( i18n( "Semi-transparent"), m_gboxSettings->plainPage() );
-    m_transparentText->setToolTip( i18n( "Use semi-transparent text background under image" ) );
+    m_transparentText = new QCheckBox(i18n("Semi-transparent"), m_gboxSettings->plainPage());
+    m_transparentText->setToolTip(i18n("Use semi-transparent text background under image"));
 
     // -------------------------------------------------------------
 
@@ -243,15 +243,15 @@ void InsertTextTool::readSettings()
     else m_defaultSizeFont = (int)(orgW / 8.0);
 
     defaultFont.setPointSize(m_defaultSizeFont);
-    m_textRotation->setCurrentIndex( group.readEntry("Text Rotation", 0) );
+    m_textRotation->setCurrentIndex(group.readEntry("Text Rotation", 0));
     m_fontColorButton->setColor(group.readEntry("Font Color", black));
     m_textEdit->setText(group.readEntry("Text String", i18n("Enter your text here!")));
     m_textFont = group.readEntry("Font Properties", defaultFont);
     m_fontChooserWidget->setFont(m_textFont);
-    m_alignTextMode = group.readEntry("Text Alignment", (int)ALIGN_LEFT);
-    m_borderText->setChecked( group.readEntry("Border Text", false) );
-    m_transparentText->setChecked( group.readEntry("Transparent Text", false) );
-    m_previewWidget->setPositionHint( group.readEntry("Position Hint",QRect()) );
+    m_alignTextMode = group.readEntry("Text Alignment", (int) ALIGN_LEFT);
+    m_borderText->setChecked(group.readEntry("Border Text", false));
+    m_transparentText->setChecked(group.readEntry("Transparent Text", false));
+    m_previewWidget->setPositionHint(group.readEntry("Position Hint", QRect()));
 
     m_alignButtonGroup->button(m_alignTextMode)->setChecked(true);
     slotAlignModeChanged(m_alignTextMode);
@@ -262,14 +262,14 @@ void InsertTextTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("inserttext Tool");
 
-    group.writeEntry( "Text Rotation", m_textRotation->currentIndex() );
-    group.writeEntry( "Font Color", m_fontColorButton->color() );
-    group.writeEntry( "Text String", m_textEdit->document()->toPlainText() );
-    group.writeEntry( "Font Properties", m_textFont );
-    group.writeEntry( "Text Alignment", m_alignTextMode );
-    group.writeEntry( "Border Text", m_borderText->isChecked() );
-    group.writeEntry( "Transparent Text", m_transparentText->isChecked() );
-    group.writeEntry( "Position Hint", m_previewWidget->getPositionHint() );
+    group.writeEntry("Text Rotation", m_textRotation->currentIndex());
+    group.writeEntry("Font Color", m_fontColorButton->color());
+    group.writeEntry("Text String", m_textEdit->document()->toPlainText());
+    group.writeEntry("Font Properties", m_textFont);
+    group.writeEntry("Text Alignment", m_alignTextMode);
+    group.writeEntry("Border Text", m_borderText->isChecked());
+    group.writeEntry("Transparent Text", m_transparentText->isChecked());
+    group.writeEntry("Position Hint", m_previewWidget->getPositionHint());
 
     config->sync();
 }
@@ -280,14 +280,14 @@ void InsertTextTool::slotResetSettings()
     m_alignButtonGroup->blockSignals(true);
     m_fontChooserWidget->blockSignals(true);
 
-    m_textRotation->setCurrentIndex(0);    // No rotation.
+    m_textRotation->setCurrentIndex(0); // No rotation.
     m_fontColorButton->setColor(Qt::black);
     QFont defaultFont;
     m_textFont = defaultFont; // Reset to default KDE font.
-    m_textFont.setPointSize( m_defaultSizeFont );
+    m_textFont.setPointSize(m_defaultSizeFont);
     m_fontChooserWidget->setFont(m_textFont);
-    m_borderText->setChecked( false );
-    m_transparentText->setChecked( false );
+    m_borderText->setChecked(false);
+    m_transparentText->setChecked(false);
     m_previewWidget->resetEdit();
     m_alignButtonGroup->button(ALIGN_LEFT)->setChecked(true);
 
@@ -303,23 +303,23 @@ void InsertTextTool::slotAlignModeChanged(int mode)
     m_textEdit->selectAll();
 
     switch (m_alignTextMode)
-        {
+    {
         case ALIGN_LEFT:
-           m_textEdit->setAlignment( Qt::AlignLeft );
-           break;
+            m_textEdit->setAlignment(Qt::AlignLeft);
+            break;
 
         case ALIGN_RIGHT:
-           m_textEdit->setAlignment( Qt::AlignRight );
-           break;
+            m_textEdit->setAlignment(Qt::AlignRight);
+            break;
 
         case ALIGN_CENTER:
-           m_textEdit->setAlignment( Qt::AlignHCenter );
-           break;
+            m_textEdit->setAlignment(Qt::AlignHCenter);
+            break;
 
         case ALIGN_BLOCK:
-           m_textEdit->setAlignment( Qt::AlignJustify );
-           break;
-        }
+            m_textEdit->setAlignment(Qt::AlignJustify);
+            break;
+    }
 
     m_textEdit->textCursor().clearSelection();
     emit signalUpdatePreview();

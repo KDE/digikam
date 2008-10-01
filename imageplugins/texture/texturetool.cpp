@@ -116,8 +116,8 @@ TextureTool::TextureTool(QObject* parent)
 
     grid->addWidget(label1,        0, 0, 1, 1);
     grid->addWidget(m_textureType, 0, 1, 1, 1);
-    grid->addWidget(label2,        1, 0, 1, 2 );
-    grid->addWidget(m_blendGain,   2, 0, 1, 2 );
+    grid->addWidget(label2,        1, 0, 1, 2);
+    grid->addWidget(m_blendGain,   2, 0, 1, 2);
     grid->setRowStretch(3, 10);
     grid->setMargin(m_gboxSettings->spacingHint());
     grid->setSpacing(m_gboxSettings->spacingHint());

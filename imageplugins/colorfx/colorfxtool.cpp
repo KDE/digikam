@@ -139,12 +139,12 @@ ColorFXTool::ColorFXTool(QObject* parent)
     m_iterationInput->setWhatsThis( i18n("This value controls the number of iterations "
                                          "to use with the Neon and Find Edges effects."));
 
-    gridSettings->addWidget(m_effectTypeLabel,  0, 0, 1, 5 );
-    gridSettings->addWidget(m_effectType,       1, 0, 1, 5 );
-    gridSettings->addWidget(m_levelLabel,       2, 0, 1, 5 );
-    gridSettings->addWidget(m_levelInput,       3, 0, 1, 5 );
-    gridSettings->addWidget(m_iterationLabel,   4, 0, 1, 5 );
-    gridSettings->addWidget(m_iterationInput,   5, 0, 1, 5 );
+    gridSettings->addWidget(m_effectTypeLabel,  0, 0, 1, 5);
+    gridSettings->addWidget(m_effectType,       1, 0, 1, 5);
+    gridSettings->addWidget(m_levelLabel,       2, 0, 1, 5);
+    gridSettings->addWidget(m_levelInput,       3, 0, 1, 5);
+    gridSettings->addWidget(m_iterationLabel,   4, 0, 1, 5);
+    gridSettings->addWidget(m_iterationInput,   5, 0, 1, 5);
     gridSettings->setRowStretch(6, 10);
     gridSettings->setMargin(m_gboxSettings->spacingHint());
     gridSettings->setSpacing(m_gboxSettings->spacingHint());

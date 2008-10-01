@@ -79,7 +79,7 @@ BlurFXTool::BlurFXTool(QObject* parent)
                                             EditorToolSettings::Try,
                                             EditorToolSettings::PanIcon);
 
-    QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage() );
+    QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage());
 
     m_effectTypeLabel = new QLabel(i18n("Type:"), m_gboxSettings->plainPage());
 

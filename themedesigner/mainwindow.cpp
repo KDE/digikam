@@ -201,9 +201,9 @@ MainWindow::MainWindow()
 
     layout->setMargin(5);
     layout->setSpacing(5);
-    layout->addWidget(splitter, 0, 0, 1, 1);
-    layout->addWidget(groupBox, 0, 1, 1, 1);
-    layout->addLayout(buttonLayout, 1, 0, 1, 2 );
+    layout->addWidget(splitter,     0, 0, 1, 1);
+    layout->addWidget(groupBox,     0, 1, 1, 1);
+    layout->addLayout(buttonLayout, 1, 0, 1, 2);
 
     // ------------------------------------------------------------------------
 

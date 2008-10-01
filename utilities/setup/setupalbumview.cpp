@@ -170,12 +170,12 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
 
     ifaceSettingsLayout->setMargin(KDialog::spacingHint());
     ifaceSettingsLayout->setSpacing(KDialog::spacingHint());
-    ifaceSettingsLayout->addWidget(d->iconTreeThumbLabel, 0, 0, 1, 1);
-    ifaceSettingsLayout->addWidget(d->iconTreeThumbSize, 0, 1, 1, 1);
+    ifaceSettingsLayout->addWidget(d->iconTreeThumbLabel,           0, 0, 1, 1);
+    ifaceSettingsLayout->addWidget(d->iconTreeThumbSize,            0, 1, 1, 1);
     ifaceSettingsLayout->addWidget(d->showFolderTreeViewItemsCount, 1, 0, 1, 4);
-    ifaceSettingsLayout->addWidget(rightClickLabel, 2 , 0, 1, 1);
-    ifaceSettingsLayout->addWidget(d->rightClickActionComboBox, 2, 1, 1, 4);
-    ifaceSettingsLayout->addWidget(d->previewLoadFullImageSize, 3, 0, 1, 5 );
+    ifaceSettingsLayout->addWidget(rightClickLabel,                 2 , 0, 1, 1);
+    ifaceSettingsLayout->addWidget(d->rightClickActionComboBox,     2, 1, 1, 4);
+    ifaceSettingsLayout->addWidget(d->previewLoadFullImageSize,     3, 0, 1, 5 );
 
     // --------------------------------------------------------
 

@@ -76,7 +76,7 @@ CharcoalTool::CharcoalTool(QObject* parent)
                                             EditorToolSettings::Cancel|
                                             EditorToolSettings::Try,
                                             EditorToolSettings::PanIcon);
-    QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage() );
+    QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage());
 
     QLabel *label1 = new QLabel(i18n("Pencil size:"), m_gboxSettings->plainPage());
 

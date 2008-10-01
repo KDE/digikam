@@ -274,27 +274,27 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
 
     // --------------------------------------------------
 
-    settingsLayout->addWidget(d->title,                  0, 0, 1, 2);
+    settingsLayout->addWidget(d->title,                   0, 0, 1, 2);
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding),
-                                                         1, 0, 1, 2);
-    settingsLayout->addWidget(d->file,                   2, 0, 1, 1);
-    settingsLayout->addWidget(d->labelFile,              2, 1, 1, 1);
-    settingsLayout->addWidget(d->folder,                 3, 0, 1, 1);
-    settingsLayout->addWidget(d->labelFolder,            3, 1, 1, 1);
-    settingsLayout->addWidget(d->modifiedDate,           4, 0, 1, 1);
-    settingsLayout->addWidget(d->labelFileModifiedDate,  4, 1, 1, 1);
-    settingsLayout->addWidget(d->size,                   5, 0, 1, 1);
-    settingsLayout->addWidget(d->labelFileSize,          5, 1, 1, 1);
-    settingsLayout->addWidget(d->owner,                  6, 0, 1, 1);
-    settingsLayout->addWidget(d->labelFileOwner,         6, 1, 1, 1);
-    settingsLayout->addWidget(d->permissions,            7, 0, 1, 1);
-    settingsLayout->addWidget(d->labelFilePermissions,   7, 1, 1, 1);
+                                                          1, 0, 1, 2);
+    settingsLayout->addWidget(d->file,                    2, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFile,               2, 1, 1, 1);
+    settingsLayout->addWidget(d->folder,                  3, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFolder,             3, 1, 1, 1);
+    settingsLayout->addWidget(d->modifiedDate,            4, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFileModifiedDate,   4, 1, 1, 1);
+    settingsLayout->addWidget(d->size,                    5, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFileSize,           5, 1, 1, 1);
+    settingsLayout->addWidget(d->owner,                   6, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFileOwner,          6, 1, 1, 1);
+    settingsLayout->addWidget(d->permissions,             7, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFilePermissions,    7, 1, 1, 1);
 
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding),
-                                                         8, 0, 1, 2);
-    settingsLayout->addWidget(line,                      9, 0, 1, 2);
+                                                          8, 0, 1, 2);
+    settingsLayout->addWidget(line,                       9, 0, 1, 2);
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding),
                                                          10, 0, 1, 2);

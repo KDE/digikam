@@ -126,7 +126,7 @@ SuperImposeTool::SuperImposeTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    gridFrame->addWidget(m_previewWidget,   0, 0, 1, 3 );
+    gridFrame->addWidget(m_previewWidget,   0, 0, 1, 3);
     gridFrame->addWidget(toolBox,           1, 1, 1, 1);
     gridFrame->setColumnStretch(0, 10);
     gridFrame->setColumnStretch(2, 10);

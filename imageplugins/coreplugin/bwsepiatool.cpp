@@ -411,21 +411,21 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
     ColorGradientWidget *hGradient = new ColorGradientWidget(
                                                   ColorGradientWidget::Horizontal,
                                                   10, curveBox );
-    hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+    hGradient->setColors(QColor("black"), QColor("white"));
 
     m_cInput = new RIntNumInput(curveBox);
     m_cInput->input()->setLabel(i18n("Contrast:"), Qt::AlignLeft | Qt::AlignVCenter);
     m_cInput->setRange(-100, 100, 1);
     m_cInput->setSliderEnabled(true);
     m_cInput->setDefaultValue(0);
-    m_cInput->setWhatsThis( i18n("Set here the contrast adjustment of the image."));
+    m_cInput->setWhatsThis(i18n("Set here the contrast adjustment of the image."));
 
     gridTab2->addWidget(vGradient,      0, 0, 1, 1);
     gridTab2->addWidget(spacev,         0, 1, 1, 1);
     gridTab2->addWidget(m_curvesWidget, 0, 2, 1, 1);
     gridTab2->addWidget(spaceh,         1, 2, 1, 1);
     gridTab2->addWidget(hGradient,      2, 2, 1, 1);
-    gridTab2->addWidget(m_cInput,       4, 0, 1, 3 );
+    gridTab2->addWidget(m_cInput,       4, 0, 1, 3);
     gridTab2->setRowMinimumHeight(3, m_gboxSettings->spacingHint());
     gridTab2->setRowStretch(5, 10);
     gridTab2->setMargin(m_gboxSettings->spacingHint());
@@ -438,7 +438,7 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
     m_tab->insertTab(ToneTab,       m_bwTone, i18n("Tone"));
     m_tab->insertTab(LuminosityTab, curveBox, i18n("Lightness"));
 
-    gridSettings->addWidget(m_tab,    0, 0, 1, 5 );
+    gridSettings->addWidget(m_tab, 0, 0, 1, 5);
     gridSettings->setRowStretch(0, 10);
     gridSettings->setMargin(m_gboxSettings->spacingHint());
     gridSettings->setSpacing(m_gboxSettings->spacingHint());

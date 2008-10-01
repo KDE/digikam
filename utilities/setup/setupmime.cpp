@@ -124,9 +124,9 @@ SetupMime::SetupMime(QWidget* parent)
     d->revertImageFileFilterBtn->setIcon(SmallIcon("view-refresh"));
     d->revertImageFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
-    grid1->addWidget(logoLabel1, 0, 0, 2, 1);
-    grid1->addWidget(d->imageFileFilterLabel, 0, 1, 1, 1);
-    grid1->addWidget(hbox1, 1, 1, 1, 1);
+    grid1->addWidget(logoLabel1,                0, 0, 2, 1);
+    grid1->addWidget(d->imageFileFilterLabel,   0, 1, 1, 1);
+    grid1->addWidget(hbox1,                     1, 1, 1, 1);
     grid1->setColumnStretch(1, 10);
     grid1->setMargin(KDialog::spacingHint());
     grid1->setSpacing(KDialog::spacingHint());
@@ -159,9 +159,9 @@ SetupMime::SetupMime(QWidget* parent)
     d->revertMovieFileFilterBtn->setIcon(SmallIcon("view-refresh"));
     d->revertMovieFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
-    grid2->addWidget(logoLabel2, 0, 0, 2, 1);
-    grid2->addWidget(d->movieFileFilterLabel, 0, 1, 1, 1);
-    grid2->addWidget(hbox2, 1, 1, 1, 1);
+    grid2->addWidget(logoLabel2,                0, 0, 2, 1);
+    grid2->addWidget(d->movieFileFilterLabel,   0, 1, 1, 1);
+    grid2->addWidget(hbox2,                     1, 1, 1, 1);
     grid2->setColumnStretch(1, 10);
     grid2->setMargin(KDialog::spacingHint());
     grid2->setSpacing(KDialog::spacingHint());
@@ -194,9 +194,9 @@ SetupMime::SetupMime(QWidget* parent)
     d->revertAudioFileFilterBtn->setIcon(SmallIcon("view-refresh"));
     d->revertAudioFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
-    grid3->addWidget(logoLabel3, 0, 0, 2, 1);
-    grid3->addWidget(d->audioFileFilterLabel, 0, 1, 1, 1);
-    grid3->addWidget(hbox3, 1, 1, 1, 1);
+    grid3->addWidget(logoLabel3,                0, 0, 2, 1);
+    grid3->addWidget(d->audioFileFilterLabel,   0, 1, 1, 1);
+    grid3->addWidget(hbox3,                     1, 1, 1, 1);
     grid3->setColumnStretch(1, 10);
     grid3->setMargin(KDialog::spacingHint());
     grid3->setSpacing(KDialog::spacingHint());
@@ -225,9 +225,9 @@ SetupMime::SetupMime(QWidget* parent)
     d->revertRawFileFilterBtn->setIcon(SmallIcon("view-refresh"));
     d->revertRawFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
-    grid4->addWidget(logoLabel4, 0, 0, 2, 1);
-    grid4->addWidget(rawFileFilterLabel, 0, 1, 1, 1);
-    grid4->addWidget(hbox4, 1, 1, 1, 1);
+    grid4->addWidget(logoLabel4,            0, 0, 2, 1);
+    grid4->addWidget(rawFileFilterLabel,    0, 1, 1, 1);
+    grid4->addWidget(hbox4,                 1, 1, 1, 1);
     grid4->setColumnStretch(1, 10);
     grid4->setMargin(KDialog::spacingHint());
     grid4->setSpacing(KDialog::spacingHint());

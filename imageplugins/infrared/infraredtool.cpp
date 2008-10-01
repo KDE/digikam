@@ -118,7 +118,7 @@ InfraredTool::InfraredTool(QObject* parent)
     grid->addWidget(label1,                0, 0, 1, 2);
     grid->addWidget(m_sensibilitySlider,   1, 0, 1, 1);
     grid->addWidget(m_sensibilityLCDValue, 1, 1, 1, 1);
-    grid->addWidget(m_addFilmGrain,        2, 0, 1, 2 );
+    grid->addWidget(m_addFilmGrain,        2, 0, 1, 2);
     grid->setRowStretch(3, 10);
     grid->setMargin(m_gboxSettings->spacingHint());
     grid->setSpacing(m_gboxSettings->spacingHint());

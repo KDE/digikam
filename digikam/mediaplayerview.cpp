@@ -117,8 +117,8 @@ MediaPlayerView::MediaPlayerView(QWidget *parent)
     d->mediaPlayerView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
     d->mediaPlayerView->setLineWidth(1);
 
-    d->grid->addWidget(d->player->videoWidget(), 0, 0, 1, 3);
-    d->grid->addWidget(d->slider, 1, 0, 1, 3);
+    d->grid->addWidget(d->player->videoWidget(),    0, 0, 1, 3);
+    d->grid->addWidget(d->slider,                   1, 0, 1, 3);
     d->grid->setColumnStretch(0, 10),
     d->grid->setColumnStretch(2, 10),
     d->grid->setRowStretch(0, 10),

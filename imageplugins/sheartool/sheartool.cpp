@@ -144,16 +144,16 @@ ShearTool::ShearTool(QObject* parent)
     gridSettings->addWidget(m_newWidthLabel,    0, 1, 1, 2);
     gridSettings->addWidget(label2,             1, 0, 1, 1);
     gridSettings->addWidget(m_newHeightLabel,   1, 1, 1, 2);
-    gridSettings->addWidget(line,               2, 0, 1, 3 );
-    gridSettings->addWidget(label3,             3, 0, 1, 3 );
-    gridSettings->addWidget(m_mainHAngleInput,  4, 0, 1, 3 );
-    gridSettings->addWidget(label4,             5, 0, 1, 3 );
-    gridSettings->addWidget(m_fineHAngleInput,  6, 0, 1, 3 );
+    gridSettings->addWidget(line,               2, 0, 1, 3);
+    gridSettings->addWidget(label3,             3, 0, 1, 3);
+    gridSettings->addWidget(m_mainHAngleInput,  4, 0, 1, 3);
+    gridSettings->addWidget(label4,             5, 0, 1, 3);
+    gridSettings->addWidget(m_fineHAngleInput,  6, 0, 1, 3);
     gridSettings->addWidget(label5,             7, 0, 1, 1);
-    gridSettings->addWidget(m_mainVAngleInput,  8, 0, 1, 3 );
-    gridSettings->addWidget(label6,             9, 0, 1, 3 );
-    gridSettings->addWidget(m_fineVAngleInput, 10, 0, 1, 3 );
-    gridSettings->addWidget(m_antialiasInput,  11, 0, 1, 3 );
+    gridSettings->addWidget(m_mainVAngleInput,  8, 0, 1, 3);
+    gridSettings->addWidget(label6,             9, 0, 1, 3);
+    gridSettings->addWidget(m_fineVAngleInput, 10, 0, 1, 3);
+    gridSettings->addWidget(m_antialiasInput,  11, 0, 1, 3);
     gridSettings->setRowStretch(12, 10);
 
     setToolSettings(m_gboxSettings);

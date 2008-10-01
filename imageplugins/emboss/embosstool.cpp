@@ -87,8 +87,8 @@ EmbossTool::EmbossTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    grid->addWidget(label1,       0, 0, 1, 2 );
-    grid->addWidget(m_depthInput, 1, 0, 1, 2 );
+    grid->addWidget(label1,       0, 0, 1, 2);
+    grid->addWidget(m_depthInput, 1, 0, 1, 2);
     grid->setRowStretch(2, 10);
     grid->setMargin(m_gboxSettings->spacingHint());
     grid->setSpacing(m_gboxSettings->spacingHint());

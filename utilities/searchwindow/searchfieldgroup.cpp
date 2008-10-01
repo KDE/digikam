@@ -153,10 +153,10 @@ SearchFieldGroupLabel::SearchFieldGroupLabel(QWidget *parent)
     QFrame *hline = new QFrame;
     hline->setFrameStyle(QFrame::HLine | QFrame::Raised);
 
-    layout->addWidget(m_titleLabel, 0, 0);
+    layout->addWidget(m_titleLabel,  0, 0);
     layout->addWidget(m_expandLabel, 0, 1);
+    layout->addWidget(hline,         1, 0, 1, 3);
     layout->setColumnStretch(2, 1);
-    layout->addWidget(hline, 1, 0, 1, 3);
     layout->setSpacing(2);
     setLayout(layout);
 
