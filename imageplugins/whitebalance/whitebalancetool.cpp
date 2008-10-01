@@ -42,7 +42,6 @@
 
 // KDE includes.
 
-#include <k3activelabel.h>
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcombobox.h>
@@ -119,8 +118,10 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
 
     QGridLayout *grid = new QGridLayout(m_gboxSettings->plainPage());
 
-    m_temperatureLabel    = new K3ActiveLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Color_temperature'>Color Temperature</a> "
-                                                  " (K): </qt>"), m_gboxSettings->plainPage());
+    m_temperatureLabel = new QLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Color_temperature'>"
+                                         "Color Temperature</a> (K): </qt>"), m_gboxSettings->plainPage());
+    m_temperatureLabel->setOpenExternalLinks(true);
+
     m_adjTemperatureLabel = new QLabel(i18n("Adjustment:"), m_gboxSettings->plainPage());
     m_temperatureInput    = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_temperatureInput->setDecimals(1);
@@ -153,7 +154,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
                                               "<p><b>200W Lamp</b>: 200 Watt incandescent lamp (3000K).</p>"
                                               "<p><b>Sunrise</b>: sunrise or sunset light (3200K).</p>"
                                               "<p><b>Studio Lamp</b>: tungsten lamp used in photo studio or "
-                                                     "light at 1 hour from dusk/dawn (3400K).</p>"
+                                              "light at 1 hour from dusk/dawn (3400K).</p>"
                                               "<p><b>Moonlight</b>: moon light (4100K).</p>"
                                               "<p><b>Neutral</b>: neutral color temperature (4750K).</p>"
                                               "<p><b>Daylight D50</b>: sunny daylight around noon (5000K).</p>"
@@ -214,8 +215,10 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_exposureLabel      = new K3ActiveLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Exposure_value'>Exposure Compensation</a> "
-                                                 " (E.V): </qt>"), m_gboxSettings->plainPage());
+    m_exposureLabel = new QLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Exposure_value'>"
+                                      "Exposure Compensation</a> (E.V): </qt>"), m_gboxSettings->plainPage());
+    m_exposureLabel->setOpenExternalLinks(true);
+
     m_mainExposureLabel  = new QLabel(i18n("Main:"), m_gboxSettings->plainPage());
     m_autoAdjustExposure = new QToolButton(m_gboxSettings->plainPage());
     m_autoAdjustExposure->setIcon(KIconLoader::global()->loadIcon("system-run", KIconLoader::Toolbar));
@@ -240,13 +243,13 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
 
     grid->setMargin(m_gboxSettings->spacingHint());
     grid->setSpacing(m_gboxSettings->spacingHint());
-    grid->addWidget(m_temperatureLabel,        0, 0, 1, 5+1);
+    grid->addWidget(m_temperatureLabel,        0, 0, 1, 6);
     grid->addWidget(m_adjTemperatureLabel,     1, 0, 1, 1);
     grid->addWidget(m_pickTemperature,         1, 1, 1, 1);
-    grid->addWidget(m_temperatureInput,        1, 2, 1, 5-2+1);
+    grid->addWidget(m_temperatureInput,        1, 2, 1, 4);
     grid->addWidget(m_temperaturePresetLabel,  2, 0, 1, 1);
-    grid->addWidget(m_temperaturePresetCB,     2, 2, 1, 5-2+1);
-    grid->addWidget(line,                      3, 0, 1, 5+1);
+    grid->addWidget(m_temperaturePresetCB,     2, 2, 1, 4);
+    grid->addWidget(line,                      3, 0, 1, 6);
     grid->addWidget(m_blackLabel,              4, 0, 1, 1);
     grid->addWidget(m_blackInput,              4, 1, 1, 5);
     grid->addWidget(m_darkLabel,               5, 0, 1, 1);
@@ -257,13 +260,13 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     grid->addWidget(m_gammaInput,              7, 1, 1, 5);
     grid->addWidget(m_greenLabel,              8, 0, 1, 1);
     grid->addWidget(m_greenInput,              8, 1, 1, 5);
-    grid->addWidget(line2,                     9, 0, 1, 5+1);
-    grid->addWidget(m_exposureLabel,          10, 0, 1, 5+1);
+    grid->addWidget(line2,                     9, 0, 1, 6);
+    grid->addWidget(m_exposureLabel,          10, 0, 1, 6);
     grid->addWidget(m_mainExposureLabel,      11, 0, 1, 1);
     grid->addWidget(m_autoAdjustExposure,     11, 1, 1, 1);
-    grid->addWidget(m_mainExposureInput,      11, 2, 1, 5- 2+1);
-    grid->addWidget(m_fineExposureLabel,      12, 0, 1, 2 );
-    grid->addWidget(m_fineExposureInput,      12, 2, 1, 5- 2+1);
+    grid->addWidget(m_mainExposureInput,      11, 2, 1, 4);
+    grid->addWidget(m_fineExposureLabel,      12, 0, 1, 2);
+    grid->addWidget(m_fineExposureInput,      12, 2, 1, 4);
     grid->setRowStretch(13, 10);
 
     setToolSettings(m_gboxSettings);
@@ -321,8 +324,6 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
 
 WhiteBalanceTool::~WhiteBalanceTool()
 {
-    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
-
     if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
 }

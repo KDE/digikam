@@ -29,7 +29,6 @@
 // Qt includes.
 
 #include <QColor>
-#include <QLabel>
 
 // Digikam includes.
 
@@ -39,8 +38,6 @@ class QPushButton;
 class QLabel;
 class QPushButton;
 class QToolButton;
-
-class K3ActiveLabel;
 
 namespace KDcrawIface
 {
@@ -125,9 +122,8 @@ private:
     QLabel                       *m_gammaLabel;
     QLabel                       *m_saturationLabel;
     QLabel                       *m_greenLabel;
-
-    K3ActiveLabel                *m_exposureLabel;
-    K3ActiveLabel                *m_temperatureLabel;
+    QLabel                       *m_exposureLabel;
+    QLabel                       *m_temperatureLabel;
 
     KDcrawIface::RComboBox       *m_temperaturePresetCB;
 
