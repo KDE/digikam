@@ -210,16 +210,16 @@ endif(LENSFUN_FOUND)
 
 if(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND GPHOTO2_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND)
   message(STATUS " digiKam will be compiled...")
-  set(DIGIKAM_CAN_BE_COMPILE true)
+  set(DIGIKAM_CAN_BE_COMPILED true)
 else(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND GPHOTO2_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND)
   message(FATAL_ERROR " digiKam will not be compiled! Look README file for more details about dependencies...")
-  set(DIGIKAM_CAN_BE_COMPILE false)
+  set(DIGIKAM_CAN_BE_COMPILED false)
 endif(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND GPHOTO2_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND)
 
 message(STATUS "----------------------------------------------------------------------------------")
 message(STATUS "")
 
-IF(DIGIKAM_CAN_BE_COMPILE)
+IF(DIGIKAM_CAN_BE_COMPILED)
 
 # ==================================================================================================
 # Create svn version header
@@ -741,4 +741,4 @@ IF(NOT WIN32)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/digikam.lsm.cmake ${CMAKE_CURRENT_BINARY_DIR}/digikam.lsm)
 ENDIF(NOT WIN32)
 
-ENDIF(DIGIKAM_CAN_BE_COMPILE)
+ENDIF(DIGIKAM_CAN_BE_COMPILED)
