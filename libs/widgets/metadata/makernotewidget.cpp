@@ -101,6 +101,8 @@ static const char* ExifEntryListToIgnore[] =
      "GPSInfo",
      "Iop",
      "Thumbnail",
+     "SubImage1",
+     "SubImage2",
      "Image",
      "Photo",
      "-1"
