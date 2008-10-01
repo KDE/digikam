@@ -1,5 +1,5 @@
 *********************************************************************************************************
-digiKam 0.10.0-beta4 - Release date: 2008-10-??
+digiKam 0.10.0-beta4 - Release date: 2008-10-02
 
 IMPORTANT: This is a beta release : do not use yet in production !!!
 ====================================================================
@@ -18,7 +18,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 171778 : digiKam does not load photos in its database.
 009 ==> 171736 : Make transferring of metadata between machines easier.
 010 ==> 170929 : Compilation of SVN version fails with gcc 4.3.2 unless debug option is activated.
-011 ==>
+011 ==> 171989 : can't set gps photo location on .nef images.
+012 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta3 - Release date: 2008-09-03
