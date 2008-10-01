@@ -17,7 +17,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 007 ==> 171310 : No preview photos shown clicking on imported albums.
 008 ==> 171778 : digiKam does not load photos in its database.
 009 ==> 171736 : Make transferring of metadata between machines easier.
-010 ==> 
+010 ==> 170929 : Compilation of SVN version fails with gcc 4.3.2 unless debug option is activated.
+011 ==>
 
 *********************************************************************************************************
 digiKam 0.10.0-beta3 - Release date: 2008-09-03
