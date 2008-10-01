@@ -74,6 +74,8 @@ static const char* StandardExifEntryList[] =
 {
      "Iop",
      "Thumbnail",
+     "SubImage1",
+     "SubImage2",
      "Image",
      "Photo",
      "-1"
