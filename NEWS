@@ -19,7 +19,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 171736 : Make transferring of metadata between machines easier.
 010 ==> 170929 : Compilation of SVN version fails with gcc 4.3.2 unless debug option is activated.
 011 ==> 171989 : can't set gps photo location on .nef images.
-012 ==> 
+012 ==> 172018 : Initial cursor in the "sharpen" dialog is on the "cancel" button.
+013 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta3 - Release date: 2008-09-03
