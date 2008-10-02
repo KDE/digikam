@@ -1,3 +1,1853 @@
+0.10.0-beta4 02-10-2008
+---------------------------------------------------------------------------
+2008-10-02 13:36  cgilles
+
+	* CMakeLists.txt: add url
+
+2008-10-02 13:16  cgilles
+
+	* NEWS.0.9.0, NEWS.0.9.1, NEWS.0.9.2, NEWS.0.9.3, NEWS.0.9.4,
+	  project/NEWS.0.9.0, project/NEWS.0.9.1, project/NEWS.0.9.2,
+	  project/NEWS.0.9.3, project/NEWS.0.9.4, project/project.kdevelop:
+	  archive 0.9.x NEWS files to project sub-dir
+
+2008-10-02 13:15  cgilles
+
+	* CMakeLists.txt: uppercase + indent
+
+2008-10-02 12:51  cgilles
+
+	* NEWS: update
+
+2008-10-02 11:02  aclemens
+
+	* libs/widgets/common/histogrambox.cpp: use i18nc if single
+	  adjective is used as message
+
+2008-10-02 11:02  aclemens
+
+	* libs/widgets/common/histogrambox.h: code polish
+
+2008-10-02 11:02  aclemens
+
+	* libs/widgets/common/histogrambox.h: use explicit ctor to prevent
+	  a possible wrong usage of the class
+
+2008-10-02 07:49  cgilles
+
+	* NEWS: update
+
+2008-10-01 20:00  cgilles
+
+	* NEWS: update
+
+2008-10-01 19:13  shaforo
+
+	* digikam/daboutdata.h: ethics: remove credits for translators from
+	  general credits page, as the list isn't full
+	  and there is a special page for them in About dialog and the
+	  credits are set in .po files, not in the code.
+	  
+	  CCMAIL: caulier.gilles@gmail.com
+	  CCMAIL: kde-i18n-doc@kde.org
+
+2008-10-01 19:00  cgilles
+
+	* libs/widgets/metadata/makernotewidget.cpp: missing to ignore sub
+	  image here
+
+2008-10-01 18:39  cgilles
+
+	* libs/widgets/metadata/exifwidget.cpp: add sub image 1 & 2
+	  available in DNG
+
+2008-10-01 12:15  cgilles
+
+	* README: update
+
+2008-10-01 12:08  cgilles
+
+	* NEWS: update
+
+2008-10-01 12:05  cgilles
+
+	* CMakeLists.txt: all gcc version > 4.3.0 must use -fno-tree-pre
+	  option, else CImg.h compilation hang-up to infinite
+	  BUG: 170929
+
+2008-10-01 11:24  cgilles
+
+	* README: missing jpÃg depency
+
+2008-10-01 10:43  aclemens
+
+	* digikam/albumpropsedit.cpp, digikam/mediaplayerview.cpp,
+	  imageplugins/blurfx/blurfxtool.cpp,
+	  imageplugins/border/bordertool.cpp,
+	  imageplugins/charcoal/charcoaltool.cpp,
+	  imageplugins/colorfx/colorfxtool.cpp,
+	  imageplugins/coreplugin/blurtool.cpp,
+	  imageplugins/coreplugin/bwsepiatool.cpp,
+	  imageplugins/distortionfx/distortionfxtool.cpp,
+	  imageplugins/emboss/embosstool.cpp,
+	  imageplugins/filmgrain/filmgraintool.cpp,
+	  imageplugins/infrared/infraredtool.cpp,
+	  imageplugins/inpainting/inpaintingtool.cpp,
+	  imageplugins/inserttext/inserttexttool.cpp,
+	  imageplugins/raindrop/raindroptool.cpp,
+	  imageplugins/sheartool/sheartool.cpp,
+	  imageplugins/superimpose/superimposetool.cpp,
+	  imageplugins/texture/texturetool.cpp,
+	  libs/dimg/loaders/jp2ksettings.cpp,
+	  libs/dimg/loaders/pngsettings.cpp,
+	  libs/greycstoration/greycstorationwidget.cpp,
+	  libs/imageproperties/cameraitempropertiestab.cpp,
+	  libs/imageproperties/imagepropertiestab.cpp,
+	  libs/widgets/iccprofiles/iccpreviewwidget.cpp,
+	  libs/widgets/imageplugins/imagewidget.cpp,
+	  themedesigner/mainwindow.cpp,
+	  utilities/cameragui/camerafolderdialog.cpp,
+	  utilities/cameragui/renamecustomizer.cpp,
+	  utilities/imageeditor/canvas/colorcorrectiondlg.cpp,
+	  utilities/imageeditor/tools/imageresize.cpp,
+	  utilities/searchwindow/searchfieldgroup.cpp,
+	  utilities/searchwindow/searchgroup.cpp,
+	  utilities/setup/setupalbumview.cpp,
+	  utilities/setup/setupidentity.cpp,
+	  utilities/setup/setupmetadata.cpp, utilities/setup/setupmime.cpp:
+	  code polish
+
+2008-10-01 10:18  cgilles
+
+	* CMakeLists.txt: typo
+
+2008-10-01 10:05  cgilles
+
+	* CMakeLists.txt: missing libjpeg report
+
+2008-10-01 09:15  cgilles
+
+	* imageplugins/channelmixer/channelmixertool.cpp,
+	  imageplugins/colorfx/colorfxtool.cpp,
+	  imageplugins/coreplugin/autocorrectiontool.cpp,
+	  imageplugins/coreplugin/bcgtool.cpp,
+	  imageplugins/coreplugin/bwsepiatool.cpp,
+	  imageplugins/coreplugin/hsl/hsltool.cpp,
+	  imageplugins/coreplugin/iccprooftool.cpp,
+	  imageplugins/coreplugin/redeyetool.cpp,
+	  imageplugins/coreplugin/rgbtool.cpp,
+	  libs/widgets/common/histogrambox.cpp, project/project.kdevelop:
+	  fix crash. do not stop histogram computation from
+	  editortoolsettings destructor. use Histogrambox container which
+	  host hostgram widget.
+
+2008-10-01 09:04  cgilles
+
+	* imageplugins/whitebalance/whitebalancetool.cpp,
+	  imageplugins/whitebalance/whitebalancetool.h: K3ActiveLabel =>
+	  QLabel
+
+2008-09-30 22:19  aclemens
+
+	* libs/imageproperties/imagepropertiescolorstab.cpp,
+	  libs/widgets/common/histogrambox.cpp,
+	  libs/widgets/common/histogrambox.h: API change: rename the colors
+	  methods, I think the new names are a little bit more
+	  meaningful now.
+
+2008-09-30 16:04  aclemens
+
+	* libs/dialogs/deletedialog.cpp, libs/dialogs/libsinfodlg.cpp,
+	  libs/dialogs/rawcameradlg.cpp,
+	  libs/dimg/loaders/jp2ksettings.cpp,
+	  libs/dimg/loaders/jpegsettings.cpp,
+	  libs/dimg/loaders/pngsettings.cpp,
+	  libs/dimg/loaders/tiffsettings.cpp,
+	  libs/greycstoration/greycstorationwidget.cpp,
+	  libs/imageproperties/imagedescedittab.cpp,
+	  libs/widgets/iccprofiles/iccprofilewidget.cpp,
+	  libs/widgets/imageplugins/imagepanelwidget.cpp,
+	  libs/widgets/imageplugins/imagewidget.cpp,
+	  libs/widgets/metadata/metadatalistview.cpp: fixed malformed i18n
+	  calls
+
+2008-09-30 15:35  cgilles
+
+	* CMakeLists.txt, libs/widgets/imageplugins/CMakeLists.txt,
+	  libs/widgets/imageplugins/imagepannelwidget.cpp,
+	  libs/widgets/imageplugins/imagepannelwidget.h,
+	  project/project.kdevelop: missing to remove obsolete files
+
+2008-09-30 13:30  aclemens
+
+	* libs/widgets/common/histogrambox.cpp: fix layout problems
+
+2008-09-30 12:46  mwiesweg
+
+	* libs/widgets/common/sidebar.cpp, libs/widgets/common/sidebar.h:
+	  Sidebar width management after removing imageplugin
+	  editortoolsettings:
+	  
+	  - Try to do the right thing, store size and active tab when
+	  adding new tab,
+	  restore both when removing tab
+	  - consolidate a bit of tab switching code to
+	  switchTabAndStackToTab()
+	  
+	  There is still a bug now: When the sidebar was minimized before,
+	  it is not restored to the minimized stack. I was not able to
+	  debug this
+	  so far and decided to leave it for now as it is.
+
+2008-09-30 12:20  aclemens
+
+	* CMakeLists.txt, imageplugins/adjustcurves/adjustcurvestool.cpp,
+	  imageplugins/adjustcurves/adjustcurvestool.h,
+	  imageplugins/adjustlevels/adjustlevelstool.cpp,
+	  imageplugins/adjustlevels/adjustlevelstool.h,
+	  imageplugins/blurfx/blurfxtool.cpp,
+	  imageplugins/border/bordertool.cpp,
+	  imageplugins/channelmixer/channelmixertool.cpp,
+	  imageplugins/channelmixer/channelmixertool.h,
+	  imageplugins/charcoal/charcoaltool.cpp,
+	  imageplugins/colorfx/colorfxtool.cpp,
+	  imageplugins/colorfx/colorfxtool.h,
+	  imageplugins/coreplugin/autocorrectiontool.cpp,
+	  imageplugins/coreplugin/autocorrectiontool.h,
+	  imageplugins/coreplugin/bcgtool.cpp,
+	  imageplugins/coreplugin/bcgtool.h,
+	  imageplugins/coreplugin/blurtool.cpp,
+	  imageplugins/coreplugin/bwsepiatool.cpp,
+	  imageplugins/coreplugin/bwsepiatool.h,
+	  imageplugins/coreplugin/hsl/hsltool.cpp,
+	  imageplugins/coreplugin/hsl/hsltool.h,
+	  imageplugins/coreplugin/iccprooftool.cpp,
+	  imageplugins/coreplugin/iccprooftool.h,
+	  imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp,
+	  imageplugins/coreplugin/redeyetool.cpp,
+	  imageplugins/coreplugin/redeyetool.h,
+	  imageplugins/coreplugin/rgbtool.cpp,
+	  imageplugins/coreplugin/rgbtool.h,
+	  imageplugins/coreplugin/sharpnesseditor/matrix.cpp,
+	  imageplugins/coreplugin/sharpnesseditor/sharpentool.cpp,
+	  imageplugins/distortionfx/distortionfxtool.cpp,
+	  imageplugins/emboss/embosstool.cpp,
+	  imageplugins/filmgrain/filmgraintool.cpp,
+	  imageplugins/freerotation/freerotationtool.cpp,
+	  imageplugins/hotpixels/hotpixelstool.cpp,
+	  imageplugins/infrared/infraredtool.cpp,
+	  imageplugins/inpainting/inpaintingtool.cpp,
+	  imageplugins/inserttext/inserttexttool.cpp,
+	  imageplugins/lenscorrection/distortion/lensdistortiontool.cpp,
+	  imageplugins/lenscorrection/vignetting/antivignettingtool.cpp,
+	  imageplugins/noisereduction/noisereductiontool.cpp,
+	  imageplugins/oilpaint/oilpainttool.cpp,
+	  imageplugins/perspective/perspectivetool.cpp,
+	  imageplugins/raindrop/raindroptool.cpp,
+	  imageplugins/restoration/restorationtool.cpp,
+	  imageplugins/sheartool/sheartool.cpp,
+	  imageplugins/superimpose/superimposetool.cpp,
+	  imageplugins/texture/texturetool.cpp,
+	  imageplugins/whitebalance/whitebalancetool.cpp,
+	  imageplugins/whitebalance/whitebalancetool.h,
+	  libs/imageproperties/imagepropertiescolorstab.cpp,
+	  libs/imageproperties/imagepropertiescolorstab.h,
+	  libs/widgets/common/CMakeLists.txt,
+	  libs/widgets/common/histogrambox.cpp,
+	  libs/widgets/common/histogrambox.h,
+	  utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h,
+	  utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.h,
+	  utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.h: re-factorize
+	  histogramwidget in all editor tools and sidebars
+	  
+	  Until now the histogram widget in the editor tools and the
+	  sidebar has been implemented by copy & paste.
+	  Changes to that code had to be made in all of the 13 editor tools
+	  and the
+	  sidebars that use a histogram.
+	  Also the slots slotChannelChanged() and slotScaleChanged() where
+	  implemented in every single
+	  editor tool, although they use a common code base most of the
+	  time (only channel mixer, adjustcurves
+	  and adjustlevels use slightly different slots).
+	  So it is time to factorize this code.
+	  
+	  This patch will move all histogram related code into a new
+	  widget:
+	  HistogramBox.
+	  This widget holds a histogram widget as well as all the control
+	  widgets for it,
+	  like the scale buttons, the channel selector and the optional
+	  gradient widget.
+	  
+	  To use the histogrambox in editor tools, a new toolcode is
+	  introduced to enable
+	  the histogram. To set its mode, a third parameter 'histogramType'
+	  is added to
+	  the ctor of EditorToolSettings. The different modes for the
+	  HistogramBox are
+	  defined in the enum HistogramType.
+	  
+	  HistogramBox defines the following methods:
+	  
+	  ----------------------------------------------------------------------
+	  
+	  histogram() :
+	  returns the histogram widget
+	  
+	  setGradientVisible(bool) :
+	  show / hide the color gradient widget beneath the histogram
+	  widget.
+	  Some tools like adjustcurves and adjustlevels don't need that
+	  widget so we need a way to
+	  disable it
+	  
+	  setGradientColors(const QColor &from, const QColor &to) :
+	  set the color range for the gradient widget.
+	  
+	  channel() :
+	  returns the selected channel (Luminosity, RGB etc). Since a
+	  QVariant is used in the channel combobox,
+	  we need to convert the ID of the combobox item to the actual
+	  channel value. This method handles the
+	  conversion.
+	  
+	  setChannel(int channel) :
+	  set the current histogram channel. Due to the use of the QVariant
+	  we need to convert the channel id properly.
+	  This method handles the conversion.
+	  
+	  setColorsEnabled(bool) :
+	  if 'Colors' channel can be used in the editor tool, we need to
+	  provide a method to enable / disable this
+	  combobox.
+	  
+	  setColors(int color) :
+	  set the current ColorsChannel
+	  
+	  scale() :
+	  get the current selected histogram scale (linear, logarithmic)
+	  
+	  setScale(int scale) :
+	  set the current histogram scale
+	  
+	  ----------------------------------------------------------------------
+	  
+	  Andi
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2008-09-30 08:58  mwiesweg
+
+	* libs/database/imagelister.cpp: Check for null QDateTime and get
+	  rid of "parameter out of range" warning on console.
+
+2008-09-30 08:58  mwiesweg
+
+	* libs/database/albumdb.cpp: Fix SQL bug causing problems with
+	  moving files
+
+2008-09-29 23:34  dfaure
+
+	* libs/database/collectionscannerhints.h: SVN_SILENT
+
+2008-09-29 15:39  cgilles
+
+	* NEWS: update
+
+2008-09-29 15:12  aclemens
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp: When resetting a
+	  single channel, all channels get reset to the default values.
+	  This is wrong. I guess this is just a simple typo, it should be
+	  repaint(), not reset().
+
+2008-09-29 13:44  cgilles
+
+	* imageplugins/lenscorrection/autocorrection/autocorrectiontool.cpp:
+	  restore preview settings
+
+2008-09-29 13:27  cgilles
+
+	* imageplugins/lenscorrection/autocorrection/autocorrectiontool.cpp:
+	  fix crash at tool init
+
+2008-09-29 06:00  cgilles
+
+	* NEWS: update
+
+2008-09-27 02:49  mitchell
+
+	* digikam/CMakeLists.txt: Fix linking
+
+2008-09-26 16:57  cgilles
+
+	* project/release/lib/libbase.rb,
+	  project/release/lib/libkdialog.rb,
+	  project/release/lib/libl10n.rb,
+	  project/release/lib/librelease.rb,
+	  project/release/lib/libreleasedigikamkipi.rb,
+	  project/release/lib/libtag.rb,
+	  project/release/release_digikam.rb: update release script. sync
+	  with kipi-plugins
+
+2008-09-25 12:34  mwiesweg
+
+	* libs/database/imagescanner.cpp: Among some minor changes, fix one
+	  more stupid mistake:
+	  Exclude the just added image from searching for identical files,
+	  as obviously it will be falsely found otherwise, resulting in
+	  empty db entries.
+
+2008-09-25 12:33  mwiesweg
+
+	* libs/database/albumdb.cpp, libs/database/albumdb.h: Give means to
+	  exclude one id from list of identical files; you will usually
+	  want to
+	  look for files identical to one given file, and not have that one
+	  included.
+
+2008-09-25 07:44  cgilles
+
+	* libs/greycstoration/greycstorationiface.cpp: digiKam from trunk :
+	  CImg interface : set number of threads accordingly with number of
+	  CPU detected by KDE4::Solid interface.
+
+2008-09-25 06:04  mwiesweg
+
+	* libs/database/databasebackend.cpp: When in a transaction, send
+	  out changesets only after completion of the
+	  transaction, as other db connections will not be able to read the
+	  changes
+	  so far.
+	  Fixes the Collection-albums-empty problem for me.
+	  
+	  CCBUG: 171310
+
+2008-09-25 06:04  mwiesweg
+
+	* libs/database/imagescanner.cpp: Give copy/move hint priority over
+	  identity. There may be several identical files
+	  with different metadata right now. Source hint is more secure.
+	  
+	  Add some debug messages, for debugging some current problems.
+
+2008-09-25 06:04  mwiesweg
+
+	* kioslave/digikamalbums.cpp: - fix mkdir:
+	  - do database operation directly, as put() will be called
+	  immediately afterwards
+	  - make sure directory url has a slash. KDE edits the url
+	  appending the new dir,
+	  and does not necessarily add the slash the DatabaseUrl expects
+	  Fixes Import->Add Folders
+	  - fix all i18n in error messages
+
+2008-09-25 06:03  mwiesweg
+
+	* libs/database/albumdb.cpp, libs/database/collectionscanner.cpp:
+	  Work around the problem that the table contraint imposes for
+	  stale albums.
+	  All this is not optimal, but we can live with that very well for
+	  now.
+
+2008-09-24 09:04  aclemens
+
+	* showfoto/main.cpp: showfoto crashes on exit
+	  
+	  At least on my system, showfoto crashes with Qt 4.4.2 on exit due
+	  to the use of "delete" in the main function. Normally QObjects
+	  should not be deleted by hand, so we can safely remove this line
+	  to prevent crashing of the application.
+
+2008-09-23 14:39  cgilles
+
+	* showfoto/main.cpp: cleanup exiv2 properlly
+
+2008-09-23 14:37  cgilles
+
+	* digikam/main.cpp: clean up Exiv2 XMP sdk properly
+
+2008-09-22 14:28  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h,
+	  utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawimport.h: sync with KDE3
+
+2008-09-22 13:57  cgilles
+
+	* utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawimport.h: revert
+
+2008-09-22 13:30  cgilles
+
+	* utilities/imageeditor/rawimport/rawpreview.cpp: backport commit
+	  #863569 from KDE3
+
+2008-09-22 13:03  cgilles
+
+	* libs/threadimageio/managedloadsavethread.cpp,
+	  libs/threadimageio/managedloadsavethread.h: new method to cancel
+	  loading using LoadingDescription container and not only file
+	  path, because this is not enough with RAW loading.
+	  CCMAIL: marcel.wiesweg@gmx.de
+
+2008-09-22 12:21  aclemens
+
+	* CMakeLists.txt, digikam/album.cpp, digikam/albumfiletip.cpp,
+	  digikam/albumfolderview.cpp, digikam/albumhistory.cpp,
+	  digikam/albumiconview.cpp, digikam/albumiconviewfilter.cpp,
+	  digikam/albumlister.cpp, digikam/albummanager.cpp,
+	  digikam/albummodel.cpp, digikam/albumselectdialog.cpp,
+	  digikam/albumthumbnailloader.cpp, digikam/datefolderview.cpp,
+	  digikam/ddragobjects.cpp, digikam/digikamapp.cpp,
+	  digikam/digikamfirstrun.cpp, digikam/digikamview.cpp,
+	  digikam/dio.cpp, digikam/folderview.cpp, digikam/iconview.cpp,
+	  digikam/imagepreviewbar.cpp, digikam/imagepreviewview.cpp,
+	  digikam/main.cpp, digikam/mediaplayerview.cpp,
+	  digikam/metadatahub.cpp, digikam/mimefilter.cpp,
+	  digikam/ratingfilter.cpp, digikam/scancontroller.cpp,
+	  digikam/syncjob.cpp, digikam/tageditdlg.cpp,
+	  digikam/tagfilterview.cpp, digikam/tagfolderview.cpp,
+	  digikam/tagspopupmenu.cpp, digikam/welcomepageview.cpp,
+	  imageplugins/adjustcurves/adjustcurvestool.cpp,
+	  imageplugins/adjustcurves/imageplugin_adjustcurves.cpp,
+	  imageplugins/adjustlevels/adjustlevelstool.cpp,
+	  imageplugins/adjustlevels/imageplugin_adjustlevels.cpp,
+	  imageplugins/blurfx/blurfxtool.cpp,
+	  imageplugins/blurfx/imageplugin_blurfx.cpp,
+	  imageplugins/border/border.cpp,
+	  imageplugins/border/bordertool.cpp,
+	  imageplugins/border/imageplugin_border.cpp,
+	  imageplugins/channelmixer/channelmixertool.cpp,
+	  imageplugins/channelmixer/imageplugin_channelmixer.cpp,
+	  imageplugins/charcoal/charcoal.cpp,
+	  imageplugins/charcoal/charcoaltool.cpp,
+	  imageplugins/charcoal/imageplugin_charcoal.cpp,
+	  imageplugins/colorfx/colorfxtool.cpp,
+	  imageplugins/colorfx/imageplugin_colorfx.cpp,
+	  imageplugins/coreplugin/blurtool.cpp,
+	  imageplugins/coreplugin/iccprooftool.cpp,
+	  imageplugins/coreplugin/imageplugin_core.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp,
+	  imageplugins/coreplugin/sharpnesseditor/matrix.cpp,
+	  imageplugins/coreplugin/sharpnesseditor/refocus.cpp,
+	  imageplugins/coreplugin/sharpnesseditor/sharpentool.cpp,
+	  imageplugins/coreplugin/sharpnesseditor/unsharp.cpp,
+	  imageplugins/distortionfx/distortionfxtool.cpp,
+	  imageplugins/distortionfx/imageplugin_distortionfx.cpp,
+	  imageplugins/emboss/imageplugin_emboss.cpp,
+	  imageplugins/filmgrain/filmgrain.cpp,
+	  imageplugins/filmgrain/filmgraintool.cpp,
+	  imageplugins/filmgrain/imageplugin_filmgrain.cpp,
+	  imageplugins/freerotation/freerotationtool.cpp,
+	  imageplugins/freerotation/imageplugin_freerotation.cpp,
+	  imageplugins/hotpixels/hotpixelfixer.cpp,
+	  imageplugins/hotpixels/hotpixelstool.cpp,
+	  imageplugins/hotpixels/imageplugin_hotpixels.cpp,
+	  imageplugins/infrared/imageplugin_infrared.cpp,
+	  imageplugins/infrared/infrared.cpp,
+	  imageplugins/infrared/infraredtool.cpp,
+	  imageplugins/inpainting/imageplugin_inpainting.cpp,
+	  imageplugins/inpainting/inpaintingtool.cpp,
+	  imageplugins/inserttext/imageplugin_inserttext.cpp,
+	  imageplugins/inserttext/inserttexttool.cpp,
+	  imageplugins/lenscorrection/autocorrection/autocorrectiontool.cpp,
+	  imageplugins/lenscorrection/autocorrection/klensfun.cpp,
+	  imageplugins/lenscorrection/distortion/lensdistortion.cpp,
+	  imageplugins/lenscorrection/distortion/lensdistortiontool.cpp,
+	  imageplugins/lenscorrection/distortion/pixelaccess.cpp,
+	  imageplugins/lenscorrection/imageplugin_lenscorrection.cpp,
+	  imageplugins/lenscorrection/vignetting/antivignettingtool.cpp,
+	  imageplugins/noisereduction/imageplugin_noisereduction.cpp,
+	  imageplugins/noisereduction/noisereduction.cpp,
+	  imageplugins/noisereduction/noisereductiontool.cpp,
+	  imageplugins/oilpaint/imageplugin_oilpaint.cpp,
+	  imageplugins/oilpaint/oilpaint.cpp,
+	  imageplugins/oilpaint/oilpainttool.cpp,
+	  imageplugins/perspective/imageplugin_perspective.cpp,
+	  imageplugins/perspective/perspectivetool.cpp,
+	  imageplugins/perspective/perspectivewidget.cpp,
+	  imageplugins/raindrop/imageplugin_raindrop.cpp,
+	  imageplugins/raindrop/raindroptool.cpp,
+	  imageplugins/restoration/imageplugin_restoration.cpp,
+	  imageplugins/restoration/restorationtool.cpp,
+	  imageplugins/sheartool/imageplugin_sheartool.cpp,
+	  imageplugins/sheartool/sheartool.cpp,
+	  imageplugins/superimpose/dirselectwidget.cpp,
+	  imageplugins/superimpose/imageplugin_superimpose.cpp,
+	  imageplugins/superimpose/superimposetool.cpp,
+	  imageplugins/texture/imageplugin_texture.cpp,
+	  imageplugins/texture/texture.cpp,
+	  imageplugins/texture/texturetool.cpp,
+	  imageplugins/whitebalance/imageplugin_whitebalance.cpp,
+	  imageplugins/whitebalance/whitebalancetool.cpp,
+	  libs/curves/imagecurves.cpp, libs/database/albumdb.cpp,
+	  libs/database/albumdb_sqlite2.cpp,
+	  libs/database/collectionmanager.cpp,
+	  libs/database/collectionscanner.cpp,
+	  libs/database/databaseaccess.cpp,
+	  libs/database/databasebackend.cpp,
+	  libs/database/databasewatch.cpp,
+	  libs/database/haar/haariface.cpp,
+	  libs/database/imagecomments.cpp,
+	  libs/database/imagecopyright.cpp, libs/database/imageinfo.cpp,
+	  libs/database/imagelister.cpp,
+	  libs/database/imagequerybuilder.cpp,
+	  libs/database/imagescanner.cpp, libs/database/schemaupdater.cpp,
+	  libs/database/upgradedb_sqlite2tosqlite3.cpp,
+	  libs/dialogs/deletedialog.cpp, libs/dialogs/dprogressdlg.cpp,
+	  libs/dialogs/iccprofileinfodlg.cpp, libs/dialogs/imagedialog.cpp,
+	  libs/dimg/CMakeLists.txt, libs/dimg/dcolor.cpp,
+	  libs/dimg/ddebug.cpp, libs/dimg/ddebug.h, libs/dimg/dimg.cpp,
+	  libs/dimg/filters/dimggaussianblur.cpp,
+	  libs/dimg/filters/dimgimagefilters.cpp,
+	  libs/dimg/filters/dimgsharpen.cpp,
+	  libs/dimg/filters/dimgthreadedfilter.cpp,
+	  libs/dimg/filters/hslmodifier.cpp,
+	  libs/dimg/filters/icctransform.cpp,
+	  libs/dimg/loaders/dimgloader.cpp,
+	  libs/dimg/loaders/jp2kloader.cpp,
+	  libs/dimg/loaders/jpegloader.cpp,
+	  libs/dimg/loaders/pngloader.cpp, libs/dimg/loaders/ppmloader.cpp,
+	  libs/dimg/loaders/qimageloader.cpp,
+	  libs/dimg/loaders/rawloader.cpp,
+	  libs/dimg/loaders/tiffloader.cpp, libs/dmetadata/dmetadata.cpp,
+	  libs/greycstoration/greycstorationiface.cpp,
+	  libs/histogram/imagehistogram.cpp,
+	  libs/imageproperties/cameraitempropertiestab.cpp,
+	  libs/imageproperties/imagedescedittab.cpp,
+	  libs/imageproperties/imagepropertiescolorstab.cpp,
+	  libs/imageproperties/imagepropertiesgpstab.cpp,
+	  libs/imageproperties/imagepropertiesmetadatatab.cpp,
+	  libs/imageproperties/imagepropertiessidebar.cpp,
+	  libs/imageproperties/imagepropertiessidebarcamgui.cpp,
+	  libs/imageproperties/imagepropertiessidebardb.cpp,
+	  libs/imageproperties/imagepropertiestab.cpp,
+	  libs/imageproperties/talbumlistview.cpp,
+	  libs/imageproperties/worldmapwidget.cpp,
+	  libs/jpegutils/jpegutils.cpp, libs/levels/imagelevels.cpp,
+	  libs/themeengine/theme.cpp, libs/themeengine/themeengine.cpp,
+	  libs/threadimageio/loadingcache.cpp,
+	  libs/threadimageio/loadsavetask.cpp,
+	  libs/threadimageio/loadsavethread.cpp,
+	  libs/threadimageio/managedloadsavethread.cpp,
+	  libs/threadimageio/previewtask.cpp,
+	  libs/threadimageio/sharedloadsavethread.cpp,
+	  libs/threadimageio/thumbnailcreator.cpp,
+	  libs/threadimageio/thumbnailloadthread.cpp,
+	  libs/threadimageio/thumbnailtask.cpp,
+	  libs/whitebalance/whitebalance.cpp,
+	  libs/widgets/common/curveswidget.cpp,
+	  libs/widgets/common/drubberband.cpp,
+	  libs/widgets/common/histogramwidget.cpp,
+	  libs/widgets/common/paniconwidget.cpp,
+	  libs/widgets/common/previewwidget.cpp,
+	  libs/widgets/common/sidebar.cpp,
+	  libs/widgets/common/splashscreen.cpp,
+	  libs/widgets/common/thumbbar.cpp,
+	  libs/widgets/iccprofiles/cietonguewidget.cpp,
+	  libs/widgets/iccprofiles/iccpreviewwidget.cpp,
+	  libs/widgets/iccprofiles/iccprofilewidget.cpp,
+	  libs/widgets/imageplugins/imageguidewidget.cpp,
+	  libs/widgets/imageplugins/imagepanelwidget.cpp,
+	  libs/widgets/imageplugins/imagepaniconwidget.cpp,
+	  libs/widgets/imageplugins/imagepannelwidget.cpp,
+	  libs/widgets/imageplugins/imageregionwidget.cpp,
+	  libs/widgets/imageplugins/imagewidget.cpp,
+	  libs/widgets/metadata/exifwidget.cpp,
+	  libs/widgets/metadata/iptcwidget.cpp,
+	  libs/widgets/metadata/makernotewidget.cpp,
+	  libs/widgets/metadata/mdkeylistviewitem.cpp,
+	  libs/widgets/metadata/metadatalistview.cpp,
+	  libs/widgets/metadata/metadatawidget.cpp,
+	  libs/widgets/metadata/xmpwidget.cpp, showfoto/showfoto.cpp,
+	  utilities/batch/batchalbumssyncmetadata.cpp,
+	  utilities/batch/batchsyncmetadata.cpp,
+	  utilities/batch/batchthumbsgenerator.cpp,
+	  utilities/batch/fingerprintsgenerator.cpp,
+	  utilities/batch/imageinfoalbumsjob.cpp,
+	  utilities/batch/imageinfojob.cpp,
+	  utilities/cameragui/cameracontroller.cpp,
+	  utilities/cameragui/camerafolderdialog.cpp,
+	  utilities/cameragui/camerafolderview.cpp,
+	  utilities/cameragui/cameraiconview.cpp,
+	  utilities/cameragui/cameraui.cpp,
+	  utilities/cameragui/capturedlg.cpp,
+	  utilities/cameragui/capturewidget.cpp,
+	  utilities/cameragui/freespacewidget.cpp,
+	  utilities/cameragui/gpcamera.cpp,
+	  utilities/cameragui/umscamera.cpp,
+	  utilities/fuzzysearch/findduplicatesalbumitem.cpp,
+	  utilities/fuzzysearch/findduplicatesview.cpp,
+	  utilities/fuzzysearch/fuzzysearchview.cpp,
+	  utilities/fuzzysearch/sketchwidget.cpp,
+	  utilities/gpssearch/gpssearchview.cpp,
+	  utilities/gpssearch/gpssearchwidget.cpp,
+	  utilities/imageeditor/canvas/canvas.cpp,
+	  utilities/imageeditor/canvas/colorcorrectiondlg.cpp,
+	  utilities/imageeditor/canvas/dimginterface.cpp,
+	  utilities/imageeditor/canvas/imagepluginloader.cpp,
+	  utilities/imageeditor/canvas/undoaction.cpp,
+	  utilities/imageeditor/canvas/undocache.cpp,
+	  utilities/imageeditor/canvas/undomanager.cpp,
+	  utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/imageiface.cpp,
+	  utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawpostprocessing.cpp,
+	  utilities/imageeditor/rawimport/rawpreview.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/imageeditor/tools/imageprint.cpp,
+	  utilities/imageeditor/tools/imageresize.cpp,
+	  utilities/kipiiface/kipiimagecollection.cpp,
+	  utilities/kipiiface/kipiimagecollectionselector.cpp,
+	  utilities/kipiiface/kipiimageinfo.cpp,
+	  utilities/kipiiface/kipiinterface.cpp,
+	  utilities/kipiiface/kipiuploadwidget.cpp,
+	  utilities/lighttable/lighttablebar.cpp,
+	  utilities/lighttable/lighttablepreview.cpp,
+	  utilities/lighttable/lighttableview.cpp,
+	  utilities/lighttable/lighttablewindow.cpp,
+	  utilities/searchwindow/choicesearchutilities.cpp,
+	  utilities/searchwindow/comboboxutilities.cpp,
+	  utilities/searchwindow/ratingsearchutilities.cpp,
+	  utilities/searchwindow/searchfieldgroup.cpp,
+	  utilities/searchwindow/searchfields.cpp,
+	  utilities/searchwindow/searchfolderview.cpp,
+	  utilities/searchwindow/searchgroup.cpp,
+	  utilities/searchwindow/searchtabheader.cpp,
+	  utilities/searchwindow/searchutilities.cpp,
+	  utilities/searchwindow/searchview.cpp,
+	  utilities/searchwindow/searchwindow.cpp,
+	  utilities/setup/setupicc.cpp, utilities/slideshow/slideshow.cpp,
+	  utilities/timeline/timelineview.cpp,
+	  utilities/timeline/timelinewidget.cpp,
+	  utilities/timeline/timelinewidget.h: since ddebug.h is not needed
+	  anymore, we can remove it
+
+2008-09-22 12:19  aclemens
+
+	* digikam/album.cpp, digikam/albummanager.cpp,
+	  digikam/digikamapp.cpp,
+	  imageplugins/lenscorrection/autocorrection/klensfun.cpp,
+	  libs/database/collectionmanager.cpp,
+	  libs/database/collectionscanner.cpp,
+	  libs/database/databaseaccess.cpp,
+	  libs/database/haar/haariface.cpp,
+	  libs/database/schemaupdater.cpp,
+	  libs/database/upgradedb_sqlite2tosqlite3.cpp,
+	  libs/dimg/loaders/jpegloader.cpp,
+	  libs/threadimageio/thumbnailloadthread.cpp: since kError() is
+	  thread-safe now, we can replace DError() everywhere
+
+2008-09-22 12:19  aclemens
+
+	* digikam/albumfolderview.cpp, digikam/albumiconview.cpp,
+	  digikam/albumlister.cpp, digikam/albummanager.cpp,
+	  digikam/albumselectdialog.cpp, digikam/digikamapp.cpp,
+	  digikam/metadatahub.cpp, digikam/scancontroller.cpp,
+	  digikam/tagfilterview.cpp, digikam/tagfolderview.cpp,
+	  digikam/tagspopupmenu.cpp,
+	  imageplugins/channelmixer/channelmixertool.cpp,
+	  imageplugins/charcoal/charcoal.cpp,
+	  imageplugins/coreplugin/sharpnesseditor/unsharp.cpp,
+	  libs/curves/imagecurves.cpp, libs/database/albumdb.cpp,
+	  libs/database/albumdb_sqlite2.cpp,
+	  libs/database/collectionmanager.cpp,
+	  libs/database/collectionscanner.cpp,
+	  libs/database/databaseaccess.cpp,
+	  libs/database/databasebackend.cpp,
+	  libs/database/imagequerybuilder.cpp,
+	  libs/database/imagescanner.cpp,
+	  libs/database/upgradedb_sqlite2tosqlite3.cpp, libs/dimg/dimg.cpp,
+	  libs/dimg/filters/dimggaussianblur.cpp,
+	  libs/dimg/filters/dimgimagefilters.cpp,
+	  libs/dimg/filters/dimgsharpen.cpp,
+	  libs/dimg/loaders/tiffloader.cpp, libs/dmetadata/dmetadata.cpp,
+	  libs/histogram/imagehistogram.cpp,
+	  libs/imageproperties/imagedescedittab.cpp,
+	  libs/imageproperties/talbumlistview.cpp,
+	  libs/jpegutils/jpegutils.cpp, libs/levels/imagelevels.cpp,
+	  libs/threadimageio/previewtask.cpp,
+	  libs/threadimageio/thumbnailcreator.cpp,
+	  libs/widgets/common/thumbbar.cpp,
+	  libs/widgets/imageplugins/imageregionwidget.cpp,
+	  showfoto/showfoto.cpp, utilities/batch/imageinfojob.cpp,
+	  utilities/cameragui/cameracontroller.cpp,
+	  utilities/cameragui/camerafolderview.cpp,
+	  utilities/cameragui/gpcamera.cpp,
+	  utilities/cameragui/umscamera.cpp,
+	  utilities/imageeditor/canvas/dimginterface.cpp,
+	  utilities/imageeditor/canvas/imagepluginloader.cpp,
+	  utilities/imageeditor/canvas/undoaction.cpp,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/imageiface.cpp,
+	  utilities/imageeditor/rawimport/rawpostprocessing.cpp,
+	  utilities/imageeditor/tools/imageprint.cpp,
+	  utilities/kipiiface/kipiimagecollection.cpp,
+	  utilities/kipiiface/kipiimagecollectionselector.cpp,
+	  utilities/kipiiface/kipiimageinfo.cpp,
+	  utilities/kipiiface/kipiinterface.cpp,
+	  utilities/kipiiface/kipiuploadwidget.cpp,
+	  utilities/searchwindow/searchfields.cpp,
+	  utilities/searchwindow/searchgroup.cpp,
+	  utilities/searchwindow/searchview.cpp: since kWarning() is
+	  thread-safe now, we can replace DWarning() everywhere
+
+2008-09-22 10:33  cgilles
+
+	* utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawimport.h: rename
+	  slotAbortPreview to slotAbort to hnadle progress bar cancel
+	  button properlly
+
+2008-09-21 00:22  aclemens
+
+	* digikam/album.cpp, digikam/album.h, digikam/albumiconview.cpp,
+	  digikam/albummanager.cpp, digikam/digikamapp.cpp,
+	  digikam/imagepreviewview.cpp, digikam/main.cpp,
+	  digikam/tageditdlg.cpp,
+	  imageplugins/adjustcurves/imageplugin_adjustcurves.cpp,
+	  imageplugins/adjustlevels/imageplugin_adjustlevels.cpp,
+	  imageplugins/blurfx/imageplugin_blurfx.cpp,
+	  imageplugins/border/border.cpp,
+	  imageplugins/border/imageplugin_border.cpp,
+	  imageplugins/channelmixer/imageplugin_channelmixer.cpp,
+	  imageplugins/charcoal/imageplugin_charcoal.cpp,
+	  imageplugins/colorfx/imageplugin_colorfx.cpp,
+	  imageplugins/coreplugin/iccprooftool.cpp,
+	  imageplugins/coreplugin/imageplugin_core.cpp,
+	  imageplugins/coreplugin/sharpnesseditor/matrix.cpp,
+	  imageplugins/coreplugin/sharpnesseditor/refocus.cpp,
+	  imageplugins/distortionfx/imageplugin_distortionfx.cpp,
+	  imageplugins/emboss/imageplugin_emboss.cpp,
+	  imageplugins/filmgrain/imageplugin_filmgrain.cpp,
+	  imageplugins/freerotation/imageplugin_freerotation.cpp,
+	  imageplugins/hotpixels/imageplugin_hotpixels.cpp,
+	  imageplugins/infrared/imageplugin_infrared.cpp,
+	  imageplugins/inpainting/imageplugin_inpainting.cpp,
+	  imageplugins/inserttext/imageplugin_inserttext.cpp,
+	  imageplugins/lenscorrection/autocorrection/klensfun.cpp,
+	  imageplugins/lenscorrection/imageplugin_lenscorrection.cpp,
+	  imageplugins/noisereduction/imageplugin_noisereduction.cpp,
+	  imageplugins/oilpaint/imageplugin_oilpaint.cpp,
+	  imageplugins/perspective/imageplugin_perspective.cpp,
+	  imageplugins/perspective/perspectivewidget.cpp,
+	  imageplugins/raindrop/imageplugin_raindrop.cpp,
+	  imageplugins/restoration/imageplugin_restoration.cpp,
+	  imageplugins/sheartool/imageplugin_sheartool.cpp,
+	  imageplugins/superimpose/dirselectwidget.cpp,
+	  imageplugins/superimpose/imageplugin_superimpose.cpp,
+	  imageplugins/texture/imageplugin_texture.cpp,
+	  imageplugins/texture/texture.cpp,
+	  imageplugins/whitebalance/imageplugin_whitebalance.cpp,
+	  libs/database/albumdb_sqlite2.cpp,
+	  libs/database/collectionmanager.cpp,
+	  libs/database/collectionscanner.cpp,
+	  libs/database/databasebackend.cpp,
+	  libs/database/haar/haariface.cpp, libs/database/imageinfo.cpp,
+	  libs/database/imagelister.cpp, libs/database/imagescanner.cpp,
+	  libs/database/schemaupdater.cpp,
+	  libs/database/upgradedb_sqlite2tosqlite3.cpp,
+	  libs/dialogs/deletedialog.cpp, libs/dialogs/imagedialog.cpp,
+	  libs/dimg/dimg.cpp, libs/dimg/filters/dimgthreadedfilter.cpp,
+	  libs/dimg/filters/icctransform.cpp,
+	  libs/dimg/loaders/dimgloader.cpp,
+	  libs/dimg/loaders/jp2kloader.cpp,
+	  libs/dimg/loaders/jpegloader.cpp,
+	  libs/dimg/loaders/pngloader.cpp, libs/dimg/loaders/ppmloader.cpp,
+	  libs/dimg/loaders/qimageloader.cpp,
+	  libs/dimg/loaders/rawloader.cpp,
+	  libs/dimg/loaders/tiffloader.cpp, libs/dmetadata/dmetadata.cpp,
+	  libs/greycstoration/greycstorationiface.cpp,
+	  libs/imageproperties/imagepropertiesgpstab.cpp,
+	  libs/jpegutils/jpegutils.cpp, libs/themeengine/theme.cpp,
+	  libs/themeengine/themeengine.cpp,
+	  libs/threadimageio/loadingcache.cpp,
+	  libs/threadimageio/loadsavetask.cpp,
+	  libs/threadimageio/managedloadsavethread.cpp,
+	  libs/threadimageio/previewtask.cpp,
+	  libs/threadimageio/thumbnailcreator.cpp,
+	  libs/whitebalance/whitebalance.cpp,
+	  libs/widgets/iccprofiles/iccpreviewwidget.cpp,
+	  libs/widgets/iccprofiles/iccprofilewidget.cpp,
+	  showfoto/showfoto.cpp,
+	  utilities/batch/batchalbumssyncmetadata.cpp,
+	  utilities/cameragui/cameracontroller.cpp,
+	  utilities/cameragui/camerafolderdialog.cpp,
+	  utilities/cameragui/camerafolderview.cpp,
+	  utilities/cameragui/cameraui.cpp,
+	  utilities/cameragui/gpcamera.cpp,
+	  utilities/gpssearch/gpssearchview.cpp,
+	  utilities/gpssearch/gpssearchwidget.cpp,
+	  utilities/imageeditor/canvas/dimginterface.cpp,
+	  utilities/imageeditor/canvas/imagepluginloader.cpp,
+	  utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/tools/imageresize.cpp,
+	  utilities/kipiiface/kipiimagecollectionselector.cpp,
+	  utilities/searchwindow/choicesearchutilities.cpp,
+	  utilities/searchwindow/ratingsearchutilities.cpp,
+	  utilities/searchwindow/searchfields.cpp,
+	  utilities/searchwindow/searchtabheader.cpp,
+	  utilities/setup/setupicc.cpp,
+	  utilities/timeline/timelineview.cpp,
+	  utilities/timeline/timelinewidget.cpp: since kDebug() is
+	  thread-safe now, we can replace DDebug() everywhere
+
+2008-09-20 18:29  aclemens
+
+	* digikam/album.cpp, digikam/albumicongroupitem.cpp,
+	  digikam/albumiconitem.cpp, digikam/albummanager.cpp,
+	  digikam/albumthumbnailloader.cpp, digikam/digikamapp.cpp,
+	  digikam/digikamfirstrun.cpp, digikam/scancontroller.cpp,
+	  digikam/tageditdlg.cpp: Adding single characters to a QString is
+	  faster if the characters are QChars and not QStrings.
+
+2008-09-20 18:13  aclemens
+
+	* utilities/cameragui/renamecustomizer.cpp: use remove() instead of
+	  replace() when deleting characters from a QString
+
+2008-09-20 18:13  aclemens
+
+	* kioslave/digikamsearch.cpp, libs/database/albumdb.cpp,
+	  libs/database/collectionmanager.cpp,
+	  libs/database/databaseurl.cpp,
+	  libs/database/imagequerybuilder.cpp,
+	  libs/widgets/iccprofiles/iccprofilewidget.cpp,
+	  themedesigner/themediconitem.cpp,
+	  utilities/cameragui/camerafolderview.cpp,
+	  utilities/cameragui/cameraiconview.cpp,
+	  utilities/cameragui/gpcamera.cpp,
+	  utilities/cameragui/umscamera.cpp,
+	  utilities/searchwindow/searchview.cpp,
+	  utilities/setup/setupcollections.cpp,
+	  utilities/slideshow/slideshow.cpp: Adding single characters to a
+	  QString is faster if the characters are QChars and not QStrings.
+
+2008-09-20 16:58  aclemens
+
+	* imageplugins/lenscorrection/autocorrection/klensfun.cpp,
+	  imageplugins/superimpose/dirselectwidget.cpp: Adding single
+	  characters to a QString is faster if the characters are QChars
+	  and not QStrings.
+
+2008-09-20 16:58  aclemens
+
+	* imageplugins/coreplugin/iccprooftool.cpp: Do not assign
+	  QString::null or QString() to a QString.
+
+2008-09-20 16:58  aclemens
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp,
+	  imageplugins/hotpixels/hotpixelstool.h,
+	  imageplugins/inserttext/inserttexttool.h,
+	  imageplugins/oilpaint/oilpainttool.cpp,
+	  imageplugins/superimpose/superimposetool.h,
+	  imageplugins/texture/texturetool.cpp: include fixes
+	  
+	  -> use include guards with coorect encoded macro names
+	  -> removed duplicate includes
+
+2008-09-20 16:03  aclemens
+
+	* imageplugins/inpainting/inpaintingtool.cpp,
+	  imageplugins/inpainting/inpaintingtool.h,
+	  imageplugins/lenscorrection/autocorrection/autocorrectiontool.cpp,
+	  imageplugins/lenscorrection/vignetting/antivignettingtool.cpp,
+	  imageplugins/noisereduction/noisereductiontool.cpp,
+	  imageplugins/restoration/restorationtool.cpp,
+	  imageplugins/restoration/restorationtool.h: use KTabWidget
+
+2008-09-20 16:03  aclemens
+
+	* imageplugins/adjustcurves/adjustcurvestool.h,
+	  imageplugins/adjustlevels/adjustlevelstool.h,
+	  imageplugins/blurfx/blurfxtool.h,
+	  imageplugins/border/bordertool.h,
+	  imageplugins/channelmixer/channelmixertool.h,
+	  imageplugins/colorfx/colorfxtool.cpp,
+	  imageplugins/colorfx/colorfxtool.h,
+	  imageplugins/coreplugin/autocorrectiontool.h,
+	  imageplugins/coreplugin/bcgtool.h,
+	  imageplugins/coreplugin/bwsepiatool.h,
+	  imageplugins/coreplugin/hsl/hsltool.h,
+	  imageplugins/coreplugin/iccprooftool.cpp,
+	  imageplugins/coreplugin/iccprooftool.h,
+	  imageplugins/coreplugin/redeyetool.h,
+	  imageplugins/coreplugin/rgbtool.h,
+	  imageplugins/inpainting/inpaintingtool.h,
+	  imageplugins/inserttext/inserttexttool.h,
+	  imageplugins/lenscorrection/autocorrection/klensfun.cpp,
+	  imageplugins/restoration/restorationtool.h,
+	  imageplugins/whitebalance/whitebalancetool.cpp,
+	  imageplugins/whitebalance/whitebalancetool.h: use KComboBox
+
+2008-09-20 12:08  scripty
+
+	* digikam/digikam.desktop,
+	  imageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
+	  imageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
+	  imageplugins/blurfx/digikamimageplugin_blurfx.desktop,
+	  imageplugins/border/digikamimageplugin_border.desktop,
+	  imageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
+	  imageplugins/charcoal/digikamimageplugin_charcoal.desktop,
+	  imageplugins/colorfx/digikamimageplugin_colorfx.desktop,
+	  imageplugins/coreplugin/digikamimageplugin_core.desktop,
+	  imageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
+	  imageplugins/emboss/digikamimageplugin_emboss.desktop,
+	  imageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
+	  imageplugins/freerotation/digikamimageplugin_freerotation.desktop,
+	  imageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
+	  imageplugins/infrared/digikamimageplugin_infrared.desktop,
+	  imageplugins/inpainting/digikamimageplugin_inpainting.desktop,
+	  imageplugins/inserttext/digikamimageplugin_inserttext.desktop,
+	  imageplugins/lenscorrection/digikamimageplugin_lenscorrection.desktop,
+	  imageplugins/noisereduction/digikamimageplugin_noisereduction.desktop,
+	  imageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
+	  imageplugins/perspective/digikamimageplugin_perspective.desktop,
+	  imageplugins/raindrop/digikamimageplugin_raindrop.desktop,
+	  imageplugins/restoration/digikamimageplugin_restoration.desktop,
+	  imageplugins/sheartool/digikamimageplugin_sheartool.desktop,
+	  imageplugins/superimpose/digikamimageplugin_superimpose.desktop,
+	  imageplugins/texture/digikamimageplugin_texture.desktop,
+	  imageplugins/whitebalance/digikamimageplugin_whitebalance.desktop,
+	  kioslave/digikamalbums.protocol, kioslave/digikamdates.protocol,
+	  kioslave/digikamsearch.protocol, kioslave/digikamtags.protocol,
+	  showfoto/showfoto.desktop,
+	  utilities/hotplug/digikam-download.desktop.cmake,
+	  utilities/hotplug/digikam-gphoto2-camera.desktop.cmake,
+	  utilities/hotplug/digikam-mount-and-download.desktop.cmake,
+	  utilities/imageeditor/editor/digikamimageplugin.desktop:
+	  SVN_SILENT made messages (.desktop file)
+
+2008-09-19 19:13  aclemens
+
+	* digikam/albumpropsedit.cpp,
+	  imageplugins/adjustcurves/adjustcurvestool.cpp,
+	  imageplugins/adjustlevels/adjustlevelstool.cpp,
+	  imageplugins/channelmixer/channelmixertool.cpp,
+	  imageplugins/colorfx/colorfxtool.cpp,
+	  imageplugins/coreplugin/autocorrectiontool.cpp,
+	  imageplugins/coreplugin/bcgtool.cpp,
+	  imageplugins/coreplugin/bwsepiatool.cpp,
+	  imageplugins/coreplugin/hsl/hsltool.cpp,
+	  imageplugins/coreplugin/iccprooftool.cpp,
+	  imageplugins/coreplugin/redeyetool.cpp,
+	  imageplugins/coreplugin/rgbtool.cpp,
+	  imageplugins/inpainting/inpaintingtool.cpp,
+	  imageplugins/inserttext/inserttexttool.cpp,
+	  imageplugins/restoration/restorationtool.cpp,
+	  imageplugins/whitebalance/whitebalancetool.cpp,
+	  libs/dimg/loaders/jpegsettings.cpp,
+	  libs/imageproperties/imagepropertiescolorstab.cpp,
+	  libs/imageproperties/imagepropertiesgpstab.cpp,
+	  showfoto/setup/setupeditor.cpp, themedesigner/mainwindow.cpp,
+	  themedesigner/mainwindow.h, utilities/cameragui/cameraui.cpp,
+	  utilities/cameragui/gpconfigdlg.cpp,
+	  utilities/cameragui/renamecustomizer.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/imageeditor/tools/imageresize.cpp,
+	  utilities/searchwindow/searchfields.cpp,
+	  utilities/searchwindow/searchgroup.cpp,
+	  utilities/setup/cameraselection.cpp,
+	  utilities/setup/setupalbumview.cpp,
+	  utilities/timeline/timelineview.cpp: Use the KDE version of some
+	  Qt GUI elements to provide a consistent look and feel for the KDE
+	  desktop.
+
+2008-09-19 12:29  cgilles
+
+	* NEWS: update
+
+2008-09-19 12:02  mwiesweg
+
+	* digikam/albummanager.cpp: Restore these lines. I copied them and
+	  then inadvertently deleted them.
+	  
+	  BUG:171310
+
+2008-09-19 12:02  mwiesweg
+
+	* digikam/albumiconview.cpp, digikam/imagepreviewview.cpp,
+	  utilities/imageeditor/canvas/canvas.cpp,
+	  utilities/imageeditor/rawimport/rawpreview.cpp,
+	  utilities/lighttable/lighttablepreview.cpp: typo
+
+2008-09-19 12:01  mwiesweg
+
+	* libs/widgets/imageplugins/imagepaniconwidget.cpp,
+	  libs/widgets/imageplugins/imagepaniconwidget.h: Same
+	  optimizations as with PanIconWidget
+
+2008-09-19 12:01  mwiesweg
+
+	* libs/widgets/common/paniconwidget.cpp,
+	  libs/widgets/common/paniconwidget.h: - optimize painting:
+	  - QImage->QPixmap conversion is the most expensive operation
+	  here,
+	  so store result of this in a pixmap.
+	  - use update() not repaint()
+	  - use QTimer instead of low-level event
+
+2008-09-17 13:44  cgilles
+
+	* digikam/album.h, digikam/albumiconview.cpp,
+	  digikam/albummanager.cpp, digikam/digikamapp.cpp,
+	  digikam/imagepreviewview.cpp, digikam/main.cpp,
+	  digikam/tageditdlg.cpp,
+	  imageplugins/adjustcurves/imageplugin_adjustcurves.cpp,
+	  imageplugins/adjustlevels/imageplugin_adjustlevels.cpp,
+	  imageplugins/blurfx/imageplugin_blurfx.cpp,
+	  imageplugins/border/border.cpp,
+	  imageplugins/border/imageplugin_border.cpp,
+	  imageplugins/channelmixer/imageplugin_channelmixer.cpp,
+	  imageplugins/charcoal/imageplugin_charcoal.cpp,
+	  imageplugins/colorfx/imageplugin_colorfx.cpp,
+	  imageplugins/coreplugin/iccprooftool.cpp,
+	  imageplugins/coreplugin/imageplugin_core.cpp,
+	  imageplugins/coreplugin/sharpnesseditor/matrix.cpp,
+	  imageplugins/coreplugin/sharpnesseditor/refocus.cpp,
+	  imageplugins/distortionfx/imageplugin_distortionfx.cpp,
+	  imageplugins/emboss/imageplugin_emboss.cpp,
+	  imageplugins/filmgrain/imageplugin_filmgrain.cpp,
+	  imageplugins/freerotation/imageplugin_freerotation.cpp,
+	  imageplugins/hotpixels/imageplugin_hotpixels.cpp,
+	  imageplugins/infrared/imageplugin_infrared.cpp,
+	  imageplugins/inpainting/imageplugin_inpainting.cpp,
+	  imageplugins/inserttext/imageplugin_inserttext.cpp,
+	  imageplugins/lenscorrection/autocorrection/klensfun.cpp,
+	  imageplugins/lenscorrection/imageplugin_lenscorrection.cpp,
+	  imageplugins/noisereduction/imageplugin_noisereduction.cpp,
+	  imageplugins/oilpaint/imageplugin_oilpaint.cpp,
+	  imageplugins/perspective/imageplugin_perspective.cpp,
+	  imageplugins/perspective/perspectivewidget.cpp,
+	  imageplugins/raindrop/imageplugin_raindrop.cpp,
+	  imageplugins/restoration/imageplugin_restoration.cpp,
+	  imageplugins/sheartool/imageplugin_sheartool.cpp,
+	  imageplugins/superimpose/dirselectwidget.cpp,
+	  imageplugins/superimpose/imageplugin_superimpose.cpp,
+	  imageplugins/texture/imageplugin_texture.cpp,
+	  imageplugins/texture/texture.cpp,
+	  imageplugins/whitebalance/imageplugin_whitebalance.cpp,
+	  kioslave/digikamalbums.cpp, kioslave/digikamdates.cpp,
+	  kioslave/digikamsearch.cpp, kioslave/digikamtags.cpp,
+	  libs/database/albumdb_sqlite2.cpp,
+	  libs/database/collectionmanager.cpp,
+	  libs/database/collectionscanner.cpp,
+	  libs/database/databasebackend.cpp,
+	  libs/database/haar/haariface.cpp, libs/database/imageinfo.cpp,
+	  libs/database/imagelister.cpp, libs/database/imagescanner.cpp,
+	  libs/database/schemaupdater.cpp,
+	  libs/database/upgradedb_sqlite2tosqlite3.cpp,
+	  libs/dialogs/deletedialog.cpp, libs/dialogs/imagedialog.cpp,
+	  libs/dimg/dimg.cpp, libs/dimg/filters/dimgthreadedfilter.cpp,
+	  libs/dimg/filters/icctransform.cpp,
+	  libs/dimg/loaders/dimgloader.cpp,
+	  libs/dimg/loaders/jp2kloader.cpp,
+	  libs/dimg/loaders/jpegloader.cpp,
+	  libs/dimg/loaders/pngloader.cpp, libs/dimg/loaders/ppmloader.cpp,
+	  libs/dimg/loaders/qimageloader.cpp,
+	  libs/dimg/loaders/rawloader.cpp,
+	  libs/dimg/loaders/tiffloader.cpp, libs/dmetadata/dmetadata.cpp,
+	  libs/greycstoration/greycstorationiface.cpp,
+	  libs/imageproperties/imagepropertiesgpstab.cpp,
+	  libs/jpegutils/jpegutils.cpp, libs/themeengine/theme.cpp,
+	  libs/themeengine/themeengine.cpp,
+	  libs/threadimageio/loadingcache.cpp,
+	  libs/threadimageio/loadsavetask.cpp,
+	  libs/threadimageio/managedloadsavethread.cpp,
+	  libs/threadimageio/previewtask.cpp,
+	  libs/threadimageio/thumbnailcreator.cpp,
+	  libs/whitebalance/whitebalance.cpp,
+	  libs/widgets/iccprofiles/iccpreviewwidget.cpp,
+	  libs/widgets/iccprofiles/iccprofilewidget.cpp,
+	  project/project.kdevelop, showfoto/showfoto.cpp,
+	  utilities/batch/batchalbumssyncmetadata.cpp,
+	  utilities/cameragui/cameracontroller.cpp,
+	  utilities/cameragui/camerafolderdialog.cpp,
+	  utilities/cameragui/camerafolderview.cpp,
+	  utilities/cameragui/cameraui.cpp,
+	  utilities/cameragui/gpcamera.cpp,
+	  utilities/gpssearch/gpssearchview.cpp,
+	  utilities/gpssearch/gpssearchwidget.cpp,
+	  utilities/imageeditor/canvas/dimginterface.cpp,
+	  utilities/imageeditor/canvas/imagepluginloader.cpp,
+	  utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/tools/imageresize.cpp,
+	  utilities/kipiiface/kipiimagecollectionselector.cpp,
+	  utilities/searchwindow/choicesearchutilities.cpp,
+	  utilities/searchwindow/ratingsearchutilities.cpp,
+	  utilities/searchwindow/searchfields.cpp,
+	  utilities/searchwindow/searchtabheader.cpp,
+	  utilities/setup/setupicc.cpp,
+	  utilities/timeline/timelineview.cpp,
+	  utilities/timeline/timelinewidget.cpp: use new kDebug spaces
+	  dedicated to digiKam
+
+2008-09-17 12:07  mwiesweg
+
+	* digikam/albumiconview.cpp, digikam/albumiconview.h: Fix dragging
+	  to albumiconview: We need to reimplement dragEnterEvent and
+	  accept
+	  
+	  drop actions there for Qt to generate further drag and drop
+	  event, including
+	  QDragMoveEvent and QDropEvent. Only implementing dragMoveEvent
+	  alone not sufficient.
+
+2008-09-17 12:07  mwiesweg
+
+	* digikam/tagfilterview.cpp, digikam/tagfolderview.cpp,
+	  libs/imageproperties/talbumlistview.cpp,
+	  utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/lighttable/lighttablebar.cpp,
+	  utilities/lighttable/lighttablepreview.cpp: Use provided decode()
+	  method for drag instead of reimplementing
+
+2008-09-17 12:06  mwiesweg
+
+	* digikam/ddragobjects.cpp, digikam/ddragobjects.h: - remove lots
+	  of unused Qt3isms
+	  
+	  - add a decode() method to classes where missing
+
+2008-09-17 11:28  mwiesweg
+
+	* CMakeLists.txt: Compile
+
+2008-09-17 11:28  mwiesweg
+
+	* digikam/digikamapp.cpp: Use new DIO call
+
+2008-09-17 11:28  mwiesweg
+
+	* digikam/ddragobjects.cpp: Encode KUrl as well in mimedata (as it
+	  was done in KDE3), so that items can be dragged
+	  
+	  to other places outside digikam
+
+2008-09-17 11:27  mwiesweg
+
+	* digikam/albumiconview.cpp: - use DItemDrag for Copy&Paste, rather
+	  than only KUrl mimedata
+	  
+	  - some fixes in drag and drop code
+	  - use new DIO calls
+
+2008-09-17 11:27  mwiesweg
+
+	* digikam/albumfolderview.cpp: Use new DIO calls
+
+2008-09-17 11:26  mwiesweg
+
+	* digikam/albumlister.cpp, digikam/albumlister.h: Support listing
+	  update on query change of a Search album
+
+2008-09-17 11:26  mwiesweg
+
+	* digikam/albummanager.cpp: - handle properly an AlbumChangeset for
+	  Rename or PropertiesChanged: Mark affected albums for rescan in
+	  scanPAlbums
+	  
+	  - adapt the changed renameAlbum call
+
+2008-09-17 11:25  mwiesweg
+
+	* kioslave/digikamalbums.cpp: Copy and rename should now be
+	  gracefully handled by the CollectionScanner.
+	  
+	  Doing it from the kioslave was a valid solution for a long time,
+	  but had its
+	  shortcomings (the bug with the pseudo .digikam_properties file,
+	  possible timing
+	  problems with ScanController kicking in)
+
+2008-09-17 11:25  mwiesweg
+
+	* digikam/dio.cpp, digikam/dio.h, digikam/dio_p.h: Large cleanup:
+	  
+	  Remove all old code.
+	  Give DIO a new and better defined purpose: Provide copy/move
+	  methods taking
+	  PAlbum* instead of a Url, and let DIO methods handle all details.
+	  Issue the appropriate KIO action and record CopyMove hints with
+	  ScanController.
+
+2008-09-17 11:25  mwiesweg
+
+	* digikam/scancontroller.cpp, digikam/scancontroller.h: Support for
+	  collecting CopyMove hints and passing them on to
+	  CollectionScanner.
+	  
+	  As ScanController is persistent and CollectionScanner objects
+	  only
+	  created when needed, hints are stored here.
+
+2008-09-17 09:15  mwiesweg
+
+	* libs/database/collectionscanner.cpp,
+	  libs/database/collectionscanner.h: - add internal structures to
+	  look up hints as to copy/move of albums and items
+	  - delete orphan (database stale) albums typically at application
+	  startup scan
+	  - consolidate scanning routines to scanNewFile() and
+	  scanModifiedFile()
+	  - use AlbumCopyMoveHints to identify albums deleted on the file
+	  system
+	  as actually renamed to another place (and due to be found on next
+	  scanning),
+	  and just rename in the database
+	  - use AlbumCopyMoveHints to identify the source of a newly found
+	  (copied) album,
+	  and copy over album properties
+	  - use both ItemCopyMoveHints and AlbumCopyMoveHints to find the
+	  possible source
+	  of a newly found file, and copy over attributes if applicable.
+
+2008-09-17 09:14  mwiesweg
+
+	* libs/database/imagescanner.cpp, libs/database/imagescanner.h: Add
+	  a method similar to newFile, but which takes the id of an image
+	  which is to be regarded copy source of the new file, and
+	  attributes
+	  will be copied from the entry.
+
+2008-09-17 09:13  mwiesweg
+
+	* libs/database/databasechangesets.h,
+	  libs/database/dbusutilities.h: Move the DECLARE_METATYPE_FOR_DBUS
+	  macro to its own header, to be shared
+
+2008-09-17 09:12  mwiesweg
+
+	* libs/database/albumdb.cpp, libs/database/albumdb.h: - introduce
+	  deferred deletion to albums as it is already done for images - do
+	  not immediately remove
+	  the entry from the database, but make it orphan by removing the
+	  AlbumRoot id.
+	  - allow changing of albumRootId in renameAlbum
+
+2008-09-17 09:09  mwiesweg
+
+	* libs/database/collectionscannerhints.cpp,
+	  libs/database/collectionscannerhints.h: Container classes to
+	  contain descriptions of move or copy operations on albums or
+	  images.
+	  Source and destination is stored, so that the originating image
+	  can be deduced
+	  when the newly created destination is scanned.
+
+2008-09-16 12:53  gkulzer
+
+	* digikam/daboutdata.h: added myself as handbook writer
+
+2008-09-16 12:32  aclemens
+
+	* utilities/imageeditor/rawimport/rawsettingsbox.cpp: fixed a typo
+
+2008-09-16 12:01  cgilles
+
+	* libs/dimg/loaders/rawloader.cpp, libs/dimg/loaders/rawloader.h:
+	  polish
+
+2008-09-16 11:40  cgilles
+
+	* utilities/setup/setupdcraw.cpp: polish
+
+2008-09-16 08:51  aclemens
+
+	* NEWS: update
+
+2008-09-14 09:05  cgilles
+
+	* libs/dimg/loaders/rawloader.cpp, libs/dimg/loaders/rawloader.h:
+	  digiKam from trunk : with libkdcraw from trunk based on libraw,
+	  we don't use KProcess anymore.
+	  RAWloader::checkToCancelReceivingData() is now a depreciate
+	  method, and is not used by libkdcraw.
+	  
+	  Marcel, it still a problem to cancel libkdcraw loading/saving
+	  job.
+	  Look KDcrawPriv::progressCallback(). This method is called by
+	  libraw to report progress information (for the moment on the
+	  console)
+	  I use this method to call RAWLoader::checkToCancelWaitingData().
+	  By debugger it called fine, but observer never return true when
+	  user
+	  cancel operation (for ex, when raw image is loaded, and editor is
+	  closed before end of loading)
+	  
+	  What's wrong exactly ?
+	  
+	  CCMAIL: marcel.wiesweg@gmx.de
+
+2008-09-13 22:43  aclemens
+
+	* data/about/infopage.css, data/about/main.html: fixes text
+	  overlapping in welcome page when resizing the sidebar
+	  
+	  CCBUGS:165337
+
+2008-09-13 22:43  aclemens
+
+	* digikam/digikamfirstrun.cpp, digikam/welcomepageview.cpp: fixed
+	  some malformed i18n strings in digikam folder.
+	  The html code of the welcome page has been restructured to be
+	  more valid.
+
+2008-09-13 19:31  aclemens
+
+	* utilities/cameragui/cameraui.cpp,
+	  utilities/cameragui/renamecustomizer.cpp,
+	  utilities/fuzzysearch/findduplicatesview.cpp,
+	  utilities/fuzzysearch/fuzzysearchview.cpp,
+	  utilities/gpssearch/gpssearchview.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/tools/imageresize.cpp,
+	  utilities/searchwindow/searchtabheader.cpp,
+	  utilities/timeline/timelineview.cpp: fixed some malformed i18n
+	  strings in utilities folder.
+
+2008-09-13 19:31  aclemens
+
+	* utilities/setup/cameraselection.cpp,
+	  utilities/setup/setupalbumtype.cpp,
+	  utilities/setup/setupalbumview.cpp,
+	  utilities/setup/setupcamera.cpp,
+	  utilities/setup/setupcollections.cpp,
+	  utilities/setup/setupeditor.cpp, utilities/setup/setupicc.cpp,
+	  utilities/setup/setuplighttable.cpp,
+	  utilities/setup/setupmetadata.cpp, utilities/setup/setupmime.cpp,
+	  utilities/setup/setupplugins.cpp,
+	  utilities/setup/setupslideshow.cpp,
+	  utilities/setup/setuptooltip.cpp: fixed some malformed i18n
+	  strings in utilities/setup folder.
+
+2008-09-13 19:31  aclemens
+
+	* showfoto/setup/setupeditor.cpp, showfoto/setup/setuptooltip.cpp:
+	  fixed some malformed i18n strings in showFoto folder.
+
+2008-09-13 13:41  aclemens
+
+	* NEWS: update
+
+2008-09-12 21:27  aclemens
+
+	* libs/dimg/loaders/tiffloader.cpp: fixed contractions issues in
+	  libs folder
+	  
+	  The KDE Style Guide recommends not using contractions in strings.
+
+2008-09-12 21:27  aclemens
+
+	* digikam/albumfolderview.cpp: fixed contractions issues in digikam
+	  folder
+	  
+	  The KDE Style Guide recommends not using contractions in strings.
+
+2008-09-12 21:27  aclemens
+
+	* utilities/cameragui/camerafolderview.cpp,
+	  utilities/cameragui/umscamera.cpp,
+	  utilities/imageeditor/canvas/colorcorrectiondlg.cpp,
+	  utilities/setup/setupcollections.cpp,
+	  utilities/setup/setupicc.cpp: Fixed contractions issues in
+	  utilities folder.
+	  
+	  The KDE Style Guide recommends not using contractions in strings.
+
+2008-09-12 20:58  aclemens
+
+	* imageplugins/blurfx/blurfxtool.cpp,
+	  imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp: The KDE
+	  Style Guide recommends not using contractions in strings.
+	  For example: "don't" should be changed to "do not". Contractions
+	  used in comments are ok.
+
+2008-09-12 08:38  aclemens
+
+	* libs/database/albumdb.cpp, libs/database/collectionmanager.cpp,
+	  libs/database/haar/haariface.cpp, libs/database/imagecopyright.h,
+	  libs/database/imagequerybuilder.cpp,
+	  libs/database/imagescanner.cpp, libs/database/schemaupdater.cpp,
+	  libs/dialogs/libsinfodlg.cpp, libs/dimg/loaders/pngloader.cpp,
+	  libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h,
+	  libs/dmetadata/geodetictools.h,
+	  libs/greycstoration/greycstoration.h,
+	  libs/imageproperties/imagepropertiessidebar.cpp,
+	  libs/imageproperties/imagepropertiessidebardb.cpp,
+	  libs/imageproperties/worldmapwidget.cpp,
+	  libs/threadimageio/loadingcache.cpp,
+	  libs/widgets/common/previewwidget.cpp,
+	  libs/widgets/metadata/xmpwidget.cpp: fixed some typos in libs
+	  folder
+
+2008-09-12 08:37  aclemens
+
+	* utilities/fuzzysearch/sketchwidget.h,
+	  utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/imageeditor/rawimport/rawpreview.cpp,
+	  utilities/imageeditor/tools/imageresize.cpp,
+	  utilities/kipiiface/kipiimagecollection.cpp,
+	  utilities/kipiiface/kipiimagecollection.h,
+	  utilities/lighttable/lighttablepreview.cpp,
+	  utilities/lighttable/lighttablewindow.cpp,
+	  utilities/searchwindow/searchfields.cpp,
+	  utilities/searchwindow/searchtabheader.cpp,
+	  utilities/searchwindow/searchutilities.cpp,
+	  utilities/setup/setupidentity.cpp,
+	  utilities/setup/setupmetadata.cpp,
+	  utilities/setup/setupslideshow.cpp: fixed some typos in utilities
+	  folder
+
+2008-09-12 08:37  aclemens
+
+	* digikam/albumlister.cpp, digikam/albummanager.cpp,
+	  digikam/digikamapp.cpp, digikam/imagepreviewview.cpp,
+	  digikam/kdateedit.h, digikam/mediaplayerview.cpp,
+	  digikam/tageditdlg.cpp, digikam/tagspopupmenu.cpp,
+	  digikam/welcomepageview.cpp: fixed some typos in digikam folder
+
+2008-09-12 08:37  aclemens
+
+	* imageplugins/charcoal/charcoal.cpp,
+	  imageplugins/lenscorrection/autocorrection/autocorrectiontool.cpp,
+	  imageplugins/lenscorrection/autocorrection/autocorrectiontool.h,
+	  imageplugins/lenscorrection/autocorrection/klensfun.cpp,
+	  imageplugins/lenscorrection/autocorrection/klensfun.h,
+	  imageplugins/lenscorrection/distortion/pixelaccess.cpp,
+	  imageplugins/lenscorrection/distortion/pixelaccess.h: fixed some
+	  typos in imageplugins
+
+2008-09-10 21:34  mjansen
+
+	* imageplugins/lenscorrection/CMakeLists.txt: Fix linking on 64bit
+	  systems.
+
+2008-09-10 18:52  cgilles
+
+	* imageplugins/adjustlevels/adjustlevelstool.cpp,
+	  imageplugins/adjustlevels/adjustlevelstool.h: fix broken slots
+
+2008-09-10 18:41  cgilles
+
+	* libs/widgets/imageplugins/imagepaniconwidget.cpp,
+	  libs/widgets/imageplugins/imagepaniconwidget.h: --This
+	  linepolish, and those below, will be ignored--
+	  
+	  M widgets/imageplugins/imagepaniconwidget.cpp
+	  M widgets/imageplugins/imagepaniconwidget.h
+
+2008-09-10 18:37  cgilles
+
+	* libs/widgets/common/previewwidget.cpp: polish
+
+2008-09-10 15:01  cgilles
+
+	* libs/dimg/loaders/rawloader.cpp: with libraw, no need 16 bits
+	  autogamma: it's already implemented...
+
+2008-09-10 11:48  aclemens
+
+	* imageplugins/lenscorrection/distortion/lensdistortiontool.cpp,
+	  imageplugins/lenscorrection/distortion/lensdistortiontool.h:
+	  added missing guide widget to lens distortion plugin
+
+2008-09-10 07:01  cgilles
+
+	* libs/dialogs/libsinfodlg.cpp: add lcms to component list
+
+2008-09-09 15:45  aclemens
+
+	* imageplugins/coreplugin/redeyetool.cpp: fixed some Krazy2 issues
+	  (malformed markup) and a typo
+
+2008-09-09 11:01  cgilles
+
+	* NEWS: update
+
+2008-09-09 10:19  cgilles
+
+	* utilities/imageeditor/rawimport/rawsettingsbox.cpp: remove black
+	  and white settings
+
+2008-09-09 10:17  cgilles
+
+	* utilities/imageeditor/editor/editorwindow.cpp: remove black and
+	  white point settings
+
+2008-09-09 10:16  cgilles
+
+	* utilities/setup/setupdcraw.cpp: sync with KDE3
+
+2008-09-09 08:50  cgilles
+
+	* utilities/setup/setupdcraw.cpp: --This line, acompilend those
+	  below, will be ignored--
+	  
+	  M setup/setupdcraw.cpp
+
+2008-09-09 06:18  cgilles
+
+	* utilities/imageeditor/rawimport/rawsettingsbox.cpp: compile with
+	  new constructor
+
+2008-09-09 06:18  cgilles
+
+	* utilities/setup/setupdcraw.cpp: compile with new constructor
+
+2008-09-08 21:23  aclemens
+
+	* libs/widgets/common/dgradientslider.cpp,
+	  libs/widgets/common/drubberband.h: header polish
+
+2008-09-08 17:05  cgilles
+
+	* NEWS: update
+
+2008-09-08 13:44  cgilles
+
+	* utilities/imageeditor/rawimport/rawpreview.cpp: fix i18n
+
+2008-09-08 10:43  cgilles
+
+	* showfoto/showfoto.cpp: compile with libkdcraw 0.4.0
+
+2008-09-08 10:39  cgilles
+
+	* digikam/digikamapp.cpp: compile with libkdcraw 0.4.0
+
+2008-09-08 10:37  cgilles
+
+	* digikam/albumsettings.cpp: compile with libkdcraw 0.4.0
+
+2008-09-08 10:36  cgilles
+
+	* digikam/albumiconview.cpp: compile with libkdcraw 0.4.0
+
+2008-09-08 10:34  cgilles
+
+	* utilities/lighttable/lighttablewindow.cpp: compile with libkdcraw
+	  0.4.0
+
+2008-09-08 10:32  cgilles
+
+	* utilities/cameragui/cameraui.cpp: compile with libkdcraw 0.4.0
+
+2008-09-08 10:29  cgilles
+
+	* libs/database/schemaupdater.cpp: compile with libkdcraw 0.4.0
+
+2008-09-08 10:24  cgilles
+
+	* libs/imageproperties/imagepropertiessidebar.cpp: compile with
+	  libkdcraw 0.4.0
+
+2008-09-08 10:23  cgilles
+
+	* libs/dialogs/libsinfodlg.cpp: compile with libkdcraw 0.4.0
+
+2008-09-08 10:21  cgilles
+
+	* libs/dialogs/imagedialog.cpp, libs/dialogs/rawcameradlg.cpp:
+	  compile with libkdcraw 0.4.0
+
+2008-09-08 10:08  cgilles
+
+	* libs/widgets/common/thumbbar.cpp: compile with libkdcraw 0.4.0
+
+2008-09-08 10:05  cgilles
+
+	* libs/dimg/loaders/rawloader.cpp: patch rawloader to work with
+	  libkdcraw 0.4.0
+
+2008-09-08 10:01  cgilles
+
+	* libs/dimg/dimg.cpp, libs/dimg/dimg.h, libs/dimg/dimgprivate.h:
+	  digiKam from trunk : prepare the future : compile with libkdcraw
+	  0.4.0 which use libRAW instead dcraw.c
+
+2008-09-08 09:35  cgilles
+
+	* NEWS: update
+
+2008-09-08 09:22  mwiesweg
+
+	* utilities/imageeditor/canvas/canvas.cpp: Use DRubberBand for
+	  Canvas. Solve all issues with rubber band that I found.
+
+2008-09-08 09:22  mwiesweg
+
+	* libs/widgets/common/drubberband.cpp,
+	  libs/widgets/common/drubberband.h: Add a few method needed for
+	  Canvas, fix a few bugs, use d pointer.
+
+2008-09-08 09:21  mwiesweg
+
+	* CMakeLists.txt, digikam/iconview.cpp,
+	  libs/widgets/common/drubberband.cpp,
+	  libs/widgets/common/drubberband.h,
+	  libs/widgets/common/q3scrollviewrubberband.cpp,
+	  libs/widgets/common/q3scrollviewrubberband.h: As suggested by
+	  Gilles, rename to DRubberBand
+
+2008-09-08 08:08  aclemens
+
+	* NEWS: update
+
+2008-09-07 20:47  cgilles
+
+	* project/project.kdevelop: update
+
+2008-09-07 13:34  mwiesweg
+
+	* CMakeLists.txt: Compile
+
+2008-09-07 13:34  mwiesweg
+
+	* digikam/iconview.cpp: Use new class Q3ScrollViewRubberBand as
+	  rubber band for iconview.
+	  Now the rubberband works again in all directions and situations.
+
+2008-09-07 13:33  mwiesweg
+
+	* libs/widgets/common/q3scrollviewrubberband.cpp,
+	  libs/widgets/common/q3scrollviewrubberband.h: Write a small
+	  wrapper class around QRubberBand for use
+	  with Q3ScrollViews.
+
+2008-09-05 18:10  cgilles
+
+	* utilities/imageeditor/rawimport/rawimport.cpp: fix dupplicate
+	  connection
+
+2008-09-05 13:39  cgilles
+
+	* libs/levels/imagelevels.cpp, libs/levels/imagelevels.h: sync with
+	  KDE3
+
+2008-09-05 13:15  cgilles
+
+	* imageplugins/adjustlevels/adjustlevelstool.cpp,
+	  imageplugins/adjustlevels/adjustlevelstool.h,
+	  imageplugins/adjustlevels/imageplugin_adjustlevels.cpp: compile
+
+2008-09-05 13:12  cgilles
+
+	* imageplugins/adjustlevels/adjustlevelstool.cpp,
+	  imageplugins/adjustlevels/adjustlevelstool.h: sync with KDE3
+
+2008-09-05 13:02  cgilles
+
+	* libs/widgets/common/histogramwidget.cpp: backport commit #857459
+	  from KDE3
+
+2008-09-05 12:38  cgilles
+
+	* utilities/imageeditor/rawimport/rawpostprocessing.cpp: sync with
+	  KDE3
+
+2008-09-05 12:36  cgilles
+
+	* libs/dimg/loaders/rawloader.cpp, libs/dimg/loaders/rawloader.h:
+	  sync with KDE3
+
+2008-09-05 12:28  cgilles
+
+	* libs/dimg/drawdecoding.h: sync with KDE3
+
+2008-09-05 11:18  cgilles
+
+	* libs/levels/imagelevels.cpp, libs/levels/imagelevels.h: polish
+
+2008-09-05 11:03  cgilles
+
+	* libs/levels/imagelevels.cpp, libs/levels/imagelevels.h: backport
+	  commit #857417 from KDE3
+
+2008-09-05 08:29  cgilles
+
+	* libs/levels/imagelevels.cpp, libs/levels/imagelevels.h: backport
+	  commit #857292 friom KDE3
+
+2008-09-05 07:11  mwiesweg
+
+	* libs/database/imagescanner.cpp, libs/database/imagescanner.h:
+	  When adding a new file in CollectionScanner, first check if the
+	  identical file
+	  is already or was added to the collection. If found, just copy
+	  over all
+	  attributes.
+
+2008-09-05 07:11  mwiesweg
+
+	* libs/database/albumdb.cpp, libs/database/albumdb.h: Add a method
+	  to find identical files based on uniqueHash and file size.
+	  Fix some other minor bugs.
+
+2008-09-05 06:39  cgilles
+
+	* utilities/imageeditor/rawimport/rawpostprocessing.cpp,
+	  utilities/imageeditor/rawimport/rawpostprocessing.h: backport
+	  commit #857265 from KDE3 branch
+
+2008-09-04 12:42  cgilles
+
+	* digikam/albumfiletip.cpp: this header is not used here
+
+2008-09-04 12:33  cgilles
+
+	* libs/database/imagelister.cpp: this header is not used here
+
+2008-09-03 14:25  cgilles
+
+	* CMakeLists.txt: let's go to beta4
+
+2008-09-03 14:13  cgilles
+
+	* NEWS: polish
+
+2008-09-03 13:54  cgilles
+
+	* data/icons/oxygen/16x16/actions/transform-crop-and-resize.png,
+	  data/icons/oxygen/22x22/actions/transform-crop-and-resize.png,
+	  data/icons/oxygen/32x32/actions/transform-crop-and-resize.png,
+	  data/icons/oxygen/48x48/actions,
+	  data/icons/oxygen/48x48/actions/transform-crop-and-resize.png,
+	  data/icons/oxygen/scalable/actions/transform-crop-and-resize.svgz:
+	  digiKam from trunk: add transform-crop-and-resize icon. To be
+	  removed when KDE4.2 will be released
+	  CCMAIL: johann.ollivierlapeyre@gmail.com
+
+2008-09-03 13:39  cgilles
+
+	* NEWS: update
+
+2008-09-03 13:38  cgilles
+
+	* utilities/imageeditor/rawimport/rawpreview.cpp: use Oxygen icon
+	  Fix crash when deleting popup thumbnail
+
+2008-09-03 12:51  cgilles
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp: polish
+
+2008-09-03 12:41  cgilles
+
+	* ChangeLog: update
+
 0.10.0-beta3 03-09-2008
 ---------------------------------------------------------------------------
 
