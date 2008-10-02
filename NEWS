@@ -1,4 +1,14 @@
 *********************************************************************************************************
+digiKam 0.10.0-beta5 - Release date: 2008-10-xx
+
+IMPORTANT: This is a beta release : do not use yet in production !!!
+====================================================================
+
+NEW FEATURES:
+
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+*********************************************************************************************************
 digiKam 0.10.0-beta4 - Release date: 2008-10-02
 
 IMPORTANT: This is a beta release : do not use yet in production !!!
@@ -21,7 +31,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 171989 : Can't set gps photo location on .nef images.
 012 ==> 172018 : Initial cursor in the "sharpen" dialog is on the "cancel" button.
 013 ==> 172033 : Unable to draw rectangle from right to left.
-014 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta3 - Release date: 2008-09-03
