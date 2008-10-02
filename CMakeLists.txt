@@ -69,7 +69,7 @@ CONFIGURE_FILE(config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-digikam
 
 MESSAGE(STATUS "")
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
-MESSAGE(STATUS " digiKam ${DIGIKAM_VERSION_STRING} dependencies results")
+MESSAGE(STATUS " digiKam ${DIGIKAM_VERSION_STRING} dependencies results   <http://www.digikam.org>")
 MESSAGE(STATUS "")
 
 IF(QT_QTSQL_FOUND)
