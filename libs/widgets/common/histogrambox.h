@@ -34,8 +34,9 @@
 
 namespace Digikam
 {
-class HistogramBoxPriv;
+
 class HistogramWidget;
+class HistogramBoxPriv;
 
 class DIGIKAM_EXPORT HistogramBox : public QWidget
 {
@@ -90,22 +91,21 @@ public:
     int  scale() const;
     void setScale(int scale);
 
-public slots:
-
-    void slotChannelChanged();
-    void slotScaleChanged();
-    void slotColorsChanged();
-
 signals:
 
     void signalChannelChanged();
     void signalColorsChanged();
     void signalScaleChanged();
 
+public slots:
+
+    void slotChannelChanged();
+    void slotScaleChanged();
+    void slotColorsChanged();
+
 private:
 
-    HistogramBoxPriv *d;
-
+    HistogramBoxPriv* d;
 };
 
 } // namspace Digikam
