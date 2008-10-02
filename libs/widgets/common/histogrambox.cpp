@@ -52,6 +52,7 @@ namespace Digikam
 
 class HistogramBoxPriv
 {
+
 public:
 
     HistogramBoxPriv()
@@ -95,12 +96,23 @@ HistogramBox::HistogramBox(QWidget *parent, int histogramType, bool selectMode)
 
     // those pairs hold the combobox text and WhatsThis description for each channel item
     typedef QPair<QString, QString> ChannelPair;
-    ChannelPair luminosityPair (i18n("Luminosity"), i18n("<b>Luminosity</b>: display the image's luminosity values."));
-    ChannelPair redPair        (i18n("Red"),        i18n("<b>Red</b>: display the red image-channel values."));
-    ChannelPair greenPair      (i18n("Green"),      i18n("<b>Green</b>: display the green image-channel values."));
-    ChannelPair bluePair       (i18n("Blue"),       i18n("<b>Blue</b>: display the blue image-channel values."));
-    ChannelPair colorsPair     (i18n("Colors"),     i18n("<b>Colors</b>: Display all color channel values at the same time."));
-    ChannelPair alphaPair      (i18n("Alpha"),      i18n("<b>Alpha</b>: display the alpha image-channel values. "
+    ChannelPair luminosityPair (i18nc("The luminosity channel", "Luminosity"),
+                                i18n("<b>Luminosity</b>: display the image's luminosity values."));
+
+    ChannelPair redPair        (i18nc("The red channel", "Red"),
+                                i18n("<b>Red</b>: display the red image-channel values."));
+
+    ChannelPair greenPair      (i18nc("The green channel", "Green"),
+                                i18n("<b>Green</b>: display the green image-channel values."));
+
+    ChannelPair bluePair       (i18nc("The blue channel", "Blue"),
+                                i18n("<b>Blue</b>: display the blue image-channel values."));
+
+    ChannelPair colorsPair     (i18nc("The colors channel", "Colors"),
+                                i18n("<b>Colors</b>: Display all color channel values at the same time."));
+
+    ChannelPair alphaPair      (i18nc("The alpha channel", "Alpha"),
+                                i18n("<b>Alpha</b>: display the alpha image-channel values. "
                                                          "This channel corresponds to the transparency value and "
                                                          "is supported by some image formats, such as PNG or TIF."));
 
@@ -212,13 +224,13 @@ HistogramBox::HistogramBox(QWidget *parent, int histogramType, bool selectMode)
                                 "if it is used, all values (small and large) will be visible on the graph.</p>"));
 
     d->linHistoButton = new QToolButton(scaleBox);
-    d->linHistoButton->setToolTip(i18n("Linear"));
+    d->linHistoButton->setToolTip(i18nc("linear histogram scaling mode", "Linear"));
     d->linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
     d->linHistoButton->setCheckable(true);
     d->scaleBG->addButton(d->linHistoButton, HistogramWidget::LinScaleHistogram);
 
     d->logHistoButton = new QToolButton(scaleBox);
-    d->logHistoButton->setToolTip(i18n("Logarithmic"));
+    d->logHistoButton->setToolTip(i18nc("logarithmic histogram scaling mode", "Logarithmic"));
     d->logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
     d->logHistoButton->setCheckable(true);
     d->scaleBG->addButton(d->logHistoButton, HistogramWidget::LogScaleHistogram);
@@ -234,9 +246,9 @@ HistogramBox::HistogramBox(QWidget *parent, int histogramType, bool selectMode)
     QLabel *colorsLabel = new QLabel(i18n("Colors:"), this);
     colorsLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     d->colorsCB = new KComboBox(this);
-    d->colorsCB->addItem(i18n("Red"));
-    d->colorsCB->addItem(i18n("Green"));
-    d->colorsCB->addItem(i18n("Blue"));
+    d->colorsCB->addItem(i18nc("the red channel for colors histogram mode",     "Red"));
+    d->colorsCB->addItem(i18nc("the green channel for colors histogram mode",   "Green"));
+    d->colorsCB->addItem(i18nc("the blue channel for colors histogram mode",    "Blue"));
     d->colorsCB->setEnabled(false);
     d->colorsCB->setWhatsThis(i18n("<p>Select the main color displayed with Colors Channel mode here:</p>"
                                    "<p><b>Red</b>: Draw the red image channel in the foreground.<br/>"
