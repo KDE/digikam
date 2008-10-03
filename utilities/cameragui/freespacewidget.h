@@ -48,10 +48,9 @@ class FreeSpaceWidgetPriv;
 
 class FreeSpaceWidget : public QWidget
 {
-
     Q_OBJECT
 
-public: 
+public:
 
     enum FreeSpaceMode
     {
