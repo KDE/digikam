@@ -536,8 +536,6 @@ void ChannelMixerTool::slotLoadSettings()
 {
     KUrl loadGainsFileUrl;
     FILE *fp = 0L;
-    int currentOutputChannel;
-    bool monochrome;
 
     loadGainsFileUrl = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), kapp->activeWindow(),
@@ -549,6 +547,8 @@ void ChannelMixerTool::slotLoadSettings()
 
     if ( fp )
     {
+        bool monochrome;
+        int  currentOutputChannel = EditorToolSettings::RedChannel;
         char buf1[1024];
         char buf2[1024];
         char buf3[1024];
