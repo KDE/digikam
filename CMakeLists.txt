@@ -15,7 +15,7 @@ SET(DIGIKAM_PATCH_VERSION "0")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final relase. Can be used in production.
-SET(DIGIKAM_SUFFIX_VERSION "-beta5")
+SET(DIGIKAM_SUFFIX_VERSION "-beta4")
 
 # ==================================================================================================
 # Set env. variables accordinly.
@@ -43,6 +43,15 @@ MACRO_OPTIONAL_FIND_PACKAGE(Jasper)
 MACRO_OPTIONAL_FIND_PACKAGE(Kdcraw)
 MACRO_OPTIONAL_FIND_PACKAGE(Kexiv2)
 MACRO_OPTIONAL_FIND_PACKAGE(Kipi)
+
+# Check KDcraw version installed to compile fine.
+FIND_PACKAGE(PkgConfig)
+PKG_CHECK_MODULES(Kdcraw libkdcraw>=0.4.0)
+IF(Kdcraw_FOUND)
+    SET(KDCRAW_FOR_DIGIKAM TRUE)
+ELSE(Kdcraw_FOUND)
+    SET(KDCRAW_FOR_DIGIKAM FALSE)
+ENDIF(Kdcraw_FOUND)
 
 # ==================================================================================================
 # Optional depencies
@@ -171,15 +180,15 @@ ELSE(KEXIV2_FOUND)
     MESSAGE(STATUS "")
 ENDIF(KEXIV2_FOUND)
 
-IF(KDCRAW_FOUND)
+IF(KDCRAW_FOR_DIGIKAM)
     MESSAGE(STATUS " libkdcraw library found........ YES")
-ELSE(KDCRAW_FOUND)
+ELSE(KDCRAW_FOR_DIGIKAM)
     MESSAGE(STATUS " libkdcraw library found........ NO")
     MESSAGE(STATUS "")
-    MESSAGE(SEND_ERROR " digiKam needs libkdcraw library >= 0.2.0. You need to install libkdcraw first")
+    MESSAGE(SEND_ERROR " digiKam needs libkdcraw library >= 0.4.0. You need to install libkdcraw first")
     MESSAGE(STATUS " libkdcraw website is at http://www.kipi-plugins.org")
     MESSAGE(STATUS "")
-ENDIF(KDCRAW_FOUND)
+ENDIF(KDCRAW_FOR_DIGIKAM)
 
 IF(KDEPIMLIBS_FOUND)
     MESSAGE(STATUS " libkdepimlibs library found.... YES (optional)")
@@ -208,13 +217,13 @@ ELSE(LENSFUN_FOUND)
     MESSAGE(STATUS "")
 ENDIF(LENSFUN_FOUND)
 
-IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND GPHOTO2_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND)
+IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND GPHOTO2_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOUND AND KIPI_FOUND)
     MESSAGE(STATUS " digiKam will be compiled...")
     SET(DIGIKAM_CAN_BE_COMPILED true)
-ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND GPHOTO2_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND)
+ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND GPHOTO2_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOUND AND KIPI_FOUND)
     MESSAGE(FATAL_ERROR " digiKam will not be compiled! Look README file for more details about dependencies...")
     SET(DIGIKAM_CAN_BE_COMPILED false)
-ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND GPHOTO2_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND)
+ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND GPHOTO2_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOUND AND KIPI_FOUND)
 
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "")
