@@ -32,6 +32,14 @@
 // KDE includes.
 
 #include <kaction.h>
+#include <kdeversion.h>
+
+#if KDE_IS_VERSION(4,1,68)
+#include <kdiskfreespaceinfo.h>
+#else
+#include <kmountpoint.h>
+#include <kdiskfreespace.h>
+#endif
 
 namespace Digikam
 {
@@ -82,6 +90,11 @@ protected:
 private slots:
 
     void slotTimeout();
+
+#if KDE_IS_VERSION(4,1,68)
+#else
+    void slotAvailableFreeSpace(QString mountPoint, quint64 kBSize, quint64 kBUsed, quint64 kBAvail);
+#endif
 
 private:
 

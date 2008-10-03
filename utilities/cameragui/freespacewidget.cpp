@@ -37,7 +37,6 @@
 #include <kdebug.h>
 #include <kurl.h>
 #include <klocale.h>
-#include <kdiskfreespaceinfo.h>
 #include <kio/global.h>
 #include <kiconloader.h>
 
@@ -282,6 +281,7 @@ void FreeSpaceWidget::paintEvent(QPaintEvent*)
     p.end();
 }
 
+#if KDE_IS_VERSION(4,1,68)
 void FreeSpaceWidget::slotTimeout()
 {
     KDiskFreeSpaceInfo info = KDiskFreeSpaceInfo::freeSpaceInfo(d->path);
@@ -290,5 +290,27 @@ void FreeSpaceWidget::slotTimeout()
         setInformations(info.size(), info.used(), info.available(), info.mountPoint());
     }
 }
+#else
+
+void FreeSpaceWidget::slotTimeout()
+{
+    KMountPoint::List list = KMountPoint::currentMountPoints();
+    KMountPoint::Ptr mp    = list.findByPath(d->path);
+    if (mp)
+    {
+        KDiskFreeSpace *job = new KDiskFreeSpace;
+        connect(job, SIGNAL(foundMountPoint(QString, quint64, quint64, quint64)),
+                this, SLOT(slotAvailableFreeSpace(QString, quint64, quint64, quint64)));
+        job->readDF(mp->mountPoint());
+    }
+}
+
+void FreeSpaceWidget::slotAvailableFreeSpace(QString mountPoint, quint64 kBSize,
+                                             quint64 kBUsed, quint64 kBAvail)
+{
+    setInformations(kBSize, kBUsed, kBAvail, mountPoint);
+}
+
+#endif /* KDE_IS_VERSION(4,1,68) */
 
 }  // namespace Digikam
