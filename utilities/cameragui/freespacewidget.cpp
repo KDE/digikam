@@ -304,13 +304,14 @@ void FreeSpaceWidget::slotTimeout()
         job->readDF(mp->mountPoint());
     }
 }
+#endif /* KDE_IS_VERSION(4,1,68) */
 
 void FreeSpaceWidget::slotAvailableFreeSpace(QString mountPoint, quint64 kBSize,
                                              quint64 kBUsed, quint64 kBAvail)
 {
+#if KDE_IS_VERSION(4,1,68)
     setInformations(kBSize, kBUsed, kBAvail, mountPoint);
-}
-
 #endif /* KDE_IS_VERSION(4,1,68) */
+}
 
 }  // namespace Digikam
