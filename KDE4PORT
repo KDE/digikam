@@ -45,30 +45,17 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
 |-libs
 |---curves                              Gilles          X      X       DONE        DONE
 |---database                            Marcel                 X       DONE
-|-----sqlite2                           Gilles                 X       DONE        -
 |---dialogs                             Gilles          X      X       DONE        DONE
 |---dimg                                Gilles          X      X       DONE        DONE
-|-----filters                           Gilles          X      X       DONE        DONE
-|-----loaders                           Gilles          X      X       DONE        DONE
 |---dmetadata                           Gilles          X      X       DONE        DONE
 |---greycstoration                      Gilles          X      X       DONE        DONE
 |---histogram                           Gilles          X      X       DONE        DONE
-|---imageproperties
-    worldmapwidget.cpp                  Gilles          X      X       DONE        DONE
-    imagepropertiessidebar.cpp          Gilles          X      X       DONE        DONE
-    imagepropertiescolorstab.cpp        Gilles          X      X       DONE        DONE
-    imagepropertiesmetadatatab.cpp      Gilles          X      X       DONE        DONE
-    imagepropertiestab.cpp              Gilles          X      X       DONE        DONE
-    cameraitempropertiestab.cpp         Gilles                 X       DONE        DONE
-    imagepropertiessidebarcamgui.cpp    Gilles                 X       DONE        DONE
-    imagepropertiessidebardb.cpp        Gilles                 X       DONE        DONE
-    imagedescedittab.cpp                Gilles                 X       DONE        DONE
-    talbumlistview.cpp                  Gilles                 X       DONE        DONE
-|---jpegutils                           Gilles                 X       DONE        
+|---imageproperties                     Gilles          X      X       DONE        DONE
+|---jpegutils                           Gilles                 X       DONE
 |---levels                              Gilles          X      X       DONE        DONE
 |---lprof                               Gilles          X      X       DONE        DONE
 |---themeengine                         Gilles                 X       DONE        DONE
-|---threadimageio                       Marcel          X      X       DONE
+|---threadimageio                       Marcel          X      X       DONE                 Some lock are done with libkdcraw based on LibRaw
 |---whitebalance                        Gilles          X      X       DONE        DONE
 |---widgets
 |-----common
@@ -79,7 +66,7 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
     filesaveoptionsbox.cpp              Gilles          X      X       DONE        DONE
     histogramwidget.cpp                 Gilles          X      X       DONE        DONE
     paniconwidget.cpp                   Gilles          X      X       DONE        DONE
-    previewwidget.cpp                   Gilles          X      X       DONE        DONE
+    previewwidget.cpp                   Gilles          X      X       DONE        DONE     Still use Q3ScrollView. Port to QScrollArea
     sidebar.cpp                         Gilles          X      X       DONE        DONE
     splashscreen.cpp                    Gilles          X      X       DONE        DONE
     squeezedcombobox.cpp                Gilles          X      X       DONE        DONE
@@ -87,18 +74,15 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
     statusprogressbar.cpp               Gilles          X      X       DONE        DONE
     statuszoombar.cpp	                Gilles          X      X       DONE        DONE
     statusled.cpp                       Gilles                 X       DONE        DONE
-    thumbbar.cpp                        Gilles          X      X       DONE        DONE
-|-----iccprofiles
-    cietonguewidget.cpp                 Gilles          X      X       DONE        DONE
-    iccpreviewwidget.cpp                Gilles          X      X       DONE        DONE
-    iccprofilewidget.cpp                Gilles          X      X       DONE        DONE
+    thumbbar.cpp                        Gilles          X      X       DONE        DONE     Still use Q3ScrollView. Port to QScrollArea
+|-----iccprofiles                       Gilles          X      X       DONE        DONE
 |-----imageplugins                      Gilles          X      X       DONE        DONE
 |-----metadata                          Gilles          X      X       DONE        DONE
 
 |-utilities
 |---batch                               Gilles                 X       DONE
 |---cameragui
-    albumselectdialog.cpp               Gilles                 X       DONE        
+    albumselectdialog.cpp               Gilles                 X       DONE
     animwidget.cpp                      Gilles                 X       DONE
     cameracontroller.cpp                Gilles                 X       DONE
     camerafolderdialog.cpp              Gilles                 X       DONE
@@ -109,32 +93,33 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
     camerainfodialog.cpp                Gilles                 X       DONE
     cameraui.cpp                        Gilles                 X       DONE                 QToolBox color background is not right.
     dkcamera.cpp                        Gilles                 X       DONE
+    freespacewidget.cpp                 Gilles                 X       DONE        DONE     With KDE 4.2, port to KCapacityBar.
     gpcamera.cpp                        Gilles                 X       DONE
     gpiteminfo.cpp                      Gilles                 X       DONE
     renamecustomizer.cpp                Gilles                 X       DONE
     umscamera.cpp                       Gilles                 X       DONE
-|---fuzzysearch                         Gilles                 X       DONE        
+|---fuzzysearch                         Gilles                 X       DONE
 |---gpssearch                           Gilles                 X       DONE                 Require Marble widget selection patch.
 |---hotplug                             Laurent                        DONE        -
 |---imageeditor
 |-----canvas  
-    canvas.cpp                          Gilles          X      X       DONE        DONE
+    canvas.cpp                          Gilles          X      X       DONE        DONE     Still use Q3ScrollView. Port to PreviewWidget
     colorcorrectiondlg.cpp              Gilles          X      X       DONE        DONE
-    dimginterface.cpp                   Gilles          X      X       DONE        DONE 
+    dimginterface.cpp                   Gilles          X      X       DONE        DONE
     imageplugin.cpp                     Gilles          X      X       DONE        DONE
     imagepluginloader.cpp               Gilles          X      X       DONE        DONE
     undoaction.cpp                      Gilles          X      X       DONE        DONE
     undocache.cpp                       Gilles          X      X       DONE        DONE
     undomanager.cpp                     Gilles          X      X       DONE        DONE
 |-----editor
-    editorwindow.cpp                    Gilles          X      X       DONE        DONE
+    editorwindow.cpp                    Gilles          X      X       DONE        DONE     Printing is disable
     imageiface.cpp                      Gilles          X      X       DONE        DONE
-    imagewindow.cpp                     Gilles                 X       DONE        DONE
+    imagewindow.cpp                     Gilles                 X       DONE        DONE     Some EditorTool preview do not work properly.
 |-----tools                             Laurent         X      X       DONE        DONE
 |---lighttable
     lighttablepreview.cpp               Gilles                 X       DONE
     lighttableview.cpp                  Gilles                 X       DONE
-    lighttablebar.cpp                   Gilles                 X       DONE
+    lighttablebar.cpp                   Gilles                 X       DONE                 D&D is broken.
     lighttablewindow.cpp                Gilles                 X       DONE
 |---kipiiface                           Gilles                 X       DONE        DONE
 |---scripts                             Gilles                         DONE        -
@@ -143,16 +128,9 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
 |---slideshow                           Laurent         X      X       DONE        DONE
 |---timeline                            Gilles                 X       DONE        DONE
 
-|-kioslave
-    digikamalbums.cpp                   Marcel                 X       DONE        DONE
-    digikamdates.cpp                    Marcel                 X       DONE        DONE
-    digikamsearch.cpp                   Marcel                 X       DONE        DONE
-    digikamtags.cpp                     Marcel                 X       DONE        DONE
+|-kioslave                              Marcel                 X       DONE        DONE
 
 |-showfoto                              Gilles          X              DONE        DONE
-|---icons                               Gilles                         DONE        -
-|---pics                                Gilles                         DONE        -
-|---setup                               Gilles          X              DONE        DONE
 
 |-digikam
     album.cpp                           Laurent                X       DONE        DONE
@@ -207,15 +185,10 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
 |---adjustlevels                        Laurent                        DONE       DONE
 |---blurfx                              Laurent                        DONE       DONE
 |---border                              Laurent                        DONE       DONE
-|-----patterns                          Laurent                        DONE        -
 |---channelmixer                        Laurent                        DONE       DONE
 |---charcoal                            Laurent                        DONE       DONE
 |---colorfx                             Laurent                        DONE       DONE
 |---coreplugin                          Gilles                         DONE       DONE
-|-----hsl                               Gilles                         DONE       DONE
-|-----ratiocrop                         Gilles                         DONE       DONE
-|-----sharpnesseditor                   Gilles                         DONE       DONE
-|-------clapack                         Gilles                         DONE       DONE
 |---distortionfx                        Laurent                        DONE       DONE
 |---emboss                              Laurent                        DONE       DONE
 |---filmgrain                           Laurent                        DONE       DONE
@@ -233,7 +206,6 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
 |---sheartool                           Laurent                        DONE       DONE
 |---superimpose                         Laurent                        DONE
 |---texture                             Laurent                        DONE       DONE
-|-----patterns                          Laurent                        DONE        -
 |---whitebalance                        Gilles                         DONE       DONE
 
 |-themedesigner                         Gilles                         DONE                 Thumbnails view is broken.
