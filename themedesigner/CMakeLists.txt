@@ -110,6 +110,8 @@ TARGET_LINK_LIBRARIES(digikamthemedesigner
                       digikam 
                       digikamdatabase 
                       ${KDE4_KUTILS_LIBS}
+		      ${KIPI_LIBRARIES}
+		      kipiplugins
                       ${GPHOTO2_LIBRARIES}
                      )
 
