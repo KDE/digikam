@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=showFoto
+Name[fr]=ShowFoto
 Name[lt]=rodytiFoto
 Name[ne]=फोटो देखाउनुहोस्
 Name[sv]=Showfoto
@@ -10,10 +11,12 @@ GenericName[ca]=Visualitzador de fotografies i editor
 GenericName[de]=Fotobetrachter und Editor
 GenericName[el]=Εφαρμογή προβολής και επεξεργασίας φωτογραφιών
 GenericName[et]=Fotode näitaja ja redaktor
+GenericName[fr]=Visualisateur et éditeur de photo
 GenericName[gl]=Visor e editor de fotos
 GenericName[it]=Visore ed editor di foto
 GenericName[ja]=フォトビューア/エディタ
 GenericName[km]=កម្មវិធី​មើល និង​កែសម្រួល​រូបថត
+GenericName[lt]=Nuotraukų žiūryklė ir redaktorius
 GenericName[lv]=Fotogrāfiju rādītājs un redaktors
 GenericName[nds]=Fotokieker un -editor
 GenericName[nl]=Fotoviewer en -bewerker
@@ -29,6 +32,7 @@ Comment[ca]=Gestioneu les vostres fotografies com un professional amb la potènc
 Comment[de]=Verwalten Sie Ihre Bilder wie ein Profi mit allen Möglichkeiten von Open Source.
 Comment[el]=Διαχειριστείτε τις φωτογραφίες σας σαν επαγγελματίας με τη δύναμη του ελεύθερου λογισμικού
 Comment[et]=Fotode haldamine profina avatud lähtekoodiga tarkvara võimsust kasutades
+Comment[fr]=Gérer vos photos comme un professionnel avec la puissance de l'open source
 Comment[gl]=Xestione as súas fotografías como un profisional
 Comment[it]=Gestisci le tue fotografie come un professionista con la forza del software libero
 Comment[ja]=オープンソースの力であなたの写真をプロのように管理します
