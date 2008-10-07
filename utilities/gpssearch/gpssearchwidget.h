@@ -65,11 +65,12 @@ public:
 
 signals:
 
-    void signalNewSelection();
+    void signalNewSelectionFromMap();
+    void signalSetNewMapSelection(const QList<double>&);
 
 private slots:
 
-    void slotNewSelection(const QList<double>&);
+    void slotNewSelectionFromMap(const QList<double>&);
 
 private:
 
@@ -106,7 +107,10 @@ public:
 
 signals:
 
-    void signalNewSelection();
+    // Dumy signals to prevent Qt warnings on the console.
+
+    void signalNewSelectionFromMap();
+    void signalSetNewMapSelection(const QList<double>&);
 };
 
 #endif // HAVE_MARBLEWIDGET

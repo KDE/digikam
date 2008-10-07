@@ -168,7 +168,7 @@ GPSSearchView::GPSSearchView(QWidget *parent)
     connect(d->nameEdit, SIGNAL(returnPressed(const QString&)),
             d->saveBtn, SLOT(animateClick()));
 
-    connect(d->gpsSearchWidget, SIGNAL(signalNewSelection()),
+    connect(d->gpsSearchWidget, SIGNAL(signalNewSelectionFromMap()),
             this, SLOT(slotSelectionChanged()));
 
     // ---------------------------------------------------------------

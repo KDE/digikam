@@ -52,8 +52,15 @@ GPSSearchWidget::GPSSearchWidget(QWidget *parent)
     setMapThemeId("earth/srtm/srtm.dgml");
 #endif // MARBLE_VERSION
 
-    //connect(this, SIGNAL(regionSelected(const QList<double>&)),
-    //this, SLOT(slotNewSelection(const QList<double>&)));
+    // NOTE: see B.K.O #153070
+    // Marble will include selection area over map canvas with KDE 4.2
+    // using CTRL + right mouse button.
+    // A new signal named regionSelected() will be emitted when user select an aera.
+
+    connect(this, SIGNAL(regionSelected(const QList<double>&)),
+            this, SLOT(slotNewSelectionFromMap(const QList<double>&)));
+
+    // TODO: connect marble with new selection to perform on the map when user select virtual album.
 }
 
 GPSSearchWidget::~GPSSearchWidget()
@@ -75,13 +82,15 @@ void GPSSearchWidget::setSelectionCoordinates(const QList<double>& sel)
 {
     d->selection = sel;
     kDebug(50003) << "Set new selection area: " << d->selection << endl;
-    // TODO : set selection area in marble widget.
+
+    // Set selection area in marble widget.
+    emit signalSetNewMapSelection(d->selection);
 }
 
-void GPSSearchWidget::slotNewSelection(const QList<double>& sel)
+void GPSSearchWidget::slotNewSelectionFromMap(const QList<double>& sel)
 {
     d->selection = sel;
-    emit signalNewSelection();
+    emit signalNewSelectionFromMap();
 }
 
 #endif // HAVE_MARBLEWIDGET
