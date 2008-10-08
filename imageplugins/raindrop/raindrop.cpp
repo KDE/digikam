@@ -166,6 +166,9 @@ void RainDrop::rainDropsImage(Digikam::DImg *orgImage, Digikam::DImg *destImage,
     QDateTime dt = QDateTime::currentDateTime();
     QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
     uint seed = dt.secsTo(Y2000);
+#ifdef _WIN32
+    srand(seed);
+#endif
 
     for (i = 0; !m_cancel && (i < Amount); i++)
     {
@@ -173,8 +176,13 @@ void RainDrop::rainDropsImage(Digikam::DImg *orgImage, Digikam::DImg *destImage,
 
         do
         {
+#ifndef _WIN32
             nRandX = (int)(rand_r(&seed) * ((double)( nWidth - 1) / RAND_MAX));
             nRandY = (int)(rand_r(&seed) * ((double)(nHeight - 1) / RAND_MAX));
+#else
+            nRandX = (int)(rand() * ((double)( nWidth - 1) / RAND_MAX));
+            nRandY = (int)(rand() * ((double)(nHeight - 1) / RAND_MAX));
+#endif
 
             nRandSize = (rand() % (MaxDropSize - MinDropSize)) + MinDropSize;
 

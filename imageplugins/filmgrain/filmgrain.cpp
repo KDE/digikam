@@ -102,6 +102,9 @@ void FilmGrain::filmgrainImage(Digikam::DImg *orgImage, int Sensibility)
     // Make gray grain mask.
 
     grainData.setSixteenBit(sixteenBit);
+#ifdef _WIN32
+    srand(seed);
+#endif
 
     for (int x = 0; !m_cancel && x < Width; x++)
     {
@@ -109,7 +112,11 @@ void FilmGrain::filmgrainImage(Digikam::DImg *orgImage, int Sensibility)
         {
             ptr = pGrainBits + x*bytesDepth + (y*Width*bytesDepth);
 
+#ifndef _WIN32
             nRand = (rand_r(&seed) % Noise) - (Noise / 2);
+#else
+            nRand = (rand() % Noise) - (Noise / 2);
+#endif
             if (sixteenBit)
                 component = CLAMP(32768 + nRand, 0, 65535);
             else
