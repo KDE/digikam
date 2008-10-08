@@ -1657,7 +1657,7 @@ bool EditorWindow::checkPermissions(const KUrl& url)
 bool EditorWindow::moveFile()
 {
     QByteArray dstFileName = QFile::encodeName(m_savingContext->destinationURL.path());
-
+#ifndef _WIN32
     // Store old permissions:
     // Just get the current umask.
     mode_t curr_umask = umask(S_IREAD | S_IWRITE);
@@ -1676,7 +1676,7 @@ bool EditorWindow::moveFile()
             filePermissions = stbuf.st_mode;
         }
     }
-
+#endif
     // rename tmp file to dest
     if (::rename(QFile::encodeName(m_savingContext->saveTempFile->fileName()), dstFileName) != 0)
     {
@@ -1685,12 +1685,13 @@ bool EditorWindow::moveFile()
         return false;
     }
 
+#ifndef _WIN32
     // restore permissions
     if (::chmod(dstFileName, filePermissions) != 0)
     {
         kWarning(50003) << "Failed to restore file permissions for file " << dstFileName << endl;
     }
-
+#endif
     return true;
 }
 
