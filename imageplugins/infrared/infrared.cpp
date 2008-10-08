@@ -168,6 +168,9 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
         QDateTime dt = QDateTime::currentDateTime();
         QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
         uint seed = ((uint) dt.secsTo(Y2000));
+#ifdef _WIN32
+        srand(seed);
+#endif
 
         pGrainBits = new uchar[numBytes];    // Grain blured without curves adjustment.
         uchar *ptr;
@@ -180,7 +183,11 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
             {
                 ptr = pGrainBits + x*bytesDepth + (y*Width*bytesDepth);
 
+#ifndef _WIN32
                 nRand = (rand_r(&seed) % Noise) - (Noise / 2);
+#else
+                nRand = (rand() % Noise) - (Noise / 2);
+#endif
                 if (sixteenBit)
                     component = CLAMP(32768 + nRand, 0, 65535);
                 else
