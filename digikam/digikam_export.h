@@ -89,4 +89,8 @@
 #  define DIGIKAM_EXPORT_DEPRECATED KDE_DEPRECATED DIGIKAM_EXPORT
 # endif
 
+#ifndef DIGIKAMDIALOG_EXPORT
+/* for now this is included in the binary and doesn't need exporting */
+#define DIGIKAMDIALOG_EXPORT
+#endif
 #endif

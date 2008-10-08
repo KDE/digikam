@@ -41,7 +41,7 @@ namespace Digikam
 
 class LibsInfoDlgPriv;
 
-class DIGIKAM_EXPORT LibsInfoDlg : public KDialog
+class DIGIKAMDIALOG_EXPORT LibsInfoDlg : public KDialog
 {
     Q_OBJECT
 

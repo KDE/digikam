@@ -43,7 +43,7 @@ namespace Digikam
 
 class DProgressDlgPriv;
 
-class DIGIKAM_EXPORT DProgressDlg : public KDialog
+class DIGIKAMDIALOG_EXPORT DProgressDlg : public KDialog
 {
 Q_OBJECT
 
