@@ -23,6 +23,8 @@
 /* needed for KDE_EXPORT and KDE_IMPORT macros */
 #include <kdemacros.h>
 
+// --------------------------------------------------------
+
 #ifndef DIGIKAM_EXPORT
 # if defined(MAKE_DIGIKAM_LIB)
    /* We are building this library */ 
@@ -32,6 +34,8 @@
 #  define DIGIKAM_EXPORT KDE_IMPORT
 # endif
 #endif
+
+// --------------------------------------------------------
 
 #ifndef DIGIKAM_DATABASE_EXPORT
 # if defined(MAKE_DIGIKAMDATABASE_LIB)
@@ -43,6 +47,8 @@
 # endif
 #endif
 
+// --------------------------------------------------------
+
 #ifndef DIGIKAMIMAGEPLUGINS_EXPORT
 # if defined(MAKE_DIGIKAMIMAGEPLUGINS_LIB)
    /* We are building this library */
@@ -53,6 +59,7 @@
 # endif
 #endif
 
+// --------------------------------------------------------
 
 #ifndef DIGIKAMIMAGEEDITOR_EXPORT
 # if defined(MAKE_DIGIKAMIMAGEEDITOR_LIB)
@@ -64,6 +71,8 @@
 # endif
 #endif
 
+// --------------------------------------------------------
+
 #ifndef DIGIKAMIMAGEFILTERS_EXPORT
 # if defined(MAKE_DIGIKAMIMAGEFILTERS_LIB)
    /* We are building this library */
@@ -73,6 +82,8 @@
 #  define DIGIKAMIMAGEFILTERS_EXPORT KDE_IMPORT
 # endif
 #endif
+
+// --------------------------------------------------------
 
 #ifndef DIGIKAMIMAGEWIDGET_EXPORT
 # if defined(MAKE_DIGIKAMIMAGEWIDGET_LIB)
@@ -84,13 +95,22 @@
 # endif
 #endif
 
+// --------------------------------------------------------
+
+#ifndef DIGIKAMDIALOG_EXPORT
+# if defined(MAKE_DIGIKAMDIALOG_LIB)
+   /* We are building this library */ 
+#  define DIGIKAMDIALOG_EXPORT KDE_EXPORT
+# else
+   /* We are using this library */ 
+#  define DIGIKAMDIALOG_EXPORT KDE_IMPORT
+# endif
+#endif
+
+// --------------------------------------------------------
 
 # ifndef DIGIKAM_EXPORT_DEPRECATED
 #  define DIGIKAM_EXPORT_DEPRECATED KDE_DEPRECATED DIGIKAM_EXPORT
 # endif
 
-#ifndef DIGIKAMDIALOG_EXPORT
-/* for now this is included in the binary and doesn't need exporting */
-#define DIGIKAMDIALOG_EXPORT
-#endif
-#endif
+#endif // DIGIKAM_EXPORT_H
