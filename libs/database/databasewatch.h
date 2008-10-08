@@ -40,7 +40,7 @@ namespace Digikam
 
 class DatabaseWatchPriv;
 
-class DIGIKAM_EXPORT DatabaseWatch : public QObject
+class DIGIKAM_DATABASE_EXPORT DatabaseWatch : public QObject
 {
 
     Q_OBJECT

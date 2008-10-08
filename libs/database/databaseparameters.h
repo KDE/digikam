@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DatabaseParameters
+class DIGIKAM_DATABASE_EXPORT DatabaseParameters
 {
 
 public:

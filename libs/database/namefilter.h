@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT NameFilter
+class DIGIKAM_DATABASE_EXPORT NameFilter
 {
 public:
 

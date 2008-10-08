@@ -59,7 +59,7 @@ class ImageInfoData;
  * The ImageInfo class contains provides access to the database for a single image.
  * The properties can be read and written. Information will be cached.
  */
-class DIGIKAM_EXPORT ImageInfo
+class DIGIKAM_DATABASE_EXPORT ImageInfo
 {
 public:
 

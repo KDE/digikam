@@ -55,7 +55,7 @@ namespace Digikam
 class DatabaseBackend;
 class AlbumDBPriv;
 
-class DIGIKAM_EXPORT AlbumDB
+class DIGIKAM_DATABASE_EXPORT AlbumDB
 {
 public:
 

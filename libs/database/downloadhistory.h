@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DownloadHistory
+class DIGIKAM_DATABASE_EXPORT DownloadHistory
 {
 public:
 

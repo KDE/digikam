@@ -43,7 +43,7 @@ namespace Digikam
 {
 
 //TODO: Docs
-class DIGIKAM_EXPORT ImageListerReceiver
+class DIGIKAM_DATABASE_EXPORT ImageListerReceiver
 {
 
 public:
@@ -53,7 +53,7 @@ public:
     virtual void error(const QString &/*errMsg*/) {};
 };
 
-class DIGIKAM_EXPORT ImageListerValueListReceiver
+class DIGIKAM_DATABASE_EXPORT ImageListerValueListReceiver
     : public ImageListerReceiver
 {
 
@@ -66,7 +66,7 @@ public:
     virtual void error(const QString &errMsg);
 };
 
-class DIGIKAM_EXPORT ImageListerSlaveBaseReceiver : public ImageListerValueListReceiver
+class DIGIKAM_DATABASE_EXPORT ImageListerSlaveBaseReceiver : public ImageListerValueListReceiver
 {
 
 public:
@@ -80,7 +80,7 @@ protected:
     KIO::SlaveBase *m_slave;
 };
 
-class DIGIKAM_EXPORT ImageListerSlaveBasePartsSendingReceiver
+class DIGIKAM_DATABASE_EXPORT ImageListerSlaveBasePartsSendingReceiver
     : public ImageListerSlaveBaseReceiver
 {
 

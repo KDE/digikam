@@ -37,7 +37,7 @@ namespace Digikam
 
 class ImageInfo;
 
-class DIGIKAM_EXPORT ImageInfoList : public QList<ImageInfo>
+class DIGIKAM_DATABASE_EXPORT ImageInfoList : public QList<ImageInfo>
 {
 
 public:

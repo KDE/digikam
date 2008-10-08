@@ -48,7 +48,7 @@ class CollectionScannerPriv;
 class AlbumCopyMoveHint;
 class ItemCopyMoveHint;
 
-class DIGIKAM_EXPORT CollectionScanner : public QObject
+class DIGIKAM_DATABASE_EXPORT CollectionScanner : public QObject
 {
     Q_OBJECT
 public:

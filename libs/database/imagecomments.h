@@ -41,7 +41,7 @@ namespace Digikam
 
 class ImageCommentsPriv;
 
-class DIGIKAM_EXPORT ImageComments
+class DIGIKAM_DATABASE_EXPORT ImageComments
 {
     /**
      * The ImageComments class shall provide short-lived objects that provide read/write access

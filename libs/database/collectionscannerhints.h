@@ -41,7 +41,7 @@ namespace Digikam
 namespace CollectionScannerHints
 {
 
-class DIGIKAM_EXPORT Album
+class DIGIKAM_DATABASE_EXPORT Album
 {
 public:
     Album();
@@ -55,7 +55,7 @@ public:
     int albumId;
 };
 
-class DIGIKAM_EXPORT DstPath
+class DIGIKAM_DATABASE_EXPORT DstPath
 {
 public:
     DstPath();
@@ -69,7 +69,7 @@ public:
     QString relativePath;
 };
 
-class DIGIKAM_EXPORT Item
+class DIGIKAM_DATABASE_EXPORT Item
 {
 public:
     Item();
@@ -89,7 +89,7 @@ inline uint qHash(const Item &item) { return item.qHash(); }
 }
 
 
-class DIGIKAM_EXPORT AlbumCopyMoveHint
+class DIGIKAM_DATABASE_EXPORT AlbumCopyMoveHint
 {
 public:
 
@@ -129,7 +129,7 @@ protected:
     CollectionScannerHints::DstPath m_dst;
 };
 
-class DIGIKAM_EXPORT ItemCopyMoveHint
+class DIGIKAM_DATABASE_EXPORT ItemCopyMoveHint
 {
 public:
 

@@ -43,7 +43,7 @@ namespace Digikam
 class CollectionLocation;
 class CollectionManagerPrivate;
 
-class DIGIKAM_EXPORT CollectionManager : public QObject
+class DIGIKAM_DATABASE_EXPORT CollectionManager : public QObject
 {
 
     Q_OBJECT

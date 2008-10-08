@@ -56,7 +56,7 @@ protected:
     QList<ImageQueryPostHook *> m_postHooks;
 };
 
-class DIGIKAM_EXPORT ImageQueryBuilder
+class DIGIKAM_DATABASE_EXPORT ImageQueryBuilder
 {
 public:
 

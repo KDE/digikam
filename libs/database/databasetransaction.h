@@ -33,7 +33,7 @@ namespace Digikam
 
 class DatabaseAccess;
 
-class DIGIKAM_EXPORT DatabaseTransaction
+class DIGIKAM_DATABASE_EXPORT DatabaseTransaction
 {
 public:
     /**

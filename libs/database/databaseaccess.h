@@ -41,7 +41,7 @@ class DatabaseWatch;
 class InitializationObserver;
 class DatabaseAccessStaticPriv;
 
-class DIGIKAM_EXPORT DatabaseAccess
+class DIGIKAM_DATABASE_EXPORT DatabaseAccess
 {
 public:
 

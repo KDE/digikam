@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DatabaseUrl : public KUrl
+class DIGIKAM_DATABASE_EXPORT DatabaseUrl : public KUrl
 {
 public:
 

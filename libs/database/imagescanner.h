@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ImageScanner
+class DIGIKAM_DATABASE_EXPORT ImageScanner
 {
 
 public:

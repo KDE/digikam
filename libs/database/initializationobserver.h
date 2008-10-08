@@ -37,7 +37,7 @@ namespace Digikam
 
 class CollectionScanner;
 
-class DIGIKAM_EXPORT InitializationObserver
+class DIGIKAM_DATABASE_EXPORT InitializationObserver
 {
 public:
 

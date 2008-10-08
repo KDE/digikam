@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ImageListerRecord
+class DIGIKAM_DATABASE_EXPORT ImageListerRecord
 {
 
 public:
@@ -68,8 +68,8 @@ public:
     QSize      imageSize;
 };
 
-DIGIKAM_EXPORT QDataStream &operator<<(QDataStream &os, const ImageListerRecord &record);
-DIGIKAM_EXPORT QDataStream &operator>>(QDataStream &ds, ImageListerRecord &record);
+DIGIKAM_DATABASE_EXPORT QDataStream &operator<<(QDataStream &os, const ImageListerRecord &record);
+DIGIKAM_DATABASE_EXPORT QDataStream &operator>>(QDataStream &ds, ImageListerRecord &record);
 
 }  // namespace Digikam
 

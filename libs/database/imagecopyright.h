@@ -38,7 +38,7 @@ namespace Digikam
 
 class CopyrightInfo;
 
-class DIGIKAM_EXPORT ImageCopyright
+class DIGIKAM_DATABASE_EXPORT ImageCopyright
 {
 public:
 

@@ -38,7 +38,7 @@ namespace Digikam
 
 class ImagePositionPriv;
 
-class DIGIKAM_EXPORT ImagePosition
+class DIGIKAM_DATABASE_EXPORT ImagePosition
 {
 
 public:

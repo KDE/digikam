@@ -44,7 +44,7 @@ class SchemaUpdater;
 class DatabaseWatch;
 class DatabaseBackendPriv;
 
-class DIGIKAM_EXPORT DatabaseBackend : public QObject
+class DIGIKAM_DATABASE_EXPORT DatabaseBackend : public QObject
 {
 
 Q_OBJECT
