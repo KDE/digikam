@@ -50,6 +50,7 @@ IF(ENABLE_GPHOTO2)
 ENDIF(ENABLE_GPHOTO2)
 
 # Check KDcraw version installed to compile fine.
+IF(NOT WIN32)
 FIND_PACKAGE(PkgConfig)
 PKG_CHECK_MODULES(Kdcraw libkdcraw>=0.4.0)
 IF(Kdcraw_FOUND)
@@ -57,6 +58,9 @@ IF(Kdcraw_FOUND)
 ELSE(Kdcraw_FOUND)
     SET(KDCRAW_FOR_DIGIKAM FALSE)
 ENDIF(Kdcraw_FOUND)
+ELSE(NOT WIN32)
+    SET(KDCRAW_FOR_DIGIKAM TRUE)
+ENDIF(NOT WIN32)
 
 # ==================================================================================================
 # Optional depencies
