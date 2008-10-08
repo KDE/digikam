@@ -132,7 +132,7 @@ SetupCamera::SetupCamera( QWidget* parent )
     gphotoLogoLabel->setToolTip(i18n("Visit Gphoto project website"));
 
 #ifndef ENABLE_GPHOTO2
-    // If digiKam is compiled without Gphoto2 support, we hide widget relevant.
+    // If digiKam is compiled without Gphoto2 support, we hide widgets relevant.
     d->autoDetectButton->hide();
     gphotoLogoLabel->hide();
 #endif /* ENABLE_GPHOTO2 */
