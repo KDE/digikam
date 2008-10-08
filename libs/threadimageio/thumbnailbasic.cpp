@@ -47,8 +47,10 @@ extern "C"
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#ifndef _WIN32
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#endif
 #include <sys/time.h>
 #include <png.h>
 }
