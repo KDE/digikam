@@ -615,7 +615,7 @@ void kio_digikamalbums::slotCanResume (KIO::Job* /*job*/, KIO::filesize_t offset
 
 extern "C"
 {
-    DIGIKAM_EXPORT int kdemain(int argc, char **argv)
+    KDE_EXPORT int kdemain(int argc, char **argv)
     {
         // Needed to load SQL driver plugins
         QCoreApplication app(argc, argv);

@@ -101,7 +101,7 @@ void kio_digikamdates::special(const QByteArray& data)
 
 extern "C"  
 {
-    DIGIKAM_EXPORT int kdemain(int argc, char **argv)
+    KDE_EXPORT int kdemain(int argc, char **argv)
     {
         // Needed to load SQL driver plugins
         QCoreApplication app(argc, argv);
