@@ -402,6 +402,12 @@ bool AlbumLister::matchesFilter(const ImageInfo &info, bool &foundText)
                 match = false;
             break;
         }
+        case MimeFilter::DNGFiles:
+        {
+            if (info.format() != "RAW-DNG")
+                match = false;
+            break;
+        }
         case MimeFilter::NoRAWFiles:
         {
             if (info.format().startsWith("RAW"))

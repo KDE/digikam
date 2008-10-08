@@ -6,7 +6,7 @@
  * Date        : 2007-10-22
  * Description : a widget to filter album contents by type mime
  *
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,6 +53,7 @@ MimeFilter::MimeFilter(QWidget* parent)
     insertItem( JPGFiles,    i18n("JPEG Files") );
     insertItem( PNGFiles,    i18n("PNG files") );
     insertItem( TIFFiles,    i18n("TIFF files") );
+    insertItem( DNGFiles,    i18n("DNG files") );
     insertItem( RAWFiles,    i18n("RAW files") );
     insertItem( MoviesFiles, i18n("Movie files") );
     insertItem( AudioFiles,  i18n("Audio files") );
