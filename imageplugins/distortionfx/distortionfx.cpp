@@ -818,6 +818,9 @@ void DistortionFX::tile(Digikam::DImg *orgImage, Digikam::DImg *destImage,
     QDateTime dt = QDateTime::currentDateTime();
     QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
     uint seed = dt.secsTo(Y2000);
+#ifdef WIN32
+    srand(seed);
+#endif
 
     int tx, ty, h, w, progress;
 
@@ -825,8 +828,13 @@ void DistortionFX::tile(Digikam::DImg *orgImage, Digikam::DImg *destImage,
     {
         for (w = 0; !m_cancel && (w < Width); w += WSize)
         {
+#ifndef _WIN32
             tx = (int)(rand_r(&seed) % Random) - (Random / 2);
             ty = (int)(rand_r(&seed) % Random) - (Random / 2);
+#else
+            tx = (int)(rand() % Random) - (Random / 2);
+            ty = (int)(rand() % Random) - (Random / 2);
+#endif
             destImage->bitBltImage(orgImage, w, h,   WSize, HSize,   w + tx, h + ty);
         }
 
