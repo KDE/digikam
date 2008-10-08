@@ -47,6 +47,7 @@
 
 // Local includes.
 
+#include "config-digikam.h"
 #include "gpcamera.h"
 #include "cameraselection.h"
 #include "cameralist.h"
@@ -129,6 +130,12 @@ SetupCamera::SetupCamera( QWidget* parent )
     gphotoLogoLabel->setUrl("http://www.gphoto.org");
     gphotoLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-gphoto.png")));
     gphotoLogoLabel->setToolTip(i18n("Visit Gphoto project website"));
+
+#ifndef ENABLE_GPHOTO2
+    // If digiKam is compiled without Gphoto2 support, we hide buton and logo relevant.
+    d->autoDetectButton->hide();
+    gphotoLogoLabel->hide();
+#endif /* ENABLE_GPHOTO2 */
 
     // -------------------------------------------------------------
 
