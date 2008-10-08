@@ -41,7 +41,9 @@
 namespace Digikam
 {
 
+#ifndef _MSC_VER
 #warning "TODO: KPrinter is disabled for KDE4.0";
+#endif
 
 /*
 class ImagePrintPrivate;
