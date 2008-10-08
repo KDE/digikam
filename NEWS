@@ -8,7 +8,8 @@ General        : libgphoto2 depency is now optional to be able to compile digiKa
                  not supported by GPhoto2
 
 001 ==> 171953 : Using create "Date-based sub-albums" makes import fail.
-002 ==> 
+002 ==> 118318 : Make (lib)gphoto support a configure flag.
+003 ==> 
 
 IMPORTANT: This is a beta release : do not use yet in production !!!
 ====================================================================
