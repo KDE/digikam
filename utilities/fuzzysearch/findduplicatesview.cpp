@@ -26,12 +26,11 @@
 
 // Qt includes.
 
+#include <QHeaderView>
 #include <QLayout>
 #include <QPainter>
 #include <QPushButton>
-#include <QProgressBar>
 #include <QTreeWidget>
-#include <QHeaderView>
 
 // KDE includes.
 
@@ -46,6 +45,7 @@
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "imagelister.h"
+#include "statusprogressbar.h"
 #include "findduplicatesalbumitem.h"
 #include "findduplicatesview.h"
 #include "findduplicatesview.moc"
@@ -70,9 +70,9 @@ public:
     QPushButton         *scanDuplicatesBtn;
     QPushButton         *updateFingerPrtBtn;
 
-    QProgressBar        *progressBar;
-
     QTreeWidget         *listView;
+
+    StatusProgressBar   *progressBar;
 
     ThumbnailLoadThread *thumbLoadThread;
 };
@@ -108,7 +108,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     d->scanDuplicatesBtn->setWhatsThis(i18n("Use this button to scan whole collection to find all "
                                             "duplicates items."));
 
-    d->progressBar = new QProgressBar(this);
+    d->progressBar = new StatusProgressBar(this);
 
     grid->addWidget(d->listView,           0, 0, 1, 3);
     grid->addWidget(d->updateFingerPrtBtn, 1, 0, 1, 3);
@@ -250,6 +250,7 @@ void FindDuplicatesView::slotFindDuplicates()
     d->scanDuplicatesBtn->setEnabled(false);
     d->updateFingerPrtBtn->setEnabled(false);
     d->progressBar->setEnabled(true);
+    d->progressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
 
     AlbumList albums = AlbumManager::instance()->allPAlbums();
     QStringList idsStringList;
@@ -273,20 +274,20 @@ void FindDuplicatesView::slotFindDuplicates()
 
 void FindDuplicatesView::slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong amount)
 {
-    d->progressBar->setMinimum(0);
-    d->progressBar->setMaximum(amount);
+//    d->progressBar->setMinimum(0);
+    d->progressBar->setProgressTotalSteps(amount);
 }
 
 void FindDuplicatesView::slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong amount)
 {
-    d->progressBar->setValue(amount);
+    d->progressBar->setProgressValue(amount);
 }
 
 void FindDuplicatesView::slotDuplicatesSearchResult(KJob*)
 {
     d->scanDuplicatesBtn->setEnabled(true);
     d->updateFingerPrtBtn->setEnabled(true);
-    d->progressBar->reset();
+//    d->progressBar->reset();
     d->progressBar->setEnabled(false);
     populateTreeView();
 }
