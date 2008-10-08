@@ -311,6 +311,11 @@ void FreeSpaceWidget::slotAvailableFreeSpace(QString mountPoint, quint64 kBSize,
 {
 #if KDE_IS_VERSION(4,1,68)
     setInformations(kBSize, kBUsed, kBAvail, mountPoint);
+#else
+    Q_UNUSED(mountPoint);
+    Q_UNUSED(kBSize);
+    Q_UNUSED(kBUsed);
+    Q_UNUSED(kBAvail);
 #endif /* KDE_IS_VERSION(4,1,68) */
 }
 
