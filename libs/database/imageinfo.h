@@ -175,7 +175,7 @@ public:
     DatabaseItem::Category category() const;
 
     /** Returns the image format / mimetype as a standardized
-     *  string (see DBSCHEMA.ods).
+     *  string (see DBSCHEMA.ODS).
      */
     QString   format() const;
 
