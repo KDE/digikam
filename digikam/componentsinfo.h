@@ -38,16 +38,21 @@
 
 #include <libkipi/interface.h>
 
-// C Ansi includes.
+// Local includes.
+
+#include "config-digikam.h"
+#include "libsinfodlg.h"
+
+#ifdef ENABLE_GPHOTO2
+
+// LibGphoto2 includes.
 
 extern "C"
 {
 #include <gphoto2-version.h>
 }
 
-// Local includes.
-
-#include "libsinfodlg.h"
+#endif /* ENABLE_GPHOTO2 */
 
 namespace Digikam
 {
@@ -57,7 +62,10 @@ static inline void showDigikamComponentsInfo()
     // Set digiKam specific components info list.
     QMap<QString, QString> list;
 
+#ifdef ENABLE_GPHOTO2
     list.insert(i18n("LibGphoto2"), QString(gp_library_version(GP_VERSION_SHORT)[0]));
+#endif /* ENABLE_GPHOTO2 */
+
     list.insert(i18n("LibKipi"),    KIPI::Interface::version());
 
     LibsInfoDlg dlg(kapp->activeWindow());

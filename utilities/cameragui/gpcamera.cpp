@@ -7,8 +7,8 @@
  * Description : Gphoto2 camera interface
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,13 +22,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
-// C Ansi includes.
-
-extern "C"
-{
-#include <gphoto2.h>
-}
 
 // C++ includes.
 
@@ -51,7 +44,19 @@ extern "C"
 
 // Local includes.
 
+#include "config-digikam.h"
 #include "gpcamera.h"
+
+#ifdef ENABLE_GPHOTO2
+
+// LibGphoto2 includes.
+
+extern "C"
+{
+#include <gphoto2.h>
+}
+
+#endif /* ENABLE_GPHOTO2 */
 
 namespace Digikam
 {
@@ -63,25 +68,32 @@ public:
 
     GPStatus()
     {
+#ifdef ENABLE_GPHOTO2
         context = gp_context_new();
         cancel  = false;
         gp_context_set_cancel_func(context, cancel_func, 0);
+#endif /* ENABLE_GPHOTO2 */
     }
 
     ~GPStatus()
     {
+#ifdef ENABLE_GPHOTO2
         gp_context_unref(context);
         cancel = false;
+#endif /* ENABLE_GPHOTO2 */
     }
 
-    GPContext   *context;
     static bool  cancel;
+
+#ifdef ENABLE_GPHOTO2
+    GPContext   *context;
 
     static GPContextFeedback cancel_func(GPContext *, void *)
     {
         return (cancel ? GP_CONTEXT_FEEDBACK_CANCEL :
                 GP_CONTEXT_FEEDBACK_OK);
     }
+#endif /* ENABLE_GPHOTO2 */
 };
 
 bool GPStatus::cancel = false;
@@ -93,11 +105,14 @@ public:
 
     GPCameraPrivate()
     {
+#ifdef ENABLE_GPHOTO2
         status            = 0;
         camera            = 0;
         cameraInitialized = false;
+#endif /* ENABLE_GPHOTO2 */
     }
 
+#ifdef ENABLE_GPHOTO2
     bool             cameraInitialized;
 
     Camera          *camera;
@@ -105,6 +120,7 @@ public:
     CameraAbilities  cameraAbilities;
 
     GPStatus        *status;
+#endif /* ENABLE_GPHOTO2 */
 };
 
 GPCamera::GPCamera(const QString& title, const QString& model,
@@ -116,17 +132,20 @@ GPCamera::GPCamera(const QString& title, const QString& model,
 
 GPCamera::~GPCamera()
 {
+#ifdef ENABLE_GPHOTO2
     if (d->camera)
     {
         gp_camera_unref(d->camera);
         d->camera = 0;
     }
+#endif /* ENABLE_GPHOTO2 */
 
     delete d;
 }
 
 bool GPCamera::doConnect()
 {
+#ifdef ENABLE_GPHOTO2
     int errorCode;
 
     // -- first step - setup the camera --------------------
@@ -239,19 +258,27 @@ bool GPCamera::doConnect()
     delete d->status;
     d->status = 0;
     d->cameraInitialized = true;
+
     return true;
+#else
+    return false;
+#endif /* ENABLE_GPHOTO2 */
 }
 
 void GPCamera::cancel()
 {
+#ifdef ENABLE_GPHOTO2
     if (!d->status)
         return;
     d->status->cancel = true;
+#endif /* ENABLE_GPHOTO2 */
 }
 
-/* NOTE: This method depand of libgphoto2 2.4.0 */
 bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
 {
+#ifdef ENABLE_GPHOTO2
+    // NOTE: This method depand of libgphoto2 2.4.0
+
     int                       nrofsinfos;
     CameraStorageInformation *sinfos;
 
@@ -365,11 +392,15 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
 
     delete d->status;
     d->status = 0;
+    return true;
+#else
     return false;
+#endif /* ENABLE_GPHOTO2 */
 }
 
 bool GPCamera::getPreview(QImage& preview)
 {
+#ifdef ENABLE_GPHOTO2
     int                errorCode;
     CameraFile        *cfile;
     const char        *data;
@@ -412,10 +443,14 @@ bool GPCamera::getPreview(QImage& preview)
 
     gp_file_unref(cfile);
     return true;
+#else
+    return false;
+#endif /* ENABLE_GPHOTO2 */
 }
 
 bool GPCamera::capture(GPItemInfo& itemInfo)
 {
+#ifdef ENABLE_GPHOTO2
     int            errorCode;
     CameraFilePath path;
 
@@ -505,6 +540,9 @@ bool GPCamera::capture(GPItemInfo& itemInfo)
     delete d->status;
     d->status = 0;
     return true;
+#else
+    return false;
+#endif /* ENABLE_GPHOTO2 */
 }
 
 void GPCamera::getAllFolders(const QString& rootFolder,
@@ -529,6 +567,7 @@ void GPCamera::getAllFolders(const QString& rootFolder,
 
 bool GPCamera::getSubFolders(const QString& folder, QStringList& subFolderList)
 {
+#ifdef ENABLE_GPHOTO2
     int         errorCode;
     CameraList *clist;
     gp_list_new(&clist);
@@ -572,10 +611,14 @@ bool GPCamera::getSubFolders(const QString& folder, QStringList& subFolderList)
 
     gp_list_unref(clist);
     return true;
+#else
+    return false;
+#endif /* ENABLE_GPHOTO2 */
 }
 
 bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
 {
+#ifdef ENABLE_GPHOTO2
     int         errorCode;
     CameraList *clist;
     const char *cname;
@@ -623,10 +666,14 @@ bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
     d->status = 0;
 
     return true;
+#else
+    return false;
+#endif /* ENABLE_GPHOTO2 */
 }
 
 bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items, bool /*getImageDimensions*/)
 {
+#ifdef ENABLE_GPHOTO2
     int         errorCode;
     CameraList *clist;
     const char *cname;
@@ -728,10 +775,14 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items, bo
     d->status = 0;
 
     return true;
+#else
+    return false;
+#endif /* ENABLE_GPHOTO2 */
 }
 
 bool GPCamera::getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail)
 {
+#ifdef ENABLE_GPHOTO2
     int                errorCode;
     CameraFile        *cfile;
     const char        *data;
@@ -777,11 +828,15 @@ bool GPCamera::getThumbnail(const QString& folder, const QString& itemName, QIma
 
     gp_file_unref(cfile);
     return true;
+#else
+    return false;
+#endif /* ENABLE_GPHOTO2 */
 }
 
 bool GPCamera::getExif(const QString& folder, const QString& itemName,
                        char **edata, int& esize)
 {
+#ifdef ENABLE_GPHOTO2
     int                errorCode;
     CameraFile        *cfile;
     const char        *data;
@@ -829,11 +884,15 @@ bool GPCamera::getExif(const QString& folder, const QString& itemName,
 
     gp_file_unref(cfile);
     return true;
+#else
+    return false;
+#endif /* ENABLE_GPHOTO2 */
 }
 
 bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
                             const QString& saveFile)
 {
+#ifdef ENABLE_GPHOTO2
     int         errorCode;
     CameraFile *cfile;
 
@@ -875,10 +934,14 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
 
     gp_file_unref(cfile);
     return true;
+#else
+    return false;
+#endif /* ENABLE_GPHOTO2 */
 }
 
 bool GPCamera::setLockItem(const QString& folder, const QString& itemName, bool lock)
 {
+#ifdef ENABLE_GPHOTO2
     int errorCode;
     if (d->status)
     {
@@ -933,10 +996,14 @@ bool GPCamera::setLockItem(const QString& folder, const QString& itemName, bool 
     delete d->status;
     d->status = 0;
     return true;
+#else
+    return false;
+#endif /* ENABLE_GPHOTO2 */
 }
 
 bool GPCamera::deleteItem(const QString& folder, const QString& itemName)
 {
+#ifdef ENABLE_GPHOTO2
     int errorCode;
     if (d->status)
     {
@@ -961,11 +1028,15 @@ bool GPCamera::deleteItem(const QString& folder, const QString& itemName)
     delete d->status;
     d->status = 0;
     return true;
+#else
+    return false;
+#endif /* ENABLE_GPHOTO2 */
 }
 
 // recursively delete all items
 bool GPCamera::deleteAllItems(const QString& folder)
 {
+#ifdef ENABLE_GPHOTO2
     int         errorCode;
     QStringList folderList;
 
@@ -1008,11 +1079,15 @@ bool GPCamera::deleteAllItems(const QString& folder)
     delete d->status;
     d->status = 0;
     return true;
+#else
+    return false;
+#endif /* ENABLE_GPHOTO2 */
 }
 
 bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile,
                           GPItemInfo& itemInfo, bool /*getImageDimensions*/)
 {
+#ifdef ENABLE_GPHOTO2
     int         errorCode;
     CameraFile *cfile;
 
@@ -1133,10 +1208,14 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     delete d->status;
     d->status = 0;
     return true;
+#else
+    return false;
+#endif /* ENABLE_GPHOTO2 */
 }
 
 bool GPCamera::cameraSummary(QString& summary)
 {
+#ifdef ENABLE_GPHOTO2
     int        errorCode;
     CameraText sum;
 
@@ -1185,10 +1264,14 @@ bool GPCamera::cameraSummary(QString& summary)
     delete d->status;
     d->status = 0;
     return true;
+#else
+    return false;
+#endif /* ENABLE_GPHOTO2 */
 }
 
 bool GPCamera::cameraManual(QString& manual)
 {
+#ifdef ENABLE_GPHOTO2
     int        errorCode;
     CameraText man;
 
@@ -1215,10 +1298,14 @@ bool GPCamera::cameraManual(QString& manual)
     delete d->status;
     d->status = 0;
     return true;
+#else
+    return false;
+#endif /* ENABLE_GPHOTO2 */
 }
 
 bool GPCamera::cameraAbout(QString& about)
 {
+#ifdef ENABLE_GPHOTO2
     int        errorCode;
     CameraText abt;
 
@@ -1247,18 +1334,24 @@ bool GPCamera::cameraAbout(QString& about)
     delete d->status;
     d->status = 0;
     return true;
+#else
+    return false;
+#endif /* ENABLE_GPHOTO2 */
 }
 
 // -- Static methods ---------------------------------------------------------------------
 
 void GPCamera::printGphotoErrorDescription(int errorCode)
 {
+#ifdef ENABLE_GPHOTO2
     kDebug(50003) << "Libgphoto2 error: " << gp_result_as_string(errorCode)
-             << " (" << errorCode << ")" << endl;
+                  << " (" << errorCode << ")" << endl;
+#endif /* ENABLE_GPHOTO2 */
 }
 
 void GPCamera::getSupportedCameras(int& count, QStringList& clist)
 {
+#ifdef ENABLE_GPHOTO2
     clist.clear();
     count = 0;
 
@@ -1291,10 +1384,12 @@ void GPCamera::getSupportedCameras(int& count, QStringList& clist)
 
     gp_abilities_list_free( abilList );
     gp_context_unref( context );
+#endif /* ENABLE_GPHOTO2 */
 }
 
 void GPCamera::getSupportedPorts(QStringList& plist)
 {
+#ifdef ENABLE_GPHOTO2
     GPPortInfoList *list;
     GPPortInfo      info;
 
@@ -1321,10 +1416,12 @@ void GPCamera::getSupportedPorts(QStringList& plist)
     }
 
     gp_port_info_list_free( list );
+#endif /* ENABLE_GPHOTO2 */
 }
 
 void GPCamera::getCameraSupportedPorts(const QString& model, QStringList& plist)
 {
+#ifdef ENABLE_GPHOTO2
     int i = 0;
     plist.clear();
 
@@ -1347,10 +1444,12 @@ void GPCamera::getCameraSupportedPorts(const QString& model, QStringList& plist)
         plist.append("usb");
 
     gp_context_unref( context );
+#endif /* ENABLE_GPHOTO2 */
 }
 
 int GPCamera::autoDetect(QString& model, QString& port)
 {
+#ifdef ENABLE_GPHOTO2
     CameraList          *camList;
     CameraAbilitiesList *abilList;
     GPPortInfoList      *infoList;
@@ -1410,11 +1509,13 @@ int GPCamera::autoDetect(QString& model, QString& port)
 
     kDebug(50003) << "Failed to autodetect camera!" << endl;
     gp_list_free(camList);
+#endif /* ENABLE_GPHOTO2 */
     return -1;
 }
 
 bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& model, QString& port)
 {
+#ifdef ENABLE_GPHOTO2
     CameraAbilitiesList *abilList;
     GPPortInfoList      *list;
     GPPortInfo           info;
@@ -1489,6 +1590,9 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
     gp_context_unref( context );
 
     return success;
+#else
+    return false;
+#endif /* ENABLE_GPHOTO2 */
 }
 
 }  // namespace Digikam
