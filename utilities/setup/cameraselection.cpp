@@ -47,6 +47,7 @@
 
 // Local includes.
 
+#include "config-digikam.h"
 #include "gpcamera.h"
 #include "searchtextbar.h"
 #include "cameraselection.h"
@@ -279,6 +280,13 @@ CameraSelection::CameraSelection( QWidget* parent )
     getCameraList();
     getSerialPortList();
     kapp->restoreOverrideCursor();
+
+#ifndef ENABLE_GPHOTO2
+    // If digiKam is compiled without Gphoto2 support, we hide widget relevant.
+    d->listView->hide();
+    box2->hide();
+    slotUMSCameraLinkUsed();
+#endif /* ENABLE_GPHOTO2 */
 }
 
 CameraSelection::~CameraSelection()
