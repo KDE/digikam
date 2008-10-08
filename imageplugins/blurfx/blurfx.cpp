@@ -1227,9 +1227,17 @@ Digikam::DColor BlurFX::RandomColor(uchar *Bits, int Width, int Height, bool six
     int RandNumber, count, Index, ErrorCount = 0;
     int J;
 
+#ifdef _WIN32
+    srand(*randomSeed);
+#endif
     do
     {
+#ifndef _WIN32
         RandNumber = abs( (int)((rand_r(randomSeed) + 1) * ((double)counter / (1 + (double) RAND_MAX))) );
+#else
+        RandNumber = abs( (int)((rand() + 1) * ((double)counter / (1 + (double) RAND_MAX))) );
+#endif
+
         count = 0;
         Index = 0;
 
