@@ -137,7 +137,7 @@ void Sidebar::loadViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("%1").arg(objectName()));
-    int tab                   = group.readEntry("ActiveTab", -1);
+    int tab                   = group.readEntry("ActiveTab", 0);
     bool minimized            = group.readEntry("Minimized", d->minimizedDefault);
     d->restoreSize            = group.readEntry("RestoreSize", -1);
 
