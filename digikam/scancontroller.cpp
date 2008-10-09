@@ -357,12 +357,15 @@ void ScanController::run()
         }
         else if (doScan)
         {
+            QTime time; time.start();
+            kDebug(50003) << "Beginning complete collection scan";
             CollectionScanner scanner;
             connectCollectionScanner(&scanner);
             scanner.recordHints(d->albumHints);
             scanner.recordHints(d->itemHints);
             scanner.completeScan();
             emit completeScanDone();
+            kDebug(50003) << "Finished complete collection scan, took" << time.elapsed();
         }
         else if (doPartialScan)
         {
