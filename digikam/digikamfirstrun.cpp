@@ -27,6 +27,7 @@
 #include <QLabel>
 #include <QString>
 #include <QDir>
+#include <QDesktopServices>
 #include <QFileInfo>
 #include <QVBoxLayout>
 #include <QGridLayout>
@@ -39,6 +40,7 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
+#include <kglobalsettings.h>
 #include <kurl.h>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
@@ -76,34 +78,43 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
     pixLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                         .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
+    QString picturesPath;
+#if KDE_IS_VERSION(4,1,61)
+    picturesPath = KGlobalSettings::picturesPath();
+#else
+    picturesPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
+#endif
+    kDebug() << picturesPath;
+    if (picturesPath.isEmpty())
+    {
+        picturesPath = QDir::homePath() + i18nc("This is a path name so you should "
+                                                "include the slash in the translation", "/Pictures");
+    }
+
     QLabel *textLabel1 = new QLabel(widget);
     textLabel1->setWordWrap(true);
-    textLabel1->setText(i18n("<p>digiKam use root album paths to store your photo albums "
-                             "created in <b>My Albums</b> view from left side-bar. "
-                             "Below, please select which folder you would like "
-                             "digiKam to use as first root album path from your local "
-                             "file system.</p>"
-                             "<p><b>Note: you can set other root album paths later using "
-                             "digiKam settings panel. Removable medias and shared files system are "
-                             "supported.</b></p>") );
+    textLabel1->setText(i18n("<p>Please enter a folder where you want to store your pictures.</p> "
+                             "<p>If you already have a folder where you usually store your pictures, "
+                             "choose that one. You can as well pick a new location or use "
+                             "the suggested folder.<br/> "
+                             "You can add more locations later on from the <i>Settings</i> menu. "
+                             "Removable media and shared file systems are supported.</p>") );
 
     m_rootAlbumPath = new KUrlRequester(widget);
     m_rootAlbumPath->setMode(KFile::Directory | KFile::LocalOnly);
-    m_rootAlbumPath->setUrl(QDir::homePath() + i18nc("This is a path name so you should "
-                            "include the slash in the translation", "/Pictures"));
+    m_rootAlbumPath->setUrl(picturesPath);
 
     QLabel *textLabel3 = new QLabel(widget);
     textLabel3->setWordWrap(true);
-    textLabel3->setText(i18n("Below, set the location on your computer "
-                             "where the digiKam database file will be stored. "
-                             "Write access is required to be able to edit image "
-                             "properties.\nPlease note that you cannot use a "
-                             "remote file system here, such as NFS."));
+    textLabel3->setText(i18n("<p>Digikam stores information about your pictures in a database file. "
+                             "Please set the location of this file. It is fine to use "
+                             "the same directory as above. <br>"
+                             "Please note that you should have write access to the folder, "
+                             "and that you cannot use a remote file system here, such as NFS."));
 
     m_dbPath = new KUrlRequester(widget);
     m_dbPath->setMode(KFile::Directory | KFile::LocalOnly);
-    m_dbPath->setUrl(QDir::homePath() + i18nc("This is a path name so you should "
-                     "include the slash in the translation", "/Pictures"));
+    m_dbPath->setUrl(picturesPath);
 
     grid->addWidget(pixLabel,        0, 0, 2, 1);
     grid->addWidget(textLabel1,      0, 1, 1, 1);
@@ -225,12 +236,14 @@ bool DigikamFirstRun::checkDatabase(QString& dbFolder)
     }
 #endif
 
+    /*
     if (KUrl(dbFolder).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutFragment))
     {
         KMessageBox::sorry(this, i18n("digiKam cannot use your home folder as "
                                       "database file path."));
         return false;
     }
+    */
 
     QDir targetPath(dbFolder);
 
