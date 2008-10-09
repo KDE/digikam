@@ -154,10 +154,12 @@ bool DigikamFirstRun::checkRootAlbum(QString& rootAlbumFolder)
         return false;
     }
 
+#ifndef _WIN32
     if (!rootAlbumFolder.startsWith('/'))
     {
         rootAlbumFolder.prepend(QDir::homePath());
     }
+#endif
 
     if (KUrl(rootAlbumFolder).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutFragment))
     {
@@ -216,10 +218,12 @@ bool DigikamFirstRun::checkDatabase(QString& dbFolder)
         return false;
     }
 
+#ifndef _WIN32
     if (!dbFolder.startsWith('/'))
     {
         dbFolder.prepend(QDir::homePath());
     }
+#endif
 
     if (KUrl(dbFolder).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutFragment))
     {
