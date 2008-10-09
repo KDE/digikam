@@ -3,6 +3,7 @@ digiKam 0.10.0-beta4 - Release date: 2008-10-02
 
 NEW FEATURES:
 
+General        : digiKam can be compiled in native under Micosoft Windows.
 General        : libkdcraw dependency updated to 0.4.0
 General        : libgphoto2 depency is now optional to be able to compile digiKam under operating systems 
                  not supported by GPhoto2
