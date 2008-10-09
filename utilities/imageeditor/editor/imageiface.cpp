@@ -71,8 +71,6 @@ public:
     int     previewHeight;
 
     QPixmap qcheck;
-    QPixmap qpix;
-    QBitmap qmask;
 
     DImg    previewImage;
     DImg    targetPreviewImage;
@@ -89,7 +87,6 @@ ImageIface::ImageIface(int w, int h)
     d->originalHeight     = DImgInterface::defaultInterface()->origHeight();
     d->originalBytesDepth = DImgInterface::defaultInterface()->bytesDepth();
 
-    d->qpix.setMask(d->qmask);
     d->qcheck = QPixmap(8, 8);
 
     QPainter p;
@@ -191,9 +188,6 @@ uchar* ImageIface::getPreviewImage() const
 
         // only create another copy if needed, in putPreviewImage
         d->targetPreviewImage = d->previewImage;
-
-        d->qmask = QPixmap(d->previewWidth, d->previewHeight);
-        d->qpix  = QPixmap(d->previewWidth, d->previewHeight);
     }
 
     DImg previewData = d->previewImage.copyImageData();
@@ -385,38 +379,42 @@ PhotoInfoContainer ImageIface::getPhotographInformations() const
 void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
                        bool underExposure, bool overExposure, QPainter *painter)
 {
-    QPainter p(&d->qpix);
+    QPainter localPainter;
+    QPainter *p;
+
+    if (painter)
+        p = painter;
+    else
+    {
+        p = &localPainter;
+        p->begin(device);
+    }
+
+    int width = w > 0 ? qMin(d->previewWidth, w) : d->previewWidth;
+    int height = h > 0 ? qMin(d->previewHeight, h) : d->previewHeight;
 
     if ( !d->targetPreviewImage.isNull() )
     {
         if (d->targetPreviewImage.hasAlpha())
         {
-            p.drawTiledPixmap(0, 0, d->qpix.width(), d->qpix.height(), d->qcheck);
+            p->drawTiledPixmap(x, y, width, height, d->qcheck);
         }
 
         QPixmap pixImage;
         ICCSettingsContainer *iccSettings = DImgInterface::defaultInterface()->getICCSettings();
 
-        if (iccSettings)
+        if (iccSettings && iccSettings->enableCMSetting && iccSettings->managedViewSetting)
         {
             IccTransform monitorICCtrans;
             monitorICCtrans.setProfiles(iccSettings->workspaceSetting, iccSettings->monitorSetting);
-
-            if (iccSettings->enableCMSetting && iccSettings->managedViewSetting)
-            {
-                pixImage = d->targetPreviewImage.convertToPixmap(&monitorICCtrans);
-            }
-            else
-            {
-                pixImage = d->targetPreviewImage.convertToPixmap();
-            }
+            pixImage = d->targetPreviewImage.convertToPixmap(&monitorICCtrans);
         }
         else
         {
             pixImage = d->targetPreviewImage.convertToPixmap();
         }
 
-        p.drawPixmap(0, 0, pixImage, 0, 0, w, h);
+        p->drawPixmap(x, y, pixImage, 0, 0, width, height);
 
         // Show the Over/Under exposure pixels indicators
 
@@ -430,22 +428,12 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
 
             QImage pureColorMask = d->targetPreviewImage.pureColorMask(&expoSettings);
             QPixmap pixMask = QPixmap::fromImage(pureColorMask);
-            p.drawPixmap(0, 0, pixMask, 0, 0, w, h);
+            p->drawPixmap(x, y, pixMask, 0, 0, width, height);
         }
     }
 
-    p.end();
-
     if (!painter)
-    {
-        QPainter p2(device);
-        p2.drawPixmap(x, y, d->qpix, 0, 0, d->qpix.width(), d->qpix.height());
-        p2.end();
-    }
-    else
-    {
-        painter->drawPixmap(x, y, d->qpix, 0, 0, d->qpix.width(), d->qpix.height());
-    }
+        p->end();
 }
 
 }   // namespace Digikam
