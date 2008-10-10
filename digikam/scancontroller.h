@@ -49,7 +49,7 @@ class SplashScreen;
 class PAlbum;
 class ScanControllerPriv;
 
-class DIGIKAM_EXPORT ScanController : public QThread, public InitializationObserver
+class ScanController : public QThread, public InitializationObserver
 {
     Q_OBJECT
 

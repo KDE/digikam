@@ -43,7 +43,7 @@ namespace Digikam
 
 class SetupICCPriv;
 
-class DIGIKAM_EXPORT SetupICC : public QWidget
+class SetupICC : public QWidget
 {
     Q_OBJECT
 

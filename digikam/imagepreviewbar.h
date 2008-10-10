@@ -41,7 +41,7 @@ namespace Digikam
 class ImagePreviewBarItem;
 class ImagePreviewBarPriv;
 
-class DIGIKAM_EXPORT ImagePreviewBar : public ThumbBarView
+class ImagePreviewBar : public ThumbBarView
 {
     Q_OBJECT
 
@@ -85,7 +85,7 @@ private:
 
 // -------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT ImagePreviewBarItem : public ThumbBarItem
+class ImagePreviewBarItem : public ThumbBarItem
 {
 public:
 
@@ -105,7 +105,7 @@ private:
 
 // -------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT ImagePreviewBarToolTip : public ThumbBarToolTip
+class ImagePreviewBarToolTip : public ThumbBarToolTip
 {
 
 public:

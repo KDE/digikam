@@ -31,7 +31,7 @@
 
 class KAction;
 
-class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_AdjustLevels : public Digikam::ImagePlugin
+class ImagePlugin_AdjustLevels : public Digikam::ImagePlugin
 {
     Q_OBJECT
 

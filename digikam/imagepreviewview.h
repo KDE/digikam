@@ -46,7 +46,7 @@ class LoadingDescription;
 class ImageInfo;
 class ImagePreviewViewPriv;
 
-class DIGIKAM_EXPORT ImagePreviewView : public PreviewWidget
+class ImagePreviewView : public PreviewWidget
 {
 
 Q_OBJECT

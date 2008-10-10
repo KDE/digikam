@@ -32,7 +32,7 @@
 
 class KAction;
 
-class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_WhiteBalance : public Digikam::ImagePlugin
+class ImagePlugin_WhiteBalance : public Digikam::ImagePlugin
 {
     Q_OBJECT
 

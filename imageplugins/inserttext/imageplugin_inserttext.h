@@ -31,7 +31,7 @@
 
 class KAction;
 
-class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_InsertText : public Digikam::ImagePlugin
+class ImagePlugin_InsertText : public Digikam::ImagePlugin
 {
     Q_OBJECT
 

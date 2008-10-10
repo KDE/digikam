@@ -37,7 +37,7 @@ namespace Digikam
 
 class SetupSlideShowPriv;
 
-class DIGIKAM_EXPORT SetupSlideShow : public QWidget
+class SetupSlideShow : public QWidget
 {
     Q_OBJECT
 

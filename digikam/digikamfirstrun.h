@@ -40,7 +40,7 @@ namespace Digikam
 
 class FirstRunWidget;
 
-class DIGIKAM_EXPORT DigikamFirstRun : public KDialog
+class DigikamFirstRun : public KDialog
 {
     Q_OBJECT
 

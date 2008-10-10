@@ -89,7 +89,7 @@ typedef QPair<int, int> YearMonth;
  * updating icons and moving Albums.
  *
  */
-class DIGIKAM_EXPORT AlbumManager : public QObject
+class AlbumManager : public QObject
 {
     Q_OBJECT
 

@@ -39,7 +39,7 @@ namespace Digikam
 class IconGroupItem;
 class IconView;
 
-class DIGIKAM_EXPORT IconItem
+class IconItem
 {
     friend class IconView;
     friend class IconGroupItem;

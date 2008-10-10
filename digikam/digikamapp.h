@@ -53,7 +53,7 @@ class ImageInfoList;
 class CameraType;
 class DigikamAppPriv;
 
-class DIGIKAM_EXPORT DigikamApp : public KXmlGuiWindow
+class DigikamApp : public KXmlGuiWindow
 {
     Q_OBJECT
 

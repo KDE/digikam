@@ -35,7 +35,7 @@ class LightTableBarItem;
 class LightTableBarItemPriv;
 class LightTableBarPriv;
 
-class DIGIKAM_EXPORT LightTableBar : public ImagePreviewBar
+class LightTableBar : public ImagePreviewBar
 {
     Q_OBJECT
 
@@ -91,7 +91,7 @@ private:
 
 // -------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT LightTableBarItem : public ImagePreviewBarItem
+class LightTableBarItem : public ImagePreviewBarItem
 {
 public:
 

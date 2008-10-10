@@ -40,7 +40,7 @@ namespace Digikam
 
 class LightTableViewPriv;
 
-class DIGIKAM_EXPORT LightTableView : public QFrame
+class LightTableView : public QFrame
 {
 
 Q_OBJECT

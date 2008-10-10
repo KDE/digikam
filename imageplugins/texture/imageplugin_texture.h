@@ -31,7 +31,7 @@
 
 class KAction;
 
-class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_Texture : public Digikam::ImagePlugin
+class ImagePlugin_Texture : public Digikam::ImagePlugin
 {
     Q_OBJECT
 

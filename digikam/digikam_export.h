@@ -49,18 +49,6 @@
 
 // --------------------------------------------------------
 
-#ifndef DIGIKAMIMAGEPLUGINS_EXPORT
-# if defined(MAKE_DIGIKAMIMAGEPLUGINS_LIB)
-   /* We are building this library */
-#  define DIGIKAMIMAGEPLUGINS_EXPORT KDE_EXPORT
-# else
-   /* We are using this library */
-#  define DIGIKAMIMAGEPLUGINS_EXPORT KDE_IMPORT
-# endif
-#endif
-
-// --------------------------------------------------------
-
 #ifndef DIGIKAMIMAGEEDITOR_EXPORT
 # if defined(MAKE_DIGIKAMIMAGEEDITOR_LIB)
    /* We are building this library */
@@ -97,14 +85,9 @@
 
 // --------------------------------------------------------
 
-#ifndef DIGIKAMDIALOG_EXPORT
-# if defined(MAKE_DIGIKAMDIALOG_LIB)
-   /* We are building this library */ 
-#  define DIGIKAMDIALOG_EXPORT KDE_EXPORT
-# else
-   /* We are using this library */ 
-#  define DIGIKAMDIALOG_EXPORT KDE_IMPORT
-# endif
+#ifndef DIGIKAM_BIN_EXPORT
+/* for now this is included in the binary and doesn't need exporting */
+#define DIGIKAM_BIN_EXPORT
 #endif
 
 // --------------------------------------------------------
@@ -113,4 +96,4 @@
 #  define DIGIKAM_EXPORT_DEPRECATED KDE_DEPRECATED DIGIKAM_EXPORT
 # endif
 
-#endif // DIGIKAM_EXPORT_H
+#endif

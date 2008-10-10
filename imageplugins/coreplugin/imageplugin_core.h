@@ -32,7 +32,7 @@
 
 class KAction;
 
-class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_Core : public Digikam::ImagePlugin
+class ImagePlugin_Core : public Digikam::ImagePlugin
 {
     Q_OBJECT
 

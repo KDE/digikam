@@ -46,7 +46,7 @@ class TAlbumCheckListItem;
 class ImageInfo;
 class ImageDescEditTabPriv;
 
-class DIGIKAM_EXPORT ImageDescEditTab : public QWidget
+class ImageDescEditTab : public QWidget
 {
     Q_OBJECT
 

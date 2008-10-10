@@ -49,7 +49,7 @@ class DImg;
 class LoadingDescription;
 class LightTablePreviewPriv;
 
-class DIGIKAM_EXPORT LightTablePreview : public PreviewWidget
+class LightTablePreview : public PreviewWidget
 {
 
 Q_OBJECT

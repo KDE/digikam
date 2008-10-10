@@ -39,7 +39,7 @@ namespace Digikam
 
 class FolderView;
 
-class DIGIKAM_EXPORT FolderItem : public Q3ListViewItem
+class FolderItem : public Q3ListViewItem
 {
 public:
 

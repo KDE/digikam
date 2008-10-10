@@ -50,7 +50,7 @@ class IconItem;
 class IconGroupItem;
 class IconViewPriv;
 
-class DIGIKAM_EXPORT IconView : public Q3ScrollView
+class IconView : public Q3ScrollView
 {
     Q_OBJECT
 

@@ -47,7 +47,7 @@ class AlbumIconView;
 class ImagePreviewView;
 class AlbumWidgetStackPriv;
 
-class DIGIKAM_EXPORT AlbumWidgetStack : public QStackedWidget
+class AlbumWidgetStack : public QStackedWidget
 {
 Q_OBJECT
 

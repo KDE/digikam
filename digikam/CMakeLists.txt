@@ -173,7 +173,6 @@ SET(digikam_bin_SRCS
                      ${libcameragui_SRCS}
                      ${liblighttable_SRCS}
                      ${libbatch_SRCS}
-                     ${libthemeengine_SRCS}
                      ${libkipiiface_SRCS}
                      ${libsearchwindow_SRCS}
                      ${libfuzzysearch_SRCS}

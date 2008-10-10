@@ -37,7 +37,7 @@ namespace Digikam
 
 class SetupIOFilesPriv;
 
-class DIGIKAM_EXPORT SetupIOFiles : public QWidget
+class SetupIOFiles : public QWidget
 {
     Q_OBJECT
 

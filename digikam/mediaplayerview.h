@@ -42,7 +42,7 @@ namespace Digikam
 
 class MediaPlayerViewPriv;
 
-class DIGIKAM_EXPORT MediaPlayerView : public QStackedWidget
+class MediaPlayerView : public QStackedWidget
 {
 Q_OBJECT
 

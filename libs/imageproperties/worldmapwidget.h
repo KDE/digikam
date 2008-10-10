@@ -68,7 +68,7 @@ typedef QList<GPSInfo> GPSInfoList;
 
 class WorldMapWidgetPriv;
 
-class DIGIKAM_EXPORT WorldMapWidget : public QFrame
+class WorldMapWidget : public QFrame
 {
 Q_OBJECT
 

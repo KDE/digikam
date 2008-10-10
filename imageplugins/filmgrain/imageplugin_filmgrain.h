@@ -32,7 +32,7 @@
 
 class KAction;
 
-class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_FilmGrain : public Digikam::ImagePlugin
+class ImagePlugin_FilmGrain : public Digikam::ImagePlugin
 {
     Q_OBJECT
 

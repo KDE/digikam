@@ -40,7 +40,7 @@ class LoadingDescription;
 class ImageDialogPrivate;
 class ImageDialogPreviewPrivate;
 
-class DIGIKAMDIALOG_EXPORT ImageDialogPreview : public KPreviewWidgetBase
+class DIGIKAM_EXPORT ImageDialogPreview : public KPreviewWidgetBase
 {
     Q_OBJECT
 

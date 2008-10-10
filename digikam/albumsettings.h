@@ -40,7 +40,7 @@ namespace Digikam
 
 class AlbumSettingsPrivate;
 
-class DIGIKAM_EXPORT AlbumSettings 
+class AlbumSettings 
 {
 public:
 

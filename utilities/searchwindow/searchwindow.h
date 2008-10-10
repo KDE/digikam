@@ -37,7 +37,7 @@ namespace Digikam
 
 class SearchWindowPriv;
 
-class DIGIKAM_EXPORT SearchWindow : public QWidget
+class SearchWindow : public QWidget
 {
     Q_OBJECT
 

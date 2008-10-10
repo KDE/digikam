@@ -30,7 +30,7 @@
 
 class KAction;
 
-class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_LensCorrection : public Digikam::ImagePlugin
+class ImagePlugin_LensCorrection : public Digikam::ImagePlugin
 {
     Q_OBJECT
 

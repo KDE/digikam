@@ -37,7 +37,7 @@ namespace Digikam
 
 class SetupDcrawPriv;
 
-class DIGIKAM_EXPORT SetupDcraw : public QWidget
+class SetupDcraw : public QWidget
 {
     Q_OBJECT
 

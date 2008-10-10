@@ -31,7 +31,7 @@
 
 class KAction;
 
-class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_AdjustCurves : public Digikam::ImagePlugin
+class ImagePlugin_AdjustCurves : public Digikam::ImagePlugin
 {
     Q_OBJECT
 

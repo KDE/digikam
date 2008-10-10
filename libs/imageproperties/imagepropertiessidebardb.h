@@ -48,7 +48,7 @@ class ImageInfo;
 class ImageChangeset;
 class ImagePropertiesSideBarDBPriv;
 
-class DIGIKAM_EXPORT ImagePropertiesSideBarDB : public ImagePropertiesSideBar
+class ImagePropertiesSideBarDB : public ImagePropertiesSideBar
 {
     Q_OBJECT
 

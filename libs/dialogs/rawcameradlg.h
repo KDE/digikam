@@ -37,7 +37,7 @@ namespace Digikam
 
 class RawCameraDlgPriv;
 
-class DIGIKAMDIALOG_EXPORT RawCameraDlg : public KDialog
+class DIGIKAM_EXPORT RawCameraDlg : public KDialog
 {
     Q_OBJECT
 

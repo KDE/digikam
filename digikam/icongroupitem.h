@@ -39,7 +39,7 @@ class IconView;
 class IconItem;
 class IconGroupItemPriv;
 
-class DIGIKAM_EXPORT IconGroupItem
+class IconGroupItem
 {
     friend class IconView;
 

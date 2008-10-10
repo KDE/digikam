@@ -40,7 +40,7 @@ namespace Digikam
 class Album;
 class TreeFolderView;
 
-class DIGIKAM_EXPORT TreeFolderItem : public QTreeWidgetItem
+class TreeFolderItem : public QTreeWidgetItem
 {
 
 public:
@@ -69,7 +69,7 @@ private:
 
 // ------------------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT TreeFolderCheckListItem : public QTreeWidgetItem
+class TreeFolderCheckListItem : public QTreeWidgetItem
 {
 
 public:
@@ -81,7 +81,7 @@ public:
 
 // ------------------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT TreeAlbumItem : public TreeFolderItem
+class TreeAlbumItem : public TreeFolderItem
 {
 
 public:
@@ -100,7 +100,7 @@ private:
 
 // ------------------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT TreeAlbumCheckListItem : public TreeAlbumItem
+class TreeAlbumCheckListItem : public TreeAlbumItem
 {
 
 public:

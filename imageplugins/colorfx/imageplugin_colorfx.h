@@ -33,7 +33,7 @@
 
 class KAction;
 
-class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_ColorFX : public Digikam::ImagePlugin
+class ImagePlugin_ColorFX : public Digikam::ImagePlugin
 {
     Q_OBJECT
 

@@ -113,7 +113,7 @@ protected:
 
 // -----------------------------------------------------------
 
-class DIGIKAMDIALOG_EXPORT DeleteDialog : public KDialog
+class DeleteDialog : public KDialog
 {
     Q_OBJECT
 

@@ -43,7 +43,7 @@ namespace Digikam
 {
 
 
-class DIGIKAMDIALOG_EXPORT ICCProfileInfoDlg : public KDialog
+class DIGIKAM_EXPORT ICCProfileInfoDlg : public KDialog
 {
 
 public:

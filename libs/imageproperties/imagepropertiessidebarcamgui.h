@@ -47,7 +47,7 @@ class CameraIconViewItem;
 class NavigateBarTab;
 class ImagePropertiesSideBarCamGuiPriv;
 
-class DIGIKAM_EXPORT ImagePropertiesSideBarCamGui : public Sidebar
+class ImagePropertiesSideBarCamGui : public Sidebar
 {
     Q_OBJECT
 

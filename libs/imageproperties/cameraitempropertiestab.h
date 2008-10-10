@@ -43,7 +43,7 @@ namespace Digikam
 class GPItemInfo;
 class CameraItemPropertiesTabPriv;
 
-class DIGIKAM_EXPORT CameraItemPropertiesTab : public QFrame
+class CameraItemPropertiesTab : public QFrame
 {
     Q_OBJECT
 

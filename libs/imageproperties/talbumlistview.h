@@ -39,7 +39,7 @@ namespace Digikam
 {
 class TAlbum;
 
-class DIGIKAM_EXPORT TAlbumCheckListItem : public FolderCheckListItem
+class TAlbumCheckListItem : public FolderCheckListItem
 {
 public:
 
@@ -68,7 +68,7 @@ private:
 
 // ------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT TAlbumListView : public FolderView
+class TAlbumListView : public FolderView
 {
     Q_OBJECT
 

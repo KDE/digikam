@@ -44,7 +44,7 @@ namespace Digikam
 class CameraController;
 class CaptureDlgPriv;
 
-class DIGIKAM_EXPORT CaptureDlg : public KDialog
+class CaptureDlg : public KDialog
 {
 Q_OBJECT
 

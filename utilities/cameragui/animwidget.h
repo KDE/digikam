@@ -39,7 +39,7 @@ namespace Digikam
 
 class AnimWidgetPriv;
 
-class DIGIKAM_EXPORT AnimWidget : public QWidget
+class AnimWidget : public QWidget
 {
     Q_OBJECT
     

@@ -33,7 +33,7 @@
 
 class KAction;
 
-class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_SuperImpose : public Digikam::ImagePlugin
+class ImagePlugin_SuperImpose : public Digikam::ImagePlugin
 {
     Q_OBJECT
 

@@ -31,7 +31,7 @@
 
 class KAction;
 
-class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_OilPaint : public Digikam::ImagePlugin
+class ImagePlugin_OilPaint : public Digikam::ImagePlugin
 {
     Q_OBJECT
 

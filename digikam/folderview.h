@@ -54,7 +54,7 @@ class FolderItem;
  * \brief Base class for a tree view
  */
 
-class DIGIKAM_EXPORT FolderView : public Q3ListView
+class FolderView : public Q3ListView
 {
     Q_OBJECT
 

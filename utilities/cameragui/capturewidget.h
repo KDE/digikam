@@ -40,7 +40,7 @@ namespace Digikam
 
 class CaptureWidgetPriv;
 
-class DIGIKAM_EXPORT CaptureWidget : public QWidget
+class CaptureWidget : public QWidget
 {
 Q_OBJECT
 

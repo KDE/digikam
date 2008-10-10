@@ -43,7 +43,7 @@ class KTemporaryFile;
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT WelcomePageView : public KHTMLPart
+class WelcomePageView : public KHTMLPart
 {
     Q_OBJECT
 

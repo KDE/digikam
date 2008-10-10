@@ -31,7 +31,7 @@
 
 class KAction;
 
-class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_BlurFX : public Digikam::ImagePlugin
+class ImagePlugin_BlurFX : public Digikam::ImagePlugin
 {
     Q_OBJECT
 
