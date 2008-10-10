@@ -87,7 +87,6 @@ SET(libdigikamtheme_SRCS
 
 SET(digikamthemedesigner_SRCS 
     ${libdigikamtheme_SRCS}
-    ${libthemeengine_SRCS}
     ${libdeletedialog_SRCS}
     ${liblighttable_SRCS}
     ${libdimgimagewindow_SRCS}
