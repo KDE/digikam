@@ -2,6 +2,32 @@ FOLDER                                  CPP         H
 -----------------------------------------------------
 |-- digikam
 |-- imageplugins
+|   |-- adjustcurves
+|   |-- adjustlevels
+|   |-- blurfx
+|   |-- border
+|   |-- channelmixer
+|   |-- charcoal
+|   |-- colorfx
+|   |-- coreplugin
+|   |-- distortionfx
+|   |-- emboss
+|   |-- filmgrain
+|   |-- freerotation
+|   |-- hotpixels
+|   |-- infrared
+|   |-- inpainting
+|   |-- inserttext
+|   |-- lenscorrection
+|   |-- noisereduction
+|   |-- oilpaint
+|   |-- perspective
+|   |-- raindrop
+|   |-- restoration
+|   |-- sheartool
+|   |-- superimpose
+|   |-- texture
+|   `-- whitebalance
 |-- kioslave                            X           X
 |-- libs
 |   |-- curves
