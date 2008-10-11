@@ -112,15 +112,14 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
                                             "duplicates items."));
 
     d->progressBar = new StatusProgressBar(this);
-    d->progressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
+    d->progressBar->progressBarMode(StatusProgressBar::TextMode);
     d->progressBar->setEnabled(false);
 
     grid->addWidget(d->listView,           0, 0, 1, 3);
     grid->addWidget(d->updateFingerPrtBtn, 1, 0, 1, 3);
-    grid->addWidget(d->scanDuplicatesBtn,  2, 0, 1, 1);
-    grid->addWidget(d->progressBar,        2, 1, 1, 2);
+    grid->addWidget(d->scanDuplicatesBtn,  2, 0, 1, 3);
+    grid->addWidget(d->progressBar,        3, 0, 1, 3);
     grid->setRowStretch(0, 10);
-    grid->setColumnStretch(1, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
@@ -290,7 +289,7 @@ void FindDuplicatesView::cancelFindDuplicates(KJob* job)
 
     d->scanDuplicatesBtn->setEnabled(true);
     d->updateFingerPrtBtn->setEnabled(true);
-    d->progressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
+    d->progressBar->progressBarMode(StatusProgressBar::TextMode);
     d->progressBar->setProgressValue(0);
     d->progressBar->setEnabled(false);
 
