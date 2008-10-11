@@ -58,9 +58,9 @@ FOLDER                                  CPP         H
     |-- lighttable
     |-- scripts
     |-- searchwindow
-    |-- setup
-    |-- slideshow
-    `-- timeline
+    |-- setup                           X           X
+    |-- slideshow                       X           X
+    `-- timelinew                       X           X
 
 
 

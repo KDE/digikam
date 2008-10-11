@@ -142,8 +142,8 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->scaleBG         = new QButtonGroup(scaleBox);
     d->scaleBG->setExclusive(true);
     scaleBox->setWhatsThis( i18n("<p>Select the histogram scale.</p>"
-                                  "<p>If the date count's maximal values are small, you can use the linear scale.</p>"
-                                  "<p>Logarithmic scale can be used when the maximal values are big; "
+                                  "<p>If the date's maximal counts are small, you can use the linear scale.</p>"
+                                  "<p>Logarithmic scale can be used when the maximal counts are big; "
                                   "if it is used, all values (small and large) will be visible on the "
                                   "graph.</p>"));
 

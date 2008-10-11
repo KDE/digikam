@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-typedef QPair<QDateTime, QDateTime> DateRange;    // Range of a contigue dates selection <start date, end date>.
+typedef QPair<QDateTime, QDateTime> DateRange;    // Range of a contiguous dates selection <start date, end date>.
 typedef QList<DateRange> DateRangeList;           // List of dates range selected.
 
 class TimeLineWidgetPriv;

@@ -117,9 +117,9 @@ SetupEditor::SetupEditor(QWidget* parent)
                                     interfaceOptionsGroup);
 
     d->useRawImportTool = new QCheckBox(i18n("Use Raw Import Tool to handle Raw image"), interfaceOptionsGroup);
-    d->useRawImportTool->setWhatsThis(i18n("Set on this option to use Raw Import "
-                                           "tool before to load a Raw image, "
-                                           "to customize indeep decoding settings."));
+    d->useRawImportTool->setWhatsThis(i18n("Set this option to use Raw Import "
+                                           "tool to load a RAW image. "
+                                           "With this tool you are able to customize indeep decoding settings."));
 
     gLayout1->addWidget(d->themebackgroundColor);
     gLayout1->addWidget(d->colorBox);
