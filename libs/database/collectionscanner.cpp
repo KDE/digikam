@@ -88,7 +88,7 @@ public:
         wantSignals = false;
     }
 
-    QStringList       nameFilters;
+    QSet<QString>     nameFilters;
     QSet<QString>     imageFilterSet;
     QSet<QString>     videoFilterSet;
     QSet<QString>     audioFilterSet;
@@ -145,18 +145,12 @@ void CollectionScanner::loadNameFilters()
     QStringList imageFilter, audioFilter, videoFilter;
     DatabaseAccess().db()->getFilterSettings(&imageFilter, &videoFilter, &audioFilter);
 
-    // one list for filtering when listing a dir, with wildcard globbing
-    foreach (const QString &suffix, imageFilter)
-        d->nameFilters << "*." + suffix;
-    foreach (const QString &suffix, audioFilter)
-        d->nameFilters << "*." + suffix;
-    foreach (const QString &suffix, videoFilter)
-        d->nameFilters << "*." + suffix;
-
     // three sets to find category of a file
     d->imageFilterSet = imageFilter.toSet();
     d->audioFilterSet = audioFilter.toSet();
     d->videoFilterSet = videoFilter.toSet();
+
+    d->nameFilters = d->imageFilterSet + d->audioFilterSet + d->videoFilterSet;
 }
 
 void CollectionScanner::completeScan()
@@ -473,7 +467,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
     }
     kDebug(50003) << "Arranged in hashes" << time.restart();
 
-    const QFileInfoList list = dir.entryInfoList(d->nameFilters, QDir::AllDirs | QDir::Files  | QDir::NoDotAndDotDot /*not CaseSensitive*/);
+    const QFileInfoList list = dir.entryInfoList(QDir::AllDirs | QDir::Files  | QDir::NoDotAndDotDot);
     QFileInfoList::const_iterator fi;
     kDebug(50003) << "Stat'ing directory" << time.restart();
 
@@ -481,6 +475,11 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
     {
         if ( fi->isFile())
         {
+            // filter with name filter
+            QString suffix = fi->suffix().toLower();
+            if (!d->nameFilters.contains(suffix))
+                continue;
+
             int index = fileNameIndexHash.value(fi->fileName(), -1);
             if (index != -1)
             {
