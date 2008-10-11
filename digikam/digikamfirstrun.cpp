@@ -82,7 +82,9 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
 #if KDE_IS_VERSION(4,1,61)
     picturesPath = KGlobalSettings::picturesPath();
 #else
+#if QT_VERSION >= 0x040400
     picturesPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
+#endif
 #endif
     kDebug() << picturesPath;
     if (picturesPath.isEmpty())
