@@ -150,23 +150,23 @@ void StatusProgressBar::setProgressText(const QString& text)
 
 void StatusProgressBar::progressBarMode(int mode, const QString& text)
 {
-    if ( mode == TextMode)
+    if (mode == TextMode)
     {
         setCurrentIndex(StatusProgressBarPriv::TextLabel);
         setProgressValue(0);
-        setText( text );
+        setText(text);
     }
-    else if ( mode == ProgressBarMode )
+    else if (mode == ProgressBarMode)
     {
         d->cancelButton->hide();
         setCurrentIndex(StatusProgressBarPriv::ProgressBar);
-        setProgressText( text );
+        setProgressText(text);
     }
-    else  // CancelProgressBarMode
+    else // CancelProgressBarMode
     {
         d->cancelButton->show();
         setCurrentIndex(StatusProgressBarPriv::ProgressBar);
-        setProgressText( text );
+        setProgressText(text);
     }
 }
 

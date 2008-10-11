@@ -109,6 +109,8 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
                                             "duplicates items."));
 
     d->progressBar = new StatusProgressBar(this);
+    d->progressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
+    d->progressBar->setEnabled(false);
 
     grid->addWidget(d->listView,           0, 0, 1, 3);
     grid->addWidget(d->updateFingerPrtBtn, 1, 0, 1, 3);
@@ -250,7 +252,6 @@ void FindDuplicatesView::slotFindDuplicates()
     d->scanDuplicatesBtn->setEnabled(false);
     d->updateFingerPrtBtn->setEnabled(false);
     d->progressBar->setEnabled(true);
-    d->progressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
 
     AlbumList albums = AlbumManager::instance()->allPAlbums();
     QStringList idsStringList;
