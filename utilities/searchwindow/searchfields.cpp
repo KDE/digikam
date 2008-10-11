@@ -793,6 +793,7 @@ void SearchFieldRangeDate::reset()
     m_secondDateEdit->setDate(QDate());
     if (m_type == DateTime)
         m_secondTimeEdit->setTime(QTime(0,0,0,0));
+    valueChanged();
 }
 
 void SearchFieldRangeDate::setBoundary(QDateTime min, QDateTime max)
