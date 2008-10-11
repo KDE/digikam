@@ -976,7 +976,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
              break;
 
           case HistogramWidget::ValueHistogram:
-             guidePos = QMAX(QMAX(d->colorGuide.red(), d->colorGuide.green()), d->colorGuide.blue());
+             guidePos = qMax(qMax(d->colorGuide.red(), d->colorGuide.green()), d->colorGuide.blue());
              break;
 
           case HistogramWidget::ColorChannelsHistogram:

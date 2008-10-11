@@ -569,8 +569,8 @@ void CameraIconView::startDrag()
     p.drawRect(0, 0, w+4, h+4);
     p.drawPixmap(2, 2, icon);
     QRect r = p.boundingRect(2,2,w,h,Qt::AlignLeft|Qt::AlignTop,text);
-    r.setWidth(QMAX(r.width(),r.height()));
-    r.setHeight(QMAX(r.width(),r.height()));
+    r.setWidth(qMax(r.width(),r.height()));
+    r.setHeight(qMax(r.width(),r.height()));
     p.fillRect(r, QColor(0, 80, 0));
     p.setPen(Qt::white);
     QFont f(font());
