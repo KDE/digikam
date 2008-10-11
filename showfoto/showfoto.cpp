@@ -1090,20 +1090,20 @@ void ShowFoto::slotDeleteCurrentItem()
         }
         else
         {
-            KIO::Job* job = KIO::del( urlCurrent );
-            connect( job, SIGNAL(result( KIO::Job* )),
-                     this, SLOT(slotDeleteCurrentItemResult( KIO::Job*)) );
+            KIO::Job* job = KIO::del(urlCurrent);
+            connect(job, SIGNAL(result( KJob* )),
+                    this, SLOT(slotDeleteCurrentItemResult( KJob*)) );
         }
     }
     else
     {
-        KIO::Job* job = KIO::trash( urlCurrent );
-        connect( job, SIGNAL(result( KIO::Job* )),
-                 this, SLOT(slotDeleteCurrentItemResult( KIO::Job*)) );
+        KIO::Job* job = KIO::trash(urlCurrent);
+        connect(job, SIGNAL(result( KJob* )),
+                this, SLOT(slotDeleteCurrentItemResult( KJob*)) );
     }
 }
 
-void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
+void ShowFoto::slotDeleteCurrentItemResult( KJob * job )
 {
     if (job->error() != 0)
     {

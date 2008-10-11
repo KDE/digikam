@@ -35,10 +35,7 @@
 
 #include "editorwindow.h"
 
-namespace KIO
-{
-class Job;
-}
+class KJob;
 
 namespace Digikam
 {
@@ -113,7 +110,7 @@ private slots:
     void slotUndoStateChanged(bool, bool, bool);
     void slotUpdateItemInfo();
 
-    void slotDeleteCurrentItemResult( KIO::Job * job );
+    void slotDeleteCurrentItemResult( KJob * job );
 
     void slotLoadingStarted(const QString &filename);
     void slotLoadingFinished(const QString &filename, bool success);
