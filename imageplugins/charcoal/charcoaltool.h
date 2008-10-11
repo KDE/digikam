@@ -76,6 +76,6 @@ private:
     Digikam::EditorToolSettings *m_gboxSettings;
 };
 
-}  // NameSpace DigikamCharcoalImagesPlugin
+}  // namespace DigikamCharcoalImagesPlugin
 
 #endif /* CHARCOALTOOL_H */

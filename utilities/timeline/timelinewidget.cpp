@@ -1704,7 +1704,7 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool &isOnSelection
 QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber)
 {
     // Search the first day of first week of year.
-    // We start to scan from 1st december of year-1 because
+    // We start to scan from 1st December of year-1 because
     // first week of year OR last week of year-1 can be shared
     // between year-1 and year.
     QDateTime d1(QDate(year-1, 12, 1));
@@ -1735,4 +1735,4 @@ void TimeLineWidget::slotThemeChanged()
     update();
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

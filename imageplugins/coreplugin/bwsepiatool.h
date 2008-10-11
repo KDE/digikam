@@ -161,6 +161,6 @@ private:
     PreviewPixmapFactory         *m_previewPixmapFactory;
 };
 
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore
 
 #endif /* BWSEPIATOOL_H */

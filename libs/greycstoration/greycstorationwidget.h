@@ -64,6 +64,6 @@ private:
     GreycstorationWidgetPriv* d;
 };
 
-} // NameSpace Digikam
+} // namespace Digikam
 
 #endif /* GREYCSTORATION_WIDGET_H */

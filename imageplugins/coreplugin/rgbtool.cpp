@@ -357,5 +357,5 @@ void RGBTool::finalRendering()
     kapp->restoreOverrideCursor();
 }
 
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore
 

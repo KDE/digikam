@@ -58,6 +58,6 @@ private:
     
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
     
 #endif /* COLORMODIFIER_H */

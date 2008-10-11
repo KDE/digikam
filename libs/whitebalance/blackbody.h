@@ -534,6 +534,6 @@ static const float blackBodyWhiteBalance[][3] =
     /*    7000 */ { 0.5677, 0.9766, 1.0000 }, 
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* BLACKBODY_H */

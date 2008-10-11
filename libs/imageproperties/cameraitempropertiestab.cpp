@@ -565,4 +565,4 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
     d->labelPhotoWhiteBalance->setText(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

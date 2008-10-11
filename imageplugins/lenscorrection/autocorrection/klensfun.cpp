@@ -636,4 +636,4 @@ void KLensFunFilter::filterImage()
     m_lfModifier->Destroy();
 }
 
-}  // NameSpace DigikamAutoCorrectionImagesPlugin
+}  // namespace DigikamAutoCorrectionImagesPlugin

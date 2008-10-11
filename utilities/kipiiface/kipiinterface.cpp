@@ -168,7 +168,7 @@ int KipiInterface::features() const
 
 bool KipiInterface::addImage( const KUrl& url, QString& errmsg )
 {
-    // Nota : All copy/move operations are processed by the plugins.
+    // Note : All copy/move operations are processed by the plugins.
 
     if ( url.isValid() == false )
     {

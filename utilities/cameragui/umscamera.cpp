@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-// C Ansi includes.
+// C ANSI includes.
 
 extern "C"
 {
@@ -128,7 +128,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
 
     const QFileInfoList list = dir.entryInfoList();
     if (list.isEmpty())
-        return true;        // Nothing todo.
+        return true;        // Nothing to do.
 
     QFileInfoList::const_iterator fi;
 
@@ -152,7 +152,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
                 {
                     KFileMetaInfo meta(fi->filePath());
 
-#warning "TODO: kde4 port it";
+#warning "TODO: KDE4 port it";
                     /* TODO: KDE4PORT: KFileMetaInfo API as Changed.
                              Check if new method to search "Dimensions" information is enough.
 
@@ -211,7 +211,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
     // THM files: try to get thumbnail from '.thm' files if we didn't manage to get
     // thumbnail from Exif. Any cameras provides *.thm files like JPEG files with RAW files.
     // Using this way is always speed up than ultimate loading using DImg.
-    // Nota: the thumbnail extracted with this method can be in poor quality.
+    // Note: the thumbnail extracted with this method can be in poor quality.
     // 2006/27/01 - Gilles - Tested with my Minolta Dynax 5D USM camera.
 
     QFileInfo fi(folder + QString("/") + itemName);
@@ -228,7 +228,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
     }
 
 
-    // Finaly, we trying to get thumbnail using DImg API (slow).
+    // Finally, we trying to get thumbnail using DImg API (slow).
 
     DImg dimgThumb(QFile::encodeName(folder + QString("/") + itemName));
 
@@ -421,7 +421,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
             {
                 KFileMetaInfo meta(fi.filePath());
 
-#warning "TODO: kde4 port it";
+#warning "TODO: KDE4 port it";
                 /* TODO: KDE4PORT: KFileMetaInfo API as Changed.
                          Check if new method to search "Dimensions" information is enough.
 

@@ -519,4 +519,4 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformations(const KUrl& url)
     }
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

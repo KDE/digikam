@@ -103,6 +103,6 @@ private:
     ImageHistogramPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* IMAGEHISTOGRAM_H */

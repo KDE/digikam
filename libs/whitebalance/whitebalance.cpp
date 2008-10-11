@@ -383,4 +383,4 @@ unsigned short WhiteBalance::pixelColor(int colorMult, int index, int value)
                                   0, (int)(d->rgbMax-1)) );
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

@@ -87,6 +87,6 @@ private:
     Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
-}  // NameSpace DigikamNoiseReductionImagesPlugin
+}  // namespace DigikamNoiseReductionImagesPlugin
 
 #endif /* NOISEREDUCTIONTOOL_H */

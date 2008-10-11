@@ -186,6 +186,6 @@ private:  // Internal filter methods.
 
 };
 
-}  // NameSpace DigikamBlurFXImagesPlugin
+}  // namespace DigikamBlurFXImagesPlugin
 
 #endif /* BLURFX_H */

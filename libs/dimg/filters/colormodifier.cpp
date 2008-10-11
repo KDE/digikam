@@ -284,4 +284,4 @@ void ColorModifier::adjustRGB(double r, double g, double b, double a, bool sixte
     }
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

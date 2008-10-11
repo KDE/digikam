@@ -76,6 +76,6 @@ private:
 
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* TEXTURE_H */

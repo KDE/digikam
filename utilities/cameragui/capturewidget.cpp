@@ -117,4 +117,4 @@ void CaptureWidget::resizeEvent(QResizeEvent *)
     blockSignals(false);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

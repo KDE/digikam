@@ -487,4 +487,4 @@ void Texture::buildImage()
     d->pixmap = QPixmap::fromImage(image);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

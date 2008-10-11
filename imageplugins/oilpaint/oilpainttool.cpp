@@ -192,4 +192,4 @@ void OilPaintTool::putFinalData()
     iface.putOriginalImage(i18n("Oil Paint"), filter()->getTargetImage().bits());
 }
 
-}  // NameSpace DigikamOilPaintImagesPlugin
+}  // namespace DigikamOilPaintImagesPlugin

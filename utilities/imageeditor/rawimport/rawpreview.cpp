@@ -337,4 +337,4 @@ void RawPreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
     p.end();
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

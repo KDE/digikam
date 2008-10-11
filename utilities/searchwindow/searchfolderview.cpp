@@ -157,7 +157,7 @@ void SearchFolderView::slotTextSearchFilterChanged(const QString& filter)
 
         SearchFolderItem* viewItem = (SearchFolderItem*) salbum->extraData(this);
 
-        // Check if a special url query exist to identify a SAlbum dedicaced to Date Search
+        // Check if a special url query exist to identify a SAlbum dedicated to Date Search
         // used with TimeLine.
         KUrl url = salbum->databaseUrl();
 

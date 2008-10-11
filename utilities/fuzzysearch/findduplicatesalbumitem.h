@@ -62,6 +62,6 @@ private:
     ImageInfo  m_refImgInfo;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* FINDDUPLICATESALBUMITEM_H */

@@ -93,6 +93,6 @@ private:
     QList<HotPixel> m_hpList;
 };
 
-}  // NameSpace DigikamHotPixelsImagesPlugin
+}  // namespace DigikamHotPixelsImagesPlugin
 
 #endif  // HOTPIXELFIXER_H

@@ -113,6 +113,6 @@ private:
     FuzzySearchViewPriv *d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* FUZZYSEARCHVIEW_H */

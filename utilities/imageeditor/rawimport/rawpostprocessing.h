@@ -58,6 +58,6 @@ private:
     DRawDecoding m_customRawSettings;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* RAWPOSTPROCESSING_H */

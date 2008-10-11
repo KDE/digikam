@@ -92,6 +92,6 @@ private:  // Gaussian blur filter methods.
     };
 };    
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* DIMGGAUSSIAN_BLUR_H */

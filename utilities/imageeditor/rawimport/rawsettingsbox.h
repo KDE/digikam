@@ -80,6 +80,6 @@ private:
     RawSettingsBoxPriv *d;
 };
 
-} // NameSpace Digikam
+} // namespace Digikam
 
 #endif // RAWSETTINGSBOX_H

@@ -65,6 +65,6 @@ private:
     CaptureWidgetPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* CAPTUREWIDGET_H */

@@ -544,7 +544,7 @@ void FuzzySearchView::setActive(bool val)
         {
             QString msg = i18n("Image fingerprints have not yet been generated for your collection. "
                                "The Fuzzy Search Tools will not be operational "
-                               "without pregenerated fingerprints.\n"
+                               "without pre-generated fingerprints.\n"
                                "Do you want to build fingerprints now?\n"
                                "Note: This process can take a while. You can run it "
                                "any time later using 'Tools/Rebuild all FingerPrints'");
@@ -961,4 +961,4 @@ void FuzzySearchView::slotSaveImageSAlbum()
     createNewFuzzySearchAlbumFromImage(name);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

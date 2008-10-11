@@ -114,6 +114,6 @@ private:
     ImagePreviewViewPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* IMAGEPREVIEWVIEW_H */

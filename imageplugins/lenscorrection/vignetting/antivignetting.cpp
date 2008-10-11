@@ -146,4 +146,4 @@ void AntiVignetting::filterImage()
     delete [] ldens;
 }
 
-}  // NameSpace DigikamAntiVignettingImagesPlugin
+}  // namespace DigikamAntiVignettingImagesPlugin

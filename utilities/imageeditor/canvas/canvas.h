@@ -102,7 +102,7 @@ public:
     QRect  getSelectedArea();
 
     // If current image file format is only available in read only,
-    // typicially all RAW image file formats.
+    // typically all RAW image file formats.
     bool  isReadOnly();
 
     void  resizeImage(int w, int h);

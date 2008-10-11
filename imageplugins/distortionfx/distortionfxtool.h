@@ -89,6 +89,6 @@ private:
     Digikam::EditorToolSettings *m_gboxSettings;
 };
 
-}  // NameSpace DigikamDistortionFXImagesPlugin
+}  // namespace DigikamDistortionFXImagesPlugin
 
 #endif /* DISTORTIONFXTOOL_H */

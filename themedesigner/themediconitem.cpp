@@ -192,4 +192,4 @@ void ThemedIconItem::paintItem()
     p2.end();
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

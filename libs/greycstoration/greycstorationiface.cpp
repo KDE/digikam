@@ -469,4 +469,4 @@ void GreycstorationIface::iterationLoop(uint iter)
     usleep(100000);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

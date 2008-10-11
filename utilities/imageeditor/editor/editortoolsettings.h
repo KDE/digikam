@@ -119,6 +119,6 @@ private:
     EditorToolSettingsPriv *d;
 };
 
-} // NameSpace Digikam
+} // namespace Digikam
 
 #endif // EDITORTOOLSETTINGS_H

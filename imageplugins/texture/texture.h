@@ -57,6 +57,6 @@ private:
     QString m_texturePath;
 };
 
-}  // NameSpace DigikamTextureImagesPlugin
+}  // namespace DigikamTextureImagesPlugin
 
 #endif /* TEXTURE_H */

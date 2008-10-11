@@ -171,7 +171,7 @@ public:
 
     ChoiceSearchComboBox(QWidget *parent = 0);
 
-    /** Sets the model and intializes the widget.
+    /** Sets the model and initializes the widget.
      *  Can only be called once for a widget. */
     void setModel(ChoiceSearchModel *model);
     /** Updates the text on the line edit area */

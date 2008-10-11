@@ -249,4 +249,4 @@ void DProgressDlg::setActionListVSBarVisible(bool visible)
         d->actionsList->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

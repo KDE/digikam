@@ -206,7 +206,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     d->gammaInput->setDecimals(2);
     d->gammaInput->setRange(0.1, 3.0, 0.01);
     d->gammaInput->setDefaultValue(1.0);
-    d->gammaInput->input()->setWhatsThis(i18n("Set here the gamma adjustement of the image"));
+    d->gammaInput->input()->setWhatsThis(i18n("Set here the gamma adjustment of the image"));
 
     d->saturationLabel = new QLabel(i18n("Saturation:"), d->advExposureBox);
     d->saturationInput = new RDoubleNumInput(d->advExposureBox);
@@ -557,4 +557,4 @@ DRawDecoding RawSettingsBox::settings()
     return settings;
 }
 
-} // NameSpace Digikam
+} // namespace Digikam

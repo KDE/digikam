@@ -119,6 +119,6 @@ private:
     Theme              *m_theme;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif // MAINWINDOW_H

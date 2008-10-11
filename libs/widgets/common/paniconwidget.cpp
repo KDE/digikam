@@ -322,4 +322,4 @@ void PanIconWidget::slotFlickerTimer()
     update();
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

@@ -87,6 +87,6 @@ private:
     Digikam::EditorToolSettings *m_gboxSettings;
 };
 
-}  // NameSpace DigikamBlurFXImagesPlugin
+}  // namespace DigikamBlurFXImagesPlugin
 
 #endif /* BLURFXTOOL_H */

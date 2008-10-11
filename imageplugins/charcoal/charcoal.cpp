@@ -244,4 +244,4 @@ int Charcoal::getOptimalKernelWidth(double radius, double sigma)
     return((int)kernelWidth-2);
 }
 
-}  // NameSpace DigikamCharcoalImagesPlugin
+}  // namespace DigikamCharcoalImagesPlugin

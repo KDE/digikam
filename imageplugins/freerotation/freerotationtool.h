@@ -90,6 +90,6 @@ private:
     Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
-}  // NameSpace DigikamFreeRotationImagesPlugin
+}  // namespace DigikamFreeRotationImagesPlugin
 
 #endif /* FREEROTATIONTOOL_H */

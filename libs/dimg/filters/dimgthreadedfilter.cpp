@@ -162,4 +162,4 @@ int DImgThreadedFilter::modulateProgress(int progress)
     return m_progressBegin + (int)((double)progress * (double)m_progressSpan / 100.0);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

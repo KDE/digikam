@@ -850,4 +850,4 @@ void TIFFLoader::tiffSetExifDataTag(TIFF* tif, ttag_t tiffTag,
     }
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

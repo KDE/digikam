@@ -300,7 +300,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
         d->height     = d->origHeight;
         valRet        = true;
 
-        // Raw files are already rotated properlly by dcraw. Only perform auto-rotation with JPEG/PNG/TIFF file.
+        // Raw files are already rotated properly by dcraw. Only perform auto-rotation with JPEG/PNG/TIFF file.
         // We don't have a feedback from dcraw about auto-rotated RAW file during decoding. Well set transformed
         // flag as well.
 
@@ -330,7 +330,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                         trans.setProfiles(QFile::encodeName(d->cmSettings->inputSetting),
                                           QFile::encodeName(d->cmSettings->workspaceSetting));
 
-                        // NOTE: If Input color profile do not exist, using built-in sRGB intead.
+                        // NOTE: If Input color profile do not exist, using built-in sRGB instead.
                         trans.apply(d->image, fakeProfile, d->cmSettings->renderingSetting,
                                     d->cmSettings->BPCSetting, false,
                                     QFile::exists(d->cmSettings->inputSetting));
@@ -353,7 +353,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                             case QDialog::Accepted:
                                 if (d->parent) d->parent->setCursor( Qt::WaitCursor );
 
-                                // NOTE: If Input color profile do not exist, using built-in sRGB intead.
+                                // NOTE: If Input color profile do not exist, using built-in sRGB instead.
                                 trans.apply(d->image, fakeProfile, d->cmSettings->renderingSetting,
                                             d->cmSettings->BPCSetting, false,
                                             QFile::exists(d->cmSettings->inputSetting));

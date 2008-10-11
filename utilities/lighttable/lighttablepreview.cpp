@@ -767,4 +767,4 @@ void LightTablePreview::drawFrame(QPainter *p)
         qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->baseColor(), lineWidth());
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

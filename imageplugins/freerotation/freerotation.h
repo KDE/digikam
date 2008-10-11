@@ -89,6 +89,6 @@ private:
     QColor m_backgroundColor;
 };    
 
-}  // NameSpace DigikamFreeRotationImagesPlugin
+}  // namespace DigikamFreeRotationImagesPlugin
 
 #endif /* FREE_ROTATION_H */

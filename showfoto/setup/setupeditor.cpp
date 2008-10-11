@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-04-02
- * Description : setup showfoto tab.
+ * Description : setup showFoto tab.
  *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008 by Arnd Baecker <arnd dot baecker at web dot de>

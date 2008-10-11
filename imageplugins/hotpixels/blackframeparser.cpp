@@ -210,4 +210,4 @@ void BlackFrameParser::validateAndConsolidate (HotPixel *a, HotPixel *b)
     a->luminosity = qMax(a->luminosity, b->luminosity);
 }
 
-}  // NameSpace DigikamHotPixelsImagesPlugin
+}  // namespace DigikamHotPixelsImagesPlugin

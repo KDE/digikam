@@ -337,4 +337,4 @@ void ImagePanelWidget::updateSelectionInfo(const QRect& rect)
                                            rect.width(), rect.height()));
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

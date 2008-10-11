@@ -181,6 +181,6 @@ private:
     KLensFun            *m_klf;
 };
 
-}  // NameSpace DigikamAutoCorrectionImagesPlugin
+}  // namespace DigikamAutoCorrectionImagesPlugin
 
 #endif /* KLENSFUN_H */

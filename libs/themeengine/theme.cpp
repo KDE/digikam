@@ -182,4 +182,4 @@ void Theme::print()
     */
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

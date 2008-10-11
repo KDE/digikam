@@ -1177,4 +1177,4 @@ QString ThumbBarToolTip::breakString(const QString& input) const
     return br;
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

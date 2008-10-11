@@ -62,6 +62,6 @@ private:
     CameraItemPropertiesTabPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* CAMERAITEMPROPERTIESTAB_H */

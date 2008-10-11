@@ -88,6 +88,6 @@ private:
     Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
-}  // NameSpace DigikamShearToolImagesPlugin
+}  // namespace DigikamShearToolImagesPlugin
 
 #endif /* SHEARTOOL_H */

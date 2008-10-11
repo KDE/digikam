@@ -58,6 +58,6 @@ private:
     double m_brighten;
 };
 
-}  // NameSpace DigikamLensDistortionImagesPlugin
+}  // namespace DigikamLensDistortionImagesPlugin
 
 #endif /* LENS_DISTORTION_H */

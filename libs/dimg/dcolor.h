@@ -142,7 +142,7 @@ public:
     void blendClamp16();
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 
 // Inline methods

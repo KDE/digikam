@@ -58,4 +58,4 @@ ICCProfileInfoDlg::~ICCProfileInfoDlg()
 {
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

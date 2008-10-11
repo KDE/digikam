@@ -90,6 +90,6 @@ private:
     Digikam::EditorToolSettings *m_gboxSettings;
 };
 
-}  // NameSpace DigikamPerspectiveImagesPlugin
+}  // namespace DigikamPerspectiveImagesPlugin
 
 #endif /* PERSPECTIVETOOL_H */

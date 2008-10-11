@@ -107,6 +107,6 @@ private:
     Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
-}  // NameSpace DigikamColorFXImagesPlugin
+}  // namespace DigikamColorFXImagesPlugin
 
 #endif /* COLORFXTOOL_H */

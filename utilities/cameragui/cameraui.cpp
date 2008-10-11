@@ -730,7 +730,7 @@ QString CameraUI::cameraTitle() const
 void CameraUI::slotCancelButton()
 {
     d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
-                                          i18n("Cancelling current operation, please wait..."));
+                                          i18n("Canceling current operation, please wait..."));
     d->controller->slotCancel();
     d->currentlyDeleting.clear();
     refreshFreeSpace();
@@ -793,7 +793,7 @@ bool CameraUI::dialogClosed()
 
 void CameraUI::finishDialog()
 {
-    // Look if an item have been downloaded to computer during camera gui session.
+    // Look if an item have been downloaded to computer during camera GUI session.
     // If yes, update the lastAccess date property of camera in digiKam camera list.
 
     if (d->view->itemsDownloaded() > 0)
@@ -1052,7 +1052,7 @@ void CameraUI::slotUpload()
     // All Images from list must been always the first entry given by KDE API
     QString allPictures = patternList[0];
 
-    // Add RAW file format to All Images" type mime and remplace current.
+    // Add RAW file format to All Images" type mime and replace current.
 #if KDCRAW_VERSION < 0x000400
     allPictures.insert(allPictures.indexOf("|"), QString(KDcrawIface::DcrawBinary::instance()->rawFiles()));
 #else
@@ -1062,7 +1062,7 @@ void CameraUI::slotUpload()
     patternList.prepend(allPictures);
 
     // Added RAW file formats supported by dcraw program like a type mime.
-    // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete
+    // Note: we cannot use here "image/x-raw" type mime from KDE because it incomplete
     // or unavailable(dcraw_0)(see file #121242 in B.K.O).
 #if KDCRAW_VERSION < 0x000400
     patternList.append(QString("\n%1|Camera RAW files").arg(QString(KDcrawIface::DcrawBinary::instance()->rawFiles())));
@@ -1327,7 +1327,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
         if (d->autoAlbumExtCheck->isChecked())
         {
             // We use the target file name to compute sub-albums name to take a care about
-            // convertion on the fly option.
+            // conversion on the fly option.
             QFileInfo fi(downloadName);
 
             QString subAlbum = fi.suffix().toUpper();
@@ -1524,7 +1524,7 @@ void CameraUI::slotDeleteSelected()
         {
             d->controller->deleteFile(*itFolder, *itFile);
             // the currentlyDeleting list is used to prevent loading items which
-            // will immenently be deleted into the sidebar and wasting time
+            // will immanently be deleted into the sidebar and wasting time
             d->currentlyDeleting.append(*itFolder + *itFile);
         }
     }

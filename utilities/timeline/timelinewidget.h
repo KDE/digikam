@@ -154,6 +154,6 @@ private:
     TimeLineWidgetPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif // TIMELINEWIDGET_H

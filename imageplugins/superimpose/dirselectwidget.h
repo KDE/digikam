@@ -72,6 +72,6 @@ private:
     Private* d;
 };
 
-}  // NameSpace DigikamSuperImposeImagesPlugin
+}  // namespace DigikamSuperImposeImagesPlugin
 
 #endif /* DIRSELECTWIDGET_H */

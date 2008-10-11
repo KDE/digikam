@@ -81,6 +81,6 @@ private:
     ImagePropertiesSideBarCamGuiPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif  // IMAGEPROPERTIESSIDEBARCAMGUI_H

@@ -107,7 +107,7 @@ public:
 
 signals:
 
-    // Dumy signals to prevent Qt warnings on the console.
+    // Dummy signals to prevent Qt warnings on the console.
 
     void signalNewSelectionFromMap();
     void signalSetNewMapSelection(const QList<double>&);

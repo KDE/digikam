@@ -124,4 +124,4 @@ void Emboss::embossImage(Digikam::DImg *orgImage, Digikam::DImg *destImage, int 
     }
 }
 
-}  // NameSpace DigikamEmbossImagesPlugin
+}  // namespace DigikamEmbossImagesPlugin

@@ -81,6 +81,6 @@ private:
     TimeLineViewPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* TIMELINEVIEW_H */

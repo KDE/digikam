@@ -136,4 +136,4 @@ void RawPostProcessing::rawPostProcessing()
     postProgress(100);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

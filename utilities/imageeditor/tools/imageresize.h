@@ -83,6 +83,6 @@ private:
     ImageResizePriv *d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* IMAGE_RESIZE_H */

@@ -153,6 +153,6 @@ private:
     Digikam::ImageIface *m_iface;
 };
 
-}  // NameSpace DigikamInsertTextImagesPlugin
+}  // namespace DigikamInsertTextImagesPlugin
 
 #endif /* INSERTTEXTWIDGET_H */

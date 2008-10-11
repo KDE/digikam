@@ -326,4 +326,4 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
     delete [] Kernel;
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

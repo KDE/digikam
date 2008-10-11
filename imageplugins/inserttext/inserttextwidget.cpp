@@ -625,4 +625,4 @@ void InsertTextWidget::mouseMoveEvent ( QMouseEvent * e )
     }
 }
 
-}  // NameSpace DigikamInsertTextImagesPlugin
+}  // namespace DigikamInsertTextImagesPlugin

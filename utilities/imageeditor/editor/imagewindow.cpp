@@ -251,7 +251,7 @@ void ImageWindow::closeEvent(QCloseEvent* e)
 
 bool ImageWindow::queryClose()
 {
-    // Note: we reimplement closeEvent above for this window.
+    // Note: we re-implement closeEvent above for this window.
     // Additionally, queryClose is called from DigikamApp.
 
     // wait if a save operation is currently running
@@ -984,7 +984,7 @@ void ImageWindow::saveAsIsComplete()
 
 bool ImageWindow::save()
 {
-    // Sanity check. Just to be homogenous with SaveAs.
+    // Sanity check. Just to be homogeneous with SaveAs.
     if (!d->imageInfoCurrent.isNull())
     {
         // Write metadata from database to DImg

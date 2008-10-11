@@ -1142,4 +1142,4 @@ bool ThemeEngine::saveTheme()
     return true;
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

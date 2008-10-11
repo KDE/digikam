@@ -419,4 +419,4 @@ void InPaintingTool::slotSaveAsSettings()
     file.close();
 }
 
-}  // NameSpace DigikamInPaintingImagesPlugin
+}  // namespace DigikamInPaintingImagesPlugin

@@ -80,6 +80,6 @@ private:
     DRawDecoding        m_customRawSettings;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* RAWLOADER_H */

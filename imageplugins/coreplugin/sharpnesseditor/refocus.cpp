@@ -198,4 +198,4 @@ void Refocus::convolveImage(uchar *orgData, uchar *destData, int width, int heig
         }
 }
 
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore

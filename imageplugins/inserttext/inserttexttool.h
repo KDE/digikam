@@ -98,6 +98,6 @@ private:
     Digikam::EditorToolSettings *m_gboxSettings;
 };
 
-}  // NameSpace DigikamInsertTextImagesPlugin
+}  // namespace DigikamInsertTextImagesPlugin
 
 #endif /* INSERTTEXTTOOL_H */

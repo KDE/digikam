@@ -652,4 +652,4 @@ bool LightTableBarItem::isOnRightPanel() const
     return d->onRightPanel;
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

@@ -394,4 +394,4 @@ void DistortionFXTool::putFinalData(void)
                            filter()->getTargetImage().bits());
 }
 
-}  // NameSpace DigikamDistortionFXImagesPlugin
+}  // namespace DigikamDistortionFXImagesPlugin

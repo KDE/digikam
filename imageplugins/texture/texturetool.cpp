@@ -295,4 +295,4 @@ QString TextureTool::getTexturePath(int texture)
     return (KStandardDirs::locate("data", QString("digikam/data/") + pattern + QString(".png")));
 }
 
-}  // NameSpace DigikamTextureImagesPlugin
+}  // namespace DigikamTextureImagesPlugin

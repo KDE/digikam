@@ -106,6 +106,6 @@ private:
     ImageCurvesPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* IMAGECURVES_H */

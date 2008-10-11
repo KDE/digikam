@@ -75,6 +75,6 @@ public:
     QMap<QString, QString>  embeddedText;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* DIMGPRIVATE_H */

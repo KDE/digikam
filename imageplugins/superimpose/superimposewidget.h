@@ -109,6 +109,6 @@ private:
     Digikam::DImg  m_templateScaled;    // Template scaled to preview widget
 };
 
-}  // NameSpace DigikamSuperImposeImagesPlugin
+}  // namespace DigikamSuperImposeImagesPlugin
 
 #endif /* SUPERIMPOSEWIDGET_H */

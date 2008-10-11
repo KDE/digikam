@@ -93,6 +93,6 @@ private:
     LoadSaveThread *m_imageLoaderThread;
 };
 
-}  // NameSpace DigikamHotPixelsImagesPlugin
+}  // namespace DigikamHotPixelsImagesPlugin
 
 #endif // BLACKFRAMEPARSER_H

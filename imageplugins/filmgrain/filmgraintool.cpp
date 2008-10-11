@@ -198,4 +198,4 @@ void FilmGrainTool::putFinalData()
     iface.putOriginalImage(i18n("Film Grain"), filter()->getTargetImage().bits());
 }
 
-}  // NameSpace DigikamFilmGrainImagesPlugin
+}  // namespace DigikamFilmGrainImagesPlugin

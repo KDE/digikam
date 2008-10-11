@@ -198,4 +198,4 @@ void ColorCorrectionDlg::slotApplyClicked()
     done(-1);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

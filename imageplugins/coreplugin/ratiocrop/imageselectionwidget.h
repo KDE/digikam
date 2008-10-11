@@ -169,6 +169,6 @@ private:
     ImageSelectionWidgetPriv* d;
 };
 
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore
 
 #endif /* IMAGESELECTIONWIDGET_H */

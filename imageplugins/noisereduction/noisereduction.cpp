@@ -809,4 +809,4 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
     }
 }
 
-}  // NameSpace DigikamNoiseReductionImagesPlugin
+}  // namespace DigikamNoiseReductionImagesPlugin

@@ -209,4 +209,4 @@ void FilmGrain::filmgrainImage(Digikam::DImg *orgImage, int Sensibility)
     delete composer;
 }
 
-}  // NameSpace DigikamFilmGrainImagesPlugin
+}  // namespace DigikamFilmGrainImagesPlugin

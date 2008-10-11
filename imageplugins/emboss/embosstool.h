@@ -76,6 +76,6 @@ private:
     Digikam::EditorToolSettings *m_gboxSettings;
 };
 
-}  // NameSpace DigikamEmbossImagesPlugin
+}  // namespace DigikamEmbossImagesPlugin
 
 #endif /* EMBOSSTOOL_H */

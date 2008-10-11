@@ -558,7 +558,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
     d->workProfilesKC->insertSqueezedList(d->workICCPath.keys(), 0);
     if (d->workICCPath.keys().isEmpty())
     {
-        // If there is no workspace icc profiles available,
+        // If there is no workspace ICC profiles available,
         // the CM is broken and cannot be used.
         d->mainDialog->enableButtonOk(false);
         return;
@@ -677,7 +677,7 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
                     }
                     default:
                     {
-                        kDebug(50003) << "ICC file: " << fileName << " ==> UNKNOW device class ("
+                        kDebug(50003) << "ICC file: " << fileName << " ==> UNKNOWN device class ("
                                  << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                         break;
                     }

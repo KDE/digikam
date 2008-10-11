@@ -260,4 +260,4 @@ void FreeRotation::filterImage(void)
     }
 }
 
-}  // NameSpace DigikamFreeRotationImagesPlugin
+}  // namespace DigikamFreeRotationImagesPlugin

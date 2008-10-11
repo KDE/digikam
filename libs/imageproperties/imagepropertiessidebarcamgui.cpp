@@ -185,4 +185,4 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
     unsetCursor();
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

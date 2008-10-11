@@ -2123,5 +2123,5 @@ int dow,              // destination scanline width
 int sow);             // src scanline width
 */
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 

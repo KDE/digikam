@@ -1388,4 +1388,4 @@ bool DMetadata::setXMLImageProperties(const QString& comments, const QDateTime& 
     return (setIptcTagData("Iptc.Application2.0x00ff", compressedData));
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

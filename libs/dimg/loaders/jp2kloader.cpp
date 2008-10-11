@@ -713,4 +713,4 @@ bool JP2KLoader::sixteenBit() const
     return m_sixteenBit;
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

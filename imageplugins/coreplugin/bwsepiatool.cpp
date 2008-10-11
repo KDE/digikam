@@ -1109,4 +1109,4 @@ void BWSepiaTool::slotSaveAsSettings()
     file.close();
 }
 
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore

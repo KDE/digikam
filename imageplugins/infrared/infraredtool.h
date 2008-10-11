@@ -80,6 +80,6 @@ private:
     Digikam::EditorToolSettings *m_gboxSettings;
 };
 
-}  // NameSpace DigikamInfraredImagesPlugin
+}  // namespace DigikamInfraredImagesPlugin
 
 #endif /* INFRAREDTOOL_H */

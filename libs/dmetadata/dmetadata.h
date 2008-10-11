@@ -121,6 +121,6 @@ private:
     QVariant fromIptcEmulateLangAlt(const char *iptcTagName) const;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* DMETADATA_H */

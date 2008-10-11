@@ -55,6 +55,6 @@ private:
     RawCameraDlgPriv *d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif  // RAWCAMERADLG_H

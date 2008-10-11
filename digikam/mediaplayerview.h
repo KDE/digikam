@@ -70,6 +70,6 @@ private:
     MediaPlayerViewPriv *d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* MEDIAPLAYERVIEW_H */

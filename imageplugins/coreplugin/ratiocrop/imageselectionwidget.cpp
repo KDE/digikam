@@ -629,7 +629,7 @@ void ImageSelectionWidget::applyAspectRatio(bool useHeight, bool repaintWidget)
         }
     }
 
-    // If we change selection size by a corner, re-adjust the oposite corner position.
+    // If we change selection size by a corner, re-adjust the opposite corner position.
     switch(d->currentResizing)
     {
         case ImageSelectionWidgetPriv::ResizingTopLeft:
@@ -825,7 +825,7 @@ void ImageSelectionWidget::updatePixmap()
             if (d->flipHorGoldenGuide)
                 p.scale(-1, 1);
 
-            // Flip verical.
+            // Flip vertical.
             if (d->flipVerGoldenGuide)
                 p.scale(1, -1);
 
@@ -1382,4 +1382,4 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
     }
 }
 
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore

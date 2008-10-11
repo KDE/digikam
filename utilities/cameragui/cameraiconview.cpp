@@ -735,7 +735,7 @@ void CameraIconView::itemsSelectionSizeInfo(unsigned long& fSize, unsigned long&
             {
                 if (d->cameraUI->convertLosslessJpegFiles())
                 {
-                    // Estimated size is aroud 5 x original size when JPEG=>PNG.
+                    // Estimated size is around 5 x original size when JPEG=>PNG.
                     dSize += iconItem->itemInfo()->size*5;
                 }
                 else if (d->cameraUI->autoRotateJpegFiles())

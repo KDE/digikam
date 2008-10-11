@@ -94,6 +94,6 @@ private:
     Digikam::EditorToolSettings   *m_gboxSettings;
 };
 
-}  // NameSpace DigikamRestorationImagesPlugin
+}  // namespace DigikamRestorationImagesPlugin
 
 #endif /* RESTORATIONTOOL_H */

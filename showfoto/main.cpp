@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-11-22
- * Description : showfoto is a stand alone version of image
+ * Description : showFoto is a stand alone version of image
  *               editor with no support of digiKam database.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 {
     KAboutData aboutData("showfoto", 0,
                          ki18n("showFoto"),
-                         digiKamVersion().toAscii(),  // NOTE: showfoto version = digiKam version
+                         digiKamVersion().toAscii(),  // NOTE: showFoto version = digiKam version
                          Digikam::digiKamSlogan(),
                          KAboutData::License_GPL,
                          Digikam::copyright(),

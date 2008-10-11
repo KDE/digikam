@@ -203,4 +203,4 @@ void ImagePanIconWidget::slotSeparateViewToggled(int t)
     update();
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

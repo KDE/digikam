@@ -274,4 +274,4 @@ void SuperImposeTool::finalRendering()
     m_thumbnailsBar->setEnabled(true);
 }
 
-}  // NameSpace DigikamSuperImposeImagesPlugin
+}  // namespace DigikamSuperImposeImagesPlugin

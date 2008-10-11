@@ -106,6 +106,6 @@ private:
     ImagePropertiesSideBarDBPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif  // IMAGEPROPERTIESSIDEBARDB_H

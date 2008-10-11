@@ -469,4 +469,4 @@ void ImageRegionWidget::contentsWheelEvent(QWheelEvent *e)
     }
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

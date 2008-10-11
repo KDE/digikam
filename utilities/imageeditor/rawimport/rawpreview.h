@@ -104,6 +104,6 @@ private:
     RawPreviewPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* RAWPREVIEW_H */

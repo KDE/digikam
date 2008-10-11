@@ -76,6 +76,6 @@ private:
     Digikam::EditorToolSettings *m_gboxSettings;
 };
 
-}  // NameSpace DigikamOilPaintImagesPlugin
+}  // namespace DigikamOilPaintImagesPlugin
 
 #endif /* OILPAINTTOOL_H */

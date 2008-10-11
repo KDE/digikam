@@ -611,5 +611,5 @@ inline int ColorFXTool::Lim_Max(int Now, int Up, int Max)
     return (Up);
 }
 
-}  // NameSpace DigikamColorFXImagesPlugin
+}  // namespace DigikamColorFXImagesPlugin
 

@@ -60,6 +60,6 @@ private:
     bool m_hasAlpha;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* JP2KLOADER_H */

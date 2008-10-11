@@ -90,6 +90,6 @@ private:
     Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
-}  // NameSpace DigikamLensDistortionImagesPlugin
+}  // namespace DigikamLensDistortionImagesPlugin
 
 #endif /* LENSDISTORTIONTOOL_H */

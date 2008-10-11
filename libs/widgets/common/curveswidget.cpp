@@ -846,4 +846,4 @@ void CurvesWidget::leaveEvent(QEvent*)
    repaint();
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

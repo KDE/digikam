@@ -332,4 +332,4 @@ void ShearTool::renderingFinished()
     kapp->restoreOverrideCursor();
 }
 
-}  // NameSpace DigikamShearToolImagesPlugin
+}  // namespace DigikamShearToolImagesPlugin

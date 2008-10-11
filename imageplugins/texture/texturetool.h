@@ -106,6 +106,6 @@ private:
     Digikam::EditorToolSettings *m_gboxSettings;
 };
 
-}  // NameSpace DigikamTextureImagesPlugin
+}  // namespace DigikamTextureImagesPlugin
 
 #endif /* TEXTURETOOL_H */

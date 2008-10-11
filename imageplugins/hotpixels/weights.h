@@ -87,6 +87,6 @@ private:
     QList <QPoint> mPositions;
 };
 
-}  // NameSpace DigikamHotPixelsImagesPlugin
+}  // namespace DigikamHotPixelsImagesPlugin
 
 #endif  // WEIGHTS_H

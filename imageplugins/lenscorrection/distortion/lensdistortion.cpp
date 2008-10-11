@@ -135,4 +135,4 @@ void LensDistortion::filterImage()
     delete pa;
 }
 
-}  // NameSpace DigikamLensDistortionImagesPlugin
+}  // namespace DigikamLensDistortionImagesPlugin

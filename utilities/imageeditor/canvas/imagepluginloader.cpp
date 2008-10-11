@@ -163,7 +163,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
         }
     }
 
-    // Load all other image plugins after (make a coherant menu construction in Image Editor).
+    // Load all other image plugins after (make a coherent menu construction in Image Editor).
 
     foreach (const QString &name, pluginsToLoad)
     {

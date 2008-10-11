@@ -327,4 +327,4 @@ void ImagePropertiesSideBar::setImagePropertiesInformations(const KUrl& url)
     m_propertiesTab->setPhotoWhiteBalance(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

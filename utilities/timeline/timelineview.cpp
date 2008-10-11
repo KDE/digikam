@@ -582,4 +582,4 @@ void TimeLineView::slotRenameAlbum(SAlbum* salbum)
     AlbumManager::instance()->updateSAlbum(salbum, salbum->query(), name);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

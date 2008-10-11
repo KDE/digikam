@@ -241,7 +241,7 @@ ICCProofTool::ICCProofTool(QObject* parent)
     m_inProfileBG->addButton(m_useEmbeddedProfile, 0);
 
     m_useSRGBDefaultProfile = new QRadioButton(box1);
-    m_useSRGBDefaultProfile->setText(i18n("Use builtin sRGB profile"));
+    m_useSRGBDefaultProfile->setText(i18n("Use built-in sRGB profile"));
     m_useSRGBDefaultProfile->setCheckable(true);
     m_inProfileBG->addButton(m_useSRGBDefaultProfile, 1);
 
@@ -992,7 +992,7 @@ void ICCProofTool::slotInICCInfo()
     }
     else if(useBuiltinProfile())
     {
-        QString message = i18n("<p>You have selected the \"Default builtin sRGB profile\"</p>");
+        QString message = i18n("<p>You have selected the \"Default built-in sRGB profile\"</p>");
         message.append(i18n("<p>This profile is built on the fly, so there is no relevant information "
                             "about it.</p>"));
         KMessageBox::information(kapp->activeWindow(), message);
@@ -1252,4 +1252,4 @@ void ICCProofTool::slotSaveAsSettings()
     file.close();
 }
 
-} // NameSpace DigikamImagesPluginCore
+} // namespace DigikamImagesPluginCore

@@ -365,4 +365,4 @@ void EditorToolSettings::setGuideSize(int size)
     d->guideSize->setValue(size);
 }
 
-} // NameSpace Digikam
+} // namespace Digikam

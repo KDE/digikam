@@ -24,7 +24,7 @@
 #ifndef GPCONFIGDLG_H
 #define GPCONFIGDLG_H
 
-// C Ansi includes.
+// C ANSI includes.
 
 extern "C"
 {

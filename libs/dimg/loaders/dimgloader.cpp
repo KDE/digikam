@@ -260,4 +260,4 @@ QByteArray DImgLoader::uniqueHash(const QString &filePath, const DImg &img, bool
     return QByteArray();
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

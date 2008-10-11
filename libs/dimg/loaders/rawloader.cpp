@@ -370,4 +370,4 @@ void RAWLoader::postProcessing(DImgLoaderObserver *observer)
     if (observer) observer->progressInfo(m_image, 0.98);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

@@ -109,7 +109,7 @@ void FingerPrintsGenerator::slotRebuildFingerPrints()
     setTitle(i18n("Processing..."));
     AlbumList palbumList = AlbumManager::instance()->allPAlbums();
 
-    // Get all digiKam albums collection pictures path, deending of d->rebuildAll flag.
+    // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
 
     if (d->rebuildAll)
     {

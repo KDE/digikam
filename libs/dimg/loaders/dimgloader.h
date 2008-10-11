@@ -111,6 +111,6 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(DImgLoader::LoadFlags)
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* DIMGLOADER_H */

@@ -61,6 +61,6 @@ private:
     LibsInfoDlgPriv *d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif  // LIBSINFODLG_H

@@ -178,7 +178,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     if (KExiv2Iface::KExiv2::supportXmp())
         txt.append(i18n("<p><b><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>"
-                        "XMP</a></b> is a new standard used in digital photography dedicaced to "
+                        "XMP</a></b> is a new standard used in digital photography dedicated to "
                         "replace IPTC.</p>"));
 
     explanation->setText(txt);

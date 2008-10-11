@@ -73,6 +73,6 @@ private:
     bool m_hasAlpha;
 };
     
-}  // NameSpace Digikam
+}  // namespace Digikam
     
 #endif /* PNGLOADER_H */

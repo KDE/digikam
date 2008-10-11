@@ -546,4 +546,4 @@ void RedEyeTool::redEyeFilter(DImg& selection)
                             0, 0);
 }
 
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore

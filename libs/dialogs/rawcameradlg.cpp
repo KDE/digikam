@@ -188,4 +188,4 @@ void RawCameraDlg::slotSearchTextChanged(const QString& filter)
     d->searchBar->slotSearchResult(query);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

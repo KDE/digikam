@@ -107,6 +107,6 @@ private:
     Digikam::EditorToolSettings *m_gboxSettings;
 };
 
-}  // NameSpace DigikamHotPixelsImagesPlugin
+}  // namespace DigikamHotPixelsImagesPlugin
 
 #endif /* HOTPIXELSTOOL_H */

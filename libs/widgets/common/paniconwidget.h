@@ -119,6 +119,6 @@ private:
     PanIconWidgetPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* PANICONWIDGET_H */

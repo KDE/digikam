@@ -53,6 +53,6 @@ private:
     HSLModifierPriv* d;    
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
     
 #endif /* HSLMODIFIER_H */

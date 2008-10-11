@@ -667,4 +667,4 @@ void BorderTool::toggleBorderSlider(bool b)
     m_labelBorderWidth->setEnabled(!b);
 }
 
-}  // NameSpace DigikamBorderImagesPlugin
+}  // namespace DigikamBorderImagesPlugin

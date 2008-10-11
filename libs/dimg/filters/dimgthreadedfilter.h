@@ -157,6 +157,6 @@ protected:
     DImgThreadedFilter *m_master;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* DIMGTHREADEDFILTER_H */

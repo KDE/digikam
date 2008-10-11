@@ -839,4 +839,4 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
     }
 }
 
-}  // NameSpace DigikamPerspectiveImagesPlugin
+}  // namespace DigikamPerspectiveImagesPlugin

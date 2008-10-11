@@ -60,6 +60,6 @@ private:
     HSPreviewWidgetPrivate *d;
 };
 
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore
 
 #endif /* HSPREVIEWWIDGET_H */

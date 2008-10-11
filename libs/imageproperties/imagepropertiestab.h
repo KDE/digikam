@@ -84,6 +84,6 @@ private:
     ImagePropertiesTabPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* IMAGEPROPERTIESTAB_H */

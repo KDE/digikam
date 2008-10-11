@@ -83,7 +83,7 @@ private slots:
 private:
 
     /** Two widgets are embedded in Editor Tool to perform preview with panning and zooming:
-        a PreviewWidget derivated class or ImagePanelWidget. 
+        a PreviewWidget derived class or ImagePanelWidget. 
         This method try to find the right PreviewWidget instance accordingly else return 0.
      */
     PreviewWidget* previewWidget() const;

@@ -199,4 +199,4 @@ void MediaPlayerView::setPreviewMode(int mode)
     setCurrentIndex(mode);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

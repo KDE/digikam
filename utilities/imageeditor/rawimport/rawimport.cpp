@@ -214,4 +214,4 @@ void RawImport::slotCancel()
     EditorTool::slotCancel();
 }
 
-} // NameSpace Digikam
+} // namespace Digikam

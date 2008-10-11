@@ -277,7 +277,7 @@ void GPCamera::cancel()
 bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
 {
 #ifdef ENABLE_GPHOTO2
-    // NOTE: This method depand of libgphoto2 2.4.0
+    // NOTE: This method depends of libgphoto2 2.4.0
 
     int                       nrofsinfos;
     CameraStorageInformation *sinfos;

@@ -635,4 +635,4 @@ void ImageGuideWidget::leaveEvent(QEvent*)
     }
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

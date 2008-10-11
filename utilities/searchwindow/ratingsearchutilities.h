@@ -118,7 +118,7 @@ class RatingComboBoxWidget : public RatingWidget, public RatingStarDrawer
 public:
 
     /// Internal
-    // Subclassing the classic RatingWidget,
+    // Sub-classing the classic RatingWidget,
     // this provides support for the Null and NoRating states.
 
     RatingComboBoxWidget(QWidget *parent = 0);

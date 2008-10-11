@@ -55,6 +55,6 @@ private:  // Infrared filter methods.
 
 };
 
-}  // NameSpace DigikamInfraredImagesPlugin
+}  // namespace DigikamInfraredImagesPlugin
 
 #endif /* INFRARED_H */

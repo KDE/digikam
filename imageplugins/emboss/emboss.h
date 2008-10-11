@@ -70,6 +70,6 @@ private:
     int m_depth;
 };
 
-}  // NameSpace DigikamEmbossImagesPlugin
+}  // namespace DigikamEmbossImagesPlugin
 
 #endif /* EMBOSS_H */

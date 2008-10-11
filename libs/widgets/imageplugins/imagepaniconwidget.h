@@ -69,6 +69,6 @@ private:
     ImagePanIconWidgetPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* IMAGEPANICONWIDGET_H */

@@ -183,4 +183,4 @@ bool PPMLoader::save(const QString& /*filePath*/, DImgLoaderObserver */*observer
     return false;
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

@@ -331,4 +331,4 @@ void FindDuplicatesView::slotDuplicatesAlbumActived(QTreeWidgetItem* item, int)
         AlbumManager::instance()->setCurrentAlbum(sitem->album());
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

@@ -51,6 +51,6 @@ private:
     double m_smooth;
 };    
 
-}  // NameSpace DigikamCharcoalImagesPlugin
+}  // namespace DigikamCharcoalImagesPlugin
 
 #endif /* CHARCOAL_H */

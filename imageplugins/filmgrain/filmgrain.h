@@ -52,6 +52,6 @@ private:
     int m_sensibility;
 };
 
-}  // NameSpace DigikamFilmGrainImagesPlugin
+}  // namespace DigikamFilmGrainImagesPlugin
 
 #endif /* FILMGRAIN_H */

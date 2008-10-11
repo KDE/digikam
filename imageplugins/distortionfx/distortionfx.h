@@ -144,6 +144,6 @@ private:
     int  m_effectType;
 };
 
-}  // NameSpace DigikamDistortionFXImagesPlugin
+}  // namespace DigikamDistortionFXImagesPlugin
 
 #endif /* DISTORTION_FX_H */

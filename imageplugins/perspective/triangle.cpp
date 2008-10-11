@@ -62,4 +62,4 @@ float Triangle::distanceP2P(const QPoint& p1, const QPoint& p2)
                  abs( p2.y()-p1.y() ) * abs( p2.y()-p1.y() ) ));
 }
 
-}  // NameSpace DigikamPerspectiveImagesPlugin
+}  // namespace DigikamPerspectiveImagesPlugin

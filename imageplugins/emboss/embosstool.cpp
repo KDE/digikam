@@ -174,4 +174,4 @@ void EmbossTool::putFinalData()
     iface.putOriginalImage(i18n("Emboss"), filter()->getTargetImage().bits());
 }
 
-}  // NameSpace DigikamEmbossImagesPlugin
+}  // namespace DigikamEmbossImagesPlugin

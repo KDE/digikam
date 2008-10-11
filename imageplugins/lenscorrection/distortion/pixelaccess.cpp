@@ -313,4 +313,4 @@ void PixelAccess::cubicInterpolate(uchar* src, int rowStride, uchar* dst,
     }
 }
 
-}  // NameSpace DigikamLensDistortionImagesPlugin
+}  // namespace DigikamLensDistortionImagesPlugin

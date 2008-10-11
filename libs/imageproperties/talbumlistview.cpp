@@ -446,4 +446,4 @@ void TAlbumListView::slotRefresh(const QMap<int, int>& tagsStatMap)
     refresh();
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

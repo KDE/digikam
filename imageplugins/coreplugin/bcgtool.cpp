@@ -271,4 +271,4 @@ void BCGTool::finalRendering()
     kapp->restoreOverrideCursor();
 }
 
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore

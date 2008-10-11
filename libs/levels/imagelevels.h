@@ -100,6 +100,6 @@ private:
     ImageLevelsPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* IMAGELEVELS_H */

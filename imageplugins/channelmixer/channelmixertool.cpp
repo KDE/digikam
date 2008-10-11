@@ -694,4 +694,4 @@ void ChannelMixerTool::slotSaveAsSettings()
     }
 }
 
-}  // NameSpace DigikamChannelMixerImagesPlugin
+}  // namespace DigikamChannelMixerImagesPlugin

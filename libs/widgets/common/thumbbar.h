@@ -238,6 +238,6 @@ protected:
     virtual QString tipContents(ThumbBarItem*) const;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* THUMBBAR_H */

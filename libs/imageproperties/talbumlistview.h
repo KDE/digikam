@@ -98,6 +98,6 @@ private slots:
     void slotRefresh(const QMap<int, int>&);
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif  // TALBUMLISTVIEW_H

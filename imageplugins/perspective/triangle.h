@@ -52,6 +52,6 @@ private:
     float distanceP2P(const QPoint& p1, const QPoint& p2);
 };
 
-}  // NameSpace DigikamPerspectiveImagesPlugin
+}  // namespace DigikamPerspectiveImagesPlugin
 
 #endif /* TRIANGLE_H */

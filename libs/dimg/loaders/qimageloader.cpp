@@ -158,4 +158,4 @@ bool QImageLoader::hasAlpha() const
     return m_hasAlpha;
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

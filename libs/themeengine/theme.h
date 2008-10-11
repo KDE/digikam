@@ -107,6 +107,6 @@ public:
     QColor   listSelBorderColor;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* THEME_H */

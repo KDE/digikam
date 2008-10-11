@@ -127,6 +127,6 @@ private:
     PreviewWidgetPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* PREVIEWWIDGET_H */

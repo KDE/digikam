@@ -446,7 +446,7 @@ void SearchField::setup(QGridLayout *layout, int line)
 
     // 10px indent
     layout->setColumnMinimumWidth(0, 10);
-    // set stretch for the value widget colums
+    // set stretch for the value widget columns
     layout->setColumnStretch(3, 1);
     layout->setColumnStretch(5, 1);
     // push value widgets to the left

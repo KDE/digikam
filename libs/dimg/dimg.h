@@ -418,6 +418,6 @@ private:
     friend class DImgLoader;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* DIMG_H */

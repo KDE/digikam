@@ -181,4 +181,4 @@ void DirSelectWidget::slotFolderSelected(Q3ListViewItem *)
     emit folderItemSelected(currentUrl());
 }
 
-}   // NameSpace DigikamSuperImposeImagesPlugin
+}   // namespace DigikamSuperImposeImagesPlugin

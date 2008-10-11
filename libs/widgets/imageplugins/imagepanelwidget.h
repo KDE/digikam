@@ -112,6 +112,6 @@ private:
     ImagePanelWidgetPriv *d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* IMAGEPANELWIDGET_H */

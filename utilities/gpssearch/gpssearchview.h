@@ -80,6 +80,6 @@ private:
     GPSSearchViewPriv *d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* FUZZYSEARCHVIEW_H */

@@ -78,6 +78,6 @@ private:
     QSize  m_newSize;
 };
 
-}  // NameSpace DigikamShearToolImagesPlugin
+}  // namespace DigikamShearToolImagesPlugin
 
 #endif /* SHEAR_H */

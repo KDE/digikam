@@ -1450,4 +1450,4 @@ void BlurFX::MakeConvolution (Digikam::DImg *orgImage, Digikam::DImg *destImage,
     delete [] pBlur;
 }
 
-}  // NameSpace DigikamBlurFXImagesPlugin
+}  // namespace DigikamBlurFXImagesPlugin

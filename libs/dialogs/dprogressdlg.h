@@ -83,6 +83,6 @@ protected slots:
     DProgressDlgPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif  // DPROGRESSDLG_H

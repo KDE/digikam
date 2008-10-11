@@ -1769,4 +1769,4 @@ QByteArray getUniqueHash(const QString &filePath)
 }
 
 
-}  // NameSpace Digikam
+}  // namespace Digikam

@@ -555,4 +555,4 @@ void ImagePropertiesTab::setPhotoWhiteBalance(const QString& str)
     d->labelPhotoWhiteBalance->setText(str);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

@@ -477,7 +477,7 @@ void Canvas::resizeEvent(QResizeEvent* e)
     // automatically after resize
 
     // To be sure than corner widget used to pan image will be hide/show
-    // accordinly with resize event.
+    // accordingly with resize event.
     slotZoomChanged(d->zoom);
 }
 
@@ -984,7 +984,7 @@ void Canvas::fitToSelect()
     if (wSel && hSel )
     {
         // If selected area, use center of selection
-        // and recompute zoom factor accordinly.
+        // and recompute zoom factor accordingly.
         double cpx = xSel + wSel / 2.0;
         double cpy = ySel + hSel / 2.0;
 
@@ -1254,7 +1254,7 @@ void Canvas::slotModified()
     viewport()->update();
 
     // To be sure than corner widget used to pan image will be hide/show
-    // accordinly with new image size (if changed).
+    // accordingly with new image size (if changed).
     slotZoomChanged(d->zoom);
 
     emit signalChanged();

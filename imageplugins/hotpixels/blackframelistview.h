@@ -117,6 +117,6 @@ private:
     BlackFrameListView   *m_parent;
 };
 
-}  // NameSpace DigikamHotPixelsImagesPlugin
+}  // namespace DigikamHotPixelsImagesPlugin
 
 #endif  // BLACKFRAMELISTVIEW_H

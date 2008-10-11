@@ -90,6 +90,6 @@ private:
     SlideShowPriv *d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* SLIDE_SHOW_H */

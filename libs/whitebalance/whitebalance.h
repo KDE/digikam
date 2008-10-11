@@ -67,6 +67,6 @@ private:
     WhiteBalancePriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* WHITEBALANCE_H */

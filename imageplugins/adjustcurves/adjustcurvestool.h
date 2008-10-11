@@ -124,6 +124,6 @@ private:
     Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
-}  // NameSpace DigikamAdjustCurvesImagesPlugin
+}  // namespace DigikamAdjustCurvesImagesPlugin
 
 #endif /* ADJUSTCURVESTOOL_H */

@@ -77,6 +77,6 @@ private:
     Digikam::EditorToolSettings *m_gboxSettings;
 };
 
-}  // NameSpace DigikamRainDropImagesPlugin
+}  // namespace DigikamRainDropImagesPlugin
 
 #endif /* RAINDROPTOOL_H */

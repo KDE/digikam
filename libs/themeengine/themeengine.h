@@ -101,6 +101,6 @@ private:
     ThemeEnginePriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* THEMEENGINE_H */

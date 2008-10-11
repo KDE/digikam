@@ -200,4 +200,4 @@ void CharcoalTool::putFinalData()
     iface.putOriginalImage(i18n("Charcoal"), filter()->getTargetImage().bits());
 }
 
-}  // NameSpace DigikamCharcoalImagesPlugin
+}  // namespace DigikamCharcoalImagesPlugin

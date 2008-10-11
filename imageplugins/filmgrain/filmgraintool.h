@@ -77,6 +77,6 @@ private:
     Digikam::EditorToolSettings *m_gboxSettings;
 };
 
-}  // NameSpace DigikamFilmGrainImagesPlugin
+}  // namespace DigikamFilmGrainImagesPlugin
 
 #endif /* FILMGRAINTOOL_H */

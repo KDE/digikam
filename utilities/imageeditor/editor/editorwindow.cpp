@@ -1134,11 +1134,11 @@ bool EditorWindow::promptUserSave(const KUrl& url)
             else if (promptForOverWrite())
                 saving = save();
 
-            // save and saveAs return false if they were cancelled and did not enter saving at all
+            // save and saveAs return false if they were canceled and did not enter saving at all
             // In this case, do not call enterWaitingLoop because quitWaitingloop will not be called.
             if (saving)
             {
-                // Waiting for asynchronous image file saving operation runing in separate thread.
+                // Waiting for asynchronous image file saving operation running in separate thread.
                 m_savingContext->synchronizingState = SavingContextContainer::SynchronousSaving;
                 enterWaitingLoop();
                 m_savingContext->synchronizingState = SavingContextContainer::NormalSaving;
@@ -1171,7 +1171,7 @@ bool EditorWindow::waitForSavingToComplete()
 
     if (m_savingContext->savingState != SavingContextContainer::SavingStateNone)
     {
-        // Waiting for asynchronous image file saving operation runing in separate thread.
+        // Waiting for asynchronous image file saving operation running in separate thread.
         m_savingContext->synchronizingState = SavingContextContainer::SynchronousSaving;
         KMessageBox::queuedMessageBox(this,
                                       KMessageBox::Information,
@@ -1264,7 +1264,7 @@ void EditorWindow::slotLoadingFinished(const QString& filename, bool success)
     toggleActions(success);
     unsetCursor();
 
-    // Note: in showfoto, we using a null filename to clear canvas.
+    // Note: in showFoto, we using a null filename to clear canvas.
     if (!success && filename != QString())
     {
         QFileInfo fi(filename);

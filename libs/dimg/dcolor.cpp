@@ -281,4 +281,4 @@ void DColor::setRGB(int h, int s, int l, bool sixteenBit)
         m_alpha = 255;
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

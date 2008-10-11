@@ -82,4 +82,4 @@ KUrl FindDuplicatesAlbumItem::refUrl() const
     return m_refImgInfo.fileUrl();
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

@@ -83,6 +83,6 @@ private:
     FindDuplicatesViewPriv *d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* FINDDUPLICATESVIEW_H */

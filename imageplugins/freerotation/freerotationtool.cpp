@@ -322,4 +322,4 @@ void FreeRotationTool::renderingFinished()
     kapp->restoreOverrideCursor();
 }
 
-}  // NameSpace DigikamFreeRotationImagesPlugin
+}  // namespace DigikamFreeRotationImagesPlugin

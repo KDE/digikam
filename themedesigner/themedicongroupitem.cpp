@@ -104,4 +104,4 @@ void ThemedIconGroupItem::paintBanner()
     p2.end();
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

@@ -637,4 +637,4 @@ QString ImagePreviewBarToolTip::tipContents(ThumbBarItem* item) const
     return tip;
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

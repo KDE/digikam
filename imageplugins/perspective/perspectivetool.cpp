@@ -241,4 +241,4 @@ void PerspectiveTool::slotUpdateInfo(QRect newSize, float topLeftAngle, float to
     m_bottomRightAngleLabel->setText(temp.setNum(bottomRightAngle, 'f', 1));
 }
 
-}  // NameSpace DigikamPerspectiveImagesPlugin
+}  // namespace DigikamPerspectiveImagesPlugin

@@ -46,10 +46,10 @@ class BatchSyncMetadata : public QObject
 
 public:
 
-    /** Constructor witch sync all metatada pictures from an Album */ 
+    /** Constructor which sync all metadata pictures from an Album */ 
     BatchSyncMetadata(QObject* parent, Album *album);
 
-    /** Constructor witch sync all metatada from an images list */ 
+    /** Constructor which sync all metadata from an images list */ 
     BatchSyncMetadata(QObject* parent, const ImageInfoList& list);
 
     ~BatchSyncMetadata();

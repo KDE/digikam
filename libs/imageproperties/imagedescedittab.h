@@ -140,6 +140,6 @@ private:
     ImageDescEditTabPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif  // IMAGEDESCEDITTAB_H

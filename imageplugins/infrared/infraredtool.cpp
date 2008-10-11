@@ -230,4 +230,4 @@ void InfraredTool::putFinalData()
     iface.putOriginalImage(i18n("Infrared"), filter()->getTargetImage().bits());
 }
 
-}  // NameSpace DigikamInfraredImagesPlugin
+}  // namespace DigikamInfraredImagesPlugin

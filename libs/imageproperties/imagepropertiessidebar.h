@@ -93,6 +93,6 @@ protected:
 
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif  // IMAGEPROPERTIESSIDEBAR_H

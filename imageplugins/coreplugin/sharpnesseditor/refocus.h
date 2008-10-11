@@ -62,6 +62,6 @@ private:  // Refocus filter data.
     double m_noise;
 };    
 
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore
 
 #endif /* REFOCUS_H */

@@ -86,6 +86,6 @@ private:
     Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
-}  // NameSpace DigikamAntiVignettingImagesPlugin
+}  // namespace DigikamAntiVignettingImagesPlugin
 
 #endif /* ANTIVIGNETTINGTOOL_H */

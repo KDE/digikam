@@ -708,4 +708,4 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     return true;
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

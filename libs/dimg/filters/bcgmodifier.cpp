@@ -205,4 +205,4 @@ void BCGModifier::setContrast(double val)
     d->modified = true;
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

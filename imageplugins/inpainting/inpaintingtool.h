@@ -128,6 +128,6 @@ private:
     Digikam::EditorToolSettings   *m_gboxSettings;
 };
 
-}  // NameSpace DigikamInPaintingImagesPlugin
+}  // namespace DigikamInPaintingImagesPlugin
 
 #endif /* INPAINTINGTOOL_H */

@@ -57,6 +57,6 @@ private:
     double m_radius;
 };
 
-}  // NameSpace DigikamAntiVignettingImagesPlugin
+}  // namespace DigikamAntiVignettingImagesPlugin
 
 #endif /* ANTIVIGNETTING_H */

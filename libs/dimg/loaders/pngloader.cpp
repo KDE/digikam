@@ -1009,4 +1009,4 @@ long PNGLoader::formatStringList(char *string, const size_t length, const char *
     return((long) n);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

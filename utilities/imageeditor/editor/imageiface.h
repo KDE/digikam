@@ -71,7 +71,7 @@ public:
 
     /** Return image data for the current, scaled preview image.
         The preview...() methods provide the characteristics of the data
-        (width, heigh, sixteen bit, alpha).
+        (width, height, sixteen bit, alpha).
         Ownership of the returned buffer is passed to the caller.
     */
     uchar* getPreviewImage() const;
@@ -179,7 +179,7 @@ public:
     void convertOriginalColorDepth(int depth);
 
     /** Convert a DImg image to a pixmap for screen using color 
-        managemed view if necessary */
+        managed view if necessary */
     QPixmap convertToPixmap(DImg& img);
 
     /** Paint the current target preview image (or the preview image,

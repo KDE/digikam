@@ -88,6 +88,6 @@ protected:
                           bool sixteenBit, double dx, double dy, double brighten);
 };
 
-}  // NameSpace DigikamLensDistortionImagesPlugin
+}  // namespace DigikamLensDistortionImagesPlugin
 
 #endif /* PIXEL_ACCESS_H */

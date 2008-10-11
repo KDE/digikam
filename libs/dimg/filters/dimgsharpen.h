@@ -64,6 +64,6 @@ private:  // DImgSharpen filter methods.
     int  getOptimalKernelWidth(double radius, double sigma);
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* DIMGSHARPEN_H */

@@ -349,4 +349,4 @@ void InsertTextTool::finalRendering()
     kapp->restoreOverrideCursor();
 }
 
-}  // NameSpace DigikamInsertTextImagesPlugin
+}  // namespace DigikamInsertTextImagesPlugin

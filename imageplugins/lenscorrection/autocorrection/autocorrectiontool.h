@@ -85,6 +85,6 @@ private:
     Digikam::EditorToolSettings *m_gboxSettings;
 };
 
-}  // NameSpace DigikamAutoCorrectionImagesPlugin
+}  // namespace DigikamAutoCorrectionImagesPlugin
 
 #endif /* AUTOCORRECTIONTOOL_H */

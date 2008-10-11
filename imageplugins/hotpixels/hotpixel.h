@@ -69,6 +69,6 @@ private:
     }
 };
 
-}  // NameSpace DigikamHotPixelsImagesPlugin
+}  // namespace DigikamHotPixelsImagesPlugin
 
 #endif  // HOTPIXEL_H

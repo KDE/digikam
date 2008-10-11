@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-04-02
- * Description : showfoto setup dialog.
+ * Description : showFoto setup dialog.
  * 
  * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *

@@ -113,6 +113,6 @@ private:
     ImageRegionWidgetPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* IMAGEREGIONWIDGET_H */

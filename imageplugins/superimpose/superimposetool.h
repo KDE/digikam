@@ -83,6 +83,6 @@ private:
     DirSelectWidget             *m_dirSelect;
 };
 
-}  // NameSpace DigikamSuperImposeImagesPlugin
+}  // namespace DigikamSuperImposeImagesPlugin
 
 #endif /* SUPERIMPOSETOOL_H */

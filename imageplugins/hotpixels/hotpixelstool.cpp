@@ -268,4 +268,4 @@ void HotPixelsTool::slotBlackFrame(QList<HotPixel> hpList, const KUrl& blackFram
     slotEffect();
 }
 
-}  // NameSpace DigikamHotPixelsImagesPlugin
+}  // namespace DigikamHotPixelsImagesPlugin

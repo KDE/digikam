@@ -100,6 +100,6 @@ private:
     int m_selectedH;
 };
 
-}  // NameSpace DigikamRainDropImagesPlugin
+}  // namespace DigikamRainDropImagesPlugin
 
 #endif /* RAINDROP_H */

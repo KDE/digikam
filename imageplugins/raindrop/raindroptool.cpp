@@ -257,4 +257,4 @@ void RainDropTool::putFinalData(void)
                            filter()->getTargetImage().bits());
 }
 
-}  // NameSpace DigikamRainDropImagesPlugin
+}  // namespace DigikamRainDropImagesPlugin

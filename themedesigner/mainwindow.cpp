@@ -592,4 +592,4 @@ void MainWindow::slotUpdateTheme()
     ThemeEngine::instance()->setCurrentTheme(*m_theme, "Digikam ThemeEditor Theme");
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

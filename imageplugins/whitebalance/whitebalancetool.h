@@ -141,6 +141,6 @@ private:
     Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
-}  // NameSpace DigikamWhiteBalanceImagesPlugin
+}  // namespace DigikamWhiteBalanceImagesPlugin
 
 #endif /* WHITEBALANCETOOL_H */

@@ -44,6 +44,6 @@ protected:
     void paintItem();
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* THEMEDICONITEM_H */

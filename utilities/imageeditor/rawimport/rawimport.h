@@ -82,6 +82,6 @@ private:
     RawImportPriv *d;
 };
 
-} // NameSpace Digikam
+} // namespace Digikam
 
 #endif // RAWIMPORTDLG_H

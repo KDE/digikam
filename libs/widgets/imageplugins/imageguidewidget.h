@@ -132,6 +132,6 @@ private:
     ImageGuideWidgetPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* IMAGEGUIDEWIDGET_H */

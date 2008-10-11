@@ -375,4 +375,4 @@ void AntiVignettingTool::putFinalData()
     iface.setOriginalBCG(b, c, g);
 }
 
-}  // NameSpace DigikamAntiVignettingImagesPlugin
+}  // namespace DigikamAntiVignettingImagesPlugin

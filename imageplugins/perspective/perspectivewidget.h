@@ -170,6 +170,6 @@ private:
     Digikam::DImg        m_previewImage;
 };
 
-}  // NameSpace DigikamPerspectiveImagesPlugin
+}  // namespace DigikamPerspectiveImagesPlugin
 
 #endif /* PERSPECTIVEWIDGET_H */

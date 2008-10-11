@@ -1782,4 +1782,4 @@ void ImageDescEditTab::slotCreateNewTag()
     d->newTagEdit->clear();
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

@@ -40,7 +40,7 @@ public:
     IOFileSettingsContainer()
     {
         JPEGCompression     = 75;
-        JPEGSubSampling     = 1;    // Medium subsampling
+        JPEGSubSampling     = 1;    // Medium sub-sampling
         PNGCompression      = 9;
         TIFFCompression     = false;
         JPEG2000Compression = 75;
@@ -55,7 +55,7 @@ public:
     // JPEG quality value.
     int  JPEGCompression;
 
-    // JPEG chroma subsampling value.
+    // JPEG chroma sub-sampling value.
     int  JPEGSubSampling;
 
     // PNG compression value.

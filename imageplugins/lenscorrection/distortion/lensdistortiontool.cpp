@@ -326,4 +326,4 @@ void LensDistortionTool::renderingFinished()
     m_brightenInput->setEnabled(true);
 }
 
-}  // NameSpace DigikamLensDistortionImagesPlugin
+}  // namespace DigikamLensDistortionImagesPlugin

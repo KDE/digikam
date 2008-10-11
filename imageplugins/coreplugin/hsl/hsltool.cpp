@@ -108,7 +108,7 @@ HSLTool::HSLTool(QObject* parent)
     m_HSSelector->setMinimumSize(256, 142);
 
     m_HSPreview = new HSPreviewWidget(m_gboxSettings->plainPage(), m_gboxSettings->spacingHint());
-    m_HSPreview->setWhatsThis(i18n("You can see here a colour preview of the hue and "
+    m_HSPreview->setWhatsThis(i18n("You can see here a color preview of the hue and "
                                    "saturation adjustments."));
     m_HSPreview->setMinimumSize(256, 15);
 
@@ -346,5 +346,5 @@ void HSLTool::finalRendering()
     kapp->restoreOverrideCursor();
 }
 
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore
 

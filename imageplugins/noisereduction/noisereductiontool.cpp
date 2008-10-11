@@ -528,4 +528,4 @@ void NoiseReductionTool::slotSaveAsSettings()
     file.close();
 }
 
-}  // NameSpace DigikamNoiseReductionImagesPlugin
+}  // namespace DigikamNoiseReductionImagesPlugin

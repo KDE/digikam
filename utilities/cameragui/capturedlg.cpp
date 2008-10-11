@@ -149,4 +149,4 @@ void CaptureDlg::slotPreviewDone(const QImage& preview)
         d->timer->start(0);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

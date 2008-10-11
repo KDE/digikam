@@ -350,4 +350,4 @@ void RestorationTool::slotSaveAsSettings()
     file.close();
 }
 
-}  // NameSpace DigikamRestorationImagesPlugin
+}  // namespace DigikamRestorationImagesPlugin

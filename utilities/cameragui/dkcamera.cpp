@@ -113,7 +113,7 @@ QString DKCamera::mimeType(const QString& fileext) const
 {
     QString ext = fileext;
     
-    // Massage known variations of known mimetypes into kde specific ones
+    // Massage known variations of known mimetypes into KDE specific ones
     if (ext == "jpg" || ext == "jpe")
         ext = "jpeg";
     else if (ext == "tif")

@@ -128,6 +128,6 @@ public:   // Public methods.
                              unsigned short *A, unsigned short *R, unsigned short *G, unsigned short *B);
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* DIMGIMAGE_FILTERS_H */

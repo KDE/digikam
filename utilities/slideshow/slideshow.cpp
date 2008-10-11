@@ -516,7 +516,7 @@ void SlideShow::updatePixmap()
         p.setFont(fn);
         p.setPen(Qt::white);
         p.drawPixmap(50, 100, logo);
-        p.drawText(60 + logo.width(), 100 + logo.height()/3,   i18n("SlideShow Completed."));
+        p.drawText(60 + logo.width(), 100 + logo.height()/3,   i18n("Slideshow Completed."));
         p.drawText(60 + logo.width(), 100 + 2*logo.height()/3, i18n("Click To Exit..."));
 
         d->endOfShow = true;
@@ -553,7 +553,7 @@ void SlideShow::printComments(QPainter &p, int &offset, const QString& comments)
         bool breakLine = false; // End Of Line found
         uint currIndex;         // Comments QString current index
 
-        // Check miminal lines dimension
+        // Check minimal lines dimension
 
         uint commentsLinesLengthLocal = MAXSTRINGLEN;
 
@@ -748,4 +748,4 @@ void SlideShow::slotMouseMoveTimeOut()
     setCursor(QCursor(Qt::BlankCursor));
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

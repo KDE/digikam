@@ -299,4 +299,4 @@ void HotPixelFixer::weightPixels (Digikam::DImg &img, HotPixel &px, int method, 
     }
 }
 
-}  // NameSpace DigikamHotPixelsImagesPlugin
+}  // namespace DigikamHotPixelsImagesPlugin

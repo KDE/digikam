@@ -136,6 +136,6 @@ private:
     Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
-}  // NameSpace DigikamAdjustLevelsImagesPlugin
+}  // namespace DigikamAdjustLevelsImagesPlugin
 
 #endif /* ADJUSTLEVELSTOOL_H */

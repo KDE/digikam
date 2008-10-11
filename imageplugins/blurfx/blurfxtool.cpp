@@ -414,4 +414,4 @@ void BlurFXTool::putFinalData()
     iface.putOriginalImage(i18n("Blur Effects"), filter()->getTargetImage().bits());
 }
 
-}  // NameSpace DigikamBlurFXImagesPlugin
+}  // namespace DigikamBlurFXImagesPlugin

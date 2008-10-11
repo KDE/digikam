@@ -841,4 +841,4 @@ void RatioCropTool::finalRendering()
     writeSettings();
 }
 
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore

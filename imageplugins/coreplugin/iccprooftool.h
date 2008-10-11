@@ -171,6 +171,6 @@ private:
     Digikam::EditorToolSettings    *m_gboxSettings;
 };
 
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore
 
 #endif  // ICCPROOFTOOL_H

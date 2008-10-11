@@ -715,4 +715,4 @@ bool ImageLevels::saveLevelsToGimpLevelsFile(const KUrl& fileUrl)
     return true;
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

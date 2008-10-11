@@ -71,6 +71,6 @@ private:
   
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* JPEGLOADER_H */

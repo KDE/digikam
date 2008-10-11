@@ -662,4 +662,4 @@ int RefocusMatrix::dgesv (const int N, const int NRHS, double *A, const int lda,
     return (result);
 }
 
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore

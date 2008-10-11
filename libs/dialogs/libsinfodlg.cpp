@@ -235,4 +235,4 @@ void LibsInfoDlg::slotCopy2ClipBoard()
     QApplication::clipboard()->setMimeData(mimeData, QClipboard::Clipboard);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

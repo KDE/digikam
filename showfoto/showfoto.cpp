@@ -520,7 +520,7 @@ void ShowFoto::setupActions()
 
     actionCollection()->addAction(KStandardAction::Quit, "showfoto_quit", this, SLOT(close()));
 
-    // --- Create the gui ----------------------------------------------------
+    // --- Create the GUI ----------------------------------------------------
 
     createGUI("showfotoui.rc");
 }
@@ -825,7 +825,7 @@ void ShowFoto::openFolder(const KUrl& url)
         filter.append (" *.JPE");
     }
 
-    // Added RAW files estentions supported by dcraw program and
+    // Added RAW files extensions supported by dcraw program and
     // defines to digikam/libs/dcraw/rawfiles.h
     filter.append (" ");
 #if KDCRAW_VERSION < 0x000400

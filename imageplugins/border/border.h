@@ -146,6 +146,6 @@ private:
     Digikam::DColor m_decorativeSecondColor;
 };    
 
-}  // NameSpace DigikamBorderImagesPlugin
+}  // namespace DigikamBorderImagesPlugin
 
 #endif /* BORDER_H */

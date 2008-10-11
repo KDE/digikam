@@ -252,6 +252,6 @@ private:
     double m_sharp;
 };
 
-}  // NameSpace DigikamNoiseReductionImagesPlugin
+}  // namespace DigikamNoiseReductionImagesPlugin
 
 #endif /* NOISE_REDUCTION_H */

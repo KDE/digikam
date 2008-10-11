@@ -88,9 +88,9 @@ protected:
     void writeGroups(SearchXmlWriter &writer);
     /// Collects the data from the same method of all contained groups (position relative to this widget)
     QList<QRect> startupAnimationAreaOfGroups() const;
-    /// Reimplement: create and setup a search group
+    /// Re-implement: create and setup a search group
     virtual SearchGroup *createSearchGroup() = 0;
-    /// Reimplement: Adds a newly created group to the layout structures
+    /// Re-implement: Adds a newly created group to the layout structures
     virtual void addGroupToLayout(SearchGroup *group) = 0;
 
 protected slots:

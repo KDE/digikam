@@ -90,6 +90,6 @@ private:
 
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif   // ICCTRANSFORM_H

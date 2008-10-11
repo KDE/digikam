@@ -68,6 +68,6 @@ private:
     BCGModifierPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* BCGMODIFIER_H */

@@ -123,6 +123,6 @@ private:
     LightTablePreviewPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* LIGHTTABLEPREVIEW_H */

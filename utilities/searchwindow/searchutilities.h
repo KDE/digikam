@@ -177,7 +177,7 @@ public:
     /// Set visible without animation
     void setDirectlyVisible(bool visible);
 
-    /** This parameter determines the bahavior when the animation
+    /** This parameter determines the behavior when the animation
      *  to hide the widget has finished:
      *  If stayVisible is true, the widget remains visible,
      *  but paints nothing.

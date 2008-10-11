@@ -203,4 +203,4 @@ Digikam::DColor OilPaint::MostFrequentColor(Digikam::DImg &src, int X, int Y, in
     return mostFrequentColor;
 }
 
-}  // NameSpace DigikamOilPaintImagesPlugin
+}  // namespace DigikamOilPaintImagesPlugin

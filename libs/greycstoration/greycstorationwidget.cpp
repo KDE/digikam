@@ -382,4 +382,4 @@ void GreycstorationWidget::saveSettings(QFile& file, const QString& header)
     stream << settings.btile << "\n";
 }
 
-} // NameSpace Digikam
+} // namespace Digikam

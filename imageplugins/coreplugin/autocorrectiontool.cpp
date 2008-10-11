@@ -335,5 +335,5 @@ void AutoCorrectionTool::autoCorrection(uchar *data, int w, int h, bool sb, int 
     }
 }
 
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore
 

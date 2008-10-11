@@ -86,6 +86,6 @@ private:
     GreycstorationIfacePriv *d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* GREYCSTORATIONIFACE_H */

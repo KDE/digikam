@@ -127,4 +127,4 @@ void UnsharpMask::filterImage(void)
     }
 }
 
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore

@@ -53,6 +53,6 @@ private:
     double m_threshold;
 };    
 
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore
 
 #endif /* UNSHARP_MASK_H */

@@ -738,4 +738,4 @@ void WhiteBalanceTool::slotSaveAsSettings()
     file.close();
 }
 
-}  // NameSpace DigikamWhiteBalanceImagesPlugin
+}  // namespace DigikamWhiteBalanceImagesPlugin

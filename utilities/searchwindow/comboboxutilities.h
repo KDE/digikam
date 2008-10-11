@@ -58,7 +58,7 @@ public:
      */
 
     ProxyLineEdit(QWidget *parent = 0);
-    /// After contructing, set the actual widget here
+    /// After constructing, set the actual widget here
     void setWidget(QWidget *widget);
 
 protected:
@@ -146,7 +146,7 @@ public:
      *  The Pop-up of the combo box will stay open after selecting an item;
      *  it will be closed by clicking outside, but not inside the widget.
      *  You need three steps:
-     *  Contruct the object, call setModel() with an appropriate
+     *  Construct the object, call setModel() with an appropriate
      *  QAbstractItemModel, then call installView() to replace
      *  the standard combo box view with a view.
      */
@@ -162,7 +162,7 @@ protected:
 
     /** Replace the standard combo box list view with the given view.
      *  The view will be set as the view of the combo box
-     *  (including reparenting) and be stored in the m_view variable */
+     *  (including re-parenting) and be stored in the m_view variable */
     void installView(QAbstractItemView *view);
 
     virtual bool eventFilter(QObject *watched, QEvent *event);
@@ -179,7 +179,7 @@ public:
     /** This class provides a QComboBox with a QTreeView
      *  instead of the usual QListView.
      *  You need three steps:
-     *  Contruct the object, call setModel() with an appropriate
+     *  Construct the object, call setModel() with an appropriate
      *  QAbstractItemModel, then call installView() to replace
      *  the standard combo box view with a QTreeView.
      */
@@ -207,7 +207,7 @@ public:
      *  with a QListView. This is the standard view of a QComboBox,
      *  but in conjunction with StayPoppedUpComboBox some extra steps are needed.
      *  You need three steps:
-     *  Contruct the object, call setModel() with an appropriate
+     *  Construct the object, call setModel() with an appropriate
      *  QAbstractItemModel, then call installView().
      */
     ListViewComboBox(QWidget *parent = 0);
@@ -232,7 +232,7 @@ public:
      *  The text in the line edit can be adjusted. The combo box will
      *  open on a click on the line edit.
      *  You need three steps:
-     *  Contruct the object, call setModel() with an appropriate
+     *  Construct the object, call setModel() with an appropriate
      *  QAbstractItemModel, then call installView() to replace
      *  the standard combo box view with a QTreeView.
      */

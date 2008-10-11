@@ -123,6 +123,6 @@ private:
     static int dgesv (const int N, const int NRHS, double *A, const int lda, double *B, const int ldb);
 };
             
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore
 
 #endif /* MATRIX_H_INCLUDED */

@@ -299,4 +299,4 @@ void ThemedIconView::updateItemRectsPixmap()
                                                                     d->itemRect.height());
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

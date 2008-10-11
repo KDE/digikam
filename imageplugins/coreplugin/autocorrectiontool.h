@@ -95,6 +95,6 @@ private:
     Digikam::DImg                 m_thumbnailImage;
 };
 
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore
 
 #endif /* AUTOCORRECTIONTOOL_H */

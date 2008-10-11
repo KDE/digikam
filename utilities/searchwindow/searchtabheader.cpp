@@ -323,7 +323,7 @@ SearchWindow *SearchTabHeader::searchWindow()
     if (!d->searchWindow)
     {
         kDebug(50003) << "Creating search window";
-        // Create the advanced search edit window, deferred from contructor
+        // Create the advanced search edit window, deferred from constructor
         d->searchWindow = new SearchWindow;
 
         connect(d->searchWindow, SIGNAL(searchEdited(int, const QString &)),

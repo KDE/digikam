@@ -145,7 +145,7 @@ public:
     void   setEmbeddedICCToOriginalImage( QString profilePath);
 
     /** Convert a DImg image to a pixmap for screen using color 
-        managemed view if necessary */
+        managed view if necessary */
     QPixmap               convertToPixmap(DImg& img);
 
     QByteArray            getEmbeddedICC();

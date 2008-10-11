@@ -54,6 +54,6 @@ private:
     bool m_sixteenBit;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* PPMLOADER_H */

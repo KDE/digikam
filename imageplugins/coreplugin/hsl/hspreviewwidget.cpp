@@ -126,4 +126,4 @@ void HSPreviewWidget::updatePixmap()
     d->pixmap = image.convertToPixmap();
 }
 
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore

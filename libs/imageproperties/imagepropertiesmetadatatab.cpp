@@ -185,4 +185,4 @@ void ImagePropertiesMetaDataTab::setCurrentData(const DMetadata& metaData, const
     d->xmpWidget->loadFromData(filename, data);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

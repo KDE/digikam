@@ -461,4 +461,4 @@ bool RainDrop::SetDropStatusBits (int Width, int Height, uchar *pStatusBits,
     return (true);
 }
 
-}  // NameSpace DigikamRainDropImagesPlugin
+}  // namespace DigikamRainDropImagesPlugin

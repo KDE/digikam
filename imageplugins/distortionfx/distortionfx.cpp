@@ -874,4 +874,4 @@ double DistortionFX::maximumRadius(int Height, int Width, double Angle)
 }
  */
 
-}  // NameSpace DigikamDistortionFXImagesPlugin
+}  // namespace DigikamDistortionFXImagesPlugin

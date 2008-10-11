@@ -776,4 +776,4 @@ void AdjustLevelsTool::slotShowOutputHistogramGuide(double v)
     m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
 
-}  // NameSpace DigikamAdjustLevelsImagesPlugin
+}  // namespace DigikamAdjustLevelsImagesPlugin

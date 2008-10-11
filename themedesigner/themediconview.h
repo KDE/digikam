@@ -81,6 +81,6 @@ private slots:
     void slotThemeChanged();
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* THEMEDICONVIEW_H */

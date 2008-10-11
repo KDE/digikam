@@ -94,7 +94,7 @@ public:
 
     // Global Slide Show Settings
 
-    /** Auto-rotate image accordinly with Exif Rotation tag */
+    /** Auto-rotate image accordingly with Exif Rotation tag */
     bool exifRotate;
 
     /** Print picture file name during slide */

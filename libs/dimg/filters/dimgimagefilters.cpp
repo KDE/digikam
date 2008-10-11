@@ -974,4 +974,4 @@ void DImgImageFilters::pixelAntiAliasing16(unsigned short *data, int Width, int 
     *A = CLAMP065535((int)lfTotalA);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

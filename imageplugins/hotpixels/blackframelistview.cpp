@@ -144,4 +144,4 @@ QPixmap BlackFrameListViewItem::thumb(const QSize& size)
     return thumb;
 }
 
-}  // NameSpace DigikamHotPixelsImagesPlugin
+}  // namespace DigikamHotPixelsImagesPlugin

@@ -107,6 +107,6 @@ private:
     Digikam::EditorToolSettings  *m_gboxSettings;
 };
 
-}  // NameSpace DigikamChannelMixerImagesPlugin
+}  // namespace DigikamChannelMixerImagesPlugin
 
 #endif /* CHANNELMIXERTOOL_H */

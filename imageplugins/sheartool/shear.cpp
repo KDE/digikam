@@ -182,4 +182,4 @@ void Shear::filterImage(void)
     m_newSize.setHeight(H);
 }
 
-}  // NameSpace DigikamShearToolImagesPlugin
+}  // namespace DigikamShearToolImagesPlugin

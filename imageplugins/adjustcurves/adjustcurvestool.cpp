@@ -604,4 +604,4 @@ void AdjustCurvesTool::slotSaveAsSettings()
     slotChannelChanged();
 }
 
-}  // NameSpace DigikamAdjustCurvesImagesPlugin
+}  // namespace DigikamAdjustCurvesImagesPlugin

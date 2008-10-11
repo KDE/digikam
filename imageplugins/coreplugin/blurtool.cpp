@@ -164,4 +164,4 @@ void BlurTool::renderingFinished(void)
     m_radiusInput->setEnabled(true);
 }
 
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore

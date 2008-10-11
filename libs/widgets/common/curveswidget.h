@@ -125,6 +125,6 @@ private:
     CurvesWidgetPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* CURVESWIDGET_H */

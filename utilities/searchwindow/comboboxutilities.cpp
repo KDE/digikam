@@ -70,7 +70,7 @@ void ProxyLineEdit::setWidget(QWidget *widget)
 }
 
 /**
- * We just reimplement all relevant QWidget event handlers and call
+ * We just re-implement all relevant QWidget event handlers and call
  * the QWidget implementation, not the QLineEdit one.
  */
 

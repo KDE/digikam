@@ -671,4 +671,4 @@ void ImageResize::slotUser2()
     file.close();
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

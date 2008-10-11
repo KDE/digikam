@@ -140,7 +140,7 @@ SharpenTool::SharpenTool(QObject* parent)
     m_radiusInput2->setRange(1, 120, 1);
     m_radiusInput2->setSliderEnabled(true);
     m_radiusInput2->setDefaultValue(1);
-    m_radiusInput2->setWhatsThis( i18n("Radius value is the gaussian blur matrix radius value "
+    m_radiusInput2->setWhatsThis( i18n("Radius value is the Gaussian blur matrix radius value "
                                        "used to determines how much to blur the image.") );
 
     QLabel *label3 = new QLabel(i18n("Amount:"), unsharpMaskSettings);
@@ -211,7 +211,7 @@ SharpenTool::SharpenTool(QObject* parent)
     m_gauss->setDecimals(2);
     m_gauss->input()->setRange(0.0, 1.0, 0.01, true);
     m_gauss->setDefaultValue(0.0);
-    m_gauss->setWhatsThis( i18n("This is the sharpness for the gaussian convolution. Use this parameter when your "
+    m_gauss->setWhatsThis( i18n("This is the sharpness for the Gaussian convolution. Use this parameter when your "
                                 "blurring is of a Gaussian type. In most cases you should set this parameter to 0, because "
                                 "it causes nasty artifacts. When you use non-zero values, you will probably also have to "
                                 "increase the correlation and/or noise filter parameters."));
@@ -223,7 +223,7 @@ SharpenTool::SharpenTool(QObject* parent)
     m_matrixSize->setDefaultValue(5);
     m_matrixSize->setWhatsThis( i18n("This parameter determines the size of the transformation matrix. "
                                      "Increasing the matrix width may give better results, especially when you have "
-                                     "chosen large values for circular or gaussian sharpness."));
+                                     "chosen large values for circular or Gaussian sharpness."));
 
     grid3->addWidget(label5,        0, 0, 1, 2);
     grid3->addWidget(m_radius,      1, 0, 1, 2);
@@ -734,4 +734,4 @@ void SharpenTool::slotSaveAsSettings()
     file.close();
 }
 
-}  // NameSpace DigikamImagesPluginCore
+}  // namespace DigikamImagesPluginCore

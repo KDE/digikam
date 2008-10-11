@@ -110,6 +110,6 @@ private:
     friend class LightTableBar;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* LIGHTTABLEBAR_H */

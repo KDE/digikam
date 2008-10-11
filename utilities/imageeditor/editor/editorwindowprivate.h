@@ -143,6 +143,6 @@ public:
     EditorToolIface           *toolIface;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* EDITORWINDOWPRIVATE_H */

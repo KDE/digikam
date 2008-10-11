@@ -181,4 +181,4 @@ void Texture::filterImage(void)
     }
 }
 
-}  // NameSpace DigikamTextureImagesPlugin
+}  // namespace DigikamTextureImagesPlugin

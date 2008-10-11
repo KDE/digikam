@@ -240,4 +240,4 @@ void HSLModifier::setLightness(double val)
     d->modified = true;
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

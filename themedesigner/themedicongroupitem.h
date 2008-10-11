@@ -49,6 +49,6 @@ private:
     ThemedIconView* m_view;
 };
 
-}  // NameSpace Digikam
+}  // namespace Digikam
 
 #endif /* THEMEDICONGROUPITEM_H */

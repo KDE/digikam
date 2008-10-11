@@ -67,6 +67,6 @@ private:
     uint  *m_averageColorB;
 };
 
-}  // NameSpace DigikamOilPaintImagesPlugin
+}  // namespace DigikamOilPaintImagesPlugin
 
 #endif /* OILPAINT_H */

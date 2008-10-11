@@ -331,4 +331,4 @@ void SuperImposeWidget::setEditModeCursor()
     }
 }
 
-}  // NameSpace DigikamSuperImposeImagesPlugin
+}  // namespace DigikamSuperImposeImagesPlugin

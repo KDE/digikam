@@ -829,4 +829,4 @@ bool IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
     return true;
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

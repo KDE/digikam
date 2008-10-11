@@ -619,4 +619,4 @@ void PreviewWidget::zoomFactorChanged(double zoom)
     emit signalZoomFactorChanged(zoom);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

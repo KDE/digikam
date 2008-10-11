@@ -238,4 +238,4 @@ int DImgSharpen::getOptimalKernelWidth(double radius, double sigma)
     return((int)kernelWidth-2);
 }
 
-}  // NameSpace Digikam
+}  // namespace Digikam

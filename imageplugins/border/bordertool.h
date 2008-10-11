@@ -115,6 +115,6 @@ private:
     Digikam::EditorToolSettings *m_gboxSettings;
 };
 
-}  // NameSpace DigikamBorderImagesPlugin
+}  // namespace DigikamBorderImagesPlugin
 
 #endif /* BORDERTOOL_H */

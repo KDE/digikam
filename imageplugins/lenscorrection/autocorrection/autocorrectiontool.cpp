@@ -298,4 +298,4 @@ void AutoCorrectionTool::renderingFinished()
     m_gboxSettings->setEnabled(true);
 }
 
-}  // NameSpace DigikamAutoCorrectionImagesPlugin
+}  // namespace DigikamAutoCorrectionImagesPlugin

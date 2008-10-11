@@ -131,7 +131,7 @@ void SetupIOFiles::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group(QString("ImageViewer Settings"));
     d->JPEGOptions->setCompressionValue(group.readEntry("JPEGCompression", 75) );
-    d->JPEGOptions->setSubSamplingValue(group.readEntry("JPEGSubSampling", 1) ); // Medium subsampling
+    d->JPEGOptions->setSubSamplingValue(group.readEntry("JPEGSubSampling", 1) ); // Medium sub-sampling
     d->PNGOptions->setCompressionValue(group.readEntry("PNGCompression", 9) );
     d->TIFFOptions->setCompression(group.readEntry("TIFFCompression", false));
     d->JPEG2000Options->setCompressionValue( group.readEntry("JPEG2000Compression", 75) );

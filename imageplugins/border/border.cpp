@@ -393,4 +393,4 @@ void Border::pattern2(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth,
     dest.bitBltImage(&tmp, borderWidth, borderWidth);
 }
 
-}  // NameSpace DigikamBorderImagesPlugin
+}  // namespace DigikamBorderImagesPlugin
