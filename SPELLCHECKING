@@ -1,6 +1,6 @@
 FOLDER                                  CPP         H
 -----------------------------------------------------
-|-- digikam                             
+|-- digikam
 |-- imageplugins
 |-- kioslave
 |-- libs
@@ -19,7 +19,7 @@ FOLDER                                  CPP         H
 |   |-- threadimageio
 |   |-- whitebalance
 |   `-- widgets
-|-- showfoto
+|-- showfoto                            X           X
 |-- themedesigner
 `-- utilities
     |-- batch
@@ -38,11 +38,8 @@ FOLDER                                  CPP         H
 
 
 
-Note:   I have created this list after I did spell checking on some sourcecode
-        folders. I will redo everything from start.
-
-        Maybe you want to help spell checking our sourcecode?
-        You can do so using those commands in one of those folders. Don't run
+Note:   Maybe you want to help spell checking our sourcecode?
+        You can do so using those commands in one of the folders. Don't run
         them under the main digiKam root, if you don't want to sit in front of aspell
         all day :-)
 
@@ -54,7 +51,7 @@ Note:   I have created this list after I did spell checking on some sourcecode
 
             find -type f -iname "*.cpp" -o -iname "*.h" -exec aspell check -x --mode=ccpp {} \;
 
-        Maybe I'm doing something wrong, but find will list both filetypes, but
+        Maybe I'm doing something wrong, find will list both filetypes, but
         aspell doesn't care.
 
 
