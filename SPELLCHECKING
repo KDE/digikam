@@ -1,0 +1,62 @@
+FOLDER                                  CPP         H
+-----------------------------------------------------
+|-- digikam                             
+|-- imageplugins
+|-- kioslave
+|-- libs
+|   |-- curves
+|   |-- database
+|   |-- dialogs
+|   |-- dimg
+|   |-- dmetadata
+|   |-- greycstoration
+|   |-- histogram
+|   |-- imageproperties
+|   |-- jpegutils
+|   |-- levels
+|   |-- lprof
+|   |-- themeengine
+|   |-- threadimageio
+|   |-- whitebalance
+|   `-- widgets
+|-- showfoto
+|-- themedesigner
+`-- utilities
+    |-- batch
+    |-- cameragui
+    |-- fuzzysearch
+    |-- gpssearch
+    |-- hotplug
+    |-- imageeditor
+    |-- kipiiface
+    |-- lighttable
+    |-- scripts
+    |-- searchwindow
+    |-- setup
+    |-- slideshow
+    `-- timeline
+
+
+
+Note:   I have created this list after I did spell checking on some sourcecode
+        folders. I will redo everything from start.
+
+        Maybe you want to help spell checking our sourcecode?
+        You can do so using those commands in one of those folders. Don't run
+        them under the main digiKam root, if you don't want to sit in front of aspell
+        all day :-)
+
+            find -type f -iname "*.cpp" -exec aspell check -x --mode=ccpp {} \;
+            find -type f -iname "*.h" -exec aspell check -x --mode=ccpp {} \;
+
+        Normally you are able to combine those commands, but then somehow aspell
+        will only scan the header files:
+
+            find -type f -iname "*.cpp" -o -iname "*.h" -exec aspell check -x --mode=ccpp {} \;
+
+        Maybe I'm doing something wrong, but find will list both filetypes, but
+        aspell doesn't care.
+
+
+Andi
+
