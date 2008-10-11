@@ -71,7 +71,12 @@ private slots:
     void slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong);
     void slotDuplicatesSearchResult(KJob*);
 
+    void slotCancelButtonPressed();
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
+
+private:
+
+    void cancelFindDuplicates(KJob* job);
 
 private:
 

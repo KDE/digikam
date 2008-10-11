@@ -84,7 +84,7 @@ StatusProgressBar::StatusProgressBar(QWidget *parent)
     QHBoxLayout *hBox = new QHBoxLayout(d->progressWidget);
     d->progressBar    = new QProgressBar(d->progressWidget);
     d->cancelButton   = new QPushButton(d->progressWidget);
-    d->cancelButton->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
+    d->cancelButton->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
     d->cancelButton->setFocusPolicy(Qt::NoFocus);
     d->cancelButton->setIcon(SmallIcon("dialog-cancel"));
     setProgressTotalSteps(100);
@@ -101,8 +101,8 @@ StatusProgressBar::StatusProgressBar(QWidget *parent)
     insertWidget(StatusProgressBarPriv::TextLabel,   d->textLabel);
     insertWidget(StatusProgressBarPriv::ProgressBar, d->progressWidget);
 
-    connect( d->cancelButton, SIGNAL( clicked() ),
-             this, SIGNAL( signalCancelButtonPressed() ) );
+    connect(d->cancelButton, SIGNAL( clicked() ),
+            this, SIGNAL( signalCancelButtonPressed() ) );
 
     progressBarMode(TextMode);
 }
@@ -144,7 +144,7 @@ void StatusProgressBar::setProgressTotalSteps(int v)
 
 void StatusProgressBar::setProgressText(const QString& text)
 {
-    d->progressBar->setFormat( text + QString ("%p%") );
+    d->progressBar->setFormat(text + QString("%p%"));
     d->progressBar->update();
 }
 

@@ -60,12 +60,15 @@ public:
 
     FindDuplicatesViewPriv()
     {
-        listView           = 0;
-        scanDuplicatesBtn  = 0;
-        updateFingerPrtBtn = 0;
-        progressBar        = 0;
-        thumbLoadThread    = 0;
+        listView                = 0;
+        scanDuplicatesBtn       = 0;
+        updateFingerPrtBtn      = 0;
+        progressBar             = 0;
+        thumbLoadThread         = 0;
+        cancelFindDuplicates    = false;
     }
+
+    bool                cancelFindDuplicates;
 
     QPushButton         *scanDuplicatesBtn;
     QPushButton         *updateFingerPrtBtn;
@@ -146,6 +149,9 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotClear()));
+
+    connect(d->progressBar, SIGNAL(signalCancelButtonPressed()),
+            this, SLOT(slotCancelButtonPressed()));
 }
 
 FindDuplicatesView::~FindDuplicatesView()
@@ -251,6 +257,7 @@ void FindDuplicatesView::slotFindDuplicates()
     slotClear();
     d->scanDuplicatesBtn->setEnabled(false);
     d->updateFingerPrtBtn->setEnabled(false);
+    d->progressBar->progressBarMode(StatusProgressBar::CancelProgressBarMode);
     d->progressBar->setEnabled(true);
 
     AlbumList albums = AlbumManager::instance()->allPAlbums();
@@ -273,22 +280,47 @@ void FindDuplicatesView::slotFindDuplicates()
             this, SLOT(slotDuplicatesSearchProcessedAmount(KJob *, KJob::Unit, qulonglong)));
 }
 
+void FindDuplicatesView::cancelFindDuplicates(KJob* job)
+{
+    if (!job)
+        return;
+
+    job->kill();
+    d->cancelFindDuplicates = false;
+
+    d->scanDuplicatesBtn->setEnabled(true);
+    d->updateFingerPrtBtn->setEnabled(true);
+    d->progressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
+    d->progressBar->setProgressValue(0);
+    d->progressBar->setEnabled(false);
+
+    populateTreeView();
+}
+
+void FindDuplicatesView::slotCancelButtonPressed()
+{
+    d->cancelFindDuplicates = true;
+}
+
 void FindDuplicatesView::slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong amount)
 {
-//    d->progressBar->setMinimum(0);
+    d->progressBar->setProgressValue(0);
     d->progressBar->setProgressTotalSteps(amount);
 }
 
-void FindDuplicatesView::slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong amount)
+void FindDuplicatesView::slotDuplicatesSearchProcessedAmount(KJob* job, KJob::Unit, qulonglong amount)
 {
     d->progressBar->setProgressValue(amount);
+
+    if (d->cancelFindDuplicates)
+        cancelFindDuplicates(job);
 }
 
 void FindDuplicatesView::slotDuplicatesSearchResult(KJob*)
 {
     d->scanDuplicatesBtn->setEnabled(true);
     d->updateFingerPrtBtn->setEnabled(true);
-//    d->progressBar->reset();
+    d->progressBar->setProgressValue(0);
     d->progressBar->setEnabled(false);
     populateTreeView();
 }
