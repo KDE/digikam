@@ -155,7 +155,6 @@ void CollectionScanner::loadNameFilters()
 
 void CollectionScanner::completeScan()
 {
-    QTime time;time.start();
     emit startCompleteScan();
 
     // lock database
@@ -163,11 +162,9 @@ void CollectionScanner::completeScan()
 
     loadNameFilters();
     d->resetRemovedItemsTime();
-    kDebug(50003) << "Some initialization tasks" << time.restart();
 
     //TODO: Implement a mechanism to watch for album root changes while we keep this list
     QList<CollectionLocation> allLocations = CollectionManager::instance()->allAvailableLocations();
-    kDebug(50003) << "Querying CollectionManager" << time.restart();
 
     if (d->wantSignals)
     {
@@ -178,22 +175,18 @@ void CollectionScanner::completeScan()
 
         emit totalFilesToScan(count);
     }
-    kDebug(50003) << "Counting total files to scan" << time.restart();
 
     // if we have no hints to follow, clean up all stale albums
     if (d->albumHints.isEmpty())
         DatabaseAccess().db()->deleteStaleAlbums();
-    kDebug(50003) << "Delete stale albums" << time.restart();
 
     scanForStaleAlbums(allLocations);
-    kDebug(50003) << "Scan for stale albums" << time.restart();
 
     if (d->wantSignals)
         emit startScanningAlbumRoots();
 
     foreach (const CollectionLocation &location, allLocations)
         scanAlbumRoot(location);
-    kDebug(50003) << "Scanned all album roots, overall" << time.restart();
 
     updateRemovedItemsTime();
     // Items may be set to status removed, without being definitely deleted.
@@ -210,7 +203,6 @@ void CollectionScanner::completeScan()
         // increment the count of complete scans during which removed items were not deleted
         incrementDeleteRemovedCompleteScanCount();
     }
-    kDebug(50003) << "Handle deleteRemoved" << time.restart();
 
     markDatabaseAsScanned();
 
@@ -434,9 +426,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
     // + Adds files if they do not yet exist in the db.
     // + Marks stale files as removed
 
-    QTime time;time.start();
     QDir dir(location.albumRootPath() + album);
-    kDebug(50003) << "Scanning album" << dir.path();
 
     if ( !dir.exists() or !dir.isReadable() )
     {
@@ -449,13 +439,11 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
         emit startScanningAlbum(location.albumRootPath(), album);
 
     int albumID = checkAlbum(location, album);
-    kDebug(50003) << "Checks and creatin album" << time.restart();
 
     // mark album as scanned
     d->scannedAlbums << albumID;
 
     QList<ItemScanInfo> scanInfos = DatabaseAccess().db()->getItemScanInfos(albumID);
-    kDebug(50003) << "List entries from database" << time.restart();
 
     // create a hash filename -> index in list
     QHash<QString, int> fileNameIndexHash;
@@ -465,11 +453,9 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
         fileNameIndexHash[scanInfos[i].itemName] = i;
         itemIdSet << scanInfos[i].id;
     }
-    kDebug(50003) << "Arranged in hashes" << time.restart();
 
     const QFileInfoList list = dir.entryInfoList(QDir::AllDirs | QDir::Files  | QDir::NoDotAndDotDot);
     QFileInfoList::const_iterator fi;
-    kDebug(50003) << "Stat'ing directory" << time.restart();
 
     for (fi = list.constBegin(); fi != list.constEnd(); ++fi)
     {
@@ -530,11 +516,9 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
             else
                 subalbum = album + '/' + fi->fileName();
 
-            kDebug(50003) << "Descending to subalbum";
             scanAlbum( location, subalbum );
         }
     }
-    kDebug(50003) << "Checked individual files" << time.restart();
 
     // Mark items in the db which we did not see on disk.
     if (!itemIdSet.isEmpty())
@@ -549,7 +533,6 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
 
 void CollectionScanner::scanNewFile(const QFileInfo &info, int albumId)
 {
-    QTime time;time.start();
     ImageScanner scanner(info);
     scanner.setCategory(category(info));
 
@@ -571,7 +554,6 @@ void CollectionScanner::scanNewFile(const QFileInfo &info, int albumId)
             // Establishing identity with the unique hsah
             scanner.newFile(albumId);
     }
-    kDebug(50003) << "Scanned new file" << info.filePath() << "took" << time.elapsed();
 }
 
 void CollectionScanner::scanModifiedFile(const QFileInfo &info, const ItemScanInfo &scanInfo)
