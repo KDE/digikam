@@ -4,7 +4,7 @@
  * http://www.digikam.org
  * 
  * Date        : 2005-04-21
- * Description : a dio-slave to process file operations on 
+ * Description : a kio-slave to process file operations on 
  *               digiKam albums.
  *
  * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>

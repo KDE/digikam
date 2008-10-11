@@ -2,7 +2,7 @@ FOLDER                                  CPP         H
 -----------------------------------------------------
 |-- digikam
 |-- imageplugins
-|-- kioslave
+|-- kioslave                            X           X
 |-- libs
 |   |-- curves
 |   |-- database
@@ -20,7 +20,7 @@ FOLDER                                  CPP         H
 |   |-- whitebalance
 |   `-- widgets
 |-- showfoto                            X           X
-|-- themedesigner
+|-- themedesigner                       X           X
 `-- utilities
     |-- batch
     |-- cameragui
