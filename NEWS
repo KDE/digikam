@@ -15,7 +15,8 @@ General        : libgphoto2 depency is now optional to be able to compile digiKa
 005 ==> 172650 : No kipi plugins available.
 006 ==> 172651 : Send image by email missing.
 007 ==> 168005 : Week view broken in timeline.
-008 ==> 
+008 ==> 172295 : digikam has a hard dependency on Jasper library.
+009 ==> 
 
 IMPORTANT: This is a beta release : do not use yet in production !!!
 ====================================================================
