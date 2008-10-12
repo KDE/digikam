@@ -13,7 +13,8 @@ General        : libgphoto2 depency is now optional to be able to compile digiKa
 003 ==> 172269 : digiKam hangs for around 20-60 seconds when starting.
 004 ==> 172648 : Thumbnail click does not display embeded picture preview.
 005 ==> 172650 : No kipi plugins available.
-006 ==> 
+006 ==> 172651 : Send image by email missing.
+007 ==> 
 
 IMPORTANT: This is a beta release : do not use yet in production !!!
 ====================================================================
