@@ -301,7 +301,7 @@ int TimeLineWidget::cursorInfo(QString& infoDate)
         }
     }
 
-    return statForDateTime(dt, selected);
+    return statForDateTime(dt, &selected);
 }
 
 void TimeLineWidget::setRefDateTime(const QDateTime& dateTime)
@@ -628,7 +628,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
 
     for (int i = 0 ; i < d->nbItems ; i++)
     {
-        val = statForDateTime(ref, sel);
+        val = statForDateTime(ref, &sel);
         max = (double)maxCount();
 
         if (d->scaleMode == TimeLineWidget::LogScale)
@@ -815,7 +815,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
 
     for (int i = 0 ; i < d->nbItems-1 ; i++)
     {
-        val = statForDateTime(ref, sel);
+        val = statForDateTime(ref, &sel);
         max = (double)maxCount();
 
         if (d->scaleMode == TimeLineWidget::LogScale)
@@ -1122,7 +1122,7 @@ int TimeLineWidget::maxCount()
     return max;
 }
 
-int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected)
+int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode *selected)
 {
     int count = 0;
     int year  = dt.date().year();
@@ -1130,7 +1130,7 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected
     int day   = d->calendar->dayOfYear(dt.date());
     int yearForWeek  = year;  // Used with week shared between 2 years decade (Dec/Jan).
     int week  = d->calendar->weekNumber(dt.date(), &yearForWeek);
-    selected  = Unselected;
+    *selected  = Unselected;
 
     switch(d->timeUnit)
     {
@@ -1141,7 +1141,7 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected
             if ( it != d->dayStatMap.end() )
             {
                 count    = it.value().first;
-                selected = it.value().second;
+                *selected = it.value().second;
             }
             break;
         }
@@ -1152,7 +1152,7 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected
             if ( it != d->weekStatMap.end() )
             {
                 count    = it.value().first;
-                selected = it.value().second;
+                *selected = it.value().second;
             }
             break;
         }
@@ -1163,7 +1163,7 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected
             if ( it != d->monthStatMap.end() )
             {
                 count    = it.value().first;
-                selected = it.value().second;
+                *selected = it.value().second;
             }
             break;
         }
@@ -1173,7 +1173,7 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected
             if ( it != d->yearStatMap.end() )
             {
                 count    = it.value().first;
-                selected = it.value().second;
+                *selected = it.value().second;
             }
             break;
         }
@@ -1497,7 +1497,7 @@ void TimeLineWidget::mousePressEvent(QMouseEvent *e)
         QPoint pt(e->x(), e->y());
 
         bool ctrlPressed    = e->modifiers() & Qt::ControlButton;
-        QDateTime ref       = dateTimeForPoint(pt, d->selMouseEvent);
+        QDateTime ref       = dateTimeForPoint(pt, &d->selMouseEvent);
         d->selStartDateTime = QDateTime();
         if (d->selMouseEvent)
         {
@@ -1525,7 +1525,7 @@ void TimeLineWidget::mouseMoveEvent(QMouseEvent *e)
         QPoint pt(e->x(), e->y());
 
         bool sel;
-        QDateTime selEndDateTime = dateTimeForPoint(pt, sel);
+        QDateTime selEndDateTime = dateTimeForPoint(pt, &sel);
         setCursorDateTime(selEndDateTime);
 
         // Clamp start and end date-time of current contiguous selection.
@@ -1599,10 +1599,10 @@ void TimeLineWidget::mouseReleaseEvent(QMouseEvent*)
     d->selMouseEvent = false;
 }
 
-QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool &isOnSelectionArea)
+QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool *isOnSelectionArea)
 {
     QRect barRect, selRect;
-    isOnSelectionArea = false;
+    *isOnSelectionArea = false;
 
     // Check on the right of reference date.
 
@@ -1625,7 +1625,7 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool &isOnSelection
         selRect.setRight(d->startPos + (i+1)*d->barWidth);
 
         if (selRect.contains(pt))
-            isOnSelectionArea = true;
+            *isOnSelectionArea = true;
 
         if (barRect.contains(pt) || selRect.contains(pt))
         {
@@ -1660,7 +1660,7 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool &isOnSelection
         selRect.setRight(d->startPos - i*d->barWidth);
 
         if (selRect.contains(pt))
-            isOnSelectionArea = true;
+            *isOnSelectionArea = true;
 
         if (barRect.contains(pt) || selRect.contains(pt))
         {
