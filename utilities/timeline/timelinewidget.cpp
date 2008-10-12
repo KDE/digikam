@@ -1520,12 +1520,36 @@ void TimeLineWidget::mousePressEvent(QMouseEvent *e)
 
 void TimeLineWidget::mouseMoveEvent(QMouseEvent *e)
 {
+    // set cursor shape to indicate selection area
+    QRect selectionArea;
+    selectionArea.setTop(height() - d->bottomMargin + 1);
+    selectionArea.setLeft(0);
+    selectionArea.setBottom(height());
+    selectionArea.setRight(width());
+
+    bool sel;
+    QDateTime selEndDateTime;
+
+    if (selectionArea.contains(e->pos()))
+    {
+        selEndDateTime = dateTimeForPoint(e->pos(), &sel);
+        SelectionMode unused;
+        bool hasSelectableDates = statForDateTime(selEndDateTime, &unused);
+        if (hasSelectableDates)
+            setCursor(Qt::PointingHandCursor);
+        else
+            unsetCursor();
+    }
+    else
+        unsetCursor();
+
+    // handle move event
     if (d->validMouseEvent == true)
     {
         QPoint pt(e->x(), e->y());
 
-        bool sel;
-        QDateTime selEndDateTime = dateTimeForPoint(pt, &sel);
+        if (selEndDateTime.isNull())
+            selEndDateTime = dateTimeForPoint(pt, &sel);
         setCursorDateTime(selEndDateTime);
 
         // Clamp start and end date-time of current contiguous selection.
