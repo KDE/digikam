@@ -128,9 +128,7 @@ private:
     int           statForDateTime(const QDateTime& dt, SelectionMode& selected);
     void          setRefDateTime(const QDateTime& dateTime);
 
-    void          updatePixmap();
     void          paintEvent(QPaintEvent*);
-    void          resizeEvent(QResizeEvent*);
     void          wheelEvent(QWheelEvent*);
 
     void          mousePressEvent(QMouseEvent*);

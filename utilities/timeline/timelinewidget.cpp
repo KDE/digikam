@@ -148,7 +148,6 @@ TimeLineWidget::TimeUnit TimeLineWidget::timeUnit() const
 void TimeLineWidget::setScaleMode(ScaleMode scaleMode)
 {
     d->scaleMode = scaleMode;
-    updatePixmap();
     update();
 }
 
@@ -335,7 +334,6 @@ void TimeLineWidget::setRefDateTime(const QDateTime& dateTime)
     }
 
     d->refDateTime = dt;
-    updatePixmap();
     update();
     emit signalRefDateTimeChanged();
 }
@@ -343,7 +341,6 @@ void TimeLineWidget::setRefDateTime(const QDateTime& dateTime)
 void TimeLineWidget::slotResetSelection()
 {
     resetSelection();
-    updatePixmap();
     update();
 }
 
@@ -392,7 +389,6 @@ void TimeLineWidget::setSelectedDateRange(const DateRangeList& list)
         }
     }
 
-    updatePixmap();
     update();
 }
 
@@ -599,18 +595,13 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
         d->minDateTime = d->refDateTime;
     }
 
-    updatePixmap();
     update();
     emit signalDateMapChanged();
 }
 
-void TimeLineWidget::updatePixmap()
+void TimeLineWidget::paintEvent(QPaintEvent*)
 {
-    // Drawing background and image.
-    d->pixmap = QPixmap(size());
-    d->pixmap.fill(palette().color(QPalette::Background));
-
-    QPainter p(&d->pixmap);
+    QPainter p(this);
 
     d->bottomMargin = (int)(p.fontMetrics().height()*1.5);
     d->barWidth     = p.fontMetrics().width("00");
@@ -1387,18 +1378,6 @@ TimeLineWidget::SelectionMode TimeLineWidget::checkSelectionForDaysRange(const Q
     return Selected;
 }
 
-void TimeLineWidget::paintEvent(QPaintEvent*)
-{
-    QPainter p(this);
-    p.drawPixmap(0, 0, d->pixmap);
-    p.end();
-}
-
-void TimeLineWidget::resizeEvent(QResizeEvent*)
-{
-    updatePixmap();
-}
-
 void TimeLineWidget::slotBackward()
 {
     QDateTime ref = d->refDateTime;
@@ -1534,7 +1513,6 @@ void TimeLineWidget::mousePressEvent(QMouseEvent *e)
             setCursorDateTime(ref);
 
         d->validMouseEvent = true;
-        updatePixmap();
         update();
     }
 }
@@ -1601,7 +1579,6 @@ void TimeLineWidget::mouseMoveEvent(QMouseEvent *e)
             }
         }
 
-        updatePixmap();
         update();
     }
 }
@@ -1731,7 +1708,6 @@ QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber)
 
 void TimeLineWidget::slotThemeChanged()
 {
-    updatePixmap();
     update();
 }
 
