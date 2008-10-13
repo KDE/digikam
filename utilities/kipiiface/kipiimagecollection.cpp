@@ -239,7 +239,7 @@ KUrl KipiImageCollection::path()
     }
     else
     {
-        kWarning(50003) << "Requesting kurl from a virtual album" << endl;
+        kWarning(50003) << "Requesting KUrl from a virtual album" << endl;
         return QString();
     }
 }
@@ -255,7 +255,7 @@ KUrl KipiImageCollection::uploadPath()
     }
     else
     {
-        kWarning(50003) << "Requesting kurl from a virtual album" << endl;
+        kWarning(50003) << "Requesting KUrl from a virtual album" << endl;
         return KUrl();
     }
 }

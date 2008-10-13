@@ -551,7 +551,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                     }
 
                     // NOTE : with implementations <= 0.9.1, the canvas doesn't work properly using high zoom level (> 500).
-                    // The sx, sy, sw, sh values haven't be computed properly and "tile" artefacts been appears
+                    // The sx, sy, sw, sh values haven't be computed properly and "tile" artifacts been appears
                     // over the image. Look the example here:
                     // http://digikam3rdparty.free.fr/Screenshots/editorhighzoomartefact.png
                     // Note than these "tile" artifacts are not the real tiles of canvas.

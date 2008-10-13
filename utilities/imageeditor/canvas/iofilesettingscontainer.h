@@ -61,7 +61,7 @@ public:
     // PNG compression value.
     int  PNGCompression;
 
-    // TIFF deflat compression.
+    // TIFF deflate compression.
     bool TIFFCompression;
 
     // JPEG2000 quality value.

@@ -169,7 +169,7 @@ CameraController::CameraController(QWidget* parent,
             d->camera = new GPCamera(title, model, port, path);
     }
 
-    // setup interthread signals
+    // setup inter-thread signals
 
     qRegisterMetaType<GPItemInfo>("GPItemInfo");
     qRegisterMetaType<GPItemInfoList>("GPItemInfoList");
@@ -507,7 +507,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
                         metadata.applyChanges();
                     }
 
-                    // Convert Jpeg file to lossless format if necessary,
+                    // Convert JPEG file to lossless format if necessary,
                     // and move converted image to destination.
 
                     if (convertJpeg && isJpegImage(tempURL.path()))

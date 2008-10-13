@@ -716,7 +716,7 @@ void ImageEditorPrintDialogPage::slotWidthChanged (double value)
 void ImageEditorPrintDialogPage::toggleRatio( bool enable )
 {
     if (!enable) return;
-    // choosing a startup value of 15x10 cm (common photo dimention)
+    // choosing a startup value of 15x10 cm (common photo dimension)
     // mContent->mHeight->value() or mContent->mWidth->value()
     // are usually empty at startup and hxw (0x0) is not good IMO keeping ratio
     double hValue, wValue;

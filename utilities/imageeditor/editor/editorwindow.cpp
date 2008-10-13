@@ -1111,7 +1111,7 @@ bool EditorWindow::promptUserSave(const KUrl& url)
 {
     if (m_saveAction->isEnabled())
     {
-        // if window is iconified, show it
+        // if window is minimized, show it
         if (isMinimized())
         {
             KWindowSystem::unminimizeWindow(winId());
@@ -1366,7 +1366,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
             return;
         }
 
-        // Only try to write exif if both src and destination are jpeg files
+        // Only try to write Exif if both src and destination are JPEG files
 
         kDebug(50003) << "renaming to " << m_savingContext->destinationURL.path() << endl;
 
@@ -1569,7 +1569,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     group.writeEntry("LastSavedImageTypeMime", m_savingContext->format);
     config->sync();
 
-    // if new and original url are equal use slotSave() ------------------------------
+    // if new and original URL are equal use slotSave() ------------------------------
 
     KUrl currURL(m_savingContext->srcURL);
     currURL.cleanPath();

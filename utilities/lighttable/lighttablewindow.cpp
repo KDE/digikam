@@ -608,7 +608,7 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list,
     }
     d->barView->blockSignals(false);
 
-    // if window is iconified, show it
+    // if window is minimized, show it
     if (isMinimized())
     {
         KWindowSystem::unminimizeWindow(winId());

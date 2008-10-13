@@ -574,7 +574,7 @@ void ImageResize::slotOk()
     }
     else
     {
-        // See B.K.O #152192: CImg resize() sound like bugous or unadapted
+        // See B.K.O #152192: CImg resize() sound like defective or unadapted
         // to resize image without good quality.
 
         image.resize(d->wInput->value(), d->hInput->value());

@@ -350,7 +350,7 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
                                 break;
                             case GP_STORAGEINFO_ST_UNKNOWN:
                             default:
-                                kDebug(50003) << "Storage type: unknow" << endl;
+                                kDebug(50003) << "Storage type: unknown" << endl;
                                 break;
                         }
                     }

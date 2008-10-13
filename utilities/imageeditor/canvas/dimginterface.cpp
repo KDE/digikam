@@ -612,15 +612,15 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
 
     d->savingFilename = fileName;
 
-    // Get image Exif/Iptc data.
+    // Get image Exif/IPTC data.
     DMetadata meta;
     meta.setExif(d->image.getExif());
     meta.setIptc(d->image.getIptc());
     meta.setXmp(d->image.getXmp());
 
-    // Update Iptc preview.
+    // Update IPTC preview.
     // NOTE: see B.K.O #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
-    // bigger than 64K duing of image preview tag size, the target JPEG image will be
+    // bigger than 64K during of image preview tag size, the target JPEG image will be
     // broken. Note that IPTC image preview tag is limited to 256K!!!
     // There is no limitation with TIFF and PNG about IPTC byte array size.
 
@@ -654,7 +654,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     if( setExifOrientationTag )
         meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
 
-    // Store new Exif/Iptc/Xmp data into image.
+    // Store new Exif/IPTC/XMP data into image.
     d->image.setExif(meta.getExif());
     d->image.setIptc(meta.getIptc());
     d->image.setXmp(meta.getXmp());

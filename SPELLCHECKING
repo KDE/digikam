@@ -47,39 +47,27 @@ FOLDER                                  CPP         H
 |   `-- widgets
 |-- showfoto                            X           X
 |-- themedesigner                       X           X
-`-- utilities
-    |-- batch
-    |-- cameragui
-    |-- fuzzysearch
-    |-- gpssearch
-    |-- hotplug
-    |-- imageeditor
-    |-- kipiiface
-    |-- lighttable
-    |-- scripts
-    |-- searchwindow
+`-- utilities                           X           X
+    |-- batch                           X           X
+    |-- cameragui                       X           X
+    |-- fuzzysearch                     X           X
+    |-- gpssearch                       X           X
+    |-- imageeditor                     X           X
+    |-- kipiiface                       X           X
+    |-- lighttable                      X           X
+    |-- searchwindow                    X           X
     |-- setup                           X           X
     |-- slideshow                       X           X
     `-- timelinew                       X           X
 
 
 
-Note:   Maybe you want to help spell checking our sourcecode?
-        You can do so using those commands in one of the folders. Don't run
-        them under the main digiKam root, if you don't want to sit in front of aspell
-        all day :-)
+NOTE:
+Maybe you want to help spell checking our source code?
+You can do so using those commands in one of the folders. Don't run
+them under the main digiKam root, if you don't want to sit in front of aspell
+all day :-)
 
-            find -type f -iname "*.cpp" -exec aspell check -x --mode=ccpp {} \;
-            find -type f -iname "*.h" -exec aspell check -x --mode=ccpp {} \;
-
-        Normally you are able to combine those commands, but then somehow aspell
-        will only scan the header files:
-
-            find -type f -iname "*.cpp" -o -iname "*.h" -exec aspell check -x --mode=ccpp {} \;
-
-        Maybe I'm doing something wrong, find will list both filetypes, but
-        aspell doesn't care.
-
-
-Andi
+    find -type f -iname "*.cpp" -exec aspell check -x --mode=ccpp {} \;
+    find -type f -iname "*.h" -exec aspell check -x --mode=ccpp {} \;
 

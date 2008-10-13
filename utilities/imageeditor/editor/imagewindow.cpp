@@ -527,7 +527,7 @@ void ImageWindow::loadCurrentList(const QString& caption, bool allowSaving)
 {
     // this method contains the code shared by loadURL and loadImageInfos
 
-    // if window is iconified, show it
+    // if window is minimized, show it
     if (isMinimized())
     {
         KWindowSystem::unminimizeWindow(winId());
@@ -978,7 +978,7 @@ void ImageWindow::saveAsIsComplete()
     else
     {
         //TODO: make the user aware that the new path has not been used as new current filename
-        //      because it is outside the digikam album hierachy
+        //      because it is outside the digikam album hierarchy
     }
 }
 

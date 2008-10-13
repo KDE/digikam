@@ -197,7 +197,7 @@ void KipiInterface::delImage( const KUrl& url )
         kWarning(50003) << "URL not in the album library" << endl;
     }
 
-    // Is there a PAlbum for this url
+    // Is there a PAlbum for this URL
 
     PAlbum *palbum = m_albumManager->findPAlbum( KUrl(url.directory()) );
 
