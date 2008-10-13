@@ -89,23 +89,23 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     m_showGrid->setWhatsThis(i18n("Set this option to visualize correction grid to be applied."));
 
     m_filterCCA  = new QCheckBox(i18n("Chromatic Aberration"), m_gboxSettings->plainPage());
-    m_filterCCA->setWhatsThis(i18n("Chromatic aberration is easily recognised as color fringes "
-                                   "towards the image corners. CA is due to a variing lens focus "
+    m_filterCCA->setWhatsThis(i18n("Chromatic aberration is easily recognized as color fringes "
+                                   "towards the image corners. CA is due to a varying lens focus "
                                    "for different colors."));
     m_filterVig  = new QCheckBox(i18n("Vignetting"), m_gboxSettings->plainPage());
     m_filterVig->setWhatsThis(i18n("Vignetting refers to an image darkening, mostly in the corners. "
-                                   "Optical and natural vignetting can be cancelled out with this option, "
+                                   "Optical and natural vignetting can be canceled out with this option, "
                                    "whereas mechanical vignetting will not be cured."));
     m_filterCCI  = new QCheckBox(i18n("Color Correction"), m_gboxSettings->plainPage());
     m_filterCCI->setWhatsThis(i18n("All lenses have a slight color tinge to them, "
                                    "mostly due to the anti-reflective coating. "
-                                   "The tinge can be cancelled when the respective data is known for the lens."));
+                                   "The tinge can be canceled when the respective data is known for the lens."));
     m_filterDist = new QCheckBox(i18n("Distortion"), m_gboxSettings->plainPage());
     m_filterDist->setWhatsThis(i18n("Distortion refers to an image deformation, which is most pronounced "
                                     "towards the corners. These Seidel aberrations are known as pincushion "
-                                    "and barrel distorsions."));
+                                    "and barrel distortions."));
     m_filterGeom = new QCheckBox(i18n("Geometry"), m_gboxSettings->plainPage());
-    m_filterGeom->setWhatsThis(i18n("Four geometries are handeled here: Rectilinear (99 percent of all lenses), "
+    m_filterGeom->setWhatsThis(i18n("Four geometries are handled here: Rectilinear (99 percent of all lenses), "
                                     "Fisheye, Cylindrical, Equirectangular."));
 
     grid->addWidget(m_showGrid,       0, 0, 1, 2);

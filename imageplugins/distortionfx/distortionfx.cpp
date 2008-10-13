@@ -180,7 +180,7 @@ void DistortionFX::setPixelFromOther(int Width, int Height, bool sixteenBit, int
  * Height           => Height of image.    
  * Coeff            => Distortion effect coeff. Positive value render 'Fish Eyes' effect, 
  *                     and negative values render 'Caricature' effect.
- * Antialias        => Smart bluring result.                       
+ * Antialias        => Smart blurring result.                       
  *                                                                                  
  * Theory           => This is a great effect if you take employee photos
  *                     Its pure trigonometry. I think if you study hard the code you
@@ -267,7 +267,7 @@ void DistortionFX::fisheye(Digikam::DImg *orgImage, Digikam::DImg *destImage, do
  * Width            => Width of image.                          
  * Height           => Height of image.                            
  * Twirl            => Distance value.
- * Antialias        => Smart bluring result.    
+ * Antialias        => Smart blurring result.    
  *                                                                                  
  * Theory           => Take spiral studies, you will understand better, I'm studying
  *                     hard on this effect, because it is not too fast.
@@ -362,7 +362,7 @@ void DistortionFX::twirl(Digikam::DImg *orgImage, Digikam::DImg *destImage, int 
  * Coeff            => Cilindrical value.
  * Horizontal       => Apply horizontally.
  * Vertical         => Apply vertically.
- * Antialias        => Smart bluring result. 
+ * Antialias        => Smart blurring result. 
  *                                                                                  
  * Theory           => This is a great effect, similar to Spherize (Photoshop).    
  *                     If you understand FishEye, you will understand Cilindrical    
@@ -446,7 +446,7 @@ void DistortionFX::cilindrical(Digikam::DImg *orgImage, Digikam::DImg *destImage
  * Width            => Width of image.                          
  * Height           => Height of image.       
  * Factor           => nb corners.
- * Antialias        => Smart bluring result.                      
+ * Antialias        => Smart blurring result.                      
  *                                                                                  
  * Theory           => This is an amazing function, you've never seen this before. 
  *                     I was testing some trigonometric functions, and I saw that if  
@@ -512,7 +512,7 @@ void DistortionFX::multipleCorners(Digikam::DImg *orgImage, Digikam::DImg *destI
  * Width            => Width of image.                          
  * Height           => Height of image.
  * Type             => if true Polar Coordinate to Polar else inverse.
- * Antialias        => Smart bluring result.                      
+ * Antialias        => Smart blurring result.                      
  *                                                                                  
  * Theory           => Similar to PolarCoordinates from Photoshop. We apply the polar   
  *                     transformation in a proportional (Height and Width) radius.
@@ -851,10 +851,10 @@ void DistortionFX::tile(Digikam::DImg *orgImage, Digikam::DImg *destImage,
  *                                                                                  
  * Height           => Height of the image                                         
  * Width            => Width of the image                                           
- * Angle            => Angle to analize the maximum radius                          
+ * Angle            => Angle to analyze the maximum radius                          
  *                                                                                  
- * Theory           => This function calcule the maximum radius to that angle      
- *                     so, we can build an oval circunference                        
+ * Theory           => This function calculates the maximum radius to that angle      
+ *                     so, we can build an oval circumference                        
  */                                                                                   
  /*
 double DistortionFX::maximumRadius(int Height, int Width, double Angle)

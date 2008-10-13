@@ -91,7 +91,7 @@ BorderTool::BorderTool(QObject* parent)
 
     m_borderType   = new RComboBox( m_gboxSettings->plainPage() );
     m_borderType->addItem(i18n("Solid"));
-    // NOTE: Niepce is Real name. This is the first guy in the world to have built a camera.
+    // NOTE: Niepce is a real name. This is the first guy in the world to have built a camera.
     m_borderType->addItem("Niepce");
     m_borderType->addItem(i18n("Beveled"));
     m_borderType->addItem(i18n("Decorative Pine"));

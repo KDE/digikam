@@ -38,7 +38,7 @@
 namespace DigikamLensDistortionImagesPlugin
 {
 
-    /* PixelAcess class: solving the eternal problem: random, cubic-interpolated,
+    /* PixelAccess class: solving the eternal problem: random, cubic-interpolated,
      * sub-pixel coordinate access to an image.
      * Assuming that accesses are at least slightly coherent,
      * PixelAccess keeps PixelAccessRegions buffers, each containing a

@@ -122,14 +122,14 @@ InPaintingTool::InPaintingTool(QObject* parent)
     typeLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_inpaintingTypeCB = new KComboBox(firstPage);
     m_inpaintingTypeCB->addItem(i18n("None"));
-    m_inpaintingTypeCB->addItem(i18n("Remove Small Artefact"));
-    m_inpaintingTypeCB->addItem(i18n("Remove Medium Artefact"));
-    m_inpaintingTypeCB->addItem(i18n("Remove Large Artefact"));
+    m_inpaintingTypeCB->addItem(i18n("Remove Small Artifact"));
+    m_inpaintingTypeCB->addItem(i18n("Remove Medium Artifact"));
+    m_inpaintingTypeCB->addItem(i18n("Remove Large Artifact"));
     m_inpaintingTypeCB->setWhatsThis( i18n("<p>Select the filter preset to use for photograph restoration here:</p>"
                                            "<p><b>None</b>: Most common values. Puts settings to default.<br/>"
-                                           "<b>Remove Small Artefact</b>: inpaint small image artefact like image glitch.<br/>"
-                                           "<b>Remove Medium Artefact</b>: inpaint medium image artefact.<br/>"
-                                           "<b>Remove Large Artefact</b>: inpaint image artefact like unwanted object.</p>"));
+                                           "<b>Remove Small Artifact</b>: inpaint small image artifact like image glitch.<br/>"
+                                           "<b>Remove Medium Artifact</b>: inpaint medium image artefact.<br/>"
+                                           "<b>Remove Large Artifact</b>: inpaint image artifact like unwanted object.</p>"));
 
     grid->addWidget(cimgLogoLabel,      0, 1, 1, 1);
     grid->addWidget(typeLabel,          1, 0, 1, 1);
@@ -285,7 +285,7 @@ void InPaintingTool::prepareEffect()
     //
     // We optimize the computation time to use the current selected area in image editor
     // and to create an inpainting mask with it. Because inpainting is done by interpolation
-    // neighboor pixels which can be located far from the selected area, we need to ajust the
+    // neighbor pixels which can be located far from the selected area, we need to adjust the
     // mask size in according with the parameter algorithms, especially 'amplitude'.
     // Mask size is computed like this :
     //

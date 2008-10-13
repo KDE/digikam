@@ -186,8 +186,8 @@ void ColorFXTool::readSettings()
                         (int)HistogramWidget::LogScaleHistogram));
 
     m_effectType->setCurrentIndex(group.readEntry("EffectType", m_effectType->defaultIndex()));
-    m_levelInput->setValue(group.readEntry("LevelAjustment", m_levelInput->defaultValue()));
-    m_iterationInput->setValue(group.readEntry("IterationAjustment", m_iterationInput->defaultValue()));
+    m_levelInput->setValue(group.readEntry("LevelAdjustment", m_levelInput->defaultValue()));
+    m_iterationInput->setValue(group.readEntry("IterationAdjustment", m_iterationInput->defaultValue()));
     slotEffectTypeChanged(m_effectType->currentIndex());  //check for enable/disable of iteration
 }
 
@@ -198,8 +198,8 @@ void ColorFXTool::writeSettings()
     group.writeEntry("Histogram Channel", m_gboxSettings->histogramBox()->channel());
     group.writeEntry("Histogram Scale", m_gboxSettings->histogramBox()->scale());
     group.writeEntry("EffectType", m_effectType->currentIndex());
-    group.writeEntry("LevelAjustment", m_levelInput->value());
-    group.writeEntry("IterationAjustment", m_iterationInput->value());
+    group.writeEntry("LevelAdjustment", m_levelInput->value());
+    group.writeEntry("IterationAdjustment", m_iterationInput->value());
     group.sync();
 }
 

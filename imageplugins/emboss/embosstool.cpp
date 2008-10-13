@@ -121,7 +121,7 @@ void EmbossTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("emboss Tool");
     m_depthInput->blockSignals(true);
-    m_depthInput->setValue(group.readEntry("DepthAjustment", m_depthInput->defaultValue()));
+    m_depthInput->setValue(group.readEntry("DepthAdjustment", m_depthInput->defaultValue()));
     m_depthInput->blockSignals(false);
 }
 
@@ -129,7 +129,7 @@ void EmbossTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("emboss Tool");
-    group.writeEntry("DepthAjustment", m_depthInput->value());
+    group.writeEntry("DepthAdjustment", m_depthInput->value());
     group.sync();
 }
 

@@ -377,7 +377,7 @@ void AdjustCurvesTool::slotEffect()
     // Calculate the LUT to apply on the image.
     m_curvesWidget->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
 
-    // Apply the lut to the image.
+    // Apply the LUT to the image.
     m_curvesWidget->curves()->curvesLutProcess(orgData, m_destinationPreviewData, w, h);
 
     iface->putPreviewImage(m_destinationPreviewData);
@@ -403,7 +403,7 @@ void AdjustCurvesTool::finalRendering()
     // Calculate the LUT to apply on the image.
     m_curvesWidget->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
 
-    // Apply the lut to the image.
+    // Apply the LUT to the image.
     m_curvesWidget->curves()->curvesLutProcess(orgData, desData, w, h);
 
     iface->putOriginalImage(i18n("Adjust Curve"), desData);
@@ -499,7 +499,7 @@ void AdjustCurvesTool::readSettings()
         for (int j = 0 ; j < 17 ; j++)
         {
             QPoint disable(-1, -1);
-            QPoint p = group.readEntry(QString("CurveAjustmentChannel%1Point%2").arg(i).arg(j), disable);
+            QPoint p = group.readEntry(QString("CurveAdjustmentChannel%1Point%2").arg(i).arg(j), disable);
 
             if (m_originalImage->sixteenBit() && p.x() != -1)
             {
@@ -543,7 +543,7 @@ void AdjustCurvesTool::writeSettings()
                 p.setY(p.y()/255);
             }
 
-            group.writeEntry(QString("CurveAjustmentChannel%1Point%2").arg(i).arg(j), p);
+            group.writeEntry(QString("CurveAdjustmentChannel%1Point%2").arg(i).arg(j), p);
         }
     }
 

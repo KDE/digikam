@@ -564,7 +564,7 @@ void ICCProofTool::readSettings()
     m_inProfileBG->button(group.readEntry("InputProfileMethod", 0))->setChecked(true);
     m_spaceProfileBG->button(group.readEntry("SpaceProfileMethod", 0))->setChecked(true);
     m_proofProfileBG->button(group.readEntry("ProofProfileMethod", 0))->setChecked(true);
-    m_cInput->setValue(group.readEntry("ContrastAjustment", m_cInput->defaultValue()));
+    m_cInput->setValue(group.readEntry("ContrastAdjustment", m_cInput->defaultValue()));
 
     for (int i = 0 ; i < 5 ; i++)
         m_curvesWidget->curves()->curvesChannelReset(i);
@@ -575,7 +575,7 @@ void ICCProofTool::readSettings()
     for (int j = 0 ; j < 17 ; j++)
     {
         QPoint disable(-1, -1);
-        QPoint p = group.readEntry(QString("CurveAjustmentPoint%1").arg(j), disable);
+        QPoint p = group.readEntry(QString("CurveAdjustmentPoint%1").arg(j), disable);
 
         if (m_originalImage->sixteenBit() && p.x() != -1)
         {
@@ -614,7 +614,7 @@ void ICCProofTool::writeSettings()
     group.writeEntry("InputProfileMethod", m_inProfileBG->checkedId());
     group.writeEntry("SpaceProfileMethod", m_spaceProfileBG->checkedId());
     group.writeEntry("ProofProfileMethod", m_proofProfileBG->checkedId());
-    group.writeEntry("ContrastAjustment", m_cInput->value());
+    group.writeEntry("ContrastAdjustment", m_cInput->value());
 
     for (int j = 0 ; j < 17 ; j++)
     {
@@ -626,7 +626,7 @@ void ICCProofTool::writeSettings()
             p.setY(p.y()/255);
         }
 
-        group.writeEntry(QString("CurveAjustmentPoint%1").arg(j), p);
+        group.writeEntry(QString("CurveAdjustmentPoint%1").arg(j), p);
     }
 
     group.sync();

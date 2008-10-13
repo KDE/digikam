@@ -210,8 +210,8 @@ void BlurFXTool::readSettings()
     m_levelInput->blockSignals(true);
 
     m_effectType->setCurrentIndex(group.readEntry("EffectType", m_effectType->defaultIndex()));
-    m_distanceInput->setValue(group.readEntry("DistanceAjustment", m_distanceInput->defaultValue()));
-    m_levelInput->setValue(group.readEntry("LevelAjustment",m_levelInput->defaultValue()));
+    m_distanceInput->setValue(group.readEntry("DistanceAdjustment", m_distanceInput->defaultValue()));
+    m_levelInput->setValue(group.readEntry("LevelAdjustment",m_levelInput->defaultValue()));
 
     m_effectType->blockSignals(false);
     m_distanceInput->blockSignals(false);
@@ -223,8 +223,8 @@ void BlurFXTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("blurfx Tool");
     group.writeEntry("EffectType", m_effectType->currentIndex());
-    group.writeEntry("DistanceAjustment", m_distanceInput->value());
-    group.writeEntry("LevelAjustment", m_levelInput->value());
+    group.writeEntry("DistanceAdjustment", m_distanceInput->value());
+    group.writeEntry("LevelAdjustment", m_levelInput->value());
     group.sync();
 }
 

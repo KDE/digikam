@@ -238,9 +238,9 @@ void RGBTool::readSettings()
     m_gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
                         (int)HistogramWidget::LogScaleHistogram));
 
-    int r = group.readEntry("RedAjustment", m_rInput->defaultValue());
-    int g = group.readEntry("GreenAjustment", m_gInput->defaultValue());
-    int b = group.readEntry("BlueAjustment", m_bInput->defaultValue());
+    int r = group.readEntry("RedAdjustment", m_rInput->defaultValue());
+    int g = group.readEntry("GreenAdjustment", m_gInput->defaultValue());
+    int b = group.readEntry("BlueAdjustment", m_bInput->defaultValue());
     adjustSliders(r, g, b);
 }
 
@@ -250,9 +250,9 @@ void RGBTool::writeSettings()
     KConfigGroup group        = config->group("colorbalance Tool");
     group.writeEntry("Histogram Channel", m_gboxSettings->histogramBox()->channel());
     group.writeEntry("Histogram Scale", m_gboxSettings->histogramBox()->scale());
-    group.writeEntry("RedAjustment", m_rSlider->value());
-    group.writeEntry("GreenAjustment", m_gInput->value());
-    group.writeEntry("BlueAjustment", m_bInput->value());
+    group.writeEntry("RedAdjustment", m_rSlider->value());
+    group.writeEntry("GreenAdjustment", m_gInput->value());
+    group.writeEntry("BlueAdjustment", m_bInput->value());
     group.sync();
 }
 

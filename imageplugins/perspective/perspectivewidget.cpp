@@ -199,7 +199,7 @@ void PerspectiveWidget::applyPerspectiveAdjustment()
                      getBottomLeftCorner(), getBottomRightCorner(),
                      orgImage, &destImage, background);
 
-    // Perform an auto-croping around the image.
+    // Perform an auto-cropping around the image.
 
     Digikam::DImg targetImg = destImage.copy(getTargetSize());
 
@@ -584,7 +584,7 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
                 int u = iu - u1;
                 int v = iv - v1;
 
-                //TODO: Check why antialiasing doesn't work
+                //TODO: Check why anti-aliasing doesn't work
                 /*if (m_antiAlias)
                 {
                     if (sixteenBit)

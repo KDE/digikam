@@ -60,7 +60,7 @@ private:
     bool SetDropStatusBits (int Width, int Height, uchar *pStatusBits, int X, int Y, int DropSize);
 
     // A color is represented in RGB value (e.g. 0xFFFFFF is white color). 
-    // But R, G and B values has 256 values to be used so, this function analize 
+    // But R, G and B values has 256 values to be used so, this function analyzes 
     // the value and limits to this range.
     inline int LimitValues8(int ColorValue)
     {

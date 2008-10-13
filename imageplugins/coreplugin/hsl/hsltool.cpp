@@ -238,9 +238,9 @@ void HSLTool::readSettings()
     m_gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
                         (int)HistogramWidget::LogScaleHistogram));
 
-    m_hInput->setValue(group.readEntry("HueAjustment", m_hInput->defaultValue()));
-    m_sInput->setValue(group.readEntry("SaturationAjustment", m_sInput->defaultValue()));
-    m_lInput->setValue(group.readEntry("LighnessAjustment", m_lInput->defaultValue()));
+    m_hInput->setValue(group.readEntry("HueAdjustment", m_hInput->defaultValue()));
+    m_sInput->setValue(group.readEntry("SaturationAdjustment", m_sInput->defaultValue()));
+    m_lInput->setValue(group.readEntry("LighnessAdjustment", m_lInput->defaultValue()));
     slotHChanged(m_hInput->value());
     slotSChanged(m_sInput->value());
 }
@@ -251,9 +251,9 @@ void HSLTool::writeSettings()
     KConfigGroup group        = config->group("hsladjust Tool");
     group.writeEntry("Histogram Channel", m_gboxSettings->histogramBox()->channel());
     group.writeEntry("Histogram Scale", m_gboxSettings->histogramBox()->scale());
-    group.writeEntry("HueAjustment", m_hInput->value());
-    group.writeEntry("SaturationAjustment", m_sInput->value());
-    group.writeEntry("LighnessAjustment", m_lInput->value());
+    group.writeEntry("HueAdjustment", m_hInput->value());
+    group.writeEntry("SaturationAdjustment", m_sInput->value());
+    group.writeEntry("LighnessAdjustment", m_lInput->value());
     config->sync();
 }
 

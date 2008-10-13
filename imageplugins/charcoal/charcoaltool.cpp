@@ -140,8 +140,8 @@ void CharcoalTool::readSettings()
     KConfigGroup group        = config->group("charcoal Tool");
     m_pencilInput->blockSignals(true);
     m_smoothInput->blockSignals(true);
-    m_pencilInput->setValue(group.readEntry("PencilAjustment", m_pencilInput->defaultValue()));
-    m_smoothInput->setValue(group.readEntry("SmoothAjustment", m_smoothInput->defaultValue()));
+    m_pencilInput->setValue(group.readEntry("PencilAdjustment", m_pencilInput->defaultValue()));
+    m_smoothInput->setValue(group.readEntry("SmoothAdjustment", m_smoothInput->defaultValue()));
     m_pencilInput->blockSignals(false);
     m_smoothInput->blockSignals(false);
 }
@@ -150,8 +150,8 @@ void CharcoalTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("charcoal Tool");
-    group.writeEntry("PencilAjustment", m_pencilInput->value());
-    group.writeEntry("SmoothAjustment", m_smoothInput->value());
+    group.writeEntry("PencilAdjustment", m_pencilInput->value());
+    group.writeEntry("SmoothAdjustment", m_smoothInput->value());
     config->sync();
 }
 

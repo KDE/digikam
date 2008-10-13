@@ -313,7 +313,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
             this, SLOT(slotTimer()));
 
     // -------------------------------------------------------------
-    // Bouttons slots.
+    // Buttons slots.
 
     connect(m_autoAdjustExposure, SIGNAL(clicked()),
             this, SLOT(slotAutoAdjustExposure()));

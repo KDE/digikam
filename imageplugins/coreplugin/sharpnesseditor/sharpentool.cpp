@@ -390,16 +390,16 @@ void SharpenTool::readSettings()
     m_sharpMethod->blockSignals(true);
     m_thresholdInput->blockSignals(true);
 
-    m_amountInput->setValue(group.readEntry("UnsharpMaskAmountAjustment", m_amountInput->defaultValue()));
-    m_correlation->setValue(group.readEntry("RefocusCorrelationAjustment", m_correlation->defaultValue()));
-    m_gauss->setValue(group.readEntry("RefocusGaussAjustment", m_gauss->defaultValue()));
+    m_amountInput->setValue(group.readEntry("UnsharpMaskAmountAdjustment", m_amountInput->defaultValue()));
+    m_correlation->setValue(group.readEntry("RefocusCorrelationAdjustment", m_correlation->defaultValue()));
+    m_gauss->setValue(group.readEntry("RefocusGaussAdjustment", m_gauss->defaultValue()));
     m_matrixSize->setValue(group.readEntry("RefocusMatrixSize", m_matrixSize->defaultValue()));
-    m_noise->setValue(group.readEntry("RefocusNoiseAjustment", m_noise->defaultValue()));
-    m_radius->setValue(group.readEntry("RefocusRadiusAjustment", m_radius->defaultValue()));
-    m_radiusInput->setValue(group.readEntry("SimpleSharpRadiusAjustment", m_radiusInput->defaultValue()));
-    m_radiusInput2->setValue(group.readEntry("UnsharpMaskRadiusAjustment", m_radiusInput2->defaultValue()));
+    m_noise->setValue(group.readEntry("RefocusNoiseAdjustment", m_noise->defaultValue()));
+    m_radius->setValue(group.readEntry("RefocusRadiusAdjustment", m_radius->defaultValue()));
+    m_radiusInput->setValue(group.readEntry("SimpleSharpRadiusAdjustment", m_radiusInput->defaultValue()));
+    m_radiusInput2->setValue(group.readEntry("UnsharpMaskRadiusAdjustment", m_radiusInput2->defaultValue()));
     m_sharpMethod->setCurrentIndex(group.readEntry("SharpenMethod", m_sharpMethod->defaultIndex()));
-    m_thresholdInput->setValue(group.readEntry("UnsharpMaskThresholdAjustment", m_thresholdInput->defaultValue()));
+    m_thresholdInput->setValue(group.readEntry("UnsharpMaskThresholdAdjustment", m_thresholdInput->defaultValue()));
 
     m_amountInput->blockSignals(false);
     m_correlation->blockSignals(false);
@@ -419,15 +419,15 @@ void SharpenTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("sharpen Tool");
-    group.writeEntry("SimpleSharpRadiusAjustment", m_radiusInput->value());
-    group.writeEntry("UnsharpMaskRadiusAjustment", m_radiusInput2->value());
-    group.writeEntry("UnsharpMaskAmountAjustment", m_amountInput->value());
-    group.writeEntry("UnsharpMaskThresholdAjustment", m_thresholdInput->value());
+    group.writeEntry("SimpleSharpRadiusAdjustment", m_radiusInput->value());
+    group.writeEntry("UnsharpMaskRadiusAdjustment", m_radiusInput2->value());
+    group.writeEntry("UnsharpMaskAmountAdjustment", m_amountInput->value());
+    group.writeEntry("UnsharpMaskThresholdAdjustment", m_thresholdInput->value());
     group.writeEntry("RefocusMatrixSize", m_matrixSize->value());
-    group.writeEntry("RefocusRadiusAjustment", m_radius->value());
-    group.writeEntry("RefocusGaussAjustment", m_gauss->value());
-    group.writeEntry("RefocusCorrelationAjustment", m_correlation->value());
-    group.writeEntry("RefocusNoiseAjustment", m_noise->value());
+    group.writeEntry("RefocusRadiusAdjustment", m_radius->value());
+    group.writeEntry("RefocusGaussAdjustment", m_gauss->value());
+    group.writeEntry("RefocusCorrelationAdjustment", m_correlation->value());
+    group.writeEntry("RefocusNoiseAdjustment", m_noise->value());
     group.writeEntry("SharpenMethod", m_sharpMethod->currentIndex());
     config->sync();
 }

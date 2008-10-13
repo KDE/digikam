@@ -21,7 +21,7 @@
  * 
  * ============================================================ */
 
-// Degrees to radian convertion coeff (PI/180). To optimize computation.
+// Degrees to radian conversion coeff (PI/180). To optimize computation.
 #define DEG2RAD 0.017453292519943
 
 // C++ includes.
@@ -66,7 +66,7 @@ void FreeRotation::filterImage(void)
     uchar *pBits            = m_orgImage.bits();
     unsigned short *pBits16 = (unsigned short*)m_orgImage.bits();
     
-    // first of all, we need to calcule the sin and cos of the given angle
+    // first of all, we need to calculate the sin and cos of the given angle
     
     lfSin = sin (m_angle * -DEG2RAD);
     lfCos = cos (m_angle * -DEG2RAD);
@@ -251,7 +251,7 @@ void FreeRotation::filterImage(void)
            }
            break;
         }
-        default:   // No auto croping.
+        default:   // No auto cropping.
         {
            m_newSize.setWidth( W );
            m_newSize.setHeight( H );

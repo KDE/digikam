@@ -142,7 +142,7 @@ private:
 
     QRect                m_rect;
 
-    // Tranformed center area for mouse position control.
+    // Transformed center area for mouse position control.
 
     QPoint               m_transformedCenter;
 

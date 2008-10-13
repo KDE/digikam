@@ -71,7 +71,7 @@ namespace DigikamAntiVignettingImagesPlugin
 AntiVignettingTool::AntiVignettingTool(QObject* parent)
                   : EditorToolThreaded(parent)
 {
-    setObjectName("antivignettings");
+    setObjectName("antivignetting");
     setToolName(i18n("Vignetting Correction"));
     setToolIcon(SmallIcon("antivignetting"));
 
@@ -220,7 +220,7 @@ void AntiVignettingTool::renderingFinished()
 void AntiVignettingTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("antivignettings Tool");
+    KConfigGroup group        = config->group("antivignetting Tool");
 
     m_densityInput->blockSignals(true);
     m_powerInput->blockSignals(true);
@@ -229,12 +229,12 @@ void AntiVignettingTool::readSettings()
     m_contrastInput->blockSignals(true);
     m_gammaInput->blockSignals(true);
 
-    m_densityInput->setValue(group.readEntry("DensityAjustment", m_densityInput->defaultValue()));
-    m_powerInput->setValue(group.readEntry("PowerAjustment", m_powerInput->defaultValue()));
-    m_radiusInput->setValue(group.readEntry("RadiusAjustment", m_radiusInput->defaultValue()));
-    m_brightnessInput->setValue(group.readEntry("BrightnessAjustment", m_brightnessInput->defaultValue()));
-    m_contrastInput->setValue(group.readEntry("ContrastAjustment", m_contrastInput->defaultValue()));
-    m_gammaInput->setValue(group.readEntry("GammaAjustment", m_gammaInput->defaultValue()));
+    m_densityInput->setValue(group.readEntry("DensityAdjustment", m_densityInput->defaultValue()));
+    m_powerInput->setValue(group.readEntry("PowerAdjustment", m_powerInput->defaultValue()));
+    m_radiusInput->setValue(group.readEntry("RadiusAdjustment", m_radiusInput->defaultValue()));
+    m_brightnessInput->setValue(group.readEntry("BrightnessAdjustment", m_brightnessInput->defaultValue()));
+    m_contrastInput->setValue(group.readEntry("ContrastAdjustment", m_contrastInput->defaultValue()));
+    m_gammaInput->setValue(group.readEntry("GammaAdjustment", m_gammaInput->defaultValue()));
 
     m_densityInput->blockSignals(false);
     m_powerInput->blockSignals(false);
@@ -249,13 +249,13 @@ void AntiVignettingTool::readSettings()
 void AntiVignettingTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("antivignettings Tool");
-    group.writeEntry("DensityAjustment", m_densityInput->value());
-    group.writeEntry("PowerAjustment", m_powerInput->value());
-    group.writeEntry("RadiusAjustment", m_radiusInput->value());
-    group.writeEntry("BrightnessAjustment", m_brightnessInput->value());
-    group.writeEntry("ContrastAjustment", m_contrastInput->value());
-    group.writeEntry("GammaAjustment", m_gammaInput->value());
+    KConfigGroup group        = config->group("antivignetting Tool");
+    group.writeEntry("DensityAdjustment", m_densityInput->value());
+    group.writeEntry("PowerAdjustment", m_powerInput->value());
+    group.writeEntry("RadiusAdjustment", m_radiusInput->value());
+    group.writeEntry("BrightnessAdjustment", m_brightnessInput->value());
+    group.writeEntry("ContrastAdjustment", m_contrastInput->value());
+    group.writeEntry("GammaAdjustment", m_gammaInput->value());
     group.sync();
 }
 

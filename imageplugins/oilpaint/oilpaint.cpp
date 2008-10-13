@@ -121,11 +121,11 @@ void OilPaint::oilpaintImage(Digikam::DImg &orgImage, Digikam::DImg &destImage, 
  * Height           => Image height
  * X                => Position horizontal
  * Y                => Position vertical
- * Radius           => Is the radius of the matrix to be analized
- * Intensity        => Intensity to calcule
+ * Radius           => Is the radius of the matrix to be analyzed
+ * Intensity        => Intensity to calculate
  *
- * Theory           => This function creates a matrix with the analized pixel in
- *                     the center of this matrix and find the most frequenty color
+ * Theory           => This function creates a matrix with the analyzed pixel in
+ *                     the center of this matrix and find the most frequently color
  */
 
 Digikam::DColor OilPaint::MostFrequentColor(Digikam::DImg &src, int X, int Y, int Radius, int Intensity)

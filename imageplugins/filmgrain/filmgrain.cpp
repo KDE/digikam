@@ -74,7 +74,7 @@ void FilmGrain::filmgrainImage(Digikam::DImg *orgImage, int Sensibility)
     bool sixteenBit = orgImage->sixteenBit();
     uchar* data = orgImage->bits();
 
-    Digikam::DImg grain(Width, Height, sixteenBit);      // Grain blured without curves adjustment.
+    Digikam::DImg grain(Width, Height, sixteenBit);      // Grain blurred without curves adjustment.
     Digikam::DImg mask(Width, Height, sixteenBit);       // Grain mask with curves adjustment.
     uchar* pGrainBits = grain.bits();
     uchar* pMaskBits  = mask.bits();

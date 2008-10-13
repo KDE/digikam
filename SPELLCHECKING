@@ -1,33 +1,33 @@
 FOLDER                                  CPP         H
 -----------------------------------------------------
 |-- digikam
-|-- imageplugins
-|   |-- adjustcurves
-|   |-- adjustlevels
-|   |-- blurfx
-|   |-- border
-|   |-- channelmixer
-|   |-- charcoal
-|   |-- colorfx
-|   |-- coreplugin
-|   |-- distortionfx
-|   |-- emboss
-|   |-- filmgrain
-|   |-- freerotation
-|   |-- hotpixels
-|   |-- infrared
-|   |-- inpainting
-|   |-- inserttext
-|   |-- lenscorrection
-|   |-- noisereduction
-|   |-- oilpaint
-|   |-- perspective
-|   |-- raindrop
-|   |-- restoration
-|   |-- sheartool
-|   |-- superimpose
-|   |-- texture
-|   `-- whitebalance
+|-- imageplugins                        X           X
+|   |-- adjustcurves                    X           X
+|   |-- adjustlevels                    X           X
+|   |-- blurfx                          X           X
+|   |-- border                          X           X
+|   |-- channelmixer                    X           X
+|   |-- charcoal                        X           X
+|   |-- colorfx                         X           X
+|   |-- coreplugin                      X           X
+|   |-- distortionfx                    X           X
+|   |-- emboss                          X           X
+|   |-- filmgrain                       X           X
+|   |-- freerotation                    X           X
+|   |-- hotpixels                       X           X
+|   |-- infrared                        X           X
+|   |-- inpainting                      X           X
+|   |-- inserttext                      X           X
+|   |-- lenscorrection                  X           X
+|   |-- noisereduction                  X           X
+|   |-- oilpaint                        X           X
+|   |-- perspective                     X           X
+|   |-- raindrop                        X           X
+|   |-- restoration                     X           X
+|   |-- sheartool                       X           X
+|   |-- superimpose                     X           X
+|   |-- texture                         X           X
+|   `-- whitebalance                    X           X
 |-- kioslave                            X           X
 |-- libs
 |   |-- curves

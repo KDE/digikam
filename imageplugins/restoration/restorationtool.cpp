@@ -99,12 +99,12 @@ RestorationTool::RestorationTool(QObject* parent)
     m_restorationTypeCB = new KComboBox(firstPage);
     m_restorationTypeCB->addItem( i18n("None") );
     m_restorationTypeCB->addItem( i18n("Reduce Uniform Noise") );
-    m_restorationTypeCB->addItem( i18n("Reduce JPEG Artefacts") );
+    m_restorationTypeCB->addItem( i18n("Reduce JPEG Artifacts") );
     m_restorationTypeCB->addItem( i18n("Reduce Texturing") );
     m_restorationTypeCB->setWhatsThis( i18n("<p>Select the filter preset to use for photograph restoration here:</p>"
                                             "<p><b>None</b>: Most common values. Puts settings to default.<br/>"
                                             "<b>Reduce Uniform Noise</b>: reduce small image artifacts like sensor noise.<br/>"
-                                            "<b>Reduce JPEG Artefacts</b>: reduce large image artifacts like JPEG compression mosaic.<br/>"
+                                            "<b>Reduce JPEG Artifacts</b>: reduce large image artifacts like JPEG compression mosaic.<br/>"
                                             "<b>Reduce Texturing</b>: reduce image artifacts like paper texture or Moire patterns "
                                             "of a scanned image.</p>"));
 

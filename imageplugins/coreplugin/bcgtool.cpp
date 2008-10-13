@@ -183,9 +183,9 @@ void BCGTool::readSettings()
     m_gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
                         (int)HistogramWidget::LogScaleHistogram));
 
-    m_bInput->setValue(group.readEntry("BrightnessAjustment", m_bInput->defaultValue()));
-    m_cInput->setValue(group.readEntry("ContrastAjustment", m_cInput->defaultValue()));
-    m_gInput->setValue(group.readEntry("GammaAjustment", m_gInput->defaultValue()));
+    m_bInput->setValue(group.readEntry("BrightnessAdjustment", m_bInput->defaultValue()));
+    m_cInput->setValue(group.readEntry("ContrastAdjustment", m_cInput->defaultValue()));
+    m_gInput->setValue(group.readEntry("GammaAdjustment", m_gInput->defaultValue()));
 }
 
 void BCGTool::writeSettings()
@@ -194,9 +194,9 @@ void BCGTool::writeSettings()
     KConfigGroup group        = config->group("bcgadjust Tool");
     group.writeEntry("Histogram Channel", m_gboxSettings->histogramBox()->channel());
     group.writeEntry("Histogram Scale", m_gboxSettings->histogramBox()->scale());
-    group.writeEntry("BrightnessAjustment", m_bInput->value());
-    group.writeEntry("ContrastAjustment", m_cInput->value());
-    group.writeEntry("GammaAjustment", m_gInput->value());
+    group.writeEntry("BrightnessAdjustment", m_bInput->value());
+    group.writeEntry("ContrastAdjustment", m_cInput->value());
+    group.writeEntry("GammaAdjustment", m_gInput->value());
     config->sync();
 }
 

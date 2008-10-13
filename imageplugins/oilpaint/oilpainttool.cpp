@@ -128,7 +128,7 @@ void OilPaintTool::readSettings()
     m_brushSizeInput->blockSignals(true);
     m_smoothInput->blockSignals(true);
     m_brushSizeInput->setValue(group.readEntry("BrushSize", m_brushSizeInput->defaultValue()));
-    m_smoothInput->setValue(group.readEntry("SmoothAjustment", m_smoothInput->defaultValue()));
+    m_smoothInput->setValue(group.readEntry("SmoothAdjustment", m_smoothInput->defaultValue()));
     m_brushSizeInput->blockSignals(false);
     m_smoothInput->blockSignals(false);
 }
@@ -138,7 +138,7 @@ void OilPaintTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("oilpaint Tool");
     group.writeEntry("BrushSize", m_brushSizeInput->value());
-    group.writeEntry("SmoothAjustment", m_smoothInput->value());
+    group.writeEntry("SmoothAdjustment", m_smoothInput->value());
     group.sync();
 }
 

@@ -95,7 +95,7 @@ InfraredTool::InfraredTool(QObject* parent)
     m_sensibilityLCDValue->display( QString::number(200) );
     QString whatsThis = i18n("<p>Set here the ISO-sensitivity of the simulated infrared film. "
                              "Increasing this value will increase the proportion of green color in the mix. "
-                             "It will also increase the halo effect on the hightlights, and the film "
+                             "It will also increase the halo effect on the highlights, and the film "
                              "graininess (if that box is checked).</p>"
                              "<p>Note: to simulate an <b>Ilford SFX200</b> infrared film, use a sensitivity "
                              "excursion of 200 to 800. "
@@ -164,7 +164,7 @@ void InfraredTool::readSettings()
     KConfigGroup group        = config->group("infrared Tool");
     m_sensibilitySlider->blockSignals(true);
     m_addFilmGrain->blockSignals(true);
-    m_sensibilitySlider->setValue(group.readEntry("SensitivityAjustment", 1));
+    m_sensibilitySlider->setValue(group.readEntry("SensitivityAdjustment", 1));
     m_addFilmGrain->setChecked(group.readEntry("AddFilmGrain", false));
     m_sensibilitySlider->blockSignals(false);
     m_addFilmGrain->blockSignals(false);
@@ -175,7 +175,7 @@ void InfraredTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("infrared Tool");
-    group.writeEntry("SensitivityAjustment", m_sensibilitySlider->value());
+    group.writeEntry("SensitivityAdjustment", m_sensibilitySlider->value());
     group.writeEntry("AddFilmGrain", m_addFilmGrain->isChecked());
     group.sync();
 }

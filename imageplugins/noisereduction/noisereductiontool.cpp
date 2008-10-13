@@ -311,16 +311,16 @@ void NoiseReductionTool::readSettings()
     m_textureInput->setEnabled(false);
     m_thresholdInput->setEnabled(false);
 
-    m_csmoothInput->setValue(group.readEntry("CsmoothAjustment", m_csmoothInput->defaultValue()));
-    m_dampingInput->setValue(group.readEntry("DampingAjustment", m_dampingInput->defaultValue()));
-    m_gammaInput->setValue(group.readEntry("GammaAjustment", m_gammaInput->defaultValue()));
-    m_lookaheadInput->setValue(group.readEntry("LookAheadAjustment", m_lookaheadInput->defaultValue()));
-    m_lumToleranceInput->setValue(group.readEntry("LumToleranceAjustment", m_lumToleranceInput->defaultValue()));
-    m_phaseInput->setValue(group.readEntry("PhaseAjustment", m_phaseInput->defaultValue()));
-    m_radiusInput->setValue(group.readEntry("RadiusAjustment", m_radiusInput->defaultValue()));
-    m_sharpnessInput->setValue(group.readEntry("SharpnessAjustment", m_sharpnessInput->defaultValue()));
-    m_textureInput->setValue(group.readEntry("TextureAjustment", m_textureInput->defaultValue()));
-    m_thresholdInput->setValue(group.readEntry("ThresholdAjustment", m_thresholdInput->defaultValue()));
+    m_csmoothInput->setValue(group.readEntry("CsmoothAdjustment", m_csmoothInput->defaultValue()));
+    m_dampingInput->setValue(group.readEntry("DampingAdjustment", m_dampingInput->defaultValue()));
+    m_gammaInput->setValue(group.readEntry("GammaAdjustment", m_gammaInput->defaultValue()));
+    m_lookaheadInput->setValue(group.readEntry("LookAheadAdjustment", m_lookaheadInput->defaultValue()));
+    m_lumToleranceInput->setValue(group.readEntry("LumToleranceAdjustment", m_lumToleranceInput->defaultValue()));
+    m_phaseInput->setValue(group.readEntry("PhaseAdjustment", m_phaseInput->defaultValue()));
+    m_radiusInput->setValue(group.readEntry("RadiusAdjustment", m_radiusInput->defaultValue()));
+    m_sharpnessInput->setValue(group.readEntry("SharpnessAdjustment", m_sharpnessInput->defaultValue()));
+    m_textureInput->setValue(group.readEntry("TextureAdjustment", m_textureInput->defaultValue()));
+    m_thresholdInput->setValue(group.readEntry("ThresholdAdjustment", m_thresholdInput->defaultValue()));
 
     m_csmoothInput->setEnabled(true);
     m_dampingInput->setEnabled(true);
@@ -338,16 +338,16 @@ void NoiseReductionTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("noisereduction Tool");
-    group.writeEntry("RadiusAjustment", m_radiusInput->value());
-    group.writeEntry("LumToleranceAjustment", m_lumToleranceInput->value());
-    group.writeEntry("ThresholdAjustment", m_thresholdInput->value());
-    group.writeEntry("TextureAjustment", m_textureInput->value());
-    group.writeEntry("SharpnessAjustment", m_sharpnessInput->value());
-    group.writeEntry("CsmoothAjustment", m_csmoothInput->value());
-    group.writeEntry("LookAheadAjustment", m_lookaheadInput->value());
-    group.writeEntry("GammaAjustment", m_gammaInput->value());
-    group.writeEntry("DampingAjustment", m_dampingInput->value());
-    group.writeEntry("PhaseAjustment", m_phaseInput->value());
+    group.writeEntry("RadiusAdjustment", m_radiusInput->value());
+    group.writeEntry("LumToleranceAdjustment", m_lumToleranceInput->value());
+    group.writeEntry("ThresholdAdjustment", m_thresholdInput->value());
+    group.writeEntry("TextureAdjustment", m_textureInput->value());
+    group.writeEntry("SharpnessAdjustment", m_sharpnessInput->value());
+    group.writeEntry("CsmoothAdjustment", m_csmoothInput->value());
+    group.writeEntry("LookAheadAdjustment", m_lookaheadInput->value());
+    group.writeEntry("GammaAdjustment", m_gammaInput->value());
+    group.writeEntry("DampingAdjustment", m_dampingInput->value());
+    group.writeEntry("PhaseAdjustment", m_phaseInput->value());
     group.sync();
 }
 

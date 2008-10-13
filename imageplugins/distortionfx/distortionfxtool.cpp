@@ -234,8 +234,8 @@ void DistortionFXTool::readSettings()
     m_levelInput->blockSignals(true);
 
     m_effectType->setCurrentIndex(group.readEntry("EffectType", (int)DistortionFX::FishEye));
-    m_iterationInput->setValue(group.readEntry("IterationAjustment", 10));
-    m_levelInput->setValue(group.readEntry("LevelAjustment", 50));
+    m_iterationInput->setValue(group.readEntry("IterationAdjustment", 10));
+    m_levelInput->setValue(group.readEntry("LevelAdjustment", 50));
 
     m_effectType->blockSignals(false);
     m_iterationInput->blockSignals(false);
@@ -249,8 +249,8 @@ void DistortionFXTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("distortionfx Tool");
     group.writeEntry("EffectType", m_effectType->currentIndex());
-    group.writeEntry("IterationAjustment", m_iterationInput->value());
-    group.writeEntry("LevelAjustment", m_levelInput->value());
+    group.writeEntry("IterationAdjustment", m_iterationInput->value());
+    group.writeEntry("LevelAdjustment", m_levelInput->value());
     config->sync();
 }
 

@@ -186,7 +186,7 @@ void NoiseReduction::filterImage(void)
         float t  = m_csmooth;
         float t2 = m_lsmooth;
 
-        // Values are squared, so that sliders get a nonlinear chracteristic
+        // Values are squared, so that sliders get a nonlinear characteristic
 	// for better adjustment accuracy when values are small.
         t*=t;
         t2*=t2;
@@ -347,7 +347,7 @@ void NoiseReduction::blur_line(float* const data, float* const data2, float* con
 
     for (row = 0, idx = 0 ; !m_cancel && (idx < len) ; row += 4, idx++)
     {
-        // Color weigths are chosen proportional to Bayer Sensor pixel count
+        // Color weights are chosen proportional to Bayer Sensor pixel count
 
         if (m_orgImage.sixteenBit())       // 16 bits image
         {
@@ -599,7 +599,7 @@ void NoiseReduction::iir_filter(float* const start, float* const end, float* dst
 }
 
 // A forward-backward box filter is used here and the radius is adapted to luminance jump.
-// Radius is calculated fron 1st and 2nd derivative of intensity values.
+// Radius is calculated from 1st and 2nd derivative of intensity values.
 // (Its not exactly 2nd derivative, but something similar, optimized by experiment)
 // The radius variations are filtered. This reduces spatial phase jitter.
 

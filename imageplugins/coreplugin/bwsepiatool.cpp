@@ -577,8 +577,8 @@ void BWSepiaTool::readSettings()
     m_bwFilters->setCurrentRow(group.readEntry("BW Filter", 0));
     m_bwFilm->setCurrentRow(group.readEntry("BW Film", 0));
     m_bwTone->setCurrentRow(group.readEntry("BW Tone", 0));
-    m_cInput->setValue(group.readEntry("ContrastAjustment", m_cInput->defaultValue()));
-    m_strengthInput->setValue(group.readEntry("StrengthAjustment", m_strengthInput->defaultValue()));
+    m_cInput->setValue(group.readEntry("ContrastAdjustment", m_cInput->defaultValue()));
+    m_strengthInput->setValue(group.readEntry("StrengthAdjustment", m_strengthInput->defaultValue()));
 
     for (int i = 0 ; i < 5 ; i++)
         m_curvesWidget->curves()->curvesChannelReset(i);
@@ -589,7 +589,7 @@ void BWSepiaTool::readSettings()
     for (int j = 0 ; j < 17 ; j++)
     {
         QPoint disable(-1, -1);
-        QPoint p = group.readEntry(QString("CurveAjustmentPoint%1").arg(j), disable);
+        QPoint p = group.readEntry(QString("CurveAdjustmentPoint%1").arg(j), disable);
 
         if (m_originalImage->sixteenBit() && p.x() != -1)
         {
@@ -622,8 +622,8 @@ void BWSepiaTool::writeSettings()
     group.writeEntry("BW Filter", m_bwFilters->currentRow());
     group.writeEntry("BW Film", m_bwFilm->currentRow());
     group.writeEntry("BW Tone", m_bwTone->currentRow());
-    group.writeEntry("ContrastAjustment", m_cInput->value());
-    group.writeEntry("StrengthAjustment", m_strengthInput->value());
+    group.writeEntry("ContrastAdjustment", m_cInput->value());
+    group.writeEntry("StrengthAdjustment", m_strengthInput->value());
 
     for (int j = 0 ; j < 17 ; j++)
     {
@@ -635,7 +635,7 @@ void BWSepiaTool::writeSettings()
             p.setY(p.y()/255);
         }
 
-        group.writeEntry(QString("CurveAjustmentPoint%1").arg(j), p);
+        group.writeEntry(QString("CurveAdjustmentPoint%1").arg(j), p);
     }
 
     group.sync();

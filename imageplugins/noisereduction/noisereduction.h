@@ -42,7 +42,7 @@
  * Let me explain, how the filter works, some understanding is necessary to use it:
  *
  * Hint for the novice user:
- * In most cases only Filter Max Radius, Filter treshold and Texture Detail are needed and the other
+ * In most cases only Filter Max Radius, Filter threshold and Texture Detail are needed and the other
  * params can be left at their default setting.
  *
  * Main Filter (Preprocessing) 
@@ -67,15 +67,15 @@
  * "Lookahead" defines the pixel distance in which the filter looks ahead for luminance variations
  * Normally the default value should do.
  * When _Lookahead is increased, then spikenoise is erased. 
- * Eventually readjust Filter treshold, when you changed lookahead.
+ * Eventually readjust Filter threshold, when you changed lookahead.
  * When the value is to high, then the adaptive filter cannot longer accurately track image details, and
  * noise can reappear or blur can occur.
  *
  * Minimum value is 1.0, this gives best accuracy when blurring very weak noise.
  *
  * I never had good success with other values than 2.0.
- * However, for images with extemely high or low resolution another value possibly is better.
- * Use it only as a last ressort.
+ * However, for images with extremely high or low resolution another value possibly is better.
+ * Use it only as a last resort.
  *------------------------------------------------------------------------------------------------------------
  *
  * "Phase Jitter Damping" defines how fast the adaptive filter-radius reacts to luminance variations.
@@ -93,18 +93,18 @@
  * "Erosion". The new filter gives better sharpness and this also gives problems
  * with spike noise. The Erosion param erodes singular spikes and it has a smooth effect to edges, and sharpens
  * edges by erosion, so noise at edges is eroded.  
- * The effect is dependant from sharpness,phase-jitter damping and lookahead.
+ * The effect is dependent from sharpness,phase-jitter damping and lookahead.
  * Set it to minimum (zero), if you want to remove weak noise or JPEG-artifacts.
  * When "Erosion" is increased, then also increasing "Phase Jitter Damping" is often useful 
  *
- * It works nicely. Apart from removing spike noise it has a sharpening and antialiasing effect to edges 
+ * It works nicely. Apart from removing spike noise it has a sharpening and anti-aliasing effect to edges 
  * (Sharpening occurs by erosion, not by deconvolution) 
  *------------------------------------------------------------------------------------------------------------
  * 
  * "Texture Detail" can be used, to get more or less texture accuracy.
  * When decreased, then noise and texture are blurred out, when increased then texture is
  * amplified, but also noise will increase.
- * It has almost no effect to image edges, opposed to Filter theshold, which would blur edges, when increased.  
+ * It has almost no effect to image edges, opposed to Filter threshold, which would blur edges, when increased.  
  *
  * E.g. if Threshold is adjusted in away so that edges are sharp, and there is still too much area noise, then
  * Texture detail could be used to reduce noise without blurring edges.
@@ -135,7 +135,7 @@
  * A filtered pixel, that is too far away from the original pixel will be overridden by original image content. 
  *
  * Hint:
- * If you cange other sliders, like lookahead or Texture Detail, then you should set color tolerance and 
+ * If you change other sliders, like lookahead or Texture Detail, then you should set color tolerance and 
  * luminance tolerance to 1.0 (right end), because otherwise the filtered template is partially hidden 
  * and e.g. the effects for the damping filter cant be seen clearly and cant be optimized. 
  *------------------------------------------------------------------------------------------------------------
@@ -151,28 +151,28 @@
  * Keep in mind, how the filter works, then usage should be easy!  
  *
  *
- * ================ THEORY AND TECHNIC =======================================================================
+ * ================ THEORY AND TECHNIQUE =======================================================================
  *
- * Some interesting things (theoretic and technic)
+ * Some interesting things (theoretic and technical)
  * This plugin bases on the assumption, that noise has no 2-dimensional correlation and therefore
  * can be removed in a 1-dimensional process.
  * To remove noise, I use a four-times  boxfilter with variable radius.
  *
  * The radius is calculated from 2nd derivative of pixeldata.
- * A gauss filter is used to calculte 2nd derivative.
+ * A gauss filter is used to calculate 2nd derivative.
  * The filter has some inbuilt features to clip low amplitude noise to clip very high values that would
  * slow down response time.
- * The 2nd derivative is lowpassfiltered and then radius is calculated as (Filter Treshold)/2nd_derivative. 
- * The radius modulation data is precalulated and buffered an is used to steer filter radius when
+ * The 2nd derivative is lowpassfiltered and then radius is calculated as (Filter Threshold)/2nd_derivative. 
+ * The radius modulation data is precalculated and buffered an is used to steer filter radius when
  * the actual filtering occurs.
  *
  * Noise and texture can be further suppressed by nonlinear distortion before adaptive filtering.
  * To make this possible I subtract low frequency from image data before denoising, so that I get a 
- * bipolar, zerosymmetric image signal.
+ * bipolar, zero-symmetric image signal.
  *
  * The filter works in a /one-dimensional/ way. It is applied to x and then to y axis.
  *
- * After filtering a zerodimensional point operator  (pixel by pixel comparison)  is used, where 
+ * After filtering a zero-dimensional point operator  (pixel by pixel comparison)  is used, where 
  * filter-errors are thrown out.
  * This is meant to limit and control filter errors,it can give "final touch" to the image, but it has 
  * nothing to do with the main filter process. 
@@ -180,10 +180,10 @@
  * I do not know if something like this filter already exists.
  * It is all based on my own ideas and experiments.
  * Possibly a separable adaptive gauss-filter is a new thing.
- * Also it is an impossible thing, from a mathemathical point of view ;-)
+ * Also it is an impossible thing, from a mathematical point of view ;-)
  * It is possible only for bandwidth limited images.
- * Happyly most photographic images are bandwidth limited, or when they are noisy then we want
- * to limit banwith locally. And this is, what the filter does: It limits bandwidth locally, dependent
+ * Happily most photographic images are bandwidth limited, or when they are noisy then we want
+ * to limit bandwidth locally. And this is, what the filter does: It limits bandwidth locally, dependent
  * from (approximately) 2nd derivative of intensity.
  * 
  * Because gauss filtering is essentially linear diffusion, and because this filter uses a variable

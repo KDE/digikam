@@ -97,14 +97,14 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
     // We can reproduce famous Ilford SFX200 infrared film
     // http://www.ilford.com/html/us_english/prod_html/sfx200/sfx200.html
     // This film have a sensibility escursion from 200 to 800 ISO.
-    // Over 800 ISO, we reproduce The Kodak HIE hight speed infrared film.
+    // Over 800 ISO, we reproduce The Kodak HIE high speed infrared film.
 
     // Infrared film grain.
     int Noise = (Sensibility + 3000) / 10;
     if (sixteenBit)
         Noise = (Noise + 1) * 256 - 1;
 
-    int   blurRadius = (int)((Sensibility / 200.0) + 1.0);   // Gaussian blur infrared hightlight effect
+    int   blurRadius = (int)((Sensibility / 200.0) + 1.0);   // Gaussian blur infrared highlight effect
                                                              // [2 to 5].
     float greenBoost = 2.1 - (Sensibility / 2000.0);         // Infrared green color boost [1.7 to 2.0].
 
@@ -112,7 +112,7 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
 
     uchar*      pBWBits = 0;    // Black and White conversion.
     uchar*  pBWBlurBits = 0;    // Black and White with blur.
-    uchar*   pGrainBits = 0;    // Grain blured without curves adjustment.
+    uchar*   pGrainBits = 0;    // Grain blurred without curves adjustment.
     uchar*    pMaskBits = 0;    // Grain mask with curves adjustment.
     uchar* pOverlayBits = 0;    // Overlay to merge with original converted in gray scale.
     uchar*     pOutBits = m_destImage.bits(); // Destination image with merged grain mask and original.
@@ -156,7 +156,7 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
     }
 
     //-----------------------------------------------------------------
-    // 2 - Create Gaussian blured averlay mask with grain if necessary.
+    // 2 - Create Gaussian blurred overlay mask with grain if necessary.
     //-----------------------------------------------------------------
 
 
@@ -172,7 +172,7 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
         srand(seed);
 #endif
 
-        pGrainBits = new uchar[numBytes];    // Grain blured without curves adjustment.
+        pGrainBits = new uchar[numBytes];    // Grain blurred without curves adjustment.
         uchar *ptr;
         int component;
         grainData.setSixteenBit(sixteenBit);

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-12-27
- * Description : a plugin to reduce lens distorsions to an image.
+ * Description : a plugin to reduce lens distortions to an image.
  *
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
