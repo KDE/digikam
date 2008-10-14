@@ -40,3 +40,4 @@ Description[vi]=kioslave tập ảnh digiKam
 Description[x-test]=xxdigiKam albums kioslavexx
 Description[zh_CN]=digiKam 相册 kioslave
 Class=:local
+Icon=digikam

@@ -34,3 +34,4 @@ Description[vi]=kioslave tìm kiếm digiKam
 Description[x-test]=xxdigiKam search kioslavexx
 Description[zh_CN]=digiKam 搜索 kioslave
 Class=:local
+Icon=digikam

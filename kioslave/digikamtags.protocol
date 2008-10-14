@@ -42,3 +42,4 @@ Description[vi]=kioslave thẻ digiKam
 Description[x-test]=xxdigikam tags kioslavexx
 Description[zh_CN]=digikam 标记 kioslave
 Class=:local
+Icon=digikam
