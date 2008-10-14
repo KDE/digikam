@@ -17,7 +17,7 @@ DIGIKAM - MANAGE YOUR PHOTOGRAPHS LIKE A PROFESSIONAL WITH THE POWER OF OPEN SOU
  digiKam can also make use of the KIPI image handling plugins to
  extend its capabilities even further for photo manipulations,
  import and export, etc. The kipi-plugins package contains many
- very useful extentions.
+ very useful extensions.
 
  digiKam is based in part on the work of the Independent JPEG Group.
 
@@ -48,11 +48,11 @@ IRC channel from irc.freenode.org server: #digikam
 
 IMPORTANT : the bug reports and wishlist entries are hosted by the KDE bug report
 system which can be reached from the standard KDE help menu of digiKam.
-A mail will automaticly be sent to the digikam development mailing list.
-There is no need to contact directly the digikam mailing list for a bug report 
+A mail will automatically be sent to the digiKam development mailing list.
+There is no need to contact directly the digiKam mailing list for a bug report 
 or a devel wish.
 
-The current bugs and devel wishes reported to the bugilla servers can be seen
+The current bugs and devel wishes reported to the bugzilla servers can be seen
 at these urls :
 
 * digiKam (KDE bugzilla):
@@ -132,12 +132,12 @@ Compared to old KDE3 autoconf options:
 "cmake . -DCMAKE_BUILD_TYPE=debugfull" is equivalent to "./configure --enable-debug=full"
 "cmake . -DCMAKE_INSTALL_PREFIX=/usr"  is equivalent to "./configure --prefix=/usr"
 
-More details can be found ata this url: http://techbase.kde.org/Development/Tutorials/CMake#Environment_Variables
+More details can be found at this url: http://techbase.kde.org/Development/Tutorials/CMake#Environment_Variables
 
 
 -- DONATE MONEY --------------------------------------------------------
 
-If you love digiKam, you can help developpers to buy new photo devices to test 
-and implemente new features. Thanks in advance for your generous donations.
+If you love digiKam, you can help developers to buy new photo devices to test 
+and implement new features. Thanks in advance for your generous donations.
 
-For more informations, look at this url : http://www.digikam.org/?q=donation
+For more information, look at this url : http://www.digikam.org/?q=donation

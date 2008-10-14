@@ -111,7 +111,7 @@ Class, file and Variable names:
 -------------------------------------------------------------------------
 
 - protected member variable names should always be of the form m_varName. 
-- Captilize logically so that it becomes easy to read it. Do not capitalize
+- Capitalize logically so that it becomes easy to read it. Do not capitalize
   the first letter after _ (Use m_varName not m_VarName)
 - variable names should be indicative of their functionality and also of 
   the type they belong too if they are instances of qt widgets.
@@ -129,8 +129,8 @@ Class, file and Variable names:
 -------------------------------------------------------------------------
 
 - private member variables must be stored in a d private container to reduce
-  compilation time and improve binary compatibilty between digiKam components.
-  See more informations how to use a 'd' private class at this url: 
+  compilation time and improve binary compatibility between digiKam components.
+  See more information how to use a 'd' private class at this url: 
 
   http://developer.kde.org/policies/librarypolicy.html
 
@@ -260,7 +260,7 @@ kcachegrind callgrind.out.16693.1
 API Documentation Validation, User Documentation Validation, Source Code Checking
 =================================================================================
 
-The following site check on a dayly basis for the a.m. errors:
+The following site check on a daily basis for the a.m. errors:
 www.englishbreakfastnetwork.org/krazy/
 
 It can be very useful, in particular before major releases.
