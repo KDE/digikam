@@ -186,9 +186,9 @@ bool DigikamFirstRun::checkRootAlbum(QString& rootAlbumFolder)
     if (!targetPath.exists())
     {
         int rc = KMessageBox::questionYesNo(this,
-                                   i18n("<qt>The folder to use as root album path does not exist: "
+                                   i18n("The folder to use as root album path does not exist: "
                                         "<p><b>%1</b></p>"
-                                        "Would you like digiKam to create it?</qt>",
+                                        "Would you like digiKam to create it?",
                                         rootAlbumFolder),
                                    i18n("Create Root Album Folder?"));
 
@@ -200,9 +200,9 @@ bool DigikamFirstRun::checkRootAlbum(QString& rootAlbumFolder)
         if (!targetPath.mkdir(rootAlbumFolder))
         {
             KMessageBox::sorry(this,
-                               i18n("<qt>digiKam could not create the folder to use as root album path.\n"
+                               i18n("digiKam could not create the folder to use as root album path.\n"
                                     "Please select a different location."
-                                    "<p><b>%1</b></p></qt>", rootAlbumFolder),
+                                    "<p><b>%1</b></p>", rootAlbumFolder),
                                i18n("Create Root Album Folder Failed"));
             return false;
         }
@@ -252,9 +252,9 @@ bool DigikamFirstRun::checkDatabase(QString& dbFolder)
     if (!targetPath.exists())
     {
         int rc = KMessageBox::questionYesNo(this,
-                                   i18n("<qt>The folder to host database file does not exist: "
+                                   i18n("The folder to host database file does not exist: "
                                         "<p><b>%1</b></p>"
-                                        "Would you like digiKam to create it?</qt>",
+                                        "Would you like digiKam to create it?",
                                         dbFolder),
                                    i18n("Create Database Folder?"));
 
@@ -266,9 +266,9 @@ bool DigikamFirstRun::checkDatabase(QString& dbFolder)
         if (!targetPath.mkdir(dbFolder))
         {
             KMessageBox::sorry(this,
-                               i18n("<qt>digiKam could not create the folder to host database file.\n"
+                               i18n("digiKam could not create the folder to host database file.\n"
                                     "Please select a different location."
-                                    "<p><b>%1</b></p></qt>", dbFolder),
+                                    "<p><b>%1</b></p>", dbFolder),
                                i18n("Create Database Folder Failed"));
             return false;
         }

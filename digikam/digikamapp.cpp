@@ -291,10 +291,10 @@ void DigikamApp::show()
 
     if(!d->validIccPath)
     {
-        QString message = i18n("<qt><p>The ICC profiles path seems to be invalid.</p>"
+        QString message = i18n("<p>The ICC profiles path seems to be invalid.</p>"
                                "<p>If you want to set it now, select \"Yes\", otherwise "
                                "select \"No\". In this case, \"Color Management\" feature "
-                               "will be disabled until you solve this issue</p></qt>");
+                               "will be disabled until you solve this issue</p>");
 
         if (KMessageBox::warningYesNo(this, message) == KMessageBox::Yes)
         {

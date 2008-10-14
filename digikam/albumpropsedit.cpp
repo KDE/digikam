@@ -110,11 +110,11 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     QLabel *topLabel = new QLabel( page );
     if (create)
     {
-        topLabel->setText(i18n("<qt><b>Create new Album in \"<i>%1</i>\"</b></qt>", album->title()));
+        topLabel->setText(i18n("<b>Create new Album in \"<i>%1</i>\"</b>", album->title()));
     }
     else
     {
-        topLabel->setText(i18n("<qt><b>\"<i>%1</i>\" Album Properties</b></qt>", album->title()));
+        topLabel->setText(i18n("<b>\"<i>%1</i>\" Album Properties</b>", album->title()));
     }
     topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     topLabel->setWordWrap(false);

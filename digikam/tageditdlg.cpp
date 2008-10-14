@@ -133,12 +133,12 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
     QLabel *tipLabel = new QLabel(page);
     tipLabel->setTextFormat(Qt::RichText);
     tipLabel->setWordWrap(true);
-    tipLabel->setText(i18n("<qt><p>To create new tags, you can use the following rules:</p>"
+    tipLabel->setText(i18n("<p>To create new tags, you can use the following rules:</p>"
                            "<p><ul><li>'/' can be used to create a tags hierarchy.<br>"
                            "Ex.: <i>\"Country/City/Paris\"</i></li>"
                            "<li>',' can be used to create more than one tags hierarchy at the same time.<br>"
                            "Ex.: <i>\"City/Paris, Monument/Notre-Dame\"</i></li>"
-                           "<li>If a tag hierarchy starts with '/', root tag album is used as parent.</li></ul></p></qt>"
+                           "<li>If a tag hierarchy starts with '/', root tag album is used as parent.</li></ul></p>"
                            ));
 
     if (d->create)
@@ -252,18 +252,18 @@ void TagEditDlg::slotTitleChanged(const QString& newtitle)
     {
         if (d->titleEdit->text().startsWith('/'))
         {
-            d->topLabel->setText(i18n("<qt><b>Create New Tag</b></qt>"));
+            d->topLabel->setText(i18n("<b>Create New Tag</b>"));
         }
         else
         {
-            d->topLabel->setText(i18n("<qt><b>Create New Tag in<br>"
-                                      "<i>\"%1\"</i></b></qt>", tagName));
+            d->topLabel->setText(i18n("<b>Create New Tag in<br>"
+                                      "<i>\"%1\"</i></b>", tagName));
         }
     }
     else
     {
-        d->topLabel->setText(i18n("<qt><b>Properties of Tag<br>"
-                                  "<i>\"%1\"</i></b></qt>", tagName));
+        d->topLabel->setText(i18n("<b>Properties of Tag<br>"
+                                  "<i>\"%1\"</i></b>", tagName));
     }
 
     enableButtonOk(!newtitle.isEmpty());
