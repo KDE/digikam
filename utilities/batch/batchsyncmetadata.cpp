@@ -123,7 +123,7 @@ void BatchSyncMetadata::parseList()
 
 void BatchSyncMetadata::parsePicture()
 {
-    if (!(d->imageInfoIndex >= d->imageInfoList.count()))     // All is done.
+    if (d->imageInfoIndex >= d->imageInfoList.count())     // All is done.
     {
         complete();
         slotAbort();
