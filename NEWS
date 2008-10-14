@@ -3,20 +3,21 @@ digiKam 0.10.0-beta4 - Release date: 2008-10-02
 
 NEW FEATURES:
 
-General        : digiKam can be compiled in native under Micosoft Windows.
+General        : digiKam can be compiled in native under Microsoft Windows.
 General        : libkdcraw dependency updated to 0.4.0
-General        : libgphoto2 depency is now optional to be able to compile digiKam under operating systems 
+General        : libgphoto2 dependency is now optional to be able to compile digiKam under operating systems 
                  not supported by GPhoto2
 
 001 ==> 171953 : Using create "Date-based sub-albums" makes import fail.
 002 ==> 118318 : Make (lib)gphoto support a configure flag.
 003 ==> 172269 : digiKam hangs for around 20-60 seconds when starting.
-004 ==> 172648 : Thumbnail click does not display embeded picture preview.
+004 ==> 172648 : Thumbnail click does not display embedded picture preview.
 005 ==> 172650 : No kipi plugins available.
 006 ==> 172651 : Send image by email missing.
 007 ==> 168005 : Week view broken in timeline.
-008 ==> 172295 : digikam has a hard dependency on Jasper library.
-009 ==> 
+008 ==> 172295 : digiKam has a hard dependency on Jasper library.
+009 ==> 172733 : Crash on Synchronize images with database.
+010 ==> 
 
 IMPORTANT: This is a beta release : do not use yet in production !!!
 ====================================================================
@@ -28,14 +29,14 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 001 ==> 169814 : Compilation error: no exp2().
 002 ==> 165345 : Selecting images from bottom right to top left does not work.
 003 ==> 170693 : Enable geotagging of Olympus orf images.
-004 ==> 170711 : Write single Keywords instead of Hirachy into IPTC.
+004 ==> 170711 : Write single Keywords instead of Hierarchy into IPTC.
 005 ==> 168569 : New Album Folders are not detected in displayed in GUI until restart.
 006 ==> 165337 : Text overlapping box on welcome page.
 007 ==> 171310 : No preview photos shown clicking on imported albums.
 008 ==> 171778 : digiKam does not load photos in its database.
 009 ==> 171736 : Make transferring of metadata between machines easier.
 010 ==> 170929 : Compilation of SVN version fails with gcc 4.3.2 unless debug option is activated.
-011 ==> 171989 : Can't set gps photo location on .nef images.
+011 ==> 171989 : Can't set GPS photo location on .nef images.
 012 ==> 172018 : Initial cursor in the "sharpen" dialog is on the "cancel" button.
 013 ==> 172033 : Unable to draw rectangle from right to left.
 
@@ -61,7 +62,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 167571 : Unnatural order when removing images from light table.
 003 ==> 167139 : Crash if Exif.GPSInfo.GPSAltitude is empty.
 004 ==> 167778 : Assigning ratings in image editor via shortcuts or toolbar not working.
-005 ==> 168567 : Unable to edit or remove iptc and xmp info.
+005 ==> 168567 : Unable to edit or remove IPTC and XMP info.
 006 ==> 168846 : crash after playing with tags (seems to be rather a crash in Qt or kdelibs).
 007 ==> 166671 : Image filter dialog buttons are much too big.
 008 ==> 134486 : Keywords are not written to raw files even though they do embed iptc/exif.
@@ -115,7 +116,7 @@ General        : Support of XMP metadata (require >= Exiv2 0.16).
 General        : Hardware handling using KDE4 Solid interface.
 General        : Preview of Video and Audio files using KDE4 Phonon interface.
 General        : Database file can be stored on a customized place to support remote album library path.
-General        : New database schema to host more photo and collection informations.
+General        : New database schema to host more photo and collection information.
 General        : Database interface fully re-written using Qt4 SQL plugin.
 General        : Support of multiple roots album paths.
 General        : Physical root albums are managed as real album.
