@@ -443,7 +443,7 @@ void RenameCustomizer::slotDateTimeFormatChanged(int index)
 void RenameCustomizer::slotDateTimeButtonClicked()
 {
     bool ok;
-    QString message = i18n("<qt><p>Enter the format for date and time.</p>"
+    QString message = i18n("<p>Enter the format for date and time.</p>"
                            "<p>Use <i>dd</i> for the day, "
                            "<i>MM</i> for the month, "
                            "<i>yyyy</i> for the year, "
@@ -453,7 +453,7 @@ void RenameCustomizer::slotDateTimeButtonClicked()
                            "<p>Examples: <i>yyyyMMddThhmmss</i> "
                            "for 20060824T142418,<br>"
                            "<i>yyyy-MM-dd hh:mm:ss</i> "
-                           "for 2006-08-24 14:24:18.</p></qt>");
+                           "for 2006-08-24 14:24:18.</p>");
 
     QString newFormat = KInputDialog::getText(i18n("Change Date and Time Format"),
                                               message,

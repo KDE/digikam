@@ -89,11 +89,11 @@ SetupMime::SetupMime(QWidget* parent)
     // --------------------------------------------------------
 
     QLabel *explanationLabel = new QLabel;
-    explanationLabel->setText(i18n("<qt><p>Digikam supports the image formats that digital cameras produce, "
+    explanationLabel->setText(i18n("<p>Digikam supports the image formats that digital cameras produce, "
                                    "a few other important image formats, as well as common video and audio formats.</p> "
                                    "<p>If you have special needs, you can adjust here the list of supported "
                                    "formats. Add your file extensions to the lists of either image, "
-                                   "audio or video files.</p></qt>"));
+                                   "audio or video files.</p>"));
     explanationLabel->setWordWrap(true);
 
     // --------------------------------------------------------

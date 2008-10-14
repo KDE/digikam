@@ -90,11 +90,11 @@ JPEGSettings::JPEGSettings(QWidget *parent)
                                           "large file size)</p>"
                                           "<p><b>Note: JPEG always uses lossy compression.</b></p>"));
 
-    d->labelWarning = new QLabel(i18n("<qt><font size=-1 color=\"red\"><i>"
+    d->labelWarning = new QLabel(i18n("<font size=-1 color=\"red\"><i>"
                           "Warning: <a href='http://en.wikipedia.org/wiki/JPEG'>JPEG</a> is a<br>"
                           "lossy compression<br>"
                           "image format!</p>"
-                          "</i></qt>"), this);
+                          "</i>"), this);
 
     d->labelWarning->setOpenExternalLinks(true);
     d->labelWarning->setFrameStyle(QFrame::Box | QFrame::Plain);

@@ -185,7 +185,7 @@ void DeleteWidget::updateText()
             }
             else
             {
-                m_deleteText->setText(i18n("<qt>These items will be moved to Trash.</qt>"));
+                m_deleteText->setText(i18n("These items will be moved to Trash."));
                 m_warningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
             }

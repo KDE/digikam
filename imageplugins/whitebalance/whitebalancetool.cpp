@@ -118,8 +118,8 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
 
     QGridLayout *grid = new QGridLayout(m_gboxSettings->plainPage());
 
-    m_temperatureLabel = new QLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Color_temperature'>"
-                                         "Color Temperature</a> (K): </qt>"), m_gboxSettings->plainPage());
+    m_temperatureLabel = new QLabel(i18n("<a href='http://en.wikipedia.org/wiki/Color_temperature'>"
+                                         "Color Temperature</a> (K): "), m_gboxSettings->plainPage());
     m_temperatureLabel->setOpenExternalLinks(true);
 
     m_adjTemperatureLabel = new QLabel(i18n("Adjustment:"), m_gboxSettings->plainPage());
@@ -215,8 +215,8 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_exposureLabel = new QLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Exposure_value'>"
-                                      "Exposure Compensation</a> (E.V): </qt>"), m_gboxSettings->plainPage());
+    m_exposureLabel = new QLabel(i18n("<a href='http://en.wikipedia.org/wiki/Exposure_value'>"
+                                      "Exposure Compensation</a> (E.V): "), m_gboxSettings->plainPage());
     m_exposureLabel->setOpenExternalLinks(true);
 
     m_mainExposureLabel  = new QLabel(i18n("Main:"), m_gboxSettings->plainPage());

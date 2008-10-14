@@ -354,7 +354,7 @@
     </filetemplates>
   </cppsupportpart>
   <kdevcppsupport>
-    <qt>
+    
       <used>false</used>
       <version>3</version>
       <root>/usr/lib/qt3/</root>
