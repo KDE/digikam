@@ -17,7 +17,8 @@ General        : libgphoto2 dependency is now optional to be able to compile dig
 007 ==> 168005 : Week view broken in timeline.
 008 ==> 172295 : digiKam has a hard dependency on Jasper library.
 009 ==> 172733 : Crash on Synchronize images with database.
-010 ==> 
+010 ==> 172776 : Combine Edit and Album menus, and other ideas.
+011 ==> 
 
 IMPORTANT: This is a beta release : do not use yet in production !!!
 ====================================================================
