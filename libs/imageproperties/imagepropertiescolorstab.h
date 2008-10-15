@@ -109,6 +109,6 @@ private:
     ImagePropertiesColorsTabPriv* d;
 };
 
-}  // Namespace Digikam
+}  // namespace Digikam
 
 #endif /* IMAGEPROPERTIESCOLORSTAB_H */

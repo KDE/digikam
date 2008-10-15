@@ -534,4 +534,4 @@ bool isJpegImage(const QString& file)
     return true;
 }
 
-} // Namespace Digikam
+} // namespace Digikam

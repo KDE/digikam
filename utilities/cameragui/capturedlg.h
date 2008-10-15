@@ -70,6 +70,6 @@ private:
     CaptureDlgPriv* d;
 };
 
-}  // Namespace Digikam
+}  // namespace Digikam
 
 #endif /* CAPTUREDLG_H */

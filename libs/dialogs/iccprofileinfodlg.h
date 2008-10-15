@@ -52,6 +52,6 @@ public:
     ~ICCProfileInfoDlg();
 };
 
-}  // Namespace Digikam
+}  // namespace Digikam
 
 #endif /* ICCPROFILEINFODLG_H */

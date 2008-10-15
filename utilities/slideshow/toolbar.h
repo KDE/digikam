@@ -79,6 +79,6 @@ private:
     friend class SlideShow;
 };
 
-}   // Namespace Digikam
+}   // namespace Digikam
 
 #endif /* TOOL_BAR_H */

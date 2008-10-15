@@ -66,6 +66,6 @@ private:
     IccTransform *m_iccTrans;
 };
 
-}  // Namespace Digikam
+}  // namespace Digikam
 
 #endif /* COLORCORRECTIONDLG_H */

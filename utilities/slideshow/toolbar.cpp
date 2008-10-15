@@ -212,4 +212,4 @@ void ToolBar::keyPressEvent(QKeyEvent *event)
     event->accept();
 }
 
-}   // Namespace Digikam
+}   // namespace Digikam
