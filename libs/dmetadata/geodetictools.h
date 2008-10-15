@@ -104,7 +104,7 @@ public:
     static Ellipsoid CLARKE_1866();
 
     /**
-    * A sphere with a radius of 6371000 {@linkplain SI#METER metres}. Spheres use a simplier
+    * A sphere with a radius of 6371000 {@linkplain SI#METER metres}. Spheres use a simpler
     * algorithm for {@linkplain #orthodromicDistance orthodromic distance computation}, which
     * may be faster and more robust.
     */
@@ -321,7 +321,7 @@ public:
     * Coordinates positive North and East.
     *
     * @param  longitude The longitude in decimal degrees between -180 and +180�
-    * @param  latitude  The latgitude in decimal degrees between  -90 and  +90�
+    * @param  latitude  The latitude in decimal degrees between  -90 and  +90�
     *
     */
     void setDestinationGeographicPoint(double longitude, double latitude);
@@ -421,7 +421,7 @@ protected:
     double castToAngleRange(const double alpha);
 
     /**
-    * Checks the latidude validity. The argument {@code latidude} should be
+    * Checks the latitude validity. The argument {@code latitude} should be
     * greater or equal than -90 degrees and lower or equals than +90 degrees. As
     * a convenience, this method converts the latitude to radians.
     *
@@ -475,17 +475,17 @@ protected:
     Ellipsoid m_ellipsoid;
 
     /*
-    * The semi major axis of the refereced ellipsoid.
+    * The semi major axis of the referenced ellipsoid.
     */
     double m_semiMajorAxis;
 
     /*
-    * The semi minor axis of the refereced ellipsoid.
+    * The semi minor axis of the referenced ellipsoid.
     */
     double m_semiMinorAxis;
 
     /*
-    * The eccenticity squared of the refereced ellipsoid.
+    * The eccentricity squared of the referenced ellipsoid.
     */
     double m_eccentricitySquared;
 

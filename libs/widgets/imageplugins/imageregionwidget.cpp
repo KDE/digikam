@@ -279,7 +279,7 @@ void ImageRegionWidget::viewportPaintExtraData()
             }
         }
 
-        // Drawing HighLighted points.
+        // Drawing highlighted points.
 
         if (!d->hightlightPoints.isEmpty())
         {

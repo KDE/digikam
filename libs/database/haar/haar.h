@@ -82,7 +82,7 @@ enum { NumberOfPixels = 128 };
  */
 enum { NumberOfPixelsSquared = NumberOfPixels * NumberOfPixels };
 
-/** Number of Haar coeffients we retain as signature for an image.
+/** Number of Haar coefficients we retain as signature for an image.
  */
 enum { NumberOfCoefficients = 40 };
 

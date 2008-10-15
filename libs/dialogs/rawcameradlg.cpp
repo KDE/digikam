@@ -132,7 +132,7 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
     d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->listView->setAllColumnsShowFocus(true);
     d->listView->setColumnCount(1);
-    d->listView->setHeaderLabels(QStringList() << "Camera Model"); // Header is hiden. No i18n here.
+    d->listView->setHeaderLabels(QStringList() << "Camera Model"); // Header is hidden. No i18n here.
     d->listView->header()->hide();
 
     for (QStringList::Iterator it = list.begin() ; it != list.end() ; ++it)

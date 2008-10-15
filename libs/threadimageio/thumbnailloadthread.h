@@ -103,7 +103,7 @@ public:
      * Load a thumbnail.
      * You do not need to use this method directly, it will not access the pixmap cache. Use find().
      * The LoadingDescription shall be constructed with the constructor for preview/thumbnail jobs.
-     * (in the description constructor, you need to specify file path, thumbnail size and exif rotation)
+     * (in the description constructor, you need to specify file path, thumbnail size and Exif rotation)
      */
     void load(const LoadingDescription &description);
 
@@ -123,7 +123,7 @@ public:
     static int maximumThumbnailSize();
 
     /**
-     * Specify if the thumbnails shall be rotated by exif.
+     * Specify if the thumbnails shall be rotated by Exif.
      * Note: This only applies to newly created thumbnails. The rotation state of thumbnails
      * found in the disk cache is unknown, so they are not rotated.
      * (The only, unsatisfactory solution is the forced recreation of all thumbnails)
@@ -132,7 +132,7 @@ public:
     void setExifRotate(int exifRotate);
 
     /**
-     * Return true is thumbnails shall be rotated by exif.
+     * Return true is thumbnails shall be rotated by Exif.
      */
     bool exifRotate() const;
 

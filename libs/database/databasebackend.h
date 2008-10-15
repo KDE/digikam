@@ -111,7 +111,7 @@ public:
     bool isReady() const { return status() == OpenSchemaChecked; }
 
     /**
-     * Executes the sql statement, and write the returned data into the values list.
+     * Executes the SQL statement, and write the returned data into the values list.
      * If you are not interested in the returned data, set values to 0.
      * Methods are provided for up to four bound values (positional binding), or for a list of bound values.
      * If you want the last inserted id (and your query is suitable), sett lastInsertId to the address of a QVariant.

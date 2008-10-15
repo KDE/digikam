@@ -145,7 +145,7 @@ void WhiteBalance::autoWBAdjustementFromColor(const QColor &tc, double &temperat
 
     /* This is a dichotomic search based on Blue and Red layers ratio
        to find the matching temperature
-       dapted from ufraw (0.12.1) RGB_to_Temperature
+       adapted from ufraw (0.12.1) RGB_to_Temperature
     */
     tmin = 2000.0;
     tmax = 12000.0;

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-03-22
- * Description : a widget to manage sidebar in gui.
+ * Description : a widget to manage sidebar in GUI.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>

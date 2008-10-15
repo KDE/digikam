@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-// This list mix differents tags name used by camera makers.
+// This list mix different tags name used by camera makers.
 static const char* MakerNoteHumanList[] =
 {
      "AFFocusPos",

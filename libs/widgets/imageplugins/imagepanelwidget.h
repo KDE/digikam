@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-07-01
- * Description : a widget to draw a control pannel image tool.
+ * Description : a widget to draw a control panel image tool.
  *
  * Copyright (C) 2005-2008 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -85,7 +85,7 @@ signals:
 
 public slots:
 
-    // Set the top/Left conner clip position.
+    // Set the top/Left corner clip position.
     void slotSetImageRegionPosition(const QRect& rect, bool targetDone);
 
     // Slot used when the original image clip focus is changed by the user.

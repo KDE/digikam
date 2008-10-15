@@ -130,7 +130,7 @@ CImg& greycstoration_stop() {
   return *this;
 }
 
-//! Return the GREYCstoration progress bar indice (between 0 and 100).
+//! Return the GREYCstoration progress bar indices (between 0 and 100).
 float greycstoration_progress() const {
   if (!greycstoration_is_running()) return 0.0f;
   const unsigned long counter = greycstoration_params->counter?*(greycstoration_params->counter):0;

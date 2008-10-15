@@ -161,7 +161,7 @@ void PreviewLoadingTask::execute()
         KDcrawIface::KDcraw::loadHalfPreview(qimage, m_loadingDescription.filePath);
     }
 
-    // Try to extract Exif/Iptc preview.
+    // Try to extract Exif/IPTC preview.
     if (qimage.isNull())
     {
         loadImagePreview(qimage, m_loadingDescription.filePath);
@@ -171,7 +171,7 @@ void PreviewLoadingTask::execute()
     {
         // convert from QImage
         img = DImg(qimage);
-        // mark as embedded preview (for exif rotation)
+        // mark as embedded preview (for Exif rotation)
         if (fromEmbeddedPreview)
             img.setAttribute("fromRawEmbeddedPreview", true);
         // free memory
@@ -256,7 +256,7 @@ bool PreviewLoadingTask::loadImagePreview(QImage& image, const QString& path)
     DMetadata metadata(path);
     if (metadata.getImagePreview(image))
     {
-        kDebug(50003) << "Use Exif/Iptc preview extraction. Size of image: "
+        kDebug(50003) << "Use Exif/IPTC preview extraction. Size of image: "
                   << image.width() << "x" << image.height() << endl;
         return true;
     }

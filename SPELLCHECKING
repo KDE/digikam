@@ -30,21 +30,25 @@ FOLDER                                  CPP         H
 |   `-- whitebalance                    X           X
 |-- kioslave                            X           X
 |-- libs
-|   |-- curves
-|   |-- database
-|   |-- dialogs
+|   |-- curves                          X           X
+|   |-- database                                    X
+|   |-- dialogs                         X           X
 |   |-- dimg
-|   |-- dmetadata
-|   |-- greycstoration
-|   |-- histogram
-|   |-- imageproperties
-|   |-- jpegutils
-|   |-- levels
-|   |-- lprof
-|   |-- themeengine
-|   |-- threadimageio
-|   |-- whitebalance
-|   `-- widgets
+|   |-- dmetadata                       X           X
+|   |-- greycstoration                  X           X
+|   |-- histogram                       X           X
+|   |-- imageproperties                 X           X
+|   |-- jpegutils                       X           X
+|   |-- levels                          X           X
+|   |-- lprof                           X           X
+|   |-- themeengine                     X           X
+|   |-- threadimageio                   X           X
+|   |-- whitebalance                    X           X
+|   `-- widgets                         X           X
+|       |-- common                      X           X
+|       |-- iccprofiles                 X           X
+|       |-- imageplugins                X           X
+|       `-- metadata                    X           X
 |-- showfoto                            X           X
 |-- themedesigner                       X           X
 `-- utilities                           X           X

@@ -241,14 +241,14 @@ ImageDialog::ImageDialog(QWidget* parent, const KUrl& url, bool singleSelect, co
     QString allPictures = patternList[0];
 
 #if KDCRAW_VERSION < 0x000400
-    // Add other files format witch are missing to All Images" type mime provided by KDE and remplace current.
+    // Add other files format witch are missing to All Images" type mime provided by KDE and replace current.
     if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
     {
         allPictures.insert(allPictures.indexOf("|"), QString(KDcrawIface::DcrawBinary::instance()->rawFiles()) + QString(" *.JPE *.TIF"));
         patternList.removeAll(patternList[0]);
         patternList.prepend(allPictures);
         // Added RAW file formats supported by dcraw program like a type mime.
-        // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete
+        // Note: we cannot use here "image/x-raw" type mime from KDE because it is incomplete
         // or unavailable(see file #121242 in B.K.O).
         patternList.append(i18n("\n%1|Camera RAW files", QString(KDcrawIface::DcrawBinary::instance()->rawFiles())));
     }
@@ -257,7 +257,7 @@ ImageDialog::ImageDialog(QWidget* parent, const KUrl& url, bool singleSelect, co
     patternList.removeAll(patternList[0]);
     patternList.prepend(allPictures);
     // Added RAW file formats supported by dcraw program like a type mime.
-    // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete
+    // Note: we cannot use here "image/x-raw" type mime from KDE because it is incomplete
     // or unavailable(see file #121242 in B.K.O).
     patternList.append(i18n("\n%1|Camera RAW files", QString(KDcrawIface::KDcraw::rawFiles())));
 #endif

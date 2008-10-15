@@ -149,9 +149,9 @@ QString DMetadata::getImageComment() const
     if (getFilePath().isEmpty())
         return QString();
 
-    // In first we trying to get image comments, outside of Xmp, Exif, and Iptc.
+    // In first we trying to get image comments, outside of XMP, Exif, and IPTC.
     // For JPEG, string is extracted from JFIF Comments section.
-    // For PNG, string is extracted from iTXt chunck.
+    // For PNG, string is extracted from iTXt chunk.
 
     QString comment = getCommentsDecoded();
     if (!comment.isEmpty())
@@ -166,7 +166,7 @@ QString DMetadata::getImageComment() const
             return exifComment;
     }
 
-    // In third, we trying to get Xmp comments. Language Alternative rule is not yet used.
+    // In third, we trying to get XMP comments. Language Alternative rule is not yet used.
 
     if (hasXmp())
     {
@@ -184,7 +184,7 @@ QString DMetadata::getImageComment() const
             return xmpComment;
 }
 
-    // In four, we trying to get Iptc comments
+    // In four, we trying to get IPTC comments
 
     if (hasIptc())
     {
@@ -204,7 +204,7 @@ bool DMetadata::setImageComment(const QString& comment) const
 
     kDebug(50003) << getFilePath() << " ==> Comment: " << comment << endl;
 
-    // In first we set image comments, outside of Exif, Xmp, and Iptc.
+    // In first we set image comments, outside of Exif, XMP, and IPTC.
 
     if (!setComments(comment.toUtf8()))
         return false;
@@ -214,7 +214,7 @@ bool DMetadata::setImageComment(const QString& comment) const
     if (!setExifComment(comment))
         return false;
 
-    // In Third we write comments into Xmp. Language Alternative rule is not yet used.
+    // In Third we write comments into XMP. Language Alternative rule is not yet used.
 
     if (!setXmpTagStringLangAlt("Xmp.dc.description", comment, QString(), false))
         return false;
@@ -225,7 +225,7 @@ bool DMetadata::setImageComment(const QString& comment) const
     if (!setXmpTagStringLangAlt("Xmp.tiff.ImageDescription", comment, QString(), false))
         return false;
 
-    // In Four we write comments into Iptc.
+    // In Four we write comments into IPTC.
     // Note that Caption IPTC tag is limited to 2000 char and ASCII charset.
 
     QString commentIptc = comment;
@@ -268,8 +268,8 @@ int DMetadata::getImageRating() const
         }
     }
 
-    // digiKam 0.9.x has used Iptc Urgency to store Rating.
-    // This way is obsolete now since digiKam support Xmp.
+    // digiKam 0.9.x has used IPTC Urgency to store Rating.
+    // This way is obsolete now since digiKam support XMP.
     // But we will let the capability to import it.
     // Iptc.Application2.Urgency <==> digiKam Rating links:
     //
@@ -315,8 +315,8 @@ int DMetadata::getImageRating() const
 
 bool DMetadata::setImageRating(int rating) const
 {
-    // NOTE : with digiKam 0.9.x, we have used Iptc Urgency to store Rating.
-    // Now this way is obsolete, and we use standard Xmp rating tag instead.
+    // NOTE : with digiKam 0.9.x, we have used IPTC Urgency to store Rating.
+    // Now this way is obsolete, and we use standard XMP rating tag instead.
 
     if (rating < RatingMin || rating > RatingMax)
     {
@@ -329,7 +329,7 @@ bool DMetadata::setImageRating(int rating) const
     if (!setProgramId())
         return false;
 
-    // Set standard Xmp rating tag.
+    // Set standard XMP rating tag.
 
     if (!setXmpTagString("Xmp.xmp.Rating", QString::number(rating)))
         return false;
@@ -453,19 +453,19 @@ PhotoInfoContainer DMetadata::getPhotographInformations() const
 
 bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
 {
-    // Try to get Tags Path list from Xmp in first.
+    // Try to get Tags Path list from XMP in first.
     tagsPath = getXmpTagStringSeq("Xmp.digiKam.TagsList", false);
     if (!tagsPath.isEmpty())
         return true;
 
-    // Try to get Tags Path list from Xmp keywords.
+    // Try to get Tags Path list from XMP keywords.
     tagsPath = getXmpKeywords();
     if (!tagsPath.isEmpty())
         return true;
 
-    // Try to get Tags Path list from Iptc keywords.
-    // digiKam 0.9.x has used Iptc keywords to store Tags Path list.
-    // This way is obsolete now since digiKam support Xmp because Iptc
+    // Try to get Tags Path list from IPTC keywords.
+    // digiKam 0.9.x has used IPTC keywords to store Tags Path list.
+    // This way is obsolete now since digiKam support XMP because IPTC
     // do not support UTF-8 and have strings size limitation. But we will
     // let the capability to import it for interworking issues.
     tagsPath = getIptcKeywords();
@@ -477,8 +477,8 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
 
 bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
 {
-    // NOTE : with digiKam 0.9.x, we have used Iptc Keywords for that.
-    // Now this way is obsolete, and we use Xmp instead.
+    // NOTE : with digiKam 0.9.x, we have used IPTC Keywords for that.
+    // Now this way is obsolete, and we use XMP instead.
 
     // Remove the old Tags path list from metadata if already exist.
     if (removeXmpTag("Xmp.digiKam.TagsList", false))
@@ -496,7 +496,7 @@ bool DMetadata::setImagePhotographerId(const QString& author, const QString& aut
     if (!setProgramId())
         return false;
 
-    // Set Xmp tags. Xmp<->Iptc Schema from Photoshop 7.0
+    // Set XMP tags. XMP<->IPTC Schema from Photoshop 7.0
 
     // Create a list of authors including old one witch already exists.
     QStringList oldAuthors = getXmpTagStringSeq("Xmp.dc.creator", false);
@@ -517,7 +517,7 @@ bool DMetadata::setImagePhotographerId(const QString& author, const QString& aut
     if (!setXmpTagString("Xmp.photoshop.AuthorsPosition", authorTitle, false))
         return false;
 
-    // Set Iptc tags.
+    // Set IPTC tags.
 
     if (!setIptcTag(author,      32, "Author",       "Iptc.Application2.Byline"))      return false;
     if (!setIptcTag(authorTitle, 32, "Author Title", "Iptc.Application2.BylineTitle")) return false;
@@ -530,7 +530,7 @@ bool DMetadata::setImageCredits(const QString& credit, const QString& source, co
     if (!setProgramId())
         return false;
 
-    // Set Xmp tags. Xmp<->Iptc Schema from Photoshop 7.0
+    // Set XMP tags. XMP<->IPTC Schema from Photoshop 7.0
 
     if (!setXmpTagString("Xmp.photoshop.Credit", credit, false))
         return false;
@@ -548,7 +548,7 @@ bool DMetadata::setImageCredits(const QString& credit, const QString& source, co
     if (!setXmpTagStringLangAlt("Xmp.tiff.Copyright", copyright, QString(), false))
         return false;
 
-    // Set Iptc tags.
+    // Set IPTC tags.
 
     if (!setIptcTag(credit,     32, "Credit",    "Iptc.Application2.Credit"))    return false;
     if (!setIptcTag(source,     32, "Source",    "Iptc.Application2.Source"))    return false;
@@ -568,7 +568,7 @@ QString DMetadata::getLensDescription() const
     lensExifTags.append("Exif.Pentax.LensType");     // Pentax Cameras Makernote.
     lensExifTags.append("Exif.Panasonic.0x0310");    // Panasonic Cameras Makernote.
     lensExifTags.append("Exif.Sigma.LensRange");     // Sigma Cameras Makernote.
-    lensExifTags.append("Exif.Photo.0xFDEA");        // Unstandard Exif tag set by Camera Raw.
+    lensExifTags.append("Exif.Photo.0xFDEA");        // Nonstandard Exif tag set by Camera Raw.
     // TODO : add Fuji, Olympus, Sony Cameras Makernotes.
 
     // -------------------------------------------------------------------
@@ -887,7 +887,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
         case MetadataInfo::IptcCoreProvinceState:
             return fromIptcOrXmp("Iptc.Application2.ProvinceState", "Xmp.photoshop.State");
         case MetadataInfo::IptcCoreIntellectualGenre:
-            // TODO: find out correct Iptc tag
+            // TODO: find out correct IPTC tag
             return fromIptcOrXmp(/*"Iptc.Application2.ObjectAttribute"?*/ 0, "Xmp.iptc.IntellectualGenre");
         case MetadataInfo::IptcCoreJobID:
             return fromIptcOrXmp("Iptc.Application2.TransmissionReference", "Xmp.photoshop.TransmissionReference");
@@ -961,7 +961,7 @@ QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field fie
         case MetadataInfo::Model:
             return exiv2Iface.createExifUserStringFromValue("Exif.Image.Model", value);
         case MetadataInfo::Lens:
-            // heterogenous source, non-standardized string
+            // heterogeneous source, non-standardized string
             return value.toString();
         case MetadataInfo::Aperture:
             return exiv2Iface.createExifUserStringFromValue("Exif.Photo.FNumber", value);

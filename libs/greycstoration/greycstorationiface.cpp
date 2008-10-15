@@ -143,7 +143,7 @@ QString GreycstorationIface::cimgVersionString()
     return QString::number(cimg_version);
 }
 
-// We need to re-implemente this method from DImgThreadedFilter class because
+// We need to re-implement this method from DImgThreadedFilter class because
 // target image size can be different from original if d->mode = Resize.
 
 void GreycstorationIface::initFilter()

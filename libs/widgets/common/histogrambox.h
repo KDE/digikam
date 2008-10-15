@@ -108,6 +108,6 @@ private:
     HistogramBoxPriv* d;
 };
 
-} // namspace Digikam
+} // namespace Digikam
 
 #endif /* HISTOGRAMBOX_H */

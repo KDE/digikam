@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-04-21
- * Description : Handling accesss to one image and associated data
+ * Description : Handling accesses to one image and associated data
  *
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>

@@ -55,8 +55,8 @@ MetadataListView::MetadataListView(QWidget* parent)
     header()->hide();
 
     QStringList labels;
-    labels.append( "Name" );        // no i18n here: hiden header
-    labels.append( "Value" );       // no i18n here: hiden header
+    labels.append( "Name" );        // no i18n here: hidden header
+    labels.append( "Value" );       // no i18n here: hidden header
     setHeaderLabels(labels);
 
     m_parent = dynamic_cast<MetadataWidget *>(parent);

@@ -81,9 +81,9 @@ public:
 
     /**
      * For preview and thumbnail jobs:
-     * Stores preview max size and exif rotation.
+     * Stores preview max size and Exif rotation.
      * Exif Rotation:
-     *    The exif rotation is only a hint.
+     *    The Exif rotation is only a hint.
      *    Call LoadSaveThread::exifRotate to make sure that the image is really
      *    rotated. It is safe to call this method even if the image is rotated.
      * Raw files / preview jobs:

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2003-02-10
- * Description : a widget to display spash with progress bar
+ * Description : a widget to display splash with progress bar
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>

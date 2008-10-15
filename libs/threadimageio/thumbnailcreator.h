@@ -81,9 +81,9 @@ public:
     void setLoadingProperties(DImgLoaderObserver *observer, DRawDecoding settings);
 
     /**
-     * Set the exif rotation property.
+     * Set the Exif rotation property.
      * If exifRotate is true, the thumbnail will be rotated according
-     * to the exif information.
+     * to the Exif information.
      * Default value is true.
      */
     void setExifRotate(bool rotate);

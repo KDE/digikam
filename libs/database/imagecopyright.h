@@ -61,7 +61,7 @@ public:
      *  This is dc:creator in XMP.
      *  "Contains preferably the name of the person who created the content of this news object, a
      *  photographer for photos, a graphic artist for graphics, or a writer for textual news. If it is not
-     *  appropriate to add the name of a person the name of a company or organisation could be
+     *  appropriate to add the name of a person the name of a company or organization could be
      *  applied as well.
      *  Aligning with IIM notions IPTC Core intents to have only one creator for this news object
      *  despite the underlying XMP property dc:creator allows for more than one item to be
@@ -169,7 +169,7 @@ public:
      *  " Any of a number of instructions from the provider or creator to the receiver of the news
      *    object which might include any of the following: embargoes (NewsMagazines OUT) and
      *    other restrictions not covered by the "Rights Usage Terms" field; information regarding the
-     *    original means of capture (scanning notes, colourspace info) or other specific text
+     *    original means of capture (scanning notes, colorspace info) or other specific text
      *    information that the user may need for accurate reproduction; additional permissions or
      *    credits required when publishing. "
      */

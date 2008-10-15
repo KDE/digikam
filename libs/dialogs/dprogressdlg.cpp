@@ -116,8 +116,8 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
     d->actionsList->setIconSize(QSize(32, 32));
 
     QStringList labels;
-    labels.append("Thumb");        // no i18n here: hiden header
-    labels.append("Status");       // no i18n here: hiden header
+    labels.append("Thumb");        // no i18n here: hidden header
+    labels.append("Status");       // no i18n here: hidden header
     d->actionsList->setHeaderLabels(labels);
 
     grid->addLayout(vlay,           0, 0, 2, 1);

@@ -108,7 +108,7 @@ public:
     bool isShuttingDown();
 
     /**
-     * Utility to make sure that an image is rotated according to exif tag.
+     * Utility to make sure that an image is rotated according to Exif tag.
      * Detects if an image has previously already been rotated: You can
      * call this method more than one time on the same image.
      * Returns true if the image has actually been rotated or flipped.

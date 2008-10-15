@@ -350,7 +350,7 @@ struct sqlite {
   Db aDbStatic[2];              /* Static space for the 2 default backends */
   int flags;                    /* Miscellaneous flags. See below */
   u8 file_format;               /* What file format version is this database? */
-  u8 safety_level;              /* How aggressive at synching data to disk */
+  u8 safety_level;              /* How aggressive at syncing data to disk */
   u8 want_to_close;             /* Close after all VDBEs are deallocated */
   u8 temp_store;                /* 1=file, 2=memory, 0=compile-time default */
   u8 onError;                   /* Default conflict algorithm */
@@ -429,7 +429,7 @@ struct sqlite {
 struct FuncDef {
   void (*xFunc)(sqlite_func*,int,const char**);  /* Regular function */
   void (*xStep)(sqlite_func*,int,const char**);  /* Aggregate function step */
-  void (*xFinalize)(sqlite_func*);           /* Aggregate function finializer */
+  void (*xFinalize)(sqlite_func*);           /* Aggregate function finalizer */
   signed char nArg;         /* Number of arguments.  -1 means unlimited */
   signed char dataType;     /* Arg that determines datatype.  -1=NUMERIC, */
                             /* -2=TEXT. -3=SQLITE_ARGS */
@@ -636,7 +636,7 @@ struct Index {
 ** this structure.  Tokens are also used as part of an expression.
 **
 ** Note if Token.z==0 then Token.dyn and Token.n are undefined and
-** may contain random values.  Do not make any assuptions about Token.dyn
+** may contain random values.  Do not make any assumptions about Token.dyn
 ** and Token.n when Token.z==0.
 */
 struct Token {
@@ -874,7 +874,7 @@ struct Select {
 #define SRT_Union        5  /* Store result as keys in a table */
 #define SRT_Except       6  /* Remove result from a UNION table */
 #define SRT_Table        7  /* Store result as data with a unique key */
-#define SRT_TempTable    8  /* Store result in a trasient table */
+#define SRT_TempTable    8  /* Store result in a transient table */
 #define SRT_Discard      9  /* Do not save the results anywhere */
 #define SRT_Sorter      10  /* Store results in the sorter */
 #define SRT_Subroutine  11  /* Call a subroutine to handle results */
@@ -1058,7 +1058,7 @@ struct TriggerStep {
  * constructed. When coding nested triggers (triggers fired by other triggers)
  * each nested trigger stores its parent trigger's TriggerStack as the "pNext" 
  * pointer. Once the nested trigger has been coded, the pNext value is restored
- * to the pTriggerStack member of the Parse stucture and coding of the parent
+ * to the pTriggerStack member of the Parse structure and coding of the parent
  * trigger continues.
  *
  * Before a nested trigger is coded, the linked list pointed to by the 

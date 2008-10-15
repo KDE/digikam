@@ -278,7 +278,7 @@ bool exifRotate(const QString& file, const QString& documentName)
         transformoption.trim            = false;
         transformoption.transform       = JXFORM_NONE;
 
-        // we have the exif info. check the orientation
+        // we have the Exif info. check the orientation
 
         switch(metaData.getImageOrientation())
         {
@@ -422,7 +422,7 @@ bool exifRotate(const QString& file, const QString& documentName)
         metaData.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
         QImage img(temp);
 
-        // Get the new image dimension of the temp image. Using a dummy QImage objet here
+        // Get the new image dimension of the temp image. Using a dummy QImage object here
         // has a sense because the Exif dimension information can be missing from original image.
         // Get new dimensions with QImage will always work...
         metaData.setImageDimensions(img.size());
@@ -431,7 +431,7 @@ bool exifRotate(const QString& file, const QString& documentName)
         QImage thumb = img.scaled(160, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         metaData.setExifThumbnail(thumb);
 
-        // Update Exif Document Name tag (the orinal file name from camera for example).
+        // Update Exif Document Name tag (the original file name from camera for example).
         metaData.setExifTagString("Exif.Image.DocumentName", documentName);
 
         // We update all new metadata now...
@@ -480,12 +480,12 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
     {
         DImg image(src);
 
-        // Get image Exif/Iptc data.
+        // Get image Exif/IPTC data.
         DMetadata meta;
         meta.setExif(image.getExif());
         meta.setIptc(image.getIptc());
 
-        // Update Iptc preview.
+        // Update IPTC preview.
         QImage preview = image.smoothScale(1280, 1024, Qt::KeepAspectRatio).copyQImage();
 
         // TODO: see B.K.O #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
@@ -503,10 +503,10 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
         QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         meta.setExifThumbnail(thumb);
 
-        // Update Exif Document Name tag (the orinal file name from camera for example).
+        // Update Exif Document Name tag (the original file name from camera for example).
         meta.setExifTagString("Exif.Image.DocumentName", documentName);
 
-        // Store new Exif/Iptc data into image.
+        // Store new Exif/IPTC data into image.
         image.setExif(meta.getExif());
         image.setIptc(meta.getIptc());
 

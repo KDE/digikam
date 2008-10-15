@@ -61,7 +61,7 @@ public:
     ImageLister();
 
     /**
-     * Adjust the setting if album or tags will be listed recurively (i.e. including subalbums / subtags)
+     * Adjust the setting if album or tags will be listed recursively (i.e. including subalbums / subtags)
      */
     void setRecursive(bool recursive);
 

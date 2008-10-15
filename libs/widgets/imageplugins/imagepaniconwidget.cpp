@@ -119,7 +119,7 @@ void ImagePanIconWidget::paintEvent(QPaintEvent*)
 
     p.drawPixmap(m_rect.x(), m_rect.y(), m_pixmap);
 
-    // Drawing HighLighted points.
+    // Drawing highlighted points.
 
     if (!d->hightlightPoints.isEmpty())
     {

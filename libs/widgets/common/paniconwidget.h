@@ -68,8 +68,8 @@ public:
 signals:
 
     // Used with ImagePreview widget. 
-    // Emit when selection have been moved with mouse. 'targetDone' booleen 
-    // value is used for indicate if the mouse have been released.
+    // Emit when selection have been moved with mouse.
+    // 'targetDone' boolean value is used for indicate if the mouse have been released.
     void signalSelectionMoved(const QRect& rect, bool targetDone);
 
     void signalSelectionTakeFocus();

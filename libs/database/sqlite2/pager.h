@@ -26,7 +26,7 @@
 ** Experiments show that a page size of 1024 gives the best speed
 ** for common usages.  The speed differences for different sizes
 ** such as 512, 2048, 4096, an so forth, is minimal.  Note, however,
-** that changing the page size results in a completely imcompatible
+** that changing the page size results in a completely incompatible
 ** file format.
 */
 #ifndef SQLITE_PAGE_SIZE

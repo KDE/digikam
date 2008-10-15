@@ -70,7 +70,7 @@ public:
     /**
      * Call this when you have detected that a file in the database has been
      * modified on disk. Only two groups of fields will be updated in the database:
-     * - filesystem specific properties (those that signalled you that the file has been modified
+     * - filesystem specific properties (those that signaled you that the file has been modified
      *   because their state on disk differed from the state in the database)
      * - image specific properties, for which a difference in the database independent from
      *   the actual file does not make sense (width/height, bit depth, color model)

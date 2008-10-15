@@ -263,7 +263,7 @@ bool LoadSaveThread::exifRotate(DImg &image, const QString& filePath)
     if (attribute.isValid() && attribute.toBool())
         return false;
 
-    // Raw files are already rotated properlly by dcraw. Only perform auto-rotation with JPEG/PNG/TIFF file.
+    // Raw files are already rotated properly by dcraw. Only perform auto-rotation with JPEG/PNG/TIFF file.
     // We don't have a feedback from dcraw about auto-rotated RAW file during decoding. Return true anyway.
 
     attribute = image.attribute("fromRawEmbeddedPreview");

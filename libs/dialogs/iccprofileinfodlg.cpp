@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-02-16
- * Description : a dialog to display icc profile information.
+ * Description : a dialog to display ICC profile information.
  *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *

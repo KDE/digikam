@@ -75,7 +75,7 @@ public:
     /** Return a string with Lens mounted on the front of camera.
         There no standard Exif tag for Lens information.
         Camera makernotes and Xmp tags are parsed. 
-        Take a care : lens information are not standardized and string content is not homogenous between 
+        Take a care : lens information are not standardized and string content is not homogeneous between 
         camera model/maker.
      */
     QString getLensDescription() const;
@@ -99,8 +99,8 @@ public:
      */
     static QMap<int, QString> possibleValuesForEnumField(MetadataInfo::Field field);
 
-    /** Methods dedicaced to record/read a private Iptc tag used to store digiKam image properties.
-        Code tested but not used because Xmp is more simple to use for that. */
+    /** Methods dedicated to record/read a private IPTC tag used to store digiKam image properties.
+        Code tested but not used because XMP is more simple to use for that. */
     bool getXMLImageProperties(QString& comments, QDateTime& date,
                                int& rating, QStringList& tagsPath) const;
     bool setXMLImageProperties(const QString& comments, const QDateTime& date, 

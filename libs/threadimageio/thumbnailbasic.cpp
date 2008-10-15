@@ -213,7 +213,7 @@ QImage ThumbnailCreator::loadPNG(const QString& path)
     if ( bit_depth == 16 )
         png_set_strip_16(png_ptr);
 
-    /* pack all pixels to byte boundaires */
+    /* pack all pixels to byte boundaries */
 
     png_set_packing(png_ptr);
     if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))

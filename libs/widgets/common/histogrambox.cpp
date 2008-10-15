@@ -455,4 +455,4 @@ void HistogramBox::slotColorsChanged()
     d->histogramWidget->repaint();
 }
 
-} // namspace Digikam
+} // namespace Digikam

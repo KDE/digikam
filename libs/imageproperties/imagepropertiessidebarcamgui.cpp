@@ -5,7 +5,7 @@
  *
  * Date        : 2006-02-08
  * Description : simple image properties side bar used by
- *               camera gui.
+ *               camera GUI.
  *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *

@@ -190,7 +190,7 @@ struct AggElem {
 typedef struct Set Set;
 struct Set {
   Hash hash;             /* A set is just a hash table */
-  HashElem *prev;        /* Previously accessed hash elemen */
+  HashElem *prev;        /* Previously accessed hash element */
 };
 
 /*

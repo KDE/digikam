@@ -53,17 +53,17 @@ namespace Digikam
 {
 
     /**
-    The  following  table  gives  the  CIE  colour  matching  functions
+    The  following  table  gives  the  CIE  color  matching  functions
     \bar{x}(\lambda),  \bar{y}(\lambda),  and   \bar{z}(\lambda),   for
-    wavelengths  \lambda  at 5 nanometre increments from 380 nm through
+    wavelengths  \lambda  at 5 nanometer increments from 380 nm through
     780 nm.  This table is used in conjunction with  Planck's  law  for
     the  energy spectrum of a black body at a given temperature to plot
     the black body curve on the CIE chart.
 
     The following table gives the  spectral  chromaticity  co-ordinates
-    x(\lambda) and y(\lambda) for wavelengths in 5 nanometre increments
+    x(\lambda) and y(\lambda) for wavelengths in 5 nanometer increments
     from 380 nm through  780  nm.   These  co-ordinates  represent  the
-    position in the CIE x-y space of pure spectral colours of the given
+    position in the CIE x-y space of pure spectral colors of the given
     wavelength, and  thus  define  the  outline  of  the  CIE  "tongue"
     diagram.
     */

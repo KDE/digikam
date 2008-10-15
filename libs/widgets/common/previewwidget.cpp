@@ -437,7 +437,7 @@ void PreviewWidget::resizeEvent(QResizeEvent* e)
     // automatically after resize
 
     // To be sure than corner widget used to pan image will be hide/show
-    // accordinly with resize event.
+    // accordingly with resize event.
     zoomFactorChanged(d->zoom);
 }
 

@@ -244,13 +244,13 @@ namespace DatabaseComment
          *  Comment: The default - a normal comment
          *  This is what the user in digikam edits as the comment.
          *  It is mapped to and from the JFIF comment,
-         *  the EXIF user comment, the Iptc Caption,
+         *  the EXIF user comment, the IPTC Caption,
          *  Dublin Core and Photoshop Description.
          */
         Comment         = 1,
-        /// Headline: as with Iptc or Photoshop
+        /// Headline: as with IPTC or Photoshop
         Headline        = 2,
-        /// Title: as with Dublin Core Title, Photoshop Title, Iptc Object Name
+        /// Title: as with Dublin Core Title, Photoshop Title, IPTC Object Name
         Title           = 3
         // Feel free to add here any more types that you need!
     };

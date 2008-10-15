@@ -84,7 +84,7 @@ public:
     uint     imageWidth;
     uint     imageHeight;
 
-    /** Numbers of histogram segments dependaing of image bytes depth*/
+    /** Numbers of histogram segments depending of image bytes depth*/
     int      histoSegments;
 
     /** Used to stop thread during calculations.*/

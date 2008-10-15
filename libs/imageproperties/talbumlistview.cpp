@@ -325,7 +325,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         if(srcAlbum == destAlbum)
         {
             // Setting the dropped image as the album thumbnail
-            // If the ctrl key is pressed, when dropping the image, the
+            // If the CTRL key is pressed, when dropping the image, the
             // thumbnail is set without a popup menu
             bool set = false;
             if (e->keyboardModifiers() == Qt::ControlModifier)
@@ -354,7 +354,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
             return;
         }
 
-        // If a ctrl key is pressed while dropping the drag object,
+        // If a CTRL key is pressed while dropping the drag object,
         // the tag is assigned to the images without showing a
         // popup menu.
         bool assign = false;

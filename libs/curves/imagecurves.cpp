@@ -158,7 +158,7 @@ void ImageCurves::curvesChannelReset(int channel)
 
     if (!d->curves) return;
 
-    // Contruct a linear curve.
+    // Construct a linear curve.
 
     for (j = 0 ; j <= d->segmentMax ; j++)
        d->curves->curve[channel][j] = j;
@@ -603,7 +603,7 @@ void ImageCurves::setCurvePoint(int channel, int point, const QPoint& val)
     if ( d->curves &&
          channel>=0 && channel<5 &&
          point>=0 && point<=17 &&
-         val.x()>=-1 && val.x()<=d->segmentMax && // x can be egal to -1
+         val.x()>=-1 && val.x()<=d->segmentMax && // x can be equal to -1
          val.y()>=0 && val.y()<=d->segmentMax)    // if the current point is disable !!!
     {
        d->dirty = true;
@@ -629,7 +629,7 @@ void ImageCurves::setCurvePointX(int channel, int point, int x)
     if ( d->curves &&
          channel>=0 && channel<5 &&
          point>=0 && point<=17 &&
-         x>=-1 && x<=d->segmentMax) // x can be egal to -1 if the current point is disable !!!
+         x>=-1 && x<=d->segmentMax) // x can be equal to -1 if the current point is disable !!!
     {
         d->dirty = true;
         d->curves->points[channel][point][0] = x;

@@ -64,7 +64,7 @@ namespace DeleteDialogMode
         NoChoiceTrash,             // "Do not show again" checkbox, does not show if config entry is set
         NoChoiceDeletePermanently, // No checkbox
         UserPreference,            // Checkbox to toggle trash/permanent, preset to user's last preference
-        UseTrash,                  // same beckbox as above, preset to trash
+        UseTrash,                  // same checkbox as above, preset to trash
         DeletePermanently          // same checkbox as above, preset to permanent
     };
 }

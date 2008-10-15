@@ -465,7 +465,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
     d->labelAlreadyDownloaded->setText(str);
 
     // -- Photograph information ------------------------------------------
-    // NOTA: If something is changed here, please updated albumfiletip section too.
+    // Note: If something is changed here, please updated albumfiletip section too.
 
     QString unavailable(i18n("<i>unavailable</i>"));
     DMetadata metaData;
