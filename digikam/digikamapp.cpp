@@ -913,7 +913,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("RAW camera supported"), this);
+    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("supported RAW cameras"), this);
     connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
     actionCollection()->addAction("help_rawcameralist", d->rawCameraListAction);
 
