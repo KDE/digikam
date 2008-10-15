@@ -39,5 +39,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 026 ==> 168844 : Make the selection rectangle draggable over the image (not only resizable).
 027 ==> 147151 : Compile error: multiple definition of `jpeg_suppress_tables'.
 028 ==> 170758 : High load when tagging 
-029 ==>
+029 ==> 168003 : Drag&dropping a photo to a folder in Dolphin begins copying the whole system:/media.
+030 ==> 
  
