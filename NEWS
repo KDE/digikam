@@ -20,7 +20,13 @@ General        : libgphoto2 dependency is now optional to be able to compile dig
 010 ==> 172776 : Combine Edit and Album menus, and other ideas.
 011 ==> 172836 : No menu item for lensfun.
 012 ==> 172912 : "Slide" becomes "Slideshow" text on button in Main window.
-013 ==> 
+013 ==> 172882 : Setup verbiage patches.
+014 ==> 172884 : Welcome/First-Run verbiage patches.
+015 ==> 172892 : Tips verbiage changes.
+016 ==> 172895 : Setup verbiage patches for slideshow and albumview.
+017 ==> 172898 : Verbiage changes for Util-ImageEditor-ImageResize.cpp.
+018 ==> 172899 : Verbiage changes for digikamapp.cpp.
+019 ==> 
 
 IMPORTANT: This is a beta release : do not use yet in production !!!
 ====================================================================
