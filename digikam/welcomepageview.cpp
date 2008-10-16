@@ -95,23 +95,25 @@ void WelcomePageView::slotUrlOpen(const KUrl& url)
 QString WelcomePageView::infoPage()
 {
     QStringList newFeatures;
-    newFeatures << i18n("Designed for KDE4");
-    newFeatures << i18n("Hardware handling using KDE4 Solid interface");
-    newFeatures << i18n("Multimedia files handling using KDE4 Phonon interface");
-    newFeatures << i18n("Geolocation performed using KDE4 Marble interface");
+    newFeatures << i18n("Designed from the ground-up for KDE4, using KDE4 technology:"
+                        "<ul><li>Hardware handling with KDE4's Solid interface</li>"
+                        "<li>More comprehensive multimedia file handling using KDE4's Phonon interface</li>"
+                        "<li>Easy Geolocation with KDE4's Marble interface</li></ul>");
     newFeatures << i18n("XMP metadata support");
-    newFeatures << i18n("TIFF/EP RAW files metadata editing");
-    newFeatures << i18n("The database file can be stored on a customized place to support remote album library paths");
-    newFeatures << i18n("Support of multiple roots album paths");
-    newFeatures << i18n("Thumbnails-bar integration with preview mode and editor for easy navigation between images");
+    newFeatures << i18n("TIFF/EP RAW metadata editing");
+    newFeatures << i18n("Customizable file storage for the Digikam database, supporting remote albums");
+    newFeatures << i18n("Support of multiple root album paths (no more importing into one giant album)");
+    newFeatures << i18n("Thumbnail-bar integration for easy navigation and editing");
     newFeatures << i18n("Supports the latest camera RAW files");
-    newFeatures << i18n("A new camera interface");
-    newFeatures << i18n("A new tool to capture photographs from Camera");
-    newFeatures << i18n("A new tool based on LensFun library to fix lens defaults automatically");
-    newFeatures << i18n("A new tool to perform fuzzy searches based on sketch drawing template");
-    newFeatures << i18n("A new tool to perform advanced searches based on photo meta-information");
-    newFeatures << i18n("A new tool to perform searches over a map");
-    newFeatures << i18n("A new tool to find similar and duplicate images around collections");
+    newFeatures << i18n("New/revamped tools:"
+                        "<ul><li>Revamped camera import wizard</li>"
+                        "<li>LensFun integration: auto-correction of lens distortion</li>"
+                        "<li>Fuzzy searches based on hand-drawn sketches</li>"
+                        "<li>Advanced searches using image meta-information, like keywords and dates</li>"
+                        "<li>User-friendly map searching that gives you the power to search for global photo locations</li>"
+                        "<li>Advanced searches for duplicate and similar images</li></ul>");
+    newFeatures << i18n("...and much more");
+
 
     QString featureItems;
     for ( int i = 0 ; i < newFeatures.count() ; i++ )
@@ -132,13 +134,13 @@ QString WelcomePageView::infoPage()
         "Welcome to digiKam %1"
         "</h2>"
 
-        "<p>digiKam is an open source photo management program. "
-        "It is designed to import, organize, enhance, search and export your "
-        "digital photographs on your computer.</p>"
+        "<p>digiKam is an open source photo management program "
+        "designed to import, organize, enhance, search and export your "
+        "digital images to and from your computer.</p>"
 
-        "<p>You are currently in the Album view mode of digiKam. The Albums are the real "
-        "containers where your files are stored, they are identical with the folders "
-        "on disk.</p>"
+        "<p>Currently, you're in the Album view mode of digiKam. Albums are the places "
+        "where your files are stored, and are identical to the folders "
+        "on your hard disk.</p>"
 
         "<ul>"
             "<li>"
@@ -147,7 +149,7 @@ QString WelcomePageView::infoPage()
             "</li>"
             "<li>"
                 "The <a href=\"%3\">digiKam homepage</A> provides information about "
-                "new versions of digiKam"
+                "new versions of digiKam."
             "</li>"
         "</ul>"
 
