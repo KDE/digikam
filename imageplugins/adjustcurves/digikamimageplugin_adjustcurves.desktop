@@ -17,6 +17,7 @@ Encoding=UTF-8
 Comment=Image histogram adjust curves plugin for digiKam
 Comment[bg]=Приставка на digiKam за настройка кривите на хистограмите на снимки
 Comment[ca]=Connector pel digiKam d'ajust de les corbes de l'histograma d'imatges
+Comment[cs]=digiKam modul pro úpravu křivek histogramu obrázku
 Comment[de]=digiKam-Modul zur Gradation mittels Bildhistogramm
 Comment[el]=Πρόσθετο προσαρμογής των καμπύλων του ιστογράμματος εικόνας για το digiKam
 Comment[es]=Complemento de digiKam para el ajuste de curvas en el histograma de una imagen
@@ -36,7 +37,7 @@ Comment[ne]=डिजिक्यामको लागि छवि हिस�
 Comment[nl]=Digikam-plugin voor curvesaanpassing van afbeeldingshistogram
 Comment[pl]=Comment=Wtyczka do programu digiKam dostosowujÄca krzywe i histogram dla obrazu
 Comment[pt]=Um 'plugin' do digiKam de ajuste de curvas do histograma da imagem
-Comment[pt_BR]=Um 'plugin' do digiKam de ajuste de curvas do histograma da imagem
+Comment[pt_BR]=Plug-in do digiKam para ajuste de curvas do histograma da imagem
 Comment[sv]=Digikam insticksprogram för justering av kurvor i bildhistogram
 Comment[tr]=digiKam için görüntü histogram eğrilerini düzenleme eklentisi
 Comment[uk]=Втулка коригування гістограми кривих digiKam

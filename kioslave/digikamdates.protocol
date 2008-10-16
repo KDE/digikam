@@ -14,6 +14,7 @@ maxInstances=1
 Description=digiKam dates kioslave
 Description[bg]=digiKam kioslave за дати
 Description[ca]=Kioslave de dates del digiKam
+Description[cs]=digiKam datový kioslave
 Description[de]=digiKam-Daten-Ein/Ausgabemodul
 Description[el]=kioslave ημερομηνιών του digiKam
 Description[es]=kioslave de digiKam para fechas

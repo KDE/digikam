@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=ImagePlugin_ColorFx
 Name[bg]=ImagePlugin_Core
+Name[cs]=ImagePlugin_Core
 Name[de]=Bildmodul_Farbeffekte
 Name[fi]=Väriefektit
 Name[he]=תוסף תמונה - צבעים
@@ -15,6 +16,7 @@ Encoding=UTF-8
 Comment=Color special effects plugin for digiKam
 Comment[bg]=Приставка на digiKam с ефекти за замъгляване на снимки
 Comment[ca]=Connector pel digiKam d'efectes especials de color
+Comment[cs]=Efektový modul digiKamu pro barvy
 Comment[de]=digiKam-Modul für spezielle Farbeffekte
 Comment[el]=Πρόσθετο ειδικών εφέ χρώματος για το digiKam
 Comment[es]=Complemento para digiKam con efectos especiales de color
@@ -34,7 +36,7 @@ Comment[ne]=डिजिक्यामका लागि ब्लर वि�
 Comment[nl]=Digikam-plugin voor kleureffecten
 Comment[pl]=Wtyczka specjalnych efektów do programu digiKam
 Comment[pt]=Um 'plugin' do digiKam para efeitos especiais de cores
-Comment[pt_BR]=Um 'plugin' do digiKam para efeitos especiais de cores
+Comment[pt_BR]=Plug-in do digiKam para efeitos especiais de cores
 Comment[sv]=Digikam insticksprogram med specialeffekter för färg
 Comment[tr]=digiKam için özel renk efektleri eklentisi
 Comment[uk]=Втулка спеціальних ефектів кольорів digiKam

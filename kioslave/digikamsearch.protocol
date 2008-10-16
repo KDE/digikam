@@ -7,6 +7,7 @@ maxInstances=1
 Description=digiKam search kioslave
 Description[bg]=digiKam kioslave за търсене
 Description[ca]=Kioslave de cerca del digiKam
+Description[cs]=digiKam kioslave vyhledávání
 Description[de]=digiKam-Suchen-Ein/Ausgabemodul
 Description[el]=kioslave αναζήτησης του digiKam
 Description[es]=kioslave de digiKam de búsqueda
