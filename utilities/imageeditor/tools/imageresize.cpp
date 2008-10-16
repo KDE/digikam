@@ -199,21 +199,21 @@ ImageResize::ImageResize(QWidget* parent)
     d->hInput->setRange(1, qMax(d->orgHeight * 10, 9999), 1);
     d->hInput->setDefaultValue(d->orgHeight);
     d->hInput->setObjectName("d->hInput");
-    d->hInput->setWhatsThis( i18n("Set here the new image height in pixels."));
+    d->hInput->setWhatsThis( i18n("New image height in pixels (px)."));
 
     QLabel *label3 = new QLabel(i18n("Width (%):"), firstPage);
     d->wpInput     = new RDoubleNumInput(firstPage);
     d->wpInput->input()->setRange(1.0, 999.0, 1.0, true);
     d->wpInput->setDefaultValue(100.0);
     d->wpInput->setObjectName("d->wpInput");
-    d->wpInput->setWhatsThis( i18n("Set here the new image width in percent."));
+    d->wpInput->setWhatsThis( i18n("New image width in percent (%)."));
 
     QLabel *label4 = new QLabel(i18n("Height (%):"), firstPage);
     d->hpInput     = new RDoubleNumInput(firstPage);
     d->hpInput->input()->setRange(1.0, 999.0, 1.0, true);
     d->hpInput->setDefaultValue(100.0);
     d->hpInput->setObjectName("d->hpInput");
-    d->hpInput->setWhatsThis( i18n("Set here the new image height in percent."));
+    d->hpInput->setWhatsThis( i18n("New image height in percent (%)."));
 
     d->preserveRatioBox = new QCheckBox(i18n("Maintain aspect ratio"), firstPage);
     d->preserveRatioBox->setWhatsThis( i18n("Enable this option to maintain aspect "
@@ -226,12 +226,11 @@ ImageResize::ImageResize(QWidget* parent)
     d->cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
     d->useGreycstorationBox = new QCheckBox(i18n("Restore photograph (slow)"), firstPage);
-    d->useGreycstorationBox->setWhatsThis( i18n("Enable this option to restore photograph content. "
-                                                "This way is useful to scale-up an image to an huge size. "
-                                                "Warning: this process can take a while."));
+    d->useGreycstorationBox->setWhatsThis( i18n("Enable this option to scale-up an image to a huge size. "
+                                                "<b>Warning</b>: This process can take some time."));
 
-    d->restorationTips = new QLabel(i18n("<b>Note: use Restoration Mode to only scale-up an image to huge size. "
-                                         "Warning, this process can take a while.</b>"), firstPage);
+    d->restorationTips = new QLabel(i18n("<b>Note:</b> use Restoration Mode to scale-up an image to a huge size. "
+                                         "This process can take some time."), firstPage);
     d->restorationTips->setWordWrap(true);
 
     d->progressBar = new QProgressBar(firstPage);

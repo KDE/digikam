@@ -66,13 +66,13 @@ SetupMisc::SetupMisc(QWidget* parent)
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
-    d->showTrashDeleteDialogCheck = new QCheckBox(i18n("Show confirmation dialog when moving items to the &trash"), this);
+    d->showTrashDeleteDialogCheck = new QCheckBox(i18n("Confirm when moving items to the &trash"), this);
     
-    d->sidebarApplyDirectlyCheck = new QCheckBox(i18n("Apply changes in the &right sidebar without confirmation"), this);
+    d->sidebarApplyDirectlyCheck = new QCheckBox(i18n("Do not confirm when apply changes in the &right sidebar"), this);
     
     d->showSplashCheck = new QCheckBox(i18n("&Show splash screen at startup"), this);
     
-    d->scanAtStart = new QCheckBox(i18n("&Scan for new items on startup (slows down startup)"), this);
+    d->scanAtStart = new QCheckBox(i18n("&Scan for new items at startup (makes startup slower)"), this);
     
     // --------------------------------------------------------
     

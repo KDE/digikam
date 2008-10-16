@@ -165,8 +165,7 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
 
     d->previewLoadFullImageSize = new QCheckBox(i18n("Embedded preview loads full image size"), interfaceOptionsGroup);
     d->previewLoadFullImageSize->setWhatsThis( i18n("Set this option to load the full image size "
-                     "with an embedded preview, instead of a reduced size. Because this option will take more time "
-                     "to load images, use it only if you have a fast computer."));
+                     "for a preview, instead of with a reduced size. This loads more data and will be slow on older computers."));
 
     ifaceSettingsLayout->setMargin(KDialog::spacingHint());
     ifaceSettingsLayout->setSpacing(KDialog::spacingHint());

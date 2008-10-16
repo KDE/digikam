@@ -98,7 +98,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     QVBoxLayout *gLayout1 = new QVBoxLayout(ExifGroup);
 
     d->ExifRotateBox = new QCheckBox(ExifGroup);
-    d->ExifRotateBox->setText(i18n("Show images/thumbs &rotated according to orientation tag"));
+    d->ExifRotateBox->setText(i18n("Show images/thumbnails &rotated according to orientation tag"));
 
     d->ExifSetOrientationBox = new QCheckBox(ExifGroup);
     d->ExifSetOrientationBox->setText(i18n("Set orientation tag to normal after rotate/flip"));
@@ -169,16 +169,16 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     QLabel* explanation = new QLabel(box);
     explanation->setOpenExternalLinks(true);
     explanation->setWordWrap(true);
-    QString txt = i18n("<p><b><a href='http://en.wikipedia.org/wiki/Exif'>EXIF</a></b> is "
+    QString txt = i18n("<p><b><a href='http://en.wikipedia.org/wiki/Exif'>EXIF</a></b> - "
                        "a standard used by most digital cameras today to store technical "
-                       "information about photograph.</p>"
-                       "<p><b><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a></b> is "
-                       "an old standard used in digital photography to store "
-                       "photographer information in pictures.</p>");
+                       "information (like aperture and shutter speed) about an image.</p>"
+                       "<p><b><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a></b> - "
+                       "an older standard used in digital photography to store "
+                       "photographer information in an image.</p>");
 
     if (KExiv2Iface::KExiv2::supportXmp())
         txt.append(i18n("<p><b><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>"
-                        "XMP</a></b> is a new standard used in digital photography dedicated to "
+                        "XMP</a></b> - a new standard used in digital photography dedicated to "
                         "replace IPTC.</p>"));
 
     explanation->setText(txt);

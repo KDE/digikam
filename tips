@@ -24,7 +24,7 @@
 <img src="hicolor/32x32/apps/digikam.png">
 </td>
 <td>
-... that you can use nested albums in digiKam.
+... that you can use nested albums in digiKam?
 </td>
 </tr>
 </table>
@@ -75,7 +75,7 @@
 <img src="hicolor/32x32/apps/digikam.png">
 </td>
 <td>
-... that albums in digiKam are folders in your Album Library? So you can easily import your photos by simply copying them to your Album Library.
+... that albums in digiKam are folders in your Album Library? So you can easily import your photos by simply copying those folders to your Album Library.
 </td>
 </tr>
 </table>
@@ -109,7 +109,7 @@
 <img src="hicolor/32x32/apps/digikam.png">
 </td>
 <td>
-... that you can reach other users through the digiKam-users mailing list? Subscribe to it at <a href="https://mail.kde.org/mailman/listinfo/digikam-users">this url</a>.
+... that you can reach other users through the digiKam-users mailing list? Subscribe to it at <a href="https://mail.kde.org/mailman/listinfo/digikam-users">this site</a>.
 </td>
 </tr>
 </table>
@@ -126,7 +126,7 @@
 <img src="hicolor/32x32/apps/digikam.png">
 </td>
 <td>
-... that digiKam has multiple plugins with extra features like <b>HTML export</b>, <b>Archive to CD</b>, <b>Slideshow</b>,... and that you are welcome to write your own plugins? You can find more information at <a href="http://extragear.kde.org/apps/kipi">this url</a>.
+... that digiKam has multiple plugins with extra features like <b>HTML export</b>, <b>Archive to CD</b>, <b>Slideshow</b>,... and many more? You can even write your own! Find more information at <a href="http://extragear.kde.org/apps/kipi">this site</a>.
 </td>
 </tr>
 </table>
@@ -174,7 +174,7 @@
 <td><img src="hicolor/32x32/apps/digikam.png">
 </td>
 <td>
-... that you can use the <b>PNG</b> file format instead of <b>TIFF</b> for good compression without losing image quality?
+... that you can save your images with the new <b>PNG</b> file format instead of the old <b>TIFF</b> format and get good compression without losing image quality?
 </td>
 </tr>
 </table>
@@ -190,7 +190,7 @@
 <td>
 <img src="hicolor/32x32/apps/digikam.png"></td>
 <td>
-... that most of the settings in a dialog box have <b>What's this?</b> information available, which can be reached via the right mouse button?
+... that most of the settings in a dialog box have small explanation text, called "<b>What's this?</b>" information, available when you hover over an item and right click with your mouse?
 </td>
 </tr>
 </table>
@@ -207,7 +207,7 @@
 <img src="hicolor/32x32/apps/digikam.png">
 </td>
 <td>
-... that because the PNG file format uses a lossless compression algorithm, you can use the max compression level with this file format?
+... that because the PNG file format uses a lossless compression algorithm, you can use the max compression level when you save your images and not lose any quality?
 </td>
 </tr>
 </table>
@@ -241,7 +241,7 @@
 <img src="hicolor/32x32/apps/digikam.png">
 </td>
 <td>
-... that you can edit the comments of the current image opened in the digiKam image editor using <b>Comments and Tags</b> sidebar tab?
+... that you can edit the comments of the current image opened in the digiKam image editor by using the <b>Comments and Tags</b> sidebar tab?
 </td>
 </tr>
 </table>

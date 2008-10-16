@@ -69,7 +69,7 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
 
     QVBoxLayout *vlayout = new QVBoxLayout(widget);
     QLabel *textLabel2   = new QLabel(widget);
-    textLabel2->setText(i18n( "<b>Configure First Local Root Album and Database File Paths</b>"));
+    textLabel2->setText(i18n( "<b>First-run Wizard: Configure where images and meta-data are stored</b>"));
 
     KSeparator *line1    = new KSeparator(Qt::Horizontal, widget);
     QGridLayout *grid    = new QGridLayout();
@@ -95,12 +95,12 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
 
     QLabel *textLabel1 = new QLabel(widget);
     textLabel1->setWordWrap(true);
-    textLabel1->setText(i18n("<p>Please enter a folder where you want to store your pictures.</p> "
-                             "<p>If you already have a folder where you usually store your pictures, "
-                             "choose that one. You can as well pick a new location or use "
-                             "the suggested folder.<br/> "
-                             "You can add more locations later on from the <i>Settings</i> menu. "
-                             "Removable media and shared file systems are supported.</p>") );
+    textLabel1->setText(i18n("<p>Please enter a location where you want to store your images.</p> "
+                             "<p>You can choose any local folder, even one that already contains images."
+                             "<br/> "
+                             "More folders can be added later under the <i>Settings</i> menu. "
+                             "</p> "
+                             "<p><i>Note:</i> Removable media (like USB drives) and shared file systems (both NFS or Samba) are supported.</p>") );
 
     m_rootAlbumPath = new KUrlRequester(widget);
     m_rootAlbumPath->setMode(KFile::Directory | KFile::LocalOnly);
@@ -108,11 +108,10 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
 
     QLabel *textLabel3 = new QLabel(widget);
     textLabel3->setWordWrap(true);
-    textLabel3->setText(i18n("<p>Digikam stores information about your pictures in a database file. "
-                             "Please set the location of this file. It is fine to use "
-                             "the same directory as above. <br>"
-                             "Please note that you should have write access to the folder, "
-                             "and that you cannot use a remote file system here, such as NFS."));
+    textLabel3->setText(i18n("<p>Digikam stores information and meta-data about your images in a database file. "
+                             "Please set the location of this file or accept the default.</p>"
+                             "<p><i>Note:</i> You need to have write access to the folder used here, "
+                             "and you cannot use a remote location on a networked server, using NFS or Samba.</p>"));
 
     m_dbPath = new KUrlRequester(widget);
     m_dbPath->setMode(KFile::Directory | KFile::LocalOnly);
@@ -163,7 +162,7 @@ bool DigikamFirstRun::checkRootAlbum(QString& rootAlbumFolder)
     if (rootAlbumFolder.isEmpty())
     {
         KMessageBox::sorry(this, i18n("You must select a folder for digiKam to "
-                                      "use as the root album path."));
+                                      "use as the root album. All of your images will go there."));
         return false;
     }
 
@@ -176,8 +175,8 @@ bool DigikamFirstRun::checkRootAlbum(QString& rootAlbumFolder)
 
     if (KUrl(rootAlbumFolder).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutFragment))
     {
-        KMessageBox::sorry(this, i18n("digiKam cannot use your home folder as "
-                                      "root album path."));
+        KMessageBox::sorry(this, i18n("digiKam will not use your home folder as the "
+                                      "root album. Please select another location."));
         return false;
     }
 
@@ -186,9 +185,9 @@ bool DigikamFirstRun::checkRootAlbum(QString& rootAlbumFolder)
     if (!targetPath.exists())
     {
         int rc = KMessageBox::questionYesNo(this,
-                                   i18n("The folder to use as root album path does not exist: "
+                                   i18n("The folder to use as the root album path does not exist: "
                                         "<p><b>%1</b></p>"
-                                        "Would you like digiKam to create it?",
+                                        "Would you like digiKam to create it for you?",
                                         rootAlbumFolder),
                                    i18n("Create Root Album Folder?"));
 
@@ -200,7 +199,7 @@ bool DigikamFirstRun::checkRootAlbum(QString& rootAlbumFolder)
         if (!targetPath.mkdir(rootAlbumFolder))
         {
             KMessageBox::sorry(this,
-                               i18n("digiKam could not create the folder to use as root album path.\n"
+                               i18n("digiKam could not create the folder to use as the root album.\n"
                                     "Please select a different location."
                                     "<p><b>%1</b></p>", rootAlbumFolder),
                                i18n("Create Root Album Folder Failed"));
@@ -212,8 +211,8 @@ bool DigikamFirstRun::checkRootAlbum(QString& rootAlbumFolder)
 
     if (!path.isWritable())
     {
-        KMessageBox::information(this, i18n("No write access for root album path.\n"
-                                            "Warning: the comment and tag features "
+        KMessageBox::information(this, i18n("You don't seem to have write access for the folder selected to be the root album.\n"
+                                            "Warning: Without write access, the comment and tag features "
                                             "will not work."));
     }
 
@@ -227,7 +226,7 @@ bool DigikamFirstRun::checkDatabase(QString& dbFolder)
     if (dbFolder.isEmpty())
     {
         KMessageBox::sorry(this, i18n("You must select a folder for digiKam to "
-                                      "store database file."));
+                                      "store information and meta-data in a database file."));
         return false;
     }
 
@@ -252,9 +251,9 @@ bool DigikamFirstRun::checkDatabase(QString& dbFolder)
     if (!targetPath.exists())
     {
         int rc = KMessageBox::questionYesNo(this,
-                                   i18n("The folder to host database file does not exist: "
+                                   i18n("The folder to put your database in does not seem to exist: "
                                         "<p><b>%1</b></p>"
-                                        "Would you like digiKam to create it?",
+                                        "Would you like digiKam to create it for you?",
                                         dbFolder),
                                    i18n("Create Database Folder?"));
 
@@ -266,7 +265,7 @@ bool DigikamFirstRun::checkDatabase(QString& dbFolder)
         if (!targetPath.mkdir(dbFolder))
         {
             KMessageBox::sorry(this,
-                               i18n("digiKam could not create the folder to host database file.\n"
+                               i18n("digiKam could not create the folder to host your database file.\n"
                                     "Please select a different location."
                                     "<p><b>%1</b></p>", dbFolder),
                                i18n("Create Database Folder Failed"));
@@ -278,7 +277,7 @@ bool DigikamFirstRun::checkDatabase(QString& dbFolder)
 
     if (!path.isWritable())
     {
-        KMessageBox::information(this, i18n("<p>No write access for path used to host database file.<br/>"
+        KMessageBox::information(this, i18n("<p>You do not seem to have write access for the folder to host the database file.<br/>"
                                             "Please select a different location.</p>"
                                             "<p><b>%1</b></p>", dbFolder),
                                  i18n("No Database Write Access"));

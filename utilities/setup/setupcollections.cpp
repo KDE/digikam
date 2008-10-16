@@ -202,14 +202,14 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox *albumPathBox = new QGroupBox(i18n("Root Album Paths"), this);
+    QGroupBox *albumPathBox = new QGroupBox(i18n("Root Album Folders"), this);
     QGridLayout* grid       = new QGridLayout(albumPathBox);
 
-    QLabel *albumPathLabel  = new QLabel(i18n("Here you can set all root album paths used to host "
+    QLabel *albumPathLabel  = new QLabel(i18n("Below are the locations of your root albums used to store "
                                               "your images. Write access is necessary to be able "
-                                              "to edit images.\n"
-                                              "You can use removable media and remote "
-                                              "file systems shared over NFS for example."),
+                                              "to edit images in these albums.\n"
+                                              "Note: Removable media and remote "
+                                              "file systems (NFS and Samba), are supported."),
                                          albumPathBox);
     albumPathLabel->setWordWrap(true);
 
@@ -219,7 +219,7 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->listView->setAllColumnsShowFocus(true);
     d->listView->setColumnCount(4);
-    d->listView->setWhatsThis(i18n("This shows all root album paths used by digiKam as collections."));
+    d->listView->setWhatsThis(i18n("This shows all root albums used by digiKam as collections."));
 
     QStringList labels;
     labels.append( i18n("Name") );
@@ -275,12 +275,12 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     QGroupBox *dbPathBox = new QGroupBox(i18n("Database File Path"), this);
     QVBoxLayout *vlay    = new QVBoxLayout(dbPathBox);
 
-    QLabel *databasePathLabel = new QLabel(i18n("Here you can set the location on your computer "
-                                                "where the digiKam database file will be stored. "
-                                                "There is only one common database file for all root albums.\n"
+    QLabel *databasePathLabel = new QLabel(i18n("The location "
+                                                "where the database file will be stored on your system. "
+                                                "There is one common database file for all root albums.\n"
                                                 "Write access is required to be able to edit image "
-                                                "properties.\nPlease note that you cannot use a "
-                                                "remote file system here, such as NFS."),
+                                                "properties.\nNote: A "
+                                                "remote file system, such as NFS, cannot be used here."),
                                            dbPathBox);
     databasePathLabel->setWordWrap(true);
 
@@ -509,8 +509,8 @@ void SetupCollections::slotChangeDatabasePath(const KUrl &result)
 
     if (!result.isEmpty() && !targetPath.isWritable())
     {
-        KMessageBox::information(0, i18n("No write access for this path to store database.\n"
-                                         "Warning: the caption and tag features will not work."));
+        KMessageBox::information(0, i18n("You don't seem to have write access to this database folder.\n"
+                                         "Without this access, the caption and tag features will not work."));
     }
 
     checkforOkButton();
@@ -535,7 +535,7 @@ void SetupCollections::slotChangeAlbumPath(const KUrl &result)
 {
     if (KUrl(result).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutTrailingSlash))
     {
-        KMessageBox::sorry(0, i18n("Sorry you can not use your home directory as root album path."));
+        KMessageBox::sorry(0, i18n("Sorry you cannot use your home directory as the root album."));
     }
     else
     {
@@ -543,8 +543,8 @@ void SetupCollections::slotChangeAlbumPath(const KUrl &result)
 
         if (!result.isEmpty() && !targetPath.isWritable())
         {
-            KMessageBox::information(0, i18n("No write access for this root album path.\n"
-                                             "Warning: image and metadata editing will not work with this path."));
+            KMessageBox::information(0, i18n("You don't seem to have write access to this root album.\n"
+                                             "Without this access, image and metadata editing will not work."));
         }
     }
 
@@ -603,13 +603,13 @@ bool SetupCollections::checkForCollection(const QString& name, const QString& pa
         {
             if (lvItem->name() == name)
             {
-                KMessageBox::information(0, i18n("A root album named \"%1\" already exist.", name));
+                KMessageBox::information(0, i18n("A root album named \"%1\" already exists.", name));
                 return false;
             }
 
             if (lvItem->path() == path)
             {
-                KMessageBox::information(0, i18n("A root album set with path \"%1\" already exist.", path));
+                KMessageBox::information(0, i18n("A root album in folder \"%1\" already exists.", path));
                 return false;
             }
         }

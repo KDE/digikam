@@ -23,18 +23,18 @@
 
 // Qt includes.
 
-#include <QLabel>
 #include <QCheckBox>
+#include <QLabel>
 #include <QVBoxLayout>
 
 // KDE includes.
 
-#include <klocale.h>
-#include <kdialog.h>
-#include <knuminput.h>
-#include <kconfig.h>
 #include <kapplication.h>
+#include <kconfig.h>
+#include <kdialog.h>
 #include <kglobal.h>
+#include <klocale.h>
+#include <knuminput.h>
 
 // Local includes.
 
@@ -50,27 +50,27 @@ public:
 
     SetupSlideShowPriv()
     {
-        delayInput           = 0;
-        startWithCurrent     = 0;
-        loopMode             = 0;
-        printName            = 0;
-        printDate            = 0;
-        printApertureFocal   = 0;
-        printExpoSensitivity = 0;
-        printMakeModel       = 0;
-        printComment         = 0;
-        printRating          = 0;
+        delayInput          = 0;
+        startWithCurrent    = 0;
+        loopMode            = 0;
+        showName            = 0;
+        showDate            = 0;
+        showApertureFocal   = 0;
+        showExpoSensitivity = 0;
+        showMakeModel       = 0;
+        showComment         = 0;
+        showRating          = 0;
     }
 
     QCheckBox    *startWithCurrent;
     QCheckBox    *loopMode;
-    QCheckBox    *printName;
-    QCheckBox    *printDate;
-    QCheckBox    *printApertureFocal;
-    QCheckBox    *printExpoSensitivity;
-    QCheckBox    *printMakeModel;
-    QCheckBox    *printComment;
-    QCheckBox    *printRating;
+    QCheckBox    *showName;
+    QCheckBox    *showDate;
+    QCheckBox    *showApertureFocal;
+    QCheckBox    *showExpoSensitivity;
+    QCheckBox    *showMakeModel;
+    QCheckBox    *showComment;
+    QCheckBox    *showRating;
 
     KIntNumInput *delayInput;
 };
@@ -84,51 +84,51 @@ SetupSlideShow::SetupSlideShow(QWidget* parent)
     d->delayInput = new KIntNumInput(5, this);
     d->delayInput->setRange(1, 3600, 1);
     d->delayInput->setSliderEnabled(true);
-    d->delayInput->setLabel( i18n("&Delay between images:"), Qt::AlignLeft|Qt::AlignTop );
+    d->delayInput->setLabel(i18n("&Delay between images:"), Qt::AlignLeft | Qt::AlignTop);
     d->delayInput->setWhatsThis(i18n("The delay, in seconds, between images."));
 
     d->startWithCurrent = new QCheckBox(i18n("Start with current image"), this);
     d->startWithCurrent->setWhatsThis( i18n("If this option is enabled, the Slideshow will be started "
                                             "with the current image selected in the images list."));
 
-    d->loopMode = new QCheckBox(i18n("Display in loop"), this);
+    d->loopMode = new QCheckBox(i18n("Slideshow runs in a loop"), this);
     d->loopMode->setWhatsThis( i18n("Run the slideshow in a loop."));
 
-    d->printName = new QCheckBox(i18n("Print image file name"), this);
-    d->printName->setWhatsThis( i18n("Print the image file name at the bottom of the screen."));
+    d->showName = new QCheckBox(i18n("Show image file name"), this);
+    d->showName->setWhatsThis( i18n("Show the image file name at the bottom of the screen."));
 
-    d->printDate = new QCheckBox(i18n("Print image creation date"), this);
-    d->printDate->setWhatsThis( i18n("Print the image creation time/date at the bottom of the screen."));
+    d->showDate = new QCheckBox(i18n("Show image creation date"), this);
+    d->showDate->setWhatsThis( i18n("Show the image creation time/date at the bottom of the screen."));
 
-    d->printApertureFocal = new QCheckBox(i18n("Print camera aperture and focal length"), this);
-    d->printApertureFocal->setWhatsThis( i18n("Print the camera aperture and focal length at the bottom of the screen."));
+    d->showApertureFocal = new QCheckBox(i18n("Show camera aperture and focal length"), this);
+    d->showApertureFocal->setWhatsThis( i18n("Show the camera aperture and focal length at the bottom of the screen."));
 
-    d->printExpoSensitivity = new QCheckBox(i18n("Print camera exposure and sensitivity"), this);
-    d->printExpoSensitivity->setWhatsThis( i18n("Print the camera exposure and sensitivity at the bottom of the screen."));
+    d->showExpoSensitivity = new QCheckBox(i18n("Show camera exposure and sensitivity"), this);
+    d->showExpoSensitivity->setWhatsThis( i18n("Show the camera exposure and sensitivity at the bottom of the screen."));
 
-    d->printMakeModel = new QCheckBox(i18n("Print camera make and model"), this);
-    d->printMakeModel->setWhatsThis( i18n("Print the camera make and model at the bottom of the screen."));
+    d->showMakeModel = new QCheckBox(i18n("Show camera make and model"), this);
+    d->showMakeModel->setWhatsThis( i18n("Show the camera make and model at the bottom of the screen."));
 
-    d->printComment = new QCheckBox(i18n("Print image caption"), this);
-    d->printComment->setWhatsThis( i18n("Print the image caption at the bottom of the screen."));
+    d->showComment = new QCheckBox(i18n("Show image caption"), this);
+    d->showComment->setWhatsThis( i18n("Show the image caption at the bottom of the screen."));
 
-    d->printRating = new QCheckBox(i18n("Print image rating"), this);
-    d->printRating->setWhatsThis( i18n("Print the digiKam image rating at the bottom of the screen."));
+    d->showRating = new QCheckBox(i18n("Show image rating"), this);
+    d->showRating->setWhatsThis( i18n("Show the digiKam image rating at the bottom of the screen."));
 
     // Only digiKam support this feature, showFoto do not support digiKam database information.
     if (kapp->applicationName() == "showfoto")
-        d->printRating->hide();
+        d->showRating->hide();
 
     layout->addWidget(d->delayInput);
     layout->addWidget(d->startWithCurrent);
     layout->addWidget(d->loopMode);
-    layout->addWidget(d->printName);
-    layout->addWidget(d->printDate);
-    layout->addWidget(d->printApertureFocal);
-    layout->addWidget(d->printExpoSensitivity);
-    layout->addWidget(d->printMakeModel);
-    layout->addWidget(d->printComment);
-    layout->addWidget(d->printRating);
+    layout->addWidget(d->showName);
+    layout->addWidget(d->showDate);
+    layout->addWidget(d->showApertureFocal);
+    layout->addWidget(d->showExpoSensitivity);
+    layout->addWidget(d->showMakeModel);
+    layout->addWidget(d->showComment);
+    layout->addWidget(d->showRating);
     layout->addStretch();
     layout->setMargin(0);
     layout->setSpacing(KDialog::spacingHint());
@@ -149,13 +149,13 @@ void SetupSlideShow::applySettings()
     group.writeEntry("SlideShowDelay", d->delayInput->value());
     group.writeEntry("SlideShowStartCurrent", d->startWithCurrent->isChecked());
     group.writeEntry("SlideShowLoop", d->loopMode->isChecked());
-    group.writeEntry("SlideShowPrintName", d->printName->isChecked());
-    group.writeEntry("SlideShowPrintDate", d->printDate->isChecked());
-    group.writeEntry("SlideShowPrintApertureFocal", d->printApertureFocal->isChecked());
-    group.writeEntry("SlideShowPrintExpoSensitivity", d->printExpoSensitivity->isChecked());
-    group.writeEntry("SlideShowPrintMakeModel", d->printMakeModel->isChecked());
-    group.writeEntry("SlideShowPrintComment", d->printComment->isChecked());
-    group.writeEntry("SlideShowPrintRating", d->printRating->isChecked());
+    group.writeEntry("SlideShowPrintName", d->showName->isChecked());
+    group.writeEntry("SlideShowPrintDate", d->showDate->isChecked());
+    group.writeEntry("SlideShowPrintApertureFocal", d->showApertureFocal->isChecked());
+    group.writeEntry("SlideShowPrintExpoSensitivity", d->showExpoSensitivity->isChecked());
+    group.writeEntry("SlideShowPrintMakeModel", d->showMakeModel->isChecked());
+    group.writeEntry("SlideShowPrintComment", d->showComment->isChecked());
+    group.writeEntry("SlideShowPrintRating", d->showRating->isChecked());
     config->sync();
 }
 
@@ -167,13 +167,13 @@ void SetupSlideShow::readSettings()
     d->delayInput->setValue(group.readEntry("SlideShowDelay", 5));
     d->startWithCurrent->setChecked(group.readEntry("SlideShowStartCurrent", false));
     d->loopMode->setChecked(group.readEntry("SlideShowLoop", false));
-    d->printName->setChecked(group.readEntry("SlideShowPrintName", true));
-    d->printDate->setChecked(group.readEntry("SlideShowPrintDate", false));
-    d->printApertureFocal->setChecked(group.readEntry("SlideShowPrintApertureFocal", false));
-    d->printExpoSensitivity->setChecked(group.readEntry("SlideShowPrintExpoSensitivity", false));
-    d->printMakeModel->setChecked(group.readEntry("SlideShowPrintMakeModel", false));
-    d->printComment->setChecked(group.readEntry("SlideShowPrintComment", false));
-    d->printRating->setChecked(group.readEntry("SlideShowPrintRating", false));
+    d->showName->setChecked(group.readEntry("SlideShowPrintName", true));
+    d->showDate->setChecked(group.readEntry("SlideShowPrintDate", false));
+    d->showApertureFocal->setChecked(group.readEntry("SlideShowPrintApertureFocal", false));
+    d->showExpoSensitivity->setChecked(group.readEntry("SlideShowPrintExpoSensitivity", false));
+    d->showMakeModel->setChecked(group.readEntry("SlideShowPrintMakeModel", false));
+    d->showComment->setChecked(group.readEntry("SlideShowPrintComment", false));
+    d->showRating->setChecked(group.readEntry("SlideShowPrintRating", false));
 }
 
 }   // namespace Digikam

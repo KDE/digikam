@@ -177,7 +177,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 
     d->mimePage  = new SetupMime();
     d->page_mime = addPage( d->mimePage, i18n("Mime Types") );
-    d->page_mime->setHeader( i18n("File (MIME) Types Settings") );
+    d->page_mime->setHeader( i18n("Supported File (MIME-Type) Settings") );
     d->page_mime->setIcon( KIcon("system-file-manager") );
 
     d->lighttablePage  = new SetupLightTable();

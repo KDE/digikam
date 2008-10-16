@@ -105,11 +105,11 @@ SetupEditor::SetupEditor(QWidget* parent )
     QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), this);
     QVBoxLayout *gLayout1            = new QVBoxLayout();
 
-    d->themebackgroundColor = new QCheckBox(i18n("&Use theme background color"),
+    d->themebackgroundColor = new QCheckBox(i18n("&Use current theme background color"),
                                             interfaceOptionsGroup);
 
-    d->themebackgroundColor->setWhatsThis(i18n("Enable this option to use background theme "
-                                               "color in image editor area"));
+    d->themebackgroundColor->setWhatsThis(i18n("Enable this option to use the current background theme "
+                                               "color in the image editor area"));
 
     d->colorBox                  = new KHBox(interfaceOptionsGroup);
     QLabel *backgroundColorlabel = new QLabel( i18n("&Background color:"), d->colorBox);
@@ -120,17 +120,17 @@ SetupEditor::SetupEditor(QWidget* parent )
 
     d->hideToolBar        = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
     d->hideThumbBar       = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
-    d->horizontalThumbBar = new QCheckBox(i18n("Use &horizontal thumbbar (need to restart showFoto)"), interfaceOptionsGroup);
-    d->horizontalThumbBar->setWhatsThis( i18n("If this option is enabled, the thumbnails bar will be displayed "
+    d->horizontalThumbBar = new QCheckBox(i18n("Use &horizontal thumbbar (will need to restart showFoto)"), interfaceOptionsGroup);
+    d->horizontalThumbBar->setWhatsThis( i18n("If this option is enabled, the thumbnail bar will be displayed "
                                               "horizontally behind the image area. You need to restart showFoto "
-                                              "for this option take effect."));
-    d->useTrash   = new QCheckBox(i18n("&Deleting items should move them to trash"), interfaceOptionsGroup);
+                                              "for this option to take effect."));
+    d->useTrash   = new QCheckBox(i18n("&Deleted items should go to the trash"), interfaceOptionsGroup);
     d->showSplash = new QCheckBox(i18n("&Show splash screen at startup"), interfaceOptionsGroup);
 
-    d->useRawImportTool = new QCheckBox(i18n("Use Raw Import Tool to handle Raw image"), interfaceOptionsGroup);
+    d->useRawImportTool = new QCheckBox(i18n("Use Raw Import Tool to handle Raw images"), interfaceOptionsGroup);
     d->useRawImportTool->setWhatsThis(i18n("Set this option to use Raw Import "
                                            "tool to load a RAW image. "
-                                           "With this tool you are able to customize indeep decoding settings."));
+                                           "With this tool you are able to customize advanced settings."));
 
     gLayout1->addWidget(d->themebackgroundColor);
     gLayout1->addWidget(d->colorBox);
@@ -151,14 +151,14 @@ SetupEditor::SetupEditor(QWidget* parent )
     QLabel *underExpoColorlabel = new QLabel( i18n("&Under-exposure color:"), underExpoBox);
     d->underExposureColor       = new KColorButton(underExpoBox);
     underExpoColorlabel->setBuddy(d->underExposureColor);
-    d->underExposureColor->setWhatsThis( i18n("Customize color used in image editor to identify "
+    d->underExposureColor->setWhatsThis( i18n("Customize the color used in the image editor to identify "
                                               "under-exposed pixels.") );
 
     KHBox *overExpoBox         = new KHBox(exposureOptionsGroup);
     QLabel *overExpoColorlabel = new QLabel( i18n("&Over-exposure color:"), overExpoBox);
     d->overExposureColor       = new KColorButton(overExpoBox);
     overExpoColorlabel->setBuddy(d->overExposureColor);
-    d->overExposureColor->setWhatsThis( i18n("Customize color used in image editor to identify "
+    d->overExposureColor->setWhatsThis( i18n("Customize the color used in the image editor to identify "
                                              "over-exposed pixels.") );
 
     gLayout2->addWidget(underExpoBox);
@@ -188,11 +188,11 @@ SetupEditor::SetupEditor(QWidget* parent )
     KHBox* sortBox       = new KHBox(sortOptionsGroup);
     new QLabel(i18n("Sort images by:"), sortBox);
     d->sortOrderComboBox = new KComboBox(sortBox);
-    d->sortOrderComboBox->insertItem(0, i18n("File Date"));
-    d->sortOrderComboBox->insertItem(1, i18n("File Name"));
-    d->sortOrderComboBox->insertItem(2, i18n("File size"));
+    d->sortOrderComboBox->insertItem(0, i18n("Date"));
+    d->sortOrderComboBox->insertItem(1, i18n("Name"));
+    d->sortOrderComboBox->insertItem(2, i18n("File Size"));
     d->sortOrderComboBox->setWhatsThis(i18n("Here, select whether newly-loaded "
-                                            "images are sorted by file-date, file-name, or file-size."));
+                                            "images are sorted by their date, name, or size on disk."));
 
     d->sortReverse = new QCheckBox(i18n("Reverse ordering"), sortOptionsGroup);
     d->sortReverse->setWhatsThis(i18n("If this option is enabled, newly-loaded "

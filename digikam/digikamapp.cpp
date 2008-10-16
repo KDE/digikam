@@ -291,9 +291,9 @@ void DigikamApp::show()
 
     if(!d->validIccPath)
     {
-        QString message = i18n("<p>The ICC profiles path seems to be invalid.</p>"
-                               "<p>If you want to set it now, select \"Yes\", otherwise "
-                               "select \"No\". In this case, \"Color Management\" feature "
+        QString message = i18n("<p>The ICC profiles folder seems to be invalid.</p>"
+                               "<p>If you want to try setting it again, choose \"Yes\" here, otherwise "
+                               "choose \"No\", and the \"Color Management\" feature "
                                "will be disabled until you solve this issue</p>");
 
         if (KMessageBox::warningYesNo(this, message) == KMessageBox::Yes)
@@ -487,12 +487,12 @@ void DigikamApp::setupAccelerators()
     lastImageAction->setShortcut( QKeySequence(Qt::Key_End) );
     connect(lastImageAction, SIGNAL(triggered()), this, SIGNAL(signalLastItem()));
 
-    KAction *copyItemsAction = new KAction(i18n("Copy Album Items Selection"), this);
+    KAction *copyItemsAction = new KAction(i18n("Copy selected album items"), this);
     actionCollection()->addAction("copy_album_selection", copyItemsAction);
     copyItemsAction->setShortcut( QKeySequence(Qt::CTRL+Qt::Key_C) );
     connect(copyItemsAction, SIGNAL(triggered()), this, SIGNAL(signalCopyAlbumItemsSelection()));
 
-    KAction *pasteItemsAction = new KAction(i18n("Paste Album Items Selection"), this);
+    KAction *pasteItemsAction = new KAction(i18n("Paste selected album items"), this);
     actionCollection()->addAction("paste_album_selection", pasteItemsAction);
     pasteItemsAction->setShortcut( QKeySequence(Qt::CTRL+Qt::Key_V) );
     connect(pasteItemsAction, SIGNAL(triggered()), this, SIGNAL(signalPasteAlbumItemsSelection()));
@@ -587,7 +587,7 @@ void DigikamApp::setupActions()
 
     d->refreshAlbumAction = new KAction(KIcon("view-refresh"), i18n("Refresh"), this);
     d->refreshAlbumAction->setShortcut(Qt::Key_F5);
-    d->refreshAlbumAction->setWhatsThis(i18n("Refresh all album contents."));
+    d->refreshAlbumAction->setWhatsThis(i18n("Refresh the contents of the current album."));
     connect(d->refreshAlbumAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumRefresh()));
     actionCollection()->addAction("album_refresh", d->refreshAlbumAction);
 
@@ -722,14 +722,14 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->recurseAlbumsAction = new KToggleAction(i18n("Include Album Sub-Tree"), this);
-    d->recurseAlbumsAction->setWhatsThis(i18n("Activate this option to recursively show all sub-albums below "
+    d->recurseAlbumsAction->setWhatsThis(i18n("Activate this option to show all sub-albums below "
                                               "the current album."));
     connect(d->recurseAlbumsAction, SIGNAL(toggled(bool)), this, SLOT(slotRecurseAlbums(bool)));
     actionCollection()->addAction("albums_recursive", d->recurseAlbumsAction);
 
     d->recurseTagsAction = new KToggleAction(i18n("Include Tag Sub-Tree"), this);
     d->recurseTagsAction->setWhatsThis(i18n("Activate this option to show all images marked by the given tag "
-                                            "and its all its sub-tags."));
+                                            "and all its sub-tags."));
     connect(d->recurseTagsAction, SIGNAL(toggled(bool)), this, SLOT(slotRecurseTags(bool)));
     actionCollection()->addAction("tags_recursive", d->recurseTagsAction);
 
@@ -858,7 +858,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->zoomTo100percents = new KAction(KIcon("zoom-original"), i18n("Zoom to 1:1"), this);
+    d->zoomTo100percents = new KAction(KIcon("zoom-original"), i18n("Zoom to 100%"), this);
     d->zoomTo100percents->setShortcut(Qt::ALT+Qt::CTRL+Qt::Key_0);       // NOTE: Photoshop 7 use ALT+CTRL+0
     connect(d->zoomTo100percents, SIGNAL(triggered()), d->view, SLOT(slotZoomTo100Percents()));
     actionCollection()->addAction("album_zoomto100percents", d->zoomTo100percents);
@@ -919,7 +919,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components info"), this);
+    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Component info"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
     actionCollection()->addAction("help_librariesinfo", d->libsInfoAction);
 
@@ -1024,7 +1024,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    KAction *rebuildFingerPrintsAction = new KAction(KIcon("run-build"), i18n("Rebuild all FingerPrints..."), this);
+    KAction *rebuildFingerPrintsAction = new KAction(KIcon("run-build"), i18n("Rebuild all Fingerprints..."), this);
     connect(rebuildFingerPrintsAction, SIGNAL(triggered()), this, SLOT(slotRebuildAllFingerPrints()));
     actionCollection()->addAction("fingerprints_rebuild", rebuildFingerPrintsAction);
 
@@ -1330,13 +1330,13 @@ void DigikamApp::cameraAutoDetect()
 
 void DigikamApp::loadCameras()
 {
-    d->cameraSolidMenu->menuAction()->setText(i18n("Digital Cameras"));
+    d->cameraSolidMenu->menuAction()->setText(i18n("Cameras (Auto-detected)"));
     d->cameraSolidMenu->menuAction()->setIcon(KIcon("camera-photo"));
     d->usbMediaMenu->menuAction()->setText(i18n("USB Storage Devices"));
     d->usbMediaMenu->menuAction()->setIcon(KIcon("drive-removable-media-usb"));
     d->cardReaderMenu->menuAction()->setText(i18n("Card Readers"));
     d->cardReaderMenu->menuAction()->setIcon(KIcon("media-flash-smart-media"));
-    d->manuallyAddedCamerasMenu->menuAction()->setText(i18n("Cameras Added Manually"));
+    d->manuallyAddedCamerasMenu->menuAction()->setText(i18n("Cameras (Add)"));
     d->manuallyAddedCamerasMenu->menuAction()->setIcon(KIcon("preferences-other"));
 
     actionCollection()->addAction("camera_solid", d->cameraSolidMenu->menuAction());
@@ -1361,7 +1361,7 @@ void DigikamApp::loadCameras()
     // -----------------------------------------------------------------
 
     d->addFoldersAction = new KAction(KIcon("albumfolder-importdir"), i18n("Add Folders..."), this);
-    d->addFoldersAction->setWhatsThis(i18n("Adds new folders to Albums library."));
+    d->addFoldersAction->setWhatsThis(i18n("Adds new folders to Album library."));
     connect(d->addFoldersAction, SIGNAL(triggered()), this, SLOT(slotImportAddFolders()));
     actionCollection()->addAction("import_addFolders", d->addFoldersAction);
 
@@ -1726,7 +1726,7 @@ void DigikamApp::fillSolidMenus()
                 driveType = i18n("SD / MMC Card Reader");
                 break;
             case Solid::StorageDrive::Xd:
-                driveType = i18n("xD-Picture Card Reader");
+                driveType = i18n("xD Card Reader");
                 break;
             case Solid::StorageDrive::HardDisk:
                 // We don't want to list HardDisk partitions, but USB Mass Storage devices.
@@ -1801,7 +1801,7 @@ void DigikamApp::fillSolidMenus()
                         label += '(' + QString::number(size) + " KB)";
                 }
                 else
-                    label += '(' + QString::number(size) + " Bytes)";
+                    label += '(' + QString::number(size) + " bytes)";
             }
         }
 
@@ -2142,7 +2142,7 @@ void DigikamApp::slotKipiPluginPlug()
                 }
                 else
                 {
-                    kDebug(50003) << "No menu found for a plugin!!!" << endl;
+                    kDebug(50003) << "No menu found for a plugin!" << endl;
                 }
             }
             else
@@ -2248,10 +2248,10 @@ void DigikamApp::slotSyncAllPicturesMetadataDone()
 
 void DigikamApp::slotRebuildAllFingerPrints()
 {
-    QString msg = i18n("Image finger-prints computation can take a while.\n"
-                       "What do you want to do?\n"
-                       "- Scan for changed or non-recorded items in database\n"
-                       "- Rebuild all fingerprints (long)");
+    QString msg = i18n("Image fingerprinting can take some time.\n"
+                       "Which would you prefer?\n"
+                       "- Scan for changed or non-cataloged items in the database (quick)\n"
+                       "- Rebuild all fingerprints (takes a long time)");
     int result = KMessageBox::questionYesNoCancel(this, msg,
                                                   i18n("Warning"),
                                                   KGuiItem(i18n("Scan")),
@@ -2353,7 +2353,7 @@ void DigikamApp::slotImportAddImages()
 void DigikamApp::slotImportAddFolders()
 {
     KFileDialog dlg(KUrl(), "inode/directory", this);
-    dlg.setCaption(i18n("Select folders to import"));
+    dlg.setCaption(i18n("Select folders to import into album"));
     dlg.setMode(KFile::Directory |  KFile::Files);
     if(dlg.exec() != QDialog::Accepted)
         return;
@@ -2366,7 +2366,7 @@ void DigikamApp::slotImportAddFolders()
         album = 0;
 
     QString header(i18n("<p>Please select the destination album from the digiKam library to "
-                        "import folders.</p>"));
+                        "import folders into.</p>"));
 
     album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header);
     if (!album) return;
