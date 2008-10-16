@@ -877,7 +877,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->slideShowAction = new KActionMenu(KIcon("view-presentation"), i18n("Slide"), this);
+    d->slideShowAction = new KActionMenu(KIcon("view-presentation"), i18n("Slideshow"), this);
     d->slideShowAction->setDelayed(false);
     actionCollection()->addAction("slideshow", d->slideShowAction);
 

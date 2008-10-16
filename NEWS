@@ -19,7 +19,8 @@ General        : libgphoto2 dependency is now optional to be able to compile dig
 009 ==> 172733 : Crash on Synchronize images with database.
 010 ==> 172776 : Combine Edit and Album menus, and other ideas.
 011 ==> 172836 : No menu item for lensfun.
-012 ==> 
+012 ==> 172912 : "Slide" becomes "Slideshow" text on button in Main window.
+013 ==> 
 
 IMPORTANT: This is a beta release : do not use yet in production !!!
 ====================================================================
