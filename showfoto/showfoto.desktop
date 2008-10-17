@@ -52,7 +52,8 @@ Comment[zh_CN]=以开源的力量专业化地管理您的照片
 Exec=showfoto %i -caption "%c" %U
 Icon=showfoto
 Type=Application
-MimeType=image/gif;image/x-xpm;image/x-xbm;image/jpeg;image/png;image/tiff;image/x-bmp;image/x-psd;image/x-eim;image/x-portable-bitmap;image/x-portable-pixmap;image/x-portable-greymap;image/x-raw;
+# TODO: What is image/x-eim? Register it to freedesktop.org if you need it.
+MimeType=image/gif;image/x-xpixmap;image/x-xbitmap;image/jpeg;image/png;image/tiff;image/x-bmp;image/x-psd;image/x-portable-bitmap;image/x-portable-pixmap;image/x-portable-graymap;image/x-dcraw;
 Terminal=false
 Categories=Qt;KDE;Graphics;
 X-DocPath=showfoto/index.html
