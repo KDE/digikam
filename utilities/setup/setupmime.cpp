@@ -89,9 +89,9 @@ SetupMime::SetupMime(QWidget* parent)
     // --------------------------------------------------------
 
     QLabel *explanationLabel = new QLabel;
-    explanationLabel->setText(i18n("<p>Digikam attempts to support all of the image formats that digital cameras produce, "
+    explanationLabel->setText(i18n("<p>digiKam attempts to support all of the image formats that digital cameras produce, "
                                    "while being able to handle a few other important video and audio formats.</p> "
-                                   "<p>You can add to the already-appreciable list of formats that Digikam handles by "
+                                   "<p>You can add to the already-appreciable list of formats that digiKam handles by "
                                    "adding the extension of the type you want to add. Multiple extensions need to be separated by a space.</p>"));
     explanationLabel->setWordWrap(true);
 
@@ -120,7 +120,7 @@ SetupMime::SetupMime(QWidget* parent)
                                                "<p>You can also remove file formats that are shown by default "
                                                "by putting a minus sign in front of the extension: \"-gif\", which would remove all GIF files "
                                                "from your Album view and any trace of them in your database. "
-                                               "They would not be deleted, just not shown in Digikam.</p>"
+                                               "They would not be deleted, just not shown in digiKam.</p>"
                                                "<p><b>Warning:</b> Removing files from the database means losing "
                                                "all of their tags and ratings!</p>"));
     d->imageFileFilterLabel->setBuddy(d->imageFileFilterEdit);
@@ -158,7 +158,7 @@ SetupMime::SetupMime(QWidget* parent)
                                                "<p>You can as well remove file formats that are supported by default "
                                                "by putting a minus sign in front of the extension: \"-avi\", which would remove "
                                                "all AVI files from your Album view and any trace of them in your database. "
-                                               "They would not be deleted, just not shown in Digikam.</p>"
+                                               "They would not be deleted, just not shown in digiKam.</p>"
                                                "<p><b>Warning:</b> Removing files from the database means losing "
                                                "all of their tags and ratings!</p>"));
     d->movieFileFilterLabel->setBuddy(d->movieFileFilterEdit);
@@ -196,7 +196,7 @@ SetupMime::SetupMime(QWidget* parent)
                                                "<p>You can also remove file formats that are supported by default "
                                                "by putting a minus sign in front of the extension: \"-ogg\", which would "
                                                "remove all OGG files from your Album view and any trace of them in your database. "
-                                               "They would not be deleted, just not shown in Digikam.</p>"
+                                               "They would not be deleted, just not shown in digiKam.</p>"
                                                "<p><b>Warning:</b> Removing files from the database means losing "
                                                "all of their tags and ratings!</p>"));
     d->audioFileFilterLabel->setBuddy(d->audioFileFilterEdit);

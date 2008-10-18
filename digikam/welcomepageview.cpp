@@ -101,7 +101,7 @@ QString WelcomePageView::infoPage()
                         "<li>Easy Geolocation with KDE4's Marble interface</li></ul>");
     newFeatures << i18n("XMP metadata support");
     newFeatures << i18n("TIFF/EP RAW metadata editing");
-    newFeatures << i18n("Customizable file storage for the Digikam database, supporting remote albums");
+    newFeatures << i18n("Customizable file storage for the digiKam database, supporting remote albums");
     newFeatures << i18n("Support of multiple root album paths (no more importing into one giant album)");
     newFeatures << i18n("Thumbnail-bar integration for easy navigation and editing");
     newFeatures << i18n("Supports the latest camera RAW files");
