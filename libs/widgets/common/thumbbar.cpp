@@ -372,15 +372,15 @@ void ThumbBarView::ensureItemVisible(ThumbBarItem* item)
 {
     if (item)
     {
+        int pos = (int)item->d->pos + d->margin + d->tileSize*.5;
+
         // We want the complete thumb visible and the next one.
         // find the middle of the image and give a margin of 1,5 image
         // When changed, watch regression for bug 104031
         if (d->orientation == Qt::Vertical)
-            ensureVisible(0, (int)(item->d->pos + d->margin + d->tileSize*.5),
-                          0, (int)(d->tileSize*1.5 + 3*d->margin));
+            ensureVisible(0, pos, 0, viewport()->height());
         else
-            ensureVisible((int)(item->d->pos + d->margin + d->tileSize*.5), 0,
-                          (int)(d->tileSize*1.5 + 3*d->margin), 0);
+            ensureVisible(pos, 0, viewport()->width(), 0);
     }
 }
 

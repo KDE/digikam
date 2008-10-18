@@ -2,7 +2,7 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2006-06-13
  * Description : A widget stack to embedded album content view
  *               or the current image preview.
@@ -91,7 +91,7 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     d->thumbBar         = new ImagePreviewBar(d->splitter, Qt::Horizontal,
                                               AlbumSettings::instance()->getExifRotate());
 
-    // To prevent flicker effect with content when user change icon view filter 
+    // To prevent flicker effect with content when user change icon view filter
     // if scrollbar appears or disapears.
     d->thumbBar->setHScrollBarMode(Q3ScrollView::AlwaysOn);
 
@@ -161,7 +161,7 @@ void AlbumWidgetStack::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("PreviewView");
-    if (group.hasKey("SplitterState")) 
+    if (group.hasKey("SplitterState"))
     {
         QByteArray state;
         state = group.readEntry("SplitterState", state);
@@ -204,7 +204,7 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo & info, const ImageInfo &p
             d->imagePreviewView->setImageInfo();
         }
 
-        // Special case to cleanup thumbbar if Image Lister do not query item accordingly to 
+        // Special case to cleanup thumbbar if Image Lister do not query item accordingly to
         // IconView Filters.
         ImageInfo current;
         if (d->albumIconView->allImageInfos(current).isEmpty())
@@ -234,7 +234,7 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo & info, const ImageInfo &p
 
             d->imagePreviewView->setImageInfo(info, previous, next);
 
-            // NOTE: No need to toggle imediatly in PreviewImageMode here, 
+            // NOTE: No need to toggle immediately in PreviewImageMode here,
             // because we will receive a signal for that when the image preview will be loaded.
             // This will prevent a flicker effect with the old image preview loaded in stack.
         }
@@ -251,7 +251,7 @@ int AlbumWidgetStack::previewMode()
 
 void AlbumWidgetStack::setPreviewMode(int mode)
 {
-    if (mode != PreviewAlbumMode && mode != PreviewImageMode && 
+    if (mode != PreviewAlbumMode && mode != PreviewImageMode &&
         mode != WelcomePageMode  && mode != MediaPlayerMode)
         return;
 
@@ -264,7 +264,7 @@ void AlbumWidgetStack::setPreviewMode(int mode)
         emit signalToggledToPreviewMode(false);
     }
     else
-    { 
+    {
         setCurrentIndex(mode);
     }
 }
@@ -318,16 +318,20 @@ void AlbumWidgetStack::slotItemsAdded()
 
 void AlbumWidgetStack::updateThumbbar()
 {
-    d->thumbBar->clear();
-
     ImageInfo current;
-    ImageInfoList list = d->albumIconView->allImageInfos(current);
-    d->thumbBar->blockSignals(true);
-    for (ImageInfoList::iterator it = list.begin(); it != list.end(); ++it)
+    ImageInfoList iconlist  = d->albumIconView->allImageInfos(current);
+    ImageInfoList thumblist = d->thumbBar->itemsImageInfoList();
+
+    if (iconlist.count() != thumblist.count())
     {
-        new ImagePreviewBarItem(d->thumbBar, *it);
+        d->thumbBar->clear();
+        d->thumbBar->blockSignals(true);
+        for (ImageInfoList::iterator it = iconlist.begin(); it != iconlist.end(); ++it)
+        {
+            new ImagePreviewBarItem(d->thumbBar, *it);
+        }
+        d->thumbBar->blockSignals(false);
     }
-    d->thumbBar->blockSignals(false);
 }
 
 void AlbumWidgetStack::increaseZoom()
