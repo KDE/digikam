@@ -107,6 +107,7 @@ public:
 
     void clear(bool updateView=true);
     void triggerUpdate();
+    void slotUpdate();
 
     void removeItem(ThumbBarItem* item);
     void takeItem(ThumbBarItem* item);
@@ -161,7 +162,6 @@ protected:
 
 protected slots:
 
-    void slotUpdate();
     virtual void slotPreload();
     void slotContentsMoved();
     void checkPreload();

@@ -353,7 +353,7 @@ void AlbumWidgetStack::updateThumbbar()
             new ImagePreviewBarItem(d->thumbBar, *it);
     d->thumbBar->blockSignals(false);
 
-    d->thumbBar->triggerUpdate();
+    d->thumbBar->slotUpdate();
 }
 
 void AlbumWidgetStack::increaseZoom()
