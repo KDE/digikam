@@ -1518,8 +1518,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
                 {
                     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                                i18n("Assigning image tags. Please wait..."));
-                    ImageInfo current;
-                    changeTagOnImageInfos(allImageInfos(current), QList<int>() << tagID, true, true);
+                    changeTagOnImageInfos(allImageInfos(), QList<int>() << tagID, true, true);
 
                     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
                 }
@@ -1590,8 +1589,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
             {
                 emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                             i18n("Assigning image tags. Please wait..."));
-                ImageInfo current;
-                changeTagOnImageInfos(allImageInfos(current), tagIDs, true, true);
+                changeTagOnImageInfos(allImageInfos(), tagIDs, true, true);
 
                 emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
             }
@@ -1723,9 +1721,19 @@ KUrl::List AlbumIconView::selectedItems()
     return itemList;
 }
 
-ImageInfoList AlbumIconView::allImageInfos(ImageInfo& current) const
+ImageInfoList AlbumIconView::allImageInfos(ImageInfo* current) const
 {
-    current = ImageInfo();
+    if (current)
+    {
+        // As default copy the first item info as current;
+        // will be changed later when a current item is found
+        if (firstItem())
+            *current = static_cast<AlbumIconItem*>(firstItem())->imageInfo();
+        else
+            *current = ImageInfo();
+    }
+
+    IconItem *currentIconItem = currentItem();
     ImageInfoList list;
     for (IconItem *it = firstItem() ; it ; it = it->nextItem())
     {
@@ -1734,14 +1742,9 @@ ImageInfoList AlbumIconView::allImageInfos(ImageInfo& current) const
 
         list << info;
 
-        // By default copy the first item info as current in
-        // case of no selection is done.
-        if (current.isNull())
-            current = info;
-
-        // Copy the selected item info in other case.
-        if (iconItem == currentItem())
-            current = info;
+        // If we found the current item, set current to its ImageInfo
+        if (current && iconItem == currentIconItem)
+            *current = info;
     }
 
     return list;

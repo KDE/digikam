@@ -94,7 +94,7 @@ public:
     /** Returns the list of ImageInfos of all items. 
         Current selected item ImageInfo will be copied into 'current'.
      */
-    ImageInfoList allImageInfos(ImageInfo& current) const;
+    ImageInfoList allImageInfos(ImageInfo *current = 0) const;
     ImageInfoList selectedImageInfos() const;
 
     void refresh();
