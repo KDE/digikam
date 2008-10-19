@@ -112,7 +112,7 @@ private slots:
 
     void slotAlbumSelected(bool val);
     void slotTagSelected(bool val);
-    void slotImageSelected(const ImageInfoList&, bool, bool, const KUrl::List&);
+    void slotImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&);
     void slotExit();
     void slotShowTip();
     void slotShowKipiHelp();

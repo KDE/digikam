@@ -206,8 +206,7 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo & info, const ImageInfo &p
 
         // Special case to cleanup thumbbar if Image Lister do not query item accordingly to
         // IconView Filters.
-        ImageInfo current;
-        if (d->albumIconView->allImageInfos(current).isEmpty())
+        if (d->albumIconView->count() == 0)
             d->thumbBar->clear();
     }
     else
@@ -318,8 +317,7 @@ void AlbumWidgetStack::slotItemsAdded()
 
 void AlbumWidgetStack::updateThumbbar()
 {
-    ImageInfo current;
-    ImageInfoList iconlist  = d->albumIconView->allImageInfos(current);
+    ImageInfoList iconlist  = d->albumIconView->allImageInfos();
     ImageInfoList thumblist = d->thumbBar->itemsImageInfoList();
 
     if (iconlist.count() != thumblist.count())

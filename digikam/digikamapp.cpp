@@ -107,6 +107,7 @@
 #include "imagewindow.h"
 #include "imageinfo.h"
 #include "thumbnailsize.h"
+#include "thumbnailloadthread.h"
 #include "themeengine.h"
 #include "scancontroller.h"
 #include "loadingcache.h"
@@ -258,6 +259,7 @@ DigikamApp::~DigikamApp()
     ScanController::instance()->shutDown();
     AlbumLister::cleanUp();
     ImageAttributesWatch::cleanUp();
+    ThumbnailLoadThread::cleanUp();
     LoadingCacheInterface::cleanUp();
 #if KDCRAW_VERSION < 0x000400
     KDcrawIface::DcrawBinary::cleanUp();
@@ -390,8 +392,8 @@ void DigikamApp::setupView()
     connect(d->view, SIGNAL(signalTagSelected(bool)),
             this, SLOT(slotTagSelected(bool)));
 
-    connect(d->view, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool, const KUrl::List&)),
-            this, SLOT(slotImageSelected(const ImageInfoList&, bool, bool, const KUrl::List&)));
+    connect(d->view, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)),
+            this, SLOT(slotImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)));
 }
 
 void DigikamApp::setupStatusBar()
@@ -1235,15 +1237,11 @@ void DigikamApp::slotTagSelected(bool val)
     }
 }
 
-void DigikamApp::slotImageSelected(const ImageInfoList& list, bool hasPrev, bool hasNext,
-                                   const KUrl::List& listAll)
+void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev, bool hasNext,
+                                   const ImageInfoList& listAll)
 {
-    ImageInfoList selection = list;
-
-    KUrl::List all = listAll;
     int num_images = listAll.count();
     bool val       = selection.isEmpty() ? false : true;
-    int index      = 1;
     QString text;
 
     d->imageViewAction->setEnabled(val);
@@ -1263,16 +1261,7 @@ void DigikamApp::slotImageSelected(const ImageInfoList& list, bool hasPrev, bool
             break;
         case 1:
         {
-            KUrl first = selection.first().fileUrl();
-
-            for (KUrl::List::iterator it = all.begin();
-                it != all.end(); ++it)
-            {
-                if ((*it) == first)
-                    break;
-
-                index++;
-            }
+            int index = listAll.indexOf(selection.first());
 
             text = selection.first().fileUrl().fileName()
                                    + i18n(" (%1 of %2)", QString::number(index),
