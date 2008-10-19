@@ -332,6 +332,7 @@ void AlbumWidgetStack::updateThumbbar()
         }
         d->thumbBar->blockSignals(false);
     }
+    d->thumbBar->triggerUpdate();
 }
 
 void AlbumWidgetStack::increaseZoom()

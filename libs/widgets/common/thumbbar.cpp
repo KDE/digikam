@@ -104,7 +104,6 @@ public:
     int                         orientation;
     int                         maxTileSize;
 
-    QTimer                     *timer;
     QTimer                     *preloadTimer;
 
     QPoint                      dragStartPos;
@@ -155,7 +154,6 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
     d->orientation     = orientation;
     d->toolTipSettings = settings;
     d->toolTip         = new ThumbBarToolTip(this);
-    d->timer           = new QTimer(this);
     d->preloadTimer    = new QTimer(this);
     d->preloadTimer->setSingleShot(true);
     d->thumbLoadThread = ThumbnailLoadThread::defaultThumbBarThread();
@@ -164,9 +162,6 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotGotThumbnail(const LoadingDescription&, const QPixmap&)));
-
-    connect(d->timer, SIGNAL(timeout()),
-            this, SLOT(slotUpdate()));
 
     connect(d->preloadTimer, SIGNAL(timeout()),
             this, SLOT(slotPreload()));
@@ -204,7 +199,6 @@ ThumbBarView::~ThumbBarView()
 
     clear(false);
 
-    delete d->timer;
     delete d->toolTip;
     delete d;
 }
@@ -294,8 +288,7 @@ KUrl::List ThumbBarView::itemsUrls()
 
 void ThumbBarView::triggerUpdate()
 {
-    d->timer->setSingleShot(true);
-    d->timer->start(0);
+    slotUpdate();
 }
 
 ThumbBarItem* ThumbBarView::currentItem() const

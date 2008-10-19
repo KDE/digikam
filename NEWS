@@ -26,7 +26,8 @@ General        : libgphoto2 dependency is now optional to be able to compile dig
 016 ==> 172895 : Setup verbiage patches for slideshow and albumview.
 017 ==> 172898 : Verbiage changes for Util-ImageEditor-ImageResize.cpp.
 018 ==> 172899 : Verbiage changes for digikamapp.cpp.
-019 ==> 
+019 ==> 167320 : Filmstrip in album view is not synchronized correctly.
+020 ==> 
 
 IMPORTANT: This is a beta release : do not use yet in production !!!
 ====================================================================
