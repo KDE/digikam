@@ -107,18 +107,18 @@ signals:
 public slots:
 
     void slotEscapePreview();
-    void slotItemsUpdated(const KUrl::List&);
-    void slotItemsAdded();
 
 private slots: 
 
     void slotZoomFactorChanged(double);
+    void slotItemsUpdated(const KUrl::List&);
+    void slotItemsAddedOrRemoved();
+    void updateThumbbar();
 
 private:
 
     void readSettings();
     void saveSettings();
-    void updateThumbbar();
 
 private:
 

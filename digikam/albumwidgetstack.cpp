@@ -26,6 +26,7 @@
 
 #include <QFileInfo>
 #include <QSplitter>
+#include <QTimer>
 #include <QWidget>
 
 // KDE includes.
@@ -65,6 +66,8 @@ public:
         mediaPlayerView  = 0;
         splitter         = 0;
         thumbBar         = 0;
+        thumbbarTimer    = 0;
+        needUpdateBar    = false;
     }
 
     QSplitter        *splitter;
@@ -78,6 +81,10 @@ public:
     WelcomePageView  *welcomePageView;
 
     MediaPlayerView  *mediaPlayerView;
+
+    QTimer           *thumbbarTimer;
+
+    bool              needUpdateBar;
 };
 
 AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
@@ -113,6 +120,9 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     setPreviewMode(PreviewAlbumMode);
     setAttribute(Qt::WA_DeleteOnClose);
 
+    d->thumbbarTimer = new QTimer(this);
+    d->thumbbarTimer->setSingleShot(true);
+
     readSettings();
 
     // -----------------------------------------------------------------
@@ -142,13 +152,22 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
             this, SIGNAL(signalInsert2LightTable()));
 
     connect(d->albumIconView, SIGNAL(signalItemsAdded()),
-            this, SLOT(slotItemsAdded()));
+            this, SLOT(slotItemsAddedOrRemoved()));
 
     connect(d->albumIconView, SIGNAL(signalItemsRearranged()),
-            this, SLOT(slotItemsAdded()));
+            this, SLOT(slotItemsAddedOrRemoved()));
+
+    connect(d->albumIconView, SIGNAL(signalItemDeleted(AlbumIconItem*)),
+            this, SLOT(slotItemsAddedOrRemoved()));
+
+    connect(d->albumIconView, SIGNAL(signalCleared()),
+            this, SLOT(slotItemsAddedOrRemoved()));
 
     connect(d->thumbBar, SIGNAL(signalUrlSelected(const KUrl&)),
             this, SIGNAL(signalUrlSelected(const KUrl&)));
+
+    connect(d->thumbbarTimer, SIGNAL(timeout()),
+            this, SLOT(updateThumbbar()));
 }
 
 AlbumWidgetStack::~AlbumWidgetStack()
@@ -300,12 +319,16 @@ void AlbumWidgetStack::slotItemsUpdated(const KUrl::List& urls)
     }
 }
 
-void AlbumWidgetStack::slotItemsAdded()
+void AlbumWidgetStack::slotItemsAddedOrRemoved()
 {
+    // do this before the check in the next line, to store this state in any case,
+    // even if we dont trigger updateThumbbar immediately
+    d->needUpdateBar = true;
+
     if (previewMode() != PreviewImageMode)
         return;
 
-    updateThumbbar();
+    d->thumbbarTimer->start(50);
 
     AlbumIconItem *iconItem = dynamic_cast<AlbumIconItem*>(d->albumIconView->currentItem());
     if (iconItem)
@@ -317,19 +340,19 @@ void AlbumWidgetStack::slotItemsAdded()
 
 void AlbumWidgetStack::updateThumbbar()
 {
-    ImageInfoList iconlist  = d->albumIconView->allImageInfos();
-    ImageInfoList thumblist = d->thumbBar->itemsImageInfoList();
+    if (!d->needUpdateBar)
+        return;
+    d->needUpdateBar = false;
 
-    if (iconlist.count() != thumblist.count())
-    {
-        d->thumbBar->clear();
-        d->thumbBar->blockSignals(true);
-        for (ImageInfoList::iterator it = iconlist.begin(); it != iconlist.end(); ++it)
-        {
+    d->thumbBar->clear();
+
+    ImageInfoList list = d->albumIconView->allImageInfos();
+
+    d->thumbBar->blockSignals(true);
+    for (ImageInfoList::iterator it = list.begin(); it != list.end(); ++it)
             new ImagePreviewBarItem(d->thumbBar, *it);
-        }
-        d->thumbBar->blockSignals(false);
-    }
+    d->thumbBar->blockSignals(false);
+
     d->thumbBar->triggerUpdate();
 }
 
