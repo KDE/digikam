@@ -405,15 +405,23 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
 
     // -- Image Properties --------------------------------------------------
 
-    d->labelImageMime->setText( (itemInfo->mime == QString("image/x-raw")) ?
-                               i18n("RAW Image") : KMimeType::mimeType(itemInfo->mime)->comment() );
+    if (itemInfo->mime == "image/x-raw")
+        d->labelImageMime->setText(i18n("RAW Image"));
+    else
+    {
+        KMimeType::Ptr mimeType = KMimeType::mimeType(itemInfo->mime, KMimeType::ResolveAliases);
+        if (mimeType)
+            d->labelImageMime->setText(mimeType->comment());
+        else
+            d->labelImageMime->setText(itemInfo->mime); // last fallback
+    }
 
     QString mpixels;
     QSize dims;
     if (itemInfo->width == -1 && itemInfo->height == -1 && !currentURL.isEmpty())
     {
         // delayed loading to list faster from UMSCamera
-        if (itemInfo->mime == QString("image/x-raw"))
+        if (itemInfo->mime == "image/x-raw")
         {
             DMetadata metaData(currentURL.path());
             dims = metaData.getImageDimensions();
