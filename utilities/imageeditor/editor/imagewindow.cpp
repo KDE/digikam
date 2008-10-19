@@ -1125,7 +1125,7 @@ bool ImageWindow::removeItem(int index)
     d->thumbBar->removeItem(d->thumbBar->findItemByUrl(url));
     d->thumbBar->blockSignals(false);
 
-    if (index + 1 != d->urlList.size())
+    if (index + 1 <= d->urlList.size())
     {
         // Try to get the next image in the current Album...
 
@@ -1137,7 +1137,7 @@ bool ImageWindow::removeItem(int index)
             d->imageInfoList.removeAt(index-1);
         return true;
     }
-    else if (index - 1 != 0)
+    else if (index - 1 >= 0)
     {
         // Try to get the previous image in the current Album.
 
