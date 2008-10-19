@@ -59,6 +59,8 @@ public:
     static ThumbnailLoadThread *defaultThumbBarThread();
     static ThumbnailLoadThread *defaultThread();
 
+    static void cleanUp();
+
     /**
      * Find a thumbnail.
      * If the pixmap is found in the cache, returns true and sets pixmap

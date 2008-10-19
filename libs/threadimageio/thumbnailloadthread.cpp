@@ -119,6 +119,13 @@ ThumbnailLoadThread *ThumbnailLoadThread::defaultThumbBarThread()
     return defaultThumbBarObject;
 }
 
+void ThumbnailLoadThread::cleanUp()
+{
+    defaultIconViewObject.destroy();
+    defaultObject.destroy();
+    defaultThumbBarObject.destroy();
+}
+
 void ThumbnailLoadThread::setThumbnailSize(int size)
 {
     d->size = size;
