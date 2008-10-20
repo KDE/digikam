@@ -24,7 +24,7 @@
 #ifndef JP2KLOADER_H
 #define JP2KLOADER_H
 
-// C ansi includes.
+// C ANSI includes.
 
 extern "C"
 {

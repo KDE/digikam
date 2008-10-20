@@ -29,7 +29,7 @@
 // files io. Uncomment this line only for debugging.
 //#define ENABLE_DEBUG_MESSAGES
 
-// C ansi includes.
+// C ANSI includes.
 
 extern "C"
 {

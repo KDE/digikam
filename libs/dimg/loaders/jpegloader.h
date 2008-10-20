@@ -25,7 +25,7 @@
 #ifndef JPEGLOADER_H
 #define JPEGLOADER_H
 
-// C ansi includes.
+// C ANSI includes.
 
 extern "C" 
 {

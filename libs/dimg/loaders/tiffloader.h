@@ -25,7 +25,7 @@
 #ifndef TIFFLOADER_H
 #define TIFFLOADER_H
 
-// C ansi includes.
+// C ANSI includes.
 
 extern "C" 
 {
