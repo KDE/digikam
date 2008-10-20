@@ -24,22 +24,22 @@
 
 // Qt includes.
 
-#include <QLabel>
-#include <QWidget>
 #include <QCheckBox>
 #include <QGridLayout>
 #include <QImageReader>
+#include <QLabel>
+#include <QWidget>
 
 // KDE includes.
 
-#include <kimageio.h>
-#include <klocale.h>
-#include <kdialog.h>
-#include <knuminput.h>
-#include <kconfig.h>
 #include <kapplication.h>
+#include <kconfig.h>
+#include <kdialog.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
+#include <kimageio.h>
+#include <klocale.h>
+#include <knuminput.h>
 
 // Local includes.
 

@@ -1461,68 +1461,62 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     kDebug(50003) << "startingSaveAs: Offered mimetypes: " << writableMimetypes << endl;
 
-    // Determine the default mime type.
-    // Determine mime type from image format of the src image
-    QString defaultMimeType;
-    QString originalFormat = m_canvas->currentImageFileFormat().toLower();
-    // inspired by kimageio.cpp, typeForMime(). This here is "mimeForType".
-    KService::List services = KServiceTypeTrader::self()->query("QImageIOPlugins");
-    foreach(const KService::Ptr &service, services)
-    {
-        if (service->property("X-KDE-ImageFormat").toStringList().contains(originalFormat))
-        {
-            defaultMimeType = service->property("X-KDE-MimeType").toString();
-            break;
-        }
-    }
-    // default to PNG
-    if (defaultMimeType.isEmpty())
-        defaultMimeType = "image/png";
-
     m_savingContext->srcURL = url;
 
-    FileSaveOptionsBox *options = new FileSaveOptionsBox();
-    KFileDialog imageFileSaveDialog(m_savingContext->srcURL.isLocalFile() ?
-                                    m_savingContext->srcURL : KUrl(QDir::homePath()),
-                                    QString(),
-                                    this,
-                                    options);
+    FileSaveOptionsBox *options      = new FileSaveOptionsBox();
+    KFileDialog *imageFileSaveDialog = new KFileDialog(m_savingContext->srcURL.isLocalFile() ?
+                                                       m_savingContext->srcURL : KUrl(QDir::homePath()),
+                                                       QString(),
+                                                       this,
+                                                       options);
 
-    connect(&imageFileSaveDialog, SIGNAL(filterChanged(const QString &)),
+    connect(imageFileSaveDialog, SIGNAL(filterChanged(const QString &)),
             options, SLOT(slotImageFileFormatChanged(const QString &)));
 
-    connect(&imageFileSaveDialog, SIGNAL(fileSelected(const QString &)),
+    connect(imageFileSaveDialog, SIGNAL(fileSelected(const QString &)),
             options, SLOT(slotImageFileSelected(const QString &)));
 
-    ImageDialogPreview *preview = new ImageDialogPreview(&imageFileSaveDialog);
-    imageFileSaveDialog.setPreviewWidget(preview);
-    imageFileSaveDialog.setModal(false);
-    imageFileSaveDialog.setOperationMode(KFileDialog::Saving);
-    imageFileSaveDialog.setMode(KFile::File);
-    imageFileSaveDialog.setCaption(i18n("New Image File Name"));
-    imageFileSaveDialog.setMimeFilter(writableMimetypes, defaultMimeType);
-    options->slotImageFileFormatChanged(defaultMimeType);
+    ImageDialogPreview *preview = new ImageDialogPreview(imageFileSaveDialog);
+    imageFileSaveDialog->setPreviewWidget(preview);
+    imageFileSaveDialog->setModal(false);
+    imageFileSaveDialog->setOperationMode(KFileDialog::Saving);
+    imageFileSaveDialog->setMode(KFile::File);
+    imageFileSaveDialog->setCaption(i18n("New Image File Name"));
 
     QFileInfo info(m_savingContext->srcURL.fileName());
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("ImageViewer Settings");
     QString ext               = group.readEntry("LastSavedImageTypeMime", "png");
     QString fileName          = info.baseName() + QString(".") + ext;
-    imageFileSaveDialog.setSelection(fileName);
+
+    // Determine the default mime type from LastSavedImageTypeMime
+    QString defaultMimeType;
+    // inspired by kimageio.cpp, typeForMime(). This here is "mimeForType".
+    KService::List services = KServiceTypeTrader::self()->query("QImageIOPlugins");
+    foreach(const KService::Ptr &service, services)
+    {
+        if (service->property("X-KDE-ImageFormat").toStringList().contains(ext))
+        {
+            defaultMimeType = service->property("X-KDE-MimeType").toString();
+            break;
+        }
+    }
+    imageFileSaveDialog->setMimeFilter(writableMimetypes, defaultMimeType);
+    imageFileSaveDialog->setSelection(fileName);
 
     // Start dialog and check if canceled.
-    if ( imageFileSaveDialog.exec() != KFileDialog::Accepted )
+    if ( imageFileSaveDialog->exec() != KFileDialog::Accepted )
        return false;
 
     // Update file save settings in editor instance.
     options->applySettings();
     applyStandardSettings();
 
-    KUrl newURL = imageFileSaveDialog.selectedUrl();
+    KUrl newURL = imageFileSaveDialog->selectedUrl();
 
     // Check if target image format have been selected from Combo List of SaveAs dialog.
 
-    QStringList mimes =KImageIO::typeForMime(imageFileSaveDialog.currentMimeFilter());
+    QStringList mimes =KImageIO::typeForMime(imageFileSaveDialog->currentMimeFilter());
     if (!mimes.isEmpty())
     {
         m_savingContext->format = mimes.first();
