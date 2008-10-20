@@ -131,7 +131,7 @@ class KDateEdit : public QComboBox
     virtual bool assignDate( const QDate &date );
 
     /**
-      Fills the keyword map. Reimplement it if you want additional
+      Fills the keyword map. Re-implement it if you want additional
       keywords.
      */
     void setupKeywords();

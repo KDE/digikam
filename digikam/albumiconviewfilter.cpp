@@ -163,16 +163,16 @@ void AlbumIconViewFilter::slotItemsFilterMatch(bool match)
     QString     message;
 
     if (!d->textFilter->text().isEmpty())
-        filtersList.append(i18n("<br><nobr><i>Text</i></nobr>"));
+        filtersList.append(i18n("<br/><nobr><i>Text</i></nobr>"));
 
     if (d->mimeFilter->mimeFilter() != MimeFilter::AllFiles)
-        filtersList.append(i18n("<br><nobr><i>Mime Type</i></nobr>"));
+        filtersList.append(i18n("<br/><nobr><i>Mime Type</i></nobr>"));
 
     if (d->ratingFilter->rating() != 0)
-        filtersList.append(i18n("<br><nobr><i>Rating</i></nobr>"));
+        filtersList.append(i18n("<br/><nobr><i>Rating</i></nobr>"));
 
     if (AlbumLister::instance()->tagFiltersIsActive())
-        filtersList.append(i18n("<br><nobr><i>Tags</i></nobr>"));
+        filtersList.append(i18n("<br/><nobr><i>Tags</i></nobr>"));
 
     if (filtersList.count() > 1)
         message = i18n("<nobr><b>Active filters:</b></nobr>");

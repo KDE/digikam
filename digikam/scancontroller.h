@@ -85,7 +85,7 @@ public:
      */
     void scheduleCollectionScan(const QString &path);
 
-    /** Temporarilly suspend collection scanning.
+    /** Temporarily suspend collection scanning.
      *  All scheduled scanning tasks are queued
      *  and will be done when resumeCollectionScan()
      *  has been called.

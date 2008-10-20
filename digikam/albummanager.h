@@ -170,7 +170,7 @@ public:
     void      setCurrentAlbum(Album *album);
  
     /**
-    * @returns the current albumm
+    * @returns the current album
     */
     Album*    currentAlbum() const;
     //@}
@@ -182,7 +182,7 @@ public:
      * Given a complete file url (kde url with file protocol), it will try to find
      * a PAlbum corresponding to it.
      * \warning This should not be used, unless really necessary
-     * @return PAlbum correspoding to supplied @p url
+     * @return PAlbum corresponding to supplied @p url
      * @param url the url we need to check
      */
     PAlbum*   findPAlbum(const KUrl& url) const;

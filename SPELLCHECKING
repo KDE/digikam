@@ -1,6 +1,6 @@
 FOLDER                                  CPP         H
 -----------------------------------------------------
-|-- digikam
+|-- digikam                             X           X
 |-- imageplugins                        X           X
 |   |-- adjustcurves                    X           X
 |   |-- adjustlevels                    X           X

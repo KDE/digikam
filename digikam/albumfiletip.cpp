@@ -534,7 +534,7 @@ QString AlbumFileTip::breakString(const QString& input)
         if (count >= maxLen && str[i].isSpace())
         {
             count = 0;
-            br.append("<br>");
+            br.append("<br/>");
         }
         else
         {

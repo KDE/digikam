@@ -745,7 +745,7 @@ void TagFilterView::slotTagDeleted(Album* album)
     if (!item)
         return;
 
-    // NOTE: see B.K.O #158558: unselected tag filter and all childrens before to delete it.
+    // NOTE: see B.K.O #158558: unselected tag filter and all children before to delete it.
     toggleChildTags(item, false);
     item->setOn(false);
 
