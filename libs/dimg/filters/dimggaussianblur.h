@@ -76,7 +76,7 @@ private:  // Gaussian blur filter methods.
     // Function to deallocates the 2d array previously created
     void Free2DArray (int** lpcArray, int Columns)
     {
-       // loop to dealocate the columns
+       // loop to deallocate the columns
        for (int i = 0; i < Columns; i++)
            delete [] lpcArray[i];
 

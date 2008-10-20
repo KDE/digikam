@@ -78,7 +78,7 @@ signals:
     void progress(int progress);
     /** Emitted when the computation has completed.
         @param success True if computation finished without interruption on valid data
-                       False if the thread was cancelled, or no data is available.
+                       False if the thread was canceled, or no data is available.
     */
     void finished(bool success);
 
@@ -131,7 +131,7 @@ protected:
 
 protected:
 
-    /** Used to stop compution loop. */
+    /** Used to stop computation loop. */
     bool                m_cancel;
 
     /** The progress span that a slave filter uses in the parent filter's progress. */

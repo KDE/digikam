@@ -249,7 +249,7 @@ public:
     /**
     Return true if the original image file format cannot be saved. 
     This is depending of DImgLoader::save() implementation. For example
-    RAW file formats are supported by DImg uing dcraw than cannot support 
+    RAW file formats are supported by DImg using dcraw than cannot support 
     writing operations.
     */
     bool       isReadOnly() const;
@@ -284,7 +284,7 @@ public:
     /** Return a deep copy of the image, but do not include metadata. */
     DImg       copyImageData();
 
-    /** Return an image that containes a deep copy of
+    /** Return an image that contains a deep copy of
         this image's metadata and the information associated
         with the image data (width, height, hasAlpha, sixteenBit),
         but no image data, i.e. isNull() is true.

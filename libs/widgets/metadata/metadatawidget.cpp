@@ -350,9 +350,9 @@ void MetadataWidget::slotPrintMetadata()
         MdKeyListViewItem* lvItem = dynamic_cast<MdKeyListViewItem*>(item);
         if (lvItem)
         {
-            textmetadata.append("<br><br><b>");
+            textmetadata.append("<br/><br/><b>");
             textmetadata.append(lvItem->getMdKey());
-            textmetadata.append("</b><br><br>");
+            textmetadata.append("</b><br/><br/>");
 
             int j                  = 0;
             QTreeWidgetItem *item2 = 0;
@@ -365,7 +365,7 @@ void MetadataWidget::slotPrintMetadata()
                     textmetadata.append(lvItem2->text(0));
                     textmetadata.append(" : <i>");
                     textmetadata.append(lvItem2->text(1));
-                    textmetadata.append("</i><br>");
+                    textmetadata.append("</i><br/>");
                 }
                 j++;
             }

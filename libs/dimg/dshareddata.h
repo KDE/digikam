@@ -77,7 +77,7 @@ public:
      * This class is inspired by QSharedDataPointer, but differs in two points:
      * - it provides "explicit sharing": A change to the data affects all classes
      *   keeping a pointer to the shared data. No automatic copying is done.
-     * - no method "detach()" is provided, ackknowledging the fact that the
+     * - no method "detach()" is provided, acknowledging the fact that the
      *   copy constructor of class T may not be used.
      */
 

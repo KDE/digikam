@@ -198,7 +198,7 @@ DImg DImg::smoothScaleSection(int sx, int sy,
         dh = (dh * sh) / psh;
 
     // do a second check to see if we now have invalid coords 
-    // do not do anything if we have a 0 widht or height image to render 
+    // do not do anything if we have a 0 width or height image to render 
     if ((dw <= 0) || (dh <= 0))
         return DImg();
 
@@ -475,13 +475,13 @@ void DImgScale::dimgSampleRGBA(DImgScaleInfo *isi, unsigned int *dest,
         dptr = dest + dx + ((y + dy) * dow);
         /* calculate the source line we'll scan from */
         sptr = ypoints[dyy + y];
-        /* go thru the scanline and copy across */
+        /* go through the scanline and copy across */
         for(x = dxx; x < end; x++)
             *dptr++ = sptr[xpoints[x]];
     }
 }
 
-/* FIXME: NEED to optimise ScaleAARGBA - currently its "ok" but needs work*/
+/* FIXME: NEED to optimize ScaleAARGBA - currently its "ok" but needs work*/
 
 /** scale by area sampling */
 void DImgScale::dimgScaleAARGBA(DImgScaleInfo *isi, unsigned int *dest,
@@ -1184,7 +1184,7 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo *isi, unsigned int *dest,
             }
         }
     }
-    /* fully optimized (i think) - onyl change of algorithm can help */
+    /* fully optimized (i think) - only change of algorithm can help */
     /* if we're scaling down horizontally & vertically */
     else
     {
@@ -1570,7 +1570,7 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo *isi, ullong *dest,
             }
         }
     }
-    // fully optimized (i think) - onyl change of algorithm can help 
+    // fully optimized (i think) - only change of algorithm can help 
     // if we're scaling down horizontally & vertically 
     else
     {

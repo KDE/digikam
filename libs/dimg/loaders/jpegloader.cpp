@@ -600,7 +600,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         observer->progressInfo(m_image, 0.1);
 
     // -------------------------------------------------------------------
-    // Write ICC profil.
+    // Write ICC profile.
 
     QByteArray profile_rawdata = m_image->getICCProfil();
 

@@ -166,8 +166,8 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
         // Special case: if Color Management is not used here, output color space is in sRGB* color space
         // RAW decoded image is a linear-histogram image with 16 bits color depth.
-        // No auto white balance and no gamma adjustemnts are performed. Image is a black hole.
-        // We need to reproduce all dcraw 8 bits color depth adjustements here.
+        // No auto white balance and no gamma adjustments are performed. Image is a black hole.
+        // We need to reproduce all dcraw 8 bits color depth adjustments here.
 
         if (m_rawDecodingSettings.outputColorSpace != DRawDecoding::RAWCOLOR)
         {
@@ -244,7 +244,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
             for (int w = 0; w < width; w++)
             {
-                // No need to adapt RGB components accordinly with rgbmax value because dcraw
+                // No need to adapt RGB components accordingly with rgbmax value because dcraw
                 // always return rgbmax to 255 in 8 bits/color/pixels.
 
                 dst[0] = src[2];    // Blue

@@ -235,7 +235,7 @@ QByteArray DImgLoader::uniqueHash(const QString &filePath, const DImg &img, bool
 
     KMD5 md5;
 
-    // First, read the exif data into the hash
+    // First, read the Exif data into the hash
     md5.update( bv );
 
     // Second, read in the first 8KB of the file

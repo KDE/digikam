@@ -29,11 +29,11 @@ FOLDER                                  CPP         H
 |   |-- texture                         X           X
 |   `-- whitebalance                    X           X
 |-- kioslave                            X           X
-|-- libs
+|-- libs                                X           X
 |   |-- curves                          X           X
-|   |-- database                                    X
+|   |-- database                        X           X
 |   |-- dialogs                         X           X
-|   |-- dimg
+|   |-- dimg                            X           X
 |   |-- dmetadata                       X           X
 |   |-- greycstoration                  X           X
 |   |-- histogram                       X           X
@@ -62,7 +62,7 @@ FOLDER                                  CPP         H
     |-- searchwindow                    X           X
     |-- setup                           X           X
     |-- slideshow                       X           X
-    `-- timelinew                       X           X
+    `-- timeline                        X           X
 
 
 

@@ -58,7 +58,7 @@ public:
      */
     virtual ~DRawDecoding(){};
 
-    /** Method to use a settings to optimize time loading, for exemple to compute image histogram 
+    /** Method to use a settings to optimize time loading, for example to compute image histogram 
      */
     void optimizeTimeLoading()
     {
@@ -112,11 +112,11 @@ public:
     */
     double exposureComp;
 
-    /** Luminosity curve adjustements.
+    /** Luminosity curve adjustments.
     */
     QPolygon curveAdjust;
 
-    /** Levels adjustements: 4 channels (L, R, G, B * 2 values).
+    /** Levels adjustments: 4 channels (L, R, G, B * 2 values).
     */
     QList<int> levelsAdjust;
 };

@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-/** Performs an histogram equalisation of the image.
+/** Performs an histogram equalization of the image.
     this method adjusts the brightness of colors across the
     active image so that the histogram for the value channel
     is as nearly as possible flat, that is, so that each possible
@@ -788,7 +788,7 @@ void DImgImageFilters::channelMixerImage(uchar *data, int Width, int Height, boo
     }
 }
 
-/** Change color tonality of an image to appling a RGB color mask.*/
+/** Change color tonality of an image for applying a RGB color mask.*/
 void DImgImageFilters::changeTonality(uchar *data, int width, int height, bool sixteenBit,
                                       int redMask, int greenMask, int blueMask)
 {
@@ -842,7 +842,7 @@ void DImgImageFilters::changeTonality(uchar *data, int width, int height, bool s
 }
 
 /** Function to apply the GaussianBlur on an image. This method do not use a
-    dedicaced thread.*/
+    dedicated thread.*/
 void DImgImageFilters::gaussianBlurImage(uchar *data, int width, int height, bool sixteenBit, int radius)
 {
     if (!data || !width || !height)
@@ -862,7 +862,7 @@ void DImgImageFilters::gaussianBlurImage(uchar *data, int width, int height, boo
 }
 
 /** Function to apply the sharpen filter on an image. This method do not use a
-    dedicaced thread.*/
+    dedicated thread.*/
 void DImgImageFilters::sharpenImage(uchar *data, int width, int height, bool sixteenBit, int radius)
 {
     if (!data || !width || !height)

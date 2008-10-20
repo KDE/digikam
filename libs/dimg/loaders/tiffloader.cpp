@@ -608,7 +608,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 #endif
     }
 
-    // Standard Exif Ascii tags (available with libtiff 3.6.1)
+    // Standard Exif ASCII tags (available with libtiff 3.6.1)
 
     tiffSetExifAsciiTag(tif, TIFFTAG_DOCUMENTNAME,            metaData, "Exif.Image.DocumentName");
     tiffSetExifAsciiTag(tif, TIFFTAG_IMAGEDESCRIPTION,        metaData, "Exif.Image.ImageDescription");
@@ -627,7 +627,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     // NOTE: All others Exif tags will be written by Exiv2 (<= 0.18)
 
     // -------------------------------------------------------------------
-    // Write ICC profil.
+    // Write ICC profile.
 
     QByteArray profile_rawdata = m_image->getICCProfil();
 
@@ -690,7 +690,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
                 if (imageHasAlpha())
                 {
-                    // TIFF makes you pre-mutiply the rgb components by alpha
+                    // TIFF makes you pre-mutiply the RGB components by alpha
 
                     a16          = (uint16)(pixel[6]+256*pixel[7]);
                     alpha_factor = ((double)a16 / 65535.0);
@@ -722,7 +722,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
                 if (imageHasAlpha())
                 {
-                    // TIFF makes you pre-mutiply the rgb components by alpha
+                    // TIFF makes you pre-mutiply the RGB components by alpha
 
                     a8           = (uint8)(pixel[3]);
                     alpha_factor = ((double)a8 / 255.0);
