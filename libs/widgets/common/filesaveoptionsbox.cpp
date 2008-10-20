@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-08-02
- * Description : a stack of widgets to set image file save 
+ * Description : a stack of widgets to set image file save
  *               options into image editor.
  *
  * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -139,9 +139,14 @@ void FileSaveOptionsBox::slotImageFileSelected(const QString& file)
 
 void FileSaveOptionsBox::slotImageFileFormatChanged(const QString& filter)
 {
-    // TODO: KDE4PORT: KImageIO::typeForMime return a StringList now. 
+    // TODO: KDE4PORT: KImageIO::typeForMime return a StringList now.
     //                 Check if we use 1st item of list is enough.
-    QString format = KImageIO::typeForMime(filter)[0].toUpper();
+
+    // we need to save the list first to prevent indexing errors if mimetype is unknown
+    QStringList type = KImageIO::typeForMime(filter);
+    if (type.isEmpty())
+        return;
+    QString format = type[0].toUpper();
     toggleFormatOptions(format);
 }
 
