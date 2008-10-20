@@ -1501,6 +1501,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     imageFileSaveDialog.setMode(KFile::File);
     imageFileSaveDialog.setCaption(i18n("New Image File Name"));
     imageFileSaveDialog.setMimeFilter(writableMimetypes, defaultMimeType);
+    options->slotImageFileFormatChanged(defaultMimeType);
 
     QFileInfo info(m_savingContext->srcURL.fileName());
     KSharedConfig::Ptr config = KGlobal::config();
