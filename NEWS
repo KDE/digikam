@@ -40,5 +40,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 027 ==> 147151 : Compile error: multiple definition of `jpeg_suppress_tables'.
 028 ==> 170758 : High load when tagging 
 029 ==> 168003 : Drag&dropping a photo to a folder in Dolphin begins copying the whole system:/media.
-030 ==> 
+030 ==> 142457 : Temp files not cleaned up after crashes.
+031 ==> 
  
