@@ -422,13 +422,13 @@ bool AlbumLister::matchesFilter(const ImageInfo &info, bool &foundText)
         }
         case MimeFilter::MoviesFiles:
         {
-            if (!info.category() == DatabaseItem::Video)
+            if (info.category() != DatabaseItem::Video)
                 match = false;
             break;
         }
         case MimeFilter::AudioFiles:
         {
-            if (!info.category() == DatabaseItem::Audio)
+            if (info.category() != DatabaseItem::Audio)
                 match = false;
             break;
         }
