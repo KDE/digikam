@@ -3,7 +3,6 @@ INSTALL(FILES histogramwidget.h
               colorgradientwidget.h 
               curveswidget.h 
               sidebar.h
-              squeezedcombobox.h 
               dpopupmenu.h 
               dlogoaction.h
               statuszoombar.h 

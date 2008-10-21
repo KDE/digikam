@@ -465,7 +465,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/sidebar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dlogoaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dpopupmenu.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/squeezedcombobox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/paniconwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/previewwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/curveswidget.cpp

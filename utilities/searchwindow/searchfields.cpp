@@ -49,6 +49,10 @@
 #include <klocale.h>
 #include <ksqueezedtextlabel.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/squeezedcombobox.h>
+
 // Local includes.
 
 #include "dimg.h"
@@ -56,7 +60,6 @@
 #include "album.h"
 #include "albummodel.h"
 #include "kdateedit.h"
-#include "squeezedcombobox.h"
 #include "dmetadata.h"
 #include "imagescanner.h"
 #include "searchwindow.h"
@@ -65,6 +68,8 @@
 #include "choicesearchutilities.h"
 #include "searchfields.h"
 #include "searchfields.moc"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

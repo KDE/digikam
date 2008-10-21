@@ -63,13 +63,18 @@
 #define cmsTakeCopyright(profile) "Unknown"
 #endif // LCMS_VERSION < 114
 
+// LibKDcraw includes.
+
+#include <libkdcraw/squeezedcombobox.h>
+
 // Local includes.
 
-#include "squeezedcombobox.h"
 #include "iccprofileinfodlg.h"
 #include "albumsettings.h"
 #include "setupicc.h"
 #include "setupicc.moc"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
