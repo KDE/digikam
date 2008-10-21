@@ -1503,6 +1503,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     }
     imageFileSaveDialog->setMimeFilter(writableMimetypes, defaultMimeType);
     imageFileSaveDialog->setSelection(fileName);
+    options->slotImageFileFormatChanged(defaultMimeType);
 
     // Start dialog and check if canceled.
     if ( imageFileSaveDialog->exec() != KFileDialog::Accepted )
