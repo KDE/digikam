@@ -49,8 +49,9 @@ MimeFilter::MimeFilter(QWidget* parent)
 {
     d = new MimeFilterPriv;
     insertItem( AllFiles,    i18n("All Files") );
+    insertItem( ImageFiles,  i18n("Image files") );
     insertItem( NoRAWFiles,  i18n("No RAW files") );
-    insertItem( JPGFiles,    i18n("JPEG Files") );
+    insertItem( JPGFiles,    i18n("JPEG files") );
     insertItem( PNGFiles,    i18n("PNG files") );
     insertItem( TIFFiles,    i18n("TIFF files") );
     insertItem( DNGFiles,    i18n("DNG files") );
@@ -59,7 +60,7 @@ MimeFilter::MimeFilter(QWidget* parent)
     insertItem( AudioFiles,  i18n("Audio files") );
 
     setToolTip(i18n("Filter by file type"));
-    setWhatsThis(i18n("Select the file types (mime types) you want to show"));
+    setWhatsThis(i18n("Select the file types (mime types) that you want shown"));
 
     setMimeFilter(AllFiles);
 }

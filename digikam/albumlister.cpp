@@ -384,6 +384,13 @@ bool AlbumLister::matchesFilter(const ImageInfo &info, bool &foundText)
     switch(d->mimeTypeFilter)
     {
         // info.format is a standardized string: Only one possibility per mime type
+        case MimeFilter::ImageFiles:
+        {
+            // TODO: this filter should pull all supported mimetypes from digiKam settings
+            if (info.format() != "JPG" && info.format() != "PNG" && info.format() != "TIFF" && info.format() != "RAW-DNG" && info.format() != "RAW")
+                match = false;
+            break;
+        }
         case MimeFilter::JPGFiles:
         {
             if (info.format() != "JPG")

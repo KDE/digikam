@@ -42,6 +42,7 @@ public:
     enum TypeMimeFilter
     {
         AllFiles = 0,
+        ImageFiles,
         NoRAWFiles,
         JPGFiles,
         PNGFiles,
