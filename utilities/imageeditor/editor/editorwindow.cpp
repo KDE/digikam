@@ -385,7 +385,7 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addAction("editorwindow_zoomminus", d->zoomMinusAction);
     d->zoomMinusAction->setShortcut(QKeySequence(Qt::Key_Minus));
 
-    d->zoomTo100percents = new KAction(KIcon("zoom-original"), i18n("Zoom to 1:1"), this);
+    d->zoomTo100percents = new KAction(KIcon("zoom-original"), i18n("Zoom to 100%"), this);
     d->zoomTo100percents->setShortcut(Qt::ALT+Qt::CTRL+Qt::Key_0);       // NOTE: Photoshop 7 use ALT+CTRL+0
     connect(d->zoomTo100percents, SIGNAL(triggered()), this, SLOT(slotZoomTo100Percents()));
     actionCollection()->addAction("editorwindow_zoomto100percents", d->zoomTo100percents);
