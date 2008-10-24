@@ -34,6 +34,7 @@ def fetchTranslations()
 
     for lang in l10nlangs
         lang.chomp!()
+        next if lang == "x-test"
 
         pofilename = "l10n-kde4/#{lang}/messages/#{COMPONENT}-#{SECTION}"
         # TODO: ruby-svn
@@ -190,8 +191,8 @@ def createTranslationStats()
         <title>Statistics of #{NAME} #{@version} translations</title>
         </head>
         <body>
-        <a name="__top"><p align="center"><a name="statistics of amarok #{@version} translations">
-        <h1>Statistics of Amarok #{@version} translations</h1><br>
+        <a name="__top"><p align="center"><a name="statistics of #{NAME} #{@version} translations">
+        <h1>Statistics of #{NAME} #{@version} translations</h1><br>
         <table border="1" cellspacing="0"dir="ltr">
         <tr><td align="left" valign="middle" width="60" height="12">
         <font color="#196aff"><i><b>Language</b></i></font>

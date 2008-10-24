@@ -21,6 +21,7 @@
 require 'lib/libkdialog'
 
 @dlg = KDialog.new("#{NAME} release script","cookie")
+@changelog = nil
 
 # This will take you to the default execution directory (BASEPATH)
 def baseDir()
@@ -39,11 +40,12 @@ end
 #  - Release version
 #  - SVN protcol to use (ssh, https, anonsvn)
 #  - If protocl is not 'anonsvn' it will also ask for a user name
+#  - Whether to use svn2cl or not
 #
 # You can override the query by providing these information when calling the method.
 # For example:
-#    InformationQuery("trunk","1.0.0","https","sitter")
-def informationQuery(location=nil, version=nil, protocol=nil, user=nil)
+#    InformationQuery("trunk","1.0.0","https","sitter","yes")
+def informationQuery(location=nil, version=nil, protocol=nil, user=nil, cl=nil)
     #     @version  = "2.0.0" #DEBUG.
     #     @protocol = "anonsvn" #DEBUG
 
@@ -70,11 +72,15 @@ def informationQuery(location=nil, version=nil, protocol=nil, user=nil)
     else
         @user = user + "@svn"
     end
+
+    unless cl
+        changeLog()
+    end
 end
 
 private
 def checkoutLocation()
-    location = @dlg.combobox("Select checkout\\'s place:", "Trunk Stable Tag")
+    location = @dlg.combobox("Select checkout's place:", "Trunk Stable Tag")
     puts location #DEBUG
     checkoutLocationDef(location)
 end
@@ -111,4 +117,18 @@ def svnUsername()
         @user += "@svn"
     end
     puts @user #DEBUG
+end
+
+def changeLog()
+    if @protocol == "anonsvn" \
+    or @user == "anonsvn" \
+    or not @changelog
+        @changelog = nil
+        return
+    end
+    unless @dlg.yesno("Create changelog using svn2cl?<br /><br /><b>Note:</b> this will commit the changelog right after creating it,<br />so only use this feature when you really want to do a release")
+        @changelog = nil
+    else
+        puts @changelog #DEBUG
+    end
 end

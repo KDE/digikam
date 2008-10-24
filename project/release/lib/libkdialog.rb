@@ -100,8 +100,8 @@ class KDialog
         dlg_cmd = @dialog
         dlg_cmd += " --title #{@backtitle} " unless @backtitle.empty?
         dlg_cmd += " --icon #{@icon} " unless @icon.empty?
-        dlg_cmd += " #{cmd} #{cmd_text.gsub(/\s/, '\ ')} #{args}"
-        #     puts "Executing: '#{dlg_cmd}'"
+        dlg_cmd += " #{cmd} \"#{cmd_text}\" #{args}"
+            puts "Executing: '#{dlg_cmd}'"
         selection = `#{dlg_cmd}`
         [selection, $?.to_i]
     end

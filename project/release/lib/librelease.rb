@@ -38,6 +38,64 @@ def fetchSource()
     puts "Fetching source from #{branch}...\n\n"
     # TODO: ruby-svn
     system("svn co #{@repo}/#{COMPONENT}/#{SECTION}/#{NAME} #{@folder}")
+
+    createChangeLog()
+end
+
+# Creates a changelog using svn2cl.
+# Gets invoked from fetchSource once the SVN checkout is finished.
+# Adds a header afterwards and commits the updated changelog.
+# Expects the constant CHANGELOG to be set and svn2cl to be in your $PATH.
+def createChangeLog()
+# TODO: not initialized
+    return unless @changelog
+    if not %x[which svn2cl.sh] == ""
+        svn2cl = "svn2cl.sh"
+    elsif not %x[which svn2cl] == ""
+        svn2cl = "svn2cl"
+    else
+        puts "NO svn2cl in your $PATH, can't generate CHANGELOG!"
+        return
+    end
+
+    srcDir()
+
+    puts("running svn2cl...")
+    cl = %x[#{svn2cl} --stdout]
+
+    puts("generating new changelog...")
+    file = File.new(@changelog, File::RDWR)
+    str = file.read()
+
+# TODO: .include isn't precise enough, we need to have a complete match of linestart-version-whitespace-isodate
+#     if str.include?(@version)
+#         puts "ChangeLog already lists #{@version}, aborting svn2cl update!"
+#         file.close()
+#         return
+#     end
+
+    file.rewind()
+    file.truncate( 0 )
+
+    lines   = cl.split("\n")
+    escape  = lines.index(str.split("\n")[2])
+    counter = 1
+
+    file << "#{@version} #{Time.now.utc.strftime("%Y-%m-%d")}\n"
+    file << "--------------------------------------------------------------------------------\n\n"
+    for line in lines
+        if counter < escape
+            file << line + "\n"
+            counter += 1
+        end
+    end
+    file << "\n"
+    file << str
+
+    file.close()
+
+    puts("committing changelog...")
+    %x[svn ci ChangeLog "Update changelog for #{@version}."]
 end
 
 # Removes all .svn directories, creates a tar.bz2 and removes the source folder.
