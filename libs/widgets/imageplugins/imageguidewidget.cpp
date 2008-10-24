@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageguidewidget.h"
+#include "imageguidewidget.moc"
+
 // Qt includes.
 
 #include <QRegion>
@@ -45,12 +50,10 @@
 #include <kcursor.h>
 #include <kglobal.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "imageiface.h"
-#include "imageguidewidget.h"
-#include "imageguidewidget.moc"
 
 namespace Digikam
 {

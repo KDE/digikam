@@ -27,6 +27,10 @@
 #define SQ2PI   2.50662827463100024161235523934010416269302368164062
 #define Epsilon 1.0e-12
 
+// Local includes.
+
+#include "dimgsharpen.h"
+
 // C++ includes.
 
 #include <cmath>
@@ -36,10 +40,9 @@
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimgimagefilters.h"
-#include "dimgsharpen.h"
 
 namespace Digikam
 {

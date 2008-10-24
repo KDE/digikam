@@ -4,8 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2005-07-15
- * Description : themed icon group item 
- * 
+ * Description : themed icon group item
+ *
  * Copyright (C) 2005 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
  * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,13 +14,17 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
+// Local includes.
+
+#include "themedicongroupitem.h"
 
 // Qt includes.
 
@@ -31,22 +35,21 @@
 
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "themeengine.h"
 #include "themediconview.h"
-#include "themedicongroupitem.h"
 
 namespace Digikam
 {
 
 ThemedIconGroupItem::ThemedIconGroupItem(ThemedIconView* view)
                    : IconGroupItem(view), m_view(view)
-{    
+{
 }
 
 ThemedIconGroupItem::~ThemedIconGroupItem()
-{    
+{
 }
 
 void ThemedIconGroupItem::paintBanner()
@@ -54,17 +57,17 @@ void ThemedIconGroupItem::paintBanner()
     QRect r(0, 0, rect().width(), rect().height());
 
     QPixmap pix(m_view->bannerPixmap());
-    
+
     QFont fn(m_view->font());
     fn.setBold(true);
     int fnSize = fn.pointSize();
     bool usePointSize;
-    if (fnSize > 0) 
+    if (fnSize > 0)
     {
         fn.setPointSize(fnSize+2);
         usePointSize = true;
     }
-    else 
+    else
     {
         fnSize = fn.pixelSize();
         fn.setPixelSize(fnSize+2);
@@ -90,15 +93,15 @@ void ThemedIconGroupItem::paintBanner()
     p.setFont(fn);
 
     p.drawText(QRect(5, r.y(), r.width(), r.height()),
-               Qt::AlignLeft | Qt::AlignVCenter, 
+               Qt::AlignLeft | Qt::AlignVCenter,
                i18n("July 2007 - 10 Items"));
-    
+
     p.end();
 
     r = rect();
     r = QRect(iconView()->contentsToViewport(QPoint(r.x(), r.y())),
               QSize(r.width(), r.height()));
-    
+
     QPainter p2(iconView()->viewport());
     p2.drawPixmap(r.x(), r.y(), pix, 0, 0, r.width(), r.height());
     p2.end();

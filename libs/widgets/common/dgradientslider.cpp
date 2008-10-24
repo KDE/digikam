@@ -22,17 +22,17 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "dgradientslider.h"
+#include "dgradientslider.moc"
+
 // Qt includes.
 
 #include <QPainter>
 #include <QPoint>
 #include <QPen>
 #include <QMouseEvent>
-
-// Local includes.
-
-#include "dgradientslider.h"
-#include "dgradientslider.moc"
 
 namespace Digikam
 {
@@ -42,7 +42,7 @@ class DGradientSliderPriv
 
 public:
 
-  enum Cursor 
+  enum Cursor
   {
     NoCursor = 0,
     LeftCursor,
@@ -168,8 +168,8 @@ void DGradientSlider::paintEvent(QPaintEvent*)
 inline bool isCursorClicked(const QPoint& pos, double cursorPos, int width, int height, int gradientWidth)
 {
     int pos2 = gradientWidth * cursorPos;
-    return ((pos.y() >= 2 * height)    && 
-            (pos.y() < 3 * height)     && 
+    return ((pos.y() >= 2 * height)    &&
+            (pos.y() < 3 * height)     &&
             (pos.x() >= pos2)          &&
             (pos.x() <= (pos2 + width)));
 }

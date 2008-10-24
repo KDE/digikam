@@ -22,14 +22,17 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "undoaction.h"
+
 // KDE includes.
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimginterface.h"
-#include "undoaction.h"
 
 namespace Digikam
 {

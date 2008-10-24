@@ -25,7 +25,7 @@
 #ifndef CHARCOALTOOL_H
 #define CHARCOALTOOL_H
 
-// Local includes.
+// Digikam includes.
 
 #include "editortool.h"
 

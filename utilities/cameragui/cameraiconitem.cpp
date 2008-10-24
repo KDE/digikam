@@ -2,25 +2,29 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2004-09-21
- * Description : camera icon view item 
- * 
+ * Description : camera icon view item
+ *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
+
+// Local includes.
+
+#include "cameraiconitem.h"
 
 // Qt includes.
 
@@ -31,7 +35,7 @@
 
 #include <kiconloader.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "iconview.h"
 #include "thumbnailsize.h"
@@ -39,7 +43,6 @@
 #include "gpiteminfo.h"
 #include "themeengine.h"
 #include "cameraiconview.h"
-#include "cameraiconitem.h"
 
 namespace Digikam
 {
@@ -66,7 +69,7 @@ public:
     QPixmap            pixmapUnknowPicture;
 
     QImage             thumbnail;
-    
+
     QRect              pixRect;
     QRect              textRect;
     QRect              extraRect;
@@ -100,7 +103,7 @@ const char *CameraIconViewItemPriv::newPicture_xpm[] =
     "      @      "
 };
 
-const char *CameraIconViewItemPriv::unknowPicture_xpm[] = 
+const char *CameraIconViewItemPriv::unknowPicture_xpm[] =
 {
     "16 16 78 1",
     "   g None",
@@ -222,7 +225,7 @@ void CameraIconViewItem::setThumbnail(const QImage& thumbnail)
 
 GPItemInfo* CameraIconViewItem::itemInfo() const
 {
-    return d->itemInfo; 
+    return d->itemInfo;
 }
 
 void CameraIconViewItem::paintItem(QPainter *p)
@@ -299,8 +302,8 @@ void CameraIconViewItem::paintItem(QPainter *p)
             downloaded = SmallIcon( "dialog-cancel" );
             break;
         }
-        /* TODO: see B.K.O #107316 : disable temporally the unknown download status until     
-                 a new method to identify the already downloaded pictures from camera is 
+        /* TODO: see B.K.O #107316 : disable temporally the unknown download status until
+                 a new method to identify the already downloaded pictures from camera is
                  implemented.
 
         case GPItemInfo::DownloadUnknow:
@@ -315,7 +318,7 @@ void CameraIconViewItem::paintItem(QPainter *p)
         p->drawPixmap(rect().width() - downloaded.width() - 5, 5, downloaded);
 
     // If camera item is locked (read only), draw a "Lock" icon.
-    if (d->itemInfo->writePermissions == 0) 
+    if (d->itemInfo->writePermissions == 0)
         p->drawPixmap(5, 5, SmallIcon( "security-high" ));
 }
 
@@ -338,9 +341,9 @@ void CameraIconViewItem::setDownloaded(int status)
 
 void CameraIconViewItem::toggleLock()
 {
-    if (d->itemInfo->writePermissions == 0) 
+    if (d->itemInfo->writePermissions == 0)
         d->itemInfo->writePermissions = 1;
-    else 
+    else
         d->itemInfo->writePermissions = 0;
 
     update();

@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "setupidentity.h"
+#include "setupidentity.moc"
+
 // Qt includes.
 
 #include <QGroupBox>
@@ -35,11 +40,9 @@
 #include <kdialog.h>
 #include <klineedit.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumsettings.h"
-#include "setupidentity.h"
-#include "setupidentity.moc"
 
 namespace Digikam
 {

@@ -23,7 +23,12 @@
  *
  * ============================================================ */
 
-// C Ansi includes.
+// Local includes.
+
+#include "albumlister.h"
+#include "albumlister.moc"
+
+// C ANSI includes.
 
 extern "C"
 {
@@ -52,7 +57,7 @@ extern "C"
 #include <kio/job.h>
 #include <kurl.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "databaseaccess.h"
 #include "databasewatch.h"
@@ -61,8 +66,6 @@ extern "C"
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
-#include "albumlister.h"
-#include "albumlister.moc"
 
 namespace Digikam
 {

@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "infrared.h"
+
 // C++ includes.
 
 #include <cmath>
@@ -35,14 +39,13 @@
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "dimggaussianblur.h"
 #include "imagecurves.h"
 #include "imagehistogram.h"
 #include "dimgimagefilters.h"
-#include "infrared.h"
 
 namespace DigikamInfraredImagesPlugin
 {

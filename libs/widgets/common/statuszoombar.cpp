@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "statuszoombar.h"
+#include "statuszoombar.moc"
+
 // Qt includes.
 
 #include <QToolButton>
@@ -34,12 +39,10 @@
 #include <kiconloader.h>
 #include <kvbox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "thumbnailsize.h"
 #include "dcursortracker.h"
-#include "statuszoombar.h"
-#include "statuszoombar.moc"
 
 namespace Digikam
 {

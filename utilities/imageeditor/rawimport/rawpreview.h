@@ -34,7 +34,7 @@
 
 #include <kurl.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "previewwidget.h"

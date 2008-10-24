@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "raindroptool.h"
+#include "raindroptool.moc"
+
 // Qt includes.
 
 #include <QFrame>
@@ -46,7 +51,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "daboutdata.h"
 #include "editortoolsettings.h"
@@ -54,8 +59,6 @@
 #include "imagewidget.h"
 #include "version.h"
 #include "raindrop.h"
-#include "raindroptool.h"
-#include "raindroptool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

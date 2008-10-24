@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "filesaveoptionsbox.h"
+#include "filesaveoptionsbox.moc"
+
 // Qt includes.
 
 #include <QCheckBox>
@@ -41,14 +46,12 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "jpegsettings.h"
 #include "pngsettings.h"
 #include "tiffsettings.h"
 #include "jp2ksettings.h"
-#include "filesaveoptionsbox.h"
-#include "filesaveoptionsbox.moc"
 
 namespace Digikam
 {

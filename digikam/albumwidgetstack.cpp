@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "albumwidgetstack.h"
+#include "albumwidgetstack.moc"
+
 // Qt includes.
 
 #include <QFileInfo>
@@ -38,7 +43,7 @@
 #include <kglobal.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumsettings.h"
 #include "albumiconview.h"
@@ -47,8 +52,6 @@
 #include "imagepreviewbar.h"
 #include "welcomepageview.h"
 #include "mediaplayerview.h"
-#include "albumwidgetstack.h"
-#include "albumwidgetstack.moc"
 
 namespace Digikam
 {

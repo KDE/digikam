@@ -29,7 +29,7 @@
 
 #include <QStringList>
 
-// Local includes.
+// Digikam includes.
 
 #include "dkcamera.h"
 

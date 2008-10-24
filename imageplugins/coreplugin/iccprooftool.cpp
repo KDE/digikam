@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "iccprooftool.h"
+#include "iccprooftool.moc"
+
 // Qt includes.
 
 #include <QButtonGroup>
@@ -86,11 +91,6 @@
 #include "imagehistogram.h"
 #include "imageiface.h"
 #include "imagewidget.h"
-
-// Local includes.
-
-#include "iccprooftool.h"
-#include "iccprooftool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

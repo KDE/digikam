@@ -24,6 +24,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imagehistogram.h"
+#include "imagehistogram.moc"
+
 // C++ includes.
 
 #include <cstdio>
@@ -39,11 +44,9 @@
 #include <kdebug.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
-#include "imagehistogram.h"
-#include "imagehistogram.moc"
 
 namespace Digikam
 {

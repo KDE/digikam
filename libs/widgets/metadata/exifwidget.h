@@ -26,9 +26,9 @@
 
 // Qt includes.
 
-#include <QString>
+#include <QtCore/QString>
 
-// Local includes.
+// Digikam includes.
 
 #include "metadatawidget.h"
 #include "digikam_export.h"

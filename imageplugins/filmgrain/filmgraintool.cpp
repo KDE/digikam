@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "filmgraintool.h"
+#include "filmgraintool.moc"
+
 // Qt includes.
 
 #include <QLabel>
@@ -43,7 +48,7 @@
 #include <kglobal.h>
 #include <kconfiggroup.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "version.h"
 #include "daboutdata.h"
@@ -52,8 +57,6 @@
 #include "imagepanelwidget.h"
 #include "editortoolsettings.h"
 #include "filmgrain.h"
-#include "filmgraintool.h"
-#include "filmgraintool.moc"
 
 using namespace Digikam;
 

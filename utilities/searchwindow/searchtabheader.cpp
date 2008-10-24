@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "searchtabheader.h"
+#include "searchtabheader.moc"
+
 // Qt includes.
 
 #include <QGroupBox>
@@ -43,15 +48,13 @@
 #include <ksqueezedtextlabel.h>
 #include <kurllabel.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
 #include "albummanager.h"
 #include "searchwindow.h"
 #include "searchfolderview.h"
 #include "searchxml.h"
-#include "searchtabheader.h"
-#include "searchtabheader.moc"
 
 namespace Digikam
 {

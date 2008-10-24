@@ -23,6 +23,13 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "cameracontroller.h"
+#include "cameracontroller.moc"
+
+// C ANSI includes.
+
 extern "C"
 {
 #include <unistd.h>
@@ -51,7 +58,7 @@ extern "C"
 #include <kstandarddirs.h>
 #include <kurl.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "thumbnailsize.h"
 #include "imagewindow.h"
@@ -59,8 +66,6 @@ extern "C"
 #include "umscamera.h"
 #include "dmetadata.h"
 #include "jpegutils.h"
-#include "cameracontroller.h"
-#include "cameracontroller.moc"
 
 namespace Digikam
 {

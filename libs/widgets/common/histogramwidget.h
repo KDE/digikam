@@ -26,12 +26,12 @@
 
 // Qt includes.
 
-#include <QWidget>
-#include <QEvent>
-#include <QMouseEvent>
-#include <QPaintEvent>
+#include <QtGui/QWidget>
+#include <QtCore/QEvent>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QPaintEvent>
 
-// Local includes.
+// Digikam includes.
 
 #include "dcolor.h"
 #include "digikam_export.h"

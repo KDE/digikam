@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "setupcollections.h"
+#include "setupcollections.moc"
+
 // Qt includes.
 
 #include <QGroupBox>
@@ -44,14 +49,12 @@
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumsettings.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "scancontroller.h"
-#include "setupcollections.h"
-#include "setupcollections.moc"
 
 namespace Digikam
 {

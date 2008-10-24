@@ -36,7 +36,7 @@
 
 #include <kurl.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "editortool.h"
 #include "hotpixelfixer.h"

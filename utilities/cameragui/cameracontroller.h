@@ -33,7 +33,7 @@
 #include <QFileInfo>
 #include <QCustomEvent>
 
-// Local includes.
+// Digikam includes.
 
 #include "downloadsettingscontainer.h"
 #include "gpiteminfo.h"

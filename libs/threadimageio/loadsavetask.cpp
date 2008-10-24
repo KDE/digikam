@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "loadsavetask.h"
+
 // Qt includes.
 
 #include <qapplication.h>
@@ -30,13 +34,12 @@
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "loadsavethread.h"
 #include "managedloadsavethread.h"
 #include "sharedloadsavethread.h"
 #include "loadingcache.h"
-#include "loadsavetask.h"
 
 namespace Digikam
 {

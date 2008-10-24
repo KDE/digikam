@@ -21,6 +21,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "albumicongroupitem.h"
+
 // Qt includes.
 
 #include <QPixmap>
@@ -32,14 +36,13 @@
 #include <kglobal.h>
 #include <kcalendarsystem.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albummanager.h"
 #include "album.h"
 #include "themeengine.h"
 #include "albumsettings.h"
 #include "albumiconview.h"
-#include "albumicongroupitem.h"
 
 namespace Digikam
 {

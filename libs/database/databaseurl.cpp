@@ -21,15 +21,18 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "databaseurl.h"
+
 // Qt includes.
 
 #include <QStringList>
 
-// Local includes.
+// Digikam includes.
 
 #include "collectionmanager.h"
 #include "collectionlocation.h"
-#include "databaseurl.h"
 
 namespace Digikam
 {

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-01-04
- * Description : a Digikam image editor plugin for superimpose a 
+ * Description : a Digikam image editor plugin for superimpose a
  *               template to an image.
  *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "superimposewidget.h"
+#include "superimposewidget.moc"
+
 // C++ includes.
 
 #include <cstdio>
@@ -39,13 +44,11 @@
 
 #include <kstandarddirs.h>
 #include <kcursor.h>
-#include <kglobal.h> 
+#include <kglobal.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "superimpose.h"
-#include "superimposewidget.h"
-#include "superimposewidget.moc"
 
 namespace DigikamSuperImposeImagesPlugin
 {
@@ -82,7 +85,7 @@ Digikam::DImg SuperImposeWidget::makeSuperImpose(void)
 void SuperImposeWidget::resetEdit(void)
 {
     m_zoomFactor = 1.0;
-    m_currentSelection = QRect(m_w/2 - m_rect.width()/2, m_h/2 - m_rect.height()/2, 
+    m_currentSelection = QRect(m_w/2 - m_rect.width()/2, m_h/2 - m_rect.height()/2,
                                m_rect.width(), m_rect.height());
     makePixmap();
     repaint();

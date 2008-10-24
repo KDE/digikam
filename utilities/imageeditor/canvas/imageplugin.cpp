@@ -24,10 +24,13 @@
 
 // Local includes.
 
-#include "editortool.h"
-#include "editortooliface.h"
 #include "imageplugin.h"
 #include "imageplugin.moc"
+
+// Digikam includes.
+
+#include "editortool.h"
+#include "editortooliface.h"
 
 namespace Digikam
 {

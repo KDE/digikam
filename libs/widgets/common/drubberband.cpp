@@ -21,13 +21,14 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "drubberband.h"
+
 // KDE includes.
 
 #include <kdebug.h>
 
-// Local includes.
-
-#include "drubberband.h"
 
 namespace Digikam
 {

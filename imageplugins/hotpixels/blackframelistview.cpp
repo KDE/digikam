@@ -5,24 +5,29 @@
  *
  * Date        : 2005-07-05
  * Description : a ListView to display black frames
- * 
+ *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #define THUMB_WIDTH 150
+
+// Local includes.
+
+#include "blackframelistview.h"
+#include "blackframelistview.moc"
 
 // Qt includes.
 
@@ -30,10 +35,6 @@
 #include <QPainter>
 #include <QPixmap>
 
-// Local includes.
-
-#include "blackframelistview.h"
-#include "blackframelistview.moc"
 
 namespace DigikamHotPixelsImagesPlugin
 {
@@ -124,7 +125,7 @@ QPixmap BlackFrameListViewItem::thumb(const QSize& size)
 
     //Draw hot pixels one by one
     QList <HotPixel>::Iterator it;
-    QList <HotPixel>::Iterator end(m_hotPixels.end()); 
+    QList <HotPixel>::Iterator end(m_hotPixels.end());
     for (it=m_hotPixels.begin() ; it!=end ; ++it)
     {
         hpRect   = (*it).rect;

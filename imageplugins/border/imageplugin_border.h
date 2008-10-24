@@ -25,6 +25,10 @@
 #ifndef IMAGEPLUGIN_BORDER_H
 #define IMAGEPLUGIN_BORDER_H
 
+// Qt includes.
+
+#include <QVariant>
+
 // Digikam includes.
 
 #include "imageplugin.h"

@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -33,18 +33,18 @@
    Written by Denis Oliver Kropp <dok@directfb.org>,
               Andreas Hundt <andi@fischlustig.de>,
               Sven Neumann <neo@directfb.org>,
-              Ville Syrj�l� <syrjala@sci.fi> and
+              Ville Syrj <syrjala@sci.fi> and
               Claudio Ciccani <klan@users.sf.net>.
 
 */
 
-// C++ includes.
-
-#include <cmath>
-
 // Local includes.
 
 #include "dcolorcomposer.h"
+
+// C++ includes.
+
+#include <cmath>
 
 namespace Digikam
 {

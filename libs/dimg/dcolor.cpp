@@ -25,6 +25,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "dcolor.h"
+
 // C++ includes.
 
 #include <cmath>
@@ -33,9 +37,6 @@
 
 #include <kdebug.h>
 
-// Local includes.
-
-#include "dcolor.h"
 
 namespace Digikam
 {

@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "libsinfodlg.h"
+#include "libsinfodlg.moc"
+
 // Qt includes.
 
 #include <QStringList>
@@ -72,12 +77,10 @@ extern "C"
 #include <lcms.h>
 }
 
-// Local includes.
+// Digikam includes.
 
 #include "daboutdata.h"
 #include "greycstorationiface.h"
-#include "libsinfodlg.h"
-#include "libsinfodlg.moc"
 
 namespace Digikam
 {

@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imagedialog.h"
+#include "imagedialog.moc"
+
 // Qt includes.
 
 #include <QLabel>
@@ -43,14 +48,12 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Digikam includes.
 
 #include "dmetadata.h"
 #include "loadingdescription.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
-#include "imagedialog.h"
-#include "imagedialog.moc"
 
 namespace Digikam
 {

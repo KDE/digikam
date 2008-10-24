@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "hsltool.h"
+#include "hsltool.moc"
+
 // Qt includes.
 
 #include <QColor>
@@ -60,14 +65,9 @@
 #include "hslmodifier.h"
 #include "imageiface.h"
 #include "imagewidget.h"
-
-// Local includes.
-
 #include "hspreviewwidget.h"
 #include "histogramwidget.h"
 #include "histogrambox.h"
-#include "hsltool.h"
-#include "hsltool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

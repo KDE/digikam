@@ -27,13 +27,13 @@
 
 // Qt includes.
 
-#include <QByteArray>
+#include <QtCore/QByteArray>
 
 // LibKExiv2 includes.
 
 #include <libkexiv2/kexiv2.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "photoinfocontainer.h"

@@ -27,16 +27,19 @@
 // Degrees to radian conversion coeff (PI/180). To optimize computation.
 #define DEG2RAD 0.017453292519943
 
+// Local includes.
+
+#include "shear.h"
+
 // C++ includes.
 
 #include <cmath>
 #include <cstdlib>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "dimgimagefilters.h"
-#include "shear.h"
 
 namespace DigikamShearToolImagesPlugin
 {

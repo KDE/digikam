@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * 
+ *
  * Adapted from fluxbox: Texture/TextureRender
  *
  * Texture.hh for Fluxbox Window Manager
@@ -35,12 +35,12 @@
 
 // Qt includes.
 
-#include <QColor>
 #include <QPixmap>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
+#include "theme.h"
 
 namespace Digikam
 {

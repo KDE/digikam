@@ -28,8 +28,8 @@
 
 // Qt includes.
 
-#include <QPoint>
-#include <QPolygon>
+#include <QtCore/QPoint>
+#include <QtGui/QPolygon>
 
 // KDE includes.
 

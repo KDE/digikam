@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "whitebalancetool.h"
+#include "whitebalancetool.moc"
+
 // Qt includes.
 
 #include <QButtonGroup>
@@ -65,7 +70,7 @@
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "colorgradientwidget.h"
 #include "dcolor.h"
@@ -79,8 +84,6 @@
 #include "imagewidget.h"
 #include "version.h"
 #include "whitebalance.h"
-#include "whitebalancetool.h"
-#include "whitebalancetool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

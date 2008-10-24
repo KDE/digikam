@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_sheartool.h"
+#include "imageplugin_sheartool.moc"
+
 // KDE includes.
 
 #include <kdebug.h>
@@ -32,11 +37,9 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "sheartool.h"
-#include "imageplugin_sheartool.h"
-#include "imageplugin_sheartool.moc"
 
 using namespace DigikamShearToolImagesPlugin;
 

@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_blurfx.h"
+#include "imageplugin_blurfx.moc"
+
 // KDE includes.
 
 #include <kdebug.h>
@@ -32,11 +37,9 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "blurfxtool.h"
-#include "imageplugin_blurfx.h"
-#include "imageplugin_blurfx.moc"
 
 using namespace DigikamBlurFXImagesPlugin;
 

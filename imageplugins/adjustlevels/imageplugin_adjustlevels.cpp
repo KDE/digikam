@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_adjustlevels.h"
+#include "imageplugin_adjustlevels.moc"
+
 // KDE includes.
 
 #include <kaction.h>
@@ -32,11 +37,9 @@
 #include <klibloader.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "adjustlevelstool.h"
-#include "imageplugin_adjustlevels.h"
-#include "imageplugin_adjustlevels.moc"
 
 using namespace DigikamAdjustLevelsImagesPlugin;
 

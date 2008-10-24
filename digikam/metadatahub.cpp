@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "metadatahub.h"
+
 // Qt includes.
 
 #include <QFileInfo>
@@ -30,14 +34,13 @@
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "imageinfo.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "imageattributeswatch.h"
-#include "metadatahub.h"
 
 namespace Digikam
 {

@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_filmgrain.h"
+#include "imageplugin_filmgrain.moc"
+
 // KDE includes.
 
 #include <kdebug.h>
@@ -33,11 +38,9 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "filmgraintool.h"
-#include "imageplugin_filmgrain.h"
-#include "imageplugin_filmgrain.moc"
 
 using namespace DigikamFilmGrainImagesPlugin;
 

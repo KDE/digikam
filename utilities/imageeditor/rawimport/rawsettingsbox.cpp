@@ -20,6 +20,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "rawsettingsbox.h"
+#include "rawsettingsbox.moc"
+
 // Qt includes.
 
 #include <QButtonGroup>
@@ -47,7 +52,7 @@
 #include <libkdcraw/dcrawsettingswidget.h>
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "histogrambox.h"
 #include "imagedialog.h"
@@ -57,8 +62,6 @@
 #include "histogramwidget.h"
 #include "curveswidget.h"
 #include "colorgradientwidget.h"
-#include "rawsettingsbox.h"
-#include "rawsettingsbox.moc"
 
 using namespace KDcrawIface;
 

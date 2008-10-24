@@ -38,15 +38,18 @@
 #define FG 0.715160
 #define FB 0.072169
 
+// Local includes.
+
+#include "noisereduction.h"
+
 // KDE includes.
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "dimgimagefilters.h"
-#include "noisereduction.h"
 
 namespace DigikamNoiseReductionImagesPlugin
 {

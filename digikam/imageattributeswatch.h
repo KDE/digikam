@@ -32,7 +32,7 @@
 
 #include <kurl.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "databasechangesets.h"
 

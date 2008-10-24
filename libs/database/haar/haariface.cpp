@@ -23,6 +23,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "haariface.h"
+
 // C++ includes.
 
 #include <fstream>
@@ -42,7 +46,7 @@
 #include <kdebug.h>
 #include <kurl.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "jpegutils.h"
 #include "dimg.h"
@@ -53,7 +57,6 @@
 #include "databasebackend.h"
 #include "searchxml.h"
 #include "haar.h"
-#include "haariface.h"
 
 using namespace std;
 

@@ -9,7 +9,7 @@
  * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
- * Original Emboss algorithm copyrighted 2004 by 
+ * Original Emboss algorithm copyrighted 2004 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
  *
  * This program is free software; you can redistribute it
@@ -17,24 +17,27 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * ============================================================ */ 
+ *
+ * ============================================================ */
+
+// Local includes.
+
+#include "emboss.h"
 
 // C++ includes.
 
 #include <cmath>
 #include <cstdlib>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "dimgimagefilters.h"
-#include "emboss.h"
 
 namespace DigikamEmbossImagesPlugin
 {
@@ -53,16 +56,16 @@ void Emboss::filterImage(void)
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
 
-/* Function to apply the Emboss effect                                             
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.                          
- * d                => Emboss value                                                  
- *                                                                                
- * Theory           => This is an amazing effect. And the theory is very simple to 
- *                     understand. You get the difference between the colors and    
- *                     increase it. After this, get the gray tone            
+/* Function to apply the Emboss effect
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * d                => Emboss value
+ *
+ * Theory           => This is an amazing effect. And the theory is very simple to
+ *                     understand. You get the difference between the colors and
+ *                     increase it. After this, get the gray tone
  */
 
 void Emboss::embossImage(Digikam::DImg *orgImage, Digikam::DImg *destImage, int d)

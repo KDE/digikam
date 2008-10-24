@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imagepreviewview.h"
+#include "imagepreviewview.moc"
+
 // Qt includes.
 
 #include <QPainter>
@@ -52,7 +57,7 @@
 #include <libkipi/pluginloader.h>
 #include <libkipi/plugin.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "albumdb.h"
@@ -70,8 +75,6 @@
 #include "tagspopupmenu.h"
 #include "ratingpopupmenu.h"
 #include "themeengine.h"
-#include "imagepreviewview.h"
-#include "imagepreviewview.moc"
 
 namespace Digikam
 {

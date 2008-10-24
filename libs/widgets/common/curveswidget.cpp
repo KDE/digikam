@@ -23,6 +23,11 @@
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
+// Local includes.
+
+#include "curveswidget.h"
+#include "curveswidget.moc"
+
 // C++ includes.
 
 #include <cmath>
@@ -54,11 +59,6 @@
 
 #include "imagehistogram.h"
 #include "imagecurves.h"
-
-// Local includes.
-
-#include "curveswidget.h"
-#include "curveswidget.moc"
 
 namespace Digikam
 {

@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imagepreviewbar.h"
+#include "imagepreviewbar.moc"
+
 // Qt includes.
 
 #include <QList>
@@ -46,7 +51,7 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
 #include "albumdb.h"
@@ -58,8 +63,6 @@
 #include "ratingpopupmenu.h"
 #include "dpopupmenu.h"
 #include "themeengine.h"
-#include "imagepreviewbar.h"
-#include "imagepreviewbar.moc"
 
 namespace Digikam
 {

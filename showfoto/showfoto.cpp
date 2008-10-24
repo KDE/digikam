@@ -25,6 +25,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "showfoto.h"
+#include "showfoto.moc"
+
 // C ANSI includes
 
 extern "C"
@@ -88,7 +93,7 @@ extern "C"
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Digikam includes.
 
 #include "canvas.h"
 #include "dimginterface.h"
@@ -113,8 +118,6 @@ extern "C"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 #include "editorstackview.h"
-#include "showfoto.h"
-#include "showfoto.moc"
 
 namespace ShowFoto
 {

@@ -30,6 +30,12 @@
 // Square
 #define SQR(x) ((x) * (x))
 
+// Local includes.
+
+#include "matrix.h"
+
+// C ANSI includes.
+
 extern "C"
 {
 #include "f2c.h"
@@ -48,9 +54,6 @@ extern "C"
 
 #include <kdebug.h>
 
-// Local includes.
-
-#include "matrix.h"
 
 namespace DigikamImagesPluginCore
 {

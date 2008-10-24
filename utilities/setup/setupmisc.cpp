@@ -5,7 +5,7 @@
  *
  * Date        : 2004-08-23
  * Description : mics configuration setup tab
- * 
+ *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "setupmisc.h"
+
 // Qt includes.
 
 #include <QGroupBox>
@@ -33,10 +37,9 @@
 #include <klocale.h>
 #include <kdialog.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumsettings.h"
-#include "setupmisc.h"
 
 namespace Digikam
 {
@@ -67,16 +70,16 @@ SetupMisc::SetupMisc(QWidget* parent)
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     d->showTrashDeleteDialogCheck = new QCheckBox(i18n("Confirm when moving items to the &trash"), this);
-    
+
     d->sidebarApplyDirectlyCheck = new QCheckBox(i18n("Do not confirm when apply changes in the &right sidebar"), this);
-    
+
     d->showSplashCheck = new QCheckBox(i18n("&Show splash screen at startup"), this);
-    
+
     d->scanAtStart = new QCheckBox(i18n("&Scan for new items at startup (makes startup slower)"), this);
-    
+
     // --------------------------------------------------------
-    
-    layout->setMargin(0);    
+
+    layout->setMargin(0);
     layout->setSpacing(KDialog::spacingHint());
     layout->addWidget(d->showTrashDeleteDialogCheck);
     layout->addWidget(d->sidebarApplyDirectlyCheck);

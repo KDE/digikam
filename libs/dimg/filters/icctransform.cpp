@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "icctransform.h"
+
 // Qt includes.
 
 #include <QDataStream>
@@ -43,9 +47,6 @@
 #define cmsTakeCopyright(profile) "Unknown"
 #endif // LCMS_VERSION < 114
 
-// Local includes.
-
-#include "icctransform.h"
 
 namespace Digikam
 {

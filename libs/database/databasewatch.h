@@ -30,7 +30,7 @@
 
 // KDE includes.
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 #include "databasechangesets.h"

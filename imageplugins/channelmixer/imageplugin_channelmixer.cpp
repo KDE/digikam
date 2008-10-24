@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_channelmixer.h"
+#include "imageplugin_channelmixer.moc"
+
 // KDE includes.
 
 #include <kdebug.h>
@@ -32,11 +37,9 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "channelmixertool.h"
-#include "imageplugin_channelmixer.h"
-#include "imageplugin_channelmixer.moc"
 
 using namespace DigikamChannelMixerImagesPlugin;
 

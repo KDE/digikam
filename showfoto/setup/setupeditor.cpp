@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "setupeditor.h"
+#include "setupeditor.moc"
+
 // Qt includes.
 
 #include <QCheckBox>
@@ -41,11 +46,6 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include <kvbox.h>
-
-// Local includes.
-
-#include "setupeditor.h"
-#include "setupeditor.moc"
 
 namespace ShowFoto
 {

@@ -23,12 +23,15 @@
 
 // Local includes.
 
+#include "editorstackview.h"
+#include "editorstackview.moc"
+
+// Digikam includes.
+
 #include "previewwidget.h"
 #include "imageregionwidget.h"
 #include "imagepanelwidget.h"
 #include "canvas.h"
-#include "editorstackview.h"
-#include "editorstackview.moc"
 
 namespace Digikam
 {

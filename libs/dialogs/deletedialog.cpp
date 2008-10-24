@@ -24,6 +24,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "deletedialog.h"
+#include "deletedialog.moc"
+
 // Qt includes.
 
 #include <QStackedWidget>
@@ -41,11 +46,9 @@
 #include <klocale.h>
 #include <kstdguiitem.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumsettings.h"
-#include "deletedialog.h"
-#include "deletedialog.moc"
 
 namespace Digikam
 {

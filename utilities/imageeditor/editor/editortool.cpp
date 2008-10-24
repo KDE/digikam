@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "editortool.h"
+#include "editortool.moc"
+
 // Qt includes.
 
 #include <QWidget>
@@ -30,7 +35,7 @@
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimgthreadedfilter.h"
 #include "imagewidget.h"
@@ -40,8 +45,6 @@
 #include "histogrambox.h"
 #include "editortoolsettings.h"
 #include "editortooliface.h"
-#include "editortool.h"
-#include "editortool.moc"
 
 namespace Digikam
 {

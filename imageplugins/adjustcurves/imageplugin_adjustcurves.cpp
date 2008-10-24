@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_adjustcurves.h"
+#include "imageplugin_adjustcurves.moc"
+
 // KDE includes.
 
 #include <kaction.h>
@@ -32,11 +37,9 @@
 #include <klibloader.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "adjustcurvestool.h"
-#include "imageplugin_adjustcurves.h"
-#include "imageplugin_adjustcurves.moc"
 
 using namespace DigikamAdjustCurvesImagesPlugin;
 

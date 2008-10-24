@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "albumselectdialog.h"
+#include "albumselectdialog.moc"
+
 // Qt includes.
 
 #include <QLabel>
@@ -45,7 +50,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "treefolderitem.h"
 #include "album.h"
@@ -53,8 +58,6 @@
 #include "albumthumbnailloader.h"
 #include "collectionmanager.h"
 #include "searchtextbar.h"
-#include "albumselectdialog.h"
-#include "albumselectdialog.moc"
 
 namespace Digikam
 {

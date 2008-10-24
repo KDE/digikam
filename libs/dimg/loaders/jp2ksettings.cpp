@@ -35,7 +35,7 @@
 #include <kdialog.h>
 #include <knuminput.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "jp2ksettings.h"
 #include "jp2ksettings.moc"

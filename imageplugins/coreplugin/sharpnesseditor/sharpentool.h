@@ -26,6 +26,7 @@
 
 // Digikam includes.
 
+#include <dimg.h>
 #include "editortool.h"
 
 class QStackedWidget;

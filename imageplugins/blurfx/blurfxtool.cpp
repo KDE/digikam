@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "blurfxtool.h"
+#include "blurfxtool.moc"
+
 // Qt includes.
 
 #include <QDateTime>
@@ -47,7 +52,7 @@
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "daboutdata.h"
 #include "editortoolsettings.h"
@@ -55,8 +60,6 @@
 #include "imagepanelwidget.h"
 #include "version.h"
 #include "blurfx.h"
-#include "blurfxtool.h"
-#include "blurfxtool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

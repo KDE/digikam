@@ -27,6 +27,10 @@
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
+// Local includes.
+
+#include "whitebalance.h"
+
 // C++ includes.
 
 #include <cmath>
@@ -39,10 +43,9 @@
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "imagehistogram.h"
-#include "whitebalance.h"
 
 namespace Digikam
 {

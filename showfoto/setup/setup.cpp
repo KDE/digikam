@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "setup.h"
+#include "setup.moc"
+
 // KDE includes.
 
 #include <klocale.h>
@@ -30,7 +35,7 @@
 #include <kglobal.h>
 #include <kvbox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "setuptooltip.h"
 #include "setupeditor.h"
@@ -38,8 +43,6 @@
 #include "setupiofiles.h"
 #include "setupslideshow.h"
 #include "setupicc.h"
-#include "setup.h"
-#include "setup.moc"
 
 namespace ShowFoto
 {
@@ -101,11 +104,11 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_tooltip = addPage( d->toolTipPage, i18n("Tool Tip") );
     d->page_tooltip->setHeader( i18n("Thumbbar Items Tool Tip Settings") );
     d->page_tooltip->setIcon( KIcon("dialog-information") );
-    
+
     d->dcrawPage = new Digikam::SetupDcraw();
     d->page_dcraw = addPage( d->dcrawPage, i18n("RAW decoding") );
     d->page_dcraw->setHeader( i18n("RAW Files Decoding Settings") );
-    d->page_dcraw->setIcon( KIcon("kdcraw") );    
+    d->page_dcraw->setIcon( KIcon("kdcraw") );
 
     d->iccPage = new Digikam::SetupICC(0, this);
     d->page_icc = addPage( d->iccPage, i18n("Color Management") );
@@ -121,13 +124,13 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_slideshow = addPage( d->slideshowPage, i18n("Slide Show") );
     d->page_slideshow->setHeader( i18n("Slide Show Settings") );
     d->page_slideshow->setIcon( KIcon("view-presentation") );
-    
+
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
 
     if (page != LastPageUsed)
         showPage(page);
-    else 
+    else
     {
         KSharedConfig::Ptr config = KGlobal::config();
         KConfigGroup group = config->group(QString("General Settings"));
@@ -162,22 +165,22 @@ void Setup::showPage(Setup::Page page)
     switch(page)
     {
         case ToolTipPage:
-            setCurrentPage(d->page_tooltip); 
+            setCurrentPage(d->page_tooltip);
             break;
         case DcrawPage:
-            setCurrentPage(d->page_dcraw); 
+            setCurrentPage(d->page_dcraw);
             break;
         case IOFilesPage:
-            setCurrentPage(d->page_iofiles); 
+            setCurrentPage(d->page_iofiles);
             break;
         case SlideshowPage:
-            setCurrentPage(d->page_slideshow); 
+            setCurrentPage(d->page_slideshow);
             break;
         case ICCPage:
-            setCurrentPage(d->page_icc); 
+            setCurrentPage(d->page_icc);
             break;
-        default: 
-            setCurrentPage(d->page_editor); 
+        default:
+            setCurrentPage(d->page_editor);
             break;
     }
 }
@@ -188,8 +191,8 @@ Setup::Page Setup::activePageIndex()
     if (cur == d->page_tooltip)   return ToolTipPage;
     if (cur == d->page_dcraw)     return DcrawPage;
     if (cur == d->page_iofiles)   return IOFilesPage;
-    if (cur == d->page_slideshow) return SlideshowPage; 
-    if (cur == d->page_icc)       return ICCPage; 
+    if (cur == d->page_slideshow) return SlideshowPage;
+    if (cur == d->page_icc)       return ICCPage;
 
     return EditorPage;
 }

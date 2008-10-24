@@ -21,6 +21,13 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "databasewatch.h"
+#include "databasewatchadaptor.h"
+#include "databasewatch.moc"
+#include "databasewatchadaptor.moc"
+
 // Qt includes.
 
 #include <QMetaType>
@@ -30,14 +37,6 @@
 // KDE includes.
 
 #include <kdebug.h>
-
-// Local includes.
-
-#include "databasewatch.h"
-#include "databasewatchadaptor.h"
-
-#include "databasewatchadaptor.moc"
-#include "databasewatch.moc"
 
 Digikam_DatabaseWatchAdaptor::Digikam_DatabaseWatchAdaptor(Digikam::DatabaseWatch *watch)
     : QDBusAbstractAdaptor(watch)

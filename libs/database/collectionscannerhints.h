@@ -27,13 +27,13 @@
 // Qt includes.
 
 #include <QList>
+#include <QStringList>
+#include <QDBusArgument>
 
-// Local includes.
+// Digikam includes.
 
 #include "dbusutilities.h"
 #include "digikam_export.h"
-
-class QDBusArgument;
 
 namespace Digikam
 {

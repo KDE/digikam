@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imagepropertiesmetadatatab.h"
+#include "imagepropertiesmetadatatab.moc"
+
 // Qt includes.
 
 #include <QFile>
@@ -39,14 +44,12 @@
 #include <kfileitem.h>
 #include <kglobal.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "exifwidget.h"
 #include "makernotewidget.h"
 #include "iptcwidget.h"
 #include "xmpwidget.h"
-#include "imagepropertiesmetadatatab.h"
-#include "imagepropertiesmetadatatab.moc"
 
 namespace Digikam
 {

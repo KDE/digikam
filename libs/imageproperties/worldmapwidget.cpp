@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "worldmapwidget.h"
+#include "worldmapwidget.moc"
+
 // Qt includes.
 
 #include <QVBoxLayout>
@@ -41,12 +46,6 @@
 #include <marble/MarbleWidget.h>
 using namespace Marble;
 #endif // HAVE_MARBLEWIDGET
-
-// Local includes.
-
-#include "worldmapwidget.h"
-#include "worldmapwidget.moc"
-
 
 namespace Digikam
 {

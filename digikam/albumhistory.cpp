@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "albumhistory.h"
+#include "albumhistory.moc"
+
 // Qt includes.
 
 #include <QString>
@@ -31,11 +36,9 @@
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
-#include "albumhistory.h"
-#include "albumhistory.moc"
 
 namespace Digikam
 {

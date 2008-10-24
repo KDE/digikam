@@ -21,16 +21,17 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "mimefilter.h"
+#include "mimefilter.moc"
+
 // KDE includes.
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
 
-// Local includes.
-
-#include "mimefilter.h"
-#include "mimefilter.moc"
 
 namespace Digikam
 {

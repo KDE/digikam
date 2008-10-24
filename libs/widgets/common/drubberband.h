@@ -27,9 +27,9 @@
 // Qt includes.
 
 #include <QRubberBand>
-#include <Q3ScrollView>
+#include <Qt3Support/Q3ScrollView>
 
-// Digikam includes
+// Digikam includes.
 
 #include "digikam_export.h"
 

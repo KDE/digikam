@@ -36,7 +36,7 @@
 #include <QDateTime>
 #include <QList>
 
-// Local includes.
+// Digikam includes.
 
 #include "imageinfo.h"
 

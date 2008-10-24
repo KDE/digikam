@@ -25,7 +25,7 @@ extern "C"
 #include "jpeglib.h"
 }
 
-// Local includes.
+// Digikam includes.
 
 #include "transupp.h"		/* My own external interface */
 

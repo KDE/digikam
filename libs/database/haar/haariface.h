@@ -32,7 +32,7 @@
 #include <QMap>
 #include <QList>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

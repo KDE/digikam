@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "digikamapp.h"
+#include "digikamapp.moc"
+
 // Qt includes.
 
 #include <QDataStream>
@@ -33,42 +38,42 @@
 
 // KDE includes.
 
-#include <kdebug.h>
-#include <khbox.h>
-#include <kactioncollection.h>
 #include <kaboutdata.h>
-#include <klocale.h>
-#include <kglobalsettings.h>
-#include <kstandarddirs.h>
-#include <kstandardaction.h>
-#include <kstandardshortcut.h>
-#include <kshortcutsdialog.h>
-#include <ktoggleaction.h>
-#include <kedittoolbar.h>
-#include <kiconloader.h>
-#include <ktip.h>
-#include <kdeversion.h>
-#include <kapplication.h>
-#include <kmenubar.h>
-#include <kmessagebox.h>
-#include <kwindowsystem.h>
+#include <kactioncollection.h>
 #include <kactionmenu.h>
-#include <kglobal.h>
-#include <ktoolinvocation.h>
-#include <ktoolbarpopupaction.h>
-#include <ktogglefullscreenaction.h>
-#include <ktoolbar.h>
+#include <kapplication.h>
+#include <kdebug.h>
+#include <kdeversion.h>
+#include <kedittoolbar.h>
 #include <kfiledialog.h>
+#include <kglobal.h>
+#include <kglobalsettings.h>
+#include <khbox.h>
+#include <kiconloader.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
+#include <klocale.h>
+#include <kmenubar.h>
+#include <kmessagebox.h>
+#include <kshortcutsdialog.h>
+#include <kstandardaction.h>
+#include <kstandarddirs.h>
+#include <kstandardshortcut.h>
+#include <ktip.h>
+#include <ktoggleaction.h>
+#include <ktogglefullscreenaction.h>
+#include <ktoolbar.h>
+#include <ktoolbarpopupaction.h>
+#include <ktoolinvocation.h>
+#include <kwindowsystem.h>
+#include <solid/camera.h>
 #include <solid/device.h>
 #include <solid/deviceinterface.h>
 #include <solid/devicenotifier.h>
+#include <solid/predicate.h>
 #include <solid/storageaccess.h>
 #include <solid/storagedrive.h>
 #include <solid/storagevolume.h>
-#include <solid/camera.h>
-#include <solid/predicate.h>
 
 #include "config-digikam.h"
 #ifdef HAVE_MARBLEWIDGET
@@ -89,40 +94,38 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
 #include "albumdb.h"
-#include "albumthumbnailloader.h"
 #include "albumiconviewfilter.h"
 #include "albumselectdialog.h"
+#include "albumthumbnailloader.h"
+#include "batchalbumssyncmetadata.h"
+#include "batchthumbsgenerator.h"
 #include "cameratype.h"
 #include "cameraui.h"
 #include "componentsinfo.h"
-#include "setup.h"
-#include "setupplugins.h"
-#include "setupeditor.h"
-#include "setupicc.h"
-#include "lighttablewindow.h"
-#include "imagewindow.h"
-#include "imageinfo.h"
-#include "thumbnailsize.h"
-#include "thumbnailloadthread.h"
-#include "themeengine.h"
-#include "scancontroller.h"
-#include "loadingcache.h"
-#include "loadingcacheinterface.h"
-#include "imageattributeswatch.h"
-#include "batchthumbsgenerator.h"
-#include "batchalbumssyncmetadata.h"
-#include "fingerprintsgenerator.h"
-#include "rawcameradlg.h"
-#include "dlogoaction.h"
-#include "dio.h"
 #include "digikamadaptor.h"
 #include "digikamappprivate.h"
-#include "digikamapp.h"
-#include "digikamapp.moc"
+#include "dio.h"
+#include "dlogoaction.h"
+#include "fingerprintsgenerator.h"
+#include "imageattributeswatch.h"
+#include "imageinfo.h"
+#include "imagewindow.h"
+#include "lighttablewindow.h"
+#include "loadingcache.h"
+#include "loadingcacheinterface.h"
+#include "rawcameradlg.h"
+#include "scancontroller.h"
+#include "setup.h"
+#include "setupeditor.h"
+#include "setupicc.h"
+#include "setupplugins.h"
+#include "themeengine.h"
+#include "thumbnailloadthread.h"
+#include "thumbnailsize.h"
 
 using KIO::Job;
 using KIO::UDSEntryList;

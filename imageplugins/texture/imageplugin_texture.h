@@ -24,6 +24,10 @@
 #ifndef IMAGEPLUGIN_TEXTURE_H
 #define IMAGEPLUGIN_TEXTURE_H
 
+// Qt includes.
+
+#include <QVariant>
+
 // Digikam includes.
 
 #include "imageplugin.h"

@@ -23,7 +23,12 @@
  *
  * ============================================================ */
 
-// System includes.
+// Local includes.
+
+#include "collectionscanner.h"
+#include "collectionscanner.moc"
+
+// C++ includes.
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -44,7 +49,7 @@
 
 #include <libkdcraw/rawfiles.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumdb.h"
 #include "collectionmanager.h"
@@ -54,8 +59,6 @@
 #include "databasetransaction.h"
 #include "imagescanner.h"
 #include "collectionscannerhints.h"
-#include "collectionscanner.h"
-#include "collectionscanner.moc"
 
 namespace Digikam
 {

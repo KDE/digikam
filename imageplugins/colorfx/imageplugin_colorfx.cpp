@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_colorfx.h"
+#include "imageplugin_colorfx.moc"
+
 // KDE includes.
 
 #include <klocale.h>
@@ -34,11 +39,9 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "colorfxtool.h"
-#include "imageplugin_colorfx.h"
-#include "imageplugin_colorfx.moc"
 
 using namespace DigikamColorFXImagesPlugin;
 

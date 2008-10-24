@@ -35,7 +35,7 @@
 
 #include <libkdcraw/rawdecodingsettings.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

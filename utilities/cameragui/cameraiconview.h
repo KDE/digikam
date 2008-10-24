@@ -34,7 +34,7 @@
 
 #include <kurl.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "iconview.h"
 #include "renamecustomizer.h"

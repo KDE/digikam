@@ -2,7 +2,7 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2005-05-05
  * Description : tags filter view
  *
@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -31,7 +31,7 @@
 #include <QDropEvent>
 #include <QMouseEvent>
 
-// Local includes.
+// Digikam includes.
 
 #include "folderview.h"
 
@@ -41,6 +41,7 @@ namespace Digikam
 {
 
 class Album;
+class TAlbum;
 class TagFilterViewItem;
 class TagFilterViewPrivate;
 

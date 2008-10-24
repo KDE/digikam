@@ -31,6 +31,7 @@
 
 // Digikam includes.
 
+#include "dimg.h"
 #include "editortool.h"
 
 class QListWidget;
@@ -39,7 +40,6 @@ namespace Digikam
 {
 class ColorGradientWidget;
 class DColor;
-class DImg;
 class HistogramWidget;
 class ImageWidget;
 }

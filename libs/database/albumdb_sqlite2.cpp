@@ -21,13 +21,17 @@
  *
  * ============================================================ */
 
-// C Ansi includes.
+// C ANSI includes.
 
 extern "C"
 {
 #include <sqlite.h>
 #include <sys/time.h>
 }
+
+// Local includes.
+
+#include "albumdb_sqlite2.h"
 
 // C++ includes.
 
@@ -43,9 +47,6 @@ extern "C"
 
 #include <kdebug.h>
 
-// Local includes.
-
-#include "albumdb_sqlite2.h"
 
 namespace Digikam
 {

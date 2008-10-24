@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "bcgtool.h"
+#include "bcgtool.moc"
+
 // Qt includes.
 
 #include <QButtonGroup>
@@ -66,10 +71,6 @@
 #include "imageiface.h"
 #include "imagewidget.h"
 
-// Local includes.
-
-#include "bcgtool.h"
-#include "bcgtool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

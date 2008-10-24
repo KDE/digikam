@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "freespacewidget.h"
+#include "freespacewidget.moc"
+
 // Qt includes.
 
 #include <QPainter>
@@ -40,11 +45,9 @@
 #include <kio/global.h>
 #include <kiconloader.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumsettings.h"
-#include "freespacewidget.h"
-#include "freespacewidget.moc"
 
 namespace Digikam
 {

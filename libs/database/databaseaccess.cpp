@@ -21,6 +21,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "databaseaccess.h"
+
 // Qt includes.
 
 #include <QMutex>
@@ -32,7 +36,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumdb.h"
 #include "imageinfocache.h"
@@ -40,7 +44,6 @@
 #include "collectionmanager.h"
 #include "databasewatch.h"
 #include "databasebackend.h"
-#include "databaseaccess.h"
 
 namespace Digikam
 {

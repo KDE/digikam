@@ -24,6 +24,10 @@
 #ifndef IMAGEPLUGIN_PERSPECTIVE_H
 #define IMAGEPLUGIN_PERSPECTIVE_H
 
+// Qt includes.
+
+#include <QVariant>
+
 // Digikam includes.
 
 #include "imageplugin.h"

@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "mainwindow.h"
+#include "mainwindow.moc"
+
 // Qt includes.
 
 #include <QCheckBox>
@@ -49,7 +54,7 @@
 #include <kmessagebox.h>
 #include <kuser.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumsettings.h"
 #include "folderview.h"
@@ -58,8 +63,6 @@
 #include "imagepropertiestab.h"
 #include "themeengine.h"
 #include "theme.h"
-#include "mainwindow.h"
-#include "mainwindow.moc"
 
 namespace Digikam
 {

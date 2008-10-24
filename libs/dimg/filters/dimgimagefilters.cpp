@@ -30,6 +30,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "dimgimagefilters.h"
+
 // C++ includes.
 
 #include <cstring>
@@ -39,14 +43,13 @@
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "imagehistogram.h"
 #include "imagelevels.h"
 #include "dcolor.h"
 #include "dimggaussianblur.h"
 #include "dimgsharpen.h"
-#include "dimgimagefilters.h"
 
 namespace Digikam
 {

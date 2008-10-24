@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "rgbtool.h"
+#include "rgbtool.moc"
+
 // Qt includes.
 
 #include <QCheckBox>
@@ -64,10 +69,6 @@
 #include "imageiface.h"
 #include "imagewidget.h"
 
-// Local includes.
-
-#include "rgbtool.h"
-#include "rgbtool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

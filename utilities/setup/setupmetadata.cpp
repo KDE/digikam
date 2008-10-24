@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "setupmetadata.h"
+#include "setupmetadata.moc"
+
 // Qt includes.
 
 #include <QButtonGroup>
@@ -46,11 +51,9 @@
 
 #include <libkexiv2/kexiv2.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumsettings.h"
-#include "setupmetadata.h"
-#include "setupmetadata.moc"
 
 namespace Digikam
 {

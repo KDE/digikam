@@ -4,8 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2005-07-15
- * Description : themed icon view 
- * 
+ * Description : themed icon view
+ *
  * Copyright (C) 2005 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
  * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,11 +24,14 @@
 
 // Local includes.
 
+#include "themediconview.h"
+#include "themediconview.moc"
+
+// Digikam includes.
+
 #include "themeengine.h"
 #include "themedicongroupitem.h"
 #include "themediconitem.h"
-#include "themediconview.h"
-#include "themediconview.moc"
 
 namespace Digikam
 {
@@ -36,9 +39,9 @@ namespace Digikam
 class ThemedIconViewPriv
 {
 public:
-    
+
     int   thumbSize;
-    
+
     QRect itemRect;
     QRect itemDateRect;
     QRect itemPixmapRect;
@@ -72,7 +75,7 @@ ThemedIconView::ThemedIconView(QWidget* parent)
         if (i > 0 && i < 3)
             item->setSelected(true, false);
     }
-    
+
     updateBannerRectPixmap();
     updateItemRectsPixmap();
 
@@ -81,7 +84,7 @@ ThemedIconView::ThemedIconView(QWidget* parent)
 }
 
 ThemedIconView::~ThemedIconView()
-{    
+{
 }
 
 QRect ThemedIconView::itemRect() const

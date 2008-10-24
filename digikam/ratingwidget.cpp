@@ -5,7 +5,7 @@
  *
  * Date        : 2005-08-15
  * Description : a widget to draw stars rating
- * 
+ *
  * Copyright (C) 2005 by Owen Hirst <n8rider@sbcglobal.net>
  * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,13 +14,18 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
+// Local includes.
+
+#include "ratingwidget.h"
+#include "ratingwidget.moc"
 
 // C++ includes.
 
@@ -33,12 +38,10 @@
 #include <QPixmap>
 #include <QPolygon>
 
-// Local includes.
+// Digikam includes.
 
 #include "constants.h"
 #include "themeengine.h"
-#include "ratingwidget.h"
-#include "ratingwidget.moc"
 
 namespace Digikam
 {
@@ -118,7 +121,7 @@ void RatingWidget::mouseMoveEvent(QMouseEvent* e)
             pos = RatingMax;
         if (pos < RatingMin)
             pos = RatingMin;
-					
+
         d->rating = pos;
         emit signalRatingChanged(d->rating);
         update();
@@ -199,11 +202,11 @@ void RatingWidget::regeneratePixmaps()
 void RatingWidget::slotThemeChanged()
 {
     d->regPixmap = QPixmap(15, 15);
-    d->regPixmap.fill(Qt::transparent); 
+    d->regPixmap.fill(Qt::transparent);
     d->selPixmap = QPixmap(15, 15);
-    d->selPixmap.fill(Qt::transparent); 
+    d->selPixmap.fill(Qt::transparent);
     d->disPixmap = QPixmap(15, 15);
-    d->disPixmap.fill(Qt::transparent); 
+    d->disPixmap.fill(Qt::transparent);
 
     QPainter p1(&d->regPixmap);
     p1.setRenderHint(QPainter::Antialiasing, true);

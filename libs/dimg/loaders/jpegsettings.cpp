@@ -36,7 +36,7 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "jpegsettings.h"
 #include "jpegsettings.moc"

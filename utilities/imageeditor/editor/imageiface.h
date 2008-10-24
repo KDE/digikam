@@ -2,12 +2,12 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2004-02-14
  * Description : image data interface for image plugins
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,14 +27,14 @@
 
 // Qt includes.
 
-#include <QString>
-#include <QPixmap>
+#include <QtCore/QString>
+#include <QtGui/QPixmap>
 
 // KDE includes.
 
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "dcolor.h"
@@ -59,7 +59,7 @@ public:
     ImageIface(int w=0, int h=0);
     ~ImageIface();
 
-    /** Use this method to use the current selection in editor instead the full 
+    /** Use this method to use the current selection in editor instead the full
         image to render the preview.
     */
     void setPreviewType(bool useSelect=false);
@@ -104,7 +104,7 @@ public:
     */
     void   putOriginalImage(const QString &caller, uchar* data, int w=-1, int h=-1);
 
-    /** Embed the Color Profile we have used in ICC plugin when this option is 
+    /** Embed the Color Profile we have used in ICC plugin when this option is
         selected
     */
     void   setEmbeddedICCToOriginalImage(const QString& profilePath);
@@ -178,7 +178,7 @@ public:
     /** Convert depth of original image */
     void convertOriginalColorDepth(int depth);
 
-    /** Convert a DImg image to a pixmap for screen using color 
+    /** Convert a DImg image to a pixmap for screen using color
         managed view if necessary */
     QPixmap convertToPixmap(DImg& img);
 

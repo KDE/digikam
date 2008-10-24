@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "batchthumbsgenerator.h"
+#include "batchthumbsgenerator.moc"
+
 // Qt includes.
 
 #include <QString>
@@ -39,7 +44,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
 #include "albumdb.h"
@@ -48,8 +53,6 @@
 #include "databaseaccess.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
-#include "batchthumbsgenerator.h"
-#include "batchthumbsgenerator.moc"
 
 namespace Digikam
 {

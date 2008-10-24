@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-05-21
- * Description : Searches folder view 
+ * Description : Searches folder view
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
@@ -15,7 +15,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,13 +26,16 @@
 #ifndef SEARCHFOLDERVIEW_H
 #define SEARCHFOLDERVIEW_H
 
-// Local includes.
+// Digikam includes.
 
 #include "folderview.h"
+
+class KUrl;
 
 namespace Digikam
 {
 
+class Album;
 class SAlbum;
 class SearchFolderItem;
 

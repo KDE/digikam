@@ -32,7 +32,7 @@
 #include <kcodecs.h> // for KMD5
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimgprivate.h"
 #include "dmetadata.h"

@@ -31,6 +31,7 @@
 class QTreeWidgetItem;
 
 class KPageDialog;
+class KUrl;
 
 namespace Digikam
 {

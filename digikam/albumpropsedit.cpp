@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "albumpropsedit.h"
+#include "albumpropsedit.moc"
+
 // Qt includes.
 
 #include <QCheckBox>
@@ -50,15 +55,13 @@
 #include <ktextedit.h>
 #include <kurl.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "databaseaccess.h"
-#include "albumpropsedit.h"
-#include "albumpropsedit.moc"
 
 namespace Digikam
 {

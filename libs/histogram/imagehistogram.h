@@ -27,10 +27,10 @@
 
 // Qt includes.
 
-#include <QEvent>
-#include <QThread>
+#include <QtCore/QEvent>
+#include <QtCore/QThread>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

@@ -9,7 +9,7 @@
  * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
- * Original Distortion algorithms copyrighted 2004-2005 by 
+ * Original Distortion algorithms copyrighted 2004-2005 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
  *
  * This program is free software; you can redistribute it
@@ -17,16 +17,20 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
- 
+
 // Represents 1
 #define ANGLE_RATIO        0.017453292519943295769236907685
+
+// Local includes.
+
+#include "distortionfx.h"
 
 // C++ includes.
 
@@ -35,13 +39,12 @@
 
 // Qt includes.
 
-#include <QDateTime> 
+#include <QDateTime>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "dimgimagefilters.h"
-#include "distortionfx.h"
 
 namespace DigikamDistortionFXImagesPlugin
 {
@@ -49,7 +52,7 @@ namespace DigikamDistortionFXImagesPlugin
 DistortionFX::DistortionFX(Digikam::DImg *orgImage, QObject *parent, int effectType,
                            int level, int iteration, bool antialiasing)
             : Digikam::DImgThreadedFilter(orgImage, parent, "DistortionFX")
-{ 
+{
     m_effectType = effectType;
     m_level      = level;
     m_iteration  = iteration;
@@ -173,15 +176,15 @@ void DistortionFX::setPixelFromOther(int Width, int Height, bool sixteenBit, int
     }
 }
 
-/* Function to apply the fisheye effect backported from ImageProcessing version 2                                           
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.    
- * Coeff            => Distortion effect coeff. Positive value render 'Fish Eyes' effect, 
+/* Function to apply the fisheye effect backported from ImageProcessing version 2
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * Coeff            => Distortion effect coeff. Positive value render 'Fish Eyes' effect,
  *                     and negative values render 'Caricature' effect.
- * Antialias        => Smart blurring result.                       
- *                                                                                  
+ * Antialias        => Smart blurring result.
+ *
  * Theory           => This is a great effect if you take employee photos
  *                     Its pure trigonometry. I think if you study hard the code you
  *                     understand very well.
@@ -262,13 +265,13 @@ void DistortionFX::fisheye(Digikam::DImg *orgImage, Digikam::DImg *destImage, do
 }
 
 /* Function to apply the twirl effect backported from ImageProcessing version 2
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.                            
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
  * Twirl            => Distance value.
- * Antialias        => Smart blurring result.    
- *                                                                                  
+ * Antialias        => Smart blurring result.
+ *
  * Theory           => Take spiral studies, you will understand better, I'm studying
  *                     hard on this effect, because it is not too fast.
  */
@@ -355,19 +358,19 @@ void DistortionFX::twirl(Digikam::DImg *orgImage, Digikam::DImg *destImage, int 
 }
 
 /* Function to apply the Cilindrical effect backported from ImageProcessing version 2
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.                            
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
  * Coeff            => Cilindrical value.
  * Horizontal       => Apply horizontally.
  * Vertical         => Apply vertically.
- * Antialias        => Smart blurring result. 
- *                                                                                  
- * Theory           => This is a great effect, similar to Spherize (Photoshop).    
- *                     If you understand FishEye, you will understand Cilindrical    
- *                     FishEye apply a logarithm function using a sphere radius,     
- *                     Spherize use the same function but in a rectangular        
+ * Antialias        => Smart blurring result.
+ *
+ * Theory           => This is a great effect, similar to Spherize (Photoshop).
+ *                     If you understand FishEye, you will understand Cilindrical
+ *                     FishEye apply a logarithm function using a sphere radius,
+ *                     Spherize use the same function but in a rectangular
  *                     environment.
  */
 void DistortionFX::cilindrical(Digikam::DImg *orgImage, Digikam::DImg *destImage, double Coeff,
@@ -441,17 +444,17 @@ void DistortionFX::cilindrical(Digikam::DImg *orgImage, Digikam::DImg *destImage
 }
 
 /* Function to apply the Multiple Corners effect backported from ImageProcessing version 2
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.       
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
  * Factor           => nb corners.
- * Antialias        => Smart blurring result.                      
- *                                                                                  
- * Theory           => This is an amazing function, you've never seen this before. 
- *                     I was testing some trigonometric functions, and I saw that if  
- *                     I multiply the angle by 2, the result is an image like this   
- *                     If we multiply by 3, we can create the SixCorners effect. 
+ * Antialias        => Smart blurring result.
+ *
+ * Theory           => This is an amazing function, you've never seen this before.
+ *                     I was testing some trigonometric functions, and I saw that if
+ *                     I multiply the angle by 2, the result is an image like this
+ *                     If we multiply by 3, we can create the SixCorners effect.
  */
 void DistortionFX::multipleCorners(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Factor, bool AntiAlias)
 {
@@ -507,14 +510,14 @@ void DistortionFX::multipleCorners(Digikam::DImg *orgImage, Digikam::DImg *destI
 }
 
 /* Function to apply the Polar Coordinates effect backported from ImageProcessing version 2
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
  * Height           => Height of image.
  * Type             => if true Polar Coordinate to Polar else inverse.
- * Antialias        => Smart blurring result.                      
- *                                                                                  
- * Theory           => Similar to PolarCoordinates from Photoshop. We apply the polar   
+ * Antialias        => Smart blurring result.
+ *
+ * Theory           => Similar to PolarCoordinates from Photoshop. We apply the polar
  *                     transformation in a proportional (Height and Width) radius.
  */
 void DistortionFX::polarCoordinates(Digikam::DImg *orgImage, Digikam::DImg *destImage, bool Type, bool AntiAlias)
@@ -584,22 +587,22 @@ void DistortionFX::polarCoordinates(Digikam::DImg *orgImage, Digikam::DImg *dest
     }
 }
 
-/* Function to apply the circular waves effect backported from ImageProcessing version 2                                           
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.     
- * X, Y             => Position of circle center on the image.                       
- * Amplitude        => Sinoidal maximum height                                        
+/* Function to apply the circular waves effect backported from ImageProcessing version 2
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * X, Y             => Position of circle center on the image.
+ * Amplitude        => Sinoidal maximum height
  * Frequency        => Frequency value.
  * Phase            => Phase value.
  * WavesType        => If true  the amplitude is proportional to radius.
- * Antialias        => Smart bluring result.                      
- *                                                                                  
+ * Antialias        => Smart bluring result.
+ *
  * Theory           => Similar to Waves effect, but here I apply a senoidal function
- *                     with the angle point.                                                      
+ *                     with the angle point.
  */
-void DistortionFX::circularWaves(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X, int Y, double Amplitude, 
+void DistortionFX::circularWaves(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X, int Y, double Amplitude,
                                  double Frequency, double Phase, bool WavesType, bool AntiAlias)
 {
     if (Amplitude < 0.0) Amplitude = 0.0;
@@ -649,18 +652,18 @@ void DistortionFX::circularWaves(Digikam::DImg *orgImage, Digikam::DImg *destIma
     }
 }
 
-/* Function to apply the waves effect                                            
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.                            
- * Amplitude        => Sinoidal maximum height.                                        
- * Frequency        => Frequency value.                                                
- * FillSides        => Like a boolean variable.                                        
- * Direction        => Vertical or horizontal flag.                                    
- *                                                                                    
- * Theory           => This is an amazing effect, very funny, and very simple to    
- *                     understand. You just need understand how sin and cos works.   
+/* Function to apply the waves effect
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * Amplitude        => Sinoidal maximum height.
+ * Frequency        => Frequency value.
+ * FillSides        => Like a boolean variable.
+ * Direction        => Vertical or horizontal flag.
+ *
+ * Theory           => This is an amazing effect, very funny, and very simple to
+ *                     understand. You just need understand how sin and cos works.
  */
 void DistortionFX::waves(Digikam::DImg *orgImage, Digikam::DImg *destImage,
                          int Amplitude, int Frequency,
@@ -721,17 +724,17 @@ void DistortionFX::waves(Digikam::DImg *orgImage, Digikam::DImg *destImage,
     }
 }
 
-/* Function to apply the block waves effect                                            
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.                            
- * Amplitude        => Sinoidal maximum height                                        
- * Frequency        => Frequency value                                                
- * Mode             => The mode to be applied.                                       
- *                                                                                  
- * Theory           => This is an amazing effect, very funny when amplitude and     
- *                     frequency are small values.                                  
+/* Function to apply the block waves effect
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * Amplitude        => Sinoidal maximum height
+ * Frequency        => Frequency value
+ * Mode             => The mode to be applied.
+ *
+ * Theory           => This is an amazing effect, very funny when amplitude and
+ *                     frequency are small values.
  */
 void DistortionFX::blockWaves(Digikam::DImg *orgImage, Digikam::DImg *destImage,
                               int Amplitude, int Frequency, bool Mode)
@@ -791,19 +794,19 @@ void DistortionFX::blockWaves(Digikam::DImg *orgImage, Digikam::DImg *destImage,
     }
 }
 
-/* Function to apply the tile effect                                            
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.                            
- * WSize            => Tile Width                                                        
- * HSize            => Tile Height                                                      
- * Random           => Maximum random value                                        
- *                                                                                    
- * Theory           => Similar to Tile effect from Photoshop and very easy to        
- *                     understand. We get a rectangular area using WSize and HSize and    
- *                     replace in a position with a random distance from the original    
- *                     position.                                                    
+/* Function to apply the tile effect
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * WSize            => Tile Width
+ * HSize            => Tile Height
+ * Random           => Maximum random value
+ *
+ * Theory           => Similar to Tile effect from Photoshop and very easy to
+ *                     understand. We get a rectangular area using WSize and HSize and
+ *                     replace in a position with a random distance from the original
+ *                     position.
  */
 void DistortionFX::tile(Digikam::DImg *orgImage, Digikam::DImg *destImage,
                         int WSize, int HSize, int Random)
@@ -847,15 +850,15 @@ void DistortionFX::tile(Digikam::DImg *orgImage, Digikam::DImg *destImage,
 }
 
 // UNUSED
-/* Function to return the maximum radius with a determined angle                    
- *                                                                                  
- * Height           => Height of the image                                         
- * Width            => Width of the image                                           
- * Angle            => Angle to analyze the maximum radius                          
- *                                                                                  
- * Theory           => This function calculates the maximum radius to that angle      
- *                     so, we can build an oval circumference                        
- */                                                                                   
+/* Function to return the maximum radius with a determined angle
+ *
+ * Height           => Height of the image
+ * Width            => Width of the image
+ * Angle            => Angle to analyze the maximum radius
+ *
+ * Theory           => This function calculates the maximum radius to that angle
+ *                     so, we can build an oval circumference
+ */
  /*
 double DistortionFX::maximumRadius(int Height, int Width, double Angle)
 {

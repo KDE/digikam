@@ -34,7 +34,6 @@
 
 #include "editortool.h"
 
-
 namespace Digikam
 {
 class ThumbBarView;

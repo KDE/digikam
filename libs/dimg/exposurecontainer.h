@@ -28,7 +28,7 @@
 
 #include <QColor>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

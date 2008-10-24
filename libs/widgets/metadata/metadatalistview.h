@@ -27,12 +27,12 @@
 
 // Qt includes.
 
-#include <QString>
-#include <QMap>
-#include <QResizeEvent>
-#include <QTreeWidget>
+#include <QtCore/QString>
+#include <QtCore/QMap>
+#include <QtGui/QResizeEvent>
+#include <QtGui/QTreeWidget>
 
-// Local includes.
+// Digikam includes.
 
 #include "metadatawidget.h"
 #include "digikam_export.h"

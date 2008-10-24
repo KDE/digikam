@@ -22,13 +22,16 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "sharedloadsavethread.h"
+
 // KDE includes.
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
-#include "sharedloadsavethread.h"
 #include "loadingcache.h"
 #include "loadsavetask.h"
 

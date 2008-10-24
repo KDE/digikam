@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "kipiuploadwidget.h"
+#include "kipiuploadwidget.moc"
+
 // Qt includes.
 
 #include <QHeaderView>
@@ -34,7 +39,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "constants.h"
 #include "album.h"
@@ -44,8 +49,6 @@
 #include "searchtextbar.h"
 #include "kipiinterface.h"
 #include "kipiimagecollection.h"
-#include "kipiuploadwidget.h"
-#include "kipiuploadwidget.moc"
 
 namespace Digikam
 {

@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "setupmime.h"
+#include "setupmime.moc"
+
 // Qt includes.
 
 #include <QGroupBox>
@@ -39,13 +44,11 @@
 #include <kmessagebox.h>
 #include <kvbox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumsettings.h"
 #include "databaseaccess.h"
 #include "albumdb.h"
-#include "setupmime.h"
-#include "setupmime.moc"
 
 namespace Digikam
 {

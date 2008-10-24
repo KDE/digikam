@@ -35,6 +35,11 @@
 // 1/PHI
 #define INVPHI   0.61803398874989479
 
+// Local includes.
+
+#include "imageselectionwidget.h"
+#include "imageselectionwidget.moc"
+
 // C++ includes.
 
 #include <iostream>
@@ -65,12 +70,10 @@
 #include <kcursor.h>
 #include <kglobal.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "imageiface.h"
 #include "dimg.h"
-#include "imageselectionwidget.h"
-#include "imageselectionwidget.moc"
 
 namespace DigikamImagesPluginCore
 {

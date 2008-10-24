@@ -27,9 +27,6 @@
 // Digikam includes.
 
 #include "digikam_export.h"
-
-// Local includes.
-
 #include "dimgthreadedfilter.h"
 
 namespace Digikam

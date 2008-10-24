@@ -25,6 +25,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "albumfiletip.h"
+
 // Qt includes.
 
 #include <QToolTip>
@@ -46,7 +50,7 @@
 #include <kglobal.h>
 #include <kdeversion.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dmetadata.h"
 #include "albumiconview.h"
@@ -54,7 +58,6 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "album.h"
-#include "albumfiletip.h"
 
 namespace Digikam
 {

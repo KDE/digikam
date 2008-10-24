@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "gpssearchview.h"
+#include "gpssearchview.moc"
+
 // Qt includes.
 
 #include <QFrame>
@@ -38,14 +43,13 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <khbox.h>
-#include <khbox.h>
 #include <kiconloader.h>
 #include <kinputdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
 #include "albummanager.h"
@@ -54,8 +58,6 @@
 #include "searchtextbar.h"
 #include "gpssearchwidget.h"
 #include "gpssearchfolderview.h"
-#include "gpssearchview.h"
-#include "gpssearchview.moc"
 
 namespace Digikam
 {

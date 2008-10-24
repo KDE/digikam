@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "perspectivetool.h"
+#include "perspectivetool.moc"
+
 // Qt includes.
 
 #include <QCheckBox>
@@ -50,7 +55,7 @@
 #include <kseparator.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "daboutdata.h"
 #include "dimg.h"
@@ -58,8 +63,6 @@
 #include "imageiface.h"
 #include "version.h"
 #include "perspectivewidget.h"
-#include "perspectivetool.h"
-#include "perspectivetool.moc"
 
 using namespace Digikam;
 

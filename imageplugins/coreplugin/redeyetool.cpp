@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "redeyetool.h"
+#include "redeyetool.moc"
+
 // Qt includes.
 
 #include <QColor>
@@ -65,11 +70,6 @@
 #include "histogrambox.h"
 #include "imageiface.h"
 #include "imagewidget.h"
-
-// Local includes.
-
-#include "redeyetool.h"
-#include "redeyetool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

@@ -31,7 +31,7 @@
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimgloader.h"
 #include "drawdecoding.h"

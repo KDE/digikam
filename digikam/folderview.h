@@ -22,10 +22,8 @@
  *
  * ============================================================ */
 
-/** @file foldeview.h */
-
-#ifndef _FOLDERVIEW_H_
-#define _FOLDERVIEW_H_
+#ifndef FOLDERVIEW_H
+#define FOLDERVIEW_H
 
 // Qt includes.
 
@@ -39,7 +37,7 @@
 #include <QDragEnterEvent>
 #include <QPixmap>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 
@@ -121,4 +119,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // _FOLDERVIEW_H
+#endif // FOLDERVIEW_H

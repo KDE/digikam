@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "metadatawidget.h"
+#include "metadatawidget.moc"
+
 // Qt includes.
 
 #include <Q3MimeSourceFactory>
@@ -29,7 +34,6 @@
 #include <Q3StyleSheet>
 #include <QButtonGroup>
 #include <QClipboard>
-#include <QColorGroup>
 #include <QColorGroup>
 #include <QDataStream>
 #include <QFile>
@@ -47,23 +51,20 @@
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <kapplication.h>
+#include <kdebug.h>
 #include <kfiledialog.h>
-#include <kglobal.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "metadatalistview.h"
 #include "metadatalistviewitem.h"
 #include "mdkeylistviewitem.h"
 #include "searchtextbar.h"
-#include "metadatawidget.h"
-#include "metadatawidget.moc"
 
 namespace Digikam
 {

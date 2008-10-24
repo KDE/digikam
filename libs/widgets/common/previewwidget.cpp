@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "previewwidget.h"
+#include "previewwidget.moc"
+
 // C++ includes.
 
 #include <cmath>
@@ -46,10 +51,6 @@
 #include <kcursor.h>
 #include <klocale.h>
 
-// Local includes.
-
-#include "previewwidget.h"
-#include "previewwidget.moc"
 
 namespace Digikam
 {

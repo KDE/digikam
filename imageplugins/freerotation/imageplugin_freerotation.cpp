@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_freerotation.h"
+#include "imageplugin_freerotation.moc"
+
 // KDE includes.
 
 #include <kdebug.h>
@@ -33,11 +38,9 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "freerotationtool.h"
-#include "imageplugin_freerotation.h"
-#include "imageplugin_freerotation.moc"
 
 using namespace DigikamFreeRotationImagesPlugin;
 

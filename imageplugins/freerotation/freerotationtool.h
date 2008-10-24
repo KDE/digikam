@@ -25,7 +25,7 @@
 #ifndef FREEROTATIONTOOL_H
 #define FREEROTATIONTOOL_H
 
-// Local includes.
+// Digikam includes.
 
 #include "editortool.h"
 

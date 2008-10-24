@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "setuptooltip.h"
+#include "setuptooltip.moc"
+
 // Qt includes.
 
 #include <QGroupBox>
@@ -34,11 +39,6 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kglobal.h>
-
-// Local includes.
-
-#include "setuptooltip.h"
-#include "setuptooltip.moc"
 
 namespace ShowFoto
 {

@@ -33,15 +33,18 @@
 #include <cstdlib>
 #include <cmath>
 
+// Local includes.
+
+#include "haar.h"
+
 // Qt includes.
 
 #include <QImage>
 #include <QString>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
-#include "haar.h"
 
 using namespace std;
 
@@ -189,7 +192,7 @@ void Calculator::haar2D(Unit a[])
 
             h1 = h >> 1;        // h = 2*h1
             C *= 0.7071;        // 1/sqrt(2)
-            for (k = 0, j1 = j2 = i; k < h1; k++, j1++, j2 += 2) 
+            for (k = 0, j1 = j2 = i; k < h1; k++, j1++, j2 += 2)
             {
                 int j21 = j2+1;
                 t[k]    = (a[j2] - a[j21]) * C;
@@ -317,7 +320,7 @@ void Calculator::getmLargests(Unit *cdata, Idx *sig)
         int t;
 
         val = vq.top();
-        t   = (cdata[val.i] <= 0);       // t = 0 if pos else 1 
+        t   = (cdata[val.i] <= 0);       // t = 0 if pos else 1
         // i - 0 ^ 0 = i; i - 1 ^ 0b111..1111 = 2-compl(i) = -i
         sig[cnt++] = (val.i - t) ^ -t;   // never 0
         vq.pop();

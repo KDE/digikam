@@ -27,12 +27,12 @@
 
 // Qt includes.
 
-#include <QWidget>
-#include <QPoint>
-#include <QColor>
-#include <QString>
+#include <QtGui/QWidget>
+#include <QtCore/QPoint>
+#include <QtGui/QColor>
+#include <QtCore/QString>
 
-// Local includes.
+// Digikam includes.
 
 #include "dcolor.h"
 #include "imageguidewidget.h"

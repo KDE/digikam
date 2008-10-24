@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "searchfields.h"
+#include "searchfields.moc"
+
 // C++ includes.
 
 #include <cmath>
@@ -39,7 +44,6 @@
 #include <QTimeEdit>
 #include <QTreeView>
 
-
 // KDE includes.
 
 #include <kcombobox.h>
@@ -53,7 +57,7 @@
 
 #include <libkdcraw/squeezedcombobox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "albummanager.h"
@@ -66,8 +70,6 @@
 #include "searchfieldgroup.h"
 #include "ratingsearchutilities.h"
 #include "choicesearchutilities.h"
-#include "searchfields.h"
-#include "searchfields.moc"
 
 using namespace KDcrawIface;
 

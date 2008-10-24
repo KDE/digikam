@@ -26,7 +26,7 @@
 #ifndef GPCAMERA_H
 #define GPCAMERA_H
 
-// Local includes.
+// Digikam includes.
 
 #include "dkcamera.h"
 

@@ -13,13 +13,18 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
+// Local includes.
+
+#include "fuzzysearchfolderview.h"
+#include "fuzzysearchfolderview.moc"
 
 // Qt includes.
 
@@ -36,14 +41,12 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "folderitem.h"
-#include "fuzzysearchfolderview.h"
-#include "fuzzysearchfolderview.moc"
 
 namespace Digikam
 {
@@ -144,8 +147,8 @@ void FuzzySearchFolderView::slotTextSearchFilterChanged(const QString& filter)
         FuzzySearchFolderItem* viewItem = (FuzzySearchFolderItem*) salbum->extraData(this);
 
         if (salbum->title().toLower().contains(search) &&
-            salbum->isHaarSearch() && 
-            salbum->title() != currentFuzzySketchSearchName() && 
+            salbum->isHaarSearch() &&
+            salbum->title() != currentFuzzySketchSearchName() &&
             salbum->title() != currentFuzzyImageSearchName())
         {
             atleastOneMatch = true;

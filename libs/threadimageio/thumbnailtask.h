@@ -29,7 +29,7 @@
 
 #include <QImage>
 
-// Local includes.
+// Digikam includes.
 
 #include "loadsavetask.h"
 

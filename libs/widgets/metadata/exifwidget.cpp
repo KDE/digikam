@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "exifwidget.h"
+#include "exifwidget.moc"
+
 // Qt includes.
 
 #include <QMap>
@@ -31,12 +36,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dmetadata.h"
 #include "metadatalistview.h"
-#include "exifwidget.h"
-#include "exifwidget.moc"
 
 namespace Digikam
 {

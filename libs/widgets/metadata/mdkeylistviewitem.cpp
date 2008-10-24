@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "mdkeylistviewitem.h"
+#include "mdkeylistviewitem.moc"
+
 // Qt includes.
 
 #include <QPalette>
@@ -33,11 +38,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "themeengine.h"
-#include "mdkeylistviewitem.h"
-#include "mdkeylistviewitem.moc"
 
 namespace Digikam
 {

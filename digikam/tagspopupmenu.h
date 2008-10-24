@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2004-09-07
- * Description : a pop-up menu implementation to display a 
+ * Description : a pop-up menu implementation to display a
  *               hierarchical view of digiKam tags.
- * 
+ *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -15,12 +15,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef TAGSPOPUPMENU_H
@@ -34,6 +34,7 @@
 namespace Digikam
 {
 
+class Album;
 class TAlbum;
 class TagsPopupMenuPriv;
 

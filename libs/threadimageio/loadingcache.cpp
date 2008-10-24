@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "loadingcache.h"
+#include "loadingcache.moc"
+
 // Qt includes.
 
 #include <QEvent>
@@ -33,10 +38,6 @@
 #include <kdebug.h>
 #include <kdirwatch.h>
 
-// Local includes.
-
-#include "loadingcache.h"
-#include "loadingcache.moc"
 
 namespace Digikam
 {

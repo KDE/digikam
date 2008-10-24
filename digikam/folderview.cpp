@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "folderview.h"
+#include "folderview.moc"
+
 // Qt includes.
 
 #include <QList>
@@ -37,15 +42,13 @@
 #include <kglobal.h>
 #include <kconfiggroup.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
 #include "themeengine.h"
 #include "folderitem.h"
-#include "folderview.h"
-#include "folderview.moc"
 
 namespace Digikam
 {

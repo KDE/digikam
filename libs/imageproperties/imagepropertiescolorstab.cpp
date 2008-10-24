@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imagepropertiescolorstab.h"
+#include "imagepropertiescolorstab.moc"
+
 // C++ includes.
 
 #include <cmath>
@@ -51,7 +56,7 @@
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "imagehistogram.h"
@@ -61,8 +66,6 @@
 #include "sharedloadsavethread.h"
 #include "iccprofilewidget.h"
 #include "cietonguewidget.h"
-#include "imagepropertiescolorstab.h"
-#include "imagepropertiescolorstab.moc"
 
 namespace Digikam
 {

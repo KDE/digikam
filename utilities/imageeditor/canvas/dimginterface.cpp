@@ -27,6 +27,11 @@
 #define GCOL     0xAA
 #define BCOL     0xAA
 
+// Local includes.
+
+#include "dimginterface.h"
+#include "dimginterface.moc"
+
 // C++ includes.
 
 #include <cmath>
@@ -52,7 +57,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "bcgmodifier.h"
 #include "colorcorrectiondlg.h"
@@ -66,8 +71,6 @@
 #include "dmetadata.h"
 #include "rawimport.h"
 #include "editortooliface.h"
-#include "dimginterface.h"
-#include "dimginterface.moc"
 
 namespace Digikam
 {

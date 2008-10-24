@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_inpainting.h"
+#include "imageplugin_inpainting.moc"
+
 // KDE includes.
 
 #include <kdebug.h>
@@ -33,12 +38,10 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "imageiface.h"
 #include "inpaintingtool.h"
-#include "imageplugin_inpainting.h"
-#include "imageplugin_inpainting.moc"
 
 using namespace DigikamInPaintingImagesPlugin;
 using namespace Digikam;

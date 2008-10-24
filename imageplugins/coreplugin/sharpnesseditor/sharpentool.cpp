@@ -23,6 +23,11 @@
 
 #define MAX_MATRIX_SIZE 25
 
+// Local includes.
+
+#include "sharpentool.h"
+#include "sharpentool.moc"
+
 // C++ includes.
 
 #include <cmath>
@@ -53,7 +58,7 @@
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "imageiface.h"
 #include "imagepanelwidget.h"
@@ -61,8 +66,6 @@
 #include "dimgsharpen.h"
 #include "unsharp.h"
 #include "refocus.h"
-#include "sharpentool.h"
-#include "sharpentool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "dprogressdlg.h"
+#include "dprogressdlg.moc"
+
 // Qt includes.
 
 #include <QHeaderView>
@@ -40,10 +45,6 @@
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 
-// Local includes.
-
-#include "dprogressdlg.h"
-#include "dprogressdlg.moc"
 
 namespace Digikam
 {

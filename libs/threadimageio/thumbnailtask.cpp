@@ -22,7 +22,11 @@
  *
  * ============================================================ */
 
-// C includes.
+// Local includes.
+
+#include "thumbnailtask.h"
+
+// C ANSI includes.
 
 #include <math.h>
 
@@ -41,13 +45,12 @@
 
 #include <libkdcraw/kdcraw.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dmetadata.h"
 #include "jpegutils.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailcreator.h"
-#include "thumbnailtask.h"
 
 namespace Digikam
 {

@@ -40,7 +40,7 @@
 #include <kio/netaccess.h>
 #include <solid/solidnamespace.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumlister.h"
 #include "digikam_export.h"

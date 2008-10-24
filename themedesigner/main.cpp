@@ -34,10 +34,10 @@
 #include <klocale.h>
 #include <kglobal.h>
 
-// Local includes.
+// Digikam includes.
 
-#include "daboutdata.h"
 #include "version.h"
+#include "daboutdata.h"
 #include "mainwindow.h"
 
 int main(int argc, char** argv)

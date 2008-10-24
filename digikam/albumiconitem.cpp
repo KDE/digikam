@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "albumiconitem.h"
+
 // Qt includes.
 
 #include <QPainter>
@@ -41,7 +45,7 @@
 #include <klocale.h>
 #include <kio/global.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "themeengine.h"
 #include "thumbnailsize.h"
@@ -51,7 +55,6 @@
 #include "icongroupitem.h"
 #include "thumbnailloadthread.h"
 #include "albumiconview.h"
-#include "albumiconitem.h"
 
 namespace Digikam
 {

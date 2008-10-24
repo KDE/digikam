@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "undocache.h"
+
 // C ANSI includes.
 
 extern "C"
@@ -44,10 +48,6 @@ extern "C"
 #include <kcomponentdata.h>
 #include <kdebug.h>
 #include <kglobal.h>
-
-// Local includes.
-
-#include "undocache.h"
 
 namespace Digikam
 {

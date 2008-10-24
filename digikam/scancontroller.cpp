@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "scancontroller.h"
+#include "scancontroller.moc"
+
 // Qt includes.
 
 #include <QApplication>
@@ -45,7 +50,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "collectionscanner.h"
 #include "collectionscannerhints.h"
@@ -59,8 +64,6 @@
 #include "albummanager.h"
 #include "album.h"
 #include "splashscreen.h"
-#include "scancontroller.h"
-#include "scancontroller.moc"
 
 namespace Digikam
 {

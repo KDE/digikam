@@ -21,18 +21,22 @@
  *
  * ============================================================ */
 
-// C includes.
+// Local includes.
+
+#include "albumthumbnailloader.h"
+#include "albumthumbnailloader.moc"
+
+// C ANSI includes.
 
 #include <math.h>
 
 // Qt includes.
 
+#include <QEvent>
 #include <QList>
 #include <QMap>
 #include <QPainter>
-#include <QEvent>
 #include <QPixmap>
-#include <QEvent>
 
 // KDE includes.
 
@@ -40,15 +44,13 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
-#include "thumbnailloadthread.h"
-#include "thumbnailsize.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
-#include "albumthumbnailloader.h"
-#include "albumthumbnailloader.moc"
+#include "thumbnailloadthread.h"
+#include "thumbnailsize.h"
 
 namespace Digikam
 {

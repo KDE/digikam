@@ -27,6 +27,10 @@
 
 #define XMD_H
 
+// Local includes.
+
+#include "jpegutils.h"
+
 // C++ includes.
 
 #include <cstdio>
@@ -55,11 +59,10 @@ extern "C"
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dmetadata.h"
 #include "transupp.h"
-#include "jpegutils.h"
 
 namespace Digikam
 {

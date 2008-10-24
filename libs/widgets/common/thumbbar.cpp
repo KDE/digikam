@@ -22,54 +22,56 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "thumbbar.h"
+#include "thumbbar.moc"
+
 // C++ includes.
 
 #include <cmath>
 
 // Qt includes.
 
-#include <QHash>
-#include <QToolTip>
-#include <QFrame>
-#include <QDir>
-#include <QPixmap>
-#include <QImage>
-#include <QPalette>
-#include <QTimer>
-#include <QPainter>
-#include <QPoint>
 #include <QDateTime>
+#include <QDir>
+#include <QFrame>
+#include <QHash>
+#include <QImage>
+#include <QPainter>
+#include <QPalette>
+#include <QPixmap>
+#include <QPoint>
 #include <QPointer>
 #include <QTextDocument>
+#include <QTimer>
+#include <QToolTip>
 
 // KDE includes.
 
-#include <kdebug.h>
-#include <kcodecs.h>
-#include <kfileitem.h>
 #include <kapplication.h>
+#include <kcodecs.h>
+#include <kdebug.h>
+#include <kfileitem.h>
+#include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmimetype.h>
-#include <kfileitem.h>
-#include <kglobal.h>
 
 // LibKDcraw includes.
 
-#include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
+#include <libkdcraw/version.h>
 
 #if KDCRAW_VERSION < 0x000400
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Digikam includes.
 
 #include "dmetadata.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
-#include "thumbbar.h"
-#include "thumbbar.moc"
 
 namespace Digikam
 {

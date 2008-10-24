@@ -25,6 +25,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "oilpaint.h"
+
 // C++ includes.
 
 #include <cmath>
@@ -34,12 +38,11 @@
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "dimggaussianblur.h"
 #include "dimgimagefilters.h"
-#include "oilpaint.h"
 
 namespace DigikamOilPaintImagesPlugin
 {

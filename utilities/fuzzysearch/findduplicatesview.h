@@ -30,16 +30,21 @@
 #include <QWidget>
 #include <QPixmap>
 
-// Local includes.
+// KDE includes.
+
+#include <kjob.h>
+
+// Digikam includes.
 
 #include "thumbnailloadthread.h"
 
 class QTreeWidgetItem;
 
-class KJob;
-
 namespace Digikam
 {
+
+class Album;
+class SAlbum;
 
 class FindDuplicatesViewPriv;
 

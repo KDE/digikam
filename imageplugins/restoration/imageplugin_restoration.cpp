@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_restoration.h"
+#include "imageplugin_restoration.moc"
+
 // KDE includes.
 
 #include <kdebug.h>
@@ -33,11 +38,9 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "restorationtool.h"
-#include "imageplugin_restoration.h"
-#include "imageplugin_restoration.moc"
 
 using namespace DigikamRestorationImagesPlugin;
 

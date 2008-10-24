@@ -22,7 +22,7 @@
 #ifndef AUTOCORRECTIONTOOL_H
 #define AUTOCORRECTIONTOOL_H
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "editortool.h"
@@ -31,7 +31,6 @@ class QCheckBox;
 class QLabel;
 class QWidget;
 
-class KLFDeviceSelector;
 
 namespace Digikam
 {
@@ -41,6 +40,8 @@ class ImageWidget;
 
 namespace DigikamAutoCorrectionImagesPlugin
 {
+
+class KLFDeviceSelector;
 
 class AutoCorrectionTool : public Digikam::EditorToolThreaded
 {

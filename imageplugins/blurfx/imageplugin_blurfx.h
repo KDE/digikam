@@ -24,6 +24,10 @@
 #ifndef IMAGEPLUGIN_BLURFX_H
 #define IMAGEPLUGIN_BLURFX_H
 
+// Qt includes.
+
+#include <QVariant>
+
 // Digikam includes.
 
 #include "imageplugin.h"

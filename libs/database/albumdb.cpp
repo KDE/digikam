@@ -23,9 +23,11 @@
  *
  * ============================================================ */
 
-/** @file albumdb.cpp */
+// Local includes.
 
-// C Ansi includes.
+#include "albumdb.h"
+
+// C ANSI includes.
 
 extern "C"
 {
@@ -49,12 +51,11 @@ extern "C"
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "databasebackend.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
-#include "albumdb.h"
 
 namespace Digikam
 {

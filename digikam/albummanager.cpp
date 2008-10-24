@@ -23,7 +23,12 @@
  *
  * ============================================================ */
 
-// C Ansi includes.
+// Local includes.
+
+#include "albummanager.h"
+#include "albummanager.moc"
+
+// C ANSI includes.
 
 extern "C"
 {
@@ -65,7 +70,7 @@ extern "C"
 #include <kdirwatch.h>
 #include <kconfiggroup.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
 #include "albumdb.h"
@@ -81,8 +86,6 @@ extern "C"
 #include "imagelister.h"
 #include "scancontroller.h"
 #include "upgradedb_sqlite2tosqlite3.h"
-#include "albummanager.h"
-#include "albummanager.moc"
 
 namespace Digikam
 {

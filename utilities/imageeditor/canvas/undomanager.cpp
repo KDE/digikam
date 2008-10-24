@@ -23,6 +23,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "undomanager.h"
+
 // C++ includes.
 
 #include <typeinfo>
@@ -36,12 +40,11 @@
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimginterface.h"
 #include "undoaction.h"
 #include "undocache.h"
-#include "undomanager.h"
 
 namespace Digikam
 {

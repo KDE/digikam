@@ -32,7 +32,7 @@
 #include <QByteArray>
 #include <QVariant>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "digikam_export.h"

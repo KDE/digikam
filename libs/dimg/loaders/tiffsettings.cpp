@@ -34,7 +34,7 @@
 #include <klocale.h>
 #include <kdialog.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "tiffsettings.h"
 #include "tiffsettings.moc"

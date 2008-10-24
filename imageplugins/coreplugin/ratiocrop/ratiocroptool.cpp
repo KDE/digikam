@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "ratiocroptool.h"
+#include "ratiocroptool.moc"
+
 // Qt includes.
 
 #include <QCheckBox>
@@ -61,10 +66,6 @@
 #include "imageiface.h"
 #include "imageselectionwidget.h"
 
-// Local includes.
-
-#include "ratiocroptool.h"
-#include "ratiocroptool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

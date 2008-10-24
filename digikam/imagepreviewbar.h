@@ -24,7 +24,7 @@
 #ifndef IMAGEPREVIEWBAR_H
 #define IMAGEPREVIEWBAR_H
 
-// Local includes.
+// Digikam includes.
 
 #include "thumbbar.h"
 #include "imageinfo.h"

@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * 
+ *
  * Adapted from fluxbox: Texture/TextureRender
  *
  * Texture.hh for Fluxbox Window Manager
@@ -30,6 +30,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "texture.h"
+
 // C++ includes.
 
 #include <cstring>
@@ -41,10 +45,9 @@
 #include <QImage>
 #include <QPixmap>
 
-// Local includes.
+// Digikam includes.
 
 #include "theme.h"
-#include "texture.h"
 
 namespace Digikam
 {
@@ -248,7 +251,7 @@ void Texture::doVgradient()
     unsigned char *pr = d->red, *pg = d->green, *pb = d->blue;
     register int y;
 
-    for (y = 0; y < d->height; y++, pr += d->width, pg += d->width, pb += d->width) 
+    for (y = 0; y < d->height; y++, pr += d->width, pg += d->width, pb += d->width)
     {
         memset(pr, (unsigned char) yr, d->width);
         memset(pg, (unsigned char) yg, d->width);
@@ -271,8 +274,8 @@ void Texture::doDgradient()
                                         xb = (float) d->color0.blue();
     unsigned char *pr = d->red, *pg = d->green, *pb = d->blue;
     unsigned int w    = d->width * 2, h = d->height * 2;
-    unsigned int *xt  = xtable; 
-    unsigned int *yt  = ytable; 
+    unsigned int *xt  = xtable;
+    unsigned int *yt  = ytable;
 
     register int x, y;
 

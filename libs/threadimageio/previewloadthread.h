@@ -24,7 +24,7 @@
 #ifndef PREVIEW_LOAD_THREAD_H
 #define PREVIEW_LOAD_THREAD_H
 
-// Local includes.
+// Digikam includes.
 
 #include "managedloadsavethread.h"
 

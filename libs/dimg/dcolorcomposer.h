@@ -24,7 +24,7 @@
 #ifndef DCOLORCOMPOSER_H
 #define DCOLORCOMPOSER_H
 
-// Local includes.
+// Digikam includes.
 
 #include "dcolor.h"
 #include "digikam_export.h"

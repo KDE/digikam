@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "splashscreen.h"
+#include "splashscreen.moc"
+
 // Qt includes.
 
 #include <QApplication>
@@ -40,10 +45,6 @@
 #include <kaboutdata.h>
 #include <kcomponentdata.h>
 
-// Local includes.
-
-#include "splashscreen.h"
-#include "splashscreen.moc"
 
 namespace Digikam
 {

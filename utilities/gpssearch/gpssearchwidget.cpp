@@ -21,13 +21,14 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "gpssearchwidget.h"
+
 // KDE includes.
 
 #include <kdebug.h>
 
-// Local includes.
-
-#include "gpssearchwidget.h"
 
 namespace Digikam
 {

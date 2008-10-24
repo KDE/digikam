@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "adjustcurvestool.h"
+#include "adjustcurvestool.moc"
+
 // C++ includes.
 
 #include <cmath>
@@ -61,7 +66,7 @@
 #include <kselector.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "colorgradientwidget.h"
 #include "curveswidget.h"
@@ -75,8 +80,6 @@
 #include "imageiface.h"
 #include "imagewidget.h"
 #include "version.h"
-#include "adjustcurvestool.h"
-#include "adjustcurvestool.moc"
 
 using namespace Digikam;
 

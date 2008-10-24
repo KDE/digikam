@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imagedescedittab.h"
+#include "imagedescedittab.moc"
+
 // Qt includes.
 
 #include <QLabel>
@@ -53,7 +58,7 @@
 #include <kselectaction.h>
 #include <kvbox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dmetadata.h"
 #include "kdatetimeedit.h"
@@ -74,8 +79,6 @@
 #include "metadatahub.h"
 #include "statusprogressbar.h"
 #include "searchtextbar.h"
-#include "imagedescedittab.h"
-#include "imagedescedittab.moc"
 
 #include "config-digikam.h"
 #ifdef HAVE_KDEPIMLIBS

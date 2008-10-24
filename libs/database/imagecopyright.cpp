@@ -21,18 +21,21 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imagecopyright.h"
+
 // KDE includes.
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "imagescanner.h"
-#include "imagecopyright.h"
 
 namespace Digikam
 {

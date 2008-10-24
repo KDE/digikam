@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "editorwindow.h"
+#include "editorwindow.moc"
+
 // C++ includes.
 
 #include <cmath>
@@ -86,7 +91,7 @@
 
 #include <libkdcraw/version.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "canvas.h"
 #include "dimginterface.h"
@@ -112,8 +117,6 @@
 #include "editorstackview.h"
 #include "editortooliface.h"
 #include "editorwindowprivate.h"
-#include "editorwindow.h"
-#include "editorwindow.moc"
 
 namespace Digikam
 {

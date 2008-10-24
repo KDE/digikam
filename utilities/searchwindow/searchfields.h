@@ -31,7 +31,7 @@
 
 // KDE includes.
 
-// Local includes.
+// Digikam includes.
 
 #include "searchxml.h"
 #include "searchutilities.h"

@@ -26,14 +26,14 @@
 
 // Qt includes.
 
-#include <QWidget>
-#include <QString>
+#include <QtGui/QWidget>
+#include <QtCore/QString>
 
 // KDE includes.
 
 #include <kurl.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dmetadata.h"
 #include "digikam_export.h"

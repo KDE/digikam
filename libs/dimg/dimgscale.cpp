@@ -46,7 +46,7 @@ extern "C"
 #include <cstdlib>
 #include <cstdio>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimgprivate.h"
 #include "dimg.h"

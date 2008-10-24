@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "paniconwidget.h"
+#include "paniconwidget.moc"
+
 // C++ includes.
 
 #include <cmath>
@@ -42,10 +47,6 @@
 #include <kdebug.h>
 #include <kcursor.h>
 
-// Local includes.
-
-#include "paniconwidget.h"
-#include "paniconwidget.moc"
 
 namespace Digikam
 {

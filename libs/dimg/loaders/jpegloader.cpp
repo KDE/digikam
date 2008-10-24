@@ -50,7 +50,7 @@ extern "C"
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "dimgloaderobserver.h"

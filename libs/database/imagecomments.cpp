@@ -21,6 +21,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imagecomments.h"
+
 // Qt includes.
 
 #include <QSharedData>
@@ -32,10 +36,9 @@
 #include <klocale.h>
 #include <kglobal.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumdb.h"
-#include "imagecomments.h"
 
 namespace Digikam
 {

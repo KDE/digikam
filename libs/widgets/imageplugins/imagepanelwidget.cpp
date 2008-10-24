@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imagepanelwidget.h"
+#include "imagepanelwidget.moc"
+
 // Qt includes.
 
 #include <QButtonGroup>
@@ -49,13 +54,11 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "thumbnailsize.h"
 #include "imageregionwidget.h"
 #include "imagepaniconwidget.h"
-#include "imagepanelwidget.h"
-#include "imagepanelwidget.moc"
 
 namespace Digikam
 {

@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imagepaniconwidget.h"
+#include "imagepaniconwidget.moc"
+
 // C++ includes.
 
 #include <cmath>
@@ -37,12 +42,10 @@
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "imageiface.h"
 #include "imageregionwidget.h"
-#include "imagepaniconwidget.h"
-#include "imagepaniconwidget.moc"
 
 namespace Digikam
 {

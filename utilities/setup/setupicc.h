@@ -31,7 +31,7 @@
 #include <QMap>
 #include <QDir>
 
-// Local includes.
+// Digikam includes.
 
 #include <kurl.h>
 #include "digikam_export.h"

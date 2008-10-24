@@ -5,12 +5,12 @@
  *
  * Date        : 2005-05-25
  * Description : Antivignetting threaded image filter.
- * 
+ *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
- * Original AntiVignetting algorithm copyrighted 2003 by 
- * John Walker from 'pnmctrfilt' implementation. See 
- * http://www.fourmilab.ch/netpbm/pnmctrfilt for more 
+ * Original AntiVignetting algorithm copyrighted 2003 by
+ * John Walker from 'pnmctrfilt' implementation. See
+ * http://www.fourmilab.ch/netpbm/pnmctrfilt for more
  * information.
  *
  * This program is free software; you can redistribute it
@@ -18,24 +18,27 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
+
+// Local includes.
+
+#include "antivignetting.h"
 
 // C++ includes.
 
 #include <cmath>
 #include <cstdlib>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "dimgimagefilters.h"
-#include "antivignetting.h"
 
 namespace DigikamAntiVignettingImagesPlugin
 {
@@ -43,7 +46,7 @@ namespace DigikamAntiVignettingImagesPlugin
 AntiVignetting::AntiVignetting(Digikam::DImg *orgImage, QObject *parent, double density,
                                double power, double radius, int xshift, int yshift, bool normalize)
               : Digikam::DImgThreadedFilter(orgImage, parent, "AntiVignetting")
-{ 
+{
     m_density   = density;
     m_power     = power;
     m_radius    = radius;
@@ -73,18 +76,18 @@ void AntiVignetting::filterImage()
     int Height = m_orgImage.height();
 
     // Determine the radius of the filter.  This is the half diagonal
-    // measure of the image multiplied by the command line radius factor. 
+    // measure of the image multiplied by the command line radius factor.
 
     xsize = (Height + 1) / 2;
     ysize = (Width + 1) / 2;
-    erad = (int)((sqrt((xsize * xsize) + (ysize * ysize)) + 0.5) * m_radius);    
+    erad = (int)((sqrt((xsize * xsize) + (ysize * ysize)) + 0.5) * m_radius);
 
     // Build the in-memory table which maps distance from the
     // center of the image (as adjusted by the X and Y offset,
     // if any) to the density of the filter at this remove.  This
     // table needs to be as large as the diagonal from the
     // (possibly offset) center to the most distant corner
-    // of the image. 
+    // of the image.
 
     xsize    = ((Height + 1) / 2) + abs(m_xshift);
     ysize    = ((Width + 1)  / 2) + abs(m_yshift);
@@ -96,18 +99,18 @@ void AntiVignetting::filterImage()
     {
         if ( i >= erad )
            ldens[i] = 1;
-        else 
+        else
            ldens[i] =  (1.0 + (m_density - 1) * pow(1.0 - (((double) i) / (erad - 1)), m_power));
     }
 
     xctr = ((Height + 1) / 2) + m_xshift;
     yctr = ((Width + 1) / 2) + m_yshift;
 
-    for (row = 0 ; !m_cancel && (row < Width) ; row++) 
+    for (row = 0 ; !m_cancel && (row < Width) ; row++)
     {
         yd = abs(yctr - row);
 
-        for (col = 0 ; !m_cancel && (col < Height) ; col++) 
+        for (col = 0 ; !m_cancel && (col < Height) ; col++)
         {
             p = (col * Width + row)*4;
 

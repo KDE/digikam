@@ -36,7 +36,7 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "dimgloaderobserver.h"

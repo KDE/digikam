@@ -27,11 +27,11 @@
 
 // Qt includes.
 
-#include <QString>
-#include <QLabel>
-#include <QEvent>
+#include <QtCore/QString>
+#include <QtGui/QLabel>
+#include <QtCore/QEvent>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

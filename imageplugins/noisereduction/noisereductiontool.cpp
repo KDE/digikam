@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "noisereductiontool.h"
+#include "noisereductiontool.moc"
+
 // Qt includes.
 
 #include <QCheckBox>
@@ -50,7 +55,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "version.h"
 #include "daboutdata.h"
@@ -59,8 +64,6 @@
 #include "imagepanelwidget.h"
 #include "editortoolsettings.h"
 #include "noisereduction.h"
-#include "noisereductiontool.h"
-#include "noisereductiontool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

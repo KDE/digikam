@@ -21,6 +21,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imagescanner.h"
+
 // Qt includes.
 
 #include <QImageReader>
@@ -31,7 +35,7 @@
 #include <kmimetype.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "databaseurl.h"
 #include "databaseaccess.h"
@@ -40,7 +44,6 @@
 #include "collectionmanager.h"
 #include "imagecomments.h"
 #include "imagecopyright.h"
-#include "imagescanner.h"
 
 namespace Digikam
 {

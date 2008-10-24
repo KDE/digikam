@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-08-26
- * Description : a digikam image editor plugin to 
+ * Description : a digikam image editor plugin to
  *               simulate charcoal drawing.
  *
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -24,6 +24,10 @@
 
 #ifndef IMAGEPLUGIN_CHARCOAL_H
 #define IMAGEPLUGIN_CHARCOAL_H
+
+// Qt includes.
+
+#include <QVariant>
 
 // Digikam includes.
 

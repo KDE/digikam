@@ -29,6 +29,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "syncjob.h"
+#include "syncjob.moc"
+
 // Qt includes.
 
 #include <QApplication>
@@ -47,14 +52,12 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumsettings.h"
 #include "thumbnailsize.h"
 #include "albumthumbnailloader.h"
 #include "album.h"
-#include "syncjob.h"
-#include "syncjob.moc"
 
 namespace Digikam
 {

@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "cameraitempropertiestab.h"
+#include "cameraitempropertiestab.moc"
+
 // Qt includes.
 
 #include <QStyle>
@@ -40,12 +45,10 @@
 #include <kseparator.h>
 #include <ksqueezedtextlabel.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dmetadata.h"
 #include "gpiteminfo.h"
-#include "cameraitempropertiestab.h"
-#include "cameraitempropertiestab.moc"
 
 namespace Digikam
 {

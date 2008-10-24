@@ -24,6 +24,11 @@
 
 #define RECT_EXTENSION 300
 
+// Local includes.
+
+#include "iconview.h"
+#include "iconview.moc"
+
 // C++ includes.
 
 #include <climits>
@@ -49,13 +54,11 @@
 #include <kcursor.h>
 #include <kglobalsettings.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "drubberband.h"
 #include "iconitem.h"
 #include "icongroupitem.h"
-#include "iconview.h"
-#include "iconview.moc"
 
 namespace Digikam
 {

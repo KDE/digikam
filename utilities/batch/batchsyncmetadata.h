@@ -29,7 +29,7 @@
 
 #include <QObject>
 
-// Local includes.
+// Digikam includes.
 
 #include "imageinfo.h"
 

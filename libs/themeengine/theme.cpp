@@ -22,13 +22,14 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "theme.h"
+
 // KDE includes.
 
 #include <kdebug.h>
 
-// Local includes.
-
-#include "theme.h"
 
 namespace Digikam
 {

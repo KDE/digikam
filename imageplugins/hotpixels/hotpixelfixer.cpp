@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "hotpixelfixer.h"
+
 // C++ includes.
 
 #include <cmath>
@@ -38,10 +42,9 @@
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
-#include "hotpixelfixer.h"
 
 #ifdef HAVE_FLOAT_H
 #if HAVE_FLOAT_H

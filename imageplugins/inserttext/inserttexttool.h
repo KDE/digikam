@@ -27,6 +27,7 @@
 // Qt includes.
 
 #include <QColor>
+#include <QFont>
 #include <QImage>
 
 // Digikam includes.

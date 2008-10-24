@@ -22,7 +22,9 @@
  *
  * ============================================================ */
 
-/** @file imageinfo.cpp */
+// Local includes.
+
+#include "imageinfo.h"
 
 // Qt includes.
 
@@ -34,7 +36,7 @@
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumdb.h"
 #include "databaseaccess.h"
@@ -44,7 +46,6 @@
 #include "imageinfodata.h"
 #include "imageinfocache.h"
 #include "imagescanner.h"
-#include "imageinfo.h"
 
 namespace Digikam
 {

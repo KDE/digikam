@@ -5,34 +5,34 @@
  *
  * Date        : 2008-05-05
  * Description : Geodetic tools
- * 
+ *
  * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2004-2006 by Daniele Franzoni
  * Copyright (C) 2004-2006 by Martin Desruisseaux
  * Copyright (C) 2003-2006 GeoTools Project Managment Committee (PMC), http://geotools.org
- * Copyright (C) 2001, Institut de Recherche pour le D�veloppement
+ * Copyright (C) 2001, Institut de Recherche pour le Developpement
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
+
+// Local includes.
+
+#include "geodetictools.h"
 
 // C++ includes.
 
 #include <cstdlib>
 #include <cfloat>
-
-// Local includes.
-
-#include "geodetictools.h"
 
 namespace Digikam
 {
@@ -489,7 +489,7 @@ bool GeodeticCalculator::computeDirection() {
 *         {@linkplain #getStartingGeographicPoint starting point} to the
 *         {@linkplain #getDestinationGeographicPoint destination point}.
 *
-* @todo We should check for cases where the path cross the 90�N, 90�S, 90�E or 90�W boundaries.
+* @todo We should check for cases where the path cross the 90N, 90S, 90E or 90W boundaries.
 * /
 public Shape getGeodeticCurve(const int numberOfPoints) {
     if (numberOfPoints < 0)

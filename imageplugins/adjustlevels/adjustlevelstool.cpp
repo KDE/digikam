@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "adjustlevelstool.h"
+#include "adjustlevelstool.moc"
+
 // C++ includes.
 
 #include <cmath>
@@ -62,7 +67,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "version.h"
 #include "daboutdata.h"
@@ -75,8 +80,6 @@
 #include "histogrambox.h"
 #include "dimgimagefilters.h"
 #include "editortoolsettings.h"
-#include "adjustlevelstool.h"
-#include "adjustlevelstool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

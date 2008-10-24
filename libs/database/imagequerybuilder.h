@@ -28,11 +28,14 @@
 
 #include <QList>
 #include <QVariant>
+#include <QString>
 
-// Local includes.
+// Digikam includes.
 
 #include "searchxml.h"
 #include "digikam_export.h"
+
+class KUrl;
 
 namespace Digikam
 {

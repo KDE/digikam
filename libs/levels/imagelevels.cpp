@@ -26,6 +26,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imagelevels.h"
+
 // Qt includes.
 
 #include <QFile>
@@ -42,10 +46,9 @@
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "imagehistogram.h"
-#include "imagelevels.h"
 
 namespace Digikam
 {

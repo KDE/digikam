@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "welcomepageview.h"
+#include "welcomepageview.moc"
+
 // Qt includes.
 
 #include <QTimer>
@@ -44,13 +49,11 @@
 #include <kglobalsettings.h>
 #include <ktemporaryfile.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "daboutdata.h"
 #include "version.h"
 #include "themeengine.h"
-#include "welcomepageview.h"
-#include "welcomepageview.moc"
 
 namespace Digikam
 {

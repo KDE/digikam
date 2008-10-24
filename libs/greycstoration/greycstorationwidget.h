@@ -25,11 +25,11 @@
 
 // Qt includes.
 
-#include <QObject>
-#include <QFile>
-#include <QString>
+#include <QtCore/QObject>
+#include <QtCore/QFile>
+#include <QtCore/QString>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 #include "greycstorationsettings.h"

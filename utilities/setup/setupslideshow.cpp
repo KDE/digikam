@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "setupslideshow.h"
+#include "setupslideshow.moc"
+
 // Qt includes.
 
 #include <QCheckBox>
@@ -36,10 +41,6 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-// Local includes.
-
-#include "setupslideshow.h"
-#include "setupslideshow.moc"
 
 namespace Digikam
 {

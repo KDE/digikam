@@ -32,7 +32,7 @@
 #include <QObject>
 #include <QList>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 #include "databaseaccess.h"

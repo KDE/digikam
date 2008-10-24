@@ -21,15 +21,18 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "treefolderitem.h"
+
 // Qt includes.
 
 #include <QTreeWidget>
 #include <QFont>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
-#include "treefolderitem.h"
 
 namespace Digikam
 {
@@ -85,7 +88,7 @@ void TreeFolderItem::setFocus(bool b)
     m_focus = b;
     for (int i=0 ; i < columnCount() ; i++)
     {
-        setForeground(i, m_focus ? treeWidget()->palette().link() 
+        setForeground(i, m_focus ? treeWidget()->palette().link()
                                  : foregroundBrush());
         QColor hb = treeWidget()->palette().highlight().color();
         hb.setAlpha(127);

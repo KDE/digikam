@@ -23,7 +23,12 @@
  *
  * ============================================================ */
 
-// C Ansi includes.
+// Local includes.
+
+#include "albumiconview.h"
+#include "albumiconview.moc"
+
+// C ANSI includes.
 
 extern "C"
 {
@@ -38,50 +43,50 @@ extern "C"
 
 // Qt includes.
 
-#include <Q3IntDict>
 #include <Q3Dict>
-#include <QImage>
-#include <QString>
-#include <QStringList>
-#include <QEvent>
-#include <QPainter>
-#include <QPoint>
-#include <QPolygon>
-#include <QDateTime>
-#include <QFileInfo>
-#include <QFile>
+#include <Q3IntDict>
+#include <QClipboard>
 #include <QCursor>
 #include <QDataStream>
-#include <QTimer>
-#include <QClipboard>
-#include <QPixmap>
+#include <QDateTime>
 #include <QDragMoveEvent>
 #include <QDropEvent>
+#include <QEvent>
+#include <QFile>
+#include <QFileInfo>
+#include <QImage>
+#include <QPainter>
+#include <QPixmap>
+#include <QPoint>
+#include <QPolygon>
 #include <QResizeEvent>
+#include <QString>
+#include <QStringList>
+#include <QTimer>
 
 // KDE includes.
 
-#include <kdebug.h>
-#include <kurl.h>
-#include <kapplication.h>
-#include <klocale.h>
-#include <kglobal.h>
-#include <kmessagebox.h>
-#include <kiconloader.h>
-#include <kpropsdlg.h>
-#include <ktrader.h>
-#include <kservice.h>
-#include <krun.h>
 #include <kaction.h>
-#include <kmenu.h>
-#include <kstandarddirs.h>
-#include <kiconeffect.h>
-#include <kdeversion.h>
+#include <kapplication.h>
 #include <kcalendarsystem.h>
+#include <kdebug.h>
+#include <kdeversion.h>
+#include <kglobal.h>
+#include <kiconeffect.h>
+#include <kiconloader.h>
 #include <kinputdialog.h>
 #include <kio/jobuidelegate.h>
+#include <klocale.h>
+#include <kmenu.h>
+#include <kmessagebox.h>
 #include <kmimetypetrader.h>
+#include <kpropsdlg.h>
+#include <krun.h>
+#include <kservice.h>
 #include <kstandardaction.h>
+#include <kstandarddirs.h>
+#include <ktrader.h>
+#include <kurl.h>
 
 // LibKipi includes.
 
@@ -97,40 +102,37 @@ extern "C"
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Digikam includes.
 
-#include "constants.h"
 #include "album.h"
 #include "albumdb.h"
-#include "albummanager.h"
-#include "dio.h"
-#include "albumlister.h"
 #include "albumfiletip.h"
+#include "albumicongroupitem.h"
+#include "albumiconitem.h"
+#include "albumlister.h"
+#include "albummanager.h"
 #include "albumsettings.h"
-#include "databasetransaction.h"
+#include "cameraui.h"
+#include "constants.h"
 #include "databaseaccess.h"
-#include "imagewindow.h"
-#include "thumbnailsize.h"
-#include "themeengine.h"
+#include "databasetransaction.h"
+#include "ddragobjects.h"
+#include "deletedialog.h"
+#include "dio.h"
+#include "dmetadata.h"
 #include "dpopupmenu.h"
-#include "tagspopupmenu.h"
+#include "imageattributeswatch.h"
+#include "imagewindow.h"
+#include "lighttablewindow.h"
+#include "loadingcacheinterface.h"
+#include "metadatahub.h"
 #include "ratingpopupmenu.h"
 #include "scancontroller.h"
-#include "thumbnailloadthread.h"
-#include "cameraui.h"
-#include "ddragobjects.h"
-#include "dmetadata.h"
-#include "albumdb.h"
-#include "imageattributeswatch.h"
-#include "deletedialog.h"
-#include "albumiconitem.h"
-#include "albumicongroupitem.h"
-#include "loadingcacheinterface.h"
-#include "lighttablewindow.h"
 #include "statusprogressbar.h"
-#include "metadatahub.h"
-#include "albumiconview.h"
-#include "albumiconview.moc"
+#include "tagspopupmenu.h"
+#include "themeengine.h"
+#include "thumbnailloadthread.h"
+#include "thumbnailsize.h"
 
 namespace Digikam
 {

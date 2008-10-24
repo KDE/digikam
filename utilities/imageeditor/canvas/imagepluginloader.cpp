@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imagepluginloader.h"
+
 // Qt includes.
 
 #include <QMap>
@@ -36,10 +40,9 @@
 #include <klocale.h>
 #include <kxmlguiclient.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "splashscreen.h"
-#include "imagepluginloader.h"
 
 namespace Digikam
 {

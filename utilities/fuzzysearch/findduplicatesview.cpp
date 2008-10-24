@@ -24,6 +24,11 @@
 
 #define ICONSIZE 64
 
+// Local includes.
+
+#include "findduplicatesview.h"
+#include "findduplicatesview.moc"
+
 // Qt includes.
 
 #include <QHeaderView>
@@ -38,7 +43,7 @@
 #include <kdialog.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
 #include "albummanager.h"
@@ -47,8 +52,6 @@
 #include "imagelister.h"
 #include "statusprogressbar.h"
 #include "findduplicatesalbumitem.h"
-#include "findduplicatesview.h"
-#include "findduplicatesview.moc"
 
 namespace Digikam
 {

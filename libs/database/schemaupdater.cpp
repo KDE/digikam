@@ -21,6 +21,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "schemaupdater.h"
+
 // Qt includes.
 
 #include <QFileInfo>
@@ -45,7 +49,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Digikam includes.
 
 #include "databasebackend.h"
 #include "albumdb.h"
@@ -56,7 +60,6 @@
 #include "collectionscanner.h"
 #include "imagequerybuilder.h"
 #include "initializationobserver.h"
-#include "schemaupdater.h"
 
 namespace Digikam
 {

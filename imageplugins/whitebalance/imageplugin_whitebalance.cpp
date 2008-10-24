@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_whitebalance.h"
+#include "imageplugin_whitebalance.moc"
+
 // KDE includes.
 
 #include <kdebug.h>
@@ -33,11 +38,9 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "whitebalancetool.h"
-#include "imageplugin_whitebalance.h"
-#include "imageplugin_whitebalance.moc"
 
 using namespace DigikamWhiteBalanceImagesPlugin;
 

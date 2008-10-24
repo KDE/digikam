@@ -28,14 +28,14 @@
 
 // Qt includes.
 
-#include <QByteArray>
-#include <QSize>
-#include <QRect>
-#include <QImage>
-#include <QPixmap>
-#include <QVariant>
+#include <QtCore/QByteArray>
+#include <QtCore/QSize>
+#include <QtCore/QRect>
+#include <QtGui/QImage>
+#include <QtGui/QPixmap>
+#include <QtCore/QVariant>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 #include "dshareddata.h"

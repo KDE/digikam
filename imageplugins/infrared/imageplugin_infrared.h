@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-02-22
- * Description : a digiKam image editor plugin for simulate 
+ * Description : a digiKam image editor plugin for simulate
  *               infrared film.
  *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -24,6 +24,10 @@
 
 #ifndef IMAGEPLUGIN_INFRARED_H
 #define IMAGEPLUGIN_INFRARED_H
+
+// Qt includes.
+
+#include <QVariant>
 
 // Digikam includes.
 

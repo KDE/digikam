@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "umscamera.h"
+
 // C ANSI includes.
 
 extern "C"
@@ -50,11 +54,10 @@ extern "C"
 
 #include <libkdcraw/kdcraw.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "dmetadata.h"
-#include "umscamera.h"
 
 namespace Digikam
 {

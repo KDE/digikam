@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "themeengine.h"
+#include "themeengine.moc"
+
 // Qt includes.
 
 #include <QHash>
@@ -45,12 +50,10 @@
 #include <kapplication.h>
 #include <kglobalsettings.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "theme.h"
 #include "texture.h"
-#include "themeengine.h"
-#include "themeengine.moc"
 
 namespace Digikam
 {

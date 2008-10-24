@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "histogrambox.h"
+#include "histogrambox.moc"
+
 // Qt includes.
 
 #include <QButtonGroup>
@@ -40,12 +45,10 @@
 #include <kicon.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "colorgradientwidget.h"
 #include "histogramwidget.h"
-#include "histogrambox.h"
-#include "histogrambox.moc"
 
 namespace Digikam
 {

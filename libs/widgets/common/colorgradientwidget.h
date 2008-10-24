@@ -27,10 +27,10 @@
 
 // KDE includes.
 
-#include <QWidget>
-#include <QColor>
+#include <QtGui/QWidget>
+#include <QtGui/QColor>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

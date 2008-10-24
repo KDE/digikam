@@ -21,6 +21,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "collectionmanager.h"
+
 // Qt includes.
 
 #include <QCoreApplication>
@@ -43,12 +47,11 @@
 #include <solid/predicate.h>
 
 
-// Local includes.
+// Digikam includes.
 
 #include "databaseaccess.h"
 #include "albumdb.h"
 #include "collectionlocation.h"
-#include "collectionmanager.h"
 
 namespace Digikam
 {

@@ -21,11 +21,15 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "rawpostprocessing.h"
+
 // KDE includes.
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "imagehistogram.h"
 #include "imagecurves.h"
@@ -33,7 +37,6 @@
 #include "bcgmodifier.h"
 #include "whitebalance.h"
 #include "dimgimagefilters.h"
-#include "rawpostprocessing.h"
 
 namespace Digikam
 {

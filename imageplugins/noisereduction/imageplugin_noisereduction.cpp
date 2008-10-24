@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_noisereduction.h"
+#include "imageplugin_noisereduction.moc"
+
 // KDE includes.
 
 #include <kaction.h>
@@ -32,11 +37,9 @@
 #include <klibloader.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "noisereductiontool.h"
-#include "imageplugin_noisereduction.h"
-#include "imageplugin_noisereduction.moc"
 
 using namespace DigikamNoiseReductionImagesPlugin;
 

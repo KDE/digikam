@@ -27,9 +27,10 @@
 // Qt includes.
 
 #include <QString>
+#include <QStringList>
 #include <QList>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

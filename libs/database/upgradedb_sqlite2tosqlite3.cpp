@@ -21,6 +21,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "upgradedb_sqlite2tosqlite3.h"
+
 // Qt includes.
 
 #include <QMap>
@@ -36,13 +40,12 @@
 #include <kstandarddirs.h>
 #include <kio/global.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databasebackend.h"
 #include "albumdb_sqlite2.h"
-#include "upgradedb_sqlite2tosqlite3.h"
 
 namespace Digikam
 {

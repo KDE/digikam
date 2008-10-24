@@ -5,7 +5,7 @@
  *
  * Date        : 2006-21-12
  * Description : a embedded view to show the image preview widget.
- * 
+ *
  * Copyright (C) 2006-2008 Gilles Caulier  <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef IMAGEPREVIEWVIEW_H
@@ -30,9 +30,10 @@
 #include <QImage>
 #include <QResizeEvent>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
+#include "imageinfo.h"
 #include "previewwidget.h"
 #include "digikam_export.h"
 
@@ -43,7 +44,6 @@ namespace Digikam
 
 class AlbumWidgetStack;
 class LoadingDescription;
-class ImageInfo;
 class ImagePreviewViewPriv;
 
 class ImagePreviewView : public PreviewWidget

@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "statusnavigatebar.h"
+#include "statusnavigatebar.moc"
+
 // Qt includes.
 
 #include <QToolButton>
@@ -32,10 +37,6 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-// Local includes.
-
-#include "statusnavigatebar.h"
-#include "statusnavigatebar.moc"
 
 namespace Digikam
 {

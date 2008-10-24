@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imagewidget.h"
+#include "imagewidget.moc"
+
 // Qt includes.
 
 #include <QButtonGroup>
@@ -43,11 +48,6 @@
 #include <klocale.h>
 #include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
-
-// Local includes.
-
-#include "imagewidget.h"
-#include "imagewidget.moc"
 
 namespace Digikam
 {

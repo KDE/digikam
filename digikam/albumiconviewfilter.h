@@ -32,7 +32,7 @@
 
 #include "khbox.h"
 
-// Local includes.
+// Digikam includes.
 
 #include "albumlister.h"
 

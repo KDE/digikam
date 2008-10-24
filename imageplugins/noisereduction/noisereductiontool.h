@@ -24,7 +24,7 @@
 #ifndef NOISEREDUCTIONTOOL_H
 #define NOISEREDUCTIONTOOL_H
 
-// Local includes.
+// Digikam includes.
 
 #include "editortool.h"
 

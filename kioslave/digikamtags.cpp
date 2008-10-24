@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-07-09
- * Description : a kio-slave to process tag query on 
+ * Description : a kio-slave to process tag query on
  *               digiKam albums.
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
@@ -21,6 +21,10 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
+// Local includes.
+
+#include "digikamtags.h"
 
 // C++ includes.
 
@@ -40,7 +44,7 @@
 #include <kstandarddirs.h>
 #include <kio/global.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 #include "databaseaccess.h"
@@ -48,7 +52,6 @@
 #include "albumdb.h"
 #include "imagelister.h"
 #include "imagelisterreceiver.h"
-#include "digikamtags.h"
 
 kio_digikamtagsProtocol::kio_digikamtagsProtocol(const QByteArray &pool_socket,
                                                  const QByteArray &app_socket)

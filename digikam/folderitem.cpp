@@ -4,8 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2005-05-31
- * Description : implementation of item folder 
- * 
+ * Description : implementation of item folder
+ *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,13 +14,17 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
+
+// Local includes.
+
+#include "folderitem.h"
 
 // Qt includes.
 
@@ -32,12 +36,11 @@
 #include <QStyle>
 #include <QStyleOption>
 
-// Local includes.
+// Digikam includes.
 
 #include "thumbnailsize.h"
 #include "albumsettings.h"
 #include "folderview.h"
-#include "folderitem.h"
 
 namespace Digikam
 {
@@ -212,7 +215,7 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup& cg, int colu
     if ((type() == Q3CheckListItem::CheckBox) ||
         (type() == Q3CheckListItem::CheckBoxController))
     {
-        int boxsize = fv->style()->pixelMetric(QStyle::PM_CheckListButtonSize, 0, fv); 
+        int boxsize = fv->style()->pixelMetric(QStyle::PM_CheckListButtonSize, 0, fv);
         int x       = 3;
         int y       = (height() - boxsize)/2 + margin;
         r += boxsize + 4;
@@ -286,7 +289,7 @@ QStyleOptionQ3ListView FolderCheckListItem::getStyleOption(const FolderView *fv)
     opt.treeStepSize      = fv->treeStepSize();
     opt.rootIsDecorated   = fv->rootIsDecorated();
     bool firstItem        = true;
-    while (item) 
+    while (item)
     {
         QStyleOptionQ3ListViewItem lvi;
         lvi.height      = item->height();
@@ -309,11 +312,11 @@ QStyleOptionQ3ListView FolderCheckListItem::getStyleOption(const FolderView *fv)
             && static_cast<Q3CheckListItem *>(item->parent())->type() == Q3CheckListItem::Controller)
             lvi.features |= QStyleOptionQ3ListViewItem::ParentControl;
         opt.items.append(lvi);
-        if (!firstItem) 
+        if (!firstItem)
         {
             item = item->nextSibling();
         }
-        else 
+        else
         {
             firstItem = false;
             item = item->firstChild();

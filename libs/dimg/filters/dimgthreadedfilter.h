@@ -27,15 +27,15 @@
 
 // Qt includes.
 
-#include <QEvent>
-#include <QThread>
-#include <QString>
+#include <QtCore/QEvent>
+#include <QtCore/QThread>
+#include <QtCore/QString>
 
 // KDE includes.
 
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "digikam_export.h"

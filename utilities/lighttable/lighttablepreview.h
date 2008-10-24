@@ -34,7 +34,7 @@
 #include <QDropEvent>
 #include <QDragMoveEvent>
 
-// Local includes.
+// Digikam includes.
 
 #include "imageinfo.h"
 #include "previewwidget.h"

@@ -5,7 +5,7 @@
  *
  * Date        : 2007-02-02
  * Description : a pop-up menu to show stars rating selection.
- * 
+ *
  * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -13,13 +13,18 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
+// Local includes.
+
+#include "ratingpopupmenu.h"
+#include "ratingpopupmenu.moc"
 
 // Qt includes.
 
@@ -40,12 +45,10 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "constants.h"
 #include "themeengine.h"
-#include "ratingpopupmenu.h"
-#include "ratingpopupmenu.moc"
 
 namespace Digikam
 {
@@ -55,13 +58,13 @@ class RatingMenuItem : public QWidget
 
   public:
 
-    RatingMenuItem(int star, QWidget *parent=0) : QWidget(parent)        
+    RatingMenuItem(int star, QWidget *parent=0) : QWidget(parent)
     {
         m_hightlighted = false;
         m_star         = star;
 
         QPolygon starPolygon;
-    
+
         // Pre-computed star polygon for a 15x15 pixmap.
         starPolygon << QPoint(0,  6);
         starPolygon << QPoint(5,  5);
@@ -73,7 +76,7 @@ class RatingMenuItem : public QWidget
         starPolygon << QPoint(7,  11);
         starPolygon << QPoint(3,  14);
         starPolygon << QPoint(4,  9);
-    
+
         // Template of one star.
         QPixmap starPix(15, 15);
         starPix.fill(Qt::transparent);
@@ -105,7 +108,7 @@ class RatingMenuItem : public QWidget
     }
 
     void setHightLighted(bool h)
-    {   
+    {
         m_hightlighted = h;
         update();
     }
@@ -144,7 +147,7 @@ RatingPopupMenu::RatingPopupMenu(QWidget* parent)
         addAction(action2);
     }
 
-    connect(this, SIGNAL(hovered(QAction *)), 
+    connect(this, SIGNAL(hovered(QAction *)),
             this, SLOT(slotHovered(QAction *)));
 }
 

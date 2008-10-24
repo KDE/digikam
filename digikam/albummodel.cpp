@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "albummodel.h"
+#include "albummodel.moc"
+
 // Qt includes.
 
 #include <QStringList>
@@ -30,13 +35,11 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
 #include "albummanager.h"
 #include "albumthumbnailloader.h"
-#include "albummodel.h"
-#include "albummodel.moc"
 
 namespace Digikam
 {

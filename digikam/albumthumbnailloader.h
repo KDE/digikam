@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGTHUMBNAILLOADER_H
-#define TAGTHUMBNAILLOADER_H
+#ifndef ALBUMTHUMBNAILLOADER_H
+#define ALBUMTHUMBNAILLOADER_H
 
 // Qt includes.
 
@@ -84,7 +84,7 @@ public:
      * and returned asynchronously by the signals.
      * If no thumbnail is associated with given album,
      * no action will be taken, and false is returned.
-     * 
+     *
     */
     bool getAlbumThumbnail(PAlbum *album);
 
@@ -197,4 +197,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TAGTHUMBNAILLOADER_H
+#endif // ALBUMTHUMBNAILLOADER_H

@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "inpaintingtool.h"
+#include "inpaintingtool.moc"
+
 // C++ includes.
 
 #include <cstdio>
@@ -64,7 +69,7 @@
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "version.h"
 #include "daboutdata.h"
@@ -74,8 +79,6 @@
 #include "greycstorationsettings.h"
 #include "greycstorationwidget.h"
 #include "greycstorationiface.h"
-#include "inpaintingtool.h"
-#include "inpaintingtool.moc"
 
 using namespace Digikam;
 

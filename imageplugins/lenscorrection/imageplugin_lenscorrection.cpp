@@ -20,6 +20,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_lenscorrection.h"
+#include "imageplugin_lenscorrection.moc"
+
 // KDE includes.
 
 #include <kaction.h>
@@ -31,7 +36,7 @@
 #include <klibloader.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "config-digikam.h"
 #ifdef HAVE_LENSFUN
@@ -41,8 +46,6 @@ using namespace DigikamAutoCorrectionImagesPlugin;
 
 #include "antivignettingtool.h"
 #include "lensdistortiontool.h"
-#include "imageplugin_lenscorrection.h"
-#include "imageplugin_lenscorrection.moc"
 
 using namespace DigikamAntiVignettingImagesPlugin;
 using namespace DigikamLensDistortionImagesPlugin;

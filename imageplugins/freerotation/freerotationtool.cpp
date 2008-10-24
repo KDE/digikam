@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "freerotationtool.h"
+#include "freerotationtool.moc"
+
 // Qt includes.
 
 #include <QCheckBox>
@@ -49,7 +54,7 @@
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "version.h"
 #include "daboutdata.h"
@@ -58,8 +63,6 @@
 #include "imagewidget.h"
 #include "editortoolsettings.h"
 #include "freerotation.h"
-#include "freerotationtool.h"
-#include "freerotationtool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

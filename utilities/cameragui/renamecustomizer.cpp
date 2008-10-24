@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "renamecustomizer.h"
+#include "renamecustomizer.moc"
+
 // Qt includes.
 
 #include <QButtonGroup>
@@ -49,10 +54,6 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-// Local includes.
-
-#include "renamecustomizer.h"
-#include "renamecustomizer.moc"
 
 namespace Digikam
 {

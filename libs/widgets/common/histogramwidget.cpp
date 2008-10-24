@@ -24,6 +24,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "histogramwidget.h"
+#include "histogramwidget.moc"
+
 // C++ includes.
 
 #include <cmath>
@@ -50,11 +55,9 @@
 #include <kcursor.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "imagehistogram.h"
-#include "histogramwidget.h"
-#include "histogramwidget.moc"
 
 namespace Digikam
 {

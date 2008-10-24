@@ -21,9 +21,15 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "searchview.h"
+#include "searchview.moc"
+
 // Qt includes.
 
 #include <QGradient>
+#include <QHBoxLayout>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QTimeLine>
@@ -37,15 +43,13 @@
 #include <kpushbutton.h>
 #include <kstandardguiitem.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "searchxml.h"
 #include "themeengine.h"
 #include "searchwindow.h"
 #include "searchgroup.h"
 #include "searchutilities.h"
-#include "searchview.h"
-#include "searchview.moc"
 
 namespace Digikam
 {

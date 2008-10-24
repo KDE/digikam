@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "xmpwidget.h"
+#include "xmpwidget.moc"
+
 // Qt includes.
 
 #include <QMap>
@@ -31,11 +36,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dmetadata.h"
-#include "xmpwidget.h"
-#include "xmpwidget.moc"
 
 namespace Digikam
 {

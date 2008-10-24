@@ -27,10 +27,10 @@
 
 // Qt includes.
 
-#include <QByteArray>
-#include <QString>
+#include <QtCore/QByteArray>
+#include <QtCore/QString>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "digikam_export.h"

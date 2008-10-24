@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "ratingsearchutilities.h"
+#include "ratingsearchutilities.moc"
+
 // Qt includes.
 
 #include <QAbstractListModel>
@@ -40,12 +45,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "constants.h"
 #include "themeengine.h"
-#include "ratingsearchutilities.h"
-#include "ratingsearchutilities.moc"
 
 namespace Digikam
 {

@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "camerafolderdialog.h"
+#include "camerafolderdialog.moc"
+
 // Qt includes.
 
 #include <QLabel>
@@ -35,13 +40,11 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "cameraiconview.h"
 #include "camerafolderitem.h"
 #include "camerafolderview.h"
-#include "camerafolderdialog.h"
-#include "camerafolderdialog.moc"
 
 namespace Digikam
 {

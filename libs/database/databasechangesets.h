@@ -30,7 +30,7 @@
 #include <QMetaType>
 #include <QDBusArgument>
 
-// Local includes.
+// Digikam includes.
 
 #include "dbusutilities.h"
 #include "digikam_export.h"

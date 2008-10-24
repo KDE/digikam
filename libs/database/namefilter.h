@@ -31,7 +31,7 @@
 #include <QList>
 #include <QRegExp>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

@@ -24,6 +24,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "kipiimageinfo.h"
+
 // KDE includes.
 
 #include <kconfig.h>
@@ -34,7 +38,7 @@
 
 #include <libkipi/version.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "constants.h"
 #include "album.h"
@@ -44,7 +48,6 @@
 #include "databaseaccess.h"
 #include "dmetadata.h"
 #include "imageattributeswatch.h"
-#include "kipiimageinfo.h"
 
 namespace Digikam
 {

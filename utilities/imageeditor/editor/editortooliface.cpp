@@ -21,11 +21,16 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "editortooliface.h"
+#include "editortooliface.moc"
+
 // Qt includes.
 
 #include <QWidget>
 
-// Local includes.
+// Digikam includes.
 
 #include "sidebar.h"
 #include "statusprogressbar.h"
@@ -33,8 +38,6 @@
 #include "editortoolsettings.h"
 #include "editorstackview.h"
 #include "editorwindow.h"
-#include "editortooliface.h"
-#include "editortooliface.moc"
 
 namespace Digikam
 {

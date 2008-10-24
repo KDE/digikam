@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "lensdistortiontool.h"
+#include "lensdistortiontool.moc"
+
 // C++ includes.
 
 #include <cmath>
@@ -51,7 +56,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "daboutdata.h"
 #include "editortoolsettings.h"
@@ -59,8 +64,6 @@
 #include "imagewidget.h"
 #include "version.h"
 #include "lensdistortion.h"
-#include "lensdistortiontool.h"
-#include "lensdistortiontool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

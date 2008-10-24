@@ -24,7 +24,7 @@
 #ifndef IPTCWIDGET_H
 #define IPTCWIDGET_H
 
-// Local includes.
+// Digikam includes.
 
 #include "metadatawidget.h"
 #include "digikam_export.h"

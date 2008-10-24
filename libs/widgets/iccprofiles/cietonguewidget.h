@@ -30,9 +30,9 @@
 
 // Qt includes.
 
-#include <QWidget>
-#include <QColor>
-#include <QPaintEvent>
+#include <QtGui/QWidget>
+#include <QtGui/QColor>
+#include <QtGui/QPaintEvent>
 
 // KDE includes.
 
@@ -45,7 +45,7 @@
 #define cmsTakeCopyright(profile) "Unknown"
 #endif // LCMS_VERSION < 114
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

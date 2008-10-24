@@ -27,10 +27,10 @@
 
 // Qt includes.
 
-#include <QString>
-#include <QTreeWidgetItem>
+#include <QtCore/QString>
+#include <QtGui/QTreeWidgetItem>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_perspective.h"
+#include "imageplugin_perspective.moc"
+
 // KDE includes.
 
 #include <kaction.h>
@@ -32,11 +37,9 @@
 #include <klibloader.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "perspectivetool.h"
-#include "imageplugin_perspective.h"
-#include "imageplugin_perspective.moc"
 
 using namespace DigikamPerspectiveImagesPlugin;
 

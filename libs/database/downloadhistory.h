@@ -29,7 +29,7 @@
 #include <QString>
 #include <QDateTime>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

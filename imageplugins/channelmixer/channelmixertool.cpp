@@ -24,6 +24,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "channelmixertool.h"
+#include "channelmixertool.moc"
+
 // C++ includes.
 
 #include <cstdio>
@@ -73,7 +78,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "colorgradientwidget.h"
 #include "daboutdata.h"
@@ -86,8 +91,6 @@
 #include "imageiface.h"
 #include "imagewidget.h"
 #include "version.h"
-#include "channelmixertool.h"
-#include "channelmixertool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

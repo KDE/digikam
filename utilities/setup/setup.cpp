@@ -5,7 +5,7 @@
  *
  * Date        : 2003-02-03
  * Description : digiKam setup dialog.
- * 
+ *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
  * Copyright (C) 2003-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,13 +14,18 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Album Public License for more details.
- * 
+ *
  * ============================================================ */
+
+// Local includes.
+
+#include "setup.h"
+#include "setup.moc"
 
 // KDE includes.
 
@@ -32,7 +37,7 @@
 #include <kglobal.h>
 #include <kvbox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "batchthumbsgenerator.h"
 #include "setupcollections.h"
@@ -51,8 +56,6 @@
 #include "setupplugins.h"
 #include "setupcamera.h"
 #include "setupmisc.h"
-#include "setup.h"
-#include "setup.moc"
 
 namespace Digikam
 {
@@ -184,7 +187,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_lighttable = addPage( d->lighttablePage, i18n("Light Table") );
     d->page_lighttable->setHeader( i18n("Light Table Settings") );
     d->page_lighttable->setIcon( KIcon("lighttable") );
-    
+
     d->editorPage  = new SetupEditor();
     d->page_editor = addPage( d->editorPage, i18n("Image Editor") );
     d->page_editor->setHeader( i18n("Image Editor Album Settings") );
@@ -230,7 +233,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 
     if (page != LastPageUsed)
         showPage(page);
-    else 
+    else
     {
         KSharedConfig::Ptr config = KGlobal::config();
         KConfigGroup group = config->group(QString("Album Settings"));
@@ -294,52 +297,52 @@ void Setup::showPage(Setup::Page page)
     switch(page)
     {
         case AlbumViewPage:
-            setCurrentPage(d->page_albumView); 
+            setCurrentPage(d->page_albumView);
             break;
         case ToolTipPage:
-            setCurrentPage(d->page_tooltip); 
+            setCurrentPage(d->page_tooltip);
             break;
         case MetadataPage:
-            setCurrentPage(d->page_metadata); 
+            setCurrentPage(d->page_metadata);
             break;
         case IdentifyPage:
-            setCurrentPage(d->page_identity); 
+            setCurrentPage(d->page_identity);
             break;
         case AlbumTypePage:
-            setCurrentPage(d->page_albumType); 
+            setCurrentPage(d->page_albumType);
             break;
         case MimePage:
-            setCurrentPage(d->page_mime); 
+            setCurrentPage(d->page_mime);
             break;
         case LightTablePage:
-            setCurrentPage(d->page_lighttable); 
+            setCurrentPage(d->page_lighttable);
             break;
         case EditorPage:
-            setCurrentPage(d->page_editor); 
+            setCurrentPage(d->page_editor);
             break;
         case DcrawPage:
-            setCurrentPage(d->page_dcraw); 
+            setCurrentPage(d->page_dcraw);
             break;
         case IOFilesPage:
-            setCurrentPage(d->page_iofiles); 
+            setCurrentPage(d->page_iofiles);
             break;
         case SlideshowPage:
-            setCurrentPage(d->page_slideshow); 
+            setCurrentPage(d->page_slideshow);
             break;
         case ICCPage:
-            setCurrentPage(d->page_icc); 
+            setCurrentPage(d->page_icc);
             break;
         case KipiPluginsPage:
-            setCurrentPage(d->page_plugins); 
+            setCurrentPage(d->page_plugins);
             break;
         case CameraPage:
-            setCurrentPage(d->page_camera); 
+            setCurrentPage(d->page_camera);
             break;
         case MiscellaneousPage:
-            setCurrentPage(d->page_misc); 
+            setCurrentPage(d->page_misc);
             break;
-        default: 
-            setCurrentPage(d->page_collections); 
+        default:
+            setCurrentPage(d->page_collections);
             break;
     }
 }
@@ -358,11 +361,11 @@ Setup::Page Setup::activePageIndex()
     if (cur == d->page_editor)      return EditorPage;
     if (cur == d->page_dcraw)       return DcrawPage;
     if (cur == d->page_iofiles)     return IOFilesPage;
-    if (cur == d->page_slideshow)   return SlideshowPage; 
-    if (cur == d->page_icc)         return ICCPage; 
-    if (cur == d->page_plugins)     return KipiPluginsPage; 
-    if (cur == d->page_camera)      return CameraPage; 
-    if (cur == d->page_misc)        return MiscellaneousPage; 
+    if (cur == d->page_slideshow)   return SlideshowPage;
+    if (cur == d->page_icc)         return ICCPage;
+    if (cur == d->page_plugins)     return KipiPluginsPage;
+    if (cur == d->page_camera)      return CameraPage;
+    if (cur == d->page_misc)        return MiscellaneousPage;
 
     return CollectionsPage;
 }

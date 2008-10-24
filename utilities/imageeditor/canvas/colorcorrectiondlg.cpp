@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "colorcorrectiondlg.h"
+#include "colorcorrectiondlg.moc"
+
 // Qt includes.
 
 #include <QLabel>
@@ -42,13 +47,11 @@
 #include <kseparator.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "icctransform.h"
 #include "iccprofileinfodlg.h"
-#include "colorcorrectiondlg.h"
-#include "colorcorrectiondlg.moc"
 
 namespace Digikam
 {

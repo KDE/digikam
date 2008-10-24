@@ -24,6 +24,10 @@
 #ifndef IMAGEPLUGIN_CHANNELMIXER_H
 #define IMAGEPLUGIN_CHANNELMIXER_H
 
+// Qt includes.
+
+#include <QVariant>
+
 // Digikam includes.
 
 #include "imageplugin.h"

@@ -22,19 +22,22 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "album.h"
+
 // KDE includes.
 
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumdb.h"
 #include "albummanager.h"
 #include "collectionmanager.h"
 #include "databaseaccess.h"
 #include "databaseurl.h"
-#include "album.h"
 
 namespace Digikam
 {

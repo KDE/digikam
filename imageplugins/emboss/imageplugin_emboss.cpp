@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_emboss.h"
+#include "imageplugin_emboss.moc"
+
 // KDE includes.
 
 #include <kdebug.h>
@@ -33,11 +38,9 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "embosstool.h"
-#include "imageplugin_emboss.h"
-#include "imageplugin_emboss.moc"
 
 using namespace DigikamEmbossImagesPlugin;
 

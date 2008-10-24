@@ -5,7 +5,7 @@
  *
  * Date        : 2005-04-24
  * Description : icons group item.
- * 
+ *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
@@ -13,15 +13,19 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
-// C Ansi includes.
+// Local includes.
+
+#include "icongroupitem.h"
+
+// C++ includes.
 
 #include <cstdlib>
 
@@ -31,11 +35,10 @@
 #include <QPalette>
 #include <QPainter>
 
-// Local includes.
+// Digikam includes.
 
 #include "iconview.h"
 #include "iconitem.h"
-#include "icongroupitem.h"
 
 namespace Digikam
 {
@@ -53,7 +56,7 @@ public:
         count     = 0;
         clearing  = false;
     }
-    
+
     IconView*      view;
 
     IconItem*      firstItem;
@@ -63,7 +66,7 @@ public:
     int            count;
     bool           clearing;
 
-    struct SortableItem 
+    struct SortableItem
     {
         IconItem *item;
     };
@@ -98,7 +101,7 @@ IconGroupItem* IconGroupItem::nextGroup() const
 
 IconGroupItem* IconGroupItem::prevGroup() const
 {
-    return m_prev;    
+    return m_prev;
 }
 
 QRect IconGroupItem::rect() const
@@ -110,12 +113,12 @@ QRect IconGroupItem::rect() const
 
 int IconGroupItem::y() const
 {
-    return d->y;    
+    return d->y;
 }
 
 IconItem* IconGroupItem::firstItem() const
 {
-    return d->firstItem;    
+    return d->firstItem;
 }
 
 IconItem* IconGroupItem::lastItem() const
@@ -156,7 +159,7 @@ void IconGroupItem::takeItem(IconItem* item)
     d->view->takeItem(item);
     d->count--;
 
-    if (item == d->firstItem) 
+    if (item == d->firstItem)
     {
         d->firstItem = d->firstItem->m_next;
         if (d->firstItem)
@@ -164,7 +167,7 @@ void IconGroupItem::takeItem(IconItem* item)
         else
             d->firstItem = d->lastItem = 0;
     }
-    else if (item == d->lastItem) 
+    else if (item == d->lastItem)
     {
         d->lastItem = d->lastItem->m_prev;
         if ( d->lastItem )
@@ -172,10 +175,10 @@ void IconGroupItem::takeItem(IconItem* item)
         else
             d->firstItem = d->lastItem = 0;
     }
-    else 
+    else
     {
         IconItem *i = item;
-        if (i) 
+        if (i)
         {
             if (i->m_prev )
                 i->m_prev->m_next = i->m_next;
@@ -199,11 +202,11 @@ int IconGroupItem::index(IconItem* item) const
         return 0;
     else if ( item == d->lastItem )
         return d->count - 1;
-    else 
+    else
     {
         IconItem *i = d->firstItem;
         int j = 0;
-        while ( i && i != item ) 
+        while ( i && i != item )
         {
             i = i->m_next;
             ++j;
@@ -263,7 +266,7 @@ void IconGroupItem::sort()
             d->lastItem = item;
         prev = item;
     }
-    
+
     delete [] items;
 }
 

@@ -26,9 +26,9 @@
 
 // Qt includes.
 
-#include <QImage>
+#include <QtGui/QImage>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "dimgthreadedfilter.h"

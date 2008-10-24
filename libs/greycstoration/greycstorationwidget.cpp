@@ -20,6 +20,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "greycstorationwidget.h"
+#include "greycstorationwidget.moc"
+
 // Qt includes.
 
 #include <QCheckBox>
@@ -40,11 +45,6 @@
 
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
-
-// Local includes.
-
-#include "greycstorationwidget.h"
-#include "greycstorationwidget.moc"
 
 using namespace KDcrawIface;
 

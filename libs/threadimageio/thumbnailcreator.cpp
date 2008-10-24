@@ -23,6 +23,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "thumbnailcreator.h"
+
 // Qt includes.
 
 #include <QFileInfo>
@@ -51,12 +55,11 @@
 #include <libkdcraw/rawfiles.h>
 #include <libkdcraw/kdcraw.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "dmetadata.h"
 #include "jpegutils.h"
-#include "thumbnailcreator.h"
 #include "thumbnailcreator_p.h"
 
 // Definitions

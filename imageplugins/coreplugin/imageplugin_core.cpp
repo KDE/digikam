@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_core.h"
+#include "imageplugin_core.moc"
+
 // KDE includes.
 
 #include <kaction.h>
@@ -34,7 +39,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "dimgimagefilters.h"
@@ -49,8 +54,6 @@
 #include "sharpentool.h"
 #include "redeyetool.h"
 #include "rgbtool.h"
-#include "imageplugin_core.h"
-#include "imageplugin_core.moc"
 
 using namespace DigikamImagesPluginCore;
 using namespace Digikam;

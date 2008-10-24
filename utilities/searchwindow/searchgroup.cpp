@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "searchgroup.h"
+#include "searchgroup.moc"
+
 // Qt includes.
 
 #include <QGridLayout>
@@ -37,14 +42,12 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "searchview.h"
 #include "searchfields.h"
 #include "searchfieldgroup.h"
 #include "searchutilities.h"
-#include "searchgroup.h"
-#include "searchgroup.moc"
 
 namespace Digikam
 {

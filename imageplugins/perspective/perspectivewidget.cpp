@@ -25,6 +25,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "perspectivewidget.h"
+#include "perspectivewidget.moc"
+
 // C++ includes.
 
 #include <cstdio>
@@ -51,13 +56,11 @@
 #include <kglobal.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "triangle.h"
 #include "imageiface.h"
 #include "dimgimagefilters.h"
-#include "perspectivewidget.h"
-#include "perspectivewidget.moc"
 
 namespace DigikamPerspectiveImagesPlugin
 {

@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "setupcamera.h"
+#include "setupcamera.moc"
+
 // Qt includes.
 
 #include <QGroupBox>
@@ -45,15 +50,13 @@
 #include <kapplication.h>
 #include <ktoolinvocation.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "config-digikam.h"
 #include "gpcamera.h"
 #include "cameraselection.h"
 #include "cameralist.h"
 #include "cameratype.h"
-#include "setupcamera.h"
-#include "setupcamera.moc"
 
 namespace Digikam
 {

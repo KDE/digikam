@@ -24,8 +24,8 @@
  * 
  * ============================================================ */
 
-#ifndef _DELETEDIALOG_H
-#define _DELETEDIALOG_H
+#ifndef DELETEDIALOG_H
+#define DELETEDIALOG_H
 
 // Qt includes.
 
@@ -36,7 +36,7 @@
 #include <kdialog.h>
 #include <kurl.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 
@@ -157,5 +157,5 @@ private:
 
 } // namespace Digikam
 
-#endif // _DELETEDIALOG_H
+#endif // DELETEDIALOG_H
 

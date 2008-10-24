@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "bordertool.h"
+#include "bordertool.moc"
+
 // Qt includes.
 
 #include <QCheckBox>
@@ -49,7 +54,7 @@
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "daboutdata.h"
 #include "editortoolsettings.h"
@@ -57,8 +62,6 @@
 #include "imagewidget.h"
 #include "version.h"
 #include "border.h"
-#include "bordertool.h"
-#include "bordertool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

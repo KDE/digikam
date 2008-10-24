@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "restorationtool.h"
+#include "restorationtool.moc"
+
 // Qt includes.
 
 #include <QFile>
@@ -47,7 +52,7 @@
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "version.h"
 #include "imageiface.h"
@@ -56,8 +61,6 @@
 #include "greycstorationsettings.h"
 #include "greycstorationwidget.h"
 #include "greycstorationiface.h"
-#include "restorationtool.h"
-#include "restorationtool.moc"
 
 using namespace Digikam;
 

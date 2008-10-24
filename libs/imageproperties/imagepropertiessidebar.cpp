@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imagepropertiessidebar.h"
+#include "imagepropertiessidebar.moc"
+
 // Qt includes.
 
 #include <QRect>
@@ -48,7 +53,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "dmetadata.h"
@@ -56,8 +61,6 @@
 #include "imagepropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
-#include "imagepropertiessidebar.h"
-#include "imagepropertiessidebar.moc"
 
 namespace Digikam
 {

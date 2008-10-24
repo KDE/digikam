@@ -5,7 +5,7 @@
  *
  * Date        : 2005-05-02
  * Description : a widget to perform month selection.
- * 
+ *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,13 +14,18 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
+
+// Local includes.
+
+#include "monthwidget.h"
+#include "monthwidget.moc"
 
 // Qt includes.
 
@@ -40,12 +45,10 @@
 #include <kcalendarsystem.h>
 #include <kdeversion.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "imageinfo.h"
 #include "albumlister.h"
-#include "monthwidget.h"
-#include "monthwidget.moc"
 
 namespace Digikam
 {
@@ -216,7 +219,7 @@ void MonthWidget::paintEvent(QPaintEvent*)
 
                 if(!weekvisible)
                 {
-                    int weeknr = KGlobal::locale()->calendar()->weekNumber(QDate(d->year, 
+                    int weeknr = KGlobal::locale()->calendar()->weekNumber(QDate(d->year,
                                                                            d->month, d->days[index].day));
                     p.setPen(d->active ? Qt::black : Qt::gray);
                     p.setFont(fnBold);
@@ -314,7 +317,7 @@ void MonthWidget::mousePressEvent(QMouseEvent *e)
         if (e->modifiers() == Qt::ShiftModifier)
         {
             int endSelection = j*7+i;
-            if (endSelection > firstSelected) 
+            if (endSelection > firstSelected)
                 for (int i2=firstSelected ; i2 <= endSelection; i2++)
                     d->days[i2].selected = true;
             else if (endSelection < firstSelected)

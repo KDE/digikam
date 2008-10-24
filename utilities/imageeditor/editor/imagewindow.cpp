@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imagewindow.h"
+#include "imagewindow.moc"
+
 // C++ includes.
 
 #include <cstdio>
@@ -70,7 +75,7 @@
 #include <ktoolbarpopupaction.h>
 #include <kwindowsystem.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "componentsinfo.h"
 #include "album.h"
@@ -110,8 +115,6 @@
 #include "tagspopupmenu.h"
 #include "themeengine.h"
 #include "editorstackview.h"
-#include "imagewindow.h"
-#include "imagewindow.moc"
 
 namespace Digikam
 {

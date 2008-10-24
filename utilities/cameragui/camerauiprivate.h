@@ -23,6 +23,9 @@
  *
  * ============================================================ */
 
+#ifndef CAMERAUIPRIVATE_H
+#define CAMERAUIPRIVATE_H
+
 // Qt includes.
 
 #include <QString>
@@ -203,3 +206,5 @@ public:
 };
 
 }  // namespace Digikam
+
+#endif /* CAMERAUIPRIVATE_H */

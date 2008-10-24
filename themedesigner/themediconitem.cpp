@@ -21,6 +21,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "themediconitem.h"
+
 // Qt includes.
 
 #include <QPainter>
@@ -38,11 +42,10 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "themeengine.h"
 #include "themediconview.h"
-#include "themediconitem.h"
 
 namespace Digikam
 {

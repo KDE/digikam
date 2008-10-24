@@ -34,7 +34,7 @@
 #include <kurl.h>
 #include <kxmlguiwindow.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "imageinfo.h"
 

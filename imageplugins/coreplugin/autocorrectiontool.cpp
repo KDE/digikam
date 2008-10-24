@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "autocorrectiontool.h"
+#include "autocorrectiontool.moc"
+
 // Qt includes.
 
 #include <QCheckBox>
@@ -62,10 +67,6 @@
 #include "imagewidget.h"
 #include "whitebalance.h"
 
-// Local includes.
-
-#include "autocorrectiontool.h"
-#include "autocorrectiontool.moc"
 
 using namespace Digikam;
 

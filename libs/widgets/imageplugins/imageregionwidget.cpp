@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageregionwidget.h"
+#include "imageregionwidget.moc"
+
 // C++ includes.
 
 #include <cmath>
@@ -44,11 +49,9 @@
 #include <kapplication.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "imageiface.h"
-#include "imageregionwidget.h"
-#include "imageregionwidget.moc"
 
 namespace Digikam
 {

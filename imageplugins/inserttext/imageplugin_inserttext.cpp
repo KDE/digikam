@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_inserttext.h"
+#include "imageplugin_inserttext.moc"
+
 // KDE includes.
 
 #include <kdebug.h>
@@ -32,11 +37,9 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "inserttexttool.h"
-#include "imageplugin_inserttext.h"
-#include "imageplugin_inserttext.moc"
 
 using namespace DigikamInsertTextImagesPlugin;
 

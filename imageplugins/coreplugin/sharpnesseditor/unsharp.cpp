@@ -21,6 +21,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "unsharp.h"
+
 // C++ includes.
 
 #include <cmath>
@@ -30,13 +34,12 @@
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "dcolor.h"
 #include "dimgimagefilters.h"
 #include "dimggaussianblur.h"
-#include "unsharp.h"
 
 namespace DigikamImagesPluginCore
 {

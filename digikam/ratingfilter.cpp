@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "ratingfilter.h"
+#include "ratingfilter.moc"
+
 // Qt includes.
 
 #include <QPainter>
@@ -38,13 +43,11 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "constants.h"
 #include "dcursortracker.h"
 #include "themeengine.h"
-#include "ratingfilter.h"
-#include "ratingfilter.moc"
 
 namespace Digikam
 {

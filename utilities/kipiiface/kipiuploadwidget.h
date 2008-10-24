@@ -30,7 +30,7 @@
 #include <libkipi/imagecollection.h>
 #include <libkipi/uploadwidget.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albummanager.h"
 

@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "canvas.h"
+#include "canvas.moc"
+
 // C++ includes.
 
 #include <cstdio>
@@ -61,7 +66,7 @@
 #include <kdatetable.h>
 #include <kglobalsettings.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "imagehistogram.h"
 #include "imagepaniconwidget.h"
@@ -71,8 +76,6 @@
 #include "iofilesettingscontainer.h"
 #include "loadingcacheinterface.h"
 #include "drubberband.h"
-#include "canvas.h"
-#include "canvas.moc"
 
 namespace Digikam
 {

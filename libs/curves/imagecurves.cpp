@@ -28,6 +28,10 @@
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
+// Local includes.
+
+#include "imagecurves.h"
+
 // C++ includes.
 
 #include <cstdio>
@@ -43,10 +47,6 @@
 // KDE includes.
 
 #include <kdebug.h>
-
-// Local includes.
-
-#include "imagecurves.h"
 
 namespace Digikam
 {

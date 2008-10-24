@@ -34,7 +34,7 @@
 #include <kdialog.h>
 #include <knuminput.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "pngsettings.h"
 #include "pngsettings.moc"

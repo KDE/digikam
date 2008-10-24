@@ -4,8 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2005-03-11
- * Description : a digiKam image editor plugin to correct 
- *               image white balance 
+ * Description : a digiKam image editor plugin to correct
+ *               image white balance
  *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -24,6 +24,10 @@
 
 #ifndef IMAGEPLUGIN_WHITEBALANCE_H
 #define IMAGEPLUGIN_WHITEBALANCE_H
+
+// Qt includes.
+
+#include <QVariant>
 
 // Digikam includes.
 

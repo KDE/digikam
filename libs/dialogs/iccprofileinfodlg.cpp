@@ -21,15 +21,18 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "iccprofileinfodlg.h"
+
 // KDE includes.
 
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "iccprofilewidget.h"
-#include "iccprofileinfodlg.h"
 
 namespace Digikam
 {

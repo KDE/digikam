@@ -25,7 +25,7 @@
 #ifndef THEMEDICONITEM_H
 #define THEMEDICONITEM_H
 
-// Local includes.
+// Digikam includes.
 
 #include "iconitem.h"
 

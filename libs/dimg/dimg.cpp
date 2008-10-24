@@ -23,6 +23,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "dimg.h"
+
 // C ANSI includes.
 
 extern "C"
@@ -36,7 +40,6 @@ extern "C"
 
 // Qt includes.
 
-#include <QtCore>
 #include <QFile>
 #include <QFileInfo>
 #include <QMap>
@@ -56,7 +59,7 @@ extern "C"
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Digikam includes.
 
 #include "pngloader.h"
 #include "jpegloader.h"
@@ -69,7 +72,6 @@ extern "C"
 #include "exposurecontainer.h"
 #include "dimgprivate.h"
 #include "dimgloaderobserver.h"
-#include "dimg.h"
 
 typedef uint64_t ullong;
 typedef int64_t  llong;

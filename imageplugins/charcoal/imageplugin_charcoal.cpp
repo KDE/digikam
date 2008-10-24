@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_charcoal.h"
+#include "imageplugin_charcoal.moc"
+
 // KDE includes.
 
 #include <klocale.h>
@@ -33,11 +38,9 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "charcoaltool.h"
-#include "imageplugin_charcoal.h"
-#include "imageplugin_charcoal.moc"
 
 using namespace DigikamCharcoalImagesPlugin;
 

@@ -28,7 +28,7 @@
 
 #include <QStackedWidget>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

@@ -5,7 +5,7 @@
  *
  * Date        : 2003-01-28
  * Description : a dialog to display camera information.
- * 
+ *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,13 +14,17 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
+
+// Local includes.
+
+#include "camerainfodialog.h"
 
 // Qt includes.
 
@@ -31,9 +35,6 @@
 #include <klocale.h>
 #include <kicon.h>
 
-// Local includes.
-
-#include "camerainfodialog.h"
 
 namespace Digikam
 {
@@ -51,7 +52,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
     resize(500, 400);
 
     // ----------------------------------------------------------
-    
+
     QTextEdit *summaryView = new QTextEdit(summary);
     summaryView->setWordWrapMode(QTextOption::WordWrap);
     summaryView->setReadOnly(true);
@@ -59,7 +60,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
     KPageWidgetItem *p1 = addPage(summaryView, i18n("Summary"));
     p1->setHeader( i18n("Device Summary") );
     p1->setIcon( KIcon("dialog-information") );
-    
+
     // ----------------------------------------------------------
 
     QTextEdit *manualView = new QTextEdit(manual);

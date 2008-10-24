@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "blurtool.h"
+#include "blurtool.moc"
+
 // Qt includes.
 
 #include <QGridLayout>
@@ -49,10 +54,6 @@
 #include "editortoolsettings.h"
 #include "dimggaussianblur.h"
 
-// Local includes.
-
-#include "blurtool.h"
-#include "blurtool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

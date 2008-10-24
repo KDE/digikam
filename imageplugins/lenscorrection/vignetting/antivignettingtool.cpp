@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "antivignettingtool.h"
+#include "antivignettingtool.moc"
+
 // Qt includes.
 
 #include <QGridLayout>
@@ -49,7 +54,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "version.h"
 #include "daboutdata.h"
@@ -59,8 +64,6 @@
 #include "imagewidget.h"
 #include "dimgimagefilters.h"
 #include "antivignetting.h"
-#include "antivignettingtool.h"
-#include "antivignettingtool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

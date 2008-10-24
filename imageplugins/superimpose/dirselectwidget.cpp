@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "dirselectwidget.h"
+#include "dirselectwidget.moc"
+
 // Qt includes.
 
 #include <Q3Header>
@@ -36,10 +41,6 @@
 #include <klocale.h>
 #include <kfiletreebranch.h>
 
-// Local includes.
-
-#include "dirselectwidget.h"
-#include "dirselectwidget.moc"
 
 namespace DigikamSuperImposeImagesPlugin
 {

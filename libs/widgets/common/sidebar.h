@@ -23,20 +23,20 @@
  *
  * ============================================================ */
 
-#ifndef _SIDEBAR_H_
-#define _SIDEBAR_H_
+#ifndef SIDEBAR_H
+#define SIDEBAR_H
 
 // Qt includes.
 
-#include <QPixmap>
-#include <QSplitter>
+#include <QtGui/QPixmap>
+#include <QtGui/QSplitter>
 
 // KDE includes.
 
 #include <kmultitabbar.h>
 #include <kconfiggroup.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 
@@ -62,7 +62,7 @@ public:
      * Creates a new sidebar
      * @param parent sidebar's parent
      * @param sp sets the splitter, which should handle the width. The splitter normally
-     *           is part of the main view. Internally, the width of the widget stack can 
+     *           is part of the main view. Internally, the width of the widget stack can
      *           be changed by a QSplitter.
      * @param side where the sidebar should be displayed. At the left or right border.
                    Use KMultiTabBar::Left or KMultiTabBar::Right.
@@ -115,17 +115,17 @@ public:
 
     /**
      * hide sidebar and backup minimized state.
-     */ 
+     */
     void backup();
 
     /**
      * show sidebar and restore minimized state.
-     */ 
+     */
     void restore();
 
     /**
      * return the visible status of current sidebar tab.
-     */ 
+     */
     bool isExpanded();
 
 private:
@@ -214,4 +214,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // _SIDEBAR_H_
+#endif // SIDEBAR_H

@@ -45,13 +45,14 @@ class RComboBox;
 
 namespace Digikam
 {
-class ImageWidget;
-class HistogramWidget;
 class ColorGradientWidget;
-class DColor;
-class ICCPreviewWidget;
 class CurvesWidget;
+class DColor;
+class DImg;
 class EditorToolSettings;
+class HistogramWidget;
+class ICCPreviewWidget;
+class ImageWidget;
 }
 
 namespace DigikamImagesPluginCore

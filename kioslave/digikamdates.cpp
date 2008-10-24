@@ -4,8 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2005-04-21
- * Description : a kio-slave to process date query on 
- *               digiKam albums. 
+ * Description : a kio-slave to process date query on
+ *               digiKam albums.
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
@@ -21,6 +21,10 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
+// Local includes.
+
+#include "digikamdates.h"
 
 // C++ includes.
 
@@ -41,13 +45,12 @@
 #include <kfilemetainfo.h>
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 #include "imagelister.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
-#include "digikamdates.h"
 
 kio_digikamdates::kio_digikamdates(const QByteArray &pool_socket,
                                    const QByteArray &app_socket)
@@ -99,7 +102,7 @@ void kio_digikamdates::special(const QByteArray& data)
 
 /* KIO slave registration */
 
-extern "C"  
+extern "C"
 {
     KDE_EXPORT int kdemain(int argc, char **argv)
     {

@@ -34,7 +34,7 @@
 #include <QWaitCondition>
 #include <QEvent>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "digikam_export.h"

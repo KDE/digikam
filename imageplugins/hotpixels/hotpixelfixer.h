@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -36,9 +36,6 @@
 // Digikam includes.
 
 #include "dimgthreadedfilter.h"
-
-// Local includes.
-
 #include "hotpixel.h"
 #include "weights.h"
 
@@ -50,7 +47,7 @@ class HotPixelFixer : public Digikam::DImgThreadedFilter
 
 public:
 
-    enum InterpolationMethod 
+    enum InterpolationMethod
     {
         AVERAGE_INTERPOLATION   = 0,
         LINEAR_INTERPOLATION    = 1,
@@ -67,16 +64,16 @@ public:
 
 public:
 
-    HotPixelFixer(Digikam::DImg *orgImage, QObject *parent, 
+    HotPixelFixer(Digikam::DImg *orgImage, QObject *parent,
                   const QList<HotPixel>& hpList, int interpolationMethod);
     ~HotPixelFixer();
 
-private: 
+private:
 
     virtual void filterImage();
 
     void interpolate (Digikam::DImg &img,HotPixel &hp, int method);
-    void weightPixels (Digikam::DImg &img, HotPixel &px, int method, 
+    void weightPixels (Digikam::DImg &img, HotPixel &px, int method,
                        Direction dir, int maxComponent);
 
     inline bool validPoint(Digikam::DImg &img, QPoint p)
@@ -86,7 +83,7 @@ private:
 
     QList <Weights> mWeightList;
 
-private: 
+private:
 
     int             m_interpolationMethod;
 

@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "searchfolderview.h"
+#include "searchfolderview.moc"
+
 // Qt includes.
 
 #include <QFont>
@@ -41,14 +46,12 @@
 #include <kmenu.h>
 #include <kmessagebox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "folderitem.h"
-#include "searchfolderview.h"
-#include "searchfolderview.moc"
 
 namespace Digikam
 {

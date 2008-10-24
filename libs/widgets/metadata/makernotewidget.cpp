@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "makernotewidget.h"
+#include "makernotewidget.moc"
+
 // Qt includes.
 
 #include <QMap>
@@ -32,11 +37,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dmetadata.h"
-#include "makernotewidget.h"
-#include "makernotewidget.moc"
 
 namespace Digikam
 {

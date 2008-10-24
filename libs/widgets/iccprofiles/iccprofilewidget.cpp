@@ -21,23 +21,27 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "iccprofilewidget.h"
+#include "iccprofilewidget.moc"
+
 // Qt includes.
 
-#include <QPushButton>
+#include <QComboBox>
+#include <QFile>
+#include <QGroupBox>
 #include <QLabel>
 #include <QMap>
-#include <QFile>
-#include <QComboBox>
-#include <QGroupBox>
-#include <QMap>
+#include <QPushButton>
 
 // KDE includes.
 
-#include <kdebug.h>
-#include <khbox.h>
-#include <kdialog.h>
-#include <klocale.h>
 #include <kapplication.h>
+#include <kdebug.h>
+#include <kdialog.h>
+#include <khbox.h>
+#include <klocale.h>
 
 // Lcms includes.
 
@@ -46,12 +50,10 @@
 #define cmsTakeCopyright(profile) "Unknown"
 #endif // LCMS_VERSION < 114
 
-// Local includes.
+// Digikam includes.
 
-#include "metadatalistview.h"
 #include "cietonguewidget.h"
-#include "iccprofilewidget.h"
-#include "iccprofilewidget.moc"
+#include "metadatalistview.h"
 
 namespace Digikam
 {

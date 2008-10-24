@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "albumiconviewfilter.h"
+#include "albumiconviewfilter.moc"
+
 // KDE includes.
 
 #include <kdebug.h>
@@ -28,15 +33,13 @@
 #include <kdeversion.h>
 #include <kdialog.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumsettings.h"
 #include "searchtextbar.h"
 #include "ratingfilter.h"
 #include "mimefilter.h"
 #include "statusled.h"
-#include "albumiconviewfilter.h"
-#include "albumiconviewfilter.moc"
 
 namespace Digikam
 {

@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "lighttablewindow.h"
+#include "lighttablewindow.moc"
+
 // Qt includes.
 
 #include <QHBoxLayout>
@@ -59,7 +64,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Digikam includes.
 
 #include "componentsinfo.h"
 #include "digikamapp.h"
@@ -78,8 +83,6 @@
 #include "thumbnailsize.h"
 #include "lighttablepreview.h"
 #include "lighttablewindowprivate.h"
-#include "lighttablewindow.h"
-#include "lighttablewindow.moc"
 
 namespace Digikam
 {

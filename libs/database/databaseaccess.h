@@ -24,7 +24,7 @@
 #ifndef DATABASEACCESS_H
 #define DATABASEACCESS_H
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 #include "databaseparameters.h"

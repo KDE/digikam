@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "fingerprintsgenerator.h"
+#include "fingerprintsgenerator.moc"
+
 // Qt includes.
 
 #include <QString>
@@ -39,7 +44,7 @@
 #include <klocale.h>
 #include <kstandardguiitem.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "album.h"
@@ -50,8 +55,6 @@
 #include "haar.h"
 #include "haariface.h"
 #include "previewloadthread.h"
-#include "fingerprintsgenerator.h"
-#include "fingerprintsgenerator.moc"
 
 namespace Digikam
 {

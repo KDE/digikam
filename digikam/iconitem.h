@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-04-24
- * Description : icon item. 
+ * Description : icon item.
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,9 +29,11 @@
 #include <QRect>
 #include <QString>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
+
+class QPainter;
 
 namespace Digikam
 {
@@ -82,7 +84,7 @@ private:
     int            m_y;
     bool           m_selected;
 };
-    
+
 }  // namespace Digikam
 
 #endif /* ICONITEM_H */

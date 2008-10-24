@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "lensdistortion.h"
+
 // C++ includes.
 
 #include <cmath>
@@ -31,11 +35,10 @@
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "pixelaccess.h"
-#include "lensdistortion.h"
 
 namespace DigikamLensDistortionImagesPlugin
 {

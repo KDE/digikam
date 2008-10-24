@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imagepropertiestab.h"
+#include "imagepropertiestab.moc"
+
 // Qt includes.
 
 #include <QGridLayout>
@@ -36,11 +41,6 @@
 #include <kdialog.h>
 #include <ksqueezedtextlabel.h>
 #include <kseparator.h>
-
-// Local includes.
-
-#include "imagepropertiestab.h"
-#include "imagepropertiestab.moc"
 
 namespace Digikam
 {

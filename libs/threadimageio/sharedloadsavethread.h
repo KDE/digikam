@@ -24,7 +24,7 @@
 #ifndef SHARED_LOAD_SAVE_THREAD_H
 #define SHARED_LOAD_SAVE_THREAD_H
 
-// Local includes.
+// Digikam includes.
 
 #include "managedloadsavethread.h"
 

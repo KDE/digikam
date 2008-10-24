@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "cameraui.h"
+#include "cameraui.moc"
+
 // Qt includes.
 
 #include <QCheckBox>
@@ -85,7 +90,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Digikam includes.
 
 #include "componentsinfo.h"
 #include "statuszoombar.h"
@@ -118,8 +123,6 @@
 #include "cameralist.h"
 #include "cameratype.h"
 #include "camerauiprivate.h"
-#include "cameraui.h"
-#include "cameraui.moc"
 
 namespace Digikam
 {

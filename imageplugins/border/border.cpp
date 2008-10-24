@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "border.h"
+
 // C++ includes.
 
 #include <cmath>
@@ -37,10 +41,9 @@
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
-#include "border.h"
 
 namespace DigikamBorderImagesPlugin
 {

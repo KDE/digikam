@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "kipiimagecollectionselector.h"
+#include "kipiimagecollectionselector.moc"
+
 // Qt includes.
 
 #include <QHeaderView>
@@ -36,7 +41,7 @@
 #include <ktabwidget.h>
 #include <kvbox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "constants.h"
 #include "album.h"
@@ -50,8 +55,6 @@
 #include "gpssearchfolderview.h"
 #include "kipiinterface.h"
 #include "kipiimagecollection.h"
-#include "kipiimagecollectionselector.h"
-#include "kipiimagecollectionselector.moc"
 
 namespace Digikam
 {

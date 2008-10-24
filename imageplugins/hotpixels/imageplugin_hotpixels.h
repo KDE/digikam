@@ -26,10 +26,16 @@
 #ifndef IMAGEPLUGIN_HOTPIXELS_H
 #define IMAGEPLUGIN_HOTPIXELS_H
 
+// Qt includes.
+
+#include <QVariant>
+
 // Digikam includes.
 
 #include "imageplugin.h"
 #include "digikam_export.h"
+
+class KAction;
 
 class ImagePlugin_HotPixels : public Digikam::ImagePlugin
 {

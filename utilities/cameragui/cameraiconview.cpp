@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "cameraiconview.h"
+#include "cameraiconview.moc"
+
 // Qt includes.
 
 #include <QFile>
@@ -46,7 +51,7 @@
 #include <kmenu.h>
 #include <kmimetype.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "themeengine.h"
 #include "thumbnailsize.h"
@@ -57,8 +62,6 @@
 #include "ddragobjects.h"
 #include "cameraui.h"
 #include "cameraiconitem.h"
-#include "cameraiconview.h"
-#include "cameraiconview.moc"
 
 namespace Digikam
 {

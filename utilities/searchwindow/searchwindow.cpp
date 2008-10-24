@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "searchwindow.h"
+#include "searchwindow.moc"
+
 // Qt includes.
 
 #include <QScrollArea>
@@ -32,13 +37,11 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "themeengine.h"
 #include "searchview.h"
-#include "searchwindow.h"
 #include "searchxml.h"
-#include "searchwindow.moc"
 
 namespace Digikam
 {

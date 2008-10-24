@@ -2,7 +2,7 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2005-04-21
  * Description : a widget to edit time stamp.
  *
@@ -21,10 +21,12 @@
  *
  * ============================================================ */
 
-/** @file kdatetimeedit.h **/
-
 #ifndef KDATETIMEEDIT_H
 #define KDATETIMEEDIT_H
+
+// Qt includes.
+
+#include <QDateTime>
 
 // KDE includes.
 
@@ -51,7 +53,7 @@ class KDateTimeEdit : public KHBox
     Q_OBJECT
 
 public:
- 
+
     /**
      * constructor
      * @param parent the parent widget

@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "setupicc.h"
+#include "setupicc.moc"
+
 // Qt includes.
 
 #include <QButtonGroup>
@@ -67,12 +72,10 @@
 
 #include <libkdcraw/squeezedcombobox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "iccprofileinfodlg.h"
 #include "albumsettings.h"
-#include "setupicc.h"
-#include "setupicc.moc"
 
 using namespace KDcrawIface;
 

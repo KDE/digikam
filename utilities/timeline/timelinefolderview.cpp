@@ -13,13 +13,18 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
+// Local includes.
+
+#include "timelinefolderview.h"
+#include "timelinefolderview.moc"
 
 // Qt includes.
 
@@ -36,14 +41,12 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "folderitem.h"
-#include "timelinefolderview.h"
-#include "timelinefolderview.moc"
 
 namespace Digikam
 {
@@ -136,7 +139,7 @@ void TimeLineFolderView::slotTextSearchFilterChanged(const QString& filter)
         TimeLineFolderItem* viewItem = (TimeLineFolderItem*) salbum->extraData(this);
 
         if (salbum->title().toLower().contains(search) &&
-            salbum->isTimelineSearch() && 
+            salbum->isTimelineSearch() &&
             salbum->title() != currentTimeLineSearchName())
         {
             atleastOneMatch = true;
@@ -187,7 +190,7 @@ void TimeLineFolderView::slotAlbumAdded(Album* a)
         return;
 
     // We will ignore the internal Dates Search Album used to perform selection from timeline.
-    if (salbum->title() == currentTimeLineSearchName()) 
+    if (salbum->title() == currentTimeLineSearchName())
         return;
 
     TimeLineFolderItem* item = new TimeLineFolderItem(this, salbum);

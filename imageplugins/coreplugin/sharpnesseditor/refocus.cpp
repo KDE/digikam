@@ -21,6 +21,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "refocus.h"
+
 // C++ includes.
 
 #include <cmath>
@@ -29,13 +33,12 @@
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "dcolor.h"
 #include "dimgimagefilters.h"
 #include "matrix.h"
-#include "refocus.h"
 
 namespace DigikamImagesPluginCore
 {

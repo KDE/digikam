@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "digikamsearch.h"
+
 // C++ includes.
 
 #include <cstdlib>
@@ -36,7 +40,7 @@
 #include <kcomponentdata.h>
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 #include "imagelister.h"
@@ -44,7 +48,6 @@
 #include "databaseurl.h"
 #include "albumdb.h"
 #include "haariface.h"
-#include "digikamsearch.h"
 
 kio_digikamsearch::kio_digikamsearch(const QByteArray &pool_socket,
                                      const QByteArray &app_socket)

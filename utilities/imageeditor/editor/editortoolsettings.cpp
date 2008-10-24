@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "editortoolsettings.h"
+#include "editortoolsettings.moc"
+
 // Qt includes.
 
 #include <QButtonGroup>
@@ -51,14 +56,12 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "colorgradientwidget.h"
 #include "histogramwidget.h"
 #include "histogrambox.h"
 #include "imagepaniconwidget.h"
-#include "editortoolsettings.h"
-#include "editortoolsettings.moc"
 
 using namespace KDcrawIface;
 

@@ -5,7 +5,7 @@
  *
  * Date        : 2007-09-07
  * Description : Gphoto2 camera config dialog
- * 
+ *
  * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -13,13 +13,18 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
+
+// Local includes.
+
+#include "gpconfigdlg.h"
+#include "gpconfigdlg.moc"
 
 // Qt includes.
 
@@ -43,10 +48,6 @@
 #include <kvbox.h>
 #include <klocale.h>
 
-// Local includes.
-
-#include "gpconfigdlg.h"
-#include "gpconfigdlg.moc"
 
 namespace Digikam
 {
@@ -116,10 +117,10 @@ void GPConfigDlg::appendWidget(QWidget *parent, CameraWidget *widget)
 	gp_widget_get_name(widget, &widget_name);
 
     // gphoto2 doesn't seem to have any standard for i18n
-	QString whats_this = QString::fromLocal8Bit(widget_info);	
+	QString whats_this = QString::fromLocal8Bit(widget_info);
 
 	// Add this widget to parent
-	switch(widget_type) 
+	switch(widget_type)
     {
         case GP_WIDGET_WINDOW:
         {
@@ -129,7 +130,7 @@ void GPConfigDlg::appendWidget(QWidget *parent, CameraWidget *widget)
 		}
         case GP_WIDGET_SECTION:
 		{
-			if (!d->tabWidget) 
+			if (!d->tabWidget)
             {
 				d->tabWidget = new QTabWidget(parent);
 				parent->layout()->addWidget(d->tabWidget);
@@ -277,7 +278,7 @@ void GPConfigDlg::appendWidget(QWidget *parent, CameraWidget *widget)
 	}
 
 	// Append all this widgets children
-	for(int i = 0; i < gp_widget_count_children(widget); ++i) 
+	for(int i = 0; i < gp_widget_count_children(widget); ++i)
     {
 		CameraWidget *widget_child;
 		gp_widget_get_child(widget, i, &widget_child);
@@ -301,7 +302,7 @@ void GPConfigDlg::updateWidgetValue(CameraWidget *widget)
 	CameraWidgetType widget_type;
 	gp_widget_get_type(widget, &widget_type);
 
-	switch(widget_type) 
+	switch(widget_type)
     {
         case GP_WIDGET_WINDOW:
             // nothing to do
@@ -357,7 +358,7 @@ void GPConfigDlg::updateWidgetValue(CameraWidget *widget)
 	}
 
 	// Copy child widget values
-	for(int i = 0; i < gp_widget_count_children(widget); ++i) 
+	for(int i = 0; i < gp_widget_count_children(widget); ++i)
     {
 		CameraWidget *widget_child;
 		gp_widget_get_child(widget, i, &widget_child);

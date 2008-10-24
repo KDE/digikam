@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imagelister.h"
+
 // C++ includes.
 
 #include <cstdlib>
@@ -46,7 +50,7 @@
 #include <kmimetype.h>
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumdb.h"
 #include "databaseaccess.h"
@@ -54,7 +58,6 @@
 #include "imagequerybuilder.h"
 #include "dmetadata.h"
 #include "haariface.h"
-#include "imagelister.h"
 
 namespace Digikam
 {

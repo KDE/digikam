@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "iccpreviewwidget.h"
+#include "iccpreviewwidget.moc"
+
 // Qt includes.
 
 #include <QFileInfo>
@@ -34,11 +39,9 @@
 #include <kdebug.h>
 #include <kurl.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "iccprofilewidget.h"
-#include "iccpreviewwidget.h"
-#include "iccpreviewwidget.moc"
 
 namespace Digikam
 {

@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_border.h"
+#include "imageplugin_border.moc"
+
 // KDE includes.
 
 #include <kdebug.h>
@@ -33,11 +38,9 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "bordertool.h"
-#include "imageplugin_border.h"
-#include "imageplugin_border.moc"
 
 using namespace DigikamBorderImagesPlugin;
 

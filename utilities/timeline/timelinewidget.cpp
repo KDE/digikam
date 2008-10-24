@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "timelinewidget.h"
+#include "timelinewidget.moc"
+
 // C++ includes.
 
 #include <cmath>
@@ -40,11 +45,9 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "themeengine.h"
-#include "timelinewidget.h"
-#include "timelinewidget.moc"
 
 namespace Digikam
 {

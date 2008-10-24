@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "mediaplayerview.h"
+#include "mediaplayerview.moc"
+
 // Qt includes.
 
 #include <QLabel>
@@ -37,11 +42,9 @@
 #include <phonon/videoplayer.h>
 #include <phonon/videowidget.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "themeengine.h"
-#include "mediaplayerview.h"
-#include "mediaplayerview.moc"
 
 namespace Digikam
 {

@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "metadatalistview.h"
+#include "metadatalistview.moc"
+
 // Qt includes.
 
 #include <QHeaderView>
@@ -33,12 +38,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "mdkeylistviewitem.h"
 #include "metadatalistviewitem.h"
-#include "metadatalistview.h"
-#include "metadatalistview.moc"
 
 namespace Digikam
 {

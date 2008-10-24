@@ -21,6 +21,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "findduplicatesalbumitem.h"
+
 // Qt includes.
 
 #include <QPainter>
@@ -31,11 +35,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
 #include "searchxml.h"
-#include "findduplicatesalbumitem.h"
 
 namespace Digikam
 {

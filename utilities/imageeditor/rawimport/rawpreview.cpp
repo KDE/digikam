@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "rawpreview.h"
+#include "rawpreview.moc"
+
 // Qt includes.
 
 #include <QString>
@@ -38,14 +43,12 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "paniconwidget.h"
 #include "managedloadsavethread.h"
 #include "loadingdescription.h"
 #include "themeengine.h"
-#include "rawpreview.h"
-#include "rawpreview.moc"
 
 namespace Digikam
 {

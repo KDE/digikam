@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "texturetool.h"
+#include "texturetool.moc"
+
 // Qt includes.
 
 #include <QGridLayout>
@@ -46,7 +51,7 @@
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "daboutdata.h"
 #include "dimg.h"
@@ -55,8 +60,6 @@
 #include "imagepanelwidget.h"
 #include "version.h"
 #include "texture.h"
-#include "texturetool.h"
-#include "texturetool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

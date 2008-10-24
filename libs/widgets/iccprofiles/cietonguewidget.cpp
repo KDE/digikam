@@ -25,6 +25,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "cietonguewidget.h"
+#include "cietonguewidget.moc"
+
 // C++ includes.
 
 #include <cmath>
@@ -43,11 +48,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "lcmsprf.h"
-#include "cietonguewidget.h"
-#include "cietonguewidget.moc"
 
 namespace Digikam
 {

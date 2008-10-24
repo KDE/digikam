@@ -5,7 +5,7 @@
  *
  * Date        : 2006-01-18
  * Description : color modifier methods for DImg framework
- * 
+ *
  * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -13,26 +13,29 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #define CLAMP_0_255(x)   qMax(qMin(x, 255), 0)
 #define CLAMP_0_65535(x) qMax(qMin(x, 65535), 0)
+
+// Local includes.
+
+#include "colormodifier.h"
 
 // C++ includes.
 
 #include <cstdio>
 #include <cmath>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
-#include "colormodifier.h"
 
 namespace Digikam
 {
@@ -52,7 +55,7 @@ public:
     int greenMap[256];
     int blueMap[256];
     int alphaMap[256];
-    
+
     int redMap16[65536];
     int greenMap16[65536];
     int blueMap16[65536];
@@ -61,7 +64,7 @@ public:
 
 ColorModifier::ColorModifier()
 {
-    d = new ColorModifierPriv;    
+    d = new ColorModifierPriv;
     reset();
 }
 
@@ -175,7 +178,7 @@ void ColorModifier::applyColorModifier(DImg& image, double r, double g, double b
             data[1] = d->greenMap[data[1]];
             data[2] = d->redMap[data[2]];
             data[3] = d->alphaMap[data[3]];
-            
+
             data += 4;
         }
     }
@@ -204,13 +207,13 @@ void ColorModifier::setGamma(double val)
     {
         val2 = (int)(pow(((double)d->redMap16[i] / 65535), (1 / val)) * 65535);
         d->redMap16[i] = CLAMP_0_65535(val2);
-    
+
         val2 = (int)(pow(((double)d->greenMap16[i] / 65535), (1 / val)) * 65535);
         d->greenMap16[i] = CLAMP_0_65535(val2);
-    
+
         val2 = (int)(pow(((double)d->blueMap16[i] / 65535), (1 / val)) * 65535);
         d->blueMap16[i] = CLAMP_0_65535(val2);
-    
+
         val2 = (int)(pow(((double)d->alphaMap16[i] / 65535), (1 / val)) * 65535);
         d->alphaMap16[i] = CLAMP_0_65535(val2);
     }
@@ -219,17 +222,17 @@ void ColorModifier::setGamma(double val)
     {
         val2 = (int)(pow(((double)d->redMap[i] / 255), (1 / val)) * 255);
         d->redMap[i] = CLAMP_0_255(val2);
-            
+
         val2 = (int)(pow(((double)d->greenMap[i] / 255), (1 / val)) * 255);
         d->greenMap[i] = CLAMP_0_255(val2);
-            
+
         val2 = (int)(pow(((double)d->blueMap[i] / 255), (1 / val)) * 255);
         d->blueMap[i] = CLAMP_0_255(val2);
-            
+
         val2 = (int)(pow(((double)d->alphaMap[i] / 255), (1 / val)) * 255);
         d->alphaMap[i] = CLAMP_0_255(val2);
     }
-    
+
     d->modified = true;
 }
 

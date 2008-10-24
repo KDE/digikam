@@ -41,7 +41,7 @@
 
 #include <kurl.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "loadsavethread.h"

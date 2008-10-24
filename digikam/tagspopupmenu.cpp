@@ -27,38 +27,40 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "tagspopupmenu.h"
+#include "tagspopupmenu.moc"
+
 // Qt includes.
 
-#include <QSet>
-#include <QPixmap>
-#include <QString>
 #include <QPainter>
-#include <QStyle>
 #include <QPixmap>
-#include <QStyleOptionMenuItem>
+#include <QSet>
+#include <QString>
+#include <QStyle>
 #include <QStyleOptionButton>
+#include <QStyleOptionMenuItem>
 #include <QStyleOptionViewItem>
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <kapplication.h>
+#include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <ktoggleaction.h>
 
-// Local includes.
+// Digikam includes.
 
-#include "albumiconview.h"
+#include "album.h"
+#include "albumdb.h"
 #include "albumiconitem.h"
+#include "albumiconview.h"
 #include "albummanager.h"
 #include "albumthumbnailloader.h"
-#include "albumdb.h"
-#include "album.h"
 #include "tageditdlg.h"
-#include "tagspopupmenu.h"
-#include "tagspopupmenu.moc"
 
 namespace Digikam
 {

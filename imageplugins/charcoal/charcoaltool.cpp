@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "charcoaltool.h"
+#include "charcoaltool.moc"
+
 // Qt includes.
 
 #include <QLabel>
@@ -44,7 +49,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "version.h"
 #include "daboutdata.h"
@@ -53,8 +58,6 @@
 #include "imagepanelwidget.h"
 #include "editortoolsettings.h"
 #include "charcoal.h"
-#include "charcoaltool.h"
-#include "charcoaltool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

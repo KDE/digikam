@@ -25,6 +25,10 @@
 #ifndef IMAGEPLUGIN_INPAINTING_H
 #define IMAGEPLUGIN_INPAINTING_H
 
+// Qt includes.
+
+#include <QVariant>
+
 // Digikam includes.
 
 #include "imageplugin.h"

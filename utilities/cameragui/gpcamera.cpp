@@ -23,6 +23,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "gpcamera.h"
+
 // C++ includes.
 
 #include <cstdio>
@@ -42,10 +46,9 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "config-digikam.h"
-#include "gpcamera.h"
 
 #ifdef ENABLE_GPHOTO2
 

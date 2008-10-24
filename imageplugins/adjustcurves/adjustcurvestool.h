@@ -29,8 +29,6 @@
 #include "editortool.h"
 #include "dimg.h"
 
-// Local includes.
-
 class QWidget;
 class QPushButton;
 class QToolButton;

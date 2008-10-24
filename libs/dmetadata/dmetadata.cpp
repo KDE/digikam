@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "dmetadata.h"
+
 // C++ includes.
 
 #include <cmath>
@@ -42,11 +46,10 @@
 #include <libkdcraw/dcrawinfocontainer.h>
 #include <libkdcraw/kdcraw.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "constants.h"
 #include "version.h"
-#include "dmetadata.h"
 
 namespace Digikam
 {

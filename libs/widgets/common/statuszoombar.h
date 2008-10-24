@@ -21,18 +21,18 @@
  *
  * ============================================================ */
 
-#ifndef STATUSSTATUSBAR_H
-#define STATUSSTATUSBAR_H
+#ifndef STATUSZOOMBAR_H
+#define STATUSZOOMBAR_H
 
 // Qt includes.
 
-#include <QString>
+#include <QtCore/QString>
 
 // KDE includes.
 
 #include <khbox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 
@@ -78,4 +78,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* STATUSSTATUSBAR_H */
+#endif // STATUSZOOMBAR_H

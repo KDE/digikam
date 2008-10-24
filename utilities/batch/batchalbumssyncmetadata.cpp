@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "batchalbumssyncmetadata.h"
+#include "batchalbumssyncmetadata.moc"
+
 // Qt includes.
 
 #include <QString>
@@ -37,14 +42,12 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
 #include "albummanager.h"
 #include "imageinfojob.h"
 #include "metadatahub.h"
-#include "batchalbumssyncmetadata.h"
-#include "batchalbumssyncmetadata.moc"
 
 namespace Digikam
 {

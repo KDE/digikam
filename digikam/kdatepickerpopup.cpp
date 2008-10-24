@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "kdatepickerpopup.h"
+#include "kdatepickerpopup.moc"
+
 // Qt includes.
 
 #include <QDateTime>
@@ -32,10 +37,6 @@
 
 #include <klocale.h>
 
-// Local includes.
-
-#include "kdatepickerpopup.h"
-#include "kdatepickerpopup.moc"
 
 namespace Digikam
 {

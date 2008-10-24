@@ -22,7 +22,11 @@
  *
  * ============================================================ */
 
-// C includes.
+// Local includes.
+
+#include "previewtask.h"
+
+// C ANSI includes.
 
 #include <cmath>
 
@@ -41,12 +45,11 @@
 
 #include <libkdcraw/kdcraw.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dmetadata.h"
 #include "jpegutils.h"
 #include "previewloadthread.h"
-#include "previewtask.h"
 
 namespace Digikam
 {

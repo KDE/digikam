@@ -28,7 +28,7 @@
 #include <QWidget>
 #include <QKeyEvent>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

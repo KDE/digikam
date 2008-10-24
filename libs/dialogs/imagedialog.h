@@ -29,7 +29,7 @@
 #include <kurl.h>
 #include <kpreviewwidgetbase.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

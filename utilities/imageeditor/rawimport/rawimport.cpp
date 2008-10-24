@@ -20,6 +20,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "rawimport.h"
+#include "rawimport.moc"
+
 // Qt includes.
 
 #include <QString>
@@ -35,7 +40,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "drawdecoding.h"
 #include "histogramwidget.h"
@@ -46,8 +51,6 @@
 #include "rawpostprocessing.h"
 #include "editortooliface.h"
 #include "rawpreview.h"
-#include "rawimport.h"
-#include "rawimport.moc"
 
 namespace Digikam
 {

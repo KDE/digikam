@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "choicesearchutilities.h"
+#include "choicesearchutilities.moc"
+
 // Qt includes.
 
 #include <QTreeView>
@@ -30,11 +35,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "searchutilities.h"
-#include "choicesearchutilities.h"
-#include "choicesearchutilities.moc"
 
 namespace Digikam
 {

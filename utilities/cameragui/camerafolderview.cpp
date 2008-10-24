@@ -22,17 +22,20 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "camerafolderview.h"
+#include "camerafolderview.moc"
+
 // KDE includes.
 
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "camerafolderitem.h"
-#include "camerafolderview.h"
-#include "camerafolderview.moc"
 
 namespace Digikam
 {

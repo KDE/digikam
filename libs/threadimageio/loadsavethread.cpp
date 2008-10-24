@@ -22,18 +22,21 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "loadsavethread.h"
+#include "loadsavethread.moc"
+
 // KDE includes.
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dmetadata.h"
 #include "managedloadsavethread.h"
 #include "sharedloadsavethread.h"
 #include "loadsavetask.h"
-#include "loadsavethread.h"
-#include "loadsavethread.moc"
 
 namespace Digikam
 {

@@ -21,6 +21,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "databasebackend.h"
+
 // Qt includes.
 
 #include <QApplication>
@@ -35,11 +39,10 @@
 #include <kdebug.h>
 #include <kglobal.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "schemaupdater.h"
 #include "databasewatch.h"
-#include "databasebackend.h"
 
 namespace Digikam
 {

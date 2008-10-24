@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "statusprogressbar.h"
+#include "statusprogressbar.moc"
+
 // Qt includes.
 
 #include <QWidget>
@@ -36,10 +41,6 @@
 #include <kiconloader.h>
 #include <kcursor.h>
 
-// Local includes.
-
-#include "statusprogressbar.h"
-#include "statusprogressbar.moc"
 
 namespace Digikam
 {

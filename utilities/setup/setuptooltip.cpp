@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "setuptooltip.h"
+#include "setuptooltip.moc"
+
 // Qt includes.
 
 #include <QGroupBox>
@@ -32,11 +37,9 @@
 #include <klocale.h>
 #include <kdialog.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumsettings.h"
-#include "setuptooltip.h"
-#include "setuptooltip.moc"
 
 namespace Digikam
 {

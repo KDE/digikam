@@ -24,6 +24,10 @@
 #ifndef IMAGEPLUGIN_SHEARTOOL_H
 #define IMAGEPLUGIN_SHEARTOOL_H
 
+// Qt includes.
+
+#include <QVariant>
+
 // Digikam includes.
 
 #include "imageplugin.h"

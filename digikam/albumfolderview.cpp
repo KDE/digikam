@@ -22,54 +22,56 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "albumfolderview.h"
+#include "albumfolderview.moc"
+
 // Qt includes.
 
-#include <QList>
-#include <QList>
-#include <QPixmap>
-#include <QPointer>
-#include <QDir>
-#include <QDropEvent>
 #include <QCursor>
 #include <QDataStream>
 #include <QDateTime>
+#include <QDir>
+#include <QDropEvent>
+#include <QList>
+#include <QPixmap>
+#include <QPointer>
 
 // KDE includes.
 
-#include <kdebug.h>
-#include <kmenu.h>
-#include <klocale.h>
-#include <kglobal.h>
-#include <kcalendarsystem.h>
-#include <kiconloader.h>
-#include <kapplication.h>
-#include <kmessagebox.h>
 #include <kaction.h>
-#include <kfiledialog.h>
+#include <kapplication.h>
+#include <kcalendarsystem.h>
+#include <kdebug.h>
 #include <kdeversion.h>
+#include <kfiledialog.h>
+#include <kglobal.h>
+#include <kiconloader.h>
 #include <kinputdialog.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
+#include <klocale.h>
+#include <kmenu.h>
+#include <kmessagebox.h>
 
-// Local includes.
+// Digikam includes.
 
-#include "albumlister.h"
-#include "albumpropsedit.h"
 #include "album.h"
 #include "albumdb.h"
+#include "albumlister.h"
 #include "albummanager.h"
+#include "albumpropsedit.h"
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
 #include "cameraui.h"
 #include "collectionmanager.h"
+#include "ddragobjects.h"
 #include "deletedialog.h"
 #include "digikamapp.h"
 #include "dio.h"
-#include "ddragobjects.h"
 #include "folderitem.h"
 #include "thumbnailsize.h"
-#include "albumfolderview.h"
-#include "albumfolderview.moc"
 
 namespace Digikam
 {

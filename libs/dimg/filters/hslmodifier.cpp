@@ -25,6 +25,10 @@
 #define CLAMP_0_255(x)   qMax(qMin(x, 255), 0)
 #define CLAMP_0_65535(x) qMax(qMin(x, 65535), 0)
 
+// Local includes.
+
+#include "hslmodifier.h"
+
 // C++ includes.
 
 #include <cstdio>
@@ -34,11 +38,10 @@
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dcolor.h"
 #include "dimg.h"
-#include "hslmodifier.h"
 
 namespace Digikam
 {

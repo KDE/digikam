@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "sheartool.h"
+#include "sheartool.moc"
+
 // Qt includes.
 
 #include <QCheckBox>
@@ -46,7 +51,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "daboutdata.h"
 #include "dimg.h"
@@ -55,8 +60,6 @@
 #include "imagewidget.h"
 #include "version.h"
 #include "shear.h"
-#include "sheartool.h"
-#include "sheartool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

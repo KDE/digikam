@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "tagfolderview.h"
+#include "tagfolderview.moc"
+
 // Qt includes.
 
 #include <QList>
@@ -37,7 +42,7 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
 #include "albumdb.h"
@@ -56,8 +61,6 @@
 #include "syncjob.h"
 #include "statusprogressbar.h"
 #include "tageditdlg.h"
-#include "tagfolderview.h"
-#include "tagfolderview.moc"
 
 #include "config-digikam.h"
 #ifdef HAVE_KDEPIMLIBS

@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "inserttexttool.h"
+#include "inserttexttool.moc"
+
 // Qt includes.
 
 #include <QBrush>
@@ -59,7 +64,7 @@
 #include <kstandarddirs.h>
 #include <ktextedit.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "daboutdata.h"
 #include "dimg.h"
@@ -67,8 +72,6 @@
 #include "imageiface.h"
 #include "version.h"
 #include "inserttextwidget.h"
-#include "inserttexttool.h"
-#include "inserttexttool.moc"
 
 using namespace Digikam;
 

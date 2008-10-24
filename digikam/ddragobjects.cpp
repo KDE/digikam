@@ -21,6 +21,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "ddragobjects.h"
+
 // Qt includes.
 
 #include <QByteArray>
@@ -29,9 +33,6 @@
 
 #include <kdebug.h>
 
-// Local includes.
-
-#include "ddragobjects.h"
 
 namespace Digikam
 {

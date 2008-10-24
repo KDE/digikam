@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "sketchwidget.h"
+
 // Qt includes.
 
 #include <QMap>
@@ -38,9 +42,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
-
-#include "sketchwidget.h"
 
 namespace Digikam
 {

@@ -29,18 +29,18 @@
 
 // Qt includes.
 
-#include <QMenu>
-#include <QColor>
-#include <QImage>
-#include <QRect>
-#include <QPaintEvent>
-#include <QResizeEvent>
+#include <QtGui/QMenu>
+#include <QtGui/QColor>
+#include <QtGui/QImage>
+#include <QtCore/QRect>
+#include <QtGui/QPaintEvent>
+#include <QtGui/QResizeEvent>
 
 // KDE includes.
 
 #include <kmenu.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

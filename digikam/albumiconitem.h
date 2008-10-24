@@ -29,7 +29,7 @@
 
 #include <QRect>
 
-// Local includes.
+// Digikam includes.
 
 #include "iconitem.h"
 

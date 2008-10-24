@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_raindrop.h"
+#include "imageplugin_raindrop.moc"
+
 // KDE includes.
 
 #include <klocale.h>
@@ -32,11 +37,9 @@
 #include <kdebug.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "raindroptool.h"
-#include "imageplugin_raindrop.h"
-#include "imageplugin_raindrop.moc"
 
 using namespace DigikamRainDropImagesPlugin;
 

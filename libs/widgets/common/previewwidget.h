@@ -26,14 +26,14 @@
 
 // Qt includes.
 
-#include <Q3ScrollView>
-#include <QPixmap>
-#include <QResizeEvent>
-#include <QWheelEvent>
-#include <QMouseEvent>
-#include <QPaintEvent>
+#include <Qt3Support/Q3ScrollView>
+#include <QtGui/QPixmap>
+#include <QtGui/QResizeEvent>
+#include <QtGui/QWheelEvent>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QPaintEvent>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

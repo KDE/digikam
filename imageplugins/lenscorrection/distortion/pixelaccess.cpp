@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "pixelaccess.h"
+
 // C++ includes.
 
 #include <cstring>
@@ -32,9 +36,6 @@
 
 #include <kdebug.h>
 
-// Local includes.
-
-#include "pixelaccess.h"
 
 namespace DigikamLensDistortionImagesPlugin
 {

@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "setupalbumview.h"
+#include "setupalbumview.moc"
+
 // Qt includes.
 
 #include <QButtonGroup>
@@ -38,11 +43,9 @@
 #include <kdialog.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumsettings.h"
-#include "setupalbumview.h"
-#include "setupalbumview.moc"
 
 namespace Digikam
 {

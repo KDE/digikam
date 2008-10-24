@@ -25,6 +25,10 @@
 #ifndef IMAGEPLUGIN_FREEROTATION_H
 #define IMAGEPLUGIN_FREEROTATION_H
 
+// Qt includes.
+
+#include <QVariant>
+
 // Digikam includes.
 
 #include "imageplugin.h"

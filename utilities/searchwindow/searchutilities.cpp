@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "searchutilities.h"
+#include "searchutilities.moc"
+
 // Qt includes.
 
 #include <QAbstractListModel>
@@ -46,14 +51,12 @@
 #include <kpushbutton.h>
 #include <kstandardguiitem.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "constants.h"
 #include "albummodel.h"
 #include "ratingwidget.h"
 #include "themeengine.h"
-#include "searchutilities.h"
-#include "searchutilities.moc"
 
 namespace Digikam
 {

@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_hotpixels.h"
+#include "imageplugin_hotpixels.moc"
+
 // KDE includes.
 
 #include <kdebug.h>
@@ -34,11 +39,9 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "hotpixelstool.h"
-#include "imageplugin_hotpixels.h"
-#include "imageplugin_hotpixels.moc"
 
 using namespace DigikamHotPixelsImagesPlugin;
 

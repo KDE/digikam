@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "setupeditor.h"
+#include "setupeditor.moc"
+
 // Qt includes.
 
 #include <QColor>
@@ -41,10 +46,6 @@
 #include <kvbox.h>
 #include <kaboutdata.h>
 
-// Local includes.
-
-#include "setupeditor.h"
-#include "setupeditor.moc"
 
 namespace Digikam
 {

@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "superimposetool.h"
+#include "superimposetool.moc"
+
 // Qt includes.
 
 #include <QButtonGroup>
@@ -53,7 +58,7 @@
 #include <kstandarddirs.h>
 #include <qprogressbar.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "daboutdata.h"
 #include "dimg.h"
@@ -63,8 +68,6 @@
 #include "superimposewidget.h"
 #include "thumbbar.h"
 #include "version.h"
-#include "superimposetool.h"
-#include "superimposetool.moc"
 
 using namespace Digikam;
 

@@ -5,7 +5,7 @@
  *
  * Date        : 2003-02-03
  * Description : Cameras list container
- * 
+ *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,13 +14,18 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
+
+// Local includes.
+
+#include "cameralist.h"
+#include "cameralist.moc"
 
 // Qt includes.
 
@@ -37,12 +42,10 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "gpcamera.h"
 #include "cameratype.h"
-#include "cameralist.h"
-#include "cameralist.moc"
 
 namespace Digikam
 {
@@ -93,7 +96,7 @@ CameraList::~CameraList()
 bool CameraList::load()
 {
     d->modified = false;
-    
+
     QFile cfile(d->file);
 
     if (!cfile.open(QIODevice::ReadOnly))
@@ -106,9 +109,9 @@ bool CameraList::load()
     QDomElement docElem = doc.documentElement();
     if (docElem.tagName()!="cameralist")
         return false;
-    
+
     for (QDomNode n = docElem.firstChild();
-         !n.isNull(); n = n.nextSibling()) 
+         !n.isNull(); n = n.nextSibling())
     {
         QDomElement e = n.toElement();
         if (e.isNull()) continue;
@@ -135,14 +138,14 @@ bool CameraList::save()
     // If not modified don't save the file
     if (!d->modified)
         return true;
-    
+
     QDomDocument doc("cameralist");
     doc.setContent(QString("<!DOCTYPE XMLCameraList><cameralist version=\"1.1\" client=\"digikam\"/>"));
 
     QDomElement docElem=doc.documentElement();
-    
+
     for (CameraType *ctype = d->clist.first(); ctype;
-         ctype = d->clist.next()) 
+         ctype = d->clist.next())
     {
        QDomElement elem = doc.createElement("item");
        elem.setAttribute("title", ctype->title());
@@ -163,16 +166,16 @@ bool CameraList::save()
     stream << doc.toString();
     cfile.close();
 
-    return true;    
+    return true;
 }
 
 bool CameraList::changeCameraAccessTime(const QString& cameraTitle, const QDateTime& newDate)
 {
     CameraType* cam = find(cameraTitle);
     if (cam)
-    {                
+    {
         cam->setLastAccess(newDate);
-        d->modified = true;    
+        d->modified = true;
         save();
         return true;
     }
@@ -184,7 +187,7 @@ void CameraList::insert(CameraType* ctype)
 {
     if (!ctype) return;
 
-    d->modified = true;    
+    d->modified = true;
     insertPrivate(ctype);
 }
 
@@ -199,7 +202,7 @@ void CameraList::remove(CameraType* ctype)
 void CameraList::insertPrivate(CameraType* ctype)
 {
     if (!ctype) return;
-    emit signalCameraAdded(ctype);    
+    emit signalCameraAdded(ctype);
     d->clist.append(ctype);
 }
 
@@ -212,13 +215,13 @@ void CameraList::removePrivate(CameraType* ctype)
 
 Q3PtrList<CameraType>* CameraList::cameraList()
 {
-    return &d->clist; 
+    return &d->clist;
 }
 
 CameraType* CameraList::find(const QString& title)
 {
     for (CameraType *ctype = d->clist.first(); ctype;
-         ctype = d->clist.next()) 
+         ctype = d->clist.next())
     {
         if (ctype->title() == title)
             return ctype;
@@ -229,7 +232,7 @@ CameraType* CameraList::find(const QString& title)
 CameraType* CameraList::autoDetect(bool& retry)
 {
     retry = false;
-    
+
     QString model, port;
     if (GPCamera::autoDetect(model, port) != 0)
     {
@@ -243,7 +246,7 @@ CameraType* CameraList::autoDetect(bool& retry)
 
     // check if the camera is already in the list
     for (CameraType *ctype = d->clist.first(); ctype;
-         ctype = d->clist.next()) 
+         ctype = d->clist.next())
     {
         // we can get away with checking only the model, as the auto-detection
         // works only for usb cameras. so the port is always usb:
@@ -252,7 +255,7 @@ CameraType* CameraList::autoDetect(bool& retry)
     }
 
     // looks like a new camera
-    
+
     // NOTE: libgphoto2 now (2.1.4+) expects port names to be
     // something like "usb:001,012". but on linux these port numbers
     // will change every time camera is reconnected. gphoto port funcs
@@ -276,9 +279,9 @@ bool CameraList::findConnectedCamera(int vendorId, int productId, QString &model
 
 void CameraList::clear()
 {
-    
+
     CameraType *ctype = d->clist.first();
-    while (ctype) 
+    while (ctype)
     {
         remove(ctype);
         ctype = d->clist.first();

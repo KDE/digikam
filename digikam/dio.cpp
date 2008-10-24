@@ -21,7 +21,9 @@
  *
  * ============================================================ */
 
-// Qt includes.
+// Local includes.
+
+#include "dio.h"
 
 // KDE includes.
 
@@ -29,7 +31,7 @@
 #include <kio/deletejob.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "imageinfo.h"
 #include "albumsettings.h"
@@ -39,7 +41,6 @@
 #include "album.h"
 #include "imagelister.h"
 #include "scancontroller.h"
-#include "dio.h"
 
 namespace Digikam
 {

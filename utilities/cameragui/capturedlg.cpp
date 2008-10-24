@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "capturedlg.h"
+#include "capturedlg.moc"
+
 // Qt includes.
 
 #include <QTimer>
@@ -32,12 +37,10 @@
 #include <klocale.h>
 #include <kglobal.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "cameracontroller.h"
 #include "capturewidget.h"
-#include "capturedlg.h"
-#include "capturedlg.moc"
 
 namespace Digikam
 {

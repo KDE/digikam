@@ -21,6 +21,9 @@
  *
  * ============================================================ */
 
+#ifndef LIGHTTABLEWINDOWPRIVATE_H
+#define LIGHTTABLEWINDOWPRIVATE_H
+
 // Qt includes.
 
 #include <QSplitter>
@@ -29,7 +32,7 @@
 
 #include <kaction.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "imagepropertiessidebardb.h"
 #include "statusprogressbar.h"
@@ -152,3 +155,5 @@ public:
 };
 
 }  // namespace Digikam
+
+#endif /* LIGHTTABLEWINDOWPRIVATE_H */

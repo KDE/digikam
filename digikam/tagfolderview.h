@@ -5,7 +5,7 @@
  *
  * Date        : 2005-03-22
  * Description : tags folder view.
- * 
+ *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,17 +22,15 @@
  *
  * ============================================================ */
 
-/** @file tagfoldeview.h */
-
-#ifndef _TAGFOLDERVIEW_H_
-#define _TAGFOLDERVIEW_H_
+#ifndef TAGFOLDERVIEW_H
+#define TAGFOLDERVIEW_H
 
 // Qt includes.
 
 #include <QDropEvent>
 #include <QPixmap>
 
-// Local includes.
+// Digikam includes.
 
 #include "folderview.h"
 
@@ -111,4 +109,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // _TAGFOLDEVIEW_H_
+#endif // TAGFOLDERVIEW_H

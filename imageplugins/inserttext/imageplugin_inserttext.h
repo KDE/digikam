@@ -24,6 +24,10 @@
 #ifndef IMAGEPLUGIN_INSERTTEXT_H
 #define IMAGEPLUGIN_INSERTTEXT_H
 
+// Qt includes.
+
+#include <QVariant>
+
 // Digikam includes.
 
 #include "imageplugin.h"

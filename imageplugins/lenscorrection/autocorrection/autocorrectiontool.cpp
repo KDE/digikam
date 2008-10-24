@@ -19,6 +19,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "autocorrectiontool.h"
+#include "autocorrectiontool.moc"
+
 // Qt includes.
 
 #include <QBitmap>
@@ -44,7 +49,7 @@
 #include <kseparator.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "daboutdata.h"
 #include "dmetadata.h"
@@ -53,8 +58,6 @@
 #include "imagewidget.h"
 #include "klensfun.h"
 #include "version.h"
-#include "autocorrectiontool.h"
-#include "autocorrectiontool.moc"
 
 using namespace Digikam;
 

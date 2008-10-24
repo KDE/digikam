@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "capturewidget.h"
+#include "capturewidget.moc"
+
 // Qt includes.
 
 #include <qpainter.h>
@@ -34,10 +39,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
-
-#include "capturewidget.h"
-#include "capturewidget.moc"
 
 namespace Digikam
 {

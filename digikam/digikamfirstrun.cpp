@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "digikamfirstrun.h"
+#include "digikamfirstrun.moc"
+
 // Qt includes.
 
 #include <QLabel>
@@ -46,11 +51,9 @@
 #include <kurlrequester.h>
 #include <kseparator.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "version.h"
-#include "digikamfirstrun.h"
-#include "digikamfirstrun.moc"
 
 namespace Digikam
 {

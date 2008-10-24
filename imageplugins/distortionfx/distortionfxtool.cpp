@@ -25,6 +25,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "distortionfxtool.h"
+#include "distortionfxtool.moc"
+
 // Qt includes.
 
 #include <QFrame>
@@ -53,7 +58,7 @@
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "daboutdata.h"
 #include "dimg.h"
@@ -62,8 +67,6 @@
 #include "imagewidget.h"
 #include "version.h"
 #include "distortionfx.h"
-#include "distortionfxtool.h"
-#include "distortionfxtool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

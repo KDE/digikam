@@ -34,7 +34,7 @@
 #include <QKeyEvent>
 #include <QFocusEvent>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

@@ -6,7 +6,7 @@
  * Date        : 2003-16-10
  * Description : albums settings interface
  *
- * Copyright (C) 2003-2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu> 
+ * Copyright (C) 2003-2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2003-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007 by Arnd Baecker <arnd dot baecker at web dot de>
  *
@@ -22,6 +22,10 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
+// Local includes.
+
+#include "albumsettings.h"
 
 // KDE includes.
 
@@ -41,19 +45,18 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Digikam includes.
 
 #include "thumbnailsize.h"
 #include "mimefilter.h"
 #include "databaseaccess.h"
 #include "albumdb.h"
 #include "albumlister.h"
-#include "albumsettings.h"
 
 namespace Digikam
 {
 
-class AlbumSettingsPrivate 
+class AlbumSettingsPrivate
 {
 
 public:
@@ -110,7 +113,7 @@ public:
     bool                                saveRating;
 
     // preview settings
-    bool                                previewLoadFullImageSize;      
+    bool                                previewLoadFullImageSize;
     bool                                showThumbbar;
 
     bool                                showFolderTreeViewItemsCount;
@@ -285,7 +288,7 @@ void AlbumSettings::readSettings()
     d->recursiveTags                = group.readEntry("Recursive Tags", true);
 
 
-    d->iconShowName                 = group.readEntry("Icon Show Name", false); 
+    d->iconShowName                 = group.readEntry("Icon Show Name", false);
     d->iconShowResolution           = group.readEntry("Icon Show Resolution", false);
     d->iconShowSize                 = group.readEntry("Icon Show Size", false);
     d->iconShowDate                 = group.readEntry("Icon Show Date", true);

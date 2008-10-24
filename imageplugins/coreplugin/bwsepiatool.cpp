@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "bwsepiatool.h"
+#include "bwsepiatool.moc"
+
 // Qt includes.
 
 #include <QColor>
@@ -75,10 +80,6 @@
 #include "imageiface.h"
 #include "imagewidget.h"
 
-// Local includes.
-
-#include "bwsepiatool.h"
-#include "bwsepiatool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

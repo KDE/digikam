@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-06-04
- * Description : image histogram adjust levels. 
+ * Description : image histogram adjust levels.
  *
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -23,6 +23,10 @@
 
 #ifndef IMAGEPLUGIN_ADJUSTLEVELS_H
 #define IMAGEPLUGIN_ADJUSTLEVELS_H
+
+// Qt includes.
+
+#include <QVariant>
 
 // Digikam includes.
 

@@ -18,6 +18,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "klensfun.h"
+#include "klensfun.moc"
+
 // Qt includes.
 
 #include <QByteArray>
@@ -39,10 +44,6 @@
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Local includes.
-
-#include "klensfun.h"
-#include "klensfun.moc"
 
 Q_DECLARE_METATYPE( DigikamAutoCorrectionImagesPlugin::KLFDeviceSelector::DevicePtr )
 Q_DECLARE_METATYPE( DigikamAutoCorrectionImagesPlugin::KLFDeviceSelector::LensPtr )

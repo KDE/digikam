@@ -24,6 +24,10 @@
 #ifndef IMAGEPLUGIN_OILPAINT_H
 #define IMAGEPLUGIN_OILPAINT_H
 
+// Qt includes.
+
+#include <QVariant>
+
 // Digikam includes.
 
 #include "imageplugin.h"

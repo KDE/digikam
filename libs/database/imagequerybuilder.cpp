@@ -21,6 +21,10 @@
  * GNU General Public License for more details.
  * ============================================================ */
 
+// Local includes.
+
+#include "imagequerybuilder.h"
+
 // C++ includes.
 
 #include <cmath>
@@ -41,12 +45,11 @@
 #include <kcomponentdata.h>
 #include <kmimetype.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "databaseaccess.h"
 #include "albumdb.h"
 #include "geodetictools.h"
-#include "imagequerybuilder.h"
 
 namespace Digikam
 {
@@ -543,7 +546,7 @@ public:
 
     void addRectanglePositionSearch(double lon1, double lat1, double lon2, double lat2)
     {
-        // lon1 is always West of lon2. If the rectangle crosses 180� longitude, we have to treat a special case.
+        // lon1 is always West of lon2. If the rectangle crosses 180 longitude, we have to treat a special case.
         if (lon1 <= lon2)
         {
             sql += " ImagePositions.LongitudeNumber > ? AND ImagePositions.LatitudeNumber < ? "
@@ -553,7 +556,7 @@ public:
         else
         {
             // this effectively means splitting the rectangle is two parts, one East, one West
-            // to the 180� line. But no need to check for less/greater than -180/180�.
+            // to the 180 line. But no need to check for less/greater than -180/180.
             sql += " (ImagePositions.LongitudeNumber > ? OR ImagePositions.LongitudeNumber < ?) "
                    " AND ImagePositions.LatitudeNumber < ? AND ImagePositions.LatitudeNumber > ? ";
             *boundValues << lon1 << lon2 << lat1 << lat2;

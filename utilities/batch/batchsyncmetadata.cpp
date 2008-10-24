@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "batchsyncmetadata.h"
+#include "batchsyncmetadata.moc"
+
 // Qt includes.
 
 #include <QString>
@@ -32,14 +37,12 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
 #include "imageinfojob.h"
 #include "metadatahub.h"
 #include "statusprogressbar.h"
-#include "batchsyncmetadata.h"
-#include "batchsyncmetadata.moc"
 
 namespace Digikam
 {

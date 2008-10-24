@@ -4,8 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2005-04-21
- * Description : a kio-slave to process file operations on 
- *               digiKam albums. 
+ * Description : a kio-slave to process file operations on
+ *               digiKam albums.
  *
  * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
@@ -27,6 +27,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "digikamalbums.h"
+#include "digikamalbums.moc"
+
 // Qt includes.
 
 #include <qcoreapplication.h>
@@ -47,16 +52,14 @@
 
 #include <libkdcraw/rawfiles.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumdb.h"
 #include "digikam_export.h"
 #include "databaseaccess.h"
 #include "databaseurl.h"
 #include "collectionscanner.h"
-#include "digikamalbums.h"
 #include "imagelister.h"
-#include "digikamalbums.moc"
 
 
 

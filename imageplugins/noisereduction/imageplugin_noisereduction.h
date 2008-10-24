@@ -24,6 +24,10 @@
 #ifndef IMAGEPLUGIN_NOISEREDUCTION_H
 #define IMAGEPLUGIN_NOISEREDUCTION_H
 
+// Qt includes.
+
+#include <QVariant>
+
 // Digikam includes.
 
 #include "imageplugin.h"

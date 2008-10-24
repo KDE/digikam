@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "embosstool.h"
+#include "embosstool.moc"
+
 // Qt includes.
 
 #include <QGridLayout>
@@ -43,15 +48,13 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imagepanelwidget.h"
 #include "version.h"
 #include "emboss.h"
-#include "embosstool.h"
-#include "embosstool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

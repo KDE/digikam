@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "timelineview.h"
+#include "timelineview.moc"
+
 // Qt includes.
 
 #include <QButtonGroup>
@@ -48,7 +53,7 @@
 #include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
 #include "albummanager.h"
@@ -56,8 +61,6 @@
 #include "searchxml.h"
 #include "timelinefolderview.h"
 #include "timelinewidget.h"
-#include "timelineview.h"
-#include "timelineview.moc"
 
 namespace Digikam
 {

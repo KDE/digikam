@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_superimpose.h"
+#include "imageplugin_superimpose.moc"
+
 // KDE includes.
 
 #include <kaction.h>
@@ -34,11 +39,9 @@
 #include <klibloader.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "superimposetool.h"
-#include "imageplugin_superimpose.h"
-#include "imageplugin_superimpose.moc"
 
 using namespace DigikamSuperImposeImagesPlugin;
 

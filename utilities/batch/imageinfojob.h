@@ -30,7 +30,7 @@
 #include <QObject>
 #include <QByteArray>
 
-// Local includes.
+// Digikam includes.
 
 #include "imageinfo.h"
 

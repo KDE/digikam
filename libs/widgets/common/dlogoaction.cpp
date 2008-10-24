@@ -21,6 +21,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "dlogoaction.h"
+
 // Qt includes.
 
 #include <QPixmap>
@@ -36,12 +40,11 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "daboutdata.h"
-#include "dlogoaction.h"
 
-namespace Digikam 
+namespace Digikam
 {
 
 DLogoAction::DLogoAction(QObject* parent, bool alignOnright)

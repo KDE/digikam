@@ -34,7 +34,7 @@
 
 // KDE includes.
 
-// Local includes.
+// Digikam includes.
 
 class QVBoxLayout;
 class QTreeView;

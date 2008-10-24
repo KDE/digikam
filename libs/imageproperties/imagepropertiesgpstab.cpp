@@ -26,6 +26,10 @@ Good explanations about GPS (in French) can be found at this url :
 http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 */
 
+// Local includes.
+
+#include "imagepropertiesgpstab.h"
+#include "imagepropertiesgpstab.moc"
 // Qt includes.
 
 #include <QFile>
@@ -45,11 +49,6 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <klocale.h>
 #include <ksqueezedtextlabel.h>
 #include <ktoolinvocation.h>
-
-// Local includes.
-
-#include "imagepropertiesgpstab.h"
-#include "imagepropertiesgpstab.moc"
 
 namespace Digikam
 {

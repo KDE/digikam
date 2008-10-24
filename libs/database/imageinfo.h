@@ -22,8 +22,6 @@
  *
  * ============================================================ */
 
-/** @file imageinfo.h */
-
 #ifndef IMAGEINFO_H
 #define IMAGEINFO_H
 
@@ -38,7 +36,7 @@
 
 #include <kurl.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 #include "dshareddata.h"
@@ -257,7 +255,7 @@ public:
     /**
      * refresh the properties of the imageinfo. it reads the database
      * again for getting the updated date and stats the file to get
-     * the updated size 
+     * the updated size
      */
     void        refresh();
 

@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_oilpaint.h"
+#include "imageplugin_oilpaint.moc"
+
 // KDE includes.
 
 #include <kdebug.h>
@@ -32,11 +37,9 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "oilpainttool.h"
-#include "imageplugin_oilpaint.h"
-#include "imageplugin_oilpaint.moc"
 
 using namespace DigikamOilPaintImagesPlugin;
 

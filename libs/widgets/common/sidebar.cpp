@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "sidebar.h"
+#include "sidebar.moc"
+
 // Qt includes.
 
 #include <QSplitter>
@@ -43,10 +48,6 @@
 #include <kglobal.h>
 #include <kconfiggroup.h>
 
-// Local includes.
-
-#include "sidebar.h"
-#include "sidebar.moc"
 
 namespace Digikam
 {

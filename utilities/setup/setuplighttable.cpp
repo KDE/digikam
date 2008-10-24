@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "setuplighttable.h"
+#include "setuplighttable.moc"
+
 // Qt includes.
 
 #include <QColor>
@@ -36,10 +41,6 @@
 #include <kconfig.h>
 #include <kglobal.h>
 
-// Local includes.
-
-#include "setuplighttable.h"
-#include "setuplighttable.moc"
 
 namespace Digikam
 {

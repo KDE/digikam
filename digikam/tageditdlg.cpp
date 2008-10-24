@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "tageditdlg.h"
+#include "tageditdlg.moc"
+
 // Qt includes.
 
 #include <QLabel>
@@ -41,13 +46,11 @@
 #include <kseparator.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
 #include "syncjob.h"
 #include "searchtextbar.h"
-#include "tageditdlg.h"
-#include "tageditdlg.moc"
 
 namespace Digikam
 {

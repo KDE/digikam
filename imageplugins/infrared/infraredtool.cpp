@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "infraredtool.h"
+#include "infraredtool.moc"
+
 // Qt includes.
 
 #include <QImage>
@@ -45,7 +50,7 @@
 #include <kglobal.h>
 #include <kconfiggroup.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "version.h"
 #include "daboutdata.h"
@@ -54,8 +59,6 @@
 #include "imagepanelwidget.h"
 #include "editortoolsettings.h"
 #include "infrared.h"
-#include "infraredtool.h"
-#include "infraredtool.moc"
 
 using namespace Digikam;
 

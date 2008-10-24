@@ -26,14 +26,14 @@
 
 // Qt includes.
 
-#include <QPolygon>
-#include <QImage>
-#include <QRect>
-#include <QString>
-#include <QResizeEvent>
-#include <QWidget>
+#include <QtGui/QPolygon>
+#include <QtGui/QImage>
+#include <QtCore/QRect>
+#include <QtCore/QString>
+#include <QtGui/QResizeEvent>
+#include <QtGui/QWidget>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "digikam_export.h"

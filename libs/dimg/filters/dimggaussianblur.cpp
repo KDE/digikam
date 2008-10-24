@@ -24,6 +24,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "dimggaussianblur.h"
+
 // C++ includes.
 
 #include <cmath>
@@ -33,10 +37,9 @@
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimgimagefilters.h"
-#include "dimggaussianblur.h"
 
 namespace Digikam
 {

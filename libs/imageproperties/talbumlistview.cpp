@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "talbumlistview.h"
+#include "talbumlistview.moc"
+
 // Qt includes.
 
 #include <QList>
@@ -41,7 +46,7 @@
 #include <kglobalsettings.h>
 #include <kdialog.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albumiconitem.h"
 #include "albummanager.h"
@@ -56,8 +61,6 @@
 #include "albumthumbnailloader.h"
 #include "scancontroller.h"
 #include "statusprogressbar.h"
-#include "talbumlistview.h"
-#include "talbumlistview.moc"
 
 namespace Digikam
 {

@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "digikamview.h"
+#include "digikamview.moc"
+
 // Qt includes.
 
 #include <QString>
@@ -56,7 +61,7 @@
 
 #include <libkdcraw/rawfiles.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dmetadata.h"
 #include "albummanager.h"
@@ -92,8 +97,6 @@
 #include "timelinefolderview.h"
 #include "dio.h"
 #include "digikamapp.h"
-#include "digikamview.h"
-#include "digikamview.moc"
 
 namespace Digikam
 {

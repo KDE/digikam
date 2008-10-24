@@ -2,10 +2,10 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2004-07-28
  * Description : a color gradient widget
- * 
+ *
  * Copyright (C) 2004-2007 by Gilles Caulier<caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -13,38 +13,36 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
-
-// Qt includes.
-
-#include <QImage>
-#include <QPainter>
-
-// KDE includes.
 
 // Local includes.
 
 #include "colorgradientwidget.h"
 #include "colorgradientwidget.moc"
 
+// Qt includes.
+
+#include <QImage>
+#include <QPainter>
+
 namespace Digikam
 {
 
 class ColorGradientWidgetPriv
 {
-    
+
 public:
 
     ColorGradientWidgetPriv(){}
 
     int    orientation;
-    
+
     QColor color1;
     QColor color2;
 };
@@ -58,20 +56,20 @@ ColorGradientWidget::ColorGradientWidget(int o, int size, QWidget *parent)
     d->color2.setRgb( 255, 255, 255 );
 
     setAttribute(Qt::WA_DeleteOnClose);
-    
+
     if ( d->orientation == Horizontal )
         setFixedHeight( size );
     else
-        setFixedWidth( size );    
+        setFixedWidth( size );
 
     setContentsMargins(1, 1, 1, 1);
-}      
+}
 
 ColorGradientWidget::~ColorGradientWidget()
 {
     delete d;
 }
-    
+
 void ColorGradientWidget::setColors( const QColor &col1, const QColor &col2 )
 {
     d->color1 = col1;
@@ -85,7 +83,7 @@ void ColorGradientWidget::paintEvent( QPaintEvent * )
 
     QColor col, color1, color2, colorf;
     float scale;
-    
+
     // Widget is disable : drawing grayed frame.
     if ( !isEnabled() )
     {
@@ -93,7 +91,7 @@ void ColorGradientWidget::paintEvent( QPaintEvent * )
         color2 = palette().color(QPalette::Disabled, QPalette::Background);
         colorf = palette().color(QPalette::Disabled, QPalette::Foreground);
     }
-    else 
+    else
     {
         color1 = d->color1;
         color2 = d->color2;
@@ -114,7 +112,7 @@ void ColorGradientWidget::paintEvent( QPaintEvent * )
                         color1.blue()  + int(blueDiff  * scale) );
 
             unsigned int *p = (uint *) image.scanLine( y );
-            
+
             for ( int x = 0; x < image.width(); x++ )
                 *p++ = col.rgb();
         }

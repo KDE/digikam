@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imagepropertiessidebardb.h"
+#include "imagepropertiessidebardb.moc"
+
 // Qt includes.
 
 #include <QRect>
@@ -40,7 +45,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "imageinfo.h"
@@ -51,8 +56,6 @@
 #include "imagepropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
-#include "imagepropertiessidebardb.h"
-#include "imagepropertiessidebardb.moc"
 
 namespace Digikam
 {

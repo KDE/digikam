@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "rawcameradlg.h"
+#include "rawcameradlg.moc"
+
 // Qt includes.
 
 #include <QStringList>
@@ -48,11 +53,9 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Digikam includes.
 
 #include "searchtextbar.h"
-#include "rawcameradlg.h"
-#include "rawcameradlg.moc"
 
 namespace Digikam
 {

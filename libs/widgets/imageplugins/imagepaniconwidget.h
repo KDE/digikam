@@ -27,9 +27,9 @@
 
 // Qt includes.
 
-#include <QPolygon>
+#include <QtGui/QPolygon>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 #include "paniconwidget.h"

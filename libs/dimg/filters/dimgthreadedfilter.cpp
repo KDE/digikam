@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "dimgthreadedfilter.h"
+#include "dimgthreadedfilter.moc"
+
 // Qt includes.
 
 #include <QObject>
@@ -30,10 +35,6 @@
 
 #include <kdebug.h>
 
-// Local includes.
-
-#include "dimgthreadedfilter.h"
-#include "dimgthreadedfilter.moc"
 
 namespace Digikam
 {

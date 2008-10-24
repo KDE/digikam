@@ -28,6 +28,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageprint.h"
+
 // Qt includes.
 
 #include <QHBoxLayout>
@@ -66,14 +70,11 @@
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "editorwindow.h"
 #include "icctransform.h"
-#include "imageprint.h"
-
-// # includes.
 
 namespace Digikam
 {

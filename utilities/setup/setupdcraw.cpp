@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "setupdcraw.h"
+#include "setupdcraw.moc"
+
 // Qt includes.
 
 #include <QVBoxLayout>
@@ -39,11 +44,9 @@
 #include <libkdcraw/version.h>
 #include <libkdcraw/dcrawsettingswidget.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "drawdecoding.h"
-#include "setupdcraw.h"
-#include "setupdcraw.moc"
 
 using namespace KDcrawIface;
 

@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "comboboxutilities.h"
+#include "comboboxutilities.moc"
+
 // Qt includes.
 
 #include <QAbstractItemView>
@@ -37,11 +42,6 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-
-// Local includes.
-
-#include "comboboxutilities.h"
-#include "comboboxutilities.moc"
 
 namespace Digikam
 {

@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "thumbnailloadthread.h"
+#include "thumbnailloadthread.moc"
+
 // Qt includes.
 
 #include <QPainter>
@@ -34,13 +39,11 @@
 #include <kiconloader.h>
 #include <kio/previewjob.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "thumbnailsize.h"
 #include "thumbnailtask.h"
 #include "thumbnailcreator.h"
-#include "thumbnailloadthread.h"
-#include "thumbnailloadthread.moc"
 
 namespace Digikam
 {

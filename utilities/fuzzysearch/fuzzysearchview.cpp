@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "fuzzysearchview.h"
+#include "fuzzysearchview.moc"
+
 // Qt includes.
 
 #include <QFrame>
@@ -52,7 +57,7 @@
 #include <ktabwidget.h>
 #include <kvbox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
 #include "albummanager.h"
@@ -69,8 +74,6 @@
 #include "thumbnailloadthread.h"
 #include "findduplicatesview.h"
 #include "fuzzysearchfolderview.h"
-#include "fuzzysearchview.h"
-#include "fuzzysearchview.moc"
 
 namespace Digikam
 {

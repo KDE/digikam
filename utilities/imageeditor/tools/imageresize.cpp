@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageresize.h"
+#include "imageresize.moc"
+
 // C++ includes.
 
 #include <cmath>
@@ -74,11 +79,6 @@
 #include "greycstorationiface.h"
 #include "greycstorationwidget.h"
 #include "greycstorationsettings.h"
-
-// Local includes.
-
-#include "imageresize.h"
-#include "imageresize.moc"
 
 using namespace KDcrawIface;
 

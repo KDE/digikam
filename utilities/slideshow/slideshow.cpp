@@ -23,20 +23,25 @@
 
 #define MAXSTRINGLEN 80
 
+// Local includes.
+
+#include "slideshow.h"
+#include "slideshow.moc"
+
 // Qt includes.
 
-#include <QTimer>
-#include <QPixmap>
+#include <QColor>
+#include <QCursor>
 #include <QDesktopWidget>
 #include <QEvent>
-#include <QCursor>
-#include <QPainter>
 #include <QFont>
-#include <QColor>
-#include <QWheelEvent>
-#include <QPaintEvent>
-#include <QMouseEvent>
 #include <QKeyEvent>
+#include <QMouseEvent>
+#include <QPaintEvent>
+#include <QPainter>
+#include <QPixmap>
+#include <QTimer>
+#include <QWheelEvent>
 
 // KDE includes.
 
@@ -48,14 +53,12 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "constants.h"
 #include "dimg.h"
-#include "toolbar.h"
 #include "previewloadthread.h"
-#include "slideshow.h"
-#include "slideshow.moc"
+#include "toolbar.h"
 
 namespace Digikam
 {

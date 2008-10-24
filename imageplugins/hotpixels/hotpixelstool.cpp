@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "hotpixelstool.h"
+#include "hotpixelstool.moc"
+
 // Qt includes.
 
 #include <QGridLayout>
@@ -47,7 +52,7 @@
 
 #include <libkdcraw/rcombobox.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "version.h"
 #include "daboutdata.h"
@@ -58,8 +63,6 @@
 #include "editortoolsettings.h"
 #include "imagedialog.h"
 #include "blackframelistview.h"
-#include "hotpixelstool.h"
-#include "hotpixelstool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

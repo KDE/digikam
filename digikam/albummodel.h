@@ -27,14 +27,16 @@
 // Qt includes.
 
 #include <QAbstractItemModel>
+#include <QHash>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
 
 namespace Digikam
 {
 
+class Album;
 class AlbumManager;
 class AlbumModelPriv;
 

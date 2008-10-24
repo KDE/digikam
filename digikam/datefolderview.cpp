@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "datefolderview.h"
+#include "datefolderview.moc"
+
 // Qt includes.
 
 #include <Q3ListView>
@@ -43,15 +48,13 @@
 #include <kcalendarsystem.h>
 #include <kconfiggroup.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "album.h"
 #include "albumdb.h"
 #include "albumsettings.h"
 #include "folderview.h"
 #include "monthwidget.h"
-#include "datefolderview.h"
-#include "datefolderview.moc"
 
 namespace Digikam
 {

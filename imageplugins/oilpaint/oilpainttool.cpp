@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "oilpainttool.h"
+#include "oilpainttool.moc"
+
 // Qt includes.
 
 #include <QGridLayout>
@@ -45,7 +50,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "editortoolsettings.h"
@@ -53,8 +58,6 @@
 #include "imagepanelwidget.h"
 #include "version.h"
 #include "oilpaint.h"
-#include "oilpainttool.h"
-#include "oilpainttool.moc"
 
 using namespace KDcrawIface;
 using namespace Digikam;

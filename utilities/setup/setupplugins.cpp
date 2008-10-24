@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "setupplugins.h"
+#include "setupplugins.moc"
+
 // Qt includes.
 
 #include <QVBoxLayout>
@@ -38,11 +43,6 @@
 
 #include <libkipi/pluginloader.h>
 #include <libkipi/version.h>
-
-// Local includes.
-
-#include "setupplugins.h"
-#include "setupplugins.moc"
 
 namespace Digikam
 {

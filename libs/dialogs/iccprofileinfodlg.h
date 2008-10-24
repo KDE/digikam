@@ -26,14 +26,14 @@
 
 // Qt includes.
 
-#include <QByteArray>
-#include <QString>
+#include <QtCore/QByteArray>
+#include <QtCore/QString>
 
 // KDE includes.
 
 #include <kdialog.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 

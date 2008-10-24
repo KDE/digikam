@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageiface.h"
+
 // Qt includes.
 
 #include <QWidget>
@@ -34,7 +38,7 @@
 
 #include <kdebug.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "exposurecontainer.h"
 #include "iccsettingscontainer.h"
@@ -42,7 +46,6 @@
 #include "dimginterface.h"
 #include "bcgmodifier.h"
 #include "dmetadata.h"
-#include "imageiface.h"
 
 namespace Digikam
 {

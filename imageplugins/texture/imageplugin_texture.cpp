@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_texture.h"
+#include "imageplugin_texture.moc"
+
 // KDE includes.
 
 #include <klocale.h>
@@ -32,11 +37,9 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "texturetool.h"
-#include "imageplugin_texture.h"
-#include "imageplugin_texture.moc"
 
 using namespace DigikamTextureImagesPlugin;
 

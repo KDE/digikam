@@ -38,10 +38,10 @@
 #include <libkexiv2/version.h>
 #include <libkexiv2/kexiv2.h>
 
-// Local includes.
+// Digikam includes.
 
-#include "daboutdata.h"
 #include "version.h"
+#include "daboutdata.h"
 #include "showfoto.h"
 
 int main(int argc, char *argv[])

@@ -28,7 +28,7 @@
 
 #include <QWidget>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 #include "histogrambox.h"

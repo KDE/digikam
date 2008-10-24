@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "kipiinterface.h"
+#include "kipiinterface.moc"
+
 // KDE includes.
 
 #include <kconfig.h>
@@ -33,7 +38,7 @@
 
 #include <libkipi/version.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "constants.h"
 #include "album.h"
@@ -46,8 +51,6 @@
 #include "thumbnailloadthread.h"
 #include "kipiimageinfo.h"
 #include "kipiimagecollection.h"
-#include "kipiinterface.h"
-#include "kipiinterface.moc"
 
 namespace Digikam
 {

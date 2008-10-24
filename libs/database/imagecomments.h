@@ -30,7 +30,7 @@
 #include <QDateTime>
 #include <QSharedDataPointer>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 #include "albuminfo.h"

@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "lighttablepreview.h"
+#include "lighttablepreview.moc"
+
 // Qt includes.
 
 #include <QList>
@@ -50,7 +55,7 @@
 #include <krun.h>
 #include <kservice.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "albumdb.h"
@@ -67,8 +72,6 @@
 #include "tagspopupmenu.h"
 #include "ratingpopupmenu.h"
 #include "themeengine.h"
-#include "lighttablepreview.h"
-#include "lighttablepreview.moc"
 
 namespace Digikam
 {

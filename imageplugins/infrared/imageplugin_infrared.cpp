@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imageplugin_infrared.h"
+#include "imageplugin_infrared.moc"
+
 // KDE includes.
 
 #include <kdebug.h>
@@ -33,11 +38,9 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "infraredtool.h"
-#include "imageplugin_infrared.h"
-#include "imageplugin_infrared.moc"
 
 using namespace DigikamInfraredImagesPlugin;
 

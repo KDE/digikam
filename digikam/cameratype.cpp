@@ -5,7 +5,7 @@
  *
  * Date        : 2003-01-29
  * Description : Camera settings container.
- * 
+ *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,22 +14,25 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
+
+// Local includes.
+
+#include "cameratype.h"
 
 // KDE includes.
 
 #include <kaction.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "cameraui.h"
-#include "cameratype.h"
 
 namespace Digikam
 {
@@ -74,7 +77,7 @@ CameraType::CameraType(const QString& title, const QString& model,
     d->path       = path;
     d->action     = action;
     d->lastAccess = lastAccess;
-    d->valid      = true;    
+    d->valid      = true;
 }
 
 CameraType::~CameraType()
@@ -95,7 +98,7 @@ CameraType::CameraType(const CameraType& ctype)
 
 CameraType& CameraType::operator=(const CameraType& ctype)
 {
-    if (this != &ctype) 
+    if (this != &ctype)
     {
         d->title      = ctype.d->title;
         d->model      = ctype.d->model;

@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "imagepropertiessidebarcamgui.h"
+#include "imagepropertiessidebarcamgui.moc"
+
 // Qt includes.
 
 #include <QSplitter>
@@ -36,7 +41,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "dmetadata.h"
 #include "gpiteminfo.h"
@@ -46,8 +51,6 @@
 #include "imagepropertiesgpstab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "statusnavigatebar.h"
-#include "imagepropertiessidebarcamgui.h"
-#include "imagepropertiessidebarcamgui.moc"
 
 namespace Digikam
 {

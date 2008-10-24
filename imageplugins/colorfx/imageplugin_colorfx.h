@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-02-14
- * Description : a digiKam image plugin for to apply a color 
+ * Description : a digiKam image plugin for to apply a color
  *               effect to an image.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
@@ -25,6 +25,10 @@
 
 #ifndef IMAGEPLUGIN_COLORFX_H
 #define IMAGEPLUGIN_COLORFX_H
+
+// Qt includes.
+
+#include <QVariant>
 
 // Digikam includes.
 

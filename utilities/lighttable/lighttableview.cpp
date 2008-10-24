@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "lighttableview.h"
+#include "lighttableview.moc"
+
 // Qt includes.
 
 #include <QGridLayout>
@@ -31,12 +36,10 @@
 #include <kdebug.h>
 #include <kdialog.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "thumbnailsize.h"
 #include "lighttablepreview.h"
-#include "lighttableview.h"
-#include "lighttableview.moc"
 
 namespace Digikam
 {

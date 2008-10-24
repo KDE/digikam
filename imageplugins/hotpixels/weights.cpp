@@ -22,13 +22,14 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "weights.h"
+
 // C++ includes.
 
 #include <cstring>
 
-// Local includes.
-
-#include "weights.h"
 
 namespace DigikamHotPixelsImagesPlugin
 {
@@ -55,19 +56,19 @@ void Weights::operator=(const Weights &w)
     {
         double*** origMatrices = w.weightMatrices();
         // Allocate mPositions.count() matrices
-        mWeightMatrices        = new double**[mPositions.count()]; 
+        mWeightMatrices        = new double**[mPositions.count()];
 
         for (int i=0 ; i < mPositions.count() ; i++)
         {
             // Allocate mHeight rows on each position
-            mWeightMatrices[i] = new double*[mHeight]; 
+            mWeightMatrices[i] = new double*[mHeight];
 
             for (uint j=0 ; j < mHeight ; j++)
             {
                 // Allocate mWidth columns on each row
-                mWeightMatrices[i][j]=new double[mWidth]; 
+                mWeightMatrices[i][j]=new double[mWidth];
 
-                for (uint k=0 ; k < mWidth ; k++) 
+                for (uint k=0 ; k < mWidth ; k++)
                 {
                     mWeightMatrices[i][j][k]=origMatrices[i][j][k];
                 }
@@ -144,7 +145,7 @@ void Weights::calculateWeights()
 
         for (j = 0; j < (size_t)mPositions.count(); ++j)
         {
-            vector0 [iy * mPositions.count() + j] = polyTerm (iy, mPositions [j].x(), 
+            vector0 [iy * mPositions.count() + j] = polyTerm (iy, mPositions [j].x(),
                     mPositions [j].y(), mPolynomeOrder);
 
             for (ix = 0; ix < mCoefficientNumber; ++ix)
@@ -167,7 +168,7 @@ void Weights::calculateWeights()
 
             for (ix = 0; ix < mCoefficientNumber; ++ix)
             {
-                vector1 [iy * mPositions.count() + j] += matrix [iy * mCoefficientNumber + ix] 
+                vector1 [iy * mPositions.count() + j] += matrix [iy * mCoefficientNumber + ix]
                             * vector0 [ix * mPositions.count() + j];
             }
         }
@@ -176,17 +177,17 @@ void Weights::calculateWeights()
     // Store weights
 
     // Allocate mPositions.count() matrices.
-    mWeightMatrices = new double**[mPositions.count()]; 
+    mWeightMatrices = new double**[mPositions.count()];
 
     for (i=0 ; i < (size_t)mPositions.count() ; i++)
     {
         // Allocate mHeight rows on each position
         mWeightMatrices[i] = new double*[mHeight];
 
-        for (j=0 ; j < mHeight ; j++) 
+        for (j=0 ; j < mHeight ; j++)
         {
             // Allocate mWidth columns on each row
-            mWeightMatrices[i][j] = new double[mWidth]; 
+            mWeightMatrices[i][j] = new double[mWidth];
         }
     }
 
@@ -199,7 +200,7 @@ void Weights::calculateWeights()
                 mWeightMatrices [j][y][x] = 0.0;
 
                 for (iy = 0; iy < mCoefficientNumber; ++iy)
-                   mWeightMatrices [j][y][x] += vector1 [iy * mPositions.count() + j] 
+                   mWeightMatrices [j][y][x] += vector1 [iy * mPositions.count() + j]
                                              * polyTerm (iy, x, y, mPolynomeOrder);
 
                 mWeightMatrices [j][y][x] *= (double) mPositions.count();
@@ -253,7 +254,7 @@ void Weights::matrixInv (double *const a, const size_t size)
         }
     }
 
-    // Convert matrix to diagonal form.  
+    // Convert matrix to diagonal form.
 
     for (iy = size - 1; iy > 0; --iy)
     {

@@ -23,26 +23,24 @@
  *
  * ============================================================ */
 
-/** @file albumdb.h */
-
 #ifndef ALBUMDB_H
 #define ALBUMDB_H
 
 // Qt includes.
 
-#include <QString>
-#include <QList>
-#include <QStringList>
-#include <QDateTime>
-#include <QPair>
-#include <QMap>
-#include <QUuid>
+#include <QtCore/QString>
+#include <QtCore/QList>
+#include <QtCore/QStringList>
+#include <QtCore/QDateTime>
+#include <QtCore/QPair>
+#include <QtCore/QMap>
+#include <QtCore/QUuid>
 
 // KDE includes.
 
 #include <kurl.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albuminfo.h"
 #include "databasefields.h"

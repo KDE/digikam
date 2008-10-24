@@ -23,6 +23,10 @@
 #ifndef IMAGEPLUGIN_LENSCORRECTION_H
 #define IMAGEPLUGIN_LENSCORRECTION_H
 
+// Qt includes.
+
+#include <QVariant>
+
 // Digikam includes.
 
 #include "imageplugin.h"

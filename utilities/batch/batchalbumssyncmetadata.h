@@ -29,7 +29,7 @@
 
 #include <QCloseEvent>
 
-// Local includes.
+// Digikam includes.
 
 #include "imageinfo.h"
 #include "dprogressdlg.h"

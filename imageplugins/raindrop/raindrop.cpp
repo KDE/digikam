@@ -5,11 +5,11 @@
  *
  * Date        : 2005-05-25
  * Description : Raindrop threaded image filter.
- * 
+ *
  * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * 
- * Original RainDrop algorithm copyrighted 2004-2005 by 
+ *
+ * Original RainDrop algorithm copyrighted 2004-2005 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
  *
  * This program is free software; you can redistribute it
@@ -17,13 +17,17 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
+
+// Local includes.
+
+#include "raindrop.h"
 
 // C++ includes.
 
@@ -32,19 +36,18 @@
 
 // Qt includes.
 
-#include <QDateTime> 
+#include <QDateTime>
 #include <QRect>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "dimgimagefilters.h"
-#include "raindrop.h"
 
 namespace DigikamRainDropImagesPlugin
 {
 
-RainDrop::RainDrop(Digikam::DImg *orgImage, QObject *parent, int drop, 
+RainDrop::RainDrop(Digikam::DImg *orgImage, QObject *parent, int drop,
                    int amount, int coeff, QRect *selection)
         : Digikam::DImgThreadedFilter(orgImage, parent, "RainDrop")
 {
@@ -123,15 +126,15 @@ void RainDrop::filterImage(void)
  * bLimitRange      => If true, the drop will not be cut.
  * progressMin      => Min. value for progress bar (can be different if using clipping area).
  * progressMax      => Max. value for progress bar (can be different if using clipping area).
- *                                                                                   
- * Theory           => This functions does several math's functions and the engine   
- *                     is simple to undestand, but a little hard to implement. A       
- *                     control will indicate if there is or not a raindrop in that       
+ *
+ * Theory           => This functions does several math's functions and the engine
+ *                     is simple to undestand, but a little hard to implement. A
+ *                     control will indicate if there is or not a raindrop in that
  *                     area, if not, a fisheye effect with a random size (max=MaxDropSize)
- *                     will be applied, after this, a shadow will be applied too.       
- *                     and after this, a blur function will finish the effect.            
+ *                     will be applied, after this, a shadow will be applied too.
+ *                     and after this, a blur function will finish the effect.
  */
-void RainDrop::rainDropsImage(Digikam::DImg *orgImage, Digikam::DImg *destImage, int MinDropSize, int MaxDropSize, 
+void RainDrop::rainDropsImage(Digikam::DImg *orgImage, Digikam::DImg *destImage, int MinDropSize, int MaxDropSize,
                               int Amount, int Coeff, bool bLimitRange, int progressMin, int progressMax)
 {
     bool   bResp;
@@ -194,7 +197,7 @@ void RainDrop::rainDropsImage(Digikam::DImg *orgImage, Digikam::DImg *destImage,
         }
         while ((bResp == false) && (nCounter < 10000) && !m_cancel);
 
-        // Update the progress bar in dialog.        
+        // Update the progress bar in dialog.
         if (nCounter >= 10000)
         {
             i = Amount;
@@ -203,7 +206,7 @@ void RainDrop::rainDropsImage(Digikam::DImg *orgImage, Digikam::DImg *destImage,
             break;
         }
 
-        postProgress( (int)(progressMin + ((double)(i) * 
+        postProgress( (int)(progressMin + ((double)(i) *
                       (double)(progressMax-progressMin)) / (double)Amount) );
     }
 
@@ -226,7 +229,7 @@ bool RainDrop::CreateRainDrop(uchar *pBits, int Width, int Height, bool sixteenB
 
     if (CanBeDropped(Width, Height, pStatusBits, X, Y, DropSize, bLimitRange))
     {
-        Coeff *= 0.01; 
+        Coeff *= 0.01;
         lfDiv = (double)nHalfSize / log (Coeff * (double)nHalfSize + 1.0);
 
         for (h = -nHalfSize; !m_cancel && (h <= nHalfSize); h++)
@@ -297,7 +300,7 @@ bool RainDrop::CreateRainDrop(uchar *pBits, int Width, int Height, bool sixteenB
                                     nBright = 30;
                                 else if ((lfAngle >= 1.75 ) && (lfAngle < 2.0))
                                     nBright = 30;
-                            } 
+                            }
 
                             else if (lfOldRadius >= 0.4 * (double)nHalfSize)
                             {
@@ -407,7 +410,7 @@ bool RainDrop::CreateRainDrop(uchar *pBits, int Width, int Height, bool sixteenB
 }
 
 
-bool RainDrop::CanBeDropped(int Width, int Height, uchar *pStatusBits, int X, int Y, 
+bool RainDrop::CanBeDropped(int Width, int Height, uchar *pStatusBits, int X, int Y,
                             int DropSize, bool bLimitRange)
 {
     register int w, h, i = 0;
@@ -437,7 +440,7 @@ bool RainDrop::CanBeDropped(int Width, int Height, uchar *pStatusBits, int X, in
     return (true);
 }
 
-bool RainDrop::SetDropStatusBits (int Width, int Height, uchar *pStatusBits, 
+bool RainDrop::SetDropStatusBits (int Width, int Height, uchar *pStatusBits,
                                   int X, int Y, int DropSize)
 {
     register int w, h, i = 0;

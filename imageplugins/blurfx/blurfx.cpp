@@ -8,8 +8,8 @@
  *
  * Copyright 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * 
- * Original Blur algorithms copyrighted 2004 by 
+ *
+ * Original Blur algorithms copyrighted 2004 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
  *
  * This program is free software; you can redistribute it
@@ -17,16 +17,20 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
-// Represents 1 
-#define ANGLE_RATIO  0.017453292519943295769236907685   
+// Represents 1
+#define ANGLE_RATIO  0.017453292519943295769236907685
+
+// Local includes.
+
+#include "blurfx.h"
 
 // C++ includes.
 
@@ -38,11 +42,10 @@
 
 #include <QDateTime>
 
-// Local includes.
+// Digikam includes.
 
 #include "dimg.h"
 #include "dimggaussianblur.h"
-#include "blurfx.h"
 
 namespace DigikamBlurFXImagesPlugin
 {
@@ -106,20 +109,20 @@ void BlurFX::filterImage(void)
     }
 }
 
-/* Function to apply the ZoomBlur effect backported from ImageProcessing version 2                                           
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.  
+/* Function to apply the ZoomBlur effect backported from ImageProcessing version 2
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
  * X, Y             => Center of zoom in the image
- * Distance         => Distance value         
+ * Distance         => Distance value
  * pArea            => Preview area.
- *                                                                                  
- * Theory           => Here we have a effect similar to RadialBlur mode Zoom from  
+ *
+ * Theory           => Here we have a effect similar to RadialBlur mode Zoom from
  *                     Photoshop. The theory is very similar to RadialBlur, but has one
- *                     difference. Instead we use pixels with the same radius and      
- *                     near angles, we take pixels with the same angle but near radius 
- *                     This radius is always from the center to out of the image, we   
+ *                     difference. Instead we use pixels with the same radius and
+ *                     near angles, we take pixels with the same angle but near radius
+ *                     This radius is always from the center to out of the image, we
  *                     calc a proportional radius from the center.
  */
 void BlurFX::zoomBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X, int Y, int Distance, QRect pArea)
@@ -222,20 +225,20 @@ void BlurFX::zoomBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X, 
     }
 }
 
-/* Function to apply the radialBlur effect backported from ImageProcessing version 2                                           
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.     
- * X, Y             => Center of radial in the image                       
- * Distance         => Distance value                                            
+/* Function to apply the radialBlur effect backported from ImageProcessing version 2
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * X, Y             => Center of radial in the image
+ * Distance         => Distance value
  * pArea            => Preview area.
- *                                                                                  
- * Theory           => Similar to RadialBlur from Photoshop, its an amazing effect    
- *                     Very easy to understand but a little hard to implement.           
+ *
+ * Theory           => Similar to RadialBlur from Photoshop, its an amazing effect
+ *                     Very easy to understand but a little hard to implement.
  *                     We have all the image and find the center pixel. Now, we analize
- *                     all the pixels and calc the radius from the center and find the 
- *                     angle. After this, we sum this pixel with others with the same  
+ *                     all the pixels and calc the radius from the center and find the
+ *                     angle. After this, we sum this pixel with others with the same
  *                     radius, but different angles. Here I'm using degrees angles.
  */
 void BlurFX::radialBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X, int Y, int Distance, QRect pArea)
@@ -343,16 +346,16 @@ void BlurFX::radialBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X
     delete [] nMultArray;
 }
 
-/* Function to apply the focusBlur effect backported from ImageProcessing version 2                                              
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.                            
- * BlurRadius       => Radius of blurred image. 
+/* Function to apply the focusBlur effect backported from ImageProcessing version 2
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * BlurRadius       => Radius of blurred image.
  * BlendRadius      => Radius of blending effect.
  * bInversed        => If true, invert focus effect.
  * pArea            => Preview area.
- *                                                                                 
+ *
  */
 void BlurFX::focusBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage,
                        int X, int Y, int BlurRadius, int BlendRadius,
@@ -492,21 +495,21 @@ void BlurFX::focusBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage,
     delete composer;
 }
 
-/* Function to apply the farBlur effect backported from ImageProcessing version 2                                            
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.                            
- * Distance         => Distance value                                            
- *                                                                                  
- * Theory           => This is an interesting effect, the blur is applied in that   
+/* Function to apply the farBlur effect backported from ImageProcessing version 2
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * Distance         => Distance value
+ *
+ * Theory           => This is an interesting effect, the blur is applied in that
  *                     way: (the value "1" means pixel to be used in a blur calc, ok?)
- *                     e.g. With distance = 2 
- *                                            |1|1|1|1|1| 
- *                                            |1|0|0|0|1| 
- *                                            |1|0|C|0|1| 
- *                                            |1|0|0|0|1| 
- *                                            |1|1|1|1|1| 
+ *                     e.g. With distance = 2
+ *                                            |1|1|1|1|1|
+ *                                            |1|0|0|0|1|
+ *                                            |1|0|C|0|1|
+ *                                            |1|0|0|0|1|
+ *                                            |1|1|1|1|1|
  *                     We sum all the pixels with value = 1 and apply at the pixel with*
  *                     the position "C".
  */
@@ -542,19 +545,19 @@ void BlurFX::farBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Dist
     delete [] nKern;
 }
 
-/* Function to apply the SmartBlur effect                                           
- *                                                                                  
- * data             => The image data in RGBA mode.  
- * Width            => Width of image.                          
- * Height           => Height of image.                            
- * Radius           => blur matrix radius.                                         
- * Strenght         => Color strenght.                                         
- *                                                                                  
- * Theory           => Similar to SmartBlur from Photoshop, this function has the   
- *                     same engine as Blur function, but, in a matrix with n        
+/* Function to apply the SmartBlur effect
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * Radius           => blur matrix radius.
+ * Strenght         => Color strenght.
+ *
+ * Theory           => Similar to SmartBlur from Photoshop, this function has the
+ *                     same engine as Blur function, but, in a matrix with n
  *                     dimentions, we take only colors that pass by sensibility filter
- *                     The result is a clean image, not totally blurred, but a image  
- *                     with correction between pixels.      
+ *                     The result is a clean image, not totally blurred, but a image
+ *                     with correction between pixels.
  */
 
 void BlurFX::smartBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Radius, int Strength)
@@ -713,17 +716,17 @@ void BlurFX::smartBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Ra
     delete [] pBlur;
 }
 
-/* Function to apply the motionBlur effect backported from ImageProcessing version 2                                              
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.                            
- * Distance         => Distance value 
- * Angle            => Angle direction (degrees)                                               
- *                                                                                  
- * Theory           => Similar to MotionBlur from Photoshop, the engine is very       
- *                     simple to undertand, we take a pixel (duh!), with the angle we   
- *                     will taking near pixels. After this we blur (add and do a       
+/* Function to apply the motionBlur effect backported from ImageProcessing version 2
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * Distance         => Distance value
+ * Angle            => Angle direction (degrees)
+ *
+ * Theory           => Similar to MotionBlur from Photoshop, the engine is very
+ *                     simple to undertand, we take a pixel (duh!), with the angle we
+ *                     will taking near pixels. After this we blur (add and do a
  *                     division).
  */
 void BlurFX::motionBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Distance, double Angle)
@@ -816,14 +819,14 @@ void BlurFX::motionBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int D
     delete [] lpYArray;
 }
 
-/* Function to apply the softenerBlur effect                                            
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.                            
- *                                                                                  
- * Theory           => An interesting blur-like function. In dark tones we apply a   
- *                     blur with 3x3 dimentions, in light tones, we apply a blur with   
+/* Function to apply the softenerBlur effect
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ *
+ * Theory           => An interesting blur-like function. In dark tones we apply a
+ *                     blur with 3x3 dimentions, in light tones, we apply a blur with
  *                     5x5 dimentions. Easy, hun?
  */
 void BlurFX::softenerBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage)
@@ -918,17 +921,17 @@ void BlurFX::softenerBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage)
     }
 }
 
-/* Function to apply the shake blur effect                                            
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.                            
- * Distance         => Distance between layers (from origin)                        
- *                                                                                  
+/* Function to apply the shake blur effect
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * Distance         => Distance between layers (from origin)
+ *
  * Theory           => Similar to Fragment effect from Photoshop. We create 4 layers
- *                    each one has the same distance from the origin, but have       
- *                    different positions (top, button, left and right), with these 4 
- *                    layers, we join all the pixels.                 
+ *                    each one has the same distance from the origin, but have
+ *                    different positions (top, button, left and right), with these 4
+ *                    layers, we join all the pixels.
  */
 void BlurFX::shakeBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Distance)
 {
@@ -1020,14 +1023,14 @@ void BlurFX::shakeBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Di
     delete [] Layer4;
 }
 
-/* Function to apply the frostGlass effect                                            
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.                            
- * Frost            => Frost value 
- *                                                                                  
- * Theory           => Similar to Diffuse effect, but the random byte is defined   
+/* Function to apply the frostGlass effect
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * Frost            => Frost value
+ *
+ * Theory           => Similar to Diffuse effect, but the random byte is defined
  *                     in a matrix. Diffuse uses a random diagonal byte.
  */
 void BlurFX::frostGlass(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Frost)
@@ -1071,7 +1074,7 @@ void BlurFX::frostGlass(Digikam::DImg *orgImage, Digikam::DImg *destImage, int F
             color.setColor(data + offset, sixteenBit);
 
             // get random color from surrounding of w|h
-            color = RandomColor (data, Width, Height, sixteenBit, bytesDepth, 
+            color = RandomColor (data, Width, Height, sixteenBit, bytesDepth,
                                  w, h, Frost, color.alpha(), &seed, range, IntensityCount,
                                  AverageColorR, AverageColorG, AverageColorB);
 
@@ -1092,19 +1095,19 @@ void BlurFX::frostGlass(Digikam::DImg *orgImage, Digikam::DImg *destImage, int F
     delete [] AverageColorB;
 }
 
-/* Function to apply the mosaic effect backported from ImageProcessing version 2                                             
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.                            
+/* Function to apply the mosaic effect backported from ImageProcessing version 2
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
  * Size             => Size of mosaic .
- *                                                                                  
- * Theory           => Ok, you can find some mosaic effects on PSC, but this one   
+ *
+ * Theory           => Ok, you can find some mosaic effects on PSC, but this one
  *                     has a great feature, if you see a mosaic in other code you will
- *                     see that the corner pixel doesn't change. The explanation is   
- *                     simple, the color of the mosaic is the same as the first pixel 
- *                     get. Here, the color of the mosaic is the same as the mosaic   
- *                     center pixel. 
+ *                     see that the corner pixel doesn't change. The explanation is
+ *                     simple, the color of the mosaic is the same as the first pixel
+ *                     get. Here, the color of the mosaic is the same as the mosaic
+ *                     center pixel.
  *                     Now the function scan the rows from the top (like photoshop).
  */
 void BlurFX::mosaic(Digikam::DImg *orgImage, Digikam::DImg *destImage, int SizeW, int SizeH)
@@ -1162,16 +1165,16 @@ void BlurFX::mosaic(Digikam::DImg *orgImage, Digikam::DImg *destImage, int SizeW
     }
 }
 
-/* Function to get a color in a matriz with a determined size                       
- *                                                                                  
- * Bits              => Bits array                                                   
- * Width             => Image width                                                  
- * Height            => Image height                                                
- * X                 => Position horizontal                                          
- * Y                 => Position vertical                                            
- * Radius            => The radius of the matrix to be created                     
- *                                                                                 
- * Theory            => This function takes from a distinct matrix a random color  
+/* Function to get a color in a matriz with a determined size
+ *
+ * Bits              => Bits array
+ * Width             => Image width
+ * Height            => Image height
+ * X                 => Position horizontal
+ * Y                 => Position vertical
+ * Radius            => The radius of the matrix to be created
+ *
+ * Theory            => This function takes from a distinct matrix a random color
  */
 Digikam::DColor BlurFX::RandomColor(uchar *Bits, int Width, int Height, bool sixteenBit, int bytesDepth,
                                     int X, int Y, int Radius,
@@ -1276,18 +1279,18 @@ Digikam::DColor BlurFX::RandomColor(uchar *Bits, int Width, int Height, bool six
     return color;
 }
 
-/* Function to simple convolve a unique pixel with a determined radius                
- *                                                                                    
- * data             => The image data in RGBA mode.  
- * Width            => Width of image.                          
- * Height           => Height of image.                            
- * Radius           => kernel radius, e.g. rad=1, so array will be 3X3               
+/* Function to simple convolve a unique pixel with a determined radius
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * Radius           => kernel radius, e.g. rad=1, so array will be 3X3
  * Kernel           => kernel array to apply.
- *                                                                                    
- * Theory           => I've worked hard here, but I think this is a very smart       
- *                     way to convolve an array, its very hard to explain how I reach    
- *                     this, but the trick here its to store the sum used by the       
- *                     previous pixel, so we sum with the other pixels that wasn't get 
+ *
+ * Theory           => I've worked hard here, but I think this is a very smart
+ *                     way to convolve an array, its very hard to explain how I reach
+ *                     this, but the trick here its to store the sum used by the
+ *                     previous pixel, so we sum with the other pixels that wasn't get
  */
 void BlurFX::MakeConvolution (Digikam::DImg *orgImage, Digikam::DImg *destImage, int Radius, int Kernel[])
 {

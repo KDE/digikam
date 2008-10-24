@@ -21,6 +21,9 @@
  *
  * ============================================================ */
 
+#ifndef DIGIKAMAPPPRIVATE_H
+#define DIGIKAMAPPPRIVATE_H
+
 // Qt includes.
 
 #include <QList>
@@ -44,7 +47,7 @@
 
 #include <libkipi/pluginloader.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "albummanager.h"
 #include "albumsettings.h"
@@ -289,3 +292,5 @@ public:
 };
 
 }  // namespace Digikam
+
+#endif // ALBUMICONVIEW_H

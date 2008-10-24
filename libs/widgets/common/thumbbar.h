@@ -27,19 +27,19 @@
 
 // Qt includes.
 
-#include <Q3ScrollView>
-#include <QString>
-#include <QEvent>
-#include <QResizeEvent>
-#include <QMouseEvent>
-#include <QPaintEvent>
-#include <QWheelEvent>
+#include <Qt3Support/Q3ScrollView>
+#include <QtCore/QString>
+#include <QtCore/QEvent>
+#include <QtGui/QResizeEvent>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QPaintEvent>
+#include <QtGui/QWheelEvent>
 
 // KDE includes.
 
 #include <kurl.h>
 
-// Local includes.
+// Digikam includes.
 
 #include "digikam_export.h"
 
