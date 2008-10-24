@@ -47,6 +47,7 @@ SET(showfoto_SRCS
     showfoto.cpp 
    )
 
+KDE4_ADD_APP_ICON(showfoto_SRCS "../data/icons/hi*-app-showfoto.png")
 
 KDE4_ADD_EXECUTABLE(showfoto ${showfoto_SRCS})
 

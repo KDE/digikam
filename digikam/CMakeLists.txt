@@ -10,7 +10,7 @@ INCLUDE_DIRECTORIES(
                      ../libs/histogram
                      ../libs/curves
                      ../libs/levels
-                     ../libs/lprof/
+                     ../libs/lprof
                      ../libs/jpegutils 
                      ../libs/greycstoration
                      ../libs/threadimageio
@@ -121,14 +121,14 @@ TARGET_LINK_LIBRARIES(digikam
               )
 
 IF(MARBLEWIDGET_FOUND)
-  TARGET_LINK_LIBRARIES(digikam ${LIBMARBLEWIDGET_LIBRARY})
+    TARGET_LINK_LIBRARIES(digikam ${LIBMARBLEWIDGET_LIBRARY})
 ENDIF(MARBLEWIDGET_FOUND)
 
-SET_TARGET_PROPERTIES(digikam PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+SET_TARGET_PROPERTIES(digikam PROPERTIES VERSION 1.0.0 SOVERSION 1)
 IF(WIN32)
-    SET_TARGET_PROPERTIES(digikam PROPERTIES COMPILE_FLAGS -DJPEG_STATIC )
+    SET_TARGET_PROPERTIES(digikam PROPERTIES COMPILE_FLAGS -DJPEG_STATIC)
 ENDIF(WIN32)
-INSTALL(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS} )
+INSTALL(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 # Shared libdigikamdatabase ########################################################
@@ -234,6 +234,8 @@ SET(digikam_bin_SRCS
     )
 
 QT4_ADD_DBUS_ADAPTOR(digikam_bin_SRCS org.kde.digikam.xml digikamapp.h Digikam::DigikamApp)
+
+KDE4_ADD_APP_ICON(digikam_bin_SRCS "../data/icons/hi*-app-digikam.png")
 
 KDE4_ADD_EXECUTABLE(digikam_bin ${digikam_bin_SRCS})
 
