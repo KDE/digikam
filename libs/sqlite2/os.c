@@ -464,6 +464,11 @@ int sqliteOsOpenReadWrite(
   id->dirfd = -1;
   id->fd = open(zFilename, O_RDWR|O_CREAT|O_LARGEFILE|O_BINARY, 0644);
   if( id->fd<0 ){
+#ifdef EISDIR
+    if( errno==EISDIR ){
+      return SQLITE_CANTOPEN;
+    }
+#endif
     id->fd = open(zFilename, O_RDONLY|O_LARGEFILE|O_BINARY);
     if( id->fd<0 ){
       return SQLITE_CANTOPEN; 
@@ -825,7 +830,7 @@ int sqliteOsTempFileName(char *zBuf){
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "0123456789";
   int i, j;
-  char *zDir;
+  const char *zDir;
   char zTempPath[SQLITE_TEMPNAME_SIZE];
   if( sqlite_temp_directory==0 ){
     GetTempPath(SQLITE_TEMPNAME_SIZE-30, zTempPath);
@@ -1110,6 +1115,10 @@ int sqliteOsSeek(OsFile *id, off_t offset){
   }
 #endif
 }
+
+#ifdef SQLITE_NOSYNC
+# define fsync(X) 0
+#endif
 
 /*
 ** Make sure all writes to a particular file are committed to disk.
@@ -1769,6 +1778,7 @@ char *sqliteOsFullPathname(const char *zRelative){
     sqliteSetString(&zFull, zRelative, (char*)0);
   }else{
     char zBuf[5000];
+    zBuf[0] = 0;
     sqliteSetString(&zFull, getcwd(zBuf, sizeof(zBuf)), "/", zRelative,
                     (char*)0);
   }

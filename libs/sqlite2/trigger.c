@@ -682,8 +682,8 @@ int sqliteCodeRowTrigger(
   ExprList *pChanges,  /* Changes list for any UPDATE OF triggers */
   int tr_tm,           /* One of TK_BEFORE, TK_AFTER */
   Table *pTab,         /* The table to code triggers from */
-  int newIdx,          /* The index of the "new" row to access */
-  int oldIdx,          /* The index of the "old" row to access */
+  int newIdx,          /* The indice of the "new" row to access */
+  int oldIdx,          /* The indice of the "old" row to access */
   int orconf,          /* ON CONFLICT policy */
   int ignoreJump       /* Instruction to jump to for RAISE(IGNORE) */
 ){

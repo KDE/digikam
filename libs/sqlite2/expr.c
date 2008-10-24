@@ -124,7 +124,7 @@ Expr *sqliteExprDup(Expr *p){
   if( pNew==0 ) return 0;
   memcpy(pNew, p, sizeof(*pNew));
   if( p->token.z!=0 ){
-    pNew->token.z = sqliteStrDup(p->token.z);
+    pNew->token.z = sqliteStrNDup(p->token.z, p->token.n);
     pNew->token.dyn = 1;
   }else{
     assert( pNew->token.z==0 );
@@ -155,7 +155,10 @@ ExprList *sqliteExprListDup(ExprList *p){
   if( pNew==0 ) return 0;
   pNew->nExpr = pNew->nAlloc = p->nExpr;
   pNew->a = pItem = sqliteMalloc( p->nExpr*sizeof(p->a[0]) );
-  if( pItem==0 ) return 0;  /* Leaks memory after a malloc failure */
+  if( pItem==0 ){
+    sqliteFree(pNew);
+    return 0;
+  }
   for(i=0; i<p->nExpr; i++, pItem++){
     Expr *pNewExpr, *pOldExpr;
     pItem->pExpr = pNewExpr = sqliteExprDup(pOldExpr = p->a[i].pExpr);
@@ -1429,7 +1432,7 @@ void sqliteExprIfFalse(Parse *pParse, Expr *pExpr, int dest, int jumpIfNull){
     case TK_EQ: {
       if( pParse->db->file_format>=4 && sqliteExprType(pExpr)==SQLITE_SO_TEXT ){
         /* Convert numeric comparison opcodes into text comparison opcodes.
-        ** This step depends on the fact that the text comparison opcodes are
+        ** This step depends on the fact that the text comparision opcodes are
         ** always 6 greater than their corresponding numeric comparison
         ** opcodes.
         */

@@ -102,25 +102,25 @@
 #ifndef UINT16_TYPE
 # define UINT16_TYPE unsigned short int
 #endif
+#ifndef INT16_TYPE
+# define INT16_TYPE short int
+#endif
 #ifndef UINT8_TYPE
 # define UINT8_TYPE unsigned char
 #endif
 #ifndef INT8_TYPE
 # define INT8_TYPE signed char
 #endif
-
-/* DigiKam customization */
 #ifndef INTPTR_TYPE
-# if SIZEOF_CHAR_P==4
+# if SQLITE_PTR_SZ==4
 #   define INTPTR_TYPE int
 # else
 #   define INTPTR_TYPE long long
-#warning "WARNING: Compiling sqlite for a 64 bit Platform."
-#warning "WARNING: If you know this is not true, please file a bugreport."
 # endif
 #endif
 typedef UINT32_TYPE u32;           /* 4-byte unsigned integer */
 typedef UINT16_TYPE u16;           /* 2-byte unsigned integer */
+typedef INT16_TYPE i16;            /* 2-byte signed integer */
 typedef UINT8_TYPE u8;             /* 1-byte unsigned integer */
 typedef UINT8_TYPE i8;             /* 1-byte signed integer */
 typedef INTPTR_TYPE ptr;           /* Big enough to hold a pointer */
@@ -284,7 +284,7 @@ struct Db {
 ** Allowed values for the DB.flags field.
 **
 ** The DB_Locked flag is set when the first OP_Transaction or OP_Checkpoint
-** opcode is emitted for a database.  This prevents multiple occurrences
+** opcode is emitted for a database.  This prevents multiple occurances
 ** of those opcodes for the same database in the same program.  Similarly,
 ** the DB_Cookie flag is set when the OP_VerifyCookie opcode is emitted,
 ** and prevents duplicate OP_VerifyCookies from taking up space and slowing
@@ -345,7 +345,7 @@ struct sqlite {
   int nDb;                      /* Number of backends currently in use */
   Db *aDb;                      /* All backends */
   Db aDbStatic[2];              /* Static space for the 2 default backends */
-  int flags;                    /* Miscellaneous flags. See below */
+  int flags;                    /* Miscellanous flags. See below */
   u8 file_format;               /* What file format version is this database? */
   u8 safety_level;              /* How aggressive at synching data to disk */
   u8 want_to_close;             /* Close after all VDBEs are deallocated */
@@ -527,7 +527,7 @@ struct Table {
 **
 ** Each REFERENCES clause generates an instance of the following structure
 ** which is attached to the from-table.  The to-table need not exist when
-** the from-table is created.  The existence of the to-table is not checked
+** the from-table is created.  The existance of the to-table is not checked
 ** until an attempt is made to insert data into the from-table.
 **
 ** The sqlite.aFKey hash table stores pointers to this structure
@@ -766,8 +766,8 @@ struct IdList {
 ** now be identified by a database name, a dot, then the table name: ID.ID.
 */
 struct SrcList {
-  u16 nSrc;        /* Number of tables or subqueries in the FROM clause */
-  u16 nAlloc;      /* Number of entries allocated in a[] below */
+  i16 nSrc;        /* Number of tables or subqueries in the FROM clause */
+  i16 nAlloc;      /* Number of entries allocated in a[] below */
   struct SrcList_item {
     char *zDatabase;  /* Name of database holding this table */
     char *zName;      /* Name of the table */
@@ -1120,7 +1120,7 @@ void sqliteRealToSortable(double r, char *);
 #endif
 char *sqliteMPrintf(const char*, ...);
 char *sqliteVMPrintf(const char*, va_list);
-void sqliteSetString(char **, const char *, ...);
+void sqliteSetString(char **, ...);
 void sqliteSetNString(char **, ...);
 void sqliteErrorMsg(Parse*, const char*, ...);
 void sqliteDequote(char*);

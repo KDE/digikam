@@ -164,7 +164,7 @@ int sqlite_exec(
 #define SQLITE_EMPTY       16   /* (Internal Only) Database table is empty */
 #define SQLITE_SCHEMA      17   /* The database schema changed */
 #define SQLITE_TOOBIG      18   /* Too much data for one row of a table */
-#define SQLITE_CONSTRAINT  19   /* Abort due to contraint violation */
+#define SQLITE_CONSTRAINT  19   /* Abort due to constraint violation */
 #define SQLITE_MISMATCH    20   /* Data type mismatch */
 #define SQLITE_MISUSE      21   /* Library used incorrectly */
 #define SQLITE_NOLFS       22   /* Uses OS features not supported on host */
@@ -210,7 +210,7 @@ int sqlite_changes(sqlite*);
 
 /*
 ** This function returns the number of database rows that were changed
-** by the last INSERT, UPDATE, or DELETE statment executed by sqlite_exec(),
+** by the last INSERT, UPDATE, or DELETE statement executed by sqlite_exec(),
 ** or by the last VM to run to completion. The change count is not updated
 ** by SQL statements other than INSERT, UPDATE or DELETE.
 **
@@ -236,7 +236,7 @@ int sqlite_last_statement_changes(sqlite*);
 
 /* If the parameter to this routine is one of the return value constants
 ** defined above, then this routine returns a constant text string which
-** descripts (in English) the meaning of the return value.
+** describes (in English) the meaning of the return value.
 */
 const char *sqlite_error_string(int);
 #define sqliteErrStr sqlite_error_string  /* Legacy. Do not use in new code. */
@@ -286,8 +286,8 @@ void sqlite_busy_handler(sqlite*, int(*)(void*,const char*,int), void*);
 /*
 ** This routine sets a busy handler that sleeps for a while when a
 ** table is locked.  The handler will sleep multiple times until 
-** at least "ms" milleseconds of sleeping have been done.  After
-** "ms" milleseconds of sleeping, the handler returns 0 which
+** at least "ms" milliseconds of sleeping have been done.  After
+** "ms" milliseconds of sleeping, the handler returns 0 which
 ** causes sqlite_exec() to return SQLITE_BUSY.
 **
 ** Calling this routine with an argument less than or equal to zero
@@ -699,7 +699,7 @@ int sqlite_step(
 /*
 ** This routine is called to delete a virtual machine after it has finished
 ** executing.  The return value is the result code.  SQLITE_OK is returned
-** if the statement executed successfuly and some other value is returned if
+** if the statement executed successfully and some other value is returned if
 ** there was any kind of error.  If an error occurred and pzErrMsg is not
 ** NULL, then an error message is written into memory obtained from malloc()
 ** and *pzErrMsg is made to point to that error message.  The calling routine
@@ -710,7 +710,7 @@ int sqlite_step(
 ** virtual machine.  If the virtual machine has not completed execution
 ** when this routine is called, that is like encountering an error or
 ** an interrupt.  (See sqlite_interrupt().)  Incomplete updates may be
-** rolled back and transactions cancelled,  depending on the circumstances,
+** rolled back and transactions canceled,  depending on the circumstances,
 ** and the result code returned will be SQLITE_ABORT.
 */
 int sqlite_finalize(sqlite_vm*, char **pzErrMsg);
@@ -732,7 +732,7 @@ int sqlite_reset(sqlite_vm*, char **pzErrMsg);
 
 /*
 ** If the SQL that was handed to sqlite_compile contains variables that
-** are represeted in the SQL text by a question mark ('?').  This routine
+** are represented in the SQL text by a question mark ('?').  This routine
 ** is used to assign values to those variables.
 **
 ** The first parameter is a virtual machine obtained from sqlite_compile().
@@ -827,7 +827,7 @@ sqlite *sqlite_open_encrypted(
 ** of SQLite.
 */
 int sqlite_rekey(
-  sqlite *db,                    /* Database to be rekeyed */
+  sqlite *db,                    /* Database to be re-keyed */
   const void *pKey, int nKey     /* The new key */
 );
 

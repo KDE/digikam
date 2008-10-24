@@ -97,11 +97,11 @@ typedef struct OverflowPage OverflowPage;
 typedef struct FreelistInfo FreelistInfo;
 
 /*
-** All structures on a database page are aligned to 4-byte boundaries.
+** All structures on a database page are aligned to 4-byte boundries.
 ** This routine rounds up a number of bytes to the next multiple of 4.
 **
 ** This might need to change for computer architectures that require
-** and 8-byte alignment boundary for structures.
+** and 8-byte alignment boundry for structures.
 */
 #define ROUNDUP(X)  ((X+3) & ~3)
 
@@ -250,7 +250,7 @@ struct Cell {
 /*
 ** Free space on a page is remembered using a linked list of the FreeBlk
 ** structures.  Space on a database page is allocated in increments of
-** at least 4 bytes and is always aligned to a 4-byte boundary.  The
+** at least 4 bytes and is always aligned to a 4-byte boundry.  The
 ** linked list of FreeBlks is always kept in order by address.
 */
 struct FreeBlk {
