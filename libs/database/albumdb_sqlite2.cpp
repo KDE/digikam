@@ -21,17 +21,16 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "albumdb_sqlite2.h"
+
 // C ANSI includes.
 
 extern "C"
 {
-#include <sqlite.h>
 #include <sys/time.h>
 }
-
-// Local includes.
-
-#include "albumdb_sqlite2.h"
 
 // C++ includes.
 

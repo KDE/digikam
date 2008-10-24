@@ -32,7 +32,7 @@
 
 // C++ includes.
 
-#include <queue>
+#include <cstring>
 
 // Qt includes.
 

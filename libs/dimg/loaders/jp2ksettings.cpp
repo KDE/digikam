@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "jp2ksettings.h"
+#include "jp2ksettings.moc"
+
 // Qt includes.
 
 #include <QString>
@@ -34,11 +39,6 @@
 #include <klocale.h>
 #include <kdialog.h>
 #include <knuminput.h>
-
-// Digikam includes.
-
-#include "jp2ksettings.h"
-#include "jp2ksettings.moc"
 
 namespace Digikam
 {

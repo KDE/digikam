@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "qimageloader.h"
+
 // Qt includes.
 
 #include <QImage>
@@ -35,7 +39,6 @@
 
 #include "dimg.h"
 #include "dimgloaderobserver.h"
-#include "qimageloader.h"
 
 namespace Digikam
 {

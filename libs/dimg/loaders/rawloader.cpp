@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "rawloader.h"
+#include "rawloader.moc"
+
 // C++ includes.
 
 #include <cmath>
@@ -45,8 +50,6 @@
 #include "imagelevels.h"
 #include "bcgmodifier.h"
 #include "whitebalance.h"
-#include "rawloader.h"
-#include "rawloader.moc"
 
 namespace Digikam
 {

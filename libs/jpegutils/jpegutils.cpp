@@ -36,7 +36,7 @@
 #include <cstdio>
 #include <cstdlib>
 
-// C Ansi includes.
+// C ANSI includes.
 
 extern "C"
 {

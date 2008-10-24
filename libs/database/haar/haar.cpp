@@ -27,15 +27,15 @@
  *
  * ============================================================ */
 
-// C++ includes.
-
-#include <cstring>
-#include <cstdlib>
-#include <cmath>
-
 // Local includes.
 
 #include "haar.h"
+
+// C++ includes.
+
+#include <cstdlib>
+#include <cmath>
+#include <queue>
 
 // Qt includes.
 

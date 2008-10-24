@@ -24,6 +24,13 @@
 #ifndef ALBUMDB_SQLITE2_H
 #define ALBUMDB_SQLITE2_H
 
+// C ANSI includes.
+
+extern "C"
+{
+#include <sqlite.h>
+}
+
 // Qt includes.
 
 #include <QString>

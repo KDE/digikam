@@ -28,7 +28,11 @@
 
 #define PNG_BYTES_TO_CHECK 4
 
-// C Ansi includes.
+// Local includes.
+
+#include "pngloader.h"
+
+// C ANSI includes.
 
 extern "C"
 {
@@ -55,7 +59,6 @@ extern "C"
 #include "version.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
-#include "pngloader.h"
 
 namespace Digikam
 {

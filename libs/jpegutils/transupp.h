@@ -20,6 +20,14 @@
 #ifndef TRANSUPP_H
 #define TRANSUPP_H
 
+// LibJPEG includes.
+
+extern "C"
+{
+#include "jinclude.h"
+#include "jpeglib.h"
+}
+
 namespace Digikam
 {
 

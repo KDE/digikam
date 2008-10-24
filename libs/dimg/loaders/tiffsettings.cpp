@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "tiffsettings.h"
+#include "tiffsettings.moc"
+
 // Qt includes.
 
 #include <QString>
@@ -33,11 +38,6 @@
 
 #include <klocale.h>
 #include <kdialog.h>
-
-// Digikam includes.
-
-#include "tiffsettings.h"
-#include "tiffsettings.moc"
 
 namespace Digikam
 {

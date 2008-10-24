@@ -28,6 +28,10 @@
 // files io. Uncomment this line only for debugging.
 //#define ENABLE_DEBUG_MESSAGES
 
+// Local includes.
+
+#include "ppmloader.h"
+
 // C ANSI includes.
 
 extern "C"
@@ -53,7 +57,6 @@ extern "C"
 
 #include "dimg.h"
 #include "dimgloaderobserver.h"
-#include "ppmloader.h"
 
 namespace Digikam
 {

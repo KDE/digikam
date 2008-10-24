@@ -17,17 +17,9 @@
  */
 #define JPEG_INTERNALS
 
-// LibJPEG includes.
-
-extern "C"
-{
-#include "jinclude.h"
-#include "jpeglib.h"
-}
-
 // Digikam includes.
 
-#include "transupp.h"		/* My own external interface */
+#include "transupp.h"
 
 namespace Digikam
 {

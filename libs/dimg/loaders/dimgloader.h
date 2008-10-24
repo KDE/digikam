@@ -34,8 +34,8 @@
 
 // Digikam includes.
 
-#include "dimg.h"
 #include "digikam_export.h"
+#include "dimg.h"
 
 namespace Digikam
 {

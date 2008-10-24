@@ -21,8 +21,8 @@
  * 
  * ============================================================ */
 
-#ifndef EXPOSURESETTINGSCONTAINER_H
-#define EXPOSURESETTINGSCONTAINER_H
+#ifndef EXPOSURECONTAINER_H
+#define EXPOSURECONTAINER_H
 
 // Qt includes.
 
@@ -62,4 +62,4 @@ public:
 
 }  // namespace Digikam
 
-#endif  // EXPOSURESETTINGSCONTAINER_H
+#endif  // EXPOSURECONTAINER_H

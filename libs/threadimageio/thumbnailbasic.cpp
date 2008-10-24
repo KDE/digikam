@@ -40,7 +40,7 @@
 #include <kurl.h>
 #include <kstandarddirs.h>
 
-// C Ansi includes.
+// C ANSI includes.
 
 extern "C"
 {

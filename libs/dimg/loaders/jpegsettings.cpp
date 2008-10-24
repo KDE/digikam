@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+// Local includes.
+
+#include "jpegsettings.h"
+#include "jpegsettings.moc"
+
 // Qt includes.
 
 #include <QFrame>
@@ -35,11 +40,6 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <knuminput.h>
-
-// Digikam includes.
-
-#include "jpegsettings.h"
-#include "jpegsettings.moc"
 
 namespace Digikam
 {

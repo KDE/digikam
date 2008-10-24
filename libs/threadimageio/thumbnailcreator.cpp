@@ -26,6 +26,7 @@
 // Local includes.
 
 #include "thumbnailcreator.h"
+#include "thumbnailcreator_p.h"
 
 // Qt includes.
 
@@ -35,32 +36,31 @@
 
 // KDE includes.
 
-#include <kdebug.h>
-#include <kurl.h>
-#include <kcomponentdata.h>
-#include <kimageio.h>
-#include <klocale.h>
-#include <kglobal.h>
-#include <kstandarddirs.h>
 #include <kcodecs.h>
-#include <kservicetypetrader.h>
-#include <klibloader.h>
-#include <kmimetype.h>
+#include <kcomponentdata.h>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <kimageio.h>
 #include <kio/global.h>
 #include <kio/thumbcreator.h>
+#include <klibloader.h>
+#include <klocale.h>
+#include <kmimetype.h>
+#include <kservicetypetrader.h>
+#include <kstandarddirs.h>
 #include <ktemporaryfile.h>
+#include <kurl.h>
 
 // LibKDcraw includes.
 
-#include <libkdcraw/rawfiles.h>
 #include <libkdcraw/kdcraw.h>
+#include <libkdcraw/rawfiles.h>
 
 // Digikam includes.
 
 #include "dimg.h"
 #include "dmetadata.h"
 #include "jpegutils.h"
-#include "thumbnailcreator_p.h"
 
 // Definitions
 
