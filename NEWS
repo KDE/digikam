@@ -1,5 +1,8 @@
 *********************************************************************************************************
-digiKam 0.10.0-beta4 - Release date: 2008-10-02
+digiKam 0.10.0-beta5 - Release date: 2008-10-XX
+
+IMPORTANT: This is a beta release : do not use yet in production !!!
+====================================================================
 
 NEW FEATURES:
 
@@ -30,6 +33,9 @@ General        : libgphoto2 dependency is now optional to be able to compile dig
 020 ==> 172911 : Album File lister does not have an "All Image Files" filter.
 021 ==> 167777 : Thumbnails in Album not shown at first start of digiKam.
 022 ==> 
+
+*********************************************************************************************************
+digiKam 0.10.0-beta4 - Release date: 2008-10-02
 
 IMPORTANT: This is a beta release : do not use yet in production !!!
 ====================================================================
