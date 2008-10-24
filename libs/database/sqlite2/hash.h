@@ -9,7 +9,7 @@
 **    May you share freely, never taking more than you give.
 **
 *************************************************************************
-** This is the header file for the generic hash-table implementation
+** This is the header file for the generic hash-table implemenation
 ** used in SQLite.
 **
 ** $Id$

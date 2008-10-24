@@ -13,10 +13,7 @@
 **
 ** @(#) $Id$
 */
-#ifdef HAVE_CONFIG
 #include "config.h"
-#endif
-
 #include "sqlite.h"
 #include "hash.h"
 #include "parse.h"
@@ -105,25 +102,25 @@
 #ifndef UINT16_TYPE
 # define UINT16_TYPE unsigned short int
 #endif
+#ifndef INT16_TYPE
+# define INT16_TYPE short int
+#endif
 #ifndef UINT8_TYPE
 # define UINT8_TYPE unsigned char
 #endif
 #ifndef INT8_TYPE
 # define INT8_TYPE signed char
 #endif
-
-/* DigiKam customization */
 #ifndef INTPTR_TYPE
-# if SIZEOF_CHAR_P==4
+# if SQLITE_PTR_SZ==4
 #   define INTPTR_TYPE int
 # else
 #   define INTPTR_TYPE long long
-#warning "WARNING: Compiling sqlite for a 64 bit Platform."
-#warning "WARNING: If you know this is not true, please file a bugreport."
 # endif
 #endif
 typedef UINT32_TYPE u32;           /* 4-byte unsigned integer */
 typedef UINT16_TYPE u16;           /* 2-byte unsigned integer */
+typedef INT16_TYPE i16;            /* 2-byte signed integer */
 typedef UINT8_TYPE u8;             /* 1-byte unsigned integer */
 typedef UINT8_TYPE i8;             /* 1-byte signed integer */
 typedef INTPTR_TYPE ptr;           /* Big enough to hold a pointer */
@@ -287,7 +284,7 @@ struct Db {
 ** Allowed values for the DB.flags field.
 **
 ** The DB_Locked flag is set when the first OP_Transaction or OP_Checkpoint
-** opcode is emitted for a database.  This prevents multiple occurrences
+** opcode is emitted for a database.  This prevents multiple occurances
 ** of those opcodes for the same database in the same program.  Similarly,
 ** the DB_Cookie flag is set when the OP_VerifyCookie opcode is emitted,
 ** and prevents duplicate OP_VerifyCookies from taking up space and slowing
@@ -348,9 +345,9 @@ struct sqlite {
   int nDb;                      /* Number of backends currently in use */
   Db *aDb;                      /* All backends */
   Db aDbStatic[2];              /* Static space for the 2 default backends */
-  int flags;                    /* Miscellaneous flags. See below */
+  int flags;                    /* Miscellanous flags. See below */
   u8 file_format;               /* What file format version is this database? */
-  u8 safety_level;              /* How aggressive at syncing data to disk */
+  u8 safety_level;              /* How aggressive at synching data to disk */
   u8 want_to_close;             /* Close after all VDBEs are deallocated */
   u8 temp_store;                /* 1=file, 2=memory, 0=compile-time default */
   u8 onError;                   /* Default conflict algorithm */
@@ -429,7 +426,7 @@ struct sqlite {
 struct FuncDef {
   void (*xFunc)(sqlite_func*,int,const char**);  /* Regular function */
   void (*xStep)(sqlite_func*,int,const char**);  /* Aggregate function step */
-  void (*xFinalize)(sqlite_func*);           /* Aggregate function finalizer */
+  void (*xFinalize)(sqlite_func*);           /* Aggregate function finializer */
   signed char nArg;         /* Number of arguments.  -1 means unlimited */
   signed char dataType;     /* Arg that determines datatype.  -1=NUMERIC, */
                             /* -2=TEXT. -3=SQLITE_ARGS */
@@ -530,7 +527,7 @@ struct Table {
 **
 ** Each REFERENCES clause generates an instance of the following structure
 ** which is attached to the from-table.  The to-table need not exist when
-** the from-table is created.  The existence of the to-table is not checked
+** the from-table is created.  The existance of the to-table is not checked
 ** until an attempt is made to insert data into the from-table.
 **
 ** The sqlite.aFKey hash table stores pointers to this structure
@@ -636,7 +633,7 @@ struct Index {
 ** this structure.  Tokens are also used as part of an expression.
 **
 ** Note if Token.z==0 then Token.dyn and Token.n are undefined and
-** may contain random values.  Do not make any assumptions about Token.dyn
+** may contain random values.  Do not make any assuptions about Token.dyn
 ** and Token.n when Token.z==0.
 */
 struct Token {
@@ -769,8 +766,8 @@ struct IdList {
 ** now be identified by a database name, a dot, then the table name: ID.ID.
 */
 struct SrcList {
-  u16 nSrc;        /* Number of tables or subqueries in the FROM clause */
-  u16 nAlloc;      /* Number of entries allocated in a[] below */
+  i16 nSrc;        /* Number of tables or subqueries in the FROM clause */
+  i16 nAlloc;      /* Number of entries allocated in a[] below */
   struct SrcList_item {
     char *zDatabase;  /* Name of database holding this table */
     char *zName;      /* Name of the table */
@@ -874,7 +871,7 @@ struct Select {
 #define SRT_Union        5  /* Store result as keys in a table */
 #define SRT_Except       6  /* Remove result from a UNION table */
 #define SRT_Table        7  /* Store result as data with a unique key */
-#define SRT_TempTable    8  /* Store result in a transient table */
+#define SRT_TempTable    8  /* Store result in a trasient table */
 #define SRT_Discard      9  /* Do not save the results anywhere */
 #define SRT_Sorter      10  /* Store results in the sorter */
 #define SRT_Subroutine  11  /* Call a subroutine to handle results */
@@ -1058,7 +1055,7 @@ struct TriggerStep {
  * constructed. When coding nested triggers (triggers fired by other triggers)
  * each nested trigger stores its parent trigger's TriggerStack as the "pNext" 
  * pointer. Once the nested trigger has been coded, the pNext value is restored
- * to the pTriggerStack member of the Parse structure and coding of the parent
+ * to the pTriggerStack member of the Parse stucture and coding of the parent
  * trigger continues.
  *
  * Before a nested trigger is coded, the linked list pointed to by the 
@@ -1123,7 +1120,7 @@ void sqliteRealToSortable(double r, char *);
 #endif
 char *sqliteMPrintf(const char*, ...);
 char *sqliteVMPrintf(const char*, va_list);
-void sqliteSetString(char **, const char *, ...);
+void sqliteSetString(char **, ...);
 void sqliteSetNString(char **, ...);
 void sqliteErrorMsg(Parse*, const char*, ...);
 void sqliteDequote(char*);
