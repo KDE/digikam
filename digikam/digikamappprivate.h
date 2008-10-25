@@ -43,7 +43,7 @@
 #include <kmenu.h>
 #include <kstatusbar.h>
 
-// libKipi includes.
+// LibKIPI includes.
 
 #include <libkipi/pluginloader.h>
 

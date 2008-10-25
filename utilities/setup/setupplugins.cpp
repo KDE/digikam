@@ -39,7 +39,7 @@
 #include <klocale.h>
 #include <kdialog.h>
 
-// libkipi includes.
+// LibKIPI includes.
 
 #include <libkipi/pluginloader.h>
 #include <libkipi/version.h>

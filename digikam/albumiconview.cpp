@@ -88,7 +88,7 @@ extern "C"
 #include <ktrader.h>
 #include <kurl.h>
 
-// LibKipi includes.
+// LibKIPI includes.
 
 #include <libkipi/pluginloader.h>
 #include <libkipi/plugin.h>

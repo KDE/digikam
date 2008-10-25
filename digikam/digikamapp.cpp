@@ -80,7 +80,7 @@
 #include <marble/global.h>
 #endif // HAVE_MARBLEWIDGET
 
-// libKipi includes.
+// LibKIPI includes.
 
 #include <libkipi/plugin.h>
 #include <libkipi/interface.h>

@@ -36,7 +36,7 @@
 
 #include <kurl.h>
 
-// libKipi includes.
+// LibKIPI includes.
 
 #include <libkipi/interface.h>
 #include <libkipi/imagecollection.h>

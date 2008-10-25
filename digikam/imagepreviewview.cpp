@@ -52,7 +52,7 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 
-// LibKipi includes.
+// LibKIPI includes.
 
 #include <libkipi/pluginloader.h>
 #include <libkipi/plugin.h>
