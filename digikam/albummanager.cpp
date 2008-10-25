@@ -127,7 +127,7 @@ public:
 
 uint qHash(const PAlbumPath &id)
 {
-    return ::qHash(id.albumRootId) xor ::qHash(id.albumPath);
+    return !(::qHash(id.albumRootId) || ::qHash(id.albumPath));
 }
 
 class AlbumManagerPriv
@@ -838,9 +838,9 @@ void AlbumManager::scanTAlbums()
         QHash<int, TAlbum*> tagHash;
 
         // insert items into a dict for quick lookup
-        for (TagInfo::List::iterator it = tList.begin(); it != tList.end(); ++it)
+        for (TagInfo::List::iterator iter = tList.begin(); iter != tList.end(); ++iter)
         {
-            TagInfo info  = *it;
+            TagInfo info  = *iter;
             TAlbum* album = new TAlbum(info.name, info.id);
             if (info.icon.isNull())
             {
@@ -1996,11 +1996,11 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
     }
 
     int year, month;
-    for ( QMap<YearMonth, int>::iterator it = yearMonthMap.begin();
-          it != yearMonthMap.end(); ++it )
+    for ( QMap<YearMonth, int>::iterator iter = yearMonthMap.begin();
+          iter != yearMonthMap.end(); ++iter )
     {
-        year  = it.key().first;
-        month = it.key().second;
+        year  = iter.key().first;
+        month = iter.key().second;
 
         QDate md(year, month, 1);
 
