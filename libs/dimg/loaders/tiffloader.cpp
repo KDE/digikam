@@ -45,8 +45,6 @@
 //#define ENABLE_DEBUG_MESSAGES
 
 
-#include "tiffloader.h"
-
 // C ANSI includes.
 extern "C"
 {
@@ -72,6 +70,7 @@ extern "C"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "dmetadata.h"
+#include "tiffloader.h"
 
 namespace Digikam
 {
