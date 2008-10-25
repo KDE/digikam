@@ -1,55 +1,42 @@
 Notice to make release tarballs from SVN
 ----------------------------------------
 
-0/ release announcements can be send to kde-i18n-docs. The earlier the better
-   TODO: not clear where an how to store them yet. 
-
-1/ Update the release info in digikam/CMakeLists.txt and commit it to SVN.
+1/ release announcements can be send to kde-i18n-docs if internationalized strings are frozen.
+   The earlier the better.
   
+2/ Commit changed source code files to SVN.
 
-3/ Commit changed files to SVN.
+3/ Update the release info in digikam/CMakeLists.txt and commit it to SVN.
 
-4/ Backup old ChangeLog file to ChangeLog.old.
-
-5/ Create a fresh ChangeLog file using svn2cl script. Just run it from main digiKam root directory.
-   Please check if ChangeLog file is updated properly.
-
-   svn2cl can be downloaded at this url: http://ch.tudelft.nl/~arthur/svn2cl/
-   Just copying this tarball content on digikam root directory to use it.
-
-   Note : svn2cl need xsltproc program. Please install it before. (check libxslt-proc package).
-
-6/ Copy last changes of fresh ChangeLog file to ChangeLog.old using a simple text editor. 
-   Place a release tag at the top of ChangeLog. Remove all 'scripty' entries in log.
-
-   Rename ChangeLog.old to ChangeLog and commit it on SVN.
-
-7/ Update NEWS file. If Changelog is a dry historical record of development, 
+4/ Update NEWS file. If Changelog is a dry historical record of development, 
    NEWS should focus on the improvements and changes, summarize everything since 
    last major release. Look into ML, changelog and use BKO filter for bug summaries.
    Commit to SVN.
 
-8/ Run project/release/release_digikam.rb script to release digiKam source tarball.
+5/ Run project/release/release_digikam.rb script to release digiKam source tarball.
    Run project/release/release_digikam_docs.rb script to release documentation tarball.
    
-   Note : the documentation must be packaged in a separate tarball to decrease the source code tarball size.
+   Note: the documentation must be packaged in a separate tarball to decrease the source code tarball size.
 
-9/ When tarball is created, decompress it in a temp folder and try to compile it to prevent any problems.
+6/ When tarball is created, decompress it in a temp folder and try to compile it to prevent any problems.
 
-10/ Upload tarball to http://digikam3rdparty.free.fr (address to indicate in mail) 
-    area via ftp and post a message on digikam-devel@kde.org mailing list to have a 
-    feedback from packagers before posting an official release announcement.
+7/ In tarball, Changelog file have been updated using svn2cl. copy it to your local and replace versioned 
+   Changelog file. Commit to svn.
 
-11/ When the official tarball is ready to post, don't forget to copy the current trunk to the tags branch
-    (http://websvn.kde.org/tags/digikam/). See TAGGING below.
+8/ Upload tarball to ftp://digikam3rdparty@ftpperso.free.fr and post a message on digikam-devel@kde.org 
+   mailing list with a link to files available by http://digikam3rdparty.free.fr to have a 
+   feedback from packagers before posting an official release announcement.
 
-12/ Upload tarball to sourceforge.net area using this url (must be admin on SF-digikam):
+9/ When the official tarball is ready to post, don't forget to copy the current trunk to the tags branch
+   (http://websvn.kde.org/tags/digikam/). See TAGGING below.
 
-	ftp://upload.sourceforge.net/incoming
-	...and admin file releases on sourceforge.net project page using this url:
-    	https://sourceforge.net/project/admin/editpackages.php?group_id=42641
+10/ Upload tarball to sourceforge.net area using this url (must be admin on SF-digikam):
 
-13/ Perform an official release announcement to these ML:
+    ftp://upload.sourceforge.net/incoming
+    ...and admin file releases on sourceforge.net project page using this url:
+    https://sourceforge.net/project/admin/editpackages.php?group_id=42641
+
+11/ Perform an official release announcement to these mailing-lists:
 
 * digikam-users@kde.org
 * digikam-devel@kde.org
@@ -81,9 +68,9 @@ If anyone knows what the purpose of this tagging is, please put it here ;-)
 ----------------- Branching -----------------
 
 Branching is done, so translators can work in two separate areas and we can develop unstable and a next stable release.
-To set it up, you need to do following. Remember it will take you two evenings to succeed, but you need to finish the first part completely, because automated KDE scripts will ruin your work!
+To set it up, you need to do following. Remember it will take you two evenings to succeed, but you need to finish the first part completely,
+because automated KDE scripts will ruin your work!
 
-14/
 - go to /branches/stable/extragear/graphics. 
 - svn delete digikam and digikamimageplugins. 
 - svn cp http://anonsvn.kde.org/home/kde/extragear/graphics/digikam digikam  
@@ -109,11 +96,27 @@ $ svn copy -r{last-used-rev_number} \
   (go to bed now and do the following tomorrow!) 
 
 - to branch all the language files, you can use the script located in extragear/scripts/
-- you need to do that for digikam, showfoto and digikamimageplugins. For digikamimageplugs you need to specify all plugins, so you get something like:
-sh  update_l10n_stable.sh --section graphics --app digikamimageplugins -u toma --extrapofiles "digikamimageplugin_adjustcurves.po digikamimageplugin_charcoal.po digikamimageplugin_inpainting.po digikamimageplugin_sheartool.po digikamimageplugin_adjustlevels.po digikamimageplugin_despeckle.po digikamimageplugin_inserttext.po digikamimageplugin_antivignetting.po digikamimageplugin_distortionfx.po digikamimageplugin_lensdistortion.po digikamimageplugin_solarize.po digikamimageplugin_blowup.po digikamimageplugin_emboss.po digikamimageplugin_oilpaint.po digikamimageplugin_superimpose.po digikamimageplugin_blurfx.po digikamimageplugin_filmgrain.po digikamimageplugin_perspective.po digikamimageplugin_texture.po digikamimageplugin_border.po digikamimageplugin_freerotation.po digikamimageplugin_raindrop.po digikamimageplugin_unsharp.po digikamimageplugin_channelmixer.po digikamimageplugin_infrared.po digikamimageplugin_restoration.po digikamimageplugin_whitebalance.po digikamimageplugin_refocus.po digikamimageplugin_hotpixels.po "
+- you need to do that for digikam, showfoto and digikamimageplugins. For digikamimageplugins 
+  you need to specify all plugins, so you get something like:
+  sh update_l10n_stable.sh --section graphics --app digikamimageplugins -u 
+     toma --extrapofiles "digikamimageplugin_adjustcurves.po digikamimageplugin_charcoal.po 
+                          digikamimageplugin_inpainting.po digikamimageplugin_sheartool.po 
+                          digikamimageplugin_adjustlevels.po digikamimageplugin_despeckle.po 
+                          digikamimageplugin_inserttext.po digikamimageplugin_antivignetting.po 
+                          digikamimageplugin_distortionfx.po digikamimageplugin_lensdistortion.po 
+                          digikamimageplugin_solarize.po digikamimageplugin_blowup.po 
+                          digikamimageplugin_emboss.po digikamimageplugin_oilpaint.po 
+                          digikamimageplugin_superimpose.po digikamimageplugin_blurfx.po 
+                          digikamimageplugin_filmgrain.po digikamimageplugin_perspective.po 
+                          digikamimageplugin_texture.po digikamimageplugin_border.po 
+                          digikamimageplugin_freerotation.po digikamimageplugin_raindrop.po 
+                          digikamimageplugin_unsharp.po digikamimageplugin_channelmixer.po 
+                          digikamimageplugin_infrared.po digikamimageplugin_restoration.po 
+                          digikamimageplugin_whitebalance.po digikamimageplugin_refocus.po 
+                          digikamimageplugin_hotpixels.po"
 
--check that all plugins are copied over, last time the last one in the list did not make it.
+- check that all plugins are copied over, last time the last one in the list did not make it.
 
--send a mail to the ml and kde-i18n-docs.
+- send a mail to the mailing-list and kde-i18n-docs.
 
 ---------------------------------------------------
