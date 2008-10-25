@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-#ifndef _MSC_VER
+#ifndef Q_CC_MSVC
 #warning "TODO: KPrinter is disabled for KDE4.0";
 #endif
 
