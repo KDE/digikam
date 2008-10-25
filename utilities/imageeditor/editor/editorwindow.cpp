@@ -603,7 +603,9 @@ void EditorWindow::setupStatusBar()
 
 void EditorWindow::printImage(KUrl /*url*/)
 {
+#ifndef Q_CC_MSVC
 #warning "TODO: KPrinter is disabled for KDE4.0";
+#endif
 
 /*
     uchar* ptr      = m_canvas->interface()->getImage();
