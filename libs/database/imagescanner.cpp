@@ -546,23 +546,28 @@ QString ImageScanner::detectFormat()
         case DImg::NONE:
         case DImg::QIMAGE:
         {
-            KMimeType::Ptr mimetype = KMimeType::mimeType(m_fileInfo.path(), KMimeType::ResolveAliases);
+            QByteArray format = QImageReader::imageFormat(m_fileInfo.filePath());
+            if (!format.isEmpty())
+            {
+                return QString(format).toUpper();
+            }
+
+            KMimeType::Ptr mimetype = KMimeType::findByPath(m_fileInfo.filePath());
             if (mimetype)
             {
                 QString name = mimetype->name();
                 if (name.startsWith("image/"))
                 {
-                    return name.mid(6).toUpper();
+                    QString imageTypeName = name.mid(6).toUpper();
+                    // cut off the "X-" from some mimetypes
+                    if (imageTypeName.startsWith("X-"))
+                        imageTypeName = imageTypeName.mid(2);
+                    return imageTypeName;
                 }
             }
-            else
-                kWarning(50003) << "Detecting file format: KMimeType for" << m_fileInfo.path() << "is null" << endl;
 
-            QByteArray format = QImageReader::imageFormat(m_fileInfo.fileName());
-            if (!format.isEmpty())
-            {
-                return QString(format).toUpper();
-            }
+            kWarning(50003) << "Detecting file format failed: KMimeType for" << m_fileInfo.filePath() << "is null" << endl;
+
         }
     }
     return QString();
