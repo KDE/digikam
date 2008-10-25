@@ -301,7 +301,7 @@ void WhiteBalance::setLUTv()
     for (int i = 1; i < (int)d->rgbMax; i++)
     {
         float x      = (float)(i - d->BP)/(d->WP - d->BP);
-        d->curve[i]  = (i < d->BP) ? 0 : (d->rgbMax-1) * pow(x, gamma);
+        d->curve[i]  = (i < d->BP) ? 0 : (d->rgbMax-1) * pow((double)x, gamma);
         d->curve[i] *= (1 - d->dark * exp(-x * x / 0.002));
         d->curve[i] /= (float)i;
     }
