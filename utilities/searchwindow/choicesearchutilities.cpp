@@ -213,7 +213,7 @@ void ChoiceSearchComboBox::setModel(ChoiceSearchModel *model)
 
 ChoiceSearchModel *ChoiceSearchComboBox::model() const
 {
-    return static_cast<ChoiceSearchModel*>(model());
+    return static_cast<ChoiceSearchModel*>(ListViewComboBox::model());
 }
 
 SearchSqueezedClickLabel *ChoiceSearchComboBox::label() const
