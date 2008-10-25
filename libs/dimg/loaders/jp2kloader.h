@@ -26,10 +26,14 @@
 
 // C ANSI includes.
 
+#ifndef Q_CC_MSVC
 extern "C"
 {
+#endif
 #include <jasper/jasper.h>
+#ifndef Q_CC_MSVC
 }
+#endif
 
 // Local includes.
 
