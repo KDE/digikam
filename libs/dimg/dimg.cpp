@@ -28,10 +28,15 @@
 
 // C ANSI includes.
 
+#ifndef Q_CC_MSVC
 extern "C"
 {
+#endif
 #include <stdint.h>
+#ifndef Q_CC_MSVC
+#include <math.h>
 }
+#endif
 
 // C++ includes.
 
