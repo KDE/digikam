@@ -107,7 +107,6 @@ public:
 
     void clear(bool updateView=true);
     void triggerUpdate();
-    void slotUpdate();
 
     void removeItem(ThumbBarItem* item);
     void takeItem(ThumbBarItem* item);
@@ -129,6 +128,10 @@ public:
 
     void refreshThumbs(const KUrl::List& urls);
     void invalidateThumb(ThumbBarItem* item);
+
+public slots:
+
+    void slotUpdate();
 
 signals:
 
