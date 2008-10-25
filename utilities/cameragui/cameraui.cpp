@@ -802,7 +802,7 @@ void CameraUI::finishDialog()
     {
         CameraList* clist = CameraList::defaultList();
         if (clist)
-            clist->changeCameraAccessTime(d->cameraTitle, QDateTime::QDateTime::currentDateTime());
+            clist->changeCameraAccessTime(d->cameraTitle, QDateTime::currentDateTime());
     }
 
     // When a directory is created, a watch is put on it to spot new files
