@@ -1,0 +1,6 @@
+This is the release script wizard.
+
+You need to install these packages:
+- ruby
+- kdialog
+- svn2cl
