@@ -67,14 +67,18 @@ using namespace Marble;
 
 // C ANSI includes
 
+#ifndef Q_CC_MSVC
 extern "C"
 {
+#endif
 #include <png.h>
 #include <tiffvers.h>
 #include <jpeglib.h>
 #include <jasper/jas_version.h>
 #include <lcms.h>
+#ifndef Q_CC_MSVC
 }
+#endif
 
 // Local includes.
 
