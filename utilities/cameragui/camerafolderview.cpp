@@ -90,7 +90,7 @@ void CameraFolderView::addVirtualFolder(const QString& name, const QPixmap& pixm
     d->virtualFolder->setExpanded(true);
     d->virtualFolder->setSelected(false);
     // item is not selectable.
-    d->virtualFolder->setFlags(d->virtualFolder->flags() & !Qt::ItemIsSelectable);
+    d->virtualFolder->setFlags(d->virtualFolder->flags() & (int)!Qt::ItemIsSelectable);
     d->virtualFolder->setDisabled(false);
 }
 
