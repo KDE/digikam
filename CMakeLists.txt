@@ -326,7 +326,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR}
                         ${KEXIV2_INCLUDE_DIR}
                         ${KDCRAW_INCLUDE_DIR}
-                        ${KDE4_INCLUDE_DIR}
+                        ${KDE4_INCLUDES}
                         ${QT_INCLUDES}
                         ${GPHOTO2_INCLUDE_DIRS}
                         ${CMAKE_CURRENT_BINARY_DIR}/digikam
