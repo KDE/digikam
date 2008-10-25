@@ -430,7 +430,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
 
     QDir dir(location.albumRootPath() + album);
 
-    if ( !dir.exists() or !dir.isReadable() )
+    if ( !dir.exists() || !dir.isReadable() )
     {
         kWarning(50003) << "Folder does not exist or is not readable: "
                         << dir.path() << endl;
@@ -570,7 +570,7 @@ int CollectionScanner::countItemsInFolder(const QString& directory)
     int items = 0;
 
     QDir dir( directory );
-    if ( !dir.exists() or !dir.isReadable() )
+    if ( !dir.exists() || !dir.isReadable() )
         return 0;
 
     QFileInfoList list = dir.entryInfoList();
@@ -854,7 +854,7 @@ void CollectionScanner::scanAlbum(const QString &albumRoot, const QString& album
     // - Does not add stale albums to m_foldersToBeDeleted.
 
     QDir dir( albumRoot + album );
-    if ( !dir.exists() or !dir.isReadable() )
+    if ( !dir.exists() || !dir.isReadable() )
     {
         kWarning(50003) << "Folder does not exist or is not readable: "
                         << dir.path() << endl;
@@ -974,7 +974,7 @@ int CollectionScanner::countItemsInFolder(const QString& directory)
     int items = 0;
 
     QDir dir( directory );
-    if ( !dir.exists() or !dir.isReadable() )
+    if ( !dir.exists() || !dir.isReadable() )
         return 0;
 
     QFileInfoList list = dir.entryInfoList();
