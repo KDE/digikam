@@ -73,7 +73,7 @@ void ProxyLineEdit::setWidget(QWidget *widget)
  * the QWidget implementation, not the QLineEdit one.
  */
 
-void ProxyLineEdit::ProxyLineEdit::mousePressEvent(QMouseEvent *event)
+void ProxyLineEdit::mousePressEvent(QMouseEvent *event)
 {
     QWidget::mousePressEvent(event);
 }
