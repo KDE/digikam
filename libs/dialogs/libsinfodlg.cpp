@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "libsinfodlg.h"
 #include "libsinfodlg.moc"
@@ -77,7 +76,7 @@ extern "C"
 #include <lcms.h>
 }
 
-// Digikam includes.
+// Local includes.
 
 #include "daboutdata.h"
 #include "greycstorationiface.h"

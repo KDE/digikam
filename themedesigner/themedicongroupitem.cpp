@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "themedicongroupitem.h"
 
@@ -35,7 +34,7 @@
 
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "themeengine.h"
 #include "themediconview.h"

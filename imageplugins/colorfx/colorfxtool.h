@@ -26,7 +26,7 @@
 #ifndef COLORFXTOOL_H
 #define COLORFXTOOL_H
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 

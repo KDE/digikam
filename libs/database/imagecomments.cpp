@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imagecomments.h"
 
@@ -36,7 +35,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albumdb.h"
 

@@ -24,7 +24,7 @@
 #ifndef RGBTOOL_H
 #define RGBTOOL_H
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 

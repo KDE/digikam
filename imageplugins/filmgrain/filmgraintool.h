@@ -26,7 +26,7 @@
 #ifndef FILMGRAINTOOL_H
 #define FILMGRAINTOOL_H
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 

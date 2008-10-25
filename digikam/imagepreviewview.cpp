@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imagepreviewview.h"
 #include "imagepreviewview.moc"
@@ -57,7 +56,7 @@
 #include <libkipi/pluginloader.h>
 #include <libkipi/plugin.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "albumdb.h"

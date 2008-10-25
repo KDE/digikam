@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "collectionmanager.h"
 
@@ -47,7 +46,7 @@
 #include <solid/predicate.h>
 
 
-// Digikam includes.
+// Local includes.
 
 #include "databaseaccess.h"
 #include "albumdb.h"

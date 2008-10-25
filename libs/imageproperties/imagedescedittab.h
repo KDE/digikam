@@ -32,7 +32,7 @@
 #include <QPixmap>
 #include <QEvent>
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 #include "imageinfolist.h"

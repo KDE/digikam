@@ -24,7 +24,7 @@
 #ifndef FUZZYSEARCHFOLDERVIEW_H
 #define FUZZYSEARCHFOLDERVIEW_H
 
-// Digikam includes.
+// Local includes.
 
 #include "folderview.h"
 

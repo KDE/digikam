@@ -55,7 +55,7 @@ extern "C"
 #include <png.h>
 }
 
-// Digikam includes.
+// Local includes.
 
 #include "thumbnailcreator.h"
 #include "thumbnailcreator_p.h"

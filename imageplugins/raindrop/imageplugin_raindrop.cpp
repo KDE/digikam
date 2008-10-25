@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageplugin_raindrop.h"
 #include "imageplugin_raindrop.moc"
@@ -37,7 +36,7 @@
 #include <kdebug.h>
 #include <kapplication.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "raindroptool.h"
 

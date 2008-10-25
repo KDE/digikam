@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageposition.h"
 
@@ -29,7 +28,7 @@
 
 #include <QSharedData>
 
-// Digikam includes.
+// Local includes.
 
 #include "databaseaccess.h"
 #include "albumdb.h"

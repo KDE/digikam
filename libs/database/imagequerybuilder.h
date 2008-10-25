@@ -30,7 +30,7 @@
 #include <QVariant>
 #include <QString>
 
-// Digikam includes.
+// Local includes.
 
 #include "searchxml.h"
 #include "digikam_export.h"

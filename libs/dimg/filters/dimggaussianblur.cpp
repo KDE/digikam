@@ -24,7 +24,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "dimggaussianblur.h"
 
@@ -37,7 +36,7 @@
 
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimgimagefilters.h"
 

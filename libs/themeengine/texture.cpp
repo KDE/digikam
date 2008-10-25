@@ -30,7 +30,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "texture.h"
 
@@ -45,7 +44,7 @@
 #include <QImage>
 #include <QPixmap>
 
-// Digikam includes.
+// Local includes.
 
 #include "theme.h"
 

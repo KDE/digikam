@@ -32,7 +32,7 @@
 #include <QtGui/QColor>
 #include <QtCore/QString>
 
-// Digikam includes.
+// Local includes.
 
 #include "dcolor.h"
 #include "imageguidewidget.h"

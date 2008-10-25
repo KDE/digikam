@@ -20,7 +20,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageplugin_lenscorrection.h"
 #include "imageplugin_lenscorrection.moc"
@@ -36,7 +35,7 @@
 #include <klibloader.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "config-digikam.h"
 #ifdef HAVE_LENSFUN

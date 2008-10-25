@@ -25,7 +25,7 @@
 #ifndef RAINDROPTOOL_H
 #define RAINDROPTOOL_H
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 

@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageplugin_hotpixels.h"
 #include "imageplugin_hotpixels.moc"
@@ -39,7 +38,7 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "hotpixelstool.h"
 

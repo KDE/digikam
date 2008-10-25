@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageplugin_core.h"
 #include "imageplugin_core.moc"
@@ -39,7 +38,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "dimgimagefilters.h"

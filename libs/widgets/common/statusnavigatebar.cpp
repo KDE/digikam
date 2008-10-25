@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "statusnavigatebar.h"
 #include "statusnavigatebar.moc"

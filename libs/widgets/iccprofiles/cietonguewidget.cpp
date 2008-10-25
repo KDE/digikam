@@ -25,7 +25,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "cietonguewidget.h"
 #include "cietonguewidget.moc"
@@ -48,7 +47,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "lcmsprf.h"
 

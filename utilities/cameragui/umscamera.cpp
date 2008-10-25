@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "umscamera.h"
 
@@ -54,7 +53,7 @@ extern "C"
 
 #include <libkdcraw/kdcraw.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "dmetadata.h"

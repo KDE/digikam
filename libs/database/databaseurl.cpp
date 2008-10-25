@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "databaseurl.h"
 
@@ -29,7 +28,7 @@
 
 #include <QStringList>
 
-// Digikam includes.
+// Local includes.
 
 #include "collectionmanager.h"
 #include "collectionlocation.h"

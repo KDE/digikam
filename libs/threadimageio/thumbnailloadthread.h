@@ -29,7 +29,7 @@
 
 #include <QPixmap>
 
-// Digikam includes.
+// Local includes.
 
 #include "managedloadsavethread.h"
 

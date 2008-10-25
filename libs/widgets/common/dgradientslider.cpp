@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "dgradientslider.h"
 #include "dgradientslider.moc"

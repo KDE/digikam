@@ -31,7 +31,7 @@
 #include <QList>
 #include <qatomic.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "databaseurl.h"
 #include "dshareddata.h"

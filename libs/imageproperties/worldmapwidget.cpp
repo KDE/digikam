@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "worldmapwidget.h"
 #include "worldmapwidget.moc"

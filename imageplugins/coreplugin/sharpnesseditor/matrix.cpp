@@ -30,7 +30,6 @@
 // Square
 #define SQR(x) ((x) * (x))
 
-// Local includes.
 
 #include "matrix.h"
 

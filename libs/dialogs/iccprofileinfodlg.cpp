@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "iccprofileinfodlg.h"
 
@@ -30,7 +29,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "iccprofilewidget.h"
 

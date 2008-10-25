@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "timelineview.h"
 #include "timelineview.moc"
@@ -53,7 +52,7 @@
 #include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "albummanager.h"

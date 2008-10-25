@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "talbumlistview.h"
 #include "talbumlistview.moc"
@@ -46,7 +45,7 @@
 #include <kglobalsettings.h>
 #include <kdialog.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albumiconitem.h"
 #include "albummanager.h"

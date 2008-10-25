@@ -30,7 +30,7 @@
 #include <QtCore/QString>
 #include <QtGui/QTreeWidgetItem>
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 

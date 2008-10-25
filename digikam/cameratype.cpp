@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "cameratype.h"
 
@@ -30,7 +29,7 @@
 
 #include <kaction.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "cameraui.h"
 

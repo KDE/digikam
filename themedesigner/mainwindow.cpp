@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "mainwindow.h"
 #include "mainwindow.moc"
@@ -54,7 +53,7 @@
 #include <kmessagebox.h>
 #include <kuser.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albumsettings.h"
 #include "folderview.h"

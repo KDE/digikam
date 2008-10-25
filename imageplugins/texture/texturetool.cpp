@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "texturetool.h"
 #include "texturetool.moc"
@@ -51,7 +50,7 @@
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "daboutdata.h"
 #include "dimg.h"

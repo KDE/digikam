@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "thumbnailcreator.h"
 #include "thumbnailcreator_p.h"
@@ -56,7 +55,7 @@
 #include <libkdcraw/kdcraw.h>
 #include <libkdcraw/rawfiles.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "dmetadata.h"

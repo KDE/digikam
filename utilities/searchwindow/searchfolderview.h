@@ -26,7 +26,7 @@
 #ifndef SEARCHFOLDERVIEW_H
 #define SEARCHFOLDERVIEW_H
 
-// Digikam includes.
+// Local includes.
 
 #include "folderview.h"
 

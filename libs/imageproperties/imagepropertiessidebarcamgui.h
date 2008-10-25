@@ -29,7 +29,7 @@
 
 #include <kurl.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "sidebar.h"
 #include "digikam_export.h"

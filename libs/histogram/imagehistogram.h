@@ -30,7 +30,7 @@
 #include <QtCore/QEvent>
 #include <QtCore/QThread>
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 

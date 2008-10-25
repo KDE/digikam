@@ -22,12 +22,11 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "themediconview.h"
 #include "themediconview.moc"
 
-// Digikam includes.
+// Local includes.
 
 #include "themeengine.h"
 #include "themedicongroupitem.h"

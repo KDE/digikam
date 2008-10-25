@@ -21,11 +21,10 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageinfolist.h"
 
-// Digikam includes.
+// Local includes.
 
 #include "imageinfo.h"
 

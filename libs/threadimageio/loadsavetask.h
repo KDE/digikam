@@ -30,7 +30,7 @@
 #include <QList>
 #include <QEvent>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "dimgloaderobserver.h"

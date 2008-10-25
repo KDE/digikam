@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "noisereductiontool.h"
 #include "noisereductiontool.moc"
@@ -55,7 +54,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "version.h"
 #include "daboutdata.h"

@@ -17,7 +17,7 @@
  */
 #define JPEG_INTERNALS
 
-// Digikam includes.
+// Local includes.
 
 #include "transupp.h"
 

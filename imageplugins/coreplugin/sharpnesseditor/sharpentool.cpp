@@ -23,7 +23,6 @@
 
 #define MAX_MATRIX_SIZE 25
 
-// Local includes.
 
 #include "sharpentool.h"
 #include "sharpentool.moc"
@@ -58,7 +57,7 @@
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "imageiface.h"
 #include "imagepanelwidget.h"

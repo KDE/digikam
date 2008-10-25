@@ -28,7 +28,7 @@
 
 #include <QtGui/QImage>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "dimgthreadedfilter.h"

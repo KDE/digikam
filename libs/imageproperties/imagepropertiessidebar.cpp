@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imagepropertiessidebar.h"
 #include "imagepropertiessidebar.moc"
@@ -53,7 +52,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "dmetadata.h"

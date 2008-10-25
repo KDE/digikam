@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "themeengine.h"
 #include "themeengine.moc"
@@ -50,7 +49,7 @@
 #include <kapplication.h>
 #include <kglobalsettings.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "theme.h"
 #include "texture.h"

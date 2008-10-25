@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "whitebalancetool.h"
 #include "whitebalancetool.moc"
@@ -70,7 +69,7 @@
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "colorgradientwidget.h"
 #include "dcolor.h"

@@ -37,7 +37,7 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "matrix.h"

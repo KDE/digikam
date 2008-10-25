@@ -27,7 +27,6 @@
 #define GCOL     0xAA
 #define BCOL     0xAA
 
-// Local includes.
 
 #include "dimginterface.h"
 #include "dimginterface.moc"
@@ -57,7 +56,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "bcgmodifier.h"
 #include "colorcorrectiondlg.h"

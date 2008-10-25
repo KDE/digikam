@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "welcomepageview.h"
 #include "welcomepageview.moc"
@@ -49,7 +48,7 @@
 #include <kglobalsettings.h>
 #include <ktemporaryfile.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "daboutdata.h"
 #include "version.h"

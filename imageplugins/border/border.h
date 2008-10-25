@@ -31,7 +31,7 @@
 #include <QColor>
 #include <QImage>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimgthreadedfilter.h"
 

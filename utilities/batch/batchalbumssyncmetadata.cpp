@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "batchalbumssyncmetadata.h"
 #include "batchalbumssyncmetadata.moc"
@@ -42,7 +41,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "albummanager.h"

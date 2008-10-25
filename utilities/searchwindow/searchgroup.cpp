@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "searchgroup.h"
 #include "searchgroup.moc"
@@ -42,7 +41,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "searchview.h"
 #include "searchfields.h"

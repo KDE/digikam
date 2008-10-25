@@ -33,7 +33,7 @@
 
 #include <kxmlguiclient.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 

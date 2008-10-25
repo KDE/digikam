@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageplugin_texture.h"
 #include "imageplugin_texture.moc"
@@ -37,7 +36,7 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "texturetool.h"
 

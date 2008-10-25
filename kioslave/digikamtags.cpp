@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "digikamtags.h"
 
@@ -44,7 +43,7 @@
 #include <kstandarddirs.h>
 #include <kio/global.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 #include "databaseaccess.h"

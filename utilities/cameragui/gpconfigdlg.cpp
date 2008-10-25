@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "gpconfigdlg.h"
 #include "gpconfigdlg.moc"

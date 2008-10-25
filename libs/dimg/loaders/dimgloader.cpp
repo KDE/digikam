@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "dimgloader.h"
 
@@ -36,7 +35,7 @@
 #include <kcodecs.h> // for KMD5
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimgprivate.h"
 #include "dmetadata.h"

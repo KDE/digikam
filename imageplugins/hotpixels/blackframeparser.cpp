@@ -36,7 +36,6 @@
 #define REL_TO_ABS(n,m) \
     ((((n) / DENOM_SQRT) * (m) + ((n) % DENOM_SQRT) * (m) / DENOM_SQRT) / DENOM_SQRT)
 
-// Local includes.
 
 #include "blackframeparser.h"
 #include "blackframeparser.moc"

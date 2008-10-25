@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageplugin_whitebalance.h"
 #include "imageplugin_whitebalance.moc"
@@ -38,7 +37,7 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "whitebalancetool.h"
 

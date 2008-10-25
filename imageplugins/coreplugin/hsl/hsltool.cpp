@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "hsltool.h"
 #include "hsltool.moc"
@@ -57,7 +56,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "colorgradientwidget.h"
 #include "dimg.h"

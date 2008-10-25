@@ -25,7 +25,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "emboss.h"
 
@@ -34,7 +33,7 @@
 #include <cmath>
 #include <cstdlib>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "dimgimagefilters.h"

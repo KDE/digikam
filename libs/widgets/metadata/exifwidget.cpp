@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "exifwidget.h"
 #include "exifwidget.moc"
@@ -36,7 +35,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dmetadata.h"
 #include "metadatalistview.h"

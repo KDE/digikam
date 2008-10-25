@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "oilpainttool.h"
 #include "oilpainttool.moc"
@@ -50,7 +49,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "editortoolsettings.h"

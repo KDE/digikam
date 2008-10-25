@@ -25,7 +25,7 @@
 #ifndef OILPAINT_H
 #define OILPAINT_H
 
-// Digikam includes.
+// Local includes.
 
 #include "dimgthreadedfilter.h"
 

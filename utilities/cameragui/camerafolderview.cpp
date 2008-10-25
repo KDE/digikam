@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "camerafolderview.h"
 #include "camerafolderview.moc"
@@ -33,7 +32,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "camerafolderitem.h"
 

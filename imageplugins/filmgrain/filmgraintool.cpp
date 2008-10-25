@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "filmgraintool.h"
 #include "filmgraintool.moc"
@@ -48,7 +47,7 @@
 #include <kglobal.h>
 #include <kconfiggroup.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "version.h"
 #include "daboutdata.h"

@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "albummanager.h"
 #include "albummanager.moc"
@@ -70,7 +69,7 @@ extern "C"
 #include <kdirwatch.h>
 #include <kconfiggroup.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "albumdb.h"

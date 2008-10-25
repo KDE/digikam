@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "superimposetool.h"
 #include "superimposetool.moc"
@@ -58,7 +57,7 @@
 #include <kstandarddirs.h>
 #include <qprogressbar.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "daboutdata.h"
 #include "dimg.h"

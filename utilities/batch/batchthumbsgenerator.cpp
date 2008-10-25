@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "batchthumbsgenerator.h"
 #include "batchthumbsgenerator.moc"
@@ -44,7 +43,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "albumdb.h"

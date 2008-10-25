@@ -28,7 +28,7 @@
 
 #include <QRect>
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 

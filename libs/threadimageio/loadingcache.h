@@ -28,7 +28,7 @@
 
 #include <QPixmap>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "loadsavethread.h"

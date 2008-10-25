@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageinfo.h"
 
@@ -36,7 +35,7 @@
 
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albumdb.h"
 #include "databaseaccess.h"

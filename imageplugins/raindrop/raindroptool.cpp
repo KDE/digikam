@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "raindroptool.h"
 #include "raindroptool.moc"
@@ -51,7 +50,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "daboutdata.h"
 #include "editortoolsettings.h"

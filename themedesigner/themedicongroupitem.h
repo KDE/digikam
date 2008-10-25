@@ -24,7 +24,7 @@
 #ifndef THEMEDICONGROUPITEM_H
 #define THEMEDICONGROUPITEM_H
 
-// Digikam includes.
+// Local includes.
 
 #include "icongroupitem.h"
 

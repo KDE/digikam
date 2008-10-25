@@ -29,7 +29,7 @@
 #include <QSize>
 #include <QColor>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimgthreadedfilter.h"
 

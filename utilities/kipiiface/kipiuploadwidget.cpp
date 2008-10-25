@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "kipiuploadwidget.h"
 #include "kipiuploadwidget.moc"
@@ -39,7 +38,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "constants.h"
 #include "album.h"

@@ -21,11 +21,10 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "albumitemhandler.h"
 
-// Digikam includes.
+// Local includes.
 
 #include "albummanager.h"
 

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imagescanner.h"
 
@@ -35,7 +34,7 @@
 #include <kmimetype.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "databaseurl.h"
 #include "databaseaccess.h"

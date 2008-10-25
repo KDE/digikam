@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "splashscreen.h"
 #include "splashscreen.moc"

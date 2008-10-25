@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "albumiconitem.h"
 
@@ -45,7 +44,7 @@
 #include <klocale.h>
 #include <kio/global.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "themeengine.h"
 #include "thumbnailsize.h"

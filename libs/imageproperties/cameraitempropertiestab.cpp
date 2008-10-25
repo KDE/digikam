@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "cameraitempropertiestab.h"
 #include "cameraitempropertiestab.moc"
@@ -45,7 +44,7 @@
 #include <kseparator.h>
 #include <ksqueezedtextlabel.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dmetadata.h"
 #include "gpiteminfo.h"

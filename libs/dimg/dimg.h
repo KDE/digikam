@@ -35,7 +35,7 @@
 #include <QtGui/QPixmap>
 #include <QtCore/QVariant>
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 #include "dshareddata.h"

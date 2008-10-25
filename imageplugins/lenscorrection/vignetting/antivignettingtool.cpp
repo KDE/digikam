@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "antivignettingtool.h"
 #include "antivignettingtool.moc"
@@ -54,7 +53,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "version.h"
 #include "daboutdata.h"

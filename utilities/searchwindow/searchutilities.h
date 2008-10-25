@@ -37,7 +37,7 @@
 
 #include <ksqueezedtextlabel.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "comboboxutilities.h"
 

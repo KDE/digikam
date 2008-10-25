@@ -24,7 +24,7 @@
 #ifndef TIMELINEFOLDERVIEW_H
 #define TIMELINEFOLDERVIEW_H
 
-// Digikam includes.
+// Local includes.
 
 #include "folderview.h"
 

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "lighttablebar.h"
 #include "lighttablebar.moc"
@@ -51,7 +50,7 @@
 #include <kmimetype.h>
 #include <kstandarddirs.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "albumdb.h"

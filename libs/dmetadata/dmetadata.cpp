@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "dmetadata.h"
 
@@ -46,7 +45,7 @@
 #include <libkdcraw/dcrawinfocontainer.h>
 #include <libkdcraw/kdcraw.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "constants.h"
 #include "version.h"

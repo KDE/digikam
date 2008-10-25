@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "searchtextbar.h"
 #include "searchtextbar.moc"

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "comboboxutilities.h"
 #include "comboboxutilities.moc"

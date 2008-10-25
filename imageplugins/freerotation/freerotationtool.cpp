@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "freerotationtool.h"
 #include "freerotationtool.moc"
@@ -54,7 +53,7 @@
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "version.h"
 #include "daboutdata.h"

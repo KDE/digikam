@@ -24,7 +24,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "kdateedit.h"
 #include "kdateedit.moc"

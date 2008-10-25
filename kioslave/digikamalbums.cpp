@@ -27,7 +27,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "digikamalbums.h"
 #include "digikamalbums.moc"
@@ -52,7 +51,7 @@
 
 #include <libkdcraw/rawfiles.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albumdb.h"
 #include "digikam_export.h"

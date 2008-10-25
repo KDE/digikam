@@ -24,7 +24,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageplugin_distortionfx.h"
 #include "imageplugin_distortionfx.moc"
@@ -40,7 +39,7 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "distortionfxtool.h"
 

@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "hotpixelfixer.h"
 
@@ -42,7 +41,7 @@
 
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 

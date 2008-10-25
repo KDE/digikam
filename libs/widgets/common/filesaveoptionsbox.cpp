@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "filesaveoptionsbox.h"
 #include "filesaveoptionsbox.moc"
@@ -46,7 +45,7 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "jpegsettings.h"
 #include "pngsettings.h"

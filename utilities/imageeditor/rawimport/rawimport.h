@@ -27,7 +27,7 @@
 
 #include <kurl.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 #include "dimg.h"

@@ -31,7 +31,7 @@
 #include <QtGui/QLabel>
 #include <QtCore/QEvent>
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 

@@ -30,7 +30,7 @@
 #include <QString>
 #include <QImage>
 
-// Digikam includes.
+// Local includes.
 
 #include "iconitem.h"
 

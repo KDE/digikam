@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "editortoolsettings.h"
 #include "editortoolsettings.moc"
@@ -56,7 +55,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "colorgradientwidget.h"
 #include "histogramwidget.h"

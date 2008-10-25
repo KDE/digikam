@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "collectionscanner.h"
 #include "collectionscanner.moc"
@@ -49,7 +48,7 @@
 
 #include <libkdcraw/rawfiles.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albumdb.h"
 #include "collectionmanager.h"

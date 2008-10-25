@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  * ============================================================ */
 
-// Local includes.
 
 #include "imagequerybuilder.h"
 
@@ -45,7 +44,7 @@
 #include <kcomponentdata.h>
 #include <kmimetype.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "databaseaccess.h"
 #include "albumdb.h"

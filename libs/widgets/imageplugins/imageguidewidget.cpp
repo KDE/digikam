@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageguidewidget.h"
 #include "imageguidewidget.moc"
@@ -50,7 +49,7 @@
 #include <kcursor.h>
 #include <kglobal.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "imageiface.h"

@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "mdkeylistviewitem.h"
 #include "mdkeylistviewitem.moc"
@@ -38,7 +37,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "themeengine.h"
 

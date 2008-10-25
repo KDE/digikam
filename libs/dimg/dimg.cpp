@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "dimg.h"
 
@@ -59,7 +58,7 @@ extern "C"
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Digikam includes.
+// Local includes.
 
 #include "pngloader.h"
 #include "jpegloader.h"

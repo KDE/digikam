@@ -32,7 +32,7 @@
 #include <QFont>
 #include <QList>
 
-// Digikam includes.
+// Local includes.
 
 #include "loadingdescription.h"
 #include "iconview.h"

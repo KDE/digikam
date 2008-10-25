@@ -25,7 +25,7 @@
 #ifndef QIMAGELOADER_H
 #define QIMAGELOADER_H
 
-// Digikam includes.
+// Local includes.
 
 #include "dimgloader.h"
 #include "digikam_export.h"

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "upgradedb_sqlite2tosqlite3.h"
 
@@ -40,7 +39,7 @@
 #include <kstandarddirs.h>
 #include <kio/global.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albumdb.h"
 #include "databaseaccess.h"

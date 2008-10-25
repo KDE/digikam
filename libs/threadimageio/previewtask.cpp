@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "previewtask.h"
 
@@ -45,7 +44,7 @@
 
 #include <libkdcraw/kdcraw.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dmetadata.h"
 #include "jpegutils.h"

@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "undomanager.h"
 
@@ -40,7 +39,7 @@
 
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimginterface.h"
 #include "undoaction.h"

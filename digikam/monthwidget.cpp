@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "monthwidget.h"
 #include "monthwidget.moc"
@@ -45,7 +44,7 @@
 #include <kcalendarsystem.h>
 #include <kdeversion.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "imageinfo.h"
 #include "albumlister.h"

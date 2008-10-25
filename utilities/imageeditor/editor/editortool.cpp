@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "editortool.h"
 #include "editortool.moc"
@@ -35,7 +34,7 @@
 
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimgthreadedfilter.h"
 #include "imagewidget.h"

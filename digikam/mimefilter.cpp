@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "mimefilter.h"
 #include "mimefilter.moc"

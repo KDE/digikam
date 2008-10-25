@@ -38,7 +38,6 @@
 #define FG 0.715160
 #define FB 0.072169
 
-// Local includes.
 
 #include "noisereduction.h"
 
@@ -46,7 +45,7 @@
 
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "dimgimagefilters.h"

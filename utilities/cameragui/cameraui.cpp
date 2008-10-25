@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "cameraui.h"
 #include "cameraui.moc"
@@ -90,7 +89,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Digikam includes.
+// Local includes.
 
 #include "componentsinfo.h"
 #include "statuszoombar.h"

@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "dirselectwidget.h"
 #include "dirselectwidget.moc"

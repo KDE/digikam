@@ -24,7 +24,7 @@
 #ifndef CHANNELMIXERTOOL_H
 #define CHANNELMIXERTOOL_H
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 

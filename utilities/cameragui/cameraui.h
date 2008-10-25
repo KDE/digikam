@@ -39,7 +39,7 @@
 #include <kxmlguiwindow.h>
 #include <kurl.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "gpiteminfo.h"
 

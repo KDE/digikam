@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "batchsyncmetadata.h"
 #include "batchsyncmetadata.moc"
@@ -37,7 +36,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "imageinfojob.h"

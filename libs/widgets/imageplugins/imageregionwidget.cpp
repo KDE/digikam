@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageregionwidget.h"
 #include "imageregionwidget.moc"
@@ -49,7 +48,7 @@
 #include <kapplication.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "imageiface.h"
 

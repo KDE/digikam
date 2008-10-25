@@ -25,7 +25,7 @@
 #ifndef RAINDROP_H
 #define RAINDROP_H
 
-// Digikam includes.
+// Local includes.
 
 #include "dimgthreadedfilter.h"
 

@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "setupmisc.h"
 
@@ -37,7 +36,7 @@
 #include <klocale.h>
 #include <kdialog.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albumsettings.h"
 

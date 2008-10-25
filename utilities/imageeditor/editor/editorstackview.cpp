@@ -21,12 +21,11 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "editorstackview.h"
 #include "editorstackview.moc"
 
-// Digikam includes.
+// Local includes.
 
 #include "previewwidget.h"
 #include "imageregionwidget.h"

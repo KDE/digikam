@@ -27,7 +27,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "haar.h"
 
@@ -42,7 +41,7 @@
 #include <QImage>
 #include <QString>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 

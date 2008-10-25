@@ -29,7 +29,7 @@
 #include <QAbstractItemModel>
 #include <QHash>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 

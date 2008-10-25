@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "iccprooftool.h"
 #include "iccprooftool.moc"
@@ -74,7 +73,7 @@
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "bcgmodifier.h"
 #include "colorgradientwidget.h"

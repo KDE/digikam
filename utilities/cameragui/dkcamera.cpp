@@ -22,11 +22,10 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "dkcamera.h"
 
-// Digikam includes.
+// Local includes.
 
 #include "albumsettings.h"
 

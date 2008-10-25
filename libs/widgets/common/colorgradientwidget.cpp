@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "colorgradientwidget.h"
 #include "colorgradientwidget.moc"

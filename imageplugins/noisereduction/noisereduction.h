@@ -33,7 +33,7 @@
 
 #include <cmath>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimgthreadedfilter.h"
 

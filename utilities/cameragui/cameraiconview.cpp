@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "cameraiconview.h"
 #include "cameraiconview.moc"
@@ -51,7 +50,7 @@
 #include <kmenu.h>
 #include <kmimetype.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "themeengine.h"
 #include "thumbnailsize.h"

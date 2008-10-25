@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "albumhistory.h"
 #include "albumhistory.moc"
@@ -36,7 +35,7 @@
 
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 

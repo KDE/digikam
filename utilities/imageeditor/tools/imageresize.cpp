@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageresize.h"
 #include "imageresize.moc"
@@ -71,7 +70,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "imageiface.h"

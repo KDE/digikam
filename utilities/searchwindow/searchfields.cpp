@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "searchfields.h"
 #include "searchfields.moc"
@@ -57,7 +56,7 @@
 
 #include <libkdcraw/squeezedcombobox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "albummanager.h"

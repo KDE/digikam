@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "mediaplayerview.h"
 #include "mediaplayerview.moc"
@@ -42,7 +41,7 @@
 #include <phonon/videoplayer.h>
 #include <phonon/videowidget.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "themeengine.h"
 

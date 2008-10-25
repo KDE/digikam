@@ -28,7 +28,7 @@
 
 #include <QtGui/QLabel>
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 

@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "cameralist.h"
 #include "cameralist.moc"
@@ -42,7 +41,7 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "gpcamera.h"
 #include "cameratype.h"

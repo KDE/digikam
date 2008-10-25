@@ -30,7 +30,7 @@
 #include <QFont>
 #include <QImage>
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 

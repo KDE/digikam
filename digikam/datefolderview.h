@@ -29,7 +29,7 @@
 
 #include <kvbox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albummanager.h"
 #include "folderitem.h"

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "databasebackend.h"
 
@@ -39,7 +38,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "schemaupdater.h"
 #include "databasewatch.h"

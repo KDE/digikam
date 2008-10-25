@@ -44,7 +44,7 @@
 #include <libkipi/imageinfoshared.h>
 #include <libkipi/imagecollectionshared.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albummanager.h"
 #include "loadingdescription.h"

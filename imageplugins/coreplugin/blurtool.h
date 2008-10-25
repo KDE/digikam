@@ -24,7 +24,7 @@
 #ifndef BLURTOOL_H
 #define BLURTOOL_H
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 

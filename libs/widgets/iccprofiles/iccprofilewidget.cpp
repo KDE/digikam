@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "iccprofilewidget.h"
 #include "iccprofilewidget.moc"
@@ -50,7 +49,7 @@
 #define cmsTakeCopyright(profile) "Unknown"
 #endif // LCMS_VERSION < 114
 
-// Digikam includes.
+// Local includes.
 
 #include "cietonguewidget.h"
 #include "metadatalistview.h"

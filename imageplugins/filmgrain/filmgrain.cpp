@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "filmgrain.h"
 
@@ -39,7 +38,7 @@
 
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "dimggaussianblur.h"

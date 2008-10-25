@@ -24,7 +24,7 @@
 #ifndef UNSHARP_MASK_H
 #define UNSHARP_MASK_H
 
-// Digikam includes.
+// Local includes.
 
 #include "dimgthreadedfilter.h"
 

@@ -24,7 +24,7 @@
 #ifndef DATABASETRANSACTION_H
 #define DATABASETRANSACTION_H
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 

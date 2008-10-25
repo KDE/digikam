@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "hotpixelstool.h"
 #include "hotpixelstool.moc"
@@ -52,7 +51,7 @@
 
 #include <libkdcraw/rcombobox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "version.h"
 #include "daboutdata.h"

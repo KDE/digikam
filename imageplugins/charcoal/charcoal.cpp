@@ -27,7 +27,6 @@
 #define SQ2PI   2.50662827463100024161235523934010416269302368164062
 #define Epsilon 1.0e-12
 
-// Local includes.
 
 #include "charcoal.h"
 
@@ -39,7 +38,7 @@
 
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "dimggaussianblur.h"

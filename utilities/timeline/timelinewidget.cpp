@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "timelinewidget.h"
 #include "timelinewidget.moc"
@@ -45,7 +44,7 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "themeengine.h"
 

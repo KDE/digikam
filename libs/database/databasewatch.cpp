@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "databasewatch.h"
 #include "databasewatchadaptor.h"

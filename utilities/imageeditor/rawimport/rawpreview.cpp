@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "rawpreview.h"
 #include "rawpreview.moc"
@@ -43,7 +42,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "paniconwidget.h"
 #include "managedloadsavethread.h"

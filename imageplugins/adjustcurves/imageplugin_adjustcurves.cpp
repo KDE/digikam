@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageplugin_adjustcurves.h"
 #include "imageplugin_adjustcurves.moc"
@@ -37,7 +36,7 @@
 #include <klibloader.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "adjustcurvestool.h"
 

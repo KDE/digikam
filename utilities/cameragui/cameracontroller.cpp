@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "cameracontroller.h"
 #include "cameracontroller.moc"
@@ -58,7 +57,7 @@ extern "C"
 #include <kstandarddirs.h>
 #include <kurl.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "thumbnailsize.h"
 #include "imagewindow.h"

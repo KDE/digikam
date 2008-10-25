@@ -30,7 +30,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "dimgimagefilters.h"
 
@@ -43,7 +42,7 @@
 
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "imagehistogram.h"
 #include "imagelevels.h"

@@ -33,7 +33,7 @@ extern "C"
 #include <tiff.h>
 }
 
-// Digikam includes.
+// Local includes.
 
 #include "dimgloader.h"
 #include "digikam_export.h"

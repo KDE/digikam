@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imagepanelwidget.h"
 #include "imagepanelwidget.moc"
@@ -54,7 +53,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "thumbnailsize.h"
 #include "imageregionwidget.h"

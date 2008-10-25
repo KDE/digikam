@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "rgbtool.h"
 #include "rgbtool.moc"
@@ -58,7 +57,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "colorgradientwidget.h"
 #include "colormodifier.h"

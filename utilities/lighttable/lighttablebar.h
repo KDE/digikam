@@ -24,7 +24,7 @@
 #ifndef LIGHTTABLEBAR_H
 #define LIGHTTABLEBAR_H
 
-// Digikam includes.
+// Local includes.
 
 #include "imagepreviewbar.h"
 

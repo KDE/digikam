@@ -28,7 +28,7 @@
 
 #include <QCloseEvent>
 
-// Digikam includes.
+// Local includes.
 
 #include "dprogressdlg.h"
 

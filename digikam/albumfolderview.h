@@ -29,7 +29,7 @@
 
 #include <kio/job.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "folderview.h"
 

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "previewwidget.h"
 #include "previewwidget.moc"

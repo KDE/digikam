@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "findduplicatesalbumitem.h"
 
@@ -35,7 +34,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "searchxml.h"

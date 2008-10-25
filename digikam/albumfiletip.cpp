@@ -25,7 +25,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "albumfiletip.h"
 
@@ -50,7 +49,7 @@
 #include <kglobal.h>
 #include <kdeversion.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dmetadata.h"
 #include "albumiconview.h"

@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "haariface.h"
 
@@ -46,7 +45,7 @@
 #include <kdebug.h>
 #include <kurl.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "jpegutils.h"
 #include "dimg.h"

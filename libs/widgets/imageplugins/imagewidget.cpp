@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imagewidget.h"
 #include "imagewidget.moc"

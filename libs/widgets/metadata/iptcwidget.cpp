@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "iptcwidget.h"
 #include "iptcwidget.moc"
@@ -36,7 +35,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dmetadata.h"
 

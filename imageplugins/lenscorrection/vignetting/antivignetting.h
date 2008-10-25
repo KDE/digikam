@@ -24,7 +24,7 @@
 #ifndef ANTIVIGNETTING_H
 #define ANTIVIGNETTING_H
 
-// Digikam includes.
+// Local includes.
 
 #include "dimgthreadedfilter.h"
 

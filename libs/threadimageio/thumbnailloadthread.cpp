@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "thumbnailloadthread.h"
 #include "thumbnailloadthread.moc"
@@ -39,7 +38,7 @@
 #include <kiconloader.h>
 #include <kio/previewjob.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "thumbnailsize.h"
 #include "thumbnailtask.h"

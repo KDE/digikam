@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "kipiinterface.h"
 #include "kipiinterface.moc"
@@ -38,7 +37,7 @@
 
 #include <libkipi/version.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "constants.h"
 #include "album.h"

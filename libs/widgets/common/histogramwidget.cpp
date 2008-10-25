@@ -24,7 +24,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "histogramwidget.h"
 #include "histogramwidget.moc"
@@ -55,7 +54,7 @@
 #include <kcursor.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "imagehistogram.h"
 

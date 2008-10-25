@@ -25,7 +25,7 @@
 #ifndef FILMGRAIN_H
 #define FILMGRAIN_H
 
-// Digikam includes.
+// Local includes.
 
 #include "dimgthreadedfilter.h"
 

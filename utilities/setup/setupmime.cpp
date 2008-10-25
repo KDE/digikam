@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "setupmime.h"
 #include "setupmime.moc"
@@ -44,7 +43,7 @@
 #include <kmessagebox.h>
 #include <kvbox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albumsettings.h"
 #include "databaseaccess.h"

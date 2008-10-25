@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "digikamdates.h"
 
@@ -45,7 +44,7 @@
 #include <kfilemetainfo.h>
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 #include "imagelister.h"

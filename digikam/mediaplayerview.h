@@ -33,7 +33,7 @@
 #include <kurl.h>
 #include <phonon/mediaobject.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 

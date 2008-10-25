@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imagepluginloader.h"
 
@@ -40,7 +39,7 @@
 #include <klocale.h>
 #include <kxmlguiclient.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "splashscreen.h"
 

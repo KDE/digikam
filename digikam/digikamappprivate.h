@@ -47,7 +47,7 @@
 
 #include <libkipi/pluginloader.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albummanager.h"
 #include "albumsettings.h"

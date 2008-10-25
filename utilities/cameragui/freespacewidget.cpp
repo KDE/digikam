@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "freespacewidget.h"
 #include "freespacewidget.moc"
@@ -45,7 +44,7 @@
 #include <kio/global.h>
 #include <kiconloader.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albumsettings.h"
 

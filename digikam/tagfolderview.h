@@ -30,7 +30,7 @@
 #include <QDropEvent>
 #include <QPixmap>
 
-// Digikam includes.
+// Local includes.
 
 #include "folderview.h"
 

@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "albumselectdialog.h"
 #include "albumselectdialog.moc"
@@ -50,7 +49,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "treefolderitem.h"
 #include "album.h"

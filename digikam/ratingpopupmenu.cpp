@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "ratingpopupmenu.h"
 #include "ratingpopupmenu.moc"
@@ -45,7 +44,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "constants.h"
 #include "themeengine.h"

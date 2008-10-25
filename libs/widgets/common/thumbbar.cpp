@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "thumbbar.h"
 #include "thumbbar.moc"
@@ -67,7 +66,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Digikam includes.
+// Local includes.
 
 #include "dmetadata.h"
 #include "thumbnailloadthread.h"

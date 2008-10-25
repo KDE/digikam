@@ -24,7 +24,6 @@
 
 #define THUMB_WIDTH 150
 
-// Local includes.
 
 #include "blackframelistview.h"
 #include "blackframelistview.moc"

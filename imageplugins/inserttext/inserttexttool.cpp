@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "inserttexttool.h"
 #include "inserttexttool.moc"
@@ -64,7 +63,7 @@
 #include <kstandarddirs.h>
 #include <ktextedit.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "daboutdata.h"
 #include "dimg.h"

@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "cameraiconitem.h"
 
@@ -35,7 +34,7 @@
 
 #include <kiconloader.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "iconview.h"
 #include "thumbnailsize.h"

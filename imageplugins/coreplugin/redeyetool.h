@@ -29,7 +29,7 @@
 
 #include <kpassivepopup.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "tiffsettings.h"
 #include "tiffsettings.moc"

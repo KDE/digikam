@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "setupicc.h"
 #include "setupicc.moc"
@@ -72,7 +71,7 @@
 
 #include <libkdcraw/squeezedcombobox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "iccprofileinfodlg.h"
 #include "albumsettings.h"

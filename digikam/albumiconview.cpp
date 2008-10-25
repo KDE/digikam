@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "albumiconview.h"
 #include "albumiconview.moc"
@@ -102,7 +101,7 @@ extern "C"
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "albumdb.h"

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "setuplighttable.h"
 #include "setuplighttable.moc"

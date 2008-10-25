@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "colorcorrectiondlg.h"
 #include "colorcorrectiondlg.moc"
@@ -47,7 +46,7 @@
 #include <kseparator.h>
 #include <kstandarddirs.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "icctransform.h"

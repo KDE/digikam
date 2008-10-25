@@ -24,7 +24,7 @@
 #ifndef IOFILESETTINGSCONTAINER_H
 #define IOFILESETTINGSCONTAINER_H
 
-// Digikam includes.
+// Local includes.
 
 #include "drawdecoding.h"
 #include "digikam_export.h"

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "gpssearchview.h"
 #include "gpssearchview.moc"
@@ -49,7 +48,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "albummanager.h"

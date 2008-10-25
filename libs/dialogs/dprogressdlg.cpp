@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "dprogressdlg.h"
 #include "dprogressdlg.moc"

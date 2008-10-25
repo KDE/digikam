@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "canvas.h"
 #include "canvas.moc"
@@ -66,7 +65,7 @@
 #include <kdatetable.h>
 #include <kglobalsettings.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "imagehistogram.h"
 #include "imagepaniconwidget.h"

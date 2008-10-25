@@ -33,7 +33,7 @@
 
 #include <libkexiv2/kexiv2.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "photoinfocontainer.h"

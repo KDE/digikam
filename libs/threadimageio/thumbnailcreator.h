@@ -36,7 +36,7 @@
 
 #include <kfileitem.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "drawdecoding.h"
 #include "digikam_export.h"

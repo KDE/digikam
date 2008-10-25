@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "lighttablewindow.h"
 #include "lighttablewindow.moc"
@@ -64,7 +63,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Digikam includes.
+// Local includes.
 
 #include "componentsinfo.h"
 #include "digikamapp.h"

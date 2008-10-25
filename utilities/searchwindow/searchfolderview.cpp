@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "searchfolderview.h"
 #include "searchfolderview.moc"
@@ -46,7 +45,7 @@
 #include <kmenu.h>
 #include <kmessagebox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "albummanager.h"

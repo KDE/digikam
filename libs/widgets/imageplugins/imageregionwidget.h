@@ -32,7 +32,7 @@
 #include <QtGui/QResizeEvent>
 #include <QtGui/QWheelEvent>
 
-// Digikam includes.
+// Local includes.
 
 #include "previewwidget.h"
 #include "dimg.h"

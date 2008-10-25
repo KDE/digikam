@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "digikamsearch.h"
 
@@ -40,7 +39,7 @@
 #include <kcomponentdata.h>
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 #include "imagelister.h"

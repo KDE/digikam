@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "albumsettings.h"
 
@@ -45,7 +44,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Digikam includes.
+// Local includes.
 
 #include "thumbnailsize.h"
 #include "mimefilter.h"

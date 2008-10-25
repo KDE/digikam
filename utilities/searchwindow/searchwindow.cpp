@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "searchwindow.h"
 #include "searchwindow.moc"
@@ -37,7 +36,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "themeengine.h"
 #include "searchview.h"

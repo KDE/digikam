@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "fuzzysearchview.h"
 #include "fuzzysearchview.moc"
@@ -57,7 +56,7 @@
 #include <ktabwidget.h>
 #include <kvbox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "albummanager.h"

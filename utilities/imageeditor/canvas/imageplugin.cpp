@@ -22,12 +22,11 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageplugin.h"
 #include "imageplugin.moc"
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 #include "editortooliface.h"

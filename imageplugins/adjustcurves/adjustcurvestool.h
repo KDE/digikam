@@ -24,7 +24,7 @@
 #ifndef ADJUSTCURVESTOOL_H
 #define ADJUSTCURVESTOOL_H
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 #include "dimg.h"

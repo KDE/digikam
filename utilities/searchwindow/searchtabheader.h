@@ -28,7 +28,7 @@
 
 #include <QWidget>
 
-// Digikam includes.
+// Local includes.
 
 #include "albuminfo.h"
 

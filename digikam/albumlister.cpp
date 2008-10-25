@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "albumlister.h"
 #include "albumlister.moc"
@@ -57,7 +56,7 @@ extern "C"
 #include <kio/job.h>
 #include <kurl.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "databaseaccess.h"
 #include "databasewatch.h"

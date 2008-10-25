@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imagewindow.h"
 #include "imagewindow.moc"
@@ -75,7 +74,7 @@
 #include <ktoolbarpopupaction.h>
 #include <kwindowsystem.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "componentsinfo.h"
 #include "album.h"

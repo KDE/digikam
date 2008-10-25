@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imagepropertiessidebarcamgui.h"
 #include "imagepropertiessidebarcamgui.moc"
@@ -41,7 +40,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dmetadata.h"
 #include "gpiteminfo.h"

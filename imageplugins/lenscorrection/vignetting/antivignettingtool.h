@@ -25,7 +25,7 @@
 #ifndef ANTIVIGNETTINGTOOL_H
 #define ANTIVIGNETTINGTOOL_H
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 

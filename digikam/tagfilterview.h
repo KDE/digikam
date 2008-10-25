@@ -31,7 +31,7 @@
 #include <QDropEvent>
 #include <QMouseEvent>
 
-// Digikam includes.
+// Local includes.
 
 #include "folderview.h"
 

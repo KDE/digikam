@@ -25,7 +25,7 @@
 #ifndef INFRARED_H
 #define INFRARED_H
 
-// Digikam includes.
+// Local includes.
 
 #include "dimgthreadedfilter.h"
 

@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "ratiocroptool.h"
 #include "ratiocroptool.moc"
@@ -60,7 +59,7 @@
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "editortoolsettings.h"
 #include "imageiface.h"

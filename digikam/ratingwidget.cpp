@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "ratingwidget.h"
 #include "ratingwidget.moc"
@@ -38,7 +37,7 @@
 #include <QPixmap>
 #include <QPolygon>
 
-// Digikam includes.
+// Local includes.
 
 #include "constants.h"
 #include "themeengine.h"

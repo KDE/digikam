@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageplugin_sheartool.h"
 #include "imageplugin_sheartool.moc"
@@ -37,7 +36,7 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "sheartool.h"
 

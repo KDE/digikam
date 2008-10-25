@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "dimgthreadedfilter.h"
 #include "dimgthreadedfilter.moc"

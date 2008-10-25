@@ -31,7 +31,7 @@
 #include <QString>
 #include <QPair>
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 #include "imageplugin.h"

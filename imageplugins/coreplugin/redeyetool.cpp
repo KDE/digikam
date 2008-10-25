@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "redeyetool.h"
 #include "redeyetool.moc"
@@ -59,7 +58,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "bcgmodifier.h"
 #include "colorgradientwidget.h"

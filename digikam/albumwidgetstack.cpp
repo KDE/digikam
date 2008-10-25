@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "albumwidgetstack.h"
 #include "albumwidgetstack.moc"
@@ -43,7 +42,7 @@
 #include <kglobal.h>
 #include <kapplication.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albumsettings.h"
 #include "albumiconview.h"

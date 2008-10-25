@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "albumthumbnailloader.h"
 #include "albumthumbnailloader.moc"
@@ -44,7 +43,7 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "albummanager.h"

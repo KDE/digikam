@@ -20,7 +20,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "rawsettingsbox.h"
 #include "rawsettingsbox.moc"
@@ -52,7 +51,7 @@
 #include <libkdcraw/dcrawsettingswidget.h>
 #include <libkdcraw/rnuminput.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "histogrambox.h"
 #include "imagedialog.h"

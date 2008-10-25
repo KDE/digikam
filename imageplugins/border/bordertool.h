@@ -30,7 +30,7 @@
 
 #include <QString>
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 

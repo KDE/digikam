@@ -23,7 +23,6 @@
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-// Local includes.
 
 #include "curveswidget.h"
 #include "curveswidget.moc"
@@ -55,7 +54,7 @@
 #include <kcursor.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "imagehistogram.h"
 #include "imagecurves.h"

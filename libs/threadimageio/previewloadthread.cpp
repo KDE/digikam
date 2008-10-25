@@ -22,12 +22,11 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "previewloadthread.h"
 #include "previewloadthread.moc"
 
-// Digikam includes.
+// Local includes.
 
 #include "previewtask.h"
 

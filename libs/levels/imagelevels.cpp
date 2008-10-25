@@ -26,7 +26,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imagelevels.h"
 
@@ -46,7 +45,7 @@
 
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "imagehistogram.h"
 

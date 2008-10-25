@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "albumiconviewfilter.h"
 #include "albumiconviewfilter.moc"
@@ -33,7 +32,7 @@
 #include <kdeversion.h>
 #include <kdialog.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albumsettings.h"
 #include "searchtextbar.h"

@@ -33,7 +33,7 @@
 
 #include <kio/job.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 #include "imageinfo.h"

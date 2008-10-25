@@ -30,7 +30,7 @@
 #include <QStringList>
 #include <QDBusArgument>
 
-// Digikam includes.
+// Local includes.
 
 #include "dbusutilities.h"
 #include "digikam_export.h"

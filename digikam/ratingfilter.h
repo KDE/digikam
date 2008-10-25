@@ -25,7 +25,7 @@
 #ifndef RATINGFILTER_H
 #define RATINGFILTER_H
 
-// Digikam includes.
+// Local includes.
 
 #include "albumlister.h"
 #include "ratingwidget.h"

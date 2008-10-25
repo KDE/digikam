@@ -25,7 +25,7 @@
 #ifndef LENS_DISTORTION_H
 #define LENS_DISTORTION_H
 
-// Digikam includes.
+// Local includes.
 
 #include "dimgthreadedfilter.h"
 

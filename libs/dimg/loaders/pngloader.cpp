@@ -28,7 +28,6 @@
 
 #define PNG_BYTES_TO_CHECK 4
 
-// Local includes.
 
 #include "pngloader.h"
 
@@ -54,7 +53,7 @@ extern "C"
 
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "version.h"
 #include "dimg.h"

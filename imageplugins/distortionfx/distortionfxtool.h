@@ -28,7 +28,7 @@
 #ifndef DISTORTIONFXTOOL_H
 #define DISTORTIONFXTOOL_H
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 

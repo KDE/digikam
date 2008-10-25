@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "timelinefolderview.h"
 #include "timelinefolderview.moc"
@@ -41,7 +40,7 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "albummanager.h"

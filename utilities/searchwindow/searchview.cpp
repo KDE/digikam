@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "searchview.h"
 #include "searchview.moc"
@@ -43,7 +42,7 @@
 #include <kpushbutton.h>
 #include <kstandardguiitem.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "searchxml.h"
 #include "themeengine.h"

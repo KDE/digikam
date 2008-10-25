@@ -26,7 +26,6 @@
 /** Only print debug information on the console */
 #define cimg_debug 1
 
-// Local includes.
 
 #include "greycstorationiface.h"
 
@@ -38,7 +37,7 @@
 
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #define cimg_plugin "greycstoration.h"
 // Unix-like (Linux, Solaris, BSD, MacOSX, Irix,...).
@@ -59,7 +58,7 @@
 
 #include <solid/device.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "greycstorationsettings.h"
 

@@ -34,7 +34,7 @@
 
 #include <kjob.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "thumbnailloadthread.h"
 

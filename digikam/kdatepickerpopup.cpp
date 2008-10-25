@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "kdatepickerpopup.h"
 #include "kdatepickerpopup.moc"

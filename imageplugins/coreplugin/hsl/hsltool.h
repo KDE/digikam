@@ -25,7 +25,7 @@
 #ifndef HSLTOOL_H
 #define HSLTOOL_H
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 

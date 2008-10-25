@@ -24,7 +24,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "channelmixertool.h"
 #include "channelmixertool.moc"
@@ -78,7 +77,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "colorgradientwidget.h"
 #include "daboutdata.h"

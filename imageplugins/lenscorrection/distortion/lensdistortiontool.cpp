@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "lensdistortiontool.h"
 #include "lensdistortiontool.moc"
@@ -56,7 +55,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "daboutdata.h"
 #include "editortoolsettings.h"

@@ -38,7 +38,7 @@
 
 #include <libkipi/interface.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "config-digikam.h"
 #include "libsinfodlg.h"

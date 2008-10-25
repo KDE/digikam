@@ -24,7 +24,6 @@
 
 #define ICONSIZE 64
 
-// Local includes.
 
 #include "findduplicatesview.h"
 #include "findduplicatesview.moc"
@@ -43,7 +42,7 @@
 #include <kdialog.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "albummanager.h"

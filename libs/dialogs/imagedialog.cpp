@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imagedialog.h"
 #include "imagedialog.moc"
@@ -48,7 +47,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Digikam includes.
+// Local includes.
 
 #include "dmetadata.h"
 #include "loadingdescription.h"

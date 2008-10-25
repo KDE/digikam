@@ -23,7 +23,6 @@
 
 #define MAXSTRINGLEN 80
 
-// Local includes.
 
 #include "slideshow.h"
 #include "slideshow.moc"
@@ -53,7 +52,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "constants.h"
 #include "dimg.h"

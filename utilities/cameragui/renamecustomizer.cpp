@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "renamecustomizer.h"
 #include "renamecustomizer.moc"

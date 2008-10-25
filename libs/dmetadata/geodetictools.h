@@ -33,7 +33,7 @@
 #include <QString>
 #include <QPointF>
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 

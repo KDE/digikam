@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "loadsavethread.h"
 #include "loadsavethread.moc"
@@ -31,7 +30,7 @@
 
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dmetadata.h"
 #include "managedloadsavethread.h"

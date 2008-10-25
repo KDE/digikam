@@ -24,7 +24,7 @@
 #ifndef COLORMODIFIER_H
 #define COLORMODIFIER_H
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 

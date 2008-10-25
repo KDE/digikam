@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "albumdb.h"
 
@@ -51,7 +50,7 @@ extern "C"
 #include <kdebug.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "databasebackend.h"
 #include "collectionmanager.h"

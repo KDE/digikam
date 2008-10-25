@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "dio.h"
 
@@ -31,7 +30,7 @@
 #include <kio/deletejob.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "imageinfo.h"
 #include "albumsettings.h"

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "setupslideshow.h"
 #include "setupslideshow.moc"

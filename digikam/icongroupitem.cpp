@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "icongroupitem.h"
 
@@ -35,7 +34,7 @@
 #include <QPalette>
 #include <QPainter>
 
-// Digikam includes.
+// Local includes.
 
 #include "iconview.h"
 #include "iconitem.h"

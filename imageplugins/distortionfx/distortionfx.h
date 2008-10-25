@@ -32,7 +32,7 @@
 
 #include <QSize>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimgthreadedfilter.h"
 

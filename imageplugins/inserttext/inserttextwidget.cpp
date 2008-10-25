@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "inserttextwidget.h"
 #include "inserttextwidget.moc"
@@ -48,7 +47,7 @@
 #include <kcursor.h>
 #include <kglobal.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "imageiface.h"
 

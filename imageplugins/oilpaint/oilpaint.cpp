@@ -25,7 +25,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "oilpaint.h"
 
@@ -38,7 +37,7 @@
 
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "dimggaussianblur.h"

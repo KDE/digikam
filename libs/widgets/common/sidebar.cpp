@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "sidebar.h"
 #include "sidebar.moc"

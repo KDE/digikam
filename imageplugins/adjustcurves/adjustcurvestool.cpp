@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "adjustcurvestool.h"
 #include "adjustcurvestool.moc"
@@ -66,7 +65,7 @@
 #include <kselector.h>
 #include <kstandarddirs.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "colorgradientwidget.h"
 #include "curveswidget.h"

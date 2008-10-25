@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageplugin_superimpose.h"
 #include "imageplugin_superimpose.moc"
@@ -39,7 +38,7 @@
 #include <klibloader.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "superimposetool.h"
 

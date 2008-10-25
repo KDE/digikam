@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "folderitem.h"
 
@@ -36,7 +35,7 @@
 #include <QStyle>
 #include <QStyleOption>
 
-// Digikam includes.
+// Local includes.
 
 #include "thumbnailsize.h"
 #include "albumsettings.h"

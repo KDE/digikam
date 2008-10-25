@@ -25,7 +25,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "perspectivewidget.h"
 #include "perspectivewidget.moc"
@@ -56,7 +55,7 @@
 #include <kglobal.h>
 #include <kapplication.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "triangle.h"
 #include "imageiface.h"

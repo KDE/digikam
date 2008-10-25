@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "lighttableview.h"
 #include "lighttableview.moc"
@@ -36,7 +35,7 @@
 #include <kdebug.h>
 #include <kdialog.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "thumbnailsize.h"
 #include "lighttablepreview.h"

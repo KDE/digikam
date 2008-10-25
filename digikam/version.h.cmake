@@ -32,7 +32,7 @@
 
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "svnversion.h"
 

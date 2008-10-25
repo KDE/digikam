@@ -30,7 +30,7 @@
 #include <QtCore/QByteArray>
 #include <QtCore/QString>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "digikam_export.h"

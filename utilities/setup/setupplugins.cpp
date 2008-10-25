@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "setupplugins.h"
 #include "setupplugins.moc"

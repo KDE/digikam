@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "makernotewidget.h"
 #include "makernotewidget.moc"
@@ -37,7 +36,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dmetadata.h"
 

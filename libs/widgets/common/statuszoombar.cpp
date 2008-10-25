@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "statuszoombar.h"
 #include "statuszoombar.moc"
@@ -39,7 +38,7 @@
 #include <kiconloader.h>
 #include <kvbox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "thumbnailsize.h"
 #include "dcursortracker.h"

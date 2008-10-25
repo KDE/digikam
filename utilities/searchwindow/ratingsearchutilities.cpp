@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "ratingsearchutilities.h"
 #include "ratingsearchutilities.moc"
@@ -45,7 +44,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "constants.h"
 #include "themeengine.h"

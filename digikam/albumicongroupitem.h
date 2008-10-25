@@ -24,7 +24,7 @@
 #ifndef ALBUMICONGROUPITEM_H
 #define ALBUMICONGROUPITEM_H
 
-// Digikam includes.
+// Local includes.
 
 #include "icongroupitem.h"
 

@@ -36,7 +36,7 @@
 #include <QtCore/QTimerEvent>
 #include <QtGui/QPaintEvent>
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 #include "dimg.h"

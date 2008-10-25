@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageplugin_adjustlevels.h"
 #include "imageplugin_adjustlevels.moc"
@@ -37,7 +36,7 @@
 #include <klibloader.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "adjustlevelstool.h"
 

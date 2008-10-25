@@ -28,7 +28,7 @@
 #ifndef BLURFX_H
 #define BLURFX_H
 
-// Digikam includes.
+// Local includes.
 
 #include "dimgthreadedfilter.h"
 

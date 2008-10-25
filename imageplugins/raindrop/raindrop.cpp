@@ -25,7 +25,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "raindrop.h"
 
@@ -39,7 +38,7 @@
 #include <QDateTime>
 #include <QRect>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "dimgimagefilters.h"

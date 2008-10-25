@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "tagfolderview.h"
 #include "tagfolderview.moc"
@@ -42,7 +41,7 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "albumdb.h"

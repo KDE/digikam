@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "xmpwidget.h"
 #include "xmpwidget.moc"
@@ -36,7 +35,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dmetadata.h"
 

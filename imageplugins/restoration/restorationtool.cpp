@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "restorationtool.h"
 #include "restorationtool.moc"
@@ -52,7 +51,7 @@
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "version.h"
 #include "imageiface.h"

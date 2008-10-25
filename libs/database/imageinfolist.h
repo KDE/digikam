@@ -28,7 +28,7 @@
 
 #include <QList>
 
-// Digikam includes.
+// Local includes.
 
 #include "imageinfo.h"
 #include "digikam_export.h"

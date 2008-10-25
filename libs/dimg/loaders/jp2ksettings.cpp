@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "jp2ksettings.h"
 #include "jp2ksettings.moc"

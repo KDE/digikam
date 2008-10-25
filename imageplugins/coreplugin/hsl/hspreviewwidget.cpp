@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "hspreviewwidget.h"
 #include "hspreviewwidget.moc"
@@ -39,7 +38,7 @@
 #include <kapplication.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "hslmodifier.h"

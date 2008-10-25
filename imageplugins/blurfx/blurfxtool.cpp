@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "blurfxtool.h"
 #include "blurfxtool.moc"
@@ -52,7 +51,7 @@
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "daboutdata.h"
 #include "editortoolsettings.h"

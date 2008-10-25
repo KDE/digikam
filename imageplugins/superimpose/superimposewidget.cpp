@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "superimposewidget.h"
 #include "superimposewidget.moc"
@@ -46,7 +45,7 @@
 #include <kcursor.h>
 #include <kglobal.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "superimpose.h"
 

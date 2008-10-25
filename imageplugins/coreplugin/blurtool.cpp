@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "blurtool.h"
 #include "blurtool.moc"
@@ -47,7 +46,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "imageiface.h"
 #include "imagepanelwidget.h"

@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "kipiimagecollectionselector.h"
 #include "kipiimagecollectionselector.moc"
@@ -41,7 +40,7 @@
 #include <ktabwidget.h>
 #include <kvbox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "constants.h"
 #include "album.h"

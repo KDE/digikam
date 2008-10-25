@@ -31,9 +31,12 @@
 #include <QMap>
 #include <QDir>
 
-// Digikam includes.
+// KDE includes.
 
 #include <kurl.h>
+
+// Local includes.
+
 #include "digikam_export.h"
 
 class KPageDialog;

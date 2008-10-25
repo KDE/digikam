@@ -29,7 +29,7 @@
 #include <QPixmap>
 #include <QResizeEvent>
 
-// Digikam includes.
+// Local includes.
 
 #include "iconview.h"
 

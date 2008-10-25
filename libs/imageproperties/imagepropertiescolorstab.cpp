@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imagepropertiescolorstab.h"
 #include "imagepropertiescolorstab.moc"
@@ -56,7 +55,7 @@
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "imagehistogram.h"

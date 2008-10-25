@@ -29,7 +29,7 @@
 #include <QObject>
 #include <QByteArray>
 
-// Digikam includes.
+// Local includes.
 
 #include "albummanager.h"
 #include "imageinfo.h"

@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "setupeditor.h"
 #include "setupeditor.moc"

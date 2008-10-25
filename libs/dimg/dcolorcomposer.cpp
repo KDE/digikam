@@ -38,7 +38,6 @@
 
 */
 
-// Local includes.
 
 #include "dcolorcomposer.h"
 

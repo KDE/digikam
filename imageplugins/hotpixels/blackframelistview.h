@@ -40,7 +40,7 @@
 #include <kurl.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "blackframeparser.h"
 #include "hotpixel.h"

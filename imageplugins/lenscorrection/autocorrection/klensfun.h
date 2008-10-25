@@ -33,7 +33,7 @@ extern "C"
 
 #include <QWidget>
 
-// Digikam includes.
+// Local includes.
 
 #include "dmetadata.h"
 #include "dimgthreadedfilter.h"

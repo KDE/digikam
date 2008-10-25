@@ -19,7 +19,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "autocorrectiontool.h"
 #include "autocorrectiontool.moc"
@@ -49,7 +48,7 @@
 #include <kseparator.h>
 #include <kstandarddirs.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "daboutdata.h"
 #include "dmetadata.h"

@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "sharedloadsavethread.h"
 
@@ -30,7 +29,7 @@
 
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "loadingcache.h"
 #include "loadsavetask.h"

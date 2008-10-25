@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "gpcamera.h"
 
@@ -46,7 +45,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "config-digikam.h"
 

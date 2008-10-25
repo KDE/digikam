@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageplugin_perspective.h"
 #include "imageplugin_perspective.moc"
@@ -37,7 +36,7 @@
 #include <klibloader.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "perspectivetool.h"
 

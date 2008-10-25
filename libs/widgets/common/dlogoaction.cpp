@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "dlogoaction.h"
 
@@ -40,7 +39,7 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "daboutdata.h"
 

@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "datefolderview.h"
 #include "datefolderview.moc"
@@ -48,7 +47,7 @@
 #include <kcalendarsystem.h>
 #include <kconfiggroup.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "albumdb.h"

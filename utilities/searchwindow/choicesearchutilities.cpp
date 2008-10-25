@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "choicesearchutilities.h"
 #include "choicesearchutilities.moc"
@@ -35,7 +34,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "searchutilities.h"
 

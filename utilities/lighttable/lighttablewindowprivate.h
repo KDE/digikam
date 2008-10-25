@@ -32,7 +32,7 @@
 
 #include <kaction.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "imagepropertiessidebardb.h"
 #include "statusprogressbar.h"

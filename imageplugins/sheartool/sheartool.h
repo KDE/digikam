@@ -24,7 +24,7 @@
 #ifndef SHEARTOOL_H
 #define SHEARTOOL_H
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 

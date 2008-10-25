@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiesmetadatatab.moc"
@@ -44,7 +43,7 @@
 #include <kfileitem.h>
 #include <kglobal.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "exifwidget.h"
 #include "makernotewidget.h"

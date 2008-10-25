@@ -26,7 +26,7 @@
 #ifndef EMBOSSTOOL_H
 #define EMBOSSTOOL_H
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 

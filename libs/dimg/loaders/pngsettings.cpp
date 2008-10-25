@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "pngsettings.h"
 #include "pngsettings.moc"

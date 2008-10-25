@@ -24,7 +24,6 @@
 
 #define RECT_EXTENSION 300
 
-// Local includes.
 
 #include "iconview.h"
 #include "iconview.moc"
@@ -54,7 +53,7 @@
 #include <kcursor.h>
 #include <kglobalsettings.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "drubberband.h"
 #include "iconitem.h"

@@ -40,7 +40,7 @@
 
 #include <kurl.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "imageiface.h"
 #include "dimg.h"

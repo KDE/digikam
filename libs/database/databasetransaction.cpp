@@ -21,11 +21,10 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "databasetransaction.h"
 
-// Digikam includes.
+// Local includes.
 
 #include "albumdb.h"
 #include "databaseaccess.h"

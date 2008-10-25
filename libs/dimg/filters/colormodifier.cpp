@@ -24,7 +24,6 @@
 #define CLAMP_0_255(x)   qMax(qMin(x, 255), 0)
 #define CLAMP_0_65535(x) qMax(qMin(x, 65535), 0)
 
-// Local includes.
 
 #include "colormodifier.h"
 
@@ -33,7 +32,7 @@
 #include <cstdio>
 #include <cmath>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 

@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "rawloader.h"
 #include "rawloader.moc"
@@ -41,7 +40,7 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "dimgloaderobserver.h"

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "setuptooltip.h"
 #include "setuptooltip.moc"

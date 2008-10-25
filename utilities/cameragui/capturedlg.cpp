@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "capturedlg.h"
 #include "capturedlg.moc"
@@ -37,7 +36,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "cameracontroller.h"
 #include "capturewidget.h"

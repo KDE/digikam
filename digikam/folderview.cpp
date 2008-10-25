@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "folderview.h"
 #include "folderview.moc"
@@ -42,7 +41,7 @@
 #include <kglobal.h>
 #include <kconfiggroup.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albummanager.h"
 #include "albumsettings.h"

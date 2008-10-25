@@ -35,7 +35,6 @@
 // 1/PHI
 #define INVPHI   0.61803398874989479
 
-// Local includes.
 
 #include "imageselectionwidget.h"
 #include "imageselectionwidget.moc"
@@ -70,7 +69,7 @@
 #include <kcursor.h>
 #include <kglobal.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "imageiface.h"
 #include "dimg.h"

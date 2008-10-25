@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "setup.h"
 #include "setup.moc"
@@ -37,7 +36,7 @@
 #include <kglobal.h>
 #include <kvbox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "batchthumbsgenerator.h"
 #include "setupcollections.h"

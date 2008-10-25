@@ -35,7 +35,7 @@
 #include <khbox.h>
 #include <kurl.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "imageinfo.h"
 

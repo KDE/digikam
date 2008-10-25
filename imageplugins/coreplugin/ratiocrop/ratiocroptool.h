@@ -26,7 +26,7 @@
 #ifndef RATIOCROPTOOL_H
 #define RATIOCROPTOOL_H
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 

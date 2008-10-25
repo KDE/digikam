@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "themediconitem.h"
 
@@ -42,7 +41,7 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "themeengine.h"
 #include "themediconview.h"

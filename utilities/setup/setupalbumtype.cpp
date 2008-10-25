@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "setupalbumtype.h"
 #include "setupalbumtype.moc"
@@ -49,7 +48,7 @@
 #include <klineedit.h>
 #include <klistwidget.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "thumbnailsize.h"
 #include "albumsettings.h"

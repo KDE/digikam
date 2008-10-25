@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "rawcameradlg.h"
 #include "rawcameradlg.moc"
@@ -53,7 +52,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Digikam includes.
+// Local includes.
 
 #include "searchtextbar.h"
 

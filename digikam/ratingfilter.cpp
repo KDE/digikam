@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "ratingfilter.h"
 #include "ratingfilter.moc"
@@ -43,7 +42,7 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "constants.h"
 #include "dcursortracker.h"

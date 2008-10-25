@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imagepropertiessidebardb.h"
 #include "imagepropertiessidebardb.moc"
@@ -45,7 +44,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "imageinfo.h"

@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "scancontroller.h"
 #include "scancontroller.moc"
@@ -50,7 +49,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "collectionscanner.h"
 #include "collectionscannerhints.h"

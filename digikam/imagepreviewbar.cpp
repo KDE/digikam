@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imagepreviewbar.h"
 #include "imagepreviewbar.moc"
@@ -51,7 +50,7 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "albumdb.h"

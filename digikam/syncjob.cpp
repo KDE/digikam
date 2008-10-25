@@ -29,7 +29,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "syncjob.h"
 #include "syncjob.moc"
@@ -52,7 +51,7 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albumsettings.h"
 #include "thumbnailsize.h"

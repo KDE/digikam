@@ -28,7 +28,7 @@
 
 #include <QString>
 
-// Digikam includes.
+// Local includes.
 
 #include "databaseaccess.h"
 

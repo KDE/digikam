@@ -45,7 +45,7 @@
 #include <libkipi/imageinfo.h>
 #include <libkipi/imageinfoshared.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "imageinfo.h"
 

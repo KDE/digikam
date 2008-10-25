@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "searchutilities.h"
 #include "searchutilities.moc"
@@ -51,7 +50,7 @@
 #include <kpushbutton.h>
 #include <kstandardguiitem.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "constants.h"
 #include "albummodel.h"

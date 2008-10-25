@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "setupdcraw.h"
 #include "setupdcraw.moc"
@@ -44,7 +43,7 @@
 #include <libkdcraw/version.h>
 #include <libkdcraw/dcrawsettingswidget.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "drawdecoding.h"
 

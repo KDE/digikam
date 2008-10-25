@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "setupcollections.h"
 #include "setupcollections.moc"
@@ -49,7 +48,7 @@
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albumsettings.h"
 #include "collectionlocation.h"

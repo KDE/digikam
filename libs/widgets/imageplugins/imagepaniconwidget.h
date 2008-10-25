@@ -29,7 +29,7 @@
 
 #include <QtGui/QPolygon>
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 #include "paniconwidget.h"

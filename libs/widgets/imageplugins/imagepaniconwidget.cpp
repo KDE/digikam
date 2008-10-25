@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imagepaniconwidget.h"
 #include "imagepaniconwidget.moc"
@@ -42,7 +41,7 @@
 
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "imageiface.h"
 #include "imageregionwidget.h"

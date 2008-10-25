@@ -34,7 +34,7 @@
 
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "dcolor.h"

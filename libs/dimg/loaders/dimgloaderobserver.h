@@ -24,7 +24,7 @@
 #ifndef DIMGLOADEROBSERVER_H
 #define DIMGLOADEROBSERVER_H
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 

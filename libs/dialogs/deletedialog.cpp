@@ -24,7 +24,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "deletedialog.h"
 #include "deletedialog.moc"
@@ -46,7 +45,7 @@
 #include <klocale.h>
 #include <kstdguiitem.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albumsettings.h"
 

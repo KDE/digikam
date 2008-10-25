@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "albumpropsedit.h"
 #include "albumpropsedit.moc"
@@ -55,7 +54,7 @@
 #include <ktextedit.h>
 #include <kurl.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "albumdb.h"

@@ -20,7 +20,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "greycstorationwidget.h"
 #include "greycstorationwidget.moc"

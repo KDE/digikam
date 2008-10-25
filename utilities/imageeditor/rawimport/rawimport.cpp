@@ -20,7 +20,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "rawimport.h"
 #include "rawimport.moc"
@@ -40,7 +39,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "drawdecoding.h"
 #include "histogramwidget.h"

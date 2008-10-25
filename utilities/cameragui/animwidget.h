@@ -30,7 +30,7 @@
 #include <QWidget>
 #include <QPaintEvent>
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 

@@ -44,7 +44,6 @@
 // files io. Uncomment this line only for debugging.
 //#define ENABLE_DEBUG_MESSAGES
 
-// Local includes.
 
 #include "tiffloader.h"
 
@@ -68,7 +67,7 @@ extern "C"
 
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "version.h"
 #include "dimg.h"

@@ -39,7 +39,7 @@
 
 #include <kurl.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dcolor.h"
 #include "digikam_export.h"

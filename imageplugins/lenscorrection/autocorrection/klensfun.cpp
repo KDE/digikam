@@ -18,7 +18,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "klensfun.h"
 #include "klensfun.moc"

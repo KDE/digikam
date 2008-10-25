@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "bcgtool.h"
 #include "bcgtool.moc"
@@ -60,7 +59,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "bcgmodifier.h"
 #include "colorgradientwidget.h"

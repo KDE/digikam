@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageinfojob.h"
 #include "imageinfojob.moc"
@@ -38,7 +37,7 @@
 #include <kio/job.h>
 #include <kurl.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "albummanager.h"

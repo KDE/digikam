@@ -26,7 +26,7 @@
 #ifndef INFRAREDTOOL_H
 #define INFRAREDTOOL_H
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 

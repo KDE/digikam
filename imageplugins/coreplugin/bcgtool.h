@@ -26,7 +26,7 @@
 #ifndef BCGTOOL_H
 #define BCGTOOL_H
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 

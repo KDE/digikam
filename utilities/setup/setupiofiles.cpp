@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "setupiofiles.h"
 #include "setupiofiles.moc"
@@ -39,7 +38,7 @@
 #include <kseparator.h>
 #include <kglobal.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "jpegsettings.h"
 #include "pngsettings.h"

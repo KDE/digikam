@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "perspectivetool.h"
 #include "perspectivetool.moc"
@@ -55,7 +54,7 @@
 #include <kseparator.h>
 #include <kstandarddirs.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "daboutdata.h"
 #include "dimg.h"

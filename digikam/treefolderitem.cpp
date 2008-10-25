@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "treefolderitem.h"
 
@@ -30,7 +29,7 @@
 #include <QTreeWidget>
 #include <QFont>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 

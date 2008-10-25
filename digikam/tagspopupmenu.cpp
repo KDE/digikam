@@ -27,7 +27,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "tagspopupmenu.h"
 #include "tagspopupmenu.moc"
@@ -52,7 +51,7 @@
 #include <kmessagebox.h>
 #include <ktoggleaction.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "albumdb.h"

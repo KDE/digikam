@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "lighttablepreview.h"
 #include "lighttablepreview.moc"
@@ -55,7 +54,7 @@
 #include <krun.h>
 #include <kservice.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "albumdb.h"

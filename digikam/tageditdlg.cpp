@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "tageditdlg.h"
 #include "tageditdlg.moc"
@@ -46,7 +45,7 @@
 #include <kseparator.h>
 #include <kstandarddirs.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "syncjob.h"

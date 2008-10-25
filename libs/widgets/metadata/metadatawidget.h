@@ -33,7 +33,7 @@
 
 #include <kurl.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dmetadata.h"
 #include "digikam_export.h"

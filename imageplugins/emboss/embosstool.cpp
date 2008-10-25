@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "embosstool.h"
 #include "embosstool.moc"
@@ -48,7 +47,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "editortoolsettings.h"
 #include "imageiface.h"

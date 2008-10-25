@@ -28,7 +28,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageprint.h"
 
@@ -70,7 +69,7 @@
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "editorwindow.h"

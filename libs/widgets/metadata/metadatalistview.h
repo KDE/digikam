@@ -32,7 +32,7 @@
 #include <QtGui/QResizeEvent>
 #include <QtGui/QTreeWidget>
 
-// Digikam includes.
+// Local includes.
 
 #include "metadatawidget.h"
 #include "digikam_export.h"

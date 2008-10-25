@@ -21,12 +21,11 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageattributeswatch.h"
 #include "imageattributeswatch.moc"
 
-// Digikam includes.
+// Local includes.
 
 #include "databaseaccess.h"
 #include "databasewatch.h"

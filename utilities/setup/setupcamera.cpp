@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "setupcamera.h"
 #include "setupcamera.moc"
@@ -50,7 +49,7 @@
 #include <kapplication.h>
 #include <ktoolinvocation.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "config-digikam.h"
 #include "gpcamera.h"

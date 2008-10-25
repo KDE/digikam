@@ -34,7 +34,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "version.h"
 #include "daboutdata.h"

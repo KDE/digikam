@@ -40,7 +40,7 @@
 
 #include <kurl.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albuminfo.h"
 #include "databasefields.h"

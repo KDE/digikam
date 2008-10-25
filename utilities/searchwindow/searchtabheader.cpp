@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "searchtabheader.h"
 #include "searchtabheader.moc"
@@ -48,7 +47,7 @@
 #include <ksqueezedtextlabel.h>
 #include <kurllabel.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "albummanager.h"

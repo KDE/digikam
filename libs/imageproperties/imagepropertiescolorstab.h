@@ -34,7 +34,7 @@
 #include <kurl.h>
 #include <ktabwidget.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "digikam_export.h"

@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imagedescedittab.h"
 #include "imagedescedittab.moc"
@@ -58,7 +57,7 @@
 #include <kselectaction.h>
 #include <kvbox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dmetadata.h"
 #include "kdatetimeedit.h"

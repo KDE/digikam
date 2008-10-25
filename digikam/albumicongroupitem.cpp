@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "albumicongroupitem.h"
 
@@ -36,7 +35,7 @@
 #include <kglobal.h>
 #include <kcalendarsystem.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albummanager.h"
 #include "album.h"

@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageplugin_colorfx.h"
 #include "imageplugin_colorfx.moc"
@@ -39,7 +38,7 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "colorfxtool.h"
 

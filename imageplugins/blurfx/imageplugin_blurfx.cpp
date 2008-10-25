@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageplugin_blurfx.h"
 #include "imageplugin_blurfx.moc"
@@ -37,7 +36,7 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "blurfxtool.h"
 

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "jpegsettings.h"
 #include "jpegsettings.moc"

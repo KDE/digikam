@@ -21,11 +21,10 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "loadingcacheinterface.h"
 
-// Digikam includes.
+// Local includes.
 
 #include "loadingcache.h"
 

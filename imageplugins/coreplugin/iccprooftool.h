@@ -26,7 +26,7 @@
 #ifndef ICCPROOFTOOL_H
 #define ICCPROOFTOOL_H
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 

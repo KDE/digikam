@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "histogrambox.h"
 #include "histogrambox.moc"
@@ -45,7 +44,7 @@
 #include <kicon.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "colorgradientwidget.h"
 #include "histogramwidget.h"

@@ -25,7 +25,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "showfoto.h"
 #include "showfoto.moc"
@@ -93,7 +92,7 @@ extern "C"
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Digikam includes.
+// Local includes.
 
 #include "canvas.h"
 #include "dimginterface.h"

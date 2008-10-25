@@ -25,7 +25,7 @@
 #ifndef OILPAINTTOOL_H
 #define OILPAINTTOOL_H
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 

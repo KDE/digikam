@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "iccpreviewwidget.h"
 #include "iccpreviewwidget.moc"
@@ -39,7 +38,7 @@
 #include <kdebug.h>
 #include <kurl.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "iccprofilewidget.h"
 

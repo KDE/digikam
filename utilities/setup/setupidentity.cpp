@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "setupidentity.h"
 #include "setupidentity.moc"
@@ -40,7 +39,7 @@
 #include <kdialog.h>
 #include <klineedit.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albumsettings.h"
 

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "searchfieldgroup.h"
 #include "searchfieldgroup.moc"
@@ -36,7 +35,7 @@
 
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "themeengine.h"
 #include "searchgroup.h"

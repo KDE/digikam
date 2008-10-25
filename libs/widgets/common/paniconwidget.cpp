@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "paniconwidget.h"
 #include "paniconwidget.moc"

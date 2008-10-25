@@ -24,7 +24,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "kipiimageinfo.h"
 
@@ -38,7 +37,7 @@
 
 #include <libkipi/version.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "constants.h"
 #include "album.h"

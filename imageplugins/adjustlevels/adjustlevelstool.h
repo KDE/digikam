@@ -24,7 +24,7 @@
 #ifndef ADJUSTLEVELSTOOL_H
 #define ADJUSTLEVELSTOOL_H
 
-// Digikam includes.
+// Local includes.
 
 #include "editortool.h"
 #include "dimg.h"

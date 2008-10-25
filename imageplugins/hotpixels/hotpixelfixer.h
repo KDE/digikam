@@ -33,7 +33,7 @@
 #include <QRect>
 #include <QString>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimgthreadedfilter.h"
 #include "hotpixel.h"

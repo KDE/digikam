@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "cameraselection.h"
 #include "cameraselection.moc"
@@ -50,7 +49,7 @@
 #include <kurlrequester.h>
 #include <kvbox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "config-digikam.h"
 #include "gpcamera.h"

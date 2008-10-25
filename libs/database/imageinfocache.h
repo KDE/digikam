@@ -29,7 +29,7 @@
 #include <QObject>
 #include <QHash>
 
-// Digikam includes.
+// Local includes.
 
 #include "databasewatch.h"
 

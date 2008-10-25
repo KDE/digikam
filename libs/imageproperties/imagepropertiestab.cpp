@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imagepropertiestab.h"
 #include "imagepropertiestab.moc"

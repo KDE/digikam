@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "autocorrectiontool.h"
 #include "autocorrectiontool.moc"
@@ -55,7 +54,7 @@
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "colorgradientwidget.h"
 #include "dimg.h"

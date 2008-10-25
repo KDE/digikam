@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "digikamfirstrun.h"
 #include "digikamfirstrun.moc"
@@ -51,7 +50,7 @@
 #include <kurlrequester.h>
 #include <kseparator.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "version.h"
 

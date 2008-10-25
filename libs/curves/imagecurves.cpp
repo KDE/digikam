@@ -28,7 +28,6 @@
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-// Local includes.
 
 #include "imagecurves.h"
 

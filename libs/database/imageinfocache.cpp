@@ -21,12 +21,11 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageinfocache.h"
 #include "imageinfocache.moc"
 
-// Digikam includes.
+// Local includes.
 
 #include "albumdb.h"
 #include "imageinfodata.h"

@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "tagfilterview.h"
 #include "tagfilterview.moc"
@@ -51,7 +50,7 @@
 #include <kglobal.h>
 #include <kselectaction.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albummanager.h"
 #include "albumdb.h"

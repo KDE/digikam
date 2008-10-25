@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "statusprogressbar.h"
 #include "statusprogressbar.moc"

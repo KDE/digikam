@@ -29,7 +29,7 @@
 #include <QtCore/QString>
 #include <QtCore/QDateTime>
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 

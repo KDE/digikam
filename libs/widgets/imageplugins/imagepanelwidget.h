@@ -33,7 +33,7 @@
 #include <QtGui/QResizeEvent>
 #include <QtGui/QWidget>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "digikam_export.h"

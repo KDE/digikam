@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "editortooliface.h"
 #include "editortooliface.moc"
@@ -30,7 +29,7 @@
 
 #include <QWidget>
 
-// Digikam includes.
+// Local includes.
 
 #include "sidebar.h"
 #include "statusprogressbar.h"

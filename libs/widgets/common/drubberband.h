@@ -29,7 +29,7 @@
 #include <QRubberBand>
 #include <Qt3Support/Q3ScrollView>
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 

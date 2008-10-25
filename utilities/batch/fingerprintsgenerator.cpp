@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "fingerprintsgenerator.h"
 #include "fingerprintsgenerator.moc"
@@ -44,7 +43,7 @@
 #include <klocale.h>
 #include <kstandardguiitem.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "album.h"

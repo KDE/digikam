@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "bwsepiatool.h"
 #include "bwsepiatool.moc"
@@ -65,7 +64,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "bcgmodifier.h"
 #include "colorgradientwidget.h"

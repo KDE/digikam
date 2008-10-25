@@ -29,7 +29,7 @@
 #include <QWidget>
 #include <QList>
 
-// Digikam includes.
+// Local includes.
 
 #include "searchview.h"
 #include "searchxml.h"

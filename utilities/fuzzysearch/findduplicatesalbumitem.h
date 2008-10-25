@@ -32,7 +32,7 @@
 
 #include <kurl.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "imageinfo.h"
 #include "thumbnailloadthread.h"

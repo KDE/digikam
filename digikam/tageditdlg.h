@@ -34,7 +34,7 @@
 
 #include <kdialog.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albummanager.h"
 

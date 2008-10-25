@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "animwidget.h"
 #include "animwidget.moc"

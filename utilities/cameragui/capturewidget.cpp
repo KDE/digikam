@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "capturewidget.h"
 #include "capturewidget.moc"

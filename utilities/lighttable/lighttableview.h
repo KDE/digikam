@@ -30,7 +30,7 @@
 #include <QFrame>
 #include <QString>
 
-// Digikam includes.
+// Local includes.
 
 #include "imageinfo.h"
 #include "digikam_export.h"

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "metadatawidget.h"
 #include "metadatawidget.moc"
@@ -59,7 +58,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "metadatalistview.h"
 #include "metadatalistviewitem.h"

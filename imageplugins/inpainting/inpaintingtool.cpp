@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "inpaintingtool.h"
 #include "inpaintingtool.moc"
@@ -69,7 +68,7 @@
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "version.h"
 #include "daboutdata.h"

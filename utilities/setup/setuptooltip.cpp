@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "setuptooltip.h"
 #include "setuptooltip.moc"
@@ -37,7 +36,7 @@
 #include <klocale.h>
 #include <kdialog.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "albumsettings.h"
 

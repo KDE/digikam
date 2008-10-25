@@ -32,7 +32,7 @@
 #include <QWheelEvent>
 #include <QWidget>
 
-// Digikam includes.
+// Local includes.
 
 #include "digikam_export.h"
 #include "loadingdescription.h"

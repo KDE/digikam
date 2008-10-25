@@ -24,7 +24,7 @@
 #ifndef GPSSEARCHFOLDERVIEW_H
 #define GPSSEARCHFOLDERVIEW_H
 
-// Digikam includes.
+// Local includes.
 
 #include "folderview.h"
 

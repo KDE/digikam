@@ -30,7 +30,7 @@
 
 #include <kurl.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "imageinfolist.h"
 #include "imagepropertiessidebar.h"

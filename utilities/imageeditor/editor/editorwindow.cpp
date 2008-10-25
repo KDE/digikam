@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "editorwindow.h"
 #include "editorwindow.moc"
@@ -91,7 +90,7 @@
 
 #include <libkdcraw/version.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "canvas.h"
 #include "dimginterface.h"

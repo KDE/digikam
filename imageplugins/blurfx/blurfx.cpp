@@ -28,7 +28,6 @@
 // Represents 1
 #define ANGLE_RATIO  0.017453292519943295769236907685
 
-// Local includes.
 
 #include "blurfx.h"
 
@@ -42,7 +41,7 @@
 
 #include <QDateTime>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 #include "dimggaussianblur.h"

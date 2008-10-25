@@ -33,7 +33,7 @@
 
 // KDE includes.
 
-// Digikam includes.
+// Local includes.
 
 #include "ratingwidget.h"
 #include "comboboxutilities.h"

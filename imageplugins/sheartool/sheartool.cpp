@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "sheartool.h"
 #include "sheartool.moc"
@@ -51,7 +50,7 @@
 
 #include <libkdcraw/rnuminput.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "daboutdata.h"
 #include "dimg.h"

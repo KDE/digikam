@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imageiface.h"
 
@@ -38,7 +37,7 @@
 
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "exposurecontainer.h"
 #include "iccsettingscontainer.h"

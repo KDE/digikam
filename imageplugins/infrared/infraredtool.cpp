@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "infraredtool.h"
 #include "infraredtool.moc"
@@ -50,7 +49,7 @@
 #include <kglobal.h>
 #include <kconfiggroup.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "version.h"
 #include "daboutdata.h"

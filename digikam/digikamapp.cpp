@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "digikamapp.h"
 #include "digikamapp.moc"
@@ -94,7 +93,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Digikam includes.
+// Local includes.
 
 #include "album.h"
 #include "albumdb.h"

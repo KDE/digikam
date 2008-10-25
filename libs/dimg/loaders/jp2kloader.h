@@ -31,7 +31,7 @@ extern "C"
 #include <jasper/jasper.h>
 }
 
-// Digikam includes.
+// Local includes.
 
 #include "dimgloader.h"
 #include "digikam_export.h"

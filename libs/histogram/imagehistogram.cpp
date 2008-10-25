@@ -24,7 +24,6 @@
  *
  * ============================================================ */
 
-// Local includes.
 
 #include "imagehistogram.h"
 #include "imagehistogram.moc"
@@ -44,7 +43,7 @@
 #include <kdebug.h>
 #include <kapplication.h>
 
-// Digikam includes.
+// Local includes.
 
 #include "dimg.h"
 
