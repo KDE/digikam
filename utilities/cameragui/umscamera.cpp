@@ -154,7 +154,9 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
                 {
                     KFileMetaInfo meta(fi->filePath());
 
+#ifndef Q_CC_MSVC
 #warning "TODO: KDE4 port it";
+#endif
                     /* TODO: KDE4PORT: KFileMetaInfo API as Changed.
                              Check if new method to search "Dimensions" information is enough.
 
@@ -422,8 +424,9 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
             else
             {
                 KFileMetaInfo meta(fi.filePath());
-
+#ifndef Q_CC_MSVC
 #warning "TODO: KDE4 port it";
+#endif
                 /* TODO: KDE4PORT: KFileMetaInfo API as Changed.
                          Check if new method to search "Dimensions" information is enough.
 
