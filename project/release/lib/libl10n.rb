@@ -192,7 +192,7 @@ def createTranslationStats()
         </head>
         <body>
         <a name="__top"><p align="center"><a name="statistics of #{NAME} #{@version} translations">
-        <h1>Statistics of #{NAME} #{@version} translations</h1><br>
+        <h1>Statistics of #{NAME} #{@version} translations</h1><br/>
         <table border="1" cellspacing="0"dir="ltr">
         <tr><td align="left" valign="middle" width="60" height="12">
         <font color="#196aff"><i><b>Language</b></i></font>

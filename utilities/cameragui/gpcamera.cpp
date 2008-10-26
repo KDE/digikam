@@ -1269,21 +1269,21 @@ bool GPCamera::cameraSummary(QString& summary)
         return false;
     }
 
-    summary =  i18n("Title: <b>%1</b><br>"
-                    "Model: <b>%2</b><br>"
-                    "Port: <b>%3</b><br>"
-                    "Path: <b>%4</b><br><br>",
+    summary =  i18n("Title: <b>%1</b><br/>"
+                    "Model: <b>%2</b><br/>"
+                    "Port: <b>%3</b><br/>"
+                    "Path: <b>%4</b><br/><br/>",
                     title(),
                     model(),
                     port(),
                     path());
 
-    summary += i18n("Thumbnails: <b>%1</b><br>"
-                    "Capture image: <b>%2</b><br>"
-                    "Delete items: <b>%3</b><br>"
-                    "Upload items: <b>%4</b><br>"
-                    "Create directories: <b>%5</b><br>"
-                    "Delete Directories: <b>%6</b><br><br>",
+    summary += i18n("Thumbnails: <b>%1</b><br/>"
+                    "Capture image: <b>%2</b><br/>"
+                    "Delete items: <b>%3</b><br/>"
+                    "Upload items: <b>%4</b><br/>"
+                    "Create directories: <b>%5</b><br/>"
+                    "Delete Directories: <b>%6</b><br/><br/>",
                     thumbnailSupport()    ? i18n("yes") : i18n("no"),
                     captureImageSupport() ? i18n("yes") : i18n("no"),
                     deleteSupport()       ? i18n("yes") : i18n("no"),

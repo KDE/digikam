@@ -451,7 +451,7 @@ void RenameCustomizer::slotDateTimeButtonClicked()
                            "<i>mm</i> for the minute, "
                            "<i>ss</i> for the second.</p>"
                            "<p>Examples: <i>yyyyMMddThhmmss</i> "
-                           "for 20060824T142418,<br>"
+                           "for 20060824T142418,<br/>"
                            "<i>yyyy-MM-dd hh:mm:ss</i> "
                            "for 2006-08-24 14:24:18.</p>");
 
