@@ -26,7 +26,9 @@
 
 // C ++ includes.
 
+#ifndef _MSC_VER
 #include <cstdio>
+#endif
 
 namespace DigikamImagesPluginCore
 {
