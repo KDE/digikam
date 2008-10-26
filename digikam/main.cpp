@@ -141,6 +141,8 @@ int main(int argc, char *argv[])
     {
         KMessageBox::error(0, i18n("Qt4 SQlite database plugin is not available. "
                                    "Please install it!"));
+
+	kDebug(50003) << "QT Sql drivers list: " << QSqlDatabase::drivers() << endl;
         return 1;
     }
 
