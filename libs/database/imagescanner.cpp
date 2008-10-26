@@ -42,6 +42,7 @@
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "imagecomments.h"
+#include "imagecomments_p.h"
 #include "imagecopyright.h"
 
 namespace Digikam

@@ -56,6 +56,8 @@
 #include "databasebackend.h"
 #include "searchxml.h"
 #include "haar.h"
+#include "imagecomments_p.h"
+#include "imageposition_p.h"
 
 using namespace std;
 
