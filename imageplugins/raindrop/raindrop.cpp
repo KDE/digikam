@@ -236,7 +236,7 @@ bool RainDrop::CreateRainDrop(uchar *pBits, int Width, int Height, bool sixteenB
             for (w = -nHalfSize; !m_cancel && (w <= nHalfSize); w++)
             {
                 lfRadius = sqrt (h * h + w * w);
-                lfAngle = atan2 (h, w);
+                lfAngle = atan2 ((double)h, (double)w);
 
                 if (lfRadius <= (double)nHalfSize)
                 {
