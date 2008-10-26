@@ -175,7 +175,7 @@ void BlurFX::zoomBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X, 
             nh = Y - h;
 
             lfRadius = sqrt (nw * nw + nh * nh);
-            lfAngle = atan2 (nh, nw);
+            lfAngle = atan2 ((double)nh, (double)nw);
             lfNewRadius = (lfRadius * Distance) / lfRadMax;
 
             for (r = 0; !m_cancel && (r <= lfNewRadius); r++)
@@ -294,7 +294,7 @@ void BlurFX::radialBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X
             nh = Y - h;
 
             Radius = sqrt (nw * nw + nh * nh);
-            AngleRad = atan2 (nh, nw);
+            AngleRad = atan2 ((double)nh, (double)nw);
 
             for (int a = -Distance; !m_cancel && (a <= Distance); a++)
             {

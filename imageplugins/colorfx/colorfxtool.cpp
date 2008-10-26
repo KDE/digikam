@@ -653,9 +653,9 @@ void ColorFXTool::neonFindEdges(uchar *data, int w, int h, bool sb, bool neon, i
                     // As (a << I) = a * (1 << I) = a * (2^I), and we can split the square root
 
                     if (neon)
-                        ((unsigned short *)ptr)[k] = CLAMP065535 ((int)( sqrt(color_1 + color_2) * intensityFactor ));
+                        ((unsigned short *)ptr)[k] = CLAMP065535 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
                     else
-                        ((unsigned short *)ptr)[k] = 65535 - CLAMP065535 ((int)( sqrt(color_1 + color_2) * intensityFactor ));
+                        ((unsigned short *)ptr)[k] = 65535 - CLAMP065535 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
                 }
             }
             else
@@ -669,9 +669,9 @@ void ColorFXTool::neonFindEdges(uchar *data, int w, int h, bool sb, bool neon, i
                     color_2 = (colorPoint - colorOther2) * (colorPoint - colorOther2);
 
                     if (neon)
-                        ptr[k] = CLAMP0255 ((int)( sqrt(color_1 + color_2) * intensityFactor ));
+                        ptr[k] = CLAMP0255 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
                     else
-                        ptr[k] = 255 - CLAMP0255 ((int)( sqrt(color_1 + color_2) * intensityFactor ));
+                        ptr[k] = 255 - CLAMP0255 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
                 }
             }
         }

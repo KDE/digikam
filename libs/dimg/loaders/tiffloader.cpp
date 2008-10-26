@@ -44,7 +44,7 @@
 // files io. Uncomment this line only for debugging.
 //#define ENABLE_DEBUG_MESSAGES
 
-// C ansi includes.
+// C ANSI includes.
 
 extern "C"
 {
@@ -197,7 +197,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     QMap<int, QByteArray>& metaData = imageMetaData();
 
-    uchar  *profile_data=NULL;
+    uchar  *profile_data=0;
     uint32  profile_size;
 
     if (TIFFGetField (tif, TIFFTAG_ICCPROFILE, &profile_size, &profile_data))
