@@ -316,7 +316,7 @@ Mat *RefocusMatrix::make_s_cmatrix (CMat * mat, int m, double noise_factor)
 
 double RefocusMatrix::correlation (const int x, const int y, const double gamma, const double musq)
 {
-    return (musq + pow (gamma, sqrt (SQR (x) + SQR (y))));
+    return (musq + pow ((double)gamma, (double)sqrt (SQR (x) + SQR (y))));
 }
 
 Mat *RefocusMatrix::copy_vec (const CMat * const mat, const int m)
@@ -524,7 +524,7 @@ void RefocusMatrix::make_gaussian_convolution (const double gradius, CMat * conv
 
     init_c_mat (convolution, m);
 
-    if (SQR (gradius) <= 1 / 3.40282347e38F)
+    if (SQR (gradius) <= 1.0e10F / 3.40282347e28F)
     {
         for (y = -m; y <= m; y++)
         {
