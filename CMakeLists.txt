@@ -321,7 +321,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                    )
 
     # Enable C++ Exceptions support, require by Greycstoration algorithm (CImg.h)
-    ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
+    IF(NOT MSVC)
+        ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
+    ENDIF(NOT MSVC)
 
     INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR}
                         ${KEXIV2_INCLUDE_DIR}
@@ -390,6 +392,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/greycstoration/greycstorationiface.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/greycstoration/greycstorationwidget.cpp
        )
+
+    SET_SOURCE_FILES_PROPERTIES(${libgreycstoration_SRCS} PROPERTIES COMPILE_FLAGS ${KDE4_ENABLE_EXCEPTIONS})
 
     SET(libhistogram_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/histogram/imagehistogram.cpp
