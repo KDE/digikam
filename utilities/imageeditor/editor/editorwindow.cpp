@@ -95,6 +95,9 @@
 #include "canvas.h"
 #include "dimginterface.h"
 #include "dpopupmenu.h"
+#include "editorstackview.h"
+#include "editortooliface.h"
+#include "editorwindowprivate.h"
 #include "exposurecontainer.h"
 #include "filesaveoptionsbox.h"
 #include "iccsettingscontainer.h"
@@ -113,9 +116,6 @@
 #include "statusprogressbar.h"
 #include "themeengine.h"
 #include "thumbbar.h"
-#include "editorstackview.h"
-#include "editortooliface.h"
-#include "editorwindowprivate.h"
 
 namespace Digikam
 {

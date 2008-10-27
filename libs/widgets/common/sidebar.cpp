@@ -29,24 +29,23 @@
 
 // Qt includes.
 
+#include <QDataStream>
+#include <QDragEnterEvent>
+#include <QEvent>
+#include <QPixmap>
 #include <QSplitter>
 #include <QStackedWidget>
-#include <QDataStream>
-#include <QPixmap>
 #include <QTimer>
-#include <QEvent>
-#include <QDragEnterEvent>
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kdeversion.h>
-#include <kiconloader.h>
-#include <kglobal.h>
 #include <kconfiggroup.h>
-
+#include <kdebug.h>
+#include <kdeversion.h>
+#include <kglobal.h>
+#include <kiconloader.h>
 
 namespace Digikam
 {

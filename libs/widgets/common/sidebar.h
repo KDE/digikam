@@ -33,8 +33,8 @@
 
 // KDE includes.
 
-#include <kmultitabbar.h>
 #include <kconfiggroup.h>
+#include <kmultitabbar.h>
 
 // Local includes.
 
@@ -46,8 +46,8 @@ namespace Digikam
 {
 
 class SidebarPriv;
-class SidebarSplitterPriv;
 class SidebarSplitter;
+class SidebarSplitterPriv;
 
 /**
  * This class handles a sidebar view

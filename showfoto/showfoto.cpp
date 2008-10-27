@@ -98,6 +98,7 @@ extern "C"
 #include "dimginterface.h"
 #include "dmetadata.h"
 #include "dpopupmenu.h"
+#include "editorstackview.h"
 #include "iccsettingscontainer.h"
 #include "imagedialog.h"
 #include "imageplugin.h"
@@ -116,7 +117,6 @@ extern "C"
 #include "thumbbar.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
-#include "editorstackview.h"
 
 namespace ShowFoto
 {
