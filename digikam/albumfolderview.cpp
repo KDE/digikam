@@ -615,7 +615,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
         }
         else
         {
-            deleteAction = popmenu.addAction(SmallIcon("editshred"), i18n("Delete Album"));
+            deleteAction = popmenu.addAction(SmallIcon("edit-delete-shred"), i18n("Delete Album"));
         }
     }
 
