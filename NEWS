@@ -1,4 +1,17 @@
 *********************************************************************************************************
+digiKam 0.10.0-beta6 - Release date: 2008-11-xx
+
+IMPORTANT: This is a beta release : do not use yet in production !!!
+====================================================================
+
+NEW FEATURES:
+
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+001 ==> 173645 : digiKam crashes after start dialog.
+002 ==> 
+
+*********************************************************************************************************
 digiKam 0.10.0-beta5 - Release date: 2008-10-26
 
 IMPORTANT: This is a beta release : do not use yet in production !!!
@@ -10,6 +23,8 @@ General        : digiKam can be compiled natively under Microsoft Windows.
 General        : libkdcraw dependency updated to 0.4.0
 General        : libgphoto2 dependency is now optional to be able to compile digiKam under operating systems 
                  not supported by GPhoto2
+
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 171953 : Using create "Date-based sub-albums" makes import fail.
 002 ==> 118318 : Make (lib)gphoto support a configure flag.
