@@ -12,7 +12,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 173645 : digiKam crashes after start dialog.
 002 ==> 173691 : digiKam doesn't show pictures.
-003 ==> 
+003 ==> 091811 : feature request: find pictures by meta tag info, date.
+004 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta5 - Release date: 2008-10-26
