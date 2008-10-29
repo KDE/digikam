@@ -68,8 +68,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.3215686"
-     inkscape:cx="243.80058"
-     inkscape:cy="185.55545"
+     inkscape:cx="243.80057"
+     inkscape:cy="215.82251"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -113,14 +113,6 @@
        y="0"
        rx="0"
        ry="0" />
-    <image
-       y="-0.69345284"
-       x="395.88763"
-       id="image3287"
-       height="510"
-       width="17"
-       sodipodi:absref="/home/andi/Programmieren/workspace/digikam_KDE4/digikam/data/pics/menusidepix-showfoto.png"
-       xlink:href="menusidepix-showfoto.png" />
     <text
        xml:space="preserve"
        style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Arial;-inkscape-font-specification:Arial"
@@ -132,18 +124,6 @@
          id="tspan3189"
          x="-442.22888"
          y="13.445801">0.10.0</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:36px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Caribbean Island;-inkscape-font-specification:Caribbean Island"
-       x="170.66226"
-       y="345.34149"
-       id="text3160"
-       transform="matrix(0.9400809,-0.3409514,0.3409514,0.9400809,0,0)"><tspan
-         sodipodi:role="line"
-         id="tspan3162"
-         x="170.66226"
-         y="345.34149"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#cc0000;font-family:Arial;-inkscape-font-specification:Arial Bold">OLD SAMPLE</tspan></text>
     <text
        id="text3164"
        y="189.2903"
