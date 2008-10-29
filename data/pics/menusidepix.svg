@@ -15,7 +15,7 @@
    sodipodi:version="0.32"
    inkscape:version="0.46"
    version="1.0"
-   sodipodi:docname="menusidepix-showfoto.svg"
+   sodipodi:docname="menusidepix.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    inkscape:export-filename="/home/andi/Programmieren/workspace/digikam_KDE4/digikam/data/pics/menusidepix-digikam.png"
    inkscape:export-xdpi="90.000008"
@@ -68,8 +68,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.3215686"
-     inkscape:cx="8.5"
-     inkscape:cy="255"
+     inkscape:cx="8.4999998"
+     inkscape:cy="254.99999"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -149,38 +149,38 @@
          style="font-size:13.52320576px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#cc0000;font-family:Arial;-inkscape-font-specification:Arial Bold"
          y="189.2903"
          x="-199.0625"
-         id="tspan3166"
-         sodipodi:role="line">When exporting the image,</tspan><tspan
+         sodipodi:role="line"
+         id="tspan3178">When exporting the image,</tspan><tspan
          style="font-size:13.52320576px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#cc0000;font-family:Arial;-inkscape-font-specification:Arial Bold"
-         y="206.19432"
+         y="206.19431"
          x="-199.0625"
          sodipodi:role="line"
-         id="tspan3172">make sure to have the correct</tspan><tspan
+         id="tspan2433">make sure to have the correct</tspan><tspan
          style="font-size:13.52320576px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#cc0000;font-family:Arial;-inkscape-font-specification:Arial Bold"
          y="223.09831"
          x="-199.06252"
          sodipodi:role="line"
-         id="tspan2408">app name displayed, you can choose the</tspan><tspan
+         id="tspan2435">app name displayed, you can choose the</tspan><tspan
          style="font-size:13.52320576px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#cc0000;font-family:Arial;-inkscape-font-specification:Arial Bold"
-         y="240.00233"
+         y="240.00232"
          x="-199.0625"
          sodipodi:role="line"
-         id="tspan2414">appropiate one from the layers dialog.</tspan><tspan
+         id="tspan2437">appropriate one from the layers dialog.</tspan><tspan
          style="font-size:13.52320576px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#cc0000;font-family:Arial;-inkscape-font-specification:Arial Bold"
-         y="256.90631"
+         y="256.90634"
          x="-199.0625"
          sodipodi:role="line"
-         id="tspan2412"></tspan><tspan
+         id="tspan2439"></tspan><tspan
          style="font-size:13.52320576px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#cc0000;font-family:Arial;-inkscape-font-specification:Arial Bold"
          y="273.81033"
          x="-199.0625"
          sodipodi:role="line"
-         id="tspan2416">Select &quot;page&quot; as the</tspan><tspan
+         id="tspan2441">Select &quot;page&quot; as the</tspan><tspan
          style="font-size:13.52320576px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#cc0000;font-family:Arial;-inkscape-font-specification:Arial Bold"
-         y="290.71432"
+         y="290.71436"
          x="-199.0625"
          sodipodi:role="line"
-         id="tspan3178">export source (dpi=90)</tspan></text>
+         id="tspan2443">export source (dpi=90)</tspan></text>
   </g>
   <g
      inkscape:groupmode="layer"
