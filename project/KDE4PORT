@@ -62,7 +62,7 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
     colorgradientwidget.cpp             Gilles          X      X       DONE        DONE
     curveswidget.cpp                    Gilles          X      X       DONE        DONE
     dcursortracker.cpp                  Gilles          X      X       DONE        DONE
-    dpopupmenu.cpp                      Gilles          X      X       DONE                 Left banner has disapear!
+    dpopupmenu.cpp                      Gilles          X      X       DONE        DONE
     filesaveoptionsbox.cpp              Gilles          X      X       DONE        DONE
     histogramwidget.cpp                 Gilles          X      X       DONE        DONE
     paniconwidget.cpp                   Gilles          X      X       DONE        DONE
