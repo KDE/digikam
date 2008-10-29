@@ -6,7 +6,7 @@
  * Date        : 2006-11-11
  * Description : a popup menu with a decorative graphic banner
  *               at the left border.
- * 
+ *
  * Copyright (C) 1996-2000 the kicker authors.
  * Copyright (C) 2005 Mark Kretschmann <markey@web.de>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -16,12 +16,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef DPOPUPMENU_H
@@ -29,10 +29,10 @@
 
 // Qt includes.
 
-#include <QtGui/QMenu>
+#include <QtCore/QRect>
 #include <QtGui/QColor>
 #include <QtGui/QImage>
-#include <QtCore/QRect>
+#include <QtGui/QMenu>
 #include <QtGui/QPaintEvent>
 #include <QtGui/QResizeEvent>
 
@@ -54,7 +54,7 @@ class DIGIKAM_EXPORT DPopupMenu : public KMenu
 
 public:
 
-    DPopupMenu(QWidget *parent=0);
+    DPopupMenu(QWidget* parent=0);
     ~DPopupMenu();
 
     int sidePixmapWidth() const;
@@ -74,9 +74,6 @@ private:
     void setMaximumSize(const QSize& s);
     void setMinimumSize(int w, int h);
     void setMaximumSize(int w, int h);
-
-    void resizeEvent(QResizeEvent* e);
-    void resize(int width, int height);
 
     void paintEvent(QPaintEvent* e);
 };

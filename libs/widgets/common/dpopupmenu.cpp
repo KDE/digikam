@@ -29,22 +29,21 @@
 
 // Qt includes.
 
+#include <QPaintEvent>
 #include <QPainter>
 #include <QPixmap>
-#include <QStyle>
 #include <QResizeEvent>
-#include <QPaintEvent>
+#include <QStyle>
 #include <QStyleOptionFrame>
 
 // KDE includes.
 
-#include <kapplication.h>
-#include <kiconeffect.h>
-#include <kglobal.h>
-#include <kstandarddirs.h>
 #include <kaboutdata.h>
+#include <kapplication.h>
 #include <kcomponentdata.h>
-
+#include <kglobal.h>
+#include <kiconeffect.h>
+#include <kstandarddirs.h>
 
 namespace Digikam
 {
@@ -56,8 +55,10 @@ DPopupMenu::DPopupMenu(QWidget* parent)
           : KMenu(parent)
 {
     // Must be initialized so that we know the size on first invocation
-    if ( s_dpopupmenu_sidePixmap.isNull() )
+    if (s_dpopupmenu_sidePixmap.isNull())
         generateSidePixmap();
+
+    setContentsMargins(sidePixmapWidth(), 0, 0, 0);
 }
 
 DPopupMenu::~DPopupMenu()
@@ -154,24 +155,7 @@ void DPopupMenu::setMaximumSize(int w, int h)
     KMenu::setMaximumSize(w + s_dpopupmenu_sidePixmap.width(), h);
 }
 
-void DPopupMenu::resizeEvent(QResizeEvent * e)
-{
-    KMenu::resizeEvent( e );
-
-#if 0
-    setFrameRect( QStyle::visualRect( QRect( s_dpopupmenu_sidePixmap.width(), 0,
-                                      width() - s_dpopupmenu_sidePixmap.width(), height() ), this ) );
-#endif
-}
-
-//Workaround Qt3.3.x sizing bug, by ensuring we're always wide enough.
-void DPopupMenu::resize(int width, int height)
-{
-    width = qMax(width, maximumSize().width());
-    KMenu::resize(width, height);
-}
-
-void DPopupMenu::paintEvent( QPaintEvent* e )
+void DPopupMenu::paintEvent(QPaintEvent* e)
 {
     {
         // scope for QPainter object
