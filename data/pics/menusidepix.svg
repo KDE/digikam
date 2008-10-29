@@ -68,10 +68,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.3215686"
-     inkscape:cx="243.80057"
-     inkscape:cy="215.82251"
+     inkscape:cx="-164.77893"
+     inkscape:cy="254.99999"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="false"
      showborder="false"
      inkscape:window-width="1440"
@@ -103,7 +103,9 @@
   <g
      inkscape:label="background"
      inkscape:groupmode="layer"
-     id="layer1">
+     id="layer1"
+     style="display:inline"
+     sodipodi:insensitive="true">
     <rect
        style="opacity:1;fill:url(#linearGradient3161);fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect2383"
@@ -113,17 +115,6 @@
        y="0"
        rx="0"
        ry="0" />
-    <text
-       xml:space="preserve"
-       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Arial;-inkscape-font-specification:Arial"
-       x="-442.22888"
-       y="13.445801"
-       id="text3187"
-       transform="matrix(0,-1,1,0,0,0)"><tspan
-         sodipodi:role="line"
-         id="tspan3189"
-         x="-442.22888"
-         y="13.445801">0.10.0</tspan></text>
     <text
        id="text3164"
        y="189.2903"
@@ -168,9 +159,26 @@
   </g>
   <g
      inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="version">
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Arial;-inkscape-font-specification:Arial"
+       x="-442.22888"
+       y="13.445801"
+       id="text3187"
+       transform="matrix(0,-1,1,0,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan3189"
+         x="-442.22888"
+         y="13.445801">0.10.0</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="digikam"
-     style="display:inline">
+     style="display:inline"
+     sodipodi:insensitive="true">
     <text
        transform="matrix(0,-1.0486654,0.953593,0,0,0)"
        id="text2420"
@@ -188,7 +196,8 @@
      inkscape:groupmode="layer"
      id="layer4"
      inkscape:label="showfoto"
-     style="display:none">
+     style="display:none"
+     sodipodi:insensitive="true">
     <text
        xml:space="preserve"
        style="font-size:13.30103397px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Arial;-inkscape-font-specification:Arial"
