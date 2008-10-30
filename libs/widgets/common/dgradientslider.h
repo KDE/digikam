@@ -55,13 +55,13 @@ class DIGIKAM_EXPORT DGradientSlider : public QWidget
 
     void setColors(const QColor& lcolor, const QColor& rcolor);
 
-  public slots:
+  public Q_SLOTS:
 
     void setLeftValue(double);
     void setRightValue(double);
     void setMiddleValue(double);
 
-  signals:
+  Q_SIGNALS:
 
     void leftValueChanged(double);
     void rightValueChanged(double);

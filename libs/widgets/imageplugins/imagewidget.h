@@ -75,18 +75,18 @@ public:
 
     void   setRenderingPreviewMode(int mode);
 
-public slots:
+public Q_SLOTS:
         
     void slotChangeGuideColor(const QColor &color);
     void slotChangeGuideSize(int size);    
 
-signals:
+Q_SIGNALS:
 
     void spotPositionChangedFromOriginal( const Digikam::DColor &color, const QPoint &position );
     void spotPositionChangedFromTarget( const Digikam::DColor &color, const QPoint &position );    
     void signalResized();
     
-private slots:
+private Q_SLOTS:
     
     void slotUpdateSpotInfo(const Digikam::DColor &col, const QPoint &point);
 

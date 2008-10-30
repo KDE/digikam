@@ -52,7 +52,7 @@ public:
 
     void  setHighLightPoints(const QPolygon& pointsList);
 
-public slots:
+public Q_SLOTS:
 
     void slotSeparateViewToggled(int t);
 

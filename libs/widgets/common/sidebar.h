@@ -137,7 +137,7 @@ private:
     bool eventFilter(QObject *o, QEvent *e);
     void switchTabAndStackToTab(int tab);
 
-private slots:
+private Q_SLOTS:
 
     /**
      * Activates a tab
@@ -146,7 +146,7 @@ private slots:
 
     void slotDragSwitchTimer();
 
-signals:
+Q_SIGNALS:
 
     /**
      * is emitted, when another tab is activated
@@ -202,7 +202,7 @@ public:
      */
     void setSize(Sidebar *bar, int size);
 
-private slots:
+private Q_SLOTS:
 
     void slotSplitterMoved(int pos, int index);
 

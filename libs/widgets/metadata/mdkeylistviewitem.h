@@ -50,7 +50,7 @@ public:
 
     QString getMdKey();
 
-private slots:
+private Q_SLOTS:
 
     void slotThemeChanged();
 

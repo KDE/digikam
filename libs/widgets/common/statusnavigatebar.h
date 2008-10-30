@@ -62,7 +62,7 @@ public:
     void setButtonsState(int itemType);
     int  getButtonsState();
 
-signals:
+Q_SIGNALS:
 
     void signalFirstItem();
     void signalPrevItem();

@@ -74,7 +74,7 @@ public:
     void   setZoomMax(double z);
     void   setZoomMin(double z);
 
-signals:
+Q_SIGNALS:
 
     void signalRightButtonClicked();
     void signalLeftButtonClicked();
@@ -83,7 +83,7 @@ signals:
     void signalZoomFactorChanged(double);
     void signalContentsMovedEvent(bool);
 
-public slots:
+public Q_SLOTS:
 
     void slotIncreaseZoom();
     void slotDecreaseZoom();

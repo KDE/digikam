@@ -98,7 +98,7 @@ public:
     void   resetSpotPosition();
     void   updatePreview();
 
-public slots:
+public Q_SLOTS:
 
     void slotChangeGuideColor(const QColor &color);
     void slotChangeGuideSize(int size);
@@ -106,7 +106,7 @@ public slots:
     void slotToggleUnderExposure(bool);
     void slotToggleOverExposure(bool);
 
-signals:
+Q_SIGNALS:
 
     void spotPositionChangedFromOriginal(const Digikam::DColor &color, const QPoint &position);
     void spotPositionChangedFromTarget(const Digikam::DColor &color, const QPoint &position);

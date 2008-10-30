@@ -70,7 +70,7 @@ public:
     /** Start computation of this filter, directly in this thread. */
     virtual void startFilterDirectly();
 
-signals:
+Q_SIGNALS:
 
     /** This signal is emitted when image data is available and the computation has started. */
     void started();

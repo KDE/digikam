@@ -47,7 +47,7 @@ public:
                
     virtual QWidget* createWidget(QWidget* parent);
 
-private slots:
+private Q_SLOTS:
 
     void slotProcessUrl(const QString&);
 

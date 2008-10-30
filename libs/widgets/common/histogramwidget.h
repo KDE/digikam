@@ -139,19 +139,19 @@ public:
     ImageHistogram *m_imageHistogram;      // Full image.
     ImageHistogram *m_selectionHistogram;  // Image selection.
 
-signals:
+Q_SIGNALS:
 
     void signalIntervalChanged(int min, int max);
     void signalMaximumValueChanged(int);
     void signalHistogramComputationDone(bool);
     void signalHistogramComputationFailed();
 
-public slots:
+public Q_SLOTS:
 
     void slotMinValueChanged(int min);
     void slotMaxValueChanged(int max);
 
-protected slots:
+protected Q_SLOTS:
 
     void slotBlinkTimerDone();
     void slotCalculationStarted(const ImageHistogram *histogram);

@@ -58,7 +58,7 @@ public:
 
     void loadTool(EditorTool* tool);
 
-private slots:
+private Q_SLOTS:
 
     void slotToolDone();
 };

@@ -46,7 +46,7 @@ public:
     RawCameraDlg(QWidget* parent);
     ~RawCameraDlg();
 
-private slots:
+private Q_SLOTS:
 
     void slotSearchTextChanged(const QString&);
 

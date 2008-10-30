@@ -99,7 +99,7 @@ private:
 
     void setProfile(cmsHPROFILE hProfile);
 
-private slots:
+private Q_SLOTS:
 
     void slotBlinkTimerDone();
 

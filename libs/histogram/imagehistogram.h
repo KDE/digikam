@@ -84,7 +84,7 @@ public:
     int    getHistogramSegment(void);
     int    getMedian(int channel, int start, int end);
 
-signals:
+Q_SIGNALS:
 
     void calculationStarted(const ImageHistogram *histogram);
     void calculationFinished(const ImageHistogram *histogram, bool success);

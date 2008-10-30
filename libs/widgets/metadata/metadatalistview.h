@@ -56,15 +56,15 @@ public:
     void    setIfdList(const DMetadata::MetaDataMap& ifds, const QStringList& keysFilter,
                        const QStringList& tagsFilter);
 
-signals:
+Q_SIGNALS:
 
     void signalTextFilterMatch(bool);
 
-public slots:
+public Q_SLOTS:
 
     void slotSearchTextChanged(const QString&);
 
-private slots:
+private Q_SLOTS:
 
     void slotSelectionChanged(QTreeWidgetItem*, int);
 

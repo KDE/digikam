@@ -65,7 +65,7 @@ public:
     void  setCursorToLocalRegionSelectionCenter();
     void  setMouseFocus();
 
-signals:
+Q_SIGNALS:
 
     // Used with ImagePreview widget. 
     // Emit when selection have been moved with mouse.
@@ -76,7 +76,7 @@ signals:
 
     void signalHidden();
 
-public slots:
+public Q_SLOTS:
 
     void slotZoomFactorChanged(double);
 
@@ -92,7 +92,7 @@ protected:
     /** Recalculate the target selection position and emit 'signalSelectionMoved'.*/
     void regionSelectionMoved(bool targetDone);
 
-protected slots:
+protected Q_SLOTS:
 
     void slotFlickerTimer();
 

@@ -57,7 +57,7 @@ public:
 
     LedColor ledColor() const;
 
-public slots:
+public Q_SLOTS:
 
     void setLedColor(LedColor color);
 

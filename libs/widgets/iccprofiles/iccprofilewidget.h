@@ -62,7 +62,7 @@ public:
     bool  setProfileData(const QByteArray& data=QByteArray());
     const QByteArray& getProfileData();
 
-protected slots:
+protected Q_SLOTS:
 
     virtual void slotSaveMetadataToFile();
 

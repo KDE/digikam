@@ -49,11 +49,11 @@ public:
     void setEnableTextQueryCompletion(bool b);
     bool textQueryCompletion() const;
 
-public slots:
+public Q_SLOTS:
 
     void slotSearchResult(bool);
 
-private slots:
+private Q_SLOTS:
 
     void slotTextChanged(const QString&);
 

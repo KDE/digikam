@@ -62,7 +62,7 @@ Q_OBJECT
 
     int  value();
 
- public slots:
+ public Q_SLOTS:
 
     void setMaximum(int max);
     void incrementMaximum(int added);
@@ -74,7 +74,7 @@ Q_OBJECT
     void addedAction(const QPixmap& pix, const QString &text);
     void reset();
 
-protected slots:
+protected Q_SLOTS:
 
     void slotCancel();
 

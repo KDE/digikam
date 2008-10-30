@@ -99,14 +99,14 @@ public:
 
     ImageHistogram *m_imageHistogram;
 
-signals:
+Q_SIGNALS:
 
     void signalMouseMoved(int x, int y);
     void signalCurvesChanged();
     void signalHistogramComputationDone();
     void signalHistogramComputationFailed();
 
-protected slots:
+protected Q_SLOTS:
 
     void slotBlinkTimerDone();
     void slotCalculationStarted(const ImageHistogram *histogram);

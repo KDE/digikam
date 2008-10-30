@@ -52,7 +52,7 @@ public:
 
     QString getMetadataTitle(void);
 
-protected slots:    
+protected Q_SLOTS:    
     
     virtual void slotSaveMetadataToFile(void);
  

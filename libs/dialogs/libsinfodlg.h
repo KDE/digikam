@@ -52,7 +52,7 @@ public:
 
     void setComponentsInfoMap(const QMap<QString, QString>& list);
 
-private slots:
+private Q_SLOTS:
 
     void slotCopy2ClipBoard();
 

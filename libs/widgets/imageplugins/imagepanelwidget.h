@@ -78,12 +78,12 @@ public:
 
     ImageRegionWidget *previewWidget() const;
 
-signals:
+Q_SIGNALS:
 
     void signalOriginalClipFocusChanged();
     void signalResized();
 
-public slots:
+public Q_SLOTS:
 
     // Set the top/Left corner clip position.
     void slotSetImageRegionPosition(const QRect& rect, bool targetDone);
@@ -95,7 +95,7 @@ protected:
 
     void resizeEvent(QResizeEvent *e);
 
-private slots:
+private Q_SLOTS:
 
     void slotPanIconTakeFocus();
     void slotInitGui();

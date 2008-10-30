@@ -66,13 +66,13 @@ public:
     int  progressTotalSteps();
     void setProgressTotalSteps(int v);
 
-public slots:
+public Q_SLOTS:
 
     void setText(const QString& text);
     void setProgressValue(int v);
     void setProgressText(const QString& text);
 
-signals:
+Q_SIGNALS:
 
     void signalCancelButtonPressed();
 

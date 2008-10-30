@@ -57,7 +57,7 @@ public:
     void setZoomSliderValue(int v);
     void setZoomTrackerText(const QString& text);
 
-signals:
+Q_SIGNALS:
 
     void signalZoomPlusClicked();
     void signalZoomMinusClicked();
@@ -65,7 +65,7 @@ signals:
     void signalDelayedZoomSliderChanged(int);
     void signalZoomSliderReleased(int);
 
-private slots:
+private Q_SLOTS:
 
     void slotZoomSliderChanged(int);
     void slotDelayedZoomSliderChanged();

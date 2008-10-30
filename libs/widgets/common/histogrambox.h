@@ -91,13 +91,13 @@ public:
     int  scale() const;
     void setScale(int scale);
 
-signals:
+Q_SIGNALS:
 
     void signalChannelChanged();
     void signalColorsChanged();
     void signalScaleChanged();
 
-public slots:
+public Q_SLOTS:
 
     void slotChannelChanged();
     void slotScaleChanged();

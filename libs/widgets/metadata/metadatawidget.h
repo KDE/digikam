@@ -75,13 +75,13 @@ public:
     virtual bool loadFromData(const QString& fileName, const DMetadata& data=DMetadata());
     virtual bool loadFromURL(const KUrl& url)=0;
 
-private slots:
+private Q_SLOTS:
 
     void slotModeChanged(int);
     void slotCopy2Clipboard();
     void slotPrintMetadata();
     
-protected slots:    
+protected Q_SLOTS:    
     
     virtual void slotSaveMetadataToFile()=0;
     
