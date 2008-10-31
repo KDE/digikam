@@ -115,7 +115,7 @@ private:
     void updateZoomAndSize(bool alwaysFitToWindow);
     inline void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh);
 
-    void contentsDragMoveEvent(QDragMoveEvent*);
+    void contentsDragEnterEvent(QDragEnterEvent*);
     void contentsDropEvent(QDropEvent*);
 
 private:

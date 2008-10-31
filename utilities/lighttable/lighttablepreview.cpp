@@ -661,7 +661,7 @@ void LightTablePreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int s
     p.end();
 }
 
-void LightTablePreview::contentsDragMoveEvent(QDragMoveEvent *e)
+void LightTablePreview::contentsDragEnterEvent(QDragEnterEvent *e)
 {
     if (d->dragAndDropEnabled)
     {
@@ -680,7 +680,7 @@ void LightTablePreview::contentsDragMoveEvent(QDragMoveEvent *e)
         }
     }
 
-    e->ignore();
+    e->acceptProposedAction();
 }
 
 void LightTablePreview::contentsDropEvent(QDropEvent *e)
