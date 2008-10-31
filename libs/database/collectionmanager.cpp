@@ -70,6 +70,7 @@ public:
         m_type       = (Type)info.type;
         specificPath = info.specificPath;
         identifier   = info.identifier;
+        m_label      = info.label;
 
         m_path       = QString();
 
