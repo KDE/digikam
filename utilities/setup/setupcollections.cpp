@@ -367,10 +367,11 @@ void SetupCollections::applySettings()
         if (lvItem)
         {
             QString path(lvItem->path());
+            QString name(lvItem->name());
 
             bool exist = false;
             for (QList<CollectionLocation>::Iterator it2 = d->collections.begin();
-                it2 != d->collections.end(); ++it2)
+                 it2 != d->collections.end(); ++it2)
             {
                 if ((*it2).albumRootPath() == path)
                     exist = true;
@@ -378,8 +379,12 @@ void SetupCollections::applySettings()
 
             if (!exist)
             {
-                CollectionLocation location = manager->addLocation(KUrl(path));
+                CollectionLocation location = manager->addLocation(KUrl(path), name);
                 lvItem->setLocation(location);
+            }
+            else
+            {
+                manager->setLabel(manager->locationForPath(path), name);
             }
         }
         it++;
