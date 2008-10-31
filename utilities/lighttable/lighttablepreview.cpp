@@ -680,7 +680,7 @@ void LightTablePreview::contentsDragEnterEvent(QDragEnterEvent *e)
         }
     }
 
-    e->acceptProposedAction();
+    e->ignore();
 }
 
 void LightTablePreview::contentsDropEvent(QDropEvent *e)

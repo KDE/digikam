@@ -67,7 +67,7 @@ private:
     void viewportPaintEvent(QPaintEvent*);
     void contentsMouseReleaseEvent(QMouseEvent*);
     void startDrag();
-    void contentsDragMoveEvent(QDragMoveEvent*);
+    void contentsDragEnterEvent(QDragEnterEvent*);
     void contentsDropEvent(QDropEvent*);
 
 private slots:

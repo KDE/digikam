@@ -531,7 +531,7 @@ void LightTableBar::startDrag()
     drag->exec();
 }
 
-void LightTableBar::contentsDragMoveEvent(QDragMoveEvent *e)
+void LightTableBar::contentsDragEnterEvent(QDragEnterEvent *e)
 {
     int        albumID;
     QList<int> albumIDs;
