@@ -243,11 +243,12 @@ bool SchemaUpdater::makeUpdates()
                 {
                     QFileInfo currentDBFile(m_access->parameters().databaseName);
                     QString errorMsg = i18n("The schema updating process from version 4 to 5 failed, "
-                                            "caused by an internal error. "
-                                            "Please delete the database files "
-                                            "(\"%1\" and \"%2\" in \"%3\") "
-                                            "if you want to try to run digiKam with an empty database "
-                                            " - it might work then.",
+                                            "caused by an error that we did not expect. "
+                                            "You can try to discard your old database and start with an empty one. "
+                                            "(In this case, please move the database files "
+                                            " \"%1\" and \"%2\") from the directory \"%3\"). "
+                                            "More probably you will want to report this error to the digikam-devel@kde.org "
+                                            "mailing list. As well, please have a look at what digikam prints on the console. ",
                                             QString("digikam3.db"), QString("digikam4.db"), currentDBFile.dir().path());
                     m_observer->error(errorMsg);
                     m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
@@ -840,6 +841,7 @@ bool SchemaUpdater::updateV4toV5()
 
     if (albumLibraryPath.isEmpty())
     {
+        kError(50003) << "Album library path from config file is empty. Aborting update." << endl;
         QString errorMsg = i18n("No album library path has been found in the configuration file. "
                                 "Giving up the schema updating process. "
                                 "Please try with an empty database, or repair your configuration.");
@@ -858,6 +860,20 @@ bool SchemaUpdater::updateV4toV5()
     if (location.isNull())
     {
         kError(50003) << "Failure to create a collection location. Aborting update." << endl;
+        QString errorMsg = i18n("There was an error associating your albumLibraryPath (\"%1\") "
+                                "with a storage volume of your system. "
+                                "This problem may indicate that there is a problem with your installation. "
+                                "If you are working on Linux, check that HAL is installed and running. "
+                                "In any case, you can seek advice from the digikam-devel@kde.org mailing list. "
+                                "The database updating process will now be aborted because we dont want "
+                                "to create a new database based on false assumptions from a broken installation.");
+        m_access->setLastError(errorMsg);
+        m_setError = true;
+        if (m_observer)
+        {
+            m_observer->error(errorMsg);
+            m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+        }
         return false;
     }
 
