@@ -1458,10 +1458,11 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     writableMimetypes.removeAll("image/tiff");
     writableMimetypes.removeAll("image/png");
     writableMimetypes.removeAll("image/jpeg2000");
+    writableMimetypes.removeAll("image/jp2");
     writableMimetypes.insert(0, "image/png");
     writableMimetypes.insert(1, "image/jpeg");
     writableMimetypes.insert(2, "image/tiff");
-    writableMimetypes.insert(3, "image/jpeg2000");
+    writableMimetypes.insert(3, "image/jp2");
 
     kDebug(50003) << "startingSaveAs: Offered mimetypes: " << writableMimetypes << endl;
 
