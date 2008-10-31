@@ -564,7 +564,17 @@ CollectionLocation CollectionManager::addLocation(const KUrl &fileUrl, const QSt
     }
     else
     {
-        kWarning(50003) << "Unable to identify a path with Solid. Adding the location with path only." << endl;
+        // Volumes should never be empty. We refuse fall back here, because then a database with a file path
+        // location will be created and requires manual work to be converted to a proper uuid based one.
+        // If any of our platforms does not provide a Solid backend, we must use the fallback then anyway.
+        if (volumes.isEmpty())
+        {
+            kError(50003) << "Solid did not return any storage volumes on your system.";
+            kError(50003) << "This indicates a problem with your installation (on Linux: Solid and HAL)";
+            return CollectionLocation();
+        }
+        // fall back
+        kWarning(50003) << "Unable to identify a path with Solid. Adding the location with path only.";
         DatabaseAccess().db()->addAlbumRoot(AlbumRoot::VolumeHardWired,
                                             d->volumeIdentifier(path), "/", label);
     }
@@ -947,7 +957,7 @@ void CollectionManager::updateLocations()
         {
             oldStatus << location->status();
 
-            QString volumePath;
+            QString absolutePath;
             bool available = false;
 
             SolidVolumeInfo info = d->findVolumeForLocation(location, volumes);
@@ -955,10 +965,13 @@ void CollectionManager::updateLocations()
             if (!info.isNull())
             {
                 available = true;
-                volumePath = info.path;
+                QString volumePath = info.path;
                 // volume.path has a trailing slash (and this is good)
                 // but specific path has a leading slash, so remove it
                 volumePath.chop(1);
+                // volumePath is the mount point of the volume;
+                // specific path is the path on the file system of the volume.
+                absolutePath = volumePath + location->specificPath;
             }
             else
             {
@@ -966,7 +979,10 @@ void CollectionManager::updateLocations()
                 if (!path.isNull())
                 {
                     available = true;
-                    volumePath = path;
+                    // Here we have the absolute path as definition of the volume.
+                    // specificPath is "/" as per convention, but ignored,
+                    // absolute path shall not have a trailing slash.
+                    absolutePath = path;
                 }
             }
 
@@ -975,8 +991,8 @@ void CollectionManager::updateLocations()
             // set values in location
             // Don't touch location->status, do not interfere with "hidden" setting
             location->available = available;
-            location->setAbsolutePath(volumePath + location->specificPath);
-            kDebug(50003) << "location for " << volumePath + location->specificPath << " is available " << available << endl;
+            location->setAbsolutePath(absolutePath);
+            kDebug(50003) << "location for " << absolutePath << " is available " << available << endl;
             // set the status depending on "hidden" and "available"
             location->setStatusFromFlags();
         }
