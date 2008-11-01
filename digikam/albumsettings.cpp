@@ -278,11 +278,11 @@ void AlbumSettings::readSettings()
                                                                           (int)AlbumSettings::ShowPreview));
 
     d->thumbnailSize                = group.readEntry("Default Icon Size", (int)ThumbnailSize::Medium);
-    d->treeThumbnailSize            = group.readEntry("Default Tree Icon Size", (int)ThumbnailSize::Tiny);
+    d->treeThumbnailSize            = group.readEntry("Default Tree Icon Size", 22);
     d->currentTheme                 = group.readEntry("Theme", i18n("Default"));
 
     d->ratingFilterCond             = group.readEntry("Rating Filter Condition",
-                                                  (int)AlbumLister::GreaterEqualCondition);
+                                                      (int)AlbumLister::GreaterEqualCondition);
     d->recursiveAlbums              = group.readEntry("Recursive Albums", false);
     d->recursiveTags                = group.readEntry("Recursive Tags", true);
 
