@@ -99,7 +99,7 @@ bool DMetadata::loadUsingDcraw(const QString& filePath) const
             setExifTagString("Exif.Image.Artist", identify.owner.toLatin1(), false);
 
         if (identify.sensitivity != -1)
-            setExifTagLong("Exif.Photo.ISOSpeedRatings", identify.sensitivity, false);
+            setExifTagLong("Exif.Photo.ISOSpeedRatings", lroundf(identify.sensitivity), false);
 
         if (identify.dateTime.isValid())
             setImageDateTime(identify.dateTime, false, false);
