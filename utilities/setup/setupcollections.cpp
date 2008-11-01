@@ -434,7 +434,10 @@ void SetupCollections::readSettings()
     for (QList<CollectionLocation>::Iterator it = d->collections.begin();
          it != d->collections.end(); ++it)
     {
-        QString name = i18n("Col. %1", i++);       // TODO: handle root album name set in DB.
+        QString name = (*it).label();
+        if (name.isEmpty()) 
+            name = i18n("Col. %1", i++);
+
         new CollectionListViewItem(d->listView, name, *it);
     }
 }
