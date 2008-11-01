@@ -128,18 +128,18 @@ public:
     // These functions are used by DColorComposer.
     // Look at that code to learn how to use them for
     // composition if you want to use them in optimized code.
-    void blendZero();
-    void blendAlpha8(int alpha);
-    void blendInvAlpha8(int alpha);
-    void blendAlpha16(int alpha);
-    void blendInvAlpha16(int alpha);
-    void premultiply16(int alpha);
-    void premultiply8(int alpha);
-    void demultiply16(int alpha);
-    void demultiply8(int alpha);
-    void blendAdd(const DColor &src);
-    void blendClamp8();
-    void blendClamp16();
+    inline void blendZero();
+    inline void blendAlpha8(int alpha);
+    inline void blendInvAlpha8(int alpha);
+    inline void blendAlpha16(int alpha);
+    inline void blendInvAlpha16(int alpha);
+    inline void premultiply16(int alpha);
+    inline void premultiply8(int alpha);
+    inline void demultiply16(int alpha);
+    inline void demultiply8(int alpha);
+    inline void blendAdd(const DColor &src);
+    inline void blendClamp8();
+    inline void blendClamp16();
 };
 
 }  // namespace Digikam
