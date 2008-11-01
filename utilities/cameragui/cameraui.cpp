@@ -996,7 +996,11 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
     {
         GPItemInfo item = *it;
 
-        if (item.mtime > d->lastAccess && item.downloaded == GPItemInfo::DownloadUnknow)
+        // We query database to check if item have been already downloaded from camera.
+        if (DownloadHistory::status(d->controller->cameraMD5ID(),
+                                    item.name,
+                                    item.size,
+                                    item.mtime) != DownloadHistory::NotDownloaded)
            item.downloaded = GPItemInfo::NewPicture;
 
         d->view->addItem(item);

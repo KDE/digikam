@@ -87,7 +87,8 @@ QString DKCamera::path() const
 QByteArray DKCamera::cameraMD5ID()
 {
     QString camData;
-    camData.append(title());
+    // We don't use camera title from digiKam setting panel to compute MD5 fingerprint, 
+    // because it can be changed by users between session.
     camData.append(model());
     camData.append(port());
     camData.append(path());
