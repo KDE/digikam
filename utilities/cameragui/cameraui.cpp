@@ -1000,7 +1000,7 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
         if (DownloadHistory::status(d->controller->cameraMD5ID(),
                                     item.name,
                                     item.size,
-                                    item.mtime) != DownloadHistory::NotDownloaded)
+                                    item.mtime) != DownloadHistory::Downloaded)
            item.downloaded = GPItemInfo::NewPicture;
 
         d->view->addItem(item);
