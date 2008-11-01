@@ -246,7 +246,13 @@ SearchField *SearchField::createField(const QString &name, SearchFieldGroup *par
         field->setBetweenText("-");
         field->setNoValueText("f/#");
         field->setNumberPrefixAndSuffix("f/", QString());
-        field->setBoundary(0.5, 128, 1, 0.1);
+        field->setBoundary(0.3, 128, 1, 0.1);
+        field->setSuggestedValues(QList<double>()
+                << 0.5 << 0.7 << 1.0 << 1.4 << 2 << 2.8 << 4 << 5.6
+                << 8 << 11 << 16 << 22 << 32 << 45 << 64 << 90 << 128
+                                );
+        field->setSuggestedInitialValue(1.0);
+        field->setSingleSteps(0.1, 10);
         return field;
     }
     else if (name == "focallength")
@@ -256,7 +262,13 @@ SearchField *SearchField::createField(const QString &name, SearchFieldGroup *par
         field->setText(i18n("Focal length"), i18n("Focal length of the lens"));
         field->setBetweenText("-");
         field->setNumberPrefixAndSuffix(QString(), "mm");
-        field->setBoundary(0, 1500, 10);
+        field->setBoundary(0, 20000, 10);
+        field->setSuggestedValues(QList<int>()
+                << 10 << 15 << 20 << 25 << 30 << 40 << 50 << 60 << 70 << 80 << 90
+                << 100 << 150 << 200 << 250 << 300 << 400 << 500 << 750 << 1000
+                                  );
+        field->setSuggestedInitialValue(30);
+        field->setSingleSteps(2, 500);
         return field;
     }
     else if (name == "focallength35")
@@ -266,7 +278,13 @@ SearchField *SearchField::createField(const QString &name, SearchFieldGroup *par
         field->setText(i18n("Focal length"), i18n("35mm equivalent focal length"));
         field->setBetweenText("-");
         field->setNumberPrefixAndSuffix(QString(), "mm");
-        field->setBoundary(0, 1500, 10);
+        field->setBoundary(0, 10000, 10);
+        field->setSuggestedValues(QList<int>()
+                << 8 << 10 << 15 << 16 << 20 << 28 << 30 << 40 << 50 << 60 << 70 << 80
+                << 90 << 100 << 150 << 200 << 250 << 300 << 400 << 500 << 750 << 1000
+                                  );
+        field->setSuggestedInitialValue(28);
+        field->setSingleSteps(2, 500);
         return field;
     }
     else if (name == "exposuretime")
@@ -275,9 +293,16 @@ SearchField *SearchField::createField(const QString &name, SearchFieldGroup *par
         field->setFieldName(name);
         field->setText(i18n("Exposure"), i18n("Exposure time"));
         field->setBetweenText("-");
-        field->setNumberPrefixAndSuffix("1/", "s");
-        field->setBoundary(0, 4000, 10);
-        field->setUseReciprocal(true); // it's 1/250, not 250 as in the spin box
+        field->setNumberPrefixAndSuffix(QString(), "s");
+        field->enableFractionMagic("1/"); // it's 1/250, not 250 as in the spin box
+        field->setBoundary(120, -10000, 10); // negative is 1/
+        field->setSuggestedValues(QList<int>()
+                << 30 << 15 << 8 << 4 << 2 << 1 << -2 << -4 << -8 << -15
+                << -30 << -50 << -60 << -100 << -125 << -150 << -200
+                << -250 << -500 << -750 << -1000 << -2000 << -4000 << -8000
+                                  );
+        field->setSuggestedInitialValue(-200);
+        field->setSingleSteps(2000, 5);
         return field;
     }
     else if (name == "exposureprogram")
@@ -305,6 +330,14 @@ SearchField *SearchField::createField(const QString &name, SearchFieldGroup *par
         field->setText(i18n("Sensitivity"), i18n("ISO film speed (linear scale, ASA)"));
         field->setBetweenText("-");
         field->setBoundary(5, 6400, 50);
+        field->setSuggestedValues(QList<int>()
+                << 6 << 8 << 10 << 12 << 16 << 20 << 25 << 32 << 40 << 50 << 64
+                << 80 << 100 << 125 << 160 << 200 << 250 << 320 << 400 << 500
+                << 640 << 800 << 1000 << 1250 << 1600 << 2000 << 2500 << 3200
+                << 4000 << 5000 << 6400
+                                  );
+        field->setSuggestedInitialValue(200);
+        field->setSingleSteps(1, 400);
         return field;
     }
     else if (name == "flashmode")
@@ -844,8 +877,8 @@ SearchFieldRangeInt::SearchFieldRangeInt(QObject *parent)
       m_firstBox(0), m_secondBox(0)
 {
     m_betweenLabel = new QLabel;
-    m_firstBox  = new QSpinBox;
-    m_secondBox = new QSpinBox;
+    m_firstBox  = new CustomStepsIntSpinBox;
+    m_secondBox = new CustomStepsIntSpinBox;
 }
 
 void SearchFieldRangeInt::setupValueWidgets(QGridLayout *layout, int row, int column)
@@ -880,15 +913,15 @@ void SearchFieldRangeInt::read(SearchXmlCachingReader &reader)
         {
             case SearchXml::LessThanOrEqual:
             case SearchXml::LessThan:
-                m_firstBox->setValue(lround(1.0 / reader.valueToDouble()));
+                m_firstBox->setFractionMagicValue(reader.valueToDouble());
                 break;
             case SearchXml::GreaterThanOrEqual:
             case SearchXml::GreaterThan:
-                m_secondBox->setValue(lround(1.0 / reader.valueToDouble()));
+                m_secondBox->setFractionMagicValue(reader.valueToDouble());
                 break;
             case SearchXml::Equal:
-                m_firstBox->setValue(lround(1.0 / reader.valueToDouble()));
-                m_secondBox->setValue(lround(1.0 / reader.valueToDouble()));
+                m_firstBox->setFractionMagicValue(reader.valueToDouble());
+                m_secondBox->setFractionMagicValue(reader.valueToDouble());
                 break;
             default:
                 break;
@@ -943,7 +976,7 @@ void SearchFieldRangeInt::write(SearchXmlWriter &writer)
             if (m_reciprocal)
             {
                 writer.writeField(m_name, SearchXml::LessThanOrEqual);
-                writer.writeValue(1.0 / (double)m_firstBox->value());
+                writer.writeValue(m_firstBox->fractionMagicValue());
             }
             else
             {
@@ -957,7 +990,7 @@ void SearchFieldRangeInt::write(SearchXmlWriter &writer)
             if (m_reciprocal)
             {
                 writer.writeField(m_name, SearchXml::GreaterThanOrEqual);
-                writer.writeValue(1.0 / (double)m_secondBox->value());
+                writer.writeValue(m_secondBox->fractionMagicValue());
             }
             else
             {
@@ -984,47 +1017,121 @@ void SearchFieldRangeInt::setNumberPrefixAndSuffix(const QString &prefix, const 
 
 void SearchFieldRangeInt::setBoundary(int min, int max, int step)
 {
-    m_min = min;
-    m_max = max;
+    if (m_reciprocal)
+    {
+        m_min = max;
+        m_max = min;
+    }
+    else
+    {
+        m_min = min;
+        m_max = max;
+    }
 
-    m_firstBox->setRange(min, max);
+    m_firstBox->setRange(m_min, m_max);
     m_firstBox->setSingleStep(step);
-    m_firstBox->setValue(min);
+    m_firstBox->setValue(m_min);
 
-    m_secondBox->setRange(min, max);
+    m_secondBox->setRange(m_min, m_max);
     m_secondBox->setSingleStep(step);
-    m_secondBox->setValue(min);
+    m_secondBox->setValue(m_min);
 }
 
-void SearchFieldRangeInt::setUseReciprocal(bool reciprocal)
+void SearchFieldRangeInt::enableFractionMagic(const QString &prefix)
 {
-    m_reciprocal = reciprocal;
+    m_reciprocal = true;
+
+    m_firstBox->enableFractionMagic(prefix);
+    m_firstBox->setInvertStepping(true);
+
+    m_secondBox->enableFractionMagic(prefix);
+    m_secondBox->setInvertStepping(true);
+}
+
+void SearchFieldRangeInt::setSuggestedValues(const QList<int> &values)
+{
+    m_firstBox->setSuggestedValues(values);
+    m_secondBox->setSuggestedValues(values);
+}
+
+void SearchFieldRangeInt::setSuggestedInitialValue(int value)
+{
+    m_firstBox->setSuggestedInitialValue(value);
+    m_secondBox->setSuggestedInitialValue(value);
+}
+
+void SearchFieldRangeInt::setSingleSteps(int smaller, int larger)
+{
+    m_firstBox->setSingleSteps(smaller, larger);
+    m_secondBox->setSingleSteps(smaller, larger);
+}
+
+void SearchFieldRangeInt::setInvertStepping(bool invert)
+{
+    m_firstBox->setInvertStepping(invert);
+    m_secondBox->setInvertStepping(invert);
 }
 
 void SearchFieldRangeInt::valueChanged()
 {
     bool validValue = false;
-    bool firstAtMinimum = (m_firstBox->value() == m_firstBox->minimum());
-    bool secondAtMinimum = (m_secondBox->value() == m_secondBox->minimum());
-    if (!secondAtMinimum)
+    if (m_reciprocal)
     {
-        m_firstBox->setRange(m_min, m_secondBox->value());
-        validValue = true;
+        bool firstAtMinimum = (m_firstBox->value() == m_firstBox->minimum());
+        bool secondAtMinimum = (m_secondBox->value() == m_secondBox->minimum());
+        if (!secondAtMinimum)
+        {
+            m_firstBox->setRange(m_secondBox->value(), m_max);
+            validValue = true;
+        }
+        if (!firstAtMinimum)
+        {
+            m_secondBox->setRange(m_min-1, m_firstBox->value());
+            if (secondAtMinimum)
+            {
+                m_firstBox->setRange(m_min, m_max);
+                m_secondBox->setValue(m_secondBox->minimum());
+            }
+            validValue = true;
+        }
+        if (firstAtMinimum && secondAtMinimum)
+        {
+            m_firstBox->setRange(m_min, m_max);
+            m_secondBox->setRange(m_min, m_max);
+        }
     }
-    if (!firstAtMinimum)
+    else
     {
-        m_secondBox->setRange(m_firstBox->value(), m_max);
-        if (secondAtMinimum)
-            m_secondBox->setValue(m_secondBox->minimum());
-        validValue = true;
+        bool firstAtMinimum = (m_firstBox->value() == m_firstBox->minimum());
+        bool secondAtMinimum = (m_secondBox->value() == m_secondBox->minimum());
+        if (!secondAtMinimum)
+        {
+            m_firstBox->setRange(m_min, m_secondBox->value());
+            validValue = true;
+        }
+        if (!firstAtMinimum)
+        {
+            m_secondBox->setRange(m_firstBox->value(), m_max);
+            if (secondAtMinimum)
+            {
+                m_firstBox->setRange(m_min, m_max);
+                m_secondBox->setValue(m_secondBox->minimum());
+            }
+            validValue = true;
+        }
+        if (firstAtMinimum && secondAtMinimum)
+        {
+            m_firstBox->setRange(m_min, m_max);
+            m_secondBox->setRange(m_min, m_max);
+        }
     }
     setValidValueState(validValue);
 }
 
 void SearchFieldRangeInt::reset()
 {
-    m_firstBox->setValue(m_firstBox->minimum());
-    m_secondBox->setValue(m_secondBox->minimum());
+    m_firstBox->reset();
+    m_secondBox->reset();
 }
 
 void SearchFieldRangeInt::setValueWidgetsVisible(bool visible)
@@ -1049,8 +1156,8 @@ SearchFieldRangeDouble::SearchFieldRangeDouble(QObject *parent)
       m_firstBox(0), m_secondBox(0)
 {
     m_betweenLabel = new QLabel;
-    m_firstBox  = new QDoubleSpinBox;
-    m_secondBox = new QDoubleSpinBox;
+    m_firstBox  = new CustomStepsDoubleSpinBox;
+    m_secondBox = new CustomStepsDoubleSpinBox;
 }
 
 void SearchFieldRangeDouble::setupValueWidgets(QGridLayout *layout, int row, int column)
@@ -1153,6 +1260,30 @@ void SearchFieldRangeDouble::setFactor(double factor)
     m_factor = factor;
 }
 
+void SearchFieldRangeDouble::setSuggestedValues(const QList<double> &values)
+{
+    m_firstBox->setSuggestedValues(values);
+    m_secondBox->setSuggestedValues(values);
+}
+
+void SearchFieldRangeDouble::setSuggestedInitialValue(double value)
+{
+    m_firstBox->setSuggestedInitialValue(value);
+    m_secondBox->setSuggestedInitialValue(value);
+}
+
+void SearchFieldRangeDouble::setSingleSteps(double smaller, double larger)
+{
+    m_firstBox->setSingleSteps(smaller, larger);
+    m_secondBox->setSingleSteps(smaller, larger);
+}
+
+void SearchFieldRangeDouble::setInvertStepping(bool invert)
+{
+    m_firstBox->setInvertStepping(invert);
+    m_secondBox->setInvertStepping(invert);
+}
+
 void SearchFieldRangeDouble::valueChanged()
 {
     bool validValue = false;
@@ -1167,16 +1298,24 @@ void SearchFieldRangeDouble::valueChanged()
     {
         m_secondBox->setRange(m_firstBox->value(), m_max);
         if (secondAtMinimum)
+        {
+            m_firstBox->setRange(m_min, m_max);
             m_secondBox->setValue(m_secondBox->minimum());
+        }
         validValue = true;
+    }
+    if (firstAtMinimum && secondAtMinimum)
+    {
+        m_firstBox->setRange(m_min, m_max);
+        m_secondBox->setRange(m_min, m_max);
     }
     setValidValueState(validValue);
 }
 
 void SearchFieldRangeDouble::reset()
 {
-    m_firstBox->setValue(m_firstBox->minimum());
-    m_secondBox->setValue(m_secondBox->minimum());
+    m_firstBox->reset();
+    m_secondBox->reset();
 }
 
 void SearchFieldRangeDouble::setValueWidgetsVisible(bool visible)

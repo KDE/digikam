@@ -164,7 +164,12 @@ public:
     void setNoValueText(const QString &text);
     void setNumberPrefixAndSuffix(const QString &prefix, const QString &suffix);
     void setBoundary(int min, int max, int step = 1);
-    void setUseReciprocal(bool reciprocal);
+    void enableFractionMagic(const QString &prefix);
+
+    void setSuggestedValues(const QList<int> &values);
+    void setSuggestedInitialValue(int initialValue);
+    void setSingleSteps(int smaller, int larger);
+    void setInvertStepping(bool invert);
 
 protected slots:
 
@@ -175,8 +180,10 @@ protected:
     int             m_min;
     int             m_max;
     bool            m_reciprocal;
-    QSpinBox       *m_firstBox;
-    QSpinBox       *m_secondBox;
+    CustomStepsIntSpinBox
+                   *m_firstBox;
+    CustomStepsIntSpinBox
+                   *m_secondBox;
     QLabel         *m_betweenLabel;
 };
 
@@ -201,6 +208,11 @@ public:
     void setBoundary(double min, double max, int decimals, double step);
     void setFactor(double factor);
 
+    void setSuggestedValues(const QList<double> &values);
+    void setSuggestedInitialValue(double initialValue);
+    void setSingleSteps(double smaller, double larger);
+    void setInvertStepping(bool invert);
+
 protected slots:
 
     void valueChanged();
@@ -210,8 +222,10 @@ protected:
     double          m_min;
     double          m_max;
     double          m_factor;
-    QDoubleSpinBox *m_firstBox;
-    QDoubleSpinBox *m_secondBox;
+    CustomStepsDoubleSpinBox
+                   *m_firstBox;
+    CustomStepsDoubleSpinBox
+                   *m_secondBox;
     QLabel         *m_betweenLabel;
 };
 
