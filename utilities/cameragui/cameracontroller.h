@@ -78,7 +78,7 @@ public:
     void capture();
 
     void downloadPrep();
-    void download(DownloadSettingsContainer downloadSettings);
+    void download(const DownloadSettingsContainer& downloadSettings);
     void upload(const QFileInfo& srcFileInfo, const QString& destFile, const QString& destFolder);
     void deleteFile(const QString& folder, const QString& file);
     void lockFile(const QString& folder, const QString& file, bool lock);
@@ -142,6 +142,8 @@ private:
 
     void addCommand(CameraCommand *cmd);
     bool queueIsEmpty();
+
+private:
 
     CameraControllerPriv *d;
 };
