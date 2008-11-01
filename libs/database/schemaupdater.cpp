@@ -246,9 +246,9 @@ bool SchemaUpdater::makeUpdates()
                                             "caused by an error that we did not expect. "
                                             "You can try to discard your old database and start with an empty one. "
                                             "(In this case, please move the database files "
-                                            " \"%1\" and \"%2\") from the directory \"%3\"). "
+                                            "\"%1\" and \"%2\" from the directory \"%3\"). "
                                             "More probably you will want to report this error to the digikam-devel@kde.org "
-                                            "mailing list. As well, please have a look at what digikam prints on the console. ",
+                                            "mailing list. As well, please have a look at what digiKam prints on the console. ",
                                             QString("digikam3.db"), QString("digikam4.db"), currentDBFile.dir().path());
                     m_observer->error(errorMsg);
                     m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
@@ -865,7 +865,7 @@ bool SchemaUpdater::updateV4toV5()
                                 "This problem may indicate that there is a problem with your installation. "
                                 "If you are working on Linux, check that HAL is installed and running. "
                                 "In any case, you can seek advice from the digikam-devel@kde.org mailing list. "
-                                "The database updating process will now be aborted because we dont want "
+                                "The database updating process will now be aborted because we do not want "
                                 "to create a new database based on false assumptions from a broken installation.");
         m_access->setLastError(errorMsg);
         m_setError = true;
