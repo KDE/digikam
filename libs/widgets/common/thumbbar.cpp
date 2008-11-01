@@ -373,7 +373,7 @@ void ThumbBarView::ensureItemVisible(ThumbBarItem* item)
 {
     if (item)
     {
-        int pos = (int)item->d->pos + d->margin + d->tileSize*.5;
+        int pos = item->d->pos + d->margin + (int)(d->tileSize*.5);
 
         // We want the complete thumb visible and the next one.
         // find the middle of the image and give a margin of 1,5 image

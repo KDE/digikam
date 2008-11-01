@@ -63,14 +63,14 @@ public:
         If sixteenBit is true, 8 bytes are read.
         Inline method.
      */
-    void setColor(const uchar *data, bool sixteenBit = false);
+    inline void setColor(const uchar *data, bool sixteenBit = false);
 
     /** Write the values of this color to the given memory location.
         If sixteenBit is false, 4 bytes are written.
         If sixteenBit is true, 8 bytes are written.
         Inline method.
     */
-    void setPixel(uchar *data) const;
+    inline void setPixel(uchar *data) const;
 
     int  red  () const { return m_red; }
     int  green() const { return m_green; }
