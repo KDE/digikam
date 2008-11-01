@@ -102,6 +102,7 @@
 #include "themeengine.h"
 #include "setup.h"
 #include "downloadsettingscontainer.h"
+#include "downloadhistory.h"
 #include "imagepropertiessidebarcamgui.h"
 #include "albummanager.h"
 #include "albumsettings.h"
@@ -1395,12 +1396,17 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
 
         //if (iconItem->isSelected())
           //  slotItemsSelected(iconItem, true);
-    }
 
-    if (status == GPItemInfo::DownloadedYes || status == GPItemInfo::DownloadFailed)
-    {
-        int curr = d->statusProgressBar->progressValue();
-        d->statusProgressBar->setProgressValue(curr+1);
+        if (status == GPItemInfo::DownloadedYes || status == GPItemInfo::DownloadFailed)
+        {
+            int curr = d->statusProgressBar->progressValue();
+            d->statusProgressBar->setProgressValue(curr+1);
+
+            DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
+                                           iconItem->itemInfo()->name,
+                                           iconItem->itemInfo()->size,
+                                           iconItem->itemInfo()->mtime);
+        }
     }
 }
 

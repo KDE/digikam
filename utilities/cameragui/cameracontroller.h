@@ -68,6 +68,8 @@ public:
 
     DKCamera::CameraDriverType cameraDriverType();
 
+    QByteArray cameraMD5ID();
+
     void listFolders();
     void listFiles(const QString& folder);
     void getFreeSpace();

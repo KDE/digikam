@@ -7,7 +7,7 @@
  * Description : abstract camera interface class
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,8 +22,11 @@
  *
  * ============================================================ */
 
-
 #include "dkcamera.h"
+
+// KDE includes.
+
+#include <kcodecs.h>
 
 // Local includes.
 
@@ -34,27 +37,27 @@ namespace Digikam
 
 DKCamera::DKCamera(const QString& title, const QString& model, const QString& port, const QString& path)
 {
-    m_title               = title;
-    m_model               = model;
-    m_port                = port;
-    m_path                = path;
-    m_thumbnailSupport    = false;
-    m_deleteSupport       = false;
-    m_uploadSupport       = false;
-    m_mkDirSupport        = false;
-    m_delDirSupport       = false;
-    m_captureImageSupport = false;
+    m_title                 = title;
+    m_model                 = model;
+    m_port                  = port;
+    m_path                  = path;
+    m_thumbnailSupport      = false;
+    m_deleteSupport         = false;
+    m_uploadSupport         = false;
+    m_mkDirSupport          = false;
+    m_delDirSupport         = false;
+    m_captureImageSupport   = false;
 
     AlbumSettings* settings = AlbumSettings::instance();
-    m_imageFilter = settings->getImageFileFilter();
-    m_movieFilter = settings->getMovieFileFilter();
-    m_audioFilter = settings->getAudioFileFilter();
-    m_rawFilter   = settings->getRawFileFilter();
+    m_imageFilter           = settings->getImageFileFilter();
+    m_movieFilter           = settings->getMovieFileFilter();
+    m_audioFilter           = settings->getAudioFileFilter();
+    m_rawFilter             = settings->getRawFileFilter();
 
-    m_imageFilter = m_imageFilter.toLower();
-    m_movieFilter = m_movieFilter.toLower();
-    m_audioFilter = m_audioFilter.toLower();
-    m_rawFilter   = m_rawFilter.toLower();
+    m_imageFilter           = m_imageFilter.toLower();
+    m_movieFilter           = m_movieFilter.toLower();
+    m_audioFilter           = m_audioFilter.toLower();
+    m_rawFilter             = m_rawFilter.toLower();
 }
 
 DKCamera::~DKCamera()
@@ -79,6 +82,17 @@ QString DKCamera::port() const
 QString DKCamera::path() const
 {
     return m_path;
+}
+
+QByteArray DKCamera::cameraMD5ID()
+{
+    QString camData;
+    camData.append(title());
+    camData.append(model());
+    camData.append(port());
+    camData.append(path());
+    KMD5 md5(camData.toUtf8());
+    return md5.hexDigest();
 }
 
 bool DKCamera::thumbnailSupport()

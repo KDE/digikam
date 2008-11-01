@@ -276,6 +276,12 @@ DKCamera::CameraDriverType CameraController::cameraDriverType()
     return d->camera->cameraDriverType();
 }
 
+QByteArray CameraController::cameraMD5ID()
+{
+    if (!d->camera) return QByteArray();
+    return d->camera->cameraMD5ID();
+}
+
 void CameraController::slotCancel()
 {
     d->canceled = true;
