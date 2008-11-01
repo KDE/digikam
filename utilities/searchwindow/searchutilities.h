@@ -32,6 +32,8 @@
 #include <QLineEdit>
 #include <QString>
 #include <QComboBox>
+#include <QDoubleSpinBox>
+#include <QSpinBox>
 
 // KDE includes.
 
@@ -204,6 +206,122 @@ private:
     QTimeLine *m_timeline;
     QPixmap    m_pixmap;
     bool       m_stayAlwaysVisible;
+};
+
+class CustomStepsDoubleSpinBox : public QDoubleSpinBox
+{
+    Q_OBJECT
+
+public:
+
+    /** This is a normal QDoubleSpinBox which allows to
+     *  customise the stepping behavior, for cases where
+     *  linear steps are not applicable
+     */
+
+    CustomStepsDoubleSpinBox(QWidget *parent = 0);
+
+    virtual void stepBy(int steps);
+
+    /** Set a list of values that are usually applicable for the
+     *  type of data of the combo box. The user can still type in
+     *  any other value. Boundaries are not touched.
+     *  Up or below the min and max values of the list given,
+     *  default stepping is used.
+     */
+    void setSuggestedValues(const QList<double> &values);
+
+    /** Sets the value that should be set as first value
+     *  when first moving away from the minimum value. */
+    void setSuggestedInitialValue(double initialValue);
+
+    /** Allows to set to different default single steps,
+     *  for for the range below m_values, the other for above */
+    void setSingleSteps(double smaller, double larger);
+
+    void setInvertStepping(bool invert);
+
+    /** Resets to minimum value */
+    void reset();
+
+private slots:
+
+    void slotValueChanged(double d);
+
+private:
+
+    bool          m_beforeInitialValue;
+    QList<double> m_values;
+    double        m_initialValue;
+    double        m_smallerStep;
+    double        m_largerStep;
+    bool          m_invertStepping;
+};
+
+class CustomStepsIntSpinBox : public QSpinBox
+{
+    Q_OBJECT
+
+public:
+
+    /** This is a normal QIntSpinBox which allows to
+     *  customise the stepping behavior, for cases where
+     *  linear steps are not applicable
+     */
+
+    CustomStepsIntSpinBox(QWidget *parent = 0);
+
+    virtual void stepBy(int steps);
+
+    /** Set a list of values that are usually applicable for the
+     *  type of data of the combo box. The user can still type in
+     *  any other value. Boundaries are not touched.
+     *  Up or below the min and max values of the list given,
+     *  default stepping is used.
+     */
+    void setSuggestedValues(const QList<int> &values);
+
+    /** Sets the value that should be set as first value
+     *  when first moving away from the minimum value. */
+    void setSuggestedInitialValue(int initialValue);
+
+    /** Allows to set to different default single steps,
+     *  for for the range below m_values, the other for above */
+    void setSingleSteps(int smaller, int larger);
+
+    void setInvertStepping(bool invert);
+
+    /** Call this with a fraction prefix (like "1/") to enable
+     *  magic handling of the value as fraction denominator. */
+    void enableFractionMagic(const QString &prefix);
+
+    /** Resets to minimum value */
+    void reset();
+
+    /** value() and setValue() for fraction magic value. */
+    double fractionMagicValue() const;
+    void setFractionMagicValue(double value);
+
+protected:
+
+    virtual QString textFromValue(int value) const;
+    virtual int valueFromText(const QString &text) const;
+    virtual StepEnabled stepEnabled() const;
+
+private slots:
+
+    void slotValueChanged(int d);
+
+private:
+
+    bool          m_beforeInitialValue;
+    QList<int>    m_values;
+    int           m_initialValue;
+    int           m_smallerStep;
+    int           m_largerStep;
+    bool          m_invertStepping;
+    QString       m_fractionPrefix;
+    QString       m_fractionSpecialValueText;
 };
 
 class StyleSheetDebugger : public QWidget
