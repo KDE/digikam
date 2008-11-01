@@ -109,7 +109,7 @@ SetupMime::SetupMime(QWidget* parent)
     QGridLayout* grid1            = new QGridLayout(imageFileFilterBox);
 
     QLabel *logoLabel1 = new QLabel(imageFileFilterBox);
-    logoLabel1->setPixmap(DesktopIcon("image-jpeg2000"));
+    logoLabel1->setPixmap(DesktopIcon("image-jp2"));
 
     d->imageFileFilterLabel = new QLabel(imageFileFilterBox);
     d->imageFileFilterLabel->setText(i18n("Customize &image file extensions (<a href='image'>Currently-supported types</a>):"));

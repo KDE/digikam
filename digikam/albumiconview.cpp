@@ -1300,7 +1300,7 @@ void AlbumIconView::startDrag()
     if (urls.isEmpty())
         return;
 
-    QPixmap icon(DesktopIcon("image-jpeg2000", 48));
+    QPixmap icon(DesktopIcon("image-jp2", 48));
     int w = icon.width();
     int h = icon.height();
 
