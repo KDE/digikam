@@ -1839,10 +1839,11 @@ QStringList AlbumDB::getItemNamesInAlbum(int albumID, bool recurssive)
     {
         KUrl url(getAlbumRelativePath(albumID));
         int rootId = getAlbumRootId(albumID);
+        QString path = url.path();
         d->db->execSql( QString("SELECT Images.name FROM Images WHERE Images.album IN "
                                 " (SELECT DISTINCT id FROM Albums "
                                 "  WHERE albumRoot=? AND (relativePath=? OR relativePath LIKE ?));"),
-                        rootId, url.path(), url.path() + "/%",
+                        rootId, path, path == "/" ? "/%" : path + "/%",
                         &values );
     }
     else
@@ -2030,7 +2031,7 @@ QList<int> AlbumDB::getAlbumAndSubalbumsForPath(int albumRootId, const QString& 
 {
     QList<QVariant> values;
     d->db->execSql( QString("SELECT id FROM Albums WHERE albumRoot=? AND (relativePath=? OR relativePath LIKE ?);"),
-                    albumRootId, relativePath, relativePath + "/%", &values);
+                    albumRootId, relativePath, (relativePath == "/" ? "/%" : relativePath + "/%"), &values);
 
     QList<int> albumIds;
     for (QList<QVariant>::iterator it = values.begin(); it != values.end(); ++it)
