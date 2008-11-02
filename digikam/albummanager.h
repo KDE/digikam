@@ -475,6 +475,7 @@ private slots:
     void slotTagsJobData(KIO::Job* job, const QByteArray& data);
     void slotDirty(const QString& path);
     void slotCollectionLocationStatusChanged(const CollectionLocation &, int);
+    void slotCollectionLocationPropertiesChanged(const CollectionLocation &location);
     void slotAlbumChange(const AlbumChangeset &changeset);
     void slotTagChange(const TagChangeset &changeset);
     void slotSearchChange(const SearchChangeset &changeset);

@@ -210,6 +210,14 @@ public:
         }
         return modList;
     }
+
+    QString labelForAlbumRootAlbum(const CollectionLocation &location)
+    {
+        QString label = location.label();
+        if (label.isEmpty())
+            label = location.albumRootPath();
+        return label;
+    }
 };
 
 class ChangingDB
@@ -540,6 +548,8 @@ void AlbumManager::startScan()
     // listen to location status changes
     connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(const CollectionLocation &, int)),
             this, SLOT(slotCollectionLocationStatusChanged(const CollectionLocation &, int)));
+    connect(CollectionManager::instance(), SIGNAL(locationPropertiesChanged(const CollectionLocation &)),
+            this, SLOT(slotCollectionLocationPropertiesChanged(const CollectionLocation &)));
 
     // reload albums
     refresh();
@@ -582,6 +592,21 @@ void AlbumManager::slotCollectionLocationStatusChanged(const CollectionLocation 
     }
 }
 
+void AlbumManager::slotCollectionLocationPropertiesChanged(const CollectionLocation &location)
+{
+    PAlbum *album = d->albumRootAlbumHash.value(location.id());
+    if (album)
+    {
+        QString newLabel = d->labelForAlbumRootAlbum(location);
+        kDebug() << newLabel << album->title();
+        if (album->title() != newLabel)
+        {
+            album->setTitle(newLabel);
+            emit signalAlbumRenamed(album);
+        }
+    }
+}
+
 void AlbumManager::addAlbumRoot(const CollectionLocation &location)
 {
     if (!d->dirWatch->contains(location.albumRootPath()))
@@ -591,9 +616,7 @@ void AlbumManager::addAlbumRoot(const CollectionLocation &location)
     if (!album)
     {
         // Create a PAlbum for the Album Root.
-        QString label = location.label();
-        if (label.isEmpty())
-            label = location.albumRootPath();
+        QString label = d->labelForAlbumRootAlbum(location);
         album = new PAlbum(location.id(), label);
 
         // insert album root created into hash and tree
