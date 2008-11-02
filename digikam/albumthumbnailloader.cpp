@@ -445,7 +445,7 @@ void AlbumThumbnailLoader::slotDispatchThumbnailInternal(int albumID, const QPix
 
 void AlbumThumbnailLoader::slotIconChanged(Album* album)
 {
-    if(!album || album->type() != Album::TAG)
+    if (!album || (album->type() != Album::TAG && album->type() != Album::PHYSICAL))
         return;
 
     d->thumbnailMap.remove(album->globalID());
