@@ -24,10 +24,6 @@
 
 #include "dkcamera.h"
 
-// KDE includes.
-
-#include <kcodecs.h>
-
 // Local includes.
 
 #include "albumsettings.h"
@@ -82,18 +78,6 @@ QString DKCamera::port() const
 QString DKCamera::path() const
 {
     return m_path;
-}
-
-QByteArray DKCamera::cameraMD5ID()
-{
-    QString camData;
-    // We don't use camera title from digiKam setting panel to compute MD5 fingerprint, 
-    // because it can be changed by users between session.
-    camData.append(model());
-    camData.append(port());
-    camData.append(path());
-    KMD5 md5(camData.toUtf8());
-    return md5.hexDigest();
 }
 
 bool DKCamera::thumbnailSupport()

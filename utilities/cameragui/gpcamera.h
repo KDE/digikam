@@ -49,6 +49,8 @@ public:
              const QString& port, const QString& path);
     ~GPCamera();
 
+    QByteArray cameraMD5ID();
+
     bool doConnect();
 
     void cancel();

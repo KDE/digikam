@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "gpcamera.h"
 
 // C++ includes.
@@ -42,6 +41,7 @@
 
 // KDE includes.
 
+#include <kcodecs.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -143,6 +143,24 @@ GPCamera::~GPCamera()
 #endif /* ENABLE_GPHOTO2 */
 
     delete d;
+}
+
+QByteArray GPCamera::cameraMD5ID()
+{
+    QByteArray md5data;
+
+#ifdef ENABLE_GPHOTO2
+    QString camData;
+    // We don't use camera title from digiKam settings panel to compute MD5 fingerprint, 
+    // because it can be changed by users between session.
+    camData.append(model());
+    camData.append(port());
+    camData.append(path());
+    KMD5 md5(camData.toUtf8());
+    md5data = md5.hexDigest();
+#endif /* ENABLE_GPHOTO2 */
+
+    return md5data;
 }
 
 bool GPCamera::doConnect()

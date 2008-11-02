@@ -85,12 +85,12 @@ public:
 
     virtual bool getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail) = 0;
 
+    virtual QByteArray cameraMD5ID() = 0;
+
     QString title() const;
     QString model() const;
     QString port()  const;
     QString path()  const;
-
-    QByteArray cameraMD5ID();
 
     bool thumbnailSupport();
     bool deleteSupport();
