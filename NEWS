@@ -14,7 +14,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 173691 : digiKam doesn't show pictures.
 003 ==> 091811 : feature request: find pictures by meta tag info, date.
 004 ==> 173853 : seg fault digiKam with marble widget (at startup).
-005 ==> 
+005 ==> 173995 : digiKam crashes on loading main view.
+006 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta5 - Release date: 2008-10-26
