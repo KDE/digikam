@@ -41,6 +41,7 @@ namespace Digikam
 {
 
 class CollectionLocation;
+class AlbumRootChangeset;
 class CollectionManagerPrivate;
 
 class DIGIKAM_DATABASE_EXPORT CollectionManager : public QObject
@@ -207,9 +208,13 @@ signals:
      */
     void locationStatusChanged(const CollectionLocation &location, int oldStatus);
 
+    /** Emitted when the label of a collection location is changed */
+    void locationPropertiesChanged(const CollectionLocation &location);
+
 private slots:
 
     void deviceChange(const QString &);
+    void slotAlbumRootChange(const AlbumRootChangeset &changeset);
 
 private:
 

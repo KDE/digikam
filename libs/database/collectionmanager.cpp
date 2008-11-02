@@ -49,6 +49,7 @@
 // Local includes.
 
 #include "databaseaccess.h"
+#include "databasechangesets.h"
 #include "albumdb.h"
 #include "collectionlocation.h"
 
@@ -163,6 +164,7 @@ public:
     CollectionManagerPrivate(CollectionManager *s);
 
     QMap<int, AlbumRootLocation *> locations;
+    bool changingDB;
 
     // hack for Solid's threading problems
     QList<SolidVolumeInfo> actuallyListVolumes();
@@ -200,6 +202,20 @@ public:
     CollectionManager *s;
 };
 
+class ChangingDB
+{
+public:
+    ChangingDB(CollectionManagerPrivate *d) : d(d)
+    {
+        d->changingDB = true;
+    }
+    ~ChangingDB()
+    {
+        d->changingDB = false;
+    }
+    CollectionManagerPrivate *d;
+};
+
 }
 
 // This is because of the private slot; we'd want a collectionmanager_p.h
@@ -209,7 +225,7 @@ namespace Digikam
 {
 
 CollectionManagerPrivate::CollectionManagerPrivate(CollectionManager *s)
-    : s(s)
+    : changingDB(false), s(s)
 {
     QObject::connect(s, SIGNAL(triggerUpdateVolumesList()),
                      s, SLOT(slotTriggerUpdateVolumesList()),
@@ -561,6 +577,7 @@ CollectionLocation CollectionManager::addLocation(const KUrl &fileUrl, const QSt
         else
             type = AlbumRoot::VolumeHardWired;
 
+        ChangingDB changing(d);
         access.db()->addAlbumRoot(type, d->volumeIdentifier(volume), specificPath, label);
     }
     else
@@ -576,6 +593,7 @@ CollectionLocation CollectionManager::addLocation(const KUrl &fileUrl, const QSt
         }
         // fall back
         kWarning(50003) << "Unable to identify a path with Solid. Adding the location with path only.";
+        ChangingDB changing(d);
         DatabaseAccess().db()->addAlbumRoot(AlbumRoot::VolumeHardWired,
                                             d->volumeIdentifier(path), "/", label);
     }
@@ -691,6 +709,7 @@ void CollectionManager::removeLocation(const CollectionLocation &location)
         if (!albumLoc)
             return;
 
+        ChangingDB changing(d);
         access.db()->deleteAlbumRoot(albumLoc->id());
     }
 
@@ -708,10 +727,13 @@ void CollectionManager::setLabel(const CollectionLocation &location, const QStri
         return;
 
     // update db
+    ChangingDB db();
     access.db()->setAlbumRootLabel(albumLoc->id(), label);
 
     // update local structure
     albumLoc->setLabel(label);
+
+    emit locationPropertiesChanged(*albumLoc);
 }
 
 QList<CollectionLocation> CollectionManager::allLocations()
@@ -1010,5 +1032,47 @@ void CollectionManager::updateLocations()
         }
     }
 }
+
+void CollectionManager::slotAlbumRootChange(const AlbumRootChangeset &changeset)
+{
+    if (d->changingDB)
+        return;
+
+    switch(changeset.operation())
+    {
+        case AlbumRootChangeset::Added:
+        case AlbumRootChangeset::Deleted:
+            updateLocations();
+            break;
+        case AlbumRootChangeset::PropertiesChanged:
+            // label has changed
+            {
+                CollectionLocation toBeEmitted;
+                {
+                    DatabaseAccess access;
+                    AlbumRootLocation *location = d->locations.value(changeset.albumRootId());
+                    if (location)
+                    {
+                        QList<AlbumRootInfo> infos = access.db()->getAlbumRoots();
+                        foreach (const AlbumRootInfo &info, infos)
+                        {
+                            if (info.id == location->id())
+                            {
+                                location->setLabel(info.label);
+                                toBeEmitted = *location;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (!toBeEmitted.isNull())
+                    emit locationPropertiesChanged(toBeEmitted);
+            }
+            break;
+        case AlbumRootChangeset::Unknown:
+            break;
+    }
+}
+
 
 }  // namespace Digikam
