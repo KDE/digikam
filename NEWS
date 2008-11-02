@@ -15,7 +15,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 091811 : feature request: find pictures by meta tag info, date.
 004 ==> 173853 : seg fault digiKam with marble widget (at startup).
 005 ==> 173995 : digiKam crashes on loading main view.
-006 ==> 
+006 ==> 163143 : digiKam doesn't detect new photos in import from a camera.
+007 ==> 107316 : Option: Only download new photos from camera.
+008 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta5 - Release date: 2008-10-26
