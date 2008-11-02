@@ -313,15 +313,13 @@ void AlbumIconView::setThumbnailSize(const ThumbnailSize& thumbSize)
 {
     if ( d->thumbSize != thumbSize)
     {
-        d->imageLister->stop();
-        clear();
-
         d->thumbSize = thumbSize;
         ThumbnailLoadThread::defaultIconViewThread()->setThumbnailSize(d->thumbSize.size());
 
         updateRectsAndPixmaps();
-
-        d->imageLister->openAlbum(d->currentAlbum);
+        IconItem *currentIconItem = currentItem();
+        triggerRearrangement();
+        setStoredVisibleItem(currentIconItem);
     }
 }
 
