@@ -53,7 +53,7 @@ KDE4_ADD_APP_ICON(showfoto_SRCS "../data/icons/hi*-app-showfoto.png")
 
 KDE4_ADD_EXECUTABLE(showfoto ${showfoto_SRCS})
 
-TARGET_LINK_LIBRARIES(showfoto digikam)
+TARGET_LINK_LIBRARIES(showfoto digikamcore)
 
 INSTALL(TARGETS showfoto ${INSTALL_TARGETS_DEFAULT_ARGS})
 

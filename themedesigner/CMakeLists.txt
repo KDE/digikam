@@ -94,7 +94,6 @@ SET(digikamthemedesigner_SRCS
     ${libcameragui_SRCS}
     ${libsetup_SRCS}
     ${libbatch_SRCS}
-#    ${libhaar_SRCS}
 
     main.cpp 
     mainwindow.cpp 
@@ -106,7 +105,7 @@ SET(digikamthemedesigner_SRCS
 KDE4_ADD_EXECUTABLE(digikamthemedesigner ${digikamthemedesigner_SRCS})
 
 TARGET_LINK_LIBRARIES(digikamthemedesigner 
-                      digikam 
+                      digikamcore 
                       digikamdatabase 
                       ${KDE4_KUTILS_LIBS}
 		      ${KIPI_LIBRARIES}

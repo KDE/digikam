@@ -60,9 +60,9 @@ INCLUDE_DIRECTORIES(
                    )
 
 
-# Shared libdigikam ################################################################
+# Shared libdigikamcore ################################################################
 
-SET(digikam_LIB_SRCS
+SET(digikamcore_LIB_SRCS
                         # basic libs
                         ${libdimg_SRCS}
                         ${libdimgloaders_SRCS}
@@ -94,9 +94,9 @@ SET(digikam_LIB_SRCS
                         ${librawimport_SRCS}
    )
 
-KDE4_ADD_LIBRARY(digikam SHARED ${digikam_LIB_SRCS})
+KDE4_ADD_LIBRARY(digikamcore SHARED ${digikamcore_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(digikam
+TARGET_LINK_LIBRARIES(digikamcore
                       ${KDE4_KDECORE_LIBS} 
                       ${KDE4_KIO_LIBS} 
                       ${KDE4_KHTML_LIBS} 
@@ -121,15 +121,15 @@ TARGET_LINK_LIBRARIES(digikam
               )
 
 IF(MARBLEWIDGET_FOUND)
-    TARGET_LINK_LIBRARIES(digikam ${LIBMARBLEWIDGET_LIBRARY})
+    TARGET_LINK_LIBRARIES(digikamcore ${LIBMARBLEWIDGET_LIBRARY})
 ENDIF(MARBLEWIDGET_FOUND)
 
-SET_TARGET_PROPERTIES(digikam PROPERTIES VERSION 1.0.0 SOVERSION 1)
+SET_TARGET_PROPERTIES(digikamcore PROPERTIES VERSION 1.0.0 SOVERSION 1)
 IF(WIN32)
-    SET_TARGET_PROPERTIES(digikam PROPERTIES COMPILE_FLAGS -DJPEG_STATIC)
-    SET_TARGET_PROPERTIES(digikam PROPERTIES OUTPUT_NAME digikamlib)
+    SET_TARGET_PROPERTIES(digikamcore PROPERTIES COMPILE_FLAGS -DJPEG_STATIC)
+    SET_TARGET_PROPERTIES(digikamcore PROPERTIES OUTPUT_NAME digikamlib)
 ENDIF(WIN32)
-INSTALL(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
+INSTALL(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 # Shared libdigikamdatabase ########################################################
@@ -147,7 +147,7 @@ SET(digikamdatabase_LIB_SRCS ${libdatabase_SRCS}
 KDE4_ADD_LIBRARY(digikamdatabase SHARED ${digikamdatabase_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(digikamdatabase
-                      digikam
+                      digikamcore
                       ${KDE4_KIO_LIBS}
                       ${KDE4_SOLID_LIBS}
                       ${KEXIV2_LIBRARIES}
@@ -166,7 +166,7 @@ INSTALL(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 # digiKam binary progam #########################################################
 
-SET(digikam_bin_SRCS
+SET(digikam_SRCS
                      ${libdimgimagewindow_SRCS}
                      ${libdeletedialog_SRCS}
                      ${libimagepropertiesdigikam_SRCS}
@@ -234,30 +234,28 @@ SET(digikam_bin_SRCS
                      welcomepageview.cpp 
     )
 
-QT4_ADD_DBUS_ADAPTOR(digikam_bin_SRCS org.kde.digikam.xml digikamapp.h Digikam::DigikamApp)
+QT4_ADD_DBUS_ADAPTOR(digikam_SRCS org.kde.digikam.xml digikamapp.h Digikam::DigikamApp)
 
-KDE4_ADD_APP_ICON(digikam_bin_SRCS "../data/icons/hi*-app-digikam.png")
+KDE4_ADD_APP_ICON(digikam_SRCS "../data/icons/hi*-app-digikam.png")
 
-KDE4_ADD_EXECUTABLE(digikam_bin ${digikam_bin_SRCS})
+KDE4_ADD_EXECUTABLE(digikam ${digikam_SRCS})
 
-TARGET_LINK_LIBRARIES(digikam_bin
+TARGET_LINK_LIBRARIES(digikam
                       ${KDE4_KPARTS_LIBS}
                       ${KDE4_PHONON_LIBS}
                       ${KDE4_KHTML_LIBS}
                       ${KIPI_LIBRARIES}
                       ${STRIGI_LIBRARIES}
                       ${GPHOTO2_LIBRARIES}
-                      digikam
+                      digikamcore
                       digikamdatabase
                      )
 
 IF(KDEPIMLIBS_FOUND)
-  TARGET_LINK_LIBRARIES(digikam_bin ${KDE4_KABC_LIBS})
+  TARGET_LINK_LIBRARIES(digikam ${KDE4_KABC_LIBS})
 ENDIF(KDEPIMLIBS_FOUND)
 
-SET_TARGET_PROPERTIES(digikam_bin PROPERTIES OUTPUT_NAME digikam)
-
-INSTALL(TARGETS digikam_bin ${INSTALL_TARGETS_DEFAULT_ARGS})
+INSTALL(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 # Others Files to install #######################################################

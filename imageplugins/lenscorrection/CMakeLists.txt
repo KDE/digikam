@@ -1,9 +1,9 @@
+
 INCLUDE_DIRECTORIES(autocorrection
                     distortion
                     vignetting
                     ${CMAKE_CURRENT_BINARY_DIR}/../../
                    )
-
 
 SET(autocorrection_SRCS autocorrection/autocorrectiontool.cpp 
                         autocorrection/klensfun.cpp
@@ -32,7 +32,7 @@ KDE4_ADD_PLUGIN(digikamimageplugin_lenscorrection ${digikamimageplugin_lenscorre
 
 TARGET_LINK_LIBRARIES(
     digikamimageplugin_lenscorrection
-    digikam
+    digikamcore
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}
@@ -47,6 +47,5 @@ IF(LENSFUN_LIBRARY)
 ENDIF(LENSFUN_LIBRARY)
 
 INSTALL(TARGETS digikamimageplugin_lenscorrection DESTINATION ${PLUGIN_INSTALL_DIR})
-
 INSTALL(FILES digikamimageplugin_lenscorrection_ui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
 INSTALL(FILES digikamimageplugin_lenscorrection.desktop DESTINATION ${SERVICES_INSTALL_DIR})

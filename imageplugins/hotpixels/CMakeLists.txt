@@ -11,7 +11,7 @@ KDE4_ADD_PLUGIN(digikamimageplugin_hotpixels ${digikamimageplugin_hotpixels_PART
 
 TARGET_LINK_LIBRARIES(
     digikamimageplugin_hotpixels
-    digikam
+    digikamcore
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}
@@ -21,6 +21,5 @@ TARGET_LINK_LIBRARIES(
     )
 
 INSTALL(TARGETS digikamimageplugin_hotpixels DESTINATION ${PLUGIN_INSTALL_DIR})
-
 INSTALL(FILES digikamimageplugin_hotpixels_ui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
 INSTALL(FILES digikamimageplugin_hotpixels.desktop DESTINATION ${SERVICES_INSTALL_DIR})
