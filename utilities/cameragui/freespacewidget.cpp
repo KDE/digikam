@@ -116,11 +116,11 @@ void FreeSpaceWidget::setMode(FreeSpaceMode mode)
     }
     else if (d->mode == FreeSpaceWidget::UMSCamera)
     {
-        d->iconPix = SmallIcon("camera");
+        d->iconPix = SmallIcon("camera-photo");
     }
     else // GPhotoCamera
     {
-        d->iconPix = SmallIcon("camera");
+        d->iconPix = SmallIcon("camera-photo");
     }
     updatePixmap();
 }
@@ -241,11 +241,14 @@ void FreeSpaceWidget::updatePixmap()
         QString headBeg("<tr bgcolor=\"#73CAE6\"><td colspan=\"2\">"
                         "<nobr><font size=\"-1\" color=\"black\"><b>");
         QString headEnd("</b></font></nobr></td></tr>");
-        QString cellBeg("<tr><td><nobr><font size=-1>");
-        QString cellMid("</font></nobr></td><td><nobr><font size=-1>");
+
+        QString cellBeg("<tr><td><nobr><font size=\"-1\" color=\"black\">");
+        QString cellMid("</font></nobr></td>"
+                        "<td><nobr><font size=\"-1\" color=\"black\">");
         QString cellEnd("</font></nobr></td></tr>");
-        tipText  = "<table cellspacing=0 cellpadding=0>";
-        tipText += headBeg + header + headEnd;
+
+        tipText = "<table cellspacing=\"0\" cellpadding=\"0\">";
+        tipText.append(headBeg + header + headEnd);
 
         if (d->dSizeKb > 0)
         {
@@ -267,7 +270,7 @@ void FreeSpaceWidget::updatePixmap()
             tipText += KIO::convertSizeFromKiB(d->kBAvail) + cellEnd;
         }
 
-        tipText += "</table>";
+        tipText.append("</table>");
 
         setWhatsThis(tipText);
         setToolTip(tipText);
@@ -300,24 +303,24 @@ void FreeSpaceWidget::slotTimeout()
     KMountPoint::Ptr mp    = list.findByPath(d->path);
     if (mp)
     {
-        KDiskFreeSpace *job = new KDiskFreeSpace;
-        connect(job, SIGNAL(foundMountPoint(QString, quint64, quint64, quint64)),
-                this, SLOT(slotAvailableFreeSpace(QString, quint64, quint64, quint64)));
+        KDiskFreeSpace *job = new KDiskFreeSpace(this);
+        connect(job, SIGNAL(foundMountPoint(const QString&, quint64, quint64, quint64)),
+                this, SLOT(slotAvailableFreeSpace(const QString&, quint64, quint64, quint64)));
         job->readDF(mp->mountPoint());
     }
 }
 #endif /* KDE_IS_VERSION(4,1,68) */
 
-void FreeSpaceWidget::slotAvailableFreeSpace(QString mountPoint, quint64 kBSize,
+void FreeSpaceWidget::slotAvailableFreeSpace(const QString& mountPoint, quint64 kBSize,
                                              quint64 kBUsed, quint64 kBAvail)
 {
 #if KDE_IS_VERSION(4,1,68)
-    setInformations(kBSize, kBUsed, kBAvail, mountPoint);
-#else
     Q_UNUSED(mountPoint);
     Q_UNUSED(kBSize);
     Q_UNUSED(kBUsed);
     Q_UNUSED(kBAvail);
+#else
+    setInformations(kBSize, kBUsed, kBAvail, mountPoint);
 #endif /* KDE_IS_VERSION(4,1,68) */
 }
 

@@ -48,6 +48,10 @@ extern "C"
 #include <kdebug.h>
 #include <klocale.h>
 #include <kfilemetainfo.h>
+#include <solid/device.h>
+#include <solid/storageaccess.h>
+#include <solid/storagedrive.h>
+#include <solid/storagevolume.h>
 
 // LibKDcraw includes.
 
@@ -66,6 +70,7 @@ UMSCamera::UMSCamera(const QString& title, const QString& model,
          : DKCamera(title, model, port, path)
 {
     m_cancel = false;
+    getUUIDFromSolid();
 }
 
 UMSCamera::~UMSCamera()
@@ -75,11 +80,15 @@ UMSCamera::~UMSCamera()
 QByteArray UMSCamera::cameraMD5ID()
 {
     QString camData;
+    // Camera media UUID is used (if available) to improve fingerprint value
+    // registration to database. We want to be sure that MD5 sum is really uniq. 
+    camData.append(uuid());
     // We don't use camera title from digiKam settings panel to compute MD5 fingerprint, 
     // because it can be changed by users between session.
     camData.append(model());
     camData.append(port());
     camData.append(path());
+
     KMD5 md5(camData.toUtf8());
     return md5.hexDigest();
 }
@@ -242,7 +251,6 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
         if (!thumbnail.isNull())
            return true;
     }
-
 
     // Finally, we trying to get thumbnail using DImg API (slow).
 
@@ -507,11 +515,13 @@ bool UMSCamera::cameraSummary(QString& summary)
     summary += i18n("Title: <b>%1</b><br/>"
                     "Model: <b>%2</b><br/>"
                     "Port: <b>%3</b><br/>"
-                    "Path: <b>%4</b><br/><br/>",
+                    "Path: <b>%4</b><br/>"
+                    "UUID: <b>%5</b><br/><br/>",
                     title(),
                     model(),
                     port(),
-                    path());
+                    path(),
+                    uuid());
 
     summary += i18n("Thumbnails: <b>%1</b><br/>"
                     "Capture image: <b>%2</b><br/>"
@@ -544,6 +554,55 @@ bool UMSCamera::cameraAbout(QString& about)
                          "To report any problems with this driver, please contact the digiKam team at:<br/><br/>"
                          "http://www.digikam.org/?q=contact"));
     return true;
+}
+
+void UMSCamera::getUUIDFromSolid()
+{
+    QList<Solid::Device> devices = Solid::Device::listFromType(Solid::DeviceInterface::StorageAccess);
+
+    foreach(const Solid::Device &accessDevice, devices)
+    {
+        // check for StorageAccess
+        if (!accessDevice.is<Solid::StorageAccess>())
+            continue;
+
+        const Solid::StorageAccess *access = accessDevice.as<Solid::StorageAccess>();
+
+        if (!access->isAccessible())
+            continue;
+
+        // check for StorageDrive
+        Solid::Device driveDevice;
+        for (Solid::Device currentDevice = accessDevice; currentDevice.isValid(); 
+             currentDevice = currentDevice.parent())
+        {
+            if (currentDevice.is<Solid::StorageDrive>())
+            {
+                driveDevice = currentDevice;
+                break;
+            }
+        }
+        if (!driveDevice.isValid())
+            continue;
+
+        // check for StorageVolume
+        Solid::Device volumeDevice;
+        for (Solid::Device currentDevice = accessDevice; currentDevice.isValid(); currentDevice = currentDevice.parent())
+        {
+            if (currentDevice.is<Solid::StorageVolume>())
+            {
+                volumeDevice = currentDevice;
+                break;
+            }
+        }
+        if (!volumeDevice.isValid())
+            continue;
+
+        Solid::StorageVolume *volume = volumeDevice.as<Solid::StorageVolume>();
+
+        if (m_path.startsWith(access->filePath()))
+            m_uuid = volume->uuid();
+    }
 }
 
 }  // namespace Digikam

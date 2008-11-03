@@ -90,7 +90,7 @@ private slots:
 
     void slotTimeout();
 
-    void slotAvailableFreeSpace(QString mountPoint, quint64 kBSize, quint64 kBUsed, quint64 kBAvail);
+    void slotAvailableFreeSpace(const QString& mountPoint, quint64 kBSize, quint64 kBUsed, quint64 kBAvail);
 
 private:
 

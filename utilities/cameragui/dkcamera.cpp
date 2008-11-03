@@ -80,6 +80,11 @@ QString DKCamera::path() const
     return m_path;
 }
 
+QString DKCamera::uuid() const
+{
+    return m_uuid;
+}
+
 bool DKCamera::thumbnailSupport()
 {
     return m_thumbnailSupport;

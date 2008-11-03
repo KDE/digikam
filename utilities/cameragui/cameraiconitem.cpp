@@ -301,16 +301,11 @@ void CameraIconViewItem::paintItem(QPainter *p)
             downloaded = SmallIcon( "dialog-cancel" );
             break;
         }
-        /* TODO: see B.K.O #107316 : disable temporally the unknown download status until
-                 a new method to identify the already downloaded pictures from camera is
-                 implemented.
-
         case GPItemInfo::DownloadUnknow:
         {
             downloaded = d->pixmapUnknowPicture;
             break;
         }
-        */
     }
 
     if (!downloaded.isNull())

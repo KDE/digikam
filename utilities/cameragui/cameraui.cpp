@@ -303,7 +303,7 @@ void CameraUI::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->cameraCaptureAction = new KAction(KIcon("camera"), i18n("Capture"), this);
+    d->cameraCaptureAction = new KAction(KIcon("webcamreceive"), i18n("Capture"), this);
     connect(d->cameraCaptureAction, SIGNAL(triggered()), this, SLOT(slotCapture()));
     actionCollection()->addAction("cameraui_capture", d->cameraCaptureAction);
 

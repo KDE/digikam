@@ -77,7 +77,13 @@ private:
 
     void listFolders(const QString& folder, QStringList& subFolderList);
 
-private :
+    /** Try to find UUID of UMS camera media using Solid interface. 
+        Search use mount path as reference. Return UUID as string 
+        else an empty string 
+     */
+    void getUUIDFromSolid();
+
+private:
 
     bool m_cancel;
 };

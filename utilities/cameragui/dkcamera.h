@@ -91,6 +91,7 @@ public:
     QString model() const;
     QString port()  const;
     QString path()  const;
+    QString uuid()  const;
 
     bool thumbnailSupport();
     bool deleteSupport();
@@ -121,6 +122,7 @@ protected:
     QString m_port;
     QString m_path;
     QString m_title;
+    QString m_uuid;
 };
 
 }  // namespace Digikam
