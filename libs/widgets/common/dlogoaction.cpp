@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-
 #include "dlogoaction.h"
+#include "dlogoaction.moc"
 
 // Qt includes.
 
