@@ -26,7 +26,7 @@
 // --------------------------------------------------------
 
 #ifndef DIGIKAM_EXPORT
-# if defined(MAKE_DIGIKAM_LIB)
+# if defined(MAKE_DIGIKAMCORE_LIB)
    /* We are building this library */ 
 #  define DIGIKAM_EXPORT KDE_EXPORT
 # else
