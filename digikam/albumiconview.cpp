@@ -4,23 +4,23 @@
  * http://www.digikam.org
  *
  * Date        : 2002-16-10
- * Description : album icon view 
- * 
+ * Description : album icon view
+ *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2002-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifdef HAVE_CONFIG_H
@@ -315,16 +315,15 @@ void AlbumIconView::setThumbnailSize(const ThumbnailSize& thumbSize)
 {
     if ( d->thumbSize != thumbSize)
     {
-        d->imageLister->stop();
-        clear();
-
         d->thumbSize = thumbSize;
         d->pixMan->setThumbnailSize(d->thumbSize.size());
 
         updateBannerRectPixmap();
         updateItemRectsPixmap();
 
-        d->imageLister->openAlbum(d->currentAlbum);
+        IconItem *currentIconItem = currentItem();
+        triggerRearrangement();
+        setStoredVisibleItem(currentIconItem);
     }
 }
 
