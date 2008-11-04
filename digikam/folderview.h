@@ -28,6 +28,7 @@
 // Qt includes.
 
 #include <Q3ListView>
+#include <Q3ListViewItemIterator>
 #include <Q3Header>
 #include <QResizeEvent>
 #include <QMouseEvent>
@@ -40,6 +41,8 @@
 // Local includes.
 
 #include "digikam_export.h"
+#include "albummanager.h"
+#include "album.h"
 
 namespace Digikam
 {
@@ -58,6 +61,23 @@ class FolderView : public Q3ListView
 
 public:
 
+    enum CollapseMode
+    {
+        /*
+         * Collapse the folder view and re-open the current viewed album (default mode)
+         * In this mode, all root items are collapsed, then the one containing
+         * the currently selected album is expand again.
+         * This mode will make sure that the selected album is visible in the folder tree.
+         */
+        RestoreCurrentAlbum,
+        /*
+         * Collapse the folder view but omit the root item.
+         * In this mode all items in the folder view are collapsed,
+         * and the first root item is expanded again (My Tags / My Albums etc)
+         */
+        OmitRoot
+    };
+
     FolderView(QWidget *parent, const char *name = "FolderView");
     virtual ~FolderView();
 
@@ -68,6 +88,8 @@ public:
     QRect    itemRect(Q3ListViewItem *item) const;
     QPixmap  itemBasePixmapRegular() const;
     QPixmap  itemBasePixmapSelected() const;
+
+    virtual void collapseView(CollapseMode mode = RestoreCurrentAlbum);
 
 protected:
 

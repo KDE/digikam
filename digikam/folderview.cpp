@@ -30,24 +30,25 @@
 
 #include <QList>
 #include <QPixmap>
+#include <QTimer>
 
 // KDE includes.
 
-#include <kdebug.h>
-#include <kglobalsettings.h>
-#include <kcursor.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kglobal.h>
 #include <kconfiggroup.h>
+#include <kcursor.h>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <kglobalsettings.h>
 
 // Local includes.
 
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
-#include "themeengine.h"
 #include "folderitem.h"
+#include "themeengine.h"
 
 namespace Digikam
 {
@@ -458,6 +459,54 @@ void FolderView::slotSelectionChanged()
 
 void FolderView::selectItem(int)
 {
+}
+
+void FolderView::collapseView(CollapseMode mode)
+{
+    // collapse the whole list first
+    Q3ListViewItemIterator iter(this);
+    while (iter.current())
+    {
+        iter.current()->setOpen(false);
+        iter.current()->setVisible(true);
+        iter++;
+    }
+
+    // handle special cases
+    switch (mode)
+    {
+        case OmitRoot:
+        {
+            firstChild()->setOpen(true);
+            break;
+        }
+        case RestoreCurrentAlbum:
+        {
+            Q3ListViewItemIterator iter(this);
+            FolderItem* restoredItem = 0;
+
+            while (iter.current())
+            {
+                FolderItem* curItem = dynamic_cast<FolderItem*>(iter.current());
+
+                if (curItem)
+                {
+                    if (curItem->id() == AlbumManager::instance()->currentAlbum()->id())
+                    {
+                        curItem->setOpen(true);
+                        restoredItem = curItem;
+                        break;
+                    }
+                }
+                iter++;
+            }
+            if (restoredItem)
+                ensureItemVisible(restoredItem);
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 }  // namespace Digikam

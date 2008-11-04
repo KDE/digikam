@@ -357,6 +357,12 @@ TagFilterView::~TagFilterView()
 
 void TagFilterView::slotTextTagFilterChanged(const QString& filter)
 {
+    if (filter.isEmpty())
+    {
+        collapseView();
+        return;
+    }
+
     QString search = filter.toLower();
 
     bool atleastOneMatch = false;
@@ -409,13 +415,17 @@ void TagFilterView::slotTextTagFilterChanged(const QString& filter)
             atleastOneMatch = true;
 
             if (viewItem)
+            {
                 viewItem->setVisible(true);
+                viewItem->setOpen(true);
+        }
         }
         else
         {
             if (viewItem)
             {
                 viewItem->setVisible(false);
+                viewItem->setOpen(false);
             }
         }
     }

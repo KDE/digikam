@@ -1574,6 +1574,12 @@ void ImageDescEditTab::slotRecentTagsMenuActivated(int id)
 
 void ImageDescEditTab::slotTagsSearchChanged(const QString& filter)
 {
+    if (filter.isEmpty())
+    {
+        d->tagsView->collapseView(FolderView::OmitRoot);
+        return;
+    }
+
     //TODO: this will destroy assigned-tags filtering. Unify in one method.
     QString search = filter.toLower();
 
@@ -1627,13 +1633,17 @@ void ImageDescEditTab::slotTagsSearchChanged(const QString& filter)
             atleastOneMatch = true;
 
             if (viewItem)
+            {
                 viewItem->setVisible(true);
+                viewItem->setOpen(true);
+        }
         }
         else
         {
             if (viewItem)
             {
                 viewItem->setVisible(false);
+                viewItem->setOpen(false);
             }
         }
     }
