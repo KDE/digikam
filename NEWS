@@ -6,7 +6,7 @@ IMPORTANT: This is a beta release : do not use yet in production !!!
 
 NEW FEATURES:
 
-General        : Under Microsoft Windows digiKam can be compiled with MinGw or MSVC independantly.
+General        : digiKam can be compiled under Microsoft Windows with MinGW or MSVC independently.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
