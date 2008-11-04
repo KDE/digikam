@@ -12,14 +12,15 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 173645 : digiKam crashes after start dialog.
 002 ==> 173691 : digiKam doesn't show pictures.
-003 ==> 091811 : feature request: find pictures by meta tag info, date.
+003 ==> 091811 : Feature request: find pictures by meta tag info, date.
 004 ==> 173853 : seg fault digiKam with marble widget (at startup).
 005 ==> 173995 : digiKam crashes on loading main view.
 006 ==> 163143 : digiKam doesn't detect new photos in import from a camera.
 007 ==> 107316 : Option: Only download new photos from camera.
 008 ==> 174108 : digikam and exiv2 crash with AVI file.
 009 ==> 174202 : Albums` names are duplicated after migrating from digikam-0.9.4.
-010 ==> 
+010 ==> 167873 : Tag and album trees are not expanded when searching for entries.
+011 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta5 - Release date: 2008-10-26
