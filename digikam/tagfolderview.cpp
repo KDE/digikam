@@ -262,6 +262,7 @@ void TagFolderView::slotTextTagFilterChanged(const QString& filter)
             continue;
 
         bool match = talbum->title().toLower().contains(search);
+        bool doesExpand = false;
         if (!match)
         {
             // check if any of the parents match the search
@@ -287,6 +288,7 @@ void TagFolderView::slotTextTagFilterChanged(const QString& filter)
                 if ((*it)->title().toLower().contains(search))
                 {
                     match = true;
+                    doesExpand = true;
                     break;
                 }
                 ++it;
@@ -302,8 +304,8 @@ void TagFolderView::slotTextTagFilterChanged(const QString& filter)
             if (viewItem)
             {
                 viewItem->setVisible(true);
-                viewItem->setOpen(true);
-        }
+                viewItem->setOpen(doesExpand);
+            }
         }
         else
         {
