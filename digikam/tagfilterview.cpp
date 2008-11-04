@@ -331,7 +331,7 @@ TagFilterView::TagFilterView(QWidget* parent)
 
     KConfig* config = kapp->config();
     config->setGroup("Tag Filters View");
-    d->matchingCond = (AlbumLister::MatchingCondition)(config->readNumEntry("Matching Condition", 
+    d->matchingCond = (AlbumLister::MatchingCondition)(config->readNumEntry("Matching Condition",
                                                        AlbumLister::OrCondition));
 
     d->toggleAutoTags = (ToggleAutoTags)(config->readNumEntry("Toggle Auto Tags", NoToggleAuto));
@@ -351,6 +351,12 @@ TagFilterView::~TagFilterView()
 
 void TagFilterView::slotTextTagFilterChanged(const QString& filter)
 {
+    if (filter.isEmpty())
+    {
+        collapseView();
+        return;
+    }
+
     QString search = filter.lower();
 
     bool atleastOneMatch = false;
@@ -365,6 +371,7 @@ void TagFilterView::slotTextTagFilterChanged(const QString& filter)
             continue;
 
         bool match = talbum->title().lower().contains(search);
+        bool doesExpand = false;
         if (!match)
         {
             // check if any of the parents match the search
@@ -390,6 +397,7 @@ void TagFilterView::slotTextTagFilterChanged(const QString& filter)
                 if ((*it)->title().lower().contains(search))
                 {
                     match = true;
+                    doesExpand = true;
                     break;
                 }
                 ++it;
@@ -403,13 +411,17 @@ void TagFilterView::slotTextTagFilterChanged(const QString& filter)
             atleastOneMatch = true;
 
             if (viewItem)
+            {
                 viewItem->setVisible(true);
+                viewItem->setOpen(doesExpand);
+        }
         }
         else
         {
             if (viewItem)
             {
                 viewItem->setVisible(false);
+                viewItem->setOpen(false);
             }
         }
     }
@@ -619,7 +631,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
 
         if (id == 10)
         {
-            emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+            emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                        i18n("Assigning image tags. Please wait..."));
 
             AlbumLister::instance()->blockSignals(true);
@@ -873,7 +885,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
         popmenu.insertSeparator(-1);
         popmenu.insertItem(SmallIcon("tag-delete"),     i18n("Delete Tag"),             12);
     }
- 
+
     popmenu.insertSeparator(-1);
 
     QPopupMenu selectTagsMenu;
@@ -1228,7 +1240,7 @@ void TagFilterView::tagDelete(TagFilterViewItem* item)
         message = i18n("Delete '%1' tag?").arg(tag->title());
     }
 
-    int result = KMessageBox::warningContinueCancel(0, message, 
+    int result = KMessageBox::warningContinueCancel(0, message,
                                                     i18n("Delete Tag"),
                                                     KGuiItem(i18n("Delete"),
                                                     "editdelete"));

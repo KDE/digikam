@@ -142,7 +142,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     m_navigateBarLayout->addWidget(settingsArea);
 
-    QGridLayout *settingsLayout = new QGridLayout(settingsArea, 6, 1, 
+    QGridLayout *settingsLayout = new QGridLayout(settingsArea, 6, 1,
                                       KDialog::spacingHint(), KDialog::spacingHint());
 
     // Captions/Date/Rating view -----------------------------------
@@ -178,15 +178,15 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->assignedTagsBtn = new QToolButton(tagsSearch);
     QToolTip::add(d->assignedTagsBtn, i18n("Tags already assigned"));
     d->assignedTagsBtn->setIconSet(kapp->iconLoader()->loadIcon("tag-assigned",
-                                   KIcon::NoGroup, KIcon::SizeSmall, 
+                                   KIcon::NoGroup, KIcon::SizeSmall,
                                    KIcon::DefaultState, 0, true));
     d->assignedTagsBtn->setToggleButton(true);
 
     d->recentTagsBtn      = new QToolButton(tagsSearch);
     QPopupMenu *popupMenu = new QPopupMenu(d->recentTagsBtn);
     QToolTip::add(d->recentTagsBtn, i18n("Recent Tags"));
-    d->recentTagsBtn->setIconSet(kapp->iconLoader()->loadIcon("tag-recents", 
-                                 KIcon::NoGroup, KIcon::SizeSmall, 
+    d->recentTagsBtn->setIconSet(kapp->iconLoader()->loadIcon("tag-recents",
+                                 KIcon::NoGroup, KIcon::SizeSmall,
                                  KIcon::DefaultState, 0, true));
     d->recentTagsBtn->setUsesBigPixmap(false);
     d->recentTagsBtn->setPopup(popupMenu);
@@ -336,7 +336,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     KConfig* config = kapp->config();
     config->setGroup("Tag List View");
-    d->toggleAutoTags = (TagFilterView::ToggleAutoTags)(config->readNumEntry("Toggle Auto Tags", 
+    d->toggleAutoTags = (TagFilterView::ToggleAutoTags)(config->readNumEntry("Toggle Auto Tags",
                                                        TagFilterView::NoToggleAuto));
 }
 
@@ -563,7 +563,7 @@ void ImageDescEditTab::setInfos(QPtrList<ImageInfo> infos)
 
 void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
 {
-    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                i18n("Reading metadata from files. Please wait..."));
 
     d->ignoreImageAttributesWatch = true;
@@ -592,7 +592,7 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
 
 void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
 {
-    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                i18n("Writing metadata to files. Please wait..."));
     MetadataWriteSettings writeSettings = MetadataHub::defaultWriteSettings();
 
@@ -1139,7 +1139,7 @@ void ImageDescEditTab::tagDelete(TAlbum *album)
         message = i18n("Delete '%1' tag?").arg(album->title());
     }
 
-    int result = KMessageBox::warningContinueCancel(this, message, 
+    int result = KMessageBox::warningContinueCancel(this, message,
                                                     i18n("Delete Tag"),
                                                     KGuiItem(i18n("Delete"),
                                                     "editdelete"));
@@ -1526,6 +1526,12 @@ void ImageDescEditTab::slotRecentTagsMenuActivated(int id)
 
 void ImageDescEditTab::slotTagsSearchChanged(const QString& filter)
 {
+    if (filter.isEmpty())
+    {
+        d->tagsView->collapseView(FolderView::OmitRoot);
+        return;
+    }
+
     //TODO: this will destroy assigned-tags filtering. Unify in one method.
     QString search = filter.lower();
 
@@ -1541,6 +1547,7 @@ void ImageDescEditTab::slotTagsSearchChanged(const QString& filter)
             continue;
 
         bool match = tag->title().lower().contains(search);
+        bool doesExpand = false;
         if (!match)
         {
             // check if any of the parents match the search
@@ -1566,6 +1573,7 @@ void ImageDescEditTab::slotTagsSearchChanged(const QString& filter)
                 if ((*it)->title().lower().contains(search))
                 {
                     match = true;
+                    doesExpand = true;
                     break;
                 }
                 ++it;
@@ -1579,13 +1587,17 @@ void ImageDescEditTab::slotTagsSearchChanged(const QString& filter)
             atleastOneMatch = true;
 
             if (viewItem)
+            {
                 viewItem->setVisible(true);
+                viewItem->setOpen(doesExpand);
+        }
         }
         else
         {
             if (viewItem)
             {
                 viewItem->setVisible(false);
+                viewItem->setOpen(false);
             }
         }
     }
@@ -1661,7 +1673,7 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
             {
                 if (!tag->isRoot())
                 {
-                    // only if the current item is not marked as tagged, check all children 
+                    // only if the current item is not marked as tagged, check all children
                     MetadataHub::TagStatus status = d->hub.tagStatus(item->album());
                     bool tagAssigned = (status == MetadataHub::MetadataAvailable && status.hasTag)
                                         || status == MetadataHub::MetadataDisjoint;
@@ -1683,7 +1695,7 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
                             }
                             ++tmpIt;
                         }
-                        if (!somethingIsSet) 
+                        if (!somethingIsSet)
                         {
                             item->setVisible(false);
                         }
@@ -1717,7 +1729,7 @@ void ImageDescEditTab::slotCreateNewTag()
 
     TAlbum *mainRootAlbum     = 0;
     TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(d->tagsView->selectedItem());
-    if (item) 
+    if (item)
         mainRootAlbum = item->album();
 
     QMap<QString, QString> errMap;

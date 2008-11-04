@@ -102,7 +102,7 @@ public:
     void    setOpen(bool o);
     void    setCount(int count);
     int     count();
-    
+
 private:
 
     bool    m_groupItem;
@@ -110,7 +110,7 @@ private:
     int     m_count;
     int     m_year;
     int     m_month;
-    
+
     PAlbum *m_album;
 };
 
@@ -147,7 +147,7 @@ AlbumFolderViewItem::AlbumFolderViewItem(QListViewItem* parent, const QString& n
 void AlbumFolderViewItem::refresh()
 {
     if (!m_album) return;
-    
+
     if (AlbumSettings::instance()->getShowFolderTreeViewItemsCount() &&
         dynamic_cast<AlbumFolderViewItem*>(parent()))
     {
@@ -251,7 +251,7 @@ public:
         albumMan     = 0;
         iconThumbJob = 0;
     }
-    
+
     AlbumManager                     *albumMan;
     ThumbnailJob                     *iconThumbJob;
     QValueList<AlbumFolderViewItem*>  groupItems;
@@ -318,6 +318,12 @@ AlbumFolderView::~AlbumFolderView()
 
 void AlbumFolderView::slotTextFolderFilterChanged(const QString& filter)
 {
+    if (filter.isEmpty())
+    {
+        collapseView();
+        return;
+    }
+
     QString search = filter.lower();
 
     bool atleastOneMatch = false;
@@ -332,6 +338,7 @@ void AlbumFolderView::slotTextFolderFilterChanged(const QString& filter)
             continue;
 
         bool match = palbum->title().lower().contains(search);
+        bool doesExpand = false;
         if (!match)
         {
             // check if any of the parents match the search
@@ -357,12 +364,13 @@ void AlbumFolderView::slotTextFolderFilterChanged(const QString& filter)
                 if ((*it)->title().lower().contains(search))
                 {
                     match = true;
+                    doesExpand = true;
                     break;
                 }
                 ++it;
             }
         }
-    
+
         AlbumFolderViewItem* viewItem = (AlbumFolderViewItem*) palbum->extraData(this);
 
         if (match)
@@ -370,13 +378,17 @@ void AlbumFolderView::slotTextFolderFilterChanged(const QString& filter)
             atleastOneMatch = true;
 
             if (viewItem)
+            {
                 viewItem->setVisible(true);
+                viewItem->setOpen(doesExpand);
+        }
         }
         else
         {
             if (viewItem)
             {
                 viewItem->setVisible(false);
+                viewItem->setOpen(false);
             }
         }
     }
@@ -767,7 +779,7 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     {
         if(item)
             item->setOpen(true);
-            
+
         ensureItemVisible(newItem);
         setSelected(newItem, true);
     }
@@ -855,11 +867,11 @@ void AlbumFolderView::albumRename(AlbumFolderViewItem* item)
     bool    ok;
 
 #if KDE_IS_VERSION(3,2,0)
-    QString title = KInputDialog::getText(i18n("Rename Album (%1)").arg(oldTitle), 
+    QString title = KInputDialog::getText(i18n("Rename Album (%1)").arg(oldTitle),
                                           i18n("Enter new album name:"),
                                           oldTitle, &ok, this);
 #else
-    QString title = KLineEditDlg::getText(i18n("Rename Item (%1)").arg(oldTitle), 
+    QString title = KLineEditDlg::getText(i18n("Rename Item (%1)").arg(oldTitle),
                                           i18n("Enter new album name:"),
                                           oldTitle, &ok, this);
 #endif
@@ -965,26 +977,26 @@ bool AlbumFolderView::acceptDrop(const QDropEvent *e) const
                 // Allow dragging at the root, to move the album at the root
                 if(!itemDrop)
                     return true;
-    
+
                 // Dragging an item on itself makes no sense
                 if(itemDrag == itemDrop)
                     return false;
-    
+
                 // Dragging a parent on its child makes no sense
                 if(itemDrag && itemDrag->album()->isAncestorOf(itemDrop->album()))
                     return false;
-    
+
                 return true;
             }
             case (AlbumSettings::ByCollection):
             {
                 if (!itemDrop)
                     return false;
-    
+
                 // Only allow dragging onto Collection
                 if (itemDrop->isGroupItem())
                     return true;
-    
+
                 return false;
             }
             default:
@@ -1015,7 +1027,7 @@ bool AlbumFolderView::acceptDrop(const QDropEvent *e) const
     {
         return true;
     }
-    
+
     if(QUriDrag::canDecode(e))
     {
         return true;
@@ -1122,7 +1134,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
                 extImgInfList.append(info);
             }
         }
-                
+
         int id = 0;
         char keys_return[32];
         XQueryKeymap(x11Display(), keys_return);
@@ -1230,7 +1242,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
     {
         Album *album = dynamic_cast<Album*>(itemDrop->album());
         if (!album) return;
-        
+
         CameraUI *ui = dynamic_cast<CameraUI*>(e->source());
         if (ui)
         {
@@ -1242,7 +1254,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             popMenu.insertItem(SmallIcon("cancel"), i18n("&Cancel"));
             popMenu.setMouseTracking(true);
             int id = popMenu.exec(QCursor::pos());
-            switch(id) 
+            switch(id)
             {
                 case 10:    // Download from camera
                 {
@@ -1262,7 +1274,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
     // -- DnD from an external source ----------------------------------------
 
-    if(QUriDrag::canDecode(e))               
+    if(QUriDrag::canDecode(e))
     {
         PAlbum* destAlbum = 0;
 
@@ -1585,7 +1597,7 @@ void AlbumFolderView::clearEmptyGroupItems()
 void AlbumFolderView::refresh()
 {
     QListViewItemIterator it(this);
-    
+
     while (it.current())
     {
         AlbumFolderViewItem* item = dynamic_cast<AlbumFolderViewItem*>(*it);
@@ -1598,7 +1610,7 @@ void AlbumFolderView::refresh()
 void AlbumFolderView::slotRefresh(const QMap<int, int>& albumsStatMap)
 {
     QListViewItemIterator it(this);
-    
+
     while (it.current())
     {
         AlbumFolderViewItem* item = dynamic_cast<AlbumFolderViewItem*>(*it);

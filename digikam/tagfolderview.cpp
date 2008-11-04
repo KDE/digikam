@@ -5,7 +5,7 @@
  *
  * Date        : 2005-03-22
  * Descritpion : tags folder view.
- * 
+ *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -86,7 +86,7 @@ public:
 private:
 
     int     m_count;
-    
+
     TAlbum *m_album;
 };
 
@@ -109,7 +109,7 @@ TagFolderViewItem::TagFolderViewItem(QListViewItem *parent, TAlbum *album)
 void TagFolderViewItem::refresh()
 {
     if (!m_album) return;
-    
+
     if (AlbumSettings::instance()->getShowFolderTreeViewItemsCount() &&
         dynamic_cast<TagFolderViewItem*>(parent()))
     {
@@ -174,9 +174,9 @@ public:
         ABCMenu  = 0;
         albumMan = 0;
     }
-    
+
     QPopupMenu   *ABCMenu;
-    
+
     AlbumManager *albumMan;
 };
 
@@ -196,7 +196,7 @@ TagFolderView::TagFolderView(QWidget *parent)
 
     connect(d->albumMan, SIGNAL(signalTAlbumsDirty(const QMap<int, int>&)),
             this, SLOT(slotRefresh(const QMap<int, int>&)));
-            
+
     connect(d->albumMan, SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
 
@@ -242,6 +242,12 @@ TagFolderView::~TagFolderView()
 
 void TagFolderView::slotTextTagFilterChanged(const QString& filter)
 {
+    if (filter.isEmpty())
+    {
+        collapseView();
+        return;
+    }
+
     QString search = filter.lower();
 
     bool atleastOneMatch = false;
@@ -256,6 +262,7 @@ void TagFolderView::slotTextTagFilterChanged(const QString& filter)
             continue;
 
         bool match = talbum->title().lower().contains(search);
+        bool doesExpand = false;
         if (!match)
         {
             // check if any of the parents match the search
@@ -281,12 +288,13 @@ void TagFolderView::slotTextTagFilterChanged(const QString& filter)
                 if ((*it)->title().lower().contains(search))
                 {
                     match = true;
+                    doesExpand = true;
                     break;
                 }
                 ++it;
             }
         }
-    
+
         TagFolderViewItem* viewItem = (TagFolderViewItem*) talbum->extraData(this);
 
         if (match)
@@ -294,13 +302,17 @@ void TagFolderView::slotTextTagFilterChanged(const QString& filter)
             atleastOneMatch = true;
 
             if (viewItem)
+            {
                 viewItem->setVisible(true);
+                viewItem->setOpen(doesExpand);
+        }
         }
         else
         {
             if (viewItem)
             {
                 viewItem->setVisible(false);
+                viewItem->setOpen(false);
             }
         }
     }
@@ -518,7 +530,7 @@ void TagFolderView::slotSelectionChanged()
 void TagFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
 {
     d->ABCMenu = new QPopupMenu;
-    
+
     connect( d->ABCMenu, SIGNAL( aboutToShow() ),
              this, SLOT( slotABCContextMenu() ) );
 
@@ -731,7 +743,7 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
         message = i18n("Delete '%1' tag?").arg(tag->title());
     }
 
-    int result = KMessageBox::warningContinueCancel(0, message, 
+    int result = KMessageBox::warningContinueCancel(0, message,
                                                     i18n("Delete Tag"),
                                                     KGuiItem(i18n("Delete"),
                                                     "editdelete"));
@@ -817,7 +829,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
 
         if(!talbum)
             return;
-        
+
         if (talbum == itemDrop->album())
             return;
 
@@ -863,7 +875,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         TAlbum *srcAlbum;
 
         KURL::List      urls;
-        KURL::List      kioURLs;        
+        KURL::List      kioURLs;
         QValueList<int> albumIDs;
         QValueList<int> imageIDs;
 
@@ -942,7 +954,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
 
         if (id == 10)
         {
-            emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+            emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                        i18n("Assigning image tags. Please wait..."));
 
             AlbumLister::instance()->blockSignals(true);
@@ -991,7 +1003,7 @@ void TagFolderView::selectItem(int id)
 void TagFolderView::refresh()
 {
     QListViewItemIterator it(this);
-    
+
     while (it.current())
     {
         TagFolderViewItem* item = dynamic_cast<TagFolderViewItem*>(*it);
@@ -1004,7 +1016,7 @@ void TagFolderView::refresh()
 void TagFolderView::slotRefresh(const QMap<int, int>& tagsStatMap)
 {
     QListViewItemIterator it(this);
-    
+
     while (it.current())
     {
         TagFolderViewItem* item = dynamic_cast<TagFolderViewItem*>(*it);

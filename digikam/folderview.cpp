@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -25,25 +25,25 @@
 // Qt includes.
 
 #include <qpixmap.h>
-#include <qvaluelist.h>
 #include <qstyle.h>
+#include <qvaluelist.h>
 
 // KDE includes.
 
-#include <kglobalsettings.h>
-#include <kcursor.h>
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kcursor.h>
+#include <kglobalsettings.h>
 
 // Local includes.
 
-#include "ddebug.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
-#include "themeengine.h"
+#include "ddebug.h"
 #include "dragobjects.h"
 #include "folderitem.h"
+#include "themeengine.h"
 #include "folderview.h"
 #include "folderview.moc"
 
@@ -185,7 +185,7 @@ void FolderView::contentsMouseMoveEvent(QMouseEvent *e)
         return;
     }
 
-    if(d->dragItem && 
+    if(d->dragItem &&
        (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
     {
         QPoint vp = contentsToViewport(e->pos());
@@ -215,7 +215,7 @@ void FolderView::contentsMousePressEvent(QMouseEvent *e)
 
     QListView::contentsMousePressEvent(e);
 
-    if(item && e->button() == LeftButton) 
+    if(item && e->button() == LeftButton)
     {
         // Prepare D&D if necessary
         d->dragStartPos = e->pos();
@@ -355,7 +355,7 @@ bool FolderView::mouseInItemRect(QListViewItem* item, int x) const
 
     int boxsize = 0;
     FolderCheckListItem* citem = dynamic_cast<FolderCheckListItem*>(item);
-    if (citem && 
+    if (citem &&
         ((citem->type() == QCheckListItem::CheckBox) || (citem->type() == QCheckListItem::CheckBoxController)))
         boxsize = style().pixelMetric(QStyle::PM_CheckListButtonSize, this);
 
@@ -456,6 +456,54 @@ void FolderView::slotSelectionChanged()
 
 void FolderView::selectItem(int)
 {
+}
+
+void FolderView::collapseView(CollapseMode mode)
+{
+    // collapse the whole list first
+    QListViewItemIterator iter(this);
+    while (iter.current())
+    {
+        iter.current()->setOpen(false);
+        iter.current()->setVisible(true);
+        iter++;
+    }
+
+    // handle special cases
+    switch (mode)
+    {
+        case OmitRoot:
+        {
+            firstChild()->setOpen(true);
+            break;
+        }
+        case RestoreCurrentAlbum:
+        {
+            QListViewItemIterator iter(this);
+            FolderItem* restoredItem = 0;
+
+            while (iter.current())
+            {
+                FolderItem* curItem = dynamic_cast<FolderItem*>(iter.current());
+
+                if (curItem)
+                {
+                    if (curItem->id() == AlbumManager::instance()->currentAlbum()->id())
+                    {
+                        curItem->setOpen(true);
+                        restoredItem = curItem;
+                        break;
+                    }
+                }
+                iter++;
+            }
+            if (restoredItem)
+                ensureItemVisible(restoredItem);
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 }  // namespace Digikam
