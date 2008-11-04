@@ -17,7 +17,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 173995 : digiKam crashes on loading main view.
 006 ==> 163143 : digiKam doesn't detect new photos in import from a camera.
 007 ==> 107316 : Option: Only download new photos from camera.
-008 ==> 
+008 ==> 174108 : digikam and exiv2 crash with AVI file.
+009 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta5 - Release date: 2008-10-26
