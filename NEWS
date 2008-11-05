@@ -1,5 +1,5 @@
 **********************************************************************************************
-digiKam 0.9.5-beta1 - Release date: 2008-??-??
+digiKam 0.9.5-beta1 - Release date: 2008-11-05
 
 NEW FEATURES:
 
@@ -41,5 +41,3 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 028 ==> 170758 : High load when tagging 
 029 ==> 168003 : Drag&dropping a photo to a folder in Dolphin begins copying the whole system:/media.
 030 ==> 142457 : Temp files not cleaned up after crashes.
-031 ==> 
- 
