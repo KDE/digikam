@@ -59,10 +59,8 @@ extern "C"
 #include <klocale.h>
 #include <kaboutdata.h>
 
-
-static const char digikam_version[]     = "0.9.5-svn";
-static const char showfoto_version[]    = "0.9.0-svn";
-
+static const char digikam_version[]     = "0.9.5-beta1";
+static const char showfoto_version[]    = "0.9.0-beta1";
 
 namespace Digikam
 {
