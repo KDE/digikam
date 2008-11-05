@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "imagepropertiescolorstab.h"
 #include "imagepropertiescolorstab.moc"
 
@@ -65,6 +64,7 @@
 #include "sharedloadsavethread.h"
 #include "iccprofilewidget.h"
 #include "cietonguewidget.h"
+#include "imagepropertiestxtlabel.h"
 
 namespace Digikam
 {
@@ -108,14 +108,14 @@ public:
     QSpinBox              *minInterv;
     QSpinBox              *maxInterv;
 
-    QLabel                *labelMeanValue;
-    QLabel                *labelPixelsValue;
-    QLabel                *labelStdDevValue;
-    QLabel                *labelCountValue;
-    QLabel                *labelMedianValue;
-    QLabel                *labelPercentileValue;
-    QLabel                *labelColorDepth;
-    QLabel                *labelAlphaChannel;
+    DTextLabelValue       *labelMeanValue;
+    DTextLabelValue       *labelPixelsValue;
+    DTextLabelValue       *labelStdDevValue;
+    DTextLabelValue       *labelCountValue;
+    DTextLabelValue       *labelMedianValue;
+    DTextLabelValue       *labelPercentileValue;
+    DTextLabelValue       *labelColorDepth;
+    DTextLabelValue       *labelAlphaChannel;
 
     QString                currentFilePath;
     LoadingDescription     currentLoadingDescription;
@@ -207,40 +207,34 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     // -------------------------------------------------------------
 
     QGroupBox *gbox = new QGroupBox(i18n("Statistics"), histogramPage);
-    gbox->setWhatsThis( i18n("Here you can see the statistical results calculated from the "
-                             "selected histogram part. These values are available for all "
-                             "channels."));
-    QGridLayout* grid = new QGridLayout(gbox);
+    gbox->setWhatsThis(i18n("Here you can see the statistical results calculated from the "
+                            "selected histogram part. These values are available for all "
+                            "channels."));
+    QGridLayout* grid       = new QGridLayout(gbox);
 
-    QLabel *label5 = new QLabel(i18n("Pixels:"), gbox);
-    label5->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    d->labelPixelsValue = new QLabel(gbox);
-    d->labelPixelsValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    DTextLabelName *label5  = new DTextLabelName(i18n("Pixels: "), gbox);
+    d->labelPixelsValue     = new DTextLabelValue(0, gbox);
 
-    QLabel *label7 = new QLabel(i18n("Count:"), gbox);
-    label7->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    d->labelCountValue = new QLabel(gbox);
-    d->labelCountValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    DTextLabelName *label7  = new DTextLabelName(i18n("Count: "), gbox);
+    d->labelCountValue      = new DTextLabelValue(0, gbox);
 
-    QLabel *label4 = new QLabel(i18n("Mean:"), gbox);
-    label4->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    d->labelMeanValue = new QLabel(gbox);
-    d->labelMeanValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    DTextLabelName *label4  = new DTextLabelName(i18n("Mean: "), gbox);
+    d->labelMeanValue       = new DTextLabelValue(0, gbox);
 
-    QLabel *label6 = new QLabel(i18n("Std. deviation:"), gbox);
-    label6->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    d->labelStdDevValue = new QLabel(gbox);
-    d->labelStdDevValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    DTextLabelName *label6  = new DTextLabelName(i18n("Std. deviation: "), gbox);
+    d->labelStdDevValue     = new DTextLabelValue(0, gbox);
 
-    QLabel *label8 = new QLabel(i18n("Median:"), gbox);
-    label8->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    d->labelMedianValue = new QLabel(gbox);
-    d->labelMedianValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    DTextLabelName *label8  = new DTextLabelName(i18n("Median: "), gbox);
+    d->labelMedianValue     = new DTextLabelValue(0, gbox);
 
-    QLabel *label9 = new QLabel(i18n("Percentile:"), gbox);
-    label9->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    d->labelPercentileValue = new QLabel(gbox);
-    d->labelPercentileValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    DTextLabelName *label9  = new DTextLabelName(i18n("Percentile: "), gbox);
+    d->labelPercentileValue = new DTextLabelValue(0, gbox);
+
+    DTextLabelName *label11 = new DTextLabelName(i18n("Color depth: "), gbox);
+    d->labelColorDepth      = new DTextLabelValue(0, gbox);
+
+    DTextLabelName *label12 = new DTextLabelName(i18n("Alpha Channel: "), gbox);
+    d->labelAlphaChannel    = new DTextLabelValue(0, gbox);
 
     grid->addWidget(label5,                  0, 0, 1, 1);
     grid->addWidget(d->labelMeanValue,       0, 1, 1, 1);
@@ -254,30 +248,12 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     grid->addWidget(d->labelMedianValue,     4, 1, 1, 1);
     grid->addWidget(label9,                  5, 0, 1, 1);
     grid->addWidget(d->labelPercentileValue, 5, 1, 1, 1);
-    grid->setMargin(KDialog::spacingHint());
+    grid->addWidget(label11,                 6, 0, 1, 1);
+    grid->addWidget(d->labelColorDepth,      6, 1, 1, 1);
+    grid->addWidget(label12,                 7, 0, 1, 1);
+    grid->addWidget(d->labelAlphaChannel,    7, 1, 1, 1);
+    grid->setMargin(0);
     grid->setSpacing(0);
-
-    // -------------------------------------------------------------
-
-    QWidget *gbox2     = new QWidget(histogramPage);
-    QGridLayout* grid2 = new QGridLayout(gbox2);
-
-    QLabel *label11     = new QLabel(i18n("Color depth:"), gbox2);
-    label11->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    d->labelColorDepth  = new QLabel(gbox2);
-    d->labelColorDepth->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-
-    QLabel *label12     = new QLabel(i18n("Alpha Channel:"), gbox2);
-    label12->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    d->labelAlphaChannel = new QLabel(gbox2);
-    d->labelAlphaChannel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-
-    grid2->addWidget(label11,              0, 0, 1, 1);
-    grid2->addWidget(d->labelColorDepth,   0, 1, 1, 1);
-    grid2->addWidget(label12,              1, 0, 1, 1);
-    grid2->addWidget(d->labelAlphaChannel, 1, 1, 1, 1);
-    grid2->setMargin(0);
-    grid2->setSpacing(0);
 
     // -------------------------------------------------------------
 
@@ -285,8 +261,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     topLayout->addWidget(histoBox,     1, 0, 2, 4);
     topLayout->addLayout(hlay3,        3, 0, 1, 4);
     topLayout->addWidget(gbox,         4, 0, 1, 4);
-    topLayout->addWidget(gbox2,        5, 0, 1, 4);
-    topLayout->setRowStretch(6, 10);
+    topLayout->setRowStretch(5, 10);
     topLayout->setColumnStretch(2, 10);
     topLayout->setMargin(KDialog::spacingHint());
     topLayout->setSpacing(KDialog::spacingHint());
@@ -301,7 +276,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     // -- read config ---------------------------------------------------------
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("Image Properties SideBar"));
+    KConfigGroup group        = config->group(QString("Image Properties SideBar"));
 
     setCurrentIndex(group.readEntry("ImagePropertiesColors Tab",
                     (int)ImagePropertiesColorsTabPriv::HISTOGRAM));
