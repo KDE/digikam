@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "cameraitempropertiestab.h"
 #include "cameraitempropertiestab.moc"
 
@@ -29,7 +28,6 @@
 
 #include <QStyle>
 #include <QFile>
-#include <QLabel>
 #include <QGridLayout>
 
 // KDE includes.
@@ -42,12 +40,12 @@
 #include <kfileitem.h>
 #include <kmimetype.h>
 #include <kseparator.h>
-#include <ksqueezedtextlabel.h>
 
 // Local includes.
 
 #include "dmetadata.h"
 #include "gpiteminfo.h"
+#include "imagepropertiestxtlabel.h"
 
 namespace Digikam
 {
@@ -104,53 +102,53 @@ public:
         labelPhotoWhiteBalance = 0;
     }
 
-    QLabel             *title;
-    QLabel             *file;
-    QLabel             *folder;
-    QLabel             *date;
-    QLabel             *size;
-    QLabel             *isReadable;
-    QLabel             *isWritable;
-    QLabel             *mime;
-    QLabel             *dimensions;
-    QLabel             *newFileName;
-    QLabel             *downloaded;
+    QLabel          *title;
+    DTextLabelName  *file;
+    DTextLabelName  *folder;
+    DTextLabelName  *date;
+    DTextLabelName  *size;
+    DTextLabelName  *isReadable;
+    DTextLabelName  *isWritable;
+    DTextLabelName  *mime;
+    DTextLabelName  *dimensions;
+    DTextLabelName  *newFileName;
+    DTextLabelName  *downloaded;
 
-    QLabel             *title2;
-    QLabel             *make;
-    QLabel             *model;
-    QLabel             *photoDate;
-    QLabel             *lens;
-    QLabel             *aperture;
-    QLabel             *focalLength;
-    QLabel             *exposureTime;
-    QLabel             *sensitivity;
-    QLabel             *exposureMode;
-    QLabel             *flash;
-    QLabel             *whiteBalance;
+    QLabel          *title2;
+    DTextLabelName  *make;
+    DTextLabelName  *model;
+    DTextLabelName  *photoDate;
+    DTextLabelName  *lens;
+    DTextLabelName  *aperture;
+    DTextLabelName  *focalLength;
+    DTextLabelName  *exposureTime;
+    DTextLabelName  *sensitivity;
+    DTextLabelName  *exposureMode;
+    DTextLabelName  *flash;
+    DTextLabelName  *whiteBalance;
 
-    KSqueezedTextLabel *labelFile;
-    KSqueezedTextLabel *labelFolder;
-    KSqueezedTextLabel *labelFileIsReadable;
-    KSqueezedTextLabel *labelFileIsWritable;
-    KSqueezedTextLabel *labelFileDate;
-    KSqueezedTextLabel *labelFileSize;
-    KSqueezedTextLabel *labelImageMime;
-    KSqueezedTextLabel *labelImageDimensions;
-    KSqueezedTextLabel *labelNewFileName;
-    KSqueezedTextLabel *labelAlreadyDownloaded;
+    DTextLabelValue *labelFile;
+    DTextLabelValue *labelFolder;
+    DTextLabelValue *labelFileIsReadable;
+    DTextLabelValue *labelFileIsWritable;
+    DTextLabelValue *labelFileDate;
+    DTextLabelValue *labelFileSize;
+    DTextLabelValue *labelImageMime;
+    DTextLabelValue *labelImageDimensions;
+    DTextLabelValue *labelNewFileName;
+    DTextLabelValue *labelAlreadyDownloaded;
 
-    KSqueezedTextLabel *labelPhotoMake;
-    KSqueezedTextLabel *labelPhotoModel;
-    KSqueezedTextLabel *labelPhotoDateTime;
-    KSqueezedTextLabel *labelPhotoLens;
-    KSqueezedTextLabel *labelPhotoAperture;
-    KSqueezedTextLabel *labelPhotoFocalLenght;
-    KSqueezedTextLabel *labelPhotoExposureTime;
-    KSqueezedTextLabel *labelPhotoSensitivity;
-    KSqueezedTextLabel *labelPhotoExposureMode;
-    KSqueezedTextLabel *labelPhotoFlash;
-    KSqueezedTextLabel *labelPhotoWhiteBalance;
+    DTextLabelValue *labelPhotoMake;
+    DTextLabelValue *labelPhotoModel;
+    DTextLabelValue *labelPhotoDateTime;
+    DTextLabelValue *labelPhotoLens;
+    DTextLabelValue *labelPhotoAperture;
+    DTextLabelValue *labelPhotoFocalLenght;
+    DTextLabelValue *labelPhotoExposureTime;
+    DTextLabelValue *labelPhotoSensitivity;
+    DTextLabelValue *labelPhotoExposureMode;
+    DTextLabelValue *labelPhotoFlash;
+    DTextLabelValue *labelPhotoWhiteBalance;
 };
 
 CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent)
@@ -166,100 +164,56 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent)
     // --------------------------------------------------
 
     d->title                  = new QLabel(i18n("<big><b>Camera File Properties</b></big>"), this);
-    d->file                   = new QLabel(i18n("<b>File</b>:"), this);
-    d->folder                 = new QLabel(i18n("<b>Folder</b>:"), this);
-    d->date                   = new QLabel(i18n("<b>Date</b>:"), this);
-    d->size                   = new QLabel(i18n("<b>Size</b>:"), this);
-    d->isReadable             = new QLabel(i18n("<b>Readable</b>:"), this);
-    d->isWritable             = new QLabel(i18n("<b>Writable</b>:"), this);
-    d->mime                   = new QLabel(i18n("<b>Type</b>:"), this);
-    d->dimensions             = new QLabel(i18n("<b>Dimensions</b>:"), this);
-    d->newFileName            = new QLabel(i18n("<nobr><b>New Name</b></nobr>:"), this);
-    d->downloaded             = new QLabel(i18n("<b>Downloaded</b>:"), this);
+    d->file                   = new DTextLabelName(i18n("File: "), this);
+    d->folder                 = new DTextLabelName(i18n("Folder: "), this);
+    d->date                   = new DTextLabelName(i18n("Date: "), this);
+    d->size                   = new DTextLabelName(i18n("Size: "), this);
+    d->isReadable             = new DTextLabelName(i18n("Readable: "), this);
+    d->isWritable             = new DTextLabelName(i18n("Writable: "), this);
+    d->mime                   = new DTextLabelName(i18n("Type: "), this);
+    d->dimensions             = new DTextLabelName(i18n("Dimensions: "), this);
+    d->newFileName            = new DTextLabelName(i18n("New Name: "), this);
+    d->downloaded             = new DTextLabelName(i18n("Downloaded: "), this);
 
     KSeparator *line          = new KSeparator (Qt::Horizontal, this);
     d->title2                 = new QLabel(i18n("<big><b>Photograph Properties</b></big>"), this);
-    d->make                   = new QLabel(i18n("<b>Make</b>:"), this);
-    d->model                  = new QLabel(i18n("<b>Model</b>:"), this);
-    d->photoDate              = new QLabel(i18n("<b>Created</b>:"), this);
-    d->lens                   = new QLabel(i18n("<b>Lens</b>:"), this);
-    d->aperture               = new QLabel(i18n("<b>Aperture</b>:"), this);
-    d->focalLength            = new QLabel(i18n("<b>Focal</b>:"), this);
-    d->exposureTime           = new QLabel(i18n("<b>Exposure</b>:"), this);
-    d->sensitivity            = new QLabel(i18n("<b>Sensitivity</b>:"), this);
-    d->exposureMode           = new QLabel(i18n("<nobr><b>Mode/Program</b></nobr>:"), this);
-    d->flash                  = new QLabel(i18n("<b>Flash</b>:"), this);
-    d->whiteBalance           = new QLabel(i18n("<nobr><b>White balance</b></nobr>:"), this);
+    d->make                   = new DTextLabelName(i18n("Make: "), this);
+    d->model                  = new DTextLabelName(i18n("Model: "), this);
+    d->photoDate              = new DTextLabelName(i18n("Created: "), this);
+    d->lens                   = new DTextLabelName(i18n("Lens: "), this);
+    d->aperture               = new DTextLabelName(i18n("Aperture: "), this);
+    d->focalLength            = new DTextLabelName(i18n("Focal: "), this);
+    d->exposureTime           = new DTextLabelName(i18n("Exposure: "), this);
+    d->sensitivity            = new DTextLabelName(i18n("Sensitivity: "), this);
+    d->exposureMode           = new DTextLabelName(i18n("Mode/Program: "), this);
+    d->flash                  = new DTextLabelName(i18n("Flash: "), this);
+    d->whiteBalance           = new DTextLabelName(i18n("White balance: "), this);
 
-    d->labelFile              = new KSqueezedTextLabel(0, this);
-    d->labelFolder            = new KSqueezedTextLabel(0, this);
-    d->labelFileDate          = new KSqueezedTextLabel(0, this);
-    d->labelFileSize          = new KSqueezedTextLabel(0, this);
-    d->labelFileIsReadable    = new KSqueezedTextLabel(0, this);
-    d->labelFileIsWritable    = new KSqueezedTextLabel(0, this);
-    d->labelImageMime         = new KSqueezedTextLabel(0, this);
-    d->labelImageDimensions   = new KSqueezedTextLabel(0, this);
-    d->labelNewFileName       = new KSqueezedTextLabel(0, this);
-    d->labelAlreadyDownloaded = new KSqueezedTextLabel(0, this);
+    d->labelFile              = new DTextLabelValue(0, this);
+    d->labelFolder            = new DTextLabelValue(0, this);
+    d->labelFileDate          = new DTextLabelValue(0, this);
+    d->labelFileSize          = new DTextLabelValue(0, this);
+    d->labelFileIsReadable    = new DTextLabelValue(0, this);
+    d->labelFileIsWritable    = new DTextLabelValue(0, this);
+    d->labelImageMime         = new DTextLabelValue(0, this);
+    d->labelImageDimensions   = new DTextLabelValue(0, this);
+    d->labelNewFileName       = new DTextLabelValue(0, this);
+    d->labelAlreadyDownloaded = new DTextLabelValue(0, this);
 
-    d->labelPhotoMake         = new KSqueezedTextLabel(0, this);
-    d->labelPhotoModel        = new KSqueezedTextLabel(0, this);
-    d->labelPhotoDateTime     = new KSqueezedTextLabel(0, this);
-    d->labelPhotoLens         = new KSqueezedTextLabel(0, this);
-    d->labelPhotoAperture     = new KSqueezedTextLabel(0, this);
-    d->labelPhotoFocalLenght  = new KSqueezedTextLabel(0, this);
-    d->labelPhotoExposureTime = new KSqueezedTextLabel(0, this);
-    d->labelPhotoSensitivity  = new KSqueezedTextLabel(0, this);
-    d->labelPhotoExposureMode = new KSqueezedTextLabel(0, this);
-    d->labelPhotoFlash        = new KSqueezedTextLabel(0, this);
-    d->labelPhotoWhiteBalance = new KSqueezedTextLabel(0, this);
+    d->labelPhotoMake         = new DTextLabelValue(0, this);
+    d->labelPhotoModel        = new DTextLabelValue(0, this);
+    d->labelPhotoDateTime     = new DTextLabelValue(0, this);
+    d->labelPhotoLens         = new DTextLabelValue(0, this);
+    d->labelPhotoAperture     = new DTextLabelValue(0, this);
+    d->labelPhotoFocalLenght  = new DTextLabelValue(0, this);
+    d->labelPhotoExposureTime = new DTextLabelValue(0, this);
+    d->labelPhotoSensitivity  = new DTextLabelValue(0, this);
+    d->labelPhotoExposureMode = new DTextLabelValue(0, this);
+    d->labelPhotoFlash        = new DTextLabelValue(0, this);
+    d->labelPhotoWhiteBalance = new DTextLabelValue(0, this);
 
-    int hgt = fontMetrics().height()-2;
     d->title->setAlignment(Qt::AlignCenter);
-    d->file->setMaximumHeight(hgt);
-    d->folder->setMaximumHeight(hgt);
-    d->date->setMaximumHeight(hgt);
-    d->size->setMaximumHeight(hgt);
-    d->isReadable->setMaximumHeight(hgt);
-    d->isWritable->setMaximumHeight(hgt);
-    d->mime->setMaximumHeight(hgt);
-    d->dimensions->setMaximumHeight(hgt);
-    d->newFileName->setMaximumHeight(hgt);
-    d->downloaded->setMaximumHeight(hgt);
-    d->labelFile->setMaximumHeight(hgt);
-    d->labelFolder->setMaximumHeight(hgt);
-    d->labelFileDate->setMaximumHeight(hgt);
-    d->labelFileSize->setMaximumHeight(hgt);
-    d->labelFileIsReadable->setMaximumHeight(hgt);
-    d->labelFileIsWritable->setMaximumHeight(hgt);
-    d->labelImageMime->setMaximumHeight(hgt);
-    d->labelImageDimensions->setMaximumHeight(hgt);
-    d->labelNewFileName->setMaximumHeight(hgt);
-    d->labelAlreadyDownloaded->setMaximumHeight(hgt);
-
     d->title2->setAlignment(Qt::AlignCenter);
-    d->make->setMaximumHeight(hgt);
-    d->model->setMaximumHeight(hgt);
-    d->photoDate->setMaximumHeight(hgt);
-    d->lens->setMaximumHeight(hgt);
-    d->aperture->setMaximumHeight(hgt);
-    d->focalLength->setMaximumHeight(hgt);
-    d->exposureTime->setMaximumHeight(hgt);
-    d->sensitivity->setMaximumHeight(hgt);
-    d->exposureMode->setMaximumHeight(hgt);
-    d->flash->setMaximumHeight(hgt);
-    d->whiteBalance->setMaximumHeight(hgt);
-    d->labelPhotoMake->setMaximumHeight(hgt);
-    d->labelPhotoModel->setMaximumHeight(hgt);
-    d->labelPhotoDateTime->setMaximumHeight(hgt);
-    d->labelPhotoLens->setMaximumHeight(hgt);
-    d->labelPhotoAperture->setMaximumHeight(hgt);
-    d->labelPhotoFocalLenght->setMaximumHeight(hgt);
-    d->labelPhotoExposureTime->setMaximumHeight(hgt);
-    d->labelPhotoSensitivity->setMaximumHeight(hgt);
-    d->labelPhotoExposureMode->setMaximumHeight(hgt);
-    d->labelPhotoFlash->setMaximumHeight(hgt);
-    d->labelPhotoWhiteBalance->setMaximumHeight(hgt);
 
     // --------------------------------------------------
 
