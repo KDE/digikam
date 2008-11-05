@@ -1,3 +1,4214 @@
+0.9.5-beta1 2008-11-05
+-------------------------------------------------------------------------
+2008-07-16 14:03  aclemens
+
+2008-11-04 15:46  aclemens
+
+	* digikam/albumfolderview.cpp, digikam/folderview.cpp,
+	  digikam/folderview.h, digikam/tagfilterview.cpp,
+	  digikam/tagfolderview.cpp,
+	  libs/imageproperties/imagedescedittab.cpp: backport commit 880036
+	  and 880037 from trunk
+	  
+	  CCBUG:167873
+
+2008-11-03 10:55  cgilles
+
+	* digikam/albumiconview.cpp: backport commit #878957 from Marcel to
+	  preserve icon view item selection when icon size is changed
+
+2008-11-03 09:34  cgilles
+
+	* libs/dimg/loaders/iccjpeg.h: fix warning
+
+2008-10-26 12:23  aclemens
+
+	* imageplugins/blurfx/blurfx.cpp,
+	  imageplugins/colorfx/colorfxtool.cpp,
+	  imageplugins/raindrop/raindrop.cpp,
+	  libs/dimg/loaders/tiffloader.cpp,
+	  libs/whitebalance/whitebalance.cpp: sync with trunk
+
+2008-10-25 07:31  cgilles
+
+	* libs/sqlite2/sqliteInt.h: sync with trunk
+
+2008-10-24 12:20  cgilles
+
+	* libs/sqlite2/auth.c, libs/sqlite2/btree.c,
+	  libs/sqlite2/btree_rb.c, libs/sqlite2/build.c,
+	  libs/sqlite2/date.c, libs/sqlite2/encode.c, libs/sqlite2/expr.c,
+	  libs/sqlite2/func.c, libs/sqlite2/hash.h, libs/sqlite2/main.c,
+	  libs/sqlite2/os.c, libs/sqlite2/pager.c, libs/sqlite2/printf.c,
+	  libs/sqlite2/select.c, libs/sqlite2/shell.c,
+	  libs/sqlite2/sqlite.h, libs/sqlite2/sqliteInt.h,
+	  libs/sqlite2/table.c, libs/sqlite2/tokenize.c,
+	  libs/sqlite2/trigger.c, libs/sqlite2/util.c,
+	  libs/sqlite2/vacuum.c, libs/sqlite2/vdbe.c,
+	  libs/sqlite2/vdbeaux.c, libs/sqlite2/where.c: sync with trunk
+
+2008-10-21 19:24  aclemens
+
+	* NEWS: update
+
+2008-10-15 20:51  aclemens
+
+	* NEWS: update
+
+2008-10-08 07:03  cgilles
+
+	* DBSCHEMA.ODS, NEWS.0.9.0, NEWS.0.9.1, NEWS.0.9.2, NEWS.0.9.3,
+	  NEWS.0.9.4, project/DBSCHEMA.ODS, project/NEWS.0.9.0,
+	  project/NEWS.0.9.1, project/NEWS.0.9.2, project/NEWS.0.9.3,
+	  project/NEWS.0.9.4: archive files
+
+2008-10-01 19:02  cgilles
+
+	* libs/widgets/metadata/makernotewidget.cpp: sync with trunk
+
+2008-10-01 18:41  cgilles
+
+	* libs/widgets/metadata/exifwidget.cpp: backport commit #866706.
+	  from trunk
+
+2008-09-29 17:46  aclemens
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp: call slotEffect()
+	  in readSettings() to see the results in the preview widget
+
+2008-09-29 15:16  aclemens
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp: sync with KDE4
+	  from trunk
+
+2008-09-22 15:39  abaecker
+
+	* NEWS, digikam/albummanager.cpp, digikam/albummanager.h: Prevent
+	  that changes of the database file trigger a rescan which
+	  leads to an invocation of kio_digikamalbums/dates etc (this is a
+	  modified backport from the KDE4 version).
+	  
+	  BUG: 170758
+
+2008-09-22 14:21  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h: new method to check
+	  current rendering mode
+
+2008-09-22 14:20  cgilles
+
+	* utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawimport.h: this version work
+	  better with status progress bar cancel button
+
+2008-09-22 13:56  cgilles
+
+	* utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawimport.h: revert
+
+2008-09-22 13:29  cgilles
+
+	* utilities/imageeditor/rawimport/rawpreview.cpp: use new method
+	  based on LoadingDescription
+
+2008-09-22 13:18  cgilles
+
+	* libs/threadimageio/managedloadsavethread.cpp,
+	  libs/threadimageio/managedloadsavethread.h: backport commit
+	  #863562 from KDE4
+
+2008-09-22 10:35  cgilles
+
+	* utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawimport.h: backport commit
+	  #863505 from KDE4
+
+2008-09-16 14:06  aclemens
+
+	* utilities/imageeditor/rawimport/rawsettingsbox.cpp: sync with
+	  KDE4
+
+2008-09-16 12:03  cgilles
+
+	* libs/dimg/loaders/rawloader.cpp, libs/dimg/loaders/rawloader.h:
+	  polish
+
+2008-09-16 11:39  cgilles
+
+	* utilities/setup/setupdcraw.cpp: fix layout
+
+2008-09-14 16:15  cgilles
+
+	* kioslave/digikamalbums.cpp: compile with last libkdcraw version
+
+2008-09-14 16:13  cgilles
+
+	* kioslave/digikamthumbnail.cpp: compile with last libkdcraw
+
+2008-09-14 16:12  cgilles
+
+	* showfoto/showfoto.cpp: compile with last libkdcraw
+
+2008-09-14 15:09  cgilles
+
+	* libs/dimg/loaders/rawloader.cpp, libs/dimg/loaders/rawloader.h:
+	  with last libkdcraw, 16 bits color depth auto-gamma is done by
+	  libraw...
+
+2008-09-14 15:08  cgilles
+
+	* digikam/albumsettings.cpp: compile with last libkdcraw
+
+2008-09-14 15:07  cgilles
+
+	* digikam/albumfiletip.cpp: compile with last libkdcraw
+
+2008-09-14 15:06  cgilles
+
+	* digikam/albumiconview.cpp: compile with last libkdcraw
+
+2008-09-14 15:05  cgilles
+
+	* digikam/digikamapp.cpp: compile with last libkdcraw
+
+2008-09-14 15:03  cgilles
+
+	* utilities/lighttable/lighttablewindow.cpp: compile with last
+	  libkdcraw
+
+2008-09-14 15:02  cgilles
+
+	* utilities/cameragui/cameraui.cpp: compile with last libkdcraw
+
+2008-09-14 13:58  cgilles
+
+	* libs/dialogs/rawcameradlg.cpp: compile with new libkdcraw
+
+2008-09-14 13:56  cgilles
+
+	* libs/dialogs/imagedialog.cpp: compile with new libkdcraw
+
+2008-09-14 13:49  cgilles
+
+	* libs/imageproperties/imagepropertiestab.cpp: compile with new
+	  libkdcraw
+
+2008-09-14 13:49  cgilles
+
+	* libs/thumbbar/thumbbar.cpp: compile with new libkdcraw
+
+2008-09-14 13:47  cgilles
+
+	* libs/dimg/dimg.cpp: compile with new libkdcraw
+
+2008-09-14 13:46  cgilles
+
+	* digikam/daboutdata.h: compile with new libkdcraw
+
+2008-09-10 11:59  aclemens
+
+	* imageplugins/lensdistortion/lensdistortiontool.cpp,
+	  imageplugins/lensdistortion/lensdistortiontool.h: backport commit
+	  #859450 from KDE4 trunk
+
+2008-09-09 10:18  cgilles
+
+	* utilities/imageeditor/editor/editorwindow.cpp: sync with trunk
+
+2008-09-09 10:15  cgilles
+
+	* utilities/setup/setupdcraw.cpp: remove black and whithe point
+	  settings
+
+2008-09-09 10:14  cgilles
+
+	* utilities/setup/setupdcraw.cpp: sync with trunk
+
+2008-09-07 20:12  aclemens
+
+	* NEWS: update
+
+2008-09-06 12:26  cgilles
+
+	* utilities/imageeditor/rawimport/Makefile.am: compile
+
+2008-09-05 13:38  cgilles
+
+	* libs/levels/imagelevels.cpp, libs/levels/imagelevels.h: add
+	  reset()
+
+2008-09-05 13:12  cgilles
+
+	* imageplugins/adjustlevels/adjustlevelstool.cpp,
+	  imageplugins/adjustlevels/adjustlevelstool.h: separate input and
+	  ouput color guide
+
+2008-09-05 13:01  cgilles
+
+	* libs/widgets/common/histogramwidget.cpp: to be able to show color
+	  guide in AllColors mode
+
+2008-09-05 12:36  cgilles
+
+	* utilities/imageeditor/rawimport/rawpostprocessing.cpp: add levels
+	  adjustements
+
+2008-09-05 12:31  cgilles
+
+	* libs/dimg/loaders/Makefile.am, libs/dimg/loaders/rawloader.cpp,
+	  libs/dimg/loaders/rawloader.h: add levels adjusments as raw post
+	  processing
+
+2008-09-05 12:28  cgilles
+
+	* libs/dimg/drawdecoding.h: add levels adjustments
+
+2008-09-05 11:19  cgilles
+
+	* libs/levels/imagelevels.cpp, libs/levels/imagelevels.h: polish
+
+2008-09-05 10:55  cgilles
+
+	* libs/levels/imagelevels.cpp: missing header
+
+2008-09-05 10:52  cgilles
+
+	* libs/levels/imagelevels.cpp, libs/levels/imagelevels.h: add dirty
+	  flag
+	  use const ref
+
+2008-09-05 08:24  cgilles
+
+	* libs/levels/imagelevels.cpp, libs/levels/imagelevels.h: new
+	  method to get sixteen bits flag
+
+2008-09-05 06:37  cgilles
+
+	* utilities/imageeditor/rawimport/rawpostprocessing.cpp,
+	  utilities/imageeditor/rawimport/rawpostprocessing.h: make this
+	  code fully re-entrant
+
+2008-09-04 07:39  cgilles
+
+	* NEWS: update
+
+2008-09-03 13:03  cgilles
+
+	* imageplugins/adjustlevels/adjustlevelstool.cpp: redesign Adjust
+	  Levels settings layout to be more suitable
+
+2008-09-02 14:43  cgilles
+
+	* utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawimport.h: we need to use
+	  slotOk and slotCancel from EditorTool class, else Raw Import is
+	  broken
+
+2008-09-02 12:36  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp: polish
+
+2008-09-02 12:09  cgilles
+
+	* utilities/imageeditor/rawimport/rawpreview.cpp,
+	  utilities/imageeditor/rawimport/rawpreview.h: polish
+
+2008-09-02 12:00  cgilles
+
+	* utilities/imageeditor/rawimport/rawpostprocessing.cpp: polish
+
+2008-09-02 11:57  cgilles
+
+	* utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawimport.h,
+	  utilities/imageeditor/rawimport/rawpostprocessing.cpp,
+	  utilities/imageeditor/rawimport/rawpreview.cpp,
+	  utilities/imageeditor/rawimport/rawpreview.h: Raw Import : use
+	  status progress bar from editor with post processed operations
+
+2008-09-02 11:10  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h: new method to
+	  customize progress message with multithreaded tools
+
+2008-09-02 11:09  cgilles
+
+	* libs/widgets/common/statusprogressbar.cpp,
+	  libs/widgets/common/statusprogressbar.h: polish
+
+2008-09-02 10:59  cgilles
+
+	* libs/widgets/common/statusprogressbar.cpp: to be sure that
+	  progress bar message is updated
+
+2008-09-02 08:23  cgilles
+
+	* utilities/imageeditor/rawimport/rawimport.cpp: fix i18n
+
+2008-09-01 20:56  cgilles
+
+	* utilities/imageeditor/rawimport/rawimport.cpp: polish
+
+2008-09-01 19:44  cgilles
+
+	* utilities/imageeditor/rawimport/rawimport.cpp: polish
+
+2008-09-01 18:16  cgilles
+
+	* utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawimport.h: use status progress
+	  bar during demosaicing
+
+2008-09-01 15:50  aclemens
+
+	* imageplugins/emboss/embosstool.cpp: we don't need a "Try" button
+	  here
+
+2008-09-01 15:17  aclemens
+
+	* imageplugins/oilpaint/oilpainttool.cpp: when Try button is used,
+	  we should not connect the settings widgets to slotTimer /
+	  slotEffect
+
+2008-09-01 15:00  aclemens
+
+	* imageplugins/texture/texturetool.cpp: we don't need a "Try"
+	  button here
+
+2008-09-01 12:26  aclemens
+
+	* NEWS: update
+
+2008-09-01 11:43  aclemens
+
+	* imageplugins/whitebalance/whitebalancetool.cpp: Temperature
+	  slider range was wrong, so that the preset "Candle" couldn't be
+	  selected. New range starts from 1750K now.
+
+2008-09-01 11:39  cgilles
+
+	* imageplugins/texture/texturetool.h: polish
+
+2008-09-01 10:57  aclemens
+
+	* imageplugins/antivignetting/antivignettingtool.cpp,
+	  imageplugins/blurfx/blurfxtool.cpp,
+	  imageplugins/border/bordertool.cpp,
+	  imageplugins/charcoal/charcoaltool.cpp,
+	  imageplugins/emboss/embosstool.cpp,
+	  imageplugins/filmgrain/filmgraintool.cpp,
+	  imageplugins/freerotation/freerotationtool.cpp,
+	  imageplugins/hotpixels/hotpixelstool.cpp,
+	  imageplugins/infrared/infraredtool.cpp,
+	  imageplugins/inpainting/inpaintingtool.cpp,
+	  imageplugins/inserttext/inserttexttool.cpp,
+	  imageplugins/lensdistortion/lensdistortiontool.cpp,
+	  imageplugins/noisereduction/noisereductiontool.cpp,
+	  imageplugins/oilpaint/oilpainttool.cpp,
+	  imageplugins/perspective/perspectivetool.cpp,
+	  imageplugins/restoration/restorationtool.cpp,
+	  imageplugins/sheartool/sheartool.cpp,
+	  imageplugins/superimpose/superimposetool.cpp,
+	  imageplugins/texture/texturetool.cpp,
+	  imageplugins/whitebalance/whitebalancetool.cpp: remove not needed
+	  whatsThis string
+
+2008-09-01 10:07  cgilles
+
+	* imageplugins/noisereduction/noisereductiontool.cpp: polish
+
+2008-09-01 08:19  cgilles
+
+	* imageplugins/coreplugin/blurtool.cpp:
+
+2008-09-01 08:02  aclemens
+
+	* imageplugins/coreplugin/iccprooftool.cpp: Wrong parent widget for
+	  ICC profile info dialog
+
+2008-09-01 07:23  aclemens
+
+	* NEWS: typo
+
+2008-09-01 07:22  aclemens
+
+	* NEWS: typo
+
+2008-09-01 07:03  cgilles
+
+	* NEWS: update
+
+2008-08-31 19:11  cgilles
+
+	* imageplugins/sheartool/sheartool.cpp: fix i18n
+
+2008-08-31 11:00  aclemens
+
+	* imageplugins/coreplugin/iccprooftool.cpp: polish
+
+2008-08-31 10:59  aclemens
+
+	* imageplugins/coreplugin/iccprooftool.cpp,
+	  imageplugins/coreplugin/iccprooftool.h: added missing Load and
+	  Save As buttons
+
+2008-08-31 09:49  aclemens
+
+	* imageplugins/hotpixels/hotpixel.h: set parentheses to eliminate
+	  compiler warnings
+
+2008-08-31 08:49  aclemens
+
+	* imageplugins/colorfx/colorfxtool.cpp: -> remove unneeded delete
+	  statements
+	  -> code polish
+
+2008-08-31 08:45  aclemens
+
+	* imageplugins/colorfx/colorfxtool.cpp: polish
+
+2008-08-31 08:38  aclemens
+
+	* imageplugins/inserttext/inserttexttool.cpp: polish
+
+2008-08-31 08:38  aclemens
+
+	* imageplugins/colorfx/colorfxtool.cpp: typo
+
+2008-08-30 22:22  cgilles
+
+	* imageplugins/restoration/restorationtool.cpp: polish
+
+2008-08-30 21:54  cgilles
+
+	* imageplugins/hotpixels/hotpixelstool.cpp: add Try button
+
+2008-08-30 15:22  cgilles
+
+	* libs/widgets/imageplugins/imagepanelwidget.cpp,
+	  libs/widgets/imageplugins/imagepanelwidget.h: polish
+
+2008-08-30 15:13  cgilles
+
+	* libs/widgets/imageplugins/imagepanelwidget.cpp: bye bye zoom bar
+
+2008-08-30 14:27  cgilles
+
+	* utilities/imageeditor/editor/editorwindow.cpp: disable zooming
+	  options when tool is busy
+
+2008-08-30 14:18  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h: dispatch busy state to
+	  settings widget
+
+2008-08-30 14:04  cgilles
+
+	* utilities/imageeditor/editor/editorstackview.cpp,
+	  utilities/imageeditor/editor/editorstackview.h: to be able to use
+	  zoom +/- from editor tool bar with all plugins
+
+2008-08-30 13:57  cgilles
+
+	* libs/widgets/imageplugins/imagepanelwidget.cpp,
+	  libs/widgets/imageplugins/imagepanelwidget.h: add method to get
+	  preview widget
+
+2008-08-30 12:43  cgilles
+
+	* libs/widgets/imageplugins/Makefile.am,
+	  libs/widgets/imageplugins/imagepannelwidget.cpp,
+	  libs/widgets/imageplugins/imagepannelwidget.h: this widget is now
+	  obsolete
+
+2008-08-30 12:41  cgilles
+
+	* libs/dialogs/Makefile.am, libs/dialogs/ctrlpaneldlg.cpp,
+	  libs/dialogs/ctrlpaneldlg.h: remove old last dialog for image
+	  plugins
+
+2008-08-30 12:40  cgilles
+
+	* imageplugins/EDITORTOOLPORT: bye bye
+
+2008-08-30 12:39  cgilles
+
+	* imageplugins/emboss/Makefile.am,
+	  imageplugins/emboss/embosstool.cpp,
+	  imageplugins/emboss/embosstool.h,
+	  imageplugins/emboss/imageeffect_emboss.cpp,
+	  imageplugins/emboss/imageeffect_emboss.h,
+	  imageplugins/emboss/imageplugin_emboss.cpp: digiKam from KDE3
+	  branch : "Et voilà!!!", the last image plugin is ported to Editor
+	  Tool API
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-30 12:08  cgilles
+
+	* imageplugins/EDITORTOOLPORT: update
+
+2008-08-30 12:08  cgilles
+
+	* imageplugins/charcoal/Makefile.am,
+	  imageplugins/charcoal/charcoaltool.cpp,
+	  imageplugins/charcoal/charcoaltool.h,
+	  imageplugins/charcoal/imageeffect_charcoal.cpp,
+	  imageplugins/charcoal/imageeffect_charcoal.h,
+	  imageplugins/charcoal/imageplugin_charcoal.cpp: digiKam from KDE3
+	  branch: Charcoal image plugin is now ported to Editor Tool API
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-30 10:34  cgilles
+
+	* imageplugins/EDITORTOOLPORT: update
+
+2008-08-30 10:34  cgilles
+
+	* imageplugins/filmgrain/filmgraintool.cpp: polish
+
+2008-08-30 10:32  cgilles
+
+	* imageplugins/filmgrain/Makefile.am,
+	  imageplugins/filmgrain/filmgraintool.cpp,
+	  imageplugins/filmgrain/filmgraintool.h,
+	  imageplugins/filmgrain/imageeffect_filmgrain.cpp,
+	  imageplugins/filmgrain/imageeffect_filmgrain.h,
+	  imageplugins/filmgrain/imageplugin_filmgrain.cpp: digiKam from
+	  KDE3 branch: Film Grain image plugin is now ported to Editor Tool
+	  API
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-30 09:43  cgilles
+
+	* imageplugins/EDITORTOOLPORT: update
+
+2008-08-30 09:39  cgilles
+
+	* imageplugins/oilpaint/Makefile.am,
+	  imageplugins/oilpaint/imageeffect_oilpaint.cpp,
+	  imageplugins/oilpaint/imageeffect_oilpaint.h,
+	  imageplugins/oilpaint/imageplugin_oilpaint.cpp,
+	  imageplugins/oilpaint/oilpainttool.cpp,
+	  imageplugins/oilpaint/oilpainttool.h: digikam from KDE3 branch :
+	  Oil Paint image plugin is now ported to Editor Tool API
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-30 09:29  cgilles
+
+	* imageplugins/EDITORTOOLPORT: update
+
+2008-08-30 09:28  cgilles
+
+	* imageplugins/texture/Makefile.am,
+	  imageplugins/texture/imageeffect_texture.cpp,
+	  imageplugins/texture/imageeffect_texture.h,
+	  imageplugins/texture/imageplugin_texture.cpp,
+	  imageplugins/texture/texturetool.cpp,
+	  imageplugins/texture/texturetool.h: digiKam from KDE3 branch:
+	  Texture image plugin is now ported to Editor Tool API
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-30 08:58  cgilles
+
+	* imageplugins/EDITORTOOLPORT: next one
+
+2008-08-30 08:58  cgilles
+
+	* imageplugins/EDITORTOOLPORT: update
+
+2008-08-30 08:57  cgilles
+
+	* imageplugins/blurfx/blurfxtool.cpp: revert
+
+2008-08-30 08:57  cgilles
+
+	* imageplugins/blurfx/blurfxtool.cpp: --This line, and those
+	  below,polish will be ignored--
+	  
+	  M blurfx/blurfxtool.cpp
+
+2008-08-30 08:55  cgilles
+
+	* imageplugins/blurfx/Makefile.am,
+	  imageplugins/blurfx/blurfxtool.cpp,
+	  imageplugins/blurfx/blurfxtool.h,
+	  imageplugins/blurfx/imageeffect_blurfx.cpp,
+	  imageplugins/blurfx/imageeffect_blurfx.h,
+	  imageplugins/blurfx/imageplugin_blurfx.cpp: digiKam from KDE3
+	  branch: BlurFX image plugin is now ported to Editor Tool API
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-30 08:44  cgilles
+
+	* imageplugins/EDITORTOOLPORT: next one
+
+2008-08-30 08:42  cgilles
+
+	* imageplugins/EDITORTOOLPORT:
+
+2008-08-30 08:41  cgilles
+
+	* imageplugins/hotpixels/Makefile.am,
+	  imageplugins/hotpixels/hotpixelstool.cpp,
+	  imageplugins/hotpixels/hotpixelstool.h,
+	  imageplugins/hotpixels/imageeffect_hotpixels.cpp,
+	  imageplugins/hotpixels/imageeffect_hotpixels.h,
+	  imageplugins/hotpixels/imageplugin_hotpixels.cpp: digiKam from
+	  KDE3 branch: HotPixels image plugin is now ported to EditorTool
+	  API
+	  Unai, Can you test and report if all work fine for you ?
+	  CCMAIL: ugarro@gmail.com
+
+2008-08-29 22:30  aclemens
+
+	* imageplugins/coreplugin/bwsepiatool.cpp: polish
+
+2008-08-29 21:46  aclemens
+
+	* imageplugins/coreplugin/bcgtool.cpp: polish
+
+2008-08-29 21:02  cgilles
+
+	* imageplugins/channelmixer/channelmixertool.cpp,
+	  imageplugins/colorfx/colorfxtool.cpp,
+	  imageplugins/coreplugin/autocorrectiontool.cpp,
+	  imageplugins/coreplugin/bcgtool.cpp,
+	  imageplugins/coreplugin/bwsepiatool.cpp,
+	  imageplugins/coreplugin/hsl/hsltool.cpp,
+	  imageplugins/coreplugin/iccprooftool.cpp,
+	  imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp,
+	  imageplugins/coreplugin/redeyetool.cpp,
+	  imageplugins/coreplugin/rgbtool.cpp,
+	  imageplugins/distortionfx/distortionfxtool.cpp,
+	  imageplugins/perspective/perspectivetool.cpp,
+	  imageplugins/raindrop/raindroptool.cpp: Editor Tool are nt
+	  Dialog. We ned to rename config text file section without
+	  "Dialog" annotation
+	  CCMAIL: andi.clemens@gmx.net
+
+2008-08-29 20:56  cgilles
+
+	* imageplugins/infrared/infraredtool.cpp: polish
+
+2008-08-29 20:55  cgilles
+
+	* imageplugins/EDITORTOOLPORT: update
+
+2008-08-29 20:54  cgilles
+
+	* imageplugins/infrared/Makefile.am,
+	  imageplugins/infrared/imageeffect_infrared.cpp,
+	  imageplugins/infrared/imageeffect_infrared.h,
+	  imageplugins/infrared/imageplugin_infrared.cpp,
+	  imageplugins/infrared/infraredtool.cpp,
+	  imageplugins/infrared/infraredtool.h: digiKam from KDE3 branch :
+	  Infrared image plugin is now ported to Editor Tool API
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-29 20:31  cgilles
+
+	* imageplugins/EDITORTOOLPORT: next one
+
+2008-08-29 20:31  cgilles
+
+	* imageplugins/EDITORTOOLPORT: and another one
+
+2008-08-29 20:18  cgilles
+
+	* imageplugins/restoration/Makefile.am,
+	  imageplugins/restoration/imageeffect_restoration.cpp,
+	  imageplugins/restoration/imageeffect_restoration.h,
+	  imageplugins/restoration/imageplugin_restoration.cpp,
+	  imageplugins/restoration/restorationtool.cpp,
+	  imageplugins/restoration/restorationtool.h: digiKam from KDE3
+	  branch : Restoration image plugin is now ported to Editor Tool
+	  API
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-29 18:47  cgilles
+
+	* imageplugins/noisereduction/imageplugin_noisereduction.cpp:
+	  polish
+
+2008-08-29 18:04  cgilles
+
+	* imageplugins/EDITORTOOLPORT: next one
+
+2008-08-29 18:04  cgilles
+
+	* imageplugins/EDITORTOOLPORT: and another one
+
+2008-08-29 18:03  cgilles
+
+	* imageplugins/noisereduction/noisereductiontool.cpp: fix layout
+
+2008-08-29 17:56  cgilles
+
+	* imageplugins/noisereduction/noisereductiontool.h: compile
+
+2008-08-29 17:55  cgilles
+
+	* imageplugins/noisereduction/Makefile.am,
+	  imageplugins/noisereduction/imageeffect_noisereduction.cpp,
+	  imageplugins/noisereduction/imageeffect_noisereduction.h,
+	  imageplugins/noisereduction/imageplugin_noisereduction.cpp,
+	  imageplugins/noisereduction/noisereductiontool.cpp,
+	  imageplugins/noisereduction/noisereductiontool.h: digiKam from
+	  KDE3 branch : Noise Reduction image plugin is now ported to
+	  Editor Tool API
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-29 16:44  cgilles
+
+	* imageplugins/EDITORTOOLPORT: next one
+
+2008-08-29 15:53  cgilles
+
+	* imageplugins/EDITORTOOLPORT: and another one
+
+2008-08-29 15:50  cgilles
+
+	* imageplugins/coreplugin/sharpnesseditor/sharpentool.cpp: compile
+
+2008-08-29 15:49  cgilles
+
+	* imageplugins/coreplugin/sharpnesseditor/sharpentool.cpp: missing
+	  buttons
+
+2008-08-29 15:48  cgilles
+
+	* imageplugins/coreplugin/sharpnesseditor/sharpentool.cpp: fix
+	  layout
+
+2008-08-29 15:31  cgilles
+
+	* imageplugins/coreplugin/imageplugin_core.cpp,
+	  imageplugins/coreplugin/sharpnesseditor/Makefile.am,
+	  imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.cpp,
+	  imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.h,
+	  imageplugins/coreplugin/sharpnesseditor/sharpentool.cpp,
+	  imageplugins/coreplugin/sharpnesseditor/sharpentool.h: digiKam
+	  from KDE3 branch: Sharpen image plugin is now ported to Editor
+	  Tool API
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-29 15:01  cgilles
+
+	* imageplugins/EDITORTOOLPORT: next one
+
+2008-08-29 12:23  cgilles
+
+	* imageplugins/texture/imageplugin_texture.cpp,
+	  imageplugins/texture/imageplugin_texture.h: compile
+
+2008-08-29 12:22  cgilles
+
+	* imageplugins/restoration/imageplugin_restoration.cpp,
+	  imageplugins/restoration/imageplugin_restoration.h: compile
+
+2008-08-29 12:21  cgilles
+
+	* imageplugins/raindrop/imageplugin_raindrop.cpp,
+	  imageplugins/raindrop/imageplugin_raindrop.h,
+	  imageplugins/raindrop/raindroptool.cpp,
+	  imageplugins/raindrop/raindroptool.h: compile
+
+2008-08-29 12:19  cgilles
+
+	* imageplugins/oilpaint/imageplugin_oilpaint.cpp,
+	  imageplugins/oilpaint/imageplugin_oilpaint.h: compile
+
+2008-08-29 12:18  cgilles
+
+	* imageplugins/noisereduction/imageplugin_noisereduction.cpp,
+	  imageplugins/noisereduction/imageplugin_noisereduction.h: compile
+
+2008-08-29 12:16  cgilles
+
+	* imageplugins/hotpixels/imageplugin_hotpixels.cpp,
+	  imageplugins/infrared/imageplugin_infrared.cpp,
+	  imageplugins/infrared/imageplugin_infrared.h: compile
+
+2008-08-29 12:14  cgilles
+
+	* imageplugins/hotpixels/imageplugin_hotpixels.cpp,
+	  imageplugins/hotpixels/imageplugin_hotpixels.h: compile
+
+2008-08-29 12:12  cgilles
+
+	* imageplugins/filmgrain/imageplugin_filmgrain.cpp,
+	  imageplugins/filmgrain/imageplugin_filmgrain.h: compile
+
+2008-08-29 12:11  cgilles
+
+	* imageplugins/distortionfx/distortionfxtool.cpp,
+	  imageplugins/distortionfx/distortionfxtool.h,
+	  imageplugins/distortionfx/imageplugin_distortionfx.cpp,
+	  imageplugins/emboss/imageplugin_emboss.cpp,
+	  imageplugins/emboss/imageplugin_emboss.h: compile
+
+2008-08-29 12:08  cgilles
+
+	* imageplugins/charcoal/imageplugin_charcoal.cpp,
+	  imageplugins/colorfx/colorfxtool.cpp,
+	  imageplugins/colorfx/colorfxtool.h,
+	  imageplugins/colorfx/imageplugin_colorfx.cpp,
+	  imageplugins/colorfx/imageplugin_colorfx.h: compile
+
+2008-08-29 12:06  cgilles
+
+	* imageplugins/charcoal/imageplugin_charcoal.cpp,
+	  imageplugins/charcoal/imageplugin_charcoal.h: compile
+
+2008-08-29 12:04  cgilles
+
+	* imageplugins/blurfx/imageplugin_blurfx.cpp,
+	  imageplugins/blurfx/imageplugin_blurfx.h: compile
+
+2008-08-29 12:02  cgilles
+
+	* imageplugins/coreplugin/autocorrectiontool.cpp,
+	  imageplugins/coreplugin/autocorrectiontool.h,
+	  imageplugins/coreplugin/bcgtool.cpp,
+	  imageplugins/coreplugin/bcgtool.h,
+	  imageplugins/coreplugin/bwsepiatool.cpp,
+	  imageplugins/coreplugin/bwsepiatool.h,
+	  imageplugins/coreplugin/hsl/hsltool.cpp,
+	  imageplugins/coreplugin/hsl/hsltool.h,
+	  imageplugins/coreplugin/iccprooftool.cpp,
+	  imageplugins/coreplugin/iccprooftool.h,
+	  imageplugins/coreplugin/imageplugin_core.cpp,
+	  imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp,
+	  imageplugins/coreplugin/ratiocrop/ratiocroptool.h,
+	  imageplugins/coreplugin/redeyetool.cpp,
+	  imageplugins/coreplugin/redeyetool.h,
+	  imageplugins/coreplugin/rgbtool.cpp,
+	  imageplugins/coreplugin/rgbtool.h,
+	  utilities/imageeditor/canvas/imageplugin.cpp,
+	  utilities/imageeditor/canvas/imageplugin.h,
+	  utilities/imageeditor/editor/editorwindow.cpp: API simplification
+	  : in ImagePlugin class, we don't need to store parent widget
+	  (editor in fact)
+	  Just use kaap->activeWindow() instead is enough.
+	  Note: EditorTool need QObject not QWidget in contructor.
+	  CCMAIL: andi.clemens@gmx.net
+
+2008-08-29 11:12  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp: optimize
+	  layout
+
+2008-08-29 10:07  cgilles
+
+	* imageplugins/coreplugin/Makefile.am,
+	  imageplugins/coreplugin/blurtool.cpp,
+	  imageplugins/coreplugin/blurtool.h,
+	  imageplugins/coreplugin/imageeffect_blur.cpp,
+	  imageplugins/coreplugin/imageeffect_blur.h,
+	  imageplugins/coreplugin/imageplugin_core.cpp: digiKam from KDE3
+	  branch : Blur image plugin is now ported to Editor Tool API
+	  CCMAIL: digik-devel@kde.org
+
+2008-08-29 10:06  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.h: new method to
+	  use pan icon widget into image plugins
+
+2008-08-29 10:05  cgilles
+
+	* libs/widgets/imageplugins/Makefile.am,
+	  libs/widgets/imageplugins/imagepanelwidget.cpp,
+	  libs/widgets/imageplugins/imagepanelwidget.h: new widget named
+	  ImagePanelWidget to replace ImagePannelWidget (look the typo)
+	  into CtrlPanelDlg image plugins ported to EditorTool
+	  CCMAIL: andi.clemens@gmx.net
+
+2008-08-29 09:02  aclemens
+
+	* imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp: disconnect
+	  the standard connection of the "Try" button to slotEffect()
+
+2008-08-29 08:53  aclemens
+
+	* imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp: Use QToolTip
+	  for "Max. Aspect" button instead of QWhatsThis. This behavior is
+	  much more logical for the average user.
+
+2008-08-29 08:42  aclemens
+
+	* imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp: We don't
+	  need to call readSettings() manually anymore since this is
+	  handled by the EditorTool class.
+
+2008-08-29 08:36  aclemens
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp: polish
+
+2008-08-29 08:36  aclemens
+
+	* imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp,
+	  imageplugins/coreplugin/ratiocrop/ratiocroptool.h: Added the
+	  "Max. Aspect" button again, this requires some tweaking of the
+	  "Try" button that will not be used in this tool anyway.
+
+2008-08-29 08:14  cgilles
+
+	* imageplugins/EDITORTOOLPORT: next one
+
+2008-08-29 07:46  cgilles
+
+	* imageplugins/superimpose/superimposetool.cpp: polish
+
+2008-08-28 22:06  cgilles
+
+	* utilities/imageeditor/editor/Makefile.am,
+	  utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.h: prepare Editor
+	  Tool API for CtrlPanelDlg port
+
+2008-08-28 21:18  aclemens
+
+	* imageplugins/colorfx/colorfxtool.cpp,
+	  imageplugins/distortionfx/distortionfxtool.cpp: polish
+
+2008-08-28 21:15  aclemens
+
+	* imageplugins/raindrop/raindroptool.cpp: polish
+
+2008-08-28 21:14  cgilles
+
+	* libs/dialogs/Makefile.am, libs/dialogs/imagedlgbase.cpp,
+	  libs/dialogs/imagedlgbase.h, libs/dialogs/imageguidedlg.cpp,
+	  libs/dialogs/imageguidedlg.h: remove obsolete dialogs for image
+	  plugins
+
+2008-08-28 21:03  cgilles
+
+	* imageplugins/EDITORTOOLPORT: Et Voilà : all ImageDlgBase and
+	  ImageGuideDlg image plugins are now ported to Editor Tool API
+
+2008-08-28 21:01  cgilles
+
+	* imageplugins/inserttext/Makefile.am,
+	  imageplugins/inserttext/imageeffect_inserttext.cpp,
+	  imageplugins/inserttext/imageeffect_inserttext.h,
+	  imageplugins/inserttext/imageplugin_inserttext.cpp,
+	  imageplugins/inserttext/imageplugin_inserttext.h,
+	  imageplugins/inserttext/inserttexttool.cpp,
+	  imageplugins/inserttext/inserttexttool.h: digiKam from KDE3
+	  branch : Insert Text image plugin is now ported to Editor Tool
+	  API
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-28 20:57  aclemens
+
+	* imageplugins/raindrop/raindroptool.cpp: polish
+
+2008-08-28 20:49  aclemens
+
+	* imageplugins/EDITORTOOLPORT: update
+
+2008-08-28 20:46  aclemens
+
+	* imageplugins/raindrop/Makefile.am,
+	  imageplugins/raindrop/imageeffect_raindrop.cpp,
+	  imageplugins/raindrop/imageeffect_raindrop.h,
+	  imageplugins/raindrop/imageplugin_raindrop.cpp,
+	  imageplugins/raindrop/raindroptool.cpp,
+	  imageplugins/raindrop/raindroptool.h: digiKam from KDE3 branch:
+	  Raindrops plugin is now ported to Editor Tool API.
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-28 20:39  cgilles
+
+	* imageplugins/EDITORTOOLPORT: i wil port this one.
+	  Andi, until i prepare the API to port plugins based on
+	  CtrlPanelDlg, you can start to backport all others to KDE4...
+	  CCMAIL: andi.clemens@gmx.net
+
+2008-08-28 20:21  aclemens
+
+	* imageplugins/EDITORTOOLPORT: update
+
+2008-08-28 20:21  aclemens
+
+	* imageplugins/colorfx/colorfxtool.cpp: polish
+
+2008-08-28 20:20  aclemens
+
+	* imageplugins/distortionfx/Makefile.am,
+	  imageplugins/distortionfx/distortionfxtool.cpp,
+	  imageplugins/distortionfx/distortionfxtool.h,
+	  imageplugins/distortionfx/imageeffect_distortionfx.cpp,
+	  imageplugins/distortionfx/imageeffect_distortionfx.h,
+	  imageplugins/distortionfx/imageplugin_distortionfx.cpp: digiKam
+	  from KDE3 branch: Distortion Effects plugin is now ported to
+	  Editor Tool API.
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-28 19:37  aclemens
+
+	* imageplugins/EDITORTOOLPORT: update
+
+2008-08-28 18:03  cgilles
+
+	* imageplugins/EDITORTOOLPORT: update
+
+2008-08-28 18:02  cgilles
+
+	* imageplugins/superimpose/Makefile.am,
+	  imageplugins/superimpose/imageeffect_superimpose.cpp,
+	  imageplugins/superimpose/imageeffect_superimpose.h,
+	  imageplugins/superimpose/imageplugin_superimpose.cpp,
+	  imageplugins/superimpose/imageplugin_superimpose.h,
+	  imageplugins/superimpose/superimposetool.cpp,
+	  imageplugins/superimpose/superimposetool.h: digiKam from KDE3
+	  branch: SuperImpose image plugin is now ported to Editor Tool API
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-28 17:53  aclemens
+
+	* imageplugins/colorfx/Makefile.am,
+	  imageplugins/colorfx/colorfxtool.cpp,
+	  imageplugins/colorfx/colorfxtool.h,
+	  imageplugins/colorfx/imageeffect_colorfx.cpp,
+	  imageplugins/colorfx/imageeffect_colorfx.h,
+	  imageplugins/colorfx/imageplugin_colorfx.cpp: digiKam from KDE3
+	  branch: Color Effects plugin is now ported to Editor Tool API.
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-28 17:29  aclemens
+
+	* imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp,
+	  imageplugins/sheartool/sheartool.cpp: polish
+
+2008-08-28 17:25  cgilles
+
+	* imageplugins/EDITORTOOLPORT: next one for me
+
+2008-08-28 16:05  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp: missing connection
+
+2008-08-28 16:02  cgilles
+
+	* imageplugins/EDITORTOOLPORT: update
+
+2008-08-28 16:01  cgilles
+
+	* imageplugins/inpainting/Makefile.am,
+	  imageplugins/inpainting/imageeffect_inpainting.cpp,
+	  imageplugins/inpainting/imageeffect_inpainting.h,
+	  imageplugins/inpainting/imageplugin_inpainting.cpp,
+	  imageplugins/inpainting/imageplugin_inpainting.h,
+	  imageplugins/inpainting/inpaintingtool.cpp,
+	  imageplugins/inpainting/inpaintingtool.h: digiKam from KDE3 :
+	  Inpainting image plugin is now ported to Editor Tool API
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-28 15:55  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h: polish
+
+2008-08-28 15:05  cgilles
+
+	* utilities/imageeditor/editor/editortooliface.h: polish
+
+2008-08-28 15:03  cgilles
+
+	* utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/editor/editortooliface.h,
+	  utilities/imageeditor/editor/editorwindow.cpp: code
+	  simplification
+
+2008-08-28 14:03  cgilles
+
+	* imageplugins/EDITORTOOLPORT: Andi, i will do it this one.
+	  Note: 1/ for all CtrlPanelDlg plugin, i need to design a new
+	  preview widget... All others plugins can be ported as well.
+	  2/ In LensDistortion, all settings default values are not
+	  implemented i think. Press Default button for ex.
+	  CCMAIL: andi.clemens@gmx.net
+
+2008-08-28 14:00  cgilles
+
+	* utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/editor/editortooliface.h,
+	  utilities/imageeditor/editor/editorwindow.cpp: Fix crash:
+	  setProgressbar in editor tool interface with a non null instance
+
+2008-08-28 12:38  aclemens
+
+	* imageplugins/EDITORTOOLPORT: update
+
+2008-08-28 12:37  aclemens
+
+	* imageplugins/coreplugin/imageplugin_core.cpp,
+	  imageplugins/coreplugin/ratiocrop/Makefile.am,
+	  imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.h,
+	  imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp,
+	  imageplugins/coreplugin/ratiocrop/ratiocroptool.h: digiKam from
+	  KDE3 branch: Aspect ratio crop plugin is now ported to Editor
+	  Tool API.
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-28 09:50  aclemens
+
+	* imageplugins/EDITORTOOLPORT: polish
+
+2008-08-28 09:47  aclemens
+
+	* imageplugins/EDITORTOOLPORT: update
+
+2008-08-28 09:41  aclemens
+
+	* imageplugins/EDITORTOOLPORT: update
+
+2008-08-28 09:30  cgilles
+
+	* imageplugins/EDITORTOOLPORT: list of EditorTool port (just for
+	  remember)
+	  CCMAIL: andi.clemens@gmx.net
+
+2008-08-28 09:02  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp: polish
+
+2008-08-28 08:47  cgilles
+
+	* imageplugins/antivignetting/antivignettingtool.cpp,
+	  imageplugins/border/bordertool.cpp,
+	  imageplugins/freerotation/freerotationtool.cpp,
+	  imageplugins/lensdistortion/lensdistortiontool.cpp,
+	  imageplugins/sheartool/sheartool.cpp: remove abort button
+
+2008-08-28 08:47  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h,
+	  utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/editor/editortooliface.h,
+	  utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.h,
+	  utilities/imageeditor/editor/editorwindow.cpp: We don't need an
+	  Abort button in editor tool settings. We can use status progress
+	  bar cancel button instead
+
+2008-08-28 07:31  cgilles
+
+	* imageplugins/adjustlevels/adjustlevelstool.cpp,
+	  imageplugins/adjustlevels/adjustlevelstool.h: restore event
+	  filter (removed by accident)
+
+2008-08-27 20:50  cgilles
+
+	* imageplugins/freerotation/freerotationtool.cpp,
+	  imageplugins/lensdistortion/lensdistortiontool.cpp,
+	  imageplugins/lensdistortion/lensdistortiontool.h,
+	  imageplugins/sheartool/sheartool.cpp: polish
+
+2008-08-27 20:48  cgilles
+
+	* imageplugins/freerotation/freerotationtool.cpp: polish
+
+2008-08-27 20:10  cgilles
+
+	* imageplugins/lensdistortion/lensdistortiontool.cpp: we need guide
+	  here
+
+2008-08-27 20:06  cgilles
+
+	* imageplugins/lensdistortion/Makefile.am,
+	  imageplugins/lensdistortion/imageeffect_lensdistortion.cpp,
+	  imageplugins/lensdistortion/imageeffect_lensdistortion.h,
+	  imageplugins/lensdistortion/imageplugin_lensdistortion.cpp,
+	  imageplugins/lensdistortion/imageplugin_lensdistortion.h,
+	  imageplugins/lensdistortion/lensdistortiontool.cpp,
+	  imageplugins/lensdistortion/lensdistortiontool.h: digiKam from
+	  KDE3 branch: LensDistortion image plugin is now ported to Editor
+	  Tool API
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-27 20:05  cgilles
+
+	* imageplugins/antivignetting/antivignettingtool.h: polish
+
+2008-08-27 19:42  cgilles
+
+	* imageplugins/antivignetting/Makefile.am,
+	  imageplugins/antivignetting/antivignettingtool.cpp,
+	  imageplugins/antivignetting/antivignettingtool.h,
+	  imageplugins/antivignetting/imageeffect_antivignetting.cpp,
+	  imageplugins/antivignetting/imageeffect_antivignetting.h,
+	  imageplugins/antivignetting/imageplugin_antivignetting.cpp,
+	  imageplugins/antivignetting/imageplugin_antivignetting.h: digiKam
+	  from KDE3 branch : Antivignetting image plugin is now ported to
+	  Editor Tool API
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-27 19:40  cgilles
+
+	* imageplugins/sheartool/sheartool.cpp: polish
+
+2008-08-27 19:40  cgilles
+
+	* imageplugins/freerotation/freerotationtool.cpp: polish
+
+2008-08-27 19:40  cgilles
+
+	* imageplugins/border/bordertool.cpp: polish
+
+2008-08-27 19:24  cgilles
+
+	* imageplugins/border/bordertool.h: polish
+
+2008-08-27 17:20  cgilles
+
+	* imageplugins/border/bordertool.cpp: polish
+
+2008-08-27 17:02  cgilles
+
+	* imageplugins/border/Makefile.am,
+	  imageplugins/border/bordertool.cpp,
+	  imageplugins/border/bordertool.h,
+	  imageplugins/border/imageeffect_border.cpp,
+	  imageplugins/border/imageeffect_border.h,
+	  imageplugins/border/imageplugin_border.cpp,
+	  imageplugins/border/imageplugin_border.h: digiKam from KDE3
+	  branch: Border image plugin is now ported to Editor Tool API
+
+2008-08-27 16:04  cgilles
+
+	* imageplugins/coreplugin/imageplugin_core.cpp: compile
+
+2008-08-27 16:02  cgilles
+
+	* imageplugins/coreplugin/imageplugin_core.cpp,
+	  imageplugins/coreplugin/imageplugin_core.h: make CCM plugin
+	  private
+
+2008-08-27 15:43  cgilles
+
+	* imageplugins/coreplugin/imageplugin_core.cpp,
+	  imageplugins/coreplugin/imageplugin_core.h,
+	  utilities/imageeditor/canvas/canvas.cpp,
+	  utilities/imageeditor/canvas/canvas.h,
+	  utilities/imageeditor/canvas/dimginterface.cpp,
+	  utilities/imageeditor/canvas/dimginterface.h,
+	  utilities/imageeditor/canvas/iccsettingscontainer.h,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/setup/setupicc.cpp, utilities/setup/setupicc.h: digiKAm
+	  from KDE3 branch : Color Management : option to handle RAW file
+	  with CM image plugin is now obsolote.
+	  This option is removed. Use RAW Import tool instead.
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-27 13:21  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp: polish
+
+2008-08-27 13:14  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp: polish
+
+2008-08-27 13:06  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp: restore status bar
+	  when tool is done
+
+2008-08-27 13:05  cgilles
+
+	* utilities/imageeditor/editor/editorwindow.cpp: fix tool progress
+	  message
+
+2008-08-27 12:58  cgilles
+
+	* imageplugins/sheartool/sheartool.cpp,
+	  imageplugins/sheartool/sheartool.h: use color guide
+
+2008-08-27 12:58  cgilles
+
+	* imageplugins/freerotation/freerotationtool.cpp,
+	  imageplugins/freerotation/freerotationtool.h: use color guide
+
+2008-08-27 12:58  cgilles
+
+	* utilities/imageeditor/rawimport/rawsettingsbox.cpp: compile
+
+2008-08-27 12:56  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.h: add color
+	  guide
+
+2008-08-26 22:42  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp: handle buttons with
+	  threaded editr tools
+
+2008-08-26 22:18  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/editor/editortooliface.h,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow.h: editor tool ifac eis
+	  now able to report editor tool progress in statusbar
+
+2008-08-26 21:53  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h: polish
+
+2008-08-26 21:37  cgilles
+
+	* imageplugins/sheartool/Makefile.am,
+	  imageplugins/sheartool/imageeffect_sheartool.cpp,
+	  imageplugins/sheartool/imageeffect_sheartool.h,
+	  imageplugins/sheartool/imageplugin_sheartool.cpp,
+	  imageplugins/sheartool/sheartool.cpp,
+	  imageplugins/sheartool/sheartool.h: digiKam from KDE3 branch :
+	  Shear Tool image plugin is now ported to Editor Tool API
+
+2008-08-26 21:22  cgilles
+
+	* imageplugins/freerotation/freerotationtool.h: polish
+
+2008-08-26 21:17  cgilles
+
+	* imageplugins/sheartool/Makefile.am,
+	  imageplugins/sheartool/imageeffect_sheartool.cpp,
+	  imageplugins/sheartool/imageplugin_sheartool.cpp,
+	  imageplugins/sheartool/imageplugin_sheartool.h,
+	  imageplugins/sheartool/shear.cpp, imageplugins/sheartool/shear.h,
+	  imageplugins/sheartool/sheartool.cpp,
+	  imageplugins/sheartool/sheartool.h: polish
+
+2008-08-26 21:09  cgilles
+
+	* imageplugins/freerotation/Makefile.am,
+	  imageplugins/freerotation/freerotationtool.cpp,
+	  imageplugins/freerotation/freerotationtool.h,
+	  imageplugins/freerotation/imageeffect_freerotation.cpp,
+	  imageplugins/freerotation/imageeffect_freerotation.h,
+	  imageplugins/freerotation/imageplugin_freerotation.cpp,
+	  imageplugins/freerotation/imageplugin_freerotation.h: digiKam
+	  from KDE3 branch : Free Rotation is the first multithreaded image
+	  plugins ported to Editor Tool API
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-26 20:47  cgilles
+
+	* imageplugins/whitebalance/whitebalancetool.cpp: polish
+
+2008-08-26 20:47  cgilles
+
+	* imageplugins/channelmixer/channelmixertool.cpp: polish
+
+2008-08-26 20:46  cgilles
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp: polish
+
+2008-08-26 20:46  cgilles
+
+	* imageplugins/adjustlevels/adjustlevelstool.cpp: polish
+
+2008-08-26 19:44  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp: fix layout
+
+2008-08-26 19:18  aclemens
+
+	* NEWS: update
+
+2008-08-26 19:01  cgilles
+
+	* imageplugins/coreplugin/imageplugin_core.h: polish
+
+2008-08-26 19:00  cgilles
+
+	* imageplugins/coreplugin/imageplugin_core.cpp: using core
+	  namesapce
+
+2008-08-26 18:57  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp: fix i18n
+
+2008-08-26 18:56  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp: code
+	  simplification
+
+2008-08-26 18:46  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.h: revert. it's a
+	  wrong way
+
+2008-08-26 18:32  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.h: QWidget =>
+	  QScrollView
+
+2008-08-26 17:47  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h: digiKam from KDE3
+	  branch : first version of EditorToolThreaded class dedicated to
+	  be used with multithreaded image plugins. Not yet complete
+
+2008-08-26 15:42  aclemens
+
+	* imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.h:
+	  slotOk() needs to be renamed to finalRendering(), layout fixes
+	  (but still not good)
+
+2008-08-26 14:53  aclemens
+
+	* imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp: at
+	  least the buttons are visible again, need to do further fixing
+
+2008-08-26 14:36  aclemens
+
+	* imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp: We
+	  need a new layout here, it doesn't work with the new editor tool.
+	  Starting to fix layout...
+
+2008-08-26 14:31  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.h: add Abort
+	  button
+
+2008-08-26 14:00  aclemens
+
+	* imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp:
+	  polish
+
+2008-08-26 13:57  aclemens
+
+	* imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.h: polish
+
+2008-08-26 13:48  aclemens
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp,
+	  imageplugins/channelmixer/channelmixertool.cpp,
+	  imageplugins/coreplugin/autocorrectiontool.cpp,
+	  imageplugins/coreplugin/bcgtool.cpp,
+	  imageplugins/coreplugin/bwsepiatool.cpp,
+	  imageplugins/coreplugin/hsl/hsltool.cpp,
+	  imageplugins/coreplugin/iccprooftool.cpp,
+	  imageplugins/coreplugin/redeyetool.cpp,
+	  imageplugins/coreplugin/rgbtool.cpp,
+	  imageplugins/whitebalance/whitebalancetool.cpp: histogram widget
+	  needs to be reset on readSettings, otherwise no histogram will be
+	  displayed at all
+
+2008-08-26 13:17  cgilles
+
+	* imageplugins/perspective/Makefile.am,
+	  imageplugins/perspective/imageeffect_perspective.cpp,
+	  imageplugins/perspective/imageeffect_perspective.h,
+	  imageplugins/perspective/imageplugin_perspective.cpp,
+	  imageplugins/perspective/imageplugin_perspective.h,
+	  imageplugins/perspective/perspectivetool.cpp,
+	  imageplugins/perspective/perspectivetool.h: digikam from KDE3
+	  branch : Perspective image plugin is no ported to Editor Tool API
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-26 12:50  cgilles
+
+	* imageplugins/channelmixer/channelmixertool.cpp: --This line, and
+	  those below,fix layout will be ignored--
+	  
+	  M channelmixer/channelmixertool.cpp
+
+2008-08-26 12:49  aclemens
+
+	* imageplugins/coreplugin/bcgtool.cpp,
+	  imageplugins/coreplugin/bcgtool.h,
+	  imageplugins/coreplugin/hsl/hsltool.cpp,
+	  imageplugins/coreplugin/hsl/hsltool.h,
+	  imageplugins/coreplugin/rgbtool.cpp,
+	  imageplugins/coreplugin/rgbtool.h: polish
+
+2008-08-26 12:46  cgilles
+
+	* imageplugins/channelmixer/Makefile.am,
+	  imageplugins/channelmixer/channelmixer.cpp,
+	  imageplugins/channelmixer/channelmixer.h,
+	  imageplugins/channelmixer/channelmixertool.cpp,
+	  imageplugins/channelmixer/channelmixertool.h,
+	  imageplugins/channelmixer/imageplugin_channelmixer.cpp,
+	  imageplugins/channelmixer/imageplugin_channelmixer.h: digiKam
+	  from KDE3 branch: Channel Mixer image plugin is now ported to
+	  Editor Tool API
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-26 12:44  aclemens
+
+	* imageplugins/coreplugin/imageplugin_core.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.h:
+	  Beginning to convert the Aspect Ratio Crop imageplugin to the new
+	  ImageTool component
+
+2008-08-26 11:51  aclemens
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp,
+	  imageplugins/adjustlevels/adjustlevelstool.cpp,
+	  imageplugins/coreplugin/autocorrectiontool.cpp,
+	  imageplugins/coreplugin/bcgtool.cpp,
+	  imageplugins/coreplugin/bwsepiatool.cpp,
+	  imageplugins/coreplugin/hsl/hsltool.cpp,
+	  imageplugins/coreplugin/iccprooftool.cpp,
+	  imageplugins/coreplugin/redeyetool.cpp,
+	  imageplugins/coreplugin/rgbtool.cpp,
+	  imageplugins/whitebalance/whitebalancetool.cpp: Cleanup tool
+	  destructors to prevent a crash that sometimes occurred.
+
+2008-08-26 11:15  cgilles
+
+	* utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawimport.h: usie slotInit()
+
+2008-08-26 11:03  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h: use delayed gui timer
+	  to call virtual method slotInit() which readSettings by default.
+	  No need to call readSettings() in Editor Tool,
+	  this will be done automatically when tool is pluged in editor.
+
+2008-08-26 10:54  aclemens
+
+	* imageplugins/coreplugin/bwsepiatool.cpp: polish
+
+2008-08-26 10:53  aclemens
+
+	* imageplugins/coreplugin/bwsepiatool.cpp: added setToolHelp()
+	  method
+
+2008-08-26 10:51  aclemens
+
+	* imageplugins/coreplugin/bwsepiatool.cpp,
+	  imageplugins/coreplugin/bwsepiatool.h: added load and saveAs
+	  methods again
+
+2008-08-26 10:27  aclemens
+
+	* imageplugins/coreplugin/bcgtool.cpp,
+	  imageplugins/coreplugin/hsl/hsltool.cpp,
+	  imageplugins/coreplugin/redeyetool.cpp: polish
+
+2008-08-26 10:20  aclemens
+
+	* imageplugins/whitebalance/whitebalancetool.cpp: polish
+
+2008-08-26 10:17  aclemens
+
+	* imageplugins/coreplugin/hsl/hsltool.cpp: polish
+
+2008-08-26 10:14  aclemens
+
+	* imageplugins/coreplugin/hsl/hsltool.cpp: added setToolHelp()
+	  method
+
+2008-08-26 10:12  cgilles
+
+	* imageplugins/whitebalance/Makefile.am,
+	  imageplugins/whitebalance/imageeffect_whitebalance.cpp,
+	  imageplugins/whitebalance/imageeffect_whitebalance.h,
+	  imageplugins/whitebalance/imageplugin_whitebalance.cpp,
+	  imageplugins/whitebalance/imageplugin_whitebalance.h,
+	  imageplugins/whitebalance/whitebalancetool.cpp,
+	  imageplugins/whitebalance/whitebalancetool.h: digiKam from KDE3
+	  branch : White Balance plugin is now ported to Editor Tool API
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-26 10:08  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp: polish
+
+2008-08-26 09:50  aclemens
+
+	* imageplugins/coreplugin/redeyetool.cpp: polish
+
+2008-08-26 09:48  aclemens
+
+	* imageplugins/coreplugin/redeyetool.cpp,
+	  imageplugins/coreplugin/redeyetool.h: polish
+
+2008-08-26 09:45  aclemens
+
+	* imageplugins/coreplugin/rgbtool.cpp: polish
+
+2008-08-26 09:39  aclemens
+
+	* imageplugins/coreplugin/iccprooftool.cpp: polish
+
+2008-08-26 09:34  aclemens
+
+	* imageplugins/coreplugin/Makefile.am,
+	  imageplugins/coreplugin/iccprooftool.cpp,
+	  imageplugins/coreplugin/iccprooftool.h,
+	  imageplugins/coreplugin/imageeffect_iccproof.cpp,
+	  imageplugins/coreplugin/imageeffect_iccproof.h,
+	  imageplugins/coreplugin/imageplugin_core.cpp: digiKam from KDE3
+	  branch: ICCProof (Color Management) plugin is now ported to
+	  Editor Tool API.
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-26 09:21  aclemens
+
+	* imageplugins/coreplugin/imageeffect_iccproof.cpp: set
+	  kapp->activeWindow() as parent for all KMessageBox objects to
+	  prevent focus stealing
+
+2008-08-26 09:20  cgilles
+
+	* imageplugins/coreplugin/autocorrectiontool.cpp,
+	  imageplugins/coreplugin/bcgtool.cpp: use setToolHelp
+
+2008-08-26 09:13  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h: use object name as
+	  anchor, not tool name
+	  add toolHelp()
+
+2008-08-26 08:36  cgilles
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp: polish
+
+2008-08-26 08:33  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h: add setToolHelp() to
+	  set help link. Note: this link is set automatically with tool
+	  name when setToolName() is used. To use another one, call
+	  setToolHelp() later than setToolName()
+	  TODO: update editor help menu entry accordingly
+	  CCMAIL: andi.clemens@gmx.net
+
+2008-08-26 08:11  aclemens
+
+	* imageplugins/coreplugin/imageeffect_iccproof.cpp: polish
+
+2008-08-26 08:03  aclemens
+
+	* imageplugins/coreplugin/imageeffect_iccproof.cpp: polish
+
+2008-08-26 07:37  aclemens
+
+	* imageplugins/coreplugin/imageeffect_iccproof.cpp: polish
+
+2008-08-25 19:56  aclemens
+
+	* imageplugins/coreplugin/imageeffect_iccproof.cpp,
+	  imageplugins/coreplugin/imageeffect_iccproof.h,
+	  imageplugins/coreplugin/imageplugin_core.cpp: Beginning to
+	  convert the ICCProof (Color Management) imageplugin to the new
+	  ImageTool component
+
+2008-08-25 19:16  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp: polish
+
+2008-08-25 19:12  aclemens
+
+	* imageplugins/coreplugin/Makefile.am,
+	  imageplugins/coreplugin/imageeffect_redeye.cpp,
+	  imageplugins/coreplugin/imageeffect_redeye.h,
+	  imageplugins/coreplugin/imageplugin_core.cpp,
+	  imageplugins/coreplugin/redeyetool.cpp,
+	  imageplugins/coreplugin/redeyetool.h: digiKam from KDE3 branch:
+	  Red Eye plugin is now ported to Editor Tool API.
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-25 19:11  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp: fix layout.
+	  but now all buttons are on the bottom
+
+2008-08-25 19:09  aclemens
+
+	* imageplugins/coreplugin/imageeffect_redeye.cpp: polish
+
+2008-08-25 19:08  aclemens
+
+	* imageplugins/coreplugin/imageeffect_redeye.cpp,
+	  imageplugins/coreplugin/imageeffect_redeye.h,
+	  imageplugins/coreplugin/imageplugin_core.cpp: Beginning to
+	  convert the Red Eye imageplugin to the new ImageTool component
+
+2008-08-25 18:58  cgilles
+
+	* imageplugins/coreplugin/autocorrectiontool.cpp: polish
+
+2008-08-25 18:54  aclemens
+
+	* imageplugins/coreplugin/autocorrectiontool.cpp,
+	  imageplugins/coreplugin/bcgtool.cpp,
+	  imageplugins/coreplugin/bwsepiatool.cpp,
+	  imageplugins/coreplugin/hsl/hsltool.cpp: polish
+
+2008-08-25 18:46  aclemens
+
+	* imageplugins/coreplugin/Makefile.am,
+	  imageplugins/coreplugin/imageeffect_rgb.cpp,
+	  imageplugins/coreplugin/imageeffect_rgb.h,
+	  imageplugins/coreplugin/imageplugin_core.cpp,
+	  imageplugins/coreplugin/rgbtool.cpp,
+	  imageplugins/coreplugin/rgbtool.h: digiKam from KDE3 branch:
+	  Color Balance plugin is now ported to Editor Tool API.
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-25 18:41  aclemens
+
+	* imageplugins/coreplugin/imageeffect_rgb.cpp: polish
+
+2008-08-25 18:40  aclemens
+
+	* imageplugins/coreplugin/imageeffect_rgb.cpp: port++
+
+2008-08-25 18:37  aclemens
+
+	* imageplugins/coreplugin/imageeffect_rgb.cpp,
+	  imageplugins/coreplugin/imageeffect_rgb.h,
+	  imageplugins/coreplugin/imageplugin_core.cpp: Beginning to
+	  convert the Color Balance imageplugin to the new ImageTool
+	  component
+
+2008-08-25 18:32  aclemens
+
+	* imageplugins/coreplugin/bwsepiatool.h: compile
+
+2008-08-25 18:17  cgilles
+
+	* imageplugins/coreplugin/autocorrectiontool.cpp,
+	  imageplugins/coreplugin/autocorrectiontool.h: polish
+
+2008-08-25 17:37  cgilles
+
+	* imageplugins/coreplugin/autocorrectiontool.cpp,
+	  imageplugins/coreplugin/bcgtool.cpp,
+	  imageplugins/coreplugin/hsl/hsltool.cpp: smae here
+
+2008-08-25 17:36  cgilles
+
+	* imageplugins/coreplugin/bwsepiatool.cpp: Remove QWidget delete in
+	  destructor. sound like Qt don't like this when EditorTool is
+	  created on the stack and deleted by hand in ImagePlugin class
+	  CCMAIL: andi.clemens@gmx.net
+
+2008-08-25 15:36  aclemens
+
+	* imageplugins/coreplugin/Makefile.am,
+	  imageplugins/coreplugin/bwsepiatool.cpp,
+	  imageplugins/coreplugin/bwsepiatool.h,
+	  imageplugins/coreplugin/imageeffect_bwsepia.cpp,
+	  imageplugins/coreplugin/imageeffect_bwsepia.h,
+	  imageplugins/coreplugin/imageplugin_core.cpp: digiKam from KDE3
+	  branch: Black & White plugin is now ported to Editor Tool API.
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-25 15:32  aclemens
+
+	* imageplugins/coreplugin/imageeffect_bwsepia.cpp: port++
+
+2008-08-25 15:15  aclemens
+
+	* imageplugins/coreplugin/autocorrectiontool.cpp,
+	  imageplugins/coreplugin/bcgtool.cpp: Use the actions name for the
+	  EditorTool caption instead of the old, longer description found
+	  in the image dialogs.
+
+2008-08-25 15:12  aclemens
+
+	* imageplugins/coreplugin/imageeffect_bwsepia.cpp,
+	  imageplugins/coreplugin/imageeffect_bwsepia.h,
+	  imageplugins/coreplugin/imageplugin_core.cpp: Beginning to
+	  convert the Black & White imageplugin to the new ImageTool
+	  component
+
+2008-08-25 14:41  aclemens
+
+	* imageplugins/coreplugin/Makefile.am,
+	  imageplugins/coreplugin/bcgtool.cpp,
+	  imageplugins/coreplugin/bcgtool.h,
+	  imageplugins/coreplugin/imageeffect_bcg.cpp,
+	  imageplugins/coreplugin/imageeffect_bcg.h,
+	  imageplugins/coreplugin/imageplugin_core.cpp: digiKam from KDE3
+	  branch: BCG plugin is now ported to Editor Tool API.
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-25 14:35  aclemens
+
+	* imageplugins/coreplugin/imageeffect_bcg.cpp,
+	  imageplugins/coreplugin/imageeffect_bcg.h,
+	  imageplugins/coreplugin/imageplugin_core.cpp: Beginning to
+	  convert the BCG imageplugin to the new ImageTool component
+
+2008-08-25 14:24  cgilles
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp,
+	  imageplugins/adjustlevels/adjustlevelstool.cpp: fix crash...
+
+2008-08-25 14:12  cgilles
+
+	* imageplugins/adjustlevels/adjustlevelstool.cpp: fix icon name
+
+2008-08-25 14:09  cgilles
+
+	* imageplugins/adjustlevels/adjustlevelstool.cpp: polish
+
+2008-08-25 14:05  cgilles
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp: polish
+
+2008-08-25 13:55  cgilles
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp,
+	  imageplugins/adjustcurves/adjustcurvestool.h,
+	  imageplugins/adjustlevels/adjustlevelstool.cpp,
+	  imageplugins/adjustlevels/adjustlevelstool.h: use private member
+	  to host settings aera
+
+2008-08-25 13:32  cgilles
+
+	* imageplugins/adjustlevels/adjustlevelstool.cpp: fix layout
+
+2008-08-25 13:24  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.h: typo
+
+2008-08-25 13:23  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.h: typo
+
+2008-08-25 13:22  cgilles
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp,
+	  imageplugins/adjustcurves/adjustcurvestool.h,
+	  imageplugins/adjustlevels/adjustlevelstool.cpp,
+	  imageplugins/adjustlevels/adjustlevelstool.h: typo
+
+2008-08-25 13:15  aclemens
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h: typo
+
+2008-08-25 13:11  aclemens
+
+	* imageplugins/coreplugin/autocorrectiontool.cpp,
+	  imageplugins/coreplugin/autocorrectiontool.h: wrong reset method
+
+2008-08-25 13:10  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp: compile
+
+2008-08-25 13:09  cgilles
+
+	* imageplugins/adjustlevels/adjustlevelstool.cpp,
+	  imageplugins/adjustlevels/adjustlevelstool.h: polish
+
+2008-08-25 13:08  cgilles
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp,
+	  imageplugins/adjustcurves/adjustcurvestool.h: polish
+
+2008-08-25 13:08  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h,
+	  utilities/imageeditor/editor/editortoolsettings.h,
+	  utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.h: polish API
+
+2008-08-25 13:00  aclemens
+
+	* imageplugins/coreplugin/Makefile.am,
+	  imageplugins/coreplugin/autocorrectiontool.cpp,
+	  imageplugins/coreplugin/autocorrectiontool.h,
+	  imageplugins/coreplugin/imageeffect_autocorrection.cpp,
+	  imageplugins/coreplugin/imageeffect_autocorrection.h,
+	  imageplugins/coreplugin/imageplugin_core.cpp: digiKam from KDE3
+	  branch: Autocorrection plugin is now ported to Editor Tool API.
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-25 12:54  aclemens
+
+	* imageplugins/coreplugin/imageeffect_autocorrection.cpp,
+	  imageplugins/coreplugin/imageeffect_autocorrection.h,
+	  imageplugins/coreplugin/imageplugin_core.cpp: Beginning to
+	  convert the autocorrection imageplugin to the new ImageTool
+	  component
+
+2008-08-25 12:36  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp: polish
+
+2008-08-25 12:32  cgilles
+
+	* imageplugins/adjustlevels/adjustlevelstool.cpp: fix layout
+
+2008-08-25 12:26  cgilles
+
+	* imageplugins/adjustlevels/Makefile.am,
+	  imageplugins/adjustlevels/adjustlevels.cpp,
+	  imageplugins/adjustlevels/adjustlevels.h,
+	  imageplugins/adjustlevels/adjustlevelstool.cpp,
+	  imageplugins/adjustlevels/adjustlevelstool.h,
+	  imageplugins/adjustlevels/imageplugin_adjustlevels.cpp: digiKam
+	  from KDE3 branch: Adjust Levels image plugin is now ported to
+	  Editor Tool API.
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-25 12:19  cgilles
+
+	* imageplugins/adjustcurves/adjustcurvestool.h: polish
+
+2008-08-25 12:08  aclemens
+
+	* imageplugins/coreplugin/hsl/Makefile.am,
+	  imageplugins/coreplugin/hsl/hsltool.cpp,
+	  imageplugins/coreplugin/hsl/hsltool.h,
+	  imageplugins/coreplugin/hsl/imageeffect_hsl.cpp,
+	  imageplugins/coreplugin/hsl/imageeffect_hsl.h,
+	  imageplugins/coreplugin/imageplugin_core.cpp: rename files to
+	  match new class name
+
+2008-08-25 12:06  cgilles
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp,
+	  imageplugins/adjustcurves/adjustcurvestool.h: adpat to new api
+
+2008-08-25 12:06  cgilles
+
+	* utilities/imageeditor/rawimport/rawimport.cpp: adapt to new api
+
+2008-08-25 12:05  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h,
+	  utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.h: editor tool
+	  api improved again about load and saveas settings
+
+2008-08-25 11:41  aclemens
+
+	* imageplugins/coreplugin/hsl/imageeffect_hsl.cpp,
+	  imageplugins/coreplugin/hsl/imageeffect_hsl.h: port++
+
+2008-08-25 11:36  cgilles
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp,
+	  imageplugins/adjustcurves/adjustcurvestool.h: polish
+
+2008-08-25 11:33  cgilles
+
+	* imageplugins/adjustcurves/adjustcurvestool.h: polish
+
+2008-08-25 11:29  cgilles
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp,
+	  imageplugins/adjustcurves/adjustcurvestool.h,
+	  imageplugins/adjustcurves/imageplugin_adjustcurves.cpp,
+	  imageplugins/adjustcurves/imageplugin_adjustcurves.h: wrong class
+	  name
+
+2008-08-25 11:18  cgilles
+
+	* imageplugins/adjustcurves/Makefile.am,
+	  imageplugins/adjustcurves/adjustcurves.cpp,
+	  imageplugins/adjustcurves/adjustcurves.h,
+	  imageplugins/adjustcurves/adjustcurvestool.cpp,
+	  imageplugins/adjustcurves/adjustcurvestool.h,
+	  imageplugins/adjustcurves/imageplugin_adjustcurves.cpp: rename
+	  accordingly with class name
+
+2008-08-25 10:19  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.h: add
+	  enableButton()
+
+2008-08-25 10:06  cgilles
+
+	* imageplugins/adjustcurves/adjustcurves.cpp,
+	  imageplugins/adjustcurves/adjustcurves.h: sync with new api
+
+2008-08-25 10:06  cgilles
+
+	* utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.h: sync with new
+	  api
+
+2008-08-25 10:05  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h,
+	  utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.h: Editor Tool:
+	  changed API about to reset settings action.
+
+2008-08-25 08:48  aclemens
+
+	* imageplugins/coreplugin/hsl/imageeffect_hsl.cpp,
+	  imageplugins/coreplugin/hsl/imageeffect_hsl.h,
+	  imageplugins/coreplugin/imageplugin_core.cpp: port++
+
+2008-08-25 08:26  aclemens
+
+	* imageplugins/coreplugin/hsl/imageeffect_hsl.cpp: polish
+
+2008-08-25 08:16  aclemens
+
+	* imageplugins/coreplugin/hsl/imageeffect_hsl.cpp: port++
+
+2008-08-25 07:55  cgilles
+
+	* libs/widgets/common/sidebar.cpp, libs/widgets/common/sidebar.h:
+	  set internal splitter instance.
+	  add access method to splitter.
+
+2008-08-25 07:40  cgilles
+
+	* utilities/imageeditor/editor/editortool.h: private slots =>
+	  protected
+
+2008-08-25 07:36  aclemens
+
+	* imageplugins/coreplugin/hsl/imageeffect_hsl.cpp: port++
+
+2008-08-24 19:40  aclemens
+
+	* imageplugins/coreplugin/hsl/imageeffect_hsl.cpp: port++
+
+2008-08-24 18:56  aclemens
+
+	* imageplugins/coreplugin/hsl/imageeffect_hsl.cpp,
+	  imageplugins/coreplugin/hsl/imageeffect_hsl.h,
+	  imageplugins/coreplugin/imageplugin_core.cpp: Beginning to
+	  convert the HSL imageplugin to the new ImageTool component
+
+2008-08-24 18:55  aclemens
+
+	* imageplugins/adjustcurves/adjustcurves.cpp: fixed a typo
+
+2008-08-24 16:09  cgilles
+
+	* imageplugins/adjustcurves/adjustcurves.cpp: polish
+
+2008-08-24 16:02  aclemens
+
+	* imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp:
+	  polish
+
+2008-08-24 12:06  cgilles
+
+	* utilities/imageeditor/editor/imageiface.cpp,
+	  utilities/imageeditor/editor/imageiface.h: use const pointer
+
+2008-08-24 12:04  cgilles
+
+	* imageplugins/adjustcurves/adjustcurves.cpp,
+	  imageplugins/adjustcurves/adjustcurves.h: digiKam from KDE3
+	  branch : AdjustCurves tool : memory consume optimization.
+	  No need to duplicates original image data here: we can use the
+	  instance from editor instead.
+	  
+	  Andi, this way can be applied in others image plugins if
+	  necessary. i'm sure that we will find old code to polish by thi
+	  way.
+	  
+	  CCBUGS: 163164
+
+2008-08-24 11:53  cgilles
+
+	* utilities/imageeditor/editor/imageiface.cpp,
+	  utilities/imageeditor/editor/imageiface.h: using const pointer is
+	  better
+
+2008-08-24 10:21  cgilles
+
+	* libs/widgets/common/sidebar.cpp: bagfix : when a tab is removed,
+	  update internal tabs number and ajust minimum width of stack
+
+2008-08-24 08:52  cgilles
+
+	* libs/widgets/common/sidebar.cpp, libs/widgets/common/sidebar.h:
+	  bugfix : missing to remove the widget from the stack when a
+	  sidebar tab is removed
+
+2008-08-24 08:13  cgilles
+
+	* libs/curves/imagecurves.cpp: backport commit #851624 from KDE4
+
+2008-08-23 22:55  aclemens
+
+	* digikam/digikamfirstrun.cpp, digikam/dio.cpp,
+	  digikam/scanlib.cpp: polish
+
+2008-08-23 22:55  aclemens
+
+	* libs/dimg/dcolorcomposer.cpp,
+	  libs/dimg/filters/dimggaussianblur.cpp,
+	  libs/dimg/filters/dimgsharpen.cpp,
+	  libs/dimg/loaders/pngloader.cpp,
+	  libs/histogram/imagehistogram.cpp,
+	  libs/imageproperties/imagepropertiescolorstab.cpp,
+	  libs/jpegutils/jpegutils.cpp, libs/levels/imagelevels.cpp,
+	  libs/threadimageio/previewtask.cpp,
+	  libs/whitebalance/whitebalance.cpp,
+	  libs/widgets/common/paniconwidget.cpp,
+	  libs/widgets/imageplugins/imagepaniconwidget.cpp,
+	  libs/widgets/imageplugins/imageregionwidget.cpp: polish
+
+2008-08-23 22:54  aclemens
+
+	* utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/imageeditor/tools/imageresize.cpp: polish
+
+2008-08-23 22:54  aclemens
+
+	* imageplugins/antivignetting/antivignetting.cpp,
+	  imageplugins/blurfx/blurfx.cpp, imageplugins/border/border.cpp,
+	  imageplugins/charcoal/charcoal.cpp,
+	  imageplugins/coreplugin/sharpnesseditor/unsharp.cpp,
+	  imageplugins/distortionfx/distortionfx.cpp,
+	  imageplugins/emboss/emboss.cpp,
+	  imageplugins/filmgrain/filmgrain.cpp,
+	  imageplugins/freerotation/freerotation.cpp,
+	  imageplugins/hotpixels/hotpixelfixer.cpp,
+	  imageplugins/infrared/infrared.cpp,
+	  imageplugins/lensdistortion/imageeffect_lensdistortion.cpp,
+	  imageplugins/lensdistortion/lensdistortion.cpp,
+	  imageplugins/lensdistortion/pixelaccess.cpp,
+	  imageplugins/noisereduction/noisereduction.h,
+	  imageplugins/oilpaint/oilpaint.cpp,
+	  imageplugins/perspective/matrix.cpp,
+	  imageplugins/perspective/perspectivewidget.cpp,
+	  imageplugins/perspective/triangle.cpp,
+	  imageplugins/raindrop/raindrop.cpp,
+	  imageplugins/sheartool/sheartool.cpp: polish
+
+2008-08-23 22:25  aclemens
+
+	* imageplugins/inpainting/imageeffect_inpainting.cpp,
+	  libs/greycstoration/greycstorationwidget.cpp: polish
+
+2008-08-23 18:35  hasso
+
+	* utilities/cameragui/gpcamera.cpp: Reorder includes to fix build
+	  at least in NetBSD and DragonFly (probably
+	  other BSDs as well).
+
+2008-08-23 11:11  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp: polish
+	  buttons
+
+2008-08-23 09:21  cgilles
+
+	* imageplugins/adjustcurves/adjustcurves.cpp: adjust to new API
+
+2008-08-23 09:19  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.h: polish api =>
+	  user1/2/3 buttons => Load/SaveAs
+
+2008-08-22 19:24  cgilles
+
+	* imageplugins/adjustcurves/adjustcurves.cpp: fix signal/slot
+
+2008-08-22 19:15  cgilles
+
+	* imageplugins/adjustcurves/adjustcurves.cpp,
+	  imageplugins/adjustcurves/adjustcurves.h,
+	  imageplugins/adjustcurves/imageplugin_adjustcurves.cpp: add
+	  support of Load /Save As
+
+2008-08-22 18:16  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.h: this methods
+	  can be only public for the moment
+
+2008-08-22 18:14  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.h: add support of
+	  USER1/2/3 buttons
+
+2008-08-22 14:46  cgilles
+
+	* showfoto/showfoto.h,
+	  utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/editor/editorwindow.h,
+	  utilities/imageeditor/editor/imagewindow.h: EditorToolIface is nw
+	  a friend class for EditorWindow.
+	  toggle on/off menu actions when an EditorTool is pluged/unpluged
+
+2008-08-22 14:28  aclemens
+
+	* imageplugins/whitebalance/imageeffect_whitebalance.cpp: when
+	  clicking "Default" button, also reset the temperature slider
+	  after the temperature preset combobox was reset, so that its
+	  reset button gets disabled, too.
+
+2008-08-22 13:38  aclemens
+
+	* imageplugins/coreplugin/imageeffect_iccproof.h: polish
+
+2008-08-22 13:15  aclemens
+
+	* imageplugins/coreplugin/imageeffect_rgb.cpp: polish
+
+2008-08-22 11:37  aclemens
+
+	* imageplugins/colorfx/imageeffect_colorfx.cpp,
+	  imageplugins/colorfx/imageeffect_colorfx.h: polish
+
+2008-08-22 11:09  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp: polish
+
+2008-08-22 10:57  cgilles
+
+	* utilities/imageeditor/editor/editorstackview.cpp: polish
+
+2008-08-22 10:38  cgilles
+
+	* utilities/imageeditor/canvas/imageplugin.cpp,
+	  utilities/imageeditor/canvas/imageplugin.h: missing to commit new
+	  image plugin api
+
+2008-08-22 10:29  cgilles
+
+	* imageplugins/adjustcurves/adjustcurves.cpp,
+	  imageplugins/adjustcurves/adjustcurves.h,
+	  imageplugins/adjustcurves/imageplugin_adjustcurves.cpp: digiKam
+	  from KDE3 : Adjust Curves usuability improvements : port first
+	  image plugin to new Editor Tool API. The tool is now embedded in
+	  editor window.
+	  There is no external dialog to show for this tool. Tool settings
+	  is placed on editor right sidebar and tool preview in editor
+	  canvas stack.
+	  
+	  The look of editor sound like more professional application (as
+	  Aperture, LightZone, or LightRoom). Look the screenshot:
+	  
+	  http://farm4.static.flickr.com/3199/2785923199_a87e6b017d_o.png
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-22 10:15  cgilles
+
+	* utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawimport.h: use new api. code
+	  factoring
+
+2008-08-22 10:14  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h: prepare code to be
+	  used with image plugins
+
+2008-08-22 10:14  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.h: prepare code
+	  to be used with Adjust Curves plugin. factoring to max
+
+2008-08-22 09:39  aclemens
+
+	* imageplugins/channelmixer/channelmixer.cpp,
+	  imageplugins/colorfx/imageeffect_colorfx.cpp: polish
+
+2008-08-22 09:00  cgilles
+
+	* utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.h: port raw import
+	  to editor tool settings api. code simplification
+
+2008-08-22 09:00  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h,
+	  utilities/imageeditor/editor/editortooliface.cpp: port code to
+	  editor tool settings component api
+
+2008-08-22 08:59  cgilles
+
+	* utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.h: improvements
+	  of editor tool settings component. fully implemented.
+
+2008-08-22 08:50  aclemens
+
+	* imageplugins/adjustlevels/adjustlevels.cpp,
+	  imageplugins/adjustlevels/adjustlevels.h: polish
+
+2008-08-21 21:24  aclemens
+
+	* digikam/albumiconviewfilter.h,
+	  libs/threadimageio/loadsavetask.cpp: polish
+
+2008-08-21 21:22  aclemens
+
+	* digikam/searchfolderview.cpp, digikam/syncjob.h,
+	  digikam/timelinefolderview.cpp, libs/dialogs/rawcameradlg.cpp,
+	  libs/dialogs/rawcameradlg.h: polish
+
+2008-08-21 21:19  aclemens
+
+	* digikam/dio.cpp, digikam/dio_p.h, libs/dialogs/deletedialog.h,
+	  libs/dimg/dcolor.h, libs/dimg/dimg.h, libs/dimg/dimgprivate.h,
+	  libs/dimg/filters/icctransform.cpp,
+	  libs/dimg/loaders/jp2kloader.cpp,
+	  libs/dimg/loaders/jpegloader.cpp,
+	  libs/dimg/loaders/pngloader.cpp, libs/dimg/loaders/ppmloader.cpp,
+	  libs/dimg/loaders/rawloader.cpp, libs/dmetadata/dmetadata.h,
+	  libs/dmetadata/photoinfocontainer.h,
+	  libs/thumbbar/thumbnailjob.cpp, libs/widgets/common/sidebar.cpp:
+	  polish
+
+2008-08-21 21:15  aclemens
+
+	* digikam/albumfiletip.cpp, digikam/albumiconitem.cpp,
+	  digikam/albummanager.cpp, digikam/albumsettings.h,
+	  digikam/albumthumbnailloader.cpp, digikam/albumthumbnailloader.h,
+	  digikam/albumwidgetstack.h, digikam/digikamview.cpp,
+	  digikam/firstrun.cpp, digikam/folderitem.h, digikam/folderview.h,
+	  digikam/icongroupitem.h, digikam/iconitem.h, digikam/iconview.h,
+	  digikam/imageattributeswatch.cpp, digikam/imageattributeswatch.h,
+	  digikam/imagepreviewview.h, digikam/kipiinterface.cpp,
+	  digikam/kipiinterface.h, digikam/main.cpp,
+	  digikam/mediaplayerview.h, digikam/metadatahub.cpp,
+	  digikam/metadatahub.h, digikam/scanlib.cpp,
+	  digikam/tagfolderview.cpp, digikam/timelineview.cpp,
+	  digikam/timelinewidget.cpp, digikam/welcomepageview.h,
+	  libs/dialogs/ctrlpaneldlg.h, libs/dialogs/deletedialog.h,
+	  libs/dialogs/dprogressdlg.cpp, libs/dialogs/imagedlgbase.h,
+	  libs/dialogs/imageguidedlg.h, libs/dialogs/rawcameradlg.cpp,
+	  libs/dialogs/rawcameradlg.h, libs/dimg/dcolorcomposer.cpp,
+	  libs/dimg/dcolorcomposer.h, libs/dimg/exposurecontainer.h,
+	  libs/dimg/filters/dimggaussianblur.h,
+	  libs/dimg/filters/dimgimagefilters.cpp,
+	  libs/dimg/filters/dimgimagefilters.h,
+	  libs/dimg/filters/dimgsharpen.h,
+	  libs/dimg/filters/dimgthreadedfilter.h,
+	  libs/dimg/filters/icctransform.cpp,
+	  libs/dimg/loaders/jp2ksettings.h,
+	  libs/dimg/loaders/jpegsettings.h,
+	  libs/dimg/loaders/pngsettings.h,
+	  libs/dimg/loaders/tiffsettings.h, libs/dmetadata/dmetadata.h,
+	  libs/greycstoration/greycstorationwidget.h,
+	  libs/imageproperties/imagepropertiescolorstab.cpp,
+	  libs/imageproperties/imagepropertiesmetadatatab.cpp,
+	  libs/imageproperties/imagepropertiessidebar.cpp,
+	  libs/imageproperties/imagepropertiessidebarcamgui.cpp,
+	  libs/imageproperties/imagepropertiessidebardb.cpp,
+	  libs/imageproperties/navigatebarwidget.cpp,
+	  libs/imageproperties/talbumlistview.cpp,
+	  libs/levels/imagelevels.cpp, libs/threadimageio/previewtask.cpp,
+	  libs/threadimageio/previewtask.h, libs/thumbbar/thumbbar.cpp,
+	  libs/whitebalance/whitebalance.cpp,
+	  libs/widgets/common/colorgradientwidget.cpp,
+	  libs/widgets/common/colorgradientwidget.h,
+	  libs/widgets/common/curveswidget.h,
+	  libs/widgets/common/filesaveoptionsbox.h,
+	  libs/widgets/common/histogramwidget.h,
+	  libs/widgets/common/paniconwidget.cpp,
+	  libs/widgets/common/paniconwidget.h,
+	  libs/widgets/common/previewwidget.cpp,
+	  libs/widgets/common/previewwidget.h,
+	  libs/widgets/common/searchtextbar.cpp,
+	  libs/widgets/common/splashscreen.h,
+	  libs/widgets/common/squeezedcombobox.h,
+	  libs/widgets/common/statusled.cpp,
+	  libs/widgets/common/statusnavigatebar.cpp,
+	  libs/widgets/common/statusprogressbar.h,
+	  libs/widgets/common/statuszoombar.h,
+	  libs/widgets/iccprofiles/cietonguewidget.h,
+	  libs/widgets/iccprofiles/iccpreviewwidget.cpp,
+	  libs/widgets/iccprofiles/iccprofilewidget.cpp,
+	  libs/widgets/iccprofiles/iccprofilewidget.h,
+	  libs/widgets/imageplugins/imageguidewidget.cpp,
+	  libs/widgets/imageplugins/imageguidewidget.h,
+	  libs/widgets/imageplugins/imagepannelwidget.h,
+	  libs/widgets/imageplugins/imageregionwidget.cpp,
+	  libs/widgets/imageplugins/imageregionwidget.h,
+	  libs/widgets/imageplugins/imagewidget.cpp,
+	  libs/widgets/imageplugins/imagewidget.h,
+	  libs/widgets/imageplugins/listboxpreviewitem.h,
+	  libs/widgets/metadata/exifwidget.h,
+	  libs/widgets/metadata/gpswidget.h,
+	  libs/widgets/metadata/iptcwidget.h,
+	  libs/widgets/metadata/makernotewidget.h,
+	  libs/widgets/metadata/mdkeylistviewitem.cpp,
+	  libs/widgets/metadata/metadatalistviewitem.cpp,
+	  libs/widgets/metadata/metadatawidget.h,
+	  libs/widgets/metadata/worldmapwidget.h: polish
+
+2008-08-21 20:05  cgilles
+
+	* utilities/imageeditor/editor/Makefile.am,
+	  utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.h: first
+	  implementation of Editor Tool Settings widget used to host tool
+	  settings pannel. Not yet complete
+
+2008-08-21 18:52  aclemens
+
+	* imageplugins/inserttext/inserttextwidget.cpp: accidently commited
+	  testing code... reverting it now
+
+2008-08-21 17:01  aclemens
+
+	* showfoto/setup/setuptooltip.cpp,
+	  utilities/imageeditor/canvas/dimginterface.h,
+	  utilities/imageeditor/editor/editortooliface.h,
+	  utilities/setup/setupcollections.cpp,
+	  utilities/setup/setupgeneral.cpp,
+	  utilities/setup/setupmetadata.cpp,
+	  utilities/setup/setuptooltip.cpp: polish
+
+2008-08-21 16:54  aclemens
+
+	* utilities/imageeditor/tools/imageprint.cpp,
+	  utilities/imageeditor/tools/imageprint.h: polish
+
+2008-08-21 16:51  aclemens
+
+	* showfoto/setup/setupeditor.cpp, showfoto/setup/setuptooltip.cpp,
+	  utilities/batch/batchalbumssyncmetadata.cpp,
+	  utilities/batch/batchsyncmetadata.cpp,
+	  utilities/batch/batchthumbsgenerator.cpp,
+	  utilities/cameragui/gpcamera.cpp,
+	  utilities/cameragui/umscamera.cpp,
+	  utilities/imageeditor/canvas/undocache.cpp,
+	  utilities/imageeditor/canvas/undocache.h,
+	  utilities/imageeditor/canvas/undomanager.h,
+	  utilities/imageeditor/editor/savingcontextcontainer.h,
+	  utilities/imageeditor/tools/imageprint.cpp,
+	  utilities/imageeditor/tools/imageprint.h,
+	  utilities/setup/setupcamera.h,
+	  utilities/setup/setupcollections.cpp,
+	  utilities/setup/setupdcraw.cpp, utilities/setup/setupeditor.cpp,
+	  utilities/setup/setupgeneral.cpp, utilities/setup/setupicc.cpp,
+	  utilities/setup/setupidentity.cpp,
+	  utilities/setup/setupiofiles.cpp,
+	  utilities/setup/setuplighttable.cpp,
+	  utilities/setup/setupmetadata.cpp, utilities/setup/setupmime.cpp,
+	  utilities/setup/setupplugins.cpp,
+	  utilities/setup/setupslideshow.cpp,
+	  utilities/setup/setuptooltip.cpp: polish
+
+2008-08-21 16:45  aclemens
+
+	* utilities/imageeditor/canvas/canvas.h,
+	  utilities/imageeditor/canvas/colorcorrectiondlg.h,
+	  utilities/imageeditor/canvas/iccsettingscontainer.h,
+	  utilities/imageeditor/canvas/imageplugin.cpp,
+	  utilities/imageeditor/editor/editorstackview.h,
+	  utilities/imageeditor/editor/savingcontextcontainer.h,
+	  utilities/imageeditor/rawimport/rawimport.h,
+	  utilities/imageeditor/rawimport/rawpostprocessing.h,
+	  utilities/imageeditor/rawimport/rawpreview.h,
+	  utilities/imageeditor/rawimport/rawsettingsbox.h,
+	  utilities/imageeditor/tools/imageprint.cpp,
+	  utilities/imageeditor/tools/imageresize.h,
+	  utilities/lighttable/lighttablepreview.h,
+	  utilities/lighttable/lighttableview.cpp,
+	  utilities/setup/setup.cpp, utilities/setup/setupcollections.cpp,
+	  utilities/setup/setupdcraw.h, utilities/setup/setupicc.h,
+	  utilities/setup/setupiofiles.h, utilities/setup/setupslideshow.h:
+	  polish
+
+2008-08-21 16:16  aclemens
+
+	* kioslave/digikamthumbnail.cpp: polish
+
+2008-08-21 15:57  aclemens
+
+	* showfoto/main.cpp: polish
+
+2008-08-21 15:44  aclemens
+
+	* imageplugins/adjustcurves/imageplugin_adjustcurves.cpp,
+	  imageplugins/adjustlevels/imageplugin_adjustlevels.cpp,
+	  imageplugins/blurfx/imageplugin_blurfx.cpp,
+	  imageplugins/border/imageplugin_border.cpp,
+	  imageplugins/channelmixer/imageplugin_channelmixer.cpp,
+	  imageplugins/charcoal/imageplugin_charcoal.cpp,
+	  imageplugins/colorfx/imageplugin_colorfx.cpp,
+	  imageplugins/coreplugin/hsl/imageeffect_hsl.h,
+	  imageplugins/coreplugin/imageeffect_autocorrection.cpp,
+	  imageplugins/coreplugin/imageeffect_autocorrection.h,
+	  imageplugins/coreplugin/imageeffect_bcg.h,
+	  imageplugins/coreplugin/imageeffect_blur.h,
+	  imageplugins/coreplugin/imageeffect_bwsepia.h,
+	  imageplugins/coreplugin/imageeffect_iccproof.h,
+	  imageplugins/coreplugin/imageeffect_redeye.h,
+	  imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.h,
+	  imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.h,
+	  imageplugins/coreplugin/sharpnesseditor/matrix.cpp,
+	  imageplugins/distortionfx/imageplugin_distortionfx.cpp,
+	  imageplugins/emboss/imageplugin_emboss.cpp,
+	  imageplugins/filmgrain/imageplugin_filmgrain.cpp,
+	  imageplugins/freerotation/imageplugin_freerotation.cpp,
+	  imageplugins/hotpixels/imageplugin_hotpixels.cpp,
+	  imageplugins/infrared/imageplugin_infrared.cpp,
+	  imageplugins/inpainting/imageplugin_inpainting.cpp,
+	  imageplugins/inserttext/imageplugin_inserttext.cpp,
+	  imageplugins/lensdistortion/imageplugin_lensdistortion.cpp,
+	  imageplugins/lensdistortion/pixelaccess.cpp,
+	  imageplugins/noisereduction/imageplugin_noisereduction.cpp,
+	  imageplugins/oilpaint/imageplugin_oilpaint.cpp,
+	  imageplugins/perspective/imageplugin_perspective.cpp,
+	  imageplugins/raindrop/imageplugin_raindrop.cpp,
+	  imageplugins/restoration/imageplugin_restoration.cpp,
+	  imageplugins/sheartool/imageplugin_sheartool.cpp,
+	  imageplugins/superimpose/imageplugin_superimpose.cpp,
+	  imageplugins/texture/imageplugin_texture.cpp,
+	  imageplugins/whitebalance/imageplugin_whitebalance.cpp:
+
+2008-08-21 13:57  cgilles
+
+	* imageplugins/adjustcurves/Makefile.am: ploish
+
+2008-08-21 13:34  cgilles
+
+	* utilities/imageeditor/editor/editorstackview.cpp: polish
+
+2008-08-21 13:31  cgilles
+
+	* utilities/imageeditor/editor/editorstackview.cpp,
+	  utilities/imageeditor/editor/editorstackview.h,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow.h: add zoom function
+	  wrapper into editor stack view. you can use zoom+ and zoom- from
+	  editor tool bar with Raw Import tool
+
+2008-08-21 13:15  aclemens
+
+	* imageplugins/coreplugin/imageeffect_autocorrection.cpp,
+	  imageplugins/coreplugin/imageeffect_autocorrection.h,
+	  imageplugins/coreplugin/imageeffect_bwsepia.cpp,
+	  imageplugins/coreplugin/imageeffect_bwsepia.h,
+	  imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp,
+	  imageplugins/coreplugin/sharpnesseditor/matrix.cpp,
+	  imageplugins/hotpixels/blackframeparser.cpp,
+	  imageplugins/inpainting/imageeffect_inpainting.h,
+	  imageplugins/inserttext/imageeffect_inserttext.cpp,
+	  imageplugins/inserttext/inserttextwidget.cpp,
+	  imageplugins/perspective/perspectivewidget.cpp,
+	  imageplugins/perspective/perspectivewidget.h,
+	  imageplugins/restoration/imageeffect_restoration.h,
+	  imageplugins/superimpose/dirselectwidget.cpp,
+	  imageplugins/superimpose/imageeffect_superimpose.h,
+	  imageplugins/superimpose/superimpose.cpp,
+	  imageplugins/superimpose/superimpose.h,
+	  imageplugins/superimpose/superimposewidget.cpp,
+	  imageplugins/whitebalance/imageeffect_whitebalance.h: polish
+
+2008-08-21 11:47  cgilles
+
+	* showfoto/setup/setupeditor.cpp: polish
+
+2008-08-21 11:34  cgilles
+
+	* utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/setup/setupeditor.cpp: polish
+
+2008-08-21 11:15  cgilles
+
+	* digikam/digikamapp.cpp: polish
+
+2008-08-21 10:37  cgilles
+
+	* utilities/imageeditor/canvas/canvas.h,
+	  utilities/imageeditor/canvas/dimginterface.cpp,
+	  utilities/imageeditor/editor/editorwindow.h: polish
+
+2008-08-21 10:07  cgilles
+
+	* showfoto/showfoto.cpp: factorize
+
+2008-08-21 09:30  cgilles
+
+	* utilities/imageeditor/editor/editorwindowprivate.h: polish
+
+2008-08-21 09:16  cgilles
+
+	* showfoto/showfoto.cpp: missing to set canvas stack to showfoto
+
+2008-08-20 19:07  cgilles
+
+	* utilities/imageeditor/canvas/dimginterface.cpp: adapt to new
+	  interface rules
+
+2008-08-20 19:06  cgilles
+
+	* utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/editor/editortooliface.h: code
+	  simplification: manage Editor Tool instance directly with
+	  interface
+
+2008-08-20 17:09  cgilles
+
+	* utilities/imageeditor/rawimport/rawimport.cpp: polish
+
+2008-08-20 17:02  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h: cleanup api
+
+2008-08-20 16:40  cgilles
+
+	* utilities/imageeditor/canvas/dimginterface.cpp: fix memory leak
+
+2008-08-20 16:32  cgilles
+
+	* utilities/imageeditor/canvas/dimginterface.cpp: using qt_cast is
+	  better
+
+2008-08-20 15:57  aclemens
+
+	* imageplugins/blurfx/imageeffect_blurfx.cpp,
+	  imageplugins/blurfx/imageeffect_blurfx.h,
+	  imageplugins/charcoal/imageeffect_charcoal.cpp,
+	  imageplugins/distortionfx/imageeffect_distortionfx.cpp,
+	  imageplugins/distortionfx/imageeffect_distortionfx.h,
+	  imageplugins/emboss/imageeffect_emboss.cpp,
+	  imageplugins/oilpaint/imageeffect_oilpaint.cpp,
+	  imageplugins/raindrop/imageeffect_raindrop.cpp: -> default values
+	  have been set
+	  -> resetValues() calls slotReset() methods
+	  -> readUserSettings() should get default values from the
+	  corresponding widget itself, if possible
+
+2008-08-20 15:33  aclemens
+
+	* imageplugins/border/imageeffect_border.cpp,
+	  imageplugins/border/imageeffect_border.h,
+	  imageplugins/inserttext/fontchooserwidget.cpp,
+	  imageplugins/inserttext/fontchooserwidget.h,
+	  imageplugins/inserttext/imageeffect_inserttext.cpp,
+	  imageplugins/texture/imageeffect_texture.cpp,
+	  imageplugins/texture/imageeffect_texture.h: -> default values
+	  have been set
+	  -> resetValues() calls slotReset() methods
+	  -> readUserSettings() should get default values from the
+	  corresponding widget itself, if possible
+
+2008-08-20 14:56  cgilles
+
+	* utilities/imageeditor/canvas/dimginterface.cpp: prevent crash
+	  from Andi
+
+2008-08-20 14:04  cgilles
+
+	* utilities/imageeditor/tools/Makefile.am: compile
+
+2008-08-20 14:04  cgilles
+
+	* utilities/imageeditor/canvas/Makefile.am,
+	  utilities/imageeditor/canvas/canvas.cpp,
+	  utilities/imageeditor/canvas/canvas.h,
+	  utilities/imageeditor/canvas/dimginterface.cpp,
+	  utilities/imageeditor/canvas/dimginterface.h: port editor core
+	  implementation to editor tool interface
+
+2008-08-20 14:03  cgilles
+
+	* showfoto/showfoto.cpp, showfoto/showfoto.h: port showfoto to
+	  editor tool interface
+
+2008-08-20 14:03  cgilles
+
+	* utilities/imageeditor/rawimport/Makefile.am,
+	  utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawimport.h,
+	  utilities/imageeditor/rawimport/rawimportdlg.cpp,
+	  utilities/imageeditor/rawimport/rawimportdlg.h,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.h: port RAW Import
+	  tool as new EditorTool component
+
+2008-08-20 14:02  cgilles
+
+	* utilities/imageeditor/editor/Makefile.am,
+	  utilities/imageeditor/editor/editorstackview.cpp,
+	  utilities/imageeditor/editor/editorstackview.h,
+	  utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h,
+	  utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/editor/editortooliface.h,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow.h,
+	  utilities/imageeditor/editor/editorwindowprivate.h,
+	  utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/imageeditor/editor/imagewindow.h: digiKam from KDE3
+	  branch : Important changes here :
+	  
+	  Image Editor usability improvements: embedding editor tools in
+	  main window instead to use separate dialog.
+	  
+	  - Add new EditorViewStack which create a stack of widget to
+	  display over editor canvas (typically the full image canvas or
+	  the editor tool preview)
+	  - Add new EditorTool QObject component. We will use this one for
+	  each tools.
+	  - Add new EditorToolIface which interface an EditorTool to editor
+	  gui (EditorViewStack + right SideBar).
+	  This interface plugin or unplugin a tool to editor. When a tool
+	  is pluged in editor,
+	  a new tab is created on Right Sidebar to display tool settings.
+	  The tool preview is displayed instead editor canvas.
+	  Some editor action still avaialble when a tool is pluged as zoom
+	  in or zoom out for ex.
+	  
+	  There is a screenshot of new RawImport tool in action which is
+	  the first one to be ported to EditorTool:
+	  
+	  http://digikam3rdparty.free.fr/Screenshots/temp/rawimport/rawimport5-EmbeddedInEditor.png
+	  
+	  The plan is to port all others tool used in editor, especially
+	  all image plugins.
+	  
+	  TODO: finalize EditorToolInterafce to be able to use editor menu
+	  actions.
+
+2008-08-20 13:48  aclemens
+
+	* imageplugins/freerotation/imageeffect_freerotation.cpp,
+	  imageplugins/freerotation/imageeffect_freerotation.h,
+	  imageplugins/perspective/imageeffect_perspective.cpp,
+	  imageplugins/perspective/imageeffect_perspective.h,
+	  imageplugins/sheartool/imageeffect_sheartool.cpp: -> default
+	  values have been set
+	  -> resetValues() calls slotReset() methods
+	  -> readUserSettings() should get default values from the
+	  corresponding widget itself, if possible
+
+2008-08-20 13:47  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp: update
+
+2008-08-20 13:29  aclemens
+
+	* imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.h: ->
+	  removed duplicate code from readSettings() method
+	  -> default values have been set
+	  -> resetValues() calls slotReset() methods
+	  -> readUserSettings() should get default values from the
+	  corresponding widget itself, if possible
+
+2008-08-20 11:49  aclemens
+
+	* imageplugins/antivignetting/imageplugin_antivignetting.cpp:
+	  Action for "Anti-Vignetting" has been renamed from "Vignetting"
+	  to "Vignetting Correction...", the old title was somehow
+	  confusing.
+
+2008-08-20 11:39  aclemens
+
+	* utilities/imageeditor/tools/imageresize.cpp: -> default values
+	  have been set
+	  -> resetValues() calls slotReset() methods
+	  -> readUserSettings() should get default values from the
+	  corresponding widget itself, if possible
+
+2008-08-20 11:30  aclemens
+
+	* imageplugins/antivignetting/imageeffect_antivignetting.cpp: -
+	  default values have been set
+	  - resetValues() calls slotReset() methods
+	  - readUserSettings should get default values from the
+	  corresponding widget itself, if possible
+
+2008-08-20 10:30  aclemens
+
+	* imageplugins/lensdistortion/imageeffect_lensdistortion.cpp: -
+	  default values have been set
+	  - resetValues() calls slotReset() methods
+	  - readUserSettings should get default values from the
+	  corresponding widget itself, if possible
+
+2008-08-20 10:30  aclemens
+
+	* imageplugins/inpainting/imageeffect_inpainting.cpp,
+	  imageplugins/restoration/imageeffect_restoration.cpp,
+	  utilities/imageeditor/tools/imageresize.cpp: - set default values
+	  for GreyCStorationWidget in the constructor of the appropriate
+	  filter
+	  - get default values from GreycstorationSettings class to reduce
+	  duplicate code in readUserSettings()
+
+2008-08-20 09:34  aclemens
+
+	* libs/dialogs/imageguidedlg.cpp: added RIntNumInput widgets
+
+2008-08-20 09:05  aclemens
+
+	* imageplugins/hotpixels/imageeffect_hotpixels.cpp,
+	  imageplugins/hotpixels/imageeffect_hotpixels.h,
+	  imageplugins/noisereduction/imageeffect_noisereduction.cpp: -
+	  default values have been set
+	  - resetValues() calls slotReset() methods
+	  - readUserSettings should get default values from the
+	  corresponding widget itself, if possible
+
+2008-08-20 08:36  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp,
+	  utilities/imageeditor/rawimport/rawimportdlg.h: prepare code to
+	  use new EditorTool object!
+
+2008-08-20 08:35  aclemens
+
+	* imageplugins/noisereduction/imageeffect_noisereduction.cpp: All
+	  settings widgets were disabled when dialog is freshly started. To
+	  change any setting, the "Try" button had to be hit first. The
+	  readUserSettings() method was messed up, this commit fixes the
+	  issue.
+
+2008-08-20 08:23  aclemens
+
+	* imageplugins/coreplugin/imageeffect_blur.cpp,
+	  imageplugins/coreplugin/imageeffect_redeye.cpp: - default values
+	  have been set
+	  - resetValues() calls slotReset() methods
+	  - readUserSettings should get default values from the
+	  corresponding widget itself, if possible
+
+2008-08-20 08:23  aclemens
+
+	* imageplugins/inpainting/imageeffect_inpainting.cpp,
+	  libs/greycstoration/greycstorationwidget.cpp,
+	  libs/greycstoration/greycstorationwidget.h: default values have
+	  been set
+	  
+	  GreyCStorationWidget:
+	  added method setDefaultSettings to initialize all R*NumInput /
+	  RComboBox widgets
+
+2008-08-19 17:10  aclemens
+
+	* imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.cpp,
+	  imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.h: -
+	  defaults are set
+	  - resetValues() calls slotReset() methods
+	  - eadUserSettings should get default values from the
+	  corresponding widget itself, if possible
+
+2008-08-19 16:38  aclemens
+
+	* imageplugins/colorfx/imageeffect_colorfx.cpp,
+	  imageplugins/coreplugin/hsl/imageeffect_hsl.cpp,
+	  imageplugins/coreplugin/imageeffect_bcg.cpp,
+	  imageplugins/coreplugin/imageeffect_bwsepia.cpp,
+	  imageplugins/coreplugin/imageeffect_iccproof.cpp,
+	  imageplugins/coreplugin/imageeffect_rgb.cpp,
+	  imageplugins/whitebalance/imageeffect_whitebalance.cpp:
+	  readUserSettings should get default values from the corresponding
+	  widget itself, if possible
+
+2008-08-19 14:36  cgilles
+
+	* libs/widgets/common/curveswidget.cpp: polish
+
+2008-08-19 14:30  cgilles
+
+	* libs/widgets/common/curveswidget.cpp: polish
+
+2008-08-19 14:08  cgilles
+
+	* libs/widgets/common/curveswidget.cpp: polish
+
+2008-08-19 14:05  cgilles
+
+	* libs/widgets/common/curveswidget.cpp,
+	  libs/widgets/common/curveswidget.h: polish
+
+2008-08-19 13:07  aclemens
+
+	* imageplugins/whitebalance/imageeffect_whitebalance.cpp,
+	  imageplugins/whitebalance/imageeffect_whitebalance.h: default
+	  values were set / corrected
+
+2008-08-19 12:49  aclemens
+
+	* imageplugins/colorfx/imageeffect_colorfx.cpp,
+	  imageplugins/colorfx/imageeffect_colorfx.h: default values were
+	  set / corrected
+
+2008-08-19 12:38  aclemens
+
+	* imageplugins/adjustlevels/adjustlevels.cpp,
+	  imageplugins/adjustlevels/adjustlevels.h,
+	  imageplugins/coreplugin/imageeffect_iccproof.cpp,
+	  imageplugins/coreplugin/imageeffect_iccproof.h: default values
+	  were set / corrected
+
+2008-08-19 11:54  aclemens
+
+	* imageplugins/coreplugin/hsl/imageeffect_hsl.cpp,
+	  imageplugins/coreplugin/imageeffect_bcg.cpp,
+	  imageplugins/coreplugin/imageeffect_bwsepia.cpp,
+	  imageplugins/coreplugin/imageeffect_rgb.cpp: - default values are
+	  set / corrected
+	  - the slot for resetting all widgets in a filter dialog uses
+	  slotReset() method from R*NumInput objects now
+
+2008-08-19 10:26  aclemens
+
+	* imageplugins/coreplugin/imageeffect_rgb.cpp,
+	  imageplugins/coreplugin/imageeffect_rgb.h: QSpinBox objects have
+	  been replaced by RIntNumInput
+
+2008-08-19 09:47  aclemens
+
+	* imageplugins/coreplugin/imageeffect_iccproof.h: polish
+
+2008-08-19 09:02  aclemens
+
+	* imageplugins/whitebalance/imageeffect_whitebalance.cpp,
+	  imageplugins/whitebalance/imageeffect_whitebalance.h: Beginning
+	  to replace Q/K*ComboBox objects by R*ComboBox objects from
+	  libkdcraw...
+
+2008-08-19 08:30  aclemens
+
+	* NEWS: polish
+
+2008-08-19 08:04  aclemens
+
+	* utilities/imageeditor/tools/imageresize.cpp: Continue to replace
+	  K*NumInput objects by R*NumInput objects...
+
+2008-08-19 07:29  aclemens
+
+	* libs/greycstoration/greycstorationwidget.cpp: Continue to replace
+	  K*NumInput objects by R*NumInput objects...
+
+2008-08-19 06:48  cgilles
+
+	* NEWS: update
+
+2008-08-19 06:47  aclemens
+
+	* imageplugins/adjustlevels/adjustlevels.cpp,
+	  imageplugins/antivignetting/imageeffect_antivignetting.cpp,
+	  imageplugins/blurfx/imageeffect_blurfx.cpp,
+	  imageplugins/border/imageeffect_border.cpp,
+	  imageplugins/channelmixer/channelmixer.cpp,
+	  imageplugins/charcoal/imageeffect_charcoal.cpp,
+	  imageplugins/colorfx/imageeffect_colorfx.cpp,
+	  imageplugins/coreplugin/hsl/imageeffect_hsl.cpp,
+	  imageplugins/coreplugin/imageeffect_bcg.cpp,
+	  imageplugins/coreplugin/imageeffect_blur.cpp,
+	  imageplugins/coreplugin/imageeffect_blur.h,
+	  imageplugins/coreplugin/imageeffect_bwsepia.cpp,
+	  imageplugins/coreplugin/imageeffect_bwsepia.h,
+	  imageplugins/coreplugin/imageeffect_iccproof.cpp,
+	  imageplugins/coreplugin/imageeffect_iccproof.h,
+	  imageplugins/coreplugin/imageeffect_redeye.cpp,
+	  imageplugins/coreplugin/imageeffect_redeye.h,
+	  imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.h,
+	  imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.cpp,
+	  imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.h,
+	  imageplugins/distortionfx/imageeffect_distortionfx.cpp,
+	  imageplugins/emboss/imageeffect_emboss.cpp,
+	  imageplugins/freerotation/imageeffect_freerotation.cpp,
+	  imageplugins/inserttext/fontchooserwidget.cpp,
+	  imageplugins/lensdistortion/imageeffect_lensdistortion.cpp,
+	  imageplugins/noisereduction/imageeffect_noisereduction.cpp,
+	  imageplugins/oilpaint/imageeffect_oilpaint.cpp,
+	  imageplugins/raindrop/imageeffect_raindrop.cpp,
+	  imageplugins/sheartool/imageeffect_sheartool.cpp,
+	  imageplugins/texture/imageeffect_texture.cpp,
+	  imageplugins/whitebalance/imageeffect_whitebalance.cpp: polish
+
+2008-08-19 06:46  cgilles
+
+	* NEWS: update
+
+2008-08-18 23:30  aclemens
+
+	* imageplugins/adjustlevels/adjustlevels.cpp,
+	  imageplugins/antivignetting/imageeffect_antivignetting.cpp,
+	  imageplugins/charcoal/imageeffect_charcoal.cpp,
+	  imageplugins/coreplugin/imageeffect_blur.cpp,
+	  imageplugins/coreplugin/imageeffect_bwsepia.cpp,
+	  imageplugins/coreplugin/imageeffect_iccproof.cpp,
+	  imageplugins/coreplugin/imageeffect_redeye.cpp,
+	  imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.cpp,
+	  imageplugins/freerotation/imageeffect_freerotation.cpp,
+	  imageplugins/raindrop/imageeffect_raindrop.cpp,
+	  imageplugins/sheartool/imageeffect_sheartool.cpp,
+	  imageplugins/texture/imageeffect_texture.cpp: replaced all
+	  setValue() methods with setDefaultValue()
+
+2008-08-18 23:12  aclemens
+
+	* imageplugins/antivignetting/imageeffect_antivignetting.cpp,
+	  imageplugins/border/imageeffect_border.cpp,
+	  imageplugins/channelmixer/channelmixer.cpp,
+	  imageplugins/charcoal/imageeffect_charcoal.cpp,
+	  imageplugins/colorfx/imageeffect_colorfx.cpp,
+	  imageplugins/coreplugin/imageeffect_blur.cpp,
+	  imageplugins/coreplugin/imageeffect_redeye.cpp,
+	  imageplugins/distortionfx/imageeffect_distortionfx.cpp,
+	  imageplugins/freerotation/imageeffect_freerotation.cpp,
+	  imageplugins/inserttext/fontchooserwidget.cpp,
+	  imageplugins/raindrop/imageeffect_raindrop.cpp,
+	  imageplugins/sheartool/imageeffect_sheartool.cpp,
+	  imageplugins/whitebalance/imageeffect_whitebalance.cpp: removed
+	  <knuminput.h> includes because they are not needed anymore.
+
+2008-08-18 22:58  aclemens
+
+	* imageplugins/adjustlevels/adjustlevels.cpp,
+	  imageplugins/adjustlevels/adjustlevels.h,
+	  imageplugins/antivignetting/imageeffect_antivignetting.cpp,
+	  imageplugins/antivignetting/imageeffect_antivignetting.h,
+	  imageplugins/blurfx/imageeffect_blurfx.cpp,
+	  imageplugins/blurfx/imageeffect_blurfx.h,
+	  imageplugins/border/imageeffect_border.cpp,
+	  imageplugins/border/imageeffect_border.h,
+	  imageplugins/channelmixer/channelmixer.cpp,
+	  imageplugins/channelmixer/channelmixer.h,
+	  imageplugins/charcoal/imageeffect_charcoal.cpp,
+	  imageplugins/charcoal/imageeffect_charcoal.h,
+	  imageplugins/colorfx/imageeffect_colorfx.cpp,
+	  imageplugins/colorfx/imageeffect_colorfx.h,
+	  imageplugins/coreplugin/hsl/imageeffect_hsl.cpp,
+	  imageplugins/coreplugin/hsl/imageeffect_hsl.h,
+	  imageplugins/coreplugin/imageeffect_blur.cpp,
+	  imageplugins/coreplugin/imageeffect_blur.h,
+	  imageplugins/coreplugin/imageeffect_bwsepia.cpp,
+	  imageplugins/coreplugin/imageeffect_bwsepia.h,
+	  imageplugins/coreplugin/imageeffect_iccproof.cpp,
+	  imageplugins/coreplugin/imageeffect_iccproof.h,
+	  imageplugins/coreplugin/imageeffect_redeye.cpp,
+	  imageplugins/coreplugin/imageeffect_redeye.h,
+	  imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.h,
+	  imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.cpp,
+	  imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.h,
+	  imageplugins/distortionfx/imageeffect_distortionfx.cpp,
+	  imageplugins/distortionfx/imageeffect_distortionfx.h,
+	  imageplugins/emboss/imageeffect_emboss.cpp,
+	  imageplugins/emboss/imageeffect_emboss.h,
+	  imageplugins/freerotation/imageeffect_freerotation.cpp,
+	  imageplugins/freerotation/imageeffect_freerotation.h,
+	  imageplugins/inserttext/fontchooserwidget.cpp,
+	  imageplugins/inserttext/fontchooserwidget.h,
+	  imageplugins/lensdistortion/imageeffect_lensdistortion.cpp,
+	  imageplugins/lensdistortion/imageeffect_lensdistortion.h,
+	  imageplugins/noisereduction/imageeffect_noisereduction.cpp,
+	  imageplugins/noisereduction/imageeffect_noisereduction.h,
+	  imageplugins/oilpaint/imageeffect_oilpaint.cpp,
+	  imageplugins/oilpaint/imageeffect_oilpaint.h,
+	  imageplugins/raindrop/imageeffect_raindrop.cpp,
+	  imageplugins/raindrop/imageeffect_raindrop.h,
+	  imageplugins/sheartool/imageeffect_sheartool.cpp,
+	  imageplugins/sheartool/imageeffect_sheartool.h,
+	  imageplugins/texture/imageeffect_texture.cpp,
+	  imageplugins/texture/imageeffect_texture.h,
+	  imageplugins/whitebalance/imageeffect_whitebalance.cpp,
+	  imageplugins/whitebalance/imageeffect_whitebalance.h: Continue to
+	  replace K*NumInput objects by R*NumInput objects from libkdcraw
+	  to unify the look of all imageplugins and the raw importer.
+
+2008-08-18 20:52  aclemens
+
+	* imageplugins/coreplugin/imageeffect_bcg.cpp,
+	  imageplugins/coreplugin/imageeffect_bcg.h: Beginning to replace
+	  K*NumInput objects by R*NumInput objects from libkdcraw to unify
+	  the look of all imageplugins and the raw importer.
+
+2008-08-18 14:09  cgilles
+
+	* utilities/imageeditor/rawimport/Makefile.am,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp: digiKam form
+	  KDE3 branch: RAW Import tool:
+	  Set icc profile preview widget to KURLRequester dialog
+	  Fix i18n
+
+2008-08-18 13:38  cgilles
+
+	* utilities/imageeditor/rawimport/rawsettingsbox.cpp: polish
+
+2008-08-18 11:11  cgilles
+
+	* utilities/imageeditor/rawimport/rawsettingsbox.cpp: support all
+	  color management options from libkdcraw
+
+2008-08-18 10:36  cgilles
+
+	* NEWS: update
+
+2008-08-18 07:46  aclemens
+
+	* NEWS: update
+
+2008-08-17 14:02  cgilles
+
+	* README, configure.in.in: set libkdcraw depency to 0.1.5
+
+2008-08-17 13:59  cgilles
+
+	* utilities/imageeditor/rawimport/rawpreview.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp: digiKAm from
+	  KDE3 branch : Adapt RAW Import with last changes from libkdcraw
+	  (reset buttons to default values
+	  for all settings).
+	  Note: digiKam require libkdcraw 0.1.5 (current svn) to compile
+	  fine now. With Angelo, we have planed to release
+	  libkdcraw 0.1.5 around begining of september.
+	  CCMAIL: digikam-devel@kde.org
+	  
+
+2008-08-16 18:55  aclemens
+
+	* NEWS: update
+
+2008-08-16 16:13  aclemens
+
+	* NEWS: corrected some typos
+
+2008-08-16 16:12  aclemens
+
+	* NEWS: update
+
+2008-08-16 14:51  aclemens
+
+	* NEWS: The added bugreport has been solved a month ago, but I
+	  forgot to put it into the NEWS file. So it will be added now for
+	  the sake of completeness.
+
+2008-08-16 09:54  aclemens
+
+	* NEWS: update
+
+2008-08-16 05:59  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp,
+	  utilities/imageeditor/rawimport/rawimportdlg.h,
+	  utilities/imageeditor/rawimport/rawpostprocessing.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.h: digiKam
+	  fromKDE3 branch : re-design again RAW Import settings layout: Now
+	  it's more clear to have
+	  all RAW decoding settings and all Post processing settings
+	  separated by a tab widget. All Raw decoding require
+	  to demosaic image to take effect. Post processing settings take
+	  effect imediatly (demosaised image is cached in memory)
+	  Add Brightness adjustement in post processing group.
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-16 05:54  cgilles
+
+	* libs/dimg/drawdecoding.h, libs/dimg/loaders/rawloader.cpp: add
+	  brightness as RAW post processing adjustement
+
+2008-08-15 07:41  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp,
+	  utilities/imageeditor/rawimport/rawimportdlg.h,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.h: Raw Import: use
+	  new signal from libkdcraw to set on/off Preview button to update
+	  image preview when Raw decoding settings is changed
+
+2008-08-14 13:26  aclemens
+
+	* NEWS: update
+	  
+	  BUG:162845
+
+2008-08-14 12:21  aclemens
+
+	* digikam/digikamapp.cpp,
+	  utilities/lighttable/lighttablewindow.cpp: New keyboard shortcut
+	  for "Place Onto Light Table": CTRL+L
+	  This seems to be more common than using SHIFT+L as an action
+	  shortcut.
+	  
+	  CCBUGS:162845
+
+2008-08-14 11:06  aclemens
+
+	* digikam/digikamapp.cpp,
+	  utilities/lighttable/lighttablewindow.cpp: New keyboard shortcuts
+	  for accessing and controlling the light table to prevent
+	  conflicts with KDE's global shortcuts:
+	  
+	  - 'L': open Light Table
+	  - 'SHIFT+L': Place on Light Table
+	  - 'SHIFT+CTRL+L': Add to Light Table
+	  
+	  CCBUGS:162845
+
+2008-08-14 09:18  aclemens
+
+	* NEWS: update
+
+2008-08-14 09:18  cgilles
+
+	* imageplugins/adjustcurves/adjustcurves.cpp,
+	  imageplugins/adjustcurves/adjustcurves.h,
+	  imageplugins/coreplugin/imageeffect_bwsepia.cpp,
+	  imageplugins/coreplugin/imageeffect_bwsepia.h,
+	  imageplugins/coreplugin/imageeffect_iccproof.cpp,
+	  imageplugins/coreplugin/imageeffect_iccproof.h,
+	  libs/widgets/common/curveswidget.cpp,
+	  libs/widgets/common/curveswidget.h,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp: Curves Widget
+	  : code simplification : this tool host now image curves instance
+	  as well. fix all code depending accordingly
+
+2008-08-14 08:09  cgilles
+
+	* libs/widgets/common/curveswidget.cpp: missing to reset curves at
+	  this place
+
+2008-08-13 21:08  cgilles
+
+	* utilities/imageeditor/rawimport/rawsettingsbox.cpp: check curves
+	  sixteenbits is better
+
+2008-08-13 21:05  cgilles
+
+	* libs/curves/imagecurves.cpp, libs/curves/imagecurves.h: new
+	  method to get sixteenbits prop
+
+2008-08-13 20:57  cgilles
+
+	* libs/widgets/common/curveswidget.cpp: reset curves when color
+	  depth is changed
+
+2008-08-13 20:22  cgilles
+
+	* utilities/imageeditor/rawimport/rawsettingsbox.cpp: manage
+	  read/write curve using 16 bits depth
+
+2008-08-13 17:09  aclemens
+
+	* NEWS: added a newline at the end of the file to stop SVN from
+	  crying all the time :-)
+
+2008-08-13 17:03  aclemens
+
+	* NEWS: update
+
+2008-08-13 17:00  aclemens
+
+	* kioslave/digikamalbums.cpp, kioslave/digikamtags.cpp: We need to
+	  initialize the albumsMap and tagsMap with all available
+	  information first before counting, so that empty albums and tags
+	  are updated correctly.
+	  
+	  
+	  CCBUGS:160564
+	  TODO:KDE4PORT
+
+2008-08-13 13:30  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp: Raw Import :
+	  fix timer to handle preview with post processing settings. Now
+	  all work fine !
+
+2008-08-13 11:01  cgilles
+
+	* project/project.kdevelop,
+	  utilities/imageeditor/rawimport/Makefile.am,
+	  utilities/imageeditor/rawimport/rawimportdlg.cpp,
+	  utilities/imageeditor/rawimport/rawimportdlg.h,
+	  utilities/imageeditor/rawimport/rawpostprocessing.cpp,
+	  utilities/imageeditor/rawimport/rawpostprocessing.h,
+	  utilities/imageeditor/rawimport/rawpreview.cpp,
+	  utilities/imageeditor/rawimport/rawpreview.h,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.h: RAWImport
+	  improvements: Separate demosaicing and post-processing
+	  adjusments. demosaicing require to render raw image using
+	  libkdcraw, against
+	  post-processing only use a cached image to render.
+	  This is want mean than all post-processing settings will a render
+	  an in live preview. These settings are saturation, exposure,
+	  gamma, contrast, and curve
+
+2008-08-13 10:55  cgilles
+
+	* libs/dimg/drawdecoding.h: const return
+
+2008-08-13 06:26  cgilles
+
+	* utilities/imageeditor/rawimport/rawsettingsbox.cpp: set exposure
+	  in E.V unit
+
+2008-08-12 20:53  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp,
+	  utilities/imageeditor/rawimport/rawimportdlg.h,
+	  utilities/imageeditor/rawimport/rawpreview.cpp,
+	  utilities/imageeditor/rawimport/rawpreview.h,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.h: code
+	  simplification about url of image.
+
+2008-08-12 20:22  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp,
+	  utilities/imageeditor/rawimport/rawimportdlg.h,
+	  utilities/imageeditor/rawimport/rawpreview.cpp,
+	  utilities/imageeditor/rawimport/rawpreview.h,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.h: Raw import :
+	  speed up improvements : use demosaicing image to render histogram
+	  from curves widget.
+	  no need to start 2 threads to load separate images (1 for
+	  histogram, 1 for curve)
+
+2008-08-11 18:58  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.h: do not disable
+	  histogram during image decoding
+
+2008-08-11 17:28  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp: revert. no need
+
+2008-08-11 16:57  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp: polish
+
+2008-08-11 16:40  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp: polish
+
+2008-08-11 15:40  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.h: link
+
+2008-08-11 15:31  cgilles
+
+	* utilities/imageeditor/rawimport/Makefile.am,
+	  utilities/imageeditor/rawimport/rawimportdlg.cpp,
+	  utilities/imageeditor/rawimport/rawimportdlg.h,
+	  utilities/imageeditor/rawimport/rawpreview.cpp,
+	  utilities/imageeditor/rawimport/rawpreview.h,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.h: Raw Import tool
+	  :
+	  - Separate preview and settings implementation from dialog. In
+	  fact the dialog will deseapear and editor will support
+	  a widget stack mechanism to display canvas view or tool preview.
+	  This will include all image plugins (but it's not yet done.)!
+	  Note than the settings will be hosted by a new right sidebar tab
+	  which will be visible only when the tool running.
+	  This moc-up is similar than Risto paper. I'm sure than Mik will
+	  be very impatient to test it (:=)))
+	  
+	  -Add Lineary adjustmant using curve widget (as UFRAW).
+	  
+	  Still Color management improvements to do to complete RAW Import
+	  tool. Please, let's me more free time...
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2008-08-11 15:24  cgilles
+
+	* libs/widgets/common/curveswidget.cpp,
+	  libs/widgets/common/curveswidget.h: CurvesWidget : improvements
+	  of API : add setDataLoading, setLoadingFailed, and other rules
+	  like HistogramWidget.
+	  This new code is used in Raw Import tool. This code need to be
+	  ported to KDE4
+
+2008-08-09 13:01  cgilles
+
+	* libs/curves/imagecurves.cpp, libs/curves/imagecurves.h: add dirty
+	  flag
+
+2008-08-09 12:27  cgilles
+
+	* libs/dimg/drawdecoding.h, libs/dimg/loaders/Makefile.am,
+	  libs/dimg/loaders/rawloader.cpp: add curves adjust support with
+	  RAW loader as post processing
+
+2008-08-09 12:19  cgilles
+
+	* libs/curves/imagecurves.cpp: polish
+
+2008-08-09 12:06  cgilles
+
+	* libs/curves/imagecurves.cpp, libs/curves/imagecurves.h: polish
+
+2008-08-09 12:05  cgilles
+
+	* NEWS: update
+
+2008-08-08 21:04  aclemens
+
+	* NEWS: update
+
+2008-08-08 20:39  aclemens
+
+	* digikam/daboutdata.h, digikam/main.cpp, showfoto/main.cpp:
+	  refactorize aboutData: library information has been moved to
+	  daboutdata.h
+
+2008-08-08 14:52  aclemens
+
+	* PACKAGING: polish
+
+2008-08-08 14:49  aclemens
+
+	* PACKAGING, digikam/daboutdata.h, digikam/digikamfirstrun.cpp,
+	  digikam/main.cpp, digikam/version.h, digikam/welcomepageview.cpp,
+	  imageplugins/adjustcurves/adjustcurves.cpp,
+	  imageplugins/adjustlevels/adjustlevels.cpp,
+	  imageplugins/antivignetting/imageeffect_antivignetting.cpp,
+	  imageplugins/blurfx/imageeffect_blurfx.cpp,
+	  imageplugins/border/imageeffect_border.cpp,
+	  imageplugins/channelmixer/channelmixer.cpp,
+	  imageplugins/charcoal/imageeffect_charcoal.cpp,
+	  imageplugins/colorfx/imageeffect_colorfx.cpp,
+	  imageplugins/distortionfx/imageeffect_distortionfx.cpp,
+	  imageplugins/emboss/imageeffect_emboss.cpp,
+	  imageplugins/filmgrain/imageeffect_filmgrain.cpp,
+	  imageplugins/freerotation/imageeffect_freerotation.cpp,
+	  imageplugins/hotpixels/imageeffect_hotpixels.cpp,
+	  imageplugins/infrared/imageeffect_infrared.cpp,
+	  imageplugins/inpainting/imageeffect_inpainting.cpp,
+	  imageplugins/inserttext/imageeffect_inserttext.cpp,
+	  imageplugins/lensdistortion/imageeffect_lensdistortion.cpp,
+	  imageplugins/noisereduction/imageeffect_noisereduction.cpp,
+	  imageplugins/oilpaint/imageeffect_oilpaint.cpp,
+	  imageplugins/perspective/imageeffect_perspective.cpp,
+	  imageplugins/raindrop/imageeffect_raindrop.cpp,
+	  imageplugins/restoration/imageeffect_restoration.cpp,
+	  imageplugins/sheartool/imageeffect_sheartool.cpp,
+	  imageplugins/superimpose/imageeffect_superimpose.cpp,
+	  imageplugins/texture/imageeffect_texture.cpp,
+	  imageplugins/whitebalance/imageeffect_whitebalance.cpp,
+	  libs/dimg/loaders/pngloader.cpp,
+	  libs/dimg/loaders/tiffloader.cpp, libs/dmetadata/dmetadata.cpp,
+	  showfoto/main.cpp, themedesigner/main.cpp: "version.h" has been
+	  removed, constants defining the digikam and showfoto application
+	  version have been moved to "daboutdata.h".
+
+2008-08-08 14:07  aclemens
+
+	* digikam/daboutdata.h, digikam/main.cpp,
+	  digikam/welcomepageview.cpp, showfoto/main.cpp,
+	  themedesigner/main.cpp: refactorize aboutData
+
+2008-08-08 13:25  cgilles
+
+	* libs/curves/imagecurves.cpp: wrong logic
+
+2008-08-08 12:54  aclemens
+
+	* digikam/daboutdata.h: removed unneeded KURL include
+
+2008-08-08 12:08  aclemens
+
+	* digikam/welcomepageview.cpp,
+	  imageplugins/adjustcurves/adjustcurves.cpp,
+	  imageplugins/adjustlevels/adjustlevels.cpp,
+	  imageplugins/antivignetting/imageeffect_antivignetting.cpp,
+	  imageplugins/blurfx/imageeffect_blurfx.cpp,
+	  imageplugins/border/imageeffect_border.cpp,
+	  imageplugins/channelmixer/channelmixer.cpp,
+	  imageplugins/charcoal/imageeffect_charcoal.cpp,
+	  imageplugins/colorfx/imageeffect_colorfx.cpp,
+	  imageplugins/distortionfx/imageeffect_distortionfx.cpp,
+	  imageplugins/emboss/imageeffect_emboss.cpp,
+	  imageplugins/filmgrain/imageeffect_filmgrain.cpp,
+	  imageplugins/freerotation/imageeffect_freerotation.cpp,
+	  imageplugins/hotpixels/imageeffect_hotpixels.cpp,
+	  imageplugins/infrared/imageeffect_infrared.cpp,
+	  imageplugins/inpainting/imageeffect_inpainting.cpp,
+	  imageplugins/inserttext/imageeffect_inserttext.cpp,
+	  imageplugins/lensdistortion/imageeffect_lensdistortion.cpp,
+	  imageplugins/noisereduction/imageeffect_noisereduction.cpp,
+	  imageplugins/perspective/imageeffect_perspective.cpp,
+	  imageplugins/raindrop/imageeffect_raindrop.cpp,
+	  imageplugins/restoration/imageeffect_restoration.cpp,
+	  imageplugins/sheartool/imageeffect_sheartool.cpp,
+	  imageplugins/superimpose/imageeffect_superimpose.cpp,
+	  imageplugins/texture/imageeffect_texture.cpp,
+	  libs/widgets/common/dlogoaction.cpp,
+	  utilities/cameragui/cameraui.cpp: refactorize aboutData
+
+2008-08-08 11:39  aclemens
+
+	* digikam/daboutdata.h, digikam/main.cpp, showfoto/main.cpp,
+	  themedesigner/main.cpp: refactorize aboutData
+
+2008-08-08 11:34  aclemens
+
+	* digikam/daboutdata.h: begin to refactorize aboutData in KDE3
+	  branch as well
+
+2008-08-08 11:21  cgilles
+
+	* libs/curves/imagecurves.cpp, libs/curves/imagecurves.h: new
+	  method to set/get list of curve points
+
+2008-08-08 08:26  aclemens
+
+	* digikam/main.cpp, themedesigner/main.cpp: polish
+
+2008-08-08 04:28  cgilles
+
+	* utilities/setup/setupdcraw.cpp: set icons
+
+2008-08-08 04:23  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp: set icons
+
+2008-08-07 18:36  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp: set button
+	  icons
+
+2008-08-07 17:50  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp: add constrast
+	  setting
+
+2008-08-07 17:49  cgilles
+
+	* libs/dimg/drawdecoding.h, libs/dimg/loaders/Makefile.am,
+	  libs/dimg/loaders/rawloader.cpp: added constrast settings as post
+	  raw decoding
+
+2008-08-07 15:55  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp: remember
+	  settings tab
+
+2008-08-07 14:08  cgilles
+
+	* project/project.kdevelop,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/rawimport/rawimportdlg.cpp,
+	  utilities/setup/setupdcraw.cpp: add support of median filter
+	  passes settings
+
+2008-08-07 12:21  cgilles
+
+	* libs/dimg/loaders/rawloader.cpp: polish
+
+2008-08-07 11:20  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp: added Exposure
+	  compensation as raw decoding post processing
+
+2008-08-07 11:05  cgilles
+
+	* libs/dimg/drawdecoding.h, libs/dimg/loaders/rawloader.cpp,
+	  libs/dimg/loaders/rawloader.h, project/project.kdevelop,
+	  utilities/imageeditor/rawimport/rawimportdlg.cpp: added
+	  Saturation settings has Raw decoding post processing
+
+2008-08-07 10:12  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp: polish
+
+2008-08-07 09:43  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp: compile with
+	  older libkdcraw
+
+2008-08-07 09:19  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp: compile with
+	  last libkdcraw changes
+
+2008-08-07 07:33  cgilles
+
+	* libs/widgets/common/curveswidget.cpp: batter color scheme support
+
+2008-08-07 06:57  cgilles
+
+	* libs/widgets/common/histogramwidget.cpp: better support of color
+	  theme
+
+2008-08-07 06:37  cgilles
+
+	* libs/widgets/common/curveswidget.cpp: always rawing frame around
+	  histogram
+
+2008-08-07 06:20  cgilles
+
+	* libs/widgets/common/histogramwidget.cpp: polish
+
+2008-08-07 06:13  cgilles
+
+	* libs/widgets/common/histogramwidget.cpp: always drawing frame
+	  around histogram
+
+2008-08-07 04:36  cgilles
+
+	* libs/widgets/common/histogramwidget.cpp: better support of color
+	  theme
+
+2008-08-06 20:34  cgilles
+
+	* imageplugins/hotpixels/blackframeparser.cpp, libs/dimg/dimg.cpp,
+	  libs/dimg/dimg.h, libs/dimg/loaders/Makefile.am,
+	  libs/dimg/loaders/rawloader.cpp, libs/dimg/loaders/rawloader.h,
+	  libs/imageproperties/imagepropertiescolorstab.cpp,
+	  libs/threadimageio/loadingdescription.cpp,
+	  libs/threadimageio/loadingdescription.h,
+	  project/project.kdevelop,
+	  utilities/imageeditor/canvas/iofilesettingscontainer.h,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/setup/setupdcraw.cpp: use DRawDecoding class
+	  everywhere.
+	  use whithe balance algorithm as post raw decoding processing to
+	  adjust gamma
+
+2008-08-06 20:33  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp,
+	  utilities/imageeditor/rawimport/rawimportdlg.h,
+	  utilities/imageeditor/rawimport/rawpreview.cpp,
+	  utilities/imageeditor/rawimport/rawpreview.h: add Exposure
+	  settings panel
+
+2008-08-06 19:02  cgilles
+
+	* libs/dimg/drawdecoding.h: new class to host customized settings
+	  to decode RAW images
+
+2008-08-06 16:34  cgilles
+
+	* libs/dimg/loaders/rawloader.cpp: this is where is cached the
+	  gamma value
+
+2008-08-06 13:06  cgilles
+
+	* utilities/imageeditor/rawimport/Makefile.am,
+	  utilities/imageeditor/rawimport/rawimportdlg.cpp: add RAW info
+	  page with main photo informations + thumbnail
+
+2008-08-06 12:56  cgilles
+
+	* libs/dialogs/imagedialog.h: make it public
+
+2008-08-06 12:56  cgilles
+
+	* libs/dialogs/imagedialog.cpp: wrong logic
+
+2008-08-06 11:43  cgilles
+
+	* libs/dimg/loaders/rawloader.cpp, libs/dimg/loaders/rawloader.h:
+	  RAW decoding improvement: we are now able to use brightness
+	  settings in 16 bits color depth.
+
+2008-08-06 11:27  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp,
+	  utilities/imageeditor/rawimport/rawimportdlg.h: always enable
+	  brightness setting
+
+2008-08-06 11:27  cgilles
+
+	* utilities/setup/setupdcraw.cpp, utilities/setup/setupdcraw.h:
+	  always enable brigthness settings
+
+2008-08-06 09:46  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp: polish
+
+2008-08-06 09:43  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp: fix margin
+
+2008-08-06 09:32  cgilles
+
+	* utilities/imageeditor/editor/editorwindow.cpp: polish
+
+2008-08-06 09:27  cgilles
+
+	* utilities/setup/setupdcraw.cpp: support white and black point
+	  settings
+
+2008-08-06 09:26  cgilles
+
+	* utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/rawimport/rawimportdlg.cpp: support whithe
+	  and black point settingsd
+
+2008-08-06 07:18  cgilles
+
+	* utilities/imageeditor/rawimport/rawpreview.cpp: poliosh
+
+2008-08-06 07:16  cgilles
+
+	* utilities/imageeditor/rawimport/rawpreview.cpp: polish
+
+2008-08-06 06:12  cgilles
+
+	* digikam/welcomepageview.cpp, digikam/welcomepageview.h: add Raw
+	  import tool in the new features list
+
+2008-08-06 06:09  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp: remember
+	  histogram settings
+
+2008-08-06 04:35  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp: fix layout
+
+2008-08-06 04:23  cgilles
+
+	* libs/imageproperties/imagepropertiescolorstab.cpp,
+	  libs/imageproperties/imagepropertiescolorstab.h: polish
+
+2008-08-05 20:22  aclemens
+
+	* utilities/lighttable/lighttablewindow.cpp: backport commit
+	  #842714 from KDE4
+	  
+	  CCBUGS:167571
+
+2008-08-05 19:24  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp: polish
+
+2008-08-05 19:21  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp,
+	  utilities/imageeditor/rawimport/rawimportdlg.h: provide Al Colors
+	  histogram visualization
+
+2008-08-05 16:50  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp,
+	  utilities/imageeditor/rawimport/rawimportdlg.h: polish
+
+2008-08-05 16:45  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp,
+	  utilities/imageeditor/rawimport/rawimportdlg.h: polish api
+
+2008-08-05 16:34  cgilles
+
+	* utilities/imageeditor/Makefile.am: rawimport in first
+
+2008-08-05 16:31  cgilles
+
+	* utilities/imageeditor/canvas/dimginterface.cpp: only manage RAW
+	  files with Raw Import tool
+
+2008-08-05 15:08  cgilles
+
+	* showfoto/setup/setupeditor.cpp, showfoto/setup/setupeditor.h: to
+	  be able to use RAW Import tool from Showfoto
+
+2008-08-05 15:08  cgilles
+
+	* utilities/setup/setupeditor.cpp: polish
+
+2008-08-05 15:00  cgilles
+
+	* digikam/digikamapp.cpp: disable RAW converter Single kipi-plugin.
+	  This tool become obsolete since we include RAW Import tool for
+	  image editor
+
+2008-08-05 14:36  cgilles
+
+	* digikam/digikamapp.cpp: polish
+
+2008-08-05 14:29  cgilles
+
+	* libs/widgets/common/histogramwidget.cpp: polish
+
+2008-08-05 14:19  cgilles
+
+	* libs/widgets/common/curveswidget.cpp,
+	  libs/widgets/common/histogramwidget.cpp,
+	  libs/widgets/iccprofiles/cietonguewidget.cpp: better color theme
+	  support
+
+2008-08-05 12:55  cgilles
+
+	* NEWS: And 4 anothers bugs closed. rock !
+
+2008-08-05 12:50  cgilles
+
+	* utilities/imageeditor/canvas/Makefile.am,
+	  utilities/imageeditor/canvas/dimginterface.cpp,
+	  utilities/imageeditor/canvas/iofilesettingscontainer.h,
+	  utilities/imageeditor/editor/Makefile.am,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/rawimport/rawimportdlg.cpp,
+	  utilities/imageeditor/rawimport/rawimportdlg.h,
+	  utilities/setup/setupeditor.cpp, utilities/setup/setupeditor.h:
+	  digiKam from KDE3 branch : new tool to import RAW file in editor
+	  There are 2 way to handle RAW file in editor :
+	  
+	  1/ using auto-gamma. User let's digiKam import RAW image using
+	  default RAW decoding setting from config panel. An Autogamma is
+	  applied to image.
+	  This option is used by default when you open image in editor. Toi
+	  change it, go to Image editor config panel and set on "Use Raw
+	  Import tool" option.
+	  2/ using Raw Import tool. In this way a dialog with all RAW
+	  decoding settings and a preview of decoded image is displayed.
+	  Histogram is available, and panning/zomming over the preview is
+	  possible.
+	  
+	  Note: this Raw import tool is also available with Showfoto of
+	  course...
+	  
+	  A preview of tool in action can be see on digiKam-labs flickr
+	  photo pool:
+	  
+	  http://farm4.static.flickr.com/3097/2735517982_598f1e30c3_o.png
+	  
+	  TODO : * included all Color management settings relevant of RAW
+	  decoding. display this settings if digiKam Color Management is
+	  on.
+	  * added a gamma adjustement with RAW decoding.
+	  * removed Tools/RAW Converter (single) option provided by RAW
+	  converter kipi-plugin which become obsolete here
+	  (Batch RAW converter will still available). Remplace this option
+	  by a link to Raw Import tool directly.
+	  
+	  BUG: 142975
+	  BUG: 150457
+	  BUG: 155074
+	  BUG: 155076
+
+2008-08-05 12:21  cgilles
+
+	* utilities/imageeditor/editor/editorwindow.cpp: polish
+
+2008-08-05 11:22  cgilles
+
+	* utilities/imageeditor/canvas/iofilesettingscontainer.h: polish
+
+2008-08-05 11:20  cgilles
+
+	* utilities/imageeditor/rawimport/rawimportdlg.cpp,
+	  utilities/imageeditor/rawimport/rawimportdlg.h,
+	  utilities/imageeditor/rawimport/rawpreview.cpp,
+	  utilities/imageeditor/rawimport/rawpreview.h: implementation
+	  undependant of digiKam DB (can be used into Showfoto)
+
+2008-08-05 11:09  cgilles
+
+	* digikam/Makefile.am: compile
+
+2008-08-05 11:08  cgilles
+
+	* utilities/Makefile.am, utilities/imageeditor/Makefile.am,
+	  utilities/imageeditor/rawimport,
+	  utilities/imageeditor/rawimport/rawimportdlg.cpp,
+	  utilities/rawimport: move rawimport to editor
+
+2008-08-05 10:09  cgilles
+
+	* libs/widgets/common/histogramwidget.cpp: polish
+
+2008-08-05 10:01  cgilles
+
+	* libs/widgets/common/curveswidget.cpp,
+	  libs/widgets/common/histogramwidget.cpp,
+	  libs/widgets/iccprofiles/cietonguewidget.cpp: missing to close
+	  painter
+
+2008-08-05 09:31  cgilles
+
+	* libs/widgets/common/curveswidget.cpp,
+	  libs/widgets/common/curveswidget.h: digiKam from KDE3: do not
+	  flash histogram curve operation progress. use a turning wheel as
+	  Flash video player.
+	  CCBUGS: 127242
+
+2008-08-05 09:18  cgilles
+
+	* libs/widgets/common/curveswidget.cpp,
+	  libs/widgets/common/curveswidget.h: polish
+
+2008-08-05 09:11  cgilles
+
+	* libs/widgets/iccprofiles/cietonguewidget.cpp: digiKam from KDE3:
+	  do not flash ICC widget operation progress. use a turning wheel
+	  as Flash video player.
+	  CCBUGS: 127242
+
+2008-08-05 08:46  cgilles
+
+	* utilities/rawimport/rawimportdlg.cpp: fix i18n
+
+2008-08-05 08:46  cgilles
+
+	* utilities/rawimport/rawimportdlg.cpp: fix i18n
+
+2008-08-05 08:43  cgilles
+
+	* libs/widgets/common/histogramwidget.cpp,
+	  libs/widgets/common/histogramwidget.h: fix api +polish
+
+2008-08-05 08:36  cgilles
+
+	* NEWS: update
+
+2008-08-05 08:35  cgilles
+
+	* utilities/rawimport/rawimportdlg.cpp: polish
+
+2008-08-05 08:34  cgilles
+
+	* libs/widgets/common/histogramwidget.cpp: digiKam from KDE3: do
+	  not flash histogram operation progress. use a turning wheel as
+	  Flash video player.
+	  BUG: 127242
+
+2008-08-05 06:26  cgilles
+
+	* libs/widgets/common/histogramwidget.cpp,
+	  libs/widgets/common/histogramwidget.h: polish api, cleanup
+	  orphelin space
+
+2008-08-04 20:07  cgilles
+
+	* utilities/rawimport/rawimportdlg.cpp,
+	  utilities/rawimport/rawimportdlg.h,
+	  utilities/rawimport/rawpreview.cpp: polish
+
+2008-08-04 20:01  cgilles
+
+	* utilities/rawimport/rawpreview.cpp,
+	  utilities/rawimport/rawpreview.h: prepare to add progress info
+	  during loading
+
+2008-08-04 19:54  cgilles
+
+	* utilities/rawimport/rawpreview.cpp: fix image loading
+
+2008-08-04 19:49  cgilles
+
+	* utilities/rawimport/rawimportdlg.cpp,
+	  utilities/rawimport/rawpreview.cpp,
+	  utilities/rawimport/rawpreview.h: manage Abort button.
+	  fix slot
+
+2008-08-04 18:49  cgilles
+
+	* utilities/rawimport/rawimportdlg.cpp: set file name in dialog
+	  title
+
+2008-08-04 18:42  cgilles
+
+	* utilities/rawimport/rawimportdlg.cpp,
+	  utilities/rawimport/rawimportdlg.h,
+	  utilities/rawimport/rawpreview.cpp,
+	  utilities/rawimport/rawpreview.h: digiKam from KDE3 branch: RAW
+	  Import tool : more progress here. All RAW decoding settings are
+	  fine now. still todo, a interface to pass RAW decoding settings
+	  to image editor as well. add all color management settings to RAW
+	  decoding settings
+
+2008-08-04 17:22  cgilles
+
+	* utilities/rawimport/rawimportdlg.cpp: fix button
+
+2008-08-04 14:04  cgilles
+
+	* utilities/rawimport/rawimportdlg.cpp,
+	  utilities/rawimport/rawpreview.cpp: do not reset zoom settings if
+	  RAW decoding settings is changed
+
+2008-08-04 13:47  cgilles
+
+	* utilities/rawimport/Makefile.am,
+	  utilities/rawimport/rawimportdlg.cpp,
+	  utilities/rawimport/rawimportdlg.h,
+	  utilities/rawimport/rawpreview.cpp,
+	  utilities/rawimport/rawpreview.h: continue to implement RawImport
+	  tool : add histogram, set preview settings. Preview work. TOOD :
+	  start editor with these settings
+
+2008-08-04 12:57  cgilles
+
+	* digikam/Makefile.am: compile with RawImport
+
+2008-08-04 12:57  cgilles
+
+	* utilities/Makefile.am: compile
+
+2008-08-04 12:56  cgilles
+
+	* utilities/rawimport, utilities/rawimport/Makefile.am,
+	  utilities/rawimport/rawimportdlg.cpp,
+	  utilities/rawimport/rawimportdlg.h,
+	  utilities/rawimport/rawpreview.cpp,
+	  utilities/rawimport/rawpreview.h: new RAW import dialog to set
+	  RAW decoding settings before to load RAW image in editor. Not yet
+	  complete.
+
+2008-08-01 20:16  aclemens
+
+	* utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/imageeditor/editor/imagewindow.h: backport commit
+	  #840766 from KDE4
+	  
+	  CCBUGS:167778
+
+2008-07-31 19:28  cgilles
+
+	* NEWS: update
+
+2008-07-31 14:11  cgilles
+
+	* digikam/datefolderview.cpp: backport commit #840152 from KDE4
+
+2008-07-31 13:17  cgilles
+
+	* digikam/tagfilterview.cpp,
+	  libs/imageproperties/talbumlistview.cpp: backport commit #840138
+	  from KDE4
+
+2008-07-30 13:48  cgilles
+
+	* data/pics/digikam-splash.png, data/pics/digikam-splash.xcf,
+	  showfoto/pics/showfoto-splash.png,
+	  showfoto/pics/showfoto-splash.xcf: update
+
+2008-07-30 13:48  cgilles
+
+	* AUTHORS: update
+
+2008-07-30 13:40  cgilles
+
+	* data/pics/menusidepixmap.png, data/pics/menusidepixmap.xcf,
+	  showfoto/pics/menusidepixmap.png,
+	  showfoto/pics/menusidepixmap.xcf: fix release number for menu
+	  side pixmap
+
+2008-07-30 07:17  cgilles
+
+	* libs/thumbbar/thumbbar.cpp: do not refresh all thumbbar items if
+	  exif rotation flags is not changed.
+	  CCBUGS: 167529
+
+2008-07-29 15:30  aclemens
+
+	* showfoto/showfoto.cpp: backport commit #839225 from KDE4 branch
+	  
+	  CCBUGS:166472
+
+2008-07-28 13:29  aclemens
+
+	* utilities/lighttable/lighttablewindow.cpp: backport commit
+	  #838675 from KDE4 branch
+	  
+	  CCBUGS:167571
+
+2008-07-28 12:46  aclemens
+
+	* utilities/lighttable/lighttablewindow.cpp: backport commit
+	  #838662 from KDE4 branch
+
+2008-07-28 11:35  cgilles
+
+	* imageplugins/inserttext/imageplugin_inserttext.cpp,
+	  imageplugins/inserttext/imageplugin_inserttext.h: backport commit
+	  #838640 from KDE4
+
+2008-07-28 09:33  cgilles
+
+	* NEWS: update
+
+2008-07-27 12:55  cgilles
+
+	* NEWS: update
+
+2008-07-27 12:53  cgilles
+
+	* tips: remove this obsolete link
+	  BUGS: 167528
+
+2008-07-23 17:02  aclemens
+
+	* NEWS: update
+
+2008-07-20 12:11  aclemens
+
+	* NEWS: update
+
+2008-07-18 12:36  aclemens
+
+	* NEWS: update
+
+2008-07-18 07:41  abaecker
+
+	* libs/greycstoration/greycstorationiface.cpp: Disable the use of
+	  X11 for greycstoration; with last CImg.h 1.2.9, the switch
+	  "cimg_display_type" has been renamed to "cimg_display".
+
+2008-07-17 17:49  aclemens
+
+	* NEWS: update
+
+2008-07-17 12:41  aclemens
+
+	* digikam/main.cpp, showfoto/main.cpp: added developer "Andi
+	  Clemens" to digiKam and showFoto
+
+2008-07-17 12:30  aclemens
+
+	* NEWS, NEWS.0.9.4, digikam.lsm, digikam/version.h,
+	  release_digikam.rb, release_digikam_docs.rb, showfoto/main.cpp:
+	  initializing 0.9.5 release in KDE3 branch
+
+2008-07-16 18:57  aclemens
+
+	* ChangeLog: preparing 0.9.4 final release
+
+2008-07-16 18:40  aclemens
+
+	* NEWS: update
+
+2008-07-16 18:30  aclemens
+
+	* NEWS, digikam.lsm: preparing the 0.9.4 final release
+
 0.9.4 2008-07-13
 -------------------------------------------------------------------------
 2008-07-16 14:03  aclemens
