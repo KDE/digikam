@@ -230,10 +230,10 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     DTextLabelName *label9  = new DTextLabelName(i18n("Percentile: "), gbox);
     d->labelPercentileValue = new DTextLabelValue(0, gbox);
 
-    DTextLabelName *label11 = new DTextLabelName(i18n("Color depth: "), gbox);
+    DTextLabelName *label10 = new DTextLabelName(i18n("Color depth: "), gbox);
     d->labelColorDepth      = new DTextLabelValue(0, gbox);
 
-    DTextLabelName *label12 = new DTextLabelName(i18n("Alpha Channel: "), gbox);
+    DTextLabelName *label11 = new DTextLabelName(i18n("Alpha Channel: "), gbox);
     d->labelAlphaChannel    = new DTextLabelValue(0, gbox);
 
     grid->addWidget(label5,                  0, 0, 1, 1);
@@ -248,11 +248,11 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     grid->addWidget(d->labelMedianValue,     4, 1, 1, 1);
     grid->addWidget(label9,                  5, 0, 1, 1);
     grid->addWidget(d->labelPercentileValue, 5, 1, 1, 1);
-    grid->addWidget(label11,                 6, 0, 1, 1);
+    grid->addWidget(label10,                 6, 0, 1, 1);
     grid->addWidget(d->labelColorDepth,      6, 1, 1, 1);
-    grid->addWidget(label12,                 7, 0, 1, 1);
+    grid->addWidget(label11,                 7, 0, 1, 1);
     grid->addWidget(d->labelAlphaChannel,    7, 1, 1, 1);
-    grid->setMargin(0);
+    grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(0);
 
     // -------------------------------------------------------------
