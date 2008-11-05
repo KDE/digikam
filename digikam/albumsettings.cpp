@@ -201,7 +201,7 @@ void AlbumSettings::init()
     d->rawFilefilter                = d->defaultRawFilefilter;
 
     d->thumbnailSize                = ThumbnailSize::Medium;
-    d->treeThumbnailSize            = 32;
+    d->treeThumbnailSize            = 22;
 
     d->ratingFilterCond             = AlbumLister::GreaterEqualCondition;
 
@@ -288,7 +288,7 @@ void AlbumSettings::readSettings()
     d->audioFilefilter              = config->readEntry("Audio File Filter", d->audioFilefilter);
     d->rawFilefilter                = config->readEntry("Raw File Filter", d->rawFilefilter);
     d->thumbnailSize                = config->readNumEntry("Default Icon Size", ThumbnailSize::Medium);
-    d->treeThumbnailSize            = config->readNumEntry("Default Tree Icon Size", ThumbnailSize::Tiny);
+    d->treeThumbnailSize            = config->readNumEntry("Default Tree Icon Size", 22);
     d->currentTheme                 = config->readEntry("Theme", i18n("Default"));
 
     d->ratingFilterCond             = config->readNumEntry("Rating Filter Condition",
