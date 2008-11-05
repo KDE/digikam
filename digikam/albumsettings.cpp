@@ -191,7 +191,7 @@ void AlbumSettings::init()
     d->itemRightClickAction         = AlbumSettings::ShowPreview;
 
     d->thumbnailSize                = ThumbnailSize::Medium;
-    d->treeThumbnailSize            = 32;
+    d->treeThumbnailSize            = 22;
 
     d->ratingFilterCond             = AlbumLister::GreaterEqualCondition;
 
