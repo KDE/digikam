@@ -30,11 +30,6 @@ URL
       http://websvn.kde.org/*checkout*/trunk/KDE/kdelibs/KDE4PORTING.html
       http://techbase.kde.org/Projects/KDEPrint/KDE4
 				
-LIST OF BUGZILLA FILES NOT YET BACKPORTED FROM KDE3 BRANCH:
------------------------------------------------------------      
-      		      
-
-
 LIST OF DIRECTORIES PORTED BY DEVELOPPERS:
 ------------------------------------------
                                                         DEPENCIES
@@ -77,7 +72,15 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
     thumbbar.cpp                        Gilles          X      X       DONE        DONE     Still use Q3ScrollView. Port to QScrollArea
 |-----iccprofiles                       Gilles          X      X       DONE        DONE
 |-----imageplugins                      Gilles          X      X       DONE        DONE
-|-----metadata                          Gilles          X      X       DONE        DONE
+|-----metadata    
+    exifwidget.cpp                      Gilles          X      X       DONE        DONE
+    iptcwidget.cpp                      Gilles          X      X       DONE        DONE
+    makernotewidget.cpp                 Gilles          X      X       DONE        DONE
+    mdkeylistviewitem.cpp               Gilles          X      X       DONE        DONE
+    metadatalistview.cpp                Gilles          X      X       DONE        DONE
+    metadatalistviewitem.cpp            Gilles          X      X       DONE        DONE
+    metadatawidget.cpp                  Gilles          X      X       DONE        DONE     Still to use Qt3 support class for printing.
+    xmpwidget.cpp                       Gilles          X      X       DONE        DONE
 
 |-utilities
 |---batch                               Gilles                 X       DONE
@@ -91,7 +94,7 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
     cameraiconitem.cpp                  Gilles                 X       DONE
     cameraiconview.cpp                  Gilles                 X       DONE
     camerainfodialog.cpp                Gilles                 X       DONE
-    cameraui.cpp                        Gilles                 X       DONE                 QToolBox color background is not right.
+    cameraui.cpp                        Gilles                 X       DONE                 
     dkcamera.cpp                        Gilles                 X       DONE
     freespacewidget.cpp                 Gilles                 X       DONE        DONE     With KDE 4.2, port to KCapacityBar.
     gpcamera.cpp                        Gilles                 X       DONE
@@ -202,9 +205,9 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
 |---oilpaint                            Laurent                        DONE       DONE
 |---perspective                         Laurent                        DONE       DONE
 |---raindrop                            Laurent                        DONE       DONE
-|---restoration                         Gilles                         DONE       DONE      Crash sometime.
+|---restoration                         Gilles                         DONE                 Crash sometime.
 |---sheartool                           Laurent                        DONE       DONE
-|---superimpose                         Laurent                        DONE
+|---superimpose                         Laurent                        DONE                 Paning/zoom is broken
 |---texture                             Laurent                        DONE       DONE
 |---whitebalance                        Gilles                         DONE       DONE
 
