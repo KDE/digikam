@@ -20,7 +20,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 174108 : digikam and exiv2 crash with AVI file.
 009 ==> 174202 : Albums` names are duplicated after migrating from digikam-0.9.4.
 010 ==> 167873 : Tag and album trees are not expanded when searching for entries.
-011 ==> 
+011 ==> 169641 : digiKam crashed while downloading AVI-files from Canon S5 IS.
+012 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta5 - Release date: 2008-10-26
