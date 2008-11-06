@@ -152,7 +152,7 @@ DigikamApp::DigikamApp()
     }
 
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Scan Albums"), Qt::AlignLeft, Qt::white);
+        d->splashScreen->message(i18n("Scan Albums"));
 
     // collection scan
     if (d->config->group("General Settings").readEntry("Scan At Start", true) ||
@@ -162,7 +162,7 @@ DigikamApp::DigikamApp()
     }
 
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Initializing..."), Qt::AlignLeft, Qt::white);
+        d->splashScreen->message(i18n("Initializing..."));
 
     new DigikamAdaptor(this);
     QDBusConnection::sessionBus().registerObject("/Digikam", this);
@@ -197,7 +197,7 @@ DigikamApp::DigikamApp()
     // Check ICC profiles repository availability
 
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Checking ICC repository"), Qt::AlignLeft, Qt::white);
+        d->splashScreen->message(i18n("Checking ICC repository"));
 
     d->validIccPath = SetupICC::iccRepositoryIsValid();
 
@@ -205,14 +205,14 @@ DigikamApp::DigikamApp()
 
 #if KDCRAW_VERSION < 0x000400
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Checking dcraw version"), Qt::AlignLeft, Qt::white);
+        d->splashScreen->message(i18n("Checking dcraw version"));
 
     KDcrawIface::DcrawBinary::instance()->checkSystem();
 #endif
 
     // Read albums from database
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Reading database"), Qt::AlignLeft, Qt::white);
+        d->splashScreen->message(i18n("Reading database"));
 
     AlbumManager::instance()->startScan();
 
@@ -349,7 +349,7 @@ void DigikamApp::autoDetect()
     // Called from main if command line option is set
 
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Auto-detect camera"), Qt::AlignLeft, Qt::white);
+        d->splashScreen->message(i18n("Auto-detect camera"));
 
     QTimer::singleShot(0, this, SLOT(slotCameraAutoDetect()));
 }
@@ -363,7 +363,7 @@ void DigikamApp::downloadFrom(const QString &cameraGuiPath)
         d->cameraGuiPath = cameraGuiPath;
 
         if(d->splashScreen)
-            d->splashScreen->message(i18n("Opening Download Dialog"), Qt::AlignLeft, Qt::white);
+            d->splashScreen->message(i18n("Opening Download Dialog"));
 
         QTimer::singleShot(0, this, SLOT(slotOpenCameraUiFromPath()));
     }
@@ -382,7 +382,7 @@ bool DigikamApp::queryClose()
 void DigikamApp::setupView()
 {
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Initializing Main View"), Qt::AlignLeft, Qt::white);
+        d->splashScreen->message(i18n("Initializing Main View"));
 
     d->view = new DigikamView(this);
     setCentralWidget(d->view);
@@ -1050,7 +1050,7 @@ void DigikamApp::setupActions()
     // Load Cameras -- do this before the createGUI so that the cameras
     // are plugged into the toolbar at startup
     if (d->splashScreen)
-        d->splashScreen->message(i18n("Loading cameras"), Qt::AlignLeft, Qt::white);
+        d->splashScreen->message(i18n("Loading cameras"));
 
     loadCameras();
 
@@ -2036,7 +2036,7 @@ void DigikamApp::slotComponentsInfo()
 void DigikamApp::loadPlugins()
 {
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Loading Kipi Plugins"), Qt::AlignLeft, Qt::white);
+        d->splashScreen->message(i18n("Loading Kipi Plugins"));
 
     QStringList ignores;
     d->kipiInterface = new KipiInterface( this, "Digikam_KIPI_interface" );
@@ -2087,9 +2087,6 @@ void DigikamApp::slotKipiPluginPlug()
             continue;
 
         ++cpt;
-
-        //if(d->splashScreen)
-          //  d->splashScreen->message(i18n("Loading: %1", (*it)->name()));
 
         plugin->setup( this );
 
@@ -2156,7 +2153,7 @@ void DigikamApp::slotKipiPluginPlug()
 void DigikamApp::populateThemes()
 {
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Loading themes"), Qt::AlignLeft, Qt::white);
+        d->splashScreen->message(i18n("Loading themes"));
 
     ThemeEngine::instance()->scanThemes();
     d->themeMenuAction->setItems(ThemeEngine::instance()->themeNames());
