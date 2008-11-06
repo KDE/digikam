@@ -607,7 +607,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->openInKonquiAction = new KAction(KIcon("konqueror"), i18n("Open in Konqueror"), this);
+    d->openInKonquiAction = new KAction(KIcon("folder-open"), i18n("Open in File Manager"), this);
     connect(d->openInKonquiAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumOpenInKonqui()));
     actionCollection()->addAction("album_openinkonqui", d->openInKonquiAction);
 
