@@ -124,7 +124,7 @@ DigikamApp::DigikamApp()
     }
 
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Initializing..."), AlignLeft, white);
+        d->splashScreen->message(i18n("Initializing..."));
 
     // Register image formats (especially for TIFF )
     KImageIO::registerFormats();
@@ -159,7 +159,7 @@ DigikamApp::DigikamApp()
     // Check ICC profiles repository availability
 
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Checking ICC repository"), AlignLeft, white);
+        d->splashScreen->message(i18n("Checking ICC repository"));
 
     d->validIccPath = SetupICC::iccRepositoryIsValid();
 
@@ -167,19 +167,19 @@ DigikamApp::DigikamApp()
     // Check witch dcraw version available
 
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Checking dcraw version"), AlignLeft, white);
+        d->splashScreen->message(i18n("Checking dcraw version"));
 
     KDcrawIface::DcrawBinary::instance()->checkSystem();
 #endif
 
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Scan Albums"), AlignLeft, white);
+        d->splashScreen->message(i18n("Scan Albums"));
 
     d->albumManager->setLibraryPath(d->albumSettings->getAlbumLibraryPath(), d->splashScreen);
 
     // Read albums from database
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Reading database"), AlignLeft, white);
+        d->splashScreen->message(i18n("Reading database"));
 
     d->albumManager->startScan();
 
@@ -327,7 +327,7 @@ void DigikamApp::autoDetect()
     // Called from main if command line option is set
 
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Auto-detect camera"), AlignLeft, white);
+        d->splashScreen->message(i18n("Auto-detect camera"));
 
     QTimer::singleShot(0, this, SLOT(slotCameraAutoDetect()));
 }
@@ -341,7 +341,7 @@ void DigikamApp::downloadFrom(const QString &cameraGuiPath)
         d->cameraGuiPath = cameraGuiPath;
 
         if(d->splashScreen)
-            d->splashScreen->message(i18n("Opening Download Dialog"), AlignLeft, white);
+            d->splashScreen->message(i18n("Opening Download Dialog"));
 
         QTimer::singleShot(0, this, SLOT(slotDownloadImages()));
     }
@@ -360,7 +360,7 @@ bool DigikamApp::queryClose()
 void DigikamApp::setupView()
 {
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Initializing Main View"), AlignLeft, white);
+        d->splashScreen->message(i18n("Initializing Main View"));
 
     d->view = new DigikamView(this);
     setCentralWidget(d->view);
@@ -1044,7 +1044,7 @@ void DigikamApp::setupActions()
     // Load Cameras -- do this before the createGUI so that the cameras
     // are plugged into the toolbar at startup
     if (d->splashScreen)
-        d->splashScreen->message(i18n("Loading cameras"), AlignLeft, white);
+        d->splashScreen->message(i18n("Loading cameras"));
 
     loadCameras();
 
@@ -1802,7 +1802,7 @@ void DigikamApp::slotRawCameraList()
 void DigikamApp::loadPlugins()
 {
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Loading Kipi Plugins"), AlignLeft, white);
+        d->splashScreen->message(i18n("Loading Kipi Plugins"));
 
     QStringList ignores;
     d->kipiInterface = new DigikamKipiInterface( this, "Digikam_KIPI_interface" );
@@ -1853,9 +1853,6 @@ void DigikamApp::slotKipiPluginPlug()
             continue;
 
         ++cpt;
-
-        //if(d->splashScreen)
-          //  d->splashScreen->message(i18n("Loading: %1").arg((*it)->name()));
 
         plugin->setup( this );
         QPtrList<KAction>* popup = 0;
@@ -1908,9 +1905,6 @@ void DigikamApp::slotKipiPluginPlug()
         plugin->actionCollection()->readShortcutSettings();
     }
 
-    //if(d->splashScreen)
-      //  d->splashScreen->message(i18n("1 Kipi Plugin Loaded", "%n Kipi Plugins Loaded", cpt));
-
     // Create GUI menu in according with plugins.
 
     plugActionList( QString::fromLatin1("file_actions_export"), d->kipiFileActionsExport );
@@ -1940,7 +1934,7 @@ void DigikamApp::loadCameras()
 void DigikamApp::populateThemes()
 {
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Loading themes"), AlignLeft, white);
+        d->splashScreen->message(i18n("Loading themes"));
 
     ThemeEngine::instance()->scanThemes();
     d->themeMenuAction->setItems(ThemeEngine::instance()->themeNames());

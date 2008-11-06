@@ -176,7 +176,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     // Check ICC profiles repository availability
 
     if(d->splash)
-        d->splash->message(i18n("Checking ICC repository"), AlignLeft, white);
+        d->splash->message(i18n("Checking ICC repository"));
 
     d->validIccPath = Digikam::SetupICC::iccRepositoryIsValid();
 
@@ -184,7 +184,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     // Check witch dcraw version available
 
     if(d->splash)
-        d->splash->message(i18n("Checking dcraw version"), AlignLeft, white);
+        d->splash->message(i18n("Checking dcraw version"));
 
     KDcrawIface::DcrawBinary::instance()->checkSystem();
 #endif
@@ -192,7 +192,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     // Populate Themes
 
     if(d->splash)
-        d->splash->message(i18n("Loading themes"), AlignLeft, white);
+        d->splash->message(i18n("Loading themes"));
 
     Digikam::ThemeEngine::instance()->scanThemes();
 

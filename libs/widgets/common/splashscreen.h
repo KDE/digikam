@@ -2,12 +2,12 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2003-02-10
  * Description : a widget to display spash with progress bar
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,14 +21,17 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
- 
+
 #ifndef SPLASHSCREEN_H
 #define SPLASHSCREEN_H
 
 // Qt includes.
 
-#include <ksplashscreen.h>
 #include <qpainter.h>
+
+// KDE includes.
+
+#include <ksplashscreen.h>
 
 // Local includes.
 
@@ -44,19 +47,19 @@ class DIGIKAM_EXPORT SplashScreen : public KSplashScreen
 Q_OBJECT
 
 public:
-	
-    SplashScreen(const QString& splash, WFlags f = 0);
-	virtual ~SplashScreen();
+
+    SplashScreen(const QString& splash, WFlags f=0);
+    virtual ~SplashScreen();
 
 protected:
-	
+
     void drawContents (QPainter *);
 
 public slots:
-	
+
     void animate();
-    void message(const QString &message, int alignment = AlignLeft,
-                 const QColor &color = white );
+    void message(const QString &message, int alignment=AlignLeft,
+                 const QColor &color=lightGray);
 
 private:
 

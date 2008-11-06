@@ -2,12 +2,12 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2003-02-10
  * Description : a widget to display spash with progress bar
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,9 +57,9 @@ public:
     int     state;
     int     progressBarSize;
     int     alignment;
-       
+
     QString string;
-    
+
     QColor  color;
 };
 
@@ -67,12 +67,12 @@ SplashScreen::SplashScreen(const QString& splash, WFlags f)
             : KSplashScreen(QPixmap(locate("appdata", splash)), f)
 {
     d = new SplashScreenPriv;
-    
-	QTimer *timer = new QTimer( this );
-    
-	connect(timer, SIGNAL(timeout()),
+
+    QTimer *timer = new QTimer( this );
+
+    connect(timer, SIGNAL(timeout()),
             this, SLOT(animate()));
-            
+
     timer->start(150);
 }
 
@@ -83,8 +83,8 @@ SplashScreen::~SplashScreen()
 
 void SplashScreen::animate()
 {
-	d->state = ((d->state + 1) % (2*d->progressBarSize-1));
-	repaint();
+    d->state = ((d->state + 1) % (2*d->progressBarSize-1));
+    repaint();
 }
 
 void SplashScreen::message( const QString &message, int alignment, const QColor &color)
@@ -101,31 +101,31 @@ void SplashScreen::drawContents(QPainter* painter)
     int position;
     QColor basecolor (155, 192, 231);
 
-	// Draw background circles
-	painter->setPen(NoPen);
+    // Draw background circles
+    painter->setPen(NoPen);
     painter->setBrush(QColor(225, 234, 231));
     painter->drawEllipse(21, 7, 9, 9);
     painter->drawEllipse(32, 7, 9, 9);
     painter->drawEllipse(43, 7, 9, 9);
 
-	// Draw animated circles, increments are chosen
-	// to get close to background's color
-	// (didn't work well with QColor::light function)
-	for (int i=0; i < d->progressBarSize; i++)
-	{
-		position = (d->state+i)%(2*d->progressBarSize-1);
+    // Draw animated circles, increments are chosen
+    // to get close to background's color
+    // (didn't work well with QColor::light function)
+    for (int i=0; i < d->progressBarSize; i++)
+    {
+        position = (d->state+i)%(2*d->progressBarSize-1);
         if (position < 3)
         {
             painter->setBrush(QColor(basecolor.red()  -18*i,
                                      basecolor.green()-28*i,
                                      basecolor.blue() -10*i));
-    
+
             painter->drawEllipse(21+position*11, 7, 9, 9);
         }
-	}
+    }
 
-	painter->setPen(d->color);
-    
+    painter->setPen(d->color);
+
     QFont fnt(KGlobalSettings::generalFont());
     int fntSize = fnt.pointSize();
     if (fntSize > 0)
@@ -139,12 +139,12 @@ void SplashScreen::drawContents(QPainter* painter)
     }
     painter->setFont(fnt);
 
-	QRect r = rect();
+    QRect r = rect();
     r.setRect( r.x() + 59, r.y() + 5, r.width() - 10, r.height() - 10 );
 
-	// Draw message at given position, limited to 43 chars
-	// If message is too long, string is truncated
-	if (d->string.length() > 40) {d->string.truncate(39); d->string += "...";}
+    // Draw message at given position, limited to 43 chars
+    // If message is too long, string is truncated
+    if (d->string.length() > 40) {d->string.truncate(39); d->string += "...";}
     painter->drawText(r, d->alignment, d->string);
 }
 
