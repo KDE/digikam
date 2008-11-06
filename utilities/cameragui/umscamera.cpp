@@ -44,10 +44,16 @@ extern "C"
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kcodecs.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kfilemetainfo.h>
+#include <ktrader.h>
+#include <klibloader.h>
+#include <kmimetype.h>
+#include <kio/global.h>
+#include <kio/thumbcreator.h>
 #include <solid/device.h>
 #include <solid/storageaccess.h>
 #include <solid/storagedrive.h>
@@ -259,7 +265,76 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
         return true;
     }
 
+    if (loadKDEThumbCreator(folder, itemName, thumbnail))
+        return true;
+
     return false;
+}
+
+bool UMSCamera::loadKDEThumbCreator(const QString& folder, const QString& itemName, QImage& thumbnail)
+{
+    QString path     = folder + QString("/") + itemName;
+    QString mimeType = KMimeType::findByUrl(path)->name();
+
+    if (mimeType.isEmpty())
+    {
+        kDebug(50003) << "Mimetype not found" << endl;
+        return false;
+    }
+
+    QString mimeTypeAlt = mimeType.replace(QRegExp("/.*"), "/*");
+    QString plugin;
+
+    KService::List plugins = KServiceTypeTrader::self()->query("ThumbCreator");
+    for (KService::List::ConstIterator it = plugins.begin(); it != plugins.end(); ++it)
+    {
+        QStringList mimeTypes = (*it)->property("MimeTypes").toStringList();
+        for (QStringList::ConstIterator mt = mimeTypes.begin(); mt != mimeTypes.end(); ++mt)
+        {
+            if  ((*mt) == mimeType || (*mt) == mimeTypeAlt)
+            {
+                plugin = (*it)->library();
+                break;
+            }
+        }
+
+        if (!plugin.isEmpty())
+            break;
+    }
+
+    if (plugin.isEmpty())
+    {
+        kDebug(50003) << "No relevant plugin found " << endl;
+        return false;
+    }
+
+    KLibrary *library = KLibLoader::self()->library(QFile::encodeName(plugin));
+    if (!library)
+    {
+        kDebug(50003) << "Plugin library not found " << plugin << endl;
+        return false;
+    }
+
+    ThumbCreator *creator = 0;
+    newCreator create     = (newCreator)library->resolveSymbol("new_creator");
+    if (create)
+        creator = create();
+
+    if (!creator)
+    {
+        kDebug(50003) << "Cannot load ThumbCreator " << plugin << endl;
+        return false;
+    }
+
+    if (!creator->create(path, 256, 256, thumbnail))
+    {
+        kDebug(50003) << "Cannot create thumbnail for " << path << endl;
+        delete creator;
+        return false;
+    }
+
+    delete creator;
+    return true;
 }
 
 bool UMSCamera::getExif(const QString&, const QString&, char **, int&)
