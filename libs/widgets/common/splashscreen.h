@@ -53,13 +53,13 @@ public:
 
 protected:
 
-    void drawContents (QPainter *);
+    void drawContents (QPainter*);
 
 public slots:
 
     void animate();
-    void message(const QString &message, int alignment = Qt::AlignLeft,
-                 const QColor &color = Qt::white );
+    void message(const QString &message, int alignment=Qt::AlignLeft,
+                 const QColor &color=Qt::lightGray);
 
 private:
 

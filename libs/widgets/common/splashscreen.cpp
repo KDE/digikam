@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "splashscreen.h"
 #include "splashscreen.moc"
 
@@ -43,7 +42,6 @@
 #include <kglobalsettings.h>
 #include <kaboutdata.h>
 #include <kcomponentdata.h>
-
 
 namespace Digikam
 {
