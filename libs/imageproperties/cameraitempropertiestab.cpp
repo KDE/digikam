@@ -442,6 +442,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
         d->make->hide();
         d->model->hide();
         d->photoDate->hide();
+        d->lens->hide();
         d->aperture->hide();
         d->focalLength->hide();
         d->exposureTime->hide();
@@ -467,6 +468,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
         d->make->show();
         d->model->show();
         d->photoDate->show();
+        d->lens->show();
         d->aperture->show();
         d->focalLength->show();
         d->exposureTime->show();
