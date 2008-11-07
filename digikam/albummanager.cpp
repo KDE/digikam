@@ -45,7 +45,6 @@ extern "C"
 #include <qfile.h>
 #include <qdir.h>
 #include <qdict.h>
-#include <qlist.h>
 #include <qintdict.h>
 #include <qcstring.h>
 #include <qtextcodec.h>

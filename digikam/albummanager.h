@@ -34,7 +34,7 @@
 #include <qstring.h>
 #include <qvaluelist.h>
 #include <qmap.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 // KDE includes.
 
