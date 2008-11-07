@@ -2,57 +2,57 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINAR
 
 INCLUDE_DIRECTORIES(
                      # basic libs
-                     ../libs/dimg
-                     ../libs/dimg/loaders
-                     ../libs/dimg/filters
-                     ../libs/whitebalance
-                     ../libs/dmetadata 
-                     ../libs/histogram
-                     ../libs/curves
-                     ../libs/levels
-                     ../libs/lprof
-                     ../libs/jpegutils 
-                     ../libs/greycstoration
-                     ../libs/threadimageio
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/dimg
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/dimg/loaders
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/dimg/filters
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/whitebalance
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/dmetadata 
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/histogram
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/curves
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/levels
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/lprof
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/jpegutils 
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/greycstoration
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/threadimageio
 
                      # widgets and dialogs
-                     ../libs/widgets/common
-                     ../libs/widgets/imageplugins 
-                     ../libs/widgets/metadata 
-                     ../libs/widgets/iccprofiles 
-                     ../libs/imageproperties
-                     ../libs/dialogs
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/widgets/common
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/widgets/imageplugins 
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/widgets/metadata 
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/widgets/iccprofiles 
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/imageproperties
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/dialogs
 
                      # database libs
-                     ../libs/database
-                     ../libs/database/sqlite2
-                     ../libs/database/sqlite3
-                     ../libs/database/haar
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/database
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/database/sqlite2
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/database/sqlite3
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/database/haar
 
                      # shared utilities
-                     ../utilities/slideshow
-                     ../utilities/imageeditor/editor
-                     ../utilities/imageeditor/canvas
-                     ../utilities/imageeditor/tools
-                     ../utilities/imageeditor/rawimport
+                     ${CMAKE_CURRENT_BINARY_DIR}/../utilities/slideshow
+                     ${CMAKE_CURRENT_BINARY_DIR}/../utilities/imageeditor/editor
+                     ${CMAKE_CURRENT_BINARY_DIR}/../utilities/imageeditor/canvas
+                     ${CMAKE_CURRENT_BINARY_DIR}/../utilities/imageeditor/tools
+                     ${CMAKE_CURRENT_BINARY_DIR}/../utilities/imageeditor/rawimport
 
                      # specific libs and utilities
-                     ../libs/themeengine
-                     ../utilities/kipiiface
-                     ../utilities/cameragui
-                     ../utilities/setup
-                     ../utilities/slideshow
-                     ../utilities/batch
-                     ../utilities/lighttable
-                     ../utilities/searchwindow
-                     ../utilities/fuzzysearch
-                     ../utilities/gpssearch
-                     ../utilities/timeline
-                     ../digikam
-                     ../
+                     ${CMAKE_CURRENT_BINARY_DIR}/../libs/themeengine
+                     ${CMAKE_CURRENT_BINARY_DIR}/../utilities/kipiiface
+                     ${CMAKE_CURRENT_BINARY_DIR}/../utilities/cameragui
+                     ${CMAKE_CURRENT_BINARY_DIR}/../utilities/setup
+                     ${CMAKE_CURRENT_BINARY_DIR}/../utilities/slideshow
+                     ${CMAKE_CURRENT_BINARY_DIR}/../utilities/batch
+                     ${CMAKE_CURRENT_BINARY_DIR}/../utilities/lighttable
+                     ${CMAKE_CURRENT_BINARY_DIR}/../utilities/searchwindow
+                     ${CMAKE_CURRENT_BINARY_DIR}/../utilities/fuzzysearch
+                     ${CMAKE_CURRENT_BINARY_DIR}/../utilities/gpssearch
+                     ${CMAKE_CURRENT_BINARY_DIR}/../utilities/timeline
+                     ${CMAKE_CURRENT_BINARY_DIR}/../digikam
 
                      # config-digikam.h
                      ${CMAKE_CURRENT_BINARY_DIR}/../
+
                      # external library paths
                      ${JPEG_INCLUDE_DIS}
                      ${PNG_PNG_INCLUDE_DIR}
