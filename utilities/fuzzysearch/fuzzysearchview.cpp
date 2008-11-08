@@ -479,6 +479,7 @@ FuzzySearchView::~FuzzySearchView()
     writeConfig();
     delete d->timerSketch;
     delete d->timerImage;
+    delete d->imageInfo;
     delete d;
 }
 
