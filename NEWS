@@ -23,7 +23,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 169641 : digiKam crashed while downloading AVI-files from Canon S5 IS.
 012 ==> 169964 : Crash when importing my picture and video collection
 013 ==> 174615 : digiKam 0.10 compile error.
-014 ==> 
+014 ==> 174620 : After updating to current svn digikam crashes.
+015 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta5 - Release date: 2008-10-26
