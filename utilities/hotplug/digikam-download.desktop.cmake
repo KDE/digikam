@@ -14,6 +14,7 @@ Name[it]=Scarica foto con digiKam
 Name[ja]=digiKam で写真をダウンロード
 Name[km]=ទាញយក​រូបថត​ដោយ digiKam
 Name[lv]=Ielādēt fotogrāfijas ar digiKam
+Name[nb]=Last ned fotografier med digiKam
 Name[nds]=Fotos mit digiKam daalladen
 Name[nl]=Foto's met digiKam downloaden
 Name[pl]=Pobierz zdjęcia za pomocą digiKam
