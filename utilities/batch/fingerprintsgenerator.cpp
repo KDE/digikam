@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-05-16
- * Description : finger-prints generator
+ * Description : fingerprints generator
  *
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -93,8 +93,8 @@ FingerPrintsGenerator::FingerPrintsGenerator(QWidget* parent, bool rebuildAll)
             this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)));
 
     setValue(0);
-    setCaption(i18n("Rebuild All Finger-Prints"));
-    setLabel(i18n("<b>Updating finger-prints database in progress. Please wait...</b>"));
+    setCaption(i18n("Rebuild All Fingerprints"));
+    setLabel(i18n("<b>Updating fingerprint database. Please wait...</b>"));
     setButtonText(i18n("&Abort"));
     resize(600, 300);
 
@@ -149,7 +149,7 @@ void FingerPrintsGenerator::complete()
 {
     QTime t;
     t = t.addMSecs(d->duration.elapsed());
-    setLabel(i18n("<b>Update of finger-prints database done</b>"));
+    setLabel(i18n("<b>Update of fingerprint database complete.</b>"));
     setTitle(i18n("Duration: %1", t.toString()));
     setButtonGuiItem(KStandardGuiItem::ok());
     setButtonText(i18n("&Close"));
