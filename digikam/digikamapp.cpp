@@ -349,7 +349,7 @@ void DigikamApp::autoDetect()
     // Called from main if command line option is set
 
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Auto-detect camera"));
+        d->splashScreen->message(i18n("Auto Detect Camera"));
 
     QTimer::singleShot(0, this, SLOT(slotCameraAutoDetect()));
 }
@@ -461,7 +461,7 @@ void DigikamApp::setupStatusBar()
 void DigikamApp::setupAccelerators()
 {
     // Action are added by <MainWindow> tag in ui.rc XML file
-    KAction *escapeAction = new KAction(i18n("Exit preview mode"), this);
+    KAction *escapeAction = new KAction(i18n("Exit Preview Mode"), this);
     actionCollection()->addAction("exit_preview_mode", escapeAction);
     escapeAction->setShortcut( QKeySequence(Qt::Key_Escape) );
     connect(escapeAction, SIGNAL(triggered()), this, SIGNAL(signalEscapePressed()));
@@ -491,12 +491,12 @@ void DigikamApp::setupAccelerators()
     lastImageAction->setShortcut( QKeySequence(Qt::Key_End) );
     connect(lastImageAction, SIGNAL(triggered()), this, SIGNAL(signalLastItem()));
 
-    KAction *copyItemsAction = new KAction(i18n("Copy selected album items"), this);
+    KAction *copyItemsAction = new KAction(i18n("Copy Selected Album Items"), this);
     actionCollection()->addAction("copy_album_selection", copyItemsAction);
     copyItemsAction->setShortcut( QKeySequence(Qt::CTRL+Qt::Key_C) );
     connect(copyItemsAction, SIGNAL(triggered()), this, SIGNAL(signalCopyAlbumItemsSelection()));
 
-    KAction *pasteItemsAction = new KAction(i18n("Paste selected album items"), this);
+    KAction *pasteItemsAction = new KAction(i18n("Paste Selected Album Items"), this);
     actionCollection()->addAction("paste_album_selection", pasteItemsAction);
     pasteItemsAction->setShortcut( QKeySequence(Qt::CTRL+Qt::Key_V) );
     connect(pasteItemsAction, SIGNAL(triggered()), this, SIGNAL(signalPasteAlbumItemsSelection()));
@@ -583,7 +583,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------------
 
     d->propsEditAction = new KAction(KIcon("albumfolder-properties"), i18n("Properties..."), this);
-    d->propsEditAction->setWhatsThis(i18n("Edit Album Properties and Collection information."));
+    d->propsEditAction->setWhatsThis(i18n("Edit album properties and collection information."));
     connect(d->propsEditAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumPropsEdit()));
     actionCollection()->addAction("album_propsEdit", d->propsEditAction);
 
@@ -600,7 +600,7 @@ void DigikamApp::setupActions()
     d->syncAlbumMetadataAction = new KAction(KIcon("view-refresh"), i18n("Synchronize images with database"), this);
     d->syncAlbumMetadataAction->setWhatsThis(i18n("Updates all image metadata of the current "
                                                   "album with the contents of digiKam database "
-                                                  "(image metadata will be over-written with data from "
+                                                  "(image metadata will be overwritten with data from "
                                                   "the database)."));
     connect(d->syncAlbumMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumSyncPicturesMetadata()));
     actionCollection()->addAction("album_syncmetadata", d->syncAlbumMetadataAction);
@@ -686,7 +686,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     // Pop up dialog to ask user whether to permanently delete
-    d->imageDeletePermanentlyAction = new KAction(KIcon("edit-delete"), i18n("Delete permanently"), this);
+    d->imageDeletePermanentlyAction = new KAction(KIcon("edit-delete"), i18n("Delete Permanently"), this);
     d->imageDeletePermanentlyAction->setShortcut(Qt::SHIFT+Qt::Key_Delete);
     connect(d->imageDeletePermanentlyAction, SIGNAL(triggered()), d->view, SLOT(slotImageDeletePermanently()));
     actionCollection()->addAction("image_delete_permanently", d->imageDeletePermanentlyAction);
@@ -760,7 +760,7 @@ void DigikamApp::setupActions()
     connect(exifOrientationMapper, SIGNAL(mapped(int)),
             d->view, SLOT(slotImageExifOrientation(int)));
 
-    d->imageExifOrientationActionMenu = new KActionMenu(i18n("Adjust Exif orientation tag"), this);
+    d->imageExifOrientationActionMenu = new KActionMenu(i18n("Adjust Exif Orientation Tag"), this);
     d->imageExifOrientationActionMenu->setDelayed(false);
     actionCollection()->addAction("image_set_exif_orientation", d->imageExifOrientationActionMenu);
 
@@ -917,7 +917,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("supported RAW cameras"), this);
+    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("Supported RAW Cameras"), this);
     connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
     actionCollection()->addAction("help_rawcameralist", d->rawCameraListAction);
 
@@ -1022,13 +1022,13 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    KAction *rebuildThumbsAction = new KAction(KIcon("run-build"), i18n("Rebuild all Thumbnails..."), this);
+    KAction *rebuildThumbsAction = new KAction(KIcon("run-build"), i18n("Rebuild All Thumbnails..."), this);
     connect(rebuildThumbsAction, SIGNAL(triggered()), this, SLOT(slotRebuildAllThumbs()));
     actionCollection()->addAction("thumbs_rebuild", rebuildThumbsAction);
 
     // -----------------------------------------------------------
 
-    KAction *rebuildFingerPrintsAction = new KAction(KIcon("run-build"), i18n("Rebuild all Fingerprints..."), this);
+    KAction *rebuildFingerPrintsAction = new KAction(KIcon("run-build"), i18n("Rebuild All Fingerprints..."), this);
     connect(rebuildFingerPrintsAction, SIGNAL(triggered()), this, SLOT(slotRebuildAllFingerPrints()));
     actionCollection()->addAction("fingerprints_rebuild", rebuildFingerPrintsAction);
 
