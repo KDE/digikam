@@ -649,7 +649,7 @@ void DigikamApp::setupActions()
                                                   "album with the contents of the digiKam database "
                                                   "(image metadata will be over-written with data from the database)."));
 
-    d->openInKonquiAction = new KAction( i18n("Open in Konqueror"),
+    d->openInKonquiAction = new KAction( i18n("Open in File Manager"),
                                     "konqueror",
                                     0,
                                     d->view,
