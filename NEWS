@@ -1,4 +1,11 @@
 **********************************************************************************************
+digiKam 0.9.5-beta2 - Release date: 2008-12-xx
+
+NEW FEATURES:
+
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+**********************************************************************************************
 digiKam 0.9.5-beta1 - Release date: 2008-11-05
 
 NEW FEATURES:
@@ -11,7 +18,7 @@ Image Editor   : All image plugin dialogs are removed. All tools are embedded in
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 166867 : Digikam crashes when starting.
+001 ==> 166867 : digiKam crashes when starting.
 002 ==> 167026 : Crash on startup Directory ImageSubIfd0 not valid.
 003 ==> 146870 : Don't reduce size of image when rotating.
 004 ==> 167528 : Remove hotlinking URL from tips.
@@ -27,7 +34,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 160564 : No refresh of the number of pictures assigned to a tag after removing the tag from some pictures.
 015 ==> 158144 : Showfoto crashes in settings window.
 016 ==> 162845 : 'Ctrl+F6' Conflict with KDE global shortcut.
-017 ==> 159523 : Digikam crashes while downloading images from Olympus MJU 810/Stylus 810 camera no xD card.
+017 ==> 159523 : digiKam crashes while downloading images from Olympus MJU 810/Stylus 810 camera no xD card.
 018 ==> 161369 : Quick filter indicator lamp is not working properly in recursive image folder view mode.
 019 ==> 147314 : Renaming like crazy with F2 slows down my system.
 020 ==> 164622 : Crash using timeline when switching from month to week to month view.
@@ -38,6 +45,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 025 ==> 147435 : Resize slider in sharpness dialog doesn't work correct.
 026 ==> 168844 : Make the selection rectangle draggable over the image (not only resizable).
 027 ==> 147151 : Compile error: multiple definition of `jpeg_suppress_tables'.
-028 ==> 170758 : High load when tagging 
+028 ==> 170758 : High load when tagging.
 029 ==> 168003 : Drag&dropping a photo to a folder in Dolphin begins copying the whole system:/media.
 030 ==> 142457 : Temp files not cleaned up after crashes.
