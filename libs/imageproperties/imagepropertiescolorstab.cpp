@@ -240,13 +240,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     SelectionImageButton->setPixmap( QPixmap( directory + "image-selection.png" ) );
     SelectionImageButton->setToggleButton(true);
 
-    topLayout->addMultiCellWidget(label1,       1, 1, 0, 0);
-    topLayout->addMultiCellWidget(d->channelCB, 1, 1, 1, 1);
-    topLayout->addMultiCellWidget(d->scaleBG,   1, 1, 3, 3);
-    topLayout->addMultiCellWidget(label10,      2, 2, 0, 0);
-    topLayout->addMultiCellWidget(d->colorsCB,  2, 2, 1, 1);
-    topLayout->addMultiCellWidget(d->regionBG,  2, 2, 3, 3);
-    topLayout->setColStretch(2, 10);
+
 
     // -------------------------------------------------------------
 
@@ -258,7 +252,6 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     space->setFixedHeight(1);
     d->hGradient = new ColorGradientWidget(ColorGradientWidget::Horizontal, 10, histoBox);
     d->hGradient->setColors(QColor("black"), QColor("white"));
-    topLayout->addMultiCellWidget(histoBox, 3, 4, 0, 3);
 
     // -------------------------------------------------------------
 
@@ -276,7 +269,6 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     hlay2->addWidget(label3);
     hlay2->addWidget(d->minInterv);
     hlay2->addWidget(d->maxInterv);
-    topLayout->addMultiCellLayout(hlay2, 5, 5, 0, 3);
 
     // -------------------------------------------------------------
 
@@ -315,26 +307,28 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     d->labelPercentileValue = new QLabel(gbox);
     d->labelPercentileValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
-    topLayout->addMultiCellWidget(gbox, 6, 6, 0, 3);
-
-    // -------------------------------------------------------------
-
-    QGroupBox *gbox2 = new QGroupBox(2, Qt::Horizontal, histogramPage);
-    gbox2->setFrameStyle( QFrame::NoFrame );
-    gbox2->setInsideMargin(0);
-
-    QLabel *label11     = new QLabel(i18n("Color depth:"), gbox2);
+    QLabel *label11 = new QLabel(i18n("Color depth:"), gbox);
     label11->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    d->labelColorDepth  = new QLabel(gbox2);
+    d->labelColorDepth = new QLabel(gbox);
     d->labelColorDepth->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    QLabel *label12     = new QLabel(i18n("Alpha Channel:"), gbox2);
+
+    QLabel *label12 = new QLabel(i18n("Alpha Channel:"), gbox);
     label12->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    d->labelAlphaChannel = new QLabel(gbox2);
+    d->labelAlphaChannel = new QLabel(gbox);
     d->labelAlphaChannel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
-    topLayout->addMultiCellWidget(gbox2, 7, 7, 0, 3);
+    topLayout->addMultiCellWidget(label1,       1, 1, 0, 0);
+    topLayout->addMultiCellWidget(d->channelCB, 1, 1, 1, 1);
+    topLayout->addMultiCellWidget(d->scaleBG,   1, 1, 3, 3);
+    topLayout->addMultiCellWidget(label10,      2, 2, 0, 0);
+    topLayout->addMultiCellWidget(d->colorsCB,  2, 2, 1, 1);
+    topLayout->addMultiCellWidget(d->regionBG,  2, 2, 3, 3);
+    topLayout->addMultiCellWidget(histoBox,     3, 4, 0, 3);
+    topLayout->addMultiCellLayout(hlay2,        5, 5, 0, 3);
+    topLayout->addMultiCellWidget(gbox,         6, 6, 0, 3);
+    topLayout->setColStretch(2, 10);
+    topLayout->setRowStretch(7, 10);
 
-    topLayout->setRowStretch(8, 10);
     d->tab->insertTab(histogramPage, i18n("Histogram"), ImagePropertiesColorsTabPriv::HISTOGRAM );
 
     // ICC Profiles tab area ---------------------------------------
