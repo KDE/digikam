@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <QFrame>
+#include <QScrollArea>
 #include <QString>
 #include <QColor>
 
@@ -43,7 +43,7 @@ namespace Digikam
 
 class ImagePropertiesTabPriv;
 
-class DIGIKAM_EXPORT ImagePropertiesTab : public QFrame
+class DIGIKAM_EXPORT ImagePropertiesTab : public QScrollArea
 {
     Q_OBJECT
 

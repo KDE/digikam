@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "editortoolsettings.h"
 #include "editortoolsettings.moc"
 
@@ -127,23 +126,29 @@ public:
 };
 
 EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, int histogramType, QWidget *parent)
-                  : QWidget(parent)
+                  : QScrollArea(parent)
 {
     d = new EditorToolSettingsPriv;
 
-    // ---------------------------------------------------------------
+    setFrameStyle( QFrame::NoFrame );
+    setWidgetResizable(true);
 
-    QGridLayout* gridSettings = new QGridLayout(this);
-
-    d->plainPage    = new QWidget(this);
-    d->guideBox     = new KHBox(this);
-    d->btnBox1      = new KHBox(this);
-    d->btnBox2      = new KHBox(this);
-    d->histogramBox = new HistogramBox(this, histogramType);
+    QWidget *settingsArea = new QWidget(viewport());
+    setWidget(settingsArea);
 
     // ---------------------------------------------------------------
 
-    QFrame *frame     = new QFrame(this);
+    QGridLayout* gridSettings = new QGridLayout(settingsArea);
+
+    d->plainPage    = new QWidget(settingsArea);
+    d->guideBox     = new KHBox(settingsArea);
+    d->btnBox1      = new KHBox(settingsArea);
+    d->btnBox2      = new KHBox(settingsArea);
+    d->histogramBox = new HistogramBox(settingsArea, histogramType);
+
+    // ---------------------------------------------------------------
+
+    QFrame *frame     = new QFrame(settingsArea);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* vlay = new QVBoxLayout(frame);
     d->panIconView    = new ImagePanIconWidget(360, 240, frame);

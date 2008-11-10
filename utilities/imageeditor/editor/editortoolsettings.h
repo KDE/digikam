@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <QWidget>
+#include <QScrollArea>
 
 // Local includes.
 
@@ -41,7 +41,7 @@ class HistogramBox;
 class ImagePanIconWidget;
 class EditorToolSettingsPriv;
 
-class DIGIKAM_EXPORT EditorToolSettings : public QWidget
+class DIGIKAM_EXPORT EditorToolSettings : public QScrollArea
 {
     Q_OBJECT
 

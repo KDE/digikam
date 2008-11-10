@@ -39,6 +39,7 @@
 #include <QPixmap>
 #include <QPushButton>
 #include <QSpinBox>
+#include <QScrollArea>
 #include <QToolButton>
 
 // KDE includes.
@@ -140,8 +141,13 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
 
     // Histogram tab area -----------------------------------------------------
 
-    QWidget* histogramPage = new QWidget(this);
+    QScrollArea *sv = new QScrollArea(this);
+    sv->setFrameStyle(QFrame::NoFrame);
+    sv->setWidgetResizable(true);
+
+    QWidget* histogramPage = new QWidget(sv->viewport());
     QGridLayout *topLayout = new QGridLayout(histogramPage);
+    sv->setWidget(histogramPage);
 
     // -------------------------------------------------------------
 
@@ -266,12 +272,17 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     topLayout->setMargin(KDialog::spacingHint());
     topLayout->setSpacing(KDialog::spacingHint());
 
-    insertTab(ImagePropertiesColorsTabPriv::HISTOGRAM, histogramPage, i18n("Histogram"));
+    insertTab(ImagePropertiesColorsTabPriv::HISTOGRAM, sv, i18n("Histogram"));
 
     // ICC Profiles tab area ---------------------------------------
 
-    d->iccProfileWidget = new ICCProfileWidget(this);
-    insertTab(ImagePropertiesColorsTabPriv::ICCPROFILE, d->iccProfileWidget, i18n("ICC profile"));
+    QScrollArea *sv2 = new QScrollArea(this);
+    sv2->setFrameStyle(QFrame::NoFrame);
+    sv2->setWidgetResizable(true);
+
+    d->iccProfileWidget = new ICCProfileWidget(sv2->viewport());
+    sv2->setWidget(d->iccProfileWidget);
+    insertTab(ImagePropertiesColorsTabPriv::ICCPROFILE, sv2, i18n("ICC profile"));
 
     // -- read config ---------------------------------------------------------
 

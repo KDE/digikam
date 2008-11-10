@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "imagedescedittab.h"
 #include "imagedescedittab.moc"
 
@@ -146,38 +145,46 @@ public:
 };
 
 ImageDescEditTab::ImageDescEditTab(QWidget *parent)
-                : QWidget(parent)
+                : QScrollArea(parent)
 {
     d = new ImageDescEditTabPriv;
 
-    QGridLayout *settingsLayout = new QGridLayout(this);
+    setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+    setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
+    setWidgetResizable(true);    setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+    setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
+    setWidgetResizable(true);
+
+    QWidget *settingsArea       = new QWidget(viewport());
+    QGridLayout *settingsLayout = new QGridLayout(settingsArea);
+    setWidget(settingsArea);
 
     // Captions/Date/Rating view -----------------------------------
 
-    KVBox *commentsBox = new KVBox(this);
+    KVBox *commentsBox = new KVBox(settingsArea);
     new QLabel(i18n("Caption:"), commentsBox);
     d->commentsEdit = new KTextEdit(commentsBox);
     d->commentsEdit->setCheckSpellingEnabled(true);
 
-    KHBox *dateBox  = new KHBox(this);
+    KHBox *dateBox  = new KHBox(settingsArea);
     new QLabel(i18n("Date:"), dateBox);
     d->dateTimeEdit = new KDateTimeEdit(dateBox, "datepicker");
     d->dateTimeEdit->setMaximumHeight( fontMetrics().height()+4 );
 
-    KHBox *ratingBox = new KHBox(this);
+    KHBox *ratingBox = new KHBox(settingsArea);
     new QLabel(i18n("Rating:"), ratingBox);
     d->ratingWidget  = new RatingWidget(ratingBox);
 
     // Tags view ---------------------------------------------------
 
-    d->newTagEdit    = new SearchTextBar(this, "ImageDescEditTabNewTagEdit", i18n("Enter new tag here..."));
+    d->newTagEdit    = new SearchTextBar(settingsArea, "ImageDescEditTabNewTagEdit", i18n("Enter new tag here..."));
     d->newTagEdit->setWhatsThis(i18n("Enter here the text used to create new tags. "
                                      "'/' can be used here to create a hierarchy of tags. "
                                      "',' can be used here to create more than one hierarchy at the same time."));
 
-    d->tagsView = new TAlbumListView(this);
+    d->tagsView = new TAlbumListView(settingsArea);
 
-    KHBox *tagsSearch = new KHBox(this);
+    KHBox *tagsSearch = new KHBox(settingsArea);
     tagsSearch->setSpacing(KDialog::spacingHint());
 
     d->tagsSearchBar   = new SearchTextBar(tagsSearch, "ImageDescEditTabTagsSearchBar");
@@ -200,7 +207,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     // Buttons -----------------------------------------
 
-    KHBox *buttonsBox = new KHBox(this);
+    KHBox *buttonsBox = new KHBox(settingsArea);
     buttonsBox->setSpacing(KDialog::spacingHint());
 
     d->revertBtn = new QToolButton(buttonsBox);
@@ -217,7 +224,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     buttonsBox->setStretchFactor(d->applyBtn, 10);
 
     d->moreButton = new QPushButton(i18n("More"), buttonsBox);
-    d->moreMenu   = new QMenu(this);
+    d->moreMenu   = new QMenu(settingsArea);
     d->moreButton->setMaximumHeight( fontMetrics().height()+4 );
     d->moreButton->setMenu(d->moreMenu);
 

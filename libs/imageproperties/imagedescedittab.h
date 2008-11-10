@@ -28,7 +28,7 @@
 
 // Qt includes.
 
-#include <QWidget>
+#include <QScrollArea>
 #include <QPixmap>
 #include <QEvent>
 
@@ -46,7 +46,7 @@ class TAlbumCheckListItem;
 class ImageInfo;
 class ImageDescEditTabPriv;
 
-class ImageDescEditTab : public QWidget
+class ImageDescEditTab : public QScrollArea
 {
     Q_OBJECT
 

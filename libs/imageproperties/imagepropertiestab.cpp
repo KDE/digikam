@@ -155,71 +155,74 @@ public:
 };
 
 ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
-                  : QFrame(parent)
+                  : QScrollArea(parent)
 {
     d = new ImagePropertiesTabPriv;
 
     setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
+    setWidgetResizable(true);
 
-    QGridLayout *settingsLayout = new QGridLayout(this);
+    QWidget *settingsArea       = new QWidget(viewport());
+    QGridLayout *settingsLayout = new QGridLayout(settingsArea);
+    setWidget(settingsArea);
 
     // --------------------------------------------------
 
-    d->title                  = new QLabel(i18n("<big><b>File Properties</b></big>"), this);
-    d->file                   = new DTextLabelName(i18n("File: "), this);
-    d->folder                 = new DTextLabelName(i18n("Folder: "), this);
-    d->modifiedDate           = new DTextLabelName(i18n("Modified: "), this);
-    d->size                   = new DTextLabelName(i18n("Size: "), this);
-    d->owner                  = new DTextLabelName(i18n("Owner: "), this);
-    d->permissions            = new DTextLabelName(i18n("Permissions: "), this);
+    d->title                  = new QLabel(i18n("<big><b>File Properties</b></big>"), settingsArea);
+    d->file                   = new DTextLabelName(i18n("File: "), settingsArea);
+    d->folder                 = new DTextLabelName(i18n("Folder: "), settingsArea);
+    d->modifiedDate           = new DTextLabelName(i18n("Modified: "), settingsArea);
+    d->size                   = new DTextLabelName(i18n("Size: "), settingsArea);
+    d->owner                  = new DTextLabelName(i18n("Owner: "), settingsArea);
+    d->permissions            = new DTextLabelName(i18n("Permissions: "), settingsArea);
 
-    KSeparator *line          = new KSeparator(Qt::Horizontal, this);
-    d->title2                 = new QLabel(i18n("<big><b>Image Properties</b></big>"), this);
-    d->mime                   = new DTextLabelName(i18n("Type: "), this);
-    d->dimensions             = new DTextLabelName(i18n("Dimensions: "), this);
-    d->compression            = new DTextLabelName(i18n("Compression: "), this);
-    d->bitDepth               = new DTextLabelName(i18n("Bit depth: "), this);
-    d->colorMode              = new DTextLabelName(i18n("Color mode: "), this);
+    KSeparator *line          = new KSeparator(Qt::Horizontal, settingsArea);
+    d->title2                 = new QLabel(i18n("<big><b>Image Properties</b></big>"), settingsArea);
+    d->mime                   = new DTextLabelName(i18n("Type: "), settingsArea);
+    d->dimensions             = new DTextLabelName(i18n("Dimensions: "), settingsArea);
+    d->compression            = new DTextLabelName(i18n("Compression: "), settingsArea);
+    d->bitDepth               = new DTextLabelName(i18n("Bit depth: "), settingsArea);
+    d->colorMode              = new DTextLabelName(i18n("Color mode: "), settingsArea);
 
-    KSeparator *line2         = new KSeparator(Qt::Horizontal, this);
-    d->title3                 = new QLabel(i18n("<big><b>Photograph Properties</b></big>"), this);
-    d->make                   = new DTextLabelName(i18n("Make: "), this);
-    d->model                  = new DTextLabelName(i18n("Model: "), this);
-    d->photoDate              = new DTextLabelName(i18n("Created: "), this);
-    d->lens                   = new DTextLabelName(i18n("Lens: "), this);
-    d->aperture               = new DTextLabelName(i18n("Aperture: "), this);
-    d->focalLength            = new DTextLabelName(i18n("Focal: "), this);
-    d->exposureTime           = new DTextLabelName(i18n("Exposure: "), this);
-    d->sensitivity            = new DTextLabelName(i18n("Sensitivity: "), this);
-    d->exposureMode           = new DTextLabelName(i18n("Mode/Program: "), this);
-    d->flash                  = new DTextLabelName(i18n("Flash: "), this);
-    d->whiteBalance           = new DTextLabelName(i18n("White balance: "), this);
+    KSeparator *line2         = new KSeparator(Qt::Horizontal, settingsArea);
+    d->title3                 = new QLabel(i18n("<big><b>Photograph Properties</b></big>"), settingsArea);
+    d->make                   = new DTextLabelName(i18n("Make: "), settingsArea);
+    d->model                  = new DTextLabelName(i18n("Model: "), settingsArea);
+    d->photoDate              = new DTextLabelName(i18n("Created: "), settingsArea);
+    d->lens                   = new DTextLabelName(i18n("Lens: "), settingsArea);
+    d->aperture               = new DTextLabelName(i18n("Aperture: "), settingsArea);
+    d->focalLength            = new DTextLabelName(i18n("Focal: "), settingsArea);
+    d->exposureTime           = new DTextLabelName(i18n("Exposure: "), settingsArea);
+    d->sensitivity            = new DTextLabelName(i18n("Sensitivity: "), settingsArea);
+    d->exposureMode           = new DTextLabelName(i18n("Mode/Program: "), settingsArea);
+    d->flash                  = new DTextLabelName(i18n("Flash: "), settingsArea);
+    d->whiteBalance           = new DTextLabelName(i18n("White balance: "), settingsArea);
 
-    d->labelFile              = new DTextLabelValue(0, this);
-    d->labelFolder            = new DTextLabelValue(0, this);
-    d->labelFileModifiedDate  = new DTextLabelValue(0, this);
-    d->labelFileSize          = new DTextLabelValue(0, this);
-    d->labelFileOwner         = new DTextLabelValue(0, this);
-    d->labelFilePermissions   = new DTextLabelValue(0, this);
+    d->labelFile              = new DTextLabelValue(0, settingsArea);
+    d->labelFolder            = new DTextLabelValue(0, settingsArea);
+    d->labelFileModifiedDate  = new DTextLabelValue(0, settingsArea);
+    d->labelFileSize          = new DTextLabelValue(0, settingsArea);
+    d->labelFileOwner         = new DTextLabelValue(0, settingsArea);
+    d->labelFilePermissions   = new DTextLabelValue(0, settingsArea);
 
-    d->labelImageMime         = new DTextLabelValue(0, this);
-    d->labelImageDimensions   = new DTextLabelValue(0, this);
-    d->labelImageCompression  = new DTextLabelValue(0, this);
-    d->labelImageBitDepth     = new DTextLabelValue(0, this);
-    d->labelImageColorMode    = new DTextLabelValue(0, this);
+    d->labelImageMime         = new DTextLabelValue(0, settingsArea);
+    d->labelImageDimensions   = new DTextLabelValue(0, settingsArea);
+    d->labelImageCompression  = new DTextLabelValue(0, settingsArea);
+    d->labelImageBitDepth     = new DTextLabelValue(0, settingsArea);
+    d->labelImageColorMode    = new DTextLabelValue(0, settingsArea);
 
-    d->labelPhotoMake         = new DTextLabelValue(0, this);
-    d->labelPhotoModel        = new DTextLabelValue(0, this);
-    d->labelPhotoDateTime     = new DTextLabelValue(0, this);
-    d->labelPhotoLens         = new DTextLabelValue(0, this);
-    d->labelPhotoAperture     = new DTextLabelValue(0, this);
-    d->labelPhotoFocalLenght  = new DTextLabelValue(0, this);
-    d->labelPhotoExposureTime = new DTextLabelValue(0, this);
-    d->labelPhotoSensitivity  = new DTextLabelValue(0, this);
-    d->labelPhotoExposureMode = new DTextLabelValue(0, this);
-    d->labelPhotoFlash        = new DTextLabelValue(0, this);
-    d->labelPhotoWhiteBalance = new DTextLabelValue(0, this);
+    d->labelPhotoMake         = new DTextLabelValue(0, settingsArea);
+    d->labelPhotoModel        = new DTextLabelValue(0, settingsArea);
+    d->labelPhotoDateTime     = new DTextLabelValue(0, settingsArea);
+    d->labelPhotoLens         = new DTextLabelValue(0, settingsArea);
+    d->labelPhotoAperture     = new DTextLabelValue(0, settingsArea);
+    d->labelPhotoFocalLenght  = new DTextLabelValue(0, settingsArea);
+    d->labelPhotoExposureTime = new DTextLabelValue(0, settingsArea);
+    d->labelPhotoSensitivity  = new DTextLabelValue(0, settingsArea);
+    d->labelPhotoExposureMode = new DTextLabelValue(0, settingsArea);
+    d->labelPhotoFlash        = new DTextLabelValue(0, settingsArea);
+    d->labelPhotoWhiteBalance = new DTextLabelValue(0, settingsArea);
 
     d->title->setAlignment(Qt::AlignCenter);
     d->title2->setAlignment(Qt::AlignCenter);

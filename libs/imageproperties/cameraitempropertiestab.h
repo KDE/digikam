@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <QFrame>
+#include <QScrollArea>
 #include <QString>
 
 // KDE includes.
@@ -43,7 +43,7 @@ namespace Digikam
 class GPItemInfo;
 class CameraItemPropertiesTabPriv;
 
-class CameraItemPropertiesTab : public QFrame
+class CameraItemPropertiesTab : public QScrollArea
 {
     Q_OBJECT
 
