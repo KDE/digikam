@@ -119,7 +119,7 @@ DGradientSlider::~DGradientSlider()
 inline void drawCursorAt(QPainter& painter, double pos, const QColor& brushColor, int width, int height, int gradientWidth)
 {
     painter.setBrush( brushColor );
-    int pos2 = (int)gradientWidth * pos;
+    int pos2 = (int)(gradientWidth * pos);
     QPoint points[3];
     points[0] = QPoint(pos2, 3 * height - 1);
     points[1] = QPoint(pos2 + width / 2, 2 * height);
@@ -166,7 +166,7 @@ void DGradientSlider::paintEvent(QPaintEvent*)
 
 inline bool isCursorClicked(const QPoint& pos, double cursorPos, int width, int height, int gradientWidth)
 {
-    int pos2 = (int)gradientWidth * cursorPos;
+    int pos2 = (int)(gradientWidth * cursorPos);
     return ((pos.y() >= 2 * height)    &&
             (pos.y() < 3 * height)     &&
             (pos.x() >= pos2)          &&
