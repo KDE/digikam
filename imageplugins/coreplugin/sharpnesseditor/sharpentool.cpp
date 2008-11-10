@@ -127,8 +127,8 @@ SharpenTool::SharpenTool(QObject* parent)
     grid1->addWidget(label,         0, 0, 1, 2);
     grid1->addWidget(m_radiusInput, 1, 0, 1, 2);
     grid1->setRowStretch(2, 10);
-    grid1->setMargin(m_gboxSettings->spacingHint());
-    grid1->setSpacing(m_gboxSettings->spacingHint());
+    grid1->setMargin(0);
+    grid1->setSpacing(0);
 
     m_stack->insertWidget(SimpleSharp, simpleSharpSettings);
 
@@ -168,8 +168,8 @@ SharpenTool::SharpenTool(QObject* parent)
     grid2->addWidget(label4,           4, 0, 1, 2);
     grid2->addWidget(m_thresholdInput, 5, 0, 1, 2);
     grid2->setRowStretch(6, 10);
-    grid2->setMargin(m_gboxSettings->spacingHint());
-    grid2->setSpacing(m_gboxSettings->spacingHint());
+    grid2->setMargin(0);
+    grid2->setSpacing(0);
 
     m_stack->insertWidget(UnsharpMask, unsharpMaskSettings);
 
@@ -238,8 +238,8 @@ SharpenTool::SharpenTool(QObject* parent)
     grid3->addWidget(label9,        8, 0, 1, 2);
     grid3->addWidget(m_matrixSize,  9, 0, 1, 2);
     grid3->setRowStretch(10, 10);
-    grid3->setMargin(m_gboxSettings->spacingHint());
-    grid3->setSpacing(m_gboxSettings->spacingHint());
+    grid3->setMargin(0);
+    grid3->setSpacing(0);
 
     m_stack->insertWidget(Refocus, refocusSettings);
 
