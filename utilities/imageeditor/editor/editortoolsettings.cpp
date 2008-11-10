@@ -23,6 +23,7 @@
 // Qt includes.
 
 #include <qhbox.h>
+#include <qvbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qstring.h>
@@ -101,22 +102,20 @@ public:
 };
 
 EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *parent)
-                  : QWidget(parent)
+                  : QScrollView(parent)
 {
     d = new EditorToolSettingsPriv;
 
-    // ---------------------------------------------------------------
+    viewport()->setBackgroundMode(Qt::PaletteBackground);
+    setResizePolicy(QScrollView::AutoOneFit);
+    setFrameStyle(QFrame::NoFrame);
 
-    QGridLayout* gridSettings = new QGridLayout(this, 4, 2);
-
-    d->plainPage = new QWidget(this);
-    d->guideBox  = new QHBox(this);
-    d->btnBox1   = new QHBox(this);
-    d->btnBox2   = new QHBox(this);
+    QVBox* vbox = new QVBox(viewport());
+    addChild(vbox);
 
     // ---------------------------------------------------------------
 
-    QFrame *frame     = new QFrame(this);
+    QFrame *frame     = new QFrame(vbox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* vlay = new QVBoxLayout(frame, 5, 0);
     d->panIconView    = new ImagePanIconWidget(360, 240, frame);
@@ -128,6 +127,13 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
 
     if (!(toolMask & PanIcon))
         frame->hide();
+
+    // ---------------------------------------------------------------
+
+    d->plainPage = new QWidget(vbox);
+    d->guideBox  = new QHBox(vbox);
+    d->btnBox1   = new QHBox(vbox);
+    d->btnBox2   = new QHBox(vbox);
 
     // ---------------------------------------------------------------
 
@@ -205,16 +211,6 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
 
     if (!(buttonMask & Load) && !(buttonMask & SaveAs) && !(buttonMask & Try))
         d->btnBox2->hide();
-
-    // ---------------------------------------------------------------
-
-    gridSettings->addMultiCellWidget(frame,        0, 0, 0, 1);
-    gridSettings->addMultiCellWidget(d->plainPage, 1, 1, 0, 1);
-    gridSettings->addMultiCellWidget(d->guideBox,  2, 2, 0, 1);
-    gridSettings->addMultiCellWidget(d->btnBox2,   3, 3, 0, 1);
-    gridSettings->addMultiCellWidget(d->btnBox1,   4, 4, 0, 1);
-    gridSettings->setSpacing(spacingHint());
-    gridSettings->setMargin(0);
 
     // ---------------------------------------------------------------
 

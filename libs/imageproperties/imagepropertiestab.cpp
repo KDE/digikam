@@ -31,6 +31,7 @@
 #include <qfileinfo.h>
 #include <qwhatsthis.h>
 #include <qframe.h>
+#include <qscrollview.h>
 
 // KDE includes.
 
@@ -174,9 +175,20 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     d = new ImagePropertiesTabPriv;
 
     setupNavigateBar(navBar);
-    d->settingsArea = new QFrame(this);
+
+    QScrollView *sv = new QScrollView(this);
+    sv->viewport()->setBackgroundMode(Qt::PaletteBackground);
+    sv->setResizePolicy(QScrollView::AutoOneFit);
+    sv->setFrameStyle(QFrame::NoFrame);
+
+    d->settingsArea = new QFrame(sv->viewport());
     d->settingsArea->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     d->settingsArea->setLineWidth( style().pixelMetric(QStyle::PM_DefaultFrameWidth, this) );
+
+    sv->addChild(d->settingsArea);
+    m_navigateBarLayout->addWidget(sv);
+
+    // --------------------------------------------------
 
     QGridLayout *settingsLayout = new QGridLayout(d->settingsArea, 33, 1, KDialog::spacingHint(), 0);
 
@@ -354,11 +366,6 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
 
     settingsLayout->setRowStretch(33, 10);
     settingsLayout->setColStretch(1, 10);
-
-    // --------------------------------------------------
-
-    m_navigateBarLayout->addWidget(d->settingsArea);
-
 }
 
 ImagePropertiesTab::~ImagePropertiesTab()

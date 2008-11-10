@@ -31,6 +31,7 @@
 #include <qcombobox.h>
 #include <qwhatsthis.h>
 #include <qframe.h>
+#include <qscrollview.h>
 
 // KDE includes.
 
@@ -161,13 +162,22 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     d = new CameraItemPropertiesTabPriv;
 
     setupNavigateBar(navBar);
-    d->settingsArea = new QFrame(this);
+
+    QScrollView *sv = new QScrollView(this);
+    sv->viewport()->setBackgroundMode(Qt::PaletteBackground);
+    sv->setResizePolicy(QScrollView::AutoOneFit);
+    sv->setFrameStyle(QFrame::NoFrame);
+
+    d->settingsArea = new QFrame(sv->viewport());
     d->settingsArea->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     d->settingsArea->setLineWidth( style().pixelMetric(QStyle::PM_DefaultFrameWidth, this) );
 
-    QGridLayout *settingsLayout = new QGridLayout(d->settingsArea, 27, 1, KDialog::spacingHint(), 0);
+    sv->addChild(d->settingsArea);
+    m_navigateBarLayout->addWidget(sv);
 
     // --------------------------------------------------
+
+    QGridLayout *settingsLayout = new QGridLayout(d->settingsArea, 27, 1, KDialog::spacingHint(), 0);
 
     d->title                  = new QLabel(i18n("<big><b>Camera File Properties</b></big>"), d->settingsArea);
     d->file                   = new QLabel(i18n("<b>File</b>:"), d->settingsArea);
@@ -318,10 +328,6 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     settingsLayout->addMultiCellWidget(d->labelPhotoWhiteBalance, 26, 26, 1, 1);
     settingsLayout->setRowStretch(27, 10);
     settingsLayout->setColStretch(1, 10);
-
-    // --------------------------------------------------
-
-    m_navigateBarLayout->addWidget(d->settingsArea);
 }
 
 CameraItemPropertiesTab::~CameraItemPropertiesTab()

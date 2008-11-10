@@ -37,6 +37,7 @@
 #include <qpushbutton.h>
 #include <qtooltip.h>
 #include <qvbox.h>
+#include <qscrollview.h>
 
 // KDE includes.
 
@@ -153,9 +154,15 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
 
     // Histogram tab area -----------------------------------------------------
 
-    QWidget* histogramPage = new QWidget( d->tab );
+    QScrollView *sv = new QScrollView(d->tab);
+    sv->viewport()->setBackgroundMode(Qt::PaletteBackground);
+    sv->setResizePolicy(QScrollView::AutoOneFit);
+    sv->setFrameStyle(QFrame::NoFrame);
+
+    QWidget* histogramPage = new QWidget(sv->viewport());
     QGridLayout *topLayout = new QGridLayout(histogramPage, 8, 3, 
                                  KDialog::spacingHint(), KDialog::spacingHint());
+    sv->addChild(histogramPage);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), histogramPage);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -239,8 +246,6 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     directory = KGlobal::dirs()->findResourceDir("image-selection", "image-selection.png");
     SelectionImageButton->setPixmap( QPixmap( directory + "image-selection.png" ) );
     SelectionImageButton->setToggleButton(true);
-
-
 
     // -------------------------------------------------------------
 
@@ -329,12 +334,18 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     topLayout->setColStretch(2, 10);
     topLayout->setRowStretch(7, 10);
 
-    d->tab->insertTab(histogramPage, i18n("Histogram"), ImagePropertiesColorsTabPriv::HISTOGRAM );
+    d->tab->insertTab(sv, i18n("Histogram"), ImagePropertiesColorsTabPriv::HISTOGRAM );
 
     // ICC Profiles tab area ---------------------------------------
 
-    d->iccProfileWidget = new ICCProfileWidget(d->tab);
-    d->tab->insertTab(d->iccProfileWidget, i18n("ICC profile"), ImagePropertiesColorsTabPriv::ICCPROFILE);
+    QScrollView *sv2 = new QScrollView(d->tab);
+    sv2->viewport()->setBackgroundMode(Qt::PaletteBackground);
+    sv2->setResizePolicy(QScrollView::AutoOneFit);
+    sv2->setFrameStyle(QFrame::NoFrame);
+
+    d->iccProfileWidget = new ICCProfileWidget(sv2->viewport());
+    sv2->addChild(d->iccProfileWidget);
+    d->tab->insertTab(sv2, i18n("ICC profile"), ImagePropertiesColorsTabPriv::ICCPROFILE);
 
     // -------------------------------------------------------------
 

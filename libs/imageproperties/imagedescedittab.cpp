@@ -34,6 +34,7 @@
 #include <qiconset.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
+#include <qscrollview.h>
 
 // KDE includes.
 
@@ -138,9 +139,15 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d = new ImageDescEditTabPriv;
 
     setupNavigateBar(navBar);
-    QWidget *settingsArea = new QWidget(this);
 
-    m_navigateBarLayout->addWidget(settingsArea);
+    QScrollView *sv = new QScrollView(this);
+    sv->viewport()->setBackgroundMode(Qt::PaletteBackground);
+    sv->setResizePolicy(QScrollView::AutoOneFit);
+    sv->setFrameStyle(QFrame::NoFrame);
+
+    QWidget *settingsArea = new QWidget(sv->viewport());
+    sv->addChild(settingsArea);
+    m_navigateBarLayout->addWidget(sv);
 
     QGridLayout *settingsLayout = new QGridLayout(settingsArea, 6, 1,
                                       KDialog::spacingHint(), KDialog::spacingHint());
