@@ -6,7 +6,7 @@
  * Date        : 2006-07-04
  * Description : default identity setup tab.
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "setupidentity.h"
 #include "setupidentity.moc"
@@ -171,7 +170,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     QLabel *note = new QLabel(i18n("<b>Note: These information are used to set "
                    "<b><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>XMP</a></b> "
                    "and <b><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a></b> tags contents. "
-                   "There is no limitation with XMP, but take a care than IPTC text tags "
+                   "There is no limitation with XMP, but take a care that IPTC text tags "
                    "only support the printable <b><a href='http://en.wikipedia.org/wiki/Ascii'>ASCII</a></b> "
                    "characters set and limit strings size. "
                    "Use contextual help for details.</b>"), this);
