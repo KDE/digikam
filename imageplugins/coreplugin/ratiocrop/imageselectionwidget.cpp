@@ -251,14 +251,14 @@ int ImageSelectionWidget::getMaxWidthRange(void)
         // Compute max width taking aspect ratio into account
         int t = d->currentWidthRatioValue > d->currentHeightRatioValue ? 1 : 0;
         int h = d->image.height() - d->regionSelection.top();
-        int w = rint( ( h + t ) * d->currentWidthRatioValue /
-                        d->currentHeightRatioValue ) - t;
+        int w = (int)rint( ( h + t ) * d->currentWidthRatioValue /
+                           d->currentHeightRatioValue ) - t;
         if ( w < maxW )
             maxW = w;
     }
 
     // Return max width adjusted if a precise crop is wanted
-    return computePreciseSize(maxW, d->currentWidthRatioValue);
+    return computePreciseSize(maxW, (int)d->currentWidthRatioValue);
 }
 
 int ImageSelectionWidget::getMaxHeightRange(void)
@@ -270,20 +270,20 @@ int ImageSelectionWidget::getMaxHeightRange(void)
         // Compute max height taking aspect ratio into account
         int t = d->currentHeightRatioValue > d->currentWidthRatioValue ? 1 : 0;
         int w = d->image.width() - d->regionSelection.left();
-        int h = rint( ( w + t ) * d->currentHeightRatioValue /
-                        d->currentWidthRatioValue ) - t;
+        int h = (int)rint( ( w + t ) * d->currentHeightRatioValue /
+                           d->currentWidthRatioValue ) - t;
         if ( h < maxH )
             maxH = h;
     }
 
     // Return max height adjusted if a precise crop is wanted
-    return computePreciseSize(maxH, d->currentHeightRatioValue);
+    return computePreciseSize(maxH, (int)d->currentHeightRatioValue);
 }
 
 int ImageSelectionWidget::getWidthStep()
 {
     if ( d->preciseCrop && preciseCropAvailable() )
-        return d->currentWidthRatioValue;
+        return (int)d->currentWidthRatioValue;
     else
         return 1;
 }
@@ -291,7 +291,7 @@ int ImageSelectionWidget::getWidthStep()
 int ImageSelectionWidget::getHeightStep()
 {
     if ( d->preciseCrop && preciseCropAvailable() )
-        return d->currentHeightRatioValue;
+        return (int)d->currentHeightRatioValue;
     else
         return 1;
 }
@@ -562,19 +562,19 @@ QPoint ImageSelectionWidget::convertPoint(int x, int y, bool localToReal)
 
     if (localToReal)
     {
-        pmX = ( x - d->rect.left() ) * (float)d->image.width() /
-                    (float)d->preview.width();
+        pmX = (int)(( x - d->rect.left() ) * (float)d->image.width() /
+                    (float)d->preview.width());
 
-        pmY = ( y - d->rect.top() ) * (float)d->image.height() /
-                    (float)d->preview.height();
+        pmY = (int)(( y - d->rect.top() ) * (float)d->image.height() /
+                    (float)d->preview.height());
     }
     else
     {
-        pmX = d->rect.left() + ( x * (float)d->preview.width() /
-                                    (float)d->image.width() );
+        pmX = (int)(d->rect.left() + ( x * (float)d->preview.width() /
+                                       (float)d->image.width() ));
 
-        pmY = d->rect.top() + ( y * (float)d->preview.height() /
-                                    (float)d->image.height() );
+        pmY = (int)(d->rect.top() + ( y * (float)d->preview.height() /
+                                      (float)d->image.height() ));
     }
 
     return QPoint(pmX, pmY);
@@ -597,7 +597,7 @@ void ImageSelectionWidget::applyAspectRatio(bool useHeight, bool repaintWidget)
     if ( !useHeight )  // Width changed.
     {
         int w = computePreciseSize(d->regionSelection.width(),
-                                   d->currentWidthRatioValue);
+                                   (int)d->currentWidthRatioValue);
 
         d->regionSelection.setWidth(w);
         switch(d->currentAspectRatioType)
@@ -606,16 +606,16 @@ void ImageSelectionWidget::applyAspectRatio(bool useHeight, bool repaintWidget)
                 break;
 
             default:
-                d->regionSelection.setHeight(
+                d->regionSelection.setHeight((int)
                                 rint( w * d->currentHeightRatioValue /
-                                    d->currentWidthRatioValue ) );
+                                      d->currentWidthRatioValue ) );
                 break;
         }
     }
     else      // Height changed.
     {
         int h = computePreciseSize(d->regionSelection.height(),
-                                   d->currentHeightRatioValue);
+                                   (int)d->currentHeightRatioValue);
 
         d->regionSelection.setHeight(h);
         switch(d->currentAspectRatioType)
@@ -624,9 +624,9 @@ void ImageSelectionWidget::applyAspectRatio(bool useHeight, bool repaintWidget)
                 break;
 
             default:
-                d->regionSelection.setWidth(
-                                rint( h * d->currentWidthRatioValue /
-                                    d->currentHeightRatioValue ) );
+                d->regionSelection.setWidth((int)
+                                   rint( h * d->currentWidthRatioValue /
+                                         d->currentHeightRatioValue ) );
                 break;
         }
     }
