@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "thumbnailloadthread.h"
 #include "thumbnailloadthread.moc"
 
@@ -49,10 +48,11 @@ namespace Digikam
 
 class ThumbnailResult
 {
+
 public:
 
     ThumbnailResult(LoadingDescription description, QImage image)
-    : loadingDescription(description), image(image)
+        : loadingDescription(description), image(image)
     {
     }
 
@@ -60,30 +60,35 @@ public:
     QImage             image;
 };
 
+// -------------------------------------------------------------------
+
 class ThumbnailLoadThreadPriv
 {
+
 public:
 
     ThumbnailLoadThreadPriv()
     {
-        size          = ThumbnailSize::Medium;
-        exifRotate    = true;
-        highlight     = true;
-        sendSurrogate = true;
-        creator       = 0;
+        size               = ThumbnailSize::Huge;
+        exifRotate         = true;
+        highlight          = true;
+        sendSurrogate      = true;
+        creator            = 0;
         notifiedForResults = false;
     }
 
-    ThumbnailCreator *creator;
-    int  size;
-    bool exifRotate;
-    bool highlight;
-    bool sendSurrogate;
-    QHash<KUrl, LoadingDescription> kdeJobHash;
+    bool                            exifRotate;
+    bool                            highlight;
+    bool                            sendSurrogate;
+    bool                            notifiedForResults;
 
-    bool notifiedForResults;
-    QList<ThumbnailResult> collectedResults;
-    QMutex resultsMutex;
+    int                             size;
+
+    ThumbnailCreator*               creator;
+
+    QHash<KUrl, LoadingDescription> kdeJobHash;
+    QList<ThumbnailResult>          collectedResults;
+    QMutex                          resultsMutex;
 };
 
 K_GLOBAL_STATIC(ThumbnailLoadThread, defaultIconViewObject)
