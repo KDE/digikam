@@ -358,6 +358,11 @@ public:
         m_box->showPopup();
     }
 
+    virtual void wheelEvent(QWheelEvent *event)
+    {
+        m_box->showPopup();
+    }
+
     QComboBox *m_box;
 };
 
