@@ -6,8 +6,8 @@
  * Date        : 2007-01-05
  * Description : Metadata handling
  *
- * Copyright (C) 2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "metadatahub.h"
 
@@ -67,27 +66,28 @@ public:
         tagsChanged     = false;
     }
 
-    MetadataHub::Status dateTimeStatus;
-    MetadataHub::Status commentStatus;
-    MetadataHub::Status ratingStatus;
-
-    QDateTime                              dateTime;
-    QDateTime                              lastDateTime;
-    QString                                comment;
-    int                                    rating;
-    int                                    highestRating;
-
-    int                                    count;
-
-    QMap<TAlbum *, MetadataHub::TagStatus> tags;
-    QStringList                            tagList;
-
-    MetadataHub::DatabaseMode              dbmode;
-
     bool                                   dateTimeChanged;
     bool                                   commentChanged;
     bool                                   ratingChanged;
     bool                                   tagsChanged;
+
+    int                                    rating;
+    int                                    highestRating;
+    int                                    count;
+
+    QDateTime                              dateTime;
+    QDateTime                              lastDateTime;
+
+    QString                                comment;
+
+    QMap<TAlbum *, MetadataHub::TagStatus> tags;
+
+    QStringList                            tagList;
+
+    MetadataHub::Status                    dateTimeStatus;
+    MetadataHub::Status                    commentStatus;
+    MetadataHub::Status                    ratingStatus;
+    MetadataHub::DatabaseMode              dbmode;
 
     template <class T> void loadWithInterval(const T &data, T &storage, T &highestStorage, MetadataHub::Status &status);
     template <class T> void loadSingleValue(const T &data, T &storage, MetadataHub::Status &status);
@@ -101,6 +101,7 @@ MetadataWriteSettings::MetadataWriteSettings()
     saveTags           = false;
     savePhotographerId = false;
     saveCredits        = false;
+    writeRawFiles      = false;
 }
 
 MetadataWriteSettings::MetadataWriteSettings(AlbumSettings *albumSettings)
@@ -111,6 +112,7 @@ MetadataWriteSettings::MetadataWriteSettings(AlbumSettings *albumSettings)
     saveTags           = albumSettings->getSaveTags();
     savePhotographerId = albumSettings->getSavePhotographerId();
     saveCredits        = albumSettings->getSaveCredits();
+    writeRawFiles      = albumSettings->getWriteRawFiles();
 
     Author             = albumSettings->getAuthor();
     AuthorTitle        = albumSettings->getAuthorTitle();
@@ -471,6 +473,8 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
 bool MetadataHub::write(DMetadata &metadata, WriteMode writeMode, const MetadataWriteSettings &settings)
 {
     bool dirty = false;
+
+    metadata.setWriteRawFiles(settings.writeRawFiles);
 
     // find out in advance if we have something to write - needed for FullWriteIfChanged mode
     bool saveComment  = (settings.saveComments && d->commentStatus == MetadataAvailable);

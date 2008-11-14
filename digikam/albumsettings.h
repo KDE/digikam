@@ -158,6 +158,9 @@ public:
     void setSaveCredits(bool val);
     bool getSaveCredits() const;
 
+    void setWriteRawFiles(bool val);
+    bool getWriteRawFiles() const;
+
     void setAuthor(const QString& author);
     QString getAuthor() const;
 

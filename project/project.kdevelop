@@ -239,6 +239,20 @@
     <projectname>project</projectname>
     <projectname>project</projectname>
     <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
   </general>
   <kdevfileview>
     <groups>
@@ -337,20 +351,20 @@
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>/home/gilles/Documents/devel/SVN/trunk/graphics/digikam/digikam/digikam.shell</mainprogram>
+      <mainprogram>/home/gilles/Documents/data/devel/SVN/trunk/graphics/digikam/digikam/digikam.shell</mainprogram>
       <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>false</autocompile>
       <envvars>
-        <envvar value="/opt/kde4" name="DBUSDIR" />
-        <envvar value="/opt/kde4" name="KDEDIR" />
-        <envvar value="/opt/kde4" name="KDEDIRS" />
+        <envvar value="/usr" name="DBUSDIR" />
+        <envvar value="/usr" name="KDEDIR" />
+        <envvar value="/usr" name="KDEDIRS" />
         <envvar value="/home/gilles/.kde4" name="KDEHOME" />
         <envvar value="/home/gilles/tmp/gilles-kde4" name="KDETMP" />
         <envvar value="/var/tmp/gilles-kde4" name="KDEVARTMP" />
-        <envvar value="/opt/kde4/lib:" name="LD_LIBRARY_PATH" />
+        <envvar value="/usr/lib:" name="LD_LIBRARY_PATH" />
         <envvar value="/usr/lib/qt4" name="QTDIR" />
-        <envvar value="/opt/kde4/lib/kde4/plugins" name="QT_PLUGIN_PATH" />
+        <envvar value="/usr/lib/kde4/plugins" name="QT_PLUGIN_PATH" />
       </envvars>
       <globaldebugarguments></globaldebugarguments>
       <globalcwd>/mnt/data/devel/SVN/trunk/graphics/digikam/project/../..</globalcwd>

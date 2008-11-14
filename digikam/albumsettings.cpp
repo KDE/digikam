@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "albumsettings.h"
 
 // KDE includes.
@@ -110,6 +109,8 @@ public:
     bool                                saveComments;
     bool                                saveDateTime;
     bool                                saveRating;
+
+    bool                                writeRawFiles;
 
     // preview settings
     bool                                previewLoadFullImageSize;
@@ -238,6 +239,8 @@ void AlbumSettings::init()
     d->saveDateTime                 = false;
     d->saveRating                   = false;
 
+    d->writeRawFiles                = false;
+
     d->previewLoadFullImageSize     = false;
     d->showThumbbar                 = true;
 
@@ -344,6 +347,8 @@ void AlbumSettings::readSettings()
     d->source                 = group.readEntry("Source", QString());
     d->copyright              = group.readEntry("Copyright", QString());
 
+    d->writeRawFiles          = group.readEntry("Write RAW Files", false);
+
     // ---------------------------------------------------------------------
 
     group = config->group("General Settings");
@@ -432,6 +437,8 @@ void AlbumSettings::saveSettings()
     group.writeEntry("Credit", d->credit);
     group.writeEntry("Source", d->source);
     group.writeEntry("Copyright", d->copyright);
+
+    group.writeEntry("Write RAW Files", d->writeRawFiles);
 
     // ---------------------------------------------------------------------
 
@@ -774,6 +781,16 @@ void AlbumSettings::setSaveCredits(bool val)
 bool AlbumSettings::getSaveCredits() const
 {
     return d->saveCredits;
+}
+
+void AlbumSettings::setWriteRawFiles(bool val)
+{
+    d->writeRawFiles = val;
+}
+
+bool AlbumSettings::getWriteRawFiles() const
+{
+    return d->writeRawFiles;
 }
 
 void AlbumSettings::setAuthor(const QString& author)
