@@ -908,8 +908,7 @@ void AlbumIconView::slotPaste()
             if (palbum->isRoot())
                 return;
 
-            KUrl::List srcURLs;
-            srcURLs.fromMimeData(data);
+            KUrl::List srcURLs = KUrl::List::fromMimeData(data);
 
             KIO::Job* job = DIO::copy(srcURLs, palbum);
             connect(job, SIGNAL(result(KJob*)),

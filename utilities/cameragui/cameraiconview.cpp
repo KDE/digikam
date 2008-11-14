@@ -598,8 +598,7 @@ void CameraIconView::contentsDropEvent(QDropEvent *e)
         return;
     }
 
-    KUrl::List srcURLs;
-    srcURLs.fromMimeData(e->mimeData());
+    KUrl::List srcURLs = KUrl::List::fromMimeData(e->mimeData());
     uploadItemPopupMenu(srcURLs);
 }
 
@@ -613,8 +612,7 @@ void CameraIconView::slotRightButtonClicked(const QPoint&)
     if(!data || !KUrl::List::canDecode(data))
         return;
 
-    KUrl::List srcURLs;
-    srcURLs.fromMimeData(data);
+    KUrl::List srcURLs = KUrl::List::fromMimeData(data);
     uploadItemPopupMenu(srcURLs);
 }
 
