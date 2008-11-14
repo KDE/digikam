@@ -214,6 +214,11 @@ void SearchGroup::setup(Type type)
 
     m_layout->addStretch(1);
     setLayout(m_layout);
+
+    // ----- //
+
+    // initialization as empty group
+    reset();
 }
 
 void SearchGroup::read(SearchXmlCachingReader &reader)
