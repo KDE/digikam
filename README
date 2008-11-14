@@ -84,28 +84,28 @@ http://dev.robotbattle.com/bugs/main_page.php
 
 -- DEPENDENCIES -------------------------------------------------------
 
-Name            Version                         URL                                          Remarks
+Name            Version                       URL                                        Remarks
 
-CMake           >= 2.4.x                        http://www.cmake.org
-libqt           >= 4.3.x (4.4.x recommended)    http://www.trolltech.com                     Including SQLite3 database plugin
-kdelibs         >= 4.0.x (4.1.x recommended)    http://www.kde.org
-libkipi         >= 0.2.0                        http://www.kipi-plugins.org
-libkexiv2       >= 0.2.0 (0.3.0 recommended)    http://www.kipi-plugins.org                  Using Exiv2 0.18.x recommended.
-libkdcraw       >= 0.4.0 recommended            http://www.kipi-plugins.org                  Using LibRaw decoder instead dcraw.
-liblcms         >= 1.14.x                       http://www.littlecms.com
-libtiff         >= 3.8.2                        http://www.remotesensing.org/libtiff
-libpng          >= 1.2.x                        http://www.libpng.org/pub/png/libpng.html
-libjpeg         >= 6b                           http://www.ijg.org
-libjasper       >= 1.7.x                        http://www.ece.uvic.ca/~mdadams/jasper
+CMake           >= 2.4.x                      http://www.cmake.org
+libqt           >= 4.3.x (4.4.x recommended)  http://www.trolltech.com                   Including SQLite3 database plugin
+kdelibs         >= 4.0.x (4.1.x recommended)  http://www.kde.org
+libkipi         >= 0.2.0                      http://www.kipi-plugins.org
+libkexiv2       >= 0.5.0                      http://www.kipi-plugins.org                Version from trunk KDE svn repository. Will be released with KDE 4.2. Exiv2 0.18.x shared library recommended.
+libkdcraw       >= 0.4.0                      http://www.kipi-plugins.org                Version from trunk KDE svn repository. Will be released with KDE 4.2.
+liblcms         >= 1.14.x                     http://www.littlecms.com
+libtiff         >= 3.8.2                      http://www.remotesensing.org/libtiff
+libpng          >= 1.2.x                      http://www.libpng.org/pub/png/libpng.html
+libjpeg         >= 6b                         http://www.ijg.org
+libjasper       >= 1.7.x                      http://www.ece.uvic.ca/~mdadams/jasper
 
 Optional :
 
-libkdepimlibs   >= 4.0.x                        http://pim.kde.org                           To support KAddressBook entries.
-libmarblewidget >= 0.5.1                        http://edu.kde.org/marble                    To support Geolocation using Marble Widget.
-liblensfun      >= 0.1.0                        http://lensfun.berlios.de                    To support LensCorrection editor plugin.
-libgphoto2      >= 2.4.0                        http://www.gphoto.org                        To support Gphoto2 Cameras. Enable by default. 
-                                                                                             Use CMake "-DENABLE_GPHOTO2=no" flag to compile 
-                                                                                             digiKam without libgphoto2 support.
+libkdepimlibs   >= 4.0.x                      http://pim.kde.org                         To support KAddressBook entries.
+libmarblewidget >= 0.5.1                      http://edu.kde.org/marble                  To support Geolocation using Marble Widget.
+liblensfun      >= 0.1.0                      http://lensfun.berlios.de                  To support LensCorrection editor plugin.
+libgphoto2      >= 2.4.0                      http://www.gphoto.org                      To support Gphoto2 Cameras. Enable by default. 
+                                                                                         Use CMake "-DENABLE_GPHOTO2=no" flag to compile 
+                                                                                         digiKam without libgphoto2 support.
 
 Note : all library dependencies require development and binary packages installed on your
 computer to compile digiKam.

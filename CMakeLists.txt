@@ -62,6 +62,19 @@ ELSE(NOT WIN32)
     SET(KDCRAW_FOR_DIGIKAM TRUE)
 ENDIF(NOT WIN32)
 
+# Check KExiv2 version installed to compile fine.
+IF(NOT WIN32)
+    FIND_PACKAGE(PkgConfig)
+    PKG_CHECK_MODULES(Kexiv2 libkexiv2>=0.5.0)
+    IF(Kexiv2_FOUND)
+	SET(KEXIV2_FOR_DIGIKAM TRUE)
+    ELSE(Kexiv2_FOUND)
+	SET(KEXIV2_FOR_DIGIKAM FALSE)
+    ENDIF(Kexiv2_FOUND)
+ELSE(NOT WIN32)
+    SET(KEXIV2_FOR_DIGIKAM TRUE)
+ENDIF(NOT WIN32)
+
 # ==================================================================================================
 # Optional depencies
 
@@ -160,15 +173,15 @@ ELSE(KIPI_FOUND)
     MESSAGE(STATUS "")
 ENDIF(KIPI_FOUND)
 
-IF(KEXIV2_FOUND)
+IF(KEXIV2_FOR_DIGIKAM)
     MESSAGE(STATUS " libkexiv2 library found............. YES")
-ELSE(KEXIV2_FOUND)
+ELSE(KEXIV2_FOR_DIGIKAM)
     MESSAGE(STATUS " libkexiv2 library found............. NO")
     MESSAGE(STATUS "")
-    MESSAGE(SEND_ERROR " digiKam needs libkexiv2 library >= 0.2.0. You need to install libkexiv2 first")
+    MESSAGE(SEND_ERROR " digiKam needs libkexiv2 library >= 0.5.0. You need to install libkexiv2 first")
     MESSAGE(STATUS " libkexiv2 website is at http://www.kipi-plugins.org")
     MESSAGE(STATUS "")
-ENDIF(KEXIV2_FOUND)
+ENDIF(KEXIV2_FOR_DIGIKAM)
 
 IF(KDCRAW_FOR_DIGIKAM)
     MESSAGE(STATUS " libkdcraw library found............. YES")
