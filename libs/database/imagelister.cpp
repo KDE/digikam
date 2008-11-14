@@ -383,12 +383,13 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
     ImageQueryBuilder builder;
     ImageQueryPostHooks hooks;
     sqlQuery += builder.buildQuery(xml, &boundValues, &hooks);
-    kDebug(50003) << "Search query:\n" << sqlQuery;
 
     if (limit > 0)
         sqlQuery += QString(" ) LIMIT %1; ").arg(limit);
     else
         sqlQuery += " );";
+
+    kDebug(50003) << "Search query:\n" << sqlQuery << "\n" << boundValues;
 
     bool executionSuccess;
     {
