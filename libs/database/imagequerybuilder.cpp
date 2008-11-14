@@ -133,6 +133,8 @@ void ImageQueryBuilder::buildGroup(QString &sql, SearchXmlCachingReader &reader,
 {
     sql += " (";
 
+    SearchXml::Operator mainGroupOp = reader.groupOperator();
+
     bool firstField = true;
     bool hasContent = false;
     while (!reader.atEnd())
@@ -165,7 +167,19 @@ void ImageQueryBuilder::buildGroup(QString &sql, SearchXmlCachingReader &reader,
     }
 
     if (!hasContent)
-        sql += " 0 ";
+    {
+        // add a condition statement with no effect
+        switch (mainGroupOp)
+        {
+            case SearchXml::And:
+            case SearchXml::Or:
+                sql += " 1 ";
+                break;
+            case SearchXml::AndNot:
+                sql += " 0 ";
+                break;
+        }
+    }
 
     sql += ") ";
 }
@@ -938,7 +952,6 @@ void ImageQueryBuilder::addSqlOperator(QString &sql, SearchXml::Operator op, boo
 
     switch (op)
     {
-        default:
         case SearchXml::And:
             sql += "AND";
             break;
