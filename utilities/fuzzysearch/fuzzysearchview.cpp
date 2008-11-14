@@ -107,7 +107,6 @@ public:
         searchFuzzyBar        = 0;
         fuzzySearchFolderView = 0;
         tabWidget             = 0;
-        imageInfo             = 0;
         thumbLoadThread       = 0;
         imageSAlbum           = 0;
         sketchSAlbum          = 0;
@@ -149,7 +148,7 @@ public:
     KSqueezedTextLabel     *labelFile;
     KSqueezedTextLabel     *labelFolder;
 
-    ImageInfo              *imageInfo;
+    ImageInfo               imageInfo;
 
     SearchTextBar          *searchFuzzyBar;
 
@@ -479,7 +478,6 @@ FuzzySearchView::~FuzzySearchView()
     writeConfig();
     delete d->timerSketch;
     delete d->timerImage;
-    delete d->imageInfo;
     delete d;
 }
 
@@ -628,7 +626,7 @@ void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
 
     if (type == "imageid")
     {
-        setImageId(reader.valueToLongLong());
+        setCurrentImage(reader.valueToLongLong());
         d->imageSAlbum = salbum;
         d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SIMILARS);
     }
@@ -858,7 +856,7 @@ void FuzzySearchView::dropEvent(QDropEvent *e)
         if (imageIDs.isEmpty())
             return;
 
-        setImageId(imageIDs.first());
+        setCurrentImage(imageIDs.first());
         slotCheckNameEditImageConditions();
         createNewFuzzySearchAlbumFromImage(FuzzySearchFolderView::currentFuzzyImageSearchName());
         d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SIMILARS);
@@ -884,24 +882,26 @@ void FuzzySearchView::slotLevelImageChanged()
 
 void FuzzySearchView::slotTimerImageDone()
 {
-    if (d->imageInfo)
-        setImageInfo(*d->imageInfo);
+    if (!d->imageInfo.isNull())
+        setImageInfo(d->imageInfo);
 }
 
-void FuzzySearchView::setImageId(qlonglong imageid)
+void FuzzySearchView::setCurrentImage(qlonglong imageid)
 {
-    if (d->imageInfo)
-        delete d->imageInfo;
+    setCurrentImage(ImageInfo(imageid));
+}
 
-    d->imageInfo = new ImageInfo(imageid);
-    d->labelFile->setText(d->imageInfo->name());
-    d->labelFolder->setText(d->imageInfo->fileUrl().directory());
-    d->thumbLoadThread->find(d->imageInfo->fileUrl().path());
+void FuzzySearchView::setCurrentImage(const ImageInfo &info)
+{
+    d->imageInfo = info;
+    d->labelFile->setText(d->imageInfo.name());
+    d->labelFolder->setText(d->imageInfo.fileUrl().directory());
+    d->thumbLoadThread->find(d->imageInfo.fileUrl().path());
 }
 
 void FuzzySearchView::setImageInfo(const ImageInfo& info)
 {
-    setImageId(info.id());
+    setCurrentImage(info);
     slotCheckNameEditImageConditions();
     createNewFuzzySearchAlbumFromImage(FuzzySearchFolderView::currentFuzzyImageSearchName());
     d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SIMILARS);
@@ -909,7 +909,7 @@ void FuzzySearchView::setImageInfo(const ImageInfo& info)
 
 void FuzzySearchView::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
 {
-    if (d->imageInfo && KUrl(desc.filePath) == d->imageInfo->fileUrl())
+    if (!d->imageInfo.isNull() && KUrl(desc.filePath) == d->imageInfo.fileUrl())
         d->imageWidget->setPixmap(pix.scaled(256, 256, Qt::KeepAspectRatio,
                                              Qt::SmoothTransformation));
 }
@@ -918,7 +918,7 @@ void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name)
 {
     AlbumManager::instance()->setCurrentAlbum(0);
 
-    if (!d->imageInfo)
+    if (d->imageInfo.isNull())
         return;
 
     // We query database here
@@ -930,7 +930,7 @@ void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name)
     writer.writeAttribute("type", "imageid");
     writer.writeAttribute("threshold", QString::number(d->levelImage->value()/100.0));
     writer.writeAttribute("sketchtype", "scanned");
-    writer.writeValue(d->imageInfo->id());
+    writer.writeValue(d->imageInfo.id());
     writer.finishField();
     writer.finishGroup();
 
@@ -941,7 +941,7 @@ void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name)
 
 void FuzzySearchView::slotCheckNameEditImageConditions()
 {
-    if (d->imageInfo)
+    if (!d->imageInfo.isNull())
     {
         d->nameEditImage->setEnabled(true);
 
