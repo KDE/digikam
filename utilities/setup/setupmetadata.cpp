@@ -151,9 +151,9 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     d->writeRawFilesBox = new QCheckBox(commonGroup);
     d->writeRawFilesBox->setText(i18n("&Write Metadata to RAW files (experimental)"));
-    d->writeRawFilesBox->setWhatsThis( i18n("Turn on this option to write metadata to RAW TIFF/EP files based "
-                                            "This feature require Exiv2 shared library version >= 0.18, still "
-                                            "experimental, and is disabled by default."));
+    d->writeRawFilesBox->setWhatsThis( i18n("Turn on this option to write metadata into RAW TIFF/EP files based. "
+                                            "This feature require Exiv2 shared library version >= 0.18.0. It still "
+                                            "experimental, and disabled by default."));
     d->writeRawFilesBox->setEnabled(KExiv2Iface::KExiv2::supportMetadataWritting("image/x-raw"));
 
     gLayout2->addWidget(d->saveTagsBox);
