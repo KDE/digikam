@@ -193,11 +193,20 @@ public:
     /// Create a volume identifier based on the path only
     QString volumeIdentifier(const QString &path);
 
+    /// Create a network share identifier based on the mountpath
+    QString networkShareIdentifier(const QString &path);
+
     /// Return the path, if location has a path-only identifier. Else returns a null string.
-    QString pathIdentifier(const AlbumRootLocation *location);
+    QString pathFromIdentifier(const AlbumRootLocation *location);
+
+    /// Return the path, if location has a path-only identifier. Else returns a null string.
+    QString networkShareMountPathFromIdentifier(const AlbumRootLocation *location);
 
     /// Create an MD5 hash of the top-level entries (file names, not file content) of the given path
     static QString directoryHash(const QString &path);
+
+    /// Check if a location for specified path exists, assuming the given list of locations was deleted
+    bool checkIfExists(const QString &path, QList<CollectionLocation> assumeDeleted);
 
     CollectionManager *s;
 };
@@ -355,7 +364,15 @@ QString CollectionManagerPrivate::volumeIdentifier(const QString &path)
     return url.url();
 }
 
-QString CollectionManagerPrivate::pathIdentifier(const AlbumRootLocation *location)
+QString CollectionManagerPrivate::networkShareIdentifier(const QString &path)
+{
+    KUrl url;
+    url.setProtocol("networkshareid");
+    url.addQueryItem("mountpath", path);
+    return url.url();
+}
+
+QString CollectionManagerPrivate::pathFromIdentifier(const AlbumRootLocation *location)
 {
     KUrl url(location->identifier);
 
@@ -363,6 +380,16 @@ QString CollectionManagerPrivate::pathIdentifier(const AlbumRootLocation *locati
         return QString();
 
     return url.queryItem("path");
+}
+
+QString CollectionManagerPrivate::networkShareMountPathFromIdentifier(const AlbumRootLocation *location)
+{
+    KUrl url(location->identifier);
+
+    if (url.protocol() != "networkshareid")
+        return QString();
+
+    return url.queryItem("mountpath");
 }
 
 QString CollectionManagerPrivate::directoryHash(const QString &path)
@@ -498,6 +525,30 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl &url, cons
     return volume;
 }
 
+bool CollectionManagerPrivate::checkIfExists(const QString &filePath, QList<CollectionLocation> assumeDeleted)
+{
+    DatabaseAccess access;
+    foreach (AlbumRootLocation *location, locations)
+    {
+        kDebug() << filePath << location->albumRootPath();
+        if (filePath.startsWith(location->albumRootPath()))
+        {
+            bool isDeleted = false;
+            foreach (const CollectionLocation &deletedLoc, assumeDeleted)
+            {
+                if (deletedLoc.id() == location->id())
+                {
+                    isDeleted = true;
+                    break;
+                }
+            }
+            if (!isDeleted)
+                return true;
+        }
+    }
+    return false;
+}
+
 
 // -------------------------------------------------
 
@@ -604,14 +655,44 @@ CollectionLocation CollectionManager::addLocation(const KUrl &fileUrl, const QSt
     return locationForPath(path);
 }
 
-CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KUrl &fileUrl, QString *message)
+CollectionLocation CollectionManager::addNetworkLocation(const KUrl &fileUrl, const QString &label)
 {
+    kDebug(50003) << "addLocation " << fileUrl << endl;
     QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
 
     if (!locationForPath(path).isNull())
+        return CollectionLocation();
+
+    ChangingDB changing(d);
+    DatabaseAccess().db()->addAlbumRoot(AlbumRoot::Network, d->networkShareIdentifier(path), "/", label);
+
+    // Do not emit the locationAdded signal here, it is done in updateLocations()
+    updateLocations();
+
+    return locationForPath(path);
+}
+
+CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KUrl &fileUrl,
+        QList<CollectionLocation> assumeDeleted, QString *message, QString *iconName)
+{
+    QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
+
+    QDir dir(path);
+    if (!dir.isReadable())
     {
         if (message)
-            *message = i18n("There is already an entry with the same path");
+            *message = i18n("The selected folder does not exist or is not readable");
+        if (iconName)
+            *iconName = "dialog-error";
+        return LocationNotAllowed;
+    }
+
+    if (d->checkIfExists(path, assumeDeleted))
+    {
+        if (message)
+            *message = i18n("There is already a collection containing the folder \"%1\"", path);
+        if (iconName)
+            *iconName = "dialog-error";
         return LocationNotAllowed;
     }
 
@@ -626,11 +707,15 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
             {
                 if (message)
                     *message = i18n("The storage media can be uniquely identified.");
+                if (iconName)
+                    *iconName = "drive-removable-media-usb";
             }
             else
             {
                 if (message)
-                    *message = QString();
+                    *message = i18n("The collection is located on your harddisk");
+                if (iconName)
+                    *iconName = "drive-harddisk";
             }
             return LocationAllRight;
         }
@@ -649,6 +734,9 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
                         break;
                     }
                 }
+
+                if (iconName)
+                    *iconName = "media-optical";
 
                 if (hasOtherLocation)
                 {
@@ -679,6 +767,8 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
                 if (message)
                     *message = i18n("This is a removable storage media that will be identified by its label (\"%1\")",
                                     volume.label);
+                if (iconName)
+                    *iconName = "drive-removable-media";
                 return LocationAllRight;
             }
         }
@@ -688,6 +778,8 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
                 *message = i18n("This entry will only be identified by the path where it is found on your system (\"%1\"). "
                                 "No more specific means of identification (UUID, label) is available.",
                                 volume.path);
+                if (iconName)
+                    *iconName = "drive-removale-media";
             return LocationHasProblems;
         }
     }
@@ -696,8 +788,43 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
         if (message)
             *message = i18n("There is a problem identifying the storage media of this path. "
                             "It will be added using the file path as the only identifier");
+                if (iconName)
+                    *iconName = "folder-important";
         return LocationHasProblems;
     }
+}
+
+CollectionManager::LocationCheckResult CollectionManager::checkNetworkLocation(const KUrl &fileUrl,
+        QList<CollectionLocation> assumeDeleted, QString *message, QString *iconName)
+{
+    QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
+
+    QDir dir(path);
+    if (!dir.isReadable())
+    {
+        if (message)
+            *message = i18n("The selected folder does not exist or is not readable");
+        if (iconName)
+            *iconName = "dialog-error";
+        return LocationNotAllowed;
+    }
+
+    if (d->checkIfExists(path, assumeDeleted))
+    {
+        if (message)
+            *message = i18n("There is already a collection for a network share with the same path");
+        if (iconName)
+            *iconName = "dialog-error";
+        return LocationNotAllowed;
+    }
+
+    if (message)
+        *message = i18n("The network share will be identified by the path you selected. "
+                        "If the path is empty, the share will be considered unavailable.");
+    if (iconName)
+        *iconName = "network-wired";
+
+    return LocationAllRight;
 }
 
 void CollectionManager::removeLocation(const CollectionLocation &location)
@@ -979,37 +1106,45 @@ void CollectionManager::updateLocations()
         foreach (AlbumRootLocation *location, d->locations)
         {
             oldStatus << location->status();
-
-            QString absolutePath;
             bool available = false;
+            QString absolutePath;
 
-            SolidVolumeInfo info = d->findVolumeForLocation(location, volumes);
-
-            if (!info.isNull())
+            if (location->type() == CollectionLocation::TypeNetwork)
             {
-                available = true;
-                QString volumePath = info.path;
-                // volume.path has a trailing slash (and this is good)
-                // but specific path has a leading slash, so remove it
-                volumePath.chop(1);
-                // volumePath is the mount point of the volume;
-                // specific path is the path on the file system of the volume.
-                absolutePath = volumePath + location->specificPath;
+                QString path = d->networkShareMountPathFromIdentifier(location);
+                QDir dir(path);
+                available = dir.isReadable()
+                    && dir.entryList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot).count() > 0;
+                absolutePath = path;
             }
             else
             {
-                QString path = d->pathIdentifier(location);
-                if (!path.isNull())
+                SolidVolumeInfo info = d->findVolumeForLocation(location, volumes);
+
+                if (!info.isNull())
                 {
                     available = true;
-                    // Here we have the absolute path as definition of the volume.
-                    // specificPath is "/" as per convention, but ignored,
-                    // absolute path shall not have a trailing slash.
-                    absolutePath = path;
+                    QString volumePath = info.path;
+                    // volume.path has a trailing slash (and this is good)
+                    // but specific path has a leading slash, so remove it
+                    volumePath.chop(1);
+                    // volumePath is the mount point of the volume;
+                    // specific path is the path on the file system of the volume.
+                    absolutePath = volumePath + location->specificPath;
+                }
+                else
+                {
+                    QString path = d->pathFromIdentifier(location);
+                    if (!path.isNull())
+                    {
+                        available = true;
+                        // Here we have the absolute path as definition of the volume.
+                        // specificPath is "/" as per convention, but ignored,
+                        // absolute path shall not have a trailing slash.
+                        absolutePath = path;
+                    }
                 }
             }
-
-            //TODO: Network locations (NFS, Samba etc.)
 
             // set values in location
             // Don't touch location->status, do not interfere with "hidden" setting

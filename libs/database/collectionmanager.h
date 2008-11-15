@@ -74,6 +74,7 @@ public:
      * The label has no further meaning and can be freely chosen.
      */
     CollectionLocation addLocation(const KUrl &fileUrl, const QString &label = QString());
+    CollectionLocation addNetworkLocation(const KUrl &fileUrl, const QString &label = QString());
 
     enum LocationCheckResult
     {
@@ -93,7 +94,10 @@ public:
      * The text is i18n'ed and can be presented to the user.
      * The returned result enum describes the test result.
      */
-    LocationCheckResult checkLocation(const KUrl &fileUrl, QString *message = 0);
+    LocationCheckResult checkLocation(const KUrl &fileUrl, QList<CollectionLocation> assumeDeleted,
+                                      QString *message = 0, QString *suggestedMessageIconName = 0);
+    LocationCheckResult checkNetworkLocation(const KUrl &fileUrl, QList<CollectionLocation> assumeDeleted,
+                                             QString *message = 0, QString *suggestedMessageIconName = 0);
 
     /**
      * Removes the given location. This means that all images contained on the
