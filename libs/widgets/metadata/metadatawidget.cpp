@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "metadatawidget.h"
 #include "metadatawidget.moc"
 
@@ -124,7 +123,6 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     simpleLevel->setWhatsThis( i18n( "Switch the tags view to a simple human-readable list" ) );
     simpleLevel->setToolTip(i18n( "Simple list" ));
     d->levelButtons->addButton(simpleLevel, SIMPLE);
-    hlay1->addWidget(simpleLevel);
 
     QToolButton *fullLevel = new QToolButton( d->levelGBox );
     fullLevel->setIcon( iconLoader->loadIcon( "view-media-playlist", (KIconLoader::Group)KIconLoader::Toolbar ) );
@@ -133,9 +131,10 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     fullLevel->setToolTip(i18n( "Full list" ));
     d->levelButtons->addButton(fullLevel, FULL);
 
+    hlay1->addWidget(simpleLevel);
     hlay1->addWidget(fullLevel);
-    hlay1->setSpacing(0);
-    hlay1->setMargin(KDialog::spacingHint());
+    hlay1->setSpacing(KDialog::spacingHint());
+    hlay1->setMargin(0);
 
     // -----------------------------------------------------------------
 
@@ -164,8 +163,8 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     hlay2->addWidget(saveMetadata);
     hlay2->addWidget(printMetadata);
     hlay2->addWidget(copy2ClipBoard);
-    hlay2->setSpacing(0);
-    hlay1->setMargin(KDialog::spacingHint());
+    hlay2->setSpacing(KDialog::spacingHint());
+    hlay1->setMargin(0);
 
     d->view         = new MetadataListView(this);
     QString barName = QString(name) + "SearchBar";
@@ -179,8 +178,8 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     d->mainLayout->addWidget(d->searchBar, 2, 0, 1, 5);
     d->mainLayout->setColumnStretch(3, 10);
     d->mainLayout->setRowStretch(1, 10);
-    d->mainLayout->setSpacing(KDialog::spacingHint());
-    d->mainLayout->setMargin(0);
+    d->mainLayout->setSpacing(0);
+    d->mainLayout->setMargin(KDialog::spacingHint());
 
     // -----------------------------------------------------------------
 
