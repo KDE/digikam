@@ -52,22 +52,9 @@ public:
 private:
 
     void readSettings();
-    void checkforOkButton();
-    void checkforAddButton();
-    bool checkForCollection(const QString& name, const QString& path);
+    void checkDBPath();
 
 private slots:
-
-    void slotSelectionChanged(QTreeWidgetItem*, int);
-    void slotNewCollectionItem();
-    void slotAddCollectionItem();
-    void slotRemoveCollectionItem();
-    void slotReplaceCollectionItem();
-
-    void slotAlbumNameEdited(const QString&);
-
-    void slotChangeAlbumPath(const KUrl&);
-    void slotAlbumPathEdited(const QString&);
 
     void slotChangeDatabasePath(const KUrl&);
     void slotDatabasePathEdited(const QString&);
