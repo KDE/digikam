@@ -589,6 +589,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     SET(libsetup_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupicc.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcollections.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcollectionview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupalbumtype.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupalbumview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setup.cpp
