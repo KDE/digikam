@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "setupcollections.h"
 #include "setupcollections.moc"
 
@@ -68,15 +67,15 @@ public:
         rootsPathChanged = false;
     }
 
-    bool                       rootsPathChanged;
+    bool                     rootsPathChanged;
 
-    SetupCollectionTreeView   *collectionView;
-    SetupCollectionModel      *collectionModel;
+    SetupCollectionTreeView *collectionView;
+    SetupCollectionModel    *collectionModel;
 
-    KUrlRequester             *databasePathEdit;
-    QString                    originalDbPath;
+    KUrlRequester           *databasePathEdit;
+    QString                  originalDbPath;
 
-    KPageDialog               *mainDialog;
+    KPageDialog              *mainDialog;
 };
 
 SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
@@ -94,8 +93,8 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     QLabel *albumPathLabel  = new QLabel(i18n("Below are the locations of your root albums used to store "
                                               "your images. Write access is necessary to be able "
                                               "to edit images in these albums.\n"
-                                              "Note: Removable media and remote "
-                                              "file systems (NFS and Samba), are supported."),
+                                              "Note: removable media (such as USB drive or DVD) and remote "
+                                              "file systems (such as NFS or Samba) are supported."),
                                          albumPathBox);
     albumPathLabel->setWordWrap(true);
 
@@ -118,9 +117,8 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     QLabel *databasePathLabel = new QLabel(i18n("The location "
                                                 "where the database file will be stored on your system. "
                                                 "There is one common database file for all root albums.\n"
-                                                "Write access is required to be able to edit image "
-                                                "properties.\nNote: A "
-                                                "remote file system, such as NFS, cannot be used here."),
+                                                "Write access is required to be able to edit image properties.\n"
+                                                "Note: a remote file system, such as NFS, cannot be used here."),
                                            dbPathBox);
     databasePathLabel->setWordWrap(true);
 
