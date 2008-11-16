@@ -220,6 +220,8 @@ void SetupCollectionDelegate::updateItemWidgets(QList<QWidget*> widgets,
         pushButton->show();
         toolButton->hide();
 
+        pushButton->setEnabled(itemView()->isEnabled());
+
         // get the mapping id from model. The signal mapper will associate the id with the signal from this button.
         m_categoryButtonMapper->setMapping(pushButton, index.data(SetupCollectionModel::CategoryButtonMapId).toInt());
     }
@@ -230,6 +232,8 @@ void SetupCollectionDelegate::updateItemWidgets(QList<QWidget*> widgets,
         toolButton->move(0, (option.rect.height() - toolButton->height()) / 2);
         toolButton->show();
         pushButton->hide();
+
+        toolButton->setEnabled(itemView()->isEnabled());
 
         m_buttonMapper->setMapping(toolButton, index.data(SetupCollectionModel::ButtonMapId).toInt());
     }
