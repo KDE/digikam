@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "searchutilities.h"
 #include "searchutilities.moc"
 
@@ -64,9 +63,8 @@
 namespace Digikam
 {
 
-
 VisibilityController::VisibilityController(QObject *parent)
-    : QObject(parent), m_status(Unknown), m_containerWidget(0)
+                    : QObject(parent), m_status(Unknown), m_containerWidget(0)
 {
 }
 
@@ -219,16 +217,16 @@ void VisibilityController::allSteps()
     }
 }
 
-// ----------------------------------- //
+// ------------------------------------------------------------------------
 
 SearchClickLabel::SearchClickLabel(QWidget *parent)
-    : QLabel(parent)
+                : QLabel(parent)
 {
     setCursor(Qt::PointingHandCursor);
 }
 
 SearchClickLabel::SearchClickLabel(const QString &text, QWidget *parent)
-    : QLabel(text, parent)
+                : QLabel(text, parent)
 {
     setCursor(Qt::PointingHandCursor);
 }
@@ -244,16 +242,16 @@ void SearchClickLabel::mouseReleaseEvent(QMouseEvent* event)
     }
 }
 
-// ----------------------------------- //
+// ------------------------------------------------------------------------
 
 SearchSqueezedClickLabel::SearchSqueezedClickLabel(QWidget *parent)
-    : KSqueezedTextLabel(parent)
+                        : KSqueezedTextLabel(parent)
 {
     setCursor(Qt::PointingHandCursor);
 }
 
 SearchSqueezedClickLabel::SearchSqueezedClickLabel(const QString &text, QWidget *parent)
-    : KSqueezedTextLabel(text, parent)
+                        : KSqueezedTextLabel(text, parent)
 {
     setCursor(Qt::PointingHandCursor);
 }
@@ -269,14 +267,13 @@ void SearchSqueezedClickLabel::mouseReleaseEvent(QMouseEvent* event)
     }
 }
 
-// ----------------------------------- //
+// ------------------------------------------------------------------------
 
 ArrowClickLabel::ArrowClickLabel(QWidget *parent)
-    : QWidget(parent),
-      m_arrowType(Qt::RightArrow)
+               : QWidget(parent), m_arrowType(Qt::RightArrow)
 {
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    m_size = 8;
+    m_size   = 8;
     m_margin = 2;
 }
 
@@ -319,22 +316,30 @@ void ArrowClickLabel::paintEvent(QPaintEvent*)
         return; // don't draw arrows if we are too small
 
     unsigned int x = 0, y = 0;
-    if (m_arrowType == Qt::DownArrow) {
+    if (m_arrowType == Qt::DownArrow) 
+    {
         x = (width() - m_size) / 2;
         y = height() - (m_size + m_margin);
-    } else if (m_arrowType == Qt::UpArrow) {
+    } 
+    else if (m_arrowType == Qt::UpArrow) 
+    {
         x = (width() - m_size) / 2;
         y = m_margin;
-    } else if (m_arrowType == Qt::RightArrow) {
+    }
+    else if (m_arrowType == Qt::RightArrow) 
+    {
         x = width() - (m_size + m_margin);
         y = (height() - m_size) / 2;
-    } else { // arrowType == LeftArrow
+    } 
+    else // arrowType == LeftArrow
+    {         
         x = m_margin;
         y = (height() - m_size) / 2;
     }
 
     /*
-    if (isDown()) {
+    if (isDown()) 
+    {
         x++;
         y++;
     }
@@ -370,13 +375,13 @@ QSize ArrowClickLabel::sizeHint() const
     return QSize(m_size + 2*m_margin, m_size + 2*m_margin);
 }
 
-// ----------------------------------- //
+// ------------------------------------------------------------------------
 
 // Copied from klineedit_p.h,
 // Copyright (C) 2007 Aaron Seigo <aseigo@kde.org>
 
 AnimatedClearButton::AnimatedClearButton(QWidget *parent)
-    : QWidget(parent)
+                   : QWidget(parent)
 {
     m_stayAlwaysVisible = false;
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -385,10 +390,15 @@ AnimatedClearButton::AnimatedClearButton(QWidget *parent)
     m_timeline->setFrameRange(0, 255);
     m_timeline->setCurveShape(QTimeLine::EaseInOutCurve);
     m_timeline->setDirection(QTimeLine::Forward);
-    connect(m_timeline, SIGNAL(finished()), this, SLOT(animationFinished()));
-    connect(m_timeline, SIGNAL(frameChanged(int)), this, SLOT(update()));
 
-    connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)), this, SLOT(updateAnimationSettings()));
+    connect(m_timeline, SIGNAL(finished()), 
+            this, SLOT(animationFinished()));
+
+    connect(m_timeline, SIGNAL(frameChanged(int)), 
+            this, SLOT(update()));
+
+    connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)), 
+            this, SLOT(updateAnimationSettings()));
 }
 
 QSize AnimatedClearButton::sizeHint () const
@@ -408,8 +418,10 @@ void AnimatedClearButton::animateVisible(bool visible)
     if (!isVisible())
         setDirectlyVisible(visible);
 
-    if (visible) {
-        if (m_timeline->direction() == QTimeLine::Forward) {
+    if (visible) 
+    {
+        if (m_timeline->direction() == QTimeLine::Forward) 
+        {
             return;
         }
 
@@ -418,8 +430,10 @@ void AnimatedClearButton::animateVisible(bool visible)
         if (!m_stayAlwaysVisible)
             show();
     }
-    else {
-        if (m_timeline->direction() == QTimeLine::Backward) {
+    else 
+    {
+        if (m_timeline->direction() == QTimeLine::Backward) 
+        {
             return;
         }
 
@@ -428,7 +442,8 @@ void AnimatedClearButton::animateVisible(bool visible)
     }
 
 #if KDE_IS_VERSION(4,0,64)
-    if (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) {
+    if (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) 
+    {
         if (m_timeline->state() != QTimeLine::Running)
             m_timeline->start();
     }
@@ -449,16 +464,21 @@ void AnimatedClearButton::setDirectlyVisible(bool visible)
     // and we don't want to replace it in all occurrences.
     // Most notably, we want to call the QWidget version from animateVisible above.
 
-    if (visible) {
-        if (m_timeline->direction() == QTimeLine::Forward) {
+    if (visible) 
+    {
+        if (m_timeline->direction() == QTimeLine::Forward) 
+        {
             return;
         }
 
         // these need to be set as paintEvent depends on these values
         m_timeline->setDirection(QTimeLine::Forward);
         m_timeline->setCurrentTime(150);
-    } else {
-        if (m_timeline->direction() == QTimeLine::Backward) {
+    }
+    else 
+    {
+        if (m_timeline->direction() == QTimeLine::Backward) 
+        {
             return;
         }
 
@@ -496,7 +516,8 @@ void AnimatedClearButton::updateAnimationSettings()
     // it wont be painted, resulting (m->timeLine->currentTime() == 0) true,
     // and therefore a bad painting. This is needed for the case that we
     // come from a non animated widget and want it animated. (ereslibre)
-    if (animationsEnabled && m_timeline->direction() == QTimeLine::Forward) {
+    if (animationsEnabled && m_timeline->direction() == QTimeLine::Forward) 
+    {
         m_timeline->setCurrentTime(150);
     }
 }
@@ -534,9 +555,12 @@ void AnimatedClearButton::paintEvent(QPaintEvent *event)
 
 void AnimatedClearButton::animationFinished()
 {
-    if (m_timeline->direction() == QTimeLine::Forward) {
+    if (m_timeline->direction() == QTimeLine::Forward) 
+    {
         update();
-    } else {
+    } 
+    else 
+    {
         if (!m_stayAlwaysVisible)
             hide();
     }
@@ -550,12 +574,15 @@ void AnimatedClearButton::mouseReleaseEvent(QMouseEvent* event)
     }
 }
 
-// ----------------------------------- //
+// ------------------------------------------------------------------------
 
 CustomStepsDoubleSpinBox::CustomStepsDoubleSpinBox(QWidget *parent)
-    : QDoubleSpinBox(parent),
-      m_beforeInitialValue(true), m_initialValue(0),
-      m_smallerStep(0), m_largerStep(0), m_invertStepping(false)
+                        : QDoubleSpinBox(parent),
+                          m_beforeInitialValue(true), 
+                          m_initialValue(0),
+                          m_smallerStep(0), 
+                          m_largerStep(0), 
+                          m_invertStepping(false)
 {
 }
 
@@ -678,12 +705,15 @@ void CustomStepsDoubleSpinBox::slotValueChanged(double d)
     }
 }
 
-// ----------------------------------- //
+// ------------------------------------------------------------------------
 
 CustomStepsIntSpinBox::CustomStepsIntSpinBox(QWidget *parent)
-    : QSpinBox(parent),
-      m_beforeInitialValue(true), m_initialValue(0),
-      m_smallerStep(0), m_largerStep(0), m_invertStepping(false)
+                     : QSpinBox(parent),
+                       m_beforeInitialValue(true), 
+                       m_initialValue(0),
+                       m_smallerStep(0), 
+                       m_largerStep(0), 
+                       m_invertStepping(false)
 {
 }
 
@@ -821,7 +851,9 @@ int CustomStepsIntSpinBox::valueFromText(const QString &text) const
         return - QSpinBox::valueFromText(text.mid(m_fractionPrefix.length()));
     }
     else
+    {
         return QSpinBox::valueFromText(text);
+    }
 }
 
 QAbstractSpinBox::StepEnabled CustomStepsIntSpinBox::stepEnabled() const
@@ -834,6 +866,7 @@ QAbstractSpinBox::StepEnabled CustomStepsIntSpinBox::stepEnabled() const
         s |= QAbstractSpinBox::StepUpEnabled;
     if (value() < maximum())
         s |= QAbstractSpinBox::StepDownEnabled;
+
     return s;
 }
 
@@ -874,10 +907,10 @@ void CustomStepsIntSpinBox::slotValueChanged(int d)
     }
 }
 
-// ----------------------------------- //
+// ------------------------------------------------------------------------
 
 StyleSheetDebugger::StyleSheetDebugger(QWidget *object)
-    : QWidget(0), m_widget(object)
+                  : QWidget(0), m_widget(object)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -904,6 +937,4 @@ void StyleSheetDebugger::buttonClicked()
     m_widget->setStyleSheet(m_edit->toPlainText());
 }
 
-
-}
-
+} // namespace Digikam
