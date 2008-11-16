@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "adjustlevelstool.h"
 #include "adjustlevelstool.moc"
 
@@ -87,7 +86,7 @@ namespace DigikamAdjustLevelsImagesPlugin
 {
 
 AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
-               : EditorTool(parent)
+                : EditorTool(parent)
 {
     setObjectName("adjustlevels");
     setToolName(i18n("Adjust Levels"));
@@ -385,7 +384,7 @@ void AdjustLevelsTool::slotGammaInputchanged(double val)
 void AdjustLevelsTool::slotAdjustMinInputSpinBox(double val)
 {
     m_minInput->blockSignals(true);
-    int newVal = val*m_histoSegments;
+    int newVal = (int)(val*m_histoSegments);
     m_minInput->setValue(newVal);
     m_levels->setLevelLowInputValue(m_gboxSettings->histogramBox()->channel(), newVal);
     m_minInput->blockSignals(false);
@@ -395,7 +394,7 @@ void AdjustLevelsTool::slotAdjustMinInputSpinBox(double val)
 void AdjustLevelsTool::slotAdjustMaxInputSpinBox(double val)
 {
     m_maxInput->blockSignals(true);
-    int newVal = val*m_histoSegments;
+    int newVal = (int)(val*m_histoSegments);
     m_maxInput->setValue(newVal);
     m_levels->setLevelHighInputValue(m_gboxSettings->histogramBox()->channel(), newVal);
     m_maxInput->blockSignals(false);
@@ -405,7 +404,7 @@ void AdjustLevelsTool::slotAdjustMaxInputSpinBox(double val)
 void AdjustLevelsTool::slotAdjustMinOutputSpinBox(double val)
 {
     m_minOutput->blockSignals(true);
-    int newVal = val*m_histoSegments;
+    int newVal = (int)(val*m_histoSegments);
     m_minOutput->setValue(newVal);
     m_levels->setLevelLowOutputValue(m_gboxSettings->histogramBox()->channel(), newVal);
     m_minOutput->blockSignals(false);
@@ -415,7 +414,7 @@ void AdjustLevelsTool::slotAdjustMinOutputSpinBox(double val)
 void AdjustLevelsTool::slotAdjustMaxOutputSpinBox(double val)
 {
     m_maxOutput->blockSignals(true);
-    int newVal = val*m_histoSegments;
+    int newVal = (int)(val*m_histoSegments);
     m_maxOutput->setValue(newVal);
     m_levels->setLevelHighOutputValue(m_gboxSettings->histogramBox()->channel(), newVal);
     m_maxOutput->blockSignals(false);
@@ -766,14 +765,14 @@ bool AdjustLevelsTool::eventFilter(QObject *obj, QEvent *ev)
 
 void AdjustLevelsTool::slotShowInputHistogramGuide(double v)
 {
-    int val = v * m_histoSegments;
+    int val = (int)(v * m_histoSegments);
     DColor color(val, val, val, val, m_originalImage->sixteenBit());
     m_levelsHistogramWidget->setHistogramGuideByColor(color);
 }
 
 void AdjustLevelsTool::slotShowOutputHistogramGuide(double v)
 {
-    int val = v * m_histoSegments;
+    int val = (int)(v * m_histoSegments);
     DColor color(val, val, val, val, m_originalImage->sixteenBit());
     m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
