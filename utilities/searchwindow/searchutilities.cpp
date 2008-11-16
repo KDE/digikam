@@ -885,7 +885,7 @@ double CustomStepsIntSpinBox::fractionMagicValue() const
 void CustomStepsIntSpinBox::setFractionMagicValue(double value)
 {
     if (m_fractionPrefix.isNull())
-        return setValue(value);
+        setValue(value);
 
     if (value < 1.0)
         setValue(- lround(1.0 / value));
