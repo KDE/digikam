@@ -885,12 +885,12 @@ double CustomStepsIntSpinBox::fractionMagicValue() const
 void CustomStepsIntSpinBox::setFractionMagicValue(double value)
 {
     if (m_fractionPrefix.isNull())
-        setValue(value);
+        setValue((int)value);
 
     if (value < 1.0)
         setValue(- lround(1.0 / value));
     else
-        setValue(value);
+        setValue((int)value);
 }
 
 void CustomStepsIntSpinBox::slotValueChanged(int d)
