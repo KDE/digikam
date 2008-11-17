@@ -437,9 +437,9 @@ void SetupCollectionModel::apply()
         Item &item = m_collections[i];
         CollectionLocation location;
         if (item.parentId == CategoryRemote)
-            location = CollectionManager::instance()->addLocation(KUrl::fromPath(item.path), item.label);
-        else
             location = CollectionManager::instance()->addNetworkLocation(KUrl::fromPath(item.path), item.label);
+        else
+            location = CollectionManager::instance()->addLocation(KUrl::fromPath(item.path), item.label);
 
         if (location.isNull())
             failedItems << item;
