@@ -163,7 +163,9 @@ void SetupCollections::applySettings()
     if (!settings) return;
 
     QString newPath = d->databasePathEdit->url().path();
-    if (d->originalDbPath != newPath)
+    QDir oldDir(d->originalDbPath);
+    QDir newDir(newPath);
+    if (oldDir != newDir)
     {
         settings->setDatabaseFilePath(newPath);
         settings->saveSettings();
@@ -212,14 +214,17 @@ void SetupCollections::slotDatabasePathEdited(const QString& newPath)
 void SetupCollections::checkDBPath()
 {
     bool dbOk = false;
+    bool pathUnchanged = true;
     QString newPath = d->databasePathEdit->url().path();
     if (!d->databasePathEdit->url().path().isEmpty())
     {
         QDir dbDir(newPath);
+        QDir oldDir(d->originalDbPath);
         dbOk = dbDir.exists();
+        pathUnchanged = (dbDir == oldDir);
     }
 
-    d->collectionView->setEnabled(d->originalDbPath == newPath);
+    d->collectionView->setEnabled(pathUnchanged);
 
     d->mainDialog->enableButtonOk(dbOk);
 }
