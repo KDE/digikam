@@ -15,12 +15,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef KIPIINTERFACE_H
@@ -31,6 +31,7 @@
 #include <QList>
 #include <QString>
 #include <QPixmap>
+#include <QVariant>
 
 // KDE includes.
 
@@ -38,6 +39,7 @@
 
 // LibKIPI includes.
 
+#include <libkipi/version.h>
 #include <libkipi/interface.h>
 #include <libkipi/imagecollection.h>
 #include <libkipi/imageinfo.h>
@@ -90,6 +92,10 @@ public:
 
     KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget *parent);
     KIPI::UploadWidget* uploadWidget(QWidget *parent);
+
+#if KIPI_VERSION >= 0x000300
+    QVariant hostSetting(const QString& settingName);
+#endif
 
 public slots:
 

@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "kipiinterface.h"
 #include "kipiinterface.moc"
 
@@ -262,5 +261,21 @@ KIPI::UploadWidget* KipiInterface::uploadWidget(QWidget *parent)
 {
     return (new KipiUploadWidget(this, parent));
 }
+
+#if KIPI_VERSION >= 0x000300
+QVariant KipiInterface::hostSetting(const QString& settingName)
+{
+    if (settingName == QString("WriteMetadataToRAW"))
+    {
+        return (AlbumSettings::instance()->getWriteRawFiles());
+    }
+    else if (settingName == QString("FileExtensions"))
+    {
+        return fileExtensions();
+    }
+
+    return QVariant();
+}
+#endif
 
 }  // namespace Digikam
