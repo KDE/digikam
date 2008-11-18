@@ -75,7 +75,7 @@ public:
     KUrlRequester           *databasePathEdit;
     QString                  originalDbPath;
 
-    KPageDialog              *mainDialog;
+    KPageDialog             *mainDialog;
 };
 
 SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
@@ -98,7 +98,7 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
                                          albumPathBox);
     albumPathLabel->setWordWrap(true);
 
-    d->collectionView = new SetupCollectionTreeView(albumPathBox);
+    d->collectionView  = new SetupCollectionTreeView(albumPathBox);
     d->collectionModel = new SetupCollectionModel(this);
     d->collectionView->setModel(d->collectionModel);
 
@@ -111,9 +111,8 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox *dbPathBox = new QGroupBox(i18n("Database File Path"), this);
-    QVBoxLayout *vlay    = new QVBoxLayout(dbPathBox);
-
+    QGroupBox *dbPathBox      = new QGroupBox(i18n("Database File Path"), this);
+    QVBoxLayout *vlay         = new QVBoxLayout(dbPathBox);
     QLabel *databasePathLabel = new QLabel(i18n("The location "
                                                 "where the database file will be stored on your system. "
                                                 "There is one common database file for all root albums.\n"
@@ -140,16 +139,16 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
 
     // --------------------------------------------------------
 
+    readSettings();
+    adjustSize();
+
+    // --------------------------------------------------------
+
     connect(d->databasePathEdit, SIGNAL(urlSelected(const KUrl &)),
             this, SLOT(slotChangeDatabasePath(const KUrl &)));
 
     connect(d->databasePathEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotDatabasePathEdited(const QString&)));
-
-    // --------------------------------------------------------
-
-    readSettings();
-    adjustSize();
 }
 
 SetupCollections::~SetupCollections()
@@ -174,7 +173,6 @@ void SetupCollections::applySettings()
     {
         d->collectionModel->apply();
     }
-
 }
 
 void SetupCollections::readSettings()
@@ -184,7 +182,6 @@ void SetupCollections::readSettings()
 
     d->originalDbPath = settings->getDatabaseFilePath();
     d->databasePathEdit->setUrl(settings->getDatabaseFilePath());
-
     d->collectionModel->loadCollections();
 }
 
