@@ -26,7 +26,6 @@ INCLUDE_DIRECTORIES(
                      # database libs
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/sqlite2
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/sqlite3
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/haar
 
                      # shared utilities
