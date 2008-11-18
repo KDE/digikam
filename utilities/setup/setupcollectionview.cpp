@@ -83,7 +83,7 @@ public:
     virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
     virtual QList<QWidget*> createItemWidgets() const;
-    virtual void updateItemWidgets(QList<QWidget*>, const QStyleOptionViewItem&, const QPersistentModelIndex&) const;
+    virtual void updateItemWidgets(const QList<QWidget*> widgets, const QStyleOptionViewItem &option, const QPersistentModelIndex &index) const;
 
 signals:
 
@@ -203,8 +203,8 @@ QSize SetupCollectionDelegate::sizeHint(const QStyleOptionViewItem &option, cons
     return hint;
 }
 
-void SetupCollectionDelegate::updateItemWidgets(QList<QWidget*> widgets,
-        const QStyleOptionViewItem &option, const QPersistentModelIndex&index) const
+void SetupCollectionDelegate::updateItemWidgets(const QList<QWidget*> widgets,
+        const QStyleOptionViewItem &option, const QPersistentModelIndex &index) const
 {
     QPushButton *pushButton = static_cast<QPushButton*>(widgets[0]);
     QToolButton *toolButton = static_cast<QToolButton*>(widgets[1]);
