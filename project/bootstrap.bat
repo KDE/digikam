@@ -3,7 +3,7 @@
 rem KDE4 must be installed into C:\KDE4
 set KDEDIRS=C:\KDE4
 set PATH=%PATH%;%KDEDIRS%\bin
-set QT_PLUGIN_PATH=%KDEDIR%\plugins
+set QT_PLUGIN_PATH=%KDEDIRS%\plugins
 set KDE4_INSTALL_DIR=%KDEDIRS%
 
 rem clean up CMake cache
