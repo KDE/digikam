@@ -27,9 +27,9 @@
 
 // Qt includes.
 
-#include <QFrame>
 #include <QFont>
 #include <QFontMetrics>
+#include <QFrame>
 #include <QPainter>
 #include <QPixmap>
 #include <QStyle>
@@ -88,12 +88,12 @@ void FolderItem::paintCell(QPainter* p, const QColorGroup& cg, int column, int w
     if (isSelected())
     {
         p->drawPixmap(0, 0, fv->itemBasePixmapSelected());
-        p->setPen(cg.highlightedText());
+        p->setPen(cg.color(QColorGroup::HighlightedText));
     }
     else
     {
         p->drawPixmap(0, 0, fv->itemBasePixmapRegular());
-        p->setPen(cg.text());
+        p->setPen(cg.color(QColorGroup::Text));
     }
 
     if (icon)
@@ -125,7 +125,7 @@ void FolderItem::paintCell(QPainter* p, const QColorGroup& cg, int column, int w
 
     if (m_focus)
     {
-        p->setPen(cg.link());
+        p->setPen(cg.color(QColorGroup::Link));
         QRect r = fv->itemRect(this);
         p->drawRect(0, 0, r.width()-1, r.height()-1);
     }
@@ -219,7 +219,7 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup& cg, int colu
         int y       = (height() - boxsize)/2 + margin;
         r += boxsize + 4;
 
-        p->fillRect(0, 0, r, height(), cg.base());
+        p->fillRect(0, 0, r, height(), cg.color(QColorGroup::Base));
 
         // NOTE: Inspired form Qt4::Q3listview::paintCell()
         QStyleOptionQ3ListView opt = getStyleOption(fv);
@@ -232,12 +232,12 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup& cg, int colu
     if (isSelected())
     {
         p->drawPixmap(r, 0, fv->itemBasePixmapSelected());
-        p->setPen(cg.highlightedText());
+        p->setPen(cg.color(QColorGroup::HighlightedText));
     }
     else
     {
         p->drawPixmap(r, 0, fv->itemBasePixmapRegular());
-        p->setPen(cg.text());
+        p->setPen(cg.color(QColorGroup::Text));
     }
 
     if (icon)
@@ -254,7 +254,7 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup& cg, int colu
 
     if (m_focus)
     {
-        p->setPen(cg.link());
+        p->setPen(cg.color(QColorGroup::Link));
         QRect r = fv->itemRect(this);
         p->drawRect(0, 0, r.width()-1, r.height()-1);
     }
