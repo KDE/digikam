@@ -37,23 +37,22 @@ extern "C"
 // Qt includes.
 
 #include <QDir>
-#include <QFileInfo>
 #include <QFile>
-#include <QStringList>
+#include <QFileInfo>
 #include <QMatrix>
+#include <QStringList>
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <kcodecs.h>
 #include <kdebug.h>
-#include <klocale.h>
 #include <kfilemetainfo.h>
-#include <ktrader.h>
-#include <klibloader.h>
-#include <kmimetype.h>
 #include <kio/global.h>
 #include <kio/thumbcreator.h>
+#include <klibloader.h>
+#include <klocale.h>
+#include <kmimetype.h>
+#include <ktrader.h>
 #include <solid/device.h>
 #include <solid/storageaccess.h>
 #include <solid/storagedrive.h>
@@ -87,10 +86,10 @@ QByteArray UMSCamera::cameraMD5ID()
 {
     QString camData;
     // Camera media UUID is used (if available) to improve fingerprint value
-    // registration to database. We want to be sure that MD5 sum is really uniq. 
+    // registration to database. We want to be sure that MD5 sum is really uniq.
     // We don't use camera informations here. media UUID is enough because it came be
     // mouted by a card reader or a camera. In this case, "already donwloaded" flag will
-    // be undependant of the device used to mount memory card. 
+    // be undependant of the device used to mount memory card.
     camData.append(uuid());
     KMD5 md5(camData.toUtf8());
     return md5.hexDigest();
@@ -645,7 +644,7 @@ void UMSCamera::getUUIDFromSolid()
 
         // check for StorageDrive
         Solid::Device driveDevice;
-        for (Solid::Device currentDevice = accessDevice; currentDevice.isValid(); 
+        for (Solid::Device currentDevice = accessDevice; currentDevice.isValid();
              currentDevice = currentDevice.parent())
         {
             if (currentDevice.is<Solid::StorageDrive>())
