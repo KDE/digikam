@@ -59,6 +59,14 @@ extern "C"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 
+#ifdef Q_CC_MSVC
+void _ReadProc(struct png_struct_def *png_ptr, unsigned char *data, unsigned int size)
+{
+    FILE* file_handle = (FILE*)png_get_io_ptr(png_ptr);
+    fread(data, size, 1, file_handle);
+}
+#endif
+
 namespace Digikam
 {
 
@@ -134,7 +142,11 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         return false;
     }
 
+#ifdef Q_CC_MSVC
+    png_set_read_fn(png_ptr, f, _ReadProc);
+#else
     png_init_io(png_ptr, f);
+#endif
 
     // -------------------------------------------------------------------
     // Read all PNG info up to image data
