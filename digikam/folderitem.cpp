@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "folderitem.h"
 
 // Qt includes.
@@ -116,7 +115,7 @@ void FolderItem::paintCell(QPainter* p, const QColorGroup& cg, int column, int w
     }
 
     QRect br;
-    p->drawText(r, 0, width-margin-r, height(), Qt::AlignLeft|Qt::AlignVCenter, t, -1, &br);
+    p->drawText(QRect(r, 0, width-margin-r, height()), Qt::AlignLeft|Qt::AlignVCenter, t.left(-1), &br);
 
     if (m_special)
     {
