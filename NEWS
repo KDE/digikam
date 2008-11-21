@@ -27,7 +27,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 174620 : After updating to current svn digikam crashes.
 015 ==> 175650 : digiKam crash at startup without Phonon problems.
 016 ==> 173918 : digiKam msvc binaries doesn't work.
-017 ==> 
+017 ==> 175662 : USB camera transfer hangs and works only the second time tried.
+018 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta5 - Release date: 2008-10-26
