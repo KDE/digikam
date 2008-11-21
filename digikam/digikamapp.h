@@ -137,7 +137,7 @@ private slots:
     void slotOpenManualCamera(QAction *);
     void slotOpenSolidUsmDevice(QAction *);
     void slotOpenCameraUiFromPath();
-    void slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorData);
+    void slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorData, const QString &udi);
     void slotSolidDeviceChanged(const QString &udi);
     void slotCameraAdded(CameraType *ctype);
     void slotCameraRemoved(CameraType *ctype);

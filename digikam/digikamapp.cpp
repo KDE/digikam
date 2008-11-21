@@ -1554,8 +1554,8 @@ void DigikamApp::slotOpenSolidUsmDevice(QAction *action)
                 return;
 
             d->eventLoop = new QEventLoop(this);
-            connect(access, SIGNAL(setupDone(Solid::ErrorType, QVariant)),
-                    this, SLOT(slotSolidSetupDone(Solid::ErrorType, QVariant)));
+            connect(access, SIGNAL(setupDone(Solid::ErrorType, QVariant, const QString &)),
+                    this, SLOT(slotSolidSetupDone(Solid::ErrorType, QVariant, const QString &)));
 
             int returnCode = d->eventLoop->exec(QEventLoop::ExcludeUserInputEvents);
 
@@ -1591,7 +1591,7 @@ void DigikamApp::slotOpenSolidUsmDevice(QAction *action)
     }
 }
 
-void DigikamApp::slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorData)
+void DigikamApp::slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorData, const QString &/*udi*/)
 {
     if (!d->eventLoop)
         return;
@@ -1773,7 +1773,7 @@ void DigikamApp::fillSolidMenus()
 
             if (volume->size())
             {
-                qulonglong size = volume->size();
+                double size = (double)volume->size();
                 if (size > 1024)
                 {
                     size /= 1024;
@@ -1783,16 +1783,16 @@ void DigikamApp::fillSolidMenus()
                         if (size > 1024)
                         {
                             size /= 1024;
-                            label += '(' + QString::number(size) + " TB)";
+                            label += '(' + QString::number(size, 'g', 1) + " GB)";
                         }
                         else
-                            label += '(' + QString::number(size) + " MB)";
+                            label += '(' + QString::number(lround(size)) + " MB)";
                     }
                     else
-                        label += '(' + QString::number(size) + " KB)";
+                        label += '(' + QString::number(lround(size)) + " KB)";
                 }
                 else
-                    label += '(' + QString::number(size) + " bytes)";
+                    label += '(' + QString::number(lround(size)) + " bytes)";
             }
         }
 
