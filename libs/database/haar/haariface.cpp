@@ -554,7 +554,7 @@ void HaarIface::rebuildDuplicatesAlbums(const QList<int> &albums2Scan, double re
 
     // Build search XML from the results. Store list of ids of similar images.
     QMap<QString, QString> queries;
-    for (QMap< qlonglong, QList<qlonglong> >::const_iterator it = results.begin(); it != results.end(); ++it)
+    for (QMap< qlonglong, QList<qlonglong> >::const_iterator it = results.constBegin(); it != results.constEnd(); ++it)
     {
         SearchXmlWriter writer;
         writer.writeGroup();
@@ -618,7 +618,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
         observer->totalNumberToScan(total);
     }
 
-    for (it = images2Scan.begin(); it != images2Scan.end(); ++it)
+    for (it = images2Scan.constBegin(); it != images2Scan.constEnd(); ++it)
     {
         //list = bestMatchesForImage(*it, 20, ScannedSketch);
         // find images with at least 90% similarity
@@ -631,9 +631,9 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
             if (!(list.count() == 1 && list.first() == *it))
             {
                 // we will check if the duplicates already exist in the map.
-                for (it2 = list.begin(); it2 != list.end(); ++it2)
+                for (it2 = list.constBegin(); it2 != list.constEnd(); ++it2)
                 {
-                    if (resultsMap.find(*it2) != resultsMap.end())
+                    if (resultsMap.constFind(*it2) != resultsMap.constEnd())
                     {
                         find = true;
                         break;

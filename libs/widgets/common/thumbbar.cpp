@@ -820,8 +820,8 @@ void ThumbBarView::slotGotThumbnail(const LoadingDescription& desc, const QPixma
 {
     if (!pix.isNull())
     {
-        QHash<KUrl, ThumbBarItem*>::const_iterator it = d->itemHash.find(KUrl(desc.filePath));
-        if (it == d->itemHash.end())
+        QHash<KUrl, ThumbBarItem*>::const_iterator it = d->itemHash.constFind(KUrl(desc.filePath));
+        if (it == d->itemHash.constEnd())
             return;
 
         ThumbBarItem* item = *it;

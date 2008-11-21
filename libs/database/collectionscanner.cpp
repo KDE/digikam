@@ -354,7 +354,7 @@ void CollectionScanner::scanForStaleAlbums(QList<CollectionLocation> locations)
         // go through all album copy/move hints
         QHash<CollectionScannerHints::DstPath, CollectionScannerHints::Album>::const_iterator it;
         int toBeDeletedIndex;
-        for (it = d->albumHints.begin(); it != d->albumHints.end(); ++it)
+        for (it = d->albumHints.constBegin(); it != d->albumHints.constEnd(); ++it)
         {
             // if the src entry of a hint is found in toBeDeleted, we have a move/rename, no copy. Handle these here.
             toBeDeletedIndex = toBeDeleted.indexOf(it.value().albumId);

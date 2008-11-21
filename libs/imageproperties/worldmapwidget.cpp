@@ -128,7 +128,7 @@ void WorldMapWidget::setGPSPositions(const GPSInfoList& list)
 
     if (!d->list.isEmpty())
     {
-        for (GPSInfoList::const_iterator it = d->list.begin(); it != d->list.end(); ++it)
+        for (GPSInfoList::const_iterator it = d->list.constBegin(); it != d->list.constEnd(); ++it)
         {
             QDomElement kmlPlacemark = addKmlElement(kmlDocument, kmlAlbum, "Placemark");
             addKmlTextElement(kmlDocument, kmlPlacemark, "name", (*it).url.fileName());

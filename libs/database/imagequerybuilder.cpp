@@ -1322,7 +1322,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *b
                     {
                         sqlQuery += subQuery.build(*it, rule.op, rule.val, boundValues);
                         ++it;
-                        if ( it != todo.end() )
+                        if ( it != todo.constEnd() )
                             sqlQuery += " OR ";
                     }
                     sqlQuery += ')';
