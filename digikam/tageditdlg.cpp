@@ -308,11 +308,11 @@ AlbumList TagEditDlg::createTAlbum(TAlbum *mainRootAlbum, const QString& tagStr,
     // Check if new tags are include in a list of tags hierarchy separated by ','.
     // Ex: /Country/France/people,/City/France/Paris
 
-    QStringList tagsHierarchies = tagStr.split(',', QString::SkipEmptyParts);
+    const QStringList tagsHierarchies = tagStr.split(',', QString::SkipEmptyParts);
     if (tagsHierarchies.isEmpty())
         return createdTagsList;
 
-    for (QStringList::const_iterator it = tagsHierarchies.begin(); it != tagsHierarchies.end(); ++it)
+    for (QStringList::const_iterator it = tagsHierarchies.constBegin(); it != tagsHierarchies.constEnd(); ++it)
     {
         QString hierarchy = (*it).trimmed();
         if (!hierarchy.isEmpty())

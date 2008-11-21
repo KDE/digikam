@@ -198,7 +198,7 @@ void AlbumLister::refresh()
     }
 
     d->itemMap.clear();
-    for (ImageInfoList::const_iterator it = d->itemList.begin(); it != d->itemList.end(); ++it)
+    for (ImageInfoList::const_iterator it = d->itemList.constBegin(); it != d->itemList.constEnd(); ++it)
     {
         d->itemMap.insert(it->id(), *it);
     }
@@ -245,7 +245,7 @@ void AlbumLister::setDayFilter(const QList<QDateTime>& days)
 {
     d->dayFilter.clear();
 
-    for (QList<QDateTime>::const_iterator it = days.begin(); it != days.end(); ++it)
+    for (QList<QDateTime>::const_iterator it = days.constBegin(); it != days.constEnd(); ++it)
         d->dayFilter.insert(*it, true);
 
     d->filterTimer->setSingleShot(true);
@@ -466,7 +466,7 @@ bool AlbumLister::matchesFilter(const ImageInfo &info, bool &foundText)
         if (settings->getIconShowTags())
         {
             QStringList tags = AlbumManager::instance()->tagNames(info.tagIds());
-            for (QStringList::const_iterator it = tags.begin() ; it != tags.end() ; ++it)
+            for (QStringList::const_iterator it = tags.constBegin() ; it != tags.constEnd() ; ++it)
             {
                 if ((*it).contains(d->textFilter))
                     foundText = true;

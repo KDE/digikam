@@ -384,8 +384,8 @@ void ImagePreviewView::slotContextMenu()
     KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::instance();
     KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
 
-    for (KIPI::PluginLoader::PluginList::const_iterator it = pluginList.begin();
-        it != pluginList.end(); ++it)
+    for (KIPI::PluginLoader::PluginList::const_iterator it = pluginList.constBegin();
+        it != pluginList.constEnd(); ++it)
     {
         KIPI::Plugin* plugin = (*it)->plugin();
 
@@ -395,8 +395,8 @@ void ImagePreviewView::slotContextMenu()
 
             QList<KAction*> actionList = plugin->actions();
 
-            for (QList<KAction*>::const_iterator iter = actionList.begin();
-                iter != actionList.end(); ++iter)
+            for (QList<KAction*>::const_iterator iter = actionList.constBegin();
+                iter != actionList.constEnd(); ++iter)
             {
                 KAction* action = *iter;
 

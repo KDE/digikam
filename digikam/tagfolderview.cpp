@@ -253,7 +253,7 @@ void TagFolderView::slotTextTagFilterChanged(const QString& filter)
     bool atleastOneMatch = false;
 
     AlbumList tList = d->albumMan->allTAlbums();
-    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    for (AlbumList::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)
     {
         TAlbum* talbum  = (TAlbum*)(*it);
 
@@ -478,7 +478,7 @@ void TagFolderView::slotThumbnailLost(Album *)
 void TagFolderView::slotReloadThumbnails()
 {
     AlbumList tList = d->albumMan->allTAlbums();
-    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    for (AlbumList::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)
     {
         TAlbum* tag  = (TAlbum*)(*it);
         setTagThumbnail(tag);
@@ -599,7 +599,7 @@ void TagFolderView::slotABCContextMenu()
     }
     qSort(names);
 
-    for ( QStringList::Iterator it = names.begin(); it != names.end(); ++it )
+    for ( QStringList::ConstIterator it = names.constBegin(); it != names.constEnd(); ++it )
     {
         QString name = *it;
         if (!name.isNull() )
@@ -641,7 +641,7 @@ void TagFolderView::tagNew( TagFolderViewItem *item, const QString& _title, cons
     AlbumList tList = TagEditDlg::createTAlbum(parent, title, icon, errMap);
     TagEditDlg::showtagsListCreationError(kapp->activeWindow(), errMap);
 
-    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    for (AlbumList::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)
     {
         TagFolderViewItem* item = (TagFolderViewItem*)(*it)->extraData(this);
         if (item)
@@ -962,7 +962,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             DatabaseTransaction transaction;
             MetadataHub         hub;
 
-            for (QList<int>::const_iterator it = imageIDs.begin(); it != imageIDs.end(); ++it)
+            for (QList<int>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
             {
                 // create temporary ImageInfo object
                 ImageInfo info(*it);
@@ -1023,7 +1023,7 @@ void TagFolderView::slotRefresh(const QMap<int, int>& tagsStatMap)
             {
                 int id = item->id();
                 QMap<int, int>::const_iterator it2 = tagsStatMap.find(id);
-                if ( it2 != tagsStatMap.end() )
+                if ( it2 != tagsStatMap.constEnd() )
                     item->setCount(it2.value());
             }
         }

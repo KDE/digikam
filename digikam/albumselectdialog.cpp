@@ -172,7 +172,7 @@ void AlbumSelectDialog::populateTreeView(PAlbum *albumToSelect)
 {
     AlbumList aList = AlbumManager::instance()->allPAlbums();
 
-    for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
+    for (AlbumList::const_iterator it = aList.constBegin(); it != aList.constEnd(); ++it)
     {
         Album *album        = *it;
         TreeAlbumItem *item = 0;

@@ -232,8 +232,8 @@ void AlbumHistory::getBackwardHistory(QStringList &list) const
     if(m_backwardStack->isEmpty())
         return;
 
-    AlbumStack::const_iterator iter = m_backwardStack->begin();
-    for(; iter != (m_backwardStack->isEmpty() ? m_backwardStack->end() : --m_backwardStack->end()); ++iter)
+    AlbumStack::const_iterator iter = m_backwardStack->constBegin();
+    for(; iter != (m_backwardStack->isEmpty() ? m_backwardStack->constEnd() : --m_backwardStack->constEnd()); ++iter)
     {
         list.push_front((*iter)->album->title());
     }
@@ -245,7 +245,7 @@ void AlbumHistory::getForwardHistory(QStringList &list) const
         return;
 
     AlbumStack::const_iterator iter;
-    for(iter = m_forwardStack->begin(); iter != m_forwardStack->end(); ++iter)
+    for(iter = m_forwardStack->constBegin(); iter != m_forwardStack->constEnd(); ++iter)
     {
         list.append((*iter)->album->title());
     }
