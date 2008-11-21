@@ -154,6 +154,14 @@ QPixmap SyncJob::getTagThumbnailPriv(TAlbum *album)
 
     AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
 
+    connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
+            this, SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)),
+            Qt::QueuedConnection);
+
+    connect(loader, SIGNAL(signalFailed(Album *)),
+            this, SLOT(slotLoadThumbnailFailed(Album *)),
+            Qt::QueuedConnection);
+
     if (!loader->getTagThumbnail(album, *d->thumbnail))
     {
         if (d->thumbnail->isNull())
@@ -167,12 +175,6 @@ QPixmap SyncJob::getTagThumbnailPriv(TAlbum *album)
     }
     else
     {
-        connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
-                this, SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)));
-
-        connect(loader, SIGNAL(signalFailed(Album *)),
-                this, SLOT(slotLoadThumbnailFailed(Album *)));
-
         d->album = album;
         enterWaitingLoop();
     }
