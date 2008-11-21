@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "imagedialog.h"
 #include "imagedialog.moc"
 
@@ -92,6 +91,7 @@ ImageDialogPreview::ImageDialogPreview(QWidget *parent)
     d->imageLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 
     d->infoLabel = new QLabel(this);
+    d->infoLabel->setAlignment(Qt::AlignCenter);
 
     vlay->setMargin(0);
     vlay->setSpacing(KDialog::spacingHint());
@@ -144,7 +144,7 @@ void ImageDialogPreview::showPreview(const KUrl& url)
         PhotoInfoContainer info = d->metaIface.getPhotographInformations();
         if (!info.isEmpty())
         {
-            QString identify;
+            QString identify("<qt><center>");
             QString make, model, dateTime, aperture, focalLength, exposureTime, sensitivity;
             QString unavailable(i18n("<i>unavailable</i>"));
             QString cellBeg("<tr><td><nobr><font size=-1>");
@@ -172,7 +172,7 @@ void ImageDialogPreview::showPreview(const KUrl& url)
             if (info.sensitivity.isEmpty()) sensitivity = unavailable;
             else sensitivity = i18n("%1 ISO", info.sensitivity);
 
-            identify = "<table cellspacing=0 cellpadding=0>";
+            identify += "<table cellspacing=0 cellpadding=0>";
             identify += cellBeg + i18n("Make:")        + cellMid + make         + cellEnd;
             identify += cellBeg + i18n("Model:")       + cellMid + model        + cellEnd;
             identify += cellBeg + i18n("Created:")     + cellMid + dateTime     + cellEnd;
@@ -180,12 +180,14 @@ void ImageDialogPreview::showPreview(const KUrl& url)
             identify += cellBeg + i18n("Focal:")       + cellMid + focalLength  + cellEnd;
             identify += cellBeg + i18n("Exposure:")    + cellMid + exposureTime + cellEnd;
             identify += cellBeg + i18n("Sensitivity:") + cellMid + sensitivity  + cellEnd;
-            identify += "</table>";
+            identify += "</table></center></qt>";
 
             d->infoLabel->setText(identify);
         }
         else
+        {
             d->infoLabel->clear();
+        }
     }
 }
 
