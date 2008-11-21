@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "themediconview.h"
 #include "themediconview.moc"
 
@@ -39,25 +38,25 @@ class ThemedIconViewPriv
 {
 public:
 
-    int   thumbSize;
+    int     thumbSize;
 
-    QRect itemRect;
-    QRect itemDateRect;
-    QRect itemPixmapRect;
-    QRect itemNameRect;
-    QRect itemCommentsRect;
-    QRect itemResolutionRect;
-    QRect itemSizeRect;
-    QRect itemTagRect;
-    QRect bannerRect;
+    QRect   itemRect;
+    QRect   itemDateRect;
+    QRect   itemPixmapRect;
+    QRect   itemNameRect;
+    QRect   itemCommentsRect;
+    QRect   itemResolutionRect;
+    QRect   itemSizeRect;
+    QRect   itemTagRect;
+    QRect   bannerRect;
 
     QPixmap itemRegPixmap;
     QPixmap itemSelPixmap;
     QPixmap bannerPixmap;
 
-    QFont fnReg;
-    QFont fnCom;
-    QFont fnXtra;
+    QFont   fnReg;
+    QFont   fnCom;
+    QFont   fnXtra;
 };
 
 ThemedIconView::ThemedIconView(QWidget* parent)
@@ -219,19 +218,19 @@ void ThemedIconView::updateBannerRectPixmap()
     d->bannerRect.setWidth(frameRect().width());
 
     d->bannerPixmap = ThemeEngine::instance()->bannerPixmap(d->bannerRect.width(),
-                                                                 d->bannerRect.height());
+                                                            d->bannerRect.height());
 }
 
 void ThemedIconView::updateItemRectsPixmap()
 {
-    d->itemRect = QRect(0,0,0,0);
-    d->itemDateRect = QRect(0,0,0,0);
-    d->itemPixmapRect = QRect(0,0,0,0);
-    d->itemNameRect = QRect(0,0,0,0);
-    d->itemCommentsRect = QRect(0,0,0,0);
-    d->itemResolutionRect = QRect(0,0,0,0);
-    d->itemSizeRect = QRect(0,0,0,0);
-    d->itemTagRect = QRect(0,0,0,0);
+    d->itemRect           = QRect(0, 0, 0, 0);
+    d->itemDateRect       = QRect(0, 0, 0, 0);
+    d->itemPixmapRect     = QRect(0, 0, 0, 0);
+    d->itemNameRect       = QRect(0, 0, 0, 0);
+    d->itemCommentsRect   = QRect(0, 0, 0, 0);
+    d->itemResolutionRect = QRect(0, 0, 0, 0);
+    d->itemSizeRect       = QRect(0, 0, 0, 0);
+    d->itemTagRect        = QRect(0, 0, 0, 0);
 
     d->fnReg  = font();
     d->fnCom  = font();

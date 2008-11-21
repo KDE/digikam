@@ -41,7 +41,7 @@ public:
 
 protected:
 
-    void paintItem();
+    void paintItem(QPainter*);
 };
 
 }  // namespace Digikam

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "themediconitem.h"
 
 // Qt includes.
@@ -118,7 +117,7 @@ ThemedIconItem::~ThemedIconItem()
 {
 }
 
-void ThemedIconItem::paintItem()
+void ThemedIconItem::paintItem(QPainter* p2)
 {
     ThemedIconView* view = (ThemedIconView*)iconView();
 
@@ -189,9 +188,7 @@ void ThemedIconItem::paintItem()
     r = QRect(view->contentsToViewport(QPoint(r.x(), r.y())),
               QSize(r.width(), r.height()));
 
-    QPainter p2(view->viewport());
-    p2.drawPixmap(r.x(), r.y(), pix, 0, 0, r.width(), r.height());
-    p2.end();
+    p2->drawPixmap(r.x(), r.y(), pix, 0, 0, r.width(), r.height());
 }
 
 }  // namespace Digikam

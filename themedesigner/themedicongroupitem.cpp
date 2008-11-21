@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "themedicongroupitem.h"
 
 // Qt includes.
@@ -51,7 +50,7 @@ ThemedIconGroupItem::~ThemedIconGroupItem()
 {
 }
 
-void ThemedIconGroupItem::paintBanner()
+void ThemedIconGroupItem::paintBanner(QPainter *p2)
 {
     QRect r(0, 0, rect().width(), rect().height());
 
@@ -101,9 +100,7 @@ void ThemedIconGroupItem::paintBanner()
     r = QRect(iconView()->contentsToViewport(QPoint(r.x(), r.y())),
               QSize(r.width(), r.height()));
 
-    QPainter p2(iconView()->viewport());
-    p2.drawPixmap(r.x(), r.y(), pix, 0, 0, r.width(), r.height());
-    p2.end();
+    p2->drawPixmap(r.x(), r.y(), pix, 0, 0, r.width(), r.height());
 }
 
 }  // namespace Digikam
