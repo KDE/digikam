@@ -598,7 +598,7 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list,
 #endif
 
     d->barView->blockSignals(true);
-    for (ImageInfoList::const_iterator it = l.begin(); it != l.end(); ++it)
+    for (ImageInfoList::const_iterator it = l.constBegin(); it != l.constEnd(); ++it)
     {
         QString fileExtension = (*it).fileUrl().fileName().section( '.', -1 );
 
@@ -643,7 +643,7 @@ void LightTableWindow::slotItemsUpdated(const KUrl::List& urls)
 {
     d->barView->refreshThumbs(urls);
 
-    for (KUrl::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
+    for (KUrl::List::const_iterator it = urls.constBegin() ; it != urls.constEnd() ; ++it)
     {
         if (!d->previewView->leftImageInfo().isNull())
         {

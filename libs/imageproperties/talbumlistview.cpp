@@ -389,7 +389,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
             ScanController::instance()->suspendCollectionScan();
             MetadataHub         hub;
 
-            for (QList<int>::const_iterator it = imageIDs.begin(); it != imageIDs.end(); ++it)
+            for (QList<int>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
             {
                 // create temporary ImageInfo object
                 ImageInfo info(*it);

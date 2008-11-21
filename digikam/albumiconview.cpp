@@ -377,7 +377,7 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
     if (!d->currentAlbum || d->currentAlbum->isRoot())
         return;
 
-    for (ImageInfoList::const_iterator it = itemList.begin(); it != itemList.end(); ++it)
+    for (ImageInfoList::const_iterator it = itemList.constBegin(); it != itemList.constEnd(); ++it)
     {
         KUrl url( it->fileUrl() );
         url.cleanPath();
@@ -445,7 +445,7 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
 void AlbumIconView::slotImageListerDeleteItem(const ImageInfo &item)
 {
     QHash<ImageInfo, AlbumIconItem*>::iterator itMap = d->itemInfoMap.find(item);
-    if (itMap == d->itemInfoMap.end())
+    if (itMap == d->itemInfoMap.constEnd())
         return;
 
     AlbumIconItem* iconItem = (*itMap);
@@ -556,7 +556,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     KMenu openWithMenu;
 
-    for( iter = offers.begin(); iter != offers.end(); ++iter )
+    for( iter = offers.constBegin(); iter != offers.constEnd(); ++iter )
     {
         ptr = *iter;
         QAction *serviceAction = openWithMenu.addAction(SmallIcon(ptr->icon()), ptr->name());
@@ -638,8 +638,8 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::instance();
     KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
 
-    for (KIPI::PluginLoader::PluginList::const_iterator it = pluginList.begin();
-         it != pluginList.end(); ++it)
+    for (KIPI::PluginLoader::PluginList::const_iterator it = pluginList.constBegin();
+         it != pluginList.constEnd(); ++it)
     {
         KIPI::Plugin* plugin = (*it)->plugin();
 
@@ -649,8 +649,8 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
             QList<KAction*> actionList = plugin->actions();
 
-            for (QList<KAction*>::const_iterator iter = actionList.begin();
-                iter != actionList.end(); ++iter)
+            for (QList<KAction*>::const_iterator iter = actionList.constBegin();
+                iter != actionList.constEnd(); ++iter)
             {
                 KAction* action = *iter;
 
@@ -883,7 +883,7 @@ void AlbumIconView::slotPaste()
             // Check if items dropped come from outside current album.
             KUrl::List extUrls;
             QList<qlonglong> extImageIDs;
-            for (QList<int>::iterator it = imageIDs.begin(); it != imageIDs.end(); ++it)
+            for (QList<int>::ConstIterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
             {
                 ImageInfo info(*it);
                 if (info.albumId() != album->id())
@@ -935,8 +935,8 @@ void AlbumIconView::slotPaste()
             return;
 
         ImageInfoList list;
-        for (QList<int>::const_iterator it = imageIDs.begin();
-             it != imageIDs.end(); ++it)
+        for (QList<int>::const_iterator it = imageIDs.constBegin();
+             it != imageIDs.constEnd(); ++it)
         {
             ImageInfo info(*it);
             list.append(info);
@@ -1647,7 +1647,7 @@ void AlbumIconView::changeTagOnImageInfos(const ImageInfoList &list, const QList
 
         hub.load(info);
 
-        for (QList<int>::const_iterator tagIt = tagIDs.begin(); tagIt != tagIDs.end(); ++tagIt)
+        for (QList<int>::const_iterator tagIt = tagIDs.constBegin(); tagIt != tagIDs.constEnd(); ++tagIt)
         {
             hub.setTag(*tagIt, addOrRemove);
         }
@@ -1786,8 +1786,8 @@ void AlbumIconView::refreshItems(const KUrl::List& urlList)
     // 1. refresh the imageinfo for the file
     // 2. refresh the thumbnails
 
-    for (KUrl::List::const_iterator it = urlList.begin();
-         it != urlList.end(); ++it)
+    for (KUrl::List::const_iterator it = urlList.constBegin();
+         it != urlList.constEnd(); ++it)
     {
         AlbumIconItem* iconItem = findItem((*it).url());
         if (!iconItem)

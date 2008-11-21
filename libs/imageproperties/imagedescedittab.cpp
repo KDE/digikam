@@ -1536,8 +1536,8 @@ void ImageDescEditTab::updateRecentTags()
     }
     else
     {
-        for (AlbumList::const_iterator it = recentTags.begin();
-             it != recentTags.end(); ++it)
+        for (AlbumList::const_iterator it = recentTags.constBegin();
+             it != recentTags.constEnd(); ++it)
         {
             TAlbum* album = static_cast<TAlbum*>(*it);
             if (album)

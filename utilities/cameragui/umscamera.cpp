@@ -285,10 +285,10 @@ bool UMSCamera::loadKDEThumbCreator(const QString& folder, const QString& itemNa
     QString plugin;
 
     KService::List plugins = KServiceTypeTrader::self()->query("ThumbCreator");
-    for (KService::List::ConstIterator it = plugins.begin(); it != plugins.end(); ++it)
+    for (KService::List::ConstIterator it = plugins.constBegin(); it != plugins.constEnd(); ++it)
     {
         QStringList mimeTypes = (*it)->property("MimeTypes").toStringList();
-        for (QStringList::ConstIterator mt = mimeTypes.begin(); mt != mimeTypes.end(); ++mt)
+        for (QStringList::ConstIterator mt = mimeTypes.constBegin(); mt != mimeTypes.constEnd(); ++mt)
         {
             if  ((*mt) == mimeType || (*mt) == mimeTypeAlt)
             {

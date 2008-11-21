@@ -323,7 +323,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         else if (tab == m_gpsTab && !m_dirtyGpsTab)
         {
             GPSInfoList list;
-            for (ImageInfoList::const_iterator it = d->currentInfos.begin(); it != d->currentInfos.end(); ++it)
+            for (ImageInfoList::const_iterator it = d->currentInfos.constBegin(); it != d->currentInfos.constEnd(); ++it)
             {
                 GPSInfo info;
                 info.latitude  = (*it).imagePosition().latitudeNumber();

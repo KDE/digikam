@@ -562,8 +562,8 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
     {
         ImageInfoList imageInfoList;
 
-        for (QList<int>::const_iterator it = imageIDs.begin();
-             it != imageIDs.end(); ++it)
+        for (QList<int>::const_iterator it = imageIDs.constBegin();
+             it != imageIDs.constEnd(); ++it)
         {
             ImageInfo info(*it);
             if (!findItemByInfo(info))
@@ -580,8 +580,8 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
         QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
         ImageInfoList imageInfoList;
 
-        for (QList<qlonglong>::const_iterator it = itemIDs.begin();
-             it != itemIDs.end(); ++it)
+        for (QList<qlonglong>::const_iterator it = itemIDs.constBegin();
+             it != itemIDs.constEnd(); ++it)
         {
             ImageInfo info(*it);
             if (!findItemByInfo(info))
@@ -602,8 +602,8 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
         QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
         ImageInfoList imageInfoList;
 
-        for (QList<qlonglong>::const_iterator it = itemIDs.begin();
-             it != itemIDs.end(); ++it)
+        for (QList<qlonglong>::const_iterator it = itemIDs.constBegin();
+             it != itemIDs.constEnd(); ++it)
         {
             ImageInfo info(*it);
             if (!findItemByInfo(info))

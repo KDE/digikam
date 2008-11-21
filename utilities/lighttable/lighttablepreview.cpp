@@ -368,7 +368,7 @@ void LightTablePreview::slotContextMenu()
 
     QMenu openWithMenu;
 
-    for( iter = offers.begin(); iter != offers.end(); ++iter )
+    for( iter = offers.constBegin(); iter != offers.constEnd(); ++iter )
     {
         ptr = *iter;
         QAction *serviceAction = openWithMenu.addAction(SmallIcon(ptr->icon()), ptr->name());
@@ -696,8 +696,8 @@ void LightTablePreview::contentsDropEvent(QDropEvent *e)
 
         if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
         {
-            for (QList<int>::const_iterator it = imageIDs.begin();
-                 it != imageIDs.end(); ++it)
+            for (QList<int>::const_iterator it = imageIDs.constBegin();
+                 it != imageIDs.constEnd(); ++it)
             {
                 list << ImageInfo(*it);
             }
@@ -710,8 +710,8 @@ void LightTablePreview::contentsDropEvent(QDropEvent *e)
         {
             QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
 
-            for (QList<qlonglong>::const_iterator it = itemIDs.begin();
-                it != itemIDs.end(); ++it)
+            for (QList<qlonglong>::const_iterator it = itemIDs.constBegin();
+                it != itemIDs.constEnd(); ++it)
             {
                 list << ImageInfo(*it);
             }
@@ -729,8 +729,8 @@ void LightTablePreview::contentsDropEvent(QDropEvent *e)
             QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
             ImageInfoList imageInfoList;
 
-            for (QList<qlonglong>::const_iterator it = itemIDs.begin();
-                it != itemIDs.end(); ++it)
+            for (QList<qlonglong>::const_iterator it = itemIDs.constBegin();
+                it != itemIDs.constEnd(); ++it)
             {
                 list << ImageInfo(*it);
             }
