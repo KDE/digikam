@@ -79,8 +79,8 @@ HotPixelFixer::~HotPixelFixer()
 void HotPixelFixer::filterImage()
 {
     QList <HotPixel>::ConstIterator it;
-    QList <HotPixel>::ConstIterator end(m_hpList.end());
-    for (it = m_hpList.begin() ; it != end ; ++it)
+    QList <HotPixel>::ConstIterator end(m_hpList.constEnd());
+    for (it = m_hpList.constBegin() ; it != end ; ++it)
     {
         HotPixel hp = *it;
         interpolate(m_orgImage, hp, m_interpolationMethod);

@@ -297,8 +297,8 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     // -- Load current items ---------------------------
 
-    for (KUrl::List::const_iterator it = urlList.begin();
-         it != urlList.end(); ++it)
+    for (KUrl::List::const_iterator it = urlList.constBegin();
+         it != urlList.constEnd(); ++it)
     {
         KUrl url = *it;
         if (url.isLocalFile())
@@ -608,8 +608,8 @@ void ShowFoto::slotOpenFile()
         d->currentItem = 0;
         d->thumbBar->clear();
 
-        for (KUrl::List::const_iterator it = urls.begin();
-             it != urls.end(); ++it)
+        for (KUrl::List::const_iterator it = urls.constBegin();
+             it != urls.constEnd(); ++it)
         {
             new Digikam::ThumbBarItem(d->thumbBar, *it);
             d->lastOpenedDirectory=(*it);
@@ -809,7 +809,7 @@ void ShowFoto::openFolder(const KUrl& url)
     QStringList mimeTypes = KImageIO::mimeTypes(KImageIO::Reading);
     QString filter;
 
-    for (QStringList::ConstIterator it = mimeTypes.begin() ; it != mimeTypes.end() ; ++it)
+    for (QStringList::ConstIterator it = mimeTypes.constBegin() ; it != mimeTypes.constEnd() ; ++it)
     {
         QString format = KImageIO::typeForMime(*it)[0].toUpper();
         filter.append ("*.");
@@ -1176,8 +1176,8 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
     m_nameLabel->progressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode,
                                  i18n("Preparing slideshow. Please wait..."));
 
-    for (KUrl::List::Iterator it = settings.fileList.begin() ;
-         !m_cancelSlideShow && (it != settings.fileList.end()) ; ++it)
+    for (KUrl::List::ConstIterator it = settings.fileList.constBegin() ;
+         !m_cancelSlideShow && (it != settings.fileList.constEnd()) ; ++it)
     {
         Digikam::SlidePictureInfo pictInfo;
         meta.load((*it).path());
