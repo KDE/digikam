@@ -633,14 +633,14 @@ CollectionLocation CollectionManager::addLocation(const KUrl &fileUrl, const QSt
     }
     else
     {
-        // Volumes should never be empty. We refuse fall back here, because then a database with a file path
-        // location will be created and requires manual work to be converted to a proper uuid based one.
-        // If any of our platforms does not provide a Solid backend, we must use the fallback then anyway.
+        // Empty volumes indicates that Solid is not working correctly.
         if (volumes.isEmpty())
         {
             kError(50003) << "Solid did not return any storage volumes on your system.";
-            kError(50003) << "This indicates a problem with your installation (on Linux: Solid and HAL)";
-            return CollectionLocation();
+            kError(50003) << "This indicates a missing implementation or a problem with your installation";
+            kError(50003) << "On Linux, check that Solid and HAL are working correctly."
+                             "Problems with RAID partitions have been reported, if you have RAID this error may be normal.";
+            kError(50003) << "On Windows, Solid may not be fully implemented, if you are running Windows this error may be normal.";
         }
         // fall back
         kWarning(50003) << "Unable to identify a path with Solid. Adding the location with path only.";
@@ -786,8 +786,9 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
     else
     {
         if (message)
-            *message = i18n("There is a problem identifying the storage media of this path. "
-                            "It will be added using the file path as the only identifier");
+            *message = i18n("It is not possible on your system to identify the storage media of this path. "
+                            "It will be added using the file path as the only identifier."
+                            "This will work well for your local hard disk.");
                 if (iconName)
                     *iconName = "folder-important";
         return LocationHasProblems;
