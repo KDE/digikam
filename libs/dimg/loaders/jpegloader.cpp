@@ -56,6 +56,10 @@ extern "C"
 #include "dimgloaderobserver.h"
 #include "jpegloader.h"
 
+#ifdef Q_CC_MSVC
+#include "jpegwin.h"
+#endif
+
 namespace Digikam
 {
 
@@ -129,7 +133,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         return false;
     }
 
-    fseek(file, 0L, SEEK_SET);
+    rewind(file);
 
     struct jpeg_decompress_struct cinfo;
     struct dimg_jpeg_error_mgr    jerr;
@@ -162,7 +166,21 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // Set JPEG decompressor instance
 
     jpeg_create_decompress(&cinfo);
+
+#ifdef Q_CC_MSVC
+    QFile inFile(filePath);
+    QByteArray buffer;
+    if(inFile.open(QIODevice::ReadOnly)) {
+        while(!inFile.atEnd()) {
+            buffer += inFile.readLine();
+        }
+        inFile.close();
+    }
+
+    jpeg_memory_src(&cinfo, (JOCTET*)buffer.data(), buffer.size());
+#else
     jpeg_stdio_src(&cinfo, file);
+#endif
 
     // Recording ICC profile marker (from iccjpeg.c)
     if (m_loadFlags & LoadICCData)

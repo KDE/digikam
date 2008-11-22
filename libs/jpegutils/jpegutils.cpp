@@ -63,6 +63,10 @@ extern "C"
 #include "dmetadata.h"
 #include "transupp.h"
 
+#ifdef Q_CC_MSVC
+#include "jpegwin.h"
+#endif
+
 namespace Digikam
 {
 
@@ -139,7 +143,20 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
     }
 
     jpeg_create_decompress(&cinfo);
+#ifdef Q_CC_MSVC
+    QFile inFile(path);
+    QByteArray buffer;
+    if(inFile.open(QIODevice::ReadOnly)) {
+        while(!inFile.atEnd()) {
+            buffer += inFile.readLine();
+        }
+        inFile.close();
+    }
+
+    jpeg_memory_src(&cinfo, (JOCTET*)buffer.data(), buffer.size());
+#else
     jpeg_stdio_src(&cinfo, inputFile);
+#endif
     jpeg_read_header(&cinfo, true);
 
     int imgSize = qMax(cinfo.image_width, cinfo.image_height);
