@@ -136,7 +136,7 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
     m_redGain->setWhatsThis(i18n("Select the red color gain in percent for "
                                  "the current channel here."));
 
-    QLabel *blueLabel = new QLabel(i18n("Blue:"), m_gboxSettings->plainPage());
+    QLabel *greenLabel = new QLabel(i18n("Green:"), m_gboxSettings->plainPage());
     m_greenGain = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_greenGain->setDecimals(0);
     m_greenGain->setRange(-200.0, 200.0, 1);
@@ -144,7 +144,7 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
     m_greenGain->setWhatsThis(i18n("Select the green color gain in percent "
                                    "for the current channel here."));
 
-    QLabel *greenLabel = new QLabel(i18n("Green:"), m_gboxSettings->plainPage());
+    QLabel *blueLabel = new QLabel(i18n("Blue:"), m_gboxSettings->plainPage());
     m_blueGain = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_blueGain->setDecimals(0);
     m_blueGain->setRange(-200.0, 200.0, 1);
