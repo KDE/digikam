@@ -1560,7 +1560,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     if (!newURL.isValid())
     {
-        KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to\n\"%2\".",
+        KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".",
                                       newURL.fileName(),
                                       newURL.path().section('/', -2, -2)));
         kWarning(50003) << "target URL is not valid !" << endl;
