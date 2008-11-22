@@ -1627,19 +1627,25 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
             const char *model_str, *port_str;
             if (count > 0)
             {
-                gp_list_get_name(camList, i, &model_str);
-                gp_list_get_value(camList, i, &port_str);
+                if (count > 1)
+                {
+                    kWarning(50003) << "More than one camera detected on port " << port
+                                    << ". Due to restrictions in the GPhoto2 API, "
+                                    << "only the first camera is used." << endl;
+                }
 
-                model = QString::fromLatin1(model_str);
-                port  = QString::fromLatin1(port_str);
+                if (gp_list_get_name(camList, 0, &model_str) == GP_OK
+                    && gp_list_get_value(camList, 0, &port_str) == GP_OK)
+                {
+                    model = QString::fromLatin1(model_str);
+                    port  = QString::fromLatin1(port_str);
 
-                success = true;
-            }
-            if (count > 1)
-            {
-                kWarning(50003) << "More than one camera detected on port " << port
-                                << ". Due to restrictions in the GPhoto2 API, "
-                                << "only the first camera is used." << endl;
+                    success = true;
+                }
+                else
+                {
+                    kError(50003) << "Failed to get information for the listed camera";
+                }
             }
 
             gp_abilities_list_free( abilList );
