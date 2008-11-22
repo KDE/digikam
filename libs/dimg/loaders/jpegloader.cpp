@@ -171,9 +171,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     QFile inFile(filePath);
     QByteArray buffer;
     if(inFile.open(QIODevice::ReadOnly)) {
-        while(!inFile.atEnd()) {
-            buffer += inFile.readLine();
-        }
+        buffer = inFile.readAll();
         inFile.close();
     }
 

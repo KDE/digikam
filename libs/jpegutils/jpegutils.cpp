@@ -147,9 +147,7 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
     QFile inFile(path);
     QByteArray buffer;
     if(inFile.open(QIODevice::ReadOnly)) {
-        while(!inFile.atEnd()) {
-            buffer += inFile.readLine();
-        }
+        buffer = inFile.readAll();
         inFile.close();
     }
 
