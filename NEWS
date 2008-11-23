@@ -30,7 +30,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 175662 : USB camera transfer hangs and works only the second time tried.
 018 ==> 174991 : digiKam freezes when generating new tag.
 019 ==> 171414 : Crash (with SIGSEV) when closing the application.
-020 ==> 
+020 ==> 175597 : Crash when trying to access usb cam (autodetected).
+021 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta5 - Release date: 2008-10-26
