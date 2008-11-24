@@ -66,15 +66,21 @@ static inline void authorsRegistration(KAboutData& aboutData)
                           "marcel dot wiesweg at gmx dot de",
                           "http://www.digikam.org/?q=blog/8");
 
+    aboutData.addAuthor ( ki18n("Andi Clemens"),
+                          ki18n("Developer"),
+                          "andi dot clemens at gmx dot net",
+                          "http://www.digikam.org/?q=blog/135");
+
+    aboutData.addAuthor ( ki18n("Patrick Spendrin"),
+                          ki18n("Developer and Windows port"),
+                          "patrick_spendrin at gmx dot de",
+                          "http://saroengels.blogspot.com");
+
     aboutData.addAuthor ( ki18n("Arnd Baecker"),
                           ki18n("Developer"),
                           "arnd dot baecker at web dot de",
                           "http://www.digikam.org/?q=blog/133");
 
-    aboutData.addAuthor ( ki18n("Andi Clemens"),
-                          ki18n("Developer"),
-                          "andi dot clemens at gmx dot net",
-                          "http://www.digikam.org/?q=blog/135");
 
     aboutData.addAuthor ( ki18n("Francisco J. Cruz"),
                           ki18n("Developer"),
