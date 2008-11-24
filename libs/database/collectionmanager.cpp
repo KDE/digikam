@@ -1129,7 +1129,7 @@ void CollectionManager::updateLocations()
 
                 if (!info.isNull())
                 {
-                    available = volume.isMounted;
+                    available = info.isMounted;
                     QString volumePath = info.path;
                     // volume.path has a trailing slash (and this is good)
                     // but specific path has a leading slash, so remove it
