@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-$version="1.6.1";
+$version="1.6.2";
 # Author: Rainer Krienke, krienke@uni-koblenz.de
 #
 # Description:
@@ -38,6 +38,9 @@ $version="1.6.1";
 # 1.6-> 1.6.1 2006/08/15
 # Added an option (-C) for archive mode (-A). Added more information to 
 # the manual page.
+# 1.6.1-> 1.6.2 2008/11/24 (Peter Muehlenpfordt, muehlenp@gmx.de)
+# Bug fix, subtags with the same name in different branches were merged
+# into one directory.
 #
 
 # ---------------------------------------------------------------------------
@@ -55,8 +58,8 @@ $version="1.6.1";
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.
+# Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA
+# 02111-1307, USA.
 #
 # ---------------------------------------------------------------------------
 
@@ -146,16 +149,19 @@ sub getTaggedImages{
       # would be the path "people/friends".  Images with tag friends would then be
       # linked in the directory <tagsroot>/people/friends/
       for($i=0; $i<=$#tags; $i++){
-         next if( $tags[$i]->{"pid"} == 0 );
 	 $pid=$tags[$i]->{"pid"};   # Get parent tag id of current tag
 	 $tag=$tags[$i]->{"tag"};   # Start constructing tag path
+         if( $pid == 0 ){
+             $tagPath{$i}=$tag;
+             next;
+         }
 	 
 	 while( $pid != 0){
 	    $tag=$tags[$pid]->{"tag"} . "/$tag"; # add parents tag name to path
 	    $pid=$tags[$pid]->{"pid"};           # look if parent has another parent
 	 }
 	 # Store path constructed
-	 $tagPath{$tags[$i]->{"tag"}}=$tag;
+	 $tagPath{$i}=$tag;
 	 #warn "+ $tag \n";
       } 
    }else{
@@ -165,16 +171,15 @@ sub getTaggedImages{
    
    if( $vers==7 ){
       # SQL to get all tagged images from digikam DB with names of tags 
-      $sqliteCmd="\"select ImageTags.name,Albums.Url,Tags.name from " . 
+      $sqliteCmd="\"select ImageTags.name,Albums.Url,ImageTags.tagid from " . 
            " ImageTags, Albums,Tags  " .
-	   " where Albums.id = ImageTags.dirid AND ImageTags.tagid = Tags.id; \"";
+	   " where Albums.id = ImageTags.dirid; \"";
    
    }elsif( $vers == 8 ){
       # SQL to get all tagged images from digikam DB with names of tags 
-      $sqliteCmd="\"select Images.name,Albums.url,tags.name from"            .
-               " Images,Albums,ImageTags,tags where "                        .
-	       " Images.dirid=Albums.id AND Images.id=ImageTags.imageid AND" .
-	       " ImageTags.tagid=tags.id; \"";
+      $sqliteCmd="\"select Images.name,Albums.url,ImageTags.tagid from"            .
+               " Images,Albums,ImageTags where "                        .
+	       " Images.dirid=Albums.id AND Images.id=ImageTags.imageid; \"";
    }else{
    	warn "Unsupported digikam database version. Contact $scriptAuthor \n\n";
 	exit(1);
@@ -227,7 +232,7 @@ sub createLinkTree{
     my($photoRootDir, $linktreeRootDir, $opt_flat, $opt_absolute, $linkMode)=@_;
     my( $i, $j, $cmd, $path, $image, $tag, $qpath, $qtag, $qimage, $linkName, 
         $tmp, $ret, $sourceDir, $destDir);
-    my($tagPath, $qtagPath, $relPath);
+    my($qtagPath, $relPath);
 
     if( -d "$linktreeRootDir" ){
     	# Remove old backuplinktree
@@ -264,9 +269,7 @@ sub createLinkTree{
 
         # Handle all of the tags for the current photo
 	for( $j=0;  $j<=$#{@{$refImages->{$i}->{"tag"}}}; $j++){	
-	   $tag=$refImages->{$i}->{"tag"}->[$j];
-	   #$qtag=quotemeta($tag);
-	   $tagPath=$refImages->{$i}->{"tagpath"}->[$j];
+	   $tag=$refImages->{$i}->{"tagpath"}->[$j];
 	   #$qtagPath=quotemeta($tagPath);
 
 	   # For tags that have subtags there is a path defined in qtagPath
@@ -274,9 +277,9 @@ sub createLinkTree{
 	   # If it is defined we want to use this path instead of the flat tag name like "brothers"
 	   # Doing so results in a directory hirachy that maps the tags parent relationships 
 	   # into the filesystem.
-	   if( !$opt_flat && length($tagPath) ){
-		   $tag=$tagPath;
-		   #$qtag=$qtagPath;
+	   if( $opt_flat ){
+	   	# For flat option just use the last subdirectory
+	   	$tag=~s/^.+\///;
 	   }
 	   # Create subdirectories needed
 	   if( ! -d "${linktreeRootDir}/$tag" ){
