@@ -5,8 +5,9 @@ NEW FEATURES:
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> Better support for small screens.
-002 ==> 
+001 ==> 164573 : Better support for small screens.
+002 ==> 175970 : digitaglinktree merges tags with same name in different subfolders.
+003 ==>
 
 **********************************************************************************************
 digiKam 0.9.5-beta1 - Release date: 2008-11-05
