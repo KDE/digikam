@@ -157,6 +157,8 @@ void DPopupMenu::setMaximumSize(int w, int h)
 
 void DPopupMenu::paintEvent(QPaintEvent* e)
 {
+    KMenu::paintEvent(e);
+
     {
         // scope for QPainter object
 
@@ -181,8 +183,6 @@ void DPopupMenu::paintEvent(QPaintEvent* e)
             p.drawImage(drawRect.topLeft(), s_dpopupmenu_sidePixmap, pixRect);
         }
     }
-
-    KMenu::paintEvent(e);
 }
 
 }  // namespace Digikam
