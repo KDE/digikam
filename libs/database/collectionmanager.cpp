@@ -152,6 +152,7 @@ public:
     QString label; // volume label (think of CDs)
     bool isRemovable; // may be removed
     bool isOpticalDisc;
+    bool isMounted;
 
     bool isNull() const { return path.isNull(); }
 };
@@ -319,7 +320,8 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
 
         SolidVolumeInfo info;
         info.path = access->filePath();
-        if (!info.path.endsWith('/'))
+        info.isMounted = access->isAccessible();
+        if (!info.path.isEmpty() && !info.path.endsWith('/'))
             info.path += '/';
         info.uuid = volume->uuid();
         info.label = volume->label();
@@ -491,7 +493,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
     {
         foreach (const SolidVolumeInfo &volume, volumes)
         {
-            if (volume.path == queryItem)
+            if (volume.isMounted && volume.path == queryItem)
                 return volume;
         }
         return SolidVolumeInfo();
@@ -510,7 +512,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl &url, cons
     // This is probably not really clean. But Solid does not help us.
     foreach (const SolidVolumeInfo &v, volumes)
     {
-        if (path.startsWith(v.path))
+        if (v.isMounted && !v.path.isEmpty() && path.startsWith(v.path))
         {
             int length = v.path.length();
             if (length > volumeMatch)
@@ -1127,7 +1129,7 @@ void CollectionManager::updateLocations()
 
                 if (!info.isNull())
                 {
-                    available = true;
+                    available = volume.isMounted;
                     QString volumePath = info.path;
                     // volume.path has a trailing slash (and this is good)
                     // but specific path has a leading slash, so remove it
