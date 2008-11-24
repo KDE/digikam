@@ -6,7 +6,7 @@
  * Date        : 2007-04-09
  * Description : Collection location management
  *
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "collectionmanager.h"
 
@@ -58,6 +57,7 @@ namespace Digikam
 
 class AlbumRootLocation : public CollectionLocation
 {
+
 public:
 
     AlbumRootLocation()
@@ -142,10 +142,11 @@ public:
     bool hidden;
 };
 
-
 class SolidVolumeInfo
 {
+
 public:
+
     QString path; // mount path of volume, with trailing slash
     QString uuid; // UUID as from Solid
     QString label; // volume label (think of CDs)
@@ -159,6 +160,7 @@ public:
 
 class CollectionManagerPrivate
 {
+
 public:
 
     CollectionManagerPrivate(CollectionManager *s);
@@ -213,7 +215,9 @@ public:
 
 class ChangingDB
 {
+
 public:
+
     ChangingDB(CollectionManagerPrivate *d) : d(d)
     {
         d->changingDB = true;
@@ -225,7 +229,7 @@ public:
     CollectionManagerPrivate *d;
 };
 
-}
+} // namespace Digikam
 
 // This is because of the private slot; we'd want a collectionmanager_p.h
 #include "collectionmanager.moc"
@@ -549,7 +553,6 @@ bool CollectionManagerPrivate::checkIfExists(const QString &filePath, QList<Coll
     return false;
 }
 
-
 // -------------------------------------------------
 
 CollectionManager *CollectionManager::m_instance = 0;
@@ -787,7 +790,7 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
     {
         if (message)
             *message = i18n("It is not possible on your system to identify the storage media of this path. "
-                            "It will be added using the file path as the only identifier."
+                            "It will be added using the file path as the only identifier. "
                             "This will work well for your local hard disk.");
                 if (iconName)
                     *iconName = "folder-important";
@@ -1209,6 +1212,5 @@ void CollectionManager::slotAlbumRootChange(const AlbumRootChangeset &changeset)
             break;
     }
 }
-
 
 }  // namespace Digikam
