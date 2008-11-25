@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-$version="1.6.2";
+$version="1.6.3";
 # Author: Rainer Krienke, krienke@uni-koblenz.de
 #
 # Description:
@@ -41,7 +41,13 @@ $version="1.6.2";
 # 1.6.1-> 1.6.2 2008/11/24 (Peter Muehlenpfordt, muehlenp@gmx.de)
 # Bug fix, subtags with the same name in different branches were merged
 # into one directory.
+# 1.6.2 -> 1.6.3 2008/11/25 Rainer Krienke, krienke@uni-koblenz.de
+# Fixed a bug that shows in some later perl interpreter versions when 
+# accessing array references with $# operator. If $r is a ref to an array
+# then $#{@r} was ok in the past but now $#{r] is correct, perhaps it was
+# always correct and the fact that $#{@r} worked was just good luck ....
 #
+
 
 # ---------------------------------------------------------------------------
 # LICENSE:
@@ -58,8 +64,8 @@ $version="1.6.2";
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA
-# 02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
 #
 # ---------------------------------------------------------------------------
 
@@ -209,7 +215,7 @@ sub getTaggedImages{
 	 # 
 	 # One image can have several tags assigned. So we manage 
 	 # a list of tags for each image
-	 $tagCount=$#{@$refTag}+1;	
+	 $tagCount=$#{$refTag}+1;	
          # The tags name
 	 $refImg->{"$path/$image"}->{"tag"}->[$tagCount]=$tag;
          # tags path for sub(sub+)tags
@@ -268,7 +274,7 @@ sub createLinkTree{
 	#$qpath=quotemeta($path);
 
         # Handle all of the tags for the current photo
-	for( $j=0;  $j<=$#{@{$refImages->{$i}->{"tag"}}}; $j++){	
+	for( $j=0;  $j<=$#{$refImages->{$i}->{"tag"}}; $j++){	
 	   $tag=$refImages->{$i}->{"tagpath"}->[$j];
 	   #$qtagPath=quotemeta($tagPath);
 
