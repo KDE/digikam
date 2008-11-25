@@ -17,7 +17,7 @@ SET(DIGIKAM_PATCH_VERSION "0")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final relase. Can be used in production.
-SET(DIGIKAM_SUFFIX_VERSION "-beta6")
+SET(DIGIKAM_SUFFIX_VERSION "-rc1")
 
 # ==================================================================================================
 # Set env. variables accordinly.
@@ -727,6 +727,15 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttableview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablebar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablewindow.cpp
+       )
+
+    SET(libqueuemanager_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuemgrwindow.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuelist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/batchtoolsmanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/batchtool.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/jpegconverttool.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/toolslist.cpp
        )
 
     SET(libcameragui_SRCS
