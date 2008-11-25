@@ -1,5 +1,5 @@
 *********************************************************************************************************
-digiKam 0.10.0-beta6 - Release date: 2008-11-xx
+digiKam 0.10.0-beta6 - Release date: 2008-11-25
 
 IMPORTANT: This is a beta release : do not use yet in production !!!
 ====================================================================
@@ -33,7 +33,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 175597 : Crash when trying to access usb cam (autodetected).
 021 ==> 176023 : digiKam svn: compile error.
 022 ==> 174752 : Creating a new album gives _two_ new albums, with the same name.
-023 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta5 - Release date: 2008-10-26
