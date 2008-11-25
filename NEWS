@@ -31,7 +31,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 174991 : digiKam freezes when generating new tag.
 019 ==> 171414 : Crash (with SIGSEV) when closing the application.
 020 ==> 175597 : Crash when trying to access usb cam (autodetected).
-021 ==> 
+021 ==> 176023 : digiKam svn: compile error.
+022 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta5 - Release date: 2008-10-26
