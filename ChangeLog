@@ -1,3 +1,1668 @@
+0.10.0-beta6 2008-11-25
+--------------------------------------------------------------------------------
+
+2008-11-25 07:41  cgilles
+
+    * digikam/daboutdata.h: update
+
+2008-11-25 07:21  cgilles
+
+    * AUTHORS: update
+
+2008-11-25 05:10  cgilles
+
+    * NEWS: update
+
+2008-11-24 22:17  sengels
+
+    * libs/database/collectionmanager.cpp: minor fix
+      please do not file bug reports - compile errors are fixed within
+      hours normally anyway
+      BUG:888572
+
+2008-11-24 19:58  mwiesweg
+
+    * libs/database/collectionmanager.cpp: Ensure that volumes are
+      mounted and that spurious empty mount paths are taken care for.
+      
+      CCBUG: 175923
+
+2008-11-24 19:22  cgilles
+
+    * digikam/daboutdata.h: give credits to Patrick
+
+2008-11-24 19:18  cgilles
+
+    * AUTHORS: add credits to Patrick, as Wi32 developer
+
+2008-11-24 13:43  cgilles
+
+    * utilities/scripts/digitaglinktree: sync with KDE3 branch
+
+2008-11-24 09:12  cgilles
+
+    * libs/database/collectionmanager.cpp,
+      libs/database/collectionmanager.h: fix typo
+
+2008-11-24 00:43  sengels
+
+    * libs/widgets/common/dpopupmenu.cpp: I filed a bug at qt-bugs@ but
+      I am not sure this will have great chances; Maybe this is even
+      our fault as painting should probably happen from the lower part
+      to the upper part.
+      -Fix missing image at the side of the menu
+
+2008-11-23 14:24  aclemens
+
+    * NEWS: update
+
+2008-11-23 12:21  scripty
+
+    * digikam/digikam.desktop, showfoto/showfoto.desktop,
+      utilities/hotplug/digikam-download.desktop.cmake,
+      utilities/hotplug/digikam-gphoto2-camera.desktop.cmake,
+      utilities/hotplug/digikam-mount-and-download.desktop.cmake,
+      utilities/imageeditor/editor/digikamimageplugin.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2008-11-22 22:03  schwarzer
+
+    * utilities/imageeditor/editor/editorwindow.cpp: Unify appearance
+      of this string with the other two 200 lines above to reduce the
+      strings to be translated by 1. :)
+
+2008-11-22 18:03  schwarzer
+
+    * imageplugins/channelmixer/channelmixertool.cpp: just switching
+      two code lines since it looks a bit
+      confusing with the mixed colors.
+      I hope it wasn't like that on purpose.
+
+2008-11-22 16:42  aclemens
+
+    * NEWS: update
+
+2008-11-22 13:25  mwiesweg
+
+    * digikam/albummanager.cpp: Fix the problem that two albums are
+      created when adding an album below an album root album.
+      (The first added album had one slash extra)
+
+2008-11-22 12:38  aclemens
+
+    * NEWS: update
+
+2008-11-22 12:17  mwiesweg
+
+    * utilities/cameragui/gpcamera.cpp: Fix possible crash when the
+      access method fails and the pointer is accessed.
+      An invalid index was used, which leads to failure in certain
+      hardware situations.
+      Please check if this fixes your crash.
+      
+      CCBUG: 175597
+
+2008-11-22 12:17  mwiesweg
+
+    * libs/database/collectionmanager.cpp: We have received reports of
+      situations where Solid is not available (Windows)
+      or fails to list storage access (Linux RAID, at least with older
+      HAL).
+      For these situations the fallback solution of storing the mount
+      path must be available.
+
+2008-11-22 02:05  sengels
+
+    * libs/jpegutils/jpegwin.cpp, libs/jpegutils/jpegwin.h: adjust
+      copyright notice
+
+2008-11-22 01:45  sengels
+
+    * libs/dimg/loaders/jpegloader.cpp, libs/jpegutils/jpegutils.cpp:
+      use readAll instead of a loop
+
+2008-11-22 01:30  sengels
+
+    * CMakeLists.txt, libs/dimg/loaders/jpegloader.cpp,
+      libs/jpegutils/jpegutils.cpp, libs/jpegutils/jpegwin.cpp,
+      libs/jpegutils/jpegwin.h: This is an even bigger commit:
+      make jpeg work on msvc;
+      CCBUG:173918
+
+2008-11-21 21:34  aclemens
+
+    * NEWS: update
+
+2008-11-21 18:41  mwiesweg
+
+    * digikam/digikamapp.cpp, digikam/digikamapp.h: Fix Solid signal
+      connection, so that the event loop can be ended when the device
+      is mounted.
+      Polish capacity display in Import menu.
+      
+      CCBUG: 175662
+
+2008-11-21 18:38  mwiesweg
+
+    * digikam/syncjob.cpp: Connect to thumbnail loader before calling
+      getThumbnail, which can fire a signal immediately.
+      Be paranoid and use queued signals so they cannot be released
+      before entering the event loop.
+      
+      CCBUG: 174991
+
+2008-11-21 12:35  mlaurent
+
+    * imageplugins/hotpixels/hotpixelfixer.cpp, showfoto/showfoto.cpp:
+      Fix iterator
+
+2008-11-21 12:30  mlaurent
+
+    * digikam/albumhistory.cpp, digikam/albumlister.cpp,
+      digikam/albumselectdialog.cpp, digikam/imagepreviewview.cpp,
+      digikam/tageditdlg.cpp, digikam/tagfilterview.cpp,
+      digikam/tagfolderview.cpp: Fix some iterator
+
+2008-11-21 10:27  cgilles
+
+    * libs/dialogs/imagedialog.cpp: center image info
+
+2008-11-21 09:17  cgilles
+
+    * utilities/CMakeLists.txt: upper
+
+2008-11-21 08:44  mlaurent
+
+    * digikam/albumiconview.cpp,
+      libs/imageproperties/imagedescedittab.cpp,
+      libs/imageproperties/imagepropertiessidebardb.cpp,
+      libs/imageproperties/talbumlistview.cpp,
+      utilities/cameragui/umscamera.cpp,
+      utilities/imageeditor/editor/imagewindow.cpp,
+      utilities/lighttable/lighttablebar.cpp,
+      utilities/lighttable/lighttablepreview.cpp,
+      utilities/lighttable/lighttablewindow.cpp: Fix iterator
+
+2008-11-21 08:21  cgilles
+
+    * themedesigner/themedicongroupitem.cpp,
+      themedesigner/themedicongroupitem.h,
+      themedesigner/themediconitem.cpp, themedesigner/themediconitem.h,
+      themedesigner/themediconview.cpp: fix warnings
+
+2008-11-21 08:03  mlaurent
+
+    * libs/database/collectionscanner.cpp,
+      libs/database/haar/haariface.cpp,
+      libs/database/imagequerybuilder.cpp,
+      libs/imageproperties/worldmapwidget.cpp,
+      libs/widgets/common/thumbbar.cpp: fix some iterator
+
+2008-11-21 07:07  cgilles
+
+    * NEWS: update
+
+2008-11-20 23:13  sengels
+
+    * libs/dimg/loaders/pngloader.cpp: fix digikam crashes when trying
+      to open png files under MSVC
+      I will close the following bug - we need a more precise bug
+      report now.
+      BUG:173918
+      @digikam-devels:
+      It should be possible to remove the ifdef's and use this solution
+      under Linux too. That way maintenance would be easier for me and
+      you. Ideas?
+      CCMAIL:digikam-devel@kde.org
+
+2008-11-20 20:51  cgilles
+
+    * NEWS: update
+
+2008-11-20 19:10  cgilles
+
+    * digikam/folderitem.cpp, digikam/iconitem.cpp: Fix depreciate
+
+2008-11-19 18:53  aclemens
+
+    * utilities/cameragui/umscamera.cpp: removed duplicate includes,
+      sorted include statements
+
+2008-11-19 13:49  cgilles
+
+    * project/bootstrap.bat, project/project.kdevelop: missing "S"
+
+2008-11-19 12:38  aclemens
+
+    * digikam/folderitem.cpp: fix deprecate warnings: Actually
+      QColorGroup is not used in Qt4 anymore, so this still isn't the
+      best solution. This code will be replaced when switching to a
+      fully Qt4 implementation.
+
+2008-11-19 11:31  aclemens
+
+    * libs/CMakeLists.txt: fixing the actual problem that was issued in
+      commit 886465:
+      loaders => dimg/loaders (typo)
+
+2008-11-19 10:43  aclemens
+
+    * libs/CMakeLists.txt: this path is not valid anymore
+
+2008-11-18 23:38  sengels
+
+    * utilities/setup/setupcollectionview.cpp: unbreak this - the const
+      modifier is needed
+
+2008-11-18 18:12  cgilles
+
+    * utilities/setup/setupcollections.cpp: digiKam from trunk : Under
+      Win32, sound like signals/slots connection are initialized faster
+      than under Linux. We need to take a care about that in the
+      future.
+      
+      So what the problem exactly : In Setup dialog, KURLRequester
+      slots are connected before than DB path is set by readSettings()
+      method. We entry in a long loop where path is set, signals
+      emitted, path is set, etc... A broken path is set in DB url
+      editor at end.
+      
+      Solution: make signal and slots connections after that
+      readSettings() is done.
+
+2008-11-18 18:10  aclemens
+
+    * digikam/CMakeLists.txt: not needed here anymore
+
+2008-11-17 21:20  mwiesweg
+
+    * utilities/setup/setupcollectionview.cpp: Fix wrong order of
+      lines.
+      Andi, this was your setupcollections problem. Turns out to be a
+      silly last-minute mistake of me ;-)
+      
+      CCMAIL: andi.clemens@gmx.net
+
+2008-11-17 21:20  mwiesweg
+
+    * utilities/setup/setupcollections.cpp: Use QDir to compare
+      directories so that a slash-only change is not recognized as
+      change of the path.
+
+2008-11-17 14:37  cgilles
+
+    * utilities/searchwindow/comboboxutilities.cpp: fix warning
+
+2008-11-17 14:35  cgilles
+
+    * utilities/kipiiface/kipiinterface.cpp,
+      utilities/kipiiface/kipiinterface.h: implement hostSetting() from
+      libkipi 0.3.0
+
+2008-11-17 12:33  cgilles
+
+    * CMakeLists.txt, README: fix urls
+
+2008-11-16 15:39  mwiesweg
+
+    * utilities/setup/setupcollectionview.cpp: Propagate the
+      enabled/disabled state of the view to the widgets
+
+2008-11-16 15:38  mwiesweg
+
+    * utilities/searchwindow/searchutilities.cpp: It was not the best
+      coding style and I am miseducated by g++ accepting to return
+      void,
+      but the return statement is needed.
+
+2008-11-16 15:31  cgilles
+
+    * imageplugins/adjustlevels/adjustlevelstool.cpp: fix compilation
+      warnings under win32
+
+2008-11-16 14:53  cgilles
+
+    * utilities/searchwindow/searchutilities.cpp: Win32 wranings :
+      missing cast to please compiler (double => int)
+      
+      Marcel, there is no precision lost here ?
+      
+      CCMAIL: marcel.wiesweg@gmx.de
+
+2008-11-16 14:50  cgilles
+
+    * utilities/searchwindow/searchutilities.cpp: Win32 warnings of the
+      day : why return a value with a void function
+
+2008-11-16 14:49  cgilles
+
+    * utilities/searchwindow/searchutilities.cpp: polish coding style
+      (more readable and homogeneous)
+
+2008-11-15 20:35  cgilles
+
+    * libs/widgets/metadata/metadatawidget.cpp: optimize layout
+
+2008-11-15 19:21  cgilles
+
+    * utilities/setup/setupcollections.cpp: more help to setup root
+      collections
+
+2008-11-15 15:41  mwiesweg
+
+    * CMakeLists.txt: compile
+
+2008-11-15 15:41  mwiesweg
+
+    * utilities/setup/setupcollections.cpp,
+      utilities/setup/setupcollections.h: Remove the old implementation
+      and replace it with the new SetupCollectionView/Model.
+
+2008-11-15 15:41  mwiesweg
+
+    * utilities/setup/setupcollectionview.cpp,
+      utilities/setup/setupcollectionview.h: A custom tree view, model
+      and delegate for the collections setup.
+      - The view is a QTreeView
+      - The delegate inherits KWidgetItemDelegate / Goya framework to
+      provide
+      widgets inside the view. Rendering is done through an object of
+      QStyledItemDelegate
+      - The model is custom. It keeps a list of collections, allows
+      editing and does
+      all the work of checking and applying the changes to
+      CollectionManager
+      
+      Collections are sorted in the three categories local, removable
+      and network.
+      An "Add collection" button is provided for all three. We can
+      autodetect local and
+      removable storage media, but we cannot autodetect that a path is
+      a network share
+      currently, so this solves the problem of providing an extra
+      button for network collections.
+      When adding a collection the path dialog pops up directly, then
+      the path is checked,
+      and in a second dialog the user can adjust the name of the
+      collection and is informed
+      about the status of the storage.
+      This reintroduces modal dialogs that we did not need with the
+      previous implementation,
+      but 1) the directory dialog was needed usually anyway and 2) we
+      can display much more
+      and flexible information.
+      
+      Label editing is done in-place with standard delegate editor
+      means.
+      Deleting is done with a small icon button for each collection.
+
+2008-11-15 15:40  mwiesweg
+
+    * libs/database/collectionmanager.cpp,
+      libs/database/collectionmanager.h: - Add basic functionality to
+      support collection on network shares.
+      There is no autodetection, you have to give the mount path and
+      say it is a network share.
+      The collection will be considered available if the directory is
+      not empty.
+      The identification in the database is done via mount path.
+      As usual we are free to add other means of identification is they
+      are available in the future.
+      - Extend checkLocation (and add checkNetworkLocation) to always
+      provide
+      meaningful information and a good icon symbolising the kind of
+      storage
+
+2008-11-14 20:18  cgilles
+
+    * utilities/setup/setupmetadata.cpp: typo
+
+2008-11-14 18:34  cgilles
+
+    * utilities/setup/setupmetadata.cpp: disable RAW metadata writing
+      is Exiv2 < 0.18.0
+
+2008-11-14 17:42  cgilles
+
+    * CMakeLists.txt, README: bump kexiv2 version to use
+
+2008-11-14 14:45  cgilles
+
+    * digikam/albumsettings.cpp, digikam/albumsettings.h,
+      digikam/metadatahub.cpp, digikam/metadatahub.h,
+      project/project.kdevelop, utilities/setup/setupmetadata.cpp:
+      digiKam from trunk: new option to set on/off metadata writing to
+      RAW file format based on TIFF/EP
+
+2008-11-14 14:24  mwiesweg
+
+    * utilities/searchwindow/searchgroup.cpp: Initialize all new groups
+      properly with empty values after setting up
+
+2008-11-14 14:23  mwiesweg
+
+    * utilities/searchwindow/comboboxutilities.cpp: Catch wheel event
+      for tree view line edit.
+      Fix strange behavior of hiding the text when using the mouse
+      wheel
+      on the album / tags search combo box line edit before.
+
+2008-11-14 14:23  mwiesweg
+
+    * libs/database/imagequerybuilder.cpp: An empty group should have
+      no effect, and not inhibit result by doing "AND 0". Now it's "AND
+      1".
+
+2008-11-14 14:23  mwiesweg
+
+    * libs/database/imagelister.cpp: improve debugging output a bit
+
+2008-11-14 14:22  mwiesweg
+
+    * utilities/fuzzysearch/fuzzysearchview.cpp,
+      utilities/fuzzysearch/fuzzysearchview.h: ImageInfo is implicitly
+      shared, no need for heap allocation, use like QString
+
+2008-11-14 14:22  mwiesweg
+
+    * digikam/albumiconview.cpp,
+      utilities/cameragui/cameraiconview.cpp: Fix wrong API usage:
+      KUrl::List::fromMimeData is static and returns the result.
+      Fixes copy-and-paste from Dolphin to icon view.
+
+2008-11-14 13:48  scripty
+
+    * imageplugins/border/digikamimageplugin_border.desktop: SVN_SILENT
+      made messages (.desktop file)
+
+2008-11-13 15:16  cgilles
+
+    * imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp: fix
+      compilation warnings under win32
+
+2008-11-13 12:34  cgilles
+
+    * libs/threadimageio/thumbnailloadthread.cpp: set icon size to
+      default thread as huge. this fix several issue where thumb are
+      really pixelized in:
+      - file open/save image dialog preview
+      - kipi thumb interface (SlideShow preview for ex.)
+      - Find Similar image list.
+
+2008-11-12 06:48  cgilles
+
+    * utilities/setup/setupidentity.cpp,
+      utilities/setup/setupidentity.h: typo
+
+2008-11-12 06:46  cgilles
+
+    * digikam/main.cpp: fix typo
+
+2008-11-10 21:40  cgilles
+
+    * NEWS: update
+
+2008-11-10 21:27  scripty
+
+    * digikam/digikam.desktop,
+      imageplugins/lenscorrection/digikamimageplugin_lenscorrection.desktop,
+      kioslave/digikamalbums.protocol, kioslave/digikamdates.protocol,
+      kioslave/digikamsearch.protocol, kioslave/digikamtags.protocol,
+      showfoto/showfoto.desktop,
+      utilities/hotplug/digikam-download.desktop.cmake,
+      utilities/hotplug/digikam-gphoto2-camera.desktop.cmake,
+      utilities/hotplug/digikam-mount-and-download.desktop.cmake,
+      utilities/imageeditor/editor/digikamimageplugin.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2008-11-10 21:25  cgilles
+
+    * libs/imageproperties/cameraitempropertiestab.cpp,
+      libs/imageproperties/cameraitempropertiestab.h,
+      libs/imageproperties/imagedescedittab.cpp,
+      libs/imageproperties/imagedescedittab.h,
+      libs/imageproperties/imagepropertiescolorstab.cpp,
+      libs/imageproperties/imagepropertiestab.cpp,
+      libs/imageproperties/imagepropertiestab.h,
+      project/project.kdevelop,
+      utilities/imageeditor/editor/editortoolsettings.cpp,
+      utilities/imageeditor/editor/editortoolsettings.h: backport
+      commit #882414 from KDE3 branch
+      CCBUGS: 164573
+
+2008-11-10 12:12  cgilles
+
+    * imageplugins/coreplugin/sharpnesseditor/sharpentool.cpp: backport
+      commit #882317 from KDE3 branch
+      CCBUGS: 164573
+
+2008-11-10 11:20  cgilles
+
+    * libs/widgets/common/dgradientslider.cpp: Fix compilation warnings
+
+2008-11-10 09:44  seb
+
+    * digikam/digikamapp.cpp: English fixes, and capitalisation changes
+      to adhere to KDE style guidelines.
+
+2008-11-10 09:37  seb
+
+    * utilities/batch/fingerprintsgenerator.cpp,
+      utilities/fuzzysearch/findduplicatesview.cpp: Improve some
+      language. "finger-prints" is not a word, "fingerprints" is.
+
+2008-11-09 15:47  cgilles
+
+    * NEWS: update
+
+2008-11-08 11:50  cgilles
+
+    * NEWS: update
+
+2008-11-08 11:04  sengels
+
+    * digikam/CMakeLists.txt: include source instead of binary path
+
+2008-11-08 08:12  aclemens
+
+    * utilities/fuzzysearch/fuzzysearchview.cpp: fix a memory leak
+
+2008-11-07 16:56  cgilles
+
+    * digikam/CMakeLists.txt: polish include paths
+
+2008-11-07 12:05  cgilles
+
+    * libs/imageproperties/cameraitempropertiestab.cpp: missing
+      hide/show Lens label
+
+2008-11-07 10:51  cgilles
+
+    * NEWS: update
+
+2008-11-06 19:17  cgilles
+
+    * NEWS: update
+
+2008-11-06 16:03  cgilles
+
+    * utilities/cameragui/umscamera.cpp,
+      utilities/cameragui/umscamera.h: with USB Mass Storage Camera,
+      try to get video thumbnail using KDE thumb creator.
+      Marcel, Andi, this patch work for you? (video thumb is broken
+      under KDE4)
+      CCMAIL: digikam-devel@kde.org
+
+2008-11-06 15:01  cgilles
+
+    * digikam/digikamapp.cpp: do not use "Konqueror" as name of
+      file-manager
+
+2008-11-06 10:20  cgilles
+
+    * digikam/digikamapp.cpp, showfoto/showfoto.cpp: use default args
+
+2008-11-06 10:15  cgilles
+
+    * libs/widgets/common/splashscreen.cpp,
+      libs/widgets/common/splashscreen.h: sync with KDE branch
+
+2008-11-06 09:02  cgilles
+
+    * project/bootstrap.bat: polish
+
+2008-11-06 08:44  cgilles
+
+    * project/KDE4PORT: update
+
+2008-11-06 08:36  cgilles
+
+    * CMakeLists.txt: For digiKam and Kipi-plugins, all depencies are
+      checked in respective cmake scripts. No need to duplicates this
+      job in root cmake script (this break compilation setup env under
+      win32)
+
+2008-11-05 14:34  cgilles
+
+    * PACKAGING, project/PACKAGING, project/project.kdevelop: sync with
+      KDE3 branch
+
+2008-11-05 13:40  cgilles
+
+    * digikam/albumsettings.cpp: polish
+
+2008-11-05 11:31  cgilles
+
+    * libs/imageproperties/imagepropertiescolorstab.cpp: polish
+
+2008-11-05 11:21  cgilles
+
+    * libs/imageproperties/imagepropertiescolorstab.cpp: image
+      properties color tab use Dolphin like info style
+
+2008-11-05 11:01  cgilles
+
+    * libs/imageproperties/cameraitempropertiestab.cpp: camera gui
+      image properties use now Dolphin like meta info style
+
+2008-11-05 10:54  cgilles
+
+    * libs/imageproperties/imagepropertiestab.cpp,
+      libs/imageproperties/imagepropertiestxtlabel.h: dolphin like
+      image properties tab content. More space conservative. Look
+      better, more ready and pleasant to see that old design
+
+2008-11-04 15:31  aclemens
+
+    * NEWS: typos
+
+2008-11-04 15:31  aclemens
+
+    * NEWS: update
+
+2008-11-04 15:31  aclemens
+
+    * digikam/albumfolderview.cpp, digikam/tagfilterview.cpp,
+      digikam/tagfolderview.cpp,
+      libs/imageproperties/imagedescedittab.cpp: collapse children of
+      matching album / tag names.
+      
+      If an album name matches the filter in one of the children of the
+      current item, but not the current item's own name,
+      don't expand the current item.
+      This will prevent the following situation. Assume we have this
+      album layout:
+      
+      |-- 1999
+      | |-- Alleyras
+      | `-- Test
+      | |-- 01
+      | `-- 02
+      `-- 2008
+      `-- all
+      |-- 01
+      `-- 02
+      
+      When we search for the term all, we will get this layout with the
+      old behavior:
+      
+      |-- 1999
+      | |-- Alleyras
+      `-- 2008
+      `-- all
+      |-- 01
+      `-- 02
+      
+      But this is wrong and can get quite messy if you have heavy
+      nested folders. We should only display the folder names that
+      really match the term.
+      We can either do this by removing all folders that don't match
+      the criteria, but this is bad. Assume we search for "birthday"
+      and want to see the underlying folders.
+      With this method they'll be gone. So the only other possible way
+      is to collapse all non matching children like this:
+      
+      |-- 1999
+      | |-- Alleyras
+      `-- 2008
+      `-- all
+      
+      You still can expand the folder 'all' to get the sub-folders, but
+      they will not mess up the folder view anymore.
+      Ok this was a long description for a commit... :-)
+      
+      Andi
+      
+      BUG:167873
+
+2008-11-04 15:31  aclemens
+
+    * digikam/albumfolderview.cpp, digikam/folderview.cpp,
+      digikam/folderview.h, digikam/tagfilterview.cpp,
+      digikam/tagfolderview.cpp,
+      libs/imageproperties/imagedescedittab.cpp: expand and collapse
+      folder view when using quick filter text search
+      
+      When searching for albums and tags with the quick filter text
+      search, the
+      folder view has not been expanded when an item matched the search
+      criteria.
+      
+      For this to work, we have to use setOpen() on every matched item.
+      In most of
+      the cases the whole album or tag tree will be expanded after you
+      reset the
+      filter again, which will be very annoying when you have a lot of
+      tags or albums.
+      
+      This commit will introduce a new FolderView method
+      collapseView(),
+      that will collapse the tree when the search criteria is removed.
+      Right now it has two modes:
+      
+      * RestoreCurrentAlbum (default):
+      Collapse the folder view and re-open the current viewed album.
+      In this mode, all root items are collapsed, then the one
+      containing
+      the currently selected album is expand again.
+      This mode will make sure that the selected album is visible in
+      the folder tree by scrolling the
+      view to the selected item.
+      
+      * OmitRoot:
+      Collapse the folder view but omit the root item.
+      In this mode all items in the folder view are collapsed,
+      and the first root item is expanded again (My Tags / My Albums
+      etc)
+      
+      CCBUG:167873
+
+2008-11-04 12:14  cgilles
+
+    * NEWS: update
+
+2008-11-04 08:06  cgilles
+
+    * NEWS: update
+
+2008-11-03 14:54  cgilles
+
+    * digikam/main.cpp: more debug info
+
+2008-11-03 13:12  sengels
+
+    * digikam/digikam_export.h: adjust flag
+
+2008-11-03 12:46  cgilles
+
+    * libs/widgets/common/dlogoaction.cpp: missing moc file
+
+2008-11-03 09:04  cgilles
+
+    * digikam/CMakeLists.txt, imageplugins/adjustcurves/CMakeLists.txt,
+      imageplugins/adjustlevels/CMakeLists.txt,
+      imageplugins/blurfx/CMakeLists.txt,
+      imageplugins/border/CMakeLists.txt,
+      imageplugins/channelmixer/CMakeLists.txt,
+      imageplugins/charcoal/CMakeLists.txt,
+      imageplugins/colorfx/CMakeLists.txt,
+      imageplugins/coreplugin/CMakeLists.txt,
+      imageplugins/distortionfx/CMakeLists.txt,
+      imageplugins/emboss/CMakeLists.txt,
+      imageplugins/filmgrain/CMakeLists.txt,
+      imageplugins/freerotation/CMakeLists.txt,
+      imageplugins/hotpixels/CMakeLists.txt,
+      imageplugins/infrared/CMakeLists.txt,
+      imageplugins/inpainting/CMakeLists.txt,
+      imageplugins/inserttext/CMakeLists.txt,
+      imageplugins/lenscorrection/CMakeLists.txt,
+      imageplugins/noisereduction/CMakeLists.txt,
+      imageplugins/oilpaint/CMakeLists.txt,
+      imageplugins/perspective/CMakeLists.txt,
+      imageplugins/raindrop/CMakeLists.txt,
+      imageplugins/restoration/CMakeLists.txt,
+      imageplugins/sheartool/CMakeLists.txt,
+      imageplugins/superimpose/CMakeLists.txt,
+      imageplugins/texture/CMakeLists.txt,
+      imageplugins/whitebalance/CMakeLists.txt,
+      kioslave/CMakeLists.txt, project/project.kdevelop,
+      showfoto/CMakeLists.txt, themedesigner/CMakeLists.txt: digiKam
+      from trunk : warning. this is a big fix to compile shared library
+      with core implementation.
+      CMake generate a script (bash under Linux or Bat under windows)
+      to run digiKam using local built without
+      to install something in your computer. It's very suitable to use
+      this way to test speedly a new change.
+      
+      In old Cmake implementation, there is a conflict between
+      libdigikam shared lib and digikam bin program to
+      define set of target names. the script dedicated to run digikam
+      (named digikam_bin) do not run because it try
+      to play with digikam_bin binary file, which doesn't exist (only
+      digikam file exist of course)
+      
+      This fix rename libdigikam to libdigikamcore to remove this
+      dysfunction.
+      
+      NOTE: you need to clean up all and recompile. Let's me hear is
+      all is fine for you.
+      
+      CCMAIL: digikam-devel@kde.org
+
+2008-11-03 08:18  cgilles
+
+    * libs/dimg/loaders/iccjpeg.h: fix warnings
+
+2008-11-03 08:17  cgilles
+
+    * utilities/cameragui/umscamera.cpp: compute a device undependant
+      fingerprint. we only use memory card UUID as item fingerprint
+
+2008-11-03 08:11  cgilles
+
+    * utilities/cameragui/cameraiconitem.cpp,
+      utilities/cameragui/cameraui.cpp,
+      utilities/cameragui/dkcamera.cpp, utilities/cameragui/dkcamera.h,
+      utilities/cameragui/freespacewidget.cpp,
+      utilities/cameragui/freespacewidget.h,
+      utilities/cameragui/umscamera.cpp,
+      utilities/cameragui/umscamera.h: digiKam from trunk: Cameragui :
+      
+      - For UMS camera, use UUID of the media provided by Solid
+      interface to identify already downloaded pictures.
+      We use UUID of the card inside the camera instead a set of
+      informations to identify the camera (mount path for ex.)
+      because the media is removable and can be mounted in other place,
+      with a CF card reader for ex.
+      
+      - Fix several bug in freespace widget which does'st show
+      informations.
+      
+
+2008-11-02 11:05  mwiesweg
+
+    * digikam/albummanager.cpp, digikam/albummanager.h: Listen if a
+      CollectionLocation label is changed and set the album root
+      album's name accordingly
+
+2008-11-02 11:05  mwiesweg
+
+    * libs/database/collectionmanager.cpp,
+      libs/database/collectionmanager.h: Listen to AlbumRootChange in
+      CollectionManager, implement refreshing and setting of album root
+      label.
+      Emit a signal when label is changed.
+
+2008-11-02 10:15  mwiesweg
+
+    * digikam/albumthumbnailloader.cpp: Do not forget to remove
+      physical albums' cached thumbnails as well.
+      Fixes settings album thumbnail and showing the change directly
+
+2008-11-02 09:36  mwiesweg
+
+    * digikam/albumiconview.cpp: When changing thumbnail size, do not
+      remove all items and reload, but just relayout and redraw
+
+2008-11-02 09:00  cgilles
+
+    * utilities/cameragui/dkcamera.cpp, utilities/cameragui/dkcamera.h,
+      utilities/cameragui/gpcamera.cpp, utilities/cameragui/gpcamera.h,
+      utilities/cameragui/umscamera.cpp,
+      utilities/cameragui/umscamera.h: now MD5 camera identification
+      method is a pure virtual one. UMS and gphoto2 camera will use
+      different way to compute ID
+
+2008-11-02 00:44  cgilles
+
+    * NEWS: update
+
+2008-11-02 00:33  cgilles
+
+    * NEWS: update
+
+2008-11-01 20:35  mwiesweg
+
+    * libs/database/albumdb.cpp: Fix recursive listing of album root
+      albums
+
+2008-11-01 20:29  cgilles
+
+    * utilities/cameragui/cameraui.cpp: wrong logic
+      line, and those below, will be ignored--
+      
+      M cameragui/cameraui.cpp
+
+2008-11-01 20:13  mwiesweg
+
+    * utilities/searchwindow/searchfields.cpp,
+      utilities/searchwindow/searchfields.h: Make use of the
+      CustomSteps Spin Boxes, and set up a lot of logic for
+      coordinating the two spin boxes
+
+2008-11-01 20:13  mwiesweg
+
+    * utilities/searchwindow/searchutilities.cpp,
+      utilities/searchwindow/searchutilities.h: Add spin box subclasses
+      (for int and double) that allow to set a predefined set of values
+      where linear increasing is not applicable, but a certain set of
+      common values is expected.
+
+2008-11-01 20:12  cgilles
+
+    * utilities/cameragui/cameraui.cpp,
+      utilities/cameragui/dkcamera.cpp: digiKam from trunk: CameraGui:
+      read "already downloaded" flag from digiKAm database to identify
+      which items are already in collection from computer.
+
+2008-11-01 19:25  cgilles
+
+    * utilities/cameragui/cameracontroller.cpp,
+      utilities/cameragui/cameracontroller.h,
+      utilities/cameragui/cameraui.cpp,
+      utilities/cameragui/dkcamera.cpp, utilities/cameragui/dkcamera.h:
+      digiKam from trunk : Cameragui: register downloaded images from
+      camera to digiKam database to be able to identify already
+      donwloaded items at next session.
+
+2008-11-01 18:09  cgilles
+
+    * utilities/cameragui/cameracontroller.cpp,
+      utilities/cameragui/cameracontroller.h: use const ref.
+
+2008-11-01 17:56  cgilles
+
+    * utilities/setup/setupcollections.cpp: use collection label from
+      DB
+
+2008-11-01 17:05  cgilles
+
+    * digikam/albumsettings.cpp: use size of 22 pixels for all folder
+      view
+
+2008-11-01 15:48  quique
+
+    * libs/database/schemaupdater.cpp: SVN_SILENT Fix typos reported by
+      Yuri Chornoivan
+
+2008-11-01 15:46  cgilles
+
+    * digikam/albumiconview.cpp, project/project.kdevelop,
+      utilities/cameragui/cameraiconview.cpp,
+      utilities/lighttable/lighttablebar.cpp,
+      utilities/setup/setupmime.cpp: use right Oxygen icons here
+
+2008-11-01 14:34  cgilles
+
+    * CMakeLists.txt: polish
+
+2008-11-01 14:27  mwiesweg
+
+    * libs/dimg/dcolor.h, libs/widgets/common/dgradientslider.cpp,
+      libs/widgets/common/thumbbar.cpp: Fix more double-int conversion
+      warnings
+
+2008-11-01 13:37  sengels
+
+    * CMakeLists.txt: change it to widget
+
+2008-11-01 12:13  mwiesweg
+
+    * libs/dmetadata/dmetadata.cpp: Convert float to long, fix Windows
+      warning
+
+2008-11-01 11:54  mwiesweg
+
+    * libs/dimg/dcolor.h: Try to fix warnings on Windows MinGW
+      compilation
+
+2008-10-31 23:33  mwiesweg
+
+    * libs/database/collectionmanager.cpp: Tiny change to make album
+      root labels from database appear in left sidebar
+
+2008-10-31 23:27  cgilles
+
+    * project/KDE4PORT, project/project.kdevelop: update
+
+2008-10-31 23:10  cgilles
+
+    * utilities/setup/setupcollections.cpp: try to set up collection
+      label in DB from Setup panel.
+
+2008-10-31 22:46  cgilles
+
+    * NEWS: update
+
+2008-10-31 22:43  cgilles
+
+    * utilities/imageeditor/editor/editorwindow.cpp: the right sentence
+      of JPEG2000 type mime is image/jp2, not image/jpeg2000 (dixit
+      wikipedia)
+
+2008-10-31 20:36  mwiesweg
+
+    * digikam/albumwidgetstack.cpp: Add a number of debugging
+      statements to AlbumWidgetStack,
+      to help debugging the infamous Preview Splitter Problem.
+      
+      Purely temporary, to be removed when problem is solved.
+
+2008-10-31 19:07  mwiesweg
+
+    * libs/database/collectionmanager.cpp: Fix a trailing slash bug
+      with album roots specified by path.
+      Fail when Solid output is empty instead of falling back to path
+      based volumes.
+      Note: Need to be verified with non-Linux systems.
+
+2008-10-31 19:07  mwiesweg
+
+    * libs/database/schemaupdater.cpp: Make the error message (shown in
+      message box) more helpful,
+      avoid the phrase "internal error", avoid suggesting to delete the
+      digikam3.db file,
+      instead point the user to console messages and the mailing list
+      for help.
+      Add a specialized error message for the case that the collection
+      location
+      cannot be created on updating the database.
+
+2008-10-31 18:57  mwiesweg
+
+    * utilities/lighttable/lighttablebar.cpp,
+      utilities/lighttable/lighttablebar.h,
+      utilities/lighttable/lighttablepreview.cpp: Same drag and drop
+      fix, and a small fix for the last commit, dont accept every drag.
+
+2008-10-31 18:30  mwiesweg
+
+    * utilities/lighttable/lighttablepreview.cpp,
+      utilities/lighttable/lighttablepreview.h: Qt requires to accept a
+      drop event in DragEnterEvent, only DragMoveEvent is not
+      sufficient
+
+2008-10-31 12:30  scripty
+
+    * imageplugins/lenscorrection/digikamimageplugin_lenscorrection.desktop,
+      kioslave/digikamtags.protocol: SVN_SILENT made messages (.desktop
+      file)
+
+2008-10-30 22:03  gateau
+
+    * CMakeLists.txt: Do not prevent extragear/graphics from building
+      if libgphoto cannot be found
+
+2008-10-30 09:51  aclemens
+
+    * libs/dialogs/dprogressdlg.h, libs/dialogs/imagedialog.h,
+      libs/dialogs/libsinfodlg.h, libs/dialogs/rawcameradlg.h,
+      libs/dimg/filters/dimgthreadedfilter.h,
+      libs/histogram/imagehistogram.h,
+      libs/widgets/common/curveswidget.h,
+      libs/widgets/common/dgradientslider.h,
+      libs/widgets/common/dlogoaction.h,
+      libs/widgets/common/histogrambox.h,
+      libs/widgets/common/histogramwidget.h,
+      libs/widgets/common/paniconwidget.h,
+      libs/widgets/common/previewwidget.h,
+      libs/widgets/common/searchtextbar.h,
+      libs/widgets/common/sidebar.h, libs/widgets/common/statusled.h,
+      libs/widgets/common/statusnavigatebar.h,
+      libs/widgets/common/statusprogressbar.h,
+      libs/widgets/common/statuszoombar.h,
+      libs/widgets/iccprofiles/cietonguewidget.h,
+      libs/widgets/iccprofiles/iccprofilewidget.h,
+      libs/widgets/imageplugins/imageguidewidget.h,
+      libs/widgets/imageplugins/imagepanelwidget.h,
+      libs/widgets/imageplugins/imagepaniconwidget.h,
+      libs/widgets/imageplugins/imageregionwidget.h,
+      libs/widgets/imageplugins/imagewidget.h,
+      libs/widgets/metadata/exifwidget.h,
+      libs/widgets/metadata/iptcwidget.h,
+      libs/widgets/metadata/makernotewidget.h,
+      libs/widgets/metadata/mdkeylistviewitem.h,
+      libs/widgets/metadata/metadatalistview.h,
+      libs/widgets/metadata/metadatawidget.h,
+      libs/widgets/metadata/xmpwidget.h,
+      utilities/imageeditor/canvas/imageplugin.h: In the libraries, use
+      Q_SIGNALS: and Q_SLOTS: instead of signals: and slots:
+
+2008-10-29 21:03  sengels
+
+    * cmake/modules/FindMarbleWidget.cmake: SVN_SILENT: remove debug
+      output
+
+2008-10-29 19:11  sengels
+
+    * cmake/modules/FindMarbleWidget.cmake: cleanup and make building
+      possible as debug under win32
+
+2008-10-29 13:01  aclemens
+
+    * data/pics/menusidepix.svg: program version has its own layer now,
+      all the other layers are locked so they can't be changed
+      accidentally...
+
+2008-10-29 12:57  aclemens
+
+    * data/pics/menusidepix.svg: polish
+
+2008-10-29 12:46  aclemens
+
+    * data/pics/menusidepix-digikam.xcf,
+      data/pics/menusidepix-showfoto.xcf: removing the GIMP project
+      files...
+
+2008-10-29 12:42  aclemens
+
+    * data/pics/menusidepix.svg: polish
+
+2008-10-29 12:40  aclemens
+
+    * data/pics/menusidepix.svg: polish
+
+2008-10-29 12:37  aclemens
+
+    * data/pics/menusidepix-digikam.png,
+      data/pics/menusidepix-digikam.svg,
+      data/pics/menusidepix-showfoto.svg, data/pics/menusidepix.svg:
+      merge inkscape projects for the menu side image
+
+2008-10-29 12:18  aclemens
+
+    * data/pics/menusidepix-digikam.png,
+      data/pics/menusidepix-digikam.svg,
+      data/pics/menusidepix-showfoto.png,
+      data/pics/menusidepix-showfoto.svg: added Inkscape project files
+      for dpopmenu side image
+      
+      I think it is much easier to change text that has been rotated in
+      an Inkscape project, because you can edit it directly. In a Gimp
+      project it's not possible.
+      Also the output is much more crisp, the font is not so washed
+      out.
+      I guess we should remove the Gimp project files...
+      
+      In addition we could merge both Inkscape project files and work
+      with layers. Since we have same version numbers for digiKam and
+      showFoto, we could put each app name on its own layer and just
+      export the appropriate one when saving the new image.
+      
+      Andi
+
+2008-10-29 11:43  cgilles
+
+    * project/KDE4PORT: update
+
+2008-10-29 11:42  cgilles
+
+    * data/pics/menusidepix-showfoto.png,
+      data/pics/menusidepix-showfoto.xcf: fix Showfoto version number
+
+2008-10-29 10:59  aclemens
+
+    * libs/widgets/common/dpopupmenu.cpp,
+      libs/widgets/common/dpopupmenu.h: fix layout of DPopupMenu so
+      that action icons are not overlapping anymore
+
+2008-10-28 17:53  cgilles
+
+    * NEWS: update
+
+2008-10-28 14:19  aclemens
+
+    * digikam/albumfolderview.cpp: fix icon names using
+      adapt-to-icon-spec.py script
+
+2008-10-28 10:09  cgilles
+
+    * NEWS: update
+
+2008-10-28 06:38  cgilles
+
+    * NEWS: update
+
+2008-10-28 06:37  cgilles
+
+    * NEWS: update
+
+2008-10-28 06:35  cgilles
+
+    * CMakeLists.txt: beta6
+
+2008-10-27 08:43  aclemens
+
+    * libs/widgets/common/sidebar.cpp, libs/widgets/common/sidebar.h,
+      showfoto/showfoto.cpp,
+      utilities/imageeditor/editor/editorwindow.cpp: polish include
+      order
+
+2008-10-26 18:47  uwolfer
+
+    * data/about/box-bottom-left.png, data/about/box-bottom-right.png,
+      data/about/box-top-left.png, data/about/box-top-right.png,
+      data/about/top-left-digikam.png,
+      data/icons/hi128-action-addimagefolder.png,
+      data/icons/hi128-action-adjustcurves.png,
+      data/icons/hi128-action-adjusthsl.png,
+      data/icons/hi128-action-adjustlevels.png,
+      data/icons/hi128-action-adjustrgb.png,
+      data/icons/hi128-action-albumfoldercomment.png,
+      data/icons/hi128-action-albumfoldernew.png,
+      data/icons/hi128-action-antivignetting.png,
+      data/icons/hi128-action-autocorrection.png,
+      data/icons/hi128-action-blurfx.png,
+      data/icons/hi128-action-blurimage.png,
+      data/icons/hi128-action-bordertool.png,
+      data/icons/hi128-action-bwtonal.png,
+      data/icons/hi128-action-channelmixer.png,
+      data/icons/hi128-action-charcoaltool.png,
+      data/icons/hi128-action-colorfx.png,
+      data/icons/hi128-action-colormanagement.png,
+      data/icons/hi128-action-contrast.png,
+      data/icons/hi128-action-depth16to8.png,
+      data/icons/hi128-action-depth8to16.png,
+      data/icons/hi128-action-digitalcam.png,
+      data/icons/hi128-action-distortionfx.png,
+      data/icons/hi128-action-editimage.png,
+      data/icons/hi128-action-embosstool.png,
+      data/icons/hi128-action-exifinfo.png,
+      data/icons/hi128-action-filmgrain.png,
+      data/icons/hi128-action-freerotation.png,
+      data/icons/hi128-action-histogram.png,
+      data/icons/hi128-action-hotpixels.png,
+      data/icons/hi128-action-imagecomment.png,
+      data/icons/hi128-action-importfolders2albums.png,
+      data/icons/hi128-action-infrared.png,
+      data/icons/hi128-action-inpainting.png,
+      data/icons/hi128-action-invertimage.png,
+      data/icons/hi128-action-lensdistortion.png,
+      data/icons/hi128-action-noisereduction.png,
+      data/icons/hi128-action-oilpaint.png,
+      data/icons/hi128-action-perspective.png,
+      data/icons/hi128-action-raindrop.png,
+      data/icons/hi128-action-ratiocrop.png,
+      data/icons/hi128-action-redeyes.png,
+      data/icons/hi128-action-resize_image.png,
+      data/icons/hi128-action-restoration.png,
+      data/icons/hi128-action-sharpenimage.png,
+      data/icons/hi128-action-shear.png,
+      data/icons/hi128-action-superimpose.png,
+      data/icons/hi128-action-texture.png,
+      data/icons/hi128-action-viewimage.png,
+      data/icons/hi128-action-whitebalance.png,
+      data/icons/hi128-app-digikam.png,
+      data/icons/hi128-app-showfoto.png,
+      data/icons/hi16-action-addimagefolder.png,
+      data/icons/hi16-action-adjustcurves.png,
+      data/icons/hi16-action-adjusthsl.png,
+      data/icons/hi16-action-adjustlevels.png,
+      data/icons/hi16-action-adjustrgb.png,
+      data/icons/hi16-action-albumfoldercomment.png,
+      data/icons/hi16-action-antivignetting.png,
+      data/icons/hi16-action-autocorrection.png,
+      data/icons/hi16-action-blurfx.png,
+      data/icons/hi16-action-blurimage.png,
+      data/icons/hi16-action-bordertool.png,
+      data/icons/hi16-action-bwtonal.png,
+      data/icons/hi16-action-channelmixer.png,
+      data/icons/hi16-action-charcoaltool.png,
+      data/icons/hi16-action-colorfx.png,
+      data/icons/hi16-action-colormanagement.png,
+      data/icons/hi16-action-contrast.png,
+      data/icons/hi16-action-depth16to8.png,
+      data/icons/hi16-action-depth8to16.png,
+      data/icons/hi16-action-digitalcam.png,
+      data/icons/hi16-action-distortionfx.png,
+      data/icons/hi16-action-editimage.png,
+      data/icons/hi16-action-embosstool.png,
+      data/icons/hi16-action-exifinfo.png,
+      data/icons/hi16-action-filmgrain.png,
+      data/icons/hi16-action-freerotation.png,
+      data/icons/hi16-action-histogram.png,
+      data/icons/hi16-action-hotpixels.png,
+      data/icons/hi16-action-imagecomment.png,
+      data/icons/hi16-action-importfolders2albums.png,
+      data/icons/hi16-action-infrared.png,
+      data/icons/hi16-action-inpainting.png,
+      data/icons/hi16-action-invertimage.png,
+      data/icons/hi16-action-lensdistortion.png,
+      data/icons/hi16-action-noisereduction.png,
+      data/icons/hi16-action-oilpaint.png,
+      data/icons/hi16-action-raindrop.png,
+      data/icons/hi16-action-ratiocrop.png,
+      data/icons/hi16-action-redeyes.png,
+      data/icons/hi16-action-resize_image.png,
+      data/icons/hi16-action-restoration.png,
+      data/icons/hi16-action-shear.png,
+      data/icons/hi16-action-superimpose.png,
+      data/icons/hi16-action-texture.png,
+      data/icons/hi16-action-whitebalance.png,
+      data/icons/hi16-app-digikam.png,
+      data/icons/hi16-app-showfoto.png,
+      data/icons/hi22-action-addimagefolder.png,
+      data/icons/hi22-action-adjustcurves.png,
+      data/icons/hi22-action-adjusthsl.png,
+      data/icons/hi22-action-adjustlevels.png,
+      data/icons/hi22-action-adjustrgb.png,
+      data/icons/hi22-action-albumfoldercomment.png,
+      data/icons/hi22-action-albumfoldernew.png,
+      data/icons/hi22-action-antivignetting.png,
+      data/icons/hi22-action-autocorrection.png,
+      data/icons/hi22-action-blurfx.png,
+      data/icons/hi22-action-bordertool.png,
+      data/icons/hi22-action-bwtonal.png,
+      data/icons/hi22-action-channelmixer.png,
+      data/icons/hi22-action-charcoaltool.png,
+      data/icons/hi22-action-colorfx.png,
+      data/icons/hi22-action-colormanagement.png,
+      data/icons/hi22-action-contrast.png,
+      data/icons/hi22-action-depth16to8.png,
+      data/icons/hi22-action-depth8to16.png,
+      data/icons/hi22-action-digitalcam.png,
+      data/icons/hi22-action-distortionfx.png,
+      data/icons/hi22-action-editimage.png,
+      data/icons/hi22-action-embosstool.png,
+      data/icons/hi22-action-exifinfo.png,
+      data/icons/hi22-action-filmgrain.png,
+      data/icons/hi22-action-freerotation.png,
+      data/icons/hi22-action-histogram.png,
+      data/icons/hi22-action-hotpixels.png,
+      data/icons/hi22-action-imagecomment.png,
+      data/icons/hi22-action-importfolders2albums.png,
+      data/icons/hi22-action-infrared.png,
+      data/icons/hi22-action-inpainting.png,
+      data/icons/hi22-action-invertimage.png,
+      data/icons/hi22-action-lensdistortion.png,
+      data/icons/hi22-action-noisereduction.png,
+      data/icons/hi22-action-oilpaint.png,
+      data/icons/hi22-action-perspective.png,
+      data/icons/hi22-action-raindrop.png,
+      data/icons/hi22-action-ratiocrop.png,
+      data/icons/hi22-action-redeyes.png,
+      data/icons/hi22-action-resize_image.png,
+      data/icons/hi22-action-restoration.png,
+      data/icons/hi22-action-sharpenimage.png,
+      data/icons/hi22-action-shear.png,
+      data/icons/hi22-action-superimpose.png,
+      data/icons/hi22-action-texture.png,
+      data/icons/hi22-action-viewimage.png,
+      data/icons/hi22-action-whitebalance.png,
+      data/icons/hi22-app-digikam.png,
+      data/icons/hi22-app-showfoto.png, data/icons/hi22-mime-raw.png,
+      data/icons/hi32-action-addimagefolder.png,
+      data/icons/hi32-action-adjustcurves.png,
+      data/icons/hi32-action-adjusthsl.png,
+      data/icons/hi32-action-adjustlevels.png,
+      data/icons/hi32-action-adjustrgb.png,
+      data/icons/hi32-action-albumfoldercomment.png,
+      data/icons/hi32-action-albumfoldernew.png,
+      data/icons/hi32-action-antivignetting.png,
+      data/icons/hi32-action-autocorrection.png,
+      data/icons/hi32-action-blurfx.png,
+      data/icons/hi32-action-blurimage.png,
+      data/icons/hi32-action-bordertool.png,
+      data/icons/hi32-action-bwtonal.png,
+      data/icons/hi32-action-channelmixer.png,
+      data/icons/hi32-action-charcoaltool.png,
+      data/icons/hi32-action-colorfx.png,
+      data/icons/hi32-action-colormanagement.png,
+      data/icons/hi32-action-contrast.png,
+      data/icons/hi32-action-depth16to8.png,
+      data/icons/hi32-action-depth8to16.png,
+      data/icons/hi32-action-digikamimageplugins.png,
+      data/icons/hi32-action-digitalcam.png,
+      data/icons/hi32-action-distortionfx.png,
+      data/icons/hi32-action-editimage.png,
+      data/icons/hi32-action-embosstool.png,
+      data/icons/hi32-action-exifinfo.png,
+      data/icons/hi32-action-filefind.png,
+      data/icons/hi32-action-filmgrain.png,
+      data/icons/hi32-action-freerotation.png,
+      data/icons/hi32-action-histogram.png,
+      data/icons/hi32-action-hotpixels.png,
+      data/icons/hi32-action-imagecomment.png,
+      data/icons/hi32-action-importfolders2albums.png,
+      data/icons/hi32-action-infrared.png,
+      data/icons/hi32-action-inpainting.png,
+      data/icons/hi32-action-invertimage.png,
+      data/icons/hi32-action-lensdistortion.png,
+      data/icons/hi32-action-lighttable.png,
+      data/icons/hi32-action-lighttableadd.png,
+      data/icons/hi32-action-noisereduction.png,
+      data/icons/hi32-action-oilpaint.png,
+      data/icons/hi32-action-perspective.png,
+      data/icons/hi32-action-raindrop.png,
+      data/icons/hi32-action-ratiocrop.png,
+      data/icons/hi32-action-redeyes.png,
+      data/icons/hi32-action-resize_image.png,
+      data/icons/hi32-action-restoration.png,
+      data/icons/hi32-action-sharpenimage.png,
+      data/icons/hi32-action-shear.png,
+      data/icons/hi32-action-superimpose.png,
+      data/icons/hi32-action-texture.png,
+      data/icons/hi32-action-viewimage.png,
+      data/icons/hi32-action-whitebalance.png,
+      data/icons/hi32-action-zoom-select-fit.png,
+      data/icons/hi32-app-digikam.png,
+      data/icons/hi32-app-digikamimageplugins.png,
+      data/icons/hi32-app-showfoto.png, data/icons/hi32-mime-raw.png,
+      data/icons/hi48-action-addimagefolder.png,
+      data/icons/hi48-action-adjustcurves.png,
+      data/icons/hi48-action-adjusthsl.png,
+      data/icons/hi48-action-adjustlevels.png,
+      data/icons/hi48-action-adjustrgb.png,
+      data/icons/hi48-action-albumfoldercomment.png,
+      data/icons/hi48-action-albumfoldernew.png,
+      data/icons/hi48-action-antivignetting.png,
+      data/icons/hi48-action-autocorrection.png,
+      data/icons/hi48-action-blurfx.png,
+      data/icons/hi48-action-blurimage.png,
+      data/icons/hi48-action-bordertool.png,
+      data/icons/hi48-action-bwtonal.png,
+      data/icons/hi48-action-channelmixer.png,
+      data/icons/hi48-action-charcoaltool.png,
+      data/icons/hi48-action-colorfx.png,
+      data/icons/hi48-action-colormanagement.png,
+      data/icons/hi48-action-contrast.png,
+      data/icons/hi48-action-depth16to8.png,
+      data/icons/hi48-action-depth8to16.png,
+      data/icons/hi48-action-digitalcam.png,
+      data/icons/hi48-action-distortionfx.png,
+      data/icons/hi48-action-editimage.png,
+      data/icons/hi48-action-embosstool.png,
+      data/icons/hi48-action-exifinfo.png,
+      data/icons/hi48-action-filmgrain.png,
+      data/icons/hi48-action-freerotation.png,
+      data/icons/hi48-action-histogram.png,
+      data/icons/hi48-action-hotpixels.png,
+      data/icons/hi48-action-imagecomment.png,
+      data/icons/hi48-action-importfolders2albums.png,
+      data/icons/hi48-action-infrared.png,
+      data/icons/hi48-action-inpainting.png,
+      data/icons/hi48-action-invertimage.png,
+      data/icons/hi48-action-lensdistortion.png,
+      data/icons/hi48-action-noisereduction.png,
+      data/icons/hi48-action-oilpaint.png,
+      data/icons/hi48-action-perspective.png,
+      data/icons/hi48-action-raindrop.png,
+      data/icons/hi48-action-ratiocrop.png,
+      data/icons/hi48-action-redeyes.png,
+      data/icons/hi48-action-resize_image.png,
+      data/icons/hi48-action-restoration.png,
+      data/icons/hi48-action-sharpenimage.png,
+      data/icons/hi48-action-shear.png,
+      data/icons/hi48-action-superimpose.png,
+      data/icons/hi48-action-texture.png,
+      data/icons/hi48-action-viewimage.png,
+      data/icons/hi48-action-whitebalance.png,
+      data/icons/hi48-app-digikam.png,
+      data/icons/hi48-app-showfoto.png, data/icons/hi48-mime-raw.png,
+      data/icons/hi64-action-addimagefolder.png,
+      data/icons/hi64-action-adjustcurves.png,
+      data/icons/hi64-action-adjusthsl.png,
+      data/icons/hi64-action-adjustlevels.png,
+      data/icons/hi64-action-adjustrgb.png,
+      data/icons/hi64-action-albumfoldercomment.png,
+      data/icons/hi64-action-albumfoldernew.png,
+      data/icons/hi64-action-antivignetting.png,
+      data/icons/hi64-action-autocorrection.png,
+      data/icons/hi64-action-blurfx.png,
+      data/icons/hi64-action-blurimage.png,
+      data/icons/hi64-action-bordertool.png,
+      data/icons/hi64-action-bwtonal.png,
+      data/icons/hi64-action-channelmixer.png,
+      data/icons/hi64-action-charcoaltool.png,
+      data/icons/hi64-action-colorfx.png,
+      data/icons/hi64-action-colormanagement.png,
+      data/icons/hi64-action-contrast.png,
+      data/icons/hi64-action-depth16to8.png,
+      data/icons/hi64-action-depth8to16.png,
+      data/icons/hi64-action-digitalcam.png,
+      data/icons/hi64-action-distortionfx.png,
+      data/icons/hi64-action-editimage.png,
+      data/icons/hi64-action-embosstool.png,
+      data/icons/hi64-action-exifinfo.png,
+      data/icons/hi64-action-filmgrain.png,
+      data/icons/hi64-action-freerotation.png,
+      data/icons/hi64-action-histogram.png,
+      data/icons/hi64-action-hotpixels.png,
+      data/icons/hi64-action-imagecomment.png,
+      data/icons/hi64-action-importfolders2albums.png,
+      data/icons/hi64-action-infrared.png,
+      data/icons/hi64-action-inpainting.png,
+      data/icons/hi64-action-invertimage.png,
+      data/icons/hi64-action-lensdistortion.png,
+      data/icons/hi64-action-noisereduction.png,
+      data/icons/hi64-action-oilpaint.png,
+      data/icons/hi64-action-perspective.png,
+      data/icons/hi64-action-raindrop.png,
+      data/icons/hi64-action-ratiocrop.png,
+      data/icons/hi64-action-redeyes.png,
+      data/icons/hi64-action-resize_image.png,
+      data/icons/hi64-action-restoration.png,
+      data/icons/hi64-action-sharpenimage.png,
+      data/icons/hi64-action-shear.png,
+      data/icons/hi64-action-superimpose.png,
+      data/icons/hi64-action-texture.png,
+      data/icons/hi64-action-viewimage.png,
+      data/icons/hi64-action-whitebalance.png,
+      data/icons/hi64-app-digikam.png,
+      data/icons/hi64-app-showfoto.png, data/icons/hi64-mime-raw.png,
+      data/icons/hisc-action-addimagefolder.svgz,
+      data/icons/hisc-action-adjustcurves.svgz,
+      data/icons/hisc-action-adjustlevels.svgz,
+      data/icons/hisc-action-adjustrgb.svgz,
+      data/icons/hisc-action-albumfoldercomment.svgz,
+      data/icons/hisc-action-albumfoldernew.svgz,
+      data/icons/hisc-action-antivignetting.svgz,
+      data/icons/hisc-action-autocorrection.svgz,
+      data/icons/hisc-action-blurfx.svgz,
+      data/icons/hisc-action-blurimage.svgz,
+      data/icons/hisc-action-bordertool.svgz,
+      data/icons/hisc-action-bwtonal.svgz,
+      data/icons/hisc-action-channelmixer.svgz,
+      data/icons/hisc-action-colormanagement.svgz,
+      data/icons/hisc-action-contrast.svgz,
+      data/icons/hisc-action-depth16to8.svgz,
+      data/icons/hisc-action-depth8to16.svgz,
+      data/icons/hisc-action-distortionfx.svgz,
+      data/icons/hisc-action-editimage.svgz,
+      data/icons/hisc-action-exifinfo.svgz,
+      data/icons/hisc-action-filmgrain.svgz,
+      data/icons/hisc-action-freerotation.svgz,
+      data/icons/hisc-action-histogram.svgz,
+      data/icons/hisc-action-hotpixels.svgz,
+      data/icons/hisc-action-imagecomment.svgz,
+      data/icons/hisc-action-importfolders2albums.svgz,
+      data/icons/hisc-action-inpainting.svgz,
+      data/icons/hisc-action-invertimage.svgz,
+      data/icons/hisc-action-noisereduction.svgz,
+      data/icons/hisc-action-perspective.svgz,
+      data/icons/hisc-action-ratiocrop.svgz,
+      data/icons/hisc-action-resize_image.svgz,
+      data/icons/hisc-action-restoration.svgz,
+      data/icons/hisc-action-sharpenimage.svgz,
+      data/icons/hisc-action-shear.svgz,
+      data/icons/hisc-action-superimpose.svgz,
+      data/icons/hisc-action-texture.svgz,
+      data/icons/hisc-action-whitebalance.svgz,
+      data/icons/hisc-app-digikam.svgz,
+      data/icons/hisc-app-showfoto.svgz,
+      data/icons/oxygen/128x128/apps/digikam.png,
+      data/icons/oxygen/128x128/apps/showfoto.png,
+      data/icons/oxygen/16x16/actions/transform-crop-and-resize.png,
+      data/icons/oxygen/16x16/actions/view-object-histogram-logarithmic.png,
+      data/icons/oxygen/16x16/apps/digikam.png,
+      data/icons/oxygen/16x16/apps/showfoto.png,
+      data/icons/oxygen/22x22/actions/transform-crop-and-resize.png,
+      data/icons/oxygen/22x22/actions/view-object-histogram-linear.png,
+      data/icons/oxygen/22x22/actions/view-object-histogram-logarithmic.png,
+      data/icons/oxygen/22x22/apps/digikam.png,
+      data/icons/oxygen/22x22/apps/showfoto.png,
+      data/icons/oxygen/32x32/actions/transform-crop-and-resize.png,
+      data/icons/oxygen/32x32/actions/view-object-histogram-linear.png,
+      data/icons/oxygen/32x32/actions/view-object-histogram-logarithmic.png,
+      data/icons/oxygen/32x32/apps/digikam.png,
+      data/icons/oxygen/32x32/apps/showfoto.png,
+      data/icons/oxygen/48x48/actions/transform-crop-and-resize.png,
+      data/icons/oxygen/48x48/apps/digikam.png,
+      data/icons/oxygen/48x48/apps/showfoto.png,
+      data/icons/oxygen/64x64/apps/digikam.png,
+      data/icons/oxygen/64x64/apps/showfoto.png,
+      data/icons/oxygen/scalable/actions/transform-crop-and-resize.svgz,
+      data/icons/oxygen/scalable/actions/view-object-histogram-linear.svgz,
+      data/icons/oxygen/scalable/actions/view-object-histogram-logarithmic.svgz,
+      data/icons/oxygen/scalable/apps/digikam.svgz,
+      data/icons/oxygen/scalable/apps/showfoto.svgz,
+      data/pics/albumfolder-importdir.png,
+      data/pics/albumfolder-importimages.png,
+      data/pics/albumfolder-new.png,
+      data/pics/albumfolder-properties.png,
+      data/pics/banner-digikam.png, data/pics/bothhorz.png,
+      data/pics/bothvert.png, data/pics/centerheight.png,
+      data/pics/centerwidth.png, data/pics/curvefree.png,
+      data/pics/curvemooth.png, data/pics/duplicatebothhorz.png,
+      data/pics/duplicatebothvert.png, data/pics/editimage.png,
+      data/pics/exifinfo.png, data/pics/histogram-lin.png,
+      data/pics/histogram-log.png, data/pics/histogram.png,
+      data/pics/image-full.png, data/pics/image-selection.png,
+      data/pics/indicator-gray.png, data/pics/indicator-green.png,
+      data/pics/indicator-red.png, data/pics/logo-cimg.png,
+      data/pics/logo-digikam.png, data/pics/logo-exiv2.png,
+      data/pics/logo-gphoto.png, data/pics/logo-lcms.png,
+      data/pics/logo-showfoto.png, data/pics/menusidepix-digikam.png,
+      data/pics/menusidepix-showfoto.png, data/pics/original.png,
+      data/pics/overexposure.png, data/pics/splash-digikam.png,
+      data/pics/splash-showfoto.png, data/pics/tag-addressbook.png,
+      data/pics/tag-assigned.png, data/pics/tag-delete.png,
+      data/pics/tag-events.png, data/pics/tag-folder.png,
+      data/pics/tag-new.png, data/pics/tag-people.png,
+      data/pics/tag-places.png, data/pics/tag-properties.png,
+      data/pics/tag-recents.png, data/pics/tag-reset.png,
+      data/pics/tag.png, data/pics/target.png,
+      data/pics/togglemouseover.png, data/pics/underexposure.png,
+      imageplugins/border/patterns/chalk-pattern.png,
+      imageplugins/border/patterns/craters-pattern.png,
+      imageplugins/border/patterns/dried-pattern.png,
+      imageplugins/border/patterns/granit-pattern.png,
+      imageplugins/border/patterns/ice-pattern.png,
+      imageplugins/border/patterns/leaf-pattern.png,
+      imageplugins/border/patterns/marble-pattern.png,
+      imageplugins/border/patterns/paper-pattern.png,
+      imageplugins/border/patterns/parque-pattern.png,
+      imageplugins/border/patterns/pine-pattern.png,
+      imageplugins/border/patterns/pink-pattern.png,
+      imageplugins/border/patterns/rain-pattern.png,
+      imageplugins/border/patterns/rock-pattern.png,
+      imageplugins/border/patterns/stone-pattern.png,
+      imageplugins/border/patterns/wall-pattern.png,
+      imageplugins/border/patterns/wood-pattern.png,
+      imageplugins/texture/patterns/bluejean-texture.png,
+      imageplugins/texture/patterns/bricks-texture.png,
+      imageplugins/texture/patterns/bricks2-texture.png,
+      imageplugins/texture/patterns/burlap-texture.png,
+      imageplugins/texture/patterns/canvas-texture.png,
+      imageplugins/texture/patterns/cellwood-texture.png,
+      imageplugins/texture/patterns/fabric-texture.png,
+      imageplugins/texture/patterns/marble-texture.png,
+      imageplugins/texture/patterns/marble2-texture.png,
+      imageplugins/texture/patterns/metalwire-texture.png,
+      imageplugins/texture/patterns/modern-texture.png,
+      imageplugins/texture/patterns/moss-texture.png,
+      imageplugins/texture/patterns/paper-texture.png,
+      imageplugins/texture/patterns/paper2-texture.png,
+      imageplugins/texture/patterns/stone-texture.png,
+      imageplugins/texture/patterns/wall-texture.png: optimizegraphics:
+      Losslessly optimized PNG and SVGZ files with "optipng -o5" and
+      "advdef -z -4".
+      Reduced disk space: 2468KB (2MB)
+
+2008-10-26 18:38  cgilles
+
+    * ChangeLog: update changelog for 0.10.0-beta5 release
+
 0.10.0-beta5 2008-10-26
 --------------------------------------------------------------------------------
 
