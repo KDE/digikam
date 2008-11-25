@@ -82,11 +82,6 @@ static inline void authorsRegistration(KAboutData& aboutData)
                           "http://www.digikam.org/?q=blog/133");
 
 
-    aboutData.addAuthor ( ki18n("Francisco J. Cruz"),
-                          ki18n("Developer"),
-                          "fj dot cruz at supercable dot es",
-                          "http://www.digikam.org/?q=blog/5");
-
     aboutData.addAuthor ( ki18n("Renchi Raju"),
                           ki18n("Developer (2002-2005)"),
                           "renchi at pooh dot tam dot uiuc dot edu");
@@ -104,6 +99,11 @@ static inline void authorsRegistration(KAboutData& aboutData)
     aboutData.addAuthor ( ki18n("Ralf Holzer"),
                           ki18n("Developer (2004)"),
                           "kde at ralfhoelzer dot com");
+
+    aboutData.addAuthor ( ki18n("Francisco J. Cruz"),
+                          ki18n("Developer (2005-2006)"),
+                          "fj dot cruz at supercable dot es",
+                          "http://www.digikam.org/?q=blog/5");
 
     aboutData.addCredit ( ki18n("Risto Saukonpaa"),
                           ki18n("Design, icons, logo, banner, mockup, beta tester"),
