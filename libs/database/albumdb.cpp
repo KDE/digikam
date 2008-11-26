@@ -1095,10 +1095,10 @@ QVariantList AlbumDB::getImagePosition(qlonglong imageID, DatabaseFields::ImageP
             (fields & DatabaseFields::LatitudeNumber ||
              fields & DatabaseFields::LongitudeNumber ||
              fields & DatabaseFields::Altitude ||
-             fields & DatabaseFields::Orientation ||
-             fields & DatabaseFields::Tilt ||
-             fields & DatabaseFields::Roll ||
-             fields & DatabaseFields::Accuracy)
+             fields & DatabaseFields::PositionOrientation ||
+             fields & DatabaseFields::PositionTilt ||
+             fields & DatabaseFields::PositionRoll ||
+             fields & DatabaseFields::PositionAccuracy)
            )
         {
             for (int i=0; i<values.size(); i++)
