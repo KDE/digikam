@@ -48,7 +48,7 @@ namespace Digikam
  *
  * Images can be moved through ItemDrag. It is possible to move them on
  * another application which understands KURLDrag, like konqueror, to
- * copy the images. Digikam can use the IDs, if ItemDrag is dropped
+ * copy the images. digiKam can use the IDs, if ItemDrag is dropped
  * on digikam itself.
  * The kioURLs are internally used with the digikamalbums kioslave.
  * The "normal" KURLDrag urls are used for external drops (k3b, gimp, ...)
@@ -68,6 +68,7 @@ public:
                        KUrl::List &kioURLs,
                        QList<int>& albumIDs,
                        QList<int>& imageIDs);
+    static QStringList mimeTypes();
 };
 
 // ------------------------------------------------------------------------
@@ -85,6 +86,7 @@ public:
     DTagDrag(int albumid);
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, int &tagID);
+    static QStringList mimeTypes();
 };
 
 // ------------------------------------------------------------------------
@@ -102,6 +104,7 @@ public:
     DAlbumDrag(const KUrl &url, int albumid);
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, KUrl::List &urls, int &albumID);
+    static QStringList mimeTypes();
 };
 
 // ------------------------------------------------------------------------
@@ -119,6 +122,7 @@ public:
     DTagListDrag(const QList<int>& tagIDs);
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, QList<int> &tagIDs);
+    static QStringList mimeTypes();
 };
 
 // ------------------------------------------------------------------------
@@ -136,6 +140,7 @@ public:
     DCameraItemListDrag(const QStringList& cameraItemPaths);
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, QStringList &cameraItemPaths);
+    static QStringList mimeTypes();
 };
 
 // ------------------------------------------------------------------------
@@ -154,6 +159,7 @@ public:
     DCameraDragObject(const CameraType& ctype);
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, CameraType& ctype);
+    static QStringList mimeTypes();
 };
 
 }  // namespace Digikam
