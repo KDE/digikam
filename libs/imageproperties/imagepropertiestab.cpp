@@ -443,7 +443,16 @@ void ImagePropertiesTab::setImageDimensions(const QString& str)
 
 void ImagePropertiesTab::setImageCompression(const QString& str)
 {
+    d->compression->show();
+    d->labelImageCompression->show();
+
     d->labelImageCompression->setText(str);
+}
+
+void ImagePropertiesTab::hideImageCompression()
+{
+    d->compression->hide();
+    d->labelImageCompression->hide();
 }
 
 void ImagePropertiesTab::setImageBitDepth(const QString& str)

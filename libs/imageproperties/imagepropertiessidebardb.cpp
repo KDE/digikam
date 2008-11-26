@@ -472,6 +472,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformations(const KUrl& url)
             /* TODO : This info is not stored by DB
             m_propertiesTab->setImageCompression(compression.isEmpty() ? unavailable : compression);
             */
+            m_propertiesTab->hideImageCompression();
 
             // -- Photograph information ------------------------------------------
 
