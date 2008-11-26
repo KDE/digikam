@@ -1052,6 +1052,28 @@ QVariantList AlbumDB::getImageMetadata(qlonglong imageID, DatabaseFields::ImageM
         query += (" FROM ImageMetadata WHERE imageid=?;");
 
         d->db->execSql(query, imageID, &values);
+
+        // For some reason REAL values may come as QString QVariants. Convert here.
+        if (values.size() == fieldNames.size() &&
+            (fields & DatabaseFields::Aperture ||
+             fields & DatabaseFields::FocalLength ||
+             fields & DatabaseFields::FocalLength35 ||
+             fields & DatabaseFields::ExposureTime ||
+             fields & DatabaseFields::SubjectDistance)
+           )
+        {
+            for (int i=0; i<values.size(); i++)
+            {
+                if (values[i].type() == QVariant::String &&
+                    (fieldNames[i] == "aperture" ||
+                     fieldNames[i] == "focalLength" ||
+                     fieldNames[i] == "focalLength35" ||
+                     fieldNames[i] == "exposureTime" ||
+                     fieldNames[i] == "subjectDistance")
+                   )
+                    values[i] = values[i].toDouble();
+            }
+        }
     }
     return values;
 }
@@ -1067,6 +1089,32 @@ QVariantList AlbumDB::getImagePosition(qlonglong imageID, DatabaseFields::ImageP
         query += (" FROM ImagePositions WHERE imageid=?;");
 
         d->db->execSql(query, imageID, &values);
+
+        // For some reason REAL values may come as QString QVariants. Convert here.
+        if (values.size() == fieldNames.size() &&
+            (fields & DatabaseFields::LatitudeNumber ||
+             fields & DatabaseFields::LongitudeNumber ||
+             fields & DatabaseFields::Altitude ||
+             fields & DatabaseFields::Orientation ||
+             fields & DatabaseFields::Tilt ||
+             fields & DatabaseFields::Roll ||
+             fields & DatabaseFields::Accuracy)
+           )
+        {
+            for (int i=0; i<values.size(); i++)
+            {
+                if (values[i].type() == QVariant::String &&
+                    (fieldNames[i] == "latitudeNumber" ||
+                     fieldNames[i] == "longitudeNumber" ||
+                     fieldNames[i] == "altitude" ||
+                     fieldNames[i] == "orientation" ||
+                     fieldNames[i] == "tilt" ||
+                     fieldNames[i] == "roll" ||
+                     fieldNames[i] == "accuracy")
+                   )
+                    values[i] = values[i].toDouble();
+            }
+        }
     }
     return values;
 }
