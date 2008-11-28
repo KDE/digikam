@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "mdkeylistviewitem.h"
 #include "mdkeylistviewitem.moc"
 
@@ -60,12 +59,11 @@ MdKeyListViewItem::MdKeyListViewItem(QTreeWidget *parent, const QString& key)
     else if (key == "Envelope")     m_decryptedKey = i18n("IIM Envelope");
     else if (key == "Application2") m_decryptedKey = i18n("IIM Application 2");
 
-    setDisabled(false);
-    setSelected(false);
-    setExpanded(true);
-    setFlags(flags() & (int)!Qt::ItemIsSelectable);
+    // Reset all item flags: item is not selectable.
+    setFlags(Qt::ItemIsEnabled);
 
-    // item is not selectable.
+    setDisabled(false);
+    setExpanded(true);
 
     setFirstColumnSpanned(true);
     setTextAlignment(0, Qt::AlignCenter);

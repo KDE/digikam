@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "metadatalistviewitem.h"
 
 // Qt includes.
@@ -30,7 +29,6 @@
 #include <QPalette>
 #include <QFont>
 #include <QPainter>
-
 
 namespace Digikam
 {
@@ -41,8 +39,6 @@ MetadataListViewItem::MetadataListViewItem(QTreeWidgetItem *parent, const QStrin
 {
     m_key = key;
 
-    // item is selectable.
-    setFlags(flags() | Qt::ItemIsSelectable);
     setDisabled(false);
 
     setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
