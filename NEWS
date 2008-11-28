@@ -10,7 +10,9 @@ General        : digiKamlinktree script updated to support new Database schema.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 
+001 ==> 172680 : Digikam crashes when I try to download the photos from my camera.
+002 ==> 166578 : Default Keyboard zoom requires three fingers.
+003 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
