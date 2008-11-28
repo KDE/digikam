@@ -54,7 +54,7 @@ public:
     bool load(const QString& filePath, DImgLoaderObserver *observer);
     bool save(const QString& filePath, DImgLoaderObserver *observer);
 
-    virtual bool hasAlpha() const;
+    virtual bool hasAlpha()   const;
     virtual bool sixteenBit() const;
     virtual bool isReadOnly() const { return false; };
 
