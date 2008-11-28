@@ -20,6 +20,8 @@ NEW FEATURES:
 
 General        : digiKam can be compiled under Microsoft Windows with MinGW or MSVC independently.
 General        : Usability improvements to be able to run digiKam on small screen (like EeePC).
+General        : New option to enable RAW metadata writing.
+General        : libkexiv2 dependency updated to 0.5.0.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
