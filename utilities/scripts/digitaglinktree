@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-$version="1.6.3";
+$version="1.7.0";
 # Author: Rainer Krienke, krienke@uni-koblenz.de
 #
 # Description:
@@ -46,7 +46,9 @@ $version="1.6.3";
 # accessing array references with $# operator. If $r is a ref to an array
 # then $#{@r} was ok in the past but now $#{r] is correct, perhaps it was
 # always correct and the fact that $#{@r} worked was just good luck ....
-#
+# 1.6.3 -> 1.7.0 2008/11/27 Rainer Krienke, krienke@uni-koblenz.de
+# Adapted script to handle digikams v0.10 new database scheme as well
+# as the older ones. Version is determined automatically.
 
 
 # ---------------------------------------------------------------------------
@@ -92,7 +94,7 @@ $scriptAuthor="krienke@uni-koblenz.de";
 #
 sub checkVersion{
     my($database)=shift;
-    my(@data, $res); 
+    my(@data, $res, $version); 
     
     if( ! -r $SQLITE ){
        warn "Cannot start sqlite executable \"$SQLITE\". \n",
@@ -112,13 +114,20 @@ sub checkVersion{
 	     "script head accordingly \n\n";
 	exit(1);     
     } 
-    
+    $version="-1";
     $res=grep(/TagsTree/, @data);
     if( $res==0 ){
-    	return("7")	# digikam version 0.7
+    	$version="7";	# digikam version 0.7
     }else{
-    	return("8");	# digikam version 0.8
+    	$version="8";	# digikam version 0.8
     }
+    # Now check if we have digikam 0.10
+    $res=grep(/AlbumRoots/, @data);
+ 
+    if( $res!=0 ){
+    	$version="10";	# digikam version 0.10 KDE4
+    }
+    return($version);
 }
 
 
@@ -126,13 +135,17 @@ sub checkVersion{
 # Get all images that have tags from digikam database
 # refPathNames will contain all photos including path having tags 
 # The key in refPathNames is the path, value is photos name
+# rootdir is the relative album path in which photos are stored
+# in digikam <0.10 this is the path given by the user via -r option
+# starting with digikam 0.10 rootDir may be any of the entries of table 
+# AlbumRoots column specificPath, albumId is the corresponding entry
+# of column id.
 #
 sub getTaggedImages{
-   my($refImg, $database, $rootDir, $refPaths, $refPathNames)=@_;
+   my($refImg, $database, $rootDir, $albumId, $refPaths, $refPathNames, $vers)=@_;
    my($i, $image, $path, $tag, $status, $id, $pid, $tmp);
-   my($sqliteCmd, @data, $vers, @tags, %tagPath, $tagCount, $refTag);
+   my($sqliteCmd, @data, @tags, %tagPath, $tagCount, $refTag);
    
-   $vers=checkVersion($database); # Find out version of digikam 
    
    # Get tag information from database
    $sqliteCmd="\"select id,pid,name from tags;\"";
@@ -154,7 +167,7 @@ sub getTaggedImages{
       # We want to find out the complete path for the subtag. For friends this
       # would be the path "people/friends".  Images with tag friends would then be
       # linked in the directory <tagsroot>/people/friends/
-      for($i=0; $i<=$#tags; $i++){
+	for($i=0; $i<=$#tags; $i++){
 	 $pid=$tags[$i]->{"pid"};   # Get parent tag id of current tag
 	 $tag=$tags[$i]->{"tag"};   # Start constructing tag path
          if( $pid == 0 ){
@@ -168,7 +181,7 @@ sub getTaggedImages{
 	 }
 	 # Store path constructed
 	 $tagPath{$i}=$tag;
-	 #warn "+ $tag \n";
+	 #warn "+ $tag \n";	 
       } 
    }else{
       print "Error running SQL-Command \"$sqliteCmd\" on database \"$database\"\n";   
@@ -186,45 +199,59 @@ sub getTaggedImages{
       $sqliteCmd="\"select Images.name,Albums.url,ImageTags.tagid from"            .
                " Images,Albums,ImageTags where "                        .
 	       " Images.dirid=Albums.id AND Images.id=ImageTags.imageid; \"";
+   }elsif( $vers == 10 ){
+      # SQL to get all tagged images from digikam DB with names of tags 
+      # Only those images are considered that belong to the album in question
+      $sqliteCmd="\"select Images.name,Albums.relativePath,ImageTags.tagid from" .
+                         " Images,Albums,ImageTags " .
+                         " where Images.album=Albums.id AND" .
+                         " Images.id=ImageTags.imageid AND  " .
+			 " Albums.albumRoot=$albumId \""
    }else{
    	warn "Unsupported digikam database version. Contact $scriptAuthor \n\n";
 	exit(1);
    }   
-   
    @data=`$SQLITE $database $sqliteCmd`;
    $status=$?;
+   #print "Status: $status, AlbumId: $albumId\n";
    if( $status == 0 ){
       foreach $i ( @data ){
       	 chomp($i);
+	 #print "$i, $albumId \n";
 	 ($image, $path, $tag)=split(/\|/, $i);
+	 $path=~s/\/$// if( $path =~ /\/$/ ); # remove a trailing /
 	 $refPaths->{"$rootDir$path"}=1;
 	 $refPathNames->{"$rootDir$path/$image"}=1;
 	 
-	 $tmp=$path;
+	 #print "-- $rootDir$path/$image \n";
+	 
+	 $tmp="$path";
 	 #warn "- $rootDir, $path, $image \n";
 	 # Enter all subpaths in $path as defined too
 	 do{
           	$tmp=~s/\/[^\/]+$//;
 		$refPaths->{"$rootDir$tmp"}=1;
+		$tmp=~s/^\/$//;     # Finally delete a "/" standing alone
 	 } while (length($tmp)); 
 	 
-	 
-	 $refImg->{"$path/$image"}->{"path"}=$path;
-	 $refImg->{"$path/$image"}->{"image"}=$image;
-	 $refTag=$refImg->{"$path/$image"}->{"tag"};
+	 $refImg->{"$rootDir/$path/$image"}->{"path"}=$path;
+	 $refImg->{"$rootDir/$path/$image"}->{"image"}=$image;
+	 $refImg->{"$rootDir/$path/$image"}->{"rootDir"}=$rootDir;
+	 $refTag=$refImg->{"$rootDir/$path/$image"}->{"tag"};
 	 # 
 	 # One image can have several tags assigned. So we manage 
 	 # a list of tags for each image
 	 $tagCount=$#{$refTag}+1;	
          # The tags name
-	 $refImg->{"$path/$image"}->{"tag"}->[$tagCount]=$tag;
+	 $refImg->{"$rootDir/$path/$image"}->{"tag"}->[$tagCount]=$tag;
          # tags path for sub(sub+)tags
-	 $refImg->{"$path/$image"}->{"tagpath"}->[$tagCount]=$tagPath{$tag};                   
+	 $refImg->{"$rootDir/$path/$image"}->{"tagpath"}->[$tagCount]=$tagPath{$tag};                   
+
+	 #print "$path/$image -> $tagPath($tag} \n";
       }
    }else{
       print "Error running SQL-Command \"$sqliteCmd\" on database \"$database\"\n";   
-   }
-   
+   } 
    return($status);
 }
 
@@ -235,10 +262,10 @@ sub getTaggedImages{
 #
 sub createLinkTree{
     my($refImages)=shift;
-    my($photoRootDir, $linktreeRootDir, $opt_flat, $opt_absolute, $linkMode)=@_;
+    my($fakeRoot, $linktreeRootDir, $opt_flat, $opt_absolute, $linkMode)=@_;
     my( $i, $j, $cmd, $path, $image, $tag, $qpath, $qtag, $qimage, $linkName, 
-        $tmp, $ret, $sourceDir, $destDir);
-    my($qtagPath, $relPath);
+        $tmp, $ret, $sourceDir, $destDir, $photoRootDir);
+    my($qtagPath, $relPath, $count);
 
     if( -d "$linktreeRootDir" ){
     	# Remove old backuplinktree
@@ -260,18 +287,35 @@ sub createLinkTree{
 	 die "Cannot mkdir \"$linktreeRootDir\"\n";
     }
     # Iterate over all tagged images and create links
+    $count=0;
     foreach $i (keys(%$refImages)){
-    	# Check that the images in the linktrees themselves are
+	$path=$refImages->{$i}->{"path"};
+	$image=$refImages->{$i}->{"image"};
+	
+	#print "-> $photoRootDir, $path, $image, $fakeRoot\n";
+	if( ! length($fakeRoot) ){
+	   $photoRootDir=$refImages->{$i}->{"rootDir"};
+	}else{
+	   $photoRootDir=$fakeRoot;
+	}
+	#$qimage=quotemeta($image);
+	#$qpath=quotemeta($path);
+
+	# Check that the images in the linktrees themselves are
 	# ignored in the process of link creation. If we do not do this
 	# we might get into trouble when the linktree root is inside the
 	# digikam root dir and so the image links inside the liktree directory 
 	# are indexed by digikam.
-	next if( -l "${photoRootDir}$i" );
-	
-	$path=$refImages->{$i}->{"path"};
-	$image=$refImages->{$i}->{"image"};
-	#$qimage=quotemeta($image);
-	#$qpath=quotemeta($path);
+	 next if( -l "${photoRootDir}$path/$image" );
+	# $refImages always contains all images from all albums. For Mode -A 
+	# in digikam 0.10 it may happen that some albums are not on the same filesystem 
+	# like the photoRoot. in this case this album is not cloned to another 
+	# directory buth neverless
+	# refImages contains also data about photos in this album. But since it is 
+	# not cloned, the cloned root # does not exits and so the photo therin does 
+	# not exist. Thats what we check here.
+	next if( ! -r "${photoRootDir}$path/$image" ); 
+        $count++;
 
         # Handle all of the tags for the current photo
 	for( $j=0;  $j<=$#{$refImages->{$i}->{"tag"}}; $j++){	
@@ -341,6 +385,7 @@ sub createLinkTree{
 	   
 	}# for
     }
+    return($count);
 }
 
 
@@ -385,6 +430,7 @@ sub cloneDir{
       }else{
          # if cloneMode is "minimal" then only clone directories and files
 	 # with photos that have tags set.
+	 #print "+ refPathNames, $srcDir/$k , ",$refPathNames->{"$srcDir/$k"}, " \n";
 	 if( $cloneMode ne "minimal" ||
      	               defined($refPathNames->{"$srcDir/$k"}) ){ 
 	    # link files
@@ -397,6 +443,7 @@ sub cloneDir{
 	       }
 	    }elsif( $linkMode eq "hard" ){
 	       $ret=link( "$srcDir/$k",  "$cloneDir/$k");
+	    
 	       if( !$ret ){
 	           $ret="$!";
 		   warn "Warning: In cloning failed hard linking \"$srcDir/$k\" to \"$cloneDir/$k\": ",
@@ -412,21 +459,12 @@ sub cloneDir{
 
 
 #
-# Manage cloning of a complete directory. If the clone directory exists
-# a .bak will be created
-# Files will be linked (hard/symbolic) according to cloneLinkMode which
-# should be "symbolic" or "hard"
-# cloneMode can "minimal" or anything else. minimal means only to clone 
-# those files and directories that have tags set. Anything else means
-# to clone the whole photo tree with all files
+# Create directory for cloning photos when running with -A 
 #
-sub runClone{
-   my($rootDir, $cloneDir, $photoDir, $cloneMode, $cloneLinkMode, 
-      $refPaths, $refPathNames)=@_;
-   my($ret);
-   my($dev_r,$dev_A, $ino,$mode,$nlink,$uid,$gid,$rdev,$size,
-      $atime,$mtime,$ctime,$blksize,$blocks);
-   
+sub createCloneDir{
+    my( $cloneDir, $photoDir)=@_;
+    my($ret);
+    
     if( -d "$cloneDir" ){
     	# Remove old backuplinktree
 	system("rm -rf ${cloneDir}.bak");
@@ -448,7 +486,24 @@ sub runClone{
     if( !$ret ){
 	die "Cannot run \"mkdir $cloneDir/$photoDir\"\n";
     }
+}
 
+#
+# Manage cloning of a complete directory. If the clone directory exists
+# a .bak will be created
+# Files will be linked (hard/symbolic) according to cloneLinkMode which
+# should be "symbolic" or "hard"
+# cloneMode can "minimal" or anything else. minimal means only to clone 
+# those files and directories that have tags set. Anything else means
+# to clone the whole photo tree with all files
+#
+sub runClone{
+   my($rootDir, $cloneDir, $photoDir, $cloneMode, $cloneLinkMode, 
+      $refPaths, $refPathNames)=@_;
+   my($ret);
+   my($dev_r,$dev_A, $ino,$mode,$nlink,$uid,$gid,$rdev,$size,
+      $atime,$mtime,$ctime,$blksize,$blocks);
+   
     # Check if root and archive dir are on same filesystem
     ($dev_r,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
        $atime,$mtime,$ctime,$blksize,$blocks)       = stat($rootDir);
@@ -456,14 +511,16 @@ sub runClone{
        $atime,$mtime,$ctime,$blksize,$blocks)       = stat($cloneDir);
     #
     if( $dev_r != $dev_A ){
-	warn "Error: \"$rootDir\" and \"$cloneDir\" are not on the same filesystem. Please select ",
-	     "an archive directory on the same filesystem like digikams root directory! Abort.\n";
-	exit 1;     
+	warn "Warning: \"$rootDir\" and \"$cloneDir\" are not on the same filesystem. Please select ",
+	     "an archive directory on the same filesystem like digikams root directory! Skipped.\n";
+	return(-1);     
     }	   
 
     # Create clone of all entries in $rootDir into $clonedir
     cloneDir($rootDir, "$cloneDir/$photoDir", $cloneLinkMode, 
              $cloneMode, $refPaths, $refPathNames);
+    
+    return(0);
 }
 
 
@@ -471,14 +528,15 @@ sub runClone{
 # print out usage 
 #
 sub usage{
-    print "$0 -r <photoroot> \n",
-          "                  -l <taglinkdir> | -A <archivedir> \n",
+    print "                  -l <taglinkdir> | -A <archivedir> \n",
 	  "                  -d <digikamdatabasefile> \n",
+	  "                  [-r <photoroot>]  \n",	  
 	  "                  [-H|-f|-a|-v|-C] \n",
-          "  -r <rootdir> path to digikams root directory containing all photos\n",
 	  "  -l <tagdir>  path to directory where the tag directory structure with \n",
 	  "               links to the original images should be created \n",
 	  "  -d <dbfile>  full path to the digikam database file \n",
+          "  -r <rootdir> path to digikams root directory containing all photos. Not allowed\n",
+	  "               for digikam vers >= 0.10. Mandatory for earlier digikam versions!\n",
 	  "  -A <ardir>   Create selfcontained archive of photos and tags in directory\n",
 	  "               ardir. rootdir and arDir have to be on the *same* filesystem!\n",
 	  "  -C           If -A <archdir> was given this option will put hardlinks of all\n",
@@ -496,6 +554,28 @@ sub usage{
 }
  
  
+# 
+# get Album roots if digikam is 0.10 or higher 
+#
+sub getAlbumRoots{
+   my($database, $refAlbumRoots)=@_;
+   my($ret, @data, $sql, $i, $id, $path);
+ 
+   $sql="\"select id, specificPath from AlbumRoots\"";
+   @data=`$SQLITE $database $sql  2>&1`; # Try to get the tables information
+   for( $i=0; $i <= $#data; $i++) {
+      chomp($data[$i]);
+      ($id, $path)=split(/\|/, $data[$i] );
+      $refAlbumRoots->{$id}=$path; # Enter Album Data
+   }
+   
+   if( $? != 0 ){
+       warn "$0: Cannot execute  $sql on database $database \n";
+       exit(1);
+   }
+
+}
+ 
 # ------------------------------------------------------------------
 # main
 # ------------------------------------------------------------------
@@ -510,19 +590,16 @@ if( defined($opt_v) ){
     exit 0;    
 }
 
-usage if( !length($opt_r) || (!length($opt_l) && ! length($opt_A)) 
+usage if ((!length($opt_l) && ! length($opt_A)) 
            || !length($opt_d) );
 
 $opt_f=0 if( ! length($opt_f) );
 
-if( ! -d $opt_r ){
-	print "Invalid digikam photoroot directory \"$opt_r\". Exit.\n";
-	exit 1;
-}
 if( ! -f $opt_d ){
 	print "Digikam database \"$opt_d\" not found. Exit.\n";
 	exit 1;
 }
+$database=$opt_d;
 
 # Remove trailing /
 $opt_r=~s/\/$//;
@@ -543,20 +620,62 @@ if( length($opt_H) ){
    $linkMode="symbolic";  # type of link from linktree to phototree
 }
 
-# Extract data needed from database
-$ret=getTaggedImages(\%images, $opt_d, $opt_r, \%paths, \%pathNames);
+# Check digikam Database "version"
+$vers=checkVersion($database); # Find out version of digikam 
+
+if( ! -d $opt_r && $vers < 10 ){
+	print "Invalid/empty digikam photoroot directory  \"$opt_r\" . Use -r to give correct one. Exit.\n";
+	exit 1;
+}
+
+# For version .10 of digikam and newer get root albumpaths
+$ret=0;
+if( $vers >= 10 ){
+    getAlbumRoots($database, \%albumRoots);
+    # Now Process all albums found
+    if( defined($opt_r) ){
+       warn "\n$0: Hint: Album root definitions given by \"-r\" ignored \n",
+            "for digikam version >= 0.10 . Instead all Albums defined in digikams \n",
+	    "database are used. Continuing work ... \n\n";
+    }
+    foreach $i  (keys(%albumRoots)) {
+      #print "Album roots -> $i:", $albumRoots{$i}, "\n";
+      # Extract data needed from database
+    
+      $ret+=getTaggedImages(\%images, $database, $albumRoots{$i},  $i, \%paths, \%pathNames, $vers);
+    }   
+}else{
+    $ret=getTaggedImages(\%images, $database, $opt_r, -1, \%paths, \%pathNames, $vers);
+}
+
+if( $ret != 0 ){
+   warn "$0: Error looking up tag information in database. Exit.\n\n";
+   exit 1;
+}
 
 # Handle Archiving photos and tag structure
-# digikams photo dir will be clone as a whole by using 
+# digikams photo dir will be cloned as a whole by using 
 # either soft or hard links ($cloneMode)
+$fakeRoot="";
 if( length($opt_A) ){
     #    
-    runClone($opt_r, $opt_A, $archiveDirPhotos, $cloneMode, "hard", \%paths, \%pathNames);
-    $rootDir="$opt_A/$archiveDirPhotos";
+    # Create a new empty directory for coling, rename old if existing
+    $ret=createCloneDir($opt_A, $archiveDirPhotos);
+    if( $vers >= 10 ){
+       foreach $i  (keys(%albumRoots)) {
+           #print "$i, $albumRoots{$i}\n";
+	   $ret+=runClone($albumRoots{$i}, $opt_A, $archiveDirPhotos, $cloneMode, "hard", \%paths, \%pathNames);
+       }
+
+    }else{
+       $ret=runClone($opt_r, $opt_A, $archiveDirPhotos, $cloneMode, "hard", \%paths, \%pathNames);
+    
+    }
+    $fakeRoot="$opt_A/$archiveDirPhotos";
     $linkDir="$opt_A/$archiveDirLinks";
 }
 
-if( !$ret && ( length($opt_l) || length($opt_A)) ){
+if( ( length($opt_l) || length($opt_A)) ){
     # When doing hard links we always use absolute linking
     if( $linkMode eq "hard" ){
 	warn "Will use absolute hard links for linktree in archive mode...\n" if( !length($opt_a) ); 
@@ -564,5 +683,7 @@ if( !$ret && ( length($opt_l) || length($opt_A)) ){
     }	
 
     # Create the link trees for all tagged images
-    createLinkTree(\%images, $rootDir, $linkDir, $opt_f, $opt_a, $linkMode);	
+    $count=createLinkTree(\%images, $fakeRoot, $linkDir, $opt_f, $opt_a, $linkMode);	
+    
+    print "Processed $count photos. \n";
 }
