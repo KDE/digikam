@@ -12,7 +12,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 172680 : Digikam crashes when I try to download the photos from my camera.
 002 ==> 166578 : Default Keyboard zoom requires three fingers.
-003 ==> 
+003 ==> 171318 : Digikam backend does not exit on Quit - processes hang
+004 ==> 175401 : Digikam doesn't always detect mass storage camera
+005 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
