@@ -147,9 +147,6 @@ public:
     QLabel                       *formatLabel;
     QLabel                       *folderDateLabel;
 
-    QComboBox                    *losslessFormat;
-    QComboBox                    *folderDateFormat;
-
     SidebarSplitter              *splitter;
 
     QDateTime                     lastAccess;
@@ -178,6 +175,9 @@ public:
     KAction                      *cameraCancelAction;
     KAction                      *rawCameraListAction;
     KAction                      *libsInfoAction;
+
+    KComboBox                    *losslessFormat;
+    KComboBox                    *folderDateFormat;
 
     KSelectAction                *themeMenuAction;
 

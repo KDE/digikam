@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "camerainfodialog.h"
 
 // Qt includes.
@@ -31,8 +30,9 @@
 
 // KDE includes.
 
-#include <klocale.h>
 #include <kicon.h>
+#include <klocale.h>
+#include <ktextedit.h>
 
 
 namespace Digikam
@@ -52,7 +52,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
 
     // ----------------------------------------------------------
 
-    QTextEdit *summaryView = new QTextEdit(summary);
+    KTextEdit *summaryView = new KTextEdit(summary);
     summaryView->setWordWrapMode(QTextOption::WordWrap);
     summaryView->setReadOnly(true);
 
@@ -62,7 +62,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
 
     // ----------------------------------------------------------
 
-    QTextEdit *manualView = new QTextEdit(manual);
+    KTextEdit *manualView = new KTextEdit(manual);
     manualView->setWordWrapMode(QTextOption::WordWrap);
     manualView->setReadOnly(true);
 
@@ -72,7 +72,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
 
     // ----------------------------------------------------------
 
-    QTextEdit *aboutView = new QTextEdit(about);
+    KTextEdit *aboutView = new KTextEdit(about);
     aboutView->setWordWrapMode(QTextOption::WordWrap);
     aboutView->setReadOnly(true);
 
