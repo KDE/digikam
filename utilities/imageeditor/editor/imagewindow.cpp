@@ -1127,28 +1127,25 @@ bool ImageWindow::removeItem(int index)
     d->thumbBar->removeItem(d->thumbBar->findItemByUrl(url));
     d->thumbBar->blockSignals(false);
 
-    if (index + 1 < d->urlList.size())
+    // remove from internal lists
+    d->urlList.removeAt(index);
+    if (!d->imageInfoList.isEmpty())
+        d->imageInfoList.removeAt(index);
+    // Remember: index now points to the next item in the list
+
+    if (index < d->urlList.size())
     {
         // Try to get the next image in the current Album...
-
-        ++index;
         d->urlCurrent       = d->urlList[index];
         d->imageInfoCurrent = d->imageInfoList[index];
-        d->urlList.removeAt(index-1);
-        if (!d->imageInfoList.isEmpty())
-            d->imageInfoList.removeAt(index-1);
         return true;
     }
     else if (index - 1 >= 0)
     {
         // Try to get the previous image in the current Album.
-
         --index;
         d->urlCurrent       = d->urlList[index];
         d->imageInfoCurrent = d->imageInfoList[index];
-        d->urlList.removeAt(index+1);
-        if (!d->imageInfoList.isEmpty())
-            d->imageInfoList.removeAt(index+1);
         return true;
     }
 
