@@ -20,8 +20,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 172730 : Preview only, but no photo details shown at all.
 009 ==> 
 
->>>>>>> update:NEWS
-
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
 
