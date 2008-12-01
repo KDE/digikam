@@ -23,9 +23,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
 
-IMPORTANT: This is a beta release : do not use yet in production !!!
-====================================================================
-
 NEW FEATURES:
 
 General        : digiKam can be compiled under Microsoft Windows with MinGW or MSVC independently.
