@@ -18,7 +18,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 165885 : Thumbnails and images are not displayed in the main view center pane.
 007 ==> 166439 : Drag and drop on lighttable does not work.
 008 ==> 172730 : Preview only, but no photo details shown at all.
-009 ==> 
+009 ==> 169830 : DigiKam crashed when navigating large images.
+010 ==> 173533 : Crash when deselecting a single photo with Ctrl+left mouse click.
+011 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
