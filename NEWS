@@ -10,21 +10,21 @@ General        : digiKamlinktree script updated to support new Database schema.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 172680 : Digikam crashes when I try to download the photos from my camera.
+001 ==> 172680 : digiKam crashes when I try to download the photos from my camera.
 002 ==> 166578 : Default Keyboard zoom requires three fingers.
-003 ==> 171318 : Digikam backend does not exit on Quit - processes hang.
-004 ==> 175401 : Digikam doesn't always detect mass storage camera.
+003 ==> 171318 : digiKam backend does not exit on Quit - processes hang.
+004 ==> 175401 : digiKam doesn't always detect mass storage camera.
 005 ==> 176472 : Moving/Deleting all files from an album crashes digiKam.
 006 ==> 165885 : Thumbnails and images are not displayed in the main view center pane.
 007 ==> 166439 : Drag and drop on lighttable does not work.
 008 ==> 172730 : Preview only, but no photo details shown at all.
-009 ==> 169830 : DigiKam crashed when navigating large images.
+009 ==> 169830 : digiKam crashed when navigating large images.
 010 ==> 173533 : Crash when deselecting a single photo with Ctrl+left mouse click.
 011 ==> 169764 : RAW file import lacks I18N support, no decoding.
 012 ==> 168918 : Rectangular selection tool often looses selection when dragging vertices.
 013 ==> 176654 : Buttons for setting album date in album properties not working.
 014 ==> 173746 : embed view does not work; I can not see an image.
-015 ==> 172164 : crash when downloading photos from Canon PowerShot A95.
+015 ==> 172164 : Crash when downloading photos from Canon PowerShot A95.
 016 ==> 165325 : Crash when trying to import pictures from a USB-Camera.
 017 ==> 174642 : Crashes when try to connect to Kodak Z812 IS.
 018 ==> 
