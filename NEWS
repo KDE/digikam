@@ -20,7 +20,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 172730 : Preview only, but no photo details shown at all.
 009 ==> 169830 : DigiKam crashed when navigating large images.
 010 ==> 173533 : Crash when deselecting a single photo with Ctrl+left mouse click.
-011 ==> 
+011 ==> 169764 : RAW file import lacks I18N support, no decoding.
+012 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
