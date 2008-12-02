@@ -2700,8 +2700,9 @@ int AlbumDB::getAlbumRootId(int albumID)
 QDate AlbumDB::getAlbumLowestDate(int albumID)
 {
     QList<QVariant> values;
-    d->db->execSql( QString("SELECT MIN(datetime) FROM Images "
-                            "WHERE album=? GROUP BY album"),
+    d->db->execSql( "SELECT MIN(creationDate) FROM ImageInformation "
+                    " LEFT JOIN Images ON Images.id=ImageInformation.imageid "
+                    " WHERE Images.album=? GROUP BY Images.album;",
                     albumID, &values );
     if (!values.isEmpty())
         return QDate::fromString( values.first().toString(), Qt::ISODate );
@@ -2712,8 +2713,9 @@ QDate AlbumDB::getAlbumLowestDate(int albumID)
 QDate AlbumDB::getAlbumHighestDate(int albumID)
 {
     QList<QVariant> values;
-    d->db->execSql( QString("SELECT MAX(datetime) FROM Images "
-                            "WHERE album=? GROUP BY album"),
+    d->db->execSql( "SELECT MAX(creationDate) FROM ImageInformation "
+                    " LEFT JOIN Images ON Images.id=ImageInformation.imageid "
+                    " WHERE Images.album=? GROUP BY Images.album;",
                     albumID , &values );
     if (!values.isEmpty())
         return QDate::fromString( values.first().toString(), Qt::ISODate );
@@ -2724,7 +2726,9 @@ QDate AlbumDB::getAlbumHighestDate(int albumID)
 QDate AlbumDB::getAlbumAverageDate(int albumID)
 {
     QList<QVariant> values;
-    d->db->execSql( QString("SELECT datetime FROM Images WHERE album=?"),
+    d->db->execSql( "SELECT creationDate FROM ImageInformation "
+                    " LEFT JOIN Images ON Images.id=ImageInformation.imageid "
+                    " WHERE Images.album=?;",
                     albumID , &values);
 
     int differenceInSecs = 0;
