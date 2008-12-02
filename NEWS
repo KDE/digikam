@@ -23,7 +23,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 169764 : RAW file import lacks I18N support, no decoding.
 012 ==> 168918 : Rectangular selection tool often looses selection when dragging vertices.
 013 ==> 176654 : Buttons for setting album date in album properties not working.
-014 ==> 
+014 ==> 173746 : embed view does not work; I can not see an image.
+015 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
