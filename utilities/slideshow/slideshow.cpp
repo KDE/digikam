@@ -312,7 +312,7 @@ void SlideShow::loadPrevImage()
         d->toolBar->setEnabledNext(d->fileIndex < num-1);
     }
 
-    if (d->fileIndex >= 0)
+    if (d->fileIndex >= 0 && d->fileIndex < num)
     {
         d->currentImage = d->settings.fileList[d->fileIndex];
         d->previewThread->load(LoadingDescription(d->currentImage.path(),
