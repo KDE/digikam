@@ -84,6 +84,8 @@ private:
     void printInfoText(QPainter &p, int &offset, const QString& str);
     void printComments(QPainter &p, int &offset, const QString& comments);
     void setupRatingPixmap(const QColor& ratingColor);
+    void inhibitScreenSaver();
+    void allowScreenSaver();
 
 private:
 

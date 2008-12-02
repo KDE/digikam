@@ -7,6 +7,7 @@
  * Description : slide show tool using preview of pictures.
  *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004 by Enrico Ros <eros.kde@email.it>                  *
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,12 +42,16 @@
 #include <QPixmap>
 #include <QTimer>
 #include <QWheelEvent>
+#include <QtDBus/QDBusConnection>
+#include <QtDBus/QDBusMessage>
+#include <QtDBus/QDBusReply>
 
 // KDE includes.
 
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kdeversion.h>
+#include <kdialog.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -75,6 +80,7 @@ public:
         fileIndex      = -1;
         endOfShow      = false;
         pause          = false;
+        screenSaverCookie = -1;
 
         // Pre-computed star polygon for a 15x15 pixmap.
         starPolygon << QPoint(0,  6);
@@ -97,6 +103,7 @@ public:
     int                deskWidth;
     int                deskHeight;
     int                fileIndex;
+    int                screenSaverCookie;
 
     QTimer            *mouseMoveTimer;  // To hide cursor when not moved.
     QTimer            *timer;
@@ -120,13 +127,17 @@ public:
 };
 
 SlideShow::SlideShow(const SlideShowSettings& settings)
-         : QWidget(0)
+         : QWidget(0, Qt::FramelessWindowHint)
 {
     d = new SlideShowPriv;
     d->settings = settings;
+
     setAttribute(Qt::WA_DeleteOnClose);
-    setWindowFlags(Qt::X11BypassWindowManagerHint |
-                   Qt::WindowStaysOnTopHint | Qt::Popup);
+    setAttribute(Qt::WA_OpaquePaintEvent);
+    setWindowState( windowState() | Qt::WindowFullScreen );
+
+    setWindowTitle( KDialog::makeStandardCaption(i18n("Slideshow")) );
+    setContextMenuPolicy( Qt::PreventContextMenu );
 
     // ---------------------------------------------------------------
 
@@ -187,12 +198,16 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     // ---------------------------------------------------------------
 
+    inhibitScreenSaver();
+
     setMouseTracking(true);
     slotMouseMoveTimeOut();
 }
 
 SlideShow::~SlideShow()
 {
+    allowScreenSaver();
+
     d->timer->stop();
     d->mouseMoveTimer->stop();
 
@@ -749,5 +764,30 @@ void SlideShow::slotMouseMoveTimeOut()
 
     setCursor(QCursor(Qt::BlankCursor));
 }
+
+// from Okular's presentation widget
+void SlideShow::inhibitScreenSaver()
+{
+    QDBusMessage message = QDBusMessage::createMethodCall( "org.freedesktop.ScreenSaver", "/ScreenSaver",
+                                                           "org.freedesktop.ScreenSaver", "Inhibit" );
+    message << QString( "Okular" );
+    message << i18nc( "Reason for inhibiting the screensaver activation, when the presentation mode is active", "Giving a presentation" );
+
+    QDBusReply<uint> reply = QDBusConnection::sessionBus().call( message );
+    if ( reply.isValid() )
+        d->screenSaverCookie = reply.value();
+}
+
+void SlideShow::allowScreenSaver()
+{
+    if ( d->screenSaverCookie != -1 )
+    {
+        QDBusMessage message = QDBusMessage::createMethodCall( "org.freedesktop.ScreenSaver", "/ScreenSaver",
+                                                               "org.freedesktop.ScreenSaver", "UnInhibit" );
+        message << (uint)d->screenSaverCookie;
+        QDBusConnection::sessionBus().send( message );
+    }
+}
+
 
 }  // namespace Digikam
