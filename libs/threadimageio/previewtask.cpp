@@ -109,6 +109,7 @@ void PreviewLoadingTask::execute()
                 // attach this thread to the other thread, wait until loading
                 // has finished.
                 m_usedProcess->addListener(this);
+                kDebug(50003) << "Slave loading process " << this << "on" << m_usedProcess;
                 // break loop when either the loading has completed, or this task is being stopped
                 while ( !m_usedProcess->completed() && m_loadingTaskStatus != LoadingTaskStatusStopping )
                     lock.timedWait();
@@ -132,6 +133,7 @@ void PreviewLoadingTask::execute()
                 // Notify other processes that we are now loading this image.
                 // They might be interested - see notifyNewLoadingProcess below
                 cache->notifyNewLoadingProcess(this, m_loadingDescription);
+                kDebug(50003) << "Adding master loading process" << m_loadingDescription.filePath << this;
             }
         }
     }
@@ -236,11 +238,13 @@ void PreviewLoadingTask::execute()
         removeListener(this);
         // wake all listeners waiting on cache condVar, so that they remove themselves
         lock.wakeAll();
+        kDebug(50003) << "Finishing loading process" << this << m_listeners.count();
         // wait until all listeners have removed themselves
         while (m_listeners.count() != 0)
             lock.timedWait();
         // set to 0, as checked in setStatus
         m_usedProcess = 0;
+        kDebug(50003) << "Leaving" << this;
     }
 }
 
