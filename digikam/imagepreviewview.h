@@ -81,6 +81,7 @@ signals:
     void signalBack2Album();
     void signalSlideShow();
     void signalInsert2LightTable();
+    void signalFindSimilar();
 
 protected:
 

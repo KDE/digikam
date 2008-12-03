@@ -102,13 +102,14 @@ signals:
     void signalSlideShow();
     void signalZoomFactorChanged(double);
     void signalInsert2LightTable();
+    void signalFindSimilar();
     void signalUrlSelected(const KUrl&);
 
 public slots:
 
     void slotEscapePreview();
 
-private slots: 
+private slots:
 
     void slotZoomFactorChanged(double);
     void slotItemsUpdated(const KUrl::List&);

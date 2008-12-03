@@ -373,9 +373,10 @@ void ImagePreviewView::slotContextMenu()
     //-- Edit actions -----------------------------------------------
 
     popmenu.addSeparator();
-    QAction *slideshowAction  = popmenu.addAction(SmallIcon("view-presentation"), i18n("SlideShow"));
-    QAction *editAction       = popmenu.addAction(SmallIcon("editimage"),         i18n("Edit..."));
-    QAction *lighttableAction = popmenu.addAction(SmallIcon("lighttableadd"),     i18n("Add to Light Table"));
+    QAction *slideshowAction    = popmenu.addAction(SmallIcon("view-presentation"), i18n("SlideShow"));
+    QAction *editAction         = popmenu.addAction(SmallIcon("editimage"),         i18n("Edit..."));
+    QAction *lighttableAction   = popmenu.addAction(SmallIcon("lighttableadd"),     i18n("Add to Light Table"));
+    QAction *findSimilarAction  = popmenu.addAction(SmallIcon("tools-wizard"),      i18n("Find Similar"));
     popmenu.addMenu(&openWithMenu);
     openWithMenu.menuAction()->setText(i18n("Open With"));
 
@@ -456,33 +457,37 @@ void ImagePreviewView::slotContextMenu()
 
     if (choice)
     {
-        if (choice == backAction)     // Back
+        if (choice == backAction)                // Back
         {
             emit signalPrevItem();
         }
-        else if (choice == forwardAction) // Forward
+        else if (choice == forwardAction)        // Forward
         {
             emit signalNextItem();
         }
-        else if (choice == editAction)     // Edit...
+        else if (choice == editAction)           // Edit...
         {
             emit signalEditItem();
         }
-        else if (choice == trashAction)     // Move to trash
+        else if (choice == trashAction)          // Move to trash
         {
             emit signalDeleteItem();
         }
-        else if (choice == backToAlbumAction)     // Back to album
+        else if (choice == backToAlbumAction)    // Back to album
         {
             emit signalBack2Album();
         }
-        else if (choice == slideshowAction)     // SlideShow
+        else if (choice == slideshowAction)      // SlideShow
         {
             emit signalSlideShow();
         }
         else if (choice == lighttableAction)     // Place onto Light Table
         {
             emit signalInsert2LightTable();
+        }
+        else if (choice == findSimilarAction)    // Find Similar
+        {
+            emit signalFindSimilar();
         }
         else if (serviceMap.contains(choice))
         {

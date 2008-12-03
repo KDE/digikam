@@ -367,6 +367,9 @@ void DigikamView::setupConnections()
     connect(d->iconView, SIGNAL(signalGotoAlbumAndItem(AlbumIconItem *)),
             this, SLOT(slotGotoAlbumAndItem(AlbumIconItem *)));
 
+    connect(d->iconView, SIGNAL(signalFindSimilar()),
+            this, SLOT(slotImageFindSimilar()));
+
     connect(d->iconView, SIGNAL(signalGotoDateAndItem(AlbumIconItem *)),
             this, SLOT(slotGotoDateAndItem(AlbumIconItem *)));
 
@@ -489,6 +492,9 @@ void DigikamView::setupConnections()
 
     connect(d->albumWidgetStack, SIGNAL(signalInsert2LightTable()),
             this, SLOT(slotImageLightTable()));
+
+    connect(d->albumWidgetStack, SIGNAL(signalFindSimilar()),
+            this, SLOT(slotImageFindSimilar()));
 
     connect(d->albumWidgetStack, SIGNAL(signalUrlSelected(const KUrl&)),
             this, SLOT(slotSelectItemByUrl(const KUrl&)));

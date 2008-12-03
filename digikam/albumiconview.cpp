@@ -617,10 +617,11 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     // --------------------------------------------------------
 
     DPopupMenu popmenu(this);
-    QAction *viewAction       = popmenu.addAction(SmallIcon("viewimage"),     i18n("View..."));
-    QAction *editAction       = popmenu.addAction(SmallIcon("editimage"),     i18n("Edit..."));
-    QAction *lighttableAction = popmenu.addAction(SmallIcon("lighttableadd"), i18n("Add to Light Table"));
-    QAction *gotoAction       = popmenu.addMenu(&gotoMenu);
+    QAction *viewAction         = popmenu.addAction(SmallIcon("viewimage"),     i18n("View..."));
+    QAction *editAction         = popmenu.addAction(SmallIcon("editimage"),     i18n("Edit..."));
+    QAction *lighttableAction   = popmenu.addAction(SmallIcon("lighttableadd"), i18n("Add to Light Table"));
+    QAction *findSimilarAction  = popmenu.addAction(SmallIcon("tools-wizard"),  i18n("Find Similar"));
+    QAction *gotoAction         = popmenu.addMenu(&gotoMenu);
     gotoAction->setIcon(SmallIcon("go-jump"));
     gotoAction->setText(i18n("Go To"));
 
@@ -769,6 +770,11 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
         {
             //  add images to existing images in the light table
             insertSelectionToLightTable(true);
+        }
+        else if (choice == findSimilarAction)
+        {
+            // send a signal to the parent widget (digikamview.cpp)
+            emit signalFindSimilar();
         }
         else if (choice == gotoAlbum)
         {
