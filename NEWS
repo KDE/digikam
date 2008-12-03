@@ -31,7 +31,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 019 ==> 133058 : Kodak DC4800 can only be read if KDE did not try to mount it.
 020 ==> 128783 : HP Instant Share to work with digiKam.
 021 ==> 132064 : Showing SVG / Vector Graphics.
-022 ==> 
+022 ==> 138548 : Error downloading or detecting camera when connected. 
+023 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
