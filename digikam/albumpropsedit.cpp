@@ -2,7 +2,7 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2003-03-09
  * Description : Album properties dialog.
  *
@@ -27,17 +27,19 @@
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
+#include <qdatetime.h>
 #include <qdir.h>
 #include <qfileinfo.h>
-#include <qdatetime.h>
+#include <qframe.h>
+#include <qgroupbox.h>
+#include <qhbox.h>
+#include <qheader.h>
+#include <qlabel.h>
 #include <qlayout.h>
 #include <qlistview.h>
-#include <qframe.h>
-#include <qheader.h>
-#include <qhbox.h>
 #include <qpushbutton.h>
+#include <qregexp.h>
+#include <qvalidator.h>
 
 // KDE includes.
 
@@ -138,6 +140,10 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     topLayout->addWidget( d->titleEdit, 2, 1 );
     titleLabel->setBuddy( d->titleEdit );
 
+    QRegExp titleRx("[^/]+");
+    QValidator *titleValidator = new QRegExpValidator(titleRx, this);
+    d->titleEdit->setValidator(titleValidator);
+
     QLabel *collectionLabel = new QLabel( plainPage( ) );
     collectionLabel->setText( i18n( "Co&llection:" ) );
     topLayout->addWidget( collectionLabel, 3, 0 );
@@ -167,16 +173,16 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     dateLabel->setBuddy( d->datePicker );
 
     QHBox *buttonRow = new QHBox( plainPage( ) );
-    QPushButton *dateLowButton = new QPushButton( 
+    QPushButton *dateLowButton = new QPushButton(
             i18n("Selects the date of the oldest image",
                  "&Oldest" ), buttonRow );
-    QPushButton *dateAvgButton = new QPushButton( 
+    QPushButton *dateAvgButton = new QPushButton(
             i18n("Calculates the average date",
                  "&Average" ), buttonRow );
-    QPushButton *dateHighButton = new QPushButton( 
+    QPushButton *dateHighButton = new QPushButton(
             i18n("Selects the date of the newest image",
                  "Newest" ), buttonRow );
-        
+
     topLayout->addWidget( buttonRow, 6, 1);
 
     setTabOrder(d->titleEdit, d->collectionCombo);
@@ -195,7 +201,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
         QStringList collections = settings->getAlbumCollectionNames();
         d->collectionCombo->insertStringList( collections );
         int collectionIndex = collections.findIndex( album->collection() );
-        
+
         if ( collectionIndex != -1 )
         {
             // + 1 because of the empty item
@@ -219,16 +225,16 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     connect(d->titleEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTitleChanged(const QString&)));
-            
+
     connect(dateLowButton, SIGNAL( clicked() ),
             this, SLOT( slotDateLowButtonClicked()));
-            
+
     connect(dateAvgButton, SIGNAL( clicked() ),
             this, SLOT( slotDateAverageButtonClicked()));
-            
+
     connect(dateHighButton, SIGNAL( clicked() ),
             this, SLOT( slotDateHighButtonClicked()));
-    
+
     adjustSize();
 }
 
@@ -322,7 +328,7 @@ bool AlbumPropsEdit::createNew(PAlbum  *parent,
 
 void AlbumPropsEdit::slotTitleChanged(const QString& newtitle)
 {
-    enableButtonOK(!newtitle.isEmpty());    
+    enableButtonOK(!newtitle.isEmpty());
 }
 
 void AlbumPropsEdit::slotDateLowButtonClicked()
