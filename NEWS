@@ -27,7 +27,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 172164 : Crash when downloading photos from Canon PowerShot A95.
 016 ==> 165325 : Crash when trying to import pictures from a USB-Camera.
 017 ==> 174642 : Crashes when try to connect to Kodak Z812 IS.
-018 ==> 
+018 ==> 168514 : Minimum Screen Size Too Large.
+019 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
