@@ -34,7 +34,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 138548 : Error downloading or detecting camera when connected. 
 023 ==> 137233 : Proper input constraints in New Album dialog.
 024 ==> 176086 : Recursive slideshow only shows last album.
-025 ==> 
+025 ==> 171234 : Tag names imported from kde3 digikam are cut off in kde4.
+026 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
