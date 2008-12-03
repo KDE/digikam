@@ -96,17 +96,7 @@ void ImageInfoAlbumsJob::stop()
 
 void ImageInfoAlbumsJob::slotItemsInfo(const ImageInfoList& items)
 {
-    d->itemsList = items;
-
-   ++d->albumIt;
-   if (d->albumIt == d->albumsList.end())
-    {
-        stop();
-        emit signalCompleted(d->itemsList);
-        return;
-    }
-
-    parseAlbum();
+    d->itemsList += items;
 }
 
 void ImageInfoAlbumsJob::slotComplete()
