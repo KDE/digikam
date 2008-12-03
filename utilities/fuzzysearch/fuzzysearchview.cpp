@@ -188,7 +188,8 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     KHBox *imageBox     = new KHBox(box2);
     d->imageWidget      = new QLabel(imageBox);
     d->imageWidget->setFixedSize(256, 256);
-    d->imageWidget->setText(i18n("Drag & drop an image here\nto perform similar\nitems search"));
+    d->imageWidget->setText(i18n("<p>Drag & drop an image here<br/>to perform similar<br/>items search.</p>"
+                                 "<p>You can also use the context menu<br/> when browsing through your images.</p>"));
     d->imageWidget->setAlignment(Qt::AlignCenter);
     imageBox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     imageBox->setLineWidth(1);
