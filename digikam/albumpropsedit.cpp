@@ -37,6 +37,8 @@
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
+#include <QRegExp>
+#include <QValidator>
 #include <QPushButton>
 #include <QTextEdit>
 
@@ -135,6 +137,10 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     d->titleEdit = new KLineEdit(page);
     d->titleEdit->setClearButtonShown(true);
     titleLabel->setBuddy(d->titleEdit);
+
+    QRegExp titleRx("[^/]+");
+    QValidator *titleValidator = new QRegExpValidator(titleRx, this);
+    d->titleEdit->setValidator(titleValidator);
 
     QLabel *collectionLabel = new QLabel(page);
     collectionLabel->setText(i18n("Co&llection:"));
