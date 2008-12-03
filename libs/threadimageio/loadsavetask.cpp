@@ -258,6 +258,8 @@ void SharedLoadingTask::setStatus(LoadingTaskStatus status)
         {
             // remove this from list of listeners - check in continueQuery() of active thread
             m_usedProcess->removeListener(this);
+            // set m_usedProcess to 0, signalling that we have detached already
+            m_usedProcess = 0;
             // wake all listeners - particularly this - from waiting on cache condvar
             lock.wakeAll();
         }

@@ -111,10 +111,11 @@ void PreviewLoadingTask::execute()
                 m_usedProcess->addListener(this);
                 kDebug(50003) << "Slave loading process " << this << "on" << m_usedProcess;
                 // break loop when either the loading has completed, or this task is being stopped
-                while ( !m_usedProcess->completed() && m_loadingTaskStatus != LoadingTaskStatusStopping )
+                while ( m_loadingTaskStatus != LoadingTaskStatusStopping && m_usedProcess && !m_usedProcess->completed())
                     lock.timedWait();
                 // remove listener from process
-                m_usedProcess->removeListener(this);
+                if (m_usedProcess)
+                    m_usedProcess->removeListener(this);
                 // wake up the process which is waiting until all listeners have removed themselves
                 lock.wakeAll();
                 // set to 0, as checked in setStatus
