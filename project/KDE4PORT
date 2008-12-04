@@ -15,21 +15,21 @@ URL
     http://www.cmake.org/Wiki/CMake_Useful_Variables
     http://www.kdedevelopers.org/node/1743
     http://websvn.kde.org/trunk/KDE/kdelibs/cmake/modules/FindKDE4Internal.cmake?view=markup
-		    
+
 * Port to QT4/KDE4.
     Overview documentation
       http://techbase.kde.org/Development/Tutorials/KDE4_Porting_Guide
-		  
+
     There are scripts to relieve us of the tedious work:
       http://doc.trolltech.com/4.2/qt3to4.html
       http://websvn.kde.org/trunk/KDE/kdesdk/scripts/qt4/
-				      
+
     There are two pages with detailed information about the API changes. These
     need to be consulted while porting:
       http://doc.trolltech.com/4.0/porting4.html
       http://websvn.kde.org/*checkout*/trunk/KDE/kdelibs/KDE4PORTING.html
       http://techbase.kde.org/Projects/KDEPrint/KDE4
-				
+
 LIST OF DIRECTORIES PORTED BY DEVELOPPERS:
 ------------------------------------------
                                                         DEPENCIES
@@ -50,7 +50,7 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
 |---levels                              Gilles          X      X       DONE        DONE
 |---lprof                               Gilles          X      X       DONE        DONE
 |---themeengine                         Gilles                 X       DONE        DONE
-|---threadimageio                       Marcel          X      X       DONE                 Some lock are done with libkdcraw based on LibRaw
+|---threadimageio                       Marcel          X      X       DONE
 |---whitebalance                        Gilles          X      X       DONE        DONE
 |---widgets
 |-----common
@@ -94,7 +94,7 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
     cameraiconitem.cpp                  Gilles                 X       DONE
     cameraiconview.cpp                  Gilles                 X       DONE
     camerainfodialog.cpp                Gilles                 X       DONE
-    cameraui.cpp                        Gilles                 X       DONE                 
+    cameraui.cpp                        Gilles                 X       DONE
     dkcamera.cpp                        Gilles                 X       DONE
     freespacewidget.cpp                 Gilles                 X       DONE        DONE     With KDE 4.2, port to KCapacityBar.
     gpcamera.cpp                        Gilles                 X       DONE
@@ -105,7 +105,7 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
 |---gpssearch                           Gilles                 X       DONE                 Require Marble widget selection patch.
 |---hotplug                             Laurent                        DONE        -
 |---imageeditor
-|-----canvas  
+|-----canvas
     canvas.cpp                          Gilles          X      X       DONE        DONE     Still use Q3ScrollView. Port to PreviewWidget
     colorcorrectiondlg.cpp              Gilles          X      X       DONE        DONE
     dimginterface.cpp                   Gilles          X      X       DONE        DONE
@@ -122,7 +122,7 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
 |---lighttable
     lighttablepreview.cpp               Gilles                 X       DONE
     lighttableview.cpp                  Gilles                 X       DONE
-    lighttablebar.cpp                   Gilles                 X       DONE                 
+    lighttablebar.cpp                   Gilles                 X       DONE
     lighttablewindow.cpp                Gilles                 X       DONE
 |---kipiiface                           Gilles                 X       DONE        DONE
 |---scripts                             Gilles                         DONE        -
@@ -142,7 +142,7 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
     albumhistory.cpp                    Laurent                X       DONE
     albumicongroupitem.cpp              Gilles                 X       DONE
     albumiconitem.cpp                   Gilles                 X       DONE
-    albumiconview.cpp                   Gilles                 X       DONE
+    albumiconview.cpp                   Gilles                 X       DONE                 Still to use Q3Dict and Q3IntDict
     albumitemhandler.cpp                Laurent                X       DONE
     albumlister.cpp                     Gilles                 X       DONE
     albummanager.cpp                    Gilles                 X       DONE
@@ -150,7 +150,7 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
     albumsettings.cpp                   Gilles                 X       DONE
     albumthumbnailloader.cpp            Gilles                 X       DONE
     albumwidgetstack.cpp                Gilles                 X       DONE
-    cameralist.cpp                      Laurent                X       DONE
+    cameralist.cpp                      Laurent                X       DONE                 Still to use Q3PtrList
     cameratype.cpp                      Gilles                 X       DONE
     datefolderview.cpp                  Laurent                X       DONE
     digikamapp.cpp                      Gilles                 X       DONE
