@@ -117,18 +117,18 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     QHBoxLayout *hlay1 = new QHBoxLayout(d->levelGBox);
     d->levelButtons->setExclusive(true);
 
-    QToolButton *simpleLevel = new QToolButton( d->levelGBox );
-    simpleLevel->setIcon( iconLoader->loadIcon( "user-identity", (KIconLoader::Group)KIconLoader::Toolbar ) );
+    QToolButton *simpleLevel = new QToolButton(d->levelGBox);
+    simpleLevel->setIcon(iconLoader->loadIcon("user-identity", (KIconLoader::Group)KIconLoader::Toolbar));
     simpleLevel->setCheckable(true);
-    simpleLevel->setWhatsThis( i18n( "Switch the tags view to a simple human-readable list" ) );
-    simpleLevel->setToolTip(i18n( "Simple list" ));
+    simpleLevel->setWhatsThis(i18n("Switch the tags view to a simple human-readable list"));
+    simpleLevel->setToolTip(i18n("Simple list"));
     d->levelButtons->addButton(simpleLevel, SIMPLE);
 
-    QToolButton *fullLevel = new QToolButton( d->levelGBox );
-    fullLevel->setIcon( iconLoader->loadIcon( "view-media-playlist", (KIconLoader::Group)KIconLoader::Toolbar ) );
+    QToolButton *fullLevel = new QToolButton(d->levelGBox);
+    fullLevel->setIcon(iconLoader->loadIcon("view-media-playlist", (KIconLoader::Group)KIconLoader::Toolbar));
     fullLevel->setCheckable(true);
-    fullLevel->setWhatsThis( i18n( "Switch the tags view to a full list" ) );
-    fullLevel->setToolTip(i18n( "Full list" ));
+    fullLevel->setWhatsThis(i18n("Switch the tags view to a full list"));
+    fullLevel->setToolTip(i18n("Full list"));
     d->levelButtons->addButton(fullLevel, FULL);
 
     hlay1->addWidget(simpleLevel);
@@ -142,22 +142,22 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     d->toolButtons     = new QButtonGroup(d->toolsGBox);
     QHBoxLayout *hlay2 = new QHBoxLayout(d->toolsGBox);
 
-    QToolButton *saveMetadata = new QToolButton( d->toolsGBox );
-    saveMetadata->setIcon( iconLoader->loadIcon( "document-save", (KIconLoader::Group)KIconLoader::Toolbar ) );
-    saveMetadata->setWhatsThis( i18n( "Save metadata to a binary file" ) );
-    saveMetadata->setToolTip( i18n( "Save metadata" ));
+    QToolButton *saveMetadata = new QToolButton(d->toolsGBox);
+    saveMetadata->setIcon(iconLoader->loadIcon("document-save", (KIconLoader::Group)KIconLoader::Toolbar));
+    saveMetadata->setWhatsThis(i18n("Save metadata to a binary file"));
+    saveMetadata->setToolTip(i18n("Save metadata"));
     d->toolButtons->addButton(saveMetadata);
 
-    QToolButton *printMetadata = new QToolButton( d->toolsGBox );
-    printMetadata->setIcon( iconLoader->loadIcon( "document-print", (KIconLoader::Group)KIconLoader::Toolbar ) );
-    printMetadata->setWhatsThis( i18n( "Print metadata to printer" ) );
-    printMetadata->setToolTip(i18n( "Print metadata" ));
+    QToolButton *printMetadata = new QToolButton(d->toolsGBox);
+    printMetadata->setIcon(iconLoader->loadIcon("document-print", (KIconLoader::Group)KIconLoader::Toolbar));
+    printMetadata->setWhatsThis(i18n("Print metadata to printer"));
+    printMetadata->setToolTip(i18n("Print metadata"));
     d->toolButtons->addButton(printMetadata);
 
-    QToolButton *copy2ClipBoard = new QToolButton( d->toolsGBox );
-    copy2ClipBoard->setIcon( iconLoader->loadIcon( "edit-copy", (KIconLoader::Group)KIconLoader::Toolbar ) );
-    copy2ClipBoard->setWhatsThis( i18n( "Copy metadata to clipboard" ) );
-    copy2ClipBoard->setToolTip(i18n( "Copy metadata to clipboard" ));
+    QToolButton *copy2ClipBoard = new QToolButton(d->toolsGBox);
+    copy2ClipBoard->setIcon( iconLoader->loadIcon("edit-copy", (KIconLoader::Group)KIconLoader::Toolbar));
+    copy2ClipBoard->setWhatsThis(i18n("Copy metadata to clipboard"));
+    copy2ClipBoard->setToolTip(i18n("Copy metadata to clipboard"));
     d->toolButtons->addButton(copy2ClipBoard);
 
     hlay2->addWidget(saveMetadata);
@@ -296,13 +296,12 @@ void MetadataWidget::slotModeChanged(int)
 
 void MetadataWidget::slotCopy2Clipboard()
 {
-    QString textmetadata = i18n("File name: %1 (%2)",d->fileName,getMetadataTitle());
-
+    QString textmetadata  = i18n("File name: %1 (%2)",d->fileName,getMetadataTitle());
     int i                 = 0;
     QTreeWidgetItem *item = 0;
     do
     {
-        item = d->view->topLevelItem(i);
+        item                      = d->view->topLevelItem(i);
         MdKeyListViewItem* lvItem = dynamic_cast<MdKeyListViewItem*>(item);
         if (lvItem)
         {
@@ -314,7 +313,7 @@ void MetadataWidget::slotCopy2Clipboard()
             QTreeWidgetItem *item2 = 0;
             do
             {
-                item2 = dynamic_cast<QTreeWidgetItem*>(lvItem)->child(j);
+                item2                         = dynamic_cast<QTreeWidgetItem*>(lvItem)->child(j);
                 MetadataListViewItem* lvItem2 = dynamic_cast<MetadataListViewItem*>(item2);
                 if (lvItem2)
                 {
@@ -338,14 +337,14 @@ void MetadataWidget::slotCopy2Clipboard()
 
 void MetadataWidget::slotPrintMetadata()
 {
-    QString textmetadata = i18n("<p><big><big><b>File name: %1 (%2)</b></big></big>",
-                                d->fileName, getMetadataTitle());
+    QString textmetadata  = i18n("<p><big><big><b>File name: %1 (%2)</b></big></big>",
+                                 d->fileName, getMetadataTitle());
 
     int i                 = 0;
     QTreeWidgetItem *item = 0;
     do
     {
-        item = d->view->topLevelItem(i);
+        item                      = d->view->topLevelItem(i);
         MdKeyListViewItem* lvItem = dynamic_cast<MdKeyListViewItem*>(item);
         if (lvItem)
         {
@@ -357,7 +356,7 @@ void MetadataWidget::slotPrintMetadata()
             QTreeWidgetItem *item2 = 0;
             do
             {
-                item2 = dynamic_cast<QTreeWidgetItem*>(lvItem)->child(j);
+                item2                         = dynamic_cast<QTreeWidgetItem*>(lvItem)->child(j);
                 MetadataListViewItem* lvItem2 = dynamic_cast<MetadataListViewItem*>(item2);
                 if (lvItem2)
                 {
@@ -377,7 +376,7 @@ void MetadataWidget::slotPrintMetadata()
     textmetadata.append("</p>");
 
     QPrinter printer;
-    printer.setFullPage( true );
+    printer.setFullPage(true);
 
     QPrintDialog dialog(&printer, kapp->activeWindow());
     if (dialog.exec())
@@ -388,29 +387,29 @@ void MetadataWidget::slotPrintMetadata()
             return;
 
         Q3PaintDeviceMetrics metrics(p.device());
-        int dpiy = metrics.logicalDpiY();
-        int margin = (int) ( (2/2.54)*dpiy ); // 2 cm margins
-        QRect view( margin, margin, metrics.width() - 2*margin, metrics.height() - 2*margin );
+        int dpiy   = metrics.logicalDpiY();
+        int margin = (int)( (2/2.54)*dpiy );    // 2 cm margins
+        QRect view(margin, margin, metrics.width() - 2*margin, metrics.height() - 2*margin);
         QFont font(KApplication::font());
-        font.setPointSize( 10 ); // we define 10pt to be a nice base size for printing
-        Q3SimpleRichText richText( textmetadata, font,
+        font.setPointSize(10);                  // we define 10pt to be a nice base size for printing
+        Q3SimpleRichText richText(textmetadata, font,
                                   QString(),
                                   Q3StyleSheet::defaultSheet(),
                                   Q3MimeSourceFactory::defaultFactory(),
-                                  view.height() );
-        richText.setWidth( &p, view.width() );
+                                  view.height());
+        richText.setWidth(&p, view.width());
         int page = 1;
 
         do
         {
-            richText.draw( &p, margin, margin, view, QColorGroup(palette()) );
-            view.translate( 0, view.height() );
-            p.translate( 0 , -view.height() );
-            p.setFont( font );
-            p.drawText( view.right() - p.fontMetrics().width( QString::number( page ) ),
-                        view.bottom() + p.fontMetrics().ascent() + 5, QString::number( page ) );
+            richText.draw(&p, margin, margin, view, QColorGroup(palette()));
+            view.translate(0, view.height());
+            p.translate(0 , -view.height());
+            p.setFont(font);
+            p.drawText(view.right()  - p.fontMetrics().width(QString::number(page)),
+                       view.bottom() + p.fontMetrics().ascent() + 5, QString::number(page));
 
-            if ( view.top() - margin >= richText.height() )
+            if (view.top() - margin >= richText.height())
                 break;
 
             printer.newPage();
@@ -485,7 +484,7 @@ void MetadataWidget::setFileName(const QString& fileName)
 void MetadataWidget::setUserAreaWidget(QWidget *w)
 {
     QVBoxLayout *vLayout = new QVBoxLayout();
-    vLayout->setSpacing( KDialog::spacingHint() );
+    vLayout->setSpacing(KDialog::spacingHint());
     vLayout->addWidget(w);
     vLayout->addStretch();
     d->mainLayout->addLayout(vLayout, 3, 0, 1, 5);
