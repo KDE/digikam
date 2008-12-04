@@ -27,9 +27,9 @@
 // Qt includes.
 
 #include <Q3MimeSourceFactory>
-#include <Q3PaintDeviceMetrics>
 #include <Q3SimpleRichText>
 #include <Q3StyleSheet>
+#include <QPaintDevice>
 #include <QButtonGroup>
 #include <QClipboard>
 #include <QColorGroup>
@@ -386,10 +386,10 @@ void MetadataWidget::slotPrintMetadata()
         if ( !p.device() )
             return;
 
-        Q3PaintDeviceMetrics metrics(p.device());
-        int dpiy   = metrics.logicalDpiY();
-        int margin = (int)( (2/2.54)*dpiy );    // 2 cm margins
-        QRect view(margin, margin, metrics.width() - 2*margin, metrics.height() - 2*margin);
+        QPaintDevice *pd = p.device();
+        int dpiy         = pd->logicalDpiY();
+        int margin       = (int)( (2/2.54)*dpiy );    // 2 cm margins
+        QRect view(margin, margin, pd->width() - 2*margin, pd->height() - 2*margin);
         QFont font(KApplication::font());
         font.setPointSize(10);                  // we define 10pt to be a nice base size for printing
         Q3SimpleRichText richText(textmetadata, font,
