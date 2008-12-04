@@ -11,7 +11,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 144078 : very slow avi startup.
 005 ==> 146258 : Moving an album into waste basket didn't remove.
 006 ==> 149165 : cannot edit anymore - sqlite lock?
-007 ==> 
+007 ==> 146025 : Wrong image name when using info from EXIF.
+008 ==> 
 
 **********************************************************************************************
 digiKam 0.9.5-beta1 - Release date: 2008-11-05
