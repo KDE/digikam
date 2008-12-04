@@ -68,9 +68,6 @@ public:
                        KUrl::List &kioURLs,
                        QList<int>& albumIDs,
                        QList<int>& imageIDs);
-    static QStringList mimeTypes();
-
-    QStringList formats() const;
 };
 
 // ------------------------------------------------------------------------
@@ -88,9 +85,6 @@ public:
     DTagDrag(int albumid);
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, int &tagID);
-    static QStringList mimeTypes();
-
-    QStringList formats() const;
 };
 
 // ------------------------------------------------------------------------
@@ -108,9 +102,6 @@ public:
     DAlbumDrag(const KUrl &url, int albumid);
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, KUrl::List &urls, int &albumID);
-    static QStringList mimeTypes();
-
-    QStringList formats() const;
 };
 
 // ------------------------------------------------------------------------
@@ -128,9 +119,6 @@ public:
     DTagListDrag(const QList<int>& tagIDs);
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, QList<int> &tagIDs);
-    static QStringList mimeTypes();
-
-    QStringList formats() const;
 };
 
 // ------------------------------------------------------------------------
@@ -148,9 +136,6 @@ public:
     DCameraItemListDrag(const QStringList& cameraItemPaths);
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, QStringList &cameraItemPaths);
-    static QStringList mimeTypes();
-
-    QStringList formats() const;
 };
 
 // ------------------------------------------------------------------------
@@ -169,9 +154,6 @@ public:
     DCameraDragObject(const CameraType& ctype);
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, CameraType& ctype);
-    static QStringList mimeTypes();
-
-    QStringList formats() const;
 };
 
 }  // namespace Digikam
