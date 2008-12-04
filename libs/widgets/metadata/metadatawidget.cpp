@@ -26,9 +26,7 @@
 
 // Qt includes.
 
-#include <Q3MimeSourceFactory>
-#include <Q3SimpleRichText>
-#include <Q3StyleSheet>
+#include <QTextDocument>
 #include <QPaintDevice>
 #include <QButtonGroup>
 #include <QClipboard>
@@ -337,8 +335,8 @@ void MetadataWidget::slotCopy2Clipboard()
 
 void MetadataWidget::slotPrintMetadata()
 {
-    QString textmetadata  = i18n("<p><big><big><b>File name: %1 (%2)</b></big></big>",
-                                 d->fileName, getMetadataTitle());
+    QString textmetadata = i18n("<p><big><big><b>File name: %1 (%2)</b></big></big>",
+                                d->fileName, getMetadataTitle());
 
     int i                 = 0;
     QTreeWidgetItem *item = 0;
@@ -381,41 +379,12 @@ void MetadataWidget::slotPrintMetadata()
     QPrintDialog dialog(&printer, kapp->activeWindow());
     if (dialog.exec())
     {
-        QPainter p(&printer);
-
-        if ( !p.device() )
-            return;
-
-        QPaintDevice *pd = p.device();
-        int dpiy         = pd->logicalDpiY();
-        int margin       = (int)( (2/2.54)*dpiy );    // 2 cm margins
-        QRect view(margin, margin, pd->width() - 2*margin, pd->height() - 2*margin);
+        QTextDocument doc;
+        doc.setHtml(textmetadata);
         QFont font(KApplication::font());
-        font.setPointSize(10);                  // we define 10pt to be a nice base size for printing
-        Q3SimpleRichText richText(textmetadata, font,
-                                  QString(),
-                                  Q3StyleSheet::defaultSheet(),
-                                  Q3MimeSourceFactory::defaultFactory(),
-                                  view.height());
-        richText.setWidth(&p, view.width());
-        int page = 1;
-
-        do
-        {
-            richText.draw(&p, margin, margin, view, QColorGroup(palette()));
-            view.translate(0, view.height());
-            p.translate(0 , -view.height());
-            p.setFont(font);
-            p.drawText(view.right()  - p.fontMetrics().width(QString::number(page)),
-                       view.bottom() + p.fontMetrics().ascent() + 5, QString::number(page));
-
-            if (view.top() - margin >= richText.height())
-                break;
-
-            printer.newPage();
-            page++;
-        }
-        while (true);
+        font.setPointSize(10);                // we define 10pt to be a nice base size for printing.
+        doc.setDefaultFont(font);
+        doc.print(&printer);
     }
 }
 

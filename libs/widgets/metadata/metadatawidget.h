@@ -80,11 +80,11 @@ private Q_SLOTS:
     void slotModeChanged(int);
     void slotCopy2Clipboard();
     void slotPrintMetadata();
-    
-protected Q_SLOTS:    
-    
+
+protected Q_SLOTS:
+
     virtual void slotSaveMetadataToFile()=0;
-    
+
 protected:
 
     void   enabledToolButtons(bool);
