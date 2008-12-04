@@ -22,13 +22,11 @@
  *
  * ============================================================ */
 
-
 #include "datefolderview.h"
 #include "datefolderview.moc"
 
 // Qt includes.
 
-#include <Q3ListView>
 #include <QDateTime>
 #include <QFont>
 #include <QPainter>
@@ -81,11 +79,11 @@ public:
 
 private:
 
-    int               m_count;
+    int      m_count;
 
-    QString           m_name;
+    QString  m_name;
 
-    DAlbum           *m_album;
+    DAlbum  *m_album;
 };
 
 DateFolderItem::DateFolderItem(Q3ListView* parent, DAlbum* album)
