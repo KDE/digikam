@@ -10,19 +10,23 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 108760 : Use collection image (or part of) as Tag/Album icon.
 004 ==> 144078 : very slow avi startup.
 005 ==> 146258 : Moving an album into waste basket didn't remove.
-006 ==> 
+006 ==> 149165 : cannot edit anymore - sqlite lock?
+007 ==> 
 
 **********************************************************************************************
 digiKam 0.9.5-beta1 - Release date: 2008-11-05
 
 NEW FEATURES:
 
-General        : libkdcraw dependency updated to 0.1.5
 
 Image Editor   : All image plugin tool settings provide default buttons to reset values.
 Image Editor   : New Raw import tool to handle Raw pictures with customized decoding settings.
 Image Editor   : All image plugin dialogs are removed. All tools are embedded in editor window.
 
+General        : libkdcraw dependency updated to 0.1.5
+General        : Raw metadata can be edited, changed, added to TIFF/EP like RAW file formats (require Exiv2 >= 0.18).
+                 Currently DNG, NEF, and PEF raw files are supported. More will be added in the future.
+                 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 166867 : digiKam crashes when starting.
