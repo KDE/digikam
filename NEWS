@@ -36,7 +36,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 024 ==> 176086 : Recursive slideshow only shows last album.
 025 ==> 171234 : Tag names imported from kde3 digikam are cut off in kde4.
 026 ==> 173828 : Geolocation do not except Canon EOS 1D Mark III CR2-files.
-027 ==> 
+027 ==> 150938 : Album thumbnail view very slow on NFS.
+028 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
