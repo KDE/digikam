@@ -79,7 +79,7 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
     mdkeylistviewitem.cpp               Gilles          X      X       DONE        DONE
     metadatalistview.cpp                Gilles          X      X       DONE        DONE
     metadatalistviewitem.cpp            Gilles          X      X       DONE        DONE
-    metadatawidget.cpp                  Gilles          X      X       DONE        DONE     Still to use Qt3 support class for printing.
+    metadatawidget.cpp                  Gilles          X      X       DONE        DONE
     xmpwidget.cpp                       Gilles          X      X       DONE        DONE
 
 |-utilities
@@ -102,7 +102,7 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
     renamecustomizer.cpp                Gilles                 X       DONE
     umscamera.cpp                       Gilles                 X       DONE
 |---fuzzysearch                         Gilles                 X       DONE
-|---gpssearch                           Gilles                 X       DONE                 Require Marble widget selection patch.
+|---gpssearch                           Gilles                 X       DONE                 Require Marble widget selection patch (will be released with KDE 4.2).
 |---hotplug                             Laurent                        DONE        -
 |---imageeditor
 |-----canvas
