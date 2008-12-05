@@ -21,7 +21,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 150342 : Camera image window keeps scrolling to the currently downloaded picture.
 015 ==> 147475 : digiKam Slideshow - Pause button does not stay sticky / work.
 016 ==> 148899 : Image Editor does not get the focus after clicking on an image.
-017 ==> 
+017 ==> Empty entries in the "back" drop-down when changing month (date view).
+018 ==> 
 
 **********************************************************************************************
 digiKam 0.9.5-beta1 - Release date: 2008-11-05
