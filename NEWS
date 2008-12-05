@@ -53,7 +53,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 041 ==> 131447 : Problem dragging folders from digikam to other places, like the desktop
 042 ==> 156847 : Missing thumbnails in album overview.
 043 ==> 146714 : IE, showfoto, album view rotation: rotated TIFs are losing metadata about picture.
-044 ==> 
+044 ==> 147961 : Search / Order by color.
+045 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
