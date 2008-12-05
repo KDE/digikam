@@ -23,7 +23,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 169764 : RAW file import lacks I18N support, no decoding.
 012 ==> 168918 : Rectangular selection tool often looses selection when dragging vertices.
 013 ==> 176654 : Buttons for setting album date in album properties not working.
-014 ==> 173746 : embed view does not work; I can not see an image.
+014 ==> 173746 : Embed view does not work; I can not see an image.
 015 ==> 172164 : Crash when downloading photos from Canon PowerShot A95.
 016 ==> 165325 : Crash when trying to import pictures from a USB-Camera.
 017 ==> 174642 : Crashes when try to connect to Kodak Z812 IS.
@@ -40,12 +40,12 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 028 ==> 137707 : A new icon for the albums in digiKam.
 029 ==> 176725 : Drag and drop stopped working.
 030 ==> 121460 : Album date average incorrect.
-031 ==> 115046 : light-table useability, possible improvements.
+031 ==> 115046 : Light-table useability, possible improvements.
 032 ==> 176584 : Mousewheeling on a slideshow sometimes crash digiKam.
 033 ==> 147477 : Camera > Media Browse does not poplulate information until click second time.
 034 ==> 169228 : View and Edit Icons missing in medium size.
 035 ==> 165321 : Maximized mode doesn't work, digiKam is "under" the taskbar.
-036 ==> 175914 : select new items in camera import window selects all files / forgets status.
+036 ==> 175914 : Select new items in camera import window selects all files / forgets status.
 037 ==> 132362 : Support for BOTH "jpgComment" and "jpgUser comment" EXIF data.
 038 ==> 133878 : Filter which files to import.
 039 ==> 167874 : Item count in tag and album view is not updated.
@@ -54,7 +54,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 042 ==> 156847 : Missing thumbnails in album overview.
 043 ==> 146714 : IE, showfoto, album view rotation: rotated TIFs are losing metadata about picture.
 044 ==> 147961 : Search / Order by color.
-045 ==> 
+045 ==> 151922 : Assign-tag menu icons sometimes in the wrong place.
+046 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
