@@ -1,4 +1,4 @@
-/* ============================================================
+ /* ============================================================
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
@@ -22,7 +22,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "cameraui.h"
 #include "cameraui.moc"
@@ -336,7 +335,7 @@ void CameraUI::setupActions()
     // -----------------------------------------------------------
 
     d->selectNewItemsAction = new KAction(KIcon("document-new"), i18n("Select New Items"), this);
-    connect(d->selectNewItemsAction, SIGNAL(triggered()), d->view, SLOT(slotSelectInvert()));
+    connect(d->selectNewItemsAction, SIGNAL(triggered()), d->view, SLOT(slotSelectNew()));
     actionCollection()->addAction("cameraui_selectnewitems", d->selectNewItemsAction);
 
     // -- Image menu ---------------------------------------------
