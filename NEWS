@@ -50,7 +50,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 038 ==> 133878 : Filter which files to import.
 039 ==> 167874 : Item count in tag and album view is not updated.
 040 ==> 176972 : Using create "Date-based  sub-albums"  makes import fail.
-041 ==> 
+041 ==> 131447 : Problem dragging folders from digikam to other places, like the desktop
+042 ==> 
 
 
 *********************************************************************************************************
