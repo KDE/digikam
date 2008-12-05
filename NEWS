@@ -13,7 +13,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 149165 : cannot edit anymore - sqlite lock?
 007 ==> 146025 : Wrong image name when using info from EXIF.
 008 ==> 167056 : Updating tags is slow when thumbnails are visible.
-009 ==> 
+009 ==> 141960 : Problems with photos without EXIV data when updating me.
+010 ==> 
 
 **********************************************************************************************
 digiKam 0.9.5-beta1 - Release date: 2008-11-05
