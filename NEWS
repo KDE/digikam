@@ -43,7 +43,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 031 ==> 115046 : light-table useability, possible improvements.
 032 ==> 176584 : Mousewheeling on a slideshow sometimes crash digiKam.
 033 ==> 147477 : Camera > Media Browse does not poplulate information until click second time.
-034 ==> 
+034 ==> 169228 : View and Edit Icons missing in medium size.
+035 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
