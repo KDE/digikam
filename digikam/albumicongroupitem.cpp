@@ -102,10 +102,18 @@ void AlbumIconGroupItem::paintBanner(QPainter *p)
     {
         QDate  date  = album->date();
 
-        dateAndComments = i18np("%1 %2 - 1 Item", "%1 %2 - %3 Items",
-                                KGlobal::locale()->calendar()->monthName(date, KCalendarSystem::LongName),
-                                QString::number(KGlobal::locale()->calendar()->year(date)),
-                                count());
+        KLocale tmpLocale(*KGlobal::locale());
+
+        tmpLocale.setDateFormat("%B"); // long form of the month
+        QString month = tmpLocale.formatDate(date);
+
+        tmpLocale.setDateFormat("%Y"); // long form of the year
+        QString year = tmpLocale.formatDate(date);
+
+        dateAndComments = i18ncp("%1 long month name, %2 year",
+                                 "%1 %2 - 1 Item", "%1 %2 - %3 Items",
+                                 month, year,
+                                 count());
 
         if (!album->caption().isEmpty())
         {
