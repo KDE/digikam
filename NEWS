@@ -51,8 +51,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 039 ==> 167874 : Item count in tag and album view is not updated.
 040 ==> 176972 : Using create "Date-based  sub-albums"  makes import fail.
 041 ==> 131447 : Problem dragging folders from digikam to other places, like the desktop
-042 ==> 
-
+042 ==> 156847 : Missing thumbnails in album overview.
+043 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
