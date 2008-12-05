@@ -39,7 +39,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 027 ==> 150938 : Album thumbnail view very slow on NFS.
 028 ==> 137707 : A new icon for the albums in digiKam.
 029 ==> 176725 : Drag and drop stopped working.
-030 ==> 
+030 ==> 121460 : Album date average incorrect.
+031 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
