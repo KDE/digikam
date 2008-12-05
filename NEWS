@@ -16,7 +16,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 141960 : Problems with photos without EXIV data when updating me.
 010 ==> 129379 : Renamed Album is shown multiple times although there is only on related picture directory.
 011 ==> 171247 : Album creation error when name start by a number.
-012 ==> 
+012 ==> 150906 : digiKam unable to connect to Panasonic LUMIX DMC-TZ3.
+013 ==> 
 
 **********************************************************************************************
 digiKam 0.9.5-beta1 - Release date: 2008-11-05
