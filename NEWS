@@ -46,7 +46,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 034 ==> 169228 : View and Edit Icons missing in medium size.
 035 ==> 165321 : Maximized mode doesn't work, digiKam is "under" the taskbar.
 036 ==> 175914 : select new items in camera import window selects all files / forgets status.
-037 ==> 
+037 ==> 132362 : Support for BOTH "jpgComment" and "jpgUser comment" EXIF data.
+038 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
