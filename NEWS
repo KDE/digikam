@@ -48,7 +48,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 036 ==> 175914 : select new items in camera import window selects all files / forgets status.
 037 ==> 132362 : Support for BOTH "jpgComment" and "jpgUser comment" EXIF data.
 038 ==> 133878 : Filter which files to import.
-039 ==> 
+039 ==> 167874 : Item count in tag and album view is not updated.
+040 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25

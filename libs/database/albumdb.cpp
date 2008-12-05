@@ -1972,12 +1972,21 @@ QMap<QDateTime, int> AlbumDB::getAllCreationDatesAndNumberOfImages()
 
 QMap<int, int> AlbumDB::getNumberOfImagesInAlbums()
 {
-    QList<QVariant> values;
-
-    d->db->execSql( "SELECT album FROM Images WHERE Images.status=1;", &values );
-
+    QList<QVariant> values, allAbumIDs;
     QMap<int, int>  albumsStatMap;
     int             albumID;
+
+    // initialize allAbumIDs with all existing albums from db to prevent
+    // wrong album image counters
+    d->db->execSql("SELECT id from Albums", &allAbumIDs);
+
+    for (QList<QVariant>::iterator it = allAbumIDs.begin(); it != allAbumIDs.end(); ++it)
+    {
+        albumID = (*it).toInt();
+        albumsStatMap.insert(albumID, 0);
+    }
+
+    d->db->execSql( "SELECT album FROM Images WHERE Images.status=1;", &values );
 
     for (QList<QVariant>::iterator it=values.begin(); it != values.end();)
     {
@@ -1996,14 +2005,24 @@ QMap<int, int> AlbumDB::getNumberOfImagesInAlbums()
 
 QMap<int, int> AlbumDB::getNumberOfImagesInTags()
 {
-    QList<QVariant> values;
+    QList<QVariant> values, allTagIDs;
+    QMap<int, int>  tagsStatMap;
+    int             tagID;
+
+    // initialize allTagIDs with all existing tags from db to prevent
+    // wrong tag counters
+    d->db->execSql(QString("SELECT id from Tags"), &allTagIDs);
+
+    for (QList<QVariant>::iterator it = allTagIDs.begin(); it != allTagIDs.end(); ++it)
+    {
+        tagID = (*it).toInt();
+        tagsStatMap.insert(tagID, 0);
+    }
 
     d->db->execSql( "SELECT tagid FROM ImageTags "
                     " LEFT JOIN Images ON Images.id=ImageTags.imageid "
                     " WHERE Images.status=1;", &values );
 
-    QMap<int, int> tagsStatMap;
-    int            tagID;
     for (QList<QVariant>::iterator it=values.begin(); it != values.end();)
     {
         tagID = (*it).toInt();
