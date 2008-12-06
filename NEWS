@@ -67,7 +67,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 055 ==> 174683 : Crashes when try to correct red eye.
 056 ==> 136206 : Losing tags after an move or rename of imagefiles.
 057 ==> 142774 : Moving pictures between albums.
-058 ==> 
+058 ==> 160664 : Protected file to camera.
+059 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
