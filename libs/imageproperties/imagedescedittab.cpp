@@ -123,7 +123,6 @@ public:
     QSignalMapper                 *recentTagsMapper;
 
     QPushButton                   *applyBtn;
-
     QPushButton                   *moreButton;
 
     KTextEdit                     *commentsEdit;
