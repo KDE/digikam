@@ -63,7 +63,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 051 ==> 171953 : Using create "Date-based  sub-albums"  makes import fail.
 052 ==> 133211 : Media browse corrupted display.
 053 ==> 170364 : Expand selection rectangle by dragging sides in imege editor.
-054 ==> 
+054 ==> 168928 : Wish: rotation of raw images.
+055 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
