@@ -69,7 +69,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 057 ==> 142774 : Moving pictures between albums.
 058 ==> 160664 : Protected file to camera.
 059 ==> 143864 : Tool to remove Chromatic Aberration from photos.
-060 ==> 
+060 ==> 125233 : "purple fringe" correction plugin.
+061 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
