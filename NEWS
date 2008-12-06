@@ -56,7 +56,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 044 ==> 147961 : Search / Order by color.
 045 ==> 151922 : Assign-tag menu icons sometimes in the wrong place.
 046 ==> 176565 : Loading a directory with more than 5000 raw files (NEF) make digikam crash.
-047 ==> 
+047 ==> 152262 : Unable to load tiff file.
+048 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
