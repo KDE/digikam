@@ -26,22 +26,23 @@
 
 // Qt includes.
 
-#include <QPixmap>
 #include <QPainter>
+#include <QPixmap>
 
 // KDE includes.
 
-#include <klocale.h>
-#include <kglobal.h>
 #include <kcalendarsystem.h>
+#include <kglobal.h>
+#include <klocale.h>
+#include <kstringhandler.h>
 
 // Local includes.
 
-#include "albummanager.h"
 #include "album.h"
-#include "themeengine.h"
-#include "albumsettings.h"
 #include "albumiconview.h"
+#include "albummanager.h"
+#include "albumsettings.h"
+#include "themeengine.h"
 
 namespace Digikam
 {
@@ -74,7 +75,7 @@ int AlbumIconGroupItem::compare(IconGroupItem* group)
         case(AlbumSettings::ByIPath):
         case(AlbumSettings::ByIRating):
         {
-            return mine->albumPath().localeAwareCompare(his->albumPath());
+            return KStringHandler::naturalCompare(mine->albumPath(), his->albumPath());
         }
         case(AlbumSettings::ByIDate):
         {

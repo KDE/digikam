@@ -27,33 +27,34 @@
 
 // Qt includes.
 
-#include <QPainter>
-#include <QPixmap>
-#include <QPalette>
-#include <QString>
-#include <QPen>
-#include <QFontMetrics>
-#include <QFont>
 #include <QDateTime>
+#include <QFont>
+#include <QFontMetrics>
+#include <QPainter>
+#include <QPalette>
+#include <QPen>
+#include <QPixmap>
+#include <QString>
 #include <QStringList>
 
 // KDE includes.
 
-#include <kurl.h>
 #include <kglobal.h>
-#include <klocale.h>
 #include <kio/global.h>
+#include <klocale.h>
+#include <kstringhandler.h>
+#include <kurl.h>
 
 // Local includes.
 
-#include "themeengine.h"
-#include "thumbnailsize.h"
-#include "imageinfo.h"
-#include "albumsettings.h"
-#include "albummanager.h"
-#include "icongroupitem.h"
-#include "thumbnailloadthread.h"
 #include "albumiconview.h"
+#include "albummanager.h"
+#include "albumsettings.h"
+#include "icongroupitem.h"
+#include "imageinfo.h"
+#include "themeengine.h"
+#include "thumbnailloadthread.h"
+#include "thumbnailsize.h"
 
 namespace Digikam
 {
@@ -175,11 +176,11 @@ int AlbumIconItem::compare(IconItem *item)
     {
         case(AlbumSettings::ByIName):
         {
-            return d->info.name().localeAwareCompare(iconItem->d->info.name());
+            return KStringHandler::naturalCompare(d->info.name(), iconItem->d->info.name());
         }
         case(AlbumSettings::ByIPath):
         {
-            return d->info.fileUrl().path().compare(iconItem->d->info.fileUrl().path());
+            return KStringHandler::naturalCompare(d->info.fileUrl().path(), iconItem->d->info.fileUrl().path());
         }
         case(AlbumSettings::ByIDate):
         {
