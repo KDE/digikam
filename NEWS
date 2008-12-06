@@ -23,7 +23,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 016 ==> 148899 : Image Editor does not get the focus after clicking on an image.
 017 ==> 148596 : Empty entries in the "back" drop-down when changing month (date view).
 018 ==> 161387 : Unable to import photos with digiKam even though it's detected.
-019 ==> 
+019 ==> 165229 : Thumbnail complete update does not work reliably, even for jpgs.
+020 ==> 
 
 **********************************************************************************************
 digiKam 0.9.5-beta1 - Release date: 2008-11-05
