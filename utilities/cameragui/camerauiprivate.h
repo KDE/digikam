@@ -105,6 +105,7 @@ public:
         selectNoneAction          = 0;
         selectInvertAction        = 0;
         selectNewItemsAction      = 0;
+        selectLockedItemsAction   = 0;
         uploadAction              = 0;
         lockAction                = 0;
         donateMoneyAction         = 0;
@@ -170,6 +171,7 @@ public:
     KAction                      *selectNoneAction;
     KAction                      *selectInvertAction;
     KAction                      *selectNewItemsAction;
+    KAction                      *selectLockedItemsAction;
     KAction                      *donateMoneyAction;
     KAction                      *contributeAction;
     KAction                      *cameraCancelAction;

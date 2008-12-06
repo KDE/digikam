@@ -338,6 +338,12 @@ void CameraUI::setupActions()
     connect(d->selectNewItemsAction, SIGNAL(triggered()), d->view, SLOT(slotSelectNew()));
     actionCollection()->addAction("cameraui_selectnewitems", d->selectNewItemsAction);
 
+    // -----------------------------------------------------------
+
+    d->selectLockedItemsAction = new KAction(KIcon("document-decrypt"), i18n("Select Locked Items"), this);
+    connect(d->selectLockedItemsAction, SIGNAL(triggered()), d->view, SLOT(slotSelectLocked()));
+    actionCollection()->addAction("cameraui_selectlockeditems", d->selectLockedItemsAction);
+
     // -- Image menu ---------------------------------------------
 
     d->imageViewAction = new KAction(KIcon("editimage"), i18n("View"), this);

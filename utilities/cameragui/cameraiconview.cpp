@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "cameraiconview.h"
 #include "cameraiconview.moc"
 
@@ -532,6 +531,25 @@ void CameraIconView::slotSelectNew()
     {
         CameraIconViewItem* viewItem = static_cast<CameraIconViewItem*>(item);
         if (viewItem->itemInfo()->downloaded == GPItemInfo::NewPicture)
+        {
+            viewItem->setSelected(true, false);
+        }
+    }
+
+    blockSignals(false);
+    emit signalSelectionChanged();
+}
+
+void CameraIconView::slotSelectLocked()
+{
+    blockSignals(true);
+    clearSelection();
+
+    for (IconItem* item = firstItem(); item;
+         item = item->nextItem())
+    {
+        CameraIconViewItem* viewItem = static_cast<CameraIconViewItem*>(item);
+        if (viewItem->itemInfo()->writePermissions == 0)
         {
             viewItem->setSelected(true, false);
         }

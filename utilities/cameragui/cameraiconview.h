@@ -110,6 +110,7 @@ public slots:
     void slotSelectNone();
     void slotSelectInvert();
     void slotSelectNew();
+    void slotSelectLocked();
 
 private slots:
 
