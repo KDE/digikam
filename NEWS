@@ -59,7 +59,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 047 ==> 152262 : Unable to load tiff file.
 048 ==> 148779 : Resync or refresh iptc-comments.
 049 ==> 147772 : Confusing UI for re-sizing side-bars.
-050 ==> 
+050 ==> 098225 : Printing and displaying exif information over the picture.
+051 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
