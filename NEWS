@@ -72,7 +72,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 060 ==> 125233 : "purple fringe" correction plugin.
 061 ==> 150161 : UFRaw as plugin for RAW.
 062 ==> 147876 : Broken/renamed images after tagging.
-063 ==> 
+063 ==> 117629 : Do an ocr of an image and store result in exif/jfif.
+064 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
