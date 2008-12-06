@@ -57,8 +57,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 045 ==> 151922 : Assign-tag menu icons sometimes in the wrong place.
 046 ==> 176565 : Loading a directory with more than 5000 raw files (NEF) make digikam crash.
 047 ==> 152262 : Unable to load tiff file.
-048 ==> 148779 : resync or refresh iptc-comments.
-049 ==> 
+048 ==> 148779 : Resync or refresh iptc-comments.
+049 ==> 147772 : Confusing UI for re-sizing side-bars.
+050 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
