@@ -71,7 +71,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 059 ==> 143864 : Tool to remove Chromatic Aberration from photos.
 060 ==> 125233 : "purple fringe" correction plugin.
 061 ==> 150161 : UFRaw as plugin for RAW.
-062 ==> 
+062 ==> 147876 : Broken/renamed images after tagging.
+063 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
