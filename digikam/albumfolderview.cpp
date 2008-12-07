@@ -581,8 +581,10 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
     if(item && item->parent())
     {
         if (!album->isAlbumRoot())
+        {
             renameAction     = popmenu.addAction(SmallIcon("edit-rename"), i18n("Rename..."));
-        propertiesAction = popmenu.addAction(SmallIcon("albumfolder-properties"), i18n("Album Properties..."));
+            propertiesAction = popmenu.addAction(SmallIcon("albumfolder-properties"), i18n("Album Properties..."));
+        }
         resetIconAction  = popmenu.addAction(SmallIcon("view-refresh"), i18n("Reset Album Icon"));
         popmenu.addSeparator();
 
