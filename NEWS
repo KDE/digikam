@@ -75,7 +75,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 063 ==> 117629 : Do an ocr of an image and store result in exif/jfif.
 064 ==> 172835 : The stars of the rating in the right panel are not refreshed when selecting different images.
 065 ==> 153798 : Bad calculation of images in recursive showed albums.
-066 ==> 
+066 ==> 134679 : Video and audio files are not imported.
+067 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
