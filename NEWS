@@ -78,7 +78,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 066 ==> 134679 : Video and audio files are not imported.
 067 ==> 171480 : Visual indicator missing for 100% zoom level. 
 068 ==> 151861 : Canon powershot 200 is not reqoqnized in this final version.
-069 ==> 
+069 ==> 144215 : Change the comment of a picture without modify its timestamp.
+070 ==> 150609 : Adjust Exif orientation tag changes files date.
+071 ==> 157788 : Tools->Update Metadata Database changes timestamps of files.
+072 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
