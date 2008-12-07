@@ -1500,6 +1500,7 @@ void LightTableWindow::slotLeftZoomFactorChanged(double zoom)
 
     d->leftZoomBar->setZoomSliderValue(size);
     d->leftZoomBar->setZoomTrackerText(i18n("zoom: %1%",(int)(zoom*100.0)));
+    d->leftZoomBar->triggerZoomTrackerToolTip();
 
     d->leftZoomBar->setEnableZoomPlus(true);
     d->leftZoomBar->setEnableZoomMinus(true);
@@ -1523,6 +1524,7 @@ void LightTableWindow::slotRightZoomFactorChanged(double zoom)
 
     d->rightZoomBar->setZoomSliderValue(size);
     d->rightZoomBar->setZoomTrackerText(i18n("zoom: %1%",(int)(zoom*100.0)));
+    d->rightZoomBar->triggerZoomTrackerToolTip();
 
     d->rightZoomBar->setEnableZoomPlus(true);
     d->rightZoomBar->setEnableZoomMinus(true);

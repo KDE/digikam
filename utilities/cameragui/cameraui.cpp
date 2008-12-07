@@ -929,6 +929,7 @@ void CameraUI::slotThumbSizeChanged(int size)
 {
     d->statusZoomBar->setZoomSliderValue(size);
     d->statusZoomBar->setZoomTrackerText(i18n("Size: %1", size));
+    d->statusZoomBar->triggerZoomTrackerToolTip();
 
     d->statusZoomBar->setEnableZoomPlus(true);
     d->statusZoomBar->setEnableZoomMinus(true);
