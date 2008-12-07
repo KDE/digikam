@@ -25,7 +25,6 @@
  *
  * ============================================================ */
 
-
 #include "albumfiletip.h"
 
 // Qt includes.
@@ -51,6 +50,7 @@
 
 // Local includes.
 
+#include "themeengine.h"
 #include "dmetadata.h"
 #include "albumiconview.h"
 #include "albumiconitem.h"
@@ -305,18 +305,22 @@ void AlbumFileTip::updateText()
     QString tip, str;
     QString unavailable(i18n("unavailable"));
 
-    QString headBeg("<tr bgcolor=\"#73CAE6\"><td colspan=\"2\">"
-                    "<nobr><font size=\"-1\" color=\"black\"><b>");
+    QString headBeg = QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"
+                              "<nobr><font size=\"-1\" color=\"%2\"><b>")
+                              .arg(ThemeEngine::instance()->baseColor().name())
+                              .arg(ThemeEngine::instance()->textRegColor().name());
     QString headEnd("</b></font></nobr></td></tr>");
 
-    QString cellBeg("<tr><td><nobr><font size=\"-1\" color=\"black\">");
-    QString cellMid("</font></nobr></td>"
-                    "<td><nobr><font size=\"-1\" color=\"black\">");
+    QString cellBeg = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\">")
+                              .arg(ThemeEngine::instance()->textRegColor().name());
+    QString cellMid = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\">")
+                              .arg(ThemeEngine::instance()->textRegColor().name());
     QString cellEnd("</font></nobr></td></tr>");
 
-    QString cellSpecBeg("<tr><td><nobr><font size=\"-1\" color=\"black\">");
-    QString cellSpecMid("</font></nobr></td>"
-                        "<td><nobr><font size=\"-1\" color=\"steelblue\"><i>");
+    QString cellSpecBeg = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\">")
+                                  .arg(ThemeEngine::instance()->textRegColor().name());
+    QString cellSpecMid = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\"><i>")
+                                  .arg(ThemeEngine::instance()->textSpecialRegColor().name());
     QString cellSpecEnd("</i></font></nobr></td></tr>");
 
     tip = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">";
