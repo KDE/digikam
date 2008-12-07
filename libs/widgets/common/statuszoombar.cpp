@@ -27,21 +27,21 @@
 
 // Qt includes.
 
-#include <QToolButton>
-#include <QTimer>
-#include <QSlider>
 #include <QLayout>
+#include <QSlider>
+#include <QTimer>
+#include <QToolButton>
 
 // KDE includes.
 
-#include <klocale.h>
 #include <kiconloader.h>
+#include <klocale.h>
 #include <kvbox.h>
 
 // Local includes.
 
-#include "thumbnailsize.h"
 #include "dcursortracker.h"
+#include "thumbnailsize.h"
 
 namespace Digikam
 {
@@ -165,6 +165,11 @@ void StatusZoomBar::setZoomSliderValue(int v)
 void StatusZoomBar::setZoomTrackerText(const QString& text)
 {
     d->zoomTracker->setText(text);
+}
+
+void StatusZoomBar::triggerZoomTrackerToolTip()
+{
+    d->zoomTracker->triggerAutoShow();
 }
 
 void StatusZoomBar::setEnableZoomPlus(bool e)

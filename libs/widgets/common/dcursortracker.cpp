@@ -4,10 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2007-23-03
- * Description : a tool tip widget witch follow cursor movements
+ * Description : A tool tip widget which follows cursor movements.
  *               Tool tip content is displayed without delay.
  *
- * Copyright (C) 2007 by Gilles Caulier  <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,24 +24,37 @@
 
 
 #include "dcursortracker.h"
+#include "dcursortracker.moc"
 
 // Qt includes.
 
 #include <QEvent>
 #include <QFrame>
-#include <QToolTip>
-#include <QMouseEvent>
 #include <QLabel>
+#include <QMouseEvent>
+#include <QTimer>
+#include <QToolTip>
+
+// KDE includes.
+
+#include <kdebug.h>
 
 namespace Digikam
 {
 
 DCursorTracker::DCursorTracker(const QString& txt, QWidget *parent)
-              : QLabel(txt, 0, Qt::ToolTip )
+              : QLabel(txt, 0, Qt::ToolTip)
 {
-    parent->setMouseTracking(true);
-    parent->installEventFilter(this);
+    m_parent = parent;
+    m_parent->setMouseTracking(true);
+    m_parent->installEventFilter(this);
     setEnable(true);
+
+    m_autoHideTimer = new QTimer(this);
+    m_autoHideTimer->setSingleShot(true);
+
+    connect(m_autoHideTimer, SIGNAL(timeout()),
+            this, SLOT(slotAutoHide()));
 }
 
 /**
@@ -58,6 +71,21 @@ void DCursorTracker::setEnable(bool b)
     m_enable = b;
 }
 
+void DCursorTracker::triggerAutoShow(int timeout)
+{
+    if (m_enable)
+    {
+        show();
+        moveToParent(m_parent);
+        m_autoHideTimer->start(timeout);
+    }
+}
+
+void DCursorTracker::slotAutoHide()
+{
+    hide();
+}
+
 bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
 {
     QWidget *widget = static_cast<QWidget*>(object);
@@ -71,8 +99,7 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
                             (event->buttons() & Qt::LeftButton)))
             {
                 show();
-                QPoint p = widget->mapToGlobal(QPoint(widget->width()/2, 0));
-                move(p.x()-width()/2, p.y()-height());
+                moveToParent(widget);
             }
             else
             {
@@ -92,6 +119,12 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
     }
 
     return false;
+}
+
+void DCursorTracker::moveToParent(QWidget* parent)
+{
+    QPoint p = parent->mapToGlobal(QPoint(parent->width()/2, 0));
+    move(p.x()-width()/2, p.y()-height());
 }
 
 

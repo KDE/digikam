@@ -56,6 +56,7 @@ public:
 
     void setZoomSliderValue(int v);
     void setZoomTrackerText(const QString& text);
+    void triggerZoomTrackerToolTip();
 
 Q_SIGNALS:
 
