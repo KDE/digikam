@@ -77,7 +77,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 065 ==> 153798 : Bad calculation of images in recursive showed albums.
 066 ==> 134679 : Video and audio files are not imported.
 067 ==> 171480 : Visual indicator missing for 100% zoom level. 
-068 ==> 
+068 ==> 151861 : Canon powershot 200 is not reqoqnized in this final version.
+069 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
