@@ -569,7 +569,8 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
     QAction *newAction = popmenu.addAction(SmallIcon("albumfolder-new"), i18n("New Album..."));
 
     AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(listitem);
-    if (item && !item->album())
+    PAlbum *album = item->album();
+    if (item && !album)
     {
         // if collection/date return
         return;
@@ -579,7 +580,8 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
     QAction *renameAction = 0, *propertiesAction = 0, *resetIconAction = 0, *deleteAction = 0;
     if(item && item->parent())
     {
-        renameAction     = popmenu.addAction(SmallIcon("edit-rename"), i18n("Rename..."));
+        if (!album->isAlbumRoot())
+            renameAction     = popmenu.addAction(SmallIcon("edit-rename"), i18n("Rename..."));
         propertiesAction = popmenu.addAction(SmallIcon("albumfolder-properties"), i18n("Album Properties..."));
         resetIconAction  = popmenu.addAction(SmallIcon("view-refresh"), i18n("Reset Album Icon"));
         popmenu.addSeparator();
@@ -621,13 +623,16 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
             popmenu.addSeparator();
         }
 
-        if(AlbumSettings::instance()->getUseTrash())
+        if (!album->isAlbumRoot())
         {
-            deleteAction = popmenu.addAction(SmallIcon("user-trash"), i18n("Move Album to Trash"));
-        }
-        else
-        {
-            deleteAction = popmenu.addAction(SmallIcon("edit-delete-shred"), i18n("Delete Album"));
+            if(AlbumSettings::instance()->getUseTrash())
+            {
+                deleteAction = popmenu.addAction(SmallIcon("user-trash"), i18n("Move Album to Trash"));
+            }
+            else
+            {
+                deleteAction = popmenu.addAction(SmallIcon("edit-delete-shred"), i18n("Delete Album"));
+            }
         }
     }
 
