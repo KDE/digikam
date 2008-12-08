@@ -86,7 +86,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 074 ==> 132244 : Special Chars in Keywords decode wrong in IPTC.
 075 ==> 162490 : dcraw-8.86 adds newer canon dslr with digic III support.
 076 ==> 103149 : Printing wizard plugin is hard to find.
-077 ==> 
+077 ==> 149328 : Let libkdcraw use raw decoding options when generating thumbnails.
+078 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
