@@ -149,6 +149,8 @@ private:
 
 signals:
 
+    void signalZoomIn();
+    void signalZoomOut();
     void signalSelectionChanged();
     void signalItemsRearranged();
     void signalRightButtonClicked(IconItem* item, const QPoint& pos);

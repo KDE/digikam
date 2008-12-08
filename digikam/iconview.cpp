@@ -1223,10 +1223,23 @@ void IconView::contentsMouseReleaseEvent(QMouseEvent* e)
 
 void IconView::contentsWheelEvent(QWheelEvent* e)
 {
+    e->accept();
+
     d->toolTipItem = 0;
     d->toolTipTimer->stop();
     slotToolTip();
     viewport()->update();
+
+    if (e->modifiers() & Qt::ControlModifier)
+    {
+        if (e->delta() < 0)
+            emit signalZoomOut();
+        else if (e->delta() > 0)
+            emit signalZoomIn();
+
+        // We don't want to scroll contents.
+        return;
+    }
 
     Q3ScrollView::contentsWheelEvent(e);
 }

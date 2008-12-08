@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "digikamview.h"
 #include "digikamview.moc"
 
@@ -183,7 +182,7 @@ DigikamView::DigikamView(QWidget *parent)
            : KHBox(parent)
 {
     d = new DigikamViewPriv;
-    d->parent       = static_cast<DigikamApp *>(parent);
+    d->parent       = static_cast<DigikamApp*>(parent);
     d->albumManager = AlbumManager::instance();
 
     d->splitter = new SidebarSplitter;
@@ -192,7 +191,7 @@ DigikamView::DigikamView(QWidget *parent)
     d->splitter->setFrameShape( QFrame::NoFrame );
     d->splitter->setOpaqueResize(false);
 
-    d->leftSideBar  = new Sidebar(this, d->splitter, KMultiTabBar::Left);
+    d->leftSideBar = new Sidebar(this, d->splitter, KMultiTabBar::Left);
     d->leftSideBar->setObjectName("Digikam Left Sidebar");
     d->splitter->setParent(this);
 
@@ -384,6 +383,12 @@ void DigikamView::setupConnections()
 
     connect(d->iconView, SIGNAL(signalProgressValue(int)),
             d->parent, SLOT(slotProgressValue(int)));
+
+    connect(d->iconView, SIGNAL(signalZoomOut()),
+            this, SLOT(slotZoomOut()));
+
+    connect(d->iconView, SIGNAL(signalZoomIn()),
+            this, SLOT(slotZoomIn()));
 
     // -- Sidebar Connections -------------------------------------
 
@@ -840,8 +845,8 @@ void DigikamView::slotAlbumsCleared()
 
 void DigikamView::slotAlbumHistoryBack(int steps)
 {
-    Album *album;
-    QWidget *widget;
+    Album   *album=0;
+    QWidget *widget=0;
 
     d->albumHistory->back(&album, &widget, steps);
 
@@ -850,8 +855,8 @@ void DigikamView::slotAlbumHistoryBack(int steps)
 
 void DigikamView::slotAlbumHistoryForward(int steps)
 {
-    Album *album;
-    QWidget *widget;
+    Album   *album=0;
+    QWidget *widget=0;
 
     d->albumHistory->forward(&album, &widget, steps);
 
