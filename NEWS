@@ -91,7 +91,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 079 ==> 148861 : [ctrl] + scroll wheel doesn't resize thumbnails.
 080 ==> 154526 : Big screen size lead to small picture in main window and editor.
 081 ==> 177231 : Rotate context menu in view mode.
-082 ==> 
+082 ==> 125923 : Image tooltip contents not shown when albumview is scrolled up or down with cursur keys.
+083 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
