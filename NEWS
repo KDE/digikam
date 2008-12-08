@@ -83,7 +83,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 071 ==> 157788 : Tools->Update Metadata Database changes timestamps of files.
 072 ==> 142568 : digiKam is really slow to load a RAW (.CR2) photo.
 073 ==> 151719 : Non latin1 in iptc keywords.
-074 ==> 
+074 ==> 132244 : Special Chars in Keywords decode wrong in IPTC.
+075 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
