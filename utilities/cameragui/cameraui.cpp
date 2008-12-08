@@ -1026,7 +1026,15 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
 void CameraUI::slotThumbnail(const QString& folder, const QString& file,
                              const QImage& thumbnail)
 {
-    d->view->setThumbnail(folder, file, thumbnail);
+    QImage thumb = thumbnail;
+
+    if (thumb.isNull())
+    {
+        // This call must be run outside Camera Controler thread.
+        thumb = d->controller->mimeTypeThumbnail(file).toImage();
+    }
+
+    d->view->setThumbnail(folder, file, thumb);
     int curr = d->statusProgressBar->progressValue();
     d->statusProgressBar->setProgressValue(curr+1);
 }

@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +22,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "cameracontroller.h"
 #include "cameracontroller.moc"
@@ -47,9 +46,11 @@ extern "C"
 #include <QImage>
 #include <QFile>
 #include <QRegExp>
+#include <QFileInfo>
 
-// KDE includes.
+// KDE includes
 
+#include <kiconloader.h>
 #include <kdebug.h>
 #include <kio/renamedialog.h>
 #include <klocale.h>
@@ -137,10 +138,9 @@ public:
 CameraController::CameraController(QWidget* parent,
                                    const QString& title, const QString& model,
                                    const QString& port, const QString& path)
-                : QThread(parent)
+                : QThread(parent), d(new CameraControllerPriv)
 {
-    d = new CameraControllerPriv;
-    d->parent        = parent;
+    d->parent = parent;
 
     // URL parsing (c) Stephan Kulow
     if (path.startsWith("camera:/"))
@@ -282,6 +282,25 @@ QByteArray CameraController::cameraMD5ID()
     return d->camera->cameraMD5ID();
 }
 
+QPixmap CameraController::mimeTypeThumbnail(const QString& itemName)
+{
+    if (!d->camera) return QPixmap();
+
+    QFileInfo fi(itemName);
+    QString mime = d->camera->mimeType(fi.suffix().toLower());
+
+    if (mime.startsWith("image/x-raw"))
+        return DesktopIcon("kdcraw");
+    else if (mime.startsWith("image/"))
+        return DesktopIcon("image-x-generic");
+    else if (mime.startsWith("video/"))
+        return DesktopIcon("video-x-generic");
+    else if (mime.startsWith("audio/"))
+        return DesktopIcon("audio-x-generic");
+
+    return DesktopIcon("unknown");
+}
+
 void CameraController::slotCancel()
 {
     d->canceled = true;
@@ -417,15 +436,14 @@ void CameraController::executeCommand(CameraCommand *cmd)
             sendInfo(i18n("Getting thumbnails..."));
 
             QImage thumbnail;
-            d->camera->getThumbnail(folder, file, thumbnail);
 
-            if (!thumbnail.isNull())
+            if (d->camera->getThumbnail(folder, file, thumbnail))
             {
                 thumbnail = thumbnail.scaled(ThumbnailSize::Huge, ThumbnailSize::Huge,
                                              Qt::KeepAspectRatio);
-
-                emit signalThumbnail(folder, file, thumbnail);
             }
+
+            emit signalThumbnail(folder, file, thumbnail);
 
             break;
         }

@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +32,7 @@
 #include <QString>
 #include <QFileInfo>
 #include <QCustomEvent>
+#include <QPixmap>
 
 // Local includes.
 
@@ -85,6 +86,8 @@ public:
     void deleteFile(const QString& folder, const QString& file);
     void lockFile(const QString& folder, const QString& file, bool lock);
     void openFile(const QString& folder, const QString& file);
+
+    QPixmap mimeTypeThumbnail(const QString& itemName);
 
 signals:
 
@@ -147,7 +150,7 @@ private:
 
 private:
 
-    CameraControllerPriv *d;
+    CameraControllerPriv* const d;
 };
 
 }  // namespace Digikam
