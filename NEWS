@@ -87,7 +87,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 075 ==> 162490 : dcraw-8.86 adds newer canon dslr with digic III support.
 076 ==> 103149 : Printing wizard plugin is hard to find.
 077 ==> 149328 : Let libkdcraw use raw decoding options when generating thumbnails.
-078 ==> 
+078 ==> 168012 : Thumbnails not shown in find similar items tool so they can't be used for drag and drop. 
+079 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
