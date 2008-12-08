@@ -526,6 +526,12 @@ void CameraUI::setupConnections()
     connect(d->view, SIGNAL(signalNewSelection(bool)),
             this, SLOT(slotNewSelection(bool)));
 
+    connect(d->view, SIGNAL(signalZoomOut()),
+            this, SLOT(slotDecreaseThumbSize()));
+
+    connect(d->view, SIGNAL(signalZoomIn()),
+            this, SLOT(slotIncreaseThumbSize()));
+
     connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
             this, SLOT(slotThumbSizeChanged(int)));
 
