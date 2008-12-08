@@ -93,7 +93,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 081 ==> 177231 : Rotate context menu in view mode.
 082 ==> 125923 : Image tooltip contents not shown when albumview is scrolled up or down with cursur keys.
 083 ==> 174807 : digiKam does not use KDE's Trash.
-084 ==> 
+084 ==> 142058 : Icons for import should use proper mime type.
+085 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
