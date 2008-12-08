@@ -256,7 +256,7 @@ private:
 
 private:
 
-    EditorWindowPriv *d;
+    EditorWindowPriv* const d;
 
     friend class EditorToolIface;
 };

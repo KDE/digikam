@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "editorwindow.h"
 #include "editorwindow.moc"
 
@@ -121,10 +120,8 @@ namespace Digikam
 {
 
 EditorWindow::EditorWindow(const char *name)
-            : KXmlGuiWindow(0)
+            : KXmlGuiWindow(0), d(new EditorWindowPriv)
 {
-    d = new EditorWindowPriv;
-
     setObjectName(name);
     setWindowFlags(Qt::Window);
 
@@ -330,7 +327,6 @@ void EditorWindow::setupStandardActions()
     d->copyAction = KStandardAction::copy(m_canvas, SLOT(slotCopy()), this);
     actionCollection()->addAction("editorwindow_copy", d->copyAction);
     d->copyAction->setEnabled(false);
-
 
     m_undoAction = new KToolBarPopupAction(KIcon("edit-undo"), i18n("Undo"), this);
     m_undoAction->setShortcut(KStandardShortcut::undo());
@@ -685,8 +681,7 @@ void EditorWindow::slotAboutToShowRedoMenu()
 
     for (int i=0; i<titles.size(); i++)
     {
-        QAction *action =
-            m_redoAction->menu()->addAction(titles[i], d->redoSignalMapper, SLOT(map()));
+        QAction *action = m_redoAction->menu()->addAction(titles[i], d->redoSignalMapper, SLOT(map()));
         d->redoSignalMapper->setMapping(action, i + 1);
     }
 }
@@ -762,8 +757,7 @@ void EditorWindow::slotZoomChanged(bool isMax, bool isMin, double zoom)
     d->zoomMinusAction->setEnabled(!isMin);
 
     d->zoomCombo->blockSignals(true);
-    d->zoomCombo->setItemText(d->zoomCombo->currentIndex(),
-                              QString::number(lround(zoom*100.0)) + QString("%"));
+    d->zoomCombo->setEditText(QString::number(lround(zoom*100.0)) + QString("%"));
     d->zoomCombo->blockSignals(false);
 }
 
@@ -792,7 +786,9 @@ void EditorWindow::loadImagePlugins()
             plugin->setEnabledSelectionActions(false);
         }
         else
+        {
             kDebug(50003) << "Invalid plugin to add!" << endl;
+        }
     }
 }
 
@@ -950,7 +946,7 @@ void EditorWindow::applyStandardSettings()
 void EditorWindow::saveStandardSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("ImageViewer Settings");
+    KConfigGroup group        = config->group("ImageViewer Settings");
 
     group.writeEntry("AutoZoom", d->zoomFitToWindowAction->isChecked());
     m_splitter->saveState(group);
@@ -1219,7 +1215,7 @@ void EditorWindow::slotSelected(bool val)
     // Update status bar
     if (val)
         d->selectLabel->setText(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y())
-                               .arg(sel.width()).arg(sel.height()));
+                                .arg(sel.width()).arg(sel.height()));
     else
         d->selectLabel->setText(i18n("No selection"));
 }
@@ -1253,7 +1249,6 @@ void EditorWindow::slotPrepareToLoad()
 void EditorWindow::slotLoadingStarted(const QString& /*filename*/)
 {
     setCursor( Qt::WaitCursor );
-
     m_nameLabel->progressBarMode(StatusProgressBar::ProgressBarMode, i18n("Loading: "));
 }
 
