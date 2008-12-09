@@ -55,19 +55,6 @@
 namespace Digikam
 {
 
-class EventDebugger : public QObject
-{
-    virtual bool eventFilter ( QObject * watched, QEvent * event )
-    {
-        if (event->type() == QEvent::Resize)
-        {
-            QResizeEvent *re = static_cast<QResizeEvent*>(event);
-            kDebug(50003) << "Resizing" << watched->metaObject()->className() << re->size();
-        }
-        return false;
-    }
-};
-
 class AlbumWidgetStackPriv
 {
 
@@ -202,19 +189,6 @@ void AlbumWidgetStack::readSettings()
     {
         QByteArray state;
         state = group.readEntry("SplitterState", state);
-        // for debugging, from qsplitter.cpp
-        {
-            QByteArray sd = QByteArray::fromBase64(state);
-            QDataStream stream(&sd, QIODevice::ReadOnly);
-            QList<int> list;
-            qint32 marker;
-            qint32 v;
-
-            stream >> marker;
-            stream >> v;
-            stream >> list;
-            kDebug(50003) << "Saved sizes were" << list;
-        }
         d->splitter->restoreState(QByteArray::fromBase64(state));
     }
 }
