@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "thumbbar.h"
 #include "thumbbar.moc"
 
@@ -86,6 +85,7 @@ public:
         clearing        = false;
         needPreload     = false;
         toolTip         = 0;
+        toolTipItem     = 0;
         firstItem       = 0;
         lastItem        = 0;
         currItem        = 0;
@@ -93,6 +93,9 @@ public:
         thumbLoadThread = 0;
         tileSize        = ThumbnailSize::Small;
         maxTileSize     = 256;
+        toolTipTimer    = 0;
+        timer           = 0;
+        preloadTimer    = 0;
     }
 
     bool                        clearing;
@@ -106,6 +109,7 @@ public:
     int                         maxTileSize;
 
     QTimer                     *timer;
+    QTimer                     *toolTipTimer;
     QTimer                     *preloadTimer;
 
     QPoint                      dragStartPos;
@@ -113,6 +117,7 @@ public:
     ThumbBarItem               *firstItem;
     ThumbBarItem               *lastItem;
     ThumbBarItem               *currItem;
+    ThumbBarItem               *toolTipItem;
 
     QHash<KUrl, ThumbBarItem*>  itemHash;
     ThumbnailLoadThread        *thumbLoadThread;
@@ -157,6 +162,7 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
     d->toolTipSettings = settings;
     d->toolTip         = new ThumbBarToolTip(this);
     d->timer           = new QTimer(this);
+    d->toolTipTimer    = new QTimer(this);
     d->preloadTimer    = new QTimer(this);
     d->preloadTimer->setSingleShot(true);
     d->thumbLoadThread = ThumbnailLoadThread::defaultThumbBarThread();
@@ -174,6 +180,9 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
 
     connect(this, SIGNAL(contentsMoving(int,int)),
             this, SLOT(slotContentsMoved()));
+
+    connect(d->toolTipTimer, SIGNAL(timeout()),
+            this, SLOT(slotToolTip()));
 
     viewport()->setMouseTracking(true);
     viewport()->setAcceptDrops(true);
@@ -206,6 +215,7 @@ ThumbBarView::~ThumbBarView()
     clear(false);
 
     delete d->timer;
+    delete d->toolTipTimer;
     delete d->toolTip;
     delete d;
 }
@@ -271,7 +281,7 @@ void ThumbBarView::setToolTipSettings(const ThumbBarToolTipSettings &settings)
     d->toolTipSettings = settings;
 }
 
-ThumbBarToolTipSettings& ThumbBarView::getToolTipSettings()
+ThumbBarToolTipSettings& ThumbBarView::getToolTipSettings() const
 {
     return d->toolTipSettings;
 }
@@ -435,7 +445,7 @@ void ThumbBarView::preloadPixmapForItem(ThumbBarItem *item) const
 
 void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
 {
-    int ts;
+    int   ts;
     QRect tile;
     QRect contentsPaintRect(viewportToContents(e->rect().topLeft()), viewportToContents(e->rect().bottomRight()));
 
@@ -515,6 +525,11 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
 
 void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
 {
+    // hide tooltip
+    d->toolTipItem = 0;
+    d->toolTipTimer->stop();
+    slotToolTip();
+
     ThumbBarItem* barItem = findItem(e->pos());
     d->dragging           = true;
     d->dragStartPos       = e->pos();
@@ -536,6 +551,49 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
 void ThumbBarView::contentsMouseMoveEvent(QMouseEvent *e)
 {
     if (!e) return;
+
+    if (e->buttons() == Qt::NoButton)
+    {
+        ThumbBarItem* item = findItem(e->pos());
+
+        if(d->toolTipSettings.showToolTips)
+        {
+            if (!isActiveWindow())
+            {
+                d->toolTipItem = 0;
+                d->toolTipTimer->stop();
+                slotToolTip();
+                return;
+            }
+
+            if (item != d->toolTipItem)
+            {
+                d->toolTipItem = 0;
+                d->toolTipTimer->stop();
+                slotToolTip();
+
+                if(acceptToolTip(item, e->pos()))
+                {
+                    d->toolTipItem = item;
+                    d->toolTipTimer->setSingleShot(true);
+                    d->toolTipTimer->start(500);
+                }
+            }
+
+            if(item == d->toolTipItem && !acceptToolTip(item, e->pos()))
+            {
+                d->toolTipItem = 0;
+                d->toolTipTimer->stop();
+                slotToolTip();
+            }
+        }
+
+        return;
+    }
+
+    d->toolTipItem  = 0;
+    d->toolTipTimer->stop();
+    slotToolTip();
 
     if (d->dragging && (e->buttons() & Qt::LeftButton))
     {
@@ -562,6 +620,10 @@ void ThumbBarView::contentsMouseReleaseEvent(QMouseEvent *e)
 void ThumbBarView::contentsWheelEvent(QWheelEvent *e)
 {
     e->accept();
+
+    d->toolTipItem = 0;
+    d->toolTipTimer->stop();
+    slotToolTip();
 
     if (e->delta() < 0)
     {
@@ -600,13 +662,41 @@ void ThumbBarView::contentsWheelEvent(QWheelEvent *e)
     }
 }
 
+void ThumbBarView::leaveEvent(QEvent *e)
+{
+    // hide tooltip
+    d->toolTipItem = 0;
+    d->toolTipTimer->stop();
+    slotToolTip();
+
+    Q3ScrollView::leaveEvent(e);
+}
+
+void ThumbBarView::focusOutEvent(QFocusEvent* e)
+{
+    // hide tooltip
+    d->toolTipItem = 0;
+    d->toolTipTimer->stop();
+    slotToolTip();
+
+    Q3ScrollView::focusOutEvent(e);
+}
+
+void ThumbBarView::slotToolTip()
+{
+    d->toolTip->setItem(d->toolTipItem);
+}
+
 void ThumbBarView::startDrag()
 {
 }
 
 void ThumbBarView::clear(bool updateView)
 {
-    d->clearing = true;
+    d->clearing    = true;
+    d->toolTipItem = 0;
+    d->toolTipTimer->stop();
+    slotToolTip();
 
     ThumbBarItem *item = d->firstItem;
     while (item)
@@ -632,6 +722,10 @@ void ThumbBarView::clear(bool updateView)
 void ThumbBarView::insertItem(ThumbBarItem* item)
 {
     if (!item) return;
+
+    d->toolTipItem = 0;
+    d->toolTipTimer->stop();
+    slotToolTip();
 
     if (!d->firstItem)
     {
@@ -666,6 +760,13 @@ void ThumbBarView::insertItem(ThumbBarItem* item)
 void ThumbBarView::takeItem(ThumbBarItem* item)
 {
     if (!item) return;
+
+    if (d->toolTipItem == item)
+    {
+        d->toolTipItem = 0;
+        d->toolTipTimer->stop();
+        slotToolTip();
+    }
 
     d->count--;
 
@@ -713,6 +814,13 @@ void ThumbBarView::takeItem(ThumbBarItem* item)
 void ThumbBarView::removeItem(ThumbBarItem* item)
 {
     if (!item) return;
+
+    if (d->toolTipItem == item)
+    {
+        d->toolTipItem = 0;
+        d->toolTipTimer->stop();
+        slotToolTip();
+    }
     delete item;
 }
 
@@ -720,14 +828,18 @@ void ThumbBarView::rearrangeItems()
 {
     KUrl::List urlList;
 
-    int pos = 0;
+    d->toolTipItem = 0;
+    d->toolTipTimer->stop();
+    slotToolTip();
+
+    int pos            = 0;
     ThumbBarItem *item = d->firstItem;
 
     while (item)
     {
         item->d->pos = pos;
-        pos += d->tileSize + 2*d->margin;
-        item = item->d->next;
+        pos          += d->tileSize + 2*d->margin;
+        item         = item->d->next;
     }
 
     if (d->orientation == Qt::Vertical)
@@ -829,28 +941,14 @@ void ThumbBarView::slotGotThumbnail(const LoadingDescription& desc, const QPixma
     }
 }
 
-bool ThumbBarView::event(QEvent *event)
-{
-    if (event->type() == QEvent::ToolTip)
-    {
-        QHelpEvent *helpEvent = dynamic_cast<QHelpEvent *>(event);
-        if (helpEvent)
-        {
-            QString tipText;
-            QRect rect = toolTip()->maybeTip(helpEvent->pos(), tipText);
-            if (!rect.isEmpty())
-                QToolTip::showText(helpEvent->globalPos(), tipText, this);
-            else
-                QToolTip::hideText();
-        }
-    }
-
-    return QWidget::event(event);
-}
-
 ThumbBarToolTip* ThumbBarView::toolTip() const
 {
     return d->toolTip;
+}
+
+bool ThumbBarView::acceptToolTip(ThumbBarItem*, const QPoint&)
+{
+    return true;
 }
 
 // -------------------------------------------------------------------------
@@ -908,274 +1006,6 @@ int ThumbBarItem::position() const
 void ThumbBarItem::repaint()
 {
     d->view->repaintItem(this);
-}
-
-// -------------------------------------------------------------------------
-
-ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* parent)
-               : m_maxStringLen(30), m_view(parent)
-{
-    m_headBeg = QString("<tr bgcolor=\"#73CAE6\"><td colspan=\"2\">"
-                        "<nobr><font size=\"-1\" color=\"black\"><b>");
-    m_headEnd = QString("</b></font></nobr></td></tr>");
-
-    m_cellBeg = QString("<tr><td><nobr><font size=\"-1\" color=\"black\">");
-    m_cellMid = QString("</font></nobr></td>"
-                        "<td><nobr><font size=\"-1\" color=\"black\">");
-    m_cellEnd = QString("</font></nobr></td></tr>");
-
-    m_cellSpecBeg = QString("<tr><td><nobr><font size=\"-1\" color=\"black\">");
-    m_cellSpecMid = QString("</font></nobr></td>"
-                            "<td><nobr><font size=\"-1\" color=\"steelblue\"><i>");
-    m_cellSpecEnd = QString("</i></font></nobr></td></tr>");
-}
-
-ThumbBarToolTip::~ThumbBarToolTip()
-{
-}
-
-QRect ThumbBarToolTip::maybeTip(const QPoint& pos, QString& tipText)
-{
-    if (!m_view) return QRect();
-
-    ThumbBarItem* item = m_view->findItem( m_view->viewportToContents(pos) );
-    if (!item) return QRect();
-
-    if (!m_view->getToolTipSettings().showToolTips) return QRect();
-
-    tipText = tipContents(item);
-    tipText.append("</table>");
-
-    return item->rect();
-}
-
-QString ThumbBarToolTip::tipContents(ThumbBarItem* item) const
-{
-    ThumbBarToolTipSettings settings = m_view->getToolTipSettings();
-
-    QString tipText, str;
-    QString unavailable(i18n("unavailable"));
-
-    tipText = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">";
-
-    QFileInfo fileInfo(item->url().path());
-    KFileItem fi(KFileItem::Unknown, KFileItem::Unknown, item->url());
-    DMetadata metaData(item->url().path());
-
-    // -- File properties ----------------------------------------------
-
-    if (settings.showFileName  ||
-        settings.showFileDate  ||
-        settings.showFileSize  ||
-        settings.showImageType ||
-        settings.showImageDim)
-    {
-        tipText += m_headBeg + i18n("File Properties") + m_headEnd;
-
-        if (settings.showFileName)
-        {
-            tipText += m_cellBeg + i18n("Name:") + m_cellMid;
-            tipText += item->url().fileName() + m_cellEnd;
-        }
-
-        if (settings.showFileDate)
-        {
-            QDateTime modifiedDate = fileInfo.lastModified();
-            str = KGlobal::locale()->formatDateTime(modifiedDate, KLocale::ShortDate, true);
-            tipText += m_cellBeg + i18n("Modified:") + m_cellMid + str + m_cellEnd;
-        }
-
-        if (settings.showFileSize)
-        {
-            tipText += m_cellBeg + i18n("Size:") + m_cellMid;
-            str = i18n("%1 (%2)", KIO::convertSize(fi.size()),
-                                  KGlobal::locale()->formatNumber(fi.size(),
-                                  0));
-            tipText += str + m_cellEnd;
-        }
-
-        QSize   dims;
-
-#if KDCRAW_VERSION < 0x000400
-        QString rawFilesExt(KDcrawIface::DcrawBinary::instance()->rawFiles());
-#else
-        QString rawFilesExt(KDcrawIface::KDcraw::rawFiles());
-#endif
-        QString ext = fileInfo.suffix().toUpper();
-
-        if (!ext.isEmpty() && rawFilesExt.toUpper().contains(ext))
-        {
-            str = i18n("RAW Image");
-            dims = metaData.getImageDimensions();
-        }
-        else
-        {
-            str = fi.mimeComment();
-
-            KFileMetaInfo meta = fi.metaInfo();
-
-/*          TODO: KDE4PORT: KFileMetaInfo API as Changed.
-                            Check if new method to search "Dimensions" information is enough.
-
-            if (meta.isValid())
-            {
-                if (meta.containsGroup("Jpeg EXIF Data"))
-                    dims = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
-                else if (meta.containsGroup("General"))
-                    dims = meta.group("General").item("Dimensions").value().toSize();
-                else if (meta.containsGroup("Technical"))
-                    dims = meta.group("Technical").item("Dimensions").value().toSize();
-            }*/
-
-            if (meta.isValid() && meta.item("Dimensions").isValid())
-            {
-                dims = meta.item("Dimensions").value().toSize();
-            }
-        }
-
-        if (settings.showImageType)
-        {
-            tipText += m_cellBeg + i18n("Type:") + m_cellMid + str + m_cellEnd;
-        }
-
-        if (settings.showImageDim)
-        {
-            QString mpixels;
-            mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
-            str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)",
-                    dims.width(), dims.height(), mpixels);
-            tipText += m_cellBeg + i18n("Dimensions:") + m_cellMid + str + m_cellEnd;
-        }
-    }
-
-    // -- Photograph Info ----------------------------------------------------
-
-    if (settings.showPhotoMake  ||
-        settings.showPhotoDate  ||
-        settings.showPhotoFocal ||
-        settings.showPhotoExpo  ||
-        settings.showPhotoMode  ||
-        settings.showPhotoFlash ||
-        settings.showPhotoWB)
-    {
-        PhotoInfoContainer photoInfo = metaData.getPhotographInformations();
-
-        if (!photoInfo.isEmpty())
-        {
-            QString metaStr;
-            tipText += m_headBeg + i18n("Photograph Properties") + m_headEnd;
-
-            if (settings.showPhotoMake)
-            {
-                str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? unavailable : photoInfo.make)
-                                        .arg(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("Make/Model:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
-            }
-
-            if (settings.showPhotoDate)
-            {
-                if (photoInfo.dateTime.isValid())
-                {
-                    str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
-                    if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                    metaStr += m_cellBeg + i18n("Created:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
-                }
-                else
-                    metaStr += m_cellBeg + i18n("Created:") + m_cellMid + Qt::escape( unavailable ) + m_cellEnd;
-            }
-
-            if (settings.showPhotoFocal)
-            {
-                str = photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture;
-
-                if (photoInfo.focalLength35mm.isEmpty())
-                    str += QString(" / %1").arg(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
-                else
-                    str += QString(" / %1").arg(i18n("%1 (35mm: %2)",
-                           photoInfo.focalLength, photoInfo.focalLength35mm));
-
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("Aperture/Focal:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
-            }
-
-            if (settings.showPhotoExpo)
-            {
-                str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? unavailable :
-                                             photoInfo.exposureTime)
-                                        .arg(photoInfo.sensitivity.isEmpty() ? unavailable :
-                                             i18n("%1 ISO", photoInfo.sensitivity));
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("Exposure/Sensitivity:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
-            }
-
-            if (settings.showPhotoMode)
-            {
-
-                if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
-                    str = unavailable;
-                else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
-                    str = photoInfo.exposureMode;
-                else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
-                    str = photoInfo.exposureProgram;
-                else
-                    str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("Mode/Program:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
-            }
-
-            if (settings.showPhotoFlash)
-            {
-                str = photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash;
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("Flash:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
-            }
-
-            if (settings.showPhotoWB)
-            {
-                str = photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance;
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("White Balance:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
-            }
-
-            tipText += metaStr;
-        }
-    }
-
-    return tipText;
-}
-
-QString ThumbBarToolTip::breakString(const QString& input) const
-{
-    QString str = input.simplified();
-    str = Qt::escape(str);
-    const int maxLen = m_maxStringLen;
-
-    if (str.length() <= maxLen)
-        return str;
-
-    QString br;
-
-    int i = 0;
-    int count = 0;
-
-    while (i < str.length())
-    {
-        if (count >= maxLen && str[i].isSpace())
-        {
-            count = 0;
-            br.append("<br/>");
-        }
-        else
-        {
-            br.append(str[i]);
-        }
-
-        i++;
-        count++;
-    }
-
-    return br;
 }
 
 }  // namespace Digikam

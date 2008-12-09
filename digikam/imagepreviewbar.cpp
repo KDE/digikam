@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "imagepreviewbar.h"
 #include "imagepreviewbar.moc"
 
@@ -96,9 +95,9 @@ public:
 };
 
 ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRotate)
-               : ThumbBarView(parent, orientation, exifRotate)
+               : ThumbBarView(parent, orientation, exifRotate), 
+                 d(new ImagePreviewBarPriv)
 {
-    d = new ImagePreviewBarPriv;
     setMouseTracking(true);
     readToolTipSettings();
     d->toolTip = new ImagePreviewBarToolTip(this);
@@ -441,13 +440,17 @@ ImagePreviewBarToolTip::~ImagePreviewBarToolTip()
 {
 }
 
-QString ImagePreviewBarToolTip::tipContents(ThumbBarItem* item) const
+QString ImagePreviewBarToolTip::tipContents()
 {
+    if (!item()) return QString();
+
     QString tip, str;
     QString unavailable(i18n("unavailable"));
 
+    tip = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">";
+
     AlbumSettings* settings          = AlbumSettings::instance();
-    const ImageInfo info             = dynamic_cast<ImagePreviewBarItem *>(item)->info();
+    const ImageInfo info             = dynamic_cast<ImagePreviewBarItem *>(item())->info();
     ImageCommonContainer commonInfo  = info.imageCommonContainer();
     ImageMetadataContainer photoInfo = info.imageMetadataContainer();
 

@@ -41,6 +41,7 @@
 
 // Local includes.
 
+#include "thumbbartooltip.h"
 #include "digikam_export.h"
 
 class KFileItem;
@@ -50,45 +51,8 @@ namespace Digikam
 
 class LoadingDescription;
 class ThumbBarItem;
-class ThumbBarToolTip;
 class ThumbBarViewPriv;
 class ThumbBarItemPriv;
-
-class DIGIKAM_EXPORT ThumbBarToolTipSettings
-{
-public:
-
-    ThumbBarToolTipSettings()
-    {
-        showToolTips   = true;
-        showFileName   = true;
-        showFileDate   = false;
-        showFileSize   = false;
-        showImageType  = false;
-        showImageDim   = true;
-        showPhotoMake  = true;
-        showPhotoDate  = true;
-        showPhotoFocal = true;
-        showPhotoExpo  = true;
-        showPhotoMode  = true;
-        showPhotoFlash = false;
-        showPhotoWB    = false;
-    };
-
-    bool showToolTips;
-    bool showFileName;
-    bool showFileDate;
-    bool showFileSize;
-    bool showImageType;
-    bool showImageDim;
-    bool showPhotoMake;
-    bool showPhotoDate;
-    bool showPhotoFocal;
-    bool showPhotoExpo;
-    bool showPhotoMode;
-    bool showPhotoFlash;
-    bool showPhotoWB;
-};
 
 // -------------------------------------------------------------------------
 
@@ -118,7 +82,7 @@ public:
     bool getExifRotate();
 
     void setToolTipSettings(const ThumbBarToolTipSettings &settings);
-    ThumbBarToolTipSettings& getToolTipSettings();
+    ThumbBarToolTipSettings& getToolTipSettings() const;
 
     ThumbBarItem* currentItem() const;
     ThumbBarItem* firstItem() const;
@@ -153,12 +117,14 @@ protected:
     void contentsMouseMoveEvent(QMouseEvent*);
     void contentsMouseReleaseEvent(QMouseEvent*);
     void contentsWheelEvent(QWheelEvent*);
+    void leaveEvent(QEvent*);
+    void focusOutEvent(QFocusEvent*);
 
     void insertItem(ThumbBarItem* item);
     void rearrangeItems();
     void repaintItem(ThumbBarItem* item);
-    bool event(QEvent*);
 
+    virtual bool acceptToolTip(ThumbBarItem*, const QPoint&);
     virtual ThumbBarToolTip* toolTip() const;
     virtual void viewportPaintEvent(QPaintEvent*);
     virtual void startDrag();
@@ -172,6 +138,7 @@ protected slots:
 private slots:
 
     void slotGotThumbnail(const LoadingDescription&, const QPixmap&);
+    void slotToolTip();
 
 private:
 
@@ -203,42 +170,6 @@ private:
     ThumbBarItemPriv* d;
 
     friend class ThumbBarView;
-};
-
-// -------------------------------------------------------------------------
-
-class DIGIKAM_EXPORT ThumbBarToolTip
-{
-
-public:
-
-    ThumbBarToolTip(ThumbBarView *parent);
-    virtual ~ThumbBarToolTip();
-
-    /** Return the thumbbar item area if a item is found at 'pos' else an empty QRect.
-        tipText will contains the tool tip string to show.*/
-    QRect maybeTip(const QPoint& pos, QString &tipText);
-
-protected:
-
-    const int     m_maxStringLen;
-
-    QString       m_headBeg;
-    QString       m_headEnd;
-    QString       m_cellBeg;
-    QString       m_cellMid;
-    QString       m_cellEnd;
-    QString       m_cellSpecBeg;
-    QString       m_cellSpecMid;
-    QString       m_cellSpecEnd;
-
-    ThumbBarView *m_view;
-
-protected:
-
-    QString breakString(const QString& input) const;
-
-    virtual QString tipContents(ThumbBarItem*) const;
 };
 
 }  // namespace Digikam
