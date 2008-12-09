@@ -446,12 +446,12 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
 
     d->labelNewFileName->setText(newFileName.isEmpty() ? i18n("<i>unchanged</i>") : newFileName);
 
-    if (itemInfo->downloaded < 0)
+    if (itemInfo->downloaded == GPItemInfo::DownloadUnknow)
         str = unknown;
-    else if (itemInfo->downloaded == 0)
-        str = i18n("No");
-    else
+    else if (itemInfo->downloaded == GPItemInfo::DownloadedYes)
         str = i18n("Yes");
+    else
+        str = i18n("No");
 
     d->labelAlreadyDownloaded->setText(str);
 
