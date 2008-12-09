@@ -94,7 +94,6 @@ AlbumFileTip::AlbumFileTip(AlbumIconView* view)
     d->view = view;
     hide();
 
-    setPalette(QToolTip::palette());
     setFrameStyle(QFrame::Plain | QFrame::Box);
     setLineWidth(1);
     setWindowFlags(Qt::ToolTip);
