@@ -69,7 +69,8 @@ public:
         splitter         = 0;
         thumbBar         = 0;
         thumbbarTimer    = 0;
-        needUpdateBar    = false;
+        needUpdateBar      = false;
+        everShowedSplitter = false;
     }
 
     QSplitter        *splitter;
@@ -87,6 +88,8 @@ public:
     QTimer           *thumbbarTimer;
 
     bool              needUpdateBar;
+
+    bool              everShowedSplitter;
 };
 
 AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
@@ -195,10 +198,13 @@ void AlbumWidgetStack::readSettings()
 
 void AlbumWidgetStack::saveSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("PreviewView");
-    group.writeEntry("SplitterState", d->splitter->saveState().toBase64());
-    config->sync();
+    if (d->everShowedSplitter)
+    {
+        KSharedConfig::Ptr config = KGlobal::config();
+        KConfigGroup group        = config->group("PreviewView");
+        group.writeEntry("SplitterState", d->splitter->saveState().toBase64());
+        config->sync();
+    }
 }
 
 void AlbumWidgetStack::slotEscapePreview()
@@ -288,6 +294,10 @@ void AlbumWidgetStack::setPreviewMode(int mode)
     }
     else
     {
+        // store if we ever showed the splitter at least once
+        if (!d->everShowedSplitter && mode == PreviewImageMode)
+            d->everShowedSplitter = true;
+
         setCurrentIndex(mode);
     }
 }
