@@ -100,7 +100,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 088 ==> 177185 : Status bar position of current image starts from 0.
 089 ==> 172632 : Album item tooltip doesn't use colors of themes properly.
 090 ==> 173746 : digikam doesn't show "big view".
-091 ==> 
+091 ==> 177093 : User should not be able to delete root album.
+092 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
