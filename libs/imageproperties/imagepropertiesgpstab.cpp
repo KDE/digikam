@@ -90,12 +90,8 @@ public:
 };
 
 ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
-                     : QWidget(parent)
+                     : QWidget(parent), d(new ImagePropertiesGPSTabPriv)
 {
-    d = new ImagePropertiesGPSTabPriv;
-
-    // --------------------------------------------------------
-
     QGridLayout *layout = new QGridLayout(this);
     d->map              = new WorldMapWidget(256, 256, this);
     d->altLabel         = new QLabel(i18n("<b>Altitude</b>:"),  this);
@@ -124,6 +120,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     d->detailsCombo->insertItem(GoogleMaps, QString("Google Maps"));
     d->detailsCombo->insertItem(MsnMaps,    QString("MSN Maps"));
     d->detailsCombo->insertItem(MultiMap,   QString("MultiMap"));
+    d->detailsCombo->insertItem(OpenStreetMap, QString("OpenStreetMap"));
 
     box2Layout->addWidget(d->detailsCombo);
     box2Layout->addStretch(1);
@@ -220,6 +217,19 @@ void ImagePropertiesGPSTab::slotGPSDetails()
             url.append("&icon=x");
             break;
         }
+
+        case OpenStreetMap:
+        {
+            // lat and lon would also work, but wouldn't show a marker
+            url.append("http://www.openstreetmap.org/?");
+            url.append("mlat=");
+            url.append(val.setNum(d->map->getLatitude(), 'g', 12));
+            url.append("&mlon=");
+            url.append(val.setNum(d->map->getLongitude(), 'g', 12));
+            url.append("&zoom=15");
+            break;
+        }
+
     }
 
     kDebug(50003) << url << endl;

@@ -56,7 +56,8 @@ public:
         MapQuest = 0,
         GoogleMaps,
         MsnMaps,
-        MultiMap
+        MultiMap,
+        OpenStreetMap
     };
 
 public:
@@ -79,7 +80,7 @@ private slots:
 
 private:
 
-    ImagePropertiesGPSTabPriv *d;
+    ImagePropertiesGPSTabPriv* const d;
 };
 
 }  // namespace Digikam
