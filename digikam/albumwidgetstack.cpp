@@ -100,11 +100,6 @@ public:
     QTimer           *thumbbarTimer;
 
     bool              needUpdateBar;
-
-    void dumpSplitter(const QString &pointInTime)
-    {
-        kDebug(50003) << "Splitter widgets sizes" << pointInTime << imagePreviewView->geometry() << thumbBar->geometry();
-    }
 };
 
 AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
@@ -118,15 +113,10 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     d->thumbBar         = new ImagePreviewBar(d->splitter, Qt::Horizontal,
                                               AlbumSettings::instance()->getExifRotate());
 
-    EventDebugger *ed = new EventDebugger;
-    d->imagePreviewView->installEventFilter(ed);
-    d->thumbBar->installEventFilter(ed);
-
     // To prevent flicker effect with content when user change icon view filter
     // if scrollbar appears or disapears.
     d->thumbBar->setHScrollBarMode(Q3ScrollView::AlwaysOn);
 
-    d->dumpSplitter(" are initially");
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );
     d->splitter->setFrameShape( QFrame::NoFrame );
@@ -142,16 +132,13 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     insertWidget(WelcomePageMode,  d->welcomePageView->view());
     insertWidget(MediaPlayerMode,  d->mediaPlayerView);
 
-    d->dumpSplitter(" after inserting widgets");
     setPreviewMode(PreviewAlbumMode);
-    d->dumpSplitter(" after setPreviewMode");
     setAttribute(Qt::WA_DeleteOnClose);
 
     d->thumbbarTimer = new QTimer(this);
     d->thumbbarTimer->setSingleShot(true);
 
     readSettings();
-    d->dumpSplitter(" after readSettings");
 
     // -----------------------------------------------------------------
 
@@ -258,7 +245,6 @@ ImagePreviewView* AlbumWidgetStack::imagePreviewView()
 
 void AlbumWidgetStack::setPreviewItem(const ImageInfo & info, const ImageInfo &previous, const ImageInfo &next)
 {
-    d->dumpSplitter(" in setPreviewItem");
     if (info.isNull())
     {
         if (previewMode() == MediaPlayerMode)
@@ -314,7 +300,6 @@ int AlbumWidgetStack::previewMode()
 
 void AlbumWidgetStack::setPreviewMode(int mode)
 {
-    d->dumpSplitter(" are in setPreviewMode");
     if (mode != PreviewAlbumMode && mode != PreviewImageMode &&
         mode != WelcomePageMode  && mode != MediaPlayerMode)
         return;
