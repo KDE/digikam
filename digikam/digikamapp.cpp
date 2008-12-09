@@ -779,6 +779,23 @@ void DigikamApp::setupActions()
     d->imageSetExifOrientation8Action =
         new KAction(i18n("Rotated left"), d->imageExifOrientationActionMenu);
 
+    actionCollection()->addAction("image_set_exif_orientation_normal",
+            d->imageSetExifOrientation1Action);
+    actionCollection()->addAction("image_set_exif_orientation_flipped_horizontal",
+            d->imageSetExifOrientation2Action);
+    actionCollection()->addAction("image_set_exif_orientation_rotated_upside_down",
+            d->imageSetExifOrientation3Action);
+    actionCollection()->addAction("image_set_exif_orientation_flipped_vertically",
+            d->imageSetExifOrientation4Action);
+    actionCollection()->addAction("image_set_exif_orientation_rotated_right_hor_flipped",
+            d->imageSetExifOrientation5Action);
+    actionCollection()->addAction("image_set_exif_orientation_rotated_right",
+            d->imageSetExifOrientation6Action);
+    actionCollection()->addAction("image_set_exif_orientation_rotated_right_ver_flipped",
+            d->imageSetExifOrientation7Action);
+    actionCollection()->addAction("image_set_exif_orientation_rotated_left",
+            d->imageSetExifOrientation8Action);
+
     d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation1Action);
     d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation2Action);
     d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation3Action);
