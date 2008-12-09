@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "digikamapp.h"
 #include "digikamapp.moc"
 
@@ -136,9 +135,8 @@ namespace Digikam
 DigikamApp* DigikamApp::m_instance = 0;
 
 DigikamApp::DigikamApp()
-          : KXmlGuiWindow(0)
+          : KXmlGuiWindow(0), d(new DigikamAppPriv)
 {
-    d = new DigikamAppPriv;
     m_instance = this;
     d->config  = KGlobal::config();
 
@@ -1259,11 +1257,13 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev,
     switch (selection.count())
     {
         case 0:
+        {
             d->statusProgressBar->setText(i18n("No item selected"));
             break;
+        }
         case 1:
         {
-            int index = listAll.indexOf(selection.first());
+            int index = listAll.indexOf(selection.first()) + 1;
 
             text = selection.first().fileUrl().fileName()
                                    + i18n(" (%1 of %2)", QString::number(index),
@@ -1272,9 +1272,11 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev,
             break;
         }
         default:
+        {
             d->statusProgressBar->setText(i18n("%1/%2 items selected", selection.count(),
                                                                        QString::number(num_images)));
             break;
+        }
     }
 
     d->statusNavigateBar->setNavigateBarState(hasPrev, hasNext);

@@ -175,7 +175,7 @@ private slots:
 
 private:
 
-    DigikamAppPriv    *d;
+    DigikamAppPriv* const d;
 
     static DigikamApp *m_instance;
 };
