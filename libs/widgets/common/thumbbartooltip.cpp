@@ -91,7 +91,7 @@ public:
 };
 
 ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* view)
-               : QFrame(0), m_maxStringLen(30), d (new ThumbBarToolTipPriv)
+               : QFrame(0), m_maxStringLen(30), d(new ThumbBarToolTipPriv)
 {
     m_headBeg     = QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"
                             "<nobr><font size=\"-1\" color=\"%2\"><b>")
@@ -114,7 +114,6 @@ ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* view)
     d->view = view;
     hide();
 
-    setPalette(QToolTip::palette());
     setFrameStyle(QFrame::Plain | QFrame::Box);
     setLineWidth(1);
     setWindowFlags(Qt::ToolTip);
