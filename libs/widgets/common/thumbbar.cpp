@@ -84,7 +84,6 @@ public:
         dragging        = false;
         clearing        = false;
         needPreload     = false;
-        toolTip         = 0;
         toolTipItem     = 0;
         firstItem       = 0;
         lastItem        = 0;
@@ -96,6 +95,7 @@ public:
         toolTipTimer    = 0;
         timer           = 0;
         preloadTimer    = 0;
+        toolTip         = 0;
     }
 
     bool                        clearing;
@@ -155,12 +155,10 @@ public:
 
 ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
                            ThumbBarToolTipSettings settings)
-            : Q3ScrollView(parent)
+            : Q3ScrollView(parent), d(new ThumbBarViewPriv)
 {
-    d = new ThumbBarViewPriv;
     d->orientation     = orientation;
     d->toolTipSettings = settings;
-    d->toolTip         = new ThumbBarToolTip(this);
     d->timer           = new QTimer(this);
     d->toolTipTimer    = new QTimer(this);
     d->preloadTimer    = new QTimer(this);
@@ -216,8 +214,12 @@ ThumbBarView::~ThumbBarView()
 
     delete d->timer;
     delete d->toolTipTimer;
-    delete d->toolTip;
     delete d;
+}
+
+void ThumbBarView::setToolTip(ThumbBarToolTip *toolTip)
+{
+    d->toolTip = toolTip;
 }
 
 void ThumbBarView::resizeEvent(QResizeEvent* e)
@@ -684,7 +686,8 @@ void ThumbBarView::focusOutEvent(QFocusEvent* e)
 
 void ThumbBarView::slotToolTip()
 {
-    d->toolTip->setItem(d->toolTipItem);
+    if (d->toolTip)
+        d->toolTip->setItem(d->toolTipItem);
 }
 
 void ThumbBarView::startDrag()
@@ -941,11 +944,6 @@ void ThumbBarView::slotGotThumbnail(const LoadingDescription& desc, const QPixma
     }
 }
 
-ThumbBarToolTip* ThumbBarView::toolTip() const
-{
-    return d->toolTip;
-}
-
 bool ThumbBarView::acceptToolTip(ThumbBarItem*, const QPoint&)
 {
     return true;
@@ -954,8 +952,8 @@ bool ThumbBarView::acceptToolTip(ThumbBarItem*, const QPoint&)
 // -------------------------------------------------------------------------
 
 ThumbBarItem::ThumbBarItem(ThumbBarView* view, const KUrl& url)
+            : d(new ThumbBarItemPriv)
 {
-    d = new ThumbBarItemPriv;
     d->url  = url;
     d->view = view;
     d->view->insertItem(this);

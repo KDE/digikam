@@ -49,7 +49,7 @@ public:
 
     ImagePreviewBar(QWidget* parent, int orientation=Qt::Vertical, 
                     bool exifRotate=true);
-    ~ImagePreviewBar();
+    virtual ~ImagePreviewBar();
 
     void setSelectedItem(ImagePreviewBarItem* ltItem);
 
@@ -67,8 +67,6 @@ protected:
     QPixmap ratingPixmap() const;
 
     virtual void viewportPaintEvent(QPaintEvent*);
-
-    ThumbBarToolTip* toolTip() const;
 
 private slots:
 

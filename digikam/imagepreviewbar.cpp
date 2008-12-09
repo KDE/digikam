@@ -72,8 +72,6 @@ public:
 
     ImagePreviewBarPriv()
     {
-        toolTip = 0;
-
         // Pre-computed star polygon for a 15x15 pixmap.
         starPolygon << QPoint(0,  6);
         starPolygon << QPoint(5,  5);
@@ -90,8 +88,6 @@ public:
     QPolygon                starPolygon;
 
     QPixmap                 ratingPixmap;
-
-    ImagePreviewBarToolTip *toolTip;
 };
 
 ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRotate)
@@ -100,7 +96,7 @@ ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRota
 {
     setMouseTracking(true);
     readToolTipSettings();
-    d->toolTip = new ImagePreviewBarToolTip(this);
+    setToolTip(new ImagePreviewBarToolTip(this));
 
     // -- Load rating Pixmap ------------------------------------------
 
@@ -132,7 +128,6 @@ ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRota
 
 ImagePreviewBar::~ImagePreviewBar()
 {
-    delete d->toolTip;
     delete d;
 }
 
@@ -403,19 +398,13 @@ void ImagePreviewBar::slotThemeChanged()
     painter.setPen(ThemeEngine::instance()->textRegColor());
     painter.drawPolygon(d->starPolygon, Qt::WindingFill);
     painter.end();
-
     slotUpdate();
-}
-
-ThumbBarToolTip* ImagePreviewBar::toolTip() const
-{
-    return (dynamic_cast<ThumbBarToolTip*>(d->toolTip));
 }
 
 // -------------------------------------------------------------------------
 
 ImagePreviewBarItem::ImagePreviewBarItem(ImagePreviewBar *view, const ImageInfo &info)
-                 : ThumbBarItem(view, info.fileUrl())
+                   : ThumbBarItem(view, info.fileUrl())
 {
     m_info = info;
 }

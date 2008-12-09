@@ -66,6 +66,8 @@ public:
                  ThumbBarToolTipSettings settings=ThumbBarToolTipSettings());
     virtual ~ThumbBarView();
 
+    void setToolTip(ThumbBarToolTip *toolTip);
+
     int countItems();
     KUrl::List itemsUrls();
 
@@ -125,7 +127,6 @@ protected:
     void repaintItem(ThumbBarItem* item);
 
     virtual bool acceptToolTip(ThumbBarItem*, const QPoint&);
-    virtual ThumbBarToolTip* toolTip() const;
     virtual void viewportPaintEvent(QPaintEvent*);
     virtual void startDrag();
 
@@ -135,6 +136,10 @@ protected slots:
     void slotContentsMoved();
     void checkPreload();
 
+protected:
+
+    ThumbBarToolTip *m_toolTip;
+
 private slots:
 
     void slotGotThumbnail(const LoadingDescription&, const QPixmap&);
@@ -142,7 +147,7 @@ private slots:
 
 private:
 
-    ThumbBarViewPriv* d;
+    ThumbBarViewPriv* const d;
 
     friend class ThumbBarItem;
 };
@@ -167,7 +172,7 @@ public:
 
 private:
 
-    ThumbBarItemPriv* d;
+    ThumbBarItemPriv* const d;
 
     friend class ThumbBarView;
 };

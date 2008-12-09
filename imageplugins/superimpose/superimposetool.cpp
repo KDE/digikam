@@ -147,6 +147,7 @@ SuperImposeTool::SuperImposeTool(QObject* parent)
     QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage());
 
     m_thumbnailsBar   = new ThumbBarView(m_gboxSettings->plainPage());
+    m_thumbnailsBar->setToolTip(new ThumbBarToolTip(m_thumbnailsBar));
     m_dirSelect       = new DirSelectWidget(m_gboxSettings->plainPage());
     QPushButton *templateDirButton = new QPushButton(i18n("Root Directory..."), m_gboxSettings->plainPage());
     templateDirButton->setWhatsThis(i18n("Set here the current templates' root directory."));

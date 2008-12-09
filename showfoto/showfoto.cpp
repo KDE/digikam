@@ -489,6 +489,8 @@ void ShowFoto::setupUserArea()
         m_vSplitter->setStretchFactor(0, 10);     // set Canvas default size to max.
     }
 
+    d->thumbBar->setToolTip(new Digikam::ThumbBarToolTip(d->thumbBar));
+
     m_canvas->makeDefaultEditingCanvas();
     m_stackView->setCanvas(m_canvas);
     m_stackView->setViewMode(Digikam::EditorStackView::CanvasMode);
