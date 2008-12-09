@@ -91,20 +91,24 @@ public:
 };
 
 ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* view)
-            : QFrame(0), m_maxStringLen(30), d (new ThumbBarToolTipPriv)
+               : QFrame(0), m_maxStringLen(30), d (new ThumbBarToolTipPriv)
 {
-    m_headBeg = QString("<tr bgcolor=\"#73CAE6\"><td colspan=\"2\">"
-                        "<nobr><font size=\"-1\" color=\"black\"><b>");
-    m_headEnd = QString("</b></font></nobr></td></tr>");
+    m_headBeg     = QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"
+                            "<nobr><font size=\"-1\" color=\"%2\"><b>")
+                            .arg(ThemeEngine::instance()->baseColor().name())
+                            .arg(ThemeEngine::instance()->textRegColor().name());
+    m_headEnd     = QString("</b></font></nobr></td></tr>");
 
-    m_cellBeg = QString("<tr><td><nobr><font size=\"-1\" color=\"black\">");
-    m_cellMid = QString("</font></nobr></td>"
-                        "<td><nobr><font size=\"-1\" color=\"black\">");
-    m_cellEnd = QString("</font></nobr></td></tr>");
+    m_cellBeg     = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\">")
+                            .arg(ThemeEngine::instance()->textRegColor().name());
+    m_cellMid     = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\">")
+                            .arg(ThemeEngine::instance()->textRegColor().name());
+    m_cellEnd     = QString("</font></nobr></td></tr>");
 
-    m_cellSpecBeg = QString("<tr><td><nobr><font size=\"-1\" color=\"black\">");
-    m_cellSpecMid = QString("</font></nobr></td>"
-                            "<td><nobr><font size=\"-1\" color=\"steelblue\"><i>");
+    m_cellSpecBeg = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\">")
+                            .arg(ThemeEngine::instance()->textRegColor().name());
+    m_cellSpecMid = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\"><i>")
+                            .arg(ThemeEngine::instance()->textSpecialRegColor().name());
     m_cellSpecEnd = QString("</i></font></nobr></td></tr>");
 
     d->view = view;
