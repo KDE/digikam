@@ -155,10 +155,8 @@ public:
 };
 
 ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
-                  : QScrollArea(parent)
+                  : QScrollArea(parent), d(new ImagePropertiesTabPriv)
 {
-    d = new ImagePropertiesTabPriv;
-
     setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
     setWidgetResizable(true);

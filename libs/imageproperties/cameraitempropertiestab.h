@@ -59,7 +59,7 @@ public:
 
 private:
 
-    CameraItemPropertiesTabPriv* d;
+    CameraItemPropertiesTabPriv* const d;
 };
 
 }  // namespace Digikam

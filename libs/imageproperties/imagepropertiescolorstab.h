@@ -106,7 +106,7 @@ private:
         AllColorsBlue
     };
 
-    ImagePropertiesColorsTabPriv* d;
+    ImagePropertiesColorsTabPriv* const d;
 };
 
 }  // namespace Digikam

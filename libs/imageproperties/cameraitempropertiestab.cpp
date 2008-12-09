@@ -152,10 +152,8 @@ public:
 };
 
 CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent)
-                       : QScrollArea(parent)
+                       : QScrollArea(parent), d(new CameraItemPropertiesTabPriv)
 {
-    d = new CameraItemPropertiesTabPriv;
-
     setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
     setWidgetResizable(true);
@@ -422,12 +420,12 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
 
     d->labelNewFileName->setText(newFileName.isEmpty() ? i18n("<i>unchanged</i>") : newFileName);
 
-    if (itemInfo->downloaded < 0)
+    if (itemInfo->downloaded == GPItemInfo::DownloadUnknow)
         str = unknown;
-    else if (itemInfo->downloaded == 0)
-        str = i18n("No");
-    else
+    else if (itemInfo->downloaded == GPItemInfo::DownloadedYes)
         str = i18n("Yes");
+    else
+        str = i18n("No");
 
     d->labelAlreadyDownloaded->setText(str);
 

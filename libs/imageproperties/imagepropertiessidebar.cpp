@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "imagepropertiessidebar.h"
 #include "imagepropertiessidebar.moc"
 
@@ -77,10 +76,10 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent,
     m_dirtyColorTab      = false;
     m_dirtyGpsTab        = false;
 
-    m_propertiesTab = new ImagePropertiesTab(parent);
-    m_metadataTab   = new ImagePropertiesMetaDataTab(parent);
-    m_colorTab      = new ImagePropertiesColorsTab(parent);
-    m_gpsTab        = new ImagePropertiesGPSTab(parent);
+    m_propertiesTab      = new ImagePropertiesTab(parent);
+    m_metadataTab        = new ImagePropertiesMetaDataTab(parent);
+    m_colorTab           = new ImagePropertiesColorsTab(parent);
+    m_gpsTab             = new ImagePropertiesGPSTab(parent);
 
     appendTab(m_propertiesTab, SmallIcon("document-properties"), i18n("Properties"));
     appendTab(m_metadataTab, SmallIcon("exifinfo"), i18n("Metadata"));

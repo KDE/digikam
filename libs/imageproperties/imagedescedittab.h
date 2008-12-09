@@ -137,7 +137,7 @@ private slots:
 
 private:
 
-    ImageDescEditTabPriv* d;
+    ImageDescEditTabPriv* const d;
 };
 
 }  // namespace Digikam

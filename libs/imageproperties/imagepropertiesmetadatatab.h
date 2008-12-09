@@ -58,7 +58,7 @@ public:
 
 private:
 
-    ImagePropertiesMetadataTabPriv* d;
+    ImagePropertiesMetadataTabPriv* const d;
 };
 
 }  // namespace Digikam

@@ -89,7 +89,7 @@ private:
 
 private:
 
-    WorldMapWidgetPriv *d;
+    WorldMapWidgetPriv* const d;
 };
 
 }  // namespace Digikam

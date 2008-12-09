@@ -144,13 +144,9 @@ public:
 };
 
 ImageDescEditTab::ImageDescEditTab(QWidget *parent)
-                : QScrollArea(parent)
+                : QScrollArea(parent), d(new ImageDescEditTabPriv)
 {
-    d = new ImageDescEditTabPriv;
-
     setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
-    setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
-    setWidgetResizable(true);    setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
     setWidgetResizable(true);
 

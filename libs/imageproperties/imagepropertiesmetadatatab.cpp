@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiesmetadatatab.moc"
 
@@ -83,10 +82,8 @@ public:
 };
 
 ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent)
-                          : KTabWidget(parent)
+                          : KTabWidget(parent), d(new ImagePropertiesMetadataTabPriv)
 {
-    d = new ImagePropertiesMetadataTabPriv;
-
     // Exif tab area ---------------------------------------
 
     d->exifWidget = new ExifWidget(this);

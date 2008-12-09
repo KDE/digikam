@@ -60,6 +60,8 @@ public:
     ~DTextLabelName(){};
 };
 
+// -------------------------------------------------------------------
+
 class DTextLabelValue : public KSqueezedTextLabel
 {
 

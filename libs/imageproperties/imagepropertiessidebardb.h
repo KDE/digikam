@@ -70,10 +70,10 @@ public:
 
 signals:
 
-    void signalFirstItem(void);
-    void signalPrevItem(void);
-    void signalNextItem(void);
-    void signalLastItem(void);
+    void signalFirstItem();
+    void signalPrevItem();
+    void signalNextItem();
+    void signalLastItem();
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
 
@@ -87,7 +87,7 @@ public slots:
     void slotAssignRatingFourStar();
     void slotAssignRatingFiveStar();
 
-    virtual void slotNoCurrentItem(void);
+    virtual void slotNoCurrentItem();
 
 private slots:
 
@@ -103,7 +103,7 @@ private:
 
 private:
 
-    ImagePropertiesSideBarDBPriv* d;
+    ImagePropertiesSideBarDBPriv* const d;
 };
 
 }  // namespace Digikam

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "worldmapwidget.h"
 #include "worldmapwidget.moc"
 
@@ -66,7 +65,7 @@ public:
 };
 
 WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
-              : QFrame(parent)
+              : QFrame(parent), d(new WorldMapWidgetPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setMinimumWidth(w);
@@ -74,7 +73,6 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
     setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
 
-    d = new WorldMapWidgetPriv;
 #ifdef HAVE_MARBLEWIDGET
     d->marbleWidget = new MarbleWidget(this);
 #ifdef MARBLE_VERSION

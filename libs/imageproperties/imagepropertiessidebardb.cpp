@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "imagepropertiessidebardb.h"
 #include "imagepropertiessidebardb.moc"
 
@@ -86,11 +85,9 @@ public:
 
 ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, SidebarSplitter *splitter,
                                                    KMultiTabBarPosition side, bool mimimizedDefault)
-                        : ImagePropertiesSideBar(parent, splitter, side, mimimizedDefault)
+                        : ImagePropertiesSideBar(parent, splitter, side, mimimizedDefault),
+                          d(new ImagePropertiesSideBarDBPriv)
 {
-    // Navigate bar is disabled by passing false to parent class constructor, and tab constructors
-
-    d = new ImagePropertiesSideBarDBPriv;
     d->desceditTab = new ImageDescEditTab(parent);
 
     appendTab(d->desceditTab, SmallIcon("imagecomment"), i18n("Caption/Tags"));
@@ -188,7 +185,7 @@ void ImagePropertiesSideBarDB::slotNoCurrentItem()
     d->dirtyDesceditTab = false;
 }
 
-void ImagePropertiesSideBarDB::populateTags(void)
+void ImagePropertiesSideBarDB::populateTags()
 {
     d->desceditTab->populateTags();
 }

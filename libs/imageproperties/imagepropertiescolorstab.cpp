@@ -135,10 +135,8 @@ public:
 };
 
 ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
-                        : KTabWidget(parent)
+                        : KTabWidget(parent), d(new ImagePropertiesColorsTabPriv)
 {
-    d = new ImagePropertiesColorsTabPriv;
-
     // Histogram tab area -----------------------------------------------------
 
     QScrollArea *sv = new QScrollArea(this);

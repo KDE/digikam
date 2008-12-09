@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "talbumlistview.h"
 #include "talbumlistview.moc"
 

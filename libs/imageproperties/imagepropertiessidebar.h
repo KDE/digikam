@@ -21,7 +21,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
- 
+
 #ifndef IMAGEPROPERTIESSIDEBAR_H
 #define IMAGEPROPERTIESSIDEBAR_H
 
@@ -90,7 +90,6 @@ protected:
     ImagePropertiesTab         *m_propertiesTab;
     ImagePropertiesMetaDataTab *m_metadataTab;
     ImagePropertiesColorsTab   *m_colorTab;
-
 };
 
 }  // namespace Digikam

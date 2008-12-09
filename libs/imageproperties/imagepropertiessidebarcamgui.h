@@ -21,7 +21,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
- 
+
 #ifndef IMAGEPROPERTIESSIDEBARCAMGUI_H
 #define IMAGEPROPERTIESSIDEBARCAMGUI_H
 
@@ -78,7 +78,7 @@ private slots:
 
 private:
 
-    ImagePropertiesSideBarCamGuiPriv* d;
+    ImagePropertiesSideBarCamGuiPriv* const d;
 };
 
 }  // namespace Digikam

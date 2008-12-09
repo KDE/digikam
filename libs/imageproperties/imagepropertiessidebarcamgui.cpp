@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "imagepropertiessidebarcamgui.h"
 #include "imagepropertiessidebarcamgui.moc"
 
@@ -97,9 +96,9 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent,
                                                            SidebarSplitter *splitter,
                                                            KMultiTabBarPosition side,
                                                            bool mimimizedDefault)
-                            : Sidebar(parent, splitter, side, mimimizedDefault)
+                            : Sidebar(parent, splitter, side, mimimizedDefault),
+                              d(new ImagePropertiesSideBarCamGuiPriv)
 {
-    d = new ImagePropertiesSideBarCamGuiPriv;
     d->cameraItemTab = new CameraItemPropertiesTab(parent);
     d->metadataTab   = new ImagePropertiesMetaDataTab(parent);
     d->gpsTab        = new ImagePropertiesGPSTab(parent);
