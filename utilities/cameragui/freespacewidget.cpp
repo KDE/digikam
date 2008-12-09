@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "freespacewidget.h"
 #include "freespacewidget.moc"
 
@@ -88,9 +87,8 @@ public:
 };
 
 FreeSpaceWidget::FreeSpaceWidget(QWidget* parent, int width)
-               : QWidget(parent)
+               : QWidget(parent), d(new FreeSpaceWidgetPriv)
 {
-    d = new FreeSpaceWidgetPriv;
     setAttribute(Qt::WA_DeleteOnClose);
     setFixedWidth(width);
     setMaximumHeight(fontMetrics().height()+4);

@@ -134,7 +134,7 @@ private:
 
 private:
 
-    CameraIconViewPriv* d;
+    CameraIconViewPriv* const d;
 };
 
 }  // namespace Digikam

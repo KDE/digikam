@@ -127,9 +127,9 @@ public:
 
 GPCamera::GPCamera(const QString& title, const QString& model,
                    const QString& port, const QString& path)
-        : DKCamera(title, model, port, path)
+        : DKCamera(title, model, port, path),
+          d(new GPCameraPrivate)
 {
-    d = new GPCameraPrivate;
 }
 
 GPCamera::~GPCamera()

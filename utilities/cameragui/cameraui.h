@@ -181,7 +181,7 @@ private slots:
 
 private:
 
-    CameraUIPriv* d;
+    CameraUIPriv* const d;
 };
 
 }  // namespace Digikam

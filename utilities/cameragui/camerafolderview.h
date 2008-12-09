@@ -74,7 +74,7 @@ private slots:
 
 private:
 
-    CameraFolderViewPriv* d;
+    CameraFolderViewPriv* const d;
 
 };
 

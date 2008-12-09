@@ -94,9 +94,8 @@ public:
 };
 
 CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
-              : IconView(parent)
+              : IconView(parent), d(new CameraIconViewPriv)
 {
-    d = new CameraIconViewPriv;
     d->cameraUI  = ui;
     d->groupItem = new IconGroupItem(this);
 
@@ -371,7 +370,7 @@ QString CameraIconView::defaultDownloadName(CameraIconViewItem *viewItem)
 QString CameraIconView::getTemplatedName(const GPItemInfo* itemInfo, int position)
 {
     QString ext = itemInfo->name;
-    int pos = ext.lastIndexOf('.');
+    int pos     = ext.lastIndexOf('.');
     if (pos < 0)
         ext = "";
     else

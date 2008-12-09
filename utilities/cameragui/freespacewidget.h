@@ -94,7 +94,7 @@ private slots:
 
 private:
 
-    FreeSpaceWidgetPriv* d;
+    FreeSpaceWidgetPriv* const d;
 };
 
 }  // namespace Digikam

@@ -129,9 +129,9 @@ namespace Digikam
 CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
                    const QString& model, const QString& port,
                    const QString& path, const QDateTime lastAccess)
-        : KXmlGuiWindow(parent)
+        : KXmlGuiWindow(parent), d(new CameraUIPriv)
+
 {
-    d = new CameraUIPriv;
     d->lastAccess  = lastAccess;
     d->cameraTitle = cameraTitle;
     setCaption(cameraTitle);
@@ -1009,12 +1009,18 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
         GPItemInfo item = *it;
 
         // We query database to check if item have been already downloaded from camera.
-        if (DownloadHistory::status(d->controller->cameraMD5ID(),
-                                    item.name,
-                                    item.size,
-                                    item.mtime) != DownloadHistory::Downloaded)
-           item.downloaded = GPItemInfo::NewPicture;
-
+        switch(DownloadHistory::status(d->controller->cameraMD5ID(), item.name, item.size, item.mtime))
+        {
+            case DownloadHistory::NotDownloaded:
+                item.downloaded = GPItemInfo::NewPicture;
+                break;
+            case DownloadHistory::Downloaded:
+                item.downloaded = GPItemInfo::DownloadedYes;
+                break;
+            default:      // DownloadHistory::StatusUnknown
+                item.downloaded = GPItemInfo::DownloadUnknow;
+                break;
+        }
         d->view->addItem(item);
         d->controller->getThumbnail(item.folder, item.name);
     }

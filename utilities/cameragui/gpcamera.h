@@ -98,7 +98,7 @@ private:
 
 private:
 
-    GPCameraPrivate *d;
+    GPCameraPrivate* const d;
 };
 
 }  // namespace Digikam

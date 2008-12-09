@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "camerafolderview.h"
 #include "camerafolderview.moc"
 
@@ -57,10 +56,8 @@ public:
 };
 
 CameraFolderView::CameraFolderView(QWidget* parent)
-                : QTreeWidget(parent)
+                : QTreeWidget(parent), d(new CameraFolderViewPriv)
 {
-    d = new CameraFolderViewPriv;
-
     setColumnCount(1);
     setRootIsDecorated(false);
     setSelectionMode(QAbstractItemView::SingleSelection);
