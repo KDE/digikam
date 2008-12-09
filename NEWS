@@ -97,7 +97,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 085 ==> 176179 : Image editor - zoom +/- buttons alter predefined list of zoom factors.
 086 ==> 177270 : Making OpenStreetMap available in the GPS-Sidebar.
 087 ==> 177236 : No tooltips for cut elements in metadata panel.
-088 ==> 
+088 ==> 177185 : Status bar position of current image starts from 0.
+089 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
