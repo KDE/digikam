@@ -194,7 +194,7 @@ void AlbumFileTip::renderArrows()
     // -- left top arrow -------------------------------------
 
     QPixmap& pix0 = d->corners[0];
-    pix0 = QPixmap(w, w);
+    pix0          = QPixmap(w, w);
     pix0.fill(palette().color(QPalette::Background));
 
     QPainter p0(&pix0);
@@ -208,7 +208,7 @@ void AlbumFileTip::renderArrows()
     // -- right top arrow ------------------------------------
 
     QPixmap& pix1 = d->corners[1];
-    pix1 = QPixmap(w, w);
+    pix1          = QPixmap(w, w);
     pix1.fill(palette().color(QPalette::Background));
 
     QPainter p1(&pix1);
@@ -222,7 +222,7 @@ void AlbumFileTip::renderArrows()
     // -- left bottom arrow ----------------------------------
 
     QPixmap& pix2 = d->corners[2];
-    pix2 = QPixmap(w, w);
+    pix2          = QPixmap(w, w);
     pix2.fill(palette().color(QPalette::Background));
 
     QPainter p2(&pix2);
@@ -236,7 +236,7 @@ void AlbumFileTip::renderArrows()
     // -- right bottom arrow ---------------------------------
 
     QPixmap& pix3 = d->corners[3];
-    pix3 = QPixmap(w, w);
+    pix3          = QPixmap(w, w);
     pix3.fill(palette().color(QPalette::Background));
 
     QPainter p3(&pix3);
