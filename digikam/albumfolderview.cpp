@@ -777,7 +777,7 @@ void AlbumFolderView::albumDelete(AlbumFolderViewItem *item)
 {
     PAlbum *album = item->album();
 
-    if(!album || album->isRoot())
+    if(!album || album->isRoot() || album->isAlbumRoot())
         return;
 
     // find subalbums
@@ -879,7 +879,7 @@ void AlbumFolderView::albumEdit(AlbumFolderViewItem* item)
 {
     PAlbum *album = item->album();
 
-    if (!album)
+    if (!album || album->isRoot() || album->isAlbumRoot())
         return;
 
     QString     oldTitle(album->title());
