@@ -192,7 +192,11 @@ void AlbumWidgetStack::readSettings()
     {
         QByteArray state;
         state = group.readEntry("SplitterState", state);
-        d->splitter->restoreState(QByteArray::fromBase64(state));
+
+        // workaround for bug 173746: this invalid config string can be found
+        // in beta tester's config. Refuse to load.
+        if (state != "AAAA/wAAAAAAAAACAAAAAAAAAAABAAAAAwAAAAAC")
+            d->splitter->restoreState(QByteArray::fromBase64(state));
     }
 }
 
