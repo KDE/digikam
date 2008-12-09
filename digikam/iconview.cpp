@@ -103,8 +103,7 @@ public:
     QSet<IconItem*>      selectedItems;
     QSet<IconItem*>      prevSelectedItems;
 
-    DRubberBand
-                         *rubber;
+    DRubberBand         *rubber;
 
     QPoint               dragStartPos;
 
@@ -141,8 +140,10 @@ public:
     };
 };
 
+// -----------------------------------------------------------------------
+
 IconView::IconView(QWidget* parent, const char* name)
-        : Q3ScrollView(parent)
+        : Q3ScrollView(parent), d(new IconViewPriv)
 {
     setObjectName(name);
     setWindowFlags(Qt::WStaticContents|Qt::WNoAutoErase);
@@ -151,7 +152,6 @@ IconView::IconView(QWidget* parent, const char* name)
     viewport()->setFocusPolicy(Qt::WheelFocus);
     viewport()->setMouseTracking(true);
 
-    d = new IconViewPriv;
     d->rearrangeTimer  = new QTimer(this);
     d->toolTipTimer    = new QTimer(this);
     d->rubber          = new DRubberBand(this);
@@ -429,8 +429,8 @@ void IconView::insertGroup(IconGroupItem* group)
     {
         d->firstGroup = group;
         d->lastGroup  = group;
-        group->m_prev   = 0;
-        group->m_next   = 0;
+        group->m_prev = 0;
+        group->m_next = 0;
     }
     else
     {
@@ -698,7 +698,7 @@ bool IconView::arrangeItems()
         while (item)
         {
             changed = item->move(x, y) || changed;
-            x += itemW + d->spacing;
+            x       += itemW + d->spacing;
             col++;
 
             if (col >= numItemsPerRow)
@@ -709,7 +709,6 @@ bool IconView::arrangeItems()
             }
 
             maxW = qMax(maxW, x + itemW);
-
             item = item->m_next;
         }
 
@@ -718,8 +717,7 @@ bool IconView::arrangeItems()
             y += itemH + d->spacing;
         }
 
-        y += d->spacing;
-
+        y     += d->spacing;
         group = group->m_next;
     }
 
@@ -871,14 +869,13 @@ void IconView::appendContainer()
 
     if (!d->firstContainer)
     {
-        d->firstContainer =
-            new IconViewPriv::ItemContainer(0, 0, QRect(QPoint(0, 0), s));
+        d->firstContainer = new IconViewPriv::ItemContainer(0, 0, QRect(QPoint(0, 0), s));
         d->lastContainer = d->firstContainer;
     }
     else
     {
         d->lastContainer = new IconViewPriv::ItemContainer(
-            d->lastContainer, 0, QRect(d->lastContainer->rect.bottomLeft(), s));
+                           d->lastContainer, 0, QRect(d->lastContainer->rect.bottomLeft(), s));
     }
 }
 
