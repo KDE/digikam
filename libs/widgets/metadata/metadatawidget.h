@@ -111,7 +111,7 @@ protected:
 
 private:
 
-    MetadataWidgetPriv* d;
+    MetadataWidgetPriv* const d;
 };
 
 }  // namespace Digikam

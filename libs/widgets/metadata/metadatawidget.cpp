@@ -100,9 +100,8 @@ public:
 };
 
 MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
-              : QWidget(parent)
+              : QWidget(parent), d(new MetadataWidgetPriv)
 {
-    d = new MetadataWidgetPriv;
     setObjectName(name);
 
     d->mainLayout           = new QGridLayout(this);

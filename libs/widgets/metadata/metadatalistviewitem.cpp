@@ -43,6 +43,7 @@ MetadataListViewItem::MetadataListViewItem(QTreeWidgetItem *parent, const QStrin
 
     setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
     setText(0, title);
+    setToolTip(0, title);
 
     QString tagVal = value.simplified();
     if (tagVal.length() > 128)
@@ -51,6 +52,7 @@ MetadataListViewItem::MetadataListViewItem(QTreeWidgetItem *parent, const QStrin
         tagVal.append("...");
     }
     setText(1, tagVal);
+    setToolTip(1, tagVal);
 }
 
 MetadataListViewItem::~MetadataListViewItem()

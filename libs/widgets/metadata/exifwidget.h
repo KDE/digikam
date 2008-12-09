@@ -5,7 +5,7 @@
  *
  * Date        : 2006-02-20
  * Description : a widget to display Standard Exif metadata
- * 
+ *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef EXIFWIDGET_H
@@ -39,28 +39,28 @@ namespace Digikam
 class DIGIKAM_EXPORT ExifWidget : public MetadataWidget
 {
     Q_OBJECT
-    
+
 public:
 
     ExifWidget(QWidget* parent, const char* name=0);
     ~ExifWidget();
 
     bool loadFromURL(const KUrl& url);
-    
+
     QString getTagDescription(const QString& key);
     QString getTagTitle(const QString& key);
 
-    QString getMetadataTitle(void);
+    QString getMetadataTitle();
 
-protected Q_SLOTS:    
-    
-    virtual void slotSaveMetadataToFile(void);
- 
+protected Q_SLOTS:
+
+    virtual void slotSaveMetadataToFile();
+
 private:
 
-    bool decodeMetadata(void);
-    void buildView(void);
-    
+    bool decodeMetadata();
+    void buildView();
+
 private:
 
     QStringList m_tagsfilter;
