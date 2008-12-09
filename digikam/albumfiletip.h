@@ -66,7 +66,7 @@ private:
 
 private:
 
-    AlbumFileTipPriv *d;
+    AlbumFileTipPriv* const d;
 };
 
 }  // namespace Digikam

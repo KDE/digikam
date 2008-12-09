@@ -89,9 +89,8 @@ public:
 };
 
 AlbumFileTip::AlbumFileTip(AlbumIconView* view)
-            : QFrame(0)
+            : QFrame(0), d(new AlbumFileTipPriv)
 {
-    d = new AlbumFileTipPriv;
     d->view = view;
     hide();
 
