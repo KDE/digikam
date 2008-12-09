@@ -164,7 +164,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
             {
                 // We using the filter to make a more user friendly output (Simple Mode)
 
-                if (tagsfilter.contains(it.key().section('.', 2, 2)))
+                if (tagsfilter.contains(it.key().section('.', 2, 2), Qt::CaseInsensitive))
                 {
                     QString tagTitle = m_parent->getTagTitle(it.key());
                     new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
