@@ -1179,41 +1179,21 @@ void DigikamApp::slotAlbumSelected(bool val)
             action->setEnabled(false);
         }
     }
-    else if(album && !album->isRoot() && album->type() == Album::PHYSICAL)
+    else if (album && album->type() == Album::PHYSICAL)
     {
-        // Normal Album selected
-        d->deleteAction->setEnabled(true);
-        d->addImagesAction->setEnabled(true);
-        d->propsEditAction->setEnabled(true);
+        // We have either the abstract root album,
+        // the album root album for collection base dirs, or normal albums.
+        PAlbum *palbum = static_cast<PAlbum*>(album);
+        bool isRoot        = palbum->isRoot();
+        bool isAlbumRoot   = palbum->isAlbumRoot();
+        bool isNormalAlbum = !isRoot && !isAlbumRoot;
+
+        d->deleteAction->setEnabled(isNormalAlbum);
+        d->addImagesAction->setEnabled(isNormalAlbum || isAlbumRoot);
+        d->propsEditAction->setEnabled(isNormalAlbum);
         d->openInKonquiAction->setEnabled(true);
-        d->newAction->setEnabled(true);
-        d->addFoldersAction->setEnabled(true);
-
-        foreach(QAction *action, d->kipiFileActionsExport)
-        {
-            action->setEnabled(true);
-        }
-    }
-    else if(album && album->isRoot() && album->type() == Album::PHYSICAL)
-    {
-        // Root Album selected
-        d->deleteAction->setEnabled(false);
-        d->addImagesAction->setEnabled(false);
-        d->propsEditAction->setEnabled(false);
-
-
-        if(album->type() == Album::PHYSICAL)
-        {
-            d->newAction->setEnabled(true);
-            d->openInKonquiAction->setEnabled(true);
-            d->addFoldersAction->setEnabled(true);
-        }
-        else
-        {
-            d->newAction->setEnabled(false);
-            d->openInKonquiAction->setEnabled(false);
-            d->addFoldersAction->setEnabled(false);
-        }
+        d->newAction->setEnabled(isNormalAlbum || isAlbumRoot);
+        d->addFoldersAction->setEnabled(isNormalAlbum || isAlbumRoot);
 
         foreach(QAction *action, d->kipiFileActionsExport)
         {
