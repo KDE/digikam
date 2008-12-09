@@ -783,22 +783,54 @@ void DigikamApp::setupActions()
                                                         "image_set_exif_orientation");
     d->imageExifOrientationActionMenu->setDelayed(false);
 
-    d->imageSetExifOrientation1Action =
-        new KAction(i18n("Normal"),0,d->imageExifOrientationActionMenu);
-    d->imageSetExifOrientation2Action =
-        new KAction(i18n("Flipped Horizontally"),0,d->imageExifOrientationActionMenu);
-    d->imageSetExifOrientation3Action =
-        new KAction(i18n("Rotated upside down"),0,d->imageExifOrientationActionMenu);
-    d->imageSetExifOrientation4Action =
-        new KAction(i18n("Flipped Vertically"),0,d->imageExifOrientationActionMenu);
-    d->imageSetExifOrientation5Action =
-        new KAction(i18n("Rotated right / Horiz. Flipped"), 0, d->imageExifOrientationActionMenu);
-    d->imageSetExifOrientation6Action =
-        new KAction(i18n("Rotated right"),0,d->imageExifOrientationActionMenu);
-    d->imageSetExifOrientation7Action =
-        new KAction(i18n("Rotated right / Vert. Flipped"), 0, d->imageExifOrientationActionMenu);
-    d->imageSetExifOrientation8Action =
-        new KAction(i18n("Rotated left"),0,d->imageExifOrientationActionMenu);
+    d->imageSetExifOrientation1Action = new KAction(i18n("Normal"),
+             0,
+             d->imageExifOrientationActionMenu,
+             0,
+             actionCollection(),
+             "image_set_exif_orientation_normal");
+    d->imageSetExifOrientation2Action = new KAction(i18n("Flipped Horizontally"),
+             0,
+             d->imageExifOrientationActionMenu,
+             0,
+             actionCollection(),
+             "image_set_exif_orientation_flipped_horizontal");
+    d->imageSetExifOrientation3Action = new KAction(i18n("Rotated upside down"),
+             0,
+             d->imageExifOrientationActionMenu,
+             0,
+             actionCollection(),
+             "image_set_exif_orientation_rotated_upside_down");
+    d->imageSetExifOrientation4Action = new KAction(i18n("Flipped Vertically"),
+             0,
+             d->imageExifOrientationActionMenu,
+             0,
+             actionCollection(),
+             "image_set_exif_orientation_flipped_vertically");
+    d->imageSetExifOrientation5Action = new KAction(i18n("Rotated right / Horiz. Flipped"),
+             0,
+             d->imageExifOrientationActionMenu,
+             0,
+             actionCollection(),
+             "image_set_exif_orientation_rotated_right_hor_flipped");
+    d->imageSetExifOrientation6Action = new KAction(i18n("Rotated right"),
+             0,
+             d->imageExifOrientationActionMenu,
+             0,
+             actionCollection(),
+             "image_set_exif_orientation_rotated_right");
+    d->imageSetExifOrientation7Action = new KAction(i18n("Rotated right / Vert. Flipped"),
+             0,
+             d->imageExifOrientationActionMenu,
+             0,
+             actionCollection(),
+             "image_set_exif_orientation_rotated_right_ver_flipped");
+    d->imageSetExifOrientation8Action = new KAction(i18n("Rotated left"),
+             0,
+             d->imageExifOrientationActionMenu,
+             0,
+             actionCollection(),
+             "image_set_exif_orientation_rotated_left");
 
     d->imageExifOrientationActionMenu->insert(d->imageSetExifOrientation1Action);
     d->imageExifOrientationActionMenu->insert(d->imageSetExifOrientation2Action);
