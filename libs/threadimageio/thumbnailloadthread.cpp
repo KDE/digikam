@@ -365,7 +365,7 @@ void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription &descript
     {
         LoadingCache *cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
-        cache->putThumbnail(description.cacheKey(), pix);
+        cache->putThumbnail(description.cacheKey(), pix, description.filePath);
     }
 
     emit signalThumbnailLoaded(description, pix);
@@ -400,7 +400,7 @@ void ThumbnailLoadThread::gotKDEPreview(const KFileItem &item, const QPixmap &kd
     {
         LoadingCache *cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
-        cache->putThumbnail(description.cacheKey(), pix);
+        cache->putThumbnail(description.cacheKey(), pix, description.filePath);
     }
 
     emit signalThumbnailLoaded(description, pix);

@@ -139,7 +139,7 @@ void ThumbnailLoadingTask::execute()
         LoadingCache::CacheLock lock(cache);
         // put (valid) image into cache of loaded images
         if (!qimage.isNull())
-            cache->putThumbnail(m_loadingDescription.cacheKey(), qimage);
+            cache->putThumbnail(m_loadingDescription.cacheKey(), qimage, m_loadingDescription.filePath);
         // remove this from the list of loading processes in cache
         cache->removeLoadingProcess(this);
     }

@@ -61,13 +61,27 @@ public:
 
 };
 
+class LoadingCacheFileWatch
+{
+public:
+
+    virtual ~LoadingCacheFileWatch();
+    /// Called by the thread when a new entry is added to the cache
+    virtual void addedImage(const QString &filePath);
+
+protected:
+
+    friend class LoadingCache;
+    /// Call this to tell the cache to remove stored images for filePath from the cache
+    void removeFromCache(const QString &filePath);
+
+    class LoadingCache *m_cache;
+};
+
 class LoadingCachePriv;
 
-class LoadingCache : public QObject
+class LoadingCache
 {
-
-    Q_OBJECT
-
 public:
 
     static LoadingCache *cache();
@@ -150,8 +164,8 @@ public:
     /**
      * Puts a thumbnail into the thumbnail cache.
      */
-    void putThumbnail(const QString &cacheKey, const QImage  &thumb);
-    void putThumbnail(const QString &cacheKey, const QPixmap &thumb);
+    void putThumbnail(const QString &cacheKey, const QImage  &thumb, const QString &filePath);
+    void putThumbnail(const QString &cacheKey, const QPixmap &thumb, const QString &filePath);
     /**
      * Remove the thumbnail for the given file path from the thumbnail cache
      */
@@ -175,14 +189,18 @@ public:
      */
     void setThumbnailCacheSize(int numberOfQImages, int numberOfQPixmaps);
 
-private slots:
+    // ------- File Watch Management -----------------------------------
 
-    void slotFileDirty(const QString &path);
-    void slotUpdateDirWatch();
+    /**
+     * Sets a LoadingCacheFileWatch to watch the files contained in this cache.
+     * Ownership of this object is transferred to the cache.
+     */
+    void setFileWatch(LoadingCacheFileWatch *watch);
 
-signals:
-
-    void signalUpdateDirWatch();
+    /**
+     * Returns a list of all possible file paths in cache.
+     */
+    QStringList filePathsInCache() const;
 
 private:
 
@@ -190,6 +208,7 @@ private:
 
     LoadingCache();
 
+    friend class LoadingCacheFileWatch;
     friend class CacheLock;
     LoadingCachePriv *d;
 
