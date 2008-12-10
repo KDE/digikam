@@ -25,13 +25,8 @@
 
 // Qt includes.
 
-#include <QToolTip>
-#include <QLabel>
 #include <QPixmap>
-#include <QDateTime>
 #include <QPainter>
-#include <QApplication>
-#include <QVBoxLayout>
 #include <QTextDocument>
 #include <QFileInfo>
 
@@ -41,8 +36,6 @@
 #include <klocale.h>
 #include <kfileitem.h>
 #include <kmimetype.h>
-#include <kglobalsettings.h>
-#include <kglobal.h>
 #include <kdeversion.h>
 
 // LibKDcraw includes.
@@ -57,7 +50,6 @@
 // Local includes.
 
 #include "thumbbar.h"
-#include "themeengine.h"
 #include "dmetadata.h"
 
 namespace Digikam
@@ -67,23 +59,11 @@ class ThumbBarToolTipPriv
 {
 public:
 
-    ThumbBarToolTipPriv() :
-        maxStringLen(30), tipBorder(5)
+    ThumbBarToolTipPriv()
     {
-        corner = 0;
-        label  = 0;
         view   = 0;
         item   = 0;
     }
-
-    const  int     maxStringLen;
-    const uint     tipBorder;
-
-    int            corner;
-
-    QLabel        *label;
-
-    QPixmap        corners[4];
 
     ThumbBarView  *view;
 
@@ -91,45 +71,9 @@ public:
 };
 
 ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* view)
-               : QFrame(0), m_maxStringLen(30), d(new ThumbBarToolTipPriv)
+               : DItemToolTip(), d(new ThumbBarToolTipPriv)
 {
-    m_headBeg     = QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"
-                            "<nobr><font size=\"-1\" color=\"%2\"><b>")
-                            .arg(ThemeEngine::instance()->baseColor().name())
-                            .arg(ThemeEngine::instance()->textRegColor().name());
-    m_headEnd     = QString("</b></font></nobr></td></tr>");
-
-    m_cellBeg     = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\">")
-                            .arg(ThemeEngine::instance()->textRegColor().name());
-    m_cellMid     = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\">")
-                            .arg(ThemeEngine::instance()->textRegColor().name());
-    m_cellEnd     = QString("</font></nobr></td></tr>");
-
-    m_cellSpecBeg = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\">")
-                            .arg(ThemeEngine::instance()->textRegColor().name());
-    m_cellSpecMid = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\"><i>")
-                            .arg(ThemeEngine::instance()->textSpecialRegColor().name());
-    m_cellSpecEnd = QString("</i></font></nobr></td></tr>");
-
     d->view = view;
-    hide();
-
-    setFrameStyle(QFrame::Plain | QFrame::Box);
-    setLineWidth(1);
-    setWindowFlags(Qt::ToolTip);
-
-    QVBoxLayout *layout = new QVBoxLayout(this);
-
-    d->label = new QLabel(this);
-    d->label->setMargin(0);
-    d->label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-
-    layout->addWidget(d->label);
-    layout->setSizeConstraint(QLayout::SetFixedSize);
-    layout->setMargin(d->tipBorder+1);
-    layout->setSpacing(0);
-
-    renderArrows();
 }
 
 ThumbBarToolTip::~ThumbBarToolTip()
@@ -152,7 +96,7 @@ void ThumbBarToolTip::setItem(ThumbBarItem* item)
     }
     else
     {
-        d->label->setText(tipContents());
+        updateToolTip();
         reposition();
         if (isHidden())
             show();
@@ -164,167 +108,14 @@ ThumbBarItem* ThumbBarToolTip::item() const
     return d->item;
 }
 
-void ThumbBarToolTip::reposition()
+QRect ThumbBarToolTip::repositionRect()
 {
-    if (!d->item)
-        return;
+    if (!item()) return QRect();
 
-    QRect rect = d->item->rect();
+    QRect rect = item()->rect();
     rect.moveTopLeft(d->view->contentsToViewport(rect.topLeft()));
     rect.moveTopLeft(d->view->viewport()->mapToGlobal(rect.topLeft()));
-
-    QPoint pos = rect.center();
-    // d->corner:
-    // 0: upperleft
-    // 1: upperright
-    // 2: lowerleft
-    // 3: lowerright
-
-    d->corner = 0;
-    // should the tooltip be shown to the left or to the right of the ivi ?
-
-    QRect desk = KGlobalSettings::desktopGeometry(rect.center());
-
-    if (rect.center().x() + width() > desk.right())
-    {
-        // to the left
-        if (pos.x() - width() < 0)
-        {
-            pos.setX(0);
-            d->corner = 4;
-        }
-        else
-        {
-            pos.setX( pos.x() - width() );
-            d->corner = 1;
-        }
-    }
-
-    // should the tooltip be shown above or below the ivi ?
-    if (rect.bottom() + height() > desk.bottom())
-    {
-        // above
-        pos.setY( rect.top() - height() - 5);
-        d->corner += 2;
-    }
-    else
-    {
-        pos.setY( rect.bottom() + 5 );
-    }
-
-    move( pos );
-}
-
-void ThumbBarToolTip::renderArrows()
-{
-    int w = d->tipBorder;
-
-    // -- left top arrow -------------------------------------
-
-    QPixmap& pix0 = d->corners[0];
-    pix0          = QPixmap(w, w);
-    pix0.fill(palette().color(QPalette::Background));
-
-    QPainter p0(&pix0);
-    p0.setPen(QPen(Qt::black, 1));
-
-    for (int j=0; j<w; j++)
-        p0.drawLine(0, j, w-j-1, j);
-
-    p0.end();
-
-    // -- right top arrow ------------------------------------
-
-    QPixmap& pix1 = d->corners[1];
-    pix1          = QPixmap(w, w);
-    pix1.fill(palette().color(QPalette::Background));
-
-    QPainter p1(&pix1);
-    p1.setPen(QPen(Qt::black, 1));
-
-    for (int j=0; j<w; j++)
-        p1.drawLine(j, j, w-1, j);
-
-    p1.end();
-
-    // -- left bottom arrow ----------------------------------
-
-    QPixmap& pix2 = d->corners[2];
-    pix2          = QPixmap(w, w);
-    pix2.fill(palette().color(QPalette::Background));
-
-    QPainter p2(&pix2);
-    p2.setPen(QPen(Qt::black, 1));
-
-    for (int j=0; j<w; j++)
-        p2.drawLine(0, j, j, j);
-
-    p2.end();
-
-    // -- right bottom arrow ---------------------------------
-
-    QPixmap& pix3 = d->corners[3];
-    pix3          = QPixmap(w, w);
-    pix3.fill(palette().color(QPalette::Background));
-
-    QPainter p3(&pix3);
-    p3.setPen(QPen(Qt::black, 1));
-
-    for (int j=0; j<w; j++)
-        p3.drawLine(w-j-1, j, w-1, j);
-
-    p3.end();
-}
-
-bool ThumbBarToolTip::event(QEvent *e)
-{
-    switch ( e->type() )
-    {
-        case QEvent::Leave:
-        case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonRelease:
-        case QEvent::FocusIn:
-        case QEvent::FocusOut:
-        case QEvent::Wheel:
-            hide();
-        default:
-            break;
-    }
-
-    return QFrame::event(e);
-}
-
-void ThumbBarToolTip::resizeEvent(QResizeEvent* e)
-{
-    QFrame::resizeEvent(e);
-    reposition();
-}
-
-void ThumbBarToolTip::paintEvent(QPaintEvent *e)
-{
-    QFrame::paintEvent(e);
-
-    if (d->corner >= 4)
-        return;
-
-    QPainter p(this);
-    QPixmap &pix = d->corners[d->corner];
-
-    switch (d->corner)
-    {
-        case 0:
-            p.drawPixmap( 3, 3, pix );
-            break;
-        case 1:
-            p.drawPixmap( width() - pix.width() - 3, 3, pix );
-            break;
-        case 2:
-            p.drawPixmap( 3, height() - pix.height() - 3, pix );
-            break;
-        case 3:
-            p.drawPixmap( width() - pix.width() - 3, height() - pix.height() - 3, pix );
-            break;
-    }
+    return rect;
 }
 
 QString ThumbBarToolTip::tipContents()
@@ -523,39 +314,6 @@ QString ThumbBarToolTip::tipContents()
     }
 
     return tipText;
-}
-
-QString ThumbBarToolTip::breakString(const QString& input)
-{
-    QString str = input.simplified();
-    str         = Qt::escape(str);
-    int maxLen  = d->maxStringLen;
-
-    if (str.length() <= maxLen)
-        return str;
-
-    QString br;
-
-    int i     = 0;
-    int count = 0;
-
-    while (i < str.length())
-    {
-        if (count >= maxLen && str[i].isSpace())
-        {
-            count = 0;
-            br.append("<br/>");
-        }
-        else
-        {
-            br.append(str[i]);
-        }
-
-        i++;
-        count++;
-    }
-
-    return br;
 }
 
 }  // namespace Digikam

@@ -24,16 +24,10 @@
 #ifndef THUMBBARTOOLTIP_H
 #define THUMBBARTOOLTIP_H
 
-// Qt includes.
-
-#include <QFrame>
-#include <QString>
-#include <QEvent>
-#include <QResizeEvent>
-
 // Local includes.
 
 #include "digikam_export.h"
+#include "ditemtooltip.h"
 
 namespace Digikam
 {
@@ -80,7 +74,7 @@ public:
 
 // --------------------------------------------------------
 
-class DIGIKAM_EXPORT ThumbBarToolTip : public QFrame
+class DIGIKAM_EXPORT ThumbBarToolTip : public DItemToolTip
 {
 public:
 
@@ -92,31 +86,10 @@ public:
 
 protected:
 
-    bool event(QEvent*);
-    void resizeEvent(QResizeEvent*);
-    void paintEvent(QPaintEvent*);
     ThumbBarToolTipSettings& toolTipSettings() const;
-    QString breakString(const QString& str);
 
+    virtual QRect   repositionRect();
     virtual QString tipContents();
-
-protected:
-
-    const int m_maxStringLen;
-
-    QString   m_headBeg;
-    QString   m_headEnd;
-    QString   m_cellBeg;
-    QString   m_cellMid;
-    QString   m_cellEnd;
-    QString   m_cellSpecBeg;
-    QString   m_cellSpecMid;
-    QString   m_cellSpecEnd;
-
-private:
-
-    void    reposition();
-    void    renderArrows();
 
 private:
 
