@@ -264,8 +264,33 @@ void CollectionScanner::partialScan(const QString &albumRoot, const QString& alb
     updateRemovedItemsTime();
 }
 
+void CollectionScanner::scanFile(const QString &filePath)
+{
+    QString albumRoot = CollectionManager::instance()->albumRootPath(filePath);
+    if (albumRoot.isNull())
+        return;
+    QString album = CollectionManager::instance()->album(filePath);
+    QFileInfo info(filePath);
+    scanFile(albumRoot, album, info.fileName());
+}
+
 void CollectionScanner::scanFile(const QString &albumRoot, const QString &album, const QString &fileName)
 {
+    if (album.isEmpty() || fileName.isEmpty())
+    {
+        // If you want to scan the album root, pass "/"
+        kWarning(50003) << "scanFile(QString, QString, QString) called with empty album or empty filename" << endl;
+        return;
+    }
+
+    if (DatabaseAccess().backend()->isInTransaction())
+    {
+        // Install ScanController::instance()->suspendCollectionScan around your DatabaseTransaction
+        kError(50003) << "Detected an active database transaction when starting a collection file scan. "
+                         "Please report this error." << endl;
+        return;
+    }
+
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
 
     if (location.isNull())
@@ -290,6 +315,7 @@ void CollectionScanner::scanFile(const QString &albumRoot, const QString &album,
     }
     else
     {
+        // If one file is explicitly scanned, assume it is modified
         ItemScanInfo scanInfo = DatabaseAccess().db()->getItemScanInfo(imageId);
         scanModifiedFile(info, scanInfo);
     }

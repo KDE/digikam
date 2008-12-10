@@ -81,6 +81,11 @@ public:
      * The specified file will be added to the database if it is not included,
      * or rescanned as if it was modified if it is found in the database.
      */
+    void scanFile(const QString &filePath);
+
+    /**
+     * Same procedure as above, but albumRoot and album is provided.
+     */
     void scanFile(const QString &albumRoot, const QString &album, const QString &fileName);
 
     /**
