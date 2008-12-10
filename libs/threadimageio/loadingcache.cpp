@@ -23,6 +23,7 @@
 
 
 #include "loadingcache.h"
+#include "loadingcache.moc"
 
 // Qt includes.
 
@@ -61,7 +62,6 @@ public:
     QWaitCondition condVar;
     LoadingCacheFileWatch *watch;
 
-    void removeFilePath(const QString &filePath);
     void mapImageFilePath(const QString &filePath, const QString &cacheKey);
     void mapThumbnailFilePath(const QString &filePath, const QString &cacheKey);
     void cleanUpImageFilePathHash();
@@ -70,10 +70,6 @@ public:
 
     LoadingCache *q;
 };
-
-// for ClassicLoadingCacheFileWatch
-#include "loadingcache.moc"
-
 
 LoadingCache *LoadingCache::m_instance = 0;
 
@@ -253,18 +249,24 @@ QStringList LoadingCache::thumbnailFilePathsInCache() const
     return d->thumbnailFilePathHash.uniqueKeys();
 }
 
-void LoadingCachePriv::removeFilePath(const QString &filePath)
+void LoadingCache::notifyFileChanged(const QString &filePath)
 {
-    QList<QString> keys = imageFilePathHash.values(filePath);
-    foreach(const QString &cacheKey, keys)
-        imageCache.remove(cacheKey);
-
-    keys = thumbnailFilePathHash.values(filePath);
+    QList<QString> keys = d->imageFilePathHash.values(filePath);
     foreach(const QString &cacheKey, keys)
     {
-        thumbnailImageCache.remove(cacheKey);
-        thumbnailPixmapCache.remove(cacheKey);
+        if (d->imageCache.remove(cacheKey))
+            emit fileChanged(filePath, cacheKey);
     }
+
+    keys = d->thumbnailFilePathHash.values(filePath);
+    foreach(const QString &cacheKey, keys)
+    {
+        if (d->thumbnailImageCache.remove(cacheKey) ||
+            d->thumbnailPixmapCache.remove(cacheKey))
+            emit fileChanged(filePath, cacheKey);
+    }
+
+    emit fileChanged(filePath);
 }
 
 LoadingCacheFileWatch *LoadingCachePriv::fileWatch()
@@ -328,16 +330,17 @@ LoadingCacheFileWatch::~LoadingCacheFileWatch()
     if (m_cache)
     {
         LoadingCache::CacheLock lock(m_cache);
-        m_cache->d->watch = 0;
+        if (m_cache->d->watch == this)
+            m_cache->d->watch = 0;
     }
 }
 
-void LoadingCacheFileWatch::removeFromCache(const QString &filePath)
+void LoadingCacheFileWatch::notifyFileChanged(const QString &filePath)
 {
     if (m_cache)
     {
         LoadingCache::CacheLock lock(m_cache);
-        m_cache->d->removeFilePath(filePath);
+        m_cache->notifyFileChanged(filePath);
     }
 }
 
@@ -396,7 +399,7 @@ void ClassicLoadingCacheFileWatch::slotFileDirty(const QString &path)
     // Signal comes from main thread
     //kDebug(50003) << "LoadingCache slotFileDirty " << path << endl;
     // This method acquires a lock itself
-    removeFromCache(path);
+    notifyFileChanged(path);
     // No need for locking here, we are in main thread
     m_watch->removeFile(path);
     m_watchedFiles.removeAll(path);

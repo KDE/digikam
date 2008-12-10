@@ -77,11 +77,12 @@ protected:
 
     friend class LoadingCache;
     /**
+     * Convenience method.
      * Call this to tell the cache to remove stored images for filePath from the cache.
      * Calling this method is fast, you do not need to check if the file is contained in the cache.
      * Do not hold the CacheLock when calling this method.
      */
-    void removeFromCache(const QString &filePath);
+    void notifyFileChanged(const QString &filePath);
 
     class LoadingCache *m_cache;
 };
@@ -116,8 +117,10 @@ protected:
 
 class LoadingCachePriv;
 
-class DIGIKAM_EXPORT LoadingCache
+class DIGIKAM_EXPORT LoadingCache : public QObject
 {
+    Q_OBJECT
+
 public:
 
     static LoadingCache *cache();
@@ -238,6 +241,27 @@ public:
      */
     QStringList imageFilePathsInCache() const;
     QStringList thumbnailFilePathsInCache() const;
+
+    /**
+     * Remove all entries from cache that were loaded from filePath.
+     * Emits relevant signals.
+     */
+    void notifyFileChanged(const QString &filePath);
+
+signals:
+
+    /**
+     * This signal is emitted when the cache is notified that a file was changed.
+     * There is no information in this signal if the file was ever contained in the cache.
+     * The signal may be emitted under CacheLock. Strongly consider a queued connection.
+     */
+    void fileChanged(const QString &filePath);
+    /**
+     * This signal is emitted when the cache is notified that a file was changed,
+     * and the given cache key was removed from the cache.
+     * The signal may be emitted under CacheLock. Strongly consider a queued connection.
+     */
+    void fileChanged(const QString &filePath, const QString &cacheKey);
 
 private:
 
