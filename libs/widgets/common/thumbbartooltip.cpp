@@ -122,13 +122,14 @@ QString ThumbBarToolTip::tipContents()
 {
     if (!item()) return QString();
 
-    QString str;
-    QString tip = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">";
+    QString           str;
+    DToolTipContainer cnt;
 
     ThumbBarToolTipSettings settings = toolTipSettings();
     QFileInfo fileInfo(item()->url().path());
     KFileItem fi(KFileItem::Unknown, KFileItem::Unknown, item()->url());
     DMetadata metaData(item()->url().path());
+    QString tip = cnt.tipHeader;
 
     // -- File properties ----------------------------------------------
 
@@ -138,28 +139,28 @@ QString ThumbBarToolTip::tipContents()
         settings.showImageType ||
         settings.showImageDim)
     {
-        tip += m_headBeg + i18n("File Properties") + m_headEnd;
+        tip += cnt.headBeg + i18n("File Properties") + cnt.headEnd;
 
         if (settings.showFileName)
         {
-            tip += m_cellBeg + i18n("Name:") + m_cellMid;
-            tip += item()->url().fileName() + m_cellEnd;
+            tip += cnt.cellBeg + i18n("Name:") + cnt.cellMid;
+            tip += item()->url().fileName() + cnt.cellEnd;
         }
 
         if (settings.showFileDate)
         {
             QDateTime modifiedDate = fileInfo.lastModified();
             str = KGlobal::locale()->formatDateTime(modifiedDate, KLocale::ShortDate, true);
-            tip += m_cellBeg + i18n("Modified:") + m_cellMid + str + m_cellEnd;
+            tip += cnt.cellBeg + i18n("Modified:") + cnt.cellMid + str + cnt.cellEnd;
         }
 
         if (settings.showFileSize)
         {
-            tip += m_cellBeg + i18n("Size:") + m_cellMid;
+            tip += cnt.cellBeg + i18n("Size:") + cnt.cellMid;
             str = i18n("%1 (%2)", KIO::convertSize(fi.size()),
                                   KGlobal::locale()->formatNumber(fi.size(),
                                   0));
-            tip += str + m_cellEnd;
+            tip += str + cnt.cellEnd;
         }
 
         QSize   dims;
@@ -203,7 +204,7 @@ QString ThumbBarToolTip::tipContents()
 
         if (settings.showImageType)
         {
-            tip += m_cellBeg + i18n("Type:") + m_cellMid + str + m_cellEnd;
+            tip += cnt.cellBeg + i18n("Type:") + cnt.cellMid + str + cnt.cellEnd;
         }
 
         if (settings.showImageDim)
@@ -212,7 +213,7 @@ QString ThumbBarToolTip::tipContents()
             mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
             str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)",
                     dims.width(), dims.height(), mpixels);
-            tip += m_cellBeg + i18n("Dimensions:") + m_cellMid + str + m_cellEnd;
+            tip += cnt.cellBeg + i18n("Dimensions:") + cnt.cellMid + str + cnt.cellEnd;
         }
     }
 
@@ -231,14 +232,14 @@ QString ThumbBarToolTip::tipContents()
         if (!photoInfo.isEmpty())
         {
             QString metaStr;
-            tip += m_headBeg + i18n("Photograph Properties") + m_headEnd;
+            tip += cnt.headBeg + i18n("Photograph Properties") + cnt.headEnd;
 
             if (settings.showPhotoMake)
             {
-                str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? m_unavailable : photoInfo.make)
-                                        .arg(photoInfo.model.isEmpty() ? m_unavailable : photoInfo.model);
+                str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? cnt.unavailable : photoInfo.make)
+                                        .arg(photoInfo.model.isEmpty() ? cnt.unavailable : photoInfo.model);
                 if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
-                metaStr += m_cellBeg + i18n("Make/Model:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
+                metaStr += cnt.cellBeg + i18n("Make/Model:") + cnt.cellMid + Qt::escape( str ) + cnt.cellEnd;
             }
 
             if (settings.showPhotoDate)
@@ -247,42 +248,42 @@ QString ThumbBarToolTip::tipContents()
                 {
                     str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
                     if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
-                    metaStr += m_cellBeg + i18n("Created:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
+                    metaStr += cnt.cellBeg + i18n("Created:") + cnt.cellMid + Qt::escape( str ) + cnt.cellEnd;
                 }
                 else
                 {
-                    metaStr += m_cellBeg + i18n("Created:") + m_cellMid + Qt::escape( m_unavailable ) + m_cellEnd;
+                    metaStr += cnt.cellBeg + i18n("Created:") + cnt.cellMid + Qt::escape( cnt.unavailable ) + cnt.cellEnd;
                 }
             }
 
             if (settings.showPhotoFocal)
             {
-                str = photoInfo.aperture.isEmpty() ? m_unavailable : photoInfo.aperture;
+                str = photoInfo.aperture.isEmpty() ? cnt.unavailable : photoInfo.aperture;
 
                 if (photoInfo.focalLength35mm.isEmpty())
-                    str += QString(" / %1").arg(photoInfo.focalLength.isEmpty() ? m_unavailable : photoInfo.focalLength);
+                    str += QString(" / %1").arg(photoInfo.focalLength.isEmpty() ? cnt.unavailable : photoInfo.focalLength);
                 else
                     str += QString(" / %1").arg(i18n("%1 (35mm: %2)",
                            photoInfo.focalLength, photoInfo.focalLength35mm));
 
                 if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
-                metaStr += m_cellBeg + i18n("Aperture/Focal:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
+                metaStr += cnt.cellBeg + i18n("Aperture/Focal:") + cnt.cellMid + Qt::escape( str ) + cnt.cellEnd;
             }
 
             if (settings.showPhotoExpo)
             {
-                str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? m_unavailable :
+                str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? cnt.unavailable :
                                              photoInfo.exposureTime)
-                                        .arg(photoInfo.sensitivity.isEmpty() ? m_unavailable :
+                                        .arg(photoInfo.sensitivity.isEmpty() ? cnt.unavailable :
                                              i18n("%1 ISO", photoInfo.sensitivity));
                 if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
-                metaStr += m_cellBeg + i18n("Exposure/Sensitivity:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
+                metaStr += cnt.cellBeg + i18n("Exposure/Sensitivity:") + cnt.cellMid + Qt::escape( str ) + cnt.cellEnd;
             }
 
             if (settings.showPhotoMode)
             {
                 if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
-                    str = m_unavailable;
+                    str = cnt.unavailable;
                 else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
                     str = photoInfo.exposureMode;
                 else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
@@ -290,28 +291,28 @@ QString ThumbBarToolTip::tipContents()
                 else
                     str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
                 if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
-                metaStr += m_cellBeg + i18n("Mode/Program:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
+                metaStr += cnt.cellBeg + i18n("Mode/Program:") + cnt.cellMid + Qt::escape( str ) + cnt.cellEnd;
             }
 
             if (settings.showPhotoFlash)
             {
-                str = photoInfo.flash.isEmpty() ? m_unavailable : photoInfo.flash;
+                str = photoInfo.flash.isEmpty() ? cnt.unavailable : photoInfo.flash;
                 if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
-                metaStr += m_cellBeg + i18n("Flash:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
+                metaStr += cnt.cellBeg + i18n("Flash:") + cnt.cellMid + Qt::escape( str ) + cnt.cellEnd;
             }
 
             if (settings.showPhotoWB)
             {
-                str = photoInfo.whiteBalance.isEmpty() ? m_unavailable : photoInfo.whiteBalance;
+                str = photoInfo.whiteBalance.isEmpty() ? cnt.unavailable : photoInfo.whiteBalance;
                 if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
-                metaStr += m_cellBeg + i18n("White Balance:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
+                metaStr += cnt.cellBeg + i18n("White Balance:") + cnt.cellMid + Qt::escape( str ) + cnt.cellEnd;
             }
 
             tip += metaStr;
         }
     }
 
-    tip += "</table>";
+    tip += cnt.tipFooter;
 
     return tip;
 }

@@ -15,6 +15,7 @@ INCLUDE_DIRECTORIES(../utilities/imageeditor/editor
                     ../libs/dimg/loaders 
                     ../libs/threadimageio
                     ../libs/dmetadata 
+                    ../libs/themeengine 
                     ../digikam 
                     ../
                     ${KDCRAW_INCLUDE_DIR}

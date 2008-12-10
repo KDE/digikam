@@ -30,21 +30,15 @@
 #include <QPixmap>
 #include <QDateTime>
 #include <QPainter>
-#include <QTextDocument>
 #include <QApplication>
 #include <QVBoxLayout>
 
 // KDE includes.
 
-#include <klocale.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kglobal.h>
 #include <kdeversion.h>
-
-// Local includes.
-
-#include "themeengine.h"
 
 namespace Digikam
 {
@@ -72,26 +66,6 @@ public:
 DItemToolTip::DItemToolTip()
             : QFrame(0), d(new DItemToolTipPriv)
 {
-    m_unavailable = i18n("unavailable");
-
-    m_headBeg     = QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"
-                            "<nobr><font size=\"-1\" color=\"%2\"><b>")
-                            .arg(ThemeEngine::instance()->baseColor().name())
-                            .arg(ThemeEngine::instance()->textRegColor().name());
-    m_headEnd     = QString("</b></font></nobr></td></tr>");
-
-    m_cellBeg     = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\">")
-                            .arg(ThemeEngine::instance()->textRegColor().name());
-    m_cellMid     = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\">")
-                            .arg(ThemeEngine::instance()->textRegColor().name());
-    m_cellEnd     = QString("</font></nobr></td></tr>");
-
-    m_cellSpecBeg = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\">")
-                            .arg(ThemeEngine::instance()->textRegColor().name());
-    m_cellSpecMid = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\"><i>")
-                            .arg(ThemeEngine::instance()->textSpecialRegColor().name());
-    m_cellSpecEnd = QString("</i></font></nobr></td></tr>");
-
     hide();
 
     setFrameStyle(QFrame::Plain | QFrame::Box);
@@ -280,39 +254,6 @@ void DItemToolTip::paintEvent(QPaintEvent *e)
             p.drawPixmap( width() - pix.width() - 3, height() - pix.height() - 3, pix );
             break;
     }
-}
-
-QString DItemToolTip::breakString(const QString& input)
-{
-    QString str      = input.simplified();
-    str              = Qt::escape(str);
-    const int maxLen = MAXSTRINGLENGHT;
-
-    if (str.length() <= maxLen)
-        return str;
-
-    QString br;
-
-    int i     = 0;
-    int count = 0;
-
-    while (i < str.length())
-    {
-        if (count >= maxLen && str[i].isSpace())
-        {
-            count = 0;
-            br.append("<br/>");
-        }
-        else
-        {
-            br.append(str[i]);
-        }
-
-        i++;
-        count++;
-    }
-
-    return br;
 }
 
 }  // namespace Digikam

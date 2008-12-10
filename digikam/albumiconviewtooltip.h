@@ -26,6 +26,7 @@
 
 // Local includes.
 
+#include "imageinfo.h"
 #include "ditemtooltip.h"
 
 namespace Digikam
@@ -43,6 +44,8 @@ public:
     ~AlbumIconViewToolTip();
 
     void setIconItem(AlbumIconItem* iconItem);
+
+    static QString fillTipContents(const ImageInfo info);
 
 private:
 
