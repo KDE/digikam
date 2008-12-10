@@ -655,7 +655,7 @@ void ScanControllerLoadingCacheFileWatch::slotImageChanged(const ImageChangeset 
         {
             ImageInfo info(imageId);
             kDebug() << imageId << info.filePath();
-            removeFromCache(info.filePath());
+            notifyFileChanged(info.filePath());
         }
     }
 }

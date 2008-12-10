@@ -41,8 +41,6 @@ extern "C"
 
 // Qt includes.
 
-#include <Q3Dict>
-#include <Q3IntDict>
 #include <QClipboard>
 #include <QCursor>
 #include <QDataStream>
@@ -191,7 +189,7 @@ public:
     QPolygon                         starPolygon;
     QSize                            starPolygonSize;
 
-    Q3Dict<AlbumIconItem>            itemDict;
+    QHash<QString, AlbumIconItem*>   itemDict;
     QHash<ImageInfo, AlbumIconItem*> itemInfoMap;
 
     KUrl                             itemUrlToFind;
@@ -199,7 +197,7 @@ public:
     AlbumLister                     *imageLister;
     Album                           *currentAlbum;
     const AlbumSettings             *albumSettings;
-    Q3IntDict<AlbumIconGroupItem>    albumDict;
+    QHash<int, AlbumIconGroupItem*>  albumDict;
 
     ThumbnailSize                    thumbSize;
 
@@ -387,7 +385,7 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
             continue;
         }
 
-        AlbumIconGroupItem* group = d->albumDict.find(it->albumId());
+        AlbumIconGroupItem* group = d->albumDict.value(it->albumId());
         if (!group)
         {
             group = new AlbumIconGroupItem(this, it->albumId());
@@ -1024,7 +1022,7 @@ void AlbumIconView::slotRenamed(KIO::Job*, const KUrl &, const KUrl&newURL)
     // refresh thumbnail
     ThumbnailLoadThread::deleteThumbnail(fileURL.path());
     // clean LoadingCache as well - be pragmatic, do it here.
-    LoadingCacheInterface::cleanFromCache(fileURL.path());
+    LoadingCacheInterface::fileChanged(fileURL.path());
 }
 
 void AlbumIconView::slotDeleteSelectedItems(bool deletePermanently)
@@ -1801,7 +1799,7 @@ void AlbumIconView::refreshItems(const KUrl::List& urlList)
         info.refresh();
         ThumbnailLoadThread::deleteThumbnail((*it).path());
         // clean LoadingCache as well - be pragmatic, do it here.
-        LoadingCacheInterface::cleanFromCache((*it).path());
+        LoadingCacheInterface::fileChanged((*it).path());
     }
 
     emit signalItemsUpdated(urlList);
@@ -2216,7 +2214,7 @@ AlbumIconItem* AlbumIconView::findItem(const QPoint& pos)
 
 AlbumIconItem* AlbumIconView::findItem(const QString& url) const
 {
-    return d->itemDict.find(url);
+    return d->itemDict.value(url);
 }
 
 AlbumIconItem* AlbumIconView::nextItemToThumbnail() const

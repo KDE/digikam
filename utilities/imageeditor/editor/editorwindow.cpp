@@ -1335,9 +1335,9 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         m_canvas->setUndoHistoryOrigin();
 
         // remove image from cache since it has changed
-        LoadingCacheInterface::cleanFromCache(m_savingContext->destinationURL.path());
+        LoadingCacheInterface::fileChanged(m_savingContext->destinationURL.path());
         // this won't be in the cache, but does not hurt to do it anyway
-        LoadingCacheInterface::cleanFromCache(filename);
+        LoadingCacheInterface::fileChanged(filename);
 
         // restore state of disabled actions. saveIsComplete can start any other task
         // (loading!) which might itself in turn change states
@@ -1377,8 +1377,8 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
 
         m_canvas->setUndoHistoryOrigin();
 
-        LoadingCacheInterface::cleanFromCache(m_savingContext->destinationURL.path());
-        LoadingCacheInterface::cleanFromCache(filename);
+        LoadingCacheInterface::fileChanged(m_savingContext->destinationURL.path());
+        LoadingCacheInterface::fileChanged(filename);
 
         finishSaving(true);
         saveAsIsComplete();
