@@ -182,10 +182,10 @@ SET(digikam_SRCS
                      album.cpp 
                      albumiconview.cpp 
                      albumiconviewfilter.cpp 
+                     albumiconviewtooltip.cpp 
                      albumicongroupitem.cpp 
                      albumiconitem.cpp 
                      albumitemhandler.cpp 
-                     albumfiletip.cpp 
                      albumfolderview.cpp 
                      albumhistory.cpp 
                      albumlister.cpp 

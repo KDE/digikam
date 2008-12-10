@@ -313,6 +313,8 @@ QString ThumbBarToolTip::tipContents()
         }
     }
 
+    tipText += "</table>";
+
     return tipText;
 }
 

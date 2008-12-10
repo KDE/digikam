@@ -149,7 +149,7 @@ public slots:
 
     void slotSetExifOrientation(int orientation);
     void slotRename(AlbumIconItem* item);
-    void slotDeleteSelectedItems(bool deletePermanently = false);
+    void slotDeleteSelectedItems(bool deletePermanently=false);
     void slotDeleteSelectedItemsDirectly(bool useTrash);
     void slotDisplayItem(AlbumIconItem *item=0);
     void slotAlbumModified();
@@ -214,11 +214,12 @@ private:
 
     void updateRectsAndPixmaps();
     void updateBannerRectPixmap();
-    void changeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs, bool addOrRemove, bool progress);
+    void changeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs, 
+                               bool addOrRemove, bool progress);
 
 private:
 
-    AlbumIconViewPrivate *d;
+    AlbumIconViewPrivate* const d;
 };
 
 }  // namespace Digikam

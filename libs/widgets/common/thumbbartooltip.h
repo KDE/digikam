@@ -79,7 +79,7 @@ class DIGIKAM_EXPORT ThumbBarToolTip : public DItemToolTip
 public:
 
     ThumbBarToolTip(ThumbBarView* view);
-    ~ThumbBarToolTip();
+    virtual ~ThumbBarToolTip();
 
     void setItem(ThumbBarItem* item);
     ThumbBarItem* item() const;

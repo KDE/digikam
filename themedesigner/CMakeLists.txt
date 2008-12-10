@@ -5,7 +5,7 @@ INCLUDE_DIRECTORIES(
                      ../libs/dimg/loaders
                      ../libs/dimg/filters
                      ../libs/dmetadata 
-                     ../libs/histogram    
+                     ../libs/histogram
                      ../libs/curves
                      ../libs/levels
                      ../libs/lprof/
@@ -55,7 +55,7 @@ SET(libdigikamtheme_SRCS
     ../digikam/albumicongroupitem.cpp 
     ../digikam/albumiconitem.cpp 
     ../digikam/albumitemhandler.cpp 
-    ../digikam/albumfiletip.cpp 
+    ../digikam/albumiconviewtooltip.cpp 
     ../digikam/albumlister.cpp 
     ../digikam/albummanager.cpp 
     ../digikam/albumsettings.cpp 
@@ -108,12 +108,12 @@ TARGET_LINK_LIBRARIES(digikamthemedesigner
                       digikamcore 
                       digikamdatabase 
                       ${KDE4_KUTILS_LIBS}
-		      ${KIPI_LIBRARIES}
+                      ${KIPI_LIBRARIES}
                       ${GPHOTO2_LIBRARIES}
                      )
 
 IF(KDEPIMLIBS_FOUND)
-  TARGET_LINK_LIBRARIES(digikamthemedesigner ${KDE4_KABC_LIBS})
+    TARGET_LINK_LIBRARIES(digikamthemedesigner ${KDE4_KABC_LIBS})
 ENDIF(KDEPIMLIBS_FOUND)
 
 INSTALL(TARGETS digikamthemedesigner ${INSTALL_TARGETS_DEFAULT_ARGS})

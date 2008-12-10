@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "albumiconview.h"
 #include "albumiconview.moc"
 
@@ -105,7 +104,7 @@ extern "C"
 
 #include "album.h"
 #include "albumdb.h"
-#include "albumfiletip.h"
+#include "albumiconviewtooltip.h"
 #include "albumicongroupitem.h"
 #include "albumiconitem.h"
 #include "albumlister.h"
@@ -161,7 +160,7 @@ public:
 
         starPolygonSize = QSize(15, 15);
 
-        ratingPixmaps = QVector<QPixmap>(10);
+        ratingPixmaps   = QVector<QPixmap>(10);
     }
 
     QString                          albumTitle;
@@ -204,16 +203,15 @@ public:
 
     ThumbnailSize                    thumbSize;
 
-    AlbumFileTip                    *toolTip;
+    AlbumIconViewToolTip            *toolTip;
 };
 
 AlbumIconView::AlbumIconView(QWidget* parent)
-             : IconView(parent)
+             : IconView(parent), d(new AlbumIconViewPrivate)
 {
-    d = new AlbumIconViewPrivate;
     d->init();
     d->imageLister = AlbumLister::instance();
-    d->toolTip     = new AlbumFileTip(this);
+    d->toolTip     = new AlbumIconViewToolTip(this);
 
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
