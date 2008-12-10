@@ -105,14 +105,15 @@ ImageInfo::ImageInfo(qlonglong ID)
 {
     DatabaseAccess access;
     m_data = access.imageInfoCache()->infoForId(ID);
-    // retrieve immutable values now, the rest on demand
-    ItemShortInfo info  = access.db()->getItemShortInfo(ID);
-    m_data->albumId     = info.albumID;
-    m_data->albumRootId = info.albumRootID;
-    m_data->name        = info.itemName;
-
-    //m_data->url     = DatabaseUrl::fromAlbumAndName(info.itemName, info.album,
-      //                                              CollectionManager::instance()->albumRootPath(info.albumRootId));
+    // is this a newly created structure, need to populate?
+    if (m_data->albumId == -1)
+    {
+        // retrieve immutable values now, the rest on demand
+        ItemShortInfo info  = access.db()->getItemShortInfo(ID);
+        m_data->albumId     = info.albumID;
+        m_data->albumRootId = info.albumRootID;
+        m_data->name        = info.itemName;
+    }
 }
 
 ImageInfo::ImageInfo(const KUrl &url)
