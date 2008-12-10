@@ -193,6 +193,7 @@ private slots:
 
     void slotFilesModified();
     void slotFilesModified(const KUrl& url);
+    void slotFileChanged(const QString &);
     void slotImageWindowURLChanged(const KUrl &url);
 
     void slotShowToolTip(IconItem* item);

@@ -273,6 +273,12 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
     connect(watch, SIGNAL(signalImageCaptionChanged(qlonglong)),
             this, SLOT(slotImageAttributesChanged(qlonglong)));
+
+    // -- FileWatch connections ------------------------------
+
+    LoadingCacheInterface::connectToSignalFileChanged(this,
+            SLOT(slotFileChanged(const QString &)));
+
 }
 
 AlbumIconView::~AlbumIconView()
@@ -1174,8 +1180,8 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
     //connect(imview, SIGNAL(signalFileAdded(const KUrl&)),
       //      this, SLOT(slotFilesModified()));
 
-    connect(imview, SIGNAL(signalFileModified(const KUrl&)),
-            this, SLOT(slotFilesModified(const KUrl&)));
+    //connect(imview, SIGNAL(signalFileModified(const KUrl&)),
+      //      this, SLOT(slotFilesModified(const KUrl&)));
 
     //connect(imview, SIGNAL(signalFileDeleted(const KUrl&)),
       //      this, SLOT(slotFilesModified()));
@@ -1795,8 +1801,6 @@ void AlbumIconView::refreshItems(const KUrl::List& urlList)
         if (!iconItem)
             continue;
 
-        ImageInfo info = iconItem->imageInfo();
-        info.refresh();
         ThumbnailLoadThread::deleteThumbnail((*it).path());
         // clean LoadingCache as well - be pragmatic, do it here.
         LoadingCacheInterface::fileChanged((*it).path());
@@ -1806,6 +1810,21 @@ void AlbumIconView::refreshItems(const KUrl::List& urlList)
 
     // trigger a delayed rearrangement, in case we need to resort items
     triggerRearrangement();
+}
+
+void AlbumIconView::slotFileChanged(const QString &filePath)
+{
+    if (!d->currentAlbum || filePath.isEmpty())
+        return;
+
+    KUrl url = KUrl::fromPath(filePath);
+
+    AlbumIconItem* iconItem = findItem(url.url());
+    if (!iconItem)
+        return;
+    iconItem->update();
+
+    emit signalItemsUpdated(KUrl::List() << url);
 }
 
 void AlbumIconView::slotThumbnailLoaded(const LoadingDescription &loadingDescription, const QPixmap&)
