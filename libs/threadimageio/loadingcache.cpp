@@ -26,6 +26,7 @@
 
 // Qt includes.
 
+#include <QCoreApplication>
 #include <QEvent>
 #include <QCustomEvent>
 #include <QCache>
@@ -53,43 +54,21 @@ public:
     QCache<QString, DImg> imageCache;
     QCache<QString, QImage>  thumbnailImageCache;
     QCache<QString, QPixmap> thumbnailPixmapCache;
-    QMultiHash<QString, QString> filePathToCacheKeyHash;
+    QMultiHash<QString, QString> imageFilePathHash;
+    QMultiHash<QString, QString> thumbnailFilePathHash;
     QHash<QString, LoadingProcess *> loadingDict;
     QMutex mutex;
     QWaitCondition condVar;
     LoadingCacheFileWatch *watch;
 
-    void addToWatchAndHash(const QString &filePath, const QString &cacheKey);
     void removeFilePath(const QString &filePath);
-    void mapFilePathToCacheKey(const QString &filePath, const QString &cacheKey);
-    void cleanUpFilePathToCacheKeyHash();
+    void mapImageFilePath(const QString &filePath, const QString &cacheKey);
+    void mapThumbnailFilePath(const QString &filePath, const QString &cacheKey);
+    void cleanUpImageFilePathHash();
+    void cleanUpThumbnailFilePathHash();
+    LoadingCacheFileWatch *fileWatch();
 
     LoadingCache *q;
-};
-
-class ClassicLoadingCacheFileWatch : public QObject, public LoadingCacheFileWatch
-{
-    Q_OBJECT
-
-public:
-
-    ClassicLoadingCacheFileWatch();
-    ~ClassicLoadingCacheFileWatch();
-    virtual void addedImage(const QString &filePath);
-
-private slots:
-
-    void slotFileDirty(const QString &path);
-    void slotUpdateDirWatch();
-
-signals:
-
-    void signalUpdateDirWatch();
-
-private:
-
-    KDirWatch  *watch;
-    QStringList watchedFiles;
 };
 
 // for ClassicLoadingCacheFileWatch
@@ -151,7 +130,10 @@ bool LoadingCache::putImage(const QString &cacheKey, DImg *img, const QString &f
     successfulyInserted = d->imageCache.insert(cacheKey, img, cost);
 
     if (successfulyInserted && !filePath.isEmpty())
-        d->addToWatchAndHash(filePath, cacheKey);
+    {
+        d->mapImageFilePath(filePath, cacheKey);
+        d->fileWatch()->addedImage(filePath);
+    }
 
     return successfulyInserted;
 }
@@ -164,53 +146,6 @@ void LoadingCache::removeImage(const QString &cacheKey)
 void LoadingCache::removeImages()
 {
     d->imageCache.clear();
-}
-
-void LoadingCachePriv::removeFilePath(const QString &filePath)
-{
-    QList<QString> keys = filePathToCacheKeyHash.values(filePath);
-    foreach(const QString &cacheKey, keys)
-    {
-        imageCache.remove(cacheKey);
-        thumbnailImageCache.remove(cacheKey);
-        thumbnailPixmapCache.remove(cacheKey);
-    }
-}
-
-void LoadingCachePriv::addToWatchAndHash(const QString &filePath, const QString &cacheKey)
-{
-    mapFilePathToCacheKey(filePath, cacheKey);
-
-    // install default watch if no watch is set yet
-    if (!watch)
-        q->setFileWatch(new ClassicLoadingCacheFileWatch);
-
-    // notify watch
-    watch->addedImage(filePath);
-}
-
-void LoadingCachePriv::mapFilePathToCacheKey(const QString &filePath, const QString &cacheKey)
-{
-    if (filePathToCacheKeyHash.size() > 5*(imageCache.size() + thumbnailImageCache.size() + thumbnailPixmapCache.size()))
-        cleanUpFilePathToCacheKeyHash();
-
-    filePathToCacheKeyHash.insert(filePath, cacheKey);
-}
-
-void LoadingCachePriv::cleanUpFilePathToCacheKeyHash()
-{
-    QSet<QString> keys;
-    keys += imageCache.keys().toSet();
-    keys += thumbnailImageCache.keys().toSet();
-    keys += thumbnailPixmapCache.keys().toSet();
-    QMultiHash<QString, QString>::iterator it;
-    for (it = filePathToCacheKeyHash.begin(); it != filePathToCacheKeyHash.end(); )
-    {
-        if (!keys.contains(it.value()))
-            it = filePathToCacheKeyHash.erase(it);
-        else
-            ++it;
-    }
 }
 
 bool LoadingCache::isCacheable(const DImg *img)
@@ -264,7 +199,10 @@ void LoadingCache::putThumbnail(const QString &cacheKey, const QImage &thumb, co
 {
     int cost = thumb.numBytes();
     if (d->thumbnailImageCache.insert(cacheKey, new QImage(thumb), cost))
-        d->addToWatchAndHash(filePath, cacheKey);
+    {
+        d->mapThumbnailFilePath(filePath, cacheKey);
+        d->fileWatch()->addedThumbnail(filePath);
+    }
 
 }
 
@@ -272,7 +210,10 @@ void LoadingCache::putThumbnail(const QString &cacheKey, const QPixmap &thumb, c
 {
     int cost = thumb.width() * thumb.height() * thumb.depth() / 8;
     if (d->thumbnailPixmapCache.insert(cacheKey, new QPixmap(thumb), cost))
-        d->addToWatchAndHash(filePath, cacheKey);
+    {
+        d->mapThumbnailFilePath(filePath, cacheKey);
+        d->fileWatch()->addedThumbnail(filePath);
+    }
 }
 
 void LoadingCache::removeThumbnail(const QString &cacheKey)
@@ -298,17 +239,87 @@ void LoadingCache::setFileWatch(LoadingCacheFileWatch *watch)
     delete d->watch;
     d->watch = watch;
     d->watch->m_cache = this;
-
-    foreach(const QString &filePath, filePathsInCache())
-        d->watch->addedImage(filePath);
 }
 
-QStringList LoadingCache::filePathsInCache() const
+QStringList LoadingCache::imageFilePathsInCache() const
 {
-    d->cleanUpFilePathToCacheKeyHash();
-    return d->filePathToCacheKeyHash.uniqueKeys();
+    d->cleanUpImageFilePathHash();
+    return d->imageFilePathHash.uniqueKeys();
 }
 
+QStringList LoadingCache::thumbnailFilePathsInCache() const
+{
+    d->cleanUpThumbnailFilePathHash();
+    return d->thumbnailFilePathHash.uniqueKeys();
+}
+
+void LoadingCachePriv::removeFilePath(const QString &filePath)
+{
+    QList<QString> keys = imageFilePathHash.values(filePath);
+    foreach(const QString &cacheKey, keys)
+        imageCache.remove(cacheKey);
+
+    keys = thumbnailFilePathHash.values(filePath);
+    foreach(const QString &cacheKey, keys)
+    {
+        thumbnailImageCache.remove(cacheKey);
+        thumbnailPixmapCache.remove(cacheKey);
+    }
+}
+
+LoadingCacheFileWatch *LoadingCachePriv::fileWatch()
+{
+    // install default watch if no watch is set yet
+    if (!watch)
+        q->setFileWatch(new ClassicLoadingCacheFileWatch);
+
+    return watch;
+}
+
+void LoadingCachePriv::mapImageFilePath(const QString &filePath, const QString &cacheKey)
+{
+    if (imageFilePathHash.size() > 5*imageCache.size())
+        cleanUpImageFilePathHash();
+
+    imageFilePathHash.insert(filePath, cacheKey);
+}
+
+void LoadingCachePriv::mapThumbnailFilePath(const QString &filePath, const QString &cacheKey)
+{
+    if (imageFilePathHash.size() > 5*(thumbnailImageCache.size() + thumbnailPixmapCache.size()))
+        cleanUpThumbnailFilePathHash();
+
+    imageFilePathHash.insert(filePath, cacheKey);
+}
+
+void LoadingCachePriv::cleanUpImageFilePathHash()
+{
+    // Remove all entries from hash whose value is no longer a key in the cache
+    QSet<QString> keys = imageCache.keys().toSet();
+    QMultiHash<QString, QString>::iterator it;
+    for (it = imageFilePathHash.begin(); it != imageFilePathHash.end(); )
+    {
+        if (!keys.contains(it.value()))
+            it = imageFilePathHash.erase(it);
+        else
+            ++it;
+    }
+}
+
+void LoadingCachePriv::cleanUpThumbnailFilePathHash()
+{
+    QSet<QString> keys;
+    keys += thumbnailImageCache.keys().toSet();
+    keys += thumbnailPixmapCache.keys().toSet();
+    QMultiHash<QString, QString>::iterator it;
+    for (it = imageFilePathHash.begin(); it != imageFilePathHash.end(); )
+    {
+        if (!keys.contains(it.value()))
+            it = thumbnailFilePathHash.erase(it);
+        else
+            ++it;
+    }
+}
 
 //---------------------------------------------------------------------------------------------------
 
@@ -335,13 +346,21 @@ void LoadingCacheFileWatch::addedImage(const QString &)
     // default: do nothing
 }
 
+void LoadingCacheFileWatch::addedThumbnail(const QString &)
+{
+    // default: do nothing
+}
+
 //---------------------------------------------------------------------------------------------------
 
 ClassicLoadingCacheFileWatch::ClassicLoadingCacheFileWatch()
 {
-    watch = new KDirWatch;
+    if (thread() != QCoreApplication::instance()->thread())
+        moveToThread(QCoreApplication::instance()->thread());
 
-    connect(watch, SIGNAL(dirty(const QString &)),
+    m_watch = new KDirWatch;
+
+    connect(m_watch, SIGNAL(dirty(const QString &)),
             this, SLOT(slotFileDirty(const QString &)));
 
     // Make sure the signal gets here directly from the event loop.
@@ -355,25 +374,32 @@ ClassicLoadingCacheFileWatch::ClassicLoadingCacheFileWatch()
 
 ClassicLoadingCacheFileWatch::~ClassicLoadingCacheFileWatch()
 {
-    delete watch;
+    delete m_watch;
 }
 
 void ClassicLoadingCacheFileWatch::addedImage(const QString &filePath)
 {
     Q_UNUSED(filePath)
-    // schedule update of file watch
+    // schedule update of file m_watch
     // KDirWatch can only be accessed from main thread!
     emit signalUpdateDirWatch();
 }
 
+void ClassicLoadingCacheFileWatch::addedThumbnail(const QString &filePath)
+{
+    Q_UNUSED(filePath);
+    // ignore, we do not m_watch thumbnails
+}
+
 void ClassicLoadingCacheFileWatch::slotFileDirty(const QString &path)
 {
-    // Signal comes from main thread, we need to lock ourselves.
-
+    // Signal comes from main thread
     //kDebug(50003) << "LoadingCache slotFileDirty " << path << endl;
+    // This method acquires a lock itself
     removeFromCache(path);
-    watch->removeFile(path);
-    watchedFiles.removeAll(path);
+    // No need for locking here, we are in main thread
+    m_watch->removeFile(path);
+    m_watchedFiles.removeAll(path);
 }
 
 void ClassicLoadingCacheFileWatch::slotUpdateDirWatch()
@@ -381,33 +407,33 @@ void ClassicLoadingCacheFileWatch::slotUpdateDirWatch()
     // Event comes from main thread, we need to lock ourselves.
     LoadingCache::CacheLock lock(m_cache);
 
-    // get a list of files in cache that need watch
+    // get a list of files in cache that need m_watch
     QStringList toBeAdded;
-    QStringList toBeRemoved = watchedFiles;
+    QStringList toBeRemoved = m_watchedFiles;
 
-    QList<QString> filePaths = m_cache->filePathsInCache();
-    foreach(const QString &watchPath, filePaths)
+    QList<QString> filePaths = m_cache->imageFilePathsInCache();
+    foreach(const QString &m_watchPath, filePaths)
     {
-        if (!watchPath.isEmpty())
+        if (!m_watchPath.isEmpty())
         {
-            if (!watchedFiles.contains(watchPath))
-                toBeAdded.append(watchPath);
-            toBeRemoved.removeAll(watchPath);
+            if (!m_watchedFiles.contains(m_watchPath))
+                toBeAdded.append(m_watchPath);
+            toBeRemoved.removeAll(m_watchPath);
         }
     }
 
     for (QStringList::iterator it = toBeRemoved.begin(); it != toBeRemoved.end(); ++it)
     {
-        //kDebug(50003) << "removing watch for " << *it << endl;
-        watch->removeFile(*it);
-        watchedFiles.removeAll(*it);
+        //kDebug(50003) << "removing m_watch for " << *it << endl;
+        m_watch->removeFile(*it);
+        m_watchedFiles.removeAll(*it);
     }
 
     for (QStringList::iterator it = toBeAdded.begin(); it != toBeAdded.end(); ++it)
     {
-        //kDebug(50003) << "adding watch for " << *it << endl;
-        watch->addFile(*it);
-        watchedFiles.append(*it);
+        //kDebug(50003) << "adding m_watch for " << *it << endl;
+        m_watch->addFile(*it);
+        m_watchedFiles.append(*it);
     }
 
 }

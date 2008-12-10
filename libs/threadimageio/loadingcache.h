@@ -34,6 +34,8 @@
 #include "loadsavethread.h"
 #include "digikam_export.h"
 
+class KDirWatch;
+
 namespace Digikam
 {
 
@@ -69,6 +71,7 @@ public:
     virtual ~LoadingCacheFileWatch();
     /// Called by the thread when a new entry is added to the cache
     virtual void addedImage(const QString &filePath);
+    virtual void addedThumbnail(const QString &filePath);
 
 protected:
 
@@ -81,6 +84,34 @@ protected:
     void removeFromCache(const QString &filePath);
 
     class LoadingCache *m_cache;
+};
+
+class DIGIKAM_EXPORT ClassicLoadingCacheFileWatch : public QObject, public LoadingCacheFileWatch
+{
+    Q_OBJECT
+
+    /** Reference implementation */
+
+public:
+
+    ClassicLoadingCacheFileWatch();
+    ~ClassicLoadingCacheFileWatch();
+    virtual void addedImage(const QString &filePath);
+    virtual void addedThumbnail(const QString &filePath);
+
+private slots:
+
+    void slotFileDirty(const QString &path);
+    void slotUpdateDirWatch();
+
+signals:
+
+    void signalUpdateDirWatch();
+
+protected:
+
+    KDirWatch *m_watch;
+    QStringList m_watchedFiles;
 };
 
 class LoadingCachePriv;
@@ -205,7 +236,8 @@ public:
     /**
      * Returns a list of all possible file paths in cache.
      */
-    QStringList filePathsInCache() const;
+    QStringList imageFilePathsInCache() const;
+    QStringList thumbnailFilePathsInCache() const;
 
 private:
 
