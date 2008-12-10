@@ -569,6 +569,8 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
     QAction *newAction = popmenu.addAction(SmallIcon("albumfolder-new"), i18n("New Album..."));
 
     AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(listitem);
+    if (!item)
+        return;
     PAlbum *album = item->album();
     if (item && !album)
     {
