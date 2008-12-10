@@ -40,18 +40,24 @@ class DIGIKAM_EXPORT LoadingCacheInterface
 {
 public:
     static void initialize();
-    // clean up cache at shutdown
+    /** clean up cache at shutdown */
     static void cleanUp();
-    // remove an image from the cache
-    // (e.g. when image has changed on disk)
+    /**
+     * Remove an image from the cache
+     * (e.g. when image has changed on disk)
+     */
     static void cleanFromCache(const QString &filePath);
-    // remove all images from the cache
-    // (e.g. when loading settings changed)
+    /**
+     * remove all images from the cache
+     * (e.g. when loading settings changed)
+     */
     static void cleanCache();
-    // add a copy of the image to cache
+    /** add a copy of the image to cache */
     static void putImage(const QString &filePath, const DImg &img);
-    // Set cache size in Megabytes.
-    // Set to 0 to disable caching.
+    /**
+     * Set cache size in Megabytes.
+     * Set to 0 to disable caching.
+     */
     static void setCacheOptions(int cacheSize);
 };
 
