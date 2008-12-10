@@ -101,7 +101,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 089 ==> 172632 : Album item tooltip doesn't use colors of themes properly.
 090 ==> 173746 : digikam doesn't show "big view".
 091 ==> 177093 : User should not be able to delete root album.
-092 ==> 
+092 ==> 177333 : digiKam can't find images in album.
+093 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
