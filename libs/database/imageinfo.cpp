@@ -95,6 +95,8 @@ ImageInfo::ImageInfo(const ImageListerRecord &record)
     m_data->imageSize              = record.imageSize;
 
     m_data->ratingCached           = true;
+    m_data->categoryCached         = true;
+    m_data->formatCached           = true;
     m_data->creationDateCached     = true;
     m_data->modificationDateCached = true;
     m_data->fileSizeCached         = true;
@@ -533,20 +535,6 @@ ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString &dstFileName)
         return ImageInfo();
 
     return ImageInfo(id);
-}
-
-void ImageInfo::refresh()
-{
-    DatabaseAccess access;
-
-    // invalidate, load lazily
-    m_data->defaultCommentCached    = false;
-    m_data->ratingCached            = false;
-    m_data->creationDateCached      = false;
-    m_data->modificationDateCached  = false;
-    m_data->fileSizeCached          = false;
-    m_data->imageSizeCached         = false;
-    m_data->tagIdsCached            = false;
 }
 
 }  // namespace Digikam

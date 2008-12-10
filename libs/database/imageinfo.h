@@ -252,13 +252,6 @@ public:
     //TODO: Move to album?
     ImageInfo   copyItem(int dstAlbumID, const QString &dstFileName);
 
-    /**
-     * refresh the properties of the imageinfo. it reads the database
-     * again for getting the updated date and stats the file to get
-     * the updated size
-     */
-    void        refresh();
-
 private:
 
     friend class ImageInfoCache;

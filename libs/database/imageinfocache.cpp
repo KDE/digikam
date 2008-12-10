@@ -102,6 +102,10 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset &changeset)
             DatabaseFields::Set changes = changeset.changes();
             if (changes & DatabaseFields::ImageCommentsAll)
                 (*it)->defaultCommentCached = false;
+            if (changes & DatabaseFields::Category)
+                (*it)->categoryCached = false;
+            if (changes & DatabaseFields::Format)
+                (*it)->formatCached = false;
             if (changes & DatabaseFields::Rating)
                 (*it)->ratingCached = false;
             if (changes & DatabaseFields::CreationDate)
@@ -110,6 +114,8 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset &changeset)
                 (*it)->modificationDateCached = false;
             if (changes & DatabaseFields::FileSize)
                 (*it)->fileSizeCached = false;
+            if (changes & DatabaseFields::Width || changes & DatabaseFields::Height)
+                (*it)->imageSizeCached = false;
         }
     }
 }
