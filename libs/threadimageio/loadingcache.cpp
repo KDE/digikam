@@ -324,7 +324,10 @@ LoadingCacheFileWatch::~LoadingCacheFileWatch()
 void LoadingCacheFileWatch::removeFromCache(const QString &filePath)
 {
     if (m_cache)
+    {
+        LoadingCache::CacheLock lock(m_cache);
         m_cache->d->removeFilePath(filePath);
+    }
 }
 
 void LoadingCacheFileWatch::addedImage(const QString &)
@@ -366,7 +369,7 @@ void ClassicLoadingCacheFileWatch::addedImage(const QString &filePath)
 void ClassicLoadingCacheFileWatch::slotFileDirty(const QString &path)
 {
     // Signal comes from main thread, we need to lock ourselves.
-    LoadingCache::CacheLock lock(m_cache);
+
     //kDebug(50003) << "LoadingCache slotFileDirty " << path << endl;
     removeFromCache(path);
     watch->removeFile(path);

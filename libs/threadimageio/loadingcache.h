@@ -32,6 +32,7 @@
 
 #include "dimg.h"
 #include "loadsavethread.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -61,7 +62,7 @@ public:
 
 };
 
-class LoadingCacheFileWatch
+class DIGIKAM_EXPORT LoadingCacheFileWatch
 {
 public:
 
@@ -72,7 +73,11 @@ public:
 protected:
 
     friend class LoadingCache;
-    /// Call this to tell the cache to remove stored images for filePath from the cache
+    /**
+     * Call this to tell the cache to remove stored images for filePath from the cache.
+     * Calling this method is fast, you do not need to check if the file is contained in the cache.
+     * Do not hold the CacheLock when calling this method.
+     */
     void removeFromCache(const QString &filePath);
 
     class LoadingCache *m_cache;
@@ -80,7 +85,7 @@ protected:
 
 class LoadingCachePriv;
 
-class LoadingCache
+class DIGIKAM_EXPORT LoadingCache
 {
 public:
 
