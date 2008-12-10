@@ -19,12 +19,12 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 007 ==> 166439 : Drag and drop on lighttable does not work.
 008 ==> 172730 : Preview only, but no photo details shown at all.
 009 ==> 169830 : digiKam crashed when navigating large images.
-010 ==> 173533 : Crash when deselecting a single photo with Ctrl+left mouse click.
+010 ==> 173533 : Crash when deselecting a single photo with CTRL+left mouse click.
 011 ==> 169764 : RAW file import lacks I18N support, no decoding.
 012 ==> 168918 : Rectangular selection tool often looses selection when dragging vertices.
 013 ==> 176654 : Buttons for setting album date in album properties not working.
 014 ==> 173746 : Embed view does not work; I can not see an image.
-015 ==> 172164 : Crash when downloading photos from Canon PowerShot A95.
+015 ==> 172164 : Crash when downloading photos from Canon Powershot A95.
 016 ==> 165325 : Crash when trying to import pictures from a USB-Camera.
 017 ==> 174642 : Crashes when try to connect to Kodak Z812 IS.
 018 ==> 168514 : Minimum Screen Size Too Large.
@@ -34,15 +34,15 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 138548 : Error downloading or detecting camera when connected. 
 023 ==> 137233 : Proper input constraints in New Album dialog.
 024 ==> 176086 : Recursive slideshow only shows last album.
-025 ==> 171234 : Tag names imported from kde3 digikam are cut off in kde4.
+025 ==> 171234 : Tag names imported from KDE3 digiKam are cut off in KDE4.
 026 ==> 173828 : Geolocation do not except Canon EOS 1D Mark III CR2-files.
 027 ==> 150938 : Album thumbnail view very slow on NFS.
 028 ==> 137707 : A new icon for the albums in digiKam.
 029 ==> 176725 : Drag and drop stopped working.
 030 ==> 121460 : Album date average incorrect.
-031 ==> 115046 : Light-table useability, possible improvements.
+031 ==> 115046 : Light-table usability, possible improvements.
 032 ==> 176584 : Mousewheeling on a slideshow sometimes crash digiKam.
-033 ==> 147477 : Camera > Media Browse does not poplulate information until click second time.
+033 ==> 147477 : Camera > Media Browse does not populate information until click second time.
 034 ==> 169228 : View and Edit Icons missing in medium size.
 035 ==> 165321 : Maximized mode doesn't work, digiKam is "under" the taskbar.
 036 ==> 175914 : Select new items in camera import window selects all files / forgets status.
@@ -50,47 +50,47 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 038 ==> 133878 : Filter which files to import.
 039 ==> 167874 : Item count in tag and album view is not updated.
 040 ==> 176972 : Using create "Date-based  sub-albums"  makes import fail.
-041 ==> 131447 : Problem dragging folders from digikam to other places, like the desktop
+041 ==> 131447 : Problem dragging folders from digiKam to other places, like the desktop
 042 ==> 156847 : Missing thumbnails in album overview.
-043 ==> 146714 : IE, showfoto, album view rotation: rotated TIFs are losing metadata about picture.
+043 ==> 146714 : IE, showFoto, album view rotation: rotated TIFs are losing metadata about picture.
 044 ==> 147961 : Search / Order by color.
 045 ==> 151922 : Assign-tag menu icons sometimes in the wrong place.
-046 ==> 176565 : Loading a directory with more than 5000 raw files (NEF) make digikam crash.
+046 ==> 176565 : Loading a directory with more than 5000 raw files (NEF) make digiKam crash.
 047 ==> 152262 : Unable to load tiff file.
-048 ==> 148779 : Resync or refresh iptc-comments.
+048 ==> 148779 : Resync or refresh IPTC-comments.
 049 ==> 147772 : Confusing UI for re-sizing side-bars.
-050 ==> 098225 : Printing and displaying exif information over the picture.
+050 ==> 098225 : Printing and displaying Exif information over the picture.
 051 ==> 171953 : Using create "Date-based  sub-albums"  makes import fail.
 052 ==> 133211 : Media browse corrupted display.
 053 ==> 168928 : Rotation of raw images.
 054 ==> 174683 : Crashes when try to correct red eye.
-055 ==> 136206 : Losing tags after an move or rename of imagefiles.
+055 ==> 136206 : Losing tags after an move or rename of image files.
 056 ==> 142774 : Moving pictures between albums.
 057 ==> 160664 : Protected file to camera.
 058 ==> 143864 : Tool to remove Chromatic Aberration from photos.
 059 ==> 125233 : "purple fringe" correction plugin.
 060 ==> 150161 : UFRaw as plugin for RAW.
 061 ==> 147876 : Broken/renamed images after tagging.
-062 ==> 117629 : Do an ocr of an image and store result in exif/jfif.
+062 ==> 117629 : Do an OCR of an image and store result in Exif/jfif.
 063 ==> 172835 : The stars of the rating in the right panel are not refreshed when selecting different images.
 064 ==> 153798 : Bad calculation of images in recursive showed albums.
 065 ==> 134679 : Video and audio files are not imported.
 066 ==> 171480 : Visual indicator missing for 100% zoom level. 
-067 ==> 151861 : Canon powershot 200 is not reqoqnized in this final version.
+067 ==> 151861 : Canon Powershot 200 is not recognized in this final version.
 068 ==> 144215 : Change the comment of a picture without modify its timestamp.
 069 ==> 150609 : Adjust Exif orientation tag changes files date.
 070 ==> 157788 : Tools->Update Metadata Database changes timestamps of files.
 071 ==> 142568 : digiKam is really slow to load a RAW (.CR2) photo.
-072 ==> 151719 : Non latin1 in iptc keywords.
+072 ==> 151719 : Non latin1 in IPTC keywords.
 073 ==> 132244 : Special Chars in Keywords decode wrong in IPTC.
 074 ==> 162490 : dcraw-8.86 adds newer canon dslr with digic III support.
 075 ==> 103149 : Printing wizard plugin is hard to find.
 076 ==> 149328 : Let libkdcraw use raw decoding options when generating thumbnails.
 077 ==> 168012 : Thumbnails not shown in find similar items tool so they can't be used for drag and drop. 
-078 ==> 148861 : [ctrl] + scroll wheel doesn't resize thumbnails.
+078 ==> 148861 : [CTRL] + scroll wheel doesn't resize thumbnails.
 079 ==> 154526 : Big screen size lead to small picture in main window and editor.
 080 ==> 177231 : Rotate context menu in view mode.
-081 ==> 125923 : Image tooltip contents not shown when albumview is scrolled up or down with cursur keys.
+081 ==> 125923 : Image tooltip contents not shown when albumview is scrolled up or down with cursor keys.
 082 ==> 174807 : digiKam does not use KDE's Trash.
 083 ==> 142058 : Icons for import should use proper mime type.
 084 ==> 176179 : Image editor - zoom +/- buttons alter predefined list of zoom factors.
