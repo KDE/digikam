@@ -105,7 +105,7 @@ private Q_SLOTS:
 
 private :
 
-    CIETongueWidgetPriv* d;
+    CIETongueWidgetPriv* const d;
 };
 
 }  // namespace Digikam

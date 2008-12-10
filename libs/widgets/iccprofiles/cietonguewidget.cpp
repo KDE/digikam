@@ -25,7 +25,6 @@
  *
  * ============================================================ */
 
-
 #include "cietonguewidget.h"
 #include "cietonguewidget.moc"
 
@@ -202,10 +201,9 @@ public:
 };
 
 CIETongueWidget::CIETongueWidget(int w, int h, QWidget *parent, cmsHPROFILE hMonitor)
-               : QWidget(parent)
+               : QWidget(parent), d(new CIETongueWidgetPriv)
 {
-    d = new CIETongueWidgetPriv;
-    d->blinkTimer = new QTimer( this );
+    d->blinkTimer = new QTimer(this);
     setMinimumSize(w, h);
     setAttribute(Qt::WA_DeleteOnClose);
     cmsErrorAction(LCMS_ERROR_SHOW);

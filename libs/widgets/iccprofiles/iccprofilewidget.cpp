@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "iccprofilewidget.h"
 #include "iccprofilewidget.moc"
 
@@ -117,11 +116,9 @@ public:
 };
 
 ICCProfileWidget::ICCProfileWidget(QWidget* parent, int w, int h)
-                : MetadataWidget(parent)
+                : MetadataWidget(parent), d(new ICCProfileWidgetPriv)
 {
     cmsErrorAction(LCMS_ERROR_SHOW);
-
-    d = new ICCProfileWidgetPriv;
 
     // Set the translated ICC tags titles/descriptions list
     d->iccTagsDescription["Icc.Header.Name"]            = ICCTagInfo(i18n("Name"),

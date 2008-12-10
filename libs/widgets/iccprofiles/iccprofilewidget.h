@@ -73,7 +73,7 @@ private:
 
 private:
 
-    ICCProfileWidgetPriv *d;
+    ICCProfileWidgetPriv* const d;
 };
 
 }  // namespace Digikam
