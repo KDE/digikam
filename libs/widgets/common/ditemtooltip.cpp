@@ -36,6 +36,7 @@
 
 // KDE includes.
 
+#include <klocale.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kglobal.h>
@@ -72,6 +73,8 @@ public:
 DItemToolTip::DItemToolTip()
             : QFrame(0), m_maxStringLen(30), d(new DItemToolTipPriv)
 {
+    m_unavailable = i18n("unavailable");
+
     m_headBeg     = QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"
                             "<nobr><font size=\"-1\" color=\"%2\"><b>")
                             .arg(ThemeEngine::instance()->baseColor().name())

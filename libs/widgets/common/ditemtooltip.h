@@ -64,6 +64,7 @@ protected:
 
     const int m_maxStringLen;
 
+    QString   m_unavailable;
     QString   m_headBeg;
     QString   m_headEnd;
     QString   m_cellBeg;

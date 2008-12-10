@@ -125,7 +125,6 @@ QString ThumbBarToolTip::tipContents()
     ThumbBarToolTipSettings settings = toolTipSettings();
 
     QString tipText, str;
-    QString unavailable(i18n("unavailable"));
 
     tipText = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">";
 
@@ -238,8 +237,8 @@ QString ThumbBarToolTip::tipContents()
 
             if (settings.showPhotoMake)
             {
-                str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? unavailable : photoInfo.make)
-                                        .arg(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
+                str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? m_unavailable : photoInfo.make)
+                                        .arg(photoInfo.model.isEmpty() ? m_unavailable : photoInfo.model);
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
                 metaStr += m_cellBeg + i18n("Make/Model:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
@@ -253,15 +252,17 @@ QString ThumbBarToolTip::tipContents()
                     metaStr += m_cellBeg + i18n("Created:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
                 }
                 else
-                    metaStr += m_cellBeg + i18n("Created:") + m_cellMid + Qt::escape( unavailable ) + m_cellEnd;
+                {
+                    metaStr += m_cellBeg + i18n("Created:") + m_cellMid + Qt::escape( m_unavailable ) + m_cellEnd;
+                }
             }
 
             if (settings.showPhotoFocal)
             {
-                str = photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture;
+                str = photoInfo.aperture.isEmpty() ? m_unavailable : photoInfo.aperture;
 
                 if (photoInfo.focalLength35mm.isEmpty())
-                    str += QString(" / %1").arg(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
+                    str += QString(" / %1").arg(photoInfo.focalLength.isEmpty() ? m_unavailable : photoInfo.focalLength);
                 else
                     str += QString(" / %1").arg(i18n("%1 (35mm: %2)",
                            photoInfo.focalLength, photoInfo.focalLength35mm));
@@ -272,9 +273,9 @@ QString ThumbBarToolTip::tipContents()
 
             if (settings.showPhotoExpo)
             {
-                str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? unavailable :
+                str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? m_unavailable :
                                              photoInfo.exposureTime)
-                                        .arg(photoInfo.sensitivity.isEmpty() ? unavailable :
+                                        .arg(photoInfo.sensitivity.isEmpty() ? m_unavailable :
                                              i18n("%1 ISO", photoInfo.sensitivity));
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
                 metaStr += m_cellBeg + i18n("Exposure/Sensitivity:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
@@ -282,9 +283,8 @@ QString ThumbBarToolTip::tipContents()
 
             if (settings.showPhotoMode)
             {
-
                 if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
-                    str = unavailable;
+                    str = m_unavailable;
                 else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
                     str = photoInfo.exposureMode;
                 else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
@@ -297,14 +297,14 @@ QString ThumbBarToolTip::tipContents()
 
             if (settings.showPhotoFlash)
             {
-                str = photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash;
+                str = photoInfo.flash.isEmpty() ? m_unavailable : photoInfo.flash;
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
                 metaStr += m_cellBeg + i18n("Flash:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
 
             if (settings.showPhotoWB)
             {
-                str = photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance;
+                str = photoInfo.whiteBalance.isEmpty() ? m_unavailable : photoInfo.whiteBalance;
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
                 metaStr += m_cellBeg + i18n("White Balance:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
