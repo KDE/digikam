@@ -176,10 +176,7 @@ QImage ThumbnailCreator::load(const QString &path)
         // -- Get the image preview --------------------------------
 
         // Try to extract Exif/IPTC preview first.
-        if (qimage.isNull())
-        {
-            qimage = loadImagePreview(path);
-        }
+        qimage = loadImagePreview(path);
 
         // To speed-up thumb extraction, we now try to load the images by the file extension.
         QFileInfo info(path);
