@@ -25,7 +25,7 @@
 
 
 #include "scancontroller.h"
-#include "scancontroller.moc"
+#include "moc_scancontroller.cpp"
 
 // Qt includes.
 
@@ -56,6 +56,10 @@
 #include "databaseaccess.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
+#include "loadingcache.h"
+#include "databasewatch.h"
+#include "databasechangesets.h"
+#include "imageinfo.h"
 #include "dprogressdlg.h"
 #include "dmetadata.h"
 #include "albumsettings.h"
@@ -160,6 +164,27 @@ public:
 
 };
 
+class ScanControllerLoadingCacheFileWatch : public ClassicLoadingCacheFileWatch
+{
+    Q_OBJECT
+
+    /* This class is derived from the ClassicLoadingCacheFileWatch,
+       which means it has the full functionality of the class
+       and only extends it by listening to CollectionScanner information
+    */
+
+public:
+
+    ScanControllerLoadingCacheFileWatch();
+
+private slots:
+
+    void slotImageChanged(const ImageChangeset &changeset);
+};
+
+// for ScanControllerLoadingCacheFileWatch
+#include "scancontroller.moc"
+
 class ScanControllerCreator { public: ScanController object; };
 K_GLOBAL_STATIC(ScanControllerCreator, creator)
 
@@ -201,6 +226,13 @@ ScanController::ScanController()
     // start thread
     d->running = true;
     start();
+
+    // setup file watch service for LoadingCache
+    {
+        LoadingCache *cache = LoadingCache::cache();
+        LoadingCache::CacheLock lock(cache);
+        cache->setFileWatch(new ScanControllerLoadingCacheFileWatch);
+    }
 }
 
 
@@ -299,6 +331,18 @@ void ScanController::scheduleCollectionScan(const QString &path)
     if (!d->scanTasks.contains(path))
         d->scanTasks << path;
     d->condVar.wakeAll();
+}
+
+void ScanController::scanFileDirectly(const QString &filePath)
+{
+    suspendCollectionScan();
+
+    CollectionScanner scanner;
+    scanner.recordHints(d->itemHints);
+    connectCollectionScanner(&scanner);
+    scanner.scanFile(filePath);
+
+    resumeCollectionScan();
 }
 
 void ScanController::suspendCollectionScan()
@@ -584,6 +628,38 @@ void ScanController::hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum *dstAlbum
     d->garbageCollectHints(true);
     d->itemHints << hint;
 }
+
+
+// --------------------------------------------------- //
+
+
+ScanControllerLoadingCacheFileWatch::ScanControllerLoadingCacheFileWatch()
+{
+    DatabaseWatch *dbwatch = DatabaseAccess::databaseWatch();
+
+    // we opt for a queued connection to make stuff a bit relaxed
+    connect(dbwatch, SIGNAL(imageChange(const ImageChangeset &)),
+            this, SLOT(slotImageChanged(const ImageChangeset &)),
+            Qt::QueuedConnection);
+
+}
+
+void ScanControllerLoadingCacheFileWatch::slotImageChanged(const ImageChangeset &changeset)
+{
+    DatabaseAccess access;
+
+    foreach (qlonglong imageId, changeset.ids())
+    {
+        DatabaseFields::Set changes = changeset.changes();
+        if (changes & DatabaseFields::ModificationDate)
+        {
+            ImageInfo info(imageId);
+            kDebug() << imageId << info.filePath();
+            removeFromCache(info.filePath());
+        }
+    }
+}
+
 
 
 }  // namespace Digikam

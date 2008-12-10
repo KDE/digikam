@@ -85,6 +85,12 @@ public:
      */
     void scheduleCollectionScan(const QString &path);
 
+    /**
+     * The file pointed to by file path will be scanned.
+     * The scan is finished when returning from the method.
+     */
+    void scanFileDirectly(const QString &filePath);
+
     /** Temporarily suspend collection scanning.
      *  All scheduled scanning tasks are queued
      *  and will be done when resumeCollectionScan()
