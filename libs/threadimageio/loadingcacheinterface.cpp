@@ -56,6 +56,13 @@ void LoadingCacheInterface::fileChanged(const QString &filePath)
     */
 }
 
+void LoadingCacheInterface::connectToSignalFileChanged(QObject *object, const char *slot)
+{
+    LoadingCache *cache = LoadingCache::cache();
+    QObject::connect(cache, SIGNAL(fileChanged(const QString &)),
+                     object, slot);
+}
+
 void LoadingCacheInterface::cleanCache()
 {
     LoadingCache *cache = LoadingCache::cache();

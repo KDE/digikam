@@ -48,6 +48,13 @@ public:
      */
     static void fileChanged(const QString &filePath);
     /**
+     * Connect the given object/slot to the signal
+     *  void fileChanged(const QString &filePath);
+     * which is emitted when the cache gains knowledge about a possible
+     * change of this file on disk.
+     */
+    static void connectToSignalFileChanged(QObject *object, const char *slot);
+    /**
      * remove all images from the cache
      * (e.g. when loading settings changed)
      */
