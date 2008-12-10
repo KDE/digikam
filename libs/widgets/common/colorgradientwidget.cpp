@@ -6,7 +6,7 @@
  * Date        : 2004-07-28
  * Description : a color gradient widget
  *
- * Copyright (C) 2004-2007 by Gilles Caulier<caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier<caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "colorgradientwidget.h"
 #include "colorgradientwidget.moc"
@@ -40,26 +39,25 @@ public:
 
     ColorGradientWidgetPriv(){}
 
-    int    orientation;
+    Qt::Orientation orientation;
 
-    QColor color1;
-    QColor color2;
+    QColor          color1;
+    QColor          color2;
 };
 
-ColorGradientWidget::ColorGradientWidget(int o, int size, QWidget *parent)
-                   : QWidget(parent)
+ColorGradientWidget::ColorGradientWidget(Qt::Orientation orientation, int size, QWidget *parent)
+                   : QWidget(parent), d(new ColorGradientWidgetPriv)
 {
-    d = new ColorGradientWidgetPriv;
-    d->orientation = o;
-    d->color1.setRgb( 0, 0, 0 );
-    d->color2.setRgb( 255, 255, 255 );
+    d->orientation = orientation;
+    d->color1.setRgb(0, 0, 0);
+    d->color2.setRgb(255, 255, 255);
 
     setAttribute(Qt::WA_DeleteOnClose);
 
-    if ( d->orientation == Horizontal )
-        setFixedHeight( size );
+    if ( d->orientation == Qt::Horizontal )
+        setFixedHeight(size);
     else
-        setFixedWidth( size );
+        setFixedWidth(size);
 
     setContentsMargins(1, 1, 1, 1);
 }
@@ -101,7 +99,7 @@ void ColorGradientWidget::paintEvent( QPaintEvent * )
     int greenDiff = color2.green() - color1.green();
     int blueDiff  = color2.blue()  - color1.blue();
 
-    if ( d->orientation == Vertical )
+    if ( d->orientation == Qt::Vertical )
     {
         for ( int y = 0; y < image.height(); y++ )
         {
@@ -145,7 +143,6 @@ void ColorGradientWidget::paintEvent( QPaintEvent * )
                                  color1.green() + greenDiff * s / psize,
                                  color1.blue()  + blueDiff  * s / psize );
     }
-    //KImageEffect::dither( image, ditherPalette, psize );
 
     QPixmap pm = QPixmap::fromImage(image);
     QPainter p(this);

@@ -267,7 +267,7 @@ HistogramBox::HistogramBox(QWidget *parent, int histogramType, bool selectMode)
                                           "of the selected image channel. This one is re-computed at any "
                                           "settings changes."));
 
-    d->hGradient = new ColorGradientWidget(ColorGradientWidget::Horizontal, 10, histoBox);
+    d->hGradient = new ColorGradientWidget(Qt::Horizontal, 10, histoBox);
     d->hGradient->setColors(QColor("black"), QColor("white"));
 
     histoBoxLayout->addWidget(d->histogramWidget);

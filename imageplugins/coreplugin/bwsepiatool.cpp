@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "bwsepiatool.h"
 #include "bwsepiatool.moc"
 
@@ -78,7 +77,6 @@
 #include "imagehistogram.h"
 #include "imageiface.h"
 #include "imagewidget.h"
-
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -392,25 +390,21 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
     QWidget *curveBox     = new QWidget( m_tab );
     QGridLayout *gridTab2 = new QGridLayout(curveBox);
 
-    ColorGradientWidget* vGradient = new ColorGradientWidget(
-                                                  ColorGradientWidget::Vertical,
-                                                  10, curveBox);
+    ColorGradientWidget* vGradient = new ColorGradientWidget(Qt::Vertical, 10, curveBox);
     vGradient->setColors( QColor( "white" ), QColor( "black" ) );
 
     QLabel *spacev = new QLabel(curveBox);
     spacev->setFixedWidth(1);
 
     m_curvesWidget = new CurvesWidget(256, 256, m_originalImage->bits(), m_originalImage->width(),
-                                               m_originalImage->height(), m_originalImage->sixteenBit(),
-                                               curveBox);
+                                                m_originalImage->height(), m_originalImage->sixteenBit(),
+                                                curveBox);
     m_curvesWidget->setWhatsThis( i18n("This is the curve adjustment of the image luminosity"));
 
     QLabel *spaceh = new QLabel(curveBox);
     spaceh->setFixedHeight(1);
 
-    ColorGradientWidget *hGradient = new ColorGradientWidget(
-                                                  ColorGradientWidget::Horizontal,
-                                                  10, curveBox );
+    ColorGradientWidget *hGradient = new ColorGradientWidget(Qt::Horizontal, 10, curveBox );
     hGradient->setColors(QColor("black"), QColor("white"));
 
     m_cInput = new RIntNumInput(curveBox);

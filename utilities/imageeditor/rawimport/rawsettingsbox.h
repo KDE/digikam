@@ -51,8 +51,8 @@ public:
 
     void setBusy(bool b);
 
-    CurvesWidget*    curve()     const;
-    DRawDecoding     settings();
+    CurvesWidget* curve() const;
+    DRawDecoding  settings();
 
     void writeSettings();
     void readSettings();
@@ -77,7 +77,7 @@ private slots:
 
 private:
 
-    RawSettingsBoxPriv *d;
+    RawSettingsBoxPriv* const d;
 };
 
 } // namespace Digikam

@@ -132,7 +132,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     QWidget *curveBox = new QWidget(m_gboxSettings->plainPage());
     QGridLayout* gl   = new QGridLayout(curveBox);
 
-    m_vGradient = new ColorGradientWidget(ColorGradientWidget::Vertical, 10, curveBox);
+    m_vGradient = new ColorGradientWidget(Qt::Vertical, 10, curveBox);
     m_vGradient->setColors(QColor("white"), QColor("black"));
 
     m_curvesWidget = new CurvesWidget(256, 256, m_originalImage->bits(), m_originalImage->width(),
@@ -144,7 +144,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     QLabel *spaceh = new QLabel(curveBox);
     spaceh->setFixedHeight(1);
 
-    m_hGradient = new ColorGradientWidget(ColorGradientWidget::Horizontal, 10, curveBox);
+    m_hGradient = new ColorGradientWidget(Qt::Horizontal, 10, curveBox);
     m_hGradient->setColors(QColor("black"), QColor("white"));
 
     gl->addWidget(m_vGradient,          0, 0, 1, 1);

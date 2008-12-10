@@ -20,7 +20,6 @@
  *
  * ============================================================ */
 
-
 #include "rawsettingsbox.h"
 #include "rawsettingsbox.moc"
 
@@ -139,12 +138,9 @@ public:
 };
 
 RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
-              : EditorToolSettings(Default|Ok|Cancel, Histogram, HistogramBox::LRGBC, parent)
+              : EditorToolSettings(Default|Ok|Cancel, Histogram, HistogramBox::LRGBC, parent),
+                d(new RawSettingsBoxPriv)
 {
-    d = new RawSettingsBoxPriv;
-
-    // ---------------------------------------------------------------
-
     QGridLayout* gridSettings = new QGridLayout(plainPage());
 
     d->tabView             = new KTabWidget(plainPage());
@@ -244,7 +240,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     d->curveBox              = new QWidget(d->postProcessSettingsBox);
     QGridLayout* curveLayout = new QGridLayout(d->curveBox);
 
-    ColorGradientWidget* vGradient = new ColorGradientWidget(ColorGradientWidget::Vertical, 10, d->curveBox);
+    ColorGradientWidget* vGradient = new ColorGradientWidget(Qt::Vertical, 10, d->curveBox);
     vGradient->setColors( QColor( "white" ), QColor( "black" ) );
 
     QLabel *spacev = new QLabel(d->curveBox);
@@ -263,7 +259,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     QLabel *spaceh = new QLabel(d->curveBox);
     spaceh->setFixedHeight(1);
 
-    ColorGradientWidget *hGradient = new ColorGradientWidget(ColorGradientWidget::Horizontal, 10, d->curveBox);
+    ColorGradientWidget *hGradient = new ColorGradientWidget(Qt::Horizontal, 10, d->curveBox);
     hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
     curveLayout->addWidget(vGradient,        0, 0, 1, 1);

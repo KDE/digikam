@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "iccprooftool.h"
 #include "iccprooftool.moc"
 
@@ -391,25 +390,21 @@ ICCProofTool::ICCProofTool(QObject* parent)
 
     QGridLayout *fourPageLayout = new QGridLayout( lightnessadjust );
 
-    ColorGradientWidget* vGradient = new ColorGradientWidget(
-                                                  ColorGradientWidget::Vertical,
-                                                  10, lightnessadjust );
+    ColorGradientWidget* vGradient = new ColorGradientWidget(Qt::Vertical, 10, lightnessadjust);
     vGradient->setColors( QColor( "white" ), QColor( "black" ) );
 
     QLabel *spacev = new QLabel(lightnessadjust);
     spacev->setFixedWidth(1);
 
     m_curvesWidget = new CurvesWidget(256, 192, m_originalImage->bits(), m_originalImage->width(),
-                                               m_originalImage->height(), m_originalImage->sixteenBit(),
-                                               lightnessadjust);
+                                                m_originalImage->height(), m_originalImage->sixteenBit(),
+                                                lightnessadjust);
     m_curvesWidget->setWhatsThis( i18n("This is the curve adjustment of the image luminosity"));
 
     QLabel *spaceh = new QLabel(lightnessadjust);
     spaceh->setFixedHeight(1);
 
-    ColorGradientWidget *hGradient = new ColorGradientWidget(
-                                                  ColorGradientWidget::Horizontal,
-                                                  10, lightnessadjust );
+    ColorGradientWidget *hGradient = new ColorGradientWidget(Qt::Horizontal, 10, lightnessadjust);
     hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
     m_cInput = new RIntNumInput(lightnessadjust);
