@@ -288,10 +288,10 @@ void LoadingCachePriv::mapImageFilePath(const QString &filePath, const QString &
 
 void LoadingCachePriv::mapThumbnailFilePath(const QString &filePath, const QString &cacheKey)
 {
-    if (imageFilePathHash.size() > 5*(thumbnailImageCache.size() + thumbnailPixmapCache.size()))
+    if (thumbnailFilePathHash.size() > 5*(thumbnailImageCache.size() + thumbnailPixmapCache.size()))
         cleanUpThumbnailFilePathHash();
 
-    imageFilePathHash.insert(filePath, cacheKey);
+    thumbnailFilePathHash.insert(filePath, cacheKey);
 }
 
 void LoadingCachePriv::cleanUpImageFilePathHash()
@@ -314,7 +314,7 @@ void LoadingCachePriv::cleanUpThumbnailFilePathHash()
     keys += thumbnailImageCache.keys().toSet();
     keys += thumbnailPixmapCache.keys().toSet();
     QMultiHash<QString, QString>::iterator it;
-    for (it = imageFilePathHash.begin(); it != imageFilePathHash.end(); )
+    for (it = thumbnailFilePathHash.begin(); it != thumbnailFilePathHash.end(); )
     {
         if (!keys.contains(it.value()))
             it = thumbnailFilePathHash.erase(it);
@@ -397,7 +397,7 @@ void ClassicLoadingCacheFileWatch::addedThumbnail(const QString &filePath)
 void ClassicLoadingCacheFileWatch::slotFileDirty(const QString &path)
 {
     // Signal comes from main thread
-    //kDebug(50003) << "LoadingCache slotFileDirty " << path << endl;
+    kDebug(50003) << "LoadingCache slotFileDirty " << path << endl;
     // This method acquires a lock itself
     notifyFileChanged(path);
     // No need for locking here, we are in main thread
