@@ -122,12 +122,10 @@ QString ThumbBarToolTip::tipContents()
 {
     if (!item()) return QString();
 
+    QString str;
+    QString tip = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">";
+
     ThumbBarToolTipSettings settings = toolTipSettings();
-
-    QString tipText, str;
-
-    tipText = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">";
-
     QFileInfo fileInfo(item()->url().path());
     KFileItem fi(KFileItem::Unknown, KFileItem::Unknown, item()->url());
     DMetadata metaData(item()->url().path());
@@ -140,28 +138,28 @@ QString ThumbBarToolTip::tipContents()
         settings.showImageType ||
         settings.showImageDim)
     {
-        tipText += m_headBeg + i18n("File Properties") + m_headEnd;
+        tip += m_headBeg + i18n("File Properties") + m_headEnd;
 
         if (settings.showFileName)
         {
-            tipText += m_cellBeg + i18n("Name:") + m_cellMid;
-            tipText += item()->url().fileName() + m_cellEnd;
+            tip += m_cellBeg + i18n("Name:") + m_cellMid;
+            tip += item()->url().fileName() + m_cellEnd;
         }
 
         if (settings.showFileDate)
         {
             QDateTime modifiedDate = fileInfo.lastModified();
             str = KGlobal::locale()->formatDateTime(modifiedDate, KLocale::ShortDate, true);
-            tipText += m_cellBeg + i18n("Modified:") + m_cellMid + str + m_cellEnd;
+            tip += m_cellBeg + i18n("Modified:") + m_cellMid + str + m_cellEnd;
         }
 
         if (settings.showFileSize)
         {
-            tipText += m_cellBeg + i18n("Size:") + m_cellMid;
+            tip += m_cellBeg + i18n("Size:") + m_cellMid;
             str = i18n("%1 (%2)", KIO::convertSize(fi.size()),
                                   KGlobal::locale()->formatNumber(fi.size(),
                                   0));
-            tipText += str + m_cellEnd;
+            tip += str + m_cellEnd;
         }
 
         QSize   dims;
@@ -205,7 +203,7 @@ QString ThumbBarToolTip::tipContents()
 
         if (settings.showImageType)
         {
-            tipText += m_cellBeg + i18n("Type:") + m_cellMid + str + m_cellEnd;
+            tip += m_cellBeg + i18n("Type:") + m_cellMid + str + m_cellEnd;
         }
 
         if (settings.showImageDim)
@@ -214,7 +212,7 @@ QString ThumbBarToolTip::tipContents()
             mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
             str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)",
                     dims.width(), dims.height(), mpixels);
-            tipText += m_cellBeg + i18n("Dimensions:") + m_cellMid + str + m_cellEnd;
+            tip += m_cellBeg + i18n("Dimensions:") + m_cellMid + str + m_cellEnd;
         }
     }
 
@@ -233,13 +231,13 @@ QString ThumbBarToolTip::tipContents()
         if (!photoInfo.isEmpty())
         {
             QString metaStr;
-            tipText += m_headBeg + i18n("Photograph Properties") + m_headEnd;
+            tip += m_headBeg + i18n("Photograph Properties") + m_headEnd;
 
             if (settings.showPhotoMake)
             {
                 str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? m_unavailable : photoInfo.make)
                                         .arg(photoInfo.model.isEmpty() ? m_unavailable : photoInfo.model);
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+                if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
                 metaStr += m_cellBeg + i18n("Make/Model:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
 
@@ -248,7 +246,7 @@ QString ThumbBarToolTip::tipContents()
                 if (photoInfo.dateTime.isValid())
                 {
                     str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
-                    if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+                    if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
                     metaStr += m_cellBeg + i18n("Created:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
                 }
                 else
@@ -267,7 +265,7 @@ QString ThumbBarToolTip::tipContents()
                     str += QString(" / %1").arg(i18n("%1 (35mm: %2)",
                            photoInfo.focalLength, photoInfo.focalLength35mm));
 
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+                if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
                 metaStr += m_cellBeg + i18n("Aperture/Focal:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
 
@@ -277,7 +275,7 @@ QString ThumbBarToolTip::tipContents()
                                              photoInfo.exposureTime)
                                         .arg(photoInfo.sensitivity.isEmpty() ? m_unavailable :
                                              i18n("%1 ISO", photoInfo.sensitivity));
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+                if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
                 metaStr += m_cellBeg + i18n("Exposure/Sensitivity:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
 
@@ -291,31 +289,31 @@ QString ThumbBarToolTip::tipContents()
                     str = photoInfo.exposureProgram;
                 else
                     str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+                if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
                 metaStr += m_cellBeg + i18n("Mode/Program:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
 
             if (settings.showPhotoFlash)
             {
                 str = photoInfo.flash.isEmpty() ? m_unavailable : photoInfo.flash;
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+                if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
                 metaStr += m_cellBeg + i18n("Flash:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
 
             if (settings.showPhotoWB)
             {
                 str = photoInfo.whiteBalance.isEmpty() ? m_unavailable : photoInfo.whiteBalance;
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+                if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
                 metaStr += m_cellBeg + i18n("White Balance:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
 
-            tipText += metaStr;
+            tip += metaStr;
         }
     }
 
-    tipText += "</table>";
+    tip += "</table>";
 
-    return tipText;
+    return tip;
 }
 
 }  // namespace Digikam

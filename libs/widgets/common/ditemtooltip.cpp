@@ -54,13 +54,12 @@ class DItemToolTipPriv
 public:
 
     DItemToolTipPriv() :
-        maxStringLen(30), tipBorder(5)
+        tipBorder(5)
     {
         corner = 0;
         label  = 0;
     }
 
-    const  int  maxStringLen;
     const uint  tipBorder;
 
     int         corner;
@@ -71,7 +70,7 @@ public:
 };
 
 DItemToolTip::DItemToolTip()
-            : QFrame(0), m_maxStringLen(30), d(new DItemToolTipPriv)
+            : QFrame(0), d(new DItemToolTipPriv)
 {
     m_unavailable = i18n("unavailable");
 
@@ -285,9 +284,9 @@ void DItemToolTip::paintEvent(QPaintEvent *e)
 
 QString DItemToolTip::breakString(const QString& input)
 {
-    QString str = input.simplified();
-    str         = Qt::escape(str);
-    int maxLen  = d->maxStringLen;
+    QString str      = input.simplified();
+    str              = Qt::escape(str);
+    const int maxLen = MAXSTRINGLENGHT;
 
     if (str.length() <= maxLen)
         return str;

@@ -432,13 +432,12 @@ ImagePreviewBarToolTip::~ImagePreviewBarToolTip()
 QString ImagePreviewBarToolTip::tipContents()
 {
     if (!item()) return QString();
+    const ImageInfo info = dynamic_cast<ImagePreviewBarItem *>(item())->info();
 
-    QString tip, str;
-
-    tip = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">";
+    QString str;
+    QString tip = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">";
 
     AlbumSettings* settings          = AlbumSettings::instance();
-    const ImageInfo info             = dynamic_cast<ImagePreviewBarItem *>(item())->info();
     ImageCommonContainer commonInfo  = info.imageCommonContainer();
     ImageMetadataContainer photoInfo = info.imageMetadataContainer();
 
@@ -514,7 +513,7 @@ QString ImagePreviewBarToolTip::tipContents()
             {
                 str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? m_unavailable : photoInfo.make)
                                         .arg(photoInfo.model.isEmpty() ? m_unavailable : photoInfo.model);
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+                if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
                 metaStr += m_cellBeg + i18n("Make/Model:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
 
@@ -523,7 +522,7 @@ QString ImagePreviewBarToolTip::tipContents()
                 if (commonInfo.creationDate.isValid())
                 {
                     str = KGlobal::locale()->formatDateTime(commonInfo.creationDate, KLocale::ShortDate, true);
-                    if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+                    if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
                     metaStr += m_cellBeg + i18n("Created:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
                 }
                 else
@@ -539,7 +538,7 @@ QString ImagePreviewBarToolTip::tipContents()
                 else
                     str += QString(" / %1").arg(i18n("%1 (35mm: %2)",photoInfo.focalLength,photoInfo.focalLength35));
 
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+                if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
                 metaStr += m_cellBeg + i18n("Aperture/Focal:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
 
@@ -547,7 +546,7 @@ QString ImagePreviewBarToolTip::tipContents()
             {
                 str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? m_unavailable : photoInfo.exposureTime)
                                         .arg(photoInfo.sensitivity.isEmpty() ? m_unavailable : i18n("%1 ISO",photoInfo.sensitivity));
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+                if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
                 metaStr += m_cellBeg + i18n("Exposure/Sensitivity:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
 
@@ -562,21 +561,21 @@ QString ImagePreviewBarToolTip::tipContents()
                     str = photoInfo.exposureProgram;
                 else
                     str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+                if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
                 metaStr += m_cellBeg + i18n("Mode/Program:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoFlash())
             {
                 str = photoInfo.flashMode.isEmpty() ? m_unavailable : photoInfo.flashMode;
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+                if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
                 metaStr += m_cellBeg + i18n("Flash:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoWB())
             {
                 str = photoInfo.whiteBalance.isEmpty() ? m_unavailable : photoInfo.whiteBalance;
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+                if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
                 metaStr += m_cellBeg + i18n("White Balance:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
 
@@ -612,7 +611,7 @@ QString ImagePreviewBarToolTip::tipContents()
 
             str = tagPaths.join(", ");
             if (str.isEmpty()) str = QString("---");
-            if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+            if (str.length() > MAXSTRINGLENGHT) str = str.left(MAXSTRINGLENGHT-3) + "...";
             tip += m_cellSpecBeg + i18n("Tags:") + m_cellSpecMid + str + m_cellSpecEnd;
         }
 

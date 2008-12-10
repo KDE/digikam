@@ -24,6 +24,8 @@
 #ifndef DITEMTOOLTIP_H
 #define DITEMTOOLTIP_H
 
+#define MAXSTRINGLENGHT 30
+
 // Qt includes.
 
 #include <QFrame>
@@ -62,17 +64,15 @@ protected:
 
 protected:
 
-    const int m_maxStringLen;
-
-    QString   m_unavailable;
-    QString   m_headBeg;
-    QString   m_headEnd;
-    QString   m_cellBeg;
-    QString   m_cellMid;
-    QString   m_cellEnd;
-    QString   m_cellSpecBeg;
-    QString   m_cellSpecMid;
-    QString   m_cellSpecEnd;
+    QString m_unavailable;
+    QString m_headBeg;
+    QString m_headEnd;
+    QString m_cellBeg;
+    QString m_cellMid;
+    QString m_cellEnd;
+    QString m_cellSpecBeg;
+    QString m_cellSpecMid;
+    QString m_cellSpecEnd;
 
 private:
 
