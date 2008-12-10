@@ -141,6 +141,10 @@ void Sidebar::loadViewState()
     bool minimized            = group.readEntry("Minimized", d->minimizedDefault);
     d->restoreSize            = group.readEntry("RestoreSize", -1);
 
+    // validate
+    if(tab >= d->tabs || tab < 0)
+        tab = 0;
+
     if (minimized)
     {
         d->activeTab = tab;
