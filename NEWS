@@ -62,48 +62,47 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 050 ==> 098225 : Printing and displaying exif information over the picture.
 051 ==> 171953 : Using create "Date-based  sub-albums"  makes import fail.
 052 ==> 133211 : Media browse corrupted display.
-053 ==> 170364 : Expand selection rectangle by dragging sides in imege editor.
-054 ==> 168928 : Rotation of raw images.
-055 ==> 174683 : Crashes when try to correct red eye.
-056 ==> 136206 : Losing tags after an move or rename of imagefiles.
-057 ==> 142774 : Moving pictures between albums.
-058 ==> 160664 : Protected file to camera.
-059 ==> 143864 : Tool to remove Chromatic Aberration from photos.
-060 ==> 125233 : "purple fringe" correction plugin.
-061 ==> 150161 : UFRaw as plugin for RAW.
-062 ==> 147876 : Broken/renamed images after tagging.
-063 ==> 117629 : Do an ocr of an image and store result in exif/jfif.
-064 ==> 172835 : The stars of the rating in the right panel are not refreshed when selecting different images.
-065 ==> 153798 : Bad calculation of images in recursive showed albums.
-066 ==> 134679 : Video and audio files are not imported.
-067 ==> 171480 : Visual indicator missing for 100% zoom level. 
-068 ==> 151861 : Canon powershot 200 is not reqoqnized in this final version.
-069 ==> 144215 : Change the comment of a picture without modify its timestamp.
-070 ==> 150609 : Adjust Exif orientation tag changes files date.
-071 ==> 157788 : Tools->Update Metadata Database changes timestamps of files.
-072 ==> 142568 : digiKam is really slow to load a RAW (.CR2) photo.
-073 ==> 151719 : Non latin1 in iptc keywords.
-074 ==> 132244 : Special Chars in Keywords decode wrong in IPTC.
-075 ==> 162490 : dcraw-8.86 adds newer canon dslr with digic III support.
-076 ==> 103149 : Printing wizard plugin is hard to find.
-077 ==> 149328 : Let libkdcraw use raw decoding options when generating thumbnails.
-078 ==> 168012 : Thumbnails not shown in find similar items tool so they can't be used for drag and drop. 
-079 ==> 148861 : [ctrl] + scroll wheel doesn't resize thumbnails.
-080 ==> 154526 : Big screen size lead to small picture in main window and editor.
-081 ==> 177231 : Rotate context menu in view mode.
-082 ==> 125923 : Image tooltip contents not shown when albumview is scrolled up or down with cursur keys.
-083 ==> 174807 : digiKam does not use KDE's Trash.
-084 ==> 142058 : Icons for import should use proper mime type.
-085 ==> 176179 : Image editor - zoom +/- buttons alter predefined list of zoom factors.
-086 ==> 177270 : Making OpenStreetMap available in the GPS-Sidebar.
-087 ==> 177236 : No tooltips for cut elements in metadata panel.
-088 ==> 177185 : Status bar position of current image starts from 0.
-089 ==> 172632 : Album item tooltip doesn't use colors of themes properly.
-090 ==> 173746 : digikam doesn't show "big view".
-091 ==> 177093 : User should not be able to delete root album.
-092 ==> 177333 : digiKam can't find images in album.
-093 ==> 149360 : Not all menu items may be bound to keyboard shortcuts. 
-094 ==> 
+053 ==> 168928 : Rotation of raw images.
+054 ==> 174683 : Crashes when try to correct red eye.
+055 ==> 136206 : Losing tags after an move or rename of imagefiles.
+056 ==> 142774 : Moving pictures between albums.
+057 ==> 160664 : Protected file to camera.
+058 ==> 143864 : Tool to remove Chromatic Aberration from photos.
+059 ==> 125233 : "purple fringe" correction plugin.
+060 ==> 150161 : UFRaw as plugin for RAW.
+061 ==> 147876 : Broken/renamed images after tagging.
+062 ==> 117629 : Do an ocr of an image and store result in exif/jfif.
+063 ==> 172835 : The stars of the rating in the right panel are not refreshed when selecting different images.
+064 ==> 153798 : Bad calculation of images in recursive showed albums.
+065 ==> 134679 : Video and audio files are not imported.
+066 ==> 171480 : Visual indicator missing for 100% zoom level. 
+067 ==> 151861 : Canon powershot 200 is not reqoqnized in this final version.
+068 ==> 144215 : Change the comment of a picture without modify its timestamp.
+069 ==> 150609 : Adjust Exif orientation tag changes files date.
+070 ==> 157788 : Tools->Update Metadata Database changes timestamps of files.
+071 ==> 142568 : digiKam is really slow to load a RAW (.CR2) photo.
+072 ==> 151719 : Non latin1 in iptc keywords.
+073 ==> 132244 : Special Chars in Keywords decode wrong in IPTC.
+074 ==> 162490 : dcraw-8.86 adds newer canon dslr with digic III support.
+075 ==> 103149 : Printing wizard plugin is hard to find.
+076 ==> 149328 : Let libkdcraw use raw decoding options when generating thumbnails.
+077 ==> 168012 : Thumbnails not shown in find similar items tool so they can't be used for drag and drop. 
+078 ==> 148861 : [ctrl] + scroll wheel doesn't resize thumbnails.
+079 ==> 154526 : Big screen size lead to small picture in main window and editor.
+080 ==> 177231 : Rotate context menu in view mode.
+081 ==> 125923 : Image tooltip contents not shown when albumview is scrolled up or down with cursur keys.
+082 ==> 174807 : digiKam does not use KDE's Trash.
+083 ==> 142058 : Icons for import should use proper mime type.
+084 ==> 176179 : Image editor - zoom +/- buttons alter predefined list of zoom factors.
+085 ==> 177270 : Making OpenStreetMap available in the GPS-Sidebar.
+086 ==> 177236 : No tooltips for cut elements in metadata panel.
+087 ==> 177185 : Status bar position of current image starts from 0.
+088 ==> 172632 : Album item tooltip doesn't use colors of themes properly.
+089 ==> 173746 : digikam doesn't show "big view".
+090 ==> 177093 : User should not be able to delete root album.
+091 ==> 177333 : digiKam can't find images in album.
+092 ==> 149360 : Not all menu items may be bound to keyboard shortcuts. 
+093 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
