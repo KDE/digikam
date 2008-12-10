@@ -44,9 +44,9 @@ public:
     static void cleanUp();
     /**
      * Remove an image from the cache
-     * (e.g. when image has changed on disk)
+     * because it may have changed on disk
      */
-    static void cleanFromCache(const QString &filePath);
+    static void fileChanged(const QString &filePath);
     /**
      * remove all images from the cache
      * (e.g. when loading settings changed)
