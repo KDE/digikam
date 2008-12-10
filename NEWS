@@ -98,11 +98,12 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 086 ==> 177236 : No tooltips for cut elements in metadata panel.
 087 ==> 177185 : Status bar position of current image starts from 0.
 088 ==> 172632 : Album item tooltip doesn't use colors of themes properly.
-089 ==> 173746 : digikam doesn't show "big view".
+089 ==> 173746 : digiKam doesn't show "big view".
 090 ==> 177093 : User should not be able to delete root album.
 091 ==> 177333 : digiKam can't find images in album.
 092 ==> 149360 : Not all menu items may be bound to keyboard shortcuts. 
-093 ==> 
+093 ==> 167838 : File details panel disappears.
+094 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
