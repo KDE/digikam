@@ -2,7 +2,7 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2003-02-10
  * Description : a widget to display splash with progress bar
  *
@@ -21,7 +21,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
- 
+
 #ifndef SPLASHSCREEN_H
 #define SPLASHSCREEN_H
 
@@ -44,7 +44,8 @@ class SplashScreenPriv;
 
 class DIGIKAM_EXPORT SplashScreen : public KSplashScreen
 {
-Q_OBJECT
+
+    Q_OBJECT
 
 public:
 
@@ -63,7 +64,7 @@ public slots:
 
 private:
 
-    SplashScreenPriv* d;
+    SplashScreenPriv* const d;
 };
 
 }   // namespace Digikam

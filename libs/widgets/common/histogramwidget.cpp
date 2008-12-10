@@ -24,7 +24,6 @@
  *
  * ============================================================ */
 
-
 #include "histogramwidget.h"
 #include "histogramwidget.moc"
 
@@ -118,14 +117,13 @@ public:
 HistogramWidget::HistogramWidget(int w, int h,
                                  QWidget *parent, bool selectMode,
                                  bool showProgress, bool statisticsVisible)
-               : QWidget(parent)
+               : QWidget(parent), d(new HistogramWidgetPriv)
 {
-    d = new HistogramWidgetPriv;
     setup(w, h, selectMode, showProgress, statisticsVisible);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    m_imageHistogram     = 0L;
-    m_selectionHistogram = 0L;
+    m_imageHistogram     = 0;
+    m_selectionHistogram = 0;
 }
 
 // Constructor without image selection.
@@ -135,9 +133,8 @@ HistogramWidget::HistogramWidget(int w, int h,
                                  bool i_sixteenBits,
                                  QWidget *parent, bool selectMode,
                                  bool showProgress, bool statisticsVisible)
-               : QWidget(parent)
+               : QWidget(parent), d(new HistogramWidgetPriv)
 {
-    d = new HistogramWidgetPriv;
     d->sixteenBits = i_sixteenBits;
     setup(w, h, selectMode, showProgress, statisticsVisible);
     setAttribute(Qt::WA_DeleteOnClose);
@@ -158,9 +155,8 @@ HistogramWidget::HistogramWidget(int w, int h,
                                  bool i_sixteenBits,
                                  QWidget *parent, bool selectMode,
                                  bool showProgress, bool statisticsVisible)
-               : QWidget(parent)
+               : QWidget(parent), d(new HistogramWidgetPriv)
 {
-    d = new HistogramWidgetPriv;
     d->sixteenBits = i_sixteenBits;
     setup(w, h, selectMode, showProgress, statisticsVisible);
     setAttribute(Qt::WA_DeleteOnClose);

@@ -124,7 +124,7 @@ protected:
 
 private:
 
-    PreviewWidgetPriv* d;
+    PreviewWidgetPriv* const d;
 };
 
 }  // namespace Digikam

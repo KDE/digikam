@@ -78,7 +78,7 @@ Q_SIGNALS:
 
 private:
 
-    StatusProgressBarPriv* d;
+    StatusProgressBarPriv* const d;
 };
 
 }  // namespace Digikam

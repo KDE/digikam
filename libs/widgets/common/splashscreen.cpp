@@ -48,6 +48,7 @@ namespace Digikam
 
 class SplashScreenPriv
 {
+
 public:
 
     SplashScreenPriv()
@@ -69,10 +70,8 @@ public:
 };
 
 SplashScreen::SplashScreen()
-            : KSplashScreen(QPixmap())
+            : KSplashScreen(QPixmap()), d(new SplashScreenPriv)
 {
-    d = new SplashScreenPriv;
-
     if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
         setPixmap(KStandardDirs::locate("data","digikam/data/splash-digikam.png"));
     else

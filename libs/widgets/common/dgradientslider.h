@@ -81,7 +81,7 @@ class DIGIKAM_EXPORT DGradientSlider : public QWidget
 
   private:
 
-    DGradientSliderPriv* d;
+    DGradientSliderPriv* const d;
 };
 
 } // namespace Digikam

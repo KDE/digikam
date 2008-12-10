@@ -23,7 +23,6 @@
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-
 #include "curveswidget.h"
 #include "curveswidget.moc"
 
@@ -106,14 +105,11 @@ public:
     QTimer      *blinkTimer;
 
     ImageCurves *curves;             // Curves data instance.
-
 };
 
 CurvesWidget::CurvesWidget(int w, int h, QWidget *parent, bool readOnly)
-            : QWidget(parent)
+            : QWidget(parent), d(new CurvesWidgetPriv)
 {
-    d = new CurvesWidgetPriv;
-
     setAttribute(Qt::WA_DeleteOnClose);
     setup(w, h, readOnly);
 }
@@ -121,10 +117,8 @@ CurvesWidget::CurvesWidget(int w, int h, QWidget *parent, bool readOnly)
 CurvesWidget::CurvesWidget(int w, int h,
                            uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits,
                            QWidget *parent, bool readOnly)
-            : QWidget(parent)
+            : QWidget(parent), d(new CurvesWidgetPriv)
 {
-    d = new CurvesWidgetPriv;
-
     setAttribute(Qt::WA_DeleteOnClose);
     setup(w, h, readOnly);
     updateData(i_data, i_w, i_h, i_sixteenBits);
@@ -154,10 +148,10 @@ void CurvesWidget::setup(int w, int h, bool readOnly)
     setMouseTracking(true);
     setMinimumSize(w, h);
 
-    d->blinkTimer = new QTimer( this );
+    d->blinkTimer = new QTimer(this);
 
-    connect( d->blinkTimer, SIGNAL(timeout()),
-             this, SLOT(slotBlinkTimerDone()) );
+    connect(d->blinkTimer, SIGNAL(timeout()),
+            this, SLOT(slotBlinkTimerDone()));
 }
 
 void CurvesWidget::updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits)

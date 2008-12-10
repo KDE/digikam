@@ -105,7 +105,7 @@ public Q_SLOTS:
 
 private:
 
-    HistogramBoxPriv* d;
+    HistogramBoxPriv* const d;
 };
 
 } // namespace Digikam

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "previewwidget.h"
 #include "previewwidget.moc"
 
@@ -99,9 +98,8 @@ public:
 };
 
 PreviewWidget::PreviewWidget(QWidget *parent)
-             : Q3ScrollView(parent)
+             : Q3ScrollView(parent), d(new PreviewWidgetPriv)
 {
-    d = new PreviewWidgetPriv;
     m_movingInProgress = false;
     setAttribute(Qt::WA_DeleteOnClose);
     setBackgroundRole(QPalette::Base);

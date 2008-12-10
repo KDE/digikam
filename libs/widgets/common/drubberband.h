@@ -2,7 +2,7 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2008-09-07
  * Description : Rubber band for Q3ScrollView
  *
@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,8 +26,8 @@
 
 // Qt includes.
 
-#include <QRubberBand>
 #include <Qt3Support/Q3ScrollView>
+#include <QRubberBand>
 
 // Local includes.
 
@@ -40,6 +40,7 @@ class DRubberBandPrivate;
 
 class DIGIKAM_EXPORT DRubberBand : public QRubberBand
 {
+
 public:
 
     DRubberBand(Q3ScrollView *parent);
@@ -89,11 +90,9 @@ protected:
 
     void updateForContentsPosition(int contentsX, int contentsY);
 
-    DRubberBandPrivate *d;
+    DRubberBandPrivate* const d;
 };
-
 
 }
 
-#endif
-
+#endif // DRUBBERBAND

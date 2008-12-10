@@ -7,7 +7,7 @@
  * Description : a stack of widgets to set image file save
  *               options into image editor.
  *
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "filesaveoptionsbox.h"
 #include "filesaveoptionsbox.moc"
@@ -85,9 +84,8 @@ public:
 };
 
 FileSaveOptionsBox::FileSaveOptionsBox(QWidget *parent)
-                  : QStackedWidget(parent)
+                  : QStackedWidget(parent), d(new FileSaveOptionsBoxPriv)
 {
-    d = new FileSaveOptionsBoxPriv;
     setAttribute(Qt::WA_DeleteOnClose);
 
     //-- NONE Settings ------------------------------------------------------
@@ -169,7 +167,7 @@ void FileSaveOptionsBox::toggleFormatOptions(const QString& format)
 void FileSaveOptionsBox::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("ImageViewer Settings");
+    KConfigGroup group        = config->group("ImageViewer Settings");
     group.writeEntry("JPEGCompression", d->JPEGOptions->getCompressionValue());
     group.writeEntry("JPEGSubSampling", d->JPEGOptions->getSubSamplingValue());
     group.writeEntry("PNGCompression", d->PNGOptions->getCompressionValue());
@@ -182,7 +180,7 @@ void FileSaveOptionsBox::applySettings()
 void FileSaveOptionsBox::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("ImageViewer Settings");
+    KConfigGroup group        = config->group("ImageViewer Settings");
     d->JPEGOptions->setCompressionValue( group.readEntry("JPEGCompression", 75) );
     d->JPEGOptions->setSubSamplingValue( group.readEntry("JPEGSubSampling", 1) );  // Medium subsampling
     d->PNGOptions->setCompressionValue( group.readEntry("PNGCompression", 9) );

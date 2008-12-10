@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "statusprogressbar.h"
 #include "statusprogressbar.moc"
 
@@ -39,7 +38,6 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcursor.h>
-
 
 namespace Digikam
 {
@@ -73,9 +71,8 @@ public:
 };
 
 StatusProgressBar::StatusProgressBar(QWidget *parent)
-                 : QStackedWidget(parent)
+                 : QStackedWidget(parent), d(new StatusProgressBarPriv)
 {
-    d = new StatusProgressBarPriv;
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);
 

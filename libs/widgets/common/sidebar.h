@@ -161,7 +161,8 @@ Q_SIGNALS:
 private:
 
     friend class SidebarSplitter;
-    SidebarPriv* d;
+
+    SidebarPriv* const d;
 };
 
 // -----------------------------------------------------------------------------
@@ -209,7 +210,8 @@ private Q_SLOTS:
 private:
 
     friend class Sidebar;
-    SidebarSplitterPriv *d;
+
+    SidebarSplitterPriv* const d;
 };
 
 }  // namespace Digikam

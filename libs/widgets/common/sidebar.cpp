@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "sidebar.h"
 #include "sidebar.moc"
 
@@ -52,7 +51,9 @@ namespace Digikam
 
 class SidebarState
 {
+
 public:
+
     SidebarState() : activeWidget(0),size(0) {}
     SidebarState(QWidget *w, int size) : activeWidget(w),size(size) {}
 
@@ -62,6 +63,7 @@ public:
 
 class SidebarPriv
 {
+
 public:
 
     SidebarPriv()
@@ -103,9 +105,8 @@ public:
 };
 
 Sidebar::Sidebar(QWidget *parent, SidebarSplitter *sp, KMultiTabBarPosition side, bool minimizedDefault)
-       : KMultiTabBar(side, parent)
+       : KMultiTabBar(side, parent), d(new SidebarPriv)
 {
-    d = new SidebarPriv;
     d->minimizedDefault = minimizedDefault;
     d->stack            = new QStackedWidget(sp);
     d->splitter         = sp;
@@ -391,19 +392,15 @@ void Sidebar::slotDragSwitchTimer()
 // -----------------------------------------------------------------------------
 
 SidebarSplitter::SidebarSplitter(QWidget *parent)
-               : QSplitter(parent)
+               : QSplitter(parent), d(new SidebarSplitterPriv)
 {
-    d = new SidebarSplitterPriv;
-
     connect(this, SIGNAL(splitterMoved(int,int)),
             this, SLOT(slotSplitterMoved(int,int)));
 }
 
 SidebarSplitter::SidebarSplitter(Qt::Orientation orientation, QWidget *parent)
-               : QSplitter(orientation, parent)
+               : QSplitter(orientation, parent), d(new SidebarSplitterPriv)
 {
-    d = new SidebarSplitterPriv;
-
     connect(this, SIGNAL(splitterMoved(int,int)),
             this, SLOT(slotSplitterMoved(int,int)));
 }

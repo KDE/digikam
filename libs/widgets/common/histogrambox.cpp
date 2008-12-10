@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "histogrambox.h"
 #include "histogrambox.moc"
 
@@ -80,10 +79,8 @@ public:
 };
 
 HistogramBox::HistogramBox(QWidget *parent, int histogramType, bool selectMode)
-            : QWidget(parent)
+            : QWidget(parent), d(new HistogramBoxPriv)
 {
-    d = new HistogramBoxPriv;
-
     QGridLayout* gridLayout = new QGridLayout(this);
     QLabel *channelLabel    = new QLabel(i18n("Channel:"), this);
     channelLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -276,12 +273,12 @@ HistogramBox::HistogramBox(QWidget *parent, int histogramType, bool selectMode)
     histoBoxLayout->setMargin(0);
     histoBox->setLayout(histoBoxLayout);
 
-    gridLayout->addWidget(channelLabel,     0, 0, 1, 1);
-    gridLayout->addWidget(d->channelCB,     0, 1, 1, 1);
-    gridLayout->addWidget(scaleBox,         0, 3, 1, 2);
-    gridLayout->addWidget(colorsLabel,      1, 0, 1, 1);
-    gridLayout->addWidget(d->colorsCB,      1, 1, 1, 1);
-    gridLayout->addWidget(histoBox,         2, 0, 1, 5);
+    gridLayout->addWidget(channelLabel, 0, 0, 1, 1);
+    gridLayout->addWidget(d->channelCB, 0, 1, 1, 1);
+    gridLayout->addWidget(scaleBox,     0, 3, 1, 2);
+    gridLayout->addWidget(colorsLabel,  1, 0, 1, 1);
+    gridLayout->addWidget(d->colorsCB,  1, 1, 1, 1);
+    gridLayout->addWidget(histoBox,     2, 0, 1, 5);
     gridLayout->setColumnStretch(2, 10);
     gridLayout->setSpacing(5);
     gridLayout->setMargin(0);

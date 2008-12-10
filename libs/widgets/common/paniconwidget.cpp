@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "paniconwidget.h"
 #include "paniconwidget.moc"
 
@@ -46,7 +45,6 @@
 #include <kdebug.h>
 #include <kcursor.h>
 
-
 namespace Digikam
 {
 
@@ -57,23 +55,22 @@ public:
 
     PanIconWidgetPriv()
     {
-        moveSelection    = false;
+        moveSelection = false;
     }
 
-    bool   moveSelection;
+    bool    moveSelection;
 
-    int    xpos;
-    int    ypos;
+    int     xpos;
+    int     ypos;
 
-    QRect  regionSelection;         // Original size image selection.
+    QRect   regionSelection;         // Original size image selection.
 
     QTimer *timer;
 };
 
 PanIconWidget::PanIconWidget(QWidget *parent, Qt::WidgetAttribute attribute)
-             : QWidget(parent)
+             : QWidget(parent), d(new PanIconWidgetPriv)
 {
-    d = new PanIconWidgetPriv;
     m_flicker    = false;
     m_zoomFactor = 1.0;
 

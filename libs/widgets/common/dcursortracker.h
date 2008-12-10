@@ -7,7 +7,7 @@
  * Description : A tool tip widget which follows cursor movements.
  *               Tool tip content is displayed without delay.
  *
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,16 +50,16 @@ class DIGIKAM_EXPORT DCursorTracker : public QLabel
 
 public:
 
-	DCursorTracker(const QString& txt, QWidget *parent);
+    DCursorTracker(const QString& txt, QWidget *parent);
 
-	void setText(const QString& txt);
+    void setText(const QString& txt);
     void setEnable(bool b);
 
     void triggerAutoShow(int timeout = 2000);
 
 protected:
 
-	bool eventFilter(QObject*, QEvent*);
+    bool eventFilter(QObject*, QEvent*);
 
 private slots:
 
@@ -85,7 +85,7 @@ class DIGIKAM_EXPORT DTipTracker : public DCursorTracker
 
 public:
 
-	DTipTracker(const QString& txt, QWidget *parent);
+    DTipTracker(const QString& txt, QWidget *parent);
 };
 
 } // namespace Digikam

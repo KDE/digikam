@@ -122,7 +122,7 @@ protected:
 
 private:
 
-    CurvesWidgetPriv* d;
+    CurvesWidgetPriv* const d;
 };
 
 }  // namespace Digikam

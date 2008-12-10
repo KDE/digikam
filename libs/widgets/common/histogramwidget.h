@@ -171,7 +171,7 @@ private:
 
 private:
 
-    HistogramWidgetPriv* d;
+    HistogramWidgetPriv* const d;
 };
 
 }  // namespace Digikam

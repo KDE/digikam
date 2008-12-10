@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "dgradientslider.h"
 #include "dgradientslider.moc"
 
@@ -102,9 +101,8 @@ public:
 };
 
 DGradientSlider::DGradientSlider(QWidget *parent)
-               : QWidget(parent)
+               : QWidget(parent), d(new DGradientSliderPriv)
 {
-    d = new DGradientSliderPriv;
     d->parent = this;
 
     setMinimumWidth(256);
@@ -116,7 +114,8 @@ DGradientSlider::~DGradientSlider()
     delete d;
 }
 
-inline void drawCursorAt(QPainter& painter, double pos, const QColor& brushColor, int width, int height, int gradientWidth)
+inline void drawCursorAt(QPainter& painter, double pos, const QColor& brushColor, 
+                         int width, int height, int gradientWidth)
 {
     painter.setBrush( brushColor );
     int pos2 = (int)(gradientWidth * pos);
@@ -164,7 +163,8 @@ void DGradientSlider::paintEvent(QPaintEvent*)
     drawCursorAt( painter, d->rightCursor, d->rightColor, cursorWidth, gradientHeight, gradientWidth );
 }
 
-inline bool isCursorClicked(const QPoint& pos, double cursorPos, int width, int height, int gradientWidth)
+inline bool isCursorClicked(const QPoint& pos, double cursorPos, 
+                            int width, int height, int gradientWidth)
 {
     int pos2 = (int)(gradientWidth * cursorPos);
     return ((pos.y() >= 2 * height)    &&
@@ -277,6 +277,7 @@ void DGradientSlider::setLeftValue(double v)
         emit middleValueChanged(d->middleCursor);
     }
 }
+
 void DGradientSlider::setMiddleValue(double v)
 {
     if( v > d->leftCursor && v != d->middleCursor && v < d->rightCursor )

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "drubberband.h"
 
 // KDE includes.
@@ -39,7 +38,7 @@ public:
     DRubberBandPrivate()
     {
         scrollView = 0;
-        active = false;
+        active     = false;
     }
 
     Q3ScrollView *scrollView;
@@ -50,9 +49,9 @@ public:
 };
 
 DRubberBand::DRubberBand(Q3ScrollView *scrollView)
-    : QRubberBand(QRubberBand::Rectangle, scrollView->viewport())
+           : QRubberBand(QRubberBand::Rectangle, scrollView->viewport()),
+             d(new DRubberBandPrivate)
 {
-    d = new DRubberBandPrivate;
     d->scrollView = scrollView;
     hide();
 }
@@ -65,7 +64,7 @@ DRubberBand::~DRubberBand()
 QRect DRubberBand::rubberBandAreaOnContents()
 {
     QRect rubber = QRect(d->firstPoint, d->secondPoint);
-    rubber = rubber.normalized();
+    rubber       = rubber.normalized();
     if (!d->restriction.isNull())
         rubber = rubber.intersected(d->restriction);
     return rubber;
@@ -137,5 +136,4 @@ void DRubberBand::updateForContentsPosition(int contentsX, int contentsY)
     resize(rubber.width(), rubber.height());
 }
 
-}
-
+} // namespace Digikam

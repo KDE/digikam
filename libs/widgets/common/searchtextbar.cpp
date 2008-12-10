@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "searchtextbar.h"
 #include "searchtextbar.moc"
 
@@ -54,9 +53,8 @@ public:
 };
 
 SearchTextBar::SearchTextBar(QWidget *parent, const char* name, const QString& msg)
-             : KLineEdit(parent)
+             : KLineEdit(parent), d(new SearchTextBarPriv)
 {
-    d = new SearchTextBarPriv;
     setAttribute(Qt::WA_DeleteOnClose);
     setClearButtonShown(true);
     setClickMessage(msg);

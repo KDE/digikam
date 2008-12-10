@@ -7,7 +7,7 @@
  * Description : a button bar to navigate between album items
  *               using status bar.
  *
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "statusnavigatebar.h"
 #include "statusnavigatebar.moc"
@@ -62,9 +61,8 @@ public:
 };
 
 StatusNavigateBar::StatusNavigateBar(QWidget *parent)
-                 : QWidget(parent)
+                 : QWidget(parent), d(new StatusNavigateBarPriv)
 {
-    d = new StatusNavigateBarPriv;
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);
 
