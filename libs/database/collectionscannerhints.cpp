@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "collectionscannerhints.h"
 
 // Qt includes.
@@ -57,7 +56,6 @@ uint CollectionScannerHints::Album::qHash() const
     return ::qHash(albumRootId) ^ ::qHash(albumId);
 }
 
-
 CollectionScannerHints::DstPath::DstPath()
     : albumRootId(0)
 {
@@ -83,7 +81,6 @@ uint CollectionScannerHints::DstPath::qHash() const
     return ::qHash(albumRootId) ^ ::qHash(relativePath);
 }
 
-
 CollectionScannerHints::Item::Item()
     : id(0)
 {
@@ -108,7 +105,6 @@ uint CollectionScannerHints::Item::qHash() const
 {
     return ::qHash(id);
 }
-
 
 AlbumCopyMoveHint::AlbumCopyMoveHint()
 {
@@ -175,7 +171,6 @@ const AlbumCopyMoveHint &AlbumCopyMoveHint::operator>>(QDBusArgument &argument) 
     return *this;
 }
 
-
 ItemCopyMoveHint::ItemCopyMoveHint()
 {
 }
@@ -225,7 +220,6 @@ QString ItemCopyMoveHint::dstName(qlonglong id) const
     return m_dstNames[index];
 }
 
-
 ItemCopyMoveHint &ItemCopyMoveHint::operator<<(const QDBusArgument &argument)
 {
     argument.beginStructure();
@@ -246,8 +240,4 @@ const ItemCopyMoveHint &ItemCopyMoveHint::operator>>(QDBusArgument &argument) co
     return *this;
 }
 
-
-}
-
-
-
+} // namespace Digikam

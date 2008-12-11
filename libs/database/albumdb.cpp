@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "albumdb.h"
 
 // C ANSI includes.
@@ -74,8 +73,8 @@ public:
 };
 
 AlbumDB::AlbumDB(DatabaseBackend *backend)
+       : d(new AlbumDBPriv)
 {
-    d = new AlbumDBPriv;
     d->db = backend;
 }
 

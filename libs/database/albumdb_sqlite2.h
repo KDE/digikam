@@ -5,20 +5,20 @@
  *
  * Date        : 2004-06-18
  * Description : SQlite version 2 database interface.
- * 
+ *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef ALBUMDB_SQLITE2_H
@@ -54,7 +54,7 @@ public:
      * Constructor
      */
     AlbumDB_Sqlite2();
-    
+
     /**
      * Destructor
      */
@@ -78,11 +78,11 @@ public:
                  const bool debug = false);
 
     bool isValid() const { return m_valid; }
-    
+
 private:
 
-    sqleet2*  m_db;
     bool      m_valid;
+    sqleet2*  m_db;
 };
 
 }  // namespace Digikam

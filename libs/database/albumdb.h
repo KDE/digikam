@@ -1091,7 +1091,7 @@ private:
 
 private:
 
-    AlbumDBPriv* d;
+    AlbumDBPriv* const d;
 };
 
 }  // namespace Digikam

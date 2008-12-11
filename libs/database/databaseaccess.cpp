@@ -6,7 +6,7 @@
  * Date        : 2007-03-18
  * Description : Database access wrapper.
  *
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "databaseaccess.h"
 
@@ -320,6 +319,5 @@ DatabaseAccessUnlock::~DatabaseAccessUnlock()
     // update lock count
     DatabaseAccess::d->lockCount = count;
 }
-
 
 }  // namespace Digikam

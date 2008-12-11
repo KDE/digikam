@@ -55,6 +55,8 @@ public:
     int albumId;
 };
 
+// ---------------------------------------------------------------------------
+
 class DIGIKAM_DATABASE_EXPORT DstPath
 {
 public:
@@ -69,6 +71,8 @@ public:
     QString relativePath;
 };
 
+// ---------------------------------------------------------------------------
+
 class DIGIKAM_DATABASE_EXPORT Item
 {
 public:
@@ -82,12 +86,13 @@ public:
     qlonglong id;
 };
 
-inline uint qHash(const Album &src) { return src.qHash(); }
-inline uint qHash(const DstPath &dst) { return dst.qHash(); }
-inline uint qHash(const Item &item) { return item.qHash(); }
+inline uint qHash(const Album &src)   { return src.qHash();  }
+inline uint qHash(const DstPath &dst) { return dst.qHash();  }
+inline uint qHash(const Item &item)   { return item.qHash(); }
 
-}
+} // namespace CollectionScannerHints
 
+// ---------------------------------------------------------------------------
 
 class DIGIKAM_DATABASE_EXPORT AlbumCopyMoveHint
 {
@@ -114,20 +119,22 @@ public:
 
     uint qHash() const;
 
-    bool operator==(const CollectionScannerHints::Album &src) { return src == m_src; }
+    bool operator==(const CollectionScannerHints::Album &src)   { return src == m_src; }
     bool operator==(const CollectionScannerHints::DstPath &dst) { return dst == m_dst; }
 
     AlbumCopyMoveHint &operator<<(const QDBusArgument &argument);
     const AlbumCopyMoveHint &operator>>(QDBusArgument &argument) const;
 
-    operator const CollectionScannerHints::Album &() const { return m_src; }
+    operator const CollectionScannerHints::Album &() const   { return m_src; }
     operator const CollectionScannerHints::DstPath &() const { return m_dst; }
 
 protected:
 
-    CollectionScannerHints::Album m_src;
+    CollectionScannerHints::Album   m_src;
     CollectionScannerHints::DstPath m_dst;
 };
+
+// ---------------------------------------------------------------------------
 
 class DIGIKAM_DATABASE_EXPORT ItemCopyMoveHint
 {
@@ -160,20 +167,17 @@ public:
 
 protected:
 
-    QList<qlonglong> m_srcIds;
+    QList<qlonglong>              m_srcIds;
     CollectionScannerHints::Album m_dst;
-    QStringList m_dstNames;
+    QStringList                   m_dstNames;
 };
 
 
 inline uint qHash(const Digikam::AlbumCopyMoveHint &hint) { return hint.qHash(); }
 
-} // end of namespace
+} // namespace Digikam
 
 DECLARE_METATYPE_FOR_DBUS(Digikam::AlbumCopyMoveHint)
 DECLARE_METATYPE_FOR_DBUS(Digikam::ItemCopyMoveHint)
 
-#endif
-
-
-
+#endif // COLLECTIONSCANNERHINTS_H

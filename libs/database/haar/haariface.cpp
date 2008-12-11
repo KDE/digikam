@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "haariface.h"
 
 // C++ includes.
@@ -165,8 +164,8 @@ public:
 };
 
 HaarIface::HaarIface()
+         : d(new HaarIfacePriv())
 {
-    d = new HaarIfacePriv();
 }
 
 HaarIface::~HaarIface()

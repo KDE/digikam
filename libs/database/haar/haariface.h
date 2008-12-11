@@ -145,7 +145,7 @@ private:
 
 private:
 
-    HaarIfacePriv *d;
+    HaarIfacePriv* const d;
 };
 
 }  // namespace Digikam

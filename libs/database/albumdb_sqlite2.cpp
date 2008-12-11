@@ -7,7 +7,7 @@
  * Description : SQlite version 2 database interface.
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "albumdb_sqlite2.h"
 
@@ -45,7 +44,6 @@ extern "C"
 
 #include <kdebug.h>
 
-
 namespace Digikam
 {
 
@@ -59,16 +57,18 @@ AlbumDB_Sqlite2::AlbumDB_Sqlite2()
 
 AlbumDB_Sqlite2::~AlbumDB_Sqlite2()
 {
-    if (m_db) {
+    if (m_db)
+    {
         sqlite_close(m_db);
     }
 }
 
 void AlbumDB_Sqlite2::setDBPath(const QString& path)
 {
-    if (m_db) {
+    if (m_db)
+    {
         sqlite_close(m_db);
-    m_db = 0;
+        m_db    = 0;
         m_valid = false;
     }
 
@@ -92,20 +92,22 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
     if ( debug )
         kDebug(50003) << "SQL-query: " << sql << endl;
 
-    if ( !m_db ) {
+    if ( !m_db )
+    {
         kWarning(50003) << "SQLite pointer == NULL" << endl;
         return false;
     }
 
     const char* tail;
-    sqlite_vm* vm;
-    char* errorStr;
-    int error;
+    sqlite_vm*  vm;
+    char*       errorStr;
+    int         error;
 
-    //compile SQL program to virtual machine
+    // Compile SQL program to virtual machine
     error = sqlite_compile( m_db, QFile::encodeName(sql), &tail, &vm, &errorStr );
 
-    if ( error != SQLITE_OK ) {
+    if ( error != SQLITE_OK )
+    {
         kWarning(50003) << "sqlite_compile error: "
                         << errorStr
                         << " on query: " << sql << endl;
@@ -113,24 +115,29 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
         return false;
     }
 
-    int number;
+    int          number;
     const char** value;
     const char** colName;
-    //execute virtual machine by iterating over rows
-    while ( true ) {
+
+    // Execute virtual machine by iterating over rows
+    while ( true )
+    {
         error = sqlite_step( vm, &number, &value, &colName );
         if ( error == SQLITE_DONE || error == SQLITE_ERROR )
             break;
-        //iterate over columns
-        for ( int i = 0; values && i < number; i++ ) {
+
+        // Iterate over columns
+        for ( int i = 0; values && i < number; i++ )
+        {
             *values << QString::fromLocal8Bit( value [i] );
         }
     }
 
-    //deallocate vm resources
+    // Deallocate vm resources
     sqlite_finalize( vm, &errorStr );
 
-    if ( error != SQLITE_DONE ) {
+    if ( error != SQLITE_DONE )
+    {
         kWarning(50003) << "sqlite_step error: "
                         << errorStr
                         << " on query: " << sql << endl;
