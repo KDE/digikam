@@ -25,7 +25,6 @@
  *
  * ============================================================ */
 
-
 #include "showfoto.h"
 #include "showfoto.moc"
 
@@ -166,11 +165,9 @@ public:
 };
 
 ShowFoto::ShowFoto(const KUrl::List& urlList)
-        : Digikam::EditorWindow( "Showfoto" )
+        : Digikam::EditorWindow("Showfoto"), d(new ShowFotoPriv)
 {
-    d = new ShowFotoPriv();
-
-    // -- Show splash at start ----------------------------
+    // Show splash-screen at start up.
 
     KGlobal::dirs()->addResourceDir("data", KStandardDirs::installPath("data") + QString("digikam"));
     KIconLoader::global()->addAppDir("digikam");
@@ -534,10 +531,10 @@ void ShowFoto::readSettings()
     readStandardSettings();
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("ImageViewer Settings");
+    KConfigGroup group        = config->group("ImageViewer Settings");
 
-    d->lastOpenedDirectory.setPath( group.readEntry("Last Opened Directory",
-                                    KGlobalSettings::documentPath()) );
+    d->lastOpenedDirectory.setPath(group.readEntry("Last Opened Directory",
+                                   KGlobalSettings::documentPath()));
 
     Digikam::ThemeEngine::instance()->setCurrentTheme(group.readEntry("Theme", i18n("Default")));
 }
@@ -547,7 +544,7 @@ void ShowFoto::saveSettings()
     saveStandardSettings();
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("ImageViewer Settings");
+    KConfigGroup group        = config->group("ImageViewer Settings");
 
     group.writeEntry("Last Opened Directory", d->lastOpenedDirectory.path() );
     group.writeEntry("Theme", Digikam::ThemeEngine::instance()->getCurrentThemeName());
@@ -560,7 +557,7 @@ void ShowFoto::applySettings()
     applyStandardSettings();
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("ImageViewer Settings");
+    KConfigGroup group        = config->group("ImageViewer Settings");
 
     // Current image deleted go to trash ?
     d->deleteItem2Trash = group.readEntry("DeleteItem2Trash", true);

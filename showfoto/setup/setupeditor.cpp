@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "setupeditor.h"
 #include "setupeditor.moc"
 
@@ -93,9 +92,8 @@ public:
 };
 
 SetupEditor::SetupEditor(QWidget* parent )
-           : QWidget(parent)
+           : QWidget(parent), d(new SetupEditorPriv)
 {
-    d = new SetupEditorPriv;
     QVBoxLayout *layout = new QVBoxLayout( this );
     layout->setSpacing( KDialog::spacingHint() );
 

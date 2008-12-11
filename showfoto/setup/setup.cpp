@@ -6,7 +6,7 @@
  * Date        : 2005-04-02
  * Description : showFoto setup dialog.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "setup.h"
 #include "setup.moc"
@@ -52,40 +51,39 @@ public:
 
     SetupPrivate()
     {
-        editorPage      = 0;
-        toolTipPage     = 0;
-        dcrawPage       = 0;
-        iofilesPage     = 0;
-        slideshowPage   = 0;
-        iccPage         = 0;
-        page_editor     = 0;
-        page_tooltip    = 0;
-        page_dcraw      = 0;
-        page_iofiles    = 0;
-        page_slideshow  = 0;
-        page_icc        = 0;
+        editorPage     = 0;
+        toolTipPage    = 0;
+        dcrawPage      = 0;
+        iofilesPage    = 0;
+        slideshowPage  = 0;
+        iccPage        = 0;
+        page_editor    = 0;
+        page_tooltip   = 0;
+        page_dcraw     = 0;
+        page_iofiles   = 0;
+        page_slideshow = 0;
+        page_icc       = 0;
     }
 
-    KPageWidgetItem          *page_editor;
-    KPageWidgetItem          *page_tooltip;
-    KPageWidgetItem          *page_dcraw;
-    KPageWidgetItem          *page_iofiles;
-    KPageWidgetItem          *page_slideshow;
-    KPageWidgetItem          *page_icc;
+    KPageWidgetItem         *page_editor;
+    KPageWidgetItem         *page_tooltip;
+    KPageWidgetItem         *page_dcraw;
+    KPageWidgetItem         *page_iofiles;
+    KPageWidgetItem         *page_slideshow;
+    KPageWidgetItem         *page_icc;
 
-    SetupEditor              *editorPage;
-    SetupToolTip             *toolTipPage;
+    SetupEditor             *editorPage;
+    SetupToolTip            *toolTipPage;
 
-    Digikam::SetupDcraw      *dcrawPage;
-    Digikam::SetupIOFiles    *iofilesPage;
-    Digikam::SetupSlideShow  *slideshowPage;
-    Digikam::SetupICC        *iccPage;
+    Digikam::SetupDcraw     *dcrawPage;
+    Digikam::SetupIOFiles   *iofilesPage;
+    Digikam::SetupSlideShow *slideshowPage;
+    Digikam::SetupICC       *iccPage;
 };
 
 Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
-     : KPageDialog(parent)
+     : KPageDialog(parent), d(new SetupPrivate)
 {
-    d = new SetupPrivate;
     setObjectName(name);
     setCaption(i18n("Configure"));
     setButtons( KDialog::Help|KDialog::Ok|KDialog::Cancel );
@@ -132,7 +130,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     else
     {
         KSharedConfig::Ptr config = KGlobal::config();
-        KConfigGroup group = config->group(QString("General Settings"));
+        KConfigGroup group        = config->group(QString("General Settings"));
         showPage((Page)group.readEntry("Setup Page", (int)EditorPage));
     }
 
@@ -142,7 +140,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 Setup::~Setup()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("General Settings"));
+    KConfigGroup group        = config->group(QString("General Settings"));
     group.writeEntry("Setup Page", (int)activePageIndex());
     config->sync();
     delete d;

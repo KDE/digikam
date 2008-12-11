@@ -6,7 +6,7 @@
  * Date        : 2006-07-09
  * Description : tool tip contents configuration setup tab
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "setuptooltip.h"
 #include "setuptooltip.moc"
@@ -89,9 +88,8 @@ public:
 };
 
 SetupToolTip::SetupToolTip(QWidget* parent)
-            : QWidget(parent)
+            : QWidget(parent), d(new SetupToolTipPriv)
 {
-    d = new SetupToolTipPriv;
     QVBoxLayout *layout = new QVBoxLayout( this );
     layout->setSpacing( KDialog::spacingHint() );
 
@@ -198,7 +196,7 @@ SetupToolTip::~SetupToolTip()
 void SetupToolTip::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("ImageViewer Settings"));
+    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
 
     d->showToolTipsBox->setChecked(group.readEntry("Show ToolTips", true));
 
@@ -223,26 +221,25 @@ void SetupToolTip::readSettings()
 void SetupToolTip::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("ImageViewer Settings"));
+    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
 
-    group.writeEntry("Show ToolTips", d->showToolTipsBox->isChecked());
+    group.writeEntry("Show ToolTips",             d->showToolTipsBox->isChecked());
 
-    group.writeEntry("ToolTips Show File Name", d->showFileNameBox->isChecked());
-    group.writeEntry("ToolTips Show File Date", d->showFileDateBox->isChecked());
-    group.writeEntry("ToolTips Show File Size", d->showFileSizeBox->isChecked());
-    group.writeEntry("ToolTips Show Image Type", d->showImageTypeBox->isChecked());
-    group.writeEntry("ToolTips Show Image Dim", d->showImageDimBox->isChecked());
+    group.writeEntry("ToolTips Show File Name",   d->showFileNameBox->isChecked());
+    group.writeEntry("ToolTips Show File Date",   d->showFileDateBox->isChecked());
+    group.writeEntry("ToolTips Show File Size",   d->showFileSizeBox->isChecked());
+    group.writeEntry("ToolTips Show Image Type",  d->showImageTypeBox->isChecked());
+    group.writeEntry("ToolTips Show Image Dim",   d->showImageDimBox->isChecked());
 
-    group.writeEntry("ToolTips Show Photo Make", d->showPhotoMakeBox->isChecked());
-    group.writeEntry("ToolTips Show Photo Date", d->showPhotoDateBox->isChecked());
+    group.writeEntry("ToolTips Show Photo Make",  d->showPhotoMakeBox->isChecked());
+    group.writeEntry("ToolTips Show Photo Date",  d->showPhotoDateBox->isChecked());
     group.writeEntry("ToolTips Show Photo Focal", d->showPhotoFocalBox->isChecked());
-    group.writeEntry("ToolTips Show Photo Expo", d->showPhotoExpoBox->isChecked());
-    group.writeEntry("ToolTips Show Photo Mode", d->showPhotoModeBox->isChecked());
+    group.writeEntry("ToolTips Show Photo Expo",  d->showPhotoExpoBox->isChecked());
+    group.writeEntry("ToolTips Show Photo Mode",  d->showPhotoModeBox->isChecked());
     group.writeEntry("ToolTips Show Photo Flash", d->showPhotoFlashBox->isChecked());
-    group.writeEntry("ToolTips Show Photo WB", d->showPhotoWbBox->isChecked());
+    group.writeEntry("ToolTips Show Photo WB",    d->showPhotoWbBox->isChecked());
 
     config->sync();
 }
 
 }  // namespace ShowFoto
-

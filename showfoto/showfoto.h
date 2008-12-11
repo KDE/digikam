@@ -88,7 +88,7 @@ private:
     void openFolder(const KUrl& url);
 
     Digikam::ThumbBarView *thumbBar() const;
-    Digikam::Sidebar *rightSideBar() const;
+    Digikam::Sidebar      *rightSideBar() const;
 
 private slots:
 
@@ -99,8 +99,8 @@ private slots:
     void slotFilePrint();
 
     void slotOpenFile();
-    void slotOpenUrl(const KUrl& url);
-    void slotOpenFolder(const KUrl& url);
+    void slotOpenUrl(const KUrl&);
+    void slotOpenFolder(const KUrl&);
     void slotOpenFilesInFolder();
     void slotDeleteCurrentItem();
 
@@ -110,7 +110,7 @@ private slots:
     void slotUndoStateChanged(bool, bool, bool);
     void slotUpdateItemInfo();
 
-    void slotDeleteCurrentItemResult( KJob * job );
+    void slotDeleteCurrentItemResult(KJob*);
 
     void slotLoadingStarted(const QString &filename);
     void slotLoadingFinished(const QString &filename, bool success);
@@ -121,7 +121,7 @@ private slots:
 
 private:
 
-    ShowFotoPriv* d;
+    ShowFotoPriv* const d;
 };
 
 }   // namespace ShowFoto
