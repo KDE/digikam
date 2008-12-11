@@ -24,8 +24,6 @@
 #ifndef DITEMTOOLTIP_H
 #define DITEMTOOLTIP_H
 
-#define MAXSTRINGLENGHT 30
-
 // Qt includes.
 
 #include <QFrame>
@@ -48,16 +46,16 @@ namespace Digikam
 
 class DItemToolTipPriv;
 
-class DIGIKAM_EXPORT DToolTipContainer
+class DIGIKAM_EXPORT DToolTipStyleSheet
 {
 public:
 
-    DToolTipContainer()
+    DToolTipStyleSheet(): maxStringLenght(30)
     {
         unavailable = i18n("unavailable");
 
-        tipHeader   = QString("<table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">");
-        tipFooter   = QString("</table>");
+        tipHeader   = QString("<qt><table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">");
+        tipFooter   = QString("</table></qt>");
 
         headBeg     = QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"
                               "<nobr><font size=\"-1\" color=\"%2\"><b>")
@@ -82,9 +80,8 @@ public:
     {
         QString str      = input.simplified();
         str              = Qt::escape(str);
-        const int maxLen = MAXSTRINGLENGHT;
 
-        if (str.length() <= maxLen)
+        if (str.length() <= maxStringLenght)
             return str;
 
         QString br;
@@ -94,7 +91,7 @@ public:
 
         while (i < str.length())
         {
-            if (count >= maxLen && str[i].isSpace())
+            if (count >= maxStringLenght && str[i].isSpace())
             {
                 count = 0;
                 br.append("<br/>");
@@ -110,17 +107,19 @@ public:
         return br;
     };
 
-    QString unavailable;
-    QString tipHeader;
-    QString tipFooter;
-    QString headBeg;
-    QString headEnd;
-    QString cellBeg;
-    QString cellMid;
-    QString cellEnd;
-    QString cellSpecBeg;
-    QString cellSpecMid;
-    QString cellSpecEnd;
+    const int maxStringLenght;
+
+    QString   unavailable;
+    QString   tipHeader;
+    QString   tipFooter;
+    QString   headBeg;
+    QString   headEnd;
+    QString   cellBeg;
+    QString   cellMid;
+    QString   cellEnd;
+    QString   cellSpecBeg;
+    QString   cellSpecMid;
+    QString   cellSpecEnd;
 };
 
 class DIGIKAM_EXPORT DItemToolTip : public QFrame
