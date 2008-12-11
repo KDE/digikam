@@ -653,9 +653,11 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     {
         if (it.key() != QString("Software") && it.key() != QString("Comment"))
         {
+            QByteArray key = it.key().toAscii();
+            QByteArray value = it.value().toAscii();
             png_text text;
-            text.key  = (char*)it.key().toAscii().data();
-            text.text = (char*)it.value().toAscii().data();
+            text.key  = key.data();
+            text.text = value.data();
 #ifdef ENABLE_DEBUG_MESSAGES
             kDebug(50003) << "Writing PNG Embedded text: key=" << text.key << " text=" << text.text << endl;
 #endif
@@ -670,9 +672,10 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     QString libpngver(PNG_HEADER_VERSION_STRING);
     libpngver.replace('\n', ' ');
     software.append(QString(" (%1)").arg(libpngver));
+    QByteArray softwareAsAscii = software.toAscii();
     png_text text;
     text.key  = (png_charp)("Software");
-    text.text = (char *)software.toAscii().data();
+    text.text = softwareAsAscii.data();
 #ifdef ENABLE_DEBUG_MESSAGES
     kDebug(50003) << "Writing PNG Embedded text: key=" << text.key << " text=" << text.text << endl;
 #endif
