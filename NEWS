@@ -105,7 +105,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 093 ==> 167838 : File details panel disappears.
 094 ==> 173790 : Edit previews happen too soon in Showfoto.
 095 ==> 148892 : Showfoto shows images in very poor resolution.
-096 ==> 
+096 ==> 177327 : Long tooltips are cut in metadata panel.
+097 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
