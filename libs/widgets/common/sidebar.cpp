@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -146,6 +146,10 @@ void Sidebar::loadViewState()
     int tab        = config->readNumEntry("ActiveTab", 0);
     bool minimized = config->readBoolEntry("Minimized", d->minimizedDefault);
 
+    // validate
+    if(tab >= d->tabs || tab < 0)
+        tab = 0;
+
     if (minimized)
     {
         d->activeTab = tab;
@@ -154,7 +158,9 @@ void Sidebar::loadViewState()
         emit signalChangedTab(d->stack->visibleWidget());
     }
     else
+    {
         d->activeTab = -1;
+    }
 
     clicked(tab);
 }
@@ -257,7 +263,7 @@ void Sidebar::setActiveTab(QWidget *w)
     d->stack->raiseWidget(d->activeTab);
 
     if(d->minimized)
-        expand();    
+        expand();
 
     emit signalChangedTab(d->stack->visibleWidget());
 }
