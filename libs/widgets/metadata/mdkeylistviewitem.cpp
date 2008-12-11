@@ -49,15 +49,32 @@ MdKeyListViewItem::MdKeyListViewItem(QTreeWidget *parent, const QString& key)
     m_decryptedKey = key;
 
     // Standard Exif key descriptions.
-    if      (key == "Iop")       m_decryptedKey = i18n("Interoperability");
-    else if (key == "Image")     m_decryptedKey = i18n("Image Information");
-    else if (key == "Photo")     m_decryptedKey = i18n("Photograph Information");
-    else if (key == "GPSInfo")   m_decryptedKey = i18n("Global Positioning System");
-    else if (key == "Thumbnail") m_decryptedKey = i18n("Embedded Thumbnail");
+    if      (key == "Iop")            m_decryptedKey = i18n("Interoperability");
+    else if (key == "Image")          m_decryptedKey = i18n("Image Information");
+    else if (key == "Photo")          m_decryptedKey = i18n("Photograph Information");
+    else if (key == "GPSInfo")        m_decryptedKey = i18n("Global Positioning System");
+    else if (key == "Thumbnail")      m_decryptedKey = i18n("Embedded Thumbnail");
 
     // Standard IPTC key descriptions.
-    else if (key == "Envelope")     m_decryptedKey = i18n("IIM Envelope");
-    else if (key == "Application2") m_decryptedKey = i18n("IIM Application 2");
+    else if (key == "Envelope")       m_decryptedKey = i18n("IIM Envelope");
+    else if (key == "Application2")   m_decryptedKey = i18n("IIM Application 2");
+
+    // Standard XMP key descriptions.
+    else if (key == "dc")             m_decryptedKey = i18n("Dublin Core");
+    else if (key == "xmp")            m_decryptedKey = i18n("Basic Schema");
+    else if (key == "xmpRights")      m_decryptedKey = i18n("Rights Management");
+    else if (key == "xmpMM")          m_decryptedKey = i18n("Media Management ");
+    else if (key == "xmpBJ")          m_decryptedKey = i18n("Basic Job Ticket");
+    else if (key == "xmpTPg")         m_decryptedKey = i18n("Paged-Text");
+    else if (key == "xmpDM")          m_decryptedKey = i18n("Dynamic Media");
+    else if (key == "MicrosoftPhoto") m_decryptedKey = i18n("Microsoft Photo");
+    else if (key == "pdf")            m_decryptedKey = i18n("Adobe PDF");
+    else if (key == "photoshop")      m_decryptedKey = i18n("Adobe Photoshop");
+    else if (key == "crs")            m_decryptedKey = i18n("Camera Raw");
+    else if (key == "tiff")           m_decryptedKey = i18n("TIFF Properties");
+    else if (key == "exif")           m_decryptedKey = i18n("Exif-specific Properties");
+    else if (key == "aux")            m_decryptedKey = i18n("Additional Exif Properties");
+    else if (key == "iptc")           m_decryptedKey = i18n("IPTC Core");
 
     // Reset all item flags: item is not selectable.
     setFlags(Qt::ItemIsEnabled);
