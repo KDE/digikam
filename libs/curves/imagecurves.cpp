@@ -28,7 +28,6 @@
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-
 #include "imagecurves.h"
 
 // C++ includes.
@@ -97,8 +96,8 @@ ImageCurves::CRMatrix CR_basis =
 };
 
 ImageCurves::ImageCurves(bool sixteenBit)
+           : d(new ImageCurvesPriv)
 {
-    d = new ImageCurvesPriv;
     d->lut        = new ImageCurvesPriv::_Lut;
     d->curves     = new ImageCurvesPriv::_Curves;
     d->segmentMax = sixteenBit ? 65535 : 255;

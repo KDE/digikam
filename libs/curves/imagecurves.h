@@ -103,7 +103,7 @@ private:
 
 private:
 
-    ImageCurvesPriv* d;
+    ImageCurvesPriv* const d;
 };
 
 }  // namespace Digikam
