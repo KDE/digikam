@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "lighttablebar.h"
 #include "lighttablebar.moc"
 
@@ -95,12 +94,9 @@ public:
 };
 
 LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
-             : ImagePreviewBar(parent, orientation, exifRotate)
+             : ImagePreviewBar(parent, orientation, exifRotate),
+               d(new LightTableBarPriv)
 {
-    d = new LightTableBarPriv;
-
-    // ----------------------------------------------------------------
-
     connect(this, SIGNAL(signalItemSelected(ThumbBarItem*)),
             this, SLOT(slotItemSelected(ThumbBarItem*)));
 }
@@ -624,9 +620,9 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
 // -------------------------------------------------------------------------
 
 LightTableBarItem::LightTableBarItem(LightTableBar *view, const ImageInfo &info)
-                 : ImagePreviewBarItem(view, info.fileUrl())
+                 : ImagePreviewBarItem(view, info.fileUrl()),
+                   d(new LightTableBarItemPriv)
 {
-    d = new LightTableBarItemPriv;
 }
 
 LightTableBarItem::~LightTableBarItem()

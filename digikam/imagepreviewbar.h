@@ -62,6 +62,8 @@ public:
     /** Read tool tip settings from Album Settings instance */
     void readToolTipSettings();
 
+    void applySettings();
+
 protected:
 
     QPixmap ratingPixmap() const;

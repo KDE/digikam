@@ -192,7 +192,7 @@ private slots:
 
 private:
 
-    DigikamViewPriv* d;
+    DigikamViewPriv* const d;
 };
 
 }  // namespace Digikam

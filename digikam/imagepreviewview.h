@@ -48,8 +48,7 @@ class ImagePreviewViewPriv;
 
 class ImagePreviewView : public PreviewWidget
 {
-
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -112,7 +111,7 @@ private:
 
 private:
 
-    ImagePreviewViewPriv* d;
+    ImagePreviewViewPriv* const d;
 };
 
 }  // namespace Digikam

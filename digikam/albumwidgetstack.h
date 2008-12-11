@@ -91,6 +91,8 @@ public:
 
     void toggleShowBar(bool b);
 
+    void applySettings();
+
 signals:
 
     void signalNextItem();
@@ -123,7 +125,7 @@ private:
 
 private:
 
-    AlbumWidgetStackPriv* d;
+    AlbumWidgetStackPriv* const d;
 };
 
 }  // namespace Digikam

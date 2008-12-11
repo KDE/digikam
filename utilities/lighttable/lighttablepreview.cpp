@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "lighttablepreview.h"
 #include "lighttablepreview.moc"
 
@@ -124,10 +123,8 @@ public:
 };
 
 LightTablePreview::LightTablePreview(QWidget *parent)
-                 : PreviewWidget(parent)
+                 : PreviewWidget(parent), d(new LightTablePreviewPriv)
 {
-    d = new LightTablePreviewPriv;
-
     // get preview size from screen size, but limit from VGA to WQXGA
     d->previewSize = qMax(KApplication::desktop()->height(),
                           KApplication::desktop()->width());

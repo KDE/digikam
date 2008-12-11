@@ -179,9 +179,8 @@ public:
 };
 
 DigikamView::DigikamView(QWidget *parent)
-           : KHBox(parent)
+           : KHBox(parent), d(new DigikamViewPriv)
 {
-    d = new DigikamViewPriv;
     d->parent       = static_cast<DigikamApp*>(parent);
     d->albumManager = AlbumManager::instance();
 
@@ -273,7 +272,7 @@ void DigikamView::applySettings()
 {
     AlbumSettings *settings = AlbumSettings::instance();
     d->iconView->applySettings(settings);
-    d->albumWidgetStack->imagePreviewView()->setLoadFullImageSize(settings->getPreviewLoadFullImageSize());
+    d->albumWidgetStack->applySettings();
     refreshView();
 }
 

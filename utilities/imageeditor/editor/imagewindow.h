@@ -151,7 +151,7 @@ private slots:
 
 private:
 
-    ImageWindowPriv    *d;
+    ImageWindowPriv* const d;
 
     static ImageWindow *m_instance;
 };

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "lighttablewindow.h"
 #include "lighttablewindow.moc"
 
@@ -102,9 +101,8 @@ bool LightTableWindow::lightTableWindowCreated()
 }
 
 LightTableWindow::LightTableWindow()
-                : KXmlGuiWindow(0)
+                : KXmlGuiWindow(0), d(new LightTableWindowPriv)
 {
-    d = new LightTableWindowPriv;
     m_instance = this;
 
     setWindowFlags(Qt::Window);
@@ -179,6 +177,7 @@ void LightTableWindow::applySettings()
     d->autoSyncPreview        = group.readEntry("Auto Sync Preview",       true);
     d->fullScreenHideToolBar  = group.readEntry("FullScreen Hide ToolBar", false);
     d->previewView->setLoadFullImageSize(group.readEntry("Load Full Image size", false));
+    d->barView->applySettings();
     refreshView();
  }
 

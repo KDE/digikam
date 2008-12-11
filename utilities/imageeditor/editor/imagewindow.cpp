@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "imagewindow.h"
 #include "imagewindow.moc"
 
@@ -183,9 +182,8 @@ bool ImageWindow::imagewindowCreated()
 }
 
 ImageWindow::ImageWindow()
-           : EditorWindow( "Image Editor" )
+           : EditorWindow("Image Editor"), d(new ImageWindowPriv)
 {
-    d = new ImageWindowPriv;
     m_instance = this;
     // We don't want to be deleted on close
     setAttribute(Qt::WA_DeleteOnClose, false);
@@ -443,12 +441,10 @@ void ImageWindow::setupActions()
 void ImageWindow::applySettings()
 {
     applyStandardSettings();
-
     AlbumSettings *settings = AlbumSettings::instance();
-    m_canvas->setExifOrient(settings->getExifRotate());
-    d->thumbBar->setExifRotate(settings->getExifRotate());
     m_setExifOrientationTag = settings->getExifSetOrientation();
-
+    m_canvas->setExifOrient(settings->getExifRotate());
+    d->thumbBar->applySettings();
     refreshView();
 }
 

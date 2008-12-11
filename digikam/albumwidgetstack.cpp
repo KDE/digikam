@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "albumwidgetstack.h"
 #include "albumwidgetstack.moc"
 
@@ -62,13 +61,13 @@ public:
 
     AlbumWidgetStackPriv()
     {
-        albumIconView    = 0;
-        imagePreviewView = 0;
-        welcomePageView  = 0;
-        mediaPlayerView  = 0;
-        splitter         = 0;
-        thumbBar         = 0;
-        thumbbarTimer    = 0;
+        albumIconView      = 0;
+        imagePreviewView   = 0;
+        welcomePageView    = 0;
+        mediaPlayerView    = 0;
+        splitter           = 0;
+        thumbBar           = 0;
+        thumbbarTimer      = 0;
         needUpdateBar      = false;
         everShowedSplitter = false;
     }
@@ -93,10 +92,8 @@ public:
 };
 
 AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
-                : QStackedWidget(parent)
+                : QStackedWidget(parent), d(new AlbumWidgetStackPriv)
 {
-    d = new AlbumWidgetStackPriv;
-
     d->albumIconView    = new AlbumIconView(this);
     d->splitter         = new QSplitter(Qt::Vertical, this);
     d->imagePreviewView = new ImagePreviewView(d->splitter, this);
@@ -232,7 +229,9 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo & info, const ImageInfo &p
     if (info.isNull())
     {
         if (previewMode() == MediaPlayerMode)
+        {
             d->mediaPlayerView->setMediaPlayerFromUrl(KUrl());
+        }
         else if (previewMode() == PreviewImageMode)
         {
             d->imagePreviewView->setImageInfo();
@@ -441,6 +440,13 @@ void AlbumWidgetStack::toggleShowBar(bool b)
         d->thumbBar->show();
     else
         d->thumbBar->hide();
+}
+
+void AlbumWidgetStack::applySettings()
+{
+    AlbumSettings *settings = AlbumSettings::instance();
+    d->imagePreviewView->setLoadFullImageSize(settings->getPreviewLoadFullImageSize());
+    d->thumbBar->applySettings();
 }
 
 }  // namespace Digikam

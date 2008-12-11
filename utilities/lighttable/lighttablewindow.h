@@ -148,7 +148,7 @@ private slots:
 
 private:
 
-    LightTableWindowPriv    *d;
+    LightTableWindowPriv* const d;
 
     static LightTableWindow *m_instance;
 };

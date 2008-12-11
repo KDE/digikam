@@ -86,9 +86,9 @@ public:
         starPolygon << QPoint(4,  9);
     }
 
-    QPolygon                starPolygon;
+    QPolygon starPolygon;
 
-    QPixmap                 ratingPixmap;
+    QPixmap  ratingPixmap;
 };
 
 ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRotate)
@@ -210,6 +210,16 @@ ImagePreviewBarItem* ImagePreviewBar::findItemByPos(const QPoint& pos) const
     }
 
     return 0;
+}
+
+void ImagePreviewBar::applySettings()
+{
+    readToolTipSettings();
+
+    AlbumSettings* albumSettings = AlbumSettings::instance();
+    if (!albumSettings) return;
+
+    setExifRotate(albumSettings->getExifRotate());
 }
 
 void ImagePreviewBar::readToolTipSettings()

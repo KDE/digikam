@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "imagepreviewview.h"
 #include "imagepreviewview.moc"
 
@@ -126,9 +125,8 @@ public:
 };
 
 ImagePreviewView::ImagePreviewView(QWidget *parent, AlbumWidgetStack *stack)
-                : PreviewWidget(parent)
+                : PreviewWidget(parent), d(new ImagePreviewViewPriv)
 {
-    d = new ImagePreviewViewPriv;
     d->stack = stack;
 
     // get preview size from screen size, but limit from VGA to WQXGA

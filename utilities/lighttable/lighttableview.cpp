@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "lighttableview.h"
 #include "lighttableview.moc"
 
@@ -68,10 +67,8 @@ public:
 };
 
 LightTableView::LightTableView(QWidget *parent)
-              : QFrame(parent)
+              : QFrame(parent), d(new LightTableViewPriv)
 {
-    d = new LightTableViewPriv;
-
     setAttribute(Qt::WA_DeleteOnClose);
     setFrameStyle(QFrame::NoFrame);
     setLineWidth(0);
