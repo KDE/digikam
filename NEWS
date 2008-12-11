@@ -104,7 +104,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 092 ==> 149360 : Not all menu items may be bound to keyboard shortcuts. 
 093 ==> 167838 : File details panel disappears.
 094 ==> 173790 : Edit previews happen too soon in Showfoto.
-095
+095 ==> 148892 : Showfoto shows images in very poor resolution.
+096 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
