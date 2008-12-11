@@ -45,7 +45,7 @@ public:
 
     void setIconItem(AlbumIconItem* iconItem);
 
-    static QString fillTipContents(const ImageInfo info);
+    static QString fillTipContents(const ImageInfo& info);
 
 private:
 

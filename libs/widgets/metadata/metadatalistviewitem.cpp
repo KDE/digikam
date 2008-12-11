@@ -30,6 +30,10 @@
 #include <QFont>
 #include <QPainter>
 
+// Local includes.
+
+#include "ditemtooltip.h"
+
 namespace Digikam
 {
 
@@ -51,8 +55,11 @@ MetadataListViewItem::MetadataListViewItem(QTreeWidgetItem *parent, const QStrin
         tagVal.truncate(128);
         tagVal.append("...");
     }
+
     setText(1, tagVal);
-    setToolTip(1, tagVal);
+
+    DToolTipStyleSheet cnt;
+    setToolTip(1, "<qt><p>" + cnt.breakString(tagVal) + "</p></qt>");
 }
 
 MetadataListViewItem::~MetadataListViewItem()

@@ -106,11 +106,11 @@ QRect AlbumIconViewToolTip::repositionRect()
 QString AlbumIconViewToolTip::tipContents()
 {
     if (!d->iconItem) return QString();
-    const ImageInfo info = d->iconItem->imageInfo();
+    ImageInfo info = d->iconItem->imageInfo();
     return fillTipContents(info);
 }
 
-QString AlbumIconViewToolTip::fillTipContents(const ImageInfo info)
+QString AlbumIconViewToolTip::fillTipContents(const ImageInfo& info)
 {
     QString            str;
     DToolTipStyleSheet cnt;

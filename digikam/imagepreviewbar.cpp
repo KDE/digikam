@@ -433,7 +433,7 @@ ImagePreviewBarToolTip::~ImagePreviewBarToolTip()
 QString ImagePreviewBarToolTip::tipContents()
 {
     if (!item()) return QString();
-    const ImageInfo info = dynamic_cast<ImagePreviewBarItem *>(item())->info();
+    ImageInfo info = dynamic_cast<ImagePreviewBarItem *>(item())->info();
     return AlbumIconViewToolTip::fillTipContents(info);
 }
 
