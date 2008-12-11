@@ -50,9 +50,9 @@ MetadataListViewItem::MetadataListViewItem(QTreeWidgetItem *parent, const QStrin
     setToolTip(0, title);
 
     QString tagVal = value.simplified();
-    if (tagVal.length() > 128)
+    if (tagVal.length() > 512)
     {
-        tagVal.truncate(128);
+        tagVal.truncate(512);
         tagVal.append("...");
     }
 
