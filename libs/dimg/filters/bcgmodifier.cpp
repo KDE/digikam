@@ -25,7 +25,6 @@
 #define CLAMP_0_255(x)   qMax(qMin(x, 255), 0)
 #define CLAMP_0_65535(x) qMax(qMin(x, 65535), 0)
 
-
 #include "bcgmodifier.h"
 
 // C++ includes.
@@ -57,9 +56,9 @@ public:
     int  map[256];
 };
 
-BCGModifier::BCGModifier()
+BCGModifier::BCGModifier() 
+           : d(new BCGModifierPriv)
 {
-    d = new BCGModifierPriv;
     reset();
 }
 

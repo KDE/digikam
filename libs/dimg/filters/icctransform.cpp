@@ -7,7 +7,7 @@
  * Description : a class to apply ICC color correction to image.
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "icctransform.h"
 
@@ -70,8 +69,8 @@ public:
 };
 
 IccTransform::IccTransform()
+            : d(new IccTransformPriv)
 {
-    d = new IccTransformPriv;
     cmsErrorAction(LCMS_ERROR_SHOW);
 }
 

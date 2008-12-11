@@ -6,7 +6,7 @@
  * Date        : 2005-17-07
  * Description : A Sharpen threaded image filter.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Original Sharpen algorithm copyright 2002
  * by Daniel M. Duley <mosfet@kde.org> from KImageEffect API.
@@ -26,7 +26,6 @@
 
 #define SQ2PI   2.50662827463100024161235523934010416269302368164062
 #define Epsilon 1.0e-12
-
 
 #include "dimgsharpen.h"
 
@@ -71,7 +70,7 @@ DImgSharpen::DImgSharpen(DImgThreadedFilter *parentFilter,
         memcpy(destImage.bits(), m_destImage.bits(), m_destImage.numBytes());
 }
 
-void DImgSharpen::filterImage(void)
+void DImgSharpen::filterImage()
 {
     sharpenImage(m_radius, m_sigma);
 }

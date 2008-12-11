@@ -65,7 +65,7 @@ public:
 
 private:
 
-    BCGModifierPriv* d;
+    BCGModifierPriv* const d;
 };
 
 }  // namespace Digikam

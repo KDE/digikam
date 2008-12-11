@@ -6,7 +6,7 @@
  * Date        : 2006-01-18
  * Description : color modifier methods for DImg framework
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,7 +23,6 @@
 
 #define CLAMP_0_255(x)   qMax(qMin(x, 255), 0)
 #define CLAMP_0_65535(x) qMax(qMin(x, 65535), 0)
-
 
 #include "colormodifier.h"
 
@@ -45,7 +44,7 @@ public:
 
     ColorModifierPriv()
     {
-        modified      = false;
+        modified = false;
     }
 
     bool modified;
@@ -62,8 +61,8 @@ public:
 };
 
 ColorModifier::ColorModifier()
+             : d(new ColorModifierPriv)
 {
-    d = new ColorModifierPriv;
     reset();
 }
 
