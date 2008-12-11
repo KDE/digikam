@@ -137,12 +137,12 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
 
 |-digikam
     album.cpp                           Laurent                X       DONE        DONE
-    albumfiletip.cpp                    Gilles                 X       DONE
     albumfolderview.cpp                 Gilles                 X       DONE
     albumhistory.cpp                    Laurent                X       DONE
     albumicongroupitem.cpp              Gilles                 X       DONE
     albumiconitem.cpp                   Gilles                 X       DONE
-    albumiconview.cpp                   Gilles                 X       DONE                 Still to use Q3Dict and Q3IntDict
+    albumiconview.cpp                   Gilles                 X       DONE                 
+    albumiconviewtooltip.cpp            Gilles                 X       DONE        DONE
     albumitemhandler.cpp                Laurent                X       DONE
     albumlister.cpp                     Gilles                 X       DONE
     albummanager.cpp                    Gilles                 X       DONE
