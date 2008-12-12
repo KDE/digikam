@@ -7,8 +7,8 @@
  * Description : Loader for thumbnails
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2003-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +22,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "thumbnailcreator.h"
 #include "thumbnailcreator_p.h"
@@ -69,14 +68,14 @@ namespace Digikam
 {
 
 ThumbnailCreator::ThumbnailCreator()
+                : d(new ThumbnailCreatorPriv)
 {
-    d = new ThumbnailCreatorPriv;
     initThumbnailDirs();
 }
 
 ThumbnailCreator::ThumbnailCreator(int thumbnailSize)
+                : d(new ThumbnailCreatorPriv)
 {
-    d = new ThumbnailCreatorPriv;
     setThumbnailSize(thumbnailSize);
     initThumbnailDirs();
 }
@@ -110,7 +109,6 @@ void ThumbnailCreator::setRemoveAlphaChannel(bool removeAlpha)
 {
     d->removeAlphaChannel = removeAlpha;
 }
-
 
 void ThumbnailCreator::setLoadingProperties(DImgLoaderObserver *observer, DRawDecoding settings)
 {
@@ -268,7 +266,6 @@ QImage ThumbnailCreator::load(const QString &path)
     }
 
     return qimage;
-
 }
 
 QImage ThumbnailCreator::loadWithDImg(const QString &path)
@@ -377,7 +374,6 @@ void ThumbnailCreator::exifRotate(const QString& filePath, QImage& thumb, bool f
     thumb = thumb.transformed( matrix );
 }
 
-
 void ThumbnailCreator::deleteThumbnailsFromDisk(const QString &filePath)
 {
     QFile smallThumb(thumbnailPath(filePath, normalThumbnailDir()));
@@ -386,6 +382,5 @@ void ThumbnailCreator::deleteThumbnailsFromDisk(const QString &filePath)
     smallThumb.remove();
     largeThumb.remove();
 }
-
 
 }  // namespace Digikam

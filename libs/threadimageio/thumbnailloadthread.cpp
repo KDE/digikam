@@ -96,9 +96,8 @@ K_GLOBAL_STATIC(ThumbnailLoadThread, defaultObject)
 K_GLOBAL_STATIC(ThumbnailLoadThread, defaultThumbBarObject)
 
 ThumbnailLoadThread::ThumbnailLoadThread()
+                   : d(new ThumbnailLoadThreadPriv)
 {
-    d = new ThumbnailLoadThreadPriv;
-
     d->creator = new ThumbnailCreator();
     d->creator->setOnlyLargeThumbnails(true);
     d->creator->setRemoveAlphaChannel(true);
@@ -294,7 +293,8 @@ bool ThumbnailLoadThread::checkSize(int size)
 {
     if (size <= 0)
     {
-        kError(50003) << "ThumbnailLoadThread::load: No thumbnail size specified. Refusing to load thumbnail." << endl;
+        kError(50003) << "ThumbnailLoadThread::load: No thumbnail size specified. Refusing to load thumbnail."
+                      << endl;
         return false;
     }
     else if (size > ThumbnailSize::Huge)

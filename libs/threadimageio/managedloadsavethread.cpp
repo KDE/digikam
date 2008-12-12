@@ -6,8 +6,8 @@
  * Date        : 2006-01-20
  * Description : image file IO threaded interface.
  *
- * Copyright (C) 2005-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "managedloadsavethread.h"
 
@@ -40,7 +39,7 @@ namespace Digikam
 
 ManagedLoadSaveThread::ManagedLoadSaveThread()
 {
-    m_terminationPolicy  = TerminationPolicyTerminateLoading;
+    m_terminationPolicy = TerminationPolicyTerminateLoading;
 }
 
 ManagedLoadSaveThread::~ManagedLoadSaveThread()
@@ -122,7 +121,7 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingPolicy p
 void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loadingMode, LoadingPolicy policy, AccessMode accessMode)
 {
     QMutexLocker lock(&m_mutex);
-    LoadingTask *loadingTask = 0;
+    LoadingTask *loadingTask  = 0;
     LoadingTask *existingTask = findExistingTask(description);
 
     //kDebug(50003) << "ManagedLoadSaveThread::load " << description.filePath << ", policy " << policy << endl;
@@ -157,6 +156,7 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loa
                 break;
             m_todo.append(createLoadingTask(description, false, loadingMode, accessMode));
             break;
+
         case LoadingPolicyPrepend:
             if (existingTask)
             {
@@ -177,6 +177,7 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loa
                 break;
             m_todo.prepend(createLoadingTask(description, false, loadingMode, accessMode));
             break;
+
         case LoadingPolicyAppend:
             if (existingTask)
             {
@@ -203,6 +204,7 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loa
             }
             m_todo.insert(i, createLoadingTask(description, false, loadingMode, accessMode));
             break;
+
         case LoadingPolicyPreload:
             // append to the very end of the list
             //kDebug(50003) << "LoadingPolicyPreload, Existing task " << existingTask << endl;
@@ -221,7 +223,7 @@ void ManagedLoadSaveThread::loadPreview(LoadingDescription description)
     // so no need to differentiate with normal loading tasks.
 
     QMutexLocker lock(&m_mutex);
-    LoadingTask *loadingTask = 0;
+    LoadingTask *loadingTask  = 0;
     LoadingTask *existingTask = findExistingTask(description);
 
     // reuse task if it exists
@@ -314,7 +316,8 @@ void ManagedLoadSaveThread::prependThumbnailGroup(QList<LoadingDescription> desc
 }
 
 LoadingTask *ManagedLoadSaveThread::createLoadingTask(const LoadingDescription &description,
-         bool preloading, LoadingMode loadingMode, AccessMode accessMode)
+                                                      bool preloading, LoadingMode loadingMode, 
+                                                      AccessMode accessMode)
 {
     if (loadingMode == LoadingModeShared)
     {
@@ -372,7 +375,6 @@ void ManagedLoadSaveThread::stopSaving(const QString& filePath)
         }
     }
 }
-
 
 void ManagedLoadSaveThread::removeLoadingTasks(const LoadingDescription &description, LoadingTaskFilter filter)
 {
