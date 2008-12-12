@@ -53,14 +53,15 @@ MimeFilter::MimeFilter(QWidget* parent)
           : QComboBox(parent)
 {
     d = new MimeFilterPriv;
-    insertItem( i18n("All files"),    AllFiles );
-    insertItem( i18n("No RAW files"),    NoRAWFiles );
-    insertItem( i18n("JPEG files"),    JPGFiles );
-    insertItem( i18n("PNG files"),    PNGFiles );
-    insertItem( i18n("TIFF files"),    TIFFiles );
-    insertItem( i18n("RAW files"),    RAWFiles );
-    insertItem( i18n("Movie files"), MoviesFiles );
-    insertItem( i18n("Audio files"),  AudioFiles );
+    insertItem( i18n("All files"),      AllFiles );
+    insertItem( i18n("Image files"),    ImageFiles );
+    insertItem( i18n("No RAW files"),   NoRAWFiles );
+    insertItem( i18n("JPEG files"),     JPGFiles );
+    insertItem( i18n("PNG files"),      PNGFiles );
+    insertItem( i18n("TIFF files"),     TIFFiles );
+    insertItem( i18n("RAW files"),      RAWFiles );
+    insertItem( i18n("Movie files"),    MoviesFiles );
+    insertItem( i18n("Audio files"),    AudioFiles );
 
     QToolTip::add(this, i18n("Filter for file type"));
     QWhatsThis::add(this, i18n("Select the file types (mime types) you want to show"));

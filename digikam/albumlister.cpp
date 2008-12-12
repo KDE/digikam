@@ -370,6 +370,14 @@ bool AlbumLister::matchesFilter(const ImageInfo* info, bool &foundText)
 
     switch(d->mimeTypeFilter)
     {
+        case MimeFilter::ImageFiles:
+        {
+            QString imageFilesExt(AlbumSettings::instance()->getImageFileFilter());
+            imageFilesExt.append(AlbumSettings::instance()->getRawFileFilter());
+            if (!imageFilesExt.upper().contains(mimeType))
+                match = false;
+            break;
+        }
         case MimeFilter::JPGFiles:
         {
             if (mimeType != QString("JPG") && mimeType != QString("JPE") &&
@@ -635,7 +643,7 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
 
     if (!newItemsList.isEmpty())
         emit signalNewItems(newItemsList);
-    
+
     slotFilterItems();
 }
 
