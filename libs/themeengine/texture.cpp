@@ -30,7 +30,6 @@
  *
  * ============================================================ */
 
-
 #include "texture.h"
 
 // C++ includes.
@@ -84,9 +83,8 @@ public:
 Texture::Texture(int w, int h, const QColor& from, const QColor& to,
                  Theme::Bevel bevel, Theme::Gradient gradient,
                  bool border, const QColor& borderColor)
+       : d(new TexturePriv)
 {
-    d = new TexturePriv;
-
     d->bevel       = bevel;
     d->gradient    = gradient;
     d->border      = border;

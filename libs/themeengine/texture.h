@@ -72,8 +72,7 @@ private:
 
 private:
 
-    TexturePriv* d;
-
+    TexturePriv* const d;
 };
 
 }  // namespace Digikam

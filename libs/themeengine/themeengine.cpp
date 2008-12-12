@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "themeengine.h"
 #include "themeengine.moc"
 
@@ -87,10 +86,9 @@ ThemeEngine* ThemeEngine::instance()
 }
 
 ThemeEngine::ThemeEngine()
+           : d(new ThemeEnginePriv)
 {
     KGlobal::dirs()->addResourceDir("themes", KStandardDirs::installPath("data") + QString("digikam/themes"));
-
-    d = new ThemeEnginePriv;
 
     d->defaultTheme = new Theme(i18n("Default"), QString());
     d->themeHash.insert(i18n("Default"), d->defaultTheme);
