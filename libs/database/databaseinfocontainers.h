@@ -89,9 +89,6 @@ public:
     QString subjectDistanceCategory;
 };
 
-
-
 } // namespace Digikam
 
-#endif
-
+#endif // DATABASEINFOCONTAINERS_H

@@ -6,7 +6,7 @@
  * Date        : 2007-03-19
  * Description : Handling of database specific URLs
  *
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "databaseurl.h"
 
@@ -162,15 +161,13 @@ DatabaseUrl DatabaseUrl::searchUrl(int id,
     return url;
 }
 
-
-
 DatabaseUrl::DatabaseUrl(const KUrl &digikamalbumsUrl)
-    : KUrl(digikamalbumsUrl)
+           : KUrl(digikamalbumsUrl)
 {
 }
 
 DatabaseUrl::DatabaseUrl(const DatabaseUrl &url)
-    : KUrl(url)
+           : KUrl(url)
 {
 }
 
@@ -200,7 +197,6 @@ DatabaseUrl::operator DatabaseParameters() const
 {
     return parameters();
 }*/
-
 
 
 // --- Database parameters ---

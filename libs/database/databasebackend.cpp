@@ -6,7 +6,7 @@
  * Date        : 2007-04-15
  * Description : Abstract database backend
  *
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "databasebackend.h"
 
@@ -173,6 +172,7 @@ public:
     class ChangesetContainer
     {
     public:
+
         ChangesetContainer(DatabaseBackendPriv *d)
         : d(d)
         {
@@ -193,7 +193,7 @@ public:
             changesets.clear();
         }
 
-        QList<T> changesets;
+        QList<T>             changesets;
         DatabaseBackendPriv *d;
     };
 
@@ -219,26 +219,25 @@ public:
     // this is always accessed in mutex context, no need for QThreadStorage
     QHash<QThread*, QSqlDatabase> threadDatabases;
     // this is not only db.isValid(), but also "parameters changed, need to reopen"
-    QHash<QThread*, int> databasesValid;
+    QHash<QThread*, int>          databasesValid;
     // for recursive transactions
-    QHash<QThread*, int> transactionCount;
+    QHash<QThread*, int>          transactionCount;
 
-    bool isInTransaction;
+    bool                          isInTransaction;
 
-    DatabaseParameters parameters;
+    DatabaseParameters            parameters;
 
-    DatabaseBackend::Status status;
+    DatabaseBackend::Status       status;
 
-    DatabaseWatch *watch;
+    DatabaseWatch                *watch;
 
-    DatabaseBackend *q;
+    DatabaseBackend              *q;
 
 };
 
 DatabaseBackend::DatabaseBackend()
+               : d(new DatabaseBackendPriv(this))
 {
-    d = new DatabaseBackendPriv(this);
-
     connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
             this, SLOT(slotMainThreadFinished()));
 }
@@ -364,8 +363,8 @@ bool DatabaseBackend::execSql(const QString& sql, const QVariant &boundValue1,
 }
 
 bool DatabaseBackend::execSql(const QString& sql,
-                const QVariant &boundValue1, const QVariant &boundValue2,
-                QList<QVariant>* values, QVariant *lastInsertId)
+                              const QVariant &boundValue1, const QVariant &boundValue2,
+                              QList<QVariant>* values, QVariant *lastInsertId)
 {
     QSqlQuery query = execQuery(sql, boundValue1, boundValue2);
     if (!query.isActive())
@@ -378,8 +377,9 @@ bool DatabaseBackend::execSql(const QString& sql,
 }
 
 bool DatabaseBackend::execSql(const QString& sql,
-                const QVariant &boundValue1, const QVariant &boundValue2, const QVariant &boundValue3,
-                QList<QVariant>* values, QVariant *lastInsertId)
+                              const QVariant &boundValue1, const QVariant &boundValue2, 
+                              const QVariant &boundValue3, QList<QVariant>* values, 
+                              QVariant *lastInsertId)
 {
     QSqlQuery query = execQuery(sql, boundValue1, boundValue2, boundValue3);
     if (!query.isActive())
@@ -418,8 +418,6 @@ bool DatabaseBackend::execSql(const QString& sql, const QList<QVariant> &boundVa
         (*values) = readToList(query);
     return true;
 }
-
-
 
 QSqlQuery DatabaseBackend::execQuery(const QString& sql, const QVariant &boundValue1)
 {
@@ -483,6 +481,7 @@ QSqlQuery DatabaseBackend::execQuery(const QString& sql)
 class sotoSleep : public QThread
 {
 public:
+
     static void sleep(unsigned long secs)
     {
         QThread::sleep(secs);
@@ -629,8 +628,5 @@ void DatabaseBackend::recordChangeset(const SearchChangeset changeset)
 {
     d->searchChangesetContainer.recordChangeset(changeset);
 }
-
-
-
 
 }  // namespace Digikam

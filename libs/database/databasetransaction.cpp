@@ -6,7 +6,7 @@
  * Date        : 2007-03-23
  * Description : Convenience object for database transactions
  *
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "databasetransaction.h"
 
 // Local includes.
@@ -34,14 +33,14 @@ namespace Digikam
 {
 
 DatabaseTransaction::DatabaseTransaction()
-    : m_access(0)
+                   : m_access(0)
 {
     DatabaseAccess access;
     access.backend()->beginTransaction();
 }
 
 DatabaseTransaction::DatabaseTransaction(DatabaseAccess *access)
-    : m_access(access)
+                   : m_access(access)
 {
     m_access->backend()->beginTransaction();
 }

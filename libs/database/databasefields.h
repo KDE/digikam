@@ -6,19 +6,19 @@
  * Date        : 2007-09-22
  * Description : Enums for database fields
  *
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef DATABASEFIELDS_H
@@ -141,8 +141,6 @@ Q_DECLARE_FLAGS(ImageMetadata, ImageMetadataField)
 Q_DECLARE_FLAGS(ImageComments, ImageCommentsField)
 Q_DECLARE_FLAGS(ImagePositions, ImagePositionsField)
 
-
-
 /**
  * You can iterate over each of the Enumerations defined above:
  * ImagesIterator, ImageMetadataIterator etc.
@@ -201,12 +199,12 @@ public:
 
     void initialize()
     {
-        images = ImagesNone;
+        images           = ImagesNone;
         imageInformation = ImageInformationNone;
-        imageMetadata = ImageMetadataNone;
-        imageComments = ImageCommentsNone;
-        imagePositions = ImagePositionsNone;
-        customEnum = (CustomEnum)0;
+        imageMetadata    = ImageMetadataNone;
+        imageComments    = ImageCommentsNone;
+        imagePositions   = ImagePositionsNone;
+        customEnum       = (CustomEnum)0;
     }
 
     DATABASEFIELDS_SET_DECLARE_METHODS(Images, images)
@@ -216,11 +214,11 @@ public:
     DATABASEFIELDS_SET_DECLARE_METHODS(ImagePositions, imagePositions)
 
     inline CustomEnum &operator=(const CustomEnum &f) { return customEnum.operator=(f); }
-    inline CustomEnum &operator|=(CustomEnum f) { return customEnum.operator|=(f); }
-    inline CustomEnum &operator^=(CustomEnum f) { return customEnum.operator^=(f); }
-    inline CustomEnum operator|(CustomEnum f) const { return customEnum.operator|(f); }
-    inline CustomEnum operator^(CustomEnum f) const { return customEnum.operator^(f); }
-    inline CustomEnum operator&(CustomEnum f) const { return customEnum.operator&(f); }
+    inline CustomEnum &operator|=(CustomEnum f)       { return customEnum.operator|=(f); }
+    inline CustomEnum &operator^=(CustomEnum f)       { return customEnum.operator^=(f); }
+    inline CustomEnum operator|(CustomEnum f) const   { return customEnum.operator|(f); }
+    inline CustomEnum operator^(CustomEnum f) const   { return customEnum.operator^(f); }
+    inline CustomEnum operator&(CustomEnum f) const   { return customEnum.operator&(f); }
 
 
     // databasechangesets.cpp
@@ -229,12 +227,12 @@ public:
 
 private:
 
-    Images images;
+    Images           images;
     ImageInformation imageInformation;
-    ImageMetadata imageMetadata;
-    ImageComments imageComments;
-    ImagePositions imagePositions;
-    CustomEnum customEnum;
+    ImageMetadata    imageMetadata;
+    ImageComments    imageComments;
+    ImagePositions   imagePositions;
+    CustomEnum       customEnum;
 };
 
 #define DATABASEFIELDS_HASH_DECLARE_METHODS(Key, method) \
@@ -268,12 +266,12 @@ public:
 
     // We use the upper 6 bits to distinguish the enums, and give the lower 26 bits to the flags.
     // So we can store up to 64 enums, with 26 flags each.
-    static inline unsigned int uniqueKey(Images f)            { return (int)f | (0 << 26); }
-    static inline unsigned int uniqueKey(ImageInformation f)  { return (int)f | (1 << 26); }
-    static inline unsigned int uniqueKey(ImageMetadata f)     { return (int)f | (2 << 26); }
-    static inline unsigned int uniqueKey(ImageComments f)     { return (int)f | (3 << 26); }
-    static inline unsigned int uniqueKey(ImagePositions f)    { return (int)f | (4 << 26); }
-    static inline unsigned int uniqueKey(CustomEnum f)        { return f | (63 << 26); }
+    static inline unsigned int uniqueKey(Images f)            { return (int)f | (0 << 26);  }
+    static inline unsigned int uniqueKey(ImageInformation f)  { return (int)f | (1 << 26);  }
+    static inline unsigned int uniqueKey(ImageMetadata f)     { return (int)f | (2 << 26);  }
+    static inline unsigned int uniqueKey(ImageComments f)     { return (int)f | (3 << 26);  }
+    static inline unsigned int uniqueKey(ImagePositions f)    { return (int)f | (4 << 26);  }
+    static inline unsigned int uniqueKey(CustomEnum f)        { return      f | (63 << 26); }
 
     // override relevant methods from QHash
     DATABASEFIELDS_HASH_DECLARE_METHODS(Images, uniqueKey);

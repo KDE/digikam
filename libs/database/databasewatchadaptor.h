@@ -6,7 +6,7 @@
  * Date        : 2007-12-23
  * Description : DBus interface description
  *
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -72,10 +72,6 @@ signals:
     void searchChange(const QString &databaseIdentifier,
                            const QString &applicationIdentifier,
                            const Digikam::SearchChangeset &changeset);
-
 };
 
-
-#endif
-
-
+#endif // DATABASEWATCHADAPTOR_H

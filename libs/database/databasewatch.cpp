@@ -6,7 +6,7 @@
  * Date        : 2007-03-23
  * Description : Keeping image properties in sync.
  *
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "databasewatch.h"
 #include "databasewatchadaptor.h"
@@ -38,7 +37,7 @@
 #include <kdebug.h>
 
 Digikam_DatabaseWatchAdaptor::Digikam_DatabaseWatchAdaptor(Digikam::DatabaseWatch *watch)
-    : QDBusAbstractAdaptor(watch)
+                            : QDBusAbstractAdaptor(watch)
 {
     setAutoRelaySignals(true);
 }
@@ -46,11 +45,10 @@ Digikam_DatabaseWatchAdaptor::Digikam_DatabaseWatchAdaptor(Digikam::DatabaseWatc
 namespace Digikam
 {
 
-// ------------------- //
-
 class DatabaseWatchPriv
 {
 public:
+
     DatabaseWatchPriv()
     {
         mode    = DatabaseWatch::DatabaseSlave;
@@ -78,11 +76,11 @@ public:
     }
 };
 
-// ------------------- //
+// ---------------------------------------------------------------------------------
 
 DatabaseWatch::DatabaseWatch()
+             : d(new DatabaseWatchPriv)
 {
-    d = new DatabaseWatchPriv;
 }
 
 DatabaseWatch::~DatabaseWatch()
@@ -268,7 +266,5 @@ void DatabaseWatch::slotSearchChangeDBus(const QString &databaseIdentifier,
         databaseIdentifier == d->databaseId)
         emit searchChange(changeset);
 }
-
-
 
 } // namespace Digikam
