@@ -6,7 +6,7 @@
  * Date        : 2008-10-26
  * Description : Access to comments of an image in the database
  *
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2008 by Patrick Spendrin <ps_ml at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 // Qt includes.
 
@@ -42,20 +41,20 @@ public:
         unique = ImageComments::UniquePerLanguage;
     }
 
-    qlonglong id;
-    QList<CommentInfo> infos;
-    QSet<int> dirtyIndices;
-    QSet<int> newIndices;
+    qlonglong                     id;
+    QList<CommentInfo>            infos;
+    QSet<int>                     dirtyIndices;
+    QSet<int>                     newIndices;
     ImageComments::UniqueBehavior unique;
 
     void languageMatch(const QString &fullCode, const QString &langCode,
                        int &fullCodeMatch, int &langCodeMatch, int &defaultCodeMatch, int &firstMatch) const
     {
         // if you change the algorithm, please take a look at ImageCopyright as well
-        fullCodeMatch = -1;
-        langCodeMatch = -1;
+        fullCodeMatch    = -1;
+        langCodeMatch    = -1;
         defaultCodeMatch = -1;
-        firstMatch = -1;
+        firstMatch       = -1;
 
         if (infos.isEmpty())
         {
@@ -89,4 +88,5 @@ public:
         }
     }
 };
+
 } // namespace Digikam

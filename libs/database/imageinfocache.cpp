@@ -6,7 +6,7 @@
  * Date        : 2007-05-01
  * Description : ImageInfo common data
  *
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "imageinfocache.h"
 #include "imageinfocache.moc"
@@ -54,8 +53,8 @@ ImageInfoData *ImageInfoCache::infoForId(qlonglong id)
     if (it == m_infos.end())
     {
         ImageInfoData *data = new ImageInfoData();
-        data->id = id;
-        m_infos[id] = data;
+        data->id            = id;
+        m_infos[id]         = data;
         return data;
     }
     return (*it);

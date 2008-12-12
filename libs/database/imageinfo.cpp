@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "imageinfo.h"
 
 // Qt includes.
@@ -73,7 +72,7 @@ ImageInfoData::ImageInfoData()
 }
 
 ImageInfo::ImageInfo()
-    : m_data(0)
+         : m_data(0)
 {
 }
 

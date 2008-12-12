@@ -6,7 +6,7 @@
  * Date        : 2007-09-19
  * Description : Access to comments of an image in the database
  *
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "imagecomments.h"
 
@@ -50,7 +49,7 @@ ImageComments::ImageComments()
 ImageComments::ImageComments(qlonglong imageid)
 {
     d = new ImageCommentsPriv;
-    d->id = imageid;
+    d->id    = imageid;
     DatabaseAccess access;
     d->infos = access.db()->getImageComments(imageid);
 }
@@ -58,7 +57,7 @@ ImageComments::ImageComments(qlonglong imageid)
 ImageComments::ImageComments(DatabaseAccess &access, qlonglong imageid)
 {
     d = new ImageCommentsPriv;
-    d->id = imageid;
+    d->id    = imageid;
     d->infos = access.db()->getImageComments(imageid);
 }
 
@@ -82,7 +81,7 @@ QString ImageComments::defaultComment(int *index) const
     if (!d)
         return QString();
 
-    KLocale *locale = KGlobal::locale();
+    KLocale *locale  = KGlobal::locale();
     QString langCode = locale->language().toLower() + '-';
     QString fullCode = langCode + locale->country().toLower();
 
@@ -107,7 +106,8 @@ QString ImageComments::defaultComment(int *index) const
         return d->infos[chosen].comment;
 }
 
-QString ImageComments::commentForLanguage(const QString &languageCode, int *index, LanguageChoiceBehavior behavior) const
+QString ImageComments::commentForLanguage(const QString &languageCode, int *index, 
+                                          LanguageChoiceBehavior behavior) const
 {
     if (!d)
         return QString();
@@ -150,8 +150,6 @@ int ImageComments::numberOfComments() const
     return d->infos.size();
 }
 
-
-
 DatabaseComment::Type ImageComments::type(int index) const
 {
     if (!d)
@@ -191,7 +189,6 @@ QString ImageComments::comment(int index) const
 
     return d->infos[index].comment;
 }
-
 
 void ImageComments::setUniqueBehavior(UniqueBehavior behavior)
 {
@@ -259,11 +256,11 @@ void ImageComments::addCommentDirect(const QString &comment, const QString &lang
                                      DatabaseComment::Type type, const QDateTime &date)
 {
     CommentInfo info;
-    info.comment = comment;
+    info.comment  = comment;
     info.language = language;
-    info.author = author;
-    info.type = type;
-    info.date = date;
+    info.author   = author;
+    info.type     = type;
+    info.date     = date;
 
     d->newIndices << d->infos.size();
     d->infos      << info;
@@ -283,7 +280,7 @@ void ImageComments::changeLanguage(int index, const QString &language)
      if (!d)
         return;
 
-   d->infos[index].language = language;
+    d->infos[index].language = language;
     d->dirtyIndices << index;
 }
 

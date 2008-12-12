@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "imagecopyright.h"
 
 // KDE includes.
@@ -40,14 +39,14 @@ namespace Digikam
 {
 
 ImageCopyright::ImageCopyright(qlonglong imageid)
-    : m_id(imageid)
+              : m_id(imageid)
 {
 }
 
 QStringList ImageCopyright::creator()
 {
-    QList<CopyrightInfo> infos =
-            DatabaseAccess().db()->getImageCopyright(m_id, ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator));
+    QList<CopyrightInfo> infos = DatabaseAccess().db()->getImageCopyright(m_id, 
+         ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator));
     QStringList list;
     foreach(const CopyrightInfo &info, infos)
     {
@@ -153,7 +152,8 @@ QString ImageCopyright::readLanguageProperty(const QString &property, const QStr
         return infos[index].value;
 }
 
-void ImageCopyright::setLanguageProperty(const QString &property, const QString &value, const QString &languageCode, ReplaceMode mode)
+void ImageCopyright::setLanguageProperty(const QString &property, const QString &value, 
+                                         const QString &languageCode, ReplaceMode mode)
 {
     AlbumDB::CopyrightPropertyUnique uniqueness;
     if (mode == ReplaceAllEntries)
@@ -237,8 +237,4 @@ int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QStrin
     return chosen;
 }
 
-
-
-
-}
-
+} // namespace Digikam

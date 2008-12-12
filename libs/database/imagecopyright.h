@@ -41,6 +41,7 @@ class CopyrightInfo;
 
 class DIGIKAM_DATABASE_EXPORT ImageCopyright
 {
+
 public:
 
     ImageCopyright(qlonglong imageid);
@@ -69,7 +70,7 @@ public:
      *  included. If there are more than one item in this array the first one should be considered as
      *  the IPTC Core Creator value."
      */
-    QStringList creator();
+     QStringList creator();
      QStringList author() { return creator(); }
      QStringList byLine() { return creator(); }
 
@@ -79,8 +80,8 @@ public:
      *  You shall not use ReplaceLanguageEntry for this method, creators have no language associated.
      */
     void setCreator(const QString &creator, ReplaceMode mode = ReplaceAllEntries);
-     void setAuthor(const QString &author, ReplaceMode mode = ReplaceAllEntries) { setCreator(author, mode); }
-     void setByLine(const QString &byline, ReplaceMode mode = ReplaceAllEntries) { setCreator(byline, mode); }
+    void setAuthor(const QString &author, ReplaceMode mode = ReplaceAllEntries) { setCreator(author, mode); }
+    void setByLine(const QString &byline, ReplaceMode mode = ReplaceAllEntries) { setCreator(byline, mode); }
 
     /** Returns the credit/provider.
      *  This is Photoshop Credit.
@@ -89,10 +90,10 @@ public:
      *  "Identifies the provider of the news object, who is not necessarily the owner/creator."
      */
     QString provider();
-     QString credit() { return provider(); }
+    QString credit() { return provider(); }
 
     void setProvider(const QString &provider);
-     void setCredit(const QString &credit) { setProvider(credit); }
+    void setCredit(const QString &credit) { setProvider(credit); }
 
     /** Returns the copyright notice.
      *  This is Photoshop Copyright Notice.
@@ -111,7 +112,7 @@ public:
      *  If you pass a null string as languageCode, the local language is returned.
      */
     QString copyrightNotice(const QString &languageCode = QString());
-     QString rights(const QString &languageCode = QString()) { return copyrightNotice(languageCode); }
+    QString rights(const QString &languageCode = QString()) { return copyrightNotice(languageCode); }
 
     /** Sets the copyright notice. If you supply a null QString as language code,
      *  this is regarded as an entry for the default language ("x-default").
@@ -119,8 +120,8 @@ public:
      */
     void setCopyrightNotice(const QString &notice, const QString &languageCode = QString(),
                             ReplaceMode mode = ReplaceLanguageEntry);
-     void setRights(const QString &notice, const QString &languageCode = QString(),
-                    ReplaceMode mode = ReplaceLanguageEntry)
+    void setRights(const QString &notice, const QString &languageCode = QString(),
+                   ReplaceMode mode = ReplaceLanguageEntry)
         { setCopyrightNotice(notice, languageCode, mode); }
 
     /** Returns the right usage terms.
@@ -132,7 +133,7 @@ public:
     QString rightsUsageTerms(const QString &languageCode = QString());
 
     void setRightsUsageTerms(const QString &term, const QString &languageCode = QString(),
-                            ReplaceMode mode = ReplaceLanguageEntry);
+                             ReplaceMode mode = ReplaceLanguageEntry);
 
     /** Returns the source.
      *  This is Photoshop Source.
@@ -156,12 +157,12 @@ public:
      *    using Creator's Jobtitle."
      */
     QString creatorJobTitle();
-     QString authorsPosition() { return creatorJobTitle(); }
-     QString byLineTitle() { return creatorJobTitle(); }
+    QString authorsPosition() { return creatorJobTitle(); }
+    QString byLineTitle()     { return creatorJobTitle(); }
 
     void setCreatorJobTitle(const QString &title);
      void setAuthorsPosition(const QString &position) { setCreatorJobTitle(position); }
-     void setByLineTitle(const QString &title) { setCreatorJobTitle(title); }
+     void setByLineTitle(const QString &title)        { setCreatorJobTitle(title); }
 
     /** Returns the instructions.
      *  This is Photoshop Instructions.
@@ -188,8 +189,6 @@ protected:
     qlonglong m_id;
 };
 
-}
+} // namespace Digikam
 
-#endif
-
-
+#endif // IMAGECOPYRIGHT_H

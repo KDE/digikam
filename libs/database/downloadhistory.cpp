@@ -6,7 +6,7 @@
  * Date        : 2007-11-01
  * Description : Access image position stored in database.
  *
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "downloadhistory.h"
 
 // Local includes.
@@ -32,7 +31,8 @@
 namespace Digikam
 {
 
-DownloadHistory::Status DownloadHistory::status(const QString &identifier, const QString &name, int fileSize, const QDateTime &date)
+DownloadHistory::Status DownloadHistory::status(const QString &identifier, const QString &name, 
+                                                int fileSize, const QDateTime &date)
 {
     int id = DatabaseAccess().db()->findInDownloadHistory(identifier, name, fileSize, date);
 
@@ -42,14 +42,10 @@ DownloadHistory::Status DownloadHistory::status(const QString &identifier, const
         return NotDownloaded;
 }
 
-void DownloadHistory::setDownloaded(const QString &identifier, const QString &name, int fileSize, const QDateTime &date)
+void DownloadHistory::setDownloaded(const QString &identifier, const QString &name, 
+                                    int fileSize, const QDateTime &date)
 {
     DatabaseAccess().db()->addToDownloadHistory(identifier, name, fileSize, date);
 }
 
-
 } // namespace Digikam
-
-
-
-
