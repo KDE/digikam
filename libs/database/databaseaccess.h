@@ -144,7 +144,7 @@ private:
     DatabaseAccess(bool);
 
     friend class DatabaseAccessUnlock;
-    static DatabaseAccessStaticPriv *d;
+    static DatabaseAccessStaticPriv* d;
 };
 
 // -----------------------------------------------------------------------------

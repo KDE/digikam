@@ -49,27 +49,28 @@ namespace Digikam
 class DatabaseAccessStaticPriv
 {
 public:
+
     DatabaseAccessStaticPriv()
-    : backend(0), db(0), infoCache(0), databaseWatch(0),
-      mutex(QMutex::Recursive), // create a recursive mutex
-      initializing(false), lockCount(0)
+        : backend(0), db(0), infoCache(0), databaseWatch(0),
+          mutex(QMutex::Recursive), // create a recursive mutex
+          initializing(false), lockCount(0)
     {
         // create a unique identifier for this application (as an application accessing a database
         applicationIdentifier = QUuid::createUuid();
     };
     ~DatabaseAccessStaticPriv() {};
 
-    DatabaseBackend *backend;
-    AlbumDB *db;
-    ImageInfoCache *infoCache;
-    DatabaseWatch *databaseWatch;
-    DatabaseParameters parameters;
-    QMutex mutex;
-    QString lastError;
-    QUuid applicationIdentifier;
+    DatabaseBackend    *backend;
+    AlbumDB            *db;
+    ImageInfoCache     *infoCache;
+    DatabaseWatch      *databaseWatch;
+    DatabaseParameters  parameters;
+    QMutex              mutex;
+    QString             lastError;
+    QUuid               applicationIdentifier;
 
-    bool initializing;
-    int  lockCount;
+    bool                initializing;
+    int                 lockCount;
 };
 
 class DatabaseAccessMutexLocker : public QMutexLocker
@@ -77,7 +78,7 @@ class DatabaseAccessMutexLocker : public QMutexLocker
 public:
 
     DatabaseAccessMutexLocker(DatabaseAccessStaticPriv *d)
-    : QMutexLocker(&d->mutex), d(d)
+        : QMutexLocker(&d->mutex), d(d)
     {
         d->lockCount++;
     }
@@ -87,7 +88,7 @@ public:
         d->lockCount--;
     }
 
-    DatabaseAccessStaticPriv *d;
+    DatabaseAccessStaticPriv* const d;
 };
 
 DatabaseAccessStaticPriv *DatabaseAccess::d = 0;
