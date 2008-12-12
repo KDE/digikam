@@ -6,7 +6,7 @@
  * Date        : 2003-05-03
  * Description : mime types setup tab
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "setupmime.h"
 #include "setupmime.moc"
@@ -83,9 +82,8 @@ public:
 };
 
 SetupMime::SetupMime(QWidget* parent)
-         : QWidget(parent)
+         : QWidget(parent), d(new SetupMimePriv)
 {
-    d = new SetupMimePriv;
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     // --------------------------------------------------------
@@ -96,12 +94,6 @@ SetupMime::SetupMime(QWidget* parent)
                                    "<p>You can add to the already-appreciable list of formats that digiKam handles by "
                                    "adding the extension of the type you want to add. Multiple extensions need to be separated by a space.</p>"));
     explanationLabel->setWordWrap(true);
-
-
-    /* FIXME:should we add such an explanation???
-                                   "<p>For more information about extension handling configuration, "
-                                   "see the 'What's This' message for the appropriate category.</p>"
-    */
 
     // --------------------------------------------------------
 
@@ -214,38 +206,6 @@ SetupMime::SetupMime(QWidget* parent)
     grid3->setColumnStretch(1, 10);
     grid3->setMargin(KDialog::spacingHint());
     grid3->setSpacing(KDialog::spacingHint());
-
-    // --------------------------------------------------------
-
-    /*
-    QGroupBox *rawFileFilterBox = new QGroupBox(i18n("RAW Files"), this);
-    QGridLayout* grid4          = new QGridLayout(rawFileFilterBox);
-
-    QLabel *logoLabel4 = new QLabel(rawFileFilterBox);
-    logoLabel4->setPixmap(DesktopIcon("kdcraw"));
-
-    QLabel *rawFileFilterLabel = new QLabel(rawFileFilterBox);
-    rawFileFilterLabel->setText(i18n("Show only &RAW files with extensions:"));
-
-    KHBox *hbox4 = new KHBox(rawFileFilterBox);
-    d->rawFileFilterEdit = new QLineEdit(hbox4);
-    d->rawFileFilterEdit->setWhatsThis( i18n("<p>Here you can set the extensions of the RAW image files "
-                                             "to be displayed in Albums (such as CRW, for Canon cameras, "
-                                             "or NEF, for Nikon cameras)."));
-    rawFileFilterLabel->setBuddy(d->rawFileFilterEdit);
-    hbox4->setStretchFactor(d->rawFileFilterEdit, 10);
-
-    d->revertRawFileFilterBtn = new QToolButton(hbox4);
-    d->revertRawFileFilterBtn->setIcon(SmallIcon("view-refresh"));
-    d->revertRawFileFilterBtn->setToolTip(i18n("Revert to default settings"));
-
-    grid4->addWidget(logoLabel4,            0, 0, 2, 1);
-    grid4->addWidget(rawFileFilterLabel,    0, 1, 1, 1);
-    grid4->addWidget(hbox4,                 1, 1, 1, 1);
-    grid4->setColumnStretch(1, 10);
-    grid4->setMargin(KDialog::spacingHint());
-    grid4->setSpacing(KDialog::spacingHint());
-    */
 
     // --------------------------------------------------------
 

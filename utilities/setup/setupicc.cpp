@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "setupicc.h"
 #include "setupicc.moc"
 
@@ -149,9 +148,8 @@ public:
 };
 
 SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
-        : QWidget(parent)
+        : QWidget(parent), d(new SetupICCPriv)
 {
-    d = new SetupICCPriv();
     d->mainDialog = dialog;
     QVBoxLayout *layout = new QVBoxLayout(this);
 
@@ -712,7 +710,9 @@ void SetupICC::slotToggledWidgets(bool t)
         slotToggleManagedView(d->managedView->isChecked());
     }
     else
+    {
         d->mainDialog->enableButtonOk(true);
+    }
 }
 
 void SetupICC::slotClickedWork()

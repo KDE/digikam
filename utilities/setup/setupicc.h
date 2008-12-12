@@ -81,7 +81,7 @@ private slots:
 
 private:
 
-    SetupICCPriv* d;
+    SetupICCPriv* const d;
 };
 
 }  // namespace Digikam

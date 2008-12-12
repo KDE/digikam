@@ -7,7 +7,7 @@
  * Description : mics configuration setup tab
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "setupmisc.h"
 
@@ -62,10 +61,8 @@ public:
 };
 
 SetupMisc::SetupMisc(QWidget* parent)
-         : QWidget( parent )
+         : QWidget(parent), d(new SetupMiscPriv)
 {
-    d = new SetupMiscPriv;
-
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     d->showTrashDeleteDialogCheck = new QCheckBox(i18n("Confirm when moving items to the &trash"), this);

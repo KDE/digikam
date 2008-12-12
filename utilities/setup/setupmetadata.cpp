@@ -89,10 +89,8 @@ public:
 };
 
 SetupMetadata::SetupMetadata(QWidget* parent )
-             : QWidget(parent)
+             : QWidget(parent), d(new SetupMetadataPriv)
 {
-    d = new SetupMetadataPriv;
-
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
     // --------------------------------------------------------

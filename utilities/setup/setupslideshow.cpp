@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "setupslideshow.h"
 #include "setupslideshow.moc"
 
@@ -39,7 +38,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <knuminput.h>
-
 
 namespace Digikam
 {
@@ -76,9 +74,8 @@ public:
 };
 
 SetupSlideShow::SetupSlideShow(QWidget* parent)
-              : QWidget(parent)
+              : QWidget(parent), d(new SetupSlideShowPriv)
 {
-    d = new SetupSlideShowPriv;
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     d->delayInput = new KIntNumInput(5, this);
@@ -144,7 +141,7 @@ SetupSlideShow::~SetupSlideShow()
 void SetupSlideShow::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("ImageViewer Settings"));
+    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
 
     group.writeEntry("SlideShowDelay", d->delayInput->value());
     group.writeEntry("SlideShowStartCurrent", d->startWithCurrent->isChecked());
@@ -162,7 +159,7 @@ void SetupSlideShow::applySettings()
 void SetupSlideShow::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("ImageViewer Settings"));
+    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
 
     d->delayInput->setValue(group.readEntry("SlideShowDelay", 5));
     d->startWithCurrent->setChecked(group.readEntry("SlideShowStartCurrent", false));

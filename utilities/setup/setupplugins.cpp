@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "setupplugins.h"
 #include "setupplugins.moc"
 
@@ -62,14 +61,11 @@ public:
 };
 
 SetupPlugins::SetupPlugins(QWidget* parent )
-            : QWidget(parent)
+            : QWidget(parent), d(new SetupPluginsPriv)
 {
-    d = new SetupPluginsPriv;
     QVBoxLayout *layout = new QVBoxLayout(this);
     QHBoxLayout *hlay   = new QHBoxLayout();
-
     d->pluginsNumber    = new QLabel(this);
-
     QLabel *KipiVersion = new QLabel(i18n("Kipi library version: %1", QString(kipi_version)), this);
     KipiVersion->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
@@ -107,4 +103,3 @@ void SetupPlugins::applyPlugins()
 }
 
 }  // namespace Digikam
-

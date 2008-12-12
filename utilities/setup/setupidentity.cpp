@@ -66,9 +66,8 @@ public:
 };
 
 SetupIdentity::SetupIdentity(QWidget* parent )
-             : QWidget(parent)
+             : QWidget(parent), d(new SetupIdentityPriv)
 {
-    d = new SetupIdentityPriv;
     QVBoxLayout *layout = new QVBoxLayout( this );
     layout->setSpacing( KDialog::spacingHint() );
 
