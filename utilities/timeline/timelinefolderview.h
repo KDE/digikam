@@ -28,8 +28,6 @@
 
 #include "folderview.h"
 
-class Q3ListViewItem;
-
 namespace Digikam
 {
 

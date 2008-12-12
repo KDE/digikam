@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "timelinefolderview.h"
 #include "timelinefolderview.moc"
 

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "timelineview.h"
 #include "timelineview.moc"
 
@@ -110,9 +109,8 @@ public:
 };
 
 TimeLineView::TimeLineView(QWidget *parent)
-            : QWidget(parent)
+            : QWidget(parent), d(new TimeLineViewPriv)
 {
-    d = new TimeLineViewPriv;
     d->timer = new QTimer(this);
     setAttribute(Qt::WA_DeleteOnClose);
 

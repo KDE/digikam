@@ -149,7 +149,7 @@ private:
 
 private:
 
-    TimeLineWidgetPriv* d;
+    TimeLineWidgetPriv* const d;
 };
 
 }  // namespace Digikam

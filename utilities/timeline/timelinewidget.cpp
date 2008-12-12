@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "timelinewidget.h"
 #include "timelinewidget.moc"
 
@@ -114,9 +113,8 @@ public:
 };
 
 TimeLineWidget::TimeLineWidget(QWidget *parent)
-              : QWidget(parent)
+              : QWidget(parent), d(new TimeLineWidgetPriv)
 {
-    d = new TimeLineWidgetPriv;
     setAttribute(Qt::WA_DeleteOnClose);
     setMouseTracking(true);
     setMinimumWidth(256);
