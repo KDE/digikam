@@ -194,7 +194,7 @@ private:
 
     static DImgInterface *m_defaultInterface;
 
-    DImgInterfacePrivate *d;
+    DImgInterfacePrivate* const d;
 };
 
 }  // namespace Digikam

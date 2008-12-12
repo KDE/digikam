@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "undoaction.h"
 
 // KDE includes.
@@ -109,8 +108,7 @@ void UndoActionRotate::execute()
     }
 }
 
-UndoActionFlip::UndoActionFlip(DImgInterface* iface,
-                               UndoActionFlip::Direction dir)
+UndoActionFlip::UndoActionFlip(DImgInterface* iface, UndoActionFlip::Direction dir)
               : UndoAction(iface), m_dir(dir)
 {
     if(m_dir == Horizontal)

@@ -159,10 +159,8 @@ void DImgInterface::setDefaultInterface(DImgInterface *defaultInterface)
 }
 
 DImgInterface::DImgInterface()
-             : QObject()
+             : QObject(), d(new DImgInterfacePrivate)
 {
-    d = new DImgInterfacePrivate;
-
     d->undoMan = new UndoManager(this);
     d->thread  = new SharedLoadSaveThread;
 

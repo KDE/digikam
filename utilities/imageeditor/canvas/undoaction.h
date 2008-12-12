@@ -50,7 +50,7 @@ public:
     virtual void execute()  = 0;
 
     QString getTitle() const;
-    
+
 protected:
 
     DImgInterface *m_iface;
@@ -68,7 +68,7 @@ public:
         R180,
         R270
     };
-    
+
     UndoActionRotate(DImgInterface* iface, Angle angle);
     ~UndoActionRotate();
 
@@ -90,7 +90,7 @@ public:
         Horizontal,
         Vertical
     };
-    
+
     UndoActionFlip(DImgInterface* iface, Direction dir);
     ~UndoActionFlip();
 

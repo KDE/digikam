@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "undomanager.h"
 
 // C++ includes.
@@ -70,8 +69,8 @@ public:
 };
 
 UndoManager::UndoManager(DImgInterface* iface)
+           : d(new UndoManagerPriv)
 {
-    d = new UndoManagerPriv;
     d->dimgiface = iface;
     d->undoCache = new UndoCache;
 }

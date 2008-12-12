@@ -15,7 +15,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -51,10 +51,10 @@ public:
 
     void undo();
     void redo();
-    
+
     void clear(bool clearCache=true);
     bool anyMoreUndo();
-    bool anyMoreRedo();    
+    bool anyMoreRedo();
     void getUndoHistory(QStringList &titles);
     void getRedoHistory(QStringList &titles);
     bool isAtOrigin();
@@ -63,13 +63,13 @@ public:
     void addAction(UndoAction* action);
 
 private:
-    
+
     void clearUndoActions();
     void clearRedoActions();
 
 private:
 
-    UndoManagerPriv *d;
+    UndoManagerPriv* const d;
 };
 
 }  // namespace Digikam

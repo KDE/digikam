@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "undocache.h"
 
 // C ANSI includes.
@@ -60,9 +59,8 @@ public:
 };
 
 UndoCache::UndoCache()
+         : d(new UndoCachePriv)
 {
-    d = new UndoCachePriv;
-
     QString cacheDir = KStandardDirs::locateLocal("cache",
                                  KGlobal::mainComponent().aboutData()->programName() + '/');
 

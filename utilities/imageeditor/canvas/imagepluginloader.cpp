@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "imagepluginloader.h"
 
 // Qt includes.
@@ -91,10 +90,9 @@ ImagePluginLoader* ImagePluginLoader::instance()
 }
 
 ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
-                 : QObject(parent)
+                 : QObject(parent), d(new ImagePluginLoaderPrivate)
 {
     m_instance = this;
-    d = new ImagePluginLoaderPrivate;
     d->splash = splash;
 
     QStringList imagePluginsList2Load;
