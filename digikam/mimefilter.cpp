@@ -48,7 +48,7 @@ MimeFilter::MimeFilter(QWidget* parent)
           : QComboBox(parent)
 {
     d = new MimeFilterPriv;
-    insertItem( AllFiles,    i18n("All Files") );
+    insertItem( AllFiles,    i18n("All files") );
     insertItem( ImageFiles,  i18n("Image files") );
     insertItem( NoRAWFiles,  i18n("No RAW files") );
     insertItem( JPGFiles,    i18n("JPEG files") );
