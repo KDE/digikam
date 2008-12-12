@@ -5,7 +5,7 @@
  *
  * Date        : 2008-03-14
  * Description : User interface for searches
- * 
+ *
  * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef SEARCHUTILITIES_H
@@ -54,11 +54,14 @@ namespace Digikam
 class VisibilityObject
 {
 public:
+
     virtual ~VisibilityObject() {}
 
     virtual void setVisible(bool visible) = 0;
     virtual bool isVisible() = 0;
 };
+
+// -------------------------------------------------------------------------
 
 class VisibilityController : public QObject
 {
@@ -100,6 +103,8 @@ protected:
     QWidget                  *m_containerWidget;
 };
 
+// -------------------------------------------------------------------------
+
 class SearchClickLabel : public QLabel
 {
     Q_OBJECT
@@ -118,6 +123,8 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent* event);
 };
 
+// -------------------------------------------------------------------------
+
 class SearchSqueezedClickLabel : public KSqueezedTextLabel
 {
     Q_OBJECT
@@ -135,6 +142,8 @@ protected:
 
     virtual void mouseReleaseEvent(QMouseEvent* event);
 };
+
+// -------------------------------------------------------------------------
 
 class ArrowClickLabel : public QWidget
 {
@@ -160,6 +169,8 @@ protected:
     int           m_size;
     int           m_margin;
 };
+
+// -------------------------------------------------------------------------
 
 class AnimatedClearButton : public QWidget
 {
@@ -207,6 +218,8 @@ private:
     QPixmap    m_pixmap;
     bool       m_stayAlwaysVisible;
 };
+
+// -------------------------------------------------------------------------
 
 class CustomStepsDoubleSpinBox : public QDoubleSpinBox
 {
@@ -257,6 +270,8 @@ private:
     double        m_largerStep;
     bool          m_invertStepping;
 };
+
+// -------------------------------------------------------------------------
 
 class CustomStepsIntSpinBox : public QSpinBox
 {
@@ -324,6 +339,8 @@ private:
     QString       m_fractionSpecialValueText;
 };
 
+// -------------------------------------------------------------------------
+
 class StyleSheetDebugger : public QWidget
 {
     Q_OBJECT
@@ -351,7 +368,6 @@ protected:
     QWidget        *m_widget;
 };
 
-}
+} // namespace Digikam
 
-#endif
-
+#endif // SEARCHUTILITIES_H

@@ -332,7 +332,7 @@ void ArrowClickLabel::paintEvent(QPaintEvent*)
         y = (height() - m_size) / 2;
     } 
     else // arrowType == LeftArrow
-    {         
+    {
         x = m_margin;
         y = (height() - m_size) / 2;
     }
@@ -558,7 +558,7 @@ void AnimatedClearButton::animationFinished()
     if (m_timeline->direction() == QTimeLine::Forward) 
     {
         update();
-    } 
+    }
     else 
     {
         if (!m_stayAlwaysVisible)

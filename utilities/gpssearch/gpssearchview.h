@@ -77,7 +77,7 @@ private slots:
 
 private:
 
-    GPSSearchViewPriv *d;
+    GPSSearchViewPriv* const d;
 };
 
 }  // namespace Digikam

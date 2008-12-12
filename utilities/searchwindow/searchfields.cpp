@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "searchfields.h"
 #include "searchfields.moc"
 
@@ -467,7 +466,7 @@ SearchField *SearchField::createField(const QString &name, SearchFieldGroup *par
 }
 
 SearchField::SearchField(QObject *parent)
-    : QObject(parent)
+           : QObject(parent)
 {
     m_label       = new QLabel;
     m_detailLabel = new QLabel;
@@ -598,10 +597,10 @@ void SearchField::setValidValueState(bool valueIsValid)
     }
 }
 
-// ----------------------------------- //
+// -------------------------------------------------------------------------
 
 SearchFieldText::SearchFieldText(QObject *parent)
-    : SearchField(parent), m_edit(0)
+               : SearchField(parent), m_edit(0)
 {
 }
 
@@ -653,10 +652,10 @@ void SearchFieldText::valueChanged(const QString &text)
     setValidValueState(!text.isEmpty());
 }
 
-// ----------------------------------- //
+// -------------------------------------------------------------------------
 
 SearchFieldKeyword::SearchFieldKeyword(QObject *parent)
-    : SearchFieldText(parent)
+                  : SearchFieldText(parent)
 {
 }
 
@@ -680,14 +679,14 @@ void SearchFieldKeyword::write(SearchXmlWriter &writer)
     }
 }
 
-// ----------------------------------- //
+// -------------------------------------------------------------------------
 
 SearchFieldRangeDate::SearchFieldRangeDate(QObject *parent, Type type)
-    : SearchField(parent),
-      m_firstTimeEdit(0), m_firstDateEdit(0),
-      m_secondTimeEdit(0), m_secondDateEdit(0), m_type(type)
+                    : SearchField(parent),
+                      m_firstTimeEdit(0), m_firstDateEdit(0),
+                      m_secondTimeEdit(0), m_secondDateEdit(0), m_type(type)
 {
-    m_betweenLabel   = new QLabel;
+    m_betweenLabel = new QLabel;
 }
 
 void SearchFieldRangeDate::setupValueWidgets(QGridLayout *layout, int row, int column)
@@ -828,10 +827,10 @@ void SearchFieldRangeDate::reset()
 {
     m_firstDateEdit->setDate(QDate());
     if (m_type == DateTime)
-        m_firstTimeEdit->setTime(QTime(0,0,0,0));
+        m_firstTimeEdit->setTime(QTime(0, 0, 0, 0));
     m_secondDateEdit->setDate(QDate());
     if (m_type == DateTime)
-        m_secondTimeEdit->setTime(QTime(0,0,0,0));
+        m_secondTimeEdit->setTime(QTime(0, 0, 0, 0));
     valueChanged();
 }
 
@@ -870,15 +869,16 @@ void SearchFieldRangeDate::valueChanged()
     setValidValueState(m_firstDateEdit->date().isValid() || m_secondDateEdit->date().isValid());
 }
 
-// ----------------------------------- //
+// -------------------------------------------------------------------------
 
 SearchFieldRangeInt::SearchFieldRangeInt(QObject *parent)
-    : SearchField(parent), m_min(0), m_max(100), m_reciprocal(false),
-      m_firstBox(0), m_secondBox(0)
+                   : SearchField(parent), 
+                     m_min(0), m_max(100), m_reciprocal(false),
+                     m_firstBox(0), m_secondBox(0)
 {
     m_betweenLabel = new QLabel;
-    m_firstBox  = new CustomStepsIntSpinBox;
-    m_secondBox = new CustomStepsIntSpinBox;
+    m_firstBox     = new CustomStepsIntSpinBox;
+    m_secondBox    = new CustomStepsIntSpinBox;
 }
 
 void SearchFieldRangeInt::setupValueWidgets(QGridLayout *layout, int row, int column)
@@ -1149,15 +1149,16 @@ QList<QRect> SearchFieldRangeInt::valueWidgetRects() const
     return rects;
 }
 
-// ----------------------------------- //
+// -------------------------------------------------------------------------
 
 SearchFieldRangeDouble::SearchFieldRangeDouble(QObject *parent)
-    : SearchField(parent), m_min(0), m_max(100), m_factor(1),
-      m_firstBox(0), m_secondBox(0)
+                      : SearchField(parent), 
+                        m_min(0), m_max(100), m_factor(1),
+                        m_firstBox(0), m_secondBox(0)
 {
     m_betweenLabel = new QLabel;
-    m_firstBox  = new CustomStepsDoubleSpinBox;
-    m_secondBox = new CustomStepsDoubleSpinBox;
+    m_firstBox     = new CustomStepsDoubleSpinBox;
+    m_secondBox    = new CustomStepsDoubleSpinBox;
 }
 
 void SearchFieldRangeDouble::setupValueWidgets(QGridLayout *layout, int row, int column)
@@ -1333,11 +1334,11 @@ QList<QRect> SearchFieldRangeDouble::valueWidgetRects() const
     return rects;
 }
 
-// ----------------------------------- //
+// -------------------------------------------------------------------------
 
 SearchFieldChoice::SearchFieldChoice(QObject *parent)
-    : SearchField(parent),
-      m_comboBox(0), m_type(QVariant::Invalid)
+                 : SearchField(parent),
+                   m_comboBox(0), m_type(QVariant::Invalid)
 {
     m_model = new ChoiceSearchModel(this);
     m_anyText = i18n("Any");
@@ -1702,11 +1703,11 @@ QList<int> SearchFieldChoice::values() const
 }
 */
 
-// ----------------------------------- //
+// -------------------------------------------------------------------------
 
 SearchFieldAlbum::SearchFieldAlbum(QObject *parent, Type type)
-    : SearchField(parent),
-      m_comboBox(0), m_type(type)
+                : SearchField(parent),
+                  m_comboBox(0), m_type(type)
 {
 }
 
@@ -1828,14 +1829,14 @@ QList<QRect> SearchFieldAlbum::valueWidgetRects() const
     return rects;
 }
 
-// ----------------------------------- //
+// -------------------------------------------------------------------------
 
 SearchFieldRating::SearchFieldRating(QObject *parent)
-    : SearchField(parent)
+                 : SearchField(parent)
 {
     m_betweenLabel = new QLabel;
-    m_firstBox  = new RatingComboBox;
-    m_secondBox = new RatingComboBox;
+    m_firstBox     = new RatingComboBox;
+    m_secondBox    = new RatingComboBox;
 }
 
 void SearchFieldRating::setupValueWidgets(QGridLayout *layout, int row, int column)
@@ -1978,11 +1979,11 @@ QList<QRect> SearchFieldRating::valueWidgetRects() const
     return rects;
 }
 
-// ----------------------------------- //
+// -------------------------------------------------------------------------
 
 SearchFieldColorDepth::SearchFieldColorDepth(QObject *parent)
-    : SearchField(parent),
-      m_comboBox(0)
+                     : SearchField(parent),
+                       m_comboBox(0)
 {
 }
 
@@ -2052,7 +2053,4 @@ void SearchFieldColorDepth::indexChanged(int index)
     setValidValueState(index != 0);
 }
 
-}
-
-
-
+} // namespace Digikam

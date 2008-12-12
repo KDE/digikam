@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "ratingsearchutilities.h"
 #include "ratingsearchutilities.moc"
 
@@ -51,7 +50,6 @@
 
 namespace Digikam
 {
-
 
 RatingStarDrawer::RatingStarDrawer()
 {
@@ -88,9 +86,10 @@ QRect RatingStarDrawer::drawStarPolygons(QPainter *painter, int numberOfStars) c
     return drawnRect;
 }
 
-// --------- //
+// -------------------------------------------------------------------------
 
-RatingComboBoxDelegate::RatingComboBoxDelegate(QObject *parent) : QItemDelegate(parent)
+RatingComboBoxDelegate::RatingComboBoxDelegate(QObject *parent) 
+                      : QItemDelegate(parent)
 {
 }
 
@@ -102,12 +101,15 @@ QSize RatingComboBoxDelegate::sizeHint ( const QStyleOptionViewItem & option, co
         return QSize(RatingMax * (starPolygonSize.width() + 1), starPolygonSize.height());
     }
     else
+    {
         return QItemDelegate::sizeHint(option, index);
+    }
 }
 
-void RatingComboBoxDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const
+void RatingComboBoxDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
+                                   const QModelIndex &index) const
 {
-    QVariant value = index.data(Qt::DisplayRole);
+    QVariant value  = index.data(Qt::DisplayRole);
     bool selectable = index.flags() & Qt::ItemIsSelectable;
     if (value.type() == QVariant::Int)
     {
@@ -122,7 +124,9 @@ void RatingComboBoxDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         painter->restore();
     }
     else
+    {
         return QItemDelegate::paint(painter, option, index);
+    }
 }
 
 void RatingComboBoxDelegate::drawRating(QPainter *painter, const QRect &rect, int rating, bool selectable) const
@@ -148,9 +152,10 @@ void RatingComboBoxDelegate::drawRating(QPainter *painter, const QRect &rect, in
     painter->restore();
 }
 
-// --------- //
+// -------------------------------------------------------------------------
 
-RatingComboBoxModel::RatingComboBoxModel(QObject *parent) : QAbstractListModel(parent)
+RatingComboBoxModel::RatingComboBoxModel(QObject *parent) 
+                   : QAbstractListModel(parent)
 {
     for (int value = RatingComboBox::Null; value <= RatingComboBox::Rating5; value++)
         m_entries << (RatingComboBox::RatingValue)value;
@@ -212,10 +217,10 @@ QModelIndex RatingComboBoxModel::indexForRatingValue(RatingComboBox::RatingValue
     return QModelIndex();
 }
 
-// --------- //
+// -------------------------------------------------------------------------
 
 RatingComboBoxWidget::RatingComboBoxWidget(QWidget *parent)
-    : RatingWidget(parent)
+                    : RatingWidget(parent)
 {
     m_value = RatingComboBox::Null;
 
@@ -322,10 +327,10 @@ void RatingComboBoxWidget::paintEvent(QPaintEvent *e)
     }
 }
 
-// --------- //
+// -------------------------------------------------------------------------
 
 RatingComboBox::RatingComboBox(QWidget *parent)
-    : ModelIndexBasedComboBox(parent)
+              : ModelIndexBasedComboBox(parent)
 {
     m_syncing = false;
 
@@ -393,6 +398,4 @@ void RatingComboBox::ratingWidgetChanged(int rv)
     emit ratingValueChanged(value);
 }
 
-
-}
-
+} // namespace Digikam

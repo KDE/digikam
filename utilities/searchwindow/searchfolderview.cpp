@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "searchfolderview.h"
 #include "searchfolderview.moc"
 
@@ -110,6 +109,8 @@ private:
 
     SAlbum *m_album;
 };
+
+// -------------------------------------------------------------------------
 
 SearchFolderView::SearchFolderView(QWidget* parent)
                 : FolderView(parent, "SearchFolderView")

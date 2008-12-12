@@ -74,7 +74,7 @@ private slots:
 
 private:
 
-    GPSSearchWidgetPriv *d;
+    GPSSearchWidgetPriv* const d;
 };
 
 #else // HAVE_MARBLEWIDGET

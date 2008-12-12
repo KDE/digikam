@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "gpssearchview.h"
 #include "gpssearchview.moc"
 
@@ -87,10 +86,8 @@ public:
 };
 
 GPSSearchView::GPSSearchView(QWidget *parent)
-             : QWidget(parent)
+             : QWidget(parent), d(new GPSSearchViewPriv)
 {
-    d = new GPSSearchViewPriv;
-
     setAttribute(Qt::WA_DeleteOnClose);
     setAcceptDrops(true);
 

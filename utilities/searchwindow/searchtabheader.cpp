@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "searchtabheader.h"
 #include "searchtabheader.moc"
 
@@ -112,7 +111,7 @@ protected:
     bool m_hasAdvanced;
 };
 
-// ------------------------------------------------------------
+// -------------------------------------------------------------------------
 
 class SearchTabHeaderPriv
 {
@@ -169,10 +168,8 @@ public:
 };
 
 SearchTabHeader::SearchTabHeader(QWidget *parent)
-               : QWidget(parent)
+               : QWidget(parent), d(new SearchTabHeaderPriv)
 {
-    d = new SearchTabHeaderPriv;
-
     QVBoxLayout *mainLayout = new QVBoxLayout;
 
     // upper part

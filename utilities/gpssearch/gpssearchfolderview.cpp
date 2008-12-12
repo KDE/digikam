@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "gpssearchfolderview.h"
 #include "gpssearchfolderview.moc"
 

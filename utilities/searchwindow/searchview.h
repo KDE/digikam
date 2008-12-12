@@ -100,10 +100,12 @@ protected:
     QList<SearchGroup *> m_groups;
 };
 
+// -------------------------------------------------------------------------
+
 class SearchViewPrivate;
+
 class SearchView : public AbstractSearchGroupContainer, public SearchViewThemedPartsCache
 {
-
     Q_OBJECT
 
 public:
@@ -148,8 +150,10 @@ protected:
 
 private:
 
-    SearchViewPrivate   *d;
+    SearchViewPrivate* const d;
 };
+
+// -------------------------------------------------------------------------
 
 class SearchViewBottomBar : public QWidget
 {
@@ -178,8 +182,6 @@ protected:
     KPushButton                *m_resetButton;
 };
 
-}
+} // namespace Digikam
 
-#endif
-
-
+#endif // SEARCHVIEW_H

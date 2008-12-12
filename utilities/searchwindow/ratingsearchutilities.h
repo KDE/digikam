@@ -5,7 +5,7 @@
  *
  * Date        : 2008-03-14
  * Description : User interface for searches
- * 
+ *
  * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef RATINGSEARCHUTILITIES_H
@@ -60,14 +60,14 @@ public:
     {
         /** The rating value. All values except Null correspond to
          *  the integers used by the database. */
-        Null = -2,
+        Null     = -2,
         NoRating = -1,
-        Rating0 = 0,
-        Rating1 = 1,
-        Rating2 = 2,
-        Rating3 = 3,
-        Rating4 = 4,
-        Rating5 = 5
+        Rating0  = 0,
+        Rating1  = 1,
+        Rating2  = 2,
+        Rating3  = 3,
+        Rating4  = 4,
+        Rating5  = 5
     };
 
     RatingComboBox(QWidget *parent = 0);
@@ -92,10 +92,9 @@ protected:
 private:
 
     bool                     m_syncing;
-
 };
 
-// -- Internal classes --
+// -- Internal classes ----------------------------------------------------------------
 
 class RatingStarDrawer
 {
@@ -110,6 +109,8 @@ protected:
     QPolygon                         starPolygon;
     QSize                            starPolygonSize;
 };
+
+// -------------------------------------------------------------------------
 
 class RatingComboBoxWidget : public RatingWidget, public RatingStarDrawer
 {
@@ -141,6 +142,8 @@ protected:
     RatingComboBox::RatingValue m_value;
 };
 
+// -------------------------------------------------------------------------
+
 class RatingComboBoxModel : public QAbstractListModel
 {
 public:
@@ -165,6 +168,8 @@ protected:
     QList<RatingComboBox::RatingValue> m_entries;
 };
 
+// -------------------------------------------------------------------------
+
 class RatingComboBoxDelegate : public QItemDelegate, public RatingStarDrawer
 {
 public:
@@ -179,8 +184,6 @@ protected:
     void drawRating(QPainter *painter, const QRect &rect, int rating, bool selectable) const;
 };
 
+} // namespace Digikam
 
-}
-
-#endif
-
+#endif // RATINGSEARCHUTILITIES_H

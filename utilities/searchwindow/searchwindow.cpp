@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "searchwindow.h"
 #include "searchwindow.moc"
 
@@ -67,10 +66,8 @@ public:
 };
 
 SearchWindow::SearchWindow()
-    : QWidget(0)
+            : QWidget(0), d(new SearchWindowPriv)
 {
-    d = new SearchWindowPriv;
-
     QVBoxLayout *layout = new QVBoxLayout;
 
     d->scrollArea = new QScrollArea(this);
@@ -179,8 +176,4 @@ void SearchWindow::keyPressEvent(QKeyEvent *e)
     }
 }
 
-
-}
-
-
-
+} // namespace Digikam

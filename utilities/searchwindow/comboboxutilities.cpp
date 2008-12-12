@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "comboboxutilities.h"
 #include "comboboxutilities.moc"
 
@@ -47,8 +46,8 @@ namespace Digikam
 
 
 ProxyLineEdit::ProxyLineEdit(QWidget *parent)
-    : QLineEdit(parent),
-      m_widget(0)
+             : QLineEdit(parent),
+               m_widget(0)
 {
     m_layout = new QVBoxLayout;
     m_layout->setSpacing(0);
@@ -72,7 +71,6 @@ void ProxyLineEdit::setWidget(QWidget *widget)
  * We just re-implement all relevant QWidget event handlers and call
  * the QWidget implementation, not the QLineEdit one.
  */
-
 void ProxyLineEdit::mousePressEvent(QMouseEvent *event)
 {
     QWidget::mousePressEvent(event);
@@ -158,10 +156,10 @@ QSize ProxyLineEdit::sizeHint() const
     return QWidget::sizeHint();
 }
 
-// ----------------------------------- //
+// -------------------------------------------------------------------------
 
 ProxyClickLineEdit::ProxyClickLineEdit(QWidget *parent)
-    : ProxyLineEdit(parent)
+                  : ProxyLineEdit(parent)
 {
 }
 
@@ -176,10 +174,10 @@ void ProxyClickLineEdit::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
-// ----------------------------------- //
+// -------------------------------------------------------------------------
 
 ModelIndexBasedComboBox::ModelIndexBasedComboBox(QWidget *parent)
-    : QComboBox(parent)
+                       : QComboBox(parent)
 {
 }
 
@@ -207,10 +205,10 @@ void ModelIndexBasedComboBox::setCurrentIndex(const QModelIndex &index)
     view()->selectionModel()->setCurrentIndex(m_currentIndex, QItemSelectionModel::ClearAndSelect);
 }
 
-// ----------------------------------- //
+// -------------------------------------------------------------------------
 
 StayPoppedUpComboBox::StayPoppedUpComboBox(QWidget *parent)
-    : ModelIndexBasedComboBox(parent)
+                    : ModelIndexBasedComboBox(parent)
 {
 }
 
@@ -240,8 +238,10 @@ bool StayPoppedUpComboBox::eventFilter(QObject *o, QEvent *e)
     // and then dispatching it to its destination.
     if (o == m_view || o == m_view->viewport())
     {
-        switch (e->type()) {
-            case QEvent::MouseButtonRelease: {
+        switch (e->type()) 
+        {
+            case QEvent::MouseButtonRelease: 
+            {
                 QMouseEvent *m = static_cast<QMouseEvent *>(e);
                 if (m_view->isVisible() && m_view->rect().contains(m->pos()))
                 {
@@ -262,7 +262,7 @@ bool StayPoppedUpComboBox::eventFilter(QObject *o, QEvent *e)
     return QComboBox::eventFilter(o, e);
 }
 
-// ----------------------------------- //
+// -------------------------------------------------------------------------
 
 class TreeViewComboBoxTreeView : public QTreeView
 {
@@ -279,7 +279,7 @@ public:
 };
 
 TreeViewComboBox::TreeViewComboBox(QWidget *parent)
-    : StayPoppedUpComboBox(parent)
+                : StayPoppedUpComboBox(parent)
 {
 }
 
@@ -299,7 +299,7 @@ QTreeView *TreeViewComboBox::view() const
     return static_cast<QTreeView *>(m_view);
 }
 
-// ----------------------------------- //
+// -------------------------------------------------------------------------
 
 class ListViewComboBoxListView : public QListView
 {
@@ -316,7 +316,7 @@ public:
 };
 
 ListViewComboBox::ListViewComboBox(QWidget *parent)
-    : StayPoppedUpComboBox(parent)
+                : StayPoppedUpComboBox(parent)
 {
 }
 
@@ -336,7 +336,7 @@ QListView *ListViewComboBox::view() const
     return static_cast<QListView *>(m_view);
 }
 
-// ----------------------------------- //
+// -------------------------------------------------------------------------
 
 class TreeViewComboBoxLineEdit : public QLineEdit
 {
@@ -367,8 +367,8 @@ public:
 };
 
 TreeViewLineEditComboBox::TreeViewLineEditComboBox(QWidget *parent)
-    : TreeViewComboBox(parent),
-      m_comboLineEdit(0)
+                        : TreeViewComboBox(parent),
+                          m_comboLineEdit(0)
 {
 }
 
@@ -387,6 +387,5 @@ void TreeViewLineEditComboBox::installView()
     setLineEdit(m_comboLineEdit);
 }
 
-
-}
+} // namespace Digikam
 

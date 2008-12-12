@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "searchgroup.h"
 #include "searchgroup.moc"
 
@@ -51,9 +50,9 @@
 namespace Digikam
 {
 
-
 SearchGroup::SearchGroup(SearchView *parent)
-    : AbstractSearchGroupContainer(parent), m_view(parent), m_layout(0), m_label(0), m_groupType(FirstGroup)
+           : AbstractSearchGroupContainer(parent), 
+             m_view(parent), m_layout(0), m_label(0), m_groupType(FirstGroup)
 {
 }
 
@@ -331,11 +330,11 @@ QList<QRect> SearchGroup::startupAnimationArea() const
     return rects;
 }
 
-// ----------------------------------- //
-
+// -------------------------------------------------------------------------
 
 SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGroup::Type type, QWidget *parent)
-    : QWidget(parent), m_groupOpBox(0), m_themeCache(cache)
+                : QWidget(parent), 
+                  m_groupOpBox(0), m_themeCache(cache)
 {
     QGridLayout *m_layout = new QGridLayout;
 
@@ -356,10 +355,10 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGrou
         logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                 .scaled(96, 96, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-        m_layout->addWidget(mainLabel,      0, 0, 1, 1);
-        m_layout->addWidget(m_allBox,       1, 0, 1, 1);
-        m_layout->addWidget(m_anyBox,       2, 0, 1, 1);
-        m_layout->addWidget(logo,           0, 2, 3, 1);
+        m_layout->addWidget(mainLabel, 0, 0, 1, 1);
+        m_layout->addWidget(m_allBox,  1, 0, 1, 1);
+        m_layout->addWidget(m_anyBox,  2, 0, 1, 1);
+        m_layout->addWidget(logo,      0, 2, 3, 1);
         m_layout->setColumnStretch(1, 10);
     }
     else
@@ -374,10 +373,10 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGrou
         connect(m_removeLabel, SIGNAL(leftClicked()),
                 this, SIGNAL(removeClicked()));
 
-        m_layout->addWidget(m_groupOpBox,   0, 0, 1, 1);
-        m_layout->addWidget(m_allBox,       1, 0, 1, 1);
-        m_layout->addWidget(m_anyBox,       2, 0, 1, 1);
-        m_layout->addWidget(m_removeLabel,  0, 2, 1, 1); //, Qt::AlignRight | Qt::AlignTop);
+        m_layout->addWidget(m_groupOpBox,  0, 0, 1, 1);
+        m_layout->addWidget(m_allBox,      1, 0, 1, 1);
+        m_layout->addWidget(m_anyBox,      2, 0, 1, 1);
+        m_layout->addWidget(m_removeLabel, 0, 2, 1, 1); //, Qt::AlignRight | Qt::AlignTop);
         m_layout->setColumnStretch(1, 10);
     }
 
@@ -420,7 +419,4 @@ void SearchGroupLabel::paintEvent(QPaintEvent *)
     p.drawPixmap(0, 0, m_themeCache->groupLabelPixmap(width(), height()));
 }
 
-}
-
-
-
+} // namespace Digikam

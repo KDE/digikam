@@ -115,8 +115,6 @@ protected:
     QLabel            *m_expandLabel;
 };
 
-}
+} // namespace Digikam
 
-#endif
-
-
+#endif // SEARCHFIELDGROUP_H

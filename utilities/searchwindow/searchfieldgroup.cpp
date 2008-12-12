@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "searchfieldgroup.h"
 #include "searchfieldgroup.moc"
 
@@ -46,7 +45,7 @@ namespace Digikam
 {
 
 SearchFieldGroup::SearchFieldGroup(SearchGroup *parent)
-    : QWidget(parent)
+                : QWidget(parent)
 {
     m_layout = new QGridLayout;
     setLayout(m_layout);
@@ -129,6 +128,7 @@ QList<QRect> SearchFieldGroup::areaOfMarkedFields() const
     QList<QRect> rects;
     if (!m_controller->isVisible())
         return rects;
+
     foreach(SearchField *field, m_markedFields)
     {
         if (field->isVisible())
@@ -142,10 +142,10 @@ QList<QRect> SearchFieldGroup::areaOfMarkedFields() const
     return rects;
 }
 
-// ----------------------------------- //
+// -------------------------------------------------------------------------
 
 SearchFieldGroupLabel::SearchFieldGroupLabel(QWidget *parent)
-    : QWidget(parent)
+                     : QWidget(parent)
 {
     QGridLayout *layout = new QGridLayout;
 
@@ -180,7 +180,4 @@ void SearchFieldGroupLabel::displayFolded()
 {
 }
 
-}
-
-
-
+} // namespace Digikam

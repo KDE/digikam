@@ -92,7 +92,7 @@ protected:
     Type                          m_groupType;
 };
 
-// ----------------------------------- //
+// -------------------------------------------------------------------------
 
 class SearchGroupLabel : public QWidget
 {
@@ -126,8 +126,6 @@ private:
     SearchViewThemedPartsCache    *m_themeCache;
 };
 
-}
+} // namespace Digikam
 
-#endif
-
-
+#endif // SEARCHGROUP_H

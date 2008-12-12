@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "gpssearchwidget.h"
 
 // KDE includes.
@@ -44,10 +43,8 @@ public:
 };
 
 GPSSearchWidget::GPSSearchWidget(QWidget *parent)
-               : MarbleWidget(parent)
+               : MarbleWidget(parent), d(new GPSSearchWidgetPriv)
 {
-    d = new GPSSearchWidgetPriv;
-
 #ifdef MARBLE_VERSION
     setMapThemeId("earth/srtm/srtm.dgml");
 #endif // MARBLE_VERSION

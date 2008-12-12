@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "choicesearchutilities.h"
 #include "choicesearchutilities.moc"
 
@@ -42,12 +41,12 @@ namespace Digikam
 {
 
 ChoiceSearchModel::Entry::Entry()
-    : checkState(false)
+                 : checkState(false)
 {
 }
 
 ChoiceSearchModel::Entry::Entry(QVariant key, const QString userDisplay)
-    : key(key), display(userDisplay), checkState(false)
+                 : key(key), display(userDisplay), checkState(false)
 {
 }
 
@@ -198,10 +197,10 @@ bool ChoiceSearchModel::setData(const QModelIndex &index, const QVariant &value,
         return QAbstractListModel::setData(index, value, role);
 }
 
-// ---------------------------- //
+// --------------------------------------------------------------------------------------
 
 ChoiceSearchComboBox::ChoiceSearchComboBox(QWidget *parent)
-    : ListViewComboBox(parent)
+                    : ListViewComboBox(parent)
 {
 }
 
@@ -258,5 +257,4 @@ void ChoiceSearchComboBox::installView()
             this, SLOT(labelClicked()));
 }
 
-}
-
+} // namespace Digikam

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "searchview.h"
 #include "searchview.moc"
 
@@ -128,7 +127,7 @@ QList<QRect> AbstractSearchGroupContainer::startupAnimationAreaOfGroups() const
     return list;
 }
 
-// ------------------------------------- //
+// -------------------------------------------------------------------------
 
 class SearchViewPrivate
 {
@@ -150,8 +149,8 @@ public:
 };
 
 SearchView::SearchView()
+          : d(new SearchViewPrivate)
 {
-    d = new SearchViewPrivate;
     d->pixmapCache.setMaxCost(4);
 }
 
@@ -426,11 +425,11 @@ QPixmap SearchView::bottomBarPixmap(int w, int h)
     return cachedBannerPixmap(w, h);
 }
 
-// ------------------------------------- //
+// -------------------------------------------------------------------------
 
 SearchViewBottomBar::SearchViewBottomBar(SearchViewThemedPartsCache * cache, QWidget *parent)
-    : QWidget(parent),
-      m_themeCache(cache)
+                   : QWidget(parent),
+                     m_themeCache(cache)
 {
     m_mainLayout = new QHBoxLayout;
 
@@ -473,7 +472,4 @@ void SearchViewBottomBar::paintEvent(QPaintEvent *)
     p.drawPixmap(0, 0, m_themeCache->bottomBarPixmap(width(), height()));
 }
 
-}
-
-
-
+} // namespace Digikam
