@@ -136,7 +136,7 @@ private:
 
     bool mouseInItemRect(Q3ListViewItem* item, int x) const;
 
-    FolderViewPriv *d;
+    FolderViewPriv* const d;
 };
 
 }  // namespace Digikam

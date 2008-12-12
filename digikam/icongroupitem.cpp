@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "icongroupitem.h"
 
 // C++ includes.
@@ -72,8 +71,8 @@ public:
 };
 
 IconGroupItem::IconGroupItem(IconView* parent)
+             : d(new IconGroupItemPriv)
 {
-    d = new IconGroupItemPriv;
     d->view = parent;
     m_next    = 0;
     m_prev    = 0;
@@ -251,9 +250,11 @@ void IconGroupItem::sort()
 
     IconItem *prev = 0;
     item = 0;
-    for ( i = 0; i < (int)count(); ++i ) {
+    for ( i = 0; i < (int)count(); ++i ) 
+    {
         item = items[ i ].item;
-        if ( item ) {
+        if ( item ) 
+        {
             item->m_prev = prev;
             if ( item->m_prev )
                 item->m_prev->m_next = item;

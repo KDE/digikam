@@ -24,7 +24,6 @@
  *
  * ============================================================ */
 
-
 #include "kdateedit.h"
 #include "kdateedit.moc"
 
@@ -52,6 +51,7 @@ namespace Digikam
 class DateValidator : public QValidator
 {
     public:
+
         DateValidator( const QStringList &keywords, QWidget* parent )
             : QValidator( parent ), mKeywords( keywords )
         {}
@@ -88,7 +88,7 @@ KDateEdit::KDateEdit(QWidget *parent, const char* name)
     setMaxCount( 1 );
     setEditable( true );
 
-    mDate = QDate::currentDate();
+    mDate         = QDate::currentDate();
     QString today = KGlobal::locale()->formatDate( mDate, KLocale::ShortDate );
 
     addItem( today );
@@ -97,6 +97,7 @@ KDateEdit::KDateEdit(QWidget *parent, const char* name)
 
     connect( lineEdit(), SIGNAL( returnPressed() ),
             this, SLOT( lineEnterPressed() ) );
+
     connect( this, SIGNAL( textChanged( const QString& ) ),
             SLOT( slotTextChanged( const QString& ) ) );
 
@@ -105,7 +106,7 @@ KDateEdit::KDateEdit(QWidget *parent, const char* name)
     mPopup->installEventFilter( this );
 
     connect( mPopup, SIGNAL( dateChanged( const QDate& ) ),
-            SLOT( dateSelected( const QDate& ) ) );
+             this, SLOT( dateSelected( const QDate& ) ) );
 
     // handle keyword entry
     setupKeywords();
@@ -149,8 +150,7 @@ void KDateEdit::showPopup()
     if ( mReadOnly )
         return;
 
-    QRect desk = KGlobalSettings::desktopGeometry( this );
-
+    QRect desk        = KGlobalSettings::desktopGeometry( this );
     QPoint popupPoint = mapToGlobal( QPoint( 0,0 ) );
 
     int dateFrameHeight = mPopup->sizeHint().height();
@@ -276,7 +276,8 @@ QDate KDateEdit::parseDate( bool *replaced ) const
 
 bool KDateEdit::eventFilter( QObject *object, QEvent *event )
 {
-    if ( object == lineEdit() ) {
+    if ( object == lineEdit() ) 
+    {
         // We only process the focus out event if the text has changed
         // since we got focus
         if ( (event->type() == QEvent::FocusOut) && mTextChanged )
@@ -315,25 +316,30 @@ bool KDateEdit::eventFilter( QObject *object, QEvent *event )
                 }
             }
         }
-    } else {
+    }
+    else
+    {
         // It's a date picker event
-        switch ( event->type() ) {
-        case QEvent::MouseButtonDblClick:
-        case QEvent::MouseButtonPress: {
-            QMouseEvent *mouseEvent = (QMouseEvent*)event;
-            if ( !mPopup->rect().contains( mouseEvent->pos() ) ) {
-            QPoint globalPos = mPopup->mapToGlobal( mouseEvent->pos() );
-            if ( QApplication::widgetAt( globalPos ) == this ) {
-                // The date picker is being closed by a click on the
-                // KDateEdit widget. Avoid popping it up again immediately.
-                mDiscardNextMousePress = true;
+        switch ( event->type() ) 
+        {
+            case QEvent::MouseButtonDblClick:
+            case QEvent::MouseButtonPress: 
+            {
+                QMouseEvent *mouseEvent = (QMouseEvent*)event;
+                if ( !mPopup->rect().contains( mouseEvent->pos() ) ) 
+                {
+                    QPoint globalPos = mPopup->mapToGlobal( mouseEvent->pos() );
+                    if ( QApplication::widgetAt( globalPos ) == this ) 
+                    {
+                        // The date picker is being closed by a click on the
+                        // KDateEdit widget. Avoid popping it up again immediately.
+                        mDiscardNextMousePress = true;
+                    }
+                }
+                break;
             }
-            }
-
-            break;
-        }
-        default:
-            break;
+            default:
+                break;
         }
     }
 

@@ -2,7 +2,7 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2004-04-21
  * Description : a menu widget to pick a date.
  *               this widget come from libkdepim.
@@ -127,7 +127,7 @@ private:
 private:
 
     KDatePicker *mDatePicker;
-    
+
     Items        mItems;
 };
 

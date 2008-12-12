@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "mediaplayerview.h"
 #include "mediaplayerview.moc"
 
@@ -80,13 +79,9 @@ public:
 };
 
 MediaPlayerView::MediaPlayerView(QWidget *parent)
-               : QStackedWidget(parent)
+               : QStackedWidget(parent), d(new MediaPlayerViewPriv)
 {
-    d = new MediaPlayerViewPriv;
-
     setAttribute(Qt::WA_DeleteOnClose);
-
-    // --------------------------------------------------------------------------
 
     d->errorView      = new QFrame(this);
     QLabel *errorMsg  = new QLabel(i18n("An error is occurred with media player..."), d->errorView);
@@ -131,6 +126,7 @@ MediaPlayerView::MediaPlayerView(QWidget *parent)
     setPreviewMode(MediaPlayerViewPriv::PlayerView);
 
     // --------------------------------------------------------------------------
+
     connect(d->player->mediaObject(), SIGNAL(finished()),
             this, SLOT(slotPlayerFinished()));
 

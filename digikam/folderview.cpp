@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "folderview.h"
 #include "folderview.moc"
 
@@ -80,9 +79,8 @@ public:
 //-----------------------------------------------------------------------------
 
 FolderView::FolderView(QWidget *parent, const char *name)
-          : Q3ListView(parent)
+          : Q3ListView(parent), d(new FolderViewPriv)
 {
-    d = new FolderViewPriv;
     setObjectName(name);
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
