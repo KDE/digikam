@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "imagewidget.h"
 #include "imagewidget.moc"
 
@@ -84,9 +83,8 @@ public:
 ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
                          const QString& previewWhatsThis, bool prevModeOptions,
                          int guideMode, bool guideVisible, bool useImageSelection)
-           : QWidget(parent)
+           : QWidget(parent), d(new ImageWidgetPriv)
 {
-    d = new ImageWidgetPriv;
     d->settingsSection = settingsSection;
 
     // -------------------------------------------------------------

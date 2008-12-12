@@ -129,7 +129,7 @@ private:
 
 private:
 
-    ImageGuideWidgetPriv* d;
+    ImageGuideWidgetPriv* const d;
 };
 
 }  // namespace Digikam

@@ -66,7 +66,7 @@ private:
 
 private:
 
-    ImagePanIconWidgetPriv* d;
+    ImagePanIconWidgetPriv* const d;
 };
 
 }  // namespace Digikam

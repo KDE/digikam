@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "imagepanelwidget.h"
 #include "imagepanelwidget.moc"
 
@@ -87,9 +86,8 @@ public:
 
 ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSection,
                                    ImagePanIconWidget *pan, QWidget *parent, int separateViewMode)
-                : QWidget(parent)
+                : QWidget(parent), d(new ImagePanelWidgetPriv)
 {
-    d = new ImagePanelWidgetPriv;
     setAttribute(Qt::WA_DeleteOnClose);
     d->settingsSection    = settingsSection;
     d->imagePanIconWidget = pan;

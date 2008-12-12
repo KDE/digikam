@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "imagepaniconwidget.h"
 #include "imagepaniconwidget.moc"
 
@@ -68,10 +67,8 @@ public:
 
 ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent,
                                        Qt::WidgetAttribute attribute)
-                  : PanIconWidget(parent, attribute)
+                  : PanIconWidget(parent, attribute), d(new ImagePanIconWidgetPriv)
 {
-    d = new ImagePanIconWidgetPriv;
-
     d->iface = new ImageIface(w, h);
     setImage();
 }

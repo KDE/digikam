@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "imageguidewidget.h"
 #include "imageguidewidget.moc"
 
@@ -107,9 +106,8 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
                                    bool spotVisible, int guideMode,
                                    const QColor& guideColor, int guideSize,
                                    bool blink, bool useImageSelection)
-                : QWidget(parent)
+                : QWidget(parent), d(new ImageGuideWidgetPriv)
 {
-    d = new ImageGuideWidgetPriv;
     d->spotVisible = spotVisible;
     d->guideMode   = guideMode;
     d->guideColor  = guideColor;

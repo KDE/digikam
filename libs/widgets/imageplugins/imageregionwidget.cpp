@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "imageregionwidget.h"
 #include "imageregionwidget.moc"
 
@@ -80,9 +79,8 @@ public:
 };
 
 ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrollBar)
-                 : PreviewWidget(parent)
+                 : PreviewWidget(parent), d(new ImageRegionWidgetPriv)
 {
-    d = new ImageRegionWidgetPriv;
     d->iface = new ImageIface(0, 0);
     d->image = d->iface->getOriginalImg()->copy();
 
