@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "canvas.h"
 #include "canvas.moc"
 
@@ -151,9 +150,8 @@ public:
 };
 
 Canvas::Canvas(QWidget *parent)
-      : Q3ScrollView(parent)
+      : Q3ScrollView(parent), d(new CanvasPrivate)
 {
-    d = new CanvasPrivate;
     d->im     = new DImgInterface();
     d->parent = parent;
     d->bgColor.setRgb(0, 0, 0);

@@ -204,7 +204,7 @@ private slots:
 
 private:
 
-    CanvasPrivate *d;
+    CanvasPrivate* const d;
 };
 
 }  // namespace Digikam
