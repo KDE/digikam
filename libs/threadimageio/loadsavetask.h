@@ -115,7 +115,7 @@ public:
 protected:
 
     LoadingDescription m_loadingDescription;
-    LoadingTaskStatus m_loadingTaskStatus;
+    LoadingTaskStatus  m_loadingTaskStatus;
 };
 
 //---------------------------------------------------------------------------------------------------
@@ -128,7 +128,7 @@ public:
                       LoadSaveThread::AccessMode mode = LoadSaveThread::AccessModeReadWrite,
                       LoadingTaskStatus loadingTaskStatus = LoadingTaskStatusLoading)
         : LoadingTask(thread, description, loadingTaskStatus),
-          m_accessMode(mode), m_completed(false), m_usedProcess(0)
+          m_completed(false), m_accessMode(mode), m_usedProcess(0)
         {}
 
     virtual void execute();
@@ -172,7 +172,7 @@ public:
     };
 
     SavingTask(LoadSaveThread* thread, DImg &img, const QString &filePath, const QString &format)
-        : LoadSaveTask(thread), m_img(img), m_filePath(filePath), m_format(format)
+        : LoadSaveTask(thread), m_filePath(filePath), m_format(format), m_img(img)
         {};
 
     virtual void execute();
