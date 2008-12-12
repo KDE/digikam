@@ -7,7 +7,7 @@
  * Description : Camera settings container.
  * 
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -76,13 +76,9 @@ CameraType::CameraType(const QString& title, const QString& model,
     d->valid      = true;    
 }
 
-CameraType::~CameraType()
-{
-    delete d;
-}
-
 CameraType::CameraType(const CameraType& ctype)
 {
+    d = new CameraTypePrivate;
     d->title      = ctype.d->title;
     d->model      = ctype.d->model;
     d->port       = ctype.d->port;
@@ -90,6 +86,11 @@ CameraType::CameraType(const CameraType& ctype)
     d->action     = ctype.d->action;
     d->lastAccess = ctype.d->lastAccess;
     d->valid      = ctype.d->valid;
+}
+
+CameraType::~CameraType()
+{
+    delete d;
 }
 
 CameraType& CameraType::operator=(const CameraType& ctype)
