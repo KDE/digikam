@@ -286,17 +286,17 @@ void CameraIconViewItem::paintItem(QPainter *p)
         }
         case GPItemInfo::DownloadedYes:
         {
-            downloaded = SmallIcon( "dialog-ok" );
+            downloaded = SmallIcon("dialog-ok");
             break;
         }
         case GPItemInfo::DownloadStarted:
         {
-            downloaded = SmallIcon( "system-run" );
+            downloaded = SmallIcon("system-run");
             break;
         }
         case GPItemInfo::DownloadFailed:
         {
-            downloaded = SmallIcon( "dialog-cancel" );
+            downloaded = SmallIcon("dialog-cancel");
             break;
         }
         case GPItemInfo::DownloadUnknow:
@@ -311,7 +311,7 @@ void CameraIconViewItem::paintItem(QPainter *p)
 
     // If camera item is locked (read only), draw a "Lock" icon.
     if (d->itemInfo->writePermissions == 0)
-        p->drawPixmap(5, 5, SmallIcon( "security-high" ));
+        p->drawPixmap(5, 5, SmallIcon("object-locked"));
 }
 
 void CameraIconViewItem::setDownloadName(const QString& downloadName)
