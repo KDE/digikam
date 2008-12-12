@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "kipiuploadwidget.h"
 #include "kipiuploadwidget.moc"
 
@@ -71,11 +70,10 @@ public:
 };
 
 KipiUploadWidget::KipiUploadWidget(KipiInterface* iface, QWidget *parent)
-                : KIPI::UploadWidget(parent)
+                : KIPI::UploadWidget(parent),
+                  d(new KipiUploadWidgetPriv)
 {
-    d = new KipiUploadWidgetPriv();
-    d->iface = iface;
-
+    d->iface      = iface;
     d->albumsView = new QTreeWidget(this);
     d->albumsView->setDragEnabled(false);
     d->albumsView->setDropIndicatorShown(false);

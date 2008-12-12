@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "kipiimagecollectionselector.h"
 #include "kipiimagecollectionselector.moc"
 
@@ -88,9 +87,9 @@ public:
 };
 
 KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, QWidget *parent)
-                           : KIPI::ImageCollectionSelector(parent)
+                           : KIPI::ImageCollectionSelector(parent),
+                             d(new KipiImageCollectionSelectorPriv)
 {
-    d = new KipiImageCollectionSelectorPriv();
     d->iface = iface;
     d->tab   = new KTabWidget(this);
 
