@@ -97,7 +97,7 @@ public:
 
 private:
 
-    ImageLevelsPriv* d;
+    ImageLevelsPriv* const d;
 };
 
 }  // namespace Digikam

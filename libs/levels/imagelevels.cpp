@@ -26,7 +26,6 @@
  *
  * ============================================================ */
 
-
 #include "imagelevels.h"
 
 // Qt includes.
@@ -102,8 +101,8 @@ public:
 };
 
 ImageLevels::ImageLevels(bool sixteenBit)
+           : d(new ImageLevelsPriv)
 {
-    d = new ImageLevelsPriv;
     d->lut        = new ImageLevelsPriv::_Lut;
     d->levels     = new ImageLevelsPriv::_Levels;
     d->sixteenBit = sixteenBit;
@@ -704,7 +703,7 @@ bool ImageLevels::saveLevelsToGimpLevelsFile(const KUrl& fileUrl)
        sprintf (buf, "%f", getLevelGammaValue(i));
 
        fprintf (file, "%d %d %d %d %s\n",
-                d->sixteenBit ? getLevelLowInputValue(i)/255 : getLevelLowInputValue(i),
+                d->sixteenBit ? getLevelLowInputValue(i)/255  : getLevelLowInputValue(i),
                 d->sixteenBit ? getLevelHighInputValue(i)/255 : getLevelHighInputValue(i),
                 d->sixteenBit ? getLevelLowOutputValue(i)/255 : getLevelLowOutputValue(i),
                 d->sixteenBit ? getLevelHighInputValue(i)/255 : getLevelHighInputValue(i),
