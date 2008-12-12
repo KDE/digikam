@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "setupdcraw.h"
 #include "setupdcraw.moc"
 
@@ -66,9 +65,8 @@ public:
 };
 
 SetupDcraw::SetupDcraw(QWidget* parent )
-          : QWidget(parent)
+          : QWidget(parent), d(new SetupDcrawPriv)
 {
-    d = new SetupDcrawPriv;
     QVBoxLayout *layout = new QVBoxLayout(this);
     d->dcrawSettings    = new DcrawSettingsWidget(this, DcrawSettingsWidget::SIXTEENBITS);
     d->dcrawSettings->setItemIcon(0, SmallIcon("kdcraw"));

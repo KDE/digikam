@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "setupalbumtype.h"
 #include "setupalbumtype.moc"
 
@@ -79,10 +78,8 @@ public:
 };
 
 SetupAlbumType::SetupAlbumType(QWidget* parent )
-              : QWidget(parent)
+              : QWidget(parent), d(new SetupAlbumTypePriv)
 {
-    d = new SetupAlbumTypePriv;
-
     QGridLayout *grid = new QGridLayout(this);
 
     // --------------------------------------------------------

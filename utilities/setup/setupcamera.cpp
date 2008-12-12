@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "setupcamera.h"
 #include "setupcamera.moc"
 
@@ -81,13 +80,10 @@ public:
 };
 
 SetupCamera::SetupCamera( QWidget* parent )
-           : QWidget( parent )
+           : QWidget(parent), d(new SetupCameraPriv)
 {
-    d = new SetupCameraPriv;
-
     QGridLayout* grid = new QGridLayout(this);
-
-    d->listView = new QTreeWidget(this);
+    d->listView       = new QTreeWidget(this);
     d->listView->setColumnCount(5);
     d->listView->setRootIsDecorated(false);
     d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -107,10 +103,10 @@ SetupCamera::SetupCamera( QWidget* parent )
 
     // -------------------------------------------------------------
 
-    d->addButton        = new QPushButton( this );
-    d->removeButton     = new QPushButton( this );
-    d->editButton       = new QPushButton( this );
-    d->autoDetectButton = new QPushButton( this );
+    d->addButton        = new QPushButton(this);
+    d->removeButton     = new QPushButton(this);
+    d->editButton       = new QPushButton(this);
+    d->autoDetectButton = new QPushButton(this);
 
     d->addButton->setText( i18n( "&Add..." ) );
     d->addButton->setIcon(SmallIcon("list-add"));

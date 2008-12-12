@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "setupcollectionview.h"
 #include "moc_setupcollectionview.cpp"
 
@@ -61,9 +60,7 @@
 namespace Digikam
 {
 
-
 // ------------- Delegate ----------------- //
-
 
 class SetupCollectionDelegate : public KWidgetItemDelegate
 {
@@ -108,8 +105,8 @@ protected:
 
 
 SetupCollectionDelegate::SetupCollectionDelegate(QAbstractItemView *view, QObject *parent)
-    : KWidgetItemDelegate(view, parent),
-      m_categoryMaxStyledWidth(0)
+                       : KWidgetItemDelegate(view, parent),
+                         m_categoryMaxStyledWidth(0)
 {
     // We keep a standard delegate that does all the normal drawing work for us
     // KWidgetItemDelegate handles the widgets, for the rest of the work we act as a proxy to m_styledDelegate
@@ -277,12 +274,10 @@ void SetupCollectionDelegate::updateEditorGeometry(QWidget *editor, const QStyle
     m_styledDelegate->updateEditorGeometry(editor, option, index);
 }
 
-
-
 // ------------- View ----------------- //
 
 SetupCollectionTreeView::SetupCollectionTreeView(QWidget *parent)
-    : QTreeView(parent)
+                       : QTreeView(parent)
 {
     setRootIsDecorated(false);
     setExpandsOnDoubleClick(false);
@@ -300,9 +295,11 @@ void SetupCollectionTreeView::setModel(SetupCollectionModel *collectionModel)
     // we need to do some things after the model has loaded its data
     connect(collectionModel, SIGNAL(collectionsLoaded()),
             this, SLOT(modelLoadedCollections()));
+
     // connect button click signals from the delegate to the model
     connect(static_cast<SetupCollectionDelegate*>(itemDelegate()), SIGNAL(categoryButtonPressed(int)),
             collectionModel, SLOT(slotCategoryButtonPressed(int)));
+
     connect(static_cast<SetupCollectionDelegate*>(itemDelegate()), SIGNAL(buttonPressed(int)),
             collectionModel, SLOT(slotButtonPressed(int)));
 
@@ -341,12 +338,7 @@ void SetupCollectionTreeView::modelLoadedCollections()
     setColumnWidth(SetupCollectionModel::ColumnStatus, hint.width() + indentation());
 }
 
-
-
-
-
 // ------------- Model ----------------- //
-
 
 SetupCollectionModel::Item::Item()
     : parentId(-1), deleted(false)
@@ -364,7 +356,6 @@ SetupCollectionModel::Item::Item(const QString &path, const QString &label, Setu
 {
 }
 
-
 /*
     Internal data structure:
 
@@ -380,7 +371,7 @@ SetupCollectionModel::Item::Item(const QString &path, const QString &label, Setu
 */
 
 SetupCollectionModel::SetupCollectionModel(QObject *parent)
-    : QAbstractItemModel(parent), m_dialogParentWidget(0)
+                    : QAbstractItemModel(parent), m_dialogParentWidget(0)
 {
 }
 
@@ -914,7 +905,6 @@ SetupCollectionModel::Category SetupCollectionModel::typeToCategory(CollectionLo
     }
 }
 
-
 int SetupCollectionModel::categoryButtonMapId(const QModelIndex &index) const
 {
     if (!index.isValid() || index.parent().isValid())
@@ -929,6 +919,4 @@ int SetupCollectionModel::buttonMapId(const QModelIndex &index) const
     return index.internalId();
 }
 
-
-}
-
+} // namespace Digikam

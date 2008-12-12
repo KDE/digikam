@@ -7,7 +7,7 @@
  * Description : digiKam setup dialog.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Album
@@ -21,7 +21,6 @@
  * GNU Album Public License for more details.
  *
  * ============================================================ */
-
 
 #include "setup.h"
 #include "setup.moc"
@@ -136,9 +135,8 @@ public:
 };
 
 Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
-     : KPageDialog(parent)
+     : KPageDialog(parent), d(new SetupPrivate)
 {
-    d = new SetupPrivate;
     setObjectName(name);
     setCaption(i18n("Configure"));
     setButtons(Help|Ok|Cancel );

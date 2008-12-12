@@ -53,7 +53,7 @@ private:
 
 private:
 
-    SetupAlbumViewPriv* d;
+    SetupAlbumViewPriv* const d;
 };
 
 }  // namespace Digikam

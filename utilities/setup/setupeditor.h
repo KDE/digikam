@@ -54,7 +54,7 @@ private:
 
 private:
 
-    SetupEditorPriv* d;
+    SetupEditorPriv* const d;
 };
 
 }  // namespace Digikam

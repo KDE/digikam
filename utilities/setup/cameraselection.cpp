@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "cameraselection.h"
 #include "cameraselection.moc"
 
@@ -100,10 +99,8 @@ public:
 };
 
 CameraSelection::CameraSelection( QWidget* parent )
-               : KDialog(parent)
+               : KDialog(parent), d(new CameraSelectionPriv)
 {
-    d = new CameraSelectionPriv;
-
     kapp->setOverrideCursor( Qt::WaitCursor );
     setHelp("cameraselection.anchor", "digikam");
     setCaption(i18n("Camera Configuration"));

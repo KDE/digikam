@@ -61,7 +61,7 @@ private slots:
 
 private:
 
-    SetupCollectionsPriv* d;
+    SetupCollectionsPriv* const d;
 };
 
 }  // namespace Digikam

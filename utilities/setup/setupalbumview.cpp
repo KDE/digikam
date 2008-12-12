@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "setupalbumview.h"
 #include "setupalbumview.moc"
 
@@ -70,28 +69,26 @@ public:
         showFolderTreeViewItemsCount = 0;
     }
 
-    QLabel        *iconTreeThumbLabel;
+    QLabel    *iconTreeThumbLabel;
 
-    QCheckBox     *iconShowNameBox;
-    QCheckBox     *iconShowSizeBox;
-    QCheckBox     *iconShowDateBox;
-    QCheckBox     *iconShowModDateBox;
-    QCheckBox     *iconShowResolutionBox;
-    QCheckBox     *iconShowCommentsBox;
-    QCheckBox     *iconShowTagsBox;
-    QCheckBox     *iconShowRatingBox;
-    QCheckBox     *previewLoadFullImageSize;
-    QCheckBox     *showFolderTreeViewItemsCount;
+    QCheckBox *iconShowNameBox;
+    QCheckBox *iconShowSizeBox;
+    QCheckBox *iconShowDateBox;
+    QCheckBox *iconShowModDateBox;
+    QCheckBox *iconShowResolutionBox;
+    QCheckBox *iconShowCommentsBox;
+    QCheckBox *iconShowTagsBox;
+    QCheckBox *iconShowRatingBox;
+    QCheckBox *previewLoadFullImageSize;
+    QCheckBox *showFolderTreeViewItemsCount;
 
-    KComboBox     *iconTreeThumbSize;
-    KComboBox     *rightClickActionComboBox;
+    KComboBox *iconTreeThumbSize;
+    KComboBox *rightClickActionComboBox;
 };
 
 SetupAlbumView::SetupAlbumView(QWidget* parent)
-              : QWidget(parent)
+              : QWidget(parent), d(new SetupAlbumViewPriv)
 {
-    d = new SetupAlbumViewPriv;
-
     QVBoxLayout *layout = new QVBoxLayout( this );
 
     // --------------------------------------------------------
@@ -174,9 +171,9 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     ifaceSettingsLayout->addWidget(d->iconTreeThumbLabel,           0, 0, 1, 1);
     ifaceSettingsLayout->addWidget(d->iconTreeThumbSize,            0, 1, 1, 1);
     ifaceSettingsLayout->addWidget(d->showFolderTreeViewItemsCount, 1, 0, 1, 4);
-    ifaceSettingsLayout->addWidget(rightClickLabel,                 2 , 0, 1, 1);
+    ifaceSettingsLayout->addWidget(rightClickLabel,                 2, 0, 1, 1);
     ifaceSettingsLayout->addWidget(d->rightClickActionComboBox,     2, 1, 1, 4);
-    ifaceSettingsLayout->addWidget(d->previewLoadFullImageSize,     3, 0, 1, 5 );
+    ifaceSettingsLayout->addWidget(d->previewLoadFullImageSize,     3, 0, 1, 5);
 
     // --------------------------------------------------------
 

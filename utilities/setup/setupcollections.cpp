@@ -79,9 +79,8 @@ public:
 };
 
 SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
-                : QWidget(parent)
+                : QWidget(parent), d(new SetupCollectionsPriv)
 {
-    d = new SetupCollectionsPriv;
     d->mainDialog = dialog;
 
     QVBoxLayout *layout = new QVBoxLayout( this );
@@ -225,6 +224,5 @@ void SetupCollections::checkDBPath()
 
     d->mainDialog->enableButtonOk(dbOk);
 }
-
 
 }  // namespace Digikam

@@ -59,7 +59,7 @@ private slots:
 
 private:
 
-    SetupDcrawPriv* d;
+    SetupDcrawPriv* const d;
 };
 
 }  // namespace Digikam

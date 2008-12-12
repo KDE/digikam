@@ -57,7 +57,7 @@ private slots:
 
 private:
 
-    SetupAlbumTypePriv* d;
+    SetupAlbumTypePriv* const d;
 };
 
 }  // namespace Digikam
