@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "findduplicatesalbumitem.h"
 
 // Qt includes.

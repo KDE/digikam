@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "sketchwidget.h"
 
 // Qt includes.
@@ -141,10 +140,8 @@ public:
 };
 
 SketchWidget::SketchWidget(QWidget *parent)
-            : QWidget(parent)
+            : QWidget(parent), d(new SketchWidgetPriv)
 {
-    d = new SketchWidgetPriv;
-
     setWhatsThis(i18n("You simply draw here a rough sketch of what you want to find "
                       "and digiKam will displays the best matches in thumbnail view."));
 

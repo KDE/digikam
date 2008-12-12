@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "fuzzysearchfolderview.h"
 #include "fuzzysearchfolderview.moc"
 

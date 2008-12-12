@@ -111,7 +111,7 @@ private slots:
 
 private:
 
-    FuzzySearchViewPriv *d;
+    FuzzySearchViewPriv* const d;
 };
 
 }  // namespace Digikam

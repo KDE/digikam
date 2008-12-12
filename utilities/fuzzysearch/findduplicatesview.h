@@ -42,10 +42,8 @@ class QTreeWidgetItem;
 
 namespace Digikam
 {
-
 class Album;
 class SAlbum;
-
 class FindDuplicatesViewPriv;
 
 class FindDuplicatesView : public QWidget
@@ -85,7 +83,7 @@ private:
 
 private:
 
-    FindDuplicatesViewPriv *d;
+    FindDuplicatesViewPriv* const d;
 };
 
 }  // namespace Digikam

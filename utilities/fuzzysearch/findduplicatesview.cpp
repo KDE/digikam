@@ -24,7 +24,6 @@
 
 #define ICONSIZE 64
 
-
 #include "findduplicatesview.h"
 #include "findduplicatesview.moc"
 
@@ -83,9 +82,8 @@ public:
 };
 
 FindDuplicatesView::FindDuplicatesView(QWidget *parent)
-                  : QWidget(parent)
+                  : QWidget(parent), d(new FindDuplicatesViewPriv)
 {
-    d = new FindDuplicatesViewPriv;
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
     setAttribute(Qt::WA_DeleteOnClose);

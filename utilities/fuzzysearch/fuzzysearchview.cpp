@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "fuzzysearchview.h"
 #include "fuzzysearchview.moc"
 
@@ -167,9 +166,8 @@ public:
 };
 
 FuzzySearchView::FuzzySearchView(QWidget *parent)
-               : QWidget(parent)
+               : QWidget(parent), d(new FuzzySearchViewPriv)
 {
-    d = new FuzzySearchViewPriv;
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
     setAttribute(Qt::WA_DeleteOnClose);

@@ -93,11 +93,11 @@ private:
     void drawPath(int width, const QColor& color, const QPainterPath &path);
     void addPath(QXmlStreamReader &reader);
     //QDomElement addXmlTextElement(QDomDocument &document, QDomElement &target,
-      //                            const QString& tag, const QString& text);
+    //                              const QString& tag, const QString& text);
 
 private:
 
-    SketchWidgetPriv *d;
+    SketchWidgetPriv* const d;
 };
 
 }  // namespace Digikam
