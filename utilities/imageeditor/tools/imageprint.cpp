@@ -7,7 +7,7 @@
  * Description : image editor printing interface.
  *
  * Copyright (C) 2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * KeepRatio and Alignment options imported from Gwenview program.
  * Copyright (c) 2003 Angelo Naselli
@@ -27,7 +27,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "imageprint.h"
 
@@ -99,9 +98,8 @@ public:
 };
 
 ImagePrint::ImagePrint(DImg& image, KPrinter& printer, const QString& filename)
-          : m_printer(printer)
+          : m_printer(printer), d(new ImagePrintPrivate)
 {
-    d = new ImagePrintPrivate();
     d->image    = image;
     d->filename = filename;
 }
@@ -362,9 +360,8 @@ public:
 
 ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *parent,
                                                        const char *name)
-                          : KPrintDialogPage( parent )
+                          : KPrintDialogPage(parent), d(new ImageEditorPrintDialogPagePrivate)
 {
-    d = new ImageEditorPrintDialogPagePrivate;
     d->image  = image;
     d->parent = parent;
     setTitle( i18n("Image Settings") );
