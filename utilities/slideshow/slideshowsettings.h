@@ -2,23 +2,23 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2007-02-13
  * Description : slide show settings container.
  *
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef SLIDESHOWSETTINGSCONTAINER_H
@@ -60,7 +60,7 @@ public:
     int                rating;
 
     /** Picture Comment */
-    QString            comment; 
+    QString            comment;
 
     /** Exif photo info of picture */
     PhotoInfoContainer photoInfo;
@@ -124,12 +124,12 @@ public:
     /** Delay in seconds */
     int delay;
 
-    /** List of pictures URL to slide */ 
+    /** List of pictures URL to slide */
     KUrl::List fileList;
 
     QColor     ratingColor;
 
-    /** Map of pictures information to slide */ 
+    /** Map of pictures information to slide */
     QMap<KUrl, SlidePictureInfo> pictInfoMap;
 };
 

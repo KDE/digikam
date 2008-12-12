@@ -24,7 +24,6 @@
 
 #define MAXSTRINGLEN 80
 
-
 #include "slideshow.h"
 #include "slideshow.moc"
 
@@ -127,9 +126,8 @@ public:
 };
 
 SlideShow::SlideShow(const SlideShowSettings& settings)
-         : QWidget(0, Qt::FramelessWindowHint)
+         : QWidget(0, Qt::FramelessWindowHint), d(new SlideShowPriv)
 {
-    d = new SlideShowPriv;
     d->settings = settings;
 
     setAttribute(Qt::WA_DeleteOnClose);

@@ -89,7 +89,7 @@ private:
 
 private:
 
-    SlideShowPriv *d;
+    SlideShowPriv* const d;
 };
 
 }  // namespace Digikam
