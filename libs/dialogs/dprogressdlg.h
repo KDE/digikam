@@ -5,7 +5,7 @@
  *
  * Date        : 2006-30-08
  * Description : a progress dialog for digiKam
- * 
+ *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef DPROGRESSDLG_H
@@ -45,9 +45,9 @@ class DProgressDlgPriv;
 
 class DIGIKAM_EXPORT DProgressDlg : public KDialog
 {
-Q_OBJECT
+    Q_OBJECT
 
- public:
+public:
 
     DProgressDlg(QWidget *parent=0, const QString &caption=QString());
     ~DProgressDlg();
@@ -62,7 +62,7 @@ Q_OBJECT
 
     int  value();
 
- public Q_SLOTS:
+public Q_SLOTS:
 
     void setMaximum(int max);
     void incrementMaximum(int added);
@@ -78,9 +78,9 @@ protected Q_SLOTS:
 
     void slotCancel();
 
- private:
+private:
 
-    DProgressDlgPriv* d;
+    DProgressDlgPriv* const d;
 };
 
 }  // namespace Digikam

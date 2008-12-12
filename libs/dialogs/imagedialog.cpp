@@ -79,14 +79,13 @@ public:
 };
 
 ImageDialogPreview::ImageDialogPreview(QWidget *parent)
-                  : KPreviewWidgetBase(parent)
+                  : KPreviewWidgetBase(parent),
+                    d(new ImageDialogPreviewPrivate)
 {
-    d = new ImageDialogPreviewPrivate;
-
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
-    QVBoxLayout *vlay = new QVBoxLayout(this);
-    d->imageLabel     = new QLabel(this);
+    QVBoxLayout *vlay  = new QVBoxLayout(this);
+    d->imageLabel      = new QLabel(this);
     d->imageLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     d->imageLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 
@@ -235,8 +234,8 @@ public:
 };
 
 ImageDialog::ImageDialog(QWidget* parent, const KUrl& url, bool singleSelect, const QString& caption)
+           : d(new ImageDialogPrivate)
 {
-    d = new ImageDialogPrivate;
     d->singleSelect = singleSelect;
 
     QStringList patternList = KImageIO::pattern(KImageIO::Reading).split('\n', QString::SkipEmptyParts);

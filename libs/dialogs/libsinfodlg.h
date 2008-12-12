@@ -58,7 +58,7 @@ private Q_SLOTS:
 
 private:
 
-    LibsInfoDlgPriv *d;
+    LibsInfoDlgPriv* const d;
 };
 
 }  // namespace Digikam

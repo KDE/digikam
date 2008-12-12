@@ -5,7 +5,7 @@
  *
  * Date        : 2005-05-07
  * Description : a dialog to delete item.
- * 
+ *
  * Copyright (C) 2004 by Michael Pyne <michael.pyne@kdemail.net>
  * Copyright (C) 2006 by Ian Monroe <ian@monroe.nu>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
@@ -16,12 +16,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef DELETEDIALOG_H
@@ -158,4 +158,3 @@ private:
 } // namespace Digikam
 
 #endif // DELETEDIALOG_H
-

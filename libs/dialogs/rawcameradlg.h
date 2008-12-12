@@ -52,7 +52,7 @@ private Q_SLOTS:
 
 private:
 
-    RawCameraDlgPriv *d;
+    RawCameraDlgPriv* const d;
 };
 
 }  // namespace Digikam

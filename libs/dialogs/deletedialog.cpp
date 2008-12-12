@@ -24,7 +24,6 @@
  *
  * ============================================================ */
 
-
 #include "deletedialog.h"
 #include "deletedialog.moc"
 

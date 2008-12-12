@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "libsinfodlg.h"
 #include "libsinfodlg.moc"
 
@@ -101,7 +100,7 @@ public:
 };
 
 LibsInfoDlg::LibsInfoDlg(QWidget *parent)
-           : KDialog(parent)
+           : KDialog(parent), d(new LibsInfoDlgPriv)
 {
     setButtons(Help|User1|Ok);
     setDefaultButton(Ok);
@@ -109,8 +108,6 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
     setHelp("digikam");
     setCaption(i18n("Shared Libraries and Components Information"));
     setButtonText(User1, i18n("Copy to Clipboard"));
-
-    d = new LibsInfoDlgPriv;
 
     QWidget *page = new QWidget(this);
     setMainWidget(page);

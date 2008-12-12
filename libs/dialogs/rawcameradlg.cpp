@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "rawcameradlg.h"
 #include "rawcameradlg.moc"
 
@@ -75,7 +74,7 @@ public:
 };
 
 RawCameraDlg::RawCameraDlg(QWidget *parent)
-            : KDialog(parent)
+            : KDialog(parent), d(new RawCameraDlgPriv)
 {
     setButtons(Help|Ok);
     setDefaultButton(Ok);
@@ -83,9 +82,7 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
     setHelp("digitalstillcamera.anchor", "digikam");
     setCaption(i18n("List of supported RAW camera"));
 
-    d = new RawCameraDlgPriv;
-
-    QWidget *page = new QWidget(this);
+    QWidget *page     = new QWidget(this);
     setMainWidget(page);
     QGridLayout* grid = new QGridLayout(page);
 

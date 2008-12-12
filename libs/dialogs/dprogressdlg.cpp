@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "dprogressdlg.h"
 #include "dprogressdlg.moc"
 
@@ -76,15 +75,14 @@ public:
 };
 
 DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
-            : KDialog(parent)
+            : KDialog(parent), d(new DProgressDlgPriv)
 {
-    d = new DProgressDlgPriv;
     setCaption(caption);
     setButtons(Cancel);
     setDefaultButton(Cancel);
     setModal(true);
 
-    QWidget *page      = new QWidget(this);
+    QWidget *page     = new QWidget(this);
     setMainWidget(page);
 
     QGridLayout* grid = new QGridLayout(page);
