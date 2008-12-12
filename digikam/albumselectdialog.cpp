@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "albumselectdialog.h"
 #include "albumselectdialog.moc"
 
@@ -86,9 +85,8 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
                                      const QString& header,
                                      const QString& newAlbumString,
                                      bool allowRootSelection)
-                 : KDialog(parent)
+                 : KDialog(parent), d(new AlbumSelectDialogPrivate)
 {
-    d = new AlbumSelectDialogPrivate;
     d->allowRootSelection = allowRootSelection;
     d->newAlbumString     = newAlbumString;
 

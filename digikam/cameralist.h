@@ -7,7 +7,7 @@
  * Description : Cameras list container
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,8 +55,8 @@ public:
     void insert(CameraType* ctype);
     void remove(CameraType* ctype);
 
-    CameraType* find(const QString& title);
-    CameraType* autoDetect(bool& retry);
+    CameraType*            find(const QString& title);
+    CameraType*            autoDetect(bool& retry);
     Q3PtrList<CameraType>* cameraList();
 
     bool changeCameraAccessTime(const QString& cameraTitle, const QDateTime& newDate);
@@ -78,7 +78,7 @@ private:
 private:
 
     static CameraList *m_defaultList;
-    CameraListPrivate *d;
+    CameraListPrivate* const d;
 };
 
 }  // namespace Digikam

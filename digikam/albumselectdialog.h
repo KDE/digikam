@@ -76,7 +76,7 @@ private:
 
 private:
 
-    AlbumSelectDialogPrivate * d;
+    AlbumSelectDialogPrivate* const d;
 };
 
 }  // namespace Digikam

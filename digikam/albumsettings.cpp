@@ -162,9 +162,9 @@ AlbumSettings* AlbumSettings::instance()
 }
 
 AlbumSettings::AlbumSettings()
+             : d(new AlbumSettingsPrivate)
 {
-    d = new AlbumSettingsPrivate;
-    d->config  = KGlobal::config();
+    d->config = KGlobal::config();
     init();
     readSettings();
 }

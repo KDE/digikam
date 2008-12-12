@@ -6,7 +6,7 @@
  * Date        : 2006-04-14
  * Description : Load and cache tag thumbnails
  *
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,13 +21,12 @@
  *
  * ============================================================ */
 
-
 #include "albumthumbnailloader.h"
 #include "albumthumbnailloader.moc"
 
-// C ANSI includes.
+// C++ includes.
 
-#include <math.h>
+#include <cmath>
 
 // Qt includes.
 
@@ -60,6 +59,7 @@ typedef QMap<int, QPixmap> AlbumThumbnailMap;
 class AlbumThumbnailLoaderPrivate
 {
 public:
+
     AlbumThumbnailLoaderPrivate()
     {
         iconSize             = AlbumSettings::instance()->getDefaultTreeIconSize();
@@ -88,9 +88,8 @@ AlbumThumbnailLoader *AlbumThumbnailLoader::instance()
 }
 
 AlbumThumbnailLoader::AlbumThumbnailLoader()
+                    : d(new AlbumThumbnailLoaderPrivate)
 {
-    d = new AlbumThumbnailLoaderPrivate;
-
     connect(this, SIGNAL(signalDispatchThumbnailInternal(int, const QPixmap &)),
             this, SLOT(slotDispatchThumbnailInternal(int, const QPixmap &)));
 
@@ -159,9 +158,9 @@ QRect AlbumThumbnailLoader::computeBlendRect(int iconSize)
 {
     // when drawing a 20x20 thumbnail in a 32x32 icon, starting point was (6,9). Scale.
     double largerSize = iconSize;
-    double x = 6.0 / 32.0 * largerSize;
-    double y = 9.0 / 32.0 * largerSize;
-    double size = 20.0 / 32.0 * largerSize;
+    double x          = 6.0 / 32.0 * largerSize;
+    double y          = 9.0 / 32.0 * largerSize;
+    double size       = 20.0 / 32.0 * largerSize;
     return QRect(lround(x), lround(y), lround(size), lround(size));
 }
 

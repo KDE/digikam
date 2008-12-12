@@ -7,7 +7,7 @@
  * Description : Camera settings container.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "cameratype.h"
 
@@ -61,15 +60,15 @@ public:
 };
 
 CameraType::CameraType()
+          : d(new CameraTypePrivate)
 {
-    d = new CameraTypePrivate;
 }
 
 CameraType::CameraType(const QString& title, const QString& model,
                        const QString& port, const QString& path,
                        const QDateTime& lastAccess, KAction *action)
+          : d(new CameraTypePrivate)
 {
-    d = new CameraTypePrivate;
     d->title      = title;
     d->model      = model;
     d->port       = port;
@@ -85,6 +84,7 @@ CameraType::~CameraType()
 }
 
 CameraType::CameraType(const CameraType& ctype)
+          : d(new CameraTypePrivate)
 {
     d->title      = ctype.d->title;
     d->model      = ctype.d->model;

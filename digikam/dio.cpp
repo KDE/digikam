@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "dio.h"
 
 // KDE includes.
@@ -165,5 +164,3 @@ KIO::Job* del(const KUrl::List& srcList, bool useTrash)
 }  // namespace DIO
 
 } // namespace Digikam
-
-

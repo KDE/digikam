@@ -273,7 +273,7 @@ private:
 
     void init();
 
-    AlbumSettingsPrivate* d;
+    AlbumSettingsPrivate* const d;
 };
 
 }  // namespace Digikam

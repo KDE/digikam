@@ -178,11 +178,10 @@ public:
 };
 
 DateFolderView::DateFolderView(QWidget* parent)
-              : KVBox(parent)
+              : KVBox(parent), d(new DateFolderViewPriv)
 {
     setObjectName("DateFolderView");
 
-    d = new DateFolderViewPriv;
     d->listview  = new FolderView(this, "DateListView");
     d->monthview = new MonthWidget(this);
 

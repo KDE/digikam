@@ -2,7 +2,7 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2005-04-27
  * Description : a folder view for date albums.
  *
@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -33,8 +33,6 @@
 
 #include "albummanager.h"
 #include "folderitem.h"
-
-class Q3ListViewItem;
 
 namespace Digikam
 {
@@ -84,7 +82,7 @@ private:
 
 private:
 
-    DateFolderViewPriv* d;
+    DateFolderViewPriv* const d;
 };
 
 }  // namespace Digikam

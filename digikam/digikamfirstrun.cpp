@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "digikamfirstrun.h"
 #include "digikamfirstrun.moc"
 
