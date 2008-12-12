@@ -27,7 +27,6 @@
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-
 #include "whitebalance.h"
 
 // C++ includes.
@@ -101,8 +100,8 @@ public:
 };
 
 WhiteBalance::WhiteBalance(bool sixteenBit)
+            :     d(new WhiteBalancePriv)
 {
-    d = new WhiteBalancePriv;
     d->WP     = sixteenBit ? 65536 : 256;
     d->rgbMax = sixteenBit ? 65536 : 256;
 }
