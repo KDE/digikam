@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "welcomepageview.h"
 #include "welcomepageview.moc"
 

@@ -354,7 +354,7 @@ private:
 
 private:
 
-    MetadataHubPriv *d;
+    MetadataHubPriv* const d;
 };
 
 } // namespace Digikam

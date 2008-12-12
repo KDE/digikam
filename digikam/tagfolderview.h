@@ -104,7 +104,7 @@ private:
 
 private:
 
-    TagFolderViewPriv *d;
+    TagFolderViewPriv* const d;
 };
 
 }  // namespace Digikam

@@ -29,7 +29,6 @@
  *
  * ============================================================ */
 
-
 #include "syncjob.h"
 #include "syncjob.moc"
 
@@ -85,8 +84,8 @@ public:
 };
 
 SyncJob::SyncJob()
+       : d(new SyncJobPriv)
 {
-    d = new SyncJobPriv;
     d->waitingLoop = new QEventLoop(this);
 }
 

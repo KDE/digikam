@@ -27,7 +27,6 @@
  *
  * ============================================================ */
 
-
 #include "tagspopupmenu.h"
 #include "tagspopupmenu.moc"
 
@@ -372,17 +371,15 @@ public:
 };
 
 TagsPopupMenu::TagsPopupMenu(qlonglong selectedImageId, Mode mode)
-             : QMenu(0)
+             : QMenu(0), d(new TagsPopupMenuPriv)
 {
-    d = new TagsPopupMenuPriv;
     d->selectedImageIDs << selectedImageId;
     setup(mode);
 }
 
 TagsPopupMenu::TagsPopupMenu(const QList<qlonglong>& selectedImageIds, Mode mode)
-             : QMenu(0)
+             : QMenu(0), d(new TagsPopupMenuPriv)
 {
-    d = new TagsPopupMenuPriv;
     d->selectedImageIDs = selectedImageIds;
     setup(mode);
 }

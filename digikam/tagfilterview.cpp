@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "tagfilterview.h"
 #include "tagfilterview.moc"
 
@@ -276,9 +275,9 @@ public:
 
 
 TagFilterView::TagFilterView(QWidget* parent)
-             : FolderView(parent, "TagFilterView")
+             : FolderView(parent, "TagFilterView"),
+               d(new TagFilterViewPrivate)
 {
-    d = new TagFilterViewPrivate;
     d->timer = new QTimer(this);
 
     addColumn(i18n("Tag Filters"));

@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "tageditdlg.h"
 #include "tageditdlg.moc"
 
@@ -94,7 +93,7 @@ public:
 };
 
 TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
-          : KDialog(parent)
+          : KDialog(parent), d(new TagEditDlgPriv)
 {
     setButtons(Help|Ok|Cancel);
     setDefaultButton(Ok);
@@ -104,7 +103,6 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
     if (create) setCaption(i18n("New Tag"));
     else        setCaption(i18n("Edit Tag"));
 
-    d = new TagEditDlgPriv;
     d->mainRootAlbum = album;
     d->create        = create;
 
@@ -399,7 +397,7 @@ TagsListCreationErrorDialog::TagsListCreationErrorDialog(QWidget* parent, const 
     setMainWidget(box);
     QVBoxLayout* vLay = new QVBoxLayout(box);
 
-    QLabel *label       = new QLabel(i18n("Error been occurred during Tag creation:"), box);
+    QLabel *label         = new QLabel(i18n("Error been occurred during Tag creation:"), box);
     QTreeWidget *listView = new QTreeWidget(box);
     listView->setHeaderLabels(QStringList() << i18n("Tag Path") << i18n("Error"));
     listView->setRootIsDecorated(false);

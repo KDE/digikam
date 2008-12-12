@@ -117,7 +117,7 @@ private:
 
 private:
 
-    TagFilterViewPrivate *d;
+    TagFilterViewPrivate* const d;
 };
 
 }  // namespace Digikam

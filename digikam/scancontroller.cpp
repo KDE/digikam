@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "scancontroller.h"
 #include "moc_scancontroller.cpp"
 
@@ -194,9 +193,8 @@ ScanController* ScanController::instance()
 }
 
 ScanController::ScanController()
+              :     d(new ScanControllerPriv)
 {
-    d = new ScanControllerPriv;
-
     // create event loop
     d->eventLoop = new QEventLoop(this);
 
@@ -234,7 +232,6 @@ ScanController::ScanController()
         cache->setFileWatch(new ScanControllerLoadingCacheFileWatch);
     }
 }
-
 
 ScanController::~ScanController()
 {
@@ -629,9 +626,7 @@ void ScanController::hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum *dstAlbum
     d->itemHints << hint;
 }
 
-
 // --------------------------------------------------- //
-
 
 ScanControllerLoadingCacheFileWatch::ScanControllerLoadingCacheFileWatch()
 {
@@ -641,7 +636,6 @@ ScanControllerLoadingCacheFileWatch::ScanControllerLoadingCacheFileWatch()
     connect(dbwatch, SIGNAL(imageChange(const ImageChangeset &)),
             this, SLOT(slotImageChanged(const ImageChangeset &)),
             Qt::QueuedConnection);
-
 }
 
 void ScanControllerLoadingCacheFileWatch::slotImageChanged(const ImageChangeset &changeset)
@@ -659,7 +653,5 @@ void ScanControllerLoadingCacheFileWatch::slotImageChanged(const ImageChangeset 
         }
     }
 }
-
-
 
 }  // namespace Digikam

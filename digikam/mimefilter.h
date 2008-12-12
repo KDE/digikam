@@ -31,8 +31,6 @@
 namespace Digikam
 {
 
-class MimeFilterPriv;
-
 class MimeFilter : public QComboBox
 {
     Q_OBJECT
@@ -60,10 +58,6 @@ public:
 
     void setMimeFilter(int filter);
     int mimeFilter();
-
-private:
-
-    MimeFilterPriv* d;
 };
 
 }  // namespace Digikam

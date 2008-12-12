@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "mimefilter.h"
 #include "mimefilter.moc"
 
@@ -35,19 +34,9 @@
 namespace Digikam
 {
 
-class MimeFilterPriv
-{
-public:
-
-    MimeFilterPriv()
-    {
-    }
-};
-
 MimeFilter::MimeFilter(QWidget* parent)
           : QComboBox(parent)
 {
-    d = new MimeFilterPriv;
     insertItem( AllFiles,    i18n("All files") );
     insertItem( ImageFiles,  i18n("Image files") );
     insertItem( NoRAWFiles,  i18n("No RAW files") );
@@ -67,7 +56,6 @@ MimeFilter::MimeFilter(QWidget* parent)
 
 MimeFilter::~MimeFilter()
 {
-    delete d;
 }
 
 void MimeFilter::setMimeFilter(int filter)

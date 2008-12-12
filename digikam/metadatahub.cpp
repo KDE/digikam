@@ -122,19 +122,19 @@ MetadataWriteSettings::MetadataWriteSettings(AlbumSettings *albumSettings)
 }
 
 MetadataHub::MetadataHub(DatabaseMode dbmode)
+           : d(new MetadataHubPriv)
 {
-    d = new MetadataHubPriv;
     d->dbmode = dbmode;
+}
+
+MetadataHub::MetadataHub(const MetadataHub &other)
+           : d(new MetadataHubPriv(*other.d))
+{
 }
 
 MetadataHub::~MetadataHub()
 {
     delete d;
-}
-
-MetadataHub::MetadataHub(const MetadataHub &other)
-{
-    d = new MetadataHubPriv(*other.d);
 }
 
 MetadataHub &MetadataHub::operator=(const MetadataHub &other)

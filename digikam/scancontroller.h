@@ -5,7 +5,7 @@
  *
  * Date        : 2007-10-28
  * Description : scan pictures interface.
- * 
+ *
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
@@ -15,12 +15,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef SCANCONTROLLER_H
@@ -150,12 +150,6 @@ protected:
 
 private:
 
-    friend class ScanControllerCreator;
-    ScanController();
-    ~ScanController();
-
-    ScanControllerPriv *d;
-
     virtual void moreSchemaUpdateSteps(int numberOfSteps);
     virtual void schemaUpdateProgress(const QString &message, int numberOfSteps);
     virtual void finishedSchemaUpdate(UpdateResult result);
@@ -163,6 +157,14 @@ private:
     virtual void error(const QString &errorMessage);
 
     void createProgressDialog();
+
+private:
+
+    friend class ScanControllerCreator;
+    ScanController();
+    ~ScanController();
+
+    ScanControllerPriv* const d;
 };
 
 }  // namespace Digikam

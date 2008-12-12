@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "tagfolderview.h"
 #include "tagfolderview.moc"
 
@@ -181,9 +180,9 @@ public:
 };
 
 TagFolderView::TagFolderView(QWidget *parent)
-             : FolderView(parent, "TagFolderView")
+             : FolderView(parent, "TagFolderView"),
+               d(new TagFolderViewPriv)
 {
-    d = new TagFolderViewPriv();
     d->albumMan = AlbumManager::instance();
 
     addColumn(i18n("My Tags"));
