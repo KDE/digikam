@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "editorstackview.h"
 #include "editorstackview.moc"
 
@@ -51,9 +50,8 @@ public:
 };
 
 EditorStackView::EditorStackView(QWidget *parent)
-               : QStackedWidget(parent)
+               : QStackedWidget(parent), d(new EditorStackViewPriv)
 {
-    d = new EditorStackViewPriv;
 }
 
 EditorStackView::~EditorStackView()
@@ -220,7 +218,6 @@ void EditorStackView::slotZoomChanged(double zoom)
         }
     }
 }
-
 
 PreviewWidget* EditorStackView::previewWidget() const
 {

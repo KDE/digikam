@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "imageiface.h"
 
 // Qt includes.
@@ -79,12 +78,10 @@ public:
 };
 
 ImageIface::ImageIface(int w, int h)
+          : d(new ImageIfacePriv)
 {
-    d = new ImageIfacePriv;
-
-    d->constrainWidth  = w;
-    d->constrainHeight = h;
-
+    d->constrainWidth     = w;
+    d->constrainHeight    = h;
     d->originalWidth      = DImgInterface::defaultInterface()->origWidth();
     d->originalHeight     = DImgInterface::defaultInterface()->origHeight();
     d->originalBytesDepth = DImgInterface::defaultInterface()->bytesDepth();

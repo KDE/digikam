@@ -59,10 +59,10 @@ public:
 
     enum ToolCode
     {
-        NoTool          = 0x00000001,
-        ColorGuide      = 0x00000002,
-        PanIcon         = 0x00000004,
-        Histogram       = 0x00000008
+        NoTool     = 0x00000001,
+        ColorGuide = 0x00000002,
+        PanIcon    = 0x00000004,
+        Histogram  = 0x00000008
     };
 
     enum ColorChannel
@@ -116,7 +116,7 @@ signals:
 
 private:
 
-    EditorToolSettingsPriv *d;
+    EditorToolSettingsPriv* const d;
 };
 
 } // namespace Digikam

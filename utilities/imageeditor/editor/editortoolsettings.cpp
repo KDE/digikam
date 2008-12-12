@@ -126,10 +126,8 @@ public:
 };
 
 EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, int histogramType, QWidget *parent)
-                  : QScrollArea(parent)
+                  : QScrollArea(parent), d(new EditorToolSettingsPriv)
 {
-    d = new EditorToolSettingsPriv;
-
     setFrameStyle( QFrame::NoFrame );
     setWidgetResizable(true);
 

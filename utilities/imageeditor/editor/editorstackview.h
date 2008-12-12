@@ -90,7 +90,7 @@ private:
 
 private:
 
-    EditorStackViewPriv* d;
+    EditorStackViewPriv* const d;
 };
 
 }  // namespace Digikam

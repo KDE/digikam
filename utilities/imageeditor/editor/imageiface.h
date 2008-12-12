@@ -192,7 +192,7 @@ public:
 
 private:
 
-    ImageIfacePriv* d;
+    ImageIfacePriv* const d;
 };
 
 } // namespace Digikam

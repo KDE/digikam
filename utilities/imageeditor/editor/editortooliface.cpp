@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "editortooliface.h"
 #include "editortooliface.moc"
 
@@ -68,9 +67,8 @@ EditorToolIface* EditorToolIface::editorToolIface()
 }
 
 EditorToolIface::EditorToolIface(EditorWindow *editor)
-               : QObject()
+               : QObject(), d(new EditorToolIfacePriv)
 {
-    d = new EditorToolIfacePriv;
     d->editor = editor;
     m_iface   = this;
 }

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "editortool.h"
 #include "editortool.moc"
 
@@ -73,9 +72,8 @@ public:
 };
 
 EditorTool::EditorTool(QObject *parent)
-          : QObject(parent)
+          : QObject(parent), d(new EditorToolPriv)
 {
-    d = new EditorToolPriv;
     d->timer = new QTimer(this);
 
     connect(d->timer, SIGNAL(timeout()),
@@ -235,9 +233,8 @@ public:
 };
 
 EditorToolThreaded::EditorToolThreaded(QObject *parent)
-                  : EditorTool(parent)
+                  : EditorTool(parent), d(new EditorToolThreadedPriv)
 {
-    d = new EditorToolThreadedPriv;
 }
 
 EditorToolThreaded::~EditorToolThreaded()

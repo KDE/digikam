@@ -91,7 +91,7 @@ protected slots:
 
 private:
 
-    EditorToolPriv *d;
+    EditorToolPriv* const d;
 };
 
 // -----------------------------------------------------------------
@@ -158,7 +158,7 @@ private slots:
 
 private:
 
-    EditorToolThreadedPriv *d;
+    EditorToolThreadedPriv* const d;
 };
 
 }  //namespace Digikam
