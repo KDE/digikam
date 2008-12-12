@@ -4,8 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2004-11-17
- * Description : Albums history manager. 
- * 
+ * Description : Albums history manager.
+ *
  * Copyright (C) 2004 by Joern Ahrens <joern.ahrens@kdemail.net>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef ALBUMHISTORY_H
@@ -60,22 +60,22 @@ public:
     void            back(Album **album, QWidget **widget, unsigned int steps=1);
     void            forward(Album **album, QWidget **widget, unsigned int steps=1);
     void            getCurrentAlbum(Album **album, QWidget **widget) const;
-    
+
     void            getBackwardHistory(QStringList &list) const;
     void            getForwardHistory(QStringList &list) const;
 
     bool            isForwardEmpty() const;
     bool            isBackwardEmpty() const;
-    
+
 private:
-    
+
     HistoryItem*    getCurrentAlbum() const;
     void            forward(unsigned int steps=1);
 
 private:
-    
+
     typedef QList<HistoryItem*> AlbumStack;
-    
+
     bool             m_moving;
 
     AlbumStack      *m_backwardStack;

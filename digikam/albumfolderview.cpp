@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "albumfolderview.h"
 #include "albumfolderview.moc"
 
@@ -249,9 +248,9 @@ public:
 };
 
 AlbumFolderView::AlbumFolderView(QWidget *parent)
-               : FolderView(parent, "AlbumFolderView")
+               : FolderView(parent, "AlbumFolderView"),
+                 d(new AlbumFolderViewPriv)
 {
-    d = new AlbumFolderViewPriv();
     d->albumMan = AlbumManager::instance();
 
     addColumn(i18n("My Albums"));

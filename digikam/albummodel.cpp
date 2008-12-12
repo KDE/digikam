@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "albummodel.h"
 #include "albummodel.moc"
 
@@ -49,10 +48,10 @@ public:
 
     AlbumModelPriv()
     {
-        rootAlbum = 0;
-        type = Album::PHYSICAL;
-        rootBehavior = AbstractAlbumModel::IncludeRootAlbum;
-        addingAlbum = 0;
+        rootAlbum     = 0;
+        type          = Album::PHYSICAL;
+        rootBehavior  = AbstractAlbumModel::IncludeRootAlbum;
+        addingAlbum   = 0;
         removingAlbum = 0;
     }
 
@@ -110,10 +109,8 @@ public:
 
 AbstractAlbumModel::AbstractAlbumModel(Album::Type albumType, Album *rootAlbum, RootAlbumBehavior rootBehavior,
                                        QObject *parent)
-    : QAbstractItemModel(parent)
+                  : QAbstractItemModel(parent), d(new AlbumModelPriv)
 {
-    d = new AlbumModelPriv;
-
     d->type = albumType;
     d->rootAlbum = rootAlbum;
     d->rootBehavior = rootBehavior;
@@ -428,7 +425,7 @@ AbstractSpecificAlbumModel::AbstractSpecificAlbumModel(Album::Type albumType,
                                                        Album *rootAlbum,
                                                        RootAlbumBehavior rootBehavior,
                                                        QObject *parent)
-    : AbstractAlbumModel(albumType, rootAlbum, rootBehavior, parent)
+                          : AbstractAlbumModel(albumType, rootAlbum, rootBehavior, parent)
 {
     AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
 
@@ -490,7 +487,7 @@ void AbstractSpecificAlbumModel::emitDataChangedForChildren(Album *album)
 AbstractCheckableAlbumModel::AbstractCheckableAlbumModel(Album::Type albumType, Album *rootAlbum,
                                                          RootAlbumBehavior rootBehavior,
                                                          QObject *parent)
-    : AbstractSpecificAlbumModel(albumType, rootAlbum, rootBehavior, parent)
+                           : AbstractSpecificAlbumModel(albumType, rootAlbum, rootBehavior, parent)
 {
     m_extraFlags = 0;
 }
@@ -602,9 +599,9 @@ bool AbstractCheckableAlbumModel::setData(const QModelIndex &index, const QVaria
 // ------------------------------------------------------------------
 
 AlbumModel::AlbumModel(RootAlbumBehavior rootBehavior, QObject *parent)
-    : AbstractCheckableAlbumModel(Album::PHYSICAL,
-                                 AlbumManager::instance()->findPAlbum(0),
-                                 rootBehavior, parent)
+          : AbstractCheckableAlbumModel(Album::PHYSICAL,
+                                        AlbumManager::instance()->findPAlbum(0),
+                                        rootBehavior, parent)
 {
     m_columnHeader = i18n("My Albums");
 }
@@ -618,9 +615,9 @@ QVariant AlbumModel::decorationRole(Album *album) const
 // ------------------------------------------------------------------
 
 TagModel::TagModel(RootAlbumBehavior rootBehavior, QObject *parent)
-    : AbstractCheckableAlbumModel(Album::TAG,
-                                 AlbumManager::instance()->findTAlbum(0),
-                                 rootBehavior, parent)
+        : AbstractCheckableAlbumModel(Album::TAG,
+                                      AlbumManager::instance()->findTAlbum(0),
+                                      rootBehavior, parent)
 {
     m_columnHeader = i18n("My Tags");
 }

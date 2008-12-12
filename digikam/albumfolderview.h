@@ -122,7 +122,7 @@ private:
 
 private:
 
-    AlbumFolderViewPriv *d;
+    AlbumFolderViewPriv* const d;
 };
 
 }  // namespace Digikam

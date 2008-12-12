@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "albummanager.h"
 #include "albummanager.moc"
 
@@ -223,6 +222,7 @@ public:
 class ChangingDB
 {
 public:
+
     ChangingDB(AlbumManagerPriv *d) : d(d)
     {
         d->changingDB = true;
@@ -246,8 +246,8 @@ AlbumManager* AlbumManager::instance()
 }
 
 AlbumManager::AlbumManager()
+            : d(new AlbumManagerPriv)
 {
-    d = new AlbumManagerPriv;
     internalInstance = this;
 
     // these operations are pretty fast, no need for long queuing

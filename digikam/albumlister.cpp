@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "albumlister.h"
 #include "albumlister.moc"
 
@@ -136,11 +135,11 @@ void AlbumLister::cleanUp()
 }
 
 AlbumLister::AlbumLister()
+           : d(new AlbumListerPriv)
 {
     m_instance = this;
 
-    d = new AlbumListerPriv;
-    d->filterTimer = new QTimer(this);
+    d->filterTimer  = new QTimer(this);
     d->refreshTimer = new QTimer(this);
     d->refreshTimer->setSingleShot(true);
 

@@ -118,7 +118,7 @@ protected slots:
 
 private:
 
-    AlbumModelPriv *d;
+    AlbumModelPriv* const d;
 };
 
 // ------------------------------------------------------------------
@@ -205,8 +205,8 @@ protected:
 
 private:
 
-    Qt::ItemFlags m_extraFlags;
-    QHash<Album *, Qt::CheckState> m_checkedAlbums;
+    Qt::ItemFlags                 m_extraFlags;
+    QHash<Album*, Qt::CheckState> m_checkedAlbums;
 };
 
 // ------------------------------------------------------------------

@@ -5,7 +5,7 @@
  *
  * Date        : 2004-06-15
  * Description : Albums manager interface.
- * 
+ *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -15,12 +15,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 /** @file albummanager.h */
@@ -77,14 +77,14 @@ typedef QPair<int, int> YearMonth;
  *
  * There are two primary managers which manage the listing and 
  * lifetime of Album and ImageInfo: AlbumManager and AlbumLister
- * 
+ *
  * AlbumManager manages albums: does listing of albums and controls the lifetime of it. 
  * For PAlbums and TAlbums, the listing is done by reading the db directly and
  * building the hierarchy of the albums. For DAlbums, since the listing takes
  * time, the work is delegated to a kioslave. Interested frontend entities can
  * connect to the albummanager to receive notifications of new Albums, when
  * Albums are deleted and when the current album is changed.
- * 
+ *
  * Additional operations are provided for: creating/deleting/rename Albums, 
  * updating icons and moving Albums.
  *
@@ -210,7 +210,7 @@ public:
      * @param id the id for the DAlbum
      */
     DAlbum*   findDAlbum(int id) const;
-    
+
     /**
      * @return a Album with the given globalID
      * @param gid the global id for the album
@@ -297,7 +297,7 @@ public:
      */
     bool updatePAlbumIcon(PAlbum *album, qlonglong iconID, QString& errMsg);
     //@}
-    
+
     /** @name Operations on TAlbum
      */
     //@{
@@ -345,7 +345,7 @@ public:
      * @param name the new name for the album
      * @param errMsg this will contain the error message describing why the
      * operation failed
-     */ 
+     */
     bool renameTAlbum(TAlbum* album, const QString& name, QString& errMsg);
 
     /**
@@ -356,9 +356,9 @@ public:
      * @param newParent the Parent Album to which album should be moved
      * @param errMsg this will contain the error message describing why the
      * operation failed
-     */ 
+     */
     bool moveTAlbum(TAlbum* album, TAlbum *newParent, QString &errMsg);
-    
+
     /**
      * Update the icon for a TAlbum. 
      * @return true if the operation succeeds, false otherwise
@@ -392,7 +392,7 @@ public:
      */
     QStringList tagNames(const QList<int> &tagIDs) const;
 
-    //@}    
+    //@}
 
     /** @name Operations on SAlbum
      */
@@ -410,7 +410,7 @@ public:
      * extended type
      */
     SAlbum* createSAlbum(const QString &name, DatabaseSearch::Type type, const QString &query);
-    
+
     /**
      * Update the url for a SAlbum
      * @return true if the operation succeeds, false otherwise
@@ -431,7 +431,7 @@ public:
      */
     bool deleteSAlbum(SAlbum* album);
     //@}
-    
+
     void setItemHandler(AlbumItemHandler *handler);
     AlbumItemHandler* getItemHandler();
     void refreshItemHandler(const KUrl::List& itemList=KUrl::List());
@@ -535,7 +535,7 @@ private:
 
 private:
 
-    AlbumManagerPriv *d;
+    AlbumManagerPriv* const d;
 };
 
 /**
@@ -544,9 +544,11 @@ private:
  * The pointer will be set to 0 when the album object is deleted.
  */
 template <class T = Album>
+
 class AlbumPointer
 {
 public:
+
     AlbumPointer() : album(0) {}
     AlbumPointer(T *a) : album(a)
     { AlbumManager::instance()->addGuardedPointer(album, &album); }

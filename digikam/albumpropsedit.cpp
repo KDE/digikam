@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005 by Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +22,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "albumpropsedit.h"
 #include "albumpropsedit.moc"
@@ -95,7 +94,7 @@ public:
 };
 
 AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
-              : KDialog( 0L )
+              : KDialog(0), d(new AlbumPropsEditPriv)
 {
     setCaption(create ? i18n("New Album") : i18n("Edit Album"));
     setButtons(Help|Ok|Cancel);
@@ -103,7 +102,6 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     setModal(true);
     setHelp("albumpropsedit.anchor", "digikam");
 
-    d = new AlbumPropsEditPriv;
     d->album = album;
 
     QWidget *page = new QWidget(this);
@@ -180,17 +178,17 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     // --------------------------------------------------------
 
-    topLayout->addWidget(topLabel,              0, 0, 1, 2);
-    topLayout->addWidget(topLine,               1, 0, 1, 2);
-    topLayout->addWidget(titleLabel,            2, 0, 1, 1);
-    topLayout->addWidget(d->titleEdit,          2, 1, 1, 1);
-    topLayout->addWidget(collectionLabel,       3, 0, 1, 1);
-    topLayout->addWidget(d->collectionCombo,    3, 1, 1, 1);
-    topLayout->addWidget(commentsLabel,         4, 0, 1, 1, Qt::AlignLeft | Qt::AlignTop);
-    topLayout->addWidget(d->commentsEdit,       4, 1, 1, 1);
-    topLayout->addWidget(dateLabel,             5, 0, 1, 1, Qt::AlignLeft | Qt::AlignTop);
-    topLayout->addWidget(d->datePicker,         5, 1, 1, 1);
-    topLayout->addWidget(buttonRow,             6, 1, 1, 1);
+    topLayout->addWidget(topLabel,           0, 0, 1, 2);
+    topLayout->addWidget(topLine,            1, 0, 1, 2);
+    topLayout->addWidget(titleLabel,         2, 0, 1, 1);
+    topLayout->addWidget(d->titleEdit,       2, 1, 1, 1);
+    topLayout->addWidget(collectionLabel,    3, 0, 1, 1);
+    topLayout->addWidget(d->collectionCombo, 3, 1, 1, 1);
+    topLayout->addWidget(commentsLabel,      4, 0, 1, 1, Qt::AlignLeft | Qt::AlignTop);
+    topLayout->addWidget(d->commentsEdit,    4, 1, 1, 1);
+    topLayout->addWidget(dateLabel,          5, 0, 1, 1, Qt::AlignLeft | Qt::AlignTop);
+    topLayout->addWidget(d->datePicker,      5, 1, 1, 1);
+    topLayout->addWidget(buttonRow,          6, 1, 1, 1);
     topLayout->setMargin(0);
     topLayout->setSpacing(KDialog::spacingHint());
 

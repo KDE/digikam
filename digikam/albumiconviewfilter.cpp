@@ -72,10 +72,8 @@ public:
 };
 
 AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
-                   : KHBox(parent)
+                   : KHBox(parent), d(new AlbumIconViewFilterPriv)
 {
-    d = new AlbumIconViewFilterPriv;
-
     d->led = new StatusLed(this);
     d->led->installEventFilter(this);
     d->led->setLedColor(StatusLed::Gray);
