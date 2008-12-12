@@ -6,14 +6,14 @@
  * Date        : 2006-01-11
  * Description : shared image loading and caching
  *
- * Copyright (C) 2005-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -47,7 +47,6 @@ public:
     virtual bool querySendNotifyEvent() = 0;
     virtual LoadSaveNotifier *loadSaveNotifier() = 0;
     virtual LoadSaveThread::AccessMode accessMode() = 0;
-
 };
 
 class LoadingProcess
@@ -61,7 +60,6 @@ public:
     virtual void addListener(LoadingProcessListener *listener) = 0;
     virtual void removeListener(LoadingProcessListener *listener) = 0;
     virtual void notifyNewLoadingProcess(LoadingProcess *process, LoadingDescription description) = 0;
-
 };
 
 class DIGIKAM_EXPORT LoadingCacheFileWatch
@@ -111,8 +109,8 @@ signals:
 
 protected:
 
-    KDirWatch *m_watch;
-    QStringList m_watchedFiles;
+    KDirWatch   *m_watch;
+    QStringList  m_watchedFiles;
 };
 
 class LoadingCachePriv;
@@ -132,11 +130,14 @@ public:
     class CacheLock
     {
     public:
+
         CacheLock(LoadingCache *cache);
         ~CacheLock();
         void wakeAll();
         void timedWait();
+
     private:
+
         LoadingCache *m_cache;
     };
 
@@ -271,8 +272,8 @@ private:
 
     friend class LoadingCacheFileWatch;
     friend class CacheLock;
-    LoadingCachePriv *d;
 
+    LoadingCachePriv* const d;
 };
 
 }   // namespace Digikam

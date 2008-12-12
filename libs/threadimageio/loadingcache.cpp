@@ -6,7 +6,7 @@
  * Date        : 2006-01-11
  * Description : shared image loading and caching
  *
- * Copyright (C) 2005-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "loadingcache.h"
 #include "loadingcache.moc"
@@ -52,15 +51,15 @@ public:
         watch = 0;
     }
 
-    QCache<QString, DImg> imageCache;
-    QCache<QString, QImage>  thumbnailImageCache;
-    QCache<QString, QPixmap> thumbnailPixmapCache;
-    QMultiHash<QString, QString> imageFilePathHash;
-    QMultiHash<QString, QString> thumbnailFilePathHash;
-    QHash<QString, LoadingProcess *> loadingDict;
-    QMutex mutex;
-    QWaitCondition condVar;
-    LoadingCacheFileWatch *watch;
+    QCache<QString, DImg>           imageCache;
+    QCache<QString, QImage>         thumbnailImageCache;
+    QCache<QString, QPixmap>        thumbnailPixmapCache;
+    QMultiHash<QString, QString>    imageFilePathHash;
+    QMultiHash<QString, QString>    thumbnailFilePathHash;
+    QHash<QString, LoadingProcess*> loadingDict;
+    QMutex                          mutex;
+    QWaitCondition                  condVar;
+    LoadingCacheFileWatch*          watch;
 
     void mapImageFilePath(const QString &filePath, const QString &cacheKey);
     void mapThumbnailFilePath(const QString &filePath, const QString &cacheKey);
@@ -86,11 +85,9 @@ void LoadingCache::cleanUp()
         delete m_instance;
 }
 
-
 LoadingCache::LoadingCache()
+            : d(new LoadingCachePriv(this))
 {
-    d = new LoadingCachePriv(this);
-
     setCacheSize(60);
     setThumbnailCacheSize(0, 100);
 
@@ -438,13 +435,12 @@ void ClassicLoadingCacheFileWatch::slotUpdateDirWatch()
         m_watch->addFile(*it);
         m_watchedFiles.append(*it);
     }
-
 }
 
 //---------------------------------------------------------------------------------------------------
 
 LoadingCache::CacheLock::CacheLock(LoadingCache *cache)
-    : m_cache(cache)
+            : m_cache(cache)
 {
     m_cache->d->mutex.lock();
 }
