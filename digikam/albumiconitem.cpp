@@ -7,7 +7,7 @@
  * Description : implementation to render album icon item.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "albumiconitem.h"
 
@@ -53,6 +52,7 @@
 #include "icongroupitem.h"
 #include "imageinfo.h"
 #include "themeengine.h"
+#include "thumbbar.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 
@@ -84,9 +84,8 @@ static void dateToString(const QDateTime& datetime, QString& str)
 }
 
 AlbumIconItem::AlbumIconItem(IconGroupItem* parent, const ImageInfo &info)
-             : IconItem(parent)
+             : IconItem(parent), d(new AlbumIconItemPriv)
 {
-    d = new AlbumIconItemPriv;
     d->view = (AlbumIconView*) parent->iconView();
     d->info = info;
 }
@@ -232,9 +231,9 @@ QRect AlbumIconItem::clickToOpenRect()
 
 void AlbumIconItem::paintItem(QPainter *p)
 {
-    QRect   r;
+    QRect r;
     const AlbumSettings *settings = d->view->settings();
-    ThemeEngine* te = ThemeEngine::instance();
+    ThemeEngine* te               = ThemeEngine::instance();
 
     QPixmap pix;
     if (isSelected())
@@ -251,11 +250,12 @@ void AlbumIconItem::paintItem(QPainter *p)
     {
         r = d->view->itemPixmapRect();
         p->drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
-                     r.y() + (r.height()-thumbnail.height())/2,
-                     thumbnail);
+                      r.y() + (r.height()-thumbnail.height())/2,
+                      thumbnail);
+
         d->tightPixmapRect.setRect(r.x() + (r.width()-thumbnail.width())/2,
-                                 r.y() + (r.height()-thumbnail.height())/2,
-                                 thumbnail.width(), thumbnail.height());
+                                   r.y() + (r.height()-thumbnail.height())/2,
+                                   thumbnail.width(), thumbnail.height());
         d->dirty = false;
     }
 
@@ -264,6 +264,11 @@ void AlbumIconItem::paintItem(QPainter *p)
     p->setClipRegion(pixmapClipRegion);
     p->drawPixmap(0, 0, pix);
     p->restore();
+
+    p->drawPixmap(d->tightPixmapRect.x()-3, d->tightPixmapRect.y()-3,
+                  ThumbBarView::generateFuzzyRect(QSize(d->tightPixmapRect.width()+6, 
+                                                        d->tightPixmapRect.height()+6),
+                                                  QColor(0, 0, 0, 128), 3));
 
     if (settings->getIconShowRating())
     {

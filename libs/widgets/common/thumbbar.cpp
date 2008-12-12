@@ -485,10 +485,12 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                 QPixmap pix;
                 if (pixmapForItem(item, pix))
                 {
-                    //QPixmap pix = item->pixmap().scaled(d->tileSize, d->tileSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
                     int x = (tile.width()  - pix.width())/2;
                     int y = (tile.height() - pix.height())/2;
                     p.drawPixmap(x, y, pix);
+                    p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6, 
+                                                                   pix.height()+6),
+                                                             QColor(0, 0, 0, 128), 3));
                 }
 
                 p.translate(0, - translate);
@@ -515,6 +517,9 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                     int x = (tile.width()  - pix.width())/2;
                     int y = (tile.height() - pix.height())/2;
                     p.drawPixmap(x, y, pix);
+                    p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6, 
+                                                                   pix.height()+6),
+                                                             QColor(0, 0, 0, 128), 3));
                 }
 
                 p.translate(- translate, 0);
@@ -523,6 +528,74 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
     }
 
     checkPreload();
+}
+
+QPixmap ThumbBarView::generateFuzzyRect(const QSize& size, const QColor& color, int radius)
+{
+    QPixmap pix(size);
+    pix.fill(Qt::transparent);
+
+    QPainter painter(&pix);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+
+    // Draw corners ----------------------------------
+
+    QRadialGradient gradient;
+    gradient.setColorAt(1, Qt::transparent);
+    gradient.setColorAt(0, color);
+    gradient.setRadius(radius);
+    QPoint center;
+
+    // Top Left
+    center = QPoint(radius, radius);
+    gradient.setCenter(center);
+    gradient.setFocalPoint(center);
+    painter.fillRect(0, 0, radius, radius, gradient);
+
+    // Top right
+    center = QPoint(size.width() - radius, radius);
+    gradient.setCenter(center);
+    gradient.setFocalPoint(center);
+    painter.fillRect(center.x(), 0, radius, radius, gradient);
+
+    // Bottom left
+    center = QPoint(radius, size.height() - radius);
+    gradient.setCenter(center);
+    gradient.setFocalPoint(center);
+    painter.fillRect(0, center.y(), radius, radius, gradient);
+
+    // Bottom right
+    center = QPoint(size.width() - radius, size.height() - radius);
+    gradient.setCenter(center);
+    gradient.setFocalPoint(center);
+    painter.fillRect(center.x(), center.y(), radius, radius, gradient);
+
+    // Draw borders ----------------------------------
+
+    QLinearGradient linearGradient;
+    linearGradient.setColorAt(1, Qt::transparent);
+    linearGradient.setColorAt(0, color);
+
+    // Top
+    linearGradient.setStart(0, radius);
+    linearGradient.setFinalStop(0, 0);
+    painter.fillRect(radius, 0, size.width() - 2*radius, radius, linearGradient);
+
+    // Bottom
+    linearGradient.setStart(0, size.height() - radius);
+    linearGradient.setFinalStop(0, size.height());
+    painter.fillRect(radius, int(linearGradient.start().y()), size.width() - 2*radius, radius, linearGradient);
+
+    // Left
+    linearGradient.setStart(radius, 0);
+    linearGradient.setFinalStop(0, 0);
+    painter.fillRect(0, radius, radius, size.height() - 2*radius, linearGradient);
+
+    // Right
+    linearGradient.setStart(size.width() - radius, 0);
+    linearGradient.setFinalStop(size.width(), 0);
+    painter.fillRect(int(linearGradient.start().x()), radius, radius, size.height() - 2*radius, linearGradient);
+    return pix;
 }
 
 void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)

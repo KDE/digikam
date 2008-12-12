@@ -376,6 +376,9 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         int y = (tile.height() - pix.height())/2;
 
                         p.drawPixmap(x, y, pix);
+                        p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6, 
+                                                                       pix.height()+6),
+                                                                 QColor(0, 0, 0, 128), 3));
 
                         LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
 
@@ -433,6 +436,9 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         int x = (tile.width() - pix.width())/2;
                         int y = (tile.height()- pix.height())/2;
                         p.drawPixmap(x, y, pix);
+                        p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6, 
+                                                                       pix.height()+6),
+                                                                 QColor(0, 0, 0, 128), 3));
 
                         LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
 

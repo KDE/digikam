@@ -95,6 +95,8 @@ public:
     void refreshThumbs(const KUrl::List& urls);
     void invalidateThumb(ThumbBarItem* item);
 
+    static QPixmap generateFuzzyRect(const QSize& size, const QColor& color, int radius);
+
 public slots:
 
     void slotUpdate();
