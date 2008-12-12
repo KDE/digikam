@@ -6,7 +6,7 @@
  * Date        : 2007-03-20
  * Description : Simple virtual interface for ImageLister
  *
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,38 +21,36 @@
  *
  * ============================================================ */
 
-
 #include "imagelisterreceiver.h"
 
 // Qt includes.
 
 #include <QList>
 
-
 namespace Digikam
 {
 
 ImageListerValueListReceiver::ImageListerValueListReceiver()
-    : hasError(false)
+                            : hasError(false)
 {
 }
 
-void ImageListerValueListReceiver::error(const QString &)
+void ImageListerValueListReceiver::error(const QString&)
 {
     hasError = true;
 }
 
-void ImageListerValueListReceiver::receive(const ImageListerRecord &record)
+void ImageListerValueListReceiver::receive(const ImageListerRecord& record)
 {
     records << record;
 }
 
 ImageListerSlaveBaseReceiver::ImageListerSlaveBaseReceiver(KIO::SlaveBase *slave)
-    : m_slave(slave)
+                            : m_slave(slave)
 {
 }
 
-void ImageListerSlaveBaseReceiver::error(const QString &errMsg)
+void ImageListerSlaveBaseReceiver::error(const QString& errMsg)
 {
     m_slave->error(KIO::ERR_INTERNAL, errMsg);
     ImageListerValueListReceiver::error(errMsg);
@@ -74,7 +72,7 @@ void ImageListerSlaveBaseReceiver::sendData()
 }
 
 ImageListerSlaveBasePartsSendingReceiver::ImageListerSlaveBasePartsSendingReceiver(KIO::SlaveBase *slave, int limit)
-    : ImageListerSlaveBaseReceiver(slave), m_limit(limit), m_count(0)
+                                        : ImageListerSlaveBaseReceiver(slave), m_limit(limit), m_count(0)
 {
 }
 

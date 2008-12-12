@@ -7,7 +7,7 @@
  * Description : Building complex database SQL queries from search descriptions
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  * ============================================================ */
-
 
 #include "imagequerybuilder.h"
 
@@ -80,7 +79,6 @@ bool ImageQueryPostHooks::checkPosition(double latitudeNumber, double longitudeN
             return false;
     return true;
 }
-
 
 ImageQueryBuilder::ImageQueryBuilder()
 {
@@ -194,11 +192,11 @@ public:
     {
     }
 
-    QString &sql;
+    QString                &sql;
     SearchXmlCachingReader &reader;
-    QList<QVariant> *boundValues;
-    ImageQueryPostHooks *hooks;
-    SearchXml::Relation relation;
+    QList<QVariant>        *boundValues;
+    ImageQueryPostHooks    *hooks;
+    SearchXml::Relation     relation;
 
     inline QString prepareForLike(const QString &str)
     {
@@ -1137,7 +1135,6 @@ QString ImageQueryBuilder::convertFromUrlToXml(const KUrl& url) const
 
     return writer.xml();
 }
-
 
 enum SKey
 {

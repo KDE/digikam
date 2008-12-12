@@ -6,7 +6,7 @@
  * Date        : 2008-10-26
  * Description : Access image position stored in database.
  *
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2008 by Patrick Spendrin <ps_ml at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 // Qt includes.
 
@@ -88,4 +87,5 @@ public:
 
     DatabaseFields::ImagePositions dirtyFields;
 };
+
 } // namespace Digikam

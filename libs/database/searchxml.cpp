@@ -21,14 +21,13 @@
  *
  * ============================================================ */
 
-
 #include "searchxml.h"
 
 namespace Digikam
 {
 
 SearchXmlReader::SearchXmlReader(const QString &xml)
-    : QXmlStreamReader(xml)
+               : QXmlStreamReader(xml)
 {
     m_defaultFieldOperator = SearchXml::And;
 
@@ -38,8 +37,8 @@ SearchXmlReader::SearchXmlReader(const QString &xml)
 
 SearchXml::Element SearchXmlReader::readNext()
 {
-    while (!atEnd()) {
-
+    while (!atEnd()) 
+    {
         QXmlStreamReader::readNext();
 
         if (isEndElement())
@@ -294,11 +293,13 @@ SearchXml::Relation SearchXmlReader::readRelation(const QString &attributeName,
 bool SearchXmlReader::readToStartOfElement(const QString &elementName)
 {
     // go to next start element
-    forever {
+    forever 
+    {
         bool atStart = isStartElement();
         if (atStart)
             break;
-        switch (QXmlStreamReader::readNext()) {
+        switch (QXmlStreamReader::readNext()) 
+        {
             case StartElement:
                 atStart = true;
             default:
@@ -309,8 +310,10 @@ bool SearchXmlReader::readToStartOfElement(const QString &elementName)
     }
 
     int stack = 1;
-    forever {
-        switch (QXmlStreamReader::readNext()) {
+    forever 
+    {
+        switch (QXmlStreamReader::readNext()) 
+        {
             case StartElement:
             {
                 if (name() == elementName)
@@ -332,9 +335,12 @@ bool SearchXmlReader::readToStartOfElement(const QString &elementName)
 void SearchXmlReader::readToEndOfElement()
 {
     int stack = 1;
-    if (isStartElement()) {
-        forever {
-            switch (QXmlStreamReader::readNext()) {
+    if (isStartElement()) 
+    {
+        forever 
+        {
+            switch (QXmlStreamReader::readNext()) 
+            {
                 case StartElement:
                     stack++;
                 case EndElement:
@@ -367,7 +373,6 @@ void SearchXmlReader::readToFirstField()
         }
     }
 }
-
 
 // ---------------------------------------- //
 
@@ -570,7 +575,6 @@ QString SearchXmlWriter::keywordSearch(const QString &keyword)
     return writer.xml();
 }
 
-
 // ---------------------------------------- //
 
 QStringList KeywordSearch::split(const QString &keywords)
@@ -625,7 +629,7 @@ QString KeywordSearch::merge(const QString &previousContent, const QString &newE
 // ---------------------------------------- //
 
 KeywordSearchReader::KeywordSearchReader(const QString &xml)
-    : SearchXmlReader(xml)
+                   : SearchXmlReader(xml)
 {
 }
 
@@ -733,11 +737,10 @@ bool KeywordSearchReader::isSimpleKeywordSearchGroup()
     return true;
 }
 
-
 // ---------------------------------------- //
 
 KeywordSearchWriter::KeywordSearchWriter()
-    : SearchXmlWriter()
+                   : SearchXmlWriter()
 {
 }
 
@@ -759,9 +762,9 @@ QString KeywordSearchWriter::xml(const QStringList &keywordList)
 // ---------------------------------------- //
 
 SearchXmlCachingReader::SearchXmlCachingReader(const QString &xml)
-    : SearchXmlReader(xml),
-      m_groupOperator(SearchXml::And), m_fieldOperator(SearchXml::And),
-      m_fieldRelation(SearchXml::Equal), m_readValue(false)
+                      : SearchXmlReader(xml),
+                        m_groupOperator(SearchXml::And), m_fieldOperator(SearchXml::And),
+                        m_fieldRelation(SearchXml::Equal), m_readValue(false)
 {
 }
 
@@ -920,8 +923,4 @@ QList<int> SearchXmlCachingReader::valueToIntOrIntList()
     return intList;
 }
 
-
-
-
-}
-
+} // namespace Digikam

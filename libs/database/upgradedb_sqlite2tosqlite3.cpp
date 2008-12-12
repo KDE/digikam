@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "upgradedb_sqlite2tosqlite3.h"
 
 // Qt includes.

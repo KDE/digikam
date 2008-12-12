@@ -6,7 +6,7 @@
  * Date        : 2007-09-19
  * Description : Scanning of a single image
  *
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "imagescanner.h"
 
@@ -49,12 +48,12 @@ namespace Digikam
 {
 
 ImageScanner::ImageScanner(const QFileInfo &info, const ItemScanInfo &scanInfo)
-    : m_fileInfo(info), m_scanInfo(scanInfo)
+            : m_fileInfo(info), m_scanInfo(scanInfo)
 {
 }
 
 ImageScanner::ImageScanner(const QFileInfo &info)
-    : m_fileInfo(info)
+            : m_fileInfo(info)
 {
 }
 
@@ -124,8 +123,10 @@ void ImageScanner::addImage(int albumId)
     m_scanInfo.uniqueHash = QString(m_img.getUniqueHash());
 
     kDebug(50003) << "Adding new item" << m_fileInfo.filePath();
-    m_scanInfo.id = DatabaseAccess().db()->addItem(m_scanInfo.albumID, m_scanInfo.itemName, m_scanInfo.status, m_scanInfo.category,
-                                                   m_scanInfo.modificationDate, fileSize, m_scanInfo.uniqueHash);
+    m_scanInfo.id = DatabaseAccess().db()->addItem(m_scanInfo.albumID, m_scanInfo.itemName, 
+                                                   m_scanInfo.status, m_scanInfo.category,
+                                                   m_scanInfo.modificationDate, fileSize,
+                                                   m_scanInfo.uniqueHash);
 }
 
 void ImageScanner::updateImage()
@@ -178,8 +179,8 @@ bool lessThanForIdentity(const ItemScanInfo &a, const ItemScanInfo &b)
 bool ImageScanner::scanFromIdenticalFile()
 {
     // Get a list of other images that are identical. Source image shall not be included.
-    QList<ItemScanInfo> candidates =
-            DatabaseAccess().db()->getIdenticalFiles((int)m_fileInfo.size(), m_scanInfo.uniqueHash, m_scanInfo.id);
+    QList<ItemScanInfo> candidates = DatabaseAccess().db()->getIdenticalFiles((int)m_fileInfo.size(),
+                                                            m_scanInfo.uniqueHash, m_scanInfo.id);
 
     if (!candidates.isEmpty())
     {
@@ -566,7 +567,8 @@ QString ImageScanner::detectFormat()
                 }
             }
 
-            kWarning(50003) << "Detecting file format failed: KMimeType for" << m_fileInfo.filePath() << "is null" << endl;
+            kWarning(50003) << "Detecting file format failed: KMimeType for" << m_fileInfo.filePath() 
+                            << "is null" << endl;
 
         }
     }
@@ -686,8 +688,8 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer *
         imagesFields = access.db()->getImagesFields(imageid,
                                            DatabaseFields::Name |
                                            DatabaseFields::ModificationDate |
-                                           DatabaseFields::FileSize
-                                                   );
+                                           DatabaseFields::FileSize);
+
         imageInformationFields = access.db()->getImageInformation(imageid,
                                            DatabaseFields::Rating |
                                            DatabaseFields::CreationDate |
@@ -697,8 +699,7 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer *
                                            DatabaseFields::Height |
                                            DatabaseFields::Format |
                                            DatabaseFields::ColorDepth |
-                                           DatabaseFields::ColorModel
-                                                                 );
+                                           DatabaseFields::ColorModel);
     }
 
     if (!imagesFields.isEmpty())
@@ -737,25 +738,22 @@ void ImageScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContain
     QStringList strings = DMetadata::valuesToString(fields, allImageMetadataFields());
 
     // associate with hard-coded variables
-    container->make             = strings[0];
-    container->model            = strings[1];
-    container->lens             = strings[2];
-    container->aperture         = strings[3];
-    container->focalLength      = strings[4];
-    container->focalLength35    = strings[5];
-    container->exposureTime     = strings[6];
-    container->exposureProgram  = strings[7];
-    container->exposureMode     = strings[8];
-    container->sensitivity      = strings[9];
-    container->flashMode        = strings[10];
-    container->whiteBalance     = strings[11];
-    container->whiteBalanceColorTemperature
-                               = strings[12];
-    container->meteringMode     = strings[13];
-    container->subjectDistance  = strings[14];
-    container->subjectDistanceCategory
-                               = strings[15];
+    container->make                         = strings[0];
+    container->model                        = strings[1];
+    container->lens                         = strings[2];
+    container->aperture                     = strings[3];
+    container->focalLength                  = strings[4];
+    container->focalLength35                = strings[5];
+    container->exposureTime                 = strings[6];
+    container->exposureProgram              = strings[7];
+    container->exposureMode                 = strings[8];
+    container->sensitivity                  = strings[9];
+    container->flashMode                    = strings[10];
+    container->whiteBalance                 = strings[11];
+    container->whiteBalanceColorTemperature = strings[12];
+    container->meteringMode                 = strings[13];
+    container->subjectDistance              = strings[14];
+    container->subjectDistanceCategory      = strings[15];
 }
 
-
-}
+} // namespace Digikam

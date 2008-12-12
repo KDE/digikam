@@ -6,7 +6,7 @@
  * Date        : 2007-11-01
  * Description : Access image position stored in database.
  *
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "imageposition.h"
 
@@ -47,7 +46,6 @@ ImagePosition::ImagePosition()
 ImagePosition::ImagePosition(qlonglong imageId)
 {
     d = new ImagePositionPriv;
-
     d->imageId = imageId;
 
     QVariantList values = DatabaseAccess().db()->getImagePosition(imageId);

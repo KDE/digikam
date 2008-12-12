@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef IMAGELISTER_H
@@ -64,7 +64,6 @@ public:
      * Adjust the setting if album or tags will be listed recursively (i.e. including subalbums / subtags)
      */
     void setRecursive(bool recursive);
-
 
     /**
      * Convenience method for Album, Tag and Date URLs, _not_ for Search URLs.
