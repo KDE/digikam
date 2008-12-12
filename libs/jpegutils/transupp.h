@@ -39,11 +39,11 @@ namespace Digikam
 /* Short forms of external names for systems with brain-damaged linkers. */
 
 #ifdef NEED_SHORT_EXTERNAL_NAMES
-#define jtransform_request_workspace		jTrRequest
-#define jtransform_adjust_parameters		jTrAdjust
-#define jtransform_execute_transformation	jTrExec
-#define jcopy_markers_setup			jCMrkSetup
-#define jcopy_markers_execute			jCMrkExec
+#define jtransform_request_workspace        jTrRequest
+#define jtransform_adjust_parameters        jTrAdjust
+#define jtransform_execute_transformation    jTrExec
+#define jcopy_markers_setup            jCMrkSetup
+#define jcopy_markers_execute            jCMrkExec
 #endif /* NEED_SHORT_EXTERNAL_NAMES */
 
 
@@ -52,14 +52,14 @@ namespace Digikam
  */
 
 typedef enum {
-	JXFORM_NONE,		/* no transformation */
-	JXFORM_FLIP_H,		/* horizontal flip */
-	JXFORM_FLIP_V,		/* vertical flip */
-	JXFORM_TRANSPOSE,	/* transpose across UL-to-LR axis */
-	JXFORM_TRANSVERSE,	/* transpose across UR-to-LL axis */
-	JXFORM_ROT_90,		/* 90-degree clockwise rotation */
-	JXFORM_ROT_180,		/* 180-degree rotation */
-	JXFORM_ROT_270		/* 270-degree clockwise (or 90 ccw) */
+    JXFORM_NONE,        /* no transformation */
+    JXFORM_FLIP_H,        /* horizontal flip */
+    JXFORM_FLIP_V,        /* vertical flip */
+    JXFORM_TRANSPOSE,    /* transpose across UL-to-LR axis */
+    JXFORM_TRANSVERSE,    /* transpose across UR-to-LL axis */
+    JXFORM_ROT_90,        /* 90-degree clockwise rotation */
+    JXFORM_ROT_180,        /* 180-degree rotation */
+    JXFORM_ROT_270        /* 270-degree clockwise (or 90 ccw) */
 } JXFORM_CODE;
 
 /*
@@ -99,12 +99,12 @@ typedef enum {
 
 typedef struct {
   /* Options: set by caller */
-  JXFORM_CODE transform;	/* image transform operator */
-  boolean trim;			/* if TRUE, trim partial MCUs as needed */
-  boolean force_grayscale;	/* if TRUE, convert color image to grayscale */
+  JXFORM_CODE transform;    /* image transform operator */
+  boolean trim;            /* if TRUE, trim partial MCUs as needed */
+  boolean force_grayscale;    /* if TRUE, convert color image to grayscale */
 
   /* Internal workspace: caller should not touch these */
-  int num_components;		/* # of components in workspace */
+  int num_components;        /* # of components in workspace */
   jvirt_barray_ptr * workspace_coef_arrays; /* workspace for transformations */
 } jpeg_transform_info;
 
@@ -113,17 +113,17 @@ typedef struct {
 
 /* Request any required workspace */
 EXTERN(void) jtransform_request_workspace
-	JPP((j_decompress_ptr srcinfo, jpeg_transform_info *info));
+    JPP((j_decompress_ptr srcinfo, jpeg_transform_info *info));
 /* Adjust output image parameters */
 EXTERN(jvirt_barray_ptr *) jtransform_adjust_parameters
-	JPP((j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
-	     jvirt_barray_ptr *src_coef_arrays,
-	     jpeg_transform_info *info));
+    JPP((j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+         jvirt_barray_ptr *src_coef_arrays,
+         jpeg_transform_info *info));
 /* Execute the actual transformation, if any */
 EXTERN(void) jtransform_execute_transformation
-	JPP((j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
-	     jvirt_barray_ptr *src_coef_arrays,
-	     jpeg_transform_info *info));
+    JPP((j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+         jvirt_barray_ptr *src_coef_arrays,
+         jpeg_transform_info *info));
 
 #endif /* TRANSFORMS_SUPPORTED */
 
@@ -133,20 +133,20 @@ EXTERN(void) jtransform_execute_transformation
  */
 
 typedef enum {
-	JCOPYOPT_NONE,		/* copy no optional markers */
-	JCOPYOPT_COMMENTS,	/* copy only comment (COM) markers */
-	JCOPYOPT_ALL		/* copy all optional markers */
+    JCOPYOPT_NONE,        /* copy no optional markers */
+    JCOPYOPT_COMMENTS,    /* copy only comment (COM) markers */
+    JCOPYOPT_ALL        /* copy all optional markers */
 } JCOPY_OPTION;
 
-#define JCOPYOPT_DEFAULT  JCOPYOPT_COMMENTS	/* recommended default */
+#define JCOPYOPT_DEFAULT  JCOPYOPT_COMMENTS    /* recommended default */
 
 /* Setup decompression object to save desired markers in memory */
 EXTERN(void) jcopy_markers_setup
-	JPP((j_decompress_ptr srcinfo, JCOPY_OPTION option));
+    JPP((j_decompress_ptr srcinfo, JCOPY_OPTION option));
 /* Copy markers saved in the given source object to the destination object */
 EXTERN(void) jcopy_markers_execute
-	JPP((j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
-	     JCOPY_OPTION option));
+    JPP((j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+         JCOPY_OPTION option));
 
 } // namespace DigiKam
 

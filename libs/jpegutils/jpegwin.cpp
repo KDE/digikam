@@ -5,7 +5,7 @@
  *
  * Date        : 2008-11-22
  * Description : some workaround functions to read jpeg files without relying on libjpeg
- * 
+ *
  * Copyright (C) 2008 Patrick Spendrin <ps_ml@gmx.de>
  *
  * This program is free software; you can redistribute it
@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -38,7 +38,9 @@ extern "C"
 
 #include "jpegwin.h"
 
-namespace Digikam {
+namespace Digikam 
+{
+
 void init_source (j_decompress_ptr cinfo)
 {
 }
@@ -60,8 +62,10 @@ void skip_input_data (j_decompress_ptr cinfo, long nbytes)
 {
     digikam_source_mgr* src = (digikam_source_mgr*) cinfo->src;
 
-    if (nbytes > 0) {
-        while (nbytes > (long) src->pub.bytes_in_buffer) {
+    if (nbytes > 0) 
+    {
+        while (nbytes > (long) src->pub.bytes_in_buffer) 
+        {
             nbytes -= (long) src->pub.bytes_in_buffer;
             (void) fill_input_buffer(cinfo);
         }
@@ -69,7 +73,6 @@ void skip_input_data (j_decompress_ptr cinfo, long nbytes)
         src->pub.bytes_in_buffer -= (size_t) nbytes;
     }
 }
-
 
 void term_source (j_decompress_ptr cinfo)
 {
@@ -79,7 +82,8 @@ void jpeg_memory_src (j_decompress_ptr cinfo, const JOCTET * buffer, size_t bufs
 {
     digikam_source_mgr* src;
 
-    if (cinfo->src == NULL) {
+    if (cinfo->src == NULL) 
+    {
         cinfo->src = (struct jpeg_source_mgr *) (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
         sizeof(digikam_source_mgr));
     }
@@ -94,4 +98,5 @@ void jpeg_memory_src (j_decompress_ptr cinfo, const JOCTET * buffer, size_t bufs
     src->pub.next_input_byte = buffer;
     src->pub.bytes_in_buffer = bufsize;
 }
+
 } // namespace Digikam
