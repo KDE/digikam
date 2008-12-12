@@ -7,7 +7,7 @@
  * Description : a kio-slave to process file operations on
  *               digiKam albums.
  *
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * The forwarding code is copied from kdelibs' ForwardingSlavebase.
@@ -26,7 +26,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "digikamalbums.h"
 #include "digikamalbums.moc"
@@ -60,8 +59,6 @@
 #include "collectionscanner.h"
 #include "imagelister.h"
 
-
-
 kio_digikamalbums::kio_digikamalbums(const QByteArray &pool_socket,
                                      const QByteArray &app_socket)
     : SlaveBase("kio_digikamalbums", pool_socket, app_socket)
@@ -73,9 +70,7 @@ kio_digikamalbums::~kio_digikamalbums()
 {
 }
 
-
 // ------------------------ Listing and Scanning ------------------------ //
-
 
 void kio_digikamalbums::special(const QByteArray& data)
 {
@@ -115,10 +110,7 @@ void kio_digikamalbums::special(const QByteArray& data)
     finished();
 }
 
-
-
 // ------------------------ Implementation of KIO::SlaveBase ------------------------ //
-
 
 void kio_digikamalbums::get( const KUrl& url )
 {
@@ -458,10 +450,7 @@ void kio_digikamalbums::createDigikamPropsUDSEntry(KIO::UDSEntry& entry)
 }
 */
 
-
-
 // ------------------------ Job forwarding code ------------------------ //
-
 
 void kio_digikamalbums::connectJob(KIO::Job *job)
 {
@@ -610,10 +599,7 @@ void kio_digikamalbums::slotCanResume (KIO::Job* /*job*/, KIO::filesize_t offset
     canResume(offset);
 }
 
-
-
 // ------------------------ KIO slave registration ------------------------ //
-
 
 extern "C"
 {

@@ -2,7 +2,7 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2005-04-21
  * Description : a kio-slave to process search on digiKam albums
  *
@@ -18,6 +18,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef DIGIKAMSEARCH_H
@@ -36,8 +37,6 @@ public:
     ~kio_digikamsearch();
 
     void special(const QByteArray& data);
-
-private:
 };
 
 #endif /* DIGIKAMSEARCH_H */

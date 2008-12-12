@@ -2,7 +2,7 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2004-07-09
  * Description : a kio-slave to process tag query on 
  *               digiKam albums.
@@ -43,6 +43,5 @@ public:
 
     void special(const QByteArray& data);
 };
-
 
 #endif /* DIGIKAMTAGS_H */
