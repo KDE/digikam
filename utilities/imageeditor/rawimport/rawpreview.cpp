@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "rawpreview.h"
 #include "rawpreview.moc"
 
@@ -88,9 +87,8 @@ public:
 };
 
 RawPreview::RawPreview(const KUrl& url, QWidget *parent)
-          : PreviewWidget(parent)
+          : PreviewWidget(parent), d(new RawPreviewPriv)
 {
-    d = new RawPreviewPriv;
     d->thread = new ManagedLoadSaveThread;
     d->url    = url;
 

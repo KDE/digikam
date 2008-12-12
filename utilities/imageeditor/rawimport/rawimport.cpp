@@ -20,7 +20,6 @@
  *
  * ============================================================ */
 
-
 #include "rawimport.h"
 #include "rawimport.moc"
 
@@ -70,9 +69,8 @@ public:
 };
 
 RawImport::RawImport(const KUrl& url, QObject *parent)
-         : EditorToolThreaded(parent)
+         : EditorToolThreaded(parent), d(new RawImportPriv)
 {
-    d = new RawImportPriv;
     d->previewWidget = new RawPreview(url, 0);
     d->settingsBox   = new RawSettingsBox(url, 0);
 

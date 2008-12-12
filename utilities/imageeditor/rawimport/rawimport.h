@@ -79,7 +79,7 @@ private slots:
 
 private:
 
-    RawImportPriv *d;
+    RawImportPriv* const d;
 };
 
 } // namespace Digikam

@@ -101,7 +101,7 @@ private:
 
 private:
 
-    RawPreviewPriv* d;
+    RawPreviewPriv* const d;
 };
 
 }  // namespace Digikam
