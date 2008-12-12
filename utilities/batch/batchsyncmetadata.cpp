@@ -7,7 +7,7 @@
  * Description : batch sync pictures metadata from all Albums
  *               with digiKam database
  *
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "batchsyncmetadata.h"
 #include "batchsyncmetadata.moc"
@@ -52,10 +51,10 @@ public:
 
     BatchSyncMetadataPriv()
     {
-        cancel       = false;
-        imageInfoJob = new ImageInfoJob();
-        album        = 0;
-        count        = 0;
+        cancel         = false;
+        imageInfoJob   = new ImageInfoJob();
+        album          = 0;
+        count          = 0;
         imageInfoIndex = 0;
     }
 
@@ -73,16 +72,14 @@ public:
 };
 
 BatchSyncMetadata::BatchSyncMetadata(QObject* parent, Album *album)
-                 : QObject(parent)
+                 : QObject(parent), d(new BatchSyncMetadataPriv)
 {
-    d = new BatchSyncMetadataPriv;
     d->album = album;
 }
 
 BatchSyncMetadata::BatchSyncMetadata(QObject* parent, const ImageInfoList& list)
-                 : QObject(parent)
+                 : QObject(parent), d(new BatchSyncMetadataPriv)
 {
-    d = new BatchSyncMetadataPriv;
     d->imageInfoList = list;
 }
 

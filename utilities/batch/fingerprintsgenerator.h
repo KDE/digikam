@@ -77,7 +77,7 @@ private slots:
 
 private:
 
-    FingerPrintsGeneratorPriv *d;
+    FingerPrintsGeneratorPriv* const d;
 };
 
 }  // namespace Digikam

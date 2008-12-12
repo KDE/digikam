@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "batchthumbsgenerator.h"
 #include "batchthumbsgenerator.moc"
 
@@ -77,9 +76,8 @@ public:
 };
 
 BatchThumbsGenerator::BatchThumbsGenerator(QWidget* parent)
-                    : DProgressDlg(parent)
+                    : DProgressDlg(parent), d(new BatchThumbsGeneratorPriv)
 {
-    d = new BatchThumbsGeneratorPriv;
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),

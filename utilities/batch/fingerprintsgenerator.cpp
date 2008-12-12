@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "fingerprintsgenerator.h"
 #include "fingerprintsgenerator.moc"
 
@@ -83,9 +82,8 @@ public:
 };
 
 FingerPrintsGenerator::FingerPrintsGenerator(QWidget* parent, bool rebuildAll)
-                     : DProgressDlg(parent)
+                     : DProgressDlg(parent), d(new FingerPrintsGeneratorPriv)
 {
-    d = new FingerPrintsGeneratorPriv;
     d->rebuildAll        = rebuildAll;
     d->previewLoadThread = new PreviewLoadThread();
 
