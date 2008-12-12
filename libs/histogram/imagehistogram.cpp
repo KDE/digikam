@@ -6,7 +6,7 @@
  * Date        : 2004-07-21
  * Description : image histogram manipulation methods.
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Some code parts are inspired from gimp 2.0
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
@@ -23,7 +23,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "imagehistogram.h"
 #include "imagehistogram.moc"
@@ -94,20 +93,19 @@ public:
 };
 
 ImageHistogram::ImageHistogram(const DImg& image, QObject *parent)
-              : QThread(parent)
+              : QThread(parent), d(new ImageHistogramPriv)
 {
     setup(image.bits(), image.width(), image.height(), image.sixteenBit());
 }
 
 ImageHistogram::ImageHistogram(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject *parent)
-              : QThread(parent)
+              : QThread(parent), d(new ImageHistogramPriv)
 {
     setup(i_data, i_w, i_h, i_sixteenBits);
 }
 
 void ImageHistogram::setup(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits)
 {
-    d = new ImageHistogramPriv;
     d->imageData     = i_data;
     d->imageWidth    = i_w;
     d->imageHeight   = i_h;
@@ -551,4 +549,3 @@ double ImageHistogram::getMaximum(int channel)
 }
 
 }  // namespace Digikam
-
