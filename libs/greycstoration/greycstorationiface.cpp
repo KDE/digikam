@@ -26,7 +26,6 @@
 /** Only print debug information on the console */
 #define cimg_debug 1
 
-
 #include "greycstorationiface.h"
 
 // C++ includes.
@@ -102,9 +101,9 @@ GreycstorationIface::GreycstorationIface(DImg *orgImage,
                                          int newWidth, int newHeight,
                                          const QImage& inPaintingMask,
                                          QObject *parent)
-                   : DImgThreadedFilter(orgImage, parent)
+                   : DImgThreadedFilter(orgImage, parent),
+                     d(new GreycstorationIfacePriv)
 {
-    d = new GreycstorationIfacePriv;
     d->settings       = settings;
     d->mode           = mode;
     d->inPaintingMask = inPaintingMask;

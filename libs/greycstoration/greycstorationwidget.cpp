@@ -20,7 +20,6 @@
  *
  * ============================================================ */
 
-
 #include "greycstorationwidget.h"
 #include "greycstorationwidget.moc"
 
@@ -58,7 +57,6 @@ public:
     GreycstorationWidgetPriv()
     {
         parent             = 0;
-
         advancedPage       = 0;
         alphaInput         = 0;
         alphaLabel         = 0;
@@ -125,9 +123,9 @@ public:
 };
 
 GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
-                    : QObject(static_cast<QObject*>(parent))
+                    : QObject(static_cast<QObject*>(parent)),
+                      d(new GreycstorationWidgetPriv)
 {
-    d = new GreycstorationWidgetPriv;
     d->parent = parent;
 
     // -------------------------------------------------------------

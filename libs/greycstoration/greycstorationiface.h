@@ -83,7 +83,7 @@ private:
 
 private:
 
-    GreycstorationIfacePriv *d;
+    GreycstorationIfacePriv* const d;
 };
 
 }  // namespace Digikam

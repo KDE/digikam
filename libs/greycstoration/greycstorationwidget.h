@@ -61,7 +61,7 @@ public:
 
 private:
 
-    GreycstorationWidgetPriv* d;
+    GreycstorationWidgetPriv* const d;
 };
 
 } // namespace Digikam

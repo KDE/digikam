@@ -5,9 +5,9 @@
  *
  * Date        : 2006-21-07
  * Description : Greycstoration settings container.
- * 
+ *
  * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
- * 
+ *
  * For a full settings description, look at this url :
  * http://www.greyc.ensicaen.fr/~dtschump/greycstoration/guide.html
  *
@@ -20,12 +20,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef GREYCSTORATIONSETTINGS_H
@@ -51,24 +51,24 @@ public:
     };
 
 public:
-    
+
     GreycstorationSettings()
     {
         setRestorationDefaultSettings();
     };
-    
+
     ~GreycstorationSettings(){};
 
     void setRestorationDefaultSettings()
     {
         fastApprox = true;
-    
+
         tile       = 256;
         btile      = 4;
-    
+
         nbIter     = 1;
         interp     = NearestNeighbor;
-    
+
         amplitude  = 60.0;
         sharpness  = 0.7;
         anisotropy = 0.3;
@@ -82,13 +82,13 @@ public:
     void setInpaintingDefaultSettings()
     {
         fastApprox = true;
-    
+
         tile       = 256;
         btile      = 4;
-    
+
         nbIter     = 30;
         interp     = NearestNeighbor;
-    
+
         amplitude  = 20.0;
         sharpness  = 0.3;
         anisotropy = 1.0;
@@ -102,13 +102,13 @@ public:
     void setResizeDefaultSettings()
     {
         fastApprox = true;
-    
+
         tile       = 256;
         btile      = 4;
-    
+
         nbIter     = 3;
         interp     = NearestNeighbor; 
-    
+
         amplitude  = 20.0;
         sharpness  = 0.2;
         anisotropy = 0.9;
