@@ -6,7 +6,7 @@
  * Date        : 2007-02-03
  * Description : Loading parameters for multithreaded loading
  *
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "loadingdescription.h"
 
 namespace Digikam
@@ -35,21 +34,21 @@ bool LoadingDescription::PreviewParameters::operator==(const PreviewParameters &
 }
 
 LoadingDescription::LoadingDescription(const QString &filePath)
-    : filePath(filePath)
+                  : filePath(filePath)
 {
     rawDecodingSettings = DRawDecoding();
 }
 
 LoadingDescription::LoadingDescription(const QString &filePath, DRawDecoding settings)
-    : filePath(filePath), rawDecodingSettings(settings)
+                  : filePath(filePath), rawDecodingSettings(settings)
 {
 }
 
 LoadingDescription::LoadingDescription(const QString &filePath, int size, bool exifRotate,
                                        LoadingDescription::PreviewParameters::PreviewType type)
-    : filePath(filePath)
+                  : filePath(filePath)
 {
-    rawDecodingSettings = DRawDecoding();
+    rawDecodingSettings          = DRawDecoding();
     previewParameters.type       = type;
     previewParameters.size       = size;
     previewParameters.exifRotate = exifRotate;
@@ -168,6 +167,5 @@ QStringList LoadingDescription::possibleThumbnailCacheKeys(const QString &filePa
         keys << path + QString::number(i);
     return keys;
 }
-
 
 } // namespace Digikam

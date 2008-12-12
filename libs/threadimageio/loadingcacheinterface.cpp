@@ -6,7 +6,7 @@
  * Date        : 2006-02-06
  * Description : shared image loading and caching
  *
- * Copyright (C) 2005-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "loadingcacheinterface.h"
 

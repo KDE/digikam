@@ -6,14 +6,14 @@
  * Date        : 2006-01-16
  * Description : image file IO threaded interface.
  *
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -39,6 +39,7 @@ public:
     class PreviewParameters
     {
     public:
+
         enum PreviewType
         {
             NoPreview,
@@ -93,9 +94,9 @@ public:
     LoadingDescription(const QString &filePath, int size, bool exifRotate,
                        PreviewParameters::PreviewType = PreviewParameters::PreviewImage);
 
-    QString                          filePath;
-    DRawDecoding rawDecodingSettings;
-    PreviewParameters                previewParameters;
+    QString           filePath;
+    DRawDecoding      rawDecodingSettings;
+    PreviewParameters previewParameters;
 
     /**
      * Return the cache key this description shall be stored as

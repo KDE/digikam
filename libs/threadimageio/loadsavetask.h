@@ -6,15 +6,15 @@
  * Date        : 2006-01-20
  * Description : image file IO threaded interface.
  *
- * Copyright (C) 2005-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -153,9 +153,9 @@ public:
 
 protected:
 
-    LoadSaveThread::AccessMode m_accessMode;
-    bool m_completed;
-    LoadingProcess *m_usedProcess;
+    bool                           m_completed;
+    LoadSaveThread::AccessMode     m_accessMode;
+    LoadingProcess*                m_usedProcess;
     QList<LoadingProcessListener*> m_listeners;
 };
 
@@ -195,9 +195,9 @@ public:
 
 private:
 
-    DImg        m_img;
-    QString     m_filePath;
-    QString     m_format;
+    QString          m_filePath;
+    QString          m_format;
+    DImg             m_img;
     SavingTaskStatus m_savingTaskStatus;
 };
 
