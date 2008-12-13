@@ -1,6 +1,264 @@
+0.9.5-beta2 2008-13-12
+-------------------------------------------------------------------------
+
+2008-12-13 10:45  aclemens
+
+    * digikam/mimefilter.cpp: backport commit #896326 from trunk
+
+2008-12-13 09:34  cgilles
+
+    * imageplugins/adjustcurves/adjustcurvestool.cpp,
+      imageplugins/adjustlevels/adjustlevelstool.cpp,
+      imageplugins/antivignetting/antivignettingtool.cpp,
+      imageplugins/blurfx/blurfxtool.cpp,
+      imageplugins/border/bordertool.cpp,
+      imageplugins/channelmixer/channelmixertool.cpp,
+      imageplugins/charcoal/charcoaltool.cpp,
+      imageplugins/colorfx/colorfxtool.cpp,
+      imageplugins/coreplugin/autocorrectiontool.cpp,
+      imageplugins/coreplugin/bcgtool.cpp,
+      imageplugins/coreplugin/blurtool.cpp,
+      imageplugins/coreplugin/bwsepiatool.cpp,
+      imageplugins/coreplugin/hsl/hsltool.cpp,
+      imageplugins/coreplugin/iccprooftool.cpp,
+      imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp,
+      imageplugins/coreplugin/redeyetool.cpp,
+      imageplugins/coreplugin/rgbtool.cpp,
+      imageplugins/coreplugin/sharpnesseditor/sharpentool.cpp,
+      imageplugins/distortionfx/distortionfxtool.cpp,
+      imageplugins/emboss/embosstool.cpp,
+      imageplugins/filmgrain/filmgraintool.cpp,
+      imageplugins/freerotation/freerotationtool.cpp,
+      imageplugins/hotpixels/hotpixelstool.cpp,
+      imageplugins/infrared/infraredtool.cpp,
+      imageplugins/inpainting/inpaintingtool.cpp,
+      imageplugins/inserttext/inserttexttool.cpp,
+      imageplugins/lensdistortion/lensdistortiontool.cpp,
+      imageplugins/noisereduction/noisereductiontool.cpp,
+      imageplugins/oilpaint/oilpainttool.cpp,
+      imageplugins/perspective/perspectivetool.cpp,
+      imageplugins/raindrop/raindroptool.cpp,
+      imageplugins/restoration/restorationtool.cpp,
+      imageplugins/sheartool/sheartool.cpp,
+      imageplugins/superimpose/superimposetool.cpp,
+      imageplugins/texture/texturetool.cpp,
+      imageplugins/whitebalance/whitebalancetool.cpp,
+      project/project.kdevelop,
+      utilities/imageeditor/editor/editortool.cpp,
+      utilities/imageeditor/editor/editortool.h,
+      utilities/imageeditor/rawimport/rawimport.cpp: backport commit
+      #896301 from trunk
+
+2008-12-12 22:39  cgilles
+
+    * digikam/cameratype.cpp, digikam/cameratype.h: Very nice : in copy
+      constructor, the d private insternal class is never created.
+      This can give a beautifull crash (:=)))...
+
+2008-12-12 08:45  aclemens
+
+    * digikam/albumlister.cpp, digikam/mimefilter.cpp,
+      digikam/mimefilter.h: add "Image files" mime filter
+      
+      CCBUG:172911
+
+2008-12-11 06:45  cgilles
+
+    * libs/widgets/common/sidebar.cpp, libs/widgets/common/sidebar.h:
+      backport commit #895498 from trunk
+
+2008-12-09 15:25  aclemens
+
+    * digikam/digikamapp.cpp: add Exif orientation actions to
+      actionCollection, so they can be changed in the Shortcut Editor
+
+2008-12-09 09:30  cgilles
+
+    * libs/imageproperties/cameraitempropertiestab.cpp: fix camera
+      download status displayed on side bar
+
+2008-12-06 07:26  cgilles
+
+    * NEWS: update
+
+2008-12-06 06:48  cgilles
+
+    * NEWS: update
+
+2008-12-05 21:37  cgilles
+
+    * NEWS: update
+
+2008-12-05 21:18  cgilles
+
+    * NEWS: update
+
+2008-12-05 20:40  cgilles
+
+    * NEWS: update
+
+2008-12-05 13:53  aclemens
+
+    * NEWS: update
+
+2008-12-05 13:11  cgilles
+
+    * NEWS: update
+
+2008-12-05 12:24  cgilles
+
+    * NEWS: update
+
+2008-12-05 11:56  cgilles
+
+    * NEWS: update
+
+2008-12-05 11:33  cgilles
+
+    * NEWS: update
+
+2008-12-05 08:03  cgilles
+
+    * NEWS: update
+
+2008-12-04 19:37  cgilles
+
+    * NEWS: update
+
+2008-12-04 17:07  cgilles
+
+    * NEWS: update
+
+2008-12-04 17:03  cgilles
+
+    * NEWS: update
+
+2008-12-04 15:29  cgilles
+
+    * NEWS: update
+
+2008-12-04 15:05  cgilles
+
+    * NEWS: update
+
+2008-12-04 14:36  cgilles
+
+    * NEWS: update
+
+2008-12-03 12:49  aclemens
+
+    * digikam/albumpropsedit.cpp: backport commit #891982 from trunk
+      
+      CCBUG:137233
+
+2008-11-25 10:00  krienke
+
+    * utilities/scripts/digitaglinktree: Fixed perl access to arrayref
+      problems
+
+2008-11-24 13:42  cgilles
+
+    * NEWS: update
+
+2008-11-24 13:41  cgilles
+
+    * utilities/scripts/digitaglinktree: digiKam from KDe3 : patch from
+      Peter Muehlenpfordt to fix problem about merging of tags with
+      same name in different subfolders. The problem is fixed by
+      changing the hash-index from the
+      tag-name to the tag-ID.
+      BUG: 175970
+
+2008-11-10 17:52  cgilles
+
+    * NEWS: update
+
+2008-11-10 17:39  cgilles
+
+    * libs/imageproperties/cameraitempropertiestab.cpp,
+      libs/imageproperties/imagedescedittab.cpp,
+      libs/imageproperties/imagepropertiescolorstab.cpp,
+      libs/imageproperties/imagepropertiestab.cpp,
+      utilities/imageeditor/editor/editortoolsettings.cpp,
+      utilities/imageeditor/editor/editortoolsettings.h: digiKam from
+      KDE3 : use QScrollView to host sidebar tab content everywhere to
+      improve usability with small screen.
+      Now digiKam can be used on small computer screen, as with EEEPC
+      for ex.
+      TODO: KDE4PORT
+      BUGS: 164573
+
+2008-11-10 14:57  cgilles
+
+    * project/project.kdevelop: update
+
+2008-11-10 14:56  cgilles
+
+    * libs/imageproperties/imagepropertiescolorstab.cpp: Color image
+      properties: use same optimized vertical layout that KDE4 version
+      CCBUGS: 164573
+
+2008-11-10 12:09  cgilles
+
+    * imageplugins/coreplugin/sharpnesseditor/sharpentool.cpp: Sharpen
+      tool : optimize layout for small screen
+      CCBUGS: 164573
+
+2008-11-10 09:13  cgilles
+
+    * digikam.lsm, digikam/daboutdata.h: bump version id
+
+2008-11-10 09:11  cgilles
+
+    * NEWS: polish
+
+2008-11-10 08:46  cgilles
+
+    * digikam/digikamapp.cpp: fix i18n
+
+2008-11-07 07:06  cgilles
+
+    * digikam/albummanager.cpp, digikam/albummanager.h: fix duplicates
+      header. use Qt3 qptrlist.h instead qlist.h
+
+2008-11-06 10:24  cgilles
+
+    * digikam/digikamapp.cpp, libs/widgets/common/splashscreen.cpp,
+      libs/widgets/common/splashscreen.h, showfoto/showfoto.cpp: sync
+      with trunk
+
+2008-11-05 14:36  cgilles
+
+    * NEWS: update
+
+2008-11-05 14:33  cgilles
+
+    * PACKAGING, project/PACKAGING: this file can be exluded from
+      tarball
+
+2008-11-05 14:32  cgilles
+
+    * digikam/daboutdata.h: dump version
+
+2008-11-05 14:30  cgilles
+
+    * digikam.lsm: dump version
+
+2008-11-05 14:29  cgilles
+
+    * configure.in.in: dump version
+
+2008-11-05 14:28  cgilles
+
+    * ChangeLog, release_digikam.rb: prepare 0.9.5-beta1
+
+2008-11-05 13:39  cgilles
+
+    * digikam/albumsettings.cpp: set 22 as default tree folder view
+      icon size
+
 0.9.5-beta1 2008-11-05
 -------------------------------------------------------------------------
-2008-07-16 14:03  aclemens
 
 2008-11-04 15:46  aclemens
 
