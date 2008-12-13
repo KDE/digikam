@@ -486,6 +486,16 @@ void ImageDescEditTab::slotApplyAllChanges()
         kWarning(50003) << "ImageDescEditTab::slotApplyAllChanges(): re-entering from event loop!" << endl;
     }
 
+    // Create a local copy of the current state of the hub.
+    // The method may be called recursively from processEvents.
+    MetadataHub hub(d->hub);
+
+    // For the same reason as above, do this now
+    d->modified = false;
+    d->hub.resetChanged();
+    d->applyBtn->setEnabled(false);
+    d->revertBtn->setEnabled(false);
+
     // we are now changing attributes ourselves
     d->ignoreImageAttributesWatch = true;
     AlbumLister::instance()->blockSignals(true);
@@ -502,7 +512,7 @@ void ImageDescEditTab::slotApplyAllChanges()
         foreach(const ImageInfo &info, d->currInfos)
         {
             // apply to database
-            d->hub.write(info);
+            hub.write(info);
 
             emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
             if (progressInfo)
@@ -521,7 +531,7 @@ void ImageDescEditTab::slotApplyAllChanges()
             QString filePath = info.filePath();
 
             // apply to file metadata
-            bool fileChanged = d->hub.write(filePath, MetadataHub::FullWrite, writeSettings);
+            bool fileChanged = hub.write(filePath, MetadataHub::FullWrite, writeSettings);
 
             // trigger db scan (to update file size etc.)
             if (fileChanged)
@@ -539,11 +549,6 @@ void ImageDescEditTab::slotApplyAllChanges()
     d->ignoreImageAttributesWatch = false;
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
-
-    d->modified = false;
-    d->hub.resetChanged();
-    d->applyBtn->setEnabled(false);
-    d->revertBtn->setEnabled(false);
 
     updateRecentTags();
     updateTagsView();
