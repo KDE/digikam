@@ -287,6 +287,7 @@ public:
     StatusZoomBar                      *statusZoomBar;
     StatusProgressBar                  *statusProgressBar;
     StatusNavigateBar                  *statusNavigateBar;
+    QString                             statusBarSelectionText;
 
     KIPI::PluginLoader                 *kipiPluginLoader;
 };

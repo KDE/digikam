@@ -1255,33 +1255,37 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev,
     {
         case 0:
         {
-            d->statusProgressBar->setText(i18n("No item selected"));
+            d->statusBarSelectionText = i18n("No item selected");
             break;
         }
         case 1:
         {
             int index = listAll.indexOf(selection.first()) + 1;
 
-            text = selection.first().fileUrl().fileName()
-                                   + i18n(" (%1 of %2)", QString::number(index),
-                                                         QString::number(num_images));
-            d->statusProgressBar->setText(text);
+            d->statusBarSelectionText = selection.first().fileUrl().fileName()
+                                         + i18n(" (%1 of %2)", QString::number(index),
+                                                               QString::number(num_images));
             break;
         }
         default:
         {
-            d->statusProgressBar->setText(i18n("%1/%2 items selected", selection.count(),
-                                                                       QString::number(num_images)));
+            d->statusBarSelectionText = i18n("%1/%2 items selected", selection.count(),
+                                                                     QString::number(num_images));
             break;
         }
     }
 
+    d->statusProgressBar->setText(d->statusBarSelectionText);
     d->statusNavigateBar->setNavigateBarState(hasPrev, hasNext);
 }
 
 void DigikamApp::slotProgressBarMode(int mode, const QString& text)
 {
     d->statusProgressBar->progressBarMode(mode, text);
+
+    // Restore the text that we set for selection
+    if (mode == StatusProgressBar::TextMode && text.isNull() && !d->statusBarSelectionText.isNull())
+        d->statusProgressBar->setText(d->statusBarSelectionText);
 }
 
 void DigikamApp::slotProgressValue(int count)
