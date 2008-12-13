@@ -595,7 +595,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->syncAlbumMetadataAction = new KAction(KIcon("view-refresh"), i18n("Synchronize images with database"), this);
+    d->syncAlbumMetadataAction = new KAction(KIcon("view-refresh"), i18n("Synchronize Images with Database"), this);
     d->syncAlbumMetadataAction->setWhatsThis(i18n("Updates all image metadata of the current "
                                                   "album with the contents of digiKam database "
                                                   "(image metadata will be overwritten with data from "
@@ -767,17 +767,17 @@ void DigikamApp::setupActions()
     d->imageSetExifOrientation2Action =
         new KAction(i18n("Flipped Horizontally"), d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation3Action =
-        new KAction(i18n("Rotated upside down"), d->imageExifOrientationActionMenu);
+        new KAction(i18n("Rotated Upside Down"), d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation4Action =
         new KAction(i18n("Flipped Vertically"), d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation5Action =
-        new KAction(i18n("Rotated right / Horiz. Flipped"), d->imageExifOrientationActionMenu);
+        new KAction(i18n("Rotated Right / Horiz. Flipped"), d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation6Action =
-        new KAction(i18n("Rotated right"), d->imageExifOrientationActionMenu);
+        new KAction(i18n("Rotated Right"), d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation7Action =
-        new KAction(i18n("Rotated right / Vert. Flipped"), d->imageExifOrientationActionMenu);
+        new KAction(i18n("Rotated Right / Vert. Flipped"), d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation8Action =
-        new KAction(i18n("Rotated left"), d->imageExifOrientationActionMenu);
+        new KAction(i18n("Rotated Left"), d->imageExifOrientationActionMenu);
 
     actionCollection()->addAction("image_set_exif_orientation_normal",
             d->imageSetExifOrientation1Action);
@@ -912,7 +912,7 @@ void DigikamApp::setupActions()
     actionCollection()->addAction("slideshow_selected", d->slideShowSelectionAction);
     d->slideShowAction->addAction(d->slideShowSelectionAction);
 
-    d->slideShowRecursiveAction = new KAction(i18n("With all sub-albums"), this);
+    d->slideShowRecursiveAction = new KAction(i18n("With all Sub-Albums"), this);
     d->slideShowRecursiveAction->setShortcut(Qt::SHIFT+Qt::Key_F9);
     connect(d->slideShowRecursiveAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowRecursive()));
     actionCollection()->addAction("slideshow_recursive", d->slideShowRecursiveAction);
@@ -938,7 +938,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Component info"), this);
+    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
     actionCollection()->addAction("help_librariesinfo", d->libsInfoAction);
 
