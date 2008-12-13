@@ -65,13 +65,15 @@ public:
     ~FreeSpaceWidget();
 
     void          setEstimatedDSizeKb(unsigned long dSize);
-    unsigned long estimatedDSizeKb();
+    unsigned long estimatedDSizeKb() const;
 
-    bool          isValid();
-    int           percentUsed();
-    unsigned long kBSize();
-    unsigned long kBUsed();
-    unsigned long kBAvail();
+    bool          isValid() const;
+    int           percentUsed() const;
+    unsigned long kBSize() const;
+    unsigned long kBUsed() const;
+    unsigned long kBAvail() const;
+    unsigned long kBAvail(const QString &path) const;
+
     void          refresh();
 
     void setMode(FreeSpaceMode mode);

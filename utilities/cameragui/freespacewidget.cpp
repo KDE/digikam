@@ -212,34 +212,61 @@ void FreeSpaceWidget::setEstimatedDSizeKb(unsigned long dSize)
     update();
 }
 
-unsigned long FreeSpaceWidget::estimatedDSizeKb()
+unsigned long FreeSpaceWidget::estimatedDSizeKb() const
 {
     return d->dSizeKb;
 }
 
-bool FreeSpaceWidget::isValid()
+bool FreeSpaceWidget::isValid() const
 {
     return d->isValid;
 }
 
-int FreeSpaceWidget::percentUsed()
+int FreeSpaceWidget::percentUsed() const
 {
     return d->percentUsed;
 }
 
-unsigned long FreeSpaceWidget::kBSize()
+unsigned long FreeSpaceWidget::kBSize() const
 {
     return d->kBSize;
 }
 
-unsigned long FreeSpaceWidget::kBUsed()
+unsigned long FreeSpaceWidget::kBUsed() const
 {
     return d->kBUsed;
 }
 
-unsigned long FreeSpaceWidget::kBAvail()
+unsigned long FreeSpaceWidget::kBAvail() const
 {
     return d->kBAvail;
+}
+
+unsigned long FreeSpaceWidget::kBAvail(const QString &path) const
+{
+    int mountPointMatch = 0;
+    MountPointInfo selectedInfo;
+
+    foreach (const MountPointInfo &info, d->infos)
+    {
+        if (info.isValid && !info.mountPoint.isEmpty() && path.startsWith(info.mountPoint))
+        {
+            int length = info.mountPoint.length();
+            if (length > mountPointMatch)
+            {
+                mountPointMatch = info.mountPoint.length();
+                selectedInfo = info;
+            }
+        }
+    }
+
+    if (!mountPointMatch)
+    {
+        kWarning(50003) << "Did not identify a valid mount point for" << path;
+        return -1;
+    }
+
+    return selectedInfo.kBAvail;
 }
 
 void FreeSpaceWidget::paintEvent(QPaintEvent*)
