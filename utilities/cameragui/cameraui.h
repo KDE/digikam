@@ -48,6 +48,7 @@ namespace Digikam
 
 class Album;
 class CameraIconViewItem;
+class CollectionLocation;
 class CameraUIPriv;
 
 class CameraUI : public KXmlGuiWindow
@@ -110,6 +111,7 @@ private:
     void showToolBars();
     void hideToolBars();
     void refreshFreeSpace();
+    void refreshCollectionFreeSpace();
 
 private slots:
 
@@ -124,6 +126,7 @@ private slots:
     void slotCapture();
     void slotCameraInformations(const QString&, const QString&, const QString&);
     void slotCameraFreeSpaceInfo(unsigned long kBSize, unsigned long kBAvail);
+    void slotCollectionLocationStatusChanged(const CollectionLocation &location, int oldStatus);
 
     void slotFolderList(const QStringList& folderList);
     void slotFileList(const GPItemInfoList& fileList);

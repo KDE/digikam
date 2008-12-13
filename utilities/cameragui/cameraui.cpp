@@ -112,6 +112,7 @@
 #include "freespacewidget.h"
 #include "collectionscanner.h"
 #include "collectionmanager.h"
+#include "collectionlocation.h"
 #include "rawcameradlg.h"
 #include "capturedlg.h"
 #include "camerafolderdialog.h"
@@ -559,6 +560,11 @@ void CameraUI::setupConnections()
 
     connect(d->statusZoomBar, SIGNAL(signalZoomSliderChanged(int)),
            this, SLOT(slotZoomSliderChanged(int)));
+
+    // -------------------------------------------------------------------------
+
+    connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(const CollectionLocation &, int)),
+            this, SLOT(slotCollectionLocationStatusChanged(const CollectionLocation &, int)));
 }
 
 void CameraUI::setupStatusBar()
@@ -572,8 +578,8 @@ void CameraUI::setupStatusBar()
 
     d->albumLibraryFreeSpace = new FreeSpaceWidget(statusBar(), 100);
     d->albumLibraryFreeSpace->setMode(FreeSpaceWidget::AlbumLibrary);
-    d->albumLibraryFreeSpace->setPath(AlbumSettings::instance()->getAlbumLibraryPath());
     statusBar()->addWidget(d->albumLibraryFreeSpace, 1);
+    refreshCollectionFreeSpace();
 
     //------------------------------------------------------------------------------
 
@@ -1975,7 +1981,7 @@ void CameraUI::hideToolBars()
 
 void CameraUI::slotCameraFreeSpaceInfo(unsigned long kBSize, unsigned long kBAvail)
 {
-    d->cameraFreeSpace->setInformations(kBSize, kBSize-kBAvail, kBAvail, QString());
+    d->cameraFreeSpace->addInformation(kBSize, kBSize-kBAvail, kBAvail, QString());
 }
 
 bool CameraUI::cameraDeleteSupport()
@@ -2026,6 +2032,16 @@ void CameraUI::slotChangeTheme(const QString& theme)
 void CameraUI::slotComponentsInfo()
 {
     showDigikamComponentsInfo();
+}
+
+void CameraUI::refreshCollectionFreeSpace()
+{
+    d->albumLibraryFreeSpace->setPaths(CollectionManager::instance()->allAvailableAlbumRootPaths());
+}
+
+void CameraUI::slotCollectionLocationStatusChanged(const CollectionLocation &, int)
+{
+    refreshCollectionFreeSpace();
 }
 
 }  // namespace Digikam
