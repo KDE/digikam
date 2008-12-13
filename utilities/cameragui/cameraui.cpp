@@ -1445,7 +1445,7 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
         //if (iconItem->isSelected())
           //  slotItemsSelected(iconItem, true);
 
-        if (status == GPItemInfo::DownloadedYes || status == GPItemInfo::DownloadFailed)
+        if (status == GPItemInfo::DownloadedYes)
         {
             int curr = d->statusProgressBar->progressValue();
             d->statusProgressBar->setProgressValue(curr+1);
