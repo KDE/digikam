@@ -931,7 +931,7 @@ CollectionLocation CollectionManager::locationForAlbumRootPath(const QString &al
 
 CollectionLocation CollectionManager::locationForUrl(const KUrl &fileUrl)
 {
-    return locationForPath(fileUrl.path());
+    return locationForPath(fileUrl.path(KUrl::RemoveTrailingSlash));
 }
 
 CollectionLocation CollectionManager::locationForPath(const QString &filePath)
@@ -996,7 +996,7 @@ bool CollectionManager::isAlbumRoot(const QString &filePath)
 
 QString CollectionManager::album(const KUrl &fileUrl)
 {
-    return album(fileUrl.path(KUrl::LeaveTrailingSlash));
+    return album(fileUrl.path(KUrl::RemoveTrailingSlash));
 }
 
 QString CollectionManager::album(const QString &filePath)
@@ -1024,7 +1024,7 @@ QString CollectionManager::album(const QString &filePath)
 
 QString CollectionManager::album(const CollectionLocation &location, const KUrl &fileUrl)
 {
-    return album(location, fileUrl.path(KUrl::LeaveTrailingSlash));
+    return album(location, fileUrl.path(KUrl::RemoveTrailingSlash));
 }
 
 QString CollectionManager::album(const CollectionLocation &location, const QString &filePath)
