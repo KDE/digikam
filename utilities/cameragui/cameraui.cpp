@@ -340,7 +340,7 @@ void CameraUI::setupActions()
 
     // -----------------------------------------------------------
 
-    d->selectLockedItemsAction = new KAction(KIcon("document-decrypt"), i18n("Select Locked Items"), this);
+    d->selectLockedItemsAction = new KAction(KIcon("object-locked"), i18n("Select Locked Items"), this);
     connect(d->selectLockedItemsAction, SIGNAL(triggered()), d->view, SLOT(slotSelectLocked()));
     actionCollection()->addAction("cameraui_selectlockeditems", d->selectLockedItemsAction);
 
@@ -385,7 +385,7 @@ void CameraUI::setupActions()
 
     // -------------------------------------------------------------------------
 
-    d->lockAction = new KAction(KIcon("document-decrypt"), i18n("Toggle Lock"), this);
+    d->lockAction = new KAction(KIcon("object-locked"), i18n("Toggle Lock"), this);
     connect(d->lockAction, SIGNAL(triggered()), this, SLOT(slotToggleLock()));
     actionCollection()->addAction("cameraui_imagelock", d->lockAction);
 
