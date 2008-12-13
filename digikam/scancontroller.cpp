@@ -336,7 +336,6 @@ void ScanController::scanFileDirectly(const QString &filePath)
 
     CollectionScanner scanner;
     scanner.recordHints(d->itemHints);
-    connectCollectionScanner(&scanner);
     scanner.scanFile(filePath);
 
     resumeCollectionScan();
@@ -412,7 +411,7 @@ void ScanController::run()
             CollectionScanner scanner;
             scanner.recordHints(d->albumHints);
             scanner.recordHints(d->itemHints);
-            connectCollectionScanner(&scanner);
+            //connectCollectionScanner(&scanner);
             scanner.partialScan(task);
         }
     }
