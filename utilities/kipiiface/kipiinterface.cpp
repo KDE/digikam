@@ -44,6 +44,8 @@
 #include "albumsettings.h"
 #include "collectionmanager.h"
 #include "databaseaccess.h"
+#include "loadingcacheinterface.h"
+#include "scancontroller.h"
 #include "imageattributeswatch.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
@@ -146,12 +148,18 @@ void KipiInterface::refreshImages(const KUrl::List& urls)
 {
     KUrl::List ulist = urls;
 
-    // Re-scan metadata from pictures. This way will update Metadata sidebar and database.
-    for ( KUrl::List::Iterator it = ulist.begin() ; it != ulist.end() ; ++it )
-        ImageAttributesWatch::instance()->fileMetadataChanged(*it);
-
-    // Refresh preview.
+    // Hard Refresh
     m_albumManager->refreshItemHandler(urls);
+
+    QSet<QString> dirs;
+    foreach (const KUrl &url, urls)
+    {
+        LoadingCacheInterface::fileChanged(url.path());
+        dirs << url.directory();
+    }
+    foreach (const QString &dir, dirs)
+        ScanController::instance()->scheduleCollectionScan(dir);
+
 }
 
 int KipiInterface::features() const
