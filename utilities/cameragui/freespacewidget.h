@@ -72,19 +72,19 @@ public:
     unsigned long kBSize();
     unsigned long kBUsed();
     unsigned long kBAvail();
-    QString       mountPoint();
     void          refresh();
 
     void setMode(FreeSpaceMode mode);
     void setPath(const QString& path);
-    void setInformations(unsigned long kBSize,
-                         unsigned long kBUsed, unsigned long kBAvail,
-                         const QString& mountPoint);
+    void setPaths(const QStringList& paths);
+    void addInformation(unsigned long kBSize,
+                        unsigned long kBUsed, unsigned long kBAvail,
+                        const QString& mountPoint);
 
 protected:
 
     void paintEvent(QPaintEvent*);
-    void updatePixmap();
+    void updateToolTip();
 
 private slots:
 

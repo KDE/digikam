@@ -24,6 +24,10 @@
 #include "freespacewidget.h"
 #include "freespacewidget.moc"
 
+// C++ includes
+
+#include <cmath>
+
 // Qt includes.
 
 #include <QPainter>
@@ -50,6 +54,27 @@
 namespace Digikam
 {
 
+class MountPointInfo
+{
+public:
+
+    MountPointInfo()
+    {
+        isValid     = false;
+        kBSize      = 0;
+        kBUsed      = 0;
+        kBAvail     = 0;
+    }
+
+    QString                         mountPoint;
+
+    bool                            isValid;
+
+    unsigned long                   kBSize;
+    unsigned long                   kBUsed;
+    unsigned long                   kBAvail;
+};
+
 class FreeSpaceWidgetPriv
 {
 public:
@@ -58,11 +83,11 @@ public:
     {
         timer       = 0;
         isValid     = false;
+        percentUsed = 0;
         kBSize      = 0;
         kBUsed      = 0;
         kBAvail     = 0;
         dSizeKb     = 0;
-        percentUsed = 0;
         mode        = FreeSpaceWidget::AlbumLibrary;
     }
 
@@ -75,12 +100,11 @@ public:
     unsigned long                   kBUsed;
     unsigned long                   kBAvail;
 
-    QString                         mountPoint;
-    QString                         path;
+    QStringList                     paths;
+    QHash<QString, MountPointInfo>  infos;
 
     QTimer                         *timer;
 
-    QPixmap                         pix;
     QPixmap                         iconPix;
 
     FreeSpaceWidget::FreeSpaceMode  mode;
@@ -120,12 +144,20 @@ void FreeSpaceWidget::setMode(FreeSpaceMode mode)
     {
         d->iconPix = SmallIcon("camera-photo");
     }
-    updatePixmap();
+
+    update();
 }
 
 void FreeSpaceWidget::setPath(const QString& path)
 {
-    d->path = path;
+    d->paths.clear();
+    d->paths << path;
+    refresh();
+}
+
+void FreeSpaceWidget::setPaths(const QStringList& paths)
+{
+    d->paths = paths;
     refresh();
 }
 
@@ -136,34 +168,48 @@ void FreeSpaceWidget::refresh()
     d->timer->start(10000);
 }
 
-void FreeSpaceWidget::setInformations(unsigned long kBSize,
-                                      unsigned long kBUsed, unsigned long kBAvail,
-                                      const QString& mountPoint)
+void FreeSpaceWidget::addInformation(unsigned long kBSize,
+                                     unsigned long kBUsed, unsigned long kBAvail,
+                                     const QString& mountPoint)
 {
-    d->mountPoint = mountPoint;
-    d->kBSize     = kBSize;
-    d->kBUsed     = kBUsed;
-    d->kBAvail    = kBAvail;
+    MountPointInfo info;
 
-    if (kBSize <= 0)
+    info.mountPoint = mountPoint;
+    info.kBSize     = kBSize;
+    info.kBUsed     = kBUsed;
+    info.kBAvail    = kBAvail;
+    info.isValid    = (kBSize > 0);
+
+    d->infos[mountPoint] = info;
+
+    // update cumulative data
+
+    d->kBSize      = 0;
+    d->kBUsed      = 0;
+    d->kBAvail     = 0;
+    d->isValid     = false;
+    foreach (const MountPointInfo &info, d->infos)
     {
-        d->percentUsed = 0;
-        d->isValid     = false;
+        if (info.isValid)
+        {
+            d->kBSize  += info.kBSize;
+            d->kBUsed  += info.kBUsed;
+            d->kBAvail += info.kBAvail;
+            d->isValid  = true;
+        }
     }
-    else
-    {
-        d->percentUsed = 100 - (int)(100.0*kBAvail/kBSize);
-        d->isValid     = true;
-    }
-    updatePixmap();
-    repaint();
+    d->percentUsed = lround(100.0 - (100.0*kBAvail/kBSize));
+
+    updateToolTip();
+    update();
 }
 
 void FreeSpaceWidget::setEstimatedDSizeKb(unsigned long dSize)
 {
     d->dSizeKb = dSize;
-    updatePixmap();
-    repaint();
+
+    updateToolTip();
+    update();
 }
 
 unsigned long FreeSpaceWidget::estimatedDSizeKb()
@@ -196,20 +242,13 @@ unsigned long FreeSpaceWidget::kBAvail()
     return d->kBAvail;
 }
 
-QString FreeSpaceWidget::mountPoint()
+void FreeSpaceWidget::paintEvent(QPaintEvent*)
 {
-    return d->mountPoint;
-}
+    QPainter p(this);
 
-void FreeSpaceWidget::updatePixmap()
-{
-    d->pix = QPixmap(size());
-    d->pix.fill(palette().background().color());
-
-    QPainter p(&d->pix);
     p.setPen(palette().mid().color());
-    p.drawRect(0, 0, d->pix.width()-1, d->pix.height()-1);
-    p.drawPixmap(2, d->pix.height()/2-d->iconPix.height()/2,
+    p.drawRect(0, 0, width()-1, height()-1);
+    p.drawPixmap(2, height()/2-d->iconPix.height()/2,
                  d->iconPix, 0, 0, d->iconPix.width(), d->iconPix.height());
 
     if (isValid())
@@ -221,11 +260,11 @@ void FreeSpaceWidget::updatePixmap()
         p.setBrush(peUsed > 95 ? Qt::red : Qt::darkGreen);
         p.setPen(Qt::white);
         QRect gRect(d->iconPix.height()+2, 1,
-                    (int)(((double)d->pix.width()-3.0-d->iconPix.width()-2.0)*(pClamp/100.0)),
-                    d->pix.height()-3);
+                    (int)(((double)width()-3.0-d->iconPix.width()-2.0)*(pClamp/100.0)),
+                    height()-3);
         p.drawRect(gRect);
 
-        QRect tRect(d->iconPix.height()+2, 1, d->pix.width()-3-d->iconPix.width()-2, d->pix.height()-3);
+        QRect tRect(d->iconPix.height()+2, 1, width()-3-d->iconPix.width()-2, height()-3);
         QString text        = QString("%1%").arg(peUsed);
         QFontMetrics fontMt = p.fontMetrics();
         QRect fontRect      = fontMt.boundingRect(tRect.x(), tRect.y(),
@@ -233,6 +272,13 @@ void FreeSpaceWidget::updatePixmap()
         p.setPen(palette().text().color());
         p.drawText(tRect, Qt::AlignCenter, text);
 
+    }
+}
+
+void FreeSpaceWidget::updateToolTip()
+{
+    if (isValid())
+    {
         QString tipText, value;
         QString header = i18n("Camera Media");
         if (d->mode == FreeSpaceWidget::AlbumLibrary) header = i18n("Album Library");
@@ -273,24 +319,23 @@ void FreeSpaceWidget::updatePixmap()
         setWhatsThis(tipText);
         setToolTip(tipText);
     }
-
-    p.end();
-}
-
-void FreeSpaceWidget::paintEvent(QPaintEvent*)
-{
-    QPainter p(this);
-    p.drawPixmap(0, 0, d->pix);
-    p.end();
+    else
+    {
+        setWhatsThis(QString());
+        setToolTip(QString());
+    }
 }
 
 #if KDE_IS_VERSION(4,1,68)
 void FreeSpaceWidget::slotTimeout()
 {
-    KDiskFreeSpaceInfo info = KDiskFreeSpaceInfo::freeSpaceInfo(d->path);
-    if(info.isValid())
+    foreach (const QString &path, d->paths)
     {
-        setInformations(info.size(), info.used(), info.available(), info.mountPoint());
+        KDiskFreeSpaceInfo info = KDiskFreeSpaceInfo::freeSpaceInfo(d->path);
+        if(info.isValid())
+        {
+            addInformation(info.size(), info.used(), info.available(), info.mountPoint());
+        }
     }
 }
 #else
@@ -298,13 +343,17 @@ void FreeSpaceWidget::slotTimeout()
 void FreeSpaceWidget::slotTimeout()
 {
     KMountPoint::List list = KMountPoint::currentMountPoints();
-    KMountPoint::Ptr mp    = list.findByPath(d->path);
-    if (mp)
+
+    foreach (const QString &path, d->paths)
     {
-        KDiskFreeSpace *job = new KDiskFreeSpace(this);
-        connect(job, SIGNAL(foundMountPoint(const QString&, quint64, quint64, quint64)),
-                this, SLOT(slotAvailableFreeSpace(const QString&, quint64, quint64, quint64)));
-        job->readDF(mp->mountPoint());
+        KMountPoint::Ptr mp    = list.findByPath(path);
+        if (mp)
+        {
+            KDiskFreeSpace *job = new KDiskFreeSpace(this);
+            connect(job, SIGNAL(foundMountPoint(const QString&, quint64, quint64, quint64)),
+                    this, SLOT(slotAvailableFreeSpace(const QString&, quint64, quint64, quint64)));
+            job->readDF(mp->mountPoint());
+        }
     }
 }
 #endif /* KDE_IS_VERSION(4,1,68) */
@@ -318,7 +367,7 @@ void FreeSpaceWidget::slotAvailableFreeSpace(const QString& mountPoint, quint64 
     Q_UNUSED(kBUsed);
     Q_UNUSED(kBAvail);
 #else
-    setInformations(kBSize, kBUsed, kBAvail, mountPoint);
+    addInformation(kBSize, kBUsed, kBAvail, mountPoint);
 #endif /* KDE_IS_VERSION(4,1,68) */
 }
 
