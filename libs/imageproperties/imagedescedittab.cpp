@@ -613,8 +613,14 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
 
     d->ignoreImageAttributesWatch = true;
     int i = 0;
+
     DatabaseTransaction transaction;
     AlbumLister::instance()->blockSignals(true);
+    ScanController::instance()->suspendCollectionScan();
+
+    //TODO: We should consider loading _all_ metadata fields here, not only comment/date/rating.
+    // This requires a new ScanController/CollectionScanner/ImageScanner method.
+    // This method must care about stuff like merging existing tags with metadata etc.
 
     foreach(const ImageInfo &info, d->currInfos)
     {
@@ -628,8 +634,9 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
         emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
         kapp->processEvents();
     }
-    AlbumLister::instance()->blockSignals(false);
 
+    ScanController::instance()->resumeCollectionScan();
+    AlbumLister::instance()->blockSignals(false);
     d->ignoreImageAttributesWatch = false;
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
