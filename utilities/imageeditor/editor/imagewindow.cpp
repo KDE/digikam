@@ -106,6 +106,7 @@
 #include "metadatahub.h"
 #include "ratingpopupmenu.h"
 #include "savingcontextcontainer.h"
+#include "scancontroller.h"
 #include "setup.h"
 #include "slideshow.h"
 #include "statusprogressbar.h"
@@ -877,6 +878,7 @@ void ImageWindow::saveIsComplete()
     // put image in cache, the LoadingCacheInterface cares for the details
     LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
     d->thumbBar->refreshThumbs(KUrl::List() << d->urlCurrent);
+    ScanController::instance()->scanFileDirectly(m_savingContext->destinationURL.path());
 
     // notify main app that file changed
     emit signalFileModified(m_savingContext->destinationURL);
@@ -964,7 +966,7 @@ void ImageWindow::saveAsIsComplete()
 
         // Add the file to the list of thumbbar images if it's not there already
         ImagePreviewBarItem *foundItem = d->thumbBar->findItemByInfo(d->imageInfoCurrent);
-        d->thumbBar->invalidateThumb(foundItem);
+        d->thumbBar->reloadThumb(foundItem);
 
         if (!foundItem)
             foundItem = new ImagePreviewBarItem(d->thumbBar, d->imageInfoCurrent);

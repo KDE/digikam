@@ -333,7 +333,7 @@ void AlbumWidgetStack::slotItemsUpdated(const KUrl::List& urls)
          it != urls.end(); ++it)
     {
         ThumbBarItem* foundItem = d->thumbBar->findItemByUrl(*it);
-        d->thumbBar->invalidateThumb(foundItem);
+        d->thumbBar->reloadThumb(foundItem);
     }
 }
 

@@ -640,7 +640,7 @@ void LightTableWindow::refreshStatusBar()
 
 void LightTableWindow::slotItemsUpdated(const KUrl::List& urls)
 {
-    d->barView->refreshThumbs(urls);
+    d->barView->reloadThumbs(urls);
 
     for (KUrl::List::const_iterator it = urls.constBegin() ; it != urls.constEnd() ; ++it)
     {
