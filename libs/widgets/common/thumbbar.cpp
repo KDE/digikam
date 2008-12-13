@@ -417,6 +417,26 @@ void ThumbBarView::invalidateThumb(ThumbBarItem* item)
     d->thumbLoadThread->find(item->url().path(), d->tileSize);
 }
 
+void ThumbBarView::reloadThumbs(const KUrl::List& urls)
+{
+    // This one does not delete the thumbnail file on disk
+    for (KUrl::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
+    {
+        ThumbBarItem *item = findItemByUrl(*it);
+        if (item)
+        {
+            reloadThumb(item);
+        }
+    }
+}
+
+void ThumbBarView::reloadThumb(ThumbBarItem* item)
+{
+    if (!item) return;
+
+    d->thumbLoadThread->find(item->url().path(), d->tileSize);
+}
+
 bool ThumbBarView::pixmapForItem(ThumbBarItem *item, QPixmap &pix) const
 {
     if (d->tileSize > d->maxTileSize)
