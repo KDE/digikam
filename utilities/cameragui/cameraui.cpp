@@ -1222,23 +1222,6 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
     if (!onlySelected)
         d->view->slotSelectAll();
 
-    // See B.K.O #139519: Always check free space available before to
-    // download items selection from camera.
-    unsigned long fSize = 0;
-    unsigned long dSize = 0;
-    d->view->itemsSelectionSizeInfo(fSize, dSize);
-    if (d->albumLibraryFreeSpace->isValid() &&
-        (dSize >= d->albumLibraryFreeSpace->kBAvail()))
-    {
-        KMessageBox::error(this, i18n("There is no enough free space on Album Library Path "
-                                      "to download and process selected pictures from camera.\n\n"
-                                      "Estimated space require: %1\n"
-                                      "Available free space: %2",
-                                 KIO::convertSizeFromKiB(dSize),
-                                 KIO::convertSizeFromKiB(d->albumLibraryFreeSpace->kBAvail())));
-        return;
-    }
-
     QString   newDirName;
     IconItem* firstItem = d->view->firstItem();
     if (firstItem)
@@ -1282,6 +1265,35 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
 
     PAlbum *pAlbum = dynamic_cast<PAlbum*>(album);
     if (!pAlbum) return;
+
+    // -- Check disk space ------------------------
+
+    // See B.K.O #139519: Always check free space available before to
+    // download items selection from camera.
+    unsigned long fSize = 0;
+    unsigned long dSize = 0;
+    d->view->itemsSelectionSizeInfo(fSize, dSize);
+    QString albumRootPath = pAlbum->albumRootPath();
+    unsigned long kBAvail = d->albumLibraryFreeSpace->kBAvail(albumRootPath);
+    if (dSize >= kBAvail)
+    {
+        KGuiItem cont = KStandardGuiItem::cont();
+        cont.setText(i18n("Try Anyway"));
+        KGuiItem cancel = KStandardGuiItem::cancel();
+        cancel.setText(i18n("Cancel Download"));
+        int result =
+        KMessageBox::warningYesNo(this,
+                                  i18n("There is not enough free space on the disk of the album you selected "
+                                       "to download and process the selected pictures from the camera.\n\n"
+                                       "Estimated space required: %1\n"
+                                       "Available free space: %2",
+                                       KIO::convertSizeFromKiB(dSize),
+                                       KIO::convertSizeFromKiB(kBAvail)),
+                                  i18n("Insufficient Disk Space"),
+                                  cont, cancel);
+        if (result == KMessageBox::No)
+            return;
+    }
 
     // -- Prepare downloading of camera items ------------------------
 
