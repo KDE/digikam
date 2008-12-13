@@ -481,93 +481,92 @@ void CameraController::executeCommand(CameraCommand *cmd)
             QString   folder            = cmd->map["folder"].toString();
             QString   file              = cmd->map["file"].toString();
             QString   dest              = cmd->map["dest"].toString();
+            bool      autoRotate        = cmd->map["autoRotate"].toBool();
+            bool      fixDateTime       = cmd->map["fixDateTime"].toBool();
+            QDateTime newDateTime       = cmd->map["newDateTime"].toDateTime();
+            bool      setPhotographerId = cmd->map["setPhotographerId"].toBool();
+            QString   author            = cmd->map["author"].toString();
+            QString   authorTitle       = cmd->map["authorTitle"].toString();
+            bool      setCredits        = cmd->map["setCredits"].toBool();
+            QString   credit            = cmd->map["credit"].toString();
+            QString   source            = cmd->map["source"].toString();
+            QString   copyright         = cmd->map["copyright"].toString();
+            bool      convertJpeg       = cmd->map["convertJpeg"].toBool();
+            QString   losslessFormat    = cmd->map["losslessFormat"].toString();
+            sendInfo(i18n("Downloading file %1...", file));
 
-            if (!d->overwriteAll)
+            // download to a temp file
+
+            emit signalDownloaded(folder, file, GPItemInfo::DownloadStarted);
+
+            KUrl tempURL(dest);
+            tempURL = tempURL.upUrl();
+            tempURL.addPath(QString(".digikam-camera-tmp1-%1").arg(getpid()).prepend(file));
+            QString temp = tempURL.path();
+
+            bool result = d->camera->downloadItem(folder, file, tempURL.path());
+
+            if (!result)
             {
-                bool      autoRotate        = cmd->map["autoRotate"].toBool();
-                bool      fixDateTime       = cmd->map["fixDateTime"].toBool();
-                QDateTime newDateTime       = cmd->map["newDateTime"].toDateTime();
-                bool      setPhotographerId = cmd->map["setPhotographerId"].toBool();
-                QString   author            = cmd->map["author"].toString();
-                QString   authorTitle       = cmd->map["authorTitle"].toString();
-                bool      setCredits        = cmd->map["setCredits"].toBool();
-                QString   credit            = cmd->map["credit"].toString();
-                QString   source            = cmd->map["source"].toString();
-                QString   copyright         = cmd->map["copyright"].toString();
-                bool      convertJpeg       = cmd->map["convertJpeg"].toBool();
-                QString   losslessFormat    = cmd->map["losslessFormat"].toString();
-                sendInfo(i18n("Downloading file %1...", file));
+                unlink(QFile::encodeName(tempURL.path()));
+                emit signalDownloaded(folder, file, GPItemInfo::DownloadFailed);
+            }
 
-                // download to a temp file
+            // possible modification operations
 
-                emit signalDownloaded(folder, file, GPItemInfo::DownloadStarted);
+            if (autoRotate)
+            {
+                kDebug(50003) << "Exif autorotate: " << file << " using (" << tempURL.path() << ")" << endl;
+                sendInfo(i18n("EXIF rotating file %1...", file));
+                exifRotate(tempURL.path(), file);
+            }
 
-                KUrl tempURL(dest);
-                tempURL = tempURL.upUrl();
-                tempURL.addPath(QString(".digikam-camera-tmp1-%1").arg(getpid()).prepend(file));
-                QString temp = tempURL.path();
+            if (fixDateTime || setPhotographerId || setCredits)
+            {
+                sendInfo(i18n("Setting Metadata tags to file %1...", file));
+                DMetadata metadata(tempURL.path());
 
-                bool result = d->camera->downloadItem(folder, file, tempURL.path());
+                if (fixDateTime)
+                    metadata.setImageDateTime(newDateTime, true);
 
-                if (result)
+                if (setPhotographerId)
+                    metadata.setImagePhotographerId(author, authorTitle);
+
+                if (setCredits)
+                    metadata.setImageCredits(credit, source, copyright);
+
+                metadata.applyChanges();
+            }
+
+            // Convert JPEG file to lossless format if necessary,
+            // and move converted image to destination.
+
+            if (convertJpeg && isJpegImage(tempURL.path()))
+            {
+                sendInfo(i18n("Converting %1 to lossless file format...", file));
+
+                KUrl tempURL2(dest);
+                tempURL2 = tempURL2.upUrl();
+                tempURL2.addPath(QString(".digikam-camera-tmp2-%1").arg(getpid()).prepend(file));
+                temp = tempURL2.path();
+
+                if (!jpegConvert(tempURL.path(), tempURL2.path(), file, losslessFormat))
                 {
-                    if (autoRotate)
-                    {
-                        kDebug(50003) << "Exif autorotate: " << file << " using (" << tempURL.path() << ")" << endl;
-                        sendInfo(i18n("EXIF rotating file %1...", file));
-                        exifRotate(tempURL.path(), file);
-                    }
-
-                    if (fixDateTime || setPhotographerId || setCredits)
-                    {
-                        sendInfo(i18n("Setting Metadata tags to file %1...", file));
-                        DMetadata metadata(tempURL.path());
-
-                        if (fixDateTime)
-                            metadata.setImageDateTime(newDateTime, true);
-
-                        if (setPhotographerId)
-                            metadata.setImagePhotographerId(author, authorTitle);
-
-                        if (setCredits)
-                            metadata.setImageCredits(credit, source, copyright);
-
-                        metadata.applyChanges();
-                    }
-
-                    // Convert JPEG file to lossless format if necessary,
-                    // and move converted image to destination.
-
-                    if (convertJpeg && isJpegImage(tempURL.path()))
-                    {
-                        sendInfo(i18n("Converting %1 to lossless file format...", file));
-
-                        KUrl tempURL2(dest);
-                        tempURL2 = tempURL2.upUrl();
-                        tempURL2.addPath(QString(".digikam-camera-tmp2-%1").arg(getpid()).prepend(file));
-                        temp = tempURL2.path();
-
-                        if (!jpegConvert(tempURL.path(), tempURL2.path(), file, losslessFormat))
-                        {
-                            // convert failed. delete the temp file
-                            unlink(QFile::encodeName(tempURL.path()));
-                            unlink(QFile::encodeName(tempURL2.path()));
-                            result = false;
-                        }
-                        else
-                        {
-                            // Else remove only the first temp file.
-                            unlink(QFile::encodeName(tempURL.path()));
-                        }
-                    }
+                    // convert failed. delete the temp file
+                    unlink(QFile::encodeName(tempURL.path()));
+                    unlink(QFile::encodeName(tempURL2.path()));
+                    result = false;
                 }
-
-                if (!d->skipAll)
+                else
                 {
-                    // do UI operation from main thread
-                    emit signalInternalCheckRename(folder, file, dest, temp);
+                    // Else remove only the first temp file.
+                    unlink(QFile::encodeName(tempURL.path()));
                 }
             }
+
+            // Now we need to move from temp file to destination file.
+            // This possibly involves UI operation, do it from main thread
+            emit signalInternalCheckRename(folder, file, dest, temp);
             break;
         }
         case(CameraCommand::gp_open):
@@ -680,12 +679,14 @@ void CameraController::sendInfo(const QString& msg)
 void CameraController::slotCheckRename(const QString &folder, const QString &file,
                                        const QString &destination, const QString &temp)
 {
+    // this is the direct continuation of executeCommand, case CameraCommand::gp_download
+
     bool skip      = false;
     bool cancel    = false;
-    bool overwrite = false;
+    bool overwrite = d->overwriteAll;
     QString dest   = destination;
 
-    // Check if dest file already exist.
+    // Check if dest file already exist, unless we overwrite anyway
 
     if (!d->overwriteAll)
     {
