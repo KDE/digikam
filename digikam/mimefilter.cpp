@@ -37,16 +37,16 @@ namespace Digikam
 MimeFilter::MimeFilter(QWidget* parent)
           : QComboBox(parent)
 {
-    insertItem( AllFiles,    i18n("All files") );
-    insertItem( ImageFiles,  i18n("Image files") );
-    insertItem( NoRAWFiles,  i18n("No RAW files") );
-    insertItem( JPGFiles,    i18n("JPEG files") );
-    insertItem( PNGFiles,    i18n("PNG files") );
-    insertItem( TIFFiles,    i18n("TIFF files") );
-    insertItem( DNGFiles,    i18n("DNG files") );
-    insertItem( RAWFiles,    i18n("RAW files") );
-    insertItem( MoviesFiles, i18n("Movie files") );
-    insertItem( AudioFiles,  i18n("Audio files") );
+    insertItem( AllFiles,    i18n("All Files") );
+    insertItem( ImageFiles,  i18n("Image Files") );
+    insertItem( NoRAWFiles,  i18n("No RAW Files") );
+    insertItem( JPGFiles,    i18n("JPEG Files") );
+    insertItem( PNGFiles,    i18n("PNG Files") );
+    insertItem( TIFFiles,    i18n("TIFF Files") );
+    insertItem( DNGFiles,    i18n("DNG Files") );
+    insertItem( RAWFiles,    i18n("RAW Files") );
+    insertItem( MoviesFiles, i18n("Movie Files") );
+    insertItem( AudioFiles,  i18n("Audio Files") );
 
     setToolTip(i18n("Filter by file type"));
     setWhatsThis(i18n("Select the file types (mime types) that you want shown"));
