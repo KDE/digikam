@@ -137,7 +137,6 @@ public:
     QString                             currentTheme;
 
     // database settings
-    QString                             albumLibraryPath;
     QString                             databaseFilePath;
 
     // album settings
@@ -259,9 +258,7 @@ void AlbumSettings::readSettings()
 
     KConfigGroup group  = config->group("Album Settings");
 
-    d->albumLibraryPath = group.readEntry("Album Path", QString());
-    // NOTE: default database file path is root album library path, like 0.7.x-0.9.x series work.
-    d->databaseFilePath = group.readEntry("Database File Path", d->albumLibraryPath);
+    d->databaseFilePath = group.readEntry("Database File Path", QString());
 
     QStringList collectionList = group.readEntry("Album Collections",QStringList());
     if (!collectionList.isEmpty())
@@ -368,7 +365,6 @@ void AlbumSettings::saveSettings()
 
     KConfigGroup group = config->group("Album Settings");
 
-    group.writeEntry("Album Path", d->albumLibraryPath);
     group.writeEntry("Database File Path", d->databaseFilePath);
     group.writeEntry("Album Collections", d->albumCollectionNames);
     group.writeEntry("Album Sort Order", (int)d->albumSortOrder);
@@ -453,11 +449,6 @@ void AlbumSettings::saveSettings()
     config->sync();
 }
 
-void AlbumSettings::setAlbumLibraryPath(const QString& path)
-{
-    d->albumLibraryPath = path;
-}
-
 QString AlbumSettings::getDatabaseFilePath() const
 {
     return d->databaseFilePath;
@@ -466,11 +457,6 @@ QString AlbumSettings::getDatabaseFilePath() const
 void AlbumSettings::setDatabaseFilePath(const QString& path)
 {
     d->databaseFilePath = path;
-}
-
-QString AlbumSettings::getAlbumLibraryPath() const
-{
-    return d->albumLibraryPath;
 }
 
 void AlbumSettings::setShowSplashScreen(bool val)

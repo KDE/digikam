@@ -71,9 +71,6 @@ public:
 
     bool showToolTipsIsValid() const;
 
-    void setAlbumLibraryPath(const QString& path);
-    QString getAlbumLibraryPath() const;
-
     void setDatabaseFilePath(const QString& path);
     QString getDatabaseFilePath() const;
 
