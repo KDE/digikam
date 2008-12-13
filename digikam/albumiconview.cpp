@@ -1660,8 +1660,11 @@ void AlbumIconView::changeTagOnImageInfos(const ImageInfoList &list, const QList
             hub.setTag(*tagIt, addOrRemove);
         }
 
+        QString filePath = info.filePath();
         hub.write(info, MetadataHub::PartialWrite);
-        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+        bool fileChanged = hub.write(filePath, MetadataHub::FullWriteIfChanged);
+        if (fileChanged)
+            ScanController::instance()->scanFileDirectly(filePath);
 
         if (progress)
         {
@@ -2320,9 +2323,16 @@ void AlbumIconView::slotAssignRating(int rating)
                 ImageInfo info = albumItem->imageInfo();
 
                 hub.load(info);
+
                 hub.setRating(rating);
+
+                QString filePath = info.filePath();
                 hub.write(info, MetadataHub::PartialWrite);
                 hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+                bool fileChanged = hub.write(filePath, MetadataHub::FullWriteIfChanged);
+
+                if (fileChanged)
+                    ScanController::instance()->scanFileDirectly(filePath);
 
                 emit signalProgressValue((int)((i++/cnt)*100.0));
                 kapp->processEvents();

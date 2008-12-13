@@ -395,8 +395,12 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
 
                 hub.load(info);
                 hub.setTag(destAlbum, true);
+
+                QString filePath = info.filePath();
                 hub.write(info, MetadataHub::PartialWrite);
-                hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+                bool fileChanged = hub.write(filePath, MetadataHub::FullWriteIfChanged);
+                if (fileChanged)
+                    ScanController::instance()->scanFileDirectly(filePath);
 
                 emit signalProgressValue((int)((i++/(float)imageIDs.count())*100.0));
                 kapp->processEvents();

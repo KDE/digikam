@@ -518,8 +518,14 @@ void ImageDescEditTab::slotApplyAllChanges()
 
         foreach(const ImageInfo &info, d->currInfos)
         {
+            QString filePath = info.filePath();
+
             // apply to file metadata
-            d->hub.write(info.filePath(), MetadataHub::FullWrite, writeSettings);
+            bool fileChanged = d->hub.write(filePath, MetadataHub::FullWrite, writeSettings);
+
+            // trigger db scan (to update file size etc.)
+            if (fileChanged)
+                ScanController::instance()->scanFileDirectly(filePath);
 
             emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
             if (progressInfo)
