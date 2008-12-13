@@ -267,11 +267,12 @@ void CollectionScanner::partialScan(const QString &albumRoot, const QString& alb
 
 void CollectionScanner::scanFile(const QString &filePath)
 {
-    QString albumRoot = CollectionManager::instance()->albumRootPath(filePath);
+    QFileInfo info(filePath);
+    QString dirPath = info.path(); // strip off filename
+    QString albumRoot = CollectionManager::instance()->albumRootPath(dirPath);
     if (albumRoot.isNull())
         return;
-    QString album = CollectionManager::instance()->album(filePath);
-    QFileInfo info(filePath);
+    QString album = CollectionManager::instance()->album(dirPath);
     scanFile(albumRoot, album, info.fileName());
 }
 
@@ -304,7 +305,10 @@ void CollectionScanner::scanFile(const QString &albumRoot, const QString &album,
     QFileInfo info(dir, fileName);
 
     if (!info.exists())
+    {
+        kWarning(50003) << "File given to scan does not exist" << albumRoot << album << fileName;
         return;
+    }
 
     int albumId = checkAlbum(location, album);
     qlonglong imageId = DatabaseAccess().db()->getImageId(albumId, fileName);
