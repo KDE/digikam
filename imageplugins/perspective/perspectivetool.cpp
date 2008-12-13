@@ -166,6 +166,7 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
     gridLayout->setSpacing(m_gboxSettings->spacingHint());
 
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

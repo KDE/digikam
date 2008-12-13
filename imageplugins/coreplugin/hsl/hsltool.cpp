@@ -205,6 +205,7 @@ HSLTool::HSLTool(QObject* parent)
 
     gridSettings->setRowStretch(11, 10);
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

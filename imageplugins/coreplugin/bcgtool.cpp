@@ -189,6 +189,7 @@ BCGTool::BCGTool(QObject* parent)
     gridSettings->setRowStretch(9, 10);
 
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

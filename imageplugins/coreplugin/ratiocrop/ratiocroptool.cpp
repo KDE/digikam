@@ -301,6 +301,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
     gboxLayout->setSpacing(m_gboxSettings->spacingHint());
 
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

@@ -327,6 +327,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     grid->setSpacing(5);
 
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
     // Channels and scale selection slots.

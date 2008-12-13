@@ -225,6 +225,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     gridSettings->setMargin(gboxSettings->spacingHint());
 
     setToolSettings(gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

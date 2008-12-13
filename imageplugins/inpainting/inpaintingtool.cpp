@@ -150,6 +150,7 @@ InPaintingTool::InPaintingTool(QObject* parent)
     gridSettings->setRowStretch(1, 10);
 
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

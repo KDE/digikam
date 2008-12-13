@@ -199,6 +199,7 @@ ColorFXTool::ColorFXTool(QObject* parent)
     gridSettings->setRowStretch(9, 10);
 
     setToolSettings(gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

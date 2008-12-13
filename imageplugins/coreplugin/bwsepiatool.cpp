@@ -159,7 +159,7 @@ const QPixmap* ListBoxBWPreviewItem::pixmap() const
 // -----------------------------------------------------------------------------------
 
 BWSepiaTool::BWSepiaTool(QObject* parent)
-                   : EditorTool(parent)
+           : EditorTool(parent)
 {
     setName("convertbw");
     setToolName(i18n("Black && White"));
@@ -471,12 +471,12 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
     m_cInput->setDefaultValue(0);
     QWhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
 
-    gridTab2->addMultiCellWidget(vGradient,         0, 0, 0, 0);
-    gridTab2->addMultiCellWidget(spacev,            0, 0, 1, 1);
-    gridTab2->addMultiCellWidget(m_curvesWidget,    0, 0, 2, 2);
-    gridTab2->addMultiCellWidget(spaceh,            1, 1, 2, 2);
-    gridTab2->addMultiCellWidget(hGradient,         2, 2, 2, 2);
-    gridTab2->addMultiCellWidget(m_cInput,          4, 4, 0, 2);
+    gridTab2->addMultiCellWidget(vGradient,      0, 0, 0, 0);
+    gridTab2->addMultiCellWidget(spacev,         0, 0, 1, 1);
+    gridTab2->addMultiCellWidget(m_curvesWidget, 0, 0, 2, 2);
+    gridTab2->addMultiCellWidget(spaceh,         1, 1, 2, 2);
+    gridTab2->addMultiCellWidget(hGradient,      2, 2, 2, 2);
+    gridTab2->addMultiCellWidget(m_cInput,       4, 4, 0, 2);
 //    gridTab2->setRowSpacing(3);
     gridTab2->setRowStretch(5, 10);
 
@@ -490,6 +490,7 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
     gridSettings->addMultiCellWidget(m_tab, 3, 3, 0, 4);
     gridSettings->setRowStretch(3, 10);
     setToolSettings(gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

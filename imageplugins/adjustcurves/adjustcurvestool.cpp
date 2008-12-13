@@ -288,6 +288,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     grid->setRowStretch(5, 10);
 
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

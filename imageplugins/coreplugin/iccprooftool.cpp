@@ -451,6 +451,7 @@ ICCProofTool::ICCProofTool(QObject* parent)
 
     setToolSettings(m_gboxSettings);
     m_gboxSettings->enableButton(EditorToolSettings::Ok, false);
+    init();
 
     // -------------------------------------------------------------
 

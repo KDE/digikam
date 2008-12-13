@@ -204,6 +204,7 @@ RedEyeTool::RedEyeTool(QObject* parent)
     gridSettings->setColStretch(3, 10);
 
     setToolSettings(gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

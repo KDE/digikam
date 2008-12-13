@@ -95,6 +95,7 @@ BlurTool::BlurTool(QObject* parent)
     m_previewWidget = new ImagePanelWidget(470, 350, "gaussianblur Tool", m_gboxSettings->panIconView());
 
     setToolView(m_previewWidget);
+    init();
 }
 
 BlurTool::~BlurTool()

@@ -220,6 +220,7 @@ RGBTool::RGBTool(QObject* parent)
 
     gridSettings->setRowStretch(6, 10);
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

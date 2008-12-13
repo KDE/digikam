@@ -119,7 +119,7 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
 
     QLabel *label1 = new QLabel(i18n("Channel:"), m_gboxSettings->plainPage());
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, m_gboxSettings->plainPage() );
+    m_channelCB    = new QComboBox( false, m_gboxSettings->plainPage() );
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
     m_channelCB->insertItem( i18n("Blue") );
@@ -223,6 +223,7 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
     grid->setSpacing(m_gboxSettings->spacingHint());
 
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
     // Channels and scale selection slots.

@@ -176,6 +176,7 @@ InsertTextTool::InsertTextTool(QObject* parent)
     grid->setRowStretch(9, 10);
 
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

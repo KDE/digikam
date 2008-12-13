@@ -106,6 +106,7 @@ CharcoalTool::CharcoalTool(QObject* parent)
     m_previewWidget = new ImagePanelWidget(470, 350, "charcoal Tool", m_gboxSettings->panIconView());
 
     setToolView(m_previewWidget);
+    init();
 
     // -------------------------------------------------------------
 

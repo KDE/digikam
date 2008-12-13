@@ -150,6 +150,7 @@ LensDistortionTool::LensDistortionTool(QObject* parent)
     grid->setSpacing(m_gboxSettings->spacingHint());
 
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

@@ -148,6 +148,7 @@ SuperImposeTool::SuperImposeTool(QObject* parent)
     grid->setColStretch(1, 10);
 
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

@@ -160,6 +160,7 @@ DistortionFXTool::DistortionFXTool(QObject* parent)
     gridSettings->setRowStretch(6, 10);
 
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 
@@ -173,7 +174,7 @@ DistortionFXTool::DistortionFXTool(QObject* parent)
             this, SLOT(slotTimer()));
 
     connect(m_gboxSettings, SIGNAL(signalColorGuideChanged()),
-                this, SLOT(slotColorGuideChanged()));
+            this, SLOT(slotColorGuideChanged()));
 }
 
 DistortionFXTool::~DistortionFXTool()

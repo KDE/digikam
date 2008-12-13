@@ -75,11 +75,13 @@ RawImport::RawImport(const KURL& url, QObject *parent)
     d->previewWidget = new RawPreview(url, 0);
     d->settingsBox   = new RawSettingsBox(url, 0);
 
-    setToolView(d->previewWidget);
-    setToolSettings(d->settingsBox);
     setToolName(i18n("Raw Import"));
     setToolIcon(SmallIcon("kdcraw"));
     setProgressMessage(i18n("Post Processing"));
+    setToolView(d->previewWidget);
+    setToolSettings(d->settingsBox);
+
+    init();
 }
 
 RawImport::~RawImport()

@@ -338,6 +338,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     grid2->setSpacing(m_gboxSettings->spacingHint());
 
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

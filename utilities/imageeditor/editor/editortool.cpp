@@ -77,13 +77,16 @@ EditorTool::EditorTool(QObject *parent)
 
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotEffect()));
-
-    QTimer::singleShot(0, this, SLOT(slotInit()));
 }
 
 EditorTool::~EditorTool()
 {
     delete d;
+}
+
+void EditorTool::init()
+{
+    QTimer::singleShot(0, this, SLOT(slotInit()));
 }
 
 QPixmap EditorTool::toolIcon() const

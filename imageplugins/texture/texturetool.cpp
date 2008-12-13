@@ -121,6 +121,7 @@ TextureTool::TextureTool(QObject* parent)
     m_previewWidget = new ImagePanelWidget(470, 350, "texture Tool", m_gboxSettings->panIconView());
 
     setToolView(m_previewWidget);
+    init();
 
     // -------------------------------------------------------------
 

@@ -64,7 +64,7 @@ namespace DigikamBorderImagesPlugin
 {
 
 BorderTool::BorderTool(QObject* parent)
-                  : EditorToolThreaded(parent)
+          : EditorToolThreaded(parent)
 {
     setName("border");
     setToolName(i18n("Add Border"));
@@ -77,14 +77,14 @@ BorderTool::BorderTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel);
+    m_gboxSettings    = new EditorToolSettings(EditorToolSettings::Default|
+                                               EditorToolSettings::Ok|
+                                               EditorToolSettings::Cancel);
     QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage(), 11, 2);
 
-    QLabel *label1 = new QLabel(i18n("Type:"), m_gboxSettings->plainPage());
+    QLabel *label1    = new QLabel(i18n("Type:"), m_gboxSettings->plainPage());
 
-    m_borderType = new RComboBox(m_gboxSettings->plainPage());
+    m_borderType      = new RComboBox(m_gboxSettings->plainPage());
     m_borderType->insertItem( i18n("Solid") );
     // Niepce is Real name. This is the first guy in the world to have built a camera.
     m_borderType->insertItem( "Niepce" );
@@ -168,6 +168,7 @@ BorderTool::BorderTool(QObject* parent)
     grid->setSpacing(m_gboxSettings->spacingHint());
 
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

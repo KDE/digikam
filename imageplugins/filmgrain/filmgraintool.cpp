@@ -74,7 +74,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
                                             EditorToolSettings::PanIcon);
 
     QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage(), 2, 1);
-    QLabel *label1            = new QLabel(i18n("Sensitivity (ISO):"), m_gboxSettings->plainPage());
+    QLabel *label1    = new QLabel(i18n("Sensitivity (ISO):"), m_gboxSettings->plainPage());
 
     m_sensibilitySlider = new QSlider(2, 30, 1, 12, Qt::Horizontal, m_gboxSettings->plainPage());
     m_sensibilitySlider->setTracking(false);
@@ -90,8 +90,8 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
     QWhatsThis::add(m_sensibilityLCDValue,  whatsThis);
     QWhatsThis::add(m_sensibilitySlider,    whatsThis);
 
-    grid->addMultiCellWidget(label1, 0, 0, 0, 1);
-    grid->addMultiCellWidget(m_sensibilitySlider, 1, 1, 0, 0);
+    grid->addMultiCellWidget(label1,                0, 0, 0, 1);
+    grid->addMultiCellWidget(m_sensibilitySlider,   1, 1, 0, 0);
     grid->addMultiCellWidget(m_sensibilityLCDValue, 1, 1, 1, 1);
     grid->setRowStretch(2, 10);
     grid->setMargin(m_gboxSettings->spacingHint());
@@ -104,6 +104,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
     m_previewWidget = new ImagePanelWidget(470, 350, "filmgrain Tool", m_gboxSettings->panIconView());
 
     setToolView(m_previewWidget);
+    init();
 
     // -------------------------------------------------------------
 
