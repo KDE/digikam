@@ -264,6 +264,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     grid->setColumnStretch(4, 10);
 
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

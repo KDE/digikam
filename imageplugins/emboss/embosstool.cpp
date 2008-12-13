@@ -102,6 +102,7 @@ EmbossTool::EmbossTool(QObject* parent)
     m_previewWidget = new ImagePanelWidget(470, 350, "emboss Tool", m_gboxSettings->panIconView());
 
     setToolView(m_previewWidget);
+    init();
 
     // -------------------------------------------------------------
 

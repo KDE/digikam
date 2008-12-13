@@ -90,7 +90,7 @@ OilPaintTool::OilPaintTool(QObject* parent)
     // -------------------------------------------------------------
 
     QLabel *label2 = new QLabel(i18n("Smooth:"), m_gboxSettings->plainPage());
-    m_smoothInput = new RIntNumInput(m_gboxSettings->plainPage());
+    m_smoothInput  = new RIntNumInput(m_gboxSettings->plainPage());
     m_smoothInput->setRange(10, 255, 1);
     m_smoothInput->setSliderEnabled(true);
     m_smoothInput->setDefaultValue(30);
@@ -111,6 +111,7 @@ OilPaintTool::OilPaintTool(QObject* parent)
     m_previewWidget = new ImagePanelWidget(470, 350, "oilpaint Tool", m_gboxSettings->panIconView());
 
     setToolView(m_previewWidget);
+    init();
 }
 
 OilPaintTool::~OilPaintTool()

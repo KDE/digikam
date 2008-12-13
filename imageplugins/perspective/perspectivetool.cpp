@@ -169,6 +169,7 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
     gridLayout->setRowStretch(14, 10);
 
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

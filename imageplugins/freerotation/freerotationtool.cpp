@@ -158,6 +158,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     gridSettings->setSpacing(0);
 
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

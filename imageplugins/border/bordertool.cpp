@@ -177,6 +177,7 @@ BorderTool::BorderTool(QObject* parent)
     gridSettings->setSpacing(m_gboxSettings->spacingHint());
 
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

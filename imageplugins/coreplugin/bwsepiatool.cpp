@@ -439,6 +439,7 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
 
     setToolSettings(m_gboxSettings);
     updatePreviews();
+    init();
 
     // -------------------------------------------------------------
 

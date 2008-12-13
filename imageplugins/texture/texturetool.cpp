@@ -75,15 +75,15 @@ TextureTool::TextureTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel|
-                                            EditorToolSettings::PanIcon);
+    m_gboxSettings    = new EditorToolSettings(EditorToolSettings::Default|
+                                               EditorToolSettings::Ok|
+                                               EditorToolSettings::Cancel|
+                                               EditorToolSettings::PanIcon);
     QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage());
 
-    QLabel *label1 = new QLabel(i18n("Type:"), m_gboxSettings->plainPage());
+    QLabel *label1    = new QLabel(i18n("Type:"), m_gboxSettings->plainPage());
 
-    m_textureType = new RComboBox(m_gboxSettings->plainPage());
+    m_textureType     = new RComboBox(m_gboxSettings->plainPage());
     m_textureType->addItem(i18n("Paper"));
     m_textureType->addItem(i18n("Paper 2"));
     m_textureType->addItem(i18n("Fabric"));
@@ -131,6 +131,7 @@ TextureTool::TextureTool(QObject* parent)
     m_previewWidget = new ImagePanelWidget(470, 350, "texture Tool", m_gboxSettings->panIconView());
 
     setToolView(m_previewWidget);
+    init();
 
     // -------------------------------------------------------------
 

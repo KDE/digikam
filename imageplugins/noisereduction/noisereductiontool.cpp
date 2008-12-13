@@ -275,8 +275,9 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     setToolSettings(m_gboxSettings);
 
     m_previewWidget = new ImagePanelWidget(470, 350, "noisereduction Tool", m_gboxSettings->panIconView());
-
     setToolView(m_previewWidget);
+
+    init();
 }
 
 NoiseReductionTool::~NoiseReductionTool()

@@ -272,6 +272,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     grid->setRowStretch(13, 10);
 
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

@@ -309,6 +309,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
     gridBox2->setSpacing(m_gboxSettings->spacingHint());
 
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

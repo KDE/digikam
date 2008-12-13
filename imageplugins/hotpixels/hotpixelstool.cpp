@@ -116,6 +116,7 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
                                            0, ImagePanelWidget::SeparateViewDuplicate);
 
     setToolView(m_previewWidget);
+    init();
 
     // -------------------------------------------------------------
 

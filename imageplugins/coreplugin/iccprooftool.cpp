@@ -285,10 +285,10 @@ ICCProofTool::ICCProofTool(QObject* parent)
     infoGrid->setMargin(m_gboxSettings->spacingHint());
     infoGrid->setSpacing(0);
 
-    firstPageLayout->addWidget(box1,                0, 0, 2, 1);
-    firstPageLayout->addWidget(inProfilesInfo,      0, 2, 1, 1);
-    firstPageLayout->addWidget(m_inProfilesPath,    2, 0, 1, 3 );
-    firstPageLayout->addWidget(pictureInfo,         3, 0, 1, 3 );
+    firstPageLayout->addWidget(box1,             0, 0, 2, 1);
+    firstPageLayout->addWidget(inProfilesInfo,   0, 2, 1, 1);
+    firstPageLayout->addWidget(m_inProfilesPath, 2, 0, 1, 3);
+    firstPageLayout->addWidget(pictureInfo,      3, 0, 1, 3);
     firstPageLayout->setColumnStretch(1, 10);
     firstPageLayout->setRowStretch(4, 10);
     firstPageLayout->setMargin(m_gboxSettings->spacingHint());
@@ -332,7 +332,7 @@ ICCProofTool::ICCProofTool(QObject* parent)
 
     secondPageLayout->addWidget(box2,               0, 0, 2, 1);
     secondPageLayout->addWidget(spaceProfilesInfo,  0, 2, 1, 1);
-    secondPageLayout->addWidget(m_spaceProfilePath, 2, 0, 1, 3 );
+    secondPageLayout->addWidget(m_spaceProfilePath, 2, 0, 1, 3);
     secondPageLayout->setColumnStretch(1, 10);
     secondPageLayout->setRowStretch(3, 10);
     secondPageLayout->setMargin(m_gboxSettings->spacingHint());
@@ -374,9 +374,9 @@ ICCProofTool::ICCProofTool(QObject* parent)
 
     QPushButton *proofProfilesInfo = new QPushButton(i18n("Info..."), box3);
 
-    thirdPageLayout->addWidget(box3,                0, 0, 2, 1);
-    thirdPageLayout->addWidget(proofProfilesInfo,   0, 2, 1, 1);
-    thirdPageLayout->addWidget(m_proofProfilePath,  2, 0, 1, 3 );
+    thirdPageLayout->addWidget(box3,               0, 0, 2, 1);
+    thirdPageLayout->addWidget(proofProfilesInfo,  0, 2, 1, 1);
+    thirdPageLayout->addWidget(m_proofProfilePath, 2, 0, 1, 3);
     thirdPageLayout->setColumnStretch(1, 10);
     thirdPageLayout->setRowStretch(3, 10);
     thirdPageLayout->setMargin(m_gboxSettings->spacingHint());
@@ -414,12 +414,12 @@ ICCProofTool::ICCProofTool(QObject* parent)
     m_cInput->setDefaultValue(0);
     m_cInput->setWhatsThis( i18n("Set here the contrast adjustment of the image."));
 
-    fourPageLayout->addWidget(vGradient,        0, 0, 1, 1);
-    fourPageLayout->addWidget(spacev,           0, 1, 1, 1);
-    fourPageLayout->addWidget(m_curvesWidget,   0, 2, 1, 1);
-    fourPageLayout->addWidget(spaceh,           1, 2, 1, 1);
-    fourPageLayout->addWidget(hGradient,        2, 2, 1, 1);
-    fourPageLayout->addWidget(m_cInput,         4, 0, 1, 3 );
+    fourPageLayout->addWidget(vGradient,      0, 0, 1, 1);
+    fourPageLayout->addWidget(spacev,         0, 1, 1, 1);
+    fourPageLayout->addWidget(m_curvesWidget, 0, 2, 1, 1);
+    fourPageLayout->addWidget(spaceh,         1, 2, 1, 1);
+    fourPageLayout->addWidget(hGradient,      2, 2, 1, 1);
+    fourPageLayout->addWidget(m_cInput,       4, 0, 1, 3);
     fourPageLayout->setRowMinimumHeight(3, m_gboxSettings->spacingHint());
     fourPageLayout->setRowStretch(5, 10);
     fourPageLayout->setMargin(m_gboxSettings->spacingHint());
@@ -427,12 +427,13 @@ ICCProofTool::ICCProofTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    gridSettings->addWidget(m_toolBoxWidgets,   0, 0, 1, 3 );
+    gridSettings->addWidget(m_toolBoxWidgets, 0, 0, 1, 3);
     gridSettings->setMargin(m_gboxSettings->spacingHint());
     gridSettings->setSpacing(m_gboxSettings->spacingHint());
 
     setToolSettings(m_gboxSettings);
     m_gboxSettings->enableButton(EditorToolSettings::Ok, false);
+    init();
 
     // -------------------------------------------------------------
 

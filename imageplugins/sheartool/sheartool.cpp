@@ -159,6 +159,7 @@ ShearTool::ShearTool(QObject* parent)
     gridSettings->setRowStretch(12, 10);
 
     setToolSettings(m_gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 

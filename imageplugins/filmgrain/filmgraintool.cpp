@@ -71,12 +71,12 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel|
-                                            EditorToolSettings::Try,
-                                            EditorToolSettings::PanIcon);
-    QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage() );
+    m_gboxSettings      = new EditorToolSettings(EditorToolSettings::Default|
+                                                 EditorToolSettings::Ok|
+                                                 EditorToolSettings::Cancel|
+                                                 EditorToolSettings::Try,
+                                                 EditorToolSettings::PanIcon);
+    QGridLayout* grid   = new QGridLayout( m_gboxSettings->plainPage() );
 
     QLabel *label1      = new QLabel(i18n("Sensitivity (ISO):"), m_gboxSettings->plainPage());
 
@@ -114,6 +114,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
     m_previewWidget = new ImagePanelWidget(470, 350, "filmgrain Tool", m_gboxSettings->panIconView());
 
     setToolView(m_previewWidget);
+    init();
 
     // -------------------------------------------------------------
 
