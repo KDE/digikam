@@ -172,7 +172,7 @@ public:
      */
     void rollbackTransaction();
     /**
-     * Returns if the database is (in any thread) in a transaction.
+     * Returns if the database is in a different thread in a transaction.
      * Note that a transaction does not require holding DatabaseAccess.
      * Note that this does not give information about other processes
      * locking the database.

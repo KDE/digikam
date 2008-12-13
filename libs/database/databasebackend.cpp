@@ -153,6 +153,16 @@ public:
         return !--transactionCount[thread];
     }
 
+    bool isInTransactionInOtherThread()
+    {
+        QThread *thread = QThread::currentThread();
+        QHash<QThread*, int>::const_iterator it;
+        for (it=transactionCount.begin(); it != transactionCount.end(); ++it)
+            if (it.key() != thread && it.value())
+                return true;
+        return false;
+    }
+
     void sendToWatch(const ImageChangeset changeset)
     { watch->sendImageChange(changeset); }
     void sendToWatch(const ImageTagChangeset changeset)
@@ -574,7 +584,7 @@ void DatabaseBackend::commitTransaction()
 
 bool DatabaseBackend::isInTransaction() const
 {
-    return d->isInTransaction;
+    return d->isInTransactionInOtherThread();
 }
 
 void DatabaseBackend::rollbackTransaction()
