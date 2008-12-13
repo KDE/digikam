@@ -128,8 +128,8 @@ public:
     QString                       cameraTitle;
 
     QStringList                   currentlyDeleting;
-    QStringList                   foldersToScan;
     QStringList                   cameraFolderList;
+    QSet<QString>                 foldersToScan;
 
     QMenu                        *downloadMenu;
     QMenu                        *deleteMenu;

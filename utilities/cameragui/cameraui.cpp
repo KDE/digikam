@@ -113,6 +113,7 @@
 #include "collectionscanner.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
+#include "scancontroller.h"
 #include "rawcameradlg.h"
 #include "capturedlg.h"
 #include "camerafolderdialog.h"
@@ -830,16 +831,10 @@ void CameraUI::finishDialog()
 
     d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
                                           i18n("Scanning for new files, please wait..."));
-    CollectionScanner scanner;
-    for (QStringList::iterator it = d->foldersToScan.begin();
-         it != d->foldersToScan.end(); ++it)
-    {
-        //kDebug(50003) << "Scanning " << (*it) << endl;
-        scanner.partialScan(*it);
-    }
+    foreach (const QString &folder, d->foldersToScan)
+        ScanController::instance()->scheduleCollectionScan(folder);
+    d->foldersToScan.clear();
 
-    // Never call finalScan after deleteLater() - ScanLib will call processEvent(),
-    // and the delete event may be executed!
     deleteLater();
 
     if(!d->lastDestURL.isEmpty())
@@ -1297,8 +1292,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
 
     // -- Prepare downloading of camera items ------------------------
 
-    KUrl url;
-    url.setPath(pAlbum->folderPath());
+    KUrl url = pAlbum->fileUrl();
 
     d->controller->downloadPrep();
 
@@ -1339,7 +1333,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
         downloadName                 = iconItem->getDownloadName();
         dateTime                     = iconItem->itemInfo()->mtime;
 
-        KUrl u(url);
+        KUrl downloadUrl(url);
         QString errMsg;
 
         // Auto sub-albums creation based on file date.
@@ -1364,13 +1358,13 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
             // See B.K.O #136927 : we need to support file system which do not
             // handle upper case properly.
             dirName = dirName.toLower();
-            if (!createAutoAlbum(url, dirName, dateTime.date(), errMsg))
+            if (!createAutoAlbum(downloadUrl, dirName, dateTime.date(), errMsg))
             {
                 KMessageBox::error(this, errMsg);
                 return;
             }
 
-            u.addPath(dirName);
+            downloadUrl.addPath(dirName);
         }
 
         // Auto sub-albums creation based on file extensions.
@@ -1395,22 +1389,22 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
             // See B.K.O #136927 : we need to support file system which do not
             // handle upper case properly.
             subAlbum = subAlbum.toLower();
-            if (!createAutoAlbum(u, subAlbum, dateTime.date(), errMsg))
+            if (!createAutoAlbum(downloadUrl, subAlbum, dateTime.date(), errMsg))
             {
                 KMessageBox::error(this, errMsg);
                 return;
             }
 
-            u.addPath(subAlbum);
+            downloadUrl.addPath(subAlbum);
         }
 
-        d->foldersToScan.append(u.path());
-        u.addPath(downloadName.isEmpty() ? downloadSettings.file : downloadName);
+        d->foldersToScan << downloadUrl.path();
+        downloadUrl.addPath(downloadName.isEmpty() ? downloadSettings.file : downloadName);
 
-        downloadSettings.dest = u.path();
+        downloadSettings.dest = downloadUrl.path();
 
         d->controller->download(downloadSettings);
-        addFileExtension(QFileInfo(u.path()).suffix());
+        addFileExtension(QFileInfo(downloadUrl.path()).suffix());
         total++;
     }
 
@@ -1796,8 +1790,7 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
 
     // looks like the directory does not exist, try to create it
 
-    AlbumManager* aman = AlbumManager::instance();
-    PAlbum* parent     = aman->findPAlbum(parentURL);
+    PAlbum* parent = AlbumManager::instance()->findPAlbum(parentURL);
     if (!parent)
     {
         errMsg = i18n("Failed to find Album for path '%1'", parentURL.path());
@@ -1805,7 +1798,7 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
     }
     QString albumRootPath = CollectionManager::instance()->albumRootPath(parentURL);
 
-    return aman->createPAlbum(albumRootPath, sub, QString(""), date, QString(""), errMsg);
+    return AlbumManager::instance()->createPAlbum(albumRootPath, sub, QString(), date, QString(), errMsg);
 }
 
 void CameraUI::addFileExtension(const QString& ext)
