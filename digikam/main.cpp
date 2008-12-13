@@ -100,8 +100,12 @@ int main(int argc, char *argv[])
     QString albumPath         = group.readEntry("Album Path", QString());
 
     // 0.9 legacy
-    if (dbPath.isEmpty())
+    if (dbPath.isEmpty() && !albumPath.isEmpty())
+    {
         dbPath = albumPath;
+        group.writeEntry("Database File Path", albumPath);
+        group.sync();
+    }
 
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
