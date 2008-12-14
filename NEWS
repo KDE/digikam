@@ -111,7 +111,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 099 ==> 175322 : Import from camera: unable to create new folders.
 100 ==> 177250 : Crash when importing pictures from Nikon D200 PTP.
 101 ==> 161304 : Status bar info cleared after rating assigment.
-102 ==> 
+102 ==> 149875 : Support interlaced PNG images.
+103 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25

@@ -344,6 +344,10 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         // -------------------------------------------------------------------
         // Get image data.
 
+        // Call before png_read_update_info and png_start_read_image()
+        // for non-interlaced images number_passes will be 1
+        int number_passes = png_set_interlace_handling(png_ptr);
+
         png_read_update_info(png_ptr, info_ptr);
 
         if (m_sixteenBit)
@@ -376,8 +380,6 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         // The other way to read images is row by row. Necessary for observer.
         // Now we need to deal with interlacing.
 
-        // for non-interlaced images number_passes will be 1
-        int number_passes = png_set_interlace_handling(png_ptr);
         for (int pass = 0; pass < number_passes; pass++)
         {
             int y;
