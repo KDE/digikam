@@ -412,8 +412,8 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->imageMenu->insertSeparator();
     d->imageMenu->insertItem(i18n("Select &New Items"), d->view, SLOT(slotSelectNew()), 0, 3);
     d->imageMenu->insertSeparator();
-    d->imageMenu->insertItem(i18n("Increase thumbnail size"),   this,    SLOT(slotIncreaseThumbSize()), CTRL+Key_Plus, 4);
-    d->imageMenu->insertItem(i18n("Decrease thumbnail size"),   this,    SLOT(slotDecreaseThumbSize()), CTRL+Key_Minus, 5);
+    d->imageMenu->insertItem(i18n("Increase Thumbnail Size"),   this,    SLOT(slotIncreaseThumbSize()), CTRL+Key_Plus, 4);
+    d->imageMenu->insertItem(i18n("Decrease Thumbnail Size"),   this,    SLOT(slotDecreaseThumbSize()), CTRL+Key_Minus, 5);
     d->imageMenu->insertSeparator();
     d->imageMenu->insertItem(i18n("Toggle Lock"),       this,    SLOT(slotToggleLock()), 0, 6);
     actionButton(User3)->setPopup(d->imageMenu);

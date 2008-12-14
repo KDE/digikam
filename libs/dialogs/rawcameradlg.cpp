@@ -74,7 +74,7 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
             : KDialogBase(parent, 0, true, QString(), Help|Ok, Ok, true)
 {
     setHelp("digitalstillcamera.anchor", "digikam");
-    setCaption(i18n("List of supported RAW camera"));
+    setCaption(i18n("List of supported RAW cameras"));
 
     d = new RawCameraDlgPriv;
 
@@ -157,7 +157,7 @@ void RawCameraDlg::slotSearchTextChanged(const QString& filter)
 
     QListViewItemIterator it(d->listView);
 
-    for ( ; it.current(); ++it ) 
+    for ( ; it.current(); ++it )
     {
         QListViewItem *item  = it.current();
 

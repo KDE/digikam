@@ -638,7 +638,7 @@ void DigikamApp::setupActions()
                                     "album_refresh");
     d->refreshAlbumAction->setWhatsThis(i18n("Refresh all album contents"));
 
-    d->syncAlbumMetadataAction = new KAction( i18n("Synchronize images with database"),
+    d->syncAlbumMetadataAction = new KAction( i18n("Synchronize Images with Database"),
                                     "rebuild",
                                     0,
                                     d->view,
@@ -795,7 +795,7 @@ void DigikamApp::setupActions()
              0,
              actionCollection(),
              "image_set_exif_orientation_flipped_horizontal");
-    d->imageSetExifOrientation3Action = new KAction(i18n("Rotated upside down"),
+    d->imageSetExifOrientation3Action = new KAction(i18n("Rotated Upside Down"),
              0,
              d->imageExifOrientationActionMenu,
              0,
@@ -807,25 +807,25 @@ void DigikamApp::setupActions()
              0,
              actionCollection(),
              "image_set_exif_orientation_flipped_vertically");
-    d->imageSetExifOrientation5Action = new KAction(i18n("Rotated right / Horiz. Flipped"),
+    d->imageSetExifOrientation5Action = new KAction(i18n("Rotated Right / Horiz. Flipped"),
              0,
              d->imageExifOrientationActionMenu,
              0,
              actionCollection(),
              "image_set_exif_orientation_rotated_right_hor_flipped");
-    d->imageSetExifOrientation6Action = new KAction(i18n("Rotated right"),
+    d->imageSetExifOrientation6Action = new KAction(i18n("Rotated Right"),
              0,
              d->imageExifOrientationActionMenu,
              0,
              actionCollection(),
              "image_set_exif_orientation_rotated_right");
-    d->imageSetExifOrientation7Action = new KAction(i18n("Rotated right / Vert. Flipped"),
+    d->imageSetExifOrientation7Action = new KAction(i18n("Rotated Right / Vert. Flipped"),
              0,
              d->imageExifOrientationActionMenu,
              0,
              actionCollection(),
              "image_set_exif_orientation_rotated_right_ver_flipped");
-    d->imageSetExifOrientation8Action = new KAction(i18n("Rotated left"),
+    d->imageSetExifOrientation8Action = new KAction(i18n("Rotated Left"),
              0,
              d->imageExifOrientationActionMenu,
              0,
@@ -908,7 +908,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->zoomPlusAction = new KAction(i18n("Zoom in"),
+    d->zoomPlusAction = new KAction(i18n("Zoom In"),
                                    "viewmag+",
                                    CTRL+Key_Plus,
                                    d->view,
@@ -916,7 +916,7 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "album_zoomin");
 
-    d->zoomMinusAction = new KAction(i18n("Zoom out"),
+    d->zoomMinusAction = new KAction(i18n("Zoom Out"),
                                    "viewmag-",
                                    CTRL+Key_Minus,
                                    d->view,
@@ -924,7 +924,7 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "album_zoomout");
 
-    d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"),
+    d->zoomTo100percents = new KAction(i18n("Zoom to 100%"),
                                    "viewmag1",
                                    ALT+CTRL+Key_0,      // NOTE: Photoshop 7 use ALT+CTRL+0.
                                    d->view,
@@ -950,7 +950,7 @@ void DigikamApp::setupActions()
                                    "full_screen");
     d->fullScreenAction->setWhatsThis(i18n("Switch the window to full screen mode"));
 
-    d->slideShowAction = new KActionMenu(i18n("Slide"), "slideshow",
+    d->slideShowAction = new KActionMenu(i18n("Slideshow"), "slideshow",
                                          actionCollection(), "slideshow");
 
     d->slideShowAction->setDelayed(false);
@@ -967,7 +967,7 @@ void DigikamApp::setupActions()
                                               "slideshow_selected");
     d->slideShowAction->insert(d->slideShowSelectionAction);
 
-    d->slideShowRecursiveAction = new KAction(i18n("With all sub-albums"), 0, SHIFT+Key_F9,
+    d->slideShowRecursiveAction = new KAction(i18n("With All Sub-Albums"), 0, SHIFT+Key_F9,
                                               d->view,
                                               SLOT(slotSlideShowRecursive()),
                                               actionCollection(),
@@ -979,7 +979,7 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "app_exit");
 
-    d->rawCameraListAction = new KAction(i18n("RAW camera supported"),
+    d->rawCameraListAction = new KAction(i18n("Supported RAW Cameras"),
                                    "kdcraw",
                                    0,
                                    this,
@@ -1057,7 +1057,7 @@ void DigikamApp::setupActions()
                 this, SLOT(slotDatabaseRescan()), actionCollection(),
                 "database_rescan");
 
-    new KAction(i18n("Rebuild all Thumbnails..."), "reload_page", 0,
+    new KAction(i18n("Rebuild All Thumbnails..."), "reload_page", 0,
                 this, SLOT(slotRebuildAllThumbs()), actionCollection(),
                 "thumbs_rebuild");
 

@@ -356,8 +356,8 @@ void EditorWindow::setupStandardActions()
     d->zoomMinusAction = KStdAction::zoomOut(this, SLOT(slotDecreaseZoom()),
                                              actionCollection(), "editorwindow_zoomminus");
 
-    d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), "viewmag1",
-                                       ALT+CTRL+Key_0,      // NOTE: Photoshop 7 use ALT+CTRL+0. 
+    d->zoomTo100percents = new KAction(i18n("Zoom to 100%"), "viewmag1",
+                                       ALT+CTRL+Key_0,      // NOTE: Photoshop 7 use ALT+CTRL+0.
                                        this, SLOT(slotZoomTo100Percents()),
                                        actionCollection(), "editorwindow_zoomto100percents");
 
@@ -378,7 +378,7 @@ void EditorWindow::setupStandardActions()
     d->zoomCombo->setDuplicatesEnabled(false);
     d->zoomCombo->setFocusPolicy(ClickFocus);
     d->zoomCombo->setInsertionPolicy(QComboBox::NoInsertion);
-    d->zoomComboAction = new KWidgetAction(d->zoomCombo, i18n("Zoom"), 0, 0, 0, 
+    d->zoomComboAction = new KWidgetAction(d->zoomCombo, i18n("Zoom"), 0, 0, 0,
                                            actionCollection(), "editorwindow_zoomto");
 
     d->zoomCombo->insertItem(QString("10%"));
@@ -407,22 +407,22 @@ void EditorWindow::setupStandardActions()
                                            actionCollection(), "editorwindow_fullscreen");
     m_fullScreenAction->setWhatsThis(i18n("Toggle the window to full screen mode"));
 
-    d->slideShowAction = new KAction(i18n("Slide"), "slideshow", Key_F9,
+    d->slideShowAction = new KAction(i18n("Slideshow"), "slideshow", Key_F9,
                                      this, SLOT(slotToggleSlideShow()),
                                      actionCollection(),"editorwindow_slideshow");
 
-    d->viewUnderExpoAction = new KToggleAction(i18n("Under-Exposure Indicator"), "underexposure", 
-                                            Key_F10, this, 
+    d->viewUnderExpoAction = new KToggleAction(i18n("Under-Exposure Indicator"), "underexposure",
+                                            Key_F10, this,
                                             SLOT(slotToggleUnderExposureIndicator()),
                                             actionCollection(),"editorwindow_underexposure");
 
-    d->viewOverExpoAction = new KToggleAction(i18n("Over-Exposure Indicator"), "overexposure", 
-                                            Key_F11, this, 
+    d->viewOverExpoAction = new KToggleAction(i18n("Over-Exposure Indicator"), "overexposure",
+                                            Key_F11, this,
                                             SLOT(slotToggleOverExposureIndicator()),
                                             actionCollection(),"editorwindow_overexposure");
 
-    d->viewCMViewAction = new KToggleAction(i18n("Color Managed View"), "tv", 
-                                            Key_F12, this, 
+    d->viewCMViewAction = new KToggleAction(i18n("Color Managed View"), "tv",
+                                            Key_F12, this,
                                             SLOT(slotToggleColorManagedView()),
                                             actionCollection(),"editorwindow_cmview");
 
@@ -456,13 +456,13 @@ void EditorWindow::setupStandardActions()
     // -- Standard 'Rotate' menu actions ----------------------------------------
 
     d->rotateLeftAction = new KAction(i18n("Rotate Left"),
-                                     "rotate_ccw", SHIFT+CTRL+Key_Left, 
+                                     "rotate_ccw", SHIFT+CTRL+Key_Left,
                                      m_canvas, SLOT(slotRotate270()),
                                      actionCollection(),
                                      "editorwindow_rotate_left");
     d->rotateLeftAction->setEnabled(false);
     d->rotateRightAction  = new KAction(i18n("Rotate Right"),
-                                     "rotate_cw", SHIFT+CTRL+Key_Right, 
+                                     "rotate_cw", SHIFT+CTRL+Key_Right,
                                      m_canvas, SLOT(slotRotate90()),
                                      actionCollection(),
                                      "editorwindow_rotate_right");
@@ -488,20 +488,20 @@ void EditorWindow::setupStandardActions()
     // -- Standard 'Help' menu actions ---------------------------------------------
 
     d->donateMoneyAction = new KAction(i18n("Donate..."),
-                                       0, 0, 
+                                       0, 0,
                                        this, SLOT(slotDonateMoney()),
                                        actionCollection(),
                                        "editorwindow_donatemoney");
 
     d->contributeAction = new KAction(i18n("Contribute..."),
-                                      0, 0, 
+                                      0, 0,
                                       this, SLOT(slotContribute()),
                                       actionCollection(),
                                       "editorwindow_contribute");
 
-    d->rawCameraListAction = new KAction(i18n("RAW camera supported"), 
-                                         "kdcraw", 
-                                         0, 
+    d->rawCameraListAction = new KAction(i18n("Supported RAW Cameras"),
+                                         "kdcraw",
+                                         0,
                                          this,
                                          SLOT(slotRawCameraList()),
                                          actionCollection(),
@@ -825,7 +825,7 @@ void EditorWindow::unLoadImagePlugins()
     for (ImagePlugin* plugin = pluginList.first();
          plugin; plugin = pluginList.next())
     {
-        if (plugin) 
+        if (plugin)
         {
             guiFactory()->removeClient(plugin);
             plugin->setEnabledSelectionActions(false);
@@ -907,7 +907,7 @@ void EditorWindow::applyStandardSettings()
     // If digiKam Color Management is enable, no need to correct color of decoded RAW image,
     // else, sRGB color workspace will be used.
 
-    if (d->ICCSettings->enableCMSetting) 
+    if (d->ICCSettings->enableCMSetting)
         m_IOFileSettings->rawDecodingSettings.outputColorSpace = DRawDecoding::RAWCOLOR;
     else
         m_IOFileSettings->rawDecodingSettings.outputColorSpace = DRawDecoding::SRGB;
@@ -937,14 +937,14 @@ void EditorWindow::applyStandardSettings()
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
     if(config->hasKey("Splitter Sizes"))
         m_splitter->setSizes(config->readIntListEntry("Splitter Sizes"));
-    else 
+    else
         m_canvas->setSizePolicy(rightSzPolicy);
 
     d->fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
 
     slotThemeChanged();
 
-    // -- Exposure Indicators Settings --------------------------------------- 
+    // -- Exposure Indicators Settings ---------------------------------------
 
     QColor black(Qt::black);
     QColor white(Qt::white);
@@ -1013,7 +1013,7 @@ void EditorWindow::toggleStandardActions(bool val)
     for (ImagePlugin* plugin = pluginList.first();
          plugin; plugin = pluginList.next())
     {
-        if (plugin) 
+        if (plugin)
         {
             plugin->setEnabledActions(val);
         }
@@ -1156,9 +1156,9 @@ bool EditorWindow::promptForOverWrite()
     QFileInfo fi(m_canvas->currentImageFilePath());
     QString warnMsg(i18n("About to overwrite file \"%1\"\nAre you sure?")
                     .arg(fi.fileName()));
-    return (KMessageBox::warningContinueCancel(this, 
-                                           warnMsg, 
-                                           i18n("Warning"), 
+    return (KMessageBox::warningContinueCancel(this,
+                                           warnMsg,
+                                           i18n("Warning"),
                                            i18n("Overwrite"),
                                            "editorWindowSaveOverwrite")
             ==  KMessageBox::Continue);
@@ -1186,7 +1186,7 @@ bool EditorWindow::promptUserSave(const KURL& url)
         {
             bool saving = false;
 
-            if (m_canvas->isReadOnly()) 
+            if (m_canvas->isReadOnly())
                 saving = saveAs();
             else if (promptForOverWrite())
                 saving = save();
@@ -1258,7 +1258,7 @@ void EditorWindow::slotSelected(bool val)
     for (ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
          plugin; plugin = m_imagePluginLoader->pluginList().next())
     {
-        if (plugin) 
+        if (plugin)
         {
             plugin->setEnabledSelectionActions(val);
         }
@@ -1272,7 +1272,7 @@ void EditorWindow::slotSelected(bool val)
     if (val)
         d->selectLabel->setText(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y())
                                .arg(sel.width()).arg(sel.height()));
-    else 
+    else
         d->selectLabel->setText(i18n("No selection"));
 }
 
@@ -1285,9 +1285,9 @@ void EditorWindow::hideToolBars()
     {
         bar = it.current();
 
-        if (bar->area()) 
+        if (bar->area())
             bar->area()->hide();
-        else 
+        else
             bar->hide();
     }
 }
@@ -1523,7 +1523,7 @@ bool EditorWindow::startingSaveAs(const KURL& url)
     m_savingContext->srcURL = url;
 
     FileSaveOptionsBox *options = new FileSaveOptionsBox();
-    KFileDialog imageFileSaveDialog(m_savingContext->srcURL.isLocalFile() ? 
+    KFileDialog imageFileSaveDialog(m_savingContext->srcURL.isLocalFile() ?
                                     m_savingContext->srcURL.directory() : QDir::homeDirPath(),
                                     QString(),
                                     this,
@@ -1583,17 +1583,17 @@ bool EditorWindow::startingSaveAs(const KURL& url)
             QString imgExtPattern;
             QStringList imgExtList = QStringList::split(" ", mimetypes);
             for (QStringList::ConstIterator it = imgExtList.begin() ; it != imgExtList.end() ; ++it)
-            {    
+            {
                 imgExtPattern.append (KImageIO::typeForMime(*it).upper());
                 imgExtPattern.append (" ");
-            }    
+            }
             imgExtPattern.append (" TIF TIFF");
-            if ( imgExtPattern.contains("JPEG") ) 
+            if ( imgExtPattern.contains("JPEG") )
             {
                 imgExtPattern.append (" JPG");
                 imgExtPattern.append (" JPE");
             }
-    
+
             if ( !imgExtPattern.contains( m_savingContext->format.upper() ) )
             {
                 KMessageBox::error(this, i18n("Target image file format \"%1\" unsupported.")
@@ -1748,9 +1748,9 @@ void EditorWindow::slotToggleColorManagedView()
         d->ICCSettings->managedViewSetting = cmv;
         m_canvas->setICCSettings(d->ICCSettings);
 
-        // Save Color Managed View setting in config file. For performance 
-        // reason, no need to flush file, it cached in memory and will be flushed 
-        // to disk at end of session.  
+        // Save Color Managed View setting in config file. For performance
+        // reason, no need to flush file, it cached in memory and will be flushed
+        // to disk at end of session.
         KConfig* config = kapp->config();
         config->setGroup("Color Management");
         config->writeEntry("ManagedView", cmv);
@@ -1797,9 +1797,9 @@ void EditorWindow::slotToggleUnderExposureIndicator()
 
 void EditorWindow::setUnderExposureToolTip(bool uei)
 {
-    QToolTip::remove(d->underExposureIndicator); 
-    QToolTip::add(d->underExposureIndicator, 
-                  uei ? i18n("Under-Exposure indicator is enabled") 
+    QToolTip::remove(d->underExposureIndicator);
+    QToolTip::add(d->underExposureIndicator,
+                  uei ? i18n("Under-Exposure indicator is enabled")
                       : i18n("Under-Exposure indicator is disabled"));
 }
 
@@ -1819,9 +1819,9 @@ void EditorWindow::slotToggleOverExposureIndicator()
 
 void EditorWindow::setOverExposureToolTip(bool oei)
 {
-    QToolTip::remove(d->overExposureIndicator); 
-    QToolTip::add(d->overExposureIndicator, 
-                  oei ? i18n("Over-Exposure indicator is enabled") 
+    QToolTip::remove(d->overExposureIndicator);
+    QToolTip::add(d->overExposureIndicator,
+                  oei ? i18n("Over-Exposure indicator is enabled")
                       : i18n("Over-Exposure indicator is disabled"));
 }
 

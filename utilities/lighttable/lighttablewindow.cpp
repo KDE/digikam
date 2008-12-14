@@ -407,7 +407,7 @@ void LightTableWindow::setupActions()
                                              actionCollection(), "lighttable_zoomminus");
     d->zoomMinusAction->setEnabled(false);
 
-    d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), "viewmag1",
+    d->zoomTo100percents = new KAction(i18n("Zoom to 100%"), "viewmag1",
                                        ALT+CTRL+Key_0,      // NOTE: Photoshop 7 use ALT+CTRL+0.
                                        this, SLOT(slotZoomTo100Percents()),
                                        actionCollection(), "lighttable_zoomto100percents");
@@ -423,7 +423,7 @@ void LightTableWindow::setupActions()
                                             actionCollection(), "lighttable_fullscreen");
     d->fullScreenAction->setWhatsThis(i18n("Toggle the window to full screen mode"));
 
-    d->slideShowAction = new KAction(i18n("Slide"), "slideshow", Key_F9,
+    d->slideShowAction = new KAction(i18n("Slideshow"), "slideshow", Key_F9,
                                      this, SLOT(slotToggleSlideShow()),
                                      actionCollection(),"lighttable_slideshow");
 
@@ -457,7 +457,7 @@ void LightTableWindow::setupActions()
                                       actionCollection(),
                                       "lighttable_contribute");
 
-    d->rawCameraListAction = new KAction(i18n("RAW camera supported"),
+    d->rawCameraListAction = new KAction(i18n("Supported RAW Cameras"),
                                          "kdcraw",
                                          0,
                                          this,
