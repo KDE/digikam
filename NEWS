@@ -1,5 +1,12 @@
 **********************************************************************************************
-digiKam 0.9.5-beta2 - Release date: 2008-12-xx
+digiKam 0.9.5-beta3 - Release date: 2009-01-xx
+
+NEW FEATURES:
+
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+**********************************************************************************************
+digiKam 0.9.5-beta2 - Release date: 2008-12-14
 
 NEW FEATURES:
 
@@ -24,7 +31,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 148596 : Empty entries in the "back" drop-down when changing month (date view).
 018 ==> 161387 : Unable to import photos with digiKam even though it's detected.
 019 ==> 165229 : Thumbnail complete update does not work reliably, even for jpgs.
-020 ==> 
 
 **********************************************************************************************
 digiKam 0.9.5-beta1 - Release date: 2008-11-05
