@@ -41,6 +41,7 @@ extern "C"
 
 // Qt includes.
 
+#include <QCache>
 #include <QClipboard>
 #include <QCursor>
 #include <QDataStream>
@@ -127,6 +128,7 @@ extern "C"
 #include "statusprogressbar.h"
 #include "tagspopupmenu.h"
 #include "themeengine.h"
+#include "thumbbar.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 
@@ -159,6 +161,7 @@ public:
         starPolygonSize = QSize(15, 15);
 
         ratingPixmaps   = QVector<QPixmap>(10);
+        thumbnailBorderCache.setMaxCost(10);
     }
 
     QString                          albumTitle;
@@ -181,6 +184,7 @@ public:
     QPixmap                          itemSelPixmap;
     QPixmap                          bannerPixmap;
     QVector<QPixmap>                 ratingPixmaps;
+    QCache<QString, QPixmap>         thumbnailBorderCache;
 
     QFont                            fnReg;
     QFont                            fnCom;
@@ -2062,6 +2066,26 @@ void AlbumIconView::updateBannerRectPixmap()
                                                             d->bannerRect.height());
 }
 
+QPixmap AlbumIconView::thumbnailBorderPixmap(const QSize &tightPixmapSize)
+{
+    const int radius = 3;
+    const QColor borderColor = QColor(0, 0, 0, 128); //TODO: take from theme?
+
+    QString cacheKey = QString::number(tightPixmapSize.width()) + "-" + QString::number(tightPixmapSize.height());
+    QPixmap *cachePix = d->thumbnailBorderCache.object(cacheKey);
+
+    if (!cachePix)
+    {
+        QPixmap pix = ThumbBarView::generateFuzzyRect(QSize(tightPixmapSize.width() + 2*radius,
+                                                            tightPixmapSize.height() + 2*radius),
+                                                      borderColor, radius);
+        d->thumbnailBorderCache.insert(cacheKey, new QPixmap(pix));
+        return pix;
+    }
+
+    return *cachePix;
+}
+
 void AlbumIconView::updateRectsAndPixmaps()
 {
     updateBannerRectPixmap();
@@ -2221,6 +2245,8 @@ void AlbumIconView::updateRectsAndPixmaps()
             }
         }
     }
+
+    d->thumbnailBorderCache.clear();
 }
 
 void AlbumIconView::slotThemeChanged()

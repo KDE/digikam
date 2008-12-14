@@ -257,18 +257,23 @@ void AlbumIconItem::paintItem(QPainter *p)
                                    r.y() + (r.height()-thumbnail.height())/2,
                                    thumbnail.width(), thumbnail.height());
         d->dirty = false;
+
+        p->save();
+        QRegion pixmapClipRegion = QRegion(d->view->itemRect()) - QRegion(d->tightPixmapRect);
+        p->setClipRegion(pixmapClipRegion);
+        p->drawPixmap(0, 0, pix);
+
+        QPixmap borderPix = d->view->thumbnailBorderPixmap(d->tightPixmapRect.size());
+        p->drawPixmap(d->tightPixmapRect.x()-3, d->tightPixmapRect.y()-3, borderPix);
+
+        p->restore();
+
     }
-
-    p->save();
-    QRegion pixmapClipRegion = QRegion(d->view->itemRect()) - QRegion(d->tightPixmapRect);
-    p->setClipRegion(pixmapClipRegion);
-    p->drawPixmap(0, 0, pix);
-    p->restore();
-
-    p->drawPixmap(d->tightPixmapRect.x()-3, d->tightPixmapRect.y()-3,
-                  ThumbBarView::generateFuzzyRect(QSize(d->tightPixmapRect.width()+6, 
-                                                        d->tightPixmapRect.height()+6),
-                                                  QColor(0, 0, 0, 128), 3));
+    else
+    {
+        // simplified
+        p->drawPixmap(0, 0, pix);
+    }
 
     if (settings->getIconShowRating())
     {
