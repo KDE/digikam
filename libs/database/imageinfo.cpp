@@ -398,12 +398,23 @@ DatabaseUrl ImageInfo::databaseUrl() const
 
 KUrl ImageInfo::fileUrl() const
 {
-    return databaseUrl().fileUrl();
+    return KUrl::fromPath(filePath());
 }
 
 QString ImageInfo::filePath() const
 {
-    return fileUrl().path();
+    if (!m_data)
+        return QString();
+
+    DatabaseAccess access;
+
+    QString album = access.imageInfoCache()->albumName(access, m_data->albumId);
+    QString albumRoot = CollectionManager::instance()->albumRootPath(m_data->albumRootId);
+
+    if (album == "/")
+        return albumRoot + album + m_data->name;
+    else
+        return albumRoot + album + "/" + m_data->name;
 }
 
 ImageComments ImageInfo::imageComments(DatabaseAccess &access) const
