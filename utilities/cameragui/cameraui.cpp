@@ -1796,9 +1796,7 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
         errMsg = i18n("Failed to find Album for path '%1'", parentURL.path());
         return false;
     }
-    QString albumRootPath = CollectionManager::instance()->albumRootPath(parentURL);
-
-    return AlbumManager::instance()->createPAlbum(albumRootPath, sub, QString(), date, QString(), errMsg);
+    return AlbumManager::instance()->createPAlbum(parent, sub, QString(), date, QString(), errMsg);
 }
 
 void CameraUI::addFileExtension(const QString& ext)
