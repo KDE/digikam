@@ -432,7 +432,7 @@ void EditorWindow::setupStandardActions()
     m_fullScreenAction = KStandardAction::fullScreen(this, SLOT(slotToggleFullScreen()), this, this);
     actionCollection()->addAction("editorwindow_fullscreen", m_fullScreenAction);
 
-    d->slideShowAction = new KAction(KIcon("view-presentation"), i18n("Slide"), this);
+    d->slideShowAction = new KAction(KIcon("view-presentation"), i18n("Slideshow"), this);
     d->slideShowAction->setShortcut(Qt::Key_F9);
     connect(d->slideShowAction, SIGNAL(triggered()), this, SLOT(slotToggleSlideShow()));
     actionCollection()->addAction("editorwindow_slideshow", d->slideShowAction);
@@ -528,17 +528,17 @@ void EditorWindow::setupStandardActions()
     connect(d->contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
     actionCollection()->addAction("editorwindow_contribute", d->contributeAction);
 
-    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("supported RAW cameras"), this);
+    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("Supported RAW Cameras"), this);
     connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
     actionCollection()->addAction("editorwindow_rawcameralist", d->rawCameraListAction);
 
-    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components info"), this);
+    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
     actionCollection()->addAction("editorwindow_librariesinfo", d->libsInfoAction);
 
     // -- Keyboard-only actions added to <MainWindow> ------------------------------
 
-    KAction *exitFullscreenAction = new KAction(i18n("Exit Fullscreen mode"), this);
+    KAction *exitFullscreenAction = new KAction(i18n("Exit Full Screen"), this);
     actionCollection()->addAction("editorwindow_exitfullscreen", exitFullscreenAction);
     exitFullscreenAction->setShortcut( QKeySequence(Qt::Key_Escape) );
     connect(exitFullscreenAction, SIGNAL(triggered()), this, SLOT(slotEscapePressed()));

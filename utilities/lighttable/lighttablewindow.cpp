@@ -451,7 +451,7 @@ void LightTableWindow::setupActions()
     d->fullScreenAction = actionCollection()->addAction(KStandardAction::FullScreen,
                           "lighttable_fullscreen", this, SLOT(slotToggleFullScreen()));
 
-    d->slideShowAction = new KAction(KIcon("view-presentation"), i18n("Slide"), this);
+    d->slideShowAction = new KAction(KIcon("view-presentation"), i18n("Slideshow"), this);
     d->slideShowAction->setShortcut(Qt::Key_F9);
     connect(d->slideShowAction, SIGNAL(triggered()), this, SLOT(slotToggleSlideShow()));
     actionCollection()->addAction("lighttable_slideshow", d->slideShowAction);
@@ -482,7 +482,7 @@ void LightTableWindow::setupActions()
     connect(d->contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
     actionCollection()->addAction("lighttable_contribute", d->contributeAction);
 
-    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("supported RAW cameras"), this);
+    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("Supported RAW Cameras"), this);
     connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
     actionCollection()->addAction("lighttable_rawcameralist", d->rawCameraListAction);
 

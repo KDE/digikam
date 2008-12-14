@@ -80,7 +80,7 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
     setDefaultButton(Ok);
     setModal(true);
     setHelp("digitalstillcamera.anchor", "digikam");
-    setCaption(i18n("List of supported RAW camera"));
+    setCaption(i18n("List of supported RAW cameras"));
 
     QWidget *page     = new QWidget(this);
     setMainWidget(page);

@@ -443,11 +443,11 @@ void CameraUI::setupActions()
     connect(d->contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
     actionCollection()->addAction("cameraui_contribute", d->contributeAction);
 
-    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("supported RAW cameras"), this);
+    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("Supported RAW Cameras"), this);
     connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
     actionCollection()->addAction("cameraui_rawcameralist", d->rawCameraListAction);
 
-    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components info"), this);
+    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
     actionCollection()->addAction("cameraui_librariesinfo", d->libsInfoAction);
 

@@ -912,7 +912,7 @@ void DigikamApp::setupActions()
     actionCollection()->addAction("slideshow_selected", d->slideShowSelectionAction);
     d->slideShowAction->addAction(d->slideShowSelectionAction);
 
-    d->slideShowRecursiveAction = new KAction(i18n("With all Sub-Albums"), this);
+    d->slideShowRecursiveAction = new KAction(i18n("With All Sub-Albums"), this);
     d->slideShowRecursiveAction->setShortcut(Qt::SHIFT+Qt::Key_F9);
     connect(d->slideShowRecursiveAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowRecursive()));
     actionCollection()->addAction("slideshow_recursive", d->slideShowRecursiveAction);
