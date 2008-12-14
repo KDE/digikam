@@ -358,7 +358,7 @@ void FreeSpaceWidget::slotTimeout()
 {
     foreach (const QString &path, d->paths)
     {
-        KDiskFreeSpaceInfo info = KDiskFreeSpaceInfo::freeSpaceInfo(d->path);
+        KDiskFreeSpaceInfo info = KDiskFreeSpaceInfo::freeSpaceInfo(path);
         if(info.isValid())
         {
             addInformation(info.size(), info.used(), info.available(), info.mountPoint());
@@ -373,7 +373,7 @@ void FreeSpaceWidget::slotTimeout()
 
     foreach (const QString &path, d->paths)
     {
-        KMountPoint::Ptr mp    = list.findByPath(path);
+        KMountPoint::Ptr mp = list.findByPath(path);
         if (mp)
         {
             KDiskFreeSpace *job = new KDiskFreeSpace(this);
