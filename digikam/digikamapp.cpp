@@ -1183,7 +1183,7 @@ void DigikamApp::slotAlbumSelected(bool val)
     {
         // We have either the abstract root album,
         // the album root album for collection base dirs, or normal albums.
-        PAlbum *palbum = static_cast<PAlbum*>(album);
+        PAlbum *palbum     = static_cast<PAlbum*>(album);
         bool isRoot        = palbum->isRoot();
         bool isAlbumRoot   = palbum->isAlbumRoot();
         bool isNormalAlbum = !isRoot && !isAlbumRoot;
@@ -1501,10 +1501,10 @@ void DigikamApp::slotOpenSolidCamera(QAction *action)
         QString model, port;
         if (CameraList::findConnectedCamera(vendorId, productId, model, port))
         {
-            kDebug(50003) << "Found camera from ids " << vendorId << " " << productId << " camera is: " << model << " at " << port << endl;
+            kDebug(50003) << "Found camera from ids " << vendorId << " " << productId 
+                          << " camera is: " << model << " at " << port << endl;
             // the CameraUI will delete itself when it has finished
-            CameraUI* cgui = new CameraUI(this, action->text(), model,
-                                          port, "/", QDateTime());
+            CameraUI* cgui = new CameraUI(this, action->text(), model, port, "/", QDateTime());
 
             d->cameraUIMap[udi] = cgui;
 
@@ -1853,7 +1853,6 @@ void DigikamApp::fillSolidMenus()
     d->cardReaderMenu->menuAction()->setEnabled(!d->cardReaderMenu->isEmpty());
 }
 
-
 void DigikamApp::slotSetup()
 {
     setup();
@@ -1939,7 +1938,6 @@ void DigikamApp::slotEditKeys()
     for( KIPI::PluginLoader::PluginList::Iterator it = list.begin() ; it != list.end() ; ++it )
     {
         KIPI::Plugin* plugin = (*it)->plugin();
-
         if ( plugin )
            dialog.addCollection(plugin->actionCollection(), (*it)->comment());
     }
@@ -2071,6 +2069,16 @@ void DigikamApp::slotKipiPluginPlug()
     unplugActionList(QString::fromLatin1("batch_actions"));
     unplugActionList(QString::fromLatin1("album_actions"));
 
+    // Remove Advanced slideshow kipi-plugin action from View/Slideshow menu.
+    foreach(QAction *action, d->slideShowAction->menu()->actions())
+    {
+        if (action->objectName() == QString("slideshow"))
+        {
+            d->slideShowAction->removeAction(action);
+            break;
+        }
+    }
+
     d->kipiImageActions.clear();
     d->kipiFileActionsExport.clear();
     d->kipiFileActionsImport.clear();
@@ -2121,7 +2129,15 @@ void DigikamApp::slotKipiPluginPlug()
                 }
                 else if (plugin->category(*it2) == KIPI::ToolsPlugin)
                 {
-                    d->kipiToolsActions.append(*it2);
+                    if (actionName == QString("slideshow"))
+                    {
+                        // Add Advanced slideshow kipi-plugin action to View/Slideshow menu.
+                        d->slideShowAction->addAction(*it2);
+                    }
+                    else
+                    {
+                        d->kipiToolsActions.append(*it2);
+                    }
                 }
                 else if (plugin->category(*it2) == KIPI::BatchPlugin)
                 {
