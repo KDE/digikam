@@ -115,7 +115,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 103 ==> 177457 : digiKam crash when tagging files.
 104 ==> 177608 : Wrong button text to save image tags and caption.
 105 ==> 141601 : File size not updated after inserting Metadata.
-106 ==> 
+106 ==> 177396 : digiKam crashes when I open RAW (CR2) file in editor.
+107 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
