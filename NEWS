@@ -118,7 +118,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 106 ==> 177396 : digiKam crashes when I open RAW (CR2) file in editor.
 107 ==> 177888 : Caption text area is too large.
 108 ==> 146618 : Media viewer does not sort correctly.
-109 ==> 
+109 ==> 156338 : DPS Files appearing in capture images dialog.
+110 ==> 133185 : Better support of JVC camera : mgr_data and prg_mgr files are not images but are available to download.
+111 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
