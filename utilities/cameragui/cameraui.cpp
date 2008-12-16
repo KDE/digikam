@@ -1004,9 +1004,16 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
     if (fileList.empty())
         return;
 
-    for (GPItemInfoList::const_iterator it = fileList.begin();
-         it != fileList.end(); ++it)
+    // We sort the map by time stamp.
+    QMap<QDateTime, GPItemInfo> map;
+    foreach(const GPItemInfo& item, fileList)
+        map.insertMulti(item.mtime, item);
+
+    QMap<QDateTime, GPItemInfo>::iterator it = map.end();
+
+    do
     {
+        --it;
         GPItemInfo item = *it;
 
         // We query database to check if item have been already downloaded from camera.
@@ -1025,6 +1032,7 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
         d->view->addItem(item);
         d->controller->getThumbnail(item.folder, item.name);
     }
+    while(it != map.begin());
 
     d->statusProgressBar->setProgressTotalSteps(d->statusProgressBar->progressTotalSteps() +
                                                 fileList.count());
