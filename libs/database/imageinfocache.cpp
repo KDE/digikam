@@ -27,6 +27,8 @@
 // Local includes.
 
 #include "albumdb.h"
+#include "imageinfo.h"
+#include "imageinfolist.h"
 #include "imageinfodata.h"
 
 namespace Digikam
@@ -34,6 +36,9 @@ namespace Digikam
 
 ImageInfoCache::ImageInfoCache()
 {
+    qRegisterMetaType<ImageInfo>("ImageInfo");
+    qRegisterMetaType<ImageInfoList>("ImageInfoList");
+
     DatabaseWatch *dbwatch = DatabaseAccess::databaseWatch();
 
     connect(dbwatch, SIGNAL(imageChange(const ImageChangeset &)),
