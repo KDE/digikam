@@ -160,6 +160,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     new QLabel(i18n("Caption:"), commentsBox);
     d->commentsEdit = new KTextEdit(commentsBox);
     d->commentsEdit->setCheckSpellingEnabled(true);
+    d->commentsEdit->setFixedHeight(100);
 
     KHBox *dateBox  = new KHBox(settingsArea);
     new QLabel(i18n("Date:"), dateBox);
