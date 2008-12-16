@@ -611,11 +611,12 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
     int dim         = height() - d->bottomMargin - d->topMargin;
     QDateTime     ref;
     double        max, logVal;
-    int           val, top;
+    int           val, pix, top;
     SelectionMode sel;
     QRect         focusRect, selRect, barRect;
     QBrush        selBrush;
     QColor        dateColor, subDateColor;
+    const int     minimum_valid_height = 1;
 
     // Date histogram drawing is divided in 2 parts. The current date-time
     // is placed on the center of the view and all dates on right are computed,
@@ -639,13 +640,19 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
             if (val <= 0) logVal = 0;
             else          logVal = log(val);
 
-            top = lround(dim + d->topMargin - ((logVal * dim) / max));
+            pix = lround((logVal * dim) / max);
+            if (val)
+                pix = qMax(pix, minimum_valid_height);
+            top = dim + d->topMargin - pix;
 
             if (top < 0) val = 0;
         }
         else
         {
-            top = lround(dim + d->topMargin - ((val * dim) / max));
+            pix = lround((val * dim) / max);
+            if (val)
+                pix = qMax(pix, minimum_valid_height);
+            top = dim + d->topMargin - pix;
         }
 
         barRect.setTop(top);
@@ -826,13 +833,19 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
             if (val <= 0) logVal = 0;
             else          logVal = log(val);
 
-            top = (int)(dim + d->topMargin - ((logVal * dim) / max));
+            pix = lround((logVal * dim) / max);
+            if (val)
+                pix = qMax(pix, minimum_valid_height);
+            top = dim + d->topMargin - pix;
 
             if (top < 0) val = 0;
         }
         else
         {
-            top = lround(dim + d->topMargin - ((val * dim) / max));
+            pix = lround((val * dim) / max);
+            if (val)
+                pix = qMax(pix, minimum_valid_height);
+            top = dim + d->topMargin - pix;
         }
 
         barRect.setTop(top);
