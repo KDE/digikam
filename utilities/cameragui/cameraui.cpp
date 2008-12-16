@@ -895,6 +895,18 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
     if (fileList.empty())
         return;
 
+    // We sort the map by time stamp
+    // and we remove internal camera files which are not image/video/sounds.
+    QStringList fileNames, fileExts;
+    QFileInfo   info;
+
+    // JVC camera (see B.K.O #133185).
+    fileNames.append("mgr_data");
+    fileNames.append("pgr_mgr");
+
+    // HP Photosmart camera (see B.K.O #156338).
+    fileExts.append("dsp");
+
     // We sort the map by time stamp.
     QMap<QDateTime, GPItemInfo>    map;
     GPItemInfoList::const_iterator it;
@@ -902,9 +914,17 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
     
     for(it = fileList.begin() ; it != fileList.end() ; ++it)
     {
-        dt.setTime_t((*it).mtime);
-        map.insert(dt, *it, false);
+        info.setFile((*it).name);
+        if (!fileNames.contains(info.fileName().lower()) &&
+            !fileExts.contains(info.extension(false).lower()))
+        {
+            dt.setTime_t((*it).mtime);
+            map.insert(dt, *it, false);
+        }
     }
+
+    if (map.empty())
+        return;
 
     QMap<QDateTime, GPItemInfo>::iterator it2 = map.end();
 
