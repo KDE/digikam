@@ -102,6 +102,11 @@ private slots:
     void slotThumbnailLost(Album *album);
     void slotReloadThumbnails();
     void slotRefresh(const QMap<int, int>&);
+    void slotAssignTags(int tagId, const QList<int> &imageIDs);
+
+signals: // private
+
+    void assignTags(int tagId, const QList<int> &imageIDs);
 
 private:
 

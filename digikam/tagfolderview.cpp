@@ -232,6 +232,13 @@ TagFolderView::TagFolderView(QWidget *parent)
 
     connect(this, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
+
+    // ------------------------------------------------------------------------
+
+    connect(this, SIGNAL(assignTags(int, const QList<int> &)),
+            this, SLOT(slotAssignTags(int, const QList<int> &)),
+            Qt::QueuedConnection);
+
 }
 
 TagFolderView::~TagFolderView()
@@ -952,38 +959,47 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
 
         if (assign)
         {
-            emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
-                                       i18n("Assigning image tags. Please wait..."));
-
-            int i = 0;
-            AlbumLister::instance()->blockSignals(true);
-            ScanController::instance()->suspendCollectionScan();
-            DatabaseTransaction transaction;
-            MetadataHub         hub;
-
-            for (QList<int>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
-            {
-                // create temporary ImageInfo object
-                ImageInfo info(*it);
-
-                hub.load(info);
-                hub.setTag(destAlbum, true);
-
-                QString filePath = info.filePath();
-                hub.write(info, MetadataHub::PartialWrite);
-                bool fileChanged = hub.write(filePath, MetadataHub::FullWriteIfChanged);
-                if (fileChanged)
-                    ScanController::instance()->scanFileDirectly(filePath);
-
-                emit signalProgressValue((int)((i++/(float)imageIDs.count())*100.0));
-                kapp->processEvents();
-            }
-            ScanController::instance()->resumeCollectionScan();
-            AlbumLister::instance()->blockSignals(false);
-
-            emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
+            emit assignTags(destAlbum->id(), imageIDs);
         }
     }
+}
+
+void TagFolderView::slotAssignTags(int tagId, const QList<int> &imageIDs)
+{
+    TAlbum *destAlbum = AlbumManager::instance()->findTAlbum(tagId);
+    if (!destAlbum)
+        return;
+
+    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
+                               i18n("Assigning image tags. Please wait..."));
+
+    AlbumLister::instance()->blockSignals(true);
+    ScanController::instance()->suspendCollectionScan();
+    DatabaseTransaction transaction;
+    MetadataHub         hub;
+    int i=0;
+
+    for (QList<int>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
+    {
+                // create temporary ImageInfo object
+        ImageInfo info(*it);
+
+        hub.load(info);
+        hub.setTag(destAlbum, true);
+
+        QString filePath = info.filePath();
+        hub.write(info, MetadataHub::PartialWrite);
+        bool fileChanged = hub.write(filePath, MetadataHub::FullWriteIfChanged);
+        if (fileChanged)
+            ScanController::instance()->scanFileDirectly(filePath);
+
+        emit signalProgressValue((int)((i++/(float)imageIDs.count())*100.0));
+        kapp->processEvents();
+    }
+    ScanController::instance()->resumeCollectionScan();
+    AlbumLister::instance()->blockSignals(false);
+
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
 }
 
 void TagFolderView::selectItem(int id)

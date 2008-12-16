@@ -96,6 +96,11 @@ protected:
 private slots:
 
     void slotRefresh(const QMap<int, int>&);
+    void slotAssignTags(int tagId, const QList<int> &imageIDs);
+
+signals: // private
+
+    void assignTags(int tagId, const QList<int> &imageIDs);
 };
 
 }  // namespace Digikam
