@@ -361,7 +361,10 @@ void FreeSpaceWidget::slotTimeout()
         KDiskFreeSpaceInfo info = KDiskFreeSpaceInfo::freeSpaceInfo(path);
         if(info.isValid())
         {
-            addInformation(info.size(), info.used(), info.available(), info.mountPoint());
+            addInformation((unsigned long)(info.size()/1024.0), 
+                           (unsigned long)(info.used()/1024.0), 
+                           (unsigned long)(info.available()/1024.0), 
+                           info.mountPoint());
         }
     }
 }
