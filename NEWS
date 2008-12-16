@@ -122,7 +122,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 110 ==> 133185 : Better support of JVC camera : mgr_data and prg_mgr files are not images but are available to download.
 111 ==> 154941 : Improve exception safety with smart pointers.
 112 ==> 177894 : digiKam not displaying images.
-113 ==> 
+113 ==> 175925 : USB Storage size (and Local disk) are wrong.
+114 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
