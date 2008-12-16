@@ -283,6 +283,12 @@ AlbumIconView::AlbumIconView(QWidget* parent)
     LoadingCacheInterface::connectToSignalFileChanged(this,
             SLOT(slotFileChanged(const QString &)));
 
+    // -- Internal connections ------------------------------
+
+    // defer this action from handling of drag event, see bug #159855
+    connect(this, SIGNAL(changeTagOnImageInfos(const ImageInfoList &, const QList<int> &, bool, bool)),
+            this, SLOT(slotChangeTagOnImageInfos(const ImageInfoList &, const QList<int> &, bool, bool)),
+            Qt::QueuedConnection);
 }
 
 AlbumIconView::~AlbumIconView()
@@ -954,7 +960,7 @@ void AlbumIconView::slotPaste()
             list.append(info);
         }
 
-        changeTagOnImageInfos(list, QList<int>() << talbum->id(), true, true);
+        emit changeTagOnImageInfos(list, QList<int>() << talbum->id(), true, true);
     }
 }
 
@@ -1516,21 +1522,11 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
             {
                 if (choice == assignToSelectedAction)    // Selected Items
                 {
-                    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
-                                               i18n("Assigning image tags. Please wait..."));
-
-                    // always give a copy of the image infos (the "true"). Else there were crashes reported.
-                    changeTagOnImageInfos(selectedImageInfos(), QList<int>() << tagID, true, true);
-
-                    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
+                    emit changeTagOnImageInfos(selectedImageInfos(), QList<int>() << tagID, true, true);
                 }
                 else if (choice == assignToAllAction)    // All Items
                 {
-                    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
-                                               i18n("Assigning image tags. Please wait..."));
-                    changeTagOnImageInfos(allImageInfos(), QList<int>() << tagID, true, true);
-
-                    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
+                    emit changeTagOnImageInfos(allImageInfos(), QList<int>() << tagID, true, true);
                 }
                 else if (choice == assignToThisAction)  // Dropped Item only.
                 {
@@ -1539,7 +1535,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
                     {
                         ImageInfoList infos;
                         infos << albumItem->imageInfo();
-                        changeTagOnImageInfos(infos, QList<int>() << tagID, true, false);
+                        emit changeTagOnImageInfos(infos, QList<int>() << tagID, true, false);
                     }
                 }
             }
@@ -1588,20 +1584,11 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
         {
             if (choice == assignToSelectedAction)    // Selected Items
             {
-                emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
-                                            i18n("Assigning image tags. Please wait..."));
-
-                changeTagOnImageInfos(selectedImageInfos(), tagIDs, true, true);
-
-                emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
+                slotChangeTagOnImageInfos(selectedImageInfos(), tagIDs, true, true);
             }
             else if (choice == assignToAllAction)    // All Items
             {
-                emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
-                                            i18n("Assigning image tags. Please wait..."));
-                changeTagOnImageInfos(allImageInfos(), tagIDs, true, true);
-
-                emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
+                slotChangeTagOnImageInfos(allImageInfos(), tagIDs, true, true);
             }
             else if (choice == assignToThisAction)    // Dropped item only.
             {
@@ -1610,7 +1597,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
                 {
                     ImageInfoList infos;
                     infos << albumItem->imageInfo();
-                    changeTagOnImageInfos(infos, tagIDs, true, false);
+                    slotChangeTagOnImageInfos(infos, tagIDs, true, false);
                 }
             }
         }
@@ -1645,10 +1632,20 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
     }
 }
 
-void AlbumIconView::changeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs, bool addOrRemove, bool progress)
+void AlbumIconView::slotChangeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs, bool addOrRemove, bool progress)
 {
     float cnt = list.count();
     int i     = 0;
+
+    if (progress)
+    {
+        if (addOrRemove)
+            emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
+                                       i18n("Assigning image tags. Please wait..."));
+        else
+            emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
+                                       i18n("Removing image tags. Please wait..."));
+    }
 
     d->imageLister->blockSignals(true);
     ScanController::instance()->suspendCollectionScan();
@@ -1678,6 +1675,9 @@ void AlbumIconView::changeTagOnImageInfos(const ImageInfoList &list, const QList
     }
     ScanController::instance()->resumeCollectionScan();
     d->imageLister->blockSignals(false);
+
+    if (progress)
+        emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
 
     if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
     {
@@ -2308,22 +2308,12 @@ void AlbumIconView::slotGotoTag(int tagID)
 
 void AlbumIconView::slotAssignTag(int tagID)
 {
-    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
-                                i18n("Assigning image tags. Please wait..."));
-
-    changeTagOnImageInfos(selectedImageInfos(), QList<int>() << tagID, true, true);
-
-    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
+    slotChangeTagOnImageInfos(selectedImageInfos(), QList<int>() << tagID, true, true);
 }
 
 void AlbumIconView::slotRemoveTag(int tagID)
 {
-    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
-                                i18n("Removing image tags. Please wait..."));
-
-    changeTagOnImageInfos(selectedImageInfos(), QList<int>() << tagID, false, true);
-
-    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
+    slotChangeTagOnImageInfos(selectedImageInfos(), QList<int>() << tagID, false, true);
 }
 
 void AlbumIconView::slotAssignRating(int rating)

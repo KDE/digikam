@@ -212,12 +212,18 @@ private slots:
     void slotImageAttributesChanged(qlonglong imageId);
     void slotAlbumImagesChanged(int albumId);
 
+    void slotChangeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs,
+                                   bool addOrRemove, bool progress);
+
+signals:
+
+    void changeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs,
+                               bool addOrRemove, bool progress);
+
 private:
 
     void updateRectsAndPixmaps();
     void updateBannerRectPixmap();
-    void changeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs, 
-                               bool addOrRemove, bool progress);
 
 private:
 
