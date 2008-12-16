@@ -895,10 +895,23 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
     if (fileList.empty())
         return;
 
-    for (GPItemInfoList::const_iterator it = fileList.begin();
-         it != fileList.end(); ++it)
+    // We sort the map by time stamp.
+    QMap<QDateTime, GPItemInfo>    map;
+    GPItemInfoList::const_iterator it;
+    QDateTime                      dt;
+    
+    for(it = fileList.begin() ; it != fileList.end() ; ++it)
     {
-        GPItemInfo item = *it;
+        dt.setTime_t((*it).mtime);
+        map.insert(dt, *it, false);
+    }
+
+    QMap<QDateTime, GPItemInfo>::iterator it2 = map.end();
+
+    do
+    {
+        --it2;
+        GPItemInfo item = *it2;
 
         if (item.mtime > (time_t)d->lastAccess.toTime_t() && item.downloaded == GPItemInfo::DownloadUnknow)
            item.downloaded = GPItemInfo::NewPicture;
@@ -906,6 +919,7 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
         d->view->addItem(item);
         d->controller->getThumbnail(item.folder, item.name);
     }
+    while(it2 != map.begin());
 
     d->progress->setTotalSteps(d->progress->totalSteps() + fileList.count());
 }
