@@ -120,7 +120,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 108 ==> 146618 : Media viewer does not sort correctly.
 109 ==> 156338 : DPS Files appearing in capture images dialog.
 110 ==> 133185 : Better support of JVC camera : mgr_data and prg_mgr files are not images but are available to download.
-111 ==> 
+111 ==> 154941 : Improve exception safety with smart pointers.
+112 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
