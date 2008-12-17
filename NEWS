@@ -126,7 +126,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 114 ==> 177933 : Viewing image doesn't work.
 115 ==> 168004 : Timeline gives zero height column for dates with a single entry.
 116 ==> 176231 : Browse Media Menu Not Populated.
-117 ==> 
+117 ==> 177953 : digiKam crash when saving current search.
+118 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
