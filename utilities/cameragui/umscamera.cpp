@@ -211,12 +211,12 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
     QFileInfo fi(folder + QString("/") + itemName);
 
-    if (thumbnail.load(folder + QString("/") + fi.baseName() + ".thm"))        // Lowercase
+    if (thumbnail.load(folder + QString("/") + fi.baseName() + QString".thm")))        // Lowercase
     {
         if (!thumbnail.isNull())
            return true;
     }
-    else if (thumbnail.load(folder + QString("/") + fi.baseName() + ".THM"))   // Uppercase
+    else if (thumbnail.load(folder + QString("/") + fi.baseName() + QString(".THM")))   // Uppercase
     {
         if (!thumbnail.isNull())
            return true;
