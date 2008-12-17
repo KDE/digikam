@@ -60,26 +60,15 @@ public:
     KIPI::ConfigWidget* kipiConfig;
 };
 
-SetupPlugins::SetupPlugins(QWidget* parent )
+SetupPlugins::SetupPlugins(QWidget* parent)
             : QWidget(parent), d(new SetupPluginsPriv)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
-    QHBoxLayout *hlay   = new QHBoxLayout();
     d->pluginsNumber    = new QLabel(this);
-    QLabel *KipiVersion = new QLabel(i18n("Kipi library version: %1", QString(kipi_version)), this);
-    KipiVersion->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    d->kipiConfig       = KIPI::PluginLoader::instance()->configWidget(this);
+    d->kipiConfig->setWhatsThis(i18n("A list of available Kipi plugins appears below."));
 
-    hlay->addWidget(d->pluginsNumber, 1);
-    hlay->addStretch(1);
-    hlay->addWidget(KipiVersion, 1);
-    hlay->setMargin(0);
-    hlay->setSpacing(0);
-
-    d->kipiConfig = KIPI::PluginLoader::instance()->configWidget(this);
-    QString pluginsListHelp = i18n("A list of available Kipi plugins appears below.");
-    d->kipiConfig->setWhatsThis( pluginsListHelp);
-
-    layout->addLayout(hlay);
+    layout->addWidget(d->pluginsNumber);
     layout->addWidget(d->kipiConfig);
     layout->setMargin(0);
     layout->setSpacing(KDialog::spacingHint());
