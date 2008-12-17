@@ -569,8 +569,7 @@ bool GPCamera::capture(GPItemInfo& itemInfo)
 #endif /* ENABLE_GPHOTO2 */
 }
 
-void GPCamera::getAllFolders(const QString& rootFolder,
-                             QStringList& folderList)
+void GPCamera::getAllFolders(const QString& rootFolder, QStringList& folderList)
 {
     QStringList subfolders;
     getSubFolders(rootFolder, subfolders);

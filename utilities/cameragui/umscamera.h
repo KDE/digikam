@@ -50,7 +50,7 @@ public:
     void cancel();
 
     void getAllFolders(const QString& folder, QStringList& subFolderList);
-    bool getItemsInfoList(const QString& folder, GPItemInfoList& infoList, bool getImageDimensions = true);
+    bool getItemsInfoList(const QString& folder, GPItemInfoList& infoList, bool getImageDimensions=true);
     bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail);
     bool getExif(const QString& folder, const QString& itemName, char **edata, int& esize);
 
@@ -58,8 +58,8 @@ public:
 
     bool downloadItem(const QString& folder, const QString& itemName, const QString& saveFile);
     bool deleteItem(const QString& folder, const QString& itemName);
-    bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile, 
-                    GPItemInfo& itemInfo, bool getImageDimensions=true);
+    bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile,
+                    GPItemInfo& info, bool getImageDimensions=true);
 
     bool cameraSummary(QString& summary);
     bool cameraManual(QString& manual);
@@ -68,7 +68,7 @@ public:
     bool getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail);
 
     // Methods not supported by UMS camera.
-    bool getPreview(QImage& /*preview*/){ return false; }; 
+    bool getPreview(QImage& /*preview*/){ return false; };
     bool capture(GPItemInfo& /*itemInfo*/){ return false; };
 
     DKCamera::CameraDriverType cameraDriverType(){ return DKCamera::UMSDriver; };

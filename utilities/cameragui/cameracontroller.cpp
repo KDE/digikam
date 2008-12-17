@@ -413,8 +413,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             sendInfo(i18n("Listing files in %1...", folder));
 
             GPItemInfoList itemsList;
-            // setting getImageDimensions to false is a huge speedup for UMSCamera
-            if (!d->camera->getItemsInfoList(folder, itemsList, false))
+            if (!d->camera->getItemsInfoList(folder, itemsList, true))
             {
                 sendError(i18n("Failed to list files in %1", folder));
             }

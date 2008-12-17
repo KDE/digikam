@@ -46,7 +46,6 @@ extern "C"
 
 #include <kcodecs.h>
 #include <kdebug.h>
-#include <kfilemetainfo.h>
 #include <kio/global.h>
 #include <kio/thumbcreator.h>
 #include <klibloader.h>
@@ -156,6 +155,8 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
         return true;        // Nothing to do.
 
     QFileInfoList::const_iterator fi;
+    QFileInfo thmlo, thmup;
+    DMetadata meta;
 
     for (fi = list.constBegin() ; !m_cancel && (fi != list.constEnd()) ; ++fi)
     {
@@ -163,50 +164,47 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
 
         if (!mime.isEmpty())
         {
+            QSize      dims;
+            QDateTime  dt;
             GPItemInfo info;
-            QSize dims(-1, -1);
+            thmlo.setFile(folder + QString("/") + fi->baseName() + QString(".thm"));
+            thmup.setFile(folder + QString("/") + fi->baseName() + QString(".THM"));
 
-            if (getImageDimensions)
+            if (thmlo.exists())
             {
-                if (mime == QString("image/x-raw"))
-                {
-                    DMetadata metaData(fi->filePath());
-                    dims = metaData.getImageDimensions();
-                }
-                else
-                {
-                    KFileMetaInfo meta(fi->filePath());
+                // Try thumbnail sidecar files with lowercase extension.
+                meta.load(thmlo.filePath());
+                dt   = meta.getImageDateTime();
+                dims = meta.getImageDimensions();
+            }
+            else if (thmup.exists())
+            {
+                // Try thumbnail sidecar files with uppercase extension.
+                meta.load(thmup.filePath());
+                dt   = meta.getImageDateTime();
+                dims = meta.getImageDimensions();
+            }
+            else
+            {
+                // If no thumbnail sidecar file available , try to load image metadata for files.
+                meta.load(fi->filePath());
+                dt   = meta.getImageDateTime();
+                dims = meta.getImageDimensions();
+            }
 
-#ifndef Q_CC_MSVC
-#warning "TODO: KDE4 port it";
-#endif
-                    /* TODO: KDE4PORT: KFileMetaInfo API as Changed.
-                             Check if new method to search "Dimensions" information is enough.
-
-                    if (meta.isValid())
-                    {
-                        if (meta.containsGroup("Jpeg EXIF Data"))
-                            dims = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
-                        else if (meta.containsGroup("General"))
-                            dims = meta.group("General").item("Dimensions").value().toSize();
-                        else if (meta.containsGroup("Technical"))
-                            dims = meta.group("Technical").item("Dimensions").value().toSize();
-                    }*/
-
-                    if (meta.isValid() && meta.item("Dimensions").isValid())
-                    {
-                        dims = meta.item("Dimensions").value().toSize();
-                    }
-                }
+            if (dt.isNull())
+            {
+                // If date is not found in metadata, use file time stamp
+                dt = fi->created();
             }
 
             info.name             = fi->fileName();
             info.folder           = !folder.endsWith('/') ? folder + QString('/') : folder;
             info.mime             = mime;
-            info.mtime            = fi->lastModified();
+            info.mtime            = dt;
             info.size             = fi->size();
-            info.width            = dims.width();
-            info.height           = dims.height();
+            info.width            = getImageDimensions ? dims.width()  : -1;
+            info.height           = getImageDimensions ? dims.height() : -1;
             info.downloaded       = GPItemInfo::DownloadUnknow;
             info.readPermissions  = fi->isReadable();
             info.writePermissions = fi->isWritable();
@@ -243,12 +241,12 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
     QFileInfo fi(folder + QString("/") + itemName);
 
-    if (thumbnail.load(folder + QString("/") + fi.baseName() + ".thm"))        // Lowercase
+    if (thumbnail.load(folder + QString("/") + fi.baseName() + QString(".thm")))        // Lowercase
     {
         if (!thumbnail.isNull())
            return true;
     }
-    else if (thumbnail.load(folder + QString("/") + fi.baseName() + ".THM"))   // Uppercase
+    else if (thumbnail.load(folder + QString("/") + fi.baseName() + QString(".THM")))   // Uppercase
     {
         if (!thumbnail.isNull())
            return true;
@@ -346,8 +344,7 @@ bool UMSCamera::getExif(const QString&, const QString&, char **, int&)
 
 bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, const QString& saveFile)
 {
-    m_cancel = false;
-
+    m_cancel     = false;
     QString src  = folder + QString("/") + itemName;
     QString dest = saveFile;
 
@@ -402,7 +399,7 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
 
 bool UMSCamera::setLockItem(const QString& folder, const QString& itemName, bool lock)
 {
-    QString src  = folder + QString("/") + itemName;
+    QString src = folder + QString("/") + itemName;
 
     if (lock)
     {
@@ -443,10 +440,9 @@ bool UMSCamera::deleteItem(const QString& folder, const QString& itemName)
 }
 
 bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile,
-                           GPItemInfo& itemInfo, bool getImageDimensions)
+                           GPItemInfo& info, bool getImageDimensions)
 {
-    m_cancel = false;
-
+    m_cancel     = false;
     QString dest = folder + QString("/") + itemName;
     QString src  = localFile;
 
@@ -498,56 +494,36 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
 
     // Get new camera item information.
 
+    DMetadata meta;
     QFileInfo fi(dest);
     QString mime = mimeType(fi.suffix().toLower());
 
     if (!mime.isEmpty())
     {
-        QSize dims(-1, -1);
+        QSize     dims;
+        QDateTime dt;
 
-        if (getImageDimensions)
+        // Try to load image metadata.
+        meta.load(fi.filePath());
+        dt   = meta.getImageDateTime();
+        dims = meta.getImageDimensions();
+
+        if (dt.isNull())
         {
-            if (mime == QString("image/x-raw"))
-            {
-                DMetadata metaData(fi.filePath());
-                dims = metaData.getImageDimensions();
-            }
-            else
-            {
-                KFileMetaInfo meta(fi.filePath());
-#ifndef Q_CC_MSVC
-#warning "TODO: KDE4 port it";
-#endif
-                /* TODO: KDE4PORT: KFileMetaInfo API as Changed.
-                         Check if new method to search "Dimensions" information is enough.
-
-                if (meta.isValid())
-                {
-                    if (meta.containsGroup("Jpeg EXIF Data"))
-                        dims = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
-                    else if (meta.containsGroup("General"))
-                        dims = meta.group("General").item("Dimensions").value().toSize();
-                    else if (meta.containsGroup("Technical"))
-                        dims = meta.group("Technical").item("Dimensions").value().toSize();
-                }*/
-
-                if (meta.isValid() && meta.item("Dimensions").isValid())
-                {
-                    dims = meta.item("Dimensions").value().toSize();
-                }
-            }
+            // If date is not found in metadata, use file time stamp
+            dt = fi.created();
         }
 
-        itemInfo.name             = fi.fileName();
-        itemInfo.folder           = !folder.endsWith('/') ? folder + QString('/') : folder;
-        itemInfo.mime             = mime;
-        itemInfo.mtime            = fi.lastModified();
-        itemInfo.size             = fi.size();
-        itemInfo.width            = dims.width();
-        itemInfo.height           = dims.height();
-        itemInfo.downloaded       = GPItemInfo::DownloadUnknow;
-        itemInfo.readPermissions  = fi.isReadable();
-        itemInfo.writePermissions = fi.isWritable();
+        info.name             = fi.fileName();
+        info.folder           = !folder.endsWith("/") ? folder + QString("/") : folder;
+        info.mime             = mime;
+        info.mtime            = dt;
+        info.size             = fi.size();
+        info.width            = getImageDimensions ? dims.width()  : -1;
+        info.height           = getImageDimensions ? dims.height() : -1;
+        info.downloaded       = GPItemInfo::DownloadUnknow;
+        info.readPermissions  = fi.isReadable();
+        info.writePermissions = fi.isWritable();
     }
 
     return true;
