@@ -51,6 +51,6 @@ typedef ImageInfoList::iterator ImageInfoListIterator;
 
 }  // namespace Digikam
 
-Q_DECLARE_METATYPE(Digikam::ImageInfoList);
+Q_DECLARE_METATYPE(Digikam::ImageInfoList)
 
 #endif // IMAGEINFOLIST_H
