@@ -128,7 +128,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 116 ==> 176231 : Browse Media Menu Not Populated.
 117 ==> 177953 : digiKam crash when saving current search.
 118 ==> 158565 : digiKam ignores files created through external applications like gimp.
-119 ==> 
+119 ==> 177242 : mtime ctime rename exif import.
+120 ==> 151275 : Camera tool: date & time should be taken from exif not file modified date.
+121 ==> 146764 : Media viewer sort images by date and try to fill videos without exiv in the correct order (by filename).
+122 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
