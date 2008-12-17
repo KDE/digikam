@@ -131,7 +131,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 119 ==> 177242 : mtime ctime rename exif import.
 120 ==> 151275 : Camera tool: date & time should be taken from exif not file modified date.
 121 ==> 146764 : Media viewer sort images by date and try to fill videos without exiv in the correct order (by filename).
-122 ==> 
+122 ==> 175898 : Selecting in the import dialog is extremly slow.
+123 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
