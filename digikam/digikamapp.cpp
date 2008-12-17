@@ -1932,16 +1932,15 @@ void DigikamApp::slotEditKeys()
                             KShortcutsEditor::LetterShortcutsAllowed, this);
     dialog.addCollection( actionCollection(), i18n( "General" ) );
 
-
     KIPI::PluginLoader::PluginList list = d->kipiPluginLoader->pluginList();
 
-    for( KIPI::PluginLoader::PluginList::Iterator it = list.begin() ; it != list.end() ; ++it )
+    foreach (KIPI::PluginLoader::Info *info, list)
     {
-        KIPI::Plugin* plugin = (*it)->plugin();
-        if ( plugin )
-           dialog.addCollection(plugin->actionCollection(), (*it)->comment());
+        if (info)
+        {
+            dialog.addCollection(info->plugin()->actionCollection(), info->name());
+        }
     }
-
     dialog.configure();
 }
 
