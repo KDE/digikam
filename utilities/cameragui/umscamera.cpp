@@ -7,7 +7,7 @@
  * Description : USB Mass Storage camera interface
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -101,8 +101,10 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
     if (!list)
         return false;
 
-    QFileInfoListIterator it( *list );
+    QFileInfoListIterator it(*list);
     QFileInfo *fi;
+    QFileInfo thmlo, thmup;
+    DMetadata meta;
 
     while ((fi = it.current()) != 0 && !m_cancel)
     {
@@ -112,38 +114,68 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
 
         if (!mime.isEmpty())
         {
+            QSize      dims;
+            QDateTime  dt;
             GPItemInfo info;
-            QSize dims(-1, -1);
+            thmlo.setFile(folder + QString("/") + fi->baseName() + QString(".thm"));
+            thmup.setFile(folder + QString("/") + fi->baseName() + QString(".THM"));
 
-            if (getImageDimensions)
+            if (thmlo.exists())
             {
-                if (mime == QString("image/x-raw"))
+                // Try thumbnail sidecar files with lowercase extension.
+                meta.load(thmlo.filePath());
+                dt   = meta.getImageDateTime();
+                dims = meta.getImageDimensions();
+            }
+            else if (thmup.exists())
+            {
+                // Try thumbnail sidecar files with uppercase extension.
+                meta.load(thmup.filePath());
+                dt   = meta.getImageDateTime();
+                dims = meta.getImageDimensions();
+            }
+            else if (mime == QString("image/x-raw"))
+            {
+                // If no thumbnail sidecar file available , try to load image metadata with Raw files.
+                meta.load(fi->filePath());
+                dt   = meta.getImageDateTime();
+                dims = meta.getImageDimensions();
+            }
+            else
+            {
+                meta.load(fi->filePath());
+                dt   = meta.getImageDateTime();
+                dims = meta.getImageDimensions();
+
+                if (dims.isNull())
                 {
-                    DMetadata metaData(fi->filePath());
-                    dims = metaData.getImageDimensions();
-                }
-                else
-                {
-                    KFileMetaInfo meta(fi->filePath());
-                    if (meta.isValid())
+                    // In all others case, try KFileMetaInfo.
+                    KFileMetaInfo kmeta(fi->filePath());
+                    if (kmeta.isValid())
                     {
-                        if (meta.containsGroup("Jpeg EXIF Data"))
-                            dims = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
-                        else if (meta.containsGroup("General"))
-                            dims = meta.group("General").item("Dimensions").value().toSize();
-                        else if (meta.containsGroup("Technical"))
-                            dims = meta.group("Technical").item("Dimensions").value().toSize();
+                        if (kmeta.containsGroup("Jpeg EXIF Data"))
+                            dims = kmeta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
+                        else if (kmeta.containsGroup("General"))
+                            dims = kmeta.group("General").item("Dimensions").value().toSize();
+                        else if (kmeta.containsGroup("Technical"))
+                            dims = kmeta.group("Technical").item("Dimensions").value().toSize();
                     }
                 }
+            }
+
+            if (dt.isNull())
+            {
+                // If date is not found in metadata, use file time stamp
+                dt = fi->created();
             }
 
             info.name             = fi->fileName();
             info.folder           = !folder.endsWith("/") ? folder + QString("/") : folder;
             info.mime             = mime;
-            info.mtime            = fi->lastModified().toTime_t();
+            info.mtime            = dt.toTime_t();
             info.size             = fi->size();
-            info.width            = dims.width();
-            info.height           = dims.height();
+            info.width            = getImageDimensions ? dims.width()  : -1;
+            info.height           = getImageDimensions ? dims.height() : -1;
             info.downloaded       = GPItemInfo::DownloadUnknow;
             info.readPermissions  = fi->isReadable();
             info.writePermissions = fi->isWritable();
@@ -173,10 +205,9 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
         return true;
 
     // THM files: try to get thumbnail from '.thm' files if we didn't manage to get 
-    // thumbnail from Exif. Any cameras provides *.thm files like JPEG files with RAW files. 
-    // Using this way is always speed up than ultimate loading using DImg.
-    // Nota: the thumbnail extracted with this method can be in poor quality.
-    // 2006/27/01 - Gilles - Tested with my Minolta Dynax 5D USM camera.
+    // thumbnail from Exif. Any cameras provides *.thm files like JPEG files with RAW/video files. 
+    // Using this way speed up thumbnailization and limit data transfered between camera and computer.
+    // NOTE: the thumbnail extracted with this method can provide a poor quality preview.
 
     QFileInfo fi(folder + QString("/") + itemName);
 
@@ -190,7 +221,6 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
         if (!thumbnail.isNull())
            return true;
     }
-
 
     // Finaly, we trying to get thumbnail using DImg API (slow).
 
@@ -215,8 +245,7 @@ bool UMSCamera::getExif(const QString&, const QString&, char **, int&)
 
 bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, const QString& saveFile)
 {
-    m_cancel = false;
-
+    m_cancel     = false;
     QString src  = folder + QString("/") + itemName;
     QString dest = saveFile;
 
@@ -226,7 +255,7 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
     if ( !sFile.open(IO_ReadOnly) )
     {
         DWarning() << "Failed to open source file for reading: "
-                    << src << endl;
+                   << src << endl;
         return false;
     }
 
@@ -271,7 +300,7 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
 
 bool UMSCamera::setLockItem(const QString& folder, const QString& itemName, bool lock)
 {
-    QString src  = folder + QString("/") + itemName;   
+    QString src = folder + QString("/") + itemName;
 
     if (lock)
     {
@@ -312,10 +341,9 @@ bool UMSCamera::deleteItem(const QString& folder, const QString& itemName)
 }
 
 bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile,
-                           GPItemInfo& itemInfo, bool getImageDimensions)
+                           GPItemInfo& info, bool getImageDimensions)
 {
-    m_cancel = false;
-
+    m_cancel     = false;
     QString dest = folder + QString("/") + itemName;
     QString src  = localFile;
 
@@ -367,45 +395,60 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
 
     // Get new camera item information.
 
+    DMetadata meta;
     QFileInfo fi(dest);
-    QString mime = mimeType(fi.extension(false).lower());
+    QString   mime = mimeType(fi.extension(false).lower());
 
     if (!mime.isEmpty())
     {
-        QSize dims(-1, -1);
+        QSize     dims;
+        QDateTime dt;
 
-        if (getImageDimensions)
+        if (mime == QString("image/x-raw"))
         {
-            if (mime == QString("image/x-raw"))
+            // Try to load image metadata with Raw files.
+            meta.load(fi.filePath());
+            dt   = meta.getImageDateTime();
+            dims = meta.getImageDimensions();
+        }
+        else
+        {
+            meta.load(fi.filePath());
+            dt   = meta.getImageDateTime();
+            dims = meta.getImageDimensions();
+
+            if (dims.isNull())
             {
-                DMetadata metaData(fi.filePath());
-                dims = metaData.getImageDimensions();
-            }
-            else
-            {
-                KFileMetaInfo meta(fi.filePath());
-                if (meta.isValid())
+                // In all others case, try KFileMetaInfo.
+                KFileMetaInfo kmeta(fi.filePath());
+                if (kmeta.isValid())
                 {
-                    if (meta.containsGroup("Jpeg EXIF Data"))
-                        dims = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
-                    else if (meta.containsGroup("General"))
-                        dims = meta.group("General").item("Dimensions").value().toSize();
-                    else if (meta.containsGroup("Technical"))
-                        dims = meta.group("Technical").item("Dimensions").value().toSize();
+                    if (kmeta.containsGroup("Jpeg EXIF Data"))
+                        dims = kmeta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
+                    else if (kmeta.containsGroup("General"))
+                        dims = kmeta.group("General").item("Dimensions").value().toSize();
+                    else if (kmeta.containsGroup("Technical"))
+                        dims = kmeta.group("Technical").item("Dimensions").value().toSize();
                 }
             }
         }
 
-        itemInfo.name             = fi.fileName();
-        itemInfo.folder           = !folder.endsWith("/") ? folder + QString("/") : folder;
-        itemInfo.mime             = mime;
-        itemInfo.mtime            = fi.lastModified().toTime_t();
-        itemInfo.size             = fi.size();
-        itemInfo.width            = dims.width();
-        itemInfo.height           = dims.height();
-        itemInfo.downloaded       = GPItemInfo::DownloadUnknow;
-        itemInfo.readPermissions  = fi.isReadable();
-        itemInfo.writePermissions = fi.isWritable();
+        if (dt.isNull())
+        {
+            // If date is not found in metadata, use file time stamp
+            dt = fi.created();
+        }
+
+        info.name             = fi.fileName();
+        info.folder           = !folder.endsWith("/") ? folder + QString("/") : folder;
+        info.mime             = mime;
+        info.mtime            = dt.toTime_t();
+        info.size             = fi.size();
+        info.width            = getImageDimensions ? dims.width()  : -1;
+        info.height           = getImageDimensions ? dims.height() : -1;
+        info.downloaded       = GPItemInfo::DownloadUnknow;
+        info.readPermissions  = fi.isReadable();
+        info.writePermissions = fi.isWritable();
     }
 
     return true;
