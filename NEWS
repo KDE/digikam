@@ -127,7 +127,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 115 ==> 168004 : Timeline gives zero height column for dates with a single entry.
 116 ==> 176231 : Browse Media Menu Not Populated.
 117 ==> 177953 : digiKam crash when saving current search.
-118 ==> 
+118 ==> 158565 : digiKam ignores files created through external applications like gimp.
+119 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
