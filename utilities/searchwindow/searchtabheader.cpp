@@ -435,12 +435,13 @@ void SearchTabHeader::editCurrentAdvancedSearch()
 
 void SearchTabHeader::saveSearch()
 {
-    // Only applicable if current album is Search View Current Album
-    // Save this album as a user names search album
+    // Only applicable if:
+    // 1. current album is Search View Current Album Save this album as a user names search album.
+    // 2. user as processed a search before to save it.
 
     QString name = d->saveNameEdit->text();
 
-    if (name.isEmpty())
+    if (name.isEmpty() || !d->currentAlbum)
     {
         // passive popup
         return;
@@ -457,11 +458,12 @@ void SearchTabHeader::saveSearch()
         if (!ok)
             return;
 
-        name  = newTitle;
+        name     = newTitle;
         oldAlbum = AlbumManager::instance()->findSAlbum(name);
     }
 
-    SAlbum *newAlbum = AlbumManager::instance()->createSAlbum(name, d->currentAlbum->type(), d->currentAlbum->query());
+    SAlbum *newAlbum = AlbumManager::instance()->createSAlbum(name, d->currentAlbum->type(),
+                                                              d->currentAlbum->query());
     emit searchShallBeSelected(newAlbum);
 }
 
@@ -497,7 +499,8 @@ void SearchTabHeader::advancedSearchEdited(int id, const QString &query)
     // the search is effectively still a keyword search.
     // We go the hard way and check this case.
     KeywordSearchReader check(query);
-    DatabaseSearch::Type type = check.isSimpleKeywordSearch() ? DatabaseSearch::KeywordSearch : DatabaseSearch::AdvancedSearch;
+    DatabaseSearch::Type type = check.isSimpleKeywordSearch() ? DatabaseSearch::KeywordSearch 
+                                                              : DatabaseSearch::AdvancedSearch;
 
     if (id == -1)
     {
