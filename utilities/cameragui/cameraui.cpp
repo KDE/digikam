@@ -907,6 +907,9 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
     // HP Photosmart camera (see B.K.O #156338).
     fileExts.append("dsp");
 
+    // Minolta camera in PTP mode
+    fileExts.append("dps");
+
     // We sort the map by time stamp.
     QMap<QDateTime, GPItemInfo>    map;
     GPItemInfoList::const_iterator it;
