@@ -157,7 +157,7 @@ public:
     {
         QThread *thread = QThread::currentThread();
         QHash<QThread*, int>::const_iterator it;
-        for (it=transactionCount.begin(); it != transactionCount.end(); ++it)
+        for (it=transactionCount.constBegin(); it != transactionCount.constEnd(); ++it)
             if (it.key() != thread && it.value())
                 return true;
         return false;
