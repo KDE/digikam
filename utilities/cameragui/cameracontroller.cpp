@@ -925,7 +925,7 @@ void CameraController::getThumbnail(const QString& folder, const QString& file)
     CameraCommand *cmd = new CameraCommand;
     cmd->action        = CameraCommand::gp_thumbnail;
     cmd->map.insert("folder", QVariant(folder));
-    cmd->map.insert("file", QVariant(file));
+    cmd->map.insert("file",   QVariant(file));
     addCommand(cmd);
 }
 
@@ -935,7 +935,7 @@ void CameraController::getExif(const QString& folder, const QString& file)
     CameraCommand *cmd = new CameraCommand;
     cmd->action        = CameraCommand::gp_exif;
     cmd->map.insert("folder", QVariant(folder));
-    cmd->map.insert("file", QVariant(file));
+    cmd->map.insert("file",   QVariant(file));
     addCommand(cmd);
 }
 
@@ -977,8 +977,8 @@ void CameraController::upload(const QFileInfo& srcFileInfo, const QString& destF
     CameraCommand *cmd = new CameraCommand;
     cmd->action        = CameraCommand::gp_upload;
     cmd->map.insert("srcFilePath", QVariant(srcFileInfo.filePath()));
-    cmd->map.insert("destFile", QVariant(destFile));
-    cmd->map.insert("destFolder", QVariant(destFolder));
+    cmd->map.insert("destFile",    QVariant(destFile));
+    cmd->map.insert("destFolder",  QVariant(destFolder));
     addCommand(cmd);
     kDebug(50003) << "Uploading '" << srcFileInfo.filePath() << "' into camera : '" << destFolder <<
                  "' (" << destFile << ")" << endl;
@@ -996,21 +996,21 @@ void CameraController::download(const DownloadSettingsContainer& downloadSetting
     d->canceled        = false;
     CameraCommand *cmd = new CameraCommand;
     cmd->action        = CameraCommand::gp_download;
-    cmd->map.insert("folder", QVariant(downloadSettings.folder));
-    cmd->map.insert("file", QVariant(downloadSettings.file));
-    cmd->map.insert("dest", QVariant(downloadSettings.dest));
-    cmd->map.insert("autoRotate", QVariant(downloadSettings.autoRotate));
-    cmd->map.insert("fixDateTime", QVariant(downloadSettings.fixDateTime));
-    cmd->map.insert("newDateTime", QVariant(downloadSettings.newDateTime));
+    cmd->map.insert("folder",            QVariant(downloadSettings.folder));
+    cmd->map.insert("file",              QVariant(downloadSettings.file));
+    cmd->map.insert("dest",              QVariant(downloadSettings.dest));
+    cmd->map.insert("autoRotate",        QVariant(downloadSettings.autoRotate));
+    cmd->map.insert("fixDateTime",       QVariant(downloadSettings.fixDateTime));
+    cmd->map.insert("newDateTime",       QVariant(downloadSettings.newDateTime));
     cmd->map.insert("setPhotographerId", QVariant(downloadSettings.setPhotographerId));
-    cmd->map.insert("author", QVariant(downloadSettings.author));
-    cmd->map.insert("authorTitle", QVariant(downloadSettings.authorTitle));
-    cmd->map.insert("setCredits", QVariant(downloadSettings.setCredits));
-    cmd->map.insert("credit", QVariant(downloadSettings.credit));
-    cmd->map.insert("source", QVariant(downloadSettings.source));
-    cmd->map.insert("copyright", QVariant(downloadSettings.copyright));
-    cmd->map.insert("convertJpeg", QVariant(downloadSettings.convertJpeg));
-    cmd->map.insert("losslessFormat", QVariant(downloadSettings.losslessFormat));
+    cmd->map.insert("author",            QVariant(downloadSettings.author));
+    cmd->map.insert("authorTitle",       QVariant(downloadSettings.authorTitle));
+    cmd->map.insert("setCredits",        QVariant(downloadSettings.setCredits));
+    cmd->map.insert("credit",            QVariant(downloadSettings.credit));
+    cmd->map.insert("source",            QVariant(downloadSettings.source));
+    cmd->map.insert("copyright",         QVariant(downloadSettings.copyright));
+    cmd->map.insert("convertJpeg",       QVariant(downloadSettings.convertJpeg));
+    cmd->map.insert("losslessFormat",    QVariant(downloadSettings.losslessFormat));
     addCommand(cmd);
 }
 
@@ -1020,7 +1020,7 @@ void CameraController::deleteFile(const QString& folder, const QString& file)
     CameraCommand *cmd = new CameraCommand;
     cmd->action        = CameraCommand::gp_delete;
     cmd->map.insert("folder", QVariant(folder));
-    cmd->map.insert("file", QVariant(file));
+    cmd->map.insert("file",   QVariant(file));
     addCommand(cmd);
 }
 
@@ -1030,8 +1030,8 @@ void CameraController::lockFile(const QString& folder, const QString& file, bool
     CameraCommand *cmd = new CameraCommand;
     cmd->action        = CameraCommand::gp_lock;
     cmd->map.insert("folder", QVariant(folder));
-    cmd->map.insert("file", QVariant(file));
-    cmd->map.insert("lock", QVariant(locked));
+    cmd->map.insert("file",   QVariant(file));
+    cmd->map.insert("lock",   QVariant(locked));
     addCommand(cmd);
 }
 
@@ -1041,8 +1041,8 @@ void CameraController::openFile(const QString& folder, const QString& file)
     CameraCommand *cmd = new CameraCommand;
     cmd->action        = CameraCommand::gp_open;
     cmd->map.insert("folder", QVariant(folder));
-    cmd->map.insert("file", QVariant(file));
-    cmd->map.insert("dest", QVariant(KStandardDirs::locate("tmp", file)));
+    cmd->map.insert("file",   QVariant(file));
+    cmd->map.insert("dest",   QVariant(KStandardDirs::locateLocal("tmp", file)));
     addCommand(cmd);
 }
 
