@@ -40,7 +40,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcomponentdata.h>
-#include <kfilemetainfo.h>
 #include <kdebug.h>
 
 // Local includes.

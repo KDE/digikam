@@ -41,7 +41,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcomponentdata.h>
-#include <kfilemetainfo.h>
 #include <kmimetype.h>
 #include <kdebug.h>
 #include <kio/deletejob.h>
