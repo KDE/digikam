@@ -266,7 +266,7 @@ public:
 
     QTimer                         *timer;
 
-    QMenu                          *ABCMenu;
+    KMenu                          *ABCMenu;
 
     TagFilterView::ToggleAutoTags   toggleAutoTags;
 
@@ -896,7 +896,7 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
     newAction     = popmenu.addAction(SmallIcon("tag-new"), i18n("New Tag..."));
 
 #ifdef HAVE_KDEPIMLIBS
-    d->ABCMenu = new QMenu(this);
+    d->ABCMenu = new KMenu(this);
 
     connect( d->ABCMenu, SIGNAL( aboutToShow() ),
              this, SLOT( slotABCContextMenu() ) );
@@ -916,7 +916,7 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
 
     popmenu.addSeparator();
 
-    QMenu selectTagsMenu;
+    KMenu selectTagsMenu;
     QAction *selectAllTagsAction, *selectChildrenAction=0, *selectParentsAction=0;
     selectAllTagsAction = selectTagsMenu.addAction(i18n("All Tags"));
     if (item)
@@ -928,7 +928,7 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
     popmenu.addMenu(&selectTagsMenu);
     selectTagsMenu.menuAction()->setText(i18n("Select"));
 
-    QMenu deselectTagsMenu;
+    KMenu deselectTagsMenu;
     QAction *deselectAllTagsAction, *deselectChildrenAction=0, *deselectParentsAction=0;
     deselectAllTagsAction = deselectTagsMenu.addAction(i18n("All Tags"));
     if (item)

@@ -117,8 +117,8 @@ public:
     QToolButton                   *assignedTagsBtn;
     QToolButton                   *revertBtn;
 
-    QMenu                         *ABCMenu;
-    QMenu                         *moreMenu;
+    KMenu                         *ABCMenu;
+    KMenu                         *moreMenu;
 
     QSignalMapper                 *recentTagsMapper;
 
@@ -192,7 +192,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     d->assignedTagsBtn->setCheckable(true);
 
     d->recentTagsBtn      = new QToolButton(tagsSearch);
-    QMenu *recentTagsMenu = new QMenu(d->recentTagsBtn);
+    KMenu *recentTagsMenu = new KMenu(d->recentTagsBtn);
     d->recentTagsBtn->setToolTip( i18n("Recent Tags"));
     d->recentTagsBtn->setIcon(KIconLoader::global()->loadIcon("tag-recents",
                               KIconLoader::NoGroup, KIconLoader::SizeSmall));
@@ -220,7 +220,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     buttonsBox->setStretchFactor(d->applyBtn, 10);
 
     d->moreButton = new QPushButton(i18n("More"), buttonsBox);
-    d->moreMenu   = new QMenu(settingsArea);
+    d->moreMenu   = new KMenu(settingsArea);
     d->moreButton->setMaximumHeight( fontMetrics().height()+4 );
     d->moreButton->setMenu(d->moreMenu);
 
@@ -893,7 +893,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
 
     popmenu.addSeparator();
 
-    QMenu selectTagsMenu;
+    KMenu selectTagsMenu;
     QAction *selectAllTagsAction, *selectChildrenAction=0, *selectParentsAction=0;
     selectAllTagsAction = selectTagsMenu.addAction(i18n("All Tags"));
     if (item)
@@ -905,7 +905,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
     popmenu.addMenu(&selectTagsMenu);
     selectTagsMenu.menuAction()->setText(i18n("Select"));
 
-    QMenu deselectTagsMenu;
+    KMenu deselectTagsMenu;
     QAction *deselectAllTagsAction, *deselectChildrenAction=0, *deselectParentsAction=0;
     deselectAllTagsAction = deselectTagsMenu.addAction(i18n("All Tags"));
     if (item)
@@ -1440,7 +1440,7 @@ void ImageDescEditTab::slotGotThumbnailFromIcon(Album *album, const QPixmap& thu
     item->setPixmap(0, blendedIcon);
 
     // update item in recent tags popup menu, if found there in
-    QMenu *menu = dynamic_cast<QMenu *>(d->recentTagsBtn->menu());
+    KMenu *menu = dynamic_cast<KMenu *>(d->recentTagsBtn->menu());
     if (menu)
     {
         QAction *action = qobject_cast<QAction *>(d->recentTagsMapper->mapping(album->id()));
@@ -1536,7 +1536,7 @@ void ImageDescEditTab::reloadForMetadataChange(qlonglong imageId)
 
 void ImageDescEditTab::updateRecentTags()
 {
-    QMenu *menu = dynamic_cast<QMenu *>(d->recentTagsBtn->menu());
+    KMenu *menu = dynamic_cast<KMenu *>(d->recentTagsBtn->menu());
     if (!menu) return;
 
     menu->clear();

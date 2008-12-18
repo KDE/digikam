@@ -28,8 +28,11 @@
 
 // Qt includes.
 
-#include <QMenu>
 #include <QList>
+
+// KDE includes.
+
+#include <kmenu.h>
 
 namespace Digikam
 {
@@ -38,7 +41,7 @@ class Album;
 class TAlbum;
 class TagsPopupMenuPriv;
 
-class TagsPopupMenu : public QMenu
+class TagsPopupMenu : public KMenu
 {
     Q_OBJECT
 
@@ -70,8 +73,8 @@ private:
 
     void         setup(Mode mode);
     void         clearPopup();
-    QMenu*       buildSubMenu(int tagid);
-    void         iterateAndBuildMenu(QMenu *menu, TAlbum *album);
+    KMenu*       buildSubMenu(int tagid);
+    void         iterateAndBuildMenu(KMenu *menu, TAlbum *album);
     void         setAlbumIcon(QAction *action, TAlbum *album);
 
 private:

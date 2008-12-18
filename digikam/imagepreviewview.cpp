@@ -345,7 +345,7 @@ void ImagePreviewView::slotContextMenu()
     KService::List::ConstIterator iter;
     KService::Ptr ptr;
 
-    QMenu openWithMenu;
+    KMenu openWithMenu;
 
     for( iter = offers.begin(); iter != offers.end(); ++iter )
     {

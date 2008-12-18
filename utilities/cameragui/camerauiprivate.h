@@ -131,9 +131,9 @@ public:
     QStringList                   cameraFolderList;
     QSet<QString>                 foldersToScan;
 
-    QMenu                        *downloadMenu;
-    QMenu                        *deleteMenu;
-    QMenu                        *imageMenu;
+    KMenu                        *downloadMenu;
+    KMenu                        *deleteMenu;
+    KMenu                        *imageMenu;
 
     QToolBox                     *advBox;
 

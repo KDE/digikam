@@ -29,11 +29,11 @@
 // Qt includes.
 
 #include <QDateTime>
-#include <QMenu>
 
 // KDE includes.
 
 #include <kdatepicker.h>
+#include <kmenu.h>
 
 namespace Digikam
 {
@@ -53,17 +53,17 @@ namespace Digikam
 
    @author Bram Schoenmakers <bram_s@softhome.net>
 */
-class KDatePickerPopup: public QMenu
+class KDatePickerPopup: public KMenu
 {
   Q_OBJECT
 
   public:
 
-    enum ItemFlag 
-    { 
-        NoDate     = 1, 
+    enum ItemFlag
+    {
+        NoDate     = 1,
         DatePicker = 2,
-        Words      = 4 
+        Words      = 4
     };
 
     Q_DECLARE_FLAGS( Items, ItemFlag )

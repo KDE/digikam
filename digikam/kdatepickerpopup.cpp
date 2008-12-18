@@ -72,7 +72,7 @@ private:
 };
 
 KDatePickerPopup::KDatePickerPopup( Items items, const QDate &date, QWidget *parent )
-                : QMenu( parent )
+                : KMenu( parent )
 {
     mItems = items;
 

@@ -39,7 +39,6 @@
 #include <QKeyEvent>
 #include <QLabel>
 #include <QLineEdit>
-#include <QMenu>
 #include <QPixmap>
 #include <QPushButton>
 #include <QRadioButton>

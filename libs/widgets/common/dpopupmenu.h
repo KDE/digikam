@@ -32,7 +32,6 @@
 #include <QtCore/QRect>
 #include <QtGui/QColor>
 #include <QtGui/QImage>
-#include <QtGui/QMenu>
 #include <QtGui/QPaintEvent>
 #include <QtGui/QResizeEvent>
 

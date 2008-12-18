@@ -174,7 +174,7 @@ public:
         albumMan = 0;
     }
 
-    QMenu        *ABCMenu;
+    KMenu        *ABCMenu;
 
     AlbumManager *albumMan;
 };
@@ -544,7 +544,7 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
     newAction = popmenu.addAction(SmallIcon("tag-new"), i18n("New Tag..."));
 
 #ifdef HAVE_KDEPIMLIBS
-    d->ABCMenu = new QMenu(this);
+    d->ABCMenu = new KMenu(this);
 
     connect( d->ABCMenu, SIGNAL( aboutToShow() ),
              this, SLOT( slotABCContextMenu() ) );

@@ -559,9 +559,9 @@ void AlbumFolderView::slotSelectionChanged()
 
 void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, int)
 {
-    QMenu menuImport(i18n("Import"));
-    QMenu menuExport(i18n("Export"));
-    QMenu menuKIPIBatch(i18n("Batch Process"));
+    KMenu menuImport(i18n("Import"));
+    KMenu menuExport(i18n("Export"));
+    KMenu menuKIPIBatch(i18n("Batch Process"));
 
     KMenu popmenu(this);
     popmenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));

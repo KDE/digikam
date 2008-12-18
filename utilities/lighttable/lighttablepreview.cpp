@@ -363,7 +363,7 @@ void LightTablePreview::slotContextMenu()
     KService::List::ConstIterator iter;
     KService::Ptr ptr;
 
-    QMenu openWithMenu;
+    KMenu openWithMenu;
 
     for( iter = offers.constBegin(); iter != offers.constEnd(); ++iter )
     {

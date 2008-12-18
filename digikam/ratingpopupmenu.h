@@ -24,16 +24,16 @@
 #ifndef RATING_POPUP_MENU_H
 #define RATING_POPUP_MENU_H
 
-// Qt includes.
+// KDE includes.
 
-#include <QMenu>
+#include <kmenu.h>
 
 class QAction;
 
 namespace Digikam
 {
 
-class RatingPopupMenu : public QMenu
+class RatingPopupMenu : public KMenu
 {
     Q_OBJECT
 

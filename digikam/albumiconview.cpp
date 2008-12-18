@@ -102,9 +102,9 @@ extern "C"
 
 #include "album.h"
 #include "albumdb.h"
-#include "albumiconviewtooltip.h"
 #include "albumicongroupitem.h"
 #include "albumiconitem.h"
+#include "albumiconviewtooltip.h"
 #include "albumlister.h"
 #include "albummanager.h"
 #include "albumsettings.h"
@@ -114,6 +114,7 @@ extern "C"
 #include "databasetransaction.h"
 #include "ddragobjects.h"
 #include "deletedialog.h"
+#include "digikamapp.h"
 #include "dio.h"
 #include "dmetadata.h"
 #include "dpopupmenu.h"
@@ -533,7 +534,7 @@ void AlbumIconView::slotRightButtonClicked(const QPoint& pos)
         return;
     }
 
-    QMenu popmenu(this);
+    KMenu popmenu(this);
     KAction *paste        = KStandardAction::paste(this, SLOT(slotPaste()), 0);
     const QMimeData *data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
 
@@ -592,7 +593,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // --------------------------------------------------------
     // Provide Goto folder and/or date pop-up menu
-    QMenu gotoMenu;
+    KMenu gotoMenu;
 
     QAction *gotoAlbum = gotoMenu.addAction(SmallIcon("folder-image"),        i18n("Album"));
     QAction *gotoDate  = gotoMenu.addAction(SmallIcon("view-calendar-month"), i18n("Date"));
@@ -1417,7 +1418,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
         {
             PAlbum* palbum = (PAlbum*)album;
 
-            QMenu popMenu(this);
+            KMenu popMenu(this);
             QAction *moveAction = popMenu.addAction( SmallIcon("go-jump"), i18n("&Move Here"));
             QAction *copyAction = popMenu.addAction( SmallIcon("edit-copy"), i18n("&Copy Here"));
             popMenu.addSeparator();
@@ -1446,7 +1447,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
 
         KUrl::List srcURLs = KUrl::List::fromMimeData(e->mimeData());
 
-        QMenu popMenu(this);
+        KMenu popMenu(this);
         QAction *moveAction = popMenu.addAction( SmallIcon("go-jump"), i18n("&Move Here"));
         QAction *copyAction = popMenu.addAction( SmallIcon("edit-copy"), i18n("&Copy Here"));
         popMenu.addSeparator();
@@ -1478,7 +1479,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
 
         if (talbum)
         {
-            QMenu popMenu(this);
+            KMenu popMenu(this);
 
             bool moreItemsSelected = false;
             bool itemDropped = false;
@@ -1542,7 +1543,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
         QList<int> tagIDs;
         DTagListDrag::decode(e->mimeData(), tagIDs);
 
-        QMenu popMenu(this);
+        KMenu popMenu(this);
 
         bool moreItemsSelected = false;
         bool itemDropped = false;
