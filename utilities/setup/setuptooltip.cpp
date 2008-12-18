@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-07-09
- * Description : album item tool tip configuration setup tab
+ * Description : icon-view item tool tip configuration setup tab
  *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -105,16 +105,16 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
 
-    d->showToolTipsBox = new QCheckBox(i18n("Show album items toolti&ps"), this);
+    d->showToolTipsBox  = new QCheckBox(i18n("Show icon-view/thumbbar items toolti&ps"), this);
     d->showToolTipsBox->setWhatsThis( i18n("Set this option to display image information when "
-                                           "the mouse hovers over an album item."));
+                                           "the mouse hovers over an icon-view or thumbbar item."));
 
     // --------------------------------------------------------
 
     d->fileSettingBox     = new QGroupBox(i18n("File/Image Information"), this);
     QVBoxLayout *gLayout1 = new QVBoxLayout(d->fileSettingBox);
 
-    d->showFileNameBox = new QCheckBox(i18n("Show file name"), d->fileSettingBox);
+    d->showFileNameBox    = new QCheckBox(i18n("Show file name"), d->fileSettingBox);
     d->showFileNameBox->setWhatsThis( i18n("Set this option to display the image file name."));
 
     d->showFileDateBox = new QCheckBox(i18n("Show file date"), d->fileSettingBox);
