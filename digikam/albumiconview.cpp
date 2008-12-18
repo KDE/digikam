@@ -2068,15 +2068,15 @@ void AlbumIconView::updateBannerRectPixmap()
 
 QPixmap AlbumIconView::thumbnailBorderPixmap(const QSize &tightPixmapSize)
 {
-    const int radius = 3;
-    const QColor borderColor = QColor(0, 0, 0, 128); //TODO: take from theme?
+    const int radius         = 3;
+    const QColor borderColor = QColor(0, 0, 0, 128);
 
-    QString cacheKey = QString::number(tightPixmapSize.width()) + "-" + QString::number(tightPixmapSize.height());
+    QString cacheKey  = QString::number(tightPixmapSize.width()) + "-" + QString::number(tightPixmapSize.height());
     QPixmap *cachePix = d->thumbnailBorderCache.object(cacheKey);
 
     if (!cachePix)
     {
-        QPixmap pix = ThumbBarView::generateFuzzyRect(QSize(tightPixmapSize.width() + 2*radius,
+        QPixmap pix = ThumbBarView::generateFuzzyRect(QSize(tightPixmapSize.width()  + 2*radius,
                                                             tightPixmapSize.height() + 2*radius),
                                                       borderColor, radius);
         d->thumbnailBorderCache.insert(cacheKey, new QPixmap(pix));

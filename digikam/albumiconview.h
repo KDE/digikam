@@ -146,6 +146,9 @@ signals:
     void signalGotoTagAndItem(int);
     void signalFindSimilar();
 
+    void changeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs,
+                               bool addOrRemove, bool progress);
+
 public slots:
 
     void slotSetExifOrientation(int orientation);
@@ -214,11 +217,6 @@ private slots:
 
     void slotChangeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs,
                                    bool addOrRemove, bool progress);
-
-signals:
-
-    void changeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs,
-                               bool addOrRemove, bool progress);
 
 private:
 
