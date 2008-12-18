@@ -257,9 +257,9 @@ void CameraIconItem::calcRect(const QString& itemName, const QString& downloadNa
     CameraIconView* view = static_cast<CameraIconView*>(iconView());
     int thumbSize        = view->thumbnailSize();
     d->pixmap            = QPixmap::fromImage(d->thumbnail.scaled(thumbSize, thumbSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    d->pixRect           = QRect(0,0,0,0);
-    d->textRect          = QRect(0,0,0,0);
-    d->extraRect         = QRect(0,0,0,0);
+    d->pixRect           = QRect(0, 0, 0, 0);
+    d->textRect          = QRect(0, 0, 0, 0);
+    d->extraRect         = QRect(0, 0, 0, 0);
     QRect itemRect       = rect();
     itemRect.moveTopLeft(QPoint(0, 0));
 
@@ -331,11 +331,12 @@ void CameraIconItem::paintItem(QPainter *p)
 {
     ThemeEngine* te      = ThemeEngine::instance();
     CameraIconView* view = static_cast<CameraIconView*>(iconView());
-    QString itemName     = AlbumIconItem::squeezedText(p, r.width()-5, d->itemInfo->name);
-    QString downloadName = AlbumIconItem::squeezedText(p, r.width()-5, d->downloadName);
 
     QFont fn(view->font());
     QRect r(rect());
+
+    QString itemName     = AlbumIconItem::squeezedText(p, r.width()-5, d->itemInfo->name);
+    QString downloadName = AlbumIconItem::squeezedText(p, r.width()-5, d->downloadName);
 
     calcRect(itemName, downloadName);
 
