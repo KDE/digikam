@@ -38,6 +38,7 @@
 #include <QClipboard>
 #include <QDropEvent>
 #include <QHash>
+#include <QCache>
 
 // KDE includes.
 
@@ -52,6 +53,7 @@
 // Local includes.
 
 #include "themeengine.h"
+#include "thumbbar.h"
 #include "thumbnailsize.h"
 #include "gpiteminfo.h"
 #include "renamecustomizer.h"
@@ -77,24 +79,27 @@ public:
         cameraUI  = 0;
         toolTip   = 0;
         thumbSize = ThumbnailSize::Large;
+        thumbnailBorderCache.setMaxCost(10);
     }
 
-    int                                 thumbSize;
+    int                              thumbSize;
 
-    QHash<QString, CameraIconItem*> itemDict;
+    QHash<QString, CameraIconItem*>  itemDict;
 
-    QRect                               itemRect;
+    QRect                            itemRect;
 
-    QPixmap                             itemRegPixmap;
-    QPixmap                             itemSelPixmap;
+    QPixmap                          itemRegPixmap;
+    QPixmap                          itemSelPixmap;
 
-    RenameCustomizer                   *renamer;
+    QCache<QString, QPixmap>         thumbnailBorderCache;
 
-    IconGroupItem                      *groupItem;
+    RenameCustomizer                *renamer;
 
-    CameraUI                           *cameraUI;
+    IconGroupItem                   *groupItem;
 
-    CameraIconViewToolTip              *toolTip;
+    CameraUI                        *cameraUI;
+
+    CameraIconViewToolTip           *toolTip;
 };
 
 CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
@@ -706,9 +711,9 @@ void CameraIconView::updateItemRectsPixmap()
     }
 
     fm = QFontMetrics(fn);
-    r = QRect(fm.boundingRect(0, 0, d->thumbSize, 0xFFFFFFFF,
-                              Qt::AlignHCenter | Qt::AlignTop,
-                              "XXXXXXXXX"));
+    r  = QRect(fm.boundingRect(0, 0, d->thumbSize, 0xFFFFFFFF,
+                               Qt::AlignHCenter | Qt::AlignTop,
+                               "XXXXXXXXX"));
     extraRect.setWidth(r.width());
     extraRect.setHeight(r.height());
 
@@ -716,13 +721,11 @@ void CameraIconView::updateItemRectsPixmap()
     r.setWidth(qMax(qMax(pixRect.width(), textRect.width()), extraRect.width()) + 4);
     r.setHeight(pixRect.height() + textRect.height() + extraRect.height() + 4);
 
-    d->itemRect = r;
+    d->itemRect      = r;
+    d->itemRegPixmap = ThemeEngine::instance()->thumbRegPixmap(d->itemRect.width(), d->itemRect.height());
+    d->itemSelPixmap = ThemeEngine::instance()->thumbSelPixmap(d->itemRect.width(), d->itemRect.height());
 
-    d->itemRegPixmap = ThemeEngine::instance()->thumbRegPixmap(d->itemRect.width(),
-                                                               d->itemRect.height());
-
-    d->itemSelPixmap = ThemeEngine::instance()->thumbSelPixmap(d->itemRect.width(),
-                                                               d->itemRect.height());
+    d->thumbnailBorderCache.clear();
 }
 
 void CameraIconView::slotThemeChanged()
@@ -802,6 +805,26 @@ void CameraIconView::itemsSelectionSizeInfo(unsigned long& fSize, unsigned long&
 
     fSize /= 1024;
     dSize /= 1024;
+}
+
+QPixmap CameraIconView::thumbnailBorderPixmap(const QSize &pixSize)
+{
+    const int radius         = 3;
+    const QColor borderColor = QColor(0, 0, 0, 128);
+
+    QString cacheKey  = QString::number(pixSize.width()) + "-" + QString::number(pixSize.height());
+    QPixmap *cachePix = d->thumbnailBorderCache.object(cacheKey);
+
+    if (!cachePix)
+    {
+        QPixmap pix = ThumbBarView::generateFuzzyRect(QSize(pixSize.width()  + 2*radius,
+                                                            pixSize.height() + 2*radius),
+                                                      borderColor, radius);
+        d->thumbnailBorderCache.insert(cacheKey, new QPixmap(pix));
+        return pix;
+    }
+
+    return *cachePix;
 }
 
 }  // namespace Digikam

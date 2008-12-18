@@ -255,7 +255,8 @@ void CameraIconItem::toggleLock()
 void CameraIconItem::calcRect(const QString& itemName, const QString& downloadName)
 {
     CameraIconView* view = static_cast<CameraIconView*>(iconView());
-    int thumbSize        = view->thumbnailSize();
+    const int border     = 8;
+    int thumbSize        = view->thumbnailSize() - (2*border);
     d->pixmap            = QPixmap::fromImage(d->thumbnail.scaled(thumbSize, thumbSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     d->pixRect           = QRect(0, 0, 0, 0);
     d->textRect          = QRect(0, 0, 0, 0);
@@ -267,7 +268,7 @@ void CameraIconItem::calcRect(const QString& itemName, const QString& downloadNa
     d->pixRect.setHeight(thumbSize);
 
     QFontMetrics fm(iconView()->font());
-    QRect r = QRect(fm.boundingRect(0, 0, thumbSize, 0xFFFFFFFF,
+    QRect r = QRect(fm.boundingRect(0, 0, thumbSize+(2*border), 0xFFFFFFFF,
                                     Qt::AlignHCenter | Qt::AlignTop,
                                     itemName));
     d->textRect.setWidth(r.width());
@@ -282,7 +283,7 @@ void CameraIconItem::calcRect(const QString& itemName, const QString& downloadNa
         }
 
         fm = QFontMetrics(fn);
-        r  = QRect(fm.boundingRect(0, 0, thumbSize, 0xFFFFFFFF,
+        r  = QRect(fm.boundingRect(0, 0, thumbSize+(2*border), 0xFFFFFFFF,
                                    Qt::AlignHCenter | Qt::TextWordWrap,
                                    downloadName));
         d->extraRect.setWidth(r.width());
@@ -292,22 +293,22 @@ void CameraIconItem::calcRect(const QString& itemName, const QString& downloadNa
         d->textRect.setHeight(d->textRect.height() + d->extraRect.height());
     }
 
-    int w = qMax(d->textRect.width(), d->pixRect.width() );
+    int w = qMax(d->textRect.width(), d->pixRect.width());
     int h = d->textRect.height() + d->pixRect.height() ;
 
-    itemRect.setWidth(w+4);
-    itemRect.setHeight(h+4);
+    itemRect.setWidth(w+border);
+    itemRect.setHeight(h+border);
 
     // Center the pix and text rect
-    d->pixRect  = QRect(2, 2, d->pixRect.width(), d->pixRect.height());
+    d->pixRect  = QRect(border, border, d->pixRect.width(), d->pixRect.height());
     d->textRect = QRect((itemRect.width() - d->textRect.width())/2,
-                        itemRect.height() - d->textRect.height(),
+                        itemRect.height() - d->textRect.height() + border,
                         d->textRect.width(), d->textRect.height());
 
     if (!d->extraRect.isEmpty())
     {
         d->extraRect = QRect((itemRect.width() - d->extraRect.width())/2,
-                             itemRect.height() - d->extraRect.height(),
+                             itemRect.height() - d->extraRect.height() + border,
                              d->extraRect.width(), d->extraRect.height());
     }
 }
@@ -354,6 +355,9 @@ void CameraIconItem::paintItem(QPainter *p)
         p->drawPixmap(0, 0, view->itemBaseSelPixmap());
     else
         p->drawPixmap(0, 0, view->itemBaseRegPixmap());
+
+    QPixmap borderPix = view->thumbnailBorderPixmap(pixmapDrawRect.size());
+    p->drawPixmap(pixmapDrawRect.x()-3, pixmapDrawRect.y()-3, borderPix);
 
     p->restore();
     p->drawText(d->textRect, Qt::AlignHCenter|Qt::AlignTop, itemName);

@@ -89,6 +89,8 @@ public:
 
     void itemsSelectionSizeInfo(unsigned long& fSize, unsigned long& dSize);
 
+    QPixmap thumbnailBorderPixmap(const QSize &pixSize);
+
 signals:
 
     void signalSelected(CameraIconItem*, bool);
