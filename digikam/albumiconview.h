@@ -116,7 +116,6 @@ public:
     QPixmap  itemBaseSelPixmap() const;
     QPixmap  bannerPixmap() const;
     QPixmap  ratingPixmap(int rating, bool selected) const;
-    QPixmap  thumbnailBorderPixmap(const QSize &tightPixmapSize);
 
     QFont    itemFontReg() const;
     QFont    itemFontCom() const;

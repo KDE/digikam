@@ -110,6 +110,9 @@ public:
 
     void setDelayedRearrangement(bool delayed);
 
+    QPixmap thumbnailBorderPixmap(const QSize &pixSize);
+    void    clearThumbnailBorderCache();
+
 protected:
 
     virtual void viewportPaintEvent(QPaintEvent* pe);

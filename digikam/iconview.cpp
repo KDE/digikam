@@ -34,6 +34,7 @@
 
 // Qt includes.
 
+#include <QCache>
 #include <QList>
 #include <QSet>
 #include <QTimer>
@@ -55,6 +56,7 @@
 // Local includes.
 
 #include "drubberband.h"
+#include "thumbbar.h"
 #include "iconitem.h"
 #include "icongroupitem.h"
 
@@ -88,34 +90,38 @@ public:
         rearrangeTimerInterval   = 0;
         storedVisibleItem        = 0;
         needEmitSelectionChanged = false;
+
+        thumbnailBorderCache.setMaxCost(10);
     }
 
-    bool                 clearing;
-    bool                 showTips;
-    bool                 pressedMoved;
-    bool                 dragging;
-    bool                 needEmitSelectionChanged; // store for slotRearrange
+    bool                      clearing;
+    bool                      showTips;
+    bool                      pressedMoved;
+    bool                      dragging;
+    bool                      needEmitSelectionChanged; // store for slotRearrange
 
-    int                  rearrangeTimerInterval;
-    int                  spacing;
+    int                       rearrangeTimerInterval;
+    int                       spacing;
 
-    QSet<IconItem*>      selectedItems;
-    QSet<IconItem*>      prevSelectedItems;
+    QSet<IconItem*>           selectedItems;
+    QSet<IconItem*>           prevSelectedItems;
 
-    DRubberBand         *rubber;
+    QCache<QString, QPixmap>  thumbnailBorderCache;
 
-    QPoint               dragStartPos;
+    DRubberBand              *rubber;
 
-    QTimer              *rearrangeTimer;
-    QTimer              *toolTipTimer;
+    QPoint                    dragStartPos;
 
-    IconItem            *toolTipItem;
-    IconItem            *currItem;
-    IconItem            *anchorItem;
-    IconItem            *storedVisibleItem; // store position for slotRearrange
+    QTimer                   *rearrangeTimer;
+    QTimer                   *toolTipTimer;
 
-    IconGroupItem       *firstGroup;
-    IconGroupItem       *lastGroup;
+    IconItem                 *toolTipItem;
+    IconItem                 *currItem;
+    IconItem                 *anchorItem;
+    IconItem                 *storedVisibleItem; // store position for slotRearrange
+
+    IconGroupItem            *firstGroup;
+    IconGroupItem            *lastGroup;
 
     struct ItemContainer
     {
@@ -1911,6 +1917,31 @@ int IconView::cmpItems(const void *n1, const void *n2)
     IconViewPriv::SortableItem *i2 = (IconViewPriv::SortableItem *)n2;
 
     return i1->group->compare( i2->group );
+}
+
+QPixmap IconView::thumbnailBorderPixmap(const QSize &pixSize)
+{
+    const int radius         = 3;
+    const QColor borderColor = QColor(0, 0, 0, 128);
+
+    QString cacheKey  = QString::number(pixSize.width()) + "-" + QString::number(pixSize.height());
+    QPixmap *cachePix = d->thumbnailBorderCache.object(cacheKey);
+
+    if (!cachePix)
+    {
+        QPixmap pix = ThumbBarView::generateFuzzyRect(QSize(pixSize.width()  + 2*radius,
+                                                            pixSize.height() + 2*radius),
+                                                      borderColor, radius);
+        d->thumbnailBorderCache.insert(cacheKey, new QPixmap(pix));
+        return pix;
+    }
+
+    return *cachePix;
+}
+
+void IconView::clearThumbnailBorderCache()
+{
+    d->thumbnailBorderCache.clear();
 }
 
 }  // namespace Digikam

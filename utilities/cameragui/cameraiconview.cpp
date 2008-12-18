@@ -38,7 +38,6 @@
 #include <QClipboard>
 #include <QDropEvent>
 #include <QHash>
-#include <QCache>
 
 // KDE includes.
 
@@ -53,7 +52,6 @@
 // Local includes.
 
 #include "themeengine.h"
-#include "thumbbar.h"
 #include "thumbnailsize.h"
 #include "gpiteminfo.h"
 #include "renamecustomizer.h"
@@ -79,7 +77,6 @@ public:
         cameraUI  = 0;
         toolTip   = 0;
         thumbSize = ThumbnailSize::Large;
-        thumbnailBorderCache.setMaxCost(10);
     }
 
     int                              thumbSize;
@@ -90,8 +87,6 @@ public:
 
     QPixmap                          itemRegPixmap;
     QPixmap                          itemSelPixmap;
-
-    QCache<QString, QPixmap>         thumbnailBorderCache;
 
     RenameCustomizer                *renamer;
 
@@ -725,7 +720,7 @@ void CameraIconView::updateItemRectsPixmap()
     d->itemRegPixmap = ThemeEngine::instance()->thumbRegPixmap(d->itemRect.width(), d->itemRect.height());
     d->itemSelPixmap = ThemeEngine::instance()->thumbSelPixmap(d->itemRect.width(), d->itemRect.height());
 
-    d->thumbnailBorderCache.clear();
+    clearThumbnailBorderCache();
 }
 
 void CameraIconView::slotThemeChanged()
@@ -805,26 +800,6 @@ void CameraIconView::itemsSelectionSizeInfo(unsigned long& fSize, unsigned long&
 
     fSize /= 1024;
     dSize /= 1024;
-}
-
-QPixmap CameraIconView::thumbnailBorderPixmap(const QSize &pixSize)
-{
-    const int radius         = 3;
-    const QColor borderColor = QColor(0, 0, 0, 128);
-
-    QString cacheKey  = QString::number(pixSize.width()) + "-" + QString::number(pixSize.height());
-    QPixmap *cachePix = d->thumbnailBorderCache.object(cacheKey);
-
-    if (!cachePix)
-    {
-        QPixmap pix = ThumbBarView::generateFuzzyRect(QSize(pixSize.width()  + 2*radius,
-                                                            pixSize.height() + 2*radius),
-                                                      borderColor, radius);
-        d->thumbnailBorderCache.insert(cacheKey, new QPixmap(pix));
-        return pix;
-    }
-
-    return *cachePix;
 }
 
 }  // namespace Digikam

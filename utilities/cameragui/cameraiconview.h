@@ -83,13 +83,11 @@ public:
     QPixmap itemBaseRegPixmap() const;
     QPixmap itemBaseSelPixmap() const;
 
-    virtual QRect itemRect() const;
-
     QString defaultDownloadName(CameraIconItem *item);
 
     void itemsSelectionSizeInfo(unsigned long& fSize, unsigned long& dSize);
 
-    QPixmap thumbnailBorderPixmap(const QSize &pixSize);
+    virtual QRect itemRect() const;
 
 signals:
 
