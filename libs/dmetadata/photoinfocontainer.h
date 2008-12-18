@@ -79,6 +79,9 @@ public:
     QDateTime dateTime;
 };
 
+DIGIKAM_EXPORT QDataStream& operator<<(QDataStream& ds, const PhotoInfoContainer& info);
+DIGIKAM_EXPORT QDataStream& operator>>(QDataStream& ds, PhotoInfoContainer& info);
+
 } // namespace Digikam
 
 #endif /* PHOTOINFOCONTAINER_H */
