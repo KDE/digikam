@@ -217,6 +217,15 @@ int AlbumIconItem::compare(IconItem *item)
     return 0;
 }
 
+QRect AlbumIconItem::thumbnailRect() const
+{
+    QRect pixmapRect = d->view->itemPixmapRect();
+    QRect r          = rect();
+
+    pixmapRect.translate(r.x(), r.y());
+    return pixmapRect;
+}
+
 QRect AlbumIconItem::clickToOpenRect()
 {
     if (d->tightPixmapRect.isNull())
@@ -369,15 +378,6 @@ void AlbumIconItem::paintItem(QPainter *p)
         p->setPen(QPen(isSelected() ? te->textSelColor() : te->textRegColor(), 0, Qt::DotLine));
         p->drawRect(1, 1, r.width()-2, r.height()-2);
     }
-}
-
-QRect AlbumIconItem::thumbnailRect() const
-{
-    QRect pixmapRect = d->view->itemPixmapRect();
-    QRect r          = rect();
-
-    pixmapRect.translate(r.x(), r.y());
-    return pixmapRect;
 }
 
 }  // namespace Digikam

@@ -225,95 +225,6 @@ GPItemInfo* CameraIconItem::itemInfo() const
     return d->itemInfo;
 }
 
-void CameraIconItem::paintItem(QPainter *p)
-{
-    CameraIconView* view = (CameraIconView*)iconView();
-    QFont fn(view->font());
-
-    QRect r(rect());
-
-    ThemeEngine* te = ThemeEngine::instance();
-
-    QString itemName     = AlbumIconItem::squeezedText(p, r.width()-5, d->itemInfo->name);
-    QString downloadName = AlbumIconItem::squeezedText(p, r.width()-5, d->downloadName);
-    calcRect(itemName, downloadName);
-
-    p->setPen(isSelected() ? te->textSelColor() : te->textRegColor());
-
-    QRect pixmapDrawRect(d->pixRect.x() + (d->pixRect.width()  - d->pixmap.width())  /2,
-                         d->pixRect.y() + (d->pixRect.height() - d->pixmap.height()) /2,
-                         d->pixmap.width(), d->pixmap.height());
-    p->drawPixmap(pixmapDrawRect.topLeft(), d->pixmap);
-
-    p->save();
-    QRegion pixmapClipRegion = QRegion(0, 0, r.width(), r.height()) - QRegion(pixmapDrawRect);
-    p->setClipRegion(pixmapClipRegion);
-    if (isSelected())
-        p->drawPixmap(0, 0, view->itemBaseSelPixmap());
-    else
-        p->drawPixmap(0, 0, view->itemBaseRegPixmap());
-    p->restore();
-
-    p->drawText(d->textRect, Qt::AlignHCenter|Qt::AlignTop, itemName);
-
-    if (!d->downloadName.isEmpty())
-    {
-        if (fn.pointSize() > 0)
-            fn.setPointSize(qMax(fn.pointSize()-2, 6));
-
-        QFont oldFn = p->font();
-        p->setFont(fn);
-        p->setPen(isSelected() ? te->textSpecialSelColor() : te->textSpecialRegColor());
-        p->drawText(d->extraRect, Qt::AlignHCenter|Qt::AlignTop, downloadName);
-        p->setFont(oldFn);
-    }
-
-    if (this == iconView()->currentItem())
-    {
-        p->setPen(QPen(isSelected() ? Qt::white : Qt::black, 1, Qt::DotLine));
-        p->drawRect(0, 0, r.width(), r.height());
-    }
-
-    // Draw download status icon.
-    QPixmap downloaded;
-
-    switch (d->itemInfo->downloaded)
-    {
-        case GPItemInfo::NewPicture:
-        {
-            downloaded = d->pixmapNewPicture;
-            break;
-        }
-        case GPItemInfo::DownloadedYes:
-        {
-            downloaded = SmallIcon("dialog-ok");
-            break;
-        }
-        case GPItemInfo::DownloadStarted:
-        {
-            downloaded = SmallIcon("system-run");
-            break;
-        }
-        case GPItemInfo::DownloadFailed:
-        {
-            downloaded = SmallIcon("dialog-cancel");
-            break;
-        }
-        case GPItemInfo::DownloadUnknow:
-        {
-            downloaded = d->pixmapUnknowPicture;
-            break;
-        }
-    }
-
-    if (!downloaded.isNull())
-        p->drawPixmap(rect().width() - downloaded.width() - 5, 5, downloaded);
-
-    // If camera item is locked (read only), draw a "Lock" icon.
-    if (d->itemInfo->writePermissions == 0)
-        p->drawPixmap(5, 5, SmallIcon("object-locked"));
-}
-
 void CameraIconItem::setDownloadName(const QString& downloadName)
 {
     d->downloadName = downloadName;
@@ -414,6 +325,95 @@ QRect CameraIconItem::clickToOpenRect()
                   d->pixRect.y() + (d->pixRect.height() - d->pixmap.height())/2,
                   d->pixmap.width(), d->pixmap.height());
     return pixRect.translated(r.x(), r.y());
+}
+
+void CameraIconItem::paintItem(QPainter *p)
+{
+    CameraIconView* view = static_cast<CameraIconView*>(iconView());
+    QFont fn(view->font());
+
+    QRect r(rect());
+
+    ThemeEngine* te = ThemeEngine::instance();
+
+    QString itemName     = AlbumIconItem::squeezedText(p, r.width()-5, d->itemInfo->name);
+    QString downloadName = AlbumIconItem::squeezedText(p, r.width()-5, d->downloadName);
+    calcRect(itemName, downloadName);
+
+    p->setPen(isSelected() ? te->textSelColor() : te->textRegColor());
+
+    QRect pixmapDrawRect(d->pixRect.x() + (d->pixRect.width()  - d->pixmap.width())  /2,
+                         d->pixRect.y() + (d->pixRect.height() - d->pixmap.height()) /2,
+                         d->pixmap.width(), d->pixmap.height());
+    p->drawPixmap(pixmapDrawRect.topLeft(), d->pixmap);
+
+    p->save();
+    QRegion pixmapClipRegion = QRegion(0, 0, r.width(), r.height()) - QRegion(pixmapDrawRect);
+    p->setClipRegion(pixmapClipRegion);
+    if (isSelected())
+        p->drawPixmap(0, 0, view->itemBaseSelPixmap());
+    else
+        p->drawPixmap(0, 0, view->itemBaseRegPixmap());
+    p->restore();
+
+    p->drawText(d->textRect, Qt::AlignHCenter|Qt::AlignTop, itemName);
+
+    if (!d->downloadName.isEmpty())
+    {
+        if (fn.pointSize() > 0)
+            fn.setPointSize(qMax(fn.pointSize()-2, 6));
+
+        QFont oldFn = p->font();
+        p->setFont(fn);
+        p->setPen(isSelected() ? te->textSpecialSelColor() : te->textSpecialRegColor());
+        p->drawText(d->extraRect, Qt::AlignHCenter|Qt::AlignTop, downloadName);
+        p->setFont(oldFn);
+    }
+
+    if (this == iconView()->currentItem())
+    {
+        p->setPen(QPen(isSelected() ? Qt::white : Qt::black, 1, Qt::DotLine));
+        p->drawRect(0, 0, r.width(), r.height());
+    }
+
+    // Draw download status icon.
+    QPixmap downloaded;
+
+    switch (d->itemInfo->downloaded)
+    {
+        case GPItemInfo::NewPicture:
+        {
+            downloaded = d->pixmapNewPicture;
+            break;
+        }
+        case GPItemInfo::DownloadedYes:
+        {
+            downloaded = SmallIcon("dialog-ok");
+            break;
+        }
+        case GPItemInfo::DownloadStarted:
+        {
+            downloaded = SmallIcon("system-run");
+            break;
+        }
+        case GPItemInfo::DownloadFailed:
+        {
+            downloaded = SmallIcon("dialog-cancel");
+            break;
+        }
+        case GPItemInfo::DownloadUnknow:
+        {
+            downloaded = d->pixmapUnknowPicture;
+            break;
+        }
+    }
+
+    if (!downloaded.isNull())
+        p->drawPixmap(rect().width() - downloaded.width() - 5, 5, downloaded);
+
+    // If camera item is locked (read only), draw a "Lock" icon.
+    if (d->itemInfo->writePermissions == 0)
+        p->drawPixmap(5, 5, SmallIcon("object-locked"));
 }
 
 }  // namespace Digikam
