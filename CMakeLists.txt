@@ -393,6 +393,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libdmetadata_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/photoinfocontainer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/dmetadata.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/geodetictools.cpp
        )
