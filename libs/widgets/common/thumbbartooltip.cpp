@@ -151,7 +151,7 @@ QString ThumbBarToolTip::tipContents()
         {
             QDateTime modifiedDate = fileInfo.lastModified();
             str = KGlobal::locale()->formatDateTime(modifiedDate, KLocale::ShortDate, true);
-            tip += cnt.cellBeg + i18n("Modified:") + cnt.cellMid + str + cnt.cellEnd;
+            tip += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
         }
 
         if (settings.showFileSize)

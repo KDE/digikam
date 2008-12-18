@@ -170,7 +170,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
     d->title                  = new QLabel(i18n("<big><b>File Properties</b></big>"), settingsArea);
     d->file                   = new DTextLabelName(i18n("File: "), settingsArea);
     d->folder                 = new DTextLabelName(i18n("Folder: "), settingsArea);
-    d->modifiedDate           = new DTextLabelName(i18n("Modified: "), settingsArea);
+    d->modifiedDate           = new DTextLabelName(i18n("Date: "), settingsArea);
     d->size                   = new DTextLabelName(i18n("Size: "), settingsArea);
     d->owner                  = new DTextLabelName(i18n("Owner: "), settingsArea);
     d->permissions            = new DTextLabelName(i18n("Permissions: "), settingsArea);
