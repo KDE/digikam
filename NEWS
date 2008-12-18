@@ -1,5 +1,5 @@
 *********************************************************************************************************
-digiKam 0.10.0-beta7 - Release date: 2008-12-xx
+digiKam 0.10.0-beta7 - Release date: 2008-12-18
 
 IMPORTANT: This version is not yet finalized : do not use yet in production !!!
 ===============================================================================
@@ -132,7 +132,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 120 ==> 151275 : Camera tool: date & time should be taken from exif not file modified date.
 121 ==> 146764 : Media viewer sort images by date and try to fill videos without exiv in the correct order (by filename).
 122 ==> 175898 : Selecting in the import dialog is extremly slow.
-123 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta6 - Release date: 2008-11-25
