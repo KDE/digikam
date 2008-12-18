@@ -329,15 +329,14 @@ QRect CameraIconItem::clickToOpenRect()
 
 void CameraIconItem::paintItem(QPainter *p)
 {
-    CameraIconView* view = static_cast<CameraIconView*>(iconView());
     QFont fn(view->font());
-
     QRect r(rect());
 
-    ThemeEngine* te = ThemeEngine::instance();
-
+    ThemeEngine* te      = ThemeEngine::instance();
+    CameraIconView* view = static_cast<CameraIconView*>(iconView());
     QString itemName     = AlbumIconItem::squeezedText(p, r.width()-5, d->itemInfo->name);
     QString downloadName = AlbumIconItem::squeezedText(p, r.width()-5, d->downloadName);
+
     calcRect(itemName, downloadName);
 
     p->setPen(isSelected() ? te->textSelColor() : te->textRegColor());
@@ -346,16 +345,16 @@ void CameraIconItem::paintItem(QPainter *p)
                          d->pixRect.y() + (d->pixRect.height() - d->pixmap.height()) /2,
                          d->pixmap.width(), d->pixmap.height());
     p->drawPixmap(pixmapDrawRect.topLeft(), d->pixmap);
-
     p->save();
+
     QRegion pixmapClipRegion = QRegion(0, 0, r.width(), r.height()) - QRegion(pixmapDrawRect);
     p->setClipRegion(pixmapClipRegion);
     if (isSelected())
         p->drawPixmap(0, 0, view->itemBaseSelPixmap());
     else
         p->drawPixmap(0, 0, view->itemBaseRegPixmap());
-    p->restore();
 
+    p->restore();
     p->drawText(d->textRect, Qt::AlignHCenter|Qt::AlignTop, itemName);
 
     if (!d->downloadName.isEmpty())
