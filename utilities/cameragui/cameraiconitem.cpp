@@ -329,13 +329,13 @@ QRect CameraIconItem::clickToOpenRect()
 
 void CameraIconItem::paintItem(QPainter *p)
 {
-    QFont fn(view->font());
-    QRect r(rect());
-
     ThemeEngine* te      = ThemeEngine::instance();
     CameraIconView* view = static_cast<CameraIconView*>(iconView());
     QString itemName     = AlbumIconItem::squeezedText(p, r.width()-5, d->itemInfo->name);
     QString downloadName = AlbumIconItem::squeezedText(p, r.width()-5, d->downloadName);
+
+    QFont fn(view->font());
+    QRect r(rect());
 
     calcRect(itemName, downloadName);
 
