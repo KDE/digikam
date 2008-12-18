@@ -6,7 +6,7 @@
  * Date        : 2006-04-21
  * Description : main photograph information container
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,27 +42,27 @@ class DIGIKAM_EXPORT PhotoInfoContainer
 public:
 
     PhotoInfoContainer(){};
-    
+
     bool isEmpty()
     {
-        if ( make.isEmpty()            && 
-             model.isEmpty()           && 
-             lens.isEmpty()            && 
-             exposureTime.isEmpty()    && 
-             exposureMode.isEmpty()    && 
-             exposureProgram.isEmpty() && 
-             aperture.isEmpty()        && 
-             focalLength.isEmpty()     && 
-             focalLength35mm.isEmpty() && 
-             sensitivity.isEmpty()     && 
-             flash.isEmpty()           && 
-             whiteBalance.isEmpty()    && 
+        if ( make.isEmpty()            &&
+             model.isEmpty()           &&
+             lens.isEmpty()            &&
+             exposureTime.isEmpty()    &&
+             exposureMode.isEmpty()    &&
+             exposureProgram.isEmpty() &&
+             aperture.isEmpty()        &&
+             focalLength.isEmpty()     &&
+             focalLength35mm.isEmpty() &&
+             sensitivity.isEmpty()     &&
+             flash.isEmpty()           &&
+             whiteBalance.isEmpty()    &&
              !dateTime.isValid() )
             return true;
         else
             return false;
     };
-    
+
     QString   make;
     QString   model;
     QString   lens;
