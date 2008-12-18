@@ -31,6 +31,10 @@
 #include <QByteArray>
 #include <QDateTime>
 
+// Local includes.
+
+#include "photoinfocontainer.h"
+
 class QDataStream;
 
 namespace Digikam
@@ -53,23 +57,25 @@ public:
 
 public:
 
-    qint64    size;
+    qint64             size;
 
-    int       width;
-    int       height;
-    int       downloaded;           // See DownloadStatus enum.
-    int       readPermissions;
-    int       writePermissions;
+    int                width;
+    int                height;
+    int                downloaded;           // See DownloadStatus enum.
+    int                readPermissions;
+    int                writePermissions;
 
-    QString   name;
-    QString   folder;
-    QString   mime;
+    QString            name;
+    QString            folder;
+    QString            mime;
 
-    QDateTime mtime;
+    QDateTime          mtime;
+
+    PhotoInfoContainer photoInfo;
 };
 
-QDataStream& operator<<(QDataStream &, const GPItemInfo &);
-QDataStream& operator>>(QDataStream &, GPItemInfo &);
+QDataStream& operator<<(QDataStream&, const GPItemInfo&);
+QDataStream& operator>>(QDataStream&, GPItemInfo&);
 
 typedef QList<GPItemInfo> GPItemInfoList;
 

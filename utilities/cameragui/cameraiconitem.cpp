@@ -45,12 +45,12 @@
 namespace Digikam
 {
 
-class CameraIconViewItemPriv
+class CameraIconItemPriv
 {
 
 public:
 
-    CameraIconViewItemPriv()
+    CameraIconItemPriv()
     {
         itemInfo            = 0;
         pixmapNewPicture    = QPixmap(newPicture_xpm);
@@ -75,7 +75,7 @@ public:
     GPItemInfo        *itemInfo;
 };
 
-const char *CameraIconViewItemPriv::newPicture_xpm[] =
+const char *CameraIconItemPriv::newPicture_xpm[] =
 {
     "13 13 8 1",
     "       c None",
@@ -101,7 +101,7 @@ const char *CameraIconViewItemPriv::newPicture_xpm[] =
     "      @      "
 };
 
-const char *CameraIconViewItemPriv::unknowPicture_xpm[] =
+const char *CameraIconItemPriv::unknowPicture_xpm[] =
 {
     "16 16 78 1",
     "   g None",
@@ -200,32 +200,32 @@ const char *CameraIconViewItemPriv::unknowPicture_xpm[] =
     "                "
 };
 
-CameraIconViewItem::CameraIconViewItem(IconGroupItem* parent, const GPItemInfo& itemInfo,
+CameraIconItem::CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo,
                                        const QImage& thumbnail, const QString& downloadName)
-                  : IconItem(parent), d(new CameraIconViewItemPriv)
+                  : IconItem(parent), d(new CameraIconItemPriv)
 {
     d->itemInfo     = new GPItemInfo(itemInfo);
     d->downloadName = downloadName;
     d->thumbnail    = thumbnail;
 }
 
-CameraIconViewItem::~CameraIconViewItem()
+CameraIconItem::~CameraIconItem()
 {
     delete d->itemInfo;
     delete d;
 }
 
-void CameraIconViewItem::setThumbnail(const QImage& thumbnail)
+void CameraIconItem::setThumbnail(const QImage& thumbnail)
 {
     d->thumbnail = thumbnail;
 }
 
-GPItemInfo* CameraIconViewItem::itemInfo() const
+GPItemInfo* CameraIconItem::itemInfo() const
 {
     return d->itemInfo;
 }
 
-void CameraIconViewItem::paintItem(QPainter *p)
+void CameraIconItem::paintItem(QPainter *p)
 {
     CameraIconView* view = (CameraIconView*)iconView();
     QFont fn(view->font());
@@ -314,24 +314,24 @@ void CameraIconViewItem::paintItem(QPainter *p)
         p->drawPixmap(5, 5, SmallIcon("object-locked"));
 }
 
-void CameraIconViewItem::setDownloadName(const QString& downloadName)
+void CameraIconItem::setDownloadName(const QString& downloadName)
 {
     d->downloadName = downloadName;
     update();
 }
 
-QString CameraIconViewItem::getDownloadName() const
+QString CameraIconItem::getDownloadName() const
 {
     return d->downloadName;
 }
 
-void CameraIconViewItem::setDownloaded(int status)
+void CameraIconItem::setDownloaded(int status)
 {
     d->itemInfo->downloaded = status;
     update();
 }
 
-void CameraIconViewItem::toggleLock()
+void CameraIconItem::toggleLock()
 {
     if (d->itemInfo->writePermissions == 0)
         d->itemInfo->writePermissions = 1;
@@ -341,7 +341,7 @@ void CameraIconViewItem::toggleLock()
     update();
 }
 
-void CameraIconViewItem::calcRect(const QString& itemName, const QString& downloadName)
+void CameraIconItem::calcRect(const QString& itemName, const QString& downloadName)
 {
     CameraIconView* view = (CameraIconView*)iconView();
     int thumbSize        = view->thumbnailSize();
@@ -401,7 +401,7 @@ void CameraIconViewItem::calcRect(const QString& itemName, const QString& downlo
     }
 }
 
-QRect CameraIconViewItem::clickToOpenRect()
+QRect CameraIconItem::clickToOpenRect()
 {
     QRect r(rect());
 

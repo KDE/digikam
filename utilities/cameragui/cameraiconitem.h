@@ -38,17 +38,17 @@ namespace Digikam
 {
 
 class GPItemInfo;
-class CameraIconViewItemPriv;
+class CameraIconItemPriv;
 
-class CameraIconViewItem : public IconItem
+class CameraIconItem : public IconItem
 {
 
 public:
 
-    CameraIconViewItem(IconGroupItem* parent, const GPItemInfo& itemInfo,
+    CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo,
                        const QImage& thumbnail, 
                        const QString& downloadName=QString());
-    ~CameraIconViewItem();
+    ~CameraIconItem();
 
     void    setThumbnail(const QImage& thumbnail);
 
@@ -73,7 +73,7 @@ private:
 
 private:
 
-    CameraIconViewItemPriv* const d;
+    CameraIconItemPriv* const d;
 };
 
 }  // namespace Digikam

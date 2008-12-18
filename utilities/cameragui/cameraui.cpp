@@ -504,11 +504,11 @@ void CameraUI::setupConnections()
 
     // -------------------------------------------------------------------------
 
-    connect(d->view, SIGNAL(signalSelected(CameraIconViewItem*, bool)),
-            this, SLOT(slotItemsSelected(CameraIconViewItem*, bool)));
+    connect(d->view, SIGNAL(signalSelected(CameraIconItem*, bool)),
+            this, SLOT(slotItemsSelected(CameraIconItem*, bool)));
 
-    connect(d->view, SIGNAL(signalFileView(CameraIconViewItem*)),
-            this, SLOT(slotFileView(CameraIconViewItem*)));
+    connect(d->view, SIGNAL(signalFileView(CameraIconItem*)),
+            this, SLOT(slotFileView(CameraIconItem*)));
 
     connect(d->view, SIGNAL(signalUpload(const KUrl::List&)),
             this, SLOT(slotUploadItems(const KUrl::List&)));
@@ -1251,7 +1251,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
     IconItem* firstItem = d->view->firstItem();
     if (firstItem)
     {
-        CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(firstItem);
+        CameraIconItem* iconItem = static_cast<CameraIconItem*>(firstItem);
 
         QDateTime dateTime = iconItem->itemInfo()->mtime;
 
@@ -1357,7 +1357,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
         if (onlySelected && !(item->isSelected()))
             continue;
 
-        CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
+        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
         downloadSettings.folder      = iconItem->itemInfo()->folder;
         downloadSettings.file        = iconItem->itemInfo()->name;
         downloadName                 = iconItem->getDownloadName();
@@ -1461,7 +1461,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
 
 void CameraUI::slotDownloaded(const QString& folder, const QString& file, int status)
 {
-    CameraIconViewItem* iconItem = d->view->findItem(folder, file);
+    CameraIconItem* iconItem = d->view->findItem(folder, file);
     if (iconItem)
     {
         iconItem->setDownloaded(status);
@@ -1484,7 +1484,7 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
 
 void CameraUI::slotSkipped(const QString& folder, const QString& file)
 {
-    CameraIconViewItem* iconItem = d->view->findItem(folder, file);
+    CameraIconItem* iconItem = d->view->findItem(folder, file);
     if (iconItem)
         iconItem->setDownloaded(GPItemInfo::DownloadedNo);
 
@@ -1498,7 +1498,7 @@ void CameraUI::slotToggleLock()
     for (IconItem* item = d->view->firstItem(); item;
          item = item->nextItem())
     {
-        CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
+        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
         if (iconItem->isSelected())
         {
             QString folder = iconItem->itemInfo()->folder;
@@ -1527,7 +1527,7 @@ void CameraUI::slotLocked(const QString& folder, const QString& file, bool statu
 {
     if (status)
     {
-        CameraIconViewItem* iconItem = d->view->findItem(folder, file);
+        CameraIconItem* iconItem = d->view->findItem(folder, file);
         if (iconItem)
         {
             iconItem->toggleLock();
@@ -1550,7 +1550,7 @@ void CameraUI::slotDeleteSelected()
     for (IconItem* item = d->view->firstItem(); item;
          item = item->nextItem())
     {
-        CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
+        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
         if (iconItem->isSelected())
         {
             if (iconItem->itemInfo()->writePermissions != 0)  // Item not locked ?
@@ -1620,7 +1620,7 @@ void CameraUI::slotDeleteAll()
     for (IconItem* item = d->view->firstItem(); item;
          item = item->nextItem())
     {
-        CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
+        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
         if (iconItem->itemInfo()->writePermissions != 0)  // Item not locked ?
         {
             QString folder = iconItem->itemInfo()->folder;
@@ -1691,19 +1691,19 @@ void CameraUI::slotDeleted(const QString& folder, const QString& file, bool stat
 
 void CameraUI::slotFileView()
 {
-    CameraIconViewItem* item = d->view->firstItemSelected();
+    CameraIconItem* item = d->view->firstItemSelected();
     if (item)
         slotFileView(item);
 }
 
-void CameraUI::slotFileView(CameraIconViewItem* item)
+void CameraUI::slotFileView(CameraIconItem* item)
 {
     d->controller->openFile(item->itemInfo()->folder, item->itemInfo()->name);
 }
 
 void CameraUI::slotExifFromFile(const QString& folder, const QString& file)
 {
-    CameraIconViewItem* item = d->view->findItem(folder, file);
+    CameraIconItem* item = d->view->findItem(folder, file);
     if (!item)
         return;
 
@@ -1713,7 +1713,7 @@ void CameraUI::slotExifFromFile(const QString& folder, const QString& file)
 
 void CameraUI::slotExifFromData(const QByteArray& exifData)
 {
-    CameraIconViewItem* item = dynamic_cast<CameraIconViewItem*>(d->view->currentItem());
+    CameraIconItem* item = dynamic_cast<CameraIconItem*>(d->view->currentItem());
 
     if (!item)
         return;
@@ -1770,7 +1770,7 @@ void CameraUI::slotNewSelection(bool hasSelection)
     d->albumLibraryFreeSpace->setEstimatedDSizeKb(dSize);
 }
 
-void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)
+void CameraUI::slotItemsSelected(CameraIconItem* item, bool selected)
 {
     if (!d->controller) return;
 
@@ -1836,7 +1836,7 @@ void CameraUI::addFileExtension(const QString& ext)
 
 void CameraUI::slotFirstItem()
 {
-    CameraIconViewItem *currItem = dynamic_cast<CameraIconViewItem*>(d->view->firstItem());
+    CameraIconItem *currItem = dynamic_cast<CameraIconItem*>(d->view->firstItem());
     d->view->clearSelection();
     d->view->updateContents();
     if (currItem)
@@ -1845,7 +1845,7 @@ void CameraUI::slotFirstItem()
 
 void CameraUI::slotPrevItem()
 {
-    CameraIconViewItem *currItem = dynamic_cast<CameraIconViewItem*>(d->view->currentItem());
+    CameraIconItem *currItem = dynamic_cast<CameraIconItem*>(d->view->currentItem());
     d->view->clearSelection();
     d->view->updateContents();
     if (currItem)
@@ -1854,7 +1854,7 @@ void CameraUI::slotPrevItem()
 
 void CameraUI::slotNextItem()
 {
-    CameraIconViewItem *currItem = dynamic_cast<CameraIconViewItem*>(d->view->currentItem());
+    CameraIconItem *currItem = dynamic_cast<CameraIconItem*>(d->view->currentItem());
     d->view->clearSelection();
     d->view->updateContents();
     if (currItem)
@@ -1863,7 +1863,7 @@ void CameraUI::slotNextItem()
 
 void CameraUI::slotLastItem()
 {
-    CameraIconViewItem *currItem = dynamic_cast<CameraIconViewItem*>(d->view->lastItem());
+    CameraIconItem *currItem = dynamic_cast<CameraIconItem*>(d->view->lastItem());
     d->view->clearSelection();
     d->view->updateContents();
     if (currItem)

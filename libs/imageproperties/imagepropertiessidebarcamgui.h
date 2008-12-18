@@ -43,7 +43,7 @@ namespace Digikam
 class SidebarSplitter;
 class GPItemInfo;
 class CameraIconView;
-class CameraIconViewItem;
+class CameraIconItem;
 class NavigateBarTab;
 class ImagePropertiesSideBarCamGuiPriv;
 
@@ -59,7 +59,7 @@ public:
     ~ImagePropertiesSideBarCamGui();
 
     void itemChanged(GPItemInfo* itemInfo, const KUrl& url, const QByteArray& exifData=QByteArray(),
-                     CameraIconView* view=0, CameraIconViewItem* item=0);
+                     CameraIconView* view=0, CameraIconItem* item=0);
 
 public slots:
 

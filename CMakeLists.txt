@@ -745,6 +745,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconviewtooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameracontroller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraui.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/freespacewidget.cpp

@@ -87,7 +87,7 @@ public:
 
     CameraIconView             *cameraView;
 
-    CameraIconViewItem         *cameraItem;
+    CameraIconItem             *cameraItem;
 
     CameraItemPropertiesTab    *cameraItemTab;
 };
@@ -120,7 +120,7 @@ ImagePropertiesSideBarCamGui::~ImagePropertiesSideBarCamGui()
 
 void ImagePropertiesSideBarCamGui::itemChanged(GPItemInfo* itemInfo, const KUrl& url,
                                                const QByteArray& exifData,
-                                               CameraIconView* view, CameraIconViewItem* item)
+                                               CameraIconView* view, CameraIconItem* item)
 {
     if (!itemInfo)
         return;

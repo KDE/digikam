@@ -48,7 +48,7 @@ class ThumbnailSize;
 class GPItemInfo;
 class RenameCustomizer;
 class CameraUI;
-class CameraIconViewItem;
+class CameraIconItem;
 class CameraIconViewPriv;
 
 class CameraIconView : public IconView
@@ -66,16 +66,16 @@ public:
     void removeItem(const QString& folder, const QString& file);
     void setThumbnail(const QString& folder, const QString& filename, const QImage& image);
 
-    void ensureItemVisible(CameraIconViewItem *item);
+    void ensureItemVisible(CameraIconItem *item);
     void ensureItemVisible(const GPItemInfo& itemInfo);
     void ensureItemVisible(const QString& folder, const QString& file);
 
     void setThumbnailSize(int thumbSize);
     int thumbnailSize();
 
-    CameraIconViewItem* findItem(const QString& folder, const QString& file);
+    CameraIconItem* findItem(const QString& folder, const QString& file);
 
-    CameraIconViewItem* firstItemSelected();
+    CameraIconItem* firstItemSelected();
 
     int countItemsByFolder(QString folder);
     int itemsDownloaded();
@@ -85,14 +85,14 @@ public:
 
     virtual QRect itemRect() const;
 
-    QString defaultDownloadName(CameraIconViewItem *item);
+    QString defaultDownloadName(CameraIconItem *item);
 
     void itemsSelectionSizeInfo(unsigned long& fSize, unsigned long& dSize);
 
 signals:
 
-    void signalSelected(CameraIconViewItem*, bool);
-    void signalFileView(CameraIconViewItem*);
+    void signalSelected(CameraIconItem*, bool);
+    void signalFileView(CameraIconItem*);
     void signalThumbSizeChanged(int);
 
     void signalUpload(const KUrl::List&);
@@ -119,12 +119,14 @@ private slots:
     void slotDoubleClicked(IconItem* item);
     void slotThemeChanged();
     void slotUpdateDownloadNames(bool hasSelection);
+    void slotShowToolTip(IconItem* item);
 
 protected:
 
     void startDrag();
     void contentsDropEvent(QDropEvent *event);
     void updateItemRectsPixmap();
+    bool acceptToolTip(IconItem *item, const QPoint &mousePos);
 
 private:
 

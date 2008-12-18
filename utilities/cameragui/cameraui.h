@@ -47,7 +47,7 @@ namespace Digikam
 {
 
 class Album;
-class CameraIconViewItem;
+class CameraIconItem;
 class CollectionLocation;
 class CameraUIPriv;
 
@@ -151,7 +151,7 @@ private slots:
     void slotToggleLock();
 
     void slotFileView();
-    void slotFileView(CameraIconViewItem* item);
+    void slotFileView(CameraIconItem* item);
 
     void slotUploaded(const GPItemInfo&);
     void slotDownloaded(const QString&, const QString&, int);
@@ -160,7 +160,7 @@ private slots:
     void slotLocked(const QString&, const QString&, bool);
 
     void slotNewSelection(bool);
-    void slotItemsSelected(CameraIconViewItem* item, bool selected);
+    void slotItemsSelected(CameraIconItem* item, bool selected);
 
     void slotExifFromFile(const QString& folder, const QString& file);
     void slotExifFromData(const QByteArray& exifData);

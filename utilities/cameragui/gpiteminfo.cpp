@@ -31,7 +31,7 @@
 namespace Digikam
 {
 
-QDataStream& operator<<( QDataStream& ds, const GPItemInfo& info)
+QDataStream& operator<<(QDataStream& ds, const GPItemInfo& info)
 {
     ds << info.name;
     ds << info.folder;
@@ -43,6 +43,7 @@ QDataStream& operator<<( QDataStream& ds, const GPItemInfo& info)
     ds << info.downloaded;
     ds << info.readPermissions;
     ds << info.writePermissions;
+    ds << info.photoInfo;
 
     return ds;
 }
@@ -59,6 +60,7 @@ QDataStream& operator>>(QDataStream& ds, GPItemInfo& info)
     ds >> info.downloaded;
     ds >> info.readPermissions;
     ds >> info.writePermissions;
+    ds >> info.photoInfo;
 
     return ds;
 }

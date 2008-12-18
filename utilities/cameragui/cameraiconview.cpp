@@ -60,6 +60,7 @@
 #include "ddragobjects.h"
 #include "cameraui.h"
 #include "cameraiconitem.h"
+#include "cameraiconviewtooltip.h"
 
 namespace Digikam
 {
@@ -74,12 +75,13 @@ public:
         renamer   = 0;
         groupItem = 0;
         cameraUI  = 0;
+        toolTip   = 0;
         thumbSize = ThumbnailSize::Large;
     }
 
     int                                 thumbSize;
 
-    QHash<QString, CameraIconViewItem*> itemDict;
+    QHash<QString, CameraIconItem*> itemDict;
 
     QRect                               itemRect;
 
@@ -91,6 +93,8 @@ public:
     IconGroupItem                      *groupItem;
 
     CameraUI                           *cameraUI;
+
+    CameraIconViewToolTip              *toolTip;
 };
 
 CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
@@ -98,6 +102,7 @@ CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
 {
     d->cameraUI  = ui;
     d->groupItem = new IconGroupItem(this);
+    d->toolTip   = new CameraIconViewToolTip(this);
 
     setHScrollBarMode(Q3ScrollView::AlwaysOff);
     setMinimumSize(400, 300);
@@ -125,6 +130,9 @@ CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
+    connect(this, SIGNAL(signalShowToolTip(IconItem*)),
+            this, SLOT(slotShowToolTip(IconItem*)));
+
     // ----------------------------------------------------------------
 
     updateItemRectsPixmap();
@@ -134,6 +142,7 @@ CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
 CameraIconView::~CameraIconView()
 {
     clear();
+    delete d->toolTip;
     delete d;
 }
 
@@ -191,13 +200,13 @@ void CameraIconView::addItem(const GPItemInfo& info)
         }
     }
 
-    CameraIconViewItem* item = new CameraIconViewItem(d->groupItem, info, thumb, downloadName);
+    CameraIconItem* item = new CameraIconItem(d->groupItem, info, thumb, downloadName);
     d->itemDict.insert(info.folder+info.name, item);
 }
 
 void CameraIconView::removeItem(const QString& folder, const QString& file)
 {
-    CameraIconViewItem* item = d->itemDict.value(folder+file);
+    CameraIconItem* item = d->itemDict.value(folder+file);
     if (!item)
         return;
     d->itemDict.remove(folder+file);
@@ -207,7 +216,7 @@ void CameraIconView::removeItem(const QString& folder, const QString& file)
     setDelayedRearrangement(false);
 }
 
-CameraIconViewItem* CameraIconView::findItem(const QString& folder, const QString& file)
+CameraIconItem* CameraIconView::findItem(const QString& folder, const QString& file)
 {
     return d->itemDict.value(folder+file);
 }
@@ -219,7 +228,7 @@ int CameraIconView::countItemsByFolder(QString folder)
 
     for (IconItem* item = firstItem(); item; item = item->nextItem())
     {
-        CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
+        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
         QString itemFolder = iconItem->itemInfo()->folder;
         if (itemFolder.endsWith('/')) itemFolder.truncate(itemFolder.length()-1);
 
@@ -232,7 +241,7 @@ int CameraIconView::countItemsByFolder(QString folder)
 
 void CameraIconView::setThumbnail(const QString& folder, const QString& filename, const QImage& image)
 {
-    CameraIconViewItem* item = d->itemDict.value(folder+filename);
+    CameraIconItem* item = d->itemDict.value(folder+filename);
     if (!item)
         return;
 
@@ -240,7 +249,7 @@ void CameraIconView::setThumbnail(const QString& folder, const QString& filename
     item->update();
 }
 
-void CameraIconView::ensureItemVisible(CameraIconViewItem *item)
+void CameraIconView::ensureItemVisible(CameraIconItem *item)
 {
     IconView::ensureItemVisible(item);
 }
@@ -252,7 +261,7 @@ void CameraIconView::ensureItemVisible(const GPItemInfo& itemInfo)
 
 void CameraIconView::ensureItemVisible(const QString& folder, const QString& file)
 {
-    CameraIconViewItem* item = d->itemDict.value(folder+file);
+    CameraIconItem* item = d->itemDict.value(folder+file);
     if (!item)
         return;
 
@@ -298,7 +307,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
         for (IconItem* item = firstItem(); item; item = item->nextItem())
         {
             QString downloadName;
-            CameraIconViewItem* viewItem = static_cast<CameraIconViewItem*>(item);
+            CameraIconItem* viewItem = static_cast<CameraIconItem*>(item);
 
             if (item->isSelected())
             {
@@ -331,7 +340,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
         for (IconItem* item = firstItem(); item; item = item->nextItem())
         {
             QString downloadName;
-            CameraIconViewItem* viewItem = static_cast<CameraIconViewItem*>(item);
+            CameraIconItem* viewItem = static_cast<CameraIconItem*>(item);
 
             if (!useDefault)
                 downloadName = getTemplatedName( viewItem->itemInfo(), startIndex );
@@ -358,7 +367,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
     viewport()->update();
 }
 
-QString CameraIconView::defaultDownloadName(CameraIconViewItem *viewItem)
+QString CameraIconView::defaultDownloadName(CameraIconItem *viewItem)
 {
     RenameCustomizer::Case renamecase = RenameCustomizer::NONE;
     if (d->renamer)
@@ -409,13 +418,13 @@ QString CameraIconView::getCasedName(const RenameCustomizer::Case ccase,
 void CameraIconView::slotSelectionChanged()
 {
     bool selected               = false;
-    CameraIconViewItem* camItem = 0;
+    CameraIconItem* camItem = 0;
 
     for (IconItem* item = firstItem(); item; item = item->nextItem())
     {
         if (item->isSelected())
         {
-            camItem  = static_cast<CameraIconViewItem*>(item);
+            camItem  = static_cast<CameraIconItem*>(item);
             selected = true;
             break;
         }
@@ -427,15 +436,15 @@ void CameraIconView::slotSelectionChanged()
     viewport()->update();
 }
 
-CameraIconViewItem* CameraIconView::firstItemSelected()
+CameraIconItem* CameraIconView::firstItemSelected()
 {
-    CameraIconViewItem* camItem = 0;
+    CameraIconItem* camItem = 0;
 
     for (IconItem* item = firstItem(); item; item = item->nextItem())
     {
         if (item->isSelected())
         {
-            camItem = static_cast<CameraIconViewItem*>(item);
+            camItem = static_cast<CameraIconItem*>(item);
             break;
         }
     }
@@ -453,7 +462,7 @@ void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
     if (d->cameraUI->isBusy())
         return;
 
-    CameraIconViewItem* camItem = static_cast<CameraIconViewItem*>(item);
+    CameraIconItem* camItem = static_cast<CameraIconItem*>(item);
 
     DPopupMenu menu(this);
     QAction *viewAction      = menu.addAction(SmallIcon("editimage"), i18n("&View"));
@@ -502,7 +511,7 @@ void CameraIconView::slotDoubleClicked(IconItem* item)
     if (d->cameraUI->isBusy())
         return;
 
-    emit signalFileView(static_cast<CameraIconViewItem*>(item));
+    emit signalFileView(static_cast<CameraIconItem*>(item));
 }
 
 void CameraIconView::slotSelectAll()
@@ -528,7 +537,7 @@ void CameraIconView::slotSelectNew()
     for (IconItem* item = firstItem(); item;
          item = item->nextItem())
     {
-        CameraIconViewItem* viewItem = static_cast<CameraIconViewItem*>(item);
+        CameraIconItem* viewItem = static_cast<CameraIconItem*>(item);
         if (viewItem->itemInfo()->downloaded == GPItemInfo::NewPicture)
         {
             viewItem->setSelected(true, false);
@@ -547,7 +556,7 @@ void CameraIconView::slotSelectLocked()
     for (IconItem* item = firstItem(); item;
          item = item->nextItem())
     {
-        CameraIconViewItem* viewItem = static_cast<CameraIconViewItem*>(item);
+        CameraIconItem* viewItem = static_cast<CameraIconItem*>(item);
         if (viewItem->itemInfo()->writePermissions == 0)
         {
             viewItem->setSelected(true, false);
@@ -567,7 +576,7 @@ void CameraIconView::startDrag()
         if (!item->isSelected())
             continue;
 
-        CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
+        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
         QString itemPath = iconItem->itemInfo()->folder + iconItem->itemInfo()->name;
         lst.append(itemPath);
     }
@@ -722,13 +731,32 @@ void CameraIconView::slotThemeChanged()
     viewport()->update();
 }
 
+bool CameraIconView::acceptToolTip(IconItem *item, const QPoint &mousePos)
+{
+    CameraIconItem *iconItem = dynamic_cast<CameraIconItem*>(item);
+
+    if (iconItem && iconItem->clickToOpenRect().contains(mousePos))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void CameraIconView::slotShowToolTip(IconItem* item)
+{
+    d->toolTip->setIconItem(dynamic_cast<CameraIconItem*>(item));
+}
+
 int CameraIconView::itemsDownloaded()
 {
     int downloaded = 0;
 
     for (IconItem* item = firstItem(); item; item = item->nextItem())
     {
-        CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
+        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
 
         if (iconItem->itemInfo()->downloaded == GPItemInfo::DownloadedYes)
             downloaded++;
@@ -745,7 +773,7 @@ void CameraIconView::itemsSelectionSizeInfo(unsigned long& fSize, unsigned long&
     {
         if (item->isSelected())
         {
-            CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
+            CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
             fSize += iconItem->itemInfo()->size;
 
             if (iconItem->itemInfo()->mime == QString("image/jpeg"))

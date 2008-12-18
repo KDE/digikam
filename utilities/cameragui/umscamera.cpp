@@ -155,8 +155,9 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
         return true;        // Nothing to do.
 
     QFileInfoList::const_iterator fi;
-    QFileInfo thmlo, thmup;
-    DMetadata meta;
+    QFileInfo          thmlo, thmup;
+    DMetadata          meta;
+    PhotoInfoContainer pInfo;
 
     for (fi = list.constBegin() ; !m_cancel && (fi != list.constEnd()) ; ++fi)
     {
@@ -174,22 +175,25 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
             {
                 // Try thumbnail sidecar files with lowercase extension.
                 meta.load(thmlo.filePath());
-                dt   = meta.getImageDateTime();
-                dims = meta.getImageDimensions();
+                dt    = meta.getImageDateTime();
+                dims  = meta.getImageDimensions();
+                pInfo = meta.getPhotographInformations();
             }
             else if (thmup.exists())
             {
                 // Try thumbnail sidecar files with uppercase extension.
                 meta.load(thmup.filePath());
-                dt   = meta.getImageDateTime();
-                dims = meta.getImageDimensions();
+                dt    = meta.getImageDateTime();
+                dims  = meta.getImageDimensions();
+                pInfo = meta.getPhotographInformations();
             }
             else
             {
                 // If no thumbnail sidecar file available , try to load image metadata for files.
                 meta.load(fi->filePath());
-                dt   = meta.getImageDateTime();
-                dims = meta.getImageDimensions();
+                dt    = meta.getImageDateTime();
+                dims  = meta.getImageDimensions();
+                pInfo = meta.getPhotographInformations();
             }
 
             if (dt.isNull())
@@ -208,6 +212,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
             info.downloaded       = GPItemInfo::DownloadUnknow;
             info.readPermissions  = fi->isReadable();
             info.writePermissions = fi->isWritable();
+            info.photoInfo        = pInfo;
 
             infoList.append(info);
         }
@@ -494,9 +499,10 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
 
     // Get new camera item information.
 
-    DMetadata meta;
-    QFileInfo fi(dest);
-    QString mime = mimeType(fi.suffix().toLower());
+    PhotoInfoContainer pInfo;
+    DMetadata          meta;
+    QFileInfo          fi(dest);
+    QString            mime = mimeType(fi.suffix().toLower());
 
     if (!mime.isEmpty())
     {
@@ -505,8 +511,9 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
 
         // Try to load image metadata.
         meta.load(fi.filePath());
-        dt   = meta.getImageDateTime();
-        dims = meta.getImageDimensions();
+        dt    = meta.getImageDateTime();
+        dims  = meta.getImageDimensions();
+        pInfo = meta.getPhotographInformations();
 
         if (dt.isNull())
         {
@@ -524,6 +531,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
         info.downloaded       = GPItemInfo::DownloadUnknow;
         info.readPermissions  = fi.isReadable();
         info.writePermissions = fi.isWritable();
+        info.photoInfo        = pInfo;
     }
 
     return true;
