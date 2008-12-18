@@ -254,7 +254,7 @@ void CameraIconItem::toggleLock()
 
 void CameraIconItem::calcRect(const QString& itemName, const QString& downloadName)
 {
-    CameraIconView* view = (CameraIconView*)iconView();
+    CameraIconView* view = static_cast<CameraIconView*>(iconView());
     int thumbSize        = view->thumbnailSize();
     d->pixmap            = QPixmap::fromImage(d->thumbnail.scaled(thumbSize, thumbSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     d->pixRect           = QRect(0,0,0,0);
