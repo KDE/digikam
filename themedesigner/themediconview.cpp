@@ -82,6 +82,7 @@ ThemedIconView::ThemedIconView(QWidget* parent)
 
 ThemedIconView::~ThemedIconView()
 {    
+    delete d;
 }
 
 QRect ThemedIconView::itemRect() const
