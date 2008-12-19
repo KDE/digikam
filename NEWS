@@ -6,13 +6,12 @@ IMPORTANT: This version is not yet finalized : do not use yet in production !!!
 
 NEW FEATURES:
 
-General        : digiKamlinktree script updated to support new Database schema.
-
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 141087 : Showing info about the image in a tooltip in the camera import view.
 002 ==> 157636 : Problem when creating album.
-003 ==> 
+003 ==> 127753 : Persistent selection / image tray.
+004 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta7 - Release date: 2008-12-18
