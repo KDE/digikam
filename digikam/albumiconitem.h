@@ -27,6 +27,8 @@
 
 // Qt includes.
 
+#include <QString>
+#include <QDateTime>
 #include <QRect>
 
 // Local includes.
@@ -34,7 +36,6 @@
 #include "iconitem.h"
 
 class QPainter;
-class QString;
 
 namespace Digikam
 {
@@ -57,6 +58,7 @@ public:
 
     bool isDirty();
 
+    static void dateToString(const QDateTime& datetime, QString& str);
     static QString squeezedText(QPainter* p, int width, const QString& text);
 
     virtual int compare(IconItem *item);

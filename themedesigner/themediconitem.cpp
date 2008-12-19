@@ -7,6 +7,7 @@
  * Description : themed icon item
  *
  * Copyright (C) 2005 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,71 +43,12 @@
 
 // Local includes.
 
+#include "albumiconitem.h"
 #include "themeengine.h"
 #include "themediconview.h"
 
 namespace Digikam
 {
-
-static void dateToString(const QDateTime& datetime, QString& str)
-{
-    str = KGlobal::locale()->formatDateTime(datetime, KLocale::ShortDate, false);
-}
-
-static QString squeezedText(QPainter* p, int width, const QString& text)
-{
-    QString fullText(text);
-    fullText.replace('\n', ' ');
-    QFontMetrics fm(p->fontMetrics());
-    int textWidth = fm.width(fullText);
-    if (textWidth > width)
-    {
-        // start with the dots only
-        QString squeezedText = "...";
-        int squeezedWidth = fm.width(squeezedText);
-
-        // estimate how many letters we can add to the dots on both sides
-        int letters = fullText.length() * (width - squeezedWidth) / textWidth;
-        if (width < squeezedWidth) letters=1;
-        squeezedText = fullText.left(letters) + "...";
-        squeezedWidth = fm.width(squeezedText);
-
-        if (squeezedWidth < width)
-        {
-            // we estimated too short
-            // add letters while text < label
-            do
-            {
-                letters++;
-                squeezedText = fullText.left(letters) + "...";
-                squeezedWidth = fm.width(squeezedText);
-            }
-            while (squeezedWidth < width);
-
-            letters--;
-            squeezedText = fullText.left(letters) + "...";
-        }
-        else if (squeezedWidth > width)
-        {
-            // we estimated too long
-            // remove letters while text > label
-            do
-            {
-                letters--;
-                squeezedText = fullText.left(letters) + "...";
-                squeezedWidth = fm.width(squeezedText);
-            }
-            while (letters && squeezedWidth > width);
-        }
-
-        if (letters >= 5)
-        {
-            return squeezedText;
-        }
-    }
-
-    return fullText;
-}
 
 ThemedIconItem::ThemedIconItem(IconGroupItem* parent)
               : IconItem(parent)
@@ -137,7 +79,7 @@ void ThemedIconItem::paintItem(QPainter* p2)
     {
         r = view->itemPixmapRect();
         KIconLoader *iconLoader = KIconLoader::global();
-        QPixmap thumbnail = iconLoader->loadIcon("image-jpeg", KIconLoader::NoGroup, 128);
+        QPixmap thumbnail       = iconLoader->loadIcon("image-jpeg", KIconLoader::NoGroup, 128);
 
         p.drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
                      r.y() + (r.height()-thumbnail.height())/2,
@@ -146,21 +88,20 @@ void ThemedIconItem::paintItem(QPainter* p2)
 
     r = view->itemNameRect();
     p.setFont(view->itemFontReg());
-    p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), "IMG_00.JPG"));
+    p.drawText(r, Qt::AlignCenter, AlbumIconItem::squeezedText(&p, r.width(), "IMG_00.JPG"));
 
     p.setFont(view->itemFontCom());
     r = view->itemCommentsRect();
-    p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), i18n("Photo caption")));
+    p.drawText(r, Qt::AlignCenter, AlbumIconItem::squeezedText(&p, r.width(), i18n("Photo caption")));
 
     p.setFont(view->itemFontXtra());
     {
         QDateTime date = QDateTime::currentDateTime();
-
-        r = view->itemDateRect();
+        r              = view->itemDateRect();
         p.setFont(view->itemFontXtra());
         QString str;
-        dateToString(date, str);
-        p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), str));
+        AlbumIconItem::dateToString(date, str);
+        p.drawText(r, Qt::AlignCenter, AlbumIconItem::squeezedText(&p, r.width(), str));
     }
 
     p.setFont(view->itemFontCom());
@@ -168,17 +109,14 @@ void ThemedIconItem::paintItem(QPainter* p2)
 
     {
         QString tags = i18n("Events, Places, Vacation");
-
-        r = view->itemTagRect();
-        p.drawText(r, Qt::AlignCenter,
-                   squeezedText(&p, r.width(), tags));
+        r            = view->itemTagRect();
+        p.drawText(r, Qt::AlignCenter, AlbumIconItem::squeezedText(&p, r.width(), tags));
     }
 
 
     if (this == view->currentItem())
     {
-        p.setPen(QPen(isSelected() ? te->textSelColor() : te->textRegColor(),
-                      0, Qt::DotLine));
+        p.setPen(QPen(isSelected() ? te->textSelColor() : te->textRegColor(), 0, Qt::DotLine));
         p.drawRect(1, 1, pix.width()-2, pix.height()-2);
     }
 

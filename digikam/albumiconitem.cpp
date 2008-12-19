@@ -26,14 +26,12 @@
 
 // Qt includes.
 
-#include <QDateTime>
 #include <QFont>
 #include <QFontMetrics>
 #include <QPainter>
 #include <QPalette>
 #include <QPen>
 #include <QPixmap>
-#include <QString>
 #include <QStringList>
 
 // KDE includes.
@@ -78,11 +76,6 @@ public:
     AlbumIconView *view;
 };
 
-static void dateToString(const QDateTime& datetime, QString& str)
-{
-    str = KGlobal::locale()->formatDateTime(datetime, KLocale::ShortDate, false);
-}
-
 AlbumIconItem::AlbumIconItem(IconGroupItem* parent, const ImageInfo &info)
              : IconItem(parent), d(new AlbumIconItemPriv)
 {
@@ -93,6 +86,11 @@ AlbumIconItem::AlbumIconItem(IconGroupItem* parent, const ImageInfo &info)
 AlbumIconItem::~AlbumIconItem()
 {
     delete d;
+}
+
+void AlbumIconItem::dateToString(const QDateTime& datetime, QString& str)
+{
+    str = KGlobal::locale()->formatDateTime(datetime, KLocale::ShortDate, false);
 }
 
 QString AlbumIconItem::squeezedText(QPainter* p, int width, const QString& text)
@@ -106,12 +104,12 @@ QString AlbumIconItem::squeezedText(QPainter* p, int width, const QString& text)
     {
         // start with the dots only
         QString squeezedText = "...";
-        int squeezedWidth = fm.width(squeezedText);
+        int squeezedWidth    = fm.width(squeezedText);
 
         // estimate how many letters we can add to the dots on both sides
         int letters = fullText.length() * (width - squeezedWidth) / textWidth;
         if (width < squeezedWidth) letters=1;
-        squeezedText = fullText.left(letters) + "...";
+        squeezedText  = fullText.left(letters) + "...";
         squeezedWidth = fm.width(squeezedText);
 
         if (squeezedWidth < width)
@@ -121,7 +119,7 @@ QString AlbumIconItem::squeezedText(QPainter* p, int width, const QString& text)
             do
             {
                 letters++;
-                squeezedText = fullText.left(letters) + "...";
+                squeezedText  = fullText.left(letters) + "...";
                 squeezedWidth = fm.width(squeezedText);
             }
             while (squeezedWidth < width);
@@ -136,7 +134,7 @@ QString AlbumIconItem::squeezedText(QPainter* p, int width, const QString& text)
             do
             {
                 letters--;
-                squeezedText = fullText.left(letters) + "...";
+                squeezedText  = fullText.left(letters) + "...";
                 squeezedWidth = fm.width(squeezedText);
             }
             while (letters && squeezedWidth > width);

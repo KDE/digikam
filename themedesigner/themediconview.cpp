@@ -38,6 +38,11 @@ class ThemedIconViewPriv
 {
 public:
 
+    ThemedIconViewPriv()
+    {
+        thumbSize = 128;
+    }
+
     int     thumbSize;
 
     QRect   itemRect;
@@ -60,12 +65,8 @@ public:
 };
 
 ThemedIconView::ThemedIconView(QWidget* parent)
-              : IconView(parent)
+              : IconView(parent), d(new ThemedIconViewPriv)
 {
-    d = new ThemedIconViewPriv;
-    d->thumbSize = 128;
-
-
     ThemedIconGroupItem* groupItem = new ThemedIconGroupItem(this);
     for (int i=0; i<10; i++)
     {
@@ -83,6 +84,7 @@ ThemedIconView::ThemedIconView(QWidget* parent)
 
 ThemedIconView::~ThemedIconView()
 {
+    delete d;
 }
 
 QRect ThemedIconView::itemRect() const
