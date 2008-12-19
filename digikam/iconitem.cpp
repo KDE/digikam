@@ -42,22 +42,41 @@
 namespace Digikam
 {
 
-IconItem::IconItem(IconGroupItem* parent)
-        : m_group(parent)
+class IconItemPriv
 {
-    m_next        = 0;
-    m_prev        = 0;
-    m_x           = 0;
-    m_y           = 0;
-    m_selected    = false;
-    m_highlighted = false;
+public:
 
-    m_group->insertItem(this);
+    IconItemPriv()
+    {
+        xpos        = 0;
+        ypos        = 0;
+        group       = 0;
+        selected    = false;
+        highlighted = false;
+    }
+
+    bool           selected;
+    bool           highlighted;
+
+    int            xpos;
+    int            ypos;
+
+    IconGroupItem *group;
+};
+
+IconItem::IconItem(IconGroupItem* parent)
+        : d(new IconItemPriv)
+{
+    m_next   = 0;
+    m_prev   = 0;
+    d->group = parent;
+    d->group->insertItem(this);
 }
 
 IconItem::~IconItem()
 {
-    m_group->takeItem(this);
+    d->group->takeItem(this);
+    delete d;
 }
 
 IconItem* IconItem::nextItem() const
@@ -65,8 +84,8 @@ IconItem* IconItem::nextItem() const
     if (m_next)
         return m_next;
 
-    if (m_group->nextGroup())
-        return m_group->nextGroup()->firstItem();
+    if (d->group->nextGroup())
+        return d->group->nextGroup()->firstItem();
 
     return 0;
 }
@@ -76,34 +95,34 @@ IconItem* IconItem::prevItem() const
     if (m_prev)
         return m_prev;
 
-    if (m_group->prevGroup())
-        return m_group->prevGroup()->lastItem();
+    if (d->group->prevGroup())
+        return d->group->prevGroup()->lastItem();
 
     return 0;
 }
 
 int IconItem::x() const
 {
-    return m_x;
+    return d->xpos;
 }
 
 int IconItem::y() const
 {
-    return m_y;
+    return d->ypos;
 }
 
 QRect IconItem::rect() const
 {
-    IconView* view = m_group->iconView();
+    IconView* view = d->group->iconView();
     QRect r(view->itemRect());
-    r.moveTopLeft(QPoint(m_x, m_y));
+    r.moveTopLeft(QPoint(d->xpos, d->ypos));
     return r;
 }
 
 QRect IconItem::toggleSelectRect() const
 {
-    QRect r       = m_group->iconView()->itemRect();
-    QSize selSize = m_group->iconView()->selectPixmap().size();
+    QRect r       = d->group->iconView()->itemRect();
+    QSize selSize = d->group->iconView()->selectPixmap().size();
     QRect selRect(QPoint(0, 0), selSize);
 
     selRect.translate(r.x()+5, r.y()+5);
@@ -118,7 +137,7 @@ QRect IconItem::clickToOpenRect()
 QRect IconItem::clickToToggleSelectRect() const
 {
     QRect r       = rect();
-    QSize selSize = m_group->iconView()->selectPixmap().size();
+    QSize selSize = d->group->iconView()->selectPixmap().size();
     QRect selRect(QPoint(0, 0), selSize);
 
     selRect.translate(r.x()+5, r.y()+5);
@@ -127,16 +146,16 @@ QRect IconItem::clickToToggleSelectRect() const
 
 bool IconItem::move(int x, int y)
 {
-    if (m_x == x && m_y == y)
+    if (d->xpos == x && d->ypos == y)
         return false;
 
-    m_x = x; m_y = y;
+    d->xpos = x; d->ypos = y;
     return true;
 }
 
 void IconItem::setSelected(bool val, bool cb)
 {
-    IconView* view = m_group->iconView();
+    IconView* view = d->group->iconView();
 
     if (cb) 
     {
@@ -145,40 +164,40 @@ void IconItem::setSelected(bool val, bool cb)
         view->blockSignals(false);
     }
 
-    m_selected = val;
+    d->selected = val;
     view->selectItem(this, val);
     view->updateContents(rect());
 }
 
 bool IconItem::isSelected() const
 {
-    return m_selected;
+    return d->selected;
 }
 
 void IconItem::setHighlighted(bool val)
 {
-    m_highlighted = val;
-    m_group->iconView()->updateContents(rect());
+    d->highlighted = val;
+    d->group->iconView()->updateContents(rect());
 }
 
 bool IconItem::isHighlighted() const
 {
-    return m_highlighted;
+    return d->highlighted;
 }
 
 void IconItem::repaint()
 {
-    m_group->iconView()->repaintContents(rect());
+    d->group->iconView()->repaintContents(rect());
 }
 
 void IconItem::update()
 {
-    m_group->iconView()->updateContents(rect());
+    d->group->iconView()->updateContents(rect());
 }
 
 IconView* IconItem::iconView() const
 {
-    return m_group->iconView();
+    return d->group->iconView();
 }
 
 int IconItem::compare(IconItem* /*item*/)
@@ -188,18 +207,18 @@ int IconItem::compare(IconItem* /*item*/)
 
 void IconItem::paintItem(QPainter *p)
 {
-    IconView* view = m_group->iconView();
+    IconView* view = d->group->iconView();
 
     QRect r(rect());
     QPixmap pix(r.width(), r.height());
-    QColor color(m_selected ? Qt::blue : Qt::gray);
-    color.setAlpha(m_highlighted ? 128 : 0);
+    QColor color(d->selected ? Qt::blue : Qt::gray);
+    color.setAlpha(d->highlighted ? 128 : 0);
     pix.fill(color);
 
     if (this == iconView()->currentItem())
     {
         QPainter p(&pix);
-        p.setPen(QPen(m_selected ? Qt::white : Qt::black, 1, Qt::DotLine));
+        p.setPen(QPen(d->selected ? Qt::white : Qt::black, 1, Qt::DotLine));
         p.drawRect(2, 2, r.width()-4, r.width()-4);
         p.end();
     }
@@ -212,7 +231,7 @@ void IconItem::paintItem(QPainter *p)
 
 void IconItem::paintToggleSelectButton(QPainter *p)
 {
-    IconView*   view      = m_group->iconView();
+    IconView*   view      = d->group->iconView();
     const int   fadingVal = 128;
     KIconEffect iconEffect;
     QPixmap     selPix;

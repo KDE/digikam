@@ -74,8 +74,8 @@ IconGroupItem::IconGroupItem(IconView* parent)
              : d(new IconGroupItemPriv)
 {
     d->view = parent;
-    m_next    = 0;
-    m_prev    = 0;
+    m_next  = 0;
+    m_prev  = 0;
 
     parent->insertGroup(this);
 }
@@ -132,16 +132,16 @@ void IconGroupItem::insertItem(IconItem* item)
     if (!d->firstItem)
     {
         d->firstItem = item;
-        d->lastItem = item;
+        d->lastItem  = item;
         item->m_prev = 0;
         item->m_next = 0;
     }
     else
     {
         d->lastItem->m_next = item;
-        item->m_prev = d->lastItem;
-        item->m_next = 0;
-        d->lastItem = item;
+        item->m_prev        = d->lastItem;
+        item->m_next        = 0;
+        d->lastItem         = item;
     }
 
     d->count++;

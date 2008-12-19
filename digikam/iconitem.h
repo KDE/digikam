@@ -41,6 +41,7 @@ namespace Digikam
 
 class IconGroupItem;
 class IconView;
+class IconItemPriv;
 
 class IconItem
 {
@@ -84,16 +85,10 @@ protected:
 
 private:
 
-    bool           m_selected;
-    bool           m_highlighted;
+    IconItem    *m_next;
+    IconItem    *m_prev;
 
-    int            m_x;
-    int            m_y;
-
-    IconItem      *m_next;
-    IconItem      *m_prev;
-
-    IconGroupItem *m_group;
+    IconItemPriv* const d;
 };
 
 }  // namespace Digikam
