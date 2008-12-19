@@ -252,8 +252,8 @@ void ThemedIconView::updateItemRectsPixmap()
         d->fnXtra.setPixelSize(fnSz-2);
     }
 
-    int margin  = 5;
-    int w = d->thumbSize + 2*margin;
+    int margin = 5;
+    int w      = d->thumbSize + 2*margin;
 
     QFontMetrics fm(d->fnReg);
     QRect oneRowRegRect = fm.boundingRect(0, 0, w, 0xFFFFFFFF,
@@ -293,13 +293,9 @@ void ThemedIconView::updateItemRectsPixmap()
         y = d->itemTagRect.bottom();
     }
 
-    d->itemRect = QRect(0, 0, w+2*margin, y+margin);
-
-    d->itemRegPixmap = ThemeEngine::instance()->thumbRegPixmap(d->itemRect.width(),
-                                                                    d->itemRect.height());
-
-    d->itemSelPixmap = ThemeEngine::instance()->thumbSelPixmap(d->itemRect.width(),
-                                                                    d->itemRect.height());
+    d->itemRect      = QRect(0, 0, w+2*margin, y+margin);
+    d->itemRegPixmap = ThemeEngine::instance()->thumbRegPixmap(d->itemRect.width(), d->itemRect.height());
+    d->itemSelPixmap = ThemeEngine::instance()->thumbSelPixmap(d->itemRect.width(), d->itemRect.height());
 }
 
 }  // namespace Digikam
