@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -86,7 +86,7 @@ public:
      */
     ImageInfo(Q_LLONG ID);
 
-    /** 
+    /**
      * Destructor
      */
     ~ImageInfo();
@@ -106,7 +106,7 @@ public:
      * @param  newName new name for the image
      */
     void setName(const QString& newName);
-    
+
     /**
      * @return the datetime of the image
      */
@@ -127,7 +127,7 @@ public:
      * have been requested)
      */
     QSize     dimensions() const;
-    
+
     /**
      * @return the standard KDE url with file protocol. The path for
      * the url is the absolute path of the image.
@@ -149,7 +149,7 @@ public:
      * to be merged with kurl()
      */
     KURL      kurlForKIO() const;
-    
+
     /**
      * @return the unique image id for this item
      */
@@ -195,7 +195,6 @@ public:
      */
     QStringList tagPaths(bool leadingSlash = true) const;
 
-    
     /**
      * @return a list of IDs of tags assigned to this item
      * @see tagNames
@@ -246,7 +245,7 @@ public:
      * @see getViewItem()
      */
     void        setViewItem(void *d);
-    
+
     /**
      * Returns the viewitem associated with this item a viewitem for this item.
      * @see setViewItem()

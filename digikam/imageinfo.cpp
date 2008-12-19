@@ -4,21 +4,21 @@
  * http://www.digikam.org
  *
  * Date        : 2005-04-21
- * Description : image informations container. 
- * 
+ * Description : image informations container.
+ *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 /** @file imageinfo.cpp */
@@ -51,8 +51,8 @@ ImageInfo::ImageInfo()
 ImageInfo::ImageInfo(Q_LLONG ID, int albumID, const QString& name,
                      const QDateTime& datetime, size_t size,
                      const QSize& dims)
-    : m_ID(ID), m_albumID(albumID), m_name(name), m_datetime(datetime),
-      m_size(size), m_dims(dims), m_viewitem(0)
+         : m_ID(ID), m_albumID(albumID), m_name(name), m_datetime(datetime),
+           m_size(size), m_dims(dims), m_viewitem(0)
 {
     if (!m_man)
     {
@@ -61,7 +61,7 @@ ImageInfo::ImageInfo(Q_LLONG ID, int albumID, const QString& name,
 }
 
 ImageInfo::ImageInfo(Q_LLONG ID)
-    : m_ID(ID), m_size(0), m_viewitem(0)
+         : m_ID(ID), m_size(0), m_viewitem(0)
 {
     if (!m_man)
     {
@@ -168,7 +168,7 @@ KURL ImageInfo::kurl() const
         DWarning() << "No album found for ID: " << m_albumID << endl;
         return KURL();
     }
-    
+
     KURL u(m_man->getLibraryPath());
     u.addPath(a->url());
     u.addPath(m_name);
@@ -217,7 +217,7 @@ void ImageInfo::setDateTime(const QDateTime& dateTime)
 {
     if (dateTime.isValid())
     {
-        AlbumDB* db  = m_man->albumDB();
+        AlbumDB* db = m_man->albumDB();
         db->setItemDate(m_ID, dateTime);
         m_datetime = dateTime;
         ImageAttributesWatch::instance()->imageDateChanged(m_ID);
@@ -226,28 +226,28 @@ void ImageInfo::setDateTime(const QDateTime& dateTime)
 
 void ImageInfo::setCaption(const QString& caption)
 {
-    AlbumDB* db  = m_man->albumDB();
-    return db->setItemCaption(m_ID, caption);
+    AlbumDB* db = m_man->albumDB();
+    db->setItemCaption(m_ID, caption);
     ImageAttributesWatch::instance()->imageCaptionChanged(m_ID);
 }
 
 QString ImageInfo::caption() const
 {
-    AlbumDB* db  = m_man->albumDB();
+    AlbumDB* db = m_man->albumDB();
     return db->getItemCaption(m_ID);
 }
 
 QStringList ImageInfo::tagNames() const
 {
-    AlbumDB* db  = m_man->albumDB();
+    AlbumDB* db = m_man->albumDB();
     return db->getItemTagNames(m_ID);
 }
 
 QStringList ImageInfo::tagPaths(bool leadingSlash) const
 {
     QStringList tagPaths;
-    
-    AlbumDB* db  = m_man->albumDB();
+
+    AlbumDB* db    = m_man->albumDB();
     IntList tagIDs = db->getItemTagIDs(m_ID);
     for (IntList::iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
     {
@@ -290,7 +290,7 @@ void ImageInfo::removeAllTags()
 
 void ImageInfo::addTagPaths(const QStringList &tagPaths)
 {
-    AlbumDB *db = m_man->albumDB();
+    AlbumDB *db    = m_man->albumDB();
     AlbumList list = m_man->findOrCreateTAlbums(tagPaths);
     for (AlbumList::iterator it = list.begin(); it != list.end(); ++it)
         db->addItemTag(m_ID, (*it)->id());
@@ -300,28 +300,31 @@ void ImageInfo::addTagPaths(const QStringList &tagPaths)
 
 int ImageInfo::rating() const
 {
-    AlbumDB* db  = m_man->albumDB();
+    AlbumDB* db = m_man->albumDB();
     return db->getItemRating(m_ID);
 }
 
 void ImageInfo::setRating(int value)
 {
-    AlbumDB* db  = m_man->albumDB();
+    AlbumDB* db = m_man->albumDB();
     db->setItemRating(m_ID, value);
     ImageAttributesWatch::instance()->imageRatingChanged(m_ID);
 }
 
 ImageInfo ImageInfo::copyItem(PAlbum *dstAlbum, const QString &dstFileName)
 {
-    DDebug() << "ImageInfo::copyItem " << m_albumID << " " << m_name << " to " << dstAlbum->id() << " " << dstFileName << endl;
+    DDebug() << "ImageInfo::copyItem " << m_albumID << " " << m_name << " to " 
+             << dstAlbum->id() << " " << dstFileName << endl;
+
     if (dstAlbum->id() == m_albumID && dstFileName == m_name)
         return (*this);
 
     AlbumDB* db = m_man->albumDB();
-    int id = db->copyItem(m_albumID, m_name, dstAlbum->id(), dstFileName);
+    int id      = db->copyItem(m_albumID, m_name, dstAlbum->id(), dstFileName);
 
     if (id == -1)
         return ImageInfo();
+
     ImageInfo info;
     info.m_ID      = id;
     info.m_albumID = dstAlbum->id();
@@ -337,9 +340,8 @@ void ImageInfo::refresh()
     m_datetime = m_man->albumDB()->getItemDate(m_ID);
 
     QFileInfo fileInfo(filePath());
-    m_size = fileInfo.size();
+    m_size        = fileInfo.size();
     m_modDatetime = fileInfo.lastModified();
 }
 
 }  // namespace Digikam
-
