@@ -52,8 +52,7 @@ ThemedIconGroupItem::~ThemedIconGroupItem()
 
 void ThemedIconGroupItem::paintBanner(QPainter *p2)
 {
-    QRect r(0, 0, rect().width(), rect().height());
-
+    QRect   r(0, 0, rect().width(), rect().height());
     QPixmap pix(m_view->bannerPixmap());
 
     QFont fn(m_view->font());
@@ -92,7 +91,7 @@ void ThemedIconGroupItem::paintBanner(QPainter *p2)
 
     p.drawText(QRect(5, r.y(), r.width(), r.height()),
                Qt::AlignLeft | Qt::AlignVCenter,
-               i18n("July 2007 - 10 Items"));
+               i18n("July 2008 - 10 Items"));
 
     p.end();
 
