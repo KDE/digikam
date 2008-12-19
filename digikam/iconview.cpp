@@ -51,6 +51,7 @@
 
 #include <kdebug.h>
 #include <kcursor.h>
+#include <kiconloader.h>
 #include <kglobalsettings.h>
 
 // Local includes.
@@ -72,6 +73,7 @@ public:
         firstGroup               = 0;
         lastGroup                = 0;
         currItem                 = 0;
+        itemHighlighted          = 0;
         anchorItem               = 0;
         clearing                 = false;
         spacing                  = 10;
@@ -92,6 +94,9 @@ public:
         needEmitSelectionChanged = false;
 
         thumbnailBorderCache.setMaxCost(10);
+
+        selectPix   = SmallIcon("list-add");
+        deselectPix = SmallIcon("list-remove");
     }
 
     bool                      clearing;
@@ -106,6 +111,9 @@ public:
     QSet<IconItem*>           selectedItems;
     QSet<IconItem*>           prevSelectedItems;
 
+    QPixmap                   selectPix;
+    QPixmap                   deselectPix;
+
     QCache<QString, QPixmap>  thumbnailBorderCache;
 
     DRubberBand              *rubber;
@@ -119,6 +127,7 @@ public:
     IconItem                 *currItem;
     IconItem                 *anchorItem;
     IconItem                 *storedVisibleItem; // store position for slotRearrange
+    IconItem                 *itemHighlighted;
 
     IconGroupItem            *firstGroup;
     IconGroupItem            *lastGroup;
@@ -157,9 +166,9 @@ IconView::IconView(QWidget* parent, const char* name)
     viewport()->setFocusPolicy(Qt::WheelFocus);
     viewport()->setMouseTracking(true);
 
-    d->rearrangeTimer  = new QTimer(this);
-    d->toolTipTimer    = new QTimer(this);
-    d->rubber          = new DRubberBand(this);
+    d->rearrangeTimer = new QTimer(this);
+    d->toolTipTimer   = new QTimer(this);
+    d->rubber         = new DRubberBand(this);
 
     connect(d->rearrangeTimer, SIGNAL(timeout()),
             this, SLOT(slotRearrange()));
@@ -946,13 +955,15 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
         if (item)
         {
             IconItem* prevCurrItem = d->currItem;
-            d->currItem   = item;
-            d->anchorItem = item;
+            d->currItem            = item;
+            d->anchorItem          = item;
+
             if (prevCurrItem)
                 prevCurrItem->repaint();
 
             if (!item->isSelected())
                 item->setSelected(true, true);
+
             item->repaint();
 
             emit signalRightButtonClicked(item, e->globalPos());
@@ -1025,13 +1036,19 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
         }
         else if (e->modifiers() == Qt::NoModifier)
         {
-            if (!item->isSelected())
+            if (item->clickToToggleSelectRect().contains(e->pos()))
+            {
+                item->setSelected(!item->isSelected(), false);
+            }
+            else if (!item->isSelected())
+            {
                 item->setSelected(true, true);
+            }
         }
 
         IconItem* prevCurrItem = d->currItem;
-        d->currItem   = item;
-        d->anchorItem = item;
+        d->currItem            = item;
+        d->anchorItem          = item;
 
         if (prevCurrItem)
             prevCurrItem->repaint();
@@ -1104,10 +1121,26 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
             else
                 unsetCursor();
         }
+
+        // Draw item highlightment when mouse is over.
+
+        if (item && item->rect().contains(e->pos()))
+        {
+            if (d->itemHighlighted)
+                d->itemHighlighted->setHighlighted(false);
+
+            d->itemHighlighted = item;
+            d->itemHighlighted->setHighlighted(true);
+        }
+        else if (d->itemHighlighted)
+        {
+            d->itemHighlighted->setHighlighted(false);
+        }
+
         return;
     }
 
-    d->toolTipItem  = 0;
+    d->toolTipItem = 0;
     d->toolTipTimer->stop();
     slotToolTip();
 
@@ -1204,7 +1237,7 @@ void IconView::contentsMouseReleaseEvent(QMouseEvent* e)
 
         // click on item
         IconItem *item = findItem(e->pos());
-        if (item)
+        if (item && !item->clickToToggleSelectRect().contains(e->pos()))
         {
             IconItem* prevCurrItem = d->currItem;
             item->setSelected(true, true);
@@ -1942,6 +1975,16 @@ QPixmap IconView::thumbnailBorderPixmap(const QSize &pixSize)
 void IconView::clearThumbnailBorderCache()
 {
     d->thumbnailBorderCache.clear();
+}
+
+QPixmap IconView::selectPixmap() const
+{
+    return d->selectPix;
+}
+
+QPixmap IconView::deselectPixmap() const
+{
+    return d->deselectPix;
 }
 
 }  // namespace Digikam

@@ -7,6 +7,7 @@
  * Description : icon item.
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,11 +40,12 @@ namespace Digikam
 IconItem::IconItem(IconGroupItem* parent)
         : m_group(parent)
 {
-    m_next     = 0;
-    m_prev     = 0;
-    m_x        = 0;
-    m_y        = 0;
-    m_selected = false;
+    m_next        = 0;
+    m_prev        = 0;
+    m_x           = 0;
+    m_y           = 0;
+    m_selected    = false;
+    m_highlighted = false;
 
     m_group->insertItem(this);
 }
@@ -93,9 +95,29 @@ QRect IconItem::rect() const
     return r;
 }
 
+QRect IconItem::toggleSelectRect() const
+{
+    QRect r       = m_group->iconView()->itemRect();
+    QSize selSize = m_group->iconView()->selectPixmap().size();
+    QRect selRect(QPoint(0, 0), selSize);
+
+    selRect.translate(r.x()+5, r.y()+5);
+    return selRect;
+}
+
 QRect IconItem::clickToOpenRect()
 {
     return rect();
+}
+
+QRect IconItem::clickToToggleSelectRect() const
+{
+    QRect r       = rect();
+    QSize selSize = m_group->iconView()->selectPixmap().size();
+    QRect selRect(QPoint(0, 0), selSize);
+
+    selRect.translate(r.x()+5, r.y()+5);
+    return selRect;
 }
 
 bool IconItem::move(int x, int y)
@@ -128,6 +150,17 @@ bool IconItem::isSelected() const
     return m_selected;
 }
 
+void IconItem::setHighlighted(bool val)
+{
+    m_highlighted = val;
+    m_group->iconView()->updateContents(rect());
+}
+
+bool IconItem::isHighlighted() const
+{
+    return m_highlighted;
+}
+
 void IconItem::repaint()
 {
     m_group->iconView()->repaintContents(rect());
@@ -154,7 +187,9 @@ void IconItem::paintItem(QPainter *p)
 
     QRect r(rect());
     QPixmap pix(r.width(), r.height());
-    pix.fill(m_selected ? Qt::blue : Qt::gray);
+    QColor color(m_selected ? Qt::blue : Qt::gray);
+    color.setAlpha(m_highlighted ? 128 : 0);
+    pix.fill(color);
 
     if (this == iconView()->currentItem())
     {

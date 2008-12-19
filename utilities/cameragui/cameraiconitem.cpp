@@ -417,7 +417,19 @@ void CameraIconItem::paintItem(QPainter *p)
 
     // If camera item is locked (read only), draw a "Lock" icon.
     if (d->itemInfo->writePermissions == 0)
-        p->drawPixmap(5, 5, SmallIcon("object-locked"));
+    {
+        QPixmap locked = SmallIcon("object-locked");
+        p->drawPixmap(rect().width() - downloaded.width() - locked.width() - 10, 5, locked);
+    }
+
+    if (isHighlighted())
+    {
+        r = view->itemRect();
+        p->setPen(QPen(view->palette().color(QPalette::Highlight), 3, Qt::SolidLine));
+        p->drawRect(1, 1, r.width()-3, r.height()-3);
+        p->drawPixmap(toggleSelectRect(), isSelected() ? view->deselectPixmap()
+                                                       : view->selectPixmap());
+    }
 }
 
 }  // namespace Digikam

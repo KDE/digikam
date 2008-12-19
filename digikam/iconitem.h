@@ -7,6 +7,7 @@
  * Description : icon item.
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,11 +58,16 @@ public:
     int   x() const;
     int   y() const;
     QRect rect() const;
+    QRect toggleSelectRect() const;
+    QRect clickToToggleSelectRect() const;
 
     bool  move(int x, int y);
 
     void  setSelected(bool val, bool cb=true);
     bool  isSelected() const;
+
+    void  setHighlighted(bool val);
+    bool  isHighlighted() const;
 
     void  repaint();
     void  update();
@@ -77,12 +83,16 @@ protected:
 
 private:
 
-    IconGroupItem *m_group;
-    IconItem      *m_next;
-    IconItem      *m_prev;
+    bool           m_selected;
+    bool           m_highlighted;
+
     int            m_x;
     int            m_y;
-    bool           m_selected;
+
+    IconItem      *m_next;
+    IconItem      *m_prev;
+
+    IconGroupItem *m_group;
 };
 
 }  // namespace Digikam

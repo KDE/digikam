@@ -113,6 +113,9 @@ public:
     QPixmap thumbnailBorderPixmap(const QSize &pixSize);
     void    clearThumbnailBorderCache();
 
+    QPixmap selectPixmap() const;
+    QPixmap deselectPixmap() const;
+
 protected:
 
     virtual void viewportPaintEvent(QPaintEvent* pe);
