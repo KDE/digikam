@@ -7,7 +7,7 @@
  * Description : camera icon view item 
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,152 +51,20 @@ public:
 
     CameraIconViewItemPriv()
     {
-        itemInfo            = 0;
-        pixmapNewPicture    = QPixmap(newPicture_xpm);
-        pixmapUnknowPicture = QPixmap(unknowPicture_xpm);
+        itemInfo = 0;
     }
 
-    static const char *newPicture_xpm[];
-    static const char *unknowPicture_xpm[];
+    QString     downloadName;
 
-    QString            downloadName;
+    QPixmap     pixmap;
 
-    QPixmap            pixmap;
-    QPixmap            pixmapNewPicture;
-    QPixmap            pixmapUnknowPicture;
-
-    QImage             thumbnail;
+    QImage      thumbnail;
     
-    QRect              pixRect;
-    QRect              textRect;
-    QRect              extraRect;
+    QRect       pixRect;
+    QRect       textRect;
+    QRect       extraRect;
 
-    GPItemInfo        *itemInfo;
-};
-
-const char *CameraIconViewItemPriv::newPicture_xpm[] =
-{
-    "13 13 8 1",
-    "       c None",
-    ".      c #232300",
-    "+      c #F6F611",
-    "@      c #000000",
-    "#      c #DBDA4D",
-    "$      c #FFFF00",
-    "%      c #AAA538",
-    "&      c #E8E540",
-    "      .      ",
-    "  .  .+.  .  ",
-    " @#@ .$. .#. ",
-    "  @$@#$#@$.  ",
-    "   @$%&%$@   ",
-    " ..#%&&&%#.. ",
-    ".+$$&&&&&$$+@",
-    " ..#%&&&%#@@ ",
-    "   @$%&%$@   ",
-    "  .$@#$#@$.  ",
-    " @#. @$@ @#. ",
-    "  .  @+@  .  ",
-    "      @      "
-};
-
-const char *CameraIconViewItemPriv::unknowPicture_xpm[] = 
-{
-    "16 16 78 1",
-    "   g None",
-    ".  g #777777",
-    "+  g #7A7A7A",
-    "@  g #8C8C8C",
-    "#  g #787878",
-    "$  g #707070",
-    "%  g #878787",
-    "&  g #C3C3C3",
-    "*  g #EAEAEA",
-    "=  g #E4E4E4",
-    "-  g #E2E2E2",
-    ";  g #E6E6E6",
-    ">  g #CECECE",
-    ",  g #888888",
-    "'  g #6B6B6B",
-    ")  g #969696",
-    "!  g #DEDEDE",
-    "~  g #D8D8D8",
-    "{  g #FFFFFF",
-    "]  g #F2F2F2",
-    "^  g #DFDFDF",
-    "/  g #9D9D9D",
-    "(  g #686868",
-    "_  g #848484",
-    ":  g #D0D0D0",
-    "<  g #F1F1F1",
-    "[  g #F0F0F0",
-    "}  g #EBEBEB",
-    "|  g #FDFDFD",
-    "1  g #DDDDDD",
-    "2  g #D4D4D4",
-    "3  g #838383",
-    "4  g #ABABAB",
-    "5  g #C8C8C8",
-    "6  g #CCCCCC",
-    "7  g #F4F4F4",
-    "8  g #D6D6D6",
-    "9  g #E8E8E8",
-    "0  g #C4C4C4",
-    "a  g #A4A4A4",
-    "b  g #656565",
-    "c  g #B4B4B4",
-    "d  g #B9B9B9",
-    "e  g #BDBDBD",
-    "f  g #B7B7B7",
-    "g  g #898989",
-    "h  g #6D6D6D",
-    "i  g #808080",
-    "j  g #AAAAAA",
-    "k  g #A9A9A9",
-    "l  g #737373",
-    "m  g #7F7F7F",
-    "n  g #9A9A9A",
-    "o  g #D3D3D3",
-    "p  g #909090",
-    "q  g #727272",
-    "r  g #8F8F8F",
-    "s  g #8E8E8E",
-    "t  g #8D8D8D",
-    "u  g #EEEEEE",
-    "v  g #FAFAFA",
-    "w  g #929292",
-    "x  g #C5C5C5",
-    "y  g #5F5F5F",
-    "z  g #989898",
-    "A  g #CFCFCF",
-    "B  g #9C9C9C",
-    "C  g #A0A0A0",
-    "D  g #FEFEFE",
-    "E  g #ACACAC",
-    "F  g #5E5E5E",
-    "G  g #868686",
-    "H  g #AFAFAF",
-    "I  g #C1C1C1",
-    "J  g #818181",
-    "K  g #7E7E7E",
-    "L  g #7B7B7B",
-    "M  g #636363",
-    "                ",
-    "     .+@@#$     ",
-    "   .%&*=-;>,'   ",
-    "  .)!~={{]^-/(  ",
-    "  _::<{[}|{123  ",
-    " .456{7558{90ab ",
-    " +cde96df={&g,h ",
-    " ijjjjjk;{=@,,l ",
-    " mnnnnno{-pgggq ",
-    " #rprstuvwtttt' ",
-    " $tpppp6xpppp@y ",
-    "  mnnnzA~Bnnn.  ",
-    "  'taaCD{Eaa,F  ",
-    "   (GjHI0HjJF   ",
-    "     (K,,LM     ",
-    "                "
+    GPItemInfo *itemInfo;
 };
 
 CameraIconViewItem::CameraIconViewItem(IconGroupItem* parent, const GPItemInfo& itemInfo,
@@ -277,7 +145,7 @@ void CameraIconViewItem::paintItem()
     {
         case GPItemInfo::NewPicture:
         {
-            downloaded = d->pixmapNewPicture;
+            downloaded = QPixmap(view->newPicturePixmap());
             break;
         }
         case GPItemInfo::DownloadedYes:
@@ -301,7 +169,7 @@ void CameraIconViewItem::paintItem()
   
         case GPItemInfo::DownloadUnknow:
         {
-            downloaded = d->pixmapUnknowPicture;
+            downloaded = view->unknowPicturePixmap();
             break;
         }
         */
@@ -428,4 +296,3 @@ QRect CameraIconViewItem::clickToOpenRect()
 }
 
 }  // namespace Digikam
-
