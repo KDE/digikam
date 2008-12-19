@@ -313,7 +313,8 @@ void IconView::clear(bool update)
 {
     d->clearing = true;
 
-    d->toolTipItem = 0;
+    d->itemHighlighted = 0;
+    d->toolTipItem     = 0;
     d->toolTipTimer->stop();
     slotToolTip();
 
@@ -349,7 +350,7 @@ void IconView::clear(bool update)
 
 void IconView::clearSelection()
 {
-    bool wasBlocked = signalsBlocked();;
+    bool wasBlocked = signalsBlocked();
 
     if (!wasBlocked)
         blockSignals(true);
@@ -549,6 +550,9 @@ void IconView::takeItem(IconItem* item)
         d->toolTipTimer->stop();
         slotToolTip();
     }
+
+    if (d->itemHighlighted == item)
+        d->itemHighlighted = 0;
 
     // if it is current item, change the current item
     if (d->currItem == item)
@@ -910,6 +914,8 @@ void IconView::deleteContainers()
 
 void IconView::leaveEvent(QEvent *e)
 {
+    d->itemHighlighted = 0;
+
     // hide tooltip
     d->toolTipItem = 0;
     d->toolTipTimer->stop();
@@ -924,6 +930,8 @@ void IconView::leaveEvent(QEvent *e)
 
 void IconView::focusOutEvent(QFocusEvent* e)
 {
+    d->itemHighlighted = 0;
+
     // hide tooltip
     d->toolTipItem = 0;
     d->toolTipTimer->stop();
@@ -1124,18 +1132,15 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
 
         // Draw item highlightment when mouse is over.
 
-        if (item && item->rect().contains(e->pos()))
+        if (item != d->itemHighlighted)
         {
             if (d->itemHighlighted)
                 d->itemHighlighted->setHighlighted(false);
 
             d->itemHighlighted = item;
-            d->itemHighlighted->setHighlighted(true);
-        }
-        else if (d->itemHighlighted)
-        {
-            d->itemHighlighted->setHighlighted(false);
-            d->itemHighlighted = 0;
+
+            if (d->itemHighlighted)
+                d->itemHighlighted->setHighlighted(true);
         }
 
         return;
@@ -1201,7 +1206,6 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
 
     blockSignals(false);
     viewport()->setUpdatesEnabled(true);
-
 
     if (changed)
     {
@@ -1932,8 +1936,8 @@ void IconView::itemClickedToOpen(IconItem* item)
         return;
 
     IconItem* prevCurrItem = d->currItem;
-    d->currItem   = item;
-    d->anchorItem = item;
+    d->currItem            = item;
+    d->anchorItem          = item;
 
     if (prevCurrItem)
         prevCurrItem->repaint();
