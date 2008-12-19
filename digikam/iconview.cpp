@@ -1135,6 +1135,7 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
         else if (d->itemHighlighted)
         {
             d->itemHighlighted->setHighlighted(false);
+            d->itemHighlighted = 0;
         }
 
         return;
