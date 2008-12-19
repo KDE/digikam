@@ -57,9 +57,8 @@ public:
     QString     downloadName;
 
     QPixmap     pixmap;
+    QPixmap     thumbnail;
 
-    QImage      thumbnail;
-    
     QRect       pixRect;
     QRect       textRect;
     QRect       extraRect;
@@ -74,7 +73,7 @@ CameraIconViewItem::CameraIconViewItem(IconGroupItem* parent, const GPItemInfo& 
     d = new CameraIconViewItemPriv;
     d->itemInfo     = new GPItemInfo(itemInfo);
     d->downloadName = downloadName;
-    d->thumbnail    = thumbnail;
+    setThumbnail(thumbnail);
 }
 
 CameraIconViewItem::~CameraIconViewItem()
@@ -85,7 +84,7 @@ CameraIconViewItem::~CameraIconViewItem()
 
 void CameraIconViewItem::setThumbnail(const QImage& thumbnail)
 {
-    d->thumbnail = thumbnail;
+    d->thumbnail = QPixmap(thumbnail);
 }
 
 GPItemInfo* CameraIconViewItem::itemInfo() const
@@ -221,7 +220,7 @@ void CameraIconViewItem::calcRect(const QString& itemName, const QString& downlo
 {
     CameraIconView* view = (CameraIconView*)iconView();
     int thumbSize        = view->thumbnailSize().size();
-    d->pixmap            = QPixmap(d->thumbnail.smoothScale(thumbSize, thumbSize, QImage::ScaleMin));
+    d->pixmap            = QPixmap(d->thumbnail.convertToImage().smoothScale(thumbSize, thumbSize, QImage::ScaleMin));
     d->pixRect           = QRect(0,0,0,0);
     d->textRect          = QRect(0,0,0,0);
     d->extraRect         = QRect(0,0,0,0);
