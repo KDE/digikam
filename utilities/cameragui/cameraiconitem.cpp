@@ -291,11 +291,11 @@ void CameraIconItem::paintItem(QPainter *p)
 
     if (isHighlighted())
     {
+        paintToggleSelectButton(p);
+
         r = view->itemRect();
         p->setPen(QPen(view->palette().color(QPalette::Highlight), 3, Qt::SolidLine));
         p->drawRect(1, 1, r.width()-3, r.height()-3);
-        p->drawPixmap(toggleSelectRect(), isSelected() ? view->deselectPixmap()
-                                                       : view->selectPixmap());
     }
 }
 

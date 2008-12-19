@@ -29,6 +29,11 @@
 #include <QPixmap>
 #include <QPainter>
 
+// KDE includes.
+
+#include <kiconeffect.h>
+#include <kiconloader.h>
+
 // Local includes.
 
 #include "icongroupitem.h"
@@ -203,6 +208,40 @@ void IconItem::paintItem(QPainter *p)
               QSize(r.width(), r.height()));
 
     p->drawPixmap(r.x(), r.y(), pix, 0, 0, r.width(), r.height());
+}
+
+void IconItem::paintToggleSelectButton(QPainter *p)
+{
+    IconView*   view      = m_group->iconView();
+    const int   fadingVal = 128;
+    KIconEffect iconEffect;
+    QPixmap     selPix;
+
+    p->save();
+    p->setClipRect(toggleSelectRect());
+    p->setRenderHint(QPainter::Antialiasing);
+
+    // draw an alpha blended circle as background
+    const QPalette& pal   = view->palette();
+    const QBrush& bgBrush = pal.brush(QPalette::Normal, QPalette::Window);
+    QColor bg             = bgBrush.color();
+    bg.setAlpha(fadingVal / 2);
+    p->setBrush(bg);
+
+    const QBrush& fgBrush = pal.brush(QPalette::Normal, QPalette::WindowText);
+    QColor fg             = fgBrush.color();
+    fg.setAlpha(fadingVal / 4);
+    p->setPen(fg);
+
+    p->drawEllipse(toggleSelectRect());
+
+    if (isSelected())
+        selPix = view->deselectPixmap();
+    else
+        selPix = view->selectPixmap();
+
+    p->drawPixmap(toggleSelectRect(), iconEffect.apply(selPix, KIconLoader::Desktop, KIconLoader::ActiveState));
+    p->restore();
 }
 
 }  // namespace Digikam

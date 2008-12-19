@@ -385,11 +385,11 @@ void AlbumIconItem::paintItem(QPainter *p)
 
     if (isHighlighted())
     {
+        paintToggleSelectButton(p);
+
         r = d->view->itemRect();
         p->setPen(QPen(d->view->palette().color(QPalette::Highlight), 3, Qt::SolidLine));
         p->drawRect(1, 1, r.width()-3, r.height()-3);
-        p->drawPixmap(toggleSelectRect(), isSelected() ? d->view->deselectPixmap()
-                                                       : d->view->selectPixmap());
     }
 }
 

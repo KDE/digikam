@@ -79,6 +79,7 @@ public:
 
 protected:
 
+    void paintToggleSelectButton(QPainter *p);
     virtual void paintItem(QPainter *p);
 
 private:
