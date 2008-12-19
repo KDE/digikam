@@ -218,9 +218,7 @@ void ThemedIconView::updateBannerRectPixmap()
 
     d->bannerRect.setHeight(d->bannerRect.height() + tr.height() + 10);
     d->bannerRect.setWidth(frameRect().width());
-
-    d->bannerPixmap = ThemeEngine::instance()->bannerPixmap(d->bannerRect.width(),
-                                                            d->bannerRect.height());
+    d->bannerPixmap = ThemeEngine::instance()->bannerPixmap(d->bannerRect.width(), d->bannerRect.height());
 }
 
 void ThemedIconView::updateItemRectsPixmap()
@@ -233,10 +231,9 @@ void ThemedIconView::updateItemRectsPixmap()
     d->itemResolutionRect = QRect(0, 0, 0, 0);
     d->itemSizeRect       = QRect(0, 0, 0, 0);
     d->itemTagRect        = QRect(0, 0, 0, 0);
-
-    d->fnReg  = font();
-    d->fnCom  = font();
-    d->fnXtra = font();
+    d->fnReg              = font();
+    d->fnCom              = font();
+    d->fnXtra             = font();
     d->fnCom.setItalic(true);
 
     int fnSz = d->fnReg.pointSize();
@@ -268,8 +265,7 @@ void ThemedIconView::updateItemRectsPixmap()
                                            Qt::AlignTop | Qt::AlignHCenter,
                                            "XXXXXXXXX");
 
-    int y = margin;
-
+    int y             = margin;
     d->itemPixmapRect = QRect(margin, y, w, d->thumbSize+margin);
     y = d->itemPixmapRect.bottom();
 

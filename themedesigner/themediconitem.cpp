@@ -77,7 +77,7 @@ void ThemedIconItem::paintItem(QPainter* p2)
     p.setPen(isSelected() ? te->textSelColor() : te->textRegColor());
 
     {
-        r = view->itemPixmapRect();
+        r                       = view->itemPixmapRect();
         KIconLoader *iconLoader = KIconLoader::global();
         QPixmap thumbnail       = iconLoader->loadIcon("image-jpeg", KIconLoader::NoGroup, 128);
 
