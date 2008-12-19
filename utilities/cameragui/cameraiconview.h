@@ -71,7 +71,7 @@ public:
     void ensureItemVisible(const QString& folder, const QString& file);
 
     void setThumbnailSize(int thumbSize);
-    int thumbnailSize();
+    int  thumbnailSize();
 
     CameraIconItem* findItem(const QString& folder, const QString& file);
 
@@ -82,6 +82,8 @@ public:
 
     QPixmap itemBaseRegPixmap() const;
     QPixmap itemBaseSelPixmap() const;
+    QPixmap newPicturePixmap() const;
+    QPixmap unknowPicturePixmap() const;
 
     QString defaultDownloadName(CameraIconItem *item);
 
