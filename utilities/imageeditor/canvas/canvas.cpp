@@ -566,7 +566,8 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                     if (d->rubber->isActive() && d->pressedMoved && !d->pressedMoving)
                     {
                         QRect rr(d->rubber->rubberBandAreaOnContents());
-                        QRect  r(i, j, d->tileSize, d->tileSize);
+                        rr = QRect(rr.x(), rr.y(), rr.width()-1, rr.height()-1);
+                        QRect r(i, j, d->tileSize, d->tileSize);
 
                         d->im->paintOnDevice(pix, sx, sy, sw, sh,
                                              0, 0, d->tileSize, d->tileSize,
