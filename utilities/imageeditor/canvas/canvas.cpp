@@ -579,14 +579,14 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                         rr.translate(-i -d->pixmapRect.x(), -j -d->pixmapRect.y());
 
                         QPainter p(pix);
-                        p.setPen(QPen(QColor(250, 250, 255), 1));
+                        p.setPen(d->rubber->palette().color(QPalette::Active, QPalette::Highlight));
                         p.drawRect(rr);
                         if (rr.width() >= 10 && rr.height() >= 10)
                         {
-                            p.drawRect(rr.x(),              rr.y(),               5, 5);
-                            p.drawRect(rr.x(),              rr.y()+rr.height()-5, 5, 5);
-                            p.drawRect(rr.x()+rr.width()-5, rr.y()+rr.height()-5, 5, 5);
-                            p.drawRect(rr.x()+rr.width()-5, rr.y(),               5, 5);
+                            p.fillRect(QRect(rr.x(),              rr.y(),               5, 5), d->rubber->palette().highlight());
+                            p.fillRect(QRect(rr.x(),              rr.y()+rr.height()-5, 5, 5), d->rubber->palette().highlight());
+                            p.fillRect(QRect(rr.x()+rr.width()-5, rr.y()+rr.height()-5, 5, 5), d->rubber->palette().highlight());
+                            p.fillRect(QRect(rr.x()+rr.width()-5, rr.y(),               5, 5), d->rubber->palette().highlight());
                         }
                         p.end();
                     }
