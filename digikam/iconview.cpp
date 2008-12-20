@@ -311,8 +311,7 @@ int IconView::groupCount() const
 
 void IconView::clear(bool update)
 {
-    d->clearing = true;
-
+    d->clearing        = true;
     d->itemHighlighted = 0;
     d->toolTipItem     = 0;
     d->toolTipTimer->stop();
@@ -914,7 +913,11 @@ void IconView::deleteContainers()
 
 void IconView::leaveEvent(QEvent *e)
 {
-    d->itemHighlighted = 0;
+    if (d->itemHighlighted)
+    {
+        d->itemHighlighted->setHighlighted(false);
+        d->itemHighlighted = 0;
+    }
 
     // hide tooltip
     d->toolTipItem = 0;
@@ -930,7 +933,11 @@ void IconView::leaveEvent(QEvent *e)
 
 void IconView::focusOutEvent(QFocusEvent* e)
 {
-    d->itemHighlighted = 0;
+    if (d->itemHighlighted)
+    {
+        d->itemHighlighted->setHighlighted(false);
+        d->itemHighlighted = 0;
+    }
 
     // hide tooltip
     d->toolTipItem = 0;
