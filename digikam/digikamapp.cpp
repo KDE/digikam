@@ -2220,16 +2220,7 @@ void DigikamApp::slotRebuildAllThumbs()
         return;
 
     BatchThumbsGenerator *thumbsGenerator = new BatchThumbsGenerator(this);
-
-    connect(thumbsGenerator, SIGNAL(signalRebuildAllThumbsDone()),
-            this, SLOT(slotRebuildAllThumbsDone()));
-
-    thumbsGenerator->exec();
-}
-
-void DigikamApp::slotRebuildAllThumbsDone()
-{
-    d->view->applySettings();
+    thumbsGenerator->show();
 }
 
 void DigikamApp::slotSyncAllPicturesMetadata()

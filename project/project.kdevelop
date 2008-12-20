@@ -287,6 +287,10 @@
     <projectname>project</projectname>
     <projectname>project</projectname>
     <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
   </general>
   <kdevfileview>
     <groups>
@@ -385,7 +389,7 @@
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>/home/gilles/Documents/data/devel/SVN/trunk/graphics/digikam/digikam/digikam</mainprogram>
+      <mainprogram>/home/gilles/Documents/devel/SVN/trunk/graphics/digikam/digikam/digikam</mainprogram>
       <programargs/>
       <terminal>false</terminal>
       <autocompile>false</autocompile>

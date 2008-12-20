@@ -150,7 +150,6 @@ private slots:
 
     void slotDatabaseRescan();
     void slotRebuildAllThumbs();
-    void slotRebuildAllThumbsDone();
     void slotSyncAllPicturesMetadata();
     void slotSyncAllPicturesMetadataDone();
     void slotRebuildAllFingerPrints();

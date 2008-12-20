@@ -75,14 +75,15 @@ public:
     ThumbnailLoadThread *thumbLoadThread;
 };
 
-BatchThumbsGenerator::BatchThumbsGenerator(QWidget* parent)
-                    : DProgressDlg(parent), d(new BatchThumbsGeneratorPriv)
+BatchThumbsGenerator::BatchThumbsGenerator(QWidget* /*parent*/)
+                    : DProgressDlg(0), d(new BatchThumbsGeneratorPriv)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotGotThumbnail(const LoadingDescription&, const QPixmap&)));
 
+    setModal(false);
     setValue(0);
     setCaption(i18n("Rebuild All Thumbnails"));
     setLabel(i18n("<b>Updating thumbnails database. Please wait...</b>"));
