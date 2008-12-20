@@ -233,7 +233,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     else
     {
         KSharedConfig::Ptr config = KGlobal::config();
-        KConfigGroup group = config->group(QString("Album Settings"));
+        KConfigGroup group        = config->group(QString("Album Settings"));
         showPage((Page)group.readEntry("Setup Page", (int)CollectionsPage));
     }
 
@@ -243,7 +243,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 Setup::~Setup()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("Album Settings"));
+    KConfigGroup group        = config->group(QString("Album Settings"));
     group.writeEntry("Setup Page", (int)activePageIndex());
     config->sync();
     delete d;
@@ -278,7 +278,7 @@ void Setup::slotOkClicked()
             return;
 
         BatchThumbsGenerator *thumbsGenerator = new BatchThumbsGenerator(this);
-        thumbsGenerator->exec();
+        thumbsGenerator->show();
     }
 
     close();
