@@ -552,9 +552,8 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
 
                     // NOTE : with implementations <= 0.9.1, the canvas doesn't work properly using high zoom level (> 500).
                     // The sx, sy, sw, sh values haven't be computed properly and "tile" artifacts been appears
-                    // over the image. Look the example here:
-                    // http://digikam3rdparty.free.fr/Screenshots/editorhighzoomartefact.png
-                    // Note than these "tile" artifacts are not the real tiles of canvas.
+                    // over the image.
+                    // Note these "tile" artifacts are not the real tiles of canvas.
                     // The new implementation below fix this problem to handle properly the areas to
                     // use from the source image to generate the canvas pixmap tiles.
 
