@@ -127,7 +127,7 @@ public:
 
     /// !! All methods of LoadingCache shall only be called when a CacheLock is held !!
 
-    class CacheLock
+    class DIGIKAM_EXPORT CacheLock
     {
     public:
 
