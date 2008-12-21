@@ -30,6 +30,7 @@
 // KDE includes.
 
 #include <kdebug.h>
+#include <kfilemetainfo.h>
 #include <kmimetype.h>
 #include <klocale.h>
 
@@ -120,7 +121,7 @@ void ImageScanner::addImage(int albumId)
     m_scanInfo.modificationDate = m_fileInfo.lastModified();
     int fileSize = (int)m_fileInfo.size();
     // the QByteArray is an ASCII hex string
-    m_scanInfo.uniqueHash = QString(m_img.getUniqueHash());
+    m_scanInfo.uniqueHash = uniqueHash();
 
     kDebug(50003) << "Adding new item" << m_fileInfo.filePath();
     m_scanInfo.id = DatabaseAccess().db()->addItem(m_scanInfo.albumID, m_scanInfo.itemName, 
@@ -134,7 +135,7 @@ void ImageScanner::updateImage()
     // part from addImage()
     m_scanInfo.modificationDate = m_fileInfo.lastModified();
     int fileSize = (int)m_fileInfo.size();
-    m_scanInfo.uniqueHash = QString(m_img.getUniqueHash());
+    m_scanInfo.uniqueHash = uniqueHash();
 
     DatabaseAccess().db()->updateItem(m_scanInfo.id, m_scanInfo.category,
                                       m_scanInfo.modificationDate, fileSize, m_scanInfo.uniqueHash);
@@ -154,6 +155,18 @@ void ImageScanner::scanFile()
             scanIPTCCore();
             scanTags();
         }
+    }
+    else if (m_scanInfo.category == DatabaseItem::Video)
+    {
+        scanVideoFile();
+    }
+    else if (m_scanInfo.category == DatabaseItem::Audio)
+    {
+        scanAudioFile();
+    }
+    else if (m_scanInfo.category == DatabaseItem::Other)
+    {
+        // unsupported
     }
 }
 
@@ -509,10 +522,83 @@ void ImageScanner::scanTags()
     }
 }
 
+void ImageScanner::scanVideoFile()
+{
+    //TODO
+
+    QVariantList metadataInfos;
+
+    if (m_hasMetadata)
+    {
+        MetadataFields fields;
+        fields << MetadataInfo::Rating
+               << MetadataInfo::CreationDate;
+        QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
+
+        // creation date: fall back to file system property
+        if (metadataInfos[1].isNull() || !metadataInfos[1].toDateTime().isValid())
+        {
+            metadataInfos[1] = m_fileInfo.created();
+        }
+    }
+    else
+    {
+        metadataInfos << -1
+                      << m_fileInfo.created();
+    }
+
+    QSize size;
+
+    QVariantList infos;
+    infos << metadataInfos
+          << detectVideoFormat();
+
+    DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos,
+                                               DatabaseFields::Rating |
+                                               DatabaseFields::CreationDate |
+                                               DatabaseFields::Format);
+
+    // KFileMetaInfo does not give us any useful information for relevant video files
+    /*
+    const KFileMetaInfo::WhatFlags flags = KFileMetaInfo::Fastest |
+            KFileMetaInfo::TechnicalInfo |
+            KFileMetaInfo::ContentInfo;
+    KFileMetaInfo metaInfo(m_fileInfo.filePath(), QString(), flags);
+    if (metaInfo.isValid())
+    {
+        QStringList keys = metaInfo.keys();
+        foreach (const QString &key, keys)
+        {
+            KFileMetaInfoItem item = metaInfo.item(key);
+            kDebug() << item.name() << item.value();
+        }
+    }
+    */
+}
+
+void ImageScanner::scanAudioFile()
+{
+    //TODO
+
+    QVariantList infos;
+    infos << -1
+          << m_fileInfo.created()
+          << detectAudioFormat();
+
+    DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos,
+                                               DatabaseFields::Rating |
+                                               DatabaseFields::CreationDate |
+                                               DatabaseFields::Format);
+}
+
 void ImageScanner::loadFromDisk()
 {
     m_hasMetadata = m_metadata.load(m_fileInfo.filePath());
-    m_hasImage    = m_img.loadImageInfo(m_fileInfo.filePath(), false, false);
+    if (m_scanInfo.category == DatabaseItem::Image)
+        m_hasImage = m_img.loadImageInfo(m_fileInfo.filePath(), false, false);
+    else
+        m_hasImage = false;
+
     // faster than loading twice from disk
     if (m_hasMetadata)
     {
@@ -521,6 +607,15 @@ void ImageScanner::loadFromDisk()
         m_img.setIptc(m_metadata.getIptc());
         m_img.setXmp(m_metadata.getXmp());
     }
+}
+
+QString ImageScanner::uniqueHash()
+{
+    // the QByteArray is an ASCII hex string
+    if (m_scanInfo.category == DatabaseItem::Image)
+        return QString(m_img.getUniqueHash());
+    else
+        return QString(DImg::getUniqueHash(m_fileInfo.filePath()));
 }
 
 QString ImageScanner::detectFormat()
@@ -575,6 +670,22 @@ QString ImageScanner::detectFormat()
     return QString();
 }
 
+QString ImageScanner::detectVideoFormat()
+{
+    QString suffix = m_fileInfo.suffix().toUpper();
+    if (suffix == "MPEG" || suffix == "MPG" || suffix == "MPO" || suffix == "MPE")
+        return "MPEG";
+    if (suffix =="ASF" || suffix == "WMV")
+        return "WMV";
+    return suffix;
+}
+
+QString ImageScanner::detectAudioFormat()
+{
+    QString suffix = m_fileInfo.suffix().toUpper();
+    return suffix;
+}
+
 QString ImageScanner::formatToString(const QString &format)
 {
     if (format == "JPG")
@@ -602,6 +713,52 @@ QString ImageScanner::formatToString(const QString &format)
         return i18nc("RAW image file (), the parentheses contain the file suffix, like MRW",
                      "RAW image file (%1)",
                      format.mid(4));
+    }
+    // video
+    else if (format == "MPEG")
+    {
+        return format;
+    }
+    else if (format == "AVI")
+    {
+        return format;
+    }
+    else if (format == "MOV")
+    {
+        return "Quicktime";
+    }
+    else if (format == "WMF")
+    {
+        return "Windows MetaFile";
+    }
+    else if (format == "WMV")
+    {
+        return "Windows Media Video";
+    }
+    else if (format == "MP4")
+    {
+        return "MPEG-4";
+    }
+    else if (format == "3GP")
+    {
+        return "3GPP";
+    }
+    // audio
+    else if (format == "OGG")
+    {
+        return "Ogg";
+    }
+    else if (format == "MP3")
+    {
+        return format;
+    }
+    else if (format == "WMA")
+    {
+        return "Windows Media Audio";
+    }
+    else if (format == "WAV")
+    {
+        return "WAVE";
     }
     else
         return format;

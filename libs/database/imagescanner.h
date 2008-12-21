@@ -136,9 +136,14 @@ protected:
     void scanImageCopyright();
     void scanIPTCCore();
     void scanTags();
+    void scanVideoFile();
+    void scanAudioFile();
 
     void loadFromDisk();
+    QString uniqueHash();
     QString detectFormat();
+    QString detectVideoFormat();
+    QString detectAudioFormat();
 
 protected:
 

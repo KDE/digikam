@@ -1769,7 +1769,7 @@ QByteArray DImg::getUniqueHash()
     return hash;
 }
 
-QByteArray getUniqueHash(const QString &filePath)
+QByteArray DImg::getUniqueHash(const QString &filePath)
 {
     return DImgLoader::uniqueHash(filePath, DImg(), true);
 }
