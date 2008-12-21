@@ -263,6 +263,7 @@ bool SchemaUpdater::makeUpdates()
             // END REMOVE
             // REMOVE BEFORE NEXT SCHEMA UPDATE
             m_access->db()->setSetting("beta010Update1", "true");
+            m_access->db()->setSetting("beta010Update2", "true");
             // END REMOVE
         }
         // add future updates here
@@ -276,6 +277,7 @@ bool SchemaUpdater::makeUpdates()
         // END REMOVE
         // REMOVE BEFORE NEXT SCHEMA UPDATE
         beta010Update1();
+        beta010Update2();
         // END REMOVE
     }
     return true;
@@ -352,6 +354,7 @@ bool SchemaUpdater::createDatabase()
         // END REMOVE
         // REMOVE BEFORE NEXT SCHEMA UPDATE
         m_access->db()->setSetting("beta010Update1", "true");
+        m_access->db()->setSetting("beta010Update2", "true");
         // END REMOVE
         m_currentVersion = 5;
         return true;
@@ -1230,6 +1233,17 @@ void SchemaUpdater::beta010Update1()
     m_access->db()->setSetting("beta010Update1", "true");
 }
 
+void SchemaUpdater::beta010Update2()
+{
+    QString hasUpdate = m_access->db()->getSetting("beta010Update2");
+    if (!hasUpdate.isNull())
+        return;
+
+    // force rescan and creation of ImageInformation entry for videos and audio
+    m_access->backend()->execSql("DELETE FROM Images WHERE category=2 OR category=3;");
+
+    m_access->db()->setSetting("beta010Update2", "true");
+}
 
 // ---------- Legacy code ------------
 
