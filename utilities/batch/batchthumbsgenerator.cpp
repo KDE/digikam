@@ -142,9 +142,12 @@ void BatchThumbsGenerator::complete()
 
 void BatchThumbsGenerator::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
 {
+    if (d->allPicturesPath.first() != desc.filePath)
+        return;
+
     addedAction(pix, desc.filePath);
     advance(1);
-    if (!d->allPicturesPath.isEmpty() && d->allPicturesPath.first() == desc.filePath)
+    if (!d->allPicturesPath.isEmpty())
         d->allPicturesPath.removeFirst();
     if (d->allPicturesPath.isEmpty())
         complete();
