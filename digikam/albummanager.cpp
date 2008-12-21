@@ -323,6 +323,9 @@ bool AlbumManager::databaseEqual(const QString &dbPath) const
 
 bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
 {
+    if (dbPath.isEmpty())
+        return false;
+
     // This is to ensure that the setup does not overrule the command line.
     // Replace with a better solution?
     if (priority)
