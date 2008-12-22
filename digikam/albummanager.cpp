@@ -153,6 +153,7 @@ public:
         scanTAlbumsTimer   = 0;
         scanSAlbumsTimer   = 0;
         scanDAlbumsTimer   = 0;
+        updatePAlbumsTimer = 0;
         albumItemCountTimer= 0;
         tagItemCountTimer  = 0;
     }
@@ -190,6 +191,7 @@ public:
     QTimer                     *scanTAlbumsTimer;
     QTimer                     *scanSAlbumsTimer;
     QTimer                     *scanDAlbumsTimer;
+    QTimer                     *updatePAlbumsTimer;
     QTimer                     *albumItemCountTimer;
     QTimer                     *tagItemCountTimer;
     QSet<int>                   changedPAlbums;
@@ -265,6 +267,11 @@ AlbumManager::AlbumManager()
     d->scanSAlbumsTimer->setInterval(50);
     d->scanSAlbumsTimer->setSingleShot(true);
     connect(d->scanSAlbumsTimer, SIGNAL(timeout()), this, SLOT(scanSAlbums()));
+
+    d->updatePAlbumsTimer = new QTimer(this);
+    d->updatePAlbumsTimer->setInterval(50);
+    d->updatePAlbumsTimer->setSingleShot(true);
+    connect(d->updatePAlbumsTimer, SIGNAL(timeout()), this, SLOT(updateChangedPAlbums()));
 
     // this operation is much more expensive than the other scan methods
     d->scanDAlbumsTimer = new QTimer(this);
@@ -688,19 +695,10 @@ void AlbumManager::scanPAlbums()
         // check that location of album is available
         if (CollectionManager::instance()->locationForAlbumRootId(info.albumRootId).isAvailable())
         {
-            if (d->changedPAlbums.contains(info.id))
-            {
-                // marked as changed: delete old object, create new from scratch
-                newAlbums << info;
-                d->changedPAlbums.remove(info.id);
-            }
+            if (oldAlbums.contains(info.id))
+                oldAlbums.remove(info.id);
             else
-            {
-                if (oldAlbums.contains(info.id))
-                    oldAlbums.remove(info.id);
-                else
-                    newAlbums << info;
-            }
+                newAlbums << info;
         }
     }
 
@@ -805,6 +803,62 @@ void AlbumManager::scanPAlbums()
     }
 
     getAlbumItemsCount();
+}
+
+void AlbumManager::updateChangedPAlbums()
+{
+    d->updatePAlbumsTimer->stop();
+
+    // scan db and get a list of all albums
+    QList<AlbumInfo> currentAlbums = DatabaseAccess().db()->scanAlbums();
+
+    // Find the AlbumInfo for each id in changedPAlbums
+    foreach (int id, d->changedPAlbums)
+    {
+        foreach (const AlbumInfo &info, currentAlbums)
+        {
+            if (info.id == id)
+            {
+                d->changedPAlbums.remove(info.id);
+
+                PAlbum *album = findPAlbum(info.id);
+                if (album)
+                {
+                    // Renamed?
+                    if (info.relativePath != "/")
+                    {
+                        // last section, no slash
+                        QString name = info.relativePath.section('/', -1, -1);
+                        if (name != album->title())
+                        {
+                            album->setTitle(name);
+                            updateAlbumPathHash();
+                            emit signalAlbumRenamed(album);
+                        }
+                    }
+
+                    // Update caption, collection, date
+                    album->m_caption    = info.caption;
+                    album->m_collection = info.collection;
+                    album->m_date       = info.date;
+
+                    // Icon changed?
+                    QString icon;
+                    if (info.iconAlbumRootId)
+                    {
+                        QString albumRootPath = CollectionManager::instance()->albumRootPath(info.iconAlbumRootId);
+                        if (!albumRootPath.isNull())
+                            icon = albumRootPath + info.iconRelativePath;
+                    }
+                    if (icon != album->m_icon)
+                    {
+                        album->m_icon = icon;
+                        emit signalAlbumIconChanged(album);
+                    }
+                }
+            }
+        }
+    }
 }
 
 void AlbumManager::getAlbumItemsCount()
@@ -1405,10 +1459,6 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
 
     // now rename the album and subalbums in the database
 
-    // all we need to do is set the title of the album which is being
-    // renamed correctly and all the sub albums will automatically get
-    // their url set correctly
-
     album->setTitle(newName);
     {
         DatabaseAccess access;
@@ -1424,6 +1474,14 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
         }
     }
 
+    updateAlbumPathHash();
+    emit signalAlbumRenamed(album);
+
+    return true;
+}
+
+void AlbumManager::updateAlbumPathHash()
+{
     // Update AlbumDict. basically clear it and rebuild from scratch
     {
         d->albumPathHash.clear();
@@ -1436,9 +1494,6 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
         }
     }
 
-    emit signalAlbumRenamed(album);
-
-    return true;
 }
 
 bool AlbumManager::updatePAlbumIcon(PAlbum *album, qlonglong iconID, QString& errMsg)
@@ -2121,8 +2176,8 @@ void AlbumManager::slotAlbumChange(const AlbumChangeset &changeset)
         case AlbumChangeset::PropertiesChanged:
             // mark for rescan
             d->changedPAlbums << changeset.albumId();
-            if (!d->scanPAlbumsTimer->isActive())
-                d->scanPAlbumsTimer->start();
+            if (!d->updatePAlbumsTimer->isActive())
+                d->updatePAlbumsTimer->start();
             break;
         case AlbumChangeset::Unknown:
             break;

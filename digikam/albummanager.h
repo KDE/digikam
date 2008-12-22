@@ -488,6 +488,7 @@ private slots:
      * created
      */
     void scanPAlbums();
+    void updateChangedPAlbums();
     /**
      * Scan tags directly from database and creates new TAlbums
      * It only creates those TAlbums which haven't already been
@@ -519,6 +520,7 @@ private:
     void removePAlbum(PAlbum *album);
     void insertTAlbum(TAlbum *album, TAlbum *parent);
     void removeTAlbum(TAlbum *album);
+    void updateAlbumPathHash();
 
     void notifyAlbumDeletion(Album *album);
 
