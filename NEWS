@@ -20,7 +20,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 178223 : Crash on external deletion of image.
 009 ==> 175322 : Import from camera: unable to create new folders.
 010 ==> 177934 : Image status on camera gets broken when usb device silently disconnects.
-011 ==> 
+011 ==> 169227 : Configure shortcuts dialog broken.
+012 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta7 - Release date: 2008-12-18
