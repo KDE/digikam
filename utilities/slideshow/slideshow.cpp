@@ -708,6 +708,25 @@ void SlideShow::keyPressEvent(QKeyEvent *event)
     d->toolBar->keyPressEvent(event);
 }
 
+static void makeCornerRectangles(const QRect &desktopRect, const QSize &size,
+                                 QRect *topLeft, QRect *topRight, QRect *bottomLeft, QRect *bottomRight,
+                                 QRect *topLeftLarger, QRect *topRightLarger, QRect *bottomLeftLarger, QRect *bottomRightLarger)
+{
+    QRect sizeRect(QPoint(0,0), size);
+    *topLeft = sizeRect; *topRight = sizeRect; *bottomLeft = sizeRect; *bottomRight = sizeRect;
+
+    topLeft->moveTo(desktopRect.x(), desktopRect.y());
+    topRight->moveTo(desktopRect.x() + desktopRect.width() - sizeRect.width() - 1, topLeft->y());
+    bottomLeft->moveTo(topLeft->x(), desktopRect.y() + desktopRect.height() - sizeRect.height() - 1);
+    bottomRight->moveTo(topRight->x(), bottomLeft->y());
+
+    const int marginX = 25, marginY = 10;
+    *topLeftLarger     = topLeft->adjusted(0, 0, marginX, marginY);
+    *topRightLarger    = topRight->adjusted(-marginX, 0, 0, marginY);
+    *bottomLeftLarger  = bottomLeft->adjusted(0, -marginY, marginX, 0);
+    *bottomRightLarger = bottomRight->adjusted(-marginX, -marginY, 0, 0);
+}
+
 void SlideShow::mouseMoveEvent(QMouseEvent *e)
 {
     setCursor(QCursor(Qt::ArrowCursor));
@@ -719,45 +738,53 @@ void SlideShow::mouseMoveEvent(QMouseEvent *e)
 
     QPoint pos(e->pos());
 
-    if ((pos.y() > (d->deskY+20)) &&
-        (pos.y() < (d->deskY+d->deskHeight-20-1)))
+    QRect sizeRect(QPoint(0,0), d->toolBar->size());
+    QRect topLeft, topRight, bottomLeft, bottomRight;
+    QRect topLeftLarger, topRightLarger, bottomLeftLarger, bottomRightLarger;
+    makeCornerRectangles(QRect(d->deskY, d->deskY, d->deskWidth, d->deskHeight), d->toolBar->size(),
+                         &topLeft, &topRight, &bottomLeft, &bottomRight,
+                         &topLeftLarger, &topRightLarger, &bottomLeftLarger, &bottomRightLarger);
+
+    if (topLeftLarger.contains(pos))
     {
-        if (d->toolBar->isHidden())
-            return;
-        else
-            d->toolBar->hide();
-        return;
+        d->toolBar->move(topLeft.topLeft());
+        d->toolBar->show();
     }
-
-    int w = d->toolBar->width();
-    int h = d->toolBar->height();
-
-    if (pos.y() < (d->deskY+20))
+    else if (topRightLarger.contains(pos))
     {
-        if (pos.x() <= (d->deskX+d->deskWidth/2))
-            // position top left
-            d->toolBar->move(d->deskX, d->deskY);
-        else
-            // position top right
-            d->toolBar->move(d->deskX+d->deskWidth-w-1, d->deskY);
+        d->toolBar->move(topRight.topLeft());
+        d->toolBar->show();
+    }
+    else if (bottomLeftLarger.contains(pos))
+    {
+        d->toolBar->move(bottomLeft.topLeft());
+        d->toolBar->show();
+    }
+    else if (bottomRightLarger.contains(pos))
+    {
+        d->toolBar->move(bottomRight.topLeft());
+        d->toolBar->show();
     }
     else
     {
-        if (pos.x() <= (d->deskX+d->deskWidth/2))
-            // position bot left
-            d->toolBar->move(d->deskX, d->deskY+d->deskHeight-h-1);
-        else
-            // position bot right
-            d->toolBar->move(d->deskX+d->deskWidth-w-1, d->deskY+d->deskHeight-h-1);
+        if (!d->toolBar->isHidden())
+            d->toolBar->hide();
     }
-    d->toolBar->show();
 }
 
 void SlideShow::slotMouseMoveTimeOut()
 {
     QPoint pos(QCursor::pos());
-    if ((pos.y() < (d->deskY+20)) ||
-        (pos.y() > (d->deskY+d->deskHeight-20-1)))
+
+    QRect sizeRect(QPoint(0,0), d->toolBar->size());
+    QRect topLeft, topRight, bottomLeft, bottomRight;
+    QRect topLeftLarger, topRightLarger, bottomLeftLarger, bottomRightLarger;
+    makeCornerRectangles(QRect(d->deskY, d->deskY, d->deskWidth, d->deskHeight), d->toolBar->size(),
+                         &topLeft, &topRight, &bottomLeft, &bottomRight,
+                         &topLeftLarger, &topRightLarger, &bottomLeftLarger, &bottomRightLarger);
+
+    if (topLeftLarger.contains(pos) || topRightLarger.contains(pos)
+        || bottomLeftLarger.contains(pos) || bottomRightLarger.contains(pos))
         return;
 
     setCursor(QCursor(Qt::BlankCursor));
