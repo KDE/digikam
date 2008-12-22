@@ -70,9 +70,6 @@ int main(int argc, char *argv[])
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options );
 
-    KGlobal::locale()->setMainCatalogue("digikam");
-    KGlobal::locale()->insertCatalogue("libkdcraw");
-
     KApplication app;
     KImageIO::registerFormats();
 
@@ -88,7 +85,11 @@ int main(int argc, char *argv[])
     app.setMainWidget(w);
     w->show();
 
-    return app.exec();
+    KGlobal::locale()->setMainCatalogue("digikam");
+    KGlobal::locale()->insertCatalogue("libkdcraw");
+
+    int ret = app.exec();
 
     delete w;
+    return ret;
 }
