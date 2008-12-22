@@ -63,7 +63,8 @@ int main(int argc, char *argv[])
     options.add("+[file(s) or folder(s)]", ki18n("File(s) or folder(s) to open"));
     KCmdLineArgs::addCmdLineOptions( options );
 
-    KGlobal::locale()->setMainCatalog( "digikam" );
+    KGlobal::locale()->setMainCatalog("digikam");
+    KGlobal::locale()->insertCatalog("libkdcraw");
 
 #if KEXIV2_VERSION >= 0x000300
     KExiv2Iface::KExiv2::initializeExiv2();
