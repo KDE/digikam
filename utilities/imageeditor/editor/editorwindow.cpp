@@ -470,6 +470,8 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
+    d->showMenuBarAction = KStdAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
+
     KStdAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
     KStdAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
     KStdAction::preferences(this, SLOT(slotSetup()),              actionCollection());
@@ -1922,6 +1924,15 @@ void EditorWindow::setToolStopProgress()
     d->zoomFitToWindowAction->setEnabled(true);
     d->zoomFitToSelectAction->setEnabled(true);
     d->zoomCombo->setEnabled(true);
+}
+
+
+void EditorWindow::slotShowMenuBar()
+{
+    if (menuBar()->isVisible())
+        menuBar()->hide();
+    else
+        menuBar()->show();
 }
 
 }  // namespace Digikam

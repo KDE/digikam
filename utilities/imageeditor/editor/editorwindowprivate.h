@@ -52,7 +52,6 @@ public:
     {
         removeFullScreenButton = false;
         fullScreenHideToolBar  = false;
-
         selectLabel            = 0;
         donateMoneyAction      = 0;
         accelerators           = 0;
@@ -85,6 +84,7 @@ public:
         rawCameraListAction    = 0;
         contributeAction       = 0;
         toolIface              = 0;
+        showMenuBarAction      = 0;
     }
 
     ~EditorWindowPriv()
@@ -123,6 +123,7 @@ public:
     KToggleAction             *viewCMViewAction;
     KToggleAction             *viewUnderExpoAction;
     KToggleAction             *viewOverExpoAction;
+    KToggleAction             *showMenuBarAction;
 
     KWidgetAction             *zoomComboAction;
 

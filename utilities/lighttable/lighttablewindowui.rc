@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="23" name="lighttablewindow" >
+<gui version="24" name="lighttablewindow" >
 
 <MenuBar>
 
@@ -20,7 +20,7 @@
         <Separator/>
         <Action name="lighttable_close" />
     </Menu>
-    
+
     <Menu name="View" ><text>&amp;View</text>
         <Action name="lighttable_fullscreen" />
         <Action name="lighttable_slideshow" />
@@ -28,29 +28,30 @@
         <Action name="lighttable_syncpreview" />
         <Action name="lighttable_navigatebypair" />
         <Separator/>
-        <Action name="lighttable_zoomplus" /> 
-        <Action name="lighttable_zoomminus" /> 
+        <Action name="lighttable_zoomplus" />
+        <Action name="lighttable_zoomminus" />
         <Action name="lighttable_zoomto100percents" />
         <Action name="lighttable_zoomfit2window" />
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>
-        <Action name="lighttable_rawcameralist"/>        
+        <Action name="lighttable_rawcameralist"/>
         <Action name="lighttable_donatemoney" />
         <Action name="lighttable_contribute" />
     </Menu>
-  
+
     <Merge/>
 
     <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
-        <Action name="options_show_toolbar"/>
         <Merge name="StandardToolBarMenuHandler" />
+        <Action name="options_show_menubar"/>
         <Action name="options_show_statusbar"/>
+        <Action name="options_show_toolbar"/>
         <Separator/>
         <Action name="theme_menu" />
         <Action name="options_configure_keybinding"/>
         <Action name="options_configure_toolbars"/>
-        <Action name="options_configure" />        
+        <Action name="options_configure" />
     </Menu>
 
 </MenuBar>
@@ -60,23 +61,23 @@
      <Action name="lighttable_backward" />
      <Action name="lighttable_forward" />
      <Action name="lighttable_last" />
-     <Separator/>     
-     <Action name="lighttable_zoomplus" /> 
-     <Action name="lighttable_zoomminus" /> 
-     <Action name="lighttable_zoomfit2window" /> 
-     <Separator/>     
+     <Separator/>
+     <Action name="lighttable_zoomplus" />
+     <Action name="lighttable_zoomminus" />
+     <Action name="lighttable_zoomfit2window" />
+     <Separator/>
      <Action name="lighttable_setitemleft" />
      <Action name="lighttable_setitemright" />
-     <Action name="lighttable_syncpreview" /> 
-     <Action name="lighttable_navigatebypair" />     
-     <Separator/>     
+     <Action name="lighttable_syncpreview" />
+     <Action name="lighttable_navigatebypair" />
+     <Separator/>
      <Action name="lighttable_fullscreen" />
-     <Action name="lighttable_slideshow" />      
+     <Action name="lighttable_slideshow" />
      <Merge />
      <WeakSeparator/>
-     <Action name="logo_action" />	       
+     <Action name="logo_action" />
 </ToolBar>
- 
+
 <ActionProperties/>
 
 </gui>

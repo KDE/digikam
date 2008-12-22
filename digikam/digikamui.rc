@@ -1,13 +1,13 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="37" name="digikam" >
+<kpartgui version="38" name="digikam" >
 
  <MenuBar>
 
   <Menu name="Album" >
    <text>&amp;Album</text>
-     <Action name="album_back" />  
-     <Action name="album_forward" />    
-   <Separator/>     
+     <Action name="album_back" />
+     <Action name="album_forward" />
+   <Separator/>
      <Action name="album_new" />
    <Separator/>
      <Action name="album_propsEdit" />
@@ -99,9 +99,10 @@
   </Menu>
 
   <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
-     <Action name="options_show_toolbar"/>
      <Merge name="StandardToolBarMenuHandler" />
+     <Action name="options_show_menubar"/>
      <Action name="options_show_statusbar"/>
+     <Action name="options_show_toolbar"/>
      <Separator/>
      <Action name="theme_menu" />
      <Action name="options_configure_keybinding"/>
@@ -124,8 +125,8 @@
 
  <ToolBar noMerge="1" name="ToolBar" >
   <text>Main Toolbar</text>
-  <Action name="album_back" />  
-  <Action name="album_forward" />    
+  <Action name="album_back" />
+  <Action name="album_forward" />
   <Action name="album_new" />
   <Action name="album_addImages" />
   <Action name="album_propsEdit" />

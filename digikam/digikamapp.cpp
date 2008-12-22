@@ -902,6 +902,8 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+    d->showMenuBarAction = KStdAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
+
     KStdAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
     KStdAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
     KStdAction::preferences(this, SLOT(slotSetup()),              actionCollection());
@@ -2114,6 +2116,14 @@ void DigikamApp::slotAlbumAddImages()
 
     // The folder contents will be parsed by Camera interface in "Directory Browse" mode.
     downloadFrom(path);
+}
+
+void DigikamApp::slotShowMenuBar()
+{
+    if (menuBar()->isVisible())
+        menuBar()->hide();
+    else
+        menuBar()->show();
 }
 
 }  // namespace Digikam

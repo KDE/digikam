@@ -142,6 +142,7 @@ private slots:
     void slotRawCameraList();
     void slotEditKeys();
     void slotConfToolbars();
+    void slotShowMenuBar();
     void slotNewToolbarConfig();
     void slotSetup();
 

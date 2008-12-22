@@ -429,6 +429,8 @@ void LightTableWindow::setupActions()
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
+    d->showMenuBarAction = KStdAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
+
     KStdAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
     KStdAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
     KStdAction::preferences(this, SLOT(slotSetup()),              actionCollection());
@@ -1665,6 +1667,14 @@ void LightTableWindow::slotChangeTheme(const QString& theme)
 {
     AlbumSettings::instance()->setCurrentTheme(theme);
     ThemeEngine::instance()->slotChangeTheme(theme);
+}
+
+void LightTableWindow::slotShowMenuBar()
+{
+    if (menuBar()->isVisible())
+        menuBar()->hide();
+    else
+        menuBar()->show();
 }
 
 }  // namespace Digikam
