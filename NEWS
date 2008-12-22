@@ -7,6 +7,7 @@ IMPORTANT: This version is not yet finalized : do not use yet in production !!!
 NEW FEATURES:
 
 General        : All batch tools as rebuild all thumbs or sync metadata with database use modeless dialogs.
+CameraGui      : Add icon-view items tooltip
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -22,7 +23,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 177934 : Image status on camera gets broken when usb device silently disconnects.
 011 ==> 169227 : Configure shortcuts dialog broken.
 012 ==> 177417 : Changing properties results in sub albums disappear.
-013 ==> 
+013 ==> 177329 : Quick search is case sensitive [regression].
+014 ==> 162206 : Wish: case sensitivity in the text quick filter.
+015 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta7 - Release date: 2008-12-18
