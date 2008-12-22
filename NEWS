@@ -13,8 +13,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 127753 : Persistent selection / image tray.
 004 ==> 138927 : wish:  modeless "Rebuild All Thumbnails" dialg box.
 005 ==> 178061 : Scancontroller missing dependecy to CacheLock.
-006 ==> 178051 : Digikam loses rating video from 0.9 to 0.10.
-007 ==> 
+006 ==> 178051 : digiKam loses rating video from 0.9 to 0.10.
+007 ==> 178403 : Single image view is blank.
+008 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta7 - Release date: 2008-12-18
