@@ -13,6 +13,7 @@ ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Lens aberrations correction tools
 Comment[ca]=Eines de correcció d'aberracions dels objectius
+Comment[da]=Værktøjer til rettelse af linseforvrængning
 Comment[de]=digiKam-Modul zur Korrektur von Linsenabweichungen
 Comment[el]=Εργαλεία διόρθωσης σφαλμάτων φακού
 Comment[et]=Läätsemoonutuse parandamise tööriistad

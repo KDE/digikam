@@ -17,6 +17,7 @@ Encoding=UTF-8
 Comment=Simulate infrared film plugin for digiKam
 Comment[bg]=Приставка на digiKam за наподобяване на снимка с инфрачервен филм
 Comment[ca]=Connector pel digiKam de simulació de pel·lícula d'infraroigs
+Comment[da]=digiKam-plugin til simulering af infrarød film
 Comment[de]=digiKam-Modul zur Simulation eines Infrarotfilms
 Comment[el]=Πρόσθετο εξομοίωσης υπέρυθρου φιλμ για το digiKam
 Comment[es]=Complemento para digiKam para simular la película infrarroja
@@ -30,12 +31,14 @@ Comment[it]=Estensione di digiKam per la simulazione della pellicola infrarossa
 Comment[ja]=digiKam 赤外線フィルム効果プラグイン
 Comment[km]=កម្មវិធី​ជំនួយ​ក្លែង​អ៊ីនហ្វ្រារ៉េដ​សម្រាប់ digiKam
 Comment[lv]=DigiKam spraudnis infrasarkanās filmas imitēšanai
+Comment[nb]=digiKam programtillegg for infrarød effekt
 Comment[nds]=digiKam-Moduul för't Simuleren vun Infraroot-Filmen
 Comment[ne]=डिजिक्यामका लागि नक्कली इन्फ्रारेड फिल्म प्लगइन
 Comment[nl]=Digikam-plugin voor infraroodfilm-effect
 Comment[pl]=Comment=Wtyczka do programu digiKam symulujÄca efekt podczerwonej kliszy
 Comment[pt]=Um 'plugin' do digiKam para simulação de infravermelhos
 Comment[pt_BR]=Plug-in do digiKam para simulação de filme infravermelho
+Comment[ro]=Modul digiKam pentru simulare film infraroșu
 Comment[ru]=Модуль имитирующий инфракрасную плёнку для digiKam
 Comment[sv]=Digikam insticksprogram för att simulera infraröd film
 Comment[th]=ปลั๊กอินลูกเล่นเลียนแบบฟิล์มอินฟาเรดสำหรับ digiKam

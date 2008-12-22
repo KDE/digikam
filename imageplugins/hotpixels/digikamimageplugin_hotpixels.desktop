@@ -16,6 +16,7 @@ Encoding=UTF-8
 Comment=Hot pixel correction plugin for digiKam
 Comment[bg]=Приставка на Digikam за корекция на "горещи пиксели"
 Comment[ca]=Connector pel digiKam de correcció dels píxels cremats
+Comment[da]=digiKam-plugin til rettelse af "hot pixels"
 Comment[de]=digiKam-Modul zur Korrektur von Hotpixeln
 Comment[el]=Πρόσθετο διόρθωσης έντονων εικονοστοιχείων για το digiKam
 Comment[es]=Complemento para Digikam para corregir los píxeles quemados de la imagen
@@ -29,12 +30,14 @@ Comment[it]=Estensione di digiKam per la correzione dei pixel bruciati
 Comment[ja]=digiKam ホットピクセル除去プラグイン
 Comment[km]=កម្មវិធី​ជំនួយ​កែ​ភីកសែល​ងាប់​សម្រាប់ digiKam
 Comment[lv]=DigiKam spraudnis bojātu pikseļu koriģēšanai attēlos
+Comment[nb]=digiKam programtillegg for å rette «hete» piksler
 Comment[nds]=digiKam-Moduul för't Richten vun hitte Pixels
 Comment[ne]=डिजिक्यामका लागि हट पिक्सेल सुधार प्लगइन
 Comment[nl]=Digikam-plugin voor het corrigeren van de hotpixels
 Comment[pl]=Wtyczka do programu digiKam usuwajÄca "gorÄce piksele"
 Comment[pt]=Um 'plugin' do digiKam para corrigir os pixels queimados da imagem
 Comment[pt_BR]=Plug-in do digiKam para correção dos pixels queimados
+Comment[ro]=Modul digiKam pentru ameliorarea punctelor aprinse
 Comment[ru]=Модуль коррекции ярких пикселей для digiKam
 Comment[sv]=Digikam insticksprogram för korrigering av heta bildpunkter
 Comment[tr]=digiKam için hot pixel düzeltme eklentisi
