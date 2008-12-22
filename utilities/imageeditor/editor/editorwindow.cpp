@@ -1427,6 +1427,22 @@ void EditorWindow::startingSave(const KUrl& url)
     if (!checkPermissions(url))
         return;
 
+    QString tempDir = url.directory();
+    // use magic file extension which tells the digikamalbums ioslave to ignore the file
+    m_savingContext->saveTempFile       = new KTemporaryFile();
+    m_savingContext->saveTempFile->setPrefix(tempDir);
+    m_savingContext->saveTempFile->setSuffix(".digikamtempfile.tmp");
+    m_savingContext->saveTempFile->setAutoRemove(true);
+    m_savingContext->saveTempFile->open();
+
+    if (!m_savingContext->saveTempFile->open())
+    {
+        KMessageBox::error(this, i18n("Could not open a temporary file in the folder \"%1\": %2 (%3)",
+                                      tempDir, m_savingContext->saveTempFile->errorString(),
+                                      m_savingContext->saveTempFile->error()));
+        return;
+    }
+
     m_savingContext->srcURL             = url;
     m_savingContext->destinationURL     = m_savingContext->srcURL;
     m_savingContext->destinationExisted = true;
@@ -1434,12 +1450,6 @@ void EditorWindow::startingSave(const KUrl& url)
     m_savingContext->format             = m_savingContext->originalFormat;
     m_savingContext->abortingSaving     = false;
     m_savingContext->savingState        = SavingContextContainer::SavingStateSave;
-    // use magic file extension which tells the digikamalbums ioslave to ignore the file
-    m_savingContext->saveTempFile       = new KTemporaryFile();
-    m_savingContext->saveTempFile->setPrefix(m_savingContext->srcURL.directory());
-    m_savingContext->saveTempFile->setSuffix(".digikamtempfile.tmp");
-    m_savingContext->saveTempFile->setAutoRemove(true);
-    m_savingContext->saveTempFile->open();
 
     m_canvas->saveAs(m_savingContext->saveTempFile->fileName(), m_IOFileSettings,
                      m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()));
@@ -1609,15 +1619,25 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     // use magic file extension which tells the digikamalbums ioslave to ignore the file
 
+    QString tempDir = newURL.directory();
+
+    m_savingContext->saveTempFile = new KTemporaryFile();
+    m_savingContext->saveTempFile->setPrefix(tempDir);
+    m_savingContext->saveTempFile->setSuffix(".digikamtempfile.tmp");
+    m_savingContext->saveTempFile->setAutoRemove(true);
+
+    if (!m_savingContext->saveTempFile->open())
+    {
+        KMessageBox::error(this, i18n("Could not open a temporary file in the folder \"%1\": %2 (%3)",
+                                      tempDir, m_savingContext->saveTempFile->errorString(),
+                                      m_savingContext->saveTempFile->error()));
+        return false;
+    }
+
     m_savingContext->destinationURL = newURL;
     m_savingContext->originalFormat = m_canvas->currentImageFileFormat();
     m_savingContext->savingState    = SavingContextContainer::SavingStateSaveAs;
     m_savingContext->abortingSaving = false;
-    m_savingContext->saveTempFile   = new KTemporaryFile();
-    m_savingContext->saveTempFile->setPrefix(newURL.directory());
-    m_savingContext->saveTempFile->setSuffix(".digikamtempfile.tmp");
-    m_savingContext->saveTempFile->setAutoRemove(true);
-    m_savingContext->saveTempFile->open();
 
     m_canvas->saveAs(m_savingContext->saveTempFile->fileName(), m_IOFileSettings,
                      m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()),
