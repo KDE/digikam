@@ -6,6 +6,8 @@ IMPORTANT: This version is not yet finalized : do not use yet in production !!!
 
 NEW FEATURES:
 
+General        : All batch tools as rebuild all thumbs or sync metadata with database use modeless dialogs.
+
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 141087 : Showing info about the image in a tooltip in the camera import view.
