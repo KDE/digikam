@@ -6,7 +6,7 @@
  * Date        : 2006-30-08
  * Description : batch thumbnails generator
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,11 +67,11 @@ public:
         duration.start();
     }
 
-    bool                       cancel;
+    bool                      cancel;
     
-    QTime                      duration;
+    QTime                     duration;
     
-    QGuardedPtr<ThumbnailJob>  thumbJob;
+    QGuardedPtr<ThumbnailJob> thumbJob;
 };
 
 BatchThumbsGenerator::BatchThumbsGenerator(QWidget* parent)
@@ -231,5 +231,3 @@ void BatchThumbsGenerator::abort()
 }
 
 }  // namespace Digikam
-
-
