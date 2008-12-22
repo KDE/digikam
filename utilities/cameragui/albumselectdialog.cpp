@@ -6,7 +6,7 @@
  * Date        : 2005-06-16
  * Description : a dialog to select a target album to download
  *               pictures from camera
- * 
+ *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -15,12 +15,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -102,7 +102,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
 
     QLabel *logo = new QLabel(plainPage());
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
-    logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 128, KIcon::DefaultState, 0, true));    
+    logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 128, KIcon::DefaultState, 0, true));
 
     QLabel *message = new QLabel(plainPage());
     if (!header.isEmpty())
@@ -193,7 +193,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
 
     // -------------------------------------------------------------
 
-    resize(600, 600);
+    resize(650, 650);
     slotSelectionChanged();
 }
 
@@ -212,14 +212,14 @@ void AlbumSelectDialog::slotAlbumAdded(Album* album)
     if (!parentItem)
     {
         DWarning() << "Failed to find parent for Album "
-                    << album->title() << endl;
+                   << album->title() << endl;
         return;
     }
 
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
-    QPixmap icon = iconLoader->loadIcon("folder", KIcon::NoGroup,
-                                        AlbumSettings::instance()->getDefaultTreeIconSize(),
-                                        KIcon::DefaultState, 0, true);
+    QPixmap icon            = iconLoader->loadIcon("folder", KIcon::NoGroup,
+                                                   AlbumSettings::instance()->getDefaultTreeIconSize(),
+                                                   KIcon::DefaultState, 0, true);
 
     FolderItem* viewItem = new FolderItem(parentItem, album->title());
     viewItem->setPixmap(0, icon);
