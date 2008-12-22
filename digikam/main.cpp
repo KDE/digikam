@@ -127,6 +127,7 @@ int main(int argc, char *argv[])
     tipsFiles.append("kipi/tips");
 
     KGlobal::locale()->insertCatalogue("kipiplugins");
+    KGlobal::locale()->insertCatalogue("libkdcraw");
 
     KTipDialog::showMultiTip(0, tipsFiles, false);
 #else
