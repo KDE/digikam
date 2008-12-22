@@ -1427,7 +1427,7 @@ void EditorWindow::startingSave(const KUrl& url)
     if (!checkPermissions(url))
         return;
 
-    QString tempDir = url.directory();
+    QString tempDir = url.directory(KUrl::AppendTrailingSlash);
     // use magic file extension which tells the digikamalbums ioslave to ignore the file
     m_savingContext->saveTempFile       = new KTemporaryFile();
     m_savingContext->saveTempFile->setPrefix(tempDir);
@@ -1619,7 +1619,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     // use magic file extension which tells the digikamalbums ioslave to ignore the file
 
-    QString tempDir = newURL.directory();
+    QString tempDir = newURL.directory(KUrl::AppendTrailingSlash);
 
     m_savingContext->saveTempFile = new KTemporaryFile();
     m_savingContext->saveTempFile->setPrefix(tempDir);

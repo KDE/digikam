@@ -25,7 +25,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 177417 : Changing properties results in sub albums disappear.
 013 ==> 177329 : Quick search is case sensitive [regression].
 014 ==> 162206 : Wish: case sensitivity in the text quick filter.
-015 ==> 
+015 ==> 168582 : Digikam fails to save images in home directory.
+016 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta7 - Release date: 2008-12-18
