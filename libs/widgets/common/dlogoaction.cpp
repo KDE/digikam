@@ -46,6 +46,8 @@ namespace Digikam
 DLogoAction::DLogoAction(QObject* parent, const char* name)
            : KAction(parent, name)
 {
+    setText("digikam.org");
+    setIcon("digikam");
 }
 
 int DLogoAction::plug(QWidget *widget, int index)
@@ -55,10 +57,8 @@ int DLogoAction::plug(QWidget *widget, int index)
 
     if ( widget->inherits( "KToolBar" ) )
     {
-        KToolBar *bar = (KToolBar *)widget;
-
-        int id = getToolButtonID();
-
+        KToolBar *bar         = (KToolBar *)widget;
+        int id                = getToolButtonID();
         KURLLabel *pixmapLogo = new KURLLabel(Digikam::webProjectUrl(), QString(), bar);
         pixmapLogo->setMargin(0);
         pixmapLogo->setScaledContents(false);
