@@ -1663,7 +1663,31 @@ void DigikamApp::fillSolidMenus()
             continue;
         }
 
-        QString label = cameraDevice.vendor() + ' ' + cameraDevice.product();
+        QString label;
+        QString vendor = cameraDevice.vendor();
+        QString product = cameraDevice.product();
+        if (product == "USB Imaging Interface")
+        {
+            Solid::Device parentUsbDevice = cameraDevice.parent();
+            if (parentUsbDevice.isValid())
+            {
+                QString vendor = parentUsbDevice.vendor();
+                QString product = parentUsbDevice.product();
+                if (!vendor.isEmpty() && !product.isEmpty())
+                {
+                    if (vendor == "Canon, Inc.")
+                    {
+                        vendor = "Canon";
+                        if (product.startsWith("Canon "))
+                            product = product.mid(6); // cut off another "Canon " from product
+                        if (product.endsWith(" (ptp)"))
+                            product.chop(6); // cut off " (ptp)"
+                    }
+                }
+            }
+        }
+        label = vendor + ' ' + product;
+
         QString iconName = cameraDevice.icon();
         if (iconName.isEmpty())
             iconName = "camera-photo";
