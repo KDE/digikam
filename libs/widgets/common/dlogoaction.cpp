@@ -50,6 +50,8 @@ DLogoAction::DLogoAction(QObject* parent, bool alignOnright)
            : KAction(parent)
 {
     m_alignOnright = alignOnright;
+    setText(i18n("digikam.org"));
+    setIcon(KIcon("digikam"));
 }
 
 QWidget* DLogoAction::createWidget( QWidget * parent )
