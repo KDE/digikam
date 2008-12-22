@@ -360,16 +360,15 @@ TagFilterView::~TagFilterView()
     delete d;
 }
 
-void TagFilterView::slotTextTagFilterChanged(const QString& filter)
+void TagFilterView::slotTextTagFilterChanged(const SearchTextSettings& settings)
 {
-    if (filter.isEmpty())
+    if (settings.text.isEmpty())
     {
         collapseView();
         return;
     }
 
-    QString search = filter.toLower();
-
+    QString search       = settings.text;
     bool atleastOneMatch = false;
 
     AlbumList tList = AlbumManager::instance()->allTAlbums();
@@ -381,7 +380,7 @@ void TagFilterView::slotTextTagFilterChanged(const QString& filter)
         if (talbum->isRoot())
             continue;
 
-        bool match = talbum->title().toLower().contains(search);
+        bool match      = talbum->title().contains(search, settings.caseSensitive);
         bool doesExpand = false;
         if (!match)
         {
@@ -389,7 +388,7 @@ void TagFilterView::slotTextTagFilterChanged(const QString& filter)
             Album* parent = talbum->parent();
             while (parent && !parent->isRoot())
             {
-                if (parent->title().toLower().contains(search))
+                if (parent->title().contains(search, settings.caseSensitive))
                 {
                     match = true;
                     break;
@@ -405,9 +404,9 @@ void TagFilterView::slotTextTagFilterChanged(const QString& filter)
             AlbumIterator it(talbum);
             while (it.current())
             {
-                if ((*it)->title().toLower().contains(search))
+                if ((*it)->title().contains(search, settings.caseSensitive))
                 {
-                    match = true;
+                    match      = true;
                     doesExpand = true;
                     break;
                 }

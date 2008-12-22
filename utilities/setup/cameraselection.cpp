@@ -52,7 +52,6 @@
 
 #include "config-digikam.h"
 #include "gpcamera.h"
-#include "searchtextbar.h"
 
 namespace Digikam
 {
@@ -271,8 +270,8 @@ CameraSelection::CameraSelection( QWidget* parent )
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()));
 
-    connect(d->searchBar, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotSearchTextChanged(const QString&)));
+    connect(d->searchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            this, SLOT(slotSearchTextChanged(const SearchTextSettings&)));
 
     // Initialize  --------------------------------------------------
 
@@ -517,17 +516,17 @@ void CameraSelection::slotOkClicked()
                          currentPortPath(), currentCameraPath());
 }
 
-void CameraSelection::slotSearchTextChanged(const QString& filter)
+void CameraSelection::slotSearchTextChanged(const SearchTextSettings& settings)
 {
     bool query     = false;
-    QString search = filter.toLower();
+    QString search = settings.text;
 
     QTreeWidgetItemIterator it(d->listView);
     while (*it)
     {
         QTreeWidgetItem *item  = *it;
 
-        if (item->text(0).toLower().contains(search))
+        if (item->text(0).contains(search, settings.caseSensitive))
         {
             query = true;
             item->setHidden(false);

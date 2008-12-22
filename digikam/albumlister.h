@@ -38,6 +38,7 @@
 
 // Local includes.
 
+#include "searchtextbar.h"
 #include "imageinfo.h"
 
 namespace KIO
@@ -115,7 +116,7 @@ public:
 
     void setMimeTypeFilter(int mimeTypeFilter);
 
-    void setTextFilter(const QString& text);
+    void setTextFilter(const SearchTextSettings& settings);
 
     void setRecurseAlbums(bool recursive);
     void setRecurseTags(bool recursive);

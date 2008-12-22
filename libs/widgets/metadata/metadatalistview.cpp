@@ -249,10 +249,10 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
     update();
 }
 
-void MetadataListView::slotSearchTextChanged(const QString& filter)
+void MetadataListView::slotSearchTextChanged(const SearchTextSettings& settings)
 {
     bool query     = false;
-    QString search = filter.toLower();
+    QString search = settings.text;
 
     QTreeWidgetItemIterator it(this);
     while (*it)
@@ -260,8 +260,8 @@ void MetadataListView::slotSearchTextChanged(const QString& filter)
         MetadataListViewItem *item = dynamic_cast<MetadataListViewItem*>(*it);
         if (item)
         {
-            if (item->text(0).toLower().contains(search) ||
-                item->text(1).toLower().contains(search))
+            if (item->text(0).toLower().contains(search, settings.caseSensitive) ||
+                item->text(1).toLower().contains(search, settings.caseSensitive))
             {
                 query = true;
                 item->setHidden(false);

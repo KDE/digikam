@@ -51,10 +51,6 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
-
-#include "searchtextbar.h"
-
 namespace Digikam
 {
 
@@ -150,8 +146,8 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
 
     // --------------------------------------------------------
 
-    connect(d->searchBar, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotSearchTextChanged(const QString&)));
+    connect(d->searchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            this, SLOT(slotSearchTextChanged(const SearchTextSettings&)));
 
     resize(500, 500);
 }
@@ -161,17 +157,17 @@ RawCameraDlg::~RawCameraDlg()
     delete d;
 }
 
-void RawCameraDlg::slotSearchTextChanged(const QString& filter)
+void RawCameraDlg::slotSearchTextChanged(const SearchTextSettings& settings)
 {
     bool query     = false;
-    QString search = filter.toLower();
+    QString search = settings.text.toLower();
 
     QTreeWidgetItemIterator it(d->listView);
     while (*it)
     {
         QTreeWidgetItem *item  = *it;
 
-        if (item->text(0).toLower().contains(search))
+        if (item->text(0).toLower().contains(search, settings.caseSensitive))
         {
             query = true;
             item->setHidden(false);

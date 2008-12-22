@@ -132,10 +132,9 @@ QString FuzzySearchFolderView::currentFuzzyImageSearchName()
     return QString("_Current_Fuzzy_Image_Search_");
 }
 
-void FuzzySearchFolderView::slotTextSearchFilterChanged(const QString& filter)
+void FuzzySearchFolderView::slotTextSearchFilterChanged(const SearchTextSettings& settings)
 {
-    QString search = filter.toLower();
-
+    QString search       = settings.text;
     bool atleastOneMatch = false;
 
     AlbumList sList = AlbumManager::instance()->allSAlbums();
@@ -144,7 +143,7 @@ void FuzzySearchFolderView::slotTextSearchFilterChanged(const QString& filter)
         SAlbum* salbum                  = (SAlbum*)(*it);
         FuzzySearchFolderItem* viewItem = (FuzzySearchFolderItem*) salbum->extraData(this);
 
-        if (salbum->title().toLower().contains(search) &&
+        if (salbum->title().contains(search, settings.caseSensitive) &&
             salbum->isHaarSearch() &&
             salbum->title() != currentFuzzySketchSearchName() &&
             salbum->title() != currentFuzzyImageSearchName())

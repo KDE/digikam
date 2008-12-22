@@ -145,10 +145,9 @@ SearchFolderView::~SearchFolderView()
 {
 }
 
-void SearchFolderView::slotTextSearchFilterChanged(const QString& filter)
+void SearchFolderView::slotTextSearchFilterChanged(const SearchTextSettings& settings)
 {
-    QString search = filter.toLower();
-
+    QString search       = settings.text;
     bool atleastOneMatch = false;
 
     AlbumList sList = AlbumManager::instance()->allSAlbums();
@@ -164,7 +163,7 @@ void SearchFolderView::slotTextSearchFilterChanged(const QString& filter)
         // used with TimeLine.
         KUrl url = salbum->databaseUrl();
 
-        if (salbum->title().toLower().contains(search))
+        if (salbum->title().contains(search, settings.caseSensitive))
         {
             atleastOneMatch = true;
 

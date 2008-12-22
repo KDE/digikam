@@ -302,16 +302,15 @@ AlbumFolderView::~AlbumFolderView()
     delete d;
 }
 
-void AlbumFolderView::slotTextFolderFilterChanged(const QString& filter)
+void AlbumFolderView::slotTextFolderFilterChanged(const SearchTextSettings& settings)
 {
-    if (filter.isEmpty())
+    if (settings.text.isEmpty())
     {
         collapseView();
         return;
     }
 
-    QString search = filter.toLower();
-
+    QString search       = settings.text;
     bool atleastOneMatch = false;
 
     AlbumList pList = d->albumMan->allPAlbums();
@@ -323,7 +322,7 @@ void AlbumFolderView::slotTextFolderFilterChanged(const QString& filter)
         if (palbum->isRoot())
             continue;
 
-        bool match = palbum->title().toLower().contains(search);
+        bool match = palbum->title().contains(search, settings.caseSensitive);
         bool doesExpand = false;
         if (!match)
         {
@@ -331,7 +330,7 @@ void AlbumFolderView::slotTextFolderFilterChanged(const QString& filter)
             Album* parent = palbum->parent();
             while (parent && !parent->isRoot())
             {
-                if (parent->title().toLower().contains(search))
+                if (parent->title().contains(search, settings.caseSensitive))
                 {
                     match = true;
                     break;
@@ -347,9 +346,9 @@ void AlbumFolderView::slotTextFolderFilterChanged(const QString& filter)
             AlbumIterator it(palbum);
             while (it.current())
             {
-                if ((*it)->title().toLower().contains(search))
+                if ((*it)->title().contains(search, settings.caseSensitive))
                 {
-                    match = true;
+                    match      = true;
                     doesExpand = true;
                     break;
                 }

@@ -127,19 +127,18 @@ QString GPSSearchFolderView::currentGPSSearchName()
     return QString("_Current_Map_Search_");
 }
 
-void GPSSearchFolderView::slotTextSearchFilterChanged(const QString& filter)
+void GPSSearchFolderView::slotTextSearchFilterChanged(const SearchTextSettings& settings)
 {
-    QString search = filter.toLower();
-
+    QString search       = settings.text;
     bool atleastOneMatch = false;
 
     AlbumList sList = AlbumManager::instance()->allSAlbums();
     for (AlbumList::iterator it = sList.begin(); it != sList.end(); ++it)
     {
-        SAlbum* salbum                  = (SAlbum*)(*it);
+        SAlbum* salbum                = (SAlbum*)(*it);
         GPSSearchFolderItem* viewItem = (GPSSearchFolderItem*) salbum->extraData(this);
 
-        if (salbum->title().toLower().contains(search) &&
+        if (salbum->title().contains(search, settings.caseSensitive) &&
             salbum->isHaarSearch() &&
             salbum->title() != currentGPSSearchName())
         {

@@ -34,6 +34,7 @@
 
 // Local includes.
 
+#include "searchtextbar.h"
 #include "albumlister.h"
 
 class QEvent;
@@ -64,7 +65,7 @@ private slots:
 
     void slotRatingFilterChanged(int, AlbumLister::RatingCondition);
     void slotMimeTypeFilterChanged(int);
-    void slotTextFilterChanged(const QString&);
+    void slotTextFilterChanged(const SearchTextSettings&);
     void slotItemsFilterMatch(bool);
 
 private:

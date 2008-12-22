@@ -409,8 +409,8 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     connect(d->fuzzySearchFolderView, SIGNAL(signalTextSearchFilterMatch(bool)),
             d->searchFuzzyBar, SLOT(slotSearchResult(bool)));
 
-    connect(d->searchFuzzyBar, SIGNAL(textChanged(const QString&)),
-            d->fuzzySearchFolderView, SLOT(slotTextSearchFilterChanged(const QString&)));
+    connect(d->searchFuzzyBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            d->fuzzySearchFolderView, SLOT(slotTextSearchFilterChanged(const SearchTextSettings&)));
 
     connect(d->hsSelector, SIGNAL(valueChanged(int, int)),
             this, SLOT(slotHSChanged(int, int)));

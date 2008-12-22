@@ -33,6 +33,7 @@
 // Local includes.
 
 #include "albummanager.h"
+#include "searchtextbar.h"
 
 class QWidget;
 class QTreeWidget;
@@ -59,7 +60,7 @@ private:
 
 private slots: 
 
-    void slotSearchTextChanged(const QString&);
+    void slotSearchTextChanged(const SearchTextSettings&);
 
 private:
 

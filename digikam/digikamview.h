@@ -37,6 +37,7 @@
 
 // Local includes.
 
+#include "searchtextbar.h"
 #include "imageinfo.h"
 
 namespace Digikam

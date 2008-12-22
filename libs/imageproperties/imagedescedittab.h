@@ -35,6 +35,7 @@
 // Local includes.
 
 #include "digikam_export.h"
+#include "searchtextbar.h"
 #include "imageinfolist.h"
 #include "albummanager.h"
 
@@ -107,8 +108,8 @@ private slots:
     void slotDateTimeChanged(const QDateTime& dateTime);
     void slotRatingChanged(int rating);
     void slotModified();
-    void slotRightButtonClicked(Q3ListViewItem *, const QPoint &, int);
-    void slotTagsSearchChanged(const QString&);
+    void slotRightButtonClicked(Q3ListViewItem*, const QPoint &, int);
+    void slotTagsSearchChanged(const SearchTextSettings&);
 
     void slotAlbumAdded(Album* a);
     void slotAlbumDeleted(Album* a);

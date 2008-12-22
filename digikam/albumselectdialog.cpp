@@ -55,7 +55,6 @@
 #include "albummanager.h"
 #include "albumthumbnailloader.h"
 #include "collectionmanager.h"
-#include "searchtextbar.h"
 
 namespace Digikam
 {
@@ -152,8 +151,8 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     connect(this, SIGNAL(user1Clicked()),
             this, SLOT(slotUser1()));
 
-    connect(d->searchBar, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotSearchTextChanged(const QString&)));
+    connect(d->searchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            this, SLOT(slotSearchTextChanged(const SearchTextSettings&)));
 
     // -------------------------------------------------------------
 
@@ -353,10 +352,9 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
     return (dynamic_cast<PAlbum*>(item->album()));
 }
 
-void AlbumSelectDialog::slotSearchTextChanged(const QString& filter)
+void AlbumSelectDialog::slotSearchTextChanged(const SearchTextSettings& settings)
 {
-    QString search = filter.toLower();
-
+    QString search       = settings.text;
     bool atleastOneMatch = false;
 
     AlbumList pList = AlbumManager::instance()->allPAlbums();
@@ -368,14 +366,14 @@ void AlbumSelectDialog::slotSearchTextChanged(const QString& filter)
         if (palbum->isRoot())
             continue;
 
-        bool match = palbum->title().toLower().contains(search);
+        bool match = palbum->title().contains(search, settings.caseSensitive);
         if (!match)
         {
             // check if any of the parents match the search
             Album* parent = palbum->parent();
             while (parent && !parent->isRoot())
             {
-                if (parent->title().toLower().contains(search))
+                if (parent->title().contains(search, settings.caseSensitive))
                 {
                     match = true;
                     break;
@@ -391,7 +389,7 @@ void AlbumSelectDialog::slotSearchTextChanged(const QString& filter)
             AlbumIterator it(palbum);
             while (it.current())
             {
-                if ((*it)->title().toLower().contains(search))
+                if ((*it)->title().contains(search, settings.caseSensitive))
                 {
                     match = true;
                     break;

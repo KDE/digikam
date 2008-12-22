@@ -26,6 +26,7 @@
 
 // Local includes.
 
+#include "searchtextbar.h"
 #include "folderview.h"
 
 class Q3ListViewItem;
@@ -58,7 +59,7 @@ signals:
 
 public slots:
 
-    void slotTextSearchFilterChanged(const QString&);
+    void slotTextSearchFilterChanged(const SearchTextSettings&);
 
 private slots:
 

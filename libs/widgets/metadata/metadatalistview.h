@@ -34,6 +34,7 @@
 
 // Local includes.
 
+#include "searchtextbar.h"
 #include "metadatawidget.h"
 #include "digikam_export.h"
 
@@ -62,7 +63,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void slotSearchTextChanged(const QString&);
+    void slotSearchTextChanged(const SearchTextSettings&);
 
 private Q_SLOTS:
 

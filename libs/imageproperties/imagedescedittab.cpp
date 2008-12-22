@@ -76,7 +76,6 @@
 #include "imageattributeswatch.h"
 #include "metadatahub.h"
 #include "statusprogressbar.h"
-#include "searchtextbar.h"
 
 #include "config-digikam.h"
 #ifdef HAVE_KDEPIMLIBS
@@ -260,8 +259,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     connect(d->tagsView, SIGNAL(rightButtonClicked(Q3ListViewItem*, const QPoint &, int)),
             this, SLOT(slotRightButtonClicked(Q3ListViewItem*, const QPoint&, int)));
 
-    connect(d->tagsSearchBar, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotTagsSearchChanged(const QString&)));
+    connect(d->tagsSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            this, SLOT(slotTagsSearchChanged(const SearchTextSettings&)));
 
     connect(this, SIGNAL(signalTagFilterMatch(bool)),
             d->tagsSearchBar, SLOT(slotSearchResult(bool)));
@@ -1348,7 +1347,7 @@ void ImageDescEditTab::slotAlbumRenamed(Album* a)
     d->tagsSearchBar->completionObject()->addItem(album->title());
     d->newTagEdit->completionObject()->addItem(album->tagPath());
     d->newTagEdit->completionObject()->addItem(album->tagPath().remove(0, 1)); // without root "/"
-    slotTagsSearchChanged(d->tagsSearchBar->text());
+    slotTagsSearchChanged(d->tagsSearchBar->searchTextSettings());
     TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)(album->extraData(d->tagsView));
     if (!viewItem)
     {
@@ -1593,29 +1592,29 @@ void ImageDescEditTab::slotRecentTagsMenuActivated(int id)
     }
 }
 
-void ImageDescEditTab::slotTagsSearchChanged(const QString& filter)
+void ImageDescEditTab::slotTagsSearchChanged(const SearchTextSettings& settings)
 {
-    if (filter.isEmpty())
+    if (settings.text.isEmpty())
     {
         d->tagsView->collapseView(FolderView::OmitRoot);
         return;
     }
 
     //TODO: this will destroy assigned-tags filtering. Unify in one method.
-    QString search = filter.toLower();
+    QString search = settings.text.toLower();
 
     bool atleastOneMatch = false;
 
     AlbumList tList = AlbumManager::instance()->allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
-        TAlbum* tag  = (TAlbum*)(*it);
+        TAlbum* tag = (TAlbum*)(*it);
 
         // don't touch the root Tag
         if (tag->isRoot())
             continue;
 
-        bool match = tag->title().toLower().contains(search);
+        bool match      = tag->title().toLower().contains(search, settings.caseSensitive);
         bool doesExpand = false;
         if (!match)
         {
@@ -1623,7 +1622,7 @@ void ImageDescEditTab::slotTagsSearchChanged(const QString& filter)
             Album* parent = tag->parent();
             while (parent && !parent->isRoot())
             {
-                if (parent->title().toLower().contains(search))
+                if (parent->title().toLower().contains(search, settings.caseSensitive))
                 {
                     match = true;
                     break;
@@ -1639,9 +1638,9 @@ void ImageDescEditTab::slotTagsSearchChanged(const QString& filter)
             AlbumIterator it(tag);
             while (it.current())
             {
-                if ((*it)->title().toLower().contains(search))
+                if ((*it)->title().toLower().contains(search, settings.caseSensitive))
                 {
-                    match = true;
+                    match      = true;
                     doesExpand = true;
                     break;
                 }
@@ -1673,14 +1672,14 @@ void ImageDescEditTab::slotTagsSearchChanged(const QString& filter)
 
     if (search.isEmpty())
     {
-        TAlbum* root = AlbumManager::instance()->findTAlbum(0);
+        TAlbum* root                  = AlbumManager::instance()->findTAlbum(0);
         TAlbumCheckListItem* rootItem = (TAlbumCheckListItem*)(root->extraData(d->tagsView));
         if (rootItem)
             rootItem->setText(0, root->title());
     }
     else
     {
-        TAlbum* root = AlbumManager::instance()->findTAlbum(0);
+        TAlbum* root                  = AlbumManager::instance()->findTAlbum(0);
         TAlbumCheckListItem* rootItem = (TAlbumCheckListItem*)(root->extraData(d->tagsView));
         if (rootItem)
             rootItem->setText(0, i18n("Found Tags"));

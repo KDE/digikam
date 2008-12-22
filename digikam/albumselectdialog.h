@@ -34,6 +34,10 @@
 
 #include <kdialog.h>
 
+// Local includes.
+
+#include "searchtextbar.h"
+
 namespace Digikam
 {
 
@@ -68,7 +72,7 @@ private slots:
     void slotSelectionChanged();
     void slotContextMenu();
     void slotUser1();
-    void slotSearchTextChanged(const QString&);
+    void slotSearchTextChanged(const SearchTextSettings&);
 
 private:
 

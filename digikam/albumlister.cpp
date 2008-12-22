@@ -93,8 +93,6 @@ public:
     int                             recurseAlbums;
     int                             recurseTags;
 
-    QString                         textFilter;
-
     QMap<qlonglong, ImageInfo>      itemMap;
     QMap<QDateTime, bool>           dayFilter;
     QSet<int>                       invalidatedItems;
@@ -105,6 +103,8 @@ public:
     QTimer                         *refreshTimer;
 
     KIO::TransferJob               *job;
+
+    SearchTextSettings              textFilterSettings;
 
     ImageInfoList                   itemList;
 
@@ -284,16 +284,16 @@ void AlbumLister::setMimeTypeFilter(int mimeTypeFilter)
     d->filterTimer->start(100);
 }
 
-void AlbumLister::setTextFilter(const QString& text)
+void AlbumLister::setTextFilter(const SearchTextSettings& settings)
 {
-    d->textFilter = text;
+    d->textFilterSettings = settings;
     d->filterTimer->setSingleShot(true);
     d->filterTimer->start(100);
 }
 
 bool AlbumLister::matchesFilter(const ImageInfo &info, bool &foundText)
 {
-    if (d->dayFilter.isEmpty() && d->tagFilter.isEmpty() && d->textFilter.isEmpty() &&
+    if (d->dayFilter.isEmpty() && d->tagFilter.isEmpty() && d->textFilterSettings.text.isEmpty() &&
         !d->untaggedFilter && d->ratingFilter==-1)
         return true;
 
@@ -447,19 +447,19 @@ bool AlbumLister::matchesFilter(const ImageInfo &info, bool &foundText)
 
     AlbumSettings *settings = AlbumSettings::instance();
     if ((settings->getIconShowName() || settings->getIconShowComments() || settings->getIconShowTags()) &&
-        !d->textFilter.isEmpty())
+        !d->textFilterSettings.text.isEmpty())
     {
         foundText = false;
         if (settings->getIconShowName())
         {
-            if (info.name().contains(d->textFilter))
+            if (info.name().contains(d->textFilterSettings.text, d->textFilterSettings.caseSensitive))
             {
                 foundText = true;
             }
         }
         if (settings->getIconShowComments())
         {
-            if (info.comment().contains(d->textFilter))
+            if (info.comment().contains(d->textFilterSettings.text, d->textFilterSettings.caseSensitive))
                 foundText = true;
         }
         if (settings->getIconShowTags())
@@ -467,13 +467,13 @@ bool AlbumLister::matchesFilter(const ImageInfo &info, bool &foundText)
             QStringList tags = AlbumManager::instance()->tagNames(info.tagIds());
             for (QStringList::const_iterator it = tags.constBegin() ; it != tags.constEnd() ; ++it)
             {
-                if ((*it).contains(d->textFilter))
+                if ((*it).contains(d->textFilterSettings.text, d->textFilterSettings.caseSensitive))
                     foundText = true;
             }
         }
         // check for folder names
         PAlbum* palbum = AlbumManager::instance()->findPAlbum(info.albumId());
-        if ((palbum && palbum->title().contains(d->textFilter)))
+        if ((palbum && palbum->title().contains(d->textFilterSettings.text, d->textFilterSettings.caseSensitive)))
         {
             foundText = true;
         }

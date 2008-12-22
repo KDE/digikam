@@ -30,6 +30,7 @@
 
 // Local includes.
 
+#include "searchtextbar.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -48,7 +49,7 @@ public:
 
 private Q_SLOTS:
 
-    void slotSearchTextChanged(const QString&);
+    void slotSearchTextChanged(const SearchTextSettings&);
 
 private:
 

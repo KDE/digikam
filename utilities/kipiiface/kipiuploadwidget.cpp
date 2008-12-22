@@ -44,7 +44,6 @@
 #include "albummanager.h"
 #include "albumthumbnailloader.h"
 #include "treefolderitem.h"
-#include "searchtextbar.h"
 #include "kipiinterface.h"
 #include "kipiimagecollection.h"
 
@@ -80,7 +79,7 @@ KipiUploadWidget::KipiUploadWidget(KipiInterface* iface, QWidget *parent)
     d->albumsView->setAcceptDrops(false);
     d->albumsView->header()->hide();
 
-    d->searchBar = new SearchTextBar(this, "KipiUploadWidgetSearchBar");
+    d->searchBar      = new SearchTextBar(this, "KipiUploadWidgetSearchBar");
 
     QVBoxLayout *vlay = new QVBoxLayout(this);
     vlay->addWidget(d->albumsView, 10);
@@ -97,8 +96,8 @@ KipiUploadWidget::KipiUploadWidget(KipiInterface* iface, QWidget *parent)
     connect(d->albumsView, SIGNAL(itemSelectionChanged()),
             this, SIGNAL(selectionChanged()));
 
-    connect(d->searchBar, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotSearchTextChanged(const QString&)));
+    connect(d->searchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            this, SLOT(slotSearchTextChanged(const SearchTextSettings&)));
 }
 
 KipiUploadWidget::~KipiUploadWidget()
@@ -164,29 +163,28 @@ KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
     return collection;
 }
 
-void KipiUploadWidget::slotSearchTextChanged(const QString& filter)
+void KipiUploadWidget::slotSearchTextChanged(const SearchTextSettings& settings)
 {
-    QString search = filter.toLower();
-
+    QString search       = settings.text;
     bool atleastOneMatch = false;
 
     AlbumList pList = AlbumManager::instance()->allPAlbums();
     for (AlbumList::iterator it = pList.begin(); it != pList.end(); ++it)
     {
-        PAlbum* palbum  = (PAlbum*)(*it);
+        PAlbum* palbum = (PAlbum*)(*it);
 
         // don't touch the root Album
         if (palbum->isRoot())
             continue;
 
-        bool match = palbum->title().toLower().contains(search);
+        bool match = palbum->title().contains(search, settings.caseSensitive);
         if (!match)
         {
             // check if any of the parents match the search
             Album* parent = palbum->parent();
             while (parent && !parent->isRoot())
             {
-                if (parent->title().toLower().contains(search))
+                if (parent->title().contains(search, settings.caseSensitive))
                 {
                     match = true;
                     break;
@@ -202,7 +200,7 @@ void KipiUploadWidget::slotSearchTextChanged(const QString& filter)
             AlbumIterator it(palbum);
             while (it.current())
             {
-                if ((*it)->title().toLower().contains(search))
+                if ((*it)->title().contains(search, settings.caseSensitive))
                 {
                     match = true;
                     break;

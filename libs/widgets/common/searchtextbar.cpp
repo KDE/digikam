@@ -26,6 +26,8 @@
 
 // Qt includes.
 
+#include <QContextMenuEvent>
+#include <QMenu>
 #include <QColor>
 #include <QPalette>
 #include <QString>
@@ -35,7 +37,6 @@
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <kconfig.h>
-
 
 namespace Digikam
 {
@@ -49,7 +50,9 @@ public:
         textQueryCompletion = false;
     }
 
-    bool textQueryCompletion;
+    bool               textQueryCompletion;
+
+    SearchTextSettings settings;
 };
 
 SearchTextBar::SearchTextBar(QWidget *parent, const char* name, const QString& msg)
@@ -73,6 +76,8 @@ SearchTextBar::SearchTextBar(QWidget *parent, const char* name, const QString& m
     KConfigGroup group        = config->group(name + QString(" Search Text Tool"));
     setCompletionMode((KGlobalSettings::Completion)group.readEntry("AutoCompletionMode",
                       (int)KGlobalSettings::CompletionAuto));
+    d->settings.caseSensitive = (Qt::CaseSensitivity)group.readEntry("CaseSensitive", 
+                                                                     (int)Qt::CaseInsensitive);
 }
 
 SearchTextBar::~SearchTextBar()
@@ -80,6 +85,7 @@ SearchTextBar::~SearchTextBar()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(objectName() + QString(" Search Text Tool"));
     group.writeEntry("AutoCompletionMode", (int)completionMode());
+    group.writeEntry("CaseSensitive",      (int)d->settings.caseSensitive);
     group.sync();
 
     delete d;
@@ -95,10 +101,24 @@ bool SearchTextBar::textQueryCompletion() const
     return d->textQueryCompletion;
 }
 
+void SearchTextBar::setSearchTextSettings(const SearchTextSettings& settings)
+{
+    d->settings = settings;
+}
+
+SearchTextSettings SearchTextBar::searchTextSettings() const
+{
+    return d->settings;
+}
+
 void SearchTextBar::slotTextChanged(const QString& text)
 {
     if (text.isEmpty())
         setPalette(QPalette());
+
+    d->settings.text = text;
+
+    emit signalSearchTextSettings(d->settings);
 }
 
 void SearchTextBar::slotSearchResult(bool match)
@@ -120,6 +140,17 @@ void SearchTextBar::slotSearchResult(bool match)
     // in auto-completion history.
     if (d->textQueryCompletion && match)
         completionObject()->addItem(text());
+}
+
+void SearchTextBar::contextMenuEvent(QContextMenuEvent* e)
+{
+    QMenu *menu = createStandardContextMenu();
+    QAction *cs = menu->addAction(tr("Case sensitive"));
+    cs->setCheckable(true);
+    cs->setChecked(d->settings.caseSensitive == Qt::CaseInsensitive ? false : true);
+    menu->exec(e->globalPos());
+    d->settings.caseSensitive = cs->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+    delete menu;
 }
 
 }  // namespace Digikam

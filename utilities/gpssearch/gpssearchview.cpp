@@ -154,8 +154,8 @@ GPSSearchView::GPSSearchView(QWidget *parent)
     connect(d->gpsSearchFolderView, SIGNAL(signalTextSearchFilterMatch(bool)),
             d->searchGPSBar, SLOT(slotSearchResult(bool)));
 
-    connect(d->searchGPSBar, SIGNAL(textChanged(const QString&)),
-            d->gpsSearchFolderView, SLOT(slotTextSearchFilterChanged(const QString&)));
+    connect(d->searchGPSBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            d->gpsSearchFolderView, SLOT(slotTextSearchFilterChanged(const SearchTextSettings&)));
 
     connect(d->saveBtn, SIGNAL(clicked()),
             this, SLOT(slotSaveGPSSAlbum()));

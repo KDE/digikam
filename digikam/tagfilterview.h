@@ -33,6 +33,7 @@
 
 // Local includes.
 
+#include "searchtextbar.h"
 #include "folderview.h"
 
 class QDrag;
@@ -76,7 +77,7 @@ signals:
 
 public slots:
 
-    void slotTextTagFilterChanged(const QString&);
+    void slotTextTagFilterChanged(const SearchTextSettings&);
 
     /** Reset all active tag filters */
     void slotResetTagFilters();

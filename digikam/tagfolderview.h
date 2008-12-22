@@ -32,6 +32,7 @@
 
 // Local includes.
 
+#include "searchtextbar.h"
 #include "folderview.h"
 
 class QDropEvent;
@@ -70,7 +71,7 @@ signals:
 
 public slots:
 
-    void slotTextTagFilterChanged(const QString&);
+    void slotTextTagFilterChanged(const SearchTextSettings&);
 
 protected:
 

@@ -35,7 +35,6 @@
 // Local includes.
 
 #include "albumsettings.h"
-#include "searchtextbar.h"
 #include "ratingfilter.h"
 #include "mimefilter.h"
 #include "statusled.h"
@@ -108,8 +107,8 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
     connect(d->mimeFilter, SIGNAL(activated(int)),
             this, SLOT(slotMimeTypeFilterChanged(int)));
 
-    connect(d->textFilter, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotTextFilterChanged(const QString&)));
+    connect(d->textFilter, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            this, SLOT(slotTextFilterChanged(const SearchTextSettings&)));
 
 #if KDE_IS_VERSION(4,1,0)
     connect(AlbumLister::instance(), SIGNAL(signalItemsTextFilterMatch(bool)),
@@ -152,9 +151,9 @@ void AlbumIconViewFilter::slotMimeTypeFilterChanged(int mimeTypeFilter)
     AlbumLister::instance()->setMimeTypeFilter(mimeTypeFilter);
 }
 
-void AlbumIconViewFilter::slotTextFilterChanged(const QString& text)
+void AlbumIconViewFilter::slotTextFilterChanged(const SearchTextSettings& settings)
 {
-    AlbumLister::instance()->setTextFilter(text);
+    AlbumLister::instance()->setTextFilter(settings);
 }
 
 void AlbumIconViewFilter::slotItemsFilterMatch(bool match)

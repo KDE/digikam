@@ -35,7 +35,23 @@
 
 namespace Digikam
 {
+
 class SearchTextBarPriv;
+
+class DIGIKAM_EXPORT SearchTextSettings
+{
+
+public:
+
+    SearchTextSettings()
+    {
+        caseSensitive = Qt::CaseInsensitive;
+    }
+
+    Qt::CaseSensitivity caseSensitive;
+
+    QString text;
+};
 
 class DIGIKAM_EXPORT SearchTextBar : public KLineEdit
 {
@@ -49,6 +65,13 @@ public:
     void setEnableTextQueryCompletion(bool b);
     bool textQueryCompletion() const;
 
+    void setSearchTextSettings(const SearchTextSettings& settings);
+    SearchTextSettings searchTextSettings() const;
+
+Q_SIGNALS:
+
+    void signalSearchTextSettings(const SearchTextSettings& settings);
+
 public Q_SLOTS:
 
     void slotSearchResult(bool);
@@ -57,7 +80,11 @@ private Q_SLOTS:
 
     void slotTextChanged(const QString&);
 
-private :
+private:
+
+    void contextMenuEvent(QContextMenuEvent* e);
+
+private:
 
     SearchTextBarPriv* const d;
 };

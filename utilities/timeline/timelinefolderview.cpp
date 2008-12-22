@@ -124,10 +124,9 @@ QString TimeLineFolderView::currentTimeLineSearchName()
     return QString("_Current_Time_Line_Search_");
 }
 
-void TimeLineFolderView::slotTextSearchFilterChanged(const QString& filter)
+void TimeLineFolderView::slotTextSearchFilterChanged(const SearchTextSettings& settings)
 {
-    QString search = filter.toLower();
-
+    QString search       = settings.text;
     bool atleastOneMatch = false;
 
     AlbumList sList = AlbumManager::instance()->allSAlbums();
@@ -136,7 +135,7 @@ void TimeLineFolderView::slotTextSearchFilterChanged(const QString& filter)
         SAlbum* salbum               = (SAlbum*)(*it);
         TimeLineFolderItem* viewItem = (TimeLineFolderItem*) salbum->extraData(this);
 
-        if (salbum->title().toLower().contains(search) &&
+        if (salbum->title().contains(search, settings.caseSensitive) &&
             salbum->isTimelineSearch() &&
             salbum->title() != currentTimeLineSearchName())
         {

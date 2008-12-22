@@ -45,7 +45,6 @@
 #include "album.h"
 #include "albummanager.h"
 #include "albumthumbnailloader.h"
-#include "searchtextbar.h"
 #include "treefolderitem.h"
 #include "searchfolderview.h"
 #include "timelinefolderview.h"
@@ -164,14 +163,14 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, Q
     connect(d->searchesView, SIGNAL(itemChanged(QTreeWidgetItem*, int)),
             this, SIGNAL(selectionChanged()));
 
-    connect(d->albumsSearchBar, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotAlbumsSearchTextChanged(const QString&)));
+    connect(d->albumsSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            this, SLOT(slotAlbumsSearchTextChanged(const SearchTextSettings&)));
 
-    connect(d->tagsSearchBar, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotTagsSearchTextChanged(const QString&)));
+    connect(d->tagsSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            this, SLOT(slotTagsSearchTextChanged(const SearchTextSettings&)));
 
-    connect(d->searchesSearchBar, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotSearchesSearchTextChanged(const QString&)));
+    connect(d->searchesSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            this, SLOT(slotSearchesSearchTextChanged(const SearchTextSettings&)));
 }
 
 KipiImageCollectionSelector::~KipiImageCollectionSelector()
@@ -312,10 +311,9 @@ QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollectio
     return list;
 }
 
-void KipiImageCollectionSelector::slotAlbumsSearchTextChanged(const QString& filter)
+void KipiImageCollectionSelector::slotAlbumsSearchTextChanged(const SearchTextSettings& settings)
 {
-    QString search = filter.toLower();
-
+    QString search       = settings.text;
     bool atleastOneMatch = false;
 
     AlbumList pList = AlbumManager::instance()->allPAlbums();
@@ -327,14 +325,14 @@ void KipiImageCollectionSelector::slotAlbumsSearchTextChanged(const QString& fil
         if (palbum->isRoot())
             continue;
 
-        bool match = palbum->title().toLower().contains(search);
+        bool match = palbum->title().contains(search, settings.caseSensitive);
         if (!match)
         {
             // check if any of the parents match the search
             Album* parent = palbum->parent();
             while (parent && !parent->isRoot())
             {
-                if (parent->title().toLower().contains(search))
+                if (parent->title().contains(search, settings.caseSensitive))
                 {
                     match = true;
                     break;
@@ -350,7 +348,7 @@ void KipiImageCollectionSelector::slotAlbumsSearchTextChanged(const QString& fil
             AlbumIterator it(palbum);
             while (it.current())
             {
-                if ((*it)->title().toLower().contains(search))
+                if ((*it)->title().contains(search, settings.caseSensitive))
                 {
                     match = true;
                     break;
@@ -380,10 +378,9 @@ void KipiImageCollectionSelector::slotAlbumsSearchTextChanged(const QString& fil
     d->albumsSearchBar->slotSearchResult(atleastOneMatch);
 }
 
-void KipiImageCollectionSelector::slotTagsSearchTextChanged(const QString& filter)
+void KipiImageCollectionSelector::slotTagsSearchTextChanged(const SearchTextSettings& settings)
 {
-    QString search = filter.toLower();
-
+    QString search       = settings.text;
     bool atleastOneMatch = false;
 
     AlbumList tList = AlbumManager::instance()->allTAlbums();
@@ -395,14 +392,14 @@ void KipiImageCollectionSelector::slotTagsSearchTextChanged(const QString& filte
         if (talbum->isRoot())
             continue;
 
-        bool match = talbum->title().toLower().contains(search);
+        bool match = talbum->title().contains(search, settings.caseSensitive);
         if (!match)
         {
             // check if any of the parents match the search
             Album* parent = talbum->parent();
             while (parent && !parent->isRoot())
             {
-                if (parent->title().toLower().contains(search))
+                if (parent->title().contains(search, settings.caseSensitive))
                 {
                     match = true;
                     break;
@@ -418,7 +415,7 @@ void KipiImageCollectionSelector::slotTagsSearchTextChanged(const QString& filte
             AlbumIterator it(talbum);
             while (it.current())
             {
-                if ((*it)->title().toLower().contains(search))
+                if ((*it)->title().contains(search, settings.caseSensitive))
                 {
                     match = true;
                     break;
@@ -448,10 +445,9 @@ void KipiImageCollectionSelector::slotTagsSearchTextChanged(const QString& filte
     d->tagsSearchBar->slotSearchResult(atleastOneMatch);
 }
 
-void KipiImageCollectionSelector::slotSearchesSearchTextChanged(const QString& filter)
+void KipiImageCollectionSelector::slotSearchesSearchTextChanged(const SearchTextSettings& settings)
 {
-    QString search = filter.toLower();
-
+    QString search       = settings.text;
     bool atleastOneMatch = false;
 
     AlbumList tList = AlbumManager::instance()->allSAlbums();
@@ -463,14 +459,14 @@ void KipiImageCollectionSelector::slotSearchesSearchTextChanged(const QString& f
         if (salbum->isRoot())
             continue;
 
-        bool match = salbum->title().toLower().contains(search);
+        bool match = salbum->title().contains(search, settings.caseSensitive);
         if (!match)
         {
             // check if any of the parents match the search
             Album* parent = salbum->parent();
             while (parent && !parent->isRoot())
             {
-                if (parent->title().toLower().contains(search))
+                if (parent->title().contains(search, settings.caseSensitive))
                 {
                     match = true;
                     break;
@@ -486,7 +482,7 @@ void KipiImageCollectionSelector::slotSearchesSearchTextChanged(const QString& f
             AlbumIterator it(salbum);
             while (it.current())
             {
-                if ((*it)->title().toLower().contains(search))
+                if ((*it)->title().contains(search, settings.caseSensitive))
                 {
                     match = true;
                     break;

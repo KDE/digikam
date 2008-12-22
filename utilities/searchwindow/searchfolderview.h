@@ -28,6 +28,7 @@
 
 // Local includes.
 
+#include "searchtextbar.h"
 #include "folderview.h"
 
 class KUrl;
@@ -69,7 +70,7 @@ signals:
 
 public slots:
 
-    void slotTextSearchFilterChanged(const QString&);
+    void slotTextSearchFilterChanged(const SearchTextSettings&);
     void slotSelectSearch(SAlbum *album);
 
 private slots:

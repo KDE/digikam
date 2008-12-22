@@ -192,8 +192,8 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     connect(saveMetadata, SIGNAL(clicked()),
             this, SLOT(slotSaveMetadataToFile()));
 
-    connect(d->searchBar, SIGNAL(textChanged(const QString&)),
-            d->view, SLOT(slotSearchTextChanged(const QString&)));
+    connect(d->searchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            d->view, SLOT(slotSearchTextChanged(const SearchTextSettings&)));
 
     connect(d->view, SIGNAL(signalTextFilterMatch(bool)),
             d->searchBar, SLOT(slotSearchResult(bool)));
@@ -460,7 +460,7 @@ void MetadataWidget::setUserAreaWidget(QWidget *w)
 
 void MetadataWidget::buildView()
 {
-    d->view->slotSearchTextChanged(d->searchBar->text());
+    d->view->slotSearchTextChanged(d->searchBar->searchTextSettings());
 }
 
 }  // namespace Digikam

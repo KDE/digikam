@@ -75,7 +75,6 @@
 #include "collectionmanager.h"
 #include "slideshow.h"
 #include "sidebar.h"
-#include "searchtextbar.h"
 #include "imagepropertiessidebardb.h"
 #include "imageinfoalbumsjob.h"
 #include "imagepreviewview.h"
@@ -435,17 +434,17 @@ void DigikamView::setupConnections()
 
     // -- Filter Bars Connections ---------------------------------
 
-    connect(d->folderSearchBar, SIGNAL(textChanged(const QString&)),
-            d->folderView, SLOT(slotTextFolderFilterChanged(const QString&)));
+    connect(d->folderSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            d->folderView, SLOT(slotTextFolderFilterChanged(const SearchTextSettings&)));
 
-    connect(d->tagSearchBar, SIGNAL(textChanged(const QString&)),
-            d->tagFolderView, SLOT(slotTextTagFilterChanged(const QString&)));
+    connect(d->tagSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            d->tagFolderView, SLOT(slotTextTagFilterChanged(const SearchTextSettings&)));
 
-    connect(d->searchSearchBar, SIGNAL(textChanged(const QString&)),
-            d->searchFolderView, SLOT(slotTextSearchFilterChanged(const QString&)));
+    connect(d->searchSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            d->searchFolderView, SLOT(slotTextSearchFilterChanged(const SearchTextSettings&)));
 
-    connect(d->tagFilterSearchBar, SIGNAL(textChanged(const QString&)),
-            d->tagFilterView, SLOT(slotTextTagFilterChanged(const QString&)));
+    connect(d->tagFilterSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            d->tagFilterView, SLOT(slotTextTagFilterChanged(const SearchTextSettings&)));
 
     connect(d->folderView, SIGNAL(signalTextFolderFilterMatch(bool)),
             d->folderSearchBar, SLOT(slotSearchResult(bool)));
@@ -779,16 +778,16 @@ void DigikamView::slotAlbumRenamed(Album *album)
             case Album::PHYSICAL:
             {
                 d->folderSearchBar->completionObject()->addItem(album->title());
-                d->folderView->slotTextFolderFilterChanged(d->folderSearchBar->text());
+                d->folderView->slotTextFolderFilterChanged(d->folderSearchBar->searchTextSettings());
                 break;
             }
             case Album::TAG:
             {
                 d->tagSearchBar->completionObject()->addItem(album->title());
-                d->tagFolderView->slotTextTagFilterChanged(d->tagSearchBar->text());
+                d->tagFolderView->slotTextTagFilterChanged(d->tagSearchBar->searchTextSettings());
 
                 d->tagFilterSearchBar->completionObject()->addItem(album->title());
-                d->tagFilterView->slotTextTagFilterChanged(d->tagFilterSearchBar->text());
+                d->tagFilterView->slotTextTagFilterChanged(d->tagFilterSearchBar->searchTextSettings());
                 break;
             }
             case Album::SEARCH:
@@ -797,22 +796,22 @@ void DigikamView::slotAlbumRenamed(Album *album)
                 if (salbum->isNormalSearch() || salbum->isKeywordSearch() || salbum->isAdvancedSearch())
                 {
                     d->searchSearchBar->completionObject()->addItem(salbum->title());
-                    d->searchFolderView->slotTextSearchFilterChanged(d->searchSearchBar->text());
+                    d->searchFolderView->slotTextSearchFilterChanged(d->searchSearchBar->searchTextSettings());
                 }
                 else if (salbum->isTimelineSearch())
                 {
                     d->timeLineView->searchBar()->completionObject()->addItem(salbum->title());
-                    d->timeLineView->folderView()->slotTextSearchFilterChanged(d->timeLineView->searchBar()->text());
+                    d->timeLineView->folderView()->slotTextSearchFilterChanged(d->timeLineView->searchBar()->searchTextSettings());
                 }
                 else if (salbum->isHaarSearch())
                 {
                     d->fuzzySearchView->searchBar()->completionObject()->addItem(salbum->title());
-                    d->fuzzySearchView->folderView()->slotTextSearchFilterChanged(d->fuzzySearchView->searchBar()->text());
+                    d->fuzzySearchView->folderView()->slotTextSearchFilterChanged(d->fuzzySearchView->searchBar()->searchTextSettings());
                 }
                 else if (salbum->isMapSearch())
                 {
                     d->gpsSearchView->searchBar()->completionObject()->addItem(salbum->title());
-                    d->gpsSearchView->folderView()->slotTextSearchFilterChanged(d->gpsSearchView->searchBar()->text());
+                    d->gpsSearchView->folderView()->slotTextSearchFilterChanged(d->gpsSearchView->searchBar()->searchTextSettings());
                 }
 
                 break;

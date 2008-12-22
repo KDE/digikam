@@ -34,6 +34,10 @@
 
 #include <kdialog.h>
 
+// Local includes.
+
+#include "searchtextbar.h"
+
 class QTreeWidgetItem;
 
 namespace Digikam
@@ -75,7 +79,7 @@ private slots:
     void slotSelectionChanged(QTreeWidgetItem*, int);
     void slotPortChanged();
     void slotOkClicked();
-    void slotSearchTextChanged(const QString&);
+    void slotSearchTextChanged(const SearchTextSettings&);
 
 private:
 
