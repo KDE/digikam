@@ -77,6 +77,7 @@ public:
         cancelBtn       = 0;
         tryBtn          = 0;
         defaultBtn      = 0;
+        settingsArea    = 0;
         plainPage       = 0;
         btnBox1         = 0;
         btnBox2         = 0;
@@ -98,6 +99,7 @@ public:
     QToolButton         *linHistoButton;
     QToolButton         *logHistoButton;
 
+    QWidget             *settingsArea;
     QWidget             *plainPage;
 
     KHBox               *btnBox1;
@@ -131,22 +133,22 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, int histogr
     setFrameStyle( QFrame::NoFrame );
     setWidgetResizable(true);
 
-    QWidget *settingsArea = new QWidget(viewport());
-    setWidget(settingsArea);
+    d->settingsArea = new QWidget;
+    setWidget(d->settingsArea);
 
     // ---------------------------------------------------------------
 
-    QGridLayout* gridSettings = new QGridLayout(settingsArea);
+    QGridLayout* gridSettings = new QGridLayout(d->settingsArea);
 
-    d->plainPage    = new QWidget(settingsArea);
-    d->guideBox     = new KHBox(settingsArea);
-    d->btnBox1      = new KHBox(settingsArea);
-    d->btnBox2      = new KHBox(settingsArea);
-    d->histogramBox = new HistogramBox(settingsArea, histogramType);
+    d->plainPage    = new QWidget(d->settingsArea);
+    d->guideBox     = new KHBox(d->settingsArea);
+    d->btnBox1      = new KHBox(d->settingsArea);
+    d->btnBox2      = new KHBox(d->settingsArea);
+    d->histogramBox = new HistogramBox(d->settingsArea, histogramType);
 
     // ---------------------------------------------------------------
 
-    QFrame *frame     = new QFrame(settingsArea);
+    QFrame *frame     = new QFrame(d->settingsArea);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* vlay = new QVBoxLayout(frame);
     d->panIconView    = new ImagePanIconWidget(360, 240, frame);
@@ -294,6 +296,18 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, int histogr
 EditorToolSettings::~EditorToolSettings()
 {
     delete d;
+}
+
+QSize EditorToolSettings::minimumSizeHint() const
+{
+    // Editor Tools usually require a larger horizontal space than other widgets in right side bar
+    // Set scroll area to a horizontal minimum size sufficient for the settings.
+    // Do not touch vertical size hint.
+    // Limit to 40% of the desktop width.
+    QSize hint = QScrollArea::minimumSizeHint();
+    QRect desktopRect = KGlobalSettings::desktopGeometry(d->settingsArea);
+    hint.setWidth(qMin(d->settingsArea->minimumSizeHint().width(), desktopRect.width() * 2 / 5));
+    return hint;
 }
 
 int EditorToolSettings::marginHint()
