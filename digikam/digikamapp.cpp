@@ -2231,16 +2231,7 @@ void DigikamApp::slotSyncAllPicturesMetadata()
         return;
 
     BatchAlbumsSyncMetadata *syncMetadata = new BatchAlbumsSyncMetadata(this);
-
-    connect(syncMetadata, SIGNAL(signalComplete()),
-            this, SLOT(slotSyncAllPicturesMetadataDone()));
-
-    syncMetadata->exec();
-}
-
-void DigikamApp::slotSyncAllPicturesMetadataDone()
-{
-    d->view->applySettings();
+    syncMetadata->show();
 }
 
 void DigikamApp::slotRebuildAllFingerPrints()
@@ -2267,7 +2258,7 @@ void DigikamApp::runFingerPrintsGenerator(bool rebuildAll)
     connect(fingerprintsGenerator, SIGNAL(signalRebuildAllFingerPrintsDone()),
             this, SLOT(slotRebuildAllFingerPrintsDone()));
 
-    fingerprintsGenerator->exec();
+    fingerprintsGenerator->show();
 }
 
 void DigikamApp::slotRebuildAllFingerPrintsDone()

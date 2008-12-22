@@ -81,8 +81,8 @@ public:
     HaarIface          haarIface;
 };
 
-FingerPrintsGenerator::FingerPrintsGenerator(QWidget* parent, bool rebuildAll)
-                     : DProgressDlg(parent), d(new FingerPrintsGeneratorPriv)
+FingerPrintsGenerator::FingerPrintsGenerator(QWidget* /*parent*/, bool rebuildAll)
+                     : DProgressDlg(0), d(new FingerPrintsGeneratorPriv)
 {
     d->rebuildAll        = rebuildAll;
     d->previewLoadThread = new PreviewLoadThread();
@@ -90,6 +90,7 @@ FingerPrintsGenerator::FingerPrintsGenerator(QWidget* parent, bool rebuildAll)
     connect(d->previewLoadThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
             this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)));
 
+    setModal(false);
     setValue(0);
     setCaption(i18n("Rebuild All Fingerprints"));
     setLabel(i18n("<b>Updating fingerprint database. Please wait...</b>"));

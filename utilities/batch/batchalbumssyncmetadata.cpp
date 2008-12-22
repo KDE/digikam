@@ -72,11 +72,12 @@ public:
     AlbumList::Iterator  albumsIt;
 };
 
-BatchAlbumsSyncMetadata::BatchAlbumsSyncMetadata(QWidget* parent)
-                       : DProgressDlg(parent),
-                         d(new BatchAlbumsSyncMetadataPriv)
+BatchAlbumsSyncMetadata::BatchAlbumsSyncMetadata(QWidget* /*parent*/)
+                       : DProgressDlg(0), d(new BatchAlbumsSyncMetadataPriv)
 {
     d->imageInfoJob = new ImageInfoJob();
+
+    setModal(false);
     setValue(0);
     setCaption(i18n("Sync All Images' Metadata"));
     setLabel(i18n("<b>Syncing the metadata of all images with the digiKam database. Please wait...</b>"));
