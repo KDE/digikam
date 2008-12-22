@@ -50,7 +50,7 @@ DLogoAction::DLogoAction(QObject* parent, bool alignOnright)
            : KAction(parent)
 {
     m_alignOnright = alignOnright;
-    setText(i18n("digikam.org"));
+    setText("digikam.org");
     setIcon(KIcon("digikam"));
 }
 
