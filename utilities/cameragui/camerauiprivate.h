@@ -117,6 +117,7 @@ public:
         libsInfoAction            = 0;
         themeMenuAction           = 0;
         contributeAction          = 0;
+        showMenuBarAction         = 0;
     }
 
     bool                          busy;
@@ -177,6 +178,7 @@ public:
     KAction                      *cameraCancelAction;
     KAction                      *rawCameraListAction;
     KAction                      *libsInfoAction;
+    KToggleAction                *showMenuBarAction;
 
     KComboBox                    *losslessFormat;
     KComboBox                    *folderDateFormat;

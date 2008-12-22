@@ -239,6 +239,7 @@ private slots:
     void slotRawCameraList();
     void slotToggleShowBar();
     void slotPrepareToLoad();
+    void slotShowMenuBar();
 
 private:
 

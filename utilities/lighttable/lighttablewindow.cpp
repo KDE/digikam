@@ -458,6 +458,8 @@ void LightTableWindow::setupActions()
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
+    d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
+
     KStandardAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
     KStandardAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
     KStandardAction::preferences(this, SLOT(slotSetup()),              actionCollection());
@@ -545,6 +547,8 @@ void LightTableWindow::setupActions()
     actionCollection()->addAction("logo_action", new DLogoAction(this));
 
     createGUI("lighttablewindowui.rc");
+
+    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
 }
 
 // Deal with items dropped onto the thumbbar (e.g. from the Album view)
@@ -1626,6 +1630,12 @@ void LightTableWindow::slotChangeTheme(const QString& theme)
 void LightTableWindow::slotComponentsInfo()
 {
     showDigikamComponentsInfo();
+}
+
+void LightTableWindow::slotShowMenuBar()
+{
+    const bool visible = menuBar()->isVisible();
+    menuBar()->setVisible(!visible);
 }
 
 }  // namespace Digikam

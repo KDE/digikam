@@ -77,6 +77,7 @@
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 #include <kvbox.h>
+#include <ktoggleaction.h>
 
 // Libkdcraw includes.
 
@@ -418,6 +419,8 @@ void CameraUI::setupActions()
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
+    d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
+
     KStandardAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
     KStandardAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
     KStandardAction::preferences(this, SLOT(slotSetup()),              actionCollection());
@@ -479,6 +482,8 @@ void CameraUI::setupActions()
     actionCollection()->addAction("anim_action", animAction);
 
     createGUI("cameraui.rc");
+
+    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
 }
 
 void CameraUI::setupConnections()
@@ -2074,6 +2079,12 @@ void CameraUI::refreshCollectionFreeSpace()
 void CameraUI::slotCollectionLocationStatusChanged(const CollectionLocation &, int)
 {
     refreshCollectionFreeSpace();
+}
+
+void CameraUI::slotShowMenuBar()
+{
+    const bool visible = menuBar()->isVisible();
+    menuBar()->setVisible(!visible);
 }
 
 }  // namespace Digikam

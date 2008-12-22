@@ -861,6 +861,8 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+    d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
+
     KStandardAction::keyBindings(this,       SLOT(slotEditKeys()),     actionCollection());
     KStandardAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
     KStandardAction::preferences(this,       SLOT(slotSetup()),        actionCollection());
@@ -1093,6 +1095,7 @@ void DigikamApp::setupActions()
     d->recurseAlbumsAction->setChecked(AlbumSettings::instance()->getRecurseAlbums());
     d->recurseTagsAction->setChecked(AlbumSettings::instance()->getRecurseTags());
     d->showBarAction->setChecked(AlbumSettings::instance()->getShowThumbbar());
+    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
 
     // Setting the filter condition also updates the tooltip.
     // (So `setRating` is called first, as otherwise the filter value is not respected).
@@ -2385,6 +2388,12 @@ void DigikamApp::slotDIOResult(KJob* kjob)
 void DigikamApp::slotToggleShowBar()
 {
     d->view->toggleShowBar(d->showBarAction->isChecked());
+}
+
+void DigikamApp::slotShowMenuBar()
+{
+    const bool visible = menuBar()->isVisible();
+    menuBar()->setVisible(!visible);
 }
 
 }  // namespace Digikam

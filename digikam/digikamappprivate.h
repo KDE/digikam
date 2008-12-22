@@ -166,6 +166,7 @@ public:
         albumIconViewFilter                  = 0;
         contributeAction                     = 0;
         showBarAction                        = 0;
+        showMenuBarAction                    = 0;
     }
 
     bool                                fullScreen;
@@ -247,6 +248,7 @@ public:
     KToggleAction                      *recurseAlbumsAction;
     KToggleAction                      *recurseTagsAction;
     KToggleAction                      *showBarAction;
+    KToggleAction                      *showMenuBarAction;
 
     KAction                            *rating0Star;
     KAction                            *rating1Star;

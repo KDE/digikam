@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "imageplugin_adjustcurves.h"
 #include "imageplugin_adjustcurves.moc"
 
@@ -45,8 +44,7 @@ using namespace DigikamAdjustCurvesImagesPlugin;
 K_PLUGIN_FACTORY( AdjustCurvesFactory, registerPlugin<ImagePlugin_AdjustCurves>(); )
 K_EXPORT_PLUGIN ( AdjustCurvesFactory("digikamimageplugin_adjustcurves") )
 
-ImagePlugin_AdjustCurves::ImagePlugin_AdjustCurves(QObject *parent,
-                                                   const QList<QVariant> &)
+ImagePlugin_AdjustCurves::ImagePlugin_AdjustCurves(QObject *parent, const QList<QVariant>&)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_AdjustCurves")
 {
     m_curvesAction  = new KAction(KIcon("adjustcurves"), i18n("Curves Adjust..."), this);
@@ -55,7 +53,8 @@ ImagePlugin_AdjustCurves::ImagePlugin_AdjustCurves(QObject *parent,
     connect(m_curvesAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotCurvesAdjust()));
 
-    m_curvesAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_M));
+    // NOTE: Photoshop 7 use CTRL+M (but it's used in KDE to toogle menu bar).
+    m_curvesAction->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_M));
     setXMLFile("digikamimageplugin_adjustcurves_ui.rc");
 
     kDebug(50006) << "ImagePlugin_AdjustCurves plugin loaded" << endl;

@@ -173,6 +173,7 @@ private slots:
     void slotDonateMoney();
     void slotContribute();
     void slotEditKeys();
+    void slotShowMenuBar();
     void slotConfToolbars();
     void slotNewToolbarConfig();
     void slotSetup();

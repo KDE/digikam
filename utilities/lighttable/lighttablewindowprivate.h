@@ -94,6 +94,7 @@ public:
         libsInfoAction         = 0;
         themeMenuAction        = 0;
         contributeAction       = 0;
+        showMenuBarAction      = 0;
     }
 
     bool                      autoLoadOnRightPanel;
@@ -140,6 +141,7 @@ public:
 
     KToggleAction            *syncPreviewAction;
     KToggleAction            *navigateByPairAction;
+    KToggleAction            *showMenuBarAction;
 
     LightTableBar            *barView;
 

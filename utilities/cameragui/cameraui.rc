@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="20" name="cameraui" >
+<gui version="21" name="cameraui" >
 
 <MenuBar>
 
@@ -42,8 +42,8 @@
     <Menu name="View" ><text>&amp;View</text>
         <Action name="cameraui_fullscreen" />
         <Separator/>
-        <Action name="cameraui_zoomplus" /> 
-        <Action name="cameraui_zoomminus" /> 
+        <Action name="cameraui_zoomplus" />
+        <Action name="cameraui_zoomminus" />
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>
@@ -56,9 +56,10 @@
     <Merge/>
 
     <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
-        <Action name="options_show_toolbar"/>
         <Merge name="StandardToolBarMenuHandler" />
+        <Action name="options_show_menubar"/>
         <Action name="options_show_statusbar"/>
+        <Action name="options_show_toolbar"/>
         <Separator/>
         <Action name="theme_menu" />
         <Action name="options_configure_keybinding"/>

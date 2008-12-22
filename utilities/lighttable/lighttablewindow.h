@@ -33,6 +33,7 @@
 
 #include <kurl.h>
 #include <kxmlguiwindow.h>
+#include <ktoggleaction.h>
 
 // Local includes.
 
@@ -138,6 +139,7 @@ private slots:
     void slotContribute();
     void slotEditKeys();
     void slotConfToolbars();
+    void slotShowMenuBar();
     void slotNewToolbarConfig();
     void slotSetup();
     void slotRawCameraList();

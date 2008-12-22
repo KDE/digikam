@@ -12,11 +12,13 @@
     </keywords>
     <projectdirectory>./</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
     <ignoreparts/>
     <projectname/>
-    <defaultencoding/>
+    <defaultencoding></defaultencoding>
     <projectname>project (KDE4)</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
     <projectname>project</projectname>
     <projectname>project</projectname>
     <projectname>project</projectname>
@@ -348,12 +350,12 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell/>
+      <dbgshell></dbgshell>
       <programargs/>
-      <gdbpath/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <gdbpath></gdbpath>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -389,8 +391,8 @@
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>/home/gilles/Documents/devel/SVN/trunk/graphics/digikam/digikam/digikam</mainprogram>
-      <programargs/>
+      <mainprogram>/home/gilles/Documents/data/devel/SVN/trunk/graphics/digikam/digikam/digikam</mainprogram>
+      <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>false</autocompile>
       <envvars>
@@ -404,7 +406,7 @@
         <envvar value="/usr/lib/qt4" name="QTDIR" />
         <envvar value="/usr/lib/kde4/plugins" name="QT_PLUGIN_PATH" />
       </envvars>
-      <globaldebugarguments/>
+      <globaldebugarguments></globaldebugarguments>
       <globalcwd>/mnt/data/devel/SVN/trunk/graphics/digikam/project/../..</globalcwd>
       <useglobalprogram>true</useglobalprogram>
       <autoinstall>false</autoinstall>
@@ -480,7 +482,7 @@
       <resolveIncludePathsUsingMakeExperimental>false</resolveIncludePathsUsingMakeExperimental>
     </codecompletion>
     <creategettersetter>
-      <prefixGet/>
+      <prefixGet></prefixGet>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>

@@ -51,7 +51,6 @@ public:
     {
         removeFullScreenButton = false;
         fullScreenHideToolBar  = false;
-
         selectLabel            = 0;
         donateMoneyAction      = 0;
         viewCMViewAction       = 0;
@@ -87,6 +86,7 @@ public:
         libsInfoAction         = 0;
         contributeAction       = 0;
         toolIface              = 0;
+        showMenuBarAction      = 0;
     }
 
     ~EditorWindowPriv()
@@ -133,6 +133,7 @@ public:
     KToggleAction             *viewCMViewAction;
     KToggleAction             *viewUnderExpoAction;
     KToggleAction             *viewOverExpoAction;
+    KToggleAction             *showMenuBarAction;
 
     KComboBox                 *zoomCombo;
 

@@ -503,6 +503,9 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
+    d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
+    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
+
     KStandardAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
     KStandardAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
     KStandardAction::preferences(this, SLOT(slotSetup()),              actionCollection());
@@ -1911,6 +1914,13 @@ void EditorWindow::setToolStopProgress()
     d->zoomFitToWindowAction->setEnabled(true);
     d->zoomFitToSelectAction->setEnabled(true);
     d->zoomCombo->setEnabled(true);
+}
+
+
+void EditorWindow::slotShowMenuBar()
+{
+    const bool visible = menuBar()->isVisible();
+    menuBar()->setVisible(!visible);
 }
 
 }  // namespace Digikam

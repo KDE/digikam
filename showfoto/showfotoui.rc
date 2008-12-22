@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="32" name="showfoto" >
+<gui version="33" name="showfoto" >
 
 <MenuBar>
 
@@ -85,9 +85,10 @@
     <Merge/>
 
     <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
-        <Action name="options_show_toolbar" />
         <Merge name="StandardToolBarMenuHandler" />
+        <Action name="options_show_menubar"/>
         <Action name="options_show_statusbar"/>
+        <Action name="options_show_toolbar"/>
         <Separator/>
         <Action name="theme_menu" />
         <Action name="options_configure_keybinding" />
