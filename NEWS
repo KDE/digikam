@@ -35,7 +35,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 175717 : digiKam crashes when configure is called.
 021 ==> 177057 : Two View menus in menubar.
 022 ==> 166562 : Rebuild thumbnails window stays on top when switching apps.
-023 ==> 
+023 ==> 178011 : Problems of the camera gui with Canon EOS 350D.
+024 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta7 - Release date: 2008-12-18
