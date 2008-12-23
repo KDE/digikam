@@ -322,7 +322,7 @@ void AlbumFolderView::slotTextFolderFilterChanged(const SearchTextSettings& sett
         if (palbum->isRoot())
             continue;
 
-        bool match = palbum->title().contains(search, settings.caseSensitive);
+        bool match      = palbum->title().contains(search, settings.caseSensitive);
         bool doesExpand = false;
         if (!match)
         {
