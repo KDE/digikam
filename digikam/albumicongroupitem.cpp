@@ -111,7 +111,7 @@ void AlbumIconGroupItem::paintBanner(QPainter *p)
         QString year = tmpLocale.formatDate(date);
 
         dateAndComments = i18ncp("%1 long month name, %2 year",
-                                 "%1 %2 - 1 Item", "%1 %2 - %3 Items",
+                                 "Created on %1 %2 - 1 Item", "Created on %1 %2 - %3 Items",
                                  month, year,
                                  count());
 
