@@ -563,23 +563,33 @@ QSqlQuery DatabaseBackend::prepareQuery(const QString &sql)
     return query;
 }
 
-void DatabaseBackend::beginTransaction()
+bool DatabaseBackend::beginTransaction()
 {
     if (d->incrementTransactionCount())
     {
-        d->databaseForThread().transaction();
+        if (!d->databaseForThread().transaction())
+        {
+            d->decrementTransactionCount();
+            return false;
+        }
         d->isInTransaction = true;
     }
+    return true;
 }
 
-void DatabaseBackend::commitTransaction()
+bool DatabaseBackend::commitTransaction()
 {
     if (d->decrementTransactionCount())
     {
-        d->databaseForThread().commit();
+        if (!d->databaseForThread().commit())
+        {
+            d->incrementTransactionCount();
+            return false;
+        }
         d->isInTransaction = false;
         d->sendOutStoredChangesets();
     }
+    return true;
 }
 
 bool DatabaseBackend::isInTransaction() const

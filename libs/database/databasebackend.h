@@ -162,11 +162,11 @@ public:
     /**
      * Begin a database transaction
      */
-    void beginTransaction();
+    bool beginTransaction();
     /**
      * Commit the current database transaction
      */
-    void commitTransaction();
+    bool commitTransaction();
     /**
      * Rollback the current database transaction
      */
