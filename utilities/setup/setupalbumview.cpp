@@ -155,10 +155,8 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     d->iconTreeThumbSize->addItem(QString("22"));
     d->iconTreeThumbSize->addItem(QString("32"));
     d->iconTreeThumbSize->addItem(QString("48"));
-    d->iconTreeThumbSize->setToolTip(i18n("Set this option to configure the size "
-                                          "in pixels of the tree-view thumbnails in digiKam's sidebars. "
-                                          "This option will take effect when you restart "
-                                          "digiKam."));
+    d->iconTreeThumbSize->setToolTip(i18n("Set this option to configure the size in pixels of "
+                                          "the tree-view thumbnails in digiKam's sidebars."));
 
     QWidget *space        = new QWidget(hbox);
     d->fontSelect         = new DFontSelect(hbox);
