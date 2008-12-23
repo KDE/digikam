@@ -234,7 +234,18 @@ bool SchemaUpdater::makeUpdates()
     {
         if (m_currentVersion < 5)
         {
-            m_access->backend()->beginTransaction();
+            if (!m_access->backend()->beginTransaction())
+            {
+                QFileInfo currentDBFile(m_access->parameters().databaseName);
+                QString errorMsg = i18n("Failed to open a database transaction on your database file \"%1\". "
+                                        "This is unusual. Please check that you can access the file and no "
+                                        "other process has currently locked the file. "
+                                        "If the problem persists you get get help from the digikam-devel@kde.org "
+                                        "mailing list. As well, please have a look at what digiKam prints on the console. ",
+                                        currentDBFile.filePath());
+                m_observer->error(errorMsg);
+                m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+            }
             if (!updateV4toV5())
             {
                 m_access->backend()->rollbackTransaction();
