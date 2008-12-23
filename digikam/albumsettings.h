@@ -111,8 +111,11 @@ public:
     void setDefaultIconSize(int val);
     int  getDefaultIconSize() const;
 
-    void setDefaultTreeIconSize(int val);
-    int  getDefaultTreeIconSize() const;
+    void setTreeViewIconSize(int val);
+    int  getTreeViewIconSize() const;
+
+    void setTreeViewFont(const QFont& font);
+    QFont getTreeViewFont() const;
 
     void setRatingFilterCond(int val);
     int  getRatingFilterCond() const;

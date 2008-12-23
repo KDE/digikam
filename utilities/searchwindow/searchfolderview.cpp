@@ -239,7 +239,7 @@ void SearchFolderView::slotAlbumAdded(Album* a)
         return;
 
     SearchFolderItem* item = new SearchFolderItem(this, album);
-    item->setPixmap(0, SmallIcon("edit-find", AlbumSettings::instance()->getDefaultTreeIconSize()));
+    item->setPixmap(0, SmallIcon("edit-find", AlbumSettings::instance()->getTreeViewIconSize()));
     m_lastAddedItem = item;
 
     if (album->title() == currentSearchViewSearchName())

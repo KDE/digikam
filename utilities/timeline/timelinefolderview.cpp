@@ -191,7 +191,7 @@ void TimeLineFolderView::slotAlbumAdded(Album* a)
         return;
 
     TimeLineFolderItem* item = new TimeLineFolderItem(this, salbum);
-    item->setPixmap(0, SmallIcon("clock", AlbumSettings::instance()->getDefaultTreeIconSize()));
+    item->setPixmap(0, SmallIcon("clock", AlbumSettings::instance()->getTreeViewIconSize()));
 }
 
 void TimeLineFolderView::slotAlbumDeleted(Album* a)

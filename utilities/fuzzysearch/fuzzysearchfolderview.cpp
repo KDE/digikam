@@ -200,7 +200,7 @@ void FuzzySearchFolderView::slotAlbumAdded(Album* a)
         return;
 
     FuzzySearchFolderItem* item = new FuzzySearchFolderItem(this, salbum);
-    item->setPixmap(0, SmallIcon("tools-wizard", AlbumSettings::instance()->getDefaultTreeIconSize()));
+    item->setPixmap(0, SmallIcon("tools-wizard", AlbumSettings::instance()->getTreeViewIconSize()));
 
     if (salbum->title() == currentFuzzySketchSearchName())
         item->setText(0, i18n("Current Fuzzy Sketch Search"));

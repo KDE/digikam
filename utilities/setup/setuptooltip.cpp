@@ -116,6 +116,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     QWidget *space      = new QWidget(hbox);
     d->fontSelect       = new DFontSelect(hbox);
+    d->fontSelect->setToolTip(i18n("Select here the font used to display text in tool tips."));
 
     hbox->setMargin(KDialog::spacingHint());
     hbox->setSpacing(0);

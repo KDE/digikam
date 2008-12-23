@@ -127,8 +127,9 @@ public:
     QString                             source;
     QString                             copyright;
 
-    // album view settings
+    // tree-view settings
     int                                 treeThumbnailSize;
+    QFont                               treeviewFont;
 
     // icon view settings
     int                                 thumbnailSize;
@@ -195,6 +196,7 @@ void AlbumSettings::init()
 
     d->thumbnailSize                = ThumbnailSize::Medium;
     d->treeThumbnailSize            = 22;
+    d->treeviewFont                 = KGlobalSettings::generalFont();
 
     d->ratingFilterCond             = AlbumLister::GreaterEqualCondition;
 
@@ -251,7 +253,6 @@ void AlbumSettings::init()
     d->recursiveTags                = true;
 
     d->showFolderTreeViewItemsCount = false;
-
 }
 
 void AlbumSettings::readSettings()
@@ -283,6 +284,7 @@ void AlbumSettings::readSettings()
 
     d->thumbnailSize                = group.readEntry("Default Icon Size", (int)ThumbnailSize::Medium);
     d->treeThumbnailSize            = group.readEntry("Default Tree Icon Size", 22);
+    d->treeviewFont                 = group.readEntry("TreeView Font", KGlobalSettings::generalFont());
     d->currentTheme                 = group.readEntry("Theme", i18n("Default"));
 
     d->ratingFilterCond             = group.readEntry("Rating Filter Condition",
@@ -377,6 +379,7 @@ void AlbumSettings::saveSettings()
     group.writeEntry("Item Right Click Action", (int)d->itemRightClickAction);
     group.writeEntry("Default Icon Size", QString::number(d->thumbnailSize));
     group.writeEntry("Default Tree Icon Size", QString::number(d->treeThumbnailSize));
+    group.writeEntry("TreeView Font", d->treeviewFont);
     group.writeEntry("Rating Filter Condition", d->ratingFilterCond);
     group.writeEntry("Recursive Albums", d->recursiveAlbums);
     group.writeEntry("Recursive Tags", d->recursiveTags);
@@ -625,14 +628,24 @@ int AlbumSettings::getDefaultIconSize() const
     return d->thumbnailSize;
 }
 
-void AlbumSettings::setDefaultTreeIconSize(int val)
+void AlbumSettings::setTreeViewIconSize(int val)
 {
     d->treeThumbnailSize = val;
 }
 
-int AlbumSettings::getDefaultTreeIconSize() const
+int AlbumSettings::getTreeViewIconSize() const
 {
     return ((d->treeThumbnailSize < 8) || (d->treeThumbnailSize > 48)) ? 48 : d->treeThumbnailSize;
+}
+
+void AlbumSettings::setTreeViewFont(const QFont& font)
+{
+    d->treeviewFont = font;
+}
+
+QFont AlbumSettings::getTreeViewFont() const
+{
+    return d->treeviewFont;
 }
 
 void AlbumSettings::setRatingFilterCond(int val)

@@ -193,7 +193,7 @@ void GPSSearchFolderView::slotAlbumAdded(Album* a)
         return;
 
     GPSSearchFolderItem* item = new GPSSearchFolderItem(this, salbum);
-    item->setPixmap(0, SmallIcon("applications-internet", AlbumSettings::instance()->getDefaultTreeIconSize()));
+    item->setPixmap(0, SmallIcon("applications-internet", AlbumSettings::instance()->getTreeViewIconSize()));
 
     if (salbum->title() == currentGPSSearchName())
         item->setText(0, i18n("Current Map Search"));

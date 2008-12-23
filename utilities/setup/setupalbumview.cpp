@@ -39,11 +39,13 @@
 
 #include <kcombobox.h>
 #include <kdialog.h>
+#include <kapplication.h>
 #include <klocale.h>
 
 // Local includes.
 
 #include "albumsettings.h"
+#include "dfontselect.h"
 
 namespace Digikam
 {
@@ -67,23 +69,26 @@ public:
         rightClickActionComboBox     = 0;
         previewLoadFullImageSize     = 0;
         showFolderTreeViewItemsCount = 0;
+        fontSelect                   = 0;
     }
 
-    QLabel    *iconTreeThumbLabel;
+    QLabel      *iconTreeThumbLabel;
 
-    QCheckBox *iconShowNameBox;
-    QCheckBox *iconShowSizeBox;
-    QCheckBox *iconShowDateBox;
-    QCheckBox *iconShowModDateBox;
-    QCheckBox *iconShowResolutionBox;
-    QCheckBox *iconShowCommentsBox;
-    QCheckBox *iconShowTagsBox;
-    QCheckBox *iconShowRatingBox;
-    QCheckBox *previewLoadFullImageSize;
-    QCheckBox *showFolderTreeViewItemsCount;
+    QCheckBox   *iconShowNameBox;
+    QCheckBox   *iconShowSizeBox;
+    QCheckBox   *iconShowDateBox;
+    QCheckBox   *iconShowModDateBox;
+    QCheckBox   *iconShowResolutionBox;
+    QCheckBox   *iconShowCommentsBox;
+    QCheckBox   *iconShowTagsBox;
+    QCheckBox   *iconShowRatingBox;
+    QCheckBox   *previewLoadFullImageSize;
+    QCheckBox   *showFolderTreeViewItemsCount;
 
-    KComboBox *iconTreeThumbSize;
-    KComboBox *rightClickActionComboBox;
+    KComboBox   *iconTreeThumbSize;
+    KComboBox   *rightClickActionComboBox;
+
+    DFontSelect *fontSelect;
 };
 
 SetupAlbumView::SetupAlbumView(QWidget* parent)
@@ -142,34 +147,43 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), this);
     QGridLayout* ifaceSettingsLayout = new QGridLayout(interfaceOptionsGroup);
 
-    d->iconTreeThumbLabel = new QLabel(i18n("Sidebar thumbnail size:"), interfaceOptionsGroup);
-    d->iconTreeThumbSize  = new KComboBox(interfaceOptionsGroup);
+    KHBox *hbox           = new KHBox(interfaceOptionsGroup);
+
+    d->iconTreeThumbLabel = new QLabel(i18n("Tree-view thumbnail size:"), hbox);
+    d->iconTreeThumbSize  = new KComboBox(hbox);
     d->iconTreeThumbSize->addItem(QString("16"));
     d->iconTreeThumbSize->addItem(QString("22"));
     d->iconTreeThumbSize->addItem(QString("32"));
     d->iconTreeThumbSize->addItem(QString("48"));
     d->iconTreeThumbSize->setToolTip(i18n("Set this option to configure the size "
-                                          "in pixels of the thumbnails in digiKam's sidebars. "
+                                          "in pixels of the tree-view thumbnails in digiKam's sidebars. "
                                           "This option will take effect when you restart "
                                           "digiKam."));
 
+    QWidget *space        = new QWidget(hbox);
+    d->fontSelect         = new DFontSelect(hbox);
+    d->fontSelect->setToolTip(i18n("Select here the font used to display text in all tree-view."));
+
+    hbox->setMargin(KDialog::spacingHint());
+    hbox->setSpacing(0);
+    hbox->setStretchFactor(space, 10);
+
     d->showFolderTreeViewItemsCount = new QCheckBox(i18n("Show count of items in all tree-view"), interfaceOptionsGroup);
 
-    QLabel *rightClickLabel     = new QLabel(i18n("Thumbnail click action:"), interfaceOptionsGroup);
-    d->rightClickActionComboBox = new KComboBox(interfaceOptionsGroup);
+    QLabel *rightClickLabel         = new QLabel(i18n("Thumbnail click action:"), interfaceOptionsGroup);
+    d->rightClickActionComboBox     = new KComboBox(interfaceOptionsGroup);
     d->rightClickActionComboBox->addItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
     d->rightClickActionComboBox->addItem(i18n("Start image editor"), AlbumSettings::StartEditor);
     d->rightClickActionComboBox->setToolTip(i18n("Here, choose what should happen when you "
                                                  "click on a thumbnail."));
 
-    d->previewLoadFullImageSize = new QCheckBox(i18n("Embedded preview loads full image size"), interfaceOptionsGroup);
+    d->previewLoadFullImageSize     = new QCheckBox(i18n("Embedded preview loads full image size"), interfaceOptionsGroup);
     d->previewLoadFullImageSize->setWhatsThis( i18n("Set this option to load the full image size "
                      "for a preview, instead of with a reduced size. This loads more data and will be slow on older computers."));
 
     ifaceSettingsLayout->setMargin(KDialog::spacingHint());
     ifaceSettingsLayout->setSpacing(KDialog::spacingHint());
-    ifaceSettingsLayout->addWidget(d->iconTreeThumbLabel,           0, 0, 1, 1);
-    ifaceSettingsLayout->addWidget(d->iconTreeThumbSize,            0, 1, 1, 1);
+    ifaceSettingsLayout->addWidget(hbox,                            0, 0, 1, 5);
     ifaceSettingsLayout->addWidget(d->showFolderTreeViewItemsCount, 1, 0, 1, 4);
     ifaceSettingsLayout->addWidget(rightClickLabel,                 2, 0, 1, 1);
     ifaceSettingsLayout->addWidget(d->rightClickActionComboBox,     2, 1, 1, 4);
@@ -199,7 +213,8 @@ void SetupAlbumView::applySettings()
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
 
-    settings->setDefaultTreeIconSize(d->iconTreeThumbSize->currentText().toInt());
+    settings->setTreeViewIconSize(d->iconTreeThumbSize->currentText().toInt());
+    settings->setTreeViewFont(d->fontSelect->font());
     settings->setIconShowName(d->iconShowNameBox->isChecked());
     settings->setIconShowTags(d->iconShowTagsBox->isChecked());
     settings->setIconShowSize(d->iconShowSizeBox->isChecked());
@@ -220,18 +235,18 @@ void SetupAlbumView::applySettings()
 void SetupAlbumView::readSettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
-
     if (!settings) return;
 
-    if (settings->getDefaultTreeIconSize() == 16)
+    if (settings->getTreeViewIconSize() == 16)
         d->iconTreeThumbSize->setCurrentIndex(0);
-    else if (settings->getDefaultTreeIconSize() == 22)
+    else if (settings->getTreeViewIconSize() == 22)
         d->iconTreeThumbSize->setCurrentIndex(1);
-    else if (settings->getDefaultTreeIconSize() == 32)
+    else if (settings->getTreeViewIconSize() == 32)
         d->iconTreeThumbSize->setCurrentIndex(2);
     else
         d->iconTreeThumbSize->setCurrentIndex(3);
 
+    d->fontSelect->setFont(settings->getTreeViewFont());
     d->iconShowNameBox->setChecked(settings->getIconShowName());
     d->iconShowTagsBox->setChecked(settings->getIconShowTags());
     d->iconShowSizeBox->setChecked(settings->getIconShowSize());

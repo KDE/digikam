@@ -93,7 +93,7 @@ FolderView::FolderView(QWidget *parent, const char *name)
             this, SLOT(slotIconSizeChanged()));
 
     setColumnAlignment(0, Qt::AlignLeft|Qt::AlignVCenter);
-    fontChange(font());
+    setFont(AlbumSettings::instance()->getTreeViewFont());
 }
 
 FolderView::~FolderView()

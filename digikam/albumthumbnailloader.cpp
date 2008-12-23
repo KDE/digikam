@@ -62,7 +62,7 @@ public:
 
     AlbumThumbnailLoaderPrivate()
     {
-        iconSize             = AlbumSettings::instance()->getDefaultTreeIconSize();
+        iconSize             = AlbumSettings::instance()->getTreeViewIconSize();
         minBlendSize         = 20;
         iconAlbumThumbThread = 0;
         iconTagThumbThread   = 0;
