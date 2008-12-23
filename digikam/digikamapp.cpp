@@ -1666,13 +1666,13 @@ void DigikamApp::fillSolidMenus()
         QString label;
         QString vendor = cameraDevice.vendor();
         QString product = cameraDevice.product();
-        if (product == "USB Imaging Interface")
+        if (product == "USB Imaging Interface" || product == "USB Vendor Specific Interface")
         {
             Solid::Device parentUsbDevice = cameraDevice.parent();
             if (parentUsbDevice.isValid())
             {
-                QString vendor = parentUsbDevice.vendor();
-                QString product = parentUsbDevice.product();
+                vendor = parentUsbDevice.vendor();
+                product = parentUsbDevice.product();
                 if (!vendor.isEmpty() && !product.isEmpty())
                 {
                     if (vendor == "Canon, Inc.")
@@ -1682,6 +1682,10 @@ void DigikamApp::fillSolidMenus()
                             product = product.mid(6); // cut off another "Canon " from product
                         if (product.endsWith(" (ptp)"))
                             product.chop(6); // cut off " (ptp)"
+                    }
+                    else if (vendor == "Fuji Photo Film Co., Ltd")
+                    {
+                        vendor = "Fuji";
                     }
                 }
             }
