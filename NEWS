@@ -39,7 +39,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 023 ==> 178011 : Problems of the camera gui with Canon EOS 350D.
 024 ==> 175598 : digiKam always starts in fullscreen after a crash.
 025 ==> 121372 : No way to modify font size for various text displays.
-026 ==> 
+026 ==> 178325 : Rebuild all thumbnails consumes large amounts of memory when processing at the end.
+027 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta7 - Release date: 2008-12-18
