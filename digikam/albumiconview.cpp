@@ -2022,6 +2022,7 @@ void AlbumIconView::updateBannerRectPixmap()
     d->bannerRect = QRect(0, 0, 0, 0);
 
     // Title --------------------------------------------------------
+
     QFont fn(font());
     int fnSize = fn.pointSize();
     bool usePointSize;
@@ -2067,16 +2068,16 @@ void AlbumIconView::updateRectsAndPixmaps()
 {
     updateBannerRectPixmap();
 
-    d->itemRect           = QRect(0,0,0,0);
-    d->itemRatingRect     = QRect(0,0,0,0);
-    d->itemDateRect       = QRect(0,0,0,0);
-    d->itemModDateRect    = QRect(0,0,0,0);
-    d->itemPixmapRect     = QRect(0,0,0,0);
-    d->itemNameRect       = QRect(0,0,0,0);
-    d->itemCommentsRect   = QRect(0,0,0,0);
-    d->itemResolutionRect = QRect(0,0,0,0);
-    d->itemSizeRect       = QRect(0,0,0,0);
-    d->itemTagRect        = QRect(0,0,0,0);
+    d->itemRect           = QRect(0, 0, 0, 0);
+    d->itemRatingRect     = QRect(0, 0, 0, 0);
+    d->itemDateRect       = QRect(0, 0, 0, 0);
+    d->itemModDateRect    = QRect(0, 0, 0, 0);
+    d->itemPixmapRect     = QRect(0, 0, 0, 0);
+    d->itemNameRect       = QRect(0, 0, 0, 0);
+    d->itemCommentsRect   = QRect(0, 0, 0, 0);
+    d->itemResolutionRect = QRect(0, 0, 0, 0);
+    d->itemSizeRect       = QRect(0, 0, 0, 0);
+    d->itemTagRect        = QRect(0, 0, 0, 0);
 
     d->fnReg  = font();
     d->fnCom  = font();
@@ -2096,8 +2097,8 @@ void AlbumIconView::updateRectsAndPixmaps()
         d->fnXtra.setPixelSize(fnSz-2);
     }
 
-    int margin  = 5;
-    int w = d->thumbSize.size() + 2*margin;
+    int margin = 5;
+    int w      = d->thumbSize.size() + 2*margin;
 
     QFontMetrics fm(d->fnReg);
     QRect oneRowRegRect = fm.boundingRect(0, 0, w, 0xFFFFFFFF,

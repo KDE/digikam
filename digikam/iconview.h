@@ -116,6 +116,22 @@ public:
     QPixmap selectPixmap() const;
     QPixmap deselectPixmap() const;
 
+signals:
+
+    void signalZoomIn();
+    void signalZoomOut();
+    void signalSelectionChanged();
+    void signalItemsRearranged();
+    void signalRightButtonClicked(IconItem* item, const QPoint& pos);
+    void signalRightButtonClicked(const QPoint& pos);
+    void signalDoubleClicked(IconItem* item);
+    void signalReturnPressed(IconItem* item);
+    void signalShowToolTip(IconItem* item);
+
+public slots:
+
+    void slotRearrange();
+
 protected:
 
     virtual void viewportPaintEvent(QPaintEvent* pe);
@@ -138,6 +154,11 @@ protected:
 
     virtual bool acceptToolTip(IconItem* , const QPoint&);
 
+private slots:
+
+    void slotToolTip();
+    void slotIconViewFontChanged();
+
 private:
 
     bool arrangeItems();
@@ -152,26 +173,6 @@ private:
     void startRearrangeTimer();
 
     static int cmpItems(const void *n1, const void *n2);
-
-signals:
-
-    void signalZoomIn();
-    void signalZoomOut();
-    void signalSelectionChanged();
-    void signalItemsRearranged();
-    void signalRightButtonClicked(IconItem* item, const QPoint& pos);
-    void signalRightButtonClicked(const QPoint& pos);
-    void signalDoubleClicked(IconItem* item);
-    void signalReturnPressed(IconItem* item);
-    void signalShowToolTip(IconItem* item);
-
-public slots:
-
-    void slotRearrange();
-
-private slots:
-
-    void slotToolTip();
 
 private:
 

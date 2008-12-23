@@ -60,6 +60,7 @@
 #include "thumbbar.h"
 #include "iconitem.h"
 #include "icongroupitem.h"
+#include "albumsettings.h"
 
 namespace Digikam
 {
@@ -176,7 +177,11 @@ IconView::IconView(QWidget* parent, const char* name)
     connect(d->toolTipTimer, SIGNAL(timeout()),
             this, SLOT(slotToolTip()));
 
+    connect(AlbumSettings::instance(), SIGNAL(signalIconViewFontChanged()),
+            this, SLOT(slotIconViewFontChanged()));
+
     setEnableToolTips(true);
+    slotIconViewFontChanged();
 }
 
 IconView::~IconView()
@@ -1997,6 +2002,11 @@ QPixmap IconView::selectPixmap() const
 QPixmap IconView::deselectPixmap() const
 {
     return d->deselectPix;
+}
+
+void IconView::slotIconViewFontChanged()
+{
+    setFont(AlbumSettings::instance()->getIconViewFont());
 }
 
 }  // namespace Digikam

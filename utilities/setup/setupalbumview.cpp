@@ -69,7 +69,8 @@ public:
         rightClickActionComboBox     = 0;
         previewLoadFullImageSize     = 0;
         showFolderTreeViewItemsCount = 0;
-        fontSelect                   = 0;
+        treeViewFontSelect           = 0;
+        iconViewFontSelect           = 0;
     }
 
     QLabel      *iconTreeThumbLabel;
@@ -88,7 +89,8 @@ public:
     KComboBox   *iconTreeThumbSize;
     KComboBox   *rightClickActionComboBox;
 
-    DFontSelect *fontSelect;
+    DFontSelect *iconViewFontSelect;
+    DFontSelect *treeViewFontSelect;
 };
 
 SetupAlbumView::SetupAlbumView(QWidget* parent)
@@ -138,6 +140,9 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     d->rightClickActionComboBox->setToolTip(i18n("Here, choose what should happen when you "
                                                  "click on a thumbnail."));
 
+    d->iconViewFontSelect = new DFontSelect(i18n("Icon-view font:"), this);
+    d->iconViewFontSelect->setToolTip(i18n("Select here the font used to display text in all icon-view."));
+
     grid->addWidget(d->iconShowNameBox,          0, 0, 1, 1);
     grid->addWidget(d->iconShowSizeBox,          1, 0, 1, 1);
     grid->addWidget(d->iconShowDateBox,          2, 0, 1, 1);
@@ -148,6 +153,7 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     grid->addWidget(d->iconShowRatingBox,        2, 1, 1, 1);
     grid->addWidget(rightClickLabel,             5, 0, 1, 1);
     grid->addWidget(d->rightClickActionComboBox, 5, 1, 1, 1);
+    grid->addWidget(d->iconViewFontSelect,       6, 0, 1, 2);
     grid->setSpacing(0);
     grid->setMargin(KDialog::spacingHint());
 
@@ -165,14 +171,14 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     d->iconTreeThumbSize->setToolTip(i18n("Set this option to configure the size in pixels of "
                                           "the tree-view thumbnails in digiKam's sidebars."));
 
-    d->fontSelect = new DFontSelect(i18n("Tree-view font:"), this);
-    d->fontSelect->setToolTip(i18n("Select here the font used to display text in all tree-view."));
+    d->treeViewFontSelect = new DFontSelect(i18n("Tree-view font:"), this);
+    d->treeViewFontSelect->setToolTip(i18n("Select here the font used to display text in all tree-view."));
 
     d->showFolderTreeViewItemsCount = new QCheckBox(i18n("Show count of items in all tree-view"), this);
 
     grid2->addWidget(d->iconTreeThumbLabel,           0, 0, 1, 1);
     grid2->addWidget(d->iconTreeThumbSize,            0, 1, 1, 1);
-    grid2->addWidget(d->fontSelect,                   1, 0, 1, 2);
+    grid2->addWidget(d->treeViewFontSelect,           1, 0, 1, 2);
     grid2->addWidget(d->showFolderTreeViewItemsCount, 2, 0, 1, 2);
     grid2->setMargin(KDialog::spacingHint());
     grid2->setSpacing(KDialog::spacingHint());
@@ -217,7 +223,7 @@ void SetupAlbumView::applySettings()
     if (!settings) return;
 
     settings->setTreeViewIconSize(d->iconTreeThumbSize->currentText().toInt());
-    settings->setTreeViewFont(d->fontSelect->font());
+    settings->setTreeViewFont(d->treeViewFontSelect->font());
     settings->setIconShowName(d->iconShowNameBox->isChecked());
     settings->setIconShowTags(d->iconShowTagsBox->isChecked());
     settings->setIconShowSize(d->iconShowSizeBox->isChecked());
@@ -226,6 +232,7 @@ void SetupAlbumView::applySettings()
     settings->setIconShowResolution(d->iconShowResolutionBox->isChecked());
     settings->setIconShowComments(d->iconShowCommentsBox->isChecked());
     settings->setIconShowRating(d->iconShowRatingBox->isChecked());
+    settings->setIconViewFont(d->iconViewFontSelect->font());
 
     settings->setItemRightClickAction((AlbumSettings::ItemRightClickAction)
                                       d->rightClickActionComboBox->currentIndex());
@@ -249,7 +256,7 @@ void SetupAlbumView::readSettings()
     else
         d->iconTreeThumbSize->setCurrentIndex(3);
 
-    d->fontSelect->setFont(settings->getTreeViewFont());
+    d->treeViewFontSelect->setFont(settings->getTreeViewFont());
     d->iconShowNameBox->setChecked(settings->getIconShowName());
     d->iconShowTagsBox->setChecked(settings->getIconShowTags());
     d->iconShowSizeBox->setChecked(settings->getIconShowSize());
@@ -258,6 +265,7 @@ void SetupAlbumView::readSettings()
     d->iconShowResolutionBox->setChecked(settings->getIconShowResolution());
     d->iconShowCommentsBox->setChecked(settings->getIconShowComments());
     d->iconShowRatingBox->setChecked(settings->getIconShowRating());
+    d->iconViewFontSelect->setFont(settings->getIconViewFont());
 
     d->rightClickActionComboBox->setCurrentIndex((int)settings->getItemRightClickAction());
 

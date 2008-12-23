@@ -73,6 +73,7 @@ public:
 signals:
 
     void signalTreeViewFontChanged();
+    void signalIconViewFontChanged();
 
 public:
 
@@ -125,6 +126,9 @@ public:
 
     void setTreeViewFont(const QFont& font);
     QFont getTreeViewFont() const;
+
+    void setIconViewFont(const QFont& font);
+    QFont getIconViewFont() const;
 
     void setRatingFilterCond(int val);
     int  getRatingFilterCond() const;

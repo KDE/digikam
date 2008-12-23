@@ -81,6 +81,8 @@ public:
     bool                                iconShowTags;
     bool                                iconShowRating;
 
+    QFont                               iconviewFont;
+
     // tooltip settings
     bool                                showToolTips;
     bool                                tooltipShowFileName;
@@ -215,6 +217,7 @@ void AlbumSettings::init()
     d->iconShowResolution           = false;
     d->iconShowTags                 = true;
     d->iconShowRating               = true;
+    d->iconviewFont                 = KGlobalSettings::generalFont();
 
     d->tooltipShowFileName          = true;
     d->tooltipShowFileDate          = false;
@@ -302,6 +305,7 @@ void AlbumSettings::readSettings()
     d->iconShowComments             = group.readEntry("Icon Show Comments",          true);
     d->iconShowTags                 = group.readEntry("Icon Show Tags",              true);
     d->iconShowRating               = group.readEntry("Icon Show Rating",            true);
+    d->iconviewFont                 = group.readEntry("IconView Font", KGlobalSettings::generalFont());
 
     d->showToolTips                 = group.readEntry("Show ToolTips",             false);
     d->tooltipShowFileName          = group.readEntry("ToolTips Show File Name",   true);
@@ -394,6 +398,7 @@ void AlbumSettings::saveSettings()
     group.writeEntry("Icon Show Comments", d->iconShowComments);
     group.writeEntry("Icon Show Tags", d->iconShowTags);
     group.writeEntry("Icon Show Rating", d->iconShowRating);
+    group.writeEntry("IconView Font", d->iconviewFont);
 
     group.writeEntry("Show ToolTips",             d->showToolTips);
     group.writeEntry("ToolTips Show File Name",   d->tooltipShowFileName);
@@ -648,6 +653,17 @@ void AlbumSettings::setTreeViewFont(const QFont& font)
 QFont AlbumSettings::getTreeViewFont() const
 {
     return d->treeviewFont;
+}
+
+void AlbumSettings::setIconViewFont(const QFont& font)
+{
+    d->iconviewFont = font;
+    emit signalIconViewFontChanged();
+}
+
+QFont AlbumSettings::getIconViewFont() const
+{
+    return d->iconviewFont;
 }
 
 void AlbumSettings::setRatingFilterCond(int val)
