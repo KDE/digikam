@@ -1601,7 +1601,7 @@ void ImageDescEditTab::slotTagsSearchChanged(const SearchTextSettings& settings)
     }
 
     //TODO: this will destroy assigned-tags filtering. Unify in one method.
-    QString search = settings.text.toLower();
+    QString search = settings.text;
 
     bool atleastOneMatch = false;
 
@@ -1614,7 +1614,7 @@ void ImageDescEditTab::slotTagsSearchChanged(const SearchTextSettings& settings)
         if (tag->isRoot())
             continue;
 
-        bool match      = tag->title().toLower().contains(search, settings.caseSensitive);
+        bool match      = tag->title().contains(search, settings.caseSensitive);
         bool doesExpand = false;
         if (!match)
         {
@@ -1622,7 +1622,7 @@ void ImageDescEditTab::slotTagsSearchChanged(const SearchTextSettings& settings)
             Album* parent = tag->parent();
             while (parent && !parent->isRoot())
             {
-                if (parent->title().toLower().contains(search, settings.caseSensitive))
+                if (parent->title().contains(search, settings.caseSensitive))
                 {
                     match = true;
                     break;
@@ -1638,7 +1638,7 @@ void ImageDescEditTab::slotTagsSearchChanged(const SearchTextSettings& settings)
             AlbumIterator it(tag);
             while (it.current())
             {
-                if ((*it)->title().toLower().contains(search, settings.caseSensitive))
+                if ((*it)->title().contains(search, settings.caseSensitive))
                 {
                     match      = true;
                     doesExpand = true;
