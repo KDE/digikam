@@ -7,7 +7,9 @@ IMPORTANT: This version is not yet finalized : do not use yet in production !!!
 NEW FEATURES:
 
 General        : All batch tools as rebuild all thumbs or sync metadata with database use modeless dialogs.
-CameraGui      : Add icon-view items tooltip
+General        : Icon-View and Thumbbar items use a smart 3D decorative border.
+CameraGui      : Add icon-view items tooltip.
+CameraGui      : List camera item in more suitable order: more recent items on the top, older one on the bottom.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -25,8 +27,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 177417 : Changing properties results in sub albums disappear.
 013 ==> 177329 : Quick search is case sensitive [regression].
 014 ==> 162206 : Wish: case sensitivity in the text quick filter.
-015 ==> 168582 : Digikam fails to save images in home directory.
-016 ==> 
+015 ==> 168582 : digiKam fails to save images in home directory.
+016 ==> 147771 : Menubar missing after full-screen, quit, restart.
+017 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta7 - Release date: 2008-12-18
