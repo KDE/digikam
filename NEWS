@@ -8,7 +8,8 @@ NEW FEATURES:
 
 General        : All batch tools as rebuild all thumbs or sync metadata with database use modeless dialogs.
 General        : Icon-View and Thumbbar items use a smart 3D decorative border.
-CameraGui      : Add icon-view items tooltip.
+General        : Fonts used by Icon-View, Folder-View, and Tooltip canbe customized.
+CameraGui      : Add Icon-View items Tooltip.
 CameraGui      : List camera item in more suitable order: more recent items on the top, older one on the bottom.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
@@ -37,7 +38,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 166562 : Rebuild thumbnails window stays on top when switching apps.
 023 ==> 178011 : Problems of the camera gui with Canon EOS 350D.
 024 ==> 175598 : digiKam always starts in fullscreen after a crash.
-025 ==> 
+025 ==> 121372 : No way to modify font size for various text displays.
+026 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta7 - Release date: 2008-12-18
