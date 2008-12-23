@@ -62,11 +62,11 @@ public:
         tipFooter   = QString("</table></qt>");
 
         headBeg     = QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"
-                              "<nobr><font size=\"-1\" color=\"%2\" face=\"%3\"><b>")
+                              "<nobr><font size=\"-1\" color=\"%2\" face=\"%3\"><center><b>")
                               .arg(ThemeEngine::instance()->baseColor().name())
                               .arg(ThemeEngine::instance()->textRegColor().name())
                               .arg(font.family());
-        headEnd     = QString("</b></font></nobr></td></tr>");
+        headEnd     = QString("</b></center></font></nobr></td></tr>");
 
         cellBeg     = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
                               .arg(ThemeEngine::instance()->textRegColor().name())
