@@ -24,6 +24,7 @@
  * ============================================================ */
 
 #include "albumsettings.h"
+#include "albumsettings.moc"
 
 // KDE includes.
 
@@ -165,7 +166,7 @@ AlbumSettings* AlbumSettings::instance()
 }
 
 AlbumSettings::AlbumSettings()
-             : d(new AlbumSettingsPrivate)
+             : QObject(), d(new AlbumSettingsPrivate)
 {
     d->config = KGlobal::config();
     init();
@@ -641,6 +642,7 @@ int AlbumSettings::getTreeViewIconSize() const
 void AlbumSettings::setTreeViewFont(const QFont& font)
 {
     d->treeviewFont = font;
+    emit signalTreeViewFontChanged();
 }
 
 QFont AlbumSettings::getTreeViewFont() const

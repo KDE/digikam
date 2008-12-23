@@ -92,8 +92,11 @@ FolderView::FolderView(QWidget *parent, const char *name)
     connect(AlbumThumbnailLoader::instance(), SIGNAL(signalReloadThumbnails()),
             this, SLOT(slotIconSizeChanged()));
 
+    connect(AlbumSettings::instance(), SIGNAL(signalTreeViewFontChanged()),
+            this, SLOT(slotTreeViewFontChanged()));
+
     setColumnAlignment(0, Qt::AlignLeft|Qt::AlignVCenter);
-    setFont(AlbumSettings::instance()->getTreeViewFont());
+    slotTreeViewFontChanged();
 }
 
 FolderView::~FolderView()
@@ -505,6 +508,11 @@ void FolderView::collapseView(CollapseMode mode)
         default:
             break;
     }
+}
+
+void FolderView::slotTreeViewFontChanged()
+{
+    setFont(AlbumSettings::instance()->getTreeViewFont());
 }
 
 }  // namespace Digikam

@@ -131,6 +131,7 @@ private slots:
 
     void slotThemeChanged();
     void slotIconSizeChanged();
+    void slotTreeViewFontChanged();
 
 private:
 

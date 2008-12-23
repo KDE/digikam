@@ -31,6 +31,7 @@
 #include <QStringList>
 #include <QString>
 #include <QFont>
+#include <QObject>
 
 // Local includes.
 
@@ -41,8 +42,10 @@ namespace Digikam
 
 class AlbumSettingsPrivate;
 
-class AlbumSettings 
+class AlbumSettings : public QObject
 {
+    Q_OBJECT
+
 public:
 
     enum AlbumSortOrder
@@ -66,6 +69,12 @@ public:
         ShowPreview = 0,
         StartEditor
     };
+
+signals:
+
+    void signalTreeViewFontChanged();
+
+public:
 
     void readSettings();
     void saveSettings();
