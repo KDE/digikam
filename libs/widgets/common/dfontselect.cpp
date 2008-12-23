@@ -26,6 +26,7 @@
 
 // Qt includes.
 
+#include <QLabel>
 #include <QEvent>
 #include <QPushButton>
 
@@ -45,10 +46,15 @@ public:
 
     DFontSelectPriv()
     {
+        space            = 0;
+        label            = 0;
         chooseFontButton = 0;
         modeCombo        = 0;
         mode             = DFontSelect::SystemFont;
     }
+
+    QLabel                *space;
+    QLabel                *label;
 
     QFont                  font;
 
@@ -59,17 +65,27 @@ public:
     DFontSelect::FontMode  mode;
 };
 
-DFontSelect::DFontSelect(QWidget* parent) 
+DFontSelect::DFontSelect(const QString& text=QString(), QWidget* parent=0)
            : KHBox(parent), d(new DFontSelectPriv)
 {
-    setSpacing(KDialog::spacingHint());
-    setMargin(KDialog::spacingHint());
+    d->label     = new QLabel(this);
+    d->label->setText(text);
+    d->space     = new QLabel(this);
+    if (text.isEmpty())
+    {
+        d->label->hide();
+        d->space->hide();
+    }
 
     d->modeCombo = new KComboBox(this);
     d->modeCombo->addItem(i18n("System Font"));
     d->modeCombo->addItem(i18n("Custom Font"));
 
     d->chooseFontButton = new QPushButton(i18n("Choose..."), this);
+
+    setSpacing(KDialog::spacingHint());
+    setMargin(0);
+    setStretchFactor(d->space, 10);
 
     connect(d->modeCombo, SIGNAL(activated(int)),
             this, SLOT(slotChangeMode(int)));

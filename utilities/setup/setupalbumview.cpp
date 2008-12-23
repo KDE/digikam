@@ -98,59 +98,66 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox *iconTextGroup = new QGroupBox(i18n("Thumbnail Information"), this);
-    QVBoxLayout *gLayout2    = new QVBoxLayout(iconTextGroup);
+    QGroupBox *iconViewGroup = new QGroupBox(i18n("Icon-View Options"), this);
+    QGridLayout *grid        = new QGridLayout(iconViewGroup);
 
-    d->iconShowNameBox = new QCheckBox(i18n("Show file &name"), iconTextGroup);
-    d->iconShowNameBox->setWhatsThis( i18n("Set this option to show the file name below the image thumbnail."));
+    d->iconShowNameBox       = new QCheckBox(i18n("Show file &name"), iconViewGroup);
+    d->iconShowNameBox->setWhatsThis(i18n("Set this option to show the file name below the image thumbnail."));
 
-    d->iconShowSizeBox = new QCheckBox(i18n("Show file si&ze"), iconTextGroup);
-    d->iconShowSizeBox->setWhatsThis( i18n("Set this option to show the file size below the image thumbnail."));
+    d->iconShowSizeBox       = new QCheckBox(i18n("Show file si&ze"), iconViewGroup);
+    d->iconShowSizeBox->setWhatsThis(i18n("Set this option to show the file size below the image thumbnail."));
 
-    d->iconShowDateBox = new QCheckBox(i18n("Show camera creation &date"), iconTextGroup);
-    d->iconShowDateBox->setWhatsThis( i18n("Set this option to show the camera creation date "
-                                           "below the image thumbnail."));
+    d->iconShowDateBox       = new QCheckBox(i18n("Show camera creation &date"), iconViewGroup);
+    d->iconShowDateBox->setWhatsThis(i18n("Set this option to show the camera creation date "
+                                          "below the image thumbnail."));
 
-    d->iconShowModDateBox = new QCheckBox(i18n("Show file &modification date"), iconTextGroup);
-    d->iconShowModDateBox->setWhatsThis( i18n("Set this option to show the file modification date "
-                                              "below the image thumbnail."));
-
-    d->iconShowCommentsBox = new QCheckBox(i18n("Show digiKam &captions"), iconTextGroup);
-    d->iconShowCommentsBox->setWhatsThis( i18n("Set this option to show the digiKam captions "
-                                               "below the image thumbnail."));
-
-    d->iconShowTagsBox = new QCheckBox(i18n("Show digiKam &tags"), iconTextGroup);
-    d->iconShowTagsBox->setWhatsThis( i18n("Set this option to show the digiKam tags "
-                                           "below the image thumbnail."));
-
-    d->iconShowRatingBox = new QCheckBox(i18n("Show digiKam &rating"), iconTextGroup);
-    d->iconShowRatingBox->setWhatsThis( i18n("Set this option to show the digiKam rating "
+    d->iconShowModDateBox    = new QCheckBox(i18n("Show file &modification date"), iconViewGroup);
+    d->iconShowModDateBox->setWhatsThis(i18n("Set this option to show the file modification date "
                                              "below the image thumbnail."));
 
-    d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions"), iconTextGroup);
-    d->iconShowResolutionBox->setWhatsThis( i18n("Set this option to show the image size in pixels "
-                                                 "below the image thumbnail."));
+    d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions"), iconViewGroup);
+    d->iconShowResolutionBox->setWhatsThis(i18n("Set this option to show the image size in pixels "
+                                                "below the image thumbnail."));
 
-    gLayout2->addWidget(d->iconShowNameBox);
-    gLayout2->addWidget(d->iconShowSizeBox);
-    gLayout2->addWidget(d->iconShowDateBox);
-    gLayout2->addWidget(d->iconShowModDateBox);
-    gLayout2->addWidget(d->iconShowCommentsBox);
-    gLayout2->addWidget(d->iconShowTagsBox);
-    gLayout2->addWidget(d->iconShowRatingBox);
-    gLayout2->addWidget(d->iconShowResolutionBox);
-    gLayout2->setSpacing(0);
-    gLayout2->setMargin(KDialog::spacingHint());
+    d->iconShowCommentsBox   = new QCheckBox(i18n("Show digiKam &captions"), iconViewGroup);
+    d->iconShowCommentsBox->setWhatsThis(i18n("Set this option to show the digiKam captions "
+                                              "below the image thumbnail."));
+
+    d->iconShowTagsBox       = new QCheckBox(i18n("Show digiKam &tags"), iconViewGroup);
+    d->iconShowTagsBox->setWhatsThis(i18n("Set this option to show the digiKam tags "
+                                          "below the image thumbnail."));
+
+    d->iconShowRatingBox     = new QCheckBox(i18n("Show digiKam &rating"), iconViewGroup);
+    d->iconShowRatingBox->setWhatsThis(i18n("Set this option to show the digiKam rating "
+                                            "below the image thumbnail."));
+
+    QLabel *rightClickLabel         = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
+    d->rightClickActionComboBox     = new KComboBox(iconViewGroup);
+    d->rightClickActionComboBox->addItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
+    d->rightClickActionComboBox->addItem(i18n("Start image editor"), AlbumSettings::StartEditor);
+    d->rightClickActionComboBox->setToolTip(i18n("Here, choose what should happen when you "
+                                                 "click on a thumbnail."));
+
+    grid->addWidget(d->iconShowNameBox,          0, 0, 1, 1);
+    grid->addWidget(d->iconShowSizeBox,          1, 0, 1, 1);
+    grid->addWidget(d->iconShowDateBox,          2, 0, 1, 1);
+    grid->addWidget(d->iconShowModDateBox,       3, 0, 1, 1);
+    grid->addWidget(d->iconShowResolutionBox,    4, 0, 1, 1);
+    grid->addWidget(d->iconShowCommentsBox,      0, 1, 1, 1);
+    grid->addWidget(d->iconShowTagsBox,          1, 1, 1, 1);
+    grid->addWidget(d->iconShowRatingBox,        2, 1, 1, 1);
+    grid->addWidget(rightClickLabel,             5, 0, 1, 1);
+    grid->addWidget(d->rightClickActionComboBox, 5, 1, 1, 1);
+    grid->setSpacing(0);
+    grid->setMargin(KDialog::spacingHint());
 
     // --------------------------------------------------------
 
-    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), this);
-    QGridLayout* ifaceSettingsLayout = new QGridLayout(interfaceOptionsGroup);
+    QGroupBox *folderViewGroup = new QGroupBox(i18n("Folder-View Options"), this);
+    QGridLayout* grid2         = new QGridLayout(folderViewGroup);
 
-    KHBox *hbox           = new KHBox(interfaceOptionsGroup);
-
-    d->iconTreeThumbLabel = new QLabel(i18n("Tree-view thumbnail size:"), hbox);
-    d->iconTreeThumbSize  = new KComboBox(hbox);
+    d->iconTreeThumbLabel      = new QLabel(i18n("Tree-view thumbnail size:"), this);
+    d->iconTreeThumbSize       = new KComboBox(this);
     d->iconTreeThumbSize->addItem(QString("16"));
     d->iconTreeThumbSize->addItem(QString("22"));
     d->iconTreeThumbSize->addItem(QString("32"));
@@ -158,40 +165,38 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     d->iconTreeThumbSize->setToolTip(i18n("Set this option to configure the size in pixels of "
                                           "the tree-view thumbnails in digiKam's sidebars."));
 
-    QWidget *space        = new QWidget(hbox);
-    d->fontSelect         = new DFontSelect(hbox);
+    d->fontSelect = new DFontSelect(i18n("Tree-view font:"), this);
     d->fontSelect->setToolTip(i18n("Select here the font used to display text in all tree-view."));
 
-    hbox->setMargin(KDialog::spacingHint());
-    hbox->setSpacing(0);
-    hbox->setStretchFactor(space, 10);
+    d->showFolderTreeViewItemsCount = new QCheckBox(i18n("Show count of items in all tree-view"), this);
 
-    d->showFolderTreeViewItemsCount = new QCheckBox(i18n("Show count of items in all tree-view"), interfaceOptionsGroup);
+    grid2->addWidget(d->iconTreeThumbLabel,           0, 0, 1, 1);
+    grid2->addWidget(d->iconTreeThumbSize,            0, 1, 1, 1);
+    grid2->addWidget(d->fontSelect,                   1, 0, 1, 2);
+    grid2->addWidget(d->showFolderTreeViewItemsCount, 2, 0, 1, 2);
+    grid2->setMargin(KDialog::spacingHint());
+    grid2->setSpacing(KDialog::spacingHint());
 
-    QLabel *rightClickLabel         = new QLabel(i18n("Thumbnail click action:"), interfaceOptionsGroup);
-    d->rightClickActionComboBox     = new KComboBox(interfaceOptionsGroup);
-    d->rightClickActionComboBox->addItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
-    d->rightClickActionComboBox->addItem(i18n("Start image editor"), AlbumSettings::StartEditor);
-    d->rightClickActionComboBox->setToolTip(i18n("Here, choose what should happen when you "
-                                                 "click on a thumbnail."));
+    // --------------------------------------------------------
 
-    d->previewLoadFullImageSize     = new QCheckBox(i18n("Embedded preview loads full image size"), interfaceOptionsGroup);
-    d->previewLoadFullImageSize->setWhatsThis( i18n("Set this option to load the full image size "
-                     "for a preview, instead of with a reduced size. This loads more data and will be slow on older computers."));
+    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Misc Options"), this);
+    QGridLayout* grid3               = new QGridLayout(interfaceOptionsGroup);
 
-    ifaceSettingsLayout->setMargin(KDialog::spacingHint());
-    ifaceSettingsLayout->setSpacing(KDialog::spacingHint());
-    ifaceSettingsLayout->addWidget(hbox,                            0, 0, 1, 5);
-    ifaceSettingsLayout->addWidget(d->showFolderTreeViewItemsCount, 1, 0, 1, 4);
-    ifaceSettingsLayout->addWidget(rightClickLabel,                 2, 0, 1, 1);
-    ifaceSettingsLayout->addWidget(d->rightClickActionComboBox,     2, 1, 1, 4);
-    ifaceSettingsLayout->addWidget(d->previewLoadFullImageSize,     3, 0, 1, 5);
+    d->previewLoadFullImageSize      = new QCheckBox(i18n("Embedded preview loads full image size"), interfaceOptionsGroup);
+    d->previewLoadFullImageSize->setWhatsThis(i18n("Set this option to load the full image size "
+                                                   "for a preview, instead of with a reduced size. This loads more "
+                                                   "data and will be slow on older computers."));
+
+    grid3->setMargin(KDialog::spacingHint());
+    grid3->setSpacing(KDialog::spacingHint());
+    grid3->addWidget(d->previewLoadFullImageSize, 0, 0, 1, 1);
 
     // --------------------------------------------------------
 
     layout->setMargin(0);
     layout->setSpacing(KDialog::spacingHint());
-    layout->addWidget(iconTextGroup);
+    layout->addWidget(iconViewGroup);
+    layout->addWidget(folderViewGroup);
     layout->addWidget(interfaceOptionsGroup);
     layout->addStretch();
 
