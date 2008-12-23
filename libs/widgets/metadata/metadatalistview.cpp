@@ -260,8 +260,8 @@ void MetadataListView::slotSearchTextChanged(const SearchTextSettings& settings)
         MetadataListViewItem *item = dynamic_cast<MetadataListViewItem*>(*it);
         if (item)
         {
-            if (item->text(0).toLower().contains(search, settings.caseSensitive) ||
-                item->text(1).toLower().contains(search, settings.caseSensitive))
+            if (item->text(0).contains(search, settings.caseSensitive) ||
+                item->text(1).contains(search, settings.caseSensitive))
             {
                 query = true;
                 item->setHidden(false);
