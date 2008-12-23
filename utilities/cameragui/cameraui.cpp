@@ -581,15 +581,15 @@ void CameraUI::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
+    d->cameraFreeSpace = new FreeSpaceWidget(statusBar(), 100);
+    statusBar()->addWidget(d->cameraFreeSpace, 1);
+
+    //------------------------------------------------------------------------------
+
     d->albumLibraryFreeSpace = new FreeSpaceWidget(statusBar(), 100);
     d->albumLibraryFreeSpace->setMode(FreeSpaceWidget::AlbumLibrary);
     statusBar()->addWidget(d->albumLibraryFreeSpace, 1);
     refreshCollectionFreeSpace();
-
-    //------------------------------------------------------------------------------
-
-    d->cameraFreeSpace = new FreeSpaceWidget(statusBar(), 100);
-    statusBar()->addWidget(d->cameraFreeSpace, 1);
 
     //------------------------------------------------------------------------------
 
