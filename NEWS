@@ -33,7 +33,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 175102 : Crashes opening the image editor for raw images (mrw). Embedded editor does not work.
 019 ==> 176480 : Application: digiKam (digikam), signal SIGSEGV.
 020 ==> 175717 : digiKam crashes when configure is called.
-021 ==> 
+021 ==> 177057 : Two View menus in menubar.
+022 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta7 - Release date: 2008-12-18
