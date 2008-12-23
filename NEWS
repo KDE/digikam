@@ -30,7 +30,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 168582 : digiKam fails to save images in home directory.
 016 ==> 147771 : Menubar missing after full-screen, quit, restart.
 017 ==> 173637 : Kodac DX7630 not recognized.
-018 ==> 
+018 ==> 175102 : Crashes opening the image editor for raw images (mrw). Embedded editor does not work.
+019 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta7 - Release date: 2008-12-18
