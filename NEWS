@@ -29,7 +29,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 162206 : Wish: case sensitivity in the text quick filter.
 015 ==> 168582 : digiKam fails to save images in home directory.
 016 ==> 147771 : Menubar missing after full-screen, quit, restart.
-017 ==> 
+017 ==> 173637 : Kodac DX7630 not recognized.
+018 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta7 - Release date: 2008-12-18
