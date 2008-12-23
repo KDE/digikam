@@ -32,7 +32,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 173637 : Kodac DX7630 not recognized.
 018 ==> 175102 : Crashes opening the image editor for raw images (mrw). Embedded editor does not work.
 019 ==> 176480 : Application: digiKam (digikam), signal SIGSEGV.
-020 ==> 
+020 ==> 175717 : digiKam crashes when configure is called.
+021 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta7 - Release date: 2008-12-18
