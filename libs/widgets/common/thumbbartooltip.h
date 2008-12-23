@@ -24,6 +24,10 @@
 #ifndef THUMBBARTOOLTIP_H
 #define THUMBBARTOOLTIP_H
 
+// KDE includes.
+
+#include <kglobalsettings.h>
+
 // Local includes.
 
 #include "digikam_export.h"
@@ -55,21 +59,24 @@ public:
         showPhotoMode  = true;
         showPhotoFlash = false;
         showPhotoWB    = false;
+        font           = KGlobalSettings::generalFont();
     };
 
-    bool showToolTips;
-    bool showFileName;
-    bool showFileDate;
-    bool showFileSize;
-    bool showImageType;
-    bool showImageDim;
-    bool showPhotoMake;
-    bool showPhotoDate;
-    bool showPhotoFocal;
-    bool showPhotoExpo;
-    bool showPhotoMode;
-    bool showPhotoFlash;
-    bool showPhotoWB;
+    bool  showToolTips;
+    bool  showFileName;
+    bool  showFileDate;
+    bool  showFileSize;
+    bool  showImageType;
+    bool  showImageDim;
+    bool  showPhotoMake;
+    bool  showPhotoDate;
+    bool  showPhotoFocal;
+    bool  showPhotoExpo;
+    bool  showPhotoMode;
+    bool  showPhotoFlash;
+    bool  showPhotoWB;
+
+    QFont font;
 };
 
 // --------------------------------------------------------

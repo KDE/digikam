@@ -50,7 +50,7 @@ public:
 
     Qt::CaseSensitivity caseSensitive;
 
-    QString text;
+    QString             text;
 };
 
 class DIGIKAM_EXPORT SearchTextBar : public KLineEdit

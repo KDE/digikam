@@ -580,6 +580,7 @@ void ShowFoto::applySettings()
 
     Digikam::ThumbBarToolTipSettings settings;
     settings.showToolTips   = group.readEntry("Show ToolTips", true);
+    settings.font           = group.readEntry("ToolTips Font", KGlobalSettings::generalFont());
     settings.showFileName   = group.readEntry("ToolTips Show File Name", true);
     settings.showFileDate   = group.readEntry("ToolTips Show File Date", false);
     settings.showFileSize   = group.readEntry("ToolTips Show File Size", false);

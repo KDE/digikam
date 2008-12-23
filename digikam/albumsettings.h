@@ -30,6 +30,7 @@
 
 #include <QStringList>
 #include <QString>
+#include <QFont>
 
 // Local includes.
 
@@ -181,6 +182,9 @@ public:
 
     void setSaveRating(bool val);
     bool getSaveRating() const;
+
+    void setToolTipsFont(const QFont& font);
+    QFont getToolTipsFont() const;
 
     void setShowToolTips(bool val);
     bool getShowToolTips() const;

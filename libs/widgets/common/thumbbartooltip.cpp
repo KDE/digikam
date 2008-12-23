@@ -61,13 +61,13 @@ public:
 
     ThumbBarToolTipPriv()
     {
-        view   = 0;
-        item   = 0;
+        view = 0;
+        item = 0;
     }
 
-    ThumbBarView  *view;
+    ThumbBarView *view;
 
-    ThumbBarItem  *item;
+    ThumbBarItem *item;
 };
 
 ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* view)
@@ -122,10 +122,10 @@ QString ThumbBarToolTip::tipContents()
 {
     if (!item()) return QString();
 
-    QString            str;
-    DToolTipStyleSheet cnt;
-
+    QString                 str;
     ThumbBarToolTipSettings settings = toolTipSettings();
+    DToolTipStyleSheet      cnt(settings.font);
+
     QFileInfo fileInfo(item()->url().path());
     KFileItem fi(KFileItem::Unknown, KFileItem::Unknown, item()->url());
     DMetadata metaData(item()->url().path());

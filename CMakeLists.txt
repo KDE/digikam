@@ -483,6 +483,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/colorgradientwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dcursortracker.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dlogoaction.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dfontselect.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dpopupmenu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dgradientslider.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/drubberband.cpp

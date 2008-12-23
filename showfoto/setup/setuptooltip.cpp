@@ -32,11 +32,19 @@
 
 // KDE includes.
 
+#include <khbox.h>
 #include <klocale.h>
 #include <kdialog.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kglobal.h>
+#include <kglobalsettings.h>
+
+// Local includes.
+
+#include "dfontselect.h"
+
+using namespace Digikam;
 
 namespace ShowFoto
 {
@@ -48,6 +56,7 @@ public:
     SetupToolTipPriv()
     {
         showToolTipsBox   = 0;
+        fontSelect        = 0;
 
         showFileNameBox   = 0;
         showFileDateBox   = 0;
@@ -67,37 +76,43 @@ public:
         photoSettingBox   = 0;
     }
 
-    QCheckBox *showToolTipsBox;
+    QCheckBox   *showToolTipsBox;
 
-    QCheckBox *showFileNameBox;
-    QCheckBox *showFileDateBox;
-    QCheckBox *showFileSizeBox;
-    QCheckBox *showImageTypeBox;
-    QCheckBox *showImageDimBox;
+    QCheckBox   *showFileNameBox;
+    QCheckBox   *showFileDateBox;
+    QCheckBox   *showFileSizeBox;
+    QCheckBox   *showImageTypeBox;
+    QCheckBox   *showImageDimBox;
 
-    QCheckBox *showPhotoMakeBox;
-    QCheckBox *showPhotoDateBox;
-    QCheckBox *showPhotoFocalBox;
-    QCheckBox *showPhotoExpoBox;
-    QCheckBox *showPhotoModeBox;
-    QCheckBox *showPhotoFlashBox;
-    QCheckBox *showPhotoWbBox;
+    QCheckBox   *showPhotoMakeBox;
+    QCheckBox   *showPhotoDateBox;
+    QCheckBox   *showPhotoFocalBox;
+    QCheckBox   *showPhotoExpoBox;
+    QCheckBox   *showPhotoModeBox;
+    QCheckBox   *showPhotoFlashBox;
+    QCheckBox   *showPhotoWbBox;
 
-    QGroupBox *fileSettingBox;
-    QGroupBox *photoSettingBox;
+    QGroupBox   *fileSettingBox;
+    QGroupBox   *photoSettingBox;
+
+    DFontSelect *fontSelect;
 };
 
 SetupToolTip::SetupToolTip(QWidget* parent)
             : QWidget(parent), d(new SetupToolTipPriv)
 {
-    QVBoxLayout *layout = new QVBoxLayout( this );
-    layout->setSpacing( KDialog::spacingHint() );
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    KHBox *hbox         = new KHBox(this);
+    d->showToolTipsBox  = new QCheckBox(i18n("Show Thumbbar items toolti&ps"), hbox);
+    d->showToolTipsBox->setWhatsThis(i18n("Set this option to display the image information when "
+                                          "the mouse hovers over a thumbbar item."));
 
-    d->showToolTipsBox = new QCheckBox(i18n("Show Thumbbar items toolti&ps"), this);
-    d->showToolTipsBox->setWhatsThis( i18n("Set this option to display the image information when "
-                                           "the mouse hovers over a thumbbar item."));
+    QWidget *space      = new QWidget(hbox);
+    d->fontSelect       = new DFontSelect(hbox);
 
-    layout->addWidget(d->showToolTipsBox);
+    hbox->setMargin(KDialog::spacingHint());
+    hbox->setSpacing(0);
+    hbox->setStretchFactor(space, 10);
 
     // --------------------------------------------------------
 
@@ -126,8 +141,6 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     gLayout1->addWidget(d->showImageTypeBox);
     gLayout1->addWidget(d->showImageDimBox);
     d->fileSettingBox->setLayout(gLayout1);
-
-    layout->addWidget(d->fileSettingBox);
 
     // --------------------------------------------------------
 
@@ -171,6 +184,9 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     gLayout2->addWidget(d->showPhotoWbBox);
     d->photoSettingBox->setLayout(gLayout2);
 
+    layout->setSpacing(KDialog::spacingHint());
+    layout->addWidget(hbox);
+    layout->addWidget(d->fileSettingBox);
     layout->addWidget(d->photoSettingBox);
     layout->addStretch();
 
@@ -199,6 +215,7 @@ void SetupToolTip::readSettings()
     KConfigGroup group        = config->group(QString("ImageViewer Settings"));
 
     d->showToolTipsBox->setChecked(group.readEntry("Show ToolTips", true));
+    d->fontSelect->setFont(group.readEntry("ToolTips Font", KGlobalSettings::generalFont()));
 
     d->showFileNameBox->setChecked(group.readEntry("ToolTips Show File Name", true));
     d->showFileDateBox->setChecked(group.readEntry("ToolTips Show File Date", false));
@@ -224,6 +241,7 @@ void SetupToolTip::applySettings()
     KConfigGroup group        = config->group(QString("ImageViewer Settings"));
 
     group.writeEntry("Show ToolTips",             d->showToolTipsBox->isChecked());
+    group.writeEntry("ToolTips Font",             d->fontSelect->font());
 
     group.writeEntry("ToolTips Show File Name",   d->showFileNameBox->isChecked());
     group.writeEntry("ToolTips Show File Date",   d->showFileDateBox->isChecked());

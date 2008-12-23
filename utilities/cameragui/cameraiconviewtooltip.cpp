@@ -112,9 +112,9 @@ QString CameraIconViewToolTip::tipContents()
 QString CameraIconViewToolTip::fillTipContents(GPItemInfo* info)
 {
     QString            str;
-    DToolTipStyleSheet cnt;
+    AlbumSettings*     settings = AlbumSettings::instance();
+    DToolTipStyleSheet cnt(settings->getToolTipsFont());
 
-    AlbumSettings* settings      = AlbumSettings::instance();
     QString tip                  = cnt.tipHeader;
     PhotoInfoContainer photoInfo = info->photoInfo;
 

@@ -33,6 +33,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
+#include <kglobalsettings.h>
 
 // LibKDcraw includes.
 
@@ -97,6 +98,8 @@ public:
     bool                                tooltipShowComments;
     bool                                tooltipShowTags;
     bool                                tooltipShowRating;
+
+    QFont                               toolTipsFont;
 
     // metadata settings
     bool                                exifRotate;
@@ -226,6 +229,7 @@ void AlbumSettings::init()
     d->tooltipShowComments          = true;
     d->tooltipShowTags              = true;
     d->tooltipShowRating            = true;
+    d->toolTipsFont                 = KGlobalSettings::generalFont();
 
     d->exifRotate                   = true;
     d->exifSetOrientation           = true;
@@ -287,35 +291,36 @@ void AlbumSettings::readSettings()
     d->recursiveTags                = group.readEntry("Recursive Tags", true);
 
 
-    d->iconShowName                 = group.readEntry("Icon Show Name", false);
-    d->iconShowResolution           = group.readEntry("Icon Show Resolution", false);
-    d->iconShowSize                 = group.readEntry("Icon Show Size", false);
-    d->iconShowDate                 = group.readEntry("Icon Show Date", true);
+    d->iconShowName                 = group.readEntry("Icon Show Name",              false);
+    d->iconShowResolution           = group.readEntry("Icon Show Resolution",        false);
+    d->iconShowSize                 = group.readEntry("Icon Show Size",              false);
+    d->iconShowDate                 = group.readEntry("Icon Show Date",              true);
     d->iconShowModDate              = group.readEntry("Icon Show Modification Date", true);
-    d->iconShowComments             = group.readEntry("Icon Show Comments", true);
-    d->iconShowTags                 = group.readEntry("Icon Show Tags", true);
-    d->iconShowRating               = group.readEntry("Icon Show Rating", true);
+    d->iconShowComments             = group.readEntry("Icon Show Comments",          true);
+    d->iconShowTags                 = group.readEntry("Icon Show Tags",              true);
+    d->iconShowRating               = group.readEntry("Icon Show Rating",            true);
 
-    d->showToolTips                 = group.readEntry("Show ToolTips", false);
-    d->tooltipShowFileName          = group.readEntry("ToolTips Show File Name", true);
-    d->tooltipShowFileDate          = group.readEntry("ToolTips Show File Date", false);
-    d->tooltipShowFileSize          = group.readEntry("ToolTips Show File Size", false);
-    d->tooltipShowImageType         = group.readEntry("ToolTips Show Image Type", false);
-    d->tooltipShowImageDim          = group.readEntry("ToolTips Show Image Dim", true);
-    d->tooltipShowPhotoMake         = group.readEntry("ToolTips Show Photo Make", true);
-    d->tooltipShowPhotoDate         = group.readEntry("ToolTips Show Photo Date", true);
+    d->showToolTips                 = group.readEntry("Show ToolTips",             false);
+    d->tooltipShowFileName          = group.readEntry("ToolTips Show File Name",   true);
+    d->tooltipShowFileDate          = group.readEntry("ToolTips Show File Date",   false);
+    d->tooltipShowFileSize          = group.readEntry("ToolTips Show File Size",   false);
+    d->tooltipShowImageType         = group.readEntry("ToolTips Show Image Type",  false);
+    d->tooltipShowImageDim          = group.readEntry("ToolTips Show Image Dim",   true);
+    d->tooltipShowPhotoMake         = group.readEntry("ToolTips Show Photo Make",  true);
+    d->tooltipShowPhotoDate         = group.readEntry("ToolTips Show Photo Date",  true);
     d->tooltipShowPhotoFocal        = group.readEntry("ToolTips Show Photo Focal", true);
-    d->tooltipShowPhotoExpo         = group.readEntry("ToolTips Show Photo Expo", true);
-    d->tooltipShowPhotoMode         = group.readEntry("ToolTips Show Photo Mode", true);
+    d->tooltipShowPhotoExpo         = group.readEntry("ToolTips Show Photo Expo",  true);
+    d->tooltipShowPhotoMode         = group.readEntry("ToolTips Show Photo Mode",  true);
     d->tooltipShowPhotoFlash        = group.readEntry("ToolTips Show Photo Flash", false);
-    d->tooltipShowPhotoWb           = group.readEntry("ToolTips Show Photo WB", false);
-    d->tooltipShowAlbumName         = group.readEntry("ToolTips Show Album Name", false);
-    d->tooltipShowComments          = group.readEntry("ToolTips Show Comments", true);
-    d->tooltipShowTags              = group.readEntry("ToolTips Show Tags", true);
-    d->tooltipShowRating            = group.readEntry("ToolTips Show Rating", true);
+    d->tooltipShowPhotoWb           = group.readEntry("ToolTips Show Photo WB",    false);
+    d->tooltipShowAlbumName         = group.readEntry("ToolTips Show Album Name",  false);
+    d->tooltipShowComments          = group.readEntry("ToolTips Show Comments",    true);
+    d->tooltipShowTags              = group.readEntry("ToolTips Show Tags",        true);
+    d->tooltipShowRating            = group.readEntry("ToolTips Show Rating",      true);
+    d->toolTipsFont                 = group.readEntry("ToolTips Font",             KGlobalSettings::generalFont());
 
     d->previewLoadFullImageSize     = group.readEntry("Preview Load Full Image Size", false);
-    d->showThumbbar                 = group.readEntry("Show Thumbbar", true);
+    d->showThumbbar                 = group.readEntry("Show Thumbbar",                true);
 
     d->showFolderTreeViewItemsCount = group.readEntry("Show Folder Tree View Items Count", false);
 
@@ -386,26 +391,27 @@ void AlbumSettings::saveSettings()
     group.writeEntry("Icon Show Tags", d->iconShowTags);
     group.writeEntry("Icon Show Rating", d->iconShowRating);
 
-    group.writeEntry("Show ToolTips", d->showToolTips);
-    group.writeEntry("ToolTips Show File Name", d->tooltipShowFileName);
-    group.writeEntry("ToolTips Show File Date", d->tooltipShowFileDate);
-    group.writeEntry("ToolTips Show File Size", d->tooltipShowFileSize);
-    group.writeEntry("ToolTips Show Image Type", d->tooltipShowImageType);
-    group.writeEntry("ToolTips Show Image Dim", d->tooltipShowImageDim);
-    group.writeEntry("ToolTips Show Photo Make", d->tooltipShowPhotoMake);
-    group.writeEntry("ToolTips Show Photo Date", d->tooltipShowPhotoDate);
+    group.writeEntry("Show ToolTips",             d->showToolTips);
+    group.writeEntry("ToolTips Show File Name",   d->tooltipShowFileName);
+    group.writeEntry("ToolTips Show File Date",   d->tooltipShowFileDate);
+    group.writeEntry("ToolTips Show File Size",   d->tooltipShowFileSize);
+    group.writeEntry("ToolTips Show Image Type",  d->tooltipShowImageType);
+    group.writeEntry("ToolTips Show Image Dim",   d->tooltipShowImageDim);
+    group.writeEntry("ToolTips Show Photo Make",  d->tooltipShowPhotoMake);
+    group.writeEntry("ToolTips Show Photo Date",  d->tooltipShowPhotoDate);
     group.writeEntry("ToolTips Show Photo Focal", d->tooltipShowPhotoFocal);
-    group.writeEntry("ToolTips Show Photo Expo", d->tooltipShowPhotoExpo);
-    group.writeEntry("ToolTips Show Photo Mode", d->tooltipShowPhotoMode);
+    group.writeEntry("ToolTips Show Photo Expo",  d->tooltipShowPhotoExpo);
+    group.writeEntry("ToolTips Show Photo Mode",  d->tooltipShowPhotoMode);
     group.writeEntry("ToolTips Show Photo Flash", d->tooltipShowPhotoFlash);
-    group.writeEntry("ToolTips Show Photo WB", d->tooltipShowPhotoWb);
-    group.writeEntry("ToolTips Show Album Name", d->tooltipShowAlbumName);
-    group.writeEntry("ToolTips Show Comments", d->tooltipShowComments);
-    group.writeEntry("ToolTips Show Tags", d->tooltipShowTags);
-    group.writeEntry("ToolTips Show Rating", d->tooltipShowRating);
+    group.writeEntry("ToolTips Show Photo WB",    d->tooltipShowPhotoWb);
+    group.writeEntry("ToolTips Show Album Name",  d->tooltipShowAlbumName);
+    group.writeEntry("ToolTips Show Comments",    d->tooltipShowComments);
+    group.writeEntry("ToolTips Show Tags",        d->tooltipShowTags);
+    group.writeEntry("ToolTips Show Rating",      d->tooltipShowRating);
+    group.writeEntry("ToolTips Font",             d->toolTipsFont);
 
     group.writeEntry("Preview Load Full Image Size", d->previewLoadFullImageSize);
-    group.writeEntry("Show Thumbbar", d->showThumbbar);
+    group.writeEntry("Show Thumbbar",                d->showThumbbar);
 
     group.writeEntry("Show Folder Tree View Items Count", d->showFolderTreeViewItemsCount);
 
@@ -857,6 +863,16 @@ bool AlbumSettings::getSaveRating() const
 void AlbumSettings::setSaveRating(bool val)
 {
     d->saveRating = val;
+}
+
+void AlbumSettings::setToolTipsFont(const QFont& font)
+{
+    d->toolTipsFont = font;
+}
+
+QFont AlbumSettings::getToolTipsFont() const
+{
+    return d->toolTipsFont;
 }
 
 void AlbumSettings::setShowToolTips(bool val)

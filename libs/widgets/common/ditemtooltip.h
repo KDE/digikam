@@ -26,6 +26,7 @@
 
 // Qt includes.
 
+#include <QFont>
 #include <QFrame>
 #include <QString>
 #include <QEvent>
@@ -35,6 +36,7 @@
 // KDE includes.
 
 #include <klocale.h>
+#include <kglobalsettings.h>
 
 // Local includes.
 
@@ -48,9 +50,11 @@ class DItemToolTipPriv;
 
 class DIGIKAM_EXPORT DToolTipStyleSheet
 {
+
 public:
 
-    DToolTipStyleSheet(): maxStringLenght(30)
+    DToolTipStyleSheet(const QFont& font = KGlobalSettings::generalFont())
+        : maxStringLenght(30)
     {
         unavailable = i18n("unavailable");
 
@@ -58,28 +62,33 @@ public:
         tipFooter   = QString("</table></qt>");
 
         headBeg     = QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"
-                              "<nobr><font size=\"-1\" color=\"%2\"><b>")
+                              "<nobr><font size=\"-1\" color=\"%2\" face=\"%3\"><b>")
                               .arg(ThemeEngine::instance()->baseColor().name())
-                              .arg(ThemeEngine::instance()->textRegColor().name());
+                              .arg(ThemeEngine::instance()->textRegColor().name())
+                              .arg(font.family());
         headEnd     = QString("</b></font></nobr></td></tr>");
 
-        cellBeg     = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\">")
-                              .arg(ThemeEngine::instance()->textRegColor().name());
-        cellMid     = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\">")
-                              .arg(ThemeEngine::instance()->textRegColor().name());
+        cellBeg     = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
+                              .arg(ThemeEngine::instance()->textRegColor().name())
+                              .arg(font.family());
+        cellMid     = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
+                              .arg(ThemeEngine::instance()->textRegColor().name())
+                              .arg(font.family());
         cellEnd     = QString("</font></nobr></td></tr>");
 
-        cellSpecBeg = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\">")
-                              .arg(ThemeEngine::instance()->textRegColor().name());
-        cellSpecMid = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\"><i>")
-                              .arg(ThemeEngine::instance()->textSpecialRegColor().name());
+        cellSpecBeg = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
+                              .arg(ThemeEngine::instance()->textRegColor().name())
+                              .arg(font.family());
+        cellSpecMid = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\"><i>")
+                              .arg(ThemeEngine::instance()->textSpecialRegColor().name())
+                              .arg(font.family());
         cellSpecEnd = QString("</i></font></nobr></td></tr>");
     };
 
     QString breakString(const QString& input)
     {
-        QString str      = input.simplified();
-        str              = Qt::escape(str);
+        QString str = input.simplified();
+        str         = Qt::escape(str);
 
         if (str.length() <= maxStringLenght)
             return str;
@@ -124,6 +133,7 @@ public:
 
 class DIGIKAM_EXPORT DItemToolTip : public QFrame
 {
+
 public:
 
     DItemToolTip();

@@ -113,9 +113,9 @@ QString AlbumIconViewToolTip::tipContents()
 QString AlbumIconViewToolTip::fillTipContents(const ImageInfo& info)
 {
     QString            str;
-    DToolTipStyleSheet cnt;
+    AlbumSettings*     settings = AlbumSettings::instance();
+    DToolTipStyleSheet cnt(settings->getToolTipsFont());
 
-    AlbumSettings* settings          = AlbumSettings::instance();
     ImageCommonContainer commonInfo  = info.imageCommonContainer();
     ImageMetadataContainer photoInfo = info.imageMetadataContainer();
     QString tip                      = cnt.tipHeader;

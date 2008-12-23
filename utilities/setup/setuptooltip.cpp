@@ -32,11 +32,13 @@
 
 // KDE includes.
 
+#include <khbox.h>
 #include <klocale.h>
 #include <kdialog.h>
 
 // Local includes.
 
+#include "dfontselect.h"
 #include "albumsettings.h"
 
 namespace Digikam
@@ -49,6 +51,7 @@ public:
     SetupToolTipPriv()
     {
         showToolTipsBox   = 0;
+        fontSelect        = 0;
 
         showFileNameBox   = 0;
         showFileDateBox   = 0;
@@ -74,40 +77,49 @@ public:
         digikamSettingBox = 0;
     }
 
-    QCheckBox *showToolTipsBox;
+    QCheckBox   *showToolTipsBox;
 
-    QCheckBox *showFileNameBox;
-    QCheckBox *showFileDateBox;
-    QCheckBox *showFileSizeBox;
-    QCheckBox *showImageTypeBox;
-    QCheckBox *showImageDimBox;
+    QCheckBox   *showFileNameBox;
+    QCheckBox   *showFileDateBox;
+    QCheckBox   *showFileSizeBox;
+    QCheckBox   *showImageTypeBox;
+    QCheckBox   *showImageDimBox;
 
-    QCheckBox *showPhotoMakeBox;
-    QCheckBox *showPhotoDateBox;
-    QCheckBox *showPhotoFocalBox;
-    QCheckBox *showPhotoExpoBox;
-    QCheckBox *showPhotoModeBox;
-    QCheckBox *showPhotoFlashBox;
-    QCheckBox *showPhotoWbBox;
+    QCheckBox   *showPhotoMakeBox;
+    QCheckBox   *showPhotoDateBox;
+    QCheckBox   *showPhotoFocalBox;
+    QCheckBox   *showPhotoExpoBox;
+    QCheckBox   *showPhotoModeBox;
+    QCheckBox   *showPhotoFlashBox;
+    QCheckBox   *showPhotoWbBox;
 
-    QCheckBox *showAlbumNameBox;
-    QCheckBox *showCommentsBox;
-    QCheckBox *showTagsBox;
-    QCheckBox *showRatingBox;
+    QCheckBox   *showAlbumNameBox;
+    QCheckBox   *showCommentsBox;
+    QCheckBox   *showTagsBox;
+    QCheckBox   *showRatingBox;
 
-    QGroupBox *fileSettingBox;
-    QGroupBox *photoSettingBox;
-    QGroupBox *digikamSettingBox;
+    QGroupBox   *fileSettingBox;
+    QGroupBox   *photoSettingBox;
+    QGroupBox   *digikamSettingBox;
+
+    DFontSelect *fontSelect;
 };
 
 SetupToolTip::SetupToolTip(QWidget* parent)
             : QWidget(parent), d(new SetupToolTipPriv)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
+    KHBox *hbox         = new KHBox(this);
+    d->showToolTipsBox  = new QCheckBox(i18n("Show icon-view/thumbbar items toolti&ps"), hbox);
+    d->showToolTipsBox->setWhatsThis(i18n("Set this option to display image information when "
+                                          "the mouse hovers over an icon-view or thumbbar item."));
 
-    d->showToolTipsBox  = new QCheckBox(i18n("Show icon-view/thumbbar items toolti&ps"), this);
-    d->showToolTipsBox->setWhatsThis( i18n("Set this option to display image information when "
-                                           "the mouse hovers over an icon-view or thumbbar item."));
+    QWidget *space      = new QWidget(hbox);
+    d->fontSelect       = new DFontSelect(hbox);
+
+    hbox->setMargin(KDialog::spacingHint());
+    hbox->setSpacing(0);
+    hbox->setStretchFactor(space, 10);
 
     // --------------------------------------------------------
 
@@ -207,7 +219,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     layout->setMargin(0);
     layout->setSpacing(KDialog::spacingHint());
-    layout->addWidget(d->showToolTipsBox);
+    layout->addWidget(hbox);
     layout->addWidget(d->fileSettingBox);
     layout->addWidget(d->photoSettingBox);
     layout->addWidget(d->digikamSettingBox);
@@ -241,6 +253,7 @@ void SetupToolTip::applySettings()
     if (!settings) return;
 
     settings->setShowToolTips(d->showToolTipsBox->isChecked());
+    settings->setToolTipsFont(d->fontSelect->font());
 
     settings->setToolTipsShowFileName(d->showFileNameBox->isChecked());
     settings->setToolTipsShowFileDate(d->showFileDateBox->isChecked());
@@ -271,6 +284,7 @@ void SetupToolTip::readSettings()
     if (!settings) return;
 
     d->showToolTipsBox->setChecked(settings->getShowToolTips());
+    d->fontSelect->setFont(settings->getToolTipsFont());
 
     d->showFileNameBox->setChecked(settings->getToolTipsShowFileName());
     d->showFileDateBox->setChecked(settings->getToolTipsShowFileDate());
