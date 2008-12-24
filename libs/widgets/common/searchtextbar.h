@@ -62,8 +62,11 @@ public:
     SearchTextBar(QWidget *parent, const char* name, const QString& msg=i18n("Search..."));
     ~SearchTextBar();
 
-    void setEnableTextQueryCompletion(bool b);
-    bool textQueryCompletion() const;
+    void setTextQueryCompletion(bool b);
+    bool hasTextQueryCompletion() const;
+
+    void setCaseSensitive(bool b);
+    bool hasCaseSensitive() const;
 
     void setSearchTextSettings(const SearchTextSettings& settings);
     SearchTextSettings searchTextSettings() const;

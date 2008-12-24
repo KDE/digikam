@@ -86,7 +86,7 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
 
 #if KDE_IS_VERSION(4,1,0)
     d->textFilter = new SearchTextBar(this, "AlbumIconViewFilterSearchTextBar");
-    d->textFilter->setEnableTextQueryCompletion(true);
+    d->textFilter->setTextQueryCompletion(true);
 #else
     d->textFilter = new QLineEdit(this);
 #endif

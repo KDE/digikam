@@ -48,9 +48,11 @@ public:
     SearchTextBarPriv()
     {
         textQueryCompletion = false;
+        hasCaseSensitive    = true;
     }
 
     bool               textQueryCompletion;
+    bool               hasCaseSensitive;
 
     SearchTextSettings settings;
 };
@@ -91,14 +93,24 @@ SearchTextBar::~SearchTextBar()
     delete d;
 }
 
-void SearchTextBar::setEnableTextQueryCompletion(bool b)
+void SearchTextBar::setTextQueryCompletion(bool b)
 {
     d->textQueryCompletion = b;
 }
 
-bool SearchTextBar::textQueryCompletion() const
+bool SearchTextBar::hasTextQueryCompletion() const
 {
     return d->textQueryCompletion;
+}
+
+void SearchTextBar::setCaseSensitive(bool b)
+{
+    d->hasCaseSensitive = b;
+}
+
+bool SearchTextBar::hasCaseSensitive() const
+{
+    return d->hasCaseSensitive;
 }
 
 void SearchTextBar::setSearchTextSettings(const SearchTextSettings& settings)
@@ -144,12 +156,21 @@ void SearchTextBar::slotSearchResult(bool match)
 
 void SearchTextBar::contextMenuEvent(QContextMenuEvent* e)
 {
+    QAction *cs = 0;
     QMenu *menu = createStandardContextMenu();
-    QAction *cs = menu->addAction(tr("Case sensitive"));
-    cs->setCheckable(true);
-    cs->setChecked(d->settings.caseSensitive == Qt::CaseInsensitive ? false : true);
+
+    if (d->hasCaseSensitive)
+    {
+        cs = menu->addAction(tr("Case sensitive"));
+        cs->setCheckable(true);
+        cs->setChecked(d->settings.caseSensitive == Qt::CaseInsensitive ? false : true);
+    }
+
     menu->exec(e->globalPos());
-    d->settings.caseSensitive = cs->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+
+    if (d->hasCaseSensitive)
+        d->settings.caseSensitive = cs->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+
     delete menu;
 }
 
