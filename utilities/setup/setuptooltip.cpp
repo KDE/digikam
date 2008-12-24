@@ -237,6 +237,9 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     connect(d->showToolTipsBox, SIGNAL(toggled(bool)),
             d->digikamSettingBox, SLOT(setEnabled(bool)));
 
+    connect(d->showToolTipsBox, SIGNAL(toggled(bool)),
+            d->fontSelect, SLOT(setEnabled(bool)));
+
     // --------------------------------------------------------
 
     readSettings();
