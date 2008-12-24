@@ -240,7 +240,7 @@ bool SchemaUpdater::makeUpdates()
                 QString errorMsg = i18n("Failed to open a database transaction on your database file \"%1\". "
                                         "This is unusual. Please check that you can access the file and no "
                                         "other process has currently locked the file. "
-                                        "If the problem persists you get get help from the digikam-devel@kde.org "
+                                        "If the problem persists you can get help from the digikam-devel@kde.org "
                                         "mailing list. As well, please have a look at what digiKam prints on the console. ",
                                         currentDBFile.filePath());
                 m_observer->error(errorMsg);
