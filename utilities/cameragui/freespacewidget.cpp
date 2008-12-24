@@ -49,6 +49,7 @@
 
 // Local includes.
 
+#include "ditemtooltip.h"
 #include "albumsettings.h"
 
 namespace Digikam
@@ -66,13 +67,13 @@ public:
         kBAvail     = 0;
     }
 
-    QString                         mountPoint;
+    QString       mountPoint;
 
-    bool                            isValid;
+    bool          isValid;
 
-    unsigned long                   kBSize;
-    unsigned long                   kBUsed;
-    unsigned long                   kBAvail;
+    unsigned long kBSize;
+    unsigned long kBUsed;
+    unsigned long kBAvail;
 };
 
 class FreeSpaceWidgetPriv
@@ -306,45 +307,39 @@ void FreeSpaceWidget::updateToolTip()
 {
     if (isValid())
     {
-        QString tipText, value;
+        QString value;
         QString header = i18n("Camera Media");
         if (d->mode == FreeSpaceWidget::AlbumLibrary) header = i18n("Album Library");
-        QString headBeg("<tr bgcolor=\"#73CAE6\"><td colspan=\"2\">"
-                        "<nobr><font size=\"-1\" color=\"black\"><b>");
-        QString headEnd("</b></font></nobr></td></tr>");
 
-        QString cellBeg("<tr><td><nobr><font size=\"-1\" color=\"black\">");
-        QString cellMid("</font></nobr></td>"
-                        "<td><nobr><font size=\"-1\" color=\"black\">");
-        QString cellEnd("</font></nobr></td></tr>");
+        DToolTipStyleSheet cnt(AlbumSettings::instance()->getToolTipsFont());
+        QString tip = cnt.tipHeader;
 
-        tipText = "<table cellspacing=\"0\" cellpadding=\"0\">";
-        tipText.append(headBeg + header + headEnd);
+        tip += cnt.headBeg + header + cnt.headEnd;
 
         if (d->dSizeKb > 0)
         {
-            tipText += cellBeg + i18n("Capacity:") + cellMid;
-            tipText += KIO::convertSizeFromKiB(d->kBSize) + cellEnd;
+            tip += cnt.cellBeg + i18n("Capacity:") + cnt.cellMid;
+            tip += KIO::convertSizeFromKiB(d->kBSize) + cnt.cellEnd;
 
-            tipText += cellBeg + i18n("Available:") + cellMid;
-            tipText += KIO::convertSizeFromKiB(d->kBAvail) + cellEnd;
+            tip += cnt.cellBeg + i18n("Available:") + cnt.cellMid;
+            tip += KIO::convertSizeFromKiB(d->kBAvail) + cnt.cellEnd;
 
-            tipText += cellBeg + i18n("Require:") + cellMid;
-            tipText += KIO::convertSizeFromKiB(d->dSizeKb) + cellEnd;
+            tip += cnt.cellBeg + i18n("Require:") + cnt.cellMid;
+            tip += KIO::convertSizeFromKiB(d->dSizeKb) + cnt.cellEnd;
         }
         else
         {
-            tipText += cellBeg + i18n("Capacity:") + cellMid;
-            tipText += KIO::convertSizeFromKiB(d->kBSize) + cellEnd;
+            tip += cnt.cellBeg + i18n("Capacity:") + cnt.cellMid;
+            tip += KIO::convertSizeFromKiB(d->kBSize) + cnt.cellEnd;
 
-            tipText += cellBeg + i18n("Available:") + cellMid;
-            tipText += KIO::convertSizeFromKiB(d->kBAvail) + cellEnd;
+            tip += cnt.cellBeg + i18n("Available:") + cnt.cellMid;
+            tip += KIO::convertSizeFromKiB(d->kBAvail) + cnt.cellEnd;
         }
 
-        tipText.append("</table>");
+        tip += cnt.tipFooter;
 
-        setWhatsThis(tipText);
-        setToolTip(tipText);
+        setWhatsThis(tip);
+        setToolTip(tip);
     }
     else
     {
