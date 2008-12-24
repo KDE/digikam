@@ -104,7 +104,7 @@ SetupMime::SetupMime(QWidget* parent)
     logoLabel1->setPixmap(DesktopIcon("image-jp2"));
 
     d->imageFileFilterLabel = new QLabel(imageFileFilterBox);
-    d->imageFileFilterLabel->setText(i18n("Customize &image file extensions (<a href='image'>Currently-supported types</a>):"));
+    d->imageFileFilterLabel->setText(i18n("Additional &image file extensions (<a href='image'>Currently-supported types</a>):"));
 
     KHBox *hbox1 = new KHBox(imageFileFilterBox);
     d->imageFileFilterEdit = new QLineEdit(hbox1);
@@ -140,7 +140,7 @@ SetupMime::SetupMime(QWidget* parent)
     logoLabel2->setPixmap(DesktopIcon("video-mpeg"));
 
     d->movieFileFilterLabel = new QLabel(movieFileFilterBox);
-    d->movieFileFilterLabel->setText(i18n("Customize &movie file extensions (<a href='video'>Currently-supported types</a>):"));
+    d->movieFileFilterLabel->setText(i18n("Additional &movie file extensions (<a href='video'>Currently-supported types</a>):"));
 
     KHBox *hbox2 = new KHBox(movieFileFilterBox);
     d->movieFileFilterEdit = new QLineEdit(hbox2);
@@ -178,7 +178,7 @@ SetupMime::SetupMime(QWidget* parent)
     logoLabel3->setPixmap(DesktopIcon("audio-basic"));
 
     d->audioFileFilterLabel = new QLabel(audioFileFilterBox);
-    d->audioFileFilterLabel->setText(i18n("Customize &audio file extensions (<a href='audio'>Currently-supported types</a>):"));
+    d->audioFileFilterLabel->setText(i18n("Additional &audio file extensions (<a href='audio'>Currently-supported types</a>):"));
 
     KHBox *hbox3 = new KHBox(audioFileFilterBox);
     d->audioFileFilterEdit = new QLineEdit(hbox3);
