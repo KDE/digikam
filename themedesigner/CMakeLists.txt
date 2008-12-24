@@ -12,6 +12,7 @@ INCLUDE_DIRECTORIES(
                      ../libs/jpegutils 
                      ../libs/greycstoration
                      ../libs/threadimageio
+                     ../libs/whitebalance
 
                      # widgets and dialogs
                      ../libs/widgets/common
