@@ -43,7 +43,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 027 ==> 178608 : Center headers in item tooltip.
 028 ==> 178607 : Order of elements in status bar.
 029 ==> 178613 : Wording in mime-setup page.
-030 ==> 
+030 ==> 156836 : Preview zoom to 100 percent is not 100 percent viewing Canon RAW/CR2.
+031 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta7 - Release date: 2008-12-18
