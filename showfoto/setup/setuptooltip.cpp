@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-07-09
- * Description : tool tip contents configuration setup tab
+ * Description : item tool tip configuration setup tab
  *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -102,24 +102,17 @@ SetupToolTip::SetupToolTip(QWidget* parent)
             : QWidget(parent), d(new SetupToolTipPriv)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
-    KHBox *hbox         = new KHBox(this);
-    d->showToolTipsBox  = new QCheckBox(i18n("Show Thumbbar items toolti&ps"), hbox);
+    d->showToolTipsBox  = new QCheckBox(i18n("Show Thumbbar items toolti&ps"), this);
     d->showToolTipsBox->setWhatsThis(i18n("Set this option to display the image information when "
                                           "the mouse hovers over a thumbbar item."));
 
-    QWidget *space      = new QWidget(hbox);
-    d->fontSelect       = new DFontSelect(QString(), hbox);
+    d->fontSelect       = new DFontSelect(i18n("Font:"), this);
     d->fontSelect->setToolTip(i18n("Select here the font used to display text in tooltips."));
-
-    hbox->setMargin(KDialog::spacingHint());
-    hbox->setSpacing(0);
-    hbox->setStretchFactor(space, 10);
 
     // --------------------------------------------------------
 
     d->fileSettingBox     = new QGroupBox(i18n("File/Image Information"), this);
-    QVBoxLayout *gLayout1 = new QVBoxLayout();
-    gLayout1->setSpacing( KDialog::spacingHint() );
+    QVBoxLayout *gLayout1 = new QVBoxLayout(d->fileSettingBox);
 
     d->showFileNameBox = new QCheckBox(i18n("Show file name"), d->fileSettingBox);
     d->showFileNameBox->setWhatsThis( i18n("Set this option to display the image file name."));
@@ -141,13 +134,13 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     gLayout1->addWidget(d->showFileSizeBox);
     gLayout1->addWidget(d->showImageTypeBox);
     gLayout1->addWidget(d->showImageDimBox);
-    d->fileSettingBox->setLayout(gLayout1);
+    gLayout1->setMargin(KDialog::spacingHint());
+    gLayout1->setSpacing(0);
 
     // --------------------------------------------------------
 
     d->photoSettingBox    = new QGroupBox(i18n("Photograph Information"), this);
-    QVBoxLayout *gLayout2 = new QVBoxLayout();
-    gLayout2->setSpacing( KDialog::spacingHint() );
+    QVBoxLayout *gLayout2 = new QVBoxLayout(d->photoSettingBox);
 
     d->showPhotoMakeBox = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
     d->showPhotoMakeBox->setWhatsThis( i18n("Set this option to display the make and model of the "
@@ -183,13 +176,16 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     gLayout2->addWidget(d->showPhotoModeBox);
     gLayout2->addWidget(d->showPhotoFlashBox);
     gLayout2->addWidget(d->showPhotoWbBox);
-    d->photoSettingBox->setLayout(gLayout2);
+    gLayout2->setMargin(KDialog::spacingHint());
+    gLayout2->setSpacing(0);
 
-    layout->setSpacing(KDialog::spacingHint());
-    layout->addWidget(hbox);
+    layout->addWidget(d->showToolTipsBox);
+    layout->addWidget(d->fontSelect);
     layout->addWidget(d->fileSettingBox);
     layout->addWidget(d->photoSettingBox);
     layout->addStretch();
+    layout->setMargin(0);
+    layout->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
 
