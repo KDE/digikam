@@ -155,25 +155,25 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_albumView->setHeader( i18n("Album View Settings") );
     d->page_albumView->setIcon( KIcon("view-list-icons") );
 
-    d->albumTypePage  = new SetupAlbumType();
-    d->page_albumType = addPage( d->albumTypePage, i18n("Album Type") );
-    d->page_albumType->setHeader( i18n("Album Type Settings") );
-    d->page_albumType->setIcon( KIcon("view-calendar-list") );
-
-    d->identityPage  = new SetupIdentity();
-    d->page_identity = addPage( d->identityPage, i18n("Identity") );
-    d->page_identity->setHeader( i18n("Default identity information") );
-    d->page_identity->setIcon( KIcon("user-identity") );
+    d->tooltipPage  = new SetupToolTip();
+    d->page_tooltip = addPage( d->tooltipPage, i18n("Tool Tip") );
+    d->page_tooltip->setHeader( i18n("Album Items Tool Tip Settings") );
+    d->page_tooltip->setIcon( KIcon("dialog-information") );
 
     d->metadataPage  = new SetupMetadata();
     d->page_metadata = addPage( d->metadataPage, i18n("Metadata") );
     d->page_metadata->setHeader( i18n("Embedded Image Information Management") );
     d->page_metadata->setIcon( KIcon("exifinfo") );
 
-    d->tooltipPage  = new SetupToolTip();
-    d->page_tooltip = addPage( d->tooltipPage, i18n("Tool Tip") );
-    d->page_tooltip->setHeader( i18n("Album Items Tool Tip Settings") );
-    d->page_tooltip->setIcon( KIcon("dialog-information") );
+    d->identityPage  = new SetupIdentity();
+    d->page_identity = addPage( d->identityPage, i18n("Identity") );
+    d->page_identity->setHeader( i18n("Default identity information") );
+    d->page_identity->setIcon( KIcon("user-identity") );
+
+    d->albumTypePage  = new SetupAlbumType();
+    d->page_albumType = addPage( d->albumTypePage, i18n("Album Type") );
+    d->page_albumType->setHeader( i18n("Album Type Settings") );
+    d->page_albumType->setIcon( KIcon("view-calendar-list") );
 
     d->mimePage  = new SetupMime();
     d->page_mime = addPage( d->mimePage, i18n("Mime Types") );

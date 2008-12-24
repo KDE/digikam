@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-07-09
- * Description : icon-view item tool tip configuration setup tab
+ * Description : item tool tip configuration setup tab
  *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -109,18 +109,12 @@ SetupToolTip::SetupToolTip(QWidget* parent)
             : QWidget(parent), d(new SetupToolTipPriv)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
-    KHBox *hbox         = new KHBox(this);
-    d->showToolTipsBox  = new QCheckBox(i18n("Show icon-view/thumbbar items toolti&ps"), hbox);
+    d->showToolTipsBox  = new QCheckBox(i18n("Show icon-view/thumbbar items toolti&ps"), this);
     d->showToolTipsBox->setWhatsThis(i18n("Set this option to display image information when "
                                           "the mouse hovers over an icon-view or thumbbar item."));
 
-    QWidget *space      = new QWidget(hbox);
-    d->fontSelect       = new DFontSelect(QString(), hbox);
+    d->fontSelect       = new DFontSelect(i18n("Font:"), this);
     d->fontSelect->setToolTip(i18n("Select here the font used to display text in tooltips."));
-
-    hbox->setMargin(KDialog::spacingHint());
-    hbox->setSpacing(0);
-    hbox->setStretchFactor(space, 10);
 
     // --------------------------------------------------------
 
@@ -218,13 +212,14 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     // --------------------------------------------------------
 
-    layout->setMargin(0);
-    layout->setSpacing(KDialog::spacingHint());
-    layout->addWidget(hbox);
+    layout->addWidget(d->showToolTipsBox);
+    layout->addWidget(d->fontSelect);
     layout->addWidget(d->fileSettingBox);
     layout->addWidget(d->photoSettingBox);
     layout->addWidget(d->digikamSettingBox);
     layout->addStretch();
+    layout->setMargin(0);
+    layout->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
 
