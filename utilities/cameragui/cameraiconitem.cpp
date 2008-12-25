@@ -55,20 +55,20 @@ public:
         itemInfo = 0;
     }
 
-    QString            downloadName;
+    QString     downloadName;
 
-    QPixmap            thumbnail;             // Full image size pixmap
-    QPixmap            pixmap;                // Image pixmap adjusted to zoom level.
+    QPixmap     thumbnail;             // Full image size pixmap
+    QPixmap     pixmap;                // Image pixmap adjusted to zoom level.
 
-    QRect              pixRect;
-    QRect              textRect;
-    QRect              extraRect;
+    QRect       pixRect;
+    QRect       textRect;
+    QRect       extraRect;
 
-    GPItemInfo        *itemInfo;
+    GPItemInfo *itemInfo;
 };
 
 CameraIconItem::CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo,
-                                       const QImage& thumbnail, const QString& downloadName)
+                               const QImage& thumbnail, const QString& downloadName)
                   : IconItem(parent), d(new CameraIconItemPriv)
 {
     d->itemInfo     = new GPItemInfo(itemInfo);
@@ -244,7 +244,7 @@ void CameraIconItem::paintItem(QPainter *p)
     if (this == iconView()->currentItem())
     {
         p->setPen(QPen(isSelected() ? Qt::white : Qt::black, 1, Qt::DotLine));
-        p->drawRect(0, 0, r.width(), r.height());
+        p->drawRect(1, 1, r.width()-3, r.height()-3);
     }
 
     // Draw download status icon.
