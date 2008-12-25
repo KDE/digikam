@@ -37,6 +37,8 @@ class KUrlLabel;
 namespace Digikam 
 {
 
+class DLogoActionPriv;
+
 class DIGIKAM_EXPORT DLogoAction : public KAction
 {
   Q_OBJECT
@@ -44,18 +46,22 @@ class DIGIKAM_EXPORT DLogoAction : public KAction
 public:
 
     DLogoAction(QObject* parent, bool alignOnright=true);
+    ~DLogoAction();
+
+    void start();
+    void stop();
+    bool running() const;
 
     virtual QWidget* createWidget(QWidget* parent);
 
 private Q_SLOTS:
 
+    void slotTimeout();
     void slotProcessUrl(const QString&);
 
 private:
 
-    bool       m_alignOnright;
-
-    KUrlLabel *m_pixmapLogo;
+    DLogoActionPriv* const d;
 };
 
 } // namespace Digikam

@@ -26,8 +26,11 @@
 
 // Qt includes.
 
+#include <QPalette>
 #include <QPixmap>
 #include <QBoxLayout>
+#include <QTimer>
+#include <QPainter>
 
 // KDE includes.
 
@@ -46,15 +49,99 @@
 namespace Digikam
 {
 
-DLogoAction::DLogoAction(QObject* parent, bool alignOnright)
-           : KAction(parent)
+class DLogoActionPriv
 {
-    m_alignOnright = alignOnright;
+public:
+
+    DLogoActionPriv()
+    {
+        alignOnright = true;
+        timer        = 0;
+        urlLabel     = 0;
+        pos          = 0;
+    }
+
+    bool       alignOnright;
+
+    int        pos;
+    int        size;
+
+    QTimer    *timer;
+
+    QPixmap    logoPix;
+    QPixmap    animPix;
+
+    KUrlLabel *urlLabel;
+};
+
+DLogoAction::DLogoAction(QObject* parent, bool alignOnright)
+           : KAction(parent), d(new DLogoActionPriv)
+{
     setText("digikam.org");
     setIcon(KIcon("digikam"));
+
+    d->logoPix      = QPixmap(KStandardDirs::locate("data", "digikam/data/banner-digikam.png"));
+    d->alignOnright = alignOnright;
+    d->size         = d->logoPix.height()-6;
+    d->timer        = new QTimer();
+
+    connect(d->timer, SIGNAL(timeout()),
+            this, SLOT(slotTimeout()));
 }
 
-QWidget* DLogoAction::createWidget( QWidget * parent )
+DLogoAction::~DLogoAction()
+{
+    delete d;
+}
+
+void DLogoAction::start()
+{
+    d->pos = 0;
+    d->timer->start(100);
+}
+
+void DLogoAction::stop()
+{
+    d->pos = 0;
+    d->timer->stop();
+    d->urlLabel->setPixmap(d->logoPix);
+}
+
+bool DLogoAction::running() const
+{
+    return d->timer->isActive();
+}
+
+void DLogoAction::slotTimeout()
+{
+    d->pos     = (d->pos + 10) % 360;
+    d->animPix = d->logoPix;
+    QPainter p(&d->animPix);
+
+    p.translate(d->logoPix.width()-(d->size/2)-4, 2 + d->size/2);
+
+    if (d->timer->isActive())
+    {
+        p.setPen(QPen(parentWidget()->palette().color(QPalette::Text)));
+        p.rotate( d->pos );
+    }
+    else
+    {
+        p.setPen(QPen(parentWidget()->palette().color(QPalette::Dark)));
+    }
+
+    for ( int i=0 ; i<12 ; i++ )
+    {
+        p.drawLine(d->size/2-4, 0, d->size/2-1, 0);
+        p.rotate(30);
+    }
+
+    p.end();
+
+    d->urlLabel->setPixmap(d->animPix);
+}
+
+QWidget* DLogoAction::createWidget(QWidget * parent)
 {
     QToolBar *bar = qobject_cast<QToolBar*>(parent);
 
@@ -63,23 +150,23 @@ QWidget* DLogoAction::createWidget( QWidget * parent )
 
     QWidget* container  = new QWidget(parent);
     QHBoxLayout* layout = new QHBoxLayout(container);
-    m_pixmapLogo        = new KUrlLabel(webProjectUrl().url(), QString(), bar);
-    m_pixmapLogo->setMargin(0);
-    m_pixmapLogo->setScaledContents(false);
-    m_pixmapLogo->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-    m_pixmapLogo->setToolTip(i18n("Visit digiKam project website"));
-    m_pixmapLogo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/banner-digikam.png")));
-    m_pixmapLogo->setFocusPolicy(Qt::NoFocus);
+    d->urlLabel         = new KUrlLabel(webProjectUrl().url(), QString(), bar);
+    d->urlLabel->setMargin(0);
+    d->urlLabel->setScaledContents(false);
+    d->urlLabel->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+    d->urlLabel->setToolTip(i18n("Visit digiKam project website"));
+    d->urlLabel->setPixmap(d->logoPix);
+    d->urlLabel->setFocusPolicy(Qt::NoFocus);
 
     layout->setMargin(0);
     layout->setSpacing(0);
 
-    if (m_alignOnright)
+    if (d->alignOnright)
         layout->addStretch();
 
-    layout->addWidget(m_pixmapLogo);
+    layout->addWidget(d->urlLabel);
 
-    connect(m_pixmapLogo, SIGNAL(leftClickedUrl(const QString&)),
+    connect(d->urlLabel, SIGNAL(leftClickedUrl(const QString&)),
             this, SLOT(slotProcessUrl(const QString&)));
 
     return container;
