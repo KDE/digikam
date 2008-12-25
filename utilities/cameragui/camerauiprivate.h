@@ -197,7 +197,7 @@ public:
 
     RenameCustomizer             *renameCustomizer;
 
-    AnimWidget                   *anim;
+    DLogoAction                  *anim;
 
     ImagePropertiesSideBarCamGui *rightSidebar;
 

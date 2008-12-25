@@ -108,7 +108,6 @@
 #include "album.h"
 #include "albumselectdialog.h"
 #include "renamecustomizer.h"
-#include "animwidget.h"
 #include "freespacewidget.h"
 #include "collectionscanner.h"
 #include "collectionmanager.h"
@@ -473,13 +472,8 @@ void CameraUI::setupActions()
 
     // ---------------------------------------------------------------------------------
 
-    DLogoAction *logoAction = new DLogoAction(this);
-    actionCollection()->addAction("logo_action", logoAction);
-
-    d->anim                   = new AnimWidget(this, 22);
-    QWidgetAction *animAction = new QWidgetAction(this);
-    animAction->setDefaultWidget(d->anim);
-    actionCollection()->addAction("anim_action", animAction);
+    d->anim = new DLogoAction(this);
+    actionCollection()->addAction("logo_action", d->anim);
 
     createGUI("cameraui.rc");
 

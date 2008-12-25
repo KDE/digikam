@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="21" name="cameraui" >
+<gui version="22" name="cameraui" >
 
 <MenuBar>
 
@@ -83,7 +83,6 @@
      <Merge />
      <WeakSeparator/>
      <Action name="logo_action" />
-     <Action name="anim_action" />
 </ToolBar>
 
 <ActionProperties/>
