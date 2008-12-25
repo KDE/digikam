@@ -31,6 +31,7 @@
 #include <QBoxLayout>
 #include <QTimer>
 #include <QPainter>
+#include <QTransform>
 
 // KDE includes.
 
@@ -64,7 +65,6 @@ public:
     bool       alignOnright;
 
     int        pos;
-    int        size;
 
     QTimer    *timer;
 
@@ -82,7 +82,6 @@ DLogoAction::DLogoAction(QObject* parent, bool alignOnright)
 
     d->logoPix      = QPixmap(KStandardDirs::locate("data", "digikam/data/banner-digikam.png"));
     d->alignOnright = alignOnright;
-    d->size         = d->logoPix.height()-6;
     d->timer        = new QTimer();
 
     connect(d->timer, SIGNAL(timeout()),
@@ -114,28 +113,17 @@ bool DLogoAction::running() const
 
 void DLogoAction::slotTimeout()
 {
-    d->pos     = (d->pos + 10) % 360;
-    d->animPix = d->logoPix;
+    QTransform trans;
+    trans.rotate(d->pos);
+    const int size = d->logoPix.height();
+    d->pos         = (d->pos + 10) % 360;
+    d->animPix     = d->logoPix;
+    QPixmap logo   = d->logoPix.copy(d->logoPix.width()-size, 0, size, size);
+    logo           = logo.transformed(trans, Qt::SmoothTransformation);
+    logo           = logo.copy((logo.width()/2) - (size/2), (logo.height()/2) - (size/2), size, size);
+
     QPainter p(&d->animPix);
-
-    p.translate(d->logoPix.width()-(d->size/2)-4, 2 + d->size/2);
-
-    if (d->timer->isActive())
-    {
-        p.setPen(QPen(parentWidget()->palette().color(QPalette::Text)));
-        p.rotate( d->pos );
-    }
-    else
-    {
-        p.setPen(QPen(parentWidget()->palette().color(QPalette::Dark)));
-    }
-
-    for ( int i=0 ; i<12 ; i++ )
-    {
-        p.drawLine(d->size/2-4, 0, d->size/2-1, 0);
-        p.rotate(30);
-    }
-
+    p.drawPixmap(d->logoPix.width()-size, 0, logo);
     p.end();
 
     d->urlLabel->setPixmap(d->animPix);
