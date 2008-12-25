@@ -373,12 +373,8 @@ void AlbumIconItem::paintItem(QPainter *p)
     if (this == d->view->currentItem())
     {
         r = d->view->itemRect();
-        p->setPen(QPen(isSelected() ? te->textSelColor() : te->textRegColor(), 0, Qt::DotLine));
-        if (isHighlighted())
-        {
-            p->setPen(QPen(te->textSelColor(), 3, Qt::SolidLine));
-        }
-        p->drawRect(1, 1, r.width()-2, r.height()-2);
+        p->setPen(QPen(isSelected() ? te->textSelColor() : te->textRegColor(), 1, Qt::DotLine));
+        p->drawRect(1, 1, r.width()-3, r.height()-3);
     }
 
     if (isHighlighted())
