@@ -24,6 +24,10 @@
 #include "dlogoaction.h"
 #include "dlogoaction.moc"
 
+// C++ includes.
+
+#include <cmath>
+
 // Qt includes.
 
 #include <QPalette>
@@ -120,7 +124,9 @@ void DLogoAction::slotTimeout()
     d->animPix     = d->logoPix;
     QPixmap logo   = d->logoPix.copy(d->logoPix.width()-size, 0, size, size);
     logo           = logo.transformed(trans, Qt::SmoothTransformation);
-    logo           = logo.copy((logo.width()/2) - (size/2), (logo.height()/2) - (size/2), size, size);
+    logo           = logo.copy(lround((logo.width()/2.0)  - (size/2.0)),
+                               lround((logo.height()/2.0) - (size/2.0)),
+                               size, size);
 
     QPainter p(&d->animPix);
     p.drawPixmap(d->logoPix.width()-size, 0, logo);
