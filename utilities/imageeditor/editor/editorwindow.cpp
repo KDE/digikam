@@ -94,6 +94,7 @@
 #include "canvas.h"
 #include "dimginterface.h"
 #include "dpopupmenu.h"
+#include "dlogoaction.h"
 #include "editorstackview.h"
 #include "editortooliface.h"
 #include "editorwindowprivate.h"
@@ -146,6 +147,7 @@ EditorWindow::EditorWindow(const char *name)
     m_splitter               = 0;
     m_vSplitter              = 0;
     m_stackView              = 0;
+    m_animLogo               = 0;
     m_fullScreen             = false;
     m_rotatedOrFlipped       = false;
     m_setExifOrientationTag  = true;
@@ -550,6 +552,9 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addAction("editorwindow_backward_shift_space", altBackwardAction);
     altBackwardAction->setShortcut( KShortcut(Qt::SHIFT+Qt::Key_Space) );
     connect(altBackwardAction, SIGNAL(triggered()), this, SLOT(slotBackward()));
+
+    m_animLogo = new DLogoAction(this);
+    actionCollection()->addAction("logo_action", m_animLogo);
 }
 
 void EditorWindow::setupStatusBar()

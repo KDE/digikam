@@ -52,6 +52,7 @@ namespace Digikam
 
 class Canvas;
 class DPopupMenu;
+class DLogoAction;
 class EditorStackView;
 class EditorWindowPriv;
 class IOFileSettingsContainer;
@@ -113,6 +114,7 @@ protected:
     KToolBarPopupAction     *m_undoAction;
     KToolBarPopupAction     *m_redoAction;
 
+    DLogoAction             *m_animLogo;
     DPopupMenu              *m_contextMenu;
     EditorStackView         *m_stackView;
     Canvas                  *m_canvas;

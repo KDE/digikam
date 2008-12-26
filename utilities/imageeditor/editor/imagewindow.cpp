@@ -90,7 +90,6 @@
 #include "dimg.h"
 #include "dimginterface.h"
 #include "dio.h"
-#include "dlogoaction.h"
 #include "dmetadata.h"
 #include "dpopupmenu.h"
 #include "iccsettingscontainer.h"
@@ -433,8 +432,6 @@ void ImageWindow::setupActions()
     actionCollection()->addAction("image_trash_directly", d->fileTrashDirectlyAction);
 
     // ---------------------------------------------------------------------------------
-
-    actionCollection()->addAction("logo_action", new DLogoAction(this));
 
     createGUI("digikamimagewindowui.rc");
 }
