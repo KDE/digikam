@@ -492,6 +492,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
        QPixmap anim(asize, asize);
        QPainter p0;
        p0.begin(&anim);
+       p0.setRenderHint(QPainter::Antialiasing);
        p0.fillRect(0, 0, asize, asize, palette().color(QPalette::Active, QPalette::Background));
        p0.translate(asize/2, asize/2);
 
@@ -625,11 +626,11 @@ void HistogramWidget::paintEvent(QPaintEvent*)
 
     for (x = 0 ; x < wWidth ; x++)
     {
-      double value = 0.0;
+      double value   = 0.0;
       double value_r = 0.0, value_g = 0.0, value_b = 0.0; // For all color channels.
       int    i, j;
 
-      i = (x * histogram->getHistogramSegment()) / wWidth;
+      i = (x       * histogram->getHistogramSegment()) / wWidth;
       j = ((x + 1) * histogram->getHistogramSegment()) / wWidth;
 
       do

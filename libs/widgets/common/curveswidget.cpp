@@ -139,10 +139,10 @@ CurvesWidget::~CurvesWidget()
 
 void CurvesWidget::setup(int w, int h, bool readOnly)
 {
-    d->readOnlyMode = readOnly;
-    d->curves       = new ImageCurves(true);
-    m_channelType   = ValueHistogram;
-    m_scaleType     = LogScaleHistogram;
+    d->readOnlyMode  = readOnly;
+    d->curves        = new ImageCurves(true);
+    m_channelType    = ValueHistogram;
+    m_scaleType      = LogScaleHistogram;
     m_imageHistogram = 0;
 
     setMouseTracking(true);
@@ -236,10 +236,8 @@ void CurvesWidget::curveTypeChanged()
                 int index = CLAMP(i * m_imageHistogram->getHistogramSegment()/8,
                                   0, m_imageHistogram->getHistogramSegment()-1);
 
-                d->curves->setCurvePoint( m_channelType,
-                                        i * 2, QPoint(index,
-                                               d->curves->getCurveValue(m_channelType,
-                                               index)) );
+                d->curves->setCurvePoint(m_channelType, i * 2, 
+                                         QPoint(index, d->curves->getCurveValue(m_channelType, index)));
             }
 
             d->curves->curvesCalculateCurve(m_channelType);
@@ -307,6 +305,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
         QPixmap anim(asize, asize);
         QPainter p2;
         p2.begin(&anim);
+        p2.setRenderHint(QPainter::Antialiasing);
         p2.fillRect(0, 0, asize, asize, palette().color(QPalette::Active, QPalette::Background));
         p2.translate(asize/2, asize/2);
 
@@ -429,7 +428,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
         int    i, j;
         int    curveVal;
 
-        i = (x * histogram->getHistogramSegment()) / wWidth;
+        i = (x       * histogram->getHistogramSegment()) / wWidth;
         j = ((x + 1) * histogram->getHistogramSegment()) / wWidth;
 
         curveVal = d->curves->getCurveValue(m_channelType, i);
