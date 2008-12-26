@@ -124,9 +124,9 @@ void DLogoAction::slotTimeout()
     QPainter p(&d->animPix);
     p.setRenderHint(QPainter::SmoothPixmapTransform);
     p.setClipRect(d->bannerPix.width()-33, 0, 33, 33);
-    p.translate(d->bannerPix.width()-17, 17);
+    p.translate(d->bannerPix.width()-16, 16);
     p.rotate(d->angle);
-    p.drawPixmap(-17, -17, d->logoPix);
+    p.drawPixmap(-16, -16, d->logoPix);
     p.end();
 
     d->urlLabel->setPixmap(d->animPix);
