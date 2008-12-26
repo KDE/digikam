@@ -45,7 +45,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 178613 : Wording in mime-setup page.
 030 ==> 156836 : Preview zoom to 100 percent is not 100 percent viewing Canon RAW/CR2.
 031 ==> 178346 : Contextual menu is empty.
-032 ==> 
+032 ==> 175844 : digiKam crashes at startup loading plugins.
+033 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta7 - Release date: 2008-12-18
