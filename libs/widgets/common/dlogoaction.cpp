@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-27-08
- * Description : an tool bar action object to display logo
+ * Description : a tool bar action object to display animated logo
  *
  * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -71,6 +71,7 @@ public:
 
     QTimer    *timer;
 
+    QPixmap    bannerPix;
     QPixmap    logoPix;
     QPixmap    animPix;
 
@@ -83,7 +84,8 @@ DLogoAction::DLogoAction(QObject* parent, bool alignOnright)
     setText("digikam.org");
     setIcon(KIcon("digikam"));
 
-    d->logoPix      = QPixmap(KStandardDirs::locate("data", "digikam/data/banner-digikam.png"));
+    d->bannerPix    = QPixmap(KStandardDirs::locate("data", "digikam/data/banner-digikam.png"));
+    d->logoPix      = d->bannerPix.copy(d->bannerPix.width()-33, 0, 33, 33);
     d->alignOnright = alignOnright;
     d->timer        = new QTimer();
 
@@ -106,7 +108,7 @@ void DLogoAction::stop()
 {
     d->angle = 0;
     d->timer->stop();
-    d->urlLabel->setPixmap(d->logoPix);
+    d->urlLabel->setPixmap(d->bannerPix);
 }
 
 bool DLogoAction::running() const
@@ -116,16 +118,15 @@ bool DLogoAction::running() const
 
 void DLogoAction::slotTimeout()
 {
-    d->angle     = (d->angle + 10) % 360;
-    d->animPix   = d->logoPix;
-    QPixmap logo = d->logoPix.copy(d->logoPix.width()-33, 0, 33, 33);
+    d->angle   = (d->angle + 10) % 360;
+    d->animPix = d->bannerPix;
 
     QPainter p(&d->animPix);
     p.setRenderHint(QPainter::SmoothPixmapTransform);
-    p.setClipRect(d->logoPix.width()-33, 0, 33, 33);
-    p.translate(d->logoPix.width()-17, 17);
+    p.setClipRect(d->bannerPix.width()-33, 0, 33, 33);
+    p.translate(d->bannerPix.width()-17, 17);
     p.rotate(d->angle);
-    p.drawPixmap(-17, -17, logo);
+    p.drawPixmap(-17, -17, d->logoPix);
     p.end();
 
     d->urlLabel->setPixmap(d->animPix);
@@ -145,7 +146,7 @@ QWidget* DLogoAction::createWidget(QWidget * parent)
     d->urlLabel->setScaledContents(false);
     d->urlLabel->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
     d->urlLabel->setToolTip(i18n("Visit digiKam project website"));
-    d->urlLabel->setPixmap(d->logoPix);
+    d->urlLabel->setPixmap(d->bannerPix);
     d->urlLabel->setFocusPolicy(Qt::NoFocus);
 
     layout->setMargin(0);

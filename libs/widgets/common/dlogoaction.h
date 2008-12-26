@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-27-08
- * Description : an tool bar action object to display logo
+ * Description : a tool bar action object to display animated logo
  *
  * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
