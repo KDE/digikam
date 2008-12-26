@@ -35,7 +35,6 @@
 #include <QBoxLayout>
 #include <QTimer>
 #include <QPainter>
-#include <QTransform>
 
 // KDE includes.
 
@@ -63,12 +62,12 @@ public:
         alignOnright = true;
         timer        = 0;
         urlLabel     = 0;
-        pos          = 0;
+        angle        = 0;
     }
 
     bool       alignOnright;
 
-    int        pos;
+    int        angle;
 
     QTimer    *timer;
 
@@ -99,13 +98,13 @@ DLogoAction::~DLogoAction()
 
 void DLogoAction::start()
 {
-    d->pos = 0;
+    d->angle = 0;
     d->timer->start(100);
 }
 
 void DLogoAction::stop()
 {
-    d->pos = 0;
+    d->angle = 0;
     d->timer->stop();
     d->urlLabel->setPixmap(d->logoPix);
 }
@@ -117,19 +116,16 @@ bool DLogoAction::running() const
 
 void DLogoAction::slotTimeout()
 {
-    QTransform trans;
-    trans.rotate(d->pos);
-    const int size = d->logoPix.height();
-    d->pos         = (d->pos + 10) % 360;
-    d->animPix     = d->logoPix;
-    QPixmap logo   = d->logoPix.copy(d->logoPix.width()-size, 0, size, size);
-    logo           = logo.transformed(trans, Qt::SmoothTransformation);
-    logo           = logo.copy(lround((logo.width()/2.0)  - (size/2.0)),
-                               lround((logo.height()/2.0) - (size/2.0)),
-                               size, size);
+    d->angle     = (d->angle + 10) % 360;
+    d->animPix   = d->logoPix;
+    QPixmap logo = d->logoPix.copy(d->logoPix.width()-33, 0, 33, 33);
 
     QPainter p(&d->animPix);
-    p.drawPixmap(d->logoPix.width()-size, 0, logo);
+    p.setRenderHint(QPainter::SmoothPixmapTransform);
+    p.setClipRect(d->logoPix.width()-33, 0, 33, 33);
+    p.translate(d->logoPix.width()-17, 17);
+    p.rotate(d->angle);
+    p.drawPixmap(-17, -17, logo);
     p.end();
 
     d->urlLabel->setPixmap(d->animPix);
