@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="33" name="showfoto" >
+<gui version="34" name="showfoto" >
 
 <MenuBar>
 
@@ -125,6 +125,8 @@
     <Action name="editorwindow_fullscreen" /> 
     <Action name="editorwindow_slideshow" /> 
     <Merge />
+    <WeakSeparator/>
+    <Action name="logo_action" />
 </ToolBar>
 
 <ActionProperties/>
