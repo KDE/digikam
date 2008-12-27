@@ -1256,7 +1256,8 @@ void EditorWindow::slotPrepareToLoad()
 
 void EditorWindow::slotLoadingStarted(const QString& /*filename*/)
 {
-    setCursor( Qt::WaitCursor );
+    setCursor(Qt::WaitCursor);
+    m_animLogo->start();
     m_nameLabel->progressBarMode(StatusProgressBar::ProgressBarMode, i18n("Loading: "));
 }
 
@@ -1270,6 +1271,7 @@ void EditorWindow::slotLoadingFinished(const QString& filename, bool success)
     // automatically by a signal from canvas
     toggleActions(success);
     unsetCursor();
+    m_animLogo->stop();
 
     // Note: in showFoto, we using a null filename to clear canvas.
     if (!success && filename != QString())
@@ -1304,7 +1306,8 @@ void EditorWindow::slotSave()
 
 void EditorWindow::slotSavingStarted(const QString& /*filename*/)
 {
-    setCursor( Qt::WaitCursor );
+    setCursor(Qt::WaitCursor);
+    m_animLogo->start();
 
     // Disable actions as appropriate during saving
     emit signalNoCurrentItem();
@@ -1413,6 +1416,7 @@ void EditorWindow::finishSaving(bool success)
     // Enable actions as appropriate after saving
     toggleActions(true);
     unsetCursor();
+    m_animLogo->stop();
 
     m_nameLabel->progressBarMode(StatusProgressBar::TextMode);
 
