@@ -153,6 +153,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     QGridLayout *settingsLayout = new QGridLayout(settingsArea);
     setWidget(settingsArea);
 
+    viewport()->setAutoFillBackground(false);
+    settingsArea->setAutoFillBackground(false);
+
     // Captions/Date/Rating view -----------------------------------
 
     KVBox *commentsBox = new KVBox(settingsArea);

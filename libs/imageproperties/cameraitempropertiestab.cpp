@@ -162,6 +162,9 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent)
     QGridLayout *settingsLayout = new QGridLayout(settingsArea);
     setWidget(settingsArea);
 
+    viewport()->setAutoFillBackground(false);
+    settingsArea->setAutoFillBackground(false);
+
     // --------------------------------------------------
 
     d->title                  = new QLabel(i18n("<big><b>Camera File Properties</b></big>"), settingsArea);
