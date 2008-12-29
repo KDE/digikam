@@ -61,6 +61,7 @@ public:
         active           = false;
         dragItem         = 0;
         oldHighlightItem = 0;
+        doNotCollapse    = false;
     }
 
     bool            active;
@@ -74,6 +75,8 @@ public:
 
     Q3ListViewItem *dragItem;
     Q3ListViewItem *oldHighlightItem;
+
+    bool            doNotCollapse;
 };
 
 //-----------------------------------------------------------------------------
@@ -217,6 +220,15 @@ void FolderView::contentsMousePressEvent(QMouseEvent *e)
         return;
     }
 
+    d->doNotCollapse = false;
+    if (!citem)
+    {
+        // See below, collapse/expand treeview using left mouse button single click.
+        // Exception: If the new selected item is already expanded, do not collapse on selection.
+        if (item != selectedItem() && item->isOpen())
+            d->doNotCollapse = true;
+    }
+
     Q3ListView::contentsMousePressEvent(e);
 
     if(item && e->button() == Qt::LeftButton)
@@ -238,7 +250,8 @@ void FolderView::contentsMouseReleaseEvent(QMouseEvent *e)
     if (item && e->button() == Qt::LeftButton)
     {
         // See B.K.O #126871: collapse/expand treeview using left mouse button single click.
-        if (mouseInItemRect(item, e->pos().x()))
+        // Exceptions see above
+        if (mouseInItemRect(item, e->pos().x()) && !d->doNotCollapse)
             item->setOpen(!item->isOpen());
     }
 
