@@ -86,6 +86,7 @@ class GPSSearchWidget : public QLabel
 public:
 
     GPSSearchWidget(QWidget *parent=0)
+        : QLabel(parent)
     {
         setText(i18n("Geolocation using Marble not available"));
         setWordWrap(true);
