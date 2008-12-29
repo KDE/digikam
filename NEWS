@@ -47,7 +47,12 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 031 ==> 178346 : Contextual menu is empty.
 032 ==> 175844 : digiKam crashes at startup loading plugins.
 033 ==> 178881 : Identifying already copied pictures right from the transfert window
-034 ==> 
+034 ==> 175630 : Setting panels of imageeditor effects should be fully visible.
+035 ==> 178583 : Digikam displays no images in album view.
+036 ==> 178190 : Sidepane's width not remembered.
+037 ==> 178800 : Possibility to move photo's via the thumbnail
+038 ==> 178677 : Batch plugins missing from menu.
+039 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta7 - Release date: 2008-12-18
