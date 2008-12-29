@@ -67,6 +67,7 @@ public:
 protected:
 
     QPixmap ratingPixmap() const;
+    void startDrag();
 
     virtual void viewportPaintEvent(QPaintEvent*);
 

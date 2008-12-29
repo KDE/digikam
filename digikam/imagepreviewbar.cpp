@@ -244,6 +244,48 @@ void ImagePreviewBar::readToolTipSettings()
     setToolTipSettings(settings);
 }
 
+void ImagePreviewBar::startDrag()
+{
+    if (!currentItem()) return;
+
+    KUrl::List urls;
+    KUrl::List kioURLs;
+    QList<int> albumIDs;
+    QList<int> imageIDs;
+
+    ImagePreviewBarItem *item = dynamic_cast<ImagePreviewBarItem*>(currentItem());
+
+    urls.append(item->info().fileUrl());
+    kioURLs.append(item->info().databaseUrl());
+    imageIDs.append(item->info().id());
+    albumIDs.append(item->info().albumId());
+
+    QPixmap icon;
+    if (pixmapForItem(item, icon))
+    {
+        icon = icon.scaled(48, 48, Qt::KeepAspectRatio);
+    }
+    else
+    {
+        icon = DesktopIcon("image-jp2", 48);
+    }
+    int w = icon.width();
+    int h = icon.height();
+
+    QPixmap pix(w+4,h+4);
+    QPainter p(&pix);
+    p.fillRect(0, 0, w+4, h+4, QColor(Qt::white));
+    p.setPen(QPen(Qt::black, 1));
+    p.drawRect(0, 0, w+4, h+4);
+    p.drawPixmap(2, 2, icon);
+    p.end();
+
+    QDrag *drag = new QDrag(this);
+    drag->setMimeData(new DItemDrag(urls, kioURLs, albumIDs, imageIDs));
+    drag->setPixmap(pix);
+    drag->exec();
+}
+
 void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
 {
     ThemeEngine* te = ThemeEngine::instance();
