@@ -317,18 +317,24 @@ void AlbumFolderView::slotTextFolderFilterChanged(const SearchTextSettings& sett
     for (AlbumList::iterator it = pList.begin(); it != pList.end(); ++it)
     {
         PAlbum* palbum  = (PAlbum*)(*it);
+        AlbumFolderViewItem* viewItem = (AlbumFolderViewItem*) palbum->extraData(this);
 
         // don't touch the root Album
-        if (palbum->isRoot())
+        if (palbum->isRoot() || palbum->isAlbumRoot())
+        {
+            viewItem->setOpen(true);
             continue;
+        }
 
-        bool match      = palbum->title().contains(search, settings.caseSensitive);
         bool doesExpand = false;
+        bool match      = palbum->title().contains(search, settings.caseSensitive);
+
         if (!match)
         {
             // check if any of the parents match the search
-            Album* parent = palbum->parent();
-            while (parent && !parent->isRoot())
+            PAlbum* parent = dynamic_cast<PAlbum*>(palbum->parent());
+
+            while (parent && !(parent->isRoot() || parent->isAlbumRoot()) )
             {
                 if (parent->title().contains(search, settings.caseSensitive))
                 {
@@ -336,7 +342,7 @@ void AlbumFolderView::slotTextFolderFilterChanged(const SearchTextSettings& sett
                     break;
                 }
 
-                parent = parent->parent();
+                parent = dynamic_cast<PAlbum*>(parent->parent());
             }
         }
 
@@ -355,8 +361,6 @@ void AlbumFolderView::slotTextFolderFilterChanged(const SearchTextSettings& sett
                 ++it;
             }
         }
-
-        AlbumFolderViewItem* viewItem = (AlbumFolderViewItem*) palbum->extraData(this);
 
         if (match)
         {
