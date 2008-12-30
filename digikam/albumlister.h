@@ -50,6 +50,8 @@ class KJob;
 namespace Digikam
 {
 
+class ImageChangeset;
+class ImageTagChangeset;
 class CollectionImageChangeset;
 class SearchChangeset;
 class Album;
@@ -128,6 +130,7 @@ public:
     void invalidateItem(const ImageInfo &item);
 
     bool tagFiltersIsActive();
+    bool filterIsActive();
 
 signals:
 
@@ -148,6 +151,8 @@ private slots:
     void slotData(KIO::Job* job, const QByteArray& data);
 
     void slotNextRefresh();
+    void slotImageChange(const ImageChangeset &changeset);
+    void slotImageTagChange(const ImageTagChangeset &changeset);
     void slotCollectionImageChange(const CollectionImageChangeset &changeset);
     void slotSearchChange(const SearchChangeset &changeset);
 

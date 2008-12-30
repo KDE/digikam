@@ -152,6 +152,12 @@ AlbumLister::AlbumLister()
     connect(d->refreshTimer, SIGNAL(timeout()),
             this, SLOT(slotNextRefresh()));
 
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset &)),
+            this, SLOT(slotImageChange(const ImageChangeset &)));
+
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(const ImageTagChangeset &)),
+            this, SLOT(slotImageTagChange(const ImageTagChangeset &)));
+
     connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
             this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)));
 
@@ -262,6 +268,12 @@ bool AlbumLister::tagFiltersIsActive()
     return false;
 }
 
+bool AlbumLister::filterIsActive()
+{
+    return !d->dayFilter.isEmpty() || !d->tagFilter.isEmpty() || !d->textFilterSettings.text.isEmpty()
+            || d->untaggedFilter || d->ratingFilter!=-1;
+}
+
 void AlbumLister::setTagFilter(const QList<int>& tags, const MatchingCondition& matchingCond,
                                bool showUnTagged)
 {
@@ -296,8 +308,7 @@ void AlbumLister::setTextFilter(const SearchTextSettings& settings)
 
 bool AlbumLister::matchesFilter(const ImageInfo &info, bool &foundText)
 {
-    if (d->dayFilter.isEmpty() && d->tagFilter.isEmpty() && d->textFilterSettings.text.isEmpty() &&
-        !d->untaggedFilter && d->ratingFilter==-1)
+    if (!filterIsActive())
         return true;
 
     bool match = false;
@@ -644,6 +655,63 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
         emit signalNewItems(newItemsList);
 
     slotFilterItems();
+}
+
+void AlbumLister::slotImageChange(const ImageChangeset &changeset)
+{
+    if (!d->currAlbum)
+        return;
+
+    // already scheduled to re-filter?
+    if (d->filterTimer->isActive())
+        return;
+
+    // do we filter at all?
+    if (!filterIsActive())
+        return;
+
+    // is one of the values affected that we filter by?
+    DatabaseFields::Set set = changeset.changes();
+    if (!(set & DatabaseFields::CreationDate) && !(set & DatabaseFields::Rating)
+        && !(set & DatabaseFields::Category) && !(set & DatabaseFields::Format)
+        && !(set & DatabaseFields::Name) && !(set & DatabaseFields::Comment))
+        return;
+
+    // is one of our images affected?
+    foreach(qlonglong id, changeset.ids())
+    {
+        // if one matching image id is found, trigger a refresh
+        if (d->itemListSet.contains(id))
+        {
+            d->filterTimer->start();
+            return;
+        }
+    }
+}
+
+void AlbumLister::slotImageTagChange(const ImageTagChangeset &changeset)
+{
+    if (!d->currAlbum)
+        return;
+
+    // already scheduled to re-filter?
+    if (d->filterTimer->isActive())
+        return;
+
+    // do we filter at all?
+    if (!tagFiltersIsActive())
+        return;
+
+    // is one of our images affected?
+    foreach(qlonglong id, changeset.ids())
+    {
+        // if one matching image id is found, trigger a refresh
+        if (d->itemListSet.contains(id))
+        {
+            d->filterTimer->start();
+            return;
+        }
+    }
 }
 
 void AlbumLister::slotCollectionImageChange(const CollectionImageChangeset &changeset)
