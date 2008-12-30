@@ -3,32 +3,39 @@
 action="$1"; shift;
 
 case "$action" in
-detect)
+downloadFrom)
+    cmdoption=--download-from
+    dcopcall=org.kde.digikam.downloadFrom
+    args="$@"
+    ;;
+downloadFromUdi)
+    cmdoption=--download-from-udi
+    dcopcall=org.kde.digikam.downloadFromUdi
+    args="$@"
+    ;;
+detectCamera)
 	cmdoption=--detect-camera
 	dcopcall=detectCamera
 	;;
-storage)
-	cmdoption=--download-from
-	dcopcall=downloadFrom
-    args="$@"
-	;;
 *)
 	echo "${0##*/}: wrong action.  Usage"
+    echo "  ${0##*/}  downloadFrom <path> # for directories with images"
+    echo "  ${0##*/}  downloadFromUdi <udi> # for devices with images"
 	echo "	${0##*/}  detect 	# for gphoto2 supported cameras"
-	echo "	${0##*/}  storage <url>	# for usbdisk or directries with images"
 	exit 1
 	;;
 esac
 
-for app in `dcop`; do
+for app in `qdbus`; do
 	case "$app" in
-	    digikam-*)
+	    org.kde.digikam-*)
 		echo "recycling running $app: $dcopcall $@"
         if test -z "$args"; then
-		    exec dcop "$app" camera  "$dcopcall"
+		    exec qdbus "$app" "/Digikam" "$dcopcall"
         else
-            exec dcop "$app" camera  "$dcopcall" "$args"
+            exec qdbus "$app" "/Digikam" "$dcopcall" "$args"
         fi
+        break
 	    ;;
 	esac
 done;
