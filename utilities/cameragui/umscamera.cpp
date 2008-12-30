@@ -655,9 +655,6 @@ void UMSCamera::getUUIDFromSolid()
 
         Solid::StorageVolume *volume = volumeDevice.as<Solid::StorageVolume>();
 
-        if (volume->isIgnored())
-            continue;
-
         if (m_path.startsWith(access->filePath()))
             m_uuid = volume->uuid();
     }

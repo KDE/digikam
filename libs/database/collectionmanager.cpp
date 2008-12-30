@@ -318,9 +318,6 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
 
         Solid::StorageVolume *volume = volumeDevice.as<Solid::StorageVolume>();
 
-        if (volume->isIgnored())
-            continue;
-
         SolidVolumeInfo info;
         info.path = access->filePath();
         info.isMounted = access->isAccessible();
