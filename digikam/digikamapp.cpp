@@ -1003,26 +1003,23 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    QAction* findAction = actionCollection()->addAction(KStandardAction::Find, "search_quick",
-                                                        d->view, SLOT(slotNewKeywordSearch()));
+    KAction* findAction = KStandardAction::find(d->view, SLOT(slotNewKeywordSearch()), this);
     findAction->setText(i18n("Search..."));
-    findAction->setIcon(BarIcon("system-search"));
-    findAction->setShortcut(Qt::CTRL+Qt::Key_F);
+    actionCollection()->addAction("search_quick", findAction);
 
     // -----------------------------------------------------------
 
-    QAction* advFindAction = actionCollection()->addAction(KStandardAction::Find, "search_advanced",
-                                                           d->view, SLOT(slotNewAdvancedSearch()));
-    advFindAction->setText(i18n("Advanced Search..."));
+    KAction* advFindAction = new KAction(KIcon("system-search"), i18n("Advanced Search..."), this);
     advFindAction->setShortcut(Qt::CTRL+Qt::ALT+Qt::Key_F);
+    connect(advFindAction, SIGNAL(triggered()), d->view, SLOT(slotNewAdvancedSearch()));
+    actionCollection()->addAction("search_advanced", advFindAction);
 
     // -----------------------------------------------------------
 
-    QAction* duplicatesAction = actionCollection()->addAction(KStandardAction::Find, "find_duplicates",
-                                                              d->view, SLOT(slotNewDuplicatesSearch()));
-    duplicatesAction->setText(i18n("Find Duplicates..."));
-    duplicatesAction->setIcon(BarIcon("tools-wizard"));
+    KAction* duplicatesAction = new KAction(KIcon("tools-wizard"), i18n("Find Duplicates..."), this);
     duplicatesAction->setShortcut(Qt::CTRL+Qt::Key_D);
+    connect(duplicatesAction, SIGNAL(triggered()), d->view, SLOT(slotNewDuplicatesSearch()));
+    actionCollection()->addAction("find_duplicates", duplicatesAction);
 
     // -----------------------------------------------------------
 
@@ -1504,7 +1501,7 @@ void DigikamApp::slotOpenSolidCamera(QAction *action)
         QString model, port;
         if (CameraList::findConnectedCamera(vendorId, productId, model, port))
         {
-            kDebug(50003) << "Found camera from ids " << vendorId << " " << productId 
+            kDebug(50003) << "Found camera from ids " << vendorId << " " << productId
                           << " camera is: " << model << " at " << port << endl;
             // the CameraUI will delete itself when it has finished
             CameraUI* cgui = new CameraUI(this, action->text(), model, port, "/", QDateTime());
