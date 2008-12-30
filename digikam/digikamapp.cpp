@@ -869,13 +869,13 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->zoomPlusAction = actionCollection()->addAction(KStandardAction::ZoomIn, "album_zoomin",
-                                                      d->view, SLOT(slotZoomIn()));
+    d->zoomPlusAction = KStandardAction::zoomIn(d->view, SLOT(slotZoomIn()), this);
+    actionCollection()->addAction("album_zoomin", d->zoomPlusAction);
 
     // -----------------------------------------------------------
 
-    d->zoomMinusAction = actionCollection()->addAction(KStandardAction::ZoomOut, "album_zoomout",
-                                                       d->view, SLOT(slotZoomOut()));
+    d->zoomMinusAction = KStandardAction::zoomOut(d->view, SLOT(slotZoomOut()), this);
+    actionCollection()->addAction("album_zoomout", d->zoomMinusAction);
 
     // -----------------------------------------------------------
 
@@ -929,8 +929,8 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->quitAction = actionCollection()->addAction(KStandardAction::Quit, "app_exit",
-                                                  this, SLOT(slotExit()));
+    d->quitAction = KStandardAction::quit(this, SLOT(slotExit()), this);
+    actionCollection()->addAction("app_exit", d->quitAction);
 
     // -----------------------------------------------------------
 
