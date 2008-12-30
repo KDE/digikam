@@ -141,7 +141,10 @@ AlbumLister::AlbumLister()
 
     d->filterTimer  = new QTimer(this);
     d->refreshTimer = new QTimer(this);
+
     d->refreshTimer->setSingleShot(true);
+    d->filterTimer->setSingleShot(true);
+    d->filterTimer->setInterval(100);
 
     connect(d->filterTimer, SIGNAL(timeout()),
             this, SLOT(slotFilterItems()));
@@ -247,8 +250,8 @@ void AlbumLister::setDayFilter(const QList<QDateTime>& days)
     for (QList<QDateTime>::const_iterator it = days.constBegin(); it != days.constEnd(); ++it)
         d->dayFilter.insert(*it, true);
 
-    d->filterTimer->setSingleShot(true);
-    d->filterTimer->start(100);
+    if (!d->filterTimer->isActive())
+        d->filterTimer->start();
 }
 
 bool AlbumLister::tagFiltersIsActive()
@@ -265,30 +268,30 @@ void AlbumLister::setTagFilter(const QList<int>& tags, const MatchingCondition& 
     d->tagFilter      = tags;
     d->matchingCond   = matchingCond;
     d->untaggedFilter = showUnTagged;
-    d->filterTimer->setSingleShot(true);
-    d->filterTimer->start(100);
+    if (!d->filterTimer->isActive())
+        d->filterTimer->start();
 }
 
 void AlbumLister::setRatingFilter(int rating, const RatingCondition& ratingCond)
 {
     d->ratingFilter = rating;
     d->ratingCond   = ratingCond;
-    d->filterTimer->setSingleShot(true);
-    d->filterTimer->start(100);
+    if (!d->filterTimer->isActive())
+        d->filterTimer->start();
 }
 
 void AlbumLister::setMimeTypeFilter(int mimeTypeFilter)
 {
     d->mimeTypeFilter = (MimeFilter::TypeMimeFilter)mimeTypeFilter;
-    d->filterTimer->setSingleShot(true);
-    d->filterTimer->start(100);
+    if (!d->filterTimer->isActive())
+        d->filterTimer->start();
 }
 
 void AlbumLister::setTextFilter(const SearchTextSettings& settings)
 {
     d->textFilterSettings = settings;
-    d->filterTimer->setSingleShot(true);
-    d->filterTimer->start(100);
+    if (!d->filterTimer->isActive())
+        d->filterTimer->start();
 }
 
 bool AlbumLister::matchesFilter(const ImageInfo &info, bool &foundText)
@@ -509,8 +512,7 @@ void AlbumLister::slotFilterItems()
 {
     if (d->job)
     {
-        d->filterTimer->setSingleShot(true);
-        d->filterTimer->start(100);
+        d->filterTimer->start();
         return;
     }
 
