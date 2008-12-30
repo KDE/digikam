@@ -406,11 +406,11 @@ DatabaseFields::Set &DatabaseFields::Set::operator<<(const QDBusArgument &argume
              >> customEnumInt;
 
     images = (DatabaseFields::Images)imagesInt;
-    imageInformation = (DatabaseFields::ImageInformation)imagesInt;
-    imageMetadata = (DatabaseFields::ImageMetadata)imagesInt;
-    imageComments = (DatabaseFields::ImageComments)imagesInt;
-    imagePositions = (DatabaseFields::ImagePositions)imagesInt;
-    customEnum = (DatabaseFields::CustomEnum)imagesInt;
+    imageInformation = (DatabaseFields::ImageInformation)imageInformationInt;
+    imageMetadata = (DatabaseFields::ImageMetadata)imageMetadataInt;
+    imageComments = (DatabaseFields::ImageComments)imageCommentsInt;
+    imagePositions = (DatabaseFields::ImagePositions)imagePositionsInt;
+    customEnum = (DatabaseFields::CustomEnum)customEnumInt;
 
     argument.endStructure();
     return *this;
