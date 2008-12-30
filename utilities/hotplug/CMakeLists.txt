@@ -11,6 +11,7 @@ configure_file(digikam-opencamera.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/digi
 #	${CMAKE_CURRENT_BINARY_DIR}/digikam-gphoto2-camera.desktop 
 #	${CMAKE_CURRENT_BINARY_DIR}/digikam-mount-and-download.desktop 
 #	DESTINATION ${SERVICES_INSTALL_DIR}/ServiceMenus )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/digikam-opencamera.desktop DESTINATION ${DATA_INSTALL_DIR}/solid/actions )
 
 if(NOT WIN32)
   install( PROGRAMS digikam-camera DESTINATION ${digikamhelperdir} )
