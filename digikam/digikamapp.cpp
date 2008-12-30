@@ -1784,6 +1784,9 @@ void DigikamApp::fillSolidMenus()
         const Solid::StorageAccess *access = accessDevice.as<Solid::StorageAccess>();
         const Solid::StorageVolume *volume = volumeDevice.as<Solid::StorageVolume>();
 
+        if (volume->isIgnored())
+            continue;
+
         QString label;
 
         if (isCamera)
