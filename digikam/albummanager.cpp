@@ -294,6 +294,21 @@ AlbumManager::AlbumManager()
 
 AlbumManager::~AlbumManager()
 {
+    cleanUp();
+
+    delete d->rootPAlbum;
+    delete d->rootTAlbum;
+    delete d->rootDAlbum;
+    delete d->rootSAlbum;
+
+    internalInstance = 0;
+    delete d;
+}
+
+void AlbumManager::cleanUp()
+{
+    // This is what we prefer to do before KApplication destruction
+
     if (d->dateListJob)
     {
         d->dateListJob->kill();
@@ -312,15 +327,8 @@ AlbumManager::~AlbumManager()
         d->tagListJob = 0;
     }
 
-    delete d->rootPAlbum;
-    delete d->rootTAlbum;
-    delete d->rootDAlbum;
-    delete d->rootSAlbum;
-
     delete d->dirWatch;
-
-    internalInstance = 0;
-    delete d;
+    d->dirWatch = 0;
 }
 
 bool AlbumManager::databaseEqual(const QString &dbPath) const

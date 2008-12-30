@@ -112,6 +112,11 @@ public:
     bool setDatabase(const QString &dbPath, bool priority);
 
     /**
+    * Stop ongoing operations, prepare for application shutdown
+    */
+    void cleanUp();
+
+    /**
     * Checks if the given database path is equal to the current one
     */
     bool databaseEqual(const QString &dbPath) const;
