@@ -164,6 +164,8 @@ DigikamApp::DigikamApp()
 
     new DigikamAdaptor(this);
     QDBusConnection::sessionBus().registerObject("/Digikam", this);
+    QDBusConnection::sessionBus().registerService("org.kde.digikam-"
+                            + QString::number(QCoreApplication::instance()->applicationPid()));
 
     // ensure creation
     AlbumSettings::instance();
