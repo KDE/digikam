@@ -80,9 +80,10 @@ int main(int argc, char *argv[])
     KCmdLineArgs::init( argc, argv, &aboutData );
 
     KCmdLineOptions options;
-    options.add("detect-camera", ki18n("Automatically detect and open camera"));
     options.add("download-from <path>", ki18n("Open camera dialog at <path>"));
-    options.add("album-root <path>", ki18n("Start digikam with the album root <path>"));
+    options.add("download-from-udi <udi>", ki18n("Open camera dialog for the device with Solid UDI <udi>"));
+    options.add("detect-camera", ki18n("Automatically detect and open a connected gphoto2 camera"));
+    options.add("database-directory <dir>", ki18n("Start digikam with the database file found in the directory <dir>"));
     KCmdLineArgs::addCmdLineOptions( options );
 
 #if KEXIV2_VERSION >= 0x000300
@@ -110,11 +111,11 @@ int main(int argc, char *argv[])
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
     // TEMPORARY SOLUTION
-    bool priorityAlbumPath = false;
-    if (args && args->isSet("album-root"))
+    bool priorityDbPath = false;
+    if (args && args->isSet("database-directory"))
     {
-        priorityAlbumPath = true;
-        albumPath = args->getOption("album-root");
+        priorityDbPath = true;
+        dbPath = args->getOption("database-directory");
     }
 
     QFileInfo dirInfo(dbPath);
@@ -154,7 +155,7 @@ int main(int argc, char *argv[])
 
     // initialize database
     Digikam::AlbumManager* man = Digikam::AlbumManager::instance();
-    if (!man->setDatabase(dbPath, priorityAlbumPath))
+    if (!man->setDatabase(dbPath, priorityDbPath))
         return 1;
 
     // ensure we have one album root
@@ -168,10 +169,12 @@ int main(int argc, char *argv[])
     app.setTopWidget(digikam);
     digikam->show();
 
-    if (args && args->isSet("detect-camera"))
-        digikam->autoDetect();
-    else if (args && args->isSet("download-from"))
+    if (args && args->isSet("download-from"))
         digikam->downloadFrom(args->getOption("download-from"));
+    else if (args && args->isSet("download-from-udi"))
+        digikam->downloadFromUdi(args->getOption("download-from-udi"));
+    else if (args && args->isSet("detect-camera"))
+        digikam->autoDetect();
 
     QStringList tipsFiles;
     tipsFiles.append("digikam/tips");
