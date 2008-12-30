@@ -45,6 +45,8 @@
 #include "albumlister.h"
 #include "digikam_export.h"
 
+namespace Solid { class Device; }
+
 namespace Digikam
 {
 
@@ -74,6 +76,7 @@ public:
 
     void autoDetect();
     void downloadFrom(const QString &cameraGuiPath);
+    void downloadFromUdi(const QString &udi);
     void enableZoomPlusAction(bool val);
     void enableZoomMinusAction(bool val);
     void enableAlbumBackwardHistory(bool enable);
@@ -91,6 +94,9 @@ signals:
     void signalCancelButtonPressed();
     void signalResetTagFilters();
 
+    void queuedOpenCameraUiFromPath(const QString &path);
+    void queuedOpenSolidDevice(const QString &udi);
+
 protected:
 
     bool queryClose();
@@ -106,6 +112,10 @@ private:
     void loadCameras();
     void populateThemes();
     void fillSolidMenus();
+    bool checkSolidCamera(const Solid::Device &cameraDevice);
+    QString labelForSolidCamera(const Solid::Device &cameraDevice);
+    void openSolidCamera(const QString &udi, const QString &label = QString());
+    void openSolidUsmDevice(const QString &udi, const QString &label = QString());
     void runFingerPrintsGenerator(bool rebuildAll);
 
 private slots:
@@ -136,7 +146,8 @@ private slots:
     void slotOpenSolidCamera(QAction *);
     void slotOpenManualCamera(QAction *);
     void slotOpenSolidUsmDevice(QAction *);
-    void slotOpenCameraUiFromPath();
+    void slotOpenSolidDevice(const QString &udi);
+    void slotOpenCameraUiFromPath(const QString &path);
     void slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorData, const QString &udi);
     void slotSolidDeviceChanged(const QString &udi);
     void slotCameraAdded(CameraType *ctype);

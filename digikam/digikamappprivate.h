@@ -180,8 +180,6 @@ public:
     QList<QAction*>                     kipiBatchActions;
     QList<QAction*>                     kipiAlbumActions;
 
-    QString                             cameraGuiPath;
-
     KMenu                              *cameraSolidMenu;
     KMenu                              *usbMediaMenu;
     KMenu                              *cardReaderMenu;
