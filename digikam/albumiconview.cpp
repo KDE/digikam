@@ -1908,8 +1908,8 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
     {
         if (failedItems.count() == 1)
         {
-            KMessageBox::error(0, i18n("Failed to revise Exif orientation for file %1.")
-                               .arg(failedItems[0]));
+            KMessageBox::error(0, i18n("Failed to revise Exif orientation for file %1.",
+                                       failedItems[0]));
         }
         else
         {
