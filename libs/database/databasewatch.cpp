@@ -65,12 +65,12 @@ public:
     {
         // connect to slave signals
         QDBusConnection::sessionBus().connect(QString(), "/ChangesetRelay",
-                                              "org.digikam.DatabaseChangesetRelay",
+                                              "org.kde.digikam.DatabaseChangesetRelay",
                                               dbusSignal,
                                               obj, slot);
         // connect to master signals
         QDBusConnection::sessionBus().connect(QString(), "/ChangesetRelayForPeers",
-                                              "org.digikam.DatabaseChangesetRelay",
+                                              "org.kde.digikam.DatabaseChangesetRelay",
                                               dbusSignal,
                                               obj, slot);
     }

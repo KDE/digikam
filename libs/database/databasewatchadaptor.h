@@ -30,12 +30,12 @@
 #include <QDBusVariant>
 #include <QDBusAbstractAdaptor>
 
-// qdbuscpp2xml -S -M databasewatchadaptor.h -o org.digikam.DatabaseChangesetRelay.xml
+// qdbuscpp2xml -S -M databasewatchadaptor.h -o org.kde.digikam.DatabaseChangesetRelay.xml
 
 class Digikam_DatabaseWatchAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.digikam.DatabaseChangesetRelay")
+    Q_CLASSINFO("D-Bus Interface", "org.kde.digikam.DatabaseChangesetRelay")
 
 public:
 
