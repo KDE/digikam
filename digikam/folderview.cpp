@@ -210,6 +210,9 @@ void FolderView::contentsMousePressEvent(QMouseEvent *e)
     QPoint vp            = contentsToViewport(e->pos());
     Q3ListViewItem *item = itemAt(vp);
 
+    if (!item)
+        return;
+
     // With Check Box item, we will toggle on/off item using middle mouse button.
     // See B.K.O #130906
     FolderCheckListItem *citem = dynamic_cast<FolderCheckListItem*>(item);
