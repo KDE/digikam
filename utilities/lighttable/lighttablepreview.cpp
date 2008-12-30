@@ -386,7 +386,7 @@ void LightTablePreview::slotContextMenu()
     //-- Edit actions -----------------------------------------------
 
     popmenu.addSeparator();
-    QAction *slideshowAction = popmenu.addAction(SmallIcon("view-presentation"), i18n("SlideShow"));
+    QAction *slideshowAction = popmenu.addAction(SmallIcon("view-presentation"), i18n("Slideshow"));
     QAction *editAction = popmenu.addAction(SmallIcon("editimage"), i18n("Edit..."));
     popmenu.addMenu(&openWithMenu);
     openWithMenu.menuAction()->setText(i18n("Open With"));

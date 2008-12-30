@@ -371,7 +371,7 @@ void ImagePreviewView::slotContextMenu()
     //-- Edit actions -----------------------------------------------
 
     popmenu.addSeparator();
-    QAction *slideshowAction    = popmenu.addAction(SmallIcon("view-presentation"), i18n("SlideShow"));
+    QAction *slideshowAction    = popmenu.addAction(SmallIcon("view-presentation"), i18n("Slideshow"));
     QAction *editAction         = popmenu.addAction(SmallIcon("editimage"),         i18n("Edit..."));
     QAction *lighttableAction   = popmenu.addAction(SmallIcon("lighttableadd"),     i18n("Add to Light Table"));
     QAction *findSimilarAction  = popmenu.addAction(SmallIcon("tools-wizard"),      i18n("Find Similar"));
