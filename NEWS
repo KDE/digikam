@@ -52,7 +52,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 036 ==> 178190 : Sidepane's width not remembered.
 037 ==> 178800 : Possibility to move photo's via the thumbnail
 038 ==> 178677 : Batch plugins missing from menu.
-039 ==> 
+039 ==> 139017 : OS X 10.4.8 digiKam fails to detect libjpeg6b during compile. 
+040 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta7 - Release date: 2008-12-18
