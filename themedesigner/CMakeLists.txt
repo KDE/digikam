@@ -40,6 +40,11 @@ INCLUDE_DIRECTORIES(
                      ../utilities/slideshow
                      ../utilities/batch
                      ../utilities/lighttable
+                     ../utilities/kipiiface
+                     ../utilities/searchwindow
+                     ../utilities/fuzzysearch
+                     ../utilities/gpssearch
+                     ../utilities/timeline
                      ../digikam
                      ../
 
@@ -50,51 +55,20 @@ INCLUDE_DIRECTORIES(
                      ${LCMS_INCLUDE_DIR}
                    )
 
-SET(libdigikamtheme_SRCS 
-    ../digikam/album.cpp 
-    ../digikam/albumiconview.cpp 
-    ../digikam/albumicongroupitem.cpp 
-    ../digikam/albumiconitem.cpp 
-    ../digikam/albumitemhandler.cpp 
-    ../digikam/albumiconviewtooltip.cpp 
-    ../digikam/albumlister.cpp 
-    ../digikam/albummanager.cpp 
-    ../digikam/albumsettings.cpp 
-    ../digikam/albumselectdialog.cpp 
-    ../digikam/albumthumbnailloader.cpp 
-    ../digikam/cameralist.cpp 
-    ../digikam/cameratype.cpp 
-    ../digikam/dio.cpp 
-    ../digikam/ddragobjects.cpp 
-    ../digikam/folderitem.cpp 
-    ../digikam/folderview.cpp 
-    ../digikam/iconview.cpp 
-    ../digikam/icongroupitem.cpp 
-    ../digikam/iconitem.cpp 
-    ../digikam/imageattributeswatch.cpp 
-    ../digikam/imagepreviewbar.cpp 
-    ../digikam/kdateedit.cpp 
-    ../digikam/kdatetimeedit.cpp 
-    ../digikam/kdatepickerpopup.cpp 
-    ../digikam/metadatahub.cpp 
-    ../digikam/ratingpopupmenu.cpp 
-    ../digikam/ratingwidget.cpp 
-    ../digikam/scancontroller.cpp
-    ../digikam/syncjob.cpp 
-    ../digikam/tageditdlg.cpp 
-    ../digikam/tagspopupmenu.cpp 
-    ../digikam/treefolderitem.cpp 
-   )
-
 SET(digikamthemedesigner_SRCS 
-    ${libdigikamtheme_SRCS}
-    ${libdeletedialog_SRCS}
-    ${liblighttable_SRCS}
     ${libdimgimagewindow_SRCS}
+    ${libdeletedialog_SRCS}
     ${libimagepropertiesdigikam_SRCS}
-    ${libcameragui_SRCS}
     ${libsetup_SRCS}
+    ${libcameragui_SRCS}
+    ${liblighttable_SRCS}
     ${libbatch_SRCS}
+    ${libkipiiface_SRCS}
+    ${libsearchwindow_SRCS}
+    ${libfuzzysearch_SRCS}
+    ${libgpssearch_SRCS}
+    ${libtimeline_SRCS}
+    ${libdigikamgui_SRCS}
 
     main.cpp 
     mainwindow.cpp 
@@ -102,6 +76,9 @@ SET(digikamthemedesigner_SRCS
     themediconitem.cpp 
     themediconview.cpp 
    )
+
+QT4_ADD_DBUS_ADAPTOR(digikamthemedesigner_SRCS 
+                     ../digikam/org.kde.digikam.xml digikamapp.h Digikam::DigikamApp)
 
 KDE4_ADD_EXECUTABLE(digikamthemedesigner ${digikamthemedesigner_SRCS})
 

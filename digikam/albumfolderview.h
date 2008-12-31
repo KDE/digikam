@@ -33,6 +33,7 @@
 
 #include "searchtextbar.h"
 #include "folderview.h"
+#include "folderitem.h"
 
 class QDropEvent;
 class QPixmap;
@@ -45,8 +46,40 @@ namespace Digikam
 
 class Album;
 class PAlbum;
-class AlbumFolderViewItem;
 class AlbumFolderViewPriv;
+
+class AlbumFolderViewItem : public FolderItem
+{
+public:
+
+    AlbumFolderViewItem(Q3ListView *parent, PAlbum *album);
+    AlbumFolderViewItem(Q3ListViewItem *parent, PAlbum *album);
+
+    // special group item (collection/dates)
+    AlbumFolderViewItem(Q3ListViewItem* parent, const QString& name,
+                        int year, int month);
+
+    PAlbum* album() const;
+    int     id() const;
+    bool    isGroupItem() const;
+    int     compare(Q3ListViewItem *i, int col, bool ascending) const;
+    void    refresh();
+    void    setOpen(bool o);
+    void    setCount(int count);
+    int     count();
+    int     countRecursive();
+
+private:
+
+    bool    m_groupItem;
+
+    int     m_year;
+    int     m_month;
+    int     m_count;
+    int     m_countRecursive;
+
+    PAlbum *m_album;
+};
 
 class AlbumFolderView : public FolderView
 {

@@ -697,7 +697,7 @@ void IconView::slotRearrange()
 
 bool IconView::arrangeItems()
 {
-    int  y   = 0;
+    int  y     = 0;
     int  itemW = itemRect().width();
     int  itemH = itemRect().height();
     int  maxW  = 0;

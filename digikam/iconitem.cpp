@@ -65,7 +65,7 @@ public:
 };
 
 IconItem::IconItem(IconGroupItem* parent)
-        : d(new IconItemPriv)
+        : QObject(), d(new IconItemPriv)
 {
     m_next   = 0;
     m_prev   = 0;

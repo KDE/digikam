@@ -272,6 +272,7 @@ void DigikamView::applySettings()
     AlbumSettings *settings = AlbumSettings::instance();
     d->iconView->applySettings(settings);
     d->albumWidgetStack->applySettings();
+    d->folderView->setEnableToolTips(settings->getShowAlbumToolTips());
     refreshView();
 }
 

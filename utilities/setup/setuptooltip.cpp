@@ -32,9 +32,10 @@
 
 // KDE includes.
 
-#include <khbox.h>
+#include <kvbox.h>
 #include <klocale.h>
 #include <kdialog.h>
+#include <ktabwidget.h>
 
 // Local includes.
 
@@ -50,31 +51,38 @@ public:
 
     SetupToolTipPriv()
     {
-        showToolTipsBox   = 0;
-        fontSelect        = 0;
+        showToolTipsBox        = 0;
+        fontSelect             = 0;
+        tab                    = 0;
 
-        showFileNameBox   = 0;
-        showFileDateBox   = 0;
-        showFileSizeBox   = 0;
-        showImageTypeBox  = 0;
-        showImageDimBox   = 0;
+        showFileNameBox        = 0;
+        showFileDateBox        = 0;
+        showFileSizeBox        = 0;
+        showImageTypeBox       = 0;
+        showImageDimBox        = 0;
 
-        showPhotoMakeBox  = 0;
-        showPhotoDateBox  = 0;
-        showPhotoFocalBox = 0;
-        showPhotoExpoBox  = 0;
-        showPhotoModeBox  = 0;
-        showPhotoFlashBox = 0;
-        showPhotoWbBox    = 0;
+        showPhotoMakeBox       = 0;
+        showPhotoDateBox       = 0;
+        showPhotoFocalBox      = 0;
+        showPhotoExpoBox       = 0;
+        showPhotoModeBox       = 0;
+        showPhotoFlashBox      = 0;
+        showPhotoWbBox         = 0;
 
-        showAlbumNameBox  = 0;
-        showCommentsBox   = 0;
-        showTagsBox       = 0;
-        showRatingBox     = 0;
+        showAlbumNameBox       = 0;
+        showCommentsBox        = 0;
+        showTagsBox            = 0;
+        showRatingBox          = 0;
 
-        fileSettingBox    = 0;
-        photoSettingBox   = 0;
-        digikamSettingBox = 0;
+        fileSettingBox         = 0;
+        photoSettingBox        = 0;
+        digikamSettingBox      = 0;
+
+        showAlbumToolTipsBox   = 0;
+        showAlbumTitleBox      = 0;
+        showAlbumDateBox       = 0;
+        showAlbumCollectionBox = 0;
+        showAlbumCaptionBox    = 0;
     }
 
     QCheckBox   *showToolTipsBox;
@@ -98,9 +106,17 @@ public:
     QCheckBox   *showTagsBox;
     QCheckBox   *showRatingBox;
 
+    QCheckBox   *showAlbumToolTipsBox;
+    QCheckBox   *showAlbumTitleBox;
+    QCheckBox   *showAlbumDateBox;
+    QCheckBox   *showAlbumCollectionBox;
+    QCheckBox   *showAlbumCaptionBox;
+
     QGroupBox   *fileSettingBox;
     QGroupBox   *photoSettingBox;
     QGroupBox   *digikamSettingBox;
+
+    KTabWidget  *tab;
 
     DFontSelect *fontSelect;
 };
@@ -108,118 +124,153 @@ public:
 SetupToolTip::SetupToolTip(QWidget* parent)
             : QWidget(parent), d(new SetupToolTipPriv)
 {
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    d->showToolTipsBox  = new QCheckBox(i18n("Show icon-view/thumbbar items toolti&ps"), this);
-    d->showToolTipsBox->setWhatsThis(i18n("Set this option to display image information when "
-                                          "the mouse hovers over an icon-view or thumbbar item."));
+    QVBoxLayout *vlay     = new QVBoxLayout(this);
 
-    d->fontSelect       = new DFontSelect(i18n("Font:"), this);
-    d->fontSelect->setToolTip(i18n("Select here the font used to display text in tooltips."));
+    d->fontSelect         = new DFontSelect(i18n("Tool-Tips Font:"), this);
+    d->fontSelect->setToolTip(i18n("Select here the font used to display text in tool-tips."));
+
+    d->tab                = new KTabWidget(this);
 
     // --------------------------------------------------------
 
-    d->fileSettingBox     = new QGroupBox(i18n("File/Image Information"), this);
-    QVBoxLayout *gLayout1 = new QVBoxLayout(d->fileSettingBox);
+    KVBox *vbox           = new KVBox(this);
+
+    d->showToolTipsBox    = new QCheckBox(i18n("Show icon-view and thumb-bar items tool-tips"), vbox);
+    d->showToolTipsBox->setWhatsThis(i18n("Set this option to display image information when "
+                                          "the mouse hovers over an icon-view or thumb-bar item."));
+
+    d->fileSettingBox     = new QGroupBox(i18n("File/Image Information"), vbox);
+    QVBoxLayout *vlay2    = new QVBoxLayout(d->fileSettingBox);
 
     d->showFileNameBox    = new QCheckBox(i18n("Show file name"), d->fileSettingBox);
-    d->showFileNameBox->setWhatsThis( i18n("Set this option to display the image file name."));
+    d->showFileNameBox->setWhatsThis(i18n("Set this option to display the image file name."));
 
-    d->showFileDateBox = new QCheckBox(i18n("Show file date"), d->fileSettingBox);
-    d->showFileDateBox->setWhatsThis( i18n("Set this option to display the image file date."));
+    d->showFileDateBox    = new QCheckBox(i18n("Show file date"), d->fileSettingBox);
+    d->showFileDateBox->setWhatsThis(i18n("Set this option to display the image file date."));
 
-    d->showFileSizeBox = new QCheckBox(i18n("Show file size"), d->fileSettingBox);
-    d->showFileSizeBox->setWhatsThis( i18n("Set this option to display the image file size."));
+    d->showFileSizeBox    = new QCheckBox(i18n("Show file size"), d->fileSettingBox);
+    d->showFileSizeBox->setWhatsThis(i18n("Set this option to display the image file size."));
 
-    d->showImageTypeBox = new QCheckBox(i18n("Show image type"), d->fileSettingBox);
-    d->showImageTypeBox->setWhatsThis( i18n("Set this option to display the image type."));
+    d->showImageTypeBox   = new QCheckBox(i18n("Show image type"), d->fileSettingBox);
+    d->showImageTypeBox->setWhatsThis(i18n("Set this option to display the image type."));
 
-    d->showImageDimBox = new QCheckBox(i18n("Show image dimensions"), d->fileSettingBox);
-    d->showImageDimBox->setWhatsThis( i18n("Set this option to display the image dimensions in pixels."));
+    d->showImageDimBox    = new QCheckBox(i18n("Show image dimensions"), d->fileSettingBox);
+    d->showImageDimBox->setWhatsThis(i18n("Set this option to display the image dimensions in pixels."));
 
-    gLayout1->addWidget(d->showFileNameBox);
-    gLayout1->addWidget(d->showFileDateBox);
-    gLayout1->addWidget(d->showFileSizeBox);
-    gLayout1->addWidget(d->showImageTypeBox);
-    gLayout1->addWidget(d->showImageDimBox);
-    gLayout1->setMargin(KDialog::spacingHint());
-    gLayout1->setSpacing(0);
-
-    // --------------------------------------------------------
-
-    d->photoSettingBox    = new QGroupBox(i18n("Photograph Information"), this);
-    QVBoxLayout *gLayout2 = new QVBoxLayout(d->photoSettingBox);
-
-    d->showPhotoMakeBox = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
-    d->showPhotoMakeBox->setWhatsThis( i18n("Set this option to display the make and model of the "
-                                            "camera with which the image has been taken."));
-
-    d->showPhotoDateBox = new QCheckBox(i18n("Show camera date"), d->photoSettingBox);
-    d->showPhotoDateBox->setWhatsThis( i18n("Set this option to display the date when the image was taken."));
-
-    d->showPhotoFocalBox = new QCheckBox(i18n("Show camera aperture and focal length"), d->photoSettingBox);
-    d->showPhotoFocalBox->setWhatsThis( i18n("Set this option to display the camera aperture and focal settings "
-                     "used to take the image."));
-
-    d->showPhotoExpoBox = new QCheckBox(i18n("Show camera exposure and sensitivity"), d->photoSettingBox);
-    d->showPhotoExpoBox->setWhatsThis( i18n("Set this option to display the camera exposure and sensitivity "
-                     "used to take the image."));
-
-    d->showPhotoModeBox = new QCheckBox(i18n("Show camera mode and program"), d->photoSettingBox);
-    d->showPhotoModeBox->setWhatsThis( i18n("Set this option to display the camera mode and program "
-                     "used to take the image."));
-
-    d->showPhotoFlashBox = new QCheckBox(i18n("Show camera flash settings"), d->photoSettingBox);
-    d->showPhotoFlashBox->setWhatsThis( i18n("Set this option to display the camera flash settings "
-                     "used to take the image."));
-
-    d->showPhotoWbBox = new QCheckBox(i18n("Show camera white balance settings"), d->photoSettingBox);
-    d->showPhotoWbBox->setWhatsThis( i18n("Set this option to display the camera white balance settings "
-                     "used to take the image."));
-
-    gLayout2->addWidget(d->showPhotoMakeBox);
-    gLayout2->addWidget(d->showPhotoDateBox);
-    gLayout2->addWidget(d->showPhotoFocalBox);
-    gLayout2->addWidget(d->showPhotoExpoBox);
-    gLayout2->addWidget(d->showPhotoModeBox);
-    gLayout2->addWidget(d->showPhotoFlashBox);
-    gLayout2->addWidget(d->showPhotoWbBox);
-    gLayout2->setMargin(KDialog::spacingHint());
-    gLayout2->setSpacing(0);
+    vlay2->addWidget(d->showFileNameBox);
+    vlay2->addWidget(d->showFileDateBox);
+    vlay2->addWidget(d->showFileSizeBox);
+    vlay2->addWidget(d->showImageTypeBox);
+    vlay2->addWidget(d->showImageDimBox);
+    vlay2->setMargin(KDialog::spacingHint());
+    vlay2->setSpacing(0);
 
     // --------------------------------------------------------
 
-    d->digikamSettingBox  = new QGroupBox(i18n("digiKam Information"), this);
-    QVBoxLayout *gLayout3 = new QVBoxLayout(d->digikamSettingBox);
+    d->photoSettingBox    = new QGroupBox(i18n("Photograph Information"), vbox);
+    QVBoxLayout *vlay3    = new QVBoxLayout(d->photoSettingBox);
 
-    d->showAlbumNameBox = new QCheckBox(i18n("Show album name"), d->digikamSettingBox);
-    d->showAlbumNameBox->setWhatsThis( i18n("Set this option to display the album name."));
+    d->showPhotoMakeBox   = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
+    d->showPhotoMakeBox->setWhatsThis(i18n("Set this option to display the make and model of the "
+                                           "camera with which the image has been taken."));
 
-    d->showCommentsBox = new QCheckBox(i18n("Show image caption"), d->digikamSettingBox);
-    d->showCommentsBox->setWhatsThis( i18n("Set this option to display the image captions."));
+    d->showPhotoDateBox   = new QCheckBox(i18n("Show camera date"), d->photoSettingBox);
+    d->showPhotoDateBox->setWhatsThis(i18n("Set this option to display the date when the image was taken."));
 
-    d->showTagsBox = new QCheckBox(i18n("Show image tags"), d->digikamSettingBox);
-    d->showTagsBox->setWhatsThis( i18n("Set this option to display the image tags."));
+    d->showPhotoFocalBox  = new QCheckBox(i18n("Show camera aperture and focal length"), d->photoSettingBox);
+    d->showPhotoFocalBox->setWhatsThis(i18n("Set this option to display the camera aperture and focal settings "
+                                            "used to take the image."));
 
-    d->showRatingBox = new QCheckBox(i18n("Show image rating"), d->digikamSettingBox);
-    d->showRatingBox->setWhatsThis( i18n("Set this option to display the image rating."));
+    d->showPhotoExpoBox   = new QCheckBox(i18n("Show camera exposure and sensitivity"), d->photoSettingBox);
+    d->showPhotoExpoBox->setWhatsThis(i18n("Set this option to display the camera exposure and sensitivity "
+                                           "used to take the image."));
 
-    gLayout3->addWidget(d->showAlbumNameBox);
-    gLayout3->addWidget(d->showCommentsBox);
-    gLayout3->addWidget(d->showTagsBox);
-    gLayout3->addWidget(d->showRatingBox);
-    gLayout3->setMargin(KDialog::spacingHint());
-    gLayout3->setSpacing(0);
+    d->showPhotoModeBox   = new QCheckBox(i18n("Show camera mode and program"), d->photoSettingBox);
+    d->showPhotoModeBox->setWhatsThis(i18n("Set this option to display the camera mode and program "
+                                           "used to take the image."));
+
+    d->showPhotoFlashBox  = new QCheckBox(i18n("Show camera flash settings"), d->photoSettingBox);
+    d->showPhotoFlashBox->setWhatsThis(i18n("Set this option to display the camera flash settings "
+                                            "used to take the image."));
+
+    d->showPhotoWbBox     = new QCheckBox(i18n("Show camera white balance settings"), d->photoSettingBox);
+    d->showPhotoWbBox->setWhatsThis(i18n("Set this option to display the camera white balance settings "
+                                         "used to take the image."));
+
+    vlay3->addWidget(d->showPhotoMakeBox);
+    vlay3->addWidget(d->showPhotoDateBox);
+    vlay3->addWidget(d->showPhotoFocalBox);
+    vlay3->addWidget(d->showPhotoExpoBox);
+    vlay3->addWidget(d->showPhotoModeBox);
+    vlay3->addWidget(d->showPhotoFlashBox);
+    vlay3->addWidget(d->showPhotoWbBox);
+    vlay3->setMargin(KDialog::spacingHint());
+    vlay3->setSpacing(0);
 
     // --------------------------------------------------------
 
-    layout->addWidget(d->showToolTipsBox);
-    layout->addWidget(d->fontSelect);
-    layout->addWidget(d->fileSettingBox);
-    layout->addWidget(d->photoSettingBox);
-    layout->addWidget(d->digikamSettingBox);
-    layout->addStretch();
-    layout->setMargin(0);
-    layout->setSpacing(KDialog::spacingHint());
+    d->digikamSettingBox = new QGroupBox(i18n("digiKam Information"), vbox);
+    QVBoxLayout *vlay4   = new QVBoxLayout(d->digikamSettingBox);
+
+    d->showAlbumNameBox  = new QCheckBox(i18n("Show album name"), d->digikamSettingBox);
+    d->showAlbumNameBox->setWhatsThis(i18n("Set this option to display the album name."));
+
+    d->showCommentsBox   = new QCheckBox(i18n("Show image caption"), d->digikamSettingBox);
+    d->showCommentsBox->setWhatsThis(i18n("Set this option to display the image captions."));
+
+    d->showTagsBox       = new QCheckBox(i18n("Show image tags"), d->digikamSettingBox);
+    d->showTagsBox->setWhatsThis(i18n("Set this option to display the image tags."));
+
+    d->showRatingBox     = new QCheckBox(i18n("Show image rating"), d->digikamSettingBox);
+    d->showRatingBox->setWhatsThis(i18n("Set this option to display the image rating."));
+
+    vlay4->addWidget(d->showAlbumNameBox);
+    vlay4->addWidget(d->showCommentsBox);
+    vlay4->addWidget(d->showTagsBox);
+    vlay4->addWidget(d->showRatingBox);
+    vlay4->setMargin(KDialog::spacingHint());
+    vlay4->setSpacing(0);
+
+    QWidget *space = new QWidget(vbox);
+    vbox->setStretchFactor(space, 10);
+    vbox->setMargin(KDialog::spacingHint());
+    vbox->setSpacing(KDialog::spacingHint());
+
+    // --------------------------------------------------------
+
+    KVBox *vbox2              = new KVBox(this);
+
+    d->showAlbumToolTipsBox   = new QCheckBox(i18n("Show album items tool-tips"), vbox2);
+    d->showAlbumToolTipsBox->setWhatsThis(i18n("Set this option to display album information when "
+                                                "the mouse hovers over a folder-view item."));
+
+    d->showAlbumTitleBox      = new QCheckBox(i18n("Show album name"), vbox2);
+    d->showAlbumTitleBox->setWhatsThis(i18n("Set this option to display the album name."));
+
+    d->showAlbumDateBox       = new QCheckBox(i18n("Show album date"), vbox2);
+    d->showAlbumDateBox->setWhatsThis(i18n("Set this option to display the album date."));
+
+    d->showAlbumCollectionBox = new QCheckBox(i18n("Show album collection"), vbox2);
+    d->showAlbumCollectionBox->setWhatsThis(i18n("Set this option to display the album collection."));
+
+    d->showAlbumCaptionBox    = new QCheckBox(i18n("Show album caption"), vbox2);
+    d->showAlbumCaptionBox->setWhatsThis(i18n("Set this option to display the album caption."));
+
+    QWidget *space2           = new QWidget(vbox2);
+    vbox2->setStretchFactor(space2, 10);
+    vbox2->setMargin(KDialog::spacingHint());
+    vbox2->setSpacing(KDialog::spacingHint());
+
+    // --------------------------------------------------------
+
+    d->tab->insertTab(0, vbox,  i18n("Icon Items"));
+    d->tab->insertTab(1, vbox2, i18n("Album Items"));
+
+    vlay->addWidget(d->fontSelect);
+    vlay->addWidget(d->tab);
+    vlay->addStretch();
+    vlay->setMargin(0);
+    vlay->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
 
@@ -232,8 +283,19 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     connect(d->showToolTipsBox, SIGNAL(toggled(bool)),
             d->digikamSettingBox, SLOT(setEnabled(bool)));
 
-    connect(d->showToolTipsBox, SIGNAL(toggled(bool)),
-            d->fontSelect, SLOT(setEnabled(bool)));
+    // --------------------------------------------------------
+
+    connect(d->showAlbumToolTipsBox, SIGNAL(toggled(bool)),
+            d->showAlbumTitleBox, SLOT(setEnabled(bool)));
+
+    connect(d->showAlbumToolTipsBox, SIGNAL(toggled(bool)),
+            d->showAlbumDateBox, SLOT(setEnabled(bool)));
+
+    connect(d->showAlbumToolTipsBox, SIGNAL(toggled(bool)),
+            d->showAlbumCollectionBox, SLOT(setEnabled(bool)));
+
+    connect(d->showAlbumToolTipsBox, SIGNAL(toggled(bool)),
+            d->showAlbumCaptionBox, SLOT(setEnabled(bool)));
 
     // --------------------------------------------------------
 
@@ -251,9 +313,9 @@ void SetupToolTip::applySettings()
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
 
-    settings->setShowToolTips(d->showToolTipsBox->isChecked());
     settings->setToolTipsFont(d->fontSelect->font());
 
+    settings->setShowToolTips(d->showToolTipsBox->isChecked());
     settings->setToolTipsShowFileName(d->showFileNameBox->isChecked());
     settings->setToolTipsShowFileDate(d->showFileDateBox->isChecked());
     settings->setToolTipsShowFileSize(d->showFileSizeBox->isChecked());
@@ -273,6 +335,12 @@ void SetupToolTip::applySettings()
     settings->setToolTipsShowTags(d->showTagsBox->isChecked());
     settings->setToolTipsShowRating(d->showRatingBox->isChecked());
 
+    settings->setShowAlbumToolTips(d->showAlbumToolTipsBox->isChecked());
+    settings->setToolTipsShowAlbumTitle(d->showAlbumTitleBox->isChecked());
+    settings->setToolTipsShowAlbumDate(d->showAlbumDateBox->isChecked());
+    settings->setToolTipsShowAlbumCollection(d->showAlbumCollectionBox->isChecked());
+    settings->setToolTipsShowAlbumCaption(d->showAlbumCaptionBox->isChecked());
+
     settings->saveSettings();
 }
 
@@ -282,9 +350,9 @@ void SetupToolTip::readSettings()
 
     if (!settings) return;
 
-    d->showToolTipsBox->setChecked(settings->getShowToolTips());
     d->fontSelect->setFont(settings->getToolTipsFont());
 
+    d->showToolTipsBox->setChecked(settings->getShowToolTips());
     d->showFileNameBox->setChecked(settings->getToolTipsShowFileName());
     d->showFileDateBox->setChecked(settings->getToolTipsShowFileDate());
     d->showFileSizeBox->setChecked(settings->getToolTipsShowFileSize());
@@ -307,6 +375,17 @@ void SetupToolTip::readSettings()
     d->fileSettingBox->setEnabled(d->showToolTipsBox->isChecked());
     d->photoSettingBox->setEnabled(d->showToolTipsBox->isChecked());
     d->digikamSettingBox->setEnabled(d->showToolTipsBox->isChecked());
+
+    d->showAlbumToolTipsBox->setChecked(settings->getShowAlbumToolTips());
+    d->showAlbumTitleBox->setChecked(settings->getToolTipsShowAlbumTitle());
+    d->showAlbumDateBox->setChecked(settings->getToolTipsShowAlbumDate());
+    d->showAlbumCollectionBox->setChecked(settings->getToolTipsShowAlbumCollection());
+    d->showAlbumCaptionBox->setChecked(settings->getToolTipsShowAlbumCaption());
+
+    d->showAlbumTitleBox->setEnabled(d->showAlbumToolTipsBox->isChecked());
+    d->showAlbumDateBox->setEnabled(d->showAlbumToolTipsBox->isChecked());
+    d->showAlbumCollectionBox->setEnabled(d->showAlbumToolTipsBox->isChecked());
+    d->showAlbumCaptionBox->setEnabled(d->showAlbumToolTipsBox->isChecked());
 }
 
 }  // namespace Digikam

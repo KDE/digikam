@@ -50,8 +50,8 @@ public:
 
     virtual int id() const;
 
-    void setFocus(bool b);
-    bool focus() const;
+    void  setHighlighted(bool val);
+    bool  isHighlighted() const;
 
 protected:
 
@@ -60,7 +60,7 @@ protected:
 
 private:
 
-    bool m_focus;
+    bool m_highlighted;
     bool m_special;
 };
 
@@ -76,8 +76,8 @@ public:
                         Q3CheckListItem::Type tt);
     virtual ~FolderCheckListItem();
 
-    void setFocus(bool b);
-    bool focus() const;
+    void  setHighlighted(bool val);
+    bool  isHighlighted() const;
 
 protected:
 
@@ -87,7 +87,7 @@ protected:
 
 private:
 
-    bool m_focus;
+    bool m_highlighted;
 };
 
 }  // namespace Digikam

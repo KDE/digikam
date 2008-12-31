@@ -42,12 +42,13 @@ class CameraIconItemPriv;
 
 class CameraIconItem : public IconItem
 {
+    Q_OBJECT
 
 public:
 
     CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo,
-                       const QImage& thumbnail, 
-                       const QString& downloadName=QString());
+                   const QImage& thumbnail,
+                   const QString& downloadName=QString());
     ~CameraIconItem();
 
     void    setThumbnail(const QImage& thumbnail);
@@ -70,6 +71,10 @@ protected:
 private:
 
     void calcRect(const QString& itemName, const QString& downloadName);
+
+private slots:
+
+    void slotDownloadBlinkTimerDone();
 
 private:
 

@@ -27,6 +27,7 @@
 
 // Qt includes.
 
+#include <QObject>
 #include <QRect>
 #include <QString>
 
@@ -43,8 +44,10 @@ class IconGroupItem;
 class IconView;
 class IconItemPriv;
 
-class IconItem
+class IconItem : public QObject
 {
+    Q_OBJECT
+
     friend class IconView;
     friend class IconGroupItem;
 

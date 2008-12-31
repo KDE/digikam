@@ -110,7 +110,7 @@ TARGET_LINK_LIBRARIES(digikamcore
                       ${PNG_LIBRARIES}
                       ${LCMS_LIBRARIES}
                       ${JASPER_LIBRARIES}
-                      
+
                       # Require by CImg library which use pthread internally.
                       ${CMAKE_THREAD_LIBS_INIT} 
 
@@ -165,72 +165,21 @@ INSTALL(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 # digiKam binary progam #########################################################
 
-SET(digikam_SRCS
-                     ${libdimgimagewindow_SRCS}
-                     ${libdeletedialog_SRCS}
-                     ${libimagepropertiesdigikam_SRCS}
-                     ${libsetup_SRCS}
-                     ${libcameragui_SRCS}
-                     ${liblighttable_SRCS}
-                     ${libbatch_SRCS}
-                     ${libkipiiface_SRCS}
-                     ${libsearchwindow_SRCS}
-                     ${libfuzzysearch_SRCS}
-                     ${libgpssearch_SRCS}
-                     ${libtimeline_SRCS}
+SET(digikam_SRCS ${libdimgimagewindow_SRCS}
+                 ${libdeletedialog_SRCS}
+                 ${libimagepropertiesdigikam_SRCS}
+                 ${libsetup_SRCS}
+                 ${libcameragui_SRCS}
+                 ${liblighttable_SRCS}
+                 ${libbatch_SRCS}
+                 ${libkipiiface_SRCS}
+                 ${libsearchwindow_SRCS}
+                 ${libfuzzysearch_SRCS}
+                 ${libgpssearch_SRCS}
+                 ${libtimeline_SRCS}
+                 ${libdigikamgui_SRCS}
 
-                     album.cpp 
-                     albumiconview.cpp 
-                     albumiconviewfilter.cpp 
-                     albumiconviewtooltip.cpp 
-                     albumicongroupitem.cpp 
-                     albumiconitem.cpp 
-                     albumitemhandler.cpp 
-                     albumfolderview.cpp 
-                     albumhistory.cpp 
-                     albumlister.cpp 
-                     albummanager.cpp 
-                     albummodel.cpp
-                     albumpropsedit.cpp 
-                     albumselectdialog.cpp
-                     albumsettings.cpp 
-                     albumthumbnailloader.cpp 
-                     albumwidgetstack.cpp 
-                     cameralist.cpp 
-                     cameratype.cpp 
-                     datefolderview.cpp 
-                     digikamapp.cpp 
-                     digikamfirstrun.cpp 
-                     digikamview.cpp 
-                     dio.cpp 
-                     ddragobjects.cpp 
-                     folderitem.cpp 
-                     folderview.cpp 
-                     iconview.cpp 
-                     icongroupitem.cpp 
-                     iconitem.cpp 
-                     imageattributeswatch.cpp 
-                     imagepreviewview.cpp 
-                     imagepreviewbar.cpp 
-                     kdateedit.cpp 
-                     kdatetimeedit.cpp 
-                     kdatepickerpopup.cpp 
-                     main.cpp
-                     mediaplayerview.cpp 
-                     metadatahub.cpp 
-                     mimefilter.cpp 
-                     monthwidget.cpp 
-                     ratingfilter.cpp
-                     ratingpopupmenu.cpp 
-                     ratingwidget.cpp 
-                     scancontroller.cpp
-                     syncjob.cpp 
-                     tageditdlg.cpp 
-                     tagfolderview.cpp 
-                     tagfilterview.cpp 
-                     treefolderitem.cpp 
-                     tagspopupmenu.cpp 
-                     welcomepageview.cpp 
+                 main.cpp
     )
 
 QT4_ADD_DBUS_ADAPTOR(digikam_SRCS org.kde.digikam.xml digikamapp.h Digikam::DigikamApp)

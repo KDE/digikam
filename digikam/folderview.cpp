@@ -46,6 +46,7 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
+#include "folderviewtooltip.h"
 #include "folderitem.h"
 #include "themeengine.h"
 
@@ -58,25 +59,36 @@ public:
 
     FolderViewPriv()
     {
+        showTips         = false;
         active           = false;
+        doNotCollapse    = false;
+        toolTipItem      = 0;
+        toolTipTimer     = 0;
         dragItem         = 0;
         oldHighlightItem = 0;
-        doNotCollapse    = false;
+        itemHighlighted  = 0;
+        toolTip          = 0;
     }
 
-    bool            active;
+    bool               active;
+    bool               showTips;
+    bool               doNotCollapse;
 
-    int             itemHeight;
+    int                itemHeight;
 
-    QPixmap         itemRegPix;
-    QPixmap         itemSelPix;
+    QPixmap            itemRegPix;
+    QPixmap            itemSelPix;
 
-    QPoint          dragStartPos;
+    QPoint             dragStartPos;
 
-    Q3ListViewItem *dragItem;
-    Q3ListViewItem *oldHighlightItem;
+    QTimer            *toolTipTimer;
 
-    bool            doNotCollapse;
+    Q3ListViewItem    *toolTipItem;
+    Q3ListViewItem    *dragItem;
+    Q3ListViewItem    *oldHighlightItem;
+    Q3ListViewItem    *itemHighlighted;
+
+    FolderViewToolTip *toolTip;
 };
 
 //-----------------------------------------------------------------------------
@@ -85,6 +97,11 @@ FolderView::FolderView(QWidget *parent, const char *name)
           : Q3ListView(parent), d(new FolderViewPriv)
 {
     setObjectName(name);
+    setColumnWidthMode(0, Q3ListView::Maximum);
+    setColumnAlignment(0, Qt::AlignLeft|Qt::AlignVCenter);
+
+    d->toolTipTimer = new QTimer(this);
+    d->toolTip      = new FolderViewToolTip(this);
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -98,14 +115,34 @@ FolderView::FolderView(QWidget *parent, const char *name)
     connect(AlbumSettings::instance(), SIGNAL(signalTreeViewFontChanged()),
             this, SLOT(slotTreeViewFontChanged()));
 
-    setColumnAlignment(0, Qt::AlignLeft|Qt::AlignVCenter);
+    connect(d->toolTipTimer, SIGNAL(timeout()),
+            this, SLOT(slotToolTip()));
+
     slotTreeViewFontChanged();
 }
 
 FolderView::~FolderView()
 {
     saveViewState();
+    delete d->toolTipTimer;
+    delete d->toolTip;
     delete d;
+}
+
+void FolderView::setEnableToolTips(bool val)
+{
+    d->showTips = val;
+    if (!val)
+    {
+        d->toolTipItem = 0;
+        d->toolTipTimer->stop();
+        slotToolTip();
+    }
+}
+
+void FolderView::slotToolTip()
+{
+    d->toolTip->setFolderItem(dynamic_cast<FolderItem*>(d->toolTipItem));
 }
 
 void FolderView::setActive(bool val)
@@ -174,23 +211,90 @@ void FolderView::slotIconSizeChanged()
     slotThemeChanged();
 }
 
+void FolderView::leaveEvent(QEvent* e)
+{
+    if (d->itemHighlighted)
+    {
+        highlightCurrentItem(false);
+        d->itemHighlighted = 0;
+    }
+
+    // hide tooltip
+    d->toolTipItem = 0;
+    d->toolTipTimer->stop();
+    slotToolTip();
+
+    Q3ListView::leaveEvent(e);
+}
+
 void FolderView::contentsMouseMoveEvent(QMouseEvent *e)
 {
     Q3ListView::contentsMouseMoveEvent(e);
 
     if(e->buttons() == Qt::NoButton)
     {
+        QPoint vp            = contentsToViewport(e->pos());
+        Q3ListViewItem *item = itemAt(vp);
+
+        if(d->showTips)
+        {
+            if (!isActiveWindow())
+            {
+                d->toolTipItem = 0;
+                d->toolTipTimer->stop();
+                slotToolTip();
+                return;
+            }
+
+            if (item != d->toolTipItem)
+            {
+                d->toolTipItem = 0;
+                d->toolTipTimer->stop();
+                slotToolTip();
+
+                if(mouseInItemRect(item, vp.x()))
+                {
+                    d->toolTipItem = item;
+                    d->toolTipTimer->setSingleShot(true);
+                    d->toolTipTimer->start(500);
+                }
+            }
+
+            if(item == d->toolTipItem && !mouseInItemRect(item, vp.x()))
+            {
+                d->toolTipItem = 0;
+                d->toolTipTimer->stop();
+                slotToolTip();
+            }
+        }
+
         if(KGlobalSettings::changeCursorOverIcon())
         {
-            QPoint vp = contentsToViewport(e->pos());
-            Q3ListViewItem *item = itemAt(vp);
             if (mouseInItemRect(item, vp.x()))
                 setCursor(Qt::PointingHandCursor);
             else
                 unsetCursor();
         }
+
+        // Draw item highlightment when mouse is over.
+
+        if (item != d->itemHighlighted)
+        {
+            if (d->itemHighlighted)
+                highlightCurrentItem(false);
+
+            d->itemHighlighted = item;
+
+            if (d->itemHighlighted)
+                highlightCurrentItem(true);
+        }
+
         return;
     }
+
+    d->toolTipItem = 0;
+    d->toolTipTimer->stop();
+    slotToolTip();
 
     if(d->dragItem &&
        (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
@@ -207,6 +311,11 @@ void FolderView::contentsMouseMoveEvent(QMouseEvent *e)
 
 void FolderView::contentsMousePressEvent(QMouseEvent *e)
 {
+    // hide tooltip
+    d->toolTipItem = 0;
+    d->toolTipTimer->stop();
+    slotToolTip();
+
     QPoint vp            = contentsToViewport(e->pos());
     Q3ListViewItem *item = itemAt(vp);
 
@@ -261,6 +370,18 @@ void FolderView::contentsMouseReleaseEvent(QMouseEvent *e)
     d->dragItem = 0;
 }
 
+void FolderView::contentsWheelEvent(QWheelEvent* e)
+{
+    e->accept();
+
+    d->toolTipItem = 0;
+    d->toolTipTimer->stop();
+    slotToolTip();
+    viewport()->update();
+
+    Q3ScrollView::contentsWheelEvent(e);
+}
+
 void FolderView::startDrag()
 {
     QDrag *o = makeDragObject();
@@ -287,12 +408,12 @@ void FolderView::contentsDragLeaveEvent(QDragLeaveEvent * e)
     {
         FolderItem *fitem = dynamic_cast<FolderItem*>(d->oldHighlightItem);
         if (fitem)
-            fitem->setFocus(false);
+            fitem->setHighlighted(false);
         else
         {
             FolderCheckListItem *citem = dynamic_cast<FolderCheckListItem*>(d->oldHighlightItem);
             if (citem)
-                citem->setFocus(false);
+                citem->setHighlighted(false);
         }
 
         d->oldHighlightItem->repaint();
@@ -312,24 +433,24 @@ void FolderView::contentsDragMoveEvent(QDragMoveEvent *e)
         {
             FolderItem *fitem = dynamic_cast<FolderItem*>(d->oldHighlightItem);
             if (fitem)
-                fitem->setFocus(false);
+                fitem->setHighlighted(false);
             else
             {
                 FolderCheckListItem *citem = dynamic_cast<FolderCheckListItem*>(d->oldHighlightItem);
                 if (citem)
-                    citem->setFocus(false);
+                    citem->setHighlighted(false);
             }
             d->oldHighlightItem->repaint();
         }
 
         FolderItem *fitem = dynamic_cast<FolderItem*>(item);
         if (fitem)
-            fitem->setFocus(true);
+            fitem->setHighlighted(true);
         else
         {
             FolderCheckListItem *citem = dynamic_cast<FolderCheckListItem*>(item);
             if (citem)
-                citem->setFocus(true);
+                citem->setHighlighted(true);
         }
         d->oldHighlightItem = item;
         item->repaint();
@@ -345,12 +466,12 @@ void FolderView::contentsDropEvent(QDropEvent *e)
     {
         FolderItem *fitem = dynamic_cast<FolderItem*>(d->oldHighlightItem);
         if (fitem)
-            fitem->setFocus(false);
+            fitem->setHighlighted(false);
         else
         {
             FolderCheckListItem *citem = dynamic_cast<FolderCheckListItem*>(d->oldHighlightItem);
             if (citem)
-                citem->setFocus(false);
+                citem->setHighlighted(false);
         }
 
         d->oldHighlightItem->repaint();
@@ -529,6 +650,23 @@ void FolderView::collapseView(CollapseMode mode)
 void FolderView::slotTreeViewFontChanged()
 {
     setFont(AlbumSettings::instance()->getTreeViewFont());
+}
+
+void FolderView::highlightCurrentItem(bool b)
+{
+    if (!d->itemHighlighted) return;
+
+    FolderItem* fi = dynamic_cast<FolderItem*>(d->itemHighlighted);
+    if (fi)
+    {
+        fi->setHighlighted(b);
+    }
+    else
+    {
+        FolderCheckListItem *fc = dynamic_cast<FolderCheckListItem*>(d->itemHighlighted);
+        if (fc)
+            fc->setHighlighted(b);
+    }
 }
 
 }  // namespace Digikam

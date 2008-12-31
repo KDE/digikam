@@ -23,11 +23,13 @@
  * ============================================================ */
 
 #include "cameraiconitem.h"
+#include "cameraiconitem.moc"
 
 // Qt includes.
 
 #include <QPainter>
 #include <QPixmap>
+#include <QTimer>
 
 // KDE includes.
 
@@ -52,8 +54,14 @@ public:
 
     CameraIconItemPriv()
     {
-        itemInfo = 0;
+        blinkDownloadTimer = 0;
+        itemInfo           = 0;
+        pos                = 0;
     }
+
+    bool        downloadBlink;
+
+    int         pos;                   // Position of animation during downloading.
 
     QString     downloadName;
 
@@ -64,6 +72,8 @@ public:
     QRect       textRect;
     QRect       extraRect;
 
+    QTimer     *blinkDownloadTimer;
+
     GPItemInfo *itemInfo;
 };
 
@@ -71,9 +81,13 @@ CameraIconItem::CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo
                                const QImage& thumbnail, const QString& downloadName)
                   : IconItem(parent), d(new CameraIconItemPriv)
 {
-    d->itemInfo     = new GPItemInfo(itemInfo);
-    d->downloadName = downloadName;
+    d->itemInfo           = new GPItemInfo(itemInfo);
+    d->downloadName       = downloadName;
+    d->blinkDownloadTimer = new QTimer(this);
     setThumbnail(thumbnail);
+
+    connect(d->blinkDownloadTimer, SIGNAL(timeout()),
+            this, SLOT(slotDownloadBlinkTimerDone()));
 }
 
 CameraIconItem::~CameraIconItem()
@@ -106,6 +120,13 @@ QString CameraIconItem::getDownloadName() const
 void CameraIconItem::setDownloaded(int status)
 {
     d->itemInfo->downloaded = status;
+    d->pos                  = 0;
+
+    if(d->itemInfo->downloaded == GPItemInfo::DownloadStarted)
+        d->blinkDownloadTimer->start(500);
+    else
+        d->blinkDownloadTimer->stop();
+
     update();
 }
 
@@ -264,7 +285,19 @@ void CameraIconItem::paintItem(QPainter *p)
         }
         case GPItemInfo::DownloadStarted:
         {
-            downloaded = SmallIcon("system-run");
+            const int asize = 16;
+            p->save();
+            p->setRenderHint(QPainter::Antialiasing);
+            p->translate(rect().width() - downloaded.width() - 5 - asize/2, 5 + asize/2);
+            d->pos = (d->pos + 10) % 360;
+            p->setPen(iconView()->palette().color(QPalette::Active, QPalette::Text));
+            p->rotate(d->pos);
+            for (int i=0 ; i<12 ; i++)
+            {
+                p->drawLine(asize/2-5, 0, asize/2-2, 0);
+                p->rotate(30);
+            }
+            p->restore();
             break;
         }
         case GPItemInfo::DownloadFailed:
@@ -297,6 +330,12 @@ void CameraIconItem::paintItem(QPainter *p)
         p->setPen(QPen(view->palette().color(QPalette::Highlight), 3, Qt::SolidLine));
         p->drawRect(1, 1, r.width()-3, r.height()-3);
     }
+}
+
+void CameraIconItem::slotDownloadBlinkTimerDone()
+{
+    update();
+    d->blinkDownloadTimer->start(500);
 }
 
 }  // namespace Digikam

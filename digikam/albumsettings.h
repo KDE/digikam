@@ -253,6 +253,21 @@ public:
     void setToolTipsShowRating(bool val);
     bool getToolTipsShowRating() const;
 
+    void setShowAlbumToolTips(bool val);
+    bool getShowAlbumToolTips() const;
+
+    void setToolTipsShowAlbumTitle(bool val);
+    bool getToolTipsShowAlbumTitle() const;
+
+    void setToolTipsShowAlbumDate(bool val);
+    bool getToolTipsShowAlbumDate() const;
+
+    void setToolTipsShowAlbumCollection(bool val);
+    bool getToolTipsShowAlbumCollection() const;
+
+    void setToolTipsShowAlbumCaption(bool val);
+    bool getToolTipsShowAlbumCaption() const;
+
     void    setCurrentTheme(const QString& theme);
     QString getCurrentTheme() const;
 

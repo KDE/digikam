@@ -84,6 +84,8 @@ public:
     void setActive(bool val);
     bool active() const;
 
+    void setEnableToolTips(bool val);
+
     int      itemHeight() const;
     QRect    itemRect(Q3ListViewItem *item) const;
     QPixmap  itemBasePixmapRegular() const;
@@ -100,6 +102,8 @@ protected:
     void contentsDragMoveEvent(QDragMoveEvent *e);
     void contentsDragLeaveEvent(QDragLeaveEvent * e);
     void contentsDropEvent(QDropEvent *e);
+    void contentsWheelEvent(QWheelEvent* e);
+    void leaveEvent(QEvent *e);
 
     virtual bool acceptDrop(const QDropEvent *e) const;
 
@@ -129,6 +133,7 @@ protected slots:
 
 private slots:
 
+    void slotToolTip();
     void slotThemeChanged();
     void slotIconSizeChanged();
     void slotTreeViewFontChanged();
@@ -136,6 +141,9 @@ private slots:
 private:
 
     bool mouseInItemRect(Q3ListViewItem* item, int x) const;
+    void highlightCurrentItem(bool b);
+
+private:
 
     FolderViewPriv* const d;
 };

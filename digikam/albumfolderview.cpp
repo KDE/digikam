@@ -68,60 +68,30 @@
 #include "deletedialog.h"
 #include "digikamapp.h"
 #include "dio.h"
-#include "folderitem.h"
 #include "thumbnailsize.h"
 
 namespace Digikam
 {
 
-class AlbumFolderViewItem : public FolderItem
-{
-public:
-
-    AlbumFolderViewItem(Q3ListView *parent, PAlbum *album);
-    AlbumFolderViewItem(Q3ListViewItem *parent, PAlbum *album);
-
-    // special group item (collection/dates)
-    AlbumFolderViewItem(Q3ListViewItem* parent, const QString& name,
-                        int year, int month);
-
-    PAlbum* album() const;
-    int     id() const;
-    bool    isGroupItem() const;
-    int     compare(Q3ListViewItem *i, int col, bool ascending) const;
-    void    refresh();
-    void    setOpen(bool o);
-    void    setCount(int count);
-    int     count();
-
-private:
-
-    bool    m_groupItem;
-
-    int     m_year;
-    int     m_month;
-    int     m_count;
-
-    PAlbum *m_album;
-};
-
 AlbumFolderViewItem::AlbumFolderViewItem(Q3ListView *parent, PAlbum *album)
                    : FolderItem(parent, album->title())
 {
     setDragEnabled(true);
-    m_album     = album;
-    m_groupItem = false;
-    m_count     = 0;
+    m_album          = album;
+    m_groupItem      = false;
+    m_count          = 0;
+    m_countRecursive = 0;
 }
 
 AlbumFolderViewItem::AlbumFolderViewItem(Q3ListViewItem *parent, PAlbum *album)
                    : FolderItem(parent, album->title())
 {
     setDragEnabled(true);
-    m_album     = album;
-    m_groupItem = false;
-    m_count     = 0;
- }
+    m_album          = album;
+    m_groupItem      = false;
+    m_count          = 0;
+    m_countRecursive = 0;
+}
 
 // special group item (collection/dates)
 AlbumFolderViewItem::AlbumFolderViewItem(Q3ListViewItem* parent, const QString& name,
@@ -129,11 +99,12 @@ AlbumFolderViewItem::AlbumFolderViewItem(Q3ListViewItem* parent, const QString& 
                    : FolderItem(parent, name, true)
 {
     setDragEnabled(false);
-    m_album     = 0;
-    m_year      = year;
-    m_month     = month;
-    m_groupItem = true;
-    m_count     = 0;
+    m_album          = 0;
+    m_year           = year;
+    m_month          = month;
+    m_groupItem      = true;
+    m_count          = 0;
+    m_countRecursive = 0;
 }
 
 void AlbumFolderViewItem::refresh()
@@ -143,21 +114,20 @@ void AlbumFolderViewItem::refresh()
     if (AlbumSettings::instance()->getShowFolderTreeViewItemsCount() &&
         dynamic_cast<AlbumFolderViewItem*>(parent()))
     {
+        m_countRecursive = m_count;
+        AlbumIterator it(m_album);
+        while ( it.current() )
+        {
+            AlbumFolderViewItem *item = (AlbumFolderViewItem*)it.current()->extraData(listView());
+            if (item)
+                m_countRecursive += item->count();
+            ++it;
+        }
+
         if (isOpen())
             setText(0, QString("%1 (%2)").arg(m_album->title()).arg(m_count));
         else
-        {
-            int countRecursive = m_count;
-            AlbumIterator it(m_album);
-            while ( it.current() )
-            {
-                AlbumFolderViewItem *item = (AlbumFolderViewItem*)it.current()->extraData(listView());
-                if (item)
-                    countRecursive += item->count();
-                ++it;
-            }
-            setText(0, QString("%1 (%2)").arg(m_album->title()).arg(countRecursive));
-        }
+            setText(0, QString("%1 (%2)").arg(m_album->title()).arg(m_countRecursive));
     }
     else
     {
@@ -230,6 +200,11 @@ void AlbumFolderViewItem::setCount(int count)
 int AlbumFolderViewItem::count()
 {
     return m_count;
+}
+
+int AlbumFolderViewItem::countRecursive()
+{
+    return m_countRecursive;
 }
 
 // -----------------------------------------------------------------------------

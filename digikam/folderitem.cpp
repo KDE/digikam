@@ -46,29 +46,30 @@ namespace Digikam
 FolderItem::FolderItem(Q3ListView* parent, const QString& text, bool special)
           : Q3ListViewItem(parent, text)
 {
-    m_special = special;
-    m_focus   = false;
+    m_special     = special;
+    m_highlighted = false;
 }
 
 FolderItem::FolderItem(Q3ListViewItem* parent, const QString& text, bool special)
           : Q3ListViewItem(parent, text)
 {
-    m_special = special;
-    m_focus   = false;
+    m_special     = special;
+    m_highlighted = false;
 }
 
 FolderItem::~FolderItem()
 {
 }
 
-void FolderItem::setFocus(bool b)
+void FolderItem::setHighlighted(bool b)
 {
-    m_focus = b;
+    m_highlighted = b;
+    repaint();
 }
 
-bool FolderItem::focus() const
+bool FolderItem::isHighlighted() const
 {
-    return m_focus;
+    return m_highlighted;
 }
 
 void FolderItem::paintCell(QPainter* p, const QColorGroup& cg, int column, int width, int)
@@ -122,9 +123,9 @@ void FolderItem::paintCell(QPainter* p, const QColorGroup& cg, int column, int w
         p->drawLine(br.right() + 2, height()/2, fv->width(), height()/2);
     }
 
-    if (m_focus)
+    if (m_highlighted)
     {
-        p->setPen(cg.color(QColorGroup::Link));
+        p->setPen(cg.color(QColorGroup::Highlight));
         QRect r = fv->itemRect(this);
         p->drawRect(0, 0, r.width()-1, r.height()-1);
     }
@@ -153,28 +154,29 @@ FolderCheckListItem::FolderCheckListItem(Q3ListView* parent, const QString& text
                                          Q3CheckListItem::Type tt)
                    : Q3CheckListItem(parent, text, tt)
 {
-    m_focus = false;
+    m_highlighted = false;
 }
 
 FolderCheckListItem::FolderCheckListItem(Q3ListViewItem* parent, const QString& text,
                                          Q3CheckListItem::Type tt)
                    : Q3CheckListItem(parent, text, tt)
 {
-    m_focus = false;
+    m_highlighted = false;
 }
 
 FolderCheckListItem::~FolderCheckListItem()
 {
 }
 
-void FolderCheckListItem::setFocus(bool b)
+void FolderCheckListItem::setHighlighted(bool b)
 {
-    m_focus = b;
+    m_highlighted = b;
+    repaint();
 }
 
-bool FolderCheckListItem::focus() const
+bool FolderCheckListItem::isHighlighted() const
 {
-    return m_focus;
+    return m_highlighted;
 }
 
 void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup& cg, int column, int width, int)
@@ -251,7 +253,7 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup& cg, int colu
 
     p->drawText(r, 0, width-margin-r, height(), Qt::AlignLeft|Qt::AlignVCenter, t);
 
-    if (m_focus)
+    if (m_highlighted)
     {
         p->setPen(cg.color(QColorGroup::Link));
         QRect r = fv->itemRect(this);
@@ -274,7 +276,7 @@ void FolderCheckListItem::setup()
 // NOTE: Inspired from Qt4::Q3listview::getStyleOption()
 QStyleOptionQ3ListView FolderCheckListItem::getStyleOption(const FolderView *fv)
 {
-    Q3ListViewItem *item = dynamic_cast<Q3ListViewItem*>(this);
+    Q3ListViewItem *item  = dynamic_cast<Q3ListViewItem*>(this);
     QStyleOptionQ3ListView opt;
     opt.init(fv);
     opt.subControls       = QStyle::SC_None;

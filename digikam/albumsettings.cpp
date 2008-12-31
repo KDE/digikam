@@ -83,7 +83,7 @@ public:
 
     QFont                               iconviewFont;
 
-    // tooltip settings
+    // Icon-view tooltip settings
     bool                                showToolTips;
     bool                                tooltipShowFileName;
     bool                                tooltipShowFileDate;
@@ -103,6 +103,13 @@ public:
     bool                                tooltipShowRating;
 
     QFont                               toolTipsFont;
+
+    // Folder-view tooltip settings
+    bool                                showAlbumToolTips;
+    bool                                tooltipShowAlbumTitle;
+    bool                                tooltipShowAlbumDate;
+    bool                                tooltipShowAlbumCollection;
+    bool                                tooltipShowAlbumCaption;
 
     // metadata settings
     bool                                exifRotate;
@@ -203,7 +210,6 @@ void AlbumSettings::init()
 
     d->ratingFilterCond             = AlbumLister::GreaterEqualCondition;
 
-    d->showToolTips                 = true;
     d->showSplash                   = true;
     d->useTrash                     = true;
     d->showTrashDeleteDialog        = true;
@@ -219,6 +225,8 @@ void AlbumSettings::init()
     d->iconShowRating               = true;
     d->iconviewFont                 = KGlobalSettings::generalFont();
 
+    d->toolTipsFont                 = KGlobalSettings::generalFont();
+    d->showToolTips                 = false;
     d->tooltipShowFileName          = true;
     d->tooltipShowFileDate          = false;
     d->tooltipShowFileSize          = false;
@@ -235,7 +243,12 @@ void AlbumSettings::init()
     d->tooltipShowComments          = true;
     d->tooltipShowTags              = true;
     d->tooltipShowRating            = true;
-    d->toolTipsFont                 = KGlobalSettings::generalFont();
+
+    d->showAlbumToolTips            = false;
+    d->tooltipShowAlbumTitle        = true;
+    d->tooltipShowAlbumDate         = true;
+    d->tooltipShowAlbumCollection   = true;
+    d->tooltipShowAlbumCaption      = true;
 
     d->exifRotate                   = true;
     d->exifSetOrientation           = true;
@@ -307,6 +320,7 @@ void AlbumSettings::readSettings()
     d->iconShowRating               = group.readEntry("Icon Show Rating",            true);
     d->iconviewFont                 = group.readEntry("IconView Font", KGlobalSettings::generalFont());
 
+    d->toolTipsFont                 = group.readEntry("ToolTips Font",             KGlobalSettings::generalFont());
     d->showToolTips                 = group.readEntry("Show ToolTips",             false);
     d->tooltipShowFileName          = group.readEntry("ToolTips Show File Name",   true);
     d->tooltipShowFileDate          = group.readEntry("ToolTips Show File Date",   false);
@@ -324,7 +338,12 @@ void AlbumSettings::readSettings()
     d->tooltipShowComments          = group.readEntry("ToolTips Show Comments",    true);
     d->tooltipShowTags              = group.readEntry("ToolTips Show Tags",        true);
     d->tooltipShowRating            = group.readEntry("ToolTips Show Rating",      true);
-    d->toolTipsFont                 = group.readEntry("ToolTips Font",             KGlobalSettings::generalFont());
+
+    d->showAlbumToolTips            = group.readEntry("Show Album ToolTips",            false);
+    d->tooltipShowAlbumTitle        = group.readEntry("ToolTips Show Album Title",      true);
+    d->tooltipShowAlbumDate         = group.readEntry("ToolTips Show Album Date",       true);
+    d->tooltipShowAlbumCollection   = group.readEntry("ToolTips Show Album Collection", true);
+    d->tooltipShowAlbumCaption      = group.readEntry("ToolTips Show Album Caption",    true);
 
     d->previewLoadFullImageSize     = group.readEntry("Preview Load Full Image Size", false);
     d->showThumbbar                 = group.readEntry("Show Thumbbar",                true);
@@ -400,6 +419,7 @@ void AlbumSettings::saveSettings()
     group.writeEntry("Icon Show Rating", d->iconShowRating);
     group.writeEntry("IconView Font", d->iconviewFont);
 
+    group.writeEntry("ToolTips Font",             d->toolTipsFont);
     group.writeEntry("Show ToolTips",             d->showToolTips);
     group.writeEntry("ToolTips Show File Name",   d->tooltipShowFileName);
     group.writeEntry("ToolTips Show File Date",   d->tooltipShowFileDate);
@@ -417,7 +437,12 @@ void AlbumSettings::saveSettings()
     group.writeEntry("ToolTips Show Comments",    d->tooltipShowComments);
     group.writeEntry("ToolTips Show Tags",        d->tooltipShowTags);
     group.writeEntry("ToolTips Show Rating",      d->tooltipShowRating);
-    group.writeEntry("ToolTips Font",             d->toolTipsFont);
+
+    group.writeEntry("Show Album ToolTips",            d->showAlbumToolTips);
+    group.writeEntry("ToolTips Show Album Title",      d->tooltipShowAlbumTitle);
+    group.writeEntry("ToolTips Show Album Date",       d->tooltipShowAlbumDate);
+    group.writeEntry("ToolTips Show Album Collection", d->tooltipShowAlbumCollection);
+    group.writeEntry("ToolTips Show Album Caption",    d->tooltipShowAlbumCaption);
 
     group.writeEntry("Preview Load Full Image Size", d->previewLoadFullImageSize);
     group.writeEntry("Show Thumbbar",                d->showThumbbar);
@@ -1074,6 +1099,56 @@ void AlbumSettings::setToolTipsShowRating(bool val)
 bool AlbumSettings::getToolTipsShowRating() const
 {
     return d->tooltipShowRating;
+}
+
+void AlbumSettings::setShowAlbumToolTips(bool val)
+{
+    d->showAlbumToolTips = val;
+}
+
+bool AlbumSettings::getShowAlbumToolTips() const
+{
+    return d->showAlbumToolTips;
+}
+
+void AlbumSettings::setToolTipsShowAlbumTitle(bool val)
+{
+    d->tooltipShowAlbumTitle = val;
+}
+
+bool AlbumSettings::getToolTipsShowAlbumTitle() const
+{
+    return d->tooltipShowAlbumTitle;
+}
+
+void AlbumSettings::setToolTipsShowAlbumDate(bool val)
+{
+    d->tooltipShowAlbumDate = val;
+}
+
+bool AlbumSettings::getToolTipsShowAlbumDate() const
+{
+    return d->tooltipShowAlbumDate;
+}
+
+void AlbumSettings::setToolTipsShowAlbumCollection(bool val)
+{
+    d->tooltipShowAlbumCollection = val;
+}
+
+bool AlbumSettings::getToolTipsShowAlbumCollection() const
+{
+    return d->tooltipShowAlbumCollection;
+}
+
+void AlbumSettings::setToolTipsShowAlbumCaption(bool val)
+{
+    d->tooltipShowAlbumCaption = val;
+}
+
+bool AlbumSettings::getToolTipsShowAlbumCaption() const
+{
+    return d->tooltipShowAlbumCaption;
 }
 
 void AlbumSettings::setCurrentTheme(const QString& theme)
