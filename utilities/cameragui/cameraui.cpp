@@ -1152,7 +1152,7 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
     if (d->cameraFreeSpace->isValid())
     {
         // Check if space require to upload new items in camera is enough.
-        qint64 totalKbSize = 0;
+        quint64 totalKbSize = 0;
         for (KUrl::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
         {
             QFileInfo fi((*it).path());
