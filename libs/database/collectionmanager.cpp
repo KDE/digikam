@@ -49,7 +49,9 @@
 
 #include "databaseaccess.h"
 #include "databasechangesets.h"
+#include "databasetransaction.h"
 #include "albumdb.h"
+#include "collectionscanner.h"
 #include "collectionlocation.h"
 
 namespace Digikam
@@ -842,7 +844,13 @@ void CollectionManager::removeLocation(const CollectionLocation &location)
         if (!albumLoc)
             return;
 
+        // Ensure that all albums are set to orphan and no images will be permanently deleted,
+        // as would do only calling deleteAlbumRoot by a Trigger
+        QList<int> albumIds = access.db()->getAlbumsOnAlbumRoot(albumLoc->id());
         ChangingDB changing(d);
+        CollectionScanner scanner;
+        DatabaseTransaction transaction(&access);
+        scanner.safelyRemoveAlbums(albumIds);
         access.db()->deleteAlbumRoot(albumLoc->id());
     }
 
