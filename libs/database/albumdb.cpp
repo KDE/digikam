@@ -2107,6 +2107,20 @@ QList<int> AlbumDB::getAlbumAndSubalbumsForPath(int albumRootId, const QString& 
     return albumIds;
 }
 
+QList<int> AlbumDB::getAlbumsOnAlbumRoot(int albumRootId)
+{
+    QList<QVariant> values;
+    d->db->execSql( QString("SELECT id FROM Albums WHERE albumRoot=?;"),
+                    albumRootId, &values);
+
+    QList<int> albumIds;
+    for (QList<QVariant>::iterator it = values.begin(); it != values.end(); ++it)
+    {
+        albumIds << (*it).toInt();
+    }
+    return albumIds;
+}
+
 qlonglong AlbumDB::addItem(int albumID, const QString& name,
                            DatabaseItem::Status status,
                            DatabaseItem::Category category,

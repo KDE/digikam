@@ -229,6 +229,12 @@ public:
     //QStringList getSubalbumsForPath(const QString &albumRoot, const QString& path, bool onlyDirectSubalbums = true);
 
     /**
+     * Find out all album ids of a given album root
+     * @return a list of album ids.
+     */
+    QList<int> getAlbumsOnAlbumRoot(int albumRootId);
+
+    /**
      * Deletes an album from the database. This will not delete the
      * subalbums of the album.
      * @param albumID the id of the album
