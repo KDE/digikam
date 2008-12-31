@@ -408,22 +408,26 @@ void CollectionScanner::scanForStaleAlbums(QList<CollectionLocation> locations)
         }
     }
 
-    // For all albums in toBeDeleted:
+    safelyRemoveAlbums(toBeDeleted);
+
+    if (d->wantSignals)
+        emit finishedScanningForStaleAlbums();
+}
+
+void CollectionScanner::safelyRemoveAlbums(const QList<int> &albumIds)
+{
     // Remove the items (orphan items, detach them from the album, but keep entries for a certain time)
     // Make album orphan (no album root, keep entries until next application start)
     {
         DatabaseAccess access;
         DatabaseTransaction transaction(&access);
-        foreach (int albumId, toBeDeleted)
+        foreach (int albumId, albumIds)
         {
             access.db()->removeItemsFromAlbum(albumId);
             access.db()->makeStaleAlbum(albumId);
             d->removedItems();
         }
     }
-
-    if (d->wantSignals)
-        emit finishedScanningForStaleAlbums();
 }
 
 int CollectionScanner::checkAlbum(const CollectionLocation &location, const QString &album)

@@ -100,6 +100,14 @@ public:
     void recordHints(const QList<AlbumCopyMoveHint> &hint);
     void recordHints(const QList<ItemCopyMoveHint> &hint);
 
+    /**
+     * Utility method:
+     * Prepare the given albums to be removed,
+     * typically by setting the albums as orphan
+     * and removing all entries from the albums
+     */
+     void safelyRemoveAlbums(const QList<int> &albumIds);
+
 protected:
 
     void scanForStaleAlbums(QList<CollectionLocation> locations);
