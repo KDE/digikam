@@ -6,7 +6,7 @@
  * Date        : 2008-07-30
  * Description : digiKam about data.
  *
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,7 +46,7 @@ static inline KLocalizedString digiKamSlogan()
 
 static inline KLocalizedString copyright()
 {
-    return ki18n("(c) 2002-2008, digiKam developers team");
+    return ki18n("(c) 2002-2009, digiKam developers team");
 }
 
 static inline KUrl webProjectUrl()
