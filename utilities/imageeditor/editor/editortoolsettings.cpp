@@ -35,6 +35,7 @@
 #include <kapplication.h>
 #include <kcolorbutton.h>
 #include <kdialog.h>
+#include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kpushbutton.h>
@@ -68,6 +69,7 @@ public:
         cancelBtn    = 0;
         tryBtn       = 0;
         defaultBtn   = 0;
+        mainVBox     = 0;
         plainPage    = 0;
         btnBox1      = 0;
         btnBox2      = 0;
@@ -85,6 +87,7 @@ public:
     QHBox              *btnBox3;
     QHBox              *guideBox;
 
+    QVBox              *mainVBox;
     QWidget            *plainPage;
 
     KPushButton        *okBtn;
@@ -110,12 +113,12 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
     setResizePolicy(QScrollView::AutoOneFit);
     setFrameStyle(QFrame::NoFrame);
 
-    QVBox* vbox = new QVBox(viewport());
-    addChild(vbox);
+    d->mainVBox = new QVBox(viewport());
+    addChild(d->mainVBox);
 
     // ---------------------------------------------------------------
 
-    QFrame *frame     = new QFrame(vbox);
+    QFrame *frame     = new QFrame(d->mainVBox);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* vlay = new QVBoxLayout(frame, 5, 0);
     d->panIconView    = new ImagePanIconWidget(360, 240, frame);
@@ -130,10 +133,10 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
 
     // ---------------------------------------------------------------
 
-    d->plainPage = new QWidget(vbox);
-    d->guideBox  = new QHBox(vbox);
-    d->btnBox1   = new QHBox(vbox);
-    d->btnBox2   = new QHBox(vbox);
+    d->plainPage = new QWidget(d->mainVBox);
+    d->guideBox  = new QHBox(d->mainVBox);
+    d->btnBox1   = new QHBox(d->mainVBox);
+    d->btnBox2   = new QHBox(d->mainVBox);
 
     // ---------------------------------------------------------------
 
@@ -242,6 +245,18 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, QWidget *pa
 EditorToolSettings::~EditorToolSettings()
 {
     delete d;
+}
+
+QSize EditorToolSettings::minimumSizeHint() const
+{
+    // Editor Tools usually require a larger horizontal space than other widgets in right side bar
+    // Set scroll area to a horizontal minimum size sufficient for the settings.
+    // Do not touch vertical size hint.
+    // Limit to 40% of the desktop width.
+    QSize hint = QScrollView::minimumSizeHint();
+    QRect desktopRect = KGlobalSettings::desktopGeometry(d->mainVBox);
+    hint.setWidth(QMIN(d->mainVBox->minimumSizeHint().width(), desktopRect.width() * 2 / 5));
+    return hint;
 }
 
 int EditorToolSettings::marginHint()

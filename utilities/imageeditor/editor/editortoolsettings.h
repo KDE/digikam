@@ -87,6 +87,8 @@ public:
     KPushButton* button(int buttonCode) const;
     void enableButton(int buttonCode, bool state);
 
+    virtual QSize minimumSizeHint() const;
+
 signals:
 
     void signalOkClicked();
