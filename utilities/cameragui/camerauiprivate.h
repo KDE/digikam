@@ -153,31 +153,30 @@ public:
 
     QDateTime                     lastAccess;
 
-    QAction                      *increaseThumbsAction;
-    QAction                      *decreaseThumbsAction;
-    QAction                      *fullScreenAction;
-
-    KAction                      *imageViewAction;
-    KAction                      *downloadSelectedAction;
-    KAction                      *downloadDelSelectedAction;
+    KAction                      *cameraCancelAction;
+    KAction                      *cameraCaptureAction;
+    KAction                      *cameraInfoAction;
+    KAction                      *contributeAction;
+    KAction                      *decreaseThumbsAction;
+    KAction                      *deleteAllAction;
+    KAction                      *deleteSelectedAction;
+    KAction                      *donateMoneyAction;
     KAction                      *downloadAllAction;
     KAction                      *downloadDelAllAction;
-    KAction                      *deleteSelectedAction;
-    KAction                      *deleteAllAction;
-    KAction                      *cameraInfoAction;
-    KAction                      *cameraCaptureAction;
-    KAction                      *uploadAction;
-    KAction                      *lockAction;
-    KAction                      *selectAllAction;
-    KAction                      *selectNoneAction;
-    KAction                      *selectInvertAction;
-    KAction                      *selectNewItemsAction;
-    KAction                      *selectLockedItemsAction;
-    KAction                      *donateMoneyAction;
-    KAction                      *contributeAction;
-    KAction                      *cameraCancelAction;
-    KAction                      *rawCameraListAction;
+    KAction                      *downloadDelSelectedAction;
+    KAction                      *downloadSelectedAction;
+    KAction                      *fullScreenAction;
+    KAction                      *imageViewAction;
+    KAction                      *increaseThumbsAction;
     KAction                      *libsInfoAction;
+    KAction                      *lockAction;
+    KAction                      *rawCameraListAction;
+    KAction                      *selectAllAction;
+    KAction                      *selectInvertAction;
+    KAction                      *selectLockedItemsAction;
+    KAction                      *selectNewItemsAction;
+    KAction                      *selectNoneAction;
+    KAction                      *uploadAction;
     KToggleAction                *showMenuBarAction;
 
     KComboBox                    *losslessFormat;

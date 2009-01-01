@@ -309,8 +309,8 @@ void CameraUI::setupActions()
 
     // -----------------------------------------------------------------
 
-    actionCollection()->addAction(KStandardAction::Close, "cameraui_close",
-                                  this, SLOT(close()));
+    KAction* closeAction = KStandardAction::close(this, SLOT(close()), this);
+    actionCollection()->addAction("cameraui_close", closeAction);
 
     // -- Edit menu ----------------------------------------------------
 
@@ -405,13 +405,13 @@ void CameraUI::setupActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    d->increaseThumbsAction = actionCollection()->addAction(KStandardAction::ZoomIn, "cameraui_zoomplus",
-                                                            this, SLOT(slotIncreaseThumbSize()));
+    d->increaseThumbsAction = KStandardAction::zoomIn(this, SLOT(slotIncreaseThumbSize()), this);
     d->increaseThumbsAction->setEnabled(false);
+    actionCollection()->addAction("cameraui_zoomplus", d->increaseThumbsAction);
 
-    d->decreaseThumbsAction = actionCollection()->addAction(KStandardAction::ZoomOut, "cameraui_zoomminus",
-                                                            this, SLOT(slotDecreaseThumbSize()));
+    d->decreaseThumbsAction = KStandardAction::zoomOut(this, SLOT(slotDecreaseThumbSize()), this);
     d->decreaseThumbsAction->setEnabled(false);
+    actionCollection()->addAction("cameraui_zoomminus", d->decreaseThumbsAction);
 
     d->fullScreenAction = actionCollection()->addAction(KStandardAction::FullScreen,
                           "cameraui_fullscreen", this, SLOT(slotToggleFullScreen()));
