@@ -10,6 +10,7 @@ Name[nl]=Afbeeldingsplugin_Perspectief
 Name[sv]=Insticksprogram för perspektiv
 Name[tr]=GörüntüEklentisi_Perspektif
 Name[x-test]=xxImagePlugin_Perspectivexx
+Name[zh_TW]=影像特效_透視圖
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -45,6 +46,7 @@ Comment[uk]=Втулка інструменту перспективи digiKam
 Comment[vi]=Bổ sung công cụ phối cảnh cho digiKam
 Comment[x-test]=xxPerspective tool plugin for digiKamxx
 Comment[zh_CN]=digiKam 透视工具插件
+Comment[zh_TW]=digiKam 使用的透視工具外掛程式
 
 X-KDE-Library=digikamimageplugin_perspective
 author=Gilles Caulier, caulier dot gilles at gmail dot com

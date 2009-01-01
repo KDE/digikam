@@ -10,6 +10,7 @@ Name[nl]=Afbeeldingsplugin_Restauratie
 Name[sv]=Insticksprogram för bildrestaurering
 Name[tr]=GörüntüEklentisi_Onarım
 Name[x-test]=xxImagePlugin_Restorationxx
+Name[zh_TW]=影像特效_恢復
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -48,6 +49,7 @@ Comment[uk]=Втулка відновлення зображень digiKam
 Comment[vi]=Bổ sung phục hồi ảnh chụp cho digiKam
 Comment[x-test]=xxdigiKam plugin to restore a photographxx
 Comment[zh_CN]=digiKam 照片还原插件
+Comment[zh_TW]=可用於恢復圖像的 digiKam 外掛程式
 
 X-KDE-Library=digikamimageplugin_restoration
 author=Gilles Caulier, caulier dot gilles at gmail dot com

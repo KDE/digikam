@@ -10,6 +10,7 @@ Name[nl]=Afbeeldingsplugin_SjabloonAanbrengen
 Name[sv]=Insticksprogram för överlagring
 Name[tr]=GörüntüEklentisi_Büyüt
 Name[x-test]=xxImagePlugin_SuperImposexx
+Name[zh_TW]=影像特效_重疊
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -45,6 +46,7 @@ Comment[uk]=Втулка шаблону накладання зображенн�
 Comment[vi]=Bổ sung đặt biểu mẫu trên cho digiKam
 Comment[x-test]=xxTemplate superimpose plugin for digiKamxx
 Comment[zh_CN]=digiKam 模板叠加插件
+Comment[zh_TW]=digiKam 使用的樣板重疊特效外掛程式
 
 X-KDE-Library=digikamimageplugin_superimpose
 author=Gilles Caulier, caulier dot gilles at gmail dot com

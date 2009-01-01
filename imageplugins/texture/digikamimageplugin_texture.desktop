@@ -10,6 +10,7 @@ Name[nl]=Afbeeldingsplugin_Textuur
 Name[sv]=Insticksprogram för struktur
 Name[tr]=GörüntüEklentisi_Desen
 Name[x-test]=xxImagePlugin_Texturexx
+Name[zh_TW]=影像特效_紋路
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -48,6 +49,7 @@ Comment[uk]=Втулка застосування текстури на зобр
 Comment[vi]=Bổ sung áp dụng hoạ tiết trên ảnh cho digiKam
 Comment[x-test]=xxdigiKam plugin to apply texture on imagexx
 Comment[zh_CN]=digiKam 图像纹理应用插件
+Comment[zh_TW]=在影像上套用紋路的 digiKam 外掛程式
 
 X-KDE-Library=digikamimageplugin_texture
 author=Gilles Caulier, caulier dot gilles at gmail dot com

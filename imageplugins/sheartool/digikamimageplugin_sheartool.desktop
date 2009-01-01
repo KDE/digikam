@@ -10,6 +10,7 @@ Name[nl]=Afbeeldingsplugin_SchuinTrekken
 Name[sv]=Insticksprogram med skjuvningsverktyg
 Name[tr]=GörüntüEklentisi_KırpmaAracı
 Name[x-test]=xxImagePlugin_ShearToolxx
+Name[zh_TW]=影像特效_修剪工具
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -45,6 +46,7 @@ Comment[uk]=Засіб зсуву для digiKam
 Comment[vi]=Bổ sung công cụ kéo cắt cho digiKam
 Comment[x-test]=xxShear tool plugin for digiKamxx
 Comment[zh_CN]=digiKam 裁减工具插件
+Comment[zh_TW]=digiKam 使用的修剪工具外掛程式
 
 X-KDE-Library=digikamimageplugin_sheartool
 author=Gilles Caulier, caulier dot gilles at gmail dot com

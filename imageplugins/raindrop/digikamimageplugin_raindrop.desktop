@@ -10,6 +10,7 @@ Name[nl]=Afbeeldingsplugin_Regendruppels
 Name[sv]=Insticksprogram för regndroppar
 Name[tr]=GörüntüEklentisi_YağmurDamlası
 Name[x-test]=xxImagePlugin_RainDropxx
+Name[zh_TW]=影像特效_雨滴
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -46,6 +47,7 @@ Comment[uk]=Втулка ефекту імітації крапель дощу �
 Comment[vi]=Bổ sung hiệu ứng ảnh giọt mưa cho digiKam
 Comment[x-test]=xxRain dropping image effect plugin for digiKamxx
 Comment[zh_CN]=digiKam 雨滴图像效果插件
+Comment[zh_TW]=digiKam 使用的雨滴特效外掛程式
 
 X-KDE-Library=digikamimageplugin_raindrop
 author=Gilles Caulier, caulier dot gilles at gmail dot com

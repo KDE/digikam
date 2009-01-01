@@ -10,6 +10,7 @@ Name[nl]=Afbeeldingsplugin_Olieverf
 Name[sv]=Insticksprogram för oljemålning
 Name[tr]=GörüntüEklentisi_YağlıBoya
 Name[x-test]=xxImagePlugin_OilPaintxx
+Name[zh_TW]=影像特效_油畫
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -45,6 +46,7 @@ Comment[uk]=Втулка ефекту імітації малювання олі
 Comment[vi]=Bổ sung hiệu ứng ảnh son dầu cho digiKam
 Comment[x-test]=xxOil paint image effect plugin for digiKamxx
 Comment[zh_CN]=digiKam 油画图像效果插件
+Comment[zh_TW]=digiKam 使用的油畫特效外掛程式
 
 X-KDE-Library=digikamimageplugin_oilpaint
 author=Gilles Caulier, caulier dot gilles at gmail dot com
