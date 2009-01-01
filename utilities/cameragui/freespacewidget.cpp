@@ -299,7 +299,6 @@ void FreeSpaceWidget::paintEvent(QPaintEvent*)
                                                 tRect.width(), tRect.height(), 0, text);
         p.setPen(palette().text().color());
         p.drawText(tRect, Qt::AlignCenter, text);
-
     }
 }
 
