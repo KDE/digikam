@@ -65,8 +65,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 047 ==> 179141 : digiKam crashes when exiting.
 048 ==> 179276 : Namuga webcam Samsung netbook NC10.
 049 ==> 179274 : "XMP" not underscored in settings dialog.
-050 ==>  
-
+050 ==> 179298 : digiKam scan for new images progress bar starts at 100%. 
+051 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta7 - Release date: 2008-12-18
