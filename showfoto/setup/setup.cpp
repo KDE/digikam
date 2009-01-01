@@ -93,7 +93,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     setModal(true);
 
     d->editorPage  = new SetupEditor();
-    d->page_editor = addPage( d->editorPage, i18n("General") );
+    d->page_editor = addPage( d->editorPage, i18nc("general settings tab", "General") );
     d->page_editor->setHeader( i18n("General Settings") );
     d->page_editor->setIcon( KIcon("showfoto") );
 

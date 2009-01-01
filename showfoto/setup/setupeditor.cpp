@@ -185,9 +185,9 @@ SetupEditor::SetupEditor(QWidget* parent )
     KHBox* sortBox       = new KHBox(sortOptionsGroup);
     new QLabel(i18n("Sort images by:"), sortBox);
     d->sortOrderComboBox = new KComboBox(sortBox);
-    d->sortOrderComboBox->insertItem(0, i18n("Date"));
-    d->sortOrderComboBox->insertItem(1, i18n("Name"));
-    d->sortOrderComboBox->insertItem(2, i18n("File Size"));
+    d->sortOrderComboBox->insertItem(0, i18nc("sort images by date", "Date"));
+    d->sortOrderComboBox->insertItem(1, i18nc("sort images by name", "Name"));
+    d->sortOrderComboBox->insertItem(2, i18nc("sort images by size", "File Size"));
     d->sortOrderComboBox->setWhatsThis(i18n("Here, select whether newly-loaded "
                                             "images are sorted by their date, name, or size on disk."));
 

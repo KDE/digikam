@@ -136,9 +136,9 @@ KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
     m_lens             = new RComboBox(this);
     m_lens->setDefaultIndex(0);
 
-    QLabel *makeLabel  = new QLabel(i18n("Make:"), this);
-    QLabel *modelLabel = new QLabel(i18n("Model:"), this);
-    QLabel *lensLabel  = new QLabel(i18n("Lens:"), this);
+    QLabel *makeLabel  = new QLabel(i18nc("camera make", "Make:"), this);
+    QLabel *modelLabel = new QLabel(i18nc("camera model", "Model:"), this);
+    QLabel *lensLabel  = new QLabel(i18nc("camera lens", "Lens:"), this);
 
     m_exifUsage->setEnabled(false);
     m_exifUsage->setCheckState(Qt::Unchecked);

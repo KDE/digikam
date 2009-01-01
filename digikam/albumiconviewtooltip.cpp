@@ -132,7 +132,8 @@ QString AlbumIconViewToolTip::fillTipContents(const ImageInfo& info)
 
         if (settings->getToolTipsShowFileName())
         {
-            tip += cnt.cellBeg + i18n("Name:") + cnt.cellMid;
+            tip += cnt.cellBeg + i18nc("filename",
+                                       "Name:") + cnt.cellMid;
             tip += commonInfo.fileName + cnt.cellEnd;
         }
 
@@ -162,7 +163,8 @@ QString AlbumIconViewToolTip::fillTipContents(const ImageInfo& info)
         {
             if (commonInfo.width == 0 || commonInfo.height == 0)
             {
-                str = i18n("Unknown");
+                str = i18nc("unknown / invalid image dimension",
+                            "Unknown");
             }
             else
             {
@@ -204,11 +206,13 @@ QString AlbumIconViewToolTip::fillTipContents(const ImageInfo& info)
                 {
                     str = KGlobal::locale()->formatDateTime(commonInfo.creationDate, KLocale::ShortDate, true);
                     if (str.length() > cnt.maxStringLenght) str = str.left(cnt.maxStringLenght-3) + "...";
-                    metaStr += cnt.cellBeg + i18n("Created:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+                    metaStr += cnt.cellBeg + i18nc("creation date of the image",
+                                                   "Created:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
                 }
                 else
                 {
-                    metaStr += cnt.cellBeg + i18n("Created:") + cnt.cellMid + Qt::escape(cnt.unavailable) + cnt.cellEnd;
+                    metaStr += cnt.cellBeg + i18nc("creation date of the image",
+                                                   "Created:") + cnt.cellMid + Qt::escape(cnt.unavailable) + cnt.cellEnd;
                 }
             }
 
@@ -251,7 +255,8 @@ QString AlbumIconViewToolTip::fillTipContents(const ImageInfo& info)
             {
                 str = photoInfo.flashMode.isEmpty() ? cnt.unavailable : photoInfo.flashMode;
                 if (str.length() > cnt.maxStringLenght) str = str.left(cnt.maxStringLenght-3) + "...";
-                metaStr += cnt.cellBeg + i18n("Flash:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+                metaStr += cnt.cellBeg + i18nc("camera flash settings",
+                                               "Flash:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoWB())
@@ -285,7 +290,8 @@ QString AlbumIconViewToolTip::fillTipContents(const ImageInfo& info)
         {
             str = info.comment();
             if (str.isEmpty()) str = QString("---");
-            tip += cnt.cellSpecBeg + i18n("Caption:") + cnt.cellSpecMid + 
+            tip += cnt.cellSpecBeg + i18nc("caption of the file",
+                                           "Caption:") + cnt.cellSpecMid +
                    cnt.breakString(str) + cnt.cellSpecEnd;
         }
 

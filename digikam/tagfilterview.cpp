@@ -925,7 +925,7 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
         selectParentsAction  = selectTagsMenu.addAction(i18n("Parents"));
     }
     popmenu.addMenu(&selectTagsMenu);
-    selectTagsMenu.menuAction()->setText(i18n("Select"));
+    selectTagsMenu.menuAction()->setText(i18nc("select tags menu", "Select"));
 
     KMenu deselectTagsMenu;
     QAction *deselectAllTagsAction, *deselectChildrenAction=0, *deselectParentsAction=0;
@@ -937,7 +937,7 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
         deselectParentsAction  = deselectTagsMenu.addAction(i18n("Parents"));
     }
     popmenu.addMenu(&deselectTagsMenu);
-    deselectTagsMenu.menuAction()->setText(i18n("Deselect"));
+    deselectTagsMenu.menuAction()->setText(i18nc("deselect tags menu", "Deselect"));
 
     QAction *invertAction;
     invertAction = popmenu.addAction(i18n("Invert Selection"));
@@ -945,11 +945,11 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
 
 
     KSelectAction *toggleAutoAction = new KSelectAction(i18n("Toggle Auto"), &popmenu);
-    QAction *toggleNoneAction     = toggleAutoAction->addAction(i18n("None"));
+    QAction *toggleNoneAction     = toggleAutoAction->addAction(i18nc("no auto toggle", "None"));
     toggleAutoAction->menu()->addSeparator();
-    QAction *toggleChildrenAction = toggleAutoAction->addAction(i18n("Children"));
-    QAction *toggleParentsAction  = toggleAutoAction->addAction(i18n("Parents"));
-    QAction *toggleBothAction     = toggleAutoAction->addAction(i18n("Both"));
+    QAction *toggleChildrenAction = toggleAutoAction->addAction(i18nc("toggle child tags", "Children"));
+    QAction *toggleParentsAction  = toggleAutoAction->addAction(i18nc("toggle parent tag", "Parents"));
+    QAction *toggleBothAction     = toggleAutoAction->addAction(i18nc("toggle child and parent tags", "Both"));
 
     toggleNoneAction->setChecked(d->toggleAutoTags == TagFilterView::NoToggleAuto);
     toggleChildrenAction->setChecked(d->toggleAutoTags == TagFilterView::Children);

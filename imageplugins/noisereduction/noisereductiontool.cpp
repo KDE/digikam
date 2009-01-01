@@ -199,7 +199,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
 
     QWidget* secondPage = new QWidget( mainTab );
     QGridLayout* grid2  = new QGridLayout( secondPage );
-    mainTab->addTab( secondPage, i18n("Advanced") );
+    mainTab->addTab( secondPage, i18nc("advanced settings", "Advanced") );
 
     QLabel *label2      = new QLabel(i18n("Luminance:"), secondPage);
 
@@ -215,7 +215,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label6 = new QLabel(i18n("Color:"), secondPage);
+    QLabel *label6 = new QLabel(i18nc("color tolerance", "Color:"), secondPage);
 
     m_csmoothInput = new RDoubleNumInput(secondPage);
     m_csmoothInput->setDecimals(1);
@@ -229,7 +229,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label8 = new QLabel(i18n("Gamma:"), secondPage);
+    QLabel *label8 = new QLabel(i18nc("gamma tolerance", "Gamma:"), secondPage);
 
     m_gammaInput   = new RDoubleNumInput(secondPage);
     m_gammaInput->setDecimals(1);

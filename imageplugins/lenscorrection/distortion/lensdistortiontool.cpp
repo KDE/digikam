@@ -98,7 +98,7 @@ LensDistortionTool::LensDistortionTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label1 = new QLabel(i18n("Main:"), m_gboxSettings->plainPage());
+    QLabel *label1 = new QLabel(i18nc("value for amount of distortion", "Main:"), m_gboxSettings->plainPage());
 
     m_mainInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_mainInput->setDecimals(1);

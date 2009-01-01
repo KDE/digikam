@@ -322,7 +322,7 @@ void AlbumIconItem::paintItem(QPainter *p)
         p->setFont(d->view->itemFontXtra());
         QString str;
         dateToString(date, str);
-        str = i18n("created : %1",str);
+        str = i18nc("date of image creation", "created : %1",str);
         p->drawText(r, Qt::AlignCenter, squeezedText(p, r.width(), str));
     }
 
@@ -334,7 +334,7 @@ void AlbumIconItem::paintItem(QPainter *p)
         p->setFont(d->view->itemFontXtra());
         QString str;
         dateToString(date, str);
-        str = i18n("modified : %1",str);
+        str = i18nc("date of last image modification", "modified : %1",str);
         p->drawText(r, Qt::AlignCenter, squeezedText(p, r.width(), str));
     }
 
@@ -345,8 +345,9 @@ void AlbumIconItem::paintItem(QPainter *p)
         {
             QString mpixels, resolution;
             mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
-            resolution = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)",
-                          dims.width(),dims.height(),mpixels);
+            resolution = (!dims.isValid()) ? i18nc("unknown image resolution", "Unknown")
+                                           : i18nc("%1 width, %2 height, %3 mpixels", "%1x%2 (%3Mpx)",
+                                                   dims.width(),dims.height(),mpixels);
             r = d->view->itemResolutionRect();
             p->drawText(r, Qt::AlignCenter, squeezedText(p, r.width(), resolution));
         }

@@ -86,10 +86,10 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
 
     QLabel *filterMethodLabel = new QLabel(i18n("Filter:"), m_gboxSettings->plainPage());
     m_filterMethodCombo       = new RComboBox(m_gboxSettings->plainPage());
-    m_filterMethodCombo->addItem(i18n("Average"));
-    m_filterMethodCombo->addItem(i18n("Linear"));
-    m_filterMethodCombo->addItem(i18n("Quadratic"));
-    m_filterMethodCombo->addItem(i18n("Cubic"));
+    m_filterMethodCombo->addItem(i18nc("average filter mode", "Average"));
+    m_filterMethodCombo->addItem(i18nc("linear filter mode", "Linear"));
+    m_filterMethodCombo->addItem(i18nc("quadratic filter mode", "Quadratic"));
+    m_filterMethodCombo->addItem(i18nc("cubic filter mode", "Cubic"));
     m_filterMethodCombo->setDefaultIndex(HotPixelFixer::QUADRATIC_INTERPOLATION);
 
     m_blackFrameButton = new QPushButton(i18n("Black Frame..."), m_gboxSettings->plainPage());

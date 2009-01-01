@@ -121,7 +121,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     QLabel *label = new QLabel(i18n("Aspect ratio:"), cropSelection);
     m_ratioCB     = new RComboBox(cropSelection);
-    m_ratioCB->addItem(i18n("Custom"));
+    m_ratioCB->addItem(i18nc("custom aspect ratio crop settings", "Custom"));
     m_ratioCB->addItem("1:1");
     m_ratioCB->addItem("2:3");
     m_ratioCB->addItem("3:4");
@@ -129,7 +129,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
     m_ratioCB->addItem("5:7");
     m_ratioCB->addItem("7:10");
     m_ratioCB->addItem(i18n("Golden Ratio"));
-    m_ratioCB->addItem(i18n("None"));
+    m_ratioCB->addItem(i18nc("no crop mode", "None"));
     m_ratioCB->setDefaultIndex(ImageSelectionWidget::RATIO03X04);
     setRatioCBText(ImageSelectionWidget::Landscape);
     m_ratioCB->setWhatsThis( i18n("<p>Select your constrained aspect ratio for cropping. "
@@ -183,7 +183,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     m_xInput = new RIntNumInput(cropSelection);
     m_xInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
-    m_xInput->input()->setLabel(i18n("X:"), Qt::AlignLeft|Qt::AlignVCenter);
+    m_xInput->input()->setLabel(i18nc("top left corner position for cropping", "X:"), Qt::AlignLeft|Qt::AlignVCenter);
     m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1);
     m_xInput->setSliderEnabled(true);
     m_xInput->setDefaultValue(50);
@@ -234,7 +234,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
     m_guideLinesCB->addItem(i18n("Rules of Thirds"));
     m_guideLinesCB->addItem(i18n("Harmonious Triangles"));
     m_guideLinesCB->addItem(i18n("Golden Mean"));
-    m_guideLinesCB->addItem(i18n("None"));
+    m_guideLinesCB->addItem(i18nc("no composition guide", "None"));
     m_guideLinesCB->setDefaultIndex(ImageSelectionWidget::GuideNone);
     m_guideLinesCB->setCurrentIndex(3);
     m_guideLinesCB->setWhatsThis( i18n("With this option, you can display guide lines "
@@ -569,7 +569,7 @@ void RatioCropTool::setRatioCBText(int orientation)
     int item = m_ratioCB->currentIndex();
     m_ratioCB->blockSignals(true);
     m_ratioCB->combo()->clear();
-    m_ratioCB->addItem(i18n("Custom"));
+    m_ratioCB->addItem(i18nc("custom ratio crop settings", "Custom"));
     m_ratioCB->addItem("1:1");
     if (orientation == ImageSelectionWidget::Landscape)
     {
@@ -588,7 +588,7 @@ void RatioCropTool::setRatioCBText(int orientation)
         m_ratioCB->addItem("7:10");
     }
     m_ratioCB->addItem(i18n("Golden Ratio"));
-    m_ratioCB->addItem(i18n("None"));
+    m_ratioCB->addItem(i18nc("no aspect ratio", "None"));
     m_ratioCB->setCurrentIndex(item);
     m_ratioCB->blockSignals(false);
 }

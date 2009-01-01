@@ -126,7 +126,7 @@ ColorFXTool::ColorFXTool(QObject* parent)
                                      "<p><b>Find Edges</b>: detects the edges in a photograph "
                                      "and their strength.</p>"));
 
-    m_levelLabel = new QLabel(i18n("Level:"), m_gboxSettings->plainPage());
+    m_levelLabel = new QLabel(i18nc("level of the effect", "Level:"), m_gboxSettings->plainPage());
     m_levelInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_levelInput->setRange(0, 100, 1);
     m_levelInput->setSliderEnabled(true);

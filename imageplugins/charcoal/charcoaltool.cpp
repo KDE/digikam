@@ -90,7 +90,7 @@ CharcoalTool::CharcoalTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Smooth:"), m_gboxSettings->plainPage());
+    QLabel *label2 = new QLabel(i18nc("smoothing value of the pencil", "Smooth:"), m_gboxSettings->plainPage());
 
     m_smoothInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_smoothInput->setRange(1, 100, 1);

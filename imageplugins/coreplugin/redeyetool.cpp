@@ -114,7 +114,8 @@ RedEyeTool::RedEyeTool(QObject* parent)
                                       "Use low value if eye have been selected exactly. "
                                       "Use high value if other parts of the face are also selected.</p>"));
 
-    m_smoothLabel = new QLabel(i18n("Smooth:"), m_gboxSettings->plainPage());
+    m_smoothLabel = new QLabel(i18nc("Smoothness when blurring border of changed pixels",
+                                     "Smooth:"), m_gboxSettings->plainPage());
     m_smoothLevel = new RIntNumInput(m_gboxSettings->plainPage());
     m_smoothLevel->setRange(0, 5, 1);
     m_smoothLevel->setSliderEnabled(true);

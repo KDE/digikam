@@ -128,7 +128,7 @@ BlurFXTool::BlurFXTool(QObject* parent)
     m_distanceInput->setDefaultValue(3);
     m_distanceInput->setWhatsThis( i18n("Set here the blur distance in pixels."));
 
-    m_levelLabel = new QLabel(i18n("Level:"), m_gboxSettings->plainPage());
+    m_levelLabel = new QLabel(i18nc("level to use for the effect", "Level:"), m_gboxSettings->plainPage());
     m_levelInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_levelInput->setRange(0, 360, 1);
     m_levelInput->setSliderEnabled(true);

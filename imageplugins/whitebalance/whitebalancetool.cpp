@@ -146,7 +146,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     m_temperaturePresetCB->addItem(i18n("Sun"));
     m_temperaturePresetCB->addItem(i18n("Xenon Lamp"));
     m_temperaturePresetCB->addItem(i18n("Daylight D65"));
-    m_temperaturePresetCB->addItem(i18n("None"));
+    m_temperaturePresetCB->addItem(i18nc("no temperature preset", "None"));
     m_temperaturePresetCB->setDefaultIndex(DaylightD65);
     m_temperaturePresetCB->setWhatsThis( i18n("<p>Select the white balance color temperature "
                                               "preset to use here:</p>"
@@ -221,7 +221,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
                                       "Exposure Compensation</a> (E.V): "), m_gboxSettings->plainPage());
     m_exposureLabel->setOpenExternalLinks(true);
 
-    m_mainExposureLabel  = new QLabel(i18n("Main:"), m_gboxSettings->plainPage());
+    m_mainExposureLabel  = new QLabel(i18nc("main exposure value", "Main:"), m_gboxSettings->plainPage());
     m_autoAdjustExposure = new QToolButton(m_gboxSettings->plainPage());
     m_autoAdjustExposure->setIcon(KIconLoader::global()->loadIcon("system-run", KIconLoader::Toolbar));
     m_autoAdjustExposure->setToolTip( i18n( "Auto exposure adjustments" ) );
@@ -233,7 +233,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     m_mainExposureInput->setDefaultValue(0.0);
     m_mainExposureInput->setWhatsThis( i18n("Set here the main exposure compensation value in E.V."));
 
-    m_fineExposureLabel = new QLabel(i18n("Fine:"), m_gboxSettings->plainPage());
+    m_fineExposureLabel = new QLabel(i18nc("fine exposure adjustment", "Fine:"), m_gboxSettings->plainPage());
     m_fineExposureInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_fineExposureInput->setDecimals(2);
     m_fineExposureInput->input()->setRange(-0.5, 0.5, 0.01, true);

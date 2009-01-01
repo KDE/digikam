@@ -132,7 +132,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     QLabel *label5 = new QLabel(i18n("Auto-crop:"), m_gboxSettings->plainPage());
     m_autoCropCB   = new RComboBox(m_gboxSettings->plainPage());
-    m_autoCropCB->addItem( i18n("None") );
+    m_autoCropCB->addItem( i18nc("no autocrop", "None") );
     m_autoCropCB->addItem( i18n("Widest Area") );
     m_autoCropCB->addItem( i18n("Largest Area") );
     m_autoCropCB->setDefaultIndex(FreeRotation::NoAutoCrop);

@@ -159,7 +159,7 @@ InsertTextTool::InsertTextTool(QObject* parent)
 
     QLabel *label1 = new QLabel(i18n("Rotation:"), m_gboxSettings->plainPage());
     m_textRotation = new KComboBox(m_gboxSettings->plainPage());
-    m_textRotation->addItem(i18n("None"));
+    m_textRotation->addItem(i18nc("no rotation", "None"));
     m_textRotation->addItem(i18n("90 Degrees"));
     m_textRotation->addItem(i18n("180 Degrees"));
     m_textRotation->addItem(i18n("270 Degrees"));
@@ -167,7 +167,7 @@ InsertTextTool::InsertTextTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Color:"), m_gboxSettings->plainPage());
+    QLabel *label2 = new QLabel(i18nc("font color", "Color:"), m_gboxSettings->plainPage());
     m_fontColorButton = new KColorButton(Qt::black, m_gboxSettings->plainPage());
     m_fontColorButton->setWhatsThis(i18n("Set here the font color to use."));
 

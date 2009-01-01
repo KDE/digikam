@@ -132,7 +132,7 @@ class RatingMenuItem : public QWidget
 RatingPopupMenu::RatingPopupMenu(QWidget* parent)
                : KMenu(parent)
 {
-    QAction *action = addAction(i18n("None"), this, SLOT(slotRatingTriggered()));
+    QAction *action = addAction(i18nc("assign no rating", "None"), this, SLOT(slotRatingTriggered()));
     action->setData(0);
 
     for (int i = 1 ; i <= RatingMax ; i++)

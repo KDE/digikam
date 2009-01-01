@@ -214,7 +214,9 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
 
     int type = BWGeneric;
 
-    ListWidgetBWPreviewItem *item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Generic"), m_previewPixmapFactory, type);
+    ListWidgetBWPreviewItem *item = new ListWidgetBWPreviewItem(m_bwFilm,
+                                                                i18nc("generic black and white film",
+                                                                      "Generic"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Generic</b>:"
                             "<p>Simulate a generic black and white film</p>"));
 

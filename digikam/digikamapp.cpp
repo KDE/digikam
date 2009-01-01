@@ -625,7 +625,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->newTagAction = new KAction(KIcon("tag-new"), i18n("N&ew..."), this);
+    d->newTagAction = new KAction(KIcon("tag-new"), i18nc("new tag", "N&ew..."), this);
     connect(d->newTagAction, SIGNAL(triggered()), d->view, SLOT(slotNewTag()));
     actionCollection()->addAction("tag_new", d->newTagAction);
 
@@ -777,7 +777,7 @@ void DigikamApp::setupActions()
     actionCollection()->addAction("image_set_exif_orientation", d->imageExifOrientationActionMenu);
 
     d->imageSetExifOrientation1Action =
-        new KAction(i18n("Normal"), d->imageExifOrientationActionMenu);
+        new KAction(i18nc("normal exif orientation", "Normal"), d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation2Action =
         new KAction(i18n("Flipped Horizontally"), d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation3Action =
@@ -2042,7 +2042,7 @@ void DigikamApp::slotEditKeys()
 {
     KShortcutsDialog dialog(KShortcutsEditor::AllActions,
                             KShortcutsEditor::LetterShortcutsAllowed, this);
-    dialog.addCollection( actionCollection(), i18n( "General" ) );
+    dialog.addCollection( actionCollection(), i18nc("general keyboard shortcuts", "General") );
 
     KIPI::PluginLoader::PluginList list = d->kipiPluginLoader->pluginList();
 

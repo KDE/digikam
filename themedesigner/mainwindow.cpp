@@ -183,10 +183,10 @@ MainWindow::MainWindow()
     QHBoxLayout* buttonLayout = new QHBoxLayout();
 
     QPushButton* loadButton = new QPushButton(this);
-    loadButton->setText(i18n("&Load"));
+    loadButton->setText(i18nc("load theme", "&Load"));
 
     QPushButton* saveButton = new QPushButton(this);
-    saveButton->setText(i18n("&Save"));
+    saveButton->setText(i18nc("save theme", "&Save"));
 
     QPushButton* closeButton = new QPushButton(this);
     closeButton->setText(i18n("&Close"));

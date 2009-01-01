@@ -123,7 +123,7 @@ InPaintingTool::InPaintingTool(QObject* parent)
     QLabel *typeLabel = new QLabel(i18n("Filtering type:"), firstPage);
     typeLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_inpaintingTypeCB = new KComboBox(firstPage);
-    m_inpaintingTypeCB->addItem(i18n("None"));
+    m_inpaintingTypeCB->addItem(i18nc("no inpainting type", "None"));
     m_inpaintingTypeCB->addItem(i18n("Remove Small Artifact"));
     m_inpaintingTypeCB->addItem(i18n("Remove Medium Artifact"));
     m_inpaintingTypeCB->addItem(i18n("Remove Large Artifact"));

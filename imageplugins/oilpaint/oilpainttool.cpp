@@ -89,7 +89,7 @@ OilPaintTool::OilPaintTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Smooth:"), m_gboxSettings->plainPage());
+    QLabel *label2 = new QLabel(i18nc("value of smoothing effect", "Smooth:"), m_gboxSettings->plainPage());
     m_smoothInput  = new RIntNumInput(m_gboxSettings->plainPage());
     m_smoothInput->setRange(10, 255, 1);
     m_smoothInput->setSliderEnabled(true);

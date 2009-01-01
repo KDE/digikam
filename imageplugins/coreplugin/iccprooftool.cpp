@@ -271,9 +271,9 @@ ICCProofTool::ICCProofTool(QObject* parent)
     QGroupBox *pictureInfo = new QGroupBox(i18n("Camera information"), inProfiles);
     QGridLayout *infoGrid  = new QGridLayout(pictureInfo);
 
-    QLabel *make1              = new QLabel(i18n("Make:"), pictureInfo);
+    QLabel *make1              = new QLabel(i18nc("camera make", "Make:"), pictureInfo);
     KSqueezedTextLabel *make2  = new KSqueezedTextLabel(0, pictureInfo);
-    QLabel *model1             = new QLabel(i18n("Model:"), pictureInfo);
+    QLabel *model1             = new QLabel(i18nc("camera model", "Model:"), pictureInfo);
     KSqueezedTextLabel *model2 = new KSqueezedTextLabel(0, pictureInfo);
     make2->setText(iface.getPhotographInformations().make);
     model2->setText(iface.getPhotographInformations().model);

@@ -92,10 +92,10 @@ BorderTool::BorderTool(QObject* parent)
     QLabel *label1 = new QLabel(i18n("Type:"), m_gboxSettings->plainPage());
 
     m_borderType   = new RComboBox( m_gboxSettings->plainPage() );
-    m_borderType->addItem(i18n("Solid"));
+    m_borderType->addItem(i18nc("solid border type", "Solid"));
     // NOTE: Niepce is a real name. This is the first guy in the world to have built a camera.
     m_borderType->addItem("Niepce");
-    m_borderType->addItem(i18n("Beveled"));
+    m_borderType->addItem(i18nc("beveled border type", "Beveled"));
     m_borderType->addItem(i18n("Decorative Pine"));
     m_borderType->addItem(i18n("Decorative Wood"));
     m_borderType->addItem(i18n("Decorative Paper"));
@@ -388,8 +388,8 @@ void BorderTool::slotColorBackgroundChanged(const QColor &color)
 
 void BorderTool::slotBorderTypeChanged(int borderType)
 {
-    m_labelForeground->setText(i18n("First:"));
-    m_labelBackground->setText(i18n("Second:"));
+    m_labelForeground->setText(i18nc("first color for border effect", "First:"));
+    m_labelBackground->setText(i18nc("second color for border effect", "Second:"));
     m_firstColorButton->setWhatsThis(i18n("Set here the foreground color of the border."));
     m_secondColorButton->setWhatsThis(i18n("Set here the Background color of the border."));
     m_firstColorButton->setEnabled(true);

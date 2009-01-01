@@ -99,7 +99,7 @@ RestorationTool::RestorationTool(QObject* parent)
     QLabel *typeLabel   = new QLabel(i18n("Filtering type:"), firstPage);
     typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_restorationTypeCB = new KComboBox(firstPage);
-    m_restorationTypeCB->addItem( i18n("None") );
+    m_restorationTypeCB->addItem( i18nc("no restoration preset", "None") );
     m_restorationTypeCB->addItem( i18n("Reduce Uniform Noise") );
     m_restorationTypeCB->addItem( i18n("Reduce JPEG Artifacts") );
     m_restorationTypeCB->addItem( i18n("Reduce Texturing") );

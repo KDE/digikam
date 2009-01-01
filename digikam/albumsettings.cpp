@@ -302,7 +302,7 @@ void AlbumSettings::readSettings()
     d->thumbnailSize                = group.readEntry("Default Icon Size", (int)ThumbnailSize::Medium);
     d->treeThumbnailSize            = group.readEntry("Default Tree Icon Size", 22);
     d->treeviewFont                 = group.readEntry("TreeView Font", KGlobalSettings::generalFont());
-    d->currentTheme                 = group.readEntry("Theme", i18n("Default"));
+    d->currentTheme                 = group.readEntry("Theme", i18nc("default theme name", "Default"));
 
     d->ratingFilterCond             = group.readEntry("Rating Filter Condition",
                                                       (int)AlbumLister::GreaterEqualCondition);
