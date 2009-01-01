@@ -48,6 +48,7 @@
 
 // Local includes.
 
+#include "ditemtooltip.h"
 #include "dmetadata.h"
 #include "loadingdescription.h"
 #include "thumbnailsize.h"
@@ -68,12 +69,12 @@ public:
         thumbLoadThread = 0;
     }
 
-    QLabel               *imageLabel;
-    QLabel               *infoLabel;
+    QLabel              *imageLabel;
+    QLabel              *infoLabel;
 
-    KUrl                  currentURL;
+    KUrl                 currentURL;
 
-    DMetadata             metaIface;
+    DMetadata            metaIface;
 
     ThumbnailLoadThread *thumbLoadThread;
 };
@@ -143,42 +144,39 @@ void ImageDialogPreview::showPreview(const KUrl& url)
         PhotoInfoContainer info = d->metaIface.getPhotographInformations();
         if (!info.isEmpty())
         {
+            DToolTipStyleSheet cnt;
             QString identify("<qt><center>");
             QString make, model, dateTime, aperture, focalLength, exposureTime, sensitivity;
-            QString unavailable(i18n("<i>unavailable</i>"));
-            QString cellBeg("<tr><td><nobr><font size=-1>");
-            QString cellMid("</font></nobr></td><td><nobr><font size=-1>");
-            QString cellEnd("</font></nobr></td></tr>");
 
-            if (info.make.isEmpty()) make = unavailable;
+            if (info.make.isEmpty()) make = cnt.unavailable;
             else make = info.make;
 
-            if (info.model.isEmpty()) model = unavailable;
+            if (info.model.isEmpty()) model = cnt.unavailable;
             else model = info.model;
 
-            if (!info.dateTime.isValid()) dateTime = unavailable;
+            if (!info.dateTime.isValid()) dateTime = cnt.unavailable;
             else dateTime = KGlobal::locale()->formatDateTime(info.dateTime, KLocale::ShortDate, true);
 
-            if (info.aperture.isEmpty()) aperture = unavailable;
+            if (info.aperture.isEmpty()) aperture = cnt.unavailable;
             else aperture = info.aperture;
 
-            if (info.focalLength.isEmpty()) focalLength = unavailable;
+            if (info.focalLength.isEmpty()) focalLength = cnt.unavailable;
             else focalLength = info.focalLength;
 
-            if (info.exposureTime.isEmpty()) exposureTime = unavailable;
+            if (info.exposureTime.isEmpty()) exposureTime = cnt.unavailable;
             else exposureTime = info.exposureTime;
 
-            if (info.sensitivity.isEmpty()) sensitivity = unavailable;
+            if (info.sensitivity.isEmpty()) sensitivity = cnt.unavailable;
             else sensitivity = i18n("%1 ISO", info.sensitivity);
 
             identify += "<table cellspacing=0 cellpadding=0>";
-            identify += cellBeg + i18n("Make:")        + cellMid + make         + cellEnd;
-            identify += cellBeg + i18n("Model:")       + cellMid + model        + cellEnd;
-            identify += cellBeg + i18n("Created:")     + cellMid + dateTime     + cellEnd;
-            identify += cellBeg + i18n("Aperture:")    + cellMid + aperture     + cellEnd;
-            identify += cellBeg + i18n("Focal:")       + cellMid + focalLength  + cellEnd;
-            identify += cellBeg + i18n("Exposure:")    + cellMid + exposureTime + cellEnd;
-            identify += cellBeg + i18n("Sensitivity:") + cellMid + sensitivity  + cellEnd;
+            identify += cnt.cellBeg + i18n("Make:")        + cnt.cellMid + make         + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("Model:")       + cnt.cellMid + model        + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("Created:")     + cnt.cellMid + dateTime     + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("Aperture:")    + cnt.cellMid + aperture     + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("Focal:")       + cnt.cellMid + focalLength  + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("Exposure:")    + cnt.cellMid + exposureTime + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("Sensitivity:") + cnt.cellMid + sensitivity  + cnt.cellEnd;
             identify += "</table></center></qt>";
 
             d->infoLabel->setText(identify);

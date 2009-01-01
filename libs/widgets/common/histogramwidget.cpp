@@ -55,6 +55,7 @@
 
 // Local includes.
 
+#include "ditemtooltip.h"
 #include "imagehistogram.h"
 
 namespace Digikam
@@ -555,7 +556,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
 
     int    x, y;
     int    yr, yg, yb;             // For all color channels.
-    int    wWidth = width();
+    int    wWidth  = width();
     int    wHeight = height();
     double max;
     class  ImageHistogram *histogram;
@@ -1033,37 +1034,35 @@ void HistogramWidget::paintEvent(QPaintEvent*)
 
     if (d->statisticsVisible)
     {
-       QString tipText, value;
-       QString cellBeg("<tr><td><nobr><font size=-1>");
-       QString cellMid("</font></nobr></td><td><nobr><font size=-1>");
-       QString cellEnd("</font></nobr></td></tr>");
-       tipText  = "<table cellspacing=0 cellpadding=0>";
+       DToolTipStyleSheet cnt;
+       QString            tipText, value;
+       tipText = "<qt><table cellspacing=0 cellpadding=0>";
 
-       tipText += cellBeg + i18n("Mean:") + cellMid;
+       tipText += cnt.cellBeg + i18n("Mean:") + cnt.cellMid;
        double mean = histogram->getMean(m_channelType, 0, histogram->getHistogramSegment()-1);
-       tipText += value.setNum(mean, 'f', 1) + cellEnd;
+       tipText += value.setNum(mean, 'f', 1) + cnt.cellEnd;
 
-       tipText += cellBeg + i18n("Pixels:") + cellMid;
+       tipText += cnt.cellBeg + i18n("Pixels:") + cnt.cellMid;
        double pixels = histogram->getPixels();
-       tipText += value.setNum((float)pixels, 'f', 0) + cellEnd;
+       tipText += value.setNum((float)pixels, 'f', 0) + cnt.cellEnd;
 
-       tipText += cellBeg + i18n("Std dev.:") + cellMid;
+       tipText += cnt.cellBeg + i18n("Std dev.:") + cnt.cellMid;
        double stddev = histogram->getStdDev(m_channelType, 0, histogram->getHistogramSegment()-1);
-       tipText += value.setNum(stddev, 'f', 1) + cellEnd;
+       tipText += value.setNum(stddev, 'f', 1) + cnt.cellEnd;
 
-       tipText += cellBeg + i18n("Count:") + cellMid;
+       tipText += cnt.cellBeg + i18n("Count:") + cnt.cellMid;
        double counts = histogram->getCount(m_channelType, 0, histogram->getHistogramSegment()-1);
-       tipText += value.setNum((float)counts, 'f', 0) + cellEnd;
+       tipText += value.setNum((float)counts, 'f', 0) + cnt.cellEnd;
 
-       tipText += cellBeg + i18n("Median:") + cellMid;
+       tipText += cnt.cellBeg + i18n("Median:") + cnt.cellMid;
        double median = histogram->getMedian(m_channelType, 0, histogram->getHistogramSegment()-1);
-       tipText += value.setNum(median, 'f', 1) + cellEnd;
+       tipText += value.setNum(median, 'f', 1) + cnt.cellEnd;
 
-       tipText += cellBeg + i18n("Percent:") + cellMid;
+       tipText += cnt.cellBeg + i18n("Percent:") + cnt.cellMid;
        double percentile = (pixels > 0 ? (100.0 * counts / pixels) : 0.0);
-       tipText += value.setNum(percentile, 'f', 1) + cellEnd;
+       tipText += value.setNum(percentile, 'f', 1) + cnt.cellEnd;
 
-       tipText += "</table>";
+       tipText += "</table></qt>";
 
        this->setToolTip( tipText);
     }
