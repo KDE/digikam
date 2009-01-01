@@ -179,17 +179,21 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     QLabel* explanation = new QLabel(box);
     explanation->setOpenExternalLinks(true);
     explanation->setWordWrap(true);
-    QString txt = i18n("<p><b><a href='http://en.wikipedia.org/wiki/Exif'>EXIF</a></b> - "
-                       "a standard used by most digital cameras today to store technical "
-                       "information (like aperture and shutter speed) about an image.</p>"
-                       "<p><b><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a></b> - "
-                       "an older standard used in digital photography to store "
-                       "photographer information in an image.</p>");
+    QString txt("<qt>");
+
+    txt.append(i18n("<p><b><a href='http://en.wikipedia.org/wiki/Exif'>EXIF</a></b> - "
+                    "a standard used by most digital cameras today to store technical "
+                    "information (like aperture and shutter speed) about an image.</p>"));
+
+    txt.append(i18n("<p><b><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a></b> - "
+                    "an older standard used in digital photography to store "
+                    "photographer information in image.</p>"));
 
     if (KExiv2Iface::KExiv2::supportXmp())
-        txt.append(i18n("<p><b><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>"
-                        "XMP</a></b> - a new standard used in digital photography dedicated to "
-                        "replace IPTC.</p>"));
+        txt.append(i18n("<p><b><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>XMP</a></b> - "
+                        "a new standard used in digital photography dedicated to replace IPTC.</p>"));
+
+    txt.append("</qt>");
 
     explanation->setText(txt);
 
