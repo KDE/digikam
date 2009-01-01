@@ -63,7 +63,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 045 ==> 178839 : digiKam crashes on exiv2 error.
 046 ==> 178673 : Zoom combo box shows wrong value instead of 100%.
 047 ==> 179141 : digiKam crashes when exiting.
-048 ==> 
+048 ==> 179276 : Namuga webcam Samsung netbook NC10.
+049 ==>  
 
 
 *********************************************************************************************************
