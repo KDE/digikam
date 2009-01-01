@@ -161,6 +161,8 @@ public:
 
     Haar::ImageData *data;
     Haar::WeightBin *bin;
+
+    QSet<int> albumRootsToSearch;
 };
 
 HaarIface::HaarIface()
@@ -171,6 +173,16 @@ HaarIface::HaarIface()
 HaarIface::~HaarIface()
 {
     delete d;
+}
+
+void HaarIface::setAlbumRootsToSearch(QList<int> albumRootIds)
+{
+    setAlbumRootsToSearch(albumRootIds.toSet());
+}
+
+void HaarIface::setAlbumRootsToSearch(QSet<int> albumRootIds)
+{
+    d->albumRootsToSearch = albumRootIds;
 }
 
 int HaarIface::preferredSize()
@@ -429,9 +441,19 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig,
     qlonglong imageid;
     Haar::SignatureData targetSig;
 
+    bool filterByAlbumRoots = !d->albumRootsToSearch.isEmpty();
+
     DatabaseAccess access;
     QSqlQuery query;
-    query = access.backend()->prepareQuery(QString("SELECT imageid, matrix FROM ImageHaarMatrix"));
+    if (filterByAlbumRoots)
+        query = access.backend()->prepareQuery(QString("SELECT imageid, Albums.albumRoot, matrix FROM ImageHaarMatrix "
+                                                       " LEFT JOIN Images ON Images.id=ImageHaarMatrix.imageid "
+                                                       " LEFT JOIN Albums ON Albums.id=Images.album "
+                                                       " WHERE Images.status=1; "));
+    else
+        query = access.backend()->prepareQuery(QString("SELECT imageid, 0, matrix FROM ImageHaarMatrix "
+                                                       " LEFT JOIN Images ON Images.id=ImageHaarMatrix.imageid "
+                                                       " WHERE Images.status=1; "));
     if (!access.backend()->exec(query))
         return scores;
 
@@ -440,7 +462,13 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig,
     while (query.next())
     {
         imageid = query.value(0).toLongLong();
-        blob.read(query.value(1).toByteArray(), &targetSig);
+        if (filterByAlbumRoots)
+        {
+            int albumRootId = query.value(1).toInt();
+            if (!d->albumRootsToSearch.contains(albumRootId))
+                continue;
+        }
+        blob.read(query.value(2).toByteArray(), &targetSig);
 
         // this is a reference
         double &score = scores[imageid];

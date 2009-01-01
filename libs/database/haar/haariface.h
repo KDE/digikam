@@ -132,6 +132,12 @@ public:
      */
     bool retrieveSignatureFromDB(qlonglong imageid, Haar::SignatureData *sig);
 
+    /** Give a list of albumRoots to which the search shall be limited.
+     *  Calling with an empty list will disable filtering.
+     */
+    void setAlbumRootsToSearch(QList<int> albumRootIds);
+    void setAlbumRootsToSearch(QSet<int> albumRootIds);
+
 private:
 
     QImage loadQImage(const QString &filename);
