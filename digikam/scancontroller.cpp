@@ -7,8 +7,8 @@
  * Description : scan pictures interface.
  *
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -78,46 +78,47 @@ public:
     {
         splash              = 0;
         progressDialog      = 0;
+        scanSuspended       = 0;
+        eventLoop           = 0;
+        showTimer           = 0;
+        idle                = false;
         running             = false;
         needsInitialization = false;
         needsCompleteScan   = false;
-        scanSuspended       = 0;
-        idle                = false;
-        eventLoop           = 0;
-        showTimer           = 0;
         advice              = ScanController::Success;
     }
 
-    bool                 running;
-    bool                 needsInitialization;
-    bool                 needsCompleteScan;
-    int                  scanSuspended;
+    bool                      running;
+    bool                      needsInitialization;
+    bool                      needsCompleteScan;
+    bool                      idle;
 
-    QStringList          scanTasks;
+    int                       scanSuspended;
 
-    bool                 idle;
+    QStringList               scanTasks;
 
-    QMutex               mutex;
-    QWaitCondition       condVar;
+    QMutex                    mutex;
+    QWaitCondition            condVar;
 
-    QEventLoop          *eventLoop;
+    QEventLoop               *eventLoop;
 
-    QTimer              *showTimer;
+    QTimer                   *showTimer;
 
-    QPixmap              albumPix;
-    QPixmap              rootPix;
-    QPixmap              actionPix;
-    QPixmap              errorPix;
+    QPixmap                   albumPix;
+    QPixmap                   rootPix;
+    QPixmap                   actionPix;
+    QPixmap                   errorPix;
 
-    DProgressDlg        *progressDialog;
+    QList<AlbumCopyMoveHint>  albumHints;
+    QList<ItemCopyMoveHint>   itemHints;
 
-    SplashScreen        *splash;
+    QDateTime                 lastHintAdded;
 
-    ScanController::Advice advice;
+    DProgressDlg             *progressDialog;
 
-    QList<AlbumCopyMoveHint> albumHints;
-    QList<ItemCopyMoveHint>  itemHints;
-    QDateTime                lastHintAdded;
+    SplashScreen             *splash;
+
+    ScanController::Advice    advice;
 
     QPixmap albumPixmap()
     {
@@ -160,7 +161,6 @@ public:
         if (setAccessTime)
             lastHintAdded = current;
     }
-
 };
 
 class ScanControllerLoadingCacheFileWatch : public ClassicLoadingCacheFileWatch
@@ -193,7 +193,7 @@ ScanController* ScanController::instance()
 }
 
 ScanController::ScanController()
-              :     d(new ScanControllerPriv)
+              : d(new ScanControllerPriv)
 {
     // create event loop
     d->eventLoop = new QEventLoop(this);
@@ -263,12 +263,12 @@ void ScanController::createProgressDialog()
     d->progressDialog = new DProgressDlg(0);
     d->progressDialog->setInitialSize(QSize(500, 100));
     d->progressDialog->setActionListVSBarVisible(false);
-    d->progressDialog->setWhatsThis( i18n("This shows the progress of the scan. "
-                                      "During the scan, all files on disk "
-                                      "are registered in a database.") );
+    d->progressDialog->setWhatsThis(i18n("This shows the progress of the scan. "
+                                         "During the scan, all files on disk "
+                                         "are registered in a database."));
 
     d->progressDialog->setMaximum(1);
-    d->progressDialog->setValue(1);
+    d->progressDialog->setValue(0);
 
     connect(this, SIGNAL(incrementProgressDialog(int)),
             d->progressDialog, SLOT(incrementMaximum(int)));
@@ -356,7 +356,6 @@ void ScanController::resumeCollectionScan()
         d->condVar.wakeAll();
 }
 
-
 void ScanController::run()
 {
     while (d->running)
@@ -368,17 +367,17 @@ void ScanController::run()
             if (d->needsInitialization)
             {
                 d->needsInitialization = false;
-                doInit = true;
+                doInit                 = true;
             }
             else if (d->needsCompleteScan)
             {
                 d->needsCompleteScan = false;
-                doScan = true;
+                doScan               = true;
             }
             else if (!d->scanTasks.isEmpty() && !d->scanSuspended)
             {
                 doPartialScan = true;
-                task = d->scanTasks.takeFirst();
+                task          = d->scanTasks.takeFirst();
             }
             else
             {
@@ -586,7 +585,8 @@ void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum *album, const QString 
     CollectionLocation location = CollectionManager::instance()->locationForPath(dstPath);
     if (location.isNull())
     {
-        kWarning(50003) << "hintAtMoveOrCopyOfAlbum: Destination path" << dstPath << "does not point to an available location.";
+        kWarning(50003) << "hintAtMoveOrCopyOfAlbum: Destination path" << dstPath 
+                        << "does not point to an available location." << endl;;
         return;
     }
     QString relativeDstPath = CollectionManager::instance()->album(location, dstPath);
