@@ -60,7 +60,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 042 ==> 178435 : Solid doesn't automatically detect digital camera.
 043 ==> 141864 : Show album properties when hovering album name.
 044 ==> 175626 : digiKam crashes while startup.
-045 ==> 
+045 ==> 178839 : digiKam crashes on exiv2 error.
+046 ==> 
 
 
 *********************************************************************************************************
