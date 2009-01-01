@@ -52,6 +52,8 @@
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databasebackend.h"
+#include "collectionmanager.h"
+#include "collectionlocation.h"
 #include "imagequerybuilder.h"
 #include "dmetadata.h"
 #include "haariface.h"
@@ -102,11 +104,17 @@ QDataStream &operator>>(QDataStream &ds, ImageListerRecord &record)
 ImageLister::ImageLister()
 {
     m_recursive = true;
+    m_listOnlyAvailableImages = true;
 }
 
 void ImageLister::setRecursive(bool recursive)
 {
     m_recursive = recursive;
+}
+
+void ImageLister::setListOnlyAvailable(bool listOnlyAvailable)
+{
+    m_listOnlyAvailableImages = listOnlyAvailable;
 }
 
 KIO::TransferJob *ImageLister::startListJob(const DatabaseUrl &url, int extraValue)
@@ -141,6 +149,12 @@ void ImageLister::list(ImageListerReceiver *receiver, const DatabaseUrl &url)
 void ImageLister::listAlbum(ImageListerReceiver *receiver,
                             int albumRootId, const QString &album)
 {
+    if (m_listOnlyAvailableImages)
+    {
+        if (!CollectionManager::instance()->locationForAlbumRootId(albumRootId).isAvailable())
+            return;
+    }
+    
     QList<QVariant> albumIds;
 
     if (m_recursive)
@@ -250,6 +264,8 @@ void ImageLister::listTag(ImageListerReceiver *receiver, int tagId)
         DatabaseAccess().backend()->execSql( query, tagId, &values );
     }
 
+    QSet<int> albumRoots = albumRootsToList();
+
     int width, height;
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
@@ -281,6 +297,9 @@ void ImageLister::listTag(ImageListerReceiver *receiver, int tagId)
         ++it;
         height                   = (*it).toInt();
         ++it;
+
+        if (m_listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
+            continue;
 
         record.imageSize         = QSize(width, height);
 
@@ -312,6 +331,8 @@ void ImageLister::listDateRange(ImageListerReceiver *receiver, const QDate &star
                                   &values);
     }
 
+    QSet<int> albumRoots = albumRootsToList();
+
     int width, height;
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
@@ -343,6 +364,9 @@ void ImageLister::listDateRange(ImageListerReceiver *receiver, const QDate &star
         ++it;
         height                   = (*it).toInt();
         ++it;
+
+        if (m_listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
+            continue;
 
         record.imageSize         = QSize(width, height);
 
@@ -404,6 +428,8 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
     }
     kDebug(50003) << "Search result:" << values.size();
 
+    QSet<int> albumRoots = albumRootsToList();
+
     int width, height;
     double lat,lon;
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
@@ -440,6 +466,9 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
         ++it;
         lon                      = (*it).toDouble();
         ++it;
+
+        if (m_listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
+            continue;
 
         if (!hooks.checkPosition(lat, lon))
             continue;
@@ -486,12 +515,16 @@ void ImageLister::listHaarSearch(ImageListerReceiver *receiver, const QString &x
     {
         QString sig = reader.value();
         HaarIface iface;
+        if (m_listOnlyAvailableImages)
+            iface.setAlbumRootsToSearch(albumRootsToList());
         list = iface.bestMatchesForSignature(sig, numberOfResults, sketchType);
     }
     else if (type == "imageid")
     {
         qlonglong id = reader.valueToLongLong();
         HaarIface iface;
+        if (m_listOnlyAvailableImages)
+            iface.setAlbumRootsToSearch(albumRootsToList());
         list = iface.bestMatchesForImageWithThreshold(id, threeshold, sketchType);
     }
 
@@ -595,6 +628,18 @@ void ImageLister::listFromIdList(ImageListerReceiver *receiver, QList<qlonglong>
 
         receiver->receive(record);
     }
+}
+
+QSet<int> ImageLister::albumRootsToList()
+{
+    if (!m_listOnlyAvailableImages)
+        return QSet<int>(); // invalid value, all album roots shall be listed
+
+    QList<CollectionLocation> locations = CollectionManager::instance()->allAvailableLocations();
+    QSet<int> ids;
+    foreach (const CollectionLocation &location, locations)
+        ids << location.id();
+    return ids;
 }
 
 }  // namespace Digikam

@@ -66,6 +66,12 @@ public:
     void setRecursive(bool recursive);
 
     /**
+     * Adjust the setting if images from collections that are currently not in the state "available"
+     * will be included in the listing. Default: true.
+     */
+    void setListOnlyAvailable(bool listOnlyAvailable);
+
+    /**
      * Convenience method for Album, Tag and Date URLs, _not_ for Search URLs.
      */
     void list(ImageListerReceiver *receiver,
@@ -108,10 +114,12 @@ public:
 private:
 
     void listFromIdList(ImageListerReceiver *receiver, QList<qlonglong> imageIds);
+    QSet<int> albumRootsToList();
 
 private:
 
     bool m_recursive;
+    bool m_listOnlyAvailableImages;
 };
 
 }  // namespace Digikam
