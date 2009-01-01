@@ -321,8 +321,8 @@ void EditorWindow::setupStandardActions()
     connect(m_fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteCurrentItem()));
     actionCollection()->addAction("editorwindow_delete", m_fileDeleteAction);
 
-    actionCollection()->addAction(KStandardAction::Close, "editorwindow_close",
-                                  this, SLOT(close()));
+    KAction* closeAction = KStandardAction::close(this, SLOT(close()), this);
+    actionCollection()->addAction("editorwindow_close", closeAction);
 
     // -- Standard 'Edit' menu actions ---------------------------------------------
 
