@@ -146,8 +146,8 @@ QString AlbumIconViewToolTip::fillTipContents(const ImageInfo& info)
         if (settings->getToolTipsShowFileSize())
         {
             tip += cnt.cellBeg + i18n("Size:") + cnt.cellMid;
-            str = i18n("%1 (%2)", KIO::convertSize(commonInfo.fileSize),
-                                  KGlobal::locale()->formatNumber(commonInfo.fileSize, 0));
+            QString localeFileSize = KGlobal::locale()->formatNumber(commonInfo.fileSize, 0);
+            str = i18n("%1 (%2)", KIO::convertSize(commonInfo.fileSize), localeFileSize);
             tip += str + cnt.cellEnd;
         }
 
