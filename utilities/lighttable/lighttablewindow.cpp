@@ -409,8 +409,8 @@ void LightTableWindow::setupActions()
     connect(d->fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteItem()));
     actionCollection()->addAction("lighttable_filedelete", d->fileDeleteAction);
 
-    actionCollection()->addAction(KStandardAction::Close, "lighttable_close",
-                                  this, SLOT(close()));
+    KAction* closeAction = KStandardAction::close(this, SLOT(close()), this);
+    actionCollection()->addAction("lighttable_close", closeAction);
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
@@ -428,15 +428,15 @@ void LightTableWindow::setupActions()
     connect(d->navigateByPairAction, SIGNAL(triggered()), this, SLOT(slotToggleNavigateByPair()));
     actionCollection()->addAction("lighttable_navigatebypair", d->navigateByPairAction);
 
-    d->zoomPlusAction = actionCollection()->addAction(KStandardAction::ZoomIn, "lighttable_zoomplus",
-                                                      d->previewView, SLOT(slotIncreaseZoom()));
+    d->zoomPlusAction = KStandardAction::zoomIn(d->previewView, SLOT(slotIncreaseZoom()), this);
     d->zoomPlusAction->setEnabled(false);
     d->zoomPlusAction->setShortcut(QKeySequence(Qt::Key_Plus));
+    actionCollection()->addAction("lighttable_zoomplus", d->zoomPlusAction);
 
-    d->zoomMinusAction = actionCollection()->addAction(KStandardAction::ZoomOut, "lighttable_zoomminus",
-                                                       d->previewView, SLOT(slotDecreaseZoom()));
+    d->zoomMinusAction = KStandardAction::zoomOut(d->previewView, SLOT(slotDecreaseZoom()), this);
     d->zoomMinusAction->setEnabled(false);
     d->zoomMinusAction->setShortcut(QKeySequence(Qt::Key_Minus));
+    actionCollection()->addAction("lighttable_zoomminus", d->zoomMinusAction);
 
     d->zoomTo100percents = new KAction(KIcon("zoom-original"), i18n("Zoom to 100%"), this);
     d->zoomTo100percents->setShortcut(Qt::ALT+Qt::CTRL+Qt::Key_0);       // NOTE: Photoshop 7 use ALT+CTRL+0
