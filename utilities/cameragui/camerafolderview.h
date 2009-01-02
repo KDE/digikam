@@ -50,7 +50,7 @@ public:
     CameraFolderView(QWidget* parent);
     ~CameraFolderView();
 
-    void addVirtualFolder(const QString& name, const QPixmap& pixmap=SmallIcon("camera"));
+    void addVirtualFolder(const QString& name, const QPixmap& pixmap=SmallIcon("camera-photo"));
     void addRootFolder(const QString& folder, int nbItems, const QPixmap& pixmap=SmallIcon("folder"));
 
     CameraFolderItem* addFolder(const QString& folder, const QString& subFolder, int nbItems,
