@@ -243,6 +243,7 @@ void DImgInterface::slotUseDefaultSettings()
 
 void DImgInterface::resetImage()
 {
+    EditorToolIface::editorToolIface()->unLoadTool();
     resetValues();
     d->image.reset();
 }
