@@ -54,6 +54,8 @@
 #include <kmessagebox.h>
 #include <ktextedit.h>
 #include <kurl.h>
+#include <kstandarddirs.h>
+#include <kiconloader.h>
 
 // Local includes.
 
@@ -107,16 +109,20 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     QWidget *page = new QWidget(this);
     setMainWidget(page);
 
-    QGridLayout *topLayout = new QGridLayout(page);
+    QGridLayout *grid = new QGridLayout(page);
 
-    QLabel *topLabel = new QLabel( page );
+    QLabel *logo      = new QLabel(page);
+    logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+                            .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+    QLabel *topLabel  = new QLabel( page );
     if (create)
     {
-        topLabel->setText(i18n("<b>Create new Album in \"<i>%1</i>\"</b>", album->title()));
+        topLabel->setText(i18n("<qt><b>Create new Album in<br>\"<i>%1</i>\"</b></qt>", album->title()));
     }
     else
     {
-        topLabel->setText(i18n("<b>\"<i>%1</i>\" Album Properties</b>", album->title()));
+        topLabel->setText(i18n("<qt><b>\"<i>%1</i>\"<br>Album Properties</b></qt>", album->title()));
     }
     topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     topLabel->setWordWrap(false);
@@ -178,19 +184,20 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     // --------------------------------------------------------
 
-    topLayout->addWidget(topLabel,        0, 0, 1, 2);
-    topLayout->addWidget(topLine,         1, 0, 1, 2);
-    topLayout->addWidget(titleLabel,      2, 0, 1, 1);
-    topLayout->addWidget(d->titleEdit,    2, 1, 1, 1);
-    topLayout->addWidget(familyLabel,     3, 0, 1, 1);
-    topLayout->addWidget(d->familyCombo,  3, 1, 1, 1);
-    topLayout->addWidget(commentsLabel,   4, 0, 1, 1, Qt::AlignLeft | Qt::AlignTop);
-    topLayout->addWidget(d->commentsEdit, 4, 1, 1, 1);
-    topLayout->addWidget(dateLabel,       5, 0, 1, 1, Qt::AlignLeft | Qt::AlignTop);
-    topLayout->addWidget(d->datePicker,   5, 1, 1, 1);
-    topLayout->addWidget(buttonRow,       6, 1, 1, 1);
-    topLayout->setMargin(0);
-    topLayout->setSpacing(KDialog::spacingHint());
+    grid->addWidget(logo,            0, 0, 1, 1);
+    grid->addWidget(topLabel,        0, 1, 1, 1);
+    grid->addWidget(topLine,         1, 0, 1, 2);
+    grid->addWidget(titleLabel,      2, 0, 1, 1);
+    grid->addWidget(d->titleEdit,    2, 1, 1, 1);
+    grid->addWidget(familyLabel,     3, 0, 1, 1);
+    grid->addWidget(d->familyCombo,  3, 1, 1, 1);
+    grid->addWidget(commentsLabel,   4, 0, 1, 1, Qt::AlignLeft | Qt::AlignTop);
+    grid->addWidget(d->commentsEdit, 4, 1, 1, 1);
+    grid->addWidget(dateLabel,       5, 0, 1, 1, Qt::AlignLeft | Qt::AlignTop);
+    grid->addWidget(d->datePicker,   5, 1, 1, 1);
+    grid->addWidget(buttonRow,       6, 1, 1, 1);
+    grid->setMargin(0);
+    grid->setSpacing(KDialog::spacingHint());
 
     // Initialize ---------------------------------------------
 
@@ -362,9 +369,9 @@ void AlbumPropsEdit::slotDateAverageButtonClicked()
     if ( avDate.isValid() )
         d->datePicker->setDate( avDate );
     else
-        KMessageBox::error( this,
-                            i18n( "Could not calculate an average."),
-                            i18n( "Could Not Calculate Average" ) );
+        KMessageBox::error(this,
+                           i18n("Could not calculate an average."),
+                           i18n("Could Not Calculate Average"));
 }
 
 }  // namespace Digikam
