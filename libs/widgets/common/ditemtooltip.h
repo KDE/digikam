@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2008-12-10
- * Description : tool tip widget for iconview or thumbbar items
+ * Description : tool tip widget for iconview, thumbbar, and folderview items
  *
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -145,6 +145,7 @@ protected:
     void    resizeEvent(QResizeEvent*);
     void    paintEvent(QPaintEvent*);
     void    updateToolTip();
+    bool    toolTipIsEmpty() const;
     void    reposition();
     void    renderArrows();
 

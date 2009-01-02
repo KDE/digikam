@@ -90,7 +90,7 @@ void FolderViewToolTip::setFolderItem(FolderItem* folderItem)
     {
         updateToolTip();
         reposition();
-        if (isHidden())
+        if (isHidden() && !toolTipIsEmpty())
             show();
     }
 }
@@ -115,8 +115,9 @@ QString FolderViewToolTip::tipContents()
         if (item)
         {
             PAlbum *album = item->album();
-            return fillTipContents(album, item->isOpen() ? item->count()
-                                                         : item->countRecursive());
+            if (!album->isRoot() && !album->isAlbumRoot())
+                return fillTipContents(album, item->isOpen() ? item->count()
+                                                             : item->countRecursive());
         }
     }
     return QString();
