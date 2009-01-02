@@ -7,7 +7,7 @@
  * Description : albums settings interface
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007 by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
@@ -51,7 +51,7 @@ public:
     enum AlbumSortOrder
     {
         ByFolder = 0,
-        ByCollection,
+        ByFamily,
         ByDate
     };
 
@@ -91,11 +91,11 @@ public:
     void setScanAtStart(bool val);
     bool getScanAtStart() const;
 
-    void setAlbumCollectionNames(const QStringList& list);
-    QStringList getAlbumCollectionNames();
+    void setAlbumFamilyNames(const QStringList& list);
+    QStringList getAlbumFamilyNames();
 
-    bool addAlbumCollectionName(const QString& name);
-    bool delAlbumCollectionName(const QString& name);
+    bool addAlbumFamilyName(const QString& name);
+    bool delAlbumFamilyName(const QString& name);
 
     void setAlbumSortOrder(const AlbumSortOrder order);
     AlbumSortOrder getAlbumSortOrder() const;

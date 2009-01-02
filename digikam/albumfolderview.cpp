@@ -7,7 +7,7 @@
  * Description : Albums folder view.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -156,7 +156,7 @@ int AlbumFolderViewItem::id() const
         }
         else
         {
-            return ( - (AlbumSettings::instance()->getAlbumCollectionNames()
+            return ( - (AlbumSettings::instance()->getAlbumFamilyNames()
                         .indexOf(text(0)) ) );
         }
     }
@@ -700,18 +700,18 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
 
     QString     title;
     QString     comments;
-    QString     collection;
+    QString     family;
     QDate       date;
-    QStringList albumCollections;
+    QStringList albumFamilies;
 
-    if(!AlbumPropsEdit::createNew(parent, title, comments, date, collection,
-                                  albumCollections))
+    if(!AlbumPropsEdit::createNew(parent, title, comments, date, family,
+                                  albumFamilies))
         return;
 
-    QStringList oldAlbumCollections(AlbumSettings::instance()->getAlbumCollectionNames());
-    if(albumCollections != oldAlbumCollections)
+    QStringList oldAlbumFamilies(AlbumSettings::instance()->getAlbumFamilyNames());
+    if(albumFamilies != oldAlbumFamilies)
     {
-        AlbumSettings::instance()->setAlbumCollectionNames(albumCollections);
+        AlbumSettings::instance()->setAlbumFamilyNames(albumFamilies);
         resort();
     }
 
@@ -719,10 +719,10 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     PAlbum* album;
     if (parent->isRoot())
         album = d->albumMan->createPAlbum(albumRootPath, title, comments,
-                                          date, collection, errMsg);
+                                          date, family, errMsg);
     else
         album = d->albumMan->createPAlbum(parent, title, comments,
-                                          date, collection, errMsg);
+                                          date, family, errMsg);
 
     if (!album)
     {
@@ -863,16 +863,16 @@ void AlbumFolderView::albumEdit(AlbumFolderViewItem* item)
 
     QString     oldTitle(album->title());
     QString     oldComments(album->caption());
-    QString     oldCollection(album->collection());
+    QString     oldFamily(album->family());
     QDate       oldDate(album->date());
-    QStringList oldAlbumCollections(AlbumSettings::instance()->getAlbumCollectionNames());
+    QStringList oldAlbumFamilies(AlbumSettings::instance()->getAlbumFamilyNames());
 
-    QString     title, comments, collection;
+    QString     title, comments, family;
     QDate       date;
-    QStringList albumCollections;
+    QStringList albumFamilies;
 
     if(AlbumPropsEdit::editProps(album, title, comments, date,
-                                 collection, albumCollections))
+                                 family, albumFamilies))
     {
         if(comments != oldComments)
             album->setCaption(comments);
@@ -880,10 +880,10 @@ void AlbumFolderView::albumEdit(AlbumFolderViewItem* item)
         if(date != oldDate && date.isValid())
             album->setDate(date);
 
-        if(collection != oldCollection)
-            album->setCollection(collection);
+        if(family != oldFamily)
+            album->setFamily(family);
 
-        AlbumSettings::instance()->setAlbumCollectionNames(albumCollections);
+        AlbumSettings::instance()->setAlbumFamilyNames(albumFamilies);
         resort();
 
         // Do this last : so that if anything else changed we can
@@ -943,7 +943,7 @@ bool AlbumFolderView::acceptDrop(const QDropEvent *e) const
 
                 return true;
             }
-            case (AlbumSettings::ByCollection):
+            case (AlbumSettings::ByFamily):
             {
                 if (!itemDrop)
                     return false;
@@ -1037,7 +1037,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
                         this, SLOT(slotDIOResult(KJob*)));
             }
         }
-        else if (AlbumSettings::instance()->getAlbumSortOrder() == AlbumSettings::ByCollection)
+        else if (AlbumSettings::instance()->getAlbumSortOrder() == AlbumSettings::ByFamily)
         {
             if (!itemDrop)
                 return;
@@ -1048,7 +1048,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
                 if (!album)
                     return;
 
-                album->setCollection(itemDrop->text(0));
+                album->setFamily(itemDrop->text(0));
                 resort();
             }
         }
@@ -1308,9 +1308,9 @@ AlbumFolderViewItem* AlbumFolderView::findParent(PAlbum* album, bool& failed)
         {
             return findParentByFolder(album, failed);
         }
-        case(AlbumSettings::ByCollection):
+        case(AlbumSettings::ByFamily):
         {
-            return findParentByCollection(album, failed);
+            return findParentByFamily(album, failed);
         }
         case(AlbumSettings::ByDate):
         {
@@ -1362,13 +1362,13 @@ AlbumFolderViewItem* AlbumFolderView::findParentByFolder(PAlbum* album, bool& fa
     return parent;
 }
 
-AlbumFolderViewItem* AlbumFolderView::findParentByCollection(PAlbum* album, bool& failed)
+AlbumFolderViewItem* AlbumFolderView::findParentByFamily(PAlbum* album, bool& failed)
 {
-    QStringList collectionList = AlbumSettings::instance()->getAlbumCollectionNames();
-    QString collection = album->collection();
+    QStringList familyList = AlbumSettings::instance()->getAlbumFamilyNames();
+    QString family         = album->family();
 
-    if (collection.isEmpty() || !collectionList.contains(collection))
-        collection = i18n("Uncategorized Albums");
+    if (family.isEmpty() || !familyList.contains(family))
+        family = i18n("Uncategorized Albums");
 
     AlbumFolderViewItem* parent = 0;
 
@@ -1376,7 +1376,7 @@ AlbumFolderViewItem* AlbumFolderView::findParentByCollection(PAlbum* album, bool
          it != d->groupItems.end(); ++it)
     {
         AlbumFolderViewItem* groupItem = *it;
-        if (groupItem->text(0) == collection)
+        if (groupItem->text(0) == family)
         {
             parent = groupItem;
             break;
@@ -1386,7 +1386,7 @@ AlbumFolderViewItem* AlbumFolderView::findParentByCollection(PAlbum* album, bool
     // Need to create a new parent item
     if (!parent)
     {
-        parent = new AlbumFolderViewItem(firstChild(), collection, 0, 0);
+        parent = new AlbumFolderViewItem(firstChild(), family, 0, 0);
         d->groupItems.append(parent);
     }
 

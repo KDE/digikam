@@ -6,7 +6,7 @@
  * Date        : 2007-04-21
  * Description : Structures for use in AlbumDB
  *
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
@@ -61,12 +61,12 @@ public:
 
     AlbumRootInfo() : id(0), type(AlbumRoot::UndefinedType) {};
 
-    int id;
-    QString label;
+    int             id;
+    QString         label;
     AlbumRoot::Type type;
-    int status;
-    QString identifier;
-    QString specificPath;
+    int             status;
+    QString         identifier;
+    QString         specificPath;
 };
 
 /**
@@ -82,14 +82,14 @@ public:
 
     typedef QList<AlbumInfo> List;
 
-    int      id;
-    int      albumRootId;
-    QString  relativePath;
-    QString  caption;
-    QString  collection;
-    QDate    date;
-    int      iconAlbumRootId;
-    QString  iconRelativePath;
+    int     id;
+    int     albumRootId;
+    QString relativePath;
+    QString caption;
+    QString family;
+    QDate   date;
+    int     iconAlbumRootId;
+    QString iconRelativePath;
 
     /**
      * needed for sorting
@@ -114,12 +114,12 @@ public:
 
     typedef QList<TagInfo> List;
 
-    int      id;
-    int      pid;
-    QString  name;
-    QString  icon;
-    int      iconAlbumRootId;
-    QString  iconRelativePath;
+    int     id;
+    int     pid;
+    QString name;
+    QString icon;
+    int     iconAlbumRootId;
+    QString iconRelativePath;
 
     bool operator<(const TagInfo& info) const
     {
@@ -208,11 +208,11 @@ public:
 
     ItemShortInfo() : id(0), albumID(0) {};
 
-    qlonglong   id;
-    QString     itemName;
-    int         albumID;
-    int         albumRootID;
-    QString     album;
+    qlonglong id;
+    QString   itemName;
+    int       albumID;
+    int       albumRootID;
+    QString   album;
 };
 
 class ItemScanInfo
@@ -262,13 +262,13 @@ public:
 
     CommentInfo() : imageId(-1), type(DatabaseComment::UndefinedType) {};
 
-    int                     id;
-    qlonglong               imageId;
-    DatabaseComment::Type   type;
-    QString                 author;
-    QString                 language;
-    QDateTime               date;
-    QString                 comment;
+    int                   id;
+    qlonglong             imageId;
+    DatabaseComment::Type type;
+    QString               author;
+    QString               language;
+    QDateTime             date;
+    QString               comment;
 };
 
 class CopyrightInfo

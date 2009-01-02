@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005 by Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,22 +54,22 @@ public:
     QString     title() const;
     QString     comments() const;
     QDate       date() const;
-    QString     collection() const;
-    QStringList albumCollections() const;
+    QString     family() const;
+    QStringList albumFamilies() const;
 
-    static bool editProps(PAlbum *album,
-                          QString& title,
-                          QString& comments,
-                          QDate& date,
-                          QString& collection,
-                          QStringList& albumCollections);
+    static bool editProps(PAlbum*      album,
+                          QString&     title,
+                          QString&     comments,
+                          QDate&       date,
+                          QString&     family,
+                          QStringList& albumFamilies);
 
-    static bool createNew(PAlbum *parent,
-                          QString& title,
-                          QString& comments,
-                          QDate& date,
-                          QString& collection,
-                          QStringList& albumCollections);
+    static bool createNew(PAlbum*      parent,
+                          QString&     title,
+                          QString&     comments,
+                          QDate&       date,
+                          QString&     family,
+                          QStringList& albumFamilies);
 
 private slots:
 

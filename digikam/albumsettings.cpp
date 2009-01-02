@@ -7,7 +7,7 @@
  * Description : albums settings interface
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007 by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
@@ -154,7 +154,7 @@ public:
     QString                             databaseFilePath;
 
     // album settings
-    QStringList                         albumCollectionNames;
+    QStringList                         albumFamilyNames;
 
     KSharedConfigPtr                    config;
 
@@ -189,16 +189,16 @@ AlbumSettings::~AlbumSettings()
 
 void AlbumSettings::init()
 {
-    d->albumCollectionNames.clear();
-    d->albumCollectionNames.append(i18n("Family"));
-    d->albumCollectionNames.append(i18n("Travel"));
-    d->albumCollectionNames.append(i18n("Holidays"));
-    d->albumCollectionNames.append(i18n("Friends"));
-    d->albumCollectionNames.append(i18n("Nature"));
-    d->albumCollectionNames.append(i18n("Party"));
-    d->albumCollectionNames.append(i18n("Todo"));
-    d->albumCollectionNames.append(i18n("Miscellaneous"));
-    d->albumCollectionNames.sort();
+    d->albumFamilyNames.clear();
+    d->albumFamilyNames.append(i18n("Family"));
+    d->albumFamilyNames.append(i18n("Travel"));
+    d->albumFamilyNames.append(i18n("Holidays"));
+    d->albumFamilyNames.append(i18n("Friends"));
+    d->albumFamilyNames.append(i18n("Nature"));
+    d->albumFamilyNames.append(i18n("Party"));
+    d->albumFamilyNames.append(i18n("Todo"));
+    d->albumFamilyNames.append(i18n("Miscellaneous"));
+    d->albumFamilyNames.sort();
 
     d->albumSortOrder               = AlbumSettings::ByFolder;
     d->imageSortOrder               = AlbumSettings::ByIName;
@@ -286,7 +286,7 @@ void AlbumSettings::readSettings()
     if (!collectionList.isEmpty())
     {
         collectionList.sort();
-        d->albumCollectionNames = collectionList;
+        d->albumFamilyNames = collectionList;
     }
 
     d->albumSortOrder = AlbumSettings::AlbumSortOrder(group.readEntry("Album Sort Order",
@@ -397,7 +397,7 @@ void AlbumSettings::saveSettings()
     KConfigGroup group = config->group("Album Settings");
 
     group.writeEntry("Database File Path", d->databaseFilePath);
-    group.writeEntry("Album Collections", d->albumCollectionNames);
+    group.writeEntry("Album Collections", d->albumFamilyNames);
     group.writeEntry("Album Sort Order", (int)d->albumSortOrder);
     group.writeEntry("Image Sort Order", (int)d->imageSortOrder);
     group.writeEntry("Item Right Click Action", (int)d->itemRightClickAction);
@@ -519,28 +519,28 @@ bool AlbumSettings::getScanAtStart() const
     return d->scanAtStart;
 }
 
-void AlbumSettings::setAlbumCollectionNames(const QStringList& list)
+void AlbumSettings::setAlbumFamilyNames(const QStringList& list)
 {
-    d->albumCollectionNames = list;
+    d->albumFamilyNames = list;
 }
 
-QStringList AlbumSettings::getAlbumCollectionNames()
+QStringList AlbumSettings::getAlbumFamilyNames()
 {
-    return d->albumCollectionNames;
+    return d->albumFamilyNames;
 }
 
-bool AlbumSettings::addAlbumCollectionName(const QString& name)
+bool AlbumSettings::addAlbumFamilyName(const QString& name)
 {
-    if (d->albumCollectionNames.contains(name))
+    if (d->albumFamilyNames.contains(name))
         return false;
 
-    d->albumCollectionNames.append(name);
+    d->albumFamilyNames.append(name);
     return true;
 }
 
-bool AlbumSettings::delAlbumCollectionName(const QString& name)
+bool AlbumSettings::delAlbumFamilyName(const QString& name)
 {
-    uint count = d->albumCollectionNames.removeAll(name);
+    uint count = d->albumFamilyNames.removeAll(name);
     return (count > 0) ? true : false;
 }
 

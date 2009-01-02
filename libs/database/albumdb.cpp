@@ -7,8 +7,8 @@
  * Description :database album interface.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -174,7 +174,7 @@ AlbumInfo::List AlbumDB::scanAlbums()
         ++it;
         info.caption = (*it).toString();
         ++it;
-        info.collection = (*it).toString();
+        info.family = (*it).toString();
         ++it;
         info.iconAlbumRootId = (*it).toInt(); // will be 0 if null
         ++it;
@@ -367,10 +367,11 @@ void AlbumDB::setAlbumCaption(int albumID, const QString& caption)
     d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::PropertiesChanged));
 }
 
-void AlbumDB::setAlbumCollection(int albumID, const QString& collection)
+void AlbumDB::setAlbumFamily(int albumID, const QString& family)
 {
+    // TODO : change "collection" propertie in DB ALbum table to "family"
     d->db->execSql( QString("UPDATE Albums SET collection=? WHERE id=?;"),
-                    collection, albumID );
+                    family, albumID );
     d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::PropertiesChanged));
 }
 

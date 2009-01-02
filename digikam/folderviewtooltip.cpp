@@ -6,7 +6,7 @@
  * Date        : 2008-12-29
  * Description : folder view tool tip
  *
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -159,9 +159,9 @@ QString FolderViewToolTip::fillTipContents(PAlbum *album, int count)
 
         if (settings->getToolTipsShowAlbumCollection())
         {
-            str = album->collection();
+            str = album->family();
             if (str.isEmpty()) str = QString("---");
-            tip += cnt.cellSpecBeg + i18n("Collection:") + cnt.cellSpecMid + 
+            tip += cnt.cellSpecBeg + i18n("Family:") + cnt.cellSpecMid + 
                    cnt.breakString(str) + cnt.cellSpecEnd;
         }
 

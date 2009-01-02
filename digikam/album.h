@@ -7,7 +7,7 @@
  * Description : digiKam album types
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -309,13 +309,13 @@ public:
     ~PAlbum();
 
     void setCaption(const QString& caption);
-    void setCollection(const QString& collection);
+    void setFamily(const QString& family);
     void setDate(const QDate& date);
 
     QString     albumRootPath() const;
     int         albumRootId() const;
     QString     caption() const;
-    QString     collection() const;
+    QString     family() const;
     QDate       date() const;
     QString     albumPath() const;
     QString     prettyUrl() const;
@@ -329,15 +329,15 @@ public:
 
 private:
 
+    bool       m_isAlbumRootAlbum;
+
     int        m_albumRootId;
 
     QString    m_path;
     QString    m_parentPath;
-    QString    m_collection;
+    QString    m_family;
     QString    m_caption;
     QString    m_icon;
-
-    bool       m_isAlbumRootAlbum;
 
     QDate      m_date;
 

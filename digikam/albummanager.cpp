@@ -7,8 +7,8 @@
  * Description : Albums manager interface.
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -795,9 +795,9 @@ void AlbumManager::scanPAlbums()
             needInsert  = true;
         }
 
-        album->m_caption    = info.caption;
-        album->m_collection = info.collection;
-        album->m_date       = info.date;
+        album->m_caption = info.caption;
+        album->m_family  = info.family;
+        album->m_date    = info.date;
 
         if (info.iconAlbumRootId)
         {
@@ -846,9 +846,9 @@ void AlbumManager::updateChangedPAlbums()
                     }
 
                     // Update caption, collection, date
-                    album->m_caption    = info.caption;
-                    album->m_collection = info.collection;
-                    album->m_date       = info.date;
+                    album->m_caption = info.caption;
+                    album->m_family  = info.family;
+                    album->m_date    = info.date;
 
                     // Icon changed?
                     QString icon;
@@ -1301,16 +1301,16 @@ void AlbumManager::invalidateGuardedPointers(Album *album)
 
 PAlbum* AlbumManager::createPAlbum(const QString& albumRootPath, const QString& name,
                                    const QString& caption, const QDate& date,
-                                   const QString& collection,
+                                   const QString& family,
                                    QString& errMsg)
 {
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRootPath(albumRootPath);
-    return createPAlbum(location, name, caption, date, collection, errMsg);
+    return createPAlbum(location, name, caption, date, family, errMsg);
 }
 
 PAlbum* AlbumManager::createPAlbum(const CollectionLocation &location, const QString& name,
                                    const QString& caption, const QDate& date,
-                                   const QString& collection,
+                                   const QString& family,
                                    QString& errMsg)
 {
     if (location.isNull() || !location.isAvailable())
@@ -1327,16 +1327,16 @@ PAlbum* AlbumManager::createPAlbum(const CollectionLocation &location, const QSt
         return 0;
     }
 
-    return createPAlbum(album, name, caption, date, collection, errMsg);
+    return createPAlbum(album, name, caption, date, family, errMsg);
 }
 
 
-PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
+PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
                                    const QString& name,
                                    const QString& caption,
-                                   const QDate& date,
-                                   const QString& collection,
-                                   QString& errMsg)
+                                   const QDate&   date,
+                                   const QString& family,
+                                   QString&       errMsg)
 {
     if (!parent)
     {
@@ -1363,8 +1363,8 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
         return 0;
     }
 
-    QString albumPath     = parent->isAlbumRoot() ? ('/' + name) : (parent->albumPath() + '/' + name);
-    int albumRootId       = parent->albumRootId();
+    QString albumPath = parent->isAlbumRoot() ? ('/' + name) : (parent->albumPath() + '/' + name);
+    int albumRootId   = parent->albumRootId();
 
     // first check if we have a sibling album with the same name
     PAlbum *child = (PAlbum *)parent->m_firstChild;
@@ -1380,7 +1380,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
 
     DatabaseUrl url = parent->databaseUrl();
     url.addPath(name);
-    KUrl fileUrl = url.fileUrl();
+    KUrl fileUrl    = url.fileUrl();
 
     if (!KIO::NetAccess::mkdir(fileUrl, qApp->activeWindow()))
     {
@@ -1389,7 +1389,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
     }
 
     ChangingDB changing(d);
-    int id = DatabaseAccess().db()->addAlbum(albumRootId, albumPath, caption, date, collection);
+    int id = DatabaseAccess().db()->addAlbum(albumRootId, albumPath, caption, date, family);
 
     if (id == -1)
     {
@@ -1401,10 +1401,10 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
     if (!parent->isAlbumRoot())
         parentPath = parent->albumPath();
 
-    PAlbum *album       = new PAlbum(albumRootId, parentPath, name, id);
-    album->m_caption    = caption;
-    album->m_collection = collection;
-    album->m_date       = date;
+    PAlbum *album    = new PAlbum(albumRootId, parentPath, name, id);
+    album->m_caption = caption;
+    album->m_family  = family;
+    album->m_date    = date;
 
     insertPAlbum(album, parent);
 

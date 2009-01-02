@@ -7,7 +7,7 @@
  * Description : digiKam setup dialog.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Album
@@ -43,7 +43,7 @@
 #include "setuptooltip.h"
 #include "setupmetadata.h"
 #include "setupidentity.h"
-#include "setupalbumtype.h"
+#include "setupfamily.h"
 #include "setupmime.h"
 #include "setuplighttable.h"
 #include "setupeditor.h"
@@ -69,7 +69,7 @@ public:
         page_tooltip     = 0;
         page_metadata    = 0;
         page_identity    = 0;
-        page_albumType   = 0;
+        page_family      = 0;
         page_mime        = 0;
         page_lighttable  = 0;
         page_editor      = 0;
@@ -86,7 +86,7 @@ public:
         tooltipPage      = 0;
         metadataPage     = 0;
         identityPage     = 0;
-        albumTypePage    = 0;
+        familyPage       = 0;
         mimePage         = 0;
         lighttablePage   = 0;
         editorPage       = 0;
@@ -104,7 +104,7 @@ public:
     KPageWidgetItem  *page_tooltip;
     KPageWidgetItem  *page_metadata;
     KPageWidgetItem  *page_identity;
-    KPageWidgetItem  *page_albumType;
+    KPageWidgetItem  *page_family;
     KPageWidgetItem  *page_mime;
     KPageWidgetItem  *page_lighttable;
     KPageWidgetItem  *page_editor;
@@ -121,7 +121,7 @@ public:
     SetupToolTip     *tooltipPage;
     SetupMetadata    *metadataPage;
     SetupIdentity    *identityPage;
-    SetupAlbumType   *albumTypePage;
+    SetupFamily      *familyPage;
     SetupMime        *mimePage;
     SetupLightTable  *lighttablePage;
     SetupEditor      *editorPage;
@@ -170,10 +170,10 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_identity->setHeader( i18n("Default identity information") );
     d->page_identity->setIcon( KIcon("user-identity") );
 
-    d->albumTypePage  = new SetupAlbumType();
-    d->page_albumType = addPage( d->albumTypePage, i18n("Album Type") );
-    d->page_albumType->setHeader( i18n("Album Type Settings") );
-    d->page_albumType->setIcon( KIcon("view-calendar-list") );
+    d->familyPage  = new SetupFamily();
+    d->page_family = addPage( d->familyPage, i18n("Album Family") );
+    d->page_family->setHeader( i18n("Album Family Settings") );
+    d->page_family->setIcon( KIcon("view-calendar-list") );
 
     d->mimePage  = new SetupMime();
     d->page_mime = addPage( d->mimePage, i18n("Mime Types") );
@@ -256,7 +256,7 @@ void Setup::slotOkClicked()
     d->tooltipPage->applySettings();
     d->metadataPage->applySettings();
     d->identityPage->applySettings();
-    d->albumTypePage->applySettings();
+    d->familyPage->applySettings();
     d->mimePage->applySettings();
     d->cameraPage->applySettings();
     d->lighttablePage->applySettings();
@@ -305,8 +305,8 @@ void Setup::showPage(Setup::Page page)
         case IdentifyPage:
             setCurrentPage(d->page_identity);
             break;
-        case AlbumTypePage:
-            setCurrentPage(d->page_albumType);
+        case FamilyPage:
+            setCurrentPage(d->page_family);
             break;
         case MimePage:
             setCurrentPage(d->page_mime);
@@ -352,7 +352,7 @@ Setup::Page Setup::activePageIndex()
     if (cur == d->page_tooltip)     return ToolTipPage;
     if (cur == d->page_metadata)    return MetadataPage;
     if (cur == d->page_identity)    return IdentifyPage;
-    if (cur == d->page_albumType)   return AlbumTypePage;
+    if (cur == d->page_family)      return FamilyPage;
     if (cur == d->page_mime)        return MimePage;
     if (cur == d->page_lighttable)  return LightTablePage;
     if (cur == d->page_editor)      return EditorPage;
