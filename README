@@ -100,8 +100,8 @@ libjasper       >= 1.7.x                      http://www.ece.uvic.ca/~mdadams/ja
 
 Optional :
 
-libkdepimlibs   >= 4.0.x                      http://pim.kde.org                         To support KAddressBook entries.
-libmarblewidget >= 0.5.1                      http://edu.kde.org/marble                  To support Geolocation using Marble Widget.
+libkdepimlibs   >= 4.0.x (4.1.x recommended)  http://pim.kde.org                         To support KAddressBook entries.
+libmarblewidget >= 0.5.1 (0.6.x recommended)  http://edu.kde.org/marble                  To support Geolocation using Marble Widget.
 liblensfun      >= 0.1.0                      http://lensfun.berlios.de                  To support LensCorrection editor plugin.
 libgphoto2      >= 2.4.0                      http://www.gphoto.org                      To support Gphoto2 Cameras. Enable by default.
                                                                                          Use CMake "-DENABLE_GPHOTO2=no" flag to compile 
