@@ -7,7 +7,7 @@
  * Description : DImg interface for image editor
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -239,6 +239,7 @@ void DImgInterface::slotUseDefaultSettings()
 
 void DImgInterface::resetImage()
 {
+    EditorToolIface::editorToolIface()->unLoadTool();
     resetValues();
     d->image.reset();
 }
@@ -450,7 +451,7 @@ bool DImgInterface::exifRotated()
 void DImgInterface::exifRotate(const QString& filename)
 {
     // Rotate image based on EXIF rotate tag
-    
+
     DMetadata metadata(filename);
     DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
 
@@ -499,7 +500,7 @@ void DImgInterface::exifRotate(const QString& filename)
 
 void DImgInterface::setExifOrient(bool exifOrient)
 {
-    d->exifOrient = exifOrient;    
+    d->exifOrient = exifOrient;
 }
 
 void DImgInterface::undo()
@@ -738,7 +739,7 @@ bool DImgInterface::imageValid()
 
 int DImgInterface::width()
 {
-    return d->width;    
+    return d->width;
 }
 
 int DImgInterface::height()
@@ -748,7 +749,7 @@ int DImgInterface::height()
 
 int DImgInterface::origWidth()
 {
-    return d->origWidth;    
+    return d->origWidth;
 }
 
 int DImgInterface::origHeight()
@@ -806,7 +807,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     DImg img = d->image.smoothScaleSection(sx, sy, sw, sh, dw, dh);
     d->cmod.applyBCG(img);
     img.convertDepth(32);
-    
+
     if (d->cmSettings->enableCMSetting && d->cmSettings->managedViewSetting)
     {
         QPixmap pix(img.convertToPixmap(&d->monitorICCtrans));
@@ -1160,7 +1161,7 @@ void DImgInterface::setEmbeddedICCToOriginalImage( QString profilePath)
         DWarning() << k_funcinfo << "d->image is NULL" << endl;
         return;
     }
-     
+
      DDebug() << k_funcinfo << "Embedding profile: " << profilePath << endl;
      d->image.getICCProfilFromFile( QFile::encodeName(profilePath));
      setModified();
@@ -1248,7 +1249,7 @@ ICCSettingsContainer* DImgInterface::getICCSettings()
 }
 
 QPixmap DImgInterface::convertToPixmap(DImg& img)
-{    
+{
     if (d->cmSettings->enableCMSetting && d->cmSettings->managedViewSetting)
         return img.convertToPixmap(&d->monitorICCtrans);
 
