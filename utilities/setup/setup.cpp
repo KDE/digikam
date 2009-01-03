@@ -155,15 +155,15 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_albumView->setHeader( i18n("Album View Settings") );
     d->page_albumView->setIcon( KIcon("view-list-icons") );
 
-    d->tooltipPage  = new SetupToolTip();
-    d->page_tooltip = addPage( d->tooltipPage, i18n("Tool Tip") );
-    d->page_tooltip->setHeader( i18n("Album Items Tool Tip Settings") );
-    d->page_tooltip->setIcon( KIcon("dialog-information") );
-
     d->categoryPage  = new SetupCategory();
     d->page_category = addPage( d->categoryPage, i18n("Album Category") );
     d->page_category->setHeader( i18n("Album Category Settings") );
     d->page_category->setIcon( KIcon("view-calendar-list") );
+
+    d->tooltipPage  = new SetupToolTip();
+    d->page_tooltip = addPage( d->tooltipPage, i18n("Tool Tip") );
+    d->page_tooltip->setHeader( i18n("Album Items Tool Tip Settings") );
+    d->page_tooltip->setIcon( KIcon("dialog-information") );
 
     d->metadataPage  = new SetupMetadata();
     d->page_metadata = addPage( d->metadataPage, i18n("Metadata") );
