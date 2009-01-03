@@ -174,7 +174,7 @@ AlbumInfo::List AlbumDB::scanAlbums()
         ++it;
         info.caption = (*it).toString();
         ++it;
-        info.family = (*it).toString();
+        info.category = (*it).toString();
         ++it;
         info.iconAlbumRootId = (*it).toInt(); // will be 0 if null
         ++it;
@@ -367,11 +367,11 @@ void AlbumDB::setAlbumCaption(int albumID, const QString& caption)
     d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::PropertiesChanged));
 }
 
-void AlbumDB::setAlbumFamily(int albumID, const QString& family)
+void AlbumDB::setAlbumCategory(int albumID, const QString& category)
 {
-    // TODO : change "collection" propertie in DB ALbum table to "family"
+    // TODO : change "collection" propertie in DB ALbum table to "category"
     d->db->execSql( QString("UPDATE Albums SET collection=? WHERE id=?;"),
-                    family, albumID );
+                    category, albumID );
     d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::PropertiesChanged));
 }
 

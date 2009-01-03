@@ -258,7 +258,7 @@ public:
      */
     PAlbum* createPAlbum(PAlbum* parent, const QString& name,
                          const QString& caption, const QDate& date,
-                         const QString& family,
+                         const QString& category,
                          QString& errMsg);
 
     /**
@@ -267,7 +267,7 @@ public:
      */
     PAlbum* createPAlbum(const QString& albumRootPath, const QString& name,
                          const QString& caption, const QDate& date,
-                         const QString& family,
+                         const QString& category,
                          QString& errMsg);
 
     /**
@@ -276,7 +276,7 @@ public:
      */
     PAlbum* createPAlbum(const CollectionLocation &location, const QString& name,
                          const QString& caption, const QDate& date,
-                         const QString& family,
+                         const QString& category,
                          QString& errMsg);
 
     /**

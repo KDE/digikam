@@ -51,7 +51,7 @@ public:
     enum AlbumSortOrder
     {
         ByFolder = 0,
-        ByFamily,
+        ByCategory,
         ByDate
     };
 
@@ -91,11 +91,11 @@ public:
     void setScanAtStart(bool val);
     bool getScanAtStart() const;
 
-    void setAlbumFamilyNames(const QStringList& list);
-    QStringList getAlbumFamilyNames();
+    void setAlbumCategoryNames(const QStringList& list);
+    QStringList getAlbumCategoryNames();
 
-    bool addAlbumFamilyName(const QString& name);
-    bool delAlbumFamilyName(const QString& name);
+    bool addAlbumCategoryName(const QString& name);
+    bool delAlbumCategoryName(const QString& name);
 
     void setAlbumSortOrder(const AlbumSortOrder order);
     AlbumSortOrder getAlbumSortOrder() const;

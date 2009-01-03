@@ -160,9 +160,9 @@ QString FolderViewToolTip::fillTipContents(PAlbum *album, int count)
 
         if (settings->getToolTipsShowAlbumCollection())
         {
-            str = album->family();
+            str = album->category();
             if (str.isEmpty()) str = QString("---");
-            tip += cnt.cellSpecBeg + i18n("Family:") + cnt.cellSpecMid + 
+            tip += cnt.cellSpecBeg + i18n("Category:") + cnt.cellSpecMid + 
                    cnt.breakString(str) + cnt.cellSpecEnd;
         }
 

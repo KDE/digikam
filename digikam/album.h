@@ -309,13 +309,13 @@ public:
     ~PAlbum();
 
     void setCaption(const QString& caption);
-    void setFamily(const QString& family);
+    void setCategory(const QString& category);
     void setDate(const QDate& date);
 
     QString     albumRootPath() const;
     int         albumRootId() const;
     QString     caption() const;
-    QString     family() const;
+    QString     category() const;
     QDate       date() const;
     QString     albumPath() const;
     QString     prettyUrl() const;
@@ -335,7 +335,7 @@ private:
 
     QString    m_path;
     QString    m_parentPath;
-    QString    m_family;
+    QString    m_category;
     QString    m_caption;
     QString    m_icon;
 

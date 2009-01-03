@@ -731,7 +731,7 @@ void DigikamApp::setupActions()
     // Use same list order as in albumsettings enum
     QStringList sortActionList;
     sortActionList.append(i18n("By Folder"));
-    sortActionList.append(i18n("By Family"));
+    sortActionList.append(i18n("By Category"));
     sortActionList.append(i18n("By Date"));
     d->albumSortAction->setItems(sortActionList);
 

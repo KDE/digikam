@@ -54,22 +54,22 @@ public:
     QString     title() const;
     QString     comments() const;
     QDate       date() const;
-    QString     family() const;
-    QStringList albumFamilies() const;
+    QString     category() const;
+    QStringList albumCategories() const;
 
     static bool editProps(PAlbum*      album,
                           QString&     title,
                           QString&     comments,
                           QDate&       date,
-                          QString&     family,
-                          QStringList& albumFamilies);
+                          QString&     category,
+                          QStringList& albumCategories);
 
     static bool createNew(PAlbum*      parent,
                           QString&     title,
                           QString&     comments,
                           QDate&       date,
-                          QString&     family,
-                          QStringList& albumFamilies);
+                          QString&     category,
+                          QStringList& albumCategories);
 
 private slots:
 

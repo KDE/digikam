@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-01-02
- * Description : album family setup tab.
+ * Description : album category setup tab.
  *
  * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPFAMILY_H
-#define SETUPFAMILY_H
+#ifndef SETUPCATEGORY_H
+#define SETUPCATEGORY_H
 
 // Qt includes.
 
@@ -31,16 +31,16 @@
 namespace Digikam
 {
 
-class SetupFamilyPriv;
+class SetupCategoryPriv;
 
-class SetupFamily : public QWidget
+class SetupCategory : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    SetupFamily(QWidget* parent = 0);
-    ~SetupFamily();
+    SetupCategory(QWidget* parent = 0);
+    ~SetupCategory();
 
     void applySettings();
 
@@ -50,16 +50,16 @@ private:
 
 private slots:
 
-    void slotFamilySelectionChanged();
-    void slotAddFamily();
-    void slotDelFamily();
-    void slotRepFamily();
+    void slotCategorySelectionChanged();
+    void slotAddCategory();
+    void slotDelCategory();
+    void slotRepCategory();
 
 private:
 
-    SetupFamilyPriv* const d;
+    SetupCategoryPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif // SETUPALBUMTYPE_H 
+#endif // SETUPCATEGORY_H

@@ -298,12 +298,12 @@ void PAlbum::setCaption(const QString& caption)
     access.db()->setAlbumCaption(id(), m_caption);
 }
 
-void PAlbum::setFamily(const QString& family)
+void PAlbum::setCategory(const QString& category)
 {
-    m_family = family;
+    m_category = category;
 
     DatabaseAccess access;
-    access.db()->setAlbumFamily(id(), m_family);
+    access.db()->setAlbumCategory(id(), m_category);
 }
 
 void PAlbum::setDate(const QDate& date)
@@ -329,9 +329,9 @@ QString PAlbum::caption() const
     return m_caption;
 }
 
-QString PAlbum::family() const
+QString PAlbum::category() const
 {
-    return m_family;
+    return m_category;
 }
 
 QDate PAlbum::date() const

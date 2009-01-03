@@ -86,7 +86,7 @@ public:
     int     albumRootId;
     QString relativePath;
     QString caption;
-    QString family;
+    QString category;
     QDate   date;
     int     iconAlbumRootId;
     QString iconRelativePath;

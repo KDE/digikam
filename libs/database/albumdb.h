@@ -272,11 +272,11 @@ public:
     void setAlbumCaption(int albumID, const QString& caption);
 
     /**
-     * Set a family for the album.
-     * @param albumID    the id of the album
-     * @param collection the new collection for the album
+     * Set a category for the album.
+     * @param albumID  the id of the album
+     * @param category the new category for the album
      */
-    void setAlbumFamily(int albumID, const QString& family);
+    void setAlbumCategory(int albumID, const QString& category);
 
     /**
      * Set a date for the album.

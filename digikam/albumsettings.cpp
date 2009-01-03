@@ -154,7 +154,7 @@ public:
     QString                             databaseFilePath;
 
     // album settings
-    QStringList                         albumFamilyNames;
+    QStringList                         albumCategoryNames;
 
     KSharedConfigPtr                    config;
 
@@ -189,16 +189,16 @@ AlbumSettings::~AlbumSettings()
 
 void AlbumSettings::init()
 {
-    d->albumFamilyNames.clear();
-    d->albumFamilyNames.append(i18n("Family"));
-    d->albumFamilyNames.append(i18n("Travel"));
-    d->albumFamilyNames.append(i18n("Holidays"));
-    d->albumFamilyNames.append(i18n("Friends"));
-    d->albumFamilyNames.append(i18n("Nature"));
-    d->albumFamilyNames.append(i18n("Party"));
-    d->albumFamilyNames.append(i18n("Todo"));
-    d->albumFamilyNames.append(i18n("Miscellaneous"));
-    d->albumFamilyNames.sort();
+    d->albumCategoryNames.clear();
+    d->albumCategoryNames.append(i18n("Category"));
+    d->albumCategoryNames.append(i18n("Travel"));
+    d->albumCategoryNames.append(i18n("Holidays"));
+    d->albumCategoryNames.append(i18n("Friends"));
+    d->albumCategoryNames.append(i18n("Nature"));
+    d->albumCategoryNames.append(i18n("Party"));
+    d->albumCategoryNames.append(i18n("Todo"));
+    d->albumCategoryNames.append(i18n("Miscellaneous"));
+    d->albumCategoryNames.sort();
 
     d->albumSortOrder               = AlbumSettings::ByFolder;
     d->imageSortOrder               = AlbumSettings::ByIName;
@@ -286,7 +286,7 @@ void AlbumSettings::readSettings()
     if (!collectionList.isEmpty())
     {
         collectionList.sort();
-        d->albumFamilyNames = collectionList;
+        d->albumCategoryNames = collectionList;
     }
 
     d->albumSortOrder = AlbumSettings::AlbumSortOrder(group.readEntry("Album Sort Order",
@@ -397,7 +397,7 @@ void AlbumSettings::saveSettings()
     KConfigGroup group = config->group("Album Settings");
 
     group.writeEntry("Database File Path", d->databaseFilePath);
-    group.writeEntry("Album Collections", d->albumFamilyNames);
+    group.writeEntry("Album Collections", d->albumCategoryNames);
     group.writeEntry("Album Sort Order", (int)d->albumSortOrder);
     group.writeEntry("Image Sort Order", (int)d->imageSortOrder);
     group.writeEntry("Item Right Click Action", (int)d->itemRightClickAction);
@@ -519,28 +519,28 @@ bool AlbumSettings::getScanAtStart() const
     return d->scanAtStart;
 }
 
-void AlbumSettings::setAlbumFamilyNames(const QStringList& list)
+void AlbumSettings::setAlbumCategoryNames(const QStringList& list)
 {
-    d->albumFamilyNames = list;
+    d->albumCategoryNames = list;
 }
 
-QStringList AlbumSettings::getAlbumFamilyNames()
+QStringList AlbumSettings::getAlbumCategoryNames()
 {
-    return d->albumFamilyNames;
+    return d->albumCategoryNames;
 }
 
-bool AlbumSettings::addAlbumFamilyName(const QString& name)
+bool AlbumSettings::addAlbumCategoryName(const QString& name)
 {
-    if (d->albumFamilyNames.contains(name))
+    if (d->albumCategoryNames.contains(name))
         return false;
 
-    d->albumFamilyNames.append(name);
+    d->albumCategoryNames.append(name);
     return true;
 }
 
-bool AlbumSettings::delAlbumFamilyName(const QString& name)
+bool AlbumSettings::delAlbumCategoryName(const QString& name)
 {
-    uint count = d->albumFamilyNames.removeAll(name);
+    uint count = d->albumCategoryNames.removeAll(name);
     return (count > 0) ? true : false;
 }
 

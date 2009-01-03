@@ -75,16 +75,16 @@ public:
 
     AlbumPropsEditPriv()
     {
-        titleEdit    = 0;
-        familyCombo  = 0;
-        commentsEdit = 0;
-        datePicker   = 0;
-        album        = 0;
+        titleEdit     = 0;
+        categoryCombo = 0;
+        commentsEdit  = 0;
+        datePicker    = 0;
+        album         = 0;
     }
 
     QStringList  albumCollections;
 
-    KComboBox   *familyCombo;
+    KComboBox   *categoryCombo;
 
     KLineEdit   *titleEdit;
 
@@ -146,12 +146,12 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     QValidator *titleValidator = new QRegExpValidator(titleRx, this);
     d->titleEdit->setValidator(titleValidator);
 
-    QLabel *familyLabel = new QLabel(page);
-    familyLabel->setText(i18n("Fami&ly:"));
+    QLabel *categoryLabel = new QLabel(page);
+    categoryLabel->setText(i18n("Ca&tegory:"));
 
-    d->familyCombo = new KComboBox(page);
-    d->familyCombo->setEditable(true);
-    familyLabel->setBuddy(d->familyCombo);
+    d->categoryCombo = new KComboBox(page);
+    d->categoryCombo->setEditable(true);
+    categoryLabel->setBuddy(d->categoryCombo);
 
     QLabel *commentsLabel = new QLabel(page);
     commentsLabel->setText(i18n("Co&mments:"));
@@ -175,8 +175,8 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     QPushButton *dateHighButton = new QPushButton(i18nc("Selects the date of the newest image",
                                                   "Newest"), buttonRow);
 
-    setTabOrder(d->titleEdit, d->familyCombo);
-    setTabOrder(d->familyCombo, d->commentsEdit);
+    setTabOrder(d->titleEdit, d->categoryCombo);
+    setTabOrder(d->categoryCombo, d->commentsEdit);
     setTabOrder(d->commentsEdit, d->datePicker);
     d->commentsEdit->setTabChangesFocus(true);
     d->titleEdit->selectAll();
@@ -184,18 +184,18 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     // --------------------------------------------------------
 
-    grid->addWidget(logo,            0, 0, 1, 1);
-    grid->addWidget(topLabel,        0, 1, 1, 1);
-    grid->addWidget(topLine,         1, 0, 1, 2);
-    grid->addWidget(titleLabel,      2, 0, 1, 1);
-    grid->addWidget(d->titleEdit,    2, 1, 1, 1);
-    grid->addWidget(familyLabel,     3, 0, 1, 1);
-    grid->addWidget(d->familyCombo,  3, 1, 1, 1);
-    grid->addWidget(commentsLabel,   4, 0, 1, 1, Qt::AlignLeft | Qt::AlignTop);
-    grid->addWidget(d->commentsEdit, 4, 1, 1, 1);
-    grid->addWidget(dateLabel,       5, 0, 1, 1, Qt::AlignLeft | Qt::AlignTop);
-    grid->addWidget(d->datePicker,   5, 1, 1, 1);
-    grid->addWidget(buttonRow,       6, 1, 1, 1);
+    grid->addWidget(logo,             0, 0, 1, 1);
+    grid->addWidget(topLabel,         0, 1, 1, 1);
+    grid->addWidget(topLine,          1, 0, 1, 2);
+    grid->addWidget(titleLabel,       2, 0, 1, 1);
+    grid->addWidget(d->titleEdit,     2, 1, 1, 1);
+    grid->addWidget(categoryLabel,    3, 0, 1, 1);
+    grid->addWidget(d->categoryCombo, 3, 1, 1, 1);
+    grid->addWidget(commentsLabel,    4, 0, 1, 1, Qt::AlignLeft | Qt::AlignTop);
+    grid->addWidget(d->commentsEdit,  4, 1, 1, 1);
+    grid->addWidget(dateLabel,        5, 0, 1, 1, Qt::AlignLeft | Qt::AlignTop);
+    grid->addWidget(d->datePicker,    5, 1, 1, 1);
+    grid->addWidget(buttonRow,        6, 1, 1, 1);
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
 
@@ -204,15 +204,15 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     AlbumSettings *settings = AlbumSettings::instance();
     if (settings)
     {
-        d->familyCombo->addItem(QString());
-        QStringList families = settings->getAlbumFamilyNames();
-        d->familyCombo->addItems(families);
-        int familyIndex      = families.indexOf( album->family() );
+        d->categoryCombo->addItem(QString());
+        QStringList Categories = settings->getAlbumCategoryNames();
+        d->categoryCombo->addItems(Categories);
+        int categoryIndex    = Categories.indexOf( album->category() );
 
-        if ( familyIndex != -1 )
+        if ( categoryIndex != -1 )
         {
             // + 1 because of the empty item
-            d->familyCombo->setCurrentIndex(familyIndex + 1);
+            d->categoryCombo->setCurrentIndex(categoryIndex + 1);
         }
     }
 
@@ -265,9 +265,9 @@ QDate AlbumPropsEdit::date() const
     return d->datePicker->date();
 }
 
-QString AlbumPropsEdit::family() const
+QString AlbumPropsEdit::category() const
 {
-    QString name = d->familyCombo->currentText();
+    QString name = d->categoryCombo->currentText();
 
     if (name.isEmpty())
     {
@@ -277,54 +277,54 @@ QString AlbumPropsEdit::family() const
     return name;
 }
 
-QStringList AlbumPropsEdit::albumFamilies() const
+QStringList AlbumPropsEdit::albumCategories() const
 {
-    QStringList families;
+    QStringList Categories;
     AlbumSettings *settings = AlbumSettings::instance();
     if (settings)
     {
-        families = settings->getAlbumFamilyNames();
+        Categories = settings->getAlbumCategoryNames();
     }
 
-    QString currentFamily = d->familyCombo->currentText();
-    if ( families.indexOf( currentFamily ) == -1 )
+    QString currentCategory = d->categoryCombo->currentText();
+    if ( Categories.indexOf( currentCategory ) == -1 )
     {
-        families.append(currentFamily);
+        Categories.append(currentCategory);
     }
 
-    families.sort();
-    return families;
+    Categories.sort();
+    return Categories;
 }
 
 bool AlbumPropsEdit::editProps(PAlbum *album, QString& title,
-                               QString& comments, QDate& date, QString& family,
-                               QStringList& albumFamilies)
+                               QString& comments, QDate& date, QString& category,
+                               QStringList& albumCategories)
 {
     AlbumPropsEdit dlg(album);
 
     bool ok = dlg.exec() == QDialog::Accepted;
 
-    title         = dlg.title();
-    comments      = dlg.comments();
-    date          = dlg.date();
-    family        = dlg.family();
-    albumFamilies = dlg.albumFamilies();
+    title           = dlg.title();
+    comments        = dlg.comments();
+    date            = dlg.date();
+    category        = dlg.category();
+    albumCategories = dlg.albumCategories();
 
     return ok;
 }
 
 bool AlbumPropsEdit::createNew(PAlbum *parent, QString& title, QString& comments,
-                               QDate& date, QString& family, QStringList& albumFamilies)
+                               QDate& date, QString& category, QStringList& albumCategories)
 {
     AlbumPropsEdit dlg(parent, true);
 
     bool ok = dlg.exec() == QDialog::Accepted;
 
-    title         = dlg.title();
-    comments      = dlg.comments();
-    date          = dlg.date();
-    family        = dlg.family();
-    albumFamilies = dlg.albumFamilies();
+    title           = dlg.title();
+    comments        = dlg.comments();
+    date            = dlg.date();
+    category        = dlg.category();
+    albumCategories = dlg.albumCategories();
 
     return ok;
 }

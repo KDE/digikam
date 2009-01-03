@@ -795,9 +795,9 @@ void AlbumManager::scanPAlbums()
             needInsert  = true;
         }
 
-        album->m_caption = info.caption;
-        album->m_family  = info.family;
-        album->m_date    = info.date;
+        album->m_caption  = info.caption;
+        album->m_category = info.category;
+        album->m_date     = info.date;
 
         if (info.iconAlbumRootId)
         {
@@ -847,7 +847,7 @@ void AlbumManager::updateChangedPAlbums()
 
                     // Update caption, collection, date
                     album->m_caption = info.caption;
-                    album->m_family  = info.family;
+                    album->m_category  = info.category;
                     album->m_date    = info.date;
 
                     // Icon changed?
@@ -1301,16 +1301,16 @@ void AlbumManager::invalidateGuardedPointers(Album *album)
 
 PAlbum* AlbumManager::createPAlbum(const QString& albumRootPath, const QString& name,
                                    const QString& caption, const QDate& date,
-                                   const QString& family,
+                                   const QString& category,
                                    QString& errMsg)
 {
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRootPath(albumRootPath);
-    return createPAlbum(location, name, caption, date, family, errMsg);
+    return createPAlbum(location, name, caption, date, category, errMsg);
 }
 
 PAlbum* AlbumManager::createPAlbum(const CollectionLocation &location, const QString& name,
                                    const QString& caption, const QDate& date,
-                                   const QString& family,
+                                   const QString& category,
                                    QString& errMsg)
 {
     if (location.isNull() || !location.isAvailable())
@@ -1327,7 +1327,7 @@ PAlbum* AlbumManager::createPAlbum(const CollectionLocation &location, const QSt
         return 0;
     }
 
-    return createPAlbum(album, name, caption, date, family, errMsg);
+    return createPAlbum(album, name, caption, date, category, errMsg);
 }
 
 
@@ -1335,7 +1335,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
                                    const QString& name,
                                    const QString& caption,
                                    const QDate&   date,
-                                   const QString& family,
+                                   const QString& category,
                                    QString&       errMsg)
 {
     if (!parent)
@@ -1389,7 +1389,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
     }
 
     ChangingDB changing(d);
-    int id = DatabaseAccess().db()->addAlbum(albumRootId, albumPath, caption, date, family);
+    int id = DatabaseAccess().db()->addAlbum(albumRootId, albumPath, caption, date, category);
 
     if (id == -1)
     {
@@ -1403,7 +1403,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
 
     PAlbum *album    = new PAlbum(albumRootId, parentPath, name, id);
     album->m_caption = caption;
-    album->m_family  = family;
+    album->m_category  = category;
     album->m_date    = date;
 
     insertPAlbum(album, parent);

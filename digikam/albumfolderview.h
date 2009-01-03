@@ -147,7 +147,7 @@ private:
 
     AlbumFolderViewItem* findParent(PAlbum* album, bool& failed);
     AlbumFolderViewItem* findParentByFolder(PAlbum* album, bool& failed);
-    AlbumFolderViewItem* findParentByFamily(PAlbum* album, bool& failed);
+    AlbumFolderViewItem* findParentByCategory(PAlbum* album, bool& failed);
     AlbumFolderViewItem* findParentByDate(PAlbum* album, bool& failed);
 
     void reparentItem(AlbumFolderViewItem* folderItem);

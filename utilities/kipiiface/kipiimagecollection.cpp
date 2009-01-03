@@ -82,7 +82,7 @@ QString KipiImageCollection::category()
     if ( m_album->type() == Album::PHYSICAL )
     {
         PAlbum *p = dynamic_cast<PAlbum*>(m_album);
-        return p->family();
+        return p->category();
     }
     else if ( m_album->type() == Album::TAG )
     {
