@@ -68,7 +68,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 050 ==> 179298 : digiKam scan for new images progress bar starts at 100%. 
 051 ==> 178103 : digiKam error: Failed to revise Exif orientation.
 052 ==> 174026 : Too narrow area to show buttons in slideshow.
-053 ==> 
+053 ==> 178382 : Many and duplicate top level menu entries. 
+054 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta7 - Release date: 2008-12-18
