@@ -482,11 +482,11 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
     // Now this way is obsolete, and we use XMP instead.
 
     // Remove the old Tags path list from metadata if already exist.
-    if (removeXmpTag("Xmp.digiKam.TagsList", false))
+    if (!removeXmpTag("Xmp.digiKam.TagsList", false))
         return false;
 
     // An now, add the new Tags path list as well.
-    if (setXmpTagStringSeq("Xmp.digiKam.TagsList", tagsPath))
+    if (!setXmpTagStringSeq("Xmp.digiKam.TagsList", tagsPath))
         return false;
 
     return true;
