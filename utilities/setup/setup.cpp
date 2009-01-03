@@ -160,6 +160,11 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_tooltip->setHeader( i18n("Album Items Tool Tip Settings") );
     d->page_tooltip->setIcon( KIcon("dialog-information") );
 
+    d->categoryPage  = new SetupCategory();
+    d->page_category = addPage( d->categoryPage, i18n("Album Category") );
+    d->page_category->setHeader( i18n("Album Category Settings") );
+    d->page_category->setIcon( KIcon("view-calendar-list") );
+
     d->metadataPage  = new SetupMetadata();
     d->page_metadata = addPage( d->metadataPage, i18n("Metadata") );
     d->page_metadata->setHeader( i18n("Embedded Image Information Management") );
@@ -169,11 +174,6 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_identity = addPage( d->identityPage, i18n("Identity") );
     d->page_identity->setHeader( i18n("Default identity information") );
     d->page_identity->setIcon( KIcon("user-identity") );
-
-    d->categoryPage  = new SetupCategory();
-    d->page_category = addPage( d->categoryPage, i18n("Album Category") );
-    d->page_category->setHeader( i18n("Album Category Settings") );
-    d->page_category->setIcon( KIcon("view-calendar-list") );
 
     d->mimePage  = new SetupMime();
     d->page_mime = addPage( d->mimePage, i18n("Mime Types") );
