@@ -6,7 +6,7 @@
  * Date        : 2005-04-02
  * Description : showFoto setup dialog.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -93,34 +93,40 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     setModal(true);
 
     d->editorPage  = new SetupEditor();
-    d->page_editor = addPage( d->editorPage, i18nc("general settings tab", "General") );
-    d->page_editor->setHeader( i18n("General Settings") );
-    d->page_editor->setIcon( KIcon("showfoto") );
+    d->page_editor = addPage(d->editorPage, i18nc("general settings tab", "General"));
+    d->page_editor->setHeader(i18n("<qt>General Settings<br/>"
+                              "<i>Use this panel to customize general behaviour</i></qt>"));
+    d->page_editor->setIcon(KIcon("showfoto"));
 
     d->toolTipPage = new SetupToolTip();
-    d->page_tooltip = addPage( d->toolTipPage, i18n("Tool Tip") );
-    d->page_tooltip->setHeader( i18n("Thumbbar Items Tool Tip Settings") );
-    d->page_tooltip->setIcon( KIcon("dialog-information") );
+    d->page_tooltip = addPage(d->toolTipPage, i18n("Tool Tip"));
+    d->page_tooltip->setHeader(i18n("<qt>Thumbbar Items Tool-Tip Settings<br/>"
+                               "<i>Use this panel to customize tool-tip contents</i></qt>"));
+    d->page_tooltip->setIcon(KIcon("dialog-information"));
 
-    d->dcrawPage = new Digikam::SetupDcraw();
-    d->page_dcraw = addPage( d->dcrawPage, i18n("RAW decoding") );
-    d->page_dcraw->setHeader( i18n("RAW Files Decoding Settings") );
-    d->page_dcraw->setIcon( KIcon("kdcraw") );
+    d->dcrawPage  = new Digikam::SetupDcraw();
+    d->page_dcraw = addPage(d->dcrawPage, i18n("RAW decoding"));
+    d->page_dcraw->setHeader(i18n("<qt>RAW Files Decoding Settings<br/>"
+                             "<i>Use this panel to customize default RAW decoding settings</i></qt>"));
+    d->page_dcraw->setIcon(KIcon("kdcraw"));
 
-    d->iccPage = new Digikam::SetupICC(0, this);
-    d->page_icc = addPage( d->iccPage, i18n("Color Management") );
-    d->page_icc->setHeader( i18n("Color Management Settings") );
-    d->page_icc->setIcon( KIcon("colormanagement") );
+    d->iccPage  = new Digikam::SetupICC(0, this);
+    d->page_icc = addPage(d->iccPage, i18n("Color Management"));
+    d->page_icc->setHeader(i18n("<qt>Settings for Color Management<br/>"
+                           "<i>Use this panel to customize color management settings</i></qt>"));
+    d->page_icc->setIcon(KIcon("colormanagement"));
 
-    d->iofilesPage = new Digikam::SetupIOFiles();
-    d->page_iofiles = addPage( d->iofilesPage, i18n("Save Images") );
-    d->page_iofiles->setHeader( i18n("Save Images' Files' Settings") );
-    d->page_iofiles->setIcon( KIcon("document-save-all") );
+    d->iofilesPage  = new Digikam::SetupIOFiles();
+    d->page_iofiles = addPage(d->iofilesPage, i18n("Save Images"));
+    d->page_iofiles->setHeader(i18n("<qt>Settings for Saving Image Files<br/>"
+                               "<i>Use this panel to set default configuration used to save images</i></qt>"));
+    d->page_iofiles->setIcon(KIcon("document-save-all"));
 
-    d->slideshowPage = new Digikam::SetupSlideShow();
-    d->page_slideshow = addPage( d->slideshowPage, i18n("Slide Show") );
-    d->page_slideshow->setHeader( i18n("Slide Show Settings") );
-    d->page_slideshow->setIcon( KIcon("view-presentation") );
+    d->slideshowPage  = new Digikam::SetupSlideShow();
+    d->page_slideshow = addPage(d->slideshowPage, i18n("Slide Show"));
+    d->page_slideshow->setHeader(i18n("<qt>Slide Show Settings<br/>"
+                                 "<i>Use this panel to customize slideshow settings</i></qt>"));
+    d->page_slideshow->setIcon(KIcon("view-presentation"));
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );

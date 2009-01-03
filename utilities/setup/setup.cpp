@@ -146,84 +146,100 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     setModal(true);
 
     d->collectionsPage  = new SetupCollections(this);
-    d->page_collections = addPage( d->collectionsPage, i18n("Collections") );
-    d->page_collections->setHeader( i18n("Collections Settings") );
-    d->page_collections->setIcon( KIcon("folder-image") );
+    d->page_collections = addPage(d->collectionsPage, i18n("Collections"));
+    d->page_collections->setHeader(i18n("<qt>Collections Settings<br/>"
+                                   "<i>Use this panel to set root albums and database paths</i></qt>"));
+    d->page_collections->setIcon(KIcon("folder-image"));
 
     d->albumViewPage  = new SetupAlbumView();
-    d->page_albumView = addPage( d->albumViewPage, i18n("Album View") );
-    d->page_albumView->setHeader( i18n("Album View Settings") );
-    d->page_albumView->setIcon( KIcon("view-list-icons") );
+    d->page_albumView = addPage(d->albumViewPage, i18n("Album View"));
+    d->page_albumView->setHeader(i18n("<qt>Album View Settings<br/>"
+                                 "<i>Use this panel to customize album view components</i></qt>"));
+    d->page_albumView->setIcon(KIcon("view-list-icons"));
 
     d->categoryPage  = new SetupCategory();
-    d->page_category = addPage( d->categoryPage, i18n("Album Category") );
-    d->page_category->setHeader( i18n("Album Category Settings") );
-    d->page_category->setIcon( KIcon("view-calendar-list") );
+    d->page_category = addPage(d->categoryPage, i18n("Album Category"));
+    d->page_category->setHeader(i18n("<qt>Album Category Settings<br/>"
+                                "<i>Use this panel to set album categories used to sort folder view</i></qt>"));
+    d->page_category->setIcon(KIcon("view-calendar-list"));
 
     d->tooltipPage  = new SetupToolTip();
-    d->page_tooltip = addPage( d->tooltipPage, i18n("Tool Tip") );
-    d->page_tooltip->setHeader( i18n("Album Items Tool Tip Settings") );
-    d->page_tooltip->setIcon( KIcon("dialog-information") );
+    d->page_tooltip = addPage(d->tooltipPage, i18n("Tool-Tip"));
+    d->page_tooltip->setHeader(i18n("<qt>Album Items Tool-Tip Settings<br/>"
+                               "<i>Use this panel to customize tool-tip contents</i></qt>"));
+    d->page_tooltip->setIcon(KIcon("dialog-information"));
 
     d->metadataPage  = new SetupMetadata();
-    d->page_metadata = addPage( d->metadataPage, i18n("Metadata") );
-    d->page_metadata->setHeader( i18n("Embedded Image Information Management") );
-    d->page_metadata->setIcon( KIcon("exifinfo") );
+    d->page_metadata = addPage(d->metadataPage, i18n("Metadata"));
+    d->page_metadata->setHeader(i18n("<qt>Embedded Image Information Management<br/>"
+                                "<i>Use this panel to setup action done with metadata when images are changed</i></qt>"));
+    d->page_metadata->setIcon(KIcon("exifinfo"));
 
     d->identityPage  = new SetupIdentity();
-    d->page_identity = addPage( d->identityPage, i18n("Identity") );
-    d->page_identity->setHeader( i18n("Default identity information") );
-    d->page_identity->setIcon( KIcon("user-identity") );
+    d->page_identity = addPage(d->identityPage, i18n("Identity"));
+    d->page_identity->setHeader(i18n("<qt>Default identity information<br/>"
+                                "<i>Use this panel to customize your personal informations</i></qt>"));
+    d->page_identity->setIcon(KIcon("user-identity"));
 
     d->mimePage  = new SetupMime();
-    d->page_mime = addPage( d->mimePage, i18n("Mime Types") );
-    d->page_mime->setHeader( i18n("Supported File (MIME-Type) Settings") );
-    d->page_mime->setIcon( KIcon("system-file-manager") );
+    d->page_mime = addPage(d->mimePage, i18n("Mime Types"));
+    d->page_mime->setHeader(i18n("<qt>Supported File Settings<br/>"
+                            "<i>Use this panel to add new mime type used to display album items</i></qt>"));
+    d->page_mime->setIcon(KIcon("system-file-manager"));
 
     d->lighttablePage  = new SetupLightTable();
-    d->page_lighttable = addPage( d->lighttablePage, i18n("Light Table") );
-    d->page_lighttable->setHeader( i18n("Light Table Settings") );
-    d->page_lighttable->setIcon( KIcon("lighttable") );
+    d->page_lighttable = addPage(d->lighttablePage, i18n("Light Table"));
+    d->page_lighttable->setHeader(i18n("<qt>Light Table Settings<br/>"
+                                  "<i>Use this panel to customize light table behaviour</i></qt>"));
+    d->page_lighttable->setIcon(KIcon("lighttable"));
 
     d->editorPage  = new SetupEditor();
-    d->page_editor = addPage( d->editorPage, i18n("Image Editor") );
-    d->page_editor->setHeader( i18n("Image Editor Album Settings") );
-    d->page_editor->setIcon( KIcon("editimage") );
+    d->page_editor = addPage(d->editorPage, i18n("Image Editor"));
+    d->page_editor->setHeader(i18n("<qt>Image Editor Settings<br/>"
+                              "<i>Use this panel to customize image editor behaviour</i></qt>"));
+    d->page_editor->setIcon(KIcon("editimage"));
 
     d->iofilesPage  = new SetupIOFiles();
-    d->page_iofiles = addPage( d->iofilesPage, i18n("Save Images") );
-    d->page_iofiles->setHeader( i18n("Image Editor: Settings for Saving Image Files") );
-    d->page_iofiles->setIcon( KIcon("document-save-all") );
+    d->page_iofiles = addPage(d->iofilesPage, i18n("Save Images"));
+    d->page_iofiles->setHeader(i18n("<qt>Image Editor: Settings for Saving Image Files<br/>"
+                                 "<i>Use this panel to set default configuration used to save images with image editor</i></qt>"));
+    d->page_iofiles->setIcon(KIcon("document-save-all"));
 
     d->dcrawPage = new SetupDcraw();
-    d->page_dcraw = addPage( d->dcrawPage, i18n("RAW decoding") );
-    d->page_dcraw->setHeader( i18n("RAW Files Decoding Settings") );
-    d->page_dcraw->setIcon( KIcon("kdcraw") );
+    d->page_dcraw = addPage(d->dcrawPage, i18n("RAW decoding"));
+    d->page_dcraw->setHeader(i18n("<qt>Image Editor: RAW Files Decoding Settings<br/>"
+                             "<i>Use this panel to customize default RAW decoding settings of image editor</i></qt>"));
+    d->page_dcraw->setIcon(KIcon("kdcraw"));
 
     d->iccPage  = new SetupICC(0, this);
-    d->page_icc = addPage( d->iccPage, i18n("Color Management") );
-    d->page_icc->setHeader( i18n("Image Editor: Settings for Color Management") );
-    d->page_icc->setIcon( KIcon("colormanagement") );
+    d->page_icc = addPage(d->iccPage, i18n("Color Management"));
+    d->page_icc->setHeader(i18n("<qt>Image Editor: Settings for Color Management<br/>"
+                           "<i>Use this panel to customize color management settings of image editor</i></qt>"));
+    d->page_icc->setIcon(KIcon("colormanagement"));
 
     d->pluginsPage  = new SetupPlugins();
-    d->page_plugins = addPage( d->pluginsPage, i18n("Kipi Plugins") );
-    d->page_plugins->setHeader( i18n("Main Interface Plug-in Settings") );
-    d->page_plugins->setIcon( KIcon("kipi") );
+    d->page_plugins = addPage(d->pluginsPage, i18n("Kipi Plugins"));
+    d->page_plugins->setHeader(i18n("<qt>Main Interface Plug-in Settings<br/>"
+                               "<i>Use this panel to customize plugins of main interface</i></qt>"));
+    d->page_plugins->setIcon(KIcon("kipi"));
 
     d->slideshowPage  = new SetupSlideShow();
-    d->page_slideshow = addPage( d->slideshowPage, i18n("Slide Show") );
-    d->page_slideshow->setHeader( i18n("Slide Show Settings") );
-    d->page_slideshow->setIcon( KIcon("view-presentation") );
+    d->page_slideshow = addPage(d->slideshowPage, i18n("Slide Show"));
+    d->page_slideshow->setHeader(i18n("<qt>Slide Show Settings<br/>"
+                                 "<i>Use this panel to customize slideshow settings</i></qt>"));
+    d->page_slideshow->setIcon(KIcon("view-presentation"));
 
     d->cameraPage  = new SetupCamera();
-    d->page_camera = addPage( d->cameraPage, i18n("Cameras") );
-    d->page_camera->setHeader( i18n("Camera Settings") );
-    d->page_camera->setIcon( KIcon("camera-photo") );
+    d->page_camera = addPage(d->cameraPage, i18n("Cameras"));
+    d->page_camera->setHeader(i18n("<qt>Camera Settings<br/>"
+                              "<i>Use this panel to set new camera devices</i></qt>"));
+    d->page_camera->setIcon(KIcon("camera-photo"));
 
     d->miscPage  = new SetupMisc();
-    d->page_misc = addPage( d->miscPage, i18n("Miscellaneous") );
-    d->page_misc->setHeader( i18n("Miscellaneous Settings") );
-    d->page_misc->setIcon( KIcon("preferences-other") );
+    d->page_misc = addPage(d->miscPage, i18n("Miscellaneous"));
+    d->page_misc->setHeader(i18n("<qt>Miscellaneous Settings<br/>"
+                            "<i>Use this panel to customize misc behaviour</i></qt>"));
+    d->page_misc->setIcon(KIcon("preferences-other"));
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );

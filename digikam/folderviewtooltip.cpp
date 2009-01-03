@@ -135,6 +135,7 @@ QString FolderViewToolTip::fillTipContents(PAlbum *album, int count)
     if (settings->getToolTipsShowAlbumTitle()      ||
         settings->getToolTipsShowAlbumDate()       ||
         settings->getToolTipsShowAlbumCollection() ||
+        settings->getToolTipsShowAlbumCategory()   ||
         settings->getToolTipsShowAlbumCaption())
     {
         tip += cnt.headBeg + i18n("Album Properties") + cnt.headEnd;
@@ -151,6 +152,13 @@ QString FolderViewToolTip::fillTipContents(PAlbum *album, int count)
             tip += QString::number(count) + cnt.cellEnd;
         }
 
+        if (settings->getToolTipsShowAlbumCollection())
+        {
+            tip += cnt.cellBeg + i18n("Collection:") + cnt.cellMid;
+            Album *col = AlbumManager::instance()->findAlbum(album->albumRootId());
+            tip += col ? col->title() : QString() + cnt.cellEnd;
+        }
+
         if (settings->getToolTipsShowAlbumDate())
         {
             QDate date = album->date();
@@ -158,7 +166,7 @@ QString FolderViewToolTip::fillTipContents(PAlbum *album, int count)
             tip        += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
         }
 
-        if (settings->getToolTipsShowAlbumCollection())
+        if (settings->getToolTipsShowAlbumCategory())
         {
             str = album->category();
             if (str.isEmpty()) str = QString("---");

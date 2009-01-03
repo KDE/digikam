@@ -7,7 +7,7 @@
  * Description : album view configuration setup tab
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -133,8 +133,8 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     d->iconShowRatingBox->setWhatsThis(i18n("Set this option to show the digiKam rating "
                                             "below the image thumbnail."));
 
-    QLabel *rightClickLabel         = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
-    d->rightClickActionComboBox     = new KComboBox(iconViewGroup);
+    QLabel *rightClickLabel     = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
+    d->rightClickActionComboBox = new KComboBox(iconViewGroup);
     d->rightClickActionComboBox->addItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
     d->rightClickActionComboBox->addItem(i18n("Start image editor"), AlbumSettings::StartEditor);
     d->rightClickActionComboBox->setToolTip(i18n("Here, choose what should happen when you "
@@ -154,7 +154,7 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     grid->addWidget(rightClickLabel,             5, 0, 1, 1);
     grid->addWidget(d->rightClickActionComboBox, 5, 1, 1, 1);
     grid->addWidget(d->iconViewFontSelect,       6, 0, 1, 2);
-    grid->setSpacing(0);
+    grid->setSpacing(KDialog::spacingHint());
     grid->setMargin(KDialog::spacingHint());
 
     // --------------------------------------------------------

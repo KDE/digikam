@@ -265,6 +265,9 @@ public:
     void setToolTipsShowAlbumCollection(bool val);
     bool getToolTipsShowAlbumCollection() const;
 
+    void setToolTipsShowAlbumCategory(bool val);
+    bool getToolTipsShowAlbumCategory() const;
+
     void setToolTipsShowAlbumCaption(bool val);
     bool getToolTipsShowAlbumCaption() const;
 

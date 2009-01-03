@@ -6,7 +6,7 @@
  * Date        : 2006-07-09
  * Description : item tool tip configuration setup tab
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -82,6 +82,7 @@ public:
         showAlbumTitleBox      = 0;
         showAlbumDateBox       = 0;
         showAlbumCollectionBox = 0;
+        showAlbumCategoryBox   = 0;
         showAlbumCaptionBox    = 0;
     }
 
@@ -110,6 +111,7 @@ public:
     QCheckBox   *showAlbumTitleBox;
     QCheckBox   *showAlbumDateBox;
     QCheckBox   *showAlbumCollectionBox;
+    QCheckBox   *showAlbumCategoryBox;
     QCheckBox   *showAlbumCaptionBox;
 
     QGroupBox   *fileSettingBox;
@@ -242,7 +244,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     d->showAlbumToolTipsBox   = new QCheckBox(i18n("Show album items tool-tips"), vbox2);
     d->showAlbumToolTipsBox->setWhatsThis(i18n("Set this option to display album information when "
-                                                "the mouse hovers over a folder-view item."));
+                                               "the mouse hovers over a folder-view item."));
 
     d->showAlbumTitleBox      = new QCheckBox(i18n("Show album name"), vbox2);
     d->showAlbumTitleBox->setWhatsThis(i18n("Set this option to display the album name."));
@@ -252,6 +254,9 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     d->showAlbumCollectionBox = new QCheckBox(i18n("Show album collection"), vbox2);
     d->showAlbumCollectionBox->setWhatsThis(i18n("Set this option to display the album collection."));
+
+    d->showAlbumCategoryBox   = new QCheckBox(i18n("Show album category"), vbox2);
+    d->showAlbumCategoryBox->setWhatsThis(i18n("Set this option to display the album category."));
 
     d->showAlbumCaptionBox    = new QCheckBox(i18n("Show album caption"), vbox2);
     d->showAlbumCaptionBox->setWhatsThis(i18n("Set this option to display the album caption."));
@@ -293,6 +298,9 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     connect(d->showAlbumToolTipsBox, SIGNAL(toggled(bool)),
             d->showAlbumCollectionBox, SLOT(setEnabled(bool)));
+
+    connect(d->showAlbumToolTipsBox, SIGNAL(toggled(bool)),
+            d->showAlbumCategoryBox, SLOT(setEnabled(bool)));
 
     connect(d->showAlbumToolTipsBox, SIGNAL(toggled(bool)),
             d->showAlbumCaptionBox, SLOT(setEnabled(bool)));
@@ -339,6 +347,7 @@ void SetupToolTip::applySettings()
     settings->setToolTipsShowAlbumTitle(d->showAlbumTitleBox->isChecked());
     settings->setToolTipsShowAlbumDate(d->showAlbumDateBox->isChecked());
     settings->setToolTipsShowAlbumCollection(d->showAlbumCollectionBox->isChecked());
+    settings->setToolTipsShowAlbumCategory(d->showAlbumCategoryBox->isChecked());
     settings->setToolTipsShowAlbumCaption(d->showAlbumCaptionBox->isChecked());
 
     settings->saveSettings();
@@ -380,11 +389,13 @@ void SetupToolTip::readSettings()
     d->showAlbumTitleBox->setChecked(settings->getToolTipsShowAlbumTitle());
     d->showAlbumDateBox->setChecked(settings->getToolTipsShowAlbumDate());
     d->showAlbumCollectionBox->setChecked(settings->getToolTipsShowAlbumCollection());
+    d->showAlbumCategoryBox->setChecked(settings->getToolTipsShowAlbumCategory());
     d->showAlbumCaptionBox->setChecked(settings->getToolTipsShowAlbumCaption());
 
     d->showAlbumTitleBox->setEnabled(d->showAlbumToolTipsBox->isChecked());
     d->showAlbumDateBox->setEnabled(d->showAlbumToolTipsBox->isChecked());
     d->showAlbumCollectionBox->setEnabled(d->showAlbumToolTipsBox->isChecked());
+    d->showAlbumCategoryBox->setEnabled(d->showAlbumToolTipsBox->isChecked());
     d->showAlbumCaptionBox->setEnabled(d->showAlbumToolTipsBox->isChecked());
 }
 

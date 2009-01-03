@@ -109,6 +109,7 @@ public:
     bool                                tooltipShowAlbumTitle;
     bool                                tooltipShowAlbumDate;
     bool                                tooltipShowAlbumCollection;
+    bool                                tooltipShowAlbumCategory;
     bool                                tooltipShowAlbumCaption;
 
     // metadata settings
@@ -248,6 +249,7 @@ void AlbumSettings::init()
     d->tooltipShowAlbumTitle        = true;
     d->tooltipShowAlbumDate         = true;
     d->tooltipShowAlbumCollection   = true;
+    d->tooltipShowAlbumCategory     = true;
     d->tooltipShowAlbumCaption      = true;
 
     d->exifRotate                   = true;
@@ -343,6 +345,7 @@ void AlbumSettings::readSettings()
     d->tooltipShowAlbumTitle        = group.readEntry("ToolTips Show Album Title",      true);
     d->tooltipShowAlbumDate         = group.readEntry("ToolTips Show Album Date",       true);
     d->tooltipShowAlbumCollection   = group.readEntry("ToolTips Show Album Collection", true);
+    d->tooltipShowAlbumCategory     = group.readEntry("ToolTips Show Album Category",   true);
     d->tooltipShowAlbumCaption      = group.readEntry("ToolTips Show Album Caption",    true);
 
     d->previewLoadFullImageSize     = group.readEntry("Preview Load Full Image Size", false);
@@ -442,6 +445,7 @@ void AlbumSettings::saveSettings()
     group.writeEntry("ToolTips Show Album Title",      d->tooltipShowAlbumTitle);
     group.writeEntry("ToolTips Show Album Date",       d->tooltipShowAlbumDate);
     group.writeEntry("ToolTips Show Album Collection", d->tooltipShowAlbumCollection);
+    group.writeEntry("ToolTips Show Album Category",   d->tooltipShowAlbumCategory);
     group.writeEntry("ToolTips Show Album Caption",    d->tooltipShowAlbumCaption);
 
     group.writeEntry("Preview Load Full Image Size", d->previewLoadFullImageSize);
@@ -1139,6 +1143,16 @@ void AlbumSettings::setToolTipsShowAlbumCollection(bool val)
 bool AlbumSettings::getToolTipsShowAlbumCollection() const
 {
     return d->tooltipShowAlbumCollection;
+}
+
+void AlbumSettings::setToolTipsShowAlbumCategory(bool val)
+{
+    d->tooltipShowAlbumCategory = val;
+}
+
+bool AlbumSettings::getToolTipsShowAlbumCategory() const
+{
+    return d->tooltipShowAlbumCategory;
 }
 
 void AlbumSettings::setToolTipsShowAlbumCaption(bool val)
