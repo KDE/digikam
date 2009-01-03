@@ -8,7 +8,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 001 ==> 176477 : Files disappear while importing.
 002 ==> 179134 : Compile-error with libkdcraw > 0.1.5.
 003 ==> 162535 : Startup is extremely slow when famd is running.
-004 ==> 
+004 ==> 179413 : Support restoring blown out highlights.
+005 ==> 
 
 **********************************************************************************************
 digiKam 0.9.5-beta2 - Release date: 2008-12-14
