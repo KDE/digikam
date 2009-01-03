@@ -115,6 +115,17 @@ public:
     bool                isReducedVersion() const;
 
     /**
+     * Returns if this description will load a thumbnail
+     */
+    bool                isThumbnail() const;
+
+
+    /**
+     * Returns if this description will load a preview
+     */
+    bool                isPreviewImage() const;
+
+   /**
      * Returns whether the other loading task equals this one
      */
     bool operator==(const LoadingDescription &other) const;

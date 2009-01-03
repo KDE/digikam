@@ -146,6 +146,16 @@ bool LoadingDescription::equalsOrBetterThan(const LoadingDescription &other) con
             );
 }
 
+bool LoadingDescription::isThumbnail() const
+{
+    return previewParameters.type == PreviewParameters::Thumbnail;
+}
+
+bool LoadingDescription::isPreviewImage() const
+{
+    return previewParameters.type == PreviewParameters::PreviewImage;
+}
+
 QStringList LoadingDescription::possibleCacheKeys(const QString &filePath)
 {
     QStringList keys;
