@@ -246,7 +246,7 @@ void ImagePreviewView::setImagePath(const QString& path)
 
 void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description, const DImg& preview)
 {
-    if (description.filePath != d->path)
+    if (description.filePath != d->path || description.isThumbnail())
         return;
 
     if (preview.isNull())
