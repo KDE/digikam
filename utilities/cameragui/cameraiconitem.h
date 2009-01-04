@@ -74,7 +74,7 @@ private:
 
 private slots:
 
-    void slotDownloadBlinkTimerDone();
+    void slotDownloadTimerDone();
 
 private:
 

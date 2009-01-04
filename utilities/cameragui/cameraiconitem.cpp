@@ -54,12 +54,10 @@ public:
 
     CameraIconItemPriv()
     {
-        blinkDownloadTimer = 0;
-        itemInfo           = 0;
-        pos                = 0;
+        itemInfo      = 0;
+        pos           = 0;
+        downloadTimer = 0;
     }
-
-    bool        downloadBlink;
 
     int         pos;                   // Position of animation during downloading.
 
@@ -72,22 +70,22 @@ public:
     QRect       textRect;
     QRect       extraRect;
 
-    QTimer     *blinkDownloadTimer;
+    QTimer     *downloadTimer;
 
     GPItemInfo *itemInfo;
 };
 
 CameraIconItem::CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo,
                                const QImage& thumbnail, const QString& downloadName)
-                  : IconItem(parent), d(new CameraIconItemPriv)
+              : IconItem(parent), d(new CameraIconItemPriv)
 {
-    d->itemInfo           = new GPItemInfo(itemInfo);
-    d->downloadName       = downloadName;
-    d->blinkDownloadTimer = new QTimer(this);
+    d->itemInfo      = new GPItemInfo(itemInfo);
+    d->downloadName  = downloadName;
+    d->downloadTimer = new QTimer(this);
     setThumbnail(thumbnail);
 
-    connect(d->blinkDownloadTimer, SIGNAL(timeout()),
-            this, SLOT(slotDownloadBlinkTimerDone()));
+    connect(d->downloadTimer, SIGNAL(timeout()),
+            this, SLOT(slotDownloadTimerDone()));
 }
 
 CameraIconItem::~CameraIconItem()
@@ -123,9 +121,9 @@ void CameraIconItem::setDownloaded(int status)
     d->pos                  = 0;
 
     if(d->itemInfo->downloaded == GPItemInfo::DownloadStarted)
-        d->blinkDownloadTimer->start(500);
+        d->downloadTimer->start(500);
     else
-        d->blinkDownloadTimer->stop();
+        d->downloadTimer->stop();
 
     update();
 }
@@ -332,10 +330,10 @@ void CameraIconItem::paintItem(QPainter *p)
     }
 }
 
-void CameraIconItem::slotDownloadBlinkTimerDone()
+void CameraIconItem::slotDownloadTimerDone()
 {
     update();
-    d->blinkDownloadTimer->start(500);
+    d->downloadTimer->start(500);
 }
 
 }  // namespace Digikam
