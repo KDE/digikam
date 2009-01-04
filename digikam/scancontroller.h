@@ -85,6 +85,15 @@ public:
     void scheduleCollectionScan(const QString &path);
 
     /**
+     * Schedules a scan of the specified part of the collection.
+     * Asynchronous, returns immediately.
+     * A small delay may be introduced before the actual scanning starts,
+     * so that you can call this often without checking for duplicates.
+     * This method must only be used from the main thread.
+     */
+    void scheduleCollectionScanRelaxed(const QString &path);
+
+    /**
      * The file pointed to by file path will be scanned.
      * The scan is finished when returning from the method.
      */
@@ -142,6 +151,8 @@ private slots:
 
     void slotProgressFromInitialization(const QString &message, int numberOfSteps);
     void slotErrorFromInitialization(const QString &errorMessage);
+
+    void slotRelaxedScanning();
 
 protected:
 

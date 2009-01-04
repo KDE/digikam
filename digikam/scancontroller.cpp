@@ -103,6 +103,7 @@ public:
     QEventLoop               *eventLoop;
 
     QTimer                   *showTimer;
+    QTimer                   *relaxedTimer;
 
     QPixmap                   albumPix;
     QPixmap                   rootPix;
@@ -213,6 +214,14 @@ ScanController::ScanController()
 
     connect(this, SIGNAL(triggerShowProgressDialog()),
             this, SLOT(slotTriggerShowProgressDialog()));
+
+    // create timer for relaxed scheduling
+    d->relaxedTimer = new QTimer(this);
+    d->relaxedTimer->setSingleShot(true);
+    d->relaxedTimer->setInterval(250);
+
+    connect(d->relaxedTimer, SIGNAL(timeout()),
+            this, SLOT(slotRelaxedScanning()));
 
     // interthread connections
     connect(this, SIGNAL(errorFromInitialization(const QString &)),
@@ -327,6 +336,24 @@ void ScanController::scheduleCollectionScan(const QString &path)
     QMutexLocker lock(&d->mutex);
     if (!d->scanTasks.contains(path))
         d->scanTasks << path;
+    d->condVar.wakeAll();
+}
+
+void ScanController::scheduleCollectionScanRelaxed(const QString &path)
+{
+    if (!d->relaxedTimer->isActive())
+        d->relaxedTimer->start();
+
+    QMutexLocker lock(&d->mutex);
+    if (!d->scanTasks.contains(path))
+        d->scanTasks << path;
+}
+
+void ScanController::slotRelaxedScanning()
+{
+    d->relaxedTimer->stop();
+
+    QMutexLocker lock(&d->mutex);
     d->condVar.wakeAll();
 }
 
