@@ -9,7 +9,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 179134 : Compile-error with libkdcraw > 0.1.5.
 003 ==> 162535 : Startup is extremely slow when famd is running.
 004 ==> 179413 : Support restoring blown out highlights.
-005 ==> 
+005 ==> 157313 : Option to reposition lighttable slide-list.
+006 ==> 
 
 **********************************************************************************************
 digiKam 0.9.5-beta2 - Release date: 2008-12-14
