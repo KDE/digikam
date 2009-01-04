@@ -115,7 +115,7 @@ QString FolderViewToolTip::tipContents()
         if (item)
         {
             PAlbum *album = item->album();
-            if (!album->isRoot() && !album->isAlbumRoot())
+            if (album && !album->isRoot() && !album->isAlbumRoot())
                 return fillTipContents(album, item->isOpen() ? item->count()
                                                              : item->countRecursive());
         }
