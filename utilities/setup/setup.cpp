@@ -154,7 +154,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->albumViewPage  = new SetupAlbumView();
     d->page_albumView = addPage(d->albumViewPage, i18n("Album View"));
     d->page_albumView->setHeader(i18n("<qt>Album View Settings<br/>"
-                                 "<i>Customize how looks list of albums</i></qt>"));
+                                 "<i>Customize the look of albums list</i></qt>"));
     d->page_albumView->setIcon(KIcon("view-list-icons"));
 
     d->categoryPage  = new SetupCategory();
