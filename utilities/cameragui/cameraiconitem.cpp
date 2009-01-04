@@ -7,7 +7,7 @@
  * Description : camera icon view item
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -288,7 +288,7 @@ void CameraIconItem::paintItem(QPainter *p)
             const int asize = 16;
             p->save();
             p->setRenderHint(QPainter::Antialiasing);
-            p->translate(rect().width() - downloaded.width() - 5 - asize/2, 5 + asize/2);
+            p->translate(rect().width() - asize/2 - 5, asize/2 + 5);
             d->pos = (d->pos + 10) % 360;
             p->setPen(iconView()->palette().color(QPalette::Active, QPalette::Text));
             p->rotate(d->pos);
