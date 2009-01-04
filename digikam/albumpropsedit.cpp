@@ -154,7 +154,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     categoryLabel->setBuddy(d->categoryCombo);
 
     QLabel *commentsLabel = new QLabel(page);
-    commentsLabel->setText(i18n("Co&mments:"));
+    commentsLabel->setText(i18n("Ca&ption:"));
 
     d->commentsEdit = new KTextEdit(page);
     commentsLabel->setBuddy(d->commentsEdit);
