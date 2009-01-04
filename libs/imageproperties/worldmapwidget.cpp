@@ -156,9 +156,12 @@ void WorldMapWidget::setGPSPositions(const GPSInfoList& list)
     {
         d->marbleWidget->setHome(lng, lat);
         d->marbleWidget->centerOn(lng, lat);
+#if MARBLE_VERSION >= 0x000700
+        d->marbleWidget->addPlaceMarkData(kmlDocument.toString(), kmlName.text());
+#else
+        d->marbleWidget->addPlaceMarkData(kmlDocument.toString());
+#endif
     }
-    d->marbleWidget->addPlaceMarkData(kmlDocument.toString());
-
 #else // MARBLE_VERSION
 
     // For Marble 0.5.1, there is no method to place a mark over the map using string.
