@@ -478,7 +478,11 @@ private slots:
     void slotAlbumsJobData(KIO::Job* job, const QByteArray& data);
     void slotTagsJobResult(KJob* job);
     void slotTagsJobData(KIO::Job* job, const QByteArray& data);
-    void slotDirty(const QString& path);
+    void slotDirWatchDirty(const QString& path);
+    void slotKioFileMoved(const QString& urlFrom, const QString& urlTo);
+    void slotKioFilesDeleted(const QStringList& urls);
+    void slotKioFilesAdded(const QString& directory);
+    void slotNotifyFileChange(const QString &directory);
     void slotCollectionLocationStatusChanged(const CollectionLocation &, int);
     void slotCollectionLocationPropertiesChanged(const CollectionLocation &location);
     void slotAlbumChange(const AlbumChangeset &changeset);
@@ -531,6 +535,8 @@ private:
 
     void addAlbumRoot(const CollectionLocation &location);
     void removeAlbumRoot(const CollectionLocation &location);
+
+    void handleKioNotification(const KUrl &url);
 
     template <class T> friend class AlbumPointer;
     friend class Album;

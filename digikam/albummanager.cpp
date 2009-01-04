@@ -45,6 +45,7 @@ extern "C"
 // Qt includes.
 
 #include <QApplication>
+#include <QDBusConnection>
 #include <QHash>
 #include <QList>
 #include <QFile>
@@ -206,8 +207,11 @@ public:
         // build list
         foreach (const QFileInfo &info, fileInfoList)
         {
-            if (info != dbFile)
+            // ignore digikam4.db and journal and other temporary files
+            if (!info.fileName().startsWith(dbFile.fileName()))
+            {
                 modList << info.lastModified();
+            }
         }
         return modList;
     }
@@ -386,6 +390,10 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
     delete d->dirWatch;
     d->dirWatch = 0;
 
+    QDBusConnection::sessionBus().disconnect(QString(), QString(), "org.kde.KDirNotify", "FileMoved", 0, 0);
+    QDBusConnection::sessionBus().disconnect(QString(), QString(), "org.kde.KDirNotify", "FilesAdded", 0, 0);
+    QDBusConnection::sessionBus().disconnect(QString(), QString(), "org.kde.KDirNotify", "FilesRemoved", 0, 0);
+
     d->currentAlbum = 0;
     emit signalAlbumCurrentChanged(0);
     emit signalAlbumsCleared();
@@ -535,7 +543,7 @@ void AlbumManager::startScan()
     // create dir watch
     d->dirWatch = new KDirWatch(this);
     connect(d->dirWatch, SIGNAL(dirty(const QString&)),
-            this, SLOT(slotDirty(const QString&)));
+            this, SLOT(slotDirWatchDirty(const QString&)));
 
     KDirWatch::Method m = d->dirWatch->internalMethod();
     QString mName("FAM");
@@ -546,6 +554,15 @@ void AlbumManager::startScan()
     else if (m == KDirWatch::INotify)
         mName = QString("INotify");
     kDebug(50003) << "KDirWatch method = " << mName << endl;
+
+    // connect to KDirNotify
+
+    QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify", "FileMoved",
+                                          this, SLOT(slotKioFileMoved(const QString&, const QString&)));
+    QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify", "FilesAdded",
+                                          this, SLOT(slotKioFilesAdded(const QString&)));
+    QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify", "FilesRemoved",
+                                          this, SLOT(slotKioFilesDeleted(const QStringList&)));
 
     // create root albums
     d->rootPAlbum = new PAlbum(i18n("My Albums"));
@@ -2270,9 +2287,15 @@ void AlbumManager::slotImageTagChange(const ImageTagChangeset &changeset)
     }
 }
 
-void AlbumManager::slotDirty(const QString& path)
+void AlbumManager::slotNotifyFileChange(const QString &path)
 {
-    kDebug(50003) << "AlbumManager::slotDirty" << path << endl;
+    //kDebug() << "Detected file change at" << path;
+    ScanController::instance()->scheduleCollectionScanRelaxed(path);
+}
+
+void AlbumManager::slotDirWatchDirty(const QString& path)
+{
+    kDebug(50003) << "KDirWatch detected change at" << path << endl;
 
     // Filter out dirty signals triggered by changes on the database file
     DatabaseParameters params = DatabaseAccess::parameters();
@@ -2290,7 +2313,7 @@ void AlbumManager::slotDirty(const QString& path)
             // check for equality
             if (modList == d->dbPathModificationDateList)
             {
-                kDebug(50003) << "Filtering out db-file-triggered dir watch signal" << endl;
+                //kDebug(50003) << "Filtering out db-file-triggered dir watch signal" << endl;
                 // we can skip the signal
                 return;
             }
@@ -2300,7 +2323,54 @@ void AlbumManager::slotDirty(const QString& path)
         }
     }
 
-    ScanController::instance()->scheduleCollectionScan(path);
+    slotNotifyFileChange(path);
 }
+
+void AlbumManager::slotKioFileMoved(const QString& urlFrom, const QString& urlTo)
+{
+    //kDebug(50003) << urlFrom << urlTo;
+    handleKioNotification(KUrl(urlFrom));
+    handleKioNotification(KUrl(urlTo));
+}
+
+void AlbumManager::slotKioFilesAdded(const QString& url)
+{
+    //kDebug(50003) << url;
+    handleKioNotification(KUrl(url));
+}
+
+void AlbumManager::slotKioFilesDeleted(const QStringList& urls)
+{
+    //kDebug(50003) << urls;
+    foreach (const QString &url, urls)
+        handleKioNotification(KUrl(url));
+}
+
+void AlbumManager::handleKioNotification(const KUrl &url)
+{
+    if (url.isLocalFile())
+    {
+        QString path = url.directory();
+        //kDebug() << path << !CollectionManager::instance()->albumRootPath(path).isEmpty();
+        // check path is in our collection
+        if (CollectionManager::instance()->albumRootPath(path).isNull())
+            return;
+
+        kDebug() << "KDirNotify detected file change at" << path;
+
+        slotNotifyFileChange(path);
+    }
+    else
+    {
+        DatabaseUrl dbUrl(url);
+        if (dbUrl.isAlbumUrl())
+        {
+            QString path = dbUrl.fileUrl().directory();
+            kDebug() << "KDirNotify detected file change at" << path;
+            slotNotifyFileChange(path);
+        }
+    }
+}
+
 
 }  // namespace Digikam
