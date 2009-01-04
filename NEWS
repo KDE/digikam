@@ -71,7 +71,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 053 ==> 178382 : Many and duplicate top level menu entries. 
 054 ==> 130230 : Wrong date in header using date-view. 
 055 ==> 179534 : Crash when deleting album.
-056 ==> 
+056 ==> 178606 : Image move to trash removes file but not displayed image.
+057 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta7 - Release date: 2008-12-18
