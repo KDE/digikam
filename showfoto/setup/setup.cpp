@@ -95,37 +95,37 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->editorPage  = new SetupEditor();
     d->page_editor = addPage(d->editorPage, i18nc("general settings tab", "General"));
     d->page_editor->setHeader(i18n("<qt>General Settings<br/>"
-                              "<i>Use this panel to customize general behaviour</i></qt>"));
+                              "<i>Customize general behavior</i></qt>"));
     d->page_editor->setIcon(KIcon("showfoto"));
 
     d->toolTipPage = new SetupToolTip();
     d->page_tooltip = addPage(d->toolTipPage, i18n("Tool Tip"));
     d->page_tooltip->setHeader(i18n("<qt>Thumbbar Items Tool-Tip Settings<br/>"
-                               "<i>Use this panel to customize tool-tip contents</i></qt>"));
+                               "<i>Customize information in tool-tips</i></qt>"));
     d->page_tooltip->setIcon(KIcon("dialog-information"));
 
     d->dcrawPage  = new Digikam::SetupDcraw();
     d->page_dcraw = addPage(d->dcrawPage, i18n("RAW decoding"));
     d->page_dcraw->setHeader(i18n("<qt>RAW Files Decoding Settings<br/>"
-                             "<i>Use this panel to customize default RAW decoding settings</i></qt>"));
+                             "<i>Customize default RAW decoding settings</i></qt>"));
     d->page_dcraw->setIcon(KIcon("kdcraw"));
 
     d->iccPage  = new Digikam::SetupICC(0, this);
     d->page_icc = addPage(d->iccPage, i18n("Color Management"));
     d->page_icc->setHeader(i18n("<qt>Settings for Color Management<br/>"
-                           "<i>Use this panel to customize color management settings</i></qt>"));
+                           "<i>Customize color management settings</i></qt>"));
     d->page_icc->setIcon(KIcon("colormanagement"));
 
     d->iofilesPage  = new Digikam::SetupIOFiles();
     d->page_iofiles = addPage(d->iofilesPage, i18n("Save Images"));
     d->page_iofiles->setHeader(i18n("<qt>Settings for Saving Image Files<br/>"
-                               "<i>Use this panel to set default configuration used to save images</i></qt>"));
+                               "<i>Set default configuration used to save images</i></qt>"));
     d->page_iofiles->setIcon(KIcon("document-save-all"));
 
     d->slideshowPage  = new Digikam::SetupSlideShow();
     d->page_slideshow = addPage(d->slideshowPage, i18n("Slide Show"));
     d->page_slideshow->setHeader(i18n("<qt>Slide Show Settings<br/>"
-                                 "<i>Use this panel to customize slideshow settings</i></qt>"));
+                                 "<i>Customize slideshow settings</i></qt>"));
     d->page_slideshow->setIcon(KIcon("view-presentation"));
 
     connect(this, SIGNAL(okClicked()),
