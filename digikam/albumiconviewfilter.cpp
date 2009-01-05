@@ -157,6 +157,9 @@ void AlbumIconViewFilter::slotItemsFilterMatch(bool match)
     if (d->mimeFilter->mimeFilter() != MimeFilter::AllFiles)
         filtersList.append(i18n("<br><nobr><i>Mime Type</i></nobr>"));
 
+    if (d->ratingFilter->rating() != 0 || d->ratingFilter->ratingFilterCondition() != AlbumLister::GreaterEqualCondition)
+        filtersList.append(i18n("<br/><nobr><i>Rating</i></nobr>"));
+
     if (d->ratingFilter->rating() != 0)
         filtersList.append(i18n("<br><nobr><i>Rating</i></nobr>"));
 
