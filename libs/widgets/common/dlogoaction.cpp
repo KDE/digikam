@@ -108,7 +108,8 @@ void DLogoAction::stop()
 {
     d->angle = 0;
     d->timer->stop();
-    d->urlLabel->setPixmap(d->bannerPix);
+    if (d->urlLabel)
+        d->urlLabel->setPixmap(d->bannerPix);
 }
 
 bool DLogoAction::running() const
