@@ -1,8 +1,15 @@
 *********************************************************************************************************
-digiKam 0.10.0-beta8 - Release date: 2009-01-04
+digiKam 0.10.0-rc1 - Release date: 2009-01-xx
 
-IMPORTANT: This version is not yet finalized : do not use yet in production !!!
-===============================================================================
+NEW FEATURES:
+
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+001 ==> 179712 : Open image in embeded editor lead to digiKam crash.
+002 ==> 
+
+*********************************************************************************************************
+digiKam 0.10.0-beta8 - Release date: 2009-01-04
 
 NEW FEATURES:
 
