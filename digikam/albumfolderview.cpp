@@ -294,6 +294,9 @@ void AlbumFolderView::slotTextFolderFilterChanged(const SearchTextSettings& sett
         PAlbum* palbum  = (PAlbum*)(*it);
         AlbumFolderViewItem* viewItem = (AlbumFolderViewItem*) palbum->extraData(this);
 
+        if (!viewItem)
+            continue;
+
         // don't touch the root Album
         if (palbum->isRoot() || palbum->isAlbumRoot())
         {
@@ -341,19 +344,13 @@ void AlbumFolderView::slotTextFolderFilterChanged(const SearchTextSettings& sett
         {
             atleastOneMatch = true;
 
-            if (viewItem)
-            {
-                viewItem->setVisible(true);
-                viewItem->setOpen(doesExpand);
-            }
+            viewItem->setVisible(true);
+            viewItem->setOpen(doesExpand);
         }
         else
         {
-            if (viewItem)
-            {
-                viewItem->setVisible(false);
-                viewItem->setOpen(false);
-            }
+            viewItem->setVisible(false);
+            viewItem->setOpen(false);
         }
     }
 
