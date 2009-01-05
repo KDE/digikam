@@ -17,7 +17,7 @@ SET(DIGIKAM_PATCH_VERSION "0")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final relase. Can be used in production.
-SET(DIGIKAM_SUFFIX_VERSION "-beta8")
+SET(DIGIKAM_SUFFIX_VERSION "-rc1")
 
 # ==================================================================================================
 # Set env. variables accordinly.
@@ -482,6 +482,7 @@ ENDIF(MSVC)
     SET(libcommonwidgets_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/colorgradientwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dcursortracker.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/danimwheel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dlogoaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dfontselect.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dpopupmenu.cpp
