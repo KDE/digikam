@@ -6,7 +6,8 @@ NEW FEATURES:
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 179712 : Open image in embeded editor lead to digiKam crash.
-002 ==> 
+002 ==> 179031 : Exposure times shown for Panasonic RAW pictures do not make sense.
+003 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
