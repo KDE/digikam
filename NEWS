@@ -8,7 +8,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 001 ==> 179712 : Open image in embeded editor lead to digiKam crash.
 002 ==> 179031 : Exposure times shown for Panasonic RAW pictures do not make sense.
 003 ==> 179745 : Rating information in right sidebar is not updated.
-004 ==> 
+004 ==> 179650 : Crash when clearing album quick search if album UI empty.
+005 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
