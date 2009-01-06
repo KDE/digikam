@@ -1316,17 +1316,17 @@ void AlbumIconView::startDrag()
     int w = icon.width();
     int h = icon.height();
 
-    QPixmap pix(w+4,h+4);
+    QPixmap pix(w+4, h+4);
     QString text(QString::number(urls.count()));
 
     QPainter p(&pix);
-    p.fillRect(0, 0, w+4, h+4, QColor(Qt::white));
+    p.fillRect(0, 0, pix.width()-1, pix.height()-1, QColor(Qt::white));
     p.setPen(QPen(Qt::black, 1));
-    p.drawRect(0, 0, w+4, h+4);
+    p.drawRect(0, 0, pix.width()-1, pix.height()-1);
     p.drawPixmap(2, 2, icon);
-    QRect r = p.boundingRect(2,2,w,h,Qt::AlignLeft|Qt::AlignTop,text);
-    r.setWidth(qMax(r.width(),r.height()));
-    r.setHeight(qMax(r.width(),r.height()));
+    QRect r = p.boundingRect(2, 2, w, h, Qt::AlignLeft|Qt::AlignTop, text);
+    r.setWidth(qMax(r.width(), r.height()));
+    r.setHeight(qMax(r.width(), r.height()));
     p.fillRect(r, QColor(0, 80, 0));
     p.setPen(Qt::white);
     QFont f(font());
