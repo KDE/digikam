@@ -105,7 +105,7 @@ bool DMetadata::loadUsingDcraw(const QString& filePath) const
 
         if (identify.exposureTime != -1.0)
         {
-            convertToRational(1/identify.exposureTime, &num, &den, 8);
+            convertToRational(identify.exposureTime, &num, &den, 8);
             setExifTagRational("Exif.Photo.ExposureTime", num, den, false);
         }
 
