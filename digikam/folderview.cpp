@@ -99,6 +99,7 @@ FolderView::FolderView(QWidget *parent, const char *name)
     setObjectName(name);
     setColumnWidthMode(0, Q3ListView::Maximum);
     setColumnAlignment(0, Qt::AlignLeft|Qt::AlignVCenter);
+    setShowSortIndicator(true);
 
     d->toolTipTimer = new QTimer(this);
     d->toolTip      = new FolderViewToolTip(this);
