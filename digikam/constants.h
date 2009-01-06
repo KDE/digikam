@@ -31,6 +31,7 @@ namespace Digikam
 
 static const int RatingMin = 0;
 static const int RatingMax = 5;
+static const int NoRating  = -1;
 
 }  // namespace Digikam
 

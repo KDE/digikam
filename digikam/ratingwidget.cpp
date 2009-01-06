@@ -95,7 +95,7 @@ int RatingWidget::regPixmapWidth() const
 
 void RatingWidget::setRating(int val)
 {
-    if (val < RatingMin || val > RatingMax) return;
+    if ((val < RatingMin || val > RatingMax) && val != NoRating) return;
 
     d->rating = val;
     emit signalRatingChanged(d->rating);
