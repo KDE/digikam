@@ -7,7 +7,7 @@
  * Description : a bar widget to display image thumbnails
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -88,6 +88,7 @@ public:
         firstItem       = 0;
         lastItem        = 0;
         currItem        = 0;
+        highlightedItem = 0;
         count           = 0;
         thumbLoadThread = 0;
         tileSize        = ThumbnailSize::Small;
@@ -117,6 +118,7 @@ public:
     ThumbBarItem               *firstItem;
     ThumbBarItem               *lastItem;
     ThumbBarItem               *currItem;
+    ThumbBarItem               *highlightedItem;
     ThumbBarItem               *toolTipItem;
 
     QHash<KUrl, ThumbBarItem*>  itemHash;
@@ -316,6 +318,11 @@ ThumbBarItem* ThumbBarView::currentItem() const
     return d->currItem;
 }
 
+ThumbBarItem* ThumbBarView::highlightedItem() const
+{
+    return d->highlightedItem;
+}
+
 ThumbBarItem* ThumbBarView::firstItem() const
 {
     return d->firstItem;
@@ -473,12 +480,12 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
 
     if (d->orientation == Qt::Vertical)
     {
-       ts = d->tileSize + 2*d->margin;
+       ts   = d->tileSize + 2*d->margin;
        tile = QRect(0, 0, visibleWidth(), ts);
     }
     else
     {
-       ts = d->tileSize + 2*d->margin;
+       ts   = d->tileSize + 2*d->margin;
        tile = QRect(0, 0, ts, visibleHeight());
     }
 
@@ -502,13 +509,20 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
 
                 p.drawRect(tile);
 
+                if (item == d->highlightedItem)
+                {
+                    QRect r = item->rect();
+                    p.setPen(QPen(palette().color(QPalette::Highlight), 3, Qt::SolidLine));
+                    p.drawRect(1, 1, r.width()-3, r.height()-3);
+                }
+
                 QPixmap pix;
                 if (pixmapForItem(item, pix))
                 {
                     int x = (tile.width()  - pix.width())/2;
                     int y = (tile.height() - pix.height())/2;
                     p.drawPixmap(x, y, pix);
-                    p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6, 
+                    p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6,
                                                                    pix.height()+6),
                                                              QColor(0, 0, 0, 128), 3));
                 }
@@ -530,6 +544,13 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                     p.setBrush(palette().background().color());
 
                 p.drawRect(tile);
+
+                if (item == d->highlightedItem)
+                {
+                    QRect r = item->rect();
+                    p.setPen(QPen(palette().color(QPalette::Highlight), 3, Qt::SolidLine));
+                    p.drawRect(1, 1, r.width()-3, r.height()-3);
+                }
 
                 QPixmap pix;
                 if (pixmapForItem(item, pix))
@@ -683,6 +704,14 @@ void ThumbBarView::contentsMouseMoveEvent(QMouseEvent *e)
             }
         }
 
+        // Draw item highlightment when mouse is over.
+
+        if (item != d->highlightedItem)
+        {
+            d->highlightedItem = item;
+            viewport()->update();
+        }
+
         return;
     }
 
@@ -759,6 +788,9 @@ void ThumbBarView::contentsWheelEvent(QWheelEvent *e)
 
 void ThumbBarView::leaveEvent(QEvent *e)
 {
+    if (d->highlightedItem)
+        d->highlightedItem = 0;
+
     // hide tooltip
     d->toolTipItem = 0;
     d->toolTipTimer->stop();
@@ -769,6 +801,9 @@ void ThumbBarView::leaveEvent(QEvent *e)
 
 void ThumbBarView::focusOutEvent(QFocusEvent* e)
 {
+    if (d->highlightedItem)
+        d->highlightedItem = 0;
+
     // hide tooltip
     d->toolTipItem = 0;
     d->toolTipTimer->stop();
@@ -789,8 +824,9 @@ void ThumbBarView::startDrag()
 
 void ThumbBarView::clear(bool updateView)
 {
-    d->clearing    = true;
-    d->toolTipItem = 0;
+    d->clearing        = true;
+    d->highlightedItem = 0;
+    d->toolTipItem     = 0;
     d->toolTipTimer->stop();
     slotToolTip();
 
@@ -864,6 +900,9 @@ void ThumbBarView::takeItem(ThumbBarItem* item)
         slotToolTip();
     }
 
+    if (d->highlightedItem == item)
+        d->highlightedItem = 0;
+
     d->count--;
 
     if (item == d->firstItem)
@@ -917,14 +956,18 @@ void ThumbBarView::removeItem(ThumbBarItem* item)
         d->toolTipTimer->stop();
         slotToolTip();
     }
+
+    if (d->highlightedItem == item)
+        d->highlightedItem = 0;
+
     delete item;
 }
 
 void ThumbBarView::rearrangeItems()
 {
     KUrl::List urlList;
-
-    d->toolTipItem = 0;
+    d->highlightedItem = 0;
+    d->toolTipItem     = 0;
     d->toolTipTimer->stop();
     slotToolTip();
 

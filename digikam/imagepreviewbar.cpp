@@ -6,7 +6,7 @@
  * Date        : 2008-18-03
  * Description : image preview thumbs bar
  *
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -348,6 +348,13 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
                         p.drawRect(0, 0, tile.width(), tile.height());
                     }
 
+                    if (item == highlightedItem())
+                    {
+                        QRect r = item->rect();
+                        p.setPen(QPen(palette().color(QPalette::Highlight), 3, Qt::SolidLine));
+                        p.drawRect(1, 1, r.width()-3, r.height()-3);
+                    }
+
                     QPixmap pix;
                     if (pixmapForItem(item, pix))
                     {
@@ -396,6 +403,13 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
                     {
                         p.setPen(QPen(te->textRegColor(), 1));
                         p.drawRect(0, 0, tile.width(), tile.height());
+                    }
+
+                    if (item == highlightedItem())
+                    {
+                        QRect r = item->rect();
+                        p.setPen(QPen(palette().color(QPalette::Highlight), 3, Qt::SolidLine));
+                        p.drawRect(1, 1, r.width()-3, r.height()-3);
                     }
 
                     QPixmap pix;
