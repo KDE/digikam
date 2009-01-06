@@ -635,8 +635,15 @@ void FolderView::collapseView(CollapseMode mode)
         }
         case RestoreCurrentAlbum:
         {
+            if (!AlbumManager::instance()->currentAlbum())
+            {
+                firstChild()->setOpen(true);
+                break;
+            }
+
             Q3ListViewItemIterator iter(this);
             FolderItem* restoredItem = 0;
+            int currentAlbumId = AlbumManager::instance()->currentAlbum()->id();
 
             while (iter.current())
             {
@@ -644,7 +651,7 @@ void FolderView::collapseView(CollapseMode mode)
 
                 if (curItem)
                 {
-                    if (curItem->id() == AlbumManager::instance()->currentAlbum()->id())
+                    if (curItem->id() == currentAlbumId)
                     {
                         curItem->setOpen(true);
                         restoredItem = curItem;
