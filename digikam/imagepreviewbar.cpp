@@ -345,7 +345,7 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
                     else
                     {
                         p.setPen(QPen(te->textRegColor(), 1));
-                        p.drawRect(0, 0, tile.width(), tile.height());
+                        p.drawRect(0, 0, tile.width()-1, tile.height()-1);
                     }
 
                     if (item == highlightedItem())
@@ -396,13 +396,13 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
 
                     if (item == currentItem())
                     {
-                        p.setPen(QPen(te->textSelColor(), 2));
-                        p.drawRect(1, 1, tile.width()-1, tile.height()-1);
+                        p.setPen(QPen(te->textSelColor(), 3));
+                        p.drawRect(1, 1, tile.width()-2, tile.height()-2);
                     }
                     else
                     {
                         p.setPen(QPen(te->textRegColor(), 1));
-                        p.drawRect(0, 0, tile.width(), tile.height());
+                        p.drawRect(0, 0, tile.width()-1, tile.height()-1);
                     }
 
                     if (item == highlightedItem())

@@ -481,12 +481,12 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
     if (d->orientation == Qt::Vertical)
     {
        ts   = d->tileSize + 2*d->margin;
-       tile = QRect(0, 0, visibleWidth(), ts);
+       tile = QRect(0, 0, visibleWidth()-1, ts-1);
     }
     else
     {
        ts   = d->tileSize + 2*d->margin;
-       tile = QRect(0, 0, ts, visibleHeight());
+       tile = QRect(0, 0, ts-1, visibleHeight()-1);
     }
 
     QPainter p(viewport());
