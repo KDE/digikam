@@ -66,7 +66,7 @@ public:
         toolTipTimer     = 0;
         dragItem         = 0;
         oldHighlightItem = 0;
-        itemHighlighted  = 0;
+        highlightedItem  = 0;
         toolTip          = 0;
     }
 
@@ -86,7 +86,7 @@ public:
     Q3ListViewItem    *toolTipItem;
     Q3ListViewItem    *dragItem;
     Q3ListViewItem    *oldHighlightItem;
-    Q3ListViewItem    *itemHighlighted;
+    Q3ListViewItem    *highlightedItem;
 
     FolderViewToolTip *toolTip;
 };
@@ -220,18 +220,18 @@ void FolderView::takeItem(Q3ListViewItem* item)
         slotToolTip();
     }
 
-    if (d->itemHighlighted == item)
-        d->itemHighlighted = 0;
+    if (d->highlightedItem == item)
+        d->highlightedItem = 0;
 
     Q3ListView::takeItem(item);
 }
 
 void FolderView::leaveEvent(QEvent* e)
 {
-    if (d->itemHighlighted)
+    if (d->highlightedItem)
     {
         highlightCurrentItem(false);
-        d->itemHighlighted = 0;
+        d->highlightedItem = 0;
     }
 
     // hide tooltip
@@ -293,14 +293,14 @@ void FolderView::contentsMouseMoveEvent(QMouseEvent *e)
 
         // Draw item highlightment when mouse is over.
 
-        if (item != d->itemHighlighted)
+        if (item != d->highlightedItem)
         {
-            if (d->itemHighlighted)
+            if (d->highlightedItem)
                 highlightCurrentItem(false);
 
-            d->itemHighlighted = item;
+            d->highlightedItem = item;
 
-            if (d->itemHighlighted)
+            if (d->highlightedItem)
                 highlightCurrentItem(true);
         }
 
@@ -669,16 +669,16 @@ void FolderView::slotTreeViewFontChanged()
 
 void FolderView::highlightCurrentItem(bool b)
 {
-    if (!d->itemHighlighted) return;
+    if (!d->highlightedItem) return;
 
-    FolderItem* fi = dynamic_cast<FolderItem*>(d->itemHighlighted);
+    FolderItem* fi = dynamic_cast<FolderItem*>(d->highlightedItem);
     if (fi)
     {
         fi->setHighlighted(b);
     }
     else
     {
-        FolderCheckListItem *fc = dynamic_cast<FolderCheckListItem*>(d->itemHighlighted);
+        FolderCheckListItem *fc = dynamic_cast<FolderCheckListItem*>(d->highlightedItem);
         if (fc)
             fc->setHighlighted(b);
     }

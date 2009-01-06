@@ -7,7 +7,7 @@
  * Description : icons view.
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -74,7 +74,7 @@ public:
         firstGroup               = 0;
         lastGroup                = 0;
         currItem                 = 0;
-        itemHighlighted          = 0;
+        highlightedItem          = 0;
         anchorItem               = 0;
         clearing                 = false;
         spacing                  = 10;
@@ -128,7 +128,7 @@ public:
     IconItem                 *currItem;
     IconItem                 *anchorItem;
     IconItem                 *storedVisibleItem; // store position for slotRearrange
-    IconItem                 *itemHighlighted;
+    IconItem                 *highlightedItem;
 
     IconGroupItem            *firstGroup;
     IconGroupItem            *lastGroup;
@@ -317,7 +317,7 @@ int IconView::groupCount() const
 void IconView::clear(bool update)
 {
     d->clearing        = true;
-    d->itemHighlighted = 0;
+    d->highlightedItem = 0;
     d->toolTipItem     = 0;
     d->toolTipTimer->stop();
     slotToolTip();
@@ -555,8 +555,8 @@ void IconView::takeItem(IconItem* item)
         slotToolTip();
     }
 
-    if (d->itemHighlighted == item)
-        d->itemHighlighted = 0;
+    if (d->highlightedItem == item)
+        d->highlightedItem = 0;
 
     // if it is current item, change the current item
     if (d->currItem == item)
@@ -918,10 +918,10 @@ void IconView::deleteContainers()
 
 void IconView::leaveEvent(QEvent *e)
 {
-    if (d->itemHighlighted)
+    if (d->highlightedItem)
     {
-        d->itemHighlighted->setHighlighted(false);
-        d->itemHighlighted = 0;
+        d->highlightedItem->setHighlighted(false);
+        d->highlightedItem = 0;
     }
 
     // hide tooltip
@@ -938,10 +938,10 @@ void IconView::leaveEvent(QEvent *e)
 
 void IconView::focusOutEvent(QFocusEvent* e)
 {
-    if (d->itemHighlighted)
+    if (d->highlightedItem)
     {
-        d->itemHighlighted->setHighlighted(false);
-        d->itemHighlighted = 0;
+        d->highlightedItem->setHighlighted(false);
+        d->highlightedItem = 0;
     }
 
     // hide tooltip
@@ -1144,15 +1144,15 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
 
         // Draw item highlightment when mouse is over.
 
-        if (item != d->itemHighlighted)
+        if (item != d->highlightedItem)
         {
-            if (d->itemHighlighted)
-                d->itemHighlighted->setHighlighted(false);
+            if (d->highlightedItem)
+                d->highlightedItem->setHighlighted(false);
 
-            d->itemHighlighted = item;
+            d->highlightedItem = item;
 
-            if (d->itemHighlighted)
-                d->itemHighlighted->setHighlighted(true);
+            if (d->highlightedItem)
+                d->highlightedItem->setHighlighted(true);
         }
 
         return;
