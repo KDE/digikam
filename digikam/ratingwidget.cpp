@@ -7,7 +7,7 @@
  * Description : a widget to draw stars rating
  *
  * Copyright (C) 2005 by Owen Hirst <n8rider@sbcglobal.net>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -153,7 +153,7 @@ void RatingWidget::paintEvent(QPaintEvent*)
         for (int i = 0; i < RatingMax; i++)
         {
             p.drawPixmap(x, 0, d->disPixmap);
-            x += d->disPixmap.width();
+            x += d->disPixmap.width()+1;
         }
     }
     else
@@ -162,13 +162,13 @@ void RatingWidget::paintEvent(QPaintEvent*)
         for (int i = 0; i < d->rating; i++)
         {
             p.drawPixmap(x, 0, d->selPixmap);
-            x += d->selPixmap.width();
+            x += d->selPixmap.width()+1;
         }
 
         for (int i = d->rating; i < RatingMax; i++)
         {
             p.drawPixmap(x, 0, d->regPixmap);
-            x += d->regPixmap.width();
+            x += d->regPixmap.width()+1;
         }
     }
 
@@ -225,7 +225,7 @@ void RatingWidget::slotThemeChanged()
     p3.drawPolygon(d->starPolygon, Qt::WindingFill);
     p3.end();
 
-    setFixedSize(QSize(d->regPixmap.width()*RatingMax, d->regPixmap.height()));
+    setFixedSize(QSize((d->regPixmap.width()+1)*RatingMax, d->regPixmap.height()));
     update();
 }
 
