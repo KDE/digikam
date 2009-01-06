@@ -6,7 +6,7 @@
  * Date        : 2007-08-31
  * Description : a widget to display free space for a mount-point.
  *
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -256,7 +256,7 @@ unsigned long FreeSpaceWidget::kBAvail(const QString &path) const
             if (length > mountPointMatch)
             {
                 mountPointMatch = info.mountPoint.length();
-                selectedInfo = info;
+                selectedInfo    = info;
             }
         }
     }
@@ -264,7 +264,7 @@ unsigned long FreeSpaceWidget::kBAvail(const QString &path) const
     if (!mountPointMatch)
     {
         kWarning(50003) << "Did not identify a valid mount point for" << path;
-        return -1;
+        return (unsigned long)(-1);
     }
 
     return selectedInfo.kBAvail;
