@@ -9,7 +9,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 179031 : Exposure times shown for Panasonic RAW pictures do not make sense.
 003 ==> 179745 : Rating information in right sidebar is not updated.
 004 ==> 179650 : Crash when clearing album quick search if album UI empty.
-005 ==> 
+005 ==> 179850 : Show sorting of albums/tags in left panel.
+006 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
