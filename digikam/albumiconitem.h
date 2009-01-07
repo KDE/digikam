@@ -63,6 +63,10 @@ public:
 
     virtual int compare(IconItem *item);
     virtual QRect clickToOpenRect();
+    virtual QRect clickToRateRect();
+
+    virtual void  setRating(int rating);
+    virtual int   rating() const;
 
 protected:
 

@@ -7,7 +7,7 @@
  * Description : album icon view
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2002-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -1994,7 +1994,16 @@ QPixmap AlbumIconView::bannerPixmap() const
 QPixmap AlbumIconView::ratingPixmap(int rating, bool selected) const
 {
     if (rating < 1 || rating > 5)
-        return QPixmap();
+    {
+        QPixmap pix;
+        if (selected)
+            pix = d->itemSelPixmap.copy(d->itemRatingRect);
+        else
+            pix = d->itemRegPixmap.copy(d->itemRatingRect);
+
+        return pix;
+    }
+
     rating--;
     if (selected)
         return d->ratingPixmaps[5 + rating];
@@ -2117,12 +2126,12 @@ void AlbumIconView::updateRectsAndPixmaps()
 
     int y = margin;
 
-    d->itemPixmapRect = QRect(margin, y, w, d->thumbSize.size()+margin);
+    d->itemPixmapRect = QRect(margin, y, w+margin, d->thumbSize.size());
     y = d->itemPixmapRect.bottom();
 
     if (d->albumSettings->getIconShowRating())
     {
-        d->itemRatingRect = QRect(margin, y, w, starPolygonSize.height());
+        d->itemRatingRect = QRect(margin, y, w+margin, starPolygonSize.height()+4);
         y = d->itemRatingRect.bottom();
     }
 
@@ -2137,7 +2146,6 @@ void AlbumIconView::updateRectsAndPixmaps()
         d->itemCommentsRect = QRect(margin, y, w, oneRowComRect.height());
         y = d->itemCommentsRect.bottom();
     }
-
 
     if (d->albumSettings->getIconShowDate())
     {
@@ -2214,7 +2222,7 @@ void AlbumIconView::updateRectsAndPixmaps()
                 painter.setPen(pen);
 
                 // move painter while drawing polygons
-                painter.translate( (d->itemRatingRect.width() - rating * starPolygonSize.width())/2, 0 );
+                painter.translate( (d->itemRatingRect.width() - margin - rating * starPolygonSize.width())/2, 2 );
                 for (int s=0; s<rating; s++)
                 {
                     painter.drawPolygon(d->starPolygon, Qt::WindingFill);
@@ -2399,6 +2407,36 @@ void AlbumIconView::slotImageAttributesChanged(qlonglong imageId)
 
 void AlbumIconView::slotAlbumImagesChanged(int /*albumId*/)
 {
+    updateContents();
+}
+
+void AlbumIconView::slotEditRatingFromItem(int rating)
+{
+    rating = qMin(RatingMax, qMax(RatingMin, rating));
+
+    d->imageLister->blockSignals(true);
+    ScanController::instance()->suspendCollectionScan();
+    DatabaseTransaction transaction;
+    AlbumIconItem *albumItem = dynamic_cast<AlbumIconItem*>(ratingItem());
+    if (albumItem)
+    {
+        ImageInfo info = albumItem->imageInfo();
+
+        MetadataHub hub;
+        hub.load(info);
+        hub.setRating(rating);
+
+        QString filePath = info.filePath();
+        hub.write(info, MetadataHub::PartialWrite);
+        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+        bool fileChanged = hub.write(filePath, MetadataHub::FullWriteIfChanged);
+
+        if (fileChanged)
+            ScanController::instance()->scanFileDirectly(filePath);
+    }
+
+    ScanController::instance()->resumeCollectionScan();
+    d->imageLister->blockSignals(false);
     updateContents();
 }
 

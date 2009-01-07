@@ -829,6 +829,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadatahub.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mimefilter.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/monthwidget.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingbox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingpopupmenu.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingwidget.cpp 

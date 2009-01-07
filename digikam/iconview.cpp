@@ -56,6 +56,7 @@
 
 // Local includes.
 
+#include "ratingbox.h"
 #include "drubberband.h"
 #include "thumbbar.h"
 #include "iconitem.h"
@@ -78,6 +79,8 @@ public:
         anchorItem               = 0;
         clearing                 = false;
         spacing                  = 10;
+        ratingBox                = 0;
+        ratingItem               = 0;
 
         rubber                   = 0;
         dragging                 = false;
@@ -129,9 +132,12 @@ public:
     IconItem                 *anchorItem;
     IconItem                 *storedVisibleItem; // store position for slotRearrange
     IconItem                 *highlightedItem;
+    IconItem                 *ratingItem;
 
     IconGroupItem            *firstGroup;
     IconGroupItem            *lastGroup;
+
+    RatingBox                *ratingBox;
 
     struct ItemContainer
     {
@@ -170,6 +176,7 @@ IconView::IconView(QWidget* parent, const char* name)
     d->rearrangeTimer = new QTimer(this);
     d->toolTipTimer   = new QTimer(this);
     d->rubber         = new DRubberBand(this);
+    d->ratingBox      = new RatingBox(this);
 
     connect(d->rearrangeTimer, SIGNAL(timeout()),
             this, SLOT(slotRearrange()));
@@ -179,6 +186,9 @@ IconView::IconView(QWidget* parent, const char* name)
 
     connect(AlbumSettings::instance(), SIGNAL(signalIconViewFontChanged()),
             this, SLOT(slotIconViewFontChanged()));
+
+    connect(d->ratingBox, SIGNAL(signalRatingChanged(int)),
+            this, SLOT(slotEditRatingFromItem(int)));
 
     setEnableToolTips(true);
     slotIconViewFontChanged();
@@ -235,6 +245,11 @@ void IconView::setCurrentItem(IconItem* item)
         d->currItem->setSelected(true, true);
         ensureItemVisible(d->currItem);
     }
+}
+
+IconItem* IconView::ratingItem() const
+{
+    return d->ratingItem;
 }
 
 IconItem* IconView::findItem(const QPoint& pos)
@@ -321,6 +336,13 @@ void IconView::clear(bool update)
     d->toolTipItem     = 0;
     d->toolTipTimer->stop();
     slotToolTip();
+
+    if (d->ratingItem)
+    {
+        d->ratingBox->hide();
+        d->ratingItem->setEditRating(false);
+        d->ratingItem = 0;
+    }
 
     deleteContainers();
 
@@ -557,6 +579,13 @@ void IconView::takeItem(IconItem* item)
 
     if (d->highlightedItem == item)
         d->highlightedItem = 0;
+
+    if (d->ratingItem == item)
+    {
+        d->ratingBox->hide();
+        d->ratingItem->setEditRating(false);
+        d->ratingItem = 0;
+    }
 
     // if it is current item, change the current item
     if (d->currItem == item)
@@ -924,6 +953,13 @@ void IconView::leaveEvent(QEvent *e)
         d->highlightedItem = 0;
     }
 
+    if (d->ratingItem)
+    {
+        d->ratingBox->hide();
+        d->ratingItem->setEditRating(false);
+        d->ratingItem = 0;
+    }
+
     // hide tooltip
     d->toolTipItem = 0;
     d->toolTipTimer->stop();
@@ -942,6 +978,13 @@ void IconView::focusOutEvent(QFocusEvent* e)
     {
         d->highlightedItem->setHighlighted(false);
         d->highlightedItem = 0;
+    }
+
+    if (d->ratingItem)
+    {
+        d->ratingBox->hide();
+        d->ratingItem->setEditRating(false);
+        d->ratingItem = 0;
     }
 
     // hide tooltip
@@ -1137,9 +1180,35 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
         if (KGlobalSettings::changeCursorOverIcon())
         {
             if (item && item->clickToOpenRect().contains(e->pos()))
+            {
                 setCursor(Qt::PointingHandCursor);
+                d->ratingBox->hide();
+                if (d->ratingItem)
+                    d->ratingItem->setEditRating(false);
+                d->ratingItem = 0;
+            }
+            else if (item && item->clickToRateRect().contains(e->pos()))
+            {
+                setCursor(Qt::CrossCursor);
+                d->ratingItem = item;
+                if (d->ratingItem)
+                    d->ratingItem->setEditRating(true);
+
+                QRect rect = item->clickToRateRect();
+                rect.moveTopLeft(contentsToViewport(rect.topLeft()));
+                d->ratingBox->setFixedSize(rect.size());
+                d->ratingBox->move(rect.topLeft().x(), rect.topLeft().y());
+                d->ratingBox->setRating(item->rating());
+                d->ratingBox->show();
+            }
             else
+            {
                 unsetCursor();
+                d->ratingBox->hide();
+                if (d->ratingItem)
+                    d->ratingItem->setEditRating(false);
+                d->ratingItem = 0;
+            }
         }
 
         // Draw item highlightment when mouse is over.
@@ -1276,6 +1345,19 @@ void IconView::contentsMouseReleaseEvent(QMouseEvent* e)
 void IconView::contentsWheelEvent(QWheelEvent* e)
 {
     e->accept();
+
+    if (d->highlightedItem)
+    {
+        d->highlightedItem->setHighlighted(false);
+        d->highlightedItem = 0;
+    }
+
+    if (d->ratingItem)
+    {
+        d->ratingBox->hide();
+        d->ratingItem->setEditRating(false);
+        d->ratingItem = 0;
+    }
 
     d->toolTipItem = 0;
     d->toolTipTimer->stop();
@@ -1767,6 +1849,19 @@ void IconView::keyPressEvent(QKeyEvent* e)
     }
     else
     {
+        if (d->highlightedItem)
+        {
+            d->highlightedItem->setHighlighted(false);
+            d->highlightedItem = 0;
+        }
+
+        if (d->ratingItem)
+        {
+            d->ratingBox->hide();
+            d->ratingItem->setEditRating(false);
+            d->ratingItem = 0;
+        }
+
         emit signalSelectionChanged();
         viewport()->update();
         d->toolTipItem = 0;

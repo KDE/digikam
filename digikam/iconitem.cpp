@@ -7,7 +7,7 @@
  * Description : icon item.
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,8 +53,10 @@ public:
         group       = 0;
         selected    = false;
         highlighted = false;
+        editRating  = false;
     }
 
+    bool           editRating;
     bool           selected;
     bool           highlighted;
 
@@ -134,6 +136,11 @@ QRect IconItem::clickToOpenRect()
     return rect();
 }
 
+QRect IconItem::clickToRateRect()
+{
+    return QRect();
+}
+
 QRect IconItem::clickToToggleSelectRect() const
 {
     QRect r       = rect();
@@ -183,6 +190,26 @@ void IconItem::setHighlighted(bool val)
 bool IconItem::isHighlighted() const
 {
     return d->highlighted;
+}
+
+void IconItem::setEditRating(bool val)
+{
+    d->editRating = val;
+    d->group->iconView()->updateContents(rect());
+}
+
+bool IconItem::editRating() const
+{
+    return d->editRating;
+}
+
+void IconItem::setRating(int /*rating*/)
+{
+}
+
+int IconItem::rating() const
+{
+    return -1;
 }
 
 void IconItem::repaint()

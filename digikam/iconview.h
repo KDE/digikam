@@ -68,6 +68,8 @@ public:
     IconItem* currentItem() const;
     IconItem* findItem(const QPoint& pos);
 
+    IconItem* ratingItem() const;
+
     void setCurrentItem(IconItem* item);
 
     int  count() const;
@@ -147,12 +149,16 @@ protected:
 
     virtual void startDrag();
 
-    virtual void prepareRepaint(const QList<IconItem *> &itemsToRepaint);
+    virtual void prepareRepaint(const QList<IconItem*> &itemsToRepaint);
 
     void drawFrameRaised(QPainter* p);
     void drawFrameSunken(QPainter* p);
 
     virtual bool acceptToolTip(IconItem* , const QPoint&);
+
+protected slots:
+
+    virtual void slotEditRatingFromItem(int){};
 
 private slots:
 

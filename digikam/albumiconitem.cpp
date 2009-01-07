@@ -236,6 +236,15 @@ QRect AlbumIconItem::clickToOpenRect()
     return pixmapRect;
 }
 
+QRect AlbumIconItem::clickToRateRect()
+{
+    QRect ratingRect = d->view->itemRatingRect();
+    QRect r          = rect();
+
+    ratingRect.translate(r.x(), r.y());
+    return ratingRect;
+}
+
 void AlbumIconItem::paintItem(QPainter *p)
 {
     QRect r;
@@ -274,7 +283,6 @@ void AlbumIconItem::paintItem(QPainter *p)
         p->drawPixmap(d->tightPixmapRect.x()-3, d->tightPixmapRect.y()-3, borderPix);
 
         p->restore();
-
     }
     else
     {
@@ -285,14 +293,14 @@ void AlbumIconItem::paintItem(QPainter *p)
     if (settings->getIconShowRating())
     {
         r = d->view->itemRatingRect();
+        QPixmap ratingPixmap;
 
-        int rating = d->info.rating();
+        if (!editRating())
+            ratingPixmap = d->view->ratingPixmap(d->info.rating(), isSelected());
+        else
+            ratingPixmap = d->view->ratingPixmap(-1, isSelected());
 
-        if (rating > 0 && rating <=5)
-        {
-            QPixmap ratingPixmap = d->view->ratingPixmap(rating, isSelected());
-            p->drawPixmap(r, ratingPixmap);
-        }
+        p->drawPixmap(r, ratingPixmap);
     }
 
     if (settings->getIconShowName())
@@ -386,6 +394,16 @@ void AlbumIconItem::paintItem(QPainter *p)
         p->setPen(QPen(d->view->palette().color(QPalette::Highlight), 3, Qt::SolidLine));
         p->drawRect(1, 1, r.width()-3, r.height()-3);
     }
+}
+
+void AlbumIconItem::setRating(int rating)
+{
+    d->info.setRating(rating);
+}
+
+int AlbumIconItem::rating() const
+{
+    return d->info.rating();
 }
 
 }  // namespace Digikam
