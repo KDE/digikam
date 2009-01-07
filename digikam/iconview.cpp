@@ -1177,38 +1177,35 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
             }
         }
 
-        if (KGlobalSettings::changeCursorOverIcon())
+        if (item && KGlobalSettings::changeCursorOverIcon() && item->clickToOpenRect().contains(e->pos()))
         {
-            if (item && item->clickToOpenRect().contains(e->pos()))
-            {
-                setCursor(Qt::PointingHandCursor);
-                d->ratingBox->hide();
-                if (d->ratingItem)
-                    d->ratingItem->setEditRating(false);
-                d->ratingItem = 0;
-            }
-            else if (item && item->clickToRateRect().contains(e->pos()))
-            {
-                setCursor(Qt::CrossCursor);
-                d->ratingItem = item;
-                if (d->ratingItem)
-                    d->ratingItem->setEditRating(true);
+            setCursor(Qt::PointingHandCursor);
+            d->ratingBox->hide();
+            if (d->ratingItem)
+                d->ratingItem->setEditRating(false);
+            d->ratingItem = 0;
+        }
+        else if (item && item->clickToRateRect().contains(e->pos()))
+        {
+            setCursor(Qt::CrossCursor);
+            d->ratingItem = item;
+            if (d->ratingItem)
+                d->ratingItem->setEditRating(true);
 
-                QRect rect = item->clickToRateRect();
-                rect.moveTopLeft(contentsToViewport(rect.topLeft()));
-                d->ratingBox->setFixedSize(rect.size());
-                d->ratingBox->move(rect.topLeft().x(), rect.topLeft().y());
-                d->ratingBox->setRating(item->rating());
-                d->ratingBox->show();
-            }
-            else
-            {
-                unsetCursor();
-                d->ratingBox->hide();
-                if (d->ratingItem)
-                    d->ratingItem->setEditRating(false);
-                d->ratingItem = 0;
-            }
+            QRect rect = item->clickToRateRect();
+            rect.moveTopLeft(contentsToViewport(rect.topLeft()));
+            d->ratingBox->setFixedSize(rect.size());
+            d->ratingBox->move(rect.topLeft().x(), rect.topLeft().y());
+            d->ratingBox->setRating(item->rating());
+            d->ratingBox->show();
+        }
+        else
+        {
+            unsetCursor();
+            d->ratingBox->hide();
+            if (d->ratingItem)
+                d->ratingItem->setEditRating(false);
+            d->ratingItem = 0;
         }
 
         // Draw item highlightment when mouse is over.
