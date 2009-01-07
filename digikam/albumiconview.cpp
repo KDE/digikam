@@ -2106,8 +2106,9 @@ void AlbumIconView::updateRectsAndPixmaps()
         d->fnXtra.setPixelSize(fnSz-2);
     }
 
-    int margin = 5;
-    int w      = d->thumbSize.size() + 2*margin;
+    const int radius = 3;
+    const int margin = 5;
+    int w            = d->thumbSize.size() + 2*radius + 2*margin;
 
     QFontMetrics fm(d->fnReg);
     QRect oneRowRegRect = fm.boundingRect(0, 0, w, 0xFFFFFFFF,
@@ -2126,12 +2127,12 @@ void AlbumIconView::updateRectsAndPixmaps()
 
     int y = margin;
 
-    d->itemPixmapRect = QRect(margin, y, w+margin, d->thumbSize.size());
+    d->itemPixmapRect = QRect(margin, y, w+margin+2*radius, d->thumbSize.size() + 2*radius);
     y = d->itemPixmapRect.bottom();
 
     if (d->albumSettings->getIconShowRating())
     {
-        d->itemRatingRect = QRect(margin, y, w+margin, starPolygonSize.height()+4);
+        d->itemRatingRect = QRect(margin, y, w+margin+2*radius, starPolygonSize.height()+4);
         y = d->itemRatingRect.bottom();
     }
 
@@ -2177,7 +2178,7 @@ void AlbumIconView::updateRectsAndPixmaps()
         y = d->itemTagRect.bottom();
     }
 
-    d->itemRect = QRect(0, 0, w+2*margin, y+margin);
+    d->itemRect      = QRect(0, 0, w+2*margin+2*radius, y+margin+radius);
 
     d->itemRegPixmap = ThemeEngine::instance()->thumbRegPixmap(d->itemRect.width(),
                                                                d->itemRect.height());
