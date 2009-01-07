@@ -14,7 +14,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 179850 : Show sorting of albums/tags in left panel.
 006 ==> 148198 : Rating/Editing of images in Thumbnail view.
 007 ==> 179895 : digiKam does not rotate thumbnails/preview.
-008 ==> 
+008 ==> 177887 : XMP tags do not get deleted.
+009 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
