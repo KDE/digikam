@@ -2127,7 +2127,7 @@ void AlbumIconView::updateRectsAndPixmaps()
 
     int y = margin;
 
-    d->itemPixmapRect = QRect(margin, y, w+margin+2*radius, d->thumbSize.size() + 2*radius);
+    d->itemPixmapRect = QRect(margin, y, w+margin+radius, d->thumbSize.size() + 2*radius);
     y = d->itemPixmapRect.bottom();
 
     if (d->albumSettings->getIconShowRating())
