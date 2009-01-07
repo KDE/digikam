@@ -481,11 +481,8 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
     // NOTE : with digiKam 0.9.x, we have used IPTC Keywords for that.
     // Now this way is obsolete, and we use XMP instead.
 
-    // Remove the old Tags path list from metadata if already exist.
-    if (!removeXmpTag("Xmp.digiKam.TagsList", false))
-        return false;
-
-    // An now, add the new Tags path list as well.
+    // Set the new Tags path list. This is set, not add-to like setXmpKeywords.
+    // Unlike the other keyword fields, we do not need to merge existing entries.
     if (!setXmpTagStringSeq("Xmp.digiKam.TagsList", tagsPath))
         return false;
 
