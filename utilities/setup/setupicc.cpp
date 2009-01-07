@@ -526,8 +526,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
     {
         if (report)
         {
-            QString message = i18n("Sorry, there are no ICC profiles files in ");
-            message.append(path);
+            QString message = i18n("Sorry, there are no ICC profiles files in %1", path);
             KMessageBox::sorry(this, message);
         }
 
@@ -597,10 +596,10 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
                     kDebug(50003) << "Error: Parsed profile  is NULL (invalid profile); " << fileName << endl;
                     cmsCloseProfile(tmpProfile);
                     ++it;
-                    QString message = i18n("<p>The following profile is invalid:</p><p><b>");
-                    message.append(fileName);
-                    message.append("</b></p><p>To avoid this message remove it from color profiles repository</p>");
-                    message.append("<p>Do you want digiKam do it for you?</p>");
+                    QString message = i18n("<p>The following profile is invalid:</p><p><b>"
+                                           "%1"
+                                           "</b></p><p>To avoid this message remove it from color profiles repository.</p>"
+                                           "<p>Do you want digiKam do it for you?</p>", message);
                     if (KMessageBox::warningYesNo(this, message, i18n("Invalid Profile")) == 3)
                     {
                         if (QFile::remove(fileName))
