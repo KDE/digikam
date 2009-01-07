@@ -13,7 +13,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 179650 : Crash when clearing album quick search if album UI empty.
 005 ==> 179850 : Show sorting of albums/tags in left panel.
 006 ==> 148198 : Rating/Editing of images in Thumbnail view.
-007 ==> 
+007 ==> 179895 : digiKam does not rotate thumbnails/preview.
+008 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
