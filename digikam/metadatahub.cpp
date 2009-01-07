@@ -534,7 +534,7 @@ bool MetadataHub::write(DMetadata &metadata, WriteMode writeMode, const Metadata
         // To fix this constraint (not needed currently), an oldKeywords parameter is needed
 
         // create list of keywords to be added and to be removed
-        QStringList tagsPathList, oldKeywords, newKeywords;
+        QStringList oldTagsPathList, newTagsPathList, oldKeywords, newKeywords;
         for (QMap<TAlbum *, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
         {
             // it is important that MetadataDisjoint keywords are not touched
@@ -545,24 +545,26 @@ bool MetadataHub::write(DMetadata &metadata, WriteMode writeMode, const Metadata
                 // have explicitly been removed with setTag.
                 if (it.value().hasTag)
                 {
-                    tagsPathList.append(it.key()->tagPath(false));
+                    newTagsPathList.append(it.key()->tagPath(false));
                     newKeywords.append(it.key()->title());
                 }
                 else
                 {
+                    oldTagsPathList.append(it.key()->tagPath(false));
                     oldKeywords.append(it.key()->title());
                 }
             }
         }
 
-        // We set Iptc keywords using tags name.
-        dirty |= metadata.setIptcKeywords(oldKeywords, newKeywords);
+        // We set Iptc keywords using tags name. Also remove tags path, for 0.9 compatibility.
+        dirty |= metadata.setIptcKeywords(oldKeywords + oldTagsPathList, newKeywords);
 
-        // We set Xmp keywords using tags name.
+        // We add Xmp keywords using tags name. Remove old keywords before.
+        dirty |= metadata.removeXmpKeywords(oldKeywords);
         dirty |= metadata.setXmpKeywords(newKeywords);
 
         // We set Tags Path list in digiKam Xmp private namespace using tags path.
-        dirty |= metadata.setImageTagsPath(tagsPathList);
+        dirty |= metadata.setImageTagsPath(newTagsPathList);
     }
 
     if (settings.savePhotographerId && writeAllFields)
