@@ -3,6 +3,8 @@ digiKam 0.10.0-rc1 - Release date: 2009-01-xx
 
 NEW FEATURES:
 
+AlbumGui       : Icon view item can be rated on the fly.
+
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 179712 : Open image in embeded editor lead to digiKam crash.
@@ -10,7 +12,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 179745 : Rating information in right sidebar is not updated.
 004 ==> 179650 : Crash when clearing album quick search if album UI empty.
 005 ==> 179850 : Show sorting of albums/tags in left panel.
-006 ==> 
+006 ==> 148198 : Rating/Editing of images in Thumbnail view.
+007 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
