@@ -2295,8 +2295,6 @@ void AlbumManager::slotNotifyFileChange(const QString &path)
 
 void AlbumManager::slotDirWatchDirty(const QString& path)
 {
-    kDebug(50003) << "KDirWatch detected change at" << path << endl;
-
     // Filter out dirty signals triggered by changes on the database file
     DatabaseParameters params = DatabaseAccess::parameters();
     if (params.isSQLite())
@@ -2322,6 +2320,8 @@ void AlbumManager::slotDirWatchDirty(const QString& path)
             d->dbPathModificationDateList = modList;
         }
     }
+
+    kDebug(50003) << "KDirWatch detected change at" << path << endl;
 
     slotNotifyFileChange(path);
 }
