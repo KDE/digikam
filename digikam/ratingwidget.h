@@ -61,6 +61,7 @@ protected:
 
     virtual void mousePressEvent(QMouseEvent*);
     virtual void mouseMoveEvent(QMouseEvent*);
+    virtual void mouseReleaseEvent(QMouseEvent*);
     virtual void paintEvent(QPaintEvent*);
 
     QPixmap starPixmap() const;

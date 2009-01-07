@@ -120,6 +120,25 @@ bool RatingWidget::hasTracking() const
     return d->tracking;
 }
 
+void RatingWidget::mousePressEvent(QMouseEvent* e)
+{
+    int pos = e->x() / d->regPixmap.width() +1;
+
+    if (d->rating == pos)
+    {
+        d->rating--;
+    }
+    else
+    {
+        d->rating = pos;
+    }
+
+    if (d->tracking)
+        emit signalRatingChanged(d->rating);
+
+    update();
+}
+
 void RatingWidget::mouseMoveEvent(QMouseEvent* e)
 {
     int pos = e->x() / d->regPixmap.width() +1;
@@ -140,27 +159,9 @@ void RatingWidget::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
-void RatingWidget::mouseReleaseEvent(QMouseEvent* e)
+void RatingWidget::mouseReleaseEvent(QMouseEvent*)
 {
     emit signalRatingChanged(d->rating);
-}
-
-void RatingWidget::mousePressEvent(QMouseEvent* e)
-{
-    int pos = e->x() / d->regPixmap.width() +1;
-
-    if (d->rating == pos)
-    {
-        d->rating--;
-    }
-    else
-    {
-        d->rating = pos;
-    }
-
-    emit signalRatingChanged(d->rating);
-
-    update();
 }
 
 void RatingWidget::paintEvent(QPaintEvent*)
