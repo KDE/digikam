@@ -48,6 +48,9 @@ public:
     void setRating(int val);
     int  rating() const;
 
+    void setTracking(bool tracking);
+    bool hasTracking() const;
+
 signals:
 
     void signalRatingChanged(int);

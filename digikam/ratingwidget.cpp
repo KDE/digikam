@@ -50,7 +50,8 @@ public:
 
     RatingWidgetPriv()
     {
-        rating = 0;
+        tracking = true;
+        rating   = 0;
 
         // Pre-computed star polygon for a 15x15 pixmap.
         starPolygon << QPoint(0,  6);
@@ -64,6 +65,8 @@ public:
         starPolygon << QPoint(3,  14);
         starPolygon << QPoint(4,  9);
     }
+
+    bool     tracking;
 
     int      rating;
 
@@ -107,6 +110,16 @@ int RatingWidget::rating() const
     return d->rating;
 }
 
+void RatingWidget::setTracking(bool tracking)
+{
+    d->tracking = tracking;
+}
+
+bool RatingWidget::hasTracking() const
+{
+    return d->tracking;
+}
+
 void RatingWidget::mouseMoveEvent(QMouseEvent* e)
 {
     int pos = e->x() / d->regPixmap.width() +1;
@@ -119,9 +132,17 @@ void RatingWidget::mouseMoveEvent(QMouseEvent* e)
             pos = RatingMin;
 
         d->rating = pos;
-        emit signalRatingChanged(d->rating);
+
+        if (d->tracking)
+            emit signalRatingChanged(d->rating);
+
         update();
     }
+}
+
+void RatingWidget::mouseReleaseEvent(QMouseEvent* e)
+{
+    emit signalRatingChanged(d->rating);
 }
 
 void RatingWidget::mousePressEvent(QMouseEvent* e)
