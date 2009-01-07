@@ -7,7 +7,7 @@
  * Description : Color management setup tab.
  *
  * Copyright (C) 2005-2007 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -473,7 +473,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
     d->mainDialog->enableButtonOK(true);
 
     // Look the ICC profile path repository set by user.
-    QDir userProfilesDir(QFile::encodeName(path), "*.icc;*.icm", QDir::Files);
+    QDir userProfilesDir(path, "*.icc;*.icm", QDir::Files);
     const QFileInfoList* usersFiles = userProfilesDir.entryInfoList();
     DDebug() << "Scanning ICC profiles from user repository: " << path << endl;
 
@@ -495,7 +495,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
     // Look the ICC color-space profile path include with digiKam dist.
     KGlobal::dirs()->addResourceType("profiles", KGlobal::dirs()->kde_default("data") + "digikam/profiles");
     QString digiKamProfilesPath = KGlobal::dirs()->findResourceDir("profiles", "srgb.icm");
-    QDir digiKamProfilesDir(QFile::encodeName(digiKamProfilesPath), "*.icc;*.icm", QDir::Files);
+    QDir digiKamProfilesDir(digiKamProfilesPath, "*.icc;*.icm", QDir::Files);
     const QFileInfoList* digiKamFiles = digiKamProfilesDir.entryInfoList();
     DDebug() << "Scanning ICC profiles included with digiKam: " << digiKamProfilesPath << endl;
     parseProfilesfromDir(digiKamFiles);
@@ -545,16 +545,16 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList* files)
 
                 if (tmpProfile == NULL)
                 {
-                    DDebug() << "Error: Parsed profile  is NULL (invalid profile); " << QFile::encodeName(fileName) << endl;
+                    DDebug() << "Error: Parsed profile  is NULL (invalid profile); " << fileName << endl;
                     cmsCloseProfile(tmpProfile);
                     ++it;
                     QString message = i18n("<p>The following profile is invalid:</p><p><b>");
-                    message.append(QFile::encodeName(fileName));
+                    message.append(fileName);
                     message.append("</b></p><p>To avoid this message remove it from color profiles repository</p>");
                     message.append("<p>Do you want digiKam do it for you?</p>");
                     if (KMessageBox::warningYesNo(this, message, i18n("Invalid Profile")) == 3)
                     {
-                        if (QFile::remove(QFile::encodeName(fileName)))
+                        if (QFile::remove(fileName))
                         {
                             KMessageBox::information(this,  i18n("Invalid color profile has been removed"));
                         }
