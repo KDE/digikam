@@ -1389,4 +1389,105 @@ bool DMetadata::setXMLImageProperties(const QString& comments, const QDateTime& 
     return (setIptcTagData("Iptc.Application2.0x00ff", compressedData));
 }
 
+// ---------- Scheduled to be moved to libkexiv2 --------------
+
+bool DMetadata::addToXmpTagStringBag(const char *xmpTagName, const QStringList& entriesToAdd,
+                                     bool setProgramName) const
+{
+//#ifdef _XMP_SUPPORT_
+
+    if (!setProgramId(setProgramName))
+        return false;
+
+    QStringList oldEntries = getXmpTagStringBag(xmpTagName, false);
+    QStringList newEntries = entriesToAdd;
+
+    // Create a list of keywords including old one which already exists.
+    for (QStringList::const_iterator it = oldEntries.constBegin(); it != oldEntries.constEnd(); ++it )
+    {
+        if (!newEntries.contains(*it))
+            newEntries.append(*it);
+    }
+
+    if (setXmpTagStringBag(xmpTagName, newEntries, false))
+        return true;
+
+//#endif // _XMP_SUPPORT_
+
+    return false;
+}
+
+bool DMetadata::removeFromXmpTagStringBag(const char *xmpTagName, const QStringList& entriesToRemove,
+                                       bool setProgramName) const
+{
+//#ifdef _XMP_SUPPORT_
+
+    if (!setProgramId(setProgramName))
+        return false;
+
+    QStringList currentEntries = getXmpTagStringBag(xmpTagName, false);
+    QStringList newEntries;
+
+    // Create a list of current keywords except those that shall be removed
+    for (QStringList::const_iterator it = currentEntries.constBegin(); it != currentEntries.constEnd(); ++it )
+    {
+        if (!entriesToRemove.contains(*it))
+            newEntries.append(*it);
+    }
+
+    if (setXmpTagStringBag(xmpTagName, newEntries, false))
+        return true;
+
+//#endif // _XMP_SUPPORT_
+
+    return false;
+}
+
+QStringList DMetadata::getXmpKeywords() const
+{
+    return (getXmpTagStringBag("Xmp.dc.subject", false));
+}
+
+bool DMetadata::setXmpKeywords(const QStringList& newKeywords, bool setProgramName) const
+{
+    return addToXmpTagStringBag("Xmp.dc.subject", newKeywords, setProgramName);
+}
+
+bool DMetadata::removeXmpKeywords(const QStringList& keywordsToRemove, bool setProgramName)
+{
+    return removeFromXmpTagStringBag("Xmp.dc.subject", keywordsToRemove, setProgramName);
+}
+
+QStringList DMetadata::getXmpSubCategories() const
+{
+    return (getXmpTagStringBag("Xmp.photoshop.SupplementalCategories", false));
+}
+
+bool DMetadata::setXmpSubCategories(const QStringList& newSubCategories, bool setProgramName) const
+{
+    return addToXmpTagStringBag("Xmp.photoshop.SupplementalCategories", newSubCategories, setProgramName);
+}
+
+bool DMetadata::removeXmpSubCategories(const QStringList& subCategoriesToRemove, bool setProgramName)
+{
+    return removeFromXmpTagStringBag("Xmp.photoshop.SupplementalCategories", subCategoriesToRemove, setProgramName);
+}
+
+QStringList DMetadata::getXmpSubjects() const
+{
+    return (getXmpTagStringBag("Xmp.iptc.SubjectCode", false));
+}
+
+bool DMetadata::setXmpSubjects(const QStringList& newSubjects, bool setProgramName) const
+{
+    return addToXmpTagStringBag("Xmp.iptc.SubjectCode", newSubjects, setProgramName);
+}
+
+bool DMetadata::removeXmpSubjects(const QStringList& subjectsToRemove, bool setProgramName)
+{
+    return removeFromXmpTagStringBag("Xmp.iptc.SubjectCode", subjectsToRemove, setProgramName);
+}
+// End: Scheduled to be moved to libkexiv2
+
+
 }  // namespace Digikam
