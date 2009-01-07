@@ -513,7 +513,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
     d->mainDialog->enableButtonOk(true);
 
     // Look the ICC profile path repository set by user.
-    QDir userProfilesDir(QFile::encodeName(path));
+    QDir userProfilesDir(path);
     QStringList filters;
     filters << "*.icc" << "*.icm";
     userProfilesDir.setNameFilters(filters);
@@ -538,7 +538,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
 
     // Look the ICC color-space profile path include with libkdcraw dist.
     QString libkdcrawProfilesPath = KStandardDirs::installPath("data") + QString("libkdcraw/profiles");
-    QDir libkdcrawProfilesDir(QFile::encodeName(libkdcrawProfilesPath));
+    QDir libkdcrawProfilesDir(libkdcrawProfilesPath);
     libkdcrawProfilesDir.setNameFilters(filters);
     libkdcrawProfilesDir.setFilter(QDir::Files);
 
@@ -594,16 +594,16 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
 
                 if (tmpProfile == NULL)
                 {
-                    kDebug(50003) << "Error: Parsed profile  is NULL (invalid profile); " << QFile::encodeName(fileName) << endl;
+                    kDebug(50003) << "Error: Parsed profile  is NULL (invalid profile); " << fileName << endl;
                     cmsCloseProfile(tmpProfile);
                     ++it;
                     QString message = i18n("<p>The following profile is invalid:</p><p><b>");
-                    message.append(QFile::encodeName(fileName));
+                    message.append(fileName);
                     message.append("</b></p><p>To avoid this message remove it from color profiles repository</p>");
                     message.append("<p>Do you want digiKam do it for you?</p>");
                     if (KMessageBox::warningYesNo(this, message, i18n("Invalid Profile")) == 3)
                     {
-                        if (QFile::remove(QFile::encodeName(fileName)))
+                        if (QFile::remove(fileName))
                         {
                             KMessageBox::information(this,  i18n("Invalid color profile has been removed"));
                         }
