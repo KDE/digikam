@@ -159,11 +159,8 @@ void SearchFolderView::slotTextSearchFilterChanged(const SearchTextSettings& set
 
         SearchFolderItem* viewItem = (SearchFolderItem*) salbum->extraData(this);
 
-        // Check if a special url query exist to identify a SAlbum dedicated to Date Search
-        // used with TimeLine.
-        KUrl url = salbum->databaseUrl();
-
-        if (salbum->title().contains(search, settings.caseSensitive))
+        // Use viewItem text rather than album title for Last/Current Search switch
+        if (viewItem->text(0).contains(search, settings.caseSensitive))
         {
             atleastOneMatch = true;
 
