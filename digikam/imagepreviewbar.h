@@ -51,6 +51,9 @@ public:
                     bool exifRotate=true);
     virtual ~ImagePreviewBar();
 
+
+    ThumbBarItem* ratingItem() const;
+
     void setSelectedItem(ImagePreviewBarItem* ltItem);
 
     ImageInfo     currentItemImageInfo() const;
@@ -64,16 +67,25 @@ public:
 
     void applySettings();
 
+    void clear(bool updateView=true);
+    void takeItem(ThumbBarItem* item);
+    void removeItem(ThumbBarItem* item);
+
 protected:
 
     QPixmap ratingPixmap() const;
     void startDrag();
 
+    virtual void contentsMouseMoveEvent(QMouseEvent*);
     virtual void viewportPaintEvent(QPaintEvent*);
+    virtual void leaveEvent(QEvent*);
+    virtual void focusOutEvent(QFocusEvent*);
+    virtual void contentsWheelEvent(QWheelEvent*);
 
 private slots:
 
     void slotImageRatingChanged(qlonglong);
+    void slotEditRatingFromItem(int);
 
     void slotThemeChanged();
 

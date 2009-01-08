@@ -60,6 +60,7 @@
 #include "imageattributeswatch.h"
 #include "metadatahub.h"
 #include "ratingpopupmenu.h"
+#include "ratingbox.h"
 #include "dpopupmenu.h"
 #include "themeengine.h"
 
@@ -84,11 +85,17 @@ public:
         starPolygon << QPoint(7,  11);
         starPolygon << QPoint(3,  14);
         starPolygon << QPoint(4,  9);
+        ratingItem = 0;
+        ratingBox  = 0;
     }
 
-    QPolygon starPolygon;
+    QPolygon      starPolygon;
 
-    QPixmap  ratingPixmap;
+    QPixmap       ratingPixmap;
+
+    ThumbBarItem *ratingItem;
+
+    RatingBox    *ratingBox;
 };
 
 ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRotate)
@@ -101,7 +108,7 @@ ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRota
 
     // -- Load rating Pixmap ------------------------------------------
 
-    d->ratingPixmap = QPixmap(15, 15);
+    d->ratingPixmap = QPixmap(16, 15);
     d->ratingPixmap.fill(Qt::transparent);
 
     QPainter painter(&d->ratingPixmap);
@@ -111,10 +118,12 @@ ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRota
     painter.drawPolygon(d->starPolygon, Qt::WindingFill);
     painter.end();
 
+    d->ratingBox = new RatingBox(this);
+
     if (orientation == Qt::Vertical)
-        setMinimumWidth(d->ratingPixmap.width()*5 + 6 + 2*getMargin());
+        setMinimumWidth(d->ratingPixmap.width()*5 + 6 + 2*getMargin() + 2*getRadius());
     else
-        setMinimumHeight(d->ratingPixmap.width()*5 + 6 + 2*getMargin());
+        setMinimumHeight(d->ratingPixmap.width()*5 + 6 + 2*getMargin() + 2*getRadius());
 
     // ----------------------------------------------------------------
 
@@ -125,11 +134,99 @@ ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRota
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
+
+    connect(d->ratingBox, SIGNAL(signalRatingChanged(int)),
+            this, SLOT(slotEditRatingFromItem(int)));
 }
 
 ImagePreviewBar::~ImagePreviewBar()
 {
     delete d;
+}
+
+void ImagePreviewBar::clear(bool updateView)
+{
+    if (d->ratingItem)
+    {
+        d->ratingBox->hide();
+        ThumbBarItem *item = d->ratingItem;
+        d->ratingItem = 0;
+        item->repaint();
+    }
+
+    ThumbBarView::clear(updateView);
+}
+
+void ImagePreviewBar::takeItem(ThumbBarItem* item)
+{
+    if (!item) return;
+
+    if (d->ratingItem == item)
+    {
+        d->ratingBox->hide();
+        d->ratingItem = 0;
+        item->repaint();
+    }
+
+    ThumbBarView::takeItem(item);
+}
+
+void ImagePreviewBar::removeItem(ThumbBarItem* item)
+{
+    if (!item) return;
+
+    if (d->ratingItem == item)
+    {
+        d->ratingBox->hide();
+        d->ratingItem = 0;
+        item->repaint();
+    }
+
+    ThumbBarView::removeItem(item);
+}
+
+void ImagePreviewBar::leaveEvent(QEvent* e)
+{
+    if (d->ratingItem)
+    {
+        d->ratingBox->hide();
+        ThumbBarItem *item = d->ratingItem;
+        d->ratingItem = 0;
+        item->repaint();
+    }
+
+    ThumbBarView::leaveEvent(e);
+}
+
+void ImagePreviewBar::focusOutEvent(QFocusEvent* e)
+{
+    if (d->ratingItem)
+    {
+        d->ratingBox->hide();
+        ThumbBarItem *item = d->ratingItem;
+        d->ratingItem = 0;
+        item->repaint();
+    }
+
+    ThumbBarView::focusOutEvent(e);
+}
+
+void ImagePreviewBar::contentsWheelEvent(QWheelEvent* e)
+{
+    if (d->ratingItem)
+    {
+        d->ratingBox->hide();
+        ThumbBarItem *item = d->ratingItem;
+        d->ratingItem = 0;
+        item->repaint();
+    }
+
+    ThumbBarView::contentsWheelEvent(e);
+}
+
+ThumbBarItem* ImagePreviewBar::ratingItem() const
+{
+    return d->ratingItem;
 }
 
 QPixmap ImagePreviewBar::ratingPixmap() const
@@ -153,6 +250,23 @@ void ImagePreviewBar::slotImageRatingChanged(qlonglong imageId)
             triggerUpdate();
             return;
         }
+    }
+}
+
+void ImagePreviewBar::slotEditRatingFromItem(int rating)
+{
+    if (!d->ratingItem) return;
+    ImagePreviewBarItem *ltItem = dynamic_cast<ImagePreviewBarItem*>(d->ratingItem);
+
+    rating = qMin(5, qMax(0, rating));
+    ImageInfo info = ltItem->info();
+    if (!info.isNull())
+    {
+        MetadataHub hub;
+        hub.load(info);
+        hub.setRating(rating);
+        hub.write(info, MetadataHub::PartialWrite);
+        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
     }
 }
 
@@ -286,6 +400,48 @@ void ImagePreviewBar::startDrag()
     drag->exec();
 }
 
+void ImagePreviewBar::contentsMouseMoveEvent(QMouseEvent *e)
+{
+    if (!e) return;
+
+    if (e->buttons() == Qt::NoButton)
+    {
+        ThumbBarItem* item = findItem(e->pos());
+        if (item)
+        {
+            QRect clickToRateRect;
+            clickToRateRect.setTop(item->rect().bottom()-getMargin()-d->ratingPixmap.height());
+            clickToRateRect.setBottom(item->rect().bottom());
+            clickToRateRect.setLeft(item->rect().left());
+            clickToRateRect.setRight(item->rect().right());
+
+            if (clickToRateRect.contains(e->pos()))
+            {
+                setCursor(Qt::CrossCursor);
+
+                d->ratingItem = item;
+                item->repaint();
+                ImagePreviewBarItem *ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
+
+                clickToRateRect.moveTopLeft(contentsToViewport(clickToRateRect.topLeft()));
+                d->ratingBox->setFixedSize(clickToRateRect.size());
+                d->ratingBox->move(clickToRateRect.topLeft().x(), clickToRateRect.topLeft().y());
+                d->ratingBox->setRating(ltItem->info().rating());
+                d->ratingBox->show();
+            }
+            else
+            {
+                unsetCursor();
+                d->ratingBox->hide();
+                d->ratingItem = 0;
+                item->repaint();
+            }
+        }
+    }
+
+    ThumbBarView::contentsMouseMoveEvent(e);
+}
+
 void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
 {
     ThemeEngine* te = ThemeEngine::instance();
@@ -303,7 +459,7 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
 
             bgPix = QPixmap(contentsRect().width(), er.height());
 
-            ts   = getTileSize() + 2*getMargin();
+            ts   = getTileSize() + 2*getMargin() + 2*getRadius();
             tile = QPixmap(visibleWidth(), ts);
 
             y1 = (cy/ts)*ts;
@@ -315,7 +471,7 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
 
             bgPix = QPixmap(er.width(), contentsRect().height());
 
-            ts   = getTileSize() + 2*getMargin();
+            ts   = getTileSize() + 2*getMargin() + 2*getRadius();
             tile = QPixmap(ts, visibleHeight());
 
             x1 = (cx/ts)*ts;
@@ -366,14 +522,17 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
                                                                        pix.height()+6),
                                                                  QColor(0, 0, 0, 128), 3));
 
-                        ImagePreviewBarItem *ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
+                        if (item != d->ratingItem)
+                        {
+                            ImagePreviewBarItem *ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
 
-                        QRect r(0, tile.height()-getMargin()-d->ratingPixmap.height(),
-                                tile.width(), d->ratingPixmap.height());
-                        int rating = ltItem->info().rating();
-                        int xr     = (r.width() - rating * d->ratingPixmap.width())/2;
-                        int wr     = rating * d->ratingPixmap.width();
-                        p.drawTiledPixmap(xr, r.y(), wr, r.height(), d->ratingPixmap);
+                            QRect r(0, tile.height()-getMargin()-d->ratingPixmap.height()+3,
+                                    tile.width(), d->ratingPixmap.height());
+                            int rating = ltItem->info().rating();
+                            int xr     = (r.width() - rating * d->ratingPixmap.width())/2;
+                            int wr     = rating * d->ratingPixmap.width();
+                            p.drawTiledPixmap(xr, r.y(), wr, r.height(), d->ratingPixmap);
+                        }
                     }
 
                     p.end();
@@ -422,14 +581,17 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
                                                                        pix.height()+6),
                                                                  QColor(0, 0, 0, 128), 3));
 
-                        ImagePreviewBarItem *ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
+                        if (item != d->ratingItem)
+                        {
+                            ImagePreviewBarItem *ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
 
-                        QRect r(0, tile.height()-getMargin()-d->ratingPixmap.height(),
-                                tile.width(), d->ratingPixmap.height());
-                        int rating = ltItem->info().rating();
-                        int xr     = (r.width() - rating * d->ratingPixmap.width())/2;
-                        int wr     = rating * d->ratingPixmap.width();
-                        p.drawTiledPixmap(xr, r.y(), wr, r.height(), d->ratingPixmap);
+                            QRect r(0, tile.height()-getMargin()-d->ratingPixmap.height()+3,
+                                    tile.width(), d->ratingPixmap.height());
+                            int rating = ltItem->info().rating();
+                            int xr     = (r.width() - rating * d->ratingPixmap.width())/2;
+                            int wr     = rating * d->ratingPixmap.width();
+                            p.drawTiledPixmap(xr, r.y(), wr, r.height(), d->ratingPixmap);
+                        }
                     }
 
                     p.end();

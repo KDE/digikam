@@ -324,7 +324,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
 
             bgPix = QPixmap(contentsRect().width(), er.height());
 
-            ts   = getTileSize() + 2*getMargin();
+            ts   = getTileSize() + 2*getMargin() + 2*getRadius();
             tile = QPixmap(visibleWidth(), ts);
 
             y1 = (cy/ts)*ts;
@@ -336,7 +336,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
 
             bgPix = QPixmap(er.width(), contentsRect().height());
 
-            ts   = getTileSize() + 2*getMargin();
+            ts   = getTileSize() + 2*getMargin() + 2*getRadius();
             tile = QPixmap(ts, visibleHeight());
 
             x1 = (cx/ts)*ts;
@@ -400,12 +400,15 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                             p.drawPixmap(tile.width() - getMargin() - rPix.width(), getMargin(), rPix);
                         }
 
-                        QRect r(0, tile.height()-getMargin()-ratingPixmap().height(),
-                                tile.width(), ratingPixmap().height());
-                        int rating = ltItem->info().rating();
-                        int xr     = (r.width() - rating * ratingPixmap().width())/2;
-                        int wr     = rating * ratingPixmap().width();
-                        p.drawTiledPixmap(xr, r.y(), wr, r.height(), ratingPixmap());
+                        if (item != ratingItem())
+                        {
+                            QRect r(0, tile.height()-getMargin()-ratingPixmap().height()+3,
+                                    tile.width(), ratingPixmap().height());
+                            int rating = ltItem->info().rating();
+                            int xr     = (r.width() - rating * ratingPixmap().width())/2;
+                            int wr     = rating * ratingPixmap().width();
+                            p.drawTiledPixmap(xr, r.y(), wr, r.height(), ratingPixmap());
+                        }
                     }
 
                     p.end();
@@ -467,12 +470,15 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                             p.drawPixmap(tile.width() - getMargin() - rPix.width(), getMargin(), rPix);
                         }
 
-                        QRect r(0, tile.height()-getMargin()-ratingPixmap().height(),
-                                tile.width(), ratingPixmap().height());
-                        int rating = ltItem->info().rating();
-                        int xr     = (r.width() - rating * ratingPixmap().width())/2;
-                        int wr     = rating * ratingPixmap().width();
-                        p.drawTiledPixmap(xr, r.y(), wr, r.height(), ratingPixmap());
+                        if (item != ratingItem())
+                        {
+                            QRect r(0, tile.height()-getMargin()-ratingPixmap().height()+3,
+                                    tile.width(), ratingPixmap().height());
+                            int rating = ltItem->info().rating();
+                            int xr     = (r.width() - rating * ratingPixmap().width())/2;
+                            int wr     = rating * ratingPixmap().width();
+                            p.drawTiledPixmap(xr, r.y(), wr, r.height(), ratingPixmap());
+                        }
                     }
 
                     p.end();

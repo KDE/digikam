@@ -79,7 +79,7 @@ class ThumbBarViewPriv
 public:
 
     ThumbBarViewPriv() :
-        margin(5)
+        margin(5), radius(3)
     {
         dragging        = false;
         clearing        = false;
@@ -104,6 +104,7 @@ public:
     bool                        needPreload;
 
     const int                   margin;
+    const int                   radius;
     int                         count;
     int                         tileSize;
     int                         orientation;
@@ -192,14 +193,14 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
 
     if (d->orientation == Qt::Vertical)
     {
-        setMinimumWidth(ThumbnailSize::Small + 2*d->margin + verticalScrollBar()->sizeHint().width());
-        setMaximumWidth(d->maxTileSize + 2*d->margin + verticalScrollBar()->sizeHint().width());
+        setMinimumWidth(ThumbnailSize::Small + 2*d->margin + 2*d->radius + verticalScrollBar()->sizeHint().width());
+        setMaximumWidth(d->maxTileSize + 2*d->margin + 2*d->radius + verticalScrollBar()->sizeHint().width());
         setHScrollBarMode(Q3ScrollView::AlwaysOff);
     }
     else
     {
-        setMinimumHeight(ThumbnailSize::Small + 2*d->margin + verticalScrollBar()->sizeHint().width());
-        setMaximumHeight(d->maxTileSize + 2*d->margin + horizontalScrollBar()->sizeHint().height());
+        setMinimumHeight(ThumbnailSize::Small + 2*d->margin + 2*d->radius + verticalScrollBar()->sizeHint().width());
+        setMaximumHeight(d->maxTileSize + 2*d->margin + 2*d->radius + horizontalScrollBar()->sizeHint().height());
         setVScrollBarMode(Q3ScrollView::AlwaysOff);
     }
 }
@@ -234,13 +235,13 @@ void ThumbBarView::resizeEvent(QResizeEvent* e)
 
     if (d->orientation == Qt::Vertical)
     {
-        d->tileSize = width() - 2*d->margin - verticalScrollBar()->sizeHint().width();
+        d->tileSize = width() - 2*d->margin - 2*d->radius - verticalScrollBar()->sizeHint().width();
         verticalScrollBar()->setSingleStep(d->tileSize);
         verticalScrollBar()->setPageStep(2*d->tileSize);
     }
     else
     {
-        d->tileSize = height() - 2*d->margin - horizontalScrollBar()->sizeHint().height();
+        d->tileSize = height() - 2*d->margin - 2*d->radius - horizontalScrollBar()->sizeHint().height();
         horizontalScrollBar()->setSingleStep(d->tileSize);
         horizontalScrollBar()->setPageStep(2*d->tileSize);
     }
@@ -280,6 +281,11 @@ int ThumbBarView::getTileSize()
 int ThumbBarView::getMargin()
 {
     return d->margin;
+}
+
+int ThumbBarView::getRadius()
+{
+    return d->radius;
 }
 
 void ThumbBarView::setToolTipSettings(const ThumbBarToolTipSettings &settings)
@@ -346,7 +352,7 @@ ThumbBarItem* ThumbBarView::findItem(const QPoint& pos) const
 
     for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
     {
-        if (itemPos >= item->d->pos && itemPos <= (item->d->pos+d->tileSize+2*d->margin))
+        if (itemPos >= item->d->pos && itemPos <= (item->d->pos+d->tileSize+2*d->margin+2*d->radius))
         {
             return item;
         }
@@ -394,7 +400,7 @@ void ThumbBarView::ensureItemVisible(ThumbBarItem* item)
 {
     if (item)
     {
-        int pos = item->d->pos + d->margin + (int)(d->tileSize*.5);
+        int pos = item->d->pos + d->margin + d->radius + (int)(d->tileSize*.5);
 
         // We want the complete thumb visible and the next one.
         // find the middle of the image and give a margin of 1,5 image
@@ -482,12 +488,12 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
 
     if (d->orientation == Qt::Vertical)
     {
-       ts   = d->tileSize + 2*d->margin;
+       ts   = d->tileSize + 2*d->margin + 2*d->radius;
        tile = QRect(0, 0, visibleWidth()-1, ts-1);
     }
     else
     {
-       ts   = d->tileSize + 2*d->margin;
+       ts   = d->tileSize + 2*d->margin + 2*d->radius;
        tile = QRect(0, 0, ts-1, visibleHeight()-1);
     }
 
@@ -524,9 +530,10 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                     int x = (tile.width()  - pix.width())/2;
                     int y = (tile.height() - pix.height())/2;
                     p.drawPixmap(x, y, pix);
-                    p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6,
-                                                                   pix.height()+6),
-                                                             QColor(0, 0, 0, 128), 3));
+                    p.drawPixmap(x-d->radius, y-d->radius, 
+                                 generateFuzzyRect(QSize(pix.width()+2*d->radius,
+                                                         pix.height()+2*d->radius),
+                                                   QColor(0, 0, 0, 128), d->radius));
                 }
 
                 p.translate(0, - translate);
@@ -979,14 +986,14 @@ void ThumbBarView::rearrangeItems()
     while (item)
     {
         item->d->pos = pos;
-        pos          += d->tileSize + 2*d->margin;
+        pos          += d->tileSize + 2*d->margin + 2*d->radius;
         item         = item->d->next;
     }
 
     if (d->orientation == Qt::Vertical)
-        resizeContents(visibleWidth(), d->count*(d->tileSize+2*d->margin));
+        resizeContents(visibleWidth(), d->count*(d->tileSize+2*d->margin+2*d->radius));
     else
-        resizeContents(d->count*(d->tileSize+2*d->margin), visibleHeight());
+        resizeContents(d->count*(d->tileSize+2*d->margin+2*d->radius), visibleHeight());
 
     // only trigger preload if we have valid arranged items
     if (d->count)
@@ -998,9 +1005,9 @@ void ThumbBarView::repaintItem(ThumbBarItem* item)
     if (item)
     {
        if (d->orientation == Qt::Vertical)
-           repaintContents(0, item->d->pos, visibleWidth(), d->tileSize+2*d->margin);
+           repaintContents(0, item->d->pos, visibleWidth(), d->tileSize+2*d->margin+2*d->radius);
        else
-           repaintContents(item->d->pos, 0, d->tileSize+2*d->margin, visibleHeight());
+           repaintContents(item->d->pos, 0, d->tileSize+2*d->margin+2*d->radius, visibleHeight());
     }
 }
 
@@ -1124,12 +1131,12 @@ QRect ThumbBarItem::rect() const
     {
         return QRect(0, d->pos,
                      d->view->visibleWidth(),
-                     d->view->d->tileSize + 2*d->view->d->margin);
+                     d->view->d->tileSize + 2*d->view->d->margin+2*d->view->d->radius);
     }
     else
     {
         return QRect(d->pos, 0,
-                     d->view->d->tileSize + 2*d->view->d->margin,
+                     d->view->d->tileSize + 2*d->view->d->margin+2*d->view->d->radius,
                      d->view->visibleHeight());
     }
 }

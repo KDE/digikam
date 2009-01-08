@@ -71,11 +71,7 @@ public:
     int countItems();
     KUrl::List itemsUrls();
 
-    void clear(bool updateView=true);
     void triggerUpdate();
-
-    void removeItem(ThumbBarItem* item);
-    void takeItem(ThumbBarItem* item);
 
     void setSelected(ThumbBarItem* item);
     void ensureItemVisible(ThumbBarItem* item);
@@ -98,6 +94,10 @@ public:
     void reloadThumbs(const KUrl::List& urls);
     void reloadThumb(ThumbBarItem* item);
 
+    virtual void takeItem(ThumbBarItem* item);
+    virtual void clear(bool updateView=true);
+    virtual void removeItem(ThumbBarItem* item);
+
     static QPixmap generateFuzzyRect(const QSize& size, const QColor& color, int radius);
 
 public slots:
@@ -115,6 +115,7 @@ protected:
     int  getOrientation();
     int  getTileSize();
     int  getMargin();
+    int  getRadius();
 
     bool pixmapForItem(ThumbBarItem *item, QPixmap &pix) const;
     void preloadPixmapForItem(ThumbBarItem *item) const;
