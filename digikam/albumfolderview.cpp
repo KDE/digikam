@@ -538,19 +538,19 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
     KMenu menuExport(i18n("Export"));
     KMenu menuKIPIBatch(i18n("Batch Process"));
 
-    KMenu popmenu(this);
-    popmenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
-    QAction *newAction = popmenu.addAction(SmallIcon("albumfolder-new"), i18n("New Album..."));
-
     AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(listitem);
     if (!item)
         return;
     PAlbum *album = item->album();
-    if (item && !album)
+    if (item && !album || album->isRoot())
     {
         // if collection/date return
         return;
     }
+
+    KMenu popmenu(this);
+    popmenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
+    QAction *newAction = popmenu.addAction(SmallIcon("albumfolder-new"), i18n("New Album..."));
 
     // Root folder only shows "New Album..."
     QAction *renameAction = 0, *propertiesAction = 0, *resetIconAction = 0, *deleteAction = 0;
