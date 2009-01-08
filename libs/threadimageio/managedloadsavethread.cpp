@@ -168,7 +168,7 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loa
                 if ( (loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterPreloading)) )
                 {
                     loadingTask->setStatus(LoadingTask::LoadingTaskStatusStopping);
-                    load(loadingTask->filePath(), LoadingPolicyPreload);
+                    load(loadingTask->loadingDescription(), LoadingPolicyPreload);
                 }
             }
             //kDebug(50003) << "LoadingPolicyPrepend, Existing task " << existingTask << ", m_currentTask " << m_currentTask << endl;
@@ -189,7 +189,7 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loa
                 if ( (loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterPreloading)) )
                 {
                     loadingTask->setStatus(LoadingTask::LoadingTaskStatusStopping);
-                    load(loadingTask->filePath(), LoadingPolicyPreload);
+                    load(loadingTask->loadingDescription(), LoadingPolicyPreload);
                 }
             }
             if (existingTask)
@@ -412,7 +412,7 @@ void ManagedLoadSaveThread::save(DImg &image, const QString& filePath, const QSt
     if (m_currentTask && (loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterPreloading)))
     {
         loadingTask->setStatus(LoadingTask::LoadingTaskStatusStopping);
-        load(loadingTask->filePath(), LoadingPolicyPreload);
+        load(loadingTask->loadingDescription(), LoadingPolicyPreload);
     }
     // append new loading task, put it in front of preloading tasks
     int i;

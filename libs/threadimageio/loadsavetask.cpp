@@ -48,7 +48,7 @@ void LoadingTask::execute()
         return;
     DImg img(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
     m_thread->taskHasFinished();
-    m_thread->imageLoaded(m_loadingDescription.filePath, img);
+    m_thread->imageLoaded(m_loadingDescription, img);
 }
 
 LoadingTask::TaskType LoadingTask::type()
@@ -61,7 +61,7 @@ void LoadingTask::progressInfo(const DImg *, float progress)
     if (m_loadingTaskStatus == LoadingTaskStatusLoading)
     {
         if (m_thread->querySendNotifyEvent())
-            m_thread->loadingProgress(m_loadingDescription.filePath, progress);
+            m_thread->loadingProgress(m_loadingDescription, progress);
     }
 }
 
@@ -91,7 +91,7 @@ void SharedLoadingTask::execute()
     if (m_loadingTaskStatus == LoadingTaskStatusStopping)
         return;
     // send StartedLoadingEvent from each single Task, not via LoadingProcess list
-    m_thread->imageStartedLoading(m_loadingDescription.filePath);
+    m_thread->imageStartedLoading(m_loadingDescription);
 
     DImg img;
 
@@ -165,7 +165,7 @@ void SharedLoadingTask::execute()
     {
         // following the golden rule to avoid deadlocks, do this when CacheLock is not held
         m_thread->taskHasFinished();
-        m_thread->imageLoaded(m_loadingDescription.filePath, img);
+        m_thread->imageLoaded(m_loadingDescription, img);
         return;
     }
 

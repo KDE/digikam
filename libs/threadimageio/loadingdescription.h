@@ -72,7 +72,7 @@ public:
      * Use this for files that are not raw files.
      * Stores only the filePath.
      */
-    LoadingDescription(const QString &filePath);
+    explicit LoadingDescription(const QString &filePath);
 
     /**
      * For raw files:

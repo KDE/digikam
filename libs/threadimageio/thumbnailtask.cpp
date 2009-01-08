@@ -127,7 +127,7 @@ void ThumbnailLoadingTask::execute()
     {
         // following the golden rule to avoid deadlocks, do this when CacheLock is not held
         m_thread->taskHasFinished();
-        m_thread->thumbnailLoaded(m_loadingDescription.filePath, qimage);
+        m_thread->thumbnailLoaded(m_loadingDescription, qimage);
         return;
     }
 
