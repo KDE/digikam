@@ -20,7 +20,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 180006 : Camera GUI window title contains '&'. 
 010 ==> 129970 : Display a cloud of tags like in flickr.
 011 ==> 179531 : Showfoto crash on saveas jpegs.
-012 ==> 
+012 ==> 154426 : Light table should remember zoom-state.
+013 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
