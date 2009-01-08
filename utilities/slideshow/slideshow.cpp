@@ -325,8 +325,11 @@ void SlideShow::loadPrevImage()
     }
 }
 
-void SlideShow::slotGotImagePreview(const LoadingDescription&, const DImg& preview)
+void SlideShow::slotGotImagePreview(const LoadingDescription &desc, const DImg& preview)
 {
+    if (desc.filePath != d->currentImage.path() || desc.isThumbnail())
+        return;
+
     d->preview = preview;
 
     updatePixmap();
