@@ -19,7 +19,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 177887 : XMP tags do not get deleted.
 009 ==> 180006 : Camera GUI window title contains '&'. 
 010 ==> 129970 : Display a cloud of tags like in flickr.
-011 ==> 
+011 ==> 179531 : Showfoto crash on saveas jpegs.
+012 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
