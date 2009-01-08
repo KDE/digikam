@@ -1584,13 +1584,7 @@ void DigikamApp::openSolidCamera(const QString &udi, const QString &cameraLabel)
 void DigikamApp::slotOpenSolidUsmDevice(QAction *action)
 {
     QString udi = action->data().toString();
-
-    // remove single ampersand characters from action text
-    QRegExp ampersandRegEx("[&]{1}");
-    QString actionText = action->text();
-    actionText.remove(ampersandRegEx);
-
-    openSolidUsmDevice(udi, actionText);
+    openSolidUsmDevice(udi, action->iconText());
 }
 
 void DigikamApp::openSolidUsmDevice(const QString &udi, const QString &givenLabel)
