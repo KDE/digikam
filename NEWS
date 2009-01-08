@@ -3,6 +3,8 @@ digiKam 0.10.0-rc1 - Release date: 2009-01-xx
 
 NEW FEATURES:
 
+General        : Thumbbar item can be rated on the fly.
+
 AlbumGui       : Icon view item can be rated on the fly.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
