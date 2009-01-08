@@ -75,7 +75,7 @@ QString LoadingDescription::cacheKey() const
     if (rawDecodingSettings.halfSizeColorImage)
         return filePath + suffix + "-halfSizeColorImage";
     else if (previewParameters.size)
-        return filePath + suffix + "-previewImage";
+        return filePath + suffix + "-previewImage" + QString::number(previewParameters.size);
     else
         return filePath + suffix;
 }
