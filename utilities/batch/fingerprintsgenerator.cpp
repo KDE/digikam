@@ -157,6 +157,9 @@ void FingerPrintsGenerator::complete()
 
 void FingerPrintsGenerator::slotGotImagePreview(const LoadingDescription& desc, const DImg& img)
 {
+    if (d->allPicturesPath.first() != desc.filePath)
+        return;
+
     if (!img.isNull())
     {
         // compute Haar fingerprint
@@ -165,7 +168,8 @@ void FingerPrintsGenerator::slotGotImagePreview(const LoadingDescription& desc, 
     QPixmap pix = DImg(img).smoothScale(128, 128, Qt::KeepAspectRatio).convertToPixmap();
     addedAction(pix, desc.filePath);
     advance(1);
-    d->allPicturesPath.removeFirst();
+    if (!d->allPicturesPath.isEmpty())
+        d->allPicturesPath.removeFirst();
     if (d->allPicturesPath.isEmpty())
         complete();
     else
