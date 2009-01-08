@@ -67,6 +67,7 @@ public:
 
     void applySettings();
 
+    void ensureItemVisible(ThumbBarItem* item);
     void clear(bool updateView=true);
     void takeItem(ThumbBarItem* item);
     void removeItem(ThumbBarItem* item);
@@ -76,6 +77,7 @@ protected:
     QPixmap ratingPixmap() const;
     void startDrag();
 
+    virtual void rearrangeItems();
     virtual void contentsMouseMoveEvent(QMouseEvent*);
     virtual void viewportPaintEvent(QPaintEvent*);
     virtual void leaveEvent(QEvent*);

@@ -185,6 +185,34 @@ void ImagePreviewBar::removeItem(ThumbBarItem* item)
     ThumbBarView::removeItem(item);
 }
 
+void ImagePreviewBar::rearrangeItems()
+{
+    if (d->ratingItem)
+    {
+        d->ratingBox->hide();
+        ThumbBarItem *item = d->ratingItem;
+        d->ratingItem = 0;
+        item->repaint();
+    }
+
+    ThumbBarView::rearrangeItems();
+}
+
+void ImagePreviewBar::ensureItemVisible(ThumbBarItem* item)
+{
+    if (!item) return;
+
+    if (d->ratingItem)
+    {
+        d->ratingBox->hide();
+        ThumbBarItem *item = d->ratingItem;
+        d->ratingItem = 0;
+        item->repaint();
+    }
+
+    ThumbBarView::ensureItemVisible(item);
+}
+
 void ImagePreviewBar::leaveEvent(QEvent* e)
 {
     if (d->ratingItem)

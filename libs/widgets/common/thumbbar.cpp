@@ -400,6 +400,13 @@ void ThumbBarView::ensureItemVisible(ThumbBarItem* item)
 {
     if (item)
     {
+        if (d->highlightedItem)
+            d->highlightedItem = 0;
+
+        d->toolTipItem = 0;
+        d->toolTipTimer->stop();
+        slotToolTip();
+
         int pos = item->d->pos + d->margin + d->radius + (int)(d->tileSize*.5);
 
         // We want the complete thumb visible and the next one.
@@ -753,6 +760,9 @@ void ThumbBarView::contentsMouseReleaseEvent(QMouseEvent *e)
 void ThumbBarView::contentsWheelEvent(QWheelEvent *e)
 {
     e->accept();
+
+    if (d->highlightedItem)
+        d->highlightedItem = 0;
 
     d->toolTipItem = 0;
     d->toolTipTimer->stop();

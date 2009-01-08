@@ -74,7 +74,6 @@ public:
     void triggerUpdate();
 
     void setSelected(ThumbBarItem* item);
-    void ensureItemVisible(ThumbBarItem* item);
 
     void setExifRotate(bool exifRotate);
     bool getExifRotate();
@@ -94,6 +93,7 @@ public:
     void reloadThumbs(const KUrl::List& urls);
     void reloadThumb(ThumbBarItem* item);
 
+    virtual void ensureItemVisible(ThumbBarItem* item);
     virtual void takeItem(ThumbBarItem* item);
     virtual void clear(bool updateView=true);
     virtual void removeItem(ThumbBarItem* item);
@@ -121,9 +121,9 @@ protected:
     void preloadPixmapForItem(ThumbBarItem *item) const;
 
     void insertItem(ThumbBarItem* item);
-    void rearrangeItems();
     void repaintItem(ThumbBarItem* item);
 
+    virtual void rearrangeItems();
     virtual void resizeEvent(QResizeEvent*);
     virtual void contentsMousePressEvent(QMouseEvent*);
     virtual void contentsMouseMoveEvent(QMouseEvent*);
