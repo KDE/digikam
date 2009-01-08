@@ -119,17 +119,17 @@ protected:
     bool pixmapForItem(ThumbBarItem *item, QPixmap &pix) const;
     void preloadPixmapForItem(ThumbBarItem *item) const;
 
-    void resizeEvent(QResizeEvent*);
-    void contentsMousePressEvent(QMouseEvent*);
-    void contentsMouseMoveEvent(QMouseEvent*);
-    void contentsMouseReleaseEvent(QMouseEvent*);
-    void contentsWheelEvent(QWheelEvent*);
-    void leaveEvent(QEvent*);
-    void focusOutEvent(QFocusEvent*);
-
     void insertItem(ThumbBarItem* item);
     void rearrangeItems();
     void repaintItem(ThumbBarItem* item);
+
+    virtual void resizeEvent(QResizeEvent*);
+    virtual void contentsMousePressEvent(QMouseEvent*);
+    virtual void contentsMouseMoveEvent(QMouseEvent*);
+    virtual void contentsMouseReleaseEvent(QMouseEvent*);
+    virtual void contentsWheelEvent(QWheelEvent*);
+    virtual void leaveEvent(QEvent*);
+    virtual void focusOutEvent(QFocusEvent*);
 
     virtual bool acceptToolTip(ThumbBarItem*, const QPoint&);
     virtual void viewportPaintEvent(QPaintEvent*);

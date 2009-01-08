@@ -92,7 +92,7 @@ public:
         count           = 0;
         thumbLoadThread = 0;
         tileSize        = ThumbnailSize::Small;
-        maxTileSize     = 256;
+        maxTileSize     = ThumbnailSize::Huge;
         toolTipTimer    = 0;
         timer           = 0;
         preloadTimer    = 0;
@@ -192,11 +192,13 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
 
     if (d->orientation == Qt::Vertical)
     {
+        setMinimumWidth(ThumbnailSize::Small + 2*d->margin + verticalScrollBar()->sizeHint().width());
         setMaximumWidth(d->maxTileSize + 2*d->margin + verticalScrollBar()->sizeHint().width());
         setHScrollBarMode(Q3ScrollView::AlwaysOff);
     }
     else
     {
+        setMinimumHeight(ThumbnailSize::Small + 2*d->margin + verticalScrollBar()->sizeHint().width());
         setMaximumHeight(d->maxTileSize + 2*d->margin + horizontalScrollBar()->sizeHint().height());
         setVScrollBarMode(Q3ScrollView::AlwaysOff);
     }
