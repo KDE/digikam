@@ -34,12 +34,13 @@ public:
 
     enum Size 
     {
-        Step   = 8,
-        Tiny   = 32,
-        Small  = 64,
-        Medium = 96,
-        Large  = 160,
-        Huge   = 256
+        Step      = 8,
+        Tiny      = 32,
+        VerySmall = 64,
+        Small     = 80,
+        Medium    = 96,
+        Large     = 160,
+        Huge      = 256
     };
 
     ThumbnailSize() 
