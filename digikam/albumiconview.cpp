@@ -38,6 +38,7 @@ extern "C"
 // C++ includes.
 
 #include <cstdio>
+#include <cmath>
 
 // Qt includes.
 
@@ -2223,7 +2224,7 @@ void AlbumIconView::updateRectsAndPixmaps()
                 painter.setPen(pen);
 
                 // move painter while drawing polygons
-                painter.translate( (d->itemRatingRect.width() - margin - rating * starPolygonSize.width())/2, 2 );
+                painter.translate( lround((d->itemRatingRect.width() - margin - rating*(starPolygonSize.width()+1))/2.0), 2 );
                 for (int s=0; s<rating; s++)
                 {
                     painter.drawPolygon(d->starPolygon, Qt::WindingFill);
