@@ -97,7 +97,7 @@ void ScanLib::startScan()
                   "run", KIcon::NoGroup, 32);
 
     QString message = i18n("Finding non-existent Albums");
-    if (m_splash) m_splash->message(message, Qt::AlignLeft, Qt::white);
+    if (m_splash) m_splash->message(message);
     else m_progressBar->addedAction(pix, message);
     gettimeofday(&tv1, 0);
     findFoldersWhichDoNotExist();
@@ -105,7 +105,7 @@ void ScanLib::startScan()
     timing(message, tv1, tv2);
 
     message = i18n("Finding items not in database");
-    if (m_splash) m_splash->message(message, Qt::AlignLeft, Qt::white);
+    if (m_splash) m_splash->message(message);
     else m_progressBar->addedAction(pix, message);
     gettimeofday(&tv1, 0);
     findMissingItems();
@@ -113,7 +113,7 @@ void ScanLib::startScan()
     timing(message, tv1, tv2);
 
     message = i18n("Updating items without a date");
-    if (m_splash) m_splash->message(message, Qt::AlignLeft, Qt::white);
+    if (m_splash) m_splash->message(message);
     else m_progressBar->addedAction(pix, message);
     gettimeofday(&tv1, 0);
     updateItemsWithoutDate();
