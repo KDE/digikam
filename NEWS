@@ -4,6 +4,7 @@ digiKam 0.10.0-rc1 - Release date: 2009-01-xx
 NEW FEATURES:
 
 General        : Thumbbar item can be rated on the fly.
+General        : New settings to fix file timestamp when metadata are saved.
 
 AlbumGui       : Icon view item can be rated on the fly.
 
@@ -24,7 +25,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 013 ==> 179801 : Clicking the fuzzy search thumbnails open small pictures.
 014 ==> 177329 : Quick search is case sensitive [regression].
 015 ==> 179933 : Context menu of top "My Albums" isn't right.
-016 ==> 
+016 ==> 155593 : Add checkbox for disabling call to utime().
+017 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
