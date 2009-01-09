@@ -22,7 +22,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 179531 : Showfoto crash on saveas jpegs.
 012 ==> 154426 : Light table should remember zoom-state.
 013 ==> 179801 : Clicking the fuzzy search thumbnails open small pictures.
-014 ==> 
+014 ==> 177329 : Quick search is case sensitive [regression].
+015 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
