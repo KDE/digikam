@@ -542,7 +542,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
     if (!item)
         return;
     PAlbum *album = item->album();
-    if (item && !album || album->isRoot())
+    if (item && (!album || album->isRoot()))
     {
         // if collection/date return
         return;
