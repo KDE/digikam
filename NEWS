@@ -26,7 +26,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 177329 : Quick search is case sensitive [regression].
 015 ==> 179933 : Context menu of top "My Albums" isn't right.
 016 ==> 155593 : Add checkbox for disabling call to utime().
-017 ==> 
+017 ==> 180126 : digiKam does not display pictures if one clicks on the bar representing the number of pictures for a month.
+018 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
