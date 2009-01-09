@@ -224,7 +224,7 @@ QList<int> SearchXmlReader::valueToIntOrIntList()
     if (token == QXmlStreamReader::Characters)
     {
         list << text().toString().toInt();
-        readToEndOfElement();
+        readNext();
         return list;
     }
 
