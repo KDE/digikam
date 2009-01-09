@@ -48,7 +48,7 @@ public:
     void setOnLeftPanel(const ImageInfo &info);
     void setOnRightPanel(const ImageInfo &info);
 
-    void removeItem(const ImageInfo &info);
+    void removeItemByInfo(const ImageInfo &info);
 
     void setNavigateByPair(bool b);
 

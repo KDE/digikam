@@ -298,7 +298,7 @@ void LightTableBar::slotItemSelected(ThumbBarItem* item)
     emit signalLightTableBarItemSelected(ImageInfo());
 }
 
-void LightTableBar::removeItem(const ImageInfo &info)
+void LightTableBar::removeItemByInfo(const ImageInfo &info)
 {
     if (info.isNull()) return;
 
