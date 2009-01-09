@@ -6,7 +6,7 @@
  * Date        : 2007-08-02
  * Description : save JPEG image options.
  *
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "jpegsettings.h"
 #include "jpegsettings.moc"
@@ -70,14 +69,14 @@ public:
 };
 
 JPEGSettings::JPEGSettings(QWidget *parent)
-            : QWidget(parent)
+            : QWidget(parent), d(new JPEGSettingsPriv)
 {
-    d = new JPEGSettingsPriv;
     setAttribute(Qt::WA_DeleteOnClose);
 
     d->JPEGGrid             = new QGridLayout(this);
     d->JPEGcompression      = new KIntNumInput(75, this);
     d->JPEGcompression->setRange(1, 100);
+    d->JPEGcompression->setSliderEnabled(true);
     d->labelJPEGcompression = new QLabel(i18n("JPEG quality:"), this);
 
     d->JPEGcompression->setWhatsThis(i18n("<p>The JPEG quality:</p>"

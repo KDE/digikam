@@ -39,10 +39,10 @@ class DIGIKAM_EXPORT QImageLoader : public DImgLoader
 public:
 
     QImageLoader(DImg* image);
-    
+
     virtual bool load(const QString& filePath, DImgLoaderObserver *observer);
     virtual bool save(const QString& filePath, DImgLoaderObserver *observer);
-    
+
     virtual bool hasAlpha()   const;
     virtual bool sixteenBit() const { return false; };
     virtual bool isReadOnly() const { return false; };

@@ -48,12 +48,12 @@ public:
 
     enum LoadFlag
     {
-        LoadImageInfo = 1,
-        LoadMetadata = 2,
-        LoadICCData = 4,
-        LoadImageData = 8,
+        LoadImageInfo  = 1,
+        LoadMetadata   = 2,
+        LoadICCData    = 4,
+        LoadImageData  = 8,
         LoadUniqueHash = 16,
-        LoadAll = LoadImageInfo | LoadMetadata | LoadUniqueHash | LoadICCData | LoadImageData
+        LoadAll        = LoadImageInfo | LoadMetadata | LoadUniqueHash | LoadICCData | LoadImageData
     };
     Q_DECLARE_FLAGS(LoadFlags, LoadFlag)
 
@@ -89,7 +89,7 @@ protected:
     QVariant                imageGetAttribute(const QString& key);
     void                    imageSetAttribute(const QString& key, const QVariant& value);
 
-    QMap<QString, QString>& imageEmbeddedText();    
+    QMap<QString, QString>& imageEmbeddedText();
     QString                 imageGetEmbbededText(const QString& key);
     void                    imageSetEmbbededText(const QString& key, const QString& text);
 

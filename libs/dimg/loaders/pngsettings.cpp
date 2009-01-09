@@ -6,7 +6,7 @@
  * Date        : 2007-08-02
  * Description : save PNG image options.
  *
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "pngsettings.h"
 #include "pngsettings.moc"
@@ -61,14 +60,14 @@ public:
 };
 
 PNGSettings::PNGSettings(QWidget *parent)
-           : QWidget(parent)
+           : QWidget(parent), d(new PNGSettingsPriv)
 {
-    d = new PNGSettingsPriv;
     setAttribute(Qt::WA_DeleteOnClose);
 
     d->PNGGrid        = new QGridLayout(this);
     d->PNGcompression = new KIntNumInput(9, this);
     d->PNGcompression->setRange(1, 9);
+    d->PNGcompression->setSliderEnabled(true);
     d->labelPNGcompression = new QLabel(i18n("PNG compression:"), this);
 
     d->PNGcompression->setWhatsThis( i18n("<p>The compression value for PNG images:</p>"

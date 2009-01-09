@@ -65,9 +65,8 @@ public:
 };
 
 JP2KSettings::JP2KSettings(QWidget *parent)
-            : QWidget(parent)
+            : QWidget(parent), d(new JP2KSettingsPriv)
 {
-    d = new JP2KSettingsPriv;
     setAttribute(Qt::WA_DeleteOnClose);
 
     d->JPEG2000Grid     = new QGridLayout(this);

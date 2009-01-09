@@ -55,10 +55,10 @@ public:
 
     virtual bool hasAlpha()   const;
     virtual bool sixteenBit() const;
-    virtual bool isReadOnly() const { return false; }; 
+    virtual bool isReadOnly() const { return false; };
 
 private:
-    
+
     void   writeRawProfile(png_struct *ping, png_info *ping_info, char *profile_type, 
                            char *profile_data, png_uint_32 length);
 
@@ -72,7 +72,7 @@ private:
     bool m_sixteenBit;
     bool m_hasAlpha;
 };
-    
+
 }  // namespace Digikam
-    
+
 #endif /* PNGLOADER_H */

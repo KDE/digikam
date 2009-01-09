@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "dimgloader.h"
 
 // Qt includes.
@@ -32,7 +31,7 @@
 // KDE includes.
 
 #include <kstandarddirs.h>
-#include <kcodecs.h> // for KMD5
+#include <kcodecs.h>       // for KMD5
 #include <kdebug.h>
 
 // Local includes.

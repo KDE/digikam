@@ -46,8 +46,8 @@ public:
 
     virtual bool hasAlpha()   const { return false; };
     virtual bool sixteenBit() const { return true;  };
-    virtual bool isReadOnly() const { return true;  };    
-    
+    virtual bool isReadOnly() const { return true;  };
+
 private:
 
     bool m_alpha;

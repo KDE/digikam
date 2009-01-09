@@ -12,7 +12,7 @@
  *
  * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
  * KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
  * WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -40,7 +40,7 @@
  */
 
 #include "iccjpeg.h"
-#include <stdlib.h>			/* define malloc() */
+#include <stdlib.h>    /* define malloc() */
 
 
 /*
@@ -72,8 +72,8 @@
 
 void
 write_icc_profile (j_compress_ptr cinfo,
-		   const JOCTET *icc_data_ptr,
-		   unsigned int icc_data_len)
+                   const JOCTET *icc_data_ptr,
+                   unsigned int icc_data_len)
 {
   unsigned int num_markers;	/* total number of markers we'll write */
   int cur_marker = 1;		/* per spec, counting starts at 1 */
