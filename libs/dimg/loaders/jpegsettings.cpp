@@ -118,7 +118,7 @@ JPEGSettings::JPEGSettings(QWidget *parent)
                                          "<p><b>Note: JPEG always uses lossy compression.</b></p>"));
 
     d->JPEGGrid->addWidget(d->labelJPEGcompression, 0, 0, 1, 1);
-    d->JPEGGrid->addWidget(d->JPEGcompression,      0, 2, 1, 1);
+    d->JPEGGrid->addWidget(d->JPEGcompression,      0, 1, 1, 2);
     d->JPEGGrid->addWidget(d->labelSubSampling,     1, 0, 1, 1);
     d->JPEGGrid->addWidget(d->subSamplingCB,        1, 1, 1, 2);
     d->JPEGGrid->addWidget(d->labelWarning,         0, 3, 2, 1);
