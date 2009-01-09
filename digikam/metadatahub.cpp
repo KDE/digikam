@@ -6,8 +6,8 @@
  * Date        : 2007-01-05
  * Description : Metadata handling
  *
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -95,30 +95,32 @@ public:
 
 MetadataWriteSettings::MetadataWriteSettings()
 {
-    saveComments       = false;
-    saveDateTime       = false;
-    saveRating         = false;
-    saveTags           = false;
-    savePhotographerId = false;
-    saveCredits        = false;
-    writeRawFiles      = false;
+    saveComments        = false;
+    saveDateTime        = false;
+    saveRating          = false;
+    saveTags            = false;
+    savePhotographerId  = false;
+    saveCredits         = false;
+    writeRawFiles       = false;
+    updateFileTimeStamp = false;
 }
 
 MetadataWriteSettings::MetadataWriteSettings(AlbumSettings *albumSettings)
 {
-    saveComments       = albumSettings->getSaveComments();
-    saveDateTime       = albumSettings->getSaveDateTime();
-    saveRating         = albumSettings->getSaveRating();
-    saveTags           = albumSettings->getSaveTags();
-    savePhotographerId = albumSettings->getSavePhotographerId();
-    saveCredits        = albumSettings->getSaveCredits();
-    writeRawFiles      = albumSettings->getWriteRawFiles();
+    saveComments        = albumSettings->getSaveComments();
+    saveDateTime        = albumSettings->getSaveDateTime();
+    saveRating          = albumSettings->getSaveRating();
+    saveTags            = albumSettings->getSaveTags();
+    savePhotographerId  = albumSettings->getSavePhotographerId();
+    saveCredits         = albumSettings->getSaveCredits();
+    writeRawFiles       = albumSettings->getWriteRawFiles();
+    updateFileTimeStamp = albumSettings->getUpdateFileTimeStamp();
 
-    Author             = albumSettings->getAuthor();
-    AuthorTitle        = albumSettings->getAuthorTitle();
-    Credit             = albumSettings->getCredit();
-    Source             = albumSettings->getSource();
-    Copyright          = albumSettings->getCopyright();
+    Author              = albumSettings->getAuthor();
+    AuthorTitle         = albumSettings->getAuthorTitle();
+    Credit              = albumSettings->getCredit();
+    Source              = albumSettings->getSource();
+    Copyright           = albumSettings->getCopyright();
 }
 
 MetadataHub::MetadataHub(DatabaseMode dbmode)
@@ -475,6 +477,10 @@ bool MetadataHub::write(DMetadata &metadata, WriteMode writeMode, const Metadata
     bool dirty = false;
 
     metadata.setWriteRawFiles(settings.writeRawFiles);
+
+#if KEXIV2_VERSION >= 0x000600
+    metadata.setUpdateFileTimestamp(settings.updateFileTimeStamp);
+#endif
 
     // find out in advance if we have something to write - needed for FullWriteIfChanged mode
     bool saveComment  = (settings.saveComments && d->commentStatus == MetadataAvailable);

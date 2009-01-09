@@ -273,7 +273,11 @@ KIPI::UploadWidget* KipiInterface::uploadWidget(QWidget *parent)
 #if KIPI_VERSION >= 0x000300
 QVariant KipiInterface::hostSetting(const QString& settingName)
 {
-    if (settingName == QString("WriteMetadataToRAW"))
+    if (settingName == QString("WriteMetadataUpdateFiletimeStamp"))
+    {
+        return (AlbumSettings::instance()->getUpdateFileTimeStamp());
+    }
+    else if (settingName == QString("WriteMetadataToRAW"))
     {
         return (AlbumSettings::instance()->getWriteRawFiles());
     }

@@ -125,6 +125,7 @@ public:
     bool                                saveRating;
 
     bool                                writeRawFiles;
+    bool                                updateFileTimeStamp;
 
     // preview settings
     bool                                previewLoadFullImageSize;
@@ -264,6 +265,7 @@ void AlbumSettings::init()
     d->saveRating                   = false;
 
     d->writeRawFiles                = false;
+    d->updateFileTimeStamp          = false;
 
     d->previewLoadFullImageSize     = false;
     d->showThumbbar                 = true;
@@ -379,6 +381,7 @@ void AlbumSettings::readSettings()
     d->copyright              = group.readEntry("Copyright", QString());
 
     d->writeRawFiles          = group.readEntry("Write RAW Files", false);
+    d->updateFileTimeStamp    = group.readEntry("Update File Timestamp", false);
 
     // ---------------------------------------------------------------------
 
@@ -479,6 +482,7 @@ void AlbumSettings::saveSettings()
     group.writeEntry("Copyright", d->copyright);
 
     group.writeEntry("Write RAW Files", d->writeRawFiles);
+    group.writeEntry("Update File Timestamp", d->updateFileTimeStamp);
 
     // ---------------------------------------------------------------------
 
@@ -843,6 +847,16 @@ void AlbumSettings::setWriteRawFiles(bool val)
 bool AlbumSettings::getWriteRawFiles() const
 {
     return d->writeRawFiles;
+}
+
+void AlbumSettings::setUpdateFileTimeStamp(bool val)
+{
+    d->updateFileTimeStamp = val;
+}
+
+bool AlbumSettings::getUpdateFileTimeStamp() const
+{
+    return d->updateFileTimeStamp;
 }
 
 void AlbumSettings::setAuthor(const QString& author)

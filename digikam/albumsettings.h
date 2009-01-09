@@ -175,6 +175,9 @@ public:
     void setWriteRawFiles(bool val);
     bool getWriteRawFiles() const;
 
+    void setUpdateFileTimeStamp(bool val);
+    bool getUpdateFileTimeStamp() const;
+
     void setAuthor(const QString& author);
     QString getAuthor() const;
 

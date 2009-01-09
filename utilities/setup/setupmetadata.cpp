@@ -7,7 +7,7 @@
  * Description : setup Metadata tab.
  *
  * Copyright (C) 2003-2004 by Ralf Holzer <ralf at well.com>
- * Copyright (C) 2003-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,6 +47,7 @@
 
 // Libkexiv2 includes.
 
+#include <libkexiv2/version.h>
 #include <libkexiv2/kexiv2.h>
 
 // Local includes.
@@ -72,6 +73,7 @@ public:
         savePhotographerIdBox   = 0;
         saveCreditsBox          = 0;
         writeRawFilesBox        = 0;
+        updateFileTimeStampBox  = 0;
     }
 
     bool       ExifAutoRotateAsChanged;
@@ -86,6 +88,7 @@ public:
     QCheckBox *savePhotographerIdBox;
     QCheckBox *saveCreditsBox;
     QCheckBox *writeRawFilesBox;
+    QCheckBox *updateFileTimeStampBox;
 };
 
 SetupMetadata::SetupMetadata(QWidget* parent )
@@ -154,6 +157,16 @@ SetupMetadata::SetupMetadata(QWidget* parent )
                                             "experimental, and disabled by default."));
     d->writeRawFilesBox->setEnabled(KExiv2Iface::KExiv2::supportMetadataWritting("image/x-raw"));
 
+    d->updateFileTimeStampBox = new QCheckBox(commonGroup);
+    d->updateFileTimeStampBox->setText(i18n("&Update file timestamp when Metadata are saved"));
+    d->updateFileTimeStampBox->setWhatsThis( i18n("Turn on this option to update file timestamp when metadata are saved."));
+
+#if KEXIV2_VERSION >= 0x000600
+    d->updateFileTimeStampBox->show();
+#else
+    d->updateFileTimeStampBox->hide();
+#endif
+
     gLayout2->addWidget(d->saveTagsBox);
     gLayout2->addWidget(d->savePhotographerIdBox);
     gLayout2->addWidget(d->saveCreditsBox);
@@ -161,6 +174,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     gLayout2->addWidget(d->saveDateTimeBox);
     gLayout2->addWidget(d->saveRatingBox);
     gLayout2->addWidget(d->writeRawFilesBox);
+    gLayout2->addWidget(d->updateFileTimeStampBox);
     gLayout2->setMargin(KDialog::spacingHint());
     gLayout2->setSpacing(0);
 
@@ -249,6 +263,7 @@ void SetupMetadata::applySettings()
     settings->setSavePhotographerId(d->savePhotographerIdBox->isChecked());
     settings->setSaveCredits(d->saveCreditsBox->isChecked());
     settings->setWriteRawFiles(d->writeRawFilesBox->isChecked());
+    settings->setUpdateFileTimeStamp(d->updateFileTimeStampBox->isChecked());
     settings->saveSettings();
 }
 
@@ -267,6 +282,7 @@ void SetupMetadata::readSettings()
     d->savePhotographerIdBox->setChecked(settings->getSavePhotographerId());
     d->saveCreditsBox->setChecked(settings->getSaveCredits());
     d->writeRawFilesBox->setChecked(settings->getWriteRawFiles());
+    d->updateFileTimeStampBox->setChecked(settings->getUpdateFileTimeStamp());
 }
 
 bool SetupMetadata::exifAutoRotateAsChanged()
