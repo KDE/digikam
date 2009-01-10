@@ -69,15 +69,15 @@
      inkscape:pageshadow="2"
      inkscape:zoom="1.3215686"
      inkscape:cx="-164.77893"
-     inkscape:cy="254.99999"
+     inkscape:cy="175.73161"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="false"
      showborder="false"
-     inkscape:window-width="1440"
-     inkscape:window-height="851"
-     inkscape:window-x="-4"
-     inkscape:window-y="27"
+     inkscape:window-width="1280"
+     inkscape:window-height="740"
+     inkscape:window-x="-5"
+     inkscape:window-y="-3"
      showguides="true"
      inkscape:guide-bbox="true">
     <sodipodi:guide
@@ -160,19 +160,7 @@
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="version">
-    <text
-       xml:space="preserve"
-       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Arial;-inkscape-font-specification:Arial"
-       x="-442.22888"
-       y="13.445801"
-       id="text3187"
-       transform="matrix(0,-1,1,0,0,0)"><tspan
-         sodipodi:role="line"
-         id="tspan3189"
-         x="-442.22888"
-         y="13.445801">0.10.0</tspan></text>
-  </g>
+     inkscape:label="version" />
   <g
      inkscape:groupmode="layer"
      id="layer3"

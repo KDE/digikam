@@ -9,7 +9,7 @@
  *
  * Copyright (C) 1996-2000 the kicker authors.
  * Copyright (C) 2005 Mark Kretschmann <markey@web.de>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

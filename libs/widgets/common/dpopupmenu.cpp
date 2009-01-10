@@ -9,7 +9,7 @@
  *
  * Copyright (C) 1996-2000 the kicker authors.
  * Copyright (C) 2005 Mark Kretschmann <markey@web.de>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,15 +34,22 @@
 #include <QResizeEvent>
 #include <QStyle>
 #include <QStyleOptionFrame>
+#include <QFont>
+#include <QFontMetrics>
 
 // KDE includes.
 
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcomponentdata.h>
+#include <kglobalsettings.h>
 #include <kglobal.h>
 #include <kiconeffect.h>
 #include <kstandarddirs.h>
+
+// Local includes.
+
+#include "version.h"
 
 namespace Digikam
 {
@@ -83,6 +90,26 @@ void DPopupMenu::generateSidePixmap()
             s_dpopupmenu_sidePixmap.load(KStandardDirs::locate("data","showfoto/data/menusidepix-showfoto.png"));
 
         KIconEffect::colorize(s_dpopupmenu_sidePixmap, newColor, 1.0);
+
+        // Draw version string.
+
+        QPainter p(&s_dpopupmenu_sidePixmap);
+        p.rotate(-90.0);
+        QFont fnt(KGlobalSettings::generalFont());
+        int fntSize = fnt.pointSize();
+        if (fntSize > 0)
+        {
+            fnt.setPointSize(fntSize-2);
+        }
+        else
+        {
+            fntSize = fnt.pixelSize();
+            fnt.setPixelSize(fntSize-2);
+        }
+        QFontMetrics fontMt(fnt);
+        p.setFont(fnt);
+        p.setPen(Qt::white);
+        p.drawText(-444, 11+fontMt.underlinePos(), QString(digikam_version));
     }
 }
 
