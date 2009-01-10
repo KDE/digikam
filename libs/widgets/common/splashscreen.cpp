@@ -191,12 +191,12 @@ void SplashScreen::drawContents(QPainter* p)
     r = fontMt.boundingRect(rect(), 0, d->version);
     r.moveTopLeft(QPoint(width()-r.width()-10, height()-r.height()-3));
     p->setFont(fnt);
-    p->fillRect(r, d->versionBrush);
+    p->fillRect(r.x()-3, r.y()-1, r.width()+5, r.height()-1, d->versionBrush);
     p->setPen(d->versionColor);
     p->drawText(r, Qt::AlignRight, d->version);
     p->setPen(Qt::black);
     p->setBrush(Qt::NoBrush);
-    p->drawRoundedRect(r.x()-1, r.y()-1, r.width()+1, r.height(), 1, 1);
+    p->drawRect(r.x()-3, r.y()-1, r.width()+5, r.height()-1);
 }
 
 }   // namespace Digikam
