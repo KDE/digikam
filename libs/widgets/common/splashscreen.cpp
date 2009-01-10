@@ -43,6 +43,10 @@
 #include <kaboutdata.h>
 #include <kcomponentdata.h>
 
+// Local includes.
+
+#include "version.h"
+
 namespace Digikam
 {
 
@@ -56,17 +60,24 @@ public:
         state           = 0;
         progressBarSize = 3;
         state           = 0;
-        color           = Qt::lightGray;
-        alignment       = Qt::AlignLeft;
+        messageColor    = Qt::lightGray;
+        messageAlign    = Qt::AlignLeft;
+        version         = QString(digikam_version);
+        versionColor    = Qt::white;
+        versionBrush    = QBrush(QColor(92, 92, 92, 220));
     }
 
     int     state;
     int     progressBarSize;
-    int     alignment;
+    int     messageAlign;
 
-    QString string;
+    QString message;
+    QString version;
 
-    QColor  color;
+    QColor  messageColor;
+    QColor  versionColor;
+
+    QBrush  versionBrush;
 
     QTime   lastStateUpdateTime;
 };
@@ -94,12 +105,12 @@ SplashScreen::~SplashScreen()
 
 void SplashScreen::setColor(const QColor& color)
 {
-    d->color = color;
+    d->messageColor = color;
 }
 
 void SplashScreen::setAlignment(int alignment)
 {
-    d->alignment = alignment;
+    d->messageAlign = alignment;
 }
 
 void SplashScreen::animate()
@@ -115,23 +126,23 @@ void SplashScreen::animate()
 
 void SplashScreen::message(const QString& message)
 {
-    d->string    = message;
-    QSplashScreen::showMessage(d->string, d->alignment, d->color);
+    d->message = message;
+    QSplashScreen::showMessage(d->message, d->messageAlign, d->messageColor);
     animate();
     qApp->processEvents();
 }
 
-void SplashScreen::drawContents(QPainter* painter)
+void SplashScreen::drawContents(QPainter* p)
 {
     int position;
-    QColor basecolor (155, 192, 231);
+    QColor basecolor(155, 192, 231);
 
     // Draw background circles
-    painter->setPen(Qt::NoPen);
-    painter->setBrush(QColor(225, 234, 231));
-    painter->drawEllipse(21, 7, 9, 9);
-    painter->drawEllipse(32, 7, 9, 9);
-    painter->drawEllipse(43, 7, 9, 9);
+    p->setPen(Qt::NoPen);
+    p->setBrush(QColor(225, 234, 231));
+    p->drawEllipse(21, 7, 9, 9);
+    p->drawEllipse(32, 7, 9, 9);
+    p->drawEllipse(43, 7, 9, 9);
 
     // Draw animated circles, increments are chosen
     // to get close to background's color
@@ -141,15 +152,15 @@ void SplashScreen::drawContents(QPainter* painter)
         position = (d->state+i)%(2*d->progressBarSize-1);
         if (position < 3)
         {
-            painter->setBrush(QColor(basecolor.red()  -18*i,
-                                     basecolor.green()-28*i,
-                                     basecolor.blue() -10*i));
+            p->setBrush(QColor(basecolor.red()  -18*i,
+                               basecolor.green()-28*i,
+                               basecolor.blue() -10*i));
 
-            painter->drawEllipse(21+position*11, 7, 9, 9);
+            p->drawEllipse(21+position*11, 7, 9, 9);
         }
     }
 
-    painter->setPen(d->color);
+    p->setPen(d->messageColor);
 
     QFont fnt(KGlobalSettings::generalFont());
     int fntSize = fnt.pointSize();
@@ -162,15 +173,30 @@ void SplashScreen::drawContents(QPainter* painter)
         fntSize = fnt.pixelSize();
         fnt.setPixelSize(fntSize-2);
     }
-    painter->setFont(fnt);
+    p->setFont(fnt);
 
     QRect r = rect();
     r.setRect( r.x() + 59, r.y() + 5, r.width() - 10, r.height() - 10 );
 
     // Draw message at given position, limited to 43 chars
     // If message is too long, string is truncated
-    if (d->string.length() > 40) {d->string.truncate(39); d->string += "...";}
-    painter->drawText(r, d->alignment, d->string);
+    if (d->message.length() > 40)
+        d->message.truncate(39); d->message += "...";
+
+    p->drawText(r, d->messageAlign, d->message);
+
+    // Draw version string on bottom/right corner.
+    fnt.setBold(true);
+    QFontMetrics fontMt(fnt);
+    r = fontMt.boundingRect(rect(), 0, d->version);
+    r.moveTopLeft(QPoint(width()-r.width()-10, height()-r.height()-3));
+    p->setFont(fnt);
+    p->fillRect(r, d->versionBrush);
+    p->setPen(d->versionColor);
+    p->drawText(r, Qt::AlignRight, d->version);
+    p->setPen(Qt::black);
+    p->setBrush(Qt::NoBrush);
+    p->drawRoundedRect(r.x()-1, r.y()-1, r.width()+1, r.height(), 1, 1);
 }
 
 }   // namespace Digikam

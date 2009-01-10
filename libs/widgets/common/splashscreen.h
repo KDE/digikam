@@ -57,12 +57,12 @@ public:
 
 protected:
 
-    void drawContents (QPainter*);
+    void drawContents(QPainter*);
 
 public slots:
 
     void animate();
-    void message(const QString &message);
+    void message(const QString& message);
 
 private:
 
