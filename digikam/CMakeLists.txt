@@ -192,6 +192,7 @@ TARGET_LINK_LIBRARIES(digikam
                       ${KDE4_KPARTS_LIBS}
                       ${KDE4_PHONON_LIBS}
                       ${KDE4_KHTML_LIBS}
+                      ${KDE4_KUTILS_LIBS}
                       ${KIPI_LIBRARIES}
                       ${STRIGI_LIBRARIES}
                       ${GPHOTO2_LIBRARIES}
