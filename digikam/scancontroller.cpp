@@ -499,7 +499,7 @@ void ScanController::slotStartScanningForStaleAlbums()
 {
     QString message = i18n("Scanning for removed albums");
     if (d->splash)
-        d->splash->message(message, Qt::AlignLeft, Qt::white);
+        d->splash->message(message);
     else if (d->progressDialog)
         d->progressDialog->addedAction(d->actionPixmap(), message);
 }
@@ -508,7 +508,7 @@ void ScanController::slotStartScanningAlbumRoots()
 {
     QString message = i18n("Scanning images in individual albums");
     if (d->splash)
-        d->splash->message(message, Qt::AlignLeft, Qt::white);
+        d->splash->message(message);
     else if (d->progressDialog)
         d->progressDialog->addedAction(d->actionPixmap(), message);
 }
@@ -533,7 +533,7 @@ void ScanController::slotProgressFromInitialization(const QString& message, int 
     // main thread
 
     if (d->splash)
-        d->splash->message(message, Qt::AlignLeft, Qt::white);
+        d->splash->message(message);
     else if (d->progressDialog)
     {
         d->progressDialog->addedAction(d->actionPixmap(), message);
@@ -571,7 +571,7 @@ void ScanController::slotErrorFromInitialization(const QString &errorMessage)
     // main thread
     QString message = i18n("Error");
     if (d->splash)
-        d->splash->message(message, Qt::AlignLeft, Qt::white);
+        d->splash->message(message);
     else if (d->progressDialog)
         d->progressDialog->addedAction(d->errorPixmap(), message);
 
