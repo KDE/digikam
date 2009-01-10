@@ -27,7 +27,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 179933 : Context menu of top "My Albums" isn't right.
 016 ==> 155593 : Add checkbox for disabling call to utime().
 017 ==> 180126 : digiKam does not display pictures if one clicks on the bar representing the number of pictures for a month.
-018 ==> 
+018 ==> 180196 : digiKam fails to compile on mac os x leopard.
+019 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
