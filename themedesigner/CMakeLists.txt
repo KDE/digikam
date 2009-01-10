@@ -85,8 +85,12 @@ KDE4_ADD_EXECUTABLE(digikamthemedesigner ${digikamthemedesigner_SRCS})
 TARGET_LINK_LIBRARIES(digikamthemedesigner 
                       digikamcore 
                       digikamdatabase 
+                      ${KDE4_KPARTS_LIBS}
+                      ${KDE4_PHONON_LIBS}
+                      ${KDE4_KHTML_LIBS}
                       ${KDE4_KUTILS_LIBS}
                       ${KIPI_LIBRARIES}
+                      ${STRIGI_LIBRARIES}
                       ${GPHOTO2_LIBRARIES}
                      )
 
