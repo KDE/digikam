@@ -16,14 +16,18 @@ SET(DIGIKAM_PATCH_VERSION "0")
 # "-beta2" : beta2 release.
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
-# ""       : final relase. Can be used in production.
+# ""       : final release. Can be used in production.
 SET(DIGIKAM_SUFFIX_VERSION "-rc1")
 
 # ==================================================================================================
 # Set env. variables accordinly.
 
+SET(DIGIKAM_VERSION_SHORT
+    "${DIGIKAM_MAJOR_VERSION}.${DIGIKAM_MINOR_VERSION}.${DIGIKAM_PATCH_VERSION}"
+   )
+
 SET(DIGIKAM_VERSION_STRING
-    "${DIGIKAM_MAJOR_VERSION}.${DIGIKAM_MINOR_VERSION}.${DIGIKAM_PATCH_VERSION}${DIGIKAM_SUFFIX_VERSION}"
+    "${DIGIKAM_VERSION_SHORT}${DIGIKAM_SUFFIX_VERSION}"
    )
 
 # ==================================================================================================

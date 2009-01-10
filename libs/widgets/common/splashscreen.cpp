@@ -62,7 +62,7 @@ public:
         state           = 0;
         messageColor    = Qt::lightGray;
         messageAlign    = Qt::AlignLeft;
-        version         = QString(digikam_version);
+        version         = QString(digikam_version_short);
         versionColor    = Qt::white;
         versionBrush    = QBrush(QColor(92, 92, 92, 220));
     }

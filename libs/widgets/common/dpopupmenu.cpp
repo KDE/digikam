@@ -109,7 +109,7 @@ void DPopupMenu::generateSidePixmap()
         QFontMetrics fontMt(fnt);
         p.setFont(fnt);
         p.setPen(Qt::white);
-        p.drawText(-444, 12, QString(digikam_version));
+        p.drawText(-444, 12, QString(digikam_version_short));
     }
 }
 
