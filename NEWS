@@ -38,10 +38,10 @@ NEW FEATURES:
 General        : All batch tools as rebuild all thumbs or sync metadata with database use modeless dialogs.
 General        : Icon-View and Thumbbar items use a smart 3D decorative border.
 General        : Fonts used by Icon-View, Folder-View, and Tooltip can be customized.
-AlbumGui       : Add Tool tips to display Physical albums properties.
-CameraGui      : Add Icon-View items Tooltip.
-CameraGui      : List camera item in more suitable order: more recent items on the top, older one on the bottom.
-CameraGui      : Animation over camera icon view during camera download.
+AlbumGUI       : Add Tool tips to display Physical albums properties.
+CameraGUI      : Add Icon-View items Tooltip.
+CameraGUI      : List camera item in more suitable order: more recent items on the top, older one on the bottom.
+CameraGUI      : Animation over camera icon view during camera download.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
