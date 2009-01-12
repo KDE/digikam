@@ -162,17 +162,9 @@ void SplashScreen::drawContents(QPainter* p)
 
     p->setPen(d->messageColor);
 
+    // We use a device dependant font with a fixed size.
     QFont fnt(KGlobalSettings::generalFont());
-    int fntSize = fnt.pointSize();
-    if (fntSize > 0)
-    {
-        fnt.setPointSize(fntSize-2);
-    }
-    else
-    {
-        fntSize = fnt.pixelSize();
-        fnt.setPixelSize(fntSize-2);
-    }
+    fnt.setPixelSize(10);
     p->setFont(fnt);
 
     QRect r = rect();
