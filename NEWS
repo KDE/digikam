@@ -28,7 +28,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 016 ==> 155593 : Add checkbox for disabling call to utime().
 017 ==> 180126 : digiKam does not display pictures if one clicks on the bar representing the number of pictures for a month.
 018 ==> 180196 : digiKam fails to compile on mac os x leopard.
-019 ==> 
+019 ==> 180447 : Images imported into wrong folder.
+020 ==> 180003 : when creating a new folder where download new photoes the parent album remains selected.
+021 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
