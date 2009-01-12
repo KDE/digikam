@@ -115,6 +115,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     d->folderView = new QTreeWidget(page);
     d->folderView->setHeaderLabels(QStringList() << i18n("My Albums"));
     d->folderView->setContextMenuPolicy(Qt::CustomContextMenu);
+    d->folderView->setSelectionMode(QAbstractItemView::SingleSelection);
 
     d->searchBar = new SearchTextBar(page, "AlbumSelectDialogSearchBar");
 
@@ -325,6 +326,7 @@ void AlbumSelectDialog::slotUser1()
     if (newItem)
     {
         d->folderView->scrollToItem(newItem);
+        d->folderView->setCurrentItem(newItem);
         newItem->setSelected(true);
     }
 }
