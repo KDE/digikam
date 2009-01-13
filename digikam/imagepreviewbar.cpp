@@ -488,7 +488,7 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
             bgPix = QPixmap(contentsRect().width(), er.height());
 
             ts   = getTileSize() + 2*getMargin() + 2*getRadius();
-            tile = QPixmap(visibleWidth(), ts);
+            tile = QPixmap(visibleWidth()-1, ts-1);
 
             y1 = (cy/ts)*ts;
             y2 = ((y1 + er.height())/ts +1)*ts;
@@ -500,7 +500,7 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
             bgPix = QPixmap(er.width(), contentsRect().height());
 
             ts   = getTileSize() + 2*getMargin() + 2*getRadius();
-            tile = QPixmap(ts, visibleHeight());
+            tile = QPixmap(ts-1, visibleWidth()-1);
 
             x1 = (cx/ts)*ts;
             x2 = ((x1 + er.width())/ts +1)*ts;
@@ -524,7 +524,7 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
                     if (item == currentItem())
                     {
                         p.setPen(QPen(te->textSelColor(), 3));
-                        p.drawRect(2, 2, tile.width()-2, tile.height()-2);
+                        p.drawRect(1, 1, tile.width()-2, tile.height()-2);
                     }
                     else
                     {
@@ -546,8 +546,7 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
                         int y = (tile.height() - pix.height())/2;
 
                         p.drawPixmap(x, y, pix);
-                        p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6, 
-                                                                       pix.height()+6),
+                        p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6, pix.height()+6),
                                                                  QColor(0, 0, 0, 128), 3));
 
                         if (item != d->ratingItem)
@@ -605,8 +604,7 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
                         int x = (tile.width() - pix.width())/2;
                         int y = (tile.height()- pix.height())/2;
                         p.drawPixmap(x, y, pix);
-                        p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6, 
-                                                                       pix.height()+6),
+                        p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6, pix.height()+6),
                                                                  QColor(0, 0, 0, 128), 3));
 
                         if (item != d->ratingItem)
