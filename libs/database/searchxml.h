@@ -71,6 +71,8 @@ namespace SearchXml
         GreaterThan,
         LessThanOrEqual,
         GreaterThanOrEqual,
+        Interval, // [a,b]
+        IntervalOpen, // (a,b)
         OneOf,
         InTree,
         NotInTree,
@@ -141,6 +143,7 @@ public:
     QStringList         valueToStringList();
 
     QList<int>          valueToIntOrIntList();
+    QList<double>       valueToDoubleOrDoubleList();
 
     /** General helper method: Reads XML a start element with the given
      *  name is found. The method goes to the next start element, and from

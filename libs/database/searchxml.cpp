@@ -242,6 +242,35 @@ QList<int> SearchXmlReader::valueToIntOrIntList()
     return list;
 }
 
+QList<double> SearchXmlReader::valueToDoubleOrDoubleList()
+{
+    QList<double> list;
+
+    // poke at next token
+    QXmlStreamReader::TokenType token = QXmlStreamReader::readNext();
+
+    // Found text? Treat text as with valueToInt(), return single element list
+    if (token == QXmlStreamReader::Characters)
+    {
+        list << text().toString().toDouble();
+        readNext();
+        return list;
+    }
+
+    // treat as with valueToIntList()
+    while (!atEnd())
+    {
+        if (token != QXmlStreamReader::StartElement || name() != "listitem")
+            break;
+
+        list << readElementText().toDouble();
+
+        token = QXmlStreamReader::readNext();
+    }
+
+    return list;
+}
+
 SearchXml::Operator SearchXmlReader::readOperator(const QString &attributeName,
                                                   SearchXml::Operator defaultOperator) const
 {
@@ -276,6 +305,10 @@ SearchXml::Relation SearchXmlReader::readRelation(const QString &attributeName,
         return SearchXml::LessThanOrEqual;
     else if (relation == "greaterthanequal")
         return SearchXml::GreaterThanOrEqual;
+    else if (relation == "interval")
+        return SearchXml::Interval;
+    else if (relation == "intervalopen")
+        return SearchXml::IntervalOpen;
     else if (relation == "oneof")
         return SearchXml::OneOf;
     else if (relation == "intree")
@@ -544,6 +577,12 @@ void SearchXmlWriter::writeRelation(const QString &attributeName, SearchXml::Rel
             break;
         case SearchXml::GreaterThanOrEqual:
             writeAttribute(attributeName, "greaterthanequal");
+            break;
+        case SearchXml::Interval:
+            writeAttribute(attributeName, "interval");
+            break;
+        case SearchXml::IntervalOpen:
+            writeAttribute(attributeName, "intervalopen");
             break;
         case SearchXml::OneOf:
             writeAttribute(attributeName, "oneof");
