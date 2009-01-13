@@ -90,7 +90,7 @@ void UndoManager::addAction(UndoAction* action)
     // All redo actions are invalid now
     clearRedoActions();
 
-    d->undoActions.push_back(action);
+    d->undoActions << action;
 
     if (typeid(*action) == typeid(UndoActionIrreversible))
     {
@@ -143,8 +143,8 @@ void UndoManager::undo()
         action->rollBack();
     }
 
-    d->undoActions.pop_back();
-    d->redoActions.push_back(action);
+    d->undoActions.removeLast();
+    d->redoActions << action;
     d->origin--;
 }
 
@@ -170,8 +170,8 @@ void UndoManager::redo()
         action->execute();
     }
 
-    d->redoActions.pop_back();
-    d->undoActions.push_back(action);
+    d->redoActions.removeLast();
+    d->undoActions << action;
     d->origin++;
 }
 
@@ -235,7 +235,7 @@ void UndoManager::getUndoHistory(QStringList &titles)
 
     for(it = d->undoActions.begin(); it != d->undoActions.end(); ++it)
     {
-        titles.push_front((*it)->getTitle());
+        titles.prepend((*it)->getTitle());
     }
 }
 
@@ -245,7 +245,7 @@ void UndoManager::getRedoHistory(QStringList &titles)
 
     for(it = d->redoActions.begin(); it != d->redoActions.end(); ++it)
     {
-        titles.push_front((*it)->getTitle());
+        titles.prepend((*it)->getTitle());
     }
 }
 
