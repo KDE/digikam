@@ -174,6 +174,7 @@ void ImageQueryBuilder::buildGroup(QString &sql, SearchXmlCachingReader &reader,
                 sql += " 1 ";
                 break;
             case SearchXml::AndNot:
+            case SearchXml::OrNot:
                 sql += " 0 ";
                 break;
         }
@@ -943,7 +944,7 @@ void ImageQueryBuilder::addSqlOperator(QString &sql, SearchXml::Operator op, boo
 {
     if (isFirst)
     {
-        if (op == SearchXml::AndNot)
+        if (op == SearchXml::AndNot || op == SearchXml::OrNot)
             sql += "NOT";
         return;
     }
@@ -958,6 +959,9 @@ void ImageQueryBuilder::addSqlOperator(QString &sql, SearchXml::Operator op, boo
             break;
         case SearchXml::AndNot:
             sql += "AND NOT";
+            break;
+        case SearchXml::OrNot:
+            sql += "OR NOT";
             break;
     }
 }

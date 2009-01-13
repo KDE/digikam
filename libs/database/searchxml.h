@@ -47,7 +47,8 @@ namespace SearchXml
     {
         And,
         Or,
-        AndNot
+        AndNot,
+        OrNot
     };
 
     enum Element
