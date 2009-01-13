@@ -691,7 +691,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     // Pop up dialog to ask user whether to move to trash
-    d->imageDeleteAction = new KAction(KIcon("user-trash"), i18n("Delete"), this);
+    d->imageDeleteAction = new KAction(KIcon("user-trash"), i18n("Move to Trash"), this);
     d->imageDeleteAction->setShortcut(Qt::Key_Delete);
     connect(d->imageDeleteAction, SIGNAL(triggered()), d->view, SLOT(slotImageDelete()));
     actionCollection()->addAction("image_delete", d->imageDeleteAction);
