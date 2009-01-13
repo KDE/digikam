@@ -208,18 +208,62 @@ public:
 
     void addIntField(const QString &name)
     {
-        sql += " (" + name + ' ';
-        ImageQueryBuilder::addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToInt();
+        if (relation == SearchXml::Interval || relation == SearchXml::IntervalOpen)
+        {
+            QList<int> values = reader.valueToIntList();
+            if (values.size() != 2)
+            {
+                kWarning() << "Relation Interval requires a list of two values";
+                return;
+            }
+            
+            sql += " (" + name + ' ';
+            ImageQueryBuilder::addSqlRelation(sql,
+                relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
+            sql += " ? AND " + name + ' ';
+            ImageQueryBuilder::addSqlRelation(sql,
+                relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
+            sql += " ?) ";
+
+            *boundValues << values.first() << values.last();
+        }
+        else
+        {
+            sql += " (" + name + ' ';
+            ImageQueryBuilder::addSqlRelation(sql, relation);
+            sql += " ?) ";
+            *boundValues << reader.valueToInt();
+        }
     }
 
     void addDoubleField(const QString &name)
     {
-        sql += " (" + name + ' ';
-        ImageQueryBuilder::addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToDouble();
+        if (relation == SearchXml::Interval || relation == SearchXml::IntervalOpen)
+        {
+            QList<double> values = reader.valueToDoubleList();
+            if (values.size() != 2)
+            {
+                kWarning() << "Relation Interval requires a list of two values";
+                return;
+            }
+
+            sql += " (" + name + ' ';
+            ImageQueryBuilder::addSqlRelation(sql,
+                relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
+            sql += " ? AND " + name + ' ';
+            ImageQueryBuilder::addSqlRelation(sql,
+                relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
+            sql += " ?) ";
+
+            *boundValues << values.first() << values.last();
+        }
+        else
+        {
+            sql += " (" + name + ' ';
+            ImageQueryBuilder::addSqlRelation(sql, relation);
+            sql += " ?) ";
+            *boundValues << reader.valueToDouble();
+        }
     }
 
     void addStringField(const QString &name)
@@ -237,7 +281,11 @@ public:
             // special case: split in < and >
             QDateTime date = QDateTime::fromString(reader.value(), Qt::ISODate);
             if (!date.isValid())
+            {
+                kWarning() << "Date" << reader.value() << "is invalid";
                 return;
+            }
+
             QDateTime startDate, endDate;
             if (date.time() == QTime(0,0,0,0))
             {
@@ -272,6 +320,25 @@ public:
             sql += " ? AND " + name + ' ';
             ImageQueryBuilder::addSqlRelation(sql, SearchXml::LessThan);
             sql += " ?) ";
+        }
+        else if (relation == SearchXml::Interval || relation == SearchXml::IntervalOpen)
+        {
+            QList<QString> values = reader.valueToStringList();
+            if (values.size() != 2)
+            {
+                kWarning() << "Relation Interval requires a list of two values";
+                return;
+            }
+
+            sql += " (" + name + ' ';
+            ImageQueryBuilder::addSqlRelation(sql,
+                relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
+            sql += " ? AND " + name + ' ';
+            ImageQueryBuilder::addSqlRelation(sql,
+                relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
+            sql += " ?) ";
+
+            *boundValues << values.first() << values.last();
         }
         else
         {
@@ -360,7 +427,11 @@ public:
         {
             QStringList values = reader.valueToStringList();
             if (values.isEmpty())
+            {
+                kDebug() << "List for OneOf is empty";
                 return;
+            }
+
             QStringList simpleValues, wildcards;
             foreach(const QString &value, values)
             {
@@ -435,8 +506,12 @@ public:
             // Get a list of doubles:
             // Longitude and Latitude in (decimal) degrees
             QList<double> list = reader.valueToDoubleList();
-            if (list.size() < 2)
+            if (list.size() != 2)
+            {
+                kWarning() << "Relation 'Near' requires a list of two values";
                 return;
+            }
+
             double lon = list[0];
             double lat = list[1];
 
@@ -532,13 +607,19 @@ public:
             QStringRef type = reader.attributes().value("type");
             // Search type, currently only "rectangle"
             if (type != "rectangle")
+            {
+                kWarning() << "Relation 'Inside' supports no other type than 'rectangle'";
                 return;
+            }
 
             // Get a list of doubles:
             // Longitude and Latitude in (decimal) degrees
             QList<double> list = reader.valueToDoubleList();
-            if (list.size() < 4)
+            if (list.size() != 4)
+            {
+                kWarning() << "Relation 'Inside' requires a list of four values";
                 return;
+            }
             // the list contains (lon1,lat1), (lon2,lat2) in this order,
             // like (x,y), (right,bottom) of a rectangle,
             // or like (West,North), (East,South),
@@ -594,7 +675,10 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader,
             QList<int> ids = reader.valueToIntOrIntList();
 
             if (ids.isEmpty())
+            {
+                kDebug() << "Relation 'InTree', name 'albumid': No values given";
                 return;
+            }
 
             sql += "(Images.album IN "
                    "   (SELECT DISTINCT id "
@@ -654,7 +738,10 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader,
             QList<int> ids = reader.valueToIntOrIntList();
 
             if (ids.isEmpty())
+            {
+                kDebug() << "Relation 'InTree', name 'tagid': No values given";
                 return;
+            }
 
             if (relation == SearchXml::InTree)
                 sql += " (Images.id IN ";
