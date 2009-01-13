@@ -44,6 +44,7 @@
 #include <kapplication.h>
 #include <ktoolinvocation.h>
 #include <kstandarddirs.h>
+#include <kglobalsettings.h>
 #include <klocale.h>
 
 // Local includes.
@@ -63,6 +64,12 @@ public:
         timer        = 0;
         urlLabel     = 0;
         angle        = 0;
+
+        // NOTE: rotation of logo is adapted to an exported PNG file generated from 
+        // digikam/data/pics/banner-digikam.svgz and digikam/data/pics/banner-showfoto.svgz
+        // using height of 33 pixels.
+        logoCenter   = QPoint(125, 16);
+        logoRect     = QRect(109, 0, 33, 33);
     }
 
     bool       alignOnright;
@@ -70,6 +77,9 @@ public:
     int        angle;
 
     QTimer    *timer;
+
+    QPoint     logoCenter;
+    QRect      logoRect;
 
     QPixmap    bannerPix;
     QPixmap    logoPix;
@@ -82,10 +92,18 @@ DLogoAction::DLogoAction(QObject* parent, bool alignOnright)
            : KAction(parent), d(new DLogoActionPriv)
 {
     setText("digikam.org");
-    setIcon(KIcon("digikam"));
+    if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
+    {
+        setIcon(KIcon("digikam"));
+        d->bannerPix = QPixmap(KStandardDirs::locate("data", "digikam/data/banner-digikam.png"));
+    }
+    else
+    {
+        setIcon(KIcon("showfoto"));
+        d->bannerPix = QPixmap(KStandardDirs::locate("data", "digikam/data/banner-showfoto.png"));
+    }
 
-    d->bannerPix    = QPixmap(KStandardDirs::locate("data", "digikam/data/banner-digikam.png"));
-    d->logoPix      = d->bannerPix.copy(d->bannerPix.width()-33, 0, 33, 33);
+    d->logoPix      = d->bannerPix.copy(d->logoRect);
     d->alignOnright = alignOnright;
     d->timer        = new QTimer();
 
@@ -124,10 +142,10 @@ void DLogoAction::slotTimeout()
 
     QPainter p(&d->animPix);
     p.setRenderHint(QPainter::SmoothPixmapTransform);
-    p.setClipRect(d->bannerPix.width()-33, 0, 33, 33);
-    p.translate(d->bannerPix.width()-16, 16);
+    p.setClipRect(d->logoRect);
+    p.translate(d->logoCenter);
     p.rotate(d->angle);
-    p.drawPixmap(-16, -16, d->logoPix);
+    p.drawPixmap(-d->logoCenter.y(), -d->logoCenter.y(), d->logoPix);
     p.end();
 
     if (d->urlLabel)

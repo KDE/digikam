@@ -26,6 +26,7 @@ INSTALL(FILES image-full.png
               histogram-lin.png
               histogram-log.png
               banner-digikam.png
+              banner-showfoto.png
               logo-digikam.png
               logo-gphoto.png
               logo-lcms.png
