@@ -1130,6 +1130,8 @@ void SearchFieldRangeInt::valueChanged()
 
 void SearchFieldRangeInt::reset()
 {
+    m_firstBox->setRange(m_min, m_max);
+    m_secondBox->setRange(m_min, m_max);
     m_firstBox->reset();
     m_secondBox->reset();
 }
@@ -1315,6 +1317,8 @@ void SearchFieldRangeDouble::valueChanged()
 
 void SearchFieldRangeDouble::reset()
 {
+    m_firstBox->setRange(m_min, m_max);
+    m_secondBox->setRange(m_min, m_max);
     m_firstBox->reset();
     m_secondBox->reset();
 }
