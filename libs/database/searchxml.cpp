@@ -213,6 +213,24 @@ QStringList SearchXmlReader::valueToStringList()
     return list;
 }
 
+QList<QDateTime> SearchXmlReader::valueToDateTimeList()
+{
+    QList<QDateTime> list;
+
+    while (!atEnd())
+    {
+        QXmlStreamReader::readNext();
+
+        if (name() != "listitem")
+            break;
+
+        if (isStartElement())
+            list << QDateTime::fromString(readElementText(), Qt::ISODate);
+    }
+
+    return list;
+}
+
 QList<int> SearchXmlReader::valueToIntOrIntList()
 {
     QList<int> list;
@@ -505,6 +523,15 @@ void SearchXmlWriter::writeValue(const QList<double> &valueList, int precision)
     foreach(double i, valueList)
     {
         writeTextElement(listitem, QString::number(i, 'g', precision));
+    }
+}
+
+void SearchXmlWriter::writeValue(const QList<QDateTime> &valueList)
+{
+    QString listitem("listitem");
+    foreach(const QDateTime &dt, valueList)
+    {
+        writeTextElement(listitem, dt.toString(Qt::ISODate));
     }
 }
 
@@ -933,6 +960,17 @@ QList<double> SearchXmlCachingReader::valueToDoubleList()
     return doubleList;
 }
 
+QList<QDateTime> SearchXmlCachingReader::valueToDateTimeList()
+{
+    // with no QVariant support for QList<QDateTime>,
+    // we convert here from string list (equivalent result)
+    QStringList list = valueToStringList();
+    QList<QDateTime> doubleList;
+    foreach (const QString &s, list)
+        doubleList << QDateTime::fromString(s, Qt::ISODate);
+    return doubleList;
+}
+
 QStringList SearchXmlCachingReader::valueToStringList()
 {
     if (!m_readValue)
@@ -960,6 +998,25 @@ QList<int> SearchXmlCachingReader::valueToIntOrIntList()
     foreach (const QVariant &var, varList)
         intList << var.toInt();
     return intList;
+}
+
+QList<double> SearchXmlCachingReader::valueToDoubleOrDoubleList()
+{
+    if (!m_readValue)
+    {
+        QList<double> doubleList = SearchXmlReader::valueToDoubleOrDoubleList();
+        QList<QVariant> varList;
+        foreach(double v, doubleList)
+            varList << v;
+        m_value = varList;
+        m_readValue = true;
+        return doubleList;
+    }
+    QList<double> doubleList;
+    QList<QVariant> varList = m_value.toList();
+    foreach (const QVariant &var, varList)
+        doubleList << var.toDouble();
+    return doubleList;
 }
 
 } // namespace Digikam

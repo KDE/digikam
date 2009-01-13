@@ -141,6 +141,7 @@ public:
     QList<qlonglong>    valueToLongLongList();
     QList<double>       valueToDoubleList();
     QStringList         valueToStringList();
+    QList<QDateTime>    valueToDateTimeList();
 
     QList<int>          valueToIntOrIntList();
     QList<double>       valueToDoubleOrDoubleList();
@@ -209,6 +210,7 @@ public:
     void writeValue(const QList<qlonglong> &valueList);
     void writeValue(const QList<double> &valueList, int precision = 8);
     void writeValue(const QStringList &valueList);
+    void writeValue(const QList<QDateTime> &valueList);
 
     /** Finish writing the current field.
      *  You shall call this method before adding another field, or closing the group.
@@ -322,7 +324,9 @@ public:
     QList<qlonglong>    valueToLongLongList();
     QList<double>       valueToDoubleList();
     QStringList         valueToStringList();
+    QList<QDateTime>    valueToDateTimeList();
     QList<int>          valueToIntOrIntList();
+    QList<double>       valueToDoubleOrDoubleList();
 
 protected:
 
