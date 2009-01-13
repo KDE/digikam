@@ -337,7 +337,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
             bgPix = QPixmap(er.width(), contentsRect().height());
 
             ts   = getTileSize() + 2*getMargin() + 2*getRadius();
-            tile = QPixmap(ts-1, visibleWidth()-1);
+            tile = QPixmap(ts-1, visibleHeight()-1);
 
             x1 = (cx/ts)*ts;
             x2 = ((x1 + er.width())/ts +1)*ts;
