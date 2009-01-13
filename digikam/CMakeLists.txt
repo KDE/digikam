@@ -193,8 +193,14 @@ TARGET_LINK_LIBRARIES(digikam
                       ${KDE4_PHONON_LIBS}
                       ${KDE4_KHTML_LIBS}
                       ${KDE4_KUTILS_LIBS}
+                      ${KDE4_SOLID_LIBS}
                       ${KIPI_LIBRARIES}
+                      ${KEXIV2_LIBRARIES}
+                      ${KDCRAW_LIBRARIES}
+                      ${QT_QTSQL_LIBRARY}
+                      ${QT_QT3SUPPORT_LIBRARY}
                       ${STRIGI_LIBRARIES}
+                      ${LCMS_LIBRARIES}
                       ${GPHOTO2_LIBRARIES}
                       digikamcore
                       digikamdatabase
@@ -203,6 +209,10 @@ TARGET_LINK_LIBRARIES(digikam
 IF(KDEPIMLIBS_FOUND)
   TARGET_LINK_LIBRARIES(digikam ${KDE4_KABC_LIBS})
 ENDIF(KDEPIMLIBS_FOUND)
+
+IF(MARBLEWIDGET_FOUND)
+  TARGET_LINK_LIBRARIES(digikam ${LIBMARBLEWIDGET_LIBRARY})
+ENDIF(MARBLEWIDGET_FOUND)
 
 INSTALL(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
 

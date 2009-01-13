@@ -89,14 +89,23 @@ TARGET_LINK_LIBRARIES(digikamthemedesigner
                       ${KDE4_PHONON_LIBS}
                       ${KDE4_KHTML_LIBS}
                       ${KDE4_KUTILS_LIBS}
+                      ${KDE4_SOLID_LIBS}
                       ${KIPI_LIBRARIES}
+                      ${KEXIV2_LIBRARIES}
+                      ${KDCRAW_LIBRARIES}
+                      ${QT_QT3SUPPORT_LIBRARY}
                       ${STRIGI_LIBRARIES}
+                      ${LCMS_LIBRARIES}
                       ${GPHOTO2_LIBRARIES}
                      )
 
 IF(KDEPIMLIBS_FOUND)
     TARGET_LINK_LIBRARIES(digikamthemedesigner ${KDE4_KABC_LIBS})
 ENDIF(KDEPIMLIBS_FOUND)
+
+IF(MARBLEWIDGET_FOUND)
+    TARGET_LINK_LIBRARIES(digikamthemedesigner ${LIBMARBLEWIDGET_LIBRARY})
+ENDIF(MARBLEWIDGET_FOUND)
 
 INSTALL(TARGETS digikamthemedesigner ${INSTALL_TARGETS_DEFAULT_ARGS})
 
