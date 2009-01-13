@@ -543,14 +543,14 @@ void SetupCollectionModel::addCollection(int category)
 
     // Create a dialog that displays volume information and allows to change the name of the collection
     KDialog *dialog = new KDialog(m_dialogParentWidget);
-    dialog->setCaption( "Adding Collection" );
+    dialog->setCaption( i18n("Adding Collection") );
     dialog->setButtons( KDialog::Ok | KDialog::Cancel );
 
     QWidget *mainWidget = new QWidget(dialog);
     dialog->setMainWidget(mainWidget);
 
     QLabel *nameLabel = new QLabel;
-    nameLabel->setText("Your new collection will be created with this name:");
+    nameLabel->setText(i18n("Your new collection will be created with this name:"));
     nameLabel->setWordWrap(true);
 
     // lineedit for collection name
