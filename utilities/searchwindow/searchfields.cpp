@@ -749,77 +749,112 @@ void SearchFieldRangeDate::setBetweenText(const QString &between)
 void SearchFieldRangeDate::read(SearchXmlCachingReader &reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
-    QDateTime dt = reader.valueToDateTime();
-    if (dt.time() == QTime(0,0,0,0))
+    if (relation == SearchXml::Interval || relation == SearchXml::IntervalOpen)
     {
-        if (relation == SearchXml::GreaterThanOrEqual)
-        {
-            m_firstDateEdit->setDate(dt.date());
-            if (m_type == DateTime)
-                m_firstTimeEdit->setTime(QTime(0,0,0,0));
-        }
-        else if (relation == SearchXml::GreaterThan)
-        {
-            dt.addDays(1);
-            m_firstDateEdit->setDate(dt.date());
-            if (m_type == DateTime)
-                m_firstTimeEdit->setTime(QTime(0,0,0,0));
-        }
-        else if (relation == SearchXml::LessThanOrEqual)
-        {
-            m_secondDateEdit->setDate(dt.date());
-            if (m_type == DateTime)
-                m_secondTimeEdit->setTime(QTime(0,0,0,0));
-        }
-        else if (relation == SearchXml::LessThan)
-        {
-            dt.addDays(-1);
-            m_secondDateEdit->setDate(dt.date());
-            if (m_type == DateTime)
-                m_secondTimeEdit->setTime(QTime(0,0,0,0));
-        }
+        QList<QDateTime> dates = reader.valueToDateTimeList();
+        if (dates.size() != 2)
+            return;
+
+        m_firstDateEdit->setDate(dates.first().date());
+        if (m_type == DateTime)
+            m_firstTimeEdit->setTime(dates.first().time());
+
+        m_secondDateEdit->setDate(dates.last().date());
+        if (m_type == DateTime)
+            m_secondTimeEdit->setTime(dates.last().time());
     }
     else
     {
-        if (relation == SearchXml::GreaterThanOrEqual || relation == SearchXml::GreaterThan)
+        QDateTime dt = reader.valueToDateTime();
+        if (dt.time() == QTime(0,0,0,0))
         {
-            m_firstDateEdit->setDate(dt.date());
-            if (m_type == DateTime)
-                m_firstTimeEdit->setTime(dt.time());
+            if (relation == SearchXml::GreaterThanOrEqual)
+            {
+                m_firstDateEdit->setDate(dt.date());
+                if (m_type == DateTime)
+                    m_firstTimeEdit->setTime(QTime(0,0,0,0));
+            }
+            else if (relation == SearchXml::GreaterThan)
+            {
+                dt.addDays(1);
+                m_firstDateEdit->setDate(dt.date());
+                if (m_type == DateTime)
+                    m_firstTimeEdit->setTime(QTime(0,0,0,0));
+            }
+            else if (relation == SearchXml::LessThanOrEqual)
+            {
+                m_secondDateEdit->setDate(dt.date());
+                if (m_type == DateTime)
+                    m_secondTimeEdit->setTime(QTime(0,0,0,0));
+            }
+            else if (relation == SearchXml::LessThan)
+            {
+                dt.addDays(-1);
+                m_secondDateEdit->setDate(dt.date());
+                if (m_type == DateTime)
+                    m_secondTimeEdit->setTime(QTime(0,0,0,0));
+            }
         }
-        else if (relation == SearchXml::LessThanOrEqual || relation == SearchXml::LessThan)
+        else
         {
-            m_secondDateEdit->setDate(dt.date());
-            if (m_type == DateTime)
-                m_secondTimeEdit->setTime(dt.time());
+            if (relation == SearchXml::GreaterThanOrEqual || relation == SearchXml::GreaterThan)
+            {
+                m_firstDateEdit->setDate(dt.date());
+                if (m_type == DateTime)
+                    m_firstTimeEdit->setTime(dt.time());
+            }
+            else if (relation == SearchXml::LessThanOrEqual || relation == SearchXml::LessThan)
+            {
+                m_secondDateEdit->setDate(dt.date());
+                if (m_type == DateTime)
+                    m_secondTimeEdit->setTime(dt.time());
+            }
         }
     }
 }
 
 void SearchFieldRangeDate::write(SearchXmlWriter &writer)
 {
-    QDate date = m_firstDateEdit->date();
-    if (date.isValid())
+    if (m_firstDateEdit->date().isValid() && m_secondDateEdit->date().isValid())
     {
-        writer.writeField(m_name, SearchXml::GreaterThanOrEqual);
-        QDateTime dt(date);
+        writer.writeField(m_name, SearchXml::Interval);
+        QList<QDateTime> dates;
+        QDateTime date(m_firstDateEdit->date());
         if (m_type == DateTime)
-            dt.setTime(m_firstTimeEdit->time());
-        writer.writeValue(dt);
+            date.setTime(m_firstTimeEdit->time());
+        dates << date;
+        date = QDateTime(m_secondDateEdit->date());
+        if (m_type == DateTime)
+            date.setTime(m_secondTimeEdit->time());
+        dates << date;
+        writer.writeValue(dates);
         writer.finishField();
     }
-
-    date = m_secondDateEdit->date();
-    if (date.isValid())
+    else
     {
-        writer.writeField(m_name, SearchXml::LessThan);
-        QDateTime dt(date);
-        if (m_type == DateTime)
-            dt.setTime(m_secondTimeEdit->time());
-        else
-            dt = dt.addDays(1); // include whole day
-        writer.writeValue(dt);
-        writer.finishField();
+        QDate date = m_firstDateEdit->date();
+        if (date.isValid())
+        {
+            writer.writeField(m_name, SearchXml::GreaterThanOrEqual);
+            QDateTime dt(date);
+            if (m_type == DateTime)
+                dt.setTime(m_firstTimeEdit->time());
+            writer.writeValue(dt);
+            writer.finishField();
+        }
+
+        date = m_secondDateEdit->date();
+        if (date.isValid())
+        {
+            writer.writeField(m_name, SearchXml::LessThan);
+            QDateTime dt(date);
+            if (m_type == DateTime)
+                dt.setTime(m_secondTimeEdit->time());
+            else
+                dt = dt.addDays(1); // include whole day
+                writer.writeValue(dt);
+            writer.finishField();
+        }
     }
 }
 
@@ -923,6 +958,15 @@ void SearchFieldRangeInt::read(SearchXmlCachingReader &reader)
                 m_firstBox->setFractionMagicValue(reader.valueToDouble());
                 m_secondBox->setFractionMagicValue(reader.valueToDouble());
                 break;
+            case SearchXml::Interval:
+            case SearchXml::IntervalOpen:
+            {
+                QList<int> list = reader.valueToIntList();
+                if (list.size() != 2)
+                    return;
+                m_secondBox->setFractionMagicValue(list.first());
+                m_firstBox->setFractionMagicValue(list.last());
+            }
             default:
                 break;
         }
@@ -947,6 +991,15 @@ void SearchFieldRangeInt::read(SearchXmlCachingReader &reader)
                 m_firstBox->setValue(reader.valueToInt());
                 m_secondBox->setValue(reader.valueToInt());
                 break;
+            case SearchXml::Interval:
+            case SearchXml::IntervalOpen:
+            {
+                QList<int> list = reader.valueToIntList();
+                if (list.size() != 2)
+                    return;
+                m_firstBox->setValue(list.first());
+                m_secondBox->setValue(list.last());
+            }
             default:
                 break;
         }
@@ -956,18 +1009,31 @@ void SearchFieldRangeInt::read(SearchXmlCachingReader &reader)
 void SearchFieldRangeInt::write(SearchXmlWriter &writer)
 {
     if (m_firstBox->value() != m_firstBox->minimum()
-        && m_secondBox->value() != m_secondBox->minimum()
-        && m_firstBox->value() == m_secondBox->value())
+        && m_secondBox->value() != m_secondBox->minimum())
     {
-        //TODO: This condition is never met due to the second clause.
-        // Right value is either displayed empty (minimum, greater than left)
-        // or one step larger than left
-        writer.writeField(m_name, SearchXml::Equal);
-        if (m_reciprocal)
-            writer.writeValue( 1.0 / (double)m_firstBox->value());
+        if (m_firstBox->value() != m_secondBox->value())
+        {
+            writer.writeField(m_name, SearchXml::Interval);
+            QList<int> values;
+            if (m_reciprocal)
+                values << m_secondBox->fractionMagicValue() << m_firstBox->fractionMagicValue();
+            else
+                values << m_firstBox->value() << m_secondBox->value();
+            writer.writeValue(values);
+            writer.finishField();
+        }
         else
-            writer.writeValue(m_firstBox->value());
-        writer.finishField();
+        {
+            //TODO: This condition is never met.
+            // Right value is either displayed empty (minimum, greater than left)
+            // or one step larger than left
+            writer.writeField(m_name, SearchXml::Equal);
+            if (m_reciprocal)
+                writer.writeValue(m_firstBox->fractionMagicValue());
+            else
+                writer.writeValue(m_firstBox->value());
+            writer.finishField();
+        }
     }
     else
     {
@@ -1191,20 +1257,37 @@ void SearchFieldRangeDouble::read(SearchXmlCachingReader &reader)
     SearchXml::Relation relation = reader.fieldRelation();
     if (relation == SearchXml::GreaterThanOrEqual || relation == SearchXml::GreaterThan)
         m_firstBox->setValue(reader.valueToDouble() / m_factor );
-    if (relation == SearchXml::LessThanOrEqual || relation == SearchXml::LessThan)
+    else if (relation == SearchXml::LessThanOrEqual || relation == SearchXml::LessThan)
         m_secondBox->setValue(reader.valueToDouble() / m_factor );
+    else if (relation == SearchXml::Interval || relation == SearchXml::IntervalOpen)
+    {
+        QList<double> list = reader.valueToDoubleList();
+        if (list.size() != 2)
+            return;
+        m_firstBox->setValue(list.first() / m_factor);
+        m_secondBox->setValue(list.last() / m_factor);
+    }
 }
 
 void SearchFieldRangeDouble::write(SearchXmlWriter &writer)
 {
     if (m_firstBox->value() != m_firstBox->minimum()
-        && m_secondBox->value() != m_secondBox->minimum()
-        && m_firstBox->value() == m_secondBox->value())
+        && m_secondBox->value() != m_secondBox->minimum())
     {
-        //TODO: See SearchFieldRangeInt
-        writer.writeField(m_name, SearchXml::Equal);
-        writer.writeValue(m_firstBox->value() * m_factor);
-        writer.finishField();
+        if (m_firstBox->value() != m_secondBox->value())
+        {
+            writer.writeField(m_name, SearchXml::Interval);
+            writer.writeValue(QList<double>()
+                    << (m_firstBox->value() * m_factor) << (m_secondBox->value() * m_factor));
+            writer.finishField();
+        }
+        else
+        {
+            //TODO: See SearchFieldRangeInt
+            writer.writeField(m_name, SearchXml::Equal);
+            writer.writeValue(m_firstBox->value() * m_factor);
+            writer.finishField();
+        }
     }
     else
     {
@@ -1877,6 +1960,15 @@ void SearchFieldRating::read(SearchXmlCachingReader &reader)
             m_firstBox->setRatingValue((RatingComboBox::RatingValue)reader.valueToInt());
             m_secondBox->setRatingValue((RatingComboBox::RatingValue)reader.valueToInt());
             break;
+        case SearchXml::Interval:
+        case SearchXml::IntervalOpen:
+        {
+            QList<int> list = reader.valueToIntList();
+            if (list.size() != 2)
+                return;
+            m_firstBox->setRatingValue((RatingComboBox::RatingValue)list.first());
+            m_secondBox->setRatingValue((RatingComboBox::RatingValue)list.last());
+        }
         default:
             break;
     }
@@ -1898,6 +1990,12 @@ void SearchFieldRating::write(SearchXmlWriter &writer)
     {
         writer.writeField(m_name, SearchXml::Equal);
         writer.writeValue(first);
+        writer.finishField();
+    }
+    else if (first != RatingComboBox::Null && second != RatingComboBox::Null)
+    {
+        writer.writeField(m_name, SearchXml::Interval);
+        writer.writeValue(QList<int>() << first << second);
         writer.finishField();
     }
     else
