@@ -363,6 +363,19 @@ void SearchView::setTheme()
             "   color: "
               + ThemeEngine::instance()->textSelColor().name() + ';' +
             " } "
+            "#SearchGroupLabel_SimpleLabel "
+            " { font-size: "
+              + fontSizeLarger + ';' +
+            "   color: "
+              + ThemeEngine::instance()->textSelColor().name() + ';' +
+            " } "
+            "#SearchGroupLabel_GroupOpLabel "
+            " { font-weight: bold; font-size: "
+              + fontSizeLarger + ';' +
+            "   color: "
+              + ThemeEngine::instance()->textSelColor().name() + ';' +
+            "   text-decoration: underline; "
+            " } "
             "#SearchGroupLabel_CheckBox "
             " { color: "
               + ThemeEngine::instance()->textSelColor().name() + ';' +
@@ -372,6 +385,13 @@ void SearchView::setTheme()
               + ThemeEngine::instance()->textSelColor().name() + ';' +
             "   font-style: italic; "
             "   text-decoration: underline; "
+            " } "
+            "#SearchGroupLabel_OptionsLabel "
+            " { color: "
+              + ThemeEngine::instance()->textSelColor().name() + ';' +
+            "   font-style: italic; "
+            "   text-decoration: underline; font-size: "
+              + fontSizeSmaller + ';' +
             " } "
             "#SearchFieldGroupLabel_Label "
             " { color: "

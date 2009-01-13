@@ -36,7 +36,9 @@
 
 class QComboBox;
 class QGridLayout;
+class QLabel;
 class QRadioButton;
+class QStackedLayout;
 class QVBoxLayout;
 
 namespace Digikam
@@ -112,17 +114,35 @@ signals:
 
     void removeClicked();
 
+protected slots:
+
+    void toggleShowOptions();
+    void toggleGroupOperator();
+    void boxesToggled();
+
 protected:
 
     virtual void paintEvent(QPaintEvent *ev);
 
+    void setExtended(bool extended);
+    void adjustOperatorOptions();
+    void updateGroupLabel();
+
 private:
 
+    bool                           m_extended;
+    SearchXml::Operator            m_groupOp;
+    SearchXml::Operator            m_fieldOp;
     QGridLayout                   *m_layout;
-    QComboBox                     *m_groupOpBox;
+    //QComboBox                     *m_groupOpBox;
+    SearchClickLabel              *m_groupOpLabel;
     QRadioButton                  *m_allBox;
     QRadioButton                  *m_anyBox;
+    QRadioButton                  *m_noneBox;
+    QRadioButton                  *m_oneNotBox;
+    SearchClickLabel              *m_optionsLabel;
     SearchClickLabel              *m_removeLabel;
+    QStackedLayout                *m_stackedLayout;
     SearchViewThemedPartsCache    *m_themeCache;
 };
 
