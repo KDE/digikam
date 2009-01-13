@@ -32,7 +32,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 180003 : when creating a new folder where download new photoes the parent album remains selected.
 021 ==> 179012 : Advanced search missing negative conditions (changed from 0.9).
 022 ==> 180336 : UNDO/REDO not working right when editing images.
-023 ==> 
+023 ==> 180489 : "Delete" menu action in the "Image" menu should say "Move to Trash".
+024 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
