@@ -126,6 +126,7 @@ void UndoManager::undo()
         int bytesDepth = d->dimgiface->bytesDepth();
         uchar* data    = d->dimgiface->getImage();
 
+        d->undoCache->erase(d->undoActions.size() + 1);
         d->undoCache->putData(d->undoActions.size() + 1, w, h, bytesDepth, data);
 
         // And now, undo the action
