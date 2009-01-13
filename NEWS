@@ -30,8 +30,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 180196 : digiKam fails to compile on mac os x leopard.
 019 ==> 180447 : Images imported into wrong folder.
 020 ==> 180003 : when creating a new folder where download new photoes the parent album remains selected.
-021 ==> 179012 : Advanced search missing negative conditions (changed from 0.9)
-022 ==> 
+021 ==> 179012 : Advanced search missing negative conditions (changed from 0.9).
+022 ==> 180336 : UNDO/REDO not working right when editing images.
+023 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
