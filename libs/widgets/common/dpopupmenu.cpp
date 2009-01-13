@@ -28,22 +28,22 @@
 
 // Qt includes.
 
+#include <QFont>
+#include <QFontMetrics>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QPixmap>
 #include <QResizeEvent>
 #include <QStyle>
 #include <QStyleOptionFrame>
-#include <QFont>
-#include <QFontMetrics>
 
 // KDE includes.
 
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcomponentdata.h>
-#include <kglobalsettings.h>
 #include <kglobal.h>
+#include <kglobalsettings.h>
 #include <kiconeffect.h>
 #include <kstandarddirs.h>
 
@@ -54,72 +54,98 @@
 namespace Digikam
 {
 
-static QImage s_dpopupmenu_sidePixmap;
-static QColor s_dpopupmenu_sidePixmapColor;
+struct DPopupMenuPriv
+{
+    int gradientWidth;
+    QFont fontAppName;
+    QFont fontVersion;
+};
 
 DPopupMenu::DPopupMenu(QWidget* parent)
-          : KMenu(parent)
+          : KMenu(parent), d(new DPopupMenuPriv)
 {
-    // Must be initialized so that we know the size on first invocation
-    if (s_dpopupmenu_sidePixmap.isNull())
-        generateSidePixmap();
+    d->fontAppName = KGlobalSettings::generalFont();
+    d->fontVersion = KGlobalSettings::generalFont();
 
-    setContentsMargins(sidePixmapWidth(), 0, 0, 0);
+    d->fontAppName.setBold(true);
+    d->fontAppName.setPixelSize(14);
+    d->fontVersion.setBold(false);
+    d->fontVersion.setPixelSize(11);
+
+    // has to be an odd number to get the text centered
+    d->gradientWidth = d->fontAppName.pixelSize() + 3;
+
+    setContentsMargins(d->gradientWidth, 0, 0, 0);
 }
 
 DPopupMenu::~DPopupMenu()
 {
+    delete d;
 }
 
-int DPopupMenu::sidePixmapWidth() const
+void DPopupMenu::renderSidebarGradient(QPainter *p)
 {
-    return s_dpopupmenu_sidePixmap.width();
-}
+    p->setRenderHint(QPainter::QPainter::TextAntialiasing);
+    p->setPen(Qt::white);
 
-void DPopupMenu::generateSidePixmap()
-{
-    const QColor newColor = calcPixmapColor();
-
-    if (newColor != s_dpopupmenu_sidePixmapColor)
-    {
-        s_dpopupmenu_sidePixmapColor = newColor;
-
-        if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
-            s_dpopupmenu_sidePixmap.load(KStandardDirs::locate("data","digikam/data/menusidepix-digikam.png"));
-        else
-            s_dpopupmenu_sidePixmap.load(KStandardDirs::locate("data","showfoto/data/menusidepix-showfoto.png"));
-
-        KIconEffect::colorize(s_dpopupmenu_sidePixmap, newColor, 1.0);
-
-        // Draw version string.
-
-        QPainter p(&s_dpopupmenu_sidePixmap);
-        p.rotate(-90.0);
-        QFont fnt(KGlobalSettings::generalFont());
-        int fntSize = fnt.pointSize();
-        if (fntSize > 0)
-        {
-            fnt.setPointSize(fntSize-2);
-        }
-        else
-        {
-            fntSize = fnt.pixelSize();
-            fnt.setPixelSize(fntSize-2);
-        }
-        QFontMetrics fontMt(fnt);
-        p.setFont(fnt);
-        p.setPen(Qt::white);
-        p.drawText(-444, 12, QString(digikam_version_short));
-    }
-}
-
-QRect DPopupMenu::sideImageRect() const
-{
     int frameWidth = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, this);
-    return QStyle::visualRect(layoutDirection(), rect(),
-                              QRect(frameWidth, frameWidth,
-                                    s_dpopupmenu_sidePixmap.width(),
-                                    height() - 2*frameWidth));
+    QRect drawRect = QStyle::visualRect(layoutDirection(), rect(),
+                                        QRect(frameWidth, frameWidth,
+                                              d->gradientWidth, height() - 2*frameWidth));
+    p->setClipRect(drawRect);
+
+    // ----------------------------------------
+
+    // draw gradient
+    QLinearGradient linearGrad;
+    linearGrad.setCoordinateMode(QGradient::ObjectBoundingMode);
+    linearGrad.setStart(0.0, 0.0);
+    linearGrad.setFinalStop(0.0, 1.0);
+    linearGrad.setColorAt(0, QColor(255, 255, 255, 25));
+    linearGrad.setColorAt(1, QColor(98, 98, 98));
+
+    // FIXME: this doesn't seem to work in 0.10.x versions, so I disable it for now
+//    linearGrad.setColorAt(1, calcPixmapColor());
+
+    p->fillRect(drawRect, QBrush(linearGrad));
+
+    // ----------------------------------------
+
+    p->resetTransform();
+    p->translate(drawRect.bottomLeft());
+    p->rotate(-90.0);
+
+    // ----------------------------------------
+
+    QString appName;
+    QFontMetrics fontMt(d->fontAppName);
+    QRect fontRect;
+
+    if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
+    {
+        appName = QString("digiKam");
+        fontRect = QRect(4, 0, drawRect.height(), drawRect.width());
+    }
+    else
+    {
+        appName = QString("showFoto");
+        int h = fontMt.ascent();
+        int shift = ((drawRect.width() - h) / 2) + 1;
+        fontRect = QRect(4, shift, drawRect.height(), h);
+    }
+
+    // draw app name
+    p->setFont(d->fontAppName);
+    p->drawText(fontRect, Qt::AlignLeft|Qt::AlignVCenter, appName);
+
+    // ----------------------------------------
+
+    // draw version string
+    fontRect.setX(fontMt.width(appName) + 11);
+    fontRect.setY(3);
+
+    p->setFont(d->fontVersion);
+    p->drawText(fontRect, Qt::AlignLeft|Qt::AlignVCenter, QString(digikam_version_short));
 }
 
 QColor DPopupMenu::calcPixmapColor()
@@ -163,22 +189,22 @@ QColor DPopupMenu::calcPixmapColor()
 
 void DPopupMenu::setMinimumSize(const QSize & s)
 {
-    KMenu::setMinimumSize(s.width() + s_dpopupmenu_sidePixmap.width(), s.height());
+    KMenu::setMinimumSize(s.width() + d->gradientWidth, s.height());
 }
 
 void DPopupMenu::setMaximumSize(const QSize & s)
 {
-    KMenu::setMaximumSize(s.width() + s_dpopupmenu_sidePixmap.width(), s.height());
+    KMenu::setMaximumSize(s.width() + d->gradientWidth, s.height());
 }
 
 void DPopupMenu::setMinimumSize(int w, int h)
 {
-    KMenu::setMinimumSize(w + s_dpopupmenu_sidePixmap.width(), h);
+    KMenu::setMinimumSize(w + d->gradientWidth, h);
 }
 
 void DPopupMenu::setMaximumSize(int w, int h)
 {
-    KMenu::setMaximumSize(w + s_dpopupmenu_sidePixmap.width(), h);
+    KMenu::setMaximumSize(w + d->gradientWidth, h);
 }
 
 void DPopupMenu::paintEvent(QPaintEvent* e)
@@ -187,11 +213,7 @@ void DPopupMenu::paintEvent(QPaintEvent* e)
 
     {
         // scope for QPainter object
-
-        generateSidePixmap();
-
         QPainter p(this);
-        p.setClipRegion(e->region());
 
         QStyleOptionFrame frOpt;
         frOpt.init(this);
@@ -199,15 +221,7 @@ void DPopupMenu::paintEvent(QPaintEvent* e)
         frOpt.midLineWidth = 0;
         style()->drawPrimitive(QStyle::PE_FrameMenu, &frOpt, &p, this);
 
-        QRect r = sideImageRect();
-        r.setTop(r.bottom()-s_dpopupmenu_sidePixmap.height()+1);
-        if (r.intersects( e->rect()))
-        {
-            QRect drawRect = r.intersect(e->rect()).intersect( sideImageRect());
-            QRect pixRect  = drawRect;
-            pixRect.translate(-r.left(), -r.top());
-            p.drawImage(drawRect.topLeft(), s_dpopupmenu_sidePixmap, pixRect);
-        }
+        renderSidebarGradient(&p);
     }
 }
 

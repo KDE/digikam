@@ -48,6 +48,8 @@ class QSize;
 namespace Digikam
 {
 
+struct DPopupMenuPriv;
+
 class DIGIKAM_EXPORT DPopupMenu : public KMenu
 {
 
@@ -56,15 +58,10 @@ public:
     DPopupMenu(QWidget* parent=0);
     ~DPopupMenu();
 
-    int sidePixmapWidth() const;
-
 private:
 
     /** Loads and prepares the sidebar image */
-    void generateSidePixmap();
-
-    /** Returns the available size for the image */
-    QRect sideImageRect() const;
+    void renderSidebarGradient(QPainter* p);
 
     /** Calculates a color that matches the current colorscheme */
     QColor calcPixmapColor();
@@ -75,6 +72,10 @@ private:
     void setMaximumSize(int w, int h);
 
     void paintEvent(QPaintEvent* e);
+
+private:
+
+    DPopupMenuPriv* const d;
 };
 
 }  // namespace Digikam
