@@ -46,6 +46,7 @@
 #include <kglobalsettings.h>
 #include <kiconeffect.h>
 #include <kstandarddirs.h>
+#include <kiconloader.h>
 
 // Local includes.
 
@@ -54,11 +55,16 @@
 namespace Digikam
 {
 
-struct DPopupMenuPriv
+class DPopupMenuPriv
 {
-    int gradientWidth;
-    QFont fontAppName;
-    QFont fontVersion;
+public:
+
+    DPopupMenuPriv(){};
+
+    int     gradientWidth;
+
+    QFont   fontAppName;
+    QFont   fontVersion;
 };
 
 DPopupMenu::DPopupMenu(QWidget* parent)
@@ -117,31 +123,41 @@ void DPopupMenu::renderSidebarGradient(QPainter *p)
 
     // ----------------------------------------
 
+    QPixmap appIcon;
     QString appName;
     QFontMetrics fontMt(d->fontAppName);
     QRect fontRect;
 
     if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
     {
-        appName = QString("digiKam");
-        fontRect = QRect(4, 0, drawRect.height(), drawRect.width());
+        appIcon  = SmallIcon("digikam", d->fontAppName.pixelSize());
+        appName  = QString("digiKam");
+        fontRect = QRect(appIcon.width() + 8, 0, fontMt.width(appName), drawRect.width());
     }
     else
     {
-        appName = QString("showFoto");
-        int h = fontMt.ascent();
+        appIcon   = SmallIcon("showfoto", d->fontAppName.pixelSize());
+        appName   = QString("showFoto");
+        int h     = fontMt.ascent();
         int shift = ((drawRect.width() - h) / 2) + 1;
-        fontRect = QRect(4, shift, drawRect.height(), h);
+        fontRect  = QRect(appIcon.width() + 8, shift, fontMt.width(appName), h);
     }
 
-    // draw app name
+    // ----------------------------------------
+    // draw application icon.
+
+    p->drawPixmap(4, 1, appIcon);
+
+    // ----------------------------------------
+    // draw app name.
+
     p->setFont(d->fontAppName);
     p->drawText(fontRect, Qt::AlignLeft|Qt::AlignVCenter, appName);
 
     // ----------------------------------------
+    // draw version string.
 
-    // draw version string
-    fontRect.setX(fontMt.width(appName) + 11);
+    fontRect.moveLeft(fontRect.right() + 8);
     fontRect.setY(3);
 
     p->setFont(d->fontVersion);
@@ -187,12 +203,12 @@ QColor DPopupMenu::calcPixmapColor()
     return color;
 }
 
-void DPopupMenu::setMinimumSize(const QSize & s)
+void DPopupMenu::setMinimumSize(const QSize& s)
 {
     KMenu::setMinimumSize(s.width() + d->gradientWidth, s.height());
 }
 
-void DPopupMenu::setMaximumSize(const QSize & s)
+void DPopupMenu::setMaximumSize(const QSize& s)
 {
     KMenu::setMaximumSize(s.width() + d->gradientWidth, s.height());
 }

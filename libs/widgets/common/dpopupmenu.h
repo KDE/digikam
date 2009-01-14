@@ -48,7 +48,7 @@ class QSize;
 namespace Digikam
 {
 
-struct DPopupMenuPriv;
+class DPopupMenuPriv;
 
 class DIGIKAM_EXPORT DPopupMenu : public KMenu
 {
