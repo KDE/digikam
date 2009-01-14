@@ -1166,18 +1166,19 @@ void DigikamApp::slotAboutToShowForwardMenu()
 
 void DigikamApp::slotAlbumSelected(bool val)
 {
+    // NOTE: val is true when a PAlbum is selected.
+
     Album *album = AlbumManager::instance()->currentAlbum();
 
     if(album && !val)
     {
-        // No PAlbum is selected
+        // Not a PAlbum is selected
         d->deleteAction->setEnabled(false);
         d->addImagesAction->setEnabled(false);
         d->propsEditAction->setEnabled(false);
         d->openInKonquiAction->setEnabled(false);
         d->newAction->setEnabled(false);
         d->addFoldersAction->setEnabled(false);
-
     }
     else if(!album && !val)
     {
@@ -1188,11 +1189,6 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->openInKonquiAction->setEnabled(false);
         d->newAction->setEnabled(false);
         d->addFoldersAction->setEnabled(false);
-
-        foreach(QAction *action, d->kipiFileActionsExport)
-        {
-            action->setEnabled(false);
-        }
     }
     else if (album && album->type() == Album::PHYSICAL)
     {
@@ -1209,11 +1205,6 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->openInKonquiAction->setEnabled(true);
         d->newAction->setEnabled(isNormalAlbum || isAlbumRoot);
         d->addFoldersAction->setEnabled(isNormalAlbum || isAlbumRoot);
-
-        foreach(QAction *action, d->kipiFileActionsExport)
-        {
-            action->setEnabled(true);
-        }
     }
 }
 
@@ -1231,21 +1222,11 @@ void DigikamApp::slotTagSelected(bool val)
     {
         d->deleteTagAction->setEnabled(true);
         d->editTagAction->setEnabled(true);
-
-        foreach(QAction *action, d->kipiFileActionsExport)
-        {
-            action->setEnabled(true);
-        }
     }
     else
     {
         d->deleteTagAction->setEnabled(false);
         d->editTagAction->setEnabled(false);
-
-        foreach(QAction *action, d->kipiFileActionsExport)
-        {
-            action->setEnabled(true);
-        }
     }
 }
 
