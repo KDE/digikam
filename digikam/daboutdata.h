@@ -38,6 +38,12 @@
 namespace Digikam
 {
 
+static inline KLocalizedString digiKamSloganHtml()
+{
+    return ki18n("<qt><font color=\"white\"><b>Manage</b> your <b>photographs</b> "
+                 "like <b>a professional</b> with the power of <b>open source</b></font></qt>");
+}
+
 static inline KLocalizedString digiKamSlogan()
 {
     return ki18n("Manage your photographs like a professional "

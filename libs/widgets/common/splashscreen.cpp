@@ -33,6 +33,7 @@
 #include <QString>
 #include <QColor>
 #include <QTime>
+#include <QTextDocument>
 
 // KDE includes.
 
@@ -45,6 +46,7 @@
 
 // Local includes.
 
+#include "daboutdata.h"
 #include "version.h"
 
 namespace Digikam
@@ -168,7 +170,9 @@ void SplashScreen::drawContents(QPainter* p)
     p->setFont(fnt);
 
     QRect r = rect();
-    r.setRect( r.x() + 59, r.y() + 5, r.width() - 10, r.height() - 10 );
+    r.setCoords(r.x() + 60, r.y() + 5, r.width() - 10, r.height() - 10);
+
+    p->drawText(r, d->messageAlign, d->message);
 
     // Draw message at given position, limited to 43 chars
     // If message is too long, string is truncated
@@ -177,9 +181,24 @@ void SplashScreen::drawContents(QPainter* p)
 
     p->drawText(r, d->messageAlign, d->message);
 
-    // Draw version string on bottom/right corner.
+    // Draw slogan
+    p->save();
+    fnt.setPixelSize(12);
     fnt.setBold(true);
+    r = rect();
+    r.setCoords(r.x() + 210, r.y() + 240, r.width() - 10, r.height() - 35);
+    p->translate(r.x(), r.y());
+    QTextDocument slogan;
+    slogan.setDefaultTextOption(QTextOption(Qt::AlignRight));
+    slogan.setHtml(Digikam::digiKamSloganHtml().toString());
+    slogan.setTextWidth(r.width());
+    slogan.setDefaultFont(fnt);
+    slogan.drawContents(p, QRect(0, 0, r.width(), r.height()));
+    p->restore();
+
+    // Draw version string on bottom/right corner.
     QFontMetrics fontMt(fnt);
+    fnt.setPixelSize(10);
     r = fontMt.boundingRect(rect(), 0, d->version);
     r.moveTopLeft(QPoint(width()-r.width()-10, height()-r.height()-3));
     p->setFont(fnt);
