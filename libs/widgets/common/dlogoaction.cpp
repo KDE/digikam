@@ -100,7 +100,7 @@ DLogoAction::DLogoAction(QObject* parent, bool alignOnright)
     else
     {
         setIcon(KIcon("showfoto"));
-        d->bannerPix = QPixmap(KStandardDirs::locate("data", "digikam/data/banner-showfoto.png"));
+        d->bannerPix = QPixmap(KStandardDirs::locate("data", "showfoto/data/banner-showfoto.png"));
     }
 
     d->logoPix      = d->bannerPix.copy(d->logoRect);
