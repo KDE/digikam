@@ -183,9 +183,9 @@ void SplashScreen::drawContents(QPainter* p)
 
     // Draw slogan
     p->save();
-    fnt.setPixelSize(12);
+    fnt.setPixelSize(11);
     r = rect();
-    r.setCoords(r.x() + 210, r.y() + 240, r.width() - 10, r.height() - 35);
+    r.setCoords(r.x() + 200, r.y() + 240, r.width() - 10, r.height() - 35);
     p->translate(r.x(), r.y());
     QTextDocument slogan;
     slogan.setDefaultTextOption(QTextOption(Qt::AlignRight));
