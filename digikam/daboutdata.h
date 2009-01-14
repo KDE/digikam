@@ -38,10 +38,10 @@
 namespace Digikam
 {
 
-static inline KLocalizedString digiKamSloganHtml()
+static inline KLocalizedString digiKamSloganFormated()
 {
     return ki18n("<qt><font color=\"white\"><b>Manage</b> your <b>photographs</b> "
-                 "like <b>a professional</b> with the power of <b>open source</b></font></qt>");
+                 "like <b>a professional</b><br>with the power of <b>open source</b></font></qt>");
 }
 
 static inline KLocalizedString digiKamSlogan()

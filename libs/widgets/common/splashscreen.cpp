@@ -189,7 +189,7 @@ void SplashScreen::drawContents(QPainter* p)
     p->translate(r.x(), r.y());
     QTextDocument slogan;
     slogan.setDefaultTextOption(QTextOption(Qt::AlignRight));
-    slogan.setHtml(Digikam::digiKamSloganHtml().toString());
+    slogan.setHtml(Digikam::digiKamSloganFormated().toString());
     slogan.setTextWidth(r.width());
     slogan.setDefaultFont(fnt);
     slogan.drawContents(p, QRect(0, 0, r.width(), r.height()));
