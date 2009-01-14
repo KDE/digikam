@@ -184,7 +184,6 @@ void SplashScreen::drawContents(QPainter* p)
     // Draw slogan
     p->save();
     fnt.setPixelSize(12);
-    fnt.setBold(true);
     r = rect();
     r.setCoords(r.x() + 210, r.y() + 240, r.width() - 10, r.height() - 35);
     p->translate(r.x(), r.y());
