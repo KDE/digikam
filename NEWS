@@ -35,7 +35,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 023 ==> 180489 : "Delete" menu action in the "Image" menu should say "Move to Trash".
 024 ==> 180570 : Crash when changing folder during rating.
 025 ==> 178952 : Error when changing the database path.
-026 ==> 
+026 ==> 180609 : Export menu items disabled by default.
+027 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
