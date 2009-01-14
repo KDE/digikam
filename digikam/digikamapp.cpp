@@ -2024,8 +2024,7 @@ void DigikamApp::slotSetupChanged()
 
     if (!AlbumManager::instance()->databaseEqual(AlbumSettings::instance()->getDatabaseFilePath()))
     {
-        if (AlbumManager::instance()->setDatabase(AlbumSettings::instance()->getDatabaseFilePath(), false))
-            AlbumManager::instance()->startScan();
+        AlbumManager::instance()->changeDatabase(AlbumSettings::instance()->getDatabaseFilePath());
     }
 
     if(AlbumSettings::instance()->getShowFolderTreeViewItemsCount())

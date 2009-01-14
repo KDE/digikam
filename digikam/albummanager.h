@@ -112,6 +112,13 @@ public:
     bool setDatabase(const QString &dbPath, bool priority);
 
     /**
+    * Sets new database when chosen by the user in setup.
+    * Handles user notification about problems.
+    * Call this instead of setDatabase when digikam is up and running.
+    */
+    void changeDatabase(const QString &dbPath);
+
+    /**
     * Stop ongoing operations, prepare for application shutdown
     */
     void cleanUp();

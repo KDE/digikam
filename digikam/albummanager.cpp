@@ -340,6 +340,77 @@ bool AlbumManager::databaseEqual(const QString &dbPath) const
     return d->dbPath == dbPath;
 }
 
+void AlbumManager::changeDatabase(const QString &dbPath)
+{
+    if (d->dbPath == dbPath)
+        return;
+
+    // if there is no file at the new place, copy old one
+    DatabaseParameters params = DatabaseAccess::parameters();
+    if (params.isSQLite())
+    {
+        QDir oldDir(d->dbPath);
+        QDir newDir(dbPath);
+        QFileInfo oldFile(params.SQLiteDatabaseFile());
+        QFileInfo newFile(newDir, oldFile.fileName());
+        if (!newFile.exists())
+        {
+            KIO::Job *job = KIO::file_copy(oldFile.filePath(), newFile.filePath(), -1, KIO::Overwrite /*| KIO::HideProgressInfo*/);
+            if (!KIO::NetAccess::synchronousRun(job, 0))
+            {
+                KMessageBox::error(0, i18n("Failed to copy the old database file (\"%1\") "
+                                           "to its new location (\"%2\"). "
+                                           "Starting with an empty database.",
+                                            oldFile.filePath(), newFile.filePath()));
+                // continue, dont return
+            }
+        }
+        else
+        {
+            KGuiItem replaceItem(i18n("Copy current database"), KStandardGuiItem::insert().icon());
+            KGuiItem useExistingItem(i18n("Use existing file"), KStandardGuiItem::open().icon());
+            int result = KMessageBox::warningYesNo(0,
+                                i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
+                                     "There is already a database file found in this folder.</p> "
+                                     "<p>Would you like to use this existing file as the new database, or remove it "
+                                     "and copy the current database to this place?</p> ",
+                                      newDir.path()),
+                                i18n("New database folder"),
+                                replaceItem, useExistingItem);
+            if (result == KMessageBox::Yes)
+            {
+                // first backup
+                QFileInfo backup(newDir, newFile.fileName() + "-backup-" + QDateTime::currentDateTime().toString(Qt::ISODate));
+                kDebug() << oldFile.filePath() << newFile.filePath() <<  backup.filePath();
+                KIO::Job *job = KIO::file_move(newFile.filePath(), backup.filePath(), -1, KIO::Overwrite | KIO::HideProgressInfo);
+                if (!KIO::NetAccess::synchronousRun(job, 0))
+                {
+                    KMessageBox::error(0, i18n("Failed to backup the existing database file (\"%1\")."
+                                               "Refusing to replace file without backup, using the existing file.",
+                                                newFile.filePath()));
+                    // continue, dont return
+                }
+                else
+                {
+                    // then copy
+                    job = KIO::file_copy(oldFile.filePath(), newFile.filePath(), -1, KIO::Overwrite | KIO::HideProgressInfo);
+                    if (!KIO::NetAccess::synchronousRun(job, 0))
+                    {
+                        KMessageBox::error(0, i18n("Failed to copy the old database file (\"%1\") "
+                                           "to its new location (\"%2\"). "
+                                           "Starting with an empty database.",
+                                            oldFile.filePath(), newFile.filePath()));
+                        // continue, dont return
+                    }
+                }
+            }
+        }
+    }
+
+    if (setDatabase(dbPath, false))
+        startScan();
+}
+
 bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
 {
     if (dbPath.isEmpty())
