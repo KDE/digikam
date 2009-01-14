@@ -2314,34 +2314,36 @@ void AlbumIconView::slotAssignRating(int rating)
     rating    = qMin(RatingMax, qMax(RatingMin, rating));
     MetadataHub hub;
 
-    d->imageLister->blockSignals(true);
-    ScanController::instance()->suspendCollectionScan();
-    DatabaseTransaction transaction;
+    QList<ImageInfo> infos;
     for (IconItem *it = firstItem() ; it ; it = it->nextItem())
     {
         if (it->isSelected())
         {
             AlbumIconItem *albumItem = dynamic_cast<AlbumIconItem *>(it);
             if (albumItem)
-            {
-                ImageInfo info = albumItem->imageInfo();
-
-                hub.load(info);
-
-                hub.setRating(rating);
-
-                QString filePath = info.filePath();
-                hub.write(info, MetadataHub::PartialWrite);
-                hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
-                bool fileChanged = hub.write(filePath, MetadataHub::FullWriteIfChanged);
-
-                if (fileChanged)
-                    ScanController::instance()->scanFileDirectly(filePath);
-
-                emit signalProgressValue((int)((i++/cnt)*100.0));
-                kapp->processEvents();
-            }
+                infos << albumItem->imageInfo();
         }
+    }
+
+    d->imageLister->blockSignals(true);
+    ScanController::instance()->suspendCollectionScan();
+    DatabaseTransaction transaction;
+    foreach (const ImageInfo &info, infos)
+    {
+        hub.load(info);
+
+        hub.setRating(rating);
+
+        QString filePath = info.filePath();
+        hub.write(info, MetadataHub::PartialWrite);
+        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+        bool fileChanged = hub.write(filePath, MetadataHub::FullWriteIfChanged);
+
+        if (fileChanged)
+            ScanController::instance()->scanFileDirectly(filePath);
+
+        emit signalProgressValue((int)((i++/cnt)*100.0));
+        kapp->processEvents();
     }
     ScanController::instance()->resumeCollectionScan();
     d->imageLister->blockSignals(false);
