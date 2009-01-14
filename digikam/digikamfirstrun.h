@@ -38,7 +38,7 @@ class KUrlRequester;
 namespace Digikam
 {
 
-class FirstRunWidget;
+class DigikamFirstRunPriv;
 
 class DigikamFirstRun : public KDialog
 {
@@ -51,7 +51,9 @@ public:
 
 protected slots:
 
-    void slotOk();
+    void slotButtonClicked(int button);
+    void slotAlbumRootChanged(const KUrl &url);
+    void slotDbPathChanged(const KUrl &url);
 
 private:
 
@@ -61,8 +63,7 @@ private:
 
 private:
 
-    KUrlRequester *m_rootAlbumPath;
-    KUrlRequester *m_dbPath;
+    DigikamFirstRunPriv *d;
 };
 
 }  // namespace Digikam

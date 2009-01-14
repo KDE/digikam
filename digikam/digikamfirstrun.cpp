@@ -56,9 +56,27 @@
 namespace Digikam
 {
 
+class DigikamFirstRunPriv
+{
+public:
+
+    DigikamFirstRunPriv()
+    {
+        rootAlbumPathRequester = 0;
+        dbPathRequester        = 0;
+        dbPathEdited    = false;
+    }
+
+    KUrlRequester *rootAlbumPathRequester;
+    KUrlRequester *dbPathRequester;
+    bool           dbPathEdited;
+};
+
 DigikamFirstRun::DigikamFirstRun(QWidget* parent)
                : KDialog(parent)
 {
+    d = new DigikamFirstRunPriv;
+
     setModal(true);
     setButtons(Help|Ok|Cancel);
     setDefaultButton(Ok);
@@ -103,9 +121,9 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
                              "</p> "
                              "<p><i>Note:</i> Removable media (like USB drives) and shared file systems (both NFS or Samba) are supported.</p>") );
 
-    m_rootAlbumPath = new KUrlRequester(widget);
-    m_rootAlbumPath->setMode(KFile::Directory | KFile::LocalOnly);
-    m_rootAlbumPath->setUrl(picturesPath);
+    d->rootAlbumPathRequester = new KUrlRequester(widget);
+    d->rootAlbumPathRequester->setMode(KFile::Directory | KFile::LocalOnly);
+    d->rootAlbumPathRequester->setUrl(picturesPath);
 
     QLabel *textLabel3 = new QLabel(widget);
     textLabel3->setWordWrap(true);
@@ -114,15 +132,15 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
                              "<p><i>Note:</i> You need to have write access to the folder used here, "
                              "and you cannot use a remote location on a networked server, using NFS or Samba.</p>"));
 
-    m_dbPath = new KUrlRequester(widget);
-    m_dbPath->setMode(KFile::Directory | KFile::LocalOnly);
-    m_dbPath->setUrl(picturesPath);
+    d->dbPathRequester = new KUrlRequester(widget);
+    d->dbPathRequester->setMode(KFile::Directory | KFile::LocalOnly);
+    d->dbPathRequester->setUrl(picturesPath);
 
-    grid->addWidget(pixLabel,        0, 0, 2, 1);
-    grid->addWidget(textLabel1,      0, 1, 1, 1);
-    grid->addWidget(m_rootAlbumPath, 1, 1, 1, 1);
-    grid->addWidget(textLabel3,      2, 1, 1, 1);
-    grid->addWidget(m_dbPath,        3, 1, 1, 1);
+    grid->addWidget(pixLabel,                  0, 0, 2, 1);
+    grid->addWidget(textLabel1,                0, 1, 1, 1);
+    grid->addWidget(d->rootAlbumPathRequester, 1, 1, 1, 1);
+    grid->addWidget(textLabel3,                2, 1, 1, 1);
+    grid->addWidget(d->dbPathRequester,        3, 1, 1, 1);
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
 
@@ -135,12 +153,15 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
 
     widget->setMinimumSize(450, sizeHint().height());
 
-    connect(this, SIGNAL(okClicked()),
-            this, SLOT(slotOk()));
+    connect(d->rootAlbumPathRequester, SIGNAL(urlSelected(const KUrl &)),
+            this, SLOT(slotAlbumRootChanged(const KUrl &)));
+    connect(d->dbPathRequester, SIGNAL(urlSelected(const KUrl &)),
+            this, SLOT(slotDbPathChanged(const KUrl &)));
 }
 
 DigikamFirstRun::~DigikamFirstRun()
 {
+    delete d;
 }
 
 void DigikamFirstRun::saveSettings(const QString& rootAlbumFolder, const QString& dbFolder)
@@ -158,7 +179,7 @@ void DigikamFirstRun::saveSettings(const QString& rootAlbumFolder, const QString
 
 bool DigikamFirstRun::checkRootAlbum(QString& rootAlbumFolder)
 {
-    rootAlbumFolder = m_rootAlbumPath->url().path();
+    rootAlbumFolder = d->rootAlbumPathRequester->url().path();
 
     if (rootAlbumFolder.isEmpty())
     {
@@ -174,12 +195,14 @@ bool DigikamFirstRun::checkRootAlbum(QString& rootAlbumFolder)
     }
 #endif
 
+    /*
     if (KUrl(rootAlbumFolder).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutFragment))
     {
         KMessageBox::sorry(this, i18n("digiKam will not use your home folder as the "
                                       "root album. Please select another location."));
         return false;
     }
+    */
 
     QDir targetPath(rootAlbumFolder);
 
@@ -222,7 +245,7 @@ bool DigikamFirstRun::checkRootAlbum(QString& rootAlbumFolder)
 
 bool DigikamFirstRun::checkDatabase(QString& dbFolder)
 {
-    dbFolder = m_dbPath->url().path();
+    dbFolder = d->dbPathRequester->url().path();
 
     if (dbFolder.isEmpty())
     {
@@ -288,18 +311,34 @@ bool DigikamFirstRun::checkDatabase(QString& dbFolder)
     return true;
 }
 
-void DigikamFirstRun::slotOk()
+void DigikamFirstRun::slotAlbumRootChanged(const KUrl &url)
 {
-    QString rootAlbumFolder;
-    if (!checkRootAlbum(rootAlbumFolder))
-        return;
+    if (!d->dbPathEdited)
+        d->dbPathRequester->setUrl(url);
+}
 
-    QString dbFolder;
-    if (!checkDatabase(dbFolder))
-        return;
+void DigikamFirstRun::slotDbPathChanged(const KUrl &)
+{
+    d->dbPathEdited = true;
+}
 
-    saveSettings(rootAlbumFolder, dbFolder);
-    KDialog::accept();
+void DigikamFirstRun::slotButtonClicked( int button )
+{
+    if (button == KDialog::Ok)
+    {
+        QString rootAlbumFolder;
+        if (!checkRootAlbum(rootAlbumFolder))
+            return;
+
+        QString dbFolder;
+        if (!checkDatabase(dbFolder))
+            return;
+
+        saveSettings(rootAlbumFolder, dbFolder);
+        KDialog::accept();
+    }
+    else
+        KDialog::slotButtonClicked(button);
 }
 
 }  // namespace Digikam
