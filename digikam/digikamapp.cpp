@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C)      2006 by Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2002-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -1174,14 +1174,13 @@ void DigikamApp::slotAlbumSelected(bool val)
 
     if(album && !val)
     {
-        // No PAlbum is selected
+        // Not a PAlbum is selected
         d->deleteAction->setEnabled(false);
         d->addImagesAction->setEnabled(false);
         d->propsEditAction->setEnabled(false);
         d->openInKonquiAction->setEnabled(false);
         d->newAction->setEnabled(false);
         d->albumImportAction->setEnabled(false);
-
     }
     else if(!album && !val)
     {
@@ -1199,12 +1198,6 @@ void DigikamApp::slotAlbumSelected(bool val)
         {
             action->setEnabled(false);
         }
-
-        for (action = d->kipiFileActionsExport.first(); action;
-             action = d->kipiFileActionsExport.next())
-        {
-            action->setEnabled(false);
-        }
     }
     else if(album && !album->isRoot() && album->type() == Album::PHYSICAL)
     {
@@ -1219,12 +1212,6 @@ void DigikamApp::slotAlbumSelected(bool val)
         KAction *action;
         for (action = d->kipiFileActionsImport.first(); action;
              action = d->kipiFileActionsImport.next())
-        {
-            action->setEnabled(true);
-        }
-
-        for (action = d->kipiFileActionsExport.first(); action;
-             action = d->kipiFileActionsExport.next())
         {
             action->setEnabled(true);
         }
@@ -1255,12 +1242,6 @@ void DigikamApp::slotAlbumSelected(bool val)
         {
             action->setEnabled(false);
         }
-
-        for (action = d->kipiFileActionsExport.first(); action;
-             action = d->kipiFileActionsExport.next())
-        {
-            action->setEnabled(true);
-        }
     }
 }
 
@@ -1285,12 +1266,6 @@ void DigikamApp::slotTagSelected(bool val)
         {
             action->setEnabled(false);
         }
-
-        for (action = d->kipiFileActionsExport.first(); action;
-             action = d->kipiFileActionsExport.next())
-        {
-            action->setEnabled(true);
-        }
     }
     else
     {
@@ -1302,12 +1277,6 @@ void DigikamApp::slotTagSelected(bool val)
              action = d->kipiFileActionsImport.next())
         {
             action->setEnabled(false);
-        }
-
-        for (action = d->kipiFileActionsExport.first(); action;
-             action = d->kipiFileActionsExport.next())
-        {
-            action->setEnabled(true);
         }
     }
 }
