@@ -961,7 +961,7 @@ void SearchFieldRangeInt::read(SearchXmlCachingReader &reader)
             case SearchXml::Interval:
             case SearchXml::IntervalOpen:
             {
-                QList<int> list = reader.valueToIntList();
+                QList<double> list = reader.valueToDoubleList();
                 if (list.size() != 2)
                     return;
                 m_secondBox->setFractionMagicValue(list.first());
@@ -1014,12 +1014,10 @@ void SearchFieldRangeInt::write(SearchXmlWriter &writer)
         if (m_firstBox->value() != m_secondBox->value())
         {
             writer.writeField(m_name, SearchXml::Interval);
-            QList<int> values;
             if (m_reciprocal)
-                values << m_secondBox->fractionMagicValue() << m_firstBox->fractionMagicValue();
+                writer.writeValue(QList<double>() << m_secondBox->fractionMagicValue() << m_firstBox->fractionMagicValue());
             else
-                values << m_firstBox->value() << m_secondBox->value();
-            writer.writeValue(values);
+                writer.writeValue(QList<int>() << m_firstBox->value() << m_secondBox->value());
             writer.finishField();
         }
         else
