@@ -185,12 +185,12 @@ void SplashScreen::drawContents(QPainter* p)
     p->save();
     fnt.setPixelSize(11);
     r = rect();
-    r.setCoords(r.x() + 200, r.y() + 240, r.width() - 10, r.height() - 35);
+    r.setCoords(r.x() + 210, r.y() + 235, r.x() + 490, r.y() + 275);
     p->translate(r.x(), r.y());
     QTextDocument slogan;
-    slogan.setDefaultTextOption(QTextOption(Qt::AlignRight));
+    slogan.setDefaultTextOption(QTextOption(Qt::AlignRight | Qt::AlignVCenter));
     slogan.setHtml(Digikam::digiKamSloganFormated().toString());
-    slogan.setTextWidth(r.width());
+    slogan.setPageSize(r.size());
     slogan.setDefaultFont(fnt);
     slogan.drawContents(p, QRect(0, 0, r.width(), r.height()));
     p->restore();

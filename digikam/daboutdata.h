@@ -38,10 +38,16 @@
 namespace Digikam
 {
 
+// NOTE: this is the slogan formated string displayed in splashcreen.
 static inline KLocalizedString digiKamSloganFormated()
 {
-    return ki18n("<qt><font color=\"white\"><b>Manage</b> your <b>photographs</b> "
-                 "like <b>a professional</b><br>with the power of <b>open source</b></font></qt>");
+    return ki18nc("<qt><font color=\"white\">"
+                  "<b>Manage</b> your <b>photographs</b> like <b>a professional</b><br>"
+                  "with the power of <b>open source</b>"
+                  "</font></qt>",
+                  "This is the slogan formated string displayed in splashscreen. "
+                  "Please translate using short words else the slogan can be troncated."
+                 );
 }
 
 static inline KLocalizedString digiKamSlogan()
