@@ -47,6 +47,7 @@
 #include <kiconeffect.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 // Local includes.
 
@@ -123,30 +124,31 @@ void DPopupMenu::renderSidebarGradient(QPainter *p)
 
     // ----------------------------------------
 
-    QPixmap appIcon;
-    QString appName;
+    const int    spacing = 8;
+    const int    margin  = 4;
+    QPixmap      appIcon;
+    QString      appName;
     QFontMetrics fontMt(d->fontAppName);
-    QRect fontRect;
+    QFontMetrics fontMt2(d->fontVersion);
 
     if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
     {
-        appIcon  = SmallIcon("digikam", d->fontAppName.pixelSize());
-        appName  = QString("digiKam");
-        fontRect = QRect(appIcon.width() + 8, 0, fontMt.width(appName), drawRect.width());
+        appIcon = SmallIcon("digikam", d->fontAppName.pixelSize());
+        appName = QString("digiKam");
     }
     else
     {
-        appIcon   = SmallIcon("showfoto", d->fontAppName.pixelSize());
-        appName   = QString("showFoto");
-        int h     = fontMt.ascent();
-        int shift = ((drawRect.width() - h) / 2) + 1;
-        fontRect  = QRect(appIcon.width() + 8, shift, fontMt.width(appName), h);
+        appIcon = SmallIcon("showfoto", d->fontAppName.pixelSize());
+        appName = QString("showFoto");
     }
+
+    QRect fontRect = QRect(appIcon.width() + spacing, 0, fontMt.width(appName), drawRect.width());
+    int   shift    = fontMt.ascent() - fontMt2.ascent();
 
     // ----------------------------------------
     // draw application icon.
 
-    p->drawPixmap(4, 1, appIcon);
+    p->drawPixmap(margin, 1, appIcon);
 
     // ----------------------------------------
     // draw app name.
@@ -157,9 +159,8 @@ void DPopupMenu::renderSidebarGradient(QPainter *p)
     // ----------------------------------------
     // draw version string.
 
-    fontRect.moveLeft(fontRect.right() + 8);
-    fontRect.setY(3);
-
+    fontRect.moveLeft(fontRect.right() + spacing);
+    fontRect.setY(shift);
     p->setFont(d->fontVersion);
     p->drawText(fontRect, Qt::AlignLeft|Qt::AlignVCenter, QString(digikam_version_short));
 }
