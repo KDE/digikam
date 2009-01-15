@@ -11,7 +11,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 179413 : Support restoring blown out highlights.
 005 ==> 157313 : Option to reposition lighttable slide-list.
 006 ==> 180671 : Scanner import does not work.
-007 ==> 
+007 ==> 175387 : digikam-doc 0.9.4 sf.net tarball is outdated.
+008 ==> 
 
 **********************************************************************************************
 digiKam 0.9.5-beta2 - Release date: 2008-12-14
