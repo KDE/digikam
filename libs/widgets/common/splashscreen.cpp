@@ -187,6 +187,7 @@ void SplashScreen::drawContents(QPainter* p)
     r = rect();
     r.setCoords(r.x() + 210, r.y() + 235, r.x() + 490, r.y() + 275);
     p->translate(r.x(), r.y());
+    p->setFont(fnt);
     QTextDocument slogan;
     slogan.setDefaultTextOption(QTextOption(Qt::AlignRight | Qt::AlignVCenter));
     slogan.setHtml(Digikam::digiKamSloganFormated().toString());
@@ -196,8 +197,8 @@ void SplashScreen::drawContents(QPainter* p)
     p->restore();
 
     // Draw version string on bottom/right corner.
-    QFontMetrics fontMt(fnt);
     fnt.setPixelSize(10);
+    QFontMetrics fontMt(fnt);
     r = fontMt.boundingRect(rect(), 0, d->version);
     r.moveTopLeft(QPoint(width()-r.width()-10, height()-r.height()-3));
     p->setFont(fnt);
