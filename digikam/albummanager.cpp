@@ -358,7 +358,7 @@ void AlbumManager::changeDatabase(const QString &dbPath)
             KGuiItem copyCurrent(i18n("Copy Current Database"), "edit-copy");
             KGuiItem startFresh(i18n("Create New Database"), "document-new");
             int result = KMessageBox::warningYesNo(0,
-                                i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
+                                i18n("<p>You have chosen the folder \"%1\" as the new place to store the database.</p>"
                                      "<p>Would you like to copy the current database to this location "
                                      "and continue using it, or start with a new database?</p> ",
                                       newDir.path()),
