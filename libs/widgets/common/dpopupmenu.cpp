@@ -75,12 +75,12 @@ DPopupMenu::DPopupMenu(QWidget* parent)
     d->fontVersion = KGlobalSettings::generalFont();
 
     d->fontAppName.setBold(true);
-    d->fontAppName.setPixelSize(14);
+    d->fontAppName.setPixelSize(13);
     d->fontVersion.setBold(false);
     d->fontVersion.setPixelSize(11);
 
     // has to be an odd number to get the text centered
-    d->gradientWidth = d->fontAppName.pixelSize() + 3;
+    d->gradientWidth = d->fontAppName.pixelSize() + 2;
 
     setContentsMargins(d->gradientWidth, 0, 0, 0);
 }
@@ -142,7 +142,7 @@ void DPopupMenu::renderSidebarGradient(QPainter *p)
         appName = QString("showFoto");
     }
 
-    QRect fontRect = QRect(appIcon.width() + spacing, 0, fontMt.width(appName), drawRect.width());
+    QRect fontRect = QRect(appIcon.width() + spacing, 1, fontMt.width(appName), drawRect.width());
     int   shift    = fontMt.ascent() - fontMt2.ascent();
 
     // ----------------------------------------
