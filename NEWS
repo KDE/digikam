@@ -37,7 +37,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 025 ==> 178952 : Error when changing the database path.
 026 ==> 180609 : Export menu items disabled by default.
 027 ==> 178251 : Crash (signal 6) when new user uses home dir.
-028 ==> 
+028 ==> 179898 : Dark theme: font in properties tab too dark.
+029 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
