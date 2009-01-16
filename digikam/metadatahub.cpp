@@ -32,6 +32,10 @@
 
 #include <kdebug.h>
 
+// Libkexiv2 includes.
+
+#include <libkexiv2/version.h>
+
 // Local includes.
 
 #include "imageinfo.h"
@@ -479,7 +483,7 @@ bool MetadataHub::write(DMetadata &metadata, WriteMode writeMode, const Metadata
     metadata.setWriteRawFiles(settings.writeRawFiles);
 
 #if KEXIV2_VERSION >= 0x000600
-    metadata.setUpdateFileTimestamp(settings.updateFileTimeStamp);
+    metadata.setUpdateFileTimeStamp(settings.updateFileTimeStamp);
 #endif
 
     // find out in advance if we have something to write - needed for FullWriteIfChanged mode
