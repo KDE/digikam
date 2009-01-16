@@ -1,5 +1,5 @@
 [Desktop Entry]
-X-KDE-Solid-Predicate=[ StorageVolume.ignored == false OR Camera.supportedDrivers == 'gphoto' ]
+X-KDE-Solid-Predicate=[ [ StorageVolume.ignored == false AND StorageVolume.usage == 'FileSystem' ] OR Camera.supportedDrivers == 'gphoto' ]
 Type=Service
 Actions=open;
 
