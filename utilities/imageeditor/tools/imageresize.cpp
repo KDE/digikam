@@ -6,7 +6,7 @@
  * Date        : 2005-04-07
  * Description : a tool to resize an image
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -336,24 +336,25 @@ void ImageResize::slotRestorationToggled(bool b)
 void ImageResize::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("resize Tool Dialog");
+    KConfigGroup group        = config->group("resize Tool Dialog");
 
     GreycstorationSettings settings;
     GreycstorationSettings defaults;
     defaults.setResizeDefaultSettings();
 
-    settings.fastApprox = group.readEntry("FastApprox", defaults.fastApprox);
+    settings.fastApprox = group.readEntry("FastApprox",    defaults.fastApprox);
     settings.interp     = group.readEntry("Interpolation", defaults.interp);
-    settings.amplitude  = group.readEntry("Amplitude", defaults.amplitude);
-    settings.sharpness  = group.readEntry("Sharpness", defaults.sharpness);
-    settings.anisotropy = group.readEntry("Anisotropy", defaults.anisotropy);
-    settings.alpha      = group.readEntry("Alpha", defaults.alpha);
-    settings.sigma      = group.readEntry("Sigma", defaults.sigma);
-    settings.gaussPrec  = group.readEntry("GaussPrec", defaults.gaussPrec);
-    settings.dl         = group.readEntry("Dl", defaults.dl);
-    settings.da         = group.readEntry("Iteration", defaults.nbIter);
-    settings.tile       = group.readEntry("Tile", defaults.tile);
-    settings.btile      = group.readEntry("BTile", defaults.btile);
+    settings.amplitude  = group.readEntry("Amplitude",     (double)defaults.amplitude);
+    settings.sharpness  = group.readEntry("Sharpness",     (double)defaults.sharpness);
+    settings.anisotropy = group.readEntry("Anisotropy",    (double)defaults.anisotropy);
+    settings.alpha      = group.readEntry("Alpha",         (double)defaults.alpha);
+    settings.sigma      = group.readEntry("Sigma",         (double)defaults.sigma);
+    settings.gaussPrec  = group.readEntry("GaussPrec",     (double)defaults.gaussPrec);
+    settings.dl         = group.readEntry("Dl",            (double)defaults.dl);
+    settings.da         = group.readEntry("Da",            (double)defaults.da);
+    settings.nbIter     = group.readEntry("Iteration",     defaults.nbIter);
+    settings.tile       = group.readEntry("Tile",          defaults.tile);
+    settings.btile      = group.readEntry("BTile",         defaults.btile);
     d->settingsWidget->setSettings(settings);
 
     slotDefault();
@@ -362,20 +363,21 @@ void ImageResize::readUserSettings()
 void ImageResize::writeUserSettings()
 {
     GreycstorationSettings settings = d->settingsWidget->getSettings();
-    KConfigGroup group = KGlobal::config()->group("resize Tool Dialog");
-    group.writeEntry("FastApprox", settings.fastApprox);
-    group.writeEntry("Interpolation", settings.interp);
-    group.writeEntry("Amplitude", (double)settings.amplitude);
-    group.writeEntry("Sharpness", (double)settings.sharpness);
-    group.writeEntry("Anisotropy", (double)settings.anisotropy);
-    group.writeEntry("Alpha", (double)settings.alpha);
-    group.writeEntry("Sigma", (double)settings.sigma);
-    group.writeEntry("GaussPrec", (double)settings.gaussPrec);
-    group.writeEntry("Dl", (double)settings.dl);
-    group.writeEntry("Da", (double)settings.da);
-    group.writeEntry("Iteration", settings.nbIter);
-    group.writeEntry("Tile", settings.tile);
-    group.writeEntry("BTile", settings.btile);
+    KConfigGroup group              = KGlobal::config()->group("resize Tool Dialog");
+
+    group.writeEntry("FastApprox",        settings.fastApprox);
+    group.writeEntry("Interpolation",     settings.interp);
+    group.writeEntry("Amplitude",         (double)settings.amplitude);
+    group.writeEntry("Sharpness",         (double)settings.sharpness);
+    group.writeEntry("Anisotropy",        (double)settings.anisotropy);
+    group.writeEntry("Alpha",             (double)settings.alpha);
+    group.writeEntry("Sigma",             (double)settings.sigma);
+    group.writeEntry("GaussPrec",         (double)settings.gaussPrec);
+    group.writeEntry("Dl",                (double)settings.dl);
+    group.writeEntry("Da",                (double)settings.da);
+    group.writeEntry("Iteration",         settings.nbIter);
+    group.writeEntry("Tile",              settings.tile);
+    group.writeEntry("BTile",             settings.btile);
     group.writeEntry("RestorePhotograph", d->useGreycstorationBox->isChecked());
     group.sync();
 }
