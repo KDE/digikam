@@ -487,4 +487,6 @@ private:
 
 }  // namespace Digikam
 
+Q_DECLARE_METATYPE(Digikam::Album*)
+
 #endif /* ALBUM_H */
