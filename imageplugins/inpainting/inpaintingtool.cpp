@@ -213,7 +213,7 @@ void InPaintingTool::writeSettings()
     GreycstorationSettings settings = m_settingsWidget->getSettings();
     KSharedConfig::Ptr config       = KGlobal::config();
     KConfigGroup group              = config->group("inpainting Tool");
-    group.writeEntry("Preset",        m_restorationTypeCB->currentIndex());
+    group.writeEntry("Preset",        m_inpaintingTypeCB->currentIndex());
     group.writeEntry("FastApprox",    settings.fastApprox);
     group.writeEntry("Interpolation", settings.interp);
     group.writeEntry("Amplitude",     (double)settings.amplitude);
