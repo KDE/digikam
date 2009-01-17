@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2007 by Jaromir Malenko <malenko at email.cz>
  * Copyright (C) 2008 by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -601,9 +601,8 @@ void ImageSelectionWidget::applyAspectRatio(bool useHeight, bool repaintWidget)
                 break;
 
             default:
-                d->regionSelection.setHeight(
-                                rint( w * d->currentHeightRatioValue /
-                                    d->currentWidthRatioValue ) );
+                d->regionSelection.setHeight(rint( w * d->currentHeightRatioValue /
+                                             d->currentWidthRatioValue ) );
                 break;
         }
     }
@@ -619,9 +618,8 @@ void ImageSelectionWidget::applyAspectRatio(bool useHeight, bool repaintWidget)
                 break;
 
             default:
-                d->regionSelection.setWidth(
-                                rint( h * d->currentWidthRatioValue /
-                                    d->currentHeightRatioValue ) );
+                d->regionSelection.setWidth(rint( h * d->currentWidthRatioValue /
+                                            d->currentHeightRatioValue ) );
                 break;
         }
     }
@@ -812,6 +810,50 @@ void ImageSelectionWidget::updatePixmap()
             p.drawLine( d->localRegionSelection.left(),  d->localRegionSelection.top() + 2*yThird,
                         d->localRegionSelection.right(), d->localRegionSelection.top() + 2*yThird );
             break;
+       }
+
+       case DiagonalMethod:
+       {
+           // Move coordinates to top, left
+           p.translate(d->localRegionSelection.topLeft().x(), d->localRegionSelection.topLeft().y());
+
+           float w = (float)d->localRegionSelection.width();
+           float h = (float)d->localRegionSelection.height();
+
+           p.setPen(QPen(Qt::white, d->guideSize, Qt::SolidLine));
+           if (w > h) 
+           {
+               p.drawLine( 0, 0, h, h);
+               p.drawLine( 0, h, h, 0);
+               p.drawLine( w-h, 0, w, h);
+               p.drawLine( w-h, h, w, 0);
+
+           } 
+           else 
+           {
+               p.drawLine( 0, 0, w, w);
+               p.drawLine( 0, w, w, 0);
+               p.drawLine( 0, h-w, w, h);
+               p.drawLine( 0, h, w, h-w);
+           }
+
+           p.setPen(QPen(d->guideColor, d->guideSize, Qt::DotLine));
+           if (w > h) 
+           {
+               p.drawLine( 0, 0, h, h);
+               p.drawLine( 0, h, h, 0);
+               p.drawLine( w-h, 0, w, h);
+               p.drawLine( w-h, h, w, 0);
+
+           }
+           else 
+           {
+               p.drawLine( 0, 0, w, w);
+               p.drawLine( 0, w, w, 0);
+               p.drawLine( 0, h-w, w, h);
+               p.drawLine( 0, h, w, h-w);
+           }
+           break;
        }
 
        case HarmoniousTriangles:
@@ -1079,11 +1121,6 @@ QPoint ImageSelectionWidget::opposite()
 
     switch(d->currentResizing)
     {
-        case ImageSelectionWidgetPriv::ResizingTopLeft:
-        default:
-            opp = d->regionSelection.bottomRight();
-            break;
-
         case ImageSelectionWidgetPriv::ResizingTopRight:
             opp = d->regionSelection.bottomLeft();
             break;
@@ -1094,6 +1131,11 @@ QPoint ImageSelectionWidget::opposite()
 
         case ImageSelectionWidgetPriv::ResizingBottomRight:
             opp = d->regionSelection.topLeft();
+            break;
+
+        case ImageSelectionWidgetPriv::ResizingTopLeft:
+        default:
+            opp = d->regionSelection.bottomRight();
             break;
     }
 

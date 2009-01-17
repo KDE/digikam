@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2007 by Jaromir Malenko <malenko at email dot cz>
  * Copyright (C) 2008 by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -216,22 +216,22 @@ RatioCropTool::RatioCropTool(QObject* parent)
     m_centerHeight->setPixmap(QPixmap(directory + "centerheight.png"));
     QWhatsThis::add(m_centerHeight, i18n("<p>Set height position to center."));
 
-    grid->addMultiCellWidget(label,                 0, 0, 0, 0);
-    grid->addMultiCellWidget(m_ratioCB,             0, 0, 1, 3);
-    grid->addMultiCellWidget(m_preciseCrop,         0, 0, 4, 4);
-    grid->addMultiCellWidget(m_customLabel1,        1, 1, 0, 0);
-    grid->addMultiCellWidget(m_customRatioNInput,   1, 1, 1, 1);
-    grid->addMultiCellWidget(m_customLabel2,        1, 1, 2, 2);
-    grid->addMultiCellWidget(m_customRatioDInput,   1, 1, 3, 3);
-    grid->addMultiCellWidget(m_orientLabel,         2, 2, 0, 0);
-    grid->addMultiCellWidget(m_orientCB,            2, 2, 1, 3);
-    grid->addMultiCellWidget(m_autoOrientation,     2, 2, 4, 4);
-    grid->addMultiCellWidget(m_xInput,              3, 3, 0, 3);
-    grid->addMultiCellWidget(m_widthInput,          4, 4, 0, 3);
-    grid->addMultiCellWidget(m_centerWidth,         4, 4, 4, 4);
-    grid->addMultiCellWidget(m_yInput,              5, 5, 0, 3);
-    grid->addMultiCellWidget(m_heightInput,         6, 6, 0, 3);
-    grid->addMultiCellWidget(m_centerHeight,        6, 6, 4, 4);
+    grid->addMultiCellWidget(label,               0, 0, 0, 0);
+    grid->addMultiCellWidget(m_ratioCB,           0, 0, 1, 3);
+    grid->addMultiCellWidget(m_preciseCrop,       0, 0, 4, 4);
+    grid->addMultiCellWidget(m_customLabel1,      1, 1, 0, 0);
+    grid->addMultiCellWidget(m_customRatioNInput, 1, 1, 1, 1);
+    grid->addMultiCellWidget(m_customLabel2,      1, 1, 2, 2);
+    grid->addMultiCellWidget(m_customRatioDInput, 1, 1, 3, 3);
+    grid->addMultiCellWidget(m_orientLabel,       2, 2, 0, 0);
+    grid->addMultiCellWidget(m_orientCB,          2, 2, 1, 3);
+    grid->addMultiCellWidget(m_autoOrientation,   2, 2, 4, 4);
+    grid->addMultiCellWidget(m_xInput,            3, 3, 0, 3);
+    grid->addMultiCellWidget(m_widthInput,        4, 4, 0, 3);
+    grid->addMultiCellWidget(m_centerWidth,       4, 4, 4, 4);
+    grid->addMultiCellWidget(m_yInput,            5, 5, 0, 3);
+    grid->addMultiCellWidget(m_heightInput,       6, 6, 0, 3);
+    grid->addMultiCellWidget(m_centerHeight,      6, 6, 4, 4);
     grid->setMargin(m_gboxSettings->spacingHint());
     grid->setSpacing(m_gboxSettings->spacingHint());
 
@@ -244,6 +244,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
     QLabel *labelGuideLines = new QLabel(i18n("Composition guide:"), compositionGuide);
     m_guideLinesCB = new RComboBox(compositionGuide);
     m_guideLinesCB->insertItem( i18n("Rules of Thirds"));
+    m_guideLinesCB->insertItem( i18n("Diagonal Method"));
     m_guideLinesCB->insertItem( i18n("Harmonious Triangles"));
     m_guideLinesCB->insertItem( i18n("Golden Mean"));
     m_guideLinesCB->insertItem( i18n("None"));
@@ -277,25 +278,25 @@ RatioCropTool::RatioCropTool(QObject* parent)
     QWhatsThis::add( m_guideColorBt, i18n("<p>Set here the color used to draw composition guides."));
     QWhatsThis::add( m_guideSize, i18n("<p>Set here the width in pixels used to draw composition guides."));
 
-    grid2->addMultiCellWidget(labelGuideLines,              0, 0, 0, 0);
-    grid2->addMultiCellWidget(m_guideLinesCB,               0, 0, 1, 2);
-    grid2->addMultiCellWidget(m_goldenSectionBox,           1, 1, 0, 2);
-    grid2->addMultiCellWidget(m_goldenSpiralSectionBox,     2, 2, 0, 2);
-    grid2->addMultiCellWidget(m_goldenSpiralBox,            3, 3, 0, 2);
-    grid2->addMultiCellWidget(m_goldenTriangleBox,          4, 4, 0, 2);
-    grid2->addMultiCellWidget(m_flipHorBox,                 5, 5, 0, 2);
-    grid2->addMultiCellWidget(m_flipVerBox,                 6, 6, 0, 2);
-    grid2->addMultiCellWidget(m_colorGuideLabel,            7, 7, 0, 0);
-    grid2->addMultiCellWidget(m_guideColorBt,               7, 7, 1, 1);
-    grid2->addMultiCellWidget(m_guideSize,                  7, 7, 2, 2);
+    grid2->addMultiCellWidget(labelGuideLines,          0, 0, 0, 0);
+    grid2->addMultiCellWidget(m_guideLinesCB,           0, 0, 1, 2);
+    grid2->addMultiCellWidget(m_goldenSectionBox,       1, 1, 0, 2);
+    grid2->addMultiCellWidget(m_goldenSpiralSectionBox, 2, 2, 0, 2);
+    grid2->addMultiCellWidget(m_goldenSpiralBox,        3, 3, 0, 2);
+    grid2->addMultiCellWidget(m_goldenTriangleBox,      4, 4, 0, 2);
+    grid2->addMultiCellWidget(m_flipHorBox,             5, 5, 0, 2);
+    grid2->addMultiCellWidget(m_flipVerBox,             6, 6, 0, 2);
+    grid2->addMultiCellWidget(m_colorGuideLabel,        7, 7, 0, 0);
+    grid2->addMultiCellWidget(m_guideColorBt,           7, 7, 1, 1);
+    grid2->addMultiCellWidget(m_guideSize,              7, 7, 2, 2);
     grid2->setMargin(m_gboxSettings->spacingHint());
     grid2->setSpacing(m_gboxSettings->spacingHint());
 
 
     // -------------------------------------------------------------
 
-    gboxLayout->addMultiCellWidget(cropSelection,           0, 0, 0, 1);
-    gboxLayout->addMultiCellWidget(compositionGuide,        1, 1, 0, 1);
+    gboxLayout->addMultiCellWidget(cropSelection,    0, 0, 0, 1);
+    gboxLayout->addMultiCellWidget(compositionGuide, 1, 1, 0, 1);
     gboxLayout->setRowStretch(2, 10);
     gboxLayout->setMargin(m_gboxSettings->spacingHint());
     gboxLayout->setSpacing(m_gboxSettings->spacingHint());
@@ -350,8 +351,8 @@ RatioCropTool::RatioCropTool(QObject* parent)
     connect(m_flipVerBox, SIGNAL(toggled(bool)),
             this, SLOT(slotGoldenGuideTypeChanged()));
 
-    connect(m_guideColorBt, SIGNAL(changed(const QColor &)),
-            m_imageSelectionWidget, SLOT(slotChangeGuideColor(const QColor &)));
+    connect(m_guideColorBt, SIGNAL(changed(const QColor&)),
+            m_imageSelectionWidget, SLOT(slotChangeGuideColor(const QColor&)));
 
     connect(m_guideSize, SIGNAL(valueChanged(int)),
             m_imageSelectionWidget, SLOT(slotChangeGuideSize(int)));
@@ -724,6 +725,18 @@ void RatioCropTool::slotGuideTypeChanged(int t)
         m_guideColorBt->setEnabled(true);
         m_guideSize->setEnabled(true);
     }
+    else if (t == ImageSelectionWidget::DiagonalMethod)
+    {
+        m_goldenSectionBox->setEnabled(false);
+        m_goldenSpiralSectionBox->setEnabled(false);
+        m_goldenSpiralBox->setEnabled(false);
+        m_goldenTriangleBox->setEnabled(false);
+        m_flipHorBox->setEnabled(false);
+        m_flipVerBox->setEnabled(false);
+        m_colorGuideLabel->setEnabled(true);
+        m_guideColorBt->setEnabled(true);
+        m_guideSize->setEnabled(true);
+    }
     else if (t == ImageSelectionWidget::HarmoniousTriangles)
     {
         m_goldenSectionBox->setEnabled(false);
@@ -812,13 +825,13 @@ void RatioCropTool::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
-    QRect currentRegion        = m_imageSelectionWidget->getRegionSelection();
-    ImageIface* iface          = m_imageSelectionWidget->imageIface();
-    uchar *data                = iface->getOriginalImage();
-    int w                      = iface->originalWidth();
-    int h                      = iface->originalHeight();
-    bool a                     = iface->originalHasAlpha();
-    bool sb                    = iface->originalSixteenBit();
+    QRect currentRegion = m_imageSelectionWidget->getRegionSelection();
+    ImageIface* iface   = m_imageSelectionWidget->imageIface();
+    uchar *data         = iface->getOriginalImage();
+    int w               = iface->originalWidth();
+    int h               = iface->originalHeight();
+    bool a              = iface->originalHasAlpha();
+    bool sb             = iface->originalSixteenBit();
 
     QRect normalizedRegion = currentRegion.normalize();
     if (normalizedRegion.right() > w)
