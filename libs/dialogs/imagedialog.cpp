@@ -6,7 +6,7 @@
  * Date        : 2008-03-13
  * Description : image files selector dialog.
  *
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -170,13 +170,13 @@ void ImageDialogPreview::showPreview(const KUrl& url)
             else sensitivity = i18n("%1 ISO", info.sensitivity);
 
             identify += "<table cellspacing=0 cellpadding=0>";
-            identify += cnt.cellBeg + i18n("Make:")        + cnt.cellMid + make         + cnt.cellEnd;
-            identify += cnt.cellBeg + i18n("Model:")       + cnt.cellMid + model        + cnt.cellEnd;
-            identify += cnt.cellBeg + i18n("Created:")     + cnt.cellMid + dateTime     + cnt.cellEnd;
-            identify += cnt.cellBeg + i18n("Aperture:")    + cnt.cellMid + aperture     + cnt.cellEnd;
-            identify += cnt.cellBeg + i18n("Focal:")       + cnt.cellMid + focalLength  + cnt.cellEnd;
-            identify += cnt.cellBeg + i18n("Exposure:")    + cnt.cellMid + exposureTime + cnt.cellEnd;
-            identify += cnt.cellBeg + i18n("Sensitivity:") + cnt.cellMid + sensitivity  + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("<i>Make:</i>")        + cnt.cellMid + make         + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("<i>Model:</i>")       + cnt.cellMid + model        + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("<i>Created:</i>")     + cnt.cellMid + dateTime     + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("<i>Aperture:</i>")    + cnt.cellMid + aperture     + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("<i>Focal:</i>")       + cnt.cellMid + focalLength  + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("<i>Exposure:</i>")    + cnt.cellMid + exposureTime + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("<i>Sensitivity:</i>") + cnt.cellMid + sensitivity  + cnt.cellEnd;
             identify += "</table></center></qt>";
 
             d->infoLabel->setText(identify);
