@@ -43,7 +43,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 031 ==> 180926 : Image thumbnails in albums not showing.
 032 ==> 181000 : Crash on closing Camera GUI after download+delete all.
 033 ==> 180908 : digiKam does not compile with recent Qt 4.5 snapshot; QVariant issue.
-034 ==> 
+034 ==> 180953 : Clicking a folder closes or open it instead of just view it.
+035 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
