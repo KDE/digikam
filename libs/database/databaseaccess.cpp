@@ -125,12 +125,6 @@ DatabaseAccess::DatabaseAccess(bool)
     d->lockCount++;
 }
 
-//TODO: Remove after beta
-void DatabaseAccess::assertNoLock()
-{
-    Q_ASSERT(d->lockCount == 0);
-}
-
 AlbumDB *DatabaseAccess::db() const
 {
     return d->db;

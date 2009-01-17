@@ -1079,9 +1079,8 @@ void CollectionManager::updateLocations()
     // get information from Solid
     QList<SolidVolumeInfo> volumes;
     {
-        // Absolutely ensure that the db mutex is not held when emitting the blocking queued signal
+        // Absolutely ensure that the db mutex is not held when emitting the blocking queued signal! Deadlock!
         DatabaseAccessUnlock unlock;
-        DatabaseAccess::assertNoLock(); //TODO: Remove after beta
         volumes = d->listVolumes();
     }
 

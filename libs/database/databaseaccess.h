@@ -137,8 +137,6 @@ public:
       */
     void setLastError(const QString &error);
 
-    static void assertNoLock();
-
 private:
 
     DatabaseAccess(bool);
