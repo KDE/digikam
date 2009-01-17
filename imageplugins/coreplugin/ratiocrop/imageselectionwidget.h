@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2007 by Jaromir Malenko <malenko at email.cz>
  * Copyright (C) 2008 by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -81,6 +81,7 @@ public:
     enum GuideLineType
     {
         RulesOfThirds = 0,         // Line guides position to 1/3 width and height.
+        DiagonalMethod,            // Diagonal Method to improve composition.
         HarmoniousTriangles,       // Harmonious Triangle to improve composition.
         GoldenMean,                // Guides tools using Phi ratio (1.618).
         GuideNone                  // No guide line.
@@ -129,13 +130,13 @@ public:
 public slots:
 
     void slotGuideLines(int guideLinesType);
-    void slotChangeGuideColor(const QColor &color);
+    void slotChangeGuideColor(const QColor& color);
     void slotChangeGuideSize(int size);
 
 signals:
 
-    void signalSelectionMoved( QRect rect );
-    void signalSelectionChanged( QRect rect );
+    void signalSelectionMoved(const QRect& rect);
+    void signalSelectionChanged(const QRect& rect);
     void signalSelectionOrientationChanged( int newOrientation );
 
 protected:
@@ -149,24 +150,24 @@ protected:
 private:
 
     // Recalculate the target selection position and emit 'signalSelectionMoved'.
-    void regionSelectionMoved();
+    void   regionSelectionMoved();
 
-    void regionSelectionChanged();
+    void   regionSelectionChanged();
     QPoint convertPoint(const QPoint pm, bool localToReal=true);
     QPoint convertPoint(int x, int y, bool localToReal=true);
-    void normalizeRegion();
-    void reverseRatioValues();
-    int computePreciseSize(int size, int step);
-    void applyAspectRatio(bool useHeight, bool repaintWidget=true);
-    void updatePixmap();
+    void   normalizeRegion();
+    void   reverseRatioValues();
+    int    computePreciseSize(int size, int step);
+    void   applyAspectRatio(bool useHeight, bool repaintWidget=true);
+    void   updatePixmap();
     QPoint opposite();
-    float distance(QPoint a, QPoint b);
-    void placeSelection(QPoint pm, bool symmetric, QPoint center);
-    void setCursorResizing();
+    float  distance(QPoint a, QPoint b);
+    void   placeSelection(QPoint pm, bool symmetric, QPoint center);
+    void   setCursorResizing();
 
 private:
 
-    ImageSelectionWidgetPriv* d;
+    ImageSelectionWidgetPriv* const d;
 };
 
 }  // namespace DigikamImagesPluginCore

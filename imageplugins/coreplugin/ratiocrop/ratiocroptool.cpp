@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2007 by Jaromir Malenko <malenko at email dot cz>
  * Copyright (C) 2008 by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +22,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "ratiocroptool.h"
 #include "ratiocroptool.moc"
@@ -64,7 +63,6 @@
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageselectionwidget.h"
-
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -232,6 +230,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
     QLabel *labelGuideLines = new QLabel(i18n("Composition guide:"), compositionGuide);
     m_guideLinesCB = new RComboBox(compositionGuide);
     m_guideLinesCB->addItem(i18n("Rules of Thirds"));
+    m_guideLinesCB->addItem(i18n("Diagonal Method"));
     m_guideLinesCB->addItem(i18n("Harmonious Triangles"));
     m_guideLinesCB->addItem(i18n("Golden Mean"));
     m_guideLinesCB->addItem(i18nc("no composition guide", "None"));
@@ -269,36 +268,36 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    grid->addWidget(label,                      0, 0, 1, 1);
-    grid->addWidget(m_ratioCB,                  0, 1, 1, 3);
-    grid->addWidget(m_preciseCrop,              0, 4, 1, 1);
-    grid->addWidget(m_orientLabel,              2, 0, 1, 1);
-    grid->addWidget(m_orientCB,                 2, 1, 1, 3);
-    grid->addWidget(m_autoOrientation,          2, 4, 1, 1);
-    grid->addWidget(m_customLabel1,             1, 0, 1, 1);
-    grid->addWidget(m_customRatioNInput,        1, 1, 1, 1);
-    grid->addWidget(m_customLabel2,             1, 2, 1, 1);
-    grid->addWidget(m_customRatioDInput,        1, 3, 1, 1);
-    grid->addWidget(m_xInput,                   3, 0, 1, 4);
-    grid->addWidget(m_widthInput,               4, 0, 1, 4);
-    grid->addWidget(m_centerWidth,              4, 4, 1, 1);
-    grid->addWidget(m_yInput,                   5, 0, 1, 4);
-    grid->addWidget(m_heightInput,              6, 0, 1, 4);
-    grid->addWidget(m_centerHeight,             6, 4, 1, 1);
+    grid->addWidget(label,               0, 0, 1, 1);
+    grid->addWidget(m_ratioCB,           0, 1, 1, 3);
+    grid->addWidget(m_preciseCrop,       0, 4, 1, 1);
+    grid->addWidget(m_orientLabel,       2, 0, 1, 1);
+    grid->addWidget(m_orientCB,          2, 1, 1, 3);
+    grid->addWidget(m_autoOrientation,   2, 4, 1, 1);
+    grid->addWidget(m_customLabel1,      1, 0, 1, 1);
+    grid->addWidget(m_customRatioNInput, 1, 1, 1, 1);
+    grid->addWidget(m_customLabel2,      1, 2, 1, 1);
+    grid->addWidget(m_customRatioDInput, 1, 3, 1, 1);
+    grid->addWidget(m_xInput,            3, 0, 1, 4);
+    grid->addWidget(m_widthInput,        4, 0, 1, 4);
+    grid->addWidget(m_centerWidth,       4, 4, 1, 1);
+    grid->addWidget(m_yInput,            5, 0, 1, 4);
+    grid->addWidget(m_heightInput,       6, 0, 1, 4);
+    grid->addWidget(m_centerHeight,      6, 4, 1, 1);
     grid->setMargin(m_gboxSettings->spacingHint());
     grid->setSpacing(m_gboxSettings->spacingHint());
 
-    grid2->addWidget(labelGuideLines,           0, 0, 1, 1);
-    grid2->addWidget(m_guideLinesCB,            0, 1, 1, 2);
-    grid2->addWidget(m_goldenSectionBox,        1, 0, 1, 3);
-    grid2->addWidget(m_goldenSpiralSectionBox,  2, 0, 1, 3);
-    grid2->addWidget(m_goldenSpiralBox,         3, 0, 1, 3);
-    grid2->addWidget(m_goldenTriangleBox,       4, 0, 1, 3);
-    grid2->addWidget(m_flipHorBox,              5, 0, 1, 3);
-    grid2->addWidget(m_flipVerBox,              6, 0, 1, 3);
-    grid2->addWidget(m_colorGuideLabel,         7, 0, 1, 1);
-    grid2->addWidget(m_guideColorBt,            7, 1, 1, 1);
-    grid2->addWidget(m_guideSize,               7, 2, 1, 1);
+    grid2->addWidget(labelGuideLines,          0, 0, 1, 1);
+    grid2->addWidget(m_guideLinesCB,           0, 1, 1, 2);
+    grid2->addWidget(m_goldenSectionBox,       1, 0, 1, 3);
+    grid2->addWidget(m_goldenSpiralSectionBox, 2, 0, 1, 3);
+    grid2->addWidget(m_goldenSpiralBox,        3, 0, 1, 3);
+    grid2->addWidget(m_goldenTriangleBox,      4, 0, 1, 3);
+    grid2->addWidget(m_flipHorBox,             5, 0, 1, 3);
+    grid2->addWidget(m_flipVerBox,             6, 0, 1, 3);
+    grid2->addWidget(m_colorGuideLabel,        7, 0, 1, 1);
+    grid2->addWidget(m_guideColorBt,           7, 1, 1, 1);
+    grid2->addWidget(m_guideSize,              7, 2, 1, 1);
     grid2->setMargin(m_gboxSettings->spacingHint());
     grid2->setSpacing(m_gboxSettings->spacingHint());
 
@@ -358,8 +357,8 @@ RatioCropTool::RatioCropTool(QObject* parent)
     connect(m_flipVerBox, SIGNAL(toggled(bool)),
             this, SLOT(slotGoldenGuideTypeChanged()));
 
-    connect(m_guideColorBt, SIGNAL(changed(const QColor &)),
-            m_imageSelectionWidget, SLOT(slotChangeGuideColor(const QColor &)));
+    connect(m_guideColorBt, SIGNAL(changed(const QColor&)),
+            m_imageSelectionWidget, SLOT(slotChangeGuideColor(const QColor&)));
 
     connect(m_guideSize, SIGNAL(valueChanged(int)),
             m_imageSelectionWidget, SLOT(slotChangeGuideSize(int)));
@@ -370,11 +369,11 @@ RatioCropTool::RatioCropTool(QObject* parent)
     connect(m_heightInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotHeightChanged(int)));
 
-    connect(m_imageSelectionWidget, SIGNAL(signalSelectionChanged(QRect)),
-            this, SLOT(slotSelectionChanged(QRect)));
+    connect(m_imageSelectionWidget, SIGNAL(signalSelectionChanged(const QRect&)),
+            this, SLOT(slotSelectionChanged(const QRect&)));
 
-    connect(m_imageSelectionWidget, SIGNAL(signalSelectionMoved(QRect)),
-            this, SLOT(slotSelectionChanged(QRect)));
+    connect(m_imageSelectionWidget, SIGNAL(signalSelectionMoved(const QRect&)),
+            this, SLOT(slotSelectionChanged(const QRect&)));
 
     connect(m_imageSelectionWidget, SIGNAL(signalSelectionOrientationChanged(int)),
             this, SLOT(slotSelectionOrientationChanged(int)));
@@ -408,7 +407,7 @@ void RatioCropTool::readSettings()
 {
     QColor defaultGuideColor(250, 250, 255);
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("aspectratiocrop Tool");
+    KConfigGroup group        = config->group("aspectratiocrop Tool");
 
     // No guide lines per default.
     m_guideLinesCB->setCurrentIndex(group.readEntry("Guide Lines Type",
@@ -532,7 +531,7 @@ void RatioCropTool::slotCenterHeight()
     m_imageSelectionWidget->setCenterSelection(ImageSelectionWidget::CenterHeight);
 }
 
-void RatioCropTool::slotSelectionChanged(QRect rect)
+void RatioCropTool::slotSelectionChanged(const QRect& rect)
 {
     m_xInput->blockSignals(true);
     m_yInput->blockSignals(true);
@@ -732,6 +731,18 @@ void RatioCropTool::slotGuideTypeChanged(int t)
         m_guideColorBt->setEnabled(true);
         m_guideSize->setEnabled(true);
     }
+    else if (t == ImageSelectionWidget::DiagonalMethod)
+    {
+        m_goldenSectionBox->setEnabled(false);
+        m_goldenSpiralSectionBox->setEnabled(false);
+        m_goldenSpiralBox->setEnabled(false);
+        m_goldenTriangleBox->setEnabled(false);
+        m_flipHorBox->setEnabled(false);
+        m_flipVerBox->setEnabled(false);
+        m_colorGuideLabel->setEnabled(true);
+        m_guideColorBt->setEnabled(true);
+        m_guideSize->setEnabled(true);
+    }
     else if (t == ImageSelectionWidget::HarmoniousTriangles)
     {
         m_goldenSectionBox->setEnabled(false);
@@ -820,13 +831,13 @@ void RatioCropTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
 
-    QRect currentRegion        = m_imageSelectionWidget->getRegionSelection();
-    ImageIface* iface = m_imageSelectionWidget->imageIface();
-    uchar *data                = iface->getOriginalImage();
-    int w                      = iface->originalWidth();
-    int h                      = iface->originalHeight();
-    bool a                     = iface->originalHasAlpha();
-    bool sb                    = iface->originalSixteenBit();
+    QRect currentRegion = m_imageSelectionWidget->getRegionSelection();
+    ImageIface* iface   = m_imageSelectionWidget->imageIface();
+    uchar *data         = iface->getOriginalImage();
+    int w               = iface->originalWidth();
+    int h               = iface->originalHeight();
+    bool a              = iface->originalHasAlpha();
+    bool sb             = iface->originalSixteenBit();
 
     QRect normalizedRegion = currentRegion.normalized();
     if (normalizedRegion.right() > w) normalizedRegion.setRight(w);

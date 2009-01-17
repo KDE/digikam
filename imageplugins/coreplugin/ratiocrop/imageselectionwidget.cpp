@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2007 by Jaromir Malenko <malenko at email.cz>
  * Copyright (C) 2008 by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -147,9 +147,8 @@ public:
 ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent,
                                            int widthRatioValue, int heightRatioValue,
                                            int aspectRatioType, int orient, int guideLinesType)
-                    : QWidget(parent)
+                    : QWidget(parent), d(new ImageSelectionWidgetPriv)
 {
-    d = new ImageSelectionWidgetPriv;
     d->currentAspectRatioType  = aspectRatioType;
     d->currentWidthRatioValue  = widthRatioValue;
     d->currentHeightRatioValue = heightRatioValue;
@@ -212,37 +211,37 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent *e)
 
     d->pixmap = new QPixmap(w, h);
 
-    d->rect = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2,
-                    d->preview.width(), d->preview.height());
+    d->rect   = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2,
+                      d->preview.width(), d->preview.height());
     updatePixmap();
 }
 
-int ImageSelectionWidget::getOriginalImageWidth(void)
+int ImageSelectionWidget::getOriginalImageWidth()
 {
     return d->image.width();
 }
 
-int ImageSelectionWidget::getOriginalImageHeight(void)
+int ImageSelectionWidget::getOriginalImageHeight()
 {
     return d->image.height();
 }
 
-QRect ImageSelectionWidget::getRegionSelection(void)
+QRect ImageSelectionWidget::getRegionSelection()
 {
     return d->regionSelection;
 }
 
-int ImageSelectionWidget::getMinWidthRange(void)
+int ImageSelectionWidget::getMinWidthRange()
 {
     return MINRANGE;
 }
 
-int ImageSelectionWidget::getMinHeightRange(void)
+int ImageSelectionWidget::getMinHeightRange()
 {
     return MINRANGE;
 }
 
-int ImageSelectionWidget::getMaxWidthRange(void)
+int ImageSelectionWidget::getMaxWidthRange()
 {
     int maxW = d->image.width() - d->regionSelection.left();
 
@@ -261,7 +260,7 @@ int ImageSelectionWidget::getMaxWidthRange(void)
     return computePreciseSize(maxW, (int)d->currentWidthRatioValue);
 }
 
-int ImageSelectionWidget::getMaxHeightRange(void)
+int ImageSelectionWidget::getMaxHeightRange()
 {
     int maxH = d->image.height() - d->regionSelection.top();
 
@@ -298,7 +297,7 @@ int ImageSelectionWidget::getHeightStep()
 
 // Draw a new centered selection with half width (if orientation = Landscape)
 // or with half height (if orientation = Portrait)
-void ImageSelectionWidget::resetSelection(void)
+void ImageSelectionWidget::resetSelection()
 {
     d->regionSelection.setWidth(d->image.width()/2);
     d->regionSelection.setHeight(d->image.height()/2);
@@ -342,7 +341,7 @@ void ImageSelectionWidget::setCenterSelection(int centerType)
 }
 
 // Draw a new centered selection with max size
-void ImageSelectionWidget::maxAspectSelection(void)
+void ImageSelectionWidget::maxAspectSelection()
 {
     d->regionSelection.setWidth(d->image.width());
     d->regionSelection.setHeight(d->image.height());
@@ -371,7 +370,7 @@ void ImageSelectionWidget::slotGuideLines(int guideLinesType)
     repaint();
 }
 
-void ImageSelectionWidget::slotChangeGuideColor(const QColor &color)
+void ImageSelectionWidget::slotChangeGuideColor(const QColor& color)
 {
     d->guideColor = color;
     updatePixmap();
@@ -401,37 +400,37 @@ void ImageSelectionWidget::setSelectionAspectRatioType(int aspectRatioType)
     switch(aspectRatioType)
     {
        case RATIO01X01:
-          d->currentWidthRatioValue = 1.0;
+          d->currentWidthRatioValue  = 1.0;
           d->currentHeightRatioValue = 1.0;
           break;
 
        case RATIO03X04:
-          d->currentWidthRatioValue = 4.0;
+          d->currentWidthRatioValue  = 4.0;
           d->currentHeightRatioValue = 3.0;
           break;
 
        case RATIO02x03:
-          d->currentWidthRatioValue = 3.0;
+          d->currentWidthRatioValue  = 3.0;
           d->currentHeightRatioValue = 2.0;
           break;
 
        case RATIO05x07:
-          d->currentWidthRatioValue = 7.0;
+          d->currentWidthRatioValue  = 7.0;
           d->currentHeightRatioValue = 5.0;
           break;
 
        case RATIO07x10:
-          d->currentWidthRatioValue = 10.0;
+          d->currentWidthRatioValue  = 10.0;
           d->currentHeightRatioValue = 7.0;
           break;
 
        case RATIO04X05:
-          d->currentWidthRatioValue = 5.0;
+          d->currentWidthRatioValue  = 5.0;
           d->currentHeightRatioValue = 4.0;
           break;
 
        case RATIOGOLDEN:
-          d->currentWidthRatioValue = PHI;
+          d->currentWidthRatioValue  = PHI;
           d->currentHeightRatioValue = 1.0;
           break;
     }
@@ -478,7 +477,7 @@ void ImageSelectionWidget::setSelectionAspectRatioValue(int widthRatioValue,
     applyAspectRatio(false);
 }
 
-void ImageSelectionWidget::reverseRatioValues(void)
+void ImageSelectionWidget::reverseRatioValues()
 {
     // Reverse ratio values if needed
     if ( ( d->currentWidthRatioValue > d->currentHeightRatioValue &&
@@ -818,6 +817,50 @@ void ImageSelectionWidget::updatePixmap()
             break;
        }
 
+       case DiagonalMethod:
+       {
+           // Move coordinates to top, left
+           p.translate(d->localRegionSelection.topLeft().x(), d->localRegionSelection.topLeft().y());
+
+           float w = (float)d->localRegionSelection.width();
+           float h = (float)d->localRegionSelection.height();
+
+           p.setPen(QPen(Qt::white, d->guideSize, Qt::SolidLine));
+           if (w > h)
+           {
+               p.drawLine(0, 0, h, h);
+               p.drawLine(0, h, h, 0);
+               p.drawLine(w-h, 0, w, h);
+               p.drawLine(w-h, h, w, 0);
+
+           }
+           else
+           {
+               p.drawLine(0, 0, w, w);
+               p.drawLine(0, w, w, 0);
+               p.drawLine(0, h-w, w, h);
+               p.drawLine(0, h, w, h-w);
+           }
+
+           p.setPen(QPen(d->guideColor, d->guideSize, Qt::DotLine));
+           if (w > h)
+           {
+               p.drawLine(0, 0, h, h);
+               p.drawLine(0, h, h, 0);
+               p.drawLine(w-h, 0, w, h);
+               p.drawLine(w-h, h, w, 0);
+
+           }
+           else
+           {
+               p.drawLine(0, 0, w, w);
+               p.drawLine(0, w, w, 0);
+               p.drawLine(0, h-w, w, h);
+               p.drawLine(0, h, w, h-w);
+           }
+           break;
+       }
+
        case HarmoniousTriangles:
        {
             // Move coordinates to local center selection.
@@ -1079,17 +1122,12 @@ void ImageSelectionWidget::paintEvent( QPaintEvent * )
     p.end();
 }
 
-QPoint ImageSelectionWidget::opposite(void)
+QPoint ImageSelectionWidget::opposite()
 {
     QPoint opp;
 
     switch(d->currentResizing)
     {
-        case ImageSelectionWidgetPriv::ResizingTopLeft:
-        default:
-            opp = d->regionSelection.bottomRight();
-            break;
-
         case ImageSelectionWidgetPriv::ResizingTopRight:
             opp = d->regionSelection.bottomLeft();
             break;
@@ -1100,6 +1138,11 @@ QPoint ImageSelectionWidget::opposite(void)
 
         case ImageSelectionWidgetPriv::ResizingBottomRight:
             opp = d->regionSelection.topLeft();
+            break;
+
+        case ImageSelectionWidgetPriv::ResizingTopLeft:
+        default:
+            opp = d->regionSelection.bottomRight();
             break;
     }
 
@@ -1207,14 +1250,14 @@ void ImageSelectionWidget::mousePressEvent ( QMouseEvent * e )
 {
     if ( e->button() == Qt::LeftButton )
     {
-        QPoint pm = QPoint(e->x(), e->y());
+        QPoint pm        = QPoint(e->x(), e->y());
         QPoint pmVirtual = convertPoint(pm);
-        d->moving = false;
+        d->moving        = false;
 
         if ( (e->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier )
         {
             bool symmetric = (e->modifiers() & Qt::ControlModifier ) == Qt::ControlModifier;
-            QPoint center = d->regionSelection.center();
+            QPoint center  = d->regionSelection.center();
 
             // Find the closest corner
 
@@ -1324,7 +1367,7 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
                 d->currentResizing = ImageSelectionWidgetPriv::ResizingTopLeft; // set to anything
             }
 
-            QPoint center = d->regionSelection.center();
+            QPoint center  = d->regionSelection.center();
             bool symmetric = (e->modifiers() & Qt::ControlModifier ) == Qt::ControlModifier;
 
             // Change resizing mode
