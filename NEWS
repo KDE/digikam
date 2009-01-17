@@ -41,7 +41,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 177009 : digiKam eats all CPU when Restore plugin is selected.
 030 ==> 179807 : Inpainting tool stuck at 0%.
 031 ==> 180926 : Image thumbnails in albums not showing.
-032 ==> 
+032 ==> 181000 : Crash on closing Camera GUI after download+delete all.
+033 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
