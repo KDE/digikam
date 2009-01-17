@@ -428,6 +428,9 @@ void CameraIconView::slotDownloadNameChanged()
 
 void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
 {
+    if (!count())
+        return;
+
     bool useDefault = true;
     int  startIndex = 0;
 
