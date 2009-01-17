@@ -6,6 +6,8 @@ NEW FEATURES:
 General        : Thumbbar item can be rated on the fly.
 General        : New settings to fix file timestamp when metadata are saved.
 
+ImagEditor     : New ratio crop composition guide based on Diagonal Rules.
+
 AlbumGui       : Icon view item can be rated on the fly.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
@@ -44,7 +46,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 032 ==> 181000 : Crash on closing Camera GUI after download+delete all.
 033 ==> 180908 : digiKam does not compile with recent Qt 4.5 snapshot; QVariant issue.
 034 ==> 180953 : Clicking a folder closes or open it instead of just view it.
-035 ==> 
+035 ==> 179548 : Additional guide for aspect ratio crop.
+036 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
