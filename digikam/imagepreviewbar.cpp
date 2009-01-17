@@ -438,10 +438,10 @@ void ImagePreviewBar::contentsMouseMoveEvent(QMouseEvent *e)
         if (item)
         {
             QRect clickToRateRect;
-            clickToRateRect.setTop(item->rect().bottom()-getMargin()-d->ratingPixmap.height());
-            clickToRateRect.setBottom(item->rect().bottom());
-            clickToRateRect.setLeft(item->rect().left());
-            clickToRateRect.setRight(item->rect().right());
+            clickToRateRect.setTop(item->rect().bottom()-getMargin()-d->ratingPixmap.height()-1);
+            clickToRateRect.setBottom(item->rect().bottom()-1);
+            clickToRateRect.setLeft(item->rect().left()-1);
+            clickToRateRect.setRight(item->rect().right()-1);
 
             if (clickToRateRect.contains(e->pos()))
             {
