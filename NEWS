@@ -1,7 +1,9 @@
 **********************************************************************************************
 digiKam 0.9.5-beta3 - Release date: 2009-01-xx
 
-NEW FEATURES:
+NEW FEATURES: 
+
+Image Editor   : New composition guide based on Diagonal Rules.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
