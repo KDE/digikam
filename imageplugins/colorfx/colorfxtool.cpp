@@ -286,7 +286,7 @@ void ColorFXTool::slotEffect()
        delete [] m_destinationPreviewData;
 
     ImageIface* iface      = m_previewWidget->imageIface();
-    uchar *m_destinationPreviewData = iface->getPreviewImage();
+    m_destinationPreviewData = iface->getPreviewImage();
     int w                           = iface->previewWidth();
     int h                           = iface->previewHeight();
     bool sb                         = iface->previewSixteenBit();
