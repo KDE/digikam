@@ -467,6 +467,8 @@ void AlbumFolderView::slotAlbumRenamed(Album *album)
     AlbumFolderViewItem* item = (AlbumFolderViewItem*) palbum->extraData(this);
     if(item)
         item->refresh();
+    if (item->parent())
+        item->parent()->sort();
 }
 
 void AlbumFolderView::slotAlbumsCleared()
