@@ -47,7 +47,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 033 ==> 180908 : digiKam does not compile with recent Qt 4.5 snapshot; QVariant issue.
 034 ==> 180953 : Clicking a folder closes or open it instead of just view it.
 035 ==> 179548 : Additional guide for aspect ratio crop.
-036 ==> 
+036 ==> 181146 : Source album {MY ALBUM NAME} not found in database.
+037 ==> 169306 : Renaming an album should reorder the whole album list.
+038 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
