@@ -1554,13 +1554,17 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
 
     QString oldAlbumPath = album->albumPath();
 
-    KUrl u = album->fileUrl();
-    u      = u.upUrl();
-    u.addPath(newName);
+    KUrl oldUrl = album->fileUrl();
+    album->setTitle(newName);
+    album->m_path = newName;
+    KUrl newUrl = album->fileUrl();
 
-    //TODO: Use KIO::NetAccess
-    if (::rename(QFile::encodeName(album->folderPath()),
-                 QFile::encodeName(u.path(KUrl::RemoveTrailingSlash))) != 0)
+    // We use a private shortcut around collection scanner noticing our changes,
+    // we rename them directly. Faster.
+    ScanController::instance()->suspendCollectionScan();
+
+    KIO::Job *job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
+    if (!KIO::NetAccess::synchronousRun(job, 0))
     {
         errMsg = i18n("Failed to rename Album");
         return false;
@@ -1568,7 +1572,6 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
 
     // now rename the album and subalbums in the database
 
-    album->setTitle(newName);
     {
         DatabaseAccess access;
         ChangingDB changing(d);
@@ -1585,6 +1588,8 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
 
     updateAlbumPathHash();
     emit signalAlbumRenamed(album);
+
+    ScanController::instance()->resumeCollectionScan();
 
     return true;
 }
