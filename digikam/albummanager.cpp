@@ -921,6 +921,8 @@ void AlbumManager::updateChangedPAlbums()
     // scan db and get a list of all albums
     QList<AlbumInfo> currentAlbums = DatabaseAccess().db()->scanAlbums();
 
+    bool needScanPAlbums = false;
+
     // Find the AlbumInfo for each id in changedPAlbums
     foreach (int id, d->changedPAlbums)
     {
@@ -936,9 +938,19 @@ void AlbumManager::updateChangedPAlbums()
                     // Renamed?
                     if (info.relativePath != "/")
                     {
+                        // Handle rename of album name
                         // last section, no slash
                         QString name = info.relativePath.section('/', -1, -1);
-                        if (name != album->title())
+                        QString parentPath = info.relativePath;
+                        parentPath.chop(name.length());
+                        if (parentPath != album->m_parentPath || info.albumRootId != album->albumRootId())
+                        {
+                            // Handle actual move operations: trigger ScanPAlbums
+                            needScanPAlbums = true;
+                            removePAlbum(album);
+                            break;
+                        }
+                        else if (name != album->title())
                         {
                             album->setTitle(name);
                             updateAlbumPathHash();
@@ -968,6 +980,9 @@ void AlbumManager::updateChangedPAlbums()
             }
         }
     }
+
+    if (needScanPAlbums)
+        scanPAlbums();
 }
 
 void AlbumManager::getAlbumItemsCount()
@@ -2417,20 +2432,20 @@ void AlbumManager::slotDirWatchDirty(const QString& path)
 
 void AlbumManager::slotKioFileMoved(const QString& urlFrom, const QString& urlTo)
 {
-    //kDebug(50003) << urlFrom << urlTo;
+    kDebug(50003) << urlFrom << urlTo;
     handleKioNotification(KUrl(urlFrom));
     handleKioNotification(KUrl(urlTo));
 }
 
 void AlbumManager::slotKioFilesAdded(const QString& url)
 {
-    //kDebug(50003) << url;
+    kDebug(50003) << url;
     handleKioNotification(KUrl(url));
 }
 
 void AlbumManager::slotKioFilesDeleted(const QStringList& urls)
 {
-    //kDebug(50003) << urls;
+    kDebug(50003) << urls;
     foreach (const QString &url, urls)
         handleKioNotification(KUrl(url));
 }
