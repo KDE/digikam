@@ -52,7 +52,11 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 038 ==> 180342 : Crash when migrating from 9.4 on Ubuntu Intrepid Ibex.
 039 ==> 181203 : Crash when closing import window.
 040 ==> 181221 : Lighttable crashes when playing with the zoom.
-041 ==> 
+041 ==> 180351 : Tooltip exposure shown as "unavailable" even if info present in EXIF.
+042 ==> 180110 : Search by rating does not work in combination with other search arguments.
+043 ==> 178326 : Misleading error method when database locked.
+044 ==> 174469 : Fatal error message  signal11(SIGSEGV).
+045 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
