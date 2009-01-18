@@ -61,6 +61,8 @@ private:
 private slots: 
 
     void slotSearchTextChanged(const SearchTextSettings&);
+    void slotNewAlbum();
+    void slotAlbumAdded(Album* album);
 
 private:
 
