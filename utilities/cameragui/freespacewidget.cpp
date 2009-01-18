@@ -285,19 +285,23 @@ void FreeSpaceWidget::paintEvent(QPaintEvent*)
         unsigned long eUsedKb = d->dSizeKb + d->kBUsed;
         int peUsed            = (int)(100.0*((double)eUsedKb/(double)d->kBSize));
         int pClamp            = peUsed > 100 ? 100 : peUsed;
-        p.setBrush(peUsed > 95 ? Qt::red : Qt::darkGreen);
-        p.setPen(Qt::white);
-        QRect gRect(d->iconPix.height()+2, 1,
+        QColor barcol         = QColor(62, 255, 62);          // Smooth Green.
+        if (peUsed > 80)      barcol = QColor(240, 255, 62);  // Smooth Yellow.
+        else if (peUsed > 95) barcol = QColor(255, 62, 62);   // Smooth Red.
+
+        p.setBrush(barcol);
+        p.setPen(palette().light().color());
+        QRect gRect(d->iconPix.height()+3, 2,
                     (int)(((double)width()-3.0-d->iconPix.width()-2.0)*(pClamp/100.0)),
-                    height()-3);
+                    height()-5);
         p.drawRect(gRect);
 
-        QRect tRect(d->iconPix.height()+2, 1, width()-3-d->iconPix.width()-2, height()-3);
+        QRect tRect(d->iconPix.height()+3, 2, width()-3-d->iconPix.width()-2, height()-5);
         QString text        = QString("%1%").arg(peUsed);
         QFontMetrics fontMt = p.fontMetrics();
         QRect fontRect      = fontMt.boundingRect(tRect.x(), tRect.y(),
-                                                tRect.width(), tRect.height(), 0, text);
-        p.setPen(palette().text().color());
+                                                  tRect.width(), tRect.height(), 0, text);
+        p.setPen(Qt::black);
         p.drawText(tRect, Qt::AlignCenter, text);
     }
 }
