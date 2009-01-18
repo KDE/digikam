@@ -164,8 +164,9 @@ CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
 
 CameraUI::~CameraUI()
 {
-    delete d->rightSidebar;
+    disconnect(d->view, 0, this, 0);
     delete d->view;
+    delete d->rightSidebar;
     delete d->controller;
     delete d;
 }
