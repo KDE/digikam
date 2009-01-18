@@ -568,7 +568,7 @@ void LightTablePreview::slotPanIconSelectionMoved(const QRect& r, bool b)
     if (b)
     {
         d->panIconPopup->hide();
-        delete d->panIconPopup;
+        d->panIconPopup->deleteLater();
         d->panIconPopup = 0;
         slotPanIconHiden();
     }
