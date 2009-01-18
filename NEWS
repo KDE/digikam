@@ -51,7 +51,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 037 ==> 169306 : Renaming an album should reorder the whole album list.
 038 ==> 180342 : Crash when migrating from 9.4 on Ubuntu Intrepid Ibex.
 039 ==> 181203 : Crash when closing import window.
-040 ==> 
+040 ==> 181221 : Lighttable crashes when playing with the zoom.
+041 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
