@@ -428,7 +428,24 @@ void ImagePreviewBar::startDrag()
     drag->exec();
 }
 
-void ImagePreviewBar::contentsMouseMoveEvent(QMouseEvent *e)
+void ImagePreviewBar::mouseMoveEvent(QMouseEvent* e)
+{
+    if (!e) return;
+    if (e->buttons() == Qt::NoButton)
+    {
+        ThumbBarItem* item = findItem(e->pos());
+        if (!item)
+        {
+            unsetCursor();
+            d->ratingBox->hide();
+            d->ratingItem = 0;
+        }
+    }
+
+    ThumbBarView::mouseMoveEvent(e);
+}
+
+void ImagePreviewBar::contentsMouseMoveEvent(QMouseEvent* e)
 {
     if (!e) return;
 
@@ -464,6 +481,12 @@ void ImagePreviewBar::contentsMouseMoveEvent(QMouseEvent *e)
                 d->ratingItem = 0;
                 item->repaint();
             }
+        }
+        else
+        {
+            unsetCursor();
+            d->ratingBox->hide();
+            d->ratingItem = 0;
         }
     }
 

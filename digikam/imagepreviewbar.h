@@ -83,6 +83,7 @@ protected:
     virtual void leaveEvent(QEvent*);
     virtual void focusOutEvent(QFocusEvent*);
     virtual void contentsWheelEvent(QWheelEvent*);
+    virtual void mouseMoveEvent(QMouseEvent*);
 
 private slots:
 
