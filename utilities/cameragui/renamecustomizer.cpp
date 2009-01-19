@@ -130,7 +130,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
                 : QButtonGroup(parent)
 {
     d = new RenameCustomizerPriv;
-    d->changedTimer = new QTimer();
+    d->changedTimer = new QTimer(this);
     d->cameraTitle  = cameraTitle;
 
     setFrameStyle( QFrame::NoFrame );

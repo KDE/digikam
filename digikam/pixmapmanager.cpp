@@ -91,7 +91,7 @@ PixmapManager::PixmapManager(AlbumIconView* view)
     d->cache->setAutoDelete(true);
     d->thumbCacheDir = QDir::homeDirPath() + "/.thumbnails/";
     
-    d->timer = new QTimer();
+    d->timer = new QTimer(this);
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotCompleted()));
 }

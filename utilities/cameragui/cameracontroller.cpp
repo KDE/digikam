@@ -644,7 +644,7 @@ CameraController::CameraController(QWidget* parent, const QString& title, const 
     }
 
     d->thread = new CameraThread(this);
-    d->timer  = new QTimer();
+    d->timer  = new QTimer(this);
 
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotProcessNext()));

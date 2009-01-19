@@ -68,7 +68,7 @@ AnimWidget::AnimWidget(QWidget* parent, int size)
     d->pix  = new QPixmap(d->size, d->size);
     setFixedSize(d->size, d->size);
 
-    d->timer = new QTimer();
+    d->timer = new QTimer(this);
     
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotTimeout()));
