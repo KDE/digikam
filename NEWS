@@ -59,7 +59,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 045 ==> 167725 : After clicking on thumbnails, digikam doesn't show any images and crashes.
 046 ==> 180926 : Image thumbnails in albums not showing.
 047 ==> 181184 : In fullscreen, thumbnails rating stars follow bottom scrollbar.
-048 ==> 
+048 ==> 180009 : digiKam crashed when downloading pictures from pictures from digital camera.
+049 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
