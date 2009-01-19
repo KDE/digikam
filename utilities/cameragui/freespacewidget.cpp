@@ -49,7 +49,7 @@
 
 // Local includes.
 
-#include "ditemtooltip.h"
+#include "freespacetooltip.h"
 #include "albumsettings.h"
 
 namespace Digikam
@@ -61,19 +61,19 @@ public:
 
     MountPointInfo()
     {
-        isValid     = false;
-        kBSize      = 0;
-        kBUsed      = 0;
-        kBAvail     = 0;
+        isValid = false;
+        kBSize  = 0;
+        kBUsed  = 0;
+        kBAvail = 0;
     }
-
-    QString       mountPoint;
 
     bool          isValid;
 
     unsigned long kBSize;
     unsigned long kBUsed;
     unsigned long kBAvail;
+
+    QString       mountPoint;
 };
 
 class FreeSpaceWidgetPriv
@@ -82,14 +82,15 @@ public:
 
     FreeSpaceWidgetPriv()
     {
-        timer       = 0;
-        isValid     = false;
-        percentUsed = 0;
-        kBSize      = 0;
-        kBUsed      = 0;
-        kBAvail     = 0;
-        dSizeKb     = 0;
-        mode        = FreeSpaceWidget::AlbumLibrary;
+        toolTip      = 0;
+        timer        = 0;
+        isValid      = false;
+        percentUsed  = 0;
+        kBSize       = 0;
+        kBUsed       = 0;
+        kBAvail      = 0;
+        dSizeKb      = 0;
+        mode         = FreeSpaceWidget::AlbumLibrary;
     }
 
     bool                            isValid;
@@ -108,6 +109,8 @@ public:
 
     QPixmap                         iconPix;
 
+    FreeSpaceToolTip               *toolTip;
+
     FreeSpaceWidget::FreeSpaceMode  mode;
 };
 
@@ -117,7 +120,8 @@ FreeSpaceWidget::FreeSpaceWidget(QWidget* parent, int width)
     setAttribute(Qt::WA_DeleteOnClose);
     setFixedWidth(width);
     setMaximumHeight(fontMetrics().height()+4);
-    d->timer = new QTimer(this);
+    d->timer   = new QTimer(this);
+    d->toolTip = new FreeSpaceToolTip(this);
 
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotTimeout()));
@@ -341,14 +345,22 @@ void FreeSpaceWidget::updateToolTip()
 
         tip += cnt.tipFooter;
 
-        setWhatsThis(tip);
-        setToolTip(tip);
+        d->toolTip->setToolTip(tip);
     }
     else
     {
-        setWhatsThis(QString());
-        setToolTip(QString());
+        d->toolTip->setToolTip(QString());
     }
+}
+
+void FreeSpaceWidget::enterEvent(QEvent *e)
+{
+    d->toolTip->show();
+}
+
+void FreeSpaceWidget::leaveEvent(QEvent* e)
+{
+    d->toolTip->hide();
 }
 
 #if KDE_IS_VERSION(4,1,68)

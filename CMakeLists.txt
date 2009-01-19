@@ -753,6 +753,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameracontroller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraui.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/freespacewidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/freespacetooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturedlg.cpp
        )

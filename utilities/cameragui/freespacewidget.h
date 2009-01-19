@@ -85,6 +85,8 @@ public:
 
 protected:
 
+    void enterEvent(QEvent*);
+    void leaveEvent(QEvent*);
     void paintEvent(QPaintEvent*);
     void updateToolTip();
 
