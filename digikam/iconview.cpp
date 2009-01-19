@@ -339,6 +339,7 @@ void IconView::clear(bool update)
 
     if (d->ratingItem)
     {
+        unsetCursor();
         d->ratingBox->hide();
         d->ratingItem->setEditRating(false);
         d->ratingItem = 0;
@@ -582,6 +583,7 @@ void IconView::takeItem(IconItem* item)
 
     if (d->ratingItem == item)
     {
+        unsetCursor();
         d->ratingBox->hide();
         d->ratingItem->setEditRating(false);
         d->ratingItem = 0;
@@ -955,6 +957,7 @@ void IconView::leaveEvent(QEvent *e)
 
     if (d->ratingItem)
     {
+        unsetCursor();
         d->ratingBox->hide();
         d->ratingItem->setEditRating(false);
         d->ratingItem = 0;
@@ -982,6 +985,7 @@ void IconView::focusOutEvent(QFocusEvent* e)
 
     if (d->ratingItem)
     {
+        unsetCursor();
         d->ratingBox->hide();
         d->ratingItem->setEditRating(false);
         d->ratingItem = 0;
@@ -1351,6 +1355,7 @@ void IconView::contentsWheelEvent(QWheelEvent* e)
 
     if (d->ratingItem)
     {
+        unsetCursor();
         d->ratingBox->hide();
         d->ratingItem->setEditRating(false);
         d->ratingItem = 0;
@@ -1854,6 +1859,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
 
         if (d->ratingItem)
         {
+            unsetCursor();
             d->ratingBox->hide();
             d->ratingItem->setEditRating(false);
             d->ratingItem = 0;
