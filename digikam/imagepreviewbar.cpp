@@ -119,6 +119,7 @@ ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRota
     painter.end();
 
     d->ratingBox = new RatingBox(this);
+    d->ratingBox->installEventFilter(this);
 
     if (orientation == Qt::Vertical)
         setMinimumWidth(d->ratingPixmap.width()*5 + 6 + 2*getMargin() + 2*getRadius());
@@ -148,6 +149,7 @@ void ImagePreviewBar::clear(bool updateView)
 {
     if (d->ratingItem)
     {
+        unsetCursor();
         d->ratingBox->hide();
         ThumbBarItem *item = d->ratingItem;
         d->ratingItem = 0;
@@ -163,6 +165,7 @@ void ImagePreviewBar::takeItem(ThumbBarItem* item)
 
     if (d->ratingItem == item)
     {
+        unsetCursor();
         d->ratingBox->hide();
         d->ratingItem = 0;
         item->repaint();
@@ -177,6 +180,7 @@ void ImagePreviewBar::removeItem(ThumbBarItem* item)
 
     if (d->ratingItem == item)
     {
+        unsetCursor();
         d->ratingBox->hide();
         d->ratingItem = 0;
         item->repaint();
@@ -189,9 +193,10 @@ void ImagePreviewBar::rearrangeItems()
 {
     if (d->ratingItem)
     {
+        unsetCursor();
         d->ratingBox->hide();
         ThumbBarItem *item = d->ratingItem;
-        d->ratingItem = 0;
+        d->ratingItem      = 0;
         item->repaint();
     }
 
@@ -204,9 +209,10 @@ void ImagePreviewBar::ensureItemVisible(ThumbBarItem* item)
 
     if (d->ratingItem)
     {
+        unsetCursor();
         d->ratingBox->hide();
         ThumbBarItem *item = d->ratingItem;
-        d->ratingItem = 0;
+        d->ratingItem      = 0;
         item->repaint();
     }
 
@@ -217,9 +223,10 @@ void ImagePreviewBar::leaveEvent(QEvent* e)
 {
     if (d->ratingItem)
     {
+        unsetCursor();
         d->ratingBox->hide();
         ThumbBarItem *item = d->ratingItem;
-        d->ratingItem = 0;
+        d->ratingItem      = 0;
         item->repaint();
     }
 
@@ -230,9 +237,10 @@ void ImagePreviewBar::focusOutEvent(QFocusEvent* e)
 {
     if (d->ratingItem)
     {
+        unsetCursor();
         d->ratingBox->hide();
         ThumbBarItem *item = d->ratingItem;
-        d->ratingItem = 0;
+        d->ratingItem      = 0;
         item->repaint();
     }
 
@@ -243,6 +251,7 @@ void ImagePreviewBar::contentsWheelEvent(QWheelEvent* e)
 {
     if (d->ratingItem)
     {
+        unsetCursor();
         d->ratingBox->hide();
         ThumbBarItem *item = d->ratingItem;
         d->ratingItem = 0;
@@ -426,23 +435,6 @@ void ImagePreviewBar::startDrag()
     drag->setMimeData(new DItemDrag(urls, kioURLs, albumIDs, imageIDs));
     drag->setPixmap(pix);
     drag->exec();
-}
-
-void ImagePreviewBar::mouseMoveEvent(QMouseEvent* e)
-{
-    if (!e) return;
-    if (e->buttons() == Qt::NoButton)
-    {
-        ThumbBarItem* item = findItem(e->pos());
-        if (!item)
-        {
-            unsetCursor();
-            d->ratingBox->hide();
-            d->ratingItem = 0;
-        }
-    }
-
-    ThumbBarView::mouseMoveEvent(e);
 }
 
 void ImagePreviewBar::contentsMouseMoveEvent(QMouseEvent* e)
@@ -683,6 +675,30 @@ void ImagePreviewBar::slotThemeChanged()
     painter.drawPolygon(d->starPolygon, Qt::WindingFill);
     painter.end();
     slotUpdate();
+}
+
+// NOTE: see B.K.O #181184 : we need to catch mouse leave event from rating 
+//       box when user move cusor over scrollbar.
+
+bool ImagePreviewBar::eventFilter(QObject *obj, QEvent *ev)
+{
+    if ( obj == qobject_cast<QObject*>(d->ratingBox) )
+    {
+        if ( ev->type() == QEvent::Leave)
+        {
+            if (d->ratingItem)
+            {
+                unsetCursor();
+                d->ratingBox->hide();
+                ThumbBarItem *item = d->ratingItem;
+                d->ratingItem      = 0;
+                item->repaint();
+            }
+        }
+    }
+
+    // pass the event on to the parent class
+    return ThumbBarView::eventFilter(obj, ev);
 }
 
 // -------------------------------------------------------------------------
