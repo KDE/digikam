@@ -129,7 +129,7 @@ public:
 RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
                 : QWidget(parent), d(new RenameCustomizerPriv)
 {
-    d->changedTimer = new QTimer();
+    d->changedTimer = new QTimer(this);
     d->cameraTitle  = cameraTitle;
     d->buttonGroup  = new QButtonGroup(this);
     d->buttonGroup->setExclusive(true);

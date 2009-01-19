@@ -65,7 +65,7 @@ public:
         urlLabel     = 0;
         angle        = 0;
 
-        // NOTE: rotation of logo is adapted to an exported PNG file generated from 
+        // NOTE: rotation of logo is adapted to an exported PNG file generated from
         // digikam/data/pics/banner-digikam.svgz and digikam/data/pics/banner-showfoto.svgz
         // using height of 33 pixels.
         logoCenter   = QPoint(125, 16);
@@ -105,7 +105,7 @@ DLogoAction::DLogoAction(QObject* parent, bool alignOnright)
 
     d->logoPix      = d->bannerPix.copy(d->logoRect);
     d->alignOnright = alignOnright;
-    d->timer        = new QTimer();
+    d->timer        = new QTimer(this);
 
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotTimeout()));
