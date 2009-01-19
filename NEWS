@@ -57,7 +57,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 043 ==> 178326 : Misleading error method when database locked.
 044 ==> 174469 : Fatal error message  signal11(SIGSEGV).
 045 ==> 167725 : After clicking on thumbnails, digikam doesn't show any images and crashes.
-046 ==> 
+046 ==> 180926 : Image thumbnails in albums not showing.
+047 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
