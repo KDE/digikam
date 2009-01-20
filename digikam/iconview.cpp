@@ -687,6 +687,25 @@ void IconView::sort()
 
 void IconView::slotRearrange()
 {
+    if (d->highlightedItem)
+    {
+        d->highlightedItem->setHighlighted(false);
+        d->highlightedItem = 0;
+    }
+
+    if (d->ratingItem)
+    {
+        unsetCursor();
+        d->ratingBox->hide();
+        d->ratingItem->setEditRating(false);
+        d->ratingItem = 0;
+    }
+
+    // hide tooltip
+    d->toolTipItem = 0;
+    d->toolTipTimer->stop();
+    slotToolTip();
+
     sort();
     arrangeItems();
 
@@ -949,24 +968,6 @@ void IconView::deleteContainers()
 
 void IconView::leaveEvent(QEvent *e)
 {
-    if (d->highlightedItem)
-    {
-        d->highlightedItem->setHighlighted(false);
-        d->highlightedItem = 0;
-    }
-
-    if (d->ratingItem)
-    {
-        unsetCursor();
-        d->ratingBox->hide();
-        d->ratingItem->setEditRating(false);
-        d->ratingItem = 0;
-    }
-
-    // hide tooltip
-    d->toolTipItem = 0;
-    d->toolTipTimer->stop();
-    slotToolTip();
 
     // if the mouse leaves the widget we are not dragging
     // anymore
