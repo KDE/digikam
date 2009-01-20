@@ -765,6 +765,7 @@ void EditorWindow::slotZoomChanged(bool isMax, bool isMin, double zoom)
     d->zoomMinusAction->setEnabled(!isMin);
 
     d->zoomCombo->blockSignals(true);
+    d->zoomCombo->setCurrentIndex(-1);
     d->zoomCombo->setEditText(QString::number(lround(zoom*100.0)) + QString("%"));
     d->zoomCombo->blockSignals(false);
 }
