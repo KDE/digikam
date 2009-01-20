@@ -386,14 +386,14 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6, pix.height()+6),
                                                                  QColor(0, 0, 0, 128), 3));
 
-                        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
+                        LightTableBarItem *rItem = dynamic_cast<LightTableBarItem*>(item);
 
-                        if (ltItem->isOnLeftPanel())
+                        if (rItem->isOnLeftPanel())
                         {
                             QPixmap lPix = SmallIcon("arrow-left");
                             p.drawPixmap(getMargin(), getMargin(), lPix);
                         }
-                        if (ltItem->isOnRightPanel())
+                        if (rItem->isOnRightPanel())
                         {
                             QPixmap rPix = SmallIcon("arrow-right");
                             p.drawPixmap(tile.width() - getMargin() - rPix.width(), getMargin(), rPix);
@@ -401,12 +401,13 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
 
                         if (item != ratingItem())
                         {
-                            QRect r(0, tile.height()-getMargin()-ratingPixmap().height()+3,
-                                    tile.width(), ratingPixmap().height());
-                            int rating = ltItem->info().rating();
-                            int xr     = (r.width() - rating * ratingPixmap().width())/2;
-                            int wr     = rating * ratingPixmap().width();
-                            p.drawTiledPixmap(xr, r.y(), wr, r.height(), ratingPixmap());
+                            QRect r    = clickToRateRect(rItem);
+                            int rating = rItem->info().rating();
+                            r.setX(((r.width() - rating * ratingPixmap().width())/2) - 1);
+                            r.setY(r.y()+1);
+                            r.setWidth((rating * ratingPixmap().width()));
+                            r.setBottom(r.bottom()-1);
+                            p.drawTiledPixmap(r, ratingPixmap());
                         }
                     }
 
@@ -455,14 +456,14 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6, pix.height()+6),
                                                                  QColor(0, 0, 0, 128), 3));
 
-                        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
+                        LightTableBarItem *rItem = dynamic_cast<LightTableBarItem*>(item);
 
-                        if (ltItem->isOnLeftPanel())
+                        if (rItem->isOnLeftPanel())
                         {
                             QPixmap lPix = SmallIcon("arrow-left");
                             p.drawPixmap(getMargin(), getMargin(), lPix);
                         }
-                        if (ltItem->isOnRightPanel())
+                        if (rItem->isOnRightPanel())
                         {
                             QPixmap rPix = SmallIcon("arrow-right");
                             p.drawPixmap(tile.width() - getMargin() - rPix.width(), getMargin(), rPix);
@@ -470,12 +471,13 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
 
                         if (item != ratingItem())
                         {
-                            QRect r(0, tile.height()-getMargin()-ratingPixmap().height()+3,
-                                    tile.width(), ratingPixmap().height());
-                            int rating = ltItem->info().rating();
-                            int xr     = (r.width() - rating * ratingPixmap().width())/2;
-                            int wr     = rating * ratingPixmap().width();
-                            p.drawTiledPixmap(xr, r.y(), wr, r.height(), ratingPixmap());
+                            QRect r    = clickToRateRect(rItem);
+                            int rating = rItem->info().rating();
+                            r.setX(((r.width() - rating * ratingPixmap().width())/2) - 1);
+                            r.setY(r.y()+1);
+                            r.setWidth((rating * ratingPixmap().width()));
+                            r.setBottom(r.bottom()-1);
+                            p.drawTiledPixmap(r, ratingPixmap());
                         }
                     }
 
