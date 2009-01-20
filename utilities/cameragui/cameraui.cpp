@@ -1351,6 +1351,8 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
 
     // -- Download camera items -------------------------------
 
+    QSet<QString> usedDownloadPaths;
+
     for (IconItem* item = d->view->firstItem(); item;
          item = item->nextItem())
     {
@@ -1429,7 +1431,35 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
         }
 
         d->foldersToScan << downloadUrl.path();
-        downloadUrl.addPath(downloadName.isEmpty() ? downloadSettings.file : downloadName);
+
+        if (downloadName.isEmpty())
+        {
+            downloadUrl.addPath(downloadSettings.file);
+        }
+        else
+        {
+            // when using custom renaming (e.g. by date, see bug 179902)
+            // make sure that we create unique names
+            downloadUrl.addPath(downloadName);
+            QString suggestedPath = downloadUrl.path();
+            if (usedDownloadPaths.contains(suggestedPath))
+            {
+                QFileInfo fi(downloadName);
+                QString suffix = "." + fi.suffix();
+                QString pathWithoutSuffix(suggestedPath);
+                pathWithoutSuffix.chop(suffix.length());
+                QString currentVariant;
+                int counter = 1;
+                do
+                    currentVariant = pathWithoutSuffix + "-" + QString::number(counter++) + suffix;
+                while (usedDownloadPaths.contains(currentVariant));
+
+                usedDownloadPaths << currentVariant;
+                downloadUrl = KUrl(currentVariant);
+            }
+            else
+                usedDownloadPaths << suggestedPath;
+        }
 
         downloadSettings.dest = downloadUrl.path();
 
