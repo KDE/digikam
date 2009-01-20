@@ -2133,7 +2133,7 @@ void AlbumIconView::updateRectsAndPixmaps()
 
     if (d->albumSettings->getIconShowRating())
     {
-        d->itemRatingRect = QRect(margin, y, w+margin, starPolygonSize.height()+4);
+        d->itemRatingRect = QRect(margin, y, w, starPolygonSize.height());
         y = d->itemRatingRect.bottom();
     }
 
@@ -2224,7 +2224,7 @@ void AlbumIconView::updateRectsAndPixmaps()
                 painter.setPen(pen);
 
                 // move painter while drawing polygons
-                painter.translate( lround((d->itemRatingRect.width() - margin - rating*(starPolygonSize.width()+1))/2.0) -1, 2 );
+                painter.translate( lround((d->itemRatingRect.width() - margin - rating*(starPolygonSize.width()+1))/2.0) + 2, 1 );
                 for (int s=0; s<rating; s++)
                 {
                     painter.drawPolygon(d->starPolygon, Qt::WindingFill);

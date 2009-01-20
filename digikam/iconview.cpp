@@ -176,7 +176,7 @@ IconView::IconView(QWidget* parent, const char* name)
     d->rearrangeTimer = new QTimer(this);
     d->toolTipTimer   = new QTimer(this);
     d->rubber         = new DRubberBand(this);
-    d->ratingBox      = new RatingBox(this);
+    d->ratingBox      = new RatingBox(viewport());
 
     connect(d->rearrangeTimer, SIGNAL(timeout()),
             this, SLOT(slotRearrange()));
@@ -1199,7 +1199,7 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
 
             QRect rect = item->clickToRateRect();
             rect.moveTopLeft(contentsToViewport(rect.topLeft()));
-            d->ratingBox->setFixedSize(rect.size());
+            d->ratingBox->setFixedSize(rect.width()+1, rect.height()+1);
             d->ratingBox->move(rect.topLeft().x(), rect.topLeft().y());
             d->ratingBox->setRating(item->rating());
             d->ratingBox->show();

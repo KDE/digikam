@@ -53,9 +53,10 @@ RatingBox::RatingBox(QWidget* parent)
     d->ratingWidget = new RatingWidget(this);
     d->ratingWidget->setTracking(false);
     layout()->setAlignment(d->ratingWidget, Qt::AlignCenter);
-    setMargin(2);
+    setMargin(1);
     setSpacing(0);
     setLineWidth(0);
+//    setFrameStyle(QFrame::Box|QFrame::Plain);
     setFrameStyle(QFrame::NoFrame);
     hide();
 

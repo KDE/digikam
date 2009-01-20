@@ -74,6 +74,7 @@ public:
 
 protected:
 
+    QRect clickToRateRect(ImagePreviewBarItem* item);
     QPixmap ratingPixmap() const;
     void startDrag();
 
@@ -110,9 +111,11 @@ public:
 
     ImageInfo info();
 
+    QRect clickToRateRect();
+
 protected:
 
-    ImageInfo m_info;
+    ImageInfo        m_info;
 
 private:
 
