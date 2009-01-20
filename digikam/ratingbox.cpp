@@ -55,8 +55,8 @@ RatingBox::RatingBox(QWidget* parent)
     layout()->setAlignment(d->ratingWidget, Qt::AlignCenter);
     setMargin(2);
     setSpacing(0);
-    setLineWidth(1);
-    setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
+    setLineWidth(0);
+    setFrameStyle(QFrame::NoFrame);
     hide();
 
     connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
