@@ -1,4 +1,4 @@
-Begin3
+Begin4
 Title:          digiKam
 Version:        ${DIGIKAM_VERSION_STRING}
 Entered-date:   2009-01-21
