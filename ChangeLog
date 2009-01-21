@@ -1,3 +1,2283 @@
+0.10.0-rc1 2008-01-21
+--------------------------------------------------------------------------------
+
+2009-01-21 17:55  cgilles
+
+    * digikam/imagepreviewbar.cpp, project/project.kdevelop,
+      utilities/lighttable/lighttablebar.cpp: fix rating on the fly
+      region computation in vertical mode.
+
+2009-01-21 08:59  cgilles
+
+    * digikam.lsm.cmake: update
+
+2009-01-21 08:38  cgilles
+
+    * libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h: new
+      panasonic tag for lens description
+
+2009-01-21 07:26  cgilles
+
+    * NEWS: update
+
+2009-01-20 22:12  mwiesweg
+
+    * utilities/cameragui/cameraui.cpp: Avoid creating double
+      auto-rename names when downloading images.
+      Insert -1, -2 etc. for duplicate names.
+      This only applies if the generated download names are found to be
+      equal in
+      one download procedure; if files are really found on disk, of
+      course the dialog
+      will still be shown.
+      
+      CCBUG: 179902
+
+2009-01-20 21:32  mwiesweg
+
+    * utilities/imageeditor/editor/editorwindow.cpp: If only edit text
+      is changed, unset any current index of the combo box,
+      so that current index does not differ from text.
+      Fixes remaing problem if 177936. I think there is another bug for
+      keeping the
+      zoom rate constant, I doubt it is user-friendly to always reset
+      to 100%.
+      
+      BUG: 177936
+
+2009-01-20 21:06  mwiesweg
+
+    * digikam/digikamapp.cpp: Change menu entry to say what it does (it
+      does the same for the whole collection
+      as "Synchronize Images with Database" does for the current
+      album),
+      following urgent user request.
+      Remaining Todo for the future: clean up this group of related
+      actions, with batch manager
+
+2009-01-20 15:41  cgilles
+
+    * utilities/lighttable/lighttablebar.cpp: missing to commit this
+      part too
+
+2009-01-20 15:41  cgilles
+
+    * digikam/albumiconview.cpp, digikam/iconview.cpp,
+      digikam/imagepreviewbar.cpp, digikam/imagepreviewbar.h,
+      digikam/ratingbox.cpp: digiKam from trunk : redesign a little bit
+      Rating on the fly over item. Factorize some part and optimize
+      painter code.
+      Must work with all KDE style.
+
+2009-01-20 14:45  mwiesweg
+
+    * utilities/searchwindow/searchgroup.cpp: Following request from
+      i18n list, use only one label and use markup for line break.
+
+2009-01-20 13:51  mwiesweg
+
+    * utilities/cameragui/cameraiconview.cpp: GPItemInfo->size is
+      qint64 and can be -1, which means not available from driver.
+      Do not add negativ number to unsigned long.
+      Use qint64 format for intermediate calculation.
+      
+      CCBUG: 181347
+
+2009-01-20 09:16  cgilles
+
+    * digikam/ratingbox.cpp: no need frame here
+
+2009-01-20 09:11  cgilles
+
+    * digikam/albumiconview.cpp, digikam/iconview.cpp,
+      digikam/ratingbox.cpp: polish
+
+2009-01-19 19:51  cgilles
+
+    * NEWS: update
+
+2009-01-19 16:56  cgilles
+
+    * NEWS: update
+
+2009-01-19 15:32  cgilles
+
+    * CMakeLists.txt, utilities/cameragui/freespacetooltip.cpp,
+      utilities/cameragui/freespacetooltip.h,
+      utilities/cameragui/freespacewidget.cpp,
+      utilities/cameragui/freespacewidget.h: digiKam from trunk :
+      Camera gui : freespace widget : use dedicated digiKam tool tip to
+      render properly tip contents
+      with specific digiKam color theme, else text can be unreadable
+      (problem is about QToolTip background color
+      which is not customizable)
+      
+
+2009-01-19 14:13  cgilles
+
+    * digikam/iconview.cpp: missing unsetcursor here
+
+2009-01-19 14:09  cgilles
+
+    * digikam/imagepreviewbar.cpp, digikam/imagepreviewbar.h: digiKam
+      from trunk : catch moise leave event from rating box to disable
+      rating widget when user move cursor over scrollbar
+      CCBUG: 181184
+
+2009-01-19 13:42  aclemens
+
+    * libs/widgets/common/dlogoaction.cpp,
+      utilities/cameragui/renamecustomizer.cpp,
+      utilities/slideshow/slideshow.cpp: fix memory leak
+      
+      Normally you can skip assigning a parent to a QObject, if it is
+      somehow
+      re-parented afterwards (like adding it to a layout etc). But the
+      QTimer
+      is not re-assigned and so we have a memory leak here. Setting the
+      parent
+      does fix it.
+
+2009-01-19 10:13  cgilles
+
+    * digikam/imagepreviewbar.cpp, digikam/imagepreviewbar.h: digiKam
+      from trunk : image preview bar : re-implement
+      QWidget:mouseMoveEvent() to hande cursor movements over scroolbar
+      to hide rating box.
+      CCBUG: 181184
+
+2009-01-19 07:44  cgilles
+
+    * NEWS: update
+
+2009-01-19 07:40  cgilles
+
+    * NEWS: update
+
+2009-01-18 21:46  mwiesweg
+
+    * NEWS: update
+
+2009-01-18 21:23  mwiesweg
+
+    * NEWS: update
+
+2009-01-18 21:22  mwiesweg
+
+    * utilities/lighttable/lighttablepreview.cpp: Use deleteLater
+      (already done in all seven other occurrences)
+      
+      BUG: 181221
+
+2009-01-18 20:26  mwiesweg
+
+    * NEWS: update
+
+2009-01-18 20:25  mwiesweg
+
+    * utilities/cameragui/cameraui.cpp: Fix crash produces with the
+      intention to fix another crash.
+      Thanks for quick beta testing ;-)
+      
+      BUG: 181203
+
+2009-01-18 19:10  cgilles
+
+    * utilities/cameragui/freespacewidget.cpp: more widget design
+
+2009-01-18 18:09  cgilles
+
+    * NEWS: update
+
+2009-01-18 15:55  mwiesweg
+
+    * NEWS: update
+
+2009-01-18 15:52  lure
+
+    * utilities/kipiiface/kipiuploadwidget.cpp,
+      utilities/kipiiface/kipiuploadwidget.h: Add New Album button to
+      KIPI::UploadWidget
+      - this is coppied from AlbumSelectionDialog
+      - will look if the code can be refactored and shared
+      (AlbumSelectionWidget)
+
+2009-01-18 15:50  mwiesweg
+
+    * digikam/albummanager.cpp: The method handling
+      AlbumChangeset::Renamed was not aware that Renamed
+      can also mean that the album has been moved to a different
+      parent.
+      In this case, remove the old album and call scanPAlbums.
+      
+      BUG: 181146
+
+2009-01-18 15:50  mwiesweg
+
+    * digikam/albumfolderview.cpp: Resort on rename.
+      Unknown to me why sorting does not work automatically and why a
+      simple Q3ListView::sort() does not work.
+      
+      BUG: 169306
+
+2009-01-18 15:50  mwiesweg
+
+    * digikam/albummanager.cpp: Remove ancient code and fix subtle
+      bugs, use KIO infrastructure
+
+2009-01-17 19:18  aclemens
+
+    * imageplugins/colorfx/colorfxtool.cpp,
+      imageplugins/coreplugin/autocorrectiontool.cpp: polish
+
+2009-01-17 19:11  aclemens
+
+    * imageplugins/coreplugin/autocorrectiontool.cpp: fix memory leak
+
+2009-01-17 19:10  aclemens
+
+    * imageplugins/colorfx/colorfxtool.cpp: polish
+
+2009-01-17 18:31  aclemens
+
+    * imageplugins/colorfx/colorfxtool.cpp: fix memory leak
+
+2009-01-17 17:49  cgilles
+
+    * NEWS: update
+
+2009-01-17 17:48  cgilles
+
+    * imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp,
+      imageplugins/coreplugin/ratiocrop/imageselectionwidget.h,
+      imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp,
+      imageplugins/coreplugin/ratiocrop/ratiocroptool.h: backport
+      commit #912532 from KDE3 branch
+      BUG: 179548
+      CCMAIL: simon@margo.student.utwente.nl
+
+2009-01-17 13:59  cgilles
+
+    * NEWS: update
+
+2009-01-17 13:52  mwiesweg
+
+    * libs/database/collectionmanager.cpp,
+      libs/database/databaseaccess.cpp, libs/database/databaseaccess.h:
+      Remove assertNoLock, was intended only as temporary check
+      
+      CCBUG: 180342
+
+2009-01-17 13:41  cgilles
+
+    * NEWS: update
+
+2009-01-17 13:41  cgilles
+
+    * NEWS: update
+
+2009-01-17 12:34  mwiesweg
+
+    * utilities/cameragui/cameraiconview.cpp,
+      utilities/cameragui/cameraui.cpp: Ensure from two places that the
+      CameraIconView does not access a CameraUI
+      which has already executed its constructor (and deleted d etc.)
+      
+      BUG: 181000
+
+2009-01-17 10:05  cgilles
+
+    * libs/dialogs/imagedialog.cpp, libs/dialogs/imagedialog.h: use
+      italic char for photo info titles
+
+2009-01-17 07:57  cgilles
+
+    * digikam/imagepreviewbar.cpp: polish
+
+2009-01-16 20:03  cgilles
+
+    * NEWS: update
+
+2009-01-16 19:34  cgilles
+
+    * digikam/albummanager.cpp: fix i18n
+
+2009-01-16 16:18  mwiesweg
+
+    * digikam/album.h, digikam/albummodel.cpp: Declare Album* as
+      Metatype and use QVariant::fromValue.
+      Did not compile with Qt4.5
+      
+      CCBUG: 180908
+
+2009-01-16 16:18  mwiesweg
+
+    * utilities/hotplug/digikam-opencamera.desktop.cmake: Solid
+      Predicate for Plasma Device Notifier: Filter by usageType as
+      well.
+      Prevents detection of Audio CDs.
+      
+      CCBUG: 178435
+
+2009-01-16 15:03  cgilles
+
+    * utilities/imageeditor/tools/imageresize.cpp,
+      utilities/imageeditor/tools/imageresize.h: fix read/write
+      GreyStoration settings to rc file
+
+2009-01-16 14:58  cgilles
+
+    * imageplugins/inpainting/inpaintingtool.cpp: compîle
+
+2009-01-16 14:56  cgilles
+
+    * NEWS: update
+
+2009-01-16 14:55  cgilles
+
+    * imageplugins/inpainting/imageplugin_inpainting.cpp,
+      imageplugins/inpainting/imageplugin_inpainting.h,
+      imageplugins/inpainting/inpaintingtool.cpp,
+      imageplugins/inpainting/inpaintingtool.h: digiKam from trunk :
+      Inpainting tool :
+      - do not mix settings : Nb iteration = da ==> Greystoration
+      algorithm make an infinite loop with default settings.
+      - use double cast for each Greystoration parameters relevant.
+      BUG: 179807
+
+2009-01-16 14:48  cgilles
+
+    * NEWS: update
+
+2009-01-16 14:48  cgilles
+
+    * imageplugins/restoration/imageplugin_restoration.cpp,
+      imageplugins/restoration/imageplugin_restoration.h,
+      imageplugins/restoration/restorationtool.cpp,
+      imageplugins/restoration/restorationtool.h: digiKAm from trunk :
+      Restoration tool :
+      - do not mix settings : Nb iteration = da ==> Greystoration
+      algorithm make an infinite loop with default settings.
+      - use double cast for each Greystoration parameters relevant.
+      BUG: 177009
+
+2009-01-16 12:47  cgilles
+
+    * NEWS: update
+
+2009-01-16 12:43  cgilles
+
+    * libs/imageproperties/imagepropertiestxtlabel.h: do not use alpha
+      blending in image properties
+      BUG: 179898
+
+2009-01-16 09:43  cgilles
+
+    * digikam/metadatahub.cpp: compile
+
+2009-01-16 09:23  cgilles
+
+    * libs/widgets/common/dpopupmenu.cpp: polish alignement
+
+2009-01-15 17:03  mwiesweg
+
+    * digikam/albummanager.cpp: As per Andi's suggestion, ask the user
+      as well if there is not existing database file,
+      with the question if he wants to copy the current database
+      (default) or use a new one.
+      Fix icons, capitalization and icons.
+
+2009-01-15 16:40  mwiesweg
+
+    * utilities/searchwindow/searchfields.cpp: Need to use double when
+      m_reciprocal is true (it's fractions)
+
+2009-01-15 16:02  cgilles
+
+    * libs/widgets/common/dpopupmenu.cpp: now version id is finely
+      aligned with application name
+
+2009-01-15 14:43  cgilles
+
+    * digikam/daboutdata.h, libs/widgets/common/splashscreen.cpp,
+      project/project.kdevelop: do not force to break slogan on the
+      middle to be sure that all space avaialble is used to draw text
+      over splash
+
+2009-01-15 10:04  cgilles
+
+    * digikam/daboutdata.h: context string and message are inverted
+
+2009-01-15 09:13  cgilles
+
+    * digikam/daboutdata.h, libs/widgets/common/splashscreen.cpp,
+      project/project.kdevelop: digiKam from trunk: drawing slogan over
+      splashscreen
+      - optimize space to max to draw text.
+      - add context comment for translators.
+
+2009-01-15 05:17  cgilles
+
+    * NEWS: update
+
+2009-01-14 21:23  mwiesweg
+
+    * utilities/imageeditor/canvas/dimginterface.cpp: Do not scale up
+      the preview image, if the image itself is already smaller than
+      the
+      intended preview size.
+      Do not store preview in image if the image is not significantly
+      larger
+      (2x as many pixels? 3x?) than the preview itself (*)
+      
+      (*) currently commented out until bug 151552 is solved
+
+2009-01-14 21:23  mwiesweg
+
+    * digikam/digikamfirstrun.cpp, digikam/digikamfirstrun.h: Fix some
+      usability problems with the FirstRun dialog:
+      - if errors occur, do not exit, but return to dialog
+      (requires to reimplement KDialog::slotButtonPressed, default
+      implementation will always accept after Ok)
+      - remove check to refuse using $HOME as album root. I think, if
+      the user really wants,
+      we are a free country. Any objections?
+      - When a directory is chosen for album root, change default
+      database directory
+      to this as well (unless user changed it before)
+      
+      BUG: 178251
+
+2009-01-14 15:05  cgilles
+
+    * libs/widgets/common/dlogoaction.cpp: wrong path
+
+2009-01-14 14:28  cgilles
+
+    * data/pics/CMakeLists.txt, data/pics/menusidepix-digikam.png,
+      data/pics/menusidepix-showfoto.png, data/pics/menusidepix.svg:
+      remove obsolete files
+
+2009-01-14 14:19  cgilles
+
+    * digikam/daboutdata.h, libs/widgets/common/splashscreen.cpp:
+      polish
+
+2009-01-14 13:55  cgilles
+
+    * libs/widgets/common/splashscreen.cpp: polish
+
+2009-01-14 12:49  cgilles
+
+    * libs/widgets/common/splashscreen.cpp: polish
+
+2009-01-14 12:39  cgilles
+
+    * NEWS: update
+
+2009-01-14 12:39  cgilles
+
+    * data/pics/splash-digikam.png, data/pics/splash-digikam.svgz,
+      data/pics/splash-showfoto.png, data/pics/splash-showfoto.svgz,
+      digikam/daboutdata.h, libs/widgets/common/splashscreen.cpp,
+      project/project.kdevelop: digiKam from trunk : slogan on the
+      splashscreen is drawed by application now.
+
+2009-01-14 12:38  cgilles
+
+    * digikam/digikamapp.cpp: digiKam from trunk: do not limit export
+      tools to use physical albums/tags contents.
+      BUG: 180609
+
+2009-01-14 09:57  cgilles
+
+    * libs/widgets/common/dpopupmenu.cpp,
+      libs/widgets/common/dpopupmenu.h: added icon
+
+2009-01-14 09:17  mwiesweg
+
+    * NEWS: update
+
+2009-01-14 08:45  mwiesweg
+
+    * digikam/albummanager.cpp, digikam/albummanager.h,
+      digikam/digikamapp.cpp: Implement the behavior when the user
+      changes the database folder in setup:
+      - if the new folder has no existing database file, copy the
+      current database to this place automatically
+      - if there is an existing file, ask if it shall be used, or if
+      the current file should be copied
+      
+      BUG: 178952
+
+2009-01-14 08:45  mwiesweg
+
+    * digikam/albumiconview.cpp: Store list of ImageInfos, do not keep
+      accessing the current icon items while calling
+      kapp->processEvents.
+      (Interestingly we had the same crash for assigning tags and fixed
+      it already ;-) )
+      
+      BUG: 180570
+
+2009-01-13 21:18  woebbe
+
+    * digikam/CMakeLists.txt, showfoto/CMakeLists.txt,
+      themedesigner/CMakeLists.txt: link with gold
+
+2009-01-13 20:07  aclemens
+
+    * libs/widgets/common/dpopupmenu.cpp,
+      libs/widgets/common/dpopupmenu.h: Draw the application name and
+      version string automatically in the
+      sidebar of the context menu. This makes rendering and updating
+      the PNG
+      sidebar pix obsolete. If rendering is well on most systems, we
+      can
+      eliminate the PNGs in a later commit.
+      
+      Gilles,
+      
+      can you test the centering again?
+      
+      Andi
+      
+      CCMAIL:caulier.gilles@gmail.com
+
+2009-01-13 16:24  mwiesweg
+
+    * NEWS: update
+
+2009-01-13 16:21  mwiesweg
+
+    * digikam/digikamapp.cpp: Say "Move to Trash" as this is what is
+      does
+      
+      BUG: 180489
+
+2009-01-13 16:10  mwiesweg
+
+    * NEWS: update
+
+2009-01-13 16:08  mwiesweg
+
+    * utilities/imageeditor/canvas/undomanager.cpp: Remove existing
+      entry in undo cache before adding a new one
+      
+      BUG: 180336
+
+2009-01-13 16:07  mwiesweg
+
+    * utilities/imageeditor/canvas/undomanager.cpp: code readability:
+      replace STL method naming
+
+2009-01-13 15:19  cgilles
+
+    * digikam/imagepreviewbar.cpp, project/project.kdevelop,
+      utilities/lighttable/lighttablebar.cpp: fix broken horizontal
+      thumbbar
+
+2009-01-13 14:52  mwiesweg
+
+    * NEWS: update
+
+2009-01-13 14:39  mwiesweg
+
+    * utilities/searchwindow/searchgroup.cpp,
+      utilities/searchwindow/searchgroup.h,
+      utilities/searchwindow/searchview.cpp: Offer options for negative
+      search conditions in the search group header.
+      We offer four different options:
+      1) All of these conditions are met: (A && B && C)
+      2) Any of these conditions are met: (A || B || C)
+      3) At least one of these conditions is not met: !(A && B && C),
+      (!A || !B ||!C)
+      4) None of these conditions are met: !(A || B || C), (!A && !B &&
+      !C)
+      with 1) being the default.
+      Intuition and UI wording of the negated versions use the (!A ||
+      !B ||!C) and (!A && !B && !C)
+      variant, while the stored search XML and the generated SQL will
+      use !(A && B && C) and
+      !(A || B || C) according to de Morgan. This explains why the code
+      is a bit more
+      complicated than I expected initially.
+      
+      BUG: 179012
+
+2009-01-13 14:38  mwiesweg
+
+    * utilities/searchwindow/searchfields.cpp: Use the 'Interval'
+      relation when both the minimum and the maximum field is set.
+      This implementation is more elegant and cleaner, and needed for
+      negative search conditions (de Morgan)
+
+2009-01-13 14:38  mwiesweg
+
+    * libs/database/searchxml.cpp, libs/database/searchxml.h: Add
+      support for QDateTime list
+
+2009-01-13 14:38  mwiesweg
+
+    * libs/database/imagequerybuilder.cpp: - Support Interval and
+      IntervalOpen relations
+      - add warning messages where wrong parameters are detected
+
+2009-01-13 14:38  mwiesweg
+
+    * libs/database/searchxml.cpp, libs/database/searchxml.h: Add
+      "Interval" and "IntervalOpen" relations and "double" analog for
+      valueToIntOrIntList
+
+2009-01-13 14:38  mwiesweg
+
+    * libs/database/imagequerybuilder.cpp, libs/database/searchxml.h:
+      Support "OR NOT" operator
+
+2009-01-13 14:38  mwiesweg
+
+    * utilities/searchwindow/searchfields.cpp: Fix resetting the search
+      combo boxes in special cases
+
+2009-01-13 14:08  cgilles
+
+    * data/icons/hi32-action-filefind.png: unused
+
+2009-01-13 14:07  cgilles
+
+    * data/icons/hi128-action-digitalcam.png,
+      data/icons/hi16-action-digitalcam.png,
+      data/icons/hi22-action-digitalcam.png,
+      data/icons/hi32-action-digitalcam.png,
+      data/icons/hi48-action-digitalcam.png,
+      data/icons/hi64-action-digitalcam.png: unused
+
+2009-01-13 14:01  cgilles
+
+    * data/icons/CMakeLists.txt, data/icons/digikam,
+      data/icons/digikam/CMakeLists.txt,
+      data/icons/digikam/hi128-action-adjustcurves.png,
+      data/icons/digikam/hi128-action-adjustlevels.png,
+      data/icons/digikam/hi128-action-adjustrgb.png,
+      data/icons/digikam/hi128-action-antivignetting.png,
+      data/icons/digikam/hi128-action-autocorrection.png,
+      data/icons/digikam/hi128-action-blurfx.png,
+      data/icons/digikam/hi128-action-blurimage.png,
+      data/icons/digikam/hi128-action-bordertool.png,
+      data/icons/digikam/hi128-action-bwtonal.png,
+      data/icons/digikam/hi128-action-channelmixer.png,
+      data/icons/digikam/hi128-action-colormanagement.png,
+      data/icons/digikam/hi128-action-contrast.png,
+      data/icons/digikam/hi128-action-depth16to8.png,
+      data/icons/digikam/hi128-action-depth8to16.png,
+      data/icons/digikam/hi128-action-distortionfx.png,
+      data/icons/digikam/hi128-action-editimage.png,
+      data/icons/digikam/hi128-action-exifinfo.png,
+      data/icons/digikam/hi128-action-filmgrain.png,
+      data/icons/digikam/hi128-action-freerotation.png,
+      data/icons/digikam/hi128-action-hotpixels.png,
+      data/icons/digikam/hi128-action-imagecomment.png,
+      data/icons/digikam/hi128-action-inpainting.png,
+      data/icons/digikam/hi128-action-invertimage.png,
+      data/icons/digikam/hi128-action-noisereduction.png,
+      data/icons/digikam/hi128-action-perspective.png,
+      data/icons/digikam/hi128-action-ratiocrop.png,
+      data/icons/digikam/hi128-action-restoration.png,
+      data/icons/digikam/hi128-action-sharpenimage.png,
+      data/icons/digikam/hi128-action-shear.png,
+      data/icons/digikam/hi128-action-superimpose.png,
+      data/icons/digikam/hi128-action-texture.png,
+      data/icons/digikam/hi128-action-whitebalance.png,
+      data/icons/digikam/hi16-action-adjustcurves.png,
+      data/icons/digikam/hi16-action-adjustlevels.png,
+      data/icons/digikam/hi16-action-adjustrgb.png,
+      data/icons/digikam/hi16-action-antivignetting.png,
+      data/icons/digikam/hi16-action-autocorrection.png,
+      data/icons/digikam/hi16-action-blurfx.png,
+      data/icons/digikam/hi16-action-blurimage.png,
+      data/icons/digikam/hi16-action-bordertool.png,
+      data/icons/digikam/hi16-action-bwtonal.png,
+      data/icons/digikam/hi16-action-channelmixer.png,
+      data/icons/digikam/hi16-action-colormanagement.png,
+      data/icons/digikam/hi16-action-contrast.png,
+      data/icons/digikam/hi16-action-depth16to8.png,
+      data/icons/digikam/hi16-action-depth8to16.png,
+      data/icons/digikam/hi16-action-distortionfx.png,
+      data/icons/digikam/hi16-action-editimage.png,
+      data/icons/digikam/hi16-action-exifinfo.png,
+      data/icons/digikam/hi16-action-filmgrain.png,
+      data/icons/digikam/hi16-action-freerotation.png,
+      data/icons/digikam/hi16-action-hotpixels.png,
+      data/icons/digikam/hi16-action-imagecomment.png,
+      data/icons/digikam/hi16-action-inpainting.png,
+      data/icons/digikam/hi16-action-invertimage.png,
+      data/icons/digikam/hi16-action-noisereduction.png,
+      data/icons/digikam/hi16-action-perspective.png,
+      data/icons/digikam/hi16-action-ratiocrop.png,
+      data/icons/digikam/hi16-action-restoration.png,
+      data/icons/digikam/hi16-action-sharpenimage.png,
+      data/icons/digikam/hi16-action-shear.png,
+      data/icons/digikam/hi16-action-superimpose.png,
+      data/icons/digikam/hi16-action-texture.png,
+      data/icons/digikam/hi16-action-whitebalance.png,
+      data/icons/digikam/hi22-action-adjustcurves.png,
+      data/icons/digikam/hi22-action-adjustlevels.png,
+      data/icons/digikam/hi22-action-adjustrgb.png,
+      data/icons/digikam/hi22-action-antivignetting.png,
+      data/icons/digikam/hi22-action-autocorrection.png,
+      data/icons/digikam/hi22-action-blurfx.png,
+      data/icons/digikam/hi22-action-blurimage.png,
+      data/icons/digikam/hi22-action-bordertool.png,
+      data/icons/digikam/hi22-action-bwtonal.png,
+      data/icons/digikam/hi22-action-channelmixer.png,
+      data/icons/digikam/hi22-action-colormanagement.png,
+      data/icons/digikam/hi22-action-contrast.png,
+      data/icons/digikam/hi22-action-depth16to8.png,
+      data/icons/digikam/hi22-action-depth8to16.png,
+      data/icons/digikam/hi22-action-distortionfx.png,
+      data/icons/digikam/hi22-action-editimage.png,
+      data/icons/digikam/hi22-action-exifinfo.png,
+      data/icons/digikam/hi22-action-filmgrain.png,
+      data/icons/digikam/hi22-action-freerotation.png,
+      data/icons/digikam/hi22-action-hotpixels.png,
+      data/icons/digikam/hi22-action-imagecomment.png,
+      data/icons/digikam/hi22-action-inpainting.png,
+      data/icons/digikam/hi22-action-invertimage.png,
+      data/icons/digikam/hi22-action-noisereduction.png,
+      data/icons/digikam/hi22-action-perspective.png,
+      data/icons/digikam/hi22-action-ratiocrop.png,
+      data/icons/digikam/hi22-action-restoration.png,
+      data/icons/digikam/hi22-action-sharpenimage.png,
+      data/icons/digikam/hi22-action-shear.png,
+      data/icons/digikam/hi22-action-superimpose.png,
+      data/icons/digikam/hi22-action-texture.png,
+      data/icons/digikam/hi22-action-whitebalance.png,
+      data/icons/digikam/hi32-action-adjustcurves.png,
+      data/icons/digikam/hi32-action-adjustlevels.png,
+      data/icons/digikam/hi32-action-adjustrgb.png,
+      data/icons/digikam/hi32-action-antivignetting.png,
+      data/icons/digikam/hi32-action-autocorrection.png,
+      data/icons/digikam/hi32-action-blurfx.png,
+      data/icons/digikam/hi32-action-blurimage.png,
+      data/icons/digikam/hi32-action-bordertool.png,
+      data/icons/digikam/hi32-action-bwtonal.png,
+      data/icons/digikam/hi32-action-channelmixer.png,
+      data/icons/digikam/hi32-action-colormanagement.png,
+      data/icons/digikam/hi32-action-contrast.png,
+      data/icons/digikam/hi32-action-depth16to8.png,
+      data/icons/digikam/hi32-action-depth8to16.png,
+      data/icons/digikam/hi32-action-distortionfx.png,
+      data/icons/digikam/hi32-action-editimage.png,
+      data/icons/digikam/hi32-action-exifinfo.png,
+      data/icons/digikam/hi32-action-filmgrain.png,
+      data/icons/digikam/hi32-action-freerotation.png,
+      data/icons/digikam/hi32-action-hotpixels.png,
+      data/icons/digikam/hi32-action-imagecomment.png,
+      data/icons/digikam/hi32-action-inpainting.png,
+      data/icons/digikam/hi32-action-invertimage.png,
+      data/icons/digikam/hi32-action-noisereduction.png,
+      data/icons/digikam/hi32-action-perspective.png,
+      data/icons/digikam/hi32-action-ratiocrop.png,
+      data/icons/digikam/hi32-action-restoration.png,
+      data/icons/digikam/hi32-action-sharpenimage.png,
+      data/icons/digikam/hi32-action-shear.png,
+      data/icons/digikam/hi32-action-superimpose.png,
+      data/icons/digikam/hi32-action-texture.png,
+      data/icons/digikam/hi32-action-whitebalance.png,
+      data/icons/digikam/hi48-action-adjustcurves.png,
+      data/icons/digikam/hi48-action-adjustlevels.png,
+      data/icons/digikam/hi48-action-adjustrgb.png,
+      data/icons/digikam/hi48-action-antivignetting.png,
+      data/icons/digikam/hi48-action-autocorrection.png,
+      data/icons/digikam/hi48-action-blurfx.png,
+      data/icons/digikam/hi48-action-blurimage.png,
+      data/icons/digikam/hi48-action-bordertool.png,
+      data/icons/digikam/hi48-action-bwtonal.png,
+      data/icons/digikam/hi48-action-channelmixer.png,
+      data/icons/digikam/hi48-action-colormanagement.png,
+      data/icons/digikam/hi48-action-contrast.png,
+      data/icons/digikam/hi48-action-depth16to8.png,
+      data/icons/digikam/hi48-action-depth8to16.png,
+      data/icons/digikam/hi48-action-distortionfx.png,
+      data/icons/digikam/hi48-action-editimage.png,
+      data/icons/digikam/hi48-action-exifinfo.png,
+      data/icons/digikam/hi48-action-filmgrain.png,
+      data/icons/digikam/hi48-action-freerotation.png,
+      data/icons/digikam/hi48-action-hotpixels.png,
+      data/icons/digikam/hi48-action-imagecomment.png,
+      data/icons/digikam/hi48-action-inpainting.png,
+      data/icons/digikam/hi48-action-invertimage.png,
+      data/icons/digikam/hi48-action-noisereduction.png,
+      data/icons/digikam/hi48-action-perspective.png,
+      data/icons/digikam/hi48-action-ratiocrop.png,
+      data/icons/digikam/hi48-action-restoration.png,
+      data/icons/digikam/hi48-action-sharpenimage.png,
+      data/icons/digikam/hi48-action-shear.png,
+      data/icons/digikam/hi48-action-superimpose.png,
+      data/icons/digikam/hi48-action-texture.png,
+      data/icons/digikam/hi48-action-whitebalance.png,
+      data/icons/digikam/hi64-action-adjustcurves.png,
+      data/icons/digikam/hi64-action-adjustlevels.png,
+      data/icons/digikam/hi64-action-adjustrgb.png,
+      data/icons/digikam/hi64-action-antivignetting.png,
+      data/icons/digikam/hi64-action-autocorrection.png,
+      data/icons/digikam/hi64-action-blurfx.png,
+      data/icons/digikam/hi64-action-blurimage.png,
+      data/icons/digikam/hi64-action-bordertool.png,
+      data/icons/digikam/hi64-action-bwtonal.png,
+      data/icons/digikam/hi64-action-channelmixer.png,
+      data/icons/digikam/hi64-action-colormanagement.png,
+      data/icons/digikam/hi64-action-contrast.png,
+      data/icons/digikam/hi64-action-depth16to8.png,
+      data/icons/digikam/hi64-action-depth8to16.png,
+      data/icons/digikam/hi64-action-distortionfx.png,
+      data/icons/digikam/hi64-action-editimage.png,
+      data/icons/digikam/hi64-action-exifinfo.png,
+      data/icons/digikam/hi64-action-filmgrain.png,
+      data/icons/digikam/hi64-action-freerotation.png,
+      data/icons/digikam/hi64-action-hotpixels.png,
+      data/icons/digikam/hi64-action-imagecomment.png,
+      data/icons/digikam/hi64-action-inpainting.png,
+      data/icons/digikam/hi64-action-invertimage.png,
+      data/icons/digikam/hi64-action-noisereduction.png,
+      data/icons/digikam/hi64-action-perspective.png,
+      data/icons/digikam/hi64-action-ratiocrop.png,
+      data/icons/digikam/hi64-action-restoration.png,
+      data/icons/digikam/hi64-action-sharpenimage.png,
+      data/icons/digikam/hi64-action-shear.png,
+      data/icons/digikam/hi64-action-superimpose.png,
+      data/icons/digikam/hi64-action-texture.png,
+      data/icons/digikam/hi64-action-whitebalance.png,
+      data/icons/digikam/hisc-action-adjustcurves.svgz,
+      data/icons/digikam/hisc-action-adjustlevels.svgz,
+      data/icons/digikam/hisc-action-adjustrgb.svgz,
+      data/icons/digikam/hisc-action-antivignetting.svgz,
+      data/icons/digikam/hisc-action-autocorrection.svgz,
+      data/icons/digikam/hisc-action-blurfx.svgz,
+      data/icons/digikam/hisc-action-blurimage.svgz,
+      data/icons/digikam/hisc-action-bordertool.svgz,
+      data/icons/digikam/hisc-action-bwtonal.svgz,
+      data/icons/digikam/hisc-action-channelmixer.svgz,
+      data/icons/digikam/hisc-action-colormanagement.svgz,
+      data/icons/digikam/hisc-action-contrast.svgz,
+      data/icons/digikam/hisc-action-depth16to8.svgz,
+      data/icons/digikam/hisc-action-depth8to16.svgz,
+      data/icons/digikam/hisc-action-distortionfx.svgz,
+      data/icons/digikam/hisc-action-editimage.svgz,
+      data/icons/digikam/hisc-action-exifinfo.svgz,
+      data/icons/digikam/hisc-action-filmgrain.svgz,
+      data/icons/digikam/hisc-action-freerotation.svgz,
+      data/icons/digikam/hisc-action-hotpixels.svgz,
+      data/icons/digikam/hisc-action-imagecomment.svgz,
+      data/icons/digikam/hisc-action-inpainting.svgz,
+      data/icons/digikam/hisc-action-invertimage.svgz,
+      data/icons/digikam/hisc-action-noisereduction.svgz,
+      data/icons/digikam/hisc-action-perspective.svgz,
+      data/icons/digikam/hisc-action-ratiocrop.svgz,
+      data/icons/digikam/hisc-action-restoration.svgz,
+      data/icons/digikam/hisc-action-sharpenimage.svgz,
+      data/icons/digikam/hisc-action-shear.svgz,
+      data/icons/digikam/hisc-action-superimpose.svgz,
+      data/icons/digikam/hisc-action-texture.svgz,
+      data/icons/digikam/hisc-action-whitebalance.svgz,
+      data/icons/oxygen/128x128/actions/adjustcurves.png,
+      data/icons/oxygen/128x128/actions/adjustlevels.png,
+      data/icons/oxygen/128x128/actions/adjustrgb.png,
+      data/icons/oxygen/128x128/actions/antivignetting.png,
+      data/icons/oxygen/128x128/actions/autocorrection.png,
+      data/icons/oxygen/128x128/actions/blurfx.png,
+      data/icons/oxygen/128x128/actions/blurimage.png,
+      data/icons/oxygen/128x128/actions/bordertool.png,
+      data/icons/oxygen/128x128/actions/bwtonal.png,
+      data/icons/oxygen/128x128/actions/channelmixer.png,
+      data/icons/oxygen/128x128/actions/colormanagement.png,
+      data/icons/oxygen/128x128/actions/contrast.png,
+      data/icons/oxygen/128x128/actions/depth16to8.png,
+      data/icons/oxygen/128x128/actions/depth8to16.png,
+      data/icons/oxygen/128x128/actions/distortionfx.png,
+      data/icons/oxygen/128x128/actions/editimage.png,
+      data/icons/oxygen/128x128/actions/exifinfo.png,
+      data/icons/oxygen/128x128/actions/filmgrain.png,
+      data/icons/oxygen/128x128/actions/freerotation.png,
+      data/icons/oxygen/128x128/actions/hotpixels.png,
+      data/icons/oxygen/128x128/actions/imagecomment.png,
+      data/icons/oxygen/128x128/actions/inpainting.png,
+      data/icons/oxygen/128x128/actions/invertimage.png,
+      data/icons/oxygen/128x128/actions/noisereduction.png,
+      data/icons/oxygen/128x128/actions/perspective.png,
+      data/icons/oxygen/128x128/actions/ratiocrop.png,
+      data/icons/oxygen/128x128/actions/restoration.png,
+      data/icons/oxygen/128x128/actions/sharpenimage.png,
+      data/icons/oxygen/128x128/actions/shear.png,
+      data/icons/oxygen/128x128/actions/superimpose.png,
+      data/icons/oxygen/128x128/actions/texture.png,
+      data/icons/oxygen/128x128/actions/whitebalance.png,
+      data/icons/oxygen/16x16/actions/adjustcurves.png,
+      data/icons/oxygen/16x16/actions/adjustlevels.png,
+      data/icons/oxygen/16x16/actions/adjustrgb.png,
+      data/icons/oxygen/16x16/actions/antivignetting.png,
+      data/icons/oxygen/16x16/actions/autocorrection.png,
+      data/icons/oxygen/16x16/actions/blurfx.png,
+      data/icons/oxygen/16x16/actions/blurimage.png,
+      data/icons/oxygen/16x16/actions/bordertool.png,
+      data/icons/oxygen/16x16/actions/bwtonal.png,
+      data/icons/oxygen/16x16/actions/channelmixer.png,
+      data/icons/oxygen/16x16/actions/colormanagement.png,
+      data/icons/oxygen/16x16/actions/contrast.png,
+      data/icons/oxygen/16x16/actions/depth16to8.png,
+      data/icons/oxygen/16x16/actions/depth8to16.png,
+      data/icons/oxygen/16x16/actions/distortionfx.png,
+      data/icons/oxygen/16x16/actions/editimage.png,
+      data/icons/oxygen/16x16/actions/exifinfo.png,
+      data/icons/oxygen/16x16/actions/filmgrain.png,
+      data/icons/oxygen/16x16/actions/freerotation.png,
+      data/icons/oxygen/16x16/actions/hotpixels.png,
+      data/icons/oxygen/16x16/actions/imagecomment.png,
+      data/icons/oxygen/16x16/actions/inpainting.png,
+      data/icons/oxygen/16x16/actions/invertimage.png,
+      data/icons/oxygen/16x16/actions/noisereduction.png,
+      data/icons/oxygen/16x16/actions/perspective.png,
+      data/icons/oxygen/16x16/actions/ratiocrop.png,
+      data/icons/oxygen/16x16/actions/restoration.png,
+      data/icons/oxygen/16x16/actions/sharpenimage.png,
+      data/icons/oxygen/16x16/actions/shear.png,
+      data/icons/oxygen/16x16/actions/superimpose.png,
+      data/icons/oxygen/16x16/actions/texture.png,
+      data/icons/oxygen/16x16/actions/whitebalance.png,
+      data/icons/oxygen/22x22/actions/adjustcurves.png,
+      data/icons/oxygen/22x22/actions/adjustlevels.png,
+      data/icons/oxygen/22x22/actions/adjustrgb.png,
+      data/icons/oxygen/22x22/actions/antivignetting.png,
+      data/icons/oxygen/22x22/actions/autocorrection.png,
+      data/icons/oxygen/22x22/actions/blurfx.png,
+      data/icons/oxygen/22x22/actions/blurimage.png,
+      data/icons/oxygen/22x22/actions/bordertool.png,
+      data/icons/oxygen/22x22/actions/bwtonal.png,
+      data/icons/oxygen/22x22/actions/channelmixer.png,
+      data/icons/oxygen/22x22/actions/colormanagement.png,
+      data/icons/oxygen/22x22/actions/contrast.png,
+      data/icons/oxygen/22x22/actions/depth16to8.png,
+      data/icons/oxygen/22x22/actions/depth8to16.png,
+      data/icons/oxygen/22x22/actions/distortionfx.png,
+      data/icons/oxygen/22x22/actions/editimage.png,
+      data/icons/oxygen/22x22/actions/exifinfo.png,
+      data/icons/oxygen/22x22/actions/filmgrain.png,
+      data/icons/oxygen/22x22/actions/freerotation.png,
+      data/icons/oxygen/22x22/actions/hotpixels.png,
+      data/icons/oxygen/22x22/actions/imagecomment.png,
+      data/icons/oxygen/22x22/actions/inpainting.png,
+      data/icons/oxygen/22x22/actions/invertimage.png,
+      data/icons/oxygen/22x22/actions/noisereduction.png,
+      data/icons/oxygen/22x22/actions/perspective.png,
+      data/icons/oxygen/22x22/actions/ratiocrop.png,
+      data/icons/oxygen/22x22/actions/restoration.png,
+      data/icons/oxygen/22x22/actions/sharpenimage.png,
+      data/icons/oxygen/22x22/actions/shear.png,
+      data/icons/oxygen/22x22/actions/superimpose.png,
+      data/icons/oxygen/22x22/actions/texture.png,
+      data/icons/oxygen/22x22/actions/whitebalance.png,
+      data/icons/oxygen/32x32/actions/adjustcurves.png,
+      data/icons/oxygen/32x32/actions/adjustlevels.png,
+      data/icons/oxygen/32x32/actions/adjustrgb.png,
+      data/icons/oxygen/32x32/actions/antivignetting.png,
+      data/icons/oxygen/32x32/actions/autocorrection.png,
+      data/icons/oxygen/32x32/actions/blurfx.png,
+      data/icons/oxygen/32x32/actions/blurimage.png,
+      data/icons/oxygen/32x32/actions/bordertool.png,
+      data/icons/oxygen/32x32/actions/bwtonal.png,
+      data/icons/oxygen/32x32/actions/channelmixer.png,
+      data/icons/oxygen/32x32/actions/colormanagement.png,
+      data/icons/oxygen/32x32/actions/contrast.png,
+      data/icons/oxygen/32x32/actions/depth16to8.png,
+      data/icons/oxygen/32x32/actions/depth8to16.png,
+      data/icons/oxygen/32x32/actions/distortionfx.png,
+      data/icons/oxygen/32x32/actions/editimage.png,
+      data/icons/oxygen/32x32/actions/exifinfo.png,
+      data/icons/oxygen/32x32/actions/filmgrain.png,
+      data/icons/oxygen/32x32/actions/freerotation.png,
+      data/icons/oxygen/32x32/actions/hotpixels.png,
+      data/icons/oxygen/32x32/actions/imagecomment.png,
+      data/icons/oxygen/32x32/actions/inpainting.png,
+      data/icons/oxygen/32x32/actions/invertimage.png,
+      data/icons/oxygen/32x32/actions/noisereduction.png,
+      data/icons/oxygen/32x32/actions/perspective.png,
+      data/icons/oxygen/32x32/actions/ratiocrop.png,
+      data/icons/oxygen/32x32/actions/restoration.png,
+      data/icons/oxygen/32x32/actions/sharpenimage.png,
+      data/icons/oxygen/32x32/actions/shear.png,
+      data/icons/oxygen/32x32/actions/superimpose.png,
+      data/icons/oxygen/32x32/actions/texture.png,
+      data/icons/oxygen/32x32/actions/whitebalance.png,
+      data/icons/oxygen/48x48/actions/adjustcurves.png,
+      data/icons/oxygen/48x48/actions/adjustlevels.png,
+      data/icons/oxygen/48x48/actions/adjustrgb.png,
+      data/icons/oxygen/48x48/actions/antivignetting.png,
+      data/icons/oxygen/48x48/actions/autocorrection.png,
+      data/icons/oxygen/48x48/actions/blurfx.png,
+      data/icons/oxygen/48x48/actions/blurimage.png,
+      data/icons/oxygen/48x48/actions/bordertool.png,
+      data/icons/oxygen/48x48/actions/bwtonal.png,
+      data/icons/oxygen/48x48/actions/channelmixer.png,
+      data/icons/oxygen/48x48/actions/colormanagement.png,
+      data/icons/oxygen/48x48/actions/contrast.png,
+      data/icons/oxygen/48x48/actions/depth16to8.png,
+      data/icons/oxygen/48x48/actions/depth8to16.png,
+      data/icons/oxygen/48x48/actions/distortionfx.png,
+      data/icons/oxygen/48x48/actions/editimage.png,
+      data/icons/oxygen/48x48/actions/exifinfo.png,
+      data/icons/oxygen/48x48/actions/filmgrain.png,
+      data/icons/oxygen/48x48/actions/freerotation.png,
+      data/icons/oxygen/48x48/actions/hotpixels.png,
+      data/icons/oxygen/48x48/actions/imagecomment.png,
+      data/icons/oxygen/48x48/actions/inpainting.png,
+      data/icons/oxygen/48x48/actions/invertimage.png,
+      data/icons/oxygen/48x48/actions/noisereduction.png,
+      data/icons/oxygen/48x48/actions/perspective.png,
+      data/icons/oxygen/48x48/actions/ratiocrop.png,
+      data/icons/oxygen/48x48/actions/restoration.png,
+      data/icons/oxygen/48x48/actions/sharpenimage.png,
+      data/icons/oxygen/48x48/actions/shear.png,
+      data/icons/oxygen/48x48/actions/superimpose.png,
+      data/icons/oxygen/48x48/actions/texture.png,
+      data/icons/oxygen/48x48/actions/whitebalance.png,
+      data/icons/oxygen/64x64/actions/adjustcurves.png,
+      data/icons/oxygen/64x64/actions/adjustlevels.png,
+      data/icons/oxygen/64x64/actions/adjustrgb.png,
+      data/icons/oxygen/64x64/actions/antivignetting.png,
+      data/icons/oxygen/64x64/actions/autocorrection.png,
+      data/icons/oxygen/64x64/actions/blurfx.png,
+      data/icons/oxygen/64x64/actions/blurimage.png,
+      data/icons/oxygen/64x64/actions/bordertool.png,
+      data/icons/oxygen/64x64/actions/bwtonal.png,
+      data/icons/oxygen/64x64/actions/channelmixer.png,
+      data/icons/oxygen/64x64/actions/colormanagement.png,
+      data/icons/oxygen/64x64/actions/contrast.png,
+      data/icons/oxygen/64x64/actions/depth16to8.png,
+      data/icons/oxygen/64x64/actions/depth8to16.png,
+      data/icons/oxygen/64x64/actions/distortionfx.png,
+      data/icons/oxygen/64x64/actions/editimage.png,
+      data/icons/oxygen/64x64/actions/exifinfo.png,
+      data/icons/oxygen/64x64/actions/filmgrain.png,
+      data/icons/oxygen/64x64/actions/freerotation.png,
+      data/icons/oxygen/64x64/actions/hotpixels.png,
+      data/icons/oxygen/64x64/actions/imagecomment.png,
+      data/icons/oxygen/64x64/actions/inpainting.png,
+      data/icons/oxygen/64x64/actions/invertimage.png,
+      data/icons/oxygen/64x64/actions/noisereduction.png,
+      data/icons/oxygen/64x64/actions/perspective.png,
+      data/icons/oxygen/64x64/actions/ratiocrop.png,
+      data/icons/oxygen/64x64/actions/restoration.png,
+      data/icons/oxygen/64x64/actions/sharpenimage.png,
+      data/icons/oxygen/64x64/actions/shear.png,
+      data/icons/oxygen/64x64/actions/superimpose.png,
+      data/icons/oxygen/64x64/actions/texture.png,
+      data/icons/oxygen/64x64/actions/whitebalance.png,
+      data/icons/oxygen/scalable/actions/adjustcurves.svgz,
+      data/icons/oxygen/scalable/actions/adjustlevels.svgz,
+      data/icons/oxygen/scalable/actions/adjustrgb.svgz,
+      data/icons/oxygen/scalable/actions/antivignetting.svgz,
+      data/icons/oxygen/scalable/actions/autocorrection.svgz,
+      data/icons/oxygen/scalable/actions/blurfx.svgz,
+      data/icons/oxygen/scalable/actions/blurimage.svgz,
+      data/icons/oxygen/scalable/actions/bordertool.svgz,
+      data/icons/oxygen/scalable/actions/bwtonal.svgz,
+      data/icons/oxygen/scalable/actions/channelmixer.svgz,
+      data/icons/oxygen/scalable/actions/colormanagement.svgz,
+      data/icons/oxygen/scalable/actions/contrast.svgz,
+      data/icons/oxygen/scalable/actions/depth16to8.svgz,
+      data/icons/oxygen/scalable/actions/depth8to16.svgz,
+      data/icons/oxygen/scalable/actions/distortionfx.svgz,
+      data/icons/oxygen/scalable/actions/editimage.svgz,
+      data/icons/oxygen/scalable/actions/exifinfo.svgz,
+      data/icons/oxygen/scalable/actions/filmgrain.svgz,
+      data/icons/oxygen/scalable/actions/freerotation.svgz,
+      data/icons/oxygen/scalable/actions/hotpixels.svgz,
+      data/icons/oxygen/scalable/actions/imagecomment.svgz,
+      data/icons/oxygen/scalable/actions/inpainting.svgz,
+      data/icons/oxygen/scalable/actions/invertimage.svgz,
+      data/icons/oxygen/scalable/actions/noisereduction.svgz,
+      data/icons/oxygen/scalable/actions/perspective.svgz,
+      data/icons/oxygen/scalable/actions/ratiocrop.svgz,
+      data/icons/oxygen/scalable/actions/restoration.svgz,
+      data/icons/oxygen/scalable/actions/sharpenimage.svgz,
+      data/icons/oxygen/scalable/actions/shear.svgz,
+      data/icons/oxygen/scalable/actions/superimpose.svgz,
+      data/icons/oxygen/scalable/actions/texture.svgz,
+      data/icons/oxygen/scalable/actions/whitebalance.svgz: accordignly
+      with Pino Toscano, move digiKAm icons in a dedicated subfloder,
+      not Oxygen
+
+2009-01-13 13:27  cgilles
+
+    * data/icons/hi32-action-digikamimageplugins.png: unused
+
+2009-01-13 13:26  cgilles
+
+    * data/icons/hi128-action-addimagefolder.png,
+      data/icons/hi128-action-adjustcurves.png,
+      data/icons/hi128-action-adjustlevels.png,
+      data/icons/hi128-action-adjustrgb.png,
+      data/icons/hi128-action-albumfoldercomment.png,
+      data/icons/hi16-action-addimagefolder.png,
+      data/icons/hi16-action-adjustcurves.png,
+      data/icons/hi16-action-adjustlevels.png,
+      data/icons/hi16-action-adjustrgb.png,
+      data/icons/hi16-action-albumfoldercomment.png,
+      data/icons/hi22-action-addimagefolder.png,
+      data/icons/hi22-action-adjustcurves.png,
+      data/icons/hi22-action-adjustlevels.png,
+      data/icons/hi22-action-adjustrgb.png,
+      data/icons/hi22-action-albumfoldercomment.png,
+      data/icons/hi32-action-addimagefolder.png,
+      data/icons/hi32-action-adjustcurves.png,
+      data/icons/hi32-action-adjustlevels.png,
+      data/icons/hi32-action-adjustrgb.png,
+      data/icons/hi32-action-albumfoldercomment.png,
+      data/icons/hi48-action-addimagefolder.png,
+      data/icons/hi48-action-adjustcurves.png,
+      data/icons/hi48-action-adjustlevels.png,
+      data/icons/hi48-action-adjustrgb.png,
+      data/icons/hi48-action-albumfoldercomment.png,
+      data/icons/hi64-action-addimagefolder.png,
+      data/icons/hi64-action-adjustcurves.png,
+      data/icons/hi64-action-adjustlevels.png,
+      data/icons/hi64-action-adjustrgb.png,
+      data/icons/hi64-action-albumfoldercomment.png,
+      data/icons/hisc-action-addimagefolder.svgz,
+      data/icons/hisc-action-adjustcurves.svgz,
+      data/icons/hisc-action-adjustlevels.svgz,
+      data/icons/hisc-action-adjustrgb.svgz,
+      data/icons/hisc-action-albumfoldercomment.svgz,
+      data/icons/oxygen/128x128/actions/adjustcurves.png,
+      data/icons/oxygen/128x128/actions/adjustlevels.png,
+      data/icons/oxygen/128x128/actions/adjustrgb.png,
+      data/icons/oxygen/16x16/actions/adjustcurves.png,
+      data/icons/oxygen/16x16/actions/adjustlevels.png,
+      data/icons/oxygen/16x16/actions/adjustrgb.png,
+      data/icons/oxygen/22x22/actions/adjustcurves.png,
+      data/icons/oxygen/22x22/actions/adjustlevels.png,
+      data/icons/oxygen/22x22/actions/adjustrgb.png,
+      data/icons/oxygen/32x32/actions/adjustcurves.png,
+      data/icons/oxygen/32x32/actions/adjustlevels.png,
+      data/icons/oxygen/32x32/actions/adjustrgb.png,
+      data/icons/oxygen/48x48/actions/adjustcurves.png,
+      data/icons/oxygen/48x48/actions/adjustlevels.png,
+      data/icons/oxygen/48x48/actions/adjustrgb.png,
+      data/icons/oxygen/64x64/actions/adjustcurves.png,
+      data/icons/oxygen/64x64/actions/adjustlevels.png,
+      data/icons/oxygen/64x64/actions/adjustrgb.png,
+      data/icons/oxygen/scalable/actions/adjustcurves.svgz,
+      data/icons/oxygen/scalable/actions/adjustlevels.svgz,
+      data/icons/oxygen/scalable/actions/adjustrgb.svgz: move icons
+      remove unused
+
+2009-01-13 13:23  cgilles
+
+    * data/icons/hi128-action-albumfoldernew.png,
+      data/icons/hi128-action-antivignetting.png,
+      data/icons/hi128-action-autocorrection.png,
+      data/icons/hi16-action-albumfoldernew.png,
+      data/icons/hi16-action-antivignetting.png,
+      data/icons/hi16-action-autocorrection.png,
+      data/icons/hi22-action-albumfoldernew.png,
+      data/icons/hi22-action-antivignetting.png,
+      data/icons/hi22-action-autocorrection.png,
+      data/icons/hi32-action-albumfoldernew.png,
+      data/icons/hi32-action-antivignetting.png,
+      data/icons/hi32-action-autocorrection.png,
+      data/icons/hi48-action-albumfoldernew.png,
+      data/icons/hi48-action-antivignetting.png,
+      data/icons/hi48-action-autocorrection.png,
+      data/icons/hi64-action-albumfoldernew.png,
+      data/icons/hi64-action-antivignetting.png,
+      data/icons/hi64-action-autocorrection.png,
+      data/icons/hisc-action-albumfoldernew.svgz,
+      data/icons/hisc-action-antivignetting.svgz,
+      data/icons/hisc-action-autocorrection.svgz,
+      data/icons/oxygen/128x128/actions/antivignetting.png,
+      data/icons/oxygen/128x128/actions/autocorrection.png,
+      data/icons/oxygen/16x16/actions/antivignetting.png,
+      data/icons/oxygen/16x16/actions/autocorrection.png,
+      data/icons/oxygen/22x22/actions/antivignetting.png,
+      data/icons/oxygen/22x22/actions/autocorrection.png,
+      data/icons/oxygen/32x32/actions/antivignetting.png,
+      data/icons/oxygen/32x32/actions/autocorrection.png,
+      data/icons/oxygen/48x48/actions/antivignetting.png,
+      data/icons/oxygen/48x48/actions/autocorrection.png,
+      data/icons/oxygen/64x64/actions/antivignetting.png,
+      data/icons/oxygen/64x64/actions/autocorrection.png,
+      data/icons/oxygen/scalable/actions/antivignetting.svgz,
+      data/icons/oxygen/scalable/actions/autocorrection.svgz: move
+      icons
+      remove unused
+
+2009-01-13 13:21  cgilles
+
+    * data/icons/hi128-action-blurfx.png,
+      data/icons/hi128-action-blurimage.png,
+      data/icons/hi128-action-bordertool.png,
+      data/icons/hi128-action-bwtonal.png,
+      data/icons/hi128-action-channelmixer.png,
+      data/icons/hi128-action-colormanagement.png,
+      data/icons/hi128-action-contrast.png,
+      data/icons/hi16-action-blurfx.png,
+      data/icons/hi16-action-blurimage.png,
+      data/icons/hi16-action-bordertool.png,
+      data/icons/hi16-action-bwtonal.png,
+      data/icons/hi16-action-channelmixer.png,
+      data/icons/hi16-action-colormanagement.png,
+      data/icons/hi16-action-contrast.png,
+      data/icons/hi22-action-blurfx.png,
+      data/icons/hi22-action-blurimage.png,
+      data/icons/hi22-action-bordertool.png,
+      data/icons/hi22-action-bwtonal.png,
+      data/icons/hi22-action-channelmixer.png,
+      data/icons/hi22-action-colormanagement.png,
+      data/icons/hi22-action-contrast.png,
+      data/icons/hi32-action-blurfx.png,
+      data/icons/hi32-action-blurimage.png,
+      data/icons/hi32-action-bordertool.png,
+      data/icons/hi32-action-bwtonal.png,
+      data/icons/hi32-action-channelmixer.png,
+      data/icons/hi32-action-colormanagement.png,
+      data/icons/hi32-action-contrast.png,
+      data/icons/hi48-action-blurfx.png,
+      data/icons/hi48-action-blurimage.png,
+      data/icons/hi48-action-bordertool.png,
+      data/icons/hi48-action-bwtonal.png,
+      data/icons/hi48-action-channelmixer.png,
+      data/icons/hi48-action-colormanagement.png,
+      data/icons/hi48-action-contrast.png,
+      data/icons/hi64-action-blurfx.png,
+      data/icons/hi64-action-blurimage.png,
+      data/icons/hi64-action-bordertool.png,
+      data/icons/hi64-action-bwtonal.png,
+      data/icons/hi64-action-channelmixer.png,
+      data/icons/hi64-action-colormanagement.png,
+      data/icons/hi64-action-contrast.png,
+      data/icons/hisc-action-blurfx.svgz,
+      data/icons/hisc-action-blurimage.svgz,
+      data/icons/hisc-action-bordertool.svgz,
+      data/icons/hisc-action-bwtonal.svgz,
+      data/icons/hisc-action-channelmixer.svgz,
+      data/icons/hisc-action-colormanagement.svgz,
+      data/icons/hisc-action-contrast.svgz,
+      data/icons/oxygen/128x128/actions/blurfx.png,
+      data/icons/oxygen/128x128/actions/blurimage.png,
+      data/icons/oxygen/128x128/actions/bordertool.png,
+      data/icons/oxygen/128x128/actions/bwtonal.png,
+      data/icons/oxygen/128x128/actions/channelmixer.png,
+      data/icons/oxygen/128x128/actions/colormanagement.png,
+      data/icons/oxygen/128x128/actions/contrast.png,
+      data/icons/oxygen/16x16/actions/blurfx.png,
+      data/icons/oxygen/16x16/actions/blurimage.png,
+      data/icons/oxygen/16x16/actions/bordertool.png,
+      data/icons/oxygen/16x16/actions/bwtonal.png,
+      data/icons/oxygen/16x16/actions/channelmixer.png,
+      data/icons/oxygen/16x16/actions/colormanagement.png,
+      data/icons/oxygen/16x16/actions/contrast.png,
+      data/icons/oxygen/22x22/actions/blurfx.png,
+      data/icons/oxygen/22x22/actions/blurimage.png,
+      data/icons/oxygen/22x22/actions/bordertool.png,
+      data/icons/oxygen/22x22/actions/bwtonal.png,
+      data/icons/oxygen/22x22/actions/channelmixer.png,
+      data/icons/oxygen/22x22/actions/colormanagement.png,
+      data/icons/oxygen/22x22/actions/contrast.png,
+      data/icons/oxygen/32x32/actions/blurfx.png,
+      data/icons/oxygen/32x32/actions/blurimage.png,
+      data/icons/oxygen/32x32/actions/bordertool.png,
+      data/icons/oxygen/32x32/actions/bwtonal.png,
+      data/icons/oxygen/32x32/actions/channelmixer.png,
+      data/icons/oxygen/32x32/actions/colormanagement.png,
+      data/icons/oxygen/32x32/actions/contrast.png,
+      data/icons/oxygen/48x48/actions/blurfx.png,
+      data/icons/oxygen/48x48/actions/blurimage.png,
+      data/icons/oxygen/48x48/actions/bordertool.png,
+      data/icons/oxygen/48x48/actions/bwtonal.png,
+      data/icons/oxygen/48x48/actions/channelmixer.png,
+      data/icons/oxygen/48x48/actions/colormanagement.png,
+      data/icons/oxygen/48x48/actions/contrast.png,
+      data/icons/oxygen/64x64/actions/blurfx.png,
+      data/icons/oxygen/64x64/actions/blurimage.png,
+      data/icons/oxygen/64x64/actions/bordertool.png,
+      data/icons/oxygen/64x64/actions/bwtonal.png,
+      data/icons/oxygen/64x64/actions/channelmixer.png,
+      data/icons/oxygen/64x64/actions/colormanagement.png,
+      data/icons/oxygen/64x64/actions/contrast.png,
+      data/icons/oxygen/scalable/actions/blurfx.svgz,
+      data/icons/oxygen/scalable/actions/blurimage.svgz,
+      data/icons/oxygen/scalable/actions/bordertool.svgz,
+      data/icons/oxygen/scalable/actions/bwtonal.svgz,
+      data/icons/oxygen/scalable/actions/channelmixer.svgz,
+      data/icons/oxygen/scalable/actions/colormanagement.svgz,
+      data/icons/oxygen/scalable/actions/contrast.svgz: move icons
+
+2009-01-13 13:18  cgilles
+
+    * data/icons/hi128-action-depth16to8.png,
+      data/icons/hi128-action-depth8to16.png,
+      data/icons/hi128-action-distortionfx.png,
+      data/icons/hi128-action-editimage.png,
+      data/icons/hi128-action-exifinfo.png,
+      data/icons/hi128-action-filmgrain.png,
+      data/icons/hi128-action-freerotation.png,
+      data/icons/hi128-action-histogram.png,
+      data/icons/hi16-action-depth16to8.png,
+      data/icons/hi16-action-depth8to16.png,
+      data/icons/hi16-action-distortionfx.png,
+      data/icons/hi16-action-editimage.png,
+      data/icons/hi16-action-exifinfo.png,
+      data/icons/hi16-action-filmgrain.png,
+      data/icons/hi16-action-freerotation.png,
+      data/icons/hi16-action-histogram.png,
+      data/icons/hi22-action-depth16to8.png,
+      data/icons/hi22-action-depth8to16.png,
+      data/icons/hi22-action-distortionfx.png,
+      data/icons/hi22-action-editimage.png,
+      data/icons/hi22-action-exifinfo.png,
+      data/icons/hi22-action-filmgrain.png,
+      data/icons/hi22-action-freerotation.png,
+      data/icons/hi22-action-histogram.png,
+      data/icons/hi32-action-depth16to8.png,
+      data/icons/hi32-action-depth8to16.png,
+      data/icons/hi32-action-distortionfx.png,
+      data/icons/hi32-action-editimage.png,
+      data/icons/hi32-action-exifinfo.png,
+      data/icons/hi32-action-filmgrain.png,
+      data/icons/hi32-action-freerotation.png,
+      data/icons/hi32-action-histogram.png,
+      data/icons/hi48-action-depth16to8.png,
+      data/icons/hi48-action-depth8to16.png,
+      data/icons/hi48-action-distortionfx.png,
+      data/icons/hi48-action-editimage.png,
+      data/icons/hi48-action-exifinfo.png,
+      data/icons/hi48-action-filmgrain.png,
+      data/icons/hi48-action-freerotation.png,
+      data/icons/hi48-action-histogram.png,
+      data/icons/hi64-action-depth16to8.png,
+      data/icons/hi64-action-depth8to16.png,
+      data/icons/hi64-action-distortionfx.png,
+      data/icons/hi64-action-editimage.png,
+      data/icons/hi64-action-exifinfo.png,
+      data/icons/hi64-action-filmgrain.png,
+      data/icons/hi64-action-freerotation.png,
+      data/icons/hi64-action-histogram.png,
+      data/icons/hisc-action-depth16to8.svgz,
+      data/icons/hisc-action-depth8to16.svgz,
+      data/icons/hisc-action-distortionfx.svgz,
+      data/icons/hisc-action-editimage.svgz,
+      data/icons/hisc-action-exifinfo.svgz,
+      data/icons/hisc-action-filmgrain.svgz,
+      data/icons/hisc-action-freerotation.svgz,
+      data/icons/hisc-action-histogram.svgz,
+      data/icons/oxygen/128x128/actions/depth16to8.png,
+      data/icons/oxygen/128x128/actions/depth8to16.png,
+      data/icons/oxygen/128x128/actions/distortionfx.png,
+      data/icons/oxygen/128x128/actions/editimage.png,
+      data/icons/oxygen/128x128/actions/exifinfo.png,
+      data/icons/oxygen/128x128/actions/filmgrain.png,
+      data/icons/oxygen/128x128/actions/freerotation.png,
+      data/icons/oxygen/16x16/actions/depth16to8.png,
+      data/icons/oxygen/16x16/actions/depth8to16.png,
+      data/icons/oxygen/16x16/actions/distortionfx.png,
+      data/icons/oxygen/16x16/actions/editimage.png,
+      data/icons/oxygen/16x16/actions/exifinfo.png,
+      data/icons/oxygen/16x16/actions/filmgrain.png,
+      data/icons/oxygen/16x16/actions/freerotation.png,
+      data/icons/oxygen/22x22/actions/depth16to8.png,
+      data/icons/oxygen/22x22/actions/depth8to16.png,
+      data/icons/oxygen/22x22/actions/distortionfx.png,
+      data/icons/oxygen/22x22/actions/editimage.png,
+      data/icons/oxygen/22x22/actions/exifinfo.png,
+      data/icons/oxygen/22x22/actions/filmgrain.png,
+      data/icons/oxygen/22x22/actions/freerotation.png,
+      data/icons/oxygen/32x32/actions/depth16to8.png,
+      data/icons/oxygen/32x32/actions/depth8to16.png,
+      data/icons/oxygen/32x32/actions/distortionfx.png,
+      data/icons/oxygen/32x32/actions/editimage.png,
+      data/icons/oxygen/32x32/actions/exifinfo.png,
+      data/icons/oxygen/32x32/actions/filmgrain.png,
+      data/icons/oxygen/32x32/actions/freerotation.png,
+      data/icons/oxygen/48x48/actions/depth16to8.png,
+      data/icons/oxygen/48x48/actions/depth8to16.png,
+      data/icons/oxygen/48x48/actions/distortionfx.png,
+      data/icons/oxygen/48x48/actions/editimage.png,
+      data/icons/oxygen/48x48/actions/exifinfo.png,
+      data/icons/oxygen/48x48/actions/filmgrain.png,
+      data/icons/oxygen/48x48/actions/freerotation.png,
+      data/icons/oxygen/64x64/actions/depth16to8.png,
+      data/icons/oxygen/64x64/actions/depth8to16.png,
+      data/icons/oxygen/64x64/actions/distortionfx.png,
+      data/icons/oxygen/64x64/actions/editimage.png,
+      data/icons/oxygen/64x64/actions/exifinfo.png,
+      data/icons/oxygen/64x64/actions/filmgrain.png,
+      data/icons/oxygen/64x64/actions/freerotation.png,
+      data/icons/oxygen/scalable/actions/depth16to8.svgz,
+      data/icons/oxygen/scalable/actions/depth8to16.svgz,
+      data/icons/oxygen/scalable/actions/distortionfx.svgz,
+      data/icons/oxygen/scalable/actions/editimage.svgz,
+      data/icons/oxygen/scalable/actions/exifinfo.svgz,
+      data/icons/oxygen/scalable/actions/filmgrain.svgz,
+      data/icons/oxygen/scalable/actions/freerotation.svgz: move icons
+      remove unused
+
+2009-01-13 13:14  cgilles
+
+    * data/icons/hi128-action-hotpixels.png,
+      data/icons/hi128-action-imagecomment.png,
+      data/icons/hi128-action-importfolders2albums.png,
+      data/icons/hi128-action-inpainting.png,
+      data/icons/hi16-action-hotpixels.png,
+      data/icons/hi16-action-imagecomment.png,
+      data/icons/hi16-action-importfolders2albums.png,
+      data/icons/hi16-action-inpainting.png,
+      data/icons/hi22-action-hotpixels.png,
+      data/icons/hi22-action-imagecomment.png,
+      data/icons/hi22-action-importfolders2albums.png,
+      data/icons/hi22-action-inpainting.png,
+      data/icons/hi32-action-hotpixels.png,
+      data/icons/hi32-action-imagecomment.png,
+      data/icons/hi32-action-importfolders2albums.png,
+      data/icons/hi32-action-inpainting.png,
+      data/icons/hi48-action-hotpixels.png,
+      data/icons/hi48-action-imagecomment.png,
+      data/icons/hi48-action-importfolders2albums.png,
+      data/icons/hi48-action-inpainting.png,
+      data/icons/hi64-action-hotpixels.png,
+      data/icons/hi64-action-imagecomment.png,
+      data/icons/hi64-action-importfolders2albums.png,
+      data/icons/hi64-action-inpainting.png,
+      data/icons/hisc-action-hotpixels.svgz,
+      data/icons/hisc-action-imagecomment.svgz,
+      data/icons/hisc-action-importfolders2albums.svgz,
+      data/icons/hisc-action-inpainting.svgz,
+      data/icons/oxygen/128x128/actions/hotpixels.png,
+      data/icons/oxygen/128x128/actions/imagecomment.png,
+      data/icons/oxygen/128x128/actions/inpainting.png,
+      data/icons/oxygen/16x16/actions/hotpixels.png,
+      data/icons/oxygen/16x16/actions/imagecomment.png,
+      data/icons/oxygen/16x16/actions/inpainting.png,
+      data/icons/oxygen/22x22/actions/hotpixels.png,
+      data/icons/oxygen/22x22/actions/imagecomment.png,
+      data/icons/oxygen/22x22/actions/inpainting.png,
+      data/icons/oxygen/32x32/actions/hotpixels.png,
+      data/icons/oxygen/32x32/actions/imagecomment.png,
+      data/icons/oxygen/32x32/actions/inpainting.png,
+      data/icons/oxygen/48x48/actions/hotpixels.png,
+      data/icons/oxygen/48x48/actions/imagecomment.png,
+      data/icons/oxygen/48x48/actions/inpainting.png,
+      data/icons/oxygen/64x64/actions/hotpixels.png,
+      data/icons/oxygen/64x64/actions/imagecomment.png,
+      data/icons/oxygen/64x64/actions/inpainting.png,
+      data/icons/oxygen/scalable/actions/hotpixels.svgz,
+      data/icons/oxygen/scalable/actions/imagecomment.svgz,
+      data/icons/oxygen/scalable/actions/inpainting.svgz: move icons
+      remove unused
+
+2009-01-13 13:10  cgilles
+
+    * data/icons/hi128-action-invertimage.png,
+      data/icons/hi128-action-noisereduction.png,
+      data/icons/hi128-action-perspective.png,
+      data/icons/hi128-action-ratiocrop.png,
+      data/icons/hi16-action-invertimage.png,
+      data/icons/hi16-action-noisereduction.png,
+      data/icons/hi16-action-perspective.png,
+      data/icons/hi16-action-ratiocrop.png,
+      data/icons/hi22-action-invertimage.png,
+      data/icons/hi22-action-noisereduction.png,
+      data/icons/hi22-action-perspective.png,
+      data/icons/hi22-action-ratiocrop.png,
+      data/icons/hi32-action-invertimage.png,
+      data/icons/hi32-action-noisereduction.png,
+      data/icons/hi32-action-perspective.png,
+      data/icons/hi32-action-ratiocrop.png,
+      data/icons/hi48-action-invertimage.png,
+      data/icons/hi48-action-noisereduction.png,
+      data/icons/hi48-action-perspective.png,
+      data/icons/hi48-action-ratiocrop.png,
+      data/icons/hi64-action-invertimage.png,
+      data/icons/hi64-action-noisereduction.png,
+      data/icons/hi64-action-perspective.png,
+      data/icons/hi64-action-ratiocrop.png,
+      data/icons/hisc-action-invertimage.svgz,
+      data/icons/hisc-action-noisereduction.svgz,
+      data/icons/hisc-action-perspective.svgz,
+      data/icons/hisc-action-ratiocrop.svgz,
+      data/icons/oxygen/128x128/actions/invertimage.png,
+      data/icons/oxygen/128x128/actions/noisereduction.png,
+      data/icons/oxygen/128x128/actions/perspective.png,
+      data/icons/oxygen/128x128/actions/ratiocrop.png,
+      data/icons/oxygen/16x16/actions/invertimage.png,
+      data/icons/oxygen/16x16/actions/noisereduction.png,
+      data/icons/oxygen/16x16/actions/perspective.png,
+      data/icons/oxygen/16x16/actions/ratiocrop.png,
+      data/icons/oxygen/22x22/actions/invertimage.png,
+      data/icons/oxygen/22x22/actions/noisereduction.png,
+      data/icons/oxygen/22x22/actions/perspective.png,
+      data/icons/oxygen/22x22/actions/ratiocrop.png,
+      data/icons/oxygen/32x32/actions/invertimage.png,
+      data/icons/oxygen/32x32/actions/noisereduction.png,
+      data/icons/oxygen/32x32/actions/perspective.png,
+      data/icons/oxygen/32x32/actions/ratiocrop.png,
+      data/icons/oxygen/48x48/actions/invertimage.png,
+      data/icons/oxygen/48x48/actions/noisereduction.png,
+      data/icons/oxygen/48x48/actions/perspective.png,
+      data/icons/oxygen/48x48/actions/ratiocrop.png,
+      data/icons/oxygen/64x64/actions/invertimage.png,
+      data/icons/oxygen/64x64/actions/noisereduction.png,
+      data/icons/oxygen/64x64/actions/perspective.png,
+      data/icons/oxygen/64x64/actions/ratiocrop.png,
+      data/icons/oxygen/scalable/actions/invertimage.svgz,
+      data/icons/oxygen/scalable/actions/noisereduction.svgz,
+      data/icons/oxygen/scalable/actions/perspective.svgz,
+      data/icons/oxygen/scalable/actions/ratiocrop.svgz: move to
+      subfolders
+
+2009-01-13 13:07  cgilles
+
+    * data/icons/hi128-action-resize_image.png,
+      data/icons/hi16-action-resize_image.png,
+      data/icons/hi22-action-resize_image.png,
+      data/icons/hi32-action-resize_image.png,
+      data/icons/hi48-action-resize_image.png,
+      data/icons/hi64-action-resize_image.png,
+      data/icons/hisc-action-resize_image.svgz: this one is unused now
+
+2009-01-13 13:05  cgilles
+
+    * data/icons/hi128-action-restoration.png,
+      data/icons/hi128-action-sharpenimage.png,
+      data/icons/hi128-action-shear.png,
+      data/icons/hi128-action-superimpose.png,
+      data/icons/hi128-action-texture.png,
+      data/icons/hi128-action-whitebalance.png,
+      data/icons/hi16-action-restoration.png,
+      data/icons/hi16-action-sharpenimage.png,
+      data/icons/hi16-action-shear.png,
+      data/icons/hi16-action-superimpose.png,
+      data/icons/hi16-action-texture.png,
+      data/icons/hi16-action-whitebalance.png,
+      data/icons/hi22-action-restoration.png,
+      data/icons/hi22-action-sharpenimage.png,
+      data/icons/hi22-action-shear.png,
+      data/icons/hi22-action-superimpose.png,
+      data/icons/hi22-action-texture.png,
+      data/icons/hi22-action-whitebalance.png,
+      data/icons/hi32-action-restoration.png,
+      data/icons/hi32-action-sharpenimage.png,
+      data/icons/hi32-action-shear.png,
+      data/icons/hi32-action-superimpose.png,
+      data/icons/hi32-action-texture.png,
+      data/icons/hi32-action-whitebalance.png,
+      data/icons/hi48-action-restoration.png,
+      data/icons/hi48-action-sharpenimage.png,
+      data/icons/hi48-action-shear.png,
+      data/icons/hi48-action-superimpose.png,
+      data/icons/hi48-action-texture.png,
+      data/icons/hi48-action-whitebalance.png,
+      data/icons/hi64-action-restoration.png,
+      data/icons/hi64-action-sharpenimage.png,
+      data/icons/hi64-action-shear.png,
+      data/icons/hi64-action-superimpose.png,
+      data/icons/hi64-action-texture.png,
+      data/icons/hi64-action-whitebalance.png,
+      data/icons/hisc-action-restoration.svgz,
+      data/icons/hisc-action-sharpenimage.svgz,
+      data/icons/hisc-action-shear.svgz,
+      data/icons/hisc-action-superimpose.svgz,
+      data/icons/hisc-action-texture.svgz,
+      data/icons/hisc-action-whitebalance.svgz,
+      data/icons/oxygen/128x128/actions/restoration.png,
+      data/icons/oxygen/128x128/actions/sharpenimage.png,
+      data/icons/oxygen/128x128/actions/shear.png,
+      data/icons/oxygen/128x128/actions/superimpose.png,
+      data/icons/oxygen/128x128/actions/texture.png,
+      data/icons/oxygen/128x128/actions/whitebalance.png,
+      data/icons/oxygen/16x16/actions/restoration.png,
+      data/icons/oxygen/16x16/actions/sharpenimage.png,
+      data/icons/oxygen/16x16/actions/shear.png,
+      data/icons/oxygen/16x16/actions/superimpose.png,
+      data/icons/oxygen/16x16/actions/texture.png,
+      data/icons/oxygen/16x16/actions/whitebalance.png,
+      data/icons/oxygen/22x22/actions/restoration.png,
+      data/icons/oxygen/22x22/actions/sharpenimage.png,
+      data/icons/oxygen/22x22/actions/shear.png,
+      data/icons/oxygen/22x22/actions/superimpose.png,
+      data/icons/oxygen/22x22/actions/texture.png,
+      data/icons/oxygen/22x22/actions/whitebalance.png,
+      data/icons/oxygen/32x32/actions/restoration.png,
+      data/icons/oxygen/32x32/actions/sharpenimage.png,
+      data/icons/oxygen/32x32/actions/shear.png,
+      data/icons/oxygen/32x32/actions/superimpose.png,
+      data/icons/oxygen/32x32/actions/texture.png,
+      data/icons/oxygen/32x32/actions/whitebalance.png,
+      data/icons/oxygen/48x48/actions/restoration.png,
+      data/icons/oxygen/48x48/actions/sharpenimage.png,
+      data/icons/oxygen/48x48/actions/shear.png,
+      data/icons/oxygen/48x48/actions/superimpose.png,
+      data/icons/oxygen/48x48/actions/texture.png,
+      data/icons/oxygen/48x48/actions/whitebalance.png,
+      data/icons/oxygen/64x64/actions/restoration.png,
+      data/icons/oxygen/64x64/actions/sharpenimage.png,
+      data/icons/oxygen/64x64/actions/shear.png,
+      data/icons/oxygen/64x64/actions/superimpose.png,
+      data/icons/oxygen/64x64/actions/texture.png,
+      data/icons/oxygen/64x64/actions/whitebalance.png,
+      data/icons/oxygen/scalable/actions/restoration.svgz,
+      data/icons/oxygen/scalable/actions/sharpenimage.svgz,
+      data/icons/oxygen/scalable/actions/shear.svgz,
+      data/icons/oxygen/scalable/actions/superimpose.svgz,
+      data/icons/oxygen/scalable/actions/texture.svgz,
+      data/icons/oxygen/scalable/actions/whitebalance.svgz: move icons
+      to Oxygen sub folders
+
+2009-01-13 12:51  cgilles
+
+    * data/icons/hi128-app-digikam.png,
+      data/icons/hi128-app-showfoto.png,
+      data/icons/hi16-app-digikam.png,
+      data/icons/hi16-app-showfoto.png,
+      data/icons/hi22-app-digikam.png,
+      data/icons/hi22-app-showfoto.png,
+      data/icons/hi32-app-digikam.png,
+      data/icons/hi32-app-digikamimageplugins.png,
+      data/icons/hi32-app-showfoto.png,
+      data/icons/hi48-app-digikam.png,
+      data/icons/hi48-app-showfoto.png,
+      data/icons/hi64-app-digikam.png,
+      data/icons/hi64-app-showfoto.png,
+      data/icons/hisc-app-digikam.svgz,
+      data/icons/hisc-app-showfoto.svgz: these files already exist in
+      internal Oxygen
+
+2009-01-13 12:49  cgilles
+
+    * data/icons/oxygen/128x128/actions,
+      data/icons/oxygen/64x64/actions: start to move icons file to
+      internal Oxygen folders
+
+2009-01-13 11:36  cgilles
+
+    * digikam/imagepreviewbar.cpp,
+      utilities/lighttable/lighttablebar.cpp: Fix highlightment
+      rectangle
+
+2009-01-13 09:21  cgilles
+
+    * data/icons/oxygen/scalable/apps/digikam.svgz,
+      data/icons/oxygen/scalable/apps/showfoto.svgz: update icons with
+      Risto files
+
+2009-01-13 09:15  cgilles
+
+    * data/pics/logo-digikam.png, data/pics/logo-digikam.svgz,
+      data/pics/logo-showfoto.png, data/pics/logo-showfoto.svgz:
+      digiKam and Showfoto logo update with Risto files
+
+2009-01-13 09:08  cgilles
+
+    * data/pics/CMakeLists.txt, data/pics/banner-digikam.png,
+      data/pics/banner-digikam.svg, data/pics/banner-digikam.svgz,
+      data/pics/banner-showfoto.png, data/pics/banner-showfoto.svgz,
+      libs/widgets/common/dlogoaction.cpp, project/project.kdevelop:
+      update tool bar banner with Risto files
+
+2009-01-13 08:32  mlaurent
+
+    * utilities/setup/setupcollectionview.cpp: Add missing i18n
+
+2009-01-12 21:48  cgilles
+
+    * data/pics/splash-digikam.svg, data/pics/splash-digikam.svgz,
+      data/pics/splash-showfoto.svg, data/pics/splash-showfoto.svgz:
+      update splash svg template from Risto
+
+2009-01-12 13:25  cgilles
+
+    * NEWS: update
+
+2009-01-12 13:24  cgilles
+
+    * digikam/albumselectdialog.cpp, digikam/albumselectdialog.h:
+      polish
+
+2009-01-12 13:21  cgilles
+
+    * digikam/albumselectdialog.cpp: digiKam from trunk : set
+      QtreeWidget item selection properly when new album is created
+      BUG: 180447
+      BUG: 180003
+
+2009-01-12 11:30  cgilles
+
+    * libs/widgets/common/splashscreen.cpp: use a device dependant font
+      with splashscreen with a fixed font size adapated to spash
+      content to prevent layout/text if general font size is huge
+
+2009-01-11 08:02  cgilles
+
+    * NEWS: typo
+
+2009-01-10 19:23  cgilles
+
+    * libs/widgets/common/splashscreen.cpp: better background color
+
+2009-01-10 17:01  cgilles
+
+    * libs/widgets/common/splashscreen.cpp: polish
+
+2009-01-10 16:45  cgilles
+
+    * CMakeLists.txt, digikam/version.h.cmake,
+      libs/widgets/common/dpopupmenu.cpp,
+      libs/widgets/common/splashscreen.cpp: use short version string in
+      splash and menu
+
+2009-01-10 16:25  cgilles
+
+    * libs/widgets/common/dpopupmenu.cpp: polish
+
+2009-01-10 15:31  cgilles
+
+    * data/pics/menusidepix-digikam.png,
+      data/pics/menusidepix-showfoto.png, data/pics/menusidepix.svg,
+      libs/widgets/common/dpopupmenu.cpp,
+      libs/widgets/common/dpopupmenu.h: digiKam from trunk : As with
+      splashscreen, no need to waste time to redraw menu side pixmap
+      with version id. it's draw automatically by dpopupmenu code
+
+2009-01-10 14:25  cgilles
+
+    * data/pics/splash-showfoto.png: remove version
+
+2009-01-10 14:16  cgilles
+
+    * data/pics/splash-digikam.png,
+      libs/widgets/common/splashscreen.cpp,
+      libs/widgets/common/splashscreen.h, project/project.kdevelop:
+      digiKAm from trunk : splashscreen now draw itself digiKam
+      version. no need to set version id on splash for the future
+      CCMAIL: friiduh@gmail.com
+
+2009-01-10 07:46  cgilles
+
+    * digikam/scancontroller.cpp, libs/widgets/common/splashscreen.cpp,
+      libs/widgets/common/splashscreen.h, project/project.kdevelop:
+      sync with KDE3 branch
+
+2009-01-10 07:36  cgilles
+
+    * NEWS: update
+
+2009-01-10 07:35  cgilles
+
+    * themedesigner/CMakeLists.txt: fix theme designer linking
+      BUG: 180196
+
+2009-01-10 07:35  cgilles
+
+    * digikam/CMakeLists.txt: polish
+
+2009-01-09 20:20  cgilles
+
+    * libs/dimg/loaders/jpegsettings.cpp,
+      libs/dimg/loaders/pngsettings.cpp: fix layout
+
+2009-01-09 20:02  cgilles
+
+    * libs/dimg/loaders/dimgloader.cpp, libs/dimg/loaders/dimgloader.h,
+      libs/dimg/loaders/iccjpeg.c, libs/dimg/loaders/iccjpeg.h,
+      libs/dimg/loaders/jp2ksettings.cpp,
+      libs/dimg/loaders/jp2ksettings.h, libs/dimg/loaders/jpegloader.h,
+      libs/dimg/loaders/jpegsettings.cpp,
+      libs/dimg/loaders/jpegsettings.h, libs/dimg/loaders/pngloader.h,
+      libs/dimg/loaders/pngsettings.cpp,
+      libs/dimg/loaders/pngsettings.h, libs/dimg/loaders/ppmloader.h,
+      libs/dimg/loaders/qimageloader.h,
+      libs/dimg/loaders/tiffsettings.cpp,
+      libs/dimg/loaders/tiffsettings.h: missing slider
+      use const d
+
+2009-01-09 14:17  mwiesweg
+
+    * libs/database/searchxml.cpp: Just call readNext in case of a
+      single entry, readToEndOfElement will fail because we are not at
+      a Start element.
+      
+      CCBUG: 180110
+
+2009-01-09 13:37  stikonas
+
+    * utilities/lighttable/lighttablewindow.cpp: Use i18np() instead of
+      switch-case for proper plural support.
+
+2009-01-09 12:40  cgilles
+
+    * NEWS: update
+
+2009-01-09 12:13  cgilles
+
+    * digikam/datefolderview.cpp, digikam/datefolderview.h: fix header
+      string as Album and Tags folder view
+
+2009-01-09 12:06  cgilles
+
+    * NEWS: update
+
+2009-01-09 11:20  cgilles
+
+    * digikam/albumsettings.cpp, digikam/albumsettings.h,
+      digikam/metadatahub.cpp, digikam/metadatahub.h,
+      utilities/kipiiface/kipiinterface.cpp,
+      utilities/setup/setupmetadata.cpp,
+      utilities/setup/setupmetadata.h: digiKam from trunk :
+      - added new option to Metadata settings panel to enable/disable
+      file time stamp updating when metadata are saved.
+      - fix internal Metadata hub accordingly.
+      - add new rule in digiKam kipi-interface to share this settings
+      with kipi-plugins.
+      
+      Note: to use this option, you need libkexiv2 from trunk (KDE
+      4.3). digiKam still compilable with libkexiv2 for
+      KDE 4.2 but option is not available in gui.
+      
+      CCMAIL: digikam-devel@kde.org
+
+2009-01-09 09:12  cgilles
+
+    * utilities/lighttable/lighttablebar.cpp,
+      utilities/lighttable/lighttablebar.h,
+      utilities/lighttable/lighttablewindow.cpp,
+      utilities/lighttable/lighttablewindow.h: fix gcc warnings
+
+2009-01-09 05:36  cgilles
+
+    * digikam/albumfolderview.cpp: fix gcc warnings
+
+2009-01-09 05:31  cgilles
+
+    * NEWS: update
+
+2009-01-09 05:28  cgilles
+
+    * NEWS: update
+
+2009-01-08 21:44  mwiesweg
+
+    * utilities/searchwindow/searchfolderview.cpp: Use viewItem's text
+      for search bar filtering, so that Last Search / Current Search is
+      found
+      
+      CCBUG: 177329
+
+2009-01-08 21:30  mwiesweg
+
+    * NEWS: update
+
+2009-01-08 21:25  mwiesweg
+
+    * utilities/slideshow/slideshow.cpp: Be more paranoid, check
+
+2009-01-08 21:25  mwiesweg
+
+    * libs/threadimageio/loadingdescription.cpp: Add the preview size
+      to the cache key. The fingerprint generator loads preview with
+      size 128, which can hardly be used for any other purpose.
+      This fixes the bug of thumbnail-sized preview images.
+      
+      CCBUG: 179801
+
+2009-01-08 21:25  mwiesweg
+
+    * libs/threadimageio/loadingdescription.h,
+      libs/threadimageio/loadsavetask.cpp,
+      libs/threadimageio/managedloadsavethread.cpp,
+      libs/threadimageio/previewtask.cpp,
+      libs/threadimageio/thumbnailtask.cpp: Make the
+      LoadingDescription(QString) constructor explicit and always pass
+      the complete LoadingDescription, rather than losing information
+      for feedback messages
+
+2009-01-08 21:25  mwiesweg
+
+    * digikam/albumfolderview.cpp, digikam/tagfolderview.cpp: Remove
+      duplication in wording, following Mikolaj's suggestion
+      
+      CCBUG: 179933
+
+2009-01-08 19:09  cgilles
+
+    * digikam/imagepreviewbar.cpp, digikam/imagepreviewbar.h,
+      libs/widgets/common/thumbbar.cpp, libs/widgets/common/thumbbar.h:
+      missing some place where highlightement and rating edit mode need
+      to be controled
+
+2009-01-08 18:47  mwiesweg
+
+    * utilities/batch/fingerprintsgenerator.cpp: In analogy to bug
+      178325, fix the same problem for the fingerprintsgenerator
+
+2009-01-08 18:30  aclemens
+
+    * NEWS: update
+
+2009-01-08 18:28  mwiesweg
+
+    * digikam/albumfolderview.cpp: Remove useless popup menu at to the
+      root album item in AlbumFolderView.
+      
+      CCBUG: 179933
+
+2009-01-08 18:01  cgilles
+
+    * NEWS: update
+
+2009-01-08 17:07  cgilles
+
+    * NEWS: update
+
+2009-01-08 16:58  cgilles
+
+    * digikam/imagepreviewbar.cpp, digikam/imagepreviewbar.h,
+      libs/widgets/common/thumbbar.cpp, libs/widgets/common/thumbbar.h,
+      project/project.kdevelop, utilities/lighttable/lighttablebar.cpp:
+      digiKam from trunk: it now possible to rate item from tumbbar, as
+      with icon view
+      CCBUG: 148198
+
+2009-01-08 14:38  cgilles
+
+    * NEWS: update
+
+2009-01-08 12:54  cgilles
+
+    * libs/widgets/common/thumbbar.cpp, libs/widgets/common/thumbbar.h:
+      assign default minimum size
+
+2009-01-08 12:41  cgilles
+
+    * libs/threadimageio/thumbnailsize.h: new Very Small Size
+
+2009-01-08 12:32  cgilles
+
+    * digikam/albumiconview.cpp: polish
+
+2009-01-08 12:09  aclemens
+
+    * NEWS: update
+
+2009-01-08 12:07  aclemens
+
+    * digikam/digikamapp.cpp: use iconText() instead of a RegEx to
+      remove ampersand characters from CameraUI window title
+      
+      BUG:180006
+
+2009-01-08 11:38  aclemens
+
+    * digikam/digikamapp.cpp: Remove single ampersand characters from
+      action text to avoid displaying them in the CameraUI window
+      title.
+      Since single ampersand is used for accelerator shortcuts, we
+      don't need
+      to display them in the window title.
+      
+      CCBUG:180006
+
+2009-01-08 09:38  cgilles
+
+    * digikam/albumiconview.cpp: center properlly rating pixmap
+
+2009-01-07 19:49  cgilles
+
+    * digikam/albumiconview.cpp: fix margin again
+
+2009-01-07 16:54  mwiesweg
+
+    * NEWS: update
+
+2009-01-07 16:50  mwiesweg
+
+    * digikam/albummanager.cpp: Dont show debug message if change is
+      filtered out
+
+2009-01-07 16:50  mwiesweg
+
+    * digikam/metadatahub.cpp: When removing a tag:
+      - remove both tag name and tags path from Iptc keywords because
+      tags set with 0.9
+      will be written with full path
+      - remove tag name from Xmp dc.subject
+      
+      CCBUG: 177887
+
+2009-01-07 16:50  mwiesweg
+
+    * libs/dmetadata/dmetadata.cpp: Not needed anymore
+
+2009-01-07 16:50  mwiesweg
+
+    * libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h: - add a
+      common implementation addToXmpTagStringBag and
+      removeFromXmpTagStringBag
+      to add a given list of string to / remove from the current
+      entries of a string bag
+      - implement or reimplement XmpKeywords, Subjects and
+      SubCategories methods
+      get, set and remove using the new common implementation.
+      
+      This patch should normally go to libkexiv2 but didn't make it due
+      to KDE4.2 freeze
+      
+      CCBUG: 177887
+
+2009-01-07 16:47  cgilles
+
+    * digikam/albumiconview.cpp: fix marging
+
+2009-01-07 13:42  cgilles
+
+    * digikam/iconview.cpp: polish
+
+2009-01-07 11:59  cgilles
+
+    * NEWS: update
+
+2009-01-07 10:21  cgilles
+
+    * NEWS: update
+
+2009-01-07 10:19  cgilles
+
+    * CMakeLists.txt, digikam/albumiconitem.cpp,
+      digikam/albumiconitem.h, digikam/albumiconview.cpp,
+      digikam/albumiconview.h, digikam/iconitem.cpp,
+      digikam/iconitem.h, digikam/iconview.cpp, digikam/iconview.h,
+      digikam/ratingbox.cpp, digikam/ratingbox.h: digiKam from trunk:
+      add support to rating icon view item on the fly.
+      BUG: 148198
+
+2009-01-07 07:42  cgilles
+
+    * digikam/ratingwidget.cpp, digikam/ratingwidget.h: compile
+
+2009-01-07 07:40  cgilles
+
+    * digikam/ratingwidget.cpp, digikam/ratingwidget.h: add tracking
+      properties, enabled by default
+
+2009-01-07 01:04  pino
+
+    * utilities/setup/setupicc.cpp: fix i18n usages
+
+2009-01-07 00:56  aacid
+
+    * utilities/setup/setupicc.cpp: QFile::encodeName shall only be
+      used when passing the value to "pure C" functions, not to Qt/KDE
+      ones
+
+2009-01-06 23:19  aclemens
+
+    * NEWS: update
+
+2009-01-06 23:10  aclemens
+
+    * digikam/folderview.cpp: add sort indicator to folderlist views
+      
+      BUG:179850
+
+2009-01-06 20:43  mwiesweg
+
+    * NEWS: update
+
+2009-01-06 18:47  mwiesweg
+
+    * digikam/folderview.cpp: Fix crash when returning from filtering
+      with no current album, and properly handle this case.
+      
+      CCBUG: 179650
+
+2009-01-06 18:29  mwiesweg
+
+    * NEWS: update
+
+2009-01-06 18:24  mwiesweg
+
+    * digikam/constants.h, digikam/ratingwidget.cpp: Accept -1 (no
+      rating) as value for the rating widget.
+      The widget itself is not able to distinguish between 0 and -1 and
+      will only generate the value 0.
+      
+      CCBUG: 179745
+
+2009-01-06 18:01  cgilles
+
+    * NEWS: update
+
+2009-01-06 17:49  mwiesweg
+
+    * libs/dmetadata/dmetadata.cpp: Pretty irrelevant, but the
+      SmallDenominator variant is better suited for shutter
+      (will give 1/160 for 0.008 etc.)
+
+2009-01-06 17:49  mwiesweg
+
+    * libs/dmetadata/dmetadata.cpp: Interpret shutter value from libraw
+      correctly
+      
+      CCBUG: 179031
+
+2009-01-06 13:51  cgilles
+
+    * digikam/ratingwidget.cpp, digikam/ratingwidget.h: fix width
+
+2009-01-06 10:26  cgilles
+
+    * digikam/albumiconview.cpp, digikam/imagepreviewbar.cpp,
+      utilities/cameragui/cameraiconview.cpp,
+      utilities/lighttable/lighttablebar.cpp: fix draw rect size
+
+2009-01-06 10:04  cgilles
+
+    * digikam/imagepreviewbar.cpp, libs/widgets/common/thumbbar.cpp,
+      utilities/lighttable/lighttablebar.cpp: fix rect size to draw on
+      painter
+
+2009-01-06 09:50  cgilles
+
+    * digikam/imagepreviewbar.cpp, digikam/imagepreviewbar.h,
+      libs/widgets/common/thumbbar.cpp, libs/widgets/common/thumbbar.h,
+      project/project.kdevelop, utilities/lighttable/lighttablebar.cpp,
+      utilities/lighttable/lighttablebar.h: thumbbar item
+      highlightement support (as icon view or folder view)
+
+2009-01-06 09:14  cgilles
+
+    * digikam/folderview.cpp, digikam/iconview.cpp, digikam/iconview.h:
+      fix internal naming
+
+2009-01-06 08:29  cgilles
+
+    * utilities/cameragui/freespacewidget.cpp,
+      utilities/cameragui/freespacewidget.h: fix warning under win32
+
+2009-01-05 17:14  mwiesweg
+
+    * digikam/albumfolderview.cpp: Fix a possible source of a crash
+      
+      CCBUG: 179650
+
+2009-01-05 17:14  mwiesweg
+
+    * digikam/digikamapp.cpp: Polish user visible strings for Nikon
+      Cameras in PTP mode.
+      Thanks to Alexander Wright.
+      
+      CCMAIL: alexander@wright-family.me.uk
+
+2009-01-05 15:07  cgilles
+
+    * libs/widgets/common/dlogoaction.cpp: missing to check in stop
+      action if url label instance is non null
+      BUG: 179712
+
+2009-01-05 15:03  cgilles
+
+    * libs/widgets/common/danimwheel.cpp,
+      libs/widgets/common/danimwheel.h: factoring here is not really
+      fine
+
+2009-01-05 15:02  cgilles
+
+    * CMakeLists.txt: polish
+
+2009-01-05 13:57  cgilles
+
+    * CMakeLists.txt: rc1 release
+
+2009-01-05 13:56  cgilles
+
+    * NEWS: update
+
+2009-01-05 13:54  cgilles
+
+    * libs/widgets/common/dlogoaction.cpp,
+      libs/widgets/common/dlogoaction.h: make sure that url label exist
+      before to apply pixmap.
+      BUG: 179712
+
+2009-01-05 11:43  cgilles
+
+    * NEWS: update
+
+2009-01-05 11:42  cgilles
+
+    * ChangeLog: prepare beta8
+
+2009-01-05 10:20  cgilles
+
+    * data/icons/hi128-app-digikam.png,
+      data/icons/hi128-app-showfoto.png,
+      data/icons/hi16-app-digikam.png,
+      data/icons/hi16-app-showfoto.png,
+      data/icons/hi22-app-digikam.png,
+      data/icons/hi22-app-showfoto.png,
+      data/icons/hi32-app-digikam.png,
+      data/icons/hi32-app-showfoto.png,
+      data/icons/hi48-app-digikam.png,
+      data/icons/hi48-app-showfoto.png,
+      data/icons/hi64-app-digikam.png,
+      data/icons/hi64-app-showfoto.png,
+      data/icons/hisc-app-digikam.svgz,
+      data/icons/hisc-app-showfoto.svgz, data/pics/splash-digikam.png,
+      data/pics/splash-showfoto.png: update
+
+2009-01-05 10:04  cgilles
+
+    * AUTHORS, data/about/top-left-digikam.png,
+      data/icons/oxygen/128x128/apps/digikam.png,
+      data/icons/oxygen/128x128/apps/showfoto.png,
+      data/icons/oxygen/16x16/apps/digikam.png,
+      data/icons/oxygen/16x16/apps/showfoto.png,
+      data/icons/oxygen/22x22/apps/digikam.png,
+      data/icons/oxygen/22x22/apps/showfoto.png,
+      data/icons/oxygen/32x32/apps/digikam.png,
+      data/icons/oxygen/32x32/apps/showfoto.png,
+      data/icons/oxygen/48x48/apps/digikam.png,
+      data/icons/oxygen/48x48/apps/showfoto.png,
+      data/icons/oxygen/64x64/apps/digikam.png,
+      data/icons/oxygen/64x64/apps/showfoto.png,
+      data/icons/oxygen/scalable/apps/digikam.svgz,
+      data/icons/oxygen/scalable/apps/showfoto.svgz,
+      data/pics/banner-digikam.png, data/pics/logo-digikam.png,
+      data/pics/logo-showfoto.png, data/pics/splash-digikam.png,
+      data/pics/splash-showfoto.png, project/project.kdevelop: digiKam
+      from trunk : update icon/logo/banner for 0.10.0-beta8 release
+      using Risto Saukonpaa works.
+      Missing admin files:
+      splash-digikam.svg
+      splash-showfoto.svg
+      banner-digikam.svg
+      A new banner-showfoto.png/svg need to be created for showfoto
+      toolbar.
+      
+      Splash are updated with Arturo Mann contributions
+      
+      CCMAIL: paristo@gmail.com
+      CCMAIL: arturo.mann@gmail.com
+      CCMAIL: digikam-devel@kde.org
+
+2009-01-05 08:32  cgilles
+
+    * NEWS: update
+
+2009-01-05 08:31  cgilles
+
+    * digikam/albumiconviewfilter.cpp, digikam/albumiconviewfilter.h:
+      backport commit #905821 from KDE3 branch
+      BUG: 179653
+
 0.10.0-beta8 2008-01-04
 --------------------------------------------------------------------------------
 
