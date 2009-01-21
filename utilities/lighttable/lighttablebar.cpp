@@ -401,12 +401,13 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
 
                         if (item != ratingItem())
                         {
-                            QRect r    = clickToRateRect(rItem);
                             int rating = rItem->info().rating();
-                            r.setX(((r.width() - rating * ratingPixmap().width())/2) - 1);
+                            QRect r    = clickToRateRect(rItem);
+                            r.translate(0, -rItem->position());
+                            r.setX(((r.right() - rating * ratingPixmap().width())/2) - 1);
                             r.setY(r.y()+1);
                             r.setWidth((rating * ratingPixmap().width()));
-                            r.setBottom(r.bottom()-1);
+                            r.setBottom(r.bottom()+1);
                             p.drawTiledPixmap(r, ratingPixmap());
                         }
                     }
@@ -471,12 +472,13 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
 
                         if (item != ratingItem())
                         {
-                            QRect r    = clickToRateRect(rItem);
                             int rating = rItem->info().rating();
-                            r.setX(((r.width() - rating * ratingPixmap().width())/2) - 1);
+                            QRect r    = clickToRateRect(rItem);
+                            r.translate(-rItem->position(), 0);
+                            r.setX(((r.right() - rating * ratingPixmap().width())/2) - 1);
                             r.setY(r.y()+1);
                             r.setWidth((rating * ratingPixmap().width()));
-                            r.setBottom(r.bottom()-1);
+                            r.setBottom(r.bottom()+1);
                             p.drawTiledPixmap(r, ratingPixmap());
                         }
                     }

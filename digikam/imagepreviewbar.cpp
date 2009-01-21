@@ -457,7 +457,7 @@ void ImagePreviewBar::contentsMouseMoveEvent(QMouseEvent* e)
 
                 rect.moveTopLeft(contentsToViewport(rect.topLeft()));
                 d->ratingBox->setFixedSize(rect.size());
-                d->ratingBox->move(rect.topLeft().x(), rect.topLeft().y());
+                d->ratingBox->move(rect.topLeft().x()-1, rect.topLeft().y());
                 d->ratingBox->setRating(item->info().rating());
                 d->ratingBox->show();
             }
@@ -562,12 +562,13 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
                         if (item != d->ratingItem)
                         {
                             ImagePreviewBarItem *rItem = dynamic_cast<ImagePreviewBarItem*>(item);
-                            QRect r                    = clickToRateRect(rItem);
                             int rating                 = rItem->info().rating();
-                            r.setX(((r.width() - rating * d->ratingPixmap.width())/2) - 1);
+                            QRect r                    = clickToRateRect(rItem);
+                            r.translate(0, -rItem->position());
+                            r.setX(((r.right() - rating * d->ratingPixmap.width())/2) - 1);
                             r.setY(r.y()+1);
                             r.setWidth((rating * d->ratingPixmap.width()));
-                            r.setBottom(r.bottom()-1);
+                            r.setBottom(r.bottom()+1);
                             p.drawTiledPixmap(r, d->ratingPixmap);
                         }
                     }
@@ -620,12 +621,13 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
                         if (item != d->ratingItem)
                         {
                             ImagePreviewBarItem *rItem = dynamic_cast<ImagePreviewBarItem*>(item);
-                            QRect r                    = clickToRateRect(rItem);
                             int rating                 = rItem->info().rating();
-                            r.setX(((r.width() - rating * d->ratingPixmap.width())/2) - 1);
+                            QRect r                    = clickToRateRect(rItem);
+                            r.translate(-rItem->position(), 0);
+                            r.setX(((r.right() - rating * d->ratingPixmap.width())/2) - 1);
                             r.setY(r.y()+1);
                             r.setWidth((rating * d->ratingPixmap.width()));
-                            r.setBottom(r.bottom()-1);
+                            r.setBottom(r.bottom()+1);
                             p.drawTiledPixmap(r, d->ratingPixmap);
                         }
                     }
@@ -673,7 +675,7 @@ void ImagePreviewBar::slotThemeChanged()
 }
 
 // NOTE: see B.K.O #181184 : we need to catch mouse leave event from rating 
-//       box when user move cusor over scrollbar.
+//       box when user move cursor over scrollbar.
 
 bool ImagePreviewBar::eventFilter(QObject *obj, QEvent *ev)
 {
@@ -698,12 +700,12 @@ bool ImagePreviewBar::eventFilter(QObject *obj, QEvent *ev)
 
 QRect ImagePreviewBar::clickToRateRect(ImagePreviewBarItem* item)
 {
-    QRect clickToRateRect;
-    clickToRateRect.setTop(item->rect().bottom() - getMargin() - ratingPixmap().height() - 2);
-    clickToRateRect.setBottom(item->rect().bottom() - getMargin() - 2);
-    clickToRateRect.setLeft(item->rect().left() - 1);
-    clickToRateRect.setRight(item->rect().right() - 1);
-    return clickToRateRect;
+    QRect r    = item->rect();
+    int top    = r.bottom() - getMargin() - ratingPixmap().height() - 2;
+    int left   = r.left() - 1;
+    int bottom = r.bottom() - getMargin() - 2;
+    int right  = r.right() - 1;
+    return QRect(left, top, right-left, bottom-top);
 }
 
 // -------------------------------------------------------------------------
