@@ -175,8 +175,11 @@ bool GeodeticCalculator::destinationGeographicPoint(double *longitude, double *l
 
 QPointF GeodeticCalculator::destinationGeographicPoint()
 {
+    double x, y;
+    destinationGeographicPoint(&x, &y);
     QPointF point;
-    destinationGeographicPoint(&point.rx(), &point.ry());
+    point.setX(x);
+    point.setY(y);
     return point;
 }
 
