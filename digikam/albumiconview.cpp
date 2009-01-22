@@ -819,6 +819,8 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     //---------------------------------------------------------------
 
     popmenu.deleteLater();
+    delete copy;
+    delete paste;
 }
 
 void AlbumIconView::slotCopy()
