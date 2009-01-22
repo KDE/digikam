@@ -92,7 +92,7 @@ DPopupMenu::~DPopupMenu()
 
 void DPopupMenu::renderSidebarGradient(QPainter *p)
 {
-    p->setRenderHint(QPainter::QPainter::TextAntialiasing);
+    p->setRenderHint(QPainter::TextAntialiasing);
     p->setPen(Qt::white);
 
     int frameWidth = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, this);
