@@ -81,6 +81,8 @@ LoadSaveThread::~LoadSaveThread()
 
     if (d->lastTask)
         delete d->lastTask;
+    foreach (LoadSaveTask *task, m_todo)
+        delete task;
     delete d;
 }
 
