@@ -111,9 +111,20 @@ ImageInfo::ImageInfo(qlonglong ID)
     {
         // retrieve immutable values now, the rest on demand
         ItemShortInfo info  = access.db()->getItemShortInfo(ID);
-        m_data->albumId     = info.albumID;
-        m_data->albumRootId = info.albumRootID;
-        m_data->name        = info.itemName;
+        if (info.id)
+        {
+            m_data->albumId     = info.albumID;
+            m_data->albumRootId = info.albumRootID;
+            m_data->name        = info.itemName;
+        }
+        else
+        {
+            // invalid image id
+            ImageInfoData *olddata = m_data.unassign();
+            if (olddata)
+                access.imageInfoCache()->dropInfo(olddata);
+            m_data = 0;
+        }
     }
 }
 
@@ -122,6 +133,11 @@ ImageInfo::ImageInfo(const KUrl &url)
     DatabaseAccess access;
 
     CollectionLocation location = CollectionManager::instance()->locationForUrl(url);
+    if (location.isNull())
+    {
+        m_data = 0;
+        return;
+    }
     QString album = CollectionManager::instance()->album(url.directory());
     QString name  = url.fileName();
 
