@@ -599,8 +599,8 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     QAction *gotoAlbum = gotoMenu.addAction(SmallIcon("folder-image"),        i18n("Album"));
     QAction *gotoDate  = gotoMenu.addAction(SmallIcon("view-calendar-month"), i18n("Date"));
 
-    TagsPopupMenu* gotoTagsPopup = new TagsPopupMenu(selectedImageIDs, TagsPopupMenu::DISPLAY);
-    QAction *gotoTag             = gotoMenu.addMenu(gotoTagsPopup);
+    TagsPopupMenu gotoTagsPopup(selectedImageIDs, TagsPopupMenu::DISPLAY);
+    QAction *gotoTag = gotoMenu.addMenu(&gotoTagsPopup);
     gotoTag->setIcon(SmallIcon("tag"));
     gotoTag->setText(i18n("Tag"));
 
@@ -608,7 +608,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     if (!DatabaseAccess().db()->hasTags(selectedImageIDs))
         gotoTag->setEnabled(false);
 
-    connect(gotoTagsPopup, SIGNAL(signalTagActivated(int)),
+    connect(&gotoTagsPopup, SIGNAL(signalTagActivated(int)),
             this, SLOT(slotGotoTag(int)));
 
     if (d->currentAlbum->type() == Album::PHYSICAL )
@@ -717,26 +717,26 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // Bulk assignment/removal of tags --------------------------
 
-    TagsPopupMenu* assignTagsPopup = new TagsPopupMenu(selectedImageIDs, TagsPopupMenu::ASSIGN);
-    TagsPopupMenu* removeTagsPopup = new TagsPopupMenu(selectedImageIDs, TagsPopupMenu::REMOVE);
+    TagsPopupMenu assignTagsPopup(selectedImageIDs, TagsPopupMenu::ASSIGN);
+    TagsPopupMenu removeTagsPopup(selectedImageIDs, TagsPopupMenu::REMOVE);
 
-    connect(assignTagsPopup, SIGNAL(signalTagActivated(int)),
+    connect(&assignTagsPopup, SIGNAL(signalTagActivated(int)),
             this, SLOT(slotAssignTag(int)));
 
-    connect(removeTagsPopup, SIGNAL(signalTagActivated(int)),
+    connect(&removeTagsPopup, SIGNAL(signalTagActivated(int)),
             this, SLOT(slotRemoveTag(int)));
 
-    popmenu.addMenu(assignTagsPopup);
-    assignTagsPopup->menuAction()->setText(i18n("Assign Tag"));
+    popmenu.addMenu(&assignTagsPopup);
+    assignTagsPopup.menuAction()->setText(i18n("Assign Tag"));
 
-    popmenu.addMenu(removeTagsPopup);
-    removeTagsPopup->menuAction()->setText(i18n("Remove Tag"));
+    popmenu.addMenu(&removeTagsPopup);
+    removeTagsPopup.menuAction()->setText(i18n("Remove Tag"));
 
     // Performance: Only check for tags if there are <250 images selected
     // Also disable the remove Tag popup menu, if there are no tags at all.
     if (selectedImageIDs.count() > 250 ||
         !DatabaseAccess().db()->hasTags(selectedImageIDs))
-        removeTagsPopup->menuAction()->setEnabled(false);
+        removeTagsPopup.menuAction()->setEnabled(false);
 
     popmenu.addSeparator();
 
