@@ -163,7 +163,11 @@ uchar* ImageIface::getPreviewImage() const
         DImg *im = 0;
 
         if (!d->usePreviewSelection)
+        {
             im = DImgInterface::defaultInterface()->getImg();
+            if (!im || im->isNull())
+                return 0;
+        }
         else
         {
             int    x, y, w, h;
@@ -173,10 +177,13 @@ uchar* ImageIface::getPreviewImage() const
             DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
             im = new DImg(w, h, s, a, data, true);
             delete [] data;
-        }
 
-        if (!im || im->isNull())
-            return 0;
+            if (!im || im->isNull())
+            {
+                delete im;
+                return 0;
+            }
+        }
 
         QSize sz(im->width(), im->height());
         sz.scale(d->constrainWidth, d->constrainHeight, Qt::KeepAspectRatio);
@@ -187,6 +194,9 @@ uchar* ImageIface::getPreviewImage() const
 
         // only create another copy if needed, in putPreviewImage
         d->targetPreviewImage = d->previewImage;
+
+        if (d->usePreviewSelection)
+            delete im;
     }
 
     DImg previewData = d->previewImage.copyImageData();
