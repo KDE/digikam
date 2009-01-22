@@ -59,6 +59,7 @@ TARGET_LINK_LIBRARIES(showfoto
                       ${KDCRAW_LIBRARIES} 
                       ${KDE4_KIO_LIBS} 
                       ${LCMS_LIBRARIES}
+                      ${QT_QT3SUPPORT_LIBRARY}
                      )
 
 INSTALL(TARGETS showfoto ${INSTALL_TARGETS_DEFAULT_ARGS})
