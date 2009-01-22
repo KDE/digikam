@@ -6,7 +6,7 @@
  * Date        : 2005-24-01
  * Description : misc image filters
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Original Equalise and StretchContrast Algorithms copyright 2002
  * by Daniel M. Duley <mosfet@kde.org> from KImageEffect API.
@@ -857,6 +857,7 @@ void DImgImageFilters::gaussianBlurImage(uchar *data, int width, int height, boo
 
     DImg orgImage(width, height, sixteenBit, true, data);
     DImgGaussianBlur *filter = new DImgGaussianBlur(&orgImage, 0L, radius);
+    filter->startFilterDirectly();
     DImg imDest = filter->getTargetImage();
     memcpy( data, imDest.bits(), imDest.numBytes() );
     delete filter;
@@ -877,6 +878,7 @@ void DImgImageFilters::sharpenImage(uchar *data, int width, int height, bool six
 
     DImg orgImage(width, height, sixteenBit, true, data);
     DImgSharpen *filter = new DImgSharpen(&orgImage, 0L, radius);
+    filter->startFilterDirectly();
     DImg imDest = filter->getTargetImage();
     memcpy( data, imDest.bits(), imDest.numBytes() );
     delete filter;
