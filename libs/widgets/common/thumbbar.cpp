@@ -1105,8 +1105,9 @@ void ThumbBarView::slotGotThumbnail(const LoadingDescription& desc, const QPixma
 
 bool ThumbBarView::acceptToolTip(ThumbBarItem* item, const QPoint& p)
 {
-    if (item->tooltipRect().contains(p))
+    if (item && item->tooltipRect().contains(p))
         return true;
+
     return false;
 }
 
