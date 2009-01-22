@@ -179,7 +179,10 @@ uchar* ImageIface::getPreviewImage() const
             im = new DImg(w, h, s, a, data, true); 
             delete [] data;
 
-            if (!im || im->isNull())
+            if (!im)
+                return 0;
+
+            if (im->isNull())
             {
                 delete im;
                 return 0;
