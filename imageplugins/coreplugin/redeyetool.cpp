@@ -545,6 +545,8 @@ void RedEyeTool::redEyeFilter(DImg& selection)
     selection.bitBlendImage(composer, &mask,
                             0, 0, mask.width(), mask.height(),
                             0, 0);
+
+    delete composer;
 }
 
 }  // namespace DigikamImagesPluginCore
