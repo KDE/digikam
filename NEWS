@@ -1,5 +1,5 @@
 *********************************************************************************************************
-digiKam 0.10.0-rc1 - Release date: 2009-01-xx
+digiKam 0.10.0-rc1 - Release date: 2009-01-21
 
 NEW FEATURES:
 
@@ -61,7 +61,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 047 ==> 181184 : In fullscreen, thumbnails rating stars follow bottom scrollbar.
 048 ==> 180009 : digiKam crashed when downloading pictures from pictures from digital camera.
 049 ==> 177936 : Choose zoom an change image break Percent-Zoom Pulldown.
-050 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta8 - Release date: 2009-01-04
