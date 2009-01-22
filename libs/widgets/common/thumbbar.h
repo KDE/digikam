@@ -174,6 +174,9 @@ public:
     int           position() const;
     QRect         rect() const;
 
+    void          setTooltipRect(const QRect& rect);
+    QRect         tooltipRect() const;
+
     void          repaint();
 
 private:

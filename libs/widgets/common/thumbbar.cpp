@@ -146,6 +146,8 @@ public:
 
     int           pos;
 
+    QRect         tooltipRect;
+
     KUrl          url;
 
     ThumbBarItem *next;
@@ -541,6 +543,7 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                                  generateFuzzyRect(QSize(pix.width()+2*d->radius,
                                                          pix.height()+2*d->radius),
                                                    QColor(0, 0, 0, 128), d->radius));
+                    item->setTooltipRect(QRect(x, y+item->position(), pix.width(), pix.height()));
                 }
 
                 p.translate(0, - translate);
@@ -577,6 +580,7 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                     p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6, 
                                                                    pix.height()+6),
                                                              QColor(0, 0, 0, 128), 3));
+                    item->setTooltipRect(QRect(x+item->position(), y, pix.width(), pix.height()));
                 }
 
                 p.translate(- translate, 0);
@@ -1099,9 +1103,11 @@ void ThumbBarView::slotGotThumbnail(const LoadingDescription& desc, const QPixma
     }
 }
 
-bool ThumbBarView::acceptToolTip(ThumbBarItem*, const QPoint&)
+bool ThumbBarView::acceptToolTip(ThumbBarItem* item, const QPoint& p)
 {
-    return true;
+    if (item->tooltipRect().contains(p))
+        return true;
+    return false;
 }
 
 // -------------------------------------------------------------------------
@@ -1149,6 +1155,16 @@ QRect ThumbBarItem::rect() const
                      d->view->d->tileSize + 2*d->view->d->margin+2*d->view->d->radius,
                      d->view->visibleHeight());
     }
+}
+
+void ThumbBarItem::setTooltipRect(const QRect& rect)
+{
+    d->tooltipRect = rect;
+}
+
+QRect ThumbBarItem::tooltipRect() const
+{
+    return d->tooltipRect;
 }
 
 int ThumbBarItem::position() const

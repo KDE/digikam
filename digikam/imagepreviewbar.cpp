@@ -558,6 +558,8 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
                         p.drawPixmap(x, y, pix);
                         p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6, pix.height()+6),
                                                                  QColor(0, 0, 0, 128), 3));
+                        item->setTooltipRect(QRect(x, y+item->position(), pix.width(), pix.height()));
+
 
                         if (item != d->ratingItem)
                         {
@@ -617,6 +619,7 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
                         p.drawPixmap(x, y, pix);
                         p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6, pix.height()+6),
                                                                  QColor(0, 0, 0, 128), 3));
+                        item->setTooltipRect(QRect(x+item->position(), y, pix.width(), pix.height()));
 
                         if (item != d->ratingItem)
                         {
