@@ -28,6 +28,8 @@
 
 #include "albumdb.h"
 #include "imageinfo.h"
+#include "imagecomments_p.h"
+#include "imageposition_p.h"
 #include "imageinfolist.h"
 #include "imageinfodata.h"
 
