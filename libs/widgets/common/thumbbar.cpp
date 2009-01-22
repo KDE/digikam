@@ -221,6 +221,7 @@ ThumbBarView::~ThumbBarView()
 
     delete d->timer;
     delete d->toolTipTimer;
+    delete d->toolTip;
     delete d;
 }
 
