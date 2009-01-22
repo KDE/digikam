@@ -167,6 +167,12 @@ AlbumLister::AlbumLister()
 
 AlbumLister::~AlbumLister()
 {
+    if (d->job)
+    {
+        d->job->kill();
+        d->job = 0;
+    }
+
     delete d;
     m_instance = 0;
 }
