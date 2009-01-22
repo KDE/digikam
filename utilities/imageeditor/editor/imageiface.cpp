@@ -7,7 +7,7 @@
  * Description : image data interface for image plugins
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -164,7 +164,11 @@ uchar* ImageIface::getPreviewImage() const
         DImg *im = 0;
 
         if (!d->usePreviewSelection)
+        {
             im = DImgInterface::defaultInterface()->getImg();
+            if (!im || im->isNull())
+                return 0;
+        }
         else 
         {
             int    x, y, w, h;
@@ -174,10 +178,13 @@ uchar* ImageIface::getPreviewImage() const
             DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
             im = new DImg(w, h, s, a, data, true); 
             delete [] data;
-        }
 
-        if (!im || im->isNull())
-            return 0;
+            if (!im || im->isNull())
+            {
+                delete im;
+                return 0;
+            }
+        }
 
         QSize sz(im->width(), im->height());
         sz.scale(d->constrainWidth, d->constrainHeight, QSize::ScaleMin);
@@ -191,6 +198,9 @@ uchar* ImageIface::getPreviewImage() const
 
         d->qmask.resize(d->previewWidth, d->previewHeight);
         d->qpix.resize(d->previewWidth, d->previewHeight);
+
+        if (d->usePreviewSelection)
+            delete im;
     }
 
     DImg previewData = d->previewImage.copyImageData();
