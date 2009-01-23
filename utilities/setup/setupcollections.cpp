@@ -89,12 +89,19 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
 
     QGroupBox *albumPathBox = new QGroupBox(i18n("Root Album Folders"), this);
 
+#ifndef _WIN32
     QLabel *albumPathLabel  = new QLabel(i18n("Below are the locations of your root albums used to store "
                                               "your images. Write access is necessary to be able "
                                               "to edit images in these albums.\n"
-                                              "Note: removable media (such as USB drive or DVD) and remote "
-                                              "file systems (such as NFS or Samba) are supported."),
+                                              "Note: Removable media (such as USB drives or DVDs) and remote file systems "
+                                              "(such as NFS, or Samba mounted with cifs/smbfs) are supported."),
                                          albumPathBox);
+#else
+    QLabel *albumPathLabel  = new QLabel(i18n("Below are the locations of your root albums used to store "
+                                              "your images. Write access is necessary to be able "
+                                              "to edit images in these albums.\n"),
+                                         albumPathBox);
+#endif
     albumPathLabel->setWordWrap(true);
 
     d->collectionView  = new SetupCollectionTreeView(albumPathBox);

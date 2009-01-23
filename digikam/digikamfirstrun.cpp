@@ -114,12 +114,21 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
 
     QLabel *textLabel1 = new QLabel(widget);
     textLabel1->setWordWrap(true);
+#ifndef _WIN32
     textLabel1->setText(i18n("<p>Please enter a location where you want to store your images.</p> "
                              "<p>You can choose any local folder, even one that already contains images."
                              "<br/> "
                              "More folders can be added later under the <i>Settings</i> menu. "
                              "</p> "
-                             "<p><i>Note:</i> Removable media (like USB drives) and shared file systems (both NFS or Samba) are supported.</p>") );
+                             "<p>Note: Removable media (such as USB drives or DVDs) and remote file systems "
+                             "(such as NFS, or Samba mounted with cifs/smbfs) are supported.</p>") );
+#else
+    textLabel1->setText(i18n("<p>Please enter a location where you want to store your images.</p> "
+                             "<p>You can choose any local folder, even one that already contains images."
+                             "<br/> "
+                             "More folders can be added later under the <i>Settings</i> menu. "
+                             "</p> ") );
+#endif
 
     d->rootAlbumPathRequester = new KUrlRequester(widget);
     d->rootAlbumPathRequester->setMode(KFile::Directory | KFile::LocalOnly);
