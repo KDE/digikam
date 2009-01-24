@@ -46,6 +46,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kmenu.h>
 #include <kmimetype.h>
 #include <kstandarddirs.h>
 
@@ -59,7 +60,6 @@
 #include "imageattributeswatch.h"
 #include "metadatahub.h"
 #include "ratingpopupmenu.h"
-#include "dpopupmenu.h"
 #include "themeengine.h"
 
 namespace Digikam
@@ -119,40 +119,53 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
 
     QPoint pos = QCursor::pos();
     LightTableBarItem *item = dynamic_cast<LightTableBarItem*>(findItemByPos(e->pos()));
-    if (!item) return;
 
     RatingPopupMenu *ratingMenu = 0;
 
     if (e->button() == Qt::RightButton)
     {
-        DPopupMenu popmenu(this);
-        QAction *leftPanelAction  = popmenu.addAction(SmallIcon("arrow-left"), i18n("Show on left panel"));
-        QAction *rightPanelAction = popmenu.addAction(SmallIcon("arrow-right"), i18n("Show on right panel"));
-        QAction *editAction       = popmenu.addAction(SmallIcon("editimage"), i18n("Edit"));
+        KMenu popmenu(this);
 
-        if (d->navigateByPair)
+        QAction *leftPanelAction  = 0;
+        QAction *rightPanelAction = 0;
+        QAction *editAction       = 0;
+        QAction *removeAction     = 0;
+        QAction *clearAllAction   = 0;
+
+        if (item)
         {
-            leftPanelAction->setEnabled(false);
-            rightPanelAction->setEnabled(false);
+            leftPanelAction  = popmenu.addAction(SmallIcon("arrow-left"), i18n("Show on left panel"));
+            rightPanelAction = popmenu.addAction(SmallIcon("arrow-right"), i18n("Show on right panel"));
+            editAction       = popmenu.addAction(SmallIcon("editimage"), i18n("Edit"));
+
+            if (d->navigateByPair)
+            {
+                leftPanelAction->setEnabled(false);
+                rightPanelAction->setEnabled(false);
+            }
+
+            popmenu.addSeparator();
+            removeAction   = popmenu.addAction(SmallIcon("dialog-close"), i18n("Remove item"));
         }
 
-        popmenu.addSeparator();
-        QAction *removeAction   = popmenu.addAction(SmallIcon("dialog-close"), i18n("Remove item"));
-        QAction *clearAllAction = popmenu.addAction(SmallIcon("edit-delete-shred"), i18n("Clear all"));
-        popmenu.addSeparator();
+        clearAllAction = popmenu.addAction(SmallIcon("edit-delete-shred"), i18n("Clear all"));
 
-        // Assign Star Rating -------------------------------------------
+        if (item)
+        {
+            popmenu.addSeparator();
 
-        ratingMenu = new RatingPopupMenu();
+            // Assign Star Rating -------------------------------------------
 
-        connect(ratingMenu, SIGNAL(signalRatingChanged(int)),
-                this, SLOT(slotAssignRating(int)));
+            ratingMenu = new RatingPopupMenu();
 
-        popmenu.addMenu(ratingMenu);
-        ratingMenu->menuAction()->setText(i18n("Assign Rating"));
+            connect(ratingMenu, SIGNAL(signalRatingChanged(int)),
+                    this, SLOT(slotAssignRating(int)));
+
+            popmenu.addMenu(ratingMenu);
+            ratingMenu->menuAction()->setText(i18n("Assign Rating"));
+        }
 
         QAction *choice = popmenu.exec(pos);
-
         if (choice)
         {
             if (choice == leftPanelAction)          // Left panel
