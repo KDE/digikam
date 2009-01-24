@@ -869,6 +869,7 @@ void CameraUI::slotBusy(bool val)
         d->selectNoneAction->setEnabled(true);
         d->selectInvertAction->setEnabled(true);
         d->selectNewItemsAction->setEnabled(true);
+        d->selectLockedItemsAction->setEnabled(true);
         d->lockAction->setEnabled(true);
         d->cameraInfoAction->setEnabled(true);
         d->cameraCaptureAction->setEnabled(d->controller->cameraCaptureImageSupport());
@@ -909,6 +910,7 @@ void CameraUI::slotBusy(bool val)
         d->selectNoneAction->setEnabled(false);
         d->selectInvertAction->setEnabled(false);
         d->selectNewItemsAction->setEnabled(false);
+        d->selectLockedItemsAction->setEnabled(false);
         d->lockAction->setEnabled(false);
         d->cameraInfoAction->setEnabled(false);
         d->cameraCaptureAction->setEnabled(false);
