@@ -11,7 +11,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 173412 : Can't use a samba share for my collection?
 004 ==> 176873 : Database synchronisation segfaulted, albums disappeared.
 005 ==> 180050 : Metadata from external program not showing.
-006 ==> 
+006 ==> 147677 : Wish EXIF sort option.
+007 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
