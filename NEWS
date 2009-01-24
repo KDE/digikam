@@ -10,7 +10,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 181610 : Discard button not working in "Apply changes?".
 003 ==> 173412 : Can't use a samba share for my collection?
 004 ==> 176873 : Database synchronisation segfaulted, albums disappeared.
-005 ==> 
+005 ==> 180050 : Metadata from external program not showing.
+006 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
