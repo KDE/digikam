@@ -148,7 +148,9 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
             removeAction   = popmenu.addAction(SmallIcon("dialog-close"), i18n("Remove item"));
         }
 
+        int totalItems = itemsUrls().count();
         clearAllAction = popmenu.addAction(SmallIcon("edit-delete-shred"), i18n("Clear all"));
+        clearAllAction->setEnabled(totalItems ? true : false);
 
         if (item)
         {
