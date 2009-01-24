@@ -33,6 +33,7 @@
 
 // KDE includes.
 
+#include <kdebug.h>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -143,10 +144,8 @@ void FuzzySearchFolderView::slotTextSearchFilterChanged(const SearchTextSettings
         SAlbum* salbum                  = (SAlbum*)(*it);
         FuzzySearchFolderItem* viewItem = (FuzzySearchFolderItem*) salbum->extraData(this);
 
-        if (salbum->title().contains(search, settings.caseSensitive) &&
-            salbum->isHaarSearch() &&
-            salbum->title() != currentFuzzySketchSearchName() &&
-            salbum->title() != currentFuzzyImageSearchName())
+        if (viewItem &&
+            viewItem->text(0).contains(search, settings.caseSensitive))
         {
             atleastOneMatch = true;
 
@@ -290,6 +289,14 @@ void FuzzySearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&,
     popmenu.addTitle(SmallIcon("digikam"), i18n("My Fuzzy Searches"));
     QAction *renSearch = popmenu.addAction(SmallIcon("edit-rename"), i18n("Rename..."));
     QAction *delSearch = popmenu.addAction(SmallIcon("edit-delete"), i18n("Delete"));
+
+    if (sItem->album()->title() == currentFuzzySketchSearchName() ||
+        sItem->album()->title() == currentFuzzyImageSearchName())
+    {
+        renSearch->setEnabled(false);
+        delSearch->setEnabled(false);
+    }
+
     QAction *choice    = popmenu.exec(QCursor::pos());
     if (choice)
     {
