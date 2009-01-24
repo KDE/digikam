@@ -46,7 +46,7 @@
 
 int main(int argc, char *argv[])
 {
-    KAboutData aboutData("showfoto", 0,
+    KAboutData aboutData("showfoto", "digikam",
                          ki18n("showFoto"),
                          digiKamVersion().toAscii(),  // NOTE: showFoto version = digiKam version
                          Digikam::digiKamSlogan(),
