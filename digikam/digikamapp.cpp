@@ -1502,7 +1502,7 @@ void DigikamApp::slotOpenSolidDevice(const QString &udi)
 void DigikamApp::slotOpenSolidCamera(QAction *action)
 {
     QString udi = action->data().toString();
-    openSolidCamera(udi, action->text());
+    openSolidCamera(udi, action->iconText());
 }
 
 void DigikamApp::openSolidCamera(const QString &udi, const QString &cameraLabel)
