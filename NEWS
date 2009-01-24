@@ -14,7 +14,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 147677 : Wish EXIF sort option.
 007 ==> 181347 : Cannot download picture with digiKam: estimated space.
 008 ==> 181721 : Right-click does nothing if not on or around an image in the top Light Table panel.
-009 ==> 
+009 ==> 181698 : Cannot delete fuzzy searches.
+010 ==> 181720 : Can't rename fuzzy searches.
+011 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
