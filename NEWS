@@ -14,7 +14,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 157313 : Option to reposition lighttable slide-list.
 006 ==> 180671 : Scanner import does not work.
 007 ==> 175387 : digikam-doc 0.9.4 sf.net tarball is outdated.
-008 ==> 
+008 ==> 181712 : Ubuntu 8.10 - digiKam finds not the correct images.
+009 ==> 
 
 **********************************************************************************************
 digiKam 0.9.5-beta2 - Release date: 2008-12-14
