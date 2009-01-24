@@ -13,7 +13,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 180050 : Metadata from external program not showing.
 006 ==> 147677 : Wish EXIF sort option.
 007 ==> 181347 : Cannot download picture with digiKam: estimated space.
-008 ==> 
+008 ==> 181721 : Right-click does nothing if not on or around an image in the top Light Table panel.
+009 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
