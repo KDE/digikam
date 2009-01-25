@@ -16,7 +16,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 181721 : Right-click does nothing if not on or around an image in the top Light Table panel.
 009 ==> 181698 : Cannot delete fuzzy searches.
 010 ==> 181720 : Can't rename fuzzy searches.
-011 ==> 
+011 ==> 181889 : Resize image (plugin): click and drag the size slider does not work properly.
+012 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
