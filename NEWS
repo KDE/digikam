@@ -18,7 +18,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 181720 : Can't rename fuzzy searches.
 011 ==> 181889 : Resize image (plugin): click and drag the size slider does not work properly.
 012 ==> 181893 : Blur: dragging the preview image removes the target frame and leaves only the source frame.
-013 ==> 
+013 ==> 181913 : digiKam 0.10.0 RC1 unbootable.
+014 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
