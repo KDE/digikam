@@ -295,9 +295,6 @@ ImageResize::ImageResize(QWidget* parent)
     connect(this, SIGNAL(user3Clicked()),
             this, SLOT(slotUser3()));
 
-    connect(this, SIGNAL(helpClicked()),
-            this, SLOT(slotHelp()));
-
     // -------------------------------------------------------------
 
     Digikam::GreycstorationSettings defaults;
@@ -311,11 +308,6 @@ ImageResize::~ImageResize()
        delete d->greycstorationIface;
 
     delete d;
-}
-
-void ImageResize::slotHelp()
-{
-    KToolInvocation::invokeHelp("resize", "digikam");
 }
 
 void ImageResize::slotButtonClicked(int button)
