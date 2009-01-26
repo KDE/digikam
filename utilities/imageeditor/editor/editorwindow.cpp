@@ -973,6 +973,8 @@ void EditorWindow::saveStandardSettings()
 void EditorWindow::toggleStandardActions(bool val)
 {
     d->zoomFitToWindowAction->setEnabled(val);
+    d->zoomMinusAction->setEnabled(val);
+    d->zoomPlusAction->setEnabled(val);
     d->rotateLeftAction->setEnabled(val);
     d->rotateRightAction->setEnabled(val);
     d->flipHorizAction->setEnabled(val);
