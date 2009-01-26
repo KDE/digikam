@@ -21,7 +21,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 013 ==> 181913 : digiKam 0.10.0 RC1 unbootable.
 014 ==> 181930 : Slider for resizing does not work, i.e.shows either 1 or some extremely high number.
 015 ==> 181940 : Image editor tools does not remember preview mode.
-016 ==> 
+016 ==> 181964 : Image Editor's "fit-to-window" is broken when invoking a filter.
+017 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
