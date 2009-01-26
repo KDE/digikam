@@ -81,6 +81,14 @@ WelcomePageView::WelcomePageView(QWidget* parent)
         findAction->setEnabled(false);
     }
 
+    // disable KHTMLPart's findNext action
+    KAction* findNextAction = dynamic_cast<KAction*>(actionCollection()->action("findNext"));
+    if (findNextAction)
+    {
+        findNextAction->setShortcut(KShortcut());
+        findNextAction->setEnabled(false);
+    }
+
     // ------------------------------------------------------------
 
     connect(browserExtension(), SIGNAL(openUrlRequest(const KUrl&, const KParts::OpenUrlArguments&, const KParts::BrowserArguments&)),
