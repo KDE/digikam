@@ -307,7 +307,10 @@ void ManagedLoadSaveThread::prependThumbnailGroup(QList<LoadingDescription> desc
 
         // remove task, if not the current task
         if (existingTask && existingTask != m_currentTask)
+        {
             m_todo.removeAll(existingTask);
+            delete existingTask;
+        }
 
         // insert new loading task, in the order given by descriptions list
         m_todo.insert(index++, new ThumbnailLoadingTask(this, descriptions[i]));
