@@ -134,6 +134,7 @@ protected:
     void setupStatusBar();
     void setupContextMenu();
     void toggleStandardActions(bool val);
+    void toggleZoomActions(bool val);
 
     void printImage(KUrl url);
 

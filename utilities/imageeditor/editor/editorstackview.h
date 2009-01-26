@@ -72,6 +72,12 @@ public:
     void zoomTo100Percents();
     void setZoomFactor(double zoom);
 
+    /** Two widgets are embedded in Editor Tool to perform preview with panning and zooming:
+        a PreviewWidget derived class or ImagePanelWidget.
+        This method try to find the right PreviewWidget instance accordingly else return 0.
+     */
+    PreviewWidget* previewWidget() const;
+
 signals:
 
     void signalZoomChanged(bool isMax, bool isMin, double zoom);
@@ -79,14 +85,6 @@ signals:
 private slots:
 
     void slotZoomChanged(double);
-
-private:
-
-    /** Two widgets are embedded in Editor Tool to perform preview with panning and zooming:
-        a PreviewWidget derived class or ImagePanelWidget. 
-        This method try to find the right PreviewWidget instance accordingly else return 0.
-     */
-    PreviewWidget* previewWidget() const;
 
 private:
 
