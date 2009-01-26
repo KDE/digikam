@@ -170,6 +170,7 @@ void HotPixelsTool::writeSettings()
     KConfigGroup group        = config->group("hotpixels Tool");
     group.writeEntry("Last Black Frame File", m_blackFrameURL.url());
     group.writeEntry("Filter Method", m_filterMethodCombo->currentIndex());
+    m_previewWidget->writeSettings();
     group.sync();
 }
 

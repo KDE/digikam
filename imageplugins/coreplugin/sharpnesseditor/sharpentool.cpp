@@ -432,6 +432,7 @@ void SharpenTool::writeSettings()
     group.writeEntry("RefocusCorrelationAdjustment", m_correlation->value());
     group.writeEntry("RefocusNoiseAdjustment", m_noise->value());
     group.writeEntry("SharpenMethod", m_sharpMethod->currentIndex());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

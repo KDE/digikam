@@ -133,6 +133,7 @@ void EmbossTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("emboss Tool");
     group.writeEntry("DepthAdjustment", m_depthInput->value());
+    m_previewWidget->writeSettings();
     group.sync();
 }
 

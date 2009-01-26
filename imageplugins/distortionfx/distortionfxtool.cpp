@@ -230,7 +230,7 @@ void DistortionFXTool::renderingFinished()
 void DistortionFXTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("distortionfx Tool");
+    KConfigGroup group        = config->group("distortionfx Tool");
 
     m_effectType->blockSignals(true);
     m_iterationInput->blockSignals(true);
@@ -250,10 +250,11 @@ void DistortionFXTool::readSettings()
 void DistortionFXTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("distortionfx Tool");
+    KConfigGroup group        = config->group("distortionfx Tool");
     group.writeEntry("EffectType", m_effectType->currentIndex());
     group.writeEntry("IterationAdjustment", m_iterationInput->value());
     group.writeEntry("LevelAdjustment", m_levelInput->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

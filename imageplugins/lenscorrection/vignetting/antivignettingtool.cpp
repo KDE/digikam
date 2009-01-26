@@ -259,6 +259,7 @@ void AntiVignettingTool::writeSettings()
     group.writeEntry("BrightnessAdjustment", m_brightnessInput->value());
     group.writeEntry("ContrastAdjustment", m_contrastInput->value());
     group.writeEntry("GammaAdjustment", m_gammaInput->value());
+    m_previewWidget->writeSettings();
     group.sync();
 }
 

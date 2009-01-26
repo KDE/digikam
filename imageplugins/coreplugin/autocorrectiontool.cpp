@@ -212,6 +212,7 @@ void AutoCorrectionTool::writeSettings()
     group.writeEntry("Histogram Channel", m_gboxSettings->histogramBox()->channel());
     group.writeEntry("Histogram Scale", m_gboxSettings->histogramBox()->scale());
     group.writeEntry("Auto Correction Filter", m_correctionTools->currentRow());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

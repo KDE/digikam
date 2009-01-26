@@ -155,6 +155,7 @@ void CharcoalTool::writeSettings()
     KConfigGroup group        = config->group("charcoal Tool");
     group.writeEntry("PencilAdjustment", m_pencilInput->value());
     group.writeEntry("SmoothAdjustment", m_smoothInput->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

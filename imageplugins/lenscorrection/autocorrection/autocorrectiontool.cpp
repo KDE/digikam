@@ -209,6 +209,8 @@ void AutoCorrectionTool::writeSettings()
         group.writeEntry("Distortion", (m_filterDist->checkState() == Qt::Checked) ? true : false);
     if ( m_filterGeom->isEnabled() )
         group.writeEntry("Geometry",   (m_filterGeom->checkState() == Qt::Checked) ? true : false);
+
+    m_previewWidget->writeSettings();
     group.sync();
 }
 

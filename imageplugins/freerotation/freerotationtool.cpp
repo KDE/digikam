@@ -191,7 +191,7 @@ void FreeRotationTool::slotColorGuideChanged()
 void FreeRotationTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("freerotation Tool");
+    KConfigGroup group        = config->group("freerotation Tool");
     m_angleInput->setValue(group.readEntry("Main Angle", m_angleInput->defaultValue()));
     m_fineAngleInput->setValue(group.readEntry("Fine Angle", m_fineAngleInput->defaultValue()));
     m_autoCropCB->setCurrentIndex(group.readEntry("Auto Crop Type", m_autoCropCB->defaultIndex()));
@@ -204,11 +204,12 @@ void FreeRotationTool::readSettings()
 void FreeRotationTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("freerotation Tool");
+    KConfigGroup group        = config->group("freerotation Tool");
     group.writeEntry("Main Angle", m_angleInput->value());
     group.writeEntry("Fine Angle", m_fineAngleInput->value());
     group.writeEntry( "Auto Crop Type", m_autoCropCB->currentIndex() );
     group.writeEntry( "Anti Aliasing", m_antialiasInput->isChecked() );
+    m_previewWidget->writeSettings();
     group.sync();
 }
 

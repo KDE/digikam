@@ -262,6 +262,8 @@ void BorderTool::writeSettings()
     group.writeEntry("Decorative First Color", m_decorativeFirstColor);
     group.writeEntry("Decorative Second Color", m_decorativeSecondColor);
 
+    m_previewWidget->writeSettings();
+
     group.sync();
 }
 

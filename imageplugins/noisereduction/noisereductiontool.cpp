@@ -301,7 +301,7 @@ void NoiseReductionTool::renderingFinished()
 void NoiseReductionTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("noisereduction Tool");
+    KConfigGroup group        = config->group("noisereduction Tool");
 
     m_csmoothInput->setEnabled(false);
     m_dampingInput->setEnabled(false);
@@ -340,7 +340,7 @@ void NoiseReductionTool::readSettings()
 void NoiseReductionTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("noisereduction Tool");
+    KConfigGroup group        = config->group("noisereduction Tool");
     group.writeEntry("RadiusAdjustment", m_radiusInput->value());
     group.writeEntry("LumToleranceAdjustment", m_lumToleranceInput->value());
     group.writeEntry("ThresholdAdjustment", m_thresholdInput->value());
@@ -351,6 +351,7 @@ void NoiseReductionTool::writeSettings()
     group.writeEntry("GammaAdjustment", m_gammaInput->value());
     group.writeEntry("DampingAdjustment", m_dampingInput->value());
     group.writeEntry("PhaseAdjustment", m_phaseInput->value());
+    m_previewWidget->writeSettings();
     group.sync();
 }
 

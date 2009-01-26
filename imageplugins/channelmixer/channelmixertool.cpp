@@ -303,7 +303,7 @@ void ChannelMixerTool::slotGainsChanged()
     slotTimer();
 }
 
-void ChannelMixerTool::adjustSliders(void)
+void ChannelMixerTool::adjustSliders()
 {
     m_redGain->blockSignals(true);
     m_greenGain->blockSignals(true);
@@ -500,6 +500,8 @@ void ChannelMixerTool::writeSettings()
     group.writeEntry("BlackRedGain", m_blackRedGain);
     group.writeEntry("BlackGreenGain", m_blackGreenGain);
     group.writeEntry("BlackBlueGain", m_blackBlueGain);
+
+    m_previewWidget->writeSettings();
 
     config->sync();
 }

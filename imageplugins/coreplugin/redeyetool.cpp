@@ -287,6 +287,7 @@ void RedEyeTool::writeSettings()
     group.writeEntry("SatColoringTint", m_HSSelector->saturation());
     group.writeEntry("ValColoringTint", m_VSelector->value());
     group.writeEntry("TintLevel", m_tintLevel->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

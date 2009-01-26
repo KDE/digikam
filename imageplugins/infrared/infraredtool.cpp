@@ -180,6 +180,7 @@ void InfraredTool::writeSettings()
     KConfigGroup group        = config->group("infrared Tool");
     group.writeEntry("SensitivityAdjustment", m_sensibilitySlider->value());
     group.writeEntry("AddFilmGrain", m_addFilmGrain->isChecked());
+    m_previewWidget->writeSettings();
     group.sync();
 }
 

@@ -128,12 +128,12 @@ BCGTool::BCGTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    gridSettings->addWidget(label2,     0, 0, 1, 5);
-    gridSettings->addWidget(m_bInput,   1, 0, 1, 5);
-    gridSettings->addWidget(label3,     2, 0, 1, 5);
-    gridSettings->addWidget(m_cInput,   3, 0, 1, 5);
-    gridSettings->addWidget(label4,     4, 0, 1, 5);
-    gridSettings->addWidget(m_gInput,   5, 0, 1, 5);
+    gridSettings->addWidget(label2,   0, 0, 1, 5);
+    gridSettings->addWidget(m_bInput, 1, 0, 1, 5);
+    gridSettings->addWidget(label3,   2, 0, 1, 5);
+    gridSettings->addWidget(m_cInput, 3, 0, 1, 5);
+    gridSettings->addWidget(label4,   4, 0, 1, 5);
+    gridSettings->addWidget(m_gInput, 5, 0, 1, 5);
     gridSettings->setRowStretch(6, 10);
     gridSettings->setMargin(m_gboxSettings->spacingHint());
     gridSettings->setSpacing(m_gboxSettings->spacingHint());
@@ -198,6 +198,7 @@ void BCGTool::writeSettings()
     group.writeEntry("BrightnessAdjustment", m_bInput->value());
     group.writeEntry("ContrastAdjustment", m_cInput->value());
     group.writeEntry("GammaAdjustment", m_gInput->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

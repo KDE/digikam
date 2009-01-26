@@ -210,6 +210,7 @@ void RestorationTool::writeSettings()
     group.writeEntry("Iteration",     settings.nbIter);
     group.writeEntry("Tile",          settings.tile);
     group.writeEntry("BTile",         settings.btile);
+    m_previewWidget->writeSettings();
     group.sync();
 }
 

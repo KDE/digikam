@@ -115,6 +115,7 @@ void BlurTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("gaussianblur Tool");
     group.writeEntry("RadiusAdjustment", m_radiusInput->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

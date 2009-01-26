@@ -203,6 +203,7 @@ void ColorFXTool::writeSettings()
     group.writeEntry("EffectType", m_effectType->currentIndex());
     group.writeEntry("LevelAdjustment", m_levelInput->value());
     group.writeEntry("IterationAdjustment", m_iterationInput->value());
+    m_previewWidget->writeSettings();
     group.sync();
 }
 

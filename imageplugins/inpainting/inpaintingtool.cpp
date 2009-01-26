@@ -90,8 +90,7 @@ InPaintingTool::InPaintingTool(QObject* parent)
     setToolName(i18n("Inpainting"));
     setToolIcon(SmallIcon("inpainting"));
 
-    m_isComputed = false;
-
+    m_isComputed    = false;
     m_previewWidget = new ImageWidget("inpainting Tool", 0,
                                       i18n("Here you can see the image selection preview with "
                                            "inpainting applied."),
@@ -110,7 +109,7 @@ InPaintingTool::InPaintingTool(QObject* parent)
     m_mainTab                 = new KTabWidget( m_gboxSettings->plainPage());
 
     QWidget* firstPage = new QWidget(m_mainTab);
-    QGridLayout* grid = new QGridLayout(firstPage);
+    QGridLayout* grid  = new QGridLayout(firstPage);
     m_mainTab->addTab(firstPage, i18n("Preset"));
 
     KUrlLabel *cimgLogoLabel = new KUrlLabel(firstPage);
@@ -119,7 +118,7 @@ InPaintingTool::InPaintingTool(QObject* parent)
     cimgLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-cimg.png")));
     cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
-    QLabel *typeLabel = new QLabel(i18n("Filtering type:"), firstPage);
+    QLabel *typeLabel  = new QLabel(i18n("Filtering type:"), firstPage);
     typeLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_inpaintingTypeCB = new KComboBox(firstPage);
     m_inpaintingTypeCB->addItem(i18nc("no inpainting type", "None"));
@@ -227,6 +226,7 @@ void InPaintingTool::writeSettings()
     group.writeEntry("Iteration",     settings.nbIter);
     group.writeEntry("Tile",          settings.tile);
     group.writeEntry("BTile",         settings.btile);
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

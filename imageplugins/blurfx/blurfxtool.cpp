@@ -228,6 +228,7 @@ void BlurFXTool::writeSettings()
     group.writeEntry("EffectType", m_effectType->currentIndex());
     group.writeEntry("DistanceAdjustment", m_distanceInput->value());
     group.writeEntry("LevelAdjustment", m_levelInput->value());
+    m_previewWidget->writeSettings();
     group.sync();
 }
 

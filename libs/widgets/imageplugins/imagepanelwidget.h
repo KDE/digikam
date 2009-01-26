@@ -76,6 +76,8 @@ public:
 
     void   setPanIconHighLightPoints(const QPolygon& pt);
 
+    void   writeSettings();
+
     ImageRegionWidget *previewWidget() const;
 
 Q_SIGNALS:
@@ -105,7 +107,6 @@ private:
 
     void updateSelectionInfo(const QRect& rect);
     void readSettings();
-    void writeSettings();
 
 private:
 

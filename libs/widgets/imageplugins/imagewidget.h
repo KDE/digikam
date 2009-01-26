@@ -72,6 +72,7 @@ public:
     int    getRenderingPreviewMode();
     void   resetSpotPosition();
     void   updatePreview();
+    void   writeSettings();
 
     void   setRenderingPreviewMode(int mode);
 
@@ -93,7 +94,6 @@ private Q_SLOTS:
 private:
 
     void readSettings();
-    void writeSettings();
 
 private:
 

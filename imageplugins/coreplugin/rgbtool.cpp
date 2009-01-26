@@ -254,6 +254,7 @@ void RGBTool::writeSettings()
     group.writeEntry("RedAdjustment", m_rSlider->value());
     group.writeEntry("GreenAdjustment", m_gInput->value());
     group.writeEntry("BlueAdjustment", m_bInput->value());
+    m_previewWidget->writeSettings();
     group.sync();
 }
 

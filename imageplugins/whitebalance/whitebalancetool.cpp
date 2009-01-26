@@ -663,6 +663,7 @@ void WhiteBalanceTool::writeSettings()
     group.writeEntry("Saturation", m_saturationInput->value());
     group.writeEntry("Green", m_greenInput->value());
     group.writeEntry("Temperature", m_temperatureInput->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

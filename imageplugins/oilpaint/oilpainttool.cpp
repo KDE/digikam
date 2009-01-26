@@ -142,6 +142,7 @@ void OilPaintTool::writeSettings()
     KConfigGroup group        = config->group("oilpaint Tool");
     group.writeEntry("BrushSize", m_brushSizeInput->value());
     group.writeEntry("SmoothAdjustment", m_smoothInput->value());
+    m_previewWidget->writeSettings();
     group.sync();
 }
 

@@ -142,7 +142,7 @@ void FilmGrainTool::renderingFinished()
 void FilmGrainTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("filmgrain Tool");
+    KConfigGroup group        = config->group("filmgrain Tool");
     m_sensibilitySlider->blockSignals(true);
     m_sensibilitySlider->setValue(group.readEntry("SensitivityAdjustment", 12));
     m_sensibilitySlider->blockSignals(false);
@@ -152,8 +152,9 @@ void FilmGrainTool::readSettings()
 void FilmGrainTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("filmgrain Tool");
+    KConfigGroup group        = config->group("filmgrain Tool");
     group.writeEntry("SensitivityAdjustment", m_sensibilitySlider->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

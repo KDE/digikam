@@ -239,6 +239,7 @@ void LensDistortionTool::writeSettings()
     group.writeEntry("4th Order Distortion", m_edgeInput->value());
     group.writeEntry("Zoom Factor", m_rescaleInput->value());
     group.writeEntry("Brighten", m_brightenInput->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

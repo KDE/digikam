@@ -155,7 +155,7 @@ void TextureTool::renderingFinished()
 void TextureTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("texture Tool");
+    KConfigGroup group        = config->group("texture Tool");
     m_textureType->blockSignals(true);
     m_blendGain->blockSignals(true);
     m_textureType->setCurrentIndex(group.readEntry("TextureType", m_textureType->defaultIndex()));
@@ -167,9 +167,10 @@ void TextureTool::readSettings()
 void TextureTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("texture Tool");
+    KConfigGroup group        = config->group("texture Tool");
     group.writeEntry("TextureType", m_textureType->currentIndex());
     group.writeEntry("BlendGain", m_blendGain->value());
+    m_previewWidget->writeSettings();
     group.sync();
 }
 

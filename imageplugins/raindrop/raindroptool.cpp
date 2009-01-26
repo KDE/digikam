@@ -181,6 +181,7 @@ void RainDropTool::writeSettings()
     group.writeEntry("DropAdjustment", m_dropInput->value());
     group.writeEntry("AmountAdjustment", m_amountInput->value());
     group.writeEntry("CoeffAdjustment", m_coeffInput->value());
+    m_previewWidget->writeSettings();
     group.sync();
 }
 

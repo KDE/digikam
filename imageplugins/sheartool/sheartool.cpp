@@ -96,7 +96,7 @@ ShearTool::ShearTool(QObject* parent)
 
     QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
 
-    QLabel *label1 = new QLabel(i18n("New width:"), m_gboxSettings->plainPage());
+    QLabel *label1  = new QLabel(i18n("New width:"), m_gboxSettings->plainPage());
     m_newWidthLabel = new QLabel(temp.setNum(iface.originalWidth()) + i18n(" px"), m_gboxSettings->plainPage());
     m_newWidthLabel->setAlignment(Qt::AlignBottom | Qt::AlignRight);
 
@@ -106,27 +106,27 @@ ShearTool::ShearTool(QObject* parent)
 
     KSeparator *line = new KSeparator(Qt::Horizontal, m_gboxSettings->plainPage());
 
-    QLabel *label3 = new QLabel(i18n("Main horizontal angle:"), m_gboxSettings->plainPage());
+    QLabel *label3    = new QLabel(i18n("Main horizontal angle:"), m_gboxSettings->plainPage());
     m_mainHAngleInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_mainHAngleInput->setRange(-45, 45, 1);
     m_mainHAngleInput->setSliderEnabled(true);
     m_mainHAngleInput->setDefaultValue(0);
     m_mainHAngleInput->setWhatsThis( i18n("The main horizontal shearing angle, in degrees."));
 
-    QLabel *label4 = new QLabel(i18n("Fine horizontal angle:"), m_gboxSettings->plainPage());
+    QLabel *label4    = new QLabel(i18n("Fine horizontal angle:"), m_gboxSettings->plainPage());
     m_fineHAngleInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_fineHAngleInput->input()->setRange(-5.0, 5.0, 0.01, true);
     m_fineHAngleInput->setDefaultValue(0);
     m_fineHAngleInput->setWhatsThis( i18n("This value in degrees will be added to main "
                                           "horizontal angle value to set fine adjustments."));
-    QLabel *label5 = new QLabel(i18n("Main vertical angle:"), m_gboxSettings->plainPage());
+    QLabel *label5    = new QLabel(i18n("Main vertical angle:"), m_gboxSettings->plainPage());
     m_mainVAngleInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_mainVAngleInput->setRange(-45, 45, 1);
     m_mainVAngleInput->setSliderEnabled(true);
     m_mainVAngleInput->setDefaultValue(0);
     m_mainVAngleInput->setWhatsThis( i18n("The main vertical shearing angle, in degrees."));
 
-    QLabel *label6 = new QLabel(i18n("Fine vertical angle:"), m_gboxSettings->plainPage());
+    QLabel *label6    = new QLabel(i18n("Fine vertical angle:"), m_gboxSettings->plainPage());
     m_fineVAngleInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_fineVAngleInput->input()->setRange(-5.0, 5.0, 0.01, true);
     m_fineVAngleInput->setDefaultValue(0);
@@ -195,7 +195,7 @@ void ShearTool::slotColorGuideChanged()
 void ShearTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("sheartool Tool");
+    KConfigGroup group        = config->group("sheartool Tool");
     m_mainHAngleInput->setValue(group.readEntry("Main HAngle", m_mainHAngleInput->defaultValue()));
     m_mainVAngleInput->setValue(group.readEntry("Main VAngle", m_mainVAngleInput->defaultValue()));
     m_fineHAngleInput->setValue(group.readEntry("Fine HAngle", m_fineHAngleInput->defaultValue()));
@@ -207,12 +207,13 @@ void ShearTool::readSettings()
 void ShearTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("sheartool Tool");
+    KConfigGroup group        = config->group("sheartool Tool");
     group.writeEntry("Main HAngle", m_mainHAngleInput->value());
     group.writeEntry("Main VAngle", m_mainVAngleInput->value());
     group.writeEntry("Fine HAngle", m_fineHAngleInput->value());
     group.writeEntry("Fine VAngle", m_fineVAngleInput->value());
     group.writeEntry("Anti Aliasing", m_antialiasInput->isChecked());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 
@@ -254,10 +255,10 @@ void ShearTool::prepareEffect()
     QColor background = Qt::black;
 
     ImageIface* iface = m_previewWidget->imageIface();
-    int orgW = iface->originalWidth();
-    int orgH = iface->originalHeight();
+    int orgW          = iface->originalWidth();
+    int orgH          = iface->originalHeight();
 
-    uchar *data = iface->getPreviewImage();
+    uchar *data       = iface->getPreviewImage();
     DImg image(iface->previewWidth(), iface->previewHeight(), iface->previewSixteenBit(),
                         iface->previewHasAlpha(), data);
     delete [] data;
@@ -292,7 +293,7 @@ void ShearTool::prepareFinal()
                        new Shear(&orgImage, this, hAngle, vAngle, antialiasing, background, orgW, orgH)));
 }
 
-void ShearTool::putPreviewData(void)
+void ShearTool::putPreviewData()
 {
     ImageIface* iface = m_previewWidget->imageIface();
     int w = iface->previewWidth();
@@ -316,7 +317,7 @@ void ShearTool::putPreviewData(void)
     m_newHeightLabel->setText(temp.setNum( newSize.height()) + i18n(" px") );
 }
 
-void ShearTool::putFinalData(void)
+void ShearTool::putFinalData()
 {
     ImageIface iface(0, 0);
     DImg targetImage = filter()->getTargetImage();

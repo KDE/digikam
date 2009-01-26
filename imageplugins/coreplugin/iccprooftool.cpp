@@ -624,6 +624,7 @@ void ICCProofTool::writeSettings()
         group.writeEntry(QString("CurveAdjustmentPoint%1").arg(j), p);
     }
 
+    m_previewWidget->writeSettings();
     group.sync();
 }
 
