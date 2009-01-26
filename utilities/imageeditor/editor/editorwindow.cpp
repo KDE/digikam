@@ -979,9 +979,23 @@ void EditorWindow::saveStandardSettings()
     config->sync();
 }
 
+/** Method used by Editor Tools. Only Zoom+ and Zoom- are currently supported.
+    TODO: Fix this behavour when editor tool preview widgets will be factored.
+ */
+void EditorWindow::toggleZoomActions(bool val)
+{
+    d->zoomMinusAction->setEnabled(val);
+    d->zoomPlusAction->setEnabled(val);
+}
+
 void EditorWindow::toggleStandardActions(bool val)
 {
+    d->zoomComboAction->setEnabled(val);
+    d->zoomTo100percents->setEnabled(val);
     d->zoomFitToWindowAction->setEnabled(val);
+    d->zoomFitToSelectAction->setEnabled(val);
+    toggleZoomActions(val);
+
     d->rotateLeftAction->setEnabled(val);
     d->rotateRightAction->setEnabled(val);
     d->flipHorizAction->setEnabled(val);
@@ -1896,14 +1910,6 @@ void EditorWindow::setToolStartProgress(const QString& toolName)
 {
     m_nameLabel->setProgressValue(0);
     m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode, QString("%1: ").arg(toolName));
-
-    // When a tool is busy, disable Zooming options.
-    d->zoomPlusAction->setEnabled(false);
-    d->zoomMinusAction->setEnabled(false);
-    d->zoomTo100percents->setEnabled(false);
-    d->zoomFitToWindowAction->setEnabled(false);
-    d->zoomFitToSelectAction->setEnabled(false);
-    d->zoomCombo->setEnabled(false);
 }
 
 void EditorWindow::setToolProgress(int progress)
@@ -1916,14 +1922,6 @@ void EditorWindow::setToolStopProgress()
     m_nameLabel->setProgressValue(0);
     m_nameLabel->progressBarMode(StatusProgressBar::TextMode);
     slotUpdateItemInfo();
-
-    // Re-enable Zooming options.
-    d->zoomPlusAction->setEnabled(true);
-    d->zoomMinusAction->setEnabled(true);
-    d->zoomTo100percents->setEnabled(true);
-    d->zoomFitToWindowAction->setEnabled(true);
-    d->zoomFitToSelectAction->setEnabled(true);
-    d->zoomCombo->setEnabled(true);
 }
 
 
