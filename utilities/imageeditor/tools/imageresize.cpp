@@ -313,6 +313,11 @@ ImageResize::~ImageResize()
     delete d;
 }
 
+void ImageResize::slotHelp()
+{
+    KToolInvocation::invokeHelp("resize", "digikam");
+}
+
 void ImageResize::slotButtonClicked(int button)
 {
     // KDialog calls QDialog::accept() for Ok.
