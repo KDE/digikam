@@ -35,17 +35,20 @@
 
 // KDE includes.
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <kaction.h>
+#include <kactioncollection.h>
+#include <kapplication.h>
 #include <kcursor.h>
+#include <kdebug.h>
+#include <kglobalsettings.h>
 #include <khtml_part.h>
 #include <khtmlview.h>
-#include <kapplication.h>
-#include <kurl.h>
+#include <klocale.h>
+#include <kshortcut.h>
 #include <kstandarddirs.h>
-#include <ktoolinvocation.h>
-#include <kglobalsettings.h>
 #include <ktemporaryfile.h>
+#include <ktoolinvocation.h>
+#include <kurl.h>
 
 // Local includes.
 
@@ -69,6 +72,14 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     setMetaRefreshEnabled(false);
     setURLCursor(Qt::PointingHandCursor);
     view()->adjustSize();
+
+    // disable KHTMLPart's find action
+    KAction* findAction = dynamic_cast<KAction*>(actionCollection()->action("find"));
+    if (findAction)
+    {
+        findAction->setShortcut(KShortcut());
+        findAction->setEnabled(false);
+    }
 
     // ------------------------------------------------------------
 

@@ -1018,8 +1018,9 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    KAction* findAction = KStandardAction::find(d->view, SLOT(slotNewKeywordSearch()), this);
-    findAction->setText(i18n("Search..."));
+    KAction* findAction = new KAction(KIcon("system-search"), i18n("Search..."), this);
+    findAction->setShortcut(Qt::CTRL+Qt::Key_F);
+    connect(findAction, SIGNAL(triggered()), d->view, SLOT(slotNewKeywordSearch()));
     actionCollection()->addAction("search_quick", findAction);
 
     // -----------------------------------------------------------
