@@ -139,10 +139,14 @@ void LoadSaveThread::taskHasFinished()
 {
     // This function is called by the tasks _before_ they send their _final_ message.
     // This is to guarantee the user of the API that at least the final message
-    // is sent after load() has been called. This might not be the case
-    // if m_currentTask is currently loading the same image and a race condition
-    // between the return from execute and the next run of the loop above occurs:
-    // Note that m_currentTask is checked for in base classes before adding new tasks.
+    // is sent after load() has been called.
+    // We set m_currentTask to 0 here. If a new task is appended, base classes usually check
+    // that m_currentTask is not currently loading the same task.
+    // Now it might happen that m_currentTask has already emitted its final signal,
+    // but the new task is rejected afterwards when m_currentTask is still the task
+    // that has actually already finished (execute() in the loop above is of course not under mutex).
+    // So we set m_currentTask to 0 immediately before the final message is emitted,
+    // so that anyone who finds this task running as m_current task will get a message.
     QMutexLocker lock(&m_mutex);
     d->lastTask = m_currentTask;
     m_currentTask = 0;
