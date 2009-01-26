@@ -184,17 +184,17 @@ ImageResize::ImageResize(QWidget* parent)
 
     QLabel *label1 = new QLabel(i18n("Width:"), firstPage);
     d->wInput      = new RIntNumInput(firstPage);
-    d->wInput->setSliderEnabled(true);
     d->wInput->setRange(1, qMax(d->orgWidth * 10, 9999), 1);
     d->wInput->setDefaultValue(d->orgWidth);
+    d->wInput->setSliderEnabled(true);
     d->wInput->setObjectName("d->wInput");
     d->wInput->setWhatsThis( i18n("Set here the new image width in pixels."));
 
     QLabel *label2 = new QLabel(i18n("Height:"), firstPage);
     d->hInput      = new RIntNumInput(firstPage);
-    d->hInput->setSliderEnabled(true);
     d->hInput->setRange(1, qMax(d->orgHeight * 10, 9999), 1);
     d->hInput->setDefaultValue(d->orgHeight);
+    d->hInput->setSliderEnabled(true);
     d->hInput->setObjectName("d->hInput");
     d->hInput->setWhatsThis( i18n("New image height in pixels (px)."));
 
