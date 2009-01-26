@@ -653,6 +653,8 @@ void DigikamView::slotEditTag()
 
 void DigikamView::slotNewKeywordSearch()
 {
+    if (d->leftSideBar->getActiveTab() != d->searchBox)
+        d->leftSideBar->setActiveTab(d->searchBox);
     d->searchTabHeader->newKeywordSearch();
 }
 
