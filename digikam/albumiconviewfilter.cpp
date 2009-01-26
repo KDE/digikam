@@ -128,11 +128,13 @@ void AlbumIconViewFilter::readSettings()
     AlbumSettings *settings = AlbumSettings::instance();
     d->ratingFilter->setRatingFilterCondition((Digikam::AlbumLister::RatingCondition)
                                               (settings->getRatingFilterCond()));
+    /*
+    Bug 181705: always enable filters
     d->ratingFilter->setEnabled(settings->getIconShowRating());
     d->textFilter->setEnabled(settings->getIconShowName()     ||
                               settings->getIconShowComments() ||
                               settings->getIconShowTags());
-    // NOTE: Mime Type filter is always enable.
+    */
 }
 
 void AlbumIconViewFilter::saveSettings()

@@ -465,31 +465,20 @@ bool AlbumLister::matchesFilter(const ImageInfo &info, bool &foundText)
 
     //-- Filter by text -----------------------------------------------------------
 
-    AlbumSettings *settings = AlbumSettings::instance();
-    if ((settings->getIconShowName() || settings->getIconShowComments() || settings->getIconShowTags()) &&
-        !d->textFilterSettings.text.isEmpty())
+    if (!d->textFilterSettings.text.isEmpty())
     {
         foundText = false;
-        if (settings->getIconShowName())
+        if (info.name().contains(d->textFilterSettings.text, d->textFilterSettings.caseSensitive))
         {
-            if (info.name().contains(d->textFilterSettings.text, d->textFilterSettings.caseSensitive))
-            {
-                foundText = true;
-            }
+            foundText = true;
         }
-        if (settings->getIconShowComments())
+        if (info.comment().contains(d->textFilterSettings.text, d->textFilterSettings.caseSensitive))
+            foundText = true;
+        QStringList tags = AlbumManager::instance()->tagNames(info.tagIds());
+        for (QStringList::const_iterator it = tags.constBegin() ; it != tags.constEnd() ; ++it)
         {
-            if (info.comment().contains(d->textFilterSettings.text, d->textFilterSettings.caseSensitive))
+            if ((*it).contains(d->textFilterSettings.text, d->textFilterSettings.caseSensitive))
                 foundText = true;
-        }
-        if (settings->getIconShowTags())
-        {
-            QStringList tags = AlbumManager::instance()->tagNames(info.tagIds());
-            for (QStringList::const_iterator it = tags.constBegin() ; it != tags.constEnd() ; ++it)
-            {
-                if ((*it).contains(d->textFilterSettings.text, d->textFilterSettings.caseSensitive))
-                    foundText = true;
-            }
         }
         // check for folder names
         PAlbum* palbum = AlbumManager::instance()->findPAlbum(info.albumId());
