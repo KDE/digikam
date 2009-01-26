@@ -175,10 +175,10 @@ DigikamApp::DigikamApp()
 
     LoadingCacheInterface::initialize();
 
-    d->cameraSolidMenu          = new KMenu;
-    d->usbMediaMenu             = new KMenu;
-    d->cardReaderMenu           = new KMenu;
-    d->manuallyAddedCamerasMenu = new KMenu;
+    d->cameraSolidMenu          = new KMenu(this);
+    d->usbMediaMenu             = new KMenu(this);
+    d->cardReaderMenu           = new KMenu(this);
+    d->manuallyAddedCamerasMenu = new KMenu(this);
 
     d->cameraList = new CameraList(this, KStandardDirs::locateLocal("appdata", "cameras.xml"));
 
