@@ -309,6 +309,7 @@ void AutoCorrectionTool::writeSettings()
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
     config->writeEntry("Auto Correction Filter", m_correctionTools->currentItem());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

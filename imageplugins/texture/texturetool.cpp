@@ -163,6 +163,7 @@ void TextureTool::writeSettings()
     config->setGroup("texture Tool");
     config->writeEntry("TextureType", m_textureType->currentItem());
     config->writeEntry("BlendGain", m_blendGain->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

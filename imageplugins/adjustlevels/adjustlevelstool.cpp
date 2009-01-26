@@ -731,6 +731,7 @@ void AdjustLevelsTool::writeSettings()
         config->writeEntry(QString("HighOutputChannel%1").arg(i), sb ? highOutput/255 : highOutput);
     }
 
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

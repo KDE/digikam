@@ -211,6 +211,7 @@ void ShearTool::writeSettings()
     config->writeEntry("Anti Aliasing", m_antialiasInput->isChecked());
     config->writeEntry("Guide Color", m_gboxSettings->guideColor());
     config->writeEntry("Guide Width", m_gboxSettings->guideSize());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

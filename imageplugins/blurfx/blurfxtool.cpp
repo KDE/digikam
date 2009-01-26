@@ -171,27 +171,27 @@ void BlurFXTool::renderingFinished(void)
     m_distanceLabel->setEnabled(true);
 
     switch (m_effectType->currentItem())
-       {
-       case BlurFX::ZoomBlur:
-       case BlurFX::RadialBlur:
-       case BlurFX::FarBlur:
-       case BlurFX::ShakeBlur:
-       case BlurFX::FrostGlass:
-       case BlurFX::Mosaic:
-          break;
+    {
+        case BlurFX::ZoomBlur:
+        case BlurFX::RadialBlur:
+        case BlurFX::FarBlur:
+        case BlurFX::ShakeBlur:
+        case BlurFX::FrostGlass:
+        case BlurFX::Mosaic:
+            break;
 
-       case BlurFX::MotionBlur:
-       case BlurFX::FocusBlur:
-       case BlurFX::SmartBlur:
-          m_levelInput->setEnabled(true);
-          m_levelLabel->setEnabled(true);
-          break;
+        case BlurFX::MotionBlur:
+        case BlurFX::FocusBlur:
+        case BlurFX::SmartBlur:
+            m_levelInput->setEnabled(true);
+            m_levelLabel->setEnabled(true);
+            break;
 
-       case BlurFX::SoftenerBlur:
-          m_distanceInput->setEnabled(false);
-          m_distanceLabel->setEnabled(false);
-          break;
-       }
+        case BlurFX::SoftenerBlur:
+            m_distanceInput->setEnabled(false);
+            m_distanceLabel->setEnabled(false);
+            break;
+    }
 }
 
 void BlurFXTool::readSettings()
@@ -218,6 +218,7 @@ void BlurFXTool::writeSettings()
     config->writeEntry("EffectType", m_effectType->currentItem());
     config->writeEntry("DistanceAjustment", m_distanceInput->value());
     config->writeEntry("LevelAjustment", m_levelInput->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

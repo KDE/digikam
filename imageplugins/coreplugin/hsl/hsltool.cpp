@@ -356,6 +356,7 @@ void HSLTool::writeSettings()
     config->writeEntry("HueAjustment", m_hInput->value());
     config->writeEntry("SaturationAjustment", m_sInput->value());
     config->writeEntry("LighnessAjustment", m_lInput->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

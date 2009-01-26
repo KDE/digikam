@@ -287,6 +287,7 @@ void BCGTool::writeSettings()
     config->writeEntry("BrightnessAjustment", m_bInput->value());
     config->writeEntry("ContrastAjustment", m_cInput->value());
     config->writeEntry("GammaAjustment", m_gInput->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

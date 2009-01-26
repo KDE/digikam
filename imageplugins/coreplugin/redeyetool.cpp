@@ -323,6 +323,7 @@ void RedEyeTool::writeSettings()
     config->writeEntry("SatColoringTint", m_HSSelector->yValue());
     config->writeEntry("ValColoringTint", m_VSelector->value());
     config->writeEntry("TintLevel", m_tintLevel->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

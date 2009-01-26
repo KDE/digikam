@@ -601,6 +601,7 @@ void AdjustCurvesTool::writeSettings()
         }
     }
 
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

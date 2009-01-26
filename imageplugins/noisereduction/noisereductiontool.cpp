@@ -352,6 +352,7 @@ void NoiseReductionTool::writeSettings()
     config->writeEntry("GammaAjustment", m_gammaInput->value());
     config->writeEntry("DampingAjustment", m_dampingInput->value());
     config->writeEntry("PhaseAjustment", m_phaseInput->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

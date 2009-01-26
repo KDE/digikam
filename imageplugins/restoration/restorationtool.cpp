@@ -208,6 +208,7 @@ void RestorationTool::writeSettings()
     config->writeEntry("Iteration", settings.nbIter);
     config->writeEntry("Tile", settings.tile);
     config->writeEntry("BTile", settings.btile);
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

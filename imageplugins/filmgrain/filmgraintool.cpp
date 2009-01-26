@@ -144,6 +144,7 @@ void FilmGrainTool::writeSettings()
     KConfig* config = kapp->config();
     config->setGroup("filmgrain Tool");
     config->writeEntry("SensitivityAjustment", m_sensibilitySlider->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

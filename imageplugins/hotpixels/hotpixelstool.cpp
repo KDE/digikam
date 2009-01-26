@@ -170,6 +170,7 @@ void HotPixelsTool::writeSettings()
     config->setGroup("hotpixels Tool");
     config->writeEntry("Last Black Frame File", m_blackFrameURL.url());
     config->writeEntry("Filter Method", m_filterMethodCombo->currentItem());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

@@ -256,6 +256,7 @@ void DistortionFXTool::writeSettings(void)
     config->writeEntry("EffectType", m_effectType->currentItem());
     config->writeEntry("IterationAjustment", m_iterationInput->value());
     config->writeEntry("LevelAjustment", m_levelInput->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

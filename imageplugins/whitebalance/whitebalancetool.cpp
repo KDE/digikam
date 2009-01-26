@@ -772,6 +772,7 @@ void WhiteBalanceTool::writeSettings()
     config->writeEntry("Saturation", m_saturationInput->value());
     config->writeEntry("Green", m_greenInput->value());
     config->writeEntry("Temperature", m_temperatureInput->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

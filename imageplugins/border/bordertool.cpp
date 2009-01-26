@@ -253,6 +253,8 @@ void BorderTool::writeSettings()
     config->writeEntry("Decorative First Color", m_decorativeFirstColor);
     config->writeEntry("Decorative Second Color", m_decorativeSecondColor);
 
+    m_previewWidget->writeSettings();
+
     config->sync();
 }
 

@@ -239,6 +239,7 @@ void LensDistortionTool::writeSettings()
     config->writeEntry("Brighten", m_brightenInput->value());
     config->writeEntry("Guide Color", m_gboxSettings->guideColor());
     config->writeEntry("Guide Width", m_gboxSettings->guideSize());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

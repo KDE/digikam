@@ -697,6 +697,7 @@ void BWSepiaTool::writeSettings()
         config->writeEntry(QString("CurveAjustmentPoint%1").arg(j), p);
     }
 
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

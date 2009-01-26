@@ -144,7 +144,7 @@ void RainDropTool::renderingFinished()
     m_coeffInput->setEnabled(true);
 }
 
-void RainDropTool::readSettings(void)
+void RainDropTool::readSettings()
 {
     KConfig *config = kapp->config();
     config->setGroup("raindrops Tool");
@@ -164,13 +164,14 @@ void RainDropTool::readSettings(void)
     slotEffect();
 }
 
-void RainDropTool::writeSettings(void)
+void RainDropTool::writeSettings()
 {
     KConfig *config = kapp->config();
     config->setGroup("raindrops Tool");
     config->writeEntry("DropAdjustment",    m_dropInput->value());
     config->writeEntry("AmountAdjustment",  m_amountInput->value());
     config->writeEntry("CoeffAdjustment",   m_coeffInput->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

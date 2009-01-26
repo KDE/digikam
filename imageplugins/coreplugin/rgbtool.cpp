@@ -272,25 +272,25 @@ void RGBTool::slotChannelChanged(int channel)
 {
     switch (channel)
     {
-    case LuminosityChannel:
-        m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
-        m_hGradient->setColors(QColor("black"), QColor("white"));
-        break;
+        case LuminosityChannel:
+            m_histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
+            m_hGradient->setColors(QColor("black"), QColor("white"));
+            break;
 
-    case RedChannel:
-        m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
-        m_hGradient->setColors(QColor("black"), QColor("red"));
-        break;
+        case RedChannel:
+            m_histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
+            m_hGradient->setColors(QColor("black"), QColor("red"));
+            break;
 
-    case GreenChannel:
-        m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
-        m_hGradient->setColors(QColor("black"), QColor("green"));
-        break;
+        case GreenChannel:
+            m_histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
+            m_hGradient->setColors(QColor("black"), QColor("green"));
+            break;
 
-    case BlueChannel:
-        m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
-        m_hGradient->setColors(QColor("black"), QColor("blue"));
-        break;
+        case BlueChannel:
+            m_histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
+            m_hGradient->setColors(QColor("black"), QColor("blue"));
+            break;
     }
 
     m_histogramWidget->repaint(false);
@@ -331,6 +331,7 @@ void RGBTool::writeSettings()
     config->writeEntry("RedAjustment", m_rSlider->value());
     config->writeEntry("GreenAjustment", m_gInput->value());
     config->writeEntry("BlueAjustment", m_bInput->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

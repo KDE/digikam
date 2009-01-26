@@ -254,6 +254,7 @@ void ColorFXTool::writeSettings()
     config->writeEntry("EffectType", m_effectType->currentItem());
     config->writeEntry("LevelAjustment", m_levelInput->value());
     config->writeEntry("IterationAjustment", m_iterationInput->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

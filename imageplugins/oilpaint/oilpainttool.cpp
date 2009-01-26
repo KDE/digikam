@@ -152,6 +152,7 @@ void OilPaintTool::writeSettings()
     config->setGroup("oilpaint Tool");
     config->writeEntry("BrushSize", m_brushSizeInput->value());
     config->writeEntry("SmoothAjustment", m_smoothInput->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

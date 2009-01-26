@@ -74,6 +74,8 @@ public:
 
     void   setPanIconHighLightPoints(const QPointArray& pt);
 
+    void   writeSettings();
+
     ImageRegionWidget *previewWidget() const;
 
 signals:
@@ -103,7 +105,6 @@ private:
 
     void updateSelectionInfo(const QRect& rect);
     void readSettings();
-    void writeSettings();
 
 private:
 

@@ -574,6 +574,8 @@ void ChannelMixerTool::writeSettings()
     config->writeEntry("BlackGreenGain", m_blackGreenGain);
     config->writeEntry("BlackBlueGain", m_blackBlueGain);
 
+    m_previewWidget->writeSettings();
+
     config->sync();
 }
 

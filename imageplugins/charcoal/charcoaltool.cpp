@@ -147,6 +147,7 @@ void CharcoalTool::writeSettings()
     config->setGroup("charcoal Tool");
     config->writeEntry("PencilAjustment", m_pencilInput->value());
     config->writeEntry("SmoothAjustment", m_smoothInput->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

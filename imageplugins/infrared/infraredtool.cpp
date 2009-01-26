@@ -167,6 +167,7 @@ void InfraredTool::writeSettings()
     config->setGroup("infrared Tool");
     config->writeEntry("SensitivityAjustment", m_sensibilitySlider->value());
     config->writeEntry("AddFilmGrain", m_addFilmGrain->isChecked());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 

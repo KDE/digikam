@@ -123,6 +123,7 @@ void EmbossTool::writeSettings()
     KConfig* config = kapp->config();
     config->setGroup("emboss Tool");
     config->writeEntry("DepthAjustment", m_depthInput->value());
+    m_previewWidget->writeSettings();
     config->sync();
 }
 
