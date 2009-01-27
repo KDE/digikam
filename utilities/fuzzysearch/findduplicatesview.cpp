@@ -251,13 +251,31 @@ void FindDuplicatesView::slotThumbnailLoaded(const LoadingDescription& desc, con
     }
 }
 
+void FindDuplicatesView::enableControlWidgets(bool reset)
+{
+
+    if (reset)
+    {
+        d->scanDuplicatesBtn->setEnabled(true);
+        d->updateFingerPrtBtn->setEnabled(true);
+        d->progressBar->progressBarMode(StatusProgressBar::TextMode);
+        d->progressBar->setProgressValue(0);
+        d->progressBar->setEnabled(false);
+    }
+    else
+    {
+        d->scanDuplicatesBtn->setEnabled(false);
+        d->updateFingerPrtBtn->setEnabled(false);
+        d->progressBar->progressBarMode(StatusProgressBar::CancelProgressBarMode);
+        d->progressBar->setProgressValue(0);
+        d->progressBar->setEnabled(true);
+    }
+}
+
 void FindDuplicatesView::slotFindDuplicates()
 {
     slotClear();
-    d->scanDuplicatesBtn->setEnabled(false);
-    d->updateFingerPrtBtn->setEnabled(false);
-    d->progressBar->progressBarMode(StatusProgressBar::CancelProgressBarMode);
-    d->progressBar->setEnabled(true);
+    enableControlWidgets(false);
 
     AlbumList albums = AlbumManager::instance()->allPAlbums();
     QStringList idsStringList;
@@ -287,12 +305,7 @@ void FindDuplicatesView::cancelFindDuplicates(KJob* job)
     job->kill();
     d->cancelFindDuplicates = false;
 
-    d->scanDuplicatesBtn->setEnabled(true);
-    d->updateFingerPrtBtn->setEnabled(true);
-    d->progressBar->progressBarMode(StatusProgressBar::TextMode);
-    d->progressBar->setProgressValue(0);
-    d->progressBar->setEnabled(false);
-
+    enableControlWidgets(true);
     populateTreeView();
 }
 
@@ -317,10 +330,7 @@ void FindDuplicatesView::slotDuplicatesSearchProcessedAmount(KJob* job, KJob::Un
 
 void FindDuplicatesView::slotDuplicatesSearchResult(KJob*)
 {
-    d->scanDuplicatesBtn->setEnabled(true);
-    d->updateFingerPrtBtn->setEnabled(true);
-    d->progressBar->setProgressValue(0);
-    d->progressBar->setEnabled(false);
+    enableControlWidgets(true);
     populateTreeView();
 }
 

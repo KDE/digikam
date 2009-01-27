@@ -80,6 +80,7 @@ private slots:
 private:
 
     void cancelFindDuplicates(KJob* job);
+    void enableControlWidgets(bool);
 
 private:
 
