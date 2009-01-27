@@ -7,7 +7,7 @@
  * Description : Albums lister.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007 by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
@@ -431,34 +431,24 @@ bool AlbumLister::matchesFilter(const ImageInfo* info, bool &foundText)
 
     //-- Filter by text -----------------------------------------------------------
 
-    AlbumSettings *settings = AlbumSettings::instance();
-    if ((settings->getIconShowName() || settings->getIconShowComments() || settings->getIconShowTags()) &&
-        !d->textFilter.isEmpty())
+    if (!d->textFilter.isEmpty())
     {
         foundText = false;
-        if (settings->getIconShowName())
+        if (info->name().lower().contains(d->textFilter.lower()))
         {
-            if (info->name().lower().contains(d->textFilter.lower()))
-            {
-                foundText = true;
-            }
+            foundText = true;
         }
-        if (settings->getIconShowComments())
+        if (info->caption().lower().contains(d->textFilter.lower()))
+            foundText = true;
+        QStringList tags = info->tagNames();
+        for (QStringList::const_iterator it = tags.constBegin() ; it != tags.constEnd() ; ++it)
         {
-            if (info->caption().lower().contains(d->textFilter.lower()))
+            if ((*it).lower().contains(d->textFilter.lower()))
                 foundText = true;
-        }
-        if (settings->getIconShowTags())
-        {
-            QStringList tags = info->tagNames();
-            for (QStringList::const_iterator it = tags.begin() ; it != tags.end() ; ++it)
-            {
-                if ((*it).lower().contains(d->textFilter.lower()))
-                    foundText = true;
-            }
         }
         // check for folder names
-        if (info->album()->title().lower().contains(d->textFilter.lower()))
+        PAlbum* palbum = AlbumManager::instance()->findPAlbum(info->albumID());
+        if ((palbum && palbum->title().lower().contains(d->textFilter.lower())))
         {
             foundText = true;
         }
