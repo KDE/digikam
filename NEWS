@@ -23,7 +23,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 181940 : Image editor tools does not remember preview mode.
 016 ==> 181964 : Image Editor's "fit-to-window" is broken when invoking a filter.
 017 ==> 181705 : Rating filter in status bar not changeable, if rating is not shown in album view.
-018 ==> 
+018 ==> 182096 : Download photos from memory card / camera to new album downloads photos to parent album.
+019 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
