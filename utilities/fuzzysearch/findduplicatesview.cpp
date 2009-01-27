@@ -251,10 +251,10 @@ void FindDuplicatesView::slotThumbnailLoaded(const LoadingDescription& desc, con
     }
 }
 
-void FindDuplicatesView::enableControlWidgets(bool reset)
+void FindDuplicatesView::enableControlWidgets(bool val)
 {
 
-    if (reset)
+    if (val)
     {
         d->scanDuplicatesBtn->setEnabled(true);
         d->updateFingerPrtBtn->setEnabled(true);
