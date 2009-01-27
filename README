@@ -86,7 +86,7 @@ http://dev.robotbattle.com/bugs/main_page.php
 
 AutoConf   >= 2.5.x                        http://www.gnu.org/software/autoconf
 AutoMake   >= 1.7.x                        http://www.gnu.org/software/automake
-libqt      >= 3.3.x                        http://www.trolltech.com
+libqt      >= 3.3.x                        http://www.qtsoftware.com
 libkde     >= 3.4.x (>=3.5.x recommended)  http://www.kde.org
 libgphoto2 >= 2.x.x (>=2.4.x recommended)  http://www.gphoto.org
 libkipi    >= 0.1.5 (>=0.1.6 recommended)  http://www.kipi-plugins.org
