@@ -93,6 +93,7 @@ DItemToolTip::~DItemToolTip()
 
 void DItemToolTip::updateToolTip()
 {
+    renderArrows();
     d->label->setText(tipContents());
 }
 
@@ -157,10 +158,10 @@ void DItemToolTip::renderArrows()
 
     QPixmap& pix0 = d->corners[0];
     pix0          = QPixmap(w, w);
-    pix0.fill(palette().color(QPalette::Background));
+    pix0.fill(ThemeEngine::instance()->baseColor());
 
     QPainter p0(&pix0);
-    p0.setPen(QPen(Qt::black, 1));
+    p0.setPen(QPen(ThemeEngine::instance()->textRegColor(), 1));
 
     for (int j=0; j<w; j++)
         p0.drawLine(0, j, w-j-1, j);
@@ -171,10 +172,10 @@ void DItemToolTip::renderArrows()
 
     QPixmap& pix1 = d->corners[1];
     pix1          = QPixmap(w, w);
-    pix1.fill(palette().color(QPalette::Background));
+    pix1.fill(ThemeEngine::instance()->baseColor());
 
     QPainter p1(&pix1);
-    p1.setPen(QPen(Qt::black, 1));
+    p1.setPen(QPen(ThemeEngine::instance()->textRegColor(), 1));
 
     for (int j=0; j<w; j++)
         p1.drawLine(j, j, w-1, j);
@@ -185,10 +186,10 @@ void DItemToolTip::renderArrows()
 
     QPixmap& pix2 = d->corners[2];
     pix2          = QPixmap(w, w);
-    pix2.fill(palette().color(QPalette::Background));
+    pix2.fill(ThemeEngine::instance()->baseColor());
 
     QPainter p2(&pix2);
-    p2.setPen(QPen(Qt::black, 1));
+    p2.setPen(QPen(ThemeEngine::instance()->textRegColor(), 1));
 
     for (int j=0; j<w; j++)
         p2.drawLine(0, j, j, j);
@@ -199,10 +200,10 @@ void DItemToolTip::renderArrows()
 
     QPixmap& pix3 = d->corners[3];
     pix3          = QPixmap(w, w);
-    pix3.fill(palette().color(QPalette::Background));
+    pix3.fill(ThemeEngine::instance()->baseColor());
 
     QPainter p3(&pix3);
-    p3.setPen(QPen(Qt::black, 1));
+    p3.setPen(QPen(ThemeEngine::instance()->textRegColor(), 1));
 
     for (int j=0; j<w; j++)
         p3.drawLine(w-j-1, j, w-1, j);
