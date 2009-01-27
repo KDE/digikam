@@ -1,3 +1,365 @@
+0.9.5-beta3 2009-01-27
+-------------------------------------------------------------------------
+
+2009-01-26 14:56  cgilles
+
+    * utilities/imageeditor/editor/editorstackview.h,
+      utilities/imageeditor/editor/editortooliface.cpp,
+      utilities/imageeditor/editor/editorwindow.cpp,
+      utilities/imageeditor/editor/editorwindow.h: backport commit
+      #916945 from trunk
+
+2009-01-26 10:02  cgilles
+
+    * imageplugins/adjustcurves/adjustcurvestool.cpp,
+      imageplugins/adjustlevels/adjustlevelstool.cpp,
+      imageplugins/antivignetting/antivignettingtool.cpp,
+      imageplugins/blurfx/blurfxtool.cpp,
+      imageplugins/border/bordertool.cpp,
+      imageplugins/channelmixer/channelmixertool.cpp,
+      imageplugins/charcoal/charcoaltool.cpp,
+      imageplugins/colorfx/colorfxtool.cpp,
+      imageplugins/coreplugin/autocorrectiontool.cpp,
+      imageplugins/coreplugin/bcgtool.cpp,
+      imageplugins/coreplugin/bwsepiatool.cpp,
+      imageplugins/coreplugin/hsl/hsltool.cpp,
+      imageplugins/coreplugin/iccprooftool.cpp,
+      imageplugins/coreplugin/redeyetool.cpp,
+      imageplugins/coreplugin/rgbtool.cpp,
+      imageplugins/coreplugin/sharpnesseditor/sharpentool.cpp,
+      imageplugins/distortionfx/distortionfxtool.cpp,
+      imageplugins/emboss/embosstool.cpp,
+      imageplugins/filmgrain/filmgraintool.cpp,
+      imageplugins/freerotation/freerotationtool.cpp,
+      imageplugins/hotpixels/hotpixelstool.cpp,
+      imageplugins/infrared/infraredtool.cpp,
+      imageplugins/inpainting/inpaintingtool.cpp,
+      imageplugins/lensdistortion/lensdistortiontool.cpp,
+      imageplugins/noisereduction/noisereductiontool.cpp,
+      imageplugins/oilpaint/oilpainttool.cpp,
+      imageplugins/raindrop/raindroptool.cpp,
+      imageplugins/restoration/restorationtool.cpp,
+      imageplugins/sheartool/sheartool.cpp,
+      imageplugins/texture/texturetool.cpp,
+      imageplugins/whitebalance/whitebalancetool.cpp,
+      libs/widgets/imageplugins/imagepanelwidget.h,
+      libs/widgets/imageplugins/imagewidget.h,
+      project/project.kdevelop: backport commit #916862 from trunk
+      CCBUG: 181940
+
+2009-01-26 08:00  cgilles
+
+    * utilities/imageeditor/tools/imageresize.cpp,
+      utilities/imageeditor/tools/imageresize.h: polish
+
+2009-01-24 23:14  aclemens
+
+    * utilities/lighttable/lighttablebar.cpp: backport commit #916232
+      
+      CCBUG:181721
+
+2009-01-24 10:03  mwiesweg
+
+    * utilities/cameragui/cameraiconview.cpp: Backport commit 914144 to
+      KDE3
+      
+      CCBUG: 181347
+
+2009-01-24 08:10  cgilles
+
+    * NEWS: update
+
+2009-01-22 17:26  cgilles
+
+    * utilities/imageeditor/editor/imageiface.cpp: backport commit
+      #915276 from trunk
+
+2009-01-22 14:52  cgilles
+
+    * utilities/imageeditor/editor/imageiface.cpp,
+      utilities/imageeditor/editor/imageiface.h: backport commit
+      #915190 from trunk
+
+2009-01-19 13:58  aclemens
+
+    * digikam/pixmapmanager.cpp, utilities/cameragui/animwidget.cpp,
+      utilities/cameragui/cameracontroller.cpp,
+      utilities/cameragui/renamecustomizer.cpp,
+      utilities/slideshow/slideshow.cpp: fix memory leak
+
+2009-01-18 16:14  mwiesweg
+
+    * digikam/albumfolderview.cpp: Backport commit 912983 to KDE3
+      
+      CCBUG: 169306
+
+2009-01-17 19:18  aclemens
+
+    * imageplugins/colorfx/colorfxtool.cpp,
+      imageplugins/coreplugin/autocorrectiontool.cpp: polish
+
+2009-01-17 19:13  aclemens
+
+    * imageplugins/coreplugin/autocorrectiontool.cpp: backport commit
+      #912597 from KDE4 trunk
+
+2009-01-17 19:12  aclemens
+
+    * imageplugins/colorfx/colorfxtool.cpp: polish
+
+2009-01-17 18:39  aclemens
+
+    * imageplugins/colorfx/colorfxtool.cpp: backport commit #912578
+      from KDE4 trunk
+
+2009-01-17 17:08  cgilles
+
+    * NEWS: update
+
+2009-01-17 17:06  cgilles
+
+    * imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp,
+      imageplugins/coreplugin/ratiocrop/imageselectionwidget.h,
+      imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp,
+      imageplugins/coreplugin/ratiocrop/ratiocroptool.h: digiKAm from
+      KDE3 branch: added great patch from Simon Margo about to add new
+      composition guide in Ratio Crop Tool based on Diagonal Rules.
+      CCBUG: 179548
+      CCMAIL: simon@margo.student.utwente.nl
+
+2009-01-15 18:01  cgilles
+
+    * digikam/digikamapp.cpp, digikam/digikamapp.h: backport commit
+      #910844 from trunk
+      CCBUG: 180609
+
+2009-01-15 07:02  cgilles
+
+    * NEWS: update
+
+2009-01-14 15:07  cgilles
+
+    * NEWS: update
+
+2009-01-12 18:19  cgilles
+
+    * libs/widgets/common/splashscreen.cpp: this text color is better
+      adapted to splash
+
+2009-01-09 22:40  cgilles
+
+    * digikam/scanlib.cpp, libs/widgets/common/splashscreen.cpp,
+      libs/widgets/common/splashscreen.h, project/project.kdevelop: fix
+      splashscreen api
+
+2009-01-07 14:02  cgilles
+
+    * utilities/setup/setupicc.cpp, utilities/setup/setupicc.h:
+      backport commit #906894 from trunk
+
+2009-01-06 23:15  aclemens
+
+    * digikam/folderview.cpp: backport commit #906855 from KDE4 trunk
+
+2009-01-05 12:13  cgilles
+
+    * digikam/albumiconviewfilter.cpp, digikam/albumiconviewfilter.h:
+      missing to remove old lines with previous commit
+      CCBUGS: 179653
+
+2009-01-05 08:05  cgilles
+
+    * digikam/albumiconviewfilter.cpp: fix rating filter rules if
+      filter is "rating equals zero stars"
+      CCBUG: 179653
+
+2009-01-04 09:12  cgilles
+
+    * NEWS: update
+
+2009-01-03 09:19  cgilles
+
+    * NEWS: update
+
+2009-01-02 17:15  cgilles
+
+    * libs/imageproperties/imagedescedittab.cpp,
+      libs/imageproperties/imagedescedittab.h: sync with trunk
+
+2009-01-02 16:32  cgilles
+
+    * utilities/imageeditor/canvas/dimginterface.cpp,
+      utilities/imageeditor/canvas/dimginterface.h: backport commit
+      #904603 from trunk
+
+2009-01-01 17:09  mwiesweg
+
+    * utilities/imageeditor/editor/editortoolsettings.cpp,
+      utilities/imageeditor/editor/editortoolsettings.h: Backport
+      commit 900430 to KDE3:
+      
+      Reimplement minimumSizeHint of the scroll area.
+      The minimumSizeHint of a QScrollView is usually independent of
+      the widget
+      contained, but here we want to have a certain amount of minimum
+      horizontal space.
+      Limit minimum size to 40% of desktop width.
+      
+      CCBUG: 175630
+
+2009-01-01 16:53  cgilles
+
+    * digikam/daboutdata.h: a new year
+
+2009-01-01 12:10  cgilles
+
+    * NEWS: update
+
+2008-12-31 11:20  cgilles
+
+    * NEWS: update
+
+2008-12-22 14:06  cgilles
+
+    * digikam/digikamapp.cpp, digikam/digikamapp.h,
+      digikam/digikamappprivate.h, digikam/digikamui.rc,
+      imageplugins/adjustcurves/imageplugin_adjustcurves.cpp,
+      showfoto/showfotoui.rc,
+      utilities/imageeditor/editor/digikamimagewindowui.rc,
+      utilities/imageeditor/editor/editorwindow.cpp,
+      utilities/imageeditor/editor/editorwindow.h,
+      utilities/imageeditor/editor/editorwindowprivate.h,
+      utilities/lighttable/lighttablewindow.cpp,
+      utilities/lighttable/lighttablewindow.h,
+      utilities/lighttable/lighttablewindowprivate.h,
+      utilities/lighttable/lighttablewindowui.rc: backport commit
+      #900178 from trunk
+      CCBUG: 147771
+
+2008-12-22 12:44  cgilles
+
+    * showfoto/main.cpp: backport commit #900169 from trunk
+
+2008-12-22 10:27  cgilles
+
+    * libs/widgets/common/dlogoaction.cpp: backport commit #900124 from
+      trunk
+
+2008-12-22 09:01  cgilles
+
+    * utilities/cameragui/albumselectdialog.cpp,
+      utilities/cameragui/albumselectdialog.h: size more adjusted for
+      large icon size from album folder view
+
+2008-12-22 08:06  cgilles
+
+    * utilities/batch/batchthumbsgenerator.cpp,
+      utilities/batch/batchthumbsgenerator.h: polish
+
+2008-12-22 08:02  cgilles
+
+    * digikam/main.cpp, showfoto/main.cpp: backport commit #900079 from
+      trunk
+
+2008-12-22 05:22  cgilles
+
+    * NEWS: update
+
+2008-12-19 19:05  cgilles
+
+    * utilities/cameragui/cameraiconitem.cpp: backport commit #135845
+      from trunk
+
+2008-12-19 18:33  cgilles
+
+    * utilities/cameragui/cameraiconitem.cpp,
+      utilities/cameragui/cameraiconitem.h,
+      utilities/cameragui/cameraiconview.cpp,
+      utilities/cameragui/cameraiconview.h: backport commit #135845
+      from trunk
+
+2008-12-19 13:46  cgilles
+
+    * themedesigner/themediconview.cpp: fix memory leak
+
+2008-12-19 06:47  cgilles
+
+    * digikam/imageinfo.cpp, digikam/imageinfo.h: fix wrong place of
+      return instance
+
+2008-12-17 18:46  cgilles
+
+    * utilities/cameragui/cameraui.cpp: add Minolta Camera internal
+      files to ignore (PTP mode only)
+
+2008-12-17 13:34  cgilles
+
+    * utilities/cameragui/umscamera.cpp: polish
+
+2008-12-17 13:33  cgilles
+
+    * utilities/cameragui/umscamera.cpp: polish
+
+2008-12-17 10:59  cgilles
+
+    * utilities/cameragui/umscamera.cpp,
+      utilities/cameragui/umscamera.h: digiKam from KDE3 branch :
+      Camera GUI improvements: USB mass Storage camera: items date
+      management:
+      - Use metadata from THM files if available to get item
+      informations.
+      - Video files date are extracted from THM if possible. In this
+      case video files are sorted by date properlly.
+      - If THM files are not available, we trying to extract date from
+      orginal file metadata.
+      - If metadata are not available, we use file creation time stamp
+      instead file Modification time stamp.
+
+2008-12-17 07:48  cgilles
+
+    * utilities/setup/setupplugins.cpp, utilities/setup/setupplugins.h:
+      no need to display libkipi version here
+
+2008-12-16 16:18  cgilles
+
+    * utilities/cameragui/cameraui.cpp: backport commit #897687 from
+      trunk
+
+2008-12-16 14:43  cgilles
+
+    * utilities/cameragui/cameraui.cpp: digiKam from KDE3 branch :
+      backport commit #897651
+      BUGS: 146618
+
+2008-12-14 18:36  cgilles
+
+    * NEWS, digikam.lsm, digikam/daboutdata.h, release_digikam.rb:
+      beta3
+
+2008-12-14 18:30  mwiesweg
+
+    * libs/dimg/loaders/pngloader.cpp: Backport commit 896911 to KDE3.
+      png_set_interlace_handling need to be called before calling
+      png_start_read_image() or png_read_update_info()
+      
+      CCBUG: 149875
+
+2008-12-14 10:08  aclemens
+
+    * digikam/digikamapp.cpp, libs/dialogs/rawcameradlg.cpp,
+      utilities/cameragui/cameraui.cpp,
+      utilities/imageeditor/editor/editorwindow.cpp,
+      utilities/lighttable/lighttablewindow.cpp: adapt to naming scheme
+      from digikam trunk
+
+2008-12-13 13:04  cgilles
+
+    * digikam.lsm: update
+
+2008-12-13 13:03  cgilles
+
+    * ChangeLog: preapre digiKam 0.9.5-beta2
+
 0.9.5-beta2 2008-13-12
 -------------------------------------------------------------------------
 
