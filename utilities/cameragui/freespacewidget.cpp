@@ -131,6 +131,7 @@ FreeSpaceWidget::~FreeSpaceWidget()
 {
     d->timer->stop();
     delete d->timer;
+    delete d->toolTip;
     delete d;
 }
 
