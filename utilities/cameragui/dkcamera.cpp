@@ -7,7 +7,7 @@
  * Description : abstract camera interface class
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -79,34 +79,35 @@ QString DKCamera::path() const
 
 QString DKCamera::mimeType(const QString& fileext) const
 {
+    if (fileext.isEmpty()) return QString();
+
     QString ext = fileext;
-    
-    // Massage known variations of known mimetypes into kde specific ones
+    QString mime;
+
+    // Massage known variations of known mimetypes into KDE specific ones
     if (ext == "jpg" || ext == "jpe")
         ext = "jpeg";
     else if (ext == "tif")
         ext = "tiff";
-    
+
     if (m_rawFilter.contains(ext))
     {
-        return QString("image/x-raw");
+        mime = QString("image/x-raw");
     }
     else if (m_imageFilter.contains(ext))
     {
-        return QString("image/") + ext;
+        mime = QString("image/") + ext;
     }
     else if (m_movieFilter.contains(ext))
     {
-        return QString("video/") + ext;
+        mime = QString("video/") + ext;
     }
     else if (m_audioFilter.contains(ext))
     {
-        return QString("audio/") + ext;
+        mime = QString("audio/") + ext;
     }
-    else
-    {
-        return QString();
-    }
+
+    return mime;
 }
 
 }  // namespace Digikam
