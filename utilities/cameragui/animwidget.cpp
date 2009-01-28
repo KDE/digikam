@@ -7,7 +7,7 @@
  * Description : an animated busy widget 
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,7 +45,6 @@ public:
     AnimWidgetPriv()
     {
         timer = 0;
-        pix   = 0;
         pos   = 0;
     }
 
@@ -54,9 +53,8 @@ public:
     
     QTimer  *timer;
     
-    QPixmap *pix;    
+    QPixmap  pix;    
 };
-
 
 AnimWidget::AnimWidget(QWidget* parent, int size)
           : QWidget(parent, 0, WResizeNoErase|WRepaintNoErase)
@@ -65,7 +63,7 @@ AnimWidget::AnimWidget(QWidget* parent, int size)
     setBackgroundMode(Qt::NoBackground);
     
     d->size = size;
-    d->pix  = new QPixmap(d->size, d->size);
+    d->pix  = QPixmap(d->size, d->size);
     setFixedSize(d->size, d->size);
 
     d->timer = new QTimer(this);
@@ -94,8 +92,8 @@ void AnimWidget::stop()
 
 void AnimWidget::paintEvent(QPaintEvent*)
 {
-    d->pix->fill(colorGroup().background());
-    QPainter p(d->pix);
+    d->pix.fill(colorGroup().background());
+    QPainter p(&d->pix);
 
     p.translate(d->size/2, d->size/2);
 
@@ -116,7 +114,7 @@ void AnimWidget::paintEvent(QPaintEvent*)
     }
     
     p.end();
-    bitBlt(this, 0, 0, d->pix);
+    bitBlt(this, 0, 0, &d->pix);
 }
 
 void AnimWidget::slotTimeout()
