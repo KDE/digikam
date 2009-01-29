@@ -705,24 +705,26 @@ bool SchemaUpdater::copyV3toV4(const QString &digikam3DBPath, const QString &cur
 
     m_access->backend()->close();
 
-    KUrl digikam3DBUrl, currentDBUrl;
-    digikam3DBUrl.setPath(digikam3DBPath);
-    currentDBUrl.setPath(currentDBPath);
-
-    KIO::Job *job = KIO::file_copy(digikam3DBUrl, currentDBUrl, -1, KIO::Overwrite | KIO::HideProgressInfo);
-    if (!KIO::NetAccess::synchronousRun(job, 0))
+    // We cannot use KIO here because KIO only works from the main thread
+    QFile oldFile(digikam3DBPath);
+    QFile newFile(currentDBPath);
+    // QFile won't override. Remove the empty db file created when a non-existent file is opened
+    newFile.remove();
+    if (!oldFile.copy(currentDBPath))
     {
         QString errorMsg = i18n("Failed to copy the old database file (\"%1\")"
                                 "to its new location (\"%2\")."
+                                "Error message: \"%3\"."
                                 "Please make sure that the file can be copied, "
                                 "or delete it.",
-                                digikam3DBPath, currentDBPath);
+                                digikam3DBPath, currentDBPath, oldFile.errorString());
         m_access->setLastError(errorMsg);
         if (m_observer)
         {
             m_observer->error(errorMsg);
             m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
         }
+        return false;
     }
     if (m_observer)
         m_observer->schemaUpdateProgress(i18n("Copied database file"));
