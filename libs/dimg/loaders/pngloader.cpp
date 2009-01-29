@@ -134,6 +134,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // PNG error handling. If an error occurs during reading, libpng
     // will jump here
 
+    // setjmp-save cleanup
     class CleanupData
     {
     public:
@@ -145,16 +146,15 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         }
         ~CleanupData()
         {
-            delete data;
+            delete [] data;
             freeLines();
-            closeFile();
+            if (f) fclose(f);
         }
         void setData(uchar *d)   { data = d; }
         void setLines(uchar **l) { lines = l; }
         void setFile(FILE *file) { f = file; }
         void takeData()  { data = 0; }
-        void closeFile() { if (f) fclose(f); }
-        void freeLines() { if (lines) free(lines); }
+        void freeLines() { if (lines) free(lines); lines = 0; }
         uchar *data;
         uchar **lines;
         FILE  *f;
@@ -599,12 +599,35 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     // PNG error handling. If an error occurs during writing, libpng
     // will jump here
 
+    // setjmp-save cleanup
+    class CleanupData
+    {
+    public:
+        CleanupData()
+        {
+            data  = 0;
+            f     = 0;
+        }
+        ~CleanupData()
+        {
+            delete [] data;
+            if (f) fclose(f);
+        }
+        void setData(uchar *d)   { data = d; }
+        void setFile(FILE *file) { f = file; }
+
+        uchar *data;
+        FILE  *f;
+    };
+    CleanupData *cleanupData = new CleanupData;
+    cleanupData->setFile(f);
+
     if (setjmp(png_ptr->jmpbuf))
     {
         kDebug(50003) << "Internal libPNG error during writing file. Process aborted!" << endl;
-        fclose(f);
         png_destroy_write_struct(&png_ptr, (png_infopp) & info_ptr);
         png_destroy_info_struct(png_ptr, (png_infopp) & info_ptr);
+        delete cleanupData;
         return false;
     }
 
@@ -637,6 +660,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         else
             data = new uchar[imageWidth() * 3 * sizeof(uchar)];
     }
+    cleanupData->setData(data);
 
     sig_bit.red   = imageBitsDepth();
     sig_bit.green = imageBitsDepth();
@@ -806,10 +830,9 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             checkPoint += granularity(observer, imageHeight(), 0.8);
             if (!observer->continueQuery(m_image))
             {
-                delete [] data;
-                fclose(f);
                 png_destroy_write_struct(&png_ptr, (png_infopp) & info_ptr);
                 png_destroy_info_struct(png_ptr, (png_infopp) & info_ptr);
+                delete cleanupData;
                 return false;
             }
             observer->progressInfo(m_image, 0.2 + (0.8 * ( ((float)y)/((float)imageHeight()) )));
@@ -866,15 +889,13 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         ptr += (imageWidth() * imageBytesDepth());
     }
 
-    delete [] data;
-
     // -------------------------------------------------------------------
 
     png_write_end(png_ptr, info_ptr);
     png_destroy_write_struct(&png_ptr, (png_infopp) & info_ptr);
     png_destroy_info_struct(png_ptr, (png_infopp) & info_ptr);
 
-    fclose(f);
+    delete cleanupData;
 
     imageSetAttribute("savedformat", "PNG");
 
