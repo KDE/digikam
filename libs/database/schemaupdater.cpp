@@ -950,17 +950,21 @@ bool SchemaUpdater::updateV4toV5()
         ImageQueryBuilder builder;
         QString query = builder.convertFromUrlToXml(url);
 
+        QString name = (*it).name;
+        if (name == i18n("Last Search"))
+            name = i18n("Last Search (0.9)");
+
         if (url.queryItem("type") == QString("datesearch"))
         {
-            m_access->db()->updateSearch((*it).id, DatabaseSearch::TimeLineSearch, (*it).name, query);
+            m_access->db()->updateSearch((*it).id, DatabaseSearch::TimeLineSearch, name, query);
         }
         else if (url.queryItem("1.key") == "keyword")
         {
-            m_access->db()->updateSearch((*it).id, DatabaseSearch::KeywordSearch, (*it).name, query);
+            m_access->db()->updateSearch((*it).id, DatabaseSearch::KeywordSearch, name, query);
         }
         else
         {
-            m_access->db()->updateSearch((*it).id, DatabaseSearch::AdvancedSearch, (*it).name, query);
+            m_access->db()->updateSearch((*it).id, DatabaseSearch::AdvancedSearch, name, query);
         }
     }
 
