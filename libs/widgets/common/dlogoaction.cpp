@@ -154,14 +154,9 @@ void DLogoAction::slotTimeout()
 
 QWidget* DLogoAction::createWidget(QWidget * parent)
 {
-    QToolBar *bar = qobject_cast<QToolBar*>(parent);
-
-    // This action should only be used in a toolbar
-    Q_ASSERT(bar != NULL);
-
     QWidget* container  = new QWidget(parent);
     QHBoxLayout* layout = new QHBoxLayout(container);
-    d->urlLabel         = new KUrlLabel(webProjectUrl().url(), QString(), bar);
+    d->urlLabel         = new KUrlLabel(webProjectUrl().url(), QString(), parent);
     d->urlLabel->setMargin(0);
     d->urlLabel->setScaledContents(false);
     d->urlLabel->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
