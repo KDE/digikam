@@ -192,7 +192,7 @@ void AlbumWidgetStack::readSettings()
 
         // workaround for bug 173746: this invalid config string can be found
         // in beta tester's config. Refuse to load.
-        if (state != "AAAA/wAAAAAAAAACAAAAAAAAAAABAAAAAwAAAAAC")
+        if (!state.startsWith("AAAA/wAAAAAAAAACAAAAAAAAAAA"))
             d->splitter->restoreState(QByteArray::fromBase64(state));
     }
 }
