@@ -65,9 +65,8 @@ Image Editor   : New Raw import tool to handle Raw pictures with customized deco
 Image Editor   : All image plugin dialogs are removed. All tools are embedded in editor window.
 
 General        : libkdcraw dependency updated to 0.1.5
-General        : Raw metadata can be edited, changed, added to TIFF/EP like RAW file formats (require Exiv2 >= 0.18).
-                 Currently DNG, NEF, and PEF raw files are supported. More will be added in the future.
-                 
+General        : TIFF/PNG/JPEG2000 metadata can be edited, changed (require Exiv2 >= 0.18).
+
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 166867 : digiKam crashes when starting.
