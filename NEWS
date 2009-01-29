@@ -25,7 +25,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 181705 : Rating filter in status bar not changeable, if rating is not shown in album view.
 018 ==> 182096 : Download photos from memory card / camera to new album downloads photos to parent album.
 019 ==> 177241 : Buttons not aligned after adding of new collection. 
-020 ==> 
+020 ==> 182223 : After modifiyng an image, saving to another format crashes digiKam.
+021 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
