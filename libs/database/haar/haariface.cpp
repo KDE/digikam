@@ -674,7 +674,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
 
         progress++;
 
-        if (observer && (progress != total || progress % progressStep == 0) )
+        if (observer && (progress == total || progress % progressStep == 0) )
             observer->processedNumber(progress);
     }
 
