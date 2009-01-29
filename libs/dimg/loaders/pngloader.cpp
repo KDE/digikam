@@ -134,11 +134,39 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // PNG error handling. If an error occurs during reading, libpng
     // will jump here
 
+    class CleanupData
+    {
+    public:
+        CleanupData()
+        {
+            data  = 0;
+            lines = 0;
+            f     = 0;
+        }
+        ~CleanupData()
+        {
+            delete data;
+            freeLines();
+            closeFile();
+        }
+        void setData(uchar *d)   { data = d; }
+        void setLines(uchar **l) { lines = l; }
+        void setFile(FILE *file) { f = file; }
+        void takeData()  { data = 0; }
+        void closeFile() { if (f) fclose(f); }
+        void freeLines() { if (lines) free(lines); }
+        uchar *data;
+        uchar **lines;
+        FILE  *f;
+    };
+    CleanupData *cleanupData = new CleanupData;
+    cleanupData->setFile(f);
+
     if (setjmp(png_ptr->jmpbuf))
     {
-        kDebug(50003) << "Internal libPNG error during reading file. Process aborted!" << endl;
+        kDebug(50003) << "Internal libPNG error during reading file. Process aborted!";
         png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-        fclose(f);
+        delete cleanupData;
         return false;
     }
 
@@ -257,6 +285,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     #ifdef ENABLE_DEBUG_MESSAGES
                     kDebug(50003) << "PNG color type unknown." << endl;
     #endif
+                    delete cleanupData;
                     return false;
             }
         }
@@ -325,6 +354,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     #ifdef ENABLE_DEBUG_MESSAGES
                     kDebug(50003) << "PNG color type unknown." << endl;
     #endif
+                    delete cleanupData;
                     return false;
             }
         }
@@ -354,16 +384,17 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             data = new uchar[width*height*8];  // 16 bits/color/pixel
         else
             data = new uchar[width*height*4];  // 8 bits/color/pixel
+        cleanupData->setData(data);
 
         uchar **lines = 0;
         lines = (uchar **)malloc(height * sizeof(uchar *));
+        cleanupData->setLines(lines);
         if (!lines)
         {
             kDebug(50003) << "Cannot allocate memory to load PNG image data." << endl;
             png_read_end(png_ptr, info_ptr);
             png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
-            fclose(f);
-            delete [] data;
+            delete cleanupData;
             return false;
         }
 
@@ -392,9 +423,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     if (!observer->continueQuery(m_image))
                     {
                         png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
-                        fclose(f);
-                        delete [] data;
-                        free(lines);
+                        delete cleanupData;
                         return false;
                     }
                     // use 10% - 80% for progress while reading rows
@@ -405,7 +434,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             }
         }
 
-        free(lines);
+        cleanupData->freeLines();
 
         // Swap bytes in 16 bits/color/pixel for DImg
 
@@ -508,7 +537,8 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     if (m_loadFlags & LoadImageData)
         png_read_end(png_ptr, info_ptr);
     png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
-    fclose(f);
+    cleanupData->takeData();
+    delete cleanupData;
 
     if (observer)
         observer->progressInfo(m_image, 1.0);
