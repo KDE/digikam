@@ -73,32 +73,25 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     setURLCursor(Qt::PointingHandCursor);
     view()->adjustSize();
 
-    // disable KHTMLPart's find action
-    KAction* findAction = dynamic_cast<KAction*>(actionCollection()->action("find"));
+    // Disable some KHTMLPart actions as they break predefined digiKam actions.
+    // We can re-assign the disabled actions later if we ever need to.
+    KAction* findAction = qobject_cast<KAction*>(actionCollection()->action("find"));
     if (findAction)
-    {
-        kDebug(50003) << "find action disabled" << endl;
         findAction->setShortcut(KShortcut());
-        findAction->setEnabled(false);
-    }
+    else
+        kDebug(50003) << "failed to remove the shortcut of khtml's find action" << endl;
 
-    // disable KHTMLPart's findNext action
-    KAction* findNextAction = dynamic_cast<KAction*>(actionCollection()->action("findNext"));
+    KAction* findNextAction = qobject_cast<KAction*>(actionCollection()->action("findNext"));
     if (findNextAction)
-    {
-        kDebug(50003) << "findNext action disabled" << endl;
         findNextAction->setShortcut(KShortcut());
-        findNextAction->setEnabled(false);
-    }
+    else
+        kDebug(50003) << "failed to remove the shortcut of khtml's findNext action" << endl;
 
-    // disable KHTMLPart's findPrevious action
-    KAction* findPreviousAction = dynamic_cast<KAction*>(actionCollection()->action("findPrevious"));
+    KAction* findPreviousAction = qobject_cast<KAction*>(actionCollection()->action("findPrevious"));
     if (findPreviousAction)
-    {
-        kDebug(50003) << "findPrevious action disabled" << endl;
         findPreviousAction->setShortcut(KShortcut());
-        findPreviousAction->setEnabled(false);
-    }
+    else
+        kDebug(50003) << "failed to remove the shortcut of khtml's findPrevious action" << endl;
 
     // ------------------------------------------------------------
 
