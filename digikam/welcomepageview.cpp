@@ -77,6 +77,7 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     KAction* findAction = dynamic_cast<KAction*>(actionCollection()->action("find"));
     if (findAction)
     {
+        kDebug(50003) << "find action disabled" << endl;
         findAction->setShortcut(KShortcut());
         findAction->setEnabled(false);
     }
@@ -85,8 +86,18 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     KAction* findNextAction = dynamic_cast<KAction*>(actionCollection()->action("findNext"));
     if (findNextAction)
     {
+        kDebug(50003) << "findNext action disabled" << endl;
         findNextAction->setShortcut(KShortcut());
         findNextAction->setEnabled(false);
+    }
+
+    // disable KHTMLPart's findPrevious action
+    KAction* findPreviousAction = dynamic_cast<KAction*>(actionCollection()->action("findPrevious"));
+    if (findPreviousAction)
+    {
+        kDebug(50003) << "findPrevious action disabled" << endl;
+        findPreviousAction->setShortcut(KShortcut());
+        findPreviousAction->setEnabled(false);
     }
 
     // ------------------------------------------------------------
