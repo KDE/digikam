@@ -512,56 +512,59 @@ void CameraController::executeCommand(CameraCommand *cmd)
                 emit signalDownloaded(folder, file, GPItemInfo::DownloadFailed);
             }
 
-            // possible modification operations
+            // Possible modification operations. Only apply it to JPEG for the moment.
 
-            if (autoRotate)
+            if (isJpegImage(tempURL.path()))
             {
-                kDebug(50003) << "Exif autorotate: " << file << " using (" << tempURL << ")" << endl;
-                sendInfo(i18n("EXIF rotating file %1...", file));
-                exifRotate(tempURL.path(), file);
-            }
-
-            if (fixDateTime || setPhotographerId || setCredits)
-            {
-                kDebug(50003) << "Set metadata from: " << file << " using (" << tempURL << ")" << endl;
-                sendInfo(i18n("Setting Metadata tags to file %1...", file));
-                DMetadata metadata(tempURL.path());
-
-                if (fixDateTime)
-                    metadata.setImageDateTime(newDateTime, true);
-
-                if (setPhotographerId)
-                    metadata.setImagePhotographerId(author, authorTitle);
-
-                if (setCredits)
-                    metadata.setImageCredits(credit, source, copyright);
-
-                metadata.applyChanges();
-            }
-
-            // Convert JPEG file to lossless format if necessary,
-            // and move converted image to destination.
-
-            if (convertJpeg && isJpegImage(tempURL.path()))
-            {
-                sendInfo(i18n("Converting %1 to lossless file format...", file));
-
-                KUrl tempURL2(dest);
-                tempURL2 = tempURL2.upUrl();
-                tempURL2.addPath(QString(".digikam-camera-tmp2-%1").arg(getpid()).prepend(file));
-                temp = tempURL2.path();
-
-                if (!jpegConvert(tempURL.path(), tempURL2.path(), file, losslessFormat))
+                if (autoRotate)
                 {
-                    // convert failed. delete the temp file
-                    unlink(QFile::encodeName(tempURL.path()));
-                    unlink(QFile::encodeName(tempURL2.path()));
-                    result = false;
+                    kDebug(50003) << "Exif autorotate: " << file << " using (" << tempURL << ")" << endl;
+                    sendInfo(i18n("EXIF rotating file %1...", file));
+                    exifRotate(tempURL.path(), file);
                 }
-                else
+
+                if (fixDateTime || setPhotographerId || setCredits)
                 {
-                    // Else remove only the first temp file.
-                    unlink(QFile::encodeName(tempURL.path()));
+                    kDebug(50003) << "Set metadata from: " << file << " using (" << tempURL << ")" << endl;
+                    sendInfo(i18n("Setting Metadata tags to file %1...", file));
+                    DMetadata metadata(tempURL.path());
+
+                    if (fixDateTime)
+                        metadata.setImageDateTime(newDateTime, true);
+
+                    if (setPhotographerId)
+                        metadata.setImagePhotographerId(author, authorTitle);
+
+                    if (setCredits)
+                        metadata.setImageCredits(credit, source, copyright);
+
+                    metadata.applyChanges();
+                }
+
+                // Convert JPEG file to lossless format if necessary,
+                // and move converted image to destination.
+
+                if (convertJpeg)
+                {
+                    sendInfo(i18n("Converting %1 to lossless file format...", file));
+
+                    KUrl tempURL2(dest);
+                    tempURL2 = tempURL2.upUrl();
+                    tempURL2.addPath(QString(".digikam-camera-tmp2-%1").arg(getpid()).prepend(file));
+                    temp = tempURL2.path();
+
+                    if (!jpegConvert(tempURL.path(), tempURL2.path(), file, losslessFormat))
+                    {
+                        // convert failed. delete the temp file
+                        unlink(QFile::encodeName(tempURL.path()));
+                        unlink(QFile::encodeName(tempURL2.path()));
+                        result = false;
+                    }
+                    else
+                    {
+                        // Else remove only the first temp file.
+                        unlink(QFile::encodeName(tempURL.path()));
+                    }
                 }
             }
 
