@@ -446,6 +446,9 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
             // (the previous ensureItemVisible does not work)
             setStoredVisibleItem(icon);
             triggerRearrangement();
+
+            // use only once (#180223)
+            d->itemUrlToFind = KUrl();
         }
     }
 
