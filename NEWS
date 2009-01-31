@@ -30,7 +30,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 175746 : digiKam doesn't remove IPTC data.
 023 ==> 182334 : digiKam always crash when I try to move the Toolbar.
 024 ==> 182412 : Raw files get modified in spite of inverse setting.
-025 ==> 
+025 ==> 180065 : digiKam image download from memorycard problems.
+026 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
