@@ -7,8 +7,8 @@
  * Description : digital camera controller
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -499,23 +499,23 @@ void CameraController::executeCommand(CameraCommand *cmd)
             emit signalDownloaded(folder, file, GPItemInfo::DownloadStarted);
 
             KUrl tempURL(dest);
-            tempURL = tempURL.upUrl();
+            tempURL      = tempURL.upUrl();
             tempURL.addPath(QString(".digikam-camera-tmp1-%1").arg(getpid()).append(file));
             kDebug(50003) << "Downloading: " << file << " using (" << tempURL << ")" << endl;
             QString temp = tempURL.path();
 
-            bool result = d->camera->downloadItem(folder, file, tempURL.path());
+            bool result  = d->camera->downloadItem(folder, file, tempURL.path());
 
             if (!result)
             {
                 unlink(QFile::encodeName(tempURL.path()));
                 emit signalDownloaded(folder, file, GPItemInfo::DownloadFailed);
+                break;
             }
-
-            // Possible modification operations. Only apply it to JPEG for the moment.
-
-            if (isJpegImage(tempURL.path()))
+            else if (isJpegImage(tempURL.path()))
             {
+                // Possible modification operations. Only apply it to JPEG for the moment.
+
                 if (autoRotate)
                 {
                     kDebug(50003) << "Exif autorotate: " << file << " using (" << tempURL << ")" << endl;
@@ -546,12 +546,13 @@ void CameraController::executeCommand(CameraCommand *cmd)
 
                 if (convertJpeg)
                 {
+                    kDebug(50003) << "Convert to LossLess: " << file << " using (" << tempURL << ")" << endl;
                     sendInfo(i18n("Converting %1 to lossless file format...", file));
 
                     KUrl tempURL2(dest);
                     tempURL2 = tempURL2.upUrl();
-                    tempURL2.addPath(QString(".digikam-camera-tmp2-%1").arg(getpid()).prepend(file));
-                    temp = tempURL2.path();
+                    tempURL2.addPath(QString(".digikam-camera-tmp2-%1").arg(getpid()).append(file));
+                    temp     = tempURL2.path();
 
                     if (!jpegConvert(tempURL.path(), tempURL2.path(), file, losslessFormat))
                     {
@@ -660,7 +661,9 @@ void CameraController::executeCommand(CameraCommand *cmd)
             break;
         }
         default:
+        {
             kWarning(50003) << " unknown action specified" << endl;
+        }
     }
 }
 
