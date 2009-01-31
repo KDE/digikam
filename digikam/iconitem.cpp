@@ -110,7 +110,8 @@ void IconItem::setSelected(bool val, bool cb)
 {
     IconView* view = m_group->iconView();
 
-    if (cb) {
+    if (cb)
+    {
         view->blockSignals(true);
         view->clearSelection();
         view->blockSignals(false);
