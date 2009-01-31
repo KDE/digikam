@@ -500,7 +500,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
 
             KUrl tempURL(dest);
             tempURL = tempURL.upUrl();
-            tempURL.addPath(QString(".digikam-camera-tmp1-%1").arg(getpid()).prepend(file));
+            tempURL.addPath(QString(".digikam-camera-tmp1-%1").arg(getpid()).append(file));
             kDebug(50003) << "Downloading: " << file << " using (" << tempURL << ")" << endl;
             QString temp = tempURL.path();
 
