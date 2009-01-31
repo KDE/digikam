@@ -7,7 +7,7 @@
  * Description : digital camera controller
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -374,13 +374,14 @@ void CameraThread::run()
                 QApplication::postEvent(parent, event);
 
                 KURL tempURL(dest);
-                tempURL = tempURL.upURL();
-                tempURL.addPath( QString(".digikam-camera-tmp1-%1").arg(getpid()).prepend(file));
+                tempURL      = tempURL.upURL();
+                tempURL.addPath( QString(".digikam-camera-tmp1-%1").arg(getpid()).append(file));
+                DDebug() << "Downloading: " << file << " using (" << tempURL.path() << ")" << endl;
                 QString temp = tempURL.path();
 
-                bool result = d->camera->downloadItem(folder, file, tempURL.path());
+                bool result  = d->camera->downloadItem(folder, file, tempURL.path());
 
-                if (result)
+                if (result && isJpegImage(tempURL.path()))
                 {
                     if (autoRotate)
                     {
@@ -391,6 +392,7 @@ void CameraThread::run()
 
                     if (fixDateTime || setPhotographerId || setCredits)
                     {
+                        DDebug() << "Set Metadata from: " << file << " using (" << tempURL.path() << ")" << endl;
                         sendInfo(i18n("Setting Metadata tags to file %1...").arg(file));
                         DMetadata metadata(tempURL.path());
 
@@ -409,14 +411,15 @@ void CameraThread::run()
                     // Convert Jpeg file to lossless format if necessary, 
                     // and move converted image to destination.
 
-                    if (convertJpeg && isJpegImage(tempURL.path()))
+                    if (convertJpeg)
                     {
+                        DDebug() << "Convert to LossLess: " << file << " using (" << tempURL.path() << ")" << endl;
                         sendInfo(i18n("Converting %1 to lossless file format...").arg(file));
 
                         KURL tempURL2(dest);
                         tempURL2 = tempURL2.upURL();
-                        tempURL2.addPath( QString(".digikam-camera-tmp2-%1").arg(getpid()).prepend(file));
-                        temp = tempURL2.path();
+                        tempURL2.addPath( QString(".digikam-camera-tmp2-%1").arg(getpid()).append(file));
+                        temp     = tempURL2.path();
 
                         if (!jpegConvert(tempURL.path(), tempURL2.path(), file, losslessFormat))
                         {
@@ -1170,7 +1173,9 @@ void CameraController::customEvent(QCustomEvent* e)
             break;
         }
         default:
+        {
             DWarning() << k_funcinfo << "Unknown event" << endl;
+        }
     }
 }
 
