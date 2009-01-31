@@ -501,6 +501,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             KUrl tempURL(dest);
             tempURL = tempURL.upUrl();
             tempURL.addPath(QString(".digikam-camera-tmp1-%1").arg(getpid()).prepend(file));
+            kDebug(50003) << "Downloading: " << file << " using (" << tempURL << ")" << endl;
             QString temp = tempURL.path();
 
             bool result = d->camera->downloadItem(folder, file, tempURL.path());
@@ -515,13 +516,14 @@ void CameraController::executeCommand(CameraCommand *cmd)
 
             if (autoRotate)
             {
-                kDebug(50003) << "Exif autorotate: " << file << " using (" << tempURL.path() << ")" << endl;
+                kDebug(50003) << "Exif autorotate: " << file << " using (" << tempURL << ")" << endl;
                 sendInfo(i18n("EXIF rotating file %1...", file));
                 exifRotate(tempURL.path(), file);
             }
 
             if (fixDateTime || setPhotographerId || setCredits)
             {
+                kDebug(50003) << "Set metadata from: " << file << " using (" << tempURL << ")" << endl;
                 sendInfo(i18n("Setting Metadata tags to file %1...", file));
                 DMetadata metadata(tempURL.path());
 
