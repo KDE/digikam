@@ -37,7 +37,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 182019 : No images displayed in albums view.
 030 ==> 148166 : Leave tags tree (right sidebar) as set when closing digikam. 
 031 ==> 182711 : Free rotation tool is borked.
-032 ==> 
+032 ==> 182665 : Assign multiple tag photo.
+033 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
