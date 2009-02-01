@@ -495,7 +495,7 @@ void DigikamView::setupConnections()
             this, SLOT(slotZoomFactorChanged(double)));
 
     connect(d->albumWidgetStack, SIGNAL(signalInsert2LightTable()),
-            this, SLOT(slotImageLightTable()));
+            this, SLOT(slotImageAddToLightTable()));
 
     connect(d->albumWidgetStack, SIGNAL(signalFindSimilar()),
             this, SLOT(slotImageFindSimilar()));
