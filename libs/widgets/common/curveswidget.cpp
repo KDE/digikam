@@ -6,7 +6,7 @@
  * Date        : 2004-12-01
  * Description : a widget to draw histogram curves
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -413,7 +413,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
     }
 
     // Drawing selection or all histogram values.
-    // A QPixmap is used for enable the double buffering.
+    // A QPixmap is used to enable  double buffering.
 
     QPixmap pm(size());
     QPainter p1;
@@ -490,10 +490,13 @@ void CurvesWidget::paintEvent(QPaintEvent*)
 
         // Drawing curves.
 
+        p1.save();
+        p1.setRenderHint(QPainter::Antialiasing);
         p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Link), 2, Qt::SolidLine));
         p1.drawLine(x - 1, wHeight - ((curvePrevVal * wHeight) / histogram->getHistogramSegment()),
                     x,     wHeight - ((curveVal * wHeight) / histogram->getHistogramSegment()));
 
+        p1.restore();
         curvePrevVal = curveVal;
    }
 
@@ -501,7 +504,9 @@ void CurvesWidget::paintEvent(QPaintEvent*)
 
    if (!d->readOnlyMode && d->curves->getCurveType(m_channelType) == ImageCurves::CURVE_SMOOTH)
    {
+      p1.save();
       p1.setPen(QPen(Qt::red, 3, Qt::SolidLine));
+      p1.setRenderHint(QPainter::Antialiasing);
 
       for (int p = 0 ; p < 17 ; p++)
       {
@@ -514,6 +519,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
                              4, 4 );
          }
       }
+      p1.restore();
    }
 
    // Drawing black/middle/highlight tone grid separators.
