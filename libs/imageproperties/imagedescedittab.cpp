@@ -9,6 +9,7 @@
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2003-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -160,7 +161,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->commentsEdit->setTextFormat(QTextEdit::PlainText);
     d->commentsEdit->setCheckSpellingEnabled(true);
     d->commentsEdit->setFixedHeight(100);
-    
+
     QHBox *dateBox  = new QHBox(settingsArea);
     new QLabel(i18n("Date:"), dateBox);
     d->dateTimeEdit = new KDateTimeEdit(dateBox, "datepicker");
@@ -654,6 +655,8 @@ void ImageDescEditTab::populateTags()
         TAlbum *tag = (TAlbum*)(*it);
         slotAlbumAdded(tag);
     }
+
+    d->tagsView->loadViewState();
 }
 
 void ImageDescEditTab::slotItemStateChanged(TAlbumCheckListItem *item)
@@ -1225,7 +1228,8 @@ void ImageDescEditTab::slotAlbumAdded(Album* a)
 
     if (viewItem)
     {
-        viewItem->setOpen(true);
+        // commenting this out due to the issues described in bug 148166.
+        // viewItem->setOpen(true);
         setTagThumbnail(tag);
     }
 }
