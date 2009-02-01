@@ -35,7 +35,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 027 ==> 182612 : Zoom in digiKam 0.10RC2 "View Mode" - keyboard zoom does not work.
 028 ==> 180223 : Rating images misbehaves when entering an album via "go to album" from another view.
 029 ==> 182019 : No images displayed in albums view.
-030 ==> 
+030 ==> 148166 : Leave tags tree (right sidebar) as set when closing digikam. 
+031 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
