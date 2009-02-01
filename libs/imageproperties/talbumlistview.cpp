@@ -6,7 +6,8 @@
  * Date        : 2006-18-12
  * Description : A list view to display digiKam Tags.
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -184,6 +185,7 @@ TAlbumListView::TAlbumListView(QWidget* parent)
 
 TAlbumListView::~TAlbumListView()
 {
+    saveViewState();
 }
 
 void TAlbumListView::stateChanged(TAlbumCheckListItem *item)
@@ -460,6 +462,74 @@ void TAlbumListView::slotRefresh(const QMap<int, int>& tagsStatMap)
     }
 
     refresh();
+}
+
+void TAlbumListView::loadViewState()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(objectName());
+
+    int selectedItem = group.readEntry("LastSelectedItem", 0);
+
+    QList<int> openFolders;
+    if(group.hasKey("OpenFolders"))
+    {
+        openFolders = group.readEntry("OpenFolders",QList<int>());
+    }
+
+    TAlbumCheckListItem *item      = 0;
+    TAlbumCheckListItem *foundItem = 0;
+    Q3ListViewItemIterator it(this->lastItem());
+
+    for( ; it.current(); --it)
+    {
+        item = dynamic_cast<TAlbumCheckListItem*>(it.current());
+        if(!item)
+            continue;
+        // Start the album root always open
+        if(openFolders.contains(item->id()) || item->id() == 0)
+            setOpen(item, true);
+        else
+            setOpen(item, false);
+
+        if(item->id() == selectedItem)
+        {
+            // Save the found selected item so that it can be made visible.
+            foundItem = item;
+        }
+    }
+
+    // Important note: this cannot be done inside the previous loop
+    // because opening folders prevents the visibility.
+    // Fixes bug #144815.
+    // (Looks a bit like a bug in Qt to me ...)
+    if (foundItem)
+    {
+        setSelected(foundItem, true);
+        ensureItemVisible(foundItem);
+    }
+}
+
+void TAlbumListView::saveViewState()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(objectName());
+
+    TAlbumCheckListItem *item = dynamic_cast<TAlbumCheckListItem*>(selectedItem());
+    if (item)
+        group.writeEntry("LastSelectedItem", item->id());
+    else
+        group.writeEntry("LastSelectedItem", 0);
+
+    QList<int> openFolders;
+    Q3ListViewItemIterator it(this);
+    for( ; it.current(); ++it)
+    {
+        item = dynamic_cast<TAlbumCheckListItem*>(it.current());
+        if(item && isOpen(item))
+            openFolders.push_back(item->id());
+    }
+    group.writeEntry("OpenFolders", openFolders);
 }
 
 }  // namespace Digikam

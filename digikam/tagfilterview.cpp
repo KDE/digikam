@@ -7,7 +7,8 @@
  * Description : tags filter view
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -355,6 +356,8 @@ TagFilterView::~TagFilterView()
     group.writeEntry("Matching Condition", (int)(d->matchingCond));
     group.writeEntry("Toggle Auto Tags", (int)(d->toggleAutoTags));
     config->sync();
+
+    saveViewState();
 
     delete d->timer;
     delete d;
@@ -1372,6 +1375,74 @@ void TagFilterView::slotResetTagFilters()
             item->setOn(false);
         ++it;
     }
+}
+
+void TagFilterView::loadViewState()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(objectName());
+
+    int selectedItem = group.readEntry("LastSelectedItem", 0);
+
+    QList<int> openFolders;
+    if(group.hasKey("OpenFolders"))
+    {
+        openFolders = group.readEntry("OpenFolders",QList<int>());
+    }
+
+    TagFilterViewItem *item      = 0;
+    TagFilterViewItem *foundItem = 0;
+    Q3ListViewItemIterator it(this->lastItem());
+
+    for( ; it.current(); --it)
+    {
+        item = dynamic_cast<TagFilterViewItem*>(it.current());
+        if(!item)
+            continue;
+        // Start the album root always open
+        if(openFolders.contains(item->id()) || item->id() == 0)
+            setOpen(item, true);
+        else
+            setOpen(item, false);
+
+        if(item->id() == selectedItem)
+        {
+            // Save the found selected item so that it can be made visible.
+            foundItem = item;
+        }
+    }
+
+    // Important note: this cannot be done inside the previous loop
+    // because opening folders prevents the visibility.
+    // Fixes bug #144815.
+    // (Looks a bit like a bug in Qt to me ...)
+    if (foundItem)
+    {
+        setSelected(foundItem, true);
+        ensureItemVisible(foundItem);
+    }
+}
+
+void TagFilterView::saveViewState()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(objectName());
+
+    TagFilterViewItem *item = dynamic_cast<TagFilterViewItem*>(selectedItem());
+    if (item)
+        group.writeEntry("LastSelectedItem", item->id());
+    else
+        group.writeEntry("LastSelectedItem", 0);
+
+    QList<int> openFolders;
+    Q3ListViewItemIterator it(this);
+    for( ; it.current(); ++it)
+    {
+        item = dynamic_cast<TagFilterViewItem*>(it.current());
+        if(item && isOpen(item))
+            openFolders.push_back(item->id());
+    }
+    group.writeEntry("OpenFolders", openFolders);
 }
 
 }  // namespace Digikam
