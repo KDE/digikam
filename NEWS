@@ -34,7 +34,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 026 ==> 182352 : digiKam import from camera sort pictures in reverse order.
 027 ==> 182612 : Zoom in digiKam 0.10RC2 "View Mode" - keyboard zoom does not work.
 028 ==> 180223 : Rating images misbehaves when entering an album via "go to album" from another view.
-029 ==> 
+029 ==> 182019 : No images displayed in albums view.
+030 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
