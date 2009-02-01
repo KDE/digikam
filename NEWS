@@ -7,7 +7,8 @@ NEW FEATURES:
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 
+001 ==> 169037 : Crash when tagging photos.
+002 ==> 
 
 **********************************************************************************************
 digiKam 0.9.5-beta3 - Release date: 2009-01-27
