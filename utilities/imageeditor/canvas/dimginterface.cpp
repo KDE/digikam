@@ -637,6 +637,11 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     // broken. Note that IPTC image preview tag is limited to 256K!!!
     // There is no limitation with TIFF and PNG about IPTC byte array size.
 
+    // Before to update IPTC preview, we remove it.
+    meta.removeIptcTag("Iptc.Application2.Preview");
+    meta.removeIptcTag("Iptc.Application2.PreviewFormat");
+    meta.removeIptcTag("Iptc.Application2.PreviewVersion");
+
     QSize previewSize = d->image.size();
     previewSize.scale(1280, 1024, Qt::KeepAspectRatio);
     QImage preview;
@@ -646,7 +651,8 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     else
         preview = d->image.smoothScale(previewSize.width(), previewSize.height(), Qt::IgnoreAspectRatio).copyQImage();
 
-    // only store preview if pixel number is at least two times bigger
+    // With JPEG file, we don't store IPTC preview.
+    // NOTE: only store preview if pixel number is at least two times bigger
     if (/* (2*(previewSize.width() * previewSize.height()) < (int)(d->image.width() * d->image.height())) &&*/
         (mimeType.toUpper() != QString("JPG") && mimeType.toUpper() != QString("JPEG") &&
          mimeType.toUpper() != QString("JPE"))
@@ -654,13 +660,6 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     {
         // Non JPEG file, we update IPTC preview
         meta.setImagePreview(preview);
-    }
-    else
-    {
-        // JPEG file, we remove IPTC preview.
-        meta.removeIptcTag("Iptc.Application2.Preview");
-        meta.removeIptcTag("Iptc.Application2.PreviewFormat");
-        meta.removeIptcTag("Iptc.Application2.PreviewVersion");
     }
 
     // Update Exif thumbnail.
