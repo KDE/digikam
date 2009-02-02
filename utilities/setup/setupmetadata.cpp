@@ -92,13 +92,19 @@ public:
 };
 
 SetupMetadata::SetupMetadata(QWidget* parent )
-             : QWidget(parent), d(new SetupMetadataPriv)
+             : QScrollArea(parent), d(new SetupMetadataPriv)
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    QWidget *panel = new QWidget(viewport());
+    panel->setAutoFillBackground(false);
+    setWidget(panel);
+    setWidgetResizable(true);
+    viewport()->setAutoFillBackground(false);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
-    QGroupBox *ExifGroup  = new QGroupBox(i18n("EXIF Actions"), this);
+    QGroupBox *ExifGroup  = new QGroupBox(i18n("EXIF Actions"), panel);
     QVBoxLayout *gLayout1 = new QVBoxLayout(ExifGroup);
 
     d->ExifRotateBox = new QCheckBox(ExifGroup);
@@ -114,7 +120,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     // --------------------------------------------------------
 
-    QGroupBox *commonGroup = new QGroupBox(i18n("Common Metadata Actions"), this);
+    QGroupBox *commonGroup = new QGroupBox(i18n("Common Metadata Actions"), panel);
     QVBoxLayout *gLayout2  = new QVBoxLayout(commonGroup);
 
     d->saveTagsBox = new QCheckBox(commonGroup);
@@ -180,7 +186,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     // --------------------------------------------------------
 
-    QFrame      *box  = new QFrame(this);
+    QFrame      *box  = new QFrame(panel);
     QGridLayout *grid = new QGridLayout(box);
     box->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 

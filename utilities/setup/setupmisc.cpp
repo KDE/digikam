@@ -7,7 +7,7 @@
  * Description : mics configuration setup tab
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,17 +61,23 @@ public:
 };
 
 SetupMisc::SetupMisc(QWidget* parent)
-         : QWidget(parent), d(new SetupMiscPriv)
+         : QScrollArea(parent), d(new SetupMiscPriv)
 {
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    QWidget *panel = new QWidget(viewport());
+    panel->setAutoFillBackground(false);
+    setWidget(panel);
+    setWidgetResizable(true);
+    viewport()->setAutoFillBackground(false);
 
-    d->showTrashDeleteDialogCheck = new QCheckBox(i18n("Confirm when moving items to the &trash"), this);
+    QVBoxLayout *layout = new QVBoxLayout(panel);
 
-    d->sidebarApplyDirectlyCheck = new QCheckBox(i18n("Do not confirm when apply changes in the &right sidebar"), this);
+    d->showTrashDeleteDialogCheck = new QCheckBox(i18n("Confirm when moving items to the &trash"), panel);
 
-    d->showSplashCheck = new QCheckBox(i18n("&Show splash screen at startup"), this);
+    d->sidebarApplyDirectlyCheck = new QCheckBox(i18n("Do not confirm when apply changes in the &right sidebar"), panel);
 
-    d->scanAtStart = new QCheckBox(i18n("&Scan for new items at startup (makes startup slower)"), this);
+    d->showSplashCheck = new QCheckBox(i18n("&Show splash screen at startup"), panel);
+
+    d->scanAtStart = new QCheckBox(i18n("&Scan for new items at startup (makes startup slower)"), panel);
 
     // --------------------------------------------------------
 

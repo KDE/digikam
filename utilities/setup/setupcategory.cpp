@@ -78,25 +78,31 @@ public:
 };
 
 SetupCategory::SetupCategory(QWidget* parent )
-             : QWidget(parent), d(new SetupCategoryPriv)
+             : QScrollArea(parent), d(new SetupCategoryPriv)
 {
-    QGridLayout *grid = new QGridLayout(this);
+    QWidget *panel = new QWidget(viewport());
+    panel->setAutoFillBackground(false);
+    setWidget(panel);
+    setWidgetResizable(true);
+    viewport()->setAutoFillBackground(false);
+
+    QGridLayout *grid = new QGridLayout(panel);
 
     // --------------------------------------------------------
 
-    d->categoryEdit = new KLineEdit(this);
+    d->categoryEdit     = new KLineEdit(panel);
     d->categoryEdit->setClearButtonShown(true);
 
-    d->albumCategoryBox = new KListWidget(this);
+    d->albumCategoryBox = new KListWidget(panel);
     d->albumCategoryBox->setWhatsThis(i18n("You can add or remove Album "
                                            "category types here to improve how "
                                            "your Albums are sorted in digiKam."));
 
     d->albumCategoryBox->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
-    d->addCategoryButton = new QPushButton(i18n("&Add..."), this);
-    d->delCategoryButton = new QPushButton(i18n("&Remove"), this);
-    d->repCategoryButton = new QPushButton(i18n("&Replace"), this);
+    d->addCategoryButton = new QPushButton(i18n("&Add..."), panel);
+    d->delCategoryButton = new QPushButton(i18n("&Remove"), panel);
+    d->repCategoryButton = new QPushButton(i18n("&Replace"), panel);
 
     d->addCategoryButton->setIcon(SmallIcon("list-add"));
     d->delCategoryButton->setIcon(SmallIcon("list-remove"));

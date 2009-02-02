@@ -6,7 +6,7 @@
  * Date        : 2006-07-04
  * Description : default identity setup tab.
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,14 +66,20 @@ public:
 };
 
 SetupIdentity::SetupIdentity(QWidget* parent )
-             : QWidget(parent), d(new SetupIdentityPriv)
+             : QScrollArea(parent), d(new SetupIdentityPriv)
 {
-    QVBoxLayout *layout = new QVBoxLayout( this );
+    QWidget *panel = new QWidget(viewport());
+    panel->setAutoFillBackground(false);
+    setWidget(panel);
+    setWidgetResizable(true);
+    viewport()->setAutoFillBackground(false);
+
+    QVBoxLayout *layout = new QVBoxLayout(panel);
     layout->setSpacing( KDialog::spacingHint() );
 
     // --------------------------------------------------------
 
-    QGroupBox *photographerIdGroup = new QGroupBox(i18n("Photographer Information"), this);
+    QGroupBox *photographerIdGroup = new QGroupBox(i18n("Photographer Information"), panel);
     QGridLayout* grid              = new QGridLayout(photographerIdGroup);
 
     QLabel *label1 = new QLabel(i18n("Author:"), photographerIdGroup);
@@ -106,7 +112,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     // --------------------------------------------------------
 
-    QGroupBox *creditsGroup = new QGroupBox(i18n("Credit and Copyright"), this);
+    QGroupBox *creditsGroup = new QGroupBox(i18n("Credit and Copyright"), panel);
     QGridLayout* grid2      = new QGridLayout(creditsGroup);
 
     QLabel *label3 = new QLabel(i18n("Credit:"), creditsGroup);
@@ -172,7 +178,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
                    "There is no limitation with XMP, but take a care that IPTC text tags "
                    "only support the printable <b><a href='http://en.wikipedia.org/wiki/Ascii'>ASCII</a></b> "
                    "characters set and limit strings size. "
-                   "Use contextual help for details.</b>"), this);
+                   "Use contextual help for details.</b>"), panel);
     note->setOpenExternalLinks(true);
     note->setWordWrap(true);
     note->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);

@@ -6,7 +6,7 @@
  * Date        : 2005-02-01
  * Description : collections setup tab
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -79,15 +79,21 @@ public:
 };
 
 SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
-                : QWidget(parent), d(new SetupCollectionsPriv)
+                : QScrollArea(parent), d(new SetupCollectionsPriv)
 {
     d->mainDialog = dialog;
 
-    QVBoxLayout *layout = new QVBoxLayout( this );
+    QWidget *panel = new QWidget(viewport());
+    panel->setAutoFillBackground(false);
+    setWidget(panel);
+    setWidgetResizable(true);
+    viewport()->setAutoFillBackground(false);
+
+    QVBoxLayout *layout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
-    QGroupBox *albumPathBox = new QGroupBox(i18n("Root Album Folders"), this);
+    QGroupBox *albumPathBox = new QGroupBox(i18n("Root Album Folders"), panel);
 
 #ifndef _WIN32
     QLabel *albumPathLabel  = new QLabel(i18n("Below are the locations of your root albums used to store "
@@ -105,7 +111,7 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     albumPathLabel->setWordWrap(true);
 
     d->collectionView  = new SetupCollectionTreeView(albumPathBox);
-    d->collectionModel = new SetupCollectionModel(this);
+    d->collectionModel = new SetupCollectionModel(panel);
     d->collectionView->setModel(d->collectionModel);
 
     QVBoxLayout *albumPathBoxLayout = new QVBoxLayout;
@@ -117,7 +123,7 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox *dbPathBox      = new QGroupBox(i18n("Database File Path"), this);
+    QGroupBox *dbPathBox      = new QGroupBox(i18n("Database File Path"), panel);
     QVBoxLayout *vlay         = new QVBoxLayout(dbPathBox);
     QLabel *databasePathLabel = new QLabel(i18n("The location "
                                                 "where the database file will be stored on your system. "

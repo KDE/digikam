@@ -6,7 +6,7 @@
  * Date        : 2007-02-06
  * Description : setup RAW decoding settings.
  *
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,10 +65,16 @@ public:
 };
 
 SetupDcraw::SetupDcraw(QWidget* parent )
-          : QWidget(parent), d(new SetupDcrawPriv)
+          : QScrollArea(parent), d(new SetupDcrawPriv)
 {
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    d->dcrawSettings    = new DcrawSettingsWidget(this, DcrawSettingsWidget::SIXTEENBITS);
+    QWidget *panel = new QWidget(viewport());
+    panel->setAutoFillBackground(false);
+    setWidget(panel);
+    setWidgetResizable(true);
+    viewport()->setAutoFillBackground(false);
+
+    QVBoxLayout *layout = new QVBoxLayout(panel);
+    d->dcrawSettings    = new DcrawSettingsWidget(panel, DcrawSettingsWidget::SIXTEENBITS);
     d->dcrawSettings->setItemIcon(0, SmallIcon("kdcraw"));
     d->dcrawSettings->setItemIcon(1, SmallIcon("whitebalance"));
     d->dcrawSettings->setItemIcon(2, SmallIcon("lensdistortion"));

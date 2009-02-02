@@ -26,14 +26,14 @@
 
 // Qt includes.
 
-#include <QWidget>
+#include <QScrollArea>
 
 namespace Digikam
 {
 
 class SetupToolTipPriv;
 
-class SetupToolTip : public QWidget
+class SetupToolTip : public QScrollArea
 {
     Q_OBJECT
 

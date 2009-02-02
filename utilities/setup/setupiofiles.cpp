@@ -6,7 +6,7 @@
  * Date        : 2006-01-23
  * Description : setup image editor output files settings.
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -70,28 +70,34 @@ public:
 };
 
 SetupIOFiles::SetupIOFiles(QWidget* parent )
-            : QWidget(parent), d(new SetupIOFilesPriv)
+            : QScrollArea(parent), d(new SetupIOFilesPriv)
 {
-    QVBoxLayout* vbox = new QVBoxLayout(this);
+    QWidget *panel = new QWidget(viewport());
+    panel->setAutoFillBackground(false);
+    setWidget(panel);
+    setWidgetResizable(true);
+    viewport()->setAutoFillBackground(false);
+
+    QVBoxLayout* vbox = new QVBoxLayout(panel);
 
     //-- JPEG Settings ------------------------------------------------------
 
-    d->JPEGOptions    = new JPEGSettings(this);
-    KSeparator *line1 = new KSeparator(Qt::Horizontal, this);
+    d->JPEGOptions    = new JPEGSettings(panel);
+    KSeparator *line1 = new KSeparator(Qt::Horizontal, panel);
 
     //-- PNG Settings -------------------------------------------------------
 
-    d->PNGOptions     = new PNGSettings(this);
-    KSeparator *line2 = new KSeparator(Qt::Horizontal, this);
+    d->PNGOptions     = new PNGSettings(panel);
+    KSeparator *line2 = new KSeparator(Qt::Horizontal, panel);
 
     //-- TIFF Settings ------------------------------------------------------
 
-    d->TIFFOptions    = new TIFFSettings(this);
-    KSeparator *line3 = new KSeparator(Qt::Horizontal, this);
+    d->TIFFOptions    = new TIFFSettings(panel);
+    KSeparator *line3 = new KSeparator(Qt::Horizontal, panel);
 
     //-- JPEG 2000 Settings -------------------------------------------------
 
-    d->JPEG2000Options = new JP2KSettings(this);
+    d->JPEG2000Options = new JP2KSettings(panel);
 
     vbox->setMargin(0);
     vbox->setSpacing(KDialog::spacingHint());

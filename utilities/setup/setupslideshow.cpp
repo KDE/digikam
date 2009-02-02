@@ -6,7 +6,7 @@
  * Date        : 2005-05-21
  * Description : setup tab for slideshow options.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -74,42 +74,48 @@ public:
 };
 
 SetupSlideShow::SetupSlideShow(QWidget* parent)
-              : QWidget(parent), d(new SetupSlideShowPriv)
+              : QScrollArea(parent), d(new SetupSlideShowPriv)
 {
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    QWidget *panel = new QWidget(viewport());
+    panel->setAutoFillBackground(false);
+    setWidget(panel);
+    setWidgetResizable(true);
+    viewport()->setAutoFillBackground(false);
 
-    d->delayInput = new KIntNumInput(5, this);
+    QVBoxLayout *layout = new QVBoxLayout(panel);
+
+    d->delayInput = new KIntNumInput(5, panel);
     d->delayInput->setRange(1, 3600, 1);
     d->delayInput->setSliderEnabled(true);
     d->delayInput->setLabel(i18n("&Delay between images:"), Qt::AlignLeft | Qt::AlignTop);
     d->delayInput->setWhatsThis(i18n("The delay, in seconds, between images."));
 
-    d->startWithCurrent = new QCheckBox(i18n("Start with current image"), this);
+    d->startWithCurrent = new QCheckBox(i18n("Start with current image"), panel);
     d->startWithCurrent->setWhatsThis( i18n("If this option is enabled, the Slideshow will be started "
                                             "with the current image selected in the images list."));
 
-    d->loopMode = new QCheckBox(i18n("Slideshow runs in a loop"), this);
+    d->loopMode = new QCheckBox(i18n("Slideshow runs in a loop"), panel);
     d->loopMode->setWhatsThis( i18n("Run the slideshow in a loop."));
 
-    d->showName = new QCheckBox(i18n("Show image file name"), this);
+    d->showName = new QCheckBox(i18n("Show image file name"), panel);
     d->showName->setWhatsThis( i18n("Show the image file name at the bottom of the screen."));
 
-    d->showDate = new QCheckBox(i18n("Show image creation date"), this);
+    d->showDate = new QCheckBox(i18n("Show image creation date"), panel);
     d->showDate->setWhatsThis( i18n("Show the image creation time/date at the bottom of the screen."));
 
-    d->showApertureFocal = new QCheckBox(i18n("Show camera aperture and focal length"), this);
+    d->showApertureFocal = new QCheckBox(i18n("Show camera aperture and focal length"), panel);
     d->showApertureFocal->setWhatsThis( i18n("Show the camera aperture and focal length at the bottom of the screen."));
 
-    d->showExpoSensitivity = new QCheckBox(i18n("Show camera exposure and sensitivity"), this);
+    d->showExpoSensitivity = new QCheckBox(i18n("Show camera exposure and sensitivity"), panel);
     d->showExpoSensitivity->setWhatsThis( i18n("Show the camera exposure and sensitivity at the bottom of the screen."));
 
-    d->showMakeModel = new QCheckBox(i18n("Show camera make and model"), this);
+    d->showMakeModel = new QCheckBox(i18n("Show camera make and model"), panel);
     d->showMakeModel->setWhatsThis( i18n("Show the camera make and model at the bottom of the screen."));
 
-    d->showComment = new QCheckBox(i18n("Show image caption"), this);
+    d->showComment = new QCheckBox(i18n("Show image caption"), panel);
     d->showComment->setWhatsThis( i18n("Show the image caption at the bottom of the screen."));
 
-    d->showRating = new QCheckBox(i18n("Show image rating"), this);
+    d->showRating = new QCheckBox(i18n("Show image rating"), panel);
     d->showRating->setWhatsThis( i18n("Show the digiKam image rating at the bottom of the screen."));
 
     // Only digiKam support this feature, showFoto do not support digiKam database information.

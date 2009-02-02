@@ -26,14 +26,14 @@
 
 // Qt includes.
 
-#include <QWidget>
+#include <QScrollArea>
 
 namespace Digikam
 {
 
 class SetupCategoryPriv;
 
-class SetupCategory : public QWidget
+class SetupCategory : public QScrollArea
 {
     Q_OBJECT
 

@@ -6,7 +6,7 @@
  * Date        : 2003-05-03
  * Description : mime types setup tab
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -82,9 +82,15 @@ public:
 };
 
 SetupMime::SetupMime(QWidget* parent)
-         : QWidget(parent), d(new SetupMimePriv)
+         : QScrollArea(parent), d(new SetupMimePriv)
 {
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    QWidget *panel = new QWidget(viewport());
+    panel->setAutoFillBackground(false);
+    setWidget(panel);
+    setWidgetResizable(true);
+    viewport()->setAutoFillBackground(false);
+
+    QVBoxLayout *layout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
@@ -97,7 +103,7 @@ SetupMime::SetupMime(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox *imageFileFilterBox = new QGroupBox(i18n("Image Files"), this);
+    QGroupBox *imageFileFilterBox = new QGroupBox(i18n("Image Files"), panel);
     QGridLayout* grid1            = new QGridLayout(imageFileFilterBox);
 
     QLabel *logoLabel1 = new QLabel(imageFileFilterBox);
@@ -133,7 +139,7 @@ SetupMime::SetupMime(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox *movieFileFilterBox = new QGroupBox(i18n("Movie Files"), this);
+    QGroupBox *movieFileFilterBox = new QGroupBox(i18n("Movie Files"), panel);
     QGridLayout* grid2            = new QGridLayout(movieFileFilterBox);
 
     QLabel *logoLabel2 = new QLabel(movieFileFilterBox);
@@ -171,7 +177,7 @@ SetupMime::SetupMime(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox *audioFileFilterBox = new QGroupBox(i18n("Audio Files"), this);
+    QGroupBox *audioFileFilterBox = new QGroupBox(i18n("Audio Files"), panel);
     QGridLayout* grid3            = new QGridLayout(audioFileFilterBox);
 
     QLabel *logoLabel3 = new QLabel(audioFileFilterBox);

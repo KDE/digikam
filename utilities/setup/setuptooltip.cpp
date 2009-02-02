@@ -124,18 +124,24 @@ public:
 };
 
 SetupToolTip::SetupToolTip(QWidget* parent)
-            : QWidget(parent), d(new SetupToolTipPriv)
+            : QScrollArea(parent), d(new SetupToolTipPriv)
 {
-    QVBoxLayout *vlay     = new QVBoxLayout(this);
+    QWidget *panel = new QWidget(viewport());
+    panel->setAutoFillBackground(false);
+    setWidget(panel);
+    setWidgetResizable(true);
+    viewport()->setAutoFillBackground(false);
 
-    d->fontSelect         = new DFontSelect(i18n("Tool-Tips Font:"), this);
+    QVBoxLayout *vlay     = new QVBoxLayout(panel);
+
+    d->fontSelect         = new DFontSelect(i18n("Tool-Tips Font:"), panel);
     d->fontSelect->setToolTip(i18n("Select here the font used to display text in tool-tips."));
 
-    d->tab                = new KTabWidget(this);
+    d->tab                = new KTabWidget(panel);
 
     // --------------------------------------------------------
 
-    KVBox *vbox           = new KVBox(this);
+    KVBox *vbox           = new KVBox(panel);
 
     d->showToolTipsBox    = new QCheckBox(i18n("Show icon-view and thumb-bar items tool-tips"), vbox);
     d->showToolTipsBox->setWhatsThis(i18n("Set this option to display image information when "
@@ -240,7 +246,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     // --------------------------------------------------------
 
-    KVBox *vbox2              = new KVBox(this);
+    KVBox *vbox2              = new KVBox(panel);
 
     d->showAlbumToolTipsBox   = new QCheckBox(i18n("Show album items tool-tips"), vbox2);
     d->showAlbumToolTipsBox->setWhatsThis(i18n("Set this option to display album information when "

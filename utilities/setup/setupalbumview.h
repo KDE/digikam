@@ -27,7 +27,7 @@
 
 // Qt includes.
 
-#include <QWidget>
+#include <QScrollArea>
 
 class KPageDialog;
 
@@ -36,7 +36,7 @@ namespace Digikam
 
 class SetupAlbumViewPriv;
 
-class SetupAlbumView : public QWidget
+class SetupAlbumView : public QScrollArea
 {
     Q_OBJECT
 

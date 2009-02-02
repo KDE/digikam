@@ -94,13 +94,19 @@ public:
 };
 
 SetupAlbumView::SetupAlbumView(QWidget* parent)
-              : QWidget(parent), d(new SetupAlbumViewPriv)
+              : QScrollArea(parent), d(new SetupAlbumViewPriv)
 {
-    QVBoxLayout *layout = new QVBoxLayout( this );
+    QWidget *panel = new QWidget(viewport());
+    panel->setAutoFillBackground(false);
+    setWidget(panel);
+    setWidgetResizable(true);
+    viewport()->setAutoFillBackground(false);
+
+    QVBoxLayout *layout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
-    QGroupBox *iconViewGroup = new QGroupBox(i18n("Icon-View Options"), this);
+    QGroupBox *iconViewGroup = new QGroupBox(i18n("Icon-View Options"), panel);
     QGridLayout *grid        = new QGridLayout(iconViewGroup);
 
     d->iconShowNameBox       = new QCheckBox(i18n("Show file &name"), iconViewGroup);
@@ -140,7 +146,7 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     d->rightClickActionComboBox->setToolTip(i18n("Here, choose what should happen when you "
                                                  "click on a thumbnail."));
 
-    d->iconViewFontSelect = new DFontSelect(i18n("Icon-view font:"), this);
+    d->iconViewFontSelect = new DFontSelect(i18n("Icon-view font:"), panel);
     d->iconViewFontSelect->setToolTip(i18n("Select here the font used to display text in all icon-view."));
 
     grid->addWidget(d->iconShowNameBox,          0, 0, 1, 1);
@@ -159,10 +165,10 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox *folderViewGroup = new QGroupBox(i18n("Folder-View Options"), this);
+    QGroupBox *folderViewGroup = new QGroupBox(i18n("Folder-View Options"), panel);
     QGridLayout* grid2         = new QGridLayout(folderViewGroup);
 
-    d->iconTreeThumbLabel      = new QLabel(i18n("Tree-view thumbnail size:"), this);
+    d->iconTreeThumbLabel      = new QLabel(i18n("Tree-view thumbnail size:"), panel);
     d->iconTreeThumbSize       = new KComboBox(this);
     d->iconTreeThumbSize->addItem(QString("16"));
     d->iconTreeThumbSize->addItem(QString("22"));
@@ -171,10 +177,10 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     d->iconTreeThumbSize->setToolTip(i18n("Set this option to configure the size in pixels of "
                                           "the tree-view thumbnails in digiKam's sidebars."));
 
-    d->treeViewFontSelect = new DFontSelect(i18n("Tree-view font:"), this);
+    d->treeViewFontSelect = new DFontSelect(i18n("Tree-view font:"), panel);
     d->treeViewFontSelect->setToolTip(i18n("Select here the font used to display text in all tree-view."));
 
-    d->showFolderTreeViewItemsCount = new QCheckBox(i18n("Show count of items in all tree-view"), this);
+    d->showFolderTreeViewItemsCount = new QCheckBox(i18n("Show count of items in all tree-view"), panel);
 
     grid2->addWidget(d->iconTreeThumbLabel,           0, 0, 1, 1);
     grid2->addWidget(d->iconTreeThumbSize,            0, 1, 1, 1);
@@ -185,7 +191,7 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Misc Options"), this);
+    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Misc Options"), panel);
     QGridLayout* grid3               = new QGridLayout(interfaceOptionsGroup);
 
     d->previewLoadFullImageSize      = new QCheckBox(i18n("Embedded preview loads full image size"), interfaceOptionsGroup);

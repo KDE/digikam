@@ -7,7 +7,7 @@
  * Description : camera setup tab.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -80,10 +80,16 @@ public:
 };
 
 SetupCamera::SetupCamera( QWidget* parent )
-           : QWidget(parent), d(new SetupCameraPriv)
+           : QScrollArea(parent), d(new SetupCameraPriv)
 {
-    QGridLayout* grid = new QGridLayout(this);
-    d->listView       = new QTreeWidget(this);
+    QWidget *panel = new QWidget(viewport());
+    panel->setAutoFillBackground(false);
+    setWidget(panel);
+    setWidgetResizable(true);
+    viewport()->setAutoFillBackground(false);
+
+    QGridLayout* grid = new QGridLayout(panel);
+    d->listView       = new QTreeWidget(panel);
     d->listView->setColumnCount(5);
     d->listView->setRootIsDecorated(false);
     d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -103,10 +109,10 @@ SetupCamera::SetupCamera( QWidget* parent )
 
     // -------------------------------------------------------------
 
-    d->addButton        = new QPushButton(this);
-    d->removeButton     = new QPushButton(this);
-    d->editButton       = new QPushButton(this);
-    d->autoDetectButton = new QPushButton(this);
+    d->addButton        = new QPushButton(panel);
+    d->removeButton     = new QPushButton(panel);
+    d->editButton       = new QPushButton(panel);
+    d->autoDetectButton = new QPushButton(panel);
 
     d->addButton->setText( i18n( "&Add..." ) );
     d->addButton->setIcon(SmallIcon("list-add"));
@@ -123,7 +129,7 @@ SetupCamera::SetupCamera( QWidget* parent )
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
 
-    KUrlLabel *gphotoLogoLabel = new KUrlLabel(this);
+    KUrlLabel *gphotoLogoLabel = new KUrlLabel(panel);
     gphotoLogoLabel->setText(QString());
     gphotoLogoLabel->setUrl("http://www.gphoto.org");
     gphotoLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-gphoto.png")));

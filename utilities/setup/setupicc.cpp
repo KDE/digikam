@@ -7,7 +7,7 @@
  * Description : Color management setup tab.
  *
  * Copyright (C) 2005-2007 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -148,14 +148,21 @@ public:
 };
 
 SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
-        : QWidget(parent), d(new SetupICCPriv)
+        : QScrollArea(parent), d(new SetupICCPriv)
 {
     d->mainDialog = dialog;
-    QVBoxLayout *layout = new QVBoxLayout(this);
+
+    QWidget *panel = new QWidget(viewport());
+    panel->setAutoFillBackground(false);
+    setWidget(panel);
+    setWidgetResizable(true);
+    viewport()->setAutoFillBackground(false);
+
+    QVBoxLayout *layout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
-    QGroupBox *colorPolicy = new QGroupBox(i18n("Color Management Policy"), this);
+    QGroupBox *colorPolicy = new QGroupBox(i18n("Color Management Policy"), panel);
     QGridLayout* grid      = new QGridLayout(colorPolicy);
 
     d->enableColorManagement = new QCheckBox(colorPolicy);
@@ -204,7 +211,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 
     // --------------------------------------------------------
 
-    d->defaultPathGB  = new QGroupBox(this);
+    d->defaultPathGB  = new QGroupBox(panel);
     QVBoxLayout *vlay = new QVBoxLayout(d->defaultPathGB);
 
     d->defaultPathGB->setTitle(i18n("Color Profiles Directory"));
@@ -221,7 +228,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 
     // --------------------------------------------------------
 
-    d->profilesGB      = new QGroupBox(i18n("ICC Profiles Settings"), this);
+    d->profilesGB      = new QGroupBox(i18n("ICC Profiles Settings"), panel);
     QGridLayout* grid2 = new QGridLayout(d->profilesGB);
 
     d->managedView = new QCheckBox(d->profilesGB);
@@ -310,7 +317,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 
     // --------------------------------------------------------
 
-    d->advancedSettingsGB = new QGroupBox(i18n("Advanced Settings"), this);
+    d->advancedSettingsGB = new QGroupBox(i18n("Advanced Settings"), panel);
     QGridLayout* grid3    = new QGridLayout(d->advancedSettingsGB);
 
     d->bpcAlgorithm = new QCheckBox(d->advancedSettingsGB);

@@ -27,14 +27,14 @@
 
 // Qt includes.
 
-#include <QWidget>
+#include <QScrollArea>
 
 namespace Digikam
 {
 
 class SetupMetadataPriv;
 
-class SetupMetadata : public QWidget
+class SetupMetadata : public QScrollArea
 {
     Q_OBJECT
 
