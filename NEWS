@@ -40,7 +40,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 032 ==> 182665 : Assign multiple tag photo.
 033 ==> 182610 : Curves Adjust tool in digiKam and showfoto could use Antialiasing for the curve.
 034 ==> 182754 : Add image via context menu to an open lighttable should not clear lighttable contents.
-035 ==> 
+035 ==> 182755 : Configure digiKam window too big.
+036 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
