@@ -6,7 +6,7 @@
  * Date        : 2005-04-02
  * Description : setup showFoto tab.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008 by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
@@ -92,14 +92,20 @@ public:
 };
 
 SetupEditor::SetupEditor(QWidget* parent )
-           : QWidget(parent), d(new SetupEditorPriv)
+           : QScrollArea(parent), d(new SetupEditorPriv)
 {
-    QVBoxLayout *layout = new QVBoxLayout( this );
+    QWidget *panel = new QWidget(viewport());
+    panel->setAutoFillBackground(false);
+    setWidget(panel);
+    setWidgetResizable(true);
+    viewport()->setAutoFillBackground(false);
+
+    QVBoxLayout *layout = new QVBoxLayout(panel);
     layout->setSpacing( KDialog::spacingHint() );
 
     // --------------------------------------------------------
 
-    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), this);
+    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), panel);
     QVBoxLayout *gLayout1            = new QVBoxLayout();
 
     d->themebackgroundColor = new QCheckBox(i18n("&Use current theme background color"),
@@ -141,7 +147,7 @@ SetupEditor::SetupEditor(QWidget* parent )
 
     // --------------------------------------------------------
 
-    QGroupBox *exposureOptionsGroup = new QGroupBox(i18n("Exposure Indicators"), this);
+    QGroupBox *exposureOptionsGroup = new QGroupBox(i18n("Exposure Indicators"), panel);
     QVBoxLayout *gLayout2           = new QVBoxLayout();
 
     KHBox *underExpoBox         = new KHBox(exposureOptionsGroup);
@@ -164,7 +170,7 @@ SetupEditor::SetupEditor(QWidget* parent )
 
     // --------------------------------------------------------
 
-    QGroupBox *ExifGroupOptions = new QGroupBox(i18n("EXIF Actions"), this);
+    QGroupBox *ExifGroupOptions = new QGroupBox(i18n("EXIF Actions"), panel);
     QVBoxLayout *gLayout3       = new QVBoxLayout();
 
     d->exifRotateBox = new QCheckBox(ExifGroupOptions);
@@ -179,7 +185,7 @@ SetupEditor::SetupEditor(QWidget* parent )
 
     // --------------------------------------------------------
 
-    QGroupBox *sortOptionsGroup = new QGroupBox(i18n("Sort order for images"), this);
+    QGroupBox *sortOptionsGroup = new QGroupBox(i18n("Sort order for images"), panel);
     QVBoxLayout *gLayout4       = new QVBoxLayout();
 
     KHBox* sortBox       = new KHBox(sortOptionsGroup);

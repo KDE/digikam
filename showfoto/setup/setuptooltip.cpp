@@ -6,7 +6,7 @@
  * Date        : 2006-07-09
  * Description : item tool tip configuration setup tab
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -99,19 +99,25 @@ public:
 };
 
 SetupToolTip::SetupToolTip(QWidget* parent)
-            : QWidget(parent), d(new SetupToolTipPriv)
+            : QScrollArea(parent), d(new SetupToolTipPriv)
 {
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    d->showToolTipsBox  = new QCheckBox(i18n("Show Thumbbar items toolti&ps"), this);
+    QWidget *panel = new QWidget(viewport());
+    panel->setAutoFillBackground(false);
+    setWidget(panel);
+    setWidgetResizable(true);
+    viewport()->setAutoFillBackground(false);
+
+    QVBoxLayout *layout = new QVBoxLayout(panel);
+    d->showToolTipsBox  = new QCheckBox(i18n("Show Thumbbar items toolti&ps"), panel);
     d->showToolTipsBox->setWhatsThis(i18n("Set this option to display the image information when "
                                           "the mouse hovers over a thumbbar item."));
 
-    d->fontSelect       = new DFontSelect(i18n("Font:"), this);
+    d->fontSelect       = new DFontSelect(i18n("Font:"), panel);
     d->fontSelect->setToolTip(i18n("Select here the font used to display text in tooltips."));
 
     // --------------------------------------------------------
 
-    d->fileSettingBox     = new QGroupBox(i18n("File/Image Information"), this);
+    d->fileSettingBox     = new QGroupBox(i18n("File/Image Information"), panel);
     QVBoxLayout *gLayout1 = new QVBoxLayout(d->fileSettingBox);
 
     d->showFileNameBox = new QCheckBox(i18n("Show file name"), d->fileSettingBox);
@@ -139,7 +145,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     // --------------------------------------------------------
 
-    d->photoSettingBox    = new QGroupBox(i18n("Photograph Information"), this);
+    d->photoSettingBox    = new QGroupBox(i18n("Photograph Information"), panel);
     QVBoxLayout *gLayout2 = new QVBoxLayout(d->photoSettingBox);
 
     d->showPhotoMakeBox = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
