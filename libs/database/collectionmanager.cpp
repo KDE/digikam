@@ -6,7 +6,7 @@
  * Date        : 2007-04-09
  * Description : Collection location management
  *
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -229,7 +229,7 @@ public:
     {
         d->changingDB = false;
     }
-    CollectionManagerPrivate *d;
+    CollectionManagerPrivate* const d;
 };
 
 } // namespace Digikam
@@ -573,9 +573,8 @@ void CollectionManager::cleanUp()
 }
 
 CollectionManager::CollectionManager()
+    : d(new CollectionManagerPrivate(this))
 {
-    d = new CollectionManagerPrivate(this);
-
     qRegisterMetaType<CollectionLocation>("CollectionLocation");
 
     connect(Solid::DeviceNotifier::instance(),

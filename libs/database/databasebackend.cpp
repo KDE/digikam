@@ -6,7 +6,7 @@
  * Date        : 2007-04-15
  * Description : Abstract database backend
  *
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,11 +50,16 @@ class DatabaseBackendPriv
 public:
 
     DatabaseBackendPriv(DatabaseBackend *backend)
-        : imageChangesetContainer(this), imageTagChangesetContainer(this),
-          collectionImageChangesetContainer(this), albumChangesetContainer(this),
-          tagChangesetContainer(this), albumRootChangesetContainer(this), searchChangesetContainer(this)
+        : imageChangesetContainer(this),
+          imageTagChangesetContainer(this),
+          collectionImageChangesetContainer(this),
+          albumChangesetContainer(this),
+          tagChangesetContainer(this),
+          albumRootChangesetContainer(this),
+          searchChangesetContainer(this),
+          q(backend)
     {
-        q               = backend;
+
         status          = DatabaseBackend::Unavailable;
         watch           = 0;
         isInTransaction = false;
@@ -134,8 +139,8 @@ public:
 
         bool success = db.open();
 
-        threadDatabases[thread] = db;
-        databasesValid[thread] = 1;
+        threadDatabases[thread]  = db;
+        databasesValid[thread]   = 1;
         transactionCount[thread] = 0;
 
         return success;
@@ -184,7 +189,7 @@ public:
     public:
 
         ChangesetContainer(DatabaseBackendPriv *d)
-        : d(d)
+            : d(d)
         {
         }
 
@@ -203,8 +208,8 @@ public:
             changesets.clear();
         }
 
-        QList<T>             changesets;
-        DatabaseBackendPriv *d;
+        QList<T>                   changesets;
+        DatabaseBackendPriv* const d;
     };
 
     ChangesetContainer<ImageChangeset>           imageChangesetContainer;
@@ -241,7 +246,7 @@ public:
 
     DatabaseWatch                *watch;
 
-    DatabaseBackend              *q;
+    DatabaseBackend* const        q;
 
 };
 
