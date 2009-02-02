@@ -5,20 +5,20 @@
  *
  * Date        : 2007-09-07
  * Description : Gphoto2 camera config dialog
- * 
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef GPCONFIGDLG_H
@@ -44,25 +44,25 @@ class GPConfigDlgPrivate;
 
 class GPConfigDlg : public KDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	GPConfigDlg(Camera *camera, CameraWidget *widget, QWidget *parent=0);
+    GPConfigDlg(Camera *camera, CameraWidget *widget, QWidget *parent=0);
     ~GPConfigDlg();
 
 private slots:
 
-	void slotOk();
+    void slotOk();
 
 private:
 
-	void appendWidget(QWidget *parent, CameraWidget* widget);
-	void updateWidgetValue(CameraWidget* widget);
+    void appendWidget(QWidget *parent, CameraWidget* widget);
+    void updateWidgetValue(CameraWidget* widget);
 
 private:
-	
-    GPConfigDlgPrivate *d;
+
+    GPConfigDlgPrivate* const d;
 };
 
 }  // namespace Digikam

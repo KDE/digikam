@@ -7,8 +7,8 @@
  * Description : a Digikam image editor plugin for superimpose a 
  *               template to an image.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,37 +39,38 @@
 namespace DigikamSuperImposeImagesPlugin
 {
 
-class DirSelectWidget : public K3FileTreeView 
+class DirSelectWidgetPrivate;
+
+class DirSelectWidget : public K3FileTreeView
 {
 Q_OBJECT
 
 public:
-     
+
     DirSelectWidget(QWidget* parent, const char* name=0, QString headerLabel=QString());
 
     DirSelectWidget(KUrl rootUrl=KUrl("/"), KUrl currentUrl=KUrl(), 
                     QWidget* parent=0, const char* name=0, QString headerLabel=QString());
 
     ~DirSelectWidget();
-     
+
     KUrl path() const;
-    KUrl rootPath(void);
+    KUrl rootPath();
     void setRootPath(KUrl rootUrl, KUrl currentUrl=KUrl(QString()));
     void setCurrentPath(KUrl currentUrl);
 
 signals :
-    
+
     void folderItemSelected(const KUrl &url);
-        
+
 protected slots:
 
     void load();
-    void slotFolderSelected(Q3ListViewItem *);
+    void slotFolderSelected(Q3ListViewItem*);
 
 private:
-    
-    struct Private;
-    Private* d;
+
+    DirSelectWidgetPrivate* const d;
 };
 
 }  // namespace DigikamSuperImposeImagesPlugin

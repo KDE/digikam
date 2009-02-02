@@ -229,7 +229,8 @@ class ChangingDB
 {
 public:
 
-    ChangingDB(AlbumManagerPriv *d) : d(d)
+    ChangingDB(AlbumManagerPriv *d)
+        : d(d)
     {
         d->changingDB = true;
     }
@@ -237,7 +238,7 @@ public:
     {
         d->changingDB = false;
     }
-    AlbumManagerPriv *d;
+    AlbumManagerPriv* const d;
 };
 
 class AlbumManagerCreator { public: AlbumManager object; };

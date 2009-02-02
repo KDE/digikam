@@ -7,8 +7,8 @@
  * Description : a Digikam image editor plugin for superimpose a
  *               template to an image.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +22,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "dirselectwidget.h"
 #include "dirselectwidget.moc"
@@ -44,8 +43,12 @@
 namespace DigikamSuperImposeImagesPlugin
 {
 
-struct DirSelectWidget::Private
+class DirSelectWidgetPrivate
 {
+public:
+
+    DirSelectWidgetPrivate(){};
+
     KFileTreeBranch* m_item;
     QStringList      m_pendingPath;
     QString          m_handled;
@@ -53,10 +56,8 @@ struct DirSelectWidget::Private
 };
 
 DirSelectWidget::DirSelectWidget(QWidget* parent, const char* name, QString headerLabel)
-               : K3FileTreeView( parent)
+               : K3FileTreeView( parent), d(new DirSelectWidgetPrivate)
 {
-    d = new Private;
-
     setObjectName(name);
     addColumn( headerLabel );
 
@@ -68,10 +69,8 @@ DirSelectWidget::DirSelectWidget(QWidget* parent, const char* name, QString head
 
 DirSelectWidget::DirSelectWidget(KUrl rootUrl, KUrl currentUrl,
                                  QWidget* parent, const char* name, QString headerLabel)
-               : K3FileTreeView( parent)
+               : K3FileTreeView( parent), d(new DirSelectWidgetPrivate)
 {
-    d = new Private;
-
     setObjectName(name);
     addColumn( headerLabel );
 
@@ -171,7 +170,7 @@ void DirSelectWidget::setRootPath(KUrl rootUrl, KUrl currentUrl)
              this, SLOT( slotFolderSelected(Q3ListViewItem *) ) );
 }
 
-KUrl DirSelectWidget::rootPath(void)
+KUrl DirSelectWidget::rootPath()
 {
     return d->m_rootUrl;
 }
