@@ -6,8 +6,8 @@
  * Date        : 2008-05-19
  * Description : Fuzzy search sidebar tab contents.
  *
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -116,7 +116,9 @@ public:
         fingerprintsChecked   = false;
     }
 
-    QColor                 selColor;
+    bool                    fingerprintsChecked;
+
+    QColor                  selColor;
 
     QToolButton            *resetButton;
     QToolButton            *saveBtnSketch;
@@ -161,25 +163,29 @@ public:
 
     AlbumPointer<SAlbum>    imageSAlbum;
     AlbumPointer<SAlbum>    sketchSAlbum;
-
-    bool                    fingerprintsChecked;
 };
 
 FuzzySearchView::FuzzySearchView(QWidget *parent)
-               : QWidget(parent), d(new FuzzySearchViewPriv)
+               : QScrollArea(parent), d(new FuzzySearchViewPriv)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
+    QWidget *panel = new QWidget(viewport());
+    panel->setAutoFillBackground(false);
+    setWidget(panel);
+    setWidgetResizable(true);
     setAttribute(Qt::WA_DeleteOnClose);
     setAcceptDrops(true);
+    viewport()->setAutoFillBackground(false);
+    viewport()->setAcceptDrops(true);
 
-    QVBoxLayout *vlay    = new QVBoxLayout(this);
-    d->tabWidget         = new KTabWidget(this);
+    QVBoxLayout *vlay    = new QVBoxLayout(panel);
+    d->tabWidget         = new KTabWidget(panel);
 
     // ---------------------------------------------------------------
     // Find Similar Images Panel
 
-    QWidget *imagePanel = new QWidget(this);
+    QWidget *imagePanel = new QWidget(panel);
     QGridLayout *grid   = new QGridLayout(imagePanel);
     QWidget *box2       = new QWidget(imagePanel);
     QVBoxLayout *vlay3  = new QVBoxLayout(box2);
@@ -264,7 +270,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     // ---------------------------------------------------------------
     // Find by Sketch Panel
 
-    QWidget *sketchPanel = new QWidget(this);
+    QWidget *sketchPanel = new QWidget(panel);
     QGridLayout *grid2   = new QGridLayout(sketchPanel);
     QWidget *box         = new QWidget(sketchPanel);
     QVBoxLayout *vlay2   = new QVBoxLayout(box);
@@ -372,7 +378,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     // ---------------------------------------------------------------
     // Find Duplicates Panel
 
-    d->findDuplicatesPanel = new FindDuplicatesView(this);
+    d->findDuplicatesPanel = new FindDuplicatesView(panel);
 
     d->tabWidget->insertTab(FuzzySearchViewPriv::SIMILARS,   imagePanel,             i18n("Image"));
     d->tabWidget->insertTab(FuzzySearchViewPriv::SKETCH,     sketchPanel,            i18n("Sketch"));
@@ -380,7 +386,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    d->folderView            = new KVBox(this);
+    d->folderView            = new KVBox(panel);
     d->fuzzySearchFolderView = new FuzzySearchFolderView(d->folderView);
     d->searchFuzzyBar        = new SearchTextBar(d->folderView, "FuzzySearchViewSearchFuzzyBar");
     d->folderView->setSpacing(KDialog::spacingHint());
