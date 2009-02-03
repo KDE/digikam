@@ -93,6 +93,12 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     else
         kDebug(50003) << "failed to remove the shortcut of khtml's findPrevious action" << endl;
 
+    KAction* selectAllAction = qobject_cast<KAction*>(actionCollection()->action("selectAll"));
+    if (selectAllAction)
+        selectAllAction->setShortcut(KShortcut());
+    else
+        kDebug(50003) << "failed to remove the shortcut of khtml's selectAll action" << endl;
+
     // ------------------------------------------------------------
 
     connect(browserExtension(), SIGNAL(openUrlRequest(const KUrl&, const KParts::OpenUrlArguments&, const KParts::BrowserArguments&)),
