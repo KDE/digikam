@@ -538,8 +538,9 @@ bool CollectionManagerPrivate::checkIfExists(const QString &filePath, QList<Coll
     DatabaseAccess access;
     foreach (AlbumRootLocation *location, locations)
     {
-        kDebug() << filePath << location->albumRootPath();
-        if (filePath.startsWith(location->albumRootPath()))
+        QString locationPath = location->albumRootPath();
+        kDebug() << filePath << locationPath;
+        if (!locationPath.isEmpty() && filePath.startsWith(locationPath))
         {
             bool isDeleted = false;
             foreach (const CollectionLocation &deletedLoc, assumeDeleted)
