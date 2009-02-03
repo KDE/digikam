@@ -2145,9 +2145,8 @@ void DigikamApp::loadPlugins()
     ignores.append( "KameraKlient" );
 
     // These plugins have been renamed with 0.2.0-rc1
-    ignores.append( "FbExport" );
-    ignores.append( "SmugExport" );
-    ignores.append( "SmugMug" );
+    ignores.append( "Facebook Exporter" );
+    ignores.append( "SmugMug Exporter" );
 
     d->kipiPluginLoader = new KIPI::PluginLoader( ignores, d->kipiInterface );
 
