@@ -92,7 +92,8 @@ public:
     QPixmap  itemBasePixmapSelected() const;
 
     virtual void collapseView(CollapseMode mode = RestoreCurrentAlbum);
-    void takeItem(Q3ListViewItem* item);
+    virtual void takeItem(Q3ListViewItem* item);
+    void notifyTakeItem(Q3ListViewItem* item);
 
 protected:
 

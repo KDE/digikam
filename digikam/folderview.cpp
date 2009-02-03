@@ -214,6 +214,12 @@ void FolderView::slotIconSizeChanged()
 
 void FolderView::takeItem(Q3ListViewItem* item)
 {
+    notifyTakeItem(item);
+    Q3ListView::takeItem(item);
+}
+
+void FolderView::notifyTakeItem(Q3ListViewItem* item)
+{
     if (d->toolTipItem == item)
     {
         d->toolTipItem = 0;
@@ -223,8 +229,6 @@ void FolderView::takeItem(Q3ListViewItem* item)
 
     if (d->highlightedItem == item)
         d->highlightedItem = 0;
-
-    Q3ListView::takeItem(item);
 }
 
 void FolderView::leaveEvent(QEvent* e)

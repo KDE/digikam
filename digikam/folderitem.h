@@ -53,6 +53,8 @@ public:
     void  setHighlighted(bool val);
     bool  isHighlighted() const;
 
+    virtual void takeItem(Q3ListViewItem *item);
+
 protected:
 
     void paintCell(QPainter* p, const QColorGroup & cg, int column, int width, int align);
@@ -78,6 +80,8 @@ public:
 
     void  setHighlighted(bool val);
     bool  isHighlighted() const;
+
+    virtual void takeItem(Q3ListViewItem *item);
 
 protected:
 

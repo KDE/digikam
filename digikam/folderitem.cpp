@@ -148,6 +148,15 @@ int FolderItem::id() const
     return 0;
 }
 
+void FolderItem::takeItem(Q3ListViewItem *item)
+{
+    FolderView *fv = dynamic_cast<FolderView*>(listView());
+    if (fv)
+        fv->notifyTakeItem(item);
+
+    Q3ListViewItem::takeItem(item);
+}
+
 // ------------------------------------------------------------------------------------
 
 FolderCheckListItem::FolderCheckListItem(Q3ListView* parent, const QString& text,
@@ -177,6 +186,15 @@ void FolderCheckListItem::setHighlighted(bool b)
 bool FolderCheckListItem::isHighlighted() const
 {
     return m_highlighted;
+}
+
+void FolderCheckListItem::takeItem(Q3ListViewItem *item)
+{
+    FolderView *fv = dynamic_cast<FolderView*>(listView());
+    if (fv)
+        fv->notifyTakeItem(item);
+
+    Q3CheckListItem::takeItem(item);
 }
 
 void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup& cg, int column, int width, int)
