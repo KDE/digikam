@@ -37,6 +37,7 @@
 
 // KDE includes.
 
+#include <kapplication.h>
 #include <kdebug.h>
 #include <kdialog.h>
 #include <klocale.h>
@@ -306,12 +307,15 @@ void FindDuplicatesView::cancelFindDuplicates(KJob* job)
     d->cancelFindDuplicates = false;
 
     enableControlWidgets(true);
+    kapp->restoreOverrideCursor();
+
     populateTreeView();
 }
 
 void FindDuplicatesView::slotCancelButtonPressed()
 {
     d->cancelFindDuplicates = true;
+    kapp->setOverrideCursor(Qt::WaitCursor);
 }
 
 void FindDuplicatesView::slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong amount)
