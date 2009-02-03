@@ -356,11 +356,13 @@ void FreeSpaceWidget::updateToolTip()
 
 void FreeSpaceWidget::enterEvent(QEvent *e)
 {
+    Q_UNUSED(e)
     d->toolTip->show();
 }
 
 void FreeSpaceWidget::leaveEvent(QEvent* e)
 {
+    Q_UNUSED(e)
     d->toolTip->hide();
 }
 
