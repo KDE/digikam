@@ -7,7 +7,8 @@
  * Description : a widget to display a welcome page
  *               on root album.
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens a gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -75,29 +76,7 @@ WelcomePageView::WelcomePageView(QWidget* parent)
 
     // Disable some KHTMLPart actions as they break predefined digiKam actions.
     // We can re-assign the disabled actions later if we ever need to.
-    KAction* findAction = qobject_cast<KAction*>(actionCollection()->action("find"));
-    if (findAction)
-        findAction->setShortcut(KShortcut());
-    else
-        kDebug(50003) << "failed to remove the shortcut of khtml's find action" << endl;
-
-    KAction* findNextAction = qobject_cast<KAction*>(actionCollection()->action("findNext"));
-    if (findNextAction)
-        findNextAction->setShortcut(KShortcut());
-    else
-        kDebug(50003) << "failed to remove the shortcut of khtml's findNext action" << endl;
-
-    KAction* findPreviousAction = qobject_cast<KAction*>(actionCollection()->action("findPrevious"));
-    if (findPreviousAction)
-        findPreviousAction->setShortcut(KShortcut());
-    else
-        kDebug(50003) << "failed to remove the shortcut of khtml's findPrevious action" << endl;
-
-    KAction* selectAllAction = qobject_cast<KAction*>(actionCollection()->action("selectAll"));
-    if (selectAllAction)
-        selectAllAction->setShortcut(KShortcut());
-    else
-        kDebug(50003) << "failed to remove the shortcut of khtml's selectAll action" << endl;
+    disablePredefinedActions();
 
     // ------------------------------------------------------------
 
@@ -306,6 +285,33 @@ void WelcomePageView::slotThemeChanged()
     write(content);
     end();
     show();
+}
+
+void WelcomePageView::disablePredefinedActions()
+{
+    KAction* findAction = qobject_cast<KAction*>(actionCollection()->action("find"));
+    if (findAction)
+        findAction->setShortcut(KShortcut());
+    else
+        kDebug(50003) << "failed to remove the shortcut of khtml's find action" << endl;
+
+    KAction* findNextAction = qobject_cast<KAction*>(actionCollection()->action("findNext"));
+    if (findNextAction)
+        findNextAction->setShortcut(KShortcut());
+    else
+        kDebug(50003) << "failed to remove the shortcut of khtml's findNext action" << endl;
+
+    KAction* findPreviousAction = qobject_cast<KAction*>(actionCollection()->action("findPrevious"));
+    if (findPreviousAction)
+        findPreviousAction->setShortcut(KShortcut());
+    else
+        kDebug(50003) << "failed to remove the shortcut of khtml's findPrevious action" << endl;
+
+    KAction* selectAllAction = qobject_cast<KAction*>(actionCollection()->action("selectAll"));
+    if (selectAllAction)
+        selectAllAction->setShortcut(KShortcut());
+    else
+        kDebug(50003) << "failed to remove the shortcut of khtml's selectAll action" << endl;
 }
 
 }  // namespace Digikam

@@ -4,10 +4,11 @@
  * http://www.digikam.org
  *
  * Date        : 2006-12-20
- * Description : a view to display a welcome page 
+ * Description : a widget to display a welcome page
  *               on root album.
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens a gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,6 +58,7 @@ private:
     QByteArray fileToString(const QString& aFileName);
     QString    infoPage();
     void       updateInfoPageCss();
+    void       disablePredefinedActions();
 
 private slots:
 
