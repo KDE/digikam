@@ -42,7 +42,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 034 ==> 182754 : Add image via context menu to an open lighttable should not clear lighttable contents.
 035 ==> 182755 : Configure digiKam window too big.
 036 ==> 182829 : Height of main window cannot be reduced enough to fit on low res. displays.
-037 ==> 
+037 ==> 182995 : Crash when deleting empty album.
+038 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
