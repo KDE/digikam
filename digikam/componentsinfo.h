@@ -6,7 +6,7 @@
  * Date        : 2008-07-30
  * Description : digiKam components info dialog.
  *
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -68,9 +68,9 @@ static inline void showDigikamComponentsInfo()
 
     list.insert(i18n("LibKipi"),    KIPI::Interface::version());
 
-    LibsInfoDlg dlg(kapp->activeWindow());
-    dlg.setComponentsInfoMap(list);
-    dlg.exec();
+    LibsInfoDlg *dlg = new LibsInfoDlg(kapp->activeWindow());
+    dlg->setComponentsInfoMap(list);
+    dlg->show();
 }
 
 }  // namespace Digikam
