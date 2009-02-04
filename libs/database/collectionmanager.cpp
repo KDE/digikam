@@ -947,8 +947,9 @@ CollectionLocation CollectionManager::locationForPath(const QString &filePath)
     DatabaseAccess access;
     foreach (AlbumRootLocation *location, d->locations)
     {
-        kDebug(50003) << "Testing location " << location->id() << filePath << location->albumRootPath() << endl;
-        if (filePath.startsWith(location->albumRootPath()))
+        QString rootPath = location->albumRootPath();
+        kDebug(50003) << "Testing location " << location->id() << filePath << rootPath << endl;
+        if (!rootPath.isEmpty() && filePath.startsWith(rootPath))
             return *location;
     }
     return CollectionLocation();
@@ -980,7 +981,8 @@ QString CollectionManager::albumRootPath(const QString &filePath)
     DatabaseAccess access;
     foreach (AlbumRootLocation *location, d->locations)
     {
-        if (filePath.startsWith(location->albumRootPath()))
+        QString rootPath = location->albumRootPath();
+        if (!rootPath.isEmpty() && filePath.startsWith(rootPath))
             return location->albumRootPath();
     }
     return QString();
@@ -1013,6 +1015,8 @@ QString CollectionManager::album(const QString &filePath)
     foreach (AlbumRootLocation *location, d->locations)
     {
         QString absolutePath = location->albumRootPath();
+        if (absolutePath.isEmpty())
+            continue;
         QString firstPart = filePath.left(absolutePath.length());
         if (firstPart == absolutePath)
         {
