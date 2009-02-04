@@ -69,7 +69,7 @@ int SchemaUpdater::schemaVersion()
 
 int SchemaUpdater::filterSettingsVersion()
 {
-    return 1;
+    return 2;
 }
 
 SchemaUpdater::SchemaUpdater(DatabaseAccess *access)
@@ -298,6 +298,9 @@ void SchemaUpdater::defaultFilterSettings(QStringList &defaultImageFilter,
                                           QStringList &defaultVideoFilter,
                                           QStringList &defaultAudioFilter)
 {
+    //NOTE for updating:
+    //When changing anything here, just increment filterSettingsVersion() so that the changes take effect
+
     defaultImageFilter << "jpg" << "jpeg" << "jpe"                    // JPEG
                        << "jp2" << "j2k" << "jpx"  << "jpc" << "pgx"  // JPEG-2000
                        << "tif" << "tiff"                             // TIFF
