@@ -39,7 +39,7 @@
 
 #include <kaboutdata.h>
 #include <kactioncollection.h>
-#include <kactioncategory.h>
+//#include <kactioncategory.h>
 #include <kactionmenu.h>
 #include <kapplication.h>
 #include <kdebug.h>
@@ -2204,26 +2204,32 @@ void DigikamApp::slotKipiPluginPlug()
 
         QList<KAction*> actions = plugin->actions();
 
-        if (!actions.isEmpty() && actions.count() > 3)
-        {
-            KActionCategory *category = new KActionCategory(plugin->name(), d->kipipluginsActionCollection);
-            foreach (QAction *action, actions)
-            {
-                category->addAction(action->objectName(), action);
-            }
-        }
-        else
-        {
-            foreach (QAction *action, actions)
-            {
-                d->kipipluginsActionCollection->addAction(action->objectName(), action);
-            }
-        }
-
         // List of obsolete kipi-plugins to not load.
         QStringList pluginActionsDisabled;
         pluginActionsDisabled << QString("raw_converter_single");  // Obsolete Since 0.9.5 and new Raw Import tool.
 
+        // add actions to kipipluginsActionCollection
+//        if (!actions.isEmpty() && actions.count() > 3)
+//        {
+//            KActionCategory *category = new KActionCategory(plugin->name(), d->kipipluginsActionCollection);
+//            foreach (QAction *action, actions)
+//            {
+//                QString actionName(action->objectName());
+//                if (!pluginActionsDisabled.contains(actionName))
+//                    category->addAction(actionName, action);
+//            }
+//        }
+//        else
+//        {
+        foreach (KAction *action, actions)
+        {
+            QString actionName(action->objectName());
+            if (!pluginActionsDisabled.contains(actionName))
+                d->kipipluginsActionCollection->addAction(actionName, action);
+        }
+//        }
+
+        // add actions to actionlists
         foreach (KAction* action, actions)
         {
             QString actionName(action->objectName());
