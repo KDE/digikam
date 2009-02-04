@@ -2177,7 +2177,7 @@ void DigikamApp::slotKipiPluginPlug()
     // Remove Advanced slideshow kipi-plugin action from View/Slideshow menu.
     foreach(QAction *action, d->slideShowAction->menu()->actions())
     {
-        if (action->objectName() == QString("slideshow"))
+        if (action->objectName() == QString("advancedslideshow"))
         {
             d->slideShowAction->removeAction(action);
             break;
@@ -2256,7 +2256,7 @@ void DigikamApp::slotKipiPluginPlug()
                     case KIPI::ImagesPlugin:      d->kipiImageActions.append(action); break;
                     case KIPI::ToolsPlugin:
                     {
-                        if (actionName == QString("slideshow"))
+                        if (actionName == QString("advancedslideshow"))
                         {
                             // Add Advanced slideshow kipi-plugin action to View/Slideshow menu.
                             d->slideShowAction->addAction(action);
