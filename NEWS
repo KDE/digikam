@@ -45,7 +45,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 037 ==> 182995 : Crash when deleting empty album.
 038 ==> 182013 : Sensitivity is not shown for rw2 files.
 039 ==> 175205 : The application digiKam (digikam) crashed and caused the signal 11 (SIGSEGV).
-040 ==> 
+040 ==> 182903 : digiKam crashes after removing the database file.
+041 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
