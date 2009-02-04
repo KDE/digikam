@@ -167,6 +167,7 @@ public:
         contributeAction                     = 0;
         showBarAction                        = 0;
         showMenuBarAction                    = 0;
+        kipipluginsActionCollection          = 0;
     }
 
     bool                                fullScreen;
@@ -186,6 +187,9 @@ public:
     KMenu                              *manuallyAddedCamerasMenu;
 
     KSharedConfig::Ptr                  config;
+
+    // KIPI actionCollection
+    KActionCollection                  *kipipluginsActionCollection;
 
     // Album Actions
     KAction                            *newAction;

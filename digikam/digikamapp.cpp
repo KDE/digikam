@@ -2032,35 +2032,7 @@ void DigikamApp::slotEditKeys()
     KShortcutsDialog dialog(KShortcutsEditor::AllActions,
                             KShortcutsEditor::LetterShortcutsAllowed, this);
     dialog.addCollection( actionCollection(), i18nc("general keyboard shortcuts", "General") );
-
-    KActionCollection *kipiplugins = new KActionCollection(this, KGlobal::mainComponent());
-
-    KIPI::PluginLoader::PluginList list = d->kipiPluginLoader->pluginList();
-    foreach (KIPI::PluginLoader::Info *info, list)
-    {
-        if (info)
-        {
-            QList<QAction*> actions = info->plugin()->actionCollection()->actions();
-            if (!actions.isEmpty() && actions.count() > 3)
-            {
-                KActionCategory *category = new KActionCategory(info->name(), kipiplugins);
-                foreach (QAction *action, actions)
-                {
-                    category->addAction(action->objectName(), action);
-                }
-            }
-            else
-            {
-                foreach (QAction *action, actions)
-                {
-                    kipiplugins->addAction(action->objectName(), action);
-                }
-            }
-        }
-    }
-
-    kipiplugins->readSettings();
-    dialog.addCollection(kipiplugins, i18nc("KIPI-Plugins keyboard shortcuts", "KIPI-Plugins"));
+    dialog.addCollection(d->kipipluginsActionCollection, i18nc("KIPI-Plugins keyboard shortcuts", "KIPI-Plugins"));
     dialog.configure();
 }
 
@@ -2192,6 +2164,10 @@ void DigikamApp::slotKipiPluginPlug()
     unplugActionList(QString::fromLatin1("batch_actions"));
     unplugActionList(QString::fromLatin1("album_actions"));
 
+    if (d->kipipluginsActionCollection)
+        delete d->kipipluginsActionCollection;
+    d->kipipluginsActionCollection = new KActionCollection(this, KGlobal::mainComponent());
+
     // Remove Advanced slideshow kipi-plugin action from View/Slideshow menu.
     foreach(QAction *action, d->slideShowAction->menu()->actions())
     {
@@ -2227,6 +2203,22 @@ void DigikamApp::slotKipiPluginPlug()
         // Plugin category identification using KAction method based.
 
         QList<KAction*> actions = plugin->actions();
+
+        if (!actions.isEmpty() && actions.count() > 3)
+        {
+            KActionCategory *category = new KActionCategory(plugin->name(), d->kipipluginsActionCollection);
+            foreach (QAction *action, actions)
+            {
+                category->addAction(action->objectName(), action);
+            }
+        }
+        else
+        {
+            foreach (QAction *action, actions)
+            {
+                d->kipipluginsActionCollection->addAction(action->objectName(), action);
+            }
+        }
 
         // List of obsolete kipi-plugins to not load.
         QStringList pluginActionsDisabled;
@@ -2269,6 +2261,9 @@ void DigikamApp::slotKipiPluginPlug()
             }
         }
     }
+
+    // load KIPI settings
+    d->kipipluginsActionCollection->readSettings();
 
     // Create GUI menu in according with plugins.
 
