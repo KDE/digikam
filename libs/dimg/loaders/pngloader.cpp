@@ -6,7 +6,7 @@
  * Date        : 2005-11-01
  * Description : a PNG image loader for DImg framework.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -795,7 +795,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     imageSetAttribute("savedformat", "PNG");
 
-    // Here there is no writeMetadata() call until Exiv2 will support PNG file format.
+    saveMetadata(filePath);
 
     return true;
 }
