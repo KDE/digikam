@@ -2212,47 +2212,35 @@ void DigikamApp::slotKipiPluginPlug()
         QStringList pluginActionsDisabled;
         pluginActionsDisabled << QString("raw_converter_single");  // Obsolete Since 0.9.5 and new Raw Import tool.
 
-        for(QList<KAction*>::Iterator it2 = actions.begin(); it2 != actions.end(); ++it2)
+        foreach (KAction* action, actions)
         {
-            QString actionName((*it2)->objectName());
+            QString actionName(action->objectName());
 
             if (!pluginActionsDisabled.contains(actionName))
             {
-                if (plugin->category(*it2) == KIPI::ImagesPlugin)
+                switch (plugin->category(action))
                 {
-                    d->kipiImageActions.append(*it2);
-                }
-                else if (plugin->category(*it2) == KIPI::ExportPlugin)
-                {
-                    d->kipiFileActionsExport.append(*it2);
-                }
-                else if (plugin->category(*it2) == KIPI::ImportPlugin)
-                {
-                    d->kipiFileActionsImport.append(*it2);
-                }
-                else if (plugin->category(*it2) == KIPI::ToolsPlugin)
-                {
-                    if (actionName == QString("slideshow"))
+                    case KIPI::BatchPlugin:       d->kipiBatchActions.append(action); break;
+                    case KIPI::CollectionsPlugin: d->kipiAlbumActions.append(action); break;
+                    case KIPI::ImportPlugin:      d->kipiFileActionsImport.append(action); break;
+                    case KIPI::ExportPlugin:      d->kipiFileActionsExport.append(action); break;
+                    case KIPI::ImagesPlugin:      d->kipiImageActions.append(action); break;
+                    case KIPI::ToolsPlugin:
                     {
-                        // Add Advanced slideshow kipi-plugin action to View/Slideshow menu.
-                        d->slideShowAction->addAction(*it2);
+                        if (actionName == QString("slideshow"))
+                        {
+                            // Add Advanced slideshow kipi-plugin action to View/Slideshow menu.
+                            d->slideShowAction->addAction(action);
+                        }
+                        else
+                        {
+                            d->kipiToolsActions.append(action);
+                        }
+                        break;
                     }
-                    else
-                    {
-                        d->kipiToolsActions.append(*it2);
-                    }
-                }
-                else if (plugin->category(*it2) == KIPI::BatchPlugin)
-                {
-                    d->kipiBatchActions.append(*it2);
-                }
-                else if (plugin->category(*it2) == KIPI::CollectionsPlugin)
-                {
-                    d->kipiAlbumActions.append(*it2);
-                }
-                else
-                {
-                    kDebug(50003) << "No menu found for a plugin!" << endl;
+                    default:
+                        kDebug(50003) << "No menu found for a plugin!" << endl;
+                        break;
                 }
             }
             else
