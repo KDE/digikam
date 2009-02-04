@@ -226,6 +226,7 @@ ENDIF(ENABLE_GPHOTO2)
 
 IF(KDEPIMLIBS_FOUND)
     MESSAGE(STATUS " libkdepimlibs library found......... YES (optional)")
+    INCLUDE_DIRECTORIES(${KDEPIMLIBS_INCLUDE_DIR})    
 ELSE(KDEPIMLIBS_FOUND)
     MESSAGE(STATUS " libkdepimlibs library found......... NO  (optional)")
     MESSAGE(STATUS "")
