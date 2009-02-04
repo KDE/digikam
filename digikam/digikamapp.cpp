@@ -37,13 +37,16 @@
 
 // KDE includes.
 
+#include <kdeversion.h>
+#if KDE_IS_VERSION(4,1,68)
+#include <kactioncategory.h>
+#endif
+
 #include <kaboutdata.h>
 #include <kactioncollection.h>
-//#include <kactioncategory.h>
 #include <kactionmenu.h>
 #include <kapplication.h>
 #include <kdebug.h>
-#include <kdeversion.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -2200,37 +2203,41 @@ void DigikamApp::slotKipiPluginPlug()
 
         plugin->setup( this );
 
-        // Plugin category identification using KAction method based.
-
-        QList<KAction*> actions = plugin->actions();
 
         // List of obsolete kipi-plugins to not load.
         QStringList pluginActionsDisabled;
         pluginActionsDisabled << QString("raw_converter_single");  // Obsolete Since 0.9.5 and new Raw Import tool.
 
-        // add actions to kipipluginsActionCollection
-//        if (!actions.isEmpty() && actions.count() > 3)
-//        {
-//            KActionCategory *category = new KActionCategory(plugin->name(), d->kipipluginsActionCollection);
-//            foreach (QAction *action, actions)
-//            {
-//                QString actionName(action->objectName());
-//                if (!pluginActionsDisabled.contains(actionName))
-//                    category->addAction(actionName, action);
-//            }
-//        }
-//        else
-//        {
-        QList<QAction*> shortcutActions = plugin->actionCollection()->actions();
-        foreach (QAction *action, shortcutActions)
-        {
-            QString actionName(action->objectName());
-            if (!pluginActionsDisabled.contains(actionName))
-                d->kipipluginsActionCollection->addAction(actionName, action);
-        }
-//        }
+        // Add actions to kipipluginsActionCollection
+        QList<QAction*> allPluginActions = plugin->actionCollection()->actions();
 
-        // add actions to actionlists
+#if KDE_IS_VERSION(4,1,68)
+        if (!allPluginActions.isEmpty() && allPluginActions.count() > 3)
+        {
+            KActionCategory *category = new KActionCategory(plugin->objectName(), d->kipipluginsActionCollection);
+            foreach (QAction *action, allPluginActions)
+            {
+                QString actionName(action->objectName());
+                if (!pluginActionsDisabled.contains(actionName))
+                    category->addAction(actionName, action);
+            }
+        }
+        else
+        {
+#endif
+            foreach (QAction *action, allPluginActions)
+            {
+                QString actionName(action->objectName());
+                if (!pluginActionsDisabled.contains(actionName))
+                    d->kipipluginsActionCollection->addAction(actionName, action);
+            }
+#if KDE_IS_VERSION(4,1,68)
+        }
+#endif
+
+        // Plugin category identification using KAction method based.
+
+        QList<KAction*> actions = plugin->actions();
         foreach (KAction* action, actions)
         {
             QString actionName(action->objectName());
