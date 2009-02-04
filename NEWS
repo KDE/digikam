@@ -47,7 +47,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 039 ==> 175205 : The application digiKam (digikam) crashed and caused the signal 11 (SIGSEGV).
 040 ==> 182903 : digiKam crashes after removing the database file.
 041 ==> 183131 : Missed icons for - "Caption/Tags", "Metadata", "Image Editor", "Color Management".
-042 ==> 
+042 ==> 182599 : Hotkey / shortcut assignment lost ( = back to default) after restart. 
+043 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
