@@ -2034,7 +2034,7 @@ void DigikamApp::slotEditKeys()
 {
     KShortcutsDialog dialog(KShortcutsEditor::AllActions,
                             KShortcutsEditor::LetterShortcutsAllowed, this);
-    dialog.addCollection( actionCollection(), i18nc("general keyboard shortcuts", "General") );
+    dialog.addCollection(actionCollection(), i18nc("general keyboard shortcuts", "General"));
     dialog.addCollection(d->kipipluginsActionCollection, i18nc("KIPI-Plugins keyboard shortcuts", "KIPI-Plugins"));
     dialog.configure();
 }
@@ -2168,7 +2168,10 @@ void DigikamApp::slotKipiPluginPlug()
     unplugActionList(QString::fromLatin1("album_actions"));
 
     if (d->kipipluginsActionCollection)
+    {
+        d->kipipluginsActionCollection->clear();
         delete d->kipipluginsActionCollection;
+    }
     d->kipipluginsActionCollection = new KActionCollection(this, KGlobal::mainComponent());
 
     // Remove Advanced slideshow kipi-plugin action from View/Slideshow menu.
@@ -2276,11 +2279,10 @@ void DigikamApp::slotKipiPluginPlug()
         }
     }
 
-    // load KIPI settings
+    // load KIPI actions settings
     d->kipipluginsActionCollection->readSettings();
 
     // Create GUI menu in according with plugins.
-
     plugActionList(QString::fromLatin1("file_actions_export"), d->kipiFileActionsExport);
     plugActionList(QString::fromLatin1("file_actions_import"), d->kipiFileActionsImport);
     plugActionList(QString::fromLatin1("image_actions"),       d->kipiImageActions);
