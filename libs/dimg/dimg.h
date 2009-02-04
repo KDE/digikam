@@ -7,8 +7,8 @@
  * Description : digiKam 8/16 bits image management API
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>  
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>  
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -161,7 +161,6 @@ public:
     */
     bool        operator==(const DImg& image) const;
 
-    
     /** Replaces image data of this object. Metadata is unchanged. Parameters like constructor above. */
     void        putImageData(uint width, uint height, bool sixteenBit, bool alpha, uchar *data, bool copyData = true);
 
@@ -183,8 +182,6 @@ public:
         Ownership of the buffer is passed to the caller, this image will be null afterwards.
     */
     uchar*      stripImageData();
-
-
 
     bool        load(const QString& filePath, DImgLoaderObserver *observer = 0,
                      DRawDecoding rawDecodingSettings=DRawDecoding());
@@ -215,7 +212,6 @@ public:
 
     /** Return the number of bits depth of one color component for one pixel : 8 (non sixteenBit) or 16 (sixteen) */
     int         bitsDepth()  const;
-
 
     /**
      * Returns the color model in which the image was stored in the file.

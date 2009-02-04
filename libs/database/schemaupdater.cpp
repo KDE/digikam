@@ -298,10 +298,10 @@ void SchemaUpdater::defaultFilterSettings(QStringList &defaultImageFilter,
                                           QStringList &defaultVideoFilter,
                                           QStringList &defaultAudioFilter)
 {
-    defaultImageFilter << "jpg" << "jpeg" << "jpe"               // JPEG
-                       << "jp2" << "jpx"  << "jpc" << "pgx"      // JPEG-2000
-                       << "tif" << "tiff"                        // TIFF
-                       << "png"                                  // PNG
+    defaultImageFilter << "jpg" << "jpeg" << "jpe"                    // JPEG
+                       << "jp2" << "j2k" << "jpx"  << "jpc" << "pgx"  // JPEG-2000
+                       << "tif" << "tiff"                             // TIFF
+                       << "png"                                       // PNG
                        << "xpm" << "ppm" << "pnm"
                        << "gif" << "bmp" << "xcf" << "pcx";
 

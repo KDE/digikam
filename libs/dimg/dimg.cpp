@@ -7,8 +7,8 @@
  * Description : digiKam 8/16 bits image management API
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +22,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "dimg.h"
 
@@ -490,7 +489,7 @@ bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserv
         PPMLoader loader(this);
         return loader.save(filePath, observer);
     }
-    if (frm == "JP2" || frm == "JPX" || frm == "JPC" || frm == "PGX")
+    if (frm == "JP2" || frm == "J2K" || frm == "JPX" || frm == "JPC" || frm == "PGX")
     {
         JP2KLoader loader(this);
         return loader.save(filePath, observer);
@@ -538,7 +537,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
         else if (rawFilesExt.toUpper().contains(ext))
             return RAW;
         if (ext == QString("JP2") || ext == QString("JPX") || // JPEG2000 file format
-            ext == QString("JPC") ||                          // JPEG2000 code stream
+            ext == QString("JPC") || ext == QString("J2K") || // JPEG2000 code stream
             ext == QString("PGX"))                            // JPEG2000 WM format
             return JP2K;
     }

@@ -1576,10 +1576,12 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
             // Else, check if format from file name extension is include on file mime type list.
 
             QStringList imgExtList = KImageIO::types(KImageIO::Writing);
+
             imgExtList << "TIF";
             imgExtList << "TIFF";
             imgExtList << "JPG";
             imgExtList << "JPE";
+            imgExtList << "J2K";
 
             if ( !imgExtList.contains( m_savingContext->format.toUpper() ) )
             {

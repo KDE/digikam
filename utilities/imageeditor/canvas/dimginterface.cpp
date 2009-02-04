@@ -7,7 +7,7 @@
  * Description : DImg interface for image editor
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -615,7 +615,8 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
 
     // JPEG 2000 file format.
     if ( mimeType.toUpper() == QString("JP2") || mimeType.toUpper() == QString("JPX") ||
-         mimeType.toUpper() == QString("JPC") || mimeType.toUpper() == QString("PGX"))
+         mimeType.toUpper() == QString("JPC") || mimeType.toUpper() == QString("PGX") || 
+         mimeType.toUpper() == QString("J2K"))
     {
         if (iofileSettings->JPEG2000LossLess)
             d->image.setAttribute("quality", 100);    // LossLess compression
