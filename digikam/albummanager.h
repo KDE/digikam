@@ -470,6 +470,7 @@ signals:
     void signalAllDAlbumsLoaded();
     void signalAlbumIconChanged(Album* album);
     void signalAlbumRenamed(Album* album);
+    void signalSearchUpdated(SAlbum *album);
     void signalTAlbumMoved(TAlbum* album, TAlbum* newParent);
     void signalPAlbumDirty(PAlbum* album);
     void signalPAlbumsDirty(const QMap<int, int>&);

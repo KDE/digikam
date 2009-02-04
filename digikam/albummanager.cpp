@@ -1172,29 +1172,59 @@ void AlbumManager::scanSAlbums()
 
     // list SAlbums directly from the db
     // first insert all the current SAlbums into a map for quick lookup
-    typedef QMap<int, SAlbum*> SearchMap;
-    SearchMap sMap;
+    QMap<int, SAlbum*> oldSearches;
 
     AlbumIterator it(d->rootSAlbum);
     while (it.current())
     {
-        SAlbum* t = (SAlbum*)(*it);
-        sMap.insert(t->id(), t);
+        SAlbum* search = (SAlbum*)(*it);
+        oldSearches[search->id()] = search;
         ++it;
     }
 
-    // Retrieve the list of searches from the database
-    SearchInfo::List sList = DatabaseAccess().db()->scanSearches();
+    // scan db and get a list of all albums
+    QList<SearchInfo> currentSearches = DatabaseAccess().db()->scanSearches();
 
-    for (SearchInfo::List::iterator it = sList.begin(); it != sList.end(); ++it)
+    QList<SearchInfo> newSearches;
+
+    // go through all the Albums and see which ones are already present
+    foreach (const SearchInfo &info, currentSearches)
     {
-        SearchInfo info = *it;
+        if (oldSearches.contains(info.id))
+        {
+            SAlbum *album = oldSearches[info.id];
+            if (info.name != album->title()
+                || info.type != album->type()
+                || info.query != album->query())
+            {
+                QString oldName = album->title();
 
-        // check if we have already added this search
-        if (sMap.contains(info.id))
-            continue;
+                album->setSearch(info.type, info.query);
+                album->setTitle(info.name);
+                if (oldName != album->title())
+                    emit signalAlbumRenamed(album);
+                emit signalSearchUpdated(album);
+            }
 
-        // Its a new album.
+            oldSearches.remove(info.id);
+        }
+        else
+            newSearches << info;
+    }
+
+    // remove old albums that have been deleted
+    foreach (SAlbum *album, oldSearches)
+    {
+        emit signalAlbumAboutToBeDeleted(album);
+        d->allAlbumsIdHash.remove(album->globalID());
+        emit signalAlbumDeleted(album);
+        delete album;
+        emit signalAlbumHasBeenDeleted(album);
+    }
+
+    // add new albums
+    foreach (const SearchInfo &info, newSearches)
+    {
         SAlbum* album = new SAlbum(info.name, info.id);
         emit signalAlbumAboutToBeAdded(album, d->rootSAlbum, d->rootSAlbum->lastChild());
         album->setSearch(info.type, info.query);
