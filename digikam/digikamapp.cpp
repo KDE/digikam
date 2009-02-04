@@ -2221,7 +2221,8 @@ void DigikamApp::slotKipiPluginPlug()
 //        }
 //        else
 //        {
-        foreach (KAction *action, actions)
+        QList<QAction*> shortcutActions = plugin->actionCollection()->actions();
+        foreach (QAction *action, shortcutActions)
         {
             QString actionName(action->objectName());
             if (!pluginActionsDisabled.contains(actionName))
