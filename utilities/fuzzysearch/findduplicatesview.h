@@ -66,6 +66,7 @@ private slots:
     void populateTreeView();
     void slotAlbumAdded(Album* a);
     void slotAlbumDeleted(Album* a);
+    void slotSearchUpdated(SAlbum* a);
     void slotClear();
     void slotFindDuplicates();
     void slotDuplicatesAlbumActived(QTreeWidgetItem*, int);

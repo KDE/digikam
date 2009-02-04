@@ -147,6 +147,9 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
             this, SLOT(slotAlbumDeleted(Album*)));
 
+    connect(AlbumManager::instance(), SIGNAL(signalSearchUpdated(SAlbum*)),
+            this, SLOT(slotSearchUpdated(SAlbum*)));
+
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotClear()));
 
@@ -217,9 +220,18 @@ void FindDuplicatesView::slotAlbumDeleted(Album* a)
     FindDuplicatesAlbumItem* item = (FindDuplicatesAlbumItem*) album->extraData(this);
     if (item)
     {
-        a->removeExtraData(item);
+        a->removeExtraData(this);
         delete item;
     }
+}
+
+void FindDuplicatesView::slotSearchUpdated(SAlbum* a)
+{
+    if (!a->isDuplicatesSearch())
+        return;
+
+    slotAlbumDeleted(a);
+    slotAlbumAdded(a);
 }
 
 void FindDuplicatesView::slotClear()
@@ -245,8 +257,6 @@ void FindDuplicatesView::slotThumbnailLoaded(const LoadingDescription& desc, con
                 item->setThumb(SmallIcon("image-x-generic", ICONSIZE, KIconLoader::DisabledState));
             else
                 item->setThumb(pix.scaled(ICONSIZE, ICONSIZE, Qt::KeepAspectRatio));
-
-            return;
         }
         ++it;
     }
@@ -335,7 +345,6 @@ void FindDuplicatesView::slotDuplicatesSearchProcessedAmount(KJob* job, KJob::Un
 void FindDuplicatesView::slotDuplicatesSearchResult(KJob*)
 {
     enableControlWidgets(true);
-    populateTreeView();
 }
 
 void FindDuplicatesView::slotDuplicatesAlbumActived(QTreeWidgetItem* item, int)
