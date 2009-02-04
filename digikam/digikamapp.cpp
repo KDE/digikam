@@ -39,6 +39,7 @@
 
 #include <kaboutdata.h>
 #include <kactioncollection.h>
+#include <kactioncategory.h>
 #include <kactionmenu.h>
 #include <kapplication.h>
 #include <kdebug.h>
@@ -2032,15 +2033,34 @@ void DigikamApp::slotEditKeys()
                             KShortcutsEditor::LetterShortcutsAllowed, this);
     dialog.addCollection( actionCollection(), i18nc("general keyboard shortcuts", "General") );
 
-    KIPI::PluginLoader::PluginList list = d->kipiPluginLoader->pluginList();
+    KActionCollection *kipiplugins = new KActionCollection(this, KGlobal::mainComponent());
 
+    KIPI::PluginLoader::PluginList list = d->kipiPluginLoader->pluginList();
     foreach (KIPI::PluginLoader::Info *info, list)
     {
         if (info)
         {
-            dialog.addCollection(info->plugin()->actionCollection(), info->name());
+            QList<QAction*> actions = info->plugin()->actionCollection()->actions();
+            if (!actions.isEmpty() && actions.count() > 3)
+            {
+                KActionCategory *category = new KActionCategory(info->name(), kipiplugins);
+                foreach (QAction *action, actions)
+                {
+                    category->addAction(action->objectName(), action);
+                }
+            }
+            else
+            {
+                foreach (QAction *action, actions)
+                {
+                    kipiplugins->addAction(action->objectName(), action);
+                }
+            }
         }
     }
+
+    kipiplugins->readSettings();
+    dialog.addCollection(kipiplugins, i18nc("KIPI-Plugins keyboard shortcuts", "KIPI-Plugins"));
     dialog.configure();
 }
 
