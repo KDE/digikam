@@ -51,7 +51,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 042 ==> 182599 : Hotkey / shortcut assignment lost ( = back to default) after restart. 
 043 ==> 161093 : gam_server use 40% CPU.
 044 ==> 182830 : Large icons in sidebar tab titles.
-045 ==> 
+045 ==> 182738 : Digikam crash on/after image library scan.
+046 ==> 181657 : Fatal error crash dump.
+047 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
