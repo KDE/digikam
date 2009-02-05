@@ -122,10 +122,11 @@ LightTableWindow::LightTableWindow()
 
     //-------------------------------------------------------------
 
-    d->leftSidebar->loadViewState();
-    d->rightSidebar->loadViewState();
-    d->leftSidebar->populateTags();
-    d->rightSidebar->populateTags();
+    d->leftSideBar->loadViewState();
+    d->rightSideBar->loadViewState();
+    d->leftSideBar->populateTags();
+    d->rightSideBar->populateTags();
+    slotSidebarTabTitleStyleChanged();
 
     readSettings();
     applySettings();
@@ -137,8 +138,8 @@ LightTableWindow::~LightTableWindow()
     m_instance = 0;
 
     delete d->barView;
-    delete d->rightSidebar;
-    delete d->leftSidebar;
+    delete d->rightSideBar;
+    delete d->leftSideBar;
     delete d;
 }
 
@@ -183,8 +184,8 @@ void LightTableWindow::applySettings()
 
 void LightTableWindow::refreshView()
 {
-    d->leftSidebar->refreshTagsView();
-    d->rightSidebar->refreshTagsView();
+    d->leftSideBar->refreshTagsView();
+    d->rightSideBar->refreshTagsView();
 }
 
 void LightTableWindow::closeEvent(QCloseEvent* e)
@@ -201,7 +202,7 @@ void LightTableWindow::setupUserArea()
     QWidget* mainW    = new QWidget(this);
     d->hSplitter      = new SidebarSplitter(Qt::Horizontal, mainW);
     QHBoxLayout *hlay = new QHBoxLayout(mainW);
-    d->leftSidebar    = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Left, true);
+    d->leftSideBar    = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Left, true);
 
     QWidget* centralW = new QWidget(d->hSplitter);
     QVBoxLayout *vlay = new QVBoxLayout(centralW);
@@ -210,15 +211,15 @@ void LightTableWindow::setupUserArea()
                                           AlbumSettings::instance()->getExifRotate());
     d->previewView    = new LightTableView(d->vSplitter);
 
-    d->rightSidebar   = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Right, true);
+    d->rightSideBar   = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Right, true);
 
     vlay->addWidget(d->vSplitter);
     vlay->setSpacing(0);
     vlay->setMargin(0);
 
-    hlay->addWidget(d->leftSidebar);
+    hlay->addWidget(d->leftSideBar);
     hlay->addWidget(d->hSplitter);
-    hlay->addWidget(d->rightSidebar);
+    hlay->addWidget(d->rightSideBar);
     hlay->setSpacing(0);
     hlay->setMargin(0);
     hlay->setStretchFactor(d->hSplitter, 10);
@@ -263,6 +264,9 @@ void LightTableWindow::setupConnections()
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
+
+    connect(AlbumSettings::instance(), SIGNAL(signalSidebarTabTitleStyleChanged()),
+            this, SLOT(slotSidebarTabTitleStyleChanged()));
 
     // Thumbs bar connections ---------------------------------------
 
@@ -640,7 +644,7 @@ void LightTableWindow::slotItemsUpdated(const KUrl::List& urls)
             if (d->previewView->leftImageInfo().fileUrl() == *it)
             {
                 d->previewView->leftReload();
-                d->leftSidebar->itemChanged(d->previewView->leftImageInfo());
+                d->leftSideBar->itemChanged(d->previewView->leftImageInfo());
             }
         }
 
@@ -649,7 +653,7 @@ void LightTableWindow::slotItemsUpdated(const KUrl::List& urls)
             if (d->previewView->rightImageInfo().fileUrl() == *it)
             {
                 d->previewView->rightReload();
-                d->rightSidebar->itemChanged(d->previewView->rightImageInfo());
+                d->rightSideBar->itemChanged(d->previewView->rightImageInfo());
             }
         }
     }
@@ -894,18 +898,18 @@ void LightTableWindow::slotSetItemOnLeftPanel(const ImageInfo &info)
 {
     d->previewView->setLeftImageInfo(info);
     if (!info.isNull())
-        d->leftSidebar->itemChanged(info);
+        d->leftSideBar->itemChanged(info);
     else
-        d->leftSidebar->slotNoCurrentItem();
+        d->leftSideBar->slotNoCurrentItem();
 }
 
 void LightTableWindow::slotSetItemOnRightPanel(const ImageInfo &info)
 {
     d->previewView->setRightImageInfo(info);
     if (!info.isNull())
-        d->rightSidebar->itemChanged(info);
+        d->rightSideBar->itemChanged(info);
     else
-        d->rightSidebar->slotNoCurrentItem();
+        d->rightSideBar->slotNoCurrentItem();
 }
 
 void LightTableWindow::slotClearItemsList()
@@ -913,13 +917,13 @@ void LightTableWindow::slotClearItemsList()
     if (!d->previewView->leftImageInfo().isNull())
     {
         d->previewView->setLeftImageInfo();
-        d->leftSidebar->slotNoCurrentItem();
+        d->leftSideBar->slotNoCurrentItem();
     }
 
     if (!d->previewView->rightImageInfo().isNull())
     {
         d->previewView->setRightImageInfo();
-        d->rightSidebar->slotNoCurrentItem();
+        d->rightSideBar->slotNoCurrentItem();
     }
 
     d->barView->clear();
@@ -998,7 +1002,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo &info)
         if (d->previewView->leftImageInfo() == info)
         {
             d->previewView->setLeftImageInfo();
-            d->leftSidebar->slotNoCurrentItem();
+            d->leftSideBar->slotNoCurrentItem();
         }
     }
 
@@ -1007,7 +1011,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo &info)
         if (d->previewView->rightImageInfo() == info)
         {
             d->previewView->setRightImageInfo();
-            d->rightSidebar->slotNoCurrentItem();
+            d->rightSideBar->slotNoCurrentItem();
         }
     }
 
@@ -1210,7 +1214,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo &info)
     else
     {
         d->previewView->setLeftImageInfo();
-        d->leftSidebar->slotNoCurrentItem();
+        d->leftSideBar->slotNoCurrentItem();
     }
 
     // set the image for the right panel
@@ -1228,7 +1232,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo &info)
     else
     {
         d->previewView->setRightImageInfo();
-        d->rightSidebar->slotNoCurrentItem();
+        d->rightSideBar->slotNoCurrentItem();
     }
 
     refreshStatusBar();
@@ -1356,8 +1360,8 @@ void LightTableWindow::slotToggleFullScreen()
             }
         }
 
-        d->leftSidebar->restore();
-        d->rightSidebar->restore();
+        d->leftSideBar->restore();
+        d->rightSideBar->restore();
 
         d->fullScreen = false;
     }
@@ -1400,8 +1404,8 @@ void LightTableWindow::slotToggleFullScreen()
             }
         }
 
-        d->leftSidebar->backup();
-        d->rightSidebar->backup();
+        d->leftSideBar->backup();
+        d->rightSideBar->backup();
 
         setWindowState( windowState() | Qt::WindowFullScreen ); // set
         d->fullScreen = true;
@@ -1623,6 +1627,12 @@ void LightTableWindow::slotShowMenuBar()
 {
     const bool visible = menuBar()->isVisible();
     menuBar()->setVisible(!visible);
+}
+
+void LightTableWindow::slotSidebarTabTitleStyleChanged()
+{
+    d->leftSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
+    d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
 }
 
 }  // namespace Digikam

@@ -6,7 +6,7 @@
  * Date        : 2007-03-05
  * Description : digiKam light table GUI
  *
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,8 +62,8 @@ public:
         star3                  = 0;
         star4                  = 0;
         star5                  = 0;
-        leftSidebar            = 0;
-        rightSidebar           = 0;
+        leftSideBar            = 0;
+        rightSideBar           = 0;
         previewView            = 0;
         barView                = 0;
         hSplitter              = 0;
@@ -152,8 +152,8 @@ public:
 
     StatusProgressBar        *statusProgressBar;
 
-    ImagePropertiesSideBarDB *leftSidebar;
-    ImagePropertiesSideBarDB *rightSidebar;
+    ImagePropertiesSideBarDB *leftSideBar;
+    ImagePropertiesSideBarDB *rightSideBar;
 };
 
 }  // namespace Digikam

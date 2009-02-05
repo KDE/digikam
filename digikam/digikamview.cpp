@@ -253,6 +253,8 @@ DigikamView::DigikamView(QWidget *parent)
 
     d->albumManager->setItemHandler(d->iconView);
     d->albumHistory = new AlbumHistory();
+
+    slotSidebarTabTitleStyleChanged();
 }
 
 DigikamView::~DigikamView()
@@ -507,6 +509,11 @@ void DigikamView::setupConnections()
 
     connect(d->selectionTimer, SIGNAL(timeout()),
             this, SLOT(slotDispatchImageSelected()));
+
+    // -- Album Settings ----------------
+
+    connect(AlbumSettings::instance(), SIGNAL(signalSidebarTabTitleStyleChanged()),
+            this, SLOT(slotSidebarTabTitleStyleChanged()));
 }
 
 void DigikamView::loadViewState()
@@ -1674,6 +1681,12 @@ void DigikamView::slotCancelSlideShow()
 void DigikamView::toggleShowBar(bool b)
 {
     d->albumWidgetStack->toggleShowBar(b);
+}
+
+void DigikamView::slotSidebarTabTitleStyleChanged()
+{
+    d->leftSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
+    d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
 }
 
 }  // namespace Digikam

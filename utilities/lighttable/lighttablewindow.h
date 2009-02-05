@@ -148,6 +148,8 @@ private slots:
     void slotThemeChanged();
     void slotChangeTheme(const QString& theme);
 
+    void slotSidebarTabTitleStyleChanged();
+
 private:
 
     LightTableWindowPriv* const d;

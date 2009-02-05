@@ -7,8 +7,8 @@
  * Description : Camera interface
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -147,6 +147,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
     // -- Make signals/slots connections ---------------------------------
 
     setupConnections();
+    slotSidebarTabTitleStyleChanged();
 
     // -- Read settings --------------------------------------------------
 
@@ -166,7 +167,7 @@ CameraUI::~CameraUI()
 {
     disconnect(d->view, 0, this, 0);
     delete d->view;
-    delete d->rightSidebar;
+    delete d->rightSideBar;
     delete d->controller;
     delete d;
 }
@@ -176,8 +177,8 @@ void CameraUI::setupUserArea()
     KHBox* widget   = new KHBox(this);
     d->splitter     = new SidebarSplitter(widget);
     d->view         = new CameraIconView(this, d->splitter);
-    d->rightSidebar = new ImagePropertiesSideBarCamGui(widget, d->splitter, KMultiTabBar::Right, true);
-    d->rightSidebar->setObjectName("CameraGui Sidebar Right");
+    d->rightSideBar = new ImagePropertiesSideBarCamGui(widget, d->splitter, KMultiTabBar::Right, true);
+    d->rightSideBar->setObjectName("CameraGui Sidebar Right");
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );
     d->splitter->setFrameShape( QFrame::NoFrame );
@@ -186,7 +187,7 @@ void CameraUI::setupUserArea()
 
     // -------------------------------------------------------------------------
 
-    d->advBox            = new QToolBox(d->rightSidebar);
+    d->advBox            = new QToolBox(d->rightSideBar);
     d->renameCustomizer  = new RenameCustomizer(d->advBox, d->cameraTitle);
     d->view->setRenameCustomizer(d->renameCustomizer);
 
@@ -280,8 +281,8 @@ void CameraUI::setupUserArea()
     d->advBox->insertItem(CameraUIPriv::ONFLYPAGE, onFlyBox, SmallIcon("system-run"),
                           i18n("On the Fly Operations (JPEG only)"));
 
-    d->rightSidebar->appendTab(d->advBox, SmallIcon("configure"), i18n("Settings"));
-    d->rightSidebar->loadViewState();
+    d->rightSideBar->appendTab(d->advBox, SmallIcon("configure"), i18n("Settings"));
+    d->rightSideBar->loadViewState();
 
     // -------------------------------------------------------------------------
 
@@ -566,6 +567,9 @@ void CameraUI::setupConnections()
 
     connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(const CollectionLocation &, int)),
             this, SLOT(slotCollectionLocationStatusChanged(const CollectionLocation &, int)));
+
+    connect(AlbumSettings::instance(), SIGNAL(signalSidebarTabTitleStyleChanged()),
+            this, SLOT(slotSidebarTabTitleStyleChanged()));
 }
 
 void CameraUI::setupStatusBar()
@@ -1739,7 +1743,7 @@ void CameraUI::slotExifFromFile(const QString& folder, const QString& file)
     if (!item)
         return;
 
-    d->rightSidebar->itemChanged(item->itemInfo(), folder + QString("/") + file,
+    d->rightSideBar->itemChanged(item->itemInfo(), folder + QString("/") + file,
                                  QByteArray(), d->view, item);
 }
 
@@ -1769,12 +1773,12 @@ void CameraUI::slotExifFromData(const QByteArray& exifData)
             QByteArray data;
             data.resize(exifData.size()-i);
             memcpy(data.data(), exifData.data()+i, data.size());
-            d->rightSidebar->itemChanged(item->itemInfo(), url, data, d->view, item);
+            d->rightSideBar->itemChanged(item->itemInfo(), url, data, d->view, item);
             return;
         }
     }
 
-    d->rightSidebar->itemChanged(item->itemInfo(), url, exifData, d->view, item);
+    d->rightSideBar->itemChanged(item->itemInfo(), url, exifData, d->view, item);
 }
 
 void CameraUI::slotNewSelection(bool hasSelection)
@@ -1817,16 +1821,16 @@ void CameraUI::slotItemsSelected(CameraIconItem* item, bool selected)
         if (!d->currentlyDeleting.contains(item->itemInfo()->folder + item->itemInfo()->name))
         {
             KUrl url(item->itemInfo()->folder + '/' + item->itemInfo()->name);
-            d->rightSidebar->itemChanged(item->itemInfo(), url, QByteArray(), d->view, item);
+            d->rightSideBar->itemChanged(item->itemInfo(), url, QByteArray(), d->view, item);
             d->controller->getExif(item->itemInfo()->folder, item->itemInfo()->name);
         }
         else
         {
-            d->rightSidebar->slotNoCurrentItem();
+            d->rightSideBar->slotNoCurrentItem();
         }
     }
     else
-        d->rightSidebar->slotNoCurrentItem();
+        d->rightSideBar->slotNoCurrentItem();
 }
 
 bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
@@ -1970,7 +1974,7 @@ void CameraUI::slotToggleFullScreen()
             }
         }
 
-        d->rightSidebar->restore();
+        d->rightSideBar->restore();
 
         d->fullScreen = false;
     }
@@ -2013,7 +2017,7 @@ void CameraUI::slotToggleFullScreen()
             }
         }
 
-        d->rightSidebar->backup();
+        d->rightSideBar->backup();
 
         setWindowState( windowState() | Qt::WindowFullScreen ); // set
         d->fullScreen = true;
@@ -2113,6 +2117,11 @@ void CameraUI::slotShowMenuBar()
 {
     const bool visible = menuBar()->isVisible();
     menuBar()->setVisible(!visible);
+}
+
+void CameraUI::slotSidebarTabTitleStyleChanged()
+{
+    d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
 }
 
 }  // namespace Digikam

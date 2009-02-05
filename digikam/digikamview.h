@@ -191,6 +191,8 @@ private slots:
     void slotThumbSizeEffect();
     void slotZoomFactorChanged(double);
 
+    void slotSidebarTabTitleStyleChanged();
+
 private:
 
     DigikamViewPriv* const d;

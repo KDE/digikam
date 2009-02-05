@@ -7,7 +7,7 @@
  * Description : digiKam image editor GUI
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -221,6 +221,7 @@ ImageWindow::ImageWindow()
 
     d->rightSideBar->loadViewState();
     d->rightSideBar->populateTags();
+    slotSidebarTabTitleStyleChanged();
 }
 
 ImageWindow::~ImageWindow()
@@ -299,6 +300,9 @@ void ImageWindow::setupConnections()
 
     connect(d->thumbBar, SIGNAL(signalUrlSelected(const KUrl&)),
             this, SLOT(slotThumbBarItemSelected(const KUrl&)));
+
+    connect(AlbumSettings::instance(), SIGNAL(signalSidebarTabTitleStyleChanged()),
+            this, SLOT(slotSidebarTabTitleStyleChanged()));
 }
 
 void ImageWindow::setupUserArea()
@@ -1429,6 +1433,11 @@ Sidebar *ImageWindow::rightSideBar() const
 void ImageWindow::slotComponentsInfo()
 {
     showDigikamComponentsInfo();
+}
+
+void ImageWindow::slotSidebarTabTitleStyleChanged()
+{
+    d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
 }
 
 }  // namespace Digikam

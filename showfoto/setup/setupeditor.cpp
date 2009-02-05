@@ -35,6 +35,7 @@
 
 // KDE includes.
 
+#include <kmultitabbar.h>
 #include <kapplication.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
@@ -69,9 +70,13 @@ public:
         sortOrderComboBox     = 0;
         sortReverse           = 0;
         useRawImportTool      = 0;
+        sidebarTypeLabel      = 0;
+        sidebarType           = 0;
     }
 
     KHBox        *colorBox;
+
+    QLabel       *sidebarTypeLabel;
 
     QCheckBox    *sortReverse;
     QCheckBox    *hideToolBar;
@@ -85,6 +90,7 @@ public:
     QCheckBox    *useRawImportTool;
 
     KComboBox    *sortOrderComboBox;
+    KComboBox    *sidebarType;
 
     KColorButton *backgroundColor;
     KColorButton *underExposureColor;
@@ -134,6 +140,13 @@ SetupEditor::SetupEditor(QWidget* parent)
                                            "tool to load a RAW image. "
                                            "With this tool you are able to customize advanced settings."));
 
+    KHBox *hbox = new KHBox(interfaceOptionsGroup);
+    d->sidebarTypeLabel  = new QLabel(i18n("Sidebar tab title:"), hbox);
+    d->sidebarType       = new KComboBox(hbox);
+    d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
+    d->sidebarType->addItem(i18n("For All Tabs"),        1);
+    d->sidebarType->setToolTip(i18n("Set this option to configure how sidebars tab title are visible."));
+
     gLayout1->addWidget(d->themebackgroundColor);
     gLayout1->addWidget(d->colorBox);
     gLayout1->addWidget(d->hideToolBar);
@@ -142,6 +155,8 @@ SetupEditor::SetupEditor(QWidget* parent)
     gLayout1->addWidget(d->useTrash);
     gLayout1->addWidget(d->showSplash);
     gLayout1->addWidget(d->useRawImportTool);
+    gLayout1->addWidget(hbox);
+
     interfaceOptionsGroup->setLayout(gLayout1);
 
     // --------------------------------------------------------
@@ -245,6 +260,7 @@ void SetupEditor::readSettings()
     d->horizontalThumbBar->setChecked(group.readEntry("HorizontalThumbbar", false));
     d->useTrash->setChecked(group.readEntry("DeleteItem2Trash", false));
     d->showSplash->setChecked(group.readEntry("ShowSplash", true));
+    d->sidebarType->setCurrentIndex(group.readEntry("Sidebar Title Style", 0));
     d->exifRotateBox->setChecked(group.readEntry("EXIF Rotate", true));
     d->exifSetOrientationBox->setChecked(group.readEntry("EXIF Set Orientation", true));
     d->underExposureColor->setColor(group.readEntry("UnderExposureColor", White));
@@ -265,6 +281,7 @@ void SetupEditor::applySettings()
     group.writeEntry("HorizontalThumbbar",      d->horizontalThumbBar->isChecked());
     group.writeEntry("DeleteItem2Trash",        d->useTrash->isChecked());
     group.writeEntry("ShowSplash",              d->showSplash->isChecked());
+    group.writeEntry("Sidebar Title Style",     d->sidebarType->currentIndex());
     group.writeEntry("EXIF Rotate",             d->exifRotateBox->isChecked());
     group.writeEntry("EXIF Set Orientation",    d->exifSetOrientationBox->isChecked());
     group.writeEntry("UnderExposureColor",      d->underExposureColor->color());

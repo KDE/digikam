@@ -190,8 +190,8 @@ IconView::IconView(QWidget* parent, const char* name)
     connect(d->ratingBox, SIGNAL(signalRatingChanged(int)),
             this, SLOT(slotEditRatingFromItem(int)));
 
-    setEnableToolTips(true);
     slotIconViewFontChanged();
+    setEnableToolTips(true);
 }
 
 IconView::~IconView()

@@ -160,6 +160,8 @@ public:
 
     KSharedConfigPtr                    config;
 
+    KMultiTabBar::KMultiTabBarStyle     sidebarTitleStyle;
+
     // album view settings
     AlbumSettings::AlbumSortOrder       albumSortOrder;
 
@@ -209,6 +211,7 @@ void AlbumSettings::init()
     d->thumbnailSize                = ThumbnailSize::Medium;
     d->treeThumbnailSize            = 22;
     d->treeviewFont                 = KGlobalSettings::generalFont();
+    d->sidebarTitleStyle            = KMultiTabBar::VSNET;
 
     d->ratingFilterCond             = AlbumLister::GreaterEqualCondition;
 
@@ -307,6 +310,8 @@ void AlbumSettings::readSettings()
     d->treeThumbnailSize            = group.readEntry("Default Tree Icon Size", 22);
     d->treeviewFont                 = group.readEntry("TreeView Font", KGlobalSettings::generalFont());
     d->currentTheme                 = group.readEntry("Theme", i18nc("default theme name", "Default"));
+    d->sidebarTitleStyle            = (KMultiTabBar::KMultiTabBarStyle)group.readEntry("Sidebar Title Style", (int)KMultiTabBar::VSNET);
+
 
     d->ratingFilterCond             = group.readEntry("Rating Filter Condition",
                                                       (int)AlbumLister::GreaterEqualCondition);
@@ -414,6 +419,7 @@ void AlbumSettings::saveSettings()
     group.writeEntry("Recursive Albums", d->recursiveAlbums);
     group.writeEntry("Recursive Tags", d->recursiveTags);
     group.writeEntry("Theme", d->currentTheme);
+    group.writeEntry("Sidebar Title Style", (int)d->sidebarTitleStyle);
 
     group.writeEntry("Icon Show Name", d->iconShowName);
     group.writeEntry("Icon Show Resolution", d->iconShowResolution);
@@ -1187,6 +1193,17 @@ void AlbumSettings::setCurrentTheme(const QString& theme)
 QString AlbumSettings::getCurrentTheme() const
 {
     return d->currentTheme;
+}
+
+void AlbumSettings::setSidebarTitleStyle(KMultiTabBar::KMultiTabBarStyle style)
+{
+    d->sidebarTitleStyle = style;
+    emit signalSidebarTabTitleStyleChanged();
+}
+
+KMultiTabBar::KMultiTabBarStyle AlbumSettings::getSidebarTitleStyle() const
+{
+    return d->sidebarTitleStyle;
 }
 
 void AlbumSettings::setUseTrash(bool val)

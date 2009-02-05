@@ -71,9 +71,12 @@ public:
         showFolderTreeViewItemsCount = 0;
         treeViewFontSelect           = 0;
         iconViewFontSelect           = 0;
+        sidebarTypeLabel             = 0;
+        sidebarType                  = 0;
     }
 
     QLabel      *iconTreeThumbLabel;
+    QLabel      *sidebarTypeLabel;
 
     QCheckBox   *iconShowNameBox;
     QCheckBox   *iconShowSizeBox;
@@ -86,6 +89,7 @@ public:
     QCheckBox   *previewLoadFullImageSize;
     QCheckBox   *showFolderTreeViewItemsCount;
 
+    KComboBox   *sidebarType;
     KComboBox   *iconTreeThumbSize;
     KComboBox   *rightClickActionComboBox;
 
@@ -168,8 +172,8 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     QGroupBox *folderViewGroup = new QGroupBox(i18n("Folder-View Options"), panel);
     QGridLayout* grid2         = new QGridLayout(folderViewGroup);
 
-    d->iconTreeThumbLabel      = new QLabel(i18n("Tree-view thumbnail size:"), panel);
-    d->iconTreeThumbSize       = new KComboBox(this);
+    d->iconTreeThumbLabel      = new QLabel(i18n("Tree-view thumbnail size:"), folderViewGroup);
+    d->iconTreeThumbSize       = new KComboBox(folderViewGroup);
     d->iconTreeThumbSize->addItem(QString("16"));
     d->iconTreeThumbSize->addItem(QString("22"));
     d->iconTreeThumbSize->addItem(QString("32"));
@@ -177,10 +181,10 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     d->iconTreeThumbSize->setToolTip(i18n("Set this option to configure the size in pixels of "
                                           "the tree-view thumbnails in digiKam's sidebars."));
 
-    d->treeViewFontSelect = new DFontSelect(i18n("Tree-view font:"), panel);
+    d->treeViewFontSelect = new DFontSelect(i18n("Tree-view font:"), folderViewGroup);
     d->treeViewFontSelect->setToolTip(i18n("Select here the font used to display text in all tree-view."));
 
-    d->showFolderTreeViewItemsCount = new QCheckBox(i18n("Show count of items in all tree-view"), panel);
+    d->showFolderTreeViewItemsCount = new QCheckBox(i18n("Show count of items in all tree-view"), folderViewGroup);
 
     grid2->addWidget(d->iconTreeThumbLabel,           0, 0, 1, 1);
     grid2->addWidget(d->iconTreeThumbSize,            0, 1, 1, 1);
@@ -199,9 +203,17 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
                                                    "for a preview, instead of with a reduced size. This loads more "
                                                    "data and will be slow on older computers."));
 
+    d->sidebarTypeLabel  = new QLabel(i18n("Sidebar tab title:"), interfaceOptionsGroup);
+    d->sidebarType       = new KComboBox(interfaceOptionsGroup);
+    d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
+    d->sidebarType->addItem(i18n("For All Tabs"),        1);
+    d->sidebarType->setToolTip(i18n("Set this option to configure how sidebars tab title are visible."));
+
     grid3->setMargin(KDialog::spacingHint());
     grid3->setSpacing(KDialog::spacingHint());
-    grid3->addWidget(d->previewLoadFullImageSize, 0, 0, 1, 1);
+    grid3->addWidget(d->previewLoadFullImageSize, 0, 0, 1, 2);
+    grid3->addWidget(d->sidebarTypeLabel,         1, 0, 1, 1);
+    grid3->addWidget(d->sidebarType,              1, 1, 1, 1);
 
     // --------------------------------------------------------
 
@@ -245,6 +257,7 @@ void SetupAlbumView::applySettings()
 
     settings->setPreviewLoadFullImageSize(d->previewLoadFullImageSize->isChecked());
     settings->setShowFolderTreeViewItemsCount(d->showFolderTreeViewItemsCount->isChecked());
+    settings->setSidebarTitleStyle(d->sidebarType->currentIndex() == 0 ? KMultiTabBar::VSNET : KMultiTabBar::KDEV3ICON);
     settings->saveSettings();
 }
 
@@ -277,6 +290,7 @@ void SetupAlbumView::readSettings()
 
     d->previewLoadFullImageSize->setChecked(settings->getPreviewLoadFullImageSize());
     d->showFolderTreeViewItemsCount->setChecked(settings->getShowFolderTreeViewItemsCount());
+    d->sidebarType->setCurrentIndex(settings->getSidebarTitleStyle() == KMultiTabBar::VSNET ? 0 : 1);
 }
 
 }  // namespace Digikam

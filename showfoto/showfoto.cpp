@@ -8,8 +8,8 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Copyright (C) 2008 by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
@@ -75,6 +75,7 @@ extern "C"
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kprotocolinfo.h>
+#include <kmultitabbar.h>
 #include <kstandardaction.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
@@ -559,6 +560,9 @@ void ShowFoto::applySettings()
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("ImageViewer Settings");
+
+    d->rightSideBar->setStyle(group.readEntry("Sidebar Title Style", 0) == 0 ?
+                              KMultiTabBar::VSNET : KMultiTabBar::KDEV3ICON);
 
     // Current image deleted go to trash ?
     d->deleteItem2Trash = group.readEntry("DeleteItem2Trash", true);

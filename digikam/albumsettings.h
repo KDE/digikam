@@ -33,6 +33,10 @@
 #include <QFont>
 #include <QObject>
 
+// KDE includes.
+
+#include <kmultitabbar.h>
+
 // Local includes.
 
 #include "digikam_export.h"
@@ -74,6 +78,7 @@ signals:
 
     void signalTreeViewFontChanged();
     void signalIconViewFontChanged();
+    void signalSidebarTabTitleStyleChanged();
 
 public:
 
@@ -276,6 +281,9 @@ public:
 
     void    setCurrentTheme(const QString& theme);
     QString getCurrentTheme() const;
+
+    void setSidebarTitleStyle(KMultiTabBar::KMultiTabBarStyle style);
+    KMultiTabBar::KMultiTabBarStyle getSidebarTitleStyle() const;
 
     void    setUseTrash(bool val);
     bool    getUseTrash() const;
