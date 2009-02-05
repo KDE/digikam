@@ -133,7 +133,7 @@ SetupSlideShow::SetupSlideShow(QWidget* parent)
     layout->addWidget(d->showComment);
     layout->addWidget(d->showRating);
     layout->addStretch();
-    layout->setMargin(0);
+    layout->setMargin(KDialog::spacingHint());
     layout->setSpacing(KDialog::spacingHint());
 
     readSettings();

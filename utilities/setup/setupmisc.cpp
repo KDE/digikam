@@ -81,7 +81,7 @@ SetupMisc::SetupMisc(QWidget* parent)
 
     // --------------------------------------------------------
 
-    layout->setMargin(0);
+    layout->setMargin(KDialog::spacingHint());
     layout->setSpacing(KDialog::spacingHint());
     layout->addWidget(d->showTrashDeleteDialogCheck);
     layout->addWidget(d->sidebarApplyDirectlyCheck);

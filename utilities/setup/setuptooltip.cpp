@@ -280,7 +280,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     vlay->addWidget(d->fontSelect);
     vlay->addWidget(d->tab);
     vlay->addStretch();
-    vlay->setMargin(0);
+    vlay->setMargin(KDialog::spacingHint());
     vlay->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------

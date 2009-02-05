@@ -118,7 +118,7 @@ SetupCategory::SetupCategory(QWidget* parent )
     grid->addWidget(d->repCategoryButton, 3, 1, 1, 1);
     grid->setRowStretch(4, 10);
     grid->setColumnStretch(0, 10);
-    grid->setMargin(0);
+    grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------

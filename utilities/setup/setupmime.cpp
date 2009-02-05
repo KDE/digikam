@@ -215,7 +215,7 @@ SetupMime::SetupMime(QWidget* parent)
 
     // --------------------------------------------------------
 
-    layout->setMargin(0);
+    layout->setMargin(KDialog::spacingHint());
     layout->setSpacing(KDialog::spacingHint());
     layout->addWidget(explanationLabel);
     layout->addWidget(imageFileFilterBox);

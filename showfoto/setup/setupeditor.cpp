@@ -91,7 +91,7 @@ public:
     KColorButton *overExposureColor;
 };
 
-SetupEditor::SetupEditor(QWidget* parent )
+SetupEditor::SetupEditor(QWidget* parent)
            : QScrollArea(parent), d(new SetupEditorPriv)
 {
     QWidget *panel = new QWidget(viewport());
@@ -101,7 +101,6 @@ SetupEditor::SetupEditor(QWidget* parent )
     viewport()->setAutoFillBackground(false);
 
     QVBoxLayout *layout = new QVBoxLayout(panel);
-    layout->setSpacing( KDialog::spacingHint() );
 
     // --------------------------------------------------------
 
@@ -212,6 +211,8 @@ SetupEditor::SetupEditor(QWidget* parent )
     layout->addWidget(ExifGroupOptions);
     layout->addWidget(sortOptionsGroup);
     layout->addStretch();
+    layout->setSpacing(KDialog::spacingHint());
+    layout->setMargin(KDialog::spacingHint());
 
     // --------------------------------------------------------
 

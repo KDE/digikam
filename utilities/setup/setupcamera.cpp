@@ -143,7 +143,7 @@ SetupCamera::SetupCamera( QWidget* parent )
 
     // -------------------------------------------------------------
 
-    grid->setMargin(0);
+    grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
     grid->setAlignment(Qt::AlignTop);
     grid->addWidget(d->listView,         0, 0, 6, 1);

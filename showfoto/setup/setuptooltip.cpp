@@ -190,7 +190,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     layout->addWidget(d->fileSettingBox);
     layout->addWidget(d->photoSettingBox);
     layout->addStretch();
-    layout->setMargin(0);
+    layout->setMargin(KDialog::spacingHint());
     layout->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
