@@ -648,17 +648,6 @@ void EditorWindow::slotEditKeys()
                             KShortcutsEditor::LetterShortcutsAllowed, this);
     dialog.addCollection(actionCollection(), i18nc("general editor shortcuts", "General"));
     dialog.addCollection(d->imagepluginsActionCollection, i18nc("imageplugins shortcuts", "Image Plugins"));
-
-//    QList<ImagePlugin *> pluginList = ImagePluginLoader::instance()->pluginList();
-//
-//    foreach (ImagePlugin *plugin, pluginList)
-//    {
-//        if (plugin)
-//        {
-//            dialog.addCollection(plugin->actionCollection(), plugin->objectName());
-//        }
-//    }
-
     dialog.configure();
 }
 
