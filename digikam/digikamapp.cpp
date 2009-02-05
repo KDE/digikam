@@ -2142,6 +2142,7 @@ void DigikamApp::loadPlugins()
     // These plugins have been renamed with 0.2.0-rc1
     ignores.append( "Facebook Exporter" );
     ignores.append( "SmugMug Exporter" );
+    ignores.append( "SlideShow" );
 
     d->kipiPluginLoader = new KIPI::PluginLoader( ignores, d->kipiInterface );
 
