@@ -22,6 +22,7 @@ Name[pa]=ਡਿਜਿਕੈਮ ਖੋਜ ਅਤੇ ਡਾਊਨਲੋਡ
 Name[pl]=Wykrywanie i pobieranie za pomocą digiKam
 Name[pt]=Detectar e Transferir com o digiKam
 Name[pt_BR]=Detectar e baixar com o digiKam
+Name[ru]=Копировать в digiKam 
 Name[sv]=Digikam detektering och nerladdning
 Name[th]=ตรวจสอบและดาวน์โหลดด้วย digiKam
 Name[tr]=DigiKam Belirle ve İndir
