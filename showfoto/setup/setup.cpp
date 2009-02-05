@@ -131,14 +131,17 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
 
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(QString("Setup Dialog"));
+
     if (page != LastPageUsed)
         showPage(page);
     else
     {
-        KSharedConfig::Ptr config = KGlobal::config();
-        KConfigGroup group        = config->group(QString("General Settings"));
         showPage((Page)group.readEntry("Setup Page", (int)EditorPage));
     }
+
+    restoreDialogSize(group);
 
     show();
 }
@@ -146,8 +149,9 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 Setup::~Setup()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("General Settings"));
+    KConfigGroup group        = config->group(QString("Setup Dialog"));
     group.writeEntry("Setup Page", (int)activePageIndex());
+    saveDialogSize(group);
     config->sync();
     delete d;
 }
