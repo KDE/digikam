@@ -32,6 +32,7 @@ class QEventLoop;
 class QSignalMapper;
 
 class KAction;
+class KActionCollection;
 class KComboBox;
 class KToggleAction;
 
@@ -49,44 +50,45 @@ public:
 
     EditorWindowPriv()
     {
-        removeFullScreenButton = false;
-        fullScreenHideToolBar  = false;
-        selectLabel            = 0;
-        donateMoneyAction      = 0;
-        viewCMViewAction       = 0;
-        filePrintAction        = 0;
-        copyAction             = 0;
-        resizeAction           = 0;
-        cropAction             = 0;
-        rotateLeftAction       = 0;
-        rotateRightAction      = 0;
-        flipHorizAction        = 0;
-        flipVertAction         = 0;
-        ICCSettings            = 0;
-        exposureSettings       = 0;
-        underExposureIndicator = 0;
-        overExposureIndicator  = 0;
-        cmViewIndicator        = 0;
-        viewUnderExpoAction    = 0;
-        viewOverExpoAction     = 0;
-        slideShowAction        = 0;
-        zoomFitToWindowAction  = 0;
-        zoomFitToSelectAction  = 0;
-        zoomPlusAction         = 0;
-        zoomMinusAction        = 0;
-        zoomTo100percents      = 0;
-        zoomCombo              = 0;
-        zoomComboAction        = 0;
-        selectAllAction        = 0;
-        selectNoneAction       = 0;
-        waitingLoop            = 0;
-        undoSignalMapper       = 0;
-        redoSignalMapper       = 0;
-        rawCameraListAction    = 0;
-        libsInfoAction         = 0;
-        contributeAction       = 0;
-        toolIface              = 0;
-        showMenuBarAction      = 0;
+        removeFullScreenButton       = false;
+        fullScreenHideToolBar        = false;
+        selectLabel                  = 0;
+        donateMoneyAction            = 0;
+        viewCMViewAction             = 0;
+        filePrintAction              = 0;
+        copyAction                   = 0;
+        resizeAction                 = 0;
+        cropAction                   = 0;
+        rotateLeftAction             = 0;
+        rotateRightAction            = 0;
+        flipHorizAction              = 0;
+        flipVertAction               = 0;
+        ICCSettings                  = 0;
+        exposureSettings             = 0;
+        underExposureIndicator       = 0;
+        overExposureIndicator        = 0;
+        cmViewIndicator              = 0;
+        viewUnderExpoAction          = 0;
+        viewOverExpoAction           = 0;
+        slideShowAction              = 0;
+        zoomFitToWindowAction        = 0;
+        zoomFitToSelectAction        = 0;
+        zoomPlusAction               = 0;
+        zoomMinusAction              = 0;
+        zoomTo100percents            = 0;
+        zoomCombo                    = 0;
+        zoomComboAction              = 0;
+        selectAllAction              = 0;
+        selectNoneAction             = 0;
+        waitingLoop                  = 0;
+        undoSignalMapper             = 0;
+        redoSignalMapper             = 0;
+        rawCameraListAction          = 0;
+        libsInfoAction               = 0;
+        contributeAction             = 0;
+        toolIface                    = 0;
+        showMenuBarAction            = 0;
+        imagepluginsActionCollection = 0;
     }
 
     ~EditorWindowPriv()
@@ -101,8 +103,10 @@ public:
     QLabel                    *selectLabel;
 
     QToolButton               *cmViewIndicator;
-    QToolButton               *underExposureIndicator; 
-    QToolButton               *overExposureIndicator; 
+    QToolButton               *underExposureIndicator;
+    QToolButton               *overExposureIndicator;
+
+    KActionCollection         *imagepluginsActionCollection;
 
     KAction                   *donateMoneyAction;
     KAction                   *contributeAction;

@@ -646,17 +646,18 @@ void EditorWindow::slotEditKeys()
 {
     KShortcutsDialog dialog(KShortcutsEditor::AllActions,
                             KShortcutsEditor::LetterShortcutsAllowed, this);
-    dialog.addCollection( actionCollection(), i18n( "General" ) );
+    dialog.addCollection(actionCollection(), i18nc("general editor shortcuts", "General"));
+    dialog.addCollection(d->imagepluginsActionCollection, i18nc("imageplugins shortcuts", "Image Plugins"));
 
-    QList<ImagePlugin *> pluginList = ImagePluginLoader::instance()->pluginList();
-
-    foreach (ImagePlugin *plugin, pluginList)
-    {
-        if (plugin)
-        {
-            dialog.addCollection(plugin->actionCollection(), plugin->objectName());
-        }
-    }
+//    QList<ImagePlugin *> pluginList = ImagePluginLoader::instance()->pluginList();
+//
+//    foreach (ImagePlugin *plugin, pluginList)
+//    {
+//        if (plugin)
+//        {
+//            dialog.addCollection(plugin->actionCollection(), plugin->objectName());
+//        }
+//    }
 
     dialog.configure();
 }
@@ -785,6 +786,13 @@ void EditorWindow::slotEscapePressed()
 
 void EditorWindow::loadImagePlugins()
 {
+    if (d->imagepluginsActionCollection)
+    {
+        d->imagepluginsActionCollection->clear();
+        delete d->imagepluginsActionCollection;
+    }
+    d->imagepluginsActionCollection = new KActionCollection(this, KGlobal::mainComponent());
+
     QList<ImagePlugin *> pluginList = m_imagePluginLoader->pluginList();
 
     foreach (ImagePlugin *plugin, pluginList)
@@ -793,16 +801,31 @@ void EditorWindow::loadImagePlugins()
         {
             guiFactory()->addClient(plugin);
             plugin->setEnabledSelectionActions(false);
+
+            // add actions to imagepluginsActionCollection
+            foreach (QAction* action, plugin->actionCollection()->actions())
+            {
+                d->imagepluginsActionCollection->addAction(action->objectName(), action);
+            }
         }
         else
         {
             kDebug(50003) << "Invalid plugin to add!" << endl;
         }
     }
+
+    // load imagepluginsActionCollection settings
+    d->imagepluginsActionCollection->readSettings();
 }
 
 void EditorWindow::unLoadImagePlugins()
 {
+    if (d->imagepluginsActionCollection)
+    {
+        d->imagepluginsActionCollection->clear();
+        delete d->imagepluginsActionCollection;
+    }
+
     QList<ImagePlugin *> pluginList = m_imagePluginLoader->pluginList();
 
     foreach (ImagePlugin *plugin, pluginList)
