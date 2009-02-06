@@ -4,7 +4,7 @@ digiKam 0.10.0-rc2 - Release date: 2009-02-xx
 NEW FEATURES:
 
 General        : Sidebar type is configurable: title is visible for only active tab, or for all tabs.
-ShowFoto       : Added print management
+ImageEditor    : Ported print management to KDE4/Qt4.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -54,7 +54,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 044 ==> 182830 : Large icons in sidebar tab titles.
 045 ==> 182738 : Digikam crash on/after image library scan.
 046 ==> 181657 : Fatal error crash dump.
-047 ==> 
+047 ==> 103126 : Initial window size is too small.
+048 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
