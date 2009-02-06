@@ -98,7 +98,6 @@
 #include "imageplugin.h"
 #include "imagepluginloader.h"
 #include "imagepreviewbar.h"
-#include "imageprint.h"
 #include "imagepropertiessidebardb.h"
 #include "iofilesettingscontainer.h"
 #include "loadingcacheinterface.h"
