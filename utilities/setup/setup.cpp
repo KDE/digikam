@@ -178,7 +178,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->identityPage  = new SetupIdentity();
     d->page_identity = addPage(d->identityPage, i18n("Identity"));
     d->page_identity->setHeader(i18n("<qt>Default identity information<br/>"
-                                "<i>Customize your personal informations</i></qt>"));
+                                "<i>Customize your personal information</i></qt>"));
     d->page_identity->setIcon(KIcon("user-identity"));
 
     d->mimePage  = new SetupMime();

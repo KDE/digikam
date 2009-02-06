@@ -6843,12 +6843,12 @@
       - For UMS camera, use UUID of the media provided by Solid
       interface to identify already downloaded pictures.
       We use UUID of the card inside the camera instead a set of
-      informations to identify the camera (mount path for ex.)
+      information to identify the camera (mount path for ex.)
       because the media is removable and can be mounted in other place,
       with a CF card reader for ex.
       
       - Fix several bug in freespace widget which does'st show
-      informations.
+      information.
       
 
 2008-11-02 11:05  mwiesweg
@@ -16258,7 +16258,7 @@
 	  digikam/main.cpp, libs/dialogs/CMakeLists.txt,
 	  libs/dialogs/libsinfodlg.cpp, libs/dialogs/libsinfodlg.h,
 	  project/project.kdevelop: digiKam from trunk : new dialog to show
-	  all components and libraries informations used by digiKam
+	  all components and libraries information used by digiKam
 
 2008-07-10 20:44  mwiesweg
 
@@ -18106,7 +18106,7 @@
 	* libs/imageproperties/worldmapwidget.h,
 	  libs/imageproperties/worldmapwidgetdb.cpp,
 	  libs/imageproperties/worldmapwidgetdb.h: new worldmap widget
-	  version dedicated to use DB informations. not yet complete
+	  version dedicated to use DB information. not yet complete
 
 2008-06-06 09:37  cgilles
 
@@ -18541,7 +18541,7 @@
 	  Marcel, i need a new Search Virtual Album type to identify
 	  searches performed over a map.
 	  Also, how to query new digiKam search engine using GPS location
-	  informations ?
+	  information ?
 	  CCMAIL: marcel.wiesweg@gmx.de
 
 2008-05-30 08:15  cgilles
@@ -20616,13 +20616,13 @@
 
 	* imageplugins/lenscorrection/autocorrection/klensfun.cpp: digiKam
 	  from trunk : now LensFun plugin use the common method from
-	  Digikam::DMetadata to extract Lens informations.
+	  Digikam::DMetadata to extract Lens information.
 	  Adrian, please look into DMetadata::getLensDescription() to see
 	  how Lens string is extracted. This method is shared with
-	  digiKam database interface to host Lens informations (digiKam
+	  digiKam database interface to host Lens information (digiKam
 	  support pictures search based on Lens info) .
 	  If something must be added in the future to get Lens strings
-	  informations from Makernotes/XMP/Exif/IPTC, please improve
+	  information from Makernotes/XMP/Exif/IPTC, please improve
 	  this method.
 	  
 	  CCMAIL: adrian@suse.de
@@ -20630,7 +20630,7 @@
 2008-04-30 06:33  cgilles
 
 	* libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h: digiKam
-	  from trunk : DMetadata : Lens informations extraction
+	  from trunk : DMetadata : Lens information extraction
 	  improvements :
 	  - add new Canon Makernote tag
 	  - add unstandard Camera Raw Exif tag
@@ -20683,7 +20683,7 @@
 2008-04-28 12:52  cgilles
 
 	* libs/imageproperties/cameraitempropertiestab.cpp: digiKam from
-	  trunk : Camera image properties tab : add Lens informations as
+	  trunk : Camera image properties tab : add Lens information as
 	  Marker and Model
 
 2008-04-28 12:02  cgilles
@@ -20693,7 +20693,7 @@
 	  libs/imageproperties/imagepropertiestab.cpp,
 	  libs/imageproperties/imagepropertiestab.h: digiKam from trunk:
 	  imageproperties right sidebar now display Camera Lens
-	  informations (Maker and type)
+	  information (Maker and type)
 
 2008-04-28 09:47  cgilles
 
@@ -21208,11 +21208,11 @@
 	* imageplugins/lenscorrection/klensfun.cpp,
 	  imageplugins/lenscorrection/klensfun.h: digiKam from trunk :
 	  LensFun plugin : we use now DMetadata and PhotoInfoContainer to
-	  get camera/Lens informations.
+	  get camera/Lens information.
 	  Adrian : EXif/makernotes/Xmp tags are parsed to find the right
-	  informations.
+	  information.
 	  Marcel : Look in KLFDeviceSelector::findFromMetadata(), there are
-	  few code that we can use to store Lens Informations to digiKam
+	  few code that we can use to store Lens Information to digiKam
 	  database as string.
 	  
 	  CCMAIL: marcel.wiesweg@gmx.de
@@ -23099,7 +23099,7 @@
 	  used (F3).
 	  Icon view filter available to status bar and TagFilters still
 	  suitable to change thumbbar contents in live.
-	  Thumbbar items can display Rating of pictures. More informations
+	  Thumbbar items can display Rating of pictures. More information
 	  about thumbbar items are avaialble using
 	  pop-up tool tips is you enable this option in config dialog.
 	  A fresh screenshot is available at these url :
@@ -24473,7 +24473,7 @@
 2008-02-14 21:27  cgilles
 
 	* libs/database/imageinfo.cpp, libs/database/imageinfo.h: new
-	  method to extract image informations as PhotoInfoContainer format
+	  method to extract image information as PhotoInfoContainer format
 
 2008-02-14 12:27  cgilles
 
@@ -24488,7 +24488,7 @@
 	* libs/thumbbar/thumbbar.cpp, libs/thumbbar/thumbbar.h,
 	  project/project.kdevelop, utilities/lighttable/lighttablebar.cpp,
 	  utilities/lighttable/lighttablebar.h: digiKam from trunk : Light
-	  Table Thumbbar use image informations from database to display
+	  Table Thumbbar use image information from database to display
 	  tooltip
 
 2008-02-14 10:07  cgilles
@@ -24531,7 +24531,7 @@
 	  libs/imageproperties/imagepropertiessidebardb.cpp,
 	  libs/imageproperties/imagepropertiestab.cpp,
 	  libs/imageproperties/imagepropertiestab.h: digiKam from trunk :
-	  use DB informations to set Image Properties sidebar tab contents
+	  use DB information to set Image Properties sidebar tab contents
 	  
 	  Marcel, there is two little problems :
 	  
@@ -26956,7 +26956,7 @@
 	  A new setting in album configuration page have been added to host
 	  the database file used by digiKam in a dedicaced place.
 	  Before, the SQlite3 database file (digikam3.db) used by digiKam
-	  to store all image informations like Tags, Rating, Comments,
+	  to store all image information like Tags, Rating, Comments,
 	  Date, etc...
 	  been store in the root album path. This solution introduce a big
 	  problem to use a root album on a network file system like NFS,
@@ -28494,7 +28494,7 @@
 	  - Preparing code to handle strings hosted in different languages
 	  (comments for example, dixit B.K.O #98462).
 	  - Handle all Xmp.exif and Xmp.tiff tags has Exif metadata content
-	  to get photo informations set by camera.
+	  to get photo information set by camera.
 	  - Do not set Iptc.Urgency tag with Rating value, but use standard
 	  Xmp.Rating tags instead. Import of Iptc.Urgency
 	  as Rating still running if Xmp metadata are not available.
@@ -29535,7 +29535,7 @@
 
 	* DBSCHEMA.ODS: digiKam from trunk (KDE4) : new Database schema.
 	  Added new table "Donwload History" used to identify already
-	  downloaded item from camera. These original informations from
+	  downloaded item from camera. These original information from
 	  media are stored :
 	  "file path", "file name", "file size", and "file date"
 	  CCMAIL: digikam-devel@kde.org
@@ -38840,7 +38840,7 @@
 	  
 	  Laurent, Please review if
 	  - the new way to use QToolTip is right to display thumbbar item
-	  informations.
+	  information.
 	  - the way to handle image "Dimensions" using new KFileMetaInfo
 	  API is right
 	  
@@ -43612,7 +43612,7 @@
 	  - Adapt Gausian blur radius to real image size and not preview.
 	  - Fix 16 bits color depth Taint Levels to right value
 	  - Blur only the pixels extracted from the Red Color using Alpha
-	  Channel informations.
+	  Channel information.
 	  - Preformance optimization of algorithm.
 	  
 	  CCBUGS: 142443
@@ -43929,7 +43929,7 @@
 	  digiKam core. It support more recent camera RAW file formats and
 	  provide a new wavelet noise reduction filter.
 	  
-	  If you want more informations about libkdcraw, take a look into
+	  If you want more information about libkdcraw, take a look into
 	  my blog : http://www.digikam.org/?q=node/208
 	  
 	  To packagers : please update your packages rules about this new
@@ -45126,13 +45126,13 @@
 	* digikam/digikamview.cpp,
 	  utilities/imageeditor/editor/imagewindow.cpp: digikam from trunk:
 	  Native SlideShow : perform optimization if photograph
-	  informations are not require to be displayed by user during
+	  information are not require to be displayed by user during
 	  slide. In this case, no need to use DMetadata to extract these
 	  info from images...
 	  
 	  Marcel: it will be time to update database content to perform
 	  optimizations everywhere. I think than all photograph
-	  informations available on right sidebar need to be stored at
+	  information available on right sidebar need to be stored at
 	  least in database (in a first time, more info later of course)
 	  and handle by ImageInfo class.
 	  
@@ -45228,7 +45228,7 @@
 	  utilities/slideshow/slideshow.cpp,
 	  utilities/slideshow/slideshowsettings.h: digikam from trunk :
 	  Native SlideShow : added camera Exposure Time and Sensitivity
-	  informations
+	  information
 
 2007-02-13 21:05  cgilles
 
@@ -45238,7 +45238,7 @@
 	  utilities/slideshow/slideshow.cpp,
 	  utilities/slideshow/slideshow.h,
 	  utilities/slideshow/slideshowsettings.h: digikam from trunk :
-	  Native SlideShow : added camera Aperture and Focal informations
+	  Native SlideShow : added camera Aperture and Focal information
 
 2007-02-13 21:00  mwiesweg
 
@@ -45292,14 +45292,14 @@
 	  utilities/setup/setupslideshow.cpp,
 	  utilities/slideshow/slideshow.cpp,
 	  utilities/slideshow/slideshowsettings.h: digikam from trunk:
-	  native Slideshow Tool : add capability to print more informations
+	  native Slideshow Tool : add capability to print more information
 	  on bottom of pictures.
 	  
 	  There is a new option to print image comment. Comments from
 	  database is displayed under digiKam. With Showfoto, Exif Comments
 	  is displayed.
 	  
-	  The implementation is ready to handle all photograph informations
+	  The implementation is ready to handle all photograph information
 	  (Apperture, Focal, Exposure, Date, etc : the same info than
 	  photograph properties from right sidebar in fact...).
 	  
@@ -45882,7 +45882,7 @@
 	  libs/dcraw/dcrawinfocontainer.h, libs/dmetadata/dmetadata.cpp:
 	  digikam from trunk : dcraw and metadata extrcation for
 	  unsupported Exiv2 RAW file : separate make and model
-	  informations.
+	  information.
 
 2007-02-06 13:22  cgilles
 
@@ -46040,7 +46040,7 @@
 	  libs/dimg/loaders/rawloader.cpp, libs/dmetadata/Makefile.am,
 	  libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h: digikam
 	  from trunk : new DcrawIface method to extract usual photo
-	  informations with RAW files (X3F, ORF, etc...) unsupported by
+	  information with RAW files (X3F, ORF, etc...) unsupported by
 	  Exiv2 library, using the dcraw indentify method.
 	  
 	  CCMAIL: digikam-devel@kde.org
@@ -46521,7 +46521,7 @@
 	  - New common widget StatusProgressbar and StatusNavigateBar.
 	  - Removing old IOFileProgressBar widget on ImageEditor.
 	  - Add StatusProgressBar on left of Album Gui status bar witch
-	  will show items selection informations from current album or a
+	  will show items selection information from current album or a
 	  progress information when user apply changes on items from
 	  Comments & Tags side bar.
 	  - Add StatusNavigateBar on right of Album Gui status bar witch
@@ -47888,7 +47888,7 @@
 2007-01-09 08:42  cgilles
 
 	* digikam/Makefile.am, digikam/main.cpp: digikam from trunk : show
-	  more informations in About pannel about shared library version
+	  more information in About pannel about shared library version
 	  used : Exiv2 and Gphoto2.
 	  CCBUGS: 139658
 
@@ -48010,7 +48010,7 @@
 	  compilation time and improve binary compatibilty between digiKam
 	  components.
 	  
-	  More informations :
+	  More information :
 	  http://developer.kde.org/policies/librarypolicy.html
 	  
 	  CCMAIL: anaselli@linux.it
@@ -48742,7 +48742,7 @@
 	  
 	  JPEG2000 is an advanced picture compression file format based on
 	  wavelet theory. It support 16 bits/color/pixel, metadata, and ICC
-	  color profile. Look url below for more informations:
+	  color profile. Look url below for more information:
 	  
 	  http://www.ece.uvic.ca/~mdadams/jasper
 	  http://en.wikipedia.org/wiki/JPEG_2000
@@ -51380,7 +51380,7 @@
 	  utilities/setup/setup.h, utilities/setup/setupgeneral.cpp,
 	  utilities/setup/setuptooltip.cpp, utilities/setup/setuptooltip.h:
 	  digiKam from trunk : new Setup album item tooltip section to
-	  optimize the informations to show over the picture using the
+	  optimize the information to show over the picture using the
 	  pop-up tool tip window. Each item to show can be set in this new
 	  setup dialog tab.
 	  
@@ -52549,7 +52549,7 @@
 
 	* utilities/cameragui/cameraui.cpp: digikam from trunk : camera gui
 	  : moving auto-rotate/flip option to "On the fly Operations"
-	  section. Remaning "Use Camera Informations" section to
+	  section. Remaning "Use Camera Information" section to
 	  "Auto-Creation of Albums"
 
 2006-08-22 11:58  cgilles
@@ -53526,14 +53526,14 @@
 	  utilities/cameragui/gpcamera.cpp,
 	  utilities/cameragui/umscamera.cpp: digikam from trunk : improving
 	  camera drivers bug report information. Fix camera dialog about
-	  data. fix Camera Informations menu entry rules
+	  data. fix Camera Information menu entry rules
 
 2006-07-21 11:51  cgilles
 
 	* utilities/cameragui/camerainfodialog.cpp,
 	  utilities/cameragui/cameraui.cpp,
 	  utilities/cameragui/umscamera.cpp: digikam from trunk : add
-	  informations about UMS camera drivers
+	  information about UMS camera drivers
 
 2006-07-21 11:24  cgilles
 
@@ -53550,7 +53550,7 @@
 	  in digiKam 0.6.x about to get all camera information from gphoto2
 	  drivers.
 	  A new Help button menu have been add instead a basic button and a
-	  new option can launch the camera informations dialog when the
+	  new option can launch the camera information dialog when the
 	  camera
 	  interface is not busy (out of pictures downloading for example).
 	  
@@ -53838,7 +53838,7 @@
 	  libs/widgets/imageplugins/Makefile.am,
 	  utilities/imageeditor/editor/imageiface.cpp,
 	  utilities/imageeditor/editor/imageiface.h: digikam from trunk:
-	  Color management tool : add camera Make/Model informations to
+	  Color management tool : add camera Make/Model information to
 	  Input profile settings area to help user with the input ICC
 	  profile file selection.
 	  CCMAIL: digikam-devel@kde.org
@@ -55474,7 +55474,7 @@
 2006-06-16 19:23  cgilles
 
 	* libs/imageproperties/imagepropertiestab.cpp: digiKam from trunk :
-	  fix widget including all image properties informations to a
+	  fix widget including all image properties information to a
 	  QFrame
 
 2006-06-16 14:42  cgilles
@@ -56013,7 +56013,7 @@
 	  users. This commit give a more suitable settings with a full
 	  technical description.
 	  
-	  note :more informations about Demosaicing RAW images :
+	  note :more information about Demosaicing RAW images :
 	  http://en.wikipedia.org/wiki/Demosaicing
 	  
 	  CCMAIL: digikam-devel@kde.org, linux@daniel-bauer.com
@@ -56244,7 +56244,7 @@
 
 	* libs/dmetadata/loaders/pngmetaloader.cpp: digikam from trunk :
 	  DMetadata::PNGMetaLoader : fix Exif conctruction rules from
-	  scratch using technical image informations
+	  scratch using technical image information
 
 2006-05-30 05:38  cgilles
 
@@ -56448,7 +56448,7 @@
 
 	* utilities/imageeditor/canvas/dimginterface.cpp: no need to set
 	  Exif image dimensions at all image modifications into editor. Set
-	  these informations when image is saved to disk is enough
+	  these information when image is saved to disk is enough
 
 2006-05-25 22:13  cgilles
 
@@ -57098,7 +57098,7 @@
 	  utilities/imageeditor/canvas/colorcorrectiondlg.cpp,
 	  utilities/imageeditor/canvas/colorcorrectiondlg.h: digikam from
 	  trunk : add 2 new button on preview of ICC color correction
-	  dialog to see embedded or output ICC color profile informations.
+	  dialog to see embedded or output ICC color profile information.
 	  
 	  CCMAIL: digikam-devel@kde.org, francisco.jct@gmail.com
 	  CCBUGS: 125733
@@ -57626,8 +57626,8 @@
 	  libs/imageproperties/cameraitempropertiestab.h,
 	  libs/imageproperties/imagepropertiessidebarcamgui.cpp: digikam
 	  from trunk : finalize camera item properties side bar tab: if
-	  your camera can provide Exif informations from a picture (Gphoto
-	  or UMS), we will display Photograph informations like in image
+	  your camera can provide Exif information from a picture (Gphoto
+	  or UMS), we will display Photograph information like in image
 	  properties sidebar tab from main interface and image editor.
 	  
 	  CMAIL: digikam-devel@kde.org
@@ -57783,7 +57783,7 @@
 	  
 	  - This MRW is based on Stephane Chauveau code and can give Exif
 	  metadata tags.
-	  - digiKam can displaying all Photograph informations from MRW,
+	  - digiKam can displaying all Photograph information from MRW,
 	  including Exif.
 	  - Makernotes can be handle but not yet displayed into digikam
 	  metadata interface because Exiv2 library do not support yet
@@ -57894,19 +57894,19 @@
 	  
 	  - New DMetadata rules to store JFIF comments section data like
 	  EXIF and IPTC
-	  - If Comments & tags informations have been changed, notify DImg
+	  - If Comments & tags information have been changed, notify DImg
 	  instance of current image to set
-	  informations in metadata bytes array (COM, EXIF, IPTC).
+	  information in metadata bytes array (COM, EXIF, IPTC).
 	  - If an image have been saved to another file format, notify
 	  Image properties sidebar to reload
-	  informations from DImg instance of new image.
+	  information from DImg instance of new image.
 	  
 	  CCMAIL: digikam-devel@kde.org
 
 2006-04-25 14:15  cgilles
 
 	* digikam/albumfiletip.cpp: digikam from trunk : album item file
-	  tips : hide all Photograph Properties informations if no metadata
+	  tips : hide all Photograph Properties information if no metadata
 	  are available from current image.
 	  
 	  CCBUGS: 121367
@@ -57946,7 +57946,7 @@
 	* libs/dmetadata/photoinfocontainer.h,
 	  libs/imageproperties/imagepropertiestab.cpp: digikam from trunk :
 	  image properties sidebar tabs : hide all Photograph Properties
-	  informations if no metadata are available from current image.
+	  information if no metadata are available from current image.
 	  
 	  CCBUGS: 121367
 	  CCMAIL: digikam-devel@kde.org
@@ -58032,7 +58032,7 @@
 	  (With the old implementation, Comments from Exif and Iptc, Rating
 	  from Iptc and are never checked duing a wrong validity test -
 	  stupid bug)
-	  - Now at startup, these informations are backported to database :
+	  - Now at startup, these information are backported to database :
 	  
 	  ==> Comments from JFIF section, or Exif UserComments tag, or Iptc
 	  Caption tag.
@@ -58087,10 +58087,10 @@
 	  - Re-designed album file tip content accordinly with image
 	  poperties sidebar tab.
 	  - Fix mime type with RAW file (sounds like TIFF file before).
-	  - Renamed Metadata informations to Photograph properties
+	  - Renamed Metadata information to Photograph properties
 	  - Added image Rating tag info.
 	  
-	  PENDING TASK : added digiKam comments & tags informations in
+	  PENDING TASK : added digiKam comments & tags information in
 	  image properties sidebar tab !!! ==> We want really that ? Please
 	  give me your viewpoints !
 	  
@@ -58151,8 +58151,8 @@
 	  libs/imageproperties/imagepropertiestab.cpp: digikam from trunk :
 	  image properties side bar tab :
 	  
-	  - Add White balance informations.
-	  - Add Exposure mode and program informations.
+	  - Add White balance information.
+	  - Add Exposure mode and program information.
 	  - Fix navigate bar problem with first and last current album
 	  items.
 	  
@@ -58245,7 +58245,7 @@
 	  aren't displayed. i think it's redondant with Comments & tags
 	  sidebar tab. Because this one is very easy to read by
 	  non-photographers users, i think it's not necessary to duplicate
-	  here these informations, and this way simpilfy source code about
+	  here these information, and this way simpilfy source code about
 	  to share resume sidebar tab implementation between showfoto and
 	  digiKam (there is no database depency).
 	  
@@ -58386,7 +58386,7 @@
 	  during download instead the current camera file name. Note that
 	  old implementation displayed the camera file name in both way :
 	  the sidebar tab header and the camera item properties. These
-	  redondant informations are now fixed by this commit.
+	  redondant information are now fixed by this commit.
 	  
 	  CCMAIL: digikam-devel@kde.org
 
@@ -58403,7 +58403,7 @@
 
 	* ChangeLog: digikam from trunk : first update of ChangeLog file to
 	  prepare 0.9.0-beta1. This is not the final beta1 update. The
-	  informations from ChangeLog have been used to update NEWS file,
+	  information from ChangeLog have been used to update NEWS file,
 	  especially B.K.O files closed/fixed.
 
 2006-04-18 11:34  cgilles
@@ -58957,7 +58957,7 @@
 	  (With the old implementation, Comments from Exif and Iptc, Rating
 	  from Iptc and are never checked duing a wrong validity test -
 	  stupid bug)
-	  - Now at startup, these informations are backported to database :
+	  - Now at startup, these information are backported to database :
 	  
 	  ==> Comments from JFIF section, or Exif UserComments tag, or Iptc
 	  Caption tag.
@@ -59150,13 +59150,13 @@
 	  utilities/setup/setupmetadata.cpp: digikam from stable : auto
 	  IPTC tagging on the fly during download:
 	  
-	  - Remove location informations used with photographer id. This is
+	  - Remove location information used with photographer id. This is
 	  relevant of picture content not photographer.
 	  - Add new Identity setup page with default IPTC Photographer and
-	  Credits/Copyright informations.
+	  Credits/Copyright information.
 	  - New method to set Credits/Copyright IPTC tags.
 	  - New option to set automaticly IPTC Credits/Copyright
-	  informations when Comment&Tags sidebar tab is used.
+	  information when Comment&Tags sidebar tab is used.
 	  - New option to set IPTC Credits/Copyright information on the fly
 	  during download.
 	  
@@ -59628,7 +59628,7 @@
 	  - Metadata setup new options to set photographer indentity in
 	  IPTC tags (author, author title, city, Province, and Country).
 	  Take a care : IPTC support only ASCII characters. This
-	  informations are set if comments & tags sidebar tab is used.
+	  information are set if comments & tags sidebar tab is used.
 	  
 	  CCMAIL: digikam-devel@kde.org
 
@@ -59780,7 +59780,7 @@
 2006-03-31 08:49  cgilles
 
 	* libs/dmetadata/dmetadata.cpp: digikam from trunk : Finalize
-	  saving Date & Time informations into Exif and Iptc metadata
+	  saving Date & Time information into Exif and Iptc metadata
 
 2006-03-31 07:08  cgilles
 
@@ -59835,7 +59835,7 @@
 
 	* libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h: digikam
 	  from trunk : DMetadata improvements: new methods to set/get Image
-	  Rating informations from IPTC.
+	  Rating information from IPTC.
 
 2006-03-30 14:11  cgilles
 
@@ -60361,7 +60361,7 @@
 	  digikam from trunk : RAW files decoding and embeded ICC profiles
 	  extraction. Implementation done. You need to use the last dcraw
 	  version for best result. Look widgets tips from setup page for
-	  more informations.
+	  more information.
 	  
 	  Advanced tests are requires. Please give me a feedback.
 	  
@@ -60655,7 +60655,7 @@
 2006-03-16 20:31  cgilles
 
 	* libs/widgets/imageplugins/imagewidget.cpp: reduce font size to
-	  display color informations
+	  display color information
 
 2006-03-16 15:35  cgilles
 
@@ -60967,7 +60967,7 @@
 	  libs/widgets/metadata/metadatawidget.h,
 	  libs/widgets/metadata/worldmapwidget.cpp,
 	  libs/widgets/metadata/worldmapwidget.h: digikam from trunk : new
-	  sidebar tab to display GPS informations.
+	  sidebar tab to display GPS information.
 	  
 	  - GPS info have been removed from standrad Exif tab.
 	  - Created a new tab named GPS including all GPS Exif info and a
@@ -61176,7 +61176,7 @@
 	  IMPORTANT:
 	  
 	  - Exiv2 do not support yet gettext for i18n rules. All
-	  informations in metadata viewers aren't yet i18n (tags name, tags
+	  information in metadata viewers aren't yet i18n (tags name, tags
 	  values, and tags descriptions)
 	  - Any tag names use internal Exiv2 name, not the user friendly
 	  text transformations. This point must be fixed in Exiv2 libs.
@@ -62230,11 +62230,11 @@
 	  GUI big changes :
 	  
 	  1 - Camera GUI using image properties side bar now with 2 tabs to
-	  display Exif informations and image file informations. The 2 old
+	  display Exif information and image file information. The 2 old
 	  dialogs have been removed.
-	  2 - With USM camera, the exif informations can be displayed with
+	  2 - With USM camera, the exif information can be displayed with
 	  all RAW files... if THM files relevant are provides by your
-	  camera. There is no yet a way to get Exif informations directly
+	  camera. There is no yet a way to get Exif information directly
 	  from RAW files.
 	  
 	  A screenshot :
@@ -62248,7 +62248,7 @@
 	  - RAW file Exif extraction (in digikam libs core), using dcraw
 	  parse implementation. I'm study hard this solution. It's can be
 	  possible to do, there are any code based on this way to extract
-	  CRW and NEF Exif informations like a bytes array.
+	  CRW and NEF Exif information like a bytes array.
 	  - LossLess convertion on the fly using PNG file (Tiff will be
 	  doing later) with metadata backup. The code is ready on my
 	  computer but i need to do any advanced tests before to commit.
@@ -62370,7 +62370,7 @@
 	  
 	  http://search.cpan.org/src/EXIFTOOL/Image-ExifTool-5.87/html/TagNames/PNG.html#TextualData
 	  
-	  - Now digiKam can display Exif informations embedded in PNG files
+	  - Now digiKam can display Exif information embedded in PNG files
 	  when a JPEG files have been converted to PNG using standard
 	  'convert' ImageMagick tool or batch convert image kipi plugin
 	  (this one using ImageMagick) ! Select a PNG file from your
@@ -65993,7 +65993,7 @@
 	* libs/imageproperties/imagepropertiescolorstab.cpp,
 	  libs/imageproperties/imagepropertiescolorstab.h: digiKam from
 	  trunk : Image Colors properties sidebar : added image color depth
-	  and alpha channel informations
+	  and alpha channel information
 	  
 	  CCMAIL: digikam-devel@kde.org
 
@@ -66170,10 +66170,10 @@
 	  libs/imageproperties/imagepropertiessidebar.cpp,
 	  libs/imageproperties/imagepropertiessidebardb.cpp: digiKam from
 	  trunk : renamed 'Histogram' image properties side bar to a more
-	  generic 'Colors' name. Histogram informations are added to an
+	  generic 'Colors' name. Histogram information are added to an
 	  KTabWidget container. A new (empty) 'ICC profiles' tab have been
 	  added. It's dedicaced to display all current image ICC profiles
-	  informations.
+	  information.
 	  
 	  CCMAIL: digikam-devel@kde.org, fj.cruz@supercable.es
 
@@ -66253,7 +66253,7 @@
 	  - Target Preview Image (changed by plugins !)
 	  
 	  The old implementation always displayed original image color
-	  point informations and this way cannot be used to check
+	  point information and this way cannot be used to check
 	  over/under-exposure area on target image !!!
 	  
 	  CCMAIL: digikam-devel@kde.org
@@ -67984,7 +67984,7 @@
 	  DImg Add new method to get camera model and camera constructor
 	  from metadata on image file (RAW, PNG, TIFF). Need to do it with
 	  JPEG file.
-	  These informations will be used to apply automaticly an icc
+	  These information will be used to apply automaticly an icc
 	  profil to an image if there is no embeded profil available
 	  CCMAIL: fj.cruz@supercable.es, digikam-devel@kde.org
 
@@ -69206,7 +69206,7 @@
 
 	* libs/thumbbar/thumbbar.cpp, libs/thumbbar/thumbbar.h,
 	  showfoto/showfoto.cpp, showfoto/showfoto.h: BugFix : update
-	  properly current item informations when images are
+	  properly current item information when images are
 	  loaded/removed.
 
 2005-08-31 06:55  scripty
@@ -70971,7 +70971,7 @@
 	  ShowFoto 0.3.0 splashscreens.
 	  
 	  Any help welcome to start this constest on Kde-look.org. Please
-	  contact me if you want more informations about.
+	  contact me if you want more information about.
 	  
 	  CCMAIL: digikam-devel@kde.org,
 
@@ -73239,7 +73239,7 @@
 
 	* Bug fix in digiKam Aspect ratio crop tool : separate width and
 	  height "selection change" signals
-	  for to update dialog informations.
+	  for to update dialog information.
 
 2005-01-21 13:55  cgilles
 
@@ -73262,7 +73262,7 @@
 	  used by the most popular photographers (this theory is based on
 	  the Fibonacci works).
 	  
-	  If you want more informations about to use 'Rule Third Lines',
+	  If you want more information about to use 'Rule Third Lines',
 	  please read at this url :
 	  http://www.megapixel.net/html/issueindex.php?lang=en
 	  
@@ -74199,7 +74199,7 @@
 	* Digikam Image Properties dialog : Important changes !!!
 	  
 	  - Added new constructor for stand alone mode (outside Digikam
-	  instance ie without album and album items informations). Dialog
+	  instance ie without album and album items information). Dialog
 	  can be used now in ShowFoto and ImageEditor (via camera
 	  interface).
 	  - Polish General page when Stand Alone mode.
@@ -74408,7 +74408,7 @@
 	* Digikam histogram computation : major changes !!!
 	  - Threaded implementation. This way run unfreezed dialogs during
 	  computation.
-	  - Histogram widget show computation informations.
+	  - Histogram widget show computation information.
 	  To Digikam users : in image properties dialog, threaded
 	  implementation let'\''s you to change the current image by
 	  Perv/Next buttons during histogram computation. This way is very
@@ -74419,7 +74419,7 @@
 	* Digikam histogram computation : major changes !!!
 	  - Threaded implementation. This way run unfreezed dialogs during
 	  computation.
-	  - Histogram widget show computation informations.
+	  - Histogram widget show computation information.
 	  
 	  To Digikam users : in image properties dialog, threaded
 	  implementation let's you to change the current image by Perv/Next
@@ -74584,7 +74584,7 @@
 2004-11-18 17:08  cgilles
 
 	* Digikam image properties : updated General tab (not finished)
-	  TODO: updated General tab informations when Prev/next item
+	  TODO: updated General tab information when Prev/next item
 	  selected
 	  CCMAIL: digikam-devel@lists.sourceforge.net
 
@@ -74799,7 +74799,7 @@
 	* Digikam File properties and Meta-Data dialog :
 	  - New Exif information tab in tree view mode !
 	  - This implementation provide just _ONE_ tab for all exif
-	  informations.
+	  information.
 	  
 	  To Digikam users : you must update libkexif source code from
 	  kdeextargear-libs-1
@@ -76023,7 +76023,7 @@
 
 2004-09-13 11:56  cgilles
 
-	* Added Kipi version informations to the GUI (Digikam about and
+	* Added Kipi version information to the GUI (Digikam about and
 	  plugins setup)
 
 2004-09-13 11:29  cgilles
