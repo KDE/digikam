@@ -105,7 +105,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_tooltip->setIcon(KIcon("dialog-information"));
 
     d->dcrawPage  = new Digikam::SetupDcraw();
-    d->page_dcraw = addPage(d->dcrawPage, i18n("RAW decoding"));
+    d->page_dcraw = addPage(d->dcrawPage, i18n("RAW Decoding"));
     d->page_dcraw->setHeader(i18n("<qt>RAW Files Decoding Settings<br/>"
                              "<i>Customize default RAW decoding settings</i></qt>"));
     d->page_dcraw->setIcon(KIcon("kdcraw"));

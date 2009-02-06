@@ -206,7 +206,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_iofiles->setIcon(KIcon("document-save-all"));
 
     d->dcrawPage = new SetupDcraw();
-    d->page_dcraw = addPage(d->dcrawPage, i18n("RAW decoding"));
+    d->page_dcraw = addPage(d->dcrawPage, i18n("RAW Decoding"));
     d->page_dcraw->setHeader(i18n("<qt>Image Editor: RAW Files Decoding Settings<br/>"
                              "<i>Customize default RAW decoding settings of image editor</i></qt>"));
     d->page_dcraw->setIcon(KIcon("kdcraw"));
