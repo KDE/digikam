@@ -55,7 +55,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 045 ==> 182738 : Digikam crash on/after image library scan.
 046 ==> 181657 : Fatal error crash dump.
 047 ==> 103126 : Initial window size is too small.
-048 ==> 
+048 ==> 143955 : Images without filename extension are inaccessible.
+049 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
