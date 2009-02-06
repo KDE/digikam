@@ -108,6 +108,7 @@ extern "C"
 #include "albumiconviewtooltip.h"
 #include "albumlister.h"
 #include "albummanager.h"
+#include "albumselectdialog.h"
 #include "albumsettings.h"
 #include "cameraui.h"
 #include "constants.h"
@@ -630,6 +631,14 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     // --------------------------------------------------------
 
     DPopupMenu popmenu(this);
+
+    QAction *newAlbumFromSelectionAction = 0;
+    if (selectedImageIDs.count() > 1)
+    {
+        newAlbumFromSelectionAction = popmenu.addAction(SmallIcon("folder-image"),
+                                                        i18n("Move Selection to new Album"));
+    }
+
     QAction *viewAction         = popmenu.addAction(SmallIcon("viewimage"),     i18n("View..."));
     QAction *editAction         = popmenu.addAction(SmallIcon("editimage"),     i18n("Edit..."));
     QAction *lighttableAction   = popmenu.addAction(SmallIcon("lighttableadd"), i18n("Add to Light Table"));
@@ -762,6 +771,10 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
         if (choice == editAction)
         {
             slotDisplayItem(iconItem);
+        }
+        else if (choice == newAlbumFromSelectionAction)
+        {
+            slotNewAlbumFromSelection();
         }
         else if (choice == renameAction)
         {
@@ -2447,6 +2460,39 @@ void AlbumIconView::slotEditRatingFromItem(int rating)
     ScanController::instance()->resumeCollectionScan();
     d->imageLister->blockSignals(false);
     updateContents();
+}
+
+void AlbumIconView::slotNewAlbumFromSelection()
+{
+    KUrl::List kioURLs;
+    QList<qlonglong> selectedImageIDs;
+
+    for (IconItem *it = firstItem(); it; it=it->nextItem())
+    {
+        if (it->isSelected())
+        {
+            AlbumIconItem *selItem = static_cast<AlbumIconItem *>(it);
+            selectedImageIDs.append(selItem->imageInfo().id());
+            kioURLs.append(selItem->imageInfo().fileUrl());
+        }
+    }
+
+    if (kioURLs.isEmpty() || selectedImageIDs.isEmpty())
+        return;
+
+    Album *album = AlbumManager::instance()->currentAlbum();
+    if (album && album->type() != Album::PHYSICAL)
+        album = 0;
+
+    QString header(i18n("<p>Please select the destination album from the digiKam library to "
+                        "move the selected images into.</p>"));
+
+    album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header);
+    if (!album) return;
+
+    KIO::Job* job = DIO::move(kioURLs, selectedImageIDs, (PAlbum*)album);
+    connect(job, SIGNAL(result(KJob*)),
+            this, SLOT(slotDIOResult(KJob*)));
 }
 
 }  // namespace Digikam
