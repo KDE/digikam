@@ -647,12 +647,6 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     gotoAction->setIcon(SmallIcon("go-jump"));
     gotoAction->setText(i18n("Go To"));
 
-    // If there is more than one image selected, disable the goto menu entry.
-    if (selectedImageIDs.count() > 1)
-    {
-        gotoAction->setEnabled(false);
-    }
-
     popmenu.addMenu(&openWithMenu);
     openWithMenu.menuAction()->setText(i18n("Open With"));
 
@@ -761,6 +755,19 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     popmenu.addMenu(&ratingMenu);
     ratingMenu.menuAction()->setText(i18n("Assign Rating"));
+
+    // --------------------------------------------------------
+
+    // If there is more than one image selected, disable some actions
+    if (selectedImageIDs.count() > 1)
+    {
+        viewAction->setEnabled(false);
+        editAction->setEnabled(false);
+        findSimilarAction->setEnabled(false);
+        gotoAction->setEnabled(false);
+        renameAction->setEnabled(false);
+        thumbnailAction->setEnabled(false);
+    }
 
     // --------------------------------------------------------
 
