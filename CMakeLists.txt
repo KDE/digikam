@@ -564,14 +564,6 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageresize.cpp
        )
 
-#     KDE4_ADD_UI_FILES(libdimgeditortools_SRCS
-#         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/printoptionspage.ui
-#        )
-# 
-#     kde4_add_kcfg_files(libdimgeditortools_SRCS
-#         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/digikamconfig.kcfgc
-#        )
-
     SET(librawimport_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawpostprocessing.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawimport.cpp
