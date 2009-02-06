@@ -593,6 +593,14 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
+    d->newAlbumFromSelectionAction = new KAction(KIcon("albumfolder-new"), i18n("&New Album from Selection..."), this);
+//    d->newAlbumFromSelectionAction->setShortcut(KStandardShortcut::openNew());
+    d->newAlbumFromSelectionAction->setWhatsThis(i18n("Move selected images into a new album."));
+    connect(d->newAlbumFromSelectionAction, SIGNAL(triggered()), d->view, SLOT(slotNewAlbumFromSelection()));
+    actionCollection()->addAction("album_new_from_selection", d->newAlbumFromSelectionAction);
+
+    // -----------------------------------------------------------------
+
     d->deleteAction = new KAction(KIcon("user-trash"), i18n("Delete"), this);
     connect(d->deleteAction, SIGNAL(triggered()), d->view, SLOT(slotDeleteAlbum()));
     actionCollection()->addAction("album_delete", d->deleteAction);
@@ -1251,6 +1259,7 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev,
     d->imageDeleteAction->setEnabled(val);
     d->imageExifOrientationActionMenu->setEnabled(val);
     d->slideShowSelectionAction->setEnabled(selection.count() != 0);
+    d->newAlbumFromSelectionAction->setEnabled(false);
 
     switch (selection.count())
     {
@@ -1278,6 +1287,7 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev,
             d->imagePreviewAction->setEnabled(false);
             d->imageRenameAction->setEnabled(false);
             d->imageFindSimilarAction->setEnabled(false);
+            d->newAlbumFromSelectionAction->setEnabled(true);
             break;
         }
     }

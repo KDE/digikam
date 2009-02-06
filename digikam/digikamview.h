@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2002-16-10
- * Description : implementation of album view interface. 
+ * Description : implementation of album view interface.
  *
- * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu> 
+ * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2002-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -96,6 +96,7 @@ public slots:
 
     // Album action slots
     void slotNewAlbum();
+    void slotNewAlbumFromSelection();
     void slotSortAlbums(int order);
     void slotDeleteAlbum();
     void slotSelectAlbum(const KUrl &url);

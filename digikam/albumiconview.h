@@ -159,6 +159,7 @@ public slots:
     void slotSetAlbumThumbnail(AlbumIconItem *iconItem);
     void slotCopy();
     void slotPaste();
+    void slotNewAlbumFromSelection();
 
     void slotAssignRating(int rating);
     void slotAssignRatingNoStar();
@@ -219,7 +220,6 @@ private slots:
     void slotChangeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs,
                                    bool addOrRemove, bool progress);
 
-    void slotNewAlbumFromSelection();
 
 private:
 

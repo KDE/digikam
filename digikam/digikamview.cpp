@@ -638,6 +638,11 @@ void DigikamView::slotNewAlbum()
     d->folderView->albumNew();
 }
 
+void DigikamView::slotNewAlbumFromSelection()
+{
+    d->iconView->slotNewAlbumFromSelection();
+}
+
 void DigikamView::slotDeleteAlbum()
 {
     d->folderView->albumDelete();

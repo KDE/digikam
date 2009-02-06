@@ -86,6 +86,7 @@ public:
         cardReaderMenu                       = 0;
         manuallyAddedCamerasMenu             = 0;
         newAction                            = 0;
+        newAlbumFromSelectionAction          = 0;
         deleteAction                         = 0;
         imageDeletePermanentlyAction         = 0;
         imageDeletePermanentlyDirectlyAction = 0;
@@ -193,6 +194,7 @@ public:
 
     // Album Actions
     KAction                            *newAction;
+    KAction                            *newAlbumFromSelectionAction;
     KAction                            *deleteAction;
     KAction                            *imageDeletePermanentlyAction;
     KAction                            *imageDeletePermanentlyDirectlyAction;

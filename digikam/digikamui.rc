@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="51" name="digikam" >
+<gui version="52" name="digikam" >
 
  <MenuBar>
 
@@ -9,6 +9,7 @@
      <Action name="album_forward" />
    <Separator/>
      <Action name="album_new" />
+     <Action name="album_new_from_selection" />
    <Separator/>
      <Action name="album_propsEdit" />
      <Action name="album_refresh" />
