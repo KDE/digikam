@@ -822,8 +822,8 @@ void ImageSelectionWidget::updatePixmap()
            // Move coordinates to top, left
            p.translate(d->localRegionSelection.topLeft().x(), d->localRegionSelection.topLeft().y());
 
-           float w = (float)d->localRegionSelection.width();
-           float h = (float)d->localRegionSelection.height();
+           int w = d->localRegionSelection.width();
+           int h = d->localRegionSelection.height();
 
            p.setPen(QPen(Qt::white, d->guideSize, Qt::SolidLine));
            if (w > h)
