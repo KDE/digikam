@@ -1272,6 +1272,12 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev,
         {
             d->statusBarSelectionText = i18n("%1/%2 items selected", selection.count(),
                                                                      QString::number(num_images));
+
+            // multiple images selected
+            d->imageViewAction->setEnabled(false);
+            d->imagePreviewAction->setEnabled(false);
+            d->imageRenameAction->setEnabled(false);
+            d->imageFindSimilarAction->setEnabled(false);
             break;
         }
     }
