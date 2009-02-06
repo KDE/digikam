@@ -57,7 +57,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 047 ==> 103126 : Initial window size is too small.
 048 ==> 143955 : Images without filename extension are inaccessible.
 049 ==> 132162 : Load image plugins on demand.
-050 ==> 
+050 ==> 183424 : Filter images by multiple tags.
+051 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
