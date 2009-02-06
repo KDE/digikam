@@ -635,7 +635,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     QAction *newAlbumFromSelectionAction = 0;
     if (selectedImageIDs.count() > 1)
     {
-        newAlbumFromSelectionAction = popmenu.addAction(SmallIcon("folder-image"),
+        newAlbumFromSelectionAction = popmenu.addAction(SmallIcon("folder-new"),
                                                         i18n("Move Selection to new Album"));
     }
 
