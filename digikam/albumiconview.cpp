@@ -766,7 +766,9 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
         findSimilarAction->setEnabled(false);
         gotoAction->setEnabled(false);
         renameAction->setEnabled(false);
-        thumbnailAction->setEnabled(false);
+        // If not in album or tag view, this action has not been created.
+        if (thumbnailAction)
+            thumbnailAction->setEnabled(false);
     }
 
     // --------------------------------------------------------
