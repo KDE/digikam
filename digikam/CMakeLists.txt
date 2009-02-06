@@ -93,6 +93,13 @@ SET(digikamcore_LIB_SRCS
                         ${librawimport_SRCS}
    )
 
+    KDE4_ADD_UI_FILES(digikamcore_LIB_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/tools/printoptionspage.ui
+       )
+
+    kde4_add_kcfg_files(digikamcore_LIB_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/tools/digikamconfig.kcfgc
+       )
 KDE4_ADD_LIBRARY(digikamcore SHARED ${digikamcore_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(digikamcore

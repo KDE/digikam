@@ -104,7 +104,6 @@
 #include "imagedialog.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
-#include "imageprint.h"
 #include "imageresize.h"
 #include "iofilesettingscontainer.h"
 #include "libsinfodlg.h"
@@ -116,6 +115,7 @@
 #include "statusprogressbar.h"
 #include "themeengine.h"
 #include "thumbbar.h"
+#include "printhelper.h"
 
 namespace Digikam
 {
@@ -607,11 +607,6 @@ void EditorWindow::setupStatusBar()
 
 void EditorWindow::printImage(KUrl /*url*/)
 {
-#ifndef Q_CC_MSVC
-#warning "TODO: KPrinter is disabled for KDE4.0";
-#endif
-
-/*
     uchar* ptr      = m_canvas->interface()->getImage();
     int w           = m_canvas->interface()->origWidth();
     int h           = m_canvas->interface()->origHeight();
@@ -623,6 +618,10 @@ void EditorWindow::printImage(KUrl /*url*/)
 
     DImg image(w, h, sixteenBit, hasAlpha, ptr);
 
+    PrintHelper printHelp(this);
+    printHelp.print(image);
+
+    /*
     KPrinter printer;
     QString appName = KGlobal::mainComponent().aboutData()->appName();
     printer.setDocName( url.fileName() );
@@ -639,7 +638,8 @@ void EditorWindow::printImage(KUrl /*url*/)
             KMessageBox::error(this, i18n("Failed to print file: '%1'",
                                url.fileName()));
         }
-    }*/
+    }
+    */
 }
 
 void EditorWindow::slotEditKeys()

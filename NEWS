@@ -4,6 +4,7 @@ digiKam 0.10.0-rc2 - Release date: 2009-02-xx
 NEW FEATURES:
 
 General        : Sidebar type is configurable: title is visible for only active tab, or for all tabs.
+ShowFoto       : Added print management
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
