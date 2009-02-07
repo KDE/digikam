@@ -84,6 +84,7 @@ extern "C"
 #include <kstandarddirs.h>
 #include <ktrader.h>
 #include <kurl.h>
+#include <kwindowsystem.h>
 
 // LibKIPI includes.
 
@@ -1225,8 +1226,9 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
     if (imview->isHidden())
         imview->show();
 
-    imview->raise();
-    imview->setFocus();
+    if (imview->isMinimized())
+        KWindowSystem::unminimizeWindow(imview->winId());
+    KWindowSystem::activateWindow(imview->winId());
 }
 
 void AlbumIconView::insertSelectionToLightTable(bool addTo)
@@ -1260,15 +1262,18 @@ void AlbumIconView::insertToLightTable(const ImageInfoList& list, const ImageInf
     connect(this, SIGNAL(signalItemsUpdated(const KUrl::List&)),
            ltview, SLOT(slotItemsUpdated(const KUrl::List&)));
 
-    if (ltview->isHidden())
-        ltview->show();
-
-    ltview->raise();
-    ltview->setFocus();
     // If addTo is false, the light table will be emptied before adding
     // the images.
     ltview->loadImageInfos(list, current, addTo);
     ltview->setLeftRightItems(list, addTo);
+
+    if (ltview->isHidden())
+        ltview->show();
+
+    if (ltview->isMinimized())
+        KWindowSystem::unminimizeWindow(ltview->winId());
+    KWindowSystem::activateWindow(ltview->winId());
+
 }
 
 // ------------------------------------------------------------------------------
