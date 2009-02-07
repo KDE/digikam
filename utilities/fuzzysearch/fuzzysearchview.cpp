@@ -113,9 +113,11 @@ public:
         timerSketch           = 0;
         timerImage            = 0;
         findDuplicatesPanel   = 0;
+        active                = false;
         fingerprintsChecked   = false;
     }
 
+    bool                    active;
     bool                    fingerprintsChecked;
 
     QColor                  selColor;
@@ -543,6 +545,8 @@ SearchTextBar* FuzzySearchView::searchBar() const
 
 void FuzzySearchView::setActive(bool val)
 {
+    d->active = val;
+
     // at first occasion, warn if no fingerprints are available
     if (val && !d->fingerprintsChecked && isVisible())
     {
@@ -618,6 +622,9 @@ void FuzzySearchView::slotTabChanged(int tab)
 void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
 {
     if (!salbum || !salbum->isHaarSearch())
+        return;
+
+    if (!d->active)
         return;
 
     AlbumManager::instance()->setCurrentAlbum(salbum);
