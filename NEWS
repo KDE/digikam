@@ -63,7 +63,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 053 ==> 167417 : Showfoto cannot save files of CIFS mount.
 054 ==> 164403 : Image zoom changes when choosing a new thumbnail.
 055 ==> 151552 : Album and Imageeditor cache problems.
-056 ==> 
+056 ==> 183489 : Light Table steels focus.
+057 ==> 166472 : Thumbnail bar gone in image editor when switching back from fullscreen.
+058 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
