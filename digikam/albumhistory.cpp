@@ -114,15 +114,14 @@ void AlbumHistory::addAlbum(Album *album, QWidget *widget)
         return;
     }
 
-    HistoryItem *item = new HistoryItem(album, widget);
-
     // Same album as before in the history
-    if(!m_backwardStack->isEmpty() &&
-       *m_backwardStack->last() == *item)
+    if(!m_backwardStack->isEmpty() && m_backwardStack->last()->album == album)
     {
-        delete item;
+        m_backwardStack->last()->widget = widget;
         return;
     }
+
+    HistoryItem *item = new HistoryItem(album, widget);
 
     m_backwardStack->push_back(item);
 
