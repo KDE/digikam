@@ -135,6 +135,8 @@ public:
         thumbSize             = ThumbnailSize::Medium;
     }
 
+    QString userPresentableAlbumTitle(const QString &album);
+
     bool                      needDispatchSelection;
     bool                      cancelSlideShow;
 
@@ -950,11 +952,30 @@ void DigikamView::clearHistory()
 void DigikamView::getBackwardHistory(QStringList &titles)
 {
     d->albumHistory->getBackwardHistory(titles);
+    for (int i=0; i<titles.size(); i++)
+        titles[i] = d->userPresentableAlbumTitle(titles[i]);
 }
 
 void DigikamView::getForwardHistory(QStringList &titles)
 {
     d->albumHistory->getForwardHistory(titles);
+    for (int i=0; i<titles.size(); i++)
+        titles[i] = d->userPresentableAlbumTitle(titles[i]);
+}
+
+QString DigikamViewPriv::userPresentableAlbumTitle(const QString &title)
+{
+    if (title == FuzzySearchFolderView::currentFuzzySketchSearchName())
+        return i18n("Fuzzy Sketch Search");
+    else if (title == FuzzySearchFolderView::currentFuzzyImageSearchName())
+        return i18n("Fuzzy Image Search");
+    else if (title == GPSSearchFolderView::currentGPSSearchName())
+        return i18n("Map Search");
+    else if (title == SearchFolderView::currentSearchViewSearchName())
+        return i18n("Last Search");
+    else if (title == TimeLineFolderView::currentTimeLineSearchName())
+        return i18n("Timeline");
+    return title;
 }
 
 void DigikamView::slotSelectAlbum(const KUrl &)
