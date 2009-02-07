@@ -585,32 +585,12 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list,
     if (imageInfoCurrent.isNull() && !l.isEmpty())
         imageInfoCurrent = l.first();
 
-    AlbumSettings *settings = AlbumSettings::instance();
-    if (!settings) return;
-
-    QString imagefilter = settings->getImageFileFilter().toLower() +
-                          settings->getImageFileFilter().toUpper();
-
-#if KDCRAW_VERSION < 0x000400
-    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
-    {
-        // add raw files only if dcraw is available
-        imagefilter += settings->getRawFileFilter().toLower() +
-                       settings->getRawFileFilter().toUpper();
-    }
-#else
-    // add raw files only if dcraw is available
-    imagefilter += settings->getRawFileFilter().toLower() +
-                   settings->getRawFileFilter().toUpper();
-#endif
-
     d->barView->blockSignals(true);
     for (ImageInfoList::const_iterator it = l.constBegin(); it != l.constEnd(); ++it)
     {
         QString fileExtension = (*it).fileUrl().fileName().section( '.', -1 );
 
-        if ( imagefilter.indexOf(fileExtension) != -1 &&
-             !d->barView->findItemByInfo(*it) )
+        if (!d->barView->findItemByInfo(*it))
         {
             new LightTableBarItem(d->barView, *it);
         }
