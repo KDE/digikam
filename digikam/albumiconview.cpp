@@ -632,13 +632,8 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     DPopupMenu popmenu(this);
 
-    QAction *newAlbumFromSelectionAction = 0;
-    if (selectedImageIDs.count() > 1)
-    {
-        newAlbumFromSelectionAction = popmenu.addAction(SmallIcon("albumfolder-new"),
-                                                        i18n("New Album from Selection"));
-    }
-
+    QAction *newAlbumFromSelectionAction = new QAction(SmallIcon("albumfolder-new"),
+                                                       i18n("New Album from Selection"), this);
     QAction *viewAction         = popmenu.addAction(SmallIcon("viewimage"),     i18n("View..."));
     QAction *editAction         = popmenu.addAction(SmallIcon("editimage"),     i18n("Edit..."));
     QAction *lighttableAction   = popmenu.addAction(SmallIcon("lighttableadd"), i18n("Add to Light Table"));
@@ -756,19 +751,18 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     popmenu.addMenu(&ratingMenu);
     ratingMenu.menuAction()->setText(i18n("Assign Rating"));
 
-    // --------------------------------------------------------
+    // Multiple Selection Handling -----------------------------------
 
-    // If there is more than one image selected, disable some actions
     if (selectedImageIDs.count() > 1)
     {
-        viewAction->setEnabled(false);
-        editAction->setEnabled(false);
-        findSimilarAction->setEnabled(false);
-        gotoAction->setEnabled(false);
-        renameAction->setEnabled(false);
-        // If not in album or tag view, this action has not been created.
-        if (thumbnailAction)
-            thumbnailAction->setEnabled(false);
+        popmenu.insertAction(viewAction, newAlbumFromSelectionAction);
+
+        popmenu.removeAction(gotoAction);
+        popmenu.removeAction(viewAction);
+        popmenu.removeAction(editAction);
+        popmenu.removeAction(findSimilarAction);
+        popmenu.removeAction(renameAction);
+        popmenu.removeAction(thumbnailAction);
     }
 
     // --------------------------------------------------------
