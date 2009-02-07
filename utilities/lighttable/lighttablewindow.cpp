@@ -588,20 +588,12 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list,
     d->barView->blockSignals(true);
     for (ImageInfoList::const_iterator it = l.constBegin(); it != l.constEnd(); ++it)
     {
-        QString fileExtension = (*it).fileUrl().fileName().section( '.', -1 );
-
         if (!d->barView->findItemByInfo(*it))
         {
             new LightTableBarItem(d->barView, *it);
         }
     }
     d->barView->blockSignals(false);
-
-    // if window is minimized, show it
-    if (isMinimized())
-    {
-        KWindowSystem::unminimizeWindow(winId());
-    }
 
     refreshStatusBar();
 }
