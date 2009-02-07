@@ -65,6 +65,7 @@ public:
     ~DigikamApp();
 
     virtual void show();
+    void restoreSession();
 
     static DigikamApp* getinstance();
 

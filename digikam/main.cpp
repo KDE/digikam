@@ -167,6 +167,7 @@ int main(int argc, char *argv[])
     Digikam::DigikamApp *digikam = new Digikam::DigikamApp();
 
     app.setTopWidget(digikam);
+    digikam->restoreSession();
     digikam->show();
 
     if (args && args->isSet("download-from"))
@@ -183,7 +184,8 @@ int main(int argc, char *argv[])
     KGlobal::locale()->insertCatalog("kipiplugins");
     KGlobal::locale()->insertCatalog("libkdcraw");
 
-    KTipDialog::showMultiTip(0, tipsFiles, false);
+    if (!app.isSessionRestored())
+        KTipDialog::showMultiTip(0, tipsFiles, false);
 
     int ret = app.exec();
 

@@ -330,6 +330,23 @@ void DigikamApp::show()
     slotZoomSliderChanged(AlbumSettings::instance()->getDefaultIconSize());
 }
 
+void DigikamApp::restoreSession()
+{
+    //TODO: show and restore ImageEditor and Lighttable main windows
+    if (qApp->isSessionRestored()){
+        int n = 1;
+        while (KMainWindow::canBeRestored(n)){
+            const QString className = KMainWindow::classNameOfToplevel(n);
+            if (className == QLatin1String(Digikam::DigikamApp::staticMetaObject.className()))
+            {
+                restore(n, false);
+                break;
+            }
+            n++;
+        }
+    }
+}
+
 const QList<QAction*>& DigikamApp::menuImageActions()
 {
     return d->kipiImageActions;
