@@ -141,6 +141,8 @@ public:
 
     KComboBox                 *zoomCombo;
 
+    QList<int>                 fullscreenSizeBackup;
+
     ICCSettingsContainer      *ICCSettings;
 
     ExposureSettingsContainer *exposureSettings;

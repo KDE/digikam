@@ -1895,22 +1895,19 @@ void EditorWindow::toggleGUI2FullScreen()
 {
     if (m_fullScreen)
     {
-        rightSideBar()->restore();
+        rightSideBar()->restore(QList<QWidget*>() << thumbBar(), d->fullscreenSizeBackup);
 
-        // If "Show Thumbnails" option is checked, restore the thumbbar.
-        if (m_showBarAction->isChecked())
+        if (m_showBarAction->isChecked() && m_fullScreenHideThumbBar)
             thumbBar()->show();
     }
     else
     {
-        rightSideBar()->backup();
+        // See bug #166472, a simple backup()/restore() will hide non-sidebar splitter child widgets
+        // in horizontal mode thumbbar wont be member of the splitter, it is just ignored then
+        rightSideBar()->backup(QList<QWidget*>() << thumbBar(), &d->fullscreenSizeBackup);
 
-        // If "Show Thumbnails" option is checked, catch it if necessary.
-        if (m_showBarAction->isChecked())
-        {
-            if (m_fullScreenHideThumbBar)
+        if (m_showBarAction->isChecked() && m_fullScreenHideThumbBar)
                 thumbBar()->hide();
-        }
     }
 }
 
