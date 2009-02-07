@@ -253,7 +253,6 @@ void Canvas::load(const QString& filename, IOFileSettingsContainer *IOFileSettin
 
 void Canvas::slotImageLoaded(const QString& filePath, bool success)
 {
-    d->zoom = 1.0;
     d->im->zoom(d->zoom);
 
     if (d->autoZoom)
