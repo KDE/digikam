@@ -61,7 +61,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 051 ==> 100770 : Create album from selected pictures. 
 052 ==> 129379 : Renamed Album is shown multiple times although there is only on related picture directory.
 053 ==> 167417 : Showfoto cannot save files of CIFS mount.
-054 ==> 
+054 ==> 164403 : Image zoom changes when choosing a new thumbnail.
+055 ==> 151552 : Album and Imageeditor cache problems.
+056 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
