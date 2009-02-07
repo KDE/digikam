@@ -51,6 +51,7 @@ extern "C"
 // KDE includes.
 
 #include <kdebug.h>
+#include <libkexiv2/kexiv2.h>
 
 // Local includes.
 
@@ -737,75 +738,81 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     text.compression = PNG_TEXT_COMPRESSION_zTXt;
     png_set_text(png_ptr, info_ptr, &(text), 1);
 
-    // Write embedded Raw profiles metadata (Exif/Iptc) in text tag using ImageMagick technique.
-    // Write digiKam comment like an iTXt chunk using UTF8 encoding.
-    // NOTE: iTXt will be enable by default with libpng >= 1.3.0.(dcraw_0)
-
-    typedef QMap<int, QByteArray> MetaDataMap;
-    MetaDataMap metaDataMap = imageMetaData();
-
-    for (MetaDataMap::iterator it = metaDataMap.begin(); it != metaDataMap.end(); ++it)
+    // There is an unsolved problem in the following code block, see bug #151552.
+    // If exiv2 supports writing to PNG, which it does since 0.18, this code is not needed
+    // and should not be used therefore.
+    if (KExiv2Iface::KExiv2::supportMetadataWritting("image/png"))
     {
-        QByteArray ba = it.value();
+        // Write embedded Raw profiles metadata (Exif/Iptc) in text tag using ImageMagick technique.
+        // Write digiKam comment like an iTXt chunk using UTF8 encoding.
+        // NOTE: iTXt will be enable by default with libpng >= 1.3.0.(dcraw_0)
 
-        switch (it.key())
+        typedef QMap<int, QByteArray> MetaDataMap;
+        MetaDataMap metaDataMap = imageMetaData();
+
+        for (MetaDataMap::iterator it = metaDataMap.begin(); it != metaDataMap.end(); ++it)
         {
+            QByteArray ba = it.value();
 
-#ifdef PNG_iTXt_SUPPORTED
-
-            // TODO : this code is not yet tested. It require libpng 1.3.0.
-
-            case(DImg::COM):
+            switch (it.key())
             {
-                png_text comment;
-                comment.key         = "Comment";
-                comment.text        = ba.data();
-                comment.itxt_lenght = ba.size();
-                comment.compression = PNG_ITXT_COMPRESSION_zTXt;
-                png_set_text(png_ptr, info_ptr, &(comment), 1);
 
-                kDebug(50003) << "Writing digiKam comment into iTXt PNG chunk : " << ba << endl;
-                break;
-            }
-#endif
+                #ifdef PNG_iTXt_SUPPORTED
 
-            case(DImg::EXIF):
-            {
-                const uchar ExifHeader[] = {0x45, 0x78, 0x69, 0x66, 0x00, 0x00};
-                QByteArray profile;
+                // TODO : this code is not yet tested. It require libpng 1.3.0.
 
-                // If bytes array do not start with ImageMagick header, Exif metadata have been created from
-                // scratch using Exiv2. In this case, we need to add Exif header from start.
-                if (memcmp(ba.data(), "exif",    4) != 0 &&
-                    memcmp(ba.data(), "iptc",    4) != 0 &&
-                    memcmp(ba.data(), "xmp",     3) != 0 &&
-                    memcmp(ba.data(), "profile", 7) != 0)
+                case(DImg::COM):
                 {
-                    profile = QByteArray();
-                    profile.resize(ba.size() + sizeof(ExifHeader));
-                    memcpy(profile.data(), ExifHeader, sizeof(ExifHeader));
-                    memcpy(profile.data() + sizeof(ExifHeader), ba.data(), ba.size());
-                }
-                else
-                {
-                    profile = ba;
-                }
+                    png_text comment;
+                    comment.key         = "Comment";
+                    comment.text        = ba.data();
+                    comment.itxt_lenght = ba.size();
+                    comment.compression = PNG_ITXT_COMPRESSION_zTXt;
+                    png_set_text(png_ptr, info_ptr, &(comment), 1);
 
-                writeRawProfile(png_ptr, info_ptr, (png_charp)("exif"), profile.data(), (png_uint_32) profile.size());
-                break;
+                    kDebug(50003) << "Writing digiKam comment into iTXt PNG chunk : " << ba << endl;
+                    break;
+                }
+                #endif
+
+                case(DImg::EXIF):
+                {
+                    const uchar ExifHeader[] = {0x45, 0x78, 0x69, 0x66, 0x00, 0x00};
+                    QByteArray profile;
+
+                    // If bytes array do not start with ImageMagick header, Exif metadata have been created from
+                    // scratch using Exiv2. In this case, we need to add Exif header from start.
+                    if (memcmp(ba.data(), "exif",    4) != 0 &&
+                        memcmp(ba.data(), "iptc",    4) != 0 &&
+                        memcmp(ba.data(), "xmp",     3) != 0 &&
+                        memcmp(ba.data(), "profile", 7) != 0)
+                    {
+                        profile = QByteArray();
+                        profile.resize(ba.size() + sizeof(ExifHeader));
+                        memcpy(profile.data(), ExifHeader, sizeof(ExifHeader));
+                        memcpy(profile.data() + sizeof(ExifHeader), ba.data(), ba.size());
+                    }
+                    else
+                    {
+                        profile = ba;
+                    }
+
+                    writeRawProfile(png_ptr, info_ptr, (png_charp)("exif"), profile.data(), (png_uint_32) profile.size());
+                    break;
+                }
+                case(DImg::IPTC):
+                {
+                    writeRawProfile(png_ptr, info_ptr, (png_charp)("iptc"), ba.data(), (png_uint_32) ba.size());
+                    break;
+                }
+                case(DImg::XMP):
+                {
+                    writeRawProfile(png_ptr, info_ptr, (png_charp)("xmp"), ba.data(), (png_uint_32) ba.size());
+                    break;
+                }
+                default:
+                    break;
             }
-            case(DImg::IPTC):
-            {
-                writeRawProfile(png_ptr, info_ptr, (png_charp)("iptc"), ba.data(), (png_uint_32) ba.size());
-                break;
-            }
-            case(DImg::XMP):
-            {
-                writeRawProfile(png_ptr, info_ptr, (png_charp)("xmp"), ba.data(), (png_uint_32) ba.size());
-                break;
-            }
-            default:
-                break;
         }
     }
 
