@@ -29,11 +29,14 @@
 #include <QGroupBox>
 #include <QCheckBox>
 #include <QVBoxLayout>
+#include <QLabel>
 
 // KDE includes.
 
 #include <klocale.h>
 #include <kdialog.h>
+#include <kcombobox.h>
+#include <khbox.h>
 
 // Local includes.
 
@@ -52,12 +55,18 @@ public:
         showTrashDeleteDialogCheck = 0;
         sidebarApplyDirectlyCheck  = 0;
         scanAtStart                = 0;
+        sidebarTypeLabel           = 0;
+        sidebarType                = 0;
     }
+
+    QLabel*    sidebarTypeLabel;
 
     QCheckBox* showSplashCheck;
     QCheckBox* showTrashDeleteDialogCheck;
     QCheckBox* sidebarApplyDirectlyCheck;
     QCheckBox* scanAtStart;
+
+    KComboBox* sidebarType;
 };
 
 SetupMisc::SetupMisc(QWidget* parent)
@@ -69,15 +78,22 @@ SetupMisc::SetupMisc(QWidget* parent)
     setWidgetResizable(true);
     viewport()->setAutoFillBackground(false);
 
-    QVBoxLayout *layout = new QVBoxLayout(panel);
+    QVBoxLayout *layout           = new QVBoxLayout(panel);
 
     d->showTrashDeleteDialogCheck = new QCheckBox(i18n("Confirm when moving items to the &trash"), panel);
 
-    d->sidebarApplyDirectlyCheck = new QCheckBox(i18n("Do not confirm when apply changes in the &right sidebar"), panel);
+    d->sidebarApplyDirectlyCheck  = new QCheckBox(i18n("Do not confirm when apply changes in the &right sidebar"), panel);
 
-    d->showSplashCheck = new QCheckBox(i18n("&Show splash screen at startup"), panel);
+    d->showSplashCheck            = new QCheckBox(i18n("&Show splash screen at startup"), panel);
 
-    d->scanAtStart = new QCheckBox(i18n("&Scan for new items at startup (makes startup slower)"), panel);
+    d->scanAtStart                = new QCheckBox(i18n("&Scan for new items at startup (makes startup slower)"), panel);
+
+    KHBox *hbox         = new KHBox(panel);
+    d->sidebarTypeLabel = new QLabel(i18n("Sidebar tab title:"), hbox);
+    d->sidebarType      = new KComboBox(hbox);
+    d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
+    d->sidebarType->addItem(i18n("For All Tabs"),        1);
+    d->sidebarType->setToolTip(i18n("Set this option to configure how sidebars tab title are visible."));
 
     // --------------------------------------------------------
 
@@ -87,6 +103,7 @@ SetupMisc::SetupMisc(QWidget* parent)
     layout->addWidget(d->sidebarApplyDirectlyCheck);
     layout->addWidget(d->showSplashCheck);
     layout->addWidget(d->scanAtStart);
+    layout->addWidget(hbox);
     layout->addStretch();
 
     readSettings();
@@ -106,6 +123,7 @@ void SetupMisc::applySettings()
     settings->setShowTrashDeleteDialog(d->showTrashDeleteDialogCheck->isChecked());
     settings->setApplySidebarChangesDirectly(d->sidebarApplyDirectlyCheck->isChecked());
     settings->setScanAtStart(d->scanAtStart->isChecked());
+    settings->setSidebarTitleStyle(d->sidebarType->currentIndex() == 0 ? KMultiTabBar::VSNET : KMultiTabBar::KDEV3ICON);
     settings->saveSettings();
 }
 
@@ -117,6 +135,7 @@ void SetupMisc::readSettings()
     d->showTrashDeleteDialogCheck->setChecked(settings->getShowTrashDeleteDialog());
     d->sidebarApplyDirectlyCheck->setChecked(settings->getApplySidebarChangesDirectly());
     d->scanAtStart->setChecked(settings->getScanAtStart());
+    d->sidebarType->setCurrentIndex(settings->getSidebarTitleStyle() == KMultiTabBar::VSNET ? 0 : 1);
 }
 
 }  // namespace Digikam
