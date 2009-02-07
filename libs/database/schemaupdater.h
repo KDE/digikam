@@ -6,7 +6,7 @@
  * Date        : 2007-04-16
  * Description : Schema update
  *
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,18 +65,21 @@ private:
 
 private:
 
-    DatabaseAccess         *m_access;
-
-    int                     m_currentVersion;
-    InitializationObserver *m_observer;
-    bool                    m_setError;
-
     void preAlpha010Update1();
     void preAlpha010Update2();
     void preAlpha010Update3();
     void beta010Update1();
     void beta010Update2();
 
+private:
+
+    bool                    m_setError;
+
+    int                     m_currentVersion;
+
+    DatabaseAccess         *m_access;
+
+    InitializationObserver *m_observer;
 };
 
 }  // namespace Digikam

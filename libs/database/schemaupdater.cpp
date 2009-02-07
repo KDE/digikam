@@ -6,7 +6,7 @@
  * Date        : 2007-04-16
  * Description : Schema update
  *
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -716,8 +716,8 @@ bool SchemaUpdater::copyV3toV4(const QString &digikam3DBPath, const QString &cur
     if (!oldFile.copy(currentDBPath))
     {
         QString errorMsg = i18n("Failed to copy the old database file (\"%1\")"
-                                "to its new location (\"%2\")."
-                                "Error message: \"%3\"."
+                                "to its new location (\"%2\"). "
+                                "Error message: \"%3\". "
                                 "Please make sure that the file can be copied, "
                                 "or delete it.",
                                 digikam3DBPath, currentDBPath, oldFile.errorString());
