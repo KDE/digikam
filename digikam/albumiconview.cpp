@@ -637,7 +637,13 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
                                                        i18n("New Album from Selection"), this);
     QAction *viewAction         = popmenu.addAction(SmallIcon("viewimage"),     i18n("View..."));
     QAction *editAction         = popmenu.addAction(SmallIcon("editimage"),     i18n("Edit..."));
-    QAction *lighttableAction   = popmenu.addAction(SmallIcon("lighttableadd"), i18n("Add to Light Table"));
+
+    QAction *lighttableAction;
+    if (LightTableWindow::lightTableWindowCreated() && !LightTableWindow::lightTableWindow()->isEmpty())
+        lighttableAction = popmenu.addAction(SmallIcon("lighttableadd"), i18n("Add to Light Table"));
+    else
+        lighttableAction = popmenu.addAction(KIcon("lighttable"), i18n("Place onto Light Table"));
+
     QAction *findSimilarAction  = popmenu.addAction(SmallIcon("tools-wizard"),  i18n("Find Similar"));
     QAction *gotoAction         = popmenu.addMenu(&gotoMenu);
     gotoAction->setIcon(SmallIcon("go-jump"));
@@ -799,7 +805,10 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
         else if (choice == lighttableAction)
         {
             //  add images to existing images in the light table
-            insertSelectionToLightTable(true);
+            if (LightTableWindow::lightTableWindowCreated() && !LightTableWindow::lightTableWindow()->isEmpty())
+                insertSelectionToLightTable(true);
+            else
+                insertSelectionToLightTable(false);
         }
         else if (choice == findSimilarAction)
         {
