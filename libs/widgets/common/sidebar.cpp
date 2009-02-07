@@ -179,12 +179,32 @@ void Sidebar::backup()
     KMultiTabBar::hide();
 }
 
+void Sidebar::backup(const QList<QWidget*> thirdWidgetsToBackup, QList<int> *sizes)
+{
+    sizes->clear();
+    foreach (QWidget *widget, thirdWidgetsToBackup)
+        *sizes << d->splitter->size(widget);
+
+    backup();
+}
+
 void Sidebar::restore()
 {
     if (!d->isMinimized)
         expand();
 
     KMultiTabBar::show();
+}
+
+void Sidebar::restore(const QList<QWidget*> thirdWidgetsToRestore, const QList<int> &sizes)
+{
+    restore();
+
+    if (thirdWidgetsToRestore.size() == sizes.size())
+    {
+        for (int i=0; i<thirdWidgetsToRestore.size(); i++)
+            d->splitter->setSize(thirdWidgetsToRestore[i], sizes[i]);
+    }
 }
 
 void Sidebar::appendTab(QWidget *w, const QPixmap &pic, const QString &title)
@@ -440,7 +460,12 @@ void SidebarSplitter::saveState(KConfigGroup &group, const char *key)
 
 int SidebarSplitter::size(Sidebar *bar) const
 {
-    int index = indexOf(bar->d->stack);
+    return size(bar->d->stack);
+}
+
+int SidebarSplitter::size(QWidget *widget) const
+{
+    int index = indexOf(widget);
     if (index == -1)
         return -1;
 
@@ -449,7 +474,12 @@ int SidebarSplitter::size(Sidebar *bar) const
 
 void SidebarSplitter::setSize(Sidebar *bar, int size)
 {
-    int index = indexOf(bar->d->stack);
+    setSize(bar->d->stack, size);
+}
+
+void SidebarSplitter::setSize(QWidget *widget, int size)
+{
+    int index = indexOf(widget);
     if (index == -1)
         return;
 
@@ -457,9 +487,9 @@ void SidebarSplitter::setSize(Sidebar *bar, int size)
     if (size == -1)
     {
         if (orientation() == Qt::Horizontal)
-            size = bar->d->stack->minimumSizeHint().width();
+            size = widget->minimumSizeHint().width();
         if (orientation() == Qt::Vertical)
-            size = bar->d->stack->minimumSizeHint().height();
+            size = widget->minimumSizeHint().height();
     }
 
     QList<int> sizeList = sizes();

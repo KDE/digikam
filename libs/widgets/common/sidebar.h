@@ -119,9 +119,22 @@ public:
     void backup();
 
     /**
+     * Hide sidebar and backup minimized state.
+     * If there are other widgets in this splitter, stores
+     * their sizes in the provided list.
+     */
+    void backup(const QList<QWidget*> thirdWidgetsToBackup, QList<int> *sizes);
+
+    /**
      * show sidebar and restore minimized state.
      */
     void restore();
+
+    /**
+     * Show sidebar and restore minimized state.
+     * Restores other widgets' sizes in splitter.
+     */
+    void restore(const QList<QWidget*> thirdWidgetsToRestore, const QList<int> &sizes);
 
     /**
      * return the visible status of current sidebar tab.
@@ -194,14 +207,16 @@ public:
     void restoreState(KConfigGroup &group, const char *key = 0);
 
     /**
-     * Returns the value of sizes() that corresponds to the given Sidebar
+     * Returns the value of sizes() that corresponds to the given Sidebar or splitter child widget.
      */
     int size(Sidebar *bar) const;
+    int size(QWidget *widget) const;
     /**
-     * Sets the splitter size for the given sidebar to size.
+     * Sets the splitter size for the given sidebar or splitter child widget to size.
      * Special value -1: Sets the minimum size hint of the widget.
      */
     void setSize(Sidebar *bar, int size);
+    void setSize(QWidget *widget, int size);
 
 private Q_SLOTS:
 
