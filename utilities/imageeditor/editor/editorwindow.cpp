@@ -620,26 +620,6 @@ void EditorWindow::printImage(KUrl /*url*/)
 
     PrintHelper printHelp(this);
     printHelp.print(image);
-
-    /*
-    KPrinter printer;
-    QString appName = KGlobal::mainComponent().aboutData()->appName();
-    printer.setDocName( url.fileName() );
-    printer.setCreator( appName );
-    printer.setUsePrinterResolution(true);
-
-    KPrinter::addDialogPage( new ImageEditorPrintDialogPage(image, this, (appName.append(" page")).toAscii() ));
-
-    if ( printer.setup( this, i18n("Print %1",printer.docName().section('/', -1)) ) )
-    {
-        ImagePrint printOperations(image, printer, url.fileName());
-        if (!printOperations.printImageWithQt())
-        {
-            KMessageBox::error(this, i18n("Failed to print file: '%1'",
-                               url.fileName()));
-        }
-    }
-    */
 }
 
 void EditorWindow::slotEditKeys()
