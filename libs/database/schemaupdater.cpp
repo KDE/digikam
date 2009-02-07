@@ -715,7 +715,7 @@ bool SchemaUpdater::copyV3toV4(const QString &digikam3DBPath, const QString &cur
     newFile.remove();
     if (!oldFile.copy(currentDBPath))
     {
-        QString errorMsg = i18n("Failed to copy the old database file (\"%1\")"
+        QString errorMsg = i18n("Failed to copy the old database file (\"%1\") "
                                 "to its new location (\"%2\"). "
                                 "Error message: \"%3\". "
                                 "Please make sure that the file can be copied, "
