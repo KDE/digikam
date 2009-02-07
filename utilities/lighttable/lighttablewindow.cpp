@@ -598,6 +598,11 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list,
     refreshStatusBar();
 }
 
+bool LightTableWindow::isEmpty() const
+{
+    return d->barView->countItems() == 0;
+}
+
 void LightTableWindow::refreshStatusBar()
 {
     d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,

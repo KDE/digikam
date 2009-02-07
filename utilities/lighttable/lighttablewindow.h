@@ -62,6 +62,7 @@ public:
     void setLeftRightItems(const ImageInfoList &list, bool addTo);
     void applySettings();
     void refreshView();
+    bool isEmpty() const;
 
 signals:
 
