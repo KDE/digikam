@@ -634,7 +634,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     DPopupMenu popmenu(this);
 
     QAction *newAlbumFromSelectionAction = new QAction(SmallIcon("albumfolder-new"),
-                                                       i18n("New Album from Selection"), this);
+                                                       i18n("New Album From Selection"), this);
     QAction *viewAction         = popmenu.addAction(SmallIcon("viewimage"),     i18n("View..."));
     QAction *editAction         = popmenu.addAction(SmallIcon("editimage"),     i18n("Edit..."));
 

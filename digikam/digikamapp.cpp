@@ -610,7 +610,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->newAlbumFromSelectionAction = new KAction(KIcon("albumfolder-new"), i18n("&New Album from Selection..."), this);
+    d->newAlbumFromSelectionAction = new KAction(KIcon("albumfolder-new"), i18n("&New Album From Selection..."), this);
 //    d->newAlbumFromSelectionAction->setShortcut(KStandardShortcut::openNew());
     d->newAlbumFromSelectionAction->setWhatsThis(i18n("Move selected images into a new album."));
     connect(d->newAlbumFromSelectionAction, SIGNAL(triggered()), d->view, SLOT(slotNewAlbumFromSelection()));
