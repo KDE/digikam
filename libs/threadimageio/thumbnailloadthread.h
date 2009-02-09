@@ -34,6 +34,7 @@
 #include "managedloadsavethread.h"
 
 class KFileItem;
+class KJob;
 
 namespace Digikam
 {
@@ -193,6 +194,7 @@ private:
 
     void load(const LoadingDescription &description, bool preload);
     void loadWithKDE(const LoadingDescription &description);
+    void startKdePreviewJob();
     QPixmap surrogatePixmap(const LoadingDescription &loadingDescription);
     bool checkSize(int size);
 
@@ -207,6 +209,7 @@ private slots:
     void slotThumbnailLoaded(const LoadingDescription &loadingDescription, const QImage& thumb);
     void gotKDEPreview(const KFileItem &, const QPixmap &pix);
     void failedKDEPreview(const KFileItem &);
+    void kdePreviewFinished(KJob *);
 
 private:
 

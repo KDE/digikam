@@ -74,6 +74,7 @@ public:
         highlight          = true;
         sendSurrogate      = true;
         creator            = 0;
+        kdeJob             = 0;
         notifiedForResults = false;
     }
 
@@ -86,9 +87,12 @@ public:
 
     ThumbnailCreator*               creator;
 
-    QHash<KUrl, LoadingDescription> kdeJobHash;
     QList<ThumbnailResult>          collectedResults;
     QMutex                          resultsMutex;
+
+    QList<LoadingDescription>       kdeTodo;
+    QHash<KUrl, LoadingDescription> kdeJobHash;
+    KIO::PreviewJob                *kdeJob;
 };
 
 K_GLOBAL_STATIC(ThumbnailLoadThread, defaultIconViewObject)
@@ -373,18 +377,33 @@ void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription &descript
 
 void ThumbnailLoadThread::loadWithKDE(const LoadingDescription &description)
 {
-    // try again with KDE preview
-    KUrl url = KUrl::fromPath(description.filePath);
-    KUrl::List list;
-    list << url;
-    KIO::PreviewJob *job = KIO::filePreview(list, d->size);
-    d->kdeJobHash[url] = description;
+    d->kdeTodo << description;
+    startKdePreviewJob();
+}
 
-    connect(job, SIGNAL(gotPreview(const KFileItem &, const QPixmap &)),
+void ThumbnailLoadThread::startKdePreviewJob()
+{
+    if (d->kdeJob || d->kdeTodo.isEmpty())
+        return;
+
+    KUrl::List list;
+    foreach (const LoadingDescription description, d->kdeTodo)
+    {
+        KUrl url = KUrl::fromPath(description.filePath);
+        list << url;
+        d->kdeJobHash[url] = description;
+    }
+    d->kdeTodo.clear();
+    d->kdeJob = KIO::filePreview(list, d->size);
+
+    connect(d->kdeJob, SIGNAL(gotPreview(const KFileItem &, const QPixmap &)),
             this, SLOT(gotKDEPreview(const KFileItem &, const QPixmap &)));
 
-    connect(job, SIGNAL(failed(const KFileItem &)),
+    connect(d->kdeJob, SIGNAL(failed(const KFileItem &)),
             this, SLOT(failedKDEPreview(const KFileItem &)));
+
+    connect(d->kdeJob, SIGNAL(finished(KJob*)),
+            this, SLOT(kdePreviewFinished(KJob*)));
 }
 
 void ThumbnailLoadThread::gotKDEPreview(const KFileItem &item, const QPixmap &kdepix)
@@ -409,6 +428,12 @@ void ThumbnailLoadThread::gotKDEPreview(const KFileItem &item, const QPixmap &kd
 void ThumbnailLoadThread::failedKDEPreview(const KFileItem &item)
 {
     gotKDEPreview(item, QPixmap());
+}
+
+void ThumbnailLoadThread::kdePreviewFinished(KJob *j)
+{
+    d->kdeJob = 0;
+    startKdePreviewJob();    
 }
 
 QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription &description)
