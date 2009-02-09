@@ -430,7 +430,7 @@ void ThumbnailLoadThread::failedKDEPreview(const KFileItem &item)
     gotKDEPreview(item, QPixmap());
 }
 
-void ThumbnailLoadThread::kdePreviewFinished(KJob *j)
+void ThumbnailLoadThread::kdePreviewFinished(KJob *)
 {
     d->kdeJob = 0;
     startKdePreviewJob();    
