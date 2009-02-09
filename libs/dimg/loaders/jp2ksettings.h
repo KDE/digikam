@@ -39,7 +39,7 @@ class JP2KSettingsPriv;
 
 class DIGIKAM_EXPORT JP2KSettings : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
