@@ -100,6 +100,12 @@ JP2KSettings::JP2KSettings(QWidget *parent)
 
     connect(d->JPEG2000LossLess, SIGNAL(toggled(bool)),
             this, SLOT(slotToggleJPEG2000LossLess(bool)));
+
+    connect(d->JPEG2000LossLess, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->JPEG2000compression, SIGNAL(valueChanged(int)),
+            this, SIGNAL(signalSettingsChanged()));
 }
 
 JP2KSettings::~JP2KSettings()
