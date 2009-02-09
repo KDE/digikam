@@ -39,7 +39,7 @@ class JPEGSettingsPriv;
 
 class DIGIKAM_EXPORT JPEGSettings : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -51,6 +51,10 @@ public:
 
     void setSubSamplingValue(int val);
     int  getSubSamplingValue();
+
+signals:
+
+    void signalSettingsChanged();
 
 private:
 

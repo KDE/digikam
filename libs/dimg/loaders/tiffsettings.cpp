@@ -70,10 +70,13 @@ TIFFSettings::TIFFSettings(QWidget *parent)
                                            "<p>A lossless compression format (Deflate) "
                                            "is used to save the file.</p>"));
 
-    d->TIFFGrid->addWidget(d->TIFFcompression, 0, 0, 1, 2 );
+    d->TIFFGrid->addWidget(d->TIFFcompression, 0, 0, 1, 2);
     d->TIFFGrid->setColumnStretch(1, 10);
     d->TIFFGrid->setMargin(KDialog::spacingHint());
     d->TIFFGrid->setSpacing(KDialog::spacingHint());
+
+    connect(d->TIFFcompression, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSettingsChanged()));
 }
 
 TIFFSettings::~TIFFSettings()

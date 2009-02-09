@@ -127,6 +127,12 @@ JPEGSettings::JPEGSettings(QWidget *parent)
     d->JPEGGrid->setAlignment(d->JPEGcompression, Qt::AlignCenter);
     d->JPEGGrid->setMargin(KDialog::spacingHint());
     d->JPEGGrid->setSpacing(KDialog::spacingHint());
+
+    connect(d->JPEGcompression, SIGNAL(valueChanged(int)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->subSamplingCB, SIGNAL(activated(int)),
+            this, SIGNAL(signalSettingsChanged()));
 }
 
 JPEGSettings::~JPEGSettings()

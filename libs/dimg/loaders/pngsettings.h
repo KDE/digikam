@@ -39,7 +39,7 @@ class PNGSettingsPriv;
 
 class DIGIKAM_EXPORT PNGSettings : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -48,6 +48,10 @@ public:
 
     void setCompressionValue(int val);
     int  getCompressionValue();
+
+signals:
+
+    void signalSettingsChanged();
 
 private:
 

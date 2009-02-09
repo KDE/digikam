@@ -39,7 +39,7 @@ class TIFFSettingsPriv;
 
 class DIGIKAM_EXPORT TIFFSettings : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -48,6 +48,10 @@ public:
 
     void setCompression(bool b);
     bool getCompression();
+
+signals:
+
+    void signalSettingsChanged();
 
 private:
 
