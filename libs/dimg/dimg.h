@@ -71,7 +71,7 @@ public:
 
     enum METADATA
     {
-        COM,    // JFIF comments section data.
+        COM=0,  // JFIF comments section data.
         EXIF,   // EXIF meta-data.
         IPTC,   // IPTC meta-data.
         ICC,    // ICC  color profile.
@@ -80,20 +80,20 @@ public:
 
     enum ANGLE
     {
-        ROT90,
+        ROT90=0,
         ROT180,
         ROT270
     };
 
     enum FLIP
     {
-        HORIZONTAL,
+        HORIZONTAL=0,
         VERTICAL
     };
 
     enum COLORMODEL
     {
-        COLORMODELUNKNOWN,
+        COLORMODELUNKNOWN=0,
         RGB,
         GRAYSCALE,
         MONOCHROME,
