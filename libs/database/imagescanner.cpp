@@ -535,6 +535,11 @@ void ImageScanner::scanVideoFile()
                << MetadataInfo::CreationDate;
         QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
 
+        // if invalid, start with -1 rating
+        if (metadataInfos[0].isNull())
+        {
+            metadataInfos[0] = -1;
+        }
         // creation date: fall back to file system property
         if (metadataInfos[1].isNull() || !metadataInfos[1].toDateTime().isValid())
         {
