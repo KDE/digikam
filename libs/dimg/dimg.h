@@ -140,7 +140,7 @@ public:
    ~DImg();
 
     /** Equivalent to the copy constructor */
-    DImg&       operator=(const DImg& image);
+    DImg&      operator=(const DImg& image);
 
     /** Detaches from shared data and makes sure that this image
         is the only one referring to the data.
@@ -173,10 +173,10 @@ public:
     void        putImageData(uchar *data, bool copyData = true);
 
     /** Reset metadata and image data to null image */
-    void        reset(void);
+    void        reset();
 
     /** Reset metadata, but do not change image data */
-    void        resetMetaData(void);
+    void        resetMetaData();
 
     /** Returns the data of this image. 
         Ownership of the buffer is passed to the caller, this image will be null afterwards.
@@ -186,6 +186,7 @@ public:
     bool        load(const QString& filePath, DImgLoaderObserver *observer = 0,
                      DRawDecoding rawDecodingSettings=DRawDecoding());
 
+    bool        save(const QString& filePath, FORMAT frm, DImgLoaderObserver *observer = 0);
     bool        save(const QString& filePath, const QString& format, DImgLoaderObserver *observer = 0);
 
     /**
@@ -391,8 +392,8 @@ private:
 
 private:
 
-    bool        load(const QString& filePath, int loadFlags, DImgLoaderObserver *observer,
-                     DRawDecoding rawDecodingSettings=DRawDecoding());
+    bool       load(const QString& filePath, int loadFlags, DImgLoaderObserver *observer,
+                    DRawDecoding rawDecodingSettings=DRawDecoding());
     void       copyMetaData(const DImgPrivate *src);
     void       copyImageData(const DImgPrivate *src);
     void       setImageData(bool null, uint width, uint height, bool sixteenBit, bool alpha);

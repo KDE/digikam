@@ -459,6 +459,54 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
     return false;
 }
 
+bool DImg::save(const QString& filePath, FORMAT frm, DImgLoaderObserver *observer)
+{
+    if (isNull())
+        return false;
+
+    QString format;
+
+    switch (frm)
+    {
+        case(NONE):
+        {
+            return false;
+            break;
+        }
+        case(JPEG):
+        {
+            format = QString("JPG");
+            break;
+        }
+        case(TIFF):
+        {
+            format = QString("TIF");
+            break;
+        }
+        case(PNG):
+        {
+            format = QString("PNG");
+            break;
+        }
+        case(PPM):
+        {
+            format = QString("PPM");
+            break;
+        }
+        case(JP2K):
+        {
+            format = QString("JP2");
+            break;
+        }
+        default:
+        {
+            // For QImage based.
+            break;
+        }
+    }
+    return( save(filePath, format, observer) );
+}
+
 bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserver *observer)
 {
     if (isNull())
