@@ -227,6 +227,8 @@ private:
     static CollectionManager *m_instance;
     void updateLocations();
 
+    friend class DatabaseWatch;
+
     CollectionManagerPrivate* const d;
     friend class CollectionManagerPrivate;
 

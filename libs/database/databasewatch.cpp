@@ -36,6 +36,10 @@
 
 #include <kdebug.h>
 
+// Local includes
+
+#include "collectionmanager.h"
+
 Digikam_DatabaseWatchAdaptor::Digikam_DatabaseWatchAdaptor(Digikam::DatabaseWatch *watch)
                             : QDBusAbstractAdaptor(watch)
 {
@@ -142,6 +146,9 @@ void DatabaseWatch::initializeRemote(DatabaseMode mode)
         d->connectWithDBus("searchChange", this,
                            SLOT(slotSearchChangeDBus(const QString &, const QString &, const Digikam::SearchChangeset &)));
     }
+
+    connect(this, SIGNAL(albumRootChange(const AlbumRootChangeset &)),
+            CollectionManager::instance(), SLOT(slotAlbumRootChange(const AlbumRootChangeset &)));
 }
 
 void DatabaseWatch::setDatabaseIdentifier(const QString &identifier)

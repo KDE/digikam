@@ -587,6 +587,8 @@ CollectionManager::CollectionManager()
             SIGNAL(deviceRemoved(const QString &)),
             this,
             SLOT(deviceChange(const QString &)));
+
+    // DatabaseWatch slot is connected at construction of DatabaseWatch, which may be later.
 }
 
 CollectionManager::~CollectionManager()
