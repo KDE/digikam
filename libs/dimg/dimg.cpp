@@ -948,7 +948,7 @@ DImg DImg::copyMetaData()
     return img;
 }
 
-DImg DImg::copy(QRect rect)
+DImg DImg::copy(const QRect& rect)
 {
     return copy(rect.x(), rect.y(), rect.width(), rect.height());
 }
@@ -1764,7 +1764,7 @@ void DImg::convertDepth(int depth)
     }
 }
 
-void DImg::fill(DColor color)
+void DImg::fill(const DColor& color)
 {
     if (sixteenBit())
     {

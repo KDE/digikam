@@ -135,7 +135,7 @@ public:
 
         If there is an alpha channel, the data shall be in non-premultiplied form (unassociated alpha).
     */
-    DImg(uint width, uint height, bool sixteenBit, bool alpha=false, uchar* data = 0, bool copyData = true);
+    DImg(uint width, uint height, bool sixteenBit, bool alpha=false, uchar* data=0, bool copyData=true);
 
    ~DImg();
 
@@ -289,7 +289,7 @@ public:
     DImg       copyMetaData();
 
     /** Return a region of image */
-    DImg       copy(QRect rect);
+    DImg       copy(const QRect& rect);
     DImg       copy(int x, int y, int w, int h);
 
     /** Copy a region of pixels from a source image to this image.
@@ -363,7 +363,7 @@ public:
     /** Fill whole image with specified color.
         The bit depth of the color must be identical to the depth of this image.
     */
-    void       fill(DColor color);
+    void       fill(const DColor& color);
 
 
     /**
@@ -384,7 +384,7 @@ public:
      * Use the static method and pass just the file path.
      */
     QByteArray getUniqueHash();
-    static QByteArray getUniqueHash(const QString &filePath);
+    static QByteArray getUniqueHash(const QString& filePath);
 
 private:
 
