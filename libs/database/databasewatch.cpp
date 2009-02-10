@@ -23,8 +23,8 @@
 
 #include "databasewatch.h"
 #include "databasewatchadaptor.h"
-#include "databasewatch.moc"
-#include "databasewatchadaptor.moc"
+#include "moc_databasewatch.cpp"
+#include "moc_databasewatchadaptor.cpp"
 
 // Qt includes.
 
@@ -49,6 +49,8 @@ Digikam_DatabaseWatchAdaptor::Digikam_DatabaseWatchAdaptor(Digikam::DatabaseWatc
 namespace Digikam
 {
 
+class DBusSignalListenerThread;
+
 class DatabaseWatchPriv
 {
 public:
@@ -57,6 +59,7 @@ public:
     {
         mode    = DatabaseWatch::DatabaseSlave;
         adaptor = 0;
+        slaveThread = 0;
     }
 
     DatabaseWatch::DatabaseMode   mode;
@@ -65,20 +68,67 @@ public:
 
     Digikam_DatabaseWatchAdaptor *adaptor;
 
-    void connectWithDBus(const char *dbusSignal, QObject *obj, const char *slot)
+    DBusSignalListenerThread     *slaveThread;
+
+    void connectWithDBus(const char *dbusSignal, QObject *obj, const char *slot,
+                         QDBusConnection connection = QDBusConnection::sessionBus())
     {
         // connect to slave signals
-        QDBusConnection::sessionBus().connect(QString(), "/ChangesetRelay",
-                                              "org.kde.digikam.DatabaseChangesetRelay",
-                                              dbusSignal,
-                                              obj, slot);
+        connection.connect(QString(), "/ChangesetRelay",
+                                      "org.kde.digikam.DatabaseChangesetRelay",
+                                      dbusSignal,
+                                      obj, slot);
         // connect to master signals
-        QDBusConnection::sessionBus().connect(QString(), "/ChangesetRelayForPeers",
-                                              "org.kde.digikam.DatabaseChangesetRelay",
-                                              dbusSignal,
-                                              obj, slot);
+        connection.connect(QString(), "/ChangesetRelayForPeers",
+                                      "org.kde.digikam.DatabaseChangesetRelay",
+                                      dbusSignal,
+                                      obj, slot);
     }
 };
+
+class DBusSignalListenerThread : public QThread
+{
+    Q_OBJECT
+
+public:
+
+    DBusSignalListenerThread(DatabaseWatch *q, DatabaseWatchPriv *d)
+    : q(q), d(d)
+    {
+        start();
+    }
+
+    ~DBusSignalListenerThread()
+    {
+        quit();
+        wait();
+    }
+
+    virtual void run()
+    {
+        // We cannot use sessionBus() here but need to connect on our own
+        QDBusConnection threadConnection =
+            QDBusConnection::connectToBus(QDBusConnection::SessionBus, QString("DigikamDatabaseSlaveConnection-%1").arg(getpid()));
+
+        // DBus signals are received from within this thread and then sent with queued signals to the main thread
+        d->connectWithDBus("imageTagChange", q,
+                           SLOT(slotImageTagChangeDBus(const QString &, const QString &, const Digikam::ImageTagChangeset &)),
+                           threadConnection);
+        d->connectWithDBus("albumRootChange", q,
+                           SLOT(slotAlbumRootChangeDBus(const QString &, const QString &, const Digikam::AlbumRootChangeset &)),
+                           threadConnection);
+
+        // enter thread event loop
+        exec();
+    }
+
+private:
+
+    DatabaseWatch *q;
+    DatabaseWatchPriv *d;
+};
+
+#include "databasewatch.moc"
 
 // ---------------------------------------------------------------------------------
 
@@ -89,6 +139,7 @@ DatabaseWatch::DatabaseWatch()
 
 DatabaseWatch::~DatabaseWatch()
 {
+    delete d->slaveThread;
     delete d;
 }
 
@@ -123,6 +174,10 @@ void DatabaseWatch::initializeRemote(DatabaseMode mode)
     {
         d->adaptor = new Digikam_DatabaseWatchAdaptor(this);
         QDBusConnection::sessionBus().registerObject("/ChangesetRelay", this);
+
+        // KIOSlave do not have an event loop which is needed for receiving DBus signals.
+        // See also the event loop in DatabaseAccess::setParameters.
+        d->slaveThread = new DBusSignalListenerThread(this, d);
     }
     else
     {
@@ -147,8 +202,20 @@ void DatabaseWatch::initializeRemote(DatabaseMode mode)
                            SLOT(slotSearchChangeDBus(const QString &, const QString &, const Digikam::SearchChangeset &)));
     }
 
+    // Do this as a favor for CollectionManager, we may not exist at time of its creation
     connect(this, SIGNAL(albumRootChange(const AlbumRootChangeset &)),
             CollectionManager::instance(), SLOT(slotAlbumRootChange(const AlbumRootChangeset &)));
+}
+
+void DatabaseWatch::doAnyProcessing()
+{
+    // In a slave we have no event loop.
+    // This method is called when a slave begins a new operation
+    // (it calls DatabaseAccess::setParameters then).
+    // Allow here queued signals to proceed that may be caused by DatabaseWatch signals
+    // that were send from within the DBus listener thread (see above).
+    QEventLoop loop;
+    loop.processEvents();
 }
 
 void DatabaseWatch::setDatabaseIdentifier(const QString &identifier)

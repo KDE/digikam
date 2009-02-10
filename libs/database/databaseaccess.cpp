@@ -25,6 +25,7 @@
 
 // Qt includes.
 
+#include <QEventLoop>
 #include <QMutex>
 #include <QSqlDatabase>
 #include <QUuid>
@@ -156,7 +157,10 @@ DatabaseParameters DatabaseAccess::parameters()
 
 void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
 {
-    return setParameters(parameters, DatabaseSlave);
+    //TODO 0.11: Refine API
+    setParameters(parameters, DatabaseSlave);
+    if (d->databaseWatch)
+        d->databaseWatch->doAnyProcessing();
 }
 
 void DatabaseAccess::setParameters(const DatabaseParameters &parameters, ApplicationStatus status)

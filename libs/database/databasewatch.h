@@ -133,6 +133,7 @@ public:
     };
 
     void initializeRemote(DatabaseMode mode);
+    void doAnyProcessing();
     void setDatabaseIdentifier(const QString &identifier);
     void setApplicationIdentifier(const QString &identifier);
 
