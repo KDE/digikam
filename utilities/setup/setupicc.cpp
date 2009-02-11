@@ -686,6 +686,14 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
                         findIccFiles = true;
                         break;
                     }
+                    case icSigLinkClass:
+                    case icSigAbstractClass:
+                    case icSigNamedColorClass:
+                    {
+                        kDebug(50003) << "ICC file: " << fileName << " ==> Device class unused ("
+                                 << cmsGetDeviceClass(tmpProfile) << ")" << endl;
+                        break;
+                    }
                     default:
                     {
                         kDebug(50003) << "ICC file: " << fileName << " ==> UNKNOWN device class ("
