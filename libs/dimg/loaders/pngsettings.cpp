@@ -82,6 +82,7 @@ PNGSettings::PNGSettings(QWidget *parent)
     d->PNGGrid->addWidget(d->labelPNGcompression, 0, 0, 1, 1);
     d->PNGGrid->addWidget(d->PNGcompression,      0, 1, 1, 1);
     d->PNGGrid->setColumnStretch(1, 10);
+    d->PNGGrid->setRowStretch(1, 10);
     d->PNGGrid->setMargin(KDialog::spacingHint());
     d->PNGGrid->setSpacing(KDialog::spacingHint());
 
