@@ -60,7 +60,7 @@ public:
     QCheckBox *loadFullImageSize;
 };
 
-SetupLightTable::SetupLightTable(QWidget* parent )
+SetupLightTable::SetupLightTable(QWidget* parent)
                : QScrollArea(parent), d(new SetupLightTablePriv)
 {
     QWidget *panel = new QWidget(viewport());
@@ -120,23 +120,23 @@ SetupLightTable::~SetupLightTable()
 void SetupLightTable::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("LightTable Settings"));
+    KConfigGroup group        = config->group(QString("LightTable Settings"));
     QColor Black(Qt::black);
     QColor White(Qt::white);
-    d->hideToolBar->setChecked(group.readEntry("FullScreen Hide ToolBar", false));
-    d->autoSyncPreview->setChecked(group.readEntry("Auto Sync Preview", true));
+    d->hideToolBar->setChecked(group.readEntry("FullScreen Hide ToolBar",        false));
+    d->autoSyncPreview->setChecked(group.readEntry("Auto Sync Preview",          true));
     d->autoLoadOnRightPanel->setChecked(group.readEntry("Auto Load Right Panel", true));
-    d->loadFullImageSize->setChecked(group.readEntry("Load Full Image size", false));
+    d->loadFullImageSize->setChecked(group.readEntry("Load Full Image size",     false));
 }
 
 void SetupLightTable::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("LightTable Settings"));
+    KConfigGroup group        = config->group(QString("LightTable Settings"));
     group.writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
-    group.writeEntry("Auto Sync Preview", d->autoSyncPreview->isChecked());
-    group.writeEntry("Auto Load Right Panel", d->autoLoadOnRightPanel->isChecked());
-    group.writeEntry("Load Full Image size", d->loadFullImageSize->isChecked());
+    group.writeEntry("Auto Sync Preview",       d->autoSyncPreview->isChecked());
+    group.writeEntry("Auto Load Right Panel",   d->autoLoadOnRightPanel->isChecked());
+    group.writeEntry("Load Full Image size",    d->loadFullImageSize->isChecked());
     config->sync();
 }
 
