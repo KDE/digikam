@@ -171,6 +171,7 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
                : QWidget(parent), d(new SearchTabHeaderPriv)
 {
     QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
 
     // upper part
     d->newSearchWidget = new QGroupBox;
@@ -264,11 +265,6 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
     vbox2->addWidget(d->storedAdvancedEditName);
     vbox2->addWidget(d->storedAdvancedEditLabel);
     d->editAdvancedWidget->setLayout(vbox2);
-
-    // ------------------- //
-
-    // main layout
-    setLayout(mainLayout);
 
     // ------------------- //
 
@@ -499,7 +495,7 @@ void SearchTabHeader::advancedSearchEdited(int id, const QString &query)
     // the search is effectively still a keyword search.
     // We go the hard way and check this case.
     KeywordSearchReader check(query);
-    DatabaseSearch::Type type = check.isSimpleKeywordSearch() ? DatabaseSearch::KeywordSearch 
+    DatabaseSearch::Type type = check.isSimpleKeywordSearch() ? DatabaseSearch::KeywordSearch
                                                               : DatabaseSearch::AdvancedSearch;
 
     if (id == -1)
