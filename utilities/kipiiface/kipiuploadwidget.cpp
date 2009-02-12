@@ -172,6 +172,8 @@ void KipiUploadWidget::populateTreeView(const AlbumList& aList, QTreeWidget *vie
 
 KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
 {
+    if (!d->iface) return;
+
     QString ext = d->iface->fileExtensions();
     KIPI::ImageCollection collection;
 
