@@ -207,7 +207,7 @@ void KipiUploadWidget::setCurrentAlbumUrl(const KUrl& albumUrl)
             if (palbum->fileUrl() == albumUrl)
             {
                 d->albumsView->setCurrentItem(item);
-                d->albumsView->scrollToItem(newItem);
+                d->albumsView->scrollToItem(item);
                 item->setSelected(true);
                 return;
             }
