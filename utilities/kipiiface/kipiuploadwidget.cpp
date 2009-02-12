@@ -184,6 +184,36 @@ KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
     return collection;
 }
 
+KUrl KipiUploadWidget::currentAlbumUrl() const
+{
+    TreeAlbumItem* item = dynamic_cast<TreeAlbumItem*>(d->albumsView->currentItem());
+    if (item)
+    {
+        PAlbum* palbum = (PAlbum*)(item->album());
+        return palbum->fileUrl();
+    }
+    return KUrl();
+}
+
+void KipiUploadWidget::setCurrentAlbumUrl(const KUrl& albumUrl)
+{
+    QTreeWidgetItemIterator it(d->albumsView);
+    while (*it)
+    {
+        TreeAlbumItem* item = dynamic_cast<TreeAlbumItem*>(*it);
+        if (item)
+        {
+            PAlbum* palbum = (PAlbum*)(item->album());
+            if (palbum->fileUrl() == albumUrl)
+            {
+                d->albumsView->setCurrentItem(item);
+                return;
+            }
+        }
+        ++it;
+    }
+}
+
 void KipiUploadWidget::slotSearchTextChanged(const SearchTextSettings& settings)
 {
     QString search       = settings.text;

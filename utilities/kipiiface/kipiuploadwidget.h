@@ -54,6 +54,9 @@ public:
 
     KIPI::ImageCollection selectedImageCollection() const;
 
+    void setCurrentAlbumUrl(const KUrl& albumUrl);
+    KUrl currentAlbumUrl() const;
+
 private:
 
     void populateTreeView(const AlbumList& aList, QTreeWidget *view);
