@@ -69,7 +69,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 059 ==> 183008 : Fuzzy image search requires two clicks to navigate back.
 060 ==> 182858 : DigiKam becomes unusable when removing a collection that is part of a "Find Duplicates" search result.
 061 ==> 183887 : Importing photos first time and crashed.
-062 ==> 
+062 ==> 183835 : Crash after multiple move/delete albums operations.
+063 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
