@@ -80,6 +80,7 @@ public:
     DigikamAppPriv()
     {
         fullScreen                           = false;
+        autoShowZoomToolTip                  = false;
         validIccPath                         = true;
         cameraSolidMenu                      = 0;
         usbMediaMenu                         = 0;
@@ -172,6 +173,7 @@ public:
     }
 
     bool                                fullScreen;
+    bool                                autoShowZoomToolTip;
     bool                                validIccPath;
 
     // KIPI plugins support

@@ -328,6 +328,7 @@ void DigikamApp::show()
     // Init album icon view zoom factor.
     slotThumbSizeChanged(AlbumSettings::instance()->getDefaultIconSize());
     slotZoomSliderChanged(AlbumSettings::instance()->getDefaultIconSize());
+    d->autoShowZoomToolTip = true;
 }
 
 void DigikamApp::restoreSession()
@@ -2452,7 +2453,7 @@ void DigikamApp::slotThumbSizeChanged(int size)
 {
     d->statusZoomBar->setZoomSliderValue(size);
     d->statusZoomBar->setZoomTrackerText(i18n("Size: %1", size));
-    if (!d->fullScreen)
+    if (!d->fullScreen && d->autoShowZoomToolTip)
         d->statusZoomBar->triggerZoomTrackerToolTip();
 }
 
@@ -2460,7 +2461,7 @@ void DigikamApp::slotZoomChanged(double zoom, int size)
 {
     d->statusZoomBar->setZoomSliderValue(size);
     d->statusZoomBar->setZoomTrackerText(i18n("zoom: %1%", (int)(zoom*100.0)));
-    if (!d->fullScreen)
+    if (!d->fullScreen && d->autoShowZoomToolTip)
         d->statusZoomBar->triggerZoomTrackerToolTip();
 }
 
