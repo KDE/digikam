@@ -172,15 +172,15 @@ void KipiUploadWidget::populateTreeView(const AlbumList& aList, QTreeWidget *vie
 
 KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
 {
-    if (!d->iface) return;
-
-    QString ext = d->iface->fileExtensions();
     KIPI::ImageCollection collection;
+    if (d->iface)
+    {
+        QString ext = d->iface->fileExtensions();
 
-    TreeAlbumItem* item = dynamic_cast<TreeAlbumItem*>(d->albumsView->currentItem());
-    if (item)
-        collection = new KipiImageCollection(KipiImageCollection::AllItems, item->album(), ext);
-
+        TreeAlbumItem* item = dynamic_cast<TreeAlbumItem*>(d->albumsView->currentItem());
+        if (item)
+            collection = new KipiImageCollection(KipiImageCollection::AllItems, item->album(), ext);
+    }
     return collection;
 }
 
