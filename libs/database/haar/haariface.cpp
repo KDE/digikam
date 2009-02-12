@@ -632,7 +632,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
     QList<qlonglong>::const_iterator    it;
     QList<qlonglong>::const_iterator    it2;
     QList<qlonglong>                    list;
-    bool                                find = false;
+    QSet<qlonglong>                     alreadyChecked;
 
     int                                 total = 0;
     int                                 progress = 0;
@@ -647,35 +647,34 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
 
     for (it = images2Scan.constBegin(); it != images2Scan.constEnd(); ++it)
     {
-        //list = bestMatchesForImage(*it, 20, ScannedSketch);
-        // find images with at least 90% similarity
-        list = bestMatchesForImageWithThreshold(*it, requiredPercentage, ScannedSketch);
-        if (!list.isEmpty())
+        if (!alreadyChecked.contains(*it))
         {
-            find = false;
-
-            // the list will usually contain one image: the original. Filter out.
-            if (!(list.count() == 1 && list.first() == *it))
+            //list = bestMatchesForImage(*it, 20, ScannedSketch);
+            // find images with at least 90% similarity
+            list = bestMatchesForImageWithThreshold(*it, requiredPercentage, ScannedSketch);
+            if (!list.isEmpty())
             {
-                // we will check if the duplicates already exist in the map.
-                for (it2 = list.constBegin(); it2 != list.constEnd(); ++it2)
+                // the list will usually contain one image: the original. Filter out.
+                if (!(list.count() == 1 && list.first() == *it))
                 {
-                    if (resultsMap.constFind(*it2) != resultsMap.constEnd())
+                    resultsMap.insert(*it, list);
+
+                    // mark already checked ids
+                    alreadyChecked << *it;
+                    foreach (qlonglong id, list)
                     {
-                        find = true;
-                        break;
+                        alreadyChecked << id;
                     }
                 }
-
-                if (!find)
-                    resultsMap.insert(*it, list);
             }
         }
 
         progress++;
 
         if (observer && (progress == total || progress % progressStep == 0) )
+        {
             observer->processedNumber(progress);
+        }
     }
 
     return resultsMap;
