@@ -557,10 +557,12 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
 
     if(tag && tag->parent())
     {
-        editAction       = popmenu.addAction(SmallIcon("tag-properties"), i18n("Edit Tag Properties..."));
-        resetIconAction  = popmenu.addAction(SmallIcon("tag-reset"),      i18n("Reset Tag Icon"));
+        resetIconAction = popmenu.addAction(SmallIcon("tag-reset"),  i18n("Reset Tag Icon"));
         popmenu.addSeparator();
-        deleteAction = popmenu.addAction(SmallIcon("tag-delete"),     i18n("Delete Tag"));
+        deleteAction    = popmenu.addAction(SmallIcon("tag-delete"), i18n("Delete Tag"));
+        popmenu.addSeparator();
+        editAction = popmenu.addAction(SmallIcon("tag-properties"),
+                                       i18nc("Edit Tag Properties", "Properties..."));
     }
 
     QAction *choice = popmenu.exec((QCursor::pos()));

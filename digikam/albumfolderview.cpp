@@ -562,8 +562,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
     {
         if (!album->isAlbumRoot())
         {
-            renameAction     = popmenu.addAction(SmallIcon("edit-rename"), i18n("Rename..."));
-            propertiesAction = popmenu.addAction(SmallIcon("albumfolder-properties"), i18n("Album Properties..."));
+            renameAction = popmenu.addAction(SmallIcon("edit-rename"), i18n("Rename..."));
         }
         resetIconAction  = popmenu.addAction(SmallIcon("view-refresh"), i18n("Reset Album Icon"));
         popmenu.addSeparator();
@@ -616,6 +615,14 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
                 deleteAction = popmenu.addAction(SmallIcon("edit-delete-shred"), i18n("Delete Album"));
             }
         }
+        popmenu.addSeparator();
+
+        if (!album->isAlbumRoot())
+        {
+            propertiesAction = popmenu.addAction(SmallIcon("albumfolder-properties"),
+                                                 i18nc("Edit Album Properties", "Properties..."));
+        }
+
     }
 
     QAction *choice = popmenu.exec(QCursor::pos());
