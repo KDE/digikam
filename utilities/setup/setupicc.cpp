@@ -374,6 +374,10 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 
     // --------------------------------------------------------
 
+    readSettings();
+
+    // --------------------------------------------------------
+
     connect(d->managedView, SIGNAL(toggled(bool)),
             this, SLOT(slotToggleManagedView(bool)));
 
@@ -401,7 +405,6 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     // --------------------------------------------------------
 
     adjustSize();
-    readSettings();
     slotToggledWidgets(d->enableColorManagement->isChecked());
     slotToggleManagedView(d->managedView->isChecked());
 }

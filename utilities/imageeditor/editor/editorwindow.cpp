@@ -854,12 +854,16 @@ void EditorWindow::applyStandardSettings()
     d->ICCSettings->monitorSetting        = group.readEntry("MonitorProfileFile", QString());
     d->ICCSettings->proofSetting          = group.readEntry("ProofProfileFile", QString());
 
+    d->viewCMViewAction->blockSignals(true);
+    d->cmViewIndicator->blockSignals(true);
     d->viewCMViewAction->setEnabled(d->ICCSettings->enableCMSetting);
     d->viewCMViewAction->setChecked(d->ICCSettings->managedViewSetting);
     d->cmViewIndicator->setEnabled(d->ICCSettings->enableCMSetting);
     d->cmViewIndicator->setChecked(d->ICCSettings->managedViewSetting);
     setColorManagedViewIndicatorToolTip(d->ICCSettings->enableCMSetting, d->ICCSettings->managedViewSetting);
     m_canvas->setICCSettings(d->ICCSettings);
+    d->viewCMViewAction->blockSignals(false);
+    d->cmViewIndicator->blockSignals(false);
 
     // -- JPEG, PNG, TIFF JPEG2000 files format settings --------------------------------------
 
