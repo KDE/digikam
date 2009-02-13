@@ -891,10 +891,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
     QAction *editAction=0, *resetIconAction=0, *deleteAction=0;
     if (!album->isRoot())
     {
-        editAction      = popmenu.addAction(SmallIcon("tag-properties"), i18n("Edit Tag Properties..."));
-        resetIconAction = popmenu.addAction(SmallIcon("tag-reset"),      i18n("Reset Tag Icon"));
-        popmenu.addSeparator();
-        deleteAction    = popmenu.addAction(SmallIcon("tag-delete"),     i18n("Delete Tag"));
+        resetIconAction = popmenu.addAction(SmallIcon("view-refresh"), i18n("Reset Tag Icon"));
     }
 
     popmenu.addSeparator();
@@ -941,6 +938,15 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
     toggleBothAction->setChecked(d->toggleAutoTags == TagFilterView::ChildrenAndParents);
 
     popmenu.addAction(toggleAutoAction);
+
+    if (!album->isRoot())
+    {
+        popmenu.addSeparator();
+        deleteAction = popmenu.addAction(SmallIcon("user-trash"), i18n("Delete Tag"));
+        popmenu.addSeparator();
+        editAction = popmenu.addAction(SmallIcon("tag-properties"),
+                                       i18nc("Edit Tag Properties", "Properties..."));
+    }
 
     TagFilterView::ToggleAutoTags oldAutoTags = d->toggleAutoTags;
 
