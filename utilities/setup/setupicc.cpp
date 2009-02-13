@@ -630,6 +630,7 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
                 switch ((int)cmsGetDeviceClass(tmpProfile))
                 {
                     case icSigInputClass:
+                    case 0x6e6b7066: // 'nkbf', proprietary in Nikon profiles
                     {
                         if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
                             d->inICCPath.insert(fileName, fileName);
