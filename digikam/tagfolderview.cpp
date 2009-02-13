@@ -557,9 +557,9 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
 
     if(tag && tag->parent())
     {
-        resetIconAction = popmenu.addAction(SmallIcon("tag-reset"),  i18n("Reset Tag Icon"));
+        resetIconAction = popmenu.addAction(SmallIcon("view-refresh"),  i18n("Reset Tag Icon"));
         popmenu.addSeparator();
-        deleteAction    = popmenu.addAction(SmallIcon("tag-delete"), i18n("Delete Tag"));
+        deleteAction    = popmenu.addAction(SmallIcon("user-trash"), i18n("Delete Tag"));
         popmenu.addSeparator();
         editAction = popmenu.addAction(SmallIcon("tag-properties"),
                                        i18nc("Edit Tag Properties", "Properties..."));
