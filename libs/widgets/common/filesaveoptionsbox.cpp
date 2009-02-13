@@ -145,7 +145,7 @@ void FileSaveOptionsBox::slotImageFileFormatChanged(const QString& filter)
     // we need to save the list first to prevent indexing errors if mimetype is unknown
     QStringList type = KImageIO::typeForMime(filter);
     if (type.isEmpty())
-        return;
+        type << "unknown";
     QString format = type[0].toUpper();
     toggleFormatOptions(format);
 }
