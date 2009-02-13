@@ -49,9 +49,9 @@ namespace Digikam
 ICCPreviewWidget::ICCPreviewWidget(QWidget *parent)
                 : KPreviewWidgetBase( parent )
 {
-    QVBoxLayout *mainLayout  = new QVBoxLayout;
-    QScrollArea * scrollArea = new QScrollArea;
-    m_iccProfileWidget       = new ICCProfileWidget(this);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    QScrollArea *scrollArea = new QScrollArea;
+    m_iccProfileWidget      = new ICCProfileWidget(this);
 
     scrollArea->setWidget(m_iccProfileWidget);
     mainLayout->addWidget(scrollArea);
