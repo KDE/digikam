@@ -895,7 +895,7 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
 
     QAction *newAction, *editAction=0, *resetIconAction=0, *deleteAction=0;
 
-    newAction     = popmenu.addAction(SmallIcon("tag-new"), i18n("New Tag..."));
+    newAction = popmenu.addAction(SmallIcon("tag-new"), i18n("New Tag..."));
 
 #ifdef HAVE_KDEPIMLIBS
     d->ABCMenu = new KMenu(this);
@@ -910,10 +910,7 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
 
     if (item)
     {
-        editAction      = popmenu.addAction(SmallIcon("tag-properties"), i18n("Edit Tag Properties..."));
-        resetIconAction = popmenu.addAction(SmallIcon("tag-reset"),      i18n("Reset Tag Icon"));
-        popmenu.addSeparator();
-        deleteAction    = popmenu.addAction(SmallIcon("tag-delete"),     i18n("Delete Tag"));
+        resetIconAction = popmenu.addAction(SmallIcon("view-refresh"), i18n("Reset Tag Icon"));
     }
 
     popmenu.addSeparator();
@@ -961,7 +958,6 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
 
     popmenu.addAction(toggleAutoAction);
 
-
     KSelectAction *matchingCondAction = new KSelectAction(i18n("Matching Condition"), &popmenu);
     QAction *orBetweenAction = matchingCondAction->addAction(i18n("Or Between Tags"));
     QAction *andBetweenAction = matchingCondAction->addAction(i18n("And Between Tags"));
@@ -971,6 +967,15 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
     else
         andBetweenAction->setChecked(true);
     popmenu.addAction(matchingCondAction);
+
+    if (item)
+    {
+        popmenu.addSeparator();
+        deleteAction    = popmenu.addAction(SmallIcon("user-trash"),     i18n("Delete Tag"));
+        popmenu.addSeparator();
+        editAction      = popmenu.addAction(SmallIcon("tag-properties"),
+                                            i18nc("Edit Tag Properties", "Properties..."));
+    }
 
     ToggleAutoTags oldAutoTags = d->toggleAutoTags;
 
