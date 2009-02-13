@@ -186,6 +186,9 @@ namespace Digikam
       return;
     }
 
+    if (optionsPage->autoRotation())
+       printer.setOrientation( doc.size().width() <= doc.size().height() ? QPrinter::Portrait
+                                                                         : QPrinter::Landscape );
     QPainter painter ( &printer );
     QRect rect = painter.viewport();
     QSize size = d->adjustSize ( optionsPage, doc, printer.resolution(), rect.size() );

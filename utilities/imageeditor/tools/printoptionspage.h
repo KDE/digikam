@@ -64,6 +64,7 @@ namespace Digikam
       double scaleWidth() const;
       double scaleHeight() const;
       bool colorManaged();
+      bool autoRotation();
       QString inProfilePath();
       QString outputProfilePath();
 

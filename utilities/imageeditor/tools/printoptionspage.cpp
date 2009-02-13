@@ -202,6 +202,11 @@ namespace Digikam
     return d->colorManaged->isChecked();
   }
 
+  bool PrintOptionsPage::autoRotation()
+  {
+    return d->kcfg_PrintAutoRotate->isChecked();
+  }
+
   QString PrintOptionsPage::inProfilePath()
   {
     return d->inProfilePath;
