@@ -668,7 +668,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->deleteTagAction = new KAction(KIcon("tag-delete"), i18n("Delete"), this);
+    d->deleteTagAction = new KAction(KIcon("user-trash"), i18n("Delete"), this);
     connect(d->deleteTagAction, SIGNAL(triggered()), d->view, SLOT(slotDeleteTag()));
     actionCollection()->addAction("tag_delete", d->deleteTagAction);
 
