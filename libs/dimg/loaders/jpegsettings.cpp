@@ -89,9 +89,8 @@ JPEGSettings::JPEGSettings(QWidget *parent)
                                           "<p><b>Note: JPEG always uses lossy compression.</b></p>"));
 
     d->labelWarning = new QLabel(i18n("<font size='-1' color='red'><i>"
-                          "Warning: <a href='http://en.wikipedia.org/wiki/JPEG'>JPEG</a> is a<br/>"
-                          "lossy compression<br/>"
-                          "image format!"
+                          "Warning: <a href='http://en.wikipedia.org/wiki/JPEG'>JPEG</a> is a "
+                          "lossy compression image format!"
                           "</i></font>"), this);
 
     d->labelWarning->setOpenExternalLinks(true);
@@ -117,14 +116,13 @@ JPEGSettings::JPEGSettings(QWidget *parent)
                                          "images with soft edges but tends to alter colors</p>"
                                          "<p><b>Note: JPEG always uses lossy compression.</b></p>"));
 
-    d->JPEGGrid->addWidget(d->labelJPEGcompression, 0, 0, 1, 1);
-    d->JPEGGrid->addWidget(d->JPEGcompression,      0, 1, 1, 2);
-    d->JPEGGrid->addWidget(d->labelSubSampling,     1, 0, 1, 1);
-    d->JPEGGrid->addWidget(d->subSamplingCB,        1, 1, 1, 2);
-    d->JPEGGrid->addWidget(d->labelWarning,         0, 3, 2, 1);
+    d->JPEGGrid->addWidget(d->labelJPEGcompression, 0, 0, 1, 2);
+    d->JPEGGrid->addWidget(d->JPEGcompression,      1, 0, 1, 2);
+    d->JPEGGrid->addWidget(d->labelSubSampling,     2, 0, 1, 2);
+    d->JPEGGrid->addWidget(d->subSamplingCB,        3, 0, 1, 2);
+    d->JPEGGrid->addWidget(d->labelWarning,         4, 0, 1, 1);
     d->JPEGGrid->setColumnStretch(1, 10);
-    d->JPEGGrid->setRowStretch(2, 10);
-    d->JPEGGrid->setAlignment(d->JPEGcompression, Qt::AlignCenter);
+    d->JPEGGrid->setRowStretch(5, 10);
     d->JPEGGrid->setMargin(KDialog::spacingHint());
     d->JPEGGrid->setSpacing(KDialog::spacingHint());
 

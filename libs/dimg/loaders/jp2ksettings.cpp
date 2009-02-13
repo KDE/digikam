@@ -92,10 +92,10 @@ JP2KSettings::JP2KSettings(QWidget *parent)
                                                "compression format when you use this setting.</b></p>"));
 
     d->JPEG2000Grid->addWidget(d->JPEG2000LossLess,         0, 0, 1, 2);
-    d->JPEG2000Grid->addWidget(d->labelJPEG2000compression, 1, 0, 1, 1);
-    d->JPEG2000Grid->addWidget(d->JPEG2000compression,      1, 1, 1, 1);
+    d->JPEG2000Grid->addWidget(d->labelJPEG2000compression, 1, 0, 1, 2);
+    d->JPEG2000Grid->addWidget(d->JPEG2000compression,      2, 0, 1, 2);
     d->JPEG2000Grid->setColumnStretch(1, 10);
-    d->JPEG2000Grid->setRowStretch(2, 10);
+    d->JPEG2000Grid->setRowStretch(3, 10);
     d->JPEG2000Grid->setMargin(KDialog::spacingHint());
     d->JPEG2000Grid->setSpacing(KDialog::spacingHint());
 
