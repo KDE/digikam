@@ -1521,7 +1521,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     // Determine the default mime type from LastSavedImageTypeMime
     QString defaultMimeType;
     // inspired by kimageio.cpp, typeForMime(). This here is "mimeForType".
-    KService::List services = KServiceTypeTrader::self()->query("QImageIOPlugins");
+    KService::List services   = KServiceTypeTrader::self()->query("QImageIOPlugins");
     foreach(const KService::Ptr &service, services)
     {
         if (service->property("X-KDE-ImageFormat").toStringList().contains(ext))
@@ -1546,7 +1546,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     // Check if target image format have been selected from Combo List of SaveAs dialog.
 
-    QStringList mimes =KImageIO::typeForMime(imageFileSaveDialog->currentMimeFilter());
+    QStringList mimes = KImageIO::typeForMime(imageFileSaveDialog->currentMimeFilter());
     if (!mimes.isEmpty())
     {
         m_savingContext->format = mimes.first();
