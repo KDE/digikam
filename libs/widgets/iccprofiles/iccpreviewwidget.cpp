@@ -32,6 +32,7 @@
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <QFrame>
+#include <QScrollArea>
 
 // KDE includes.
 
@@ -48,10 +49,13 @@ namespace Digikam
 ICCPreviewWidget::ICCPreviewWidget(QWidget *parent)
                 : KPreviewWidgetBase( parent )
 {
-    QVBoxLayout *layout = new QVBoxLayout();
-    m_iccProfileWidget  = new ICCProfileWidget(this);
-    layout->addWidget(m_iccProfileWidget);
-    setLayout(layout);
+    QVBoxLayout *mainLayout  = new QVBoxLayout;
+    QScrollArea * scrollArea = new QScrollArea;
+    m_iccProfileWidget       = new ICCProfileWidget(this);
+
+    scrollArea->setWidget(m_iccProfileWidget);
+    mainLayout->addWidget(scrollArea);
+    setLayout(mainLayout);
 }
 
 ICCPreviewWidget::~ICCPreviewWidget()
