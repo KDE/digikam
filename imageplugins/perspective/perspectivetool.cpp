@@ -125,6 +125,7 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
     KSeparator *line2         = new KSeparator (Qt::Horizontal, m_gboxSettings->plainPage());
     m_drawWhileMovingCheckBox = new QCheckBox(i18n("Draw preview while moving"), m_gboxSettings->plainPage());
     m_drawGridCheckBox        = new QCheckBox(i18n("Draw grid"), m_gboxSettings->plainPage());
+    m_inverseTransformation   = new QCheckBox(i18n("Inverse transformation"), m_gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
@@ -160,13 +161,14 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
     gridLayout->addWidget(line2,                        8, 0, 1, 3);
     gridLayout->addWidget(m_drawWhileMovingCheckBox,    9, 0, 1, 3);
     gridLayout->addWidget(m_drawGridCheckBox,          10, 0, 1, 3);
-    gridLayout->addWidget(label7,                      11, 0, 1, 1);
-    gridLayout->addWidget(m_guideColorBt,              11, 2, 1, 1);
-    gridLayout->addWidget(space,                       12, 0, 1, 3);
-    gridLayout->addWidget(label8,                      13, 0, 1, 1);
-    gridLayout->addWidget(m_guideSize,                 13, 2, 1, 1);
+    gridLayout->addWidget(m_inverseTransformation,     11, 0, 1, 3);
+    gridLayout->addWidget(label7,                      12, 0, 1, 1);
+    gridLayout->addWidget(m_guideColorBt,              12, 2, 1, 1);
+    gridLayout->addWidget(space,                       13, 0, 1, 3);
+    gridLayout->addWidget(label8,                      14, 0, 1, 1);
+    gridLayout->addWidget(m_guideSize,                 14, 2, 1, 1);
     gridLayout->setColumnStretch(1, 10);
-    gridLayout->setRowStretch(14, 10);
+    gridLayout->setRowStretch(15, 10);
 
     setToolSettings(m_gboxSettings);
     init();
@@ -187,6 +189,7 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
 
     connect(m_guideSize, SIGNAL(valueChanged(int)),
             m_previewWidget, SLOT(slotChangeGuideSize(int)));
+    connect(m_inverseTransformation, SIGNAL(toggled(bool)), m_previewWidget, SLOT(slotInverseTransformationChanged(bool)));
 }
 
 PerspectiveTool::~PerspectiveTool()
@@ -202,6 +205,7 @@ void PerspectiveTool::readSettings()
     m_drawGridCheckBox->setChecked(group.readEntry("Draw Grid", false));
     m_guideColorBt->setColor(group.readEntry("Guide Color", defaultGuideColor));
     m_guideSize->setValue(group.readEntry("Guide Width", 1));
+    m_inverseTransformation->setChecked(group.readEntry("Inverse Transformation", false));
     m_previewWidget->slotToggleDrawWhileMoving(m_drawWhileMovingCheckBox->isChecked());
     m_previewWidget->slotToggleDrawGrid(m_drawGridCheckBox->isChecked());
     m_previewWidget->slotChangeGuideColor(m_guideColorBt->color());
@@ -216,6 +220,7 @@ void PerspectiveTool::writeSettings()
     group.writeEntry("Draw Grid", m_drawGridCheckBox->isChecked());
     group.writeEntry("Guide Color", m_guideColorBt->color());
     group.writeEntry("Guide Width", m_guideSize->value());
+    group.writeEntry("Inverse Transformation", m_inverseTransformation->isChecked());
     config->sync();
 }
 
