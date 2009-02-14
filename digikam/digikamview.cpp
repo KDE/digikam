@@ -501,6 +501,9 @@ void DigikamView::setupConnections()
     connect(d->albumWidgetStack, SIGNAL(signalInsert2LightTable()),
             this, SLOT(slotImageAddToLightTable()));
 
+    connect(d->albumWidgetStack, SIGNAL(signalInsert2QueueMgr()),
+            this, SLOT(slotImageAddToQueueMgr()));
+
     connect(d->albumWidgetStack, SIGNAL(signalFindSimilar()),
             this, SLOT(slotImageFindSimilar()));
 
@@ -1444,6 +1447,12 @@ void DigikamView::slotLightTable()
     d->iconView->insertToLightTable(empty, ImageInfo(), true);
 }
 
+void DigikamView::slotQueueMgr()
+{
+    ImageInfoList empty;
+    d->iconView->insertToQueueMgr(empty, ImageInfo());
+}
+
 void DigikamView::slotImageLightTable()
 {
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
@@ -1475,6 +1484,21 @@ void DigikamView::slotImageAddToLightTable()
         list.append(info);
         // add images to the existing images in the light table
         d->iconView->insertToLightTable(list, info, true);
+    }
+}
+
+void DigikamView::slotImageAddToQueueMgr()
+{
+    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+    {
+        d->iconView->insertSelectionToQueueMgr();
+    }
+    else
+    {
+        ImageInfoList list;
+        ImageInfo info = d->albumWidgetStack->imagePreviewView()->getImageInfo();
+        list.append(info);
+        d->iconView->insertToQueueMgr(list, info);
     }
 }
 

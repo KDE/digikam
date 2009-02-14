@@ -43,6 +43,8 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/slideshow
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/batch
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/lighttable
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/searchwindow
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/fuzzysearch
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/gpssearch
@@ -184,6 +186,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libfuzzysearch_SRCS}
                  ${libgpssearch_SRCS}
                  ${libtimeline_SRCS}
+                 ${libqueuemanager_SRCS}
                  ${libdigikamgui_SRCS}
 
                  main.cpp

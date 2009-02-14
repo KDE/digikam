@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="52" name="digikam" >
+<gui version="53" name="digikam" >
 
  <MenuBar>
 
@@ -36,6 +36,7 @@
      <Action name="image_edit" />
      <Action name="image_lighttable" />
      <Action name="image_add_to_lighttable" />
+     <Action name="image_add_to_queuemanager" />
      <Action name="image_find_similar" />
      <Action name="image_set_exif_orientation"/>
    <Separator />
@@ -88,6 +89,8 @@
   </Menu>
 
   <Menu name="Batch"><text>&amp;Batch</text>
+      <Action name="queue_manager" />
+      <Separator/>
       <ActionList name="batch_actions"/>
   </Menu>
 

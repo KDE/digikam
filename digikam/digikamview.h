@@ -129,6 +129,7 @@ public slots:
     // Image action slots
     void slotImageLightTable();
     void slotImageAddToLightTable();
+    void slotImageAddToQueueMgr();
     void slotImagePreview();
     void slotImageEdit();
     void slotImageFindSimilar();
@@ -154,6 +155,7 @@ public slots:
 
     // Tools action slots.
     void slotLightTable();
+    void slotQueueMgr();
 
 private:
 

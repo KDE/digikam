@@ -45,6 +45,8 @@ INCLUDE_DIRECTORIES(
                      ../utilities/fuzzysearch
                      ../utilities/gpssearch
                      ../utilities/timeline
+                     ../utilities/queuemanager
+                     ../utilities/queuemanager/basetools
                      ../digikam
                      ../
 
@@ -69,6 +71,7 @@ SET(digikamthemedesigner_SRCS
     ${libgpssearch_SRCS}
     ${libtimeline_SRCS}
     ${libdigikamgui_SRCS}
+    ${libqueuemanager_SRCS}
 
     main.cpp 
     mainwindow.cpp 

@@ -118,6 +118,7 @@
 #include "imageinfo.h"
 #include "imagewindow.h"
 #include "lighttablewindow.h"
+#include "queuemgrwindow.h"
 #include "loadingcache.h"
 #include "loadingcacheinterface.h"
 #include "rawcameradlg.h"
@@ -252,6 +253,14 @@ DigikamApp::~DigikamApp()
     {
         LightTableWindow::lightTableWindow()->setAttribute(Qt::WA_DeleteOnClose, true);
         LightTableWindow::lightTableWindow()->close();
+    }
+
+    // Close and delete Batch Queue Manager instance.
+
+    if (QueueMgrWindow::queueManagerWindowCreated())
+    {
+        QueueMgrWindow::queueManagerWindow()->setAttribute(Qt::WA_DeleteOnClose, true);
+        QueueMgrWindow::queueManagerWindow()->close();
     }
 
     if (d->view)
@@ -705,6 +714,14 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+    d->imageAddQueueMgrAction = new KAction(KIcon("vcs_add"), i18n("Add to batch queue manager"), this);
+    d->imageAddQueueMgrAction->setShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_B);
+    d->imageAddQueueMgrAction->setWhatsThis(i18n("Add selected items to the batch queue manager."));
+    connect(d->imageAddQueueMgrAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToQueueMgr()));
+    actionCollection()->addAction("image_add_to_queuemanager", d->imageAddQueueMgrAction);
+
+    // -----------------------------------------------------------
+
     d->imageFindSimilarAction = new KAction(KIcon("tools-wizard"), i18n("Find Similar..."), this);
     d->imageFindSimilarAction->setWhatsThis(i18n("Find similar images using selected item as reference."));
     connect(d->imageFindSimilarAction, SIGNAL(triggered()), d->view, SLOT(slotImageFindSimilar()));
@@ -1073,6 +1090,13 @@ void DigikamApp::setupActions()
     ltAction->setShortcut(Qt::Key_L);
     connect(ltAction, SIGNAL(triggered()), d->view, SLOT(slotLightTable()));
     actionCollection()->addAction("light_table", ltAction);
+
+    // -----------------------------------------------------------
+
+    KAction *bqmAction = new KAction(KIcon("vcs_diff"), i18n("Batch Queue Manager"), this);
+    bqmAction->setShortcut(Qt::Key_B);
+    connect(bqmAction, SIGNAL(triggered()), d->view, SLOT(slotQueueMgr()));
+    actionCollection()->addAction("queue_manager", bqmAction);
 
     // -----------------------------------------------------------
 
@@ -2061,6 +2085,9 @@ void DigikamApp::slotSetupChanged()
     if (LightTableWindow::lightTableWindowCreated())
         LightTableWindow::lightTableWindow()->applySettings();
 
+    if (QueueMgrWindow::queueManagerWindowCreated())
+        QueueMgrWindow::queueManagerWindow()->applySettings();
+
     d->config->sync();
 }
 
@@ -2367,6 +2394,9 @@ void DigikamApp::slotDatabaseRescan()
 
     if (LightTableWindow::lightTableWindowCreated())
         LightTableWindow::lightTableWindow()->refreshView();
+
+    if (QueueMgrWindow::queueManagerWindowCreated())
+        QueueMgrWindow::queueManagerWindow()->refreshView();
 }
 
 void DigikamApp::slotRebuildAllThumbs()

@@ -1,0 +1,109 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2008-11-28
+ * Description : TIFF image Converter.
+ *
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
+#include "convert2tiff.h"
+#include "convert2tiff.moc"
+
+// Qt includes.
+
+#include <QWidget>
+#include <QFileInfo>
+
+// KDE includes.
+
+#include <kconfiggroup.h>
+#include <kconfig.h>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kiconloader.h>
+
+// Local includes.
+
+#include "dimg.h"
+#include "tiffsettings.h"
+
+namespace Digikam
+{
+
+Convert2TIFF::Convert2TIFF(QObject* parent)
+            : BatchTool("Convert2TIFF", BaseTool, parent)
+{
+    setToolTitle(i18n("Convert To TIFF"));
+    setToolDescription(i18n("A tool to convert image to TIFF format"));
+    setToolIcon(KIcon(SmallIcon("image-tiff")));
+
+    m_settings = new TIFFSettings();
+    setSettingsWidget(m_settings);
+
+    connect(m_settings, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+}
+
+Convert2TIFF::~Convert2TIFF()
+{
+}
+
+BatchToolSettings Convert2TIFF::defaultSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("ImageViewer Settings");
+    bool compression          = group.readEntry("TIFFCompression", false);
+    BatchToolSettings settings;
+    settings.insert("Quality", compression);
+    return settings;
+}
+
+void Convert2TIFF::assignSettings2Widget()
+{
+    m_settings->setCompression(settings()["compress"].toBool());
+}
+
+void Convert2TIFF::slotSettingsChanged()
+{
+    BatchToolSettings settings;
+    settings.insert("compress", m_settings->getCompression());
+    setSettings(settings);
+}
+
+void Convert2TIFF::setOutputUrlFromInputUrl()
+{
+    BatchTool::setOutputUrlFromInputUrl();
+    KUrl url     = outputUrl();
+    QString base = url.fileName();
+    base.append(".tif");
+    url.setFileName(base);
+    setOutputUrl(url);
+}
+
+bool Convert2TIFF::toolOperations()
+{
+    DImg img;
+    if (!img.load(inputUrl().path()))
+        return false;
+
+    img.setAttribute("compress", settings()["compress"].toBool());
+
+    return( img.save(outputUrl().path(), "TIFF") );
+}
+
+}  // namespace Digikam

@@ -1,0 +1,506 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2008-11-21
+ * Description : Batch Queue Manager items list.
+ *
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
+#include "assignedlist.h"
+#include "assignedlist.moc"
+
+// Qt includes.
+
+#include <QPainter>
+#include <QDragEnterEvent>
+#include <QUrl>
+#include <QFileInfo>
+#include <QHeaderView>
+
+// KDE includes.
+
+#include <klocale.h>
+#include <kiconloader.h>
+#include <kdebug.h>
+
+// Local includes.
+
+#include "queuemgrwindow.h"
+#include "toolslist.h"
+
+namespace Digikam
+{
+
+AssignedListViewItem::AssignedListViewItem(QTreeWidget *parent, const BatchToolSet& set)
+                    : QTreeWidgetItem(parent)
+{
+    setFlags(Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | flags());
+    setToolSet(set);
+}
+
+AssignedListViewItem::AssignedListViewItem(QTreeWidget *parent, QTreeWidgetItem* preceding, const BatchToolSet& set)
+                    : QTreeWidgetItem(parent, preceding)
+{
+    setFlags(Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | flags());
+    setToolSet(set);
+}
+
+AssignedListViewItem::~AssignedListViewItem()
+{
+}
+
+void AssignedListViewItem::setToolSet(const BatchToolSet& set)
+{
+    m_set = set;
+    if (m_set.tool)
+    {
+        setIcon(0, m_set.tool->toolIcon());
+        setText(0, m_set.tool->toolTitle());
+    }
+}
+
+BatchToolSet AssignedListViewItem::toolSet()
+{
+    return m_set;
+}
+
+void AssignedListViewItem::setProgressIcon(const QIcon& icon)
+{
+    setIcon(0, icon.isNull() ? m_set.tool->toolIcon() : icon);
+}
+
+// ---------------------------------------------------------------------------
+
+AssignedListView::AssignedListView(QWidget *parent)
+                : QTreeWidget(parent)
+{
+    setSelectionMode(QAbstractItemView::SingleSelection);
+    setWhatsThis(i18n("This is the list of batch tool assigned."));
+
+    setDragEnabled(true);
+    setAcceptDrops(true);
+    viewport()->setAcceptDrops(true);
+    setDropIndicatorShown(true);
+
+    setSortingEnabled(false);
+    setAllColumnsShowFocus(true);
+    setRootIsDecorated(false);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setColumnCount(1);
+    setHeaderHidden(true);
+    header()->setResizeMode(QHeaderView::Stretch);
+
+    connect(this, SIGNAL(itemSelectionChanged()),
+            this, SLOT(slotSelectionChanged()));
+}
+
+AssignedListView::~AssignedListView()
+{
+}
+
+void AssignedListView::setCurrentTool(int index)
+{
+    int count = 0;
+
+    QTreeWidgetItemIterator it(this);
+    while (*it)
+    {
+        if (count == index)
+        {
+            AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(*it);
+            if (item)
+            {
+                setCurrentItem(item);
+                return;
+            }
+        }
+        count++;
+        ++it;
+    }
+}
+
+int AssignedListView::toolIndex(BatchTool* tool)
+{
+    int index = 0;
+
+    QTreeWidgetItemIterator it(this);
+    while (*it)
+    {
+        AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(*it);
+        if (item)
+        {
+            if (item->toolSet().tool == tool)
+                return index;
+        }
+        index++;
+        ++it;
+    }
+    return -1;
+}
+
+AssignedBatchTools AssignedListView::assignedList()
+{
+    BatchToolMap map;
+    int index = 0;
+
+    QTreeWidgetItemIterator it(this);
+    while (*it)
+    {
+        AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(*it);
+        if (item)
+        {
+            map.insert(index, item->toolSet());
+        }
+        index++;
+        ++it;
+    }
+
+    AssignedBatchTools tools4Item;
+    tools4Item.itemUrl  = m_itemUrl;
+    tools4Item.toolsMap = map;
+    return tools4Item;
+}
+
+int AssignedListView::assignedCount()
+{
+    return assignedList().toolsMap.count();
+}
+
+void AssignedListView::slotRemoveCurrentTool()
+{
+    AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(currentItem());
+    if (item)
+    {
+        delete item;
+        emit signalAssignedToolsChanged(assignedList());
+    }
+
+    if (assignedCount() == 0)
+        emit signalToolSelected(BatchToolSet());
+}
+
+void AssignedListView::slotClearToolsList()
+{
+    clear();
+    emit signalToolSelected(BatchToolSet());
+}
+
+void AssignedListView::slotMoveCurrentToolUp()
+{
+    AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(currentItem());
+    if (item)
+    {
+        int index = toolIndex(item->toolSet().tool);
+        if (index > -1)
+        {
+            int preIndex = index-2;
+            if (preIndex != -1)
+            {
+                AssignedListViewItem* iabove = findTool(preIndex);
+                if(iabove)
+                {
+                    AssignedListViewItem* nitem = moveTool(iabove, item->toolSet());
+                    setCurrentItem(nitem);
+                }
+            }
+            else
+            {
+                BatchToolMap map = assignedList().toolsMap;
+                BatchToolSet tmp = map[0];
+                map[0]           = map[1];
+                map[1]           = tmp;
+
+                AssignedBatchTools tools;
+                tools.itemUrl  = assignedList().itemUrl;
+                tools.toolsMap = map;
+
+                blockSignals(true);
+                slotItemSelected(tools);
+                blockSignals(false);
+                setCurrentTool(0);
+            }
+        }
+    }
+}
+
+void AssignedListView::slotMoveCurrentToolDown()
+{
+    AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(currentItem());
+    if (item)
+    {
+        AssignedListViewItem* ibelow = dynamic_cast<AssignedListViewItem*>(itemBelow(item));
+        if(ibelow)
+        {
+            AssignedListViewItem* nitem = moveTool(ibelow, item->toolSet());
+            setCurrentItem(nitem);
+        }
+    }
+}
+
+AssignedListViewItem* AssignedListView::moveTool(AssignedListViewItem* preceding, const BatchToolSet& set)
+{
+    if (!set.tool) return 0;
+
+    removeTool(set);
+    AssignedListViewItem* item = insertTool(preceding, set);
+
+    emit signalAssignedToolsChanged(assignedList());
+
+    return item;
+}
+
+AssignedListViewItem* AssignedListView::insertTool(AssignedListViewItem* preceding, const BatchToolSet& set)
+{
+    if (!set.tool) return 0;
+
+    if (findTool(set)) return 0;
+
+    AssignedListViewItem* item = 0;
+
+    if (preceding)
+        item = new AssignedListViewItem(this, preceding, set);
+    else
+        item = new AssignedListViewItem(this, set);
+
+    emit signalAssignedToolsChanged(assignedList());
+
+    return item;
+}
+
+AssignedListViewItem* AssignedListView::addTool(int /*index*/, const BatchToolSet& set)
+{
+    if (!set.tool) return 0;
+
+    if (findTool(set)) return 0;
+
+    AssignedListViewItem* item = new AssignedListViewItem(this, set);
+
+    emit signalAssignedToolsChanged(assignedList());
+
+    return item;
+}
+
+bool AssignedListView::removeTool(const BatchToolSet& set)
+{
+    QTreeWidgetItemIterator it(this);
+    while (*it)
+    {
+        AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(*it);
+        if (item->toolSet().tool == set.tool)
+        {
+            delete item;
+            return true;
+        }
+        ++it;
+    }
+    return false;
+}
+
+AssignedListViewItem* AssignedListView::findTool(int index)
+{
+    int count = 0;
+    QTreeWidgetItemIterator it(this);
+    while (*it)
+    {
+        AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(*it);
+        if (count == index)
+            return item;
+
+        count++;
+        ++it;
+    }
+    return 0;
+}
+
+AssignedListViewItem* AssignedListView::findTool(const BatchToolSet& set)
+{
+    QTreeWidgetItemIterator it(this);
+    while (*it)
+    {
+        AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(*it);
+        if (item->toolSet().tool == set.tool)
+            return item;
+
+        ++it;
+    }
+    return 0;
+}
+
+Qt::DropActions AssignedListView::supportedDropActions() const
+{
+    return Qt::CopyAction | Qt::MoveAction;
+}
+
+QStringList AssignedListView::mimeTypes() const
+{
+    QStringList types;
+    types << "digikam/assignedbatchtool";
+    return types;
+}
+
+QMimeData* AssignedListView::mimeData(const QList<QTreeWidgetItem*> items) const
+{
+    QMimeData *mimeData = new QMimeData();
+    QByteArray encodedData;
+
+    QDataStream stream(&encodedData, QIODevice::WriteOnly);
+    stream << items.count();
+    foreach(QTreeWidgetItem* itm, items)
+    {
+        AssignedListViewItem* alwi = dynamic_cast<AssignedListViewItem*>(itm);
+        if (alwi)
+        {
+            stream << (int)(alwi->toolSet().tool->toolGroup());
+            stream << alwi->toolSet().tool->objectName();
+            stream << alwi->toolSet().settings;
+        }
+    }
+
+    mimeData->setData("digikam/assignedbatchtool", encodedData);
+    return mimeData;
+}
+
+void AssignedListView::dragEnterEvent(QDragEnterEvent *e)
+{
+    QTreeWidget::dragEnterEvent(e);
+    e->accept();
+}
+
+void AssignedListView::dragMoveEvent(QDragMoveEvent *e)
+{
+    if (e->mimeData()->formats().contains("digikam/batchtoolslist") ||
+        e->mimeData()->formats().contains("digikam/assignedbatchtool"))
+    {
+        QTreeWidget::dragMoveEvent(e);
+        e->accept();
+        return;
+    }
+    e->ignore();
+}
+
+void AssignedListView::dropEvent(QDropEvent *e)
+{
+    if (e->mimeData()->formats().contains("digikam/batchtoolslist"))
+    {
+        QByteArray ba = e->mimeData()->data("digikam/batchtoolslist");
+        if (ba.size())
+        {
+            QDataStream ds(ba);
+            QMap<int, QString> map;
+            ds >> map;
+
+            for (QMap<int, QString>::iterator it = map.begin();
+                it != map.end(); ++it)
+            {
+                BatchTool::BatchToolGroup group = (BatchTool::BatchToolGroup)(it.key());
+                QString name                    = it.value();
+                BatchTool *tool                 = QueueMgrWindow::queueManagerWindow()->batchToolsManager()
+                                                                                      ->findTool(name, group);
+                AssignedListViewItem *preceding = dynamic_cast<AssignedListViewItem*>(itemAt(e->pos()));
+                BatchToolSet set;
+                set.tool     = tool;
+                set.settings = tool->defaultSettings();
+                AssignedListViewItem* item = insertTool(preceding, set);
+                setCurrentItem(item);
+            }
+        }
+        e->acceptProposedAction();
+    }
+    else if (e->mimeData()->formats().contains("digikam/assignedbatchtool"))
+    {
+        QByteArray ba = e->mimeData()->data("digikam/assignedbatchtool");
+        if (ba.size())
+        {
+            int count;
+            QDataStream ds(ba);
+            ds >> count;
+
+            for (int i = 0 ; i < count ; i++)
+            {
+                int               group;
+                QString           name;
+                BatchToolSettings settings;
+
+                ds >> group;
+                ds >> name;
+                ds >> settings;
+
+                BatchTool *tool = QueueMgrWindow::queueManagerWindow()->batchToolsManager()
+                                  ->findTool(name, (BatchTool::BatchToolGroup)group);
+
+                AssignedListViewItem *preceding = dynamic_cast<AssignedListViewItem*>(itemAt(e->pos()));
+
+                BatchToolSet set;
+                set.tool     = tool;
+                set.settings = settings;
+                AssignedListViewItem* item = moveTool(preceding, set);
+                setCurrentItem(item);
+            }
+        }
+        e->acceptProposedAction();
+    }
+    else
+    {
+        e->ignore();
+    }
+}
+
+void AssignedListView::slotSelectionChanged()
+{
+    QList<QTreeWidgetItem*> list = selectedItems();
+    if (list.isEmpty()) return;
+
+    AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(list.first());
+    if (item)
+    {
+        BatchToolSet set = item->toolSet();
+        emit signalToolSelected(set);
+    }
+    else
+    {
+        emit signalToolSelected(BatchToolSet());
+    }
+}
+
+void AssignedListView::slotItemSelected(const AssignedBatchTools& tools4Item)
+{
+    // Backup previous tools assignement.
+    emit signalAssignedToolsChanged(assignedList());
+
+    clear();
+    emit signalToolSelected(BatchToolSet());
+    m_itemUrl = tools4Item.itemUrl;
+
+    if (!tools4Item.toolsMap.isEmpty())
+    {
+        for (BatchToolMap::const_iterator it = tools4Item.toolsMap.begin() ; it != tools4Item.toolsMap.end() ; ++it)
+            addTool(it.key(), it.value());
+    }
+}
+
+void AssignedListView::slotSettingsChanged(const BatchToolSet& set)
+{
+    AssignedListViewItem* item = findTool(set);
+    if (item)
+    {
+        item->setToolSet(set);
+        emit signalAssignedToolsChanged(assignedList());
+    }
+}
+
+}  // namespace Digikam

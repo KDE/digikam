@@ -130,6 +130,9 @@ public:
     void insertSelectionToLightTable(bool addTo=false);
     void insertToLightTable(const ImageInfoList& list, const ImageInfo &current, bool addTo=false);
 
+    void insertSelectionToQueueMgr();
+    void insertToQueueMgr(const ImageInfoList& list, const ImageInfo &current);
+
 signals:
 
     void signalPreviewItem(AlbumIconItem*);

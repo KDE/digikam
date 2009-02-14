@@ -46,6 +46,7 @@
 #include "setupcategory.h"
 #include "setupmime.h"
 #include "setuplighttable.h"
+#include "setupqueue.h"
 #include "setupeditor.h"
 #include "setupdcraw.h"
 #include "setupiofiles.h"
@@ -72,6 +73,7 @@ public:
         page_category    = 0;
         page_mime        = 0;
         page_lighttable  = 0;
+        page_queue       = 0;
         page_editor      = 0;
         page_dcraw       = 0;
         page_iofiles     = 0;
@@ -89,6 +91,7 @@ public:
         categoryPage     = 0;
         mimePage         = 0;
         lighttablePage   = 0;
+        queuePage        = 0;
         editorPage       = 0;
         dcrawPage        = 0;
         iofilesPage      = 0;
@@ -107,6 +110,7 @@ public:
     KPageWidgetItem  *page_category;
     KPageWidgetItem  *page_mime;
     KPageWidgetItem  *page_lighttable;
+    KPageWidgetItem  *page_queue;
     KPageWidgetItem  *page_editor;
     KPageWidgetItem  *page_dcraw;
     KPageWidgetItem  *page_iofiles;
@@ -124,6 +128,7 @@ public:
     SetupCategory    *categoryPage;
     SetupMime        *mimePage;
     SetupLightTable  *lighttablePage;
+    SetupQueue       *queuePage;
     SetupEditor      *editorPage;
     SetupDcraw       *dcrawPage;
     SetupIOFiles     *iofilesPage;
@@ -192,6 +197,12 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_lighttable->setHeader(i18n("<qt>Light Table Settings<br/>"
                                   "<i>Customize tool used to compare images</i></qt>"));
     d->page_lighttable->setIcon(KIcon("lighttable"));
+
+    d->queuePage  = new SetupQueue();
+    d->page_queue = addPage(d->queuePage, i18n("Queue Manager"));
+    d->page_queue->setHeader(i18n("<qt>Batch Queue Manager Settings<br/>"
+                                  "<i>Customize tool used to batch process images</i></qt>"));
+    d->page_queue->setIcon(KIcon("vcs_diff"));
 
     d->editorPage  = new SetupEditor();
     d->page_editor = addPage(d->editorPage, i18n("Image Editor"));
@@ -280,6 +291,7 @@ void Setup::slotOkClicked()
     d->mimePage->applySettings();
     d->cameraPage->applySettings();
     d->lighttablePage->applySettings();
+    d->queuePage->applySettings();
     d->editorPage->applySettings();
     d->dcrawPage->applySettings();
     d->iofilesPage->applySettings();
@@ -334,6 +346,9 @@ void Setup::showPage(Setup::Page page)
         case LightTablePage:
             setCurrentPage(d->page_lighttable);
             break;
+        case QueuePage:
+            setCurrentPage(d->page_queue);
+            break;
         case EditorPage:
             setCurrentPage(d->page_editor);
             break;
@@ -375,6 +390,7 @@ Setup::Page Setup::activePageIndex()
     if (cur == d->page_category)    return CategoryPage;
     if (cur == d->page_mime)        return MimePage;
     if (cur == d->page_lighttable)  return LightTablePage;
+    if (cur == d->page_queue)       return QueuePage;
     if (cur == d->page_editor)      return EditorPage;
     if (cur == d->page_dcraw)       return DcrawPage;
     if (cur == d->page_iofiles)     return IOFilesPage;

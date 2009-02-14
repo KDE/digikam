@@ -104,6 +104,7 @@ signals:
     void signalSlideShow();
     void signalZoomFactorChanged(double);
     void signalInsert2LightTable();
+    void signalInsert2QueueMgr();
     void signalFindSimilar();
     void signalUrlSelected(const KUrl&);
 

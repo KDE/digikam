@@ -621,6 +621,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdcraw.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcamera.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameraselection.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/setupqueue.cpp
        )
 
     SET(libkipiiface_SRCS
@@ -737,6 +738,25 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttableview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablebar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablewindow.cpp
+       )
+
+    SET(libqueuemanager_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/actionthread.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuemgrwindow.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuetab.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuelist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/batchtoolsmanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/batchtool.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/toolslist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/assignedlist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/toolsettingsview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert2jpeg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert2png.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert2tiff.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert2jp2.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/autocorrection.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/rotate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/flip.cpp
        )
 
     SET(libcameragui_SRCS

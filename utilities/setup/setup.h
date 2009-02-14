@@ -52,6 +52,7 @@ public:
         IdentifyPage,
         MimePage,
         LightTablePage,
+        QueuePage,
         EditorPage,
         DcrawPage,
         IOFilesPage,

@@ -153,6 +153,9 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     connect(d->imagePreviewView, SIGNAL(signalInsert2LightTable()),
             this, SIGNAL(signalInsert2LightTable()));
 
+    connect(d->imagePreviewView, SIGNAL(signalInsert2QueueMgr()),
+            this, SIGNAL(signalInsert2QueueMgr()));
+
     connect(d->imagePreviewView, SIGNAL(signalFindSimilar()),
             this, SIGNAL(signalFindSimilar()));
 

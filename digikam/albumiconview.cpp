@@ -124,6 +124,7 @@ extern "C"
 #include "imageattributeswatch.h"
 #include "imagewindow.h"
 #include "lighttablewindow.h"
+#include "queuemgrwindow.h"
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
 #include "ratingpopupmenu.h"
@@ -644,6 +645,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     else
         lighttableAction = popmenu.addAction(KIcon("lighttable"), i18n("Place onto Light Table"));
 
+    QAction *queuemgrAction     = popmenu.addAction(SmallIcon("vcs_add"),       i18n("Add to Queue Manager"));
     QAction *findSimilarAction  = popmenu.addAction(SmallIcon("tools-wizard"),  i18n("Find Similar"));
     QAction *gotoAction         = popmenu.addMenu(&gotoMenu);
     gotoAction->setIcon(SmallIcon("go-jump"));
@@ -809,6 +811,11 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
                 insertSelectionToLightTable(true);
             else
                 insertSelectionToLightTable(false);
+        }
+        else if (choice == queuemgrAction)
+        {
+            //  add images to existing images in the batch queue manager
+            insertSelectionToQueueMgr();
         }
         else if (choice == findSimilarAction)
         {
@@ -1283,6 +1290,44 @@ void AlbumIconView::insertToLightTable(const ImageInfoList& list, const ImageInf
         KWindowSystem::unminimizeWindow(ltview->winId());
     KWindowSystem::activateWindow(ltview->winId());
 
+}
+
+// ------------------------------------------------------------------------------
+
+void AlbumIconView::insertSelectionToQueueMgr()
+{
+    // Run Batch Queue Manager with all selected image files in the current Album.
+    ImageInfoList imageInfoList;
+
+    for (IconItem *it = firstItem() ; it ; it = it->nextItem())
+    {
+        if ((*it).isSelected())
+        {
+            AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
+            imageInfoList << iconItem->imageInfo();
+        }
+    }
+
+    insertToQueueMgr(imageInfoList, imageInfoList.first());
+}
+
+void AlbumIconView::insertToQueueMgr(const ImageInfoList& list, const ImageInfo& current)
+{
+    QueueMgrWindow *bqmview = QueueMgrWindow::queueManagerWindow();
+
+    bqmview->disconnect(this);
+
+    connect(this, SIGNAL(signalItemsUpdated(const KUrl::List&)),
+           bqmview, SLOT(slotItemsUpdated(const KUrl::List&)));
+
+    if (bqmview->isHidden())
+        bqmview->show();
+
+    if (bqmview->isMinimized())
+        KWindowSystem::unminimizeWindow(bqmview->winId());
+    KWindowSystem::activateWindow(bqmview->winId());
+
+    bqmview->loadImageInfos(list, current);
 }
 
 // ------------------------------------------------------------------------------

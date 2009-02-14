@@ -110,6 +110,7 @@ public:
         imageViewAction                      = 0;
         imageLightTableAction                = 0;
         imageAddLightTableAction             = 0;
+        imageAddQueueMgrAction               = 0;
         imageFindSimilarAction               = 0;
         imageSetExifOrientation1Action       = 0;
         imageSetExifOrientation2Action       = 0;
@@ -220,6 +221,7 @@ public:
     KToggleAction                      *imagePreviewAction;
     KAction                            *imageLightTableAction;
     KAction                            *imageAddLightTableAction;
+    KAction                            *imageAddQueueMgrAction;
     KAction                            *imageViewAction;
     KAction                            *imageFindSimilarAction;
     KAction                            *imageSetExifOrientation1Action;

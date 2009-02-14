@@ -374,6 +374,7 @@ void ImagePreviewView::slotContextMenu()
     QAction *slideshowAction    = popmenu.addAction(SmallIcon("view-presentation"), i18n("Slideshow"));
     QAction *editAction         = popmenu.addAction(SmallIcon("editimage"),         i18n("Edit..."));
     QAction *lighttableAction   = popmenu.addAction(SmallIcon("lighttableadd"),     i18n("Add to Light Table"));
+    QAction *queuemgrAction     = popmenu.addAction(SmallIcon("vcs_add"),       i18n("Add to Queue Manager"));
     QAction *findSimilarAction  = popmenu.addAction(SmallIcon("tools-wizard"),      i18n("Find Similar"));
     popmenu.addMenu(&openWithMenu);
     openWithMenu.menuAction()->setText(i18n("Open With"));
@@ -482,6 +483,10 @@ void ImagePreviewView::slotContextMenu()
         else if (choice == lighttableAction)     // Place onto Light Table
         {
             emit signalInsert2LightTable();
+        }
+        else if (choice == queuemgrAction)       // Add images to batch queue manager
+        {
+            emit signalInsert2QueueMgr();
         }
         else if (choice == findSimilarAction)    // Find Similar
         {
