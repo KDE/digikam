@@ -68,7 +68,8 @@ public:
 
 public slots:
 
-    void slotRun();
+    void slotRunCurrentQueue();
+    void slotRunAllQueue();
     void slotStop();
     void slotItemsUpdated(const KUrl::List&);
 
@@ -97,6 +98,7 @@ private:
 
 private slots:
 
+    void slotRemoveCurrentQueue();
     void slotToggleFullScreen();
     void slotEscapePressed();
     void slotDonateMoney();

@@ -60,7 +60,9 @@ public:
         donateMoneyAction      = 0;
         statusProgressBar      = 0;
         runAction              = 0;
+        runAllAction           = 0;
         stopAction             = 0;
+        removeQueueAction      = 0;
         rawCameraListAction    = 0;
         libsInfoAction         = 0;
         themeMenuAction        = 0;
@@ -97,7 +99,9 @@ public:
     QAction                   *clearToolsAction;
 
     KAction                   *runAction;
+    KAction                   *runAllAction;
     KAction                   *stopAction;
+    KAction                   *removeQueueAction;
     KAction                   *donateMoneyAction;
     KAction                   *contributeAction;
     KAction                   *rawCameraListAction;

@@ -311,14 +311,25 @@ void QueueMgrWindow::setupActions()
     d->runAction = new KAction(KIcon("media-playback-start"), i18n("Run"), this);
     d->runAction->setShortcut(Qt::CTRL+Qt::Key_P);
     d->runAction->setEnabled(false);
-    connect(d->runAction, SIGNAL(triggered()), this, SLOT(slotRun()));
-    actionCollection()->addAction("queuemgr_run", d->runAction);
+    connect(d->runAction, SIGNAL(triggered()), this, SLOT(slotRunCurrentQueue()));
+    actionCollection()->addAction("queuemgr_run_current", d->runAction);
+
+    d->runAllAction = new KAction(KIcon("media-skip-forward"), i18n("Run All"), this);
+    d->runAllAction->setShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_P);
+    d->runAllAction->setEnabled(false);
+    connect(d->runAllAction, SIGNAL(triggered()), this, SLOT(slotRunAllQueue()));
+    actionCollection()->addAction("queuemgr_run_all", d->runAllAction);
 
     d->stopAction = new KAction(KIcon("media-playback-stop"), i18n("Stop"), this);
     d->stopAction->setShortcut(Qt::CTRL+Qt::Key_S);
     d->stopAction->setEnabled(false);
     connect(d->stopAction, SIGNAL(triggered()), this, SLOT(slotStop()));
     actionCollection()->addAction("queuemgr_stop", d->stopAction);
+
+    d->removeQueueAction = new KAction(KIcon("media-eject"), i18n("Remove Queue"), this);
+    d->removeQueueAction->setEnabled(false);
+    connect(d->removeQueueAction, SIGNAL(triggered()), this, SLOT(slotRemoveCurrentQueue()));
+    actionCollection()->addAction("queuemgr_remove_current", d->removeQueueAction);
 
     d->removeItemsSelAction = new KAction(KIcon("list-remove"), i18n("Remove items"), this);
     d->removeItemsSelAction->setShortcut(Qt::CTRL+Qt::Key_K);
@@ -694,7 +705,15 @@ void QueueMgrWindow::slotShowMenuBar()
     menuBar()->setVisible(!visible);
 }
 
-void QueueMgrWindow::slotRun()
+void QueueMgrWindow::slotRemoveCurrentQueue()
+{
+}
+
+void QueueMgrWindow::slotRunAllQueue()
+{
+}
+
+void QueueMgrWindow::slotRunCurrentQueue()
 {
     d->itemsList.clear();
     d->itemsList = d->queueTab->currentQueue()->pendingItemsList();
