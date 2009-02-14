@@ -314,14 +314,8 @@ void QueueMgrWindow::setupActions()
     d->runAction = new KAction(KIcon("media-playback-start"), i18n("Run"), this);
     d->runAction->setShortcut(Qt::CTRL+Qt::Key_P);
     d->runAction->setEnabled(false);
-    connect(d->runAction, SIGNAL(triggered()), this, SLOT(slotRunCurrentQueue()));
-    actionCollection()->addAction("queuemgr_run_current", d->runAction);
-
-    d->runAllAction = new KAction(KIcon("media-skip-forward"), i18n("Run All"), this);
-    d->runAllAction->setShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_P);
-    d->runAllAction->setEnabled(false);
-    connect(d->runAllAction, SIGNAL(triggered()), this, SLOT(slotRunAllQueue()));
-    actionCollection()->addAction("queuemgr_run_all", d->runAllAction);
+    connect(d->runAction, SIGNAL(triggered()), this, SLOT(slotRun()));
+    actionCollection()->addAction("queuemgr_run", d->runAction);
 
     d->stopAction = new KAction(KIcon("media-playback-stop"), i18n("Stop"), this);
     d->stopAction->setShortcut(Qt::CTRL+Qt::Key_S);
@@ -740,11 +734,7 @@ void QueueMgrWindow::slotShowMenuBar()
     menuBar()->setVisible(!visible);
 }
 
-void QueueMgrWindow::slotRunAllQueue()
-{
-}
-
-void QueueMgrWindow::slotRunCurrentQueue()
+void QueueMgrWindow::slotRun()
 {
     d->itemsList.clear();
     d->itemsList = d->queuePool->currentQueue()->pendingItemsList();

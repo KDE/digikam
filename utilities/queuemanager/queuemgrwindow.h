@@ -68,8 +68,7 @@ public:
 
 public slots:
 
-    void slotRunCurrentQueue();
-    void slotRunAllQueue();
+    void slotRun();
     void slotStop();
     void slotItemsUpdated(const KUrl::List&);
 
