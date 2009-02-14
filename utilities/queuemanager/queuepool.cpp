@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#include "queuetab.h"
-#include "queuetab.moc"
+#include "queuepool.h"
+#include "queuepool.moc"
 
 // KDE includes.
 
@@ -37,19 +37,19 @@
 namespace Digikam
 {
 
-class QueueTabPriv
+class QueuePoolPriv
 {
 
 public:
 
-    QueueTabPriv()
+    QueuePoolPriv()
     {
     }
 
 };
 
 QueuePool::QueuePool(QWidget *parent)
-        : KTabWidget(parent), d(new QueueTabPriv)
+        : KTabWidget(parent), d(new QueuePoolPriv)
 {
     setTabBarHidden(false);
     addQueue();

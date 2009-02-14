@@ -39,7 +39,7 @@ class ImageInfo;
 class ImageInfoList;
 class AssignedBatchTools;
 class QueueListView;
-class QueueTabPriv;
+class QueuePoolPriv;
 
 class QueuePool : public KTabWidget
 {
@@ -71,7 +71,7 @@ public slots:
 
 private:
 
-    QueueTabPriv* const d;
+    QueuePoolPriv* const d;
 };
 
 }  // namespace Digikam

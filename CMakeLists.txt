@@ -743,7 +743,7 @@ ENDIF(MSVC)
     SET(libqueuemanager_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/actionthread.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuemgrwindow.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuetab.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuepool.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuelist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/batchtoolsmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/batchtool.cpp
