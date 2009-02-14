@@ -60,6 +60,11 @@ QueuePool::~QueuePool()
     delete d;
 }
 
+QueueListView* QueuePool::currentQueue() const
+{
+    return (dynamic_cast<QueueListView*>(currentWidget()));
+}
+
 void QueuePool::addQueue()
 {
     QueueListView* queue = new QueueListView(this);
@@ -70,11 +75,8 @@ void QueuePool::addQueue()
 
     connect(queue, SIGNAL(signalItemSelected(const AssignedBatchTools&)),
             this, SIGNAL(signalItemSelected(const AssignedBatchTools&)));
-}
 
-QueueListView* QueuePool::currentQueue() const
-{
-    return (dynamic_cast<QueueListView*>(currentWidget()));
+    emit signalQueuePoolChanged();
 }
 
 int QueuePool::totalPendingItems()
