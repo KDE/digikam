@@ -360,14 +360,16 @@ void PerspectiveWidget::updatePixmap()
 
     // Drawing vertical and horizontal guide lines.
 
-    int xspot = m_spot.x() + m_rect.x();
-    int yspot = m_spot.y() + m_rect.y();
-    p.setPen(QPen(Qt::white, m_guideSize, Qt::SolidLine));
-    p.drawLine(xspot, m_rect.top(), xspot, m_rect.bottom());
-    p.drawLine(m_rect.left(), yspot, m_rect.right(), yspot);
-    p.setPen(QPen(m_guideColor, m_guideSize, Qt::DotLine));
-    p.drawLine(xspot, m_rect.top(), xspot, m_rect.bottom());
-    p.drawLine(m_rect.left(), yspot, m_rect.right(), yspot);
+    if(!m_inverseTransformation) {
+      int xspot = m_spot.x() + m_rect.x();
+      int yspot = m_spot.y() + m_rect.y();
+      p.setPen(QPen(Qt::white, m_guideSize, Qt::SolidLine));
+      p.drawLine(xspot, m_rect.top(), xspot, m_rect.bottom());
+      p.drawLine(m_rect.left(), yspot, m_rect.right(), yspot);
+      p.setPen(QPen(m_guideColor, m_guideSize, Qt::DotLine));
+      p.drawLine(xspot, m_rect.top(), xspot, m_rect.bottom());
+      p.drawLine(m_rect.left(), yspot, m_rect.right(), yspot);
+    }
 
     p.end();
 
@@ -612,30 +614,32 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
             {
                 // u, v coordinates into source
 
-                int u = iu - u1;
-                int v = iv - v1;
-
-                //TODO: Check why anti-aliasing doesn't work
-                /*if (m_antiAlias)
+		//In inverse transformation we always enable anti-aliasing, because there is always under-sampling
+                if (m_antiAlias || m_inverseTransformation)
                 {
+		    double finalU = u[0] - u1;
+		    double finalV = v[0] - v1;
+		    
                     if (sixteenBit)
                     {
                         unsigned short *d16 = (unsigned short *)d;
                         filters.pixelAntiAliasing16((unsigned short *)data,
-                                                  width, height, u, v, d16+3, d16+2, d16+1, d16);
+                                                  width, height, finalU, finalV, d16+3, d16+2, d16+1, d16);
                     }
                     else
                     {
-                        filters.pixelAntiAliasing(data, width, height, u, v,
+                        filters.pixelAntiAliasing(data, width, height, finalU, finalV,
                                                                   d+3, d+2, d+1, d);
                     }
                 }
                 else
-                {*/
+                {
+                int u = iu - u1;
+                int v = iv - v1;
                 offset = (v * width * bytesDepth) + (u * bytesDepth);
                 color.setColor(data + offset, sixteenBit);
                 color.setPixel(d);
-                //}
+                }
 
                 d += bytesDepth;
             }
