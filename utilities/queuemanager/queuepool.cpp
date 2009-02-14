@@ -77,6 +77,28 @@ QueueListView* QueuePool::currentQueue() const
     return (dynamic_cast<QueueListView*>(currentWidget()));
 }
 
+int QueuePool::totalPendingItems()
+{
+    int items = 0;
+    for (int i = 0; i < count(); i++)
+    {
+        QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
+        items += queue->pendingItemsCount();
+    }
+    return items;
+}
+
+int QueuePool::totalPendingTasks()
+{
+    int tasks = 0;
+    for (int i = 0; i < count(); i++)
+    {
+        QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
+        tasks += queue->pendingTasksCount();
+    }
+    return tasks;
+}
+
 void QueuePool::slotRemoveCurrentQueue()
 {
     removeTab(indexOf(currentQueue()));

@@ -281,6 +281,9 @@ void QueueMgrWindow::setupConnections()
     connect(d->queuePool, SIGNAL(signalItemSelected(const AssignedBatchTools&)),
             d->assignedList, SLOT(slotItemSelected(const AssignedBatchTools&)));
 
+    connect(d->queuePool, SIGNAL(signalQueuePoolChanged()),
+            this, SLOT(slotImageListChanged()));
+
     connect(d->queuePool, SIGNAL(signalImageListChanged()),
             this, SLOT(slotImageListChanged()));
 
@@ -435,49 +438,80 @@ void QueueMgrWindow::setupActions()
 
 void QueueMgrWindow::refreshStatusBar()
 {
-    int count   = d->queuePool->currentQueue()->itemsCount();
-    int pending = d->queuePool->currentQueue()->pendingTasksCount();
-    QString message;
+    int items       = d->queuePool->currentQueue()->pendingItemsCount();
+    int tasks       = d->queuePool->currentQueue()->pendingTasksCount();
+    int totalItems  = d->queuePool->totalPendingItems();
+    int totalTasks  = d->queuePool->totalPendingTasks();
+    QString message = i18n("Current Queue: ");
 
-    switch (count)
+    switch (items)
     {
         case 0:
-            message = i18n("No item on Queue");
+            message.append(i18n("No item"));
             break;
         case 1:
-            message = i18n("1 item on Queue");
+            message.append(i18n("1 item"));
             break;
         default:
-            message = i18n("%1 items on Queue", count);
+            message.append(i18n("%1 items", items));
             break;
     }
 
     message.append(" / ");
 
-    switch (pending)
+    switch (tasks)
     {
         case 0:
-            message.append(i18n("No pending task"));
+            message.append(i18n("No task"));
             break;
         case 1:
-            message.append(i18n("1 pending task"));
+            message.append(i18n("1 task"));
             break;
         default:
-            message.append(i18n("%1 pending tasks", pending));
+            message.append(i18n("%1 tasks", tasks));
+            break;
+    }
+
+    message.append(" - Total: ");
+
+    switch (totalItems)
+    {
+        case 0:
+            message.append(i18n("No item"));
+            break;
+        case 1:
+            message.append(i18n("1 item"));
+            break;
+        default:
+            message.append(i18n("%1 items", totalItems));
+            break;
+    }
+
+    message.append(" / ");
+
+    switch (totalTasks)
+    {
+        case 0:
+            message.append(i18n("No task"));
+            break;
+        case 1:
+            message.append(i18n("1 task"));
+            break;
+        default:
+            message.append(i18n("%1 tasks", totalTasks));
             break;
     }
 
     d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, message);
 
-
     if (!d->busy)
     {
-        bool b = (count != 0) ? true : false;
+        bool b = (items != 0) ? true : false;
         d->removeItemsSelAction->setEnabled(b);
         d->removeItemsDoneAction->setEnabled(b);
         d->clearListAction->setEnabled(b);
-        d->runAction->setEnabled(b && pending);
-        d->runAllAction->setEnabled(b && pending);
+        d->runAction->setEnabled(b && items);
+        d->runAllAction->setEnabled(b && totalItems);
     }
 }
 

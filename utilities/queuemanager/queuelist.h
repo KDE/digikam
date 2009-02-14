@@ -90,6 +90,7 @@ public:
     void removeItemByInfo(const ImageInfo& info);
 
     ImageInfoList pendingItemsList();
+    int           pendingItemsCount();
     int           pendingTasksCount();
 
     QueueListViewItem* findItemByUrl(const KUrl& url);

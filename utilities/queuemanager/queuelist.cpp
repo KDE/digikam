@@ -532,6 +532,11 @@ ImageInfoList QueueListView::pendingItemsList()
     return list;
 }
 
+int QueueListView::pendingItemsCount()
+{
+    return pendingItemsList().count();
+}
+
 int QueueListView::pendingTasksCount()
 {
     int count = 0;

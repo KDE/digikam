@@ -53,6 +53,9 @@ public:
     void addQueue();
     QueueListView* currentQueue() const;
 
+    int totalPendingItems();
+    int totalPendingTasks();
+
 signals:
 
     void signalQueuePoolChanged();
