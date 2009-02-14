@@ -72,7 +72,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 062 ==> 183835 : Crash after multiple move/delete albums operations.
 063 ==> 184091 : Crash at startup if albums moved between collections externally.
 064 ==> 160196 : Unable to save preferences for Color Management: ManagedView. 
-065 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc1 - Release date: 2009-01-21
