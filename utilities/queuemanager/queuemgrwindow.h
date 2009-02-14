@@ -98,7 +98,6 @@ private:
 
 private slots:
 
-    void slotRemoveCurrentQueue();
     void slotToggleFullScreen();
     void slotEscapePressed();
     void slotDonateMoney();

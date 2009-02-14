@@ -68,7 +68,7 @@ public:
         themeMenuAction        = 0;
         contributeAction       = 0;
         assignedList           = 0;
-        queueTab               = 0;
+        queuePool              = 0;
         toolsList              = 0;
         batchToolsMgr          = 0;
         toolSettings           = 0;
@@ -126,7 +126,7 @@ public:
 
     ToolsListView             *toolsList;
     AssignedListView          *assignedList;
-    QueuePool                  *queueTab;
+    QueuePool                 *queuePool;
     ToolSettingsView          *toolSettings;
 
     ImageInfoList             itemsList;

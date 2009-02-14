@@ -70,7 +70,7 @@
 
 #include "batchtoolsmanager.h"
 #include "actionthread.h"
-#include "queuetab.h"
+#include "queuepool.h"
 #include "queuelist.h"
 #include "toolslist.h"
 #include "assignedlist.h"
@@ -203,8 +203,8 @@ void QueueMgrWindow::setupUserArea()
 
     QGroupBox *gbox1   = new QGroupBox(i18n("Queues"), mainW);
     QVBoxLayout *vlay1 = new QVBoxLayout(gbox1);
-    d->queueTab        = new QueuePool(gbox1);
-    vlay1->addWidget(d->queueTab);
+    d->queuePool        = new QueuePool(gbox1);
+    vlay1->addWidget(d->queuePool);
     vlay1->setSpacing(0);
     vlay1->setMargin(0);
 
@@ -268,7 +268,7 @@ void QueueMgrWindow::setupConnections()
             d->toolSettings, SLOT(slotToolSelected(const BatchToolSet&)));
 
     connect(d->assignedList, SIGNAL(signalAssignedToolsChanged(const AssignedBatchTools&)),
-            d->queueTab, SLOT(slotAssignedToolsChanged(const AssignedBatchTools&)));
+            d->queuePool, SLOT(slotAssignedToolsChanged(const AssignedBatchTools&)));
 
     connect(d->toolSettings, SIGNAL(signalSettingsChanged(const BatchToolSet&)),
             d->assignedList, SLOT(slotSettingsChanged(const BatchToolSet&)));
@@ -278,13 +278,13 @@ void QueueMgrWindow::setupConnections()
 
     // -- Queued Items list connections -------------------------------------
 
-    connect(d->queueTab, SIGNAL(signalItemSelected(const AssignedBatchTools&)),
+    connect(d->queuePool, SIGNAL(signalItemSelected(const AssignedBatchTools&)),
             d->assignedList, SLOT(slotItemSelected(const AssignedBatchTools&)));
 
-    connect(d->queueTab, SIGNAL(signalImageListChanged()),
+    connect(d->queuePool, SIGNAL(signalImageListChanged()),
             this, SLOT(slotImageListChanged()));
 
-    connect(d->queueTab, SIGNAL(itemSelectionChanged()),
+    connect(d->queuePool, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotImageSelectionChanged()));
 
     // -- Multithreaded interface connections -------------------------------
@@ -328,24 +328,24 @@ void QueueMgrWindow::setupActions()
 
     d->removeQueueAction = new KAction(KIcon("media-eject"), i18n("Remove Queue"), this);
     d->removeQueueAction->setEnabled(false);
-    connect(d->removeQueueAction, SIGNAL(triggered()), this, SLOT(slotRemoveCurrentQueue()));
+    connect(d->removeQueueAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveCurrentQueue()));
     actionCollection()->addAction("queuemgr_remove_current", d->removeQueueAction);
 
     d->removeItemsSelAction = new KAction(KIcon("list-remove"), i18n("Remove items"), this);
     d->removeItemsSelAction->setShortcut(Qt::CTRL+Qt::Key_K);
     d->removeItemsSelAction->setEnabled(false);
-    connect(d->removeItemsSelAction, SIGNAL(triggered()), d->queueTab, SLOT(slotRemoveSelectedItems()));
+    connect(d->removeItemsSelAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveSelectedItems()));
     actionCollection()->addAction("queuemgr_removeitemssel", d->removeItemsSelAction);
 
     d->removeItemsDoneAction = new KAction(i18n("Remove items done"), this);
     d->removeItemsDoneAction->setEnabled(false);
-    connect(d->removeItemsDoneAction, SIGNAL(triggered()), d->queueTab, SLOT(slotRemoveItemsDone()));
+    connect(d->removeItemsDoneAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveItemsDone()));
     actionCollection()->addAction("queuemgr_removeitemsdone", d->removeItemsDoneAction);
 
     d->clearListAction = new KAction(KIcon("edit-clear"), i18n("Clear Queue"), this);
     d->clearListAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_K);
     d->clearListAction->setEnabled(false);
-    connect(d->clearListAction, SIGNAL(triggered()), d->queueTab, SLOT(slotClearList()));
+    connect(d->clearListAction, SIGNAL(triggered()), d->queuePool, SLOT(slotClearList()));
     actionCollection()->addAction("queuemgr_clearlist", d->clearListAction);
 
     actionCollection()->addAction(KStandardAction::Close, "queuemgr_close",
@@ -435,8 +435,8 @@ void QueueMgrWindow::setupActions()
 
 void QueueMgrWindow::refreshStatusBar()
 {
-    int count   = d->queueTab->currentQueue()->itemsCount();
-    int pending = d->queueTab->currentQueue()->pendingTasksCount();
+    int count   = d->queuePool->currentQueue()->itemsCount();
+    int pending = d->queuePool->currentQueue()->pendingTasksCount();
     QString message;
 
     switch (count)
@@ -663,7 +663,7 @@ void QueueMgrWindow::slotComponentsInfo()
 
 void QueueMgrWindow::loadImageInfos(const ImageInfoList &list, const ImageInfo &current)
 {
-    d->queueTab->currentQueue()->slotAddItems(list, current);
+    d->queuePool->currentQueue()->slotAddItems(list, current);
 }
 
 void QueueMgrWindow::refreshView()
@@ -674,7 +674,7 @@ void QueueMgrWindow::refreshView()
 
 void QueueMgrWindow::slotImageListChanged()
 {
-    bool b = d->queueTab->currentQueue()->itemsCount() > 0 ? true : false;
+    bool b = d->queuePool->currentQueue()->itemsCount() > 0 ? true : false;
     d->assignedList->setEnabled(b);
     d->toolSettings->setEnabled(b);
     refreshStatusBar();
@@ -682,7 +682,7 @@ void QueueMgrWindow::slotImageListChanged()
 
 void QueueMgrWindow::slotImageSelectionChanged()
 {
-    int count = d->queueTab->currentQueue()->selectedItems().count();
+    int count = d->queuePool->currentQueue()->selectedItems().count();
     d->removeItemsSelAction->setEnabled((count != 0) ? true : false);
 }
 
@@ -706,10 +706,6 @@ void QueueMgrWindow::slotShowMenuBar()
     menuBar()->setVisible(!visible);
 }
 
-void QueueMgrWindow::slotRemoveCurrentQueue()
-{
-}
-
 void QueueMgrWindow::slotRunAllQueue()
 {
 }
@@ -717,7 +713,7 @@ void QueueMgrWindow::slotRunAllQueue()
 void QueueMgrWindow::slotRunCurrentQueue()
 {
     d->itemsList.clear();
-    d->itemsList = d->queueTab->currentQueue()->pendingItemsList();
+    d->itemsList = d->queuePool->currentQueue()->pendingItemsList();
 
     if (d->itemsList.empty())
     {
@@ -727,7 +723,7 @@ void QueueMgrWindow::slotRunCurrentQueue()
         return;
     }
 
-    d->statusProgressBar->setProgressTotalSteps(d->queueTab->currentQueue()->pendingTasksCount());
+    d->statusProgressBar->setProgressTotalSteps(d->queuePool->currentQueue()->pendingTasksCount());
     d->statusProgressBar->setProgressValue(0);
     d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
     busy(true);
@@ -768,7 +764,7 @@ void QueueMgrWindow::processOne()
         return;
     }
 
-    QueueListViewItem* item = d->queueTab->currentQueue()->findItemByUrl(d->itemsList.first().fileUrl());
+    QueueListViewItem* item = d->queuePool->currentQueue()->findItemByUrl(d->itemsList.first().fileUrl());
     if (item)
     {
         AssignedBatchTools tools4Item = item->assignedTools();
@@ -858,11 +854,11 @@ void QueueMgrWindow::slotBlinkTimerDone()
 
 void QueueMgrWindow::processing(const KUrl& url)
 {
-    d->currentProcessItem = d->queueTab->currentQueue()->findItemByUrl(url);
+    d->currentProcessItem = d->queuePool->currentQueue()->findItemByUrl(url);
     if (d->currentProcessItem)
     {
-        d->queueTab->currentQueue()->setCurrentItem(d->currentProcessItem);
-        d->queueTab->currentQueue()->scrollToItem(d->currentProcessItem);
+        d->queuePool->currentQueue()->setCurrentItem(d->currentProcessItem);
+        d->queuePool->currentQueue()->scrollToItem(d->currentProcessItem);
     }
 
     d->processBlink = false;
@@ -959,14 +955,14 @@ void QueueMgrWindow::busy(bool busy)
     d->moveUpToolAction->setEnabled(!d->busy);
     d->moveDownToolAction->setEnabled(!d->busy);
     d->removeToolAction->setEnabled(!d->busy);
-    d->queueTab->setEnabled(!d->busy);
+    d->queuePool->setEnabled(!d->busy);
     d->toolsList->setEnabled(!d->busy);
     d->assignedList->setEnabled(!d->busy);
     d->toolSettings->setEnabled(!d->busy);
 
     d->stopAction->setEnabled(d->busy);
 
-    d->busy ? d->queueTab->setCursor(Qt::WaitCursor) : d->queueTab->unsetCursor();
+    d->busy ? d->queuePool->setCursor(Qt::WaitCursor) : d->queuePool->unsetCursor();
     d->busy ? d->animLogo->start() : d->animLogo->stop();
 }
 
