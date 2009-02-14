@@ -48,19 +48,19 @@ public:
 
 };
 
-QueueTab::QueueTab(QWidget *parent)
+QueuePool::QueuePool(QWidget *parent)
         : KTabWidget(parent), d(new QueueTabPriv)
 {
     setTabBarHidden(false);
     addQueue();
 }
 
-QueueTab::~QueueTab()
+QueuePool::~QueuePool()
 {
     delete d;
 }
 
-void QueueTab::addQueue()
+void QueuePool::addQueue()
 {
     QueueListView* queue = new QueueListView(this);
     addTab(queue, SmallIcon("vcs_diff"), QString("#%1").arg(count()+1));
@@ -72,32 +72,41 @@ void QueueTab::addQueue()
             this, SIGNAL(signalItemSelected(const AssignedBatchTools&)));
 }
 
-QueueListView* QueueTab::currentQueue() const
+QueueListView* QueuePool::currentQueue() const
 {
     return (dynamic_cast<QueueListView*>(currentWidget()));
 }
 
-void QueueTab::slotClearList()
+void QueuePool::slotRemoveCurrentQueue()
+{
+    removeTab(indexOf(currentQueue()));
+    if (count() == 0)
+        addQueue();
+
+    emit signalQueuePoolChanged();
+}
+
+void QueuePool::slotClearList()
 {
     currentQueue()->slotClearList();
 }
 
-void QueueTab::slotRemoveSelectedItems()
+void QueuePool::slotRemoveSelectedItems()
 {
     currentQueue()->slotRemoveSelectedItems();
 }
 
-void QueueTab::slotRemoveItemsDone()
+void QueuePool::slotRemoveItemsDone()
 {
     currentQueue()->slotRemoveItemsDone();
 }
 
-void QueueTab::slotAddItems(const ImageInfoList& list, const ImageInfo &current)
+void QueuePool::slotAddItems(const ImageInfoList& list, const ImageInfo &current)
 {
     currentQueue()->slotAddItems(list, current);
 }
 
-void QueueTab::slotAssignedToolsChanged(const AssignedBatchTools& tools4Item)
+void QueuePool::slotAssignedToolsChanged(const AssignedBatchTools& tools4Item)
 {
     currentQueue()->slotAssignedToolsChanged(tools4Item);
 }

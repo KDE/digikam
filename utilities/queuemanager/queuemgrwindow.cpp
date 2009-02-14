@@ -203,7 +203,7 @@ void QueueMgrWindow::setupUserArea()
 
     QGroupBox *gbox1   = new QGroupBox(i18n("Queues"), mainW);
     QVBoxLayout *vlay1 = new QVBoxLayout(gbox1);
-    d->queueTab        = new QueueTab(gbox1);
+    d->queueTab        = new QueuePool(gbox1);
     vlay1->addWidget(d->queueTab);
     vlay1->setSpacing(0);
     vlay1->setMargin(0);

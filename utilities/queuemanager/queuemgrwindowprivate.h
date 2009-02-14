@@ -126,7 +126,7 @@ public:
 
     ToolsListView             *toolsList;
     AssignedListView          *assignedList;
-    QueueTab                  *queueTab;
+    QueuePool                  *queueTab;
     ToolSettingsView          *toolSettings;
 
     ImageInfoList             itemsList;

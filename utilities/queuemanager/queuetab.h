@@ -41,24 +41,27 @@ class AssignedBatchTools;
 class QueueListView;
 class QueueTabPriv;
 
-class QueueTab : public KTabWidget
+class QueuePool : public KTabWidget
 {
     Q_OBJECT
 
 public:
 
-    QueueTab(QWidget *parent);
-    ~QueueTab();
+    QueuePool(QWidget *parent);
+    ~QueuePool();
 
     void addQueue();
     QueueListView* currentQueue() const;
 
 signals:
 
+    void signalQueuePoolChanged();
     void signalImageListChanged();
     void signalItemSelected(const AssignedBatchTools&);
 
 public slots:
+
+    void slotRemoveCurrentQueue();
 
     void slotClearList();
     void slotRemoveSelectedItems();
