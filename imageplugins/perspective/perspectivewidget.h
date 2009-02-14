@@ -85,6 +85,7 @@ public slots:
 
     void slotChangeGuideColor(const QColor &color);
     void slotChangeGuideSize(int size);
+    void slotInverseTransformationChanged(bool isEnabled);
 
 signals:
 
@@ -126,6 +127,7 @@ private:
     bool                 m_antiAlias;
     bool                 m_drawWhileMoving;
     bool                 m_drawGrid;
+    bool                 m_inverseTransformation;
 
     uint                *m_data;
     int                  m_w;

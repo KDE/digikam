@@ -80,6 +80,7 @@ private:
 
     QCheckBox                   *m_drawWhileMovingCheckBox;
     QCheckBox                   *m_drawGridCheckBox;
+    QCheckBox                   *m_inverseTransformation;
 
     QSpinBox                    *m_guideSize;
 

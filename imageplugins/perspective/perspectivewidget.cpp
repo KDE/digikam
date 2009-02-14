@@ -73,6 +73,7 @@ PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget *parent)
 
     m_drawGrid        = false;
     m_drawWhileMoving = true;
+    m_inverseTransformation = false;
     m_currentResizing = ResizingNone;
     m_guideColor      = Qt::red;
     m_guideSize       = 1;
@@ -210,6 +211,12 @@ void PerspectiveWidget::applyPerspectiveAdjustment()
                               targetImg.bits(), targetImg.width(), targetImg.height());
 }
 
+void PerspectiveWidget::slotInverseTransformationChanged(bool isEnabled) {
+    m_inverseTransformation = isEnabled;
+    updatePixmap();
+    repaint();
+}
+
 void PerspectiveWidget::slotToggleAntiAliasing(bool a)
 {
     m_antiAlias = a;
@@ -276,8 +283,17 @@ void PerspectiveWidget::updatePixmap()
 
     m_pixmap->fill(palette().color(QPalette::Background));
 
+    if(m_inverseTransformation) {
+        m_transformedCenter = buildPerspective(QPoint(0, 0), QPoint(m_w, m_h),
+                                               m_topLeftPoint, m_topRightPoint,
+                                               m_bottomLeftPoint, m_bottomRightPoint);
+      
+	m_iface->putPreviewImage(m_previewImage.bits());
+        m_iface->paint(m_pixmap, m_rect.x(), m_rect.y(),
+                       m_rect.width(), m_rect.height());
     // if we are resizing with the mouse, compute and draw only if drawWhileMoving is set
-    if (m_currentResizing == ResizingNone || m_drawWhileMoving)
+    }
+    else if ((m_currentResizing == ResizingNone || m_drawWhileMoving))
     {
         // Create preview image
 
@@ -456,9 +472,22 @@ QPoint PerspectiveWidget::buildPerspective(QPoint orignTopLeft, QPoint orignBott
     transform.scale    (scalex, scaley);
     transform.multiply (matrix);
 
-    // Compute perspective transformation to image if image data containers exist.
-    if (orgImage && destImage)
+    if(orgImage && destImage) {
+      if(m_inverseTransformation) {
+	Matrix inverseTransform = transform;
+	inverseTransform.invert();
+	
+	//Transform the matrix so it puts the result into the getTargetSize() rectangle
+	Matrix transformIntoBounds;
+	transformIntoBounds.scale(double(getTargetSize().width()) / double(orgImage->width()), double(getTargetSize().height()) / double(orgImage->height()));
+	transformIntoBounds.translate(getTargetSize().left(), getTargetSize().top());
+	inverseTransform.multiply(transformIntoBounds);
+        transformAffine(orgImage, destImage, inverseTransform, background);
+      }else{
+	// Compute perspective transformation to image if image data containers exist.
         transformAffine(orgImage, destImage, transform, background);
+      }
+    }
 
     // Calculate the grid array points.
     double newX, newY;
@@ -757,7 +786,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
                                         m_w-1, 0 );
                 QRegion unsableArea(unsablePoints);
 
-                if ( unsableArea.contains(pm) ) return;
+                if ( unsableArea.contains(pm) && !m_inverseTransformation ) return;
 
                 m_topLeftPoint = pm - m_rect.topLeft();
                 setCursor( Qt::SizeFDiagCursor );
@@ -775,7 +804,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
                                         m_w-1, m_h-1);
                 QRegion unsableArea(unsablePoints);
 
-                if ( unsableArea.contains(pm) ) return;
+                if ( unsableArea.contains(pm) && !m_inverseTransformation ) return;
 
                 m_topRightPoint = pm - m_rect.topLeft();
                 setCursor( Qt::SizeBDiagCursor );
@@ -793,7 +822,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
                                         0, 0);
                 QRegion unsableArea(unsablePoints);
 
-                if ( unsableArea.contains(pm) ) return;
+                if ( unsableArea.contains(pm) && !m_inverseTransformation ) return;
 
                 m_bottomLeftPoint = pm - m_rect.topLeft();
                 setCursor( Qt::SizeBDiagCursor );
@@ -811,7 +840,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
                                         0, m_w-1);
                 QRegion unsableArea(unsablePoints);
 
-                if ( unsableArea.contains(pm) ) return;
+                if ( unsableArea.contains(pm) && !m_inverseTransformation ) return;
 
                 m_bottomRightPoint = pm - m_rect.topLeft();
                 setCursor( Qt::SizeFDiagCursor );
