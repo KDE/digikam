@@ -477,7 +477,7 @@ void QueueMgrWindow::refreshStatusBar()
         d->removeItemsDoneAction->setEnabled(b);
         d->clearListAction->setEnabled(b);
         d->runAction->setEnabled(b && pending);
-        d->d->runAllAction->setEnabled(b && pending);
+        d->runAllAction->setEnabled(b && pending);
     }
 }
 
