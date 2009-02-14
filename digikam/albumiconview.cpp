@@ -460,7 +460,7 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
 
 void AlbumIconView::slotImageListerDeleteItem(const ImageInfo &item)
 {
-    QHash<ImageInfo, AlbumIconItem*>::iterator itMap = d->itemInfoMap.find(item);
+    QHash<ImageInfo, AlbumIconItem*>::ConstIterator itMap = d->itemInfoMap.constFind(item);
     if (itMap == d->itemInfoMap.constEnd())
         return;
 
