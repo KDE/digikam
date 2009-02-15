@@ -54,8 +54,8 @@ public:
         DISPLAY      // Used by "GoTo Tag" feature
     };
 
-    TagsPopupMenu(qlonglong selectedImageId, Mode mode);
-    TagsPopupMenu(const QList<qlonglong>& selectedImageIDs, Mode mode);
+    TagsPopupMenu(qlonglong selectedImageId, Mode mode, QWidget* parent = 0);
+    TagsPopupMenu(const QList<qlonglong>& selectedImageIDs, Mode mode, QWidget* parent = 0);
     ~TagsPopupMenu();
 
 signals:
