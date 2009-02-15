@@ -505,7 +505,6 @@ void QueueMgrWindow::refreshStatusBar()
         d->removeItemsDoneAction->setEnabled(b);
         d->clearListAction->setEnabled(b);
         d->runAction->setEnabled(b && items);
-        d->runAllAction->setEnabled(b && totalItems);
     }
 }
 
@@ -973,7 +972,6 @@ void QueueMgrWindow::busy(bool busy)
 {
     d->busy = busy;
     d->runAction->setEnabled(!d->busy);
-    d->runAllAction->setEnabled(!d->busy);
     d->removeQueueAction->setEnabled(!d->busy);
     d->removeItemsSelAction->setEnabled(!d->busy);
     d->removeItemsDoneAction->setEnabled(!d->busy);
