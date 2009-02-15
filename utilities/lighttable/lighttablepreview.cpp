@@ -401,8 +401,8 @@ void LightTablePreview::slotContextMenu()
     QList<qlonglong> idList;
     idList << d->imageInfo.id();
 
-    assignTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::ASSIGN);
-    removeTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::REMOVE);
+    assignTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::ASSIGN, this);
+    removeTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::REMOVE, this);
 
     popmenu.addSeparator();
 

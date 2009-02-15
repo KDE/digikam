@@ -370,15 +370,15 @@ public:
     TagsPopupMenu::Mode  mode;
 };
 
-TagsPopupMenu::TagsPopupMenu(qlonglong selectedImageId, Mode mode)
-             : KMenu(0), d(new TagsPopupMenuPriv)
+TagsPopupMenu::TagsPopupMenu(qlonglong selectedImageId, Mode mode, QWidget* parent)
+             : KMenu(parent), d(new TagsPopupMenuPriv)
 {
     d->selectedImageIDs << selectedImageId;
     setup(mode);
 }
 
-TagsPopupMenu::TagsPopupMenu(const QList<qlonglong>& selectedImageIds, Mode mode)
-             : KMenu(0), d(new TagsPopupMenuPriv)
+TagsPopupMenu::TagsPopupMenu(const QList<qlonglong>& selectedImageIds, Mode mode, QWidget* parent)
+             : KMenu(parent), d(new TagsPopupMenuPriv)
 {
     d->selectedImageIDs = selectedImageIds;
     setup(mode);
