@@ -90,7 +90,8 @@ QueuePoolItemsList QueuePool::totalPendingItemsList()
         ImageInfoList list   = queue->pendingItemsList();
         for (ImageInfoList::iterator it = list.begin() ; it != list.end() ; ++it)
         {
-            ItemInfoSet set(i, *it);
+            ImageInfo info = *it;
+            ItemInfoSet set(i, info);
             qpool.append(set);
         }
     }

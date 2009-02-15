@@ -792,11 +792,13 @@ void QueueMgrWindow::processOne()
 
     ItemInfoSet set = d->itemsList.first();
     d->queuePool->setCurrentIndex(set.queueId);
+
     QueueListViewItem* item = d->queuePool->currentQueue()->findItemByUrl(set.info.fileUrl());
     if (item)
     {
         AssignedBatchTools tools4Item = item->assignedTools();
-        d->itemsList.pop_front();
+        d->itemsList.removeFirst();
+
         if (!tools4Item.toolsMap.isEmpty())
         {
             d->thread->processFile(tools4Item);

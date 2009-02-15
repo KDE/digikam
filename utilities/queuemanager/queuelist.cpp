@@ -480,7 +480,9 @@ void QueueListView::slotAssignedToolsChanged(const AssignedBatchTools& tools4Ite
         if (item)
         {
             // We assign tools list on all items from queue
-            item->setAssignedTools(tools4Item);
+            AssignedBatchTools tools = tools4Item;
+            tools.itemUrl            = item->info().fileUrl();
+            item->setAssignedTools(tools);
         }
         ++it;
     }
