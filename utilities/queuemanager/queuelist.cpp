@@ -477,8 +477,9 @@ void QueueListView::slotAssignedToolsChanged(const AssignedBatchTools& tools4Ite
     while (*it)
     {
         QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
-        if (item && (item->info().fileUrl() == tools4Item.itemUrl))
+        if (item)
         {
+            // We assign tools list on all items from queue
             item->setAssignedTools(tools4Item);
         }
         ++it;
