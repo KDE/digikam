@@ -737,17 +737,17 @@ void QueueMgrWindow::slotShowMenuBar()
 void QueueMgrWindow::slotRun()
 {
     d->itemsList.clear();
-    d->itemsList = d->queuePool->currentQueue()->pendingItemsList();
+    d->itemsList = d->queuePool->totalPendingItemsList();
 
     if (d->itemsList.empty())
     {
-        KMessageBox::error(this, i18n("There is no item to process in the list!"));
+        KMessageBox::error(this, i18n("There is no item to process in the queues!"));
         busy(false);
         slotAborted();
         return;
     }
 
-    d->statusProgressBar->setProgressTotalSteps(d->queuePool->currentQueue()->pendingTasksCount());
+    d->statusProgressBar->setProgressTotalSteps(d->queuePool->totalPendingTasks());
     d->statusProgressBar->setProgressValue(0);
     d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
     busy(true);
@@ -788,7 +788,9 @@ void QueueMgrWindow::processOne()
         return;
     }
 
-    QueueListViewItem* item = d->queuePool->currentQueue()->findItemByUrl(d->itemsList.first().fileUrl());
+    ItemInfoSet set = d->itemsList.first();
+    d->queuePool->setCurrentIndex(set.queueId);
+    QueueListViewItem* item = d->queuePool->currentQueue()->findItemByUrl(set.info.fileUrl());
     if (item)
     {
         AssignedBatchTools tools4Item = item->assignedTools();

@@ -79,6 +79,22 @@ void QueuePool::addQueue()
     emit signalQueuePoolChanged();
 }
 
+QueuePoolItemsList QueuePool::totalPendingItemsList()
+{
+    QueuePoolItemsList qpool;
+    for (int i = 0; i < count(); i++)
+    {
+        QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
+        ImageInfoList list   = queue->pendingItemsList();
+        for (ImageInfoList::iterator it = list.begin() ; it != list.end() ; ++it)
+        {
+            ItemInfoSet set(i, *it);
+            qpool.append(set);
+        }
+    }
+    return qpool;
+}
+
 int QueuePool::totalPendingItems()
 {
     int items = 0;

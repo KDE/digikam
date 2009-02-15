@@ -32,6 +32,10 @@
 
 #include <ktabwidget.h>
 
+// Local includes.
+
+#include "iteminfoset.h"
+
 namespace Digikam
 {
 
@@ -40,6 +44,7 @@ class ImageInfoList;
 class AssignedBatchTools;
 class QueueListView;
 class QueuePoolPriv;
+
 
 class QueuePool : public KTabWidget
 {
@@ -52,6 +57,8 @@ public:
 
     void addQueue();
     QueueListView* currentQueue() const;
+
+    QueuePoolItemsList totalPendingItemsList();
 
     int totalPendingItems();
     int totalPendingTasks();

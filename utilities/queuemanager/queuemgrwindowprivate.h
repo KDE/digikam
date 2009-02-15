@@ -129,9 +129,9 @@ public:
     QueuePool                 *queuePool;
     ToolSettingsView          *toolSettings;
 
-    ImageInfoList             itemsList;
+    QueuePoolItemsList         itemsList;
 
-    SetupQueue::ConflictRule  conflictRule;
+    SetupQueue::ConflictRule   conflictRule;
 };
 
 }  // namespace Digikam
