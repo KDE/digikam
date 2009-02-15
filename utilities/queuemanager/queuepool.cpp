@@ -68,7 +68,7 @@ QueueListView* QueuePool::currentQueue() const
 void QueuePool::slotAddQueue()
 {
     QueueListView* queue = new QueueListView(this);
-    addTab(queue, SmallIcon("vcs_diff"), QString("#%1").arg(count()+1));
+    int index = addTab(queue, SmallIcon("vcs_diff"), QString("#%1").arg(count()+1));
 
     connect(queue, SIGNAL(signalImageListChanged()),
             this, SIGNAL(signalImageListChanged()));
@@ -77,6 +77,8 @@ void QueuePool::slotAddQueue()
             this, SIGNAL(signalItemSelected(const AssignedBatchTools&)));
 
     emit signalQueuePoolChanged();
+
+    setCurrentIndex(index);
 }
 
 QueuePoolItemsList QueuePool::totalPendingItemsList()
