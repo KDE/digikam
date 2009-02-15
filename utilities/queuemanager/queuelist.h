@@ -105,13 +105,13 @@ public slots:
     void slotClearList();
     void slotRemoveSelectedItems();
     void slotRemoveItemsDone();
-    void slotAddItems(const ImageInfoList& list, const ImageInfo &current);
-    void slotAssignedToolsChanged(const AssignedBatchTools& tools4Item);
+    void slotAddItems(const ImageInfoList&, const ImageInfo&);
+    void slotAssignedToolsChanged(const AssignedBatchTools&);
+    void slotItemSelectionChanged();
 
 private slots:
 
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
-    void slotItemSelectionChanged();
 
 private:
 

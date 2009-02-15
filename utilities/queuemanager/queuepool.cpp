@@ -53,6 +53,9 @@ QueuePool::QueuePool(QWidget *parent)
 {
     setTabBarHidden(false);
     slotAddQueue();
+
+    connect(this, SIGNAL(currentChanged(int)),
+            this, SLOT(slotQueuePoolChanged(int)));
 }
 
 QueuePool::~QueuePool()
@@ -152,6 +155,11 @@ void QueuePool::slotAddItems(const ImageInfoList& list, const ImageInfo &current
 void QueuePool::slotAssignedToolsChanged(const AssignedBatchTools& tools4Item)
 {
     currentQueue()->slotAssignedToolsChanged(tools4Item);
+}
+
+void QueuePool::slotQueuePoolChanged(int)
+{
+    currentQueue()->slotItemSelectionChanged();
 }
 
 }  // namespace Digikam
