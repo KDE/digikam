@@ -26,6 +26,7 @@
 
 // KDE includes.
 
+#include <kmessagebox.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -52,10 +53,14 @@ QueuePool::QueuePool(QWidget *parent)
         : KTabWidget(parent), d(new QueuePoolPriv)
 {
     setTabBarHidden(false);
+    setCloseButtonEnabled(true);
     slotAddQueue();
 
     connect(this, SIGNAL(currentChanged(int)),
             this, SLOT(slotQueuePoolChanged(int)));
+
+    connect(this, SIGNAL(closeRequest(QWidget*)),
+            this, SLOT(slotCloseQueueRequest(QWidget*)));
 }
 
 QueuePool::~QueuePool()
@@ -125,7 +130,10 @@ int QueuePool::totalPendingTasks()
 
 void QueuePool::slotRemoveCurrentQueue()
 {
-    removeTab(indexOf(currentQueue()));
+    QueueListView* queue = currentQueue();
+    if (!queue) return;
+
+    removeTab(indexOf(queue));
     if (count() == 0)
         slotAddQueue();
 
@@ -134,32 +142,64 @@ void QueuePool::slotRemoveCurrentQueue()
 
 void QueuePool::slotClearList()
 {
-    currentQueue()->slotClearList();
+    QueueListView* queue = currentQueue();
+    if (queue) queue->slotClearList();
 }
 
 void QueuePool::slotRemoveSelectedItems()
 {
-    currentQueue()->slotRemoveSelectedItems();
+    QueueListView* queue = currentQueue();
+    if (queue) queue->slotRemoveSelectedItems();
 }
 
 void QueuePool::slotRemoveItemsDone()
 {
-    currentQueue()->slotRemoveItemsDone();
+    QueueListView* queue = currentQueue();
+    if (queue) queue->slotRemoveItemsDone();
 }
 
 void QueuePool::slotAddItems(const ImageInfoList& list, const ImageInfo &current)
 {
-    currentQueue()->slotAddItems(list, current);
+    QueueListView* queue = currentQueue();
+    if (queue) queue->slotAddItems(list, current);
 }
 
 void QueuePool::slotAssignedToolsChanged(const AssignedBatchTools& tools4Item)
 {
-    currentQueue()->slotAssignedToolsChanged(tools4Item);
+    QueueListView* queue = currentQueue();
+    if (queue) queue->slotAssignedToolsChanged(tools4Item);
 }
 
 void QueuePool::slotQueuePoolChanged(int)
 {
-    currentQueue()->slotItemSelectionChanged();
+    QueueListView* queue = currentQueue();
+    if (queue) queue->slotItemSelectionChanged();
+}
+
+void QueuePool::slotCloseQueueRequest(QWidget* w)
+{
+    removeTab(indexOf(w));
+    if (count() == 0)
+        slotAddQueue();
+
+    emit signalQueuePoolChanged();
+}
+
+void QueuePool::removeTab(int index)
+{
+    QueueListView* queue = dynamic_cast<QueueListView*>(widget(index));
+    int count = queue->pendingItemsCount();
+    if (count > 0)
+    {
+        int ret = KMessageBox::questionYesNo(this, 
+                  i18np("It still 1 unprocessed item in \"%2\". Do you want to close this queue?", 
+                        "There still %1 unprocessed items in \"%2\". Do you want to close this queue?", 
+                  count, tabText(index)));
+        if (ret == KMessageBox::No)
+            return;
+    }
+
+    KTabWidget::removeTab(index);
 }
 
 }  // namespace Digikam

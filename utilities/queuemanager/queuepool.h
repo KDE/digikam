@@ -67,9 +67,10 @@ signals:
 
 public slots:
 
+    void removeTab(int index);
+
     void slotAddQueue();
     void slotRemoveCurrentQueue();
-
     void slotClearList();
     void slotRemoveSelectedItems();
     void slotRemoveItemsDone();
@@ -79,6 +80,7 @@ public slots:
 private slots:
 
     void slotQueuePoolChanged(int);
+    void slotCloseQueueRequest(QWidget*);
 
 private:
 
