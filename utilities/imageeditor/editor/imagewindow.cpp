@@ -659,8 +659,8 @@ void ImageWindow::slotContextMenu()
             QList<qlonglong> idList;
             idList << d->imageInfoCurrent.id();
 
-            assignTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::ASSIGN);
-            removeTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::REMOVE);
+            assignTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::ASSIGN, this);
+            removeTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::REMOVE, this);
             assignTagsMenu->menuAction()->setText(i18n("Assign Tag"));
             removeTagsMenu->menuAction()->setText(i18n("Remove Tag"));
 
