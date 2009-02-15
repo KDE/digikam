@@ -1,12 +1,13 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="13" name="queuemgrwindow" >
+<gui version="14" name="queuemgrwindow" >
 
 <MenuBar>
 
     <Menu name="Queues" ><text>&amp;Queues</text>
         <Action name="queuemgr_run" />
         <Action name="queuemgr_stop" />
-        <Action name="queuemgr_remove_current" />
+        <Action name="queuemgr_removequeue" />
+        <Action name="queuemgr_newqueue" />
         <Separator/>
         <Action name="queuemgr_removeitemssel" />
         <Action name="queuemgr_removeitemsdone" />
@@ -52,7 +53,8 @@
 <ToolBar name="ToolBar" ><text>Main Toolbar</text>
      <Action name="queuemgr_run" />
      <Action name="queuemgr_stop" />
-     <Action name="queuemgr_remove_current" />
+     <Action name="queuemgr_removequeue" />
+     <Action name="queuemgr_newqueue" />
      <Separator/>
      <Action name="queuemgr_removeitemssel" />
      <Separator/>

@@ -323,10 +323,15 @@ void QueueMgrWindow::setupActions()
     connect(d->stopAction, SIGNAL(triggered()), this, SLOT(slotStop()));
     actionCollection()->addAction("queuemgr_stop", d->stopAction);
 
-    d->removeQueueAction = new KAction(KIcon("media-eject"), i18n("Remove Queue"), this);
+    d->removeQueueAction = new KAction(KIcon("svn_remove"), i18n("Remove Queue"), this);
     d->removeQueueAction->setEnabled(false);
     connect(d->removeQueueAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveCurrentQueue()));
-    actionCollection()->addAction("queuemgr_remove_current", d->removeQueueAction);
+    actionCollection()->addAction("queuemgr_removequeue", d->removeQueueAction);
+
+    d->newQueueAction = new KAction(KIcon("svn_add"), i18n("New Queue"), this);
+    d->newQueueAction->setEnabled(false);
+    connect(d->newQueueAction, SIGNAL(triggered()), d->queuePool, SLOT(slotAddQueue()));
+    actionCollection()->addAction("queuemgr_newqueue", d->newQueueAction);
 
     d->removeItemsSelAction = new KAction(KIcon("list-remove"), i18n("Remove items"), this);
     d->removeItemsSelAction->setShortcut(Qt::CTRL+Qt::Key_K);

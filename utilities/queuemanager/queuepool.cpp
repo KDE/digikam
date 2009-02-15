@@ -52,7 +52,7 @@ QueuePool::QueuePool(QWidget *parent)
         : KTabWidget(parent), d(new QueuePoolPriv)
 {
     setTabBarHidden(false);
-    addQueue();
+    slotAddQueue();
 }
 
 QueuePool::~QueuePool()
@@ -65,7 +65,7 @@ QueueListView* QueuePool::currentQueue() const
     return (dynamic_cast<QueueListView*>(currentWidget()));
 }
 
-void QueuePool::addQueue()
+void QueuePool::slotAddQueue()
 {
     QueueListView* queue = new QueueListView(this);
     addTab(queue, SmallIcon("vcs_diff"), QString("#%1").arg(count()+1));
@@ -121,7 +121,7 @@ void QueuePool::slotRemoveCurrentQueue()
 {
     removeTab(indexOf(currentQueue()));
     if (count() == 0)
-        addQueue();
+        slotAddQueue();
 
     emit signalQueuePoolChanged();
 }

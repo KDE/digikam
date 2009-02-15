@@ -62,6 +62,7 @@ public:
         runAction              = 0;
         stopAction             = 0;
         removeQueueAction      = 0;
+        newQueueAction         = 0;
         rawCameraListAction    = 0;
         libsInfoAction         = 0;
         themeMenuAction        = 0;
@@ -100,6 +101,7 @@ public:
     KAction                   *runAction;
     KAction                   *stopAction;
     KAction                   *removeQueueAction;
+    KAction                   *newQueueAction;
     KAction                   *donateMoneyAction;
     KAction                   *contributeAction;
     KAction                   *rawCameraListAction;

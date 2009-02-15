@@ -39,12 +39,9 @@
 namespace Digikam
 {
 
-class ImageInfo;
-class ImageInfoList;
 class AssignedBatchTools;
 class QueueListView;
 class QueuePoolPriv;
-
 
 class QueuePool : public KTabWidget
 {
@@ -55,7 +52,6 @@ public:
     QueuePool(QWidget *parent);
     ~QueuePool();
 
-    void addQueue();
     QueueListView* currentQueue() const;
 
     QueuePoolItemsList totalPendingItemsList();
@@ -71,6 +67,7 @@ signals:
 
 public slots:
 
+    void slotAddQueue();
     void slotRemoveCurrentQueue();
 
     void slotClearList();
