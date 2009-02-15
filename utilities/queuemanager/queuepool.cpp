@@ -81,6 +81,9 @@ void QueuePool::slotAddQueue()
     connect(queue, SIGNAL(signalImageListChanged()),
             this, SIGNAL(signalImageListChanged()));
 
+    connect(queue, SIGNAL(itemSelectionChanged()),
+            this, SIGNAL(signalItemSelectionChanged()));
+
     connect(queue, SIGNAL(signalItemSelected(const AssignedBatchTools&)),
             this, SIGNAL(signalItemSelected(const AssignedBatchTools&)));
 

@@ -287,7 +287,7 @@ void QueueMgrWindow::setupConnections()
     connect(d->queuePool, SIGNAL(signalImageListChanged()),
             this, SLOT(slotImageListChanged()));
 
-    connect(d->queuePool, SIGNAL(itemSelectionChanged()),
+    connect(d->queuePool, SIGNAL(signalItemSelectionChanged()),
             this, SLOT(slotImageSelectionChanged()));
 
     // -- Multithreaded interface connections -------------------------------

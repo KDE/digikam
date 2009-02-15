@@ -61,6 +61,7 @@ public:
 
 signals:
 
+    void signalItemSelectionChanged();
     void signalQueuePoolChanged();
     void signalImageListChanged();
     void signalItemSelected(const AssignedBatchTools&);
