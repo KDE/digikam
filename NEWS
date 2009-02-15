@@ -7,7 +7,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 168916 : Please put anti-aliasing in the perspective adjustment tool.
 002 ==> 152528 : Nikon D80 icc profile not recognized as input profile in Showfoto.
-003 ==> 
+003 ==> 182737 : Album view is not updated after saving edited PNG files, not even after restart.
+004 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc2 - Release date: 2009-02-15
