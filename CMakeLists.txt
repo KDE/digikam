@@ -834,6 +834,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumwidgetstack.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/cameralist.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/cameratype.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/contextmenuhelper.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/datefolderview.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamapp.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamfirstrun.cpp 
