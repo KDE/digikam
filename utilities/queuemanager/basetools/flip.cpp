@@ -105,7 +105,7 @@ bool Flip::toolOperations()
                 return (exifTransform(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), FlipVertical));
                 break;
             default:
-                kDebug(50003) << "Unknow rotate action" << endl;
+                kDebug(50003) << "Unknow flip action" << endl;
                 return false;
                 break;
         }
