@@ -73,6 +73,7 @@ public:
     const QList<QAction*>& menuImageActions();
     const QList<QAction*>& menuBatchActions();
     const QList<QAction*>& menuAlbumActions();
+    const QList<QAction*>& menuImportActions();
     const QList<QAction*>& menuExportActions();
 
     void autoDetect();

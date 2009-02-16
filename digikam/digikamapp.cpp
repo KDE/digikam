@@ -372,6 +372,11 @@ const QList<QAction*>& DigikamApp::menuAlbumActions()
     return d->kipiAlbumActions;
 }
 
+const QList<QAction*>& DigikamApp::menuImportActions()
+{
+    return d->kipiFileActionsImport;
+}
+
 const QList<QAction*>& DigikamApp::menuExportActions()
 {
     return d->kipiFileActionsExport;
