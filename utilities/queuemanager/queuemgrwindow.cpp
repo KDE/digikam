@@ -691,6 +691,11 @@ void QueueMgrWindow::slotComponentsInfo()
     showDigikamComponentsInfo();
 }
 
+void QueueMgrWindow::addNewQueue()
+{
+    d->queuePool->slotAddQueue();
+}
+
 void QueueMgrWindow::loadImageInfos(const ImageInfoList &list, const ImageInfo &current)
 {
     d->queuePool->currentQueue()->slotAddItems(list, current);

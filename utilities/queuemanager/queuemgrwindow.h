@@ -60,6 +60,7 @@ public:
     static QueueMgrWindow *queueManagerWindow();
     static bool            queueManagerWindowCreated();
 
+    void addNewQueue();
     void loadImageInfos(const ImageInfoList &list, const ImageInfo &current);
     void refreshView();
     void applySettings();

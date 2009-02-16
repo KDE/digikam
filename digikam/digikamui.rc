@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="53" name="digikam" >
+<gui version="54" name="digikam" >
 
  <MenuBar>
 
@@ -34,9 +34,13 @@
    <text>&amp;Image</text>
      <Action name="image_view" />
      <Action name="image_edit" />
+   <Separator />
      <Action name="image_lighttable" />
      <Action name="image_add_to_lighttable" />
-     <Action name="image_add_to_queuemanager" />
+   <Separator />
+     <Action name="image_add_to_current_queue" />
+     <Action name="image_add_to_new_queue" />
+   <Separator />
      <Action name="image_find_similar" />
      <Action name="image_set_exif_orientation"/>
    <Separator />
@@ -77,6 +81,7 @@
         <Action name="find_duplicates" />
       <Separator/>
         <Action name="light_table" />
+        <Action name="queue_manager" />
       <Separator/>
         <Action name="database_rescan" />
         <Action name="thumbs_rebuild" />
@@ -86,12 +91,8 @@
         <ActionList name="album_actions"/>
       <Separator/>
         <ActionList name="tool_actions"/>
-  </Menu>
-
-  <Menu name="Batch"><text>&amp;Batch</text>
-      <Action name="queue_manager" />
       <Separator/>
-      <ActionList name="batch_actions"/>
+        <ActionList name="batch_actions"/>
   </Menu>
 
   <Menu name="Import"><text>I&amp;mport</text>

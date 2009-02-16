@@ -128,10 +128,11 @@ public:
     AlbumIconItem* nextItemToThumbnail() const;
 
     void insertSelectionToLightTable(bool addTo=false);
-    void insertToLightTable(const ImageInfoList& list, const ImageInfo &current, bool addTo=false);
+    void insertToLightTable(const ImageInfoList& list, const ImageInfo& current, bool addTo=false);
 
-    void insertSelectionToQueueMgr();
-    void insertToQueueMgr(const ImageInfoList& list, const ImageInfo &current);
+    void insertSelectionToCurrentQueue();
+    void insertSelectionToNewQueue();
+    void insertToQueueManager(const ImageInfoList& list, const ImageInfo& current, bool newQueue);
 
 signals:
 

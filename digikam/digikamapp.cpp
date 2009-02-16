@@ -342,10 +342,12 @@ void DigikamApp::show()
 
 void DigikamApp::restoreSession()
 {
-    //TODO: show and restore ImageEditor and Lighttable main windows
-    if (qApp->isSessionRestored()){
+    //TODO: show and restore ImageEditor, Lighttable, and Batch Queue Manager main windows
+    if (qApp->isSessionRestored())
+    {
         int n = 1;
-        while (KMainWindow::canBeRestored(n)){
+        while (KMainWindow::canBeRestored(n))
+        {
             const QString className = KMainWindow::classNameOfToplevel(n);
             if (className == QLatin1String(Digikam::DigikamApp::staticMetaObject.className()))
             {
@@ -719,11 +721,17 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->imageAddQueueMgrAction = new KAction(KIcon("vcs_add"), i18n("Add to batch queue manager"), this);
-    d->imageAddQueueMgrAction->setShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_B);
-    d->imageAddQueueMgrAction->setWhatsThis(i18n("Add selected items to the batch queue manager."));
-    connect(d->imageAddQueueMgrAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToQueueMgr()));
-    actionCollection()->addAction("image_add_to_queuemanager", d->imageAddQueueMgrAction);
+    d->imageAddCurrentQueueAction = new KAction(KIcon("vcs_commit"), i18n("Add to current queue"), this);
+    d->imageAddCurrentQueueAction->setShortcut(Qt::CTRL+Qt::Key_B);
+    d->imageAddCurrentQueueAction->setWhatsThis(i18n("Add selected items to current queue from batch manager."));
+    connect(d->imageAddCurrentQueueAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToCurrentQueue()));
+    actionCollection()->addAction("image_add_to_current_queue", d->imageAddCurrentQueueAction);
+
+    d->imageAddNewQueueAction = new KAction(KIcon("vcs_add"), i18n("Add to new queue"), this);
+    d->imageAddNewQueueAction->setShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_B);
+    d->imageAddNewQueueAction->setWhatsThis(i18n("Add selected items to a new queue from batch manager."));
+    connect(d->imageAddNewQueueAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToNewQueue()));
+    actionCollection()->addAction("image_add_to_new_queue", d->imageAddNewQueueAction);
 
     // -----------------------------------------------------------
 

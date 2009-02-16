@@ -502,7 +502,7 @@ void DigikamView::setupConnections()
             this, SLOT(slotImageAddToLightTable()));
 
     connect(d->albumWidgetStack, SIGNAL(signalInsert2QueueMgr()),
-            this, SLOT(slotImageAddToQueueMgr()));
+            this, SLOT(slotImageAddToCurrentQueue()));
 
     connect(d->albumWidgetStack, SIGNAL(signalFindSimilar()),
             this, SLOT(slotImageFindSimilar()));
@@ -1449,8 +1449,7 @@ void DigikamView::slotLightTable()
 
 void DigikamView::slotQueueMgr()
 {
-    ImageInfoList empty;
-    d->iconView->insertToQueueMgr(empty, ImageInfo());
+    d->iconView->insertToQueueManager(ImageInfoList(), ImageInfo(), false);
 }
 
 void DigikamView::slotImageLightTable()
@@ -1487,18 +1486,34 @@ void DigikamView::slotImageAddToLightTable()
     }
 }
 
-void DigikamView::slotImageAddToQueueMgr()
+void DigikamView::slotImageAddToCurrentQueue()
 {
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
-        d->iconView->insertSelectionToQueueMgr();
+        d->iconView->insertSelectionToCurrentQueue();
     }
     else
     {
         ImageInfoList list;
         ImageInfo info = d->albumWidgetStack->imagePreviewView()->getImageInfo();
         list.append(info);
-        d->iconView->insertToQueueMgr(list, info);
+        d->iconView->insertToQueueManager(list, info, false);
+    }
+}
+
+void DigikamView::slotImageAddToNewQueue()
+{
+    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+    {
+        d->iconView->insertSelectionToNewQueue();
+    }
+    else
+    {
+        //FIXME.
+        ImageInfoList list;
+        ImageInfo info = d->albumWidgetStack->imagePreviewView()->getImageInfo();
+        list.append(info);
+        d->iconView->insertToQueueManager(list, info, true);
     }
 }
 

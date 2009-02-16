@@ -645,7 +645,9 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     else
         lighttableAction = popmenu.addAction(KIcon("lighttable"), i18n("Place onto Light Table"));
 
-    QAction *queuemgrAction     = popmenu.addAction(SmallIcon("vcs_add"),       i18n("Add to Queue Manager"));
+    QAction *addCurrentQueueAction = popmenu.addAction(SmallIcon("vcs_commit"), i18n("Add to Current Queue"));
+    QAction *addNewQueueAction     = popmenu.addAction(SmallIcon("vcs_add"),    i18n("Add to New Queue"));
+
     QAction *findSimilarAction  = popmenu.addAction(SmallIcon("tools-wizard"),  i18n("Find Similar"));
     QAction *gotoAction         = popmenu.addMenu(&gotoMenu);
     gotoAction->setIcon(SmallIcon("go-jump"));
@@ -812,10 +814,15 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
             else
                 insertSelectionToLightTable(false);
         }
-        else if (choice == queuemgrAction)
+        else if (choice == addCurrentQueueAction)
         {
-            //  add images to existing images in the batch queue manager
-            insertSelectionToQueueMgr();
+            //  add images to existing images in current queue from batch manager.
+            insertSelectionToCurrentQueue();
+        }
+        else if (choice == addNewQueueAction)
+        {
+            //  add images to new queue from batch manager.
+            insertSelectionToNewQueue();
         }
         else if (choice == findSimilarAction)
         {
@@ -1294,9 +1301,8 @@ void AlbumIconView::insertToLightTable(const ImageInfoList& list, const ImageInf
 
 // ------------------------------------------------------------------------------
 
-void AlbumIconView::insertSelectionToQueueMgr()
+void AlbumIconView::insertSelectionToCurrentQueue()
 {
-    // Run Batch Queue Manager with all selected image files in the current Album.
     ImageInfoList imageInfoList;
 
     for (IconItem *it = firstItem() ; it ; it = it->nextItem())
@@ -1308,10 +1314,26 @@ void AlbumIconView::insertSelectionToQueueMgr()
         }
     }
 
-    insertToQueueMgr(imageInfoList, imageInfoList.first());
+    insertToQueueManager(imageInfoList, imageInfoList.first(), false);
 }
 
-void AlbumIconView::insertToQueueMgr(const ImageInfoList& list, const ImageInfo& current)
+void AlbumIconView::insertSelectionToNewQueue()
+{
+    ImageInfoList imageInfoList;
+
+    for (IconItem *it = firstItem() ; it ; it = it->nextItem())
+    {
+        if ((*it).isSelected())
+        {
+            AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
+            imageInfoList << iconItem->imageInfo();
+        }
+    }
+
+    insertToQueueManager(imageInfoList, imageInfoList.first(), true);
+}
+
+void AlbumIconView::insertToQueueManager(const ImageInfoList& list, const ImageInfo& current, bool newQueue)
 {
     QueueMgrWindow *bqmview = QueueMgrWindow::queueManagerWindow();
 
@@ -1326,6 +1348,8 @@ void AlbumIconView::insertToQueueMgr(const ImageInfoList& list, const ImageInfo&
     if (bqmview->isMinimized())
         KWindowSystem::unminimizeWindow(bqmview->winId());
     KWindowSystem::activateWindow(bqmview->winId());
+
+    if (newQueue) bqmview->addNewQueue();
 
     bqmview->loadImageInfos(list, current);
 }
