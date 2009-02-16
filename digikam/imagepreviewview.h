@@ -99,6 +99,7 @@ private slots:
     void slotCornerButtonPressed();
     void slotPanIconSelectionMoved(const QRect&, bool);
     void slotPanIconHiden();
+    void slotDeleteItem();
 
 private:
 

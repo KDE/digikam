@@ -7,6 +7,7 @@
  * Description : a embedded view to show the image preview widget.
  *
  * Copyright (C) 2006-2009 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,6 +64,7 @@
 #include "albumsettings.h"
 #include "albumwidgetstack.h"
 #include "databaseaccess.h"
+#include "digikamapp.h"
 #include "imageinfo.h"
 #include "dmetadata.h"
 #include "dpopupmenu.h"
@@ -73,6 +75,7 @@
 #include "tagspopupmenu.h"
 #include "ratingpopupmenu.h"
 #include "themeengine.h"
+#include "contextmenuhelper.h"
 
 namespace Digikam
 {
@@ -94,6 +97,7 @@ public:
         loadFullImageSize    = false;
         currentFitWindowZoom = 0;
         previewSize          = 1024;
+        contextMenuHelper    = 0;
     }
 
     bool               hasPrev;
@@ -122,12 +126,15 @@ public:
     PreviewLoadThread *previewPreloadThread;
 
     AlbumWidgetStack  *stack;
+
+    ContextMenuHelper *contextMenuHelper;
 };
 
 ImagePreviewView::ImagePreviewView(QWidget *parent, AlbumWidgetStack *stack)
                 : PreviewWidget(parent), d(new ImagePreviewViewPriv)
 {
     d->stack = stack;
+    d->contextMenuHelper = new ContextMenuHelper(this, DigikamApp::getinstance()->actionCollection());
 
     // get preview size from screen size, but limit from VGA to WQXGA
     d->previewSize = qMax(KApplication::desktop()->height(),
@@ -327,181 +334,71 @@ ImageInfo ImagePreviewView::getImageInfo() const
 
 void ImagePreviewView::slotContextMenu()
 {
-    RatingPopupMenu *ratingMenu     = 0;
-    TagsPopupMenu   *assignTagsMenu = 0;
-    TagsPopupMenu   *removeTagsMenu = 0;
-
     if (d->imageInfo.isNull())
         return;
 
-    //-- Open With Actions ------------------------------------
+    // --------------------------------------------------------
 
-    KUrl url(d->imageInfo.fileUrl().path());
-    KMimeType::Ptr mimePtr = KMimeType::findByUrl(url, 0, true, true);
-
-    QMap<QAction *,KService::Ptr> serviceMap;
-
-    const KService::List offers = KMimeTypeTrader::self()->query(mimePtr->name());
-    KService::List::ConstIterator iter;
-    KService::Ptr ptr;
-
-    KMenu openWithMenu;
-
-    for( iter = offers.begin(); iter != offers.end(); ++iter )
-    {
-        ptr = *iter;
-        QAction *serviceAction = openWithMenu.addAction(SmallIcon(ptr->icon()), ptr->name());
-        serviceMap[serviceAction] = ptr;
-    }
-
-    if (openWithMenu.isEmpty())
-        openWithMenu.menuAction()->setEnabled(false);
-
-    //-- Navigate actions -------------------------------------------
-
-    DPopupMenu popmenu(this);
-    QAction *backAction        = popmenu.addAction(SmallIcon("go-previous"), i18nc("go to previous image", "Back"));
-    backAction->setEnabled(d->hasPrev);
-
-    QAction *forwardAction     = popmenu.addAction(SmallIcon("go-next"), i18nc("go to next image", "Forward"));
-    forwardAction->setEnabled(d->hasNext);
-
-    QAction *backToAlbumAction = popmenu.addAction(SmallIcon("folder-image"), i18n("Back to Album"));
-
-    //-- Edit actions -----------------------------------------------
-
-    popmenu.addSeparator();
-    QAction *slideshowAction       = popmenu.addAction(SmallIcon("view-presentation"), i18n("Slideshow"));
-    QAction *editAction            = popmenu.addAction(SmallIcon("editimage"),         i18n("Edit..."));
-    QAction *lighttableAction      = popmenu.addAction(SmallIcon("lighttableadd"),     i18n("Add to Light Table"));
-    QAction *addCurrentQueueAction = popmenu.addAction(SmallIcon("vcs_commit"),        i18n("Add to Current Queue"));
-    QAction *findSimilarAction     = popmenu.addAction(SmallIcon("tools-wizard"),      i18n("Find Similar"));
-    popmenu.addMenu(&openWithMenu);
-    openWithMenu.menuAction()->setText(i18n("Open With"));
-
-    // Merge in the KIPI plugins actions ----------------------------
-
-    KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::instance();
-    KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
-
-    for (KIPI::PluginLoader::PluginList::const_iterator it = pluginList.constBegin();
-        it != pluginList.constEnd(); ++it)
-    {
-        KIPI::Plugin* plugin = (*it)->plugin();
-
-        if (plugin && (*it)->name() == "JPEGLossless")
-        {
-            //kDebug(50003) << "Found JPEGLossless plugin" << endl;
-
-            QList<KAction*> actionList = plugin->actions();
-
-            for (QList<KAction*>::const_iterator iter = actionList.constBegin();
-                iter != actionList.constEnd(); ++iter)
-            {
-                KAction* action = *iter;
-
-                if (action->objectName().toLatin1() == QString::fromLatin1("jpeglossless_rotate"))
-                {
-                    popmenu.addAction(action);
-                }
-            }
-        }
-    }
-
-    //-- Trash action -------------------------------------------
-
-    popmenu.addSeparator();
-    QAction *trashAction = popmenu.addAction(SmallIcon("user-trash"), i18n("Move to Trash"));
-
-    // Bulk assignment/removal of tags --------------------------
-
+    QMap<QAction*, KService::Ptr> servicesMap;
     QList<qlonglong> idList;
     idList << d->imageInfo.id();
 
-    assignTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::ASSIGN, this);
-    removeTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::REMOVE, this);
+    QAction *backAction = new QAction(SmallIcon("go-previous"), i18nc("go to previous image", "Back"), this);
+    backAction->setEnabled(d->hasPrev);
 
+    QAction *forwardAction = new QAction(SmallIcon("go-next"), i18nc("go to next image", "Forward"), this);
+    forwardAction->setEnabled(d->hasNext);
+
+    // --------------------------------------------------------
+
+    DPopupMenu popmenu(this);
+
+    d->contextMenuHelper->addAction(popmenu, "full_screen");
     popmenu.addSeparator();
-
-    popmenu.addMenu(assignTagsMenu);
-    assignTagsMenu->menuAction()->setText(i18n("Assign Tag"));
-
-    popmenu.addMenu(removeTagsMenu);
-    removeTagsMenu->menuAction()->setText(i18n("Remove Tag"));
-
-    connect(assignTagsMenu, SIGNAL(signalTagActivated(int)),
-            this, SLOT(slotAssignTag(int)));
-
-    connect(removeTagsMenu, SIGNAL(signalTagActivated(int)),
-            this, SLOT(slotRemoveTag(int)));
-
-    if (!DatabaseAccess().db()->hasTags( idList ))
-        removeTagsMenu->menuAction()->setEnabled(false);
-
+    // --------------------------------------------------------
+    // TODO: use global actions here, too
+    d->contextMenuHelper->addAction(popmenu, backAction,    true);
+    d->contextMenuHelper->addAction(popmenu, forwardAction, true);
     popmenu.addSeparator();
-
-    // Assign Star Rating -------------------------------------------
-
-    ratingMenu = new RatingPopupMenu();
-
-    connect(ratingMenu, SIGNAL(signalRatingChanged(int)),
-            this, SLOT(slotAssignRating(int)));
-
-    popmenu.addMenu(ratingMenu);
-    ratingMenu->menuAction()->setText(i18n("Assign Rating"));
+    // --------------------------------------------------------
+    d->contextMenuHelper->addAction(popmenu, "image_view");
+    d->contextMenuHelper->addAction(popmenu, "image_edit");
+    d->contextMenuHelper->addAction(popmenu, "image_find_similar");
+    d->contextMenuHelper->addActionLightTable(popmenu);
+    d->contextMenuHelper->addQueueManagerMenu(popmenu);
+    d->contextMenuHelper->addServicesMenu(popmenu, d->imageInfo, servicesMap);
+    d->contextMenuHelper->addKipiActions(popmenu);
+    popmenu.addSeparator();
+    // --------------------------------------------------------
+    d->contextMenuHelper->addActionDelete(popmenu, this, SLOT(slotDeleteItem()));
+    popmenu.addSeparator();
+    // --------------------------------------------------------
+    d->contextMenuHelper->addAssignTagsMenu(popmenu, idList, this, SLOT(slotAssignTag(int)));
+    d->contextMenuHelper->addRemoveTagsMenu(popmenu, idList, this, SLOT(slotRemoveTag(int)));
+    popmenu.addSeparator();
+    // --------------------------------------------------------
+    d->contextMenuHelper->addRatingMenu(popmenu, this, SLOT(slotAssignRating(int)));
 
     // --------------------------------------------------------
 
     QAction *choice = popmenu.exec(QCursor::pos());
-
     if (choice)
     {
-        if (choice == backAction)                 // Back
+        if (choice == backAction)
         {
             emit signalPrevItem();
         }
-        else if (choice == forwardAction)         // Forward
+        else if (choice == forwardAction)
         {
             emit signalNextItem();
         }
-        else if (choice == editAction)            // Edit...
+        else if (servicesMap.contains(choice))
         {
-            emit signalEditItem();
-        }
-        else if (choice == trashAction)           // Move to trash
-        {
-            emit signalDeleteItem();
-        }
-        else if (choice == backToAlbumAction)     // Back to album
-        {
-            emit signalBack2Album();
-        }
-        else if (choice == slideshowAction)       // SlideShow
-        {
-            emit signalSlideShow();
-        }
-        else if (choice == lighttableAction)      // Place onto Light Table
-        {
-            emit signalInsert2LightTable();
-        }
-        else if (choice == addCurrentQueueAction) // Add images to current queue from batch manager
-        {
-            emit signalInsert2QueueMgr();
-        }
-        else if (choice == findSimilarAction)     // Find Similar
-        {
-            emit signalFindSimilar();
-        }
-        else if (serviceMap.contains(choice))
-        {
-            KService::Ptr imageServicePtr = serviceMap[choice];
-            KRun::run(*imageServicePtr, url,this);
+            KService::Ptr imageServicePtr = servicesMap[choice];
+            KUrl url(d->imageInfo.fileUrl().path());
+            KRun::run(*imageServicePtr, url, this);
         }
     }
-
-    delete assignTagsMenu;
-    delete removeTagsMenu;
-    delete ratingMenu;
 }
 
 void ImagePreviewView::slotAssignTag(int tagID)
@@ -587,6 +484,11 @@ void ImagePreviewView::slotPanIconHiden()
     d->cornerButton->blockSignals(true);
     d->cornerButton->animateClick();
     d->cornerButton->blockSignals(false);
+}
+
+void ImagePreviewView::slotDeleteItem()
+{
+    emit signalDeleteItem();
 }
 
 void ImagePreviewView::slotPanIconSelectionMoved(const QRect& r, bool b)
