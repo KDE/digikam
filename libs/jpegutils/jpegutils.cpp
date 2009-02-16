@@ -27,7 +27,6 @@
 
 #define XMD_H
 
-
 #include "jpegutils.h"
 
 // C++ includes.
@@ -264,7 +263,8 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
     return true;
 }
 
-bool exifRotate(const QString& file, const QString& documentName)
+bool exifRotate(const QString& file, const QString& documentName,
+                const QString& trgFile, TransformAction action)
 {
     QFileInfo fi(file);
     if (!fi.exists())
@@ -283,7 +283,8 @@ bool exifRotate(const QString& file, const QString& documentName)
         }
 
         QString temp(fi.absolutePath() + "/.digikam-exifrotate-");
-        temp += QString::number(getpid());
+        temp.append(QString::number(getpid()));
+        temp.append(QString(".jpg"));
 
         QByteArray in  = QFile::encodeName(file);
         QByteArray out = QFile::encodeName(temp);
@@ -295,46 +296,67 @@ bool exifRotate(const QString& file, const QString& documentName)
         transformoption.trim            = false;
         transformoption.transform       = JXFORM_NONE;
 
-        // we have the Exif info. check the orientation
-
-        switch(metaData.getImageOrientation())
+        switch (action)
         {
-            case(DMetadata::ORIENTATION_UNSPECIFIED):
-            case(DMetadata::ORIENTATION_NORMAL):
-                break;
-            case(DMetadata::ORIENTATION_HFLIP):
-            {
-                transformoption.transform = JXFORM_FLIP_H;
-                break;
-            }
-            case(DMetadata::ORIENTATION_ROT_180):
-            {
-                transformoption.transform = JXFORM_ROT_180;
-                break;
-            }
-            case(DMetadata::ORIENTATION_VFLIP):
-            {
-                transformoption.transform = JXFORM_FLIP_V;
-                break;
-            }
-            case(DMetadata::ORIENTATION_ROT_90_HFLIP):
-            {
-                transformoption.transform = JXFORM_TRANSPOSE;
-                break;
-            }
-            case(DMetadata::ORIENTATION_ROT_90):
+            case Rotate90:
             {
                 transformoption.transform = JXFORM_ROT_90;
                 break;
             }
-            case(DMetadata::ORIENTATION_ROT_90_VFLIP):
+            case Rotate180:
             {
-                transformoption.transform = JXFORM_TRANSVERSE;
+                transformoption.transform = JXFORM_ROT_180;
                 break;
             }
-            case(DMetadata::ORIENTATION_ROT_270):
+            case Rotate270:
             {
                 transformoption.transform = JXFORM_ROT_270;
+                break;
+            }
+            default:  // Auto
+            {
+                // we have the Exif info. check the orientation
+                switch(metaData.getImageOrientation())
+                {
+                    case(DMetadata::ORIENTATION_UNSPECIFIED):
+                    case(DMetadata::ORIENTATION_NORMAL):
+                        break;
+                    case(DMetadata::ORIENTATION_HFLIP):
+                    {
+                        transformoption.transform = JXFORM_FLIP_H;
+                        break;
+                    }
+                    case(DMetadata::ORIENTATION_ROT_180):
+                    {
+                        transformoption.transform = JXFORM_ROT_180;
+                        break;
+                    }
+                    case(DMetadata::ORIENTATION_VFLIP):
+                    {
+                        transformoption.transform = JXFORM_FLIP_V;
+                        break;
+                    }
+                    case(DMetadata::ORIENTATION_ROT_90_HFLIP):
+                    {
+                        transformoption.transform = JXFORM_TRANSPOSE;
+                        break;
+                    }
+                    case(DMetadata::ORIENTATION_ROT_90):
+                    {
+                        transformoption.transform = JXFORM_ROT_90;
+                        break;
+                    }
+                    case(DMetadata::ORIENTATION_ROT_90_VFLIP):
+                    {
+                        transformoption.transform = JXFORM_TRANSVERSE;
+                        break;
+                    }
+                    case(DMetadata::ORIENTATION_ROT_270):
+                    {
+                        transformoption.transform = JXFORM_ROT_270;
+                        break;
+                    }
+                }
                 break;
             }
         }
@@ -466,14 +488,21 @@ bool exifRotate(const QString& file, const QString& documentName)
 
         utime(out, &ut);
 
-        // now overwrite the original file
-        if (rename(out, in) == 0)
+        // Target file is original ?
+        QByteArray trg = in;
+        if (!trgFile.isEmpty())
+        {
+             trg = QFile::encodeName(trgFile);
+        }
+
+        // Overwrite target file
+        if (rename(out, trg) == 0)
         {
             return true;
         }
         else
         {
-            // moving failed. unlink the temp file
+            // Moving failed. unlink the temp file
             unlink(out);
             return false;
         }

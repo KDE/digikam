@@ -39,6 +39,7 @@
 
 // Local includes.
 
+#include "jpegutils.h"
 #include "dimg.h"
 
 namespace Digikam
@@ -92,11 +93,33 @@ void Rotate::slotSettingsChanged()
 
 bool Rotate::toolOperations()
 {
+    DImg::ANGLE angle = (DImg::ANGLE)(settings()["Rotation"].toInt());
+
+    if (isJpegImage(inputUrl().path()))
+    {
+        switch(angle)
+        {
+            case DImg::ROT90:
+                return (exifRotate(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), Rotate90));
+                break;
+            case DImg::ROT180:
+                return (exifRotate(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), Rotate180));
+                break;
+            case DImg::ROT270:
+                return (exifRotate(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), Rotate270));
+                break;
+            default:
+                kDebug(50003) << "Unknow rotate action" << endl;
+                return false;
+                break;
+        }
+    }
+
     DImg img;
     if (!img.load(inputUrl().path()))
         return false;
 
-    img.rotate((DImg::ANGLE)(settings()["Rotation"].toInt()));
+    img.rotate(angle);
 
     DImg::FORMAT format = (DImg::FORMAT)(img.attribute("detectedFileFormat").toInt());
 
