@@ -538,7 +538,7 @@ void AlbumFolderView::slotSelectionChanged()
 
 void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, int)
 {
-    // FIXME: not import actions not used?
+    // FIXME: import actions not used?
     KMenu menuImport(i18n("Import"));
 
     KMenu menuExport(i18n("Export"));
