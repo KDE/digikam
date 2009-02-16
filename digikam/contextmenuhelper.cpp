@@ -316,6 +316,17 @@ void ContextMenuHelper::addGotoMenu(KMenu& menu, imageIds& ids, QObject* recv, c
     addAction(menu, gotoMenuAction);
 }
 
+void ContextMenuHelper::addQueueManagerMenu(KMenu& menu)
+{
+    KMenu* queueMenu = new KMenu(i18n("Queue Manager"), &menu);
+    QStringList queueActions;
+    queueActions << QString("image_add_to_current_queue")
+                 << QString("image_add_to_new_queue");
+    queueMenu->addAction(d->ac->action(queueActions.at(0)));
+    queueMenu->addAction(d->ac->action(queueActions.at(1)));
+    menu.addMenu(queueMenu);
+}
+
 void ContextMenuHelper::addActionCopy(KMenu& menu, QObject* recv, const char* slot)
 {
     KAction* copy = KStandardAction::copy(recv, slot, &menu);

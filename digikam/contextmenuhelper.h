@@ -97,6 +97,7 @@ public:
     virtual void addKipiActions(KMenu&);
     virtual void addServicesMenu(KMenu&, const ImageInfo&, QMap<QAction*, KService::Ptr>&);
     virtual void addGotoMenu(KMenu&, imageIds&, QObject* recv, const char* slot);
+    virtual void addQueueManagerMenu(KMenu&);
 
     virtual void addAssignTagsMenu(KMenu&, imageIds&, QObject* recv, const char* slot);
     virtual void addRemoveTagsMenu(KMenu&, imageIds&, QObject* recv, const char* slot);
