@@ -7,7 +7,7 @@
  * Description : perform lossless rotation/flip to JPEG file
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -259,7 +259,8 @@ bool exifRotate(const QString& file, const QString& documentName)
         }
 
         QString temp(fi.dirPath(true) + "/.digikam-exifrotate-");
-        temp += QString::number(getpid());
+        temp.append(QString::number(getpid()));
+        temp.append(Qstring(".jpg"));
         
         QCString in  = QFile::encodeName(file);
         QCString out = QFile::encodeName(temp);
