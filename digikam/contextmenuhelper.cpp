@@ -125,10 +125,10 @@ void ContextMenuHelper::addActionLightTable(KMenu& menu)
     addAction(menu, action);
 }
 
-void ContextMenuHelper::addActionThumbnail(KMenu& menu, const QList<qlonglong>& selectedIds, Album* album)
+void ContextMenuHelper::addActionThumbnail(KMenu& menu, imageIds& ids, Album* album)
 {
     QAction* thumbnailAction = 0;
-    if (album && selectedIds.count() == 1)
+    if (album && ids.count() == 1)
     {
         if (album->type() == Album::PHYSICAL )
             thumbnailAction = new QAction(i18n("Set as Album Thumbnail"), this);
@@ -184,10 +184,9 @@ void ContextMenuHelper::addKipiActions(KMenu &menu)
     }
 }
 
-void ContextMenuHelper::addAssignTagsMenu(KMenu& menu, const QList<qlonglong>& selectedImageIDs,
-                                          QObject* recv, const char* slot)
+void ContextMenuHelper::addAssignTagsMenu(KMenu& menu, imageIds& ids, QObject* recv, const char* slot)
 {
-    KMenu* assignTagsPopup = new TagsPopupMenu(selectedImageIDs, TagsPopupMenu::ASSIGN, &menu);
+    KMenu* assignTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::ASSIGN, &menu);
     assignTagsPopup->menuAction()->setText(i18n("Assign Tag"));
     menu.addMenu(assignTagsPopup);
 
@@ -195,17 +194,16 @@ void ContextMenuHelper::addAssignTagsMenu(KMenu& menu, const QList<qlonglong>& s
             recv, slot);
 }
 
-void ContextMenuHelper::addRemoveTagsMenu(KMenu& menu, const QList<qlonglong>& selectedImageIDs,
-                                          QObject* recv, const char* slot)
+void ContextMenuHelper::addRemoveTagsMenu(KMenu& menu, imageIds& ids, QObject* recv, const char* slot)
 {
-    KMenu* removeTagsPopup = new TagsPopupMenu(selectedImageIDs, TagsPopupMenu::REMOVE, &menu);
+    KMenu* removeTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::REMOVE, &menu);
     removeTagsPopup->menuAction()->setText(i18n("Remove Tag"));
     menu.addMenu(removeTagsPopup);
 
     // Performance: Only check for tags if there are <250 images selected
     // Also disable the remove Tag popup menu, if there are no tags at all.
-    if (selectedImageIDs.count() > 250 ||
-            !DatabaseAccess().db()->hasTags(selectedImageIDs))
+    if (ids.count() > 250 ||
+            !DatabaseAccess().db()->hasTags(ids))
         removeTagsPopup->menuAction()->setEnabled(false);
 
     connect(removeTagsPopup, SIGNAL(signalTagActivated(int)),
@@ -262,8 +260,15 @@ void ContextMenuHelper::addAlbumActions(KMenu& menu)
         menu.addActions(albumActions);
 }
 
-void ContextMenuHelper::addGotoMenu(KMenu& menu, const ImageInfo& item, QObject* recv, const char* slot)
+void ContextMenuHelper::addGotoMenu(KMenu& menu, imageIds& ids, QObject* recv, const char* slot)
 {
+    // when more then one item is selected, don't add the menu
+    if (ids.count() > 1)
+        return;
+
+    // the currently selected image is always the first item
+    ImageInfo item(ids.first());
+
     KMenu *gotoMenu    = new KMenu(&menu);
     QAction *gotoAlbum = new QAction(SmallIcon("folder-image"),        i18n("Album"), gotoMenu);
     QAction *gotoDate  = new QAction(SmallIcon("view-calendar-month"), i18n("Date"),  gotoMenu);
@@ -276,18 +281,13 @@ void ContextMenuHelper::addGotoMenu(KMenu& menu, const ImageInfo& item, QObject*
     connect(gotoDate, SIGNAL(triggered()),
             recv, slot);
 
-    // We disable the goto menu when multiple images are selected.
-    // Therefore selectedImageIDs contains only the currently selected image.
-    QList<qlonglong> selectedImageIDs;
-    selectedImageIDs << item.id();
-
-    TagsPopupMenu *gotoTagsPopup = new TagsPopupMenu(selectedImageIDs, TagsPopupMenu::DISPLAY, gotoMenu);
+    TagsPopupMenu *gotoTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::DISPLAY, gotoMenu);
     QAction *gotoTag = gotoMenu->addMenu(gotoTagsPopup);
     gotoTag->setIcon(SmallIcon("tag"));
     gotoTag->setText(i18n("Tag"));
 
     // Disable the goto Tag popup menu, if there are no tags at all.
-    if (!DatabaseAccess().db()->hasTags(selectedImageIDs))
+    if (!DatabaseAccess().db()->hasTags(ids))
         gotoTag->setEnabled(false);
 
     connect(gotoTagsPopup, SIGNAL(signalTagActivated(int)),
@@ -296,6 +296,7 @@ void ContextMenuHelper::addGotoMenu(KMenu& menu, const ImageInfo& item, QObject*
 //            this, SLOT(slotGotoTag(int)));
 
     Album* currentAlbum = AlbumManager::instance()->currentAlbum();
+
     if (currentAlbum->type() == Album::PHYSICAL )
     {
         // If the currently selected album is the same as album to

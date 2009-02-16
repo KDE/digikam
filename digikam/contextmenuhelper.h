@@ -53,6 +53,10 @@ class ContextMenuHelper : public QObject
 
 public:
 
+    typedef const QList<qlonglong> imageIds;
+
+public:
+
     ContextMenuHelper(QObject* parent, KActionCollection*);
     virtual ~ContextMenuHelper();
 
@@ -87,15 +91,15 @@ public:
 
     // add special actions
     virtual void addActionLightTable(KMenu& menu);
-    virtual void addActionThumbnail(KMenu& menu, const QList<qlonglong>&, Album* album);
+    virtual void addActionThumbnail(KMenu& menu, imageIds&, Album* album);
 
     // add special menus
     virtual void addKipiActions(KMenu&);
     virtual void addServicesMenu(KMenu&, const ImageInfo&, QMap<QAction*, KService::Ptr>&);
-    virtual void addGotoMenu(KMenu&, const ImageInfo&, QObject* recv, const char* slot);
+    virtual void addGotoMenu(KMenu&, imageIds&, QObject* recv, const char* slot);
 
-    virtual void addAssignTagsMenu(KMenu&, const QList<qlonglong>&, QObject* recv, const char* slot);
-    virtual void addRemoveTagsMenu(KMenu&, const QList<qlonglong>&, QObject* recv, const char* slot);
+    virtual void addAssignTagsMenu(KMenu&, imageIds&, QObject* recv, const char* slot);
+    virtual void addRemoveTagsMenu(KMenu&, imageIds&, QObject* recv, const char* slot);
 
     virtual void addRatingMenu(KMenu&, QObject* recv, const char* slot);
 
