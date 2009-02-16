@@ -520,7 +520,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
                 {
                     kDebug(50003) << "Exif autorotate: " << file << " using (" << tempURL << ")" << endl;
                     sendInfo(i18n("EXIF rotating file %1...", file));
-                    exifRotate(tempURL.path(), file);
+                    exifTransform(tempURL.path(), file);
                 }
 
                 if (fixDateTime || setPhotographerId || setCredits)

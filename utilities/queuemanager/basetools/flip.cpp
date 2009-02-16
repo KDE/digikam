@@ -39,6 +39,7 @@
 
 // Local includes.
 
+#include "jpegutils.h"
 #include "dimg.h"
 
 namespace Digikam
@@ -91,11 +92,30 @@ void Flip::slotSettingsChanged()
 
 bool Flip::toolOperations()
 {
+    DImg::FLIP flip = (DImg::FLIP)(settings()["Flip"].toInt());
+
+    if (isJpegImage(inputUrl().path()))
+    {
+        switch(flip)
+        {
+            case DImg::HORIZONTAL:
+                return (exifTransform(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), FlipHorizontal));
+                break;
+            case DImg::VERTICAL:
+                return (exifTransform(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), FlipVertical));
+                break;
+            default:
+                kDebug(50003) << "Unknow rotate action" << endl;
+                return false;
+                break;
+        }
+    }
+
     DImg img;
     if (!img.load(inputUrl().path()))
         return false;
 
-    img.flip((DImg::FLIP)(settings()["Flip"].toInt()));
+    img.flip(flip);
 
     DImg::FORMAT format = (DImg::FORMAT)(img.attribute("detectedFileFormat").toInt());
 

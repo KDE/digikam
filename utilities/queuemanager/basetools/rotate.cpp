@@ -100,13 +100,13 @@ bool Rotate::toolOperations()
         switch(angle)
         {
             case DImg::ROT90:
-                return (exifRotate(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), Rotate90));
+                return (exifTransform(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), Rotate90));
                 break;
             case DImg::ROT180:
-                return (exifRotate(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), Rotate180));
+                return (exifTransform(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), Rotate180));
                 break;
             case DImg::ROT270:
-                return (exifRotate(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), Rotate270));
+                return (exifTransform(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), Rotate270));
                 break;
             default:
                 kDebug(50003) << "Unknow rotate action" << endl;

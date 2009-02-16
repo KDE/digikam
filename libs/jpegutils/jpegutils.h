@@ -7,7 +7,7 @@
  * Description : perform lossless rotation/flip to JPEG file
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,12 +42,14 @@ enum TransformAction
     Auto = 0,
     Rotate90,
     Rotate180,
-    Rotate270
+    Rotate270,
+    FlipHorizontal,
+    FlipVertical
 };
 
 DIGIKAM_EXPORT bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize);
-DIGIKAM_EXPORT bool exifRotate(const QString& file, const QString& documentName, 
-                               const QString& trgFile=QString(), TransformAction action=Auto);
+DIGIKAM_EXPORT bool exifTransform(const QString& file, const QString& documentName, 
+                                  const QString& trgFile=QString(), TransformAction action=Auto);
 DIGIKAM_EXPORT bool jpegConvert(const QString& src, const QString& dest, const QString& documentName,
                                 const QString& format=QString("PNG"));
 DIGIKAM_EXPORT bool isJpegImage(const QString& file);

@@ -7,7 +7,7 @@
  * Description : perform lossless rotation/flip to JPEG file
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Parts of the loading code is taken from qjpeghandler.cpp, copyright follows:
  * Copyright (C) 1992-2007 Trolltech ASA. All rights reserved.
@@ -263,8 +263,8 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
     return true;
 }
 
-bool exifRotate(const QString& file, const QString& documentName,
-                const QString& trgFile, TransformAction action)
+bool exifTransform(const QString& file, const QString& documentName,
+                   const QString& trgFile, TransformAction action)
 {
     QFileInfo fi(file);
     if (!fi.exists())
@@ -311,6 +311,16 @@ bool exifRotate(const QString& file, const QString& documentName,
             case Rotate270:
             {
                 transformoption.transform = JXFORM_ROT_270;
+                break;
+            }
+            case FlipHorizontal:
+            {
+                transformoption.transform = JXFORM_FLIP_H;
+                break;
+            }
+            case FlipVertical:
+            {
+                transformoption.transform = JXFORM_FLIP_V;
                 break;
             }
             default:  // Auto
