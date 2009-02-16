@@ -27,55 +27,55 @@
 
 // Qt includes.
 
-#include <QPainter>
 #include <QCursor>
-#include <QString>
-#include <QFileInfo>
-#include <QToolButton>
 #include <QDesktopWidget>
+#include <QFileInfo>
+#include <QPainter>
 #include <QPixmap>
+#include <QString>
+#include <QToolButton>
 
 // KDE includes.
 
-#include <kdebug.h>
-#include <kmimetypetrader.h>
-#include <kdialog.h>
-#include <klocale.h>
-#include <kservice.h>
-#include <krun.h>
 #include <kaction.h>
-#include <kmenu.h>
-#include <kmimetype.h>
+#include <kapplication.h>
 #include <kcursor.h>
 #include <kdatetable.h>
+#include <kdebug.h>
+#include <kdialog.h>
 #include <kiconloader.h>
-#include <kapplication.h>
+#include <klocale.h>
+#include <kmenu.h>
+#include <kmimetype.h>
+#include <kmimetypetrader.h>
+#include <krun.h>
+#include <kservice.h>
 
 // LibKIPI includes.
 
-#include <libkipi/pluginloader.h>
 #include <libkipi/plugin.h>
+#include <libkipi/pluginloader.h>
 
 // Local includes.
 
-#include "dimg.h"
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "albumwidgetstack.h"
+#include "contextmenuhelper.h"
 #include "databaseaccess.h"
 #include "digikamapp.h"
-#include "imageinfo.h"
+#include "dimg.h"
 #include "dmetadata.h"
 #include "dpopupmenu.h"
+#include "imageinfo.h"
+#include "loadingdescription.h"
 #include "metadatahub.h"
 #include "paniconwidget.h"
 #include "previewloadthread.h"
-#include "loadingdescription.h"
-#include "tagspopupmenu.h"
 #include "ratingpopupmenu.h"
+#include "tagspopupmenu.h"
 #include "themeengine.h"
-#include "contextmenuhelper.h"
 
 namespace Digikam
 {
