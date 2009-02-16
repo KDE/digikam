@@ -59,7 +59,7 @@ public:
     /*
      * The ContextMenuHelper class makes it easier to add actions to a menu.
      * Use this class to add
-     *  - actions from the standardCollection
+     *  - actions from the actionCollection
      *  - standard actions (copy, paste, delete)
      *  - temporary actions
      *  - predefined special actions
