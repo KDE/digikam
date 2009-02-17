@@ -28,6 +28,9 @@
 
 #include "batchtool.h"
 
+class QLabel;
+class QCheckBox;
+
 class KComboBox;
 
 namespace Digikam
@@ -54,6 +57,10 @@ private slots:
     void slotSettingsChanged();
 
 private:
+
+    QLabel    *m_label;
+
+    QCheckBox *m_useExif;
 
     KComboBox *m_comboBox;
 };
