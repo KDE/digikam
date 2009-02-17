@@ -55,12 +55,12 @@ Resize::Resize(QObject* parent)
     KVBox *vbox   = new KVBox;
     QLabel *label = new QLabel(vbox);
     m_comboBox    = new KComboBox(vbox);
-    m_comboBox->insertItem(Tiny,   i18n("Tiny (%1)",   presetLenghtValue(Tiny)));
-    m_comboBox->insertItem(Small,  i18n("Small (%1)",  presetLenghtValue(Small)));
-    m_comboBox->insertItem(Medium, i18n("Medium (%1)", presetLenghtValue(Medium)));
-    m_comboBox->insertItem(Big,    i18n("Big (%1)",    presetLenghtValue(Big)));
-    m_comboBox->insertItem(Large,  i18n("Large (%1)",  presetLenghtValue(Large)));
-    m_comboBox->insertItem(Huge,   i18n("Huge (%1)",   presetLenghtValue(Huge)));
+    m_comboBox->insertItem(Tiny,   i18n("Tiny (%1 pixels)",   presetLenghtValue(Tiny)));
+    m_comboBox->insertItem(Small,  i18n("Small (%1 pixels)",  presetLenghtValue(Small)));
+    m_comboBox->insertItem(Medium, i18n("Medium (%1 pixels)", presetLenghtValue(Medium)));
+    m_comboBox->insertItem(Big,    i18n("Big (%1 pixels)",    presetLenghtValue(Big)));
+    m_comboBox->insertItem(Large,  i18n("Large (%1 pixels)",  presetLenghtValue(Large)));
+    m_comboBox->insertItem(Huge,   i18n("Huge (%1 pixels)",   presetLenghtValue(Huge)));
     label->setText(i18n("Lenght:"));
     QLabel *space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
