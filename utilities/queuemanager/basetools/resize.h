@@ -1,0 +1,74 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2009-02-17
+ * Description : resize image.
+ *
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
+#ifndef RESIZE_H
+#define RESIZE_H
+
+// Local includes.
+
+#include "batchtool.h"
+
+class KComboBox;
+
+namespace Digikam
+{
+
+class Resize : public BatchTool
+{
+    Q_OBJECT
+
+public:
+
+    Resize(QObject* parent=0);
+    ~Resize();
+
+    BatchToolSettings defaultSettings();
+
+private slots:
+
+    void slotSettingsChanged();
+
+private:
+
+    enum WidthPreset
+    {
+        Tiny=0,
+        Small,
+        Medium,
+        Big,
+        Large,
+        Huge
+    };
+
+    KComboBox *m_comboBox;
+
+private:
+
+    void assignSettings2Widget();
+    bool toolOperations();
+    int  presetLenghtValue(WidthPreset preset);
+};
+
+}  // namespace Digikam
+
+#endif /* RESIZE_H */

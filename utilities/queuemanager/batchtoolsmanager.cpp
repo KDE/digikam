@@ -35,6 +35,7 @@
 #include "convert2tiff.h"
 #include "convert2jp2.h"
 #include "autocorrection.h"
+#include "resize.h"
 #include "rotate.h"
 #include "flip.h"
 
@@ -46,9 +47,7 @@ class BatchToolsManagerPriv
 
 public:
 
-    BatchToolsManagerPriv()
-    {
-    }
+    BatchToolsManagerPriv(){}
 
     BatchToolsList toolsList;
 };
@@ -64,6 +63,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new AutoCorrection(this));
     registerTool(new Rotate(this));
     registerTool(new Flip(this));
+    registerTool(new Resize(this));
 }
 
 BatchToolsManager::~BatchToolsManager()

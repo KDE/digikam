@@ -757,6 +757,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/autocorrection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/rotate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/flip.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/resize.cpp
        )
 
     SET(libcameragui_SRCS
