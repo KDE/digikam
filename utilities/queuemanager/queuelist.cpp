@@ -327,6 +327,13 @@ void QueueListView::dropEvent(QDropEvent *e)
         {
             slotAddItems(imageInfoList, imageInfoList.first());
             e->acceptProposedAction();
+
+            QueueListView* vitem = dynamic_cast<QueueListView*>(e->source());
+            if (vitem && vitem != this)
+            {
+                foreach(ImageInfo info, imageInfoList)
+                    vitem->removeItemByInfo(info);
+            }
         }
     }
     else if (DAlbumDrag::decode(e->mimeData(), urls, albumID))
