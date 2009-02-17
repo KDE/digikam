@@ -339,29 +339,30 @@ void ImagePreviewView::slotContextMenu()
 
     // --------------------------------------------------------
 
+    DPopupMenu popmenu(this);
+
     QMap<QAction*, KService::Ptr> servicesMap;
     QList<qlonglong> idList;
     idList << d->imageInfo.id();
 
-    QAction *backAction = new QAction(SmallIcon("go-previous"), i18nc("go to previous image", "Back"), this);
-    backAction->setEnabled(d->hasPrev);
+    QAction *back2AlbumAction = new QAction(SmallIcon("folder-image"), i18n("Back to Album"), this);
 
-    QAction *forwardAction = new QAction(SmallIcon("go-next"), i18nc("go to next image", "Forward"), this);
-    forwardAction->setEnabled(d->hasNext);
+    QAction *prevAction = new QAction(SmallIcon("go-previous"), i18nc("go to previous image", "Back"), this);
+    prevAction->setEnabled(d->hasPrev);
+
+    QAction *nextAction = new QAction(SmallIcon("go-next"), i18nc("go to next image", "Forward"), this);
+    nextAction->setEnabled(d->hasNext);
 
     // --------------------------------------------------------
 
-    DPopupMenu popmenu(this);
-
-    d->contextMenuHelper->addAction(popmenu, "full_screen");
+//    d->contextMenuHelper->addAction(popmenu, "full_screen");
+//    popmenu.addSeparator();
+    // --------------------------------------------------------
+    d->contextMenuHelper->addAction(popmenu, prevAction, true);
+    d->contextMenuHelper->addAction(popmenu, nextAction, true);
+    d->contextMenuHelper->addAction(popmenu, back2AlbumAction);
     popmenu.addSeparator();
     // --------------------------------------------------------
-    // TODO: use global actions here, too
-    d->contextMenuHelper->addAction(popmenu, backAction,    true);
-    d->contextMenuHelper->addAction(popmenu, forwardAction, true);
-    popmenu.addSeparator();
-    // --------------------------------------------------------
-    d->contextMenuHelper->addAction(popmenu, "image_view");
     d->contextMenuHelper->addAction(popmenu, "image_edit");
     d->contextMenuHelper->addAction(popmenu, "image_find_similar");
     d->contextMenuHelper->addActionLightTable(popmenu);
@@ -384,13 +385,17 @@ void ImagePreviewView::slotContextMenu()
     QAction *choice = popmenu.exec(QCursor::pos());
     if (choice)
     {
-        if (choice == backAction)
+        if (choice == prevAction)
         {
             emit signalPrevItem();
         }
-        else if (choice == forwardAction)
+        else if (choice == nextAction)
         {
             emit signalNextItem();
+        }
+        else if (choice == back2AlbumAction)
+        {
+            emit signalBack2Album();
         }
         else if (servicesMap.contains(choice))
         {
