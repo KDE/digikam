@@ -118,6 +118,8 @@ private:
     bool findItemByInfo(const ImageInfo& info);
     void removeItems(int removeType);
 
+    QMimeData* mimeData(const QList<QTreeWidgetItem*> items) const;
+    void startDrag(Qt::DropActions supportedActions);
     Qt::DropActions supportedDropActions() const;
     void dragMoveEvent(QDragMoveEvent*);
     void dragEnterEvent(QDragEnterEvent*);

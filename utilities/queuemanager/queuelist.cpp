@@ -171,6 +171,7 @@ QueueListView::QueueListView(QWidget *parent)
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
     setDropIndicatorShown(true);
+    setDragEnabled(true);
 
     setSortingEnabled(false);
     setAllColumnsShowFocus(true);
@@ -198,11 +199,70 @@ QueueListView::~QueueListView()
 
 Qt::DropActions QueueListView::supportedDropActions() const
 {
-    return Qt::CopyAction;
+    return Qt::CopyAction | Qt::MoveAction;
+}
+
+QMimeData* QueueListView::mimeData(const QList<QTreeWidgetItem*> items) const
+{
+    KUrl::List urls;
+    KUrl::List kioURLs;
+    QList<int> albumIDs;
+    QList<int> imageIDs;
+
+    foreach(QTreeWidgetItem* itm, items)
+    {
+        QueueListViewItem* vitem = dynamic_cast<QueueListViewItem*>(itm);
+        if (vitem)
+        {
+            urls.append(vitem->info().fileUrl());
+            kioURLs.append(vitem->info().databaseUrl());
+            albumIDs.append(vitem->info().albumId());
+            imageIDs.append(vitem->info().id());
+        }
+    }
+
+    DItemDrag *mimeData = new DItemDrag(urls, kioURLs, albumIDs, imageIDs);
+    return mimeData;
+}
+
+void QueueListView::startDrag(Qt::DropActions /*supportedActions*/)
+{
+    QList<QTreeWidgetItem*> items = selectedItems();
+    if (items.isEmpty())
+        return;
+
+    QPixmap icon(DesktopIcon("image-jp2", 48));
+    int w = icon.width();
+    int h = icon.height();
+
+    QPixmap pix(w+4,h+4);
+    QString text(QString::number(items.count()));
+
+    QPainter p(&pix);
+    p.fillRect(0, 0, pix.width()-1, pix.height()-1, QColor(Qt::white));
+    p.setPen(QPen(Qt::black, 1));
+    p.drawRect(0, 0, pix.width()-1, pix.height()-1);
+    p.drawPixmap(2, 2, icon);
+    QRect r = p.boundingRect(2, 2, w, h, Qt::AlignLeft|Qt::AlignTop, text);
+    r.setWidth(qMax(r.width(), r.height()));
+    r.setHeight(qMax(r.width(), r.height()));
+    p.fillRect(r, QColor(0, 80, 0));
+    p.setPen(Qt::white);
+    QFont f(font());
+    f.setBold(true);
+    p.setFont(f);
+    p.drawText(r, Qt::AlignCenter, text);
+    p.end();
+
+    QDrag *drag = new QDrag(this);
+    drag->setMimeData(mimeData(items));
+    drag->setPixmap(pix);
+    drag->exec();
 }
 
 void QueueListView::dragEnterEvent(QDragEnterEvent *e)
 {
+    QTreeWidget::dragEnterEvent(e);
     e->accept();
 }
 
@@ -218,8 +278,26 @@ void QueueListView::dragMoveEvent(QDragMoveEvent *e)
         DAlbumDrag::decode(e->mimeData(), urls, albumID) ||
         DTagDrag::canDecode(e->mimeData()))
     {
-        e->accept();
-        return;
+
+        if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
+        {
+            ImageInfoList imageInfoList;
+
+            for (QList<int>::const_iterator it = imageIDs.constBegin();
+                it != imageIDs.constEnd(); ++it)
+            {
+                ImageInfo info(*it);
+                if (!findItemByInfo(info))
+                    imageInfoList.append(info);
+            }
+
+            if (!imageInfoList.isEmpty())
+            {
+                QTreeWidget::dragMoveEvent(e);
+                e->accept();
+                return;
+            }
+        }
     }
     e->ignore();
 }
@@ -246,8 +324,11 @@ void QueueListView::dropEvent(QDropEvent *e)
             }
         }
 
-        slotAddItems(imageInfoList, imageInfoList.first());
-        e->acceptProposedAction();
+        if (!imageInfoList.isEmpty())
+        {
+            slotAddItems(imageInfoList, imageInfoList.first());
+            e->acceptProposedAction();
+        }
     }
     else if (DAlbumDrag::decode(e->mimeData(), urls, albumID))
     {
@@ -264,8 +345,11 @@ void QueueListView::dropEvent(QDropEvent *e)
             }
         }
 
-        slotAddItems(imageInfoList, imageInfoList.first());
-        e->acceptProposedAction();
+        if (!imageInfoList.isEmpty())
+        {
+            slotAddItems(imageInfoList, imageInfoList.first());
+            e->acceptProposedAction();
+        }
     }
     else if(DTagDrag::canDecode(e->mimeData()))
     {
@@ -286,8 +370,11 @@ void QueueListView::dropEvent(QDropEvent *e)
             }
         }
 
-        slotAddItems(imageInfoList, imageInfoList.first());
-        e->acceptProposedAction();
+        if (!imageInfoList.isEmpty())
+        {
+            slotAddItems(imageInfoList, imageInfoList.first());
+            e->acceptProposedAction();
+        }
     }
     else
     {
@@ -297,7 +384,7 @@ void QueueListView::dropEvent(QDropEvent *e)
     emit signalImageListChanged();
 }
 
-void QueueListView::slotAddItems(const ImageInfoList& list, const ImageInfo &current)
+void QueueListView::slotAddItems(const ImageInfoList& list, const ImageInfo& current)
 {
     if ( list.count() == 0 ) return;
 
