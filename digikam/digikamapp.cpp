@@ -2182,6 +2182,7 @@ void DigikamApp::loadPlugins()
     ignores.append( "Facebook Exporter" );
     ignores.append( "SmugMug Exporter" );
     ignores.append( "SlideShow" );
+    ignores.append( "PrintWizard" );
 
     d->kipiPluginLoader = new KIPI::PluginLoader( ignores, d->kipiInterface );
 
