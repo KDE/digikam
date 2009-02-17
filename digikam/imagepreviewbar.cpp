@@ -682,16 +682,17 @@ void ImagePreviewBar::slotThemeChanged()
 
 bool ImagePreviewBar::eventFilter(QObject *obj, QEvent *ev)
 {
-    if ( obj == qobject_cast<QObject*>(d->ratingBox) )
+    if ( obj == d->ratingBox )
     {
         if ( ev->type() == QEvent::Leave)
         {
-            if (d->ratingItem)
+            // Cave: ratingBox->hide can recurse here again! See bug 184473
+            ThumbBarItem *item = d->ratingItem;
+            if (item)
             {
                 unsetCursor();
+                d->ratingItem = 0;
                 d->ratingBox->hide();
-                ThumbBarItem *item = d->ratingItem;
-                d->ratingItem      = 0;
                 item->repaint();
             }
         }
