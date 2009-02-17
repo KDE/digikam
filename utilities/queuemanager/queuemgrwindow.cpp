@@ -178,7 +178,20 @@ void QueueMgrWindow::applySettings()
         KMessageBox::error(this,
                            i18n("Album to host queued processed items is not set. "
                                 "Please select one in configuration panel."),
-                           i18n("Processed items album is not set"));
+                           i18n("Processed items album settings"));
+        setup(Setup::QueuePage);
+        return;
+    }
+
+    QFileInfo dir(d->processedItemsAlbumUrl.path());
+    kDebug(50003) << "Queue Manager target album is: " << d->processedItemsAlbumUrl.path() << endl;
+
+    if ( !dir.exists() || !dir.isWritable() )
+    {
+        KMessageBox::error(this,
+                           i18n("Album to host queued processed items is not available or not writable. "
+                                "Please set another one in configuration panel."),
+                           i18n("Processed items album settings"));
         setup(Setup::QueuePage);
         return;
     }
