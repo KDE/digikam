@@ -110,7 +110,8 @@ ToolsListView::ToolsListView(QWidget *parent)
              : QTreeWidget(parent)
 {
     setIconSize(QSize(22, 22));
-    setSelectionMode(QAbstractItemView::SingleSelection);
+//    setSelectionMode(QAbstractItemView::SingleSelection);
+    setSelectionMode(QAbstractItemView::ExtendedSelection);
     setWhatsThis(i18n("This is the list of batch tools available."));
     setSortingEnabled(false);
     setAllColumnsShowFocus(true);
@@ -255,9 +256,8 @@ QMimeData* ToolsListView::mimeData(const QList<QTreeWidgetItem*> items) const
     {
         ToolListViewItem* tlwi = dynamic_cast<ToolListViewItem*>(itm);
         if (tlwi)
-            map.insert((int)(tlwi->tool()->toolGroup()), tlwi->tool()->objectName());
+            map.insertMulti((int)(tlwi->tool()->toolGroup()), tlwi->tool()->objectName());
     }
-
     stream << map;
 
     mimeData->setData("digikam/batchtoolslist", encodedData);

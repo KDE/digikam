@@ -404,9 +404,12 @@ void AssignedListView::dropEvent(QDropEvent *e)
             QMap<int, QString> map;
             ds >> map;
 
-            for (QMap<int, QString>::iterator it = map.begin();
-                it != map.end(); ++it)
+            // We pop all items in reverse order to have same order than selection from Batch Tools list.
+            QMapIterator<int, QString> it(map);
+            it.toBack();
+            while (it.hasPrevious())
             {
+                it.previous();
                 BatchTool::BatchToolGroup group = (BatchTool::BatchToolGroup)(it.key());
                 QString name                    = it.value();
                 BatchTool *tool                 = QueueMgrWindow::queueManagerWindow()->batchToolsManager()
