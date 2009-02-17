@@ -33,6 +33,7 @@
 
 // Local includes.
 
+#include "ddragobjects.h"
 #include "queuelist.h"
 
 namespace Digikam
@@ -50,7 +51,7 @@ public:
 };
 
 QueuePool::QueuePool(QWidget *parent)
-        : KTabWidget(parent), d(new QueuePoolPriv)
+         : KTabWidget(parent), d(new QueuePoolPriv)
 {
     setTabBarHidden(false);
     setCloseButtonEnabled(true);
@@ -61,6 +62,9 @@ QueuePool::QueuePool(QWidget *parent)
 
     connect(this, SIGNAL(closeRequest(QWidget*)),
             this, SLOT(slotCloseQueueRequest(QWidget*)));
+
+    connect(this, SIGNAL(testCanDecode(const QDragMoveEvent*, bool&)),
+            this, SLOT(slotTestCanDecode(const QDragMoveEvent*, bool&)));
 }
 
 QueuePool::~QueuePool()
@@ -203,6 +207,24 @@ void QueuePool::removeTab(int index)
     }
 
     KTabWidget::removeTab(index);
+}
+
+void QueuePool::slotTestCanDecode(const QDragMoveEvent* e, bool& accept)
+{
+    int        albumID;
+    QList<int> albumIDs;
+    QList<int> imageIDs;
+    KUrl::List urls;
+    KUrl::List kioURLs;
+
+    if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
+        DAlbumDrag::decode(e->mimeData(), urls, albumID) ||
+        DTagDrag::canDecode(e->mimeData()))
+    {
+        accept = true;
+        return;
+    }
+    accept = false;
 }
 
 }  // namespace Digikam

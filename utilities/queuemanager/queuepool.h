@@ -27,6 +27,8 @@
 // Qt includes.
 
 #include <QWidget>
+#include <QDragMoveEvent>
+#include <QDropEvent>
 
 // KDE includes.
 
@@ -82,6 +84,7 @@ private slots:
 
     void slotQueuePoolChanged(int);
     void slotCloseQueueRequest(QWidget*);
+    void slotTestCanDecode(const QDragMoveEvent*, bool&);
 
 private:
 

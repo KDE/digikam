@@ -278,7 +278,6 @@ void QueueListView::dragMoveEvent(QDragMoveEvent *e)
         DAlbumDrag::decode(e->mimeData(), urls, albumID) ||
         DTagDrag::canDecode(e->mimeData()))
     {
-
         if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
         {
             ImageInfoList imageInfoList;
