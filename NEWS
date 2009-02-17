@@ -9,7 +9,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 152528 : Nikon D80 icc profile not recognized as input profile in Showfoto.
 003 ==> 182737 : Album view is not updated after saving edited PNG files, not even after restart.
 004 ==> 178204 : Entire hierarchy is not displayed.
-005 ==> 
+005 ==> 184686 : Enable insertion of special unicode control characters (LRM, RTL, RTL, RLM...) at the caption edit box. (right click).
+006 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc2 - Release date: 2009-02-15
