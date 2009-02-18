@@ -260,7 +260,7 @@ bool exifRotate(const QString& file, const QString& documentName)
 
         QString temp(fi.dirPath(true) + "/.digikam-exifrotate-");
         temp.append(QString::number(getpid()));
-        temp.append(Qstring(".jpg"));
+        temp.append(QString(".jpg"));
         
         QCString in  = QFile::encodeName(file);
         QCString out = QFile::encodeName(temp);
