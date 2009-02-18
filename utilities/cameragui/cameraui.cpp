@@ -301,7 +301,7 @@ void CameraUI::setupActions()
     // -----------------------------------------------------------------
 
     d->cameraInfoAction = new KAction(KIcon("camera-photo"), i18n("Information"), this);
-    connect(d->cameraInfoAction, SIGNAL(triggered()), this, SLOT(slotInformations()));
+    connect(d->cameraInfoAction, SIGNAL(triggered()), this, SLOT(slotInformation()));
     actionCollection()->addAction("cameraui_info", d->cameraInfoAction);
 
     // -----------------------------------------------------------------
@@ -629,8 +629,8 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
     connect(d->controller, SIGNAL(signalErrorMsg(const QString&)),
             this, SLOT(slotErrorMsg(const QString&)));
 
-    connect(d->controller, SIGNAL(signalCameraInformations(const QString&, const QString&, const QString&)),
-            this, SLOT(slotCameraInformations(const QString&, const QString&, const QString&)));
+    connect(d->controller, SIGNAL(signalCameraInformation(const QString&, const QString&, const QString&)),
+            this, SLOT(slotCameraInformation(const QString&, const QString&, const QString&)));
 
     connect(d->controller, SIGNAL(signalBusy(bool)),
             this, SLOT(slotBusy(bool)));
@@ -1091,15 +1091,15 @@ void CameraUI::slotCapture()
     captureDlg->show();
 }
 
-void CameraUI::slotInformations()
+void CameraUI::slotInformation()
 {
     if (d->busy)
         return;
 
-    d->controller->getCameraInformations();
+    d->controller->getCameraInformation();
 }
 
-void CameraUI::slotCameraInformations(const QString& summary, const QString& manual, const QString& about)
+void CameraUI::slotCameraInformation(const QString& summary, const QString& manual, const QString& about)
 {
     CameraInfoDialog *infoDlg = new CameraInfoDialog(this, summary, manual, about);
     infoDlg->show();

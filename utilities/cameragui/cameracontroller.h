@@ -76,7 +76,7 @@ public:
     void getFreeSpace();
     void getThumbnail(const QString& folder, const QString& file);
     void getExif(const QString& folder, const QString& file);
-    void getCameraInformations();
+    void getCameraInformation();
     void getPreview();
     void capture();
 
@@ -94,7 +94,7 @@ signals:
     void signalBusy(bool val);
     void signalInfoMsg(const QString& msg);
     void signalErrorMsg(const QString& msg);
-    void signalCameraInformations(const QString& summary, const QString& manual,
+    void signalCameraInformation(const QString& summary, const QString& manual,
                                   const QString& about);
     void signalFreeSpace(unsigned long kBSize, unsigned long kBAvail);
     void signalPreview(const QImage& preview);

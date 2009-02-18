@@ -80,7 +80,7 @@ public:
      */
     QString getLensDescription() const;
 
-    PhotoInfoContainer getPhotographInformations() const;
+    PhotoInfoContainer getPhotographInformation() const;
 
     /** Returns the requested metadata field as a QVariant. See metadatainfo.h for a specification
         of the format of the QVariant.

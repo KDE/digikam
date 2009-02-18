@@ -141,7 +141,7 @@ void ImageDialogPreview::showPreview(const KUrl& url)
         d->thumbLoadThread->find(d->currentURL.path());
 
         d->metaIface.load(d->currentURL.path());
-        PhotoInfoContainer info = d->metaIface.getPhotographInformations();
+        PhotoInfoContainer info = d->metaIface.getPhotographInformation();
         if (!info.isEmpty())
         {
             DToolTipStyleSheet cnt;

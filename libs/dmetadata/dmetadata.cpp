@@ -370,7 +370,7 @@ bool DMetadata::setImageRating(int rating) const
     return true;
 }
 
-PhotoInfoContainer DMetadata::getPhotographInformations() const
+PhotoInfoContainer DMetadata::getPhotographInformation() const
 {
     PhotoInfoContainer photoInfo;
 

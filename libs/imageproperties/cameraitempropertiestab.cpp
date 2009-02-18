@@ -438,7 +438,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
     QString unavailable(i18n("<i>unavailable</i>"));
     DMetadata metaData;
     metaData.setExif(exifData);
-    PhotoInfoContainer photoInfo = metaData.getPhotographInformations();
+    PhotoInfoContainer photoInfo = metaData.getPhotographInformation();
 
     if (photoInfo.isEmpty())
     {

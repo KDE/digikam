@@ -149,7 +149,7 @@ public:
     QByteArray getXmpFromOriginalImage();
 
     /** Get photograph information from original image.*/
-    PhotoInfoContainer getPhotographInformations() const;
+    PhotoInfoContainer getPhotographInformation() const;
 
     /** Standard methods to get/set preview information.*/
     int  previewWidth();

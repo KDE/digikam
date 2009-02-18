@@ -227,7 +227,7 @@ QString ThumbBarToolTip::tipContents()
         settings.showPhotoFlash ||
         settings.showPhotoWB)
     {
-        PhotoInfoContainer photoInfo = metaData.getPhotographInformations();
+        PhotoInfoContainer photoInfo = metaData.getPhotographInformation();
 
         if (!photoInfo.isEmpty())
         {

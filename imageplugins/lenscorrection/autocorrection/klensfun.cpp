@@ -241,7 +241,7 @@ void KLFDeviceSelector::findFromMetadata()
         m_exifUsage->setEnabled(true);
     }
 
-    Digikam::PhotoInfoContainer photoInfo = m_metadata.getPhotographInformations();
+    Digikam::PhotoInfoContainer photoInfo = m_metadata.getPhotographInformation();
 
     QString make  = photoInfo.make;
     QString model = photoInfo.model;

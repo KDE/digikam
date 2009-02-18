@@ -3,7 +3,7 @@ PROJECT(digikam)
 OPTION(ENABLE_GPHOTO2 "Build digiKam with libgphoto2 support (default=ON)" ON)
 
 # ==================================================================================================
-# Informations to update before to release this package.
+# Information to update before to release this package.
 
 # digiKam version
 SET(DIGIKAM_MAJOR_VERSION "0")

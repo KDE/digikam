@@ -275,8 +275,8 @@ ICCProofTool::ICCProofTool(QObject* parent)
     KSqueezedTextLabel *make2  = new KSqueezedTextLabel(0, pictureInfo);
     QLabel *model1             = new QLabel(i18nc("camera model", "Model:"), pictureInfo);
     KSqueezedTextLabel *model2 = new KSqueezedTextLabel(0, pictureInfo);
-    make2->setText(iface.getPhotographInformations().make);
-    model2->setText(iface.getPhotographInformations().model);
+    make2->setText(iface.getPhotographInformation().make);
+    model2->setText(iface.getPhotographInformation().model);
 
     infoGrid->addWidget(make1,  0, 0, 1, 1);
     infoGrid->addWidget(make2,  0, 1, 1, 1);
