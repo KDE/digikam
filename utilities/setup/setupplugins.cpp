@@ -78,6 +78,9 @@ SetupPlugins::SetupPlugins(QWidget* parent)
     layout->addWidget(d->kipiConfig);
     layout->setMargin(KDialog::spacingHint());
     layout->setSpacing(KDialog::spacingHint());
+
+    KIPI::PluginLoader::PluginList list = KIPI::PluginLoader::instance()->pluginList();
+    initPlugins((int)list.count());
 }
 
 SetupPlugins::~SetupPlugins()
