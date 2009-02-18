@@ -517,7 +517,7 @@ void DigikamView::setupConnections()
 
     // -- Album Settings ----------------
 
-    connect(AlbumSettings::instance(), SIGNAL(signalSidebarTabTitleStyleChanged()),
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSidebarTabTitleStyleChanged()));
 }
 

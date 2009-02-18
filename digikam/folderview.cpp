@@ -114,7 +114,7 @@ FolderView::FolderView(QWidget *parent, const char *name)
     connect(AlbumThumbnailLoader::instance(), SIGNAL(signalReloadThumbnails()),
             this, SLOT(slotIconSizeChanged()));
 
-    connect(AlbumSettings::instance(), SIGNAL(signalTreeViewFontChanged()),
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotTreeViewFontChanged()));
 
     connect(d->toolTipTimer, SIGNAL(timeout()),

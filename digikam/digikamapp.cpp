@@ -177,8 +177,10 @@ DigikamApp::DigikamApp()
     AlbumSettings::instance();
     AlbumManager::instance();
     AlbumLister::instance();
-
     LoadingCacheInterface::initialize();
+
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+            this, SLOT(slotSetupChanged()));
 
     d->cameraSolidMenu          = new KMenu(this);
     d->usbMediaMenu             = new KMenu(this);
@@ -317,7 +319,7 @@ void DigikamApp::show()
 
         if (KMessageBox::warningYesNo(this, message) == KMessageBox::Yes)
         {
-            if (!setup(true))
+            if (!setupICC())
             {
                 d->config->group("Color Management").writeEntry("EnableCM", false);
                 d->config->sync();
@@ -1512,9 +1514,6 @@ void DigikamApp::slotOpenCameraUiFromPath(const QString &path)
 
     connect(cgui, SIGNAL(signalLastDestination(const KUrl&)),
             d->view, SLOT(slotSelectAlbum(const KUrl&)));
-
-    connect(cgui, SIGNAL(signalAlbumSettingsChanged()),
-            this, SLOT(slotSetupChanged()));
 }
 
 void DigikamApp::slotOpenManualCamera(QAction *action)
@@ -1543,9 +1542,6 @@ void DigikamApp::slotOpenManualCamera(QAction *action)
 
             connect(cgui, SIGNAL(signalLastDestination(const KUrl&)),
                     d->view, SLOT(slotSelectAlbum(const KUrl&)));
-
-            connect(cgui, SIGNAL(signalAlbumSettingsChanged()),
-                    this, SLOT(slotSetupChanged()));
         }
     }
 }
@@ -1629,9 +1625,6 @@ void DigikamApp::openSolidCamera(const QString &udi, const QString &cameraLabel)
 
             connect(cgui, SIGNAL(signalLastDestination(const KUrl&)),
                     d->view, SLOT(slotSelectAlbum(const KUrl&)));
-
-            connect(cgui, SIGNAL(signalAlbumSettingsChanged()),
-                    this, SLOT(slotSetupChanged()));
         }
         else
         {
@@ -1714,9 +1707,6 @@ void DigikamApp::openSolidUsmDevice(const QString &udi, const QString &givenLabe
 
         connect(cgui, SIGNAL(signalLastDestination(const KUrl&)),
                 d->view, SLOT(slotSelectAlbum(const KUrl&)));
-
-        connect(cgui, SIGNAL(signalAlbumSettingsChanged()),
-                this, SLOT(slotSetupChanged()));
     }
 }
 
@@ -2036,40 +2026,19 @@ void DigikamApp::slotSetup()
     setup();
 }
 
-bool DigikamApp::setup(bool iccSetupPage)
+bool DigikamApp::setup()
 {
-    Setup setup(this, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);
+    return Setup::exec(this, Setup::LastPageUsed);
+}
 
-    // To show the number of KIPI plugins in the setup dialog.
-
-    KIPI::PluginLoader::PluginList list = d->kipiPluginLoader->pluginList();
-    setup.kipiPluginsPage()->initPlugins((int)list.count());
-
-    if (setup.exec() != QDialog::Accepted)
-        return false;
-
-    setup.kipiPluginsPage()->applyPlugins();
-
-    slotSetupChanged();
-
-    return true;
+bool DigikamApp::setupICC()
+{
+    return Setup::execSinglePage(this, Setup::ICCPage);
 }
 
 void DigikamApp::slotSetupCamera()
 {
-    Setup setup(this, Setup::CameraPage);
-
-    // For to show the number of KIPI plugins in the setup dialog.
-
-    KIPI::PluginLoader::PluginList list = d->kipiPluginLoader->pluginList();
-    setup.kipiPluginsPage()->initPlugins((int)list.count());
-
-    if (setup.exec() != QDialog::Accepted)
-        return;
-
-    setup.kipiPluginsPage()->applyPlugins();
-
-    slotSetupChanged();
+    Setup::execSinglePage(this, Setup::CameraPage);
 }
 
 void DigikamApp::slotSetupChanged()

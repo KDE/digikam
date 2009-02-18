@@ -184,7 +184,7 @@ IconView::IconView(QWidget* parent, const char* name)
     connect(d->toolTipTimer, SIGNAL(timeout()),
             this, SLOT(slotToolTip()));
 
-    connect(AlbumSettings::instance(), SIGNAL(signalIconViewFontChanged()),
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotIconViewFontChanged()));
 
     connect(d->ratingBox, SIGNAL(signalRatingChanged(int)),

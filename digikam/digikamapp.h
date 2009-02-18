@@ -105,7 +105,8 @@ protected:
 
 private:
 
-    bool setup(bool iccSetupPage=false);
+    bool setup();
+    bool setupICC();
     void setupView();
     void setupStatusBar();
     void setupActions();
