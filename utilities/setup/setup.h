@@ -60,19 +60,27 @@ public:
         ICCPage,
         KipiPluginsPage,
         CameraPage,
-        MiscellaneousPage
+        MiscellaneousPage,
+
+        SetupPageEnumLast
     };
 
-    Setup(QWidget* parent=0, Page page=LastPageUsed);
-    ~Setup();
-
-    SetupPlugins *kipiPluginsPage();
+    /** Show a setup dialog. The specified page will be selected.
+        True is returned if the dialog was closed with Ok. */
+    static bool exec(Page page=LastPageUsed);
+    static bool exec(QWidget *parent, Page page=LastPageUsed);
+    /** Show a setup dialog. Only the specified page will be available. */
+    static bool execSinglePage(Page page);
+    static bool execSinglePage(QWidget *parent, Page page);
 
 private slots:
 
     void slotOkClicked();
 
 private:
+
+    Setup(QWidget* parent=0);
+    ~Setup();
 
     Setup::Page activePageIndex();
     void showPage(Setup::Page page);

@@ -137,9 +137,11 @@ public:
     SetupCamera      *cameraPage;
     SetupMisc        *miscPage;
     SetupPlugins     *pluginsPage;
+
+    KPageWidgetItem *pageItem(Setup::Page page);
 };
 
-Setup::Setup(QWidget* parent, Setup::Page page)
+Setup::Setup(QWidget* parent)
      : KPageDialog(parent), d(new SetupPrivate)
 {
     setCaption(i18n("Configure"));
@@ -256,14 +258,6 @@ Setup::Setup(QWidget* parent, Setup::Page page)
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("Setup Dialog"));
-
-    if (page != LastPageUsed)
-        showPage(page);
-    else
-    {
-        showPage((Page)group.readEntry("Setup Page", (int)CollectionsPage));
-    }
-
     restoreDialogSize(group);
 
     show();
@@ -277,6 +271,31 @@ Setup::~Setup()
     saveDialogSize(group);
     config->sync();
     delete d;
+}
+
+bool Setup::exec(Page page)
+{
+    return exec(0, page);
+}
+
+bool Setup::exec(QWidget *parent, Page page)
+{
+    Setup setup(parent);
+    setup.showPage(page);
+    return setup.exec() == QDialog::Accepted;
+}
+
+bool Setup::execSinglePage(Page page)
+{
+    return execSinglePage(0, page);
+}
+
+bool Setup::execSinglePage(QWidget *parent, Page page)
+{
+    Setup setup(parent);
+    setup.showPage(page);
+    setup.setFaceType(Plain);
+    return setup.exec() == QDialog::Accepted;
 }
 
 void Setup::slotOkClicked()
@@ -297,6 +316,7 @@ void Setup::slotOkClicked()
     d->slideshowPage->applySettings();
     d->iccPage->applySettings();
     d->miscPage->applySettings();
+    d->pluginsPage->applyPlugins();
 
     if (d->metadataPage->exifAutoRotateAsChanged())
     {
@@ -315,66 +335,66 @@ void Setup::slotOkClicked()
     close();
 }
 
-SetupPlugins* Setup::kipiPluginsPage()
+void Setup::showPage(Setup::Page page)
 {
-    return d->pluginsPage;
+    KPageWidgetItem *item = 0;
+    if (page == LastPageUsed)
+    {
+        KSharedConfig::Ptr config = KGlobal::config();
+        KConfigGroup group        = config->group(QString("Setup Dialog"));
+
+        item = d->pageItem((Page)group.readEntry("Setup Page", (int)CollectionsPage));
+    }
+    else
+    {
+        item = d->pageItem(page);
+    }
+    if (!item)
+        item = d->pageItem(CollectionsPage);
+
+    setCurrentPage(item);
 }
 
-void Setup::showPage(Setup::Page page)
+KPageWidgetItem *SetupPrivate::pageItem(Setup::Page page)
 {
     switch(page)
     {
-        case AlbumViewPage:
-            setCurrentPage(d->page_albumView);
-            break;
-        case ToolTipPage:
-            setCurrentPage(d->page_tooltip);
-            break;
-        case MetadataPage:
-            setCurrentPage(d->page_metadata);
-            break;
-        case IdentifyPage:
-            setCurrentPage(d->page_identity);
-            break;
-        case CategoryPage:
-            setCurrentPage(d->page_category);
-            break;
-        case MimePage:
-            setCurrentPage(d->page_mime);
-            break;
-        case LightTablePage:
-            setCurrentPage(d->page_lighttable);
-            break;
-        case QueuePage:
-            setCurrentPage(d->page_queue);
-            break;
-        case EditorPage:
-            setCurrentPage(d->page_editor);
-            break;
-        case DcrawPage:
-            setCurrentPage(d->page_dcraw);
-            break;
-        case IOFilesPage:
-            setCurrentPage(d->page_iofiles);
-            break;
-        case SlideshowPage:
-            setCurrentPage(d->page_slideshow);
-            break;
-        case ICCPage:
-            setCurrentPage(d->page_icc);
-            break;
-        case KipiPluginsPage:
-            setCurrentPage(d->page_plugins);
-            break;
-        case CameraPage:
-            setCurrentPage(d->page_camera);
-            break;
-        case MiscellaneousPage:
-            setCurrentPage(d->page_misc);
-            break;
+        case Setup::CollectionsPage:
+            return page_collections;
+        case Setup::AlbumViewPage:
+            return page_albumView;
+        case Setup::ToolTipPage:
+            return page_tooltip;
+        case Setup::MetadataPage:
+            return page_metadata;
+        case Setup::IdentifyPage:
+            return page_identity;
+        case Setup::CategoryPage:
+            return page_category;
+        case Setup::MimePage:
+            return page_mime;
+        case Setup::LightTablePage:
+            return page_lighttable;
+        case Setup::QueuePage:
+            return page_queue;
+        case Setup::EditorPage:
+            return page_editor;
+        case Setup::DcrawPage:
+            return page_dcraw;
+        case Setup::IOFilesPage:
+            return page_iofiles;
+        case Setup::SlideshowPage:
+            return page_slideshow;
+        case Setup::ICCPage:
+            return page_icc;
+        case Setup::KipiPluginsPage:
+            return page_plugins;
+        case Setup::CameraPage:
+            return page_camera;
+        case Setup::MiscellaneousPage:
+            return page_misc;
         default:
-            setCurrentPage(d->page_collections);
-            break;
+            return 0;
     }
 }
 
