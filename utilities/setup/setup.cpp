@@ -282,7 +282,7 @@ bool Setup::exec(QWidget *parent, Page page)
 {
     Setup setup(parent);
     setup.showPage(page);
-    return setup.exec() == QDialog::Accepted;
+    return setup.KPageDialog::exec() == QDialog::Accepted;
 }
 
 bool Setup::execSinglePage(Page page)
@@ -295,7 +295,7 @@ bool Setup::execSinglePage(QWidget *parent, Page page)
     Setup setup(parent);
     setup.showPage(page);
     setup.setFaceType(Plain);
-    return setup.exec() == QDialog::Accepted;
+    return setup.KPageDialog::exec() == QDialog::Accepted;
 }
 
 void Setup::slotOkClicked()
