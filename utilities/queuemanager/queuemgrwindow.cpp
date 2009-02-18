@@ -666,7 +666,7 @@ void QueueMgrWindow::slotSetup()
 
 void QueueMgrWindow::setup(Setup::Page page)
 {
-    Setup setup(this, 0, page);
+    Setup setup(this, page);
 
     if (setup.exec() != QDialog::Accepted)
         return;

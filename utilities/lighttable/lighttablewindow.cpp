@@ -1449,7 +1449,7 @@ void LightTableWindow::slotNewToolbarConfig()
 
 void LightTableWindow::slotSetup()
 {
-    Setup setup(this, 0);
+    Setup setup(this);
 
     if (setup.exec() != QDialog::Accepted)
         return;

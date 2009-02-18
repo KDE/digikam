@@ -1942,7 +1942,7 @@ void CameraUI::slotNewToolbarConfig()
 
 void CameraUI::slotSetup()
 {
-    Setup setup(this, 0);
+    Setup setup(this);
 
     if (setup.exec() != QDialog::Accepted)
         return;

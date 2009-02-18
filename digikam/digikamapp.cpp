@@ -2038,7 +2038,7 @@ void DigikamApp::slotSetup()
 
 bool DigikamApp::setup(bool iccSetupPage)
 {
-    Setup setup(this, 0, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);
+    Setup setup(this, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);
 
     // To show the number of KIPI plugins in the setup dialog.
 
@@ -2057,7 +2057,7 @@ bool DigikamApp::setup(bool iccSetupPage)
 
 void DigikamApp::slotSetupCamera()
 {
-    Setup setup(this, 0, Setup::CameraPage);
+    Setup setup(this, Setup::CameraPage);
 
     // For to show the number of KIPI plugins in the setup dialog.
 

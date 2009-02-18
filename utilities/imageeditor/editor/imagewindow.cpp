@@ -865,7 +865,7 @@ void ImageWindow::slotUpdateItemInfo()
 
 bool ImageWindow::setup(bool iccSetupPage)
 {
-    Setup setup(this, 0, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);
+    Setup setup(this, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);
 
     if (setup.exec() != QDialog::Accepted)
         return false;
