@@ -274,6 +274,14 @@ public:
     void       setEmbeddedText(const QString& key, const QString& text);
     QString    embeddedText(const QString& key) const;
 
+    /** Use this method to update lead metadata after image transformations.
+        This fix Iptc preview, Exif thumbnail, image size informations, etc.
+        'destMimeType' is destination type mime. In some case, any metadata are not updated by the same way.
+        'originalFileName' is original file name. Can be empty.
+        'setExifOrientationTag' is used to force Exif orientation flag to normal.
+     */
+    void       updateMetadata(const QString& destMimeType, const QString& originalFileName,
+                              bool setExifOrientationTag);
 
     /** Return a deep copy of full image */
     DImg       copy();

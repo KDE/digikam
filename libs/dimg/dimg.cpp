@@ -73,6 +73,7 @@ extern "C"
 #include "qimageloader.h"
 #include "icctransform.h"
 #include "exposurecontainer.h"
+#include "dmetadata.h"
 #include "dimgprivate.h"
 #include "dimgloaderobserver.h"
 
@@ -1821,5 +1822,64 @@ QByteArray DImg::getUniqueHash(const QString &filePath)
     return DImgLoader::uniqueHash(filePath, DImg(), true);
 }
 
+void DImg::updateMetadata(const QString& destMimeType, const QString& originalFileName, bool setExifOrientationTag)
+{
+    // Get image Exif/IPTC data.
+    DMetadata meta;
+    meta.setExif(getExif());
+    meta.setIptc(getIptc());
+    meta.setXmp(getXmp());
+
+    // Update IPTC preview.
+    // NOTE: see B.K.O #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
+    // bigger than 64K during of image preview tag size, the target JPEG image will be
+    // broken. Note that IPTC image preview tag is limited to 256K!!!
+    // There is no limitation with TIFF and PNG about IPTC byte array size.
+
+    // Before to update IPTC preview, we remove it.
+    meta.removeIptcTag("Iptc.Application2.Preview");
+    meta.removeIptcTag("Iptc.Application2.PreviewFormat");
+    meta.removeIptcTag("Iptc.Application2.PreviewVersion");
+
+    QSize previewSize = size();
+    previewSize.scale(1280, 1024, Qt::KeepAspectRatio);
+    QImage preview;
+    // Ensure that preview is not upscaled
+    if (previewSize.width() >= (int)width())
+        preview = copyQImage();
+    else
+        preview = smoothScale(previewSize.width(), previewSize.height(), Qt::IgnoreAspectRatio).copyQImage();
+
+    // With JPEG file, we don't store IPTC preview.
+    // NOTE: only store preview if pixel number is at least two times bigger
+    if (/* (2*(previewSize.width() * previewSize.height()) < (int)(d->image.width() * d->image.height())) &&*/
+        (destMimeType.toUpper() != QString("JPG") && destMimeType.toUpper() != QString("JPEG") &&
+         destMimeType.toUpper() != QString("JPE"))
+       )
+    {
+        // Non JPEG file, we update IPTC preview
+        meta.setImagePreview(preview);
+    }
+
+    // Update Exif thumbnail.
+    QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    meta.setExifThumbnail(thumb);
+
+    // Update Exif Image dimensions.
+    meta.setImageDimensions(size());
+
+    // Update Exif Document Name tag with the original file name.
+    if (!originalFileName.isEmpty())
+        meta.setExifTagString("Exif.Image.DocumentName", originalFileName);
+
+    // Update Exif Orientation tag if necessary.
+    if(setExifOrientationTag)
+        meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
+
+    // Store new Exif/IPTC/XMP data into image.
+    setExif(meta.getExif());
+    setIptc(meta.getIptc());
+    setXmp(meta.getXmp());
+}
 
 }  // namespace Digikam

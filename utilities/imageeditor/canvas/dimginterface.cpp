@@ -595,7 +595,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
         mimeType = getImageFormat();
 
     kDebug(50003) << "Saving to :" << QFile::encodeName(fileName).data() << " ("
-             << mimeType << ")" << endl;
+                  << mimeType << ")" << endl;
 
     // JPEG file format.
     if ( mimeType.toUpper() == QString("JPG") || mimeType.toUpper() == QString("JPEG") ||
@@ -626,61 +626,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
 
     d->savingFilename = fileName;
 
-    // Get image Exif/IPTC data.
-    DMetadata meta;
-    meta.setExif(d->image.getExif());
-    meta.setIptc(d->image.getIptc());
-    meta.setXmp(d->image.getXmp());
-
-    // Update IPTC preview.
-    // NOTE: see B.K.O #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
-    // bigger than 64K during of image preview tag size, the target JPEG image will be
-    // broken. Note that IPTC image preview tag is limited to 256K!!!
-    // There is no limitation with TIFF and PNG about IPTC byte array size.
-
-    // Before to update IPTC preview, we remove it.
-    meta.removeIptcTag("Iptc.Application2.Preview");
-    meta.removeIptcTag("Iptc.Application2.PreviewFormat");
-    meta.removeIptcTag("Iptc.Application2.PreviewVersion");
-
-    QSize previewSize = d->image.size();
-    previewSize.scale(1280, 1024, Qt::KeepAspectRatio);
-    QImage preview;
-    // Ensure that preview is not upscaled
-    if (previewSize.width() >= (int)d->image.width())
-        preview = d->image.copyQImage();
-    else
-        preview = d->image.smoothScale(previewSize.width(), previewSize.height(), Qt::IgnoreAspectRatio).copyQImage();
-
-    // With JPEG file, we don't store IPTC preview.
-    // NOTE: only store preview if pixel number is at least two times bigger
-    if (/* (2*(previewSize.width() * previewSize.height()) < (int)(d->image.width() * d->image.height())) &&*/
-        (mimeType.toUpper() != QString("JPG") && mimeType.toUpper() != QString("JPEG") &&
-         mimeType.toUpper() != QString("JPE"))
-       )
-    {
-        // Non JPEG file, we update IPTC preview
-        meta.setImagePreview(preview);
-    }
-
-    // Update Exif thumbnail.
-    QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    meta.setExifThumbnail(thumb);
-
-    // Update Exif Image dimensions.
-    meta.setImageDimensions(d->image.size());
-
-    // Update Exif Document Name tag with the original file name.
-    meta.setExifTagString("Exif.Image.DocumentName", getImageFileName());
-
-    // Update Exif Orientation tag if necessary.
-    if( setExifOrientationTag )
-        meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
-
-    // Store new Exif/IPTC/XMP data into image.
-    d->image.setExif(meta.getExif());
-    d->image.setIptc(meta.getIptc());
-    d->image.setXmp(meta.getXmp());
+    d->image.updateMetadata(mimeType, getImageFileName(), setExifOrientationTag);
 
     d->thread->save(d->image, fileName, mimeType);
 }
