@@ -3,7 +3,7 @@ digiKam 0.9.5-rc1 - Release date: 2009-02-xx
 
 NEW FEATURES: 
 
-
+General        : Internal CImg library updated to 1.3.0.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
