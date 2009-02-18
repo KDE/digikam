@@ -734,6 +734,16 @@ void ShowFoto::slotFilePrint()
     printImage(d->currentItem->url());
 }
 
+bool ShowFoto::setup()
+{
+    return setup(false);
+}
+
+bool ShowFoto::setupICC()
+{
+    return setup(true);
+}
+
 bool ShowFoto::setup(bool iccSetupPage)
 {
     Setup setup(this, 0, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);

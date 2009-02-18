@@ -57,9 +57,12 @@ public:
     ~ShowFoto();
 
     virtual void show();
-    bool setup(bool iccSetupPage=false);
+    bool setup();
+    bool setupICC();
 
 private:
+
+    bool setup(bool iccSetupPage=false);
 
     bool queryClose();
     bool queryExit();
