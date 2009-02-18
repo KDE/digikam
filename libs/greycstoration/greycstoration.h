@@ -1,7 +1,7 @@
 /*
   #
   #  File        : greycstoration.h
-  #                ( C++ header file )
+  #                ( C++ header file - CImg plug-in )
   #
   #  Description : GREYCstoration plug-in allowing easy integration in
   #                third parties softwares.
@@ -409,7 +409,7 @@ static void* greycstoration_thread(void *arg) {
                 else img.blur_anisotropic(mask_tile,p.amplitude,p.sharpness,p.anisotropy,
                                           p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,p.interpolation,p.fast_approx,p.gfact);
                 greycstoration_mutex_lock(p);
-                temporary.draw_image(img.crop(b,b,b,img.width-b,img.height-b,img.depth-b),x,y,z);
+                temporary.draw_image(x,y,z,img.crop(b,b,b,img.width-b,img.height-b,img.depth-b));
               }
       } else {
         for (unsigned int y=0; y<source.height && !*(p.stop_request); y+=p.tile)
@@ -427,7 +427,7 @@ static void* greycstoration_thread(void *arg) {
               if (p.patch_based) img.blur_patch(p.patch_size,p.sigma_p,p.sigma_s,p.lookup_size,p.fast_approx);
               else img.blur_anisotropic(mask_tile,p.amplitude,p.sharpness,p.anisotropy,
                                         p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,p.interpolation,p.fast_approx,p.gfact);
-              temporary.draw_image(img.crop(b,b,img.width-b,img.height-b),x,y);
+              temporary.draw_image(x,y,img.crop(b,b,img.width-b,img.height-b));
               greycstoration_mutex_lock(p);
             }
       }
