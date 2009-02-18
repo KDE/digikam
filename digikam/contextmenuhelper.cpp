@@ -134,7 +134,6 @@ void ContextMenuHelper::addActionThumbnail(KMenu& menu, imageIds& ids, Album* al
             thumbnailAction = new QAction(i18n("Set as Album Thumbnail"), this);
         else if (album->type() == Album::TAG )
             thumbnailAction = new QAction(i18n("Set as Tag Thumbnail"), this);
-
         addAction(menu, thumbnailAction);
         menu.addSeparator();
     }
@@ -260,26 +259,19 @@ void ContextMenuHelper::addAlbumActions(KMenu& menu)
         menu.addActions(albumActions);
 }
 
-void ContextMenuHelper::addGotoMenu(KMenu& menu, imageIds& ids, QObject* recv, const char* slot)
+void ContextMenuHelper::addGotoMenu(KMenu& menu, imageIds& ids, QAction* gotoAlbum, QAction* gotoDate)
 {
     // when more then one item is selected, don't add the menu
-    if (ids.count() > 1)
-        return;
+    if (ids.count() > 1) return;
+
+    if (!gotoAlbum || !gotoDate) return;
 
     // the currently selected image is always the first item
     ImageInfo item(ids.first());
 
-    KMenu *gotoMenu    = new KMenu(&menu);
-    QAction *gotoAlbum = new QAction(SmallIcon("folder-image"),        i18n("Album"), gotoMenu);
-    QAction *gotoDate  = new QAction(SmallIcon("view-calendar-month"), i18n("Date"),  gotoMenu);
+    KMenu   *gotoMenu  = new KMenu(&menu);
     gotoMenu->addAction(gotoAlbum);
     gotoMenu->addAction(gotoDate);
-
-    connect(gotoAlbum, SIGNAL(triggered()),
-            recv, slot);
-
-    connect(gotoDate, SIGNAL(triggered()),
-            recv, slot);
 
     TagsPopupMenu *gotoTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::DISPLAY, gotoMenu);
     QAction *gotoTag = gotoMenu->addMenu(gotoTagsPopup);
@@ -291,9 +283,7 @@ void ContextMenuHelper::addGotoMenu(KMenu& menu, imageIds& ids, QObject* recv, c
         gotoTag->setEnabled(false);
 
     connect(gotoTagsPopup, SIGNAL(signalTagActivated(int)),
-            recv, slot);
-//    connect(gotoTagsPopup, SIGNAL(signalTagActivated(int)),
-//            this, SLOT(slotGotoTag(int)));
+            this, SLOT(slotGotoTag(int)));
 
     Album* currentAlbum = AlbumManager::instance()->currentAlbum();
 

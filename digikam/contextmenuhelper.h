@@ -91,23 +91,23 @@ public:
 
     // add special actions
     virtual void addActionLightTable(KMenu& menu);
-    virtual void addActionThumbnail(KMenu& menu, imageIds&, Album* album);
+    virtual void addActionThumbnail(KMenu& menu, imageIds& imageIds, Album* album);
 
     // add special menus
-    virtual void addKipiActions(KMenu&);
-    virtual void addServicesMenu(KMenu&, const ImageInfo&, QMap<QAction*, KService::Ptr>&);
-    virtual void addGotoMenu(KMenu&, imageIds&, QObject* recv, const char* slot);
-    virtual void addQueueManagerMenu(KMenu&);
+    virtual void addKipiActions(KMenu& menu);
+    virtual void addServicesMenu(KMenu& menu, const ImageInfo&, QMap<QAction*, KService::Ptr>&);
+    virtual void addGotoMenu(KMenu& menu, imageIds& imageIDs, QAction*, QAction*);
+    virtual void addQueueManagerMenu(KMenu& menu);
 
-    virtual void addAssignTagsMenu(KMenu&, imageIds&, QObject* recv, const char* slot);
-    virtual void addRemoveTagsMenu(KMenu&, imageIds&, QObject* recv, const char* slot);
+    virtual void addAssignTagsMenu(KMenu& menu, imageIds& imageIDs, QObject* recv, const char* slot);
+    virtual void addRemoveTagsMenu(KMenu& menu, imageIds& imageIDs, QObject* recv, const char* slot);
 
-    virtual void addRatingMenu(KMenu&, QObject* recv, const char* slot);
+    virtual void addRatingMenu(KMenu& menu, QObject* recv, const char* slot);
 
-    virtual void addImportMenu(KMenu&);
-    virtual void addExportMenu(KMenu&);
-    virtual void addBatchMenu(KMenu&);
-    virtual void addAlbumActions(KMenu&);
+    virtual void addImportMenu(KMenu& menu);
+    virtual void addExportMenu(KMenu& menu);
+    virtual void addBatchMenu(KMenu& menu);
+    virtual void addAlbumActions(KMenu& menu);
 
 
 private:
