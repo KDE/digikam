@@ -337,27 +337,24 @@ void ImagePreviewView::slotContextMenu()
     if (d->imageInfo.isNull())
         return;
 
-    // --------------------------------------------------------
-
-    DPopupMenu popmenu(this);
-
     QMap<QAction*, KService::Ptr> servicesMap;
     QList<qlonglong> idList;
     idList << d->imageInfo.id();
 
-    QAction *back2AlbumAction = new QAction(SmallIcon("folder-image"), i18n("Back to Album"), this);
+    // Temporary actions --------------------------------------
 
-    QAction *prevAction = new QAction(SmallIcon("go-previous"), i18nc("go to previous image", "Back"), this);
+    QAction *back2AlbumAction, *prevAction, *nextAction = 0;
+
+    back2AlbumAction = new QAction(SmallIcon("folder-image"), i18n("Back to Album"), this);
+    prevAction       = new QAction(SmallIcon("go-previous"),  i18nc("go to previous image", "Back"), this);
+    nextAction       = new QAction(SmallIcon("go-next"),      i18nc("go to next image", "Forward"), this);
     prevAction->setEnabled(d->hasPrev);
-
-    QAction *nextAction = new QAction(SmallIcon("go-next"), i18nc("go to next image", "Forward"), this);
     nextAction->setEnabled(d->hasNext);
 
     // --------------------------------------------------------
 
-//    d->contextMenuHelper->addAction(popmenu, "full_screen");
-//    popmenu.addSeparator();
-    // --------------------------------------------------------
+    DPopupMenu popmenu(this);
+
     d->contextMenuHelper->addAction(popmenu, prevAction, true);
     d->contextMenuHelper->addAction(popmenu, nextAction, true);
     d->contextMenuHelper->addAction(popmenu, back2AlbumAction);
@@ -380,7 +377,7 @@ void ImagePreviewView::slotContextMenu()
     // --------------------------------------------------------
     d->contextMenuHelper->addRatingMenu(popmenu, this, SLOT(slotAssignRating(int)));
 
-    // --------------------------------------------------------
+    // special action handling --------------------------------
 
     QAction *choice = popmenu.exec(QCursor::pos());
     if (choice)
@@ -404,6 +401,13 @@ void ImagePreviewView::slotContextMenu()
             KRun::run(*imageServicePtr, url, this);
         }
     }
+
+    // cleanup -------------------------
+
+    popmenu.deleteLater();
+    delete back2AlbumAction;
+    delete prevAction;
+    delete nextAction;
 }
 
 void ImagePreviewView::slotAssignTag(int tagID)
