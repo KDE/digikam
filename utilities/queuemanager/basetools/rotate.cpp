@@ -181,7 +181,9 @@ bool Rotate::toolOperations()
                 break;
 
             default:
-                kDebug(50003) << "Unknow Exif orientation" << endl;
+                // DMetadata::ORIENTATION_NORMAL
+                // DMetadata::ORIENTATION_UNSPECIFIED
+                // Nothing to do...
                 break;
         }
     }
