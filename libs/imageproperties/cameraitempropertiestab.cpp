@@ -94,7 +94,7 @@ public:
         labelPhotoDateTime     = 0;
         labelPhotoLens         = 0;
         labelPhotoAperture     = 0;
-        labelPhotoFocalLenght  = 0;
+        labelPhotoFocalLength  = 0;
         labelPhotoExposureTime = 0;
         labelPhotoSensitivity  = 0;
         labelPhotoExposureMode = 0;
@@ -143,7 +143,7 @@ public:
     DTextLabelValue *labelPhotoDateTime;
     DTextLabelValue *labelPhotoLens;
     DTextLabelValue *labelPhotoAperture;
-    DTextLabelValue *labelPhotoFocalLenght;
+    DTextLabelValue *labelPhotoFocalLength;
     DTextLabelValue *labelPhotoExposureTime;
     DTextLabelValue *labelPhotoSensitivity;
     DTextLabelValue *labelPhotoExposureMode;
@@ -209,7 +209,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent)
     d->labelPhotoDateTime     = new DTextLabelValue(0, settingsArea);
     d->labelPhotoLens         = new DTextLabelValue(0, settingsArea);
     d->labelPhotoAperture     = new DTextLabelValue(0, settingsArea);
-    d->labelPhotoFocalLenght  = new DTextLabelValue(0, settingsArea);
+    d->labelPhotoFocalLength  = new DTextLabelValue(0, settingsArea);
     d->labelPhotoExposureTime = new DTextLabelValue(0, settingsArea);
     d->labelPhotoSensitivity  = new DTextLabelValue(0, settingsArea);
     d->labelPhotoExposureMode = new DTextLabelValue(0, settingsArea);
@@ -269,7 +269,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent)
     settingsLayout->addWidget(d->aperture,               21, 0, 1, 1);
     settingsLayout->addWidget(d->labelPhotoAperture,     21, 1, 1, 1);
     settingsLayout->addWidget(d->focalLength,            22, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoFocalLenght,  22, 1, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoFocalLength,  22, 1, 1, 1);
     settingsLayout->addWidget(d->exposureTime,           23, 0, 1, 1);
     settingsLayout->addWidget(d->labelPhotoExposureTime, 23, 1, 1, 1);
     settingsLayout->addWidget(d->sensitivity,            24, 0, 1, 1);
@@ -314,7 +314,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
         d->labelPhotoDateTime->setText(QString());
         d->labelPhotoLens->setText(QString());
         d->labelPhotoAperture->setText(QString());
-        d->labelPhotoFocalLenght->setText(QString());
+        d->labelPhotoFocalLength->setText(QString());
         d->labelPhotoExposureTime->setText(QString());
         d->labelPhotoSensitivity->setText(QString());
         d->labelPhotoExposureMode->setText(QString());
@@ -459,7 +459,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
         d->labelPhotoDateTime->hide();
         d->labelPhotoLens->hide();
         d->labelPhotoAperture->hide();
-        d->labelPhotoFocalLenght->hide();
+        d->labelPhotoFocalLength->hide();
         d->labelPhotoExposureTime->hide();
         d->labelPhotoSensitivity->hide();
         d->labelPhotoExposureMode->hide();
@@ -485,7 +485,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
         d->labelPhotoDateTime->show();
         d->labelPhotoLens->show();
         d->labelPhotoAperture->show();
-        d->labelPhotoFocalLenght->show();
+        d->labelPhotoFocalLength->show();
         d->labelPhotoExposureTime->show();
         d->labelPhotoSensitivity->show();
         d->labelPhotoExposureMode->show();
@@ -508,12 +508,12 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
     d->labelPhotoAperture->setText(photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture);
 
     if (photoInfo.focalLength35mm.isEmpty())
-        d->labelPhotoFocalLenght->setText(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
+        d->labelPhotoFocalLength->setText(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
     else
     {
         str = i18n("%1 (35mm: %2)", photoInfo.focalLength,
                    photoInfo.focalLength35mm);
-        d->labelPhotoFocalLenght->setText(str);
+        d->labelPhotoFocalLength->setText(str);
     }
 
     d->labelPhotoExposureTime->setText(photoInfo.exposureTime.isEmpty() ? unavailable : photoInfo.exposureTime);
