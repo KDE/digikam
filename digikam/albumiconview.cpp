@@ -588,14 +588,9 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     // This is needed both for the goto tags submenu here and also
     // for the "move to trash" and further actions below.
     QList<qlonglong> selectedImageIDs;
-
-    for (IconItem *it = firstItem(); it; it=it->nextItem())
+    foreach (ImageInfo info, selectedImageInfos())
     {
-        if (it->isSelected())
-        {
-            AlbumIconItem *selItem = static_cast<AlbumIconItem *>(it);
-            selectedImageIDs.append(selItem->imageInfo().id());
-        }
+        selectedImageIDs << info.id();
     }
 
     // --------------------------------------------------------
