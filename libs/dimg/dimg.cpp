@@ -460,11 +460,8 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
     return false;
 }
 
-bool DImg::save(const QString& filePath, FORMAT frm, DImgLoaderObserver *observer)
+QString DImg::formatToMimeType(FORMAT frm)
 {
-    if (isNull())
-        return false;
-
     QString format;
 
     switch (frm)
@@ -505,7 +502,15 @@ bool DImg::save(const QString& filePath, FORMAT frm, DImgLoaderObserver *observe
             break;
         }
     }
-    return( save(filePath, format, observer) );
+    return format;
+}
+
+bool DImg::save(const QString& filePath, FORMAT frm, DImgLoaderObserver *observer)
+{
+    if (isNull())
+        return false;
+
+    return( save(filePath, formatToMimeType(frm), observer) );
 }
 
 bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserver *observer)

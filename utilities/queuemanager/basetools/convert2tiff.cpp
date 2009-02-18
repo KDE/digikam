@@ -102,6 +102,7 @@ bool Convert2TIFF::toolOperations()
         return false;
 
     img.setAttribute("compress", settings()["compress"].toBool());
+    img.updateMetadata("TIFF", QString(), getExifSetOrientation());
 
     return( img.save(outputUrl().path(), "TIFF") );
 }

@@ -107,6 +107,8 @@ public:
     /** Identify file format */
     static FORMAT fileFormat(const QString& filePath);
 
+    static QString formatToMimeType(FORMAT frm);
+
     /** Create null image */
     DImg();
 

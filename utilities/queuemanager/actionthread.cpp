@@ -53,8 +53,9 @@ public:
 
     ActionThreadPriv()
     {
-        running = false;
-        cancel  = false;
+        running            = false;
+        cancel             = false;
+        exifSetOrientation = true;
     }
 
     class Task
@@ -68,6 +69,7 @@ public:
 
     bool           running;
     bool           cancel;
+    bool           exifSetOrientation;
 
     QMutex         mutex;
 
@@ -97,6 +99,11 @@ ActionThread::~ActionThread()
 void ActionThread::setWorkingUrl(const KUrl& workingUrl)
 {
     d->workingUrl = workingUrl;
+}
+
+void ActionThread::setExifSetOrientation(bool set)
+{
+    d->exifSetOrientation = set;
 }
 
 void ActionThread::processFile(const AssignedBatchTools& item)
@@ -168,6 +175,7 @@ void ActionThread::run()
 
                 tool->setCancelFlag(&d->cancel);
                 tool->setWorkingUrl(d->workingUrl);
+                tool->setExifSetOrientation(d->exifSetOrientation);
                 tool->setInputUrl(inUrl);
                 tool->setSettings(settings);
                 tool->setInputUrl(inUrl);

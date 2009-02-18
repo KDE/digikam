@@ -134,6 +134,8 @@ bool AutoCorrection::toolOperations()
 
     DImg::FORMAT format = (DImg::FORMAT)(img.attribute("detectedFileFormat").toInt());
 
+    img.updateMetadata(DImg::formatToMimeType(format), QString(), getExifSetOrientation());
+
     return( img.save(outputUrl().path(), format) );
 }
 

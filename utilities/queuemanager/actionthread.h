@@ -52,6 +52,7 @@ public:
     ~ActionThread();
 
     void setWorkingUrl(const KUrl& workingUrl);
+    void setExifSetOrientation(bool set);
 
     void processFile(const AssignedBatchTools& item);
 

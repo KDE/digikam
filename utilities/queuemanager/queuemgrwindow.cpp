@@ -155,6 +155,7 @@ void QueueMgrWindow::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Batch Queue Manager Settings");
     // TODO
+
 }
 
 void QueueMgrWindow::writeSettings()
@@ -197,6 +198,7 @@ void QueueMgrWindow::applySettings()
     }
 
     d->thread->setWorkingUrl(d->processedItemsAlbumUrl);
+    d->thread->setExifSetOrientation(AlbumSettings::instance()->getExifSetOrientation());
 }
 
 void QueueMgrWindow::closeEvent(QCloseEvent* e)

@@ -92,6 +92,9 @@ public:
     void setWorkingUrl(const KUrl& workingUrl);
     KUrl workingUrl() const;
 
+    void setExifSetOrientation(bool set);
+    bool getExifSetOrientation() const;
+
     void setCancelFlag(const bool* cancel);
 
     bool apply();

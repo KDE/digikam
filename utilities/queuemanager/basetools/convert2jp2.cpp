@@ -107,6 +107,7 @@ bool Convert2JP2::toolOperations()
 
     bool lossless = settings()["lossless"].toBool();
     img.setAttribute("quality", lossless ? 100 : settings()["quality"].toInt());
+    img.updateMetadata("JP2", QString(), getExifSetOrientation());
 
     return ( img.save(outputUrl().path(), "JP2") );
 }

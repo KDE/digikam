@@ -107,6 +107,7 @@ bool Convert2JPEG::toolOperations()
 
     img.setAttribute("quality",     settings()["Quality"].toInt());
     img.setAttribute("subsampling", settings()["SubSampling"].toInt());
+    img.updateMetadata("JPEG", QString(), getExifSetOrientation());
 
     return( img.save(outputUrl().path(), "JPEG") );
 }

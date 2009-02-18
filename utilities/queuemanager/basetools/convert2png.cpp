@@ -102,6 +102,7 @@ bool Convert2PNG::toolOperations()
         return false;
 
     img.setAttribute("quality", settings()["Quality"].toInt());
+    img.updateMetadata("PNG", QString(), getExifSetOrientation());
 
     return( img.save(outputUrl().path(), "PNG") );
 }

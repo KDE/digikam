@@ -45,10 +45,12 @@ public:
 
     BatchToolPriv()
     {
-        cancel         = 0;
-        settingsWidget = 0;
+        cancel             = 0;
+        settingsWidget     = 0;
+        exifSetOrientation = true;
     }
 
+    bool                      exifSetOrientation;
     const bool*               cancel;
 
     QString                   toolTitle;          // User friendly tool title.
@@ -150,6 +152,16 @@ void BatchTool::setOutputUrl(const KUrl& outputUrl)
 KUrl BatchTool::outputUrl() const
 {
     return d->outputUrl;
+}
+
+void BatchTool::setExifSetOrientation(bool set)
+{
+    d->exifSetOrientation = set;
+}
+
+bool BatchTool::getExifSetOrientation() const
+{
+    return d->exifSetOrientation;
 }
 
 void BatchTool::setWorkingUrl(const KUrl& workingUrl)
