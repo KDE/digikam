@@ -73,6 +73,8 @@ public:
     static bool execSinglePage(Page page);
     static bool execSinglePage(QWidget *parent, Page page);
 
+    QSize sizeHint() const;
+
 private slots:
 
     void slotOkClicked();

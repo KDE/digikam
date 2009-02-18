@@ -254,6 +254,17 @@ Setup::Setup(QWidget* parent)
                             "<i>Customize behavior of other parts of digiKam</i></qt>"));
     d->page_misc->setIcon(KIcon("preferences-other"));
 
+    for (int page = 0; page != SetupPageEnumLast; page++)
+    {
+        KPageWidgetItem *item = d->pageItem((Page)page);
+        if (!item)
+            continue;
+        QWidget *page = item->widget();
+        QScrollArea *scrollArea = qobject_cast<QScrollArea*>(page);
+        if (scrollArea)
+            scrollArea->setFrameShape(QFrame::NoFrame);
+    }
+
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
 
@@ -272,6 +283,46 @@ Setup::~Setup()
     saveDialogSize(group);
     config->sync();
     delete d;
+}
+
+QSize Setup::sizeHint() const
+{
+    // The minimum size is very small. But the default initial size is such
+    // that some important tabs get a scroll bar, although the dialog could be larger
+    // on a normal display (QScrollArea size hint does not take widget into account)
+    // Adjust size hint here so that certain selected tabs are display full per default.
+    QSize hint = KPageDialog::sizeHint();
+    int maxHintHeight = 0;
+    int maxWidgetHeight = 0;
+    for (int page = 0; page != SetupPageEnumLast; page++)
+    {
+        // only take tabs into account here that should better be displayed without scrolling
+        if (page == CollectionsPage ||
+            page == AlbumViewPage ||
+            page == IdentifyPage ||
+            page == MimePage ||
+            page == QueuePage ||
+            page == LightTablePage ||
+            page == EditorPage ||
+            page == IOFilesPage ||
+            page == DcrawPage ||
+            page == MiscellaneousPage)
+        {
+            KPageWidgetItem *item = d->pageItem((Page)page);
+            if (!item)
+                continue;
+            QWidget *page = item->widget();
+            maxHintHeight = qMax(maxHintHeight, page->sizeHint().height());
+            QScrollArea *scrollArea = qobject_cast<QScrollArea*>(page);
+            if (scrollArea)
+                maxWidgetHeight = qMax(maxWidgetHeight, scrollArea->widget()->sizeHint().height());
+        }
+    }
+    // The additional 20 is a hack to make it work.
+    // Don't know why, the largest page would have scroll bars without this
+    if (maxWidgetHeight > maxHintHeight)
+        hint.setHeight(hint.height() + (maxWidgetHeight - maxHintHeight) + 20);
+    return hint;
 }
 
 bool Setup::exec(Page page)
