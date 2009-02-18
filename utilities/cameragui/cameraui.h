@@ -122,9 +122,9 @@ private slots:
     void slotConnected(bool val);
     void slotBusy(bool val);
     void slotErrorMsg(const QString& msg);
-    void slotInformations();
+    void slotInformation();
     void slotCapture();
-    void slotCameraInformations(const QString&, const QString&, const QString&);
+    void slotCameraInformation(const QString&, const QString&, const QString&);
     void slotCameraFreeSpaceInfo(unsigned long kBSize, unsigned long kBAvail);
     void slotCollectionLocationStatusChanged(const CollectionLocation &location, int oldStatus);
 

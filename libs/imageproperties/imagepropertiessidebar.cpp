@@ -145,7 +145,7 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
     if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
     {
         m_propertiesTab->setCurrentURL(m_currentURL);
-        setImagePropertiesInformations(m_currentURL);
+        setImagePropertiesInformation(m_currentURL);
         m_dirtyPropertiesTab = true;
     }
     else if (tab == m_metadataTab && !m_dirtyMetadataTab)
@@ -167,7 +167,7 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
     unsetCursor();
 }
 
-void ImagePropertiesSideBar::setImagePropertiesInformations(const KUrl& url)
+void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
 {
     QString str;
     QString unavailable(i18n("<i>unavailable</i>"));
@@ -283,7 +283,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformations(const KUrl& url)
 
     // -- Photograph information ------------------------------------------
 
-    PhotoInfoContainer photoInfo = metaData.getPhotographInformations();
+    PhotoInfoContainer photoInfo = metaData.getPhotographInformation();
 
     m_propertiesTab->setPhotoInfoDisable(photoInfo.isEmpty());
 

@@ -379,13 +379,13 @@ QByteArray ImageIface::getXmpFromOriginalImage()
     return DImgInterface::defaultInterface()->getXmp();
 }
 
-PhotoInfoContainer ImageIface::getPhotographInformations() const
+PhotoInfoContainer ImageIface::getPhotographInformation() const
 {
     DMetadata meta;
     meta.setExif(DImgInterface::defaultInterface()->getExif());
     meta.setIptc(DImgInterface::defaultInterface()->getIptc());
     meta.setXmp(DImgInterface::defaultInterface()->getXmp());
-    return meta.getPhotographInformations();
+    return meta.getPhotographInformation();
 }
 
 void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,

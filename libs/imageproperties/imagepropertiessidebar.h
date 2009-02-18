@@ -71,7 +71,7 @@ protected slots:
 
 protected:
 
-    virtual void setImagePropertiesInformations(const KUrl& url);
+    virtual void setImagePropertiesInformation(const KUrl& url);
 
 protected:
 

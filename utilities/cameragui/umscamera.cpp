@@ -177,7 +177,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
                 meta.load(thmlo.filePath());
                 dt    = meta.getImageDateTime();
                 dims  = meta.getImageDimensions();
-                pInfo = meta.getPhotographInformations();
+                pInfo = meta.getPhotographInformation();
             }
             else if (thmup.exists())
             {
@@ -185,7 +185,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
                 meta.load(thmup.filePath());
                 dt    = meta.getImageDateTime();
                 dims  = meta.getImageDimensions();
-                pInfo = meta.getPhotographInformations();
+                pInfo = meta.getPhotographInformation();
             }
             else
             {
@@ -193,7 +193,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
                 meta.load(fi->filePath());
                 dt    = meta.getImageDateTime();
                 dims  = meta.getImageDimensions();
-                pInfo = meta.getPhotographInformations();
+                pInfo = meta.getPhotographInformation();
             }
 
             if (dt.isNull())
@@ -513,7 +513,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
         meta.load(fi.filePath());
         dt    = meta.getImageDateTime();
         dims  = meta.getImageDimensions();
-        pInfo = meta.getPhotographInformations();
+        pInfo = meta.getPhotographInformation();
 
         if (dt.isNull())
         {

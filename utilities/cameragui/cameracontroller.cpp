@@ -79,7 +79,7 @@ public:
         gp_none = 0,
         gp_connect,
         gp_cancel,
-        gp_cameraInformations,
+        gp_cameraInformation,
         gp_listfolders,
         gp_listfiles,
         gp_download,
@@ -355,7 +355,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
 
             break;
         }
-        case(CameraCommand::gp_cameraInformations):
+        case(CameraCommand::gp_cameraInformation):
         {
             sendInfo(i18n("Getting camera information..."));
 
@@ -365,7 +365,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             d->camera->cameraManual(manual);
             d->camera->cameraAbout(about);
 
-            emit signalCameraInformations(summary, manual, about);
+            emit signalCameraInformation(summary, manual, about);
             break;
         }
         case(CameraCommand::gp_freeSpace):
@@ -947,11 +947,11 @@ void CameraController::getExif(const QString& folder, const QString& file)
     addCommand(cmd);
 }
 
-void CameraController::getCameraInformations()
+void CameraController::getCameraInformation()
 {
     d->canceled        = false;
     CameraCommand *cmd = new CameraCommand;
-    cmd->action        = CameraCommand::gp_cameraInformations;
+    cmd->action        = CameraCommand::gp_cameraInformation;
     addCommand(cmd);
 }
 

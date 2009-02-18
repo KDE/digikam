@@ -99,7 +99,7 @@ private:
 
     void itemChanged(const KUrl& url, const ImageInfo &info, const QRect &rect, DImg *img);
     void itemChanged(const ImageInfoList infos, const QRect &rect, DImg *img);
-    void setImagePropertiesInformations(const KUrl& url);
+    void setImagePropertiesInformation(const KUrl& url);
 
 private:
 
