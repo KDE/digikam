@@ -503,6 +503,11 @@ void AlbumSettings::saveSettings()
     config->sync();
 }
 
+void AlbumSettings::emitSetupChanged()
+{
+    emit setupChanged();
+}
+
 QString AlbumSettings::getDatabaseFilePath() const
 {
     return d->databaseFilePath;

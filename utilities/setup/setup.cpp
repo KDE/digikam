@@ -37,6 +37,7 @@
 
 // Local includes.
 
+#include "albumsettings.h"
 #include "batchthumbsgenerator.h"
 #include "setupcollections.h"
 #include "setupalbumview.h"
@@ -317,6 +318,8 @@ void Setup::slotOkClicked()
     d->iccPage->applySettings();
     d->miscPage->applySettings();
     d->pluginsPage->applyPlugins();
+
+    AlbumSettings::instance()->emitSetupChanged();
 
     if (d->metadataPage->exifAutoRotateAsChanged())
     {

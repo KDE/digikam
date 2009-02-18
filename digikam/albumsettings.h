@@ -85,6 +85,8 @@ public:
     void readSettings();
     void saveSettings();
 
+    void emitSetupChanged();
+
     bool showToolTipsIsValid() const;
 
     void setDatabaseFilePath(const QString& path);
