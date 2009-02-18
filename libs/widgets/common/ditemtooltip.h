@@ -54,7 +54,7 @@ class DIGIKAM_EXPORT DToolTipStyleSheet
 public:
 
     DToolTipStyleSheet(const QFont& font = KGlobalSettings::generalFont())
-        : maxStringLenght(30)
+        : maxStringLength(30)
     {
         unavailable = i18n("unavailable");
 
@@ -90,7 +90,7 @@ public:
         QString str = input.simplified();
         str         = Qt::escape(str);
 
-        if (str.length() <= maxStringLenght)
+        if (str.length() <= maxStringLength)
             return str;
 
         QString br;
@@ -100,7 +100,7 @@ public:
 
         while (i < str.length())
         {
-            if (count >= maxStringLenght && str[i].isSpace())
+            if (count >= maxStringLength && str[i].isSpace())
             {
                 count = 0;
                 br.append("<br/>");
@@ -116,7 +116,7 @@ public:
         return br;
     };
 
-    const int maxStringLenght;
+    const int maxStringLength;
 
     QString   unavailable;
     QString   tipHeader;
