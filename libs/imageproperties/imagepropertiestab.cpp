@@ -92,7 +92,7 @@ public:
         labelPhotoDateTime     = 0;
         labelPhotoLens         = 0;
         labelPhotoAperture     = 0;
-        labelPhotoFocalLenght  = 0;
+        labelPhotoFocalLength  = 0;
         labelPhotoExposureTime = 0;
         labelPhotoSensitivity  = 0;
         labelPhotoExposureMode = 0;
@@ -146,7 +146,7 @@ public:
     DTextLabelValue *labelPhotoDateTime;
     DTextLabelValue *labelPhotoLens;
     DTextLabelValue *labelPhotoAperture;
-    DTextLabelValue *labelPhotoFocalLenght;
+    DTextLabelValue *labelPhotoFocalLength;
     DTextLabelValue *labelPhotoExposureTime;
     DTextLabelValue *labelPhotoSensitivity;
     DTextLabelValue *labelPhotoExposureMode;
@@ -218,7 +218,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
     d->labelPhotoDateTime     = new DTextLabelValue(0, settingsArea);
     d->labelPhotoLens         = new DTextLabelValue(0, settingsArea);
     d->labelPhotoAperture     = new DTextLabelValue(0, settingsArea);
-    d->labelPhotoFocalLenght  = new DTextLabelValue(0, settingsArea);
+    d->labelPhotoFocalLength  = new DTextLabelValue(0, settingsArea);
     d->labelPhotoExposureTime = new DTextLabelValue(0, settingsArea);
     d->labelPhotoSensitivity  = new DTextLabelValue(0, settingsArea);
     d->labelPhotoExposureMode = new DTextLabelValue(0, settingsArea);
@@ -294,7 +294,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
     settingsLayout->addWidget(d->aperture,               27, 0, 1, 1);
     settingsLayout->addWidget(d->labelPhotoAperture,     27, 1, 1, 1);
     settingsLayout->addWidget(d->focalLength,            28, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoFocalLenght,  28, 1, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoFocalLength,  28, 1, 1, 1);
     settingsLayout->addWidget(d->exposureTime,           29, 0, 1, 1);
     settingsLayout->addWidget(d->labelPhotoExposureTime, 29, 1, 1, 1);
     settingsLayout->addWidget(d->sensitivity,            30, 0, 1, 1);
@@ -339,7 +339,7 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
         d->labelPhotoDateTime->setText(QString());
         d->labelPhotoLens->setText(QString());
         d->labelPhotoAperture->setText(QString());
-        d->labelPhotoFocalLenght->setText(QString());
+        d->labelPhotoFocalLength->setText(QString());
         d->labelPhotoExposureTime->setText(QString());
         d->labelPhotoSensitivity->setText(QString());
         d->labelPhotoExposureMode->setText(QString());
@@ -377,7 +377,7 @@ void ImagePropertiesTab::setPhotoInfoDisable(bool b)
         d->labelPhotoDateTime->hide();
         d->labelPhotoLens->hide();
         d->labelPhotoAperture->hide();
-        d->labelPhotoFocalLenght->hide();
+        d->labelPhotoFocalLength->hide();
         d->labelPhotoExposureTime->hide();
         d->labelPhotoSensitivity->hide();
         d->labelPhotoExposureMode->hide();
@@ -403,7 +403,7 @@ void ImagePropertiesTab::setPhotoInfoDisable(bool b)
         d->labelPhotoDateTime->show();
         d->labelPhotoLens->show();
         d->labelPhotoAperture->show();
-        d->labelPhotoFocalLenght->show();
+        d->labelPhotoFocalLength->show();
         d->labelPhotoExposureTime->show();
         d->labelPhotoSensitivity->show();
         d->labelPhotoExposureMode->show();
@@ -493,7 +493,7 @@ void ImagePropertiesTab::setPhotoAperture(const QString& str)
 
 void ImagePropertiesTab::setPhotoFocalLength(const QString& str)
 {
-    d->labelPhotoFocalLenght->setText(str);
+    d->labelPhotoFocalLength->setText(str);
 }
 
 void ImagePropertiesTab::setPhotoExposureTime(const QString& str)
