@@ -139,10 +139,9 @@ public:
     SetupPlugins     *pluginsPage;
 };
 
-Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
+Setup::Setup(QWidget* parent, Setup::Page page)
      : KPageDialog(parent), d(new SetupPrivate)
 {
-    setObjectName(name);
     setCaption(i18n("Configure"));
     setButtons(Help|Ok|Cancel );
     setDefaultButton(Ok);
