@@ -1114,7 +1114,9 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             {
                 KMenu popMenu(this);
                 popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
-                QAction *setAction = popMenu.addAction(i18n("Set as Album Thumbnail"));
+                QAction *setAction = 0;
+                if (imageIDs.count() == 1)
+                    setAction = popMenu.addAction(i18n("Set as Album Thumbnail"));
                 popMenu.addSeparator();
                 popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
                 popMenu.setMouseTracking(true);
