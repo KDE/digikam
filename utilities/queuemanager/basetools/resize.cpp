@@ -55,13 +55,13 @@ Resize::Resize(QObject* parent)
     KVBox *vbox   = new KVBox;
     QLabel *label = new QLabel(vbox);
     m_comboBox    = new KComboBox(vbox);
-    m_comboBox->insertItem(Tiny,   i18n("Tiny (%1 pixels)",   presetLenghtValue(Tiny)));
-    m_comboBox->insertItem(Small,  i18n("Small (%1 pixels)",  presetLenghtValue(Small)));
-    m_comboBox->insertItem(Medium, i18n("Medium (%1 pixels)", presetLenghtValue(Medium)));
-    m_comboBox->insertItem(Big,    i18n("Big (%1 pixels)",    presetLenghtValue(Big)));
-    m_comboBox->insertItem(Large,  i18n("Large (%1 pixels)",  presetLenghtValue(Large)));
-    m_comboBox->insertItem(Huge,   i18n("Huge (%1 pixels)",   presetLenghtValue(Huge)));
-    label->setText(i18n("Lenght:"));
+    m_comboBox->insertItem(Tiny,   i18n("Tiny (%1 pixels)",   presetLengthValue(Tiny)));
+    m_comboBox->insertItem(Small,  i18n("Small (%1 pixels)",  presetLengthValue(Small)));
+    m_comboBox->insertItem(Medium, i18n("Medium (%1 pixels)", presetLengthValue(Medium)));
+    m_comboBox->insertItem(Big,    i18n("Big (%1 pixels)",    presetLengthValue(Big)));
+    m_comboBox->insertItem(Large,  i18n("Large (%1 pixels)",  presetLengthValue(Large)));
+    m_comboBox->insertItem(Huge,   i18n("Huge (%1 pixels)",   presetLengthValue(Huge)));
+    label->setText(i18n("Length:"));
     QLabel *space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
@@ -78,62 +78,62 @@ Resize::~Resize()
 BatchToolSettings Resize::defaultSettings()
 {
     BatchToolSettings settings;
-    settings.insert("LenghtPreset", Medium);
+    settings.insert("LengthPreset", Medium);
     return settings;
 }
 
 void Resize::assignSettings2Widget()
 {
-    m_comboBox->setCurrentIndex(settings()["LenghtPreset"].toInt());
+    m_comboBox->setCurrentIndex(settings()["LengthPreset"].toInt());
 }
 
 void Resize::slotSettingsChanged()
 {
     BatchToolSettings settings;
-    settings.insert("LenghtPreset", m_comboBox->currentIndex());
+    settings.insert("LengthPreset", m_comboBox->currentIndex());
     setSettings(settings);
 }
 
-int Resize::presetLenghtValue(WidthPreset preset)
+int Resize::presetLengthValue(WidthPreset preset)
 {
-    int lenght;
+    int length;
 
     switch(preset)
     {
         case Tiny:
-            lenght = 480;
+            length = 480;
             break;
         case Small:
-            lenght = 640;
+            length = 640;
             break;
         case Medium:
-            lenght = 800;
+            length = 800;
             break;
         case Big:
-            lenght = 1024;
+            length = 1024;
             break;
         case Large:
-            lenght = 1280;
+            length = 1280;
             break;
         default:   // Huge
-            lenght = 1600;
+            length = 1600;
             break;
     }
 
-    return lenght;
+    return length;
 }
 
 bool Resize::toolOperations()
 {
-    WidthPreset preset = (WidthPreset)(settings()["LenghtPreset"].toInt());
-    int lenght         = presetLenghtValue(preset);
+    WidthPreset preset = (WidthPreset)(settings()["LengthPreset"].toInt());
+    int length         = presetLengthValue(preset);
 
     DImg img;
     if (!img.load(inputUrl().path()))
         return false;
 
     QSize newSize(img.size());
-    newSize.scale(QSize(lenght, lenght), Qt::KeepAspectRatio);
+    newSize.scale(QSize(length, length), Qt::KeepAspectRatio);
     if (!newSize.isValid())
         return false;
 

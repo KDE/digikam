@@ -66,7 +66,7 @@ private:
 
     void assignSettings2Widget();
     bool toolOperations();
-    int  presetLenghtValue(WidthPreset preset);
+    int  presetLengthValue(WidthPreset preset);
 };
 
 }  // namespace Digikam
