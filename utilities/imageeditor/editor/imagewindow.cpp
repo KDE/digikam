@@ -300,7 +300,7 @@ void ImageWindow::setupConnections()
     connect(d->thumbBar, SIGNAL(signalUrlSelected(const KUrl&)),
             this, SLOT(slotThumbBarItemSelected(const KUrl&)));
 
-    connect(AlbumSettings::instance(), SIGNAL(signalSidebarTabTitleStyleChanged()),
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSidebarTabTitleStyleChanged()));
 }
 
@@ -863,17 +863,14 @@ void ImageWindow::slotUpdateItemInfo()
     }
 }
 
-bool ImageWindow::setup(bool iccSetupPage)
+bool ImageWindow::setup()
 {
-    Setup setup(this, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);
+    return Setup::exec(this);
+}
 
-    if (setup.exec() != QDialog::Accepted)
-        return false;
-
-    KGlobal::config()->sync();
-
-    applySettings();
-    return true;
+bool ImageWindow::setupICC()
+{
+    return Setup::execSinglePage(this, Setup::ICCPage);
 }
 
 void ImageWindow::saveIsComplete()

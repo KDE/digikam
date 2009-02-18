@@ -348,7 +348,7 @@ namespace Digikam
   void PrintOptionsPage::slotSetupDlg()
   {
     EditorWindow* editor = dynamic_cast<EditorWindow*>(d->mParent);
-    editor->setup(true);
+    editor->setupICC();
   }
 
 } // namespace

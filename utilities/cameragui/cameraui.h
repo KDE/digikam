@@ -81,7 +81,6 @@ public:
 signals:
 
     void signalLastDestination(const KUrl&);
-    void signalAlbumSettingsChanged();
 
 public slots:
 

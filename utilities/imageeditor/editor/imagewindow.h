@@ -70,7 +70,8 @@ public:
 
     void applySettings();
     void refreshView();
-    bool setup(bool iccSetupPage=false);
+    bool setup();
+    bool setupICC();
 
     bool queryClose();
 

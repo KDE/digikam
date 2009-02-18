@@ -568,7 +568,7 @@ void CameraUI::setupConnections()
     connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(const CollectionLocation &, int)),
             this, SLOT(slotCollectionLocationStatusChanged(const CollectionLocation &, int)));
 
-    connect(AlbumSettings::instance(), SIGNAL(signalSidebarTabTitleStyleChanged()),
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSidebarTabTitleStyleChanged()));
 }
 
@@ -1942,12 +1942,7 @@ void CameraUI::slotNewToolbarConfig()
 
 void CameraUI::slotSetup()
 {
-    Setup setup(this);
-
-    if (setup.exec() != QDialog::Accepted)
-        return;
-
-    KGlobal::config()->sync();
+    Setup::exec(this);
 }
 
 void CameraUI::slotToggleFullScreen()

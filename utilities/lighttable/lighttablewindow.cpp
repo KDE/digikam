@@ -265,7 +265,7 @@ void LightTableWindow::setupConnections()
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
-    connect(AlbumSettings::instance(), SIGNAL(signalSidebarTabTitleStyleChanged()),
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSidebarTabTitleStyleChanged()));
 
     // Thumbs bar connections ---------------------------------------
@@ -1449,14 +1449,7 @@ void LightTableWindow::slotNewToolbarConfig()
 
 void LightTableWindow::slotSetup()
 {
-    Setup setup(this);
-
-    if (setup.exec() != QDialog::Accepted)
-        return;
-
-    KGlobal::config()->sync();
-
-    applySettings();
+    Setup::exec(this);
 }
 
 void LightTableWindow::slotLeftZoomFactorChanged(double zoom)

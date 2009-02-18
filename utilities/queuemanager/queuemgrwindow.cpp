@@ -666,14 +666,7 @@ void QueueMgrWindow::slotSetup()
 
 void QueueMgrWindow::setup(Setup::Page page)
 {
-    Setup setup(this, page);
-
-    if (setup.exec() != QDialog::Accepted)
-        return;
-
-    KGlobal::config()->sync();
-
-    applySettings();
+    Setup::exec(this, page);
 }
 
 void QueueMgrWindow::slotRawCameraList()
