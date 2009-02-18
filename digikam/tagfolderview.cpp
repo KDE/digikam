@@ -921,7 +921,9 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             {
                 KMenu popMenu(this);
                 popMenu.addTitle(SmallIcon("digikam"), i18n("My Tags"));
-                QAction *setAction = popMenu.addAction(i18n("Set as Tag Thumbnail"));
+                QAction *setAction = 0;
+                if (imageIDs.count() == 1)
+                    setAction = popMenu.addAction(i18n("Set as Tag Thumbnail"));
                 popMenu.addSeparator();
                 popMenu.addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
 
