@@ -76,11 +76,11 @@ public:
 
 signals:
 
-    void signalTreeViewFontChanged();
-    void signalIconViewFontChanged();
-    void signalSidebarTabTitleStyleChanged();
+    void setupChanged();
 
 public:
+
+    static AlbumSettings *instance();
 
     void readSettings();
     void saveSettings();
@@ -308,8 +308,6 @@ public:
 
     void setShowThumbbar(bool val);
     bool getShowThumbbar() const;
-
-    static AlbumSettings *instance();
 
 private:
 

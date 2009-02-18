@@ -686,7 +686,6 @@ int AlbumSettings::getTreeViewIconSize() const
 void AlbumSettings::setTreeViewFont(const QFont& font)
 {
     d->treeviewFont = font;
-    emit signalTreeViewFontChanged();
 }
 
 QFont AlbumSettings::getTreeViewFont() const
@@ -697,7 +696,6 @@ QFont AlbumSettings::getTreeViewFont() const
 void AlbumSettings::setIconViewFont(const QFont& font)
 {
     d->iconviewFont = font;
-    emit signalIconViewFontChanged();
 }
 
 QFont AlbumSettings::getIconViewFont() const
@@ -1198,7 +1196,6 @@ QString AlbumSettings::getCurrentTheme() const
 void AlbumSettings::setSidebarTitleStyle(KMultiTabBar::KMultiTabBarStyle style)
 {
     d->sidebarTitleStyle = style;
-    emit signalSidebarTabTitleStyleChanged();
 }
 
 KMultiTabBar::KMultiTabBarStyle AlbumSettings::getSidebarTitleStyle() const
