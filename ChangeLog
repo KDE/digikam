@@ -46686,7 +46686,7 @@
 
 	* utilities/slideshow/slideshow.cpp,
 	  utilities/slideshow/slideshow.h: digikam from trunk: native
-	  Slideshow Tool : limit Comments string lenght to 60 char to
+	  Slideshow Tool : limit Comments string length to 60 char to
 	  print.
 
 2007-02-15 09:00  cgilles
@@ -56139,7 +56139,7 @@
 
 	* libs/widgets/metadata/metadatalistview.cpp,
 	  libs/widgets/metadata/metadatalistviewitem.cpp: digikam from
-	  trunk : if a metadata tag lenght is higher than 128 char,
+	  trunk : if a metadata tag length is higher than 128 char,
 	  troncate it to prevent very big tooltips/whatsthis size
 
 2006-06-29 19:34  cgilles
@@ -56368,7 +56368,7 @@
 	* libs/widgets/metadata/worldmapwidget.cpp,
 	  libs/widgets/metadata/worldmapwidget.h: digikam from trunk :
 	  GPSWidget : size of map is 256*128 instead 300*150 to reduce at
-	  minimum lenght of right sidebar. We cannot reduce again this size
+	  minimum length of right sidebar. We cannot reduce again this size
 	  because this is dependiong of histogram size now from Color tab.
 	  This is suitable and enought for 0.9.0.
 	  
@@ -65770,7 +65770,7 @@
 
 2006-01-19 10:11  cgilles
 
-	* libs/dimg/dimg.cpp: fix lenght of data to fill
+	* libs/dimg/dimg.cpp: fix length of data to fill
 
 2006-01-19 09:53  cgilles
 
