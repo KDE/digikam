@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-02-10
- * Description : rotate image.
+ * Description : rotate image batch tool.
  *
  * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *

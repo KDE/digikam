@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-11-24
- * Description : JPEG image Converter.
+ * Description : JPEG image Converter batch tool.
  *
  * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *

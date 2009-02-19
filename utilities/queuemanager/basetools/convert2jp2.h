@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-11-28
- * Description : JPEG2000 image Converter.
+ * Description : JPEG2000 image Converter batch tool.
  *
  * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
