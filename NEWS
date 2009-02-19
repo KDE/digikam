@@ -14,7 +14,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 184686 : Enable insertion of special unicode control characters (LRM, RTL, RTL, RLM...) at the caption edit box. (right click).
 006 ==> 178762 : showFoto thumbnail browser incorrectly sorts images. 
 007 ==> 184639 : Can not save an image twice.
-008 ==> 
+008 ==> 184731 : Cannot apply inpainting, it just hangs.
+009 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc2 - Release date: 2009-02-15
