@@ -340,8 +340,7 @@ void InPaintingTool::prepareFinal()
     }
     else
     {
-        putFinalData();
-        kapp->restoreOverrideCursor();
+        slotFilterFinished(true);
     }
 }
 
