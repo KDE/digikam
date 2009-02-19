@@ -2183,6 +2183,7 @@ void DigikamApp::loadPlugins()
     ignores.append( "SmugMug Exporter" );
     ignores.append( "SlideShow" );
     ignores.append( "PrintWizard" );
+    ignores.append( "SimpleViewer" );
 
     d->kipiPluginLoader = new KIPI::PluginLoader( ignores, d->kipiInterface );
 
