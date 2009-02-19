@@ -89,7 +89,7 @@ public slots:
 
 signals:
 
-    void signalPerspectiveChanged(QRect newSize, float topLeftAngle, float topRightAngle,
+    void signalPerspectiveChanged(const QRect& newSize, float topLeftAngle, float topRightAngle,
                                   float bottomLeftAngle, float bottomRightAngle);
 
 protected:

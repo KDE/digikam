@@ -174,8 +174,8 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(m_previewWidget, SIGNAL(signalPerspectiveChanged(QRect, float, float, float, float)),
-            this, SLOT(slotUpdateInfo(QRect, float, float, float, float)));
+    connect(m_previewWidget, SIGNAL(signalPerspectiveChanged(const QRect&, float, float, float, float)),
+            this, SLOT(slotUpdateInfo(const QRect&, float, float, float, float)));
 
     connect(m_drawWhileMovingCheckBox, SIGNAL(toggled(bool)),
             m_previewWidget, SLOT(slotToggleDrawWhileMoving(bool)));
@@ -188,7 +188,9 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
 
     connect(m_guideSize, SIGNAL(valueChanged(int)),
             m_previewWidget, SLOT(slotChangeGuideSize(int)));
-    connect(m_inverseTransformation, SIGNAL(toggled(bool)), m_previewWidget, SLOT(slotInverseTransformationChanged(bool)));
+
+    connect(m_inverseTransformation, SIGNAL(toggled(bool)),
+            m_previewWidget, SLOT(slotInverseTransformationChanged(bool)));
 }
 
 PerspectiveTool::~PerspectiveTool()
