@@ -111,6 +111,9 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     d->splitter->setStretchFactor(0, 10);
     d->splitter->setStretchFactor(1, 2);
 
+    // could fix bug 173746, see workaround in readSettings()
+    d->splitter->setChildrenCollapsible(false);
+
     d->welcomePageView  = new WelcomePageView(this);
     d->mediaPlayerView  = new MediaPlayerView(this);
 
@@ -447,6 +450,9 @@ void AlbumWidgetStack::applySettings()
     AlbumSettings *settings = AlbumSettings::instance();
     d->imagePreviewView->setLoadFullImageSize(settings->getPreviewLoadFullImageSize());
     d->thumbBar->applySettings();
+
+    // could fix bug 173746, see workaround in readSettings()
+    toggleShowBar(settings->getShowThumbbar());
 }
 
 }  // namespace Digikam
