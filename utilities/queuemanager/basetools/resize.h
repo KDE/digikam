@@ -68,7 +68,7 @@ private:
 
     QCheckBox    *m_useCustom;
 
-    KIntNumInput *m_customLenght;
+    KIntNumInput *m_customLength;
 
     KComboBox    *m_comboBox;
 

@@ -51,11 +51,11 @@ Resize::Resize(QObject* parent)
       : BatchTool("Resize", BaseTool, parent)
 {
     setToolTitle(i18n("Resize"));
-    setToolDescription(i18n("A tool to resize image with a customized lenght"));
+    setToolDescription(i18n("A tool to resize image with a customized length"));
     setToolIcon(KIcon(SmallIcon("transform-scale")));
 
     KVBox *vbox   = new KVBox;
-    m_labelPreset = new QLabel(i18n("Preset Lenght:"), vbox);
+    m_labelPreset = new QLabel(i18n("Preset Length:"), vbox);
     m_comboBox    = new KComboBox(vbox);
     m_comboBox->insertItem(Tiny,   i18n("Tiny (%1 pixels)",   presetLengthValue(Tiny)));
     m_comboBox->insertItem(Small,  i18n("Small (%1 pixels)",  presetLengthValue(Small)));
@@ -64,10 +64,10 @@ Resize::Resize(QObject* parent)
     m_comboBox->insertItem(Large,  i18n("Large (%1 pixels)",  presetLengthValue(Large)));
     m_comboBox->insertItem(Huge,   i18n("Huge (%1 pixels)",   presetLengthValue(Huge)));
 
-    m_useCustom    = new QCheckBox(i18n("Use Custom Lenght"), vbox);
-    m_customLenght = new KIntNumInput(vbox);
-    m_customLenght->setRange(100, 4000);
-    m_customLenght->setSliderEnabled(true);
+    m_useCustom    = new QCheckBox(i18n("Use Custom Length"), vbox);
+    m_customLength = new KIntNumInput(vbox);
+    m_customLength->setRange(100, 4000);
+    m_customLength->setSliderEnabled(true);
 
     QLabel *space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
@@ -77,7 +77,7 @@ Resize::Resize(QObject* parent)
     connect(m_comboBox, SIGNAL(activated(int)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(m_customLenght, SIGNAL(valueChanged(int)),
+    connect(m_customLength, SIGNAL(valueChanged(int)),
             this, SLOT(slotSettingsChanged()));
 
     connect(m_useCustom, SIGNAL(toggled(bool)),
@@ -92,74 +92,74 @@ BatchToolSettings Resize::defaultSettings()
 {
     BatchToolSettings settings;
     settings.insert("UseCustom",    false);
-    settings.insert("LenghtCustom", 1024);
-    settings.insert("LenghtPreset", Medium);
+    settings.insert("LengthCustom", 1024);
+    settings.insert("LengthPreset", Medium);
     return settings;
 }
 
 void Resize::assignSettings2Widget()
 {
-    m_comboBox->setCurrentIndex(settings()["LenghtPreset"].toInt());
+    m_comboBox->setCurrentIndex(settings()["LengthPreset"].toInt());
     m_useCustom->setChecked(settings()["UseCustom"].toBool());
-    m_customLenght->setValue(settings()["LenghtCustom"].toInt());
+    m_customLength->setValue(settings()["LengthCustom"].toInt());
 }
 
 void Resize::slotSettingsChanged()
 {
-    m_customLenght->setEnabled(m_useCustom->isChecked());
+    m_customLength->setEnabled(m_useCustom->isChecked());
     m_labelPreset->setEnabled(!m_useCustom->isChecked());
     m_comboBox->setEnabled(!m_useCustom->isChecked());
 
     BatchToolSettings settings;
-    settings.insert("LenghtPreset", m_comboBox->currentIndex());
+    settings.insert("LengthPreset", m_comboBox->currentIndex());
     settings.insert("UseCustom",    m_useCustom->isChecked());
-    settings.insert("LenghtCustom", m_customLenght->value());
+    settings.insert("LengthCustom", m_customLength->value());
     setSettings(settings);
 }
 
 int Resize::presetLengthValue(WidthPreset preset)
 {
-    int lenght;
+    int length;
 
     switch(preset)
     {
         case Tiny:
-            lenght = 480;
+            length = 480;
             break;
         case Small:
-            lenght = 640;
+            length = 640;
             break;
         case Medium:
-            lenght = 800;
+            length = 800;
             break;
         case Big:
-            lenght = 1024;
+            length = 1024;
             break;
         case Large:
-            lenght = 1280;
+            length = 1280;
             break;
         default:   // Huge
-            lenght = 1600;
+            length = 1600;
             break;
     }
 
-    return lenght;
+    return length;
 }
 
 bool Resize::toolOperations()
 {
     bool useCustom     = settings()["UseCustom"].toBool();
     WidthPreset preset = (WidthPreset)(settings()["LengthPreset"].toInt());
-    int lenght         = settings()["LenghtCustom"].toInt();
+    int length         = settings()["LengthCustom"].toInt();
     if (!useCustom)
-        lenght = presetLengthValue(preset);
+        length = presetLengthValue(preset);
 
     DImg img;
     if (!img.load(inputUrl().path()))
         return false;
 
     QSize newSize(img.size());
-    newSize.scale(QSize(lenght, lenght), Qt::KeepAspectRatio);
+    newSize.scale(QSize(length, length), Qt::KeepAspectRatio);
     if (!newSize.isValid())
         return false;
 
