@@ -6,8 +6,8 @@
  * Date  : 2005-01-18
  * Description : a widget class to edit perspective.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Matrix3 implementation inspired from gimp 2.0
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
@@ -24,7 +24,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "perspectivewidget.h"
 #include "perspectivewidget.moc"
@@ -71,12 +70,12 @@ PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget *parent)
     setMinimumSize(w, h);
     setMouseTracking(true);
 
-    m_drawGrid        = false;
-    m_drawWhileMoving = true;
+    m_drawGrid              = false;
+    m_drawWhileMoving       = true;
     m_inverseTransformation = false;
-    m_currentResizing = ResizingNone;
-    m_guideColor      = Qt::red;
-    m_guideSize       = 1;
+    m_currentResizing       = ResizingNone;
+    m_guideColor            = Qt::red;
+    m_guideSize             = 1;
 
     m_iface        = new Digikam::ImageIface(w, h);
     uchar *data    = m_iface->setPreviewImageSize(w, h);
@@ -211,7 +210,8 @@ void PerspectiveWidget::applyPerspectiveAdjustment()
                               targetImg.bits(), targetImg.width(), targetImg.height());
 }
 
-void PerspectiveWidget::slotInverseTransformationChanged(bool isEnabled) {
+void PerspectiveWidget::slotInverseTransformationChanged(bool isEnabled)
+{
     m_inverseTransformation = isEnabled;
     updatePixmap();
     repaint();
@@ -283,14 +283,16 @@ void PerspectiveWidget::updatePixmap()
 
     m_pixmap->fill(palette().color(QPalette::Background));
 
-    if(m_inverseTransformation) {
+    if(m_inverseTransformation)
+    {
         m_transformedCenter = buildPerspective(QPoint(0, 0), QPoint(m_w, m_h),
                                                m_topLeftPoint, m_topRightPoint,
                                                m_bottomLeftPoint, m_bottomRightPoint);
-      
-	m_iface->putPreviewImage(m_previewImage.bits());
+
+        m_iface->putPreviewImage(m_previewImage.bits());
         m_iface->paint(m_pixmap, m_rect.x(), m_rect.y(),
                        m_rect.width(), m_rect.height());
+
     // if we are resizing with the mouse, compute and draw only if drawWhileMoving is set
     }
     else if ((m_currentResizing == ResizingNone || m_drawWhileMoving))
@@ -360,7 +362,8 @@ void PerspectiveWidget::updatePixmap()
 
     // Drawing vertical and horizontal guide lines.
 
-    if(!m_inverseTransformation) {
+    if(!m_inverseTransformation)
+    {
       int xspot = m_spot.x() + m_rect.x();
       int yspot = m_spot.y() + m_rect.y();
       p.setPen(QPen(Qt::white, m_guideSize, Qt::SolidLine));
@@ -474,21 +477,25 @@ QPoint PerspectiveWidget::buildPerspective(QPoint orignTopLeft, QPoint orignBott
     transform.scale    (scalex, scaley);
     transform.multiply (matrix);
 
-    if(orgImage && destImage) {
-      if(m_inverseTransformation) {
-	Matrix inverseTransform = transform;
-	inverseTransform.invert();
-	
-	//Transform the matrix so it puts the result into the getTargetSize() rectangle
-	Matrix transformIntoBounds;
-	transformIntoBounds.scale(double(getTargetSize().width()) / double(orgImage->width()), double(getTargetSize().height()) / double(orgImage->height()));
-	transformIntoBounds.translate(getTargetSize().left(), getTargetSize().top());
-	inverseTransform.multiply(transformIntoBounds);
-        transformAffine(orgImage, destImage, inverseTransform, background);
-      }else{
-	// Compute perspective transformation to image if image data containers exist.
-        transformAffine(orgImage, destImage, transform, background);
-      }
+    if(orgImage && destImage)
+    {
+        if(m_inverseTransformation)
+        {
+            Matrix inverseTransform = transform;
+            inverseTransform.invert();
+
+            //Transform the matrix so it puts the result into the getTargetSize() rectangle
+            Matrix transformIntoBounds;
+            transformIntoBounds.scale(double(getTargetSize().width()) / double(orgImage->width()), double(getTargetSize().height()) / double(orgImage->height()));
+            transformIntoBounds.translate(getTargetSize().left(), getTargetSize().top());
+            inverseTransform.multiply(transformIntoBounds);
+            transformAffine(orgImage, destImage, inverseTransform, background);
+        }
+        else
+        {
+            // Compute perspective transformation to image if image data containers exist.
+            transformAffine(orgImage, destImage, transform, background);
+        }
     }
 
     // Calculate the grid array points.
@@ -614,12 +621,12 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
             {
                 // u, v coordinates into source
 
-		//In inverse transformation we always enable anti-aliasing, because there is always under-sampling
+                //In inverse transformation we always enable anti-aliasing, because there is always under-sampling
                 if (m_antiAlias || m_inverseTransformation)
                 {
-		    double finalU = u[0] - u1;
-		    double finalV = v[0] - v1;
-		    
+                    double finalU = u[0] - u1;
+                    double finalV = v[0] - v1;
+
                     if (sixteenBit)
                     {
                         unsigned short *d16 = (unsigned short *)d;
@@ -634,11 +641,11 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
                 }
                 else
                 {
-                int u = iu - u1;
-                int v = iv - v1;
-                offset = (v * width * bytesDepth) + (u * bytesDepth);
-                color.setColor(data + offset, sixteenBit);
-                color.setPixel(d);
+                    int u = iu - u1;
+                    int v = iv - v1;
+                    offset = (v * width * bytesDepth) + (u * bytesDepth);
+                    color.setColor(data + offset, sixteenBit);
+                    color.setPixel(d);
                 }
 
                 d += bytesDepth;
