@@ -200,11 +200,22 @@ void AlbumWidgetStack::readSettings()
         // in beta tester's config. Refuse to load.
         if (!state.startsWith("AAAA/wAAAAAAAAACAAAAAAAAAAA"))
             d->splitter->restoreState(QByteArray::fromBase64(state));
+
+        // could fix bug 173746...
+        AlbumSettings *settings = AlbumSettings::instance();
+        bool showThumbbar = settings->getShowThumbbar();
+        toggleShowBar(showThumbbar);
+
     }
 }
 
 void AlbumWidgetStack::saveSettings()
 {
+    // could fix bug 173746, see workaround in readSettings()
+    // show thumbbar to get a valid splitter state
+    toggleShowBar(true);
+    d->splitter->refresh();
+
     if (d->everShowedSplitter)
     {
         KSharedConfig::Ptr config = KGlobal::config();
@@ -453,9 +464,6 @@ void AlbumWidgetStack::applySettings()
     AlbumSettings *settings = AlbumSettings::instance();
     d->imagePreviewView->setLoadFullImageSize(settings->getPreviewLoadFullImageSize());
     d->thumbBar->applySettings();
-
-    // could fix bug 173746, see workaround in readSettings()
-    toggleShowBar(settings->getShowThumbbar());
 }
 
 }  // namespace Digikam
