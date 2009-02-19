@@ -59,8 +59,9 @@ public:
 
 private slots:
 
+    void slotInverseTransformationChanged(bool b);
     void slotResetSettings();
-    void slotUpdateInfo(QRect newSize, float topLeftAngle, float topRightAngle,
+    void slotUpdateInfo(const QRect& newSize, float topLeftAngle, float topRightAngle,
                         float bottomLeftAngle, float bottomRightAngle);
 
 private:

@@ -107,16 +107,16 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    KSeparator *line = new KSeparator (Qt::Horizontal, m_gboxSettings->plainPage());
+    KSeparator *line        = new KSeparator (Qt::Horizontal, m_gboxSettings->plainPage());
 
-    QLabel *angleLabel = new QLabel(i18n("Angles (in degrees):"), m_gboxSettings->plainPage());
-    QLabel *label3 = new QLabel(i18n("  Top left:"), m_gboxSettings->plainPage());
-    m_topLeftAngleLabel = new QLabel(m_gboxSettings->plainPage());
-    QLabel *label4 = new QLabel(i18n("  Top right:"), m_gboxSettings->plainPage());
-    m_topRightAngleLabel = new QLabel(m_gboxSettings->plainPage());
-    QLabel *label5 = new QLabel(i18n("  Bottom left:"), m_gboxSettings->plainPage());
-    m_bottomLeftAngleLabel = new QLabel(m_gboxSettings->plainPage());
-    QLabel *label6 = new QLabel(i18n("  Bottom right:"), m_gboxSettings->plainPage());
+    QLabel *angleLabel      = new QLabel(i18n("Angles (in degrees):"), m_gboxSettings->plainPage());
+    QLabel *label3          = new QLabel(i18n("  Top left:"), m_gboxSettings->plainPage());
+    m_topLeftAngleLabel     = new QLabel(m_gboxSettings->plainPage());
+    QLabel *label4          = new QLabel(i18n("  Top right:"), m_gboxSettings->plainPage());
+    m_topRightAngleLabel    = new QLabel(m_gboxSettings->plainPage());
+    QLabel *label5          = new QLabel(i18n("  Bottom left:"), m_gboxSettings->plainPage());
+    m_bottomLeftAngleLabel  = new QLabel(m_gboxSettings->plainPage());
+    QLabel *label6          = new QLabel(i18n("  Bottom right:"), m_gboxSettings->plainPage());
     m_bottomRightAngleLabel = new QLabel(m_gboxSettings->plainPage());
 
     // -------------------------------------------------------------
@@ -136,7 +136,7 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
     space->setFixedHeight(m_gboxSettings->spacingHint());
 
     QLabel *label8 = new QLabel(i18n("Guide width:"), m_gboxSettings->plainPage());
-    m_guideSize = new QSpinBox(m_gboxSettings->plainPage());
+    m_guideSize    = new QSpinBox(m_gboxSettings->plainPage());
     m_guideSize->setRange(1, 5);
     m_guideSize->setSingleStep(1);
     m_guideSize->setWhatsThis(i18n("Set here the width in pixels used to draw guides dashed-lines."));
@@ -190,7 +190,7 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
             m_previewWidget, SLOT(slotChangeGuideSize(int)));
 
     connect(m_inverseTransformation, SIGNAL(toggled(bool)),
-            m_previewWidget, SLOT(slotInverseTransformationChanged(bool)));
+            this, SLOT(slotInverseTransformationChanged(bool)));
 }
 
 PerspectiveTool::~PerspectiveTool()
@@ -237,8 +237,8 @@ void PerspectiveTool::finalRendering()
     kapp->restoreOverrideCursor();
 }
 
-void PerspectiveTool::slotUpdateInfo(QRect newSize, float topLeftAngle, float topRightAngle,
-                                             float bottomLeftAngle, float bottomRightAngle)
+void PerspectiveTool::slotUpdateInfo(const QRect& newSize, float topLeftAngle, float topRightAngle,
+                                     float bottomLeftAngle, float bottomRightAngle)
 {
     QString temp;
     m_newWidthLabel->setText(temp.setNum(newSize.width()) + i18n(" px"));
@@ -248,6 +248,13 @@ void PerspectiveTool::slotUpdateInfo(QRect newSize, float topLeftAngle, float to
     m_topRightAngleLabel->setText(temp.setNum(topRightAngle, 'f', 1));
     m_bottomLeftAngleLabel->setText(temp.setNum(bottomLeftAngle, 'f', 1));
     m_bottomRightAngleLabel->setText(temp.setNum(bottomRightAngle, 'f', 1));
+}
+
+void PerspectiveTool::slotInverseTransformationChanged(bool b)
+{
+    m_drawWhileMovingCheckBox->setEnabled(!b);
+    m_drawGridCheckBox->setEnabled(!b);
+    m_previewWidget->slotInverseTransformationChanged(b);
 }
 
 }  // namespace DigikamPerspectiveImagesPlugin
