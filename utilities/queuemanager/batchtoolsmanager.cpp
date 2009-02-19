@@ -37,6 +37,7 @@
 #include "autocorrection.h"
 #include "resize.h"
 #include "rotate.h"
+#include "restoration.h"
 #include "flip.h"
 
 namespace Digikam
@@ -64,6 +65,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new Rotate(this));
     registerTool(new Flip(this));
     registerTool(new Resize(this));
+    registerTool(new Restoration(this));
 }
 
 BatchToolsManager::~BatchToolsManager()
