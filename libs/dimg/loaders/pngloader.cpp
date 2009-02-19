@@ -640,7 +640,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     // Write embedded Raw profiles metadata (Exif/Iptc) in text tag using ImageMagick technic.
     // Write digiKam comment like an iTXt chunk using UTF8 encoding.
-    // NOTE: iTXt will be enable by default with libpng >= 1.3.0.(dcraw_0)
+    // NOTE: iTXt will be enable by default with libpng >= 1.3.0.
 
     typedef QMap<int, QByteArray> MetaDataMap;
     MetaDataMap metaDataMap = imageMetaData();
@@ -661,7 +661,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
                 png_text comment;
                 comment.key         = "Comment";
                 comment.text        = ba.data();
-                comment.itxt_lenght = ba.size();
+                comment.itxt_length = ba.size();
                 comment.compression = PNG_ITXT_COMPRESSION_zTXt;
                 png_set_text(png_ptr, info_ptr, &(comment), 1);
 
