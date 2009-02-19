@@ -28,6 +28,10 @@
 
 #include "batchtool.h"
 
+class QLabel;
+class QCheckBox;
+
+class KIntNumInput;
 class KComboBox;
 
 namespace Digikam
@@ -60,7 +64,13 @@ private:
         Huge
     };
 
-    KComboBox *m_comboBox;
+    QLabel       *m_labelPreset;
+
+    QCheckBox    *m_useCustom;
+
+    KIntNumInput *m_customLenght;
+
+    KComboBox    *m_comboBox;
 
 private:
 
