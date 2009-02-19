@@ -112,8 +112,10 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     d->splitter->setStretchFactor(1, 2);
 
     // could fix bug 173746, see workaround in readSettings()
-    int thumbbarIndex = d->splitter->indexOf(d->thumbBar);
-    d->splitter->setCollapsible(thumbbarIndex, false);
+    int imagePreviewIndex = d->splitter->indexOf(d->imagePreviewView);
+    int thumbbarIndex     = d->splitter->indexOf(d->thumbBar);
+    d->splitter->setCollapsible(imagePreviewIndex, false);
+    d->splitter->setCollapsible(thumbbarIndex,     false);
 
     d->welcomePageView  = new WelcomePageView(this);
     d->mediaPlayerView  = new MediaPlayerView(this);
