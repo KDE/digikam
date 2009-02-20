@@ -53,6 +53,7 @@ DIGIKAM_EXPORT bool exifTransform(const QString& file, const QString& documentNa
 DIGIKAM_EXPORT bool jpegConvert(const QString& src, const QString& dest, const QString& documentName,
                                 const QString& format=QString("PNG"));
 DIGIKAM_EXPORT bool isJpegImage(const QString& file);
+DIGIKAM_EXPORT bool copyFile(const QString& src, const QString& dst);
 
 }
 

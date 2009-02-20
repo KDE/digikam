@@ -374,129 +374,141 @@ bool exifTransform(const QString& file, const QString& documentName,
         if (transformoption.transform == JXFORM_NONE)
         {
             kDebug(50003) << "ExifRotate: no rotation to perform: " << file << endl;
-            return true;
+
+            if (trgFile.isEmpty())
+            {
+                // if target file est empty, we working directly on source file and there is nothing to do.
+                return true;
+            }
+            else
+            {
+                // else, as, there is nothing to do, we will copy original to target as well.
+                return copyFile(file, trgFile);
+            }
         }
-
-        struct jpeg_decompress_struct srcinfo;
-        struct jpeg_compress_struct   dstinfo;
-        struct jpegutils_jpeg_error_mgr jsrcerr, jdsterr;
-        jvirt_barray_ptr* src_coef_arrays;
-        jvirt_barray_ptr* dst_coef_arrays;
-
-        // Initialize the JPEG decompression object with default error handling
-        srcinfo.err                 = jpeg_std_error(&jsrcerr);
-        srcinfo.err->error_exit     = jpegutils_jpeg_error_exit;
-        srcinfo.err->emit_message   = jpegutils_jpeg_emit_message;
-        srcinfo.err->output_message = jpegutils_jpeg_output_message;
-
-        // Initialize the JPEG compression object with default error handling
-        dstinfo.err                 = jpeg_std_error(&jdsterr);
-        dstinfo.err->error_exit     = jpegutils_jpeg_error_exit;
-        dstinfo.err->emit_message   = jpegutils_jpeg_emit_message;
-        dstinfo.err->output_message = jpegutils_jpeg_output_message;
-
-        FILE *input_file;
-        FILE *output_file;
-
-        input_file = fopen(in, "rb");
-        if (!input_file)
+        else
         {
-            kWarning(50003) << "ExifRotate: Error in opening input file: " << input_file << endl;
-            return false;
-        }
+            // A transformation must be done.
 
-        output_file = fopen(out, "wb");
-        if (!output_file)
-        {
-            fclose(input_file);
-            kWarning(50003) << "ExifRotate: Error in opening output file: " << output_file  << endl;
-            return false;
-        }
+            struct jpeg_decompress_struct srcinfo;
+            struct jpeg_compress_struct   dstinfo;
+            struct jpegutils_jpeg_error_mgr jsrcerr, jdsterr;
+            jvirt_barray_ptr* src_coef_arrays;
+            jvirt_barray_ptr* dst_coef_arrays;
 
-        if (setjmp(jsrcerr.setjmp_buffer) || setjmp(jdsterr.setjmp_buffer))
-        {
-            jpeg_destroy_decompress(&srcinfo);
+            // Initialize the JPEG decompression object with default error handling
+            srcinfo.err                 = jpeg_std_error(&jsrcerr);
+            srcinfo.err->error_exit     = jpegutils_jpeg_error_exit;
+            srcinfo.err->emit_message   = jpegutils_jpeg_emit_message;
+            srcinfo.err->output_message = jpegutils_jpeg_output_message;
+
+            // Initialize the JPEG compression object with default error handling
+            dstinfo.err                 = jpeg_std_error(&jdsterr);
+            dstinfo.err->error_exit     = jpegutils_jpeg_error_exit;
+            dstinfo.err->emit_message   = jpegutils_jpeg_emit_message;
+            dstinfo.err->output_message = jpegutils_jpeg_output_message;
+
+            FILE *input_file;
+            FILE *output_file;
+
+            input_file = fopen(in, "rb");
+            if (!input_file)
+            {
+                kWarning(50003) << "ExifRotate: Error in opening input file: " << input_file << endl;
+                return false;
+            }
+
+            output_file = fopen(out, "wb");
+            if (!output_file)
+            {
+                fclose(input_file);
+                kWarning(50003) << "ExifRotate: Error in opening output file: " << output_file  << endl;
+                return false;
+            }
+
+            if (setjmp(jsrcerr.setjmp_buffer) || setjmp(jdsterr.setjmp_buffer))
+            {
+                jpeg_destroy_decompress(&srcinfo);
+                jpeg_destroy_compress(&dstinfo);
+                fclose(input_file);
+                fclose(output_file);
+                return false;
+            }
+
+            jpeg_create_decompress(&srcinfo);
+            jpeg_create_compress(&dstinfo);
+
+            jpeg_stdio_src(&srcinfo, input_file);
+            jcopy_markers_setup(&srcinfo, copyoption);
+
+            (void) jpeg_read_header(&srcinfo, true);
+
+            jtransform_request_workspace(&srcinfo, &transformoption);
+
+            // Read source file as DCT coefficients
+            src_coef_arrays = jpeg_read_coefficients(&srcinfo);
+
+            // Initialize destination compression parameters from source values
+            jpeg_copy_critical_parameters(&srcinfo, &dstinfo);
+
+            dst_coef_arrays = jtransform_adjust_parameters(&srcinfo, &dstinfo, src_coef_arrays, &transformoption);
+
+            // Specify data destination for compression
+            jpeg_stdio_dest(&dstinfo, output_file);
+
+            // Start compressor (note no image data is actually written here)
+            jpeg_write_coefficients(&dstinfo, dst_coef_arrays);
+
+            // Copy to the output file any extra markers that we want to preserve
+            jcopy_markers_execute(&srcinfo, &dstinfo, copyoption);
+
+            jtransform_execute_transformation(&srcinfo, &dstinfo, src_coef_arrays, &transformoption);
+
+            // Finish compression and release memory
+            jpeg_finish_compress(&dstinfo);
             jpeg_destroy_compress(&dstinfo);
+            (void) jpeg_finish_decompress(&srcinfo);
+            jpeg_destroy_decompress(&srcinfo);
+
             fclose(input_file);
             fclose(output_file);
-            return false;
+
+            // -- Metadata operations ------------------------------------------------------
+
+            // Reset the Exif orientation tag of the temp image to normal
+            kDebug(50003) << "ExifRotate: set Orientation tag to normal: " << file << endl;
+
+            metaData.load(temp);
+            metaData.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
+            QImage img(temp);
+
+            // Get the new image dimension of the temp image. Using a dummy QImage object here
+            // has a sense because the Exif dimension information can be missing from original image.
+            // Get new dimensions with QImage will always work...
+            metaData.setImageDimensions(img.size());
+
+            // Update the image thumbnail.
+            QImage thumb = img.scaled(160, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            metaData.setExifThumbnail(thumb);
+
+            // Update Exif Document Name tag (the original file name from camera for example).
+            metaData.setExifTagString("Exif.Image.DocumentName", documentName);
+
+            // We update all new metadata now...
+            metaData.applyChanges();
+
+            // -----------------------------------------------------------------------------
+            // set the file modification time of the temp file to that
+            // of the original file
+            struct stat st;
+            stat(in, &st);
+
+            struct utimbuf ut;
+            ut.modtime = st.st_mtime;
+            ut.actime  = st.st_atime;
+
+            utime(out, &ut);
         }
-
-        jpeg_create_decompress(&srcinfo);
-        jpeg_create_compress(&dstinfo);
-
-        jpeg_stdio_src(&srcinfo, input_file);
-        jcopy_markers_setup(&srcinfo, copyoption);
-
-        (void) jpeg_read_header(&srcinfo, true);
-
-        jtransform_request_workspace(&srcinfo, &transformoption);
-
-        // Read source file as DCT coefficients
-        src_coef_arrays = jpeg_read_coefficients(&srcinfo);
-
-        // Initialize destination compression parameters from source values
-        jpeg_copy_critical_parameters(&srcinfo, &dstinfo);
-
-        dst_coef_arrays = jtransform_adjust_parameters(&srcinfo, &dstinfo,
-                                                        src_coef_arrays, &transformoption);
-
-        // Specify data destination for compression
-        jpeg_stdio_dest(&dstinfo, output_file);
-
-        // Start compressor (note no image data is actually written here)
-        jpeg_write_coefficients(&dstinfo, dst_coef_arrays);
-
-        // Copy to the output file any extra markers that we want to preserve
-        jcopy_markers_execute(&srcinfo, &dstinfo, copyoption);
-
-        jtransform_execute_transformation(&srcinfo, &dstinfo,
-                                            src_coef_arrays, &transformoption);
-
-        // Finish compression and release memory
-        jpeg_finish_compress(&dstinfo);
-        jpeg_destroy_compress(&dstinfo);
-        (void) jpeg_finish_decompress(&srcinfo);
-        jpeg_destroy_decompress(&srcinfo);
-
-        fclose(input_file);
-        fclose(output_file);
-
-        // -- Metadata operations ------------------------------------------------------
-
-        // Reset the Exif orientation tag of the temp image to normal
-        kDebug(50003) << "ExifRotate: set Orientation tag to normal: " << file << endl;
-
-        metaData.load(temp);
-        metaData.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
-        QImage img(temp);
-
-        // Get the new image dimension of the temp image. Using a dummy QImage object here
-        // has a sense because the Exif dimension information can be missing from original image.
-        // Get new dimensions with QImage will always work...
-        metaData.setImageDimensions(img.size());
-
-        // Update the image thumbnail.
-        QImage thumb = img.scaled(160, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        metaData.setExifThumbnail(thumb);
-
-        // Update Exif Document Name tag (the original file name from camera for example).
-        metaData.setExifTagString("Exif.Image.DocumentName", documentName);
-
-        // We update all new metadata now...
-        metaData.applyChanges();
-
-        // -----------------------------------------------------------------------------
-        // set the file modification time of the temp file to that
-        // of the original file
-        struct stat st;
-        stat(in, &st);
-
-        struct utimbuf ut;
-        ut.modtime = st.st_mtime;
-        ut.actime  = st.st_atime;
-
-        utime(out, &ut);
 
         // Target file is original ?
         QByteArray trg = in;
@@ -586,6 +598,40 @@ bool isJpegImage(const QString& file)
     QString format = QString(QImageReader::imageFormat(file)).toUpper();
     kDebug(50003) << "mimetype = " << format << endl;
     if (format !="JPEG") return false;
+
+    return true;
+}
+
+bool copyFile(const QString& src, const QString& dst)
+{
+    QFile sFile(src);
+    QFile dFile(dst);
+
+    if ( !sFile.open(QIODevice::ReadOnly) )
+        return false;
+
+    if ( !dFile.open(QIODevice::WriteOnly) )
+    {
+        sFile.close();
+        return false;
+    }
+
+    const int MAX_IPC_SIZE = (1024*32);
+    char buffer[MAX_IPC_SIZE];
+
+    qint64 len;
+    while ((len = sFile.read(buffer, MAX_IPC_SIZE)) != 0)
+    {
+        if (len == -1 || dFile.write(buffer, (qint64)len) == -1)
+        {
+            sFile.close();
+            dFile.close();
+            return false;
+        }
+    }
+
+    sFile.close();
+    dFile.close();
 
     return true;
 }
