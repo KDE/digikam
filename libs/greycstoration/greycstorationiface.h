@@ -74,7 +74,6 @@ public:
 
     ~GreycstorationIface();
 
-    void setImage(const DImg& orgImage);
     void setMode(int mode, int newWidth=0, int newHeight=0);
     void setSettings(const GreycstorationSettings& settings);
     void setInPaintingMask(const QImage& inPaintingMask);

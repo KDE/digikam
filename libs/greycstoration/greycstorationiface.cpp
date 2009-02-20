@@ -100,10 +100,10 @@ GreycstorationIface::GreycstorationIface(QObject *parent)
                    : DImgThreadedFilter(parent),
                      d(new GreycstorationIfacePriv)
 {
+    setOriginalImage(DImg());
     setSettings(GreycstorationSettings());
     setMode(Restore);
     setInPaintingMask(QImage());
-    setOriginalImage(DImg());
 }
 
 GreycstorationIface::GreycstorationIface(DImg *orgImage,
