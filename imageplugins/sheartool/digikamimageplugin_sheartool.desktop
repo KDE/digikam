@@ -7,6 +7,7 @@ Name[fi]=Väännin
 Name[he]=תוסף תמונה - הטיה
 Name[it]=Distorsione curvilinea
 Name[nl]=Afbeeldingsplugin_SchuinTrekken
+Name[sk]=ObrazovýModul_Orezanie
 Name[sv]=Insticksprogram med skjuvningsverktyg
 Name[tr]=GörüntüEklentisi_KırpmaAracı
 Name[x-test]=xxImagePlugin_ShearToolxx
@@ -40,6 +41,7 @@ Comment[pl]=Wtyczka do programu digiKam umoÅ¼liwiajÄca pochylenie obrazu
 Comment[pt]=Um 'plugin' do digiKam para inclinar uma imagem
 Comment[pt_BR]=Plug-in do digiKam para inclinação de imagem
 Comment[ro]=Modul digiKam pentru instrumentul de tuns
+Comment[sk]=Zásuvný modul digiKam - Orezanie obrázka
 Comment[sv]=Digikam insticksprogram med skjuvningsverktyg
 Comment[th]=ส่วนเสริมของ digiKam สำหรับเบนภาพ
 Comment[tr]=digiKam için kırpma aracı eklentisi

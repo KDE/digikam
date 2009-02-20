@@ -7,6 +7,7 @@ Name[fi]=Tekstinlisäys
 Name[he]=תוסף תמונה - הוספת מלל
 Name[it]=Testo
 Name[nl]=Afbeeldingsplugin_TekstInvoegen
+Name[sk]=ObrazovýModul_VkladanieTextu
 Name[sv]=Insticksprogram för infoga text
 Name[tr]=GörüntüEklentisi_MetinEkle
 Name[x-test]=xxImagePlugin_InsertTextxx
@@ -38,6 +39,7 @@ Comment[pl]=Wtyczka do programu digiKam dodajÄca tekst do zdjÄcia
 Comment[pt]=Um 'plugin' do digiKam para inserir texto na imagem
 Comment[pt_BR]=Plug-in do digiKam para inserir texto na imagem
 Comment[ro]=Modul digiKam de inserare text în imagine
+Comment[sk]=Zásuvný modul digiKam - Vkladanie textu do obrázka
 Comment[sv]=Digikam insticksprogram för att infoga text i bilder
 Comment[th]=ส่วนเสริมของ digiKam สำหรับแทรกข้อความไปยังภาพ
 Comment[tr]=digiKam için görüntüye metin ekleme eklentisi

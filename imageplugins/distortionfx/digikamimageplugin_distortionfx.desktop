@@ -7,6 +7,7 @@ Name[fi]=Vääristymä
 Name[he]=תוסף תמונה - עיוות
 Name[it]=Effetti di distorsione
 Name[nl]=Afbeeldingsplugin_Vervormingseffect
+Name[sk]=ObrazovýModul_EfektyRozostrenia
 Name[sv]=Insticksprogram för förvrängningseffekt
 Name[tr]=GörüntüEklentisi_Bozulma
 Name[x-test]=xxImagePlugin_DistortionFXxx
@@ -39,6 +40,7 @@ Comment[pl]=Wtyczka do programu digiKam oferujÄca efekty znieksztaÅceÅ
 Comment[pt]=Um 'plugin' do digiKam para efeitos especiais de distorção
 Comment[pt_BR]=Plug-in do digiKam para efeitos especiais de distorção
 Comment[ro]=Modul digiKam pentru efecte speciale ale distorsiunii
+Comment[sk]=Zásuvný modul digiKam - Špeciálne efekty skreslenia
 Comment[sv]=Digikam insticksprogram för förvrängningsspecialeffekt
 Comment[th]=ส่วนเสริมหลักของ digiKam สำหรับลูกเล่นการบิดเบือนภาพ
 Comment[tr]=digiKam için özel bozulma efektleri eklentisi

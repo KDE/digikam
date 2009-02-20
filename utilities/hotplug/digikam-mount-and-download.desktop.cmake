@@ -26,6 +26,7 @@ Name[pt]=Obter Fotos com o digiKam
 Name[pt_BR]=Baixar as fotos com o digiKam
 Name[ro]=Descărcere fotografii cu digiKam
 Name[ru]=Скопировать фотографии в альбом digiKam
+Name[sk]=Stiahnuť fotografie pomocou digiKam
 Name[sv]=Ladda ner foton med Digikam
 Name[th]=ดาวน์โหลดภาพถ่ายด้วย digiKam
 Name[tr]=Fotoğrafları DigiKam ile İndir
