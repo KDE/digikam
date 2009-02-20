@@ -42,8 +42,8 @@ DImgThreadedFilter::DImgThreadedFilter(QObject *parent)
 {
     setOriginalImage(DImg());
     setFilterName(QString());
+    setParent(parent);
 
-    m_parent        = parent;
     m_cancel        = false;
     m_master        = 0;
     m_slave         = 0;
@@ -58,8 +58,8 @@ DImgThreadedFilter::DImgThreadedFilter(DImg *orgImage, QObject *parent,
     // remove meta data
     setOriginalImage(orgImage->copyImageData());
     setFilterName(name);
+    setParent(parent);
 
-    m_parent        = parent;
     m_cancel        = false;
     m_master        = 0;
     m_slave         = 0;
@@ -73,8 +73,8 @@ DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter *master, const DImg &o
 {
     setOriginalImage(orgImage);
     setFilterName(name);
+    setParent(0);
 
-    m_parent        = 0;
     m_destImage     = destImage;
     m_cancel        = false;
     m_master        = master;
@@ -100,6 +100,11 @@ void DImgThreadedFilter::setOriginalImage(const DImg& orgImage)
 void DImgThreadedFilter::setFilterName(const QString& name)
 {
     m_name = QString(name);
+}
+
+void DImgThreadedFilter::setParent(QObject *parent)
+{
+    m_parent = parent;
 }
 
 void DImgThreadedFilter::initFilter()

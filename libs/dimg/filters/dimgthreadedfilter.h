@@ -56,7 +56,7 @@ public:
         to start the threaded computation.
         To run filter without to use multithreading, call startFilterDirectly().
     */
-    DImgThreadedFilter(QObject *parent);
+    DImgThreadedFilter(QObject *parent=0);
 
     /** Constructs a filter with all arguments (ready to use).
         You need to call startFilter() to start the threaded computation.
@@ -69,6 +69,7 @@ public:
 
     void setOriginalImage(const DImg& orgImage);
     void setFilterName(const QString& name);
+    void setParent(QObject *parent);
 
     DImg getTargetImage()       { return m_destImage; };
     const QString &filterName() { return m_name; };
