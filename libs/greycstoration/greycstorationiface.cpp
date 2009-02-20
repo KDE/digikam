@@ -6,7 +6,7 @@
  * Date        : 2007-12-03
  * Description : Greycstoration interface.
  *
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -70,7 +70,7 @@ using namespace cimg_library;
 namespace Digikam
 {
 
-class GreycstorationIfacePriv : public DSharedData
+class GreycstorationIfacePriv
 {
 
 public:
@@ -80,8 +80,6 @@ public:
         mode               = GreycstorationIface::Restore;
         gfact              = 1.0;
         computationThreads = 2;
-        img                = CImg<>();
-        mask               = CImg<uchar>();
     }
 
     float                  gfact;
@@ -100,7 +98,7 @@ public:
 
 GreycstorationIface::GreycstorationIface(QObject *parent)
                    : DImgThreadedFilter(parent),
-                     m_priv(new GreycstorationIfacePriv)
+                     d(new GreycstorationIfacePriv)
 {
     setOriginalImage(DImg());
     setSettings(GreycstorationSettings());
@@ -115,7 +113,7 @@ GreycstorationIface::GreycstorationIface(DImg *orgImage,
                                          const QImage& inPaintingMask,
                                          QObject *parent)
                    : DImgThreadedFilter(parent),
-                     m_priv(new GreycstorationIfacePriv)
+                     d(new GreycstorationIfacePriv)
 {
     setOriginalImage(orgImage->copyImageData());
     setSettings(settings);
@@ -126,38 +124,33 @@ GreycstorationIface::GreycstorationIface(DImg *orgImage,
 
 GreycstorationIface::~GreycstorationIface()
 {
-}
-
-GreycstorationIface& GreycstorationIface::operator=(const GreycstorationIface& iface)
-{
-    m_priv = iface.m_priv;
-    return *this;
+    delete d;
 }
 
 void GreycstorationIface::setSettings(const GreycstorationSettings& settings)
 {
-    m_priv->settings = settings;
+    d->settings = settings;
 }
 
 void GreycstorationIface::setMode(int mode, int newWidth, int newHeight)
 {
-    m_priv->mode    = mode;
-    m_priv->newSize = QSize(newWidth, newHeight);
+    d->mode = mode;
+    d->newSize = QSize(newWidth, newHeight);
 }
 
 void GreycstorationIface::setInPaintingMask(const QImage& inPaintingMask)
 {
-    m_priv->inPaintingMask = inPaintingMask;
+    d->inPaintingMask = inPaintingMask;
 }
 
 void GreycstorationIface::computeChildrenThreads()
 {
     // Check number of CPU with Solid interface.
 
-    const int numProcs         = qMax(Solid::Device::listFromType(Solid::DeviceInterface::Processor).count(), 1);
-    const int maxThreads       = 16;
-    m_priv->computationThreads = qMin(maxThreads, 2 + ((numProcs - 1) * 2));
-    kDebug(50003) << "GreycstorationIface::Computation threads: " << m_priv->computationThreads << endl;
+    const int numProcs    = qMax(Solid::Device::listFromType(Solid::DeviceInterface::Processor).count(), 1);
+    const int maxThreads  = 16;
+    d->computationThreads = qMin(maxThreads, 2 + ((numProcs - 1) * 2));
+    kDebug(50003) << "GreycstorationIface::Computation threads: " << d->computationThreads << endl;
 }
 
 void GreycstorationIface::setup()
@@ -165,14 +158,14 @@ void GreycstorationIface::setup()
     computeChildrenThreads();
 
     if (m_orgImage.sixteenBit())   // 16 bits image.
-        m_priv->gfact = 1.0/256.0;
+        d->gfact = 1.0/256.0;
 
-    if (m_priv->mode == Resize || m_priv->mode == SimpleResize)
+    if (d->mode == Resize || d->mode == SimpleResize)
     {
-        m_destImage = Digikam::DImg(m_priv->newSize.width(), m_priv->newSize.height(),
+        m_destImage = Digikam::DImg(d->newSize.width(), d->newSize.height(),
                                     m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
         kDebug(50003) << "GreycstorationIface::Resize: new size: ("
-                      << m_priv->newSize.width() << ", " << m_priv->newSize.height() << ")" << endl;
+                      << d->newSize.width() << ", " << d->newSize.height() << ")" << endl;
     }
     else
     {
@@ -189,7 +182,7 @@ QString GreycstorationIface::cimgVersionString()
 }
 
 // We need to re-implement this method from DImgThreadedFilter class because
-// target image size can be different from original if m_priv->mode = Resize.
+// target image size can be different from original if d->mode = Resize.
 
 void GreycstorationIface::initFilter()
 {
@@ -203,11 +196,11 @@ void GreycstorationIface::cancelFilter()
 {
     // Because Greycstoration algorithm run in a child thread, we need
     // to stop it before to stop this thread.
-    if (m_priv->img.greycstoration_is_running())
+    if (d->img.greycstoration_is_running())
     {
         // If the user abort, we stop the algorithm.
         kDebug(50003) << "Stop Greycstoration computation..." << endl;
-        m_priv->img.greycstoration_stop();
+        d->img.greycstoration_stop();
     }
 
     // And now when stop main loop and clean up all
@@ -225,7 +218,7 @@ void GreycstorationIface::filterImage()
     uchar* imageData = m_orgImage.bits();
     int imageWidth   = m_orgImage.width();
     int imageHeight  = m_orgImage.height();
-    m_priv->img      = CImg<>(imageWidth, imageHeight, 1, 4);
+    d->img           = CImg<>(imageWidth, imageHeight, 1, 4);
 
     if (!m_orgImage.sixteenBit())           // 8 bits image.
     {
@@ -235,10 +228,10 @@ void GreycstorationIface::filterImage()
         {
             for (x = 0; x < imageWidth; x++)
             {
-                m_priv->img(x, y, 0) = ptr[0];        // Blue.
-                m_priv->img(x, y, 1) = ptr[1];        // Green.
-                m_priv->img(x, y, 2) = ptr[2];        // Red.
-                m_priv->img(x, y, 3) = ptr[3];        // Alpha.
+                d->img(x, y, 0) = ptr[0];        // Blue.
+                d->img(x, y, 1) = ptr[1];        // Green.
+                d->img(x, y, 2) = ptr[2];        // Red.
+                d->img(x, y, 3) = ptr[3];        // Alpha.
                 ptr += 4;
             }
         }
@@ -251,10 +244,10 @@ void GreycstorationIface::filterImage()
         {
             for (x = 0; x < imageWidth; x++)
             {
-                m_priv->img(x, y, 0) = ptr[0];        // Blue.
-                m_priv->img(x, y, 1) = ptr[1];        // Green.
-                m_priv->img(x, y, 2) = ptr[2];        // Red.
-                m_priv->img(x, y, 3) = ptr[3];        // Alpha.
+                d->img(x, y, 0) = ptr[0];        // Blue.
+                d->img(x, y, 1) = ptr[1];        // Green.
+                d->img(x, y, 2) = ptr[2];        // Red.
+                d->img(x, y, 3) = ptr[3];        // Alpha.
                 ptr += 4;
             }
         }
@@ -264,7 +257,7 @@ void GreycstorationIface::filterImage()
 
     try
     {
-        switch (m_priv->mode)
+        switch (d->mode)
         {
             case Restore:
                 restoration();
@@ -313,10 +306,10 @@ void GreycstorationIface::filterImage()
             for (x = 0; x < newWidth; x++)
             {
                 // Overwrite RGB values to destination.
-                ptr[0] = static_cast<uchar>(m_priv->img(x, y, 0));        // Blue
-                ptr[1] = static_cast<uchar>(m_priv->img(x, y, 1));        // Green
-                ptr[2] = static_cast<uchar>(m_priv->img(x, y, 2));        // Red
-                ptr[3] = static_cast<uchar>(m_priv->img(x, y, 3));        // Alpha
+                ptr[0] = static_cast<uchar>(d->img(x, y, 0));        // Blue
+                ptr[1] = static_cast<uchar>(d->img(x, y, 1));        // Green
+                ptr[2] = static_cast<uchar>(d->img(x, y, 2));        // Red
+                ptr[3] = static_cast<uchar>(d->img(x, y, 3));        // Alpha
                 ptr    += 4;
             }
         }
@@ -330,10 +323,10 @@ void GreycstorationIface::filterImage()
             for (x = 0; x < newWidth; x++)
             {
                 // Overwrite RGB values to destination.
-                ptr[0] = static_cast<unsigned short>(m_priv->img(x, y, 0));        // Blue
-                ptr[1] = static_cast<unsigned short>(m_priv->img(x, y, 1));        // Green
-                ptr[2] = static_cast<unsigned short>(m_priv->img(x, y, 2));        // Red
-                ptr[3] = static_cast<unsigned short>(m_priv->img(x, y, 3));        // Alpha
+                ptr[0] = static_cast<unsigned short>(d->img(x, y, 0));        // Blue
+                ptr[1] = static_cast<unsigned short>(d->img(x, y, 1));        // Green
+                ptr[2] = static_cast<unsigned short>(d->img(x, y, 2));        // Red
+                ptr[3] = static_cast<unsigned short>(d->img(x, y, 3));        // Alpha
                 ptr    += 4;
             }
         }
@@ -342,27 +335,27 @@ void GreycstorationIface::filterImage()
 
 void GreycstorationIface::restoration()
 {
-    for (uint iter = 0 ; !m_cancel && (iter < m_priv->settings.nbIter) ; iter++)
+    for (uint iter = 0 ; !m_cancel && (iter < d->settings.nbIter) ; iter++)
     {
         // This function will start a thread running one iteration of the GREYCstoration filter.
         // It returns immediately, so you can do what you want after (update a progress bar for
         // instance).
-        m_priv->img.greycstoration_run(m_priv->settings.amplitude,
-                                       m_priv->settings.sharpness,
-                                       m_priv->settings.anisotropy,
-                                       m_priv->settings.alpha,
-                                       m_priv->settings.sigma,
+        d->img.greycstoration_run(d->settings.amplitude,
+                                  d->settings.sharpness,
+                                  d->settings.anisotropy,
+                                  d->settings.alpha,
+                                  d->settings.sigma,
 #ifdef GREYSTORATION_USING_GFACT
-                                       m_priv->gfact,
+                                  d->gfact,
 #endif
-                                       m_priv->settings.dl,
-                                       m_priv->settings.da,
-                                       m_priv->settings.gaussPrec,
-                                       m_priv->settings.interp,
-                                       m_priv->settings.fastApprox,
-                                       m_priv->settings.tile,
-                                       m_priv->settings.btile,
-                                       m_priv->computationThreads);
+                                  d->settings.dl,
+                                  d->settings.da,
+                                  d->settings.gaussPrec,
+                                  d->settings.interp,
+                                  d->settings.fastApprox,
+                                  d->settings.tile,
+                                  d->settings.btile,
+                                  d->computationThreads);
 
         iterationLoop(iter);
     }
@@ -370,22 +363,22 @@ void GreycstorationIface::restoration()
 
 void GreycstorationIface::inpainting()
 {
-    if (!m_priv->inPaintingMask.isNull())
+    if (!d->inPaintingMask.isNull())
     {
         // Copy the inpainting image data into a CImg type image with three channels and no alpha.
 
         register int x, y;
 
-        m_priv->mask    = CImg<uchar>(m_priv->inPaintingMask.width(), m_priv->inPaintingMask.height(), 1, 3);
-        uchar *ptr = m_priv->inPaintingMask.bits();
+        d->mask    = CImg<uchar>(d->inPaintingMask.width(), d->inPaintingMask.height(), 1, 3);
+        uchar *ptr = d->inPaintingMask.bits();
 
-        for (y = 0; y < m_priv->inPaintingMask.height(); y++)
+        for (y = 0; y < d->inPaintingMask.height(); y++)
         {
-            for (x = 0; x < m_priv->inPaintingMask.width(); x++)
+            for (x = 0; x < d->inPaintingMask.width(); x++)
             {
-                m_priv->mask(x, y, 0) = ptr[2];        // blue.
-                m_priv->mask(x, y, 1) = ptr[1];        // green.
-                m_priv->mask(x, y, 2) = ptr[0];        // red.
+                d->mask(x, y, 0) = ptr[2];        // blue.
+                d->mask(x, y, 1) = ptr[1];        // green.
+                d->mask(x, y, 2) = ptr[0];        // red.
                 ptr += 4;
             }
         }
@@ -397,28 +390,28 @@ void GreycstorationIface::inpainting()
         return;
     }
 
-    for (uint iter=0 ; !m_cancel && (iter < m_priv->settings.nbIter) ; iter++)
+    for (uint iter=0 ; !m_cancel && (iter < d->settings.nbIter) ; iter++)
     {
         // This function will start a thread running one iteration of the GREYCstoration filter.
         // It returns immediately, so you can do what you want after (update a progress bar for
         // instance).
-        m_priv->img.greycstoration_run(m_priv->mask,
-                                       m_priv->settings.amplitude,
-                                       m_priv->settings.sharpness,
-                                       m_priv->settings.anisotropy,
-                                       m_priv->settings.alpha,
-                                       m_priv->settings.sigma,
+        d->img.greycstoration_run(d->mask,
+                                  d->settings.amplitude,
+                                  d->settings.sharpness,
+                                  d->settings.anisotropy,
+                                  d->settings.alpha,
+                                  d->settings.sigma,
 #ifdef GREYSTORATION_USING_GFACT
-                                       m_priv->gfact,
+                                  d->gfact,
 #endif
-                                       m_priv->settings.dl,
-                                       m_priv->settings.da,
-                                       m_priv->settings.gaussPrec,
-                                       m_priv->settings.interp,
-                                       m_priv->settings.fastApprox,
-                                       m_priv->settings.tile,
-                                       m_priv->settings.btile,
-                                       m_priv->computationThreads);
+                                  d->settings.dl,
+                                  d->settings.da,
+                                  d->settings.gaussPrec,
+                                  d->settings.interp,
+                                  d->settings.fastApprox,
+                                  d->settings.tile,
+                                  d->settings.btile,
+                                  d->computationThreads);
 
         iterationLoop(iter);
     }
@@ -432,37 +425,37 @@ void GreycstorationIface::resize()
     int w = m_destImage.width();
     int h = m_destImage.height();
 
-    m_priv->mask.assign(m_priv->img.dimx(), m_priv->img.dimy(), 1, 1, 255);
+    d->mask.assign(d->img.dimx(), d->img.dimy(), 1, 1, 255);
 
     if (!anchor)
-        m_priv->mask.resize(w, h, 1, 1, 1);
+        d->mask.resize(w, h, 1, 1, 1);
     else
-        m_priv->mask = !m_priv->mask.resize(w, h, 1, 1, 4);
+        d->mask = !d->mask.resize(w, h, 1, 1, 4);
 
-    m_priv->img.resize(w, h, 1, -100, init);
+    d->img.resize(w, h, 1, -100, init);
 
-    for (uint iter = 0 ; !m_cancel && (iter < m_priv->settings.nbIter) ; iter++)
+    for (uint iter = 0 ; !m_cancel && (iter < d->settings.nbIter) ; iter++)
     {
         // This function will start a thread running one iteration of the GREYCstoration filter.
         // It returns immediately, so you can do what you want after (update a progress bar for
         // instance).
-        m_priv->img.greycstoration_run(m_priv->mask,
-                                       m_priv->settings.amplitude,
-                                       m_priv->settings.sharpness,
-                                       m_priv->settings.anisotropy,
-                                       m_priv->settings.alpha,
-                                       m_priv->settings.sigma,
+        d->img.greycstoration_run(d->mask,
+                                  d->settings.amplitude,
+                                  d->settings.sharpness,
+                                  d->settings.anisotropy,
+                                  d->settings.alpha,
+                                  d->settings.sigma,
 #ifdef GREYSTORATION_USING_GFACT
-                                       m_priv->gfact,
+                                  d->gfact,
 #endif
-                                       m_priv->settings.dl,
-                                       m_priv->settings.da,
-                                       m_priv->settings.gaussPrec,
-                                       m_priv->settings.interp,
-                                       m_priv->settings.fastApprox,
-                                       m_priv->settings.tile,
-                                       m_priv->settings.btile,
-                                       m_priv->computationThreads);
+                                  d->settings.dl,
+                                  d->settings.da,
+                                  d->settings.gaussPrec,
+                                  d->settings.interp,
+                                  d->settings.fastApprox,
+                                  d->settings.tile,
+                                  d->settings.btile,
+                                  d->computationThreads);
 
         iterationLoop(iter);
     }
@@ -475,13 +468,13 @@ void GreycstorationIface::simpleResize()
     int w = m_destImage.width();
     int h = m_destImage.height();
 
-    while (m_priv->img.dimx() > 2*w &&
-           m_priv->img.dimy() > 2*h)
+    while (d->img.dimx() > 2*w &&
+           d->img.dimy() > 2*h)
     {
-        m_priv->img.resize_halfXY();
+        d->img.resize_halfXY();
     }
 
-    m_priv->img.resize(w, h, -100, -100, method);
+    d->img.resize(w, h, -100, -100, method);
 }
 
 void GreycstorationIface::iterationLoop(uint iter)
@@ -498,7 +491,7 @@ void GreycstorationIface::iterationLoop(uint iter)
             // Update the progress bar in dialog. We simply computes the global
             // progression index (including all iterations).
 
-            p = (uint)((iter*100 + m_priv->img.greycstoration_progress())/m_priv->settings.nbIter);
+            p = (uint)((iter*100 + d->img.greycstoration_progress())/d->settings.nbIter);
 
             if (p > mp)
             {
@@ -507,7 +500,7 @@ void GreycstorationIface::iterationLoop(uint iter)
             }
         }
     }
-    while (m_priv->img.greycstoration_is_running() && !m_cancel);
+    while (d->img.greycstoration_is_running() && !m_cancel);
 
     // A delay is require here. I suspect a sync problem between threads
     // used by GreycStoration algorithm.

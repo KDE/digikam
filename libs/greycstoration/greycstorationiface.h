@@ -6,7 +6,7 @@
  * Date        : 2007-12-03
  * Description : Greycstoration interface.
  *
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,7 +31,6 @@
 // Local includes.
 
 #include "dimg.h"
-#include "dshareddata.h"
 #include "dimgthreadedfilter.h"
 #include "greycstorationsettings.h"
 #include "digikam_export.h"
@@ -75,9 +74,6 @@ public:
 
     ~GreycstorationIface();
 
-    /** Equivalent to the copy constructor */
-    GreycstorationIface& operator=(const GreycstorationIface& iface);
-
     void setMode(int mode, int newWidth=0, int newHeight=0);
     void setSettings(const GreycstorationSettings& settings);
     void setInPaintingMask(const QImage& inPaintingMask);
@@ -102,7 +98,7 @@ private:
 
 private:
 
-    DSharedDataPointer<GreycstorationIfacePriv> m_priv;
+    GreycstorationIfacePriv* const d;
 };
 
 }  // namespace Digikam
