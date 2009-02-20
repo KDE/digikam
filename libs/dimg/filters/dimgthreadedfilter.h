@@ -6,8 +6,8 @@
  * Date        : 2005-05-25
  * Description : threaded image filter class.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,7 +51,14 @@ class DIGIKAM_EXPORT DImgThreadedFilter : public QThread
 
 public:
 
-    /** Constructs a filter.
+    /** Constructs a filter without argument.
+        You need to call setOriginalImage(), setFilterName(), and startFilter() 
+        to start the threaded computation.
+        To run filter without to use multithreading, call startFilterDirectly().
+    */
+    DImgThreadedFilter(QObject *parent);
+
+    /** Constructs a filter with all arguments (ready to use).
         You need to call startFilter() to start the threaded computation.
         To run filter without to use multithreading, call startFilterDirectly().
     */
@@ -59,6 +66,9 @@ public:
                        const QString& name = QString());
 
     ~DImgThreadedFilter();
+
+    void setOriginalImage(const DImg& orgImage);
+    void setFilterName(const QString& name);
 
     DImg getTargetImage()       { return m_destImage; };
     const QString &filterName() { return m_name; };

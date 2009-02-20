@@ -6,8 +6,8 @@
  * Date        : 2005-05-25
  * Description : threaded image filter class.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,17 +37,30 @@
 namespace Digikam
 {
 
+DImgThreadedFilter::DImgThreadedFilter(QObject *parent)
+                  : QThread()
+{
+    setOriginalImage(DImg());
+    setFilterName(QString());
+
+    m_parent        = parent;
+    m_cancel        = false;
+    m_master        = 0;
+    m_slave         = 0;
+    m_progressBegin = 0;
+    m_progressSpan  = 100;
+}
+
 DImgThreadedFilter::DImgThreadedFilter(DImg *orgImage, QObject *parent,
                                        const QString& name)
                   : QThread()
 {
     // remove meta data
-    m_orgImage      = orgImage->copyImageData();
+    setOriginalImage(orgImage->copyImageData());
+    setFilterName(name);
+
     m_parent        = parent;
     m_cancel        = false;
-
-    m_name          = name;
-
     m_master        = 0;
     m_slave         = 0;
     m_progressBegin = 0;
@@ -58,13 +71,12 @@ DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter *master, const DImg &o
                                        const DImg &destImage, int progressBegin, int progressEnd,
                                        const QString& name)
 {
-    m_orgImage      = orgImage;
-    m_destImage     = destImage;
+    setOriginalImage(orgImage);
+    setFilterName(name);
+
     m_parent        = 0;
+    m_destImage     = destImage;
     m_cancel        = false;
-
-    m_name          = QString(name);
-
     m_master        = master;
     m_slave         = 0;
     m_progressBegin = progressBegin;
@@ -78,6 +90,16 @@ DImgThreadedFilter::~DImgThreadedFilter()
     cancelFilter();
     if (m_master)
         m_master->setSlave(0);
+}
+
+void DImgThreadedFilter::setOriginalImage(const DImg& orgImage)
+{
+    m_orgImage = orgImage;
+}
+
+void DImgThreadedFilter::setFilterName(const QString& name)
+{
+    m_name = QString(name);
 }
 
 void DImgThreadedFilter::initFilter()
