@@ -116,7 +116,8 @@ bool Rotate::toolOperations()
     {
         if (useExif)
         {
-            return (exifTransform(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), Auto));
+            if (!exifTransform(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), Auto))
+                return false;
         }
         else
         {
