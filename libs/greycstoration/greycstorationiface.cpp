@@ -80,6 +80,8 @@ public:
         mode               = GreycstorationIface::Restore;
         gfact              = 1.0;
         computationThreads = 2;
+        img                = CImg<>();
+        mask               = CImg<uchar>();
     }
 
     float                  gfact;
@@ -139,7 +141,7 @@ void GreycstorationIface::setSettings(const GreycstorationSettings& settings)
 
 void GreycstorationIface::setMode(int mode, int newWidth, int newHeight)
 {
-    m_priv->mode = mode;
+    m_priv->mode    = mode;
     m_priv->newSize = QSize(newWidth, newHeight);
 }
 
@@ -152,8 +154,8 @@ void GreycstorationIface::computeChildrenThreads()
 {
     // Check number of CPU with Solid interface.
 
-    const int numProcs    = qMax(Solid::Device::listFromType(Solid::DeviceInterface::Processor).count(), 1);
-    const int maxThreads  = 16;
+    const int numProcs         = qMax(Solid::Device::listFromType(Solid::DeviceInterface::Processor).count(), 1);
+    const int maxThreads       = 16;
     m_priv->computationThreads = qMin(maxThreads, 2 + ((numProcs - 1) * 2));
     kDebug(50003) << "GreycstorationIface::Computation threads: " << m_priv->computationThreads << endl;
 }
@@ -223,7 +225,7 @@ void GreycstorationIface::filterImage()
     uchar* imageData = m_orgImage.bits();
     int imageWidth   = m_orgImage.width();
     int imageHeight  = m_orgImage.height();
-    m_priv->img           = CImg<>(imageWidth, imageHeight, 1, 4);
+    m_priv->img      = CImg<>(imageWidth, imageHeight, 1, 4);
 
     if (!m_orgImage.sixteenBit())           // 8 bits image.
     {
@@ -346,21 +348,21 @@ void GreycstorationIface::restoration()
         // It returns immediately, so you can do what you want after (update a progress bar for
         // instance).
         m_priv->img.greycstoration_run(m_priv->settings.amplitude,
-                                  m_priv->settings.sharpness,
-                                  m_priv->settings.anisotropy,
-                                  m_priv->settings.alpha,
-                                  m_priv->settings.sigma,
+                                       m_priv->settings.sharpness,
+                                       m_priv->settings.anisotropy,
+                                       m_priv->settings.alpha,
+                                       m_priv->settings.sigma,
 #ifdef GREYSTORATION_USING_GFACT
-                                  m_priv->gfact,
+                                       m_priv->gfact,
 #endif
-                                  m_priv->settings.dl,
-                                  m_priv->settings.da,
-                                  m_priv->settings.gaussPrec,
-                                  m_priv->settings.interp,
-                                  m_priv->settings.fastApprox,
-                                  m_priv->settings.tile,
-                                  m_priv->settings.btile,
-                                  m_priv->computationThreads);
+                                       m_priv->settings.dl,
+                                       m_priv->settings.da,
+                                       m_priv->settings.gaussPrec,
+                                       m_priv->settings.interp,
+                                       m_priv->settings.fastApprox,
+                                       m_priv->settings.tile,
+                                       m_priv->settings.btile,
+                                       m_priv->computationThreads);
 
         iterationLoop(iter);
     }
@@ -401,22 +403,22 @@ void GreycstorationIface::inpainting()
         // It returns immediately, so you can do what you want after (update a progress bar for
         // instance).
         m_priv->img.greycstoration_run(m_priv->mask,
-                                  m_priv->settings.amplitude,
-                                  m_priv->settings.sharpness,
-                                  m_priv->settings.anisotropy,
-                                  m_priv->settings.alpha,
-                                  m_priv->settings.sigma,
+                                       m_priv->settings.amplitude,
+                                       m_priv->settings.sharpness,
+                                       m_priv->settings.anisotropy,
+                                       m_priv->settings.alpha,
+                                       m_priv->settings.sigma,
 #ifdef GREYSTORATION_USING_GFACT
-                                  m_priv->gfact,
+                                       m_priv->gfact,
 #endif
-                                  m_priv->settings.dl,
-                                  m_priv->settings.da,
-                                  m_priv->settings.gaussPrec,
-                                  m_priv->settings.interp,
-                                  m_priv->settings.fastApprox,
-                                  m_priv->settings.tile,
-                                  m_priv->settings.btile,
-                                  m_priv->computationThreads);
+                                       m_priv->settings.dl,
+                                       m_priv->settings.da,
+                                       m_priv->settings.gaussPrec,
+                                       m_priv->settings.interp,
+                                       m_priv->settings.fastApprox,
+                                       m_priv->settings.tile,
+                                       m_priv->settings.btile,
+                                       m_priv->computationThreads);
 
         iterationLoop(iter);
     }
@@ -445,22 +447,22 @@ void GreycstorationIface::resize()
         // It returns immediately, so you can do what you want after (update a progress bar for
         // instance).
         m_priv->img.greycstoration_run(m_priv->mask,
-                                  m_priv->settings.amplitude,
-                                  m_priv->settings.sharpness,
-                                  m_priv->settings.anisotropy,
-                                  m_priv->settings.alpha,
-                                  m_priv->settings.sigma,
+                                       m_priv->settings.amplitude,
+                                       m_priv->settings.sharpness,
+                                       m_priv->settings.anisotropy,
+                                       m_priv->settings.alpha,
+                                       m_priv->settings.sigma,
 #ifdef GREYSTORATION_USING_GFACT
-                                  m_priv->gfact,
+                                       m_priv->gfact,
 #endif
-                                  m_priv->settings.dl,
-                                  m_priv->settings.da,
-                                  m_priv->settings.gaussPrec,
-                                  m_priv->settings.interp,
-                                  m_priv->settings.fastApprox,
-                                  m_priv->settings.tile,
-                                  m_priv->settings.btile,
-                                  m_priv->computationThreads);
+                                       m_priv->settings.dl,
+                                       m_priv->settings.da,
+                                       m_priv->settings.gaussPrec,
+                                       m_priv->settings.interp,
+                                       m_priv->settings.fastApprox,
+                                       m_priv->settings.tile,
+                                       m_priv->settings.btile,
+                                       m_priv->computationThreads);
 
         iterationLoop(iter);
     }
