@@ -54,9 +54,6 @@ Restoration::Restoration(QObject* parent)
     setToolDescription(i18n("A tool to restore photograph based on Greystoration"));
     setToolIcon(KIcon(SmallIcon("restoration")));
 
-    m_cimgIface.setParent(this);
-    m_cimgIface.setMode(GreycstorationIface::Restore);
-
     KVBox *vbox   = new KVBox;
 
     KUrlLabel *cimgLogoLabel = new KUrlLabel(vbox);
@@ -146,12 +143,19 @@ bool Restoration::toolOperations()
         }
     }
 
-    m_cimgIface.setOriginalImage(img);
-    m_cimgIface.setSettings(settings);
-    m_cimgIface.setup();
-    m_cimgIface.startFilterDirectly();
-    DImg trg = m_cimgIface.getTargetImage();
+    m_cimgIface = new GreycstorationIface(this);
+    m_cimgIface->setMode(GreycstorationIface::Restore);
+    m_cimgIface->setOriginalImage(img);
+    m_cimgIface->setSettings(settings);
+    m_cimgIface->setup();
+    m_cimgIface->startFilterDirectly();
+
+    if (isCancelled()) return false;
+
+    DImg trg    = m_cimgIface->getTargetImage();
     img.putImageData(trg.bits());
+    delete m_cimgIface;
+    m_cimgIface = 0;
 
     DImg::FORMAT format = (DImg::FORMAT)(img.attribute("detectedFileFormat").toInt());
 
@@ -162,7 +166,8 @@ bool Restoration::toolOperations()
 
 void Restoration::cancel()
 {
-    m_cimgIface.cancelFilter();
+    if (m_cimgIface)
+        m_cimgIface->cancelFilter();
     BatchTool::cancel();
 }
 

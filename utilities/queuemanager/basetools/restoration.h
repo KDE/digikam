@@ -67,7 +67,7 @@ private:
 
     KComboBox           *m_comboBox;
 
-    GreycstorationIface  m_cimgIface;
+    GreycstorationIface *m_cimgIface;
 };
 
 }  // namespace Digikam
