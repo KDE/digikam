@@ -57,14 +57,29 @@ public:
 
 public:
 
+    /** Contructor without argument. Before to use it,
+        you need to call in order: setSettings(), setMode(), optionally setInPaintingMask(), 
+        setOriginalImage(), and necessary setup() at end.
+     */
+    GreycstorationIface(QObject *parent=0);
+
+    /** Contructor with all arguments. Ready to use.
+     */
     GreycstorationIface(DImg *orgImage,
-                        GreycstorationSettings settings,
+                        const GreycstorationSettings& settings,
                         int mode=Restore,
                         int newWidth=0, int newHeight=0,
                         const QImage& inPaintingMask=QImage(),
                         QObject *parent=0);
 
     ~GreycstorationIface();
+
+    void setImage(const DImg& orgImage);
+    void setMode(int mode, int newWidth=0, int newHeight=0);
+    void setSettings(const GreycstorationSettings& settings);
+    void setInPaintingMask(const QImage& inPaintingMask);
+
+    void setup();
 
     virtual void cancelFilter();
 
@@ -75,6 +90,7 @@ private:
     virtual void initFilter();
     virtual void filterImage();
 
+    void computeChildrenThreads();
     void restoration();
     void inpainting();
     void resize();

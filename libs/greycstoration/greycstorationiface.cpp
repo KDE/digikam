@@ -87,6 +87,7 @@ public:
     int                    computationThreads;  // Number of threads used by CImg during computation.
     int                    mode;                // The interface running mode.
 
+    QSize                  newSize;
     QImage                 inPaintingMask;      // Mask for inpainting.
 
     GreycstorationSettings settings;            // Current Greycstoraion algorithm settings.
@@ -95,35 +96,76 @@ public:
     CImg<uchar>            mask;                // The mask used with inpaint or resize mode
 };
 
+GreycstorationIface::GreycstorationIface(QObject *parent)
+                   : DImgThreadedFilter(parent),
+                     d(new GreycstorationIfacePriv)
+{
+    setSettings(GreycstorationSettings());
+    setMode(Restore);
+    setInPaintingMask(QImage());
+    setOriginalImage(DImg());
+}
+
 GreycstorationIface::GreycstorationIface(DImg *orgImage,
-                                         GreycstorationSettings settings,
+                                         const GreycstorationSettings& settings,
                                          int mode,
                                          int newWidth, int newHeight,
                                          const QImage& inPaintingMask,
                                          QObject *parent)
-                   : DImgThreadedFilter(orgImage, parent),
+                   : DImgThreadedFilter(parent),
                      d(new GreycstorationIfacePriv)
 {
-    d->settings       = settings;
-    d->mode           = mode;
-    d->inPaintingMask = inPaintingMask;
+    setOriginalImage(orgImage->copyImageData());
+    setSettings(settings);
+    setMode(mode, newWidth, newHeight);
+    setInPaintingMask(inPaintingMask);
+    setup();
+}
 
+GreycstorationIface::~GreycstorationIface()
+{
+    delete d;
+}
+
+void GreycstorationIface::setSettings(const GreycstorationSettings& settings)
+{
+    d->settings = settings;
+}
+
+void GreycstorationIface::setMode(int mode, int newWidth, int newHeight)
+{
+    d->mode = mode;
+    d->newSize = QSize(newWidth, newHeight);
+}
+
+void GreycstorationIface::setInPaintingMask(const QImage& inPaintingMask)
+{
+    d->inPaintingMask = inPaintingMask;
+}
+
+void GreycstorationIface::computeChildrenThreads()
+{
     // Check number of CPU with Solid interface.
 
     const int numProcs    = qMax(Solid::Device::listFromType(Solid::DeviceInterface::Processor).count(), 1);
     const int maxThreads  = 16;
     d->computationThreads = qMin(maxThreads, 2 + ((numProcs - 1) * 2));
     kDebug(50003) << "GreycstorationIface::Computation threads: " << d->computationThreads << endl;
+}
 
-    if (m_orgImage.sixteenBit())           // 16 bits image.
+void GreycstorationIface::setup()
+{
+    computeChildrenThreads();
+
+    if (m_orgImage.sixteenBit())   // 16 bits image.
         d->gfact = 1.0/256.0;
 
     if (d->mode == Resize || d->mode == SimpleResize)
     {
-        m_destImage = Digikam::DImg(newWidth, newHeight,
+        m_destImage = Digikam::DImg(d->newSize.width(), d->newSize.height(),
                                     m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
         kDebug(50003) << "GreycstorationIface::Resize: new size: ("
-                 << newWidth << ", " << newHeight << ")" << endl;
+                      << d->newSize.width() << ", " << d->newSize.height() << ")" << endl;
     }
     else
     {
@@ -132,11 +174,6 @@ GreycstorationIface::GreycstorationIface(DImg *orgImage,
     }
 
     initFilter();
-}
-
-GreycstorationIface::~GreycstorationIface()
-{
-    delete d;
 }
 
 QString GreycstorationIface::cimgVersionString()
