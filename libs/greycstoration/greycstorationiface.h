@@ -31,6 +31,7 @@
 // Local includes.
 
 #include "dimg.h"
+#include "dshareddata.h"
 #include "dimgthreadedfilter.h"
 #include "greycstorationsettings.h"
 #include "digikam_export.h"
@@ -74,6 +75,9 @@ public:
 
     ~GreycstorationIface();
 
+    /** Equivalent to the copy constructor */
+    GreycstorationIface& operator=(const GreycstorationIface& iface);
+
     void setMode(int mode, int newWidth=0, int newHeight=0);
     void setSettings(const GreycstorationSettings& settings);
     void setInPaintingMask(const QImage& inPaintingMask);
@@ -98,7 +102,7 @@ private:
 
 private:
 
-    GreycstorationIfacePriv* const d;
+    DSharedDataPointer<GreycstorationIfacePriv> m_priv;
 };
 
 }  // namespace Digikam
