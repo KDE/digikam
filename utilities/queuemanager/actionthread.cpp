@@ -53,6 +53,7 @@ public:
 
     ActionThreadPriv()
     {
+        tool               = 0;
         running            = false;
         cancel             = false;
         exifSetOrientation = true;
@@ -67,17 +68,19 @@ public:
             AssignedBatchTools item;
     };
 
-    bool           running;
-    bool           cancel;
-    bool           exifSetOrientation;
+    bool            running;
+    bool            cancel;
+    bool            exifSetOrientation;
 
-    QMutex         mutex;
+    QMutex          mutex;
 
-    QWaitCondition condVar;
+    QWaitCondition  condVar;
 
-    QList<Task*>   todo;
+    QList<Task*>    todo;
 
-    KUrl           workingUrl;
+    KUrl            workingUrl;
+
+    BatchTool      *tool;
 };
 
 ActionThread::ActionThread(QObject *parent)
@@ -119,6 +122,8 @@ void ActionThread::processFile(const AssignedBatchTools& item)
 void ActionThread::cancel()
 {
     d->cancel  = true;
+    if (d->tool) d->tool->cancel();
+
     QMutexLocker lock(&d->mutex);
     d->todo.clear();
     d->running = false;
@@ -127,7 +132,6 @@ void ActionThread::cancel()
 
 void ActionThread::run()
 {
-    d->cancel  = false;;
     d->running = true;
 
     while (d->running)
@@ -150,6 +154,7 @@ void ActionThread::run()
 
             // Loop with all batch tools operations to apply on item.
 
+            d->cancel    = false;
             int index    = 0;
             bool success = false;
             KUrl outUrl  = t->item.itemUrl;
@@ -161,7 +166,7 @@ void ActionThread::run()
             {
                 index                      = it.key();
                 BatchToolSet set           = it.value();
-                BatchTool *tool            = set.tool;
+                d->tool                    = set.tool;
                 BatchToolSettings settings = set.settings;
                 inUrl                      = outUrl;
 
@@ -173,19 +178,19 @@ void ActionThread::run()
                 ad2.index   = index;
                 emit finished(ad2);
 
-                tool->setCancelFlag(&d->cancel);
-                tool->setWorkingUrl(d->workingUrl);
-                tool->setExifSetOrientation(d->exifSetOrientation);
-                tool->setInputUrl(inUrl);
-                tool->setSettings(settings);
-                tool->setInputUrl(inUrl);
-                tool->setOutputUrlFromInputUrl();
+                d->tool->setWorkingUrl(d->workingUrl);
+                d->tool->setExifSetOrientation(d->exifSetOrientation);
+                d->tool->setInputUrl(inUrl);
+                d->tool->setSettings(settings);
+                d->tool->setInputUrl(inUrl);
+                d->tool->setOutputUrlFromInputUrl();
 
-                outUrl  = tool->outputUrl();
-                success = tool->apply();
+                outUrl  = d->tool->outputUrl();
+                success = d->tool->apply();
                 tmp2del.append(outUrl);
+                d->tool = 0;
 
-                if (success)
+                if (success && !d->cancel)
                 {
                     ActionData ad3;
                     ad3.fileUrl = t->item.itemUrl;

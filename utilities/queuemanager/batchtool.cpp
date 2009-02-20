@@ -45,13 +45,13 @@ public:
 
     BatchToolPriv()
     {
-        cancel             = 0;
         settingsWidget     = 0;
         exifSetOrientation = true;
+        cancel             = false;
     }
 
     bool                      exifSetOrientation;
-    const bool*               cancel;
+    bool                      cancel;
 
     QString                   toolTitle;          // User friendly tool title.
     QString                   toolDescription;    // User friendly tool description.
@@ -174,9 +174,14 @@ KUrl BatchTool::workingUrl() const
     return d->workingUrl;
 }
 
-void BatchTool::setCancelFlag(const bool* cancel)
+void BatchTool::cancel()
 {
-    d->cancel = cancel;
+    d->cancel = true;
+}
+
+bool BatchTool::isCancelled()
+{
+    return d->cancel;
 }
 
 BatchToolSettings BatchTool::settings()
@@ -186,6 +191,8 @@ BatchToolSettings BatchTool::settings()
 
 bool BatchTool::apply()
 {
+    d->cancel = false;
+
     kDebug(50003) << "Tool:       " << toolTitle() << endl;
     kDebug(50003) << "Input url:  " << inputUrl()  << endl;
     kDebug(50003) << "Output url: " << outputUrl() << endl;

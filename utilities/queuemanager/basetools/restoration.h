@@ -27,6 +27,7 @@
 // Local includes.
 
 #include "batchtool.h"
+#include "greycstorationiface.h"
 
 class KComboBox;
 
@@ -43,6 +44,8 @@ public:
     ~Restoration();
 
     BatchToolSettings defaultSettings();
+
+    void cancel();
 
 private:
 
@@ -62,7 +65,9 @@ private:
         ReduceTexturing
     };
 
-    KComboBox *m_comboBox;
+    KComboBox           *m_comboBox;
+
+    GreycstorationIface  m_cimgIface;
 };
 
 }  // namespace Digikam

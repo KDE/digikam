@@ -43,17 +43,19 @@
 
 #include "dimg.h"
 #include "greycstorationsettings.h"
-#include "greycstorationiface.h"
 
 namespace Digikam
 {
 
 Restoration::Restoration(QObject* parent)
-           : BatchTool("Restoration", BaseTool, parent)
+           : BatchTool("Restoration", BaseTool, parent), m_cimgIface(0)
 {
     setToolTitle(i18n("Restoration"));
     setToolDescription(i18n("A tool to restore photograph based on Greystoration"));
     setToolIcon(KIcon(SmallIcon("restoration")));
+
+    m_cimgIface.setParent(this);
+    m_cimgIface.setMode(GreycstorationIface::Restore);
 
     KVBox *vbox   = new KVBox;
 
@@ -144,9 +146,11 @@ bool Restoration::toolOperations()
         }
     }
 
-    GreycstorationIface iface(&img, settings, GreycstorationIface::Restore, 0, 0, QImage(), this);
-    iface.startFilterDirectly();
-    DImg trg = iface.getTargetImage();
+    m_cimgIface.setOriginalImage(img);
+    m_cimgIface.setSettings(settings);
+    m_cimgIface.setup();
+    m_cimgIface.startFilterDirectly();
+    DImg trg = m_cimgIface.getTargetImage();
     img.putImageData(trg.bits());
 
     DImg::FORMAT format = (DImg::FORMAT)(img.attribute("detectedFileFormat").toInt());
@@ -154,6 +158,12 @@ bool Restoration::toolOperations()
     img.updateMetadata(DImg::formatToMimeType(format), QString(), getExifSetOrientation());
 
     return( img.save(outputUrl().path(), format) );
+}
+
+void Restoration::cancel()
+{
+    m_cimgIface.cancelFilter();
+    BatchTool::cancel();
 }
 
 }  // namespace Digikam

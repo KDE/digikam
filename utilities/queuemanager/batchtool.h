@@ -95,9 +95,13 @@ public:
     void setExifSetOrientation(bool set);
     bool getExifSetOrientation() const;
 
-    void setCancelFlag(const bool* cancel);
-
     bool apply();
+
+    /** Re-implement this method is you want customize cancelization of tool, for ex. to call 
+        a dedicated method to kill sub-threads parented to this tool instance.
+        Unforget to call parent BatchTool::cancel() method in you customized implementation.
+     */
+    virtual void cancel();
 
     virtual void setOutputUrlFromInputUrl();
 
@@ -110,6 +114,10 @@ signals:
     void signalSettingsChanged(const BatchToolSettings&);
 
 protected:
+
+    /** Return true if cancel() have been called. Use this method to stop loop in your toolOperations() implementation.
+     */
+    bool isCancelled();
 
     /** Re-implement this method to customize how all settings values must be assigned to settings widget.
         This method is called by setSettings().
