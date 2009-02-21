@@ -50,6 +50,10 @@ public:
     QueueSettingsView(QWidget *parent=0);
     ~QueueSettingsView();
 
+public slots:
+
+    void slotQueueSelected(int id);
+
 private:
 
     QueueSettingsViewPriv* const d;

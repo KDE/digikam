@@ -117,4 +117,9 @@ QueueSettingsView::~QueueSettingsView()
     delete d;
 }
 
+void QueueSettingsView::slotQueueSelected(int /*id*/)
+{
+    //TODO
+}
+
 }  // namespace Digikam

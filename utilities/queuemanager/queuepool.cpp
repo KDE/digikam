@@ -177,10 +177,14 @@ void QueuePool::slotAssignedToolsChanged(const AssignedBatchTools& tools4Item)
     if (queue) queue->slotAssignedToolsChanged(tools4Item);
 }
 
-void QueuePool::slotQueuePoolChanged(int)
+void QueuePool::slotQueuePoolChanged(int id)
 {
     QueueListView* queue = currentQueue();
-    if (queue) queue->slotItemSelectionChanged();
+    if (queue)
+    {
+        queue->slotItemSelectionChanged();
+        emit signalQueueSelected(id);
+    }
 }
 
 void QueuePool::slotCloseQueueRequest(QWidget* w)
