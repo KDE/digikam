@@ -69,6 +69,7 @@ public:
         contributeAction       = 0;
         assignedList           = 0;
         queuePool              = 0;
+        queueSettingsView      = 0;
         toolsList              = 0;
         batchToolsMgr          = 0;
         toolSettings           = 0;
@@ -125,9 +126,10 @@ public:
     ActionThread              *thread;
 
     ToolsListView             *toolsList;
+    ToolSettingsView          *toolSettings;
     AssignedListView          *assignedList;
     QueuePool                 *queuePool;
-    ToolSettingsView          *toolSettings;
+    QueueSettingsView         *queueSettingsView;
 
     QueuePoolItemsList         itemsList;
 
