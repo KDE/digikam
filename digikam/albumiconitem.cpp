@@ -373,7 +373,7 @@ void AlbumIconItem::paintItem(QPainter *p)
 
     if (settings->getIconShowTags())
     {
-        QString tags = AlbumManager::instance()->tagPaths(d->info.tagIds(), false).join(", ");
+        QString tags = AlbumManager::instance()->tagNames(d->info.tagIds()).join(", ");
 
         r = d->view->itemTagRect();
         p->drawText(r, Qt::AlignCenter, squeezedText(p, r.width(), tags));
