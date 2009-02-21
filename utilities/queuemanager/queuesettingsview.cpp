@@ -101,8 +101,8 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
 
     vlay->addWidget(d->overwriteButton);
     vlay->addWidget(d->promptButton);
-    vlay->setMargin(KDialog::spacingHint());
-    vlay->setSpacing(KDialog::spacingHint());
+    vlay->setMargin(0);
+    vlay->setSpacing(0);
 
     layout->addWidget(d->uploadLabel);
     layout->addWidget(d->uploadWidget);
