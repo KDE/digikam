@@ -216,46 +216,46 @@ void QueueMgrWindow::setupUserArea()
 
     // ------------------------------------------------------------------------------
 
-    QGroupBox *gbox1   = new QGroupBox(i18n("Queues"), mainW);
-    QVBoxLayout *vlay1 = new QVBoxLayout(gbox1);
-    d->queuePool        = new QueuePool(gbox1);
+    QGroupBox *queuesBox = new QGroupBox(i18n("Queues"), mainW);
+    QVBoxLayout *vlay1   = new QVBoxLayout(queuesBox);
+    d->queuePool         = new QueuePool(queuesBox);
     vlay1->addWidget(d->queuePool);
     vlay1->setSpacing(0);
     vlay1->setMargin(0);
 
     // ------------------------------------------------------------------------------
 
-    QGroupBox *gbox2   = new QGroupBox(i18n("Batch Tools Available"), mainW);
-    QVBoxLayout *vlay2 = new QVBoxLayout(gbox2);
-    d->toolsList       = new ToolsListView(gbox2);
+    QGroupBox *toolsBox = new QGroupBox(i18n("Batch Tools Available"), mainW);
+    QVBoxLayout *vlay2  = new QVBoxLayout(toolsBox);
+    d->toolsList        = new ToolsListView(toolsBox);
     vlay2->addWidget(d->toolsList);
     vlay2->setSpacing(0);
     vlay2->setMargin(0);
 
     // ------------------------------------------------------------------------------
 
-    QGroupBox *gbox3   = new QGroupBox(i18n("Assigned Tools"), mainW);
-    QVBoxLayout *vlay3 = new QVBoxLayout(gbox3);
-    d->assignedList    = new AssignedListView(gbox3);
+    QGroupBox *assignBox = new QGroupBox(i18n("Assigned Tools"), mainW);
+    QVBoxLayout *vlay3   = new QVBoxLayout(assignBox);
+    d->assignedList      = new AssignedListView(assignBox);
     vlay3->addWidget(d->assignedList);
     vlay3->setSpacing(0);
     vlay3->setMargin(0);
 
     // ------------------------------------------------------------------------------
 
-    QGroupBox *gbox4   = new QGroupBox(i18n("Tool Settings"), mainW);
-    QVBoxLayout *vlay4 = new QVBoxLayout(gbox4);
-    d->toolSettings    = new ToolSettingsView(gbox4);
+    QGroupBox *toolSettingsBox = new QGroupBox(i18n("Tool Settings"), mainW);
+    QVBoxLayout *vlay4         = new QVBoxLayout(toolSettingsBox);
+    d->toolSettings            = new ToolSettingsView(toolSettingsBox);
     vlay4->addWidget(d->toolSettings);
     vlay4->setSpacing(0);
     vlay4->setMargin(0);
 
     // ------------------------------------------------------------------------------
 
-    grid->addWidget(gbox1, 0, 0, 1, 1);
-    grid->addWidget(gbox2, 1, 0, 1, 3);
-    grid->addWidget(gbox3, 0, 1, 1, 1);
-    grid->addWidget(gbox4, 0, 2, 1, 2);
+    grid->addWidget(queuesBox,       0, 0, 2, 1);
+    grid->addWidget(toolsBox,        1, 1, 1, 2);
+    grid->addWidget(assignBox,       0, 1, 1, 1);
+    grid->addWidget(toolSettingsBox, 0, 2, 1, 2);
     grid->setColumnStretch(0, 5);
     grid->setColumnStretch(1, 5);
     grid->setColumnStretch(2, 5);
