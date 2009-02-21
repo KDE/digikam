@@ -154,6 +154,8 @@ private slots:
 
     void slotUploaded(const GPItemInfo&);
     void slotDownloaded(const QString&, const QString&, int);
+    void slotDownloadCompleted(const QString &sourceFolder, const QString &sourceFile,
+                               const QString destFolder, const QString &destFile);
     void slotSkipped(const QString&, const QString&);
     void slotDeleted(const QString&, const QString&, bool);
     void slotLocked(const QString&, const QString&, bool);

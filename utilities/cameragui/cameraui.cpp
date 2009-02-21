@@ -647,6 +647,9 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
     connect(d->controller, SIGNAL(signalDownloaded(const QString&, const QString&, int)),
             this, SLOT(slotDownloaded(const QString&, const QString&, int)));
 
+    connect(d->controller, SIGNAL(signalDownloadCompleted(const QString&, const QString&, const QString&, const QString&)),
+            this, SLOT(slotDownloadComplete(const QString&, const QString&, const QString&, const QString&)));
+
     connect(d->controller, SIGNAL(signalSkipped(const QString&, const QString&)),
             this, SLOT(slotSkipped(const QString&, const QString&)));
 
@@ -1516,6 +1519,12 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
                                            iconItem->itemInfo()->mtime);
         }
     }
+}
+
+void CameraUI::slotDownloadCompleted(const QString &, const QString &,
+                                     const QString destFolder, const QString &)
+{
+    ScanController::instance()->scheduleCollectionScanRelaxed(destFolder);
 }
 
 void CameraUI::slotSkipped(const QString& folder, const QString& file)

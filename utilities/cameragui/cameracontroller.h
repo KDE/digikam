@@ -104,6 +104,8 @@ signals:
     void signalFileList(const GPItemInfoList& infoList);
     void signalUploaded(const GPItemInfo& itemInfo);
     void signalDownloaded(const QString& folder, const QString& file, int status);
+    void signalDownloadComplete(const QString &sourceFolder, const QString &sourceFile,
+                                const QString destFolder, const QString &destFile);
     void signalSkipped(const QString& folder, const QString& file);
     void signalDeleted(const QString& folder, const QString& file, bool status);
     void signalLocked(const QString& folder, const QString& file, bool status);

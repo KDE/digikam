@@ -695,9 +695,9 @@ void CameraController::slotCheckRename(const QString &folder, const QString &fil
 
     // Check if dest file already exist, unless we overwrite anyway
 
+    QFileInfo info(dest);
     if (!d->overwriteAll)
     {
-        QFileInfo info(dest);
 
         while (info.exists())
         {
@@ -778,6 +778,7 @@ void CameraController::slotCheckRename(const QString &folder, const QString &fil
     else
     {
         emit signalDownloaded(folder, file, GPItemInfo::DownloadedYes);
+        emit signalDownloadComplete(folder, file, info.path(), info.fileName());
     }
 }
 
