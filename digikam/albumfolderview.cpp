@@ -70,6 +70,7 @@
 #include "digikamapp.h"
 #include "dio.h"
 #include "thumbnailsize.h"
+#include "contextmenuhelper.h"
 
 namespace Digikam
 {
@@ -216,7 +217,7 @@ public:
 
     AlbumFolderViewPriv()
     {
-        albumMan = 0;
+        albumMan          = 0;
     }
 
     AlbumManager                *albumMan;
@@ -538,15 +539,10 @@ void AlbumFolderView::slotSelectionChanged()
 
 void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, int)
 {
-    // FIXME: import actions not used?
-    KMenu menuImport(i18n("Import"));
-
-    KMenu menuExport(i18n("Export"));
-    KMenu menuKIPIBatch(i18n("Batch Process"));
-
     AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(listitem);
     if (!item)
         return;
+
     PAlbum *album = item->album();
     if (item && (!album || album->isRoot()))
     {
@@ -554,104 +550,80 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
         return;
     }
 
+    // temporary actions  -------------------------------------
+
+    QAction *renameAction, *resetIconAction, *deleteAction = 0;
+
+    if(AlbumSettings::instance()->getUseTrash())
+        deleteAction = new QAction(SmallIcon("user-trash"), i18n("Move Album to Trash"), this);
+    else
+        deleteAction = new QAction(SmallIcon("edit-delete-shred"), i18n("Delete Album"), this);
+
+    renameAction    = new QAction(SmallIcon("edit-rename"), i18n("Rename..."), this);
+    resetIconAction = new QAction(SmallIcon("view-refresh"), i18n("Reset Album Icon"), this);
+
+    if (album->isAlbumRoot())
+    {
+        renameAction->setEnabled(false);
+        deleteAction->setEnabled(false);
+    }
+
+    // --------------------------------------------------------
+
     KMenu popmenu(this);
     popmenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
-    QAction *newAction = popmenu.addAction(SmallIcon("albumfolder-new"), i18n("New Album..."));
+    ContextMenuHelper cmhelper(&popmenu);
 
-    // Root folder only shows "New Album..."
-    QAction *renameAction = 0, *propertiesAction = 0, *resetIconAction = 0, *deleteAction = 0;
-    if(item && item->parent())
+    cmhelper.addAction("album_new");
+    cmhelper.addAction(renameAction);
+    cmhelper.addAction(resetIconAction);
+    popmenu.addSeparator();
+    // --------------------------------------------------------
+    cmhelper.addImportMenu();
+    cmhelper.addExportMenu();
+    cmhelper.addBatchMenu();
+    cmhelper.addAlbumActions();
+    popmenu.addSeparator();
+    // --------------------------------------------------------
+    cmhelper.addAction(deleteAction);
+    popmenu.addSeparator();
+    // --------------------------------------------------------
+    cmhelper.addAction("album_propsEdit");
+
+    // special action handling --------------------------------
+
+    int actionId    = 0;
+    QAction* choice = cmhelper.exec(actionId);
+    switch (actionId)
     {
-        if (!album->isAlbumRoot())
+        case ContextMenuHelper::Unknown:
         {
-            renameAction = popmenu.addAction(SmallIcon("edit-rename"), i18n("Rename..."));
-        }
-        resetIconAction  = popmenu.addAction(SmallIcon("view-refresh"), i18n("Reset Album Icon"));
-        popmenu.addSeparator();
-
-        // Add KIPI Albums plugins Actions
-        const QList<QAction*>& albumActions = DigikamApp::getinstance()->menuAlbumActions();
-        if(!albumActions.isEmpty())
-        {
-            foreach(QAction *action, albumActions)
+            if (choice)
             {
-                popmenu.addAction(action);
+                if (choice == resetIconAction)
+                {
+                    QString err;
+                    d->albumMan->updatePAlbumIcon(item->album(), 0, err);
+                }
+                else if (choice == renameAction)
+                {
+                    albumRename(item);
+                }
+                else if (choice == deleteAction)
+                {
+                    albumDelete(item);
+                }
             }
+            break;
         }
-
-        // Add All Export Actions
-        const QList<QAction*> exportActions = DigikamApp::getinstance()->menuExportActions();
-        if(!exportActions.isEmpty())
-        {
-            foreach(QAction *action, exportActions)
-            {
-                menuExport.addAction(action);
-            }
-            popmenu.addMenu(&menuExport);
-        }
-
-        // Add KIPI Batch processes plugins Actions
-        const QList<QAction*>& batchActions = DigikamApp::getinstance()->menuBatchActions();
-        if(!batchActions.isEmpty())
-        {
-            foreach(QAction *action, batchActions)
-            {
-                menuKIPIBatch.addAction(action);
-            }
-            popmenu.addMenu(&menuKIPIBatch);
-        }
-
-        if(!albumActions.isEmpty() || !batchActions.isEmpty())
-        {
-            popmenu.addSeparator();
-        }
-
-        if (!album->isAlbumRoot())
-        {
-            if(AlbumSettings::instance()->getUseTrash())
-            {
-                deleteAction = popmenu.addAction(SmallIcon("user-trash"), i18n("Move Album to Trash"));
-            }
-            else
-            {
-                deleteAction = popmenu.addAction(SmallIcon("edit-delete-shred"), i18n("Delete Album"));
-            }
-        }
-        popmenu.addSeparator();
-
-        if (!album->isAlbumRoot())
-        {
-            propertiesAction = popmenu.addAction(SmallIcon("albumfolder-properties"),
-                                                 i18nc("Edit Album Properties", "Properties..."));
-        }
-
     }
 
-    QAction *choice = popmenu.exec(QCursor::pos());
-    if (choice)
-    {
-        if (choice == newAction)
-        {
-            albumNew(item);
-        }
-        else if (choice == propertiesAction)
-        {
-            albumEdit(item);
-        }
-        else if (choice == resetIconAction)
-        {
-            QString err;
-            d->albumMan->updatePAlbumIcon(item->album(), 0, err);
-        }
-        else if (choice == renameAction)
-        {
-            albumRename(item);
-        }
-        else if (choice == deleteAction)
-        {
-            albumDelete(item);
-        }
-    }
+    // cleanup -----------------------
+
+    popmenu.deleteLater();
+    delete deleteAction;
+    delete renameAction;
+    delete resetIconAction;
 }
 
 void AlbumFolderView::albumNew()

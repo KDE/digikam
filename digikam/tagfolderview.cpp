@@ -28,37 +28,39 @@
 
 // Qt includes.
 
+#include <QCursor>
 #include <QList>
 #include <QPainter>
-#include <QCursor>
 
 // KDE includes.
 
-#include <kdebug.h>
-#include <kmenu.h>
-#include <klocale.h>
-#include <kiconloader.h>
 #include <kapplication.h>
+#include <kdebug.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kmenu.h>
 #include <kmessagebox.h>
 
 // Local includes.
 
 #include "album.h"
 #include "albumdb.h"
+#include "albumlister.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
-#include "albumlister.h"
+#include "contextmenuhelper.h"
 #include "databasetransaction.h"
 #include "ddragobjects.h"
-#include "folderitem.h"
+#include "digikamapp.h"
 #include "dio.h"
+#include "folderitem.h"
 #include "imageattributeswatch.h"
 #include "imageinfo.h"
 #include "metadatahub.h"
 #include "scancontroller.h"
-#include "syncjob.h"
 #include "statusprogressbar.h"
+#include "syncjob.h"
 #include "tageditdlg.h"
 
 #include "config-digikam.h"
@@ -171,13 +173,12 @@ public:
 
     TagFolderViewPriv()
     {
-        ABCMenu  = 0;
-        albumMan = 0;
+        ABCMenu           = 0;
+        albumMan          = 0;
     }
 
-    KMenu        *ABCMenu;
-
-    AlbumManager *albumMan;
+    KMenu             *ABCMenu;
+    AlbumManager      *albumMan;
 };
 
 TagFolderView::TagFolderView(QWidget *parent)
@@ -537,60 +538,58 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
 {
     TagFolderViewItem *tag = dynamic_cast<TagFolderViewItem*>(item);
 
-    KMenu popmenu(this);
-    popmenu.addTitle(SmallIcon("digikam"), i18n("My Tags"));
+    // temporary actions --------------------------------------
 
-    QAction *newAction, *editAction=0, *resetIconAction=0, *deleteAction=0;
-
-    newAction = popmenu.addAction(SmallIcon("tag-new"), i18n("New Tag..."));
-
-#ifdef HAVE_KDEPIMLIBS
+    #ifdef HAVE_KDEPIMLIBS
     d->ABCMenu = new KMenu(this);
 
-    connect( d->ABCMenu, SIGNAL( aboutToShow() ),
-             this, SLOT( slotABCContextMenu() ) );
+    connect( d->ABCMenu, SIGNAL(aboutToShow()),
+             this, SLOT(slotABCContextMenu()));
 
-    popmenu.addMenu(d->ABCMenu);
     d->ABCMenu->menuAction()->setIcon(SmallIcon("tag-addressbook"));
     d->ABCMenu->menuAction()->setText(i18n("Create Tag From AddressBook"));
 #endif // HAVE_KDEPIMLIBS
 
-    if(tag && tag->parent())
+    QAction *resetIconAction = new QAction(SmallIcon("view-refresh"),  i18n("Reset Tag Icon"), this);
+    if (!tag || !tag->parent())
+        resetIconAction->setEnabled(false);
+    // --------------------------------------------------------
+
+    KMenu popmenu(this);
+    popmenu.addTitle(SmallIcon("digikam"), i18n("My Tags"));
+    ContextMenuHelper cmhelper(&popmenu);
+
+    cmhelper.addAction("tag_new");
+    if (d->ABCMenu)
+        popmenu.addMenu(d->ABCMenu);
+    cmhelper.addAction(resetIconAction);
+    popmenu.addSeparator();
+    // --------------------------------------------------------
+    cmhelper.addAction("tag_delete");
+    popmenu.addSeparator();
+    // --------------------------------------------------------
+    cmhelper.addAction("tag_edit");
+
+    int actionId    = 0;
+    QAction* choice = cmhelper.exec(actionId);
+    switch (actionId)
     {
-        resetIconAction = popmenu.addAction(SmallIcon("view-refresh"),  i18n("Reset Tag Icon"));
-        popmenu.addSeparator();
-        deleteAction    = popmenu.addAction(SmallIcon("user-trash"), i18n("Delete Tag"));
-        popmenu.addSeparator();
-        editAction = popmenu.addAction(SmallIcon("tag-properties"),
-                                       i18nc("Edit Tag Properties", "Properties..."));
+        case ContextMenuHelper::Unknown:
+        {
+            if (choice)
+            {
+                if (choice == resetIconAction)
+                {
+                    QString errMsg;
+                    d->albumMan->updateTAlbumIcon(tag->album(), QString("tag"), 0, errMsg);
+                }
+            }
+            break;
+        }
     }
 
-    QAction *choice = popmenu.exec((QCursor::pos()));
-    if (choice)
-    {
-        if (choice == newAction)
-        {
-            tagNew(tag);
-        }
-        else if (choice == editAction)
-        {
-            tagEdit(tag);
-        }
-        else if (choice == deleteAction)
-        {
-            tagDelete(tag);
-        }
-        else if (choice == resetIconAction)
-        {
-            QString errMsg;
-            d->albumMan->updateTAlbumIcon(tag->album(), QString("tag"), 0, errMsg);
-        }
-        else
-        {
-            tagNew( tag, choice->text(), "tag-people" );
-        }
-    }
-
+    popmenu.deleteLater();
+    delete resetIconAction;
     delete d->ABCMenu;
     d->ABCMenu = 0;
 }
