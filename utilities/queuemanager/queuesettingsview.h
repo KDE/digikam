@@ -27,9 +27,41 @@
 // Qt includes.
 
 #include <QScrollArea>
+#include <QList>
+#include <QMap>
 
 namespace Digikam
 {
+
+/** A map of queue settings (setting key, setting value).
+ */
+typedef QMap<QString, QVariant> QueueSettings;
+
+/** A container of associated queue settings and queue id.
+ */
+class QueueSettingsSet
+{
+public:
+
+    QueueSettingsSet(){};
+    QueueSettingsSet(int id, const QueueSettings& set)
+    {
+        queueId  = id;
+        settings = set;
+    };
+
+    ~QueueSettingsSet(){};
+
+    int           queueId;
+    QueueSettings settings;
+};
+
+/** A list of all queued items from the pool.
+ */
+typedef QList<QueueSettingsSet> QueueSettingsSetList;
+
+// --------------------------------------------------------
+
 
 class QueueSettingsViewPriv;
 
