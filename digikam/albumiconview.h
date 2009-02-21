@@ -8,7 +8,8 @@
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2002-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,41 +27,48 @@
 #ifndef ALBUMICONVIEW_H
 #define ALBUMICONVIEW_H
 
-// KDE includes.
+// Qt includes.
 
-#include <QRect>
 #include <QFont>
 #include <QList>
+#include <QRect>
+
+// KDE includes.
+
+#include <kservice.h>
 
 // Local includes.
 
-#include "loadingdescription.h"
+#include "albumitemhandler.h"
 #include "iconview.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
-#include "albumitemhandler.h"
+#include "loadingdescription.h"
 
-class QResizeEvent;
+class QAction;
 class QDragMoveEvent;
 class QDropEvent;
-class QPoint;
-class QString;
 class QPixmap;
+class QPoint;
+class QResizeEvent;
+class QString;
 
 namespace KIO
 {
 class Job;
 }
+
+class KMenu;
 class KJob;
 
 namespace Digikam
 {
 
+class Album;
 class AlbumIconItem;
+class AlbumIconViewPrivate;
 class AlbumSettings;
 class ThumbnailSize;
-class Album;
-class AlbumIconViewPrivate;
 
 class AlbumIconView : public IconView,
                       public AlbumItemHandler
@@ -173,6 +181,8 @@ public slots:
     void slotAssignRatingFourStar();
     void slotAssignRatingFiveStar();
 
+    void slotHandleGotoRequest();
+
 protected:
 
     void resizeEvent(QResizeEvent* e);
@@ -223,7 +233,6 @@ private slots:
 
     void slotChangeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs,
                                    bool addOrRemove, bool progress);
-
 
 private:
 

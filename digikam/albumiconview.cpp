@@ -8,7 +8,8 @@
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2002-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,10 +61,12 @@ extern "C"
 #include <QString>
 #include <QStringList>
 #include <QTimer>
+#include <QMap>
 
 // KDE includes.
 
 #include <kaction.h>
+#include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcalendarsystem.h>
 #include <kdebug.h>
@@ -79,22 +82,16 @@ extern "C"
 #include <kmimetypetrader.h>
 #include <kpropsdlg.h>
 #include <krun.h>
-#include <kservice.h>
 #include <kstandardaction.h>
 #include <kstandarddirs.h>
 #include <ktrader.h>
 #include <kurl.h>
 #include <kwindowsystem.h>
 
-// LibKIPI includes.
-
-#include <libkipi/pluginloader.h>
-#include <libkipi/plugin.h>
-
 // LibKDcraw includes.
 
-#include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
+#include <libkdcraw/version.h>
 
 #if KDCRAW_VERSION < 0x000400
 #include <libkdcraw/dcrawbinary.h>
@@ -113,6 +110,7 @@ extern "C"
 #include "albumsettings.h"
 #include "cameraui.h"
 #include "constants.h"
+#include "contextmenuhelper.h"
 #include "databaseaccess.h"
 #include "databasetransaction.h"
 #include "ddragobjects.h"
@@ -122,11 +120,12 @@ extern "C"
 #include "dmetadata.h"
 #include "dpopupmenu.h"
 #include "imageattributeswatch.h"
+#include "imageinfo.h"
 #include "imagewindow.h"
 #include "lighttablewindow.h"
-#include "queuemgrwindow.h"
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
+#include "queuemgrwindow.h"
 #include "ratingpopupmenu.h"
 #include "scancontroller.h"
 #include "statusprogressbar.h"
@@ -555,310 +554,87 @@ void AlbumIconView::slotRightButtonClicked(const QPoint& pos)
 
 void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 {
-    if (!item)
-        return;
+    if (!item) return;
 
+    QMap<QAction*, KService::Ptr> servicesMap;
     AlbumIconItem* iconItem = static_cast<AlbumIconItem *>(item);
-
-    //-- Open With Actions ------------------------------------
-
-    KMimeType::Ptr mimePtr = KMimeType::findByUrl(iconItem->imageInfo().fileUrl(), 0, true, true);
-
-    QMap<QAction*, KService::Ptr> serviceMap;
-
-    const KService::List offers = KMimeTypeTrader::self()->query(mimePtr->name());
-    KService::List::ConstIterator iter;
-    KService::Ptr ptr;
-
-    KMenu openWithMenu;
-
-    for( iter = offers.constBegin(); iter != offers.constEnd(); ++iter )
-    {
-        ptr = *iter;
-        QAction *serviceAction = openWithMenu.addAction(SmallIcon(ptr->icon()), ptr->name());
-        serviceMap[serviceAction] = ptr;
-    }
-
-    if (openWithMenu.isEmpty())
-        openWithMenu.menuAction()->setEnabled(false);
+    ImageInfo imageInfo     = iconItem->imageInfo();
 
     // --------------------------------------------------------
 
-    // Obtain a list of all selected images.
-    // This is needed both for the goto tags submenu here and also
-    // for the "move to trash" and further actions below.
     QList<qlonglong> selectedImageIDs;
     foreach (ImageInfo info, selectedImageInfos())
     {
         selectedImageIDs << info.id();
     }
 
-    // --------------------------------------------------------
-    // Provide Goto folder and/or date pop-up menu
-    KMenu gotoMenu;
+    // Temporary actions --------------------------------------
 
-    QAction *gotoAlbum = gotoMenu.addAction(SmallIcon("folder-image"),        i18n("Album"));
-    QAction *gotoDate  = gotoMenu.addAction(SmallIcon("view-calendar-month"), i18n("Date"));
-
-    TagsPopupMenu gotoTagsPopup(selectedImageIDs, TagsPopupMenu::DISPLAY);
-    QAction *gotoTag = gotoMenu.addMenu(&gotoTagsPopup);
-    gotoTag->setIcon(SmallIcon("tag"));
-    gotoTag->setText(i18n("Tag"));
-
-    // Disable the goto Tag popup menu, if there are no tags at all.
-    if (!DatabaseAccess().db()->hasTags(selectedImageIDs))
-        gotoTag->setEnabled(false);
-
-    connect(&gotoTagsPopup, SIGNAL(signalTagActivated(int)),
-            this, SLOT(slotGotoTag(int)));
-
-    if (d->currentAlbum->type() == Album::PHYSICAL )
-    {
-        // If the currently selected album is the same as album to
-        // which the image belongs, then disable the "Go To" Album.
-        // (Note that in recursive album view these can be different).
-        if (iconItem->imageInfo().albumId() == d->currentAlbum->id())
-            gotoAlbum->setEnabled(false);
-    }
-    else if (d->currentAlbum->type() == Album::DATE )
-    {
-        gotoDate->setEnabled(false);
-    }
+    QAction  *viewAction = new QAction(SmallIcon("viewimage"), i18n("View"),  this);
 
     // --------------------------------------------------------
 
     DPopupMenu popmenu(this);
+    ContextMenuHelper cmhelper(&popmenu);
 
-    QAction *newAlbumFromSelectionAction = new QAction(SmallIcon("albumfolder-new"),
-                                                       i18n("New Album From Selection"), this);
-    QAction *viewAction         = popmenu.addAction(SmallIcon("viewimage"),     i18n("View..."));
-    QAction *editAction         = popmenu.addAction(SmallIcon("editimage"),     i18n("Edit..."));
+    cmhelper.addAction("album_new_from_selection");
+    cmhelper.addAction(viewAction);
+    cmhelper.addAction("image_edit");
+    cmhelper.addAction("image_find_similar");
+    cmhelper.addActionLightTable();
+    cmhelper.addQueueManagerMenu();
+    cmhelper.addGotoMenu(selectedImageIDs);
+    cmhelper.addServicesMenu(imageInfo, servicesMap);
+    cmhelper.addKipiActions();
+    cmhelper.addAction("image_rename");
+    popmenu.addSeparator();
+    // --------------------------------------------------------
+    cmhelper.addActionCopy(this, SLOT(slotCopy()));
+    cmhelper.addActionPaste(this, SLOT(slotPaste()));
+    cmhelper.addActionItemDelete(this, SLOT(slotDeleteSelectedItems()), selectedImageIDs.count());
+    popmenu.addSeparator();
+    // --------------------------------------------------------
+    cmhelper.addActionThumbnail(selectedImageIDs, d->currentAlbum);
+    // --------------------------------------------------------
+    cmhelper.addAssignTagsMenu(selectedImageIDs, this, SLOT(slotAssignTag(int)));
+    cmhelper.addRemoveTagsMenu(selectedImageIDs, this, SLOT(slotRemoveTag(int)));
+    popmenu.addSeparator();
+    // --------------------------------------------------------
+    cmhelper.addRatingMenu(this, SLOT(slotAssignRating(int)));
 
-    QAction *lighttableAction;
-    if (LightTableWindow::lightTableWindowCreated() && !LightTableWindow::lightTableWindow()->isEmpty())
-        lighttableAction = popmenu.addAction(SmallIcon("lighttableadd"), i18n("Add to Light Table"));
-    else
-        lighttableAction = popmenu.addAction(KIcon("lighttable"), i18n("Place onto Light Table"));
+    // special action handling --------------------------------
 
-    QAction *addCurrentQueueAction = popmenu.addAction(SmallIcon("vcs_commit"), i18n("Add to Current Queue"));
-    QAction *addNewQueueAction     = popmenu.addAction(SmallIcon("vcs_add"),    i18n("Add to New Queue"));
-
-    QAction *findSimilarAction  = popmenu.addAction(SmallIcon("tools-wizard"),  i18n("Find Similar"));
-    QAction *gotoAction         = popmenu.addMenu(&gotoMenu);
-    gotoAction->setIcon(SmallIcon("go-jump"));
-    gotoAction->setText(i18n("Go To"));
-
-    popmenu.addMenu(&openWithMenu);
-    openWithMenu.menuAction()->setText(i18n("Open With"));
-
-    // Merge in the KIPI plugins actions ----------------------------
-
-    KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::instance();
-    KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
-
-    for (KIPI::PluginLoader::PluginList::const_iterator it = pluginList.constBegin();
-         it != pluginList.constEnd(); ++it)
+    int actionId    = 0;
+    QAction* choice = cmhelper.exec(actionId);
+    switch (actionId)
     {
-        KIPI::Plugin* plugin = (*it)->plugin();
-
-        if (plugin && (*it)->name() == "JPEGLossless")
+        case ContextMenuHelper::GotoAlbum:    emit signalGotoAlbumAndItem(iconItem); break;
+        case ContextMenuHelper::GotoDate:     emit signalGotoDateAndItem(iconItem);  break;
+        case ContextMenuHelper::SetThumbnail: slotSetAlbumThumbnail(iconItem);       break;
+        case ContextMenuHelper::Unknown:
         {
-            kDebug(50003) << "Found JPEGLossless plugin" << endl;
-
-            QList<KAction*> actionList = plugin->actions();
-
-            for (QList<KAction*>::const_iterator iter = actionList.constBegin();
-                iter != actionList.constEnd(); ++iter)
+            if (choice)
             {
-                KAction* action = *iter;
-
-                if (action->objectName().toLatin1() == QString::fromLatin1("jpeglossless_rotate"))
+                if (servicesMap.contains(choice))
                 {
-                    popmenu.addAction(action);
+                    KService::Ptr imageServicePtr = servicesMap[choice];
+                    KUrl::List urlList = selectedItems();
+                    if (urlList.count())
+                        KRun::run(*imageServicePtr, urlList, this);
+                }
+                else if (choice == viewAction)
+                {
+                    emit signalPreviewItem(iconItem);
                 }
             }
+            break;
         }
     }
 
-    // --------------------------------------------------------
-
-    QAction *renameAction = popmenu.addAction(SmallIcon("edit-rename"), i18n("Rename..."));
-    popmenu.addSeparator();
-
-    // --------------------------------------------------------
-
-    QAction *thumbnailAction = 0;
-    if (d->currentAlbum)
-    {
-        if (d->currentAlbum->type() == Album::PHYSICAL )
-        {
-            thumbnailAction = popmenu.addAction(i18n("Set as Album Thumbnail"));
-            popmenu.addSeparator();
-        }
-        else if (d->currentAlbum->type() == Album::TAG )
-        {
-            thumbnailAction = popmenu.addAction(i18n("Set as Tag Thumbnail"));
-            popmenu.addSeparator();
-        }
-    }
-
-    // --------------------------------------------------------
-
-    KAction *copy         = KStandardAction::copy(this, SLOT(slotCopy()), 0);
-    KAction *paste        = KStandardAction::paste(this, SLOT(slotPaste()), 0);
-    const QMimeData *data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
-
-    if(!data || !KUrl::List::canDecode(data))
-        paste->setEnabled(false);
-
-    popmenu.addAction(copy);
-    popmenu.addAction(paste);
-    popmenu.addSeparator();
-
-    // --------------------------------------------------------
-
-    QAction *trashAction = popmenu.addAction(SmallIcon("user-trash"),
-                           i18np("Move to Trash", "Move %1 Files to Trash", selectedImageIDs.count()));
-
-    popmenu.addSeparator();
-
-    // Bulk assignment/removal of tags --------------------------
-
-    TagsPopupMenu assignTagsPopup(selectedImageIDs, TagsPopupMenu::ASSIGN);
-    TagsPopupMenu removeTagsPopup(selectedImageIDs, TagsPopupMenu::REMOVE);
-
-    connect(&assignTagsPopup, SIGNAL(signalTagActivated(int)),
-            this, SLOT(slotAssignTag(int)));
-
-    connect(&removeTagsPopup, SIGNAL(signalTagActivated(int)),
-            this, SLOT(slotRemoveTag(int)));
-
-    popmenu.addMenu(&assignTagsPopup);
-    assignTagsPopup.menuAction()->setText(i18n("Assign Tag"));
-
-    popmenu.addMenu(&removeTagsPopup);
-    removeTagsPopup.menuAction()->setText(i18n("Remove Tag"));
-
-    // Performance: Only check for tags if there are <250 images selected
-    // Also disable the remove Tag popup menu, if there are no tags at all.
-    if (selectedImageIDs.count() > 250 ||
-        !DatabaseAccess().db()->hasTags(selectedImageIDs))
-        removeTagsPopup.menuAction()->setEnabled(false);
-
-    popmenu.addSeparator();
-
-    // Assign Star Rating -------------------------------------------
-
-    RatingPopupMenu ratingMenu;
-
-    connect(&ratingMenu, SIGNAL(signalRatingChanged(int)),
-            this, SLOT(slotAssignRating(int)));
-
-    popmenu.addMenu(&ratingMenu);
-    ratingMenu.menuAction()->setText(i18n("Assign Rating"));
-
-    // Multiple Selection Handling -----------------------------------
-
-    if (selectedImageIDs.count() > 1)
-    {
-        popmenu.insertAction(viewAction, newAlbumFromSelectionAction);
-
-        popmenu.removeAction(gotoAction);
-        popmenu.removeAction(viewAction);
-        popmenu.removeAction(editAction);
-        popmenu.removeAction(findSimilarAction);
-        popmenu.removeAction(renameAction);
-        popmenu.removeAction(thumbnailAction);
-    }
-
-    // --------------------------------------------------------
-
-    QAction *choice = popmenu.exec(pos);
-
-    if (choice)
-    {
-        if (choice == editAction)
-        {
-            slotDisplayItem(iconItem);
-        }
-        else if (choice == newAlbumFromSelectionAction)
-        {
-            slotNewAlbumFromSelection();
-        }
-        else if (choice == renameAction)
-        {
-            slotRename(iconItem);
-        }
-        else if (choice == trashAction)
-        {
-            slotDeleteSelectedItems();
-        }
-        else if (choice == thumbnailAction)
-        {
-            slotSetAlbumThumbnail(iconItem);
-        }
-        else if (choice == viewAction)
-        {
-            signalPreviewItem(iconItem);
-        }
-        else if (choice == lighttableAction)
-        {
-            //  add images to existing images in the light table
-            if (LightTableWindow::lightTableWindowCreated() && !LightTableWindow::lightTableWindow()->isEmpty())
-                insertSelectionToLightTable(true);
-            else
-                insertSelectionToLightTable(false);
-        }
-        else if (choice == addCurrentQueueAction)
-        {
-            //  add images to existing images in current queue from batch manager.
-            insertSelectionToCurrentQueue();
-        }
-        else if (choice == addNewQueueAction)
-        {
-            //  add images to new queue from batch manager.
-            insertSelectionToNewQueue();
-        }
-        else if (choice == findSimilarAction)
-        {
-            // send a signal to the parent widget (digikamview.cpp)
-            emit signalFindSimilar();
-        }
-        else if (choice == gotoAlbum)
-        {
-            // send a signal to the parent widget (digikamview.cpp)
-            emit signalGotoAlbumAndItem(iconItem);
-        }
-        else if (choice == gotoDate)
-        {
-            // send a signal to the parent widget (digikamview.cpp)
-            emit signalGotoDateAndItem(iconItem);
-        }
-        else
-        {
-            if (serviceMap.contains(choice))
-            {
-                KService::Ptr imageServicePtr = serviceMap[choice];
-                KUrl::List urlList;
-                for (IconItem *it = firstItem(); it; it=it->nextItem())
-                {
-                    if (it->isSelected())
-                    {
-                        AlbumIconItem *selItem = static_cast<AlbumIconItem *>(it);
-                        urlList.append(selItem->imageInfo().fileUrl());
-                    }
-                }
-                if (urlList.count())
-                    KRun::run(*imageServicePtr, urlList, this);
-            }
-        }
-    }
-
-    //---------------------------------------------------------------
+    // cleanup -----------------------
 
     popmenu.deleteLater();
-    delete copy;
-    delete paste;
+    delete viewAction;
 }
 
 void AlbumIconView::slotCopy()
@@ -2479,6 +2255,11 @@ void AlbumIconView::slotAssignRatingFourStar()
 void AlbumIconView::slotAssignRatingFiveStar()
 {
     slotAssignRating(5);
+}
+
+void AlbumIconView::slotHandleGotoRequest()
+{
+
 }
 
 void AlbumIconView::slotDIOResult(KJob* kjob)
