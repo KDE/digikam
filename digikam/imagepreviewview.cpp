@@ -97,7 +97,6 @@ public:
         loadFullImageSize    = false;
         currentFitWindowZoom = 0;
         previewSize          = 1024;
-        contextMenuHelper    = 0;
     }
 
     bool               hasPrev;
@@ -126,15 +125,12 @@ public:
     PreviewLoadThread *previewPreloadThread;
 
     AlbumWidgetStack  *stack;
-
-    ContextMenuHelper *contextMenuHelper;
 };
 
 ImagePreviewView::ImagePreviewView(QWidget *parent, AlbumWidgetStack *stack)
                 : PreviewWidget(parent), d(new ImagePreviewViewPriv)
 {
     d->stack = stack;
-    d->contextMenuHelper = new ContextMenuHelper(this, DigikamApp::getinstance()->actionCollection());
 
     // get preview size from screen size, but limit from VGA to WQXGA
     d->previewSize = qMax(KApplication::desktop()->height(),
@@ -354,51 +350,60 @@ void ImagePreviewView::slotContextMenu()
     // --------------------------------------------------------
 
     DPopupMenu popmenu(this);
+    ContextMenuHelper cmhelper(&popmenu);
 
-    d->contextMenuHelper->addAction(popmenu, prevAction, true);
-    d->contextMenuHelper->addAction(popmenu, nextAction, true);
-    d->contextMenuHelper->addAction(popmenu, back2AlbumAction);
+    cmhelper.addAction(prevAction, true);
+    cmhelper.addAction(nextAction, true);
+    cmhelper.addAction(back2AlbumAction);
     popmenu.addSeparator();
     // --------------------------------------------------------
-    d->contextMenuHelper->addAction(popmenu, "image_edit");
-    d->contextMenuHelper->addAction(popmenu, "image_find_similar");
-    d->contextMenuHelper->addActionLightTable(popmenu);
-    d->contextMenuHelper->addQueueManagerMenu(popmenu);
-    d->contextMenuHelper->addServicesMenu(popmenu, d->imageInfo, servicesMap);
-    d->contextMenuHelper->addKipiActions(popmenu);
+    cmhelper.addAction("image_edit");
+    cmhelper.addAction("image_find_similar");
+    cmhelper.addActionLightTable();
+    cmhelper.addQueueManagerMenu();
+    cmhelper.addServicesMenu(d->imageInfo, servicesMap);
+    cmhelper.addKipiActions();
     popmenu.addSeparator();
     // --------------------------------------------------------
-    d->contextMenuHelper->addActionDelete(popmenu, this, SLOT(slotDeleteItem()));
+    cmhelper.addActionItemDelete(this, SLOT(slotDeleteItem()));
     popmenu.addSeparator();
     // --------------------------------------------------------
-    d->contextMenuHelper->addAssignTagsMenu(popmenu, idList, this, SLOT(slotAssignTag(int)));
-    d->contextMenuHelper->addRemoveTagsMenu(popmenu, idList, this, SLOT(slotRemoveTag(int)));
+    cmhelper.addAssignTagsMenu(idList, this, SLOT(slotAssignTag(int)));
+    cmhelper.addRemoveTagsMenu(idList, this, SLOT(slotRemoveTag(int)));
     popmenu.addSeparator();
     // --------------------------------------------------------
-    d->contextMenuHelper->addRatingMenu(popmenu, this, SLOT(slotAssignRating(int)));
+    cmhelper.addRatingMenu(this, SLOT(slotAssignRating(int)));
 
     // special action handling --------------------------------
 
-    QAction *choice = popmenu.exec(QCursor::pos());
-    if (choice)
+    int actionId    = 0;
+    QAction* choice = cmhelper.exec(actionId);
+    switch (actionId)
     {
-        if (choice == prevAction)
+        case ContextMenuHelper::Unknown:
         {
-            emit signalPrevItem();
-        }
-        else if (choice == nextAction)
-        {
-            emit signalNextItem();
-        }
-        else if (choice == back2AlbumAction)
-        {
-            emit signalBack2Album();
-        }
-        else if (servicesMap.contains(choice))
-        {
-            KService::Ptr imageServicePtr = servicesMap[choice];
-            KUrl url(d->imageInfo.fileUrl().path());
-            KRun::run(*imageServicePtr, url, this);
+            if (choice)
+            {
+                if (choice == prevAction)
+                {
+                    emit signalPrevItem();
+                }
+                else if (choice == nextAction)
+                {
+                    emit signalNextItem();
+                }
+                else if (choice == back2AlbumAction)
+                {
+                    emit signalBack2Album();
+                }
+                else if (servicesMap.contains(choice))
+                {
+                    KService::Ptr imageServicePtr = servicesMap[choice];
+                    KUrl url(d->imageInfo.fileUrl().path());
+                    KRun::run(*imageServicePtr, url, this);
+                }
+            }
+            break;
         }
     }
 
