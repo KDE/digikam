@@ -1136,6 +1136,9 @@ bool ImageWindow::removeItem(int index)
         d->imageInfoList.removeAt(index);
     // Remember: index now points to the next item in the list
 
+    if (url != d->urlCurrent)
+        return true;
+
     if (index < d->urlList.size())
     {
         // Try to get the next image in the current Album...
@@ -1182,9 +1185,13 @@ void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset &chan
                 if (changeset.containsImage(d->imageInfoList[i].id()))
                 {
                     if (d->imageInfoCurrent == d->imageInfoList[i])
+                    {
                         promptUserSave(d->urlCurrent, AlwaysSaveAs);
-                    if (removeItem(i))
-                        needLoadCurrent = true;
+                        if (removeItem(i))
+                            needLoadCurrent = true;
+                    }
+                    else
+                        removeItem(i);
                     i--;
                 }
             }
@@ -1195,9 +1202,13 @@ void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset &chan
                 if (changeset.containsAlbum(d->imageInfoList[i].albumId()))
                 {
                     if (d->imageInfoCurrent == d->imageInfoList[i])
+                    {
                         promptUserSave(d->urlCurrent, AlwaysSaveAs);
-                    if (removeItem(i))
-                        needLoadCurrent = true;
+                        if (removeItem(i))
+                            needLoadCurrent = true;
+                    }
+                    else
+                        removeItem(i);
                     i--;
                 }
             }
