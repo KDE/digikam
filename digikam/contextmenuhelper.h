@@ -34,10 +34,10 @@
 #include <kservice.h>
 
 class QAction;
+class QMenu;
 class QString;
 
 class KActionCollection;
-class KMenu;
 
 namespace Digikam
 {
@@ -55,9 +55,21 @@ public:
 
     typedef const QList<qlonglong> imageIds;
 
+    enum StdActions
+    {
+        Unknown = 0,
+        AssignTags,
+        RemoveTags,
+        AssignRating,
+        GotoAlbum,
+        GotoTag,
+        GotoDate,
+        SetThumbnail
+    };
+
 public:
 
-    ContextMenuHelper(QObject* parent, KActionCollection*);
+    explicit ContextMenuHelper(QMenu* parent, KActionCollection* actionCollection = 0);
     virtual ~ContextMenuHelper();
 
     /*
@@ -77,38 +89,38 @@ public:
      */
 
     // add action from actionCollection
-    virtual void addAction(KMenu& menu, const char* name, bool addDisabled = false);
+    virtual void addAction(const char* name, bool addDisabled = false);
 
     // add temporary action
-    virtual void addAction(KMenu& menu, QAction* action, bool addDisabled = false);
-    virtual void addAction(KMenu& menu, QAction* action, QObject* recv, const char* slot,
-                           bool addDisabled = false);
+    virtual void addAction(QAction* action, bool addDisabled = false);
+    virtual void addAction(QAction* action, QObject* recv, const char* slot, bool addDisabled = false);
 
     // add standard actions
-    virtual void addActionCopy(KMenu& menu, QObject* recv, const char* slot);
-    virtual void addActionPaste(KMenu& menu, QObject* recv, const char* slot);
-    virtual void addActionDelete(KMenu& menu, QObject* recv, const char* slot, int quantity = 1);
+    virtual void addActionCopy(QObject* recv, const char* slot);
+    virtual void addActionPaste(QObject* recv, const char* slot);
+    virtual void addActionItemDelete(QObject* recv, const char* slot, int quantity = 1);
 
     // add special actions
-    virtual void addActionLightTable(KMenu& menu);
-    virtual void addActionThumbnail(KMenu& menu, imageIds& imageIds, Album* album);
+    virtual void addActionLightTable();
+    virtual void addActionThumbnail(imageIds& imageIds, Album* album);
 
     // add special menus
-    virtual void addKipiActions(KMenu& menu);
-    virtual void addServicesMenu(KMenu& menu, const ImageInfo&, QMap<QAction*, KService::Ptr>&);
-    virtual void addGotoMenu(KMenu& menu, imageIds& imageIDs, QAction*, QAction*);
-    virtual void addQueueManagerMenu(KMenu& menu);
+    virtual void addKipiActions();
+    virtual void addServicesMenu(const ImageInfo&, QMap<QAction*, KService::Ptr>&);
+    virtual void addGotoMenu(imageIds& imageIDs/*, QAction*, QAction* */);
+    virtual void addQueueManagerMenu();
 
-    virtual void addAssignTagsMenu(KMenu& menu, imageIds& imageIDs, QObject* recv, const char* slot);
-    virtual void addRemoveTagsMenu(KMenu& menu, imageIds& imageIDs, QObject* recv, const char* slot);
+    virtual void addAssignTagsMenu(imageIds& imageIDs, QObject* recv, const char* slot);
+    virtual void addRemoveTagsMenu(imageIds& imageIDs, QObject* recv, const char* slot);
+    virtual void addRatingMenu(QObject* recv, const char* slot);
 
-    virtual void addRatingMenu(KMenu& menu, QObject* recv, const char* slot);
+    virtual void addImportMenu();
+    virtual void addExportMenu();
+    virtual void addBatchMenu();
+    virtual void addAlbumActions();
 
-    virtual void addImportMenu(KMenu& menu);
-    virtual void addExportMenu(KMenu& menu);
-    virtual void addBatchMenu(KMenu& menu);
-    virtual void addAlbumActions(KMenu& menu);
-
+    // execute the registered menu
+    virtual QAction* exec(int &id);
 
 private:
 
