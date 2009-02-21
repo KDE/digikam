@@ -572,20 +572,7 @@ void SearchGroupLabel::adjustOperatorOptions()
 
 SearchXml::Operator SearchGroupLabel::groupOperator() const
 {
-    if (!m_groupOpLabel || m_groupOp == SearchXml::And)
-    {
-        if (m_allBox->isChecked() || m_anyBox->isChecked())
-            return SearchXml::And;
-        else
-            return SearchXml::AndNot;
-    }
-    else // m_groupOp == SearchXml::Or
-    {
-        if (m_allBox->isChecked() || m_anyBox->isChecked())
-            return SearchXml::Or;
-        else
-            return SearchXml::OrNot;
-    }
+    return m_groupOp;
 }
 
 SearchXml::Operator SearchGroupLabel::defaultFieldOperator() const
