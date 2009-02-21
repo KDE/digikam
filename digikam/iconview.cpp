@@ -339,10 +339,10 @@ void IconView::clear(bool update)
 
     if (d->ratingItem)
     {
-        unsetCursor();
-        d->ratingBox->hide();
         d->ratingItem->setEditRating(false);
         d->ratingItem = 0;
+        unsetCursor();
+        d->ratingBox->hide();
     }
 
     deleteContainers();
@@ -583,10 +583,10 @@ void IconView::takeItem(IconItem* item)
 
     if (d->ratingItem == item)
     {
-        unsetCursor();
-        d->ratingBox->hide();
         d->ratingItem->setEditRating(false);
         d->ratingItem = 0;
+        unsetCursor();
+        d->ratingBox->hide();
     }
 
     // if it is current item, change the current item
@@ -695,10 +695,10 @@ void IconView::slotRearrange()
 
     if (d->ratingItem)
     {
-        unsetCursor();
-        d->ratingBox->hide();
         d->ratingItem->setEditRating(false);
         d->ratingItem = 0;
+        unsetCursor();
+        d->ratingBox->hide();
     }
 
     // hide tooltip
@@ -986,10 +986,10 @@ void IconView::focusOutEvent(QFocusEvent* e)
 
     if (d->ratingItem)
     {
-        unsetCursor();
-        d->ratingBox->hide();
         d->ratingItem->setEditRating(false);
         d->ratingItem = 0;
+        unsetCursor();
+        d->ratingBox->hide();
     }
 
     // hide tooltip
@@ -1356,10 +1356,10 @@ void IconView::contentsWheelEvent(QWheelEvent* e)
 
     if (d->ratingItem)
     {
-        unsetCursor();
-        d->ratingBox->hide();
         d->ratingItem->setEditRating(false);
         d->ratingItem = 0;
+        unsetCursor();
+        d->ratingBox->hide();
     }
 
     d->toolTipItem = 0;
@@ -1860,10 +1860,10 @@ void IconView::keyPressEvent(QKeyEvent* e)
 
         if (d->ratingItem)
         {
-            unsetCursor();
-            d->ratingBox->hide();
             d->ratingItem->setEditRating(false);
             d->ratingItem = 0;
+            unsetCursor();
+            d->ratingBox->hide();
         }
 
         emit signalSelectionChanged();
