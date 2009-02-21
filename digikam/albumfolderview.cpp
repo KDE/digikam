@@ -217,7 +217,7 @@ public:
 
     AlbumFolderViewPriv()
     {
-        albumMan          = 0;
+        albumMan = 0;
     }
 
     AlbumManager                *albumMan;
