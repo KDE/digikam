@@ -299,6 +299,8 @@ SearchXml::Operator SearchXmlReader::readOperator(const QString &attributeName,
         return SearchXml::Or;
     else if (op == "andnot")
         return SearchXml::AndNot;
+    else if (op == "ornot")
+        return SearchXml::OrNot;
 
     return defaultOperator;
 }
@@ -572,6 +574,9 @@ void SearchXmlWriter::writeOperator(const QString &attributeName, SearchXml::Ope
             break;
         case SearchXml::AndNot:
             writeAttribute(attributeName, "andnot");
+            break;
+        case SearchXml::OrNot:
+            writeAttribute(attributeName, "ornot");
             break;
     }
 }
