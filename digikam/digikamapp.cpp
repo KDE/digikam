@@ -645,7 +645,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->propsEditAction = new KAction(KIcon("albumfolder-properties"), i18n("Properties..."), this);
+    d->propsEditAction = new KAction(KIcon("albumfolder-properties"), i18n("Properties"), this);
     d->propsEditAction->setWhatsThis(i18n("Edit album properties and collection information."));
     connect(d->propsEditAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumPropsEdit()));
     actionCollection()->addAction("album_propsEdit", d->propsEditAction);
@@ -682,7 +682,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->editTagAction = new KAction(KIcon("tag-properties"), i18n("Properties..."), this);
+    d->editTagAction = new KAction(KIcon("tag-properties"), i18n("Properties"), this);
     connect(d->editTagAction, SIGNAL(triggered()), d->view, SLOT(slotEditTag()));
     actionCollection()->addAction("tag_edit", d->editTagAction);
 
