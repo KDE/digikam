@@ -225,7 +225,6 @@ Canvas::~Canvas()
 void Canvas::resetImage()
 {
     reset();
-    viewport()->setUpdatesEnabled(false);
     d->im->resetImage();
 }
 
@@ -245,8 +244,6 @@ void Canvas::load(const QString& filename, IOFileSettingsContainer *IOFileSettin
 {
     reset();
 
-    viewport()->setUpdatesEnabled(false);
-
     d->im->load( filename, IOFileSettings, d->parent );
     emit signalPrepareToLoad();
 }
@@ -260,7 +257,6 @@ void Canvas::slotImageLoaded(const QString& filePath, bool success)
 
     updateContentsSize(true);
 
-    viewport()->setUpdatesEnabled(true);
     viewport()->update();
 
     emit signalZoomChanged(d->zoom);
