@@ -552,7 +552,7 @@ void AlbumIconView::slotRightButtonClicked(const QPoint& pos)
     delete paste;
 }
 
-void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
+void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint&)
 {
     if (!item) return;
 
