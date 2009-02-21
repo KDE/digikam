@@ -1,0 +1,19 @@
+*************************
+Factorizing context menu
+*************************
+
+Type                            DONE
+----------------------------------------
+AlbumIconView                   X
+ImagePreviewView                X
+AlbumFolderView                 X        
+TagFolderView                   X
+--LightTable
+--Right Sidebar
+--CameraUI                      X   (not needed)
+
+
+******************
+Missing Features
+******************
+Goto Tag
