@@ -292,7 +292,8 @@ void ImageWindow::setupConnections()
             this, SLOT(slotFileMetadataChanged(const KUrl &)));
 
     connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
-            this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)));
+            this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)),
+            Qt::QueuedConnection);
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -1180,6 +1181,8 @@ void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset &chan
             {
                 if (changeset.containsImage(d->imageInfoList[i].id()))
                 {
+                    if (d->imageInfoCurrent == d->imageInfoList[i])
+                        promptUserSave(d->urlCurrent, AlwaysSaveAs);
                     if (removeItem(i))
                         needLoadCurrent = true;
                     i--;
@@ -1191,6 +1194,8 @@ void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset &chan
             {
                 if (changeset.containsAlbum(d->imageInfoList[i].albumId()))
                 {
+                    if (d->imageInfoCurrent == d->imageInfoList[i])
+                        promptUserSave(d->urlCurrent, AlwaysSaveAs);
                     if (removeItem(i))
                         needLoadCurrent = true;
                     i--;

@@ -143,7 +143,13 @@ protected:
     void loadImagePlugins();
 
     bool promptForOverWrite();
-    bool promptUserSave(const KUrl& url);
+    enum SaveOrSaveAs
+    {
+        AskIfNeeded,
+        OverwriteWithoutAsking,
+        AlwaysSaveAs
+    };
+    bool promptUserSave(const KUrl& url, SaveOrSaveAs = AskIfNeeded);
     bool waitForSavingToComplete();
     void startingSave(const KUrl& url);
     bool startingSaveAs(const KUrl& url);

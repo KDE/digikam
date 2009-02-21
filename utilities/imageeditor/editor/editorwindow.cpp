@@ -1126,7 +1126,7 @@ bool EditorWindow::promptForOverWrite()
             ==  KMessageBox::Continue);
 }
 
-bool EditorWindow::promptUserSave(const KUrl& url)
+bool EditorWindow::promptUserSave(const KUrl& url, SaveOrSaveAs saveOrSaveAs)
 {
     if (m_saveAction->isEnabled())
     {
@@ -1148,10 +1148,24 @@ bool EditorWindow::promptUserSave(const KUrl& url)
         {
             bool saving = false;
 
-            if (m_canvas->isReadOnly())
-                saving = saveAs();
-            else if (promptForOverWrite())
-                saving = save();
+            switch (saveOrSaveAs)
+            {
+                case AskIfNeeded:
+                    if (m_canvas->isReadOnly())
+                        saving = saveAs();
+                    else if (promptForOverWrite())
+                        saving = save();
+                    break;
+                case OverwriteWithoutAsking:
+                    if (m_canvas->isReadOnly())
+                        saving = saveAs();
+                    else
+                        saving = save();
+                    break;
+                case AlwaysSaveAs:
+                    saving = saveAs();
+                    break;
+            }
 
             // save and saveAs return false if they were canceled and did not enter saving at all
             // In this case, do not call enterWaitingLoop because quitWaitingloop will not be called.
