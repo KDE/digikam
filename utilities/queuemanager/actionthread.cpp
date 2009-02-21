@@ -215,7 +215,7 @@ void ActionThread::run()
                 }
             }
 
-            if (success)
+            if (success && !d->cancel)
             {
                 // if success, we don't remove last ouput tmp url.
                 tmp2del.removeAll(outUrl);
@@ -233,7 +233,6 @@ void ActionThread::run()
             {
                 unlink(QFile::encodeName((*it).path()));
             }
-
         }
 
         delete t;

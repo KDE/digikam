@@ -93,6 +93,7 @@ private:
     void processing(const KUrl& url);
     void processed(const KUrl& url, const KUrl& tmp);
     void processingFailed(const KUrl& url);
+    void processingAborted();
 
     QueueMgrWindow();
 
@@ -110,7 +111,6 @@ private slots:
     void slotRawCameraList();
     void slotComponentsInfo();
     void slotAction(const ActionData&);
-    void slotAborted();
     void slotImageListChanged();
     void slotImageSelectionChanged();
     void slotBlinkTimerDone();

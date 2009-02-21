@@ -757,8 +757,7 @@ void QueueMgrWindow::slotRun()
     if (d->itemsList.empty())
     {
         KMessageBox::error(this, i18n("There is no item to process in the queues!"));
-        busy(false);
-        slotAborted();
+        processingAborted();
         return;
     }
 
@@ -782,15 +781,14 @@ void QueueMgrWindow::slotStop()
 
     d->itemsList.clear();
     d->thread->cancel();
-    busy(false);
-
-    QTimer::singleShot(500, this, SLOT(slotAborted()));
+    processingAborted();
 }
 
-void QueueMgrWindow::slotAborted()
+void QueueMgrWindow::processingAborted()
 {
     d->statusProgressBar->setProgressValue(0);
     d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode);
+    busy(false);
     refreshStatusBar();
 }
 
@@ -798,8 +796,7 @@ void QueueMgrWindow::processOne()
 {
     if (d->itemsList.empty())
     {
-        busy(false);
-        slotAborted();
+        processingAborted();
         return;
     }
 
@@ -911,7 +908,8 @@ void QueueMgrWindow::processing(const KUrl& url)
 void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
 {
     d->blinkTimer->stop();
-    d->currentProcessItem->setDone(true);
+    if (d->currentProcessItem)
+        d->currentProcessItem->setDone(true);
 
     KUrl dest    = d->processedItemsAlbumUrl;
     QFileInfo fiTmp(tmp.path());
