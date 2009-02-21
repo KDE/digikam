@@ -299,8 +299,6 @@ AlbumManager::AlbumManager()
 
 AlbumManager::~AlbumManager()
 {
-    cleanUp();
-
     delete d->rootPAlbum;
     delete d->rootTAlbum;
     delete d->rootDAlbum;
