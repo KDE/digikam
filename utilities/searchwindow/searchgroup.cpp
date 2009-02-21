@@ -414,12 +414,6 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGrou
     }
     else
     {
-        /*
-        m_groupOpBox = new KComboBox;
-        m_groupOpBox->addItem("- OR -", SearchXml::Or);
-        m_groupOpBox->addItem("- AND -", SearchXml::And);
-        m_groupOpBox->addItem("- AND NOT -", SearchXml::AndNot);
-        */
         m_groupOpLabel = new SearchClickLabel;
         m_groupOpLabel->setObjectName("SearchGroupLabel_GroupOpLabel");
         connect(m_groupOpLabel, SIGNAL(leftClicked()),
@@ -534,8 +528,6 @@ void SearchGroupLabel::updateGroupLabel()
         else
             m_groupOpLabel->setText(i18n("OR"));
     }
-    //if (m_groupOpBox)
-      //  m_groupOpBox->setCurrentIndex(m_groupOpBox->findData(op));
 }
 
 void SearchGroupLabel::setDefaultFieldOperator(SearchXml::Operator op)
@@ -580,11 +572,6 @@ void SearchGroupLabel::adjustOperatorOptions()
 
 SearchXml::Operator SearchGroupLabel::groupOperator() const
 {
-    /*
-    if (m_groupOpBox && m_groupOpBox->currentIndex() != -1)
-    {
-        SearchXml::Operator op = (SearchXml::Operator)m_groupOpBox->itemData(m_groupOpBox->currentIndex()).toInt();
-    */
     if (!m_groupOpLabel || m_groupOp == SearchXml::And)
     {
         if (m_allBox->isChecked() || m_anyBox->isChecked())
