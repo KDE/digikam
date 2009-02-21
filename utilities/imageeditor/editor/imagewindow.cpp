@@ -1192,7 +1192,6 @@ void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset &chan
                 {
                     if (d->imageInfoCurrent == d->imageInfoList[i])
                     {
-                        promptUserSave(d->urlCurrent, AlwaysSaveAs);
                         if (removeItem(i))
                             needLoadCurrent = true;
                     }
@@ -1209,7 +1208,6 @@ void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset &chan
                 {
                     if (d->imageInfoCurrent == d->imageInfoList[i])
                     {
-                        promptUserSave(d->urlCurrent, AlwaysSaveAs);
                         if (removeItem(i))
                             needLoadCurrent = true;
                     }
