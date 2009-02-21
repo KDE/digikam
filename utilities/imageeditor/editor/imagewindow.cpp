@@ -1176,6 +1176,10 @@ void ImageWindow::slotFileMetadataChanged(const KUrl &url)
 
 void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset &changeset)
 {
+    // ignore when closed
+    if (!isVisible())
+        return;
+
     bool needLoadCurrent = false;
     switch(changeset.operation())
     {
