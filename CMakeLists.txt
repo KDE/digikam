@@ -742,14 +742,15 @@ ENDIF(MSVC)
 
     SET(libqueuemanager_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/actionthread.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/assignedlist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/toolslist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/toolsettingsview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuemgrwindow.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuepool.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuelist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuesettingsview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/batchtoolsmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/batchtool.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/toolslist.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/assignedlist.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/toolsettingsview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert2jpeg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert2png.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert2tiff.cpp
