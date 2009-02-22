@@ -109,7 +109,7 @@ public:
     * A return value of false during startup indicates termination of the program
     * (user is informed)
     */
-    bool setDatabase(const QString &dbPath, bool priority);
+    bool setDatabase(const QString &dbPath, bool priority, const QString &suggestedAlbumRoot = QString());
 
     /**
     * Sets new database when chosen by the user in setup.

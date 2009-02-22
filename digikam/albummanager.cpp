@@ -84,6 +84,7 @@ extern "C"
 #include "dio.h"
 #include "imagelister.h"
 #include "scancontroller.h"
+#include "setup.h"
 #include "upgradedb_sqlite2tosqlite3.h"
 
 namespace Digikam
@@ -423,7 +424,7 @@ void AlbumManager::changeDatabase(const QString &dbPath)
         startScan();
 }
 
-bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
+bool AlbumManager::setDatabase(const QString &dbPath, bool priority, const QString &suggestedAlbumRoot)
 {
     if (dbPath.isEmpty())
         return false;
@@ -612,6 +613,18 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
     {
         QFileInfo dbFile(params.SQLiteDatabaseFile());
         d->dbPathModificationDateList = d->buildDirectoryModList(dbFile);
+    }
+
+    // check that we have one album root
+    if (Digikam::CollectionManager::instance()->allLocations().isEmpty())
+    {
+        if (suggestedAlbumRoot.isEmpty())
+            Setup::execSinglePage(Setup::CollectionsPage);
+        else
+        {
+            Digikam::CollectionManager::instance()->addLocation(suggestedAlbumRoot);
+            ScanController::instance()->completeCollectionScan();
+        }
     }
 
     return true;
