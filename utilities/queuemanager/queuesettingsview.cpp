@@ -27,6 +27,7 @@
 // Qt includes.
 
 #include <QLabel>
+#include <QScrollArea>
 #include <QButtonGroup>
 #include <QVBoxLayout>
 #include <QRadioButton>
@@ -62,7 +63,6 @@ public:
     }
 
     QLabel           *conflictLabel;
-    QLabel           *uploadLabel;
 
     QButtonGroup     *conflictButtonGroup;
 
@@ -73,21 +73,26 @@ public:
 };
 
 QueueSettingsView::QueueSettingsView(QWidget *parent)
-                 : QScrollArea(parent), d(new QueueSettingsViewPriv)
+                 : KTabWidget(parent), d(new QueueSettingsViewPriv)
 {
-    QWidget *panel = new QWidget(viewport());
-    panel->setAutoFillBackground(false);
-    setWidget(panel);
-    setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
-
-    QVBoxLayout *layout = new QVBoxLayout(panel);
+    setTabBarHidden(false);
+    setCloseButtonEnabled(false);
 
     // --------------------------------------------------------
 
-    d->uploadLabel         = new QLabel(i18n("Album to Host Processed Items:"), panel);
-    d->uploadWidget        = new KipiUploadWidget(0, panel);
+    d->uploadWidget = new KipiUploadWidget(0, this);
+    addTab(d->uploadWidget, i18n("Target Album"));
 
+    // --------------------------------------------------------
+
+    QScrollArea *sv = new QScrollArea(this);
+    QWidget *panel  = new QWidget(sv->viewport());
+    panel->setAutoFillBackground(false);
+    sv->setWidget(panel);
+    sv->setWidgetResizable(true);
+    sv->viewport()->setAutoFillBackground(false);
+
+    QVBoxLayout *layout    = new QVBoxLayout(panel);
     d->conflictLabel       = new QLabel(i18n("If Target File Exists:"), panel);
     QWidget *conflictBox   = new QWidget(panel);
     QVBoxLayout *vlay      = new QVBoxLayout(conflictBox);
@@ -104,12 +109,13 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
     vlay->setMargin(0);
     vlay->setSpacing(0);
 
-    layout->addWidget(d->uploadLabel);
-    layout->addWidget(d->uploadWidget);
     layout->addWidget(d->conflictLabel);
     layout->addWidget(conflictBox);
     layout->setMargin(KDialog::spacingHint());
     layout->setSpacing(KDialog::spacingHint());
+    layout->addStretch();
+
+    addTab(sv, i18n("Behavior"));
 }
 
 QueueSettingsView::~QueueSettingsView()

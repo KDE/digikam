@@ -30,6 +30,10 @@
 #include <QList>
 #include <QMap>
 
+// KDE includes.
+
+#include <ktabwidget.h>
+
 namespace Digikam
 {
 
@@ -62,10 +66,9 @@ typedef QList<QueueSettingsSet> QueueSettingsSetList;
 
 // --------------------------------------------------------
 
-
 class QueueSettingsViewPriv;
 
-class QueueSettingsView : public QScrollArea
+class QueueSettingsView : public KTabWidget
 {
     Q_OBJECT
 
