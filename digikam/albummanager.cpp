@@ -340,6 +340,41 @@ bool AlbumManager::databaseEqual(const QString &dbPath) const
     return d->dbPath == dbPath;
 }
 
+static bool moveToBackup(const QFileInfo &info)
+{
+    if (info.exists())
+    {
+        QFileInfo backup(info.dir(), info.fileName() + "-backup-" + QDateTime::currentDateTime().toString(Qt::ISODate));
+        KIO::Job *job = KIO::file_move(info.filePath(), backup.filePath(), -1, KIO::Overwrite | KIO::HideProgressInfo);
+        if (!KIO::NetAccess::synchronousRun(job, 0))
+        {
+            KMessageBox::error(0, i18n("Failed to backup the existing database file (\"%1\")."
+                                       "Refusing to replace file without backup, using the existing file.",
+                                        info.filePath()));
+            return false;
+        }
+    }
+    return true;
+}
+
+static bool copyToNewLocation(const QFileInfo &oldFile, const QFileInfo &newFile, const QString otherMessage = QString())
+{
+    QString message = otherMessage;
+    if (message.isNull())
+        message = i18n("Failed to copy the old database file (\"%1\") "
+                       "to its new location (\"%2\"). "
+                       "Starting with an empty database.",
+                       oldFile.filePath(), newFile.filePath());
+
+    KIO::Job *job = KIO::file_copy(oldFile.filePath(), newFile.filePath(), -1, KIO::Overwrite /*| KIO::HideProgressInfo*/);
+    if (!KIO::NetAccess::synchronousRun(job, 0))
+    {
+        KMessageBox::error(0, message);
+        return false;
+    }
+    return true;
+}
+
 void AlbumManager::changeDatabase(const QString &dbPath)
 {
     if (d->dbPath == dbPath)
@@ -355,26 +390,61 @@ void AlbumManager::changeDatabase(const QString &dbPath)
         QFileInfo newFile(newDir, oldFile.fileName());
         if (!newFile.exists())
         {
-            KGuiItem copyCurrent(i18n("Copy Current Database"), "edit-copy");
-            KGuiItem startFresh(i18n("Create New Database"), "document-new");
-            int result = KMessageBox::warningYesNo(0,
-                                i18n("<p>You have chosen the folder \"%1\" as the new place to store the database.</p>"
-                                     "<p>Would you like to copy the current database to this location "
-                                     "and continue using it, or start with a new database?</p> ",
-                                      newDir.path()),
-                                i18n("New database folder"),
-                                startFresh, copyCurrent);
+            QFileInfo digikam3DB(newDir, "digikam3.db");
+            QFileInfo digikamVeryOldDB(newDir, "digikam.db");
 
-            if (result == KMessageBox::No)
+            if (digikam3DB.exists() || digikamVeryOldDB.exists())
             {
-                KIO::Job *job = KIO::file_copy(oldFile.filePath(), newFile.filePath(), -1, KIO::Overwrite /*| KIO::HideProgressInfo*/);
-                if (!KIO::NetAccess::synchronousRun(job, 0))
+                KGuiItem copyCurrent(i18n("Copy Current Database"), "edit-copy");
+                KGuiItem startFresh(i18n("Create New Database"), "document-new");
+                KGuiItem upgrade(i18n("Upgrade Database"), "view-refresh");
+                int result = KMessageBox::warningYesNoCancel(0,
+                                    i18n("<p>You have chosen the folder \"%1\" as the new place to store the database."
+                                         "A database file from an older digikam version is found in this folder.</p> "
+                                        "<p>Would you like to upgrade the old database file, start with a new database, "
+                                        "or copy the current database to this location and continue using it?</p> ",
+                                        newDir.path()),
+                                    i18n("New database folder"),
+                                    upgrade, startFresh, copyCurrent);
+
+                if (result == KMessageBox::Yes)
                 {
-                    KMessageBox::error(0, i18n("Failed to copy the old database file (\"%1\") "
-                                               "to its new location (\"%2\"). "
-                                               "Starting with an empty database.",
-                                               oldFile.filePath(), newFile.filePath()));
-                    // continue, dont return
+                    // SchemaUpdater expects Album Path to point to the album root of the 0.9 db file.
+                    // Restore this situation.
+                    KSharedConfigPtr config = KGlobal::config();
+                    KConfigGroup group = config->group("Album Settings");
+                    group.writeEntry("Album Path", newDir.path());
+                    group.sync();
+                }
+                else if (result == KMessageBox::No)
+                {
+                    moveToBackup(digikam3DB);
+                    moveToBackup(digikamVeryOldDB);
+                }
+                else if (result == KMessageBox::Cancel)
+                {
+                    copyToNewLocation(oldFile, newFile, i18n("Failed to copy the old database file (\"%1\") "
+                                                             "to its new location (\"%2\"). "
+                                                             "Trying to upgrade old databases.",
+                                                             oldFile.filePath(), newFile.filePath()));
+                }
+            }
+            else
+            {
+
+                KGuiItem copyCurrent(i18n("Copy Current Database"), "edit-copy");
+                KGuiItem startFresh(i18n("Create New Database"), "document-new");
+                int result = KMessageBox::warningYesNo(0,
+                                    i18n("<p>You have chosen the folder \"%1\" as the new place to store the database.</p>"
+                                        "<p>Would you like to copy the current database to this location "
+                                        "and continue using it, or start with a new database?</p> ",
+                                        newDir.path()),
+                                    i18n("New database folder"),
+                                    startFresh, copyCurrent);
+
+                if (result == KMessageBox::No)
+                {
+                    copyToNewLocation(oldFile, newFile);
                 }
             }
         }
@@ -393,28 +463,10 @@ void AlbumManager::changeDatabase(const QString &dbPath)
             if (result == KMessageBox::Yes)
             {
                 // first backup
-                QFileInfo backup(newDir, newFile.fileName() + "-backup-" + QDateTime::currentDateTime().toString(Qt::ISODate));
-                kDebug() << oldFile.filePath() << newFile.filePath() <<  backup.filePath();
-                KIO::Job *job = KIO::file_move(newFile.filePath(), backup.filePath(), -1, KIO::Overwrite | KIO::HideProgressInfo);
-                if (!KIO::NetAccess::synchronousRun(job, 0))
-                {
-                    KMessageBox::error(0, i18n("Failed to backup the existing database file (\"%1\")."
-                                               "Refusing to replace file without backup, using the existing file.",
-                                                newFile.filePath()));
-                    // continue, dont return
-                }
-                else
+                if (moveToBackup(newFile))
                 {
                     // then copy
-                    job = KIO::file_copy(oldFile.filePath(), newFile.filePath(), -1, KIO::Overwrite | KIO::HideProgressInfo);
-                    if (!KIO::NetAccess::synchronousRun(job, 0))
-                    {
-                        KMessageBox::error(0, i18n("Failed to copy the old database file (\"%1\") "
-                                           "to its new location (\"%2\"). "
-                                           "Starting with an empty database.",
-                                            oldFile.filePath(), newFile.filePath()));
-                        // continue, dont return
-                    }
+                   copyToNewLocation(oldFile, newFile);
                 }
             }
         }
