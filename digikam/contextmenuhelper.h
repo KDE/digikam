@@ -35,6 +35,7 @@
 
 class QAction;
 class QMenu;
+class QPoint;
 class QString;
 
 class KActionCollection;
@@ -120,7 +121,7 @@ public:
     virtual void addAlbumActions();
 
     // execute the registered menu
-    virtual QAction* exec(int &id);
+    virtual QAction* exec(const QPoint& pos, int& id, QAction* at = 0);
 
 private:
 

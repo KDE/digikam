@@ -571,7 +571,7 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
     cmhelper.addAction("tag_edit");
 
     int actionId    = 0;
-    QAction* choice = cmhelper.exec(actionId);
+    QAction* choice = cmhelper.exec(QCursor::pos(), actionId);
     switch (actionId)
     {
         case ContextMenuHelper::Unknown:

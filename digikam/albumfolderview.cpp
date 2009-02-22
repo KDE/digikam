@@ -593,7 +593,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
     // special action handling --------------------------------
 
     int actionId    = 0;
-    QAction* choice = cmhelper.exec(actionId);
+    QAction* choice = cmhelper.exec(QCursor::pos(), actionId);
     switch (actionId)
     {
         case ContextMenuHelper::Unknown:

@@ -364,9 +364,9 @@ void ContextMenuHelper::addActionItemDelete(QObject* recv, const char* slot, int
     addAction(trashAction);
 }
 
-QAction* ContextMenuHelper::exec(int &id)
+QAction* ContextMenuHelper::exec(const QPoint& pos, int& id, QAction* at)
 {
-    QAction* choice = d->menu->exec(QCursor::pos());
+    QAction* choice = d->menu->exec(pos, at);
     id = Unknown;
 
     QMapIterator<int, QAction*> it(d->actions);

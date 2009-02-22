@@ -605,7 +605,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint&)
     // special action handling --------------------------------
 
     int actionId    = 0;
-    QAction* choice = cmhelper.exec(actionId);
+    QAction* choice = cmhelper.exec(QCursor::pos(), actionId);
     switch (actionId)
     {
         case ContextMenuHelper::GotoAlbum:    emit signalGotoAlbumAndItem(iconItem); break;
