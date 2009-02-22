@@ -955,7 +955,7 @@ void LightTableWindow::slotDeleteItem(const ImageInfo &info)
         kioURL = fileURL;
 
     SyncJobResult deleteResult = SyncJob::del(kioURL, useTrash);
-    if (deleteResult)
+    if (!deleteResult)
     {
         KMessageBox::error(this, deleteResult.errorString);
         return;
