@@ -20,8 +20,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 184637 : Potential data loss with image editor automatically switching file.
 012 ==> 184641 : Image editor loads images even when closed.
 013 ==> 185106 : Advanced search is not saved/restored correctly.
-014 ==> 
-
+014 ==> 184187 : Tags displayed with their full path.
+015 ==>
 
 *********************************************************************************************************
 digiKam 0.10.0-rc2 - Release date: 2009-02-15
