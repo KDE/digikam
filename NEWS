@@ -22,7 +22,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 013 ==> 185106 : Advanced search is not saved/restored correctly.
 014 ==> 184187 : Tags displayed with their full path.
 015 ==> 182212 : Zoom to fit in image editor is not always sticky.
-016 ==> 
+016 ==> 185232 : Images can not be removed from within the light table.
+017 ==>
 
 *********************************************************************************************************
 digiKam 0.10.0-rc2 - Release date: 2009-02-15
