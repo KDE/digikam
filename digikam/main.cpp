@@ -98,13 +98,13 @@ int main(int argc, char *argv[])
 
     group                     = config->group("Album Settings");
     QString dbPath            = group.readEntry("Database File Path", QString());
-    QString albumPath         = group.readEntry("Album Path", QString());
+    QString firstAlbumPath;
 
     // 0.9 legacy
-    if (dbPath.isEmpty() && !albumPath.isEmpty())
+    if (dbPath.isEmpty() && group.hasKey("Album Path"))
     {
-        dbPath = albumPath;
-        group.writeEntry("Database File Path", albumPath);
+        dbPath = group.readEntry("Album Path", QString());
+        group.writeEntry("Database File Path", dbPath);
         group.sync();
     }
 
@@ -127,17 +127,15 @@ int main(int argc, char *argv[])
         !dirInfo.isDir())
     {
         // Run the first run
-        Digikam::DigikamFirstRun *firstRun = new Digikam::DigikamFirstRun();
-        app.setTopWidget(firstRun);
-        if (firstRun->exec() == QDialog::Rejected)
+        Digikam::DigikamFirstRun firstRun;
+        app.setTopWidget(&firstRun);
+        if (firstRun.exec() == QDialog::Rejected)
             return 1;
 
-        group     = config->group("Album Settings");
-        dbPath    = group.readEntry("Database File Path", QString());
-        albumPath = group.readEntry("Album Path", QString());
+        dbPath         = firstRun.databasePath();
+        firstAlbumPath = firstRun.firstAlbumPath();
     }
 
-    kDebug(50003) << "Root Album Path: " << albumPath << endl;
     kDebug(50003) << "Database Path: " << dbPath << endl;
 
     // Check if SQLite Qt4 plugin is available.
@@ -155,14 +153,8 @@ int main(int argc, char *argv[])
 
     // initialize database
     Digikam::AlbumManager* man = Digikam::AlbumManager::instance();
-    if (!man->setDatabase(dbPath, priorityDbPath))
+    if (!man->setDatabase(dbPath, priorityDbPath, firstAlbumPath))
         return 1;
-
-    // ensure we have one album root
-    if (Digikam::CollectionManager::instance()->allLocations().isEmpty())
-    {
-        Digikam::CollectionManager::instance()->addLocation(albumPath);
-    }
 
     Digikam::DigikamApp *digikam = new Digikam::DigikamApp();
 
