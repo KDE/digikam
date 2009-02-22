@@ -68,6 +68,8 @@ public:
     }
 
     bool           dbPathEdited;
+    QString        rootAlbum;
+    QString        dbPath;
 
     KUrlRequester *rootAlbumPathRequester;
     KUrlRequester *dbPathRequester;
@@ -172,6 +174,16 @@ DigikamFirstRun::~DigikamFirstRun()
     delete d;
 }
 
+QString DigikamFirstRun::firstAlbumPath() const
+{
+    return d->rootAlbum;
+}
+
+QString DigikamFirstRun::databasePath() const
+{
+    return d->dbPath;
+}
+
 void DigikamFirstRun::saveSettings(const QString& rootAlbumFolder, const QString& dbFolder)
 {
     KSharedConfig::Ptr config = KGlobal::config();
@@ -179,8 +191,10 @@ void DigikamFirstRun::saveSettings(const QString& rootAlbumFolder, const QString
     group.writeEntry("Version", digikam_version);
 
     group = config->group("Album Settings");
-    group.writeEntry("Album Path", rootAlbumFolder);
     group.writeEntry("Database File Path", dbFolder);
+
+    d->rootAlbum = rootAlbumFolder;
+    d->dbPath = dbFolder;
 
     config->sync();
 }

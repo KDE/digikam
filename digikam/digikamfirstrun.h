@@ -49,6 +49,9 @@ public:
     DigikamFirstRun(QWidget* parent=0);
     ~DigikamFirstRun();
 
+    QString databasePath() const;
+    QString firstAlbumPath() const;
+
 protected slots:
 
     void slotButtonClicked(int button);
