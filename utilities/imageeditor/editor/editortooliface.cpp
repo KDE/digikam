@@ -113,7 +113,8 @@ void EditorToolIface::unLoadTool()
     d->editor->rightSideBar()->setActiveTab(d->prevTab);
     d->editor->toggleActions(true);
     // To restore canvas zoom level in zoom combobox.
-    d->editor->editorStackView()->setZoomFactor(d->editor->editorStackView()->canvas()->zoomFactor());
+    if (!d->editor->editorStackView()->canvas()->fitToWindow())
+        d->editor->editorStackView()->setZoomFactor(d->editor->editorStackView()->canvas()->zoomFactor());
     delete d->tool;
     d->tool = 0;
 }
