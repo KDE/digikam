@@ -6,7 +6,7 @@
  * Date        : 2008-08-20
  * Description : Image editor interface used by editor tools.
  *
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -113,7 +113,8 @@ void EditorToolIface::unLoadTool()
     d->editor->rightSideBar()->setActiveTab(d->prevTab);
     d->editor->toggleActions(true);
     // To restore canvas zoom level in zoom combobox.
-    d->editor->editorStackView()->setZoomFactor(d->editor->editorStackView()->canvas()->zoomFactor());
+    if (!d->editor->editorStackView()->canvas()->fitToWindow())
+        d->editor->editorStackView()->setZoomFactor(d->editor->editorStackView()->canvas()->zoomFactor());
     delete d->tool;
     d->tool = 0;
 }
