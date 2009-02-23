@@ -8,7 +8,8 @@
  *               operations during camera downloading
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,6 +32,7 @@
 #include <QButtonGroup>
 #include <QCheckBox>
 #include <QDateTime>
+#include <QFileInfo>
 #include <QFrame>
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -78,6 +80,7 @@ public:
         renameCustomBox       = 0;
         renameDefaultCase     = 0;
         renameDefaultCaseType = 0;
+        addOrigNameBox        = 0;
         addDateTimeBox        = 0;
         addCameraNameBox      = 0;
         addSeqNumberBox       = 0;
@@ -110,6 +113,7 @@ public:
     KComboBox    *renameDefaultCaseType;
     KComboBox    *dateTimeFormat;
 
+    QCheckBox    *addOrigNameBox;
     QCheckBox    *addDateTimeBox;
     QCheckBox    *addCameraNameBox;
     QCheckBox    *addSeqNumberBox;
@@ -183,10 +187,13 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     QLabel* suffixLabel   = new QLabel(i18n("Suffix:"), d->renameCustomBox);
     d->renameCustomSuffix = new KLineEdit(d->renameCustomBox);
-    d->renameCustomSuffix->setWhatsThis( i18n("Set the suffix which will be added to "
-                                              "the image filenames."));
+    d->renameCustomSuffix->setWhatsThis(i18n("Set the suffix which will be added to "
+                                             "the image filenames."));
 
-    d->addDateTimeBox = new QCheckBox( i18n("Add Date && Time"), d->renameCustomBox );
+    d->addOrigNameBox = new QCheckBox(i18n("Add Original &Filename"), d->renameCustomBox);
+    d->addOrigNameBox->setWhatsThis(i18n("Set this option to add the original filename."));
+
+    d->addDateTimeBox = new QCheckBox(i18n("Add Date && Time"), d->renameCustomBox);
     d->addDateTimeBox->setWhatsThis( i18n("Set this option to add the camera provided date and time."));
 
     QWidget *dateTimeWidget = new QWidget(d->renameCustomBox);
@@ -238,12 +245,13 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     renameCustomBoxLayout->addWidget(d->renameCustomPrefix, 0, 2, 1, 1);
     renameCustomBoxLayout->addWidget(suffixLabel,           1, 1, 1, 1);
     renameCustomBoxLayout->addWidget(d->renameCustomSuffix, 1, 2, 1, 1);
-    renameCustomBoxLayout->addWidget(d->addDateTimeBox,     2, 1, 1, 2);
-    renameCustomBoxLayout->addWidget(dateTimeWidget,        3, 1, 1, 2);
-    renameCustomBoxLayout->addWidget(d->addCameraNameBox,   4, 1, 1, 2);
-    renameCustomBoxLayout->addWidget(d->addSeqNumberBox,    5, 1, 1, 2);
-    renameCustomBoxLayout->addWidget(d->startIndexLabel,    6, 1, 1, 1);
-    renameCustomBoxLayout->addWidget(d->startIndexInput,    6, 2, 1, 1);
+    renameCustomBoxLayout->addWidget(d->addOrigNameBox,     2, 1, 1, 2);
+    renameCustomBoxLayout->addWidget(d->addDateTimeBox,     3, 1, 1, 2);
+    renameCustomBoxLayout->addWidget(dateTimeWidget,        4, 1, 1, 2);
+    renameCustomBoxLayout->addWidget(d->addCameraNameBox,   5, 1, 1, 2);
+    renameCustomBoxLayout->addWidget(d->addSeqNumberBox,    6, 1, 1, 2);
+    renameCustomBoxLayout->addWidget(d->startIndexLabel,    7, 1, 1, 1);
+    renameCustomBoxLayout->addWidget(d->startIndexInput,    7, 2, 1, 1);
     renameCustomBoxLayout->setColumnMinimumWidth(0, 10);
     renameCustomBoxLayout->setMargin(KDialog::spacingHint());
     renameCustomBoxLayout->setSpacing(KDialog::spacingHint());
@@ -268,6 +276,9 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
             this, SLOT(slotRenameOptionsChanged()));
 
     connect(d->renameCustomSuffix, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotRenameOptionsChanged()));
+
+    connect(d->addOrigNameBox, SIGNAL(toggled(bool)),
             this, SLOT(slotRenameOptionsChanged()));
 
     connect(d->addDateTimeBox, SIGNAL(toggled(bool)),
@@ -322,7 +333,8 @@ int RenameCustomizer::startIndex() const
     return d->startIndexInput->value();
 }
 
-QString RenameCustomizer::newName(const QDateTime &dateTime, int index, const QString &extension) const
+QString RenameCustomizer::newName(const QString &fileName, const QDateTime &dateTime,
+                                  int index, const QString &extension) const
 {
     if (d->renameDefault->isChecked())
         return QString();
@@ -354,6 +366,12 @@ QString RenameCustomizer::newName(const QDateTime &dateTime, int index, const QS
         // it seems that QString::number does not support padding with zeros
         QString seq;
         seq.sprintf("-%06d", index);
+
+        if (d->addOrigNameBox->isChecked())
+        {
+            QFileInfo fi(fileName);
+            name += fi.baseName();
+        }
 
         if (d->addDateTimeBox->isChecked())
             name += date;
