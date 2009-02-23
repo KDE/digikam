@@ -82,14 +82,14 @@ void QueuePool::slotAddQueue()
     QueueListView* queue = new QueueListView(this);
     int index = addTab(queue, SmallIcon("vcs_diff"), QString("#%1").arg(count()+1));
 
-    connect(queue, SIGNAL(signalImageListChanged()),
-            this, SIGNAL(signalImageListChanged()));
+    connect(queue, SIGNAL(signalQueueContentsChanged()),
+            this, SIGNAL(signalQueueContentsChanged()));
 
     connect(queue, SIGNAL(itemSelectionChanged()),
             this, SIGNAL(signalItemSelectionChanged()));
 
-    connect(queue, SIGNAL(signalItemSelected(const AssignedBatchTools&)),
-            this, SIGNAL(signalItemSelected(const AssignedBatchTools&)));
+    connect(queue, SIGNAL(signalQueueItemSelected(const AssignedBatchTools&)),
+            this, SIGNAL(signalQueueItemSelected(const AssignedBatchTools&)));
 
     emit signalQueuePoolChanged();
 

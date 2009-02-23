@@ -99,8 +99,8 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
     d->conflictButtonGroup = new QButtonGroup(conflictBox);
     d->overwriteButton     = new QRadioButton(i18n("Overwrite automatically"), conflictBox);
     d->promptButton        = new QRadioButton(i18n("Open rename-file dialog"), conflictBox);
-    d->conflictButtonGroup->addButton(d->overwriteButton, OVERWRITE);
-    d->conflictButtonGroup->addButton(d->promptButton,    ASKTOUSER);
+    d->conflictButtonGroup->addButton(d->overwriteButton, QueueSettings::OVERWRITE);
+    d->conflictButtonGroup->addButton(d->promptButton,    QueueSettings::ASKTOUSER);
     d->conflictButtonGroup->setExclusive(true);
     d->overwriteButton->setChecked(true);
 

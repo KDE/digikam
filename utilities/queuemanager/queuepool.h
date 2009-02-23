@@ -66,8 +66,8 @@ signals:
     void signalItemSelectionChanged();
     void signalQueuePoolChanged();
     void signalQueueSelected(int id);
-    void signalImageListChanged();
-    void signalItemSelected(const AssignedBatchTools&);
+    void signalQueueContentsChanged();
+    void signalQueueItemSelected(const AssignedBatchTools&);
 
 public slots:
 

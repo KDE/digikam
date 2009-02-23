@@ -159,6 +159,8 @@ public:
     }
 
     ThumbnailLoadThread *thumbLoadThread;
+
+    QueueSettings        settings;
 };
 
 QueueListView::QueueListView(QWidget *parent)
@@ -387,7 +389,7 @@ void QueueListView::dropEvent(QDropEvent *e)
         e->ignore();
     }
 
-    emit signalImageListChanged();
+    emit signalQueueContentsChanged();
 }
 
 void QueueListView::slotAddItems(const ImageInfoList& list, const ImageInfo& current)
@@ -425,7 +427,7 @@ void QueueListView::slotAddItems(const ImageInfoList& list, const ImageInfo& cur
             setCurrentItem(item);
         }
     }
-    emit signalImageListChanged();
+    emit signalQueueContentsChanged();
 }
 
 void QueueListView::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
@@ -450,19 +452,19 @@ void QueueListView::slotThumbnailLoaded(const LoadingDescription& desc, const QP
 void QueueListView::slotClearList()
 {
     removeItems(QueueListViewPriv::ItemsAll);
-    emit signalImageListChanged();
+    emit signalQueueContentsChanged();
 }
 
 void QueueListView::slotRemoveSelectedItems()
 {
     removeItems(QueueListViewPriv::ItemsSelected);
-    emit signalImageListChanged();
+    emit signalQueueContentsChanged();
 }
 
 void QueueListView::slotRemoveItemsDone()
 {
     removeItems(QueueListViewPriv::ItemsDone);
-    emit signalImageListChanged();
+    emit signalQueueContentsChanged();
 }
 
 void QueueListView::removeItems(int removeType)
@@ -507,7 +509,7 @@ void QueueListView::removeItems(int removeType)
     }
     while(find);
 
-    emit signalItemSelected(AssignedBatchTools());
+    emit signalQueueItemSelected(AssignedBatchTools());
 }
 
 void QueueListView::removeItemByInfo(const ImageInfo& info)
@@ -531,7 +533,7 @@ void QueueListView::removeItemByInfo(const ImageInfo& info)
     }
     while(find);
 
-    emit signalImageListChanged();
+    emit signalQueueContentsChanged();
 }
 
 bool QueueListView::findItemByInfo(const ImageInfo& info)
@@ -588,7 +590,7 @@ void QueueListView::slotItemSelectionChanged()
 
     if (list.count() > 1)
     {
-        emit signalItemSelected(AssignedBatchTools());
+        emit signalQueueItemSelected(AssignedBatchTools());
     }
     else
     {
@@ -596,7 +598,7 @@ void QueueListView::slotItemSelectionChanged()
         if (item)
         {
             AssignedBatchTools tools4Item = item->assignedTools();
-            emit signalItemSelected(tools4Item);
+            emit signalQueueItemSelected(tools4Item);
         }
     }
 }
@@ -645,6 +647,16 @@ int QueueListView::pendingTasksCount()
         ++it;
     }
     return count;
+}
+
+void QueueListView::slotSettingsChanged(const QueueSettings& settings)
+{
+    d->settings = settings;
+}
+
+QueueSettings QueueListView::settings()
+{
+    return d->settings;
 }
 
 }  // namespace Digikam

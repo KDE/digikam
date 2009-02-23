@@ -32,37 +32,34 @@
 
 // KDE includes.
 
+#include <kurl.h>
 #include <ktabwidget.h>
 
 namespace Digikam
 {
 
-/** A map of queue settings (setting key, setting value).
- */
-typedef QMap<QString, QVariant> QueueSettings;
-
-/** A container of associated queue settings and queue id.
- */
-class QueueSettingsSet
+class QueueSettings
 {
 public:
 
-    QueueSettingsSet(){};
-    QueueSettingsSet(int id, const QueueSettings& set)
+    enum ConflictRule
     {
-        queueId  = id;
-        settings = set;
+        OVERWRITE = 0,
+        ASKTOUSER
     };
 
-    ~QueueSettingsSet(){};
+public:
 
-    int           queueId;
-    QueueSettings settings;
+    QueueSettings()
+    {
+        conflictRule = OVERWRITE;
+    };
+
+
+    KUrl         targetPath;
+
+    ConflictRule conflictRule;
 };
-
-/** A list of all queued items from the pool.
- */
-typedef QList<QueueSettingsSet> QueueSettingsSetList;
 
 // --------------------------------------------------------
 

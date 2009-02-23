@@ -37,6 +37,7 @@
 #include "imageinfo.h"
 #include "imageinfolist.h"
 #include "loadingdescription.h"
+#include "queuesettingsview.h"
 
 namespace Digikam
 {
@@ -95,10 +96,13 @@ public:
 
     QueueListViewItem* findItemByUrl(const KUrl& url);
 
+    QueueSettings settings();
+
 signals:
 
-    void signalImageListChanged();
-    void signalItemSelected(const AssignedBatchTools&);
+    void signalQueueItemSelected(const AssignedBatchTools&);
+    void signalQueueContentsChanged();
+    void signalQueueSelected(const QueueSettings&);
 
 public slots:
 
@@ -108,6 +112,7 @@ public slots:
     void slotAddItems(const ImageInfoList&, const ImageInfo&);
     void slotAssignedToolsChanged(const AssignedBatchTools&);
     void slotItemSelectionChanged();
+    void slotSettingsChanged(const QueueSettings& settings);
 
 private slots:
 
