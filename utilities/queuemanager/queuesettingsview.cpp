@@ -133,7 +133,7 @@ void QueueSettingsView::slotQueueSelected(int /*id*/, const QueueSettings& setti
 void QueueSettingsView::slotSettingsChanged()
 {
     QueueSettings settings;
-    settings.conflictRule = (QueueSettings::ConflictRule)d->conflictButtonGroup->checkedId()
+    settings.conflictRule = (QueueSettings::ConflictRule)d->conflictButtonGroup->checkedId();
     settings.targetUrl    = d->uploadWidget->currentAlbumUrl();
     emit signalSettingsChanged(settings);
 }
