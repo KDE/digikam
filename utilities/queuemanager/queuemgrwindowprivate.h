@@ -79,7 +79,6 @@ public:
         currentProcessItem     = 0;
         currentTaskItem        = 0;
         animLogo               = 0;
-        conflictRule           = SetupQueue::OVERWRITE;
     }
 
     bool                       fullScreenHideToolBar;
@@ -108,8 +107,6 @@ public:
     KAction                   *rawCameraListAction;
     KAction                   *libsInfoAction;
 
-    KUrl                       processedItemsAlbumUrl;
-
     KToggleAction             *showMenuBarAction;
 
     KSelectAction             *themeMenuAction;
@@ -132,8 +129,6 @@ public:
     QueueSettingsView         *queueSettingsView;
 
     QueuePoolItemsList         itemsList;
-
-    SetupQueue::ConflictRule   conflictRule;
 };
 
 }  // namespace Digikam

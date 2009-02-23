@@ -86,7 +86,6 @@
 #include "albummanager.h"
 #include "imagewindow.h"
 #include "rawcameradlg.h"
-#include "setupqueue.h"
 #include "imagedialog.h"
 #include "thumbnailsize.h"
 #include "queuemgrwindowprivate.h"
@@ -172,9 +171,7 @@ void QueueMgrWindow::applySettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Batch Queue Manager Settings");
 
-    d->conflictRule = (SetupQueue::ConflictRule)group.readEntry("Conflict Rule", (int)(SetupQueue::OVERWRITE));
-
-    d->processedItemsAlbumUrl = group.readEntry("Processes Items Url", KUrl());
+/* FIXME
     if (d->processedItemsAlbumUrl.isEmpty())
     {
         KMessageBox::error(this,
@@ -197,8 +194,7 @@ void QueueMgrWindow::applySettings()
         setup(Setup::QueuePage);
         return;
     }
-
-    d->thread->setWorkingUrl(d->processedItemsAlbumUrl);
+*/
     d->thread->setExifSetOrientation(AlbumSettings::instance()->getExifSetOrientation());
 }
 
@@ -828,6 +824,8 @@ void QueueMgrWindow::processOne()
 
         if (!tools4Item.toolsMap.isEmpty())
         {
+            QueueSettings settings = d->queuePool->currentQueue()->settings();
+            d->thread->setWorkingUrl(settings.targetUrl);
             d->thread->processFile(tools4Item);
             if (!d->thread->isRunning())
                 d->thread->start();
@@ -928,14 +926,15 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
     if (d->currentProcessItem)
         d->currentProcessItem->setDone(true);
 
-    KUrl dest    = d->processedItemsAlbumUrl;
+    QueueSettings settings = d->queuePool->currentQueue()->settings();
+    KUrl dest              = settings.targetUrl;
     QFileInfo fiTmp(tmp.path());
     QString ext  = fiTmp.suffix();
     QFileInfo fiUrl(url.path());
     QString name = fiUrl.baseName();
     dest.setFileName(QString("%1.%2").arg(name).arg(ext));
 
-    if (d->conflictRule != SetupQueue::OVERWRITE)
+    if (settings.conflictRule != QueueSettings::OVERWRITE)
     {
         struct stat statBuf;
         if (::stat(QFile::encodeName(dest.path()), &statBuf) == 0)
