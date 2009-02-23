@@ -169,7 +169,7 @@ void kio_digikamalbums::copy( const KUrl &src, const KUrl &dst, int mode, KIO::J
 
     if (dbUrlSrc.parameters() != dbUrlDst.parameters())
     {
-        error(KIO::ERR_UNKNOWN, "Database parameters of source and destination do not match.");
+        error(KIO::ERR_UNKNOWN, i18n("Database parameters of source and destination do not match."));
         return;
     }
 
@@ -180,8 +180,8 @@ void kio_digikamalbums::copy( const KUrl &src, const KUrl &dst, int mode, KIO::J
     int srcAlbumID = access.db()->getAlbumForPath(dbUrlSrc.albumRootId(), dbUrlSrc.album(), false);
     if (srcAlbumID == -1)
     {
-        error(KIO::ERR_UNKNOWN, QString("Source album %1 not found in database")
-              .arg(dbUrlSrc.album()));
+        error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database",
+                                     dbUrlSrc.album()));
         return;
     }
 
@@ -239,7 +239,7 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
 
     if (dbUrlSrc.parameters() != dbUrlDst.parameters())
     {
-        error(KIO::ERR_UNKNOWN, "Database parameters of source and destination do not match.");
+        error(KIO::ERR_UNKNOWN, i18n("Database parameters of source and destination do not match."));
         return;
     }
 
