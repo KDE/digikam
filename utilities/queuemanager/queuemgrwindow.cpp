@@ -973,15 +973,11 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
         }
         else
         {
-//            d->currentProcessItem->setDestFileName(QFileInfo(destFile).fileName());
             d->currentProcessItem->setProgressIcon(SmallIcon("dialog-ok"));
+/* TODO
+            d->currentProcessItem->setDestFileName(QFileInfo(destFile).fileName());
 
-            // Assign attributes from original image.
-
-/*
-            KIPI::ImageInfo orgInfo = d->iface->info(url);
-            KIPI::ImageInfo newInfo = d->iface->info(KUrl(destFile));
-            newInfo.cloneData(orgInfo);
+            // assign attributes from original image.
 */
         }
     }
