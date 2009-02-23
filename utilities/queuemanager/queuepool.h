@@ -44,7 +44,6 @@ namespace Digikam
 class AssignedBatchTools;
 class QueueSettings;
 class QueueListView;
-class QueuePoolPriv;
 
 class QueuePool : public KTabWidget
 {
@@ -88,10 +87,6 @@ private slots:
     void slotQueuePoolChanged(int);
     void slotCloseQueueRequest(QWidget*);
     void slotTestCanDecode(const QDragMoveEvent*, bool&);
-
-private:
-
-    QueuePoolPriv* const d;
 };
 
 }  // namespace Digikam

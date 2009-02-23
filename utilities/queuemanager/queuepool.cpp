@@ -39,19 +39,8 @@
 namespace Digikam
 {
 
-class QueuePoolPriv
-{
-
-public:
-
-    QueuePoolPriv()
-    {
-    }
-
-};
-
 QueuePool::QueuePool(QWidget *parent)
-         : KTabWidget(parent), d(new QueuePoolPriv)
+         : KTabWidget(parent)
 {
     setTabBarHidden(false);
     setCloseButtonEnabled(true);
@@ -69,7 +58,6 @@ QueuePool::QueuePool(QWidget *parent)
 
 QueuePool::~QueuePool()
 {
-    delete d;
 }
 
 QueueListView* QueuePool::currentQueue() const
@@ -119,7 +107,7 @@ int QueuePool::totalPendingItems()
     for (int i = 0; i < count(); i++)
     {
         QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
-        items += queue->pendingItemsCount();
+        items                += queue->pendingItemsCount();
     }
     return items;
 }
@@ -130,7 +118,7 @@ int QueuePool::totalPendingTasks()
     for (int i = 0; i < count(); i++)
     {
         QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
-        tasks += queue->pendingTasksCount();
+        tasks                += queue->pendingTasksCount();
     }
     return tasks;
 }
@@ -199,7 +187,7 @@ void QueuePool::slotCloseQueueRequest(QWidget* w)
 void QueuePool::removeTab(int index)
 {
     QueueListView* queue = dynamic_cast<QueueListView*>(widget(index));
-    int count = queue->pendingItemsCount();
+    int count            = queue->pendingItemsCount();
     if (count > 0)
     {
         int ret = KMessageBox::questionYesNo(this, 
