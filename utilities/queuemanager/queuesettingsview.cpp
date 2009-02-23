@@ -120,10 +120,10 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
     // --------------------------------------------------------
 
     connect(d->uploadWidget, SIGNAL(selectionChanged()),
-            this, SIGNAL(slotSettingsChanged()));
+            this, SLOT(slotSettingsChanged()));
 
     connect(d->conflictButtonGroup, SIGNAL(buttonClicked(int)),
-            this, SIGNAL(slotSettingsChanged()));
+            this, SLOT(slotSettingsChanged()));
 }
 
 QueueSettingsView::~QueueSettingsView()
