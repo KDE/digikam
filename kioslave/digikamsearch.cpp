@@ -120,7 +120,7 @@ void kio_digikamsearch::special(const QByteArray& data)
         if (albumIds.isEmpty())
         {
             kDebug(50004) << "No album ids passed for duplicates search";
-            error(KIO::ERR_INTERNAL, "No album ids passed");
+            error(KIO::ERR_INTERNAL, i18n("No album ids passed"));
             return;
         }
 
