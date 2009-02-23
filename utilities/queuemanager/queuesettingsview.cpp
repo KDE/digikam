@@ -116,6 +116,14 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
     layout->addStretch();
 
     addTab(sv, i18n("Behavior"));
+
+    // --------------------------------------------------------
+
+    connect(d->uploadWidget, SIGNAL(selectionChanged()),
+            this, SIGNAL(slotSettingsChanged()));
+
+    connect(d->conflictButtonGroup, SIGNAL(buttonClicked(int)),
+            this, SIGNAL(slotSettingsChanged()));
 }
 
 QueueSettingsView::~QueueSettingsView()
