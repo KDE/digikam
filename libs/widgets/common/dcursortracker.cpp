@@ -49,6 +49,8 @@ DCursorTracker::DCursorTracker(const QString& txt, QWidget *parent)
     m_parent->installEventFilter(this);
     setEnable(true);
 
+    m_keepOpen = false;
+
     m_autoHideTimer = new QTimer(this);
     m_autoHideTimer->setSingleShot(true);
 
@@ -68,6 +70,13 @@ void DCursorTracker::setText(const QString& txt)
 void DCursorTracker::setEnable(bool b)
 {
     m_enable = b;
+    if (b)
+        moveToParent(m_parent);
+}
+
+void DCursorTracker::setKeepOpen(bool b)
+{
+    m_keepOpen = b;
 }
 
 void DCursorTracker::triggerAutoShow(int timeout)
@@ -100,7 +109,7 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
                 show();
                 moveToParent(widget);
             }
-            else
+            else if (!m_keepOpen)
             {
                 hide();
             }
@@ -109,7 +118,8 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
 
         case QEvent::Leave:
         {
-            hide();
+            if (!m_keepOpen)
+                hide();
             break;
         }
 

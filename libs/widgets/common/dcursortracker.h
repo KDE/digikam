@@ -54,6 +54,7 @@ public:
 
     void setText(const QString& txt);
     void setEnable(bool b);
+    void setKeepOpen(bool b);
 
     void triggerAutoShow(int timeout = 2000);
 
@@ -72,6 +73,7 @@ private:
 private:
 
     bool     m_enable;
+    bool     m_keepOpen;
     QTimer*  m_autoHideTimer;
     QWidget* m_parent;
 };
