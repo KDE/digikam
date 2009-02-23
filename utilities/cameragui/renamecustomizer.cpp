@@ -380,7 +380,12 @@ QString RenameCustomizer::newName(const QString &fileName, const QDateTime &date
             name += seq;
 
         if (d->addCameraNameBox->isChecked())
-            name += QString("-%1").arg(d->cameraTitle.simplified().remove(' '));
+        {
+            if (!name.isEmpty())
+                name += QString("-");
+            name += QString("%1").arg(d->cameraTitle.simplified().remove(' '));
+
+        }
 
         name += d->renameCustomSuffix->text();
         name += extension;
