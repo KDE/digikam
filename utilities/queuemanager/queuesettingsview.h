@@ -56,7 +56,7 @@ public:
     };
 
 
-    KUrl         targetPath;
+    KUrl         targetUrl;
 
     ConflictRule conflictRule;
 };
@@ -71,20 +71,20 @@ class QueueSettingsView : public KTabWidget
 
 public:
 
-    enum ConflictRule
-    {
-        OVERWRITE = 0,
-        ASKTOUSER
-    };
-
-public:
-
     QueueSettingsView(QWidget *parent=0);
     ~QueueSettingsView();
 
+signals:
+
+    void signalSettingsChanged(const QueueSettings&);
+
 public slots:
 
-    void slotQueueSelected(int id);
+    void slotQueueSelected(int, const QueueSettings&);
+
+private slots:
+
+    void slotSettingsChanged();
 
 private:
 

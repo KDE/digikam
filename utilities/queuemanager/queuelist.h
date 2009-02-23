@@ -96,13 +96,13 @@ public:
 
     QueueListViewItem* findItemByUrl(const KUrl& url);
 
+    void setSettings(const QueueSettings& settings);
     QueueSettings settings();
 
 signals:
 
     void signalQueueItemSelected(const AssignedBatchTools&);
     void signalQueueContentsChanged();
-    void signalQueueSelected(const QueueSettings&);
 
 public slots:
 
@@ -112,7 +112,6 @@ public slots:
     void slotAddItems(const ImageInfoList&, const ImageInfo&);
     void slotAssignedToolsChanged(const AssignedBatchTools&);
     void slotItemSelectionChanged();
-    void slotSettingsChanged(const QueueSettings& settings);
 
 private slots:
 

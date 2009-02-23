@@ -649,7 +649,7 @@ int QueueListView::pendingTasksCount()
     return count;
 }
 
-void QueueListView::slotSettingsChanged(const QueueSettings& settings)
+void QueueListView::setSettings(const QueueSettings& settings)
 {
     d->settings = settings;
 }

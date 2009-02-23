@@ -307,8 +307,11 @@ void QueueMgrWindow::setupConnections()
     connect(d->queuePool, SIGNAL(signalQueueItemSelected(const AssignedBatchTools&)),
             d->assignedList, SLOT(slotItemSelected(const AssignedBatchTools&)));
 
-    connect(d->queuePool, SIGNAL(signalQueueSelected(int)),
-            d->queueSettingsView, SLOT(slotQueueSelected(int)));
+    connect(d->queuePool, SIGNAL(signalQueueSelected(int, const QueueSettings&)),
+            d->queueSettingsView, SLOT(slotQueueSelected(int, const QueueSettings&)));
+
+    connect(d->queueSettingsView, SIGNAL(signalSettingsChanged(const QueueSettings&)),
+            d->queuePool, SLOT(slotSettingsChanged(const QueueSettings&)));
 
     connect(d->queuePool, SIGNAL(signalQueuePoolChanged()),
             this, SLOT(slotImageListChanged()));

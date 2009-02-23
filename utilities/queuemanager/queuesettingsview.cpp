@@ -123,9 +123,19 @@ QueueSettingsView::~QueueSettingsView()
     delete d;
 }
 
-void QueueSettingsView::slotQueueSelected(int /*id*/)
+void QueueSettingsView::slotQueueSelected(int /*id*/, const QueueSettings& settings)
 {
-    //TODO
+    int btn = (int)settings.conflictRule;
+    d->conflictButtonGroup->button(btn)->setChecked(true);
+    d->uploadWidget->setCurrentAlbumUrl(settings.targetUrl);
+}
+
+void QueueSettingsView::slotSettingsChanged()
+{
+    QueueSettings settings;
+    settings.conflictRule = (QueueSettings::ConflictRule)d->conflictButtonGroup->checkedId()
+    settings.targetUrl    = d->uploadWidget->currentAlbumUrl();
+    emit signalSettingsChanged(settings);
 }
 
 }  // namespace Digikam

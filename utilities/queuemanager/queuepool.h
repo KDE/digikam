@@ -42,6 +42,7 @@ namespace Digikam
 {
 
 class AssignedBatchTools;
+class QueueSettings;
 class QueueListView;
 class QueuePoolPriv;
 
@@ -65,7 +66,7 @@ signals:
 
     void signalItemSelectionChanged();
     void signalQueuePoolChanged();
-    void signalQueueSelected(int id);
+    void signalQueueSelected(int id, const QueueSettings&);
     void signalQueueContentsChanged();
     void signalQueueItemSelected(const AssignedBatchTools&);
 
@@ -80,6 +81,7 @@ public slots:
     void slotRemoveItemsDone();
     void slotAddItems(const ImageInfoList&, const ImageInfo&);
     void slotAssignedToolsChanged(const AssignedBatchTools&);
+    void slotSettingsChanged(const QueueSettings&);
 
 private slots:
 

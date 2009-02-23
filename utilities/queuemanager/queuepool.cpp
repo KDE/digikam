@@ -80,7 +80,7 @@ QueueListView* QueuePool::currentQueue() const
 void QueuePool::slotAddQueue()
 {
     QueueListView* queue = new QueueListView(this);
-    int index = addTab(queue, SmallIcon("vcs_diff"), QString("#%1").arg(count()+1));
+    int index            = addTab(queue, SmallIcon("vcs_diff"), QString("#%1").arg(count()+1));
 
     connect(queue, SIGNAL(signalQueueContentsChanged()),
             this, SIGNAL(signalQueueContentsChanged()));
@@ -183,7 +183,7 @@ void QueuePool::slotQueuePoolChanged(int id)
     if (queue)
     {
         queue->slotItemSelectionChanged();
-        emit signalQueueSelected(id);
+        emit signalQueueSelected(id, queue->settings());
     }
 }
 
@@ -229,6 +229,12 @@ void QueuePool::slotTestCanDecode(const QDragMoveEvent* e, bool& accept)
         return;
     }
     accept = false;
+}
+
+void QueuePool::slotSettingsChanged(const QueueSettings& settings)
+{
+    QueueListView* queue = currentQueue();
+    if (queue) queue->setSettings(settings);
 }
 
 }  // namespace Digikam
