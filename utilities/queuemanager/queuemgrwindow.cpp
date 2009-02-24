@@ -730,9 +730,6 @@ void QueueMgrWindow::refreshView()
 
 void QueueMgrWindow::slotQueueContentsChanged()
 {
-    bool b = d->queuePool->currentQueue()->itemsCount() > 0 ? true : false;
-    d->assignedList->setEnabled(b);
-    d->toolSettings->setEnabled(b);
     refreshStatusBar();
 }
 
