@@ -142,7 +142,7 @@ QueueMgrWindow::QueueMgrWindow()
 
     populateToolsList();
     slotQueueContentsChanged();
-    slotAssignedToolsChanged(d->assignedList->assignedList())
+    slotAssignedToolsChanged(d->assignedList->assignedList());
 }
 
 QueueMgrWindow::~QueueMgrWindow()
