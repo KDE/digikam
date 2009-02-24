@@ -120,6 +120,19 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
 
     // --------------------------------------------------------
 
+/* TODO
+    QScrollArea *sv2 = new QScrollArea(this);
+    QWidget *panel2  = new QWidget(sv2->viewport());
+    panel2->setAutoFillBackground(false);
+    sv2->setWidget(panel2);
+    sv2->setWidgetResizable(true);
+    sv2->viewport()->setAutoFillBackground(false);
+
+    addTab(sv2, i18n("File Renaming"));
+*/
+
+    // --------------------------------------------------------
+
     connect(d->uploadWidget, SIGNAL(selectionChanged()),
             this, SLOT(slotSettingsChanged()));
 
