@@ -1052,7 +1052,7 @@ bool QueueMgrWindow::checkTargetAlbum(int queueId)
     if (processedItemsAlbumUrl.isEmpty())
     {
         KMessageBox::error(this,
-                        i18n("Album to host processed items from queue \"%1\". "
+                        i18n("Album to host processed items from queue \"%1\" is not set. "
                              "Please select one from Queue Settings panel.", queueName),
                         i18n("Processed items album settings"));
         return false;
