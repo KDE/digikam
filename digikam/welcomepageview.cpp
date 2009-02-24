@@ -115,7 +115,8 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("Thumbnail-bar integration for easy navigation and editing");
     newFeatures << i18n("Supports the latest camera RAW files");
     newFeatures << i18n("New/revamped tools:"
-                        "<ul><li>Revamped camera import wizard</li>"
+                        "<ul><li>Batch queue manager</li>"
+                        "<li>Revamped camera import wizard</li>"
                         "<li>LensFun integration: auto-correction of lens distortion</li>"
                         "<li>Fuzzy searches based on hand-drawn sketches</li>"
                         "<li>Advanced searches using image meta-information, like keywords and dates</li>"
