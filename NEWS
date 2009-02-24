@@ -25,7 +25,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 016 ==> 185232 : Images can not be removed from within the light table.
 017 ==> 184469 : Red eyes doesn't work here.
 018 ==> 184473 : Reproducable Crash in Albumview.
-019 ==> 
+019 ==> 182611 : Segfault with Samsung S85 RAW images.
+020 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc2 - Release date: 2009-02-15
