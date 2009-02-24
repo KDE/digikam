@@ -81,6 +81,7 @@ public:
 signals:
 
     void signalLastDestination(const KUrl&);
+    void signalWindowHasMoved();
 
 public slots:
 
@@ -89,6 +90,7 @@ public slots:
 protected:
 
     void closeEvent(QCloseEvent* e);
+    void moveEvent(QMoveEvent *e);
 
 private:
 
