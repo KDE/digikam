@@ -9,7 +9,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C)      2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,12 +29,53 @@
 
 // Qt includes.
 
+#include <QMap>
+#include <QRegExp>
 #include <QWidget>
 
 class QDateTime;
 
 namespace Digikam
 {
+
+class ManualRenameInputPriv;
+
+class ManualRenameInput : public QWidget
+{
+    Q_OBJECT
+
+public:
+
+    ManualRenameInput(QWidget* parent = 0);
+    ~ManualRenameInput();
+
+    QString text() const;
+    QString parse(const QString &fileName, const QString &cameraName,
+                  const QDateTime &dateTime, int index) const;
+    void hideToolTip();
+
+signals:
+
+    void signalTextChanged(const QString&);
+
+public slots:
+
+    void slotUpdateTrackerPos();
+
+private slots:
+
+    void slotToggleToolTip(bool);
+
+private:
+
+    QString createToolTip();
+
+private:
+
+    ManualRenameInputPriv* const d;
+};
+
+// ------------------------------------------------------------
 
 class RenameCustomizerPriv;
 
@@ -67,6 +108,7 @@ signals:
 public slots:
 
     void restoreFocus();
+    void slotUpdateTrackerPos();
 
 private:
 

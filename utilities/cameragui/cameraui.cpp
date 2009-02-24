@@ -563,6 +563,12 @@ void CameraUI::setupConnections()
     connect(d->statusZoomBar, SIGNAL(signalZoomSliderChanged(int)),
            this, SLOT(slotZoomSliderChanged(int)));
 
+    connect(this, SIGNAL(signalWindowHasMoved()),
+            d->statusZoomBar, SLOT(slotUpdateTrackerPos()));
+
+    connect(this, SIGNAL(signalWindowHasMoved()),
+            d->renameCustomizer, SLOT(slotUpdateTrackerPos()));
+
     // -------------------------------------------------------------------------
 
     connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(const CollectionLocation &, int)),
@@ -596,9 +602,6 @@ void CameraUI::setupStatusBar()
     d->statusZoomBar = new StatusZoomBar(statusBar());
     d->statusZoomBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addPermanentWidget(d->statusZoomBar, 1);
-
-    connect(this, SIGNAL(signalWindowHasMoved()),
-            d->statusZoomBar, SLOT(slotUpdateTrackerPos()));
 
     //------------------------------------------------------------------------------
 
