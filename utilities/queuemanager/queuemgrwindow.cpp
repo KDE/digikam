@@ -1003,6 +1003,7 @@ void QueueMgrWindow::busy(bool busy)
     d->removeItemsDoneAction->setEnabled(!d->busy);
     d->clearQueueAction->setEnabled(!d->busy);
     d->queuePool->setEnabled(!d->busy);
+    d->queueSettingsView->setEnabled(!d->busy);
     d->toolsList->setEnabled(!d->busy);
     d->assignedList->setEnabled(!d->busy);
     d->toolSettings->setEnabled(!d->busy);
