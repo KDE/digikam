@@ -67,10 +67,15 @@ public:
 signals:
 
     void signalFileDeleted(const KUrl&);
+    void signalWindowHasMoved();
 
 public slots:
 
     void slotItemsUpdated(const KUrl::List&);
+
+protected:
+
+    void moveEvent(QMoveEvent *e);
 
 private:
 
