@@ -348,6 +348,12 @@ void LightTableWindow::setupConnections()
 
     connect(d->previewView, SIGNAL(signalRightPanelLeftButtonClicked()),
             this, SLOT(slotRightPanelLeftButtonClicked()));
+
+    connect(this, SIGNAL(signalWindowHasMoved()),
+            d->leftZoomBar, SLOT(slotUpdateTrackerPos()));
+
+    connect(this, SIGNAL(signalWindowHasMoved()),
+            d->rightZoomBar, SLOT(slotUpdateTrackerPos()));
 }
 
 void LightTableWindow::setupActions()
@@ -1610,6 +1616,12 @@ void LightTableWindow::slotSidebarTabTitleStyleChanged()
 {
     d->leftSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
     d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
+}
+
+void LightTableWindow::moveEvent(QMoveEvent *e)
+{
+    Q_UNUSED(e)
+    emit signalWindowHasMoved();
 }
 
 }  // namespace Digikam
