@@ -57,6 +57,7 @@ public:
     void setKeepOpen(bool b);
 
     void triggerAutoShow(int timeout = 2000);
+    void refresh();
 
 protected:
 
