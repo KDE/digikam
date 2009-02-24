@@ -99,7 +99,8 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     d->listView->setSortingEnabled(true);
     d->listView->setColumnCount(2);
     d->listView->setHeaderLabels(QStringList() << i18n("Ref. images") << i18n("Items"));
-    d->listView->header()->setResizeMode(QHeaderView::Stretch);
+    d->listView->header()->setResizeMode(0, QHeaderView::Stretch);
+    d->listView->header()->setResizeMode(1, QHeaderView::ResizeToContents);
     d->listView->setWhatsThis(i18n("This shows all duplicate items found in whole collection."));
 
     d->updateFingerPrtBtn = new QPushButton(i18n("Update fingerprints"), this);
