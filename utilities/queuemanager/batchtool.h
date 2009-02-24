@@ -160,7 +160,8 @@ public:
  */
 typedef QMap<int, BatchToolSet> BatchToolMap;
 
-/** Container to assign Batch tools and settings to an item.
+/** Container to assign Batch tools and settings to an item by Url.
+    Url is used only with ActionThread class.
  */
 class AssignedBatchTools
 {

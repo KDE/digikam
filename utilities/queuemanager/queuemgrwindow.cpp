@@ -816,7 +816,8 @@ void QueueMgrWindow::processOne()
 
     QueueSettings settings        = d->queuePool->currentQueue()->settings();
     AssignedBatchTools tools4Item = d->queuePool->currentQueue()->assignedTools();
-    QueueListViewItem* item       = d->queuePool->currentQueue()->findItemByUrl(set.info.fileUrl());
+    tools4Item.itemUrl            = set.info.fileUrl();
+    QueueListViewItem* item       = d->queuePool->currentQueue()->findItemByUrl(tools4Item.itemUrl);
     if (item)
     {
         d->itemsList.removeFirst();
@@ -972,11 +973,9 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
         else
         {
             d->currentProcessItem->setProgressIcon(SmallIcon("dialog-ok"));
-/* TODO
-            d->currentProcessItem->setDestFileName(QFileInfo(destFile).fileName());
+            d->currentProcessItem->setDestFileName(dest.fileName());
 
-            // assign attributes from original image.
-*/
+            // TODO: assign attributes from original image.
         }
     }
 
