@@ -997,6 +997,9 @@ void QueueMgrWindow::busy(bool busy)
     // To update status of Tools actions.
     slotAssignedToolsChanged(d->assignedList->assignedList());
 
+    // To update status of Queue items actions.
+    slotItemSelectionChanged();
+
     d->busy ? d->queuePool->setCursor(Qt::WaitCursor) : d->queuePool->unsetCursor();
     d->busy ? d->animLogo->start() : d->animLogo->stop();
 }
