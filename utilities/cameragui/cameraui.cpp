@@ -597,6 +597,9 @@ void CameraUI::setupStatusBar()
     d->statusZoomBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addPermanentWidget(d->statusZoomBar, 1);
 
+    connect(this, SIGNAL(signalWindowHasMoved()),
+            d->statusZoomBar, SLOT(slotUpdateTrackerPos()));
+
     //------------------------------------------------------------------------------
 
     d->statusNavigateBar = new StatusNavigateBar(statusBar());
@@ -775,6 +778,12 @@ void CameraUI::closeEvent(QCloseEvent* e)
         e->accept();
     else
         e->ignore();
+}
+
+void CameraUI::moveEvent(QMoveEvent *e)
+{
+    Q_UNUSED(e)
+    emit signalWindowHasMoved();
 }
 
 void CameraUI::slotClose()
