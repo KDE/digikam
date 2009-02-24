@@ -141,7 +141,7 @@ QueueMgrWindow::QueueMgrWindow()
     setAutoSaveSettings("Batch Queue Manager Settings", true);
 
     populateToolsList();
-    slotImageListChanged();
+    slotQueueContentsChanged();
 }
 
 QueueMgrWindow::~QueueMgrWindow()
@@ -300,23 +300,23 @@ void QueueMgrWindow::setupConnections()
 
     // -- Queued Items list connections -------------------------------------
 
-    connect(d->queuePool, SIGNAL(signalQueueItemSelected(const AssignedBatchTools&)),
-            d->assignedList, SLOT(slotItemSelected(const AssignedBatchTools&)));
+    connect(d->queuePool, SIGNAL(signalQueueSelected(int, const QueueSettings&, const AssignedBatchTools&)),
+            d->queueSettingsView, SLOT(slotQueueSelected(int, const QueueSettings&, const AssignedBatchTools&)));
 
-    connect(d->queuePool, SIGNAL(signalQueueSelected(int, const QueueSettings&)),
-            d->queueSettingsView, SLOT(slotQueueSelected(int, const QueueSettings&)));
+    connect(d->queuePool, SIGNAL(signalQueueSelected(int, const QueueSettings&, const AssignedBatchTools&)),
+            d->assignedList, SLOT(slotQueueSelected(int, const QueueSettings&, const AssignedBatchTools&)));
 
     connect(d->queueSettingsView, SIGNAL(signalSettingsChanged(const QueueSettings&)),
             d->queuePool, SLOT(slotSettingsChanged(const QueueSettings&)));
 
     connect(d->queuePool, SIGNAL(signalQueuePoolChanged()),
-            this, SLOT(slotImageListChanged()));
+            this, SLOT(slotQueueContentsChanged()));
 
     connect(d->queuePool, SIGNAL(signalQueueContentsChanged()),
-            this, SLOT(slotImageListChanged()));
+            this, SLOT(slotQueueContentsChanged()));
 
     connect(d->queuePool, SIGNAL(signalItemSelectionChanged()),
-            this, SLOT(slotImageSelectionChanged()));
+            this, SLOT(slotItemSelectionChanged()));
 
     // -- Multithreaded interface connections -------------------------------
 
@@ -728,7 +728,7 @@ void QueueMgrWindow::refreshView()
     //       There is nothing to do for the moment.
 }
 
-void QueueMgrWindow::slotImageListChanged()
+void QueueMgrWindow::slotQueueContentsChanged()
 {
     bool b = d->queuePool->currentQueue()->itemsCount() > 0 ? true : false;
     d->assignedList->setEnabled(b);
@@ -736,7 +736,7 @@ void QueueMgrWindow::slotImageListChanged()
     refreshStatusBar();
 }
 
-void QueueMgrWindow::slotImageSelectionChanged()
+void QueueMgrWindow::slotItemSelectionChanged()
 {
     int count = d->queuePool->currentQueue()->selectedItems().count();
     d->removeItemsSelAction->setEnabled((count != 0) ? true : false);
@@ -816,15 +816,15 @@ void QueueMgrWindow::processOne()
     ItemInfoSet set = d->itemsList.first();
     d->queuePool->setCurrentIndex(set.queueId);
 
-    QueueListViewItem* item = d->queuePool->currentQueue()->findItemByUrl(set.info.fileUrl());
+    QueueSettings settings        = d->queuePool->currentQueue()->settings();
+    AssignedBatchTools tools4Item = d->queuePool->currentQueue()->assignedTools();
+    QueueListViewItem* item       = d->queuePool->currentQueue()->findItemByUrl(set.info.fileUrl());
     if (item)
     {
-        AssignedBatchTools tools4Item = item->assignedTools();
         d->itemsList.removeFirst();
 
         if (!tools4Item.toolsMap.isEmpty())
         {
-            QueueSettings settings = d->queuePool->currentQueue()->settings();
             d->thread->setWorkingUrl(settings.targetUrl);
             d->thread->processFile(tools4Item);
             if (!d->thread->isRunning())

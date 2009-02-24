@@ -41,6 +41,7 @@
 // Local includes.
 
 #include "queuemgrwindow.h"
+#include "queuesettingsview.h"
 #include "toolslist.h"
 
 namespace Digikam
@@ -170,10 +171,9 @@ AssignedBatchTools AssignedListView::assignedList()
         ++it;
     }
 
-    AssignedBatchTools tools4Item;
-    tools4Item.itemUrl  = m_itemUrl;
-    tools4Item.toolsMap = map;
-    return tools4Item;
+    AssignedBatchTools tools;
+    tools.toolsMap = map;
+    return tools;
 }
 
 int AssignedListView::assignedCount()
@@ -226,11 +226,10 @@ void AssignedListView::slotMoveCurrentToolUp()
                 map[1]           = tmp;
 
                 AssignedBatchTools tools;
-                tools.itemUrl  = assignedList().itemUrl;
                 tools.toolsMap = map;
 
                 blockSignals(true);
-                slotItemSelected(tools);
+                slotQueueSelected(-1, QueueSettings(), tools);
                 blockSignals(false);
                 setCurrentTool(0);
             }
@@ -480,18 +479,17 @@ void AssignedListView::slotSelectionChanged()
     }
 }
 
-void AssignedListView::slotItemSelected(const AssignedBatchTools& tools4Item)
+void AssignedListView::slotQueueSelected(int, const QueueSettings&, const AssignedBatchTools& tools)
 {
     // Backup previous tools assignement.
-    emit signalAssignedToolsChanged(assignedList());
+    //emit signalAssignedToolsChanged(assignedList());
 
     clear();
     emit signalToolSelected(BatchToolSet());
-    m_itemUrl = tools4Item.itemUrl;
 
-    if (!tools4Item.toolsMap.isEmpty())
+    if (!tools.toolsMap.isEmpty())
     {
-        for (BatchToolMap::const_iterator it = tools4Item.toolsMap.begin() ; it != tools4Item.toolsMap.end() ; ++it)
+        for (BatchToolMap::const_iterator it = tools.toolsMap.begin() ; it != tools.toolsMap.end() ; ++it)
             addTool(it.key(), it.value());
     }
 }

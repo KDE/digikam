@@ -59,9 +59,6 @@ public:
     void assignTool(int index, const BatchToolSet& set);
     void unassignTool(int index);
 
-    void setAssignedTools(const AssignedBatchTools& tools);
-    AssignedBatchTools assignedTools();
-
     void setThumb(const QPixmap& pix);
 
     void setProgressIcon(const QIcon& icon);
@@ -99,9 +96,11 @@ public:
     void setSettings(const QueueSettings& settings);
     QueueSettings settings();
 
+    void setAssignedTools(const AssignedBatchTools& tools);
+    AssignedBatchTools assignedTools();
+
 signals:
 
-    void signalQueueItemSelected(const AssignedBatchTools&);
     void signalQueueContentsChanged();
 
 public slots:
@@ -111,7 +110,6 @@ public slots:
     void slotRemoveItemsDone();
     void slotAddItems(const ImageInfoList&, const ImageInfo&);
     void slotAssignedToolsChanged(const AssignedBatchTools&);
-    void slotItemSelectionChanged();
 
 private slots:
 

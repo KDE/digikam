@@ -63,6 +63,7 @@ public:
 
 // --------------------------------------------------------
 
+class AssignedBatchTools;
 class QueueSettingsViewPriv;
 
 class QueueSettingsView : public KTabWidget
@@ -80,7 +81,7 @@ signals:
 
 public slots:
 
-    void slotQueueSelected(int, const QueueSettings&);
+    void slotQueueSelected(int, const QueueSettings&, const AssignedBatchTools&);
 
 private slots:
 

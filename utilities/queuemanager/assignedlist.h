@@ -37,6 +37,7 @@
 namespace Digikam
 {
 
+class QueueSettings;
 class AssignedListPriv;
 
 class AssignedListViewItem : public QTreeWidgetItem
@@ -91,7 +92,7 @@ public slots:
     void slotMoveCurrentToolDown();
     void slotRemoveCurrentTool();
     void slotClearToolsList();
-    void slotItemSelected(const AssignedBatchTools&);
+    void slotQueueSelected(int, const QueueSettings&, const AssignedBatchTools&);
     void slotSettingsChanged(const BatchToolSet&);
 
 private slots:
@@ -110,10 +111,6 @@ private:
     void dragEnterEvent(QDragEnterEvent*);
     void dragMoveEvent(QDragMoveEvent*);
     void dropEvent(QDropEvent*);
-
-private:
-
-    KUrl m_itemUrl;
 };
 
 }  // namespace Digikam

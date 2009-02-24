@@ -111,10 +111,10 @@ private slots:
     void slotRawCameraList();
     void slotComponentsInfo();
     void slotAction(const ActionData&);
-    void slotImageListChanged();
-    void slotImageSelectionChanged();
     void slotBlinkTimerDone();
     void slotAssignedToolsChanged(const AssignedBatchTools&);
+    void slotQueueContentsChanged();
+    void slotItemSelectionChanged();
 
     void slotThemeChanged();
     void slotChangeTheme(const QString&);

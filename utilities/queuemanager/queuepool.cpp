@@ -76,9 +76,6 @@ void QueuePool::slotAddQueue()
     connect(queue, SIGNAL(itemSelectionChanged()),
             this, SIGNAL(signalItemSelectionChanged()));
 
-    connect(queue, SIGNAL(signalQueueItemSelected(const AssignedBatchTools&)),
-            this, SIGNAL(signalQueueItemSelected(const AssignedBatchTools&)));
-
     emit signalQueuePoolChanged();
 
     setCurrentIndex(index);
@@ -170,8 +167,8 @@ void QueuePool::slotQueueSelected(int index)
     QueueListView* queue = dynamic_cast<QueueListView*>(widget(index));
     if (queue)
     {
-        queue->slotItemSelectionChanged();
-        emit signalQueueSelected(index, queue->settings());
+        emit signalItemSelectionChanged();
+        emit signalQueueSelected(index, queue->settings(), queue->assignedTools());
     }
 }
 

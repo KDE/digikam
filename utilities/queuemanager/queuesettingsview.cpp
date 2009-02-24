@@ -42,6 +42,7 @@
 
 // Local includes.
 
+#include "batchtool.h"
 #include "album.h"
 #include "kipiuploadwidget.h"
 
@@ -131,7 +132,7 @@ QueueSettingsView::~QueueSettingsView()
     delete d;
 }
 
-void QueueSettingsView::slotQueueSelected(int /*id*/, const QueueSettings& settings)
+void QueueSettingsView::slotQueueSelected(int, const QueueSettings& settings, const AssignedBatchTools&)
 {
     int btn = (int)settings.conflictRule;
     d->conflictButtonGroup->button(btn)->setChecked(true);

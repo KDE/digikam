@@ -60,11 +60,9 @@ public:
         done = false;
     }
 
-    bool               done;
+    bool      done;
 
-    ImageInfo          info;
-
-    AssignedBatchTools toolsList;
+    ImageInfo info;
 };
 
 QueueListViewItem::QueueListViewItem(QTreeWidget *view, const ImageInfo& info)
@@ -81,35 +79,13 @@ QueueListViewItem::~QueueListViewItem()
 
 void QueueListViewItem::setInfo(const ImageInfo& info)
 {
-    d->info              = info;
-    d->toolsList.itemUrl = info.fileUrl();
+    d->info = info;
     setText(1, d->info.name());
 }
 
 ImageInfo QueueListViewItem::info() const
 {
     return d->info;
-}
-
-void QueueListViewItem::assignTool(int index, const BatchToolSet& set)
-{
-    d->toolsList.toolsMap.remove(index);
-    d->toolsList.toolsMap.insert(index, set);
-}
-
-void QueueListViewItem::unassignTool(int index)
-{
-    d->toolsList.toolsMap.remove(index);
-}
-
-AssignedBatchTools QueueListViewItem::assignedTools()
-{
-    return d->toolsList;
-}
-
-void QueueListViewItem::setAssignedTools(const AssignedBatchTools& tools)
-{
-    d->toolsList = tools;
 }
 
 void QueueListViewItem::setThumb(const QPixmap& pix)
@@ -161,6 +137,8 @@ public:
     ThumbnailLoadThread *thumbLoadThread;
 
     QueueSettings        settings;
+
+    AssignedBatchTools   toolsList;
 };
 
 QueueListView::QueueListView(QWidget *parent)
@@ -189,9 +167,6 @@ QueueListView::QueueListView(QWidget *parent)
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
-
-    connect(this, SIGNAL(itemSelectionChanged()),
-            this, SLOT(slotItemSelectionChanged()));
 }
 
 QueueListView::~QueueListView()
@@ -509,7 +484,7 @@ void QueueListView::removeItems(int removeType)
     }
     while(find);
 
-    emit signalQueueItemSelected(AssignedBatchTools());
+    emit signalQueueContentsChanged();
 }
 
 void QueueListView::removeItemByInfo(const ImageInfo& info)
@@ -566,43 +541,6 @@ QueueListViewItem* QueueListView::findItemByUrl(const KUrl& url)
     return 0;
 }
 
-void QueueListView::slotAssignedToolsChanged(const AssignedBatchTools& tools4Item)
-{
-    QTreeWidgetItemIterator it(this);
-    while (*it)
-    {
-        QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
-        if (item)
-        {
-            // We assign tools list on all items from queue
-            AssignedBatchTools tools = tools4Item;
-            tools.itemUrl            = item->info().fileUrl();
-            item->setAssignedTools(tools);
-        }
-        ++it;
-    }
-}
-
-void QueueListView::slotItemSelectionChanged()
-{
-    QList<QTreeWidgetItem*> list = selectedItems();
-    if (list.isEmpty()) return;
-
-    if (list.count() > 1)
-    {
-        emit signalQueueItemSelected(AssignedBatchTools());
-    }
-    else
-    {
-        QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(currentItem());
-        if (item)
-        {
-            AssignedBatchTools tools4Item = item->assignedTools();
-            emit signalQueueItemSelected(tools4Item);
-        }
-    }
-}
-
 int QueueListView::itemsCount()
 {
     int count = 0;
@@ -643,7 +581,7 @@ int QueueListView::pendingTasksCount()
     {
         QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
         if (item && !item->isDone())
-            count += item->assignedTools().toolsMap.count();
+            count += assignedTools().toolsMap.count();
         ++it;
     }
     return count;
@@ -657,6 +595,21 @@ void QueueListView::setSettings(const QueueSettings& settings)
 QueueSettings QueueListView::settings()
 {
     return d->settings;
+}
+
+AssignedBatchTools QueueListView::assignedTools()
+{
+    return d->toolsList;
+}
+
+void QueueListView::setAssignedTools(const AssignedBatchTools& tools)
+{
+    d->toolsList = tools;
+}
+
+void QueueListView::slotAssignedToolsChanged(const AssignedBatchTools& tools)
+{
+    setAssignedTools(tools);
 }
 
 }  // namespace Digikam
