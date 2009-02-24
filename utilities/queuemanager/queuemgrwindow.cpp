@@ -805,6 +805,7 @@ void QueueMgrWindow::processOne()
 
         if (!tools4Item.toolsMap.isEmpty())
         {
+            kDebug() << "Target Suffix: " << tools4Item.targetSuffix() << endl;
             d->thread->setWorkingUrl(settings.targetUrl);
             d->thread->processFile(tools4Item);
             if (!d->thread->isRunning())

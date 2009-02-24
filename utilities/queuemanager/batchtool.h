@@ -26,6 +26,7 @@
 
 // Qt includes.
 
+#include <QFileInfo>
 #include <QObject>
 #include <QString>
 #include <QVariant>
@@ -178,6 +179,20 @@ class AssignedBatchTools
 public:
 
     AssignedBatchTools(){};
+
+    QString targetSuffix()
+    {
+        QString suffix;
+        foreach(BatchToolSet set, toolsMap)
+        {
+            suffix = set.tool->outputSuffix();
+        }
+
+        if (suffix.isEmpty())
+            return (QFileInfo(itemUrl.fileName()).suffix());
+
+        return suffix;
+    }
 
     KUrl         itemUrl;
     BatchToolMap toolsMap;
