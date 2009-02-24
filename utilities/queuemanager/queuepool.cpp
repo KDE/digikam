@@ -47,7 +47,7 @@ QueuePool::QueuePool(QWidget *parent)
     slotAddQueue();
 
     connect(this, SIGNAL(currentChanged(int)),
-            this, SLOT(slotQueuePoolChanged(int)));
+            this, SLOT(slotQueueSelected(int)));
 
     connect(this, SIGNAL(closeRequest(QWidget*)),
             this, SLOT(slotCloseQueueRequest(QWidget*)));
@@ -165,13 +165,13 @@ void QueuePool::slotAssignedToolsChanged(const AssignedBatchTools& tools4Item)
     if (queue) queue->slotAssignedToolsChanged(tools4Item);
 }
 
-void QueuePool::slotQueuePoolChanged(int id)
+void QueuePool::slotQueueSelected(int index)
 {
-    QueueListView* queue = currentQueue();
+    QueueListView* queue = dynamic_cast<QueueListView*>(widget(index));
     if (queue)
     {
         queue->slotItemSelectionChanged();
-        emit signalQueueSelected(id, queue->settings());
+        emit signalQueueSelected(index, queue->settings());
     }
 }
 

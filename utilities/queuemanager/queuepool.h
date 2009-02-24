@@ -84,7 +84,7 @@ public slots:
 
 private slots:
 
-    void slotQueuePoolChanged(int);
+    void slotQueueSelected(int);
     void slotCloseQueueRequest(QWidget*);
     void slotTestCanDecode(const QDragMoveEvent*, bool&);
 };
