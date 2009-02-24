@@ -712,8 +712,11 @@ void QueueMgrWindow::slotQueueContentsChanged()
 
 void QueueMgrWindow::slotItemSelectionChanged()
 {
-    int count = d->queuePool->currentQueue()->selectedItems().count();
-    d->removeItemsSelAction->setEnabled((count != 0) ? true : false);
+    if (!d->busy)
+    {
+        int count = d->queuePool->currentQueue()->selectedItems().count();
+        d->removeItemsSelAction->setEnabled((count != 0) ? true : false);
+    }
 }
 
 void QueueMgrWindow::populateToolsList()
