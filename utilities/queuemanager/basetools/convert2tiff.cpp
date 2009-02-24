@@ -85,14 +85,9 @@ void Convert2TIFF::slotSettingsChanged()
     setSettings(settings);
 }
 
-void Convert2TIFF::setOutputUrlFromInputUrl()
+QString Convert2TIFF::outputSuffix() const
 {
-    BatchTool::setOutputUrlFromInputUrl();
-    KUrl url     = outputUrl();
-    QString base = url.fileName();
-    base.append(".tif");
-    url.setFileName(base);
-    setOutputUrl(url);
+    return QString("tif");
 }
 
 bool Convert2TIFF::toolOperations()

@@ -89,14 +89,9 @@ void Convert2JP2::slotSettingsChanged()
     setSettings(settings);
 }
 
-void Convert2JP2::setOutputUrlFromInputUrl()
+QString Convert2JP2::outputSuffix() const
 {
-    BatchTool::setOutputUrlFromInputUrl();
-    KUrl url     = outputUrl();
-    QString base = url.fileName();
-    base.append(".jp2");
-    url.setFileName(base);
-    setOutputUrl(url);
+    return QString("jp2");
 }
 
 bool Convert2JP2::toolOperations()

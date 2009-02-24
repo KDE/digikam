@@ -42,7 +42,7 @@ public:
     Convert2PNG(QObject* parent=0);
     ~Convert2PNG();
 
-    void setOutputUrlFromInputUrl();
+    QString outputSuffix() const;
     BatchToolSettings defaultSettings();
 
 private slots:

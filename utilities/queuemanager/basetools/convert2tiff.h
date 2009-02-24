@@ -42,7 +42,7 @@ public:
     Convert2TIFF(QObject* parent=0);
     ~Convert2TIFF();
 
-    void setOutputUrlFromInputUrl();
+    QString outputSuffix() const;
     BatchToolSettings defaultSettings();
 
 private slots:

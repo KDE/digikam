@@ -89,14 +89,9 @@ void Convert2JPEG::slotSettingsChanged()
     setSettings(settings);
 }
 
-void Convert2JPEG::setOutputUrlFromInputUrl()
+QString Convert2JPEG::outputSuffix() const
 {
-    BatchTool::setOutputUrlFromInputUrl();
-    KUrl url     = outputUrl();
-    QString base = url.fileName();
-    base.append(".jpg");
-    url.setFileName(base);
-    setOutputUrl(url);
+    return QString("jpg");
 }
 
 bool Convert2JPEG::toolOperations()

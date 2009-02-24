@@ -154,6 +154,11 @@ KUrl BatchTool::outputUrl() const
     return d->outputUrl;
 }
 
+QString BatchTool::outputSuffix() const
+{
+    return QString();
+}
+
 void BatchTool::setExifSetOrientation(bool set)
 {
     d->exifSetOrientation = set;
@@ -221,6 +226,15 @@ void BatchTool::setOutputUrlFromInputUrl()
     KUrl url;
     url.setPath(path);
     setOutputUrl(url);
+
+    if (!outputSuffix().isEmpty())
+    {
+        KUrl url     = outputUrl();
+        QString base = url.fileName();
+        base.append(QString(".%1").arg(outputSuffix()));
+        url.setFileName(base);
+        setOutputUrl(url);
+    }
 }
 
 }  // namespace Digikam

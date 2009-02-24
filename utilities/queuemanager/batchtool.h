@@ -92,6 +92,12 @@ public:
     void setWorkingUrl(const KUrl& workingUrl);
     KUrl workingUrl() const;
 
+    /** Set output url using input url content + annotation based on time stamp + file 
+        extension defined by outputSuffix().
+        if outputSuffix() return null, file extension is the same than original.
+     */
+    void setOutputUrlFromInputUrl();
+
     void setExifSetOrientation(bool set);
     bool getExifSetOrientation() const;
 
@@ -103,7 +109,11 @@ public:
      */
     virtual void cancel();
 
-    virtual void setOutputUrlFromInputUrl();
+    /** Re-implemnt this method if tool change file extension during batch process (ex: "png").
+        Typicaly, this is used with tool which convert to new file format.
+        This method return and empty string by default
+     */
+    virtual QString outputSuffix() const;
 
     /** Re-implement this method to initialize Settings Widget value with default settings.
      */

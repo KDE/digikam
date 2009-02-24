@@ -42,7 +42,7 @@ public:
     Convert2JPEG(QObject* parent=0);
     ~Convert2JPEG();
 
-    void setOutputUrlFromInputUrl();
+    QString outputSuffix() const;
     BatchToolSettings defaultSettings();
 
 private slots:

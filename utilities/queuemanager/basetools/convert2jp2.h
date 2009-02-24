@@ -42,7 +42,7 @@ public:
     Convert2JP2(QObject* parent=0);
     ~Convert2JP2();
 
-    void setOutputUrlFromInputUrl();
+    QString outputSuffix() const;
     BatchToolSettings defaultSettings();
 
 private slots:

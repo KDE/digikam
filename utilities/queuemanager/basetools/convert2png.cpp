@@ -85,14 +85,9 @@ void Convert2PNG::slotSettingsChanged()
     setSettings(settings);
 }
 
-void Convert2PNG::setOutputUrlFromInputUrl()
+QString Convert2PNG::outputSuffix() const
 {
-    BatchTool::setOutputUrlFromInputUrl();
-    KUrl url     = outputUrl();
-    QString base = url.fileName();
-    base.append(".png");
-    url.setFileName(base);
-    setOutputUrl(url);
+    return QString("png");
 }
 
 bool Convert2PNG::toolOperations()
