@@ -65,6 +65,11 @@ QueueListView* QueuePool::currentQueue() const
     return (dynamic_cast<QueueListView*>(currentWidget()));
 }
 
+QueueListView* QueuePool::findQueueById(int index) const
+{
+    return (dynamic_cast<QueueListView*>(widget(index)));
+}
+
 void QueuePool::slotAddQueue()
 {
     QueueListView* queue = new QueueListView(this);

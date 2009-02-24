@@ -88,6 +88,7 @@ private:
     void populateToolsList();
     void setup(Setup::Page page);
 
+    bool checkTargetAlbum(int queueId);
     void busy(bool busy);
     void processOne();
     void processing(const KUrl& url);

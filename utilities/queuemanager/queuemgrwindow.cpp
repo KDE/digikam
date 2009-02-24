@@ -172,30 +172,6 @@ void QueueMgrWindow::applySettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Batch Queue Manager Settings");
 
-/* FIXME
-    if (d->processedItemsAlbumUrl.isEmpty())
-    {
-        KMessageBox::error(this,
-                           i18n("Album to host queued processed items is not set. "
-                                "Please select one in configuration panel."),
-                           i18n("Processed items album settings"));
-        setup(Setup::QueuePage);
-        return;
-    }
-
-    QFileInfo dir(d->processedItemsAlbumUrl.path());
-    kDebug(50003) << "Queue Manager target album is: " << d->processedItemsAlbumUrl.path() << endl;
-
-    if ( !dir.exists() || !dir.isWritable() )
-    {
-        KMessageBox::error(this,
-                           i18n("Album to host queued processed items is not available or not writable. "
-                                "Please set another one in configuration panel."),
-                           i18n("Processed items album settings"));
-        setup(Setup::QueuePage);
-        return;
-    }
-*/
     d->thread->setExifSetOrientation(AlbumSettings::instance()->getExifSetOrientation());
 }
 
@@ -813,6 +789,11 @@ void QueueMgrWindow::processOne()
 
     ItemInfoSet set = d->itemsList.first();
     d->queuePool->setCurrentIndex(set.queueId);
+    if (!checkTargetAlbum(set.queueId))
+    {
+        processingAborted();
+        return;
+    }
 
     QueueSettings settings        = d->queuePool->currentQueue()->settings();
     AssignedBatchTools tools4Item = d->queuePool->currentQueue()->assignedTools();
@@ -1056,6 +1037,40 @@ void QueueMgrWindow::slotAssignedToolsChanged(const AssignedBatchTools& tools)
     }
 
     refreshStatusBar();
+}
+
+bool QueueMgrWindow::checkTargetAlbum(int queueId)
+{
+    QueueListView* queue = d->queuePool->findQueueById(queueId);
+    if (!queue)
+        return false;
+
+    QString queueName              = d->queuePool->tabText(queueId);
+    KUrl    processedItemsAlbumUrl = queue->settings().targetUrl;
+    kDebug(50003) << "Target album for queue " << queueName << " is: " << processedItemsAlbumUrl.path() << endl;
+
+    if (processedItemsAlbumUrl.isEmpty())
+    {
+        KMessageBox::error(this,
+                        i18n("Album to host processed items from queue \"%1\". "
+                             "Please select one from Queue Settings panel.", queueName),
+                        i18n("Processed items album settings"));
+        return false;
+    }
+
+    QFileInfo dir(processedItemsAlbumUrl.path());
+
+    if ( !dir.exists() || !dir.isWritable() )
+    {
+        KMessageBox::error(this,
+                        i18n("Album to host processed items from queue \"%1\" "
+                             "is not available or not writable. "
+                             "Please set another one from Queue Settings panel.", queueName),
+                        i18n("Processed items album settings"));
+        return false;
+    }
+
+    return true;
 }
 
 }  // namespace Digikam
