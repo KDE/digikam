@@ -9,7 +9,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 169037 : Crash when tagging photos.
 002 ==> 173314 : digiKam crashes while exiting the photo-editing mode in KDE 3.5.10.
-003 ==> 
+003 ==> 185279 : Raw pictures from Panasonic LX2 have totally wrong colours in digikam show modus.
+004 ==> 
 
 **********************************************************************************************
 digiKam 0.9.5-beta3 - Release date: 2009-01-27
