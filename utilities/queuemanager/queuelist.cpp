@@ -62,6 +62,8 @@ public:
 
     bool      done;
 
+    QString   destFileName;
+
     ImageInfo info;
 };
 
@@ -113,6 +115,17 @@ bool QueueListViewItem::isDone()
     return d->done;
 }
 
+void QueueListViewItem::setDestFileName(const QString& str)
+{
+    d->destFileName = str;
+    setText(2, d->destFileName);
+}
+
+QString QueueListViewItem::destFileName() const
+{
+    return d->destFileName;
+}
+
 // ---------------------------------------------------------------------------
 
 class QueueListViewPriv
@@ -157,13 +170,16 @@ QueueListView::QueueListView(QWidget *parent)
     setAllColumnsShowFocus(true);
     setRootIsDecorated(false);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    setColumnCount(2);
+    setColumnCount(3);
 
     QStringList titles;
     titles.append(i18n("Thumbnail"));
     titles.append(i18n("File Name"));
+    titles.append(i18n("Target"));
     setHeaderLabels(titles);
-    header()->setResizeMode(QHeaderView::Stretch);
+    header()->setResizeMode(0, QHeaderView::ResizeToContents);
+    header()->setResizeMode(1, QHeaderView::Stretch);
+    header()->setResizeMode(2, QHeaderView::Stretch);
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));

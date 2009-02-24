@@ -66,6 +66,9 @@ public:
     void setDone(bool b);
     bool isDone();
 
+    void    setDestFileName(const QString& str);
+    QString destFileName() const;
+
 private:
 
     QueueListViewItemPriv* const d;
