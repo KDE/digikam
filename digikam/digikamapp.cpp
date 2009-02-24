@@ -496,6 +496,9 @@ void DigikamApp::setupStatusBar()
 
     connect(d->statusProgressBar, SIGNAL(signalCancelButtonPressed()),
             this, SIGNAL(signalCancelButtonPressed()));
+
+    connect(this, SIGNAL(signalWindowHasMoved()),
+            d->statusZoomBar, SLOT(slotUpdateTrackerPos()));
 }
 
 void DigikamApp::setupAccelerators()
@@ -2556,6 +2559,11 @@ void DigikamApp::slotShowMenuBar()
 {
     const bool visible = menuBar()->isVisible();
     menuBar()->setVisible(!visible);
+}
+
+void DigikamApp::moveEvent(QMoveEvent *e)
+{
+    emit signalWindowHasMoved();
 }
 
 }  // namespace Digikam

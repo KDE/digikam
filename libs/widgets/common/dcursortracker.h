@@ -56,6 +56,7 @@ public:
     void setEnable(bool b);
 
     void triggerAutoShow(int timeout = 2000);
+    void refresh();
 
 protected:
 
@@ -72,6 +73,7 @@ private:
 private:
 
     bool     m_enable;
+    bool     m_keepOpen;
     QTimer*  m_autoHideTimer;
     QWidget* m_parent;
 };

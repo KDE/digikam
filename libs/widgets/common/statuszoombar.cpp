@@ -180,4 +180,9 @@ void StatusZoomBar::setEnableZoomMinus(bool e)
     d->zoomMinusButton->setEnabled(e);
 }
 
+void StatusZoomBar::slotUpdateTrackerPos()
+{
+    d->zoomTracker->refresh();
+}
+
 }  // namespace Digikam

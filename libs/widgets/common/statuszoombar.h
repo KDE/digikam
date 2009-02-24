@@ -66,6 +66,10 @@ Q_SIGNALS:
     void signalDelayedZoomSliderChanged(int);
     void signalZoomSliderReleased(int);
 
+public Q_SLOTS:
+
+    void slotUpdateTrackerPos();
+
 private Q_SLOTS:
 
     void slotZoomSliderChanged(int);

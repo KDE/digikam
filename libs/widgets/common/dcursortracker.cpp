@@ -49,6 +49,7 @@ DCursorTracker::DCursorTracker(const QString& txt, QWidget *parent)
     m_parent->installEventFilter(this);
     setEnable(true);
 
+    m_keepOpen      = false;
     m_autoHideTimer = new QTimer(this);
     m_autoHideTimer->setSingleShot(true);
 
@@ -78,6 +79,11 @@ void DCursorTracker::triggerAutoShow(int timeout)
         moveToParent(m_parent);
         m_autoHideTimer->start(timeout);
     }
+}
+
+void DCursorTracker::refresh()
+{
+    moveToParent(m_parent);
 }
 
 void DCursorTracker::slotAutoHide()

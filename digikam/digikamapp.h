@@ -96,12 +96,15 @@ signals:
     void signalCancelButtonPressed();
     void signalResetTagFilters();
 
+    void signalWindowHasMoved();
+
     void queuedOpenCameraUiFromPath(const QString &path);
     void queuedOpenSolidDevice(const QString &udi);
 
 protected:
 
     bool queryClose();
+    void moveEvent(QMoveEvent *e);
 
 private:
 
