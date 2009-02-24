@@ -481,17 +481,19 @@ void AssignedListView::slotSelectionChanged()
 
 void AssignedListView::slotQueueSelected(int, const QueueSettings&, const AssignedBatchTools& tools)
 {
-    // Backup previous tools assignement.
-    //emit signalAssignedToolsChanged(assignedList());
-
+    // Clear assigned tools list and tool settings view.
     clear();
     emit signalToolSelected(BatchToolSet());
 
     if (!tools.toolsMap.isEmpty())
     {
+        blockSignals(true);
         for (BatchToolMap::const_iterator it = tools.toolsMap.begin() ; it != tools.toolsMap.end() ; ++it)
             addTool(it.key(), it.value());
+        blockSignals(false);
     }
+
+    emit signalAssignedToolsChanged(assignedList());
 }
 
 void AssignedListView::slotSettingsChanged(const BatchToolSet& set)
