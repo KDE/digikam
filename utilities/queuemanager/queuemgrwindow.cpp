@@ -371,11 +371,11 @@ void QueueMgrWindow::setupActions()
     connect(d->removeItemsDoneAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveItemsDone()));
     actionCollection()->addAction("queuemgr_removeitemsdone", d->removeItemsDoneAction);
 
-    d->clearListAction = new KAction(KIcon("edit-clear"), i18n("Clear Queue"), this);
-    d->clearListAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_K);
-    d->clearListAction->setEnabled(false);
-    connect(d->clearListAction, SIGNAL(triggered()), d->queuePool, SLOT(slotClearList()));
-    actionCollection()->addAction("queuemgr_clearlist", d->clearListAction);
+    d->clearQueueAction = new KAction(KIcon("edit-clear"), i18n("Clear Queue"), this);
+    d->clearQueueAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_K);
+    d->clearQueueAction->setEnabled(false);
+    connect(d->clearQueueAction, SIGNAL(triggered()), d->queuePool, SLOT(slotClearList()));
+    actionCollection()->addAction("queuemgr_clearlist", d->clearQueueAction);
 
     actionCollection()->addAction(KStandardAction::Close, "queuemgr_close",
                                   this, SLOT(close()));
@@ -535,7 +535,7 @@ void QueueMgrWindow::refreshStatusBar()
         bool b = (items != 0) ? true : false;
         d->removeItemsSelAction->setEnabled(b);
         d->removeItemsDoneAction->setEnabled(b);
-        d->clearListAction->setEnabled(b);
+        d->clearQueueAction->setEnabled(b);
         d->runAction->setEnabled(b && items);
     }
 }
@@ -1001,16 +1001,15 @@ void QueueMgrWindow::busy(bool busy)
     d->removeQueueAction->setEnabled(!d->busy);
     d->removeItemsSelAction->setEnabled(!d->busy);
     d->removeItemsDoneAction->setEnabled(!d->busy);
-    d->clearListAction->setEnabled(!d->busy);
-    d->moveUpToolAction->setEnabled(!d->busy);
-    d->moveDownToolAction->setEnabled(!d->busy);
-    d->removeToolAction->setEnabled(!d->busy);
+    d->clearQueueAction->setEnabled(!d->busy);
     d->queuePool->setEnabled(!d->busy);
     d->toolsList->setEnabled(!d->busy);
     d->assignedList->setEnabled(!d->busy);
     d->toolSettings->setEnabled(!d->busy);
-
     d->stopAction->setEnabled(d->busy);
+
+    // To update status of Tools actions.
+    slotAssignedToolsChanged(d->assignedList->assignedList());
 
     d->busy ? d->queuePool->setCursor(Qt::WaitCursor) : d->queuePool->unsetCursor();
     d->busy ? d->animLogo->start() : d->animLogo->stop();
@@ -1018,7 +1017,14 @@ void QueueMgrWindow::busy(bool busy)
 
 void QueueMgrWindow::slotAssignedToolsChanged(const AssignedBatchTools& tools)
 {
-    if (d->busy) return;
+    if (d->busy)
+    {
+        d->moveUpToolAction->setEnabled(false);
+        d->moveDownToolAction->setEnabled(false);
+        d->removeToolAction->setEnabled(false);
+        d->clearToolsAction->setEnabled(false);
+        return;
+    }
 
     switch (tools.toolsMap.count())
     {

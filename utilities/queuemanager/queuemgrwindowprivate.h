@@ -49,7 +49,7 @@ public:
         removeFullScreenButton = false;
         busy                   = false;
         processBlink           = false;
-        clearListAction        = 0;
+        clearQueueAction        = 0;
         moveUpToolAction       = 0;
         moveDownToolAction     = 0;
         removeToolAction       = 0;
@@ -89,7 +89,7 @@ public:
 
     QTimer                    *blinkTimer;
 
-    QAction                   *clearListAction;
+    QAction                   *clearQueueAction;
     QAction                   *removeItemsSelAction;
     QAction                   *removeItemsDoneAction;
     QAction                   *fullScreenAction;
