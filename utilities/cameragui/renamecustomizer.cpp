@@ -71,13 +71,13 @@ public:
 
     ManualRenameInputPriv()
     {
-        tokenLineEdit       = 0;
+        parseStringLineEdit = 0;
         tooltipTracker      = 0;
         tooltipToggleButton = 0;
     }
 
     QToolButton* tooltipToggleButton;
-    KLineEdit*   tokenLineEdit;
+    KLineEdit*   parseStringLineEdit;
     DTipTracker* tooltipTracker;
 };
 
@@ -85,25 +85,25 @@ ManualRenameInput::ManualRenameInput(QWidget* parent)
                  : QWidget(parent), d(new ManualRenameInputPriv)
 {
     QGridLayout* mainLayout = new QGridLayout(this);
-    d->tokenLineEdit        = new KLineEdit(this);
+    d->parseStringLineEdit  = new KLineEdit(this);
     d->tooltipToggleButton  = new QToolButton(this);
     d->tooltipToggleButton->setCheckable(true);
     d->tooltipToggleButton->setIcon(SmallIcon("dialog-information"));
 
-    mainLayout->addWidget(d->tokenLineEdit,       1, 1, 1, 1);
+    mainLayout->addWidget(d->parseStringLineEdit, 1, 1, 1, 1);
     mainLayout->addWidget(d->tooltipToggleButton, 1, 2, 1, 1);
     mainLayout->setColumnStretch(1, 10);
     setLayout(mainLayout);
 
     QString tooltip   = createToolTip();
-    d->tooltipTracker = new DTipTracker(tooltip, d->tokenLineEdit);
+    d->tooltipTracker = new DTipTracker(tooltip, d->parseStringLineEdit);
     d->tooltipTracker->setEnable(false);
     d->tooltipTracker->setKeepOpen(true);
 
     connect(d->tooltipToggleButton, SIGNAL(toggled(bool)),
             this, SLOT(slotToggleToolTip(bool)));
 
-    connect(d->tokenLineEdit, SIGNAL(textChanged(const QString&)),
+    connect(d->parseStringLineEdit, SIGNAL(textChanged(const QString&)),
             this, SIGNAL(signalTextChanged(const QString&)));
 }
 
@@ -113,7 +113,7 @@ ManualRenameInput::~ManualRenameInput()
 
 QString ManualRenameInput::text() const
 {
-    return d->tokenLineEdit->text();
+    return d->parseStringLineEdit->text();
 }
 
 void ManualRenameInput::hideToolTip()
@@ -126,7 +126,7 @@ QString ManualRenameInput::parse(const QString &fileName, const QString &cameraN
                                  const QDateTime &dateTime, int index) const
 {
     QFileInfo fi(fileName);
-    QString name = d->tokenLineEdit->text();
+    QString parseString = d->parseStringLineEdit->text();
 
     // parse sequence number token ----------------------------
     {
@@ -135,11 +135,11 @@ QString ManualRenameInput::parse(const QString &fileName, const QString &cameraN
         // define 4 as default length
         int slength = 4;
         // to make "parsing" easier, convert the %n token
-        name.replace("%n", "%{n:4}");
+        parseString.replace("%n", "%{n:4}");
         int pos = 0;
         while (pos > -1)
         {
-            pos = regExp.indexIn(name, pos);
+            pos     = regExp.indexIn(parseString, pos);
             slength = regExp.cap(1).toInt();
             QString seq;
             QTextStream seqStream(&seq);
@@ -147,7 +147,7 @@ QString ManualRenameInput::parse(const QString &fileName, const QString &cameraN
             seqStream.setFieldAlignment(QTextStream::AlignRight);
             seqStream.setPadChar('0');
             seqStream << index;
-            name.replace(pos, regExp.matchedLength(), seq);
+            parseString.replace(pos, regExp.matchedLength(), seq);
         }
     }
     // parse date time token ----------------------------------
@@ -158,20 +158,20 @@ QString ManualRenameInput::parse(const QString &fileName, const QString &cameraN
         int pos = 0;
         while (pos > -1)
         {
-            pos = regExp.indexIn(name, pos);
+            pos  = regExp.indexIn(parseString, pos);
             date = dateTime.toString(regExp.cap(1));
-            name.replace(pos, regExp.matchedLength(), date);
+            parseString.replace(pos, regExp.matchedLength(), date);
         }
     }
     // parse simple / remaining tokens ------------------------
     {
-        name.replace("%o", fi.baseName());
-        name.replace("%F", fi.baseName().toUpper());
-        name.replace("%f", fi.baseName().toLower());
-        name.replace("%c", cameraName);
+        parseString.replace("%o", fi.baseName());
+        parseString.replace("%F", fi.baseName().toUpper());
+        parseString.replace("%f", fi.baseName().toLower());
+        parseString.replace("%c", cameraName);
     }
 
-    return name;
+    return parseString;
 }
 
 QString ManualRenameInput::createToolTip()
@@ -234,66 +234,64 @@ public:
 
     RenameCustomizerPriv()
     {
-        buttonGroup           = 0;
-        renameDefault         = 0;
-        renameCustom          = 0;
-        renameManual          = 0;
-        renameDefaultBox      = 0;
-        renameCustomBox       = 0;
-        renameManualBox       = 0;
-        renameDefaultCase     = 0;
-        renameDefaultCaseType = 0;
-        addOrigNameBox        = 0;
-        addDateTimeBox        = 0;
         addCameraNameBox      = 0;
+        addDateTimeBox        = 0;
+        addOrigNameBox        = 0;
         addSeqNumberBox       = 0;
+        buttonGroup           = 0;
         changedTimer          = 0;
+        dateTimeButton        = 0;
+        dateTimeFormat        = 0;
+        dateTimeLabel         = 0;
+        focusedWidget         = 0;
+        manualRenameInput     = 0;
+        renameCustom          = 0;
+        renameCustomBox       = 0;
         renameCustomPrefix    = 0;
         renameCustomSuffix    = 0;
-        startIndexLabel       = 0;
+        renameDefault         = 0;
+        renameDefaultBox      = 0;
+        renameDefaultCase     = 0;
+        renameDefaultCaseType = 0;
+        renameManual          = 0;
         startIndexInput       = 0;
-        focusedWidget         = 0;
-        dateTimeButton        = 0;
-        dateTimeLabel         = 0;
-        dateTimeFormat        = 0;
-        renameManualBox       = 0;
+        startIndexLabel       = 0;
 }
 
-    QButtonGroup *buttonGroup;
+    QButtonGroup        *buttonGroup;
 
-    QCheckBox    *addCameraNameBox;
-    QCheckBox    *addDateTimeBox;
-    QCheckBox    *addOrigNameBox;
-    QCheckBox    *addSeqNumberBox;
+    QCheckBox           *addCameraNameBox;
+    QCheckBox           *addDateTimeBox;
+    QCheckBox           *addOrigNameBox;
+    QCheckBox           *addSeqNumberBox;
 
-    QLabel       *dateTimeLabel;
-    QLabel       *renameDefaultCase;
-    QLabel       *startIndexLabel;
+    QLabel              *dateTimeLabel;
+    QLabel              *renameDefaultCase;
+    QLabel              *startIndexLabel;
 
-    QPushButton  *dateTimeButton;
+    QPushButton         *dateTimeButton;
 
-    QRadioButton *renameCustom;
-    QRadioButton *renameDefault;
-    QRadioButton *renameManual;
+    QRadioButton        *renameCustom;
+    QRadioButton        *renameDefault;
+    QRadioButton        *renameManual;
 
-    QString       cameraTitle;
-    QString       dateTimeFormatString;
+    QString              cameraTitle;
+    QString              dateTimeFormatString;
 
-    QTimer       *changedTimer;
+    QTimer              *changedTimer;
 
-    QWidget      *focusedWidget;
-    QWidget      *renameCustomBox;
-    QWidget      *renameDefaultBox;
+    QWidget             *focusedWidget;
+    QWidget             *renameCustomBox;
+    QWidget             *renameDefaultBox;
 
-    KComboBox    *dateTimeFormat;
-    KComboBox    *renameDefaultCaseType;
+    KComboBox           *dateTimeFormat;
+    KComboBox           *renameDefaultCaseType;
 
-    KIntNumInput *startIndexInput;
+    KIntNumInput        *startIndexInput;
+    KLineEdit           *renameCustomPrefix;
+    KLineEdit           *renameCustomSuffix;
 
-    KLineEdit    *renameCustomPrefix;
-    KLineEdit    *renameCustomSuffix;
-
-    ManualRenameInput *renameManualBox;
+    ManualRenameInput   *manualRenameInput;
 };
 
 RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
@@ -426,8 +424,8 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     // ----------------------------------------------------------------------
 
-    d->renameManual    = new QRadioButton(i18n("Manual"), this);
-    d->renameManualBox = new ManualRenameInput;
+    d->renameManual      = new QRadioButton(i18n("Manual"), this);
+    d->manualRenameInput = new ManualRenameInput;
     d->buttonGroup->addButton(d->renameManual);
 
     mainLayout->addWidget(d->renameDefault,     0, 0, 1, 2);
@@ -435,7 +433,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     mainLayout->addWidget(d->renameCustom,      2, 0, 1, 2);
     mainLayout->addWidget(d->renameCustomBox,   3, 0, 1, 2);
     mainLayout->addWidget(d->renameManual,      4, 0, 1, 2);
-    mainLayout->addWidget(d->renameManualBox,   5, 0, 1, 2);
+    mainLayout->addWidget(d->manualRenameInput, 5, 0, 1, 2);
     mainLayout->setRowStretch(6, 10);
     mainLayout->setMargin(KDialog::spacingHint());
     mainLayout->setSpacing(KDialog::spacingHint());
@@ -481,7 +479,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     connect(d->addDateTimeBox, SIGNAL(toggled(bool)),
             this, SLOT(slotDateTimeBoxToggled(bool)));
 
-    connect(d->renameManualBox, SIGNAL(signalTextChanged(const QString&)),
+    connect(d->manualRenameInput, SIGNAL(signalTextChanged(const QString&)),
             this, SLOT(slotRenameOptionsChanged()));
 
     // -- initial values ---------------------------------------------------
@@ -572,7 +570,7 @@ QString RenameCustomizer::newName(const QString &fileName, const QDateTime &date
     }
     else if (d->renameManual->isChecked())
     {
-        name =  d->renameManualBox->parse(fileName, cameraName, dateTime, index);
+        name =  d->manualRenameInput->parse(fileName, cameraName, dateTime, index);
         name += extension;
     }
 
@@ -599,8 +597,8 @@ void RenameCustomizer::slotRadioButtonClicked(int)
 
     d->renameCustomBox->setEnabled( btn == d->renameCustom );
     d->renameDefaultBox->setEnabled( btn == d->renameDefault );
-    d->renameManualBox->setEnabled( btn == d->renameManual );
-    d->renameManualBox->hideToolTip();
+    d->manualRenameInput->setEnabled( btn == d->renameManual );
+    d->manualRenameInput->hideToolTip();
     slotRenameOptionsChanged();
 }
 
@@ -696,7 +694,7 @@ void RenameCustomizer::readSettings()
         d->renameCustom->setChecked(false);
         d->renameCustomBox->setEnabled(false);
         d->renameManual->setChecked(false);
-        d->renameManualBox->setEnabled(false);
+        d->manualRenameInput->setEnabled(false);
     }
     else
     {
@@ -705,7 +703,7 @@ void RenameCustomizer::readSettings()
         d->renameCustom->setChecked(true);
         d->renameCustomBox->setEnabled(true);
         d->renameManual->setChecked(true);
-        d->renameManualBox->setEnabled(true);
+        d->manualRenameInput->setEnabled(true);
     }
 
     d->addDateTimeBox->setChecked(adddateTime);
@@ -745,7 +743,7 @@ void RenameCustomizer::restoreFocus()
 
 void RenameCustomizer::slotUpdateTrackerPos()
 {
-    d->renameManualBox->slotUpdateTrackerPos();
+    d->manualRenameInput->slotUpdateTrackerPos();
 }
 
 }  // namespace Digikam
