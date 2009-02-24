@@ -1027,6 +1027,7 @@ void QueueMgrWindow::slotAssignedToolsChanged(const AssignedBatchTools& tools)
             d->moveUpToolAction->setEnabled(false);
             d->moveDownToolAction->setEnabled(false);
             d->removeToolAction->setEnabled(false);
+            d->clearToolsAction->setEnabled(false);
             break;
         }
         case 1:
@@ -1034,6 +1035,7 @@ void QueueMgrWindow::slotAssignedToolsChanged(const AssignedBatchTools& tools)
             d->moveUpToolAction->setEnabled(false);
             d->moveDownToolAction->setEnabled(false);
             d->removeToolAction->setEnabled(true);
+            d->clearToolsAction->setEnabled(true);
             break;
         }
         default:
@@ -1041,6 +1043,7 @@ void QueueMgrWindow::slotAssignedToolsChanged(const AssignedBatchTools& tools)
             d->moveUpToolAction->setEnabled(true);
             d->moveDownToolAction->setEnabled(true);
             d->removeToolAction->setEnabled(true);
+            d->clearToolsAction->setEnabled(true);
             break;
         }
     }
