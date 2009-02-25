@@ -178,7 +178,7 @@ QString ManualRenameInput::parser(const QString& parse,
     }
     // parse date time token ----------------------------------
     {
-        QRegExp regExp("%\\{date:(.*)\\}");
+        QRegExp regExp("\\[date:(.*)\\]");
         regExp.setMinimal(true);
         int pos = 0;
         while (pos > -1)
