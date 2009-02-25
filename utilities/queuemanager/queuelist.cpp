@@ -660,7 +660,9 @@ void QueueListView::updateDestFileNames()
             if (settings().renamingRule == QueueSettings::CUSTOMIZE)
             {
                 QString parser = settings().renamingParser;
-                baseName       = ManualRenameInput::parser(parser, baseName, info.photoInfoContainer().make, info.dateTime(), index);
+                QString camera = info.photoInfoContainer().make + info.photoInfoContainer().model;
+                QString date   = info.dateTime();
+                baseName       = ManualRenameInput::parser(parser, baseName, camera, date, index);
             }
 
             // Update suffix using assigned batch tool rules.
