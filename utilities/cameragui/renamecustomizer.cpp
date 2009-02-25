@@ -228,13 +228,13 @@ QString ManualRenameInput::createToolTip()
     typedef QPair<QString, QString> token;
     typedef QPair<token, QString> p;
     QList<p> list;
-    list << p( token(QString("%o"),             QString("$")), i18n("filename (original)"))
-         << p( token(QString("%F"),             QString("&")), i18n("filename (uppercase)"))
-         << p( token(QString("%f"),             QString("%")), i18n("filename (lowercase)"))
-         << p( token(QString("%c"),             QString("")),  i18n("camera name"))
-         << p( token(QString("%n"),             QString("#")), i18n("sequence number"))
-         << p( token(QString("%{n:length}"),    QString("#")), i18n("sequence number (custom length)"))
-         << p( token(QString("%{date:format}"), QString("")),  i18n("datetime of the file"));
+    list << p( token(QString("%o"), QString("$")),              i18n("filename (original)"))
+         << p( token(QString("%F"), QString("&")),              i18n("filename (uppercase)"))
+         << p( token(QString("%f"), QString("%")),              i18n("filename (lowercase)"))
+         << p( token(QString("%c"), QString("")),               i18n("camera name"))
+         << p( token(QString("%n"), QString("#")),              i18n("sequence number"))
+         << p( token(QString("%{n:length}"), QString("#")),     i18n("sequence number (custom length)"))
+         << p( token(QString("%{date:format}"), QString("")),   i18n("datetime of the file"));
 
     QString tooltip;
     tooltip += QString("<table style='border:1px solid black;'>");
