@@ -62,7 +62,7 @@ public:
         renamingRule = USEORIGINAL;
     };
 
-    QString      renamingCtrl;
+    QString      renamingParser;
 
     KUrl         targetUrl;
 

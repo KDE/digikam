@@ -45,6 +45,7 @@
 #include "albumdb.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
+#include "renamecustomizer.h"
 #include "ddragobjects.h"
 
 namespace Digikam
@@ -658,7 +659,7 @@ void QueueListView::updateDestFileNames()
             QString baseName = fi.baseName();
             if (settings().renamingRule == QueueSettings::CUSTOMIZE)
             {
-                QString ctrl = settings().renamingCtrl;
+                QString parser = settings().renamingParser;
                 /* TODO: call static method from ManualRenameInput to adjust base name
                          accordingly with ImageInfo data and RenamingCtrl settings.
                 baseName = ...

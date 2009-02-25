@@ -184,6 +184,7 @@ void QueueSettingsView::slotResetSettings()
     // TODO: reset d->uploadWidget
     d->conflictButtonGroup->button(QueueSettings::OVERWRITE)->setChecked(true);
     d->renamingButtonGroup->button(QueueSettings::USEORIGINAL)->setChecked(true);
+    d->manualRenameInput->input()->clear();
     blockSignals(false);
     slotSettingsChanged();
 }
@@ -195,15 +196,16 @@ void QueueSettingsView::slotQueueSelected(int, const QueueSettings& settings, co
     d->conflictButtonGroup->button(btn)->setChecked(true);
     btn = (int)settings.renamingRule;
     d->renamingButtonGroup->button(btn)->setChecked(true);
+    d->manualRenameInput->setText(settings.renamingParser);
 }
 
 void QueueSettingsView::slotSettingsChanged()
 {
     QueueSettings settings;
-    settings.conflictRule = (QueueSettings::ConflictRule)d->conflictButtonGroup->checkedId();
-    settings.targetUrl    = d->uploadWidget->currentAlbumUrl();
-    settings.renamingRule = (QueueSettings::RenamingRule)d->renamingButtonGroup->checkedId();
-    settings.renamingCtrl = d->manualRenameInput->text();
+    settings.conflictRule   = (QueueSettings::ConflictRule)d->conflictButtonGroup->checkedId();
+    settings.targetUrl      = d->uploadWidget->currentAlbumUrl();
+    settings.renamingRule   = (QueueSettings::RenamingRule)d->renamingButtonGroup->checkedId();
+    settings.renamingParser = d->manualRenameInput->text();
     d->manualRenameInput->setEnabled(settings.renamingRule == QueueSettings::CUSTOMIZE);
     emit signalSettingsChanged(settings);
 }
