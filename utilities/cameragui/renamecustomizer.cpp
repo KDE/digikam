@@ -148,10 +148,12 @@ QString ManualRenameInput::parser(const QString& parse,
     {
         QRegExp regExp("%\\{n:(\\d+)\\}");
         regExp.setMinimal(true);
-        // define 4 as default length
-        int slength = 4;
-        // to make "parsing" easier, convert the %n token
-        parsedString.replace("%n", "%{n:4}");
+        // define 4 as default minimum length
+        const int MIN_LENGTH = 4;
+        int slength = MIN_LENGTH;
+        // to make parsing easier, convert the %n token
+        QString replaceDefaultToken = QString("%{n:%1}").arg(MIN_LENGTH);
+        parsedString.replace("%n", replaceDefaultToken);
         int pos = 0;
         while (pos > -1)
         {
