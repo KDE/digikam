@@ -109,6 +109,8 @@ ManualRenameInput::ManualRenameInput(QWidget* parent)
 
 ManualRenameInput::~ManualRenameInput()
 {
+    // we need to delete it manually, because it has no parent
+    delete d->tooltipTracker;
 }
 
 QString ManualRenameInput::text() const
