@@ -199,6 +199,11 @@ void QueueSettingsView::slotQueueSelected(int, const QueueSettings& settings, co
     d->manualRenameInput->setText(settings.renamingParser);
 }
 
+void QueueSettingsView::slotUpdateTrackerPos()
+{
+    d->manualRenameInput->slotUpdateTrackerPos();
+}
+
 void QueueSettingsView::slotSettingsChanged()
 {
     QueueSettings settings;

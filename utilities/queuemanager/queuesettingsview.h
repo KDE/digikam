@@ -91,6 +91,7 @@ signals:
 public slots:
 
     void slotQueueSelected(int, const QueueSettings&, const AssignedBatchTools&);
+    void slotUpdateTrackerPos();
 
 private slots:
 

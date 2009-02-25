@@ -67,6 +67,14 @@ public:
 
     BatchToolsManager* batchToolsManager() const;
 
+signals:
+
+    void signalWindowhasMoved();
+
+protected:
+
+    void moveEvent(QMoveEvent *e);
+
 public slots:
 
     void slotRun();
