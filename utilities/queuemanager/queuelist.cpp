@@ -126,6 +126,18 @@ QString QueueListViewItem::destFileName() const
     return d->destFileName;
 }
 
+QString QueueListViewItem::destBaseName() const
+{
+    QFileInfo fi(d->destFileName);
+    return fi.completeBaseName();
+}
+
+QString QueueListViewItem::destSuffix() const
+{
+    QFileInfo fi(d->destFileName);
+    return fi.suffix();
+}
+
 // ---------------------------------------------------------------------------
 
 class QueueListViewPriv
@@ -606,6 +618,7 @@ int QueueListView::pendingTasksCount()
 void QueueListView::setSettings(const QueueSettings& settings)
 {
     d->settings = settings;
+    updateDestFileNames();
 }
 
 QueueSettings QueueListView::settings()
@@ -613,19 +626,54 @@ QueueSettings QueueListView::settings()
     return d->settings;
 }
 
+void QueueListView::setAssignedTools(const AssignedBatchTools& tools)
+{
+    d->toolsList = tools;
+    updateDestFileNames();
+}
+
 AssignedBatchTools QueueListView::assignedTools()
 {
     return d->toolsList;
 }
 
-void QueueListView::setAssignedTools(const AssignedBatchTools& tools)
-{
-    d->toolsList = tools;
-}
-
 void QueueListView::slotAssignedToolsChanged(const AssignedBatchTools& tools)
 {
     setAssignedTools(tools);
+}
+
+void QueueListView::updateDestFileNames()
+{
+    int index = 0;
+    QTreeWidgetItemIterator it(this);
+    while (*it)
+    {
+        QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+        if (item)
+        {
+            // Update base name using queue renaming rules.
+            ImageInfo info = item->info();
+            QFileInfo fi(info.name());
+
+            QString baseName = fi.baseName();
+            if (settings().renamingRule == QueueSettings::CUSTOMIZE)
+            {
+                QString ctrl = settings().renamingCtrl;
+                /* TODO: call static method from ManualRenameInput to adjust base name
+                         accordingly with ImageInfo data and RenamingCtrl settings.
+                baseName = ...
+                */
+            }
+
+            // Update suffix using assigned batch tool rules.
+            QString newSuffix = assignedTools().targetSuffix();
+            if (newSuffix.isEmpty()) newSuffix = fi.suffix();
+
+            item->setDestFileName(QString("%1.%2").arg(baseName).arg(newSuffix));
+        }
+        ++it;
+        index++;
+    }
 }
 
 }  // namespace Digikam

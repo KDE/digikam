@@ -26,6 +26,7 @@
 
 // Qt includes.
 
+#include <QTimer>
 #include <QLabel>
 #include <QScrollArea>
 #include <QButtonGroup>
@@ -39,12 +40,14 @@
 #include <kdialog.h>
 #include <kconfig.h>
 #include <kglobal.h>
+#include <kvbox.h>
 
 // Local includes.
 
 #include "batchtool.h"
 #include "album.h"
 #include "kipiuploadwidget.h"
+#include "renamecustomizer.h"
 
 namespace Digikam
 {
@@ -63,14 +66,19 @@ public:
         uploadWidget        = 0;
     }
 
-    QLabel           *conflictLabel;
+    QLabel            *conflictLabel;
 
-    QButtonGroup     *conflictButtonGroup;
+    QButtonGroup      *renamingButtonGroup;
+    QButtonGroup      *conflictButtonGroup;
 
-    QRadioButton     *overwriteButton;
-    QRadioButton     *promptButton;
+    QRadioButton      *renameOriginal;
+    QRadioButton      *renameManual;
+    QRadioButton      *overwriteButton;
+    QRadioButton      *promptButton;
 
-    KipiUploadWidget *uploadWidget;
+    KipiUploadWidget  *uploadWidget;
+
+    ManualRenameInput *manualRenameInput;
 };
 
 QueueSettingsView::QueueSettingsView(QWidget *parent)
@@ -120,16 +128,31 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
 
     // --------------------------------------------------------
 
-/* TODO
     QScrollArea *sv2 = new QScrollArea(this);
-    QWidget *panel2  = new QWidget(sv2->viewport());
-    panel2->setAutoFillBackground(false);
-    sv2->setWidget(panel2);
+    KVBox *vbox2     = new KVBox(sv2->viewport());
+    vbox2->setAutoFillBackground(false);
+    sv2->setWidget(vbox2);
     sv2->setWidgetResizable(true);
     sv2->viewport()->setAutoFillBackground(false);
 
+    d->renamingButtonGroup = new QButtonGroup(vbox2);
+    d->renameOriginal      = new QRadioButton(i18n("Use original filenames"), vbox2);
+    d->renameOriginal->setWhatsThis(i18n("Turn on this option to use original "
+                                         "filenames without modifications."));
+
+    d->renameManual        = new QRadioButton(i18n("Customize filenames:"), vbox2);
+    d->manualRenameInput   = new ManualRenameInput(vbox2);
+    QWidget *space         = new QWidget(vbox2);
+
+    d->renamingButtonGroup->setExclusive(true);
+    d->renamingButtonGroup->addButton(d->renameOriginal, QueueSettings::USEORIGINAL);
+    d->renamingButtonGroup->addButton(d->renameManual,   QueueSettings::CUSTOMIZE);
+
+    vbox2->setStretchFactor(space, 10);
+    vbox2->setMargin(KDialog::spacingHint());
+    vbox2->setSpacing(KDialog::spacingHint());
+
     addTab(sv2, i18n("File Renaming"));
-*/
 
     // --------------------------------------------------------
 
@@ -138,6 +161,16 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
 
     connect(d->conflictButtonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(slotSettingsChanged()));
+
+    connect(d->renamingButtonGroup, SIGNAL(buttonClicked(int)),
+            this, SLOT(slotSettingsChanged()));
+
+    connect(d->manualRenameInput, SIGNAL(signalTextChanged(const QString&)),
+            this, SLOT(slotSettingsChanged()));
+
+    // --------------------------------------------------------
+
+    QTimer::singleShot(0, this, SLOT(slotResetSettings()));
 }
 
 QueueSettingsView::~QueueSettingsView()
@@ -145,11 +178,23 @@ QueueSettingsView::~QueueSettingsView()
     delete d;
 }
 
+void QueueSettingsView::slotResetSettings()
+{
+    blockSignals(true);
+    // TODO: reset d->uploadWidget
+    d->conflictButtonGroup->button(QueueSettings::OVERWRITE)->setChecked(true);
+    d->renamingButtonGroup->button(QueueSettings::USEORIGINAL)->setChecked(true);
+    blockSignals(false);
+    slotSettingsChanged();
+}
+
 void QueueSettingsView::slotQueueSelected(int, const QueueSettings& settings, const AssignedBatchTools&)
 {
+    d->uploadWidget->setCurrentAlbumUrl(settings.targetUrl);
     int btn = (int)settings.conflictRule;
     d->conflictButtonGroup->button(btn)->setChecked(true);
-    d->uploadWidget->setCurrentAlbumUrl(settings.targetUrl);
+    btn = (int)settings.renamingRule;
+    d->renamingButtonGroup->button(btn)->setChecked(true);
 }
 
 void QueueSettingsView::slotSettingsChanged()
@@ -157,6 +202,9 @@ void QueueSettingsView::slotSettingsChanged()
     QueueSettings settings;
     settings.conflictRule = (QueueSettings::ConflictRule)d->conflictButtonGroup->checkedId();
     settings.targetUrl    = d->uploadWidget->currentAlbumUrl();
+    settings.renamingRule = (QueueSettings::RenamingRule)d->renamingButtonGroup->checkedId();
+    settings.renamingCtrl = d->manualRenameInput->text();
+    d->manualRenameInput->setEnabled(settings.renamingRule == QueueSettings::CUSTOMIZE);
     emit signalSettingsChanged(settings);
 }
 

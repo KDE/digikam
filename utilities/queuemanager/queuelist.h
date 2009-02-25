@@ -68,6 +68,8 @@ public:
 
     void    setDestFileName(const QString& str);
     QString destFileName() const;
+    QString destBaseName() const;
+    QString destSuffix() const;
 
 private:
 
@@ -122,6 +124,7 @@ private:
 
     bool findItemByInfo(const ImageInfo& info);
     void removeItems(int removeType);
+    void updateDestFileNames();
 
     QMimeData* mimeData(const QList<QTreeWidgetItem*> items) const;
     void startDrag(Qt::DropActions supportedActions);

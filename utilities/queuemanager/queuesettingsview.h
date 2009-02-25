@@ -48,17 +48,26 @@ public:
         ASKTOUSER
     };
 
+    enum RenamingRule
+    {
+        USEORIGINAL = 0,
+        CUSTOMIZE
+    };
+
 public:
 
     QueueSettings()
     {
         conflictRule = OVERWRITE;
+        renamingRule = USEORIGINAL;
     };
 
+    QString      renamingCtrl;
 
     KUrl         targetUrl;
 
     ConflictRule conflictRule;
+    RenamingRule renamingRule;
 };
 
 // --------------------------------------------------------
@@ -85,6 +94,7 @@ public slots:
 
 private slots:
 
+    void slotResetSettings();
     void slotSettingsChanged();
 
 private:

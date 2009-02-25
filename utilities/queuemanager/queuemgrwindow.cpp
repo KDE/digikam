@@ -260,7 +260,7 @@ void QueueMgrWindow::setupConnections()
             d->assignedList, SLOT(slotQueueSelected(int, const QueueSettings&, const AssignedBatchTools&)));
 
     connect(d->queueSettingsView, SIGNAL(signalSettingsChanged(const QueueSettings&)),
-            d->queuePool, SLOT(slotSettingsChanged(const QueueSettings&)));
+            d->queuePool, SLOT((const QueueSettings&)));
 
     connect(d->queuePool, SIGNAL(signalQueuePoolChanged()),
             this, SLOT(slotQueueContentsChanged()));
@@ -958,7 +958,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
         else
         {
             d->currentProcessItem->setProgressIcon(SmallIcon("dialog-ok"));
-            d->currentProcessItem->setDestFileName(dest.fileName());
+//            d->currentProcessItem->setDestFileName(dest.fileName());
 
             // TODO: assign attributes from original image.
         }
