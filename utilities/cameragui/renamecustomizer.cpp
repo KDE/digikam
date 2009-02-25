@@ -99,7 +99,11 @@ ManualRenameInput::ManualRenameInput(QWidget* parent)
     d->tooltipTracker = new DTipTracker(tooltip, d->parseStringLineEdit);
     d->tooltipTracker->setEnable(false);
     d->tooltipTracker->setKeepOpen(true);
-    d->parseStringLineEdit->setWhatsThis(tooltip);
+
+    QString additionalInfo = i18n("<p><i>Example:</i><br/>"
+                                  "<b>new_$_###</b> => new_MyImageName_001.jpg"
+                                  "</p>");
+    d->parseStringLineEdit->setWhatsThis(tooltip + additionalInfo);
     d->parseStringLineEdit->setClearButtonShown(true);
     d->parseStringLineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);
 
@@ -144,7 +148,7 @@ QString ManualRenameInput::parser(const QString& parse,
     QFileInfo fi(fileName);
     QString parsedString = parse;
 
-    // parse sequence number token (krename style)-------------
+    // parse sequence number token ----------------------------
     {
         QRegExp regExp("(#+)(\\{(\\d+)\\s*,\\s*(\\d+)\\})?");
         int pos     = 0;
@@ -171,33 +175,6 @@ QString ManualRenameInput::parser(const QString& parse,
             }
         }
     }
-    // parse sequence number token ----------------------------
-    {
-        QRegExp regExp("%\\{n:(\\d+)\\}");
-        regExp.setMinimal(true);
-        // define 4 as default minimum length
-        const int MIN_LENGTH = 4;
-        int slength = MIN_LENGTH;
-        // to make parsing easier, convert the %n token
-        QString replaceDefaultToken = QString("%{n:%1}").arg(MIN_LENGTH);
-        parsedString.replace("%n", replaceDefaultToken);
-        int pos = 0;
-        while (pos > -1)
-        {
-            pos = regExp.indexIn(parsedString, pos);
-            if (pos > -1)
-            {
-                slength = regExp.cap(1).toInt();
-                QString seq;
-                QTextStream seqStream(&seq);
-                seqStream.setFieldWidth(slength);
-                seqStream.setFieldAlignment(QTextStream::AlignRight);
-                seqStream.setPadChar('0');
-                seqStream << index;
-                parsedString.replace(pos, regExp.matchedLength(), seq);
-            }
-        }
-    }
     // parse date time token ----------------------------------
     {
         QString date;
@@ -216,13 +193,6 @@ QString ManualRenameInput::parser(const QString& parse,
     }
     // parse simple / remaining tokens ------------------------
     {
-        parsedString.replace("%o", fi.baseName());
-        parsedString.replace("%F", fi.baseName().toUpper());
-        parsedString.replace("%f", fi.baseName().toLower());
-        parsedString.replace("%c", cameraName);
-    }
-    // parse simple / remaining tokens (krename style) --------
-    {
         parsedString.replace("$", fi.baseName());
         parsedString.replace("&", fi.baseName().toUpper());
         parsedString.replace("%", fi.baseName().toLower());
@@ -240,37 +210,26 @@ QString ManualRenameInput::parse(const QString &fileName, const QString &cameraN
 
 QString ManualRenameInput::createToolTip()
 {
-    typedef QPair<QString, QString> token;
-    typedef QPair<token, QString> p;
+    typedef QPair<QString, QString> p;
     QList<p> list;
-    list << p( token(QString("%o"), QString("$")),              i18n("filename (original)"))
-         << p( token(QString("%F"), QString("&")),              i18n("filename (uppercase)"))
-         << p( token(QString("%f"), QString("%")),              i18n("filename (lowercase)"))
-         << p( token(QString("%c"), QString("")),               i18n("camera name"))
-         << p( token(QString("%n"), QString("#")),              i18n("sequence number"))
-         << p( token(QString("%{n:length}"), QString("#")),     i18n("sequence number (custom length)"))
-         << p( token(QString(""),  QString("#{start,step}")),   i18n("sequence number (custom start,step)"))
-         << p( token(QString("%{date:format}"), QString("")),   i18n("datetime of the file"));
+    list << p(QString("$"),              i18n("filename (original)"))
+         << p(QString("&"),              i18n("filename (uppercase)"))
+         << p(QString("%"),              i18n("filename (lowercase)"))
+         << p(QString("#"),              i18n("sequence number"))
+         << p(QString("#{start,step}"),  i18n("sequence number (custom start,step)"))
+         << p(QString("%c"),             i18n("camera name"))
+         << p(QString("%{date:format}"), i18n("datetime of the file"));
 
     QString tooltip;
-    tooltip += QString("<table style='border:1px solid black;'>");
-    tooltip += QString("<tr><th>own</th><th>krename</th><th>description</th></tr>");
+    tooltip += QString("<table>");
 
     foreach (const p &token, list)
     {
-        tooltip += QString("<tr><td>%1</td><td>%2</td><td>%3</td></tr>")
-                            .arg(token.first.first)
-                            .arg(token.first.second)
-                            .arg(token.second);
+        tooltip += QString("<tr><td><b>%1</b></td><td>:</td><td>%2</td></tr>").arg(token.first)
+                                                                              .arg(token.second);
     }
 
-    tooltip += QString("</table>"
-                       "<p><i>Example:</i><br/>"
-                       "new_%o_%{n:3}<br/>"
-                       "new_$_###<br/>"
-                       "=> <b>new_MyImageName_001.jpg</b>"
-                       "</p>"
-                       "</table>");
+    tooltip += QString("</table>");
     return tooltip;
 }
 
