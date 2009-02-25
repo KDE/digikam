@@ -238,11 +238,11 @@ QString ManualRenameInput::createToolTip()
 
     QString tooltip;
     tooltip += QString("<table style='border:1px solid black;'>");
-    tooltip += QString("<tr><th>own</th><th>krename</th><th></th><th>description</th></tr>");
+    tooltip += QString("<tr><th>own</th><th>krename</th><th>description</th></tr>");
 
     foreach (const p &token, list)
     {
-        tooltip += QString("<tr><td>%1</td><td>(%2)</td><td>:</td><td>%3</td></tr>")
+        tooltip += QString("<tr><td>%1</td><td>%2</td><td>%3</td></tr>")
                             .arg(token.first.first)
                             .arg(token.first.second)
                             .arg(token.second);
