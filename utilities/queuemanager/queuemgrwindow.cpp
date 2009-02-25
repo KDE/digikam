@@ -811,7 +811,6 @@ void QueueMgrWindow::processOne()
 
         if (!tools4Item.toolsMap.isEmpty())
         {
-            kDebug() << "Target Suffix: " << tools4Item.targetSuffix() << endl;
             d->thread->setWorkingUrl(settings.targetUrl);
             d->thread->processFile(tools4Item);
             if (!d->thread->isRunning())
@@ -915,11 +914,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
 
     QueueSettings settings = d->queuePool->currentQueue()->settings();
     KUrl dest              = settings.targetUrl;
-    QFileInfo fiTmp(tmp.path());
-    QString ext  = fiTmp.suffix();
-    QFileInfo fiUrl(url.path());
-    QString name = fiUrl.baseName();
-    dest.setFileName(QString("%1.%2").arg(name).arg(ext));
+    dest.setFileName(d->currentProcessItem->destFileName());
 
     if (settings.conflictRule != QueueSettings::OVERWRITE)
     {
@@ -961,7 +956,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
         else
         {
             d->currentProcessItem->setProgressIcon(SmallIcon("dialog-ok"));
-//            d->currentProcessItem->setDestFileName(dest.fileName());
+            d->currentProcessItem->setDestFileName(dest.fileName());
 
             // TODO: assign attributes from original image.
         }
