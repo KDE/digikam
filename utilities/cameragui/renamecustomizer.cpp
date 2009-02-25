@@ -137,7 +137,7 @@ void ManualRenameInput::hideToolTip()
     slotToggleToolTip(false);
 }
 
-QString ManualRenameInput::parser(const QString& parse, 
+QString ManualRenameInput::parser(const QString& parse,
                                   const QString &fileName, const QString &cameraName,
                                   const QDateTime &dateTime, int index)
 {
@@ -220,7 +220,7 @@ QString ManualRenameInput::createToolTip()
 
     tooltip += QString("</table>"
                        "<p><i>Example:</i><br/>"
-                       "new_%o_{n:3}<br/>"
+                       "new_%o_%{n:3}<br/>"
                        "=> <b>new_MyImageName_001.jpg</b>"
                        "</p>"
                        "</table>");
