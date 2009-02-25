@@ -118,6 +118,11 @@ QString ManualRenameInput::text() const
     return d->parseStringLineEdit->text();
 }
 
+void ManualRenameInput::setText(const QString &text)
+{
+    d->parseStringLineEdit->setText(text);
+}
+
 void ManualRenameInput::hideToolTip()
 {
     d->tooltipToggleButton->setChecked(false);
@@ -678,16 +683,17 @@ void RenameCustomizer::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
 
     KConfigGroup group = config->group("Camera Settings");
-    bool def         = group.readEntry("Rename Use Default", true);
-    bool addSeqNumb  = group.readEntry("Add Sequence Number", true);
-    bool adddateTime = group.readEntry("Add Date Time", false);
-    bool addCamName  = group.readEntry("Add Camera Name", false);
-    int chcaseT      = group.readEntry("Case Type", (int)NONE);
-    QString prefix   = group.readEntry("Rename Prefix", i18n("photo"));
-    QString suffix   = group.readEntry("Rename Postfix", QString());
-    int startIndex   = group.readEntry("Rename Start Index", 1);
-    int dateTime     = group.readEntry("Date Time Format", (int)RenameCustomizerPriv::IsoDateFormat);
-    QString format   = group.readEntry("Date Time Format String", QString("yyyyMMddThhmmss"));
+    bool def             = group.readEntry("Rename Use Default", true);
+    bool addSeqNumb      = group.readEntry("Add Sequence Number", true);
+    bool adddateTime     = group.readEntry("Add Date Time", false);
+    bool addCamName      = group.readEntry("Add Camera Name", false);
+    int chcaseT          = group.readEntry("Case Type", (int)NONE);
+    QString prefix       = group.readEntry("Rename Prefix", i18n("photo"));
+    QString suffix       = group.readEntry("Rename Postfix", QString());
+    int startIndex       = group.readEntry("Rename Start Index", 1);
+    int dateTime         = group.readEntry("Date Time Format", (int)RenameCustomizerPriv::IsoDateFormat);
+    QString format       = group.readEntry("Date Time Format String", QString("yyyyMMddThhmmss"));
+    QString manualRename = group.readEntry("Manual Rename String", QString());
 
     if (def)
     {
@@ -717,6 +723,7 @@ void RenameCustomizer::readSettings()
     d->startIndexInput->setValue(startIndex);
     d->dateTimeFormat->setCurrentIndex(dateTime);
     d->dateTimeFormatString = format;
+    d->manualRenameInput->setText(manualRename);
     slotRenameOptionsChanged();
 }
 
@@ -735,6 +742,7 @@ void RenameCustomizer::saveSettings()
     group.writeEntry("Rename Start Index", d->startIndexInput->value());
     group.writeEntry("Date Time Format", d->dateTimeFormat->currentIndex());
     group.writeEntry("Date Time Format String", d->dateTimeFormatString);
+    group.writeEntry("Manual Rename String", d->manualRenameInput->text());
     config->sync();
 }
 

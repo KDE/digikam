@@ -50,8 +50,11 @@ public:
     ~ManualRenameInput();
 
     QString text() const;
+    void    setText(const QString &text);
+
     QString parse(const QString &fileName, const QString &cameraName,
                   const QDateTime &dateTime, int index) const;
+
     void hideToolTip();
 
 signals:
