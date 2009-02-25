@@ -146,20 +146,29 @@ QString ManualRenameInput::parser(const QString& parse,
 
     // parse sequence number token (krename style)-------------
     {
-        QRegExp regExp("(#+)");
-        int slength = 0;
+        QRegExp regExp("(#+)(\\{(\\d+)\\s*,\\s*(\\d+)\\})?");
         int pos     = 0;
         while (pos > -1)
         {
-            pos     = regExp.indexIn(parsedString, pos);
-            slength = regExp.cap(1).length();
-            QString seq;
-            QTextStream seqStream(&seq);
-            seqStream.setFieldWidth(slength);
-            seqStream.setFieldAlignment(QTextStream::AlignRight);
-            seqStream.setPadChar('0');
-            seqStream << index;
-            parsedString.replace(pos, regExp.matchedLength(), seq);
+            pos = regExp.indexIn(parsedString, pos);
+            if (pos > -1)
+            {
+                int slength = 0;
+                int start   = 0;
+                int step    = 0;
+
+                slength = regExp.cap(1).length();
+                start   = regExp.cap(3).isEmpty() ? 1 : regExp.cap(3).toInt();
+                step    = regExp.cap(4).isEmpty() ? 1 : regExp.cap(4).toInt();
+
+                QString seq;
+                QTextStream seqStream(&seq);
+                seqStream.setFieldWidth(slength);
+                seqStream.setFieldAlignment(QTextStream::AlignRight);
+                seqStream.setPadChar('0');
+                seqStream << start + ((index-1) * step);
+                parsedString.replace(pos, regExp.matchedLength(), seq);
+            }
         }
     }
     // parse sequence number token ----------------------------
@@ -175,15 +184,18 @@ QString ManualRenameInput::parser(const QString& parse,
         int pos = 0;
         while (pos > -1)
         {
-            pos     = regExp.indexIn(parsedString, pos);
-            slength = regExp.cap(1).toInt();
-            QString seq;
-            QTextStream seqStream(&seq);
-            seqStream.setFieldWidth(slength);
-            seqStream.setFieldAlignment(QTextStream::AlignRight);
-            seqStream.setPadChar('0');
-            seqStream << index;
-            parsedString.replace(pos, regExp.matchedLength(), seq);
+            pos = regExp.indexIn(parsedString, pos);
+            if (pos > -1)
+            {
+                slength = regExp.cap(1).toInt();
+                QString seq;
+                QTextStream seqStream(&seq);
+                seqStream.setFieldWidth(slength);
+                seqStream.setFieldAlignment(QTextStream::AlignRight);
+                seqStream.setPadChar('0');
+                seqStream << index;
+                parsedString.replace(pos, regExp.matchedLength(), seq);
+            }
         }
     }
     // parse date time token ----------------------------------
@@ -195,8 +207,11 @@ QString ManualRenameInput::parser(const QString& parse,
         while (pos > -1)
         {
             pos  = regExp.indexIn(parsedString, pos);
-            date = dateTime.toString(regExp.cap(1));
-            parsedString.replace(pos, regExp.matchedLength(), date);
+            if (pos > -1)
+            {
+                date = dateTime.toString(regExp.cap(1));
+                parsedString.replace(pos, regExp.matchedLength(), date);
+            }
         }
     }
     // parse simple / remaining tokens ------------------------
@@ -234,6 +249,7 @@ QString ManualRenameInput::createToolTip()
          << p( token(QString("%c"), QString("")),               i18n("camera name"))
          << p( token(QString("%n"), QString("#")),              i18n("sequence number"))
          << p( token(QString("%{n:length}"), QString("#")),     i18n("sequence number (custom length)"))
+         << p( token(QString(""),  QString("#{start,step}")),   i18n("sequence number (custom start,step)"))
          << p( token(QString("%{date:format}"), QString("")),   i18n("datetime of the file"));
 
     QString tooltip;
