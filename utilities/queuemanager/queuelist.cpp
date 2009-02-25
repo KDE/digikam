@@ -645,7 +645,7 @@ void QueueListView::slotAssignedToolsChanged(const AssignedBatchTools& tools)
 
 void QueueListView::updateDestFileNames()
 {
-    int index = 0;
+    int index = 1;
     QTreeWidgetItemIterator it(this);
     while (*it)
     {
