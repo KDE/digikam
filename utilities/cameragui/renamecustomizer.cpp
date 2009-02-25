@@ -192,12 +192,39 @@ QString ManualRenameInput::parser(const QString& parse,
             }
         }
     }
+    // parse * token (first letter upper case -----------------
+    {
+        QString firstToUpper;
+        QRegExp regExp("\\*{1}");
+        regExp.setMinimal(true);
+        int pos = 0;
+        while (pos > -1)
+        {
+            pos  = regExp.indexIn(parsedString, pos);
+            if (pos > -1)
+            {
+                QString tmp = fileName.toLower();
+                if( tmp[0].isLetter() )
+                    tmp[0] = tmp[0].toUpper();
+
+                for( int i = 0; i < tmp.length(); i++ )
+                {
+                    if( tmp[i+1].isLetter() && !tmp[i].isLetter() &&
+                            tmp[i] != '\'' && tmp[i] != '?' && tmp[i] != '`' )
+                    {
+                        tmp[i+1] = tmp[i+1].toUpper();
+                    }
+                }
+                parsedString.replace(pos, regExp.matchedLength(), tmp);
+            }
+        }
+    }
     // parse simple / remaining tokens ------------------------
     {
-        parsedString.replace("%c", cameraName);
-        parsedString.replace("$",  fi.baseName());
-        parsedString.replace("&",  fi.baseName().toUpper());
-        parsedString.replace("%",  fi.baseName().toLower());
+        parsedString.replace("[cam]", cameraName);
+        parsedString.replace("$",     fi.baseName());
+        parsedString.replace("&",     fi.baseName().toUpper());
+        parsedString.replace("%",     fi.baseName().toLower());
     }
 
     return parsedString;
@@ -215,12 +242,13 @@ QString ManualRenameInput::createToolTip()
     typedef QPair<QString, QString> p;
     QList<p> list;
     list << p(QString("$"),              i18n("filename (original)"))
-         << p(QString("&"),              i18n("filename (uppercase)"))
-         << p(QString("%"),              i18n("filename (lowercase)"))
+         << p(QString("&"),              i18n("filename (upper case)"))
+         << p(QString("%"),              i18n("filename (lower case)"))
+         << p(QString("*"),              i18n("filename (first letter of each word upper case)"))
          << p(QString("#"),              i18n("sequence number"))
          << p(QString("#{start,step}"),  i18n("sequence number (custom start + step)"))
-         << p(QString("%c"),             i18n("camera name"))
-         << p(QString("%{date:format}"), i18n("datetime of the file"));
+         << p(QString("[cam]"),          i18n("camera name"))
+         << p(QString("[date:format]"),  i18n("datetime of the file"));
 
     QString tooltip;
     tooltip += QString("<table>");
