@@ -151,30 +151,6 @@ QueueMgrWindow::~QueueMgrWindow()
     delete d;
 }
 
-void QueueMgrWindow::readSettings()
-{
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Batch Queue Manager Settings");
-    // TODO
-
-}
-
-void QueueMgrWindow::writeSettings()
-{
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Batch Queue Manager Settings");
-    // TODO
-    config->sync();
-}
-
-void QueueMgrWindow::applySettings()
-{
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Batch Queue Manager Settings");
-
-    d->thread->setExifSetOrientation(AlbumSettings::instance()->getExifSetOrientation());
-}
-
 void QueueMgrWindow::closeEvent(QCloseEvent* e)
 {
     if (!e) return;
@@ -438,6 +414,41 @@ void QueueMgrWindow::setupActions()
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
 }
 
+void QueueMgrWindow::slotItemsUpdated(const KUrl::List& /*urls*/)
+{
+    // TODO
+}
+
+void QueueMgrWindow::refreshView()
+{
+    // NOTE: method called when something is changed from Database (tags, rating, etc...).
+    //       There is nothing to do for the moment.
+}
+
+void QueueMgrWindow::readSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("Batch Queue Manager Settings");
+    // TODO
+
+}
+
+void QueueMgrWindow::writeSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("Batch Queue Manager Settings");
+    // TODO
+    config->sync();
+}
+
+void QueueMgrWindow::applySettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("Batch Queue Manager Settings");
+
+    d->thread->setExifSetOrientation(AlbumSettings::instance()->getExifSetOrientation());
+}
+
 void QueueMgrWindow::refreshStatusBar()
 {
     int items       = d->queuePool->currentQueue()->pendingItemsCount();
@@ -514,11 +525,6 @@ void QueueMgrWindow::refreshStatusBar()
         d->clearQueueAction->setEnabled(b);
         d->runAction->setEnabled(b && items);
     }
-}
-
-void QueueMgrWindow::slotItemsUpdated(const KUrl::List& /*urls*/)
-{
-    // TODO
 }
 
 void QueueMgrWindow::slotToggleFullScreen()
@@ -697,12 +703,6 @@ void QueueMgrWindow::addNewQueue()
 void QueueMgrWindow::loadImageInfos(const ImageInfoList &list, const ImageInfo &current)
 {
     d->queuePool->currentQueue()->slotAddItems(list, current);
-}
-
-void QueueMgrWindow::refreshView()
-{
-    // NOTE: method called when something is changed from Database (tags, rating, etc...).
-    //       There is nothing to do for the moment.
 }
 
 void QueueMgrWindow::slotQueueContentsChanged()
