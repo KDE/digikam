@@ -8,9 +8,9 @@ AlbumIconView                   X
 ImagePreviewView                X
 AlbumFolderView                 X        
 TagFolderView                   X
-LightTable
+LightTable                      X
 |- LightTablePreview            X
-|- LightTableBar
+|- LightTableBar                X
 
 Right Sidebar
 |- Tagfilter

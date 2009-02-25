@@ -56,6 +56,7 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "contextmenuhelper.h"
 #include "ddragobjects.h"
 #include "imageattributeswatch.h"
 #include "metadatahub.h"
@@ -120,80 +121,69 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
     QPoint pos = QCursor::pos();
     LightTableBarItem *item = dynamic_cast<LightTableBarItem*>(findItemByPos(e->pos()));
 
-    RatingPopupMenu *ratingMenu = 0;
-
     if (e->button() == Qt::RightButton)
     {
+        // temporary actions ----------------------------------
+
+        QAction *leftPanelAction, *rightPanelAction, *editAction, *removeAction, *clearAllAction = 0;
+
+        leftPanelAction  = new QAction(SmallIcon("arrow-left"),         i18n("Show on left panel"), this);
+        rightPanelAction = new QAction(SmallIcon("arrow-right"),        i18n("Show on right panel"), this);
+        editAction       = new QAction(SmallIcon("editimage"),          i18n("Edit"), this);
+        removeAction     = new QAction(SmallIcon("dialog-close"),       i18n("Remove item"), this);
+        clearAllAction   = new QAction(SmallIcon("edit-delete-shred"),  i18n("Clear all"), this);
+
+        leftPanelAction->setEnabled(d->navigateByPair  ? false : true);
+        rightPanelAction->setEnabled(d->navigateByPair ? false : true);
+        clearAllAction->setEnabled(itemsUrls().count() ? true  : false);
+
+        // ----------------------------------------------------
+
         KMenu popmenu(this);
-
-        QAction *leftPanelAction  = 0;
-        QAction *rightPanelAction = 0;
-        QAction *editAction       = 0;
-        QAction *removeAction     = 0;
-        QAction *clearAllAction   = 0;
+        ContextMenuHelper cmhelper(&popmenu);
 
         if (item)
         {
-            leftPanelAction  = popmenu.addAction(SmallIcon("arrow-left"), i18n("Show on left panel"));
-            rightPanelAction = popmenu.addAction(SmallIcon("arrow-right"), i18n("Show on right panel"));
-            editAction       = popmenu.addAction(SmallIcon("editimage"), i18n("Edit"));
-
-            if (d->navigateByPair)
-            {
-                leftPanelAction->setEnabled(false);
-                rightPanelAction->setEnabled(false);
-            }
-
+            cmhelper.addAction(leftPanelAction, true);
+            cmhelper.addAction(rightPanelAction, true);
             popmenu.addSeparator();
-            removeAction   = popmenu.addAction(SmallIcon("dialog-close"), i18n("Remove item"));
-        }
-
-        int totalItems = itemsUrls().count();
-        clearAllAction = popmenu.addAction(SmallIcon("edit-delete-shred"), i18n("Clear all"));
-        clearAllAction->setEnabled(totalItems ? true : false);
-
-        if (item)
-        {
+            // ------------------------------------------------
+            cmhelper.addAction(editAction);
+            cmhelper.addAction(removeAction);
             popmenu.addSeparator();
-
-            // Assign Star Rating -------------------------------------------
-
-            ratingMenu = new RatingPopupMenu();
-
-            connect(ratingMenu, SIGNAL(signalRatingChanged(int)),
-                    this, SLOT(slotAssignRating(int)));
-
-            popmenu.addMenu(ratingMenu);
-            ratingMenu->menuAction()->setText(i18n("Assign Rating"));
+            // ------------------------------------------------
+            cmhelper.addRatingMenu(this, SLOT(slotAssignRating(int)));
+            popmenu.addSeparator();
+            // ------------------------------------------------
         }
+        cmhelper.addAction(clearAllAction, true);
 
-        QAction *choice = popmenu.exec(pos);
-        if (choice)
+        // special action handling --------------------------------
+
+        int actionId    = 0;
+        QAction* choice = cmhelper.exec(pos, actionId);
+        switch (actionId)
         {
-            if (choice == leftPanelAction)          // Left panel
+            case ContextMenuHelper::Unknown:
             {
-                emit signalSetItemOnLeftPanel(item->info());
-            }
-            else if (choice == rightPanelAction)    // Right panel
-            {
-                emit signalSetItemOnRightPanel(item->info());
-            }
-            else if (choice == editAction)          // Edit
-            {
-                emit signalEditItem(item->info());
-            }
-            else if (choice == removeAction)        // Remove
-            {
-                emit signalRemoveItem(item->info());
-            }
-            else if (choice == clearAllAction)      // Clear All
-            {
-                emit signalClearAll();
+                if (choice)
+                {
+                    if (choice == leftPanelAction)       emit signalSetItemOnLeftPanel(item->info());
+                    else if (choice == rightPanelAction) emit signalSetItemOnRightPanel(item->info());
+                    else if (choice == editAction)       emit signalEditItem(item->info());
+                    else if (choice == removeAction)     emit signalRemoveItem(item->info());
+                    else if (choice == clearAllAction)   emit signalClearAll();
+                }
             }
         }
+
+        popmenu.deleteLater();
+        delete leftPanelAction;
+        delete rightPanelAction;
+        delete editAction;
+        delete removeAction;
+        delete clearAllAction;
     }
-
-    delete ratingMenu;
 }
 
 void LightTableBar::slotAssignRating(int rating)
