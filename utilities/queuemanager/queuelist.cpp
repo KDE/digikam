@@ -666,8 +666,9 @@ void QueueListView::updateDestFileNames()
             }
 
             // Update suffix using assigned batch tool rules.
-            QString newSuffix = assignedTools().targetSuffix();
-            if (newSuffix.isEmpty()) newSuffix = fi.suffix();
+            AssignedBatchTools tools = assignedTools();
+            tools.itemUrl            = item->info().fileUrl();
+            QString newSuffix        = tools.targetSuffix();
 
             item->setDestFileName(QString("%1.%2").arg(baseName).arg(newSuffix));
         }

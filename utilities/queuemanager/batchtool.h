@@ -185,7 +185,9 @@ public:
         QString suffix;
         foreach(BatchToolSet set, toolsMap)
         {
-            suffix = set.tool->outputSuffix();
+            QString s = set.tool->outputSuffix();
+            if (!s.isEmpty())
+                suffix = s;
         }
 
         if (suffix.isEmpty())
