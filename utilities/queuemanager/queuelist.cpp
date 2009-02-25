@@ -661,7 +661,7 @@ void QueueListView::updateDestFileNames()
             {
                 QString parser = settings().renamingParser;
                 QString camera = info.photoInfoContainer().make + info.photoInfoContainer().model;
-                QString date   = info.dateTime();
+                QDateTime date = info.dateTime();
                 baseName       = ManualRenameInput::parser(parser, baseName, camera, date, index);
             }
 
