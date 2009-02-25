@@ -55,20 +55,21 @@
 
 // Local includes.
 
-#include "dimg.h"
 #include "albumdb.h"
-#include "constants.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "constants.h"
+#include "contextmenuhelper.h"
 #include "ddragobjects.h"
+#include "dimg.h"
 #include "dmetadata.h"
 #include "dpopupmenu.h"
+#include "loadingdescription.h"
 #include "metadatahub.h"
 #include "paniconwidget.h"
 #include "previewloadthread.h"
-#include "loadingdescription.h"
-#include "tagspopupmenu.h"
 #include "ratingpopupmenu.h"
+#include "tagspopupmenu.h"
 #include "themeengine.h"
 
 namespace Digikam
@@ -345,134 +346,97 @@ ImageInfo LightTablePreview::getImageInfo() const
 
 void LightTablePreview::slotContextMenu()
 {
-    RatingPopupMenu *ratingMenu     = 0;
-    TagsPopupMenu   *assignTagsMenu = 0;
-    TagsPopupMenu   *removeTagsMenu = 0;
-
     if (d->imageInfo.isNull())
         return;
 
-    //-- Open With Actions ------------------------------------
-
-    KUrl url(d->imageInfo.fileUrl().path());
-    KMimeType::Ptr mimePtr = KMimeType::findByUrl(url, 0, true, true);
-
-    QMap<QAction *, KService::Ptr> serviceMap;
-
-    const KService::List offers = KMimeTypeTrader::self()->query(mimePtr->name());
-    KService::List::ConstIterator iter;
-    KService::Ptr ptr;
-
-    KMenu openWithMenu;
-
-    for( iter = offers.constBegin(); iter != offers.constEnd(); ++iter )
-    {
-        ptr = *iter;
-        QAction *serviceAction = openWithMenu.addAction(SmallIcon(ptr->icon()), ptr->name());
-        serviceMap[serviceAction] = ptr;
-    }
-
-    if (openWithMenu.isEmpty())
-        openWithMenu.menuAction()->setEnabled(false);
-
-    DPopupMenu popmenu(this);
-
-    //-- Zoom actions -----------------------------------------------
-
-    QAction *zoomInAction    = popmenu.addAction(SmallIcon("zoom-in"), i18n("Zoom in"));
-    QAction *zoomOutAction   = popmenu.addAction(SmallIcon("zoom-out"), i18n("Zoom out"));
-    QAction *fitWindowAction = popmenu.addAction(SmallIcon("zoom-fit-best"), i18n("Fit to &Window"));
-
-    //-- Edit actions -----------------------------------------------
-
-    popmenu.addSeparator();
-    QAction *slideshowAction = popmenu.addAction(SmallIcon("view-presentation"), i18n("Slideshow"));
-    QAction *editAction = popmenu.addAction(SmallIcon("editimage"), i18n("Edit..."));
-    popmenu.addMenu(&openWithMenu);
-    openWithMenu.menuAction()->setText(i18n("Open With"));
-
-    //-- Trash action -------------------------------------------
-
-    popmenu.addSeparator();
-    QAction *trashAction = popmenu.addAction(SmallIcon("user-trash"), i18n("Move to Trash"));
-
-    // Bulk assignment/removal of tags --------------------------
-
     QList<qlonglong> idList;
     idList << d->imageInfo.id();
+    QMap<QAction *, KService::Ptr> servicesMap;
 
-    assignTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::ASSIGN, this);
-    removeTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::REMOVE, this);
+    //-- temporary actions -----------------------------------------------
 
-    popmenu.addSeparator();
-
-    popmenu.addMenu(assignTagsMenu);
-    assignTagsMenu->menuAction()->setText(i18n("Assign Tag"));
-
-    popmenu.addMenu(removeTagsMenu);
-    removeTagsMenu->menuAction()->setText(i18n("Remove Tag"));
-
-    connect(assignTagsMenu, SIGNAL(signalTagActivated(int)),
-            this, SLOT(slotAssignTag(int)));
-
-    connect(removeTagsMenu, SIGNAL(signalTagActivated(int)),
-            this, SLOT(slotRemoveTag(int)));
-
-    if (!DatabaseAccess().db()->hasTags(idList))
-        removeTagsMenu->menuAction()->setEnabled(false);
-
-    popmenu.addSeparator();
-
-    // Assign Star Rating -------------------------------------------
-
-    ratingMenu = new RatingPopupMenu();
-
-    connect(ratingMenu, SIGNAL(signalRatingChanged(int)),
-            this, SLOT(slotAssignRating(int)));
-
-    popmenu.addMenu(ratingMenu);
-    ratingMenu->menuAction()->setText(i18n("Assign Rating"));
+    QAction *zoomInAction    = new QAction(SmallIcon("zoom-in"), i18n("Zoom in"), this);
+    QAction *zoomOutAction   = new QAction(SmallIcon("zoom-out"), i18n("Zoom out"), this);
+    QAction *fitWindowAction = new QAction(SmallIcon("zoom-fit-best"), i18n("Fit to &Window"), this);
+    QAction *slideshowAction = new QAction(SmallIcon("view-presentation"), i18n("Slideshow"), this);
+    QAction *editAction      = new QAction(SmallIcon("editimage"), i18n("Edit..."), this);
+    QAction *trashAction     = new QAction(SmallIcon("user-trash"), i18n("Move to Trash"), this);
 
     // --------------------------------------------------------
 
-    QAction *choice = popmenu.exec(QCursor::pos());
+    DPopupMenu popmenu(this);
+    ContextMenuHelper cmhelper(&popmenu);
 
-    if (choice)
+    cmhelper.addAction(zoomInAction);
+    cmhelper.addAction(zoomOutAction);
+    cmhelper.addAction(fitWindowAction);
+    popmenu.addSeparator();
+    // --------------------------------------------------------
+    cmhelper.addAction(slideshowAction);
+    cmhelper.addAction(editAction);
+    cmhelper.addServicesMenu(d->imageInfo, servicesMap);
+    popmenu.addSeparator();
+    // --------------------------------------------------------
+    cmhelper.addAction(trashAction);
+    popmenu.addSeparator();
+    // --------------------------------------------------------
+    cmhelper.addAssignTagsMenu(idList, this, SLOT(slotAssignTag(int)));
+    cmhelper.addRemoveTagsMenu(idList, this, SLOT(slotRemoveTag(int)));
+    popmenu.addSeparator();
+    // --------------------------------------------------------
+    cmhelper.addRatingMenu(this, SLOT(slotAssignRating(int)));
+
+    // special action handling --------------------------------
+
+    int actionId    = 0;
+    QAction* choice = cmhelper.exec(QCursor::pos(), actionId);
+    switch (actionId)
     {
-        if (choice == editAction)               // Edit...
+        case ContextMenuHelper::Unknown:
         {
-            emit signalEditItem(d->imageInfo);
-        }
-        else if (choice == trashAction)         // Move to trash
-        {
-            emit signalDeleteItem(d->imageInfo);
-        }
-        else if (choice == slideshowAction)     // SlideShow
-        {
-            emit signalSlideShow();
-        }
-        else if (choice == zoomInAction)        // Zoom in
-        {
-            slotIncreaseZoom();
-        }
-        else if (choice == zoomOutAction)       // Zoom out
-        {
-            slotDecreaseZoom();
-        }
-        else if (choice == fitWindowAction)     // Fit to window
-        {
-            fitToWindow();
-        }
-        else if (serviceMap.contains(choice))
-        {
-            KService::Ptr imageServicePtr = serviceMap[choice];
-            KRun::run(*imageServicePtr, url, this);
+            if (choice)
+            {
+                if (choice == editAction)
+                {
+                    emit signalEditItem(d->imageInfo);
+                }
+                else if (choice == trashAction)
+                {
+                    emit signalDeleteItem(d->imageInfo);
+                }
+                else if (choice == slideshowAction)
+                {
+                    emit signalSlideShow();
+                }
+                else if (choice == zoomInAction)
+                {
+                    slotIncreaseZoom();
+                }
+                else if (choice == zoomOutAction)
+                {
+                    slotDecreaseZoom();
+                }
+                else if (choice == fitWindowAction)
+                {
+                    fitToWindow();
+                }
+                else if (servicesMap.contains(choice))
+                {
+                    KService::Ptr imageServicePtr = servicesMap[choice];
+                    KUrl url(d->imageInfo.fileUrl().path());
+                    KRun::run(*imageServicePtr, url, this);
+                }
+            }
+            break;
         }
     }
-
-    delete assignTagsMenu;
-    delete removeTagsMenu;
-    delete ratingMenu;
+    popmenu.deleteLater();
+    delete zoomInAction;
+    delete zoomOutAction;
+    delete fitWindowAction;
+    delete slideshowAction;
+    delete editAction;
+    delete trashAction;
 }
 
 void LightTablePreview::slotAssignTag(int tagID)
