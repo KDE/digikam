@@ -99,6 +99,9 @@ ManualRenameInput::ManualRenameInput(QWidget* parent)
     d->tooltipTracker = new DTipTracker(tooltip, d->parseStringLineEdit);
     d->tooltipTracker->setEnable(false);
     d->tooltipTracker->setKeepOpen(true);
+    d->parseStringLineEdit->setWhatsThis(tooltip);
+    d->parseStringLineEdit->setClearButtonShown(true);
+    d->parseStringLineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);
 
     connect(d->tooltipToggleButton, SIGNAL(toggled(bool)),
             this, SLOT(slotToggleToolTip(bool)));
