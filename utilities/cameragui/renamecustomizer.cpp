@@ -101,7 +101,8 @@ ManualRenameInput::ManualRenameInput(QWidget* parent)
     d->tooltipTracker->setKeepOpen(true);
 
     QString additionalInfo = i18n("<p><i>Example:</i><br/>"
-                                  "<b>new_$_###</b> => new_MyImageName_001.jpg"
+                                  "<b>new_$_###</b><br/>"
+                                  "=> new_MyImageName_001.jpg"
                                   "</p>");
     d->parseStringLineEdit->setWhatsThis(tooltip + additionalInfo);
     d->parseStringLineEdit->setClearButtonShown(true);
@@ -216,7 +217,7 @@ QString ManualRenameInput::createToolTip()
          << p(QString("&"),              i18n("filename (uppercase)"))
          << p(QString("%"),              i18n("filename (lowercase)"))
          << p(QString("#"),              i18n("sequence number"))
-         << p(QString("#{start,step}"),  i18n("sequence number (custom start,step)"))
+         << p(QString("#{start,step}"),  i18n("sequence number (custom start + step)"))
          << p(QString("%c"),             i18n("camera name"))
          << p(QString("%{date:format}"), i18n("datetime of the file"));
 
