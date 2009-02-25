@@ -287,7 +287,7 @@ void QueueMgrWindow::setupConnections()
     connect(d->blinkTimer, SIGNAL(timeout()),
             this, SLOT(slotBlinkTimerDone()));
 
-    connect(this, SIGNAL(signalWindowhasMoved()),
+    connect(this, SIGNAL(signalWindowHasMoved()),
             d->queueSettingsView, SLOT(slotUpdateTrackerPos()));
 }
 
@@ -1086,7 +1086,7 @@ bool QueueMgrWindow::checkTargetAlbum(int queueId)
 void QueueMgrWindow::moveEvent(QMoveEvent *e)
 {
     Q_UNUSED(e)
-    emit signalWindowhasMoved();
+    emit signalWindowHasMoved();
 }
 
 }  // namespace Digikam

@@ -69,7 +69,7 @@ public:
 
 signals:
 
-    void signalWindowhasMoved();
+    void signalWindowHasMoved();
 
 protected:
 
