@@ -9,6 +9,9 @@ ImagePreviewView                X
 AlbumFolderView                 X        
 TagFolderView                   X
 LightTable
+|- LightTablePreview            X
+|- LightTableBar
+
 Right Sidebar
 |- Tagfilter
 |- ImageDescr
