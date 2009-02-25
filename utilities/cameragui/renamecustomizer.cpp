@@ -166,19 +166,18 @@ QString ManualRenameInput::parser(const QString& parse,
                 start   = regExp.cap(3).isEmpty() ? 1 : regExp.cap(3).toInt();
                 step    = regExp.cap(4).isEmpty() ? 1 : regExp.cap(4).toInt();
 
-                QString seq;
-                QTextStream seqStream(&seq);
+                QString tmp;
+                QTextStream seqStream(&tmp);
                 seqStream.setFieldWidth(slength);
                 seqStream.setFieldAlignment(QTextStream::AlignRight);
                 seqStream.setPadChar('0');
                 seqStream << start + ((index-1) * step);
-                parsedString.replace(pos, regExp.matchedLength(), seq);
+                parsedString.replace(pos, regExp.matchedLength(), tmp);
             }
         }
     }
     // parse date time token ----------------------------------
     {
-        QString date;
         QRegExp regExp("%\\{date:(.*)\\}");
         regExp.setMinimal(true);
         int pos = 0;
@@ -187,14 +186,14 @@ QString ManualRenameInput::parser(const QString& parse,
             pos  = regExp.indexIn(parsedString, pos);
             if (pos > -1)
             {
-                date = dateTime.toString(regExp.cap(1));
-                parsedString.replace(pos, regExp.matchedLength(), date);
+                QString tmp;
+                tmp = dateTime.toString(regExp.cap(1));
+                parsedString.replace(pos, regExp.matchedLength(), tmp);
             }
         }
     }
     // parse * token (first letter upper case -----------------
     {
-        QString firstToUpper;
         QRegExp regExp("\\*{1}");
         regExp.setMinimal(true);
         int pos = 0;
