@@ -152,7 +152,8 @@ QString CameraIconViewToolTip::fillTipContents(GPItemInfo* info)
         if (settings->getToolTipsShowImageType())
         {
             KMimeType::Ptr mt = KMimeType::mimeType(info->mime);
-            tip += cnt.cellBeg + i18n("Type:") + cnt.cellMid + mt->comment() + cnt.cellEnd;
+            if (mt)
+                tip += cnt.cellBeg + i18n("Type:") + cnt.cellMid + mt->comment() + cnt.cellEnd;
         }
 
         if (settings->getToolTipsShowImageDim())
