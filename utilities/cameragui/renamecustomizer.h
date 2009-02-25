@@ -35,6 +35,8 @@
 
 class QDateTime;
 
+class KLineEdit;
+
 namespace Digikam
 {
 
@@ -51,6 +53,8 @@ public:
 
     QString text() const;
     void    setText(const QString &text);
+
+    KLineEdit* input() const;
 
     QString parse(const QString &fileName, const QString &cameraName,
                   const QDateTime &dateTime, int index) const;

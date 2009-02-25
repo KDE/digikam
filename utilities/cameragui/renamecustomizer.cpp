@@ -123,6 +123,11 @@ void ManualRenameInput::setText(const QString &text)
     d->parseStringLineEdit->setText(text);
 }
 
+KLineEdit* ManualRenameInput::input() const
+{
+    return d->parseStringLineEdit;
+}
+
 void ManualRenameInput::hideToolTip()
 {
     d->tooltipToggleButton->setChecked(false);
