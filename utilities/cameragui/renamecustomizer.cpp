@@ -134,11 +134,12 @@ void ManualRenameInput::hideToolTip()
     slotToggleToolTip(false);
 }
 
-QString ManualRenameInput::parse(const QString &fileName, const QString &cameraName,
-                                 const QDateTime &dateTime, int index) const
+QString ManualRenameInput::parser(const QString& parse, 
+                                  const QString &fileName, const QString &cameraName,
+                                  const QDateTime &dateTime, int index)
 {
     QFileInfo fi(fileName);
-    QString parseString = d->parseStringLineEdit->text();
+    QString parsedString = parse;
 
     // parse sequence number token ----------------------------
     {
@@ -147,11 +148,11 @@ QString ManualRenameInput::parse(const QString &fileName, const QString &cameraN
         // define 4 as default length
         int slength = 4;
         // to make "parsing" easier, convert the %n token
-        parseString.replace("%n", "%{n:4}");
+        parsedString.replace("%n", "%{n:4}");
         int pos = 0;
         while (pos > -1)
         {
-            pos     = regExp.indexIn(parseString, pos);
+            pos     = regExp.indexIn(parsedString, pos);
             slength = regExp.cap(1).toInt();
             QString seq;
             QTextStream seqStream(&seq);
@@ -159,7 +160,7 @@ QString ManualRenameInput::parse(const QString &fileName, const QString &cameraN
             seqStream.setFieldAlignment(QTextStream::AlignRight);
             seqStream.setPadChar('0');
             seqStream << index;
-            parseString.replace(pos, regExp.matchedLength(), seq);
+            parsedString.replace(pos, regExp.matchedLength(), seq);
         }
     }
     // parse date time token ----------------------------------
@@ -170,20 +171,27 @@ QString ManualRenameInput::parse(const QString &fileName, const QString &cameraN
         int pos = 0;
         while (pos > -1)
         {
-            pos  = regExp.indexIn(parseString, pos);
+            pos  = regExp.indexIn(parsedString, pos);
             date = dateTime.toString(regExp.cap(1));
-            parseString.replace(pos, regExp.matchedLength(), date);
+            parsedString.replace(pos, regExp.matchedLength(), date);
         }
     }
     // parse simple / remaining tokens ------------------------
     {
-        parseString.replace("%o", fi.baseName());
-        parseString.replace("%F", fi.baseName().toUpper());
-        parseString.replace("%f", fi.baseName().toLower());
-        parseString.replace("%c", cameraName);
+        parsedString.replace("%o", fi.baseName());
+        parsedString.replace("%F", fi.baseName().toUpper());
+        parsedString.replace("%f", fi.baseName().toLower());
+        parsedString.replace("%c", cameraName);
     }
 
-    return parseString;
+    return parsedString;
+}
+
+QString ManualRenameInput::parse(const QString &fileName, const QString &cameraName,
+                                 const QDateTime &dateTime, int index) const
+{
+    QString parseString = d->parseStringLineEdit->text();
+    return (parser(parseString, fileName, cameraName, dateTime, index));
 }
 
 QString ManualRenameInput::createToolTip()

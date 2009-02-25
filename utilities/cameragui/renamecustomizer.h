@@ -55,11 +55,15 @@ public:
     void    setText(const QString &text);
 
     KLineEdit* input() const;
+    void hideToolTip();
+
 
     QString parse(const QString &fileName, const QString &cameraName,
                   const QDateTime &dateTime, int index) const;
 
-    void hideToolTip();
+    static QString parser(const QString& parseString,
+                          const QString &fileName, const QString &cameraName,
+                          const QDateTime &dateTime, int index);
 
 signals:
 
