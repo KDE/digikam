@@ -189,7 +189,7 @@ QString ManualRenameInput::createToolTip()
     QString tooltip;
     tooltip += QString("<table>");
 
-    foreach (p token, list)
+    foreach (const p &token, list)
     {
         tooltip += QString("<tr><td>%1</td><td>:</td><td>%2</td></tr>").arg(token.first)
                                                                        .arg(token.second);
