@@ -27,6 +27,7 @@
 // KDE includes.
 
 #include <kaction.h>
+#include <kiconloader.h>
 
 // Local includes.
 
@@ -48,8 +49,7 @@ public:
         fullScreen             = false;
         removeFullScreenButton = false;
         busy                   = false;
-        processBlink           = false;
-        clearQueueAction        = 0;
+        clearQueueAction       = 0;
         moveUpToolAction       = 0;
         moveDownToolAction     = 0;
         removeToolAction       = 0;
@@ -75,19 +75,24 @@ public:
         toolSettings           = 0;
         showMenuBarAction      = 0;
         thread                 = 0;
-        blinkTimer             = 0;
         currentProcessItem     = 0;
         currentTaskItem        = 0;
         animLogo               = 0;
+        progressCount          = 0;
+        progressTimer          = 0;
+        progressPix            = SmallIcon("process-working", 22);
     }
 
     bool                       fullScreenHideToolBar;
     bool                       fullScreen;
     bool                       removeFullScreenButton;
     bool                       busy;
-    bool                       processBlink;
 
-    QTimer                    *blinkTimer;
+    int                        progressCount;
+
+    QTimer                    *progressTimer;
+
+    QPixmap                    progressPix;
 
     QAction                   *clearQueueAction;
     QAction                   *removeItemsSelAction;

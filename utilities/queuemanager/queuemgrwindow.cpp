@@ -117,7 +117,7 @@ QueueMgrWindow::QueueMgrWindow()
     m_instance       = this;
     d->batchToolsMgr = new BatchToolsManager(this);
     d->thread        = new ActionThread(this);
-    d->blinkTimer    = new QTimer(this);
+    d->progressTimer    = new QTimer(this);
 
     setWindowFlags(Qt::Window);
     setCaption(i18n("Batch Queue Manager"));
@@ -284,8 +284,8 @@ void QueueMgrWindow::setupConnections()
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
-    connect(d->blinkTimer, SIGNAL(timeout()),
-            this, SLOT(slotBlinkTimerDone()));
+    connect(d->progressTimer, SIGNAL(timeout()),
+            this, SLOT(slotProgressTimerDone()));
 
     connect(this, SIGNAL(signalWindowHasMoved()),
             d->queueSettingsView, SLOT(slotUpdateTrackerPos()));
@@ -765,7 +765,7 @@ void QueueMgrWindow::slotRun()
 
 void QueueMgrWindow::slotStop()
 {
-    d->blinkTimer->stop();
+    d->progressTimer->stop();
 
     if (d->currentProcessItem)
         d->currentProcessItem->setProgressIcon(SmallIcon("dialog-cancel"));
@@ -873,25 +873,18 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
     }
 }
 
-void QueueMgrWindow::slotBlinkTimerDone()
+void QueueMgrWindow::slotProgressTimerDone()
 {
-    if(d->processBlink)
-    {
-        if (d->currentProcessItem)
-            d->currentProcessItem->setProgressIcon(SmallIcon("arrow-right"));
-        if (d->currentTaskItem)
-            d->currentTaskItem->setProgressIcon(SmallIcon("arrow-right"));
-    }
-    else
-    {
-        if (d->currentProcessItem)
-            d->currentProcessItem->setProgressIcon(SmallIcon("arrow-right-double"));
-        if (d->currentTaskItem)
-            d->currentTaskItem->setProgressIcon(SmallIcon("arrow-right-double"));
-    }
+    QIcon ico(d->progressPix.copy(0, d->progressCount*22, 22, 22));
+    if (d->currentProcessItem)
+        d->currentProcessItem->setProgressIcon(ico);
+    if (d->currentTaskItem)
+        d->currentTaskItem->setProgressIcon(ico);
 
-    d->processBlink = !d->processBlink;
-    d->blinkTimer->start(500);
+    d->progressCount++;
+    if (d->progressCount == 8) d->progressCount = 0;
+
+    d->progressTimer->start(500);
 }
 
 void QueueMgrWindow::processing(const KUrl& url)
@@ -903,13 +896,13 @@ void QueueMgrWindow::processing(const KUrl& url)
         d->queuePool->currentQueue()->scrollToItem(d->currentProcessItem);
     }
 
-    d->processBlink = false;
-    d->blinkTimer->start(500);
+    d->progressCount = 0;
+    d->progressTimer->start(500);
 }
 
 void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
 {
-    d->blinkTimer->stop();
+    d->progressTimer->stop();
     if (d->currentProcessItem)
         d->currentProcessItem->setDone(true);
 

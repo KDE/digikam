@@ -120,7 +120,7 @@ private slots:
     void slotRawCameraList();
     void slotComponentsInfo();
     void slotAction(const ActionData&);
-    void slotBlinkTimerDone();
+    void slotProgressTimerDone();
     void slotAssignedToolsChanged(const AssignedBatchTools&);
     void slotQueueContentsChanged();
     void slotItemSelectionChanged();
