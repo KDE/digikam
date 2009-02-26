@@ -84,6 +84,8 @@ public:
 ManualRenameInput::ManualRenameInput(QWidget* parent)
                  : QWidget(parent), d(new ManualRenameInputPriv)
 {
+    setAttribute(Qt::WA_DeleteOnClose);
+
     QGridLayout* mainLayout = new QGridLayout(this);
     d->parseStringLineEdit  = new KLineEdit(this);
     d->tooltipToggleButton  = new QToolButton(this);
