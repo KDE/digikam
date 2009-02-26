@@ -9,7 +9,8 @@ General        : Add new Batch Queue Manager.
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 091742 : Batch process auto levels.
-002 ==> 
+002 ==> 185317 : Album thumbnails are gone when moving nested albums.
+003 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0 - Release date: 2009-03-08
