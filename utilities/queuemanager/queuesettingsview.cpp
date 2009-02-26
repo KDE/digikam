@@ -46,7 +46,7 @@
 
 #include "batchtool.h"
 #include "album.h"
-#include "kipiuploadwidget.h"
+#include "albumselectwidget.h"
 #include "renamecustomizer.h"
 
 namespace Digikam
@@ -63,7 +63,7 @@ public:
         conflictButtonGroup = 0;
         overwriteButton     = 0;
         promptButton        = 0;
-        uploadWidget        = 0;
+        albumSel            = 0;
     }
 
     QLabel            *conflictLabel;
@@ -76,7 +76,7 @@ public:
     QRadioButton      *overwriteButton;
     QRadioButton      *promptButton;
 
-    KipiUploadWidget  *uploadWidget;
+    AlbumSelectWidget *albumSel;
 
     ManualRenameInput *manualRenameInput;
 };
@@ -89,8 +89,8 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
 
     // --------------------------------------------------------
 
-    d->uploadWidget = new KipiUploadWidget(0, this);
-    addTab(d->uploadWidget, i18n("Target Album"));
+    d->albumSel = new AlbumSelectWidget(this);
+    addTab(d->albumSel, i18n("Target"));
 
     // --------------------------------------------------------
 
@@ -156,7 +156,7 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
 
     // --------------------------------------------------------
 
-    connect(d->uploadWidget, SIGNAL(selectionChanged()),
+    connect(d->albumSel, SIGNAL(selectionChanged()),
             this, SLOT(slotSettingsChanged()));
 
     connect(d->conflictButtonGroup, SIGNAL(buttonClicked(int)),
@@ -181,7 +181,7 @@ QueueSettingsView::~QueueSettingsView()
 void QueueSettingsView::slotResetSettings()
 {
     blockSignals(true);
-    // TODO: reset d->uploadWidget
+    // TODO: reset d->albumSel
     d->conflictButtonGroup->button(QueueSettings::OVERWRITE)->setChecked(true);
     d->renamingButtonGroup->button(QueueSettings::USEORIGINAL)->setChecked(true);
     d->manualRenameInput->input()->clear();
@@ -191,7 +191,7 @@ void QueueSettingsView::slotResetSettings()
 
 void QueueSettingsView::slotQueueSelected(int, const QueueSettings& settings, const AssignedBatchTools&)
 {
-    d->uploadWidget->setCurrentAlbumUrl(settings.targetUrl);
+    d->albumSel->setCurrentAlbumUrl(settings.targetUrl);
     int btn = (int)settings.conflictRule;
     d->conflictButtonGroup->button(btn)->setChecked(true);
     btn = (int)settings.renamingRule;
@@ -208,7 +208,7 @@ void QueueSettingsView::slotSettingsChanged()
 {
     QueueSettings settings;
     settings.conflictRule   = (QueueSettings::ConflictRule)d->conflictButtonGroup->checkedId();
-    settings.targetUrl      = d->uploadWidget->currentAlbumUrl();
+    settings.targetUrl      = d->albumSel->currentAlbumUrl();
     settings.renamingRule   = (QueueSettings::RenamingRule)d->renamingButtonGroup->checkedId();
     settings.renamingParser = d->manualRenameInput->text();
     d->manualRenameInput->setEnabled(settings.renamingRule == QueueSettings::CUSTOMIZE);

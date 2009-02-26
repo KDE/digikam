@@ -30,13 +30,7 @@
 #include <libkipi/imagecollection.h>
 #include <libkipi/uploadwidget.h>
 
-// Local includes.
-
-#include "albummanager.h"
-#include "searchtextbar.h"
-
 class QWidget;
-class QTreeWidget;
 
 namespace Digikam
 {
@@ -53,19 +47,6 @@ public:
     ~KipiUploadWidget();
 
     KIPI::ImageCollection selectedImageCollection() const;
-
-    void setCurrentAlbumUrl(const KUrl& albumUrl);
-    KUrl currentAlbumUrl() const;
-
-private:
-
-    void populateTreeView(const AlbumList& aList, QTreeWidget *view);
-
-private slots: 
-
-    void slotSearchTextChanged(const SearchTextSettings&);
-    void slotNewAlbum();
-    void slotAlbumAdded(Album* album);
 
 private:
 
