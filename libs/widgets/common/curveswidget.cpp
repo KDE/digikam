@@ -52,6 +52,7 @@
 #include <kdebug.h>
 #include <kcursor.h>
 #include <klocale.h>
+#include <kiconloader.h>
 
 // Local includes.
 
@@ -76,16 +77,21 @@ public:
 
     CurvesWidgetPriv()
     {
-        blinkTimer   = 0;
-        curves       = 0;
-        grabPoint    = -1;
-        last         = 0;
-        guideVisible = false;
-        xMouseOver   = -1;
-        yMouseOver   = -1;
-        clearFlag    = HistogramNone;
-        pos          = 0;
+        curves        = 0;
+        grabPoint     = -1;
+        last          = 0;
+        guideVisible  = false;
+        xMouseOver    = -1;
+        yMouseOver    = -1;
+        clearFlag     = HistogramNone;
+        progressCount = 0;
+        progressTimer = 0;
+        progressPix   = SmallIcon("process-working", 22);
     }
+
+    bool         sixteenBits;
+    bool         readOnlyMode;
+    bool         guideVisible;
 
     int          clearFlag;          // Clear drawing zone with message.
     int          leftMost;
@@ -94,15 +100,13 @@ public:
     int          last;
     int          xMouseOver;
     int          yMouseOver;
-    int          pos;                // Position of animation during loading/calculation.
+    int          progressCount;      // Position of animation during loading/calculation.
 
-    bool         sixteenBits;
-    bool         readOnlyMode;
-    bool         guideVisible;
+    QTimer      *progressTimer;
+
+    QPixmap      progressPix;
 
     DColor       colorGuide;
-
-    QTimer      *blinkTimer;
 
     ImageCurves *curves;             // Curves data instance.
 };
@@ -126,7 +130,7 @@ CurvesWidget::CurvesWidget(int w, int h,
 
 CurvesWidget::~CurvesWidget()
 {
-    d->blinkTimer->stop();
+    d->progressTimer->stop();
 
     if (m_imageHistogram)
        delete m_imageHistogram;
@@ -148,10 +152,10 @@ void CurvesWidget::setup(int w, int h, bool readOnly)
     setMouseTracking(true);
     setMinimumSize(w, h);
 
-    d->blinkTimer = new QTimer(this);
+    d->progressTimer = new QTimer(this);
 
-    connect(d->blinkTimer, SIGNAL(timeout()),
-            this, SLOT(slotBlinkTimerDone()));
+    connect(d->progressTimer, SIGNAL(timeout()),
+            this, SLOT(slotProgressTimerDone()));
 }
 
 void CurvesWidget::updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits)
@@ -201,17 +205,17 @@ void CurvesWidget::setDataLoading()
     if (d->clearFlag != CurvesWidgetPriv::HistogramDataLoading)
     {
         setCursor(Qt::WaitCursor);
-        d->clearFlag = CurvesWidgetPriv::HistogramDataLoading;
-        d->pos       = 0;
-        d->blinkTimer->start(100);
+        d->clearFlag     = CurvesWidgetPriv::HistogramDataLoading;
+        d->progressCount = 0;
+        d->progressTimer->start(100);
     }
 }
 
 void CurvesWidget::setLoadingFailed()
 {
-    d->clearFlag = CurvesWidgetPriv::HistogramFailed;
-    d->pos       = 0;
-    d->blinkTimer->stop();
+    d->clearFlag     = CurvesWidgetPriv::HistogramFailed;
+    d->progressCount = 0;
+    d->progressTimer->stop();
     repaint();
     setCursor(Qt::ArrowCursor);
 }
@@ -255,7 +259,7 @@ void CurvesWidget::slotCalculationStarted(const ImageHistogram*)
 {
     setCursor(Qt::WaitCursor);
     d->clearFlag = CurvesWidgetPriv::HistogramStarted;
-    d->blinkTimer->start(200);
+    d->progressTimer->start(200);
     repaint();
 }
 
@@ -265,14 +269,14 @@ void CurvesWidget::slotCalculationFinished(const ImageHistogram*, bool success)
     {
         // Repaint histogram
         d->clearFlag = CurvesWidgetPriv::HistogramCompleted;
-        d->blinkTimer->stop();
+        d->progressTimer->stop();
         repaint();
         setCursor(Qt::ArrowCursor);
     }
     else
     {
         d->clearFlag = CurvesWidgetPriv::HistogramFailed;
-        d->blinkTimer->stop();
+        d->progressTimer->stop();
         repaint();
         setCursor(Qt::ArrowCursor);
         emit signalHistogramComputationFailed();
@@ -284,14 +288,14 @@ void CurvesWidget::stopHistogramComputation()
     if (m_imageHistogram)
        m_imageHistogram->stopCalculation();
 
-    d->blinkTimer->stop();
-    d->pos = 0;
+    d->progressTimer->stop();
+    d->progressCount = 0;
 }
 
-void CurvesWidget::slotBlinkTimerDone()
+void CurvesWidget::slotProgressTimerDone()
 {
     repaint();
-    d->blinkTimer->start(200);
+    d->progressTimer->start(200);
 }
 
 void CurvesWidget::paintEvent(QPaintEvent*)
@@ -301,23 +305,9 @@ void CurvesWidget::paintEvent(QPaintEvent*)
     {
         // In first, we draw an animation.
 
-        int asize = 24;
-        QPixmap anim(asize, asize);
-        QPainter p2;
-        p2.begin(&anim);
-        p2.setRenderHint(QPainter::Antialiasing);
-        p2.fillRect(0, 0, asize, asize, palette().color(QPalette::Active, QPalette::Background));
-        p2.translate(asize/2, asize/2);
-
-        d->pos = (d->pos + 10) % 360;
-        p2.setPen(palette().color(QPalette::Active, QPalette::Foreground));
-        p2.rotate(d->pos);
-        for ( int i=0 ; i<12 ; i++ )
-        {
-            p2.drawLine(asize/2-5, 0, asize/2-2, 0);
-            p2.rotate(30);
-        }
-        p2.end();
+        QPixmap anim(d->progressPix.copy(0, d->progressCount*22, 22, 22));
+        d->progressCount++;
+        if (d->progressCount == 8) d->progressCount = 0;
 
         // ... and we render busy text.
 
@@ -328,7 +318,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
         p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
         p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
         p1.drawRect(0, 0, width()-1, height()-1);
-        p1.drawPixmap(width()/2 - asize /2, asize, anim);
+        p1.drawPixmap(width()/2 - anim.width() /2, anim.height(), anim);
         p1.setPen(palette().color(QPalette::Active, QPalette::Text));
 
         if (d->clearFlag == CurvesWidgetPriv::HistogramDataLoading)

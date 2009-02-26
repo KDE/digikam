@@ -108,7 +108,7 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
 
-    void slotBlinkTimerDone();
+    void slotProgressTimerDone();
     void slotCalculationStarted(const ImageHistogram *histogram);
     void slotCalculationFinished(const ImageHistogram *histogram, bool success);
 

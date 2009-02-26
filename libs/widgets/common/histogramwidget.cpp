@@ -6,10 +6,7 @@
  * Date        : 2004-07-21
  * Description : a widget to display an image histogram.
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- *
- * Some code parts are inspired from from gimp 2.0
- * Copyright (C) 1995 Spencer Kimball and Peter Mattis
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,6 +49,7 @@
 #include <kdebug.h>
 #include <kcursor.h>
 #include <klocale.h>
+#include <kiconloader.h>
 
 // Local includes.
 
@@ -77,7 +75,6 @@ public:
     HistogramWidgetPriv()
     {
         renderingType        = HistogramWidget::FullImageHistogram;
-        blinkTimer           = 0;
         sixteenBits          = false;
         inSelected           = false;
         clearFlag            = HistogramNone;
@@ -86,18 +83,12 @@ public:
         range                = 255;
         guideVisible         = false;
         inInitialRepaintWait = false;
+        progressCount        = 0;
+        progressTimer        = 0;
+        progressPix          = SmallIcon("process-working", 22);
     }
 
-    int     renderingType;       // Using full image or image selection for histogram rendering.
-
-    // Current selection information.
-    double  xmin;
-    double  xminOrg;
-    double  xmax;
-    int     range;
-    int     clearFlag;          // Clear drawing zone with message.
-    int     pos;                // Position of animation during loading/calculation.
-
+    bool    inInitialRepaintWait;
     bool    sixteenBits;
     bool    guideVisible;       // Display color guide.
     bool    statisticsVisible;  // Display tooltip histogram statistics.
@@ -106,9 +97,20 @@ public:
     bool    showProgress;       // If true, a message will be displayed during histogram computation,
                                 // else nothing (limit flicker effect in widget especially for small
                                 // image/computation time).
-    bool    inInitialRepaintWait;
 
-    QTimer *blinkTimer;
+    int     renderingType;      // Using full image or image selection for histogram rendering.
+    int     range;
+    int     clearFlag;          // Clear drawing zone with message.
+    int     progressCount;      // Position of animation during loading/calculation.
+
+    // Current selection information.
+    double  xmin;
+    double  xminOrg;
+    double  xmax;
+
+    QTimer *progressTimer;
+
+    QPixmap progressPix;
 
     DColor  colorGuide;
 };
@@ -173,7 +175,7 @@ HistogramWidget::HistogramWidget(int w, int h,
 
 HistogramWidget::~HistogramWidget()
 {
-    d->blinkTimer->stop();
+    d->progressTimer->stop();
 
     if (m_imageHistogram)
        delete m_imageHistogram;
@@ -196,10 +198,10 @@ void HistogramWidget::setup(int w, int h, bool selectMode, bool showProgress, bo
     setMouseTracking(true);
     setMinimumSize(w, h);
 
-    d->blinkTimer = new QTimer( this );
+    d->progressTimer = new QTimer( this );
 
-    connect( d->blinkTimer, SIGNAL(timeout()),
-             this, SLOT(slotBlinkTimerDone()) );
+    connect(d->progressTimer, SIGNAL(timeout()),
+            this, SLOT(slotProgressTimerDone()));
 }
 
 void HistogramWidget::connectHistogram(const ImageHistogram *histogram)
@@ -276,14 +278,14 @@ void HistogramWidget::slotCalculationStarted(const ImageHistogram *histogram)
             // enter initial repaint wait, repaint only after waiting
             // a short time so that very fast computation does not create flicker
             d->inInitialRepaintWait = true;
-            d->blinkTimer->start( 100 );
+            d->progressTimer->start( 100 );
         }
         else
         {
             // For data loading, the initial wait has been set in setDataLoading.
             // After the initial repaint, we can repaint immediately.
             repaint();
-            d->blinkTimer->start( 200 );
+            d->progressTimer->start( 200 );
         }
     }
 }
@@ -308,7 +310,7 @@ void HistogramWidget::slotCalculationFinished(const ImageHistogram *histogram, b
     {
         // Repaint histogram
         d->clearFlag = HistogramWidgetPriv::HistogramCompleted;
-        d->blinkTimer->stop();
+        d->progressTimer->stop();
         d->inInitialRepaintWait = false;
         setCursor( Qt::ArrowCursor );
 
@@ -326,7 +328,7 @@ void HistogramWidget::slotCalculationFinished(const ImageHistogram *histogram, b
     else
     {
         d->clearFlag = HistogramWidgetPriv::HistogramFailed;
-        d->blinkTimer->stop();
+        d->progressTimer->stop();
         d->inInitialRepaintWait = false;
         repaint();
         setCursor( Qt::ArrowCursor );
@@ -354,16 +356,16 @@ void HistogramWidget::setDataLoading()
         // enter initial repaint wait, repaint only after waiting
         // a short time so that very fast computation does not create flicker
         d->inInitialRepaintWait = true;
-        d->pos                  = 0;
-        d->blinkTimer->start( 100 );
+        d->progressCount        = 0;
+        d->progressTimer->start( 100 );
     }
 }
 
 void HistogramWidget::setLoadingFailed()
 {
-    d->clearFlag = HistogramWidgetPriv::HistogramFailed;
-    d->pos       = 0;
-    d->blinkTimer->stop();
+    d->clearFlag     = HistogramWidgetPriv::HistogramFailed;
+    d->progressCount = 0;
+    d->progressTimer->stop();
     d->inInitialRepaintWait = false;
     repaint();
     setCursor( Qt::ArrowCursor );
@@ -377,8 +379,8 @@ void HistogramWidget::stopHistogramComputation()
     if (m_selectionHistogram)
        m_selectionHistogram->stopCalculation();
 
-    d->blinkTimer->stop();
-    d->pos = 0;
+    d->progressTimer->stop();
+    d->progressCount = 0;
 }
 
 void HistogramWidget::updateData(uchar *i_data, uint i_w, uint i_h,
@@ -442,11 +444,11 @@ void HistogramWidget::updateSelectionData(uchar *s_data, uint s_w, uint s_h,
         m_selectionHistogram->calculateInThread();
 }
 
-void HistogramWidget::slotBlinkTimerDone()
+void HistogramWidget::slotProgressTimerDone()
 {
     d->inInitialRepaintWait = false;
     repaint();
-    d->blinkTimer->start( 200 );
+    d->progressTimer->start( 200 );
 }
 
 void HistogramWidget::paintEvent(QPaintEvent*)
@@ -489,23 +491,9 @@ void HistogramWidget::paintEvent(QPaintEvent*)
     {
        // In first, we draw an animation.
 
-       int asize = 24;
-       QPixmap anim(asize, asize);
-       QPainter p0;
-       p0.begin(&anim);
-       p0.setRenderHint(QPainter::Antialiasing);
-       p0.fillRect(0, 0, asize, asize, palette().color(QPalette::Active, QPalette::Background));
-       p0.translate(asize/2, asize/2);
-
-       d->pos = (d->pos + 10) % 360;
-       p0.setPen(palette().color(QPalette::Active, QPalette::Text));
-       p0.rotate(d->pos);
-       for ( int i=0 ; i<12 ; i++ )
-       {
-           p0.drawLine(asize/2-5, 0, asize/2-2, 0);
-           p0.rotate(30);
-       }
-       p0.end();
+       QPixmap anim(d->progressPix.copy(0, d->progressCount*22, 22, 22));
+       d->progressCount++;
+       if (d->progressCount == 8) d->progressCount = 0;
 
        // ... and we render busy text.
 
@@ -516,7 +504,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
        p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
        p1.drawRect(0, 0, width()-1, height()-1);
-       p1.drawPixmap(width()/2 - asize /2, asize, anim);
+       p1.drawPixmap(width()/2 - anim.width() /2, anim.height(), anim);
        p1.setPen(palette().color(QPalette::Active, QPalette::Text));
 
        if (d->clearFlag == HistogramWidgetPriv::HistogramDataLoading)
