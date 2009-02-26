@@ -205,6 +205,11 @@ void QueueSettingsView::slotUpdateTrackerPos()
     d->manualRenameInput->slotUpdateTrackerPos();
 }
 
+void QueueSettingsView::slotHideToolTip()
+{
+    d->manualRenameInput->slotHideToolTip();
+}
+
 void QueueSettingsView::slotSettingsChanged()
 {
     QueueSettings settings;

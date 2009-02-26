@@ -55,7 +55,6 @@ public:
     void    setText(const QString &text);
 
     KLineEdit* input() const;
-    void hideToolTip();
 
 
     QString parse(const QString &fileName, const QString &cameraName,
@@ -72,10 +71,11 @@ signals:
 public slots:
 
     void slotUpdateTrackerPos();
+    void slotHideToolTip();
 
 private slots:
 
-    void slotToggleToolTip(bool);
+    void slotToolTipButtonToggled(bool);
 
 private:
 

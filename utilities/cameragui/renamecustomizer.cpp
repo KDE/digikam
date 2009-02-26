@@ -109,7 +109,7 @@ ManualRenameInput::ManualRenameInput(QWidget* parent)
     d->parseStringLineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);
 
     connect(d->tooltipToggleButton, SIGNAL(toggled(bool)),
-            this, SLOT(slotToggleToolTip(bool)));
+            this, SLOT(slotToolTipButtonToggled(bool)));
 
     connect(d->parseStringLineEdit, SIGNAL(textChanged(const QString&)),
             this, SIGNAL(signalTextChanged(const QString&)));
@@ -136,10 +136,10 @@ KLineEdit* ManualRenameInput::input() const
     return d->parseStringLineEdit;
 }
 
-void ManualRenameInput::hideToolTip()
+void ManualRenameInput::slotHideToolTip()
 {
     d->tooltipToggleButton->setChecked(false);
-    slotToggleToolTip(false);
+    slotToolTipButtonToggled(false);
 }
 
 QString ManualRenameInput::parser(const QString& parse,
@@ -262,7 +262,7 @@ QString ManualRenameInput::createToolTip()
     return tooltip;
 }
 
-void ManualRenameInput::slotToggleToolTip(bool checked)
+void ManualRenameInput::slotToolTipButtonToggled(bool checked)
 {
     d->tooltipTracker->setVisible(checked);
     d->tooltipTracker->refresh();
@@ -656,7 +656,7 @@ void RenameCustomizer::slotRadioButtonClicked(int)
     d->renameCustomBox->setEnabled( btn == d->renameCustom );
     d->renameDefaultBox->setEnabled( btn == d->renameDefault );
     d->manualRenameInput->setEnabled( btn == d->renameManual );
-    d->manualRenameInput->hideToolTip();
+    d->manualRenameInput->slotHideToolTip();
     slotRenameOptionsChanged();
 }
 

@@ -757,6 +757,7 @@ void QueueMgrWindow::slotRun()
     d->statusProgressBar->setProgressTotalSteps(d->queuePool->totalPendingTasks());
     d->statusProgressBar->setProgressValue(0);
     d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
+    d->queueSettingsView->slotHideToolTip();
     busy(true);
 
     processOne();
