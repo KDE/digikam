@@ -117,7 +117,7 @@ QueueMgrWindow::QueueMgrWindow()
     m_instance       = this;
     d->batchToolsMgr = new BatchToolsManager(this);
     d->thread        = new ActionThread(this);
-    d->progressTimer    = new QTimer(this);
+    d->progressTimer = new QTimer(this);
 
     setWindowFlags(Qt::Window);
     setCaption(i18n("Batch Queue Manager"));
