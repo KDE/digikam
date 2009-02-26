@@ -71,7 +71,7 @@ signals:
 public slots:
 
     void slotUpdateTrackerPos();
-    void slotHideToolTip();
+    void slotHideToolTipTracker();
 
 private slots:
 

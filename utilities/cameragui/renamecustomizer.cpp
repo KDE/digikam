@@ -136,7 +136,7 @@ KLineEdit* ManualRenameInput::input() const
     return d->parseStringLineEdit;
 }
 
-void ManualRenameInput::slotHideToolTip()
+void ManualRenameInput::slotHideToolTipTracker()
 {
     d->tooltipToggleButton->setChecked(false);
     slotToolTipButtonToggled(false);
@@ -239,20 +239,21 @@ QString ManualRenameInput::parse(const QString &fileName, const QString &cameraN
 QString ManualRenameInput::createToolTip()
 {
     typedef QPair<QString, QString> p;
-    QList<p> list;
-    list << p(QString("$"),              i18n("filename (original)"))
-         << p(QString("&"),              i18n("filename (upper case)"))
-         << p(QString("%"),              i18n("filename (lower case)"))
-         << p(QString("*"),              i18n("filename (first letter of each word upper case)"))
-         << p(QString("#"),              i18n("sequence number"))
-         << p(QString("#{start,step}"),  i18n("sequence number (custom start + step)"))
-         << p(QString("[cam]"),          i18n("camera name"))
-         << p(QString("[date:format]"),  i18n("datetime of the file"));
+    QList<p> tokenList;
+
+    tokenList << p(QString("$"),              i18n("filename (original)"))
+              << p(QString("&"),              i18n("filename (upper case)"))
+              << p(QString("%"),              i18n("filename (lower case)"))
+              << p(QString("*"),              i18n("filename (first letter of each word upper case)"))
+              << p(QString("#"),              i18n("sequence number"))
+              << p(QString("#{start,step}"),  i18n("sequence number (custom start + step)"))
+              << p(QString("[cam]"),          i18n("camera name"))
+              << p(QString("[date:format]"),  i18n("datetime of the file"));
 
     QString tooltip;
     tooltip += QString("<table>");
 
-    foreach (const p &token, list)
+    foreach (const p &token, tokenList)
     {
         tooltip += QString("<tr><td><b>%1</b></td><td>:</td><td>%2</td></tr>").arg(token.first)
                                                                               .arg(token.second);
@@ -656,7 +657,7 @@ void RenameCustomizer::slotRadioButtonClicked(int)
     d->renameCustomBox->setEnabled( btn == d->renameCustom );
     d->renameDefaultBox->setEnabled( btn == d->renameDefault );
     d->manualRenameInput->setEnabled( btn == d->renameManual );
-    d->manualRenameInput->slotHideToolTip();
+    d->manualRenameInput->slotHideToolTipTracker();
     slotRenameOptionsChanged();
 }
 
