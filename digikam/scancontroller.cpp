@@ -597,10 +597,15 @@ static QList<AlbumCopyMoveHint> hintsForAlbum(const PAlbum *album, int dstAlbumR
     QList<AlbumCopyMoveHint> newHints;
 
     newHints << hintForAlbum(album, dstAlbumRootId, relativeDstPath, albumName);
+    QString parentAlbumPath = album->albumPath();
+    if (parentAlbumPath == "/")
+        parentAlbumPath = QString(); // dont cut away a "/" in mid() below
 
     for (AlbumIterator it(const_cast<PAlbum*>(album)); *it; ++it)
     {
-        newHints << hintForAlbum((PAlbum*)*it, dstAlbumRootId, relativeDstPath, albumName);
+        PAlbum *a = (PAlbum *)*it;
+        QString childAlbumPath = a->albumPath();
+        newHints << hintForAlbum(a, dstAlbumRootId, relativeDstPath, albumName + childAlbumPath.mid(parentAlbumPath.length()));
     }
 
     return newHints;
