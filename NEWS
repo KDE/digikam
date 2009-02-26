@@ -27,7 +27,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 184473 : Reproducable Crash in Albumview.
 019 ==> 182611 : Segfault with Samsung S85 RAW images.
 020 ==> 184954 : Unable to delete items from camera - canon sx10is.
-021 ==> 
+021 ==> 175077 : digiKam does not print.
+022 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc2 - Release date: 2009-02-15
