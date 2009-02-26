@@ -48,6 +48,10 @@ public:
 
     KIPI::ImageCollection selectedImageCollection() const;
 
+private slots:
+
+    void slotSelectionChanged();
+
 private:
 
     KipiUploadWidgetPriv* const d;

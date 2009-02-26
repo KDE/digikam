@@ -38,6 +38,7 @@ class QTreeWidget;
 namespace Digikam
 {
 
+class PAlbum;
 class AlbumSelectWidgetPriv;
 
 class AlbumSelectWidget : public QWidget
@@ -46,23 +47,29 @@ class AlbumSelectWidget : public QWidget
 
 public:
 
-    AlbumSelectWidget(QWidget *parent=0);
+    AlbumSelectWidget(QWidget *parent=0, PAlbum* albumToSelect=0);
     ~AlbumSelectWidget();
 
     void setCurrentAlbumUrl(const KUrl& albumUrl);
     KUrl currentAlbumUrl() const;
 
+    PAlbum* currentAlbum() const;
+    void    setCurrentAlbum(PAlbum *albumToSelect);
+
     QTreeWidget* albumView() const;
 
 private:
 
-    void populateTreeView(const AlbumList& aList, QTreeWidget *view);
+    void populateTreeView(const AlbumList& aList, QTreeWidget *view, PAlbum* albumToSelect);
 
 private slots: 
 
     void slotSearchTextChanged(const SearchTextSettings&);
     void slotNewAlbum();
-    void slotAlbumAdded(Album* album);
+    void slotAlbumAdded(Album* a);
+    void slotAlbumDeleted(Album* a);
+    void slotAlbumsCleared();
+    void slotContextMenu();
 
 private:
 

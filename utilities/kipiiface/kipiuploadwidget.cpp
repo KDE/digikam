@@ -75,6 +75,9 @@ KipiUploadWidget::KipiUploadWidget(KipiInterface* iface, QWidget *parent)
     vlay->addWidget(d->albumSel);
     vlay->setMargin(0);
     vlay->setSpacing(KDialog::spacingHint());
+
+    connect(d->albumSel->albumView(), SIGNAL(itemSelectionChanged()),
+            this, SLOT(slotSelectionChanged()));
 }
 
 KipiUploadWidget::~KipiUploadWidget()
@@ -94,6 +97,16 @@ KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
             collection = new KipiImageCollection(KipiImageCollection::AllItems, item->album(), ext);
     }
     return collection;
+}
+
+void KipiUploadWidget::slotSelectionChanged()
+{
+    QTreeWidgetItem* selItem = d->albumSel->albumView()->currentItem();
+
+    if (!selItem || (selItem == d->albumSel->albumView()->topLevelItem(0)))
+    {
+        emit selectionChanged();
+    }
 }
 
 }  // namespace Digikam

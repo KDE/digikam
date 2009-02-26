@@ -33,6 +33,7 @@
 #include <QVBoxLayout>
 #include <QRadioButton>
 #include <QGroupBox>
+#include <QTreeWidget>
 
 // KDE includes.
 
@@ -156,7 +157,7 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
 
     // --------------------------------------------------------
 
-    connect(d->albumSel, SIGNAL(selectionChanged()),
+    connect(d->albumSel->albumView(), SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSettingsChanged()));
 
     connect(d->conflictButtonGroup, SIGNAL(buttonClicked(int)),
@@ -194,7 +195,7 @@ void QueueSettingsView::slotQueueSelected(int, const QueueSettings& settings, co
     d->albumSel->setCurrentAlbumUrl(settings.targetUrl);
     int btn = (int)settings.conflictRule;
     d->conflictButtonGroup->button(btn)->setChecked(true);
-    btn = (int)settings.renamingRule;
+    btn     = (int)settings.renamingRule;
     d->renamingButtonGroup->button(btn)->setChecked(true);
     d->manualRenameInput->setText(settings.renamingParser);
 }

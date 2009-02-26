@@ -41,7 +41,6 @@
 namespace Digikam
 {
 
-class Album;
 class PAlbum;
 class AlbumSelectDialogPrivate;
 
@@ -66,17 +65,7 @@ public:
 
 private slots:
 
-    void slotAlbumAdded(Album* a);
-    void slotAlbumDeleted(Album* a);
-    void slotAlbumsCleared();
     void slotSelectionChanged();
-    void slotContextMenu();
-    void slotUser1();
-    void slotSearchTextChanged(const SearchTextSettings&);
-
-private:
-
-    void populateTreeView(PAlbum *albumToSelect);
 
 private:
 

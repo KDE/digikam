@@ -35,6 +35,8 @@
 #include <kdialog.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kaction.h>
+#include <kmenu.h>
 #include <kpushbutton.h>
 #include <kmessagebox.h>
 #include <kinputdialog.h>
@@ -71,7 +73,7 @@ public:
     KPushButton   *newAlbumBtn;
 };
 
-AlbumSelectWidget::AlbumSelectWidget(QWidget *parent)
+AlbumSelectWidget::AlbumSelectWidget(QWidget *parent, PAlbum* albumToSelect)
                  : QWidget(parent),
                    d(new AlbumSelectWidgetPriv)
 {
@@ -81,6 +83,8 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget *parent)
     d->albumsView->setDropIndicatorShown(false);
     d->albumsView->setAcceptDrops(false);
     d->albumsView->header()->hide();
+    d->albumsView->setContextMenuPolicy(Qt::CustomContextMenu);
+    d->albumsView->setSelectionMode(QAbstractItemView::SingleSelection);
 
     d->searchBar      = new SearchTextBar(this, "AlbumSelectWidgetSearchBar");
     d->newAlbumBtn    = new KPushButton(KGuiItem(i18n("&New Album"), "albumfolder-new",
@@ -95,15 +99,22 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget *parent)
 
     // ------------------------------------------------------------------------------------
 
-    populateTreeView(AlbumManager::instance()->allPAlbums(), d->albumsView);
+    if (!albumToSelect) albumToSelect = dynamic_cast<PAlbum*>(AlbumManager::instance()->currentAlbum());
+    populateTreeView(AlbumManager::instance()->allPAlbums(), d->albumsView, albumToSelect);
 
     // ------------------------------------------------------------------------------------
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
 
-    connect(d->albumsView, SIGNAL(itemSelectionChanged()),
-            this, SIGNAL(selectionChanged()));
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
+            this, SLOT(slotAlbumDeleted(Album*)));
+
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
+            this, SLOT(slotAlbumsCleared()));
+
+    connect(d->albumsView, SIGNAL(customContextMenuRequested(const QPoint&)),
+            this, SLOT(slotContextMenu()));
 
     connect(d->searchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             this, SLOT(slotSearchTextChanged(const SearchTextSettings&)));
@@ -122,7 +133,7 @@ QTreeWidget* AlbumSelectWidget::albumView() const
     return d->albumsView;
 }
 
-void AlbumSelectWidget::populateTreeView(const AlbumList& aList, QTreeWidget *view)
+void AlbumSelectWidget::populateTreeView(const AlbumList& aList, QTreeWidget *view, PAlbum* albumToSelect)
 {
     for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
     {
@@ -158,7 +169,7 @@ void AlbumSelectWidget::populateTreeView(const AlbumList& aList, QTreeWidget *vi
                     item->setIcon(0, AlbumThumbnailLoader::instance()->getStandardTagIcon(talbum));
             }
 
-            if (album == AlbumManager::instance()->currentAlbum())
+            if (album == albumToSelect)
             {
                 item->setExpanded(true);
                 view->setCurrentItem(item);
@@ -168,14 +179,43 @@ void AlbumSelectWidget::populateTreeView(const AlbumList& aList, QTreeWidget *vi
     }
 }
 
-KUrl AlbumSelectWidget::currentAlbumUrl() const
+PAlbum* AlbumSelectWidget::currentAlbum() const
 {
     TreeAlbumItem* item = dynamic_cast<TreeAlbumItem*>(d->albumsView->currentItem());
     if (item)
     {
         PAlbum* palbum = (PAlbum*)(item->album());
-        return palbum->fileUrl();
+        return palbum;
     }
+    return 0;
+}
+
+void AlbumSelectWidget::setCurrentAlbum(PAlbum *albumToSelect)
+{
+    QTreeWidgetItemIterator it(d->albumsView);
+    while (*it)
+    {
+        TreeAlbumItem* item = dynamic_cast<TreeAlbumItem*>(*it);
+        if (item)
+        {
+            PAlbum* palbum = (PAlbum*)(item->album());
+            if (palbum == albumToSelect)
+            {
+                d->albumsView->setCurrentItem(item);
+                d->albumsView->scrollToItem(item);
+                item->setSelected(true);
+                return;
+            }
+        }
+        ++it;
+    }
+}
+
+KUrl AlbumSelectWidget::currentAlbumUrl() const
+{
+    PAlbum* palbum = currentAlbum();
+    if (palbum) return palbum->fileUrl();
+
     return KUrl();
 }
 
@@ -341,6 +381,39 @@ void AlbumSelectWidget::slotAlbumAdded(Album* album)
     PAlbum* palbum      = dynamic_cast<PAlbum*>(album);
     if (palbum)
         item->setIcon(0, AlbumThumbnailLoader::instance()->getStandardAlbumIcon(palbum));
+}
+
+void AlbumSelectWidget::slotAlbumDeleted(Album* album)
+{
+    if (!album || album->type() != Album::PHYSICAL)
+        return;
+
+    TreeAlbumItem *item = (TreeAlbumItem*)(album->extraData(d->albumsView));
+    if (item)
+        delete item;
+}
+
+void AlbumSelectWidget::slotAlbumsCleared()
+{
+    for(QTreeWidgetItemIterator it(d->albumsView); *it; ++it)
+    {
+        Album *album = static_cast<TreeAlbumItem*>(*it)->album();
+        if (album)
+            album->removeExtraData(d->albumsView);
+    }
+    d->albumsView->clear();
+}
+
+void AlbumSelectWidget::slotContextMenu()
+{
+    KMenu popmenu(d->albumsView);
+
+    KAction *action = new KAction(KIcon("albumfolder-new"), i18n("Create New Album"), this);
+    connect(action, SIGNAL(triggered(bool) ),
+            this, SLOT(slotNewAlbum()));
+
+    popmenu.addAction(action);
+    popmenu.exec(QCursor::pos());
 }
 
 }  // namespace Digikam
