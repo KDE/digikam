@@ -64,7 +64,7 @@ protected:
 
     bool eventFilter(QObject*, QEvent*);
 
-private slots:
+private Q_SLOTS:
 
     void slotAutoHide();
 
