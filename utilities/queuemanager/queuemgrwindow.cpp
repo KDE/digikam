@@ -771,7 +771,7 @@ void QueueMgrWindow::slotStop()
         d->currentProcessItem->setCanceled();
 
     if (d->currentTaskItem)
-        d->currentTaskItem->setProgressIcon(SmallIcon("dialog-cancel"));
+        d->currentTaskItem->setCanceled();
 
     d->itemsList.clear();
     d->thread->cancel();
@@ -854,14 +854,14 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
         }
         case ActionData::TaskDone:
         {
-            d->currentTaskItem->setProgressIcon(SmallIcon("dialog-ok"));
+            d->currentTaskItem->setDone();
             d->currentTaskItem = 0;
             d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue()+1);
             break;
         }
         case ActionData::TaskFailed:
         {
-            d->currentTaskItem->setProgressIcon(SmallIcon("dialog-cancel"));
+            d->currentTaskItem->setCanceled();
             d->currentTaskItem = 0;
             d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue()+1);
             break;
@@ -964,7 +964,7 @@ void QueueMgrWindow::processingFailed(const KUrl&)
         d->currentProcessItem->setCanceled();
 
     if (d->currentTaskItem)
-        d->currentTaskItem->setProgressIcon(SmallIcon("dialog-cancel"));
+        d->currentTaskItem->setCanceled();
 
     d->currentProcessItem = 0;
 }

@@ -80,9 +80,29 @@ BatchToolSet AssignedListViewItem::toolSet()
     return m_set;
 }
 
-void AssignedListViewItem::setProgressIcon(const QIcon& icon)
+void AssignedListViewItem::setCanceled()
 {
-    setIcon(0, icon.isNull() ? m_set.tool->toolIcon() : icon);
+    setIcon(0, SmallIcon("dialog-cancel"));
+}
+
+void AssignedListViewItem::setFailed()
+{
+    setIcon(0, SmallIcon("dialog-error"));
+}
+
+void AssignedListViewItem::setDone()
+{
+    setIcon(0, SmallIcon("dialog-ok"));
+}
+
+void AssignedListViewItem::reset()
+{
+    setIcon(0, m_set.tool->toolIcon());
+}
+
+void AssignedListViewItem::setProgressIcon(const QPixmap& icon)
+{
+    setIcon(0, QIcon(icon));
 }
 
 // ---------------------------------------------------------------------------
