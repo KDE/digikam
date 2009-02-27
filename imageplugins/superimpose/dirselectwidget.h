@@ -59,7 +59,7 @@ public:
     void setRootPath(KUrl rootUrl, KUrl currentUrl=KUrl(QString()));
     void setCurrentPath(KUrl currentUrl);
 
-signals :
+Q_SIGNALS:
 
     void folderItemSelected(const KUrl &url);
 
