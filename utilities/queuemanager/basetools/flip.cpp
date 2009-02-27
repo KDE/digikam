@@ -94,7 +94,7 @@ bool Flip::toolOperations()
 {
     DImg::FLIP flip = (DImg::FLIP)(settings()["Flip"].toInt());
 
-    if (isJpegImage(inputUrl().path()))
+    if (isJpegImage(inputUrl().path()) && image().isNull())
     {
         switch(flip)
         {

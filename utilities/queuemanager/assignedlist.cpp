@@ -137,7 +137,7 @@ void AssignedListView::setCurrentTool(int index)
 
 int AssignedListView::toolIndex(BatchTool* tool)
 {
-    int index = 0;
+    int index = 1;
 
     QTreeWidgetItemIterator it(this);
     while (*it)
@@ -157,7 +157,7 @@ int AssignedListView::toolIndex(BatchTool* tool)
 AssignedBatchTools AssignedListView::assignedList()
 {
     BatchToolMap map;
-    int index = 0;
+    int index = 1;
 
     QTreeWidgetItemIterator it(this);
     while (*it)
@@ -206,7 +206,7 @@ void AssignedListView::slotMoveCurrentToolUp()
     if (item)
     {
         int index = toolIndex(item->toolSet().tool);
-        if (index > -1)
+        if (index != -1)
         {
             int preIndex = index-2;
             if (preIndex != -1)
@@ -312,7 +312,7 @@ bool AssignedListView::removeTool(const BatchToolSet& set)
 
 AssignedListViewItem* AssignedListView::findTool(int index)
 {
-    int count = 0;
+    int count = 1;
     QTreeWidgetItemIterator it(this);
     while (*it)
     {

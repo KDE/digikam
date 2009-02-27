@@ -44,6 +44,10 @@ extern "C"
 #include <klocale.h>
 #include <kstandarddirs.h>
 
+// Local includes.
+
+#include "dimg.h"
+
 namespace Digikam
 {
 
@@ -160,6 +164,7 @@ void ActionThread::run()
             KUrl outUrl  = t->item.itemUrl;
             KUrl inUrl;
             KUrl::List tmp2del;
+            DImg tmpImage;
 
             for (BatchToolMap::const_iterator it = t->item.toolsMap.begin(); 
                  !d->cancel && (it != t->item.toolsMap.end()) ; ++it)
@@ -178,17 +183,20 @@ void ActionThread::run()
                 ad2.index   = index;
                 emit finished(ad2);
 
+                d->tool->setImageData(tmpImage);
                 d->tool->setWorkingUrl(d->workingUrl);
                 d->tool->setExifSetOrientation(d->exifSetOrientation);
+                d->tool->setLastChainedTool(index == t->item.toolsMap.count());
                 d->tool->setInputUrl(inUrl);
                 d->tool->setSettings(settings);
                 d->tool->setInputUrl(inUrl);
                 d->tool->setOutputUrlFromInputUrl();
 
-                outUrl  = d->tool->outputUrl();
-                success = d->tool->apply();
+                outUrl   = d->tool->outputUrl();
+                success  = d->tool->apply();
+                tmpImage = d->tool->imageData();
                 tmp2del.append(outUrl);
-                d->tool = 0;
+                d->tool  = 0;
 
                 if (success && !d->cancel)
                 {

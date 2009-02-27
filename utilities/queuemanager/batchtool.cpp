@@ -48,10 +48,12 @@ public:
         settingsWidget     = 0;
         exifSetOrientation = true;
         cancel             = false;
+        last               = false;
     }
 
     bool                      exifSetOrientation;
     bool                      cancel;
+    bool                      last;
 
     QString                   toolTitle;          // User friendly tool title.
     QString                   toolDescription;    // User friendly tool description.
@@ -162,6 +164,16 @@ QString BatchTool::outputSuffix() const
     return QString();
 }
 
+void BatchTool::setImageData(const DImg& img)
+{
+    d->image = img;
+}
+
+DImg BatchTool::imageData() const
+{
+    return d->image;
+}
+
 void BatchTool::setExifSetOrientation(bool set)
 {
     d->exifSetOrientation = set;
@@ -197,6 +209,16 @@ BatchToolSettings BatchTool::settings()
     return d->settings;
 }
 
+void BatchTool::setLastChainedTool(bool last)
+{
+    d->last = last;
+}
+
+bool BatchTool::isLastChainedTool() const
+{
+    return d->last;
+}
+
 void BatchTool::setOutputUrlFromInputUrl()
 {
     QFileInfo fi(inputUrl().fileName());
@@ -224,11 +246,15 @@ void BatchTool::setOutputUrlFromInputUrl()
 
 bool BatchTool::loadToDImg()
 {
+    if (!d->image.isNull()) return true;
+
     return d->image.load(inputUrl().path());
 }
 
 bool BatchTool::savefromDImg()
 {
+    if (!isLastChainedTool() && outputSuffix().isEmpty()) return true;
+
     QString frm = outputSuffix().toUpper();
     if (frm.isEmpty())
     {
@@ -239,7 +265,9 @@ bool BatchTool::savefromDImg()
     }
 
     d->image.updateMetadata(frm, QString(), getExifSetOrientation());
-    return( d->image.save(outputUrl().path(), frm) );
+    bool b   = d->image.save(outputUrl().path(), frm);
+    d->image = DImg();
+    return b;
 }
 
 DImg& BatchTool::image()

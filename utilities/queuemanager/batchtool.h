@@ -97,6 +97,12 @@ public:
     void setWorkingUrl(const KUrl& workingUrl);
     KUrl workingUrl() const;
 
+    void setImageData(const DImg& img);
+    DImg imageData() const;
+
+    void setLastChainedTool(bool last);
+    bool isLastChainedTool() const;
+
     /** Set output url using input url content + annotation based on time stamp + file 
         extension defined by outputSuffix().
         if outputSuffix() return null, file extension is the same than original.
@@ -114,10 +120,6 @@ public:
           format of original image is used instead.
      */
     bool savefromDImg();
-
-    /** Retrun a reference of internal DImg container used to modify image data.
-     */
-    DImg& image();
 
     /** Set-up Exif orientation tag needs to be fixed during tool operations.
      */
@@ -152,6 +154,10 @@ Q_SIGNALS:
     void signalSettingsChanged(const BatchToolSettings&);
 
 protected:
+
+    /** Return a reference of internal DImg container used to modify image data.
+     */
+    DImg& image();
 
     /** Return true if cancel() have been called. Use this method to stop loop in your toolOperations() implementation.
      */

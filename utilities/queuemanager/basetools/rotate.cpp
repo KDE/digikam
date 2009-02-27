@@ -112,7 +112,7 @@ bool Rotate::toolOperations()
 
     // JPEG image : lossless method.
 
-    if (isJpegImage(inputUrl().path()))
+    if (isJpegImage(inputUrl().path()) && image().isNull())
     {
         if (useExif)
         {
