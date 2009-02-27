@@ -55,7 +55,7 @@ public:
     AntiVignettingTool(QObject *parent);
     ~AntiVignettingTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotResetSettings();
 

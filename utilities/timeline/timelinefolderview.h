@@ -48,17 +48,17 @@ public:
     void searchDelete(SAlbum* album);
     static QString currentTimeLineSearchName();
 
-signals:
+Q_SIGNALS:
 
     void signalTextSearchFilterMatch(bool);
     void signalAlbumSelected(SAlbum*);
     void signalRenameAlbum(SAlbum*);
 
-public slots:
+public Q_SLOTS:
 
     void slotTextSearchFilterChanged(const SearchTextSettings&);
 
-private slots:
+private Q_SLOTS:
 
     void slotAlbumAdded(Album* album);
     void slotAlbumDeleted(Album* album);

@@ -69,7 +69,7 @@ private:
     void adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
     bool eventFilter(QObject*, QEvent*);
 
-private slots:
+private Q_SLOTS:
 
     void slotSaveAsSettings();
     void slotLoadSettings();

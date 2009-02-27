@@ -126,7 +126,7 @@ public:
     void  toggleFitToWindow();
     void  fitToSelect();
 
-signals:
+Q_SIGNALS:
 
     void signalZoomChanged(double zoom);
     void signalMaxZoom();
@@ -147,7 +147,7 @@ signals:
     void signalSelectionChanged(const QRect&);
     void signalToggleOffFitToWindow();
 
-public slots:
+public Q_SLOTS:
 
     void slotIncreaseZoom();
     void slotDecreaseZoom();
@@ -191,7 +191,7 @@ private:
 
     void reset();
 
-private slots:
+private Q_SLOTS:
 
     void slotSelected();
     void slotModified();

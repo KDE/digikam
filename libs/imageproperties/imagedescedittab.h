@@ -62,7 +62,7 @@ public:
     void populateTags();
     void refreshTagsView();
 
-signals:
+Q_SIGNALS:
 
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
@@ -97,7 +97,7 @@ private:
     void setMetadataWidgetStatus(int status, QWidget *widget);
     void reloadForMetadataChange(qlonglong imageId);
 
-private slots:
+private Q_SLOTS:
 
     void slotApplyAllChanges();
     void slotCreateNewTag();

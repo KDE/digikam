@@ -116,7 +116,7 @@ public:
      */
     static bool exifRotate(DImg &image, const QString& filePath);
 
-signals:
+Q_SIGNALS:
 
     /** All signals are delivered to the thread from where the LoadSaveThread object
      *  has been created. This thread must use its event loop to get the signals.

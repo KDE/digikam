@@ -52,7 +52,7 @@ public:
     QString databasePath() const;
     QString firstAlbumPath() const;
 
-protected slots:
+protected Q_SLOTS:
 
     void slotButtonClicked(int button);
     void slotAlbumRootChanged(const KUrl &url);

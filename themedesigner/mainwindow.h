@@ -83,7 +83,7 @@ public:
     MainWindow();
     ~MainWindow();
 
-private slots:
+private Q_SLOTS:
 
     void slotLoad();
     void slotSave();

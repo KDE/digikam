@@ -71,11 +71,11 @@ public:
     void clearMarkedFields();
     QList<QRect> areaOfMarkedFields() const;
 
-public slots:
+public Q_SLOTS:
 
     void setFieldsVisible(bool visible);
 
-protected slots:
+protected Q_SLOTS:
 
     void slotLabelClicked();
 
@@ -99,12 +99,12 @@ public:
 
     void setTitle(const QString &title);
 
-public slots:
+public Q_SLOTS:
 
     void displayExpanded();
     void displayFolded();
 
-signals:
+Q_SIGNALS:
 
     void clicked();
 

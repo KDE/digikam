@@ -52,11 +52,11 @@ public:
     void setLossLessCompression(bool b);
     bool getLossLessCompression();
 
-signals:
+Q_SIGNALS:
 
     void signalSettingsChanged();
 
-private slots:
+private Q_SLOTS:
 
     void slotToggleJPEG2000LossLess(bool);
 

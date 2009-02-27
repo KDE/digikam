@@ -55,7 +55,7 @@ public:
     BCGTool(QObject *parent);
     ~BCGTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotEffect();
     void slotResetSettings();

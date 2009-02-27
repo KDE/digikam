@@ -59,7 +59,7 @@ public:
     void setToolProgress(int progress);
     void setToolStopProgress();
 
-public slots:
+public Q_SLOTS:
 
     void slotToolAborted();
 

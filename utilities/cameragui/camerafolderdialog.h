@@ -52,7 +52,7 @@ public:
 
     QString selectedFolderPath() const;
 
-private slots:
+private Q_SLOTS:
 
     void slotFolderPathSelectionChanged(CameraFolderItem* item);
 

@@ -51,7 +51,7 @@ public:
     GPConfigDlg(Camera *camera, CameraWidget *widget, QWidget *parent=0);
     ~GPConfigDlg();
 
-private slots:
+private Q_SLOTS:
 
     void slotOk();
 

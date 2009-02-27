@@ -63,12 +63,12 @@ public:
     QList<double> selectionCoordinates() const;
     void setSelectionCoordinates(const QList<double>&);
 
-signals:
+Q_SIGNALS:
 
     void signalNewSelectionFromMap();
     void signalSetNewMapSelection(const QList<double>&);
 
-private slots:
+private Q_SLOTS:
 
     void slotNewSelectionFromMap(const QList<double>&);
 
@@ -106,7 +106,7 @@ public:
     void setCenterLongitude(double) {};
     void setCenterLatitude(double) {};
 
-signals:
+Q_SIGNALS:
 
     // Dummy signals to prevent Qt warnings on the console.
 

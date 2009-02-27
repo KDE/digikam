@@ -82,7 +82,7 @@ public:
     void refresh();
     void loadViewState();
 
-signals:
+Q_SIGNALS:
 
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
@@ -95,12 +95,12 @@ protected:
 
     QDrag* makeDragObject();
 
-private slots:
+private Q_SLOTS:
 
     void slotRefresh(const QMap<int, int>&);
     void slotAssignTags(int tagId, const QList<int> &imageIDs);
 
-signals: // private
+Q_SIGNALS: // private
 
     void assignTags(int tagId, const QList<int> &imageIDs);
 

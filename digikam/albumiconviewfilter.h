@@ -57,11 +57,11 @@ public:
     void readSettings();
     void saveSettings();
 
-signals:
+Q_SIGNALS:
 
     void signalResetTagFilters();
 
-private slots:
+private Q_SLOTS:
 
     void slotRatingFilterChanged(int, AlbumLister::RatingCondition);
     void slotMimeTypeFilterChanged(int);

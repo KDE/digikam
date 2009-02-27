@@ -66,7 +66,7 @@ public:
 
     void cancelLoading();
 
-signals:
+Q_SIGNALS:
 
     void signalLoadingStarted();
     void signalLoadingProgress(float);
@@ -78,7 +78,7 @@ protected:
 
     void resizeEvent(QResizeEvent* e);
 
-private slots:
+private Q_SLOTS:
 
     void slotLoadingProgress(const LoadingDescription& description, float progress);
     void slotImageLoaded(const LoadingDescription& description, const DImg &image);

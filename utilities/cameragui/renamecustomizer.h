@@ -64,16 +64,16 @@ public:
                           const QString &fileName, const QString &cameraName,
                           const QDateTime &dateTime, int index);
 
-signals:
+Q_SIGNALS:
 
     void signalTextChanged(const QString&);
 
-public slots:
+public Q_SLOTS:
 
     void slotUpdateTrackerPos();
     void slotHideToolTipTracker();
 
-private slots:
+private Q_SLOTS:
 
     void slotToolTipButtonToggled(bool);
 
@@ -112,11 +112,11 @@ public:
     Case    changeCase() const;
     int     startIndex() const;
 
-signals:
+Q_SIGNALS:
 
     void signalChanged();
 
-public slots:
+public Q_SLOTS:
 
     void restoreFocus();
     void slotUpdateTrackerPos();
@@ -126,7 +126,7 @@ private:
     void readSettings();
     void saveSettings();
 
-private slots:
+private Q_SLOTS:
 
     void slotRadioButtonClicked(int);
     void slotRenameOptionsChanged();

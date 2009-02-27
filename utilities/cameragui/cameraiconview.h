@@ -92,7 +92,7 @@ public:
 
     virtual QRect itemRect() const;
 
-signals:
+Q_SIGNALS:
 
     void signalSelected(CameraIconItem*, bool);
     void signalFileView(CameraIconItem*);
@@ -105,7 +105,7 @@ signals:
     void signalToggleLock();
     void signalNewSelection(bool);
 
-public slots:
+public Q_SLOTS:
 
     void slotDownloadNameChanged();
     void slotSelectionChanged();
@@ -115,7 +115,7 @@ public slots:
     void slotSelectNew();
     void slotSelectLocked();
 
-private slots:
+private Q_SLOTS:
 
     void slotRightButtonClicked(const QPoint& pos);
     void slotContextMenu(IconItem* item, const QPoint& pos);

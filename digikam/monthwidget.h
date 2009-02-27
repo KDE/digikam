@@ -65,7 +65,7 @@ private:
 
     void init();
 
-private slots:
+private Q_SLOTS:
 
     void slotAddItems(const ImageInfoList& items);
     void slotDeleteItem(const ImageInfo& item);

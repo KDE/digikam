@@ -72,7 +72,7 @@ public:
     QSize  getTemplateSize(void);
     Digikam::DImg makeSuperImpose(void);
 
-public slots:
+public Q_SLOTS:
 
     void slotEditModeChanged(int mode);
     void slotSetCurrentTemplate(const KUrl& url);

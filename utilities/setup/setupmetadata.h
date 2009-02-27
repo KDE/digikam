@@ -51,7 +51,7 @@ private:
 
     void readSettings();
 
-private slots:
+private Q_SLOTS:
 
     void processExiv2Url(const QString&);
     void slotExifAutoRotateToggled(bool);

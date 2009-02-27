@@ -69,7 +69,7 @@ public:
 
     static void showtagsListCreationError(QWidget* parent, const QMap<QString, QString>& errMap);
 
-private slots:
+private Q_SLOTS:
 
     void slotIconChanged();
     void slotIconResetClicked();

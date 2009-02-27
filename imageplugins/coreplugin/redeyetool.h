@@ -85,7 +85,7 @@ public:
     RedEyeTool(QObject* parent);
     ~RedEyeTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotEffect();
     void slotResetSettings();

@@ -76,7 +76,7 @@ public:
 
     bool isVisible() const;
 
-public slots:
+public Q_SLOTS:
 
     void setVisible(bool visible);
     void show();
@@ -114,7 +114,7 @@ public:
     SearchClickLabel(QWidget *parent = 0);
     SearchClickLabel(const QString &text, QWidget *parent = 0);
 
-signals:
+Q_SIGNALS:
 
     void leftClicked();
 
@@ -134,7 +134,7 @@ public:
     SearchSqueezedClickLabel(QWidget *parent = 0);
     SearchSqueezedClickLabel(const QString &text, QWidget *parent = 0);
 
-signals:
+Q_SIGNALS:
 
     void leftClicked();
 
@@ -156,7 +156,7 @@ public:
     void setArrowType(Qt::ArrowType arrowType);
     virtual QSize sizeHint () const;
 
-signals:
+Q_SIGNALS:
 
     void leftClicked();
 
@@ -199,7 +199,7 @@ public:
      *  Default: false */
     void stayVisibleWhenAnimatedOut(bool stayVisible);
 
-signals:
+Q_SIGNALS:
 
     void clicked();
 
@@ -208,7 +208,7 @@ protected:
     virtual void paintEvent(QPaintEvent *event);
     virtual void mouseReleaseEvent(QMouseEvent* event);
 
-protected slots:
+protected Q_SLOTS:
 
     void animationFinished();
     void updateAnimationSettings();
@@ -257,7 +257,7 @@ public:
     /** Resets to minimum value */
     void reset();
 
-private slots:
+private Q_SLOTS:
 
     void slotValueChanged(double d);
 
@@ -323,7 +323,7 @@ protected:
     virtual int valueFromText(const QString &text) const;
     virtual StepEnabled stepEnabled() const;
 
-private slots:
+private Q_SLOTS:
 
     void slotValueChanged(int d);
 
@@ -357,7 +357,7 @@ public:
 
     StyleSheetDebugger(QWidget *object);
 
-protected slots:
+protected Q_SLOTS:
 
     void buttonClicked();
 

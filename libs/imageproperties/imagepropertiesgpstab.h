@@ -74,7 +74,7 @@ public:
     int  getWebGPSLocator();
     void setWebGPSLocator(int locator);
 
-private slots:
+private Q_SLOTS:
 
     void slotGPSDetails();
 

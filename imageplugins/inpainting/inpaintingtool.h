@@ -80,7 +80,7 @@ public:
     InPaintingTool(QObject* parent);
     ~InPaintingTool();
 
-private slots:
+private Q_SLOTS:
 
     void processCImgUrl(const QString&);
     void slotResetValues(int);

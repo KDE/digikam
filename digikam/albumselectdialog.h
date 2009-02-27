@@ -63,7 +63,7 @@ public:
                                const QString& newAlbumString=QString(),
                                bool allowRootSelection=false);
 
-private slots:
+private Q_SLOTS:
 
     void slotSelectionChanged();
 

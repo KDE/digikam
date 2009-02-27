@@ -59,7 +59,7 @@ protected:
 
     void drawContents(QPainter*);
 
-public slots:
+public Q_SLOTS:
 
     void animate();
     void message(const QString& message);

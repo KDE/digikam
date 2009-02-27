@@ -102,7 +102,7 @@ public:
 
     ProxyClickLineEdit(QWidget *parent = 0);
 
-signals:
+Q_SIGNALS:
 
     void leftClicked();
 

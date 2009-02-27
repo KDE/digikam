@@ -74,7 +74,7 @@ private:
     inline int getOffset(int Width, int X, int Y, int bytesDepth);
     inline int Lim_Max(int Now, int Up, int Max);
 
-private slots:
+private Q_SLOTS:
 
     void slotEffectTypeChanged(int type);
     void slotEffect();

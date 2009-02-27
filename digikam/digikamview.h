@@ -66,7 +66,7 @@ public:
     void setThumbSize(int size);
     void toggleShowBar(bool);
 
-signals:
+Q_SIGNALS:
 
     void signalAlbumSelected(bool val);
     void signalTagSelected(bool val);
@@ -83,7 +83,7 @@ signals:
     void signalGotoTagAndItem(int tagID);
     void signalChangedTab(QWidget*);
 
-public slots:
+public Q_SLOTS:
 
     // View Action slots
     void slotZoomIn();
@@ -168,7 +168,7 @@ private:
     void imageEdit(AlbumIconItem* iconItem=0);
     void slideShow(ImageInfoList &infoList);
 
-private slots:
+private Q_SLOTS:
 
     void slotAllAlbumsLoaded();
 

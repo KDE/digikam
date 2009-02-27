@@ -60,7 +60,7 @@ private:
     void       updateInfoPageCss();
     void       disablePredefinedActions();
 
-private slots:
+private Q_SLOTS:
 
     void slotUrlOpen(const KUrl&);
     void slotThemeChanged();

@@ -90,7 +90,7 @@ protected:
     void paintEvent(QPaintEvent*);
     void updateToolTip();
 
-private slots:
+private Q_SLOTS:
 
     void slotTimeout();
 

@@ -58,7 +58,7 @@ public:
 
     void refresh();
 
-private slots:
+private Q_SLOTS:
 
     void slotAllDAlbumsLoaded();
     void slotAlbumAdded(Album* album);

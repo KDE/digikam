@@ -52,7 +52,7 @@ public:
     CharcoalTool(QObject* parent);
     ~CharcoalTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotResetSettings();
 

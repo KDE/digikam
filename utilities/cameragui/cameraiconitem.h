@@ -72,7 +72,7 @@ private:
 
     void calcRect(const QString& itemName, const QString& downloadName);
 
-private slots:
+private Q_SLOTS:
 
     void slotDownloadTimerDone();
 

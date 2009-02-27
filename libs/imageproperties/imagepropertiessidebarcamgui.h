@@ -61,18 +61,18 @@ public:
     void itemChanged(GPItemInfo* itemInfo, const KUrl& url, const QByteArray& exifData=QByteArray(),
                      CameraIconView* view=0, CameraIconItem* item=0);
 
-public slots:
+public Q_SLOTS:
 
     virtual void slotNoCurrentItem(void);
 
-signals:
+Q_SIGNALS:
 
     void signalFirstItem(void);
     void signalPrevItem(void);
     void signalNextItem(void);
     void signalLastItem(void);
 
-private slots:
+private Q_SLOTS:
 
     virtual void slotChangedTab(QWidget* tab);
 

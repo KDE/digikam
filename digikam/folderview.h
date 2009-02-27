@@ -128,12 +128,12 @@ protected:
      */
     virtual void saveViewState();
 
-protected slots:
+protected Q_SLOTS:
 
     virtual void slotSelectionChanged();
     virtual void slotAllAlbumsLoaded();
 
-private slots:
+private Q_SLOTS:
 
     void slotToolTip();
     void slotThemeChanged();

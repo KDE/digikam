@@ -52,7 +52,7 @@ public:
     AutoCorrectionTool(QObject *parent);
     ~AutoCorrectionTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotSetFilters();
     void slotLensChanged();

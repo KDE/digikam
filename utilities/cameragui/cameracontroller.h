@@ -89,7 +89,7 @@ public:
 
     QPixmap mimeTypeThumbnail(const QString& itemName);
 
-signals:
+Q_SIGNALS:
 
     void signalBusy(bool val);
     void signalInfoMsg(const QString& msg);
@@ -121,7 +121,7 @@ signals:
     void signalInternalLockFailed(const QString &folder, const QString &file);
     void signalInternalOpen(const QString &folder, const QString &file, const QString &dest);
 
-public slots:
+public Q_SLOTS:
 
     void slotCancel();
     void slotConnect();
@@ -131,7 +131,7 @@ protected:
     void run();
     void executeCommand(CameraCommand *cmd);
 
-private slots:
+private Q_SLOTS:
 
     void slotCheckRename(const QString &folder, const QString &file, 
                          const QString &destination, const QString& temp);

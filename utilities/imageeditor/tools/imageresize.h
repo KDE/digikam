@@ -60,7 +60,7 @@ private:
 
     void writeUserSettings();
 
-private slots:
+private Q_SLOTS:
 
     void slotOk();
     void slotCancel();

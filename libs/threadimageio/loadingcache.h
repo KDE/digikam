@@ -98,12 +98,12 @@ public:
     virtual void addedImage(const QString &filePath);
     virtual void addedThumbnail(const QString &filePath);
 
-private slots:
+private Q_SLOTS:
 
     void slotFileDirty(const QString &path);
     void slotUpdateDirWatch();
 
-signals:
+Q_SIGNALS:
 
     void signalUpdateDirWatch();
 
@@ -249,7 +249,7 @@ public:
      */
     void notifyFileChanged(const QString &filePath);
 
-signals:
+Q_SIGNALS:
 
     /**
      * This signal is emitted when the cache is notified that a file was changed.

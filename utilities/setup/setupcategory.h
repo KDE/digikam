@@ -48,7 +48,7 @@ private:
 
     void readSettings();
 
-private slots:
+private Q_SLOTS:
 
     void slotCategorySelectionChanged();
     void slotAddCategory();

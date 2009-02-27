@@ -48,7 +48,7 @@ public:
 
     KIPI::ImageCollection selectedImageCollection() const;
 
-private slots:
+private Q_SLOTS:
 
     void slotSelectionChanged();
 

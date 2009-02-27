@@ -176,7 +176,7 @@ public:
      */
     static void deleteThumbnail(const QString &filePath);
 
-signals:
+Q_SIGNALS:
 
     // See LoadSaveThread for a QImage-based thumbnailLoaded() signal.
     void signalThumbnailLoaded(const LoadingDescription &loadingDescription, const QPixmap& pix);
@@ -198,12 +198,12 @@ private:
     QPixmap surrogatePixmap(const LoadingDescription &loadingDescription);
     bool checkSize(int size);
 
-signals:
+Q_SIGNALS:
 
     // For internal use
     void thumbnailsAvailable();
 
-private slots:
+private Q_SLOTS:
 
     void slotThumbnailsAvailable();
     void slotThumbnailLoaded(const LoadingDescription &loadingDescription, const QImage& thumb);

@@ -57,7 +57,7 @@ public:
     SharpenTool(QObject *parent);
     ~SharpenTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotSaveAsSettings();
     void slotLoadSettings();

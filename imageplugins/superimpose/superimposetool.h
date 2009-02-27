@@ -55,7 +55,7 @@ public:
     SuperImposeTool(QObject* parent);
     ~SuperImposeTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotResetSettings();
     void slotTemplateDirChanged(const KUrl& url);

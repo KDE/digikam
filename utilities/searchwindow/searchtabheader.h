@@ -48,18 +48,18 @@ public:
     SearchTabHeader(QWidget *parent);
     ~SearchTabHeader();
 
-public slots:
+public Q_SLOTS:
 
     void selectedSearchChanged(SAlbum *album);
     void editSearch(SAlbum *album);
     void newKeywordSearch();
     void newAdvancedSearch();
 
-signals:
+Q_SIGNALS:
 
     void searchShallBeSelected(SAlbum *album);
 
-private slots:
+private Q_SLOTS:
 
     void keywordChanged();
     void editCurrentAdvancedSearch();

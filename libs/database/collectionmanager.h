@@ -195,7 +195,7 @@ public:
     KUrl oneAlbumRoot();
     QString oneAlbumRootPath();
 
-signals:
+Q_SIGNALS:
 
     /** Emitted when the status of a collection location changed.
      *  This means that the location became available, hidden or unavailable.
@@ -215,7 +215,7 @@ signals:
     /** Emitted when the label of a collection location is changed */
     void locationPropertiesChanged(const CollectionLocation &location);
 
-private slots:
+private Q_SLOTS:
 
     void deviceChange(const QString &);
     void slotAlbumRootChange(const AlbumRootChangeset &changeset);
@@ -234,7 +234,7 @@ private:
 
     Q_PRIVATE_SLOT(d, void slotTriggerUpdateVolumesList())
 
-signals: // private
+Q_SIGNALS: // private
 
     void triggerUpdateVolumesList();
 };

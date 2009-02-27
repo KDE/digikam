@@ -55,7 +55,7 @@ public:
     BlurFXTool(QObject *parent);
     ~BlurFXTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotEffectTypeChanged(int type);
     void slotResetSettings();

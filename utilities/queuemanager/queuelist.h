@@ -104,11 +104,11 @@ public:
     void setAssignedTools(const AssignedBatchTools& tools);
     AssignedBatchTools assignedTools();
 
-signals:
+Q_SIGNALS:
 
     void signalQueueContentsChanged();
 
-public slots:
+public Q_SLOTS:
 
     void slotClearList();
     void slotRemoveSelectedItems();
@@ -116,7 +116,7 @@ public slots:
     void slotAddItems(const ImageInfoList&, const ImageInfo&);
     void slotAssignedToolsChanged(const AssignedBatchTools&);
 
-private slots:
+private Q_SLOTS:
 
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
 

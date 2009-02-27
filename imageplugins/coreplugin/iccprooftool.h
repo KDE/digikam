@@ -92,7 +92,7 @@ private:
     bool useDefaultProofProfile();
     bool useSelectedProofProfile();
 
-private slots:
+private Q_SLOTS:
 
     void slotSaveAsSettings();
     void slotLoadSettings();

@@ -61,7 +61,7 @@ protected:
 
     void keyPressEvent(QKeyEvent *event);
 
-signals:
+Q_SIGNALS:
 
     void signalNext();
     void signalPrev();
@@ -69,7 +69,7 @@ signals:
     void signalPlay();
     void signalPause();
 
-private slots:
+private Q_SLOTS:
 
     void slotPlayBtnToggled();
     void slotNexPrevClicked();

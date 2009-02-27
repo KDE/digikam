@@ -61,7 +61,7 @@ private:
 
     QString getTexturePath(int texture);
 
-private slots:
+private Q_SLOTS:
 
     void slotResetSettings();
 

@@ -70,13 +70,13 @@ public:
 
     void refresh();
 
-signals:
+Q_SIGNALS:
 
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
     void signalTextTagFilterMatch(bool);
 
-public slots:
+public Q_SLOTS:
 
     void slotTextTagFilterChanged(const SearchTextSettings&);
 
@@ -89,7 +89,7 @@ protected:
     bool acceptDrop(const QDropEvent *e) const;
     void contentsDropEvent(QDropEvent *e);
 
-private slots:
+private Q_SLOTS:
 
     void slotTagAdded(Album* album);
     void slotTagMoved(TAlbum* tag, TAlbum* newParent);
@@ -106,7 +106,7 @@ private slots:
     void slotRefresh(const QMap<int, int>&);
     void slotAssignTags(int tagId, const QList<int> &imageIDs);
 
-signals: // private
+Q_SIGNALS: // private
 
     void assignTags(int tagId, const QList<int> &imageIDs);
 

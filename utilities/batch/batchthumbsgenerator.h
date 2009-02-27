@@ -53,7 +53,7 @@ public:
     BatchThumbsGenerator(QWidget* parent);
     ~BatchThumbsGenerator();
 
-signals:
+Q_SIGNALS:
 
     void signalRebuildAllThumbsDone();
 
@@ -67,11 +67,11 @@ protected:
 
     void closeEvent(QCloseEvent *e);
 
-protected slots:
+protected Q_SLOTS:
 
     void slotCancel();
 
-private slots:
+private Q_SLOTS:
 
     void slotRebuildThumbs();
     void slotGotThumbnail(const LoadingDescription&, const QPixmap&);

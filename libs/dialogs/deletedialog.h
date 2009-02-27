@@ -84,7 +84,7 @@ public:
     void setListMode(DeleteDialogMode::ListMode mode);
     void setDeleteMode(DeleteDialogMode::DeleteMode deleteMode);
 
-protected slots:
+protected Q_SLOTS:
 
     void slotShouldDelete(bool);
 
@@ -140,7 +140,7 @@ public:
     void presetDeleteMode(DeleteDialogMode::DeleteMode mode);
     void setListMode(DeleteDialogMode::ListMode mode);
 
-protected slots:
+protected Q_SLOTS:
 
     virtual void accept();
     void slotShouldDelete(bool);

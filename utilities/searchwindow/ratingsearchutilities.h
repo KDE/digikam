@@ -75,11 +75,11 @@ public:
     void setRatingValue(RatingValue value);
     RatingValue ratingValue() const;
 
-signals:
+Q_SIGNALS:
 
     void ratingValueChanged(int value);
 
-protected slots:
+protected Q_SLOTS:
 
     void currentValueChanged(const QModelIndex &current, const QModelIndex &previous);
     void ratingWidgetChanged(int);
@@ -127,11 +127,11 @@ public:
     RatingComboBox::RatingValue ratingValue() const;
     void setRatingValue(RatingComboBox::RatingValue value);
 
-signals:
+Q_SIGNALS:
 
     void ratingValueChanged(int value);
 
-protected slots:
+protected Q_SLOTS:
 
     void slotRatingChanged(int);
 

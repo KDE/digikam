@@ -217,7 +217,7 @@ protected:
                                const QString& albumRoot, const QString &album, const QString &fileName);
 #endif
 
-signals:
+Q_SIGNALS:
 
     /**
      * Emitted once in scanAlbums(), the scan() methods, and updateItemsWithoutDate().

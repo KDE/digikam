@@ -49,7 +49,7 @@ public:
     void setCompression(bool b);
     bool getCompression();
 
-signals:
+Q_SIGNALS:
 
     void signalSettingsChanged();
 

@@ -78,11 +78,11 @@ public:
      */
     PreviewWidget* previewWidget() const;
 
-signals:
+Q_SIGNALS:
 
     void signalZoomChanged(bool isMax, bool isMin, double zoom);
 
-private slots:
+private Q_SLOTS:
 
     void slotZoomChanged(double);
 

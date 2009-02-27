@@ -57,13 +57,13 @@ public:
     void parseList();
     void parseAlbum();
 
-signals:
+Q_SIGNALS:
 
     void signalComplete();
     void signalProgressValue(int);
     void signalProgressBarMode(int, const QString&);
 
-public slots:
+public Q_SLOTS:
 
     void slotAbort();
 
@@ -72,7 +72,7 @@ private:
     void parsePicture();
     void complete();
 
-private slots:
+private Q_SLOTS:
 
     void slotAlbumParsed(const ImageInfoList&);
     void slotComplete();

@@ -54,7 +54,7 @@ public:
     void setMediaPlayerFromUrl(const KUrl& url);
     void escapePreview();
 
-private slots:
+private Q_SLOTS:
 
     void slotThemeChanged();
     void slotPlayerFinished();

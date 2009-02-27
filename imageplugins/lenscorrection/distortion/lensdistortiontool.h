@@ -59,7 +59,7 @@ public:
     LensDistortionTool(QObject *parent);
     ~LensDistortionTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotResetSettings();
     void slotColorGuideChanged();

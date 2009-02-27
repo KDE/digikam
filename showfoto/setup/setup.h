@@ -54,7 +54,7 @@ public:
     Setup(QWidget* parent=0, const char* name=0, Page page=LastPageUsed);
     ~Setup();
 
-private slots:
+private Q_SLOTS:
 
     void slotOkClicked();
 

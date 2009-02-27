@@ -66,13 +66,13 @@ public:
     void parseBlackFrame(QImage& img);
     QImage image(){return m_Image;}
 
-signals:
+Q_SIGNALS:
 
     void parsed(QList<HotPixel>);
     void signalLoadingProgress(float);
     void signalLoadingComplete();
 
-private slots:
+private Q_SLOTS:
 
     void slotLoadingProgress(const LoadingDescription&, float);
     void slotLoadImageFromUrlComplete(const LoadingDescription&, const DImg&);

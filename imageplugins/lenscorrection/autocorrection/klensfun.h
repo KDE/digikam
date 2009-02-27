@@ -142,15 +142,15 @@ public:
 
     KLensFun *getKLFObject(){ return m_klf; };
 
-public slots:
+public Q_SLOTS:
 
     void findFromMetadata(const Digikam::DMetadata&);
 
-signals:
+Q_SIGNALS:
 
     void signalLensSettingsChanged();
 
-protected slots:
+protected Q_SLOTS:
 
     void slotUpdateCombos();
     void slotUpdateLensCombo();

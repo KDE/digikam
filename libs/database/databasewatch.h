@@ -45,7 +45,7 @@ class DIGIKAM_DATABASE_EXPORT DatabaseWatch : public QObject
 
     Q_OBJECT
 
-signals:
+Q_SIGNALS:
 
     /** Retrieve the DatabaseWatch object from DatabaseAccess::databaseWatch(). */
 
@@ -65,7 +65,7 @@ protected:
 
     ~DatabaseWatch();
 
-protected slots:
+protected Q_SLOTS:
 
     //NOTE:
     // The full qualification with "Digikam::" for the changeset types in the following
@@ -95,7 +95,7 @@ protected slots:
                            const QString &applicationIdentifier,
                            const Digikam::SearchChangeset &changeset);
 
-signals:
+Q_SIGNALS:
 
     // DBus signals, for internal use
     void imageChange(const QString &databaseIdentifier,

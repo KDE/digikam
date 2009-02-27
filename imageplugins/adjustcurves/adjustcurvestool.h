@@ -62,7 +62,7 @@ private:
     void writeSettings();
     void finalRendering();
 
-private slots:
+private Q_SLOTS:
 
     void slotSaveAsSettings();
     void slotLoadSettings();

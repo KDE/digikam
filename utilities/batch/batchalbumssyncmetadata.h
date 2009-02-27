@@ -51,7 +51,7 @@ public:
     BatchAlbumsSyncMetadata(QWidget* parent);
     ~BatchAlbumsSyncMetadata();
 
-signals:
+Q_SIGNALS:
 
     void signalComplete();
 
@@ -64,11 +64,11 @@ protected:
 
     void closeEvent(QCloseEvent *e);
 
-protected slots:
+protected Q_SLOTS:
 
     void slotCancel();
 
-private slots:
+private Q_SLOTS:
 
     void slotStart();
     void slotAlbumParsed(const ImageInfoList&);

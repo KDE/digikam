@@ -66,7 +66,7 @@ private:
     void adjustSliders(int r, int g, int b);
     void finalRendering();
 
-private slots:
+private Q_SLOTS:
 
     void slotEffect();
     void slotColorSelectedFromTarget( const Digikam::DColor &color );

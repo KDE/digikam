@@ -58,11 +58,11 @@ public:
     TagsPopupMenu(const QList<qlonglong>& selectedImageIDs, Mode mode, QWidget* parent = 0);
     ~TagsPopupMenu();
 
-signals:
+Q_SIGNALS:
 
     void signalTagActivated(int id);
 
-private slots:
+private Q_SLOTS:
 
     void slotAboutToShow();
     void slotToggleTag(QAction *);

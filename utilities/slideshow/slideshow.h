@@ -63,7 +63,7 @@ protected:
     void keyPressEvent(QKeyEvent *);
     void wheelEvent(QWheelEvent *);
 
-private slots:
+private Q_SLOTS:
 
     void slotTimeOut();
     void slotMouseMoveTimeOut();

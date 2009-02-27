@@ -106,7 +106,7 @@ protected:
     Album *albumForIndex(const QModelIndex &index) const;
     Album *rootAlbum() const;
 
-protected slots:
+protected Q_SLOTS:
 
     void slotAlbumAboutToBeAdded(Album *album, Album *parent, Album *prev);
     void slotAlbumAdded(Album *);
@@ -139,7 +139,7 @@ protected:
     virtual QVariant decorationRole(Album *a) const = 0;
     virtual QString  columnHeader() const;
 
-protected slots:
+protected Q_SLOTS:
 
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
     void slotThumbnailLost(Album *album);
@@ -191,7 +191,7 @@ public:
     /// Resets the checked state of all albums to Qt::Unchecked
     void resetCheckedAlbums();
 
-signals:
+Q_SIGNALS:
 
     /** Emitted when the check state of an album changes.
      *  checkState contains the new Qt::CheckState of album */

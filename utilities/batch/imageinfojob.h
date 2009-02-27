@@ -58,12 +58,12 @@ public:
     void allItemsFromAlbum(Album *album);
     void stop();
 
-signals:
+Q_SIGNALS:
 
     void signalItemsInfo(const ImageInfoList& items);
     void signalCompleted();
 
-private slots:
+private Q_SLOTS:
 
     void slotResult(KJob* job);
     void slotData(KIO::Job* job, const QByteArray& data);

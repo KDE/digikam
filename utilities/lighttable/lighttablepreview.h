@@ -79,7 +79,7 @@ public:
     void setDragAndDropEnabled(bool b); 
     void setDragAndDropMessage();
 
-signals:
+Q_SIGNALS:
 
     void signalDroppedItems(const ImageInfoList&);
     void signalDeleteItem(const ImageInfo &);
@@ -92,7 +92,7 @@ protected:
     void resizeEvent(QResizeEvent* e);
     void drawFrame(QPainter *p);
 
-private slots:
+private Q_SLOTS:
 
     void slotGotImagePreview(const LoadingDescription &loadingDescription, const DImg &image);
     void slotNextPreload();

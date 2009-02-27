@@ -84,17 +84,17 @@ public:
     QueueSettingsView(QWidget *parent=0);
     ~QueueSettingsView();
 
-signals:
+Q_SIGNALS:
 
     void signalSettingsChanged(const QueueSettings&);
 
-public slots:
+public Q_SLOTS:
 
     void slotQueueSelected(int, const QueueSettings&, const AssignedBatchTools&);
     void slotUpdateTrackerPos();
     void slotHideToolTipTracker();
 
-private slots:
+private Q_SLOTS:
 
     void slotResetSettings();
     void slotSettingsChanged();

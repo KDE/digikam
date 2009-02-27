@@ -74,7 +74,7 @@ private:
     void connectListJob(KIO::ListJob *job);
     void connectTransferJob(KIO::TransferJob *job);
 
-private slots:
+private Q_SLOTS:
 
     // KIO::Job
     void slotResult(KJob *job);

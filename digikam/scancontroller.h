@@ -128,7 +128,7 @@ public:
     void hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const PAlbum *dstAlbum, QStringList itemNames);
     void hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum *dstAlbum, QString itemName);
 
-signals:
+Q_SIGNALS:
 
     void databaseInitialized(bool success);
     void completeScanDone();
@@ -137,7 +137,7 @@ signals:
     void errorFromInitialization(const QString &);
     void progressFromInitialization(const QString &, int);
 
-private slots:
+private Q_SLOTS:
 
     void slotTotalFilesToScan(int count);
     void slotStartScanningAlbum(const QString &albumRoot, const QString &album);

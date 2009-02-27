@@ -63,7 +63,7 @@ private:
 
     void populateTreeView(const AlbumList& aList, QTreeWidget *view);
 
-private slots: 
+private Q_SLOTS: 
 
     void slotAlbumsSearchTextChanged(const SearchTextSettings&);
     void slotTagsSearchTextChanged(const SearchTextSettings&);

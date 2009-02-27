@@ -69,7 +69,7 @@ private:
     void updateStatistics();
     void getICCData();
 
-private slots:
+private Q_SLOTS:
 
     void slotRefreshOptions(bool sixteenBit);
     void slotHistogramComputationFailed(void);

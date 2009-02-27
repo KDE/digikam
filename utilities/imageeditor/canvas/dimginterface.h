@@ -162,14 +162,14 @@ public:
     QColor                underExposureColor();
     QColor                overExposureColor();
 
-protected slots:
+protected Q_SLOTS:
 
     void   slotImageLoaded(const LoadingDescription &loadingDescription, const DImg& img);
     void   slotImageSaved(const QString& filePath, bool success);
     void   slotLoadingProgress(const LoadingDescription &loadingDescription, float progress);
     void   slotSavingProgress(const QString& filePath, float progress);
 
-signals:
+Q_SIGNALS:
 
     void   signalModified();
     void   signalUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave);
@@ -180,7 +180,7 @@ signals:
     void   signalSavingProgress(const QString& filePath, float progress);
     void   signalImageSaved(const QString& filePath, bool success);
 
-private slots:
+private Q_SLOTS:
 
     void slotUseRawImportSettings();
     void slotUseDefaultSettings();

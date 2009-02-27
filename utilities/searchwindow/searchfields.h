@@ -86,7 +86,7 @@ public:
     enum WidgetRectType { LabelAndValueWidgetRects, ValueWidgetRectsOnly };
     QList<QRect> widgetRects(WidgetRectType = ValueWidgetRectsOnly) const;
 
-protected slots:
+protected Q_SLOTS:
 
     void clearButtonClicked();
 
@@ -126,7 +126,7 @@ public:
     virtual void reset();
     virtual QList<QRect> valueWidgetRects() const;
 
-protected slots:
+protected Q_SLOTS:
 
     void valueChanged(const QString &text);
 
@@ -171,7 +171,7 @@ public:
     void setSingleSteps(int smaller, int larger);
     void setInvertStepping(bool invert);
 
-protected slots:
+protected Q_SLOTS:
 
     void valueChanged();
 
@@ -213,7 +213,7 @@ public:
     void setSingleSteps(double smaller, double larger);
     void setInvertStepping(bool invert);
 
-protected slots:
+protected Q_SLOTS:
 
     void valueChanged();
 
@@ -253,7 +253,7 @@ public:
     void setBetweenText(const QString &between);
     void setBoundary(QDateTime min, QDateTime max);
 
-protected slots:
+protected Q_SLOTS:
 
     void valueChanged();
 
@@ -287,7 +287,7 @@ public:
     virtual void setValueWidgetsVisible(bool visible);
     virtual QList<QRect> valueWidgetRects() const;
 
-protected slots:
+protected Q_SLOTS:
 
     void checkStateChanged();
 
@@ -324,7 +324,7 @@ public:
     virtual void setValueWidgetsVisible(bool visible);
     virtual QList<QRect> valueWidgetRects() const;
 
-protected slots:
+protected Q_SLOTS:
 
     void checkStateChanged(Album *album, int state);
 
@@ -355,7 +355,7 @@ public:
 
     void setBetweenText(const QString &text);
 
-protected slots:
+protected Q_SLOTS:
 
     void firstValueChanged();
     void secondValueChanged();
@@ -382,7 +382,7 @@ public:
     virtual void setValueWidgetsVisible(bool visible);
     virtual QList<QRect> valueWidgetRects() const;
 
-protected slots:
+protected Q_SLOTS:
 
     void indexChanged(int);
 

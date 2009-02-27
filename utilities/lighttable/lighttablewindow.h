@@ -64,12 +64,12 @@ public:
     void refreshView();
     bool isEmpty() const;
 
-signals:
+Q_SIGNALS:
 
     void signalFileDeleted(const KUrl&);
     void signalWindowHasMoved();
 
-public slots:
+public Q_SLOTS:
 
     void slotItemsUpdated(const KUrl::List&);
 
@@ -93,7 +93,7 @@ private:
 
     LightTableWindow();
 
-private slots:
+private Q_SLOTS:
 
     void slotBackward();
     void slotForward();

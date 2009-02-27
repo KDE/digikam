@@ -57,11 +57,11 @@ public:
 
     SAlbum* currentFindDuplicatesAlbum() const;
 
-signals:
+Q_SIGNALS:
 
     void signalUpdateFingerPrints();
 
-private slots:
+private Q_SLOTS:
 
     void populateTreeView();
     void slotAlbumAdded(Album* a);

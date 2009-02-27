@@ -71,7 +71,7 @@ public:
     void setImagePath(const QString& path=QString());
     void setPreviousNextPaths(const QString& previous, const QString &next);
 
-signals:
+Q_SIGNALS:
 
     void signalNextItem();
     void signalPrevItem();
@@ -88,7 +88,7 @@ protected:
 
     void resizeEvent(QResizeEvent* e);
 
-private slots:
+private Q_SLOTS:
 
     void slotGotImagePreview(const LoadingDescription &loadingDescription, const DImg &image);
     void slotNextPreload();

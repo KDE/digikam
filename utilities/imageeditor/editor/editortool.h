@@ -58,7 +58,7 @@ public:
     QWidget*            toolView() const;
     EditorToolSettings* toolSettings() const;
 
-signals:
+Q_SIGNALS:
 
     void okClicked();
     void cancelClicked();
@@ -76,7 +76,7 @@ protected:
     virtual void writeSettings();
     virtual void finalRendering(){};
 
-protected slots:
+protected Q_SLOTS:
 
     void slotTimer();
 
@@ -128,7 +128,7 @@ public:
      */
     RenderingMode renderingMode() const;
 
-public slots:
+public Q_SLOTS:
 
     virtual void slotAbort();
 
@@ -144,7 +144,7 @@ protected:
     virtual void putFinalData(){};
     virtual void renderingFinished(){};
 
-protected slots:
+protected Q_SLOTS:
 
     virtual void slotOk();
     virtual void slotCancel();
@@ -154,7 +154,7 @@ protected slots:
     void slotFilterFinished(bool success);
     void slotFilterProgress(int progress);
 
-private slots:
+private Q_SLOTS:
 
     void slotResized();
 

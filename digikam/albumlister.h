@@ -132,7 +132,7 @@ public:
     bool tagFiltersIsActive();
     bool filterIsActive();
 
-signals:
+Q_SIGNALS:
 
     void signalNewItems(const ImageInfoList& items);
     void signalDeleteItem(const ImageInfo &item);
@@ -143,7 +143,7 @@ signals:
     void signalItemsTextFilterMatch(bool);
     void signalItemsFilterMatch(bool);
 
-private slots:
+private Q_SLOTS:
 
     void slotFilterItems();
 

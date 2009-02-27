@@ -52,7 +52,7 @@ public:
     RainDropTool(QObject *parent);
     ~RainDropTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotResetSettings();
 

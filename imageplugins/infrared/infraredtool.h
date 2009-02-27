@@ -52,7 +52,7 @@ public:
     InfraredTool(QObject* parent);
     ~InfraredTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotSliderMoved(int);
     void slotResetSettings();

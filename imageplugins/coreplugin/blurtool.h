@@ -51,7 +51,7 @@ public:
     BlurTool(QObject *parent);
     ~BlurTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotResetSettings();
 

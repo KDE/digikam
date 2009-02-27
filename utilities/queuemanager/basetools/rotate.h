@@ -52,7 +52,7 @@ private:
     void assignSettings2Widget();
     bool toolOperations();
 
-private slots:
+private Q_SLOTS:
 
     void slotSettingsChanged();
 

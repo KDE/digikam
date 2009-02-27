@@ -93,7 +93,7 @@ private:
 
     QPixmap getTagThumbnailPriv(TAlbum *album);
 
-private slots:
+private Q_SLOTS:
 
     void slotResult( KJob *job );
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& pix);

@@ -60,7 +60,7 @@ public:
 
     void fileMetadataChanged(const KUrl &url);
 
-signals:
+Q_SIGNALS:
 
     /** Indicates that tags have been assigned or removed
         for image with given imageId.
@@ -98,7 +98,7 @@ private:
 
     static ImageAttributesWatch *m_instance;
 
-private slots:
+private Q_SLOTS:
 
     void slotImageChange(const ImageChangeset &changeset);
     void slotImageTagChange(const ImageTagChangeset &changeset);

@@ -57,11 +57,11 @@ public:
     InsertTextTool(QObject *parent);
     ~InsertTextTool();
 
-signals:
+Q_SIGNALS:
 
     void signalUpdatePreview();
 
-private slots:
+private Q_SLOTS:
 
     void slotResetSettings();
     void slotFontPropertiesChanged(const QFont &font);

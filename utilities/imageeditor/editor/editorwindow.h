@@ -77,7 +77,7 @@ public:
     virtual bool setup()=0;
     virtual bool setupICC()=0;
 
-signals:
+Q_SIGNALS:
 
     void signalSelectionChanged(const QRect&);
     void signalNoCurrentItem();
@@ -180,7 +180,7 @@ protected:
     virtual void saveIsComplete()=0;
     virtual void saveAsIsComplete()=0;
 
-protected slots:
+protected Q_SLOTS:
 
     void slotSave();
     void slotSaveAs() { saveAs(); };
@@ -226,7 +226,7 @@ protected slots:
     virtual void slotContextMenu()=0;
     virtual void slotRevert()=0;
 
-private slots:
+private Q_SLOTS:
 
     void slotToggleUnderExposureIndicator();
     void slotToggleOverExposureIndicator();

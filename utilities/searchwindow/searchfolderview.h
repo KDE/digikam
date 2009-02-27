@@ -61,19 +61,19 @@ public:
 
     static QString currentSearchViewSearchName();
 
-signals:
+Q_SIGNALS:
 
     void editSearch(SAlbum *album);
     void selectedSearchChanged(SAlbum *album);
 
     void signalTextSearchFilterMatch(bool);
 
-public slots:
+public Q_SLOTS:
 
     void slotTextSearchFilterChanged(const SearchTextSettings&);
     void slotSelectSearch(SAlbum *album);
 
-private slots:
+private Q_SLOTS:
 
     void slotAlbumAdded(Album* album);
     void slotAlbumDeleted(Album* album);

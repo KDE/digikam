@@ -57,7 +57,7 @@ public:
     PerspectiveTool(QObject* parent);
     ~PerspectiveTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotInverseTransformationChanged(bool b);
     void slotResetSettings();

@@ -63,7 +63,7 @@ signals :
 
     void folderItemSelected(const KUrl &url);
 
-protected slots:
+protected Q_SLOTS:
 
     void load();
     void slotFolderSelected(Q3ListViewItem*);

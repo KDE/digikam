@@ -103,7 +103,7 @@ public:
 
     virtual QSize minimumSizeHint() const;
 
-signals:
+Q_SIGNALS:
 
     void signalOkClicked();
     void signalCancelClicked();

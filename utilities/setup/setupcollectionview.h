@@ -119,12 +119,12 @@ public:
     QModelIndex indexForCategory(Category category) const;
     QList<QModelIndex> categoryIndexes() const;
 
-signals:
+Q_SIGNALS:
 
     /// Emitted when all collections were loaded and the model reset in loadCollections
     void collectionsLoaded();
 
-public slots:
+public Q_SLOTS:
 
     /** Forward category button clicked signals to this slot.
      *  mappedId is retrieved with the CategoryButtonMapId role
@@ -135,7 +135,7 @@ public slots:
      *  for the model index of the button */
     void slotButtonPressed(int mappedId);
 
-protected slots:
+protected Q_SLOTS:
 
     void addCollection(int category);
     void deleteCollection(int internalId);
@@ -179,7 +179,7 @@ public:
 
     void setModel(SetupCollectionModel *model);
 
-protected slots:
+protected Q_SLOTS:
 
     void modelLoadedCollections();
 

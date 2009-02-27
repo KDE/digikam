@@ -62,7 +62,7 @@ public:
     QString currentPortPath();
     QString currentCameraPath();
 
-signals:
+Q_SIGNALS:
 
     void signalOkClicked(const QString& title, const QString& model,
                          const QString& port,  const QString& path);
@@ -72,7 +72,7 @@ private:
     void getCameraList();
     void getSerialPortList();
 
-private slots:
+private Q_SLOTS:
 
     void slotPTPCameraLinkUsed();
     void slotUMSCameraLinkUsed();

@@ -65,12 +65,12 @@ public:
     bool setSketchImageFromXML(QXmlStreamReader &reader);
     bool setSketchImageFromXML(const QString &xml);
 
-signals:
+Q_SIGNALS:
 
     void signalSketchChanged(const QImage&);
     void signalUndoRedoStateChanged(bool hasUndo, bool hasRedo);
 
-public slots:
+public Q_SLOTS:
 
     void setPenColor(const QColor& newColor);
     void setPenWidth(int newWidth);

@@ -42,11 +42,11 @@ public:
     RatingPopupMenu(QWidget* parent=0);
     ~RatingPopupMenu();
 
-signals:
+Q_SIGNALS:
 
     void signalRatingChanged(int);
 
-private slots:
+private Q_SLOTS:
 
     void slotRatingTriggered();
     void slotHovered(QAction *);

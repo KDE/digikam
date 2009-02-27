@@ -67,7 +67,7 @@ public:
 
     BatchToolsManager* batchToolsManager() const;
 
-signals:
+Q_SIGNALS:
 
     void signalWindowHasMoved();
 
@@ -75,7 +75,7 @@ protected:
 
     void moveEvent(QMoveEvent *e);
 
-public slots:
+public Q_SLOTS:
 
     void slotRun();
     void slotStop();
@@ -106,7 +106,7 @@ private:
 
     QueueMgrWindow();
 
-private slots:
+private Q_SLOTS:
 
     void slotToggleFullScreen();
     void slotEscapePressed();

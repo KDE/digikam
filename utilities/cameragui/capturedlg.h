@@ -58,7 +58,7 @@ protected:
 
     void closeEvent(QCloseEvent *e);
 
-private slots:
+private Q_SLOTS:
 
     void slotPreview();
     void slotPreviewDone(const QImage&);

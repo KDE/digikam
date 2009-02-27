@@ -52,7 +52,7 @@ public:
     void setSubSamplingValue(int val);
     int  getSubSamplingValue();
 
-signals:
+Q_SIGNALS:
 
     void signalSettingsChanged();
 

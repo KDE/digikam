@@ -63,12 +63,12 @@ public:
 
     virtual void clear();
 
-signals:
+Q_SIGNALS:
 
     void signalFolderChanged(CameraFolderItem*);
     void signalCleared();
 
-private slots:
+private Q_SLOTS:
 
     void slotCurrentChanged(QTreeWidgetItem*, int);
 

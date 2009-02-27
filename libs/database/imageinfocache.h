@@ -72,7 +72,7 @@ public:
 
     QString albumName(DatabaseAccess &access, int albumId);
 
-private slots:
+private Q_SLOTS:
 
     void slotImageChanged(const ImageChangeset &changeset);
     void slotImageTagChanged(const ImageTagChangeset &changeset);

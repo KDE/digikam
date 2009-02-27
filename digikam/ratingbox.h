@@ -45,7 +45,7 @@ public:
     void setRating(int val);
     int  rating() const;
 
-signals:
+Q_SIGNALS:
 
     void signalRatingChanged(int);
 

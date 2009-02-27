@@ -47,7 +47,7 @@ public:
     void setRatingFilterCondition(AlbumLister::RatingCondition cond);
     AlbumLister::RatingCondition ratingFilterCondition();
 
-signals:
+Q_SIGNALS:
 
     void signalRatingFilterChanged(int, AlbumLister::RatingCondition);
 
@@ -61,7 +61,7 @@ private:
 
     void updateRatingTooltip();
 
-private slots:
+private Q_SLOTS:
 
     void slotRatingChanged();
 

@@ -449,7 +449,7 @@ public:
     void refreshItemHandler(const KUrl::List& itemList=KUrl::List());
     void emitAlbumItemsSelected(bool val);
 
-signals:
+Q_SIGNALS:
 
     /// An album is about to be added to the given parent (0 if album is root)
     /// after the item given by prev (prev is 0 if parent has no children yet)
@@ -478,7 +478,7 @@ signals:
     void signalDAlbumsDirty(const QMap<YearMonth, int>&);
     void signalDatesMapDirty(const QMap<QDateTime, int>&);
 
-private slots:
+private Q_SLOTS:
 
     void slotDatesJobResult(KJob* job);
     void slotDatesJobData(KIO::Job* job, const QByteArray& data);

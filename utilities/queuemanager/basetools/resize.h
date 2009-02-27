@@ -48,7 +48,7 @@ public:
 
     BatchToolSettings defaultSettings();
 
-private slots:
+private Q_SLOTS:
 
     void slotSettingsChanged();
 

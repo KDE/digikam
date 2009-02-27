@@ -71,7 +71,7 @@ private:
     void applyRatioChanges(int a);
     void setRatioCBText(int orientation);
 
-private slots:
+private Q_SLOTS:
 
     void slotMaxAspectRatio();
     void slotResetSettings();

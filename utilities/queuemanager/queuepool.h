@@ -62,14 +62,14 @@ public:
     int totalPendingItems();
     int totalPendingTasks();
 
-signals:
+Q_SIGNALS:
 
     void signalItemSelectionChanged();
     void signalQueuePoolChanged();
     void signalQueueSelected(int id, const QueueSettings&, const AssignedBatchTools&);
     void signalQueueContentsChanged();
 
-public slots:
+public Q_SLOTS:
 
     void removeTab(int index);
 
@@ -82,7 +82,7 @@ public slots:
     void slotAssignedToolsChanged(const AssignedBatchTools&);
     void slotSettingsChanged(const QueueSettings&);
 
-private slots:
+private Q_SLOTS:
 
     void slotQueueSelected(int);
     void slotCloseQueueRequest(QWidget*);

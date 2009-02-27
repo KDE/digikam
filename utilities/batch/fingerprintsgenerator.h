@@ -52,7 +52,7 @@ public:
     FingerPrintsGenerator(QWidget* parent, bool rebuildAll);
     ~FingerPrintsGenerator();
 
-signals:
+Q_SIGNALS:
 
     void signalRebuildAllFingerPrintsDone();
 
@@ -66,11 +66,11 @@ protected:
 
     void closeEvent(QCloseEvent *e);
 
-protected slots:
+protected Q_SLOTS:
 
     void slotCancel();
 
-private slots:
+private Q_SLOTS:
 
     void slotRebuildFingerPrints();
     void slotGotImagePreview(const LoadingDescription&, const DImg&);

@@ -59,13 +59,13 @@ public:
 
     virtual void itemChanged(const KUrl& url, const QRect &rect = QRect(), DImg *img = 0);
 
-public slots:
+public Q_SLOTS:
 
     void slotImageSelectionChanged(const QRect &rect);
     virtual void slotNoCurrentItem();
 
 
-protected slots:
+protected Q_SLOTS:
 
     virtual void slotChangedTab(QWidget* tab);
 

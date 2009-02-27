@@ -64,14 +64,14 @@ public:
 
     void resetSettings();
 
-signals:
+Q_SIGNALS:
 
     void signalUpdatePreview();
     void signalAbortPreview();
     void signalDemosaicingChanged();
     void signalPostProcessingChanged();
 
-private slots:
+private Q_SLOTS:
 
     void slotResetCurve();
 

@@ -56,11 +56,11 @@ public:
     void allItemsFromAlbums(const AlbumList& albumsList);
     void stop();
 
-signals:
+Q_SIGNALS:
 
     void signalCompleted(const ImageInfoList& items);
 
-private slots:
+private Q_SLOTS:
 
     void slotItemsInfo(const ImageInfoList&);
     void slotComplete();

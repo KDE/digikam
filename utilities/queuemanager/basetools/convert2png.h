@@ -45,7 +45,7 @@ public:
     QString outputSuffix() const;
     BatchToolSettings defaultSettings();
 
-private slots:
+private Q_SLOTS:
 
     void slotSettingsChanged();
 

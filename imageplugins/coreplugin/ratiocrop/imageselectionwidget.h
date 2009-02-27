@@ -127,13 +127,13 @@ public:
 
     Digikam::ImageIface* imageIface();
 
-public slots:
+public Q_SLOTS:
 
     void slotGuideLines(int guideLinesType);
     void slotChangeGuideColor(const QColor& color);
     void slotChangeGuideSize(int size);
 
-signals:
+Q_SIGNALS:
 
     void signalSelectionMoved(const QRect& rect);
     void signalSelectionChanged(const QRect& rect);

@@ -93,7 +93,7 @@ private:
     Digikam::ThumbBarView *thumbBar() const;
     Digikam::Sidebar      *rightSideBar() const;
 
-private slots:
+private Q_SLOTS:
 
     void slotForward();
     void slotBackward();

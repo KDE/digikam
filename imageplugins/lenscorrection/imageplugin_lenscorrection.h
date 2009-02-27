@@ -45,7 +45,7 @@ public:
 
     void setEnabledActions(bool enable);
 
-private slots:
+private Q_SLOTS:
 
     void slotAutoCorrection();
     void slotLensDistortion();

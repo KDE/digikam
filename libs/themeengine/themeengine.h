@@ -88,11 +88,11 @@ private:
     void    changePalette();
     QString resourceValue(const QDomElement &rootElem, const QString& key);
 
-signals:
+Q_SIGNALS:
 
     void signalThemeChanged();
 
-public slots:
+public Q_SLOTS:
 
     void slotChangeTheme(const QString& name);
 

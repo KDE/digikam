@@ -67,7 +67,7 @@ public:
      */
     QString search();
 
-signals:
+Q_SIGNALS:
 
     /**
      * Signals that the user has finished editing the search.
@@ -75,7 +75,7 @@ signals:
      */
     void searchEdited(int id, const QString &query);
 
-protected slots:
+protected Q_SLOTS:
 
     void searchOk();
     void searchCancel();

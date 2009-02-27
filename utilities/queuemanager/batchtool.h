@@ -120,7 +120,7 @@ public:
      */
     virtual BatchToolSettings defaultSettings() = 0;
 
-signals:
+Q_SIGNALS:
 
     void signalSettingsChanged(const BatchToolSettings&);
 
@@ -139,7 +139,7 @@ protected:
      */
     virtual bool toolOperations()=0;
 
-protected slots:
+protected Q_SLOTS:
 
     virtual void slotSettingsChanged()=0;
 

@@ -58,7 +58,7 @@ public:
     DistortionFXTool(QObject *parent);
     ~DistortionFXTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotEffectTypeChanged(int type);
     void slotResetSettings();

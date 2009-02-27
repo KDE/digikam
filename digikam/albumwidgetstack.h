@@ -93,7 +93,7 @@ public:
 
     void applySettings();
 
-signals:
+Q_SIGNALS:
 
     void signalNextItem();
     void signalPrevItem();
@@ -108,11 +108,11 @@ signals:
     void signalFindSimilar();
     void signalUrlSelected(const KUrl&);
 
-public slots:
+public Q_SLOTS:
 
     void slotEscapePreview();
 
-private slots:
+private Q_SLOTS:
 
     void slotZoomFactorChanged(double);
     void slotItemsUpdated(const KUrl::List&);

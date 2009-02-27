@@ -74,7 +74,7 @@ private:
     void updateBannerRectPixmap();
     void updateItemRectsPixmap();
 
-private slots:
+private Q_SLOTS:
 
     void slotThemeChanged();
 

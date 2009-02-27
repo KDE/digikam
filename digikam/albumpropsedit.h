@@ -71,7 +71,7 @@ public:
                           QString&     category,
                           QStringList& albumCategories);
 
-private slots:
+private Q_SLOTS:
 
     void slotTitleChanged(const QString& newtitle);
     void slotDateLowButtonClicked();

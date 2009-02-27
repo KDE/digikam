@@ -74,7 +74,7 @@ public:
         StartEditor
     };
 
-signals:
+Q_SIGNALS:
 
     void setupChanged();
 

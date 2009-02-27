@@ -94,7 +94,7 @@ public:
     virtual Qt::ItemFlags flags ( const QModelIndex & index ) const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
 
-signals:
+Q_SIGNALS:
 
     void checkStateChanged(QVariant key, bool isChecked);
 
@@ -182,11 +182,11 @@ public:
     ChoiceSearchModel *model() const;
     SearchSqueezedClickLabel *label() const;
 
-signals:
+Q_SIGNALS:
 
     void checkStateChanged();
 
-protected slots:
+protected Q_SLOTS:
 
     void labelClicked();
 

@@ -55,7 +55,7 @@ public:
     ShearTool(QObject* parent);
     ~ShearTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotResetSettings();
     void slotColorGuideChanged();

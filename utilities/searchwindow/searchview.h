@@ -68,7 +68,7 @@ public:
 
     AbstractSearchGroupContainer(QWidget *parent = 0);
 
-public slots:
+public Q_SLOTS:
 
     SearchGroup *addSearchGroup();
     void removeSearchGroup(SearchGroup *group);
@@ -90,7 +90,7 @@ protected:
     /// Re-implement: Adds a newly created group to the layout structures
     virtual void addGroupToLayout(SearchGroup *group) = 0;
 
-protected slots:
+protected Q_SLOTS:
 
     void removeSendingSearchGroup();
 
@@ -119,13 +119,13 @@ public:
     void read(const QString &search);
     QString write();
 
-signals:
+Q_SIGNALS:
 
     void searchOk();
     void searchTryout();
     void searchCancel();
 
-protected slots:
+protected Q_SLOTS:
 
     void setTheme();
     void slotAddGroupButton();
@@ -163,7 +163,7 @@ public:
 
     SearchViewBottomBar(SearchViewThemedPartsCache * cache, QWidget *parent = 0);
 
-signals:
+Q_SIGNALS:
 
     void okPressed();
     void cancelPressed();

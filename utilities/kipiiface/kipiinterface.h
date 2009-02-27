@@ -97,12 +97,12 @@ public:
     QVariant hostSetting(const QString& settingName);
 #endif
 
-public slots:
+public Q_SLOTS:
 
     void slotSelectionChanged( bool b );
     void slotCurrentAlbumChanged( Album *palbum );
 
-private slots:
+private Q_SLOTS:
 
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
 

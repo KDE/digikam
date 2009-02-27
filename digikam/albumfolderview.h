@@ -102,16 +102,16 @@ public:
 
     void setCurrentAlbum(Album *album);
 
-signals:
+Q_SIGNALS:
 
     void signalAlbumModified();
     void signalTextFolderFilterMatch(bool);
 
-public slots:
+public Q_SLOTS:
 
     void slotTextFolderFilterChanged(const SearchTextSettings&);
 
-private slots:
+private Q_SLOTS:
 
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
     void slotThumbnailLost(Album *album);

@@ -86,7 +86,7 @@ protected:
     virtual void contentsWheelEvent(QWheelEvent*);
     virtual bool eventFilter(QObject *obj, QEvent *ev);
 
-private slots:
+private Q_SLOTS:
 
     void slotImageRatingChanged(qlonglong);
     void slotEditRatingFromItem(int);

@@ -78,12 +78,12 @@ public:
 
     QString cameraTitle() const;
 
-signals:
+Q_SIGNALS:
 
     void signalLastDestination(const KUrl&);
     void signalWindowHasMoved();
 
-public slots:
+public Q_SLOTS:
 
     void slotDownload(bool onlySelected, bool deleteAfter, Album *pAlbum=0);
 
@@ -114,7 +114,7 @@ private:
     void refreshFreeSpace();
     void refreshCollectionFreeSpace();
 
-private slots:
+private Q_SLOTS:
 
     void slotClose();
     void slotCancelButton();

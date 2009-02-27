@@ -57,7 +57,7 @@ public:
     HSLTool(QObject *parent);
     ~HSLTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotEffect();
     void slotResetSettings();

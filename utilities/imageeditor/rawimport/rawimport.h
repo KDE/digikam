@@ -60,7 +60,7 @@ private:
     void prepareEffect();
     void putPreviewData();
 
-private slots:
+private Q_SLOTS:
 
     void slotInit();
 

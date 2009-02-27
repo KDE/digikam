@@ -57,11 +57,11 @@ public:
     BlackFrameListView(QWidget* parent=0);
     ~BlackFrameListView(){};
 
-signals:
+Q_SIGNALS:
 
     void blackFrameSelected(QList<HotPixel>, const KUrl&);
 
-private slots:
+private Q_SLOTS:
 
     void slotParsed(QList<HotPixel> hotPixels, const KUrl& blackFrameURL)
     {
@@ -80,7 +80,7 @@ public:
     BlackFrameListViewItem(BlackFrameListView* parent, const KUrl &url);
     ~BlackFrameListViewItem(){};
 
-signals:
+Q_SIGNALS:
 
     void parsed(QList<HotPixel>, const KUrl&);
     void signalLoadingProgress(float);
@@ -94,7 +94,7 @@ private:
 
     QPixmap thumb(const QSize& size);
 
-private slots:
+private Q_SLOTS:
 
     void slotParsed(QList<HotPixel>);
 

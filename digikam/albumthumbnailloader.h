@@ -149,7 +149,7 @@ public:
      */
     QPixmap blendIcons(QPixmap dstIcon, const QPixmap &tagIcon);
 
-signals:
+Q_SIGNALS:
 
     /**
      * This signal is emitted as soon as a thumbnail has become available
@@ -172,7 +172,7 @@ signals:
 
     void signalDispatchThumbnailInternal(int albumID, const QPixmap &thumbnail);
 
-protected slots:
+protected Q_SLOTS:
 
     void slotGotThumbnailFromIcon(const LoadingDescription &loadingDescription, const QPixmap &pixmap);
     void slotIconChanged(Album* album);

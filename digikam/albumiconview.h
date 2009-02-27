@@ -142,7 +142,7 @@ public:
     void insertSelectionToNewQueue();
     void insertToQueueManager(const ImageInfoList& list, const ImageInfo& current, bool newQueue);
 
-signals:
+Q_SIGNALS:
 
     void signalPreviewItem(AlbumIconItem*);
     void signalItemsAdded();
@@ -160,7 +160,7 @@ signals:
     void changeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs,
                                bool addOrRemove, bool progress);
 
-public slots:
+public Q_SLOTS:
 
     void slotSetExifOrientation(int orientation);
     void slotRename(AlbumIconItem* item);
@@ -196,7 +196,7 @@ protected:
 
     bool acceptToolTip(IconItem *item, const QPoint &mousePos);
 
-private slots:
+private Q_SLOTS:
 
     void slotImageListerNewItems(const ImageInfoList& itemList);
     void slotImageListerDeleteItem(const ImageInfo &item);

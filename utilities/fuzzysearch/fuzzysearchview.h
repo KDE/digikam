@@ -60,7 +60,7 @@ public:
 
     void newDuplicatesSearch();
 
-signals:
+Q_SIGNALS:
 
     void signalUpdateFingerPrints();
 
@@ -85,7 +85,7 @@ private:
 
     void setColor(QColor c);
 
-private slots:
+private Q_SLOTS:
 
     void slotTabChanged(int);
 

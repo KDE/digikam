@@ -75,7 +75,7 @@ public:
 
     bool queryClose();
 
-signals:
+Q_SIGNALS:
 
     void signalFileDeleted(const KUrl& url);
     void signalFileAdded(const KUrl& url);
@@ -110,7 +110,7 @@ private:
 
     ImageWindow();
 
-private slots:
+private Q_SLOTS:
 
     void slotForward();
     void slotBackward();

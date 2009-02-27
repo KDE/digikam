@@ -55,7 +55,7 @@ public:
     RestorationTool(QObject* parent);
     ~RestorationTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotSaveAsSettings();
     void slotLoadSettings();

@@ -78,7 +78,7 @@ private:
     void finalRendering();
     QPixmap getThumbnailForEffect(int type);
 
-private slots:
+private Q_SLOTS:
 
     void slotResetSettings();
     void slotSaveAsSettings();

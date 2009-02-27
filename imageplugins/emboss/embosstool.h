@@ -53,7 +53,7 @@ public:
     EmbossTool(QObject* parent);
     ~EmbossTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotResetSettings();
 

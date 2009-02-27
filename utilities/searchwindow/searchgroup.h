@@ -73,7 +73,7 @@ public:
 
     QList<QRect> startupAnimationArea() const;
 
-signals:
+Q_SIGNALS:
 
     void removeRequested();
 
@@ -110,11 +110,11 @@ public:
     SearchXml::Operator groupOperator() const;
     SearchXml::Operator defaultFieldOperator() const;
 
-signals:
+Q_SIGNALS:
 
     void removeClicked();
 
-protected slots:
+protected Q_SLOTS:
 
     void toggleShowOptions();
     void toggleGroupOperator();

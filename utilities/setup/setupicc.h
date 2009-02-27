@@ -68,7 +68,7 @@ private:
     void profileInfo(const QString&);
     bool parseProfilesfromDir(const QFileInfoList& files);
 
-private slots:
+private Q_SLOTS:
 
     void processLcmsUrl(const QString&);
     void slotToggledWidgets(bool);

@@ -56,7 +56,7 @@ public:
     AutoCorrectionTool(QObject *parent);
     ~AutoCorrectionTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotEffect();
     void slotResetSettings();

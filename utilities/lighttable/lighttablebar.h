@@ -52,7 +52,7 @@ public:
 
     void setNavigateByPair(bool b);
 
-signals:
+Q_SIGNALS:
 
     void signalLightTableBarItemSelected(const ImageInfo &);
     void signalSetItemOnLeftPanel(const ImageInfo &);
@@ -70,7 +70,7 @@ private:
     void contentsDragEnterEvent(QDragEnterEvent*);
     void contentsDropEvent(QDropEvent*);
 
-private slots:
+private Q_SLOTS:
 
     void slotItemSelected(ThumbBarItem*);
 

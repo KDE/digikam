@@ -64,7 +64,7 @@ private:
     void finalRendering();
     void adjustSliders();
 
-private slots:
+private Q_SLOTS:
 
     void slotSaveAsSettings();
     void slotLoadSettings();

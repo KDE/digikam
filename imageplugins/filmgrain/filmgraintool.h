@@ -51,7 +51,7 @@ public:
     FilmGrainTool(QObject* parent);
     ~FilmGrainTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotSliderMoved(int);
     void slotResetSettings();

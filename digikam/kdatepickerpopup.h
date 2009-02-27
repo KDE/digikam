@@ -96,7 +96,7 @@ class KDatePickerPopup: public KMenu
     /** @return Returns the bitwise result of the active items in the popup. */
     int items() const { return mItems; }
 
- signals:
+ Q_SIGNALS:
 
     /**
       This signal emits the new date (selected with datepicker or other
@@ -104,7 +104,7 @@ class KDatePickerPopup: public KMenu
     */
     void dateChanged (const QDate&);
 
-protected slots:
+protected Q_SLOTS:
 
     void slotDateChanged(const QDate&);
     void slotToday();

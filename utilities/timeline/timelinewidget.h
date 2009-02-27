@@ -98,14 +98,14 @@ public:
     int  indexForCursorDateTime();
     void setCurrentIndex(int index);
 
-signals:
+Q_SIGNALS:
 
     void signalCursorPositionChanged();
     void signalSelectionChanged();
     void signalRefDateTimeChanged();
     void signalDateMapChanged();
 
-public slots:
+public Q_SLOTS:
 
     void slotDatesMap(const QMap<QDateTime, int>&);
     void slotPrevious();
@@ -114,7 +114,7 @@ public slots:
     void slotForward();
     void slotResetSelection();
 
-private slots:
+private Q_SLOTS:
 
     void slotThemeChanged();
 

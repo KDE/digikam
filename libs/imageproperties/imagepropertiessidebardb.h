@@ -68,7 +68,7 @@ public:
     void populateTags(void);
     void refreshTagsView();
 
-signals:
+Q_SIGNALS:
 
     void signalFirstItem();
     void signalPrevItem();
@@ -77,7 +77,7 @@ signals:
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
 
-public slots:
+public Q_SLOTS:
 
     void slotAssignRating(int rating);
     void slotAssignRatingNoStar();
@@ -89,7 +89,7 @@ public slots:
 
     virtual void slotNoCurrentItem();
 
-private slots:
+private Q_SLOTS:
 
     void slotChangedTab(QWidget* tab);
     void slotFileMetadataChanged(const KUrl &url);

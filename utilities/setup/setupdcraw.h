@@ -53,7 +53,7 @@ private:
     void readSettings();
 
 
-private slots:
+private Q_SLOTS:
 
     void slotSixteenBitsImageToggled(bool);
 

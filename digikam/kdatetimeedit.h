@@ -77,7 +77,7 @@ public:
       */
      void setDateTime(const QDateTime dateTime);
 
-signals:
+Q_SIGNALS:
 
     /**
      *  This signal is emitted whenever the user modifies the date or time.
@@ -91,7 +91,7 @@ private:
 
     KDateEdit* m_datePopUp;
 
-private slots:
+private Q_SLOTS:
 
     void slotDateTimeChanged();
 };

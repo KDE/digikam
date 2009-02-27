@@ -81,12 +81,12 @@ public:
 
     void setCurrentTool(int index);
 
-signals:
+Q_SIGNALS:
 
     void signalToolSelected(const BatchToolSet&);
     void signalAssignedToolsChanged(const AssignedBatchTools&);
 
-public slots:
+public Q_SLOTS:
 
     void slotMoveCurrentToolUp();
     void slotMoveCurrentToolDown();
@@ -95,7 +95,7 @@ public slots:
     void slotQueueSelected(int, const QueueSettings&, const AssignedBatchTools&);
     void slotSettingsChanged(const BatchToolSet&);
 
-private slots:
+private Q_SLOTS:
 
     void slotSelectionChanged();
 

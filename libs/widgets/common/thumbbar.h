@@ -100,11 +100,11 @@ public:
 
     static QPixmap generateFuzzyRect(const QSize& size, const QColor& color, int radius);
 
-public slots:
+public Q_SLOTS:
 
     void slotUpdate();
 
-signals:
+Q_SIGNALS:
 
     void signalItemSelected(ThumbBarItem*);
     void signalUrlSelected(const KUrl&);
@@ -136,7 +136,7 @@ protected:
     virtual void viewportPaintEvent(QPaintEvent*);
     virtual void startDrag();
 
-protected slots:
+protected Q_SLOTS:
 
     virtual void slotPreload();
     void slotContentsMoved();
@@ -146,7 +146,7 @@ protected:
 
     ThumbBarToolTip *m_toolTip;
 
-private slots:
+private Q_SLOTS:
 
     void slotGotThumbnail(const LoadingDescription&, const QPixmap&);
     void slotToolTip();

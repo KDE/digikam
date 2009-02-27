@@ -84,7 +84,7 @@ public:
     void   fitToWindow();
     void   toggleFitToWindowOr100();
 
-signals:
+Q_SIGNALS:
 
     void signalLeftPreviewLoaded(bool);
     void signalRightPreviewLoaded(bool);
@@ -103,7 +103,7 @@ signals:
     void signalEditItem(const ImageInfo &);
     void signalToggleOnSyncPreview(bool);
 
-public slots:
+public Q_SLOTS:
 
     void slotDecreaseZoom();
     void slotIncreaseZoom();
@@ -115,7 +115,7 @@ public slots:
     void slotIncreaseRightZoom();
     void slotRightZoomSliderChanged(int);
 
-private slots:
+private Q_SLOTS:
 
     void slotLeftContentsMoved(int, int);
     void slotRightContentsMoved(int, int);

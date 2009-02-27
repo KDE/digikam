@@ -227,7 +227,7 @@ public:
         LastInsertId
 */
 
-private slots:
+private Q_SLOTS:
 
     void slotThreadFinished();
     void slotMainThreadFinished();

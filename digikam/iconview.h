@@ -118,7 +118,7 @@ public:
     QPixmap selectPixmap() const;
     QPixmap deselectPixmap() const;
 
-signals:
+Q_SIGNALS:
 
     void signalZoomIn();
     void signalZoomOut();
@@ -130,7 +130,7 @@ signals:
     void signalReturnPressed(IconItem* item);
     void signalShowToolTip(IconItem* item);
 
-public slots:
+public Q_SLOTS:
 
     void slotRearrange();
 
@@ -156,11 +156,11 @@ protected:
 
     virtual bool acceptToolTip(IconItem* , const QPoint&);
 
-protected slots:
+protected Q_SLOTS:
 
     virtual void slotEditRatingFromItem(int){};
 
-private slots:
+private Q_SLOTS:
 
     void slotToolTip();
     void slotIconViewFontChanged();

@@ -52,7 +52,7 @@ public:
     OilPaintTool(QObject* parent);
     ~OilPaintTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotResetSettings();
 

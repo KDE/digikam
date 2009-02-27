@@ -44,7 +44,7 @@ public:
 
     void applySettings();
 
-private slots:
+private Q_SLOTS:
 
     void slotThemeBackgroundColor(bool);
 

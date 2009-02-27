@@ -51,7 +51,7 @@ public:
 
     void applySettings();
 
-public slots:
+public Q_SLOTS:
 
     void slotImageFileFormatChanged(const QString&);
     void slotImageFileSelected(const QString&);

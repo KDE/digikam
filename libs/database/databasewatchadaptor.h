@@ -41,7 +41,7 @@ public:
 
     Digikam_DatabaseWatchAdaptor(Digikam::DatabaseWatch *watch);
 
-signals:
+Q_SIGNALS:
 
     // These signals are the same as declared in DatabaseWatch, setAutoRelaySignals will
     // automatically connect the DatabaseWatch signals to these, which are then sent over DBus.

@@ -60,7 +60,7 @@ private:
     bool checkName(QString& name);
     bool checkAlbum(const QString& name) const;
 
-private slots:
+private Q_SLOTS:
 
     void slotInit();
     void slotScrollBarValueChanged(int);

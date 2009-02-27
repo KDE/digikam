@@ -49,7 +49,7 @@ public:
     void setCompressionValue(int val);
     int  getCompressionValue();
 
-signals:
+Q_SIGNALS:
 
     void signalSettingsChanged();
 

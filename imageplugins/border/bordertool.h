@@ -64,7 +64,7 @@ public:
     BorderTool(QObject *parent);
     ~BorderTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotResetSettings();
     void slotPreserveAspectRatioToggled(bool);

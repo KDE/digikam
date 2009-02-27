@@ -48,7 +48,7 @@ public:
     void setEnabledSelectionActions(bool enable);
     void setEnabledActions(bool enable);
 
-private slots:
+private Q_SLOTS:
 
     void slotBlur();
     void slotSharpen();

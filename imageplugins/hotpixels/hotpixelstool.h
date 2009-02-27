@@ -69,7 +69,7 @@ public:
     HotPixelsTool(QObject *parent);
     ~HotPixelsTool();
 
-private slots:
+private Q_SLOTS:
 
     void slotLoadingProgress(float v);
     void slotLoadingComplete();

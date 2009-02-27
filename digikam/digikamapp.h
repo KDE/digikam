@@ -85,7 +85,7 @@ public:
     void enableAlbumBackwardHistory(bool enable);
     void enableAlbumForwardHistory(bool enable);
 
-signals:
+Q_SIGNALS:
 
     void signalEscapePressed();
     void signalNextItem();
@@ -125,7 +125,7 @@ private:
     void openSolidUsmDevice(const QString &udi, const QString &label = QString());
     void runFingerPrintsGenerator(bool rebuildAll);
 
-private slots:
+private Q_SLOTS:
 
     void slotAlbumSelected(bool val);
     void slotTagSelected(bool val);

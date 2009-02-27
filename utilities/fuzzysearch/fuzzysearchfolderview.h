@@ -51,17 +51,17 @@ public:
     static QString currentFuzzySketchSearchName();
     static QString currentFuzzyImageSearchName();
 
-signals:
+Q_SIGNALS:
 
     void signalTextSearchFilterMatch(bool);
     void signalAlbumSelected(SAlbum*);
     void signalRenameAlbum(SAlbum*);
 
-public slots:
+public Q_SLOTS:
 
     void slotTextSearchFilterChanged(const SearchTextSettings&);
 
-private slots:
+private Q_SLOTS:
 
     void slotAlbumAdded(Album*);
     void slotAlbumDeleted(Album*);

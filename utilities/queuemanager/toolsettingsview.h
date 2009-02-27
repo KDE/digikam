@@ -46,15 +46,15 @@ public:
     ToolSettingsView(QWidget *parent=0);
     ~ToolSettingsView();
 
-signals:
+Q_SIGNALS:
 
     void signalSettingsChanged(const BatchToolSet&);
 
-public slots:
+public Q_SLOTS:
 
     void slotToolSelected(const BatchToolSet&);
 
-private slots:
+private Q_SLOTS:
 
     void slotSettingsChanged(const BatchToolSettings&);
     void slotThemeChanged();

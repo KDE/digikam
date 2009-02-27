@@ -51,7 +51,7 @@ public:
     void setTracking(bool tracking);
     bool hasTracking() const;
 
-signals:
+Q_SIGNALS:
 
     void signalRatingChanged(int);
 
@@ -70,7 +70,7 @@ protected:
 
     void regeneratePixmaps();
 
-private slots:
+private Q_SLOTS:
 
     void slotThemeChanged();
 

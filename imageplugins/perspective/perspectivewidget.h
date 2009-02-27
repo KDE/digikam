@@ -77,7 +77,7 @@ public:
 
     Digikam::ImageIface* imageIface();
 
-public slots:
+public Q_SLOTS:
 
     void slotToggleAntiAliasing(bool a);
     void slotToggleDrawWhileMoving(bool draw);
@@ -87,7 +87,7 @@ public slots:
     void slotChangeGuideSize(int size);
     void slotInverseTransformationChanged(bool isEnabled);
 
-signals:
+Q_SIGNALS:
 
     void signalPerspectiveChanged(const QRect& newSize, float topLeftAngle, float topRightAngle,
                                   float bottomLeftAngle, float bottomRightAngle);

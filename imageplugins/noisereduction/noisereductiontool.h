@@ -61,7 +61,7 @@ private:
     void putFinalData();
     void renderingFinished();
 
-private slots:
+private Q_SLOTS:
 
     void slotSaveAsSettings();
     void slotLoadSettings();

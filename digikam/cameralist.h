@@ -65,7 +65,7 @@ public:
 
     static CameraList* defaultList();
 
-signals:
+Q_SIGNALS:
 
     void signalCameraAdded(CameraType*);
     void signalCameraRemoved(CameraType*);

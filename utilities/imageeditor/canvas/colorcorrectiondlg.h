@@ -53,7 +53,7 @@ public:
                        IccTransform *iccTrans, const QString& file);
     ~ColorCorrectionDlg();
 
-private slots:
+private Q_SLOTS:
 
     void slotCurrentProfInfo();
     void slotEmbeddedProfInfo();
