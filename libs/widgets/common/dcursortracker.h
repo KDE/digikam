@@ -41,6 +41,8 @@ class QTimer;
 namespace Digikam
 {
 
+class DCursorTrackerPriv;
+
 /**
  * This class implements a decoration-less window which will follow the cursor
  * when it's over a specified widget.
@@ -74,10 +76,7 @@ private:
 
 private:
 
-    bool     m_enable;
-    bool     m_keepOpen;
-    QTimer*  m_autoHideTimer;
-    QWidget* m_parent;
+    DCursorTrackerPriv* const d;
 };
 
 

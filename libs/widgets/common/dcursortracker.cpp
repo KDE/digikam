@@ -42,19 +42,36 @@
 namespace Digikam
 {
 
-DCursorTracker::DCursorTracker(const QString& txt, QWidget *parent)
-              : QLabel(txt, 0, Qt::ToolTip)
+class DCursorTrackerPriv
 {
-    m_parent = parent;
-    m_parent->setMouseTracking(true);
-    m_parent->installEventFilter(this);
-    setEnable(true);
 
-    m_keepOpen      = false;
-    m_autoHideTimer = new QTimer(this);
-    m_autoHideTimer->setSingleShot(true);
+public:
 
-    connect(m_autoHideTimer, SIGNAL(timeout()),
+    DCursorTrackerPriv()
+    {
+        keepOpen      = false;
+        enable        = true;
+        autoHideTimer = 0;
+        parent        = 0;
+    }
+
+    bool     enable;
+    bool     keepOpen;
+    QTimer*  autoHideTimer;
+    QWidget* parent;
+};
+
+DCursorTracker::DCursorTracker(const QString& txt, QWidget *parent)
+              : QLabel(txt, 0, Qt::ToolTip), d(new DCursorTrackerPriv)
+{
+    d->parent = parent;
+    d->parent->setMouseTracking(true);
+    d->parent->installEventFilter(this);
+
+    d->autoHideTimer = new QTimer(this);
+    d->autoHideTimer->setSingleShot(true);
+
+    connect(d->autoHideTimer, SIGNAL(timeout()),
             this, SLOT(slotAutoHide()));
 }
 
@@ -69,28 +86,28 @@ void DCursorTracker::setText(const QString& txt)
 
 void DCursorTracker::setEnable(bool b)
 {
-    m_enable = b;
-    moveToParent(m_parent);
+    d->enable = b;
+    moveToParent(d->parent);
 }
 
 void DCursorTracker::setKeepOpen(bool b)
 {
-    m_keepOpen = b;
+    d->keepOpen = b;
 }
 
 void DCursorTracker::triggerAutoShow(int timeout)
 {
-    if (m_enable)
+    if (d->enable)
     {
         show();
-        moveToParent(m_parent);
-        m_autoHideTimer->start(timeout);
+        moveToParent(d->parent);
+        d->autoHideTimer->start(timeout);
     }
 }
 
 void DCursorTracker::refresh()
 {
-    moveToParent(m_parent);
+    moveToParent(d->parent);
 }
 
 void DCursorTracker::slotAutoHide()
@@ -107,13 +124,13 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
         case QEvent::MouseMove:
         {
             QMouseEvent *event = static_cast<QMouseEvent*>(e);
-            if (m_enable && (widget->rect().contains(event->pos()) ||
-                            (event->buttons() & Qt::LeftButton)))
+            if (d->enable && (widget->rect().contains(event->pos()) ||
+                             (event->buttons() & Qt::LeftButton)))
             {
                 show();
                 moveToParent(widget);
             }
-            else if (!m_keepOpen)
+            else if (!d->keepOpen)
             {
                 hide();
             }
@@ -122,7 +139,7 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
 
         case QEvent::Leave:
         {
-            if (!m_keepOpen)
+            if (!d->keepOpen)
                 hide();
             break;
         }
