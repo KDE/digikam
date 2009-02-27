@@ -92,14 +92,11 @@ QString Convert2PNG::outputSuffix() const
 
 bool Convert2PNG::toolOperations()
 {
-    DImg img;
-    if (!img.load(inputUrl().path()))
-        return false;
+    if (!loadToDImg()) return false;
 
-    img.setAttribute("quality", settings()["Quality"].toInt());
-    img.updateMetadata("PNG", QString(), getExifSetOrientation());
+    image().setAttribute("quality", settings()["Quality"].toInt());
 
-    return( img.save(outputUrl().path(), "PNG") );
+    return (savefromDImg());
 }
 
 }  // namespace Digikam

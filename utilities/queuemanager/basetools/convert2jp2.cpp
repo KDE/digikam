@@ -96,15 +96,12 @@ QString Convert2JP2::outputSuffix() const
 
 bool Convert2JP2::toolOperations()
 {
-    DImg img;
-    if (!img.load(inputUrl().path()))
-        return false;
+    if (!loadToDImg()) return false;
 
     bool lossless = settings()["lossless"].toBool();
-    img.setAttribute("quality", lossless ? 100 : settings()["quality"].toInt());
-    img.updateMetadata("JP2", QString(), getExifSetOrientation());
+    image().setAttribute("quality", lossless ? 100 : settings()["quality"].toInt());
 
-    return ( img.save(outputUrl().path(), "JP2") );
+    return (savefromDImg());
 }
 
 }  // namespace Digikam

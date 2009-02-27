@@ -107,9 +107,7 @@ void Restoration::slotSettingsChanged()
 
 bool Restoration::toolOperations()
 {
-    DImg img;
-    if (!img.load(inputUrl().path()))
-        return false;
+    if (!loadToDImg()) return false;
 
     int type = settings()["RestorationMethod"].toInt();
 
@@ -145,7 +143,7 @@ bool Restoration::toolOperations()
 
     m_cimgIface = new GreycstorationIface(this);
     m_cimgIface->setMode(GreycstorationIface::Restore);
-    m_cimgIface->setOriginalImage(img);
+    m_cimgIface->setOriginalImage(image());
     m_cimgIface->setSettings(settings);
     m_cimgIface->setup();
     m_cimgIface->startFilterDirectly();
@@ -153,15 +151,11 @@ bool Restoration::toolOperations()
     if (isCancelled()) return false;
 
     DImg trg    = m_cimgIface->getTargetImage();
-    img.putImageData(trg.bits());
+    image().putImageData(trg.bits());
     delete m_cimgIface;
     m_cimgIface = 0;
 
-    DImg::FORMAT format = (DImg::FORMAT)(img.attribute("detectedFileFormat").toInt());
-
-    img.updateMetadata(DImg::formatToMimeType(format), QString(), getExifSetOrientation());
-
-    return( img.save(outputUrl().path(), format) );
+    return (savefromDImg());
 }
 
 void Restoration::cancel()

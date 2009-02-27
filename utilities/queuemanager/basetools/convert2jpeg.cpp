@@ -96,15 +96,12 @@ QString Convert2JPEG::outputSuffix() const
 
 bool Convert2JPEG::toolOperations()
 {
-    DImg img;
-    if (!img.load(inputUrl().path()))
-        return false;
+    if (!loadToDImg()) return false;
 
-    img.setAttribute("quality",     settings()["Quality"].toInt());
-    img.setAttribute("subsampling", settings()["SubSampling"].toInt());
-    img.updateMetadata("JPEG", QString(), getExifSetOrientation());
+    image().setAttribute("quality",     settings()["Quality"].toInt());
+    image().setAttribute("subsampling", settings()["SubSampling"].toInt());
 
-    return( img.save(outputUrl().path(), "JPEG") );
+    return (savefromDImg());
 }
 
 }  // namespace Digikam

@@ -111,17 +111,11 @@ bool Flip::toolOperations()
         }
     }
 
-    DImg img;
-    if (!img.load(inputUrl().path()))
-        return false;
+    if (!loadToDImg()) return false;
 
-    img.flip(flip);
+    image().flip(flip);
 
-    DImg::FORMAT format = (DImg::FORMAT)(img.attribute("detectedFileFormat").toInt());
-
-    img.updateMetadata(DImg::formatToMimeType(format), QString(), getExifSetOrientation());
-
-    return( img.save(outputUrl().path(), format) );
+    return (savefromDImg());
 }
 
 }  // namespace Digikam

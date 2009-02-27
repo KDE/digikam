@@ -96,9 +96,7 @@ void AutoCorrection::slotSettingsChanged()
 
 bool AutoCorrection::toolOperations()
 {
-    DImg img;
-    if (!img.load(inputUrl().path()))
-        return false;
+    if (!loadToDImg()) return false;
 
     int type = settings()["AutoCorrectionFilter"].toInt();
 
@@ -107,36 +105,32 @@ bool AutoCorrection::toolOperations()
     switch (type)
     {
         case AutoLevelsCorrection:
-            filter.autoLevelsCorrectionImage(img.bits(), img.width(), img.height(), img.sixteenBit());
+            filter.autoLevelsCorrectionImage(image().bits(), image().width(), image().height(), image().sixteenBit());
             break;
 
         case NormalizeCorrection:
-            filter.normalizeImage(img.bits(), img.width(), img.height(), img.sixteenBit());
+            filter.normalizeImage(image().bits(), image().width(), image().height(), image().sixteenBit());
             break;
 
         case EqualizeCorrection:
-            filter.equalizeImage(img.bits(), img.width(), img.height(), img.sixteenBit());
+            filter.equalizeImage(image().bits(), image().width(), image().height(), image().sixteenBit());
             break;
 
         case StretchContrastCorrection:
-            filter.stretchContrastImage(img.bits(), img.width(), img.height(), img.sixteenBit());
+            filter.stretchContrastImage(image().bits(), image().width(), image().height(), image().sixteenBit());
             break;
 
         case AutoExposureCorrection:
-            WhiteBalance wbFilter(img.sixteenBit());
+            WhiteBalance wbFilter(image().sixteenBit());
             double       blackLevel, exposureLevel;
-            wbFilter.autoExposureAdjustement(img.bits(), img.width(), img.height(),
-                                             img.sixteenBit(), blackLevel, exposureLevel);
-            wbFilter.whiteBalance(img.bits(), img.width(), img.height(),
-                                  img.sixteenBit(), blackLevel, exposureLevel);
+            wbFilter.autoExposureAdjustement(image().bits(), image().width(), image().height(),
+                                             image().sixteenBit(), blackLevel, exposureLevel);
+            wbFilter.whiteBalance(image().bits(), image().width(), image().height(),
+                                  image().sixteenBit(), blackLevel, exposureLevel);
             break;
     }
 
-    DImg::FORMAT format = (DImg::FORMAT)(img.attribute("detectedFileFormat").toInt());
-
-    img.updateMetadata(DImg::formatToMimeType(format), QString(), getExifSetOrientation());
-
-    return( img.save(outputUrl().path(), format) );
+    return (savefromDImg());
 }
 
 }  // namespace Digikam

@@ -64,6 +64,8 @@ public:
     KUrl                      outputUrl;
     KUrl                      workingUrl;
 
+    DImg                      image;
+
     BatchToolSettings         settings;
 
     BatchTool::BatchToolGroup toolGroup;
@@ -195,24 +197,6 @@ BatchToolSettings BatchTool::settings()
     return d->settings;
 }
 
-bool BatchTool::apply()
-{
-    d->cancel = false;
-
-    kDebug(50003) << "Tool:       " << toolTitle() << endl;
-    kDebug(50003) << "Input url:  " << inputUrl()  << endl;
-    kDebug(50003) << "Output url: " << outputUrl() << endl;
-    kDebug(50003) << "Settings:   " << endl;
-
-    BatchToolSettings prm = settings();
-    for (BatchToolSettings::const_iterator it = prm.begin() ; it != prm.end() ; ++it)
-    {
-        kDebug(50003) << "   " << it.key() << ": " << it.value() << endl;
-    }
-
-    return toolOperations();
-}
-
 void BatchTool::setOutputUrlFromInputUrl()
 {
     QFileInfo fi(inputUrl().fileName());
@@ -236,6 +220,49 @@ void BatchTool::setOutputUrlFromInputUrl()
         url.setFileName(base);
         setOutputUrl(url);
     }
+}
+
+bool BatchTool::loadToDImg()
+{
+    return d->image.load(inputUrl().path());
+}
+
+bool BatchTool::savefromDImg()
+{
+    QString frm = outputSuffix().toUpper();
+    if (frm.isEmpty())
+    {
+        // In case of output support is not set for ex. with all tool which do not convert to new format.
+        DImg::FORMAT format = (DImg::FORMAT)(d->image.attribute("detectedFileFormat").toInt());
+        d->image.updateMetadata(DImg::formatToMimeType(format), QString(), getExifSetOrientation());
+        return( d->image.save(outputUrl().path(), format) );
+    }
+
+    d->image.updateMetadata(frm, QString(), getExifSetOrientation());
+    return( d->image.save(outputUrl().path(), frm) );
+}
+
+DImg& BatchTool::image()
+{
+    return d->image;
+}
+
+bool BatchTool::apply()
+{
+    d->cancel = false;
+
+    kDebug(50003) << "Tool:       " << toolTitle() << endl;
+    kDebug(50003) << "Input url:  " << inputUrl()  << endl;
+    kDebug(50003) << "Output url: " << outputUrl() << endl;
+    kDebug(50003) << "Settings:   " << endl;
+
+    BatchToolSettings prm = settings();
+    for (BatchToolSettings::const_iterator it = prm.begin() ; it != prm.end() ; ++it)
+    {
+        kDebug(50003) << "   " << it.key() << ": " << it.value() << endl;
+    }
+
+    return toolOperations();
 }
 
 }  // namespace Digikam

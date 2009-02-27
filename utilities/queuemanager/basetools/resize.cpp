@@ -154,22 +154,16 @@ bool Resize::toolOperations()
     if (!useCustom)
         length = presetLengthValue(preset);
 
-    DImg img;
-    if (!img.load(inputUrl().path()))
-        return false;
+    if (!loadToDImg()) return false;
 
-    QSize newSize(img.size());
+    QSize newSize(image().size());
     newSize.scale(QSize(length, length), Qt::KeepAspectRatio);
     if (!newSize.isValid())
         return false;
 
-    img.resize(newSize.width(), newSize.height());
+    image().resize(newSize.width(), newSize.height());
 
-    DImg::FORMAT format = (DImg::FORMAT)(img.attribute("detectedFileFormat").toInt());
-
-    img.updateMetadata(DImg::formatToMimeType(format), QString(), getExifSetOrientation());
-
-    return( img.save(outputUrl().path(), format) );
+    return (savefromDImg());
 }
 
 }  // namespace Digikam

@@ -92,14 +92,11 @@ QString Convert2TIFF::outputSuffix() const
 
 bool Convert2TIFF::toolOperations()
 {
-    DImg img;
-    if (!img.load(inputUrl().path()))
-        return false;
+    if (!loadToDImg()) return false;
 
-    img.setAttribute("compress", settings()["compress"].toBool());
-    img.updateMetadata("TIFF", QString(), getExifSetOrientation());
+    image().setAttribute("compress", settings()["compress"].toBool());
 
-    return( img.save(outputUrl().path(), "TIFF") );
+    return (savefromDImg());
 }
 
 }  // namespace Digikam

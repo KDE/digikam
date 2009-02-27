@@ -38,6 +38,10 @@
 #include <kurl.h>
 #include <kicon.h>
 
+// Local includes.
+
+#include "dimg.h"
+
 class QWidget;
 
 namespace Digikam
@@ -99,9 +103,32 @@ public:
      */
     void setOutputUrlFromInputUrl();
 
+    /** Load image data using input Url set by setInputUrl() to instance of internal 
+        DImg container.
+     */
+    bool loadToDImg();
+
+    /** Save image data from instance of internal DImg container using :
+        - output Url set by setOutputUrl() or setOutputUrlFromInputUrl()
+        - output file format set by outputSuffix(). If this one is empty, 
+          format of original image is used instead.
+     */
+    bool savefromDImg();
+
+    /** Retrun a reference of internal DImg container used to modify image data.
+     */
+    DImg& image();
+
+    /** Set-up Exif orientation tag needs to be fixed during tool operations.
+     */
     void setExifSetOrientation(bool set);
+
+    /** Return true if Exif orientation tag will be fixed during tool operations.
+     */
     bool getExifSetOrientation() const;
 
+    /** Apply all change to perform by this tool. This method call customized toolOperations().
+     */
     bool apply();
 
     /** Re-implement this method is you want customize cancelization of tool, for ex. to call 
@@ -112,7 +139,7 @@ public:
 
     /** Re-implemnt this method if tool change file extension during batch process (ex: "png").
         Typicaly, this is used with tool which convert to new file format.
-        This method return and empty string by default
+        This method return and empty string by default.
      */
     virtual QString outputSuffix() const;
 
@@ -135,7 +162,8 @@ protected:
      */
     virtual void assignSettings2Widget()=0;
 
-    /** re-implement this method to customize th batch operations done by tool
+    /** Re-implement this method to customize all batch operations done by this tool. 
+        This method is called by apply().
      */
     virtual bool toolOperations()=0;
 

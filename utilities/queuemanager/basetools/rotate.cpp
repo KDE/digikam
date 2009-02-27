@@ -142,9 +142,7 @@ bool Rotate::toolOperations()
 
     // Non-JPEG image: DImg
 
-    DImg img;
-    if (!img.load(inputUrl().path()))
-        return false;
+    if (!loadToDImg()) return false;
 
     if (useExif)
     {
@@ -152,33 +150,33 @@ bool Rotate::toolOperations()
         switch(meta.getImageOrientation())
         {
             case DMetadata::ORIENTATION_HFLIP:
-                img.flip(DImg::HORIZONTAL);
+                image().flip(DImg::HORIZONTAL);
                 break;
 
             case DMetadata::ORIENTATION_ROT_180:
-                img.rotate(DImg::ROT180);
+                image().rotate(DImg::ROT180);
                 break;
 
             case DMetadata::ORIENTATION_VFLIP:
-                img.flip(DImg::VERTICAL);
+                image().flip(DImg::VERTICAL);
                 break;
 
             case DMetadata::ORIENTATION_ROT_90_HFLIP:
-                img.flip(DImg::HORIZONTAL);
-                img.rotate(DImg::ROT90);
+                image().flip(DImg::HORIZONTAL);
+                image().rotate(DImg::ROT90);
                 break;
 
             case DMetadata::ORIENTATION_ROT_90:
-                img.rotate(DImg::ROT90);
+                image().rotate(DImg::ROT90);
                 break;
 
             case DMetadata::ORIENTATION_ROT_90_VFLIP:
-                img.flip(DImg::VERTICAL);
-                img.rotate(DImg::ROT90);
+                image().flip(DImg::VERTICAL);
+                image().rotate(DImg::ROT90);
                 break;
 
             case DMetadata::ORIENTATION_ROT_270:
-                img.rotate(DImg::ROT270);
+                image().rotate(DImg::ROT270);
                 break;
 
             default:
@@ -190,13 +188,10 @@ bool Rotate::toolOperations()
     }
     else
     {
-        img.rotate(angle);
+        image().rotate(angle);
     }
 
-    DImg::FORMAT format = (DImg::FORMAT)(img.attribute("detectedFileFormat").toInt());
-
-    img.updateMetadata(DImg::formatToMimeType(format), QString(), getExifSetOrientation());
-    return( img.save(outputUrl().path(), format) );
+    return (savefromDImg());
 }
 
 }  // namespace Digikam
