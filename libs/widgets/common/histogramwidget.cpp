@@ -30,17 +30,16 @@
 
 // Qt includes.
 
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qpen.h>
-#include <qevent.h>
-#include <qtimer.h>
-#include <qcolor.h>
-#include <qbrush.h>
-#include <qrect.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qtooltip.h>
+#include <QPixmap>
+#include <QPainter>
+#include <QPen>
+#include <QEvent>
+#include <QTimer>
+#include <QColor>
+#include <QBrush>
+#include <QRect>
+#include <QFont>
+#include <QFontMetrics>
 #include <QPaintEvent>
 #include <QMouseEvent>
 
