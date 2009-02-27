@@ -55,11 +55,11 @@ public:
     CameraIconItemPriv()
     {
         itemInfo      = 0;
-        pos           = 0;
-        downloadTimer = 0;
+        progressCount = 0;
+        progressTimer = 0;
     }
 
-    int         pos;                   // Position of animation during downloading.
+    int         progressCount;         // Position of animation during downloading.
 
     QString     downloadName;
 
@@ -70,7 +70,7 @@ public:
     QRect       textRect;
     QRect       extraRect;
 
-    QTimer     *downloadTimer;
+    QTimer     *progressTimer;
 
     GPItemInfo *itemInfo;
 };
@@ -81,11 +81,11 @@ CameraIconItem::CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo
 {
     d->itemInfo      = new GPItemInfo(itemInfo);
     d->downloadName  = downloadName;
-    d->downloadTimer = new QTimer(this);
+    d->progressTimer = new QTimer(this);
     setThumbnail(thumbnail);
 
-    connect(d->downloadTimer, SIGNAL(timeout()),
-            this, SLOT(slotDownloadTimerDone()));
+    connect(d->progressTimer, SIGNAL(timeout()),
+            this, SLOT(slotProgressTimerDone()));
 }
 
 CameraIconItem::~CameraIconItem()
@@ -118,12 +118,12 @@ QString CameraIconItem::getDownloadName() const
 void CameraIconItem::setDownloaded(int status)
 {
     d->itemInfo->downloaded = status;
-    d->pos                  = 0;
+    d->progressCount                  = 0;
 
     if(d->itemInfo->downloaded == GPItemInfo::DownloadStarted)
-        d->downloadTimer->start(500);
+        d->progressTimer->start(500);
     else
-        d->downloadTimer->stop();
+        d->progressTimer->stop();
 
     update();
 }
@@ -283,18 +283,18 @@ void CameraIconItem::paintItem(QPainter *p)
         }
         case GPItemInfo::DownloadStarted:
         {
-            const int asize = 16;
+            QPixmap mask(d->pixmap.size());
+            mask.fill(QColor(128, 128, 128, 192));
+            p->drawPixmap(pixmapDrawRect.topLeft(), mask);
+
+            QPixmap anim(view->progressPixmap().copy(0, d->progressCount*22, 22, 22));
+            d->progressCount++;
+            if (d->progressCount == 8) d->progressCount = 0;
+
             p->save();
-            p->setRenderHint(QPainter::Antialiasing);
-            p->translate(rect().width() - asize/2 - 5, asize/2 + 5);
-            d->pos = (d->pos + 10) % 360;
-            p->setPen(iconView()->palette().color(QPalette::Active, QPalette::Text));
-            p->rotate(d->pos);
-            for (int i=0 ; i<12 ; i++)
-            {
-                p->drawLine(asize/2-5, 0, asize/2-2, 0);
-                p->rotate(30);
-            }
+            int x = pixmapDrawRect.x() + pixmapDrawRect.width()/2  - anim.width()/2;
+            int y = pixmapDrawRect.y() + pixmapDrawRect.height()/2 - anim.height()/2;
+            p->drawPixmap(x, y, anim);
             p->restore();
             break;
         }
@@ -330,10 +330,10 @@ void CameraIconItem::paintItem(QPainter *p)
     }
 }
 
-void CameraIconItem::slotDownloadTimerDone()
+void CameraIconItem::slotProgressTimerDone()
 {
     update();
-    d->downloadTimer->start(500);
+    d->progressTimer->start(300);
 }
 
 }  // namespace Digikam

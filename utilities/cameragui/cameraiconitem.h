@@ -74,7 +74,7 @@ private:
 
 private Q_SLOTS:
 
-    void slotDownloadTimerDone();
+    void slotProgressTimerDone();
 
 private:
 

@@ -80,6 +80,8 @@ public:
         thumbSize           = ThumbnailSize::Large;
         pixmapNewPicture    = QPixmap(newPicture_xpm);
         pixmapUnknowPicture = QPixmap(unknowPicture_xpm);
+        progressPix         = SmallIcon("process-working", 22);
+
     }
 
     static const char               *newPicture_xpm[];
@@ -95,6 +97,7 @@ public:
     QPixmap                          itemSelPixmap;
     QPixmap                          pixmapNewPicture;
     QPixmap                          pixmapUnknowPicture;
+    QPixmap                          progressPix;
 
     RenameCustomizer                *renamer;
 
@@ -277,6 +280,11 @@ CameraIconView::~CameraIconView()
     clear();
     delete d->toolTip;
     delete d;
+}
+
+QPixmap CameraIconView::progressPixmap() const
+{
+    return d->progressPix;
 }
 
 QPixmap CameraIconView::itemBaseRegPixmap() const

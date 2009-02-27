@@ -81,10 +81,11 @@ public:
     int countItemsByFolder(QString folder);
     int itemsDownloaded();
 
-    QPixmap itemBaseRegPixmap() const;
-    QPixmap itemBaseSelPixmap() const;
-    QPixmap newPicturePixmap() const;
+    QPixmap itemBaseRegPixmap()   const;
+    QPixmap itemBaseSelPixmap()   const;
+    QPixmap newPicturePixmap()    const;
     QPixmap unknowPicturePixmap() const;
+    QPixmap progressPixmap()      const;
 
     QString defaultDownloadName(CameraIconItem *item);
 
