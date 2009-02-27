@@ -257,7 +257,7 @@ bool DigikamFirstRun::checkRootAlbum(QString& rootAlbumFolder)
 
     if (!path.isWritable())
     {
-        KMessageBox::information(this, i18n("You don't seem to have write access for the folder selected to be the root album.\n"
+        KMessageBox::information(this, i18n("You do not seem to have write access for the folder selected to be the root album.\n"
                                             "Warning: Without write access, the comment and tag features "
                                             "will not work."));
     }

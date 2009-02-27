@@ -203,7 +203,7 @@ void SetupCollections::slotChangeDatabasePath(const KUrl &result)
 
     if (!result.isEmpty() && !targetPath.isWritable())
     {
-        KMessageBox::information(0, i18n("You don't seem to have write access to this database folder.\n"
+        KMessageBox::information(0, i18n("You do not seem to have write access to this database folder.\n"
                                          "Without this access, the caption and tag features will not work."));
     }
 
