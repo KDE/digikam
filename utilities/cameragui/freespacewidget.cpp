@@ -24,7 +24,7 @@
 #include "freespacewidget.h"
 #include "freespacewidget.moc"
 
-// C++ includes
+// C++ includes.
 
 #include <cmath>
 

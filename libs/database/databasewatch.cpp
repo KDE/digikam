@@ -36,7 +36,7 @@
 
 #include <kdebug.h>
 
-// Local includes
+// Local includes.
 
 #include "collectionmanager.h"
 

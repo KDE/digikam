@@ -24,7 +24,7 @@
 #include "searchutilities.h"
 #include "searchutilities.moc"
 
-// C++ includes
+// C++ includes.
 
 #include <cmath>
 

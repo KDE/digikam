@@ -28,7 +28,7 @@
 #include "showfoto.h"
 #include "showfoto.moc"
 
-// C ANSI includes
+// C ANSI includes.
 
 extern "C"
 {

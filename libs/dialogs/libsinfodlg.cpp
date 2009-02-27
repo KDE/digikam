@@ -64,7 +64,7 @@ using namespace Marble;
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// C ANSI includes
+// C ANSI includes.
 
 #ifndef Q_CC_MSVC
 extern "C"

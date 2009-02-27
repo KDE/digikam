@@ -48,7 +48,7 @@ extern "C"
 #include <QRegExp>
 #include <QFileInfo>
 
-// KDE includes
+// KDE includes.
 
 #include <kiconloader.h>
 #include <kdebug.h>
