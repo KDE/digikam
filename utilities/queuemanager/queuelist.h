@@ -61,7 +61,10 @@ public:
 
     void setThumb(const QPixmap& pix);
 
-    void setProgressIcon(const QIcon& icon);
+    void setProgressIcon(const QPixmap& icon);
+
+    void setCanceled();
+    void setFailed();
 
     void setDone(bool b);
     bool isDone();

@@ -768,7 +768,7 @@ void QueueMgrWindow::slotStop()
     d->progressTimer->stop();
 
     if (d->currentProcessItem)
-        d->currentProcessItem->setProgressIcon(SmallIcon("dialog-cancel"));
+        d->currentProcessItem->setCanceled();
 
     if (d->currentTaskItem)
         d->currentTaskItem->setProgressIcon(SmallIcon("dialog-cancel"));
@@ -875,7 +875,7 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
 
 void QueueMgrWindow::slotProgressTimerDone()
 {
-    QIcon ico(d->progressPix.copy(0, d->progressCount*22, 22, 22));
+    QPixmap ico(d->progressPix.copy(0, d->progressCount*22, 22, 22));
     if (d->currentProcessItem)
         d->currentProcessItem->setProgressIcon(ico);
     if (d->currentTaskItem)
@@ -926,7 +926,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
                 case KIO::R_SKIP:
                 {
                     dest = KUrl();
-                    d->currentProcessItem->setProgressIcon(SmallIcon("dialog-cancel"));
+                    d->currentProcessItem->setCanceled();
                     break;
                 }
                 case KIO::R_RENAME:
@@ -945,11 +945,10 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
         if (::rename(QFile::encodeName(tmp.path()), QFile::encodeName(dest.path())) != 0)
         {
             KMessageBox::error(this, i18n("Failed to save image %1", dest.fileName()));
-            d->currentProcessItem->setProgressIcon(SmallIcon("dialog-error"));
+            d->currentProcessItem->setFailed();
         }
         else
         {
-            d->currentProcessItem->setProgressIcon(SmallIcon("dialog-ok"));
             d->currentProcessItem->setDestFileName(dest.fileName());
 
             // TODO: assign attributes from original image.
@@ -962,7 +961,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
 void QueueMgrWindow::processingFailed(const KUrl&)
 {
     if (d->currentProcessItem)
-        d->currentProcessItem->setProgressIcon(SmallIcon("dialog-cancel"));
+        d->currentProcessItem->setCanceled();
 
     if (d->currentTaskItem)
         d->currentTaskItem->setProgressIcon(SmallIcon("dialog-cancel"));

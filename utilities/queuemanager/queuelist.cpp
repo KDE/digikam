@@ -65,6 +65,8 @@ public:
 
     QString   destFileName;
 
+    QPixmap   preview;
+
     ImageInfo info;
 };
 
@@ -97,17 +99,37 @@ void QueueListViewItem::setThumb(const QPixmap& pix)
     pixmap.fill(Qt::color0);
     QPainter p(&pixmap);
     p.drawPixmap((pixmap.width()/2) - (pix.width()/2), (pixmap.height()/2) - (pix.height()/2), pix);
-    setIcon(0, QIcon(pixmap));
+    d->preview = pixmap;
+    setIcon(0, QIcon(d->preview));
 }
 
-void QueueListViewItem::setProgressIcon(const QIcon& icon)
+void QueueListViewItem::setProgressIcon(const QPixmap& icon)
 {
-    setIcon(1, icon);
+    QPixmap preview = d->preview;
+    QPixmap mask(preview.size());
+    mask.fill(QColor(128, 128, 128, 192));
+    QPainter p(&preview);
+    p.drawPixmap(0, 0, mask);
+    p.drawPixmap((preview.width()/2) - (icon.width()/2), (preview.height()/2) - (icon.height()/2), icon);
+    setIcon(0, QIcon(preview));
+}
+
+void QueueListViewItem::setCanceled()
+{
+    setIcon(0, QIcon(d->preview));
+    setIcon(1, SmallIcon("dialog-cancel"));
+}
+
+void QueueListViewItem::setFailed()
+{
+    setIcon(0, QIcon(d->preview));
+    setIcon(1, SmallIcon("dialog-error"));
 }
 
 void QueueListViewItem::setDone(bool done)
 {
-    setProgressIcon(SmallIcon("dialog-ok"));
+    setIcon(0, QIcon(d->preview));
+    setIcon(1, SmallIcon("dialog-ok"));
     d->done = done;
 }
 
