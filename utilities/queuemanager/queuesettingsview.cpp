@@ -112,7 +112,7 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
     d->conflictButtonGroup->addButton(d->overwriteButton, QueueSettings::OVERWRITE);
     d->conflictButtonGroup->addButton(d->promptButton,    QueueSettings::ASKTOUSER);
     d->conflictButtonGroup->setExclusive(true);
-    d->overwriteButton->setChecked(true);
+    d->promptButton->setChecked(true);
 
     vlay->addWidget(d->overwriteButton);
     vlay->addWidget(d->promptButton);
@@ -183,7 +183,7 @@ void QueueSettingsView::slotResetSettings()
 {
     blockSignals(true);
     // TODO: reset d->albumSel
-    d->conflictButtonGroup->button(QueueSettings::OVERWRITE)->setChecked(true);
+    d->conflictButtonGroup->button(QueueSettings::ASKTOUSER)->setChecked(true);
     d->renamingButtonGroup->button(QueueSettings::USEORIGINAL)->setChecked(true);
     d->manualRenameInput->input()->clear();
     blockSignals(false);
