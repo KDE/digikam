@@ -4,10 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2006-01-10
- * Description : a widget to display CIE tongue from
- *               an ICC profile.
+ * Description : a widget to display CIE tongue from an ICC profile.
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Any source code are inspired from lprof project and
  * Copyright (C) 1998-2001 Marti Maria
@@ -45,6 +44,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kiconloader.h>
 
 // Local includes.
 
@@ -159,19 +159,18 @@ public:
 
     CIETongueWidgetPriv()
     {
-        hMonitorProfile      = 0;
-        hXYZProfile          = 0;
-        hXFORM               = 0;
-
-        Measurement.Patches  = 0;
-        Measurement.Allowed  = 0;
-        blinkTimer           = 0;
-        pos                  = 0;
-
         profileDataAvailable = true;
         loadingImageMode     = false;
         loadingImageSucess   = false;
         needUpdatePixmap     = false;
+        hMonitorProfile      = 0;
+        hXYZProfile          = 0;
+        hXFORM               = 0;
+        Measurement.Patches  = 0;
+        Measurement.Allowed  = 0;
+        progressCount        = 0;
+        progressTimer        = 0;
+        progressPix          = SmallIcon("process-working", 22);
     }
 
     bool             profileDataAvailable;
@@ -179,17 +178,20 @@ public:
     bool             loadingImageSucess;
     bool             needUpdatePixmap;
 
-    double           gridside;
-
     int              xBias;
     int              yBias;
     int              pxcols;
     int              pxrows;
-    int              pos;           // Position of animation during loading/calculation.
+    int              progressCount;           // Position of animation during loading/calculation.
+
+    double           gridside;
 
     QPainter         painter;
+
+    QTimer          *progressTimer;
+
     QPixmap          pixmap;
-    QTimer          *blinkTimer;
+    QPixmap          progressPix;
 
     cmsHPROFILE      hMonitorProfile;
     cmsHPROFILE      hXYZProfile;
@@ -203,7 +205,7 @@ public:
 CIETongueWidget::CIETongueWidget(int w, int h, QWidget *parent, cmsHPROFILE hMonitor)
                : QWidget(parent), d(new CIETongueWidgetPriv)
 {
-    d->blinkTimer = new QTimer(this);
+    d->progressTimer = new QTimer(this);
     setMinimumSize(w, h);
     setAttribute(Qt::WA_DeleteOnClose);
     cmsErrorAction(LCMS_ERROR_SHOW);
@@ -218,8 +220,8 @@ CIETongueWidget::CIETongueWidget(int w, int h, QWidget *parent, cmsHPROFILE hMon
                                         d->hMonitorProfile, TYPE_RGB_8,
                                         INTENT_PERCEPTUAL, 0);
 
-    connect(d->blinkTimer, SIGNAL(timeout()),
-            this, SLOT(slotBlinkTimerDone()));
+    connect(d->progressTimer, SIGNAL(timeout()),
+            this, SLOT(slotProgressTimerDone()));
 }
 
 CIETongueWidget::~CIETongueWidget()
@@ -269,7 +271,7 @@ bool CIETongueWidget::setProfileData(const QByteArray &profileData)
 
     d->loadingImageMode = false;
 
-    d->blinkTimer->stop();
+    d->progressTimer->stop();
     d->needUpdatePixmap = true;
     update();
     return (d->profileDataAvailable);
@@ -300,7 +302,7 @@ bool CIETongueWidget::setProfileFromFile(const KUrl& file)
         d->loadingImageSucess   = false;
     }
 
-    d->blinkTimer->stop();
+    d->progressTimer->stop();
     d->needUpdatePixmap = true;
     update();
     return (d->profileDataAvailable);
@@ -688,17 +690,17 @@ void CIETongueWidget::drawWhitePoint()
 
 void CIETongueWidget::loadingStarted()
 {
-    d->pos                = 0;
+    d->progressCount      = 0;
     d->loadingImageMode   = true;
     d->loadingImageSucess = false;
     update();
-    d->blinkTimer->start(200);
+    d->progressTimer->start(200);
 }
 
 void CIETongueWidget::loadingFailed()
 {
-    d->blinkTimer->stop();
-    d->pos                = 0;
+    d->progressTimer->stop();
+    d->progressCount      = 0;
     d->loadingImageMode   = false;
     d->loadingImageSucess = false;
     update();
@@ -775,28 +777,14 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
     {
         // In first, we draw an animation.
 
-        int asize = 24;
-        QPixmap anim(asize, asize);
-        QPainter p2;
-        p2.begin(&anim);
-        p2.fillRect(0, 0, asize, asize, palette().color(QPalette::Active, QPalette::Background));
-        p2.translate(asize/2, asize/2);
-
-        d->pos = (d->pos + 10) % 360;
-        p2.setPen(QPen(palette().color(QPalette::Active, QPalette::Text)));
-
-        p2.rotate(d->pos);
-        for ( int i=0 ; i<12 ; i++ )
-        {
-            p2.drawLine(asize/2-5, 0, asize/2-2, 0);
-            p2.rotate(30);
-        }
-        p2.end();
+        QPixmap anim(d->progressPix.copy(0, d->progressCount*22, 22, 22));
+        d->progressCount++;
+        if (d->progressCount == 8) d->progressCount = 0;
 
         // ... and we render busy text.
 
         p.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
-        p.drawPixmap(width()/2 - asize /2, asize, anim);
+        p.drawPixmap(width()/2 - anim.width() /2, anim.height(), anim);
         QPen pen(palette().color(QPalette::Active, QPalette::Text));
         pen.setStyle(Qt::SolidLine);
         pen.setWidth(1);
@@ -835,10 +823,10 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
     p.drawPixmap(0, 0, d->pixmap);
 }
 
-void CIETongueWidget::slotBlinkTimerDone()
+void CIETongueWidget::slotProgressTimerDone()
 {
     update();
-    d->blinkTimer->start( 200 );
+    d->progressTimer->start(200);
 }
 
 }  // namespace Digikam
