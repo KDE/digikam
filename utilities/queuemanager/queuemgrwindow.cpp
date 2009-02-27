@@ -884,7 +884,7 @@ void QueueMgrWindow::slotProgressTimerDone()
     d->progressCount++;
     if (d->progressCount == 8) d->progressCount = 0;
 
-    d->progressTimer->start(500);
+    d->progressTimer->start(300);
 }
 
 void QueueMgrWindow::processing(const KUrl& url)
@@ -897,7 +897,7 @@ void QueueMgrWindow::processing(const KUrl& url)
     }
 
     d->progressCount = 0;
-    d->progressTimer->start(500);
+    d->progressTimer->start(300);
 }
 
 void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
