@@ -592,29 +592,21 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
 
     // special action handling --------------------------------
 
-    int actionId    = 0;
-    QAction* choice = cmhelper.exec(QCursor::pos(), actionId);
-    switch (actionId)
+    QAction* choice = cmhelper.exec(QCursor::pos());
+    if (choice)
     {
-        case ContextMenuHelper::Unknown:
+        if (choice == resetIconAction)
         {
-            if (choice)
-            {
-                if (choice == resetIconAction)
-                {
-                    QString err;
-                    d->albumMan->updatePAlbumIcon(item->album(), 0, err);
-                }
-                else if (choice == renameAction)
-                {
-                    albumRename(item);
-                }
-                else if (choice == deleteAction)
-                {
-                    albumDelete(item);
-                }
-            }
-            break;
+            QString err;
+            d->albumMan->updatePAlbumIcon(item->album(), 0, err);
+        }
+        else if (choice == renameAction)
+        {
+            albumRename(item);
+        }
+        else if (choice == deleteAction)
+        {
+            albumDelete(item);
         }
     }
 

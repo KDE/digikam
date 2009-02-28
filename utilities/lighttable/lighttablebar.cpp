@@ -152,7 +152,7 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
             cmhelper.addAction(removeAction);
             popmenu.addSeparator();
             // ------------------------------------------------
-            cmhelper.addRatingMenu(this, SLOT(slotAssignRating(int)));
+            cmhelper.addRatingMenu();
             popmenu.addSeparator();
             // ------------------------------------------------
         }
@@ -160,21 +160,17 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
 
         // special action handling --------------------------------
 
-        int actionId    = 0;
-        QAction* choice = cmhelper.exec(pos, actionId);
-        switch (actionId)
+        connect(&cmhelper, SIGNAL(signalAssignRating(int)),
+                this, SLOT(slotAssignRating(int)));
+
+        QAction* choice = cmhelper.exec(pos);
+        if (choice)
         {
-            case ContextMenuHelper::Unknown:
-            {
-                if (choice)
-                {
-                    if (choice == leftPanelAction)       emit signalSetItemOnLeftPanel(item->info());
-                    else if (choice == rightPanelAction) emit signalSetItemOnRightPanel(item->info());
-                    else if (choice == editAction)       emit signalEditItem(item->info());
-                    else if (choice == removeAction)     emit signalRemoveItem(item->info());
-                    else if (choice == clearAllAction)   emit signalClearAll();
-                }
-            }
+            if (choice == leftPanelAction)       emit signalSetItemOnLeftPanel(item->info());
+            else if (choice == rightPanelAction) emit signalSetItemOnRightPanel(item->info());
+            else if (choice == editAction)       emit signalEditItem(item->info());
+            else if (choice == removeAction)     emit signalRemoveItem(item->info());
+            else if (choice == clearAllAction)   emit signalClearAll();
         }
 
         popmenu.deleteLater();

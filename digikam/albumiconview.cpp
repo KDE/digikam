@@ -571,6 +571,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint&)
     // Temporary actions --------------------------------------
 
     QAction  *viewAction = new QAction(SmallIcon("viewimage"), i18n("View"),  this);
+    viewAction->setEnabled(selectedImageIDs.count() == 1);
 
     // --------------------------------------------------------
 
@@ -595,39 +596,54 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint&)
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addActionThumbnail(selectedImageIDs, d->currentAlbum);
+    cmhelper.addActionThumbnail(selectedImageIDs, d->currentAlbum);
+    cmhelper.addActionThumbnail(selectedImageIDs, d->currentAlbum);
+    cmhelper.addActionThumbnail(selectedImageIDs, d->currentAlbum);
     // --------------------------------------------------------
-    cmhelper.addAssignTagsMenu(selectedImageIDs, this, SLOT(slotAssignTag(int)));
-    cmhelper.addRemoveTagsMenu(selectedImageIDs, this, SLOT(slotRemoveTag(int)));
+    cmhelper.addAssignTagsMenu(selectedImageIDs);
+    cmhelper.addRemoveTagsMenu(selectedImageIDs);
     popmenu.addSeparator();
     // --------------------------------------------------------
-    cmhelper.addRatingMenu(this, SLOT(slotAssignRating(int)));
+    cmhelper.addRatingMenu();
 
     // special action handling --------------------------------
 
-    int actionId    = 0;
-    QAction* choice = cmhelper.exec(QCursor::pos(), actionId);
-    switch (actionId)
+    connect(&cmhelper, SIGNAL(signalAssignTag(int)),
+            this, SLOT(slotAssignTag(int)));
+
+    connect(&cmhelper, SIGNAL(signalRemoveTag(int)),
+            this, SLOT(slotRemoveTag(int)));
+
+    connect(&cmhelper, SIGNAL(signalGotoTag(int)),
+            this, SLOT(slotGotoTag(int)));
+
+    connect(&cmhelper, SIGNAL(signalGotoAlbum(ImageInfo&)),
+            this, SIGNAL(signalGotoAlbumAndItem(ImageInfo&)));
+
+    connect(&cmhelper, SIGNAL(signalGotoDate(ImageInfo&)),
+            this, SIGNAL(signalGotoDateAndItem(ImageInfo&)));
+
+    connect(&cmhelper, SIGNAL(signalAssignRating(int)),
+            this, SLOT(slotAssignRating(int)));
+
+    connect(&cmhelper, SIGNAL(signalSetThumbnail(ImageInfo&)),
+            this, SLOT(slotSetAlbumThumbnail(ImageInfo&)));
+
+    // handle temporary actions
+
+    QAction* choice = cmhelper.exec(QCursor::pos());
+    if (choice)
     {
-        case ContextMenuHelper::GotoAlbum:    emit signalGotoAlbumAndItem(iconItem); break;
-        case ContextMenuHelper::GotoDate:     emit signalGotoDateAndItem(iconItem);  break;
-        case ContextMenuHelper::SetThumbnail: slotSetAlbumThumbnail(iconItem);       break;
-        case ContextMenuHelper::Unknown:
+        if (servicesMap.contains(choice))
         {
-            if (choice)
-            {
-                if (servicesMap.contains(choice))
-                {
-                    KService::Ptr imageServicePtr = servicesMap[choice];
-                    KUrl::List urlList = selectedItems();
-                    if (urlList.count())
-                        KRun::run(*imageServicePtr, urlList, this);
-                }
-                else if (choice == viewAction)
-                {
-                    emit signalPreviewItem(iconItem);
-                }
-            }
-            break;
+            KService::Ptr imageServicePtr = servicesMap[choice];
+            KUrl::List urlList = selectedItems();
+            if (urlList.count())
+                KRun::run(*imageServicePtr, urlList, this);
+        }
+        else if (choice == viewAction)
+        {
+            emit signalPreviewItem(iconItem);
         }
     }
 
@@ -778,7 +794,7 @@ void AlbumIconView::slotPaste()
     }
 }
 
-void AlbumIconView::slotSetAlbumThumbnail(AlbumIconItem *iconItem)
+void AlbumIconView::slotSetAlbumThumbnail(ImageInfo &imageInfo)
 {
     if(!d->currentAlbum)
         return;
@@ -789,7 +805,7 @@ void AlbumIconView::slotSetAlbumThumbnail(AlbumIconItem *iconItem)
 
         QString err;
         AlbumManager::instance()->updatePAlbumIcon( album,
-                                                    iconItem->imageInfo().id(),
+                                                    imageInfo.id(),
                                                     err );
     }
     else if (d->currentAlbum->type() == Album::TAG)
@@ -799,7 +815,7 @@ void AlbumIconView::slotSetAlbumThumbnail(AlbumIconItem *iconItem)
         QString err;
         AlbumManager::instance()->updateTAlbumIcon( album,
                                                     QString(),
-                                                    iconItem->imageInfo().id(),
+                                                    imageInfo.id(),
                                                     err );
     }
 }

@@ -366,14 +366,14 @@ void DigikamView::setupConnections()
     //connect(d->iconView, SIGNAL(signalItemDeleted(AlbumIconItem*)),
       //      this, SIGNAL(signalNoCurrentItem()));
 
-    connect(d->iconView, SIGNAL(signalGotoAlbumAndItem(AlbumIconItem *)),
-            this, SLOT(slotGotoAlbumAndItem(AlbumIconItem *)));
+    connect(d->iconView, SIGNAL(signalGotoAlbumAndItem(ImageInfo&)),
+            this, SLOT(slotGotoAlbumAndItem(ImageInfo&)));
 
     connect(d->iconView, SIGNAL(signalFindSimilar()),
             this, SLOT(slotImageFindSimilar()));
 
-    connect(d->iconView, SIGNAL(signalGotoDateAndItem(AlbumIconItem *)),
-            this, SLOT(slotGotoDateAndItem(AlbumIconItem *)));
+    connect(d->iconView, SIGNAL(signalGotoDateAndItem(ImageInfo&)),
+            this, SLOT(slotGotoDateAndItem(ImageInfo&)));
 
     connect(d->iconView, SIGNAL(signalGotoTagAndItem(int)),
             this, SLOT(slotGotoTagAndItem(int)));
@@ -999,14 +999,14 @@ void DigikamView::slotSelectAlbum(const KUrl &)
     */
 }
 
-void DigikamView::slotGotoAlbumAndItem(AlbumIconItem* iconItem)
+void DigikamView::slotGotoAlbumAndItem(ImageInfo &imageInfo)
 {
-    KUrl url( iconItem->imageInfo().fileUrl() );
+    KUrl url( imageInfo.fileUrl() );
     url.cleanPath();
 
     emit signalNoCurrentItem();
 
-    Album* album = dynamic_cast<Album*>(AlbumManager::instance()->findPAlbum(iconItem->imageInfo().albumId()));
+    Album* album = dynamic_cast<Album*>(AlbumManager::instance()->findPAlbum(imageInfo.albumId()));
 
     // Change the current album in list view.
     d->folderView->setCurrentAlbum(album);
@@ -1025,11 +1025,11 @@ void DigikamView::slotGotoAlbumAndItem(AlbumIconItem* iconItem)
     d->albumManager->setCurrentAlbum(album);
 }
 
-void DigikamView::slotGotoDateAndItem(AlbumIconItem* iconItem)
+void DigikamView::slotGotoDateAndItem(ImageInfo &imageInfo)
 {
-    KUrl url( iconItem->imageInfo().fileUrl() );
+    KUrl url( imageInfo.fileUrl() );
     url.cleanPath();
-    QDate date = iconItem->imageInfo().dateTime().date();
+    QDate date = imageInfo.dateTime().date();
 
     emit signalNoCurrentItem();
 

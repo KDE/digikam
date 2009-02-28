@@ -380,56 +380,40 @@ void LightTablePreview::slotContextMenu()
     cmhelper.addAction(trashAction);
     popmenu.addSeparator();
     // --------------------------------------------------------
-    cmhelper.addAssignTagsMenu(idList, this, SLOT(slotAssignTag(int)));
-    cmhelper.addRemoveTagsMenu(idList, this, SLOT(slotRemoveTag(int)));
+    cmhelper.addAssignTagsMenu(idList);
+    cmhelper.addRemoveTagsMenu(idList);
     popmenu.addSeparator();
     // --------------------------------------------------------
-    cmhelper.addRatingMenu(this, SLOT(slotAssignRating(int)));
+    cmhelper.addRatingMenu();
 
     // special action handling --------------------------------
 
-    int actionId    = 0;
-    QAction* choice = cmhelper.exec(QCursor::pos(), actionId);
-    switch (actionId)
+    connect(&cmhelper, SIGNAL(signalAssignTag(int)),
+            this, SLOT(slotAssignTag(int)));
+
+    connect(&cmhelper, SIGNAL(signalRemoveTag(int)),
+            this, SLOT(slotRemoveTag(int)));
+
+    connect(&cmhelper, SIGNAL(signalAssignRating(int)),
+            this, SLOT(slotAssignRating(int)));
+
+    QAction* choice = cmhelper.exec(QCursor::pos());
+    if (choice)
     {
-        case ContextMenuHelper::Unknown:
+        if (choice == editAction)           emit signalEditItem(d->imageInfo);
+        else if (choice == trashAction)     emit signalDeleteItem(d->imageInfo);
+        else if (choice == slideshowAction) emit signalSlideShow();
+        else if (choice == zoomInAction)    slotIncreaseZoom();
+        else if (choice == zoomOutAction)   slotDecreaseZoom();
+        else if (choice == fitWindowAction) fitToWindow();
+        else if (servicesMap.contains(choice))
         {
-            if (choice)
-            {
-                if (choice == editAction)
-                {
-                    emit signalEditItem(d->imageInfo);
-                }
-                else if (choice == trashAction)
-                {
-                    emit signalDeleteItem(d->imageInfo);
-                }
-                else if (choice == slideshowAction)
-                {
-                    emit signalSlideShow();
-                }
-                else if (choice == zoomInAction)
-                {
-                    slotIncreaseZoom();
-                }
-                else if (choice == zoomOutAction)
-                {
-                    slotDecreaseZoom();
-                }
-                else if (choice == fitWindowAction)
-                {
-                    fitToWindow();
-                }
-                else if (servicesMap.contains(choice))
-                {
-                    KService::Ptr imageServicePtr = servicesMap[choice];
-                    KUrl url(d->imageInfo.fileUrl().path());
-                    KRun::run(*imageServicePtr, url, this);
-                }
-            }
-            break;
+            KService::Ptr imageServicePtr = servicesMap[choice];
+            KUrl url(d->imageInfo.fileUrl().path());
+            KRun::run(*imageServicePtr, url, this);
         }
     }
+
     popmenu.deleteLater();
     delete zoomInAction;
     delete zoomOutAction;

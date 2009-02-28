@@ -570,21 +570,15 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
     // --------------------------------------------------------
     cmhelper.addAction("tag_edit");
 
-    int actionId    = 0;
-    QAction* choice = cmhelper.exec(QCursor::pos(), actionId);
-    switch (actionId)
+    // special action handling --------------------------------
+
+    QAction* choice = cmhelper.exec(QCursor::pos());
+    if (choice)
     {
-        case ContextMenuHelper::Unknown:
+        if (choice == resetIconAction)
         {
-            if (choice)
-            {
-                if (choice == resetIconAction)
-                {
-                    QString errMsg;
-                    d->albumMan->updateTAlbumIcon(tag->album(), QString("tag"), 0, errMsg);
-                }
-            }
-            break;
+            QString errMsg;
+            d->albumMan->updateTAlbumIcon(tag->album(), QString("tag"), 0, errMsg);
         }
     }
 

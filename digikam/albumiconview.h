@@ -152,8 +152,8 @@ Q_SIGNALS:
     void signalProgressValue(int);
     void signalItemsUpdated(const KUrl::List&);
 
-    void signalGotoAlbumAndItem(AlbumIconItem *);
-    void signalGotoDateAndItem(AlbumIconItem *);
+    void signalGotoAlbumAndItem(ImageInfo&);
+    void signalGotoDateAndItem(ImageInfo&);
     void signalGotoTagAndItem(int);
     void signalFindSimilar();
 
@@ -168,7 +168,7 @@ public Q_SLOTS:
     void slotDeleteSelectedItemsDirectly(bool useTrash);
     void slotDisplayItem(AlbumIconItem *item=0);
     void slotAlbumModified();
-    void slotSetAlbumThumbnail(AlbumIconItem *iconItem);
+    void slotSetAlbumThumbnail(ImageInfo &imageInfo);
     void slotCopy();
     void slotPaste();
     void slotNewAlbumFromSelection();
