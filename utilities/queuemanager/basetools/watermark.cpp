@@ -66,7 +66,7 @@ WaterMark::WaterMark(QObject* parent)
     vbox->setSpacing(KDialog::spacingHint());
     vbox->setMargin(0);
 
-    KVBox *hbox    = new KVBox(vbox);
+    KHBox *hbox    = new KHBox(vbox);
     QLabel *label  = new QLabel(hbox);
     m_textEdit     = new KLineEdit(hbox);
     m_textEdit->setClearButtonShown(true);
@@ -77,13 +77,13 @@ WaterMark::WaterMark(QObject* parent)
     m_fontChooserWidget->setSampleBoxVisible(true);
     m_fontChooserWidget->setWhatsThis( i18n("Here you can choose the font to be used."));
 
-    KVBox *hbox2      = new KVBox(vbox);
+    KHBox *hbox2      = new KHBox(vbox);
     QLabel *label2    = new QLabel(hbox2);
     m_fontColorButton = new KColorButton(Qt::red, hbox2);
     m_fontColorButton->setWhatsThis(i18n("Set here the font color to use."));
     label2->setText(i18n("Font Color:"));
 
-    KVBox *hbox3   = new KVBox(vbox);
+    KHBox *hbox3   = new KHBox(vbox);
     QLabel *label3 = new QLabel(hbox3);
     m_comboBox     = new KComboBox(hbox3);
     m_comboBox->insertItem(TopLeft,     i18n("Top left"));
