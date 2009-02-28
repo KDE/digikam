@@ -4,6 +4,7 @@ install( FILES Dreary
 	       OrangeCrush 
 	       Sandy 
 	       Dark 
+	       DarkRoom 
 	       Dessert 
 	       Digikasa 
 	       Gray 
