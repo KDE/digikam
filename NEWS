@@ -31,7 +31,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 185481 : digiKam hangs when changing filtering under specific conditions.
 023 ==> 185574 : Crash while importing images from cardreader.
 024 ==> 185317 : Album thumbnails are gone when moving nested albums.
-025 ==> 
+025 ==> 185805 : digiKam 0.10.0-rc2 fails to save keyword hierarchy in IPTC and XMP tags.
+026 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc2 - Release date: 2009-02-15
