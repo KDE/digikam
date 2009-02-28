@@ -39,6 +39,7 @@
 #include "rotate.h"
 #include "restoration.h"
 #include "flip.h"
+#include "watermark.h"
 
 namespace Digikam
 {
@@ -66,6 +67,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new Flip(this));
     registerTool(new Resize(this));
     registerTool(new Restoration(this));
+    registerTool(new WaterMark(this));
 }
 
 BatchToolsManager::~BatchToolsManager()
@@ -98,7 +100,5 @@ BatchTool* BatchToolsManager::findTool(const QString& name, BatchTool::BatchTool
 
     return 0;
 }
-
-
 
 }  // namespace Digikam
