@@ -163,8 +163,7 @@ void ContextMenuHelper::addActionThumbnail(imageIds& ids, Album* album)
     }
 }
 
-void ContextMenuHelper::addServicesMenu(const ImageInfo& item,
-                                        QMap<QAction*, KService::Ptr> &servicesMap)
+void ContextMenuHelper::addServicesMenu(const ImageInfo& item, QMap<QAction*, KService::Ptr> &servicesMap)
 {
     KMimeType::Ptr mimePtr = KMimeType::findByUrl(item.fileUrl(), 0, true, true);
     const KService::List offers = KMimeTypeTrader::self()->query(mimePtr->name());
