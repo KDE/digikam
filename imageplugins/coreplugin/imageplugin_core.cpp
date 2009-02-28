@@ -210,9 +210,12 @@ void ImagePlugin_Core::slotConvertTo8Bits()
     }
     else
     {
-       if (KMessageBox::warningContinueCancel(kapp->activeWindow(),
-                                              i18n("Performing this operation will reduce image color quality. "
-                                                   "Do you want to continue?")) == KMessageBox::Cancel)
+       if (KMessageBox::warningContinueCancel(
+                        kapp->activeWindow(),
+                        i18n("Performing this operation will reduce image color quality. "
+                             "Do you want to continue?"), QString(), 
+                        KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
+                        QString("ImagePluginCore16To8Bits")) == KMessageBox::Cancel)
            return;
     }
 
