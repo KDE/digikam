@@ -6,7 +6,7 @@ Type                            DONE
 ----------------------------------------
 AlbumIconView                   X
 ImagePreviewView                X
-AlbumFolderView                 X        
+AlbumFolderView                 X
 TagFolderView                   X
 LightTable                      X
 |- LightTablePreview            X
@@ -21,4 +21,6 @@ CameraUI                        X   (not needed)
 ******************
 Missing Features
 ******************
-Goto Tag
+Goto Tag                        X
+Select/Deselect Tags Menu
+Invert Tag Selection
