@@ -37,6 +37,7 @@ class QAction;
 class QMenu;
 class QPoint;
 class QString;
+class Q3ListViewItem;
 
 class KActionCollection;
 
@@ -56,17 +57,15 @@ public:
 
     typedef const QList<qlonglong> imageIds;
 
-    enum StdActions
-    {
-        Unknown = 0,
-        AssignTags,
-        RemoveTags,
-        AssignRating,
-        GotoAlbum,
-        GotoTag,
-        GotoDate,
-        SetThumbnail
-    };
+Q_SIGNALS:
+
+    void signalSetThumbnail(ImageInfo&);
+    void signalGotoAlbum(ImageInfo&);
+    void signalGotoDate(ImageInfo&);
+    void signalGotoTag(int);
+    void signalAssignTag(int);
+    void signalRemoveTag(int);
+    void signalAssignRating(int);
 
 public:
 
@@ -90,38 +89,47 @@ public:
      */
 
     // add action from actionCollection
-    virtual void addAction(const char* name, bool addDisabled = false);
+    void addAction(const char* name, bool addDisabled = false);
 
     // add temporary action
-    virtual void addAction(QAction* action, bool addDisabled = false);
-    virtual void addAction(QAction* action, QObject* recv, const char* slot, bool addDisabled = false);
+    void addAction(QAction* action, bool addDisabled = false);
+    void addAction(QAction* action, QObject* recv, const char* slot, bool addDisabled = false);
 
     // add standard actions
-    virtual void addActionCopy(QObject* recv, const char* slot);
-    virtual void addActionPaste(QObject* recv, const char* slot);
-    virtual void addActionItemDelete(QObject* recv, const char* slot, int quantity = 1);
+    void addActionCopy(QObject* recv, const char* slot);
+    void addActionPaste(QObject* recv, const char* slot);
+    void addActionItemDelete(QObject* recv, const char* slot, int quantity = 1);
 
     // add special actions
-    virtual void addActionLightTable();
-    virtual void addActionThumbnail(imageIds& imageIds, Album* album);
+    void addActionLightTable();
+    void addActionThumbnail(imageIds& ids, Album* album);
 
     // add special menus
-    virtual void addKipiActions();
-    virtual void addServicesMenu(const ImageInfo&, QMap<QAction*, KService::Ptr>&);
-    virtual void addGotoMenu(imageIds& imageIDs/*, QAction*, QAction* */);
-    virtual void addQueueManagerMenu();
+    void addServicesMenu(const ImageInfo&, QMap<QAction*, KService::Ptr>&);
+    void addGotoMenu(imageIds& ids);
+    void addQueueManagerMenu();
 
-    virtual void addAssignTagsMenu(imageIds& imageIDs, QObject* recv, const char* slot);
-    virtual void addRemoveTagsMenu(imageIds& imageIDs, QObject* recv, const char* slot);
-    virtual void addRatingMenu(QObject* recv, const char* slot);
+    // tags & rating menus
+    void addAssignTagsMenu(imageIds& ids);
+    void addRemoveTagsMenu(imageIds& ids);
+    void addCreateTagFromAddressbookMenu();
+    void addSelectTagsMenu(Q3ListViewItem *item);
+    void addRatingMenu();
 
-    virtual void addImportMenu();
-    virtual void addExportMenu();
-    virtual void addBatchMenu();
-    virtual void addAlbumActions();
+    // KIPI menus
+    void addKipiActions();
+    void addImportMenu();
+    void addExportMenu();
+    void addBatchMenu();
+    void addAlbumActions();
 
     // execute the registered menu
-    virtual QAction* exec(const QPoint& pos, int& id, QAction* at = 0);
+    QAction* exec(const QPoint& pos, QAction* at = 0);
+
+private:
+
+    void setSelectedIds(imageIds& ids);
+    bool actionExists(QAction* action);
 
 private:
 

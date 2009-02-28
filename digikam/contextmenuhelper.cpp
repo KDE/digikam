@@ -74,10 +74,17 @@ public:
     {
         stdActionCollection = 0;
         menu                = 0;
+        gotoAlbumAction     = 0;
+        gotoDateAction      = 0;
+        setThumbnailAction  = 0;
     }
     KActionCollection*  stdActionCollection;
     QMenu*              menu;
-    QMap<int, QAction*> actions;
+    QList<qlonglong>    selectedIds;
+
+    QAction*            gotoAlbumAction;
+    QAction*            gotoDateAction;
+    QAction*            setThumbnailAction;
 };
 
 ContextMenuHelper::ContextMenuHelper(QMenu* parent, KActionCollection* actionCollection)
@@ -139,18 +146,20 @@ void ContextMenuHelper::addActionLightTable()
 
 void ContextMenuHelper::addActionThumbnail(imageIds& ids, Album* album)
 {
-    QAction* thumbnailAction = 0;
+    if (actionExists(d->setThumbnailAction))
+        return;
+
+    setSelectedIds(ids);
+
     if (album && ids.count() == 1)
     {
         if (album->type() == Album::PHYSICAL )
-            thumbnailAction = new QAction(i18n("Set as Album Thumbnail"), this);
+            d->setThumbnailAction = new QAction(i18n("Set as Album Thumbnail"), this);
         else if (album->type() == Album::TAG )
-            thumbnailAction = new QAction(i18n("Set as Tag Thumbnail"), this);
+            d->setThumbnailAction = new QAction(i18n("Set as Tag Thumbnail"), this);
 
-        addAction(thumbnailAction);
+        addAction(d->setThumbnailAction);
         d->menu->addSeparator();
-
-        d->actions.insert(SetThumbnail, thumbnailAction);
     }
 }
 
@@ -198,18 +207,22 @@ void ContextMenuHelper::addKipiActions()
     }
 }
 
-void ContextMenuHelper::addAssignTagsMenu(imageIds& ids, QObject* recv, const char* slot)
+void ContextMenuHelper::addAssignTagsMenu(imageIds& ids)
 {
+    setSelectedIds(ids);
+
     KMenu* assignTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::ASSIGN, d->menu);
     assignTagsPopup->menuAction()->setText(i18n("Assign Tag"));
     d->menu->addMenu(assignTagsPopup);
 
     connect(assignTagsPopup, SIGNAL(signalTagActivated(int)),
-            recv, slot);
+            this, SIGNAL(signalAssignTag(int)));
 }
 
-void ContextMenuHelper::addRemoveTagsMenu(imageIds& ids, QObject* recv, const char* slot)
+void ContextMenuHelper::addRemoveTagsMenu(imageIds& ids)
 {
+    setSelectedIds(ids);
+
     KMenu* removeTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::REMOVE, d->menu);
     removeTagsPopup->menuAction()->setText(i18n("Remove Tag"));
     d->menu->addMenu(removeTagsPopup);
@@ -221,17 +234,45 @@ void ContextMenuHelper::addRemoveTagsMenu(imageIds& ids, QObject* recv, const ch
         removeTagsPopup->menuAction()->setEnabled(false);
 
     connect(removeTagsPopup, SIGNAL(signalTagActivated(int)),
-            recv, slot);
+            this, SIGNAL(signalRemoveTag(int)));
 }
 
-void ContextMenuHelper::addRatingMenu(QObject* recv, const char* slot)
+void ContextMenuHelper::addRatingMenu()
 {
     KMenu* ratingMenu = new RatingPopupMenu(d->menu);
     ratingMenu->menuAction()->setText(i18n("Assign Rating"));
     d->menu->addMenu(ratingMenu);
 
     connect(ratingMenu, SIGNAL(signalRatingChanged(int)),
-            recv, slot);
+            this, SIGNAL(signalAssignRating(int)));
+}
+
+void ContextMenuHelper::addCreateTagFromAddressbookMenu()
+{
+#ifdef HAVE_KDEPIMLIBS
+    d->ABCMenu = new KMenu(this);
+
+    connect( d->ABCMenu, SIGNAL( aboutToShow() ),
+             this, SLOT( slotABCContextMenu() ) );
+
+    popmenu.addMenu(d->ABCMenu);
+    d->ABCMenu->menuAction()->setIcon(SmallIcon("tag-addressbook"));
+    d->ABCMenu->menuAction()->setText(i18n("Create Tag From AddressBook"));
+#endif // HAVE_KDEPIMLIBS
+}
+
+void ContextMenuHelper::addSelectTagsMenu(Q3ListViewItem *item)
+{
+    KMenu *selectTagsMenu = new KMenu(i18nc("select tags menu", "Select"), d->menu);
+    QAction *selectChildrenAction=0, *selectParentsAction=0;
+    QAction *selectAllTagsAction = selectTagsMenu->addAction(i18n("All Tags"));
+    if (item)
+    {
+        selectTagsMenu->addSeparator();
+        selectChildrenAction = selectTagsMenu->addAction(i18n("Children"));
+        selectParentsAction  = selectTagsMenu->addAction(i18n("Parents"));
+    }
+    d->menu->addMenu(selectTagsMenu);
 }
 
 void ContextMenuHelper::addImportMenu()
@@ -274,38 +315,43 @@ void ContextMenuHelper::addAlbumActions()
         d->menu->addActions(albumActions);
 }
 
-void ContextMenuHelper::addGotoMenu(imageIds& ids/*, QAction* gotoAlbum, QAction* gotoDate*/)
+void ContextMenuHelper::addGotoMenu(imageIds& ids)
 {
-    // when more then one item is selected, don't add the menu
-    if (ids.count() > 1) return;
+    if (actionExists(d->gotoAlbumAction))
+        return;
+    if (actionExists(d->gotoDateAction))
+        return;
 
-    QAction  *viewAction, *gotoAlbum, *gotoDate = 0;
-    viewAction = new QAction(SmallIcon("viewimage"),           i18n("View"),  this);
-    gotoAlbum  = new QAction(SmallIcon("folder-image"),        i18n("Album"), this);
-    gotoDate   = new QAction(SmallIcon("view-calendar-month"), i18n("Date"),  this);
-    d->actions.insert(GotoAlbum, gotoAlbum);
-    d->actions.insert(GotoDate,  gotoDate);
+    setSelectedIds(ids);
+
+    // when more then one item is selected, don't add the menu
+    if (d->selectedIds.count() > 1) return;
+
+    d->gotoAlbumAction = new QAction(SmallIcon("folder-image"),        i18n("Album"), this);
+    d->gotoDateAction  = new QAction(SmallIcon("view-calendar-month"), i18n("Date"),  this);
+//    d->actions.insert(GotoAlbum, gotoAlbum);
+//    d->actions.insert(GotoDate,  gotoDate);
 
 //    if (!gotoAlbum || !gotoDate) return;
 
     // the currently selected image is always the first item
-    ImageInfo item(ids.first());
+    ImageInfo item(d->selectedIds.first());
 
     KMenu *gotoMenu  = new KMenu(d->menu);
-    gotoMenu->addAction(gotoAlbum);
-    gotoMenu->addAction(gotoDate);
+    gotoMenu->addAction(d->gotoAlbumAction);
+    gotoMenu->addAction(d->gotoDateAction);
 
-    TagsPopupMenu *gotoTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::DISPLAY, gotoMenu);
+    TagsPopupMenu *gotoTagsPopup = new TagsPopupMenu(d->selectedIds, TagsPopupMenu::DISPLAY, gotoMenu);
     QAction *gotoTag = gotoMenu->addMenu(gotoTagsPopup);
     gotoTag->setIcon(SmallIcon("tag"));
     gotoTag->setText(i18n("Tag"));
 
     // Disable the goto Tag popup menu, if there are no tags at all.
-    if (!DatabaseAccess().db()->hasTags(ids))
+    if (!DatabaseAccess().db()->hasTags(d->selectedIds))
         gotoTag->setEnabled(false);
 
-    connect(gotoTagsPopup, SIGNAL(signalTagActivated(int)),
-            this, SLOT(slotGotoTag(int)));
+//    connect(gotoTagsPopup, SIGNAL(signalTagActivated(int)),
+//            this, SLOT(slotGotoTag(int)));
 
     Album* currentAlbum = AlbumManager::instance()->currentAlbum();
 
@@ -315,15 +361,18 @@ void ContextMenuHelper::addGotoMenu(imageIds& ids/*, QAction* gotoAlbum, QAction
         // which the image belongs, then disable the "Go To" Album.
         // (Note that in recursive album view these can be different).
         if (item.albumId() == currentAlbum->id())
-            gotoAlbum->setEnabled(false);
+            d->gotoAlbumAction->setEnabled(false);
     }
     else if (currentAlbum->type() == Album::DATE)
     {
-        gotoDate->setEnabled(false);
+        d->gotoDateAction->setEnabled(false);
     }
     QAction *gotoMenuAction = gotoMenu->menuAction();
     gotoMenuAction->setIcon(SmallIcon("go-jump"));
     gotoMenuAction->setText(i18n("Go To"));
+
+    connect(gotoTagsPopup, SIGNAL(signalTagActivated(int)),
+            this, SIGNAL(signalGotoTag(int)));
 
     addAction(gotoMenuAction);
 }
@@ -364,22 +413,41 @@ void ContextMenuHelper::addActionItemDelete(QObject* recv, const char* slot, int
     addAction(trashAction);
 }
 
-QAction* ContextMenuHelper::exec(const QPoint& pos, int& id, QAction* at)
+QAction* ContextMenuHelper::exec(const QPoint& pos, QAction* at)
 {
     QAction* choice = d->menu->exec(pos, at);
-    id = Unknown;
-
-    QMapIterator<int, QAction*> it(d->actions);
-    while (it.hasNext())
+    if (choice)
     {
-        it.next();
-        if (it.value() == choice)
+        if (choice == d->gotoAlbumAction)
         {
-            id = it.key();
-            break;
+            ImageInfo item(d->selectedIds.first());
+            emit signalGotoAlbum(item);
+        }
+        else if (choice == d->gotoDateAction)
+        {
+            ImageInfo item(d->selectedIds.first());
+            emit signalGotoDate(item);
+        }
+        else if (choice == d->setThumbnailAction)
+        {
+            ImageInfo item(d->selectedIds.first());
+            emit signalSetThumbnail(item);
         }
     }
     return choice;
+}
+
+void ContextMenuHelper::setSelectedIds(imageIds &ids)
+{
+    if (d->selectedIds.isEmpty())
+        d->selectedIds = ids;
+}
+
+bool ContextMenuHelper::actionExists(QAction *action)
+{
+    if (action)
+        return true;
+    return false;
 }
 
 } // namespace Digikam
