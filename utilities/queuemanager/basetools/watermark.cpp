@@ -70,7 +70,7 @@ WaterMark::WaterMark(QObject* parent)
     QLabel *label  = new QLabel(hbox);
     m_textEdit     = new KLineEdit(hbox);
     m_textEdit->setClearButtonShown(true);
-    m_textEdit->setWhatsThis(i18n("Here, enter your watermark."));
+    m_textEdit->setWhatsThis(i18n("Here, enter your watermark string."));
     label->setText(i18n("Text:"));
 
     m_fontChooserWidget = new KFontChooser(vbox, KFontChooser::NoDisplayFlags);
@@ -106,7 +106,7 @@ WaterMark::WaterMark(QObject* parent)
     connect(m_fontColorButton, SIGNAL(changed(const QColor&)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(m_textEdit, SIGNAL(textChanged()),
+    connect(m_textEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotSettingsChanged()));
 }
 
@@ -119,7 +119,7 @@ BatchToolSettings WaterMark::defaultSettings()
     BatchToolSettings settings;
     settings.insert("Text",   QString());
     settings.insert("Font",   QFont());
-    settings.insert("Color",  Qt::red);
+    settings.insert("Color",  Qt::black);
     settings.insert("Corner", BottomRight);
     return settings;
 }
@@ -134,6 +134,10 @@ void WaterMark::assignSettings2Widget()
 
 void WaterMark::slotSettingsChanged()
 {
+    m_fontChooserWidget->setSampleText(m_textEdit->text());
+    m_fontChooserWidget->setColor(m_fontColorButton->color());
+    m_fontChooserWidget->setBackgroundColor(QColor(0xCC, 0xCC, 0xCC));
+
     BatchToolSettings settings;
     settings.insert("Text",   m_textEdit->text());
     settings.insert("Font",   m_fontChooserWidget->font());
@@ -176,6 +180,17 @@ bool WaterMark::toolOperations()
             break;
     }
 
+    DColorComposer *composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
+
+    // Add a transparent layer.
+    DImg transparentLayer(fontRect.width(), fontRect.height(), image().sixteenBit(), true);
+    DColor transparent(0xCC, 0xCC, 0xCC, 210, image().sixteenBit());
+    transparentLayer.fill(transparent);
+    image().bitBlendImage(composer, &transparentLayer, 0, 0, 
+                          transparentLayer.width(), transparentLayer.height(),
+                          fontRect.x(), fontRect.y());
+
+    // Draw text
     QImage img = image().copyQImage(fontRect);
     QPainter p(&img);
     p.setPen(QPen(color, 1));
@@ -184,16 +199,6 @@ bool WaterMark::toolOperations()
     p.drawText(0, 0, fontRect.width(), fontRect.height(), alignMode, text);
     p.restore();
     p.end();
-
-    DColorComposer *composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
-
-    DImg transparentLayer(fontRect.width(), fontRect.height(), image().sixteenBit(), true);
-    DColor transparent(QColor(0xCC, 0xCC, 0xCC));
-    transparent.setAlpha(210);
-    if (image().sixteenBit()) transparent.convertToSixteenBit();
-    transparentLayer.fill(transparent);
-    image().bitBlendImage(composer, &transparentLayer, 0, 0, fontRect.width(), fontRect.height(),
-                          fontRect.x(), fontRect.y());
 
     DImg textDrawn(img);
 
