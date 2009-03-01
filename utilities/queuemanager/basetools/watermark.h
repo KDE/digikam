@@ -24,14 +24,19 @@
 #ifndef WATERMARK_H
 #define WATERMARK_H
 
+// Qt includes.
+
+#include <QFont>
+
 // Local includes.
 
 #include "batchtool.h"
 
 class KComboBox;
 class KLineEdit;
-class KFontChooser;
+class KFontComboBox;
 class KColorButton;
+class KIntNumInput;
 
 namespace Digikam
 {
@@ -47,14 +52,15 @@ public:
 
     BatchToolSettings defaultSettings();
 
+private Q_SLOTS:
+
+    void slotSettingsChanged();
+
 private:
 
     void assignSettings2Widget();
     bool toolOperations();
-
-private Q_SLOTS:
-
-    void slotSettingsChanged();
+    int  queryFontSize(const QString& text, const QFont& font, int lenght);
 
 private:
 
@@ -66,13 +72,15 @@ private:
         BottomRight
     };
 
-    KLineEdit    *m_textEdit;
+    KLineEdit     *m_textEdit;
 
-    KFontChooser *m_fontChooserWidget;
+    KIntNumInput  *m_stringLength;
 
-    KColorButton *m_fontColorButton;
+    KFontComboBox *m_fontChooserWidget;
 
-    KComboBox    *m_comboBox;
+    KColorButton  *m_fontColorButton;
+
+    KComboBox     *m_comboBox;
 };
 
 }  // namespace Digikam

@@ -29,7 +29,6 @@
 #include <QWidget>
 #include <QLabel>
 #include <QFontMetrics>
-#include <QFont>
 #include <QPoint>
 #include <QRect>
 #include <QPen>
@@ -43,10 +42,11 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kcombobox.h>
-#include <kfontchooser.h>
+#include <kfontcombobox.h>
 #include <kcolorbutton.h>
 #include <klineedit.h>
 #include <kdialog.h>
+#include <knuminput.h>
 
 // Local includes.
 
@@ -73,24 +73,35 @@ WaterMark::WaterMark(QObject* parent)
     m_textEdit->setWhatsThis(i18n("Here, enter your watermark string."));
     label->setText(i18n("Text:"));
 
-    m_fontChooserWidget = new KFontChooser(vbox, KFontChooser::NoDisplayFlags);
-    m_fontChooserWidget->setSampleBoxVisible(true);
+    KHBox *hbox2        = new KHBox(vbox);
+    QLabel *label2      = new QLabel(hbox2);
+    m_fontChooserWidget = new KFontComboBox(hbox2);
     m_fontChooserWidget->setWhatsThis( i18n("Here you can choose the font to be used."));
+    label2->setText(i18n("Font:"));
 
-    KHBox *hbox2      = new KHBox(vbox);
-    QLabel *label2    = new QLabel(hbox2);
-    m_fontColorButton = new KColorButton(Qt::red, hbox2);
+    KHBox *hbox3      = new KHBox(vbox);
+    QLabel *label3    = new QLabel(hbox3);
+    m_fontColorButton = new KColorButton(Qt::black, hbox3);
     m_fontColorButton->setWhatsThis(i18n("Set here the font color to use."));
-    label2->setText(i18n("Font Color:"));
+    label3->setText(i18n("Font Color:"));
 
-    KHBox *hbox3   = new KHBox(vbox);
-    QLabel *label3 = new QLabel(hbox3);
-    m_comboBox     = new KComboBox(hbox3);
+    KHBox *hbox4   = new KHBox(vbox);
+    QLabel *label4 = new QLabel(hbox4);
+    m_comboBox     = new KComboBox(hbox4);
     m_comboBox->insertItem(TopLeft,     i18n("Top left"));
     m_comboBox->insertItem(TopRight,    i18n("Top right"));
     m_comboBox->insertItem(BottomLeft,  i18n("Bottom left"));
     m_comboBox->insertItem(BottomRight, i18n("Bottom right"));
-    label3->setText(i18n("Corner:"));
+    label4->setText(i18n("Corner:"));
+
+    KHBox *hbox5   = new KHBox(vbox);
+    QLabel *label5 = new QLabel(hbox5);
+    m_stringLength = new KIntNumInput(hbox5);
+    m_stringLength->setRange(10, 90);
+    m_stringLength->setValue(25);
+    m_stringLength->setSliderEnabled(true);
+    m_stringLength->setWhatsThis(i18n("Set here the string lenght in percent relative of image width."));
+    label5->setText(i18n("Lenght (%):"));
 
     QLabel *space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
@@ -100,13 +111,16 @@ WaterMark::WaterMark(QObject* parent)
     connect(m_comboBox, SIGNAL(activated(int)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(m_fontChooserWidget, SIGNAL(fontSelected(const QFont&)),
+    connect(m_fontChooserWidget, SIGNAL(currentFontChanged(const QFont&)),
             this, SLOT(slotSettingsChanged()));
 
     connect(m_fontColorButton, SIGNAL(changed(const QColor&)),
             this, SLOT(slotSettingsChanged()));
 
     connect(m_textEdit, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotSettingsChanged()));
+
+    connect(m_stringLength, SIGNAL(valueChanged(int)),
             this, SLOT(slotSettingsChanged()));
 }
 
@@ -121,6 +135,7 @@ BatchToolSettings WaterMark::defaultSettings()
     settings.insert("Font",   QFont());
     settings.insert("Color",  Qt::black);
     settings.insert("Corner", BottomRight);
+    settings.insert("Lenght", 25);
     return settings;
 }
 
@@ -130,19 +145,17 @@ void WaterMark::assignSettings2Widget()
     m_fontChooserWidget->setFont(settings()["Font"].toString());
     m_fontColorButton->setColor(settings()["Color"].toString());
     m_comboBox->setCurrentIndex(settings()["Corner"].toInt());
+    m_stringLength->setValue(settings()["Lenght"].toInt());
 }
 
 void WaterMark::slotSettingsChanged()
 {
-    m_fontChooserWidget->setSampleText(m_textEdit->text());
-    m_fontChooserWidget->setColor(m_fontColorButton->color());
-    m_fontChooserWidget->setBackgroundColor(QColor(0xCC, 0xCC, 0xCC));
-
     BatchToolSettings settings;
     settings.insert("Text",   m_textEdit->text());
     settings.insert("Font",   m_fontChooserWidget->font());
     settings.insert("Color",  m_fontColorButton->color());
     settings.insert("Corner", (int)m_comboBox->currentIndex());
+    settings.insert("Lenght", (int)m_stringLength->value());
     setSettings(settings);
 }
 
@@ -155,9 +168,13 @@ bool WaterMark::toolOperations()
     QFont font       = settings()["Font"].toString();
     QColor color     = settings()["Color"].toString();
     int corner       = settings()["Corner"].toInt();
+    int lenght       = settings()["Lenght"].toInt();
     int alignMode;
 
-    font.setPointSizeF(font.pointSizeF());
+    int size = queryFontSize(text, font, lenght);
+    if (size == 0) return false;
+
+    font.setPointSizeF(size);
     QFontMetrics fontMt(font);
     QRect fontRect = fontMt.boundingRect(0, 0, image().width(), image().height(), 0, text);
 
@@ -213,6 +230,22 @@ bool WaterMark::toolOperations()
     delete composer;
 
     return (savefromDImg());
+}
+
+int WaterMark::queryFontSize(const QString& text, const QFont& font, int lenght)
+{
+    // Find font size using relative lenght compared to image width.
+    QFont fnt = font;
+    QRect fontRect;
+    for (int i = 5 ; i <= 1000 ; i++)
+    {
+        fnt.setPointSizeF(i);
+        QFontMetrics fontMt(fnt);
+        fontRect = fontMt.boundingRect(0, 0, image().width(), image().height(), 0, text);
+        if (fontRect.width() > (int)((image().width() * lenght)/100.0))
+            return (i-1);
+    }
+    return 0;
 }
 
 }  // namespace Digikam
