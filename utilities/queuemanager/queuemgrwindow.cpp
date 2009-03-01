@@ -903,8 +903,6 @@ void QueueMgrWindow::processing(const KUrl& url)
 void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
 {
     d->progressTimer->stop();
-    if (d->currentProcessItem)
-        d->currentProcessItem->setDone(true);
 
     QueueSettings settings = d->queuePool->currentQueue()->settings();
     KUrl dest              = settings.targetUrl;
@@ -931,7 +929,8 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
                 case KIO::R_SKIP:
                 {
                     dest = KUrl();
-                    d->currentProcessItem->setCanceled();
+                    if (d->currentProcessItem)
+                        d->currentProcessItem->setCanceled();
                     break;
                 }
                 case KIO::R_RENAME:
@@ -950,11 +949,16 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
         if (::rename(QFile::encodeName(tmp.path()), QFile::encodeName(dest.path())) != 0)
         {
             KMessageBox::error(this, i18n("Failed to save image %1", dest.fileName()));
-            d->currentProcessItem->setFailed();
+            if (d->currentProcessItem)
+                d->currentProcessItem->setFailed();
         }
         else
         {
-            d->currentProcessItem->setDestFileName(dest.fileName());
+            if (d->currentProcessItem)
+            {
+                d->currentProcessItem->setDestFileName(dest.fileName());
+                d->currentProcessItem->setDone();
+            }
 
             // TODO: assign attributes from original image.
         }

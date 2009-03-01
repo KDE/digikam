@@ -118,19 +118,21 @@ void QueueListViewItem::setCanceled()
 {
     setIcon(0, QIcon(d->preview));
     setIcon(1, SmallIcon("dialog-cancel"));
+    d->done = false;
 }
 
 void QueueListViewItem::setFailed()
 {
     setIcon(0, QIcon(d->preview));
     setIcon(1, SmallIcon("dialog-error"));
+    d->done = false;
 }
 
-void QueueListViewItem::setDone(bool done)
+void QueueListViewItem::setDone()
 {
     setIcon(0, QIcon(d->preview));
     setIcon(1, SmallIcon("dialog-ok"));
-    d->done = done;
+    d->done = true;
 }
 
 bool QueueListViewItem::isDone()

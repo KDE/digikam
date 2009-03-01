@@ -66,7 +66,7 @@ public:
     void setCanceled();
     void setFailed();
 
-    void setDone(bool b);
+    void setDone();
     bool isDone();
 
     void    setDestFileName(const QString& str);
