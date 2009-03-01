@@ -36,7 +36,6 @@
 
 // KDE includes.
 
-#include <khbox.h>
 #include <kvbox.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -66,37 +65,32 @@ WaterMark::WaterMark(QObject* parent)
     vbox->setSpacing(KDialog::spacingHint());
     vbox->setMargin(0);
 
-    KHBox *hbox    = new KHBox(vbox);
-    QLabel *label  = new QLabel(hbox);
-    m_textEdit     = new KLineEdit(hbox);
+    QLabel *label  = new QLabel(vbox);
+    m_textEdit     = new KLineEdit(vbox);
     m_textEdit->setClearButtonShown(true);
     m_textEdit->setWhatsThis(i18n("Here, enter your watermark string."));
     label->setText(i18n("Text:"));
 
-    KHBox *hbox2        = new KHBox(vbox);
-    QLabel *label2      = new QLabel(hbox2);
-    m_fontChooserWidget = new KFontComboBox(hbox2);
+    QLabel *label2      = new QLabel(vbox);
+    m_fontChooserWidget = new KFontComboBox(vbox);
     m_fontChooserWidget->setWhatsThis( i18n("Here you can choose the font to be used."));
     label2->setText(i18n("Font:"));
 
-    KHBox *hbox3      = new KHBox(vbox);
-    QLabel *label3    = new QLabel(hbox3);
-    m_fontColorButton = new KColorButton(Qt::black, hbox3);
+    QLabel *label3    = new QLabel(vbox);
+    m_fontColorButton = new KColorButton(Qt::black, vbox);
     m_fontColorButton->setWhatsThis(i18n("Set here the font color to use."));
     label3->setText(i18n("Font Color:"));
 
-    KHBox *hbox4   = new KHBox(vbox);
-    QLabel *label4 = new QLabel(hbox4);
-    m_comboBox     = new KComboBox(hbox4);
+    QLabel *label4 = new QLabel(vbox);
+    m_comboBox     = new KComboBox(vbox);
     m_comboBox->insertItem(TopLeft,     i18n("Top left"));
     m_comboBox->insertItem(TopRight,    i18n("Top right"));
     m_comboBox->insertItem(BottomLeft,  i18n("Bottom left"));
     m_comboBox->insertItem(BottomRight, i18n("Bottom right"));
     label4->setText(i18n("Corner:"));
 
-    KHBox *hbox5   = new KHBox(vbox);
-    QLabel *label5 = new QLabel(hbox5);
-    m_stringLength = new KIntNumInput(hbox5);
+    QLabel *label5 = new QLabel(vbox);
+    m_stringLength = new KIntNumInput(vbox);
     m_stringLength->setRange(10, 90);
     m_stringLength->setValue(25);
     m_stringLength->setSliderEnabled(true);
