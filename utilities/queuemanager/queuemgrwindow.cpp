@@ -923,6 +923,11 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
             switch (dlg.exec())
             {
                 case KIO::R_CANCEL:
+                {
+                    slotStop();
+                    return;
+                    break;
+                }
                 case KIO::R_SKIP:
                 {
                     dest = KUrl();
