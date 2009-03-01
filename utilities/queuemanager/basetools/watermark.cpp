@@ -196,7 +196,9 @@ bool WaterMark::toolOperations()
 
     // Add a transparent layer.
     DImg transparentLayer(fontRect.width(), fontRect.height(), image().sixteenBit(), true);
-    DColor transparent(0xCC, 0xCC, 0xCC, 210, image().sixteenBit());
+    DColor transparent(QColor(0xCC, 0xCC, 0xCC));
+    transparent.setAlpha(128);
+    if (image().sixteenBit()) transparent.convertToSixteenBit();
     transparentLayer.fill(transparent);
     image().bitBlendImage(composer, &transparentLayer, 0, 0, 
                           transparentLayer.width(), transparentLayer.height(),
