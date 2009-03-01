@@ -150,10 +150,11 @@ bool WaterMark::toolOperations()
 {
     if (!loadToDImg()) return false;
 
-    QString text = settings()["Text"].toString();
-    QFont font   = settings()["Font"].toString();
-    QColor color = settings()["Color"].toString();
-    int corner   = settings()["Corner"].toInt();
+    const int margin = 50;
+    QString text     = settings()["Text"].toString();
+    QFont font       = settings()["Font"].toString();
+    QColor color     = settings()["Color"].toString();
+    int corner       = settings()["Corner"].toInt();
     int alignMode;
 
     font.setPointSizeF(font.pointSizeF());
@@ -163,19 +164,19 @@ bool WaterMark::toolOperations()
     switch(corner)
     {
         case TopLeft:
-            fontRect.moveTopLeft(QPoint(50, 50));
+            fontRect.moveTopLeft(QPoint(margin, margin));
             alignMode = Qt::AlignLeft;
             break;
         case TopRight:
-            fontRect.moveTopRight(QPoint(image().width()-50, 50));
+            fontRect.moveTopRight(QPoint(image().width()-margin, margin));
             alignMode = Qt::AlignRight;
             break;
         case BottomLeft:
-            fontRect.moveBottomLeft(QPoint(50, image().height()-50));
+            fontRect.moveBottomLeft(QPoint(margin, image().height()-margin));
             alignMode = Qt::AlignLeft;
             break;
         default :    // BottomRight
-            fontRect.moveBottomRight(QPoint(image().width()-50, image().height()-50));
+            fontRect.moveBottomRight(QPoint(image().width()-margin, image().height()-margin));
             alignMode = Qt::AlignRight;
             break;
     }
