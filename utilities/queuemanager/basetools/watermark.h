@@ -41,6 +41,8 @@ class KIntNumInput;
 namespace Digikam
 {
 
+class WaterMarkPriv;
+
 class WaterMark : public BatchTool
 {
     Q_OBJECT
@@ -64,23 +66,7 @@ private:
 
 private:
 
-    enum AutoCorrectionType
-    {
-        TopLeft=0,
-        TopRight,
-        BottomLeft,
-        BottomRight
-    };
-
-    KLineEdit     *m_textEdit;
-
-    KIntNumInput  *m_stringLength;
-
-    KFontComboBox *m_fontChooserWidget;
-
-    KColorButton  *m_fontColorButton;
-
-    KComboBox     *m_comboBox;
+    WaterMarkPriv* const d;
 };
 
 }  // namespace Digikam
