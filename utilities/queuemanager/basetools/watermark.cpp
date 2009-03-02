@@ -163,7 +163,7 @@ bool WaterMark::toolOperations()
     if (!loadToDImg()) return false;
 
     const int radius = 10;
-    const int margin = 50;
+    const int margin = 5;   // Relative of image dimenssions (percents)
     QString text     = settings()["Text"].toString();
     QFont font       = settings()["Font"].toString();
     QColor color     = settings()["Color"].toString();
@@ -171,29 +171,33 @@ bool WaterMark::toolOperations()
     int lenght       = settings()["Lenght"].toInt();
     int alignMode;
 
+    if (text.isEmpty()) return false;
+
     int size = queryFontSize(text, font, lenght);
     if (size == 0) return false;
 
     font.setPointSizeF(size);
     QFontMetrics fontMt(font);
     QRect fontRect = fontMt.boundingRect(0, 0, image().width(), image().height(), 0, text);
+    int mrgW       = lround(image().width()  * (margin / 100.0));
+    int mrgH       = lround(image().height() * (margin / 100.0));
 
     switch(corner)
     {
         case TopLeft:
-            fontRect.moveTopLeft(QPoint(margin, margin));
+            fontRect.moveTopLeft(QPoint(mrgW, mrgH));
             alignMode = Qt::AlignLeft;
             break;
         case TopRight:
-            fontRect.moveTopRight(QPoint(image().width()-margin, margin));
+            fontRect.moveTopRight(QPoint(image().width()-mrgW, mrgH));
             alignMode = Qt::AlignRight;
             break;
         case BottomLeft:
-            fontRect.moveBottomLeft(QPoint(margin, image().height()-margin));
+            fontRect.moveBottomLeft(QPoint(mrgW, image().height()-mrgH));
             alignMode = Qt::AlignLeft;
             break;
         default :    // BottomRight
-            fontRect.moveBottomRight(QPoint(image().width()-margin, image().height()-margin));
+            fontRect.moveBottomRight(QPoint(image().width()-mrgW, image().height()-mrgH));
             alignMode = Qt::AlignRight;
             break;
     }
