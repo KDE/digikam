@@ -34,7 +34,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 024 ==> 185317 : Album thumbnails are gone when moving nested albums.
 025 ==> 185805 : digiKam 0.10.0-rc2 fails to save keyword hierarchy in IPTC and XMP tags.
 026 ==> 185744 : Crash while entering new caption (or clicking thumbnail icon in folder view).
-027 ==> 
+027 ==> 182376 : Window opened when 'Sharpen' is selected from Enhance Menu cannot be re-sized.
+028 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc2 - Release date: 2009-02-15
