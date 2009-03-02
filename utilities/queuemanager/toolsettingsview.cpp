@@ -29,6 +29,7 @@
 #include <QLabel>
 #include <QString>
 #include <QScrollArea>
+#include <QPushButton>
 
 // KDE includes.
 
@@ -64,12 +65,15 @@ public:
         settingsView      = 0;
         settingsViewIcon  = 0;
         settingsViewTitle = 0;
+        settingsViewReset = 0;
         tool              = 0;
     }
 
     QLabel      *messageView;
     QLabel      *settingsViewIcon;
     QLabel      *settingsViewTitle;
+
+    QPushButton *settingsViewReset;
 
     QScrollArea *settingsView;
 
@@ -94,10 +98,14 @@ ToolSettingsView::ToolSettingsView(QWidget *parent)
     KHBox *hbox          = new KHBox(vbox);
     d->settingsViewIcon  = new QLabel(hbox);
     d->settingsViewTitle = new QLabel(hbox);
+    d->settingsViewReset = new QPushButton(hbox);
+    d->settingsViewReset->setIcon(SmallIcon("document-revert"));
+    d->settingsViewReset->setToolTip(i18n("Reset current tool settings to default values."));
+
     d->settingsView      = new QScrollArea(vbox);
     d->settingsView->setWidgetResizable(true);
     d->settingsViewIcon->setAlignment(Qt::AlignRight);
-    d->settingsViewTitle->setAlignment(Qt::AlignLeft);
+    d->settingsViewTitle->setAlignment(Qt::AlignCenter);
 
     hbox->setMargin(0);
     hbox->setSpacing(KDialog::spacingHint());
@@ -164,6 +172,9 @@ void ToolSettingsView::slotToolSelected(const BatchToolSet& set)
     {
         disconnect(d->tool, SIGNAL(signalSettingsChanged(const BatchToolSettings&)),
                    this, SLOT(slotSettingsChanged(const BatchToolSettings&)));
+
+        disconnect(d->settingsViewReset, SIGNAL(clicked()),
+                   d->tool, SLOT(slotResetSettingsToDefault()));
     }
 
     d->tool = set.tool;
@@ -172,15 +183,20 @@ void ToolSettingsView::slotToolSelected(const BatchToolSet& set)
         d->settingsViewIcon->setPixmap(d->tool->toolIcon().pixmap(QSize(22, 22)));
         d->settingsViewTitle->setText(d->tool->toolTitle());
         d->tool->setSettings(set.settings);
+        d->settingsViewReset->setEnabled(true);
         setToolSettingsWidget(d->tool->settingsWidget());
 
         connect(d->tool, SIGNAL(signalSettingsChanged(const BatchToolSettings&)),
                 this, SLOT(slotSettingsChanged(const BatchToolSettings&)));
+
+        connect(d->settingsViewReset, SIGNAL(clicked()),
+                d->tool, SLOT(slotResetSettingsToDefault()));
     }
     else
     {
         d->settingsViewIcon->clear();
         d->settingsViewTitle->clear();
+        d->settingsViewReset->setEnabled(false);
         setToolSettingsWidget(0);
     }
 }

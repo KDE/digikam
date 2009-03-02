@@ -153,6 +153,10 @@ Q_SIGNALS:
 
     void signalSettingsChanged(const BatchToolSettings&);
 
+public Q_SLOTS:
+
+    void slotResetSettingsToDefault();
+
 protected:
 
     /** Return a reference of internal DImg container used to modify image data.

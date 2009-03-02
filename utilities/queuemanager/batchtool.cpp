@@ -132,6 +132,11 @@ void BatchTool::setSettingsWidget(QWidget* settingsWidget)
     d->settingsWidget = settingsWidget;
 }
 
+void BatchTool::slotResetSettingsToDefault()
+{
+    setSettings(defaultSettings());
+}
+
 void BatchTool::setSettings(const BatchToolSettings& settings)
 {
     d->settings = settings;
