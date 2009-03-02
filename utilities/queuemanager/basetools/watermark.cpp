@@ -73,7 +73,7 @@ WaterMark::WaterMark(QObject* parent)
     QLabel *label  = new QLabel(vbox);
     m_textEdit     = new KLineEdit(vbox);
     m_textEdit->setClearButtonShown(true);
-    m_textEdit->setWhatsThis(i18n("Here, enter your watermark string."));
+    m_textEdit->setClickMessage(i18n("Enter here your watermark string."));
     label->setText(i18n("Text:"));
 
     QLabel *label2      = new QLabel(vbox);
@@ -162,7 +162,7 @@ bool WaterMark::toolOperations()
 {
     if (!loadToDImg()) return false;
 
-    const int radius = 8;
+    const int radius = 10;
     const int margin = 50;
     QString text     = settings()["Text"].toString();
     QFont font       = settings()["Font"].toString();
