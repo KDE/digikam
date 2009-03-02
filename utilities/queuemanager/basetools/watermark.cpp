@@ -151,7 +151,7 @@ void WaterMark::slotSettingsChanged()
 {
     BatchToolSettings settings;
     settings.insert("Text",   m_textEdit->text());
-    settings.insert("Font",   m_fontChooserWidget->font());
+    settings.insert("Font",   m_fontChooserWidget->currentFont());
     settings.insert("Color",  m_fontColorButton->color());
     settings.insert("Corner", (int)m_comboBox->currentIndex());
     settings.insert("Lenght", (int)m_stringLength->value());
