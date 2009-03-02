@@ -162,7 +162,7 @@ bool WaterMark::toolOperations()
 {
     if (!loadToDImg()) return false;
 
-    const int radius = 5;
+    const int radius = 8;
     const int margin = 50;
     QString text     = settings()["Text"].toString();
     QFont font       = settings()["Font"].toString();
@@ -211,7 +211,7 @@ bool WaterMark::toolOperations()
 
     DImg grayTransLayer(fontRect.width(), fontRect.height(), image().sixteenBit(), true);
     DColor grayTrans(QColor(0xCC, 0xCC, 0xCC));
-    grayTrans.setAlpha(220);
+    grayTrans.setAlpha(0xCC);
     if (image().sixteenBit()) grayTrans.convertToSixteenBit();
     grayTransLayer.fill(grayTrans);
 
@@ -256,7 +256,7 @@ int WaterMark::queryFontSize(const QString& text, const QFont& font, int lenght)
     // Find font size using relative lenght compared to image width.
     QFont fnt = font;
     QRect fontRect;
-    for (int i = 5 ; i <= 1000 ; i++)
+    for (int i = 1 ; i <= 1000 ; i++)
     {
         fnt.setPointSizeF(i);
         QFontMetrics fontMt(fnt);
