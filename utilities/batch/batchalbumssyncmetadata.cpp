@@ -132,7 +132,7 @@ void BatchAlbumsSyncMetadata::parseAlbum()
 
 void BatchAlbumsSyncMetadata::slotAlbumParsed(const ImageInfoList& list)
 {
-    QPixmap pix = KIconLoader::global()->loadIcon("folder_image", KIconLoader::NoGroup, 32);
+    QPixmap pix = KIconLoader::global()->loadIcon("folder-image", KIconLoader::NoGroup, 32);
 
     ImageInfoList imageInfoList = list;
 
