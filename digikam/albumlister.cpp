@@ -437,13 +437,13 @@ bool AlbumLister::matchesFilter(const ImageInfo &info, bool &foundText)
         }
         case MimeFilter::NoRAWFiles:
         {
-            if (info.format().startsWith("RAW"))
+            if (info.format().startsWith(QString("RAW")))
                 match = false;
             break;
         }
         case MimeFilter::RAWFiles:
         {
-            if (!info.format().startsWith("RAW"))
+            if (!info.format().startsWith(QString("RAW")))
                 match = false;
             break;
         }

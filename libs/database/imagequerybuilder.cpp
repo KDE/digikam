@@ -94,7 +94,7 @@ ImageQueryBuilder::ImageQueryBuilder()
 QString ImageQueryBuilder::buildQuery(const QString &q, QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const
 {
     // Handle legacy query descriptions
-    if (q.startsWith("digikamsearch:"))
+    if (q.startsWith(QString("digikamsearch:")))
         return buildQueryFromUrl(KUrl(q), boundValues);
     else
         return buildQueryFromXml(q, boundValues, hooks);
@@ -216,7 +216,7 @@ public:
                 kWarning() << "Relation Interval requires a list of two values";
                 return;
             }
-            
+
             sql += " (" + name + ' ';
             ImageQueryBuilder::addSqlRelation(sql,
                 relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
