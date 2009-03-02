@@ -54,7 +54,6 @@ public:
 
     ~BatchSyncMetadata();
 
-    void parseList();
     void parseAlbum();
 
 Q_SIGNALS:
@@ -65,6 +64,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
+    void parseList();
     void slotAbort();
 
 private:
@@ -76,6 +76,10 @@ private Q_SLOTS:
 
     void slotAlbumParsed(const ImageInfoList&);
     void slotComplete();
+
+Q_SIGNALS:
+
+    void startParsingList();
 
 private:
 

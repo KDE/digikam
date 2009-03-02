@@ -52,13 +52,19 @@ public:
     BatchSyncMetadataPriv()
     {
         cancel         = false;
-        imageInfoJob   = new ImageInfoJob();
+        running        = false;
+        everStarted    = false;
+        imageInfoJob   = 0;
         album          = 0;
         count          = 0;
         imageInfoIndex = 0;
     }
 
     bool                   cancel;
+
+    bool                   everStarted;
+
+    bool                   running;
 
     int                    count;
 
@@ -75,6 +81,10 @@ BatchSyncMetadata::BatchSyncMetadata(QObject* parent, Album *album)
                  : QObject(parent), d(new BatchSyncMetadataPriv)
 {
     d->album = album;
+
+    connect(this, SIGNAL(startParsingList()),
+             this, SLOT(parseList()),
+             Qt::QueuedConnection);
 }
 
 BatchSyncMetadata::BatchSyncMetadata(QObject* parent, const ImageInfoList& list)
@@ -85,11 +95,13 @@ BatchSyncMetadata::BatchSyncMetadata(QObject* parent, const ImageInfoList& list)
 
 BatchSyncMetadata::~BatchSyncMetadata()
 {
+    delete d->imageInfoJob;
     delete d;
 }
 
 void BatchSyncMetadata::parseAlbum()
 {
+    d->imageInfoJob = new ImageInfoJob;
     d->imageInfoJob->allItemsFromAlbum(d->album);
 
     connect(d->imageInfoJob, SIGNAL(signalItemsInfo(const ImageInfoList&)),
@@ -101,58 +113,64 @@ void BatchSyncMetadata::parseAlbum()
 
 void BatchSyncMetadata::slotComplete()
 {
-    if (d->imageInfoList.isEmpty())
-        complete();
 }
 
 void BatchSyncMetadata::slotAlbumParsed(const ImageInfoList& list)
 {
-    d->imageInfoList = list;
-    parseList();
+    d->imageInfoList << list;
+
+    if (!d->everStarted)
+    {
+        emit signalProgressBarMode(StatusProgressBar::CancelProgressBarMode,
+                                i18n("Synchronizing images Metadata with database. Please wait..."));
+
+        d->imageInfoIndex = 0;
+        d->everStarted = true;
+    }
+    if (!d->running)
+        emit startParsingList();
 }
 
 void BatchSyncMetadata::parseList()
 {
-    emit signalProgressBarMode(StatusProgressBar::CancelProgressBarMode,
-                               i18n("Synchronizing images Metadata with database. Please wait..."));
+    d->running = true;
+    while (d->imageInfoIndex != d->imageInfoList.size() && !d->cancel)
+    {
+        parsePicture();
+        kapp->processEvents();
+    }
 
-    d->imageInfoIndex = 0;
-    parsePicture();
+    if (d->imageInfoJob && !d->imageInfoJob->isRunning())
+    {
+        complete();
+    }
+    else if (d->cancel)
+    {
+        slotAbort();
+        complete();
+    }
+    d->running = false;
 }
 
 void BatchSyncMetadata::parsePicture()
 {
-    if (d->imageInfoIndex >= d->imageInfoList.count())     // All is done.
-    {
-        complete();
-        slotAbort();
-    }
-    else if (d->cancel)
-    {
-        complete();
-    }
-    else
-    {
-        ImageInfo info = d->imageInfoList[d->imageInfoIndex];
-        MetadataHub fileHub;
-        // read in from database
-        fileHub.load(info);
-        // write out to file DMetadata
-        fileHub.write(info.filePath());
+    ImageInfo info = d->imageInfoList[d->imageInfoIndex];
+    MetadataHub fileHub;
+    // read in from database
+    fileHub.load(info);
+    // write out to file DMetadata
+    fileHub.write(info.filePath());
 
-        emit signalProgressValue((int)((d->count++/(float)d->imageInfoList.count())*100.0));
+    emit signalProgressValue((int)((d->count++/(float)d->imageInfoList.count())*100.0));
 
-        d->imageInfoIndex++;
-
-        kapp->processEvents();
-        parsePicture();
-    }
+    d->imageInfoIndex++;
 }
 
 void BatchSyncMetadata::slotAbort()
 {
     d->cancel = true;
-    d->imageInfoJob->stop();
+    if (d->imageInfoJob)
+        d->imageInfoJob->stop();
 }
 
 void BatchSyncMetadata::complete()

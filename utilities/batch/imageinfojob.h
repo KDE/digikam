@@ -57,6 +57,7 @@ public:
 
     void allItemsFromAlbum(Album *album);
     void stop();
+    bool isRunning();
 
 Q_SIGNALS:
 

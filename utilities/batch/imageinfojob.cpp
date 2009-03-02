@@ -65,6 +65,8 @@ ImageInfoJob::ImageInfoJob()
 
 ImageInfoJob::~ImageInfoJob()
 {
+    if (d->job)
+       d->job->kill();
     delete d;
 }
 
@@ -96,6 +98,11 @@ void ImageInfoJob::stop()
         d->job->kill();
         d->job = 0;
     }
+}
+
+bool ImageInfoJob::isRunning()
+{
+    return d->job;
 }
 
 void ImageInfoJob::slotResult(KJob* job)
