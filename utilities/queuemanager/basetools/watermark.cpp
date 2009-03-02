@@ -24,6 +24,10 @@
 #include "watermark.h"
 #include "watermark.moc"
 
+// C++ includes.
+
+#include <cmath>
+
 // Qt includes.
 
 #include <QWidget>
@@ -50,6 +54,7 @@
 // Local includes.
 
 #include "dimg.h"
+#include "dimgimagefilters.h"
 
 namespace Digikam
 {
@@ -157,6 +162,7 @@ bool WaterMark::toolOperations()
 {
     if (!loadToDImg()) return false;
 
+    const int radius = 5;
     const int margin = 50;
     QString text     = settings()["Text"].toString();
     QFont font       = settings()["Font"].toString();
@@ -195,14 +201,31 @@ bool WaterMark::toolOperations()
     DColorComposer *composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
 
     // Add a transparent layer.
-    DImg transparentLayer(fontRect.width(), fontRect.height(), image().sixteenBit(), true);
-    DColor transparent(QColor(0xCC, 0xCC, 0xCC));
-    transparent.setAlpha(128);
+    QRect backgroundRect(fontRect.x()-radius, fontRect.y()-radius, 
+                         fontRect.width()+2*radius, fontRect.height()+2*radius);
+    DImg backgroundLayer(backgroundRect.width(), backgroundRect.height(), image().sixteenBit(), true);
+    DColor transparent(QColor(0, 0, 0));
+    transparent.setAlpha(0);
     if (image().sixteenBit()) transparent.convertToSixteenBit();
-    transparentLayer.fill(transparent);
-    image().bitBlendImage(composer, &transparentLayer, 0, 0, 
-                          transparentLayer.width(), transparentLayer.height(),
-                          fontRect.x(), fontRect.y());
+    backgroundLayer.fill(transparent);
+
+    DImg grayTransLayer(fontRect.width(), fontRect.height(), image().sixteenBit(), true);
+    DColor grayTrans(QColor(0xCC, 0xCC, 0xCC));
+    grayTrans.setAlpha(220);
+    if (image().sixteenBit()) grayTrans.convertToSixteenBit();
+    grayTransLayer.fill(grayTrans);
+
+    backgroundLayer.bitBlendImage(composer, &grayTransLayer, 0, 0, 
+                                  grayTransLayer.width(), grayTransLayer.height(),
+                                  radius, radius);
+
+    DImgImageFilters filters;
+    filters.gaussianBlurImage(backgroundLayer.bits(), backgroundLayer.width(), 
+                              backgroundLayer.height(), backgroundLayer.sixteenBit(), radius);
+
+    image().bitBlendImage(composer, &backgroundLayer, 0, 0, 
+                          backgroundLayer.width(), backgroundLayer.height(),
+                          backgroundRect.x(), backgroundRect.y());
 
     // Draw text
     QImage img = image().copyQImage(fontRect);
@@ -238,7 +261,7 @@ int WaterMark::queryFontSize(const QString& text, const QFont& font, int lenght)
         fnt.setPointSizeF(i);
         QFontMetrics fontMt(fnt);
         fontRect = fontMt.boundingRect(0, 0, image().width(), image().height(), 0, text);
-        if (fontRect.width() > (int)((image().width() * lenght)/100.0))
+        if (fontRect.width() > lround((image().width() * lenght)/100.0))
             return (i-1);
     }
     return 0;
