@@ -360,6 +360,18 @@ AssignedListViewItem* AssignedListView::findTool(const BatchToolSet& set)
     return 0;
 }
 
+void AssignedListView::reset()
+{
+    QTreeWidgetItemIterator it(this);
+    while (*it)
+    {
+        AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(*it);
+        if (item) item->reset();
+
+        ++it;
+    }
+}
+
 Qt::DropActions AssignedListView::supportedDropActions() const
 {
     return Qt::CopyAction | Qt::MoveAction;

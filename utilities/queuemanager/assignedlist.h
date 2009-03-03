@@ -85,6 +85,7 @@ public:
     bool removeTool(const BatchToolSet& set);
 
     void setCurrentTool(int index);
+    void reset();
 
 Q_SIGNALS:
 

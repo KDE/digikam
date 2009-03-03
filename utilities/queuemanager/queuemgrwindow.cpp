@@ -892,6 +892,7 @@ void QueueMgrWindow::slotProgressTimerDone()
 
 void QueueMgrWindow::processing(const KUrl& url)
 {
+    d->assignedList->reset();
     d->currentProcessItem = d->queuePool->currentQueue()->findItemByUrl(url);
     if (d->currentProcessItem)
     {
