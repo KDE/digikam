@@ -148,7 +148,7 @@ QString WelcomePageView::infoPage()
         "designed to import, organize, enhance, search and export your "
         "digital images to and from your computer.</p>"
 
-        "<p>Currently, you're in the Album view mode of digiKam. Albums are the places "
+        "<p>Currently, you are in the Album view mode of digiKam. Albums are the places "
         "where your files are stored, and are identical to the folders "
         "on your hard disk.</p>"
 
