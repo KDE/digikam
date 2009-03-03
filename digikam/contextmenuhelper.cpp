@@ -73,20 +73,24 @@ public:
 
     ContextMenuHelperPriv()
     {
-        stdActionCollection = 0;
-        menu                = 0;
         gotoAlbumAction     = 0;
         gotoDateAction      = 0;
+        menu                = 0;
         setThumbnailAction  = 0;
+        stdActionCollection = 0;
     }
-    KActionCollection*  stdActionCollection;
-    QMenu*              menu;
-    QList<qlonglong>    selectedIds;
-    QMap<int, QAction*> queueActions;
 
     QAction*            gotoAlbumAction;
     QAction*            gotoDateAction;
     QAction*            setThumbnailAction;
+
+    QList<qlonglong>    selectedIds;
+
+    QMap<int, QAction*> queueActions;
+
+    QMenu*              menu;
+
+    KActionCollection*  stdActionCollection;
 };
 
 ContextMenuHelper::ContextMenuHelper(QMenu* parent, KActionCollection* actionCollection)
