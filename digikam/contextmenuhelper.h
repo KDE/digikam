@@ -327,14 +327,6 @@ private:
      */
     void setSelectedIds(imageIds& ids);
 
-    /**
-     * Check if the provided action already exists.
-     *
-     * @param action the action to check
-     * @return true if action is already registered
-     */
-    bool actionExists(QAction* action);
-
 private:
 
     ContextMenuHelperPriv* const d;

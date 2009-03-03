@@ -152,9 +152,8 @@ void ContextMenuHelper::addActionLightTable()
 
 void ContextMenuHelper::addActionThumbnail(imageIds& ids, Album* album)
 {
-    if (actionExists(d->setThumbnailAction))
+    if (d->setThumbnailAction)
         return;
-
     setSelectedIds(ids);
 
     if (album && ids.count() == 1)
@@ -322,11 +321,8 @@ void ContextMenuHelper::addAlbumActions()
 
 void ContextMenuHelper::addGotoMenu(imageIds& ids)
 {
-    if (actionExists(d->gotoAlbumAction))
+    if (d->gotoAlbumAction && d->gotoDateAction)
         return;
-    if (actionExists(d->gotoDateAction))
-        return;
-
     setSelectedIds(ids);
 
     // when more then one item is selected, don't add the menu
@@ -477,13 +473,6 @@ void ContextMenuHelper::setSelectedIds(imageIds &ids)
 {
     if (d->selectedIds.isEmpty())
         d->selectedIds = ids;
-}
-
-bool ContextMenuHelper::actionExists(QAction *action)
-{
-    if (action)
-        return true;
-    return false;
 }
 
 } // namespace Digikam
