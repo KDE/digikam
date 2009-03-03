@@ -69,6 +69,8 @@ public:
     void setDone();
     bool isDone();
 
+    void reset();
+
     void    setDestFileName(const QString& str);
     QString destFileName() const;
     QString destBaseName() const;

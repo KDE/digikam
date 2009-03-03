@@ -896,6 +896,7 @@ void QueueMgrWindow::processing(const KUrl& url)
     d->currentProcessItem = d->queuePool->currentQueue()->findItemByUrl(url);
     if (d->currentProcessItem)
     {
+        d->currentProcessItem->reset();
         d->queuePool->currentQueue()->setCurrentItem(d->currentProcessItem);
         d->queuePool->currentQueue()->scrollToItem(d->currentProcessItem);
     }

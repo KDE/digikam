@@ -140,6 +140,13 @@ bool QueueListViewItem::isDone()
     return d->done;
 }
 
+void QueueListViewItem::reset()
+{
+    setIcon(0, QIcon(d->preview));
+    setIcon(1, QIcon());
+    d->done = false;
+}
+
 void QueueListViewItem::setDestFileName(const QString& str)
 {
     d->destFileName = str;
