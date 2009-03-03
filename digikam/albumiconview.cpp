@@ -629,6 +629,9 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint&)
     connect(&cmhelper, SIGNAL(signalSetThumbnail(ImageInfo&)),
             this, SLOT(slotSetAlbumThumbnail(ImageInfo&)));
 
+    connect(&cmhelper, SIGNAL(signalAddToExistingQueue(int)),
+            this, SIGNAL(signalAddToExistingQueue(int)));
+
     // handle temporary actions
 
     QAction* choice = cmhelper.exec(QCursor::pos());
@@ -1119,6 +1122,18 @@ void AlbumIconView::insertToQueueManager(const ImageInfoList& list, const ImageI
     if (newQueue) bqmview->addNewQueue();
 
     bqmview->loadImageInfos(list, bqmview->currentQueueId());
+}
+
+void AlbumIconView::insertSilentToQueueManager(const ImageInfoList& list, const ImageInfo& /*current*/, int queueid)
+{
+    QueueMgrWindow *bqmview = QueueMgrWindow::queueManagerWindow();
+
+    bqmview->disconnect(this);
+
+    connect(this, SIGNAL(signalItemsUpdated(const KUrl::List&)),
+            bqmview, SLOT(slotItemsUpdated(const KUrl::List&)));
+
+    bqmview->loadImageInfos(list, queueid);
 }
 
 // ------------------------------------------------------------------------------

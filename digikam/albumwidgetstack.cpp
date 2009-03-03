@@ -165,6 +165,9 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     connect(d->imagePreviewView, SIGNAL(signalFindSimilar()),
             this, SIGNAL(signalFindSimilar()));
 
+    connect(d->imagePreviewView, SIGNAL(signalAddToExistingQueue(int)),
+            this, SIGNAL(signalAddToExistingQueue(int)));
+
     connect(d->albumIconView, SIGNAL(signalItemsAdded()),
             this, SLOT(slotItemsAddedOrRemoved()));
 

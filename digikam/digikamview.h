@@ -131,6 +131,7 @@ public Q_SLOTS:
     void slotImageAddToLightTable();
     void slotImageAddToCurrentQueue();
     void slotImageAddToNewQueue();
+    void slotImageAddToExistingQueue(int);
     void slotImagePreview();
     void slotImageEdit();
     void slotImageFindSimilar();

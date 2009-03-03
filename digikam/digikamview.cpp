@@ -363,6 +363,9 @@ void DigikamView::setupConnections()
     connect(d->iconView, SIGNAL(signalPreviewItem(AlbumIconItem*)),
             this, SLOT(slotTogglePreviewMode(AlbumIconItem*)));
 
+    connect(d->iconView, SIGNAL(signalAddToExistingQueue(int)),
+            this, SLOT(slotImageAddToExistingQueue(int)));
+
     //connect(d->iconView, SIGNAL(signalItemDeleted(AlbumIconItem*)),
       //      this, SIGNAL(signalNoCurrentItem()));
 
@@ -509,6 +512,9 @@ void DigikamView::setupConnections()
 
     connect(d->albumWidgetStack, SIGNAL(signalUrlSelected(const KUrl&)),
             this, SLOT(slotSelectItemByUrl(const KUrl&)));
+
+    connect(d->albumWidgetStack, SIGNAL(signalAddToExistingQueue(int)),
+            this, SLOT(slotImageAddToExistingQueue(int)));
 
     // -- Selection timer ---------------
 
@@ -1515,6 +1521,18 @@ void DigikamView::slotImageAddToNewQueue()
         list.append(info);
         d->iconView->insertToQueueManager(list, info, true);
     }
+}
+
+void DigikamView::slotImageAddToExistingQueue(int queueid)
+{
+    ImageInfoList list;
+
+    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+        list = d->albumWidgetStack->albumIconView()->selectedImageInfos();
+    else
+        list << d->albumWidgetStack->imagePreviewView()->getImageInfo();
+
+    d->iconView->insertSilentToQueueManager(list, list.first(), queueid);
 }
 
 void DigikamView::slotImageRename(AlbumIconItem *iconItem)

@@ -385,6 +385,9 @@ void ImagePreviewView::slotContextMenu()
     connect(&cmhelper, SIGNAL(signalAssignRating(int)),
             this, SLOT(slotAssignRating(int)));
 
+    connect(&cmhelper, SIGNAL(signalAddToExistingQueue(int)),
+            this, SIGNAL(signalAddToExistingQueue(int)));
+
     // handle temporary actions
 
     QAction* choice = cmhelper.exec(QCursor::pos());

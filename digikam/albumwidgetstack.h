@@ -107,6 +107,7 @@ Q_SIGNALS:
     void signalInsert2QueueMgr();
     void signalFindSimilar();
     void signalUrlSelected(const KUrl&);
+    void signalAddToExistingQueue(int);
 
 public Q_SLOTS:
 

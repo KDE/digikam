@@ -493,6 +493,9 @@ void DigikamApp::setupStatusBar()
     connect(d->view, SIGNAL(signalTogglePreview(bool)),
             this, SLOT(slotTogglePreview(bool)));
 
+    connect(d->view, SIGNAL(signalAddToExistingQueue(int)),
+            this, SLOT(slot(int)));
+
     connect(d->albumIconViewFilter, SIGNAL(signalResetTagFilters()),
             this, SIGNAL(signalResetTagFilters()));
 
@@ -2574,6 +2577,11 @@ void DigikamApp::slotShowMenuBar()
 void DigikamApp::moveEvent(QMoveEvent*)
 {
     emit signalWindowHasMoved();
+}
+
+void DigikamApp::slotAddToExistingQueue(int queueid)
+{
+    d->view;
 }
 
 }  // namespace Digikam

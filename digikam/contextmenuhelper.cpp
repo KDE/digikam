@@ -62,6 +62,7 @@
 #include "lighttablewindow.h"
 #include "ratingpopupmenu.h"
 #include "tagspopupmenu.h"
+#include "queuemgrwindow.h"
 
 namespace Digikam
 {
@@ -81,6 +82,7 @@ public:
     KActionCollection*  stdActionCollection;
     QMenu*              menu;
     QList<qlonglong>    selectedIds;
+    QMap<int, QAction*> queueActions;
 
     QAction*            gotoAlbumAction;
     QAction*            gotoDateAction;
@@ -378,13 +380,31 @@ void ContextMenuHelper::addGotoMenu(imageIds& ids)
 
 void ContextMenuHelper::addQueueManagerMenu()
 {
-    KMenu* queueMenu = new KMenu(i18n("Queue Manager"), d->menu);
+    KMenu* bqmMenu = new KMenu(i18n("Batch Queue Manager"), d->menu);
     QStringList queueActions;
     queueActions << QString("image_add_to_current_queue")
                  << QString("image_add_to_new_queue");
-    queueMenu->addAction(d->stdActionCollection->action(queueActions.at(0)));
-    queueMenu->addAction(d->stdActionCollection->action(queueActions.at(1)));
-    d->menu->addMenu(queueMenu);
+    bqmMenu->addAction(d->stdActionCollection->action(queueActions.at(0)));
+    bqmMenu->addAction(d->stdActionCollection->action(queueActions.at(1)));
+
+    QueueMgrWindow* qmw = QueueMgrWindow::queueManagerWindow();
+    KMenu* queueMenu    = new KMenu(i18n("Add to existing queue"), bqmMenu);
+
+    QList<QAction*> queueList;
+    QMapIterator<int, QString> it(qmw->queuesMap());
+    if (!d->queueActions.isEmpty())
+        d->queueActions.clear();
+    while (it.hasNext())
+    {
+        it.next();
+        QAction* action = new QAction(it.value(), this);
+        queueList << action;
+        d->queueActions[it.key()] = action;
+    }
+    queueMenu->addActions(queueList);
+
+    bqmMenu->addMenu(queueMenu);
+    d->menu->addMenu(bqmMenu);
 }
 
 void ContextMenuHelper::addActionCopy(QObject* recv, const char* slot)
@@ -431,6 +451,19 @@ QAction* ContextMenuHelper::exec(const QPoint& pos, QAction* at)
         {
             ImageInfo item(d->selectedIds.first());
             emit signalSetThumbnail(item);
+        }
+        else
+        {
+            QMapIterator<int, QAction*> it(d->queueActions);
+            while (it.hasNext())
+            {
+                it.next();
+                if (choice == it.value())
+                {
+                    emit signalAddToExistingQueue(it.key());
+                    break;
+                }
+            }
         }
     }
     return choice;

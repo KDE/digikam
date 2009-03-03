@@ -142,6 +142,7 @@ public:
     void insertSelectionToCurrentQueue();
     void insertSelectionToNewQueue();
     void insertToQueueManager(const ImageInfoList& list, const ImageInfo& current, bool newQueue);
+    void insertSilentToQueueManager(const ImageInfoList& list, const ImageInfo& current, int queueid);
 
 Q_SIGNALS:
 
@@ -153,6 +154,7 @@ Q_SIGNALS:
     void signalProgressValue(int);
     void signalItemsUpdated(const KUrl::List&);
 
+    void signalAddToExistingQueue(int);
     void signalGotoAlbumAndItem(ImageInfo&);
     void signalGotoDateAndItem(ImageInfo&);
     void signalGotoTagAndItem(int);

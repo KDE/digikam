@@ -87,6 +87,7 @@ Q_SIGNALS:
     void signalAssignTag(int);
     void signalRemoveTag(int);
     void signalAssignRating(int);
+    void signalAddToExistingQueue(int);
 
 public:
 
