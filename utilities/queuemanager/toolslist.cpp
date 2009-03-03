@@ -38,6 +38,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kiconloader.h>
+#include <kaction.h>
+#include <kmenu.h>
 
 namespace Digikam
 {
@@ -109,6 +111,7 @@ BatchTool* ToolListViewItem::tool() const
 ToolsListView::ToolsListView(QWidget *parent)
              : QTreeWidget(parent)
 {
+    setContextMenuPolicy(Qt::CustomContextMenu);
     setIconSize(QSize(22, 22));
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     setWhatsThis(i18n("This is the list of batch tools available."));
@@ -123,6 +126,9 @@ ToolsListView::ToolsListView(QWidget *parent)
     new ToolListViewGroup(this, BatchTool::BaseTool);
     new ToolListViewGroup(this, BatchTool::KipiTool);
     new ToolListViewGroup(this, BatchTool::CustomTool);
+
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
+            this, SLOT(slotContextMenu()));
 }
 
 ToolsListView::~ToolsListView()
@@ -245,6 +251,11 @@ QStringList ToolsListView::mimeTypes() const
 
 void ToolsListView::mouseDoubleClickEvent(QMouseEvent*)
 {
+    slotAssignTools();
+}
+
+void ToolsListView::slotAssignTools()
+{
     QList<QTreeWidgetItem*> items = selectedItems();
     if (items.isEmpty())
         return;
@@ -277,6 +288,17 @@ QMap<int, QString> ToolsListView::itemsToMap(const QList<QTreeWidgetItem*> items
             map.insertMulti((int)(tlwi->tool()->toolGroup()), tlwi->tool()->objectName());
     }
     return map;
+}
+
+void ToolsListView::slotContextMenu()
+{
+    KMenu popmenu(this);
+    KAction *action = new KAction(KIcon("vcs_add"), i18n("Assign tools"), this);
+    connect(action, SIGNAL(triggered(bool) ),
+            this, SLOT(slotAssignTools()));
+
+    popmenu.addAction(action);
+    popmenu.exec(QCursor::pos());
 }
 
 }  // namespace Digikam

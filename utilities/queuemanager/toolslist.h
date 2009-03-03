@@ -97,6 +97,11 @@ Q_SIGNALS:
 
     void signalAssignTools(const QMap<int, QString>&);
 
+private Q_SLOTS:
+
+    void slotContextMenu();
+    void slotAssignTools();
+
 private:
 
     bool findTool(BatchTool* tool);
