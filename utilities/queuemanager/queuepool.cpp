@@ -235,4 +235,13 @@ void QueuePool::slotSettingsChanged(const QueueSettings& settings)
     if (queue) queue->setSettings(settings);
 }
 
+void QueuePool::setEnableToolTips(bool b)
+{
+    for (int i = 0; i < count(); i++)
+    {
+        QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
+        if (queue) queue->setEnableToolTips(b);
+    }
+}
+
 }  // namespace Digikam

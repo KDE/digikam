@@ -747,6 +747,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuemgrwindow.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuepool.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuelist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuetooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuesettingsview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/batchtoolsmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/batchtool.cpp

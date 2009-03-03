@@ -65,6 +65,8 @@ public:
 
     QMap<int, QString> queuesMap() const;
 
+    void setEnableToolTips(bool b);
+
 Q_SIGNALS:
 
     void signalItemSelectionChanged();

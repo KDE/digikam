@@ -449,7 +449,6 @@ void QueueMgrWindow::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Batch Queue Manager Settings");
     // TODO
-
 }
 
 void QueueMgrWindow::writeSettings()
@@ -462,10 +461,12 @@ void QueueMgrWindow::writeSettings()
 
 void QueueMgrWindow::applySettings()
 {
+    AlbumSettings *settings   = AlbumSettings::instance();
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Batch Queue Manager Settings");
 
-    d->thread->setExifSetOrientation(AlbumSettings::instance()->getExifSetOrientation());
+    d->thread->setExifSetOrientation(settings->getExifSetOrientation());
+    d->queuePool->setEnableToolTips(settings->getShowToolTips());
 }
 
 void QueueMgrWindow::refreshStatusBar()

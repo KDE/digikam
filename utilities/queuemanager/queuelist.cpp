@@ -33,6 +33,7 @@
 #include <QUrl>
 #include <QFileInfo>
 #include <QHeaderView>
+#include <QTimer>
 
 // KDE includes.
 
@@ -51,6 +52,7 @@
 #include "renamecustomizer.h"
 #include "ddragobjects.h"
 #include "queuemgrwindow.h"
+#include "queuetooltip.h"
 
 namespace Digikam
 {
@@ -192,14 +194,26 @@ public:
 
     QueueListViewPriv()
     {
+        showTips        = false;
+        toolTipTimer    = 0;
+        toolTip         = 0;
+        toolTipItem     = 0;
         thumbLoadThread = ThumbnailLoadThread::defaultThread();
     }
+
+    bool                 showTips;
+
+    QTimer              *toolTipTimer;
 
     ThumbnailLoadThread *thumbLoadThread;
 
     QueueSettings        settings;
 
     AssignedBatchTools   toolsList;
+
+    QueueToolTip        *toolTip;
+
+    QueueListViewItem   *toolTipItem;
 };
 
 QueueListView::QueueListView(QWidget *parent)
@@ -213,6 +227,7 @@ QueueListView::QueueListView(QWidget *parent)
     viewport()->setAcceptDrops(true);
     setDropIndicatorShown(true);
     setDragEnabled(true);
+    viewport()->setMouseTracking(true);
 
     setSortingEnabled(false);
     setAllColumnsShowFocus(true);
@@ -230,15 +245,24 @@ QueueListView::QueueListView(QWidget *parent)
     header()->setResizeMode(1, QHeaderView::Stretch);
     header()->setResizeMode(2, QHeaderView::Stretch);
 
+    d->toolTip      = new QueueToolTip(this);
+    d->toolTipTimer = new QTimer(this);
+
+    // -----------------------------------------------------------
+
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
             this, SLOT(slotContextMenu()));
+
+    connect(d->toolTipTimer, SIGNAL(timeout()),
+            this, SLOT(slotToolTip()));
 }
 
 QueueListView::~QueueListView()
 {
+    delete d->toolTip;
     delete d;
 }
 
@@ -435,6 +459,96 @@ void QueueListView::dropEvent(QDropEvent *e)
     emit signalQueueContentsChanged();
 }
 
+void QueueListView::setEnableToolTips(bool val)
+{
+    d->showTips = val;
+    if (!val)
+        hideToolTip();
+}
+
+void QueueListView::hideToolTip()
+{
+    d->toolTipItem = 0;
+    d->toolTipTimer->stop();
+    slotToolTip();
+}
+
+bool QueueListView::acceptToolTip(const QPoint& pos)
+{
+    if (columnAt(pos.x()) == 0)
+        return true;
+
+    return false;
+}
+
+void QueueListView::slotToolTip()
+{
+    d->toolTip->setQueueItem(d->toolTipItem);
+}
+
+void QueueListView::mouseMoveEvent(QMouseEvent* e)
+{
+    if (e->buttons() == Qt::NoButton)
+    {
+        QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(itemAt(e->pos()));
+
+        if(d->showTips)
+        {
+            if (!isActiveWindow())
+            {
+                hideToolTip();
+                return;
+            }
+
+            if (item != d->toolTipItem)
+            {
+                hideToolTip();
+
+                if (acceptToolTip(e->pos()))
+                {
+                    d->toolTipItem = item;
+                    d->toolTipTimer->setSingleShot(true);
+                    d->toolTipTimer->start(500);
+                }
+            }
+
+            if(item == d->toolTipItem && !acceptToolTip(e->pos()))
+            {
+                hideToolTip();
+            }
+        }
+
+        return;
+    }
+
+    hideToolTip();
+    QTreeWidget::mouseMoveEvent(e);
+}
+
+void QueueListView::wheelEvent(QWheelEvent* e)
+{
+    hideToolTip();
+    QTreeWidget::wheelEvent(e);
+}
+
+void QueueListView::keyPressEvent(QKeyEvent* e)
+{
+    hideToolTip();
+    QTreeWidget::keyPressEvent(e);
+}
+
+void QueueListView::focusOutEvent(QFocusEvent* e)
+{
+    hideToolTip();
+    QTreeWidget::focusOutEvent(e);
+}
+
+void QueueListView::leaveEvent(QEvent* e)
+{
+    hideToolTip();
+    QTreeWidget::leaveEvent(e);
+}
+
 void QueueListView::slotAddItems(const ImageInfoList& list)
 {
     if ( list.count() == 0 ) return;
@@ -507,6 +621,8 @@ void QueueListView::slotRemoveItemsDone()
 
 void QueueListView::removeItems(int removeType)
 {
+    hideToolTip();
+
     bool find;
     do
     {
@@ -552,6 +668,8 @@ void QueueListView::removeItems(int removeType)
 
 void QueueListView::removeItemByInfo(const ImageInfo& info)
 {
+    hideToolTip();
+
     bool find;
     do
     {

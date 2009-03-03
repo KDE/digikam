@@ -109,6 +109,8 @@ public:
     void setAssignedTools(const AssignedBatchTools& tools);
     AssignedBatchTools assignedTools();
 
+    void setEnableToolTips(bool val);
+
 Q_SIGNALS:
 
     void signalQueueContentsChanged();
@@ -125,12 +127,15 @@ private Q_SLOTS:
 
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
     void slotContextMenu();
+    void slotToolTip();
 
 private:
 
     bool findItemByInfo(const ImageInfo& info);
     void removeItems(int removeType);
     void updateDestFileNames();
+    void hideToolTip();
+    bool acceptToolTip(const QPoint& pos);
 
     QMimeData* mimeData(const QList<QTreeWidgetItem*> items) const;
     void startDrag(Qt::DropActions supportedActions);
@@ -138,6 +143,11 @@ private:
     void dragMoveEvent(QDragMoveEvent*);
     void dragEnterEvent(QDragEnterEvent*);
     void dropEvent(QDropEvent*);
+    void mouseMoveEvent(QMouseEvent*);
+    void wheelEvent(QWheelEvent*);
+    void keyPressEvent(QKeyEvent*);
+    void focusOutEvent(QFocusEvent*);
+    void leaveEvent(QEvent*);
 
 private:
 
