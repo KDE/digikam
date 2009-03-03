@@ -388,7 +388,7 @@ void ContextMenuHelper::addQueueManagerMenu()
     bqmMenu->addAction(d->stdActionCollection->action(queueActions.at(1)));
 
     QueueMgrWindow* qmw = QueueMgrWindow::queueManagerWindow();
-    KMenu* queueMenu    = new KMenu(i18n("Add to existing queue"), bqmMenu);
+    KMenu* queueMenu    = new KMenu(i18n("Add to Existing Queue"), bqmMenu);
 
     QList<QAction*> queueList;
     QMapIterator<int, QString> it(qmw->queuesMap());

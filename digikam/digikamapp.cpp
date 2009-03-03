@@ -732,13 +732,13 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->imageAddCurrentQueueAction = new KAction(KIcon("vcs_commit"), i18n("Add to current queue"), this);
+    d->imageAddCurrentQueueAction = new KAction(KIcon("vcs_commit"), i18n("Add to Current Queue"), this);
     d->imageAddCurrentQueueAction->setShortcut(Qt::CTRL+Qt::Key_B);
     d->imageAddCurrentQueueAction->setWhatsThis(i18n("Add selected items to current queue from batch manager."));
     connect(d->imageAddCurrentQueueAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToCurrentQueue()));
     actionCollection()->addAction("image_add_to_current_queue", d->imageAddCurrentQueueAction);
 
-    d->imageAddNewQueueAction = new KAction(KIcon("vcs_add"), i18n("Add to new queue"), this);
+    d->imageAddNewQueueAction = new KAction(KIcon("vcs_add"), i18n("Add to New Queue"), this);
     d->imageAddNewQueueAction->setShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_B);
     d->imageAddNewQueueAction->setWhatsThis(i18n("Add selected items to a new queue from batch manager."));
     connect(d->imageAddNewQueueAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToNewQueue()));
