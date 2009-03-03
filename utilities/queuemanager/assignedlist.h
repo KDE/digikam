@@ -29,6 +29,7 @@
 #include <QTreeWidget>
 #include <QWidget>
 #include <QIcon>
+#include <QPoint>
 
 // Local includes.
 
@@ -105,6 +106,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotSelectionChanged();
+    void slotContextMenu();
 
 private:
 

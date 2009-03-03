@@ -37,6 +37,9 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <kaction.h>
+#include <kmenu.h>
+#include <kactioncollection.h>
 
 // Local includes.
 
@@ -118,6 +121,7 @@ AssignedListView::AssignedListView(QWidget *parent)
     viewport()->setAcceptDrops(true);
     setDropIndicatorShown(true);
 
+    setContextMenuPolicy(Qt::CustomContextMenu);
     setSortingEnabled(false);
     setAllColumnsShowFocus(true);
     setRootIsDecorated(false);
@@ -128,6 +132,9 @@ AssignedListView::AssignedListView(QWidget *parent)
 
     connect(this, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
+
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
+            this, SLOT(slotContextMenu()));
 }
 
 AssignedListView::~AssignedListView()
@@ -547,6 +554,19 @@ void AssignedListView::assignTools(const QMap<int, QString>& map, AssignedListVi
         AssignedListViewItem* item = insertTool(preceding, set);
         setCurrentItem(item);
     }
+}
+
+void AssignedListView::slotContextMenu()
+{
+    KMenu popmenu(this);
+
+    KActionCollection *acol = QueueMgrWindow::queueManagerWindow()->actionCollection();
+    popmenu.addAction(acol->action("queuemgr_toolup"));
+    popmenu.addAction(acol->action("queuemgr_tooldown"));
+    popmenu.addAction(acol->action("queuemgr_toolremove"));
+    popmenu.addSeparator();
+    popmenu.addAction(acol->action("queuemgr_toolsclear"));
+    popmenu.exec(QCursor::pos());
 }
 
 }  // namespace Digikam
