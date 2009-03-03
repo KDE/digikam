@@ -29,7 +29,6 @@
 #include <QTreeWidget>
 #include <QWidget>
 #include <QIcon>
-#include <QPoint>
 
 // Local includes.
 

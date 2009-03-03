@@ -124,6 +124,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
+    void slotContextMenu();
 
 private:
 

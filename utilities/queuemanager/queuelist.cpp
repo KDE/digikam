@@ -39,6 +39,9 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <kaction.h>
+#include <kmenu.h>
+#include <kactioncollection.h>
 
 // Local includes.
 
@@ -47,6 +50,7 @@
 #include "thumbnailloadthread.h"
 #include "renamecustomizer.h"
 #include "ddragobjects.h"
+#include "queuemgrwindow.h"
 
 namespace Digikam
 {
@@ -215,6 +219,7 @@ QueueListView::QueueListView(QWidget *parent)
     setRootIsDecorated(false);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setColumnCount(3);
+    setContextMenuPolicy(Qt::CustomContextMenu);
 
     QStringList titles;
     titles.append(i18n("Thumbnail"));
@@ -227,6 +232,9 @@ QueueListView::QueueListView(QWidget *parent)
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
+
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
+            this, SLOT(slotContextMenu()));
 }
 
 QueueListView::~QueueListView()
@@ -701,6 +709,16 @@ void QueueListView::updateDestFileNames()
         ++it;
         index++;
     }
+}
+
+void QueueListView::slotContextMenu()
+{
+    KActionCollection *acol = QueueMgrWindow::queueManagerWindow()->actionCollection();
+    KMenu popmenu(this);
+    popmenu.addAction(acol->action("queuemgr_removeitemssel"));
+    popmenu.addSeparator();
+    popmenu.addAction(acol->action("queuemgr_clearlist"));
+    popmenu.exec(QCursor::pos());
 }
 
 }  // namespace Digikam

@@ -558,9 +558,8 @@ void AssignedListView::assignTools(const QMap<int, QString>& map, AssignedListVi
 
 void AssignedListView::slotContextMenu()
 {
-    KMenu popmenu(this);
-
     KActionCollection *acol = QueueMgrWindow::queueManagerWindow()->actionCollection();
+    KMenu popmenu(this);
     popmenu.addAction(acol->action("queuemgr_toolup"));
     popmenu.addAction(acol->action("queuemgr_tooldown"));
     popmenu.addAction(acol->action("queuemgr_toolremove"));
