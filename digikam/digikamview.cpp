@@ -1132,7 +1132,7 @@ void DigikamView::slotDispatchImageSelected()
     if (d->needDispatchSelection)
     {
         // the list of ImageInfos of currently selected items, currentItem first
-        ImageInfoList list = d->iconView->selectedImageInfos();
+        ImageInfoList list = d->iconView->selectedImageInfosCurrentFirst();
 
         ImageInfoList allImages = d->iconView->allImageInfos();
 

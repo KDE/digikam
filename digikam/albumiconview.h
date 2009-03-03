@@ -103,6 +103,7 @@ public:
         Current selected item ImageInfo will be copied into 'current'.
      */
     ImageInfoList allImageInfos(ImageInfo *current = 0) const;
+    ImageInfoList selectedImageInfosCurrentFirst() const;
     ImageInfoList selectedImageInfos() const;
 
     void refresh();

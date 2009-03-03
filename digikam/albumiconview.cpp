@@ -563,7 +563,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint&)
     // --------------------------------------------------------
 
     QList<qlonglong> selectedImageIDs;
-    foreach (ImageInfo info, selectedImageInfos())
+    foreach (ImageInfo info, selectedImageInfosCurrentFirst())
     {
         selectedImageIDs << info.id();
     }
@@ -1090,33 +1090,13 @@ void AlbumIconView::insertToLightTable(const ImageInfoList& list, const ImageInf
 
 void AlbumIconView::insertSelectionToCurrentQueue()
 {
-    ImageInfoList imageInfoList;
-
-    for (IconItem *it = firstItem() ; it ; it = it->nextItem())
-    {
-        if ((*it).isSelected())
-        {
-            AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
-            imageInfoList << iconItem->imageInfo();
-        }
-    }
-
+    ImageInfoList imageInfoList = selectedImageInfos();
     insertToQueueManager(imageInfoList, imageInfoList.first(), false);
 }
 
 void AlbumIconView::insertSelectionToNewQueue()
 {
-    ImageInfoList imageInfoList;
-
-    for (IconItem *it = firstItem() ; it ; it = it->nextItem())
-    {
-        if ((*it).isSelected())
-        {
-            AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
-            imageInfoList << iconItem->imageInfo();
-        }
-    }
-
+    ImageInfoList imageInfoList = selectedImageInfos();
     insertToQueueManager(imageInfoList, imageInfoList.first(), true);
 }
 
@@ -1411,7 +1391,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
             {
                 if (choice == assignToSelectedAction)    // Selected Items
                 {
-                    emit changeTagOnImageInfos(selectedImageInfos(), QList<int>() << tagID, true, true);
+                    emit changeTagOnImageInfos(selectedImageInfosCurrentFirst(), QList<int>() << tagID, true, true);
                 }
                 else if (choice == assignToAllAction)    // All Items
                 {
@@ -1473,7 +1453,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
         {
             if (choice == assignToSelectedAction)    // Selected Items
             {
-                slotChangeTagOnImageInfos(selectedImageInfos(), tagIDs, true, true);
+                slotChangeTagOnImageInfos(selectedImageInfosCurrentFirst(), tagIDs, true, true);
             }
             else if (choice == assignToAllAction)    // All Items
             {
@@ -1652,7 +1632,7 @@ ImageInfoList AlbumIconView::allImageInfos(ImageInfo* current) const
     return list;
 }
 
-ImageInfoList AlbumIconView::selectedImageInfos() const
+ImageInfoList AlbumIconView::selectedImageInfosCurrentFirst() const
 {
     // Returns the list of ImageInfos of currently selected items,
     // with the extra feature that the currentItem is the first in the list.
@@ -1668,6 +1648,21 @@ ImageInfoList AlbumIconView::selectedImageInfos() const
                 list.prepend(info);
             else
                 list.append(info);
+        }
+    }
+    return list;
+}
+
+ImageInfoList AlbumIconView::selectedImageInfos() const
+{
+    // Returns the list of ImageInfos of currently selected items,
+    ImageInfoList list;
+    for (IconItem *it = firstItem(); it; it = it->nextItem())
+    {
+        if (it->isSelected())
+        {
+            AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
+            list << iconItem->imageInfo();
         }
     }
     return list;
@@ -2187,12 +2182,12 @@ void AlbumIconView::slotGotoTag(int tagID)
 
 void AlbumIconView::slotAssignTag(int tagID)
 {
-    slotChangeTagOnImageInfos(selectedImageInfos(), QList<int>() << tagID, true, true);
+    slotChangeTagOnImageInfos(selectedImageInfosCurrentFirst(), QList<int>() << tagID, true, true);
 }
 
 void AlbumIconView::slotRemoveTag(int tagID)
 {
-    slotChangeTagOnImageInfos(selectedImageInfos(), QList<int>() << tagID, false, true);
+    slotChangeTagOnImageInfos(selectedImageInfosCurrentFirst(), QList<int>() << tagID, false, true);
 }
 
 void AlbumIconView::slotAssignRating(int rating)
