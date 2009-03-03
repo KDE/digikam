@@ -1790,9 +1790,9 @@ QString DigikamApp::labelForSolidCamera(const Solid::Device &cameraDevice)
                 if (vendor == "Canon, Inc.")
                 {
                     vendor = "Canon";
-                    if (product.startsWith(QString("Canon ")))
+                    if (product.startsWith("Canon "))
                         product = product.mid(6); // cut off another "Canon " from product
-                    if (product.endsWith(QString(" (ptp)")))
+                    if (product.endsWith(" (ptp)"))
                         product.chop(6); // cut off " (ptp)"
                 }
                 else if (vendor == "Fuji Photo Film Co., Ltd")
@@ -1802,7 +1802,7 @@ QString DigikamApp::labelForSolidCamera(const Solid::Device &cameraDevice)
                 else if (vendor == "Nikon Corp.")
                 {
                     vendor = "Nikon";
-                    if (product.startsWith(QString("NIKON ")))
+                    if (product.startsWith("NIKON "))
                         product = product.mid(6);
                 }
             }

@@ -124,7 +124,7 @@ void ImageScanner::addImage(int albumId)
     m_scanInfo.uniqueHash = uniqueHash();
 
     kDebug(50003) << "Adding new item" << m_fileInfo.filePath();
-    m_scanInfo.id = DatabaseAccess().db()->addItem(m_scanInfo.albumID, m_scanInfo.itemName,
+    m_scanInfo.id = DatabaseAccess().db()->addItem(m_scanInfo.albumID, m_scanInfo.itemName, 
                                                    m_scanInfo.status, m_scanInfo.category,
                                                    m_scanInfo.modificationDate, fileSize,
                                                    m_scanInfo.uniqueHash);
@@ -657,17 +657,17 @@ QString ImageScanner::detectFormat()
             if (mimetype)
             {
                 QString name = mimetype->name();
-                if (name.startsWith(QString("image/")))
+                if (name.startsWith("image/"))
                 {
                     QString imageTypeName = name.mid(6).toUpper();
                     // cut off the "X-" from some mimetypes
-                    if (imageTypeName.startsWith(QString("X-")))
+                    if (imageTypeName.startsWith("X-"))
                         imageTypeName = imageTypeName.mid(2);
                     return imageTypeName;
                 }
             }
 
-            kWarning(50003) << "Detecting file format failed: KMimeType for" << m_fileInfo.filePath()
+            kWarning(50003) << "Detecting file format failed: KMimeType for" << m_fileInfo.filePath() 
                             << "is null" << endl;
 
         }
@@ -713,7 +713,7 @@ QString ImageScanner::formatToString(const QString &format)
     {
         return "JPEG 2000";
     }
-    else if (format.startsWith(QString("RAW-")))
+    else if (format.startsWith("RAW-"))
     {
         return i18nc("RAW image file (), the parentheses contain the file suffix, like MRW",
                      "RAW image file (%1)",

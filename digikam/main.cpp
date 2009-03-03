@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
 
     // version 0.6 was the version when the new Albums Library
     // storage was implemented
-    if (version.startsWith(QString("0.5")) ||
+    if (version.startsWith("0.5") ||
         !dirInfo.exists() ||
         !dirInfo.isDir())
     {

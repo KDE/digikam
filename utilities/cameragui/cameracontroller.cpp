@@ -143,12 +143,12 @@ CameraController::CameraController(QWidget* parent,
     d->parent = parent;
 
     // URL parsing (c) Stephan Kulow
-    if (path.startsWith(QString("camera:/")))
+    if (path.startsWith("camera:/"))
     {
         KUrl url(path);
         kDebug(50003) << "path " << path << " " << url <<  " " << url.host() << endl;
         QString xport = url.host();
-        if (xport.startsWith(QString("usb:")))
+        if (xport.startsWith("usb:"))
         {
             kDebug(50003) << "xport " << xport << endl;
             QRegExp x = QRegExp("(usb:[0-9,]*)");
@@ -289,13 +289,13 @@ QPixmap CameraController::mimeTypeThumbnail(const QString& itemName)
     QFileInfo fi(itemName);
     QString mime = d->camera->mimeType(fi.suffix().toLower());
 
-    if (mime.startsWith(QString("image/x-raw")))
+    if (mime.startsWith("image/x-raw"))
         return DesktopIcon("kdcraw");
-    else if (mime.startsWith(QString("image/")))
+    else if (mime.startsWith("image/"))
         return DesktopIcon("image-x-generic");
-    else if (mime.startsWith(QString("video/")))
+    else if (mime.startsWith("video/"))
         return DesktopIcon("video-x-generic");
-    else if (mime.startsWith(QString("audio/")))
+    else if (mime.startsWith("audio/"))
         return DesktopIcon("audio-x-generic");
 
     return DesktopIcon("unknown");

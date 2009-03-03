@@ -391,7 +391,7 @@ void CameraSelection::getSerialPortList()
 
     for (int i = 0; i < plist.count() ; i++)
     {
-        if ((plist[i]).startsWith(QString("serial:")))
+        if ((plist[i]).startsWith("serial:"))
             d->serialPortList.append(plist[i]);
     }
 }
