@@ -181,8 +181,6 @@ public Q_SLOTS:
     void slotAssignRatingFourStar();
     void slotAssignRatingFiveStar();
 
-    void slotHandleGotoRequest();
-
 protected:
 
     void resizeEvent(QResizeEvent* e);

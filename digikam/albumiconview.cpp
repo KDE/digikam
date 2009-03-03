@@ -2273,11 +2273,6 @@ void AlbumIconView::slotAssignRatingFiveStar()
     slotAssignRating(5);
 }
 
-void AlbumIconView::slotHandleGotoRequest()
-{
-
-}
-
 void AlbumIconView::slotDIOResult(KJob* kjob)
 {
     KIO::Job *job = static_cast<KIO::Job*>(kjob);
