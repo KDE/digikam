@@ -423,23 +423,8 @@ void AssignedListView::dropEvent(QDropEvent *e)
             QMap<int, QString> map;
             ds >> map;
 
-            // We pop all items in reverse order to have same order than selection from Batch Tools list.
-            QMapIterator<int, QString> it(map);
-            it.toBack();
-            while (it.hasPrevious())
-            {
-                it.previous();
-                BatchTool::BatchToolGroup group = (BatchTool::BatchToolGroup)(it.key());
-                QString name                    = it.value();
-                BatchTool *tool                 = QueueMgrWindow::queueManagerWindow()->batchToolsManager()
-                                                                                      ->findTool(name, group);
-                AssignedListViewItem *preceding = dynamic_cast<AssignedListViewItem*>(itemAt(e->pos()));
-                BatchToolSet set;
-                set.tool     = tool;
-                set.settings = tool->defaultSettings();
-                AssignedListViewItem* item = insertTool(preceding, set);
-                setCurrentItem(item);
-            }
+            AssignedListViewItem *preceding = dynamic_cast<AssignedListViewItem*>(itemAt(e->pos()));
+            assignTools(map, preceding);
         }
         e->acceptProposedAction();
     }
@@ -468,8 +453,8 @@ void AssignedListView::dropEvent(QDropEvent *e)
                 AssignedListViewItem *preceding = dynamic_cast<AssignedListViewItem*>(itemAt(e->pos()));
 
                 BatchToolSet set;
-                set.tool     = tool;
-                set.settings = settings;
+                set.tool                   = tool;
+                set.settings               = settings;
                 AssignedListViewItem* item = moveTool(preceding, set);
                 setCurrentItem(item);
             }
@@ -523,6 +508,32 @@ void AssignedListView::slotSettingsChanged(const BatchToolSet& set)
     {
         item->setToolSet(set);
         emit signalAssignedToolsChanged(assignedList());
+    }
+}
+
+void AssignedListView::slotAssignTools(const QMap<int, QString>& map)
+{
+    if (map.isEmpty()) return;
+    assignTools(map, 0);
+}
+
+void AssignedListView::assignTools(const QMap<int, QString>& map, AssignedListViewItem *preceding)
+{
+    // We pop all items in reverse order to have same order than selection from Batch Tools list.
+    QMapIterator<int, QString> it(map);
+    it.toBack();
+    while (it.hasPrevious())
+    {
+        it.previous();
+        BatchTool::BatchToolGroup group = (BatchTool::BatchToolGroup)(it.key());
+        QString name                    = it.value();
+        BatchTool *tool                 = QueueMgrWindow::queueManagerWindow()->batchToolsManager()
+                                                                                ->findTool(name, group);
+        BatchToolSet set;
+        set.tool     = tool;
+        set.settings = tool->defaultSettings();
+        AssignedListViewItem* item = insertTool(preceding, set);
+        setCurrentItem(item);
     }
 }
 

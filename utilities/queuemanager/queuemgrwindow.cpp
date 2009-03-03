@@ -251,6 +251,9 @@ void QueueMgrWindow::setupConnections()
     connect(d->assignedList, SIGNAL(signalAssignedToolsChanged(const AssignedBatchTools&)),
             this, SLOT(slotAssignedToolsChanged(const AssignedBatchTools&)));
 
+    connect(d->toolsList, SIGNAL(signalAssignTools(const QMap<int, QString>&)),
+            d->assignedList, SLOT(slotAssignTools(const QMap<int, QString>&)));
+
     // -- Queued Items list connections -------------------------------------
 
     connect(d->queuePool, SIGNAL(signalQueueSelected(int, const QueueSettings&, const AssignedBatchTools&)),

@@ -110,7 +110,6 @@ ToolsListView::ToolsListView(QWidget *parent)
              : QTreeWidget(parent)
 {
     setIconSize(QSize(22, 22));
-//    setSelectionMode(QAbstractItemView::SingleSelection);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     setWhatsThis(i18n("This is the list of batch tools available."));
     setSortingEnabled(false);
@@ -244,12 +243,31 @@ QStringList ToolsListView::mimeTypes() const
     return types;
 }
 
+void ToolsListView::mouseDoubleClickEvent(QMouseEvent*)
+{
+    QList<QTreeWidgetItem*> items = selectedItems();
+    if (items.isEmpty())
+        return;
+
+    QMap<int, QString> map = itemsToMap(items);
+    emit signalAssignTools(map);
+}
+
 QMimeData* ToolsListView::mimeData(const QList<QTreeWidgetItem*> items) const
 {
     QMimeData *mimeData = new QMimeData();
     QByteArray encodedData;
 
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
+    QMap<int, QString> map = itemsToMap(items);
+    stream << map;
+
+    mimeData->setData("digikam/batchtoolslist", encodedData);
+    return mimeData;
+}
+
+QMap<int, QString> ToolsListView::itemsToMap(const QList<QTreeWidgetItem*> items) const
+{
     QMap<int, QString> map;
 
     foreach(QTreeWidgetItem* itm, items)
@@ -258,10 +276,7 @@ QMimeData* ToolsListView::mimeData(const QList<QTreeWidgetItem*> items) const
         if (tlwi)
             map.insertMulti((int)(tlwi->tool()->toolGroup()), tlwi->tool()->objectName());
     }
-    stream << map;
-
-    mimeData->setData("digikam/batchtoolslist", encodedData);
-    return mimeData;
+    return map;
 }
 
 }  // namespace Digikam

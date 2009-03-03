@@ -99,6 +99,7 @@ public Q_SLOTS:
     void slotClearToolsList();
     void slotQueueSelected(int, const QueueSettings&, const AssignedBatchTools&);
     void slotSettingsChanged(const BatchToolSet&);
+    void slotAssignTools(const QMap<int, QString>&);
 
 private Q_SLOTS:
 
@@ -108,6 +109,7 @@ private:
 
     int toolIndex(BatchTool* tool);
     AssignedListViewItem* findTool(const BatchToolSet& set);
+    void assignTools(const QMap<int, QString>& map, AssignedListViewItem *preceding);
 
     Qt::DropActions supportedDropActions() const;
     QStringList mimeTypes() const;

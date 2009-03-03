@@ -29,6 +29,9 @@
 #include <QTreeWidget>
 #include <QWidget>
 #include <QPixmap>
+#include <QMap>
+#include <QString>
+#include <QList>
 
 // Local includes.
 
@@ -90,6 +93,10 @@ public:
     void addTool(BatchTool* tool);
     bool removeTool(BatchTool* tool);
 
+signals:
+
+    void signalAssignTools(const QMap<int, QString>&);
+
 private:
 
     bool findTool(BatchTool* tool);
@@ -98,6 +105,9 @@ private:
     void startDrag(Qt::DropActions supportedActions);
     QStringList mimeTypes() const;
     QMimeData* mimeData(const QList<QTreeWidgetItem*> items) const;
+
+    void mouseDoubleClickEvent(QMouseEvent*);
+    QMap<int, QString> itemsToMap(const QList<QTreeWidgetItem*> items) const;
 };
 
 }  // namespace Digikam
