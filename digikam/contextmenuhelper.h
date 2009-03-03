@@ -321,7 +321,7 @@ public:
 private:
 
     /**
-     * Set the selected image ids.
+     * Assign the selected image ids.
      *
      * @param ids the selected image ids
      */

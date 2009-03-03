@@ -330,10 +330,6 @@ void ContextMenuHelper::addGotoMenu(imageIds& ids)
 
     d->gotoAlbumAction = new QAction(SmallIcon("folder-image"),        i18n("Album"), this);
     d->gotoDateAction  = new QAction(SmallIcon("view-calendar-month"), i18n("Date"),  this);
-//    d->actions.insert(GotoAlbum, gotoAlbum);
-//    d->actions.insert(GotoDate,  gotoDate);
-
-//    if (!gotoAlbum || !gotoDate) return;
 
     // the currently selected image is always the first item
     ImageInfo item(d->selectedIds.first());
@@ -350,9 +346,6 @@ void ContextMenuHelper::addGotoMenu(imageIds& ids)
     // Disable the goto Tag popup menu, if there are no tags at all.
     if (!DatabaseAccess().db()->hasTags(d->selectedIds))
         gotoTag->setEnabled(false);
-
-//    connect(gotoTagsPopup, SIGNAL(signalTagActivated(int)),
-//            this, SLOT(slotGotoTag(int)));
 
     Album* currentAlbum = AlbumManager::instance()->currentAlbum();
 
