@@ -197,9 +197,9 @@ public:
     void addServicesMenu(const ImageInfo &item, QMap<QAction*, KService::Ptr> &servicesMap);
 
     /**
-     * Add goto menu.
+     * Add the Goto menu.
      *
-     * The goto menu will provide the following actions for the given item:
+     * This menu will provide the following actions for the given item:
      * - Goto Album
      * - Goto Date
      * - Goto Tag
@@ -215,13 +215,11 @@ public:
 
     /**
      * Add Queue Manager actions menu.
-     *
-     * The queue manager menu will provide actions to add the selected items to the Queue Batch Manager.
      */
     void addQueueManagerMenu();
 
     /**
-     * Add assign tag menu.
+     * Add "Assign Tags" menu.
      *
      * This menu will provide a list of all tags available so that they can be assigned to the current
      * selected items.
@@ -237,7 +235,7 @@ public:
     void addAssignTagsMenu(imageIds& ids);
 
     /**
-     * Add remove tag menu.
+     * Add "Remove Tags" menu.
      *
      * This menu will provide a list of all tags assigned to the current items. Actions triggered in here
      * will remove the selected tag from the items.
@@ -270,7 +268,7 @@ public:
     void addSelectTagsMenu(Q3ListViewItem *item);
 
     /**
-     * Add rating menu.
+     * Add "Rating" menu.
      *
      * This menu will provide methods to assign ratings to the currently selected items.
      *
