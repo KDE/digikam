@@ -638,6 +638,29 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
     int                                 progress = 0;
     int                                 progressStep = 20;
 
+    /*
+     * TODO: implement a fast detection (right now find duplicates is very slow for a collection with 5000
+     * or more images.
+     * If you only want to find 100% duplicate images, we could use the following query instead.
+     *
+     * This query will select all 100% similar images from the db, which is very fast:
+
+     QString fastQuery("SELECT COUNT(*)AS x, Images.name "
+                           "FROM ImageHaarMatrix "
+                               "LEFT JOIN Images ON Images.id=ImageHaarMatrix.imageid "
+                                   "WHERE Images.status=1 "
+                                   "GROUP BY ImageHaarMatrix.matrix HAVING x>1 "
+                                   "ORDER BY x DESC;");
+     *
+     * This query is not absolutely correct, since it is grouping the results in a wrong way.
+     * Anyway this is only meant for demonstration purposes right now.
+     * For my testcollection this query is done in 1 second, delivering 300 image results.
+     * We might need a checkbox or something like that in the find duplicates view.
+     *
+     * [X] Fast scan
+     * + a tooltip / what's this message to explain what will happen with this setting
+     */
+
     if (observer)
     {
         total        = images2Scan.count();
