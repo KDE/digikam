@@ -151,6 +151,19 @@ QueueMgrWindow::~QueueMgrWindow()
     delete d;
 }
 
+BatchToolsManager* QueueMgrWindow::batchToolsManager() const
+{
+    return d->batchToolsMgr;
+}
+
+QMap<int, QString> QueueMgrWindow::queuesMap() const
+{
+    if (d->queuePool)
+        return d->queuePool->queuesMap();
+
+    return QMap<int, QString>();
+}
+
 void QueueMgrWindow::closeEvent(QCloseEvent* e)
 {
     if (!e) return;
@@ -706,9 +719,15 @@ void QueueMgrWindow::addNewQueue()
     d->queuePool->slotAddQueue();
 }
 
-void QueueMgrWindow::loadImageInfos(const ImageInfoList &list, const ImageInfo &current)
+int QueueMgrWindow::currentQueueId()
 {
-    d->queuePool->currentQueue()->slotAddItems(list, current);
+    return (d->queuePool->currentIndex());
+}
+
+void QueueMgrWindow::loadImageInfos(const ImageInfoList &list, int queueId)
+{
+    QueueListView* queue = d->queuePool->findQueueById(queueId);
+    if (queue) queue->slotAddItems(list);
 }
 
 void QueueMgrWindow::slotQueueContentsChanged()
@@ -732,11 +751,6 @@ void QueueMgrWindow::populateToolsList()
     {
         d->toolsList->addTool(tool);
     }
-}
-
-BatchToolsManager* QueueMgrWindow::batchToolsManager() const
-{
-    return d->batchToolsMgr;
 }
 
 void QueueMgrWindow::slotShowMenuBar()

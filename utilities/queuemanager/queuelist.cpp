@@ -362,7 +362,7 @@ void QueueListView::dropEvent(QDropEvent *e)
 
         if (!imageInfoList.isEmpty())
         {
-            slotAddItems(imageInfoList, imageInfoList.first());
+            slotAddItems(imageInfoList);
             e->acceptProposedAction();
 
             QueueListView* vitem = dynamic_cast<QueueListView*>(e->source());
@@ -390,7 +390,7 @@ void QueueListView::dropEvent(QDropEvent *e)
 
         if (!imageInfoList.isEmpty())
         {
-            slotAddItems(imageInfoList, imageInfoList.first());
+            slotAddItems(imageInfoList);
             e->acceptProposedAction();
         }
     }
@@ -415,7 +415,7 @@ void QueueListView::dropEvent(QDropEvent *e)
 
         if (!imageInfoList.isEmpty())
         {
-            slotAddItems(imageInfoList, imageInfoList.first());
+            slotAddItems(imageInfoList);
             e->acceptProposedAction();
         }
     }
@@ -427,7 +427,7 @@ void QueueListView::dropEvent(QDropEvent *e)
     emit signalQueueContentsChanged();
 }
 
-void QueueListView::slotAddItems(const ImageInfoList& list, const ImageInfo& current)
+void QueueListView::slotAddItems(const ImageInfoList& list)
 {
     if ( list.count() == 0 ) return;
 
@@ -455,11 +455,6 @@ void QueueListView::slotAddItems(const ImageInfoList& list, const ImageInfo& cur
         {
             item = new QueueListViewItem(this, info);
             d->thumbLoadThread->find(info.fileUrl().path());
-        }
-
-        if (info == current)
-        {
-            setCurrentItem(item);
         }
     }
     emit signalQueueContentsChanged();

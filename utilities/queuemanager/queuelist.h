@@ -118,7 +118,7 @@ public Q_SLOTS:
     void slotClearList();
     void slotRemoveSelectedItems();
     void slotRemoveItemsDone();
-    void slotAddItems(const ImageInfoList&, const ImageInfo&);
+    void slotAddItems(const ImageInfoList&);
     void slotAssignedToolsChanged(const AssignedBatchTools&);
 
 private Q_SLOTS:

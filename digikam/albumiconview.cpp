@@ -1120,14 +1120,14 @@ void AlbumIconView::insertSelectionToNewQueue()
     insertToQueueManager(imageInfoList, imageInfoList.first(), true);
 }
 
-void AlbumIconView::insertToQueueManager(const ImageInfoList& list, const ImageInfo& current, bool newQueue)
+void AlbumIconView::insertToQueueManager(const ImageInfoList& list, const ImageInfo& /*current*/, bool newQueue)
 {
     QueueMgrWindow *bqmview = QueueMgrWindow::queueManagerWindow();
 
     bqmview->disconnect(this);
 
     connect(this, SIGNAL(signalItemsUpdated(const KUrl::List&)),
-           bqmview, SLOT(slotItemsUpdated(const KUrl::List&)));
+            bqmview, SLOT(slotItemsUpdated(const KUrl::List&)));
 
     if (bqmview->isHidden())
         bqmview->show();
@@ -1138,7 +1138,7 @@ void AlbumIconView::insertToQueueManager(const ImageInfoList& list, const ImageI
 
     if (newQueue) bqmview->addNewQueue();
 
-    bqmview->loadImageInfos(list, current);
+    bqmview->loadImageInfos(list, bqmview->currentQueueId());
 }
 
 // ------------------------------------------------------------------------------

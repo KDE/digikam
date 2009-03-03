@@ -26,6 +26,7 @@
 
 // Qt includes.
 
+#include <QMap>
 #include <QWidget>
 #include <QDragMoveEvent>
 #include <QDropEvent>
@@ -62,6 +63,8 @@ public:
     int totalPendingItems();
     int totalPendingTasks();
 
+    QMap<int, QString> queuesMap() const;
+
 Q_SIGNALS:
 
     void signalItemSelectionChanged();
@@ -78,7 +81,7 @@ public Q_SLOTS:
     void slotClearList();
     void slotRemoveSelectedItems();
     void slotRemoveItemsDone();
-    void slotAddItems(const ImageInfoList&, const ImageInfo&);
+    void slotAddItems(const ImageInfoList&, int queueId);
     void slotAssignedToolsChanged(const AssignedBatchTools&);
     void slotSettingsChanged(const QueueSettings&);
 

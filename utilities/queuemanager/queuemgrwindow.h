@@ -26,6 +26,7 @@
 
 // Qt includes.
 
+#include <QMap>
 #include <QString>
 #include <QCloseEvent>
 
@@ -61,11 +62,17 @@ public:
     static bool            queueManagerWindowCreated();
 
     void addNewQueue();
-    void loadImageInfos(const ImageInfoList &list, const ImageInfo &current);
+    void loadImageInfos(const ImageInfoList &list, int queueId);
     void refreshView();
     void applySettings();
 
     BatchToolsManager* batchToolsManager() const;
+
+    /** Return a map of all queues available from pool (index and title).
+     */
+    QMap<int, QString> queuesMap() const;
+
+    int currentQueueId();
 
 Q_SIGNALS:
 

@@ -70,6 +70,14 @@ QueueListView* QueuePool::findQueueById(int index) const
     return (dynamic_cast<QueueListView*>(widget(index)));
 }
 
+QMap<int, QString> QueuePool::queuesMap() const
+{
+    QMap<int, QString> map;
+    for (int i = 0; i < count(); i++)
+        map.insert(i, tabText(i));
+    return map;
+}
+
 void QueuePool::slotAddQueue()
 {
     QueueListView* queue = new QueueListView(this);
@@ -155,10 +163,10 @@ void QueuePool::slotRemoveItemsDone()
     if (queue) queue->slotRemoveItemsDone();
 }
 
-void QueuePool::slotAddItems(const ImageInfoList& list, const ImageInfo &current)
+void QueuePool::slotAddItems(const ImageInfoList& list, int queueId)
 {
-    QueueListView* queue = currentQueue();
-    if (queue) queue->slotAddItems(list, current);
+    QueueListView* queue = findQueueById(queueId);
+    if (queue) queue->slotAddItems(list);
 }
 
 void QueuePool::slotAssignedToolsChanged(const AssignedBatchTools& tools4Item)
