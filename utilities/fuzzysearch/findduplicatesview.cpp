@@ -346,6 +346,7 @@ void FindDuplicatesView::slotDuplicatesSearchProcessedAmount(KJob* job, KJob::Un
 void FindDuplicatesView::slotDuplicatesSearchResult(KJob*)
 {
     enableControlWidgets(true);
+    populateTreeView();
 }
 
 void FindDuplicatesView::slotDuplicatesAlbumActived(QTreeWidgetItem* item, int)
