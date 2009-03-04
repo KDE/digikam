@@ -49,7 +49,7 @@ Metadata::Metadata(QObject* parent)
 {
     setToolTitle(i18n("Edit Metadata"));
     setToolDescription(i18n("A tool to edit metadata"));
-    setToolIcon(KIcon(SmallIcon("autocorrection")));
+    setToolIcon(KIcon(SmallIcon("application-xml")));
 
     KVBox *vbox   = new KVBox;
 

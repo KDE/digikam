@@ -40,6 +40,7 @@
 #include "restoration.h"
 #include "flip.h"
 #include "watermark.h"
+#include "metadata.h"
 
 namespace Digikam
 {
@@ -68,6 +69,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new Resize(this));
     registerTool(new Restoration(this));
     registerTool(new WaterMark(this));
+    registerTool(new Metadata(this));
 }
 
 BatchToolsManager::~BatchToolsManager()
