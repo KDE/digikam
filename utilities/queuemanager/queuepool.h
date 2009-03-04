@@ -68,6 +68,7 @@ public:
     void setEnableToolTips(bool b);
 
     bool customRenamingRulesAreValid();
+    bool assignedBatchToolsListsAreValid();
 
 Q_SIGNALS:
 

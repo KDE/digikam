@@ -271,4 +271,29 @@ bool QueuePool::customRenamingRulesAreValid()
     return true;
 }
 
+bool QueuePool::assignedBatchToolsListsAreValid()
+{
+    QStringList list;
+    for (int i = 0; i < count(); i++)
+    {
+        QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
+        if (queue)
+        {
+            if (queue->assignedTools().isEmpty())
+            {
+                list.append(tabText(i));
+            }
+        }
+    }
+
+    if (!list.isEmpty())
+    {
+        KMessageBox::errorList(kapp->activeWindow(), 
+                               i18n("Assigned batch tools list is empty for Queues listed below. "
+                                    "Please assign tools!"), list);
+        return false;
+    }
+    return true;
+}
+
 }  // namespace Digikam

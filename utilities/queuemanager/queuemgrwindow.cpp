@@ -778,6 +778,12 @@ void QueueMgrWindow::slotRun()
         return;
     }
 
+    if (!d->queuePool->assignedBatchToolsListsAreValid())
+    {
+        processingAborted();
+        return;
+    }
+
     d->statusProgressBar->setProgressTotalSteps(d->queuePool->totalPendingTasks());
     d->statusProgressBar->setProgressValue(0);
     d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
