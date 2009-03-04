@@ -56,6 +56,8 @@ public:
 
     void setThumb(const QPixmap& pix);
 
+    bool operator<(const QTreeWidgetItem &other) const;
+
 private:
 
     SAlbum    *m_album;
