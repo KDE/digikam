@@ -35,8 +35,14 @@
 
 #include <kdebug.h>
 
+// Local includes.
+
+#include "dimgloaderobserver.h"
+
 namespace Digikam
 {
+
+class BatchToolObserver;
 
 class BatchToolPriv
 {
@@ -49,41 +55,68 @@ public:
         exifSetOrientation = true;
         cancel             = false;
         last               = false;
+        observer           = 0;
     }
 
-    bool                      exifSetOrientation;
-    bool                      cancel;
-    bool                      last;
+    bool                       exifSetOrientation;
+    bool                       cancel;
+    bool                       last;
 
-    QString                   toolTitle;          // User friendly tool title.
-    QString                   toolDescription;    // User friendly tool description.
+    QString                    toolTitle;          // User friendly tool title.
+    QString                    toolDescription;    // User friendly tool description.
 
-    QWidget*                  settingsWidget;
+    QWidget                   *settingsWidget;
 
-    KIcon                     toolIcon;
+    KIcon                      toolIcon;
 
-    KUrl                      inputUrl;
-    KUrl                      outputUrl;
-    KUrl                      workingUrl;
+    KUrl                       inputUrl;
+    KUrl                       outputUrl;
+    KUrl                       workingUrl;
 
-    DImg                      image;
+    DImg                       image;
 
-    BatchToolSettings         settings;
+    BatchToolSettings          settings;
 
-    BatchTool::BatchToolGroup toolGroup;
+    BatchToolObserver         *observer;
+
+    BatchTool::BatchToolGroup  toolGroup;
+};
+
+class BatchToolObserver : public DImgLoaderObserver
+{
+
+public:
+
+    BatchToolObserver(BatchToolPriv* priv)
+        : DImgLoaderObserver(), d(priv)
+    {
+    }
+
+    ~BatchToolObserver()
+    {
+    }
+
+    bool continueQuery(const DImg*)
+    {
+        return !d->cancel;
+    }
+
+    BatchToolPriv* const d;
 };
 
 BatchTool::BatchTool(const QString& name, BatchToolGroup group, QObject* parent)
          : QObject(parent), d(new BatchToolPriv)
 {
-    setObjectName(name);
+    d->observer  = new BatchToolObserver(d);
     d->toolGroup = group;
+    setObjectName(name);
 }
 
 BatchTool::~BatchTool()
 {
     wait();
     delete d->settingsWidget;
+    delete d->observer;
     delete d;
 }
 
@@ -253,7 +286,7 @@ bool BatchTool::loadToDImg()
 {
     if (!d->image.isNull()) return true;
 
-    return d->image.load(inputUrl().path());
+    return d->image.load(inputUrl().path(), d->observer);
 }
 
 bool BatchTool::savefromDImg()
@@ -266,11 +299,11 @@ bool BatchTool::savefromDImg()
         // In case of output support is not set for ex. with all tool which do not convert to new format.
         DImg::FORMAT format = (DImg::FORMAT)(d->image.attribute("detectedFileFormat").toInt());
         d->image.updateMetadata(DImg::formatToMimeType(format), QString(), getExifSetOrientation());
-        return( d->image.save(outputUrl().path(), format) );
+        return( d->image.save(outputUrl().path(), format, d->observer) );
     }
 
     d->image.updateMetadata(frm, QString(), getExifSetOrientation());
-    bool b   = d->image.save(outputUrl().path(), frm);
+    bool b   = d->image.save(outputUrl().path(), frm, d->observer);
     d->image = DImg();
     return b;
 }
