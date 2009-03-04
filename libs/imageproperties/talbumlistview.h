@@ -55,6 +55,7 @@ public:
     int     id() const;
     void    setCount(int count);
     int     count();
+    int     compare(Q3ListViewItem *i, int col, bool ascending) const;
 
 private :
 
