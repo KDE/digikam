@@ -210,6 +210,14 @@ void QueueSettingsView::slotHideToolTipTracker()
     d->manualRenameInput->slotHideToolTipTracker();
 }
 
+bool QueueSettingsView::customRenamingIsValid()
+{
+    if (d->renamingButtonGroup->checkedId() == QueueSettings::CUSTOMIZE)
+        return (!d->manualRenameInput->text().isEmpty());
+
+    return true;
+}
+
 void QueueSettingsView::slotSettingsChanged()
 {
     QueueSettings settings;

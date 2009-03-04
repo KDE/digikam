@@ -772,6 +772,13 @@ void QueueMgrWindow::slotRun()
         return;
     }
 
+    if (d->queueSettingsView->customRenamingIsValid())
+    {
+        KMessageBox::error(this, i18n("Custom renaming rules is invalid. Please fix it!"));
+        processingAborted();
+        return;
+    }
+
     d->statusProgressBar->setProgressTotalSteps(d->queuePool->totalPendingTasks());
     d->statusProgressBar->setProgressValue(0);
     d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);

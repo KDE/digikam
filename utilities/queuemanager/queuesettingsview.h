@@ -84,6 +84,8 @@ public:
     QueueSettingsView(QWidget *parent=0);
     ~QueueSettingsView();
 
+    bool customRenamingIsValid();
+
 Q_SIGNALS:
 
     void signalSettingsChanged(const QueueSettings&);
