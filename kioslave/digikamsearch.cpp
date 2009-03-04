@@ -176,7 +176,7 @@ extern "C"
         if (argc != 4)
         {
             kDebug(50004) << "Usage: kio_digikamsearch  protocol domain-socket1 domain-socket2"
-                      << endl;
+                          << endl;
             exit(-1);
         }
 
