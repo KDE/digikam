@@ -30,6 +30,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kapplication.h>
 
 // Local includes.
 
@@ -242,6 +243,32 @@ void QueuePool::setEnableToolTips(bool b)
         QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
         if (queue) queue->setEnableToolTips(b);
     }
+}
+
+bool QueuePool::customRenamingRulesAreValid()
+{
+    QStringList list;
+    for (int i = 0; i < count(); i++)
+    {
+        QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
+        if (queue)
+        {
+            if (queue->settings().renamingRule == QueueSettings::CUSTOMIZE &&
+                queue->settings().renamingParser.isEmpty())
+            {
+                list.append(tabText(i));
+            }
+        }
+    }
+
+    if (!list.isEmpty())
+    {
+        KMessageBox::errorList(kapp->activeWindow(), 
+                               i18n("Custom renaming rules is invalid for Queues listed below. "
+                                    "Please fix it!"), list);
+        return false;
+    }
+    return true;
 }
 
 }  // namespace Digikam

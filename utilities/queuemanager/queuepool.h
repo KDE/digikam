@@ -67,6 +67,8 @@ public:
 
     void setEnableToolTips(bool b);
 
+    bool customRenamingRulesAreValid();
+
 Q_SIGNALS:
 
     void signalItemSelectionChanged();
