@@ -751,16 +751,16 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuesettingsview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/batchtoolsmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/batchtool.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert2jpeg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert2png.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert2tiff.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert2jp2.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/autocorrection.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/rotate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/flip.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/resize.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/restoration.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/watermark.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2jpeg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2png.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2tiff.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2jp2.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/autocorrection.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/restoration.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform/rotate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform/flip.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform/resize.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/decorate/watermark.cpp
        )
 
     SET(libcameragui_SRCS
