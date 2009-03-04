@@ -117,6 +117,7 @@ ToolSettingsView::ToolSettingsView(QWidget *parent)
 
     insertWidget(ToolSettingsViewPriv::SettingsView, vbox);
     setToolSettingsWidget(new QWidget(this));
+    setViewMode(ToolSettingsViewPriv::MessageView);
 
     // --------------------------------------------------------------------------
 
@@ -162,6 +163,11 @@ void ToolSettingsView::setViewMode(int mode)
 {
     if (mode != ToolSettingsViewPriv::MessageView && mode != ToolSettingsViewPriv::SettingsView)
         return;
+
+    if (mode == ToolSettingsViewPriv::MessageView)
+        d->settingsViewReset->setEnabled(false);
+    else
+        d->settingsViewReset->setEnabled(true);
 
     setCurrentIndex(mode);
 }
