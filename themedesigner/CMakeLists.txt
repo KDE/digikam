@@ -46,7 +46,11 @@ INCLUDE_DIRECTORIES(
                      ../utilities/gpssearch
                      ../utilities/timeline
                      ../utilities/queuemanager
-                     ../utilities/queuemanager/basetools
+                     ../utilities/queuemanager/basetools/convert
+                     ../utilities/queuemanager/basetools/enhance
+                     ../utilities/queuemanager/basetools/transform
+                     ../utilities/queuemanager/basetools/metadata
+                     ../utilities/queuemanager/basetools/decorate
                      ../digikam
                      ../
 
