@@ -772,7 +772,7 @@ void QueueMgrWindow::slotRun()
         return;
     }
 
-    if (d->queueSettingsView->customRenamingIsValid())
+    if (!d->queueSettingsView->customRenamingIsValid())
     {
         KMessageBox::error(this, i18n("Custom renaming rules is invalid. Please fix it!"));
         processingAborted();
