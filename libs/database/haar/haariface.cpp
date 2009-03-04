@@ -684,7 +684,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
 
                     // mark already checked ids
                     alreadyChecked << *it;
-                    foreach (qlonglong id, list)
+                    foreach (const qlonglong &id, list)
                     {
                         alreadyChecked << id;
                     }
