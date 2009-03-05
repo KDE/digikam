@@ -35,7 +35,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 025 ==> 185805 : digiKam 0.10.0-rc2 fails to save keyword hierarchy in IPTC and XMP tags.
 026 ==> 185744 : Crash while entering new caption (or clicking thumbnail icon in folder view).
 027 ==> 182376 : Window opened when 'Sharpen' is selected from Enhance Menu cannot be re-sized.
-028 ==> 
+028 ==> 185915 : Album View: "Created" time of video set to "00:00".
+029 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc2 - Release date: 2009-02-15
