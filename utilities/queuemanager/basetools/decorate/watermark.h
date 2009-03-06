@@ -62,7 +62,7 @@ private:
 
     void assignSettings2Widget();
     bool toolOperations();
-    int  queryFontSize(const QString& text, const QFont& font, int lenght);
+    int  queryFontSize(const QString& text, const QFont& font, int length);
 
 private:
 

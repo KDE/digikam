@@ -134,8 +134,8 @@ WaterMark::WaterMark(QObject* parent)
     d->stringLength->setRange(10, 90);
     d->stringLength->setValue(25);
     d->stringLength->setSliderEnabled(true);
-    d->stringLength->setWhatsThis(i18n("Set here the string lenght in percent relative of image width."));
-    label5->setText(i18n("Lenght (%):"));
+    d->stringLength->setWhatsThis(i18n("Set here the string length in percent relative of image width."));
+    label5->setText(i18n("length (%):"));
 
     QLabel *space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
@@ -170,7 +170,7 @@ BatchToolSettings WaterMark::defaultSettings()
     settings.insert("Font",   QFont());
     settings.insert("Color",  Qt::black);
     settings.insert("Corner", WaterMarkPriv::BottomRight);
-    settings.insert("Lenght", 25);
+    settings.insert("Length", 25);
     return settings;
 }
 
@@ -180,7 +180,7 @@ void WaterMark::assignSettings2Widget()
     d->fontChooserWidget->setFont(settings()["Font"].toString());
     d->fontColorButton->setColor(settings()["Color"].toString());
     d->comboBox->setCurrentIndex(settings()["Corner"].toInt());
-    d->stringLength->setValue(settings()["Lenght"].toInt());
+    d->stringLength->setValue(settings()["Length"].toInt());
 }
 
 void WaterMark::slotSettingsChanged()
@@ -190,7 +190,7 @@ void WaterMark::slotSettingsChanged()
     settings.insert("Font",   d->fontChooserWidget->currentFont());
     settings.insert("Color",  d->fontColorButton->color());
     settings.insert("Corner", (int)d->comboBox->currentIndex());
-    settings.insert("Lenght", (int)d->stringLength->value());
+    settings.insert("Length", (int)d->stringLength->value());
     setSettings(settings);
 }
 
@@ -204,12 +204,12 @@ bool WaterMark::toolOperations()
     QFont font       = settings()["Font"].toString();
     QColor color     = settings()["Color"].toString();
     int corner       = settings()["Corner"].toInt();
-    int lenght       = settings()["Lenght"].toInt();
+    int length       = settings()["Length"].toInt();
     int alignMode;
 
     if (text.isEmpty()) return false;
 
-    int size = queryFontSize(text, font, lenght);
+    int size = queryFontSize(text, font, length);
     if (size == 0) return false;
 
     font.setPointSizeF(size);
@@ -241,7 +241,7 @@ bool WaterMark::toolOperations()
     DColorComposer *composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
 
     // Add a transparent layer.
-    QRect backgroundRect(fontRect.x()-radius, fontRect.y()-radius, 
+    QRect backgroundRect(fontRect.x()-radius, fontRect.y()-radius,
                          fontRect.width()+2*radius, fontRect.height()+2*radius);
     DImg backgroundLayer(backgroundRect.width(), backgroundRect.height(), image().sixteenBit(), true);
     DColor transparent(QColor(0, 0, 0));
@@ -255,15 +255,15 @@ bool WaterMark::toolOperations()
     if (image().sixteenBit()) grayTrans.convertToSixteenBit();
     grayTransLayer.fill(grayTrans);
 
-    backgroundLayer.bitBlendImage(composer, &grayTransLayer, 0, 0, 
+    backgroundLayer.bitBlendImage(composer, &grayTransLayer, 0, 0,
                                   grayTransLayer.width(), grayTransLayer.height(),
                                   radius, radius);
 
     DImgImageFilters filters;
-    filters.gaussianBlurImage(backgroundLayer.bits(), backgroundLayer.width(), 
+    filters.gaussianBlurImage(backgroundLayer.bits(), backgroundLayer.width(),
                               backgroundLayer.height(), backgroundLayer.sixteenBit(), radius);
 
-    image().bitBlendImage(composer, &backgroundLayer, 0, 0, 
+    image().bitBlendImage(composer, &backgroundLayer, 0, 0,
                           backgroundLayer.width(), backgroundLayer.height(),
                           backgroundRect.x(), backgroundRect.y());
 
@@ -283,7 +283,7 @@ bool WaterMark::toolOperations()
     textDrawn.convertToDepthOfImage(&image());
 
     // now compose to original: only pixels affected by drawing text and border are changed, not whole area
-    image().bitBlendImage(composer, &textDrawn, 0, 0, textDrawn.width(), textDrawn.height(), 
+    image().bitBlendImage(composer, &textDrawn, 0, 0, textDrawn.width(), textDrawn.height(),
                           fontRect.x(), fontRect.y());
 
     delete composer;
@@ -291,9 +291,9 @@ bool WaterMark::toolOperations()
     return (savefromDImg());
 }
 
-int WaterMark::queryFontSize(const QString& text, const QFont& font, int lenght)
+int WaterMark::queryFontSize(const QString& text, const QFont& font, int length)
 {
-    // Find font size using relative lenght compared to image width.
+    // Find font size using relative length compared to image width.
     QFont fnt = font;
     QRect fontRect;
     for (int i = 1 ; i <= 1000 ; i++)
@@ -301,7 +301,7 @@ int WaterMark::queryFontSize(const QString& text, const QFont& font, int lenght)
         fnt.setPointSizeF(i);
         QFontMetrics fontMt(fnt);
         fontRect = fontMt.boundingRect(0, 0, image().width(), image().height(), 0, text);
-        if (fontRect.width() > lround((image().width() * lenght)/100.0))
+        if (fontRect.width() > lround((image().width() * length)/100.0))
             return (i-1);
     }
     return 0;
