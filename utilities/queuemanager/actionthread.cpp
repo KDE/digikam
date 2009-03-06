@@ -166,7 +166,7 @@ void ActionThread::run()
             KUrl::List tmp2del;
             DImg tmpImage;
 
-            for (BatchToolMap::const_iterator it = t->item.toolsMap.begin(); 
+            for (BatchToolMap::const_iterator it = t->item.toolsMap.begin();
                  !d->cancel && (it != t->item.toolsMap.end()) ; ++it)
             {
                 index                      = it.key();
@@ -225,7 +225,7 @@ void ActionThread::run()
 
             if (success && !d->cancel)
             {
-                // if success, we don't remove last ouput tmp url.
+                // if success, we don't remove last output tmp url.
                 tmp2del.removeAll(outUrl);
 
                 ActionData ad6;

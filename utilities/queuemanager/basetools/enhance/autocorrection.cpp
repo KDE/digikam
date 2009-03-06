@@ -50,7 +50,7 @@ AutoCorrection::AutoCorrection(QObject* parent)
               : BatchTool("AutoCorrection", BaseTool, parent)
 {
     setToolTitle(i18n("Colors Auto-correction"));
-    setToolDescription(i18n("A tool to correct automaticaly image colors"));
+    setToolDescription(i18n("A tool to correct automatically image colors"));
     setToolIcon(KIcon(SmallIcon("autocorrection")));
 
     KVBox *vbox   = new KVBox;

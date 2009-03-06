@@ -1088,7 +1088,7 @@ void CameraUI::slotThumbnail(const QString& folder, const QString& file,
 
     if (thumb.isNull())
     {
-        // This call must be run outside Camera Controler thread.
+        // This call must be run outside Camera Controller thread.
         thumb = d->controller->mimeTypeThumbnail(file).toImage();
     }
 

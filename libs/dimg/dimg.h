@@ -7,7 +7,7 @@
  * Description : digiKam 8/16 bits image management API
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>  
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
@@ -125,7 +125,7 @@ public:
     */
     DImg(const DImg& image);
 
-    /** Copy image: Creates a copy of a QImage object. If the QImage is null, a 
+    /** Copy image: Creates a copy of a QImage object. If the QImage is null, a
         null DImg will be created.
     */
     DImg(const QImage& image);
@@ -180,7 +180,7 @@ public:
     /** Reset metadata, but do not change image data */
     void        resetMetaData();
 
-    /** Returns the data of this image. 
+    /** Returns the data of this image.
         Ownership of the buffer is passed to the caller, this image will be null afterwards.
     */
     uchar*      stripImageData();
@@ -246,9 +246,9 @@ public:
     void        setPixelColor(uint x, uint y, DColor color);
 
     /**
-    Return true if the original image file format cannot be saved. 
+    Return true if the original image file format cannot be saved.
     This is depending of DImgLoader::save() implementation. For example
-    RAW file formats are supported by DImg using dcraw than cannot support 
+    RAW file formats are supported by DImg using dcraw than cannot support
     writing operations.
     */
     bool       isReadOnly() const;
@@ -277,7 +277,7 @@ public:
     QString    embeddedText(const QString& key) const;
 
     /** Use this method to update lead metadata after image transformations.
-        This fix Iptc preview, Exif thumbnail, image size informations, etc.
+        This fix Iptc preview, Exif thumbnail, image size information, etc.
         'destMimeType' is destination type mime. In some case, any metadata are not updated by the same way.
         'originalFileName' is original file name. Can be empty.
         'setExifOrientationTag' is used to force Exif orientation flag to normal.

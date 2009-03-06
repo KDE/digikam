@@ -85,10 +85,10 @@ QByteArray UMSCamera::cameraMD5ID()
 {
     QString camData;
     // Camera media UUID is used (if available) to improve fingerprint value
-    // registration to database. We want to be sure that MD5 sum is really uniq.
+    // registration to database. We want to be sure that MD5 sum is really unique.
     // We don't use camera information here. media UUID is enough because it came be
-    // mouted by a card reader or a camera. In this case, "already donwloaded" flag will
-    // be undependant of the device used to mount memory card.
+    // mounted by a card reader or a camera. In this case, "already downloaded" flag will
+    // be independent of the device used to mount memory card.
     camData.append(uuid());
     KMD5 md5(camData.toUtf8());
     return md5.hexDigest();

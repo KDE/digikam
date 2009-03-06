@@ -228,7 +228,7 @@ class CustomStepsDoubleSpinBox : public QDoubleSpinBox
 public:
 
     /** This is a normal QDoubleSpinBox which allows to
-     *  customise the stepping behavior, for cases where
+     *  customize the stepping behavior, for cases where
      *  linear steps are not applicable
      */
 
@@ -280,7 +280,7 @@ class CustomStepsIntSpinBox : public QSpinBox
 public:
 
     /** This is a normal QIntSpinBox which allows to
-     *  customise the stepping behavior, for cases where
+     *  customize the stepping behavior, for cases where
      *  linear steps are not applicable
      */
 
