@@ -75,6 +75,11 @@ DCursorTracker::DCursorTracker(const QString& txt, QWidget *parent)
             this, SLOT(slotAutoHide()));
 }
 
+DCursorTracker::~DCursorTracker()
+{
+    delete d;
+}
+
 /**
  * Overload to make sure the widget size is correct
  */

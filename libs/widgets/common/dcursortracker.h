@@ -54,6 +54,7 @@ class DIGIKAM_EXPORT DCursorTracker : public QLabel
 public:
 
     DCursorTracker(const QString& txt, QWidget *parent);
+    ~DCursorTracker();
 
     void setText(const QString& txt);
     void setEnable(bool b);
