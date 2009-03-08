@@ -266,7 +266,7 @@ void ThemedIconView::updateItemRectsPixmap()
                                            "XXXXXXXXX");
 
     int y             = margin;
-    d->itemPixmapRect = QRect(margin, y, w, d->thumbSize+margin);
+    d->itemPixmapRect = QRect(margin, y, w, d->thumbSize + margin);
     y = d->itemPixmapRect.bottom();
 
     {

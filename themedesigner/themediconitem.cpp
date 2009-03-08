@@ -61,7 +61,9 @@ ThemedIconItem::~ThemedIconItem()
 
 void ThemedIconItem::paintItem(QPainter* p2)
 {
-    ThemedIconView* view = (ThemedIconView*)iconView();
+    ThemedIconView* view = qobject_cast<ThemedIconView*>(iconView());
+    if (!view)
+        return;
 
     QPixmap pix;
     QRect   r;
@@ -122,9 +124,9 @@ void ThemedIconItem::paintItem(QPainter* p2)
 
     p.end();
 
-    r = rect();
-    r = QRect(view->contentsToViewport(QPoint(r.x(), r.y())),
-              QSize(r.width(), r.height()));
+    r = view->itemRect();
+//    r = QRect(view->contentsToViewport(QPoint(r.x(), r.y())),
+//              QSize(r.width(), r.height()));
 
     p2->drawPixmap(r.x(), r.y(), pix, 0, 0, r.width(), r.height());
 }
