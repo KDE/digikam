@@ -263,6 +263,7 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
+    delete m_theme;
 }
 
 void MainWindow::slotLoad()
