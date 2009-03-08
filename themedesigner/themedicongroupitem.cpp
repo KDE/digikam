@@ -95,9 +95,9 @@ void ThemedIconGroupItem::paintBanner(QPainter *p2)
 
     p.end();
 
-    r = rect();
-    r = QRect(iconView()->contentsToViewport(QPoint(r.x(), r.y())),
-              QSize(r.width(), r.height()));
+    r = m_view->bannerRect();
+//    r = QRect(iconView()->contentsToViewport(QPoint(r.x(), r.y())),
+//              QSize(r.width(), r.height()));
 
     p2->drawPixmap(r.x(), r.y(), pix, 0, 0, r.width(), r.height());
 }
