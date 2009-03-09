@@ -7,8 +7,9 @@
  * Description : Haar Database interface
  *
  * Copyright (C) 2003 by Ricardo Niederberger Cabral <nieder at mail dot ru>
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,6 +32,7 @@
 #include <QString>
 #include <QMap>
 #include <QList>
+#include <haar.h>
 
 // Local includes.
 
@@ -43,10 +45,10 @@ namespace Digikam
 
 class DImg;
 
-namespace Haar
-{
-    class SignatureData; 
-}
+//namespace Haar
+//{
+//    class SignatureData;
+//}
 
 class HaarProgressObserver
 {
@@ -96,7 +98,8 @@ public:
      *  All matches with a similarity above a given threshold are returned.
      *  The threshold is in the range 0..1, with 1 meaning identical signature.
      */
-    QList<qlonglong> bestMatchesForImageWithThreshold(qlonglong imageid, double requiredPercentage, SketchType type=ScannedSketch);
+    QList<qlonglong> bestMatchesForImageWithThreshold(qlonglong imageid,
+                                                      double requiredPercentage, SketchType type=ScannedSketch);
 
     /** Calculates the Haar signature, bring it in a form as stored in the DB,
      *  and encode it to Ascii data. Can be used for bestMatchesForSignature.
@@ -116,6 +119,11 @@ public:
      */
     QMap< qlonglong, QList<qlonglong> > findDuplicates(const QList<qlonglong>& images2Scan, double requiredPercentage,
                                                        HaarProgressObserver *observer = 0);
+
+    /** Fill a map of duplicates images found over a list of image to scan, in a fast way.
+     *  @see findDuplicates()
+     */
+    QMap< qlonglong, QList<qlonglong> > findDuplicatesFast(HaarProgressObserver *observer = 0);
 
     /** Calls findDuplicates with all images in the given album ids */
     QMap< qlonglong, QList<qlonglong> > findDuplicatesInAlbums(const QList<int> &albums2Scan, double requiredPercentage,
@@ -145,9 +153,12 @@ private:
     bool   indexImage(qlonglong imageid);
 
     QList<qlonglong> bestMatches(Haar::SignatureData *data, int numberOfResults, SketchType type);
-    QList<qlonglong> bestMatchesWithThreshold(Haar::SignatureData *querySig, double requiredPercentage, SketchType type);
+    QList<qlonglong> bestMatchesWithThreshold(Haar::SignatureData *querySig,
+                                              double requiredPercentage, SketchType type);
 
     QMap<qlonglong, double> searchDatabase(Haar::SignatureData *data, SketchType type);
+    void calculateScore(double &score, Haar::SignatureData &querySig, Haar::SignatureData &targetSig,
+                        Haar::Weights &weights, Haar::SignatureMap** queryMaps);
 
 private:
 

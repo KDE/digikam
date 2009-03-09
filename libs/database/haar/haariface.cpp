@@ -7,8 +7,9 @@
  * Description : Haar Database interface
  *
  * Copyright (C) 2003 by Ricardo Niederberger Cabral <nieder at mail dot ru>
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -137,14 +138,17 @@ public:
 
     HaarIfacePriv()
     {
-        data = 0;
-        bin  = 0;
+        data          = 0;
+        bin           = 0;
+        sigMap        = 0;
+        useCachedSigs = false;
     }
 
     ~HaarIfacePriv()
     {
         delete data;
         delete bin;
+        delete sigMap;
     }
 
     void createLoadingBuffer()
@@ -159,8 +163,21 @@ public:
             bin = new Haar::WeightBin;
     }
 
-    Haar::ImageData *data;
-    Haar::WeightBin *bin;
+    void enableCachedSignatures(bool cached)
+    {
+        if (sigMap)
+            delete sigMap;
+
+        if (cached)
+            sigMap = new QMap<qlonglong, Haar::SignatureData>();
+
+        useCachedSigs = cached;
+    }
+
+    bool                                  useCachedSigs;
+    Haar::ImageData                      *data;
+    Haar::WeightBin                      *bin;
+    QMap<qlonglong, Haar::SignatureData> *sigMap;
 
     QSet<int> albumRootsToSearch;
 };
@@ -301,7 +318,8 @@ QList<qlonglong> HaarIface::bestMatchesForImage(qlonglong imageid, int numberOfR
     return bestMatches(&sig, numberOfResults, type);
 }
 
-QList<qlonglong> HaarIface::bestMatchesForImageWithThreshold(qlonglong imageid, double requiredPercentage, SketchType type)
+QList<qlonglong> HaarIface::bestMatchesForImageWithThreshold(qlonglong imageid, double requiredPercentage,
+                                                             SketchType type)
 {
     Haar::SignatureData sig;
     if (!retrieveSignatureFromDB(imageid, &sig))
@@ -422,6 +440,7 @@ QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData *queryS
 QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig, SketchType type)
 {
     d->createWeightBin();
+
     // The table of constant weight factors applied to each channel and bin
     Haar::Weights weights((Haar::Weights::SketchType)type);
 
@@ -437,66 +456,76 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig,
     QMap<qlonglong, double> scores;
 
     // Variables for data read from DB
-    DatabaseBlob blob;
-    qlonglong imageid;
+    DatabaseAccess      access;
+    QSqlQuery           query;
+    DatabaseBlob        blob;
+    qlonglong           imageid;
     Haar::SignatureData targetSig;
+
+    // reference for easier access
+    QMap<qlonglong, Haar::SignatureData> &sigMap = *d->sigMap;
 
     bool filterByAlbumRoots = !d->albumRootsToSearch.isEmpty();
 
-    DatabaseAccess access;
-    QSqlQuery query;
-    if (filterByAlbumRoots)
-        query = access.backend()->prepareQuery(QString("SELECT imageid, Albums.albumRoot, matrix FROM ImageHaarMatrix "
-                                                       " LEFT JOIN Images ON Images.id=ImageHaarMatrix.imageid "
-                                                       " LEFT JOIN Albums ON Albums.id=Images.album "
-                                                       " WHERE Images.status=1; "));
-    else
-        query = access.backend()->prepareQuery(QString("SELECT imageid, 0, matrix FROM ImageHaarMatrix "
-                                                       " LEFT JOIN Images ON Images.id=ImageHaarMatrix.imageid "
-                                                       " WHERE Images.status=1; "));
-    if (!access.backend()->exec(query))
-        return scores;
-
-    // We don't use DatabaseBackend's convenience calls, as the result set is large
-    // and we try to avoid copying in a temporary QList<QVariant>
-    while (query.next())
+    // if no cache is used or the cache signature map is empty, query the database
+    if ( !d->useCachedSigs || (sigMap.isEmpty() && d->useCachedSigs) )
     {
-        imageid = query.value(0).toLongLong();
         if (filterByAlbumRoots)
-        {
-            int albumRootId = query.value(1).toInt();
-            if (!d->albumRootsToSearch.contains(albumRootId))
-                continue;
-        }
-        blob.read(query.value(2).toByteArray(), &targetSig);
+            query = access.backend()->prepareQuery(QString("SELECT M.imageid, Albums.albumRoot, M.matrix "
+                                                           " FROM ImageHaarMatrix AS M, Albums, Images "
+                                                           " WHERE Images.id=M.imageid "
+                                                           " AND Albums.id=Images.album "
+                                                           " AND Images.status=1; "));
+        else
+            query = access.backend()->prepareQuery(QString("SELECT M.imageid, 0, M.matrix "
+                                                           " FROM ImageHaarMatrix AS M, Images "
+                                                           " WHERE Images.id=M.imageid "
+                                                           " AND Images.status=1; "));
+        if (!access.backend()->exec(query))
+            return scores;
 
-        // this is a reference
-        double &score = scores[imageid];
-
-        // Step 1: Initialize scores with average intensity values of all three channels
-        for (int channel=0; channel<3; channel++)
+        // We don't use DatabaseBackend's convenience calls, as the result set is large
+        // and we try to avoid copying in a temporary QList<QVariant>
+        while (query.next())
         {
-            score += weights.weightForAverage(channel) * fabs( querySig->avg[channel] - targetSig.avg[channel] );
-        }
+            imageid = query.value(0).toLongLong();
 
-        // Step 2: Decrease the score if query and target have significant coefficients in common
-        for (int channel=0; channel<3; channel++)
-        {
-            Haar::Idx *sig = targetSig.sig[channel];
-            Haar::SignatureMap *queryMap = queryMaps[channel];
-            int x;
-            for (int coef = 0; coef < Haar::NumberOfCoefficients; coef++)
+            if (filterByAlbumRoots)
             {
-                // x is a pixel index, either positive or negative, 0..16384
-                x = sig[coef];
-                // If x is a significant coefficient with the same sign in the query signature as well,
-                // descrease the score (lower is better)
-                // Note: both method calls called with x accept positive or negative values
-                if ((*queryMap)[x])
-                    score -= weights.weight(d->bin->binAbs(x), channel);
+                int albumRootId = query.value(1).toInt();
+                if (!d->albumRootsToSearch.contains(albumRootId))
+                    continue;
+            }
+
+            blob.read(query.value(2).toByteArray(), &targetSig);
+
+            if (d->useCachedSigs)
+            {
+                sigMap[imageid] = targetSig;
+            }
+            else
+            {
+                double              &score = scores[imageid];
+                Haar::SignatureData &qSig  = *querySig;
+                Haar::SignatureData &tSig  = targetSig;
+
+                calculateScore(score, qSig, tSig, weights, queryMaps);
             }
         }
     }
+    // read cached signature map if possible
+    else
+    {
+        foreach (const qlonglong &imageid, sigMap.keys())
+        {
+            double              &score = scores[imageid];
+            Haar::SignatureData &qSig  = *querySig;
+            Haar::SignatureData &tSig  = sigMap[imageid];
+
+            calculateScore(score, qSig, tSig, weights, queryMaps);
+        }
+    }
+
 
     return scores;
 }
@@ -628,15 +657,15 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QLis
 QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlonglong>& images2Scan,
                                                double requiredPercentage, HaarProgressObserver *observer)
 {
-    QMap< qlonglong, QList<qlonglong> > resultsMap;
-    QList<qlonglong>::const_iterator    it;
-    QList<qlonglong>::const_iterator    it2;
-    QList<qlonglong>                    list;
-    QSet<qlonglong>                     alreadyChecked;
+    QMap< qlonglong, QList<qlonglong> >  resultsMap;
+    QList<qlonglong>::const_iterator     it;
+    QList<qlonglong>::const_iterator     it2;
+    QList<qlonglong>                     list;
+    QSet<qlonglong>                      alreadyChecked;
 
-    int                                 total = 0;
-    int                                 progress = 0;
-    int                                 progressStep = 20;
+    int                                  total        = 0;
+    int                                  progress     = 0;
+    int                                  progressStep = 20;
 
     if (observer)
     {
@@ -644,6 +673,9 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
         progressStep = qMax(progressStep, total / 100);
         observer->totalNumberToScan(total);
     }
+
+    // create signature cache map for fast lookup
+    d->enableCachedSignatures(true);
 
     for (it = images2Scan.constBegin(); it != images2Scan.constEnd(); ++it)
     {
@@ -677,7 +709,121 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
         }
     }
 
+    d->enableCachedSignatures(false);
+
     return resultsMap;
+}
+
+QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesFast(HaarProgressObserver *observer)
+{
+    QMap<qlonglong, QList<qlonglong> > resultsMap;
+    QList<QByteArray> matrixList;
+    int _total        = 0;
+    int total         = 0;
+    int progress      = 0;
+    int progressStep  = 20;
+
+    DatabaseAccess access;
+
+    /*
+     * Step 1: get all fingerprints that are absolutely identical
+     */
+    QSqlQuery mainQuery = access.backend()->prepareQuery(QString(
+                                                         "SELECT COUNT(*)AS x, ImageHaarMatrix.matrix "
+                                                         "FROM ImageHaarMatrix, Images "
+                                                         "WHERE Images.id=ImageHaarMatrix.imageid "
+                                                         "AND Images.status=1 "
+                                                         "GROUP BY ImageHaarMatrix.matrix HAVING x>1 ")
+    );
+
+    if (!access.backend()->exec(mainQuery))
+        return resultsMap;
+
+    // get all duplicate fingerprints and calculate total images
+    while (mainQuery.next())
+    {
+        matrixList << mainQuery.value(1).toByteArray();
+        _total += mainQuery.value(0).toInt();
+    }
+
+    // --------------------------------------------------------
+
+    if (observer)
+    {
+        total        = _total;
+        progressStep = qMax(progressStep, total / 100);
+        observer->totalNumberToScan(total);
+    }
+
+    // --------------------------------------------------------
+
+    /*
+     * Step 2: get all image ids for each duplicate fingerprint
+     */
+    QList<qlonglong> ids;
+    foreach(const QByteArray &matrix, matrixList)
+    {
+        QSqlQuery imageQuery = access.backend()->prepareQuery(QString(
+                "SELECT Images.id "
+                "FROM Images, ImageHaarMatrix "
+                "WHERE Images.id=ImageHaarMatrix.imageid "
+                "AND Images.status=1 "
+                "AND ImageHaarMatrix.matrix=?; ")
+        );
+        imageQuery.bindValue(0, matrix);
+        access.backend()->exec(imageQuery);
+
+        ids.clear();
+
+        while (imageQuery.next())
+        {
+            ids << imageQuery.value(0).toLongLong();
+            ++progress;
+        }
+        resultsMap[ids.first()] = ids;
+
+        if (observer && (progress % progressStep == 0))
+            observer->processedNumber(progress);
+    }
+
+    // make sure that the progress bar is really set to maximum now, just in case
+    // we have calculated a wrong amount of duplicate images
+    if (observer)
+        observer->processedNumber(total);
+
+    return resultsMap;
+}
+
+void HaarIface::calculateScore(double &score, Haar::SignatureData &querySig, Haar::SignatureData &targetSig,
+                           Haar::Weights &weights, Haar::SignatureMap** queryMaps)
+{
+    // this is a reference
+//    double &score                  = scores[imageid];
+//    Haar::SignatureData &targetSig = sigMap[imageid];
+
+    // Step 1: Initialize scores with average intensity values of all three channels
+    for (int channel=0; channel<3; channel++)
+    {
+        score += weights.weightForAverage(channel) * fabs( querySig.avg[channel] - targetSig.avg[channel] );
+    }
+
+    // Step 2: Decrease the score if query and target have significant coefficients in common
+    for (int channel=0; channel<3; channel++)
+    {
+        Haar::Idx *sig               = targetSig.sig[channel];
+        Haar::SignatureMap *queryMap = queryMaps[channel];
+        int x;
+        for (int coef = 0; coef < Haar::NumberOfCoefficients; coef++)
+        {
+            // x is a pixel index, either positive or negative, 0..16384
+            x = sig[coef];
+            // If x is a significant coefficient with the same sign in the query signature as well,
+            // decrease the score (lower is better)
+            // Note: both method calls called with x accept positive or negative values
+            if ((*queryMap)[x])
+                score -= weights.weight(d->bin->binAbs(x), channel);
+        }
+    }
 }
 
 }  // namespace Digikam
