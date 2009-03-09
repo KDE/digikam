@@ -110,15 +110,15 @@ GreycstorationIface::GreycstorationIface(DImg *orgImage,
 
     if (d->mode == Resize || d->mode == SimpleResize)
     {
-        m_destImage = Digikam::DImg(newWidth, newHeight,
-                                    m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
+        m_destImage = DImg(newWidth, newHeight,
+                           m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
         DDebug() << "GreycstorationIface::Resize: new size: ("
                  << newWidth << ", " << newHeight << ")" << endl;
     }
     else
     {
-        m_destImage = Digikam::DImg(m_orgImage.width(), m_orgImage.height(),
-                                    m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
+        m_destImage = DImg(m_orgImage.width(), m_orgImage.height(),
+                           m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
     }
 
     initFilter();
@@ -163,7 +163,7 @@ void GreycstorationIface::stopComputation()
     }
 
     // And now when stop main loop and clean up all
-    Digikam::DImgThreadedFilter::stopComputation();
+    DImgThreadedFilter::stopComputation();
 }
 
 void GreycstorationIface::filterImage()
