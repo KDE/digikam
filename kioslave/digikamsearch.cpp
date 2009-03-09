@@ -7,7 +7,7 @@
  * Description : a kio-slave to process search on digiKam albums
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,7 +59,7 @@ kio_digikamsearch::~kio_digikamsearch()
 
 void kio_digikamsearch::special(const QByteArray& data)
 {
-    bool duplicates = (metaData("duplicates") == "true");
+    bool duplicates = ( metaData("duplicates") == "true" || metaData("duplicatesfast") == "true");
 
     KUrl    kurl;
     int     listingType = 0;
@@ -154,7 +154,11 @@ void kio_digikamsearch::special(const QByteArray& data)
 
         // rebuild the duplicate albums
         Digikam::HaarIface iface;
-        iface.rebuildDuplicatesAlbums(albumIds, threshold, &observer);
+
+        if (metaData("duplicatesfast") == "true")
+            iface.rebuildDuplicatesAlbums(albumIds, threshold, &observer, true);
+        else // accurate
+            iface.rebuildDuplicatesAlbums(albumIds, threshold, &observer, false);
     }
 
     finished();

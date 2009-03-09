@@ -603,10 +603,10 @@ void HaarIface::getBestAndWorstPossibleScore(Haar::SignatureData *sig, SketchTyp
 }
 
 void HaarIface::rebuildDuplicatesAlbums(const QList<int> &albums2Scan, double requiredPercentage,
-                                        HaarProgressObserver *observer)
+                                        HaarProgressObserver *observer, bool fast)
 {
     // Carry out search. This takes long.
-    QMap< qlonglong, QList<qlonglong> > results = findDuplicatesInAlbums(albums2Scan, requiredPercentage, observer);
+    QMap< qlonglong, QList<qlonglong> > results = findDuplicatesInAlbums(albums2Scan, requiredPercentage, observer, fast);
 
     // Build search XML from the results. Store list of ids of similar images.
     QMap<QString, QString> queries;
@@ -641,7 +641,7 @@ void HaarIface::rebuildDuplicatesAlbums(const QList<int> &albums2Scan, double re
 
 
 QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QList<int> &albums2Scan,
-                                               double requiredPercentage, HaarProgressObserver *observer)
+                                               double requiredPercentage, HaarProgressObserver *observer, bool fast)
 {
     QList<qlonglong> idList;
 
@@ -651,7 +651,10 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QLis
         idList << DatabaseAccess().db()->getItemIDsInAlbum(albumId);
     }
 
-    return findDuplicates(idList, requiredPercentage, observer);
+    if (fast)
+        return findDuplicatesFast(observer);
+    else
+        return findDuplicates(idList, requiredPercentage, observer);
 }
 
 QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlonglong>& images2Scan,

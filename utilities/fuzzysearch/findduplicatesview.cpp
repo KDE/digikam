@@ -41,16 +41,18 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 
 // Local includes.
 
 #include "album.h"
-#include "albummanager.h"
 #include "albumdb.h"
+#include "albummanager.h"
 #include "databaseaccess.h"
+#include "databasebackend.h"
+#include "findduplicatesalbumitem.h"
 #include "imagelister.h"
 #include "statusprogressbar.h"
-#include "findduplicatesalbumitem.h"
 
 namespace Digikam
 {
@@ -286,6 +288,45 @@ void FindDuplicatesView::enableControlWidgets(bool val)
 
 void FindDuplicatesView::slotFindDuplicates()
 {
+    // query the database to get the approximate size of the haar matrices
+    DatabaseAccess access;
+    QList<QVariant> matrixSizeList;
+    int matrixSize = 0;
+    access.backend()->execSql(QString("SELECT SUM(LENGTH(matrix)) "
+                                      "FROM Imagehaarmatrix, Images "
+                                      "WHERE Images.id == Imagehaarmatrix.imageid "
+                                      "AND Images.status == 1;"),
+                                      &matrixSizeList);
+    bool ok = false;
+    if (!matrixSizeList.isEmpty())
+        matrixSize = matrixSizeList.first().toInt(&ok);
+    if (ok)
+        matrixSize = matrixSize / 1024 / 1024;
+
+    // prepare the find duplicates dialog
+    QString fastMode     = i18nc("Fast 'find duplicates' search method",     "Fast");
+    QString accurateMode = i18nc("Accurate 'find duplicates' search method", "Accurate");
+
+    QString msg = QString("<p>%1<p><table>"
+                          "<tr><td><b>%2</b></td><td>-</td><td>%3</td></tr>"
+                          "<tr><td><b>%4</b></td><td>-</td><td>%5</td></tr>"
+                          "</table></p>")
+                          .arg(i18n("Find Duplicates can take some time, especially on huge collections.<br/> "
+                                    "Which of the following methods do you prefer?"))
+                          .arg(fastMode)
+                          .arg(i18n("find images that are absolutely identical (quick)"))
+                          .arg(accurateMode)
+                          .arg(i18n("find images with a similarity of 90% or more (can be very slow<br/>"
+                                    "and memory consuming (approx. <b>%1 MB</b> in case of your database))",
+                                    matrixSize));
+
+    int result = KMessageBox::questionYesNoCancel(this, msg, i18n("Warning"),
+                                                  KGuiItem(fastMode),
+                                                  KGuiItem(accurateMode));
+
+    if (result == KMessageBox::Cancel)
+        return;
+
     slotClear();
     enableControlWidgets(false);
 
@@ -295,7 +336,12 @@ void FindDuplicatesView::slotFindDuplicates()
         idsStringList << QString::number(a->id());
 
     KIO::Job *job = ImageLister::startListJob(DatabaseUrl::searchUrl(-1));
-    job->addMetaData("duplicates", "true");
+
+    if (result == KMessageBox::Yes)
+        job->addMetaData("duplicatesfast", "true");
+    else
+        job->addMetaData("duplicates", "true");
+
     job->addMetaData("albumids", idsStringList.join(","));
     job->addMetaData("threshold", QString::number(0.9));
 

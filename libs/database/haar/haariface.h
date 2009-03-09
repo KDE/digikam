@@ -127,13 +127,13 @@ public:
 
     /** Calls findDuplicates with all images in the given album ids */
     QMap< qlonglong, QList<qlonglong> > findDuplicatesInAlbums(const QList<int> &albums2Scan, double requiredPercentage,
-                                                               HaarProgressObserver *observer = 0);
+                                                               HaarProgressObserver *observer = 0, bool fast = false);
 
     /** Rebuilds the special search albums in the database that contain a list of possible candidates
      *  for duplicate images (one album per group of duplicates)
      */
     void rebuildDuplicatesAlbums(const QList<int> &albums2Scan, double requiredPercentage,
-                                 HaarProgressObserver *observer = 0);
+                                 HaarProgressObserver *observer = 0, bool fast = false);
 
     /** Retrieve the Haar signature from database using image id.
      *  Return true if item signature exist else false.
