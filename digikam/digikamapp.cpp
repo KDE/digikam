@@ -2561,7 +2561,7 @@ void DigikamApp::slotShowMenuBar()
     menuBar()->setVisible(!visible);
 }
 
-void DigikamApp::moveEvent(QMoveEvent *e)
+void DigikamApp::moveEvent(QMoveEvent* /*e*/)
 {
     emit signalWindowHasMoved();
 }
