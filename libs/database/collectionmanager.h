@@ -162,7 +162,7 @@ public:
     /**
      * Returns true if the given path forms an album root.
      * It will return false if the path is a path below an album root,
-     * or if the the path does not belong to an album root.
+     * or if the path does not belong to an album root.
      * Example: "/media/fotos/Paris 2007" is an album with album root "/media/fotos".
      *          "/media/fotos" returns true, "/media/fotos/Paris 2007" and "/media" return false.
      * Only available (or hidden, but available) album roots are guaranteed to be found.

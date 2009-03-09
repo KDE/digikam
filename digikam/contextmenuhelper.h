@@ -176,7 +176,7 @@ public:
      * Add the thumbnail action to the menu.
      *
      * Do not use addAction() to add the thumbnail action, because we need
-     * to handle special cases here. Depending on whether the the current view is
+     * to handle special cases here. Depending on whether the current view is
      * album or icon view, we set different actions.
      *
      * @param ids the selected items in the current view
