@@ -2579,9 +2579,4 @@ void DigikamApp::moveEvent(QMoveEvent*)
     emit signalWindowHasMoved();
 }
 
-void DigikamApp::slotAddToExistingQueue(int /*queueid*/)
-{
-//    d->view;
-}
-
 }  // namespace Digikam

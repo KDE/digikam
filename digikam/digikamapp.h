@@ -190,8 +190,6 @@ private Q_SLOTS:
     void slotImportAddFolders();
     void slotDIOResult(KJob*);
 
-    void slotAddToExistingQueue(int);
-
 private:
 
     DigikamAppPriv* const d;
