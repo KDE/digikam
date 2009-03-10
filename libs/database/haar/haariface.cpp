@@ -664,7 +664,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
     QList<qlonglong>::const_iterator     it;
     QList<qlonglong>::const_iterator     it2;
     QList<qlonglong>                     list;
-    QSet<qlonglong>                      alreadyChecked;
+    QSet<qlonglong>                      resultsCandidates;
 
     int                                  total        = 0;
     int                                  progress     = 0;
@@ -682,7 +682,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
 
     for (it = images2Scan.constBegin(); it != images2Scan.constEnd(); ++it)
     {
-        if (!alreadyChecked.contains(*it))
+        if (!resultsCandidates.contains(*it))
         {
             //list = bestMatchesForImage(*it, 20, ScannedSketch);
             // find images with at least 90% similarity
@@ -693,16 +693,19 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
                 if (!(list.count() == 1 && list.first() == *it))
                 {
                     resultsMap.insert(*it, list);
+                    resultsCandidates << *it;
 
-                    // mark already checked ids
-                    alreadyChecked << *it;
                     foreach (const qlonglong &id, list)
                     {
-                        alreadyChecked << id;
+                        resultsCandidates << id;
                     }
                 }
             }
         }
+        // if an imageid is not a results candidate, remove it from the cached signature map as well,
+        // to greatly improve speed
+        if (!resultsCandidates.contains(*it))
+            d->sigMap->remove(*it);
 
         progress++;
 
