@@ -291,7 +291,7 @@ void FindDuplicatesView::slotFindDuplicates()
     // query the database to get the approximate size of the haar matrices
     DatabaseAccess access;
     QList<QVariant> matrixSizeList;
-    int matrixSize = 0;
+    qulonglong matrixSize = 0;
     access.backend()->execSql(QString("SELECT SUM(LENGTH(matrix)) "
                                       "FROM Imagehaarmatrix, Images "
                                       "WHERE Images.id == Imagehaarmatrix.imageid "
@@ -299,9 +299,9 @@ void FindDuplicatesView::slotFindDuplicates()
                                       &matrixSizeList);
     bool ok = false;
     if (!matrixSizeList.isEmpty())
-        matrixSize = matrixSizeList.first().toInt(&ok);
+        matrixSize = matrixSizeList.first().toULongLong(&ok);
     if (ok)
-        matrixSize = matrixSize / 1024 / 1024;
+        matrixSize *= 2;
 
     // prepare the find duplicates dialog
     QString fastMode     = i18nc("Fast 'find duplicates' search method",     "Fast");
@@ -317,8 +317,8 @@ void FindDuplicatesView::slotFindDuplicates()
                           .arg(i18n("find images that are absolutely identical (quick)"))
                           .arg(accurateMode)
                           .arg(i18n("find images with a similarity of 90% or more (can be very slow<br/>"
-                                    "and memory consuming (approx. <b>%1 MB</b> in case of your database))",
-                                    matrixSize));
+                                    "and memory consuming (approx. <b>%1</b> in case of your database))",
+                                    KIO::convertSize(matrixSize)));
 
     int result = KMessageBox::questionYesNoCancel(this, msg, i18n("Warning"),
                                                   KGuiItem(fastMode),
