@@ -1605,6 +1605,8 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
     album->m_path = newName;
     KUrl newUrl = album->fileUrl();
 
+    QString newAlbumPath = album->albumPath();
+
     // We use a private shortcut around collection scanner noticing our changes,
     // we rename them directly. Faster.
     ScanController::instance()->suspendCollectionScan();
@@ -1627,7 +1629,8 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
         AlbumIterator it(album);
         while ((subAlbum = static_cast<PAlbum*>(it.current())) != 0)
         {
-            access.db()->renameAlbum(subAlbum->id(), subAlbum->albumRootId(), subAlbum->albumPath());
+            subAlbum->m_parentPath = newAlbumPath + subAlbum->m_parentPath.mid(oldAlbumPath.length());
+            access.db()->renameAlbum(subAlbum->id(), album->albumRootId(), subAlbum->albumPath());
             ++it;
         }
     }
