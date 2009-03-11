@@ -584,11 +584,6 @@ void AdjustLevelsTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("adjustlevels Tool");
 
-    m_gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
-                    (int)EditorToolSettings::LuminosityChannel));
-    m_gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
-                    (int)HistogramWidget::LogScaleHistogram));
-
     for (int i = 0 ; i < 5 ; i++)
     {
         bool sb        = m_originalImage->sixteenBit();
@@ -608,6 +603,11 @@ void AdjustLevelsTool::readSettings()
 
     m_levelsHistogramWidget->reset();
     m_gboxSettings->histogramBox()->histogram()->reset();
+
+    m_gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+                    (int)EditorToolSettings::LuminosityChannel));
+    m_gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+                    (int)HistogramWidget::LogScaleHistogram));
 
     // This is mandatory here to set spinbox values because slot connections
     // can be not set completely at plugin startup.
