@@ -1,6 +1,6 @@
 # Install standard icons.
 
-KDE4_INSTALL_ICONS( ${ICON_INSTALL_DIR} )
+KDE4_INSTALL_ICONS( ${DATA_INSTALL_DIR}/digikam/icons )
 
 # Install Oxygen icons.
 add_subdirectory(oxygen)
