@@ -338,9 +338,9 @@ void FindDuplicatesView::slotFindDuplicates()
     KIO::Job *job = ImageLister::startListJob(DatabaseUrl::searchUrl(-1));
 
     if (result == KMessageBox::Yes)
-        job->addMetaData("duplicatesfast", "true");
+        job->addMetaData("duplicates", "fast");
     else
-        job->addMetaData("duplicates", "true");
+        job->addMetaData("duplicates", "accurate");
 
     job->addMetaData("albumids", idsStringList.join(","));
     job->addMetaData("threshold", QString::number(0.85));

@@ -59,7 +59,9 @@ kio_digikamsearch::~kio_digikamsearch()
 
 void kio_digikamsearch::special(const QByteArray& data)
 {
-    bool duplicates = ( metaData("duplicates") == "true" || metaData("duplicatesfast") == "true");
+    QStringList duplicatesModes;
+    duplicatesModes << "fast" << "accurate";
+    bool duplicates = duplicatesModes.contains(metaData("duplicates"));
 
     KUrl    kurl;
     int     listingType = 0;
@@ -155,7 +157,7 @@ void kio_digikamsearch::special(const QByteArray& data)
         // rebuild the duplicate albums
         Digikam::HaarIface iface;
 
-        if (metaData("duplicatesfast") == "true")
+        if (metaData("duplicates") == "fast")
             iface.rebuildDuplicatesAlbums(albumIds, threshold, &observer, true);
         else // accurate
             iface.rebuildDuplicatesAlbums(albumIds, threshold, &observer, false);
