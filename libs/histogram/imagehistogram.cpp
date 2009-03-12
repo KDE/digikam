@@ -178,7 +178,6 @@ void ImageHistogram::calculate()
     emit calculationStarted(this);
 
     d->histogram = new ImageHistogramPriv::double_packet[d->histoSegments];
-    memset(d->histogram, 0, d->histoSegments*sizeof(ImageHistogramPriv::double_packet));
 
     if ( !d->histogram )
     {
