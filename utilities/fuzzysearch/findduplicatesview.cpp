@@ -316,7 +316,7 @@ void FindDuplicatesView::slotFindDuplicates()
                           .arg(fastMode)
                           .arg(i18n("find images that are absolutely identical (quick)"))
                           .arg(accurateMode)
-                          .arg(i18n("find images with a similarity of 90% or more (can be very slow<br/>"
+                          .arg(i18n("find images with a similarity of 85% or more (can be very slow<br/>"
                                     "and memory consuming (approx. <b>%1</b> in case of your database))",
                                     KIO::convertSize(matrixSize)));
 
@@ -343,7 +343,7 @@ void FindDuplicatesView::slotFindDuplicates()
         job->addMetaData("duplicates", "true");
 
     job->addMetaData("albumids", idsStringList.join(","));
-    job->addMetaData("threshold", QString::number(0.9));
+    job->addMetaData("threshold", QString::number(0.85));
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotDuplicatesSearchResult(KJob*)));
