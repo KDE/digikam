@@ -50,7 +50,8 @@
 #include <pthread.h>
 #endif
 
-/** Uncomment this line if you use future GreycStoration implementation with GFact parameter */
+/** Uncomment this line if you use future GreycStoration implementation with GFact parameter 
+ */
 #define GREYSTORATION_USING_GFACT 1
 
 // KDE includes.
@@ -79,7 +80,7 @@ public:
     {
         mode               = GreycstorationIface::Restore;
         gfact              = 1.0;
-        computationThreads = 2;
+        computationThreads = 1;    // use only one thread. See B.K.O #186642 for details
     }
 
     float                  gfact;
