@@ -303,9 +303,20 @@ void FindDuplicatesView::slotFindDuplicates()
     if (ok)
         matrixSize *= 2;
 
+    bool validSizeInfo = ok && (matrixSize > 0);
+
     // prepare the find duplicates dialog
-    QString fastMode     = i18nc("Fast 'find duplicates' search method",     "Fast");
-    QString accurateMode = i18nc("Accurate 'find duplicates' search method", "Accurate");
+    QString fastMode        = i18nc("Fast 'find duplicates' search method",     "Fast");
+    QString accurateMode    = i18nc("Accurate 'find duplicates' search method", "Accurate");
+    QString accurateInfoStr = i18n("find images that are identical or very similar to each other <br/>"
+                                   "(slow and memory consuming");
+    if (validSizeInfo)
+    {
+        accurateInfoStr.append(QString(", <br/>"));
+        accurateInfoStr.append(i18n("approx. <b>%1</b> in case of your database",
+                          KIO::convertSize(matrixSize)));
+    }
+    accurateInfoStr.append(QString(")"));
 
     QString msg = QString("<p>%1<p><table>"
                           "<tr><td><b>%2</b></td><td>-</td><td>%3</td></tr>"
@@ -316,9 +327,7 @@ void FindDuplicatesView::slotFindDuplicates()
                           .arg(fastMode)
                           .arg(i18n("find images that are absolutely identical (quick)"))
                           .arg(accurateMode)
-                          .arg(i18n("find images with a similarity of 85% or more (can be very slow<br/>"
-                                    "and memory consuming (approx. <b>%1</b> in case of your database))",
-                                    KIO::convertSize(matrixSize)));
+                          .arg(accurateInfoStr);
 
     int result = KMessageBox::questionYesNoCancel(this, msg, i18n("Warning"),
                                                   KGuiItem(fastMode),
