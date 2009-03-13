@@ -38,7 +38,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 028 ==> 185915 : Album View: "Created" time of video set to "00:00".
 029 ==> 185494 : No images in digikam, possibly database problem, however they look fine in showphoto.
 030 ==> 186205 : Can't open photo in the external application from digiKam.
-031 ==> 
+031 ==> 158868 : Non natural album sorting.
+032 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc2 - Release date: 2009-02-15
