@@ -48,10 +48,14 @@
 #include <pthread.h>
 #endif
 
-/** Number of children threads used to run Greystoration algorithm */ 
-#define COMPUTATION_THREAD 2
+/** Number of children threads used to run Greystoration algorithm 
+    For the moment we use only one thread. See B.K.O #186642  for details.
+    Multithreading management need to be fixed into CImg. 
+ */ 
+#define COMPUTATION_THREAD 1
 
-/** Uncomment this line if you use future GreycStoration implementation with GFact parameter */
+/** Uncomment this line if you use future GreycStoration implementation with GFact parameter
+ */
 #define GREYSTORATION_USING_GFACT 1
 
 // Local includes.
