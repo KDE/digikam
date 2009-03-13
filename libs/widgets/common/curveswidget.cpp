@@ -237,8 +237,8 @@ void CurvesWidget::curveTypeChanged()
 
             for (int i = 0; i <= 8; i++)
             {
-                int index = CLAMP(i * m_imageHistogram->getHistogramSegment()/8,
-                                  0, m_imageHistogram->getHistogramSegment()-1);
+                int index = CLAMP(i * m_imageHistogram->getHistogramSegments()/8,
+                                  0, m_imageHistogram->getHistogramSegments()-1);
 
                 d->curves->setCurvePoint(m_channelType, i * 2, 
                                          QPoint(index, d->curves->getCurveValue(m_channelType, index)));
@@ -418,8 +418,8 @@ void CurvesWidget::paintEvent(QPaintEvent*)
         int    i, j;
         int    curveVal;
 
-        i = (x       * histogram->getHistogramSegment()) / wWidth;
-        j = ((x + 1) * histogram->getHistogramSegment()) / wWidth;
+        i = (x       * histogram->getHistogramSegments()) / wWidth;
+        j = ((x + 1) * histogram->getHistogramSegments()) / wWidth;
 
         curveVal = d->curves->getCurveValue(m_channelType, i);
 
@@ -483,8 +483,8 @@ void CurvesWidget::paintEvent(QPaintEvent*)
         p1.save();
         p1.setRenderHint(QPainter::Antialiasing);
         p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Link), 2, Qt::SolidLine));
-        p1.drawLine(x - 1, wHeight - ((curvePrevVal * wHeight) / histogram->getHistogramSegment()),
-                    x,     wHeight - ((curveVal * wHeight) / histogram->getHistogramSegment()));
+        p1.drawLine(x - 1, wHeight - ((curvePrevVal * wHeight) / histogram->getHistogramSegments()),
+                    x,     wHeight - ((curveVal * wHeight) / histogram->getHistogramSegments()));
 
         p1.restore();
         curvePrevVal = curveVal;
@@ -504,8 +504,8 @@ void CurvesWidget::paintEvent(QPaintEvent*)
 
          if (curvePoint.x() >= 0)
          {
-             p1.drawEllipse( ((curvePoint.x() * wWidth) / histogram->getHistogramSegment()) - 2,
-                             wHeight - 2 - ((curvePoint.y() * wHeight) / histogram->getHistogramSegment()),
+             p1.drawEllipse( ((curvePoint.x() * wWidth) / histogram->getHistogramSegments()) - 2,
+                             wHeight - 2 - ((curvePoint.y() * wHeight) / histogram->getHistogramSegments()),
                              4, 4 );
          }
       }
@@ -567,7 +567,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
 
         if (guidePos != -1)
         {
-            int xGuide = (guidePos * wWidth) / histogram->getHistogramSegment();
+            int xGuide = (guidePos * wWidth) / histogram->getHistogramSegments();
             p1.drawLine(xGuide, 0, xGuide, wHeight);
 
             QString string = i18n("x:%1",guidePos);
@@ -619,11 +619,11 @@ void CurvesWidget::mousePressEvent(QMouseEvent *e)
         return;
 
     int x = CLAMP((int)(e->pos().x() *
-                       ((float)(m_imageHistogram->getHistogramSegment()-1) / (float)width())),
-                    0, m_imageHistogram->getHistogramSegment()-1 );
+                       ((float)(m_imageHistogram->getHistogramSegments()-1) / (float)width())),
+                    0, m_imageHistogram->getHistogramSegments()-1 );
     int y = CLAMP((int)(e->pos().y() *
-                       ((float)(m_imageHistogram->getHistogramSegment()-1) / (float)height())),
-                    0, m_imageHistogram->getHistogramSegment()-1 );
+                       ((float)(m_imageHistogram->getHistogramSegments()-1) / (float)height())),
+                    0, m_imageHistogram->getHistogramSegments()-1 );
 
     distance = 65536;
 
@@ -641,7 +641,7 @@ void CurvesWidget::mousePressEvent(QMouseEvent *e)
         }
     }
 
-    int delta = m_imageHistogram->getHistogramSegment()/16;
+    int delta = m_imageHistogram->getHistogramSegments()/16;
     if (distance > 8)
         closest_point = (x + delta/2) / delta;
 
@@ -664,7 +664,7 @@ void CurvesWidget::mousePressEvent(QMouseEvent *e)
                 }
             }
 
-            d->rightMost = m_imageHistogram->getHistogramSegment();
+            d->rightMost = m_imageHistogram->getHistogramSegments();
 
             for (i = closest_point + 1 ; i < 17 ; i++)
             {
@@ -677,7 +677,7 @@ void CurvesWidget::mousePressEvent(QMouseEvent *e)
 
             d->grabPoint = closest_point;
             d->curves->setCurvePoint(m_channelType, d->grabPoint,
-                                     QPoint(x, m_imageHistogram->getHistogramSegment() - y));
+                                     QPoint(x, m_imageHistogram->getHistogramSegments() - y));
 
             break;
         }
@@ -685,7 +685,7 @@ void CurvesWidget::mousePressEvent(QMouseEvent *e)
         case ImageCurves::CURVE_FREE:
         {
 
-            d->curves->setCurveValue(m_channelType, x, m_imageHistogram->getHistogramSegment() - y);
+            d->curves->setCurveValue(m_channelType, x, m_imageHistogram->getHistogramSegments() - y);
             d->grabPoint = x;
             d->last      = y;
             break;
@@ -722,10 +722,10 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent *e)
    if (d->clearFlag == CurvesWidgetPriv::HistogramStarted)
       return;
 
-   int x = CLAMP( (int)(e->pos().x()*((float)(m_imageHistogram->getHistogramSegment()-1)/(float)width())),
-                  0, m_imageHistogram->getHistogramSegment()-1 );
-   int y = CLAMP( (int)(e->pos().y()*((float)(m_imageHistogram->getHistogramSegment()-1)/(float)height())),
-                  0, m_imageHistogram->getHistogramSegment()-1 );
+   int x = CLAMP( (int)(e->pos().x()*((float)(m_imageHistogram->getHistogramSegments()-1)/(float)width())),
+                  0, m_imageHistogram->getHistogramSegments()-1 );
+   int y = CLAMP( (int)(e->pos().y()*((float)(m_imageHistogram->getHistogramSegments()-1)/(float)height())),
+                  0, m_imageHistogram->getHistogramSegments()-1 );
 
    distance = 65536;
 
@@ -741,7 +741,7 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent *e)
       }
    }
 
-   int delta = m_imageHistogram->getHistogramSegment()/16;
+   int delta = m_imageHistogram->getHistogramSegments()/16;
    if (distance > 8)
       closest_point = (x + delta/2) / delta;
 
@@ -770,7 +770,7 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent *e)
                   d->grabPoint = closest_point;
 
                d->curves->setCurvePoint(m_channelType, d->grabPoint,
-                                        QPoint(x, m_imageHistogram->getHistogramSegment()-1 - y));
+                                        QPoint(x, m_imageHistogram->getHistogramSegments()-1 - y));
             }
 
             d->curves->curvesCalculateCurve(m_channelType);
@@ -803,11 +803,11 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent *e)
            {
               for (i = x1 ; i <= x2 ; i++)
                  d->curves->setCurveValue(m_channelType, i,
-                    m_imageHistogram->getHistogramSegment()-1 - (y1 + ((y2 - y1) * (i - x1)) / (x2 - x1)));
+                    m_imageHistogram->getHistogramSegments()-1 - (y1 + ((y2 - y1) * (i - x1)) / (x2 - x1)));
            }
            else
            {
-              d->curves->setCurveValue(m_channelType, x, m_imageHistogram->getHistogramSegment()-1 - y);
+              d->curves->setCurveValue(m_channelType, x, m_imageHistogram->getHistogramSegments()-1 - y);
            }
 
            d->grabPoint = x;
@@ -821,7 +821,7 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent *e)
    }
 
    d->xMouseOver = x;
-   d->yMouseOver = m_imageHistogram->getHistogramSegment()-1 - y;
+   d->yMouseOver = m_imageHistogram->getHistogramSegments()-1 - y;
    emit signalMouseMoved(d->xMouseOver, d->yMouseOver);
    repaint();
 }

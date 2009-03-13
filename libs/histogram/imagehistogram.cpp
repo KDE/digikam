@@ -122,7 +122,7 @@ ImageHistogram::~ImageHistogram()
     delete d;
 }
 
-int ImageHistogram::getHistogramSegment(void)
+int ImageHistogram::getHistogramSegments(void)
 {
     return d->histoSegments;
 }

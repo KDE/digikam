@@ -79,8 +79,8 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
     histogram->calculate();
 
     // Memory allocation.
-    map          = new double_packet[histogram->getHistogramSegment()];
-    equalize_map = new int_packet[histogram->getHistogramSegment()];
+    map          = new double_packet[histogram->getHistogramSegments()];
+    equalize_map = new int_packet[histogram->getHistogramSegments()];
 
     if( !histogram || !map || !equalize_map )
     {
@@ -103,7 +103,7 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
     memset(&high,      0, sizeof(struct double_packet));
     memset(&low,       0, sizeof(struct double_packet));
 
-    for(i = 0 ; i < histogram->getHistogramSegment() ; i++)
+    for(i = 0 ; i < histogram->getHistogramSegments() ; i++)
     {
        intensity.red   += histogram->getValue(ImageHistogram::RedChannel, i);
        intensity.green += histogram->getValue(ImageHistogram::GreenChannel, i);
@@ -115,25 +115,25 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
     // Stretch the histogram.
 
     low  = map[0];
-    high = map[histogram->getHistogramSegment()-1];
-    memset(equalize_map, 0, histogram->getHistogramSegment()*sizeof(int_packet));
+    high = map[histogram->getHistogramSegments()-1];
+    memset(equalize_map, 0, histogram->getHistogramSegments()*sizeof(int_packet));
 
-    for(i = 0 ; i < histogram->getHistogramSegment() ; i++)
+    for(i = 0 ; i < histogram->getHistogramSegments() ; i++)
     {
        if(high.red != low.red)
-          equalize_map[i].red = (uint)(((256*histogram->getHistogramSegment() -1) *
+          equalize_map[i].red = (uint)(((256*histogram->getHistogramSegments() -1) *
                                 (map[i].red-low.red))/(high.red-low.red));
 
        if(high.green != low.green)
-          equalize_map[i].green = (uint)(((256*histogram->getHistogramSegment() -1) *
+          equalize_map[i].green = (uint)(((256*histogram->getHistogramSegments() -1) *
                                   (map[i].green-low.green))/(high.green-low.green));
 
        if(high.blue != low.blue)
-          equalize_map[i].blue = (uint)(((256*histogram->getHistogramSegment() -1) *
+          equalize_map[i].blue = (uint)(((256*histogram->getHistogramSegments() -1) *
                                  (map[i].blue-low.blue))/(high.blue-low.blue));
 
        if(high.alpha != low.alpha)
-          equalize_map[i].alpha = (uint)(((256*histogram->getHistogramSegment() -1) *
+          equalize_map[i].alpha = (uint)(((256*histogram->getHistogramSegments() -1) *
                                   (map[i].alpha-low.alpha))/(high.alpha-low.alpha));
     }
 
@@ -230,7 +230,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
     histogram->calculate();
 
     // Memory allocation.
-    normalize_map = new int_packet[histogram->getHistogramSegment()];
+    normalize_map = new int_packet[histogram->getHistogramSegments()];
 
     if( !histogram || !normalize_map )
     {
@@ -256,7 +256,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 
     memset(&intensity, 0, sizeof(struct double_packet));
 
-    for(high.red = histogram->getHistogramSegment()-1 ; high.red != 0 ; high.red--)
+    for(high.red = histogram->getHistogramSegments()-1 ; high.red != 0 ; high.red--)
     {
        intensity.red += histogram->getValue(ImageHistogram::RedChannel, (int)high.red);
 
@@ -269,7 +269,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        threshold_intensity = 0;
        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(low.red = 0 ; low.red < histogram->getHistogramSegment()-1 ; low.red++)
+       for(low.red = 0 ; low.red < histogram->getHistogramSegments()-1 ; low.red++)
        {
           intensity.red += histogram->getValue(ImageHistogram::RedChannel, (int)low.red);
 
@@ -279,7 +279,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 
        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(high.red = histogram->getHistogramSegment()-1 ; high.red != 0 ; high.red--)
+       for(high.red = histogram->getHistogramSegments()-1 ; high.red != 0 ; high.red--)
        {
           intensity.red += histogram->getValue(ImageHistogram::RedChannel, (int)high.red);
 
@@ -292,7 +292,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 
     memset(&intensity, 0, sizeof(struct double_packet));
 
-    for(high.green = histogram->getHistogramSegment()-1 ; high.green != 0 ; high.green--)
+    for(high.green = histogram->getHistogramSegments()-1 ; high.green != 0 ; high.green--)
     {
        intensity.green += histogram->getValue(ImageHistogram::GreenChannel, (int)high.green);
 
@@ -305,7 +305,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        threshold_intensity = 0;
        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(low.green = 0 ; low.green < histogram->getHistogramSegment()-1 ; low.green++)
+       for(low.green = 0 ; low.green < histogram->getHistogramSegments()-1 ; low.green++)
        {
           intensity.green += histogram->getValue(ImageHistogram::GreenChannel, (int)low.green);
 
@@ -315,7 +315,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 
        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(high.green = histogram->getHistogramSegment()-1 ; high.green != 0 ; high.green--)
+       for(high.green = histogram->getHistogramSegments()-1 ; high.green != 0 ; high.green--)
        {
           intensity.green += histogram->getValue(ImageHistogram::GreenChannel, (int)high.green);
 
@@ -328,7 +328,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 
     memset(&intensity, 0, sizeof(struct double_packet));
 
-    for(high.blue = histogram->getHistogramSegment()-1 ; high.blue != 0 ; high.blue--)
+    for(high.blue = histogram->getHistogramSegments()-1 ; high.blue != 0 ; high.blue--)
     {
        intensity.blue += histogram->getValue(ImageHistogram::BlueChannel, (int)high.blue);
 
@@ -341,7 +341,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        threshold_intensity = 0;
        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(low.blue = 0 ; low.blue < histogram->getHistogramSegment()-1 ; low.blue++)
+       for(low.blue = 0 ; low.blue < histogram->getHistogramSegments()-1 ; low.blue++)
        {
           intensity.blue += histogram->getValue(ImageHistogram::BlueChannel, (int)low.blue);
 
@@ -351,7 +351,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 
        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(high.blue = histogram->getHistogramSegment()-1 ; high.blue != 0 ; high.blue--)
+       for(high.blue = histogram->getHistogramSegments()-1 ; high.blue != 0 ; high.blue--)
        {
           intensity.blue += histogram->getValue(ImageHistogram::BlueChannel, (int)high.blue);
 
@@ -364,7 +364,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 
     memset(&intensity, 0, sizeof(struct double_packet));
 
-    for(high.alpha = histogram->getHistogramSegment()-1 ; high.alpha != 0 ; high.alpha--)
+    for(high.alpha = histogram->getHistogramSegments()-1 ; high.alpha != 0 ; high.alpha--)
     {
        intensity.alpha += histogram->getValue(ImageHistogram::AlphaChannel, (int)high.alpha);
 
@@ -377,7 +377,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        threshold_intensity = 0;
        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(low.alpha = 0 ; low.alpha < histogram->getHistogramSegment()-1 ; low.alpha++)
+       for(low.alpha = 0 ; low.alpha < histogram->getHistogramSegments()-1 ; low.alpha++)
        {
           intensity.alpha += histogram->getValue(ImageHistogram::AlphaChannel, (int)low.alpha);
 
@@ -387,7 +387,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 
        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(high.alpha = histogram->getHistogramSegment()-1 ; high.alpha != 0 ; high.alpha--)
+       for(high.alpha = histogram->getHistogramSegments()-1 ; high.alpha != 0 ; high.alpha--)
        {
           intensity.alpha += histogram->getValue(ImageHistogram::AlphaChannel, (int)high.alpha);
 
@@ -400,37 +400,37 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 
     // Stretch the histogram to create the normalized image mapping.
 
-    memset(normalize_map, 0, histogram->getHistogramSegment()*sizeof(struct int_packet));
+    memset(normalize_map, 0, histogram->getHistogramSegments()*sizeof(struct int_packet));
 
-    for(i = 0 ; i <= (long)histogram->getHistogramSegment()-1 ; i++)
+    for(i = 0 ; i <= (long)histogram->getHistogramSegments()-1 ; i++)
     {
        if(i < (long) low.red)
           normalize_map[i].red = 0;
        else if (i > (long) high.red)
-          normalize_map[i].red = (256*histogram->getHistogramSegment() -1);
+          normalize_map[i].red = (256*histogram->getHistogramSegments() -1);
        else if (low.red != high.red)
-          normalize_map[i].red = (int)(((256*histogram->getHistogramSegment() -1)*(i-low.red))/(high.red-low.red));
+          normalize_map[i].red = (int)(((256*histogram->getHistogramSegments() -1)*(i-low.red))/(high.red-low.red));
 
        if(i < (long) low.green)
           normalize_map[i].green = 0;
        else if (i > (long) high.green)
-          normalize_map[i].green = (256*histogram->getHistogramSegment() -1);
+          normalize_map[i].green = (256*histogram->getHistogramSegments() -1);
        else if (low.green != high.green)
-          normalize_map[i].green = (int)(((256*histogram->getHistogramSegment() -1)*(i-low.green))/(high.green-low.green));
+          normalize_map[i].green = (int)(((256*histogram->getHistogramSegments() -1)*(i-low.green))/(high.green-low.green));
 
        if(i < (long) low.blue)
           normalize_map[i].blue = 0;
        else if (i > (long) high.blue)
-          normalize_map[i].blue = (256*histogram->getHistogramSegment() -1);
+          normalize_map[i].blue = (256*histogram->getHistogramSegments() -1);
        else if (low.blue != high.blue)
-          normalize_map[i].blue = (int)(((256*histogram->getHistogramSegment() -1)*(i-low.blue))/(high.blue-low.blue));
+          normalize_map[i].blue = (int)(((256*histogram->getHistogramSegments() -1)*(i-low.blue))/(high.blue-low.blue));
 
        if(i < (long) low.alpha)
           normalize_map[i].alpha = 0;
        else if (i > (long) high.alpha)
-          normalize_map[i].alpha = (256*histogram->getHistogramSegment() -1);
+          normalize_map[i].alpha = (256*histogram->getHistogramSegments() -1);
        else if (low.alpha != high.alpha)
-          normalize_map[i].alpha = (int)(((256*histogram->getHistogramSegment() -1)*(i-low.alpha))/(high.alpha-low.alpha));
+          normalize_map[i].alpha = (int)(((256*histogram->getHistogramSegments() -1)*(i-low.alpha))/(high.alpha-low.alpha));
     }
 
     // Apply result to image.
