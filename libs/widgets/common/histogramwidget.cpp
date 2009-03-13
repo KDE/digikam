@@ -392,7 +392,7 @@ void HistogramWidget::updateData(uchar *i_data, uint i_w, uint i_h,
     // We are deleting the histogram data, so we must not use it to draw any more.
     d->clearFlag = HistogramWidgetPriv::HistogramNone;
 
-    // Do not using ImageHistogram::getHistogramSegment()
+    // Do not using ImageHistogram::getHistogramSegments()
     // method here because histogram hasn't yet been computed.
     d->range = d->sixteenBits ? 65535 : 255;
     emit signalMaximumValueChanged( d->range );
@@ -631,8 +631,8 @@ void HistogramWidget::paintEvent(QPaintEvent*)
       double value_r = 0.0, value_g = 0.0, value_b = 0.0; // For all color channels.
       int    i, j;
 
-      i = (x       * histogram->getHistogramSegment()) / wWidth;
-      j = ((x + 1) * histogram->getHistogramSegment()) / wWidth;
+      i = (x       * histogram->getHistogramSegments()) / wWidth;
+      j = ((x + 1) * histogram->getHistogramSegments()) / wWidth;
 
       do
       {
@@ -1004,7 +1004,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
 
        if (guidePos != -1)
        {
-          int xGuide = (guidePos * wWidth) / histogram->getHistogramSegment();
+          int xGuide = (guidePos * wWidth) / histogram->getHistogramSegments();
           p1.drawLine(xGuide, 0, xGuide, wHeight);
 
           QString string = i18n("x:%1", guidePos);
@@ -1039,7 +1039,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
        tipText = "<qt><table cellspacing=0 cellpadding=0>";
 
        tipText += cnt.cellBeg + i18n("Mean:") + cnt.cellMid;
-       double mean = histogram->getMean(m_channelType, 0, histogram->getHistogramSegment()-1);
+       double mean = histogram->getMean(m_channelType, 0, histogram->getHistogramSegments()-1);
        tipText += value.setNum(mean, 'f', 1) + cnt.cellEnd;
 
        tipText += cnt.cellBeg + i18n("Pixels:") + cnt.cellMid;
@@ -1047,15 +1047,15 @@ void HistogramWidget::paintEvent(QPaintEvent*)
        tipText += value.setNum((float)pixels, 'f', 0) + cnt.cellEnd;
 
        tipText += cnt.cellBeg + i18n("Std dev.:") + cnt.cellMid;
-       double stddev = histogram->getStdDev(m_channelType, 0, histogram->getHistogramSegment()-1);
+       double stddev = histogram->getStdDev(m_channelType, 0, histogram->getHistogramSegments()-1);
        tipText += value.setNum(stddev, 'f', 1) + cnt.cellEnd;
 
        tipText += cnt.cellBeg + i18n("Count:") + cnt.cellMid;
-       double counts = histogram->getCount(m_channelType, 0, histogram->getHistogramSegment()-1);
+       double counts = histogram->getCount(m_channelType, 0, histogram->getHistogramSegments()-1);
        tipText += value.setNum((float)counts, 'f', 0) + cnt.cellEnd;
 
        tipText += cnt.cellBeg + i18n("Median:") + cnt.cellMid;
-       double median = histogram->getMedian(m_channelType, 0, histogram->getHistogramSegment()-1);
+       double median = histogram->getMedian(m_channelType, 0, histogram->getHistogramSegments()-1);
        tipText += value.setNum(median, 'f', 1) + cnt.cellEnd;
 
        tipText += cnt.cellBeg + i18n("Percent:") + cnt.cellMid;
@@ -1120,7 +1120,7 @@ void HistogramWidget::mouseMoveEvent ( QMouseEvent * e )
        if (d->inSelected)
        {
           double max = ((double)e->pos().x()) / ((double)width());
-          //int max = (int)(e->pos().x()*((float)m_imageHistogram->getHistogramSegment()/(float)width()));
+          //int max = (int)(e->pos().x()*((float)m_imageHistogram->getHistogramSegments()/(float)width()));
 
           if (max < d->xminOrg)
           {
