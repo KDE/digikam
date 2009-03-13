@@ -40,6 +40,7 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
+#include <kstringhandler.h>
 
 // Local includes.
 
@@ -82,6 +83,8 @@ public:
     void    setOpen(bool o);
     void    setCount(int count);
     int     count();
+    int     compare(Q3ListViewItem *i, int col, bool ascending) const;
+
 
 private:
 
@@ -89,6 +92,11 @@ private:
 
     TAlbum *m_album;
 };
+
+int TagFolderViewItem::compare(Q3ListViewItem *i, int col, bool ascending) const
+{
+    return KStringHandler::naturalCompare(key(col, ascending), i->key(col, ascending));
+}
 
 TagFolderViewItem::TagFolderViewItem(Q3ListView *parent, TAlbum *album)
                  : FolderItem(parent, album->title())

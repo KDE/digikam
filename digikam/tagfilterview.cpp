@@ -49,6 +49,7 @@
 #include <kmessagebox.h>
 #include <kglobal.h>
 #include <kselectaction.h>
+#include <kstringhandler.h>
 
 // Local includes.
 
@@ -196,7 +197,7 @@ int TagFilterViewItem::compare(Q3ListViewItem* i, int column, bool ascending) co
     if (dItem && dItem->m_untagged)
         return -1;
 
-    return Q3ListViewItem::compare(i, column, ascending);
+    return KStringHandler::naturalCompare(key(column, ascending), i->key(column, ascending));
 }
 
 void TagFilterViewItem::paintCell(QPainter* p, const QColorGroup & cg, int column, int width, int align)

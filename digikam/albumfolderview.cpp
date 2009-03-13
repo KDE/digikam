@@ -53,6 +53,7 @@
 #include <klocale.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
+#include <kstringhandler.h>
 
 // Local includes.
 
@@ -175,7 +176,9 @@ bool AlbumFolderViewItem::isGroupItem() const
 int AlbumFolderViewItem::compare(Q3ListViewItem *i, int col, bool ascending) const
 {
     if (!m_groupItem || m_year == 0 || m_month == 0)
-        return Q3ListViewItem::compare(i, col, ascending);
+    {
+        return KStringHandler::naturalCompare(key(col, ascending), i->key(col, ascending));
+    }
 
     AlbumFolderViewItem* thatItem = dynamic_cast<AlbumFolderViewItem*>(i);
     if (!thatItem)

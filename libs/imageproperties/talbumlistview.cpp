@@ -44,6 +44,7 @@
 #include <kconfig.h>
 #include <kglobalsettings.h>
 #include <kdialog.h>
+#include <kstringhandler.h>
 
 // Local includes.
 
@@ -146,6 +147,11 @@ void TAlbumCheckListItem::setCount(int count)
 int TAlbumCheckListItem::count()
 {
     return m_count;
+}
+
+int TAlbumCheckListItem::compare(Q3ListViewItem *i, int col, bool ascending) const
+{
+    return KStringHandler::naturalCompare(key(col, ascending), i->key(col, ascending));
 }
 
 void TAlbumCheckListItem::setStatus(MetadataHub::TagStatus status)
