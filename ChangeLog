@@ -1,3 +1,164 @@
+0.9.5 2009-03-15
+-------------------------------------------------------------------------
+
+2009-03-09 08:08  cgilles
+
+	* libs/greycstoration/greycstorationiface.cpp: sync with trunk
+
+2009-02-28 20:28  cgilles
+
+	* data/themes/DarkRoom, data/themes/Makefile.am: backport commit
+	  #933385
+
+2009-02-28 16:56  cgilles
+
+	* imageplugins/coreplugin/imageplugin_core.cpp: backport commit
+	  #933318.
+
+2009-02-24 18:50  cgilles
+
+	* NEWS: update
+
+2009-02-22 08:29  cgilles
+
+	* utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/editor/editortooliface.h: backport commit
+	  #929686 to kde3 branch
+	  BUG: 182212
+
+2009-02-19 14:05  cgilles
+
+	* imageplugins/inpainting/imageplugin_inpainting.cpp,
+	  imageplugins/inpainting/imageplugin_inpainting.h,
+	  imageplugins/inpainting/inpaintingtool.cpp,
+	  imageplugins/inpainting/inpaintingtool.h: sync with trunk
+	  BUG: 184731
+
+2009-02-19 13:06  cgilles
+
+	* libs/dimg/loaders/pngloader.cpp: sync with trunk
+
+2009-02-18 12:10  cgilles
+
+	* libs/jpegutils/jpegutils.cpp: compile
+
+2009-02-18 11:50  cgilles
+
+	* NEWS: update
+
+2009-02-18 11:45  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h: kill current thread
+	  with multithreaded Editor Tools when slotAbort() is called
+	  CCBUGS: 184731
+
+2009-02-18 11:33  cgilles
+
+	* libs/greycstoration/CImg.h, libs/greycstoration/greycstoration.h:
+	  update CImg to 1.3.0
+
+2009-02-16 20:42  cgilles
+
+	* libs/jpegutils/jpegutils.cpp, libs/jpegutils/jpegutils.h: tmp
+	  file is jpeg
+
+2009-02-04 11:12  cgilles
+
+	* libs/dimg/loaders/pngloader.cpp, libs/dimg/loaders/pngloader.h:
+	  backport commit #921033 from trunk
+	  CCBUG: 151552
+
+2009-02-03 14:09  cgilles
+
+	* NEWS: update
+
+2009-02-01 17:53  cgilles
+
+	* digikam/albumwidgetstack.cpp, digikam/albumwidgetstack.h,
+	  digikam/digikamview.cpp, digikam/digikamview.h,
+	  digikam/imagepreviewview.cpp, digikam/imagepreviewview.h:
+	  backport commit #919853 from trunk
+	  CCBUG: 182754
+
+2009-02-01 16:00  aclemens
+
+	* digikam/albumfolderview.cpp, digikam/folderview.cpp,
+	  digikam/searchfolderview.cpp, digikam/tagfilterview.cpp,
+	  digikam/tagfilterview.h, digikam/tagfolderview.cpp,
+	  digikam/timelinefolderview.cpp, digikam/timelinefolderview.h,
+	  libs/imageproperties/imagedescedittab.cpp,
+	  libs/imageproperties/imagedescedittab.h,
+	  libs/imageproperties/talbumlistview.cpp,
+	  libs/imageproperties/talbumlistview.h: backport commit #919579
+	  from KDE4 trunk
+	  
+	  CCBUG:148166
+
+2009-02-01 14:28  aclemens
+
+	* NEWS: update
+
+2009-01-31 16:02  cgilles
+
+	* utilities/cameragui/cameraiconview.cpp,
+	  utilities/cameragui/cameraiconview.h: digiKam from KDE3 branch:
+	  CameraGUI : adapt count of selected item to new ordering :
+	  - rescent item (on the top of icon view) = upper value.
+	  - older item (on the bottom of icon view) = lower value.
+	  CCBUG: 182352
+
+2009-01-31 15:18  cgilles
+
+	* digikam/iconitem.cpp: polish
+
+2009-01-31 13:43  cgilles
+
+	* utilities/cameragui/cameracontroller.cpp,
+	  utilities/cameragui/cameracontroller.h: backport commit #919064
+	  from trunk
+
+2009-01-29 08:54  cgilles
+
+	* NEWS: update
+
+2009-01-28 19:19  cgilles
+
+	* utilities/cameragui/animwidget.cpp,
+	  utilities/cameragui/animwidget.h: fix memory leak
+
+2009-01-28 18:23  cgilles
+
+	* NEWS, digikam.lsm, digikam/daboutdata.h: bump version
+
+2009-01-28 18:20  cgilles
+
+	* utilities/cameragui/dkcamera.cpp, utilities/cameragui/dkcamera.h:
+	  backport commit #917883 from trunk
+
+2009-01-27 14:45  cgilles
+
+	* README: fix Qt url
+
+2009-01-27 12:13  cgilles
+
+	* release_digikam.rb: update
+
+2009-01-27 12:12  cgilles
+
+	* ChangeLog: beta3
+
+2009-01-27 11:46  cgilles
+
+	* NEWS, digikam.lsm: prepare beta3
+
+2009-01-27 10:56  cgilles
+
+	* digikam/albumiconviewfilter.cpp, digikam/albumlister.cpp,
+	  digikam/albumlister.h: digiKam from KDE3 branche : backport
+	  commit #917103 from trunk
+	  CCBUG: 181705
+
 0.9.5-beta3 2009-01-27
 -------------------------------------------------------------------------
 
