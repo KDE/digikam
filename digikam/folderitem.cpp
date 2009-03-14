@@ -271,6 +271,7 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup& cg, int colu
 
     p->drawText(r, 0, width-margin-r, height(), Qt::AlignLeft|Qt::AlignVCenter, t);
 
+    p->setBrush(QBrush());
     if (m_highlighted)
     {
         p->setPen(cg.color(QColorGroup::Link));
