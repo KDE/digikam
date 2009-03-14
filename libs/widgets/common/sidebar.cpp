@@ -323,7 +323,10 @@ void Sidebar::switchTabAndStackToTab(int tab)
 
 QWidget* Sidebar::getActiveTab()
 {
-    return d->stack->currentWidget();
+    if (d->splitter)
+        return d->stack->currentWidget();
+    else
+        return 0;
 }
 
 void Sidebar::shrink()
