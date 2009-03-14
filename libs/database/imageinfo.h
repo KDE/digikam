@@ -264,6 +264,7 @@ inline uint qHash(const ImageInfo &info) { return info.hash(); }
 
 }  // namespace Digikam
 
+Q_DECLARE_TYPEINFO(Digikam::ImageInfo, Q_MOVABLE_TYPE);
 Q_DECLARE_METATYPE(Digikam::ImageInfo)
 
 #endif /* IMAGEINFO_H */
