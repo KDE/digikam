@@ -40,7 +40,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 030 ==> 186205 : Can't open photo in the external application from digiKam.
 031 ==> 158868 : Non natural album sorting.
 032 ==> 187015 : Libraw 0.6.16 breaks RW2 file handling.
-033 ==> 
+033 ==> 187095 : images are not displayed at central panel.
+034 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc2 - Release date: 2009-02-15
