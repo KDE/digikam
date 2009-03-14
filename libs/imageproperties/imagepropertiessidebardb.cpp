@@ -359,6 +359,8 @@ void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset &cha
     if (!d->currentInfos.isEmpty())
     {
         QWidget *tab = getActiveTab();
+        if (!tab) return;
+
         if (tab == m_propertiesTab || tab == m_gpsTab)
         {
             ImageInfo &info = d->currentInfos.first();
