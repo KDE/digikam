@@ -360,7 +360,11 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
 ImageDescEditTab::~ImageDescEditTab()
 {
-    slotChangingItems();
+    // FIXME: this slot seems to be called several times, which can also be seen when changing the metadata of
+    // an image and then switching to another one, because you'll get the dialog created by slotChangingItems()
+    // twice, and this seems to be exactly the problem when called here.
+    // We should disable the slot here at the moment, otherwise digikam crashes.
+//    slotChangingItems();
 
     /*
     AlbumList tList = AlbumManager::instance().allTAlbums();
