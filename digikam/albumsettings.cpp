@@ -1277,6 +1277,7 @@ bool AlbumSettings::getPreviewLoadFullImageSize() const
 void AlbumSettings::setRecurseAlbums(bool val)
 {
     d->recursiveAlbums = val;
+    emit recurseSettingsChanged();
 }
 
 bool AlbumSettings::getRecurseAlbums() const
@@ -1287,6 +1288,7 @@ bool AlbumSettings::getRecurseAlbums() const
 void AlbumSettings::setRecurseTags(bool val)
 {
     d->recursiveTags = val;
+    emit recurseSettingsChanged();
 }
 
 bool AlbumSettings::getRecurseTags() const

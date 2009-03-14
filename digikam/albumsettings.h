@@ -78,6 +78,8 @@ Q_SIGNALS:
 
     void setupChanged();
 
+    void recurseSettingsChanged();
+
 public:
 
     static AlbumSettings *instance();
