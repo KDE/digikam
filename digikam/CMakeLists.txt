@@ -27,6 +27,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/sqlite2
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/haar
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models
 
                      # shared utilities
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/slideshow
@@ -153,6 +154,7 @@ ENDFOREACH(_curentfile ${libsqlite2_SRCS})
 
 SET(digikamdatabase_LIB_SRCS ${libdatabase_SRCS}
                              ${libhaar_SRCS}
+                             ${libdatabasemodels_SRCS}
                              ${libsqlite2_SRCS}
    )
 
@@ -191,6 +193,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libgpssearch_SRCS}
                  ${libtimeline_SRCS}
                  ${libqueuemanager_SRCS}
+                 ${libalbummodels_SRCS}
                  ${libdigikamgui_SRCS}
 
                  main.cpp

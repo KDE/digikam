@@ -732,6 +732,17 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar/haariface.cpp
        )
 
+    SET(libdatabasemodels_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagemodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltermodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltersettings.cpp
+       )
+
+    SET(libalbummodels_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagealbummodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagealbumfiltermodel.cpp
+       )
+
     SET(liblighttable_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablepreview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttableview.cpp
