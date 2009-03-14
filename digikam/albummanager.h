@@ -310,6 +310,11 @@ public:
     bool updatePAlbumIcon(PAlbum *album, qlonglong iconID, QString& errMsg);
     //@}
 
+    /**
+     * @return A hash with the titles for all album IDs.
+     */
+    QHash<int, QString> albumTitles() const;
+
     /** @name Operations on TAlbum
      */
     //@{
@@ -393,16 +398,26 @@ public:
     AlbumList getRecentlyAssignedTags() const;
 
     /**
-     * @return A list with the tagPaths for a list of tag IDs.
+     * @return A list with the tag paths for a list of tag IDs.
      * @param tagIDs list of tag album IDs
      */
     QStringList tagPaths(const QList<int> &tagIDs, bool leadingSlash=true) const;
 
     /**
-     * @return A list with the tagPaths for a list of tag IDs.
+     * @return A list with the tag names for a list of tag IDs.
      * @param tagIDs list of tag album IDs
      */
     QStringList tagNames(const QList<int> &tagIDs) const;
+
+    /**
+     * @return A hash with the tag paths for all tag IDs.
+     */
+    QHash<int, QString> tagPaths(bool leadingSlash=true) const;
+
+    /**
+     * @return A hash with the tag names for all tag IDs.
+     */
+    QHash<int, QString> tagNames() const;
 
     //@}
 

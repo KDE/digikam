@@ -2011,6 +2011,45 @@ QStringList AlbumManager::tagNames(const QList<int> &tagIDs) const
     return tagNames;
 }
 
+QHash<int, QString> AlbumManager::tagPaths(bool leadingSlash) const
+{
+    QHash<int, QString> hash;
+    AlbumIterator it(d->rootTAlbum);
+    while (it.current())
+    {
+        TAlbum* t = (TAlbum*)(*it);
+        hash.insert(t->id(), t->tagPath(leadingSlash));
+        ++it;
+    }
+    return hash;
+}
+
+QHash<int, QString> AlbumManager::tagNames() const
+{
+    QHash<int, QString> hash;
+    AlbumIterator it(d->rootTAlbum);
+    while (it.current())
+    {
+        TAlbum* t = (TAlbum*)(*it);
+        hash.insert(t->id(), t->title());
+        ++it;
+    }
+    return hash;
+}
+
+QHash<int, QString> AlbumManager::albumTitles() const
+{
+    QHash<int, QString> hash;
+    AlbumIterator it(d->rootPAlbum);
+    while (it.current())
+    {
+        PAlbum* a = (PAlbum*)(*it);
+        hash.insert(a->id(), a->title());
+        ++it;
+    }
+    return hash;
+}
+
 SAlbum* AlbumManager::createSAlbum(const QString &name, DatabaseSearch::Type type, const QString &query)
 {
     // first iterate through all the search albums and see if there's an existing
