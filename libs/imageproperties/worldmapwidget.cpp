@@ -156,7 +156,7 @@ void WorldMapWidget::setGPSPositions(const GPSInfoList& list)
     {
         d->marbleWidget->setHome(lng, lat);
         d->marbleWidget->centerOn(lng, lat);
-        d->marbleWidget->addPlaceMarkData(kmlDocument.toString());
+        d->marbleWidget->addPlacemarkData(kmlDocument.toString());
     }
 #else // MARBLE_VERSION
 
