@@ -685,7 +685,7 @@ bool ImageDescEditTab::eventFilter(QObject *, QEvent *e)
 {
     if ( e->type() == QEvent::KeyPress )
     {
-        QKeyEvent *k = (QKeyEvent *)e;
+        QKeyEvent *k = static_cast<QKeyEvent *>(e);
         if (k->modifiers() == Qt::ControlModifier &&
             (k->key() == Qt::Key_Enter || k->key() == Qt::Key_Return))
         {
