@@ -103,6 +103,12 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, SidebarSplit
     connect(d->desceditTab, SIGNAL(signalProgressValue(int)),
             this, SIGNAL(signalProgressValue(int)));
 
+    connect(d->desceditTab, SIGNAL(signalNextItem()),
+            this, SIGNAL(signalNextItem()));
+
+    connect(d->desceditTab, SIGNAL(signalPrevItem()),
+            this, SIGNAL(signalPrevItem()));
+
     DatabaseWatch *dbwatch = DatabaseAccess::databaseWatch();
 
     connect(dbwatch, SIGNAL(imageChange(const ImageChangeset &)),

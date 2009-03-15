@@ -686,22 +686,22 @@ bool ImageDescEditTab::eventFilter(QObject *, QEvent *e)
     if ( e->type() == QEvent::KeyPress )
     {
         QKeyEvent *k = static_cast<QKeyEvent *>(e);
-        if (k->modifiers() == Qt::ControlModifier &&
-            (k->key() == Qt::Key_Enter || k->key() == Qt::Key_Return))
-        {
-            emit signalNextItem();
-            return true;
-        }
-        else if (k->modifiers() == Qt::ShiftModifier &&
-                 (k->key() == Qt::Key_Enter || k->key() == Qt::Key_Return))
-        {
-            emit signalPrevItem();
-            return true;
-        }
 
+        if (k->key() == Qt::Key_Enter || k->key() == Qt::Key_Return)
+        {
+            if (k->modifiers() == Qt::ControlModifier)
+                    {
+                emit signalNextItem();
+                return true;
+                    }
+            else if (k->modifiers() == Qt::ShiftModifier)
+            {
+                emit signalPrevItem();
+                return true;
+            }
+        }
         return false;
     }
-
     return false;
 }
 
