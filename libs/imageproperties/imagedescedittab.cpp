@@ -621,8 +621,7 @@ void ImageDescEditTab::setInfos(const ImageInfoList &infos)
     updateRating();
     updateDate();
     updateTagsView();
-    if (d->lastSelectedWidget)
-        d->lastSelectedWidget->setFocus();
+    focusLastSelectedWidget();
 }
 
 void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
@@ -1839,6 +1838,14 @@ void ImageDescEditTab::slotCreateNewTag()
     }
 
     d->newTagEdit->clear();
+}
+
+void ImageDescEditTab::focusLastSelectedWidget()
+{
+    if (d->lastSelectedWidget)
+        d->lastSelectedWidget->setFocus();
+
+    d->lastSelectedWidget = 0;
 }
 
 }  // namespace Digikam

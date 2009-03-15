@@ -77,6 +77,7 @@ protected:
 private:
 
     void setInfos(const ImageInfoList &infos);
+    void focusLastSelectedWidget();
 
     void updateTagsView();
     void updateComments();
