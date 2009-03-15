@@ -643,7 +643,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->deleteAction = new KAction(KIcon("user-trash"), i18n("Delete"), this);
+    d->deleteAction = new KAction(KIcon("albumfolder-user-trash"), i18n("Delete"), this);
     connect(d->deleteAction, SIGNAL(triggered()), d->view, SLOT(slotDeleteAlbum()));
     actionCollection()->addAction("album_delete", d->deleteAction);
 

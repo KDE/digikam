@@ -557,8 +557,11 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
 
     QAction *renameAction, *resetIconAction, *deleteAction = 0;
 
+    // FIXME: use the same icon for both actions? If not, maybe we need to have a second one that is
+    // showing a trashcan or something like that? Right now the icon looks more like a permanent delete,
+    // not like a trash action.
     if(AlbumSettings::instance()->getUseTrash())
-        deleteAction = new QAction(SmallIcon("user-trash"), i18n("Move Album to Trash"), this);
+        deleteAction = new QAction(SmallIcon("albumfolder-user-trash"), i18n("Move Album to Trash"), this);
     else
         deleteAction = new QAction(SmallIcon("edit-delete-shred"), i18n("Delete Album"), this);
 
