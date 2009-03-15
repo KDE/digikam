@@ -108,6 +108,7 @@ public:
         recentTagsMapper           = 0;
         newTagEdit                 = 0;
         toggleAutoTags             = TagFilterView::NoToggleAuto;
+        lastSelectedWidget         = 0;
     }
 
     bool                           modified;
@@ -124,6 +125,8 @@ public:
 
     QPushButton                   *applyBtn;
     QPushButton                   *moreButton;
+
+    QWidget                       *lastSelectedWidget;
 
     KTextEdit                     *commentsEdit;
 
@@ -618,6 +621,8 @@ void ImageDescEditTab::setInfos(const ImageInfoList &infos)
     updateRating();
     updateDate();
     updateTagsView();
+    if (d->lastSelectedWidget)
+        d->lastSelectedWidget->setFocus();
 }
 
 void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
@@ -681,7 +686,7 @@ void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
 }
 
-bool ImageDescEditTab::eventFilter(QObject *, QEvent *e)
+bool ImageDescEditTab::eventFilter(QObject *o, QEvent *e)
 {
     if ( e->type() == QEvent::KeyPress )
     {
@@ -691,11 +696,13 @@ bool ImageDescEditTab::eventFilter(QObject *, QEvent *e)
         {
             if (k->modifiers() == Qt::ControlModifier)
             {
+                d->lastSelectedWidget = qobject_cast<QWidget*>(o);
                 emit signalNextItem();
                 return true;
             }
             else if (k->modifiers() == Qt::ShiftModifier)
             {
+                d->lastSelectedWidget = qobject_cast<QWidget*>(o);
                 emit signalPrevItem();
                 return true;
             }
