@@ -56,7 +56,7 @@ public:
 
 private Q_SLOTS:
 
-    void slotTimeout();
+    void slotProgressTimerDone();
     void slotProcessUrl(const QString&);
 
 private:

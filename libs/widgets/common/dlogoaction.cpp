@@ -60,30 +60,19 @@ public:
 
     DLogoActionPriv()
     {
-        alignOnright = true;
-        timer        = 0;
-        urlLabel     = 0;
-        angle        = 0;
-
-        // NOTE: rotation of logo is adapted to an exported PNG file generated from
-        // digikam/data/pics/banner-digikam.svgz and digikam/data/pics/banner-showfoto.svgz
-        // using height of 33 pixels.
-        logoCenter   = QPoint(125, 16);
-        logoRect     = QRect(109, 0, 33, 33);
+        alignOnright   = true;
+        progressTimer  = 0;
+        urlLabel       = 0;
+        progressCount  = 0;
     }
 
     bool       alignOnright;
 
-    int        angle;
+    int        progressCount;         // Position of animation.
 
-    QTimer    *timer;
+    QTimer    *progressTimer;
 
-    QPoint     logoCenter;
-    QRect      logoRect;
-
-    QPixmap    bannerPix;
-    QPixmap    logoPix;
-    QPixmap    animPix;
+    QPixmap    progressPixmap;
 
     KUrlLabel *urlLabel;
 };
@@ -92,23 +81,22 @@ DLogoAction::DLogoAction(QObject* parent, bool alignOnright)
            : KAction(parent), d(new DLogoActionPriv)
 {
     setText("digikam.org");
-    if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
+//    if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
     {
         setIcon(KIcon("digikam"));
-        d->bannerPix = QPixmap(KStandardDirs::locate("data", "digikam/data/banner-digikam.png"));
+        d->progressPixmap = QPixmap(KStandardDirs::locate("data", "digikam/data/banner-digikam.png"));
     }
-    else
+/*    else
     {
         setIcon(KIcon("showfoto"));
-        d->bannerPix = QPixmap(KStandardDirs::locate("data", "showfoto/data/banner-showfoto.png"));
+        d->progressPixmap = QPixmap(KStandardDirs::locate("data", "showfoto/data/banner-showfoto.png"));
     }
+*/
+    d->alignOnright  = alignOnright;
+    d->progressTimer = new QTimer(this);
 
-    d->logoPix      = d->bannerPix.copy(d->logoRect);
-    d->alignOnright = alignOnright;
-    d->timer        = new QTimer(this);
-
-    connect(d->timer, SIGNAL(timeout()),
-            this, SLOT(slotTimeout()));
+    connect(d->progressTimer, SIGNAL(timeout()),
+            this, SLOT(slotProgressTimerDone()));
 }
 
 DLogoAction::~DLogoAction()
@@ -118,38 +106,33 @@ DLogoAction::~DLogoAction()
 
 void DLogoAction::start()
 {
-    d->angle = 0;
-    d->timer->start(100);
+    d->progressCount = 0;
+    d->progressTimer->start(100);
 }
 
 void DLogoAction::stop()
 {
-    d->angle = 0;
-    d->timer->stop();
+    d->progressCount = 0;
+    d->progressTimer->stop();
     if (d->urlLabel)
-        d->urlLabel->setPixmap(d->bannerPix);
+        d->urlLabel->setPixmap(d->progressPixmap.copy(0, 0, 144, 32));
 }
 
 bool DLogoAction::running() const
 {
-    return d->timer->isActive();
+    return d->progressTimer->isActive();
 }
 
-void DLogoAction::slotTimeout()
+void DLogoAction::slotProgressTimerDone()
 {
-    d->angle   = (d->angle + 10) % 360;
-    d->animPix = d->bannerPix;
-
-    QPainter p(&d->animPix);
-    p.setRenderHint(QPainter::SmoothPixmapTransform);
-    p.setClipRect(d->logoRect);
-    p.translate(d->logoCenter);
-    p.rotate(d->angle);
-    p.drawPixmap(-d->logoCenter.y(), -d->logoCenter.y(), d->logoPix);
-    p.end();
+    QPixmap anim(d->progressPixmap.copy(0, d->progressCount*32, 144, 32));
+    d->progressCount++;
+    if (d->progressCount == 36) d->progressCount = 0;
 
     if (d->urlLabel)
-        d->urlLabel->setPixmap(d->animPix);
+        d->urlLabel->setPixmap(anim);
+
+    d->progressTimer->start(100);
 }
 
 QWidget* DLogoAction::createWidget(QWidget * parent)
@@ -161,7 +144,7 @@ QWidget* DLogoAction::createWidget(QWidget * parent)
     d->urlLabel->setScaledContents(false);
     d->urlLabel->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
     d->urlLabel->setToolTip(i18n("Visit digiKam project website"));
-    d->urlLabel->setPixmap(d->bannerPix);
+    d->urlLabel->setPixmap(d->progressPixmap.copy(0, 0, 144, 32));
     d->urlLabel->setFocusPolicy(Qt::NoFocus);
 
     layout->setMargin(0);
