@@ -81,17 +81,17 @@ DLogoAction::DLogoAction(QObject* parent, bool alignOnright)
            : KAction(parent), d(new DLogoActionPriv)
 {
     setText("digikam.org");
-//    if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
+    if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
     {
         setIcon(KIcon("digikam"));
         d->progressPixmap = QPixmap(KStandardDirs::locate("data", "digikam/data/banner-digikam.png"));
     }
-/*    else
+    else
     {
         setIcon(KIcon("showfoto"));
         d->progressPixmap = QPixmap(KStandardDirs::locate("data", "showfoto/data/banner-showfoto.png"));
     }
-*/
+
     d->alignOnright  = alignOnright;
     d->progressTimer = new QTimer(this);
 
