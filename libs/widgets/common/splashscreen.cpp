@@ -140,11 +140,14 @@ void SplashScreen::drawContents(QPainter* p)
     QColor basecolor(155, 192, 231);
 
     // Draw background circles
+    QPainter::RenderHints hints = p->renderHints();
+    p->setRenderHints(QPainter::Antialiasing);
     p->setPen(Qt::NoPen);
     p->setBrush(QColor(225, 234, 231));
     p->drawEllipse(21, 7, 9, 9);
     p->drawEllipse(32, 7, 9, 9);
     p->drawEllipse(43, 7, 9, 9);
+    p->setRenderHints(hints);
 
     // Draw animated circles, increments are chosen
     // to get close to background's color
