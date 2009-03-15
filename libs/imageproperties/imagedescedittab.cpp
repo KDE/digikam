@@ -690,10 +690,10 @@ bool ImageDescEditTab::eventFilter(QObject *, QEvent *e)
         if (k->key() == Qt::Key_Enter || k->key() == Qt::Key_Return)
         {
             if (k->modifiers() == Qt::ControlModifier)
-                    {
+            {
                 emit signalNextItem();
                 return true;
-                    }
+            }
             else if (k->modifiers() == Qt::ShiftModifier)
             {
                 emit signalPrevItem();
