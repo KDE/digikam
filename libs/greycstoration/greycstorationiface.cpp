@@ -52,7 +52,7 @@
     For the moment we use only one thread. See B.K.O #186642  for details.
     Multithreading management need to be fixed into CImg. 
  */ 
-#define COMPUTATION_THREAD 1
+#define COMPUTATION_THREAD 2
 
 /** Uncomment this line if you use future GreycStoration implementation with GFact parameter
  */
