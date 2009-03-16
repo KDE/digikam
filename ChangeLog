@@ -1,3 +1,768 @@
+0.10.0 2009-03-15
+--------------------------------------------------------------------------------
+
+2009-03-16 11:29  cgilles
+
+    * libs/greycstoration/greycstorationiface.cpp: restore 2 CImg
+      threads
+
+2009-03-16 11:04  cgilles
+
+    * NEWS: update
+
+2009-03-16 05:16  cgilles
+
+    * NEWS: update
+
+2009-03-15 22:02  cgilles
+
+    * libs/imageproperties/worldmapwidget.cpp,
+      libs/imageproperties/worldmapwidget.h: compile
+
+2009-03-15 21:40  mboquien
+
+    * libs/widgets/common/splashscreen.cpp: Prettify the splash screen
+      antialiasing the circles. Saving/restoring the painter states so
+      it does not affect the rest of the painting.
+
+2009-03-15 19:47  jkekkonen
+
+    * libs/imageproperties/worldmapwidget.cpp: Wrong camelcase in
+      trunk, addPlaceMarkData -> addPlacemarkData .. Fixes build in
+      trunk, feel free to revert if this is not ok yet
+
+2009-03-15 17:58  cgilles
+
+    * digikam.lsm.cmake: update
+
+2009-03-14 23:53  cgilles
+
+    * NEWS: update
+
+2009-03-14 22:35  aclemens
+
+    * libs/imageproperties/imagedescedittab.cpp: backport:
+      Quick fix to prevent digiKam from crashing when changes in the
+      ImageDescEditTab were not saved and the mainwindow was closed.
+
+2009-03-14 15:42  aclemens
+
+    * digikam/folderitem.cpp: backport:
+      reset brush when drawing highlight rectangle for TAlbumCheckList
+      items.
+
+2009-03-14 15:42  aclemens
+
+    * libs/imageproperties/imagepropertiessidebardb.cpp,
+      libs/widgets/common/sidebar.cpp: backport:
+      Fix crash when changes were made in the ImagePropertiesSideBarDB
+      (like
+      entering a caption or assigning a tag) and the digiKam mainwindow
+      is
+      closed while these changes were not applied.
+
+2009-03-13 20:57  aclemens
+
+    * libs/dimg/filters/dimgimagefilters.cpp,
+      libs/histogram/imagehistogram.cpp,
+      libs/histogram/imagehistogram.h,
+      libs/widgets/common/curveswidget.cpp,
+      libs/widgets/common/histogramwidget.cpp: backport:
+      getHistogramSegment() should be named getHistogramSegments()
+
+2009-03-13 20:24  cgilles
+
+    * NEWS: update
+
+2009-03-13 19:47  aclemens
+
+    * NEWS: update
+
+2009-03-13 19:45  aclemens
+
+    * digikam/albumfolderview.cpp, digikam/tagfilterview.cpp,
+      digikam/tagfolderview.cpp,
+      libs/imageproperties/talbumlistview.cpp,
+      libs/imageproperties/talbumlistview.h: backport:
+      Add naturalCompare() to AlbumFolderView, TagFilterView,
+      TagFolderView and TAlbumListView
+      
+      BUG:158868
+
+2009-03-13 16:59  aclemens
+
+    * libs/histogram/imagehistogram.cpp: backport:
+      No need to call memset twice here.
+      Removing the first occurrence, leaving the second (after the null
+      pointer check).
+
+2009-03-13 11:52  cgilles
+
+    * libs/greycstoration/greycstorationiface.cpp,
+      libs/greycstoration/greycstorationiface.h: backport commit
+      #938858 from KDE3 branch
+
+2009-03-11 20:08  aclemens
+
+    * imageplugins/adjustlevels/adjustlevelstool.cpp: set the current
+      channel after the histogram widget has been reset,
+      otherwise wrong values are displayed in the settings widgets.
+
+2009-03-11 19:10  lure
+
+    * data/icons/CMakeLists.txt, data/icons/digikam/CMakeLists.txt,
+      data/icons/oxygen/CMakeLists.txt: Install all Digikam icons to
+      /usr/share/kde4/apps/digikam/icons
+      
+      These were installed to /usr/share/icons before, some even
+      in conflict with the one's shipped by Oxygen. This have caused
+      that packagers have implemented various workarounds.
+      
+      This should be tested on Windows & Mac OS X ports to ensure
+      that this works (it should).
+      
+      CCMAIL: digikam-devel@kde.org
+
+2009-03-11 12:14  mwiesweg
+
+    * digikam/albummanager.cpp: When renaming the parent album, the
+      parentPath of child albums need to be adjusted.
+      Then renaming in db is really done with a new name, not with the
+      same name again.
+      
+      CCBUG: 185317
+
+2009-03-11 09:02  cgilles
+
+    * NEWS: update
+
+2009-03-10 00:24  aclemens
+
+    * libs/database/haar/haariface.cpp: backport:
+      Remove imageids from cached signature map if they are not part of
+      the
+      result set.
+      This will boost the "Find Duplicates" algorithm even more.
+      
+      Rename alreadyChecked => resultsCandidates, this name is more
+      meaningful
+      
+      Conflicts:
+      
+      libs/database/haar/haariface.cpp
+
+2009-03-09 21:42  aclemens
+
+    * libs/database/haar/haariface.cpp, libs/database/haar/haariface.h:
+      backport from 0.11 branch:
+      Use cached signatures to speed up "Find Duplicates".
+
+2009-03-09 08:05  cgilles
+
+    * digikam/digikamapp.cpp: fix warning
+
+2009-03-09 08:04  cgilles
+
+    * libs/greycstoration/greycstorationiface.cpp: no need extar
+      namespace here
+
+2009-03-08 15:31  aclemens
+
+    * themedesigner/themedicongroupitem.cpp: backport commit:
+      fix the album banner as well
+
+2009-03-08 14:20  aclemens
+
+    * project/KDE4PORT, themedesigner/mainwindow.cpp,
+      themedesigner/themediconitem.cpp,
+      themedesigner/themediconview.cpp: backport commits from 0.11
+      branch:
+      fix thumbnail rendering in themedesigner, fix memory leak
+
+2009-03-07 13:29  scripty
+
+    * digikam/digikam.desktop, showfoto/showfoto.desktop,
+      utilities/hotplug/digikam-download.desktop.cmake,
+      utilities/hotplug/digikam-mount-and-download.desktop.cmake,
+      utilities/hotplug/digikam-opencamera.desktop.cmake: SVN_SILENT
+      made messages (.desktop file)
+
+2009-03-06 07:49  cgilles
+
+    * NEWS: update
+
+2009-03-05 08:34  cgilles
+
+    * NEWS: update
+
+2009-03-04 20:28  cgilles
+
+    * utilities/fuzzysearch/findduplicatesalbumitem.cpp,
+      utilities/fuzzysearch/findduplicatesalbumitem.h: fix background
+      color
+
+2009-03-04 19:55  aclemens
+
+    * utilities/fuzzysearch/findduplicatesalbumitem.cpp,
+      utilities/fuzzysearch/findduplicatesalbumitem.h: add
+      naturalCompare to find duplicates treeview
+
+2009-03-04 15:54  scripty
+
+    * kioslave/digikamalbums.protocol, kioslave/digikamdates.protocol,
+      kioslave/digikamsearch.protocol, kioslave/digikamtags.protocol:
+      SVN_SILENT made messages (.desktop file)
+
+2009-03-04 11:00  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp: we need to populate
+      the duplicates result tree here...
+
+2009-03-02 20:02  cgilles
+
+    * NEWS: update
+
+2009-03-02 16:35  aclemens
+
+    * utilities/batch/batchalbumssyncmetadata.cpp: backport:
+      fix folder icon in "sync all images with db" dialog
+
+2009-03-01 19:22  cgilles
+
+    * NEWS: update
+
+2009-02-28 20:27  cgilles
+
+    * NEWS: update
+
+2009-02-28 20:26  cgilles
+
+    * data/themes/CMakeLists.txt, data/themes/DarkRoom: backport commit
+      #933385
+
+2009-02-28 16:48  cgilles
+
+    * imageplugins/coreplugin/imageplugin_core.cpp: backport commit
+      #933318.
+
+2009-02-28 15:23  cgilles
+
+    * NEWS: update
+
+2009-02-28 11:55  aclemens
+
+    * project/rm_git_mergetool_leftovers.sh: this little script will
+      clean up the working dir if you want to build
+      the API documentation and have used git mergetool before...
+
+2009-02-26 18:29  cgilles
+
+    * NEWS: update
+
+2009-02-26 18:19  mwiesweg
+
+    * digikam/scancontroller.cpp: Backport:
+      Fix recording hints for the copy or move of children of the moved
+      album.
+      The dst path was not adjusted properly.
+      
+      CCBUG: 185317
+
+2009-02-26 10:50  cgilles
+
+    * NEWS: update
+
+2009-02-26 10:38  cgilles
+
+    * NEWS: update
+
+2009-02-26 10:13  cgilles
+
+    * NEWS: update
+
+2009-02-26 09:31  cgilles
+
+    * project/KDE4PORT, project/project.kdevelop: update
+
+2009-02-26 05:29  cgilles
+
+    * NEWS: update
+
+2009-02-26 05:22  cgilles
+
+    * NEWS: update
+
+2009-02-25 21:55  mwiesweg
+
+    * utilities/cameragui/cameraiconviewtooltip.cpp: Backport
+      Check that KMimetype pointer is not null
+      
+      CCBUG: 185574
+
+2009-02-25 11:51  lure
+
+    * data/icons/oxygen/128x128/actions,
+      data/icons/oxygen/16x16/actions, data/icons/oxygen/22x22/actions,
+      data/icons/oxygen/32x32/actions, data/icons/oxygen/48x48/actions,
+      data/icons/oxygen/64x64/actions,
+      data/icons/oxygen/scalable/actions: Remove actions icons that
+      were copied from Oxygen.
+      KDE4 version of digikam now depends on KDE 4.2 which
+      provides those icons.
+      Apps icons (digikam/showfoto) were also copied to
+      Oxygen, but leave a copy here for systems w/o
+      Oxygen.
+      
+      For more info:
+      http://mail.kde.org/pipermail/digikam-devel/2009-February/026587.html
+      
+      CCMAIL: digikam-devel@kde.org
+
+2009-02-24 13:32  aclemens
+
+    * utilities/cameragui/cameraui.cpp, utilities/cameragui/cameraui.h:
+      update tracker position in camera window as well
+
+2009-02-24 13:27  aclemens
+
+    * utilities/lighttable/lighttablewindow.cpp,
+      utilities/lighttable/lighttablewindow.h: update tracker position
+      when lighttable window is moved
+
+2009-02-24 13:27  aclemens
+
+    * digikam/digikamapp.cpp, digikam/digikamapp.h,
+      libs/widgets/common/dcursortracker.cpp,
+      libs/widgets/common/dcursortracker.h,
+      libs/widgets/common/statuszoombar.cpp,
+      libs/widgets/common/statuszoombar.h: backport:
+      If main window is moved, the DCursorTracker will stay in its
+      position
+      instead of moving along with the statuszoombar.
+      If the window has been moved, we need to emit a signal and update
+      the
+      tracker accordingly.
+
+2009-02-24 12:56  cgilles
+
+    * NEWS: update
+
+2009-02-24 12:32  cgilles
+
+    * NEWS: update
+
+2009-02-23 20:56  cgilles
+
+    * NEWS: typo
+
+2009-02-23 20:50  cgilles
+
+    * NEWS: update
+
+2009-02-23 17:20  dfaure
+
+    * kioslave/digikamalbums.cpp, kioslave/digikamsearch.cpp: detected
+      missing i18n()s
+
+2009-02-23 10:26  cgilles
+
+    * NEWS: update
+
+2009-02-22 14:48  aclemens
+
+    * NEWS: update
+
+2009-02-22 14:48  aclemens
+
+    * utilities/lighttable/lighttablewindow.cpp: fix result checking
+      
+      BUG:185232
+
+2009-02-22 08:30  cgilles
+
+    * NEWS: update
+
+2009-02-22 08:23  cgilles
+
+    * utilities/imageeditor/editor/editortooliface.cpp: backport commit
+      #929686 to trunk
+      CCBUGS: 182212
+
+2009-02-22 08:05  cgilles
+
+    * NEWS: update
+
+2009-02-21 22:39  mwiesweg
+
+    * digikam/albumiconitem.cpp: Backport:
+      Display tag names, as we did in 0.9, not paths.
+      
+      CCBUG: 184187
+
+2009-02-21 22:39  mwiesweg
+
+    * NEWS: update
+
+2009-02-21 17:49  mwiesweg
+
+    * NEWS: update
+
+2009-02-21 17:13  mwiesweg
+
+    * utilities/imageeditor/editor/imagewindow.cpp: One line too much
+      backported
+
+2009-02-21 17:11  mwiesweg
+
+    * utilities/imageeditor/editor/imagewindow.cpp: Backport:
+      Ignore collection image change events while window is closed
+      
+      CCBUG: 184641
+
+2009-02-21 17:11  mwiesweg
+
+    * utilities/imageeditor/editor/imagewindow.cpp: Backport:
+      In removeItem(), do not touch urlCurrent if the removed item is
+      not the current item.
+      In slotCollectionImageChange, do not trigger slotLoadCurrent
+      unless the current item is deleted.
+      
+      CCBUG: 184637
+
+2009-02-21 17:11  mwiesweg
+
+    * libs/database/searchxml.cpp: Backport:
+      Add missing implementation for "OrNot" (which was not properly
+      written or read as a consequence)
+      
+      CCBUG: 185106
+
+2009-02-21 17:11  mwiesweg
+
+    * utilities/searchwindow/searchgroup.cpp: Backport:
+      Simplify: complex and buggy code is not necessary here (other
+      parts are complex enough)
+
+2009-02-21 17:11  mwiesweg
+
+    * digikam/iconview.cpp: Backport:
+      Reorder statements so the d->ratingBox->hide() which may reenter
+      somewhere cannot set d->ratingItem to 0.
+      
+      BUG: 185109
+
+2009-02-21 13:41  cgilles
+
+    * NEWS: update
+
+2009-02-20 16:11  scripty
+
+    * digikam/digikam.desktop,
+      imageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
+      imageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
+      imageplugins/blurfx/digikamimageplugin_blurfx.desktop,
+      imageplugins/border/digikamimageplugin_border.desktop,
+      imageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
+      imageplugins/charcoal/digikamimageplugin_charcoal.desktop,
+      imageplugins/colorfx/digikamimageplugin_colorfx.desktop,
+      imageplugins/coreplugin/digikamimageplugin_core.desktop,
+      imageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
+      imageplugins/emboss/digikamimageplugin_emboss.desktop,
+      imageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
+      imageplugins/freerotation/digikamimageplugin_freerotation.desktop,
+      imageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
+      imageplugins/infrared/digikamimageplugin_infrared.desktop,
+      imageplugins/inpainting/digikamimageplugin_inpainting.desktop,
+      imageplugins/inserttext/digikamimageplugin_inserttext.desktop,
+      imageplugins/lenscorrection/digikamimageplugin_lenscorrection.desktop,
+      imageplugins/noisereduction/digikamimageplugin_noisereduction.desktop,
+      imageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
+      imageplugins/perspective/digikamimageplugin_perspective.desktop,
+      imageplugins/raindrop/digikamimageplugin_raindrop.desktop,
+      imageplugins/restoration/digikamimageplugin_restoration.desktop,
+      imageplugins/sheartool/digikamimageplugin_sheartool.desktop,
+      imageplugins/superimpose/digikamimageplugin_superimpose.desktop,
+      imageplugins/texture/digikamimageplugin_texture.desktop,
+      imageplugins/whitebalance/digikamimageplugin_whitebalance.desktop,
+      kioslave/digikamtags.protocol, showfoto/showfoto.desktop,
+      utilities/hotplug/digikam-download.desktop.cmake,
+      utilities/hotplug/digikam-gphoto2-camera.desktop.cmake,
+      utilities/hotplug/digikam-mount-and-download.desktop.cmake,
+      utilities/hotplug/digikam-opencamera.desktop.cmake,
+      utilities/imageeditor/editor/digikamimageplugin.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2009-02-20 10:15  pino
+
+    * Messages.sh: extract messages from .h.cmake files as well
+
+2009-02-19 21:21  aclemens
+
+    * digikam/digikamapp.cpp: ignore renamed plugin SimpleViewer from
+      now on
+
+2009-02-19 18:27  aclemens
+
+    * ChangeLog: sync with 0.11 branch
+
+2009-02-19 15:02  cgilles
+
+    * imageplugins/perspective/perspectivetool.cpp,
+      imageplugins/perspective/perspectivetool.h: sync with 0.11 branch
+
+2009-02-19 14:50  cgilles
+
+    * imageplugins/perspective/perspectivetool.cpp,
+      imageplugins/perspective/perspectivewidget.h: use const ref
+
+2009-02-19 13:13  aclemens
+
+    * digikam/albumwidgetstack.cpp: Show thumbbar when saveSettings()
+      is called to make sure a valid
+      splitter state is put into the config file. This way a custom
+      thumbbar
+      height will be restored when restarting digiKam, otherwise the
+      minimum
+      size is set due to the "no collapse mode" of the splitter.
+
+2009-02-19 13:09  cgilles
+
+    * NEWS: update
+
+2009-02-19 13:08  cgilles
+
+    * imageplugins/inpainting/inpaintingtool.cpp: sync with 0.11 branch
+      CCBUGS: 184731
+
+2009-02-19 11:59  aclemens
+
+    * NEWS: update
+
+2009-02-19 11:55  aclemens
+
+    * libs/dimg/loaders/pngloader.cpp: fix typo... this code would not
+      have compiled anyway when libpng 1.3.0 is used...
+
+2009-02-19 09:43  cgilles
+
+    * imageplugins/perspective/imageplugin_perspective.cpp,
+      imageplugins/perspective/imageplugin_perspective.h,
+      imageplugins/perspective/matrix.cpp,
+      imageplugins/perspective/matrix.h,
+      imageplugins/perspective/perspectivetool.cpp,
+      imageplugins/perspective/perspectivetool.h,
+      imageplugins/perspective/perspectivewidget.cpp,
+      imageplugins/perspective/perspectivewidget.h,
+      imageplugins/perspective/triangle.cpp,
+      imageplugins/perspective/triangle.h: polish
+
+2009-02-19 09:27  cgilles
+
+    * libs/dimg/loaders/pngloader.cpp: polish
+
+2009-02-19 08:40  aclemens
+
+    * digikam/albumwidgetstack.cpp: to hopefully fix bug 173746, set
+      the imagePreviewView to not
+      collapsible, too. Using setChildrenCollapsible doesn't work for
+      some
+      reason, the thumbbar can still be resized to 0, but when setting
+      both
+      widgets manually to not collapsible, it is working.
+
+2009-02-19 08:34  aclemens
+
+    * digikam/albumwidgetstack.cpp: somehow setChildrenCollapsible is
+      not working correctly, the thumbbar is
+      still dragable to a size of zero, which can lead to a
+      disappearing
+      thumbbar again when the splitter state is saved. The user will
+      not know
+      why the menu entry "Show Thumbnails" is not working anymore. To
+      save us
+      from more and more bugreports about this (:-)), we need to set
+      only the thumbbar to be not
+      collapsible. Works fine now.
+
+2009-02-19 08:25  aclemens
+
+    * digikam/albumwidgetstack.cpp: if the thumbbar is turned off in
+      ImagePreviewView and digiKam is
+      restarted, the thumbbar is not restorable anymore. You need to
+      find the
+      splitter and drag it up (the infamous splitter bug, yeah).
+      This commit fixes the issue and might also fix our general
+      splitter bug,
+      because now collapsing of children is turned off, so no "invalid"
+      state
+      could be saved.
+
+2009-02-18 19:59  aclemens
+
+    * NEWS: update
+
+2009-02-18 16:41  aclemens
+
+    * CMakeLists.txt, imageplugins/coreplugin/iccprooftool.cpp,
+      imageplugins/lenscorrection/autocorrection/klensfun.cpp,
+      libs/dialogs/imagedialog.cpp, libs/dmetadata/dmetadata.cpp,
+      libs/dmetadata/dmetadata.h,
+      libs/imageproperties/cameraitempropertiestab.cpp,
+      libs/imageproperties/imagepropertiessidebar.cpp,
+      libs/imageproperties/imagepropertiessidebar.h,
+      libs/imageproperties/imagepropertiessidebardb.cpp,
+      libs/imageproperties/imagepropertiessidebardb.h,
+      libs/widgets/common/thumbbartooltip.cpp, showfoto/showfoto.cpp,
+      utilities/cameragui/cameracontroller.cpp,
+      utilities/cameragui/cameracontroller.h,
+      utilities/cameragui/cameraui.cpp, utilities/cameragui/cameraui.h,
+      utilities/cameragui/umscamera.cpp,
+      utilities/imageeditor/editor/imageiface.cpp,
+      utilities/imageeditor/editor/imageiface.h,
+      utilities/imageeditor/editor/imagewindow.cpp: information has no
+      plural form
+
+2009-02-18 12:47  aclemens
+
+    * libs/imageproperties/cameraitempropertiestab.cpp,
+      libs/imageproperties/imagepropertiestab.cpp: lenght => length
+
+2009-02-18 12:32  aclemens
+
+    * digikam/albumiconviewtooltip.cpp,
+      libs/widgets/common/ditemtooltip.h,
+      libs/widgets/common/thumbbartooltip.cpp,
+      utilities/cameragui/cameraiconviewtooltip.cpp: typo: lenght =>
+      length
+
+2009-02-18 11:56  aclemens
+
+    * digikam/albumfolderview.cpp, digikam/tagfolderview.cpp: It
+      doesn't make sense to allow "Set Album/Tag Thumbnail" on D&D for
+      multiple items, disabling the action completely is better then
+      using the
+      first item of all dropped items.
+
+2009-02-18 11:50  cgilles
+
+    * NEWS: update
+
+2009-02-18 11:44  cgilles
+
+    * libs/greycstoration/CImg.h, libs/greycstoration/greycstoration.h:
+      update CImg library to 1.3.0
+
+2009-02-18 11:41  cgilles
+
+    * utilities/imageeditor/editor/editortool.cpp,
+      utilities/imageeditor/editor/editortool.h: kill current thread
+      with multithreaded Editor Tools when slotAbort() is called
+      CCBUGS: 184731
+
+2009-02-17 17:36  cgilles
+
+    * NEWS: update
+
+2009-02-17 09:48  aclemens
+
+    * digikam/digikamapp.cpp: add "PrintWizard" to the list of obsoete
+      kipi-plugins
+
+2009-02-17 08:47  mwiesweg
+
+    * digikam/imagepreviewbar.cpp: Backport to 0.10:
+      Apply patch from Ian Hubbertz.
+      Calling ratingBox->hide can recurse into event filter again,
+      setting ratingItem to 0,
+      causing a crash when returned to the outer method. Store
+      ratingItem on the stack.
+      
+      CCBUG: 184473
+
+2009-02-16 20:30  cgilles
+
+    * libs/jpegutils/jpegutils.cpp: temp file is jpeg file
+
+2009-02-16 20:26  cgilles
+
+    * NEWS: update
+
+2009-02-16 01:21  aclemens
+
+    * digikam/digikamapp.cpp, digikam/digikamapp.h: add missing
+      menuImportActions() method
+
+2009-02-16 01:09  aclemens
+
+    * digikam/albumfolderview.cpp: typo
+
+2009-02-16 00:59  aclemens
+
+    * digikam/albumfolderview.cpp: import actions in albumfolderview
+      are not used?
+
+2009-02-15 12:40  aclemens
+
+    * digikam/imagepreviewview.cpp, digikam/tagspopupmenu.cpp,
+      digikam/tagspopupmenu.h,
+      utilities/imageeditor/editor/imagewindow.cpp,
+      utilities/lighttable/lighttablepreview.cpp: fix memory leak
+
+2009-02-15 12:06  cgilles
+
+    * NEWS: update
+
+2009-02-14 19:52  cgilles
+
+    * NEWS: update
+
+2009-02-14 16:38  mlaurent
+
+    * digikam/albumiconview.cpp: Fix iterator
+
+2009-02-14 15:39  cgilles
+
+    * NEWS: update
+
+2009-02-14 14:59  zwabel
+
+    * imageplugins/perspective/perspectivewidget.cpp: - Fix
+      anti-aliasing. The function needs a double parameter, not the
+      rounded integer. This works great with inverse perspective
+      transform.
+      - Only show the guide when inverse transform is disabled. With
+      inverse transform it doesn't make sense, because there is no
+      preview of the result.
+
+2009-02-14 13:49  zwabel
+
+    * imageplugins/perspective/perspectivetool.cpp,
+      imageplugins/perspective/perspectivetool.h,
+      imageplugins/perspective/perspectivewidget.cpp,
+      imageplugins/perspective/perspectivewidget.h: Implement inverse
+      transformation for the perspective tool. This allows transforming
+      photographed images back to a rectangular shape.
+
+2009-02-14 12:01  cgilles
+
+    * digikam.lsm.cmake: fix release date
+
+2009-02-14 11:58  cgilles
+
+    * CMakeLists.txt: let's go to finale release
+
+2009-02-14 08:11  cgilles
+
+    * ChangeLog: prepare rc2
+
+2009-02-14 07:48  cgilles
+
+    * digikam.lsm.cmake: update
+
+2009-02-14 07:45  cgilles
+
+    * NEWS: update
+
 0.10.0-rc2 2009-02-15
 --------------------------------------------------------------------------------
 
