@@ -1,5 +1,5 @@
 *********************************************************************************************************
-digiKam 0.10.0 - Release date: 2009-03-08
+digiKam 0.10.0 - Release date: 2009-03-15
 
 NEW FEATURES:
 
@@ -43,7 +43,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 033 ==> 187095 : Images are not displayed at central panel.
 034 ==> 186837 : Libexiv2 crashes on certain JPGs.
 035 ==> 185911 : Crash on Synchronize Images with Database.
-036 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-rc2 - Release date: 2009-02-15
