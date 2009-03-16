@@ -801,7 +801,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesFast(HaarProgressOb
 }
 
 void HaarIface::calculateScore(double &score, Haar::SignatureData &querySig, Haar::SignatureData &targetSig,
-                           Haar::Weights &weights, Haar::SignatureMap** queryMaps)
+                               Haar::Weights &weights, Haar::SignatureMap** queryMaps)
 {
     // this is a reference
 //    double &score                  = scores[imageid];
