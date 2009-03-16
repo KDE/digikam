@@ -107,7 +107,7 @@ public:
      * This method will help you adding actions from the actionCollection. The actionCollection can
      * be set in the constructor of the ContextMenuHelper class.
      *
-     * @param name name of the action in the actionCollection
+     * @param name the name of the action in the actionCollection
      * @param addDisabled if set, disabled actions are added to the menu
      * @see ContextMenuHelper()
      */

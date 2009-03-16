@@ -172,7 +172,7 @@ public:
     bool    isAlbumRoot(const QString &filePath);
 
     /**
-     * Returns the album part of of the given file path, i.e. the album root path
+     * Returns the album part of the given file path, i.e. the album root path
      * at the beginning is removed and the second part, starting with "/", ending without a slash,
      * is returned. Example: "/media/fotos/Paris 2007" gives "/Paris 2007"
      * Returns a null QString if the file path is not located in an album root.

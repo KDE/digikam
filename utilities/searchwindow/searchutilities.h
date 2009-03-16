@@ -249,7 +249,7 @@ public:
     void setSuggestedInitialValue(double initialValue);
 
     /** Allows to set to different default single steps,
-     *  for for the range below m_values, the other for above */
+     *  for the range below m_values, the other for above */
     void setSingleSteps(double smaller, double larger);
 
     void setInvertStepping(bool invert);
@@ -301,7 +301,7 @@ public:
     void setSuggestedInitialValue(int initialValue);
 
     /** Allows to set to different default single steps,
-     *  for for the range below m_values, the other for above */
+     *  for the range below m_values, the other for above */
     void setSingleSteps(int smaller, int larger);
 
     void setInvertStepping(bool invert);

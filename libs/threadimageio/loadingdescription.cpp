@@ -92,7 +92,7 @@ QStringList LoadingDescription::lookupCacheKeys() const
     // Typically, the first is the best, but an actual loading operation may use a
     // lower-quality loading and will effectively only add the last entry of the
     // list to the cache, although it can accept the first if already available.
-    // Sixteen-bit images cannot be used used instead of eight-bit ones because
+    // Sixteen-bit images cannot be used instead of eight-bit ones because
     // color management is needed to display them.
 
     QString suffix = rawDecodingSettings.sixteenBitsImage ? "-16" : "-8";
