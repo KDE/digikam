@@ -79,7 +79,7 @@ public:
     {
         mode               = GreycstorationIface::Restore;
         gfact              = 1.0;
-        computationThreads = 1;     // Use only one thread. See B.K.O #186642 for details.
+        computationThreads = 2;
     }
 
     float                  gfact;
