@@ -157,8 +157,8 @@ private:
                                               double requiredPercentage, SketchType type);
 
     QMap<qlonglong, double> searchDatabase(Haar::SignatureData *data, SketchType type);
-    void calculateScore(double &score, Haar::SignatureData &querySig, Haar::SignatureData &targetSig,
-                        Haar::Weights &weights, Haar::SignatureMap** queryMaps);
+    double calculateScore(Haar::SignatureData &querySig, Haar::SignatureData &targetSig,
+                          Haar::Weights &weights, Haar::SignatureMap** queryMaps);
 
 private:
 

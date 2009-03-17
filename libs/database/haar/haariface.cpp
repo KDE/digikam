@@ -509,7 +509,7 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig,
                 Haar::SignatureData &qSig  = *querySig;
                 Haar::SignatureData &tSig  = targetSig;
 
-                calculateScore(score, qSig, tSig, weights, queryMaps);
+                score = calculateScore(qSig, tSig, weights, queryMaps);
             }
         }
     }
@@ -522,7 +522,7 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig,
             Haar::SignatureData &qSig  = *querySig;
             Haar::SignatureData &tSig  = sigMap[imageid];
 
-            calculateScore(score, qSig, tSig, weights, queryMaps);
+            score = calculateScore(qSig, tSig, weights, queryMaps);
         }
     }
 
@@ -800,9 +800,11 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesFast(HaarProgressOb
     return resultsMap;
 }
 
-void HaarIface::calculateScore(double &score, Haar::SignatureData &querySig, Haar::SignatureData &targetSig,
-                               Haar::Weights &weights, Haar::SignatureMap** queryMaps)
+double HaarIface::calculateScore(Haar::SignatureData &querySig, Haar::SignatureData &targetSig,
+                                 Haar::Weights &weights, Haar::SignatureMap** queryMaps)
 {
+    double score = 0.0;
+
     // Step 1: Initialize scores with average intensity values of all three channels
     for (int channel=0; channel<3; channel++)
     {
@@ -826,6 +828,7 @@ void HaarIface::calculateScore(double &score, Haar::SignatureData &querySig, Haa
                 score -= weights.weight(d->bin->binAbs(x), channel);
         }
     }
+    return score;
 }
 
 }  // namespace Digikam
