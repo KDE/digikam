@@ -316,8 +316,9 @@ void FindDuplicatesView::slotFindDuplicates()
     if (validSizeInfo)
     {
         accurateInfoStr.append(QString(", <br/>"));
-        accurateInfoStr.append(i18n("approx. <b>%1</b> in case of your database",
-                                    KIO::convertSize(matrixSize)));
+        accurateInfoStr.append(i18nc("%1 - kioslave memory usage",
+                                     "approx. <b>%1</b> in case of your database",
+                                     KIO::convertSize(matrixSize)));
     }
     accurateInfoStr.append(QString(")"));
 
