@@ -305,7 +305,8 @@ void FindDuplicatesView::slotFindDuplicates()
 
     bool validSizeInfo = ok && (matrixSize > 0);
 
-    // prepare the find duplicates dialog
+    // prepare the find duplicates dialog ---------------------
+
     QString fastMode        = i18nc("Fast 'find duplicates' search method",     "Fast");
     QString fastModeInfoStr = i18n("find images that are absolutely identical (quick)");
 
@@ -331,12 +332,16 @@ void FindDuplicatesView::slotFindDuplicates()
                           .arg(accurateMode)
                           .arg(accurateInfoStr);
 
+    // --------------------------------------------------------
+
     int result = KMessageBox::questionYesNoCancel(this, msg, i18n("Warning"),
                                                   KGuiItem(fastMode),
                                                   KGuiItem(accurateMode));
 
     if (result == KMessageBox::Cancel)
         return;
+
+    // --------------------------------------------------------
 
     slotClear();
     enableControlWidgets(false);
