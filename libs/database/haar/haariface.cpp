@@ -803,10 +803,6 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesFast(HaarProgressOb
 void HaarIface::calculateScore(double &score, Haar::SignatureData &querySig, Haar::SignatureData &targetSig,
                                Haar::Weights &weights, Haar::SignatureMap** queryMaps)
 {
-    // this is a reference
-//    double &score                  = scores[imageid];
-//    Haar::SignatureData &targetSig = sigMap[imageid];
-
     // Step 1: Initialize scores with average intensity values of all three channels
     for (int channel=0; channel<3; channel++)
     {
