@@ -253,6 +253,42 @@ int DMetadata::getImageRating() const
             if (ok && rating >= RatingMin && rating <= RatingMax)
                 return rating;
         }
+
+        value = getXmpTagString("Xmp.MicrosoftPhoto.Rating", false);
+        if (!value.isEmpty())
+        {
+            bool ok            = false;
+            long ratingPercent = value.toLong(&ok);
+            if (ok)
+            {
+                // Wrapper around rating percents managed by Windows Vista.
+                long rating = -1;
+                switch(ratingPercent)
+                {
+                    case 0:
+                        rating = 0;
+                        break;
+                    case 1:
+                        rating = 1;
+                        break;
+                    case 25:
+                        rating = 2;
+                        break;
+                    case 50:
+                        rating = 3;
+                        break;
+                    case 75:
+                        rating = 4;
+                        break;
+                    case 99:
+                        rating = 5;
+                        break;
+                }
+
+                if (rating != -1 && rating >= RatingMin && rating <= RatingMax)
+                    return rating;
+            }
+        }
     }
 
     // Check Exif rating tag set by Windows Vista
@@ -363,6 +399,9 @@ bool DMetadata::setImageRating(int rating) const
             ratePercents = 99;
             break;
     }
+
+    if (!setXmpTagString("Xmp.MicrosoftPhoto.Rating", QString::number(ratePercents)))
+        return false;
 
     if (!setExifTagLong("Exif.Image.0x4749", ratePercents))
         return false;
