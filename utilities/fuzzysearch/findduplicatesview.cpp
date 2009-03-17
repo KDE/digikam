@@ -307,6 +307,8 @@ void FindDuplicatesView::slotFindDuplicates()
 
     // prepare the find duplicates dialog
     QString fastMode        = i18nc("Fast 'find duplicates' search method",     "Fast");
+    QString fastModeInfoStr = i18n("find images that are absolutely identical (quick)");
+
     QString accurateMode    = i18nc("Accurate 'find duplicates' search method", "Accurate");
     QString accurateInfoStr = i18n("find images that are identical or very similar to each other <br/>"
                                    "(slow and memory consuming");
@@ -314,7 +316,7 @@ void FindDuplicatesView::slotFindDuplicates()
     {
         accurateInfoStr.append(QString(", <br/>"));
         accurateInfoStr.append(i18n("approx. <b>%1</b> in case of your database",
-                          KIO::convertSize(matrixSize)));
+                                    KIO::convertSize(matrixSize)));
     }
     accurateInfoStr.append(QString(")"));
 
@@ -325,7 +327,7 @@ void FindDuplicatesView::slotFindDuplicates()
                           .arg(i18n("Find Duplicates can take some time, especially on huge collections.<br/> "
                                     "Which of the following methods do you prefer?"))
                           .arg(fastMode)
-                          .arg(i18n("find images that are absolutely identical (quick)"))
+                          .arg(fastModeInfoStr)
                           .arg(accurateMode)
                           .arg(accurateInfoStr);
 
