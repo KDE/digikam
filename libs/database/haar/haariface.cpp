@@ -806,18 +806,18 @@ double HaarIface::calculateScore(Haar::SignatureData &querySig, Haar::SignatureD
     double score = 0.0;
 
     // Step 1: Initialize scores with average intensity values of all three channels
-    for (int channel=0; channel<3; channel++)
+    for (int channel=0; channel<3; ++channel)
     {
         score += weights.weightForAverage(channel) * fabs( querySig.avg[channel] - targetSig.avg[channel] );
     }
 
     // Step 2: Decrease the score if query and target have significant coefficients in common
-    for (int channel=0; channel<3; channel++)
+    for (int channel=0; channel<3; ++channel)
     {
         Haar::Idx *sig               = targetSig.sig[channel];
         Haar::SignatureMap *queryMap = queryMaps[channel];
         int x;
-        for (int coef = 0; coef < Haar::NumberOfCoefficients; coef++)
+        for (int coef = 0; coef < Haar::NumberOfCoefficients; ++coef)
         {
             // x is a pixel index, either positive or negative, 0..16384
             x = sig[coef];
