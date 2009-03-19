@@ -12,5 +12,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 001 ==> 091742 : Batch process auto levels.
 002 ==> 149361 : Not all edit actions are available as batch commands (for example auto-levels and gamma correction).
 003 ==> 187523 : digiKam crashes on startup (undefined symbol).
-004 ==> 
+004 ==> 187569 : Crash on star removing when filtering by stars.
+005 ==> 
 
