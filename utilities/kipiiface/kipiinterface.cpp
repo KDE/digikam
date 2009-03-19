@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well.com>
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -107,12 +107,11 @@ KIPI::ImageCollection KipiInterface::currentSelection()
 QList<KIPI::ImageCollection> KipiInterface::allAlbums()
 {
     QList<KIPI::ImageCollection> result;
-
     QString fileFilter(fileExtensions());
 
-    AlbumList palbumList = m_albumManager->allPAlbums();
-    for ( AlbumList::Iterator it = palbumList.begin();
-          it != palbumList.end(); ++it )
+    const AlbumList palbumList = m_albumManager->allPAlbums();
+    for ( AlbumList::ConstIterator it = palbumList.constBegin();
+          it != palbumList.constEnd(); ++it )
     {
         // don't add the root album
         if ((*it)->isRoot())
@@ -123,9 +122,9 @@ QList<KIPI::ImageCollection> KipiInterface::allAlbums()
         result.append( KIPI::ImageCollection( col ) );
     }
 
-    AlbumList talbumList = m_albumManager->allTAlbums();
-    for ( AlbumList::Iterator it = talbumList.begin();
-          it != talbumList.end(); ++it )
+    const AlbumList talbumList = m_albumManager->allTAlbums();
+    for ( AlbumList::ConstIterator it = talbumList.constBegin();
+          it != talbumList.constEnd(); ++it )
     {
         // don't add the root album
         if ((*it)->isRoot())

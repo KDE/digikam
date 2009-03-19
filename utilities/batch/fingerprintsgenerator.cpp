@@ -6,7 +6,7 @@
  * Date        : 2008-05-16
  * Description : fingerprints generator
  *
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -108,14 +108,14 @@ FingerPrintsGenerator::~FingerPrintsGenerator()
 void FingerPrintsGenerator::slotRebuildFingerPrints()
 {
     setTitle(i18n("Processing..."));
-    AlbumList palbumList = AlbumManager::instance()->allPAlbums();
+    const AlbumList palbumList = AlbumManager::instance()->allPAlbums();
 
     // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
 
     if (d->rebuildAll)
     {
-        for (AlbumList::Iterator it = palbumList.begin();
-             !d->cancel && (it != palbumList.end()); ++it)
+        for (AlbumList::ConstIterator it = palbumList.constBegin();
+             !d->cancel && (it != palbumList.constEnd()); ++it)
         {
             d->allPicturesPath += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
         }
