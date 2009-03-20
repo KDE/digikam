@@ -14,5 +14,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 187523 : digiKam crashes on startup (undefined symbol).
 004 ==> 187569 : Crash on star removing when filtering by stars.
 005 ==> 186549 : digiKam crashes when hovering the bottom part of its.
-006 ==> 
+006 ==> 187641 : digiKam: error while loading shared libraries: libkdcraw.so.5.
+007 ==> 
 
