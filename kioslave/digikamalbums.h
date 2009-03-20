@@ -7,7 +7,7 @@
  * Description : a kio-slave to process file operations on
  *               digiKam albums.
  *
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * The forwarding code is copied from kdelibs' ForwardingSlavebase.

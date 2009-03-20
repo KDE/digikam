@@ -126,9 +126,9 @@ QString ThumbBarToolTip::tipContents()
     ThumbBarToolTipSettings settings = toolTipSettings();
     DToolTipStyleSheet      cnt(settings.font);
 
-    QFileInfo fileInfo(item()->url().path());
+    QFileInfo fileInfo(item()->url().toLocalFile());
     KFileItem fi(KFileItem::Unknown, KFileItem::Unknown, item()->url());
-    DMetadata metaData(item()->url().path());
+    DMetadata metaData(item()->url().toLocalFile());
     QString tip = cnt.tipHeader;
 
     // -- File properties ----------------------------------------------

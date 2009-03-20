@@ -68,6 +68,7 @@ public:
     }
 
     bool           dbPathEdited;
+
     QString        rootAlbum;
     QString        dbPath;
 
@@ -194,14 +195,14 @@ void DigikamFirstRun::saveSettings(const QString& rootAlbumFolder, const QString
     group.writeEntry("Database File Path", dbFolder);
 
     d->rootAlbum = rootAlbumFolder;
-    d->dbPath = dbFolder;
+    d->dbPath    = dbFolder;
 
     config->sync();
 }
 
 bool DigikamFirstRun::checkRootAlbum(QString& rootAlbumFolder)
 {
-    rootAlbumFolder = d->rootAlbumPathRequester->url().path();
+    rootAlbumFolder = d->rootAlbumPathRequester->url().toLocalFile();
 
     if (rootAlbumFolder.isEmpty())
     {
@@ -211,7 +212,7 @@ bool DigikamFirstRun::checkRootAlbum(QString& rootAlbumFolder)
     }
 
 #ifndef _WIN32
-    if (!rootAlbumFolder.startsWith('/'))
+    if (!QDir::isAbsolutePath(rootAlbumFolder))
     {
         rootAlbumFolder.prepend(QDir::homePath());
     }
@@ -267,7 +268,7 @@ bool DigikamFirstRun::checkRootAlbum(QString& rootAlbumFolder)
 
 bool DigikamFirstRun::checkDatabase(QString& dbFolder)
 {
-    dbFolder = d->dbPathRequester->url().path();
+    dbFolder = d->dbPathRequester->url().toLocalFile();
 
     if (dbFolder.isEmpty())
     {
@@ -277,7 +278,7 @@ bool DigikamFirstRun::checkDatabase(QString& dbFolder)
     }
 
 #ifndef _WIN32
-    if (!dbFolder.startsWith('/'))
+    if (!QDir::isAbsolutePath(dbFolder))
     {
         dbFolder.prepend(QDir::homePath());
     }
@@ -360,7 +361,9 @@ void DigikamFirstRun::slotButtonClicked( int button )
         KDialog::accept();
     }
     else
+    {
         KDialog::slotButtonClicked(button);
+    }
 }
 
 }  // namespace Digikam

@@ -438,8 +438,8 @@ void ThumbBarView::invalidateThumb(ThumbBarItem* item)
 {
     if (!item) return;
 
-    d->thumbLoadThread->deleteThumbnail(item->url().path());
-    d->thumbLoadThread->find(item->url().path(), d->tileSize);
+    d->thumbLoadThread->deleteThumbnail(item->url().toLocalFile());
+    d->thumbLoadThread->find(item->url().toLocalFile(), d->tileSize);
 }
 
 void ThumbBarView::reloadThumbs(const KUrl::List& urls)
@@ -459,7 +459,7 @@ void ThumbBarView::reloadThumb(ThumbBarItem* item)
 {
     if (!item) return;
 
-    d->thumbLoadThread->find(item->url().path(), d->tileSize);
+    d->thumbLoadThread->find(item->url().toLocalFile(), d->tileSize);
 }
 
 bool ThumbBarView::pixmapForItem(ThumbBarItem *item, QPixmap &pix) const
@@ -467,7 +467,7 @@ bool ThumbBarView::pixmapForItem(ThumbBarItem *item, QPixmap &pix) const
     if (d->tileSize > d->maxTileSize)
     {
         //TODO: Install a widget maximum size to prevent this situation
-        bool hasPixmap = d->thumbLoadThread->find(item->url().path(), pix, d->maxTileSize);
+        bool hasPixmap = d->thumbLoadThread->find(item->url().toLocalFile(), pix, d->maxTileSize);
         if (hasPixmap)
         {
             kWarning(50003) << "Thumbbar: Requested thumbnail size" << d->tileSize
@@ -477,17 +477,19 @@ bool ThumbBarView::pixmapForItem(ThumbBarItem *item, QPixmap &pix) const
             return true;
         }
         else
+        {
             return false;
+        }
     }
     else
     {
-        return d->thumbLoadThread->find(item->url().path(), pix, d->tileSize);
+        return d->thumbLoadThread->find(item->url().toLocalFile(), pix, d->tileSize);
     }
 }
 
 void ThumbBarView::preloadPixmapForItem(ThumbBarItem *item) const
 {
-    d->thumbLoadThread->preload(item->url().path(), qMin(d->tileSize, d->maxTileSize));
+    d->thumbLoadThread->preload(item->url().toLocalFile(), qMin(d->tileSize, d->maxTileSize));
 }
 
 void ThumbBarView::viewportPaintEvent(QPaintEvent* e)

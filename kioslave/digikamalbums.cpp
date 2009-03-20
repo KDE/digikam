@@ -7,7 +7,7 @@
  * Description : a kio-slave to process file operations on
  *               digiKam albums.
  *
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * The forwarding code is copied from kdelibs' ForwardingSlavebase.
@@ -32,9 +32,9 @@
 
 // Qt includes.
 
-#include <qcoreapplication.h>
-#include <qfileinfo.h>
-#include <qdatastream.h>
+#include <QCoreApplication>
+#include <QFileInfo>
+#include <QDataStream>
 
 // KDE includes.
 
@@ -60,7 +60,7 @@
 
 kio_digikamalbums::kio_digikamalbums(const QByteArray &pool_socket,
                                      const QByteArray &app_socket)
-    : SlaveBase("kio_digikamalbums", pool_socket, app_socket)
+                 : SlaveBase("kio_digikamalbums", pool_socket, app_socket)
 {
     m_eventLoop = new QEventLoop(this);
 }
@@ -247,7 +247,7 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
     Digikam::DatabaseAccess access;
 
     // check if we are renaming an album or a image
-    QFileInfo info(dbUrlSrc.fileUrl().path());
+    QFileInfo info(dbUrlSrc.fileUrl().toLocalFile());
     bool renamingAlbum = info.isDir();
 
     int srcAlbumID, dstAlbumID = -1;

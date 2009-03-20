@@ -1707,9 +1707,9 @@ void AlbumIconView::refreshItems(const KUrl::List& urlList)
         if (!iconItem)
             continue;
 
-        ThumbnailLoadThread::deleteThumbnail((*it).path());
+        ThumbnailLoadThread::deleteThumbnail((*it).toLocalFile());
         // clean LoadingCache as well - be pragmatic, do it here.
-        LoadingCacheInterface::fileChanged((*it).path());
+        LoadingCacheInterface::fileChanged((*it).toLocalFile());
     }
 
     emit signalItemsUpdated(urlList);
@@ -1787,7 +1787,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
     {
         kDebug(50003) << "Setting Exif Orientation tag to " << orientation << endl;
 
-        DMetadata metadata((*it).path());
+        DMetadata metadata((*it).toLocalFile());
         DMetadata::ImageOrientation o = (DMetadata::ImageOrientation)orientation;
         metadata.setImageOrientation(o);
 

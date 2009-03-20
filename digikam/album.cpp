@@ -374,7 +374,7 @@ KUrl PAlbum::fileUrl() const
 
 QString PAlbum::folderPath() const
 {
-    return databaseUrl().fileUrl().path();
+    return databaseUrl().fileUrl().toLocalFile();
 }
 
 // --------------------------------------------------------------------------
