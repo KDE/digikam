@@ -987,7 +987,7 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
           break;
 
        case BWGreenTone:
-          filter.changeTonality(data, w, h, sb, 108*mul, 116*mul, 100*mul);
+          filter.changeTonality(data, w, h, sb, 125*mul, 125*mul, 105*mul);
           break;
     }
 }
