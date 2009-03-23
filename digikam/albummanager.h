@@ -70,7 +70,6 @@ class ImageTagChangeset;
 class AlbumManagerPriv;
 
 typedef QList<Album*> AlbumList;
-typedef QPair<int, int> YearMonth;
 
 /**
  * \class AlbumManager

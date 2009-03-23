@@ -40,6 +40,8 @@
 namespace Digikam
 {
 
+typedef QPair<int, int> YearMonth;
+
 namespace AlbumRoot
 {
     enum Type
