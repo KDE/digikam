@@ -13,6 +13,7 @@ INCLUDE_DIRECTORIES(
                      ../libs/greycstoration
                      ../libs/threadimageio
                      ../libs/whitebalance
+                     ../libs/models
 
                      # widgets and dialogs
                      ../libs/widgets/common
@@ -76,6 +77,7 @@ SET(digikamthemedesigner_SRCS
     ${libtimeline_SRCS}
     ${libdigikamgui_SRCS}
     ${libqueuemanager_SRCS}
+    ${libalbummodels_SRCS}
 
     main.cpp 
     mainwindow.cpp 
