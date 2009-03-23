@@ -19,4 +19,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 187937 : Writing tags to files doesn't update modification timestamp.
 009 ==> 184687 : Crash after deleting an empty album.
 010 ==> 186766 : Crash after finish resize and rename of images in folder.
-011 ==> 
+011 ==> 184953 : Zooming and paning in slideshow / without toolbars.
+012 ==> 
