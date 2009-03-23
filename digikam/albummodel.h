@@ -28,6 +28,8 @@
 
 #include <QAbstractItemModel>
 #include <QHash>
+#include <QPixmap>
+#include <QSet>
 
 // Local includes.
 
@@ -97,10 +99,13 @@ public:
 protected:
 
     // these can be reimplemented in a subclass
+    virtual QVariant albumData(Album *a, int role) const;
     virtual QVariant decorationRole(Album *a) const;
     virtual QString columnHeader() const;
     virtual Qt::ItemFlags itemFlags(Album *album) const;
     virtual bool filterAlbum(Album *album) const;
+    virtual void albumCleared(Album */*album*/) {};
+    virtual void allAlbumsCleared() {};
 
     QModelIndex indexForAlbum(Album *album) const;
     Album *albumForIndex(const QModelIndex &index) const;
@@ -136,8 +141,8 @@ public:
 
 protected:
 
-    virtual QVariant decorationRole(Album *a) const = 0;
     virtual QString  columnHeader() const;
+    void setColumnHeader(const QString &header);
 
 protected Q_SLOTS:
 
@@ -147,6 +152,8 @@ protected Q_SLOTS:
 
 protected:
 
+    /// You need to call this from your constructor if you intend to load the thumbnail facilities of this class
+    void setupThumbnailLoading();
     void emitDataChangedForChildren(Album *album);
 
     QString m_columnHeader;
@@ -154,7 +161,65 @@ protected:
 
 // ------------------------------------------------------------------
 
-class AbstractCheckableAlbumModel : public AbstractSpecificAlbumModel
+class AbstractCountingAlbumModel : public AbstractSpecificAlbumModel
+{
+    Q_OBJECT
+
+public:
+
+    /// Supports displaying a count alongside the album name in DisplayRole
+
+    AbstractCountingAlbumModel(Album::Type albumType, Album *rootAlbum,
+                               RootAlbumBehavior rootBehavior = IncludeRootAlbum,
+                               QObject *parent = 0);
+
+public Q_SLOTS:
+
+    /// Call to enable or disable showing the count. Default is false.
+    void setShowCount(bool show);
+
+    /** Enable displaying the count. Set a map of album id -> count (excluding children).
+     *  If an album is not contained, no count is displayed. To display a count of 0,
+     *  there must be an entry album id -> 0. */
+    void setCountMap(const QMap<int, int>& idCountMap);
+
+    /** Displays only the count of the album, without adding child albums' counts.
+     *  This is the default.
+     *  Can connect to QTreeView's expanded() signal. */
+    void excludeChildrenCount(const QModelIndex &index);
+    /** Displays sum of the count of the album and child albums' counts.
+     *  Can connect to QTreeView's collapsed() signal. */
+    void includeChildrenCount(const QModelIndex &index);
+
+protected:
+
+    /// need to implement in subclass
+    virtual Album* albumForId(int id) const = 0;
+
+    /// Can reimplement in subclass
+    virtual QString albumName(Album *a) const;
+
+    // Reimplemented from parent classes
+    virtual QVariant albumData(Album *a, int role) const;
+    virtual void albumCleared(Album *album);
+    virtual void allAlbumsCleared();
+
+    /// If you do not use setCountMap, excludeChildrenCount and includeChildrenCount, you can set a count here.
+    void setCount(Album *album, int count);
+
+private:
+
+    void updateCount(Album *album);
+
+    bool            m_showCount;
+    QMap<int, int>  m_countMap;
+    QHash<int, int> m_countHashReady;
+    QSet<int>       m_includeChildrenAlbums;
+};
+
+// ------------------------------------------------------------------
+
+class AbstractCheckableAlbumModel : public AbstractCountingAlbumModel
 {
     Q_OBJECT
 
@@ -199,7 +264,7 @@ Q_SIGNALS:
 
 protected:
 
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual QVariant albumData(Album *a, int role) const;
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole );
 
@@ -221,6 +286,7 @@ public:
 protected:
 
     virtual QVariant decorationRole(Album *a) const;
+    virtual Album* albumForId(int id) const;
 };
 
 // ------------------------------------------------------------------
@@ -235,6 +301,65 @@ public:
 protected:
 
     virtual QVariant decorationRole(Album *a) const;
+    virtual Album* albumForId(int id) const;
+};
+
+// ------------------------------------------------------------------
+
+class SearchModel : public AbstractSpecificAlbumModel
+{
+public:
+
+    /// Create a model containing searches
+    SearchModel(QObject *parent = 0);
+
+    /** Set the DatabaseSearch::Type. */
+    void setSearchType(DatabaseSearch::Type type);
+    void listNormalSearches();
+    void listAllSearches();
+
+    /** Set a hash of internal names (key) that shall be replaced by a user-visible string (value) */
+    void setReplaceNames(QHash<QString, QString> replaceNames);
+
+    /** Set a pixmap for the DecorationRole */
+    void setPixmap(const QPixmap &pix);
+
+protected:
+
+    virtual QVariant albumData(Album *a, int role) const;
+    virtual bool filterAlbum(Album *album) const;
+
+    QPixmap m_pixmap;
+    int     m_searchType;
+    QHash<QString, QString> m_replaceNames;
+};
+
+// ------------------------------------------------------------------
+
+class DateAlbumModel : public AbstractCountingAlbumModel
+{
+    Q_OBJECT
+
+public:
+
+    /// A model for date based albums
+    DateAlbumModel(QObject *parent = 0);
+
+    /** Set pixmaps for the DecorationRole */
+    void setPixmaps(const QPixmap &forYearAlbums, const QPixmap &forMonthAlbums);
+
+public Q_SLOTS:
+
+    void setYearMonthMap(const QMap<YearMonth, int>& yearMonthMap);
+
+protected:
+
+    virtual QString  albumName(Album *a) const;
+    virtual QVariant decorationRole(Album *a) const;
+    virtual Album* albumForId(int id) const;
+
+    QPixmap m_yearPixmap;
+    QPixmap m_monthPixmap;
 };
 
 } // namespace Digikam

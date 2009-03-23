@@ -30,7 +30,9 @@
 
 // KDE includes.
 
+#include <kcalendarsystem.h>
 #include <kdebug.h>
+#include <kglobal.h>
 #include <klocale.h>
 
 // Local includes.
@@ -152,6 +154,11 @@ QVariant AbstractAlbumModel::data(const QModelIndex &index, int role) const
 
     Album *a = static_cast<Album*>(index.internalPointer());
 
+    return albumData(a, role);
+}
+
+QVariant AbstractAlbumModel::albumData(Album *a, int role) const
+{
     switch (role)
     {
         case Qt::DisplayRole:
@@ -427,6 +434,10 @@ AbstractSpecificAlbumModel::AbstractSpecificAlbumModel(Album::Type albumType,
                                                        QObject *parent)
                           : AbstractAlbumModel(albumType, rootAlbum, rootBehavior, parent)
 {
+}
+
+void AbstractSpecificAlbumModel::setupThumbnailLoading()
+{
     AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
 
     connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
@@ -442,6 +453,12 @@ AbstractSpecificAlbumModel::AbstractSpecificAlbumModel(Album::Type albumType,
 QString AbstractSpecificAlbumModel::columnHeader() const
 {
     return m_columnHeader;
+}
+
+void AbstractSpecificAlbumModel::setColumnHeader(const QString &header)
+{
+    m_columnHeader = header;
+    emit headerDataChanged(Qt::Horizontal, 0, 0);
 }
 
 void AbstractSpecificAlbumModel::slotGotThumbnailFromIcon(Album *album, const QPixmap&)
@@ -484,10 +501,155 @@ void AbstractSpecificAlbumModel::emitDataChangedForChildren(Album *album)
 
 // ------------------------------------------------------------------
 
+AbstractCountingAlbumModel::AbstractCountingAlbumModel(Album::Type albumType, Album *rootAlbum,
+                                                       RootAlbumBehavior rootBehavior,
+                                                       QObject *parent)
+                           : AbstractSpecificAlbumModel(albumType, rootAlbum, rootBehavior, parent)
+{
+    m_showCount = false;
+}
+
+void AbstractCountingAlbumModel::setShowCount(bool show)
+{
+    if (m_showCount != show)
+    {
+        m_showCount = show;
+        emitDataChangedForChildren(rootAlbum());
+    }
+}
+
+void AbstractCountingAlbumModel::excludeChildrenCount(const QModelIndex &index)
+{
+    Album *album = albumForIndex(index);
+    if (!album)
+        return;
+    m_includeChildrenAlbums.remove(album->id());
+    updateCount(album);
+}
+
+void AbstractCountingAlbumModel::includeChildrenCount(const QModelIndex &index)
+{
+    Album *album = albumForIndex(index);
+    if (!album)
+        return;
+    m_includeChildrenAlbums << album->id();
+    updateCount(album);
+}
+
+void AbstractCountingAlbumModel::setCountMap(const QMap<int, int>& idCountMap)
+{
+    m_countMap = idCountMap;
+    QMap<int, int>::const_iterator it = m_countMap.begin();
+    for (; it != m_countMap.end(); ++it)
+        updateCount(albumForId(it.key()));
+}
+
+void AbstractCountingAlbumModel::updateCount(Album *album)
+{
+    if (!album)
+        return;
+
+    QHash<int, int>::iterator includeIt = m_countHashReady.find(album->id());
+    bool changed = false;
+
+    // get count for album without children
+    int count = m_countMap.value(album->id());
+
+    // if wanted, add up children's counts
+    if (m_includeChildrenAlbums.contains(album->id()))
+    {
+        AlbumIterator it(album);
+        while ( it.current() )
+        {
+            count += m_countMap.value((*it)->id());
+            ++it;
+        }
+    }
+
+    // insert or update
+    if (includeIt == m_countHashReady.end())
+    {
+        changed = true;
+        m_countHashReady[album->id()] = count;
+    }
+    else
+    {
+        changed = (includeIt.value() != count);
+        includeIt.value() = count;
+    }
+
+    // notify views
+    if (changed)
+    {
+        QModelIndex index = indexForAlbum(album);
+        emit dataChanged(index, index);
+    }
+}
+
+void AbstractCountingAlbumModel::setCount(Album *album, int count)
+{
+    if (!album)
+        return;
+
+    QHash<int, int>::iterator includeIt = m_countHashReady.find(album->id());
+    bool changed = false;
+
+    // insert or update
+    if (includeIt == m_countHashReady.end())
+    {
+        changed = true;
+        m_countHashReady[album->id()] = count;
+    }
+    else
+    {
+        changed = (includeIt.value() != count);
+        includeIt.value() = count;
+    }
+
+    // notify views
+    if (changed)
+    {
+        QModelIndex index = indexForAlbum(album);
+        emit dataChanged(index, index);
+    }
+}
+
+QVariant AbstractCountingAlbumModel::albumData(Album *album, int role) const
+{
+    if (role == Qt::DisplayRole && m_showCount)
+    {
+        QHash<int, int>::const_iterator it = m_countHashReady.find(album->id());
+        if (it != m_countHashReady.end())
+            return QString("%1 (%2)").arg(albumName(album)).arg(it.value());
+    }
+    return AbstractSpecificAlbumModel::albumData(album, role);
+}
+
+QString AbstractCountingAlbumModel::albumName(Album *album) const
+{
+    return album->title();
+}
+
+void AbstractCountingAlbumModel::albumCleared(Album *album)
+{
+    m_countMap.remove(album->id());
+    m_countHashReady.remove(album->id());
+    m_includeChildrenAlbums.remove(album->id());
+}
+
+void AbstractCountingAlbumModel::allAlbumsCleared()
+{
+    m_countMap.clear();
+    m_countHashReady.clear();
+    m_includeChildrenAlbums.clear();
+}
+
+// ------------------------------------------------------------------
+
 AbstractCheckableAlbumModel::AbstractCheckableAlbumModel(Album::Type albumType, Album *rootAlbum,
                                                          RootAlbumBehavior rootBehavior,
                                                          QObject *parent)
-                           : AbstractSpecificAlbumModel(albumType, rootAlbum, rootBehavior, parent)
+                           : AbstractCountingAlbumModel(albumType, rootAlbum, rootBehavior, parent)
 {
     m_extraFlags = 0;
 }
@@ -559,7 +721,7 @@ void AbstractCheckableAlbumModel::resetCheckedAlbums()
     }
 }
 
-QVariant AbstractCheckableAlbumModel::data(const QModelIndex &index, int role) const
+QVariant AbstractCheckableAlbumModel::albumData(Album *a, int role) const
 {
     if (role == Qt::CheckStateRole)
     {
@@ -567,16 +729,16 @@ QVariant AbstractCheckableAlbumModel::data(const QModelIndex &index, int role) c
         {
             // with Qt::Unchecked as default, albums not in the hash (initially all)
             // are simply regarded as unchecked
-            return m_checkedAlbums.value(albumForIndex(index), Qt::Unchecked);
+            return m_checkedAlbums.value(a, Qt::Unchecked);
         }
     }
 
-    return AbstractSpecificAlbumModel::data(index, role);
+    return AbstractCountingAlbumModel::albumData(a, role);
 }
 
 Qt::ItemFlags AbstractCheckableAlbumModel::flags(const QModelIndex &index) const
 {
-    return AbstractSpecificAlbumModel::flags(index) | m_extraFlags;
+    return AbstractCountingAlbumModel::flags(index) | m_extraFlags;
 }
 
 bool AbstractCheckableAlbumModel::setData(const QModelIndex &index, const QVariant &value, int role)
@@ -593,7 +755,7 @@ bool AbstractCheckableAlbumModel::setData(const QModelIndex &index, const QVaria
         return true;
     }
     else
-        return AbstractSpecificAlbumModel::setData(index, value, role);
+        return AbstractCountingAlbumModel::setData(index, value, role);
 }
 
 // ------------------------------------------------------------------
@@ -604,12 +766,18 @@ AlbumModel::AlbumModel(RootAlbumBehavior rootBehavior, QObject *parent)
                                         rootBehavior, parent)
 {
     m_columnHeader = i18n("My Albums");
+    setupThumbnailLoading();
 }
 
 QVariant AlbumModel::decorationRole(Album *album) const
 {
     // asynchronous signals are handled by parent class
     return AlbumThumbnailLoader::instance()->getAlbumThumbnailDirectly(static_cast<PAlbum *>(album));
+}
+
+Album* AlbumModel::albumForId(int id) const
+{
+    return AlbumManager::instance()->findPAlbum(id);
 }
 
 // ------------------------------------------------------------------
@@ -620,11 +788,147 @@ TagModel::TagModel(RootAlbumBehavior rootBehavior, QObject *parent)
                                       rootBehavior, parent)
 {
     m_columnHeader = i18n("My Tags");
+    setupThumbnailLoading();
 }
 
 QVariant TagModel::decorationRole(Album *album) const
 {
     return AlbumThumbnailLoader::instance()->getTagThumbnailDirectly(static_cast<TAlbum *>(album), true);
+}
+
+Album* TagModel::albumForId(int id) const
+{
+    return AlbumManager::instance()->findTAlbum(id);
+}
+
+// ------------------------------------------------------------------
+
+SearchModel::SearchModel(QObject *parent)
+            : AbstractSpecificAlbumModel(Album::SEARCH,
+                                         AlbumManager::instance()->findSAlbum(0),
+                                         IgnoreRootAlbum, parent)
+{
+}
+
+void SearchModel::setSearchType(DatabaseSearch::Type type)
+{
+    m_searchType = type;
+}
+
+void SearchModel::listNormalSearches()
+{
+    m_searchType = -1;
+}
+
+void SearchModel::listAllSearches()
+{
+    m_searchType = -2;
+}
+
+void SearchModel::setReplaceNames(QHash<QString, QString> replaceNames)
+{
+    m_replaceNames = replaceNames;
+}
+
+void SearchModel::setPixmap(const QPixmap &pix)
+{
+    m_pixmap = pix;
+}
+
+QVariant SearchModel::albumData(Album *a, int role) const
+{
+    if (role == Qt::DisplayRole)
+    {
+        QString name = a->title();
+        return m_replaceNames.value(name, name);
+    }
+    else if (role == Qt::DecorationRole)
+        return m_pixmap;
+
+    return AbstractSpecificAlbumModel::albumData(a, role);
+}
+
+bool SearchModel::filterAlbum(Album *album) const
+{
+    if (AbstractSpecificAlbumModel::filterAlbum(album))
+    {
+        SAlbum *salbum = static_cast<SAlbum*>(album);
+        if (m_searchType == -1)
+            return salbum->isNormalSearch();
+        else if (m_searchType == -2)
+            return true;
+        else
+            return salbum->type() == (DatabaseSearch::Type)m_searchType;
+    }
+    return false;
+}
+
+// ------------------------------------------------------------------
+
+DateAlbumModel::DateAlbumModel(QObject *parent)
+            : AbstractCountingAlbumModel(Album::DATE,
+                                         AlbumManager::instance()->findDAlbum(0),
+                                         IgnoreRootAlbum, parent)
+{
+}
+
+void DateAlbumModel::setPixmaps(const QPixmap &forYearAlbums, const QPixmap &forMonthAlbums)
+{
+    m_yearPixmap = forYearAlbums;
+    m_monthPixmap = forMonthAlbums;
+}
+
+QString DateAlbumModel::albumName(Album *album) const
+{
+    DAlbum *dalbum = static_cast<DAlbum*>(album);
+    if (dalbum->range() == DAlbum::Year)
+        return QString::number(dalbum->date().year());
+    else
+        return KGlobal::locale()->calendar()->monthName(dalbum->date(), KCalendarSystem::LongName);
+}
+
+QVariant DateAlbumModel::decorationRole(Album *album) const
+{
+    DAlbum *dalbum = static_cast<DAlbum*>(album);
+    if (dalbum->range() == DAlbum::Year)
+        return m_yearPixmap;
+    else
+        return m_monthPixmap;
+}
+
+Album* DateAlbumModel::albumForId(int id) const
+{
+    return AlbumManager::instance()->findDAlbum(id);
+}
+
+void DateAlbumModel::setYearMonthMap(const QMap<YearMonth, int>& yearMonthMap)
+{
+    AlbumIterator it(rootAlbum());
+
+    while (it.current())
+    {
+        DAlbum *dalbum = static_cast<DAlbum*>(*it);
+        QDate date = dalbum->date();
+
+        if (dalbum->range() == DAlbum::Month)
+        {
+            QMap<YearMonth, int>::const_iterator it2 = yearMonthMap.find(YearMonth(date.year(), date.month()));
+            if ( it2 != yearMonthMap.end() )
+                setCount(*it, it2.value());
+        }
+        else
+        {
+            int count = 0;
+            for ( QMap<YearMonth, int>::const_iterator it2 = yearMonthMap.begin();
+                    it2 != yearMonthMap.end(); ++it2 )
+            {
+                if (it2.key().first == date.year())
+                    count += it2.value();
+            }
+            setCount(*it, count);
+        }
+        ++it;
+    }
 }
 
 } // namespace Digikam
