@@ -741,6 +741,7 @@ ENDIF(MSVC)
     SET(libalbummodels_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagealbummodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagealbumfiltermodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/albummodel.cpp
        )
 
     SET(liblighttable_SRCS
