@@ -15,5 +15,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 187569 : Crash on star removing when filtering by stars.
 005 ==> 186549 : digiKam crashes when hovering the bottom part of its.
 006 ==> 187641 : digiKam: error while loading shared libraries: libkdcraw.so.5.
-007 ==> 
-
+007 ==> 187429 : Crash on Launch after disable KIPI plugins rotate. 
+008 ==> 
