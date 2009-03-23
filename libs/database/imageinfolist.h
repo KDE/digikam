@@ -43,8 +43,9 @@ class DIGIKAM_DATABASE_EXPORT ImageInfoList : public QList<ImageInfo>
 
 public:
 
-    //TODO: Connect change signals from album db,
-    // to provide facilities to update contained ImageInfos
+    ImageInfoList() {}
+    ImageInfoList(const QList<ImageInfo> &list)
+        : QList<ImageInfo>(list) {}
 };
 
 typedef ImageInfoList::iterator ImageInfoListIterator;
