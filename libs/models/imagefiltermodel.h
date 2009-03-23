@@ -76,7 +76,6 @@ protected:
     virtual void setSourceModel(QAbstractItemModel* model);
 
     virtual bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
-    //void triggerFiltering();
 
     ImageFilterModelPrivate *const d_ptr;
     ImageFilterModel(ImageFilterModelPrivate &dd, QObject *parent);
@@ -84,7 +83,7 @@ protected:
 protected Q_SLOTS:
 
     void slotModelReset();
-    //void slotRefilter();
+    void slotUpdateFilter();
 
     void slotImageTagChange(const ImageTagChangeset &changeset);
     void slotImageChange(const ImageChangeset &changeset);

@@ -51,7 +51,7 @@ ImageFilterModelPrivate::ImageFilterModelPrivate()
     lastFilteredVersion   = 0;
     sentOut               = 0;
     sentOutForReAdd       = 0;
-    filterTimer           = 0;
+    updateFilterTimer           = 0;
     needPrepare           = false;
     needPrepareComments   = false;
     needPrepareTags       = false;
@@ -99,15 +99,13 @@ ImageFilterModel::ImageFilterModel(ImageFilterModelPrivate &dd, QObject *parent)
 void ImageFilterModelPrivate::init(ImageFilterModel *_q)
 {
     q = _q;
-    /*
-    filterTimer  = new QTimer(this);
 
-    filterTimer->setSingleShot(true);
-    filterTimer->setInterval(100);
+    updateFilterTimer  = new QTimer(this);
+    updateFilterTimer->setSingleShot(true);
+    updateFilterTimer->setInterval(250);
 
-    connect(filterTimer, SIGNAL(timeout()),
-            q, SLOT(slotRefilter()));
-    */
+    connect(updateFilterTimer, SIGNAL(timeout()),
+            q, SLOT(slotUpdateFilter()));
 
     connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset &)),
             q, SLOT(slotImageChange(const ImageChangeset &)));
@@ -218,29 +216,16 @@ void ImageFilterModel::setImageFilterSettings(const ImageFilterSettings &setting
     d->filterResults.clear();
     if (d->imageModel)
         d->infosToProcess(d->imageModel->imageInfos(), false);
-    //triggerFiltering();
 }
 
-/*
-void ImageFilterModel::triggerFiltering()
+void ImageFilterModel::slotUpdateFilter()
 {
     Q_D(ImageFilterModel);
-    if (!d->filterTimer->isActive())
-        d->filterTimer->start(); // -> slotRefilter
-}
-
-void ImageFilterModel::slotRefilter()
-{
-    Q_D(ImageFilterModel);
-
-    if (d->version == d->lastFilteredVersion)
-        return;
 
     d->filterResults.clear();
     if (d->imageModel)
         d->infosToProcess(d->imageModel->imageInfos(), false);
 }
-*/
 
 ImageFilterSettings ImageFilterModel::imageFilterSettings() const
 {
@@ -456,7 +441,7 @@ void ImageFilterModel::slotImageTagChange(const ImageTagChangeset &changeset)
         return;
 
     // already scheduled to re-filter?
-    if (d->filterTimer->isActive())
+    if (d->updateFilterTimer->isActive())
         return;
 
     // do we filter at all?
@@ -469,7 +454,7 @@ void ImageFilterModel::slotImageTagChange(const ImageTagChangeset &changeset)
         // if one matching image id is found, trigger a refresh
         if (d->imageModel->hasImage(id))
         {
-            d->filterTimer->start();
+            d->updateFilterTimer->start();
             return;
         }
     }
@@ -483,7 +468,7 @@ void ImageFilterModel::slotImageChange(const ImageChangeset &changeset)
         return;
 
     // already scheduled to re-filter?
-    if (d->filterTimer->isActive())
+    if (d->updateFilterTimer->isActive())
         return;
 
     // do we filter at all?
@@ -503,7 +488,7 @@ void ImageFilterModel::slotImageChange(const ImageChangeset &changeset)
         // if one matching image id is found, trigger a refresh
         if (d->imageModel->hasImage(id))
         {
-            d->filterTimer->start();
+            d->updateFilterTimer->start();
             return;
         }
     }

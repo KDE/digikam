@@ -81,7 +81,7 @@ public:
     int                        sentOut;
     int                        sentOutForReAdd;
 
-    QTimer                    *filterTimer;
+    QTimer                    *updateFilterTimer;
 
     bool                       needPrepare;
     bool                       needPrepareComments;
