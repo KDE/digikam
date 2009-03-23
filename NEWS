@@ -16,4 +16,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 186549 : digiKam crashes when hovering the bottom part of its.
 006 ==> 187641 : digiKam: error while loading shared libraries: libkdcraw.so.5.
 007 ==> 187429 : Crash on Launch after disable KIPI plugins rotate. 
-008 ==> 
+008 ==> 187937 : Writing tags to files doesn't update modification timestamp.
+009 ==> 
