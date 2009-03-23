@@ -197,7 +197,7 @@ void ContextMenuHelper::addKipiActions()
     {
         KIPI::Plugin* plugin = info->plugin();
 
-        if (plugin && info->name() == "JPEGLossless")
+        if (plugin && info->shouldLoad() && info->name() == "JPEGLossless")
         {
             kDebug(50003) << "Found JPEGLossless plugin" << endl;
 
