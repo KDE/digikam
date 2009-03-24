@@ -124,8 +124,9 @@ ToolsListView::ToolsListView(QWidget *parent)
     header()->setResizeMode(QHeaderView::Stretch);
 
     new ToolListViewGroup(this, BatchTool::BaseTool);
-    new ToolListViewGroup(this, BatchTool::KipiTool);
     new ToolListViewGroup(this, BatchTool::CustomTool);
+    // Not yet implemented in libkipi.
+    //new ToolListViewGroup(this, BatchTool::KipiTool);
 
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
             this, SLOT(slotContextMenu()));
