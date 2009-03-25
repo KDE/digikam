@@ -20,4 +20,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 184687 : Crash after deleting an empty album.
 010 ==> 186766 : Crash after finish resize and rename of images in folder.
 011 ==> 184953 : Zooming and paning in slideshow / without toolbars.
-012 ==> 
+012 ==> 187508 : Spontaneous crash whilst doing nothing in particular.
+013 ==> 
