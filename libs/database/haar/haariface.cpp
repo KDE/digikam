@@ -662,7 +662,6 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
 {
     QMap< qlonglong, QList<qlonglong> >  resultsMap;
     QList<qlonglong>::const_iterator     it;
-    QList<qlonglong>::const_iterator     it2;
     QList<qlonglong>                     list;
     QSet<qlonglong>                      resultsCandidates;
 
