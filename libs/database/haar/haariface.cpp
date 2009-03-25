@@ -708,11 +708,15 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
 
         progress++;
 
-        if (observer && (progress == total || progress % progressStep == 0) )
+        if (observer && (progress == total || progress % progressStep == 0))
         {
             observer->processedNumber(progress);
         }
     }
+
+    // make sure the progress bar is really set to 100% when search is finished
+    if (observer)
+        observer->processedNumber(total);
 
     d->enableCachedSignatures(false);
 
