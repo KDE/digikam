@@ -1202,7 +1202,7 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
         pictInfo.photoInfo = meta.getPhotographInformation();
         settings.pictInfoMap.insert(*it, pictInfo);
 
-        m_nameLabel->setProgressValue((int)((i++/cnt)*100.0));
+        m_nameLabel->setProgressValue((int)((i++/cnt)*100.0f));
         kapp->processEvents();
     }
 

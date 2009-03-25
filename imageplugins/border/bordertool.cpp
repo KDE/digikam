@@ -512,7 +512,7 @@ void BorderTool::prepareFinal()
 
     int borderType    = m_borderType->currentIndex();
     int borderWidth   = m_borderWidth->value();
-    float borderRatio = m_borderPercent->value()/100.0;
+    float borderRatio = m_borderPercent->value()/100.0f;
     QString border    = getBorderPath( m_borderType->currentIndex() );
 
     ImageIface iface(0, 0);

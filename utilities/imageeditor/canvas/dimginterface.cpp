@@ -260,9 +260,9 @@ void DImgInterface::resetValues()
     d->selY           = 0;
     d->selW           = 0;
     d->selH           = 0;
-    d->gamma          = 1.0;
-    d->contrast       = 1.0;
-    d->brightness     = 0.0;
+    d->gamma          = 1.0f;
+    d->contrast       = 1.0f;
+    d->brightness     = 0.0f;
     d->changedBCG     = false;
     d->iofileSettings = 0;
     d->parent         = 0;
@@ -560,9 +560,9 @@ void DImgInterface::save(const QString& file, IOFileSettingsContainer *iofileSet
     d->cmod.applyBCG(d->image);
 
     d->cmod.reset();
-    d->gamma      = 1.0;
-    d->contrast   = 1.0;
-    d->brightness = 0.0;
+    d->gamma      = 1.0f;
+    d->contrast   = 1.0f;
+    d->brightness = 0.0f;
 
     QString currentMimeType(QImageIO::imageFormat(d->filename));
 
@@ -974,7 +974,7 @@ void DImgInterface::changeGamma(double gamma)
                                             d->contrast, gamma, d->brightness,
                                             d->contrast));
 
-    d->gamma += gamma/10.0;
+    d->gamma += gamma/10.0f;
 
     d->cmod.reset();
     d->cmod.setGamma(d->gamma);
@@ -991,7 +991,7 @@ void DImgInterface::changeBrightness(double brightness)
                                             d->contrast, d->gamma, brightness,
                                             d->contrast));
 
-    d->brightness += brightness/100.0;
+    d->brightness += brightness/100.0f;
 
     d->cmod.reset();
     d->cmod.setGamma(d->gamma);
@@ -1008,7 +1008,7 @@ void DImgInterface::changeContrast(double contrast)
                                             d->contrast, d->gamma, d->brightness,
                                             contrast));
 
-    d->contrast += contrast/100.0;
+    d->contrast += contrast/100.0f;
 
     d->cmod.reset();
     d->cmod.setGamma(d->gamma);
@@ -1045,9 +1045,9 @@ void DImgInterface::setBCG(double brightness, double contrast, double gamma)
     d->cmod.applyBCG(d->image);
 
     d->cmod.reset();
-    d->gamma      = 1.0;
-    d->contrast   = 1.0;
-    d->brightness = 0.0;
+    d->gamma      = 1.0f;
+    d->contrast   = 1.0f;
+    d->brightness = 0.0f;
     d->changedBCG = false;
 
     setModified();

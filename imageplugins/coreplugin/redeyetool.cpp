@@ -376,7 +376,7 @@ void RedEyeTool::redEyeFilter(DImg& selection)
                        selection.bits(), true);
 
     selection          = mask.copy();
-    float redThreshold = m_redThreshold->value()/10.0;
+    float redThreshold = m_redThreshold->value()/10.0f;
     int hue            = m_VSelector->hue();
     int sat            = m_VSelector->saturation();
     int val            = m_VSelector->value();
@@ -391,24 +391,24 @@ void RedEyeTool::redEyeFilter(DImg& selection)
 
     channel red_chan, green_chan, blue_chan;
 
-    red_chan.red_gain     = 0.1;
-    red_chan.green_gain   = 0.6;
-    red_chan.blue_gain    = 0.3;
+    red_chan.red_gain     = 0.1f;
+    red_chan.green_gain   = 0.6f;
+    red_chan.blue_gain    = 0.3f;
 
-    green_chan.red_gain   = 0.0;
-    green_chan.green_gain = 1.0;
-    green_chan.blue_gain  = 0.0;
+    green_chan.red_gain   = 0.0f;
+    green_chan.green_gain = 1.0f;
+    green_chan.blue_gain  = 0.0f;
 
-    blue_chan.red_gain    = 0.0;
-    blue_chan.green_gain  = 0.0;
-    blue_chan.blue_gain   = 1.0;
+    blue_chan.red_gain    = 0.0f;
+    blue_chan.green_gain  = 0.0f;
+    blue_chan.blue_gain   = 1.0f;
 
     float red_norm, green_norm, blue_norm;
     int   level = 201 - m_tintLevel->value();
 
-    red_norm   = 1.0 / (red_chan.red_gain   + red_chan.green_gain   + red_chan.blue_gain);
-    green_norm = 1.0 / (green_chan.red_gain + green_chan.green_gain + green_chan.blue_gain);
-    blue_norm  = 1.0 / (blue_chan.red_gain  + blue_chan.green_gain  + blue_chan.blue_gain);
+    red_norm   = 1.0f / (red_chan.red_gain   + red_chan.green_gain   + red_chan.blue_gain);
+    green_norm = 1.0f / (green_chan.red_gain + green_chan.green_gain + green_chan.blue_gain);
+    blue_norm  = 1.0f / (blue_chan.red_gain  + blue_chan.green_gain  + blue_chan.blue_gain);
 
     red_norm   *= coloring.red()   / level;
     green_norm *= coloring.green() / level;
