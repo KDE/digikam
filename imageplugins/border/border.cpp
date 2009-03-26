@@ -229,23 +229,45 @@ void Border::bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColo
     btTriangle.setPoint(2, width, height);
     QRegion btRegion(btTriangle);
 
-    for(int x=0 ; x < width ; x++)
+    // paint upper right corner
+    int xUpperRight = width - ((width - src.width())/ 2) - 10;
+    int yUpperRight = (0 + (height - src.height())) / 2 + 10;
+    for(int x= xUpperRight ; x < width ; x++)
     {
-        for(int y=0 ; y < height ; y++)
+        for(int y=0 ; y < yUpperRight ; y++)
         {
             if (btRegion.contains(QPoint(x, y)))
                 dest.setPixelColor(x, y, btmColor);
         }
     }
 
+    // paint right border
+    for(int x= xUpperRight ; x < width ; x++)
+        for(int y=yUpperRight ; y < height ; y++)
+            dest.setPixelColor(x, y, btmColor);
+
+    // paint lower left corner
+    int xLowerLeft = 0 + ((width - src.width())/ 2) + 10;
+    int yLowerLeft = height - ((height - src.height())/ 2) - 10;
+    for(int x= 0 ; x < xLowerLeft ; x++)
+    {
+        for(int y=yLowerLeft ; y < height ; y++)
+        {
+            if (btRegion.contains(QPoint(x, y)))
+                dest.setPixelColor(x, y, btmColor);
+        }
+    }
+
+    // paint bottom border
+    for(int x= xLowerLeft ; x < width ; x++)
+        for(int y=yLowerLeft ; y < height ; y++)
+            dest.setPixelColor(x, y, btmColor);
+
+
     if (m_orgWidth > m_orgHeight)
-    {
         dest.bitBltImage(&src, (dest.width()-src.width())/2, borderWidth);
-    }
     else
-    {
         dest.bitBltImage(&src, borderWidth, (dest.height()-src.height())/2);
-    }
 }
 
 void Border::pattern(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth,
