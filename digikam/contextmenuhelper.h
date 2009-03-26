@@ -27,17 +27,16 @@
 // Qt includes.
 
 #include <QMap>
-#include <QObject>
 
 // KDE includes.
 
 #include <kservice.h>
 
+class Q3ListViewItem;
 class QAction;
 class QMenu;
 class QPoint;
 class QString;
-class Q3ListViewItem;
 
 class KActionCollection;
 

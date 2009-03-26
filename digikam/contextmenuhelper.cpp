@@ -28,8 +28,8 @@
 
 #include <QAction>
 #include <QClipboard>
-#include <QMenu>
 #include <QMap>
+#include <QMenu>
 #include <QMimeData>
 #include <QString>
 
@@ -433,20 +433,19 @@ QAction* ContextMenuHelper::exec(const QPoint& pos, QAction* at)
     QAction* choice = d->menu->exec(pos, at);
     if (choice)
     {
+        ImageInfo selectedItem(d->selectedIds.first());
+
         if (choice == d->gotoAlbumAction)
         {
-            ImageInfo item(d->selectedIds.first());
-            emit signalGotoAlbum(item);
+            emit signalGotoAlbum(selectedItem);
         }
         else if (choice == d->gotoDateAction)
         {
-            ImageInfo item(d->selectedIds.first());
-            emit signalGotoDate(item);
+            emit signalGotoDate(selectedItem);
         }
         else if (choice == d->setThumbnailAction)
         {
-            ImageInfo item(d->selectedIds.first());
-            emit signalSetThumbnail(item);
+            emit signalSetThumbnail(selectedItem);
         }
         else
         {
