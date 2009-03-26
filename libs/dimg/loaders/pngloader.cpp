@@ -51,6 +51,9 @@ extern "C"
 // KDE includes.
 
 #include <kdebug.h>
+
+// Libkexiv2 includes.
+
 #include <libkexiv2/kexiv2.h>
 
 // Local includes.
@@ -225,15 +228,15 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
         if (bit_depth == 16)
         {
-    #ifdef ENABLE_DEBUG_MESSAGES
+#ifdef ENABLE_DEBUG_MESSAGES
             kDebug(50003) << "PNG in 16 bits/color/pixel." << endl;
-    #endif
+#endif
             switch (color_type)
             {
                 case PNG_COLOR_TYPE_RGB :            // RGB
-    #ifdef ENABLE_DEBUG_MESSAGES
+#ifdef ENABLE_DEBUG_MESSAGES
                     kDebug(50003) << "PNG in PNG_COLOR_TYPE_RGB" << endl;
-    #endif
+#endif
                     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
                         png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
                     else                                                         // PPC
@@ -242,15 +245,15 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     break;
 
                 case PNG_COLOR_TYPE_RGB_ALPHA :     // RGBA
-    #ifdef ENABLE_DEBUG_MESSAGES
+#ifdef ENABLE_DEBUG_MESSAGES
                     kDebug(50003) << "PNG in PNG_COLOR_TYPE_RGB_ALPHA" << endl;
-    #endif
+#endif
                     break;
 
                 case PNG_COLOR_TYPE_GRAY :          // Grayscale
-    #ifdef ENABLE_DEBUG_MESSAGES
+#ifdef ENABLE_DEBUG_MESSAGES
                     kDebug(50003) << "PNG in PNG_COLOR_TYPE_GRAY" << endl;
-    #endif
+#endif
                     png_set_gray_to_rgb(png_ptr);
 
                     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
@@ -261,17 +264,17 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     break;
 
                 case PNG_COLOR_TYPE_GRAY_ALPHA :	// Grayscale + Alpha
-    #ifdef ENABLE_DEBUG_MESSAGES
+#ifdef ENABLE_DEBUG_MESSAGES
                     kDebug(50003) << "PNG in PNG_COLOR_TYPE_GRAY_ALPHA" << endl;
-    #endif
+#endif
                     png_set_gray_to_rgb(png_ptr);
 
                     break;
 
                 case PNG_COLOR_TYPE_PALETTE :       // Indexed
-    #ifdef ENABLE_DEBUG_MESSAGES
+#ifdef ENABLE_DEBUG_MESSAGES
                     kDebug(50003) << "PNG in PNG_COLOR_TYPE_PALETTE" << endl;
-    #endif
+#endif
                     png_set_palette_to_rgb(png_ptr);
 
                     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
@@ -282,26 +285,26 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     break;
 
                 default:
-    #ifdef ENABLE_DEBUG_MESSAGES
+#ifdef ENABLE_DEBUG_MESSAGES
                     kDebug(50003) << "PNG color type unknown." << endl;
-    #endif
+#endif
                     delete cleanupData;
                     return false;
             }
         }
         else
         {
-    #ifdef ENABLE_DEBUG_MESSAGES
+#ifdef ENABLE_DEBUG_MESSAGES
             kDebug(50003) << "PNG in >=8 bits/color/pixel." << endl;
-    #endif
+#endif
             png_set_packing(png_ptr);
 
             switch (color_type)
             {
                 case PNG_COLOR_TYPE_RGB :           // RGB
-    #ifdef ENABLE_DEBUG_MESSAGES
+#ifdef ENABLE_DEBUG_MESSAGES
                     kDebug(50003) << "PNG in PNG_COLOR_TYPE_RGB" << endl;
-    #endif
+#endif
                     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
                         png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
                     else                                                         // PPC
@@ -310,15 +313,15 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     break;
 
                 case PNG_COLOR_TYPE_RGB_ALPHA :     // RGBA
-    #ifdef ENABLE_DEBUG_MESSAGES
+#ifdef ENABLE_DEBUG_MESSAGES
                     kDebug(50003) << "PNG in PNG_COLOR_TYPE_RGB_ALPHA" << endl;
-    #endif
+#endif
                     break;
 
                 case PNG_COLOR_TYPE_GRAY :          // Grayscale
-    #ifdef ENABLE_DEBUG_MESSAGES
+#ifdef ENABLE_DEBUG_MESSAGES
                     kDebug(50003) << "PNG in PNG_COLOR_TYPE_GRAY" << endl;
-    #endif
+#endif
                     png_set_gray_1_2_4_to_8(png_ptr);
                     png_set_gray_to_rgb(png_ptr);
 
@@ -330,16 +333,16 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     break;
 
                 case PNG_COLOR_TYPE_GRAY_ALPHA :    // Grayscale + alpha
-    #ifdef ENABLE_DEBUG_MESSAGES
+#ifdef ENABLE_DEBUG_MESSAGES
                     kDebug(50003) << "PNG in PNG_COLOR_TYPE_GRAY_ALPHA" << endl;
-    #endif
+#endif
                     png_set_gray_to_rgb(png_ptr);
                     break;
 
                 case PNG_COLOR_TYPE_PALETTE :       // Indexed
-    #ifdef ENABLE_DEBUG_MESSAGES
+#ifdef ENABLE_DEBUG_MESSAGES
                     kDebug(50003) << "PNG in PNG_COLOR_TYPE_PALETTE" << endl;
-    #endif
+#endif
                     png_set_packing(png_ptr);
                     png_set_palette_to_rgb(png_ptr);
 
@@ -351,9 +354,9 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     break;
 
                 default:
-    #ifdef ENABLE_DEBUG_MESSAGES
+#ifdef ENABLE_DEBUG_MESSAGES
                     kDebug(50003) << "PNG color type unknown." << endl;
-    #endif
+#endif
                     delete cleanupData;
                     return false;
             }
@@ -524,10 +527,10 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             {
                 imageSetEmbbededText(text_ptr[i].key, text_ptr[i].text);
 
-    #ifdef ENABLE_DEBUG_MESSAGES
+#ifdef ENABLE_DEBUG_MESSAGES
                 kDebug(50003) << "Reading PNG Embedded text: key=" << text_ptr[i].key
-                        << " text=" << text_ptr[i].text << endl;
-    #endif
+                              << " text=" << text_ptr[i].text << endl;
+#endif
             }
         }
     }
@@ -757,7 +760,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             switch (it.key())
             {
 
-                #ifdef PNG_iTXt_SUPPORTED
+#ifdef PNG_iTXt_SUPPORTED
 
                 // TODO : this code is not yet tested. It require libpng 1.3.0.
 
@@ -773,7 +776,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
                     kDebug(50003) << "Writing digiKam comment into iTXt PNG chunk : " << ba << endl;
                     break;
                 }
-                #endif
+#endif
 
                 case(DImg::EXIF):
                 {
