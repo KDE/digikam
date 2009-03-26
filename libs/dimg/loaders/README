@@ -1,4 +1,4 @@
-Native DIMG Loaders status (Gilles Caulier - 2006-11-29)
+Native DIMG Loaders status (Gilles Caulier - 2009-03-26)
 --------------------------------------------------------
 
 Format  Read  Write  ICC   MetaData  Thumb  8bits    16bits  depency     Remarks
@@ -6,12 +6,12 @@ Format  Read  Write  ICC   MetaData  Thumb  8bits    16bits  depency     Remarks
 JPG     Done  Done   Done  Done      TODO    yes      N.A     libjpeg    Metadata are EXIF/IPTC/XMP/ICC profil
 PNG     Done  Done   Done  Done      N.A     yes      yes     libpng     Metadata are EXIF/IPTC/XMP/ICC profil
 TIF/EP  Done  Done   Done  Done      TODO    yes      yes     libtiff    Metadata are EXIF/IPTC/XMP/ICC profil
-RAW     Done  N.A    N.A   Done      Done    yes      yes     dcraw      Metadata are EXIF
+RAW     Done  N.A    N.A   Done      Done    yes      yes     libkdcraw  Metadata are EXIF
 PPM     Done  TODO   N.A   N.A       N.A     yes      yes     none
-JPEG2K  Done  Done   Done  TODO      N.A     yes      yes     libjasper  Metadata are EXIF/XMP/ICC profil
+JPEG2K  Done  Done   Done  Done      N.A     yes      yes     libjasper  Metadata are EXIF/IPTC/XMP/ICC profil
 
 Others file formats are supported only in 8 bits/color/pixel using QImage/kimgio. 
-QT3.x + KDE 3.4.x support these formats :
+Supported formats are listed below :
 
 Format   Read       Write      Remarks
 
