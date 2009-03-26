@@ -230,8 +230,8 @@ void Border::bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColo
     QRegion btRegion(btTriangle);
 
     // paint upper right corner
-    int xUpperRight = width - ((width - src.width()) / 2) - 10;
-    int yUpperRight = (0 + (height - src.height())) / 2 + 10;
+    int xUpperRight = width - ((width - src.width()) / 2) - 2;
+    int yUpperRight = (0 + (height - src.height())) / 2 + 2;
 
     for (int x = xUpperRight; x < width; ++x)
     {
@@ -248,8 +248,8 @@ void Border::bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColo
             dest.setPixelColor(x, y, btmColor);
 
     // paint lower left corner
-    int xLowerLeft = 0 + ((width - src.width()) / 2) + 10;
-    int yLowerLeft = height - ((height - src.height()) / 2) - 10;
+    int xLowerLeft = 0 + ((width - src.width()) / 2) + 2;
+    int yLowerLeft = height - ((height - src.height()) / 2) - 2;
 
     for (int x = 0; x < xLowerLeft; ++x)
     {
