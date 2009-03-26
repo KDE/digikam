@@ -232,9 +232,10 @@ void Border::bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColo
     // paint upper right corner
     int xUpperRight = width - ((width - src.width())/ 2) - 10;
     int yUpperRight = (0 + (height - src.height())) / 2 + 10;
-    for(int x= xUpperRight ; x < width ; x++)
+
+    for(int x = xUpperRight ; x < width ; ++x)
     {
-        for(int y=0 ; y < yUpperRight ; y++)
+        for(int y = 0 ; y < yUpperRight ; ++y)
         {
             if (btRegion.contains(QPoint(x, y)))
                 dest.setPixelColor(x, y, btmColor);
@@ -242,16 +243,17 @@ void Border::bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColo
     }
 
     // paint right border
-    for(int x= xUpperRight ; x < width ; x++)
-        for(int y=yUpperRight ; y < height ; y++)
+    for(int x = xUpperRight ; x < width ; ++x)
+        for(int y = yUpperRight ; y < height ; ++y)
             dest.setPixelColor(x, y, btmColor);
 
     // paint lower left corner
     int xLowerLeft = 0 + ((width - src.width())/ 2) + 10;
     int yLowerLeft = height - ((height - src.height())/ 2) - 10;
-    for(int x= 0 ; x < xLowerLeft ; x++)
+
+    for(int x = 0 ; x < xLowerLeft ; ++x)
     {
-        for(int y=yLowerLeft ; y < height ; y++)
+        for(int y = yLowerLeft ; y < height ; ++y)
         {
             if (btRegion.contains(QPoint(x, y)))
                 dest.setPixelColor(x, y, btmColor);
@@ -259,8 +261,8 @@ void Border::bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColo
     }
 
     // paint bottom border
-    for(int x= xLowerLeft ; x < width ; x++)
-        for(int y=yLowerLeft ; y < height ; y++)
+    for(int x = xLowerLeft ; x < width ; ++x)
+        for(int y = yLowerLeft ; y < height ; ++y)
             dest.setPixelColor(x, y, btmColor);
 
 
