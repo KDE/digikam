@@ -40,6 +40,8 @@ public:
     /// Create a model containing all physical albums
     AlbumModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum, QObject *parent = 0);
 
+    PAlbum *albumForIndex(const QModelIndex &index) const;
+
 protected:
 
     virtual QVariant decorationRole(Album *a) const;
@@ -55,6 +57,8 @@ public:
     /// Create a model containing all tags
     TagModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum, QObject *parent = 0);
 
+    TAlbum *albumForIndex(const QModelIndex &index) const;
+
 protected:
 
     virtual QVariant decorationRole(Album *a) const;
@@ -69,6 +73,8 @@ public:
 
     /// Create a model containing searches
     SearchModel(QObject *parent = 0);
+
+    SAlbum *albumForIndex(const QModelIndex &index) const;
 
     /** Set the DatabaseSearch::Type. */
     void setSearchType(DatabaseSearch::Type type);
@@ -101,6 +107,8 @@ public:
 
     /// A model for date based albums
     DateAlbumModel(QObject *parent = 0);
+
+    DAlbum *albumForIndex(const QModelIndex &index) const;
 
     /** Set pixmaps for the DecorationRole */
     void setPixmaps(const QPixmap &forYearAlbums, const QPixmap &forMonthAlbums);

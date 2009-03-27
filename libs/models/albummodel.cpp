@@ -50,6 +50,11 @@ AlbumModel::AlbumModel(RootAlbumBehavior rootBehavior, QObject *parent)
     setupThumbnailLoading();
 }
 
+PAlbum *AlbumModel::albumForIndex(const QModelIndex &index) const
+{
+    return static_cast<PAlbum*>(albumForIndex(index));
+}
+
 QVariant AlbumModel::decorationRole(Album *album) const
 {
     // asynchronous signals are handled by parent class
@@ -72,6 +77,11 @@ TagModel::TagModel(RootAlbumBehavior rootBehavior, QObject *parent)
     setupThumbnailLoading();
 }
 
+TAlbum *TagModel::albumForIndex(const QModelIndex &index) const
+{
+    return static_cast<TAlbum*>(albumForIndex(index));
+}
+
 QVariant TagModel::decorationRole(Album *album) const
 {
     return AlbumThumbnailLoader::instance()->getTagThumbnailDirectly(static_cast<TAlbum *>(album), true);
@@ -89,6 +99,11 @@ SearchModel::SearchModel(QObject *parent)
                                          AlbumManager::instance()->findSAlbum(0),
                                          IgnoreRootAlbum, parent)
 {
+}
+
+SAlbum *SearchModel::albumForIndex(const QModelIndex &index) const
+{
+    return static_cast<SAlbum*>(albumForIndex(index));
 }
 
 void SearchModel::setSearchType(DatabaseSearch::Type type)
@@ -151,6 +166,11 @@ DateAlbumModel::DateAlbumModel(QObject *parent)
                                          AlbumManager::instance()->findDAlbum(0),
                                          IgnoreRootAlbum, parent)
 {
+}
+
+DAlbum *DateAlbumModel::albumForIndex(const QModelIndex &index) const
+{
+    return static_cast<DAlbum*>(albumForIndex(index));
 }
 
 void DateAlbumModel::setPixmaps(const QPixmap &forYearAlbums, const QPixmap &forMonthAlbums)
