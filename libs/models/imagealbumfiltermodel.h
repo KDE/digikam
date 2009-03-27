@@ -52,7 +52,7 @@ public:
     void setSourceImageModel(ImageAlbumModel* model);
 
 
-protected slots:
+protected Q_SLOTS:
 
     //void slotListedAlbumChanged(Album *album);
     void slotAlbumRenamed(Album *album);
