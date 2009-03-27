@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2008-03-22
+ * Date        : 2009-03-23
  * Description : Qt Model for Albums
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,12 +23,14 @@
 
 #include "abstractalbummodel.h"
 #include "abstractalbummodel.moc"
+#include "abstractalbummodelpriv.h"
 
 // Qt includes.
 
 // KDE includes.
 
 #include <kdebug.h>
+#include <klocale.h>
 #include <kglobal.h>
 
 // Local includes.
@@ -67,9 +69,6 @@ AbstractAlbumModel::AbstractAlbumModel(Album::Type albumType, Album *rootAlbum, 
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumRenamed(Album*)),
             this, SLOT(slotAlbumRenamed(Album*)));
-
-    //connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(const QMap<int, int>&)),
-      //      this, SLOT(slotRefresh(const QMap<int, int>&)));
 }
 
 AbstractAlbumModel::~AbstractAlbumModel()
@@ -243,6 +242,9 @@ QModelIndex AbstractAlbumModel::indexForAlbum(Album *a) const
     if (!a)
         return QModelIndex();
 
+    if (!filterAlbum(a))
+        return QModelIndex();
+
     // a is root album? Decide on root behavior
     if (a == d->rootAlbum)
     {
@@ -267,6 +269,11 @@ Album *AbstractAlbumModel::albumForIndex(const QModelIndex &index) const
 Album *AbstractAlbumModel::rootAlbum() const
 {
     return d->rootAlbum;
+}
+
+QModelIndex AbstractAlbumModel::rootAlbumIndex() const
+{
+    return indexForAlbum(d->rootAlbum);
 }
 
 QVariant AbstractAlbumModel::decorationRole(Album *) const
@@ -311,8 +318,12 @@ void AbstractAlbumModel::slotAlbumAdded(Album *album)
 {
     if (d->addingAlbum == album)
     {
+
+        bool isRoot = d->addingAlbum == d->rootAlbum;
         d->addingAlbum = 0;
         endInsertRows();
+        if (isRoot)
+            emit rootAlbumAvailable();
     }
 }
 
@@ -324,6 +335,7 @@ void AbstractAlbumModel::slotAlbumAboutToBeDeleted(Album *album)
     // begin removing operation
     int row = d->findIndexAsChild(album);
     QModelIndex parent = indexForAlbum(album->parent());
+    albumCleared(album);
     beginRemoveRows(parent, row, row);
 
     // store album for slotAlbumHasBeenDeleted
@@ -342,6 +354,7 @@ void AbstractAlbumModel::slotAlbumHasBeenDeleted(void *p)
 void AbstractAlbumModel::slotAlbumsCleared()
 {
     reset();
+    allAlbumsCleared();
 }
 
 void AbstractAlbumModel::slotAlbumIconChanged(Album* album)
@@ -415,6 +428,9 @@ void AbstractSpecificAlbumModel::slotReloadThumbnails()
 
 void AbstractSpecificAlbumModel::emitDataChangedForChildren(Album *album)
 {
+    if (!album)
+        return;
+
     for (Album *child = album->firstChild(); child; child = child->next())
     {
         if (filterAlbum(child))
@@ -446,6 +462,11 @@ void AbstractCountingAlbumModel::setShowCount(bool show)
         m_showCount = show;
         emitDataChangedForChildren(rootAlbum());
     }
+}
+
+bool AbstractCountingAlbumModel::showCount() const
+{
+    return m_showCount;
 }
 
 void AbstractCountingAlbumModel::excludeChildrenCount(const QModelIndex &index)
@@ -546,7 +567,7 @@ void AbstractCountingAlbumModel::setCount(Album *album, int count)
 
 QVariant AbstractCountingAlbumModel::albumData(Album *album, int role) const
 {
-    if (role == Qt::DisplayRole && m_showCount)
+    if (role == Qt::DisplayRole && m_showCount && !album->isRoot())
     {
         QHash<int, int>::const_iterator it = m_countHashReady.find(album->id());
         if (it != m_countHashReady.end())

@@ -6,7 +6,7 @@
  * Date        : 2009-03-23
  * Description : Qt Model for Albums - abstract base classes
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -96,20 +96,41 @@ public:
     virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
     virtual QMimeData * mimeData(const QModelIndexList &indexes) const;
 
+    /** Returns the album object associated with the given model index */
+    Album *albumForIndex(const QModelIndex &index) const;
+    /** Return the QModelIndex for the given album, or an invalid index if the album is not contained in this model. */
+    QModelIndex indexForAlbum(Album *album) const;
+
+    Album *rootAlbum() const;
+    /// Return the index corresponding to the root album. If the policy is IgnoreRootAlbum, this is an invalid index. */
+    QModelIndex rootAlbumIndex() const;
+
+Q_SIGNALS:
+
+    /** This is initialized once after creation, if the root album becomes available,
+     *  if it was not already available at time of construction.
+     *  This is emitted regardless of root album policy. */
+    void rootAlbumAvailable();
+
 protected:
 
     // these can be reimplemented in a subclass
+    /// For subclassing convenience: A part of the implementation of data()
     virtual QVariant albumData(Album *a, int role) const;
+    /// For subclassing convenience: A part of the implementation of data()
     virtual QVariant decorationRole(Album *a) const;
+    /// For subclassing convenience: A part of the implementation of headerData()
     virtual QString columnHeader() const;
+    /// For subclassing convenience: A part of the implementation of itemFlags()
     virtual Qt::ItemFlags itemFlags(Album *album) const;
+    /** Returns true for those and only those albums that shall be contained in this model.
+     *  They must have a common root album, which is set in the constructor. */
     virtual bool filterAlbum(Album *album) const;
+    /// Notification when an entry is removed
     virtual void albumCleared(Album */*album*/) {};
+    /// Notification when all entries are removed
     virtual void allAlbumsCleared() {};
 
-    QModelIndex indexForAlbum(Album *album) const;
-    Album *albumForIndex(const QModelIndex &index) const;
-    Album *rootAlbum() const;
 
 protected Q_SLOTS:
 
@@ -177,6 +198,7 @@ public Q_SLOTS:
 
     /// Call to enable or disable showing the count. Default is false.
     void setShowCount(bool show);
+    bool showCount() const;
 
     /** Enable displaying the count. Set a map of album id -> count (excluding children).
      *  If an album is not contained, no count is displayed. To display a count of 0,
