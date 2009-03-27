@@ -486,7 +486,6 @@ Q_SIGNALS:
     void signalAlbumRenamed(Album* album);
     void signalSearchUpdated(SAlbum *album);
     void signalTAlbumMoved(TAlbum* album, TAlbum* newParent);
-    void signalPAlbumDirty(PAlbum* album);
     void signalPAlbumsDirty(const QMap<int, int>&);
     void signalTAlbumsDirty(const QMap<int, int>&);
     void signalDAlbumsDirty(const QMap<YearMonth, int>&);

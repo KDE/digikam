@@ -802,9 +802,8 @@ void AlbumManager::addAlbumRoot(const CollectionLocation &location)
         QString label = d->labelForAlbumRootAlbum(location);
         album = new PAlbum(location.id(), label);
 
-        // insert album root created into hash and tree
+        // insert album root created into hash
         d->albumRootAlbumHash.insert(location.id(), album);
-        insertPAlbum(album, d->rootPAlbum);
     }
 }
 
@@ -847,10 +846,7 @@ void AlbumManager::scanPAlbums()
     while (it.current())
     {
         PAlbum* a = (PAlbum*)(*it);
-        // Album root album have -1 immediately after their creation.
-        // We want to recognize them as new albums then.
-        if (a->id() != -1)
-            oldAlbums[a->id()] = a;
+        oldAlbums[a->id()] = a;
         ++it;
     }
 
@@ -908,7 +904,6 @@ void AlbumManager::scanPAlbums()
             continue;
 
         PAlbum *album, *parent;
-        bool needInsert;
         if (info.relativePath == "/")
         {
             // Albums that represent the root directory of an album root
@@ -916,7 +911,6 @@ void AlbumManager::scanPAlbums()
 
             parent = d->rootPAlbum;
             album  = d->albumRootAlbumHash.value(info.albumRootId);
-            needInsert = false;
 
             if (!album)
             {
@@ -924,17 +918,9 @@ void AlbumManager::scanPAlbums()
                 continue;
             }
 
-            // remove from hashes
-            d->albumPathHash.remove(album);
-            d->allAlbumsIdHash.remove(album->globalID());
-
             // it has been created from the collection location
             // with album root id, parentPath "/" and a name, but no album id yet.
             album->m_id = info.id;
-
-            // update hashes after setting id
-            d->albumPathHash[album] = album;
-            d->allAlbumsIdHash[album->globalID()] = album;
         }
         else
         {
@@ -957,7 +943,6 @@ void AlbumManager::scanPAlbums()
 
             // Create the new album
             album       = new PAlbum(info.albumRootId, parentPath, name, info.id);
-            needInsert  = true;
         }
 
         album->m_caption  = info.caption;
@@ -971,8 +956,7 @@ void AlbumManager::scanPAlbums()
                 album->m_icon = albumRootPath + info.iconRelativePath;
         }
 
-        if (needInsert)
-            insertPAlbum(album, parent);
+        insertPAlbum(album, parent);
     }
 
     getAlbumItemsCount();
