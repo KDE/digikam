@@ -741,7 +741,9 @@ ENDIF(MSVC)
     SET(libalbummodels_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagealbummodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagealbumfiltermodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/abstractalbummodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/albummodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/albumfiltermodel.cpp
        )
 
     SET(liblighttable_SRCS
@@ -848,6 +850,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumsettings.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumthumbnailloader.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumtreeview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumwidgetstack.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/cameralist.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/cameratype.cpp 
