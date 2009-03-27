@@ -135,6 +135,7 @@ BorderTool::BorderTool(QObject* parent)
 
     m_labelBorderWidth = new QLabel(i18n("Width (pixels):"), m_gboxSettings->plainPage());
     m_borderWidth      = new RIntNumInput(m_gboxSettings->plainPage());
+    m_borderWidth->setRange(1, 1000, 1);
     m_borderWidth->setSliderEnabled(true);
     m_borderWidth->setDefaultValue(100);
     m_borderWidth->setWhatsThis( i18n("Set here the border width in pixels to add around the image."));
