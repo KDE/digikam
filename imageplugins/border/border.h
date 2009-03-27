@@ -5,23 +5,24 @@
  *
  * Date        : 2005-05-25
  * Description : border threaded image filter.
- * 
- * Copyright 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ *
+ * Copyright 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright 2009      by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
-  
+
 #ifndef BORDER_H
 #define BORDER_H
 
@@ -43,7 +44,7 @@ class Border : public Digikam::DImgThreadedFilter
 
 public:
 
-    enum BorderTypes 
+    enum BorderTypes
     {
         SolidBorder=0,
         NiepceBorder,
@@ -93,30 +94,30 @@ public:
 
     ~Border(){};
 
-private:  
+private:
 
     virtual void filterImage(void);
-    
-    
+
+
     /** Methods to preserve aspect ratio of image. */
     void solid(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth);
-    void niepce(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth, 
+    void niepce(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth,
                 const Digikam::DColor &bg, int lineWidth);
-    void bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &topColor, 
+    void bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &topColor,
                const Digikam::DColor &btmColor, int borderWidth);
-    void pattern(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth, const Digikam::DColor &firstColor, 
+    void pattern(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth, const Digikam::DColor &firstColor,
                  const Digikam::DColor &secondColor, int firstWidth, int secondWidth);
 
     /** Methods to not-preserve aspect ratio of image. */
     void solid2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth);
-    void niepce2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth, 
+    void niepce2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth,
                  const Digikam::DColor &bg, int lineWidth);
-    void bevel2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &topColor, 
+    void bevel2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &topColor,
                 const Digikam::DColor &btmColor, int borderWidth);
-    void pattern2(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth, const Digikam::DColor &firstColor, 
+    void pattern2(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth, const Digikam::DColor &firstColor,
                   const Digikam::DColor &secondColor, int firstWidth, int secondWidth);
 
-private:  
+private:
 
     bool            m_preserveAspectRatio;
 
@@ -124,7 +125,7 @@ private:
     int             m_orgHeight;
 
     int             m_borderType;
-    
+
     int             m_borderWidth1;
     int             m_borderWidth2;
     int             m_borderWidth3;
@@ -136,15 +137,15 @@ private:
     float           m_orgRatio;
 
     QString         m_borderPath;
-    
+
     Digikam::DColor m_solidColor;
     Digikam::DColor m_niepceBorderColor;
     Digikam::DColor m_niepceLineColor;
-    Digikam::DColor m_bevelUpperLeftColor; 
+    Digikam::DColor m_bevelUpperLeftColor;
     Digikam::DColor m_bevelLowerRightColor;
-    Digikam::DColor m_decorativeFirstColor; 
+    Digikam::DColor m_decorativeFirstColor;
     Digikam::DColor m_decorativeSecondColor;
-};    
+};
 
 }  // namespace DigikamBorderImagesPlugin
 
