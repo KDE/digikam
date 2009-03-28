@@ -7,6 +7,7 @@ Name[fi]=TasonsäätöKäyrä
 Name[he]=תוסף תמונה - כוונון עקומות
 Name[it]=Regolazione delle curve
 Name[nl]=Afbeeldingsplugin_CurvesAanpassen
+Name[sk]=ObrazovýModul_NastavenieKriviek
 Name[sv]=Insticksprogram för justering av kurvor
 Name[tr]=GörüntüEklentisi_EğrileriDüzenle
 Name[x-test]=xxImagePlugin_AdjustCurvesxx
@@ -41,6 +42,8 @@ Comment[pa]=ਡਿਜਿਕੈਮ ਲਈ ਚਿੱਤਰ ਹਿਸਟੋਗਰ�
 Comment[pl]=Comment=Wtyczka do programu digiKam dostosowujÄca krzywe i histogram dla obrazu
 Comment[pt]=Um 'plugin' do digiKam de ajuste de curvas do histograma da imagem
 Comment[pt_BR]=Plug-in do digiKam para ajuste de curvas do histograma da imagem
+Comment[ro]=Modul digiKam de ajustare a curbelor histogramei imaginii
+Comment[sk]=Zásuvný modul digiKam - nastavenie kriviek histogramu obrázka
 Comment[sv]=Digikam insticksprogram för justering av kurvor i bildhistogram
 Comment[th]=ส่วนเสริมของ digiKam สำหรับปรับค่าเส้นโค้งของกราฟแสดงความถี่ของภาพ
 Comment[tr]=digiKam için görüntü histogram eğrilerini düzenleme eklentisi

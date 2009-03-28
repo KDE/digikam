@@ -7,6 +7,7 @@ Name[fi]=SuperImpose
 Name[he]=תוסף תמונה - תבנית עליונה
 Name[it]=Sovrapposizione
 Name[nl]=Afbeeldingsplugin_SjabloonAanbrengen
+Name[sk]=ObrazovýModul_PrekrytieŠablónou
 Name[sv]=Insticksprogram för överlagring
 Name[tr]=GörüntüEklentisi_Büyüt
 Name[x-test]=xxImagePlugin_SuperImposexx
@@ -39,7 +40,9 @@ Comment[nl]=Digikam-plugin voor het aanbrengen van een sjabloon op de afbeelding
 Comment[pl]=Comment=Wtyczka do programu digiKam umoÅ¼liwiajÄca naÅoÅ¼enie szablonu na obraz
 Comment[pt]=Um 'plugin' do digiKam para sobrepor modelos
 Comment[pt_BR]=Plug-in do digiKam para sobrepor modelo
+Comment[ro]=Modul digiKam de suprapunere a modelului
 Comment[ru]=Модуль накладывания шаблона для digiKam
+Comment[sk]=Zásuvný modul digiKam - Prekrytie fotografie šablónou
 Comment[sv]=Digikam insticksprogram för överlagringsmall
 Comment[th]=ส่วนเสริมของ digiKam สำหรับสร้างภาพประทับใจจากแม่แบบ
 Comment[tr]=digiKam için büyütme şablonu eklentisi

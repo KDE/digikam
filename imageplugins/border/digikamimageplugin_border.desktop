@@ -7,6 +7,7 @@ Name[fi]=Reunus
 Name[he]=תוסף תמונה - מסגרת
 Name[it]=Bordi
 Name[nl]=Afbeeldingsplugin_Rand
+Name[sk]=ObrazovýModul_Okraj
 Name[sv]=Insticksprogram för bildkanter
 Name[tr]=GörüntüEklentisi_Kenarlık
 Name[x-test]=xxImagePlugin_Borderxx
@@ -42,6 +43,7 @@ Comment[pl]=Wtyczka do programu digiKam dodajÄca ramkÄ do obrazu
 Comment[pt]=Um 'plugin' do digiKam para adicionar um contorno à imagem
 Comment[pt_BR]=Plug-in do digiKam para adicionar uma borda à imagem
 Comment[ro]=Modul digiKam de adăugare a bordurii la imagine
+Comment[sk]=Zásuvný modul digiKam - Pridanie okraja obrázku
 Comment[sv]=Digikam insticksprogram för tillägg av kanter
 Comment[th]=ส่วนเสริมของ digiKam สำหรับเพิ่มกรอบให้ภาพ
 Comment[tr]=digiKam için görüntüye kenarlık ekleme eklentisi

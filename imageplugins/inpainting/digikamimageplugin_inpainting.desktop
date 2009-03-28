@@ -6,6 +6,7 @@ Name[el]=ΠρόσθετοΕικόνας_Αποζωγραφισμός
 Name[he]=תוסף תמונה - ציור
 Name[it]=Reintegrazione
 Name[nl]=Afbeeldingsplugin_Inkleuren
+Name[sk]=ObrazovýModul_OdstránenieArtefaktov
 Name[sv]=Insticksprogram för ifyllnad
 Name[tr]=GörüntüEklentisi_Boyama
 Name[x-test]=xxImagePlugin_InPaintingxx
@@ -35,7 +36,9 @@ Comment[nl]=Digikam-plugin voor het inkleuren van een foto
 Comment[pl]=Comment=Wtyczka do programu digiKam umoÅ¼liwiajÄca zamalowanie fragmentÃ³w zdjÄcia
 Comment[pt]=Um 'plugin' do digiKam para pintar por dentro uma fotografia
 Comment[pt_BR]=Plug-in do digiKam para pintar uma fotografia
+Comment[ro]=Modul digiKam de restaurat o fotografie
 Comment[ru]=Модуль подрисовки фотографий для digiKam
+Comment[sk]=Zásuvný modul digiKam - Odstránenie artefaktov
 Comment[sv]=Digikam insticksprogram för att fylla i ett fotografi
 Comment[th]=ส่วนเสริมของ digiKam สำหรับปัดเกลี่ยพื้นที่ภายในภาพ
 Comment[tr]=Fotoğrafı boyamak için digiKam eklentisi

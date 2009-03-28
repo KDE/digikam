@@ -7,6 +7,7 @@ Name[fi]=Sadepisarat
 Name[he]=תוסף תמונה - טיפות גשם
 Name[it]=Gocce di pioggia
 Name[nl]=Afbeeldingsplugin_Regendruppels
+Name[sk]=ObrazovýModul_DažďovéKvapky
 Name[sv]=Insticksprogram för regndroppar
 Name[tr]=GörüntüEklentisi_YağmurDamlası
 Name[x-test]=xxImagePlugin_RainDropxx
@@ -40,7 +41,9 @@ Comment[pa]=ਡਿਜਿਕੈਮ ਲਈ ਮੀਂਹ ਦੀ ਕਣੀ ਚਿੱ
 Comment[pl]=Comment=Wtyczka do programu digiKam dodajÄca efekt kropel deszczu na obrazie
 Comment[pt]=Um 'plugin' do digiKam para criar um efeito de pingos de chuva
 Comment[pt_BR]=Plug-in do digiKam para criar efeito de imagem com pingos de chuva
+Comment[ro]=Modul digiKam de efect de picături de ploaie pe imagine
 Comment[ru]=Расширение digiKam для создания эффекта дождевых капель
+Comment[sk]=Zásuvný modul digiKam - Efekt padajúcich kvapiek
 Comment[sv]=Digikam insticksprogram för regndroppsbildeffekt
 Comment[th]=ส่วนเสริมของ digiKam สำหรับลูกเล่นสร้างหยดน้ำฝนบนภาพ
 Comment[tr]=digiKam için yağmur damlası görüntü efekti  eklentisi
