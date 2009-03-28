@@ -490,8 +490,8 @@ void AbstractCountingAlbumModel::includeChildrenCount(const QModelIndex &index)
 void AbstractCountingAlbumModel::setCountMap(const QMap<int, int>& idCountMap)
 {
     m_countMap = idCountMap;
-    QMap<int, int>::const_iterator it = m_countMap.begin();
-    for (; it != m_countMap.end(); ++it)
+    QMap<int, int>::const_iterator it = m_countMap.constBegin();
+    for (; it != m_countMap.constEnd(); ++it)
         updateCount(albumForId(it.key()));
 }
 

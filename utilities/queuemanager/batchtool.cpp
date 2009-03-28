@@ -323,7 +323,7 @@ bool BatchTool::apply()
     kDebug(50003) << "Settings:   " << endl;
 
     BatchToolSettings prm = settings();
-    for (BatchToolSettings::const_iterator it = prm.begin() ; it != prm.end() ; ++it)
+    for (BatchToolSettings::const_iterator it = prm.constBegin() ; it != prm.constEnd() ; ++it)
     {
         kDebug(50003) << "   " << it.key() << ": " << it.value() << endl;
     }

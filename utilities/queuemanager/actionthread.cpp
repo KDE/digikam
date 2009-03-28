@@ -166,8 +166,8 @@ void ActionThread::run()
             KUrl::List tmp2del;
             DImg tmpImage;
 
-            for (BatchToolMap::const_iterator it = t->item.toolsMap.begin();
-                 !d->cancel && (it != t->item.toolsMap.end()) ; ++it)
+            for (BatchToolMap::const_iterator it = t->item.toolsMap.constBegin();
+                 !d->cancel && (it != t->item.toolsMap.constEnd()) ; ++it)
             {
                 index                      = it.key();
                 BatchToolSet set           = it.value();
@@ -237,7 +237,7 @@ void ActionThread::run()
 
             // Clean up all tmp url.
 
-            for (KUrl::List::const_iterator it = tmp2del.begin(); it != tmp2del.end() ; ++it)
+            for (KUrl::List::const_iterator it = tmp2del.constBegin(); it != tmp2del.constEnd() ; ++it)
             {
                 unlink(QFile::encodeName((*it).path()));
             }
