@@ -433,19 +433,29 @@ QAction* ContextMenuHelper::exec(const QPoint& pos, QAction* at)
     QAction* choice = d->menu->exec(pos, at);
     if (choice)
     {
-        ImageInfo selectedItem(d->selectedIds.first());
-
         if (choice == d->gotoAlbumAction)
         {
-            emit signalGotoAlbum(selectedItem);
+            if (!d->selectedIds.isEmpty())
+            {
+                ImageInfo selectedItem(d->selectedIds.first());
+                emit signalGotoAlbum(selectedItem);
+            }
         }
         else if (choice == d->gotoDateAction)
         {
-            emit signalGotoDate(selectedItem);
+            if (!d->selectedIds.isEmpty())
+            {
+                ImageInfo selectedItem(d->selectedIds.first());
+                emit signalGotoDate(selectedItem);
+            }
         }
         else if (choice == d->setThumbnailAction)
         {
-            emit signalSetThumbnail(selectedItem);
+            if (!d->selectedIds.isEmpty())
+            {
+                ImageInfo selectedItem(d->selectedIds.first());
+                emit signalSetThumbnail(selectedItem);
+            }
         }
         else
         {
