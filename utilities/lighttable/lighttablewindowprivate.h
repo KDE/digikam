@@ -107,18 +107,18 @@ public:
     SidebarSplitter          *hSplitter;
     QSplitter                *vSplitter;
 
-    QAction                  *setItemLeftAction;
-    QAction                  *setItemRightAction;
-    QAction                  *clearListAction;
-    QAction                  *editItemAction;
-    QAction                  *removeItemAction;
-    QAction                  *fileDeleteAction;
-    QAction                  *slideShowAction;
-    QAction                  *zoomPlusAction;
-    QAction                  *zoomMinusAction;
-    QAction                  *zoomTo100percents;
-    QAction                  *zoomFitToWindowAction;
-    QAction                  *fullScreenAction;
+    KAction                  *setItemLeftAction;
+    KAction                  *setItemRightAction;
+    KAction                  *clearListAction;
+    KAction                  *editItemAction;
+    KAction                  *removeItemAction;
+    KAction                  *fileDeleteAction;
+    KAction                  *slideShowAction;
+    KAction                  *zoomPlusAction;
+    KAction                  *zoomMinusAction;
+    KAction                  *zoomTo100percents;
+    KAction                  *zoomFitToWindowAction;
+    KAction                  *fullScreenAction;
 
     // Rating actions.
     KAction                  *star0;
