@@ -94,8 +94,8 @@ public:
 
     QPixmap                    progressPix;
 
-    QAction                   *clearQueueAction;
-    QAction                   *removeItemsSelAction;
+    KAction                   *clearQueueAction;
+    KAction                   *removeItemsSelAction;
     QAction                   *removeItemsDoneAction;
     QAction                   *fullScreenAction;
     QAction                   *moveUpToolAction;
