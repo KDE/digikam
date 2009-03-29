@@ -180,7 +180,7 @@ void FindDuplicatesView::populateTreeView()
 {
     const AlbumList& aList = AlbumManager::instance()->allSAlbums();
 
-    for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
+    for (AlbumList::const_iterator it = aList.constBegin(); it != aList.constEnd(); ++it)
     {
         SAlbum* salbum = dynamic_cast<SAlbum*>(*it);
         if (salbum && salbum->isDuplicatesSearch() && !salbum->extraData(this))

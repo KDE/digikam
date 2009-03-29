@@ -352,8 +352,8 @@ void AlbumWidgetStack::slotItemsUpdated(const KUrl::List& urls)
     if (urls.contains(imagePreviewView()->getImageInfo().fileUrl()))
         d->imagePreviewView->reload();
 
-    for (KUrl::List::const_iterator it = urls.begin();
-         it != urls.end(); ++it)
+    for (KUrl::List::const_iterator it = urls.constBegin();
+         it != urls.constEnd(); ++it)
     {
         ThumbBarItem* foundItem = d->thumbBar->findItemByUrl(*it);
         d->thumbBar->reloadThumb(foundItem);

@@ -1967,7 +1967,7 @@ QStringList AlbumManager::tagPaths(const QList<int> &tagIDs, bool leadingSlash) 
 {
     QStringList tagPaths;
 
-    for (QList<int>::const_iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
+    for (QList<int>::const_iterator it = tagIDs.constBegin(); it != tagIDs.constEnd(); ++it)
     {
         TAlbum *album = findTAlbum(*it);
         if (album)

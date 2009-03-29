@@ -512,7 +512,7 @@ void AssignedListView::slotQueueSelected(int, const QueueSettings&, const Assign
     if (!tools.toolsMap.isEmpty())
     {
         blockSignals(true);
-        for (BatchToolMap::const_iterator it = tools.toolsMap.begin() ; it != tools.toolsMap.end() ; ++it)
+        for (BatchToolMap::const_iterator it = tools.toolsMap.constBegin() ; it != tools.toolsMap.constEnd() ; ++it)
             addTool(it.key(), it.value());
         blockSignals(false);
     }

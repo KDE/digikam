@@ -424,7 +424,7 @@ void ThumbBarView::ensureItemVisible(ThumbBarItem* item)
 
 void ThumbBarView::refreshThumbs(const KUrl::List& urls)
 {
-    for (KUrl::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
+    for (KUrl::List::const_iterator it = urls.constBegin() ; it != urls.constEnd() ; ++it)
     {
         ThumbBarItem *item = findItemByUrl(*it);
         if (item)
@@ -445,7 +445,7 @@ void ThumbBarView::invalidateThumb(ThumbBarItem* item)
 void ThumbBarView::reloadThumbs(const KUrl::List& urls)
 {
     // This one does not delete the thumbnail file on disk
-    for (KUrl::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
+    for (KUrl::List::const_iterator it = urls.constBegin() ; it != urls.constEnd() ; ++it)
     {
         ThumbBarItem *item = findItemByUrl(*it);
         if (item)
@@ -542,7 +542,7 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                     int x = (tile.width()  - pix.width())/2;
                     int y = (tile.height() - pix.height())/2;
                     p.drawPixmap(x, y, pix);
-                    p.drawPixmap(x-d->radius, y-d->radius, 
+                    p.drawPixmap(x-d->radius, y-d->radius,
                                  generateFuzzyRect(QSize(pix.width()+2*d->radius,
                                                          pix.height()+2*d->radius),
                                                    QColor(0, 0, 0, 128), d->radius));
@@ -580,7 +580,7 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                     int x = (tile.width()  - pix.width())/2;
                     int y = (tile.height() - pix.height())/2;
                     p.drawPixmap(x, y, pix);
-                    p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6, 
+                    p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6,
                                                                    pix.height()+6),
                                                              QColor(0, 0, 0, 128), 3));
                     item->setTooltipRect(QRect(x+item->position(), y, pix.width(), pix.height()));

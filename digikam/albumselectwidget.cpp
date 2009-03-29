@@ -135,7 +135,7 @@ QTreeWidget* AlbumSelectWidget::albumView() const
 
 void AlbumSelectWidget::populateTreeView(const AlbumList& aList, QTreeWidget *view, PAlbum* albumToSelect)
 {
-    for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
+    for (AlbumList::const_iterator it = aList.constBegin(); it != aList.constEnd(); ++it)
     {
         Album *album        = *it;
         TreeAlbumItem *item = 0;

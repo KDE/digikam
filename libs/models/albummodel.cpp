@@ -213,15 +213,15 @@ void DateAlbumModel::setYearMonthMap(const QMap<YearMonth, int>& yearMonthMap)
 
         if (dalbum->range() == DAlbum::Month)
         {
-            QMap<YearMonth, int>::const_iterator it2 = yearMonthMap.find(YearMonth(date.year(), date.month()));
-            if ( it2 != yearMonthMap.end() )
+            QMap<YearMonth, int>::const_iterator it2 = yearMonthMap.constFind(YearMonth(date.year(), date.month()));
+            if ( it2 != yearMonthMap.constEnd() )
                 setCount(*it, it2.value());
         }
         else
         {
             int count = 0;
-            for ( QMap<YearMonth, int>::const_iterator it2 = yearMonthMap.begin();
-                    it2 != yearMonthMap.end(); ++it2 )
+            for ( QMap<YearMonth, int>::const_iterator it2 = yearMonthMap.constBegin();
+                    it2 != yearMonthMap.constEnd(); ++it2 )
             {
                 if (it2.key().first == date.year())
                     count += it2.value();

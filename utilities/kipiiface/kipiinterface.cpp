@@ -250,7 +250,7 @@ void KipiInterface::thumbnail(const KUrl& url, int /*size*/)
 
 void KipiInterface::thumbnails(const KUrl::List& list, int size)
 {
-    for (KUrl::List::const_iterator it = list.begin() ; it != list.end() ; ++it)
+    for (KUrl::List::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
         thumbnail((*it).path(), size);
 }
 

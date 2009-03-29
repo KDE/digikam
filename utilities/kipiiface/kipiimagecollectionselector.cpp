@@ -180,7 +180,7 @@ KipiImageCollectionSelector::~KipiImageCollectionSelector()
 
 void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTreeWidget *view)
 {
-    for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
+    for (AlbumList::const_iterator it = aList.constBegin(); it != aList.constEnd(); ++it)
     {
         Album *album                 = *it;
         TreeAlbumCheckListItem *item = 0;

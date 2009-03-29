@@ -1010,8 +1010,8 @@ void CameraUI::slotFolderList(const QStringList& folderList)
     d->statusProgressBar->setProgressTotalSteps(0);
 
     d->cameraFolderList = folderList;
-    for (QStringList::const_iterator it = folderList.begin();
-         it != folderList.end(); ++it)
+    for (QStringList::const_iterator it = folderList.constBegin();
+         it != folderList.constEnd(); ++it)
     {
         d->controller->listFiles(*it);
     }
@@ -1176,7 +1176,7 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
     {
         // Check if space require to upload new items in camera is enough.
         quint64 totalKbSize = 0;
-        for (KUrl::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
+        for (KUrl::List::const_iterator it = urls.constBegin() ; it != urls.constEnd() ; ++it)
         {
             QFileInfo fi((*it).path());
             totalKbSize += fi.size()/1024;
@@ -1203,7 +1203,7 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
 
     QString cameraFolder = dlg.selectedFolderPath();
 
-    for (KUrl::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
+    for (KUrl::List::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
     {
         QFileInfo fi((*it).path());
         if (!fi.exists()) continue;

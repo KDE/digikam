@@ -86,8 +86,8 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
     m_folderView->addVirtualFolder(cameraName);
     m_folderView->addRootFolder("/", cameraView->countItemsByFolder(rootPath));
 
-    for (QStringList::const_iterator it = cameraFolderList.begin();
-         it != cameraFolderList.end(); ++it)
+    for (QStringList::const_iterator it = cameraFolderList.constBegin();
+         it != cameraFolderList.constEnd(); ++it)
     {
         QString folder(*it);
         if (folder.startsWith(rootPath) && rootPath != QString("/"))

@@ -140,7 +140,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
     QString            ifDItemName;
     MdKeyListViewItem *parentifDItem = 0;
 
-    for (DMetadata::MetaDataMap::const_iterator it = ifds.begin(); it != ifds.end(); ++it)
+    for (DMetadata::MetaDataMap::const_iterator it = ifds.constBegin(); it != ifds.constEnd(); ++it)
     {
         // We checking if we have changed of ifDName
         QString currentIfDName = it.key().section('.', 1, 1);
@@ -199,8 +199,8 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
     MdKeyListViewItem *parentifDItem = 0;
     if (ifds.count() == 0) return;
 
-    for (QStringList::const_iterator itKeysFilter = keysFilter.begin();
-         itKeysFilter != keysFilter.end();
+    for (QStringList::const_iterator itKeysFilter = keysFilter.constBegin();
+         itKeysFilter != keysFilter.constEnd();
          ++itKeysFilter)
     {
         subItems = 0;

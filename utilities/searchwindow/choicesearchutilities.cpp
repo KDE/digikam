@@ -115,7 +115,7 @@ void ChoiceSearchModel::setChoice(QStringList data)
 QVariantList ChoiceSearchModel::checkedKeys() const
 {
     QVariantList list;
-    for (QList<Entry>::const_iterator it = m_entries.begin(); it != m_entries.end(); ++it)
+    for (QList<Entry>::const_iterator it = m_entries.constBegin(); it != m_entries.constEnd(); ++it)
     {
         if ((*it).checkState)
             list << (*it).key;
@@ -126,7 +126,7 @@ QVariantList ChoiceSearchModel::checkedKeys() const
 QStringList ChoiceSearchModel::checkedDisplayTexts() const
 {
     QStringList list;
-    for (QList<Entry>::const_iterator it = m_entries.begin(); it != m_entries.end(); ++it)
+    for (QList<Entry>::const_iterator it = m_entries.constBegin(); it != m_entries.constEnd(); ++it)
     {
         if ((*it).checkState)
             list << (*it).display;

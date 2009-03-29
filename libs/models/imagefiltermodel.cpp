@@ -252,8 +252,8 @@ bool ImageFilterModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
         return false;
 
     qlonglong id = d->imageModel->imageId(source_row);
-    QHash<qlonglong, bool>::const_iterator it = d->filterResults.find(id);
-    if (it != d->filterResults.end())
+    QHash<qlonglong, bool>::const_iterator it = d->filterResults.constFind(id);
+    if (it != d->filterResults.constEnd())
         return it.value();
 
     // usually done in thread and cache, unless source model changed
@@ -299,9 +299,9 @@ void ImageFilterModelPrivate::infosToProcess(const QList<ImageInfo> &infos, bool
     // prepare and filter in chunks
     const int size = infos.size();
     const int maxChunkSize = needPrepare ? PrepareChunkSize : FilterChunkSize;
-    QList<ImageInfo>::const_iterator it = infos.begin();
+    QList<ImageInfo>::const_iterator it = infos.constBegin();
     int index = 0;
-    while (it != infos.end())
+    while (it != infos.constEnd())
     {
         QVector<ImageInfo> vector(qMin(maxChunkSize, size - index));
         QList<ImageInfo>::const_iterator end = it + vector.size();
@@ -330,8 +330,8 @@ void ImageFilterModelPrivate::packageFinished(const ImageFilterModelTodoPackage 
     }
 
     // incorporate result
-    QHash<qlonglong, bool>::const_iterator it = package.filterResults.begin();
-    for (; it != package.filterResults.end(); it++)
+    QHash<qlonglong, bool>::const_iterator it = package.filterResults.constBegin();
+    for (; it != package.filterResults.constEnd(); it++)
         filterResults.insert(it.key(), it.value());
 
     // re-add if necessary

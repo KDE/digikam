@@ -410,7 +410,7 @@ TagsListCreationErrorDialog::TagsListCreationErrorDialog(QWidget* parent, const 
     vLay->setMargin(0);
     vLay->setSpacing(0);
 
-    for (QMap<QString, QString>::const_iterator it = errMap.begin() ; it != errMap.end() ; ++it)
+    for (QMap<QString, QString>::const_iterator it = errMap.constBegin(); it != errMap.constEnd(); ++it)
         new QTreeWidgetItem(listView, QStringList() << it.key() << it.value());
 
     adjustSize();

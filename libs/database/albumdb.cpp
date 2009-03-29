@@ -937,9 +937,9 @@ bool AlbumDB::hasTags(const QList<qlonglong>& imageIDList)
                           "WHERE imageid=? ");
     boundValues << imageIDList.first();
 
-    QList<qlonglong>::const_iterator it = imageIDList.begin();
+    QList<qlonglong>::const_iterator it = imageIDList.constBegin();
     ++it;
-    for (; it != imageIDList.end(); ++it)
+    for (; it != imageIDList.constEnd(); ++it)
     {
         sql += QString(" OR imageid=? ");
         boundValues << (*it);
@@ -968,9 +968,9 @@ QList<int> AlbumDB::getItemCommonTagIDs(const QList<qlonglong>& imageIDList)
                           "WHERE imageid=? ");
     boundValues << imageIDList.first();
 
-    QList<qlonglong>::const_iterator it = imageIDList.begin();
+    QList<qlonglong>::const_iterator it = imageIDList.constBegin();
     ++it;
-    for (; it != imageIDList.end(); ++it)
+    for (; it != imageIDList.constEnd(); ++it)
     {
         sql += QString(" OR imageid=? ");
         boundValues << (*it);
@@ -2192,8 +2192,8 @@ QList<int> AlbumDB::getTagsFromTagPaths(const QStringList &keywordsList, bool cr
 
     // For every tag in keywordsList, scan taglist to check if tag already exists.
 
-    for (QStringList::const_iterator kwd = keywordsList.begin();
-        kwd != keywordsList.end(); ++kwd )
+    for (QStringList::const_iterator kwd = keywordsList.constBegin();
+        kwd != keywordsList.constEnd(); ++kwd )
     {
         // split full tag "url" into list of single tag names
         QStringList tagHierarchy = (*kwd).split('/', QString::SkipEmptyParts);

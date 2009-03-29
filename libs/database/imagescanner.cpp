@@ -124,7 +124,7 @@ void ImageScanner::addImage(int albumId)
     m_scanInfo.uniqueHash = uniqueHash();
 
     kDebug(50003) << "Adding new item" << m_fileInfo.filePath();
-    m_scanInfo.id = DatabaseAccess().db()->addItem(m_scanInfo.albumID, m_scanInfo.itemName, 
+    m_scanInfo.id = DatabaseAccess().db()->addItem(m_scanInfo.albumID, m_scanInfo.itemName,
                                                    m_scanInfo.status, m_scanInfo.category,
                                                    m_scanInfo.modificationDate, fileSize,
                                                    m_scanInfo.uniqueHash);
@@ -261,8 +261,8 @@ void ImageScanner::scanImageInformation()
 
 static bool hasValidField(const QVariantList &list)
 {
-    for (QVariantList::const_iterator it = list.begin();
-         it != list.end(); ++it)
+    for (QVariantList::const_iterator it = list.constBegin();
+         it != list.constEnd(); ++it)
     {
         if (!(*it).isNull())
             return true;
@@ -369,8 +369,8 @@ void ImageScanner::scanImageComments()
 
         const QMap<QString, QVariant> &map = metadataInfos[1].toMap();
 
-        for (QMap<QString, QVariant>::const_iterator it = map.begin();
-             it != map.end(); ++it)
+        for (QMap<QString, QVariant>::const_iterator it = map.constBegin();
+             it != map.constEnd(); ++it)
         {
             comments.addComment(it.value().toString(), it.key(), author);
             /*
@@ -667,7 +667,7 @@ QString ImageScanner::detectFormat()
                 }
             }
 
-            kWarning(50003) << "Detecting file format failed: KMimeType for" << m_fileInfo.filePath() 
+            kWarning(50003) << "Detecting file format failed: KMimeType for" << m_fileInfo.filePath()
                             << "is null" << endl;
 
         }

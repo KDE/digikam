@@ -274,8 +274,8 @@ void DImg::copyMetaData(const DImgPrivate *src)
     // since qbytearrays are explicitly shared, we need to make sure that they are
     // detached from any shared references
 
-    for (QMap<int, QByteArray>::const_iterator it = src->metaData.begin();
-         it != src->metaData.end(); ++it)
+    for (QMap<int, QByteArray>::const_iterator it = src->metaData.constBegin();
+         it != src->metaData.constEnd(); ++it)
     {
         // Insert a deep copy...
         m_priv->metaData.insert(it.key(), QByteArray(it.value()));
@@ -832,7 +832,7 @@ QByteArray DImg::metadata(DImg::METADATA key) const
 {
     typedef QMap<int, QByteArray> MetaDataMap;
 
-    for (MetaDataMap::const_iterator it = m_priv->metaData.begin(); it != m_priv->metaData.end(); ++it)
+    for (MetaDataMap::const_iterator it = m_priv->metaData.constBegin(); it != m_priv->metaData.constEnd(); ++it)
     {
         if (it.key() == key)
             return it.value();

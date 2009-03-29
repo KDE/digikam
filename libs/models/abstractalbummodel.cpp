@@ -569,8 +569,8 @@ QVariant AbstractCountingAlbumModel::albumData(Album *album, int role) const
 {
     if (role == Qt::DisplayRole && m_showCount && !album->isRoot())
     {
-        QHash<int, int>::const_iterator it = m_countHashReady.find(album->id());
-        if (it != m_countHashReady.end())
+        QHash<int, int>::const_iterator it = m_countHashReady.constFind(album->id());
+        if (it != m_countHashReady.constEnd())
             return QString("%1 (%2)").arg(albumName(album)).arg(it.value());
     }
     return AbstractSpecificAlbumModel::albumData(album, role);

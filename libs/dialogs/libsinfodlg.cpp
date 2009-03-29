@@ -210,7 +210,7 @@ LibsInfoDlg::~LibsInfoDlg()
 
 void LibsInfoDlg::setComponentsInfoMap(const QMap<QString, QString>& list)
 {
-    for (QMap<QString, QString>::const_iterator it = list.begin() ; it != list.end() ; ++it)
+    for (QMap<QString, QString>::const_iterator it = list.constBegin(); it != list.constEnd() ; ++it)
         new QTreeWidgetItem(d->listView, QStringList() << it.key() << it.value());
 }
 

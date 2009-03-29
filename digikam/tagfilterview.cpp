@@ -1359,7 +1359,7 @@ void TagFilterView::slotRefresh(const QMap<int, int>& tagsStatMap)
             if (item->album())
             {
                 int id = item->id();
-                QMap<int, int>::const_iterator it2 = tagsStatMap.find(id);
+                QMap<int, int>::const_iterator it2 = tagsStatMap.constFind(id);
                 if ( it2 != tagsStatMap.constEnd() )
                     item->setCount(it2.value());
             }

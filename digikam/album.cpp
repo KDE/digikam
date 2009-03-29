@@ -218,8 +218,8 @@ void Album::removeExtraData(const void* key)
 void* Album::extraData(const void* key) const
 {
     typedef QMap<const void*, void*> Map;
-    Map::const_iterator it = m_extraMap.find(key);
-    if (it == m_extraMap.end())
+    Map::const_iterator it = m_extraMap.constFind(key);
+    if (it == m_extraMap.constEnd())
         return 0;
 
     return it.value();
