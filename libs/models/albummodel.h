@@ -6,7 +6,7 @@
  * Date        : 2008-03-22
  * Description : Qt Model for Albums
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,16 +24,15 @@
 #ifndef ALBUMMODEL_H
 #define ALBUMMODEL_H
 
-// Qt includes.
-
 // Local includes.
 
 #include "abstractalbummodel.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class AlbumModel : public AbstractCheckableAlbumModel
+class DIGIKAM_MODEL_EXPORT AlbumModel : public AbstractCheckableAlbumModel
 {
 public:
 
@@ -50,7 +49,7 @@ protected:
 
 // ------------------------------------------------------------------
 
-class TagModel : public AbstractCheckableAlbumModel
+class DIGIKAM_MODEL_EXPORT TagModel : public AbstractCheckableAlbumModel
 {
 public:
 
@@ -67,7 +66,7 @@ protected:
 
 // ------------------------------------------------------------------
 
-class SearchModel : public AbstractSpecificAlbumModel
+class DIGIKAM_MODEL_EXPORT SearchModel : public AbstractSpecificAlbumModel
 {
 public:
 
@@ -92,6 +91,8 @@ protected:
     virtual QVariant albumData(Album *a, int role) const;
     virtual bool filterAlbum(Album *album) const;
 
+protected:
+
     QPixmap m_pixmap;
     int     m_searchType;
     QHash<QString, QString> m_replaceNames;
@@ -99,7 +100,7 @@ protected:
 
 // ------------------------------------------------------------------
 
-class DateAlbumModel : public AbstractCountingAlbumModel
+class DIGIKAM_MODEL_EXPORT DateAlbumModel : public AbstractCountingAlbumModel
 {
     Q_OBJECT
 
@@ -122,6 +123,8 @@ protected:
     virtual QString  albumName(Album *a) const;
     virtual QVariant decorationRole(Album *a) const;
     virtual Album* albumForId(int id) const;
+
+protected:
 
     QPixmap m_yearPixmap;
     QPixmap m_monthPixmap;

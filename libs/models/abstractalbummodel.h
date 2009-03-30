@@ -33,6 +33,7 @@
 
 // Local includes.
 
+#include "digikam_export.h"
 #include "album.h"
 
 namespace Digikam
@@ -42,7 +43,7 @@ class Album;
 class AlbumManager;
 class AlbumModelPriv;
 
-class AbstractAlbumModel : public QAbstractItemModel
+class DIGIKAM_MODEL_EXPORT AbstractAlbumModel : public QAbstractItemModel
 {
     Q_OBJECT
 

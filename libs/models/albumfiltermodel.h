@@ -6,7 +6,7 @@
  * Date        : 2009-03-24
  * Description : Qt Model for Albums - filter model
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,11 +32,12 @@
 
 #include "albummodel.h"
 #include "searchtextbar.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class AlbumFilterModel : public QSortFilterProxyModel
+class DIGIKAM_MODEL_EXPORT AlbumFilterModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 

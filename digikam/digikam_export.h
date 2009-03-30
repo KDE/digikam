@@ -49,6 +49,18 @@
 
 // --------------------------------------------------------
 
+#ifndef DIGIKAM_MODEL_EXPORT
+# if defined(MAKE_DIGIKAMMODEL_LIB)
+   /* We are building this library */ 
+#  define DIGIKAM_MODEL_EXPORT KDE_EXPORT
+# else
+   /* We are using this library */ 
+#  define DIGIKAM_MODEL_EXPORT KDE_IMPORT
+# endif
+#endif
+
+// --------------------------------------------------------
+
 #ifndef DIGIKAMIMAGEEDITOR_EXPORT
 # if defined(MAKE_DIGIKAMIMAGEEDITOR_LIB)
    /* We are building this library */

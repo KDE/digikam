@@ -1,25 +1,25 @@
 /* ============================================================
-*
-* This file is a part of digiKam project
-* http://www.digikam.org
-*
-* Date        : 2009-03-05
-* Description : Filter values for use with ImageFilterModel
-*
-* Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
-*
-* This program is free software; you can redistribute it
-* and/or modify it under the terms of the GNU General
-* Public License as published by the Free Software Foundation;
-* either version 2, or (at your option)
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* ============================================================ */
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2009-03-05
+ * Description : Filter values for use with ImageFilterModel
+ *
+ * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
 
 #ifndef IMAGEFILTERSETTINGS_H
 #define IMAGEFILTERSETTINGS_H
@@ -42,7 +42,7 @@ namespace Digikam
 
 class ImageInfo;
 
-class DIGIKAM_EXPORT ImageFilterSettings
+class DIGIKAM_MODEL_EXPORT ImageFilterSettings
 {
 public:
 
@@ -54,7 +54,7 @@ public:
      */
     bool matches(const ImageInfo &info, bool *foundText = 0) const;
 
-   /// --- Tags filter ---
+    /// --- Tags filter ---
 
     /// Possible logical matching condition used to sort tags id.
     enum MatchingCondition
@@ -70,7 +70,7 @@ public:
     void setTagFilter(const QList<int>& tags, MatchingCondition matchingCond,
                       bool showUnTagged = false);
 
-   /// --- Rating filter ---
+    /// --- Rating filter ---
 
     /// Possible conditions used to filter rating: >=, =, <=
     enum RatingCondition
@@ -85,13 +85,12 @@ public:
 
     void setRatingFilter(int rating, RatingCondition ratingCond);
 
-   /// --- Date filter ---
+    /// --- Date filter ---
 
     QMap<QDateTime, bool>           dayFilter;
     void setDayFilter(const QList<QDateTime>& days);
 
-
-   /// --- Text filter ---
+    /// --- Text filter ---
 
     SearchTextSettings              textFilterSettings;
     void setTextFilter(const SearchTextSettings& settings);
@@ -102,7 +101,7 @@ public:
     void setTagNames(const QHash<int, QString> &tagNameHash);
     void setAlbumNames(const QHash<int, QString> &albumNameHash);
 
-   /// --- Mime filter ---
+    /// --- Mime filter ---
 
     MimeFilter::TypeMimeFilter      mimeTypeFilter;
     void setMimeTypeFilter(int mimeTypeFilter);
@@ -115,6 +114,6 @@ public:
     bool isFiltering() const;
 };
 
-}
+} // namespace Digikam
 
-#endif
+#endif // IMAGEFILTERSETTINGS_H

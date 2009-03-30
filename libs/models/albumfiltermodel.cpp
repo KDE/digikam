@@ -6,7 +6,7 @@
  * Date        : 2009-03-24
  * Description : Qt Model for Albums - filter model
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -156,6 +156,4 @@ bool AlbumFilterModel::lessThan(const QModelIndex &left, const QModelIndex &righ
         return QSortFilterProxyModel::lessThan(left, right);
 }
 
-
-}
-
+} // namespace Digikam
