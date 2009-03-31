@@ -96,6 +96,10 @@ private Q_SLOTS:
 
 private:
 
+    void blockWidgetSignals(bool b);
+
+private:
+
     bool                         m_originalIsLandscape;
 
     QLabel                      *m_customLabel1;
