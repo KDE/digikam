@@ -207,15 +207,10 @@ BorderTool::~BorderTool()
 
 void BorderTool::readSettings()
 {
-    m_borderType->blockSignals(true);
-    m_borderPercent->blockSignals(true);
-    m_borderWidth->blockSignals(true);
-    m_firstColorButton->blockSignals(true);
-    m_secondColorButton->blockSignals(true);
-    m_preserveAspectRatio->blockSignals(true);
-
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("border Tool");
+
+    blockWidgetSignals(true);
 
     m_borderType->setCurrentIndex(group.readEntry("Border Type", m_borderType->defaultIndex()));
     m_borderPercent->setValue(group.readEntry("Border Percent", m_borderPercent->defaultValue()));
@@ -235,12 +230,7 @@ void BorderTool::readSettings()
     m_decorativeFirstColor = group.readEntry("Decorative First Color", black);
     m_decorativeSecondColor = group.readEntry("Decorative Second Color", black);
 
-    m_borderType->blockSignals(false);
-    m_borderPercent->blockSignals(false);
-    m_borderWidth->blockSignals(false);
-    m_firstColorButton->blockSignals(false);
-    m_secondColorButton->blockSignals(false);
-    m_preserveAspectRatio->blockSignals(false);
+    blockWidgetSignals(false);
 
     slotBorderTypeChanged(m_borderType->currentIndex());
 }
@@ -270,12 +260,7 @@ void BorderTool::writeSettings()
 
 void BorderTool::slotResetSettings()
 {
-    m_borderType->blockSignals(true);
-    m_borderPercent->blockSignals(true);
-    m_borderWidth->blockSignals(true);
-    m_firstColorButton->blockSignals(true);
-    m_secondColorButton->blockSignals(true);
-    m_preserveAspectRatio->blockSignals(true);
+    blockWidgetSignals(true);
 
     m_borderType->slotReset();
     m_borderPercent->slotReset();
@@ -290,12 +275,7 @@ void BorderTool::slotResetSettings()
     m_decorativeFirstColor  = QColor(0, 0, 0);
     m_decorativeSecondColor = QColor(0, 0, 0);
 
-    m_borderType->blockSignals(false);
-    m_borderPercent->blockSignals(false);
-    m_borderWidth->blockSignals(false);
-    m_firstColorButton->blockSignals(false);
-    m_secondColorButton->blockSignals(false);
-    m_preserveAspectRatio->blockSignals(false);
+    blockWidgetSignals(false);
 
     slotBorderTypeChanged(Border::SolidBorder);
 }
@@ -671,6 +651,16 @@ void BorderTool::toggleBorderSlider(bool b)
     m_borderWidth->setEnabled(!b);
     m_labelBorderPercent->setEnabled(b);
     m_labelBorderWidth->setEnabled(!b);
+}
+
+void BorderTool::blockWidgetSignals(bool b)
+{
+    m_borderType->blockSignals(b);
+    m_borderPercent->blockSignals(b);
+    m_borderWidth->blockSignals(b);
+    m_firstColorButton->blockSignals(b);
+    m_secondColorButton->blockSignals(b);
+    m_preserveAspectRatio->blockSignals(b);
 }
 
 }  // namespace DigikamBorderImagesPlugin

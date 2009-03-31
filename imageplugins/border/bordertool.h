@@ -82,6 +82,7 @@ private:
     void putFinalData();
     void renderingFinished();
     void toggleBorderSlider(bool b);
+    void blockWidgetSignals(bool b);
 
     QString getBorderPath(int border);
 
