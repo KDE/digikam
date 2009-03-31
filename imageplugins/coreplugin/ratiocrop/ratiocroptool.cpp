@@ -312,6 +312,12 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     // -------------------------------------------------------------
 
+    // Sets current region selection
+    slotSelectionChanged(m_imageSelectionWidget->getRegionSelection());
+    readSettings();
+
+    // -------------------------------------------------------------
+
     connect(m_ratioCB, SIGNAL(activated(int)),
             this, SLOT(slotRatioChanged(int)));
 
@@ -390,13 +396,6 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     connect(m_gboxSettings, SIGNAL(signalTryClicked()),
             this, SLOT(slotMaxAspectRatio()));
-
-    // -------------------------------------------------------------
-
-    // Sets current region selection
-    slotSelectionChanged(m_imageSelectionWidget->getRegionSelection());
-
-    readSettings();
 }
 
 RatioCropTool::~RatioCropTool()
@@ -408,6 +407,24 @@ void RatioCropTool::readSettings()
     QColor defaultGuideColor(250, 250, 255);
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("aspectratiocrop Tool");
+
+    // --------------------------------------------------------
+
+    m_customRatioDInput->blockSignals(true);
+    m_customRatioNInput->blockSignals(true);
+    m_flipHorBox->blockSignals(true);
+    m_flipVerBox->blockSignals(true);
+    m_goldenSectionBox->blockSignals(true);
+    m_goldenSpiralBox->blockSignals(true);
+    m_goldenSpiralSectionBox->blockSignals(true);
+    m_goldenTriangleBox->blockSignals(true);
+    m_guideLinesCB->blockSignals(true);
+    m_heightInput->blockSignals(true);
+    m_imageSelectionWidget->blockSignals(true);
+    m_preciseCrop->blockSignals(true);
+    m_widthInput->blockSignals(true);
+    m_xInput->blockSignals(true);
+    m_yInput->blockSignals(true);
 
     // No guide lines per default.
     m_guideLinesCB->setCurrentIndex(group.readEntry("Guide Lines Type",
@@ -465,6 +482,24 @@ void RatioCropTool::readSettings()
 
     m_autoOrientation->setChecked(group.readEntry("Auto Orientation", false));
     slotAutoOrientChanged( m_autoOrientation->isChecked() );
+
+    // --------------------------------------------------------
+
+    m_customRatioDInput->blockSignals(false);
+    m_customRatioNInput->blockSignals(false);
+    m_flipHorBox->blockSignals(false);
+    m_flipVerBox->blockSignals(false);
+    m_goldenSectionBox->blockSignals(false);
+    m_goldenSpiralBox->blockSignals(false);
+    m_goldenSpiralSectionBox->blockSignals(false);
+    m_goldenTriangleBox->blockSignals(false);
+    m_guideLinesCB->blockSignals(false);
+    m_heightInput->blockSignals(false);
+    m_imageSelectionWidget->blockSignals(false);
+    m_preciseCrop->blockSignals(false);
+    m_widthInput->blockSignals(false);
+    m_xInput->blockSignals(false);
+    m_yInput->blockSignals(false);
 }
 
 void RatioCropTool::writeSettings()
