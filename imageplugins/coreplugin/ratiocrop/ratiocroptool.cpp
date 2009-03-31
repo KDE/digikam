@@ -539,10 +539,7 @@ void RatioCropTool::slotCenterHeight()
 
 void RatioCropTool::slotSelectionChanged(const QRect& rect)
 {
-    m_xInput->blockSignals(true);
-    m_yInput->blockSignals(true);
-    m_widthInput->blockSignals(true);
-    m_heightInput->blockSignals(true);
+    blockWidgetSignals(true);
 
     m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth() - rect.width(), 1);
     m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageHeight() - rect.height(), 1);
@@ -563,10 +560,7 @@ void RatioCropTool::slotSelectionChanged(const QRect& rect)
 
     m_preciseCrop->setEnabled(m_imageSelectionWidget->preciseCropAvailable());
 
-    m_xInput->blockSignals(false);
-    m_yInput->blockSignals(false);
-    m_widthInput->blockSignals(false);
-    m_heightInput->blockSignals(false);
+    blockWidgetSignals(false);
 }
 
 void RatioCropTool::setRatioCBText(int orientation)
