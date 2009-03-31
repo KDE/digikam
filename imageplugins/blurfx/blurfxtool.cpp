@@ -208,17 +208,14 @@ void BlurFXTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("blurfx Tool");
-    m_effectType->blockSignals(true);
-    m_distanceInput->blockSignals(true);
-    m_levelInput->blockSignals(true);
+
+    blockWidgetSignals(true);
 
     m_effectType->setCurrentIndex(group.readEntry("EffectType", m_effectType->defaultIndex()));
     m_distanceInput->setValue(group.readEntry("DistanceAdjustment", m_distanceInput->defaultValue()));
     m_levelInput->setValue(group.readEntry("LevelAdjustment",m_levelInput->defaultValue()));
 
-    m_effectType->blockSignals(false);
-    m_distanceInput->blockSignals(false);
-    m_levelInput->blockSignals(false);
+    blockWidgetSignals(false);
 }
 
 void BlurFXTool::writeSettings()
@@ -234,17 +231,13 @@ void BlurFXTool::writeSettings()
 
 void BlurFXTool::slotResetSettings()
 {
-    m_effectType->blockSignals(true);
-    m_distanceInput->blockSignals(true);
-    m_levelInput->blockSignals(true);
+    blockWidgetSignals(true);
 
     m_effectType->slotReset();
     m_distanceInput->slotReset();
     m_levelInput->slotReset();
 
-    m_effectType->blockSignals(false);
-    m_distanceInput->blockSignals(false);
-    m_levelInput->blockSignals(false);
+    blockWidgetSignals(false);
 
     slotEffectTypeChanged(m_effectType->defaultIndex());
 }
@@ -254,8 +247,7 @@ void BlurFXTool::slotEffectTypeChanged(int type)
     m_distanceInput->setEnabled(true);
     m_distanceLabel->setEnabled(true);
 
-    m_distanceInput->blockSignals(true);
-    m_levelInput->blockSignals(true);
+    blockWidgetSignals(true);
 
     m_distanceInput->setRange(0, 200, 1);
     m_distanceInput->setSliderEnabled(true);
@@ -324,8 +316,7 @@ void BlurFXTool::slotEffectTypeChanged(int type)
           break;
     }
 
-    m_distanceInput->blockSignals(false);
-    m_levelInput->blockSignals(false);
+    blockWidgetSignals(false);
 
     slotEffect();
 }
@@ -416,6 +407,13 @@ void BlurFXTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Blur Effects"), filter()->getTargetImage().bits());
+}
+
+void BlurFXTool::blockWidgetSignals(bool b)
+{
+    m_effectType->blockSignals(b);
+    m_distanceInput->blockSignals(b);
+    m_levelInput->blockSignals(b);
 }
 
 }  // namespace DigikamBlurFXImagesPlugin

@@ -70,6 +70,7 @@ private:
     void putPreviewData();
     void putFinalData();
     void renderingFinished();
+    void blockWidgetSignals(bool b);
 
 private:
 
