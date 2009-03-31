@@ -743,65 +743,42 @@ void RatioCropTool::applyRatioChanges(int a)
 
 void RatioCropTool::slotGuideTypeChanged(int t)
 {
-    if (t == ImageSelectionWidget::GuideNone)
+    m_goldenSectionBox->setEnabled(false);
+    m_goldenSpiralSectionBox->setEnabled(false);
+    m_goldenSpiralBox->setEnabled(false);
+    m_goldenTriangleBox->setEnabled(false);
+    m_flipHorBox->setEnabled(false);
+    m_flipVerBox->setEnabled(false);
+    m_colorGuideLabel->setEnabled(false);
+    m_guideColorBt->setEnabled(false);
+    m_guideSize->setEnabled(false);
+
+    switch (t)
     {
-        m_goldenSectionBox->setEnabled(false);
-        m_goldenSpiralSectionBox->setEnabled(false);
-        m_goldenSpiralBox->setEnabled(false);
-        m_goldenTriangleBox->setEnabled(false);
-        m_flipHorBox->setEnabled(false);
-        m_flipVerBox->setEnabled(false);
-        m_colorGuideLabel->setEnabled(false);
-        m_guideColorBt->setEnabled(false);
-        m_guideSize->setEnabled(false);
-    }
-    else if (t == ImageSelectionWidget::RulesOfThirds)
-    {
-        m_goldenSectionBox->setEnabled(false);
-        m_goldenSpiralSectionBox->setEnabled(false);
-        m_goldenSpiralBox->setEnabled(false);
-        m_goldenTriangleBox->setEnabled(false);
-        m_flipHorBox->setEnabled(false);
-        m_flipVerBox->setEnabled(false);
-        m_colorGuideLabel->setEnabled(true);
-        m_guideColorBt->setEnabled(true);
-        m_guideSize->setEnabled(true);
-    }
-    else if (t == ImageSelectionWidget::DiagonalMethod)
-    {
-        m_goldenSectionBox->setEnabled(false);
-        m_goldenSpiralSectionBox->setEnabled(false);
-        m_goldenSpiralBox->setEnabled(false);
-        m_goldenTriangleBox->setEnabled(false);
-        m_flipHorBox->setEnabled(false);
-        m_flipVerBox->setEnabled(false);
-        m_colorGuideLabel->setEnabled(true);
-        m_guideColorBt->setEnabled(true);
-        m_guideSize->setEnabled(true);
-    }
-    else if (t == ImageSelectionWidget::HarmoniousTriangles)
-    {
-        m_goldenSectionBox->setEnabled(false);
-        m_goldenSpiralSectionBox->setEnabled(false);
-        m_goldenSpiralBox->setEnabled(false);
-        m_goldenTriangleBox->setEnabled(false);
-        m_flipHorBox->setEnabled(true);
-        m_flipVerBox->setEnabled(true);
-        m_colorGuideLabel->setEnabled(true);
-        m_guideColorBt->setEnabled(true);
-        m_guideSize->setEnabled(true);
-    }
-    else
-    {
-        m_goldenSectionBox->setEnabled(true);
-        m_goldenSpiralSectionBox->setEnabled(true);
-        m_goldenSpiralBox->setEnabled(true);
-        m_goldenTriangleBox->setEnabled(true);
-        m_flipHorBox->setEnabled(true);
-        m_flipVerBox->setEnabled(true);
-        m_colorGuideLabel->setEnabled(true);
-        m_guideColorBt->setEnabled(true);
-        m_guideSize->setEnabled(true);
+        case ImageSelectionWidget::RulesOfThirds:
+        case ImageSelectionWidget::DiagonalMethod:
+            m_colorGuideLabel->setEnabled(true);
+            m_guideColorBt->setEnabled(true);
+            m_guideSize->setEnabled(true);
+            break;
+        case ImageSelectionWidget::HarmoniousTriangles:
+            m_colorGuideLabel->setEnabled(true);
+            m_guideColorBt->setEnabled(true);
+            m_guideSize->setEnabled(true);
+            m_flipHorBox->setEnabled(true);
+            m_flipVerBox->setEnabled(true);
+            break;
+        case ImageSelectionWidget::GoldenMean:
+            m_colorGuideLabel->setEnabled(true);
+            m_guideColorBt->setEnabled(true);
+            m_guideSize->setEnabled(true);
+            m_flipHorBox->setEnabled(true);
+            m_flipVerBox->setEnabled(true);
+            m_goldenSectionBox->setEnabled(true);
+            m_goldenSpiralSectionBox->setEnabled(true);
+            m_goldenSpiralBox->setEnabled(true);
+            m_goldenTriangleBox->setEnabled(true);
+            break;
     }
 
     m_imageSelectionWidget->setGoldenGuideTypes(m_goldenSectionBox->isChecked(),
