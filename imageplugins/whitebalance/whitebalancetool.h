@@ -85,6 +85,7 @@ private:
     void readSettings();
     void writeSettings();
     void finalRendering();
+    void blockWidgetSignals(bool b);
 
 private:
 

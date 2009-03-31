@@ -588,15 +588,7 @@ void WhiteBalanceTool::finalRendering()
 
 void WhiteBalanceTool::slotResetSettings()
 {
-    m_blackInput->blockSignals(true);
-    m_darkInput->blockSignals(true);
-    m_fineExposureInput->blockSignals(true);
-    m_gammaInput->blockSignals(true);
-    m_greenInput->blockSignals(true);
-    m_mainExposureInput->blockSignals(true);
-    m_saturationInput->blockSignals(true);
-    m_temperatureInput->blockSignals(true);
-    m_temperaturePresetCB->blockSignals(true);
+    blockWidgetSignals(true);
 
     // Neutral color temperature settings is D65.
     m_blackInput->slotReset();
@@ -614,15 +606,7 @@ void WhiteBalanceTool::slotResetSettings()
     m_gboxSettings->histogramBox()->setChannel(EditorToolSettings::LuminosityChannel);
     m_gboxSettings->histogramBox()->histogram()->reset();
 
-    m_blackInput->blockSignals(false);
-    m_darkInput->blockSignals(false);
-    m_fineExposureInput->blockSignals(false);
-    m_gammaInput->blockSignals(false);
-    m_greenInput->blockSignals(false);
-    m_mainExposureInput->blockSignals(false);
-    m_saturationInput->blockSignals(false);
-    m_temperatureInput->blockSignals(false);
-    m_temperaturePresetCB->blockSignals(false);
+    blockWidgetSignals(false);
 
     slotEffect();
 }
@@ -740,6 +724,19 @@ void WhiteBalanceTool::slotSaveAsSettings()
                            i18n("Cannot save settings to the White Color Balance text file."));
 
     file.close();
+}
+
+void WhiteBalanceTool::blockWidgetSignals(bool b)
+{
+    m_blackInput->blockSignals(b);
+    m_darkInput->blockSignals(b);
+    m_fineExposureInput->blockSignals(b);
+    m_gammaInput->blockSignals(b);
+    m_greenInput->blockSignals(b);
+    m_mainExposureInput->blockSignals(b);
+    m_saturationInput->blockSignals(b);
+    m_temperatureInput->blockSignals(b);
+    m_temperaturePresetCB->blockSignals(b);
 }
 
 }  // namespace DigikamWhiteBalanceImagesPlugin
