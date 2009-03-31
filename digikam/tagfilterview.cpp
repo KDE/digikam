@@ -700,7 +700,7 @@ void TagFilterView::slotTagAdded(Album* album)
     if (!tag)
         return;
 
-    if (tag->parent()->isRoot())
+    if (tag->parent() && tag->parent()->isRoot())
     {
         new TagFilterViewItem(this, tag);
     }

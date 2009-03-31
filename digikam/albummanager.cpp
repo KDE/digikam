@@ -1899,7 +1899,8 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *newParent, QString &errMsg)
 
     ChangingDB changing(d);
     DatabaseAccess().db()->setTagParentID(album->id(), newParent->id());
-    album->parent()->removeChild(album);
+    if (album->parent())
+        album->parent()->removeChild(album);
     album->setParent(newParent);
 
     emit signalTAlbumMoved(album, newParent);
