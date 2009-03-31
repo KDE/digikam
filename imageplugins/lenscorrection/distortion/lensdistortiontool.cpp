@@ -212,20 +212,14 @@ void LensDistortionTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("lensdistortion Tool");
 
-    m_mainInput->blockSignals(true);
-    m_edgeInput->blockSignals(true);
-    m_rescaleInput->blockSignals(true);
-    m_brightenInput->blockSignals(true);
+    blockWidgetSignals(true);
 
     m_mainInput->setValue(group.readEntry("2nd Order Distortion", m_mainInput->defaultValue()));
     m_edgeInput->setValue(group.readEntry("4th Order Distortion", m_edgeInput->defaultValue()));
     m_rescaleInput->setValue(group.readEntry("Zoom Factor", m_rescaleInput->defaultValue()));
     m_brightenInput->setValue(group.readEntry("Brighten", m_brightenInput->defaultValue()));
 
-    m_mainInput->blockSignals(false);
-    m_edgeInput->blockSignals(false);
-    m_rescaleInput->blockSignals(false);
-    m_brightenInput->blockSignals(false);
+    blockWidgetSignals(false);
 
     slotColorGuideChanged();
     slotEffect();
@@ -245,20 +239,14 @@ void LensDistortionTool::writeSettings()
 
 void LensDistortionTool::slotResetSettings()
 {
-    m_mainInput->blockSignals(true);
-    m_edgeInput->blockSignals(true);
-    m_rescaleInput->blockSignals(true);
-    m_brightenInput->blockSignals(true);
+    blockWidgetSignals(true);
 
     m_mainInput->slotReset();
     m_edgeInput->slotReset();
     m_rescaleInput->slotReset();
     m_brightenInput->slotReset();
 
-    m_mainInput->blockSignals(false);
-    m_edgeInput->blockSignals(false);
-    m_rescaleInput->blockSignals(false);
-    m_brightenInput->blockSignals(false);
+    blockWidgetSignals(false);
 
     slotEffect();
 }
@@ -328,6 +316,14 @@ void LensDistortionTool::renderingFinished()
     m_edgeInput->setEnabled(true);
     m_rescaleInput->setEnabled(true);
     m_brightenInput->setEnabled(true);
+}
+
+void LensDistortionTool::blockWidgetSignals(bool b)
+{
+    m_mainInput->blockSignals(b);
+    m_edgeInput->blockSignals(b);
+    m_rescaleInput->blockSignals(b);
+    m_brightenInput->blockSignals(b);
 }
 
 }  // namespace DigikamLensDistortionImagesPlugin
