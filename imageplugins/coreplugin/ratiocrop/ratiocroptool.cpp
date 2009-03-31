@@ -749,29 +749,22 @@ void RatioCropTool::slotGuideTypeChanged(int t)
     m_goldenTriangleBox->setEnabled(false);
     m_flipHorBox->setEnabled(false);
     m_flipVerBox->setEnabled(false);
-    m_colorGuideLabel->setEnabled(false);
-    m_guideColorBt->setEnabled(false);
-    m_guideSize->setEnabled(false);
+    m_colorGuideLabel->setEnabled(true);
+    m_guideColorBt->setEnabled(true);
+    m_guideSize->setEnabled(true);
 
     switch (t)
     {
-        case ImageSelectionWidget::RulesOfThirds:
-        case ImageSelectionWidget::DiagonalMethod:
-            m_colorGuideLabel->setEnabled(true);
-            m_guideColorBt->setEnabled(true);
-            m_guideSize->setEnabled(true);
+        case ImageSelectionWidget::GuideNone:
+            m_colorGuideLabel->setEnabled(false);
+            m_guideColorBt->setEnabled(false);
+            m_guideSize->setEnabled(false);
             break;
         case ImageSelectionWidget::HarmoniousTriangles:
-            m_colorGuideLabel->setEnabled(true);
-            m_guideColorBt->setEnabled(true);
-            m_guideSize->setEnabled(true);
             m_flipHorBox->setEnabled(true);
             m_flipVerBox->setEnabled(true);
             break;
         case ImageSelectionWidget::GoldenMean:
-            m_colorGuideLabel->setEnabled(true);
-            m_guideColorBt->setEnabled(true);
-            m_guideSize->setEnabled(true);
             m_flipHorBox->setEnabled(true);
             m_flipVerBox->setEnabled(true);
             m_goldenSectionBox->setEnabled(true);
