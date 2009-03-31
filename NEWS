@@ -24,4 +24,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 013 ==> 188235 : Assigning a color profile to TIFF images does not work anymore with 0.10.0.
 014 ==> 187748 : Install application icons to right path for non-KDE desktops.
 015 ==> 186255 : digiKam crashes when switching collection database. 
-016 ==> 
+016 ==> 178292 : AspectRatioCrop is slow and jumps around in first second. 
+017 ==> 
