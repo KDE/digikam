@@ -1306,8 +1306,9 @@ AlbumFolderViewItem* AlbumFolderView::findParent(PAlbum* album, bool& failed)
 
 AlbumFolderViewItem* AlbumFolderView::findParentByFolder(PAlbum* album, bool& failed)
 {
-    AlbumFolderViewItem* parent =
-        (AlbumFolderViewItem*) album->parent()->extraData(this);
+    AlbumFolderViewItem* parent = 0;
+    if (album->parent())
+        parent = static_cast<AlbumFolderViewItem*>(album->parent()->extraData(this));
 
     if (!parent)
     {

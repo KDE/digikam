@@ -356,7 +356,9 @@ void TagFolderView::slotAlbumAdded(Album *album)
     }
     else
     {
-        TagFolderViewItem *parent = (TagFolderViewItem*)tag->parent()->extraData(this);
+        TagFolderViewItem *parent = 0;
+        if (tag->parent())
+            parent = static_cast<TagFolderViewItem*>(tag->parent()->extraData(this));
 
         if (!parent)
         {

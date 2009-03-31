@@ -1284,7 +1284,10 @@ void ImageDescEditTab::slotAlbumAdded(Album* a)
     }
     else
     {
-        TAlbumCheckListItem* parent = (TAlbumCheckListItem*)(tag->parent()->extraData(d->tagsView));
+        TAlbumCheckListItem* parent = 0;
+        if (tag->parent())
+            parent = static_cast<TAlbumCheckListItem*>(tag->parent()->extraData(d->tagsView));
+
         if (!parent)
         {
             kWarning(50003) << "Failed to find parent for Tag " << tag->title() << endl;
