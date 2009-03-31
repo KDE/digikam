@@ -159,17 +159,13 @@ void RainDropTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("raindrops Tool");
 
-    m_dropInput->blockSignals(true);
-    m_amountInput->blockSignals(true);
-    m_coeffInput->blockSignals(true);
+    blockWidgetSignals(true);
 
     m_dropInput->setValue(group.readEntry("DropAdjustment", m_dropInput->defaultValue()));
     m_amountInput->setValue(group.readEntry("AmountAdjustment", m_amountInput->defaultValue()));
     m_coeffInput->setValue(group.readEntry("CoeffAdjustment", m_coeffInput->defaultValue()));
 
-    m_dropInput->blockSignals(false);
-    m_amountInput->blockSignals(false);
-    m_coeffInput->blockSignals(false);
+    blockWidgetSignals(false);
 
     slotEffect();
 }
@@ -187,17 +183,13 @@ void RainDropTool::writeSettings()
 
 void RainDropTool::slotResetSettings()
 {
-    m_dropInput->blockSignals(true);
-    m_amountInput->blockSignals(true);
-    m_coeffInput->blockSignals(true);
+    blockWidgetSignals(true);
 
     m_dropInput->slotReset();
     m_amountInput->slotReset();
     m_coeffInput->slotReset();
 
-    m_dropInput->blockSignals(false);
-    m_amountInput->blockSignals(false);
-    m_coeffInput->blockSignals(false);
+    blockWidgetSignals(false);
 
     slotEffect();
 }
@@ -259,6 +251,13 @@ void RainDropTool::putFinalData(void)
 
     iface.putOriginalImage(i18n("RainDrop"),
                            filter()->getTargetImage().bits());
+}
+
+void RainDropTool::blockWidgetSignals(bool b)
+{
+    m_dropInput->blockSignals(b);
+    m_amountInput->blockSignals(b);
+    m_coeffInput->blockSignals(b);
 }
 
 }  // namespace DigikamRainDropImagesPlugin
