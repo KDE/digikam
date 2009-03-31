@@ -225,12 +225,7 @@ void AntiVignettingTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("antivignetting Tool");
 
-    m_densityInput->blockSignals(true);
-    m_powerInput->blockSignals(true);
-    m_radiusInput->blockSignals(true);
-    m_brightnessInput->blockSignals(true);
-    m_contrastInput->blockSignals(true);
-    m_gammaInput->blockSignals(true);
+    blockWidgetSignals(true);
 
     m_densityInput->setValue(group.readEntry("DensityAdjustment", m_densityInput->defaultValue()));
     m_powerInput->setValue(group.readEntry("PowerAdjustment", m_powerInput->defaultValue()));
@@ -239,12 +234,7 @@ void AntiVignettingTool::readSettings()
     m_contrastInput->setValue(group.readEntry("ContrastAdjustment", m_contrastInput->defaultValue()));
     m_gammaInput->setValue(group.readEntry("GammaAdjustment", m_gammaInput->defaultValue()));
 
-    m_densityInput->blockSignals(false);
-    m_powerInput->blockSignals(false);
-    m_radiusInput->blockSignals(false);
-    m_brightnessInput->blockSignals(false);
-    m_contrastInput->blockSignals(false);
-    m_gammaInput->blockSignals(false);
+    blockWidgetSignals(false);
 
     slotEffect();
 }
@@ -265,12 +255,7 @@ void AntiVignettingTool::writeSettings()
 
 void AntiVignettingTool::slotResetSettings()
 {
-    m_densityInput->blockSignals(true);
-    m_powerInput->blockSignals(true);
-    m_radiusInput->blockSignals(true);
-    m_brightnessInput->blockSignals(true);
-    m_contrastInput->blockSignals(true);
-    m_gammaInput->blockSignals(true);
+    blockWidgetSignals(true);
 
     m_densityInput->slotReset();
     m_powerInput->slotReset();
@@ -279,12 +264,7 @@ void AntiVignettingTool::slotResetSettings()
     m_contrastInput->slotReset();
     m_gammaInput->slotReset();
 
-    m_densityInput->blockSignals(false);
-    m_powerInput->blockSignals(false);
-    m_radiusInput->blockSignals(false);
-    m_brightnessInput->blockSignals(false);
-    m_contrastInput->blockSignals(false);
-    m_gammaInput->blockSignals(false);
+    blockWidgetSignals(false);
 
     slotEffect();
 }
@@ -377,6 +357,16 @@ void AntiVignettingTool::putFinalData()
 
     // Adjust Image BCG.
     iface.setOriginalBCG(b, c, g);
+}
+
+void AntiVignettingTool::blockWidgetSignals(bool b)
+{
+    m_densityInput->blockSignals(b);
+    m_powerInput->blockSignals(b);
+    m_radiusInput->blockSignals(b);
+    m_brightnessInput->blockSignals(b);
+    m_contrastInput->blockSignals(b);
+    m_gammaInput->blockSignals(b);
 }
 
 }  // namespace DigikamAntiVignettingImagesPlugin
