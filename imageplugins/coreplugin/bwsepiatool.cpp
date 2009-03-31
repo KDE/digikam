@@ -641,11 +641,7 @@ void BWSepiaTool::writeSettings()
 
 void BWSepiaTool::slotResetSettings()
 {
-    m_bwFilm->blockSignals(true);
-    m_bwFilters->blockSignals(true);
-    m_bwTone->blockSignals(true);
-    m_cInput->blockSignals(true);
-    m_strengthInput->blockSignals(true);
+    blockWidgetSignals(true);
 
     m_bwFilters->setCurrentRow(0);
     m_bwFilm->setCurrentRow(0);
@@ -659,11 +655,7 @@ void BWSepiaTool::slotResetSettings()
 
     m_curvesWidget->reset();
 
-    m_bwFilm->blockSignals(false);
-    m_bwFilters->blockSignals(false);
-    m_bwTone->blockSignals(false);
-    m_cInput->blockSignals(false);
-    m_strengthInput->blockSignals(false);
+    blockWidgetSignals(false);
 
     m_gboxSettings->histogramBox()->histogram()->reset();
     m_previewPixmapFactory->invalidate();
@@ -1017,9 +1009,7 @@ void BWSepiaTool::slotLoadSettings()
            return;
         }
 
-        m_bwFilters->blockSignals(true);
-        m_bwTone->blockSignals(true);
-        m_cInput->blockSignals(true);
+        blockWidgetSignals(true);
 
         m_bwFilters->setCurrentRow(stream.readLine().toInt());
         m_bwTone->setCurrentRow(stream.readLine().toInt());
@@ -1050,9 +1040,7 @@ void BWSepiaTool::slotLoadSettings()
         for (int i = 0 ; i < 5 ; i++)
            m_curvesWidget->curves()->curvesCalculateCurve(i);
 
-        m_bwFilters->blockSignals(false);
-        m_bwTone->blockSignals(false);
-        m_cInput->blockSignals(false);
+        blockWidgetSignals(false);
 
         m_gboxSettings->histogramBox()->histogram()->reset();
         m_previewPixmapFactory->invalidate();
@@ -1105,6 +1093,15 @@ void BWSepiaTool::slotSaveAsSettings()
                            i18n("Cannot save settings to the Black & White text file."));
 
     file.close();
+}
+
+void BWSepiaTool::blockWidgetSignals(bool b)
+{
+    m_bwFilm->blockSignals(b);
+    m_bwFilters->blockSignals(b);
+    m_bwTone->blockSignals(b);
+    m_cInput->blockSignals(b);
+    m_strengthInput->blockSignals(b);
 }
 
 }  // namespace DigikamImagesPluginCore

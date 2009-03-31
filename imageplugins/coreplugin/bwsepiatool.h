@@ -76,6 +76,7 @@ private:
     void blackAndWhiteConversion(uchar *data, int w, int h, bool sb, int type);
     void updatePreviews();
     void finalRendering();
+    void blockWidgetSignals(bool b);
     QPixmap getThumbnailForEffect(int type);
 
 private Q_SLOTS:
