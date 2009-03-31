@@ -38,7 +38,7 @@ namespace Digikam
 
 class ImageModelPriv;
 
-class DIGIKAM_MODEL_EXPORT ImageModel : public QAbstractListModel
+class DIGIKAM_DATABASEMODELS_EXPORT ImageModel : public QAbstractListModel
 {
     Q_OBJECT
 

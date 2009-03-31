@@ -38,7 +38,7 @@ class Album;
 class ImageAlbumModel;
 class ImageAlbumFilterModelPrivate;
 
-class DIGIKAM_MODEL_EXPORT ImageAlbumFilterModel : public ImageFilterModel
+class DIGIKAM_ALBUMMODELS_EXPORT ImageAlbumFilterModel : public ImageFilterModel
 {
     Q_OBJECT
 

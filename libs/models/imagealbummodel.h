@@ -43,7 +43,7 @@ class SearchChangeset;
 class Album;
 class ImageAlbumModelPriv;
 
-class DIGIKAM_MODEL_EXPORT ImageAlbumModel : public ImageModel
+class DIGIKAM_ALBUMMODELS_EXPORT ImageAlbumModel : public ImageModel
 {
     Q_OBJECT
 

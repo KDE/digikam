@@ -41,7 +41,7 @@ class ImageChangeset;
 class ImageTagChangeset;
 class ImageFilterModelPrivate;
 
-class DIGIKAM_MODEL_EXPORT ImageFilterModel : public QSortFilterProxyModel
+class DIGIKAM_DATABASEMODELS_EXPORT ImageFilterModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 

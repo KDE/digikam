@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_MODEL_EXPORT ImageFilterModelWorker : public QObject
+class DIGIKAM_DATABASEMODELS_EXPORT ImageFilterModelWorker : public QObject
 {
     Q_OBJECT
 
@@ -70,7 +70,7 @@ protected:
     ImageFilterModelPrivate *d;
 };
 
-class DIGIKAM_MODEL_EXPORT ImageFilterModelPreparer : public ImageFilterModelWorker
+class DIGIKAM_DATABASEMODELS_EXPORT ImageFilterModelPreparer : public ImageFilterModelWorker
 {
     Q_OBJECT
 
@@ -82,7 +82,7 @@ public:
     void process(ImageFilterModelTodoPackage package);
 };
 
-class DIGIKAM_MODEL_EXPORT ImageFilterModelFilterer : public ImageFilterModelWorker
+class DIGIKAM_DATABASEMODELS_EXPORT ImageFilterModelFilterer : public ImageFilterModelWorker
 {
     Q_OBJECT
 

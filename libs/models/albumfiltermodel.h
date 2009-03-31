@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_MODEL_EXPORT AlbumFilterModel : public QSortFilterProxyModel
+class DIGIKAM_ALBUMMODELS_EXPORT AlbumFilterModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
@@ -89,10 +89,11 @@ protected:
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
 
+protected:
+
     SearchTextSettings m_settings;
 };
 
-}
+} // namespace Digikam
 
-#endif
-
+#endif // ALBUMFILTERMODEL_H

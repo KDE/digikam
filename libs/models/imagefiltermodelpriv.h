@@ -60,7 +60,7 @@ public:
 class ImageFilterModelPreparer;
 class ImageFilterModelFilterer;
 
-class DIGIKAM_EXPORT ImageFilterModelPrivate : public QObject
+class DIGIKAM_DATABASEMODELS_EXPORT ImageFilterModelPrivate : public QObject
 {
     Q_OBJECT
 

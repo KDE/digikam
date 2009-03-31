@@ -43,7 +43,7 @@ class Album;
 class AlbumManager;
 class AlbumModelPriv;
 
-class DIGIKAM_MODEL_EXPORT AbstractAlbumModel : public QAbstractItemModel
+class DIGIKAM_ALBUMMODELS_EXPORT AbstractAlbumModel : public QAbstractItemModel
 {
     Q_OBJECT
 
@@ -150,7 +150,7 @@ private:
 
 // ------------------------------------------------------------------
 
-class AbstractSpecificAlbumModel : public AbstractAlbumModel
+class DIGIKAM_ALBUMMODELS_EXPORT AbstractSpecificAlbumModel : public AbstractAlbumModel
 {
     Q_OBJECT
 
@@ -183,7 +183,7 @@ protected:
 
 // ------------------------------------------------------------------
 
-class AbstractCountingAlbumModel : public AbstractSpecificAlbumModel
+class DIGIKAM_ALBUMMODELS_EXPORT AbstractCountingAlbumModel : public AbstractSpecificAlbumModel
 {
     Q_OBJECT
 
@@ -242,7 +242,7 @@ private:
 
 // ------------------------------------------------------------------
 
-class AbstractCheckableAlbumModel : public AbstractCountingAlbumModel
+class DIGIKAM_ALBUMMODELS_EXPORT AbstractCheckableAlbumModel : public AbstractCountingAlbumModel
 {
     Q_OBJECT
 
@@ -296,7 +296,6 @@ private:
     Qt::ItemFlags                 m_extraFlags;
     QHash<Album*, Qt::CheckState> m_checkedAlbums;
 };
-
 
 } // namespace Digikam
 
