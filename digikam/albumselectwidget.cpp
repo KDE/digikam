@@ -368,7 +368,10 @@ void AlbumSelectWidget::slotAlbumAdded(Album* album)
     if (!album || album->type() != Album::PHYSICAL)
         return;
 
-    TreeAlbumItem* parentItem = (TreeAlbumItem*)(album->parent()->extraData(d->albumsView));
+    TreeAlbumItem* parentItem = 0;
+
+    if (album->parent())
+        parentItem = static_cast<TreeAlbumItem*>(album->parent()->extraData(d->albumsView));
 
     if (!parentItem)
     {
