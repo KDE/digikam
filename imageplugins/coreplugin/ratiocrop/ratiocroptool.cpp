@@ -478,10 +478,11 @@ void RatioCropTool::readSettings()
                                     (int)ImageSelectionWidget::Portrait));
         m_orientCB->setDefaultIndex(ImageSelectionWidget::Portrait);
     }
-    applyRatioChanges(m_ratioCB->currentIndex());
 
+    applyRatioChanges(m_ratioCB->currentIndex());
     m_autoOrientation->setChecked(group.readEntry("Auto Orientation", false));
     slotAutoOrientChanged( m_autoOrientation->isChecked() );
+    slotGuideTypeChanged(m_guideLinesCB->currentIndex());
 
     // --------------------------------------------------------
 
