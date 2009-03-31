@@ -382,16 +382,7 @@ void SharpenTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("sharpen Tool");
 
-    m_amountInput->blockSignals(true);
-    m_correlation->blockSignals(true);
-    m_gauss->blockSignals(true);
-    m_matrixSize->blockSignals(true);
-    m_noise->blockSignals(true);
-    m_radius->blockSignals(true);
-    m_radiusInput->blockSignals(true);
-    m_radiusInput2->blockSignals(true);
-    m_sharpMethod->blockSignals(true);
-    m_thresholdInput->blockSignals(true);
+    blockWidgetSignals(true);
 
     m_amountInput->setValue(group.readEntry("UnsharpMaskAmountAdjustment", m_amountInput->defaultValue()));
     m_correlation->setValue(group.readEntry("RefocusCorrelationAdjustment", m_correlation->defaultValue()));
@@ -404,16 +395,7 @@ void SharpenTool::readSettings()
     m_sharpMethod->setCurrentIndex(group.readEntry("SharpenMethod", m_sharpMethod->defaultIndex()));
     m_thresholdInput->setValue(group.readEntry("UnsharpMaskThresholdAdjustment", m_thresholdInput->defaultValue()));
 
-    m_amountInput->blockSignals(false);
-    m_correlation->blockSignals(false);
-    m_gauss->blockSignals(false);
-    m_matrixSize->blockSignals(false);
-    m_noise->blockSignals(false);
-    m_radius->blockSignals(false);
-    m_radiusInput->blockSignals(false);
-    m_radiusInput2->blockSignals(false);
-    m_sharpMethod->blockSignals(false);
-    m_thresholdInput->blockSignals(false);
+    blockWidgetSignals(false);
 
     slotSharpMethodActived(m_sharpMethod->currentIndex());
 }
@@ -438,54 +420,28 @@ void SharpenTool::writeSettings()
 
 void SharpenTool::slotResetSettings()
 {
+    blockWidgetSignals(true);
+
     switch (m_stack->indexOf(m_stack->currentWidget()))
     {
         case SimpleSharp:
-        {
-            m_radiusInput->blockSignals(true);
             m_radiusInput->slotReset();
-            m_radiusInput->blockSignals(false);
             break;
-        }
-
         case UnsharpMask:
-        {
-            m_radiusInput2->blockSignals(true);
-            m_amountInput->blockSignals(true);
-            m_thresholdInput->blockSignals(true);
-
             m_radiusInput2->slotReset();
             m_amountInput->slotReset();
             m_thresholdInput->slotReset();
-
-            m_radiusInput2->blockSignals(false);
-            m_amountInput->blockSignals(false);
-            m_thresholdInput->blockSignals(false);
             break;
-        }
-
         case Refocus:
-        {
-            m_matrixSize->blockSignals(true);
-            m_radius->blockSignals(true);
-            m_gauss->blockSignals(true);
-            m_correlation->blockSignals(true);
-            m_noise->blockSignals(true);
-
             m_matrixSize->slotReset();
             m_radius->slotReset();
             m_gauss->slotReset();
             m_correlation->slotReset();
             m_noise->slotReset();
-
-            m_matrixSize->blockSignals(false);
-            m_radius->blockSignals(false);
-            m_gauss->blockSignals(false);
-            m_correlation->blockSignals(false);
-            m_noise->blockSignals(false);
             break;
-        }
     }
+
+    blockWidgetSignals(false);
 }
 
 void SharpenTool::prepareEffect()
@@ -736,6 +692,20 @@ void SharpenTool::slotSaveAsSettings()
         KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the Photograph Refocus text file."));
 
     file.close();
+}
+
+void SharpenTool::blockWidgetSignals(bool b)
+{
+    m_amountInput->blockSignals(b);
+    m_correlation->blockSignals(b);
+    m_gauss->blockSignals(b);
+    m_matrixSize->blockSignals(b);
+    m_noise->blockSignals(b);
+    m_radius->blockSignals(b);
+    m_radiusInput->blockSignals(b);
+    m_radiusInput2->blockSignals(b);
+    m_sharpMethod->blockSignals(b);
+    m_thresholdInput->blockSignals(b);
 }
 
 }  // namespace DigikamImagesPluginCore
