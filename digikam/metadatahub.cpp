@@ -169,7 +169,7 @@ void MetadataHub::load(const ImageInfo &info)
     if (d->dbmode == ManagedTags)
     {
         QList<TAlbum *> loadedTags;
-        for (QList<int>::iterator it = tagIds.begin(); it != tagIds.end(); ++it)
+        for (QList<int>::const_iterator it = tagIds.constBegin(); it != tagIds.constEnd(); ++it)
         {
             TAlbum *album = man->findTAlbum(*it);
             if (!album)
@@ -231,7 +231,7 @@ void MetadataHub::load(const DMetadata &metadata)
             AlbumManager *man = AlbumManager::instance();
             QList<TAlbum *> loadedTags;
 
-            for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
+            for (QStringList::const_iterator it = tagPaths.constBegin(); it != tagPaths.constEnd(); ++it)
             {
                 TAlbum *album = man->findTAlbum(*it);
                 if (!album)

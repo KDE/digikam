@@ -311,7 +311,8 @@ AlbumList TagEditDlg::createTAlbum(TAlbum *mainRootAlbum, const QString& tagStr,
     if (tagsHierarchies.isEmpty())
         return createdTagsList;
 
-    for (QStringList::const_iterator it = tagsHierarchies.constBegin(); it != tagsHierarchies.constEnd(); ++it)
+    for (QStringList::const_iterator it = tagsHierarchies.constBegin();
+         it != tagsHierarchies.constEnd(); ++it)
     {
         QString hierarchy = (*it).trimmed();
         if (!hierarchy.isEmpty())
@@ -330,7 +331,8 @@ AlbumList TagEditDlg::createTAlbum(TAlbum *mainRootAlbum, const QString& tagStr,
 
             if (!tagsList.isEmpty())
             {
-                for (QStringList::iterator it2 = tagsList.begin(); it2 != tagsList.end(); ++it2)
+                for (QStringList::const_iterator it2 = tagsList.constBegin();
+                     it2 != tagsList.constEnd(); ++it2)
                 {
                     QString tagPath, errMsg;
                     QString tag = (*it2).trimmed();

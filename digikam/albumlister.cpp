@@ -579,8 +579,8 @@ void AlbumLister::slotResult(KJob* job)
         return;
     }
 
-    for (QMap<qlonglong, ImageInfo>::iterator it = d->itemMap.begin();
-         it != d->itemMap.end(); ++it)
+    for (QMap<qlonglong, ImageInfo>::const_iterator it = d->itemMap.constBegin();
+         it != d->itemMap.constEnd(); ++it)
     {
         emit signalDeleteItem(it.value());
         emit signalDeleteFilteredItem(it.value());

@@ -87,16 +87,16 @@ AlbumHistory::~AlbumHistory()
 
 void AlbumHistory::clearHistory()
 {
-    AlbumStack::iterator iter = m_backwardStack->begin();
-    AlbumStack::iterator end  = m_backwardStack->end();
+    AlbumStack::const_iterator iter = m_backwardStack->constBegin();
+    AlbumStack::const_iterator end  = m_backwardStack->constEnd();
 
     for(; iter != end; ++iter)
         delete *iter;
 
     m_backwardStack->clear();
 
-    iter = m_forwardStack->begin();
-    end = m_forwardStack->end();
+    iter = m_forwardStack->constBegin();
+    end = m_forwardStack->constEnd();
 
     for(; iter != end; ++iter)
         delete *iter;
@@ -128,9 +128,9 @@ void AlbumHistory::addAlbum(Album *album, QWidget *widget)
     // The forward stack has to be cleared, if backward stack was changed
     if(!m_forwardStack->isEmpty())
     {
-        AlbumStack::iterator iter = m_forwardStack->begin();
+        AlbumStack::const_iterator iter = m_forwardStack->constBegin();
 
-        for(; iter != m_forwardStack->end(); ++iter)
+        for(; iter != m_forwardStack->constEnd(); ++iter)
             delete *iter;
 
         m_forwardStack->clear();
