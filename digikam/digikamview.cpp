@@ -1725,8 +1725,8 @@ void DigikamView::slideShow(ImageInfoList &infoList)
     settings.loop                 = group.readEntry("SlideShowLoop", false);
 
     d->cancelSlideShow = false;
-    for (ImageInfoList::iterator it = infoList.begin() ;
-         !d->cancelSlideShow && (it != infoList.end()) ; ++it)
+    for (ImageInfoList::const_iterator it = infoList.constBegin();
+         !d->cancelSlideShow && (it != infoList.constEnd()) ; ++it)
     {
         ImageInfo info = *it;
         settings.fileList.append(info.fileUrl());

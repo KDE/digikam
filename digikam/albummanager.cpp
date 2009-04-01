@@ -1800,7 +1800,7 @@ AlbumList AlbumManager::findOrCreateTAlbums(const QStringList &tagPaths)
 
     AlbumList resultList;
 
-    for (QList<int>::iterator it = tagIDs.begin() ; it != tagIDs.end() ; ++it)
+    for (QList<int>::const_iterator it = tagIDs.constBegin() ; it != tagIDs.constEnd() ; ++it)
     {
         resultList.append(findTAlbum(*it));
     }
@@ -1956,7 +1956,7 @@ AlbumList AlbumManager::getRecentlyAssignedTags() const
 
     AlbumList resultList;
 
-    for (QList<int>::iterator it = tagIDs.begin() ; it != tagIDs.end() ; ++it)
+    for (QList<int>::const_iterator it = tagIDs.constBegin() ; it != tagIDs.constEnd() ; ++it)
     {
         resultList.append(findTAlbum(*it));
     }

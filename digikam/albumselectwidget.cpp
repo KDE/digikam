@@ -248,7 +248,7 @@ void AlbumSelectWidget::slotSearchTextChanged(const SearchTextSettings& settings
     bool atleastOneMatch = false;
 
     AlbumList pList = AlbumManager::instance()->allPAlbums();
-    for (AlbumList::iterator it = pList.begin(); it != pList.end(); ++it)
+    for (AlbumList::const_iterator it = pList.constBegin(); it != pList.constEnd(); ++it)
     {
         PAlbum* palbum = (PAlbum*)(*it);
 

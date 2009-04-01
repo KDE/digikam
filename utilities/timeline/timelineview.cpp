@@ -361,7 +361,7 @@ void TimeLineView::setActive(bool val)
         else
         {
             AlbumList sList = AlbumManager::instance()->allSAlbums();
-            for (AlbumList::iterator it = sList.begin(); it != sList.end(); ++it)
+            for (AlbumList::const_iterator it = sList.constBegin(); it != sList.constEnd(); ++it)
             {
                 SAlbum* salbum = (SAlbum*)(*it);
                 if (salbum->title() == d->timeLineFolderView->currentTimeLineSearchName())

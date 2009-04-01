@@ -376,7 +376,7 @@ void TagFilterView::slotTextTagFilterChanged(const SearchTextSettings& settings)
     bool atleastOneMatch = false;
 
     AlbumList tList = AlbumManager::instance()->allTAlbums();
-    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    for (AlbumList::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)
     {
         TAlbum* talbum  = (TAlbum*)(*it);
 

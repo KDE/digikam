@@ -145,7 +145,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
     if (d->create)
     {
         AlbumList tList = AlbumManager::instance()->allTAlbums();
-        for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+        for (AlbumList::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)
         {
             TAlbum *tag = dynamic_cast<TAlbum*>(*it);
             d->titleEdit->completionObject()->addItem(tag->tagPath());

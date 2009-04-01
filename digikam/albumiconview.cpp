@@ -1286,7 +1286,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
         // Check if items dropped come from outside current album.
         KUrl::List extUrls;
         QList<qlonglong> extImageIDs;
-        for (QList<int>::iterator it = imageIDs.begin(); it != imageIDs.end(); ++it)
+        for (QList<int>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
         {
             ImageInfo info(*it);
             if (info.albumId() != album->id())

@@ -589,10 +589,10 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
     if (!files.isEmpty())
     {
         QFileInfoList f = files;
-        QFileInfoList::iterator it = f.begin();
+        QFileInfoList::const_iterator it = f.constBegin();
         QFileInfo fileInfo;
 
-        while (it != f.end())
+        while (it != f.constEnd())
         {
             fileInfo = *it;
 

@@ -295,7 +295,7 @@ void AlbumFolderView::slotTextFolderFilterChanged(const SearchTextSettings& sett
     bool atleastOneMatch = false;
 
     AlbumList pList = d->albumMan->allPAlbums();
-    for (AlbumList::iterator it = pList.begin(); it != pList.end(); ++it)
+    for (AlbumList::const_iterator it = pList.constBegin(); it != pList.constEnd(); ++it)
     {
         PAlbum* palbum  = (PAlbum*)(*it);
         AlbumFolderViewItem* viewItem = (AlbumFolderViewItem*) palbum->extraData(this);
@@ -492,7 +492,7 @@ void AlbumFolderView::slotThumbnailLost(Album *)
 void AlbumFolderView::slotReloadThumbnails()
 {
     AlbumList tList = d->albumMan->allPAlbums();
-    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    for (AlbumList::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)
     {
         PAlbum* album  = (PAlbum*)(*it);
         setAlbumThumbnail(album);
@@ -1059,7 +1059,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         KUrl::List extUrls;
         ImageInfoList extImgInfList;
         QList<qlonglong> extImageIDs;
-        for (QList<int>::iterator it = imageIDs.begin(); it != imageIDs.end(); ++it)
+        for (QList<int>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
         {
             ImageInfo info(*it);
             if (info.albumId() != destAlbum->id())
@@ -1321,8 +1321,8 @@ AlbumFolderViewItem* AlbumFolderView::findParentByFolder(PAlbum* album, bool& fa
         QStringList albumRoots = CollectionManager::instance()->allAvailableAlbumRootPaths();
         if (albumRoots.count() > 1)
         {
-            for (QList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
-                 it != d->groupItems.end(); ++it)
+            for (QList<AlbumFolderViewItem*>::const_iterator it = d->groupItems.constBegin();
+                 it != d->groupItems.constEnd(); ++it)
             {
                 AlbumFolderViewItem* groupItem = *it;
                 if (groupItem->text(0) == album->albumRootPath())
@@ -1355,8 +1355,8 @@ AlbumFolderViewItem* AlbumFolderView::findParentByCategory(PAlbum* album, bool& 
 
     AlbumFolderViewItem* parent = 0;
 
-    for (QList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
-         it != d->groupItems.end(); ++it)
+    for (QList<AlbumFolderViewItem*>::const_iterator it = d->groupItems.constBegin();
+         it != d->groupItems.constEnd(); ++it)
     {
         AlbumFolderViewItem* groupItem = *it;
         if (groupItem->text(0) == category)
@@ -1386,8 +1386,8 @@ AlbumFolderViewItem* AlbumFolderView::findParentByDate(PAlbum* album, bool& fail
 
     AlbumFolderViewItem* parent = 0;
 
-    for (QList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
-         it != d->groupItems.end(); ++it)
+    for (QList<AlbumFolderViewItem*>::const_iterator it = d->groupItems.constBegin();
+         it != d->groupItems.constEnd(); ++it)
     {
         AlbumFolderViewItem* groupItem = *it;
         if (groupItem->text(0) == timeString)
@@ -1416,7 +1416,7 @@ void AlbumFolderView::resort()
         prevSelectedItem = 0;
 
     AlbumList pList(d->albumMan->allPAlbums());
-    for (AlbumList::iterator it = pList.begin(); it != pList.end(); ++it)
+    for (AlbumList::const_iterator it = pList.constBegin(); it != pList.constEnd(); ++it)
     {
         PAlbum *album = (PAlbum*)(*it);
         if (!album->isRoot() && album->extraData(this))
