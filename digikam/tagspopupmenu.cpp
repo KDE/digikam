@@ -442,8 +442,7 @@ void TagsPopupMenu::slotAboutToShow()
 
         // also add the parents of the assigned tags
         QSet<int> parents;
-        for (QSet<int>::iterator it = d->assignedTags.begin();
-             it != d->assignedTags.end(); ++it)
+        for (QSet<int>::const_iterator it = d->assignedTags.constBegin(); it != d->assignedTags.constEnd(); ++it)
         {
             TAlbum* album = man->findTAlbum(*it);
             if (album)
@@ -497,7 +496,7 @@ void TagsPopupMenu::iterateAndBuildMenu(KMenu *menu, TAlbum *album)
     }
     qStableSort(sortedTags.begin(), sortedTags.end(), lessThanByTitle);
 
-    for (QList<Album*>::iterator it = sortedTags.begin(); it != sortedTags.end(); ++it)
+    for (QList<Album*>::const_iterator it = sortedTags.constBegin(); it != sortedTags.constEnd(); ++it)
     {
         TAlbum *a = (TAlbum*)*it;
 
@@ -627,7 +626,7 @@ void TagsPopupMenu::slotAddTag(QAction *action)
     AlbumList tList = TagEditDlg::createTAlbum(parent, title, icon, errMap);
     TagEditDlg::showtagsListCreationError(kapp->activeWindow(), errMap);
 
-    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    for (AlbumList::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)
         emit signalTagActivated((*it)->id());
 }
 

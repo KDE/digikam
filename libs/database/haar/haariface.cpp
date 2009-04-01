@@ -411,7 +411,7 @@ QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData *queryS
     QMultiMap<double, qlonglong> bestMatches;
     double score, percentage;
     qlonglong id;
-    for (QMap<qlonglong, double>::iterator it = scores.begin(); it != scores.end(); ++it)
+    for (QMap<qlonglong, double>::const_iterator it = scores.constBegin(); it != scores.constEnd(); ++it)
     {
         score = it.value();
         id    = it.key();
@@ -427,7 +427,7 @@ QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData *queryS
     if (bestMatches.count() > 1)
     {
         kDebug(50003) << "Duplicates with id and score:";
-        for (QMultiMap<double, qlonglong>::iterator it = bestMatches.begin(); it != bestMatches.end(); ++it)
+        for (QMultiMap<double, qlonglong>::const_iterator it = bestMatches.constBegin(); it != bestMatches.constEnd(); ++it)
         {
             kDebug(50003) << it.value() << QString::number(it.key() * 100)+QChar('%');
         }
@@ -632,7 +632,7 @@ void HaarIface::rebuildDuplicatesAlbums(const QList<int> &albums2Scan, double re
         access.db()->deleteSearches(DatabaseSearch::DuplicatesSearch);
 
         // create new groups
-        for(QMap<QString, QString>::iterator it = queries.begin(); it != queries.end(); ++it)
+        for(QMap<QString, QString>::const_iterator it = queries.constBegin(); it != queries.constEnd(); ++it)
         {
             access.db()->addSearch(DatabaseSearch::DuplicatesSearch, it.key(), it.value());
         }

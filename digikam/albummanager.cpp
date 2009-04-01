@@ -1090,7 +1090,7 @@ void AlbumManager::scanTAlbums()
         QHash<int, TAlbum*> tagHash;
 
         // insert items into a dict for quick lookup
-        for (TagInfo::List::iterator iter = tList.begin(); iter != tList.end(); ++iter)
+        for (TagInfo::List::const_iterator iter = tList.constBegin(); iter != tList.constEnd(); ++iter)
         {
             TagInfo info  = *iter;
             TAlbum* album = new TAlbum(info.name, info.id);
@@ -1115,7 +1115,8 @@ void AlbumManager::scanTAlbums()
         tagHash.insert(0, rootTag);
 
         // build tree
-        for (QHash<int, TAlbum*>::iterator iter = tagHash.begin() ; iter != tagHash.end(); ++iter )
+        for (QHash<int, TAlbum*>::const_iterator iter = tagHash.constBegin();
+             iter != tagHash.constEnd(); ++iter )
         {
             TAlbum* album = *iter;
             if (album->m_id == 0)
@@ -1153,7 +1154,7 @@ void AlbumManager::scanTAlbums()
         delete rootTag;
     }
 
-    for (TagInfo::List::iterator it = tList.begin(); it != tList.end(); ++it)
+    for (TagInfo::List::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)
     {
         TagInfo info = *it;
 
@@ -2310,8 +2311,7 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
     ds >> datesStatMap;
 
     QMap<YearMonth, int> yearMonthMap;
-    for ( QMap<QDateTime, int>::iterator it = datesStatMap.begin();
-          it != datesStatMap.end(); ++it )
+    for (QMap<QDateTime, int>::const_iterator it = datesStatMap.constBegin(); it != datesStatMap.constEnd(); ++it)
     {
         YearMonth yearMonth = YearMonth(it.key().date().year(), it.key().date().month());
 
@@ -2327,8 +2327,8 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
     }
 
     int year, month;
-    for ( QMap<YearMonth, int>::iterator iter = yearMonthMap.begin();
-          iter != yearMonthMap.end(); ++iter )
+    for (QMap<YearMonth, int>::const_iterator iter = yearMonthMap.constBegin();
+         iter != yearMonthMap.constEnd(); ++iter)
     {
         year  = iter.key().first;
         month = iter.key().second;
@@ -2384,8 +2384,8 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
 
     // Now the items contained in the maps are the ones which
     // have been deleted.
-    for (QMap<QDate, DAlbum*>::iterator it = mAlbumMap.begin();
-         it != mAlbumMap.end(); ++it)
+    for (QMap<QDate, DAlbum*>::const_iterator it = mAlbumMap.constBegin();
+         it != mAlbumMap.constEnd(); ++it)
     {
         DAlbum* album = it.value();
         emit signalAlbumAboutToBeDeleted(album);
@@ -2395,8 +2395,8 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
         emit signalAlbumHasBeenDeleted(album);
     }
 
-    for (QMap<int, DAlbum*>::iterator it = yAlbumMap.begin();
-         it != yAlbumMap.end(); ++it)
+    for (QMap<int, DAlbum*>::const_iterator it = yAlbumMap.constBegin();
+         it != yAlbumMap.constEnd(); ++it)
     {
         DAlbum* album = it.value();
         emit signalAlbumAboutToBeDeleted(album);

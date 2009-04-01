@@ -61,7 +61,7 @@ void ImageListerSlaveBaseReceiver::sendData()
     QByteArray  ba;
     QDataStream os(&ba, QIODevice::WriteOnly);
 
-    for (QList<ImageListerRecord>::iterator it = records.begin(); it != records.end(); ++it)
+    for (QList<ImageListerRecord>::const_iterator it = records.constBegin(); it != records.constEnd(); ++it)
     {
         os << *it;
     }

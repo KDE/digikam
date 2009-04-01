@@ -390,7 +390,7 @@ void AlbumWidgetStack::updateThumbbar()
     ImageInfoList list = d->albumIconView->allImageInfos();
 
     d->thumbBar->blockSignals(true);
-    for (ImageInfoList::iterator it = list.begin(); it != list.end(); ++it)
+    for (ImageInfoList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
             new ImagePreviewBarItem(d->thumbBar, *it);
     d->thumbBar->blockSignals(false);
 

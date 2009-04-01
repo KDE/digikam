@@ -948,7 +948,7 @@ bool SchemaUpdater::updateV4toV5()
 
     SearchInfo::List sList = m_access->db()->scanSearches();
 
-    for (SearchInfo::List::iterator it = sList.begin(); it != sList.end(); ++it)
+    for (SearchInfo::List::const_iterator it = sList.constBegin(); it != sList.constEnd(); ++it)
     {
         KUrl url((*it).query);
 
@@ -1103,7 +1103,7 @@ void SchemaUpdater::preAlpha010Update1()
 
     SearchInfo::List sList = m_access->db()->scanSearches();
 
-    for (SearchInfo::List::iterator it = sList.begin(); it != sList.end(); ++it)
+    for (SearchInfo::List::const_iterator it = sList.constBegin(); it != sList.constEnd(); ++it)
     {
         KUrl url((*it).query);
 

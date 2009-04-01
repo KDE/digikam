@@ -154,7 +154,7 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
         if (!CollectionManager::instance()->locationForAlbumRootId(albumRootId).isAvailable())
             return;
     }
-    
+
     QList<QVariant> albumIds;
 
     if (m_recursive)
@@ -200,7 +200,7 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
     }
 
     int width, height;
-    for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
+    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
         ImageListerRecord record;
         record.imageID           = (*it).toLongLong();
@@ -267,7 +267,7 @@ void ImageLister::listTag(ImageListerReceiver *receiver, int tagId)
     QSet<int> albumRoots = albumRootsToList();
 
     int width, height;
-    for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
+    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
         ImageListerRecord record;
 
@@ -334,7 +334,7 @@ void ImageLister::listDateRange(ImageListerReceiver *receiver, const QDate &star
     QSet<int> albumRoots = albumRootsToList();
 
     int width, height;
-    for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
+    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
         ImageListerRecord record;
 
@@ -432,7 +432,7 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
 
     int width, height;
     double lat,lon;
-    for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
+    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
         ImageListerRecord record;
 
@@ -593,7 +593,7 @@ void ImageLister::listFromIdList(ImageListerReceiver *receiver, QList<qlonglong>
     }
 
     int width, height;
-    for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
+    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
         ImageListerRecord record;
 

@@ -424,7 +424,7 @@ void ImageScanner::scanImageCopyright()
         QMap<QString, QVariant> map = metadataInfos[0].toMap();
         // replace all entries for the first time, after that, add entries
         ImageCopyright::ReplaceMode mode = ImageCopyright::ReplaceAllEntries;
-        for (QMap<QString, QVariant>::iterator it = map.begin(); it != map.end(); ++it)
+        for (QMap<QString, QVariant>::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
         {
             copyright.setCopyrightNotice(it.value().toString(), it.key(), mode);
             mode = ImageCopyright::ReplaceLanguageEntry;
@@ -448,7 +448,7 @@ void ImageScanner::scanImageCopyright()
     {
         QMap<QString, QVariant> map = metadataInfos[0].toMap();
         ImageCopyright::ReplaceMode mode = ImageCopyright::ReplaceAllEntries;
-        for (QMap<QString, QVariant>::iterator it = map.begin(); it != map.end(); ++it)
+        for (QMap<QString, QVariant>::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
         {
             copyright.setRightsUsageTerms(it.value().toString(), it.key(), mode);
             mode = ImageCopyright::ReplaceLanguageEntry;

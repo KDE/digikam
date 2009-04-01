@@ -384,7 +384,7 @@ void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const LoadingDescription &lo
         if (thumbnail.isNull())
         {
             // Loading failed
-            for (QList<int>::iterator vit = (*it).begin(); vit != (*it).end(); ++vit)
+            for (QList<int>::const_iterator vit = (*it).constBegin(); vit != (*it).constEnd(); ++vit)
             {
                 Album *album = manager->findAlbum(*vit);
                 if (album)
@@ -397,7 +397,7 @@ void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const LoadingDescription &lo
 
             QPixmap tagThumbnail;
 
-            for (QList<int>::iterator vit = (*it).begin(); vit != (*it).end(); ++vit)
+            for (QList<int>::const_iterator vit = (*it).constBegin(); vit != (*it).constEnd(); ++vit)
             {
                 // look up with global id
                 Album *album = manager->findAlbum(*vit);

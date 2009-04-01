@@ -70,7 +70,7 @@ public:
 
     bool operator==(const NewlyAppearedFile &other) const
     {
-        return albumId == other.albumId && fileName == other.fileName; 
+        return albumId == other.albumId && fileName == other.fileName;
     }
 
     int     albumId;
@@ -719,7 +719,7 @@ bool CollectionScanner::checkDeleteRemoved()
 void CollectionScanner::scanForStaleAlbums()
 {
     QStringList albumRootPaths = CollectionManager::instance()->allAvailableAlbumRootPaths();
-    for (QStringList::iterator it = albumRootPaths.begin(); it != albumRootPaths.end(); ++it)
+    for (QStringList::const_iterator it = albumRootPaths.constBegin(); it != albumRootPaths.constEnd(); ++it)
         scanForStaleAlbums(*it);
 }
 
@@ -794,12 +794,12 @@ void CollectionScanner::scanAlbums()
 {
     QStringList albumRootPaths = CollectionManager::instance()->allAvailableAlbumRootPaths();
     int count = 0;
-    for (QStringList::iterator it = albumRootPaths.begin(); it != albumRootPaths.end(); ++it)
+    for (QStringList::const_iterator it = albumRootPaths.constBegin(); it != albumRootPaths.constEnd(); ++it)
         count += countItemsInFolder(*it);
 
     emit totalFilesToScan(count);
 
-    for (QStringList::iterator it = albumRootPaths.begin(); it != albumRootPaths.end(); ++it)
+    for (QStringList::const_iterator it = albumRootPaths.constBegin(); it != albumRootPaths.constEnd(); ++it)
     {
         QDir dir(*it);
         QStringList fileList(dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot));
@@ -845,7 +845,7 @@ void CollectionScanner::scan(const QString &albumRoot, const QString& album)
         QStringList fileList(dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot));
 
         DatabaseTransaction transaction;
-        for (QStringList::iterator fileIt = fileList.begin(); fileIt != fileList.end(); ++fileIt)
+        for (QStringList::const_iterator fileIt = fileList.constBegin(); fileIt != fileList.constEnd(); ++fileIt)
         {
             scanAlbum(albumRoot, '/' + (*fileIt));
         }
@@ -959,7 +959,7 @@ void CollectionScanner::updateItemsWithoutDate()
 
     {
         DatabaseTransaction transaction;
-        for (QStringList::iterator it = urls.begin(); it != urls.end(); ++it)
+        for (QStringList::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
         {
             emit scanningFile(*it);
 

@@ -37,7 +37,7 @@ SearchXmlReader::SearchXmlReader(const QString &xml)
 
 SearchXml::Element SearchXmlReader::readNext()
 {
-    while (!atEnd()) 
+    while (!atEnd())
     {
         QXmlStreamReader::readNext();
 
@@ -346,12 +346,12 @@ SearchXml::Relation SearchXmlReader::readRelation(const QString &attributeName,
 bool SearchXmlReader::readToStartOfElement(const QString &elementName)
 {
     // go to next start element
-    forever 
+    forever
     {
         bool atStart = isStartElement();
         if (atStart)
             break;
-        switch (QXmlStreamReader::readNext()) 
+        switch (QXmlStreamReader::readNext())
         {
             case StartElement:
                 atStart = true;
@@ -363,9 +363,9 @@ bool SearchXmlReader::readToStartOfElement(const QString &elementName)
     }
 
     int stack = 1;
-    forever 
+    forever
     {
-        switch (QXmlStreamReader::readNext()) 
+        switch (QXmlStreamReader::readNext())
         {
             case StartElement:
             {
@@ -388,11 +388,11 @@ bool SearchXmlReader::readToStartOfElement(const QString &elementName)
 void SearchXmlReader::readToEndOfElement()
 {
     int stack = 1;
-    if (isStartElement()) 
+    if (isStartElement())
     {
-        forever 
+        forever
         {
-            switch (QXmlStreamReader::readNext()) 
+            switch (QXmlStreamReader::readNext())
             {
                 case StartElement:
                     stack++;

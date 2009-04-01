@@ -708,7 +708,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     typedef QMap<QString, QString> EmbeddedTextMap;
     EmbeddedTextMap map = imageEmbeddedText();
 
-    for (EmbeddedTextMap::iterator it = map.begin(); it != map.end(); ++it)
+    for (EmbeddedTextMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
     {
         if (it.key() != QString("Software") && it.key() != QString("Comment"))
         {

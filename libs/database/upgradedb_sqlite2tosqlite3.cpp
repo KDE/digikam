@@ -163,7 +163,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
     AlbumMap albumMap;
 
     access.backend()->beginTransaction();
-    for (QStringList::iterator it=values.begin(); it!=values.end();)
+    for (QStringList::const_iterator it=values.constBegin(); it!=values.constEnd();)
     {
         _Album album;
 
@@ -202,7 +202,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
     TagList tagList;
 
     access.backend()->beginTransaction();
-    for (QStringList::iterator it=values.begin(); it!=values.end();)
+    for (QStringList::const_iterator it=values.constBegin(); it!=values.constEnd();)
     {
         _Tag tag;
 
@@ -230,7 +230,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
                 &values);
 
     access.backend()->beginTransaction();
-    for (QStringList::iterator it=values.begin(); it!=values.end();)
+    for (QStringList::const_iterator it=values.constBegin(); it!=values.constEnd();)
     {
         int dirid   = (*it).toInt();
         ++it;
@@ -249,7 +249,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
     db2.execSql("SELECT dirid, name, tagid FROM ImageTags;",
                 &values);
     access.backend()->beginTransaction();
-    for (QStringList::iterator it=values.begin(); it!=values.end();)
+    for (QStringList::const_iterator it=values.constBegin(); it!=values.constEnd();)
     {
         int dirid = (*it).toInt();
         ++it;
@@ -270,7 +270,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
     // update album icons -------------------------------------------------
 
     access.backend()->beginTransaction();
-    for (AlbumList::iterator it = albumList.begin(); it != albumList.end();
+    for (AlbumList::const_iterator it = albumList.constBegin(); it != albumList.constEnd();
          ++it)
     {
         _Album album = *it;
@@ -288,7 +288,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
     // -- update tag icons ---------------------------------------------------
 
     access.backend()->beginTransaction();
-    for (TagList::iterator it = tagList.begin(); it != tagList.end(); ++it)
+    for (TagList::const_iterator it = tagList.constBegin(); it != tagList.constEnd(); ++it)
     {
         _Tag tag = *it;
 

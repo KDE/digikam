@@ -1470,8 +1470,7 @@ void AlbumFolderView::clearEmptyGroupItems()
 {
     QList<AlbumFolderViewItem*> deleteItems;
 
-    for (QList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
-         it != d->groupItems.end(); )
+    for (QList<AlbumFolderViewItem*>::iterator it = d->groupItems.begin(); it != d->groupItems.end();)
     {
         AlbumFolderViewItem* groupItem = *it;
 

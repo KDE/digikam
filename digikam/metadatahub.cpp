@@ -296,7 +296,7 @@ void MetadataHub::loadTags(const QList<TAlbum *> &loadedTags)
 
     // Those tags which had been set as MetadataAvailable before,
     // but are not contained in this set, have to be set to MetadataDisjoint
-    for (QList<TAlbum *>::iterator it = previousTags.begin(); it != previousTags.end(); ++it)
+    for (QList<TAlbum *>::const_iterator it = previousTags.constBegin(); it != previousTags.constEnd(); ++it)
     {
         QMap<TAlbum *, TagStatus>::iterator mapIt = d->tags.find(*it);
         if (mapIt != d->tags.end() && mapIt.value() == TagStatus(MetadataAvailable, true))
@@ -835,7 +835,7 @@ QMap<int, MetadataHub::TagStatus> MetadataHub::tagIDs() const
 {
     // DatabaseMode == ManagedTags is assumed
     QMap<int, TagStatus> intmap;
-    for (QMap<TAlbum *, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
+    for (QMap<TAlbum *, TagStatus>::const_iterator it = d->tags.constBegin(); it != d->tags.constEnd(); ++it)
     {
         intmap.insert(it.key()->id(), it.value());
     }
