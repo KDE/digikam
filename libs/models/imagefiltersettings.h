@@ -42,7 +42,7 @@ namespace Digikam
 
 class ImageInfo;
 
-class DIGIKAM_DATABASEMODELS_EXPORT ImageFilterSettings
+class DIGIKAM_DATABASE_EXPORT ImageFilterSettings
 {
 public:
 

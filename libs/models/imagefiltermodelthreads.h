@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_DATABASEMODELS_EXPORT ImageFilterModelWorker : public QObject
+class DIGIKAM_DATABASE_EXPORT ImageFilterModelWorker : public QObject
 {
     Q_OBJECT
 
@@ -65,12 +65,12 @@ protected:
         Thread(QObject *parent = 0) : QThread(parent) {}
         virtual void run() { exec(); }
     };
-    Thread *thread;
+    Thread                  *thread;
 
     ImageFilterModelPrivate *d;
 };
 
-class DIGIKAM_DATABASEMODELS_EXPORT ImageFilterModelPreparer : public ImageFilterModelWorker
+class DIGIKAM_DATABASE_EXPORT ImageFilterModelPreparer : public ImageFilterModelWorker
 {
     Q_OBJECT
 
@@ -82,7 +82,7 @@ public:
     void process(ImageFilterModelTodoPackage package);
 };
 
-class DIGIKAM_DATABASEMODELS_EXPORT ImageFilterModelFilterer : public ImageFilterModelWorker
+class DIGIKAM_DATABASE_EXPORT ImageFilterModelFilterer : public ImageFilterModelWorker
 {
     Q_OBJECT
 
