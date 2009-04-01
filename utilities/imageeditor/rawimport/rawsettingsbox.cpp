@@ -47,6 +47,7 @@
 
 // LibKDcraw includes.
 
+#include <libkdcraw/version.h>
 #include <libkdcraw/dcrawsettingswidget.h>
 #include <libkdcraw/rnuminput.h>
 
@@ -422,7 +423,9 @@ void RawSettingsBox::readSettings()
     d->decodingSettingsBox->setUseCACorrection(group.readEntry("EnableCACorrection", false));
     d->decodingSettingsBox->setcaRedMultiplier(group.readEntry("caRedMultiplier", 1.0));
     d->decodingSettingsBox->setcaBlueMultiplier(group.readEntry("caBlueMultiplier", 1.0));
-
+#if KDCRAW_VERSION >= 0x000500
+    d->decodingSettingsBox->setAutoBrightness(group.readEntry("AutoBrightness", true));
+#endif
     d->decodingSettingsBox->setQuality(
         (DRawDecoding::DecodingQuality)group.readEntry("Decoding Quality",
             (int)(DRawDecoding::BILINEAR)));
@@ -496,7 +499,9 @@ void RawSettingsBox::writeSettings()
     group.writeEntry("Output Color Space",         (int)d->decodingSettingsBox->outputColorSpace());
     group.writeEntry("Input Color Profile",        d->decodingSettingsBox->inputColorProfile());
     group.writeEntry("Output Color Profile",       d->decodingSettingsBox->outputColorProfile());
-
+#if KDCRAW_VERSION >= 0x000500
+    group.writeEntry("AutoBrightness",             d->decodingSettingsBox->useAutoBrightness());
+#endif
     group.writeEntry("Brightness",                 d->brightnessInput->value());
     group.writeEntry("Contrast",                   d->contrastInput->value());
     group.writeEntry("Gamma",                      d->gammaInput->value());
@@ -542,6 +547,9 @@ DRawDecoding RawSettingsBox::settings()
     settings.outputColorSpace        = d->decodingSettingsBox->outputColorSpace();
     settings.inputProfile            = d->decodingSettingsBox->inputColorProfile();
     settings.outputProfile           = d->decodingSettingsBox->outputColorProfile();
+#if KDCRAW_VERSION >= 0x000500
+    settings.autoBrightness          = d->decodingSettingsBox->useAutoBrightness();
+#endif
 
     settings.lightness               = (double)d->brightnessInput->value()/250.0;
     settings.contrast                = (double)(d->contrastInput->value()/100.0) + 1.00;

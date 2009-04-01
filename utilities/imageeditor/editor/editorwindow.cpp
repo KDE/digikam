@@ -918,7 +918,9 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.caMultiplier[1]         = group.readEntry("caBlueMultiplier", 1.0);
     m_IOFileSettings->rawDecodingSettings.brightness              = group.readEntry("RAWBrightness", 1.0);
     m_IOFileSettings->rawDecodingSettings.medianFilterPasses      = group.readEntry("MedianFilterPasses", 0);
-
+#if KDCRAW_VERSION >= 0x000500
+    m_IOFileSettings->rawDecodingSettings.autoBrightness          = group.readEntry("AutoBrightness", true);
+#endif
     m_IOFileSettings->useRAWImport                                = group.readEntry("UseRawImportTool", false);
 
     // -- GUI Settings -------------------------------------------------------

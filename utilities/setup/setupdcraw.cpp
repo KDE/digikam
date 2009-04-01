@@ -122,6 +122,7 @@ void SetupDcraw::applySettings()
     group.writeEntry("RAWBrightness",           d->dcrawSettings->brightness());
     group.writeEntry("RAWQuality",              (int)d->dcrawSettings->quality());
     group.writeEntry("MedianFilterPasses",      d->dcrawSettings->medianFilterPasses());
+    group.writeEntry("AutoBrightness",          d->dcrawSettings->useAutoBrightness());
     config->sync();
 }
 
@@ -148,6 +149,10 @@ void SetupDcraw::readSettings()
                                   (int)DRawDecoding::BILINEAR));
     d->dcrawSettings->setBrightness(group.readEntry("RAWBrightness", 1.0));
     d->dcrawSettings->setMedianFilterPasses(group.readEntry("MedianFilterPasses", 0));
+
+#if KDCRAW_VERSION >= 0x000500
+    d->dcrawSettings->setAutoBrightness(group.readEntry("AutoBrightness", true));
+#endif
 }
 
 }  // namespace Digikam
