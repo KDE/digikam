@@ -114,7 +114,6 @@ BatchTool::BatchTool(const QString& name, BatchToolGroup group, QObject* parent)
 
 BatchTool::~BatchTool()
 {
-    wait();
     delete d->settingsWidget;
     delete d->observer;
     delete d;
