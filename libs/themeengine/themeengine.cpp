@@ -194,7 +194,7 @@ void ThemeEngine::scanThemes()
     QStringList themes = KGlobal::dirs()->findAllResources("themes", QString(),
                                           KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
 
-    for (QStringList::iterator it=themes.begin(); it != themes.end(); ++it)
+    for (QStringList::const_iterator it = themes.constBegin(); it != themes.constEnd(); ++it)
     {
         QFileInfo fi(*it);
         Theme* theme = new Theme(fi.fileName(), *it);

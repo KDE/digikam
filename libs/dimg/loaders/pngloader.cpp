@@ -753,7 +753,8 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         typedef QMap<int, QByteArray> MetaDataMap;
         MetaDataMap metaDataMap = imageMetaData();
 
-        for (MetaDataMap::iterator it = metaDataMap.begin(); it != metaDataMap.end(); ++it)
+        for (MetaDataMap::const_iterator it = metaDataMap.constBegin();
+             it != metaDataMap.constEnd(); ++it)
         {
             QByteArray ba = it.value();
 

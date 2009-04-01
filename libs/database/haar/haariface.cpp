@@ -359,7 +359,7 @@ QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData *querySig, int numbe
     bool initialFill = false;
     double score, worstScore, bestScore;
     qlonglong id;
-    for (QMap<qlonglong, double>::iterator it = scores.begin(); it != scores.end(); ++it)
+    for (QMap<qlonglong, double>::const_iterator it = scores.constBegin(); it != scores.constEnd(); ++it)
     {
         score = it.value();
         id    = it.key();

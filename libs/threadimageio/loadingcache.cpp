@@ -422,14 +422,14 @@ void ClassicLoadingCacheFileWatch::slotUpdateDirWatch()
         }
     }
 
-    for (QStringList::iterator it = toBeRemoved.begin(); it != toBeRemoved.end(); ++it)
+    for (QStringList::const_iterator it = toBeRemoved.constBegin(); it != toBeRemoved.constEnd(); ++it)
     {
         //kDebug(50003) << "removing m_watch for " << *it << endl;
         m_watch->removeFile(*it);
         m_watchedFiles.removeAll(*it);
     }
 
-    for (QStringList::iterator it = toBeAdded.begin(); it != toBeAdded.end(); ++it)
+    for (QStringList::const_iterator it = toBeAdded.constBegin(); it != toBeAdded.constEnd(); ++it)
     {
         //kDebug(50003) << "adding m_watch for " << *it << endl;
         m_watch->addFile(*it);

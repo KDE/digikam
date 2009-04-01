@@ -898,8 +898,8 @@ void CollectionScanner::scanAlbum(const QString &albumRoot, const QString& album
 
     QSet<QString> filesFoundInDB;
 
-    for (QStringList::iterator it = filesInAlbum.begin();
-         it != filesInAlbum.end(); ++it)
+    for (QStringList::const_iterator it = filesInAlbum.constBegin();
+         it != filesInAlbum.constEnd(); ++it)
     {
         filesFoundInDB << *it;
     }
