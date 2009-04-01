@@ -27,12 +27,11 @@
 // Local includes.
 
 #include "abstractalbummodel.h"
-#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_ALBUMMODELS_EXPORT AlbumModel : public AbstractCheckableAlbumModel
+class AlbumModel : public AbstractCheckableAlbumModel
 {
 public:
 
@@ -49,7 +48,7 @@ protected:
 
 // ------------------------------------------------------------------
 
-class DIGIKAM_ALBUMMODELS_EXPORT TagModel : public AbstractCheckableAlbumModel
+class TagModel : public AbstractCheckableAlbumModel
 {
 public:
 
@@ -66,7 +65,7 @@ protected:
 
 // ------------------------------------------------------------------
 
-class DIGIKAM_ALBUMMODELS_EXPORT SearchModel : public AbstractSpecificAlbumModel
+class SearchModel : public AbstractSpecificAlbumModel
 {
 public:
 
@@ -93,14 +92,14 @@ protected:
 
 protected:
 
-    QPixmap m_pixmap;
-    int     m_searchType;
+    int                     m_searchType;
+    QPixmap                 m_pixmap;
     QHash<QString, QString> m_replaceNames;
 };
 
 // ------------------------------------------------------------------
 
-class DIGIKAM_ALBUMMODELS_EXPORT DateAlbumModel : public AbstractCountingAlbumModel
+class DateAlbumModel : public AbstractCountingAlbumModel
 {
     Q_OBJECT
 

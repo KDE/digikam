@@ -30,7 +30,6 @@
 
 #include "imagemodel.h"
 #include "album.h"
-#include "digikam_export.h"
 
 namespace KIO { class Job; }
 class KJob;
@@ -43,7 +42,7 @@ class SearchChangeset;
 class Album;
 class ImageAlbumModelPriv;
 
-class DIGIKAM_ALBUMMODELS_EXPORT ImageAlbumModel : public ImageModel
+class ImageAlbumModel : public ImageModel
 {
     Q_OBJECT
 

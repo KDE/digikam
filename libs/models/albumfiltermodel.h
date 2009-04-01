@@ -32,12 +32,11 @@
 
 #include "albummodel.h"
 #include "searchtextbar.h"
-#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_ALBUMMODELS_EXPORT AlbumFilterModel : public QSortFilterProxyModel
+class AlbumFilterModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 

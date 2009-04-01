@@ -33,7 +33,6 @@
 
 // Local includes.
 
-#include "digikam_export.h"
 #include "album.h"
 
 namespace Digikam
@@ -43,7 +42,7 @@ class Album;
 class AlbumManager;
 class AlbumModelPriv;
 
-class DIGIKAM_ALBUMMODELS_EXPORT AbstractAlbumModel : public QAbstractItemModel
+class AbstractAlbumModel : public QAbstractItemModel
 {
     Q_OBJECT
 
@@ -99,7 +98,8 @@ public:
 
     /** Returns the album object associated with the given model index */
     Album *albumForIndex(const QModelIndex &index) const;
-    /** Return the QModelIndex for the given album, or an invalid index if the album is not contained in this model. */
+    /** Return the QModelIndex for the given album, or an invalid index if 
+        the album is not contained in this model. */
     QModelIndex indexForAlbum(Album *album) const;
 
     Album *rootAlbum() const;
@@ -150,7 +150,7 @@ private:
 
 // ------------------------------------------------------------------
 
-class DIGIKAM_ALBUMMODELS_EXPORT AbstractSpecificAlbumModel : public AbstractAlbumModel
+class AbstractSpecificAlbumModel : public AbstractAlbumModel
 {
     Q_OBJECT
 
@@ -166,6 +166,10 @@ protected:
     virtual QString  columnHeader() const;
     void setColumnHeader(const QString &header);
 
+    /// You need to call this from your constructor if you intend to load the thumbnail facilities of this class
+    void setupThumbnailLoading();
+    void emitDataChangedForChildren(Album *album);
+
 protected Q_SLOTS:
 
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
@@ -174,16 +178,12 @@ protected Q_SLOTS:
 
 protected:
 
-    /// You need to call this from your constructor if you intend to load the thumbnail facilities of this class
-    void setupThumbnailLoading();
-    void emitDataChangedForChildren(Album *album);
-
     QString m_columnHeader;
 };
 
 // ------------------------------------------------------------------
 
-class DIGIKAM_ALBUMMODELS_EXPORT AbstractCountingAlbumModel : public AbstractSpecificAlbumModel
+class AbstractCountingAlbumModel : public AbstractSpecificAlbumModel
 {
     Q_OBJECT
 
@@ -234,6 +234,8 @@ private:
 
     void updateCount(Album *album);
 
+private:
+
     bool            m_showCount;
     QMap<int, int>  m_countMap;
     QHash<int, int> m_countHashReady;
@@ -242,7 +244,7 @@ private:
 
 // ------------------------------------------------------------------
 
-class DIGIKAM_ALBUMMODELS_EXPORT AbstractCheckableAlbumModel : public AbstractCountingAlbumModel
+class AbstractCheckableAlbumModel : public AbstractCountingAlbumModel
 {
     Q_OBJECT
 

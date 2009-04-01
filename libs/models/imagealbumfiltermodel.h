@@ -29,7 +29,6 @@
 // Local includes.
 
 #include "imagefiltermodel.h"
-#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -38,7 +37,7 @@ class Album;
 class ImageAlbumModel;
 class ImageAlbumFilterModelPrivate;
 
-class DIGIKAM_ALBUMMODELS_EXPORT ImageAlbumFilterModel : public ImageFilterModel
+class ImageAlbumFilterModel : public ImageFilterModel
 {
     Q_OBJECT
 
