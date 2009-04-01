@@ -49,18 +49,6 @@
 
 // --------------------------------------------------------
 
-#ifndef DIGIKAM_DATABASEMODELS_EXPORT
-# if defined(MAKE_DIGIKAMDATABASEMODELS_LIB)
-   /* We are building this library */ 
-#  define DIGIKAM_DATABASEMODELS_EXPORT KDE_EXPORT
-# else
-   /* We are using this library */ 
-#  define DIGIKAM_DATABASEMODELS_EXPORT KDE_IMPORT
-# endif
-#endif
-
-// --------------------------------------------------------
-
 #ifndef DIGIKAM_ALBUMMODELS_EXPORT
 # if defined(MAKE_DIGIKAMALBUMMODELS_LIB)
    /* We are building this library */ 
