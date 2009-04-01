@@ -26,4 +26,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 186255 : digiKam crashes when switching collection database. 
 016 ==> 178292 : AspectRatioCrop is slow and jumps around in first second. 
 017 ==> 181892 : AspectRatioCrop: some properties should be disabled.
-018 ==> 
+018 ==> 188573 : RW2 converter broken for low light images.
+019 ==> 
