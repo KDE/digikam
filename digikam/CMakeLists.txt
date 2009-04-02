@@ -201,7 +201,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
 
 QT4_ADD_DBUS_ADAPTOR(digikam_SRCS org.kde.digikam.xml digikamapp.h Digikam::DigikamApp)
 
-KDE4_ADD_APP_ICON(digikam_SRCS "../data/icons/apps/hi128-app-digikam.png")
+KDE4_ADD_APP_ICON(digikam_SRCS "../data/icons/apps/hi*-app-digikam.png")
 
 KDE4_ADD_EXECUTABLE(digikam ${digikam_SRCS})
 
