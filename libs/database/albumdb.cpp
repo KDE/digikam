@@ -403,7 +403,7 @@ bool AlbumDB::getAlbumIcon(int albumID, int *albumRootId, QString *iconRelativeP
     if (values.isEmpty())
         return false;
 
-    QList<QVariant>::const_iterator it = values.constEnd();
+    QList<QVariant>::const_iterator it = values.constBegin();
     QString album     = (*it).toString();
     ++it;
     QString iconName  = (*it).toString();
