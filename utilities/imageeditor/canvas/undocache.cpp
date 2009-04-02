@@ -80,8 +80,8 @@ UndoCache::~UndoCache()
  */
 void UndoCache::clear()
 {
-    for (QStringList::iterator it = d->cacheFilenames.begin();
-         it != d->cacheFilenames.end(); ++it)
+    for (QStringList::const_iterator it = d->cacheFilenames.constBegin();
+         it != d->cacheFilenames.constEnd(); ++it)
     {
         ::unlink(QFile::encodeName(*it));
     }

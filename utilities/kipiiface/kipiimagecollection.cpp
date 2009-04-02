@@ -201,7 +201,7 @@ KUrl::List KipiImageCollection::imagesFromPAlbum(PAlbum* album) const
 
     NameFilter nameFilter(m_imgFilter);
 
-    for (QStringList::iterator it = urls.begin(); it != urls.end(); ++it)
+    for (QStringList::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
     {
         if (nameFilter.matches(*it))
             urlList.append(*it);
@@ -221,7 +221,7 @@ KUrl::List KipiImageCollection::imagesFromTAlbum(TAlbum* album) const
 
     NameFilter nameFilter(m_imgFilter);
 
-    for (QStringList::iterator it = urls.begin(); it != urls.end(); ++it)
+    for (QStringList::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
     {
         if (nameFilter.matches(*it))
             urlList.append(*it);

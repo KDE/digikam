@@ -320,7 +320,7 @@ void KipiImageCollectionSelector::slotAlbumsSearchTextChanged(const SearchTextSe
     bool atleastOneMatch = false;
 
     AlbumList pList = AlbumManager::instance()->allPAlbums();
-    for (AlbumList::iterator it = pList.begin(); it != pList.end(); ++it)
+    for (AlbumList::const_iterator it = pList.constBegin(); it != pList.constEnd(); ++it)
     {
         PAlbum* palbum  = (PAlbum*)(*it);
 
@@ -387,7 +387,7 @@ void KipiImageCollectionSelector::slotTagsSearchTextChanged(const SearchTextSett
     bool atleastOneMatch = false;
 
     AlbumList tList = AlbumManager::instance()->allTAlbums();
-    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    for (AlbumList::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)
     {
         TAlbum* talbum  = (TAlbum*)(*it);
 
@@ -454,7 +454,7 @@ void KipiImageCollectionSelector::slotSearchesSearchTextChanged(const SearchText
     bool atleastOneMatch = false;
 
     AlbumList tList = AlbumManager::instance()->allSAlbums();
-    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    for (AlbumList::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)
     {
         SAlbum* salbum  = (SAlbum*)(*it);
 
