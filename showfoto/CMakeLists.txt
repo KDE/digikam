@@ -5,33 +5,33 @@ ENDIF(NOT MSVC)
 
 ADD_SUBDIRECTORY(setup)
 
-INCLUDE_DIRECTORIES( ../showfoto/setup 
-                     ../libs/widgets/common 
-                     ../libs/widgets/imageplugins 
-                     ../libs/widgets/metadata 
-                     ../libs/widgets/iccprofiles 
-                     ../libs/jpegutils 
-                     ../libs/greycstoration 
-                     ../libs/imageproperties 
-                     ../libs/dimg 
-                     ../libs/dimg/filters 
-                     ../libs/dimg/loaders 
-                     ../libs/dmetadata 
-                     ../libs/themeengine 
-                     ../libs/curves 
-                     ../libs/levels 
-                     ../libs/lprof 
-                     ../libs/whitebalance 
-                     ../libs/histogram 
-                     ../libs/threadimageio 
-                     ../libs/dialogs 
-                     ../utilities/setup 
-                     ../utilities/imageeditor/canvas 
-                     ../utilities/imageeditor/editor 
-                     ../utilities/imageeditor/tools 
-                     ../utilities/imageeditor/rawimport 
-                     ../utilities/slideshow 
-                     ../digikam 
+INCLUDE_DIRECTORIES( ../showfoto/setup
+                     ../libs/widgets/common
+                     ../libs/widgets/imageplugins
+                     ../libs/widgets/metadata
+                     ../libs/widgets/iccprofiles
+                     ../libs/jpegutils
+                     ../libs/greycstoration
+                     ../libs/imageproperties
+                     ../libs/dimg
+                     ../libs/dimg/filters
+                     ../libs/dimg/loaders
+                     ../libs/dmetadata
+                     ../libs/themeengine
+                     ../libs/curves
+                     ../libs/levels
+                     ../libs/lprof
+                     ../libs/whitebalance
+                     ../libs/histogram
+                     ../libs/threadimageio
+                     ../libs/dialogs
+                     ../utilities/setup
+                     ../utilities/imageeditor/canvas
+                     ../utilities/imageeditor/editor
+                     ../utilities/imageeditor/tools
+                     ../utilities/imageeditor/rawimport
+                     ../utilities/slideshow
+                     ../digikam
                      ../
 
                      # version.h
@@ -46,18 +46,18 @@ SET(showfoto_SRCS
     ${libshowfotosetup_SRCS}
 
     main.cpp
-    showfoto.cpp 
+    showfoto.cpp
    )
 
-KDE4_ADD_APP_ICON(showfoto_SRCS "../data/icons/oxygen/*/apps/showfoto.png")
+KDE4_ADD_APP_ICON(showfoto_SRCS "../data/icons/apps/hi128-app-showfoto.png")
 
 KDE4_ADD_EXECUTABLE(showfoto ${showfoto_SRCS})
 
-TARGET_LINK_LIBRARIES(showfoto 
-                      digikamcore 
-                      ${KEXIV2_LIBRARIES} 
-                      ${KDCRAW_LIBRARIES} 
-                      ${KDE4_KIO_LIBS} 
+TARGET_LINK_LIBRARIES(showfoto
+                      digikamcore
+                      ${KEXIV2_LIBRARIES}
+                      ${KDCRAW_LIBRARIES}
+                      ${KDE4_KIO_LIBS}
                       ${LCMS_LIBRARIES}
                       ${QT_QT3SUPPORT_LIBRARY}
                      )

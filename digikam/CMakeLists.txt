@@ -6,20 +6,20 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/loaders
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/whitebalance
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata 
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/histogram
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/curves
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/levels
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/lprof
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/jpegutils 
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/jpegutils
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/greycstoration
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/threadimageio
 
                      # widgets and dialogs
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/imageplugins 
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/metadata 
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/iccprofiles 
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/imageplugins
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/metadata
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/iccprofiles
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/imageproperties
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dialogs
 
@@ -110,11 +110,11 @@ SET(digikamcore_LIB_SRCS
 KDE4_ADD_LIBRARY(digikamcore SHARED ${digikamcore_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(digikamcore
-                      ${KDE4_KDECORE_LIBS} 
-                      ${KDE4_KIO_LIBS} 
-                      ${KDE4_KHTML_LIBS} 
-                      ${KDE4_KDEUI_LIBS} 
-                      ${KDE4_KUTILS_LIBS} 
+                      ${KDE4_KDECORE_LIBS}
+                      ${KDE4_KIO_LIBS}
+                      ${KDE4_KHTML_LIBS}
+                      ${KDE4_KDEUI_LIBS}
+                      ${KDE4_KUTILS_LIBS}
                       ${KDE4_SOLID_LIBS}
                       ${KDE4_KDE3SUPPORT_LIBRARY}
                       ${QT_QT3SUPPORT_LIBRARY}
@@ -126,7 +126,7 @@ TARGET_LINK_LIBRARIES(digikamcore
                       ${JASPER_LIBRARIES}
 
                       # Require by CImg library which use pthread internally.
-                      ${CMAKE_THREAD_LIBS_INIT} 
+                      ${CMAKE_THREAD_LIBS_INIT}
 
                       ${KDCRAW_LIBRARIES}
                       ${KEXIV2_LIBRARIES}
@@ -201,7 +201,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
 
 QT4_ADD_DBUS_ADAPTOR(digikam_SRCS org.kde.digikam.xml digikamapp.h Digikam::DigikamApp)
 
-KDE4_ADD_APP_ICON(digikam_SRCS "../data/icons/oxygen/*/apps/digikam.png")
+KDE4_ADD_APP_ICON(digikam_SRCS "../data/icons/apps/hi128-app-digikam.png")
 
 KDE4_ADD_EXECUTABLE(digikam ${digikam_SRCS})
 
