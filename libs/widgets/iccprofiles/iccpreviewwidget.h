@@ -47,7 +47,7 @@ Q_OBJECT
 
 public:
 
-    explicit ICCPreviewWidget(QWidget *parent = 0);
+    ICCPreviewWidget(QWidget *parent = 0);
     ~ICCPreviewWidget();
 
 public Q_SLOTS:

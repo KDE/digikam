@@ -41,7 +41,7 @@ class HSPreviewWidget : public QWidget
 
 public:
 
-    explicit HSPreviewWidget(QWidget *parent=0, int xBorder=0);
+    HSPreviewWidget(QWidget *parent=0, int xBorder=0);
     ~HSPreviewWidget();
 
     void setHS(double hue, double sat);

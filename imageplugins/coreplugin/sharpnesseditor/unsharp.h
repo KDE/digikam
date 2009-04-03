@@ -36,8 +36,8 @@ class UnsharpMask : public Digikam::DImgThreadedFilter
 
 public:
 
-    explicit UnsharpMask(Digikam::DImg *orgImage, QObject *parent=0, int radius=1,
-                         double amount=1.0, double threshold=0.05);
+    UnsharpMask(Digikam::DImg *orgImage, QObject *parent=0, int radius=1,
+                double amount=1.0, double threshold=0.05);
 
     ~UnsharpMask(){};
 

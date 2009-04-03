@@ -97,7 +97,7 @@ public:
      * @param actionCollection the actionCollection that should be used. If not set, the standard
      * action from DigikamApp is used
      */
-    explicit ContextMenuHelper(QMenu* parent, KActionCollection* actionCollection = 0);
+    ContextMenuHelper(QMenu* parent, KActionCollection* actionCollection = 0);
     virtual ~ContextMenuHelper();
 
     /**

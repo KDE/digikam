@@ -72,7 +72,7 @@ public:
 
 public:
 
-    explicit HistogramBox(QWidget* parent = 0, int histogramType = LRGB, bool selectMode = false);
+    HistogramBox(QWidget* parent = 0, int histogramType = LRGB, bool selectMode = false);
     ~HistogramBox();
 
     HistogramWidget* histogram() const;
