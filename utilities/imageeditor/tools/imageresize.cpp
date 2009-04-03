@@ -611,6 +611,7 @@ void ImageResize::slotFilterFinished(bool success)
         switch (d->currentRenderingMode)
         {
             case ImageResizePriv::FinalRendering:
+                d->parent->unsetCursor();
                 break;
         }
     }
