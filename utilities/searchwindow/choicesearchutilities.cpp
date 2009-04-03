@@ -68,7 +68,7 @@ void ChoiceSearchModel::setChoice(QMap<int, QString> data)
         reset();
     }
 
-    for (QMap<int, QString>::iterator it = data.begin(); it != data.end(); ++it)
+    for (QMap<int, QString>::const_iterator it = data.constBegin(); it != data.constEnd(); ++it)
     {
         m_entries << Entry(it.key(), it.value());
     }
@@ -83,7 +83,7 @@ void ChoiceSearchModel::setChoice(QVariantList data)
     }
 
     Q_ASSERT(data.size() % 2 == 0);
-    for (QVariantList::iterator it = data.begin(); it != data.end(); )
+    for (QVariantList::const_iterator it = data.constBegin(); it != data.constEnd(); )
     {
         QVariant key = *it;
         ++it;
@@ -102,7 +102,7 @@ void ChoiceSearchModel::setChoice(QStringList data)
     }
 
     Q_ASSERT(data.size() % 2 == 0);
-    for (QStringList::iterator it = data.begin(); it != data.end(); )
+    for (QStringList::const_iterator it = data.constBegin(); it != data.constEnd(); )
     {
         QVariant key = *it;
         ++it;

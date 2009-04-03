@@ -151,7 +151,7 @@ QByteArray GPCamera::cameraMD5ID()
 
 #ifdef ENABLE_GPHOTO2
     QString camData;
-    // We don't use camera title from digiKam settings panel to compute MD5 fingerprint, 
+    // We don't use camera title from digiKam settings panel to compute MD5 fingerprint,
     // because it can be changed by users between session.
     camData.append(model());
     camData.append(port());
@@ -581,8 +581,8 @@ void GPCamera::getAllFolders(const QString& rootFolder, QStringList& folderList)
         folderList.append(*it);
     }
 
-    for (QStringList::iterator it = subfolders.begin();
-         it != subfolders.end(); ++it)
+    for (QStringList::const_iterator it = subfolders.constBegin();
+         it != subfolders.constEnd(); ++it)
     {
         getAllFolders(*it, folderList);
     }

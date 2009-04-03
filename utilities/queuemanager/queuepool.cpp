@@ -102,7 +102,7 @@ QueuePoolItemsList QueuePool::totalPendingItemsList()
     {
         QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
         ImageInfoList list   = queue->pendingItemsList();
-        for (ImageInfoList::iterator it = list.begin() ; it != list.end() ; ++it)
+        for (ImageInfoList::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
         {
             ImageInfo info = *it;
             ItemInfoSet set(i, info);

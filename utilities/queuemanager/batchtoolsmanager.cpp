@@ -94,7 +94,7 @@ void BatchToolsManager::unregisterTool(BatchTool* tool)
 
 BatchTool* BatchToolsManager::findTool(const QString& name, BatchTool::BatchToolGroup group) const
 {
-    for (BatchToolsList::iterator it = d->toolsList.begin(); it != d->toolsList.end(); ++it)
+    for (BatchToolsList::const_iterator it = d->toolsList.constBegin(); it != d->toolsList.constEnd(); ++it)
     {
         if ((*it)->objectName() == name && (*it)->toolGroup() == group)
             return *it;
