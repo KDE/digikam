@@ -13,14 +13,14 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
-  
+
 #ifndef UNSHARP_MASK_H
 #define UNSHARP_MASK_H
 
@@ -35,23 +35,23 @@ class UnsharpMask : public Digikam::DImgThreadedFilter
 {
 
 public:
-    
-    UnsharpMask(Digikam::DImg *orgImage, QObject *parent=0, int radius=1, 
-                double amount=1.0, double threshold=0.05);
-    
+
+    explicit UnsharpMask(Digikam::DImg *orgImage, QObject *parent=0, int radius=1,
+                         double amount=1.0, double threshold=0.05);
+
     ~UnsharpMask(){};
-    
-private:  
+
+private:
 
    virtual void filterImage(void);
 
-private:  
+private:
 
     int    m_radius;
 
     double m_amount;
     double m_threshold;
-};    
+};
 
 }  // namespace DigikamImagesPluginCore
 
