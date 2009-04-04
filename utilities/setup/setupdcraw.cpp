@@ -122,7 +122,9 @@ void SetupDcraw::applySettings()
     group.writeEntry("RAWBrightness",           d->dcrawSettings->brightness());
     group.writeEntry("RAWQuality",              (int)d->dcrawSettings->quality());
     group.writeEntry("MedianFilterPasses",      d->dcrawSettings->medianFilterPasses());
+#if KDCRAW_VERSION >= 0x000500
     group.writeEntry("AutoBrightness",          d->dcrawSettings->useAutoBrightness());
+#endif
     config->sync();
 }
 
