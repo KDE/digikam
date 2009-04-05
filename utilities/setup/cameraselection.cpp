@@ -153,7 +153,7 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     d->usbButton = new QRadioButton(i18n("USB"), portBox);
     d->usbButton->setWhatsThis(i18n("<p>Select this option if your camera is connected to your "
-                                    "computer using an USB cable.</p>"));
+                                    "computer using a USB cable.</p>"));
 
     d->serialButton = new QRadioButton( i18n("Serial"), portBox );
     d->serialButton->setWhatsThis(i18n("<p>Select this option if your camera is connected to your "
@@ -173,7 +173,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     QVBoxLayout *gLayout3  = new QVBoxLayout(portPathBox);
 
     d->portPathLabel = new QLabel( portPathBox);
-    d->portPathLabel->setText(i18n("Note: only for serial port camera"));
+    d->portPathLabel->setText(i18n("Note: only for serial port cameras."));
 
     d->portPathComboBox = new KComboBox( portPathBox );
     d->portPathComboBox->setDuplicatesEnabled( false );
@@ -191,7 +191,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     QVBoxLayout *gLayout4  = new QVBoxLayout(umsMountBox);
 
     QLabel* umsMountLabel = new QLabel( umsMountBox );
-    umsMountLabel->setText(i18n("Note: only for USB/IEEE mass storage camera"));
+    umsMountLabel->setText(i18n("Note: only for USB/IEEE mass storage cameras."));
 
     d->umsMountURL = new KUrlRequester( QString("/mnt/camera"), umsMountBox);
     d->umsMountURL->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
@@ -217,7 +217,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     link->setText(i18n("<p>To set a <b>USB Mass Storage</b> camera<br/>"
                        "(which looks like a removable drive when mounted<br/>"
                        "on your desktop), please use<br/>"
-                       "<a href=\"umscamera\">%1</a> from camera list.</p>",
+                       "<a href=\"umscamera\">%1</a> from the camera list.</p>",
                        d->UMSCameraNameShown));
 
     QLabel* link2 = new QLabel(box2);
@@ -230,7 +230,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     explanation->setOpenExternalLinks(true);
     explanation->setText(i18n("<p>A complete list of camera settings to use is<br/>"
                  "available at <a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>"
-                 "this url</a>.</p>"));
+                 "this URL</a>.</p>"));
 
     gLayout5->setMargin(KDialog::spacingHint());
     gLayout5->setSpacing(KDialog::spacingHint());

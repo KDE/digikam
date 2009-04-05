@@ -97,7 +97,7 @@ SetupEditor::SetupEditor(QWidget* parent)
                                             interfaceOptionsGroup);
 
     d->themebackgroundColor->setWhatsThis( i18n("Enable this option to use background theme "
-                                                "color in image editor area") );
+                                                "color in the image editor area.") );
 
     d->colorBox = new KHBox(interfaceOptionsGroup);
 
@@ -106,22 +106,22 @@ SetupEditor::SetupEditor(QWidget* parent)
     d->backgroundColor = new KColorButton(d->colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
     d->backgroundColor->setWhatsThis( i18n("Customize the background color to use "
-                                           "in image editor area.") );
+                                           "in the image editor area.") );
 
     d->horizontalThumbBar = new QCheckBox(i18n("Use &horizontal thumbbar (needs to restart %1)",
                                                KGlobal::mainComponent().aboutData()->programName()),
                                           interfaceOptionsGroup);
     d->horizontalThumbBar->setWhatsThis( i18n("If this option is enabled, the thumbnails bar will be displayed "
-                                              "horizontally behind the image area. You need to restart editor "
+                                              "horizontally behind the image area. You need to restart the editor "
                                               "for this option take effect."));
 
     d->hideThumbBar = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
     d->hideToolBar  = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"),
                                     interfaceOptionsGroup);
 
-    d->useRawImportTool = new QCheckBox(i18n("Use Raw Import Tool to handle Raw image"), interfaceOptionsGroup);
-    d->useRawImportTool->setWhatsThis(i18n("Set this option to use Raw Import "
-                                           "tool to load a RAW image. "
+    d->useRawImportTool = new QCheckBox(i18n("Use Raw Import Tool to handle Raw images"), interfaceOptionsGroup);
+    d->useRawImportTool->setWhatsThis(i18n("Set this option to use the Raw Import "
+                                           "tool to load RAW images. "
                                            "With this tool you are able to customize indeep decoding settings."));
 
     gLayout1->addWidget(d->themebackgroundColor);

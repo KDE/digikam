@@ -143,7 +143,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     KVBox *vbox           = new KVBox(panel);
 
-    d->showToolTipsBox    = new QCheckBox(i18n("Show icon-view and thumb-bar items tool-tips"), vbox);
+    d->showToolTipsBox    = new QCheckBox(i18n("Show icon-view and thumb-bar items' tool-tips"), vbox);
     d->showToolTipsBox->setWhatsThis(i18n("Set this option to display image information when "
                                           "the mouse hovers over an icon-view or thumb-bar item."));
 
@@ -248,7 +248,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     KVBox *vbox2              = new KVBox(panel);
 
-    d->showAlbumToolTipsBox   = new QCheckBox(i18n("Show album items tool-tips"), vbox2);
+    d->showAlbumToolTipsBox   = new QCheckBox(i18n("Show album items' tool-tips"), vbox2);
     d->showAlbumToolTipsBox->setWhatsThis(i18n("Set this option to display album information when "
                                                "the mouse hovers over a folder-view item."));
 

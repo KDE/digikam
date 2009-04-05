@@ -156,7 +156,7 @@ Setup::Setup(QWidget* parent)
     d->albumViewPage  = new SetupAlbumView();
     d->page_albumView = addPage(d->albumViewPage, i18n("Album View"));
     d->page_albumView->setHeader(i18n("<qt>Album View Settings<br/>"
-                                 "<i>Customize the look of albums list</i></qt>"));
+                                 "<i>Customize the look of the albums list</i></qt>"));
     d->page_albumView->setIcon(KIcon("view-list-icons"));
 
     d->categoryPage  = new SetupCategory();
@@ -204,25 +204,25 @@ Setup::Setup(QWidget* parent)
     d->iofilesPage  = new SetupIOFiles();
     d->page_iofiles = addPage(d->iofilesPage, i18n("Save Images"));
     d->page_iofiles->setHeader(i18n("<qt>Image Editor: Settings for Saving Image Files<br/>"
-                               "<i>Set default configuration used to save images with image editor</i></qt>"));
+                               "<i>Set default configuration used to save images with the image editor</i></qt>"));
     d->page_iofiles->setIcon(KIcon("document-save-all"));
 
     d->dcrawPage = new SetupDcraw();
     d->page_dcraw = addPage(d->dcrawPage, i18n("RAW Decoding"));
     d->page_dcraw->setHeader(i18n("<qt>Image Editor: RAW Files Decoding Settings<br/>"
-                             "<i>Customize default RAW decoding settings of image editor</i></qt>"));
+                             "<i>Customize the default RAW decoding settings of the image editor</i></qt>"));
     d->page_dcraw->setIcon(KIcon("kdcraw"));
 
     d->iccPage  = new SetupICC(0, this);
     d->page_icc = addPage(d->iccPage, i18n("Color Management"));
     d->page_icc->setHeader(i18n("<qt>Image Editor: Settings for Color Management<br/>"
-                           "<i>Customize color management settings of image editor</i></qt>"));
+                           "<i>Customize the color management settings of the image editor</i></qt>"));
     d->page_icc->setIcon(KIcon("colormanagement"));
 
     d->pluginsPage  = new SetupPlugins();
     d->page_plugins = addPage(d->pluginsPage, i18n("Kipi Plugins"));
     d->page_plugins->setHeader(i18n("<qt>Main Interface Plug-in Settings<br/>"
-                               "<i>Set which plugins will be accessible from main interface</i></qt>"));
+                               "<i>Set which plugins will be accessible from the main interface</i></qt>"));
     d->page_plugins->setIcon(KIcon("kipi"));
 
     d->slideshowPage  = new SetupSlideShow();
@@ -240,7 +240,7 @@ Setup::Setup(QWidget* parent)
     d->miscPage  = new SetupMisc();
     d->page_misc = addPage(d->miscPage, i18n("Miscellaneous"));
     d->page_misc->setHeader(i18n("<qt>Miscellaneous Settings<br/>"
-                            "<i>Customize behavior of other parts of digiKam</i></qt>"));
+                            "<i>Customize behavior of the other parts of digiKam</i></qt>"));
     d->page_misc->setIcon(KIcon("preferences-other"));
 
     for (int page = 0; page != SetupPageEnumLast; page++)
@@ -363,7 +363,7 @@ void Setup::slotOkClicked()
     {
         QString msg = i18n("The Exif auto-rotate thumbnails option has been changed.\n"
                            "Do you want to rebuild all albums' items' thumbnails now?\n\n"
-                           "Note: thumbnail processing can take a while! You can start "
+                           "Note: thumbnail processing can take a while. You can start "
                            "this job later from the \"Tools\" menu.");
         int result = KMessageBox::warningYesNo(this, msg);
         if (result != KMessageBox::Yes)

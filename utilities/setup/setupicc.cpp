@@ -344,10 +344,10 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
                      "between colors is preserved as much as possible.</p>"
                      "<p>This intent is most suitable for display of photographs and images, and is the default intent.</p></li>"
                      "<li><p><b>Absolute Colorimetric intent</b> causes any colors that fall outside the range that the output device "
-                     "can render are adjusted to the closest color that can be rendered, while all other colors are "
+                     "can render to be adjusted to the closest color that can be rendered, while all other colors are "
                      "left unchanged.</p>"
                      "<p>This intent preserves the white point and is most suitable for spot colors (Pantone, TruMatch, "
-                     "logo colors, ...).</p></li>"
+                     "logo colors, ....)</p></li>"
                      "<li><p><b>Relative Colorimetric intent</b> is defined such that any colors that fall outside the range that the "
                      "output device can render are adjusted to the closest color that can be rendered, while all other colors "
                      "are left unchanged. Proof intent does not preserve the white point.</p></li>"
@@ -536,7 +536,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
     {
         if (report)
         {
-            QString message = i18n("Sorry, there are no ICC profiles files in %1", path);
+            QString message = i18n("No ICC profiles files found in %1.", path);
             KMessageBox::sorry(this, message);
         }
 
@@ -608,17 +608,17 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
                     ++it;
                     QString message = i18n("<p>The following profile is invalid:</p><p><b>"
                                            "%1"
-                                           "</b></p><p>To avoid this message remove it from color profiles repository.</p>"
-                                           "<p>Do you want digiKam do it for you?</p>", message);
+                                           "</b></p><p>To avoid this message, remove the profile from the color profiles repository.</p>"
+                                           "<p>Do you want digiKam to do this for you?</p>", message);
                     if (KMessageBox::warningYesNo(this, message, i18n("Invalid Profile")) == 3)
                     {
                         if (QFile::remove(fileName))
                         {
-                            KMessageBox::information(this,  i18n("Invalid color profile has been removed"));
+                            KMessageBox::information(this,  i18n("Invalid color profile has been removed."));
                         }
                         else
                         {
-                            KMessageBox::information(this, i18n("<p>digiKam has failed to remove the invalid color profile</p><p>You have to do it manually</p>"));
+                            KMessageBox::information(this, i18n("<p>digiKam has failed to remove the invalid color profile.</p><p>Remove it manually.</p>"));
                         }
                     }
 
@@ -761,7 +761,7 @@ void SetupICC::profileInfo(const QString& profile)
 {
     if (profile.isEmpty())
     {
-        KMessageBox::error(this, i18n("Sorry, there is not any selected profile"), i18n("Profile Error"));
+        KMessageBox::error(this, i18n("No profile is selected."), i18n("Profile Error"));
         return;
     }
 
