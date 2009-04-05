@@ -6,5 +6,12 @@ export QTDIR=/usr/lib/qt4/
 export PATH=$QTDIR/bin:$PATH
 export LD_LIBRARY_PATH=/usr/lib/kde4
 export PKG_CONFIG_PATH=/usr/lib/pkgconfig
-cmake . -DCMAKE_BUILD_TYPE=debugfull -DCMAKE_INSTALL_PREFIX=/usr
+
+# We will work on command line using MinGW compiler
+#export MAKEFILES_TYPE="MinGW Makefiles"
+
+# We will work with CodeBlock IDE using MinGW compiler
+export MAKEFILES_TYPE="CodeBlocks - MinGW Makefiles"
+
+cmake -G %MAKEFILES_TYPE% . -DCMAKE_BUILD_TYPE=debugfull -DCMAKE_INSTALL_PREFIX=/usr
 
