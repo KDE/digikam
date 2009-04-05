@@ -10,6 +10,7 @@ Name[et]=Fotode tuvastamine ja allalaadimine digiKamiga
 Name[fi]=Tunnista kamera ja lataa kuvat digiKamilla
 Name[fr]=Détection et téléchargement avec Digikam
 Name[gl]=Detección e descarga de digiKam
+Name[hne]=डिजिकैम पता लगिस अउ डाउनलोड करव
 Name[is]=digiKam Finna og Hala niður
 Name[it]=Rileva e scarica con digiKam
 Name[ja]=digiKam 検出とダウンロード

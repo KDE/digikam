@@ -11,6 +11,7 @@ Name[et]=Fotode allalaadimine digiKamiga
 Name[fi]=Lataa valokuvat digiKamilla
 Name[fr]=Télécharger des photos avec Digikam
 Name[gl]=Descargar fotos con digiKam
+Name[hne]=डिजिकैम के साथ फोटो डाउनलोड करव
 Name[is]=Hala niður myndum með digiKam
 Name[it]=Scarica foto con digiKam
 Name[ja]=digiKam で写真をダウンロード

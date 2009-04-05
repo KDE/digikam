@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=showFoto
 Name[fr]=ShowFoto
+Name[hne]=सो-फोटो
 Name[ne]=फोटो देखाउनुहोस्
 Name[pa]=ਫੋਟੋ ਵੇਖੋ
 Name[sv]=Showfoto
@@ -15,6 +16,7 @@ GenericName[el]=Εφαρμογή προβολής και επεξεργασία�
 GenericName[et]=Fotode näitaja ja redaktor
 GenericName[fr]=Visualisateur et éditeur de photo
 GenericName[gl]=Visor e editor de fotos
+GenericName[hne]=फोटो देखइया अउ संपादक
 GenericName[it]=Visore ed editor di foto
 GenericName[ja]=フォトビューア/エディタ
 GenericName[km]=កម្មវិធី​មើល និង​កែសម្រួល​រូបថត
@@ -43,6 +45,7 @@ Comment[el]=Διαχειριστείτε τις φωτογραφίες σας σ
 Comment[et]=Fotode haldamine profina avatud lähtekoodiga tarkvara võimsust kasutades
 Comment[fr]=Gérer vos photos comme un professionnel avec la puissance de l'open source
 Comment[gl]=Xestione as súas fotografías como un profesional
+Comment[hne]=ओपन सोर्स के पावर से आप मन अपन फोटो ल प्रोफेसनल जइसन मैनेज कर सकथो
 Comment[it]=Gestisci le tue fotografie come un professionista con la forza del software libero
 Comment[ja]=オープンソースの力であなたの写真をプロのように管理します
 Comment[km]=គ្រប់គ្រង​​រូបថត​របស់​អ្នក​ ដូច​ជា​អ្នក​អាជីព​ដែល​មាន​ថាម​ពល​លើ​កម្មវិធី​ប្រភព​កូដ​ចំហ
