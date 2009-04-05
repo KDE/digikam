@@ -23,19 +23,19 @@
 
 #include "databaseaccess.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QEventLoop>
 #include <QMutex>
 #include <QSqlDatabase>
 #include <QUuid>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "albumdb.h"
 #include "imageinfocache.h"

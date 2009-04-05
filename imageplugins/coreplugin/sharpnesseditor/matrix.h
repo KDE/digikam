@@ -24,7 +24,7 @@
 #ifndef MATRIX_H_INCLUDED
 #define MATRIX_H_INCLUDED
 
-// C ++ includes.
+// C ++ includes
 
 #ifndef _MSC_VER
 #include <cstdio>

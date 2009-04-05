@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QSharedData>

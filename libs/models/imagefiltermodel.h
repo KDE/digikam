@@ -24,11 +24,11 @@
 #ifndef IMAGEFILTERMODEL_H
 #define IMAGEFILTERMODEL_H
 
-// Qt includes.
+// Qt includes
 
 #include <QSortFilterProxyModel>
 
-// Local includes.
+// Local includes
 
 #include "imagefiltersettings.h"
 #include "digikam_export.h"

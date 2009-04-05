@@ -39,14 +39,14 @@
 #include "imageselectionwidget.h"
 #include "imageselectionwidget.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <iostream>
 #include <cstdio>
 #include <cmath>
 #include <cstdlib>
 
-// Qt includes.
+// Qt includes
 
 #include <QRegion>
 #include <QColor>
@@ -62,14 +62,14 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kcursor.h>
 #include <kglobal.h>
 
-// Local includes.
+// Local includes
 
 #include "imageiface.h"
 #include "dimg.h"

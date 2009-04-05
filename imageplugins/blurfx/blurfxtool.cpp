@@ -26,7 +26,7 @@
 #include "blurfxtool.h"
 #include "blurfxtool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QDateTime>
 #include <QGridLayout>
@@ -34,7 +34,7 @@
 #include <QLabel>
 #include <QSlider>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -46,12 +46,12 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Local includes.
+// Local includes
 
 #include "daboutdata.h"
 #include "editortoolsettings.h"

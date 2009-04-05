@@ -26,7 +26,7 @@
 #include "scancontroller.h"
 #include "moc_scancontroller.cpp"
 
-// Qt includes.
+// Qt includes
 
 #include <QApplication>
 #include <QStringList>
@@ -40,7 +40,7 @@
 #include <QWaitCondition>
 #include <QTimer>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -48,7 +48,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 
-// Local includes.
+// Local includes
 
 #include "collectionscanner.h"
 #include "collectionscannerhints.h"

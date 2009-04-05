@@ -25,18 +25,18 @@
 #ifndef METADATAHUB_H
 #define METADATAHUB_H
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QStringList>
 #include <QDateTime>
 #include <QMap>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "dmetadata.h"
 #include "dimg.h"

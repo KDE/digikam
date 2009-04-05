@@ -24,7 +24,7 @@
 #ifndef QUEUETOOLTIP_H
 #define QUEUETOOLTIP_H
 
-// Local includes.
+// Local includes
 
 #include "imageinfo.h"
 #include "ditemtooltip.h"

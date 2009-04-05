@@ -24,12 +24,12 @@
 
 #include "imagepluginloader.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QMap>
 #include <QList>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kservicetypetrader.h>
@@ -38,7 +38,7 @@
 #include <klocale.h>
 #include <kxmlguiclient.h>
 
-// Local includes.
+// Local includes
 
 #include "splashscreen.h"
 

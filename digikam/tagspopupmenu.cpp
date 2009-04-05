@@ -30,7 +30,7 @@
 #include "tagspopupmenu.h"
 #include "tagspopupmenu.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QPainter>
 #include <QPixmap>
@@ -41,7 +41,7 @@
 #include <QStyleOptionMenuItem>
 #include <QStyleOptionViewItem>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -50,7 +50,7 @@
 #include <kmessagebox.h>
 #include <ktoggleaction.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "albumdb.h"

@@ -24,7 +24,7 @@
 #include "gpssearchview.h"
 #include "gpssearchview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QFrame>
 #include <QImage>
@@ -34,7 +34,7 @@
 #include <QStyle>
 #include <QToolButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -47,7 +47,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "albummanager.h"

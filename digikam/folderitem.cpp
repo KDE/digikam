@@ -24,7 +24,7 @@
 
 #include "folderitem.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QFont>
 #include <QFontMetrics>
@@ -34,7 +34,7 @@
 #include <QStyle>
 #include <QStyleOption>
 
-// Local includes.
+// Local includes
 
 #include "thumbnailsize.h"
 #include "albumsettings.h"

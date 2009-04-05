@@ -26,11 +26,11 @@
 #ifndef TAGSPOPUPMENU_H
 #define TAGSPOPUPMENU_H
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 
-// KDE includes.
+// KDE includes
 
 #include <kmenu.h>
 

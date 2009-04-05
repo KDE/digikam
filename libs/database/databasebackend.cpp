@@ -23,7 +23,7 @@
 
 #include "databasebackend.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QApplication>
 #include <QCoreApplication>
@@ -32,12 +32,12 @@
 #include <QSqlError>
 #include <QThread>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kglobal.h>
 
-// Local includes.
+// Local includes
 
 #include "schemaupdater.h"
 #include "databasewatch.h"

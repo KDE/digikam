@@ -24,12 +24,12 @@
 #include "autocorrection.h"
 #include "autocorrection.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QLabel>
 
-// KDE includes.
+// KDE includes
 
 #include <kvbox.h>
 #include <klocale.h>
@@ -37,7 +37,7 @@
 #include <kiconloader.h>
 #include <kcombobox.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "dimgimagefilters.h"

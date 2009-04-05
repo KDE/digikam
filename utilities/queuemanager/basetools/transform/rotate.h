@@ -24,7 +24,7 @@
 #ifndef ROTATE_H
 #define ROTATE_H
 
-// Local includes.
+// Local includes
 
 #include "batchtool.h"
 

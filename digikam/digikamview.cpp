@@ -25,7 +25,7 @@
 #include "digikamview.h"
 #include "digikamview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QFileInfo>
@@ -40,7 +40,7 @@
 #include <QListView>
 #include <QTreeView>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kpushbutton.h>
@@ -55,11 +55,11 @@
 #include <kvbox.h>
 #include <kconfiggroup.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rawfiles.h>
 
-// Local includes.
+// Local includes
 
 #include "dmetadata.h"
 #include "albummanager.h"

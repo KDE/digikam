@@ -25,12 +25,12 @@
 #ifndef LIGHTTABLEVIEW_H
 #define LIGHTTABLEVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QFrame>
 #include <QString>
 
-// Local includes.
+// Local includes
 
 #include "imageinfo.h"
 #include "digikam_export.h"

@@ -26,12 +26,12 @@
 #include "curveswidget.h"
 #include "curveswidget.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 #include <cstdlib>
 
-// Qt includes.
+// Qt includes
 
 #include <QPixmap>
 #include <QPainter>
@@ -47,14 +47,14 @@
 #include <QPaintEvent>
 #include <QMouseEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kcursor.h>
 #include <klocale.h>
 #include <kiconloader.h>
 
-// Local includes.
+// Local includes
 
 #include "imagehistogram.h"
 #include "imagecurves.h"

@@ -26,13 +26,13 @@
 #include "texturetool.h"
 #include "texturetool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QGridLayout>
 #include <QImage>
 #include <QLabel>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kdebug.h>
@@ -45,12 +45,12 @@
 #include <knuminput.h>
 #include <kstandarddirs.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Local includes.
+// Local includes
 
 #include "daboutdata.h"
 #include "dimg.h"

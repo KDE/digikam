@@ -24,7 +24,7 @@
 #ifndef GPSSEARCHVIEW_H
 #define GPSSEARCHVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 

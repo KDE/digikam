@@ -27,7 +27,7 @@
 #ifndef DPOPUPMENU_H
 #define DPOPUPMENU_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QRect>
 #include <QtGui/QColor>
@@ -35,11 +35,11 @@
 #include <QtGui/QPaintEvent>
 #include <QtGui/QResizeEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kmenu.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

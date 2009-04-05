@@ -25,13 +25,13 @@
 #ifndef NAMEFILTER_H
 #define NAMEFILTER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QList>
 #include <QRegExp>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

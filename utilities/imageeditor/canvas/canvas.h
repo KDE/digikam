@@ -25,7 +25,7 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
-// Qt includes.
+// Qt includes
 
 #include <Q3ScrollView>
 #include <QRect>
@@ -36,7 +36,7 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "dimg.h"

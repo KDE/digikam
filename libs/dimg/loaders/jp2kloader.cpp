@@ -36,17 +36,17 @@
 // files io. Uncomment this line only for debugging.
 //#define ENABLE_DEBUG_MESSAGES
 
-// Qt includes.
+// Qt includes
 
 #include <QFile>
 #include <QByteArray>
 #include <QTextStream>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "dimgloaderobserver.h"

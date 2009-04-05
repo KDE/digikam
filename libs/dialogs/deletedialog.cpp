@@ -27,7 +27,7 @@
 #include "deletedialog.h"
 #include "deletedialog.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QStackedWidget>
 #include <QLayout>
@@ -35,7 +35,7 @@
 #include <QTimer>
 #include <QCheckBox>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klistwidget.h>
@@ -44,7 +44,7 @@
 #include <klocale.h>
 #include <kstdguiitem.h>
 
-// Local includes.
+// Local includes
 
 #include "albumsettings.h"
 

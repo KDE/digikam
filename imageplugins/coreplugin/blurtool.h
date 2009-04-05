@@ -24,7 +24,7 @@
 #ifndef BLURTOOL_H
 #define BLURTOOL_H
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

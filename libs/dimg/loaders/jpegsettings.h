@@ -24,11 +24,11 @@
 #ifndef JPEGSETTINGS_H
 #define JPEGSETTINGS_H
 
-// KDE includes.
+// KDE includes
 
 #include <QWidget>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

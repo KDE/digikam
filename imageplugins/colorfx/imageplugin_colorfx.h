@@ -26,11 +26,11 @@
 #ifndef IMAGEPLUGIN_COLORFX_H
 #define IMAGEPLUGIN_COLORFX_H
 
-// Qt includes.
+// Qt includes
 
 #include <QVariant>
 
-// Local includes.
+// Local includes
 
 #include "imageplugin.h"
 #include "digikam_export.h"

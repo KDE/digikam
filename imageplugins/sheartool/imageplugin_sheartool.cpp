@@ -25,7 +25,7 @@
 #include "imageplugin_sheartool.h"
 #include "imageplugin_sheartool.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -36,7 +36,7 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Local includes
 
 #include "sheartool.h"
 

@@ -26,7 +26,7 @@
 
 #include "dpopupmenu.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QFont>
 #include <QFontMetrics>
@@ -37,7 +37,7 @@
 #include <QStyle>
 #include <QStyleOptionFrame>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -49,7 +49,7 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "version.h"
 

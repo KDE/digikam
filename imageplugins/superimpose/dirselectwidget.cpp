@@ -26,14 +26,14 @@
 #include "dirselectwidget.h"
 #include "dirselectwidget.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <Q3Header>
 #include <Q3ListView>
 #include <QLayout>
 #include <QDir>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>

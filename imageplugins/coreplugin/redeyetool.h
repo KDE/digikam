@@ -25,11 +25,11 @@
 #ifndef REDEYETOOL_H
 #define REDEYETOOL_H
 
-// KDE includes.
+// KDE includes
 
 #include <kpassivepopup.h>
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

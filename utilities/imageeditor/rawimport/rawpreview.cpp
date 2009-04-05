@@ -24,7 +24,7 @@
 #include "rawpreview.h"
 #include "rawpreview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QPainter>
@@ -33,7 +33,7 @@
 #include <QFileInfo>
 #include <QResizeEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kcursor.h>
 #include <kdatetable.h>
@@ -41,7 +41,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "paniconwidget.h"
 #include "managedloadsavethread.h"

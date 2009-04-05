@@ -24,7 +24,7 @@
 #include "colorgradientwidget.h"
 #include "colorgradientwidget.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QImage>
 #include <QPainter>

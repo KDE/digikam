@@ -25,22 +25,22 @@
 #include "imagepaniconwidget.h"
 #include "imagepaniconwidget.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QPainter>
 #include <QPixmap>
 #include <QPen>
 #include <QTimer>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "imageiface.h"
 #include "imageregionwidget.h"

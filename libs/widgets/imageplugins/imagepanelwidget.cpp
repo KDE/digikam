@@ -24,7 +24,7 @@
 #include "imagepanelwidget.h"
 #include "imagepanelwidget.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QButtonGroup>
 #include <QFrame>
@@ -40,7 +40,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kapplication.h>
@@ -52,7 +52,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Local includes
 
 #include "thumbnailsize.h"
 #include "imageregionwidget.h"

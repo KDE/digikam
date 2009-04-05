@@ -24,7 +24,7 @@
 #include "imageguidewidget.h"
 #include "imageguidewidget.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QRegion>
 #include <QPainter>
@@ -41,14 +41,14 @@
 #include <QMouseEvent>
 #include <QEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kcursor.h>
 #include <kglobal.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "imageiface.h"

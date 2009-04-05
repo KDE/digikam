@@ -24,7 +24,7 @@
 #include "searchgroup.h"
 #include "searchgroup.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QGridLayout>
 #include <QLabel>
@@ -33,7 +33,7 @@
 #include <QStackedLayout>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kcombobox.h>
 #include <kdebug.h>
@@ -41,7 +41,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Local includes
 
 #include "searchview.h"
 #include "searchfields.h"

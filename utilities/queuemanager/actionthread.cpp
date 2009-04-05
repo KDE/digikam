@@ -24,27 +24,27 @@
 #include "actionthread.h"
 #include "actionthread.moc"
 
-// C ANSI includes.
+// C ANSI includes
 
 extern "C"
 {
 #include <unistd.h>
 }
 
-// Qt includes.
+// Qt includes
 
 #include <QFileInfo>
 #include <QMutex>
 #include <QMutexLocker>
 #include <QWaitCondition>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 

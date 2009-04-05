@@ -23,24 +23,24 @@
  *
  * ============================================================ */
 
-// C++ includes.
+// C++ includes
 
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
 
-// Qt includes.
+// Qt includes
 
 #include <QImage>
 #include <QDir>
 
-// KDE includes.
+// KDE includes
 
 #include <kcodecs.h>
 #include <kurl.h>
 #include <kstandarddirs.h>
 
-// C ANSI includes.
+// C ANSI includes
 
 extern "C"
 {
@@ -55,7 +55,7 @@ extern "C"
 #include <png.h>
 }
 
-// Local includes.
+// Local includes
 
 #include "thumbnailcreator.h"
 #include "thumbnailcreator_p.h"

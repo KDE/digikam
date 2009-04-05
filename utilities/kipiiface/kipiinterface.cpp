@@ -26,17 +26,17 @@
 #include "kipiinterface.h"
 #include "kipiinterface.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
 
-// LibKIPI includes.
+// LibKIPI includes
 
 #include <libkipi/version.h>
 
-// Local includes.
+// Local includes
 
 #include "constants.h"
 #include "album.h"

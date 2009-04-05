@@ -26,7 +26,7 @@
 #include "sidebar.h"
 #include "sidebar.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QDataStream>
 #include <QDragEnterEvent>
@@ -36,7 +36,7 @@
 #include <QStackedWidget>
 #include <QTimer>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kconfig.h>

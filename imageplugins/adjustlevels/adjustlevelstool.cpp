@@ -24,11 +24,11 @@
 #include "adjustlevelstool.h"
 #include "adjustlevelstool.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QButtonGroup>
 #include <QColor>
@@ -43,7 +43,7 @@
 #include <QTimer>
 #include <QToolButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -61,11 +61,11 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Local includes
 
 #include "version.h"
 #include "daboutdata.h"

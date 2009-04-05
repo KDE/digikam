@@ -25,12 +25,12 @@
 #ifndef METADATALISTVIEWITEM_H
 #define METADATALISTVIEWITEM_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QString>
 #include <QtGui/QTreeWidgetItem>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

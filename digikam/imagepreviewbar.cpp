@@ -24,7 +24,7 @@
 #include "imagepreviewbar.h"
 #include "imagepreviewbar.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QToolTip>
@@ -39,7 +39,7 @@
 #include <QPolygon>
 #include <QTextDocument>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -49,7 +49,7 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "albumdb.h"

@@ -24,17 +24,17 @@
 #ifndef IMAGEPROPERTIESTAB_H
 #define IMAGEPROPERTIESTAB_H
 
-// Qt includes.
+// Qt includes
 
 #include <QScrollArea>
 #include <QString>
 #include <QColor>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

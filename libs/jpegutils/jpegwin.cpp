@@ -26,12 +26,12 @@ extern "C"
 #include "iccjpeg.h"
 }
 
-// C+ includes.
+// C+ includes
 
 #include <cstdio>
 #include <cstdlib>
 
-// Qt includes.
+// Qt includes
 
 #include <QFile>
 #include <QByteArray>

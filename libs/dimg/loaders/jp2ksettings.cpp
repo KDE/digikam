@@ -25,7 +25,7 @@
 #include "jp2ksettings.h"
 #include "jp2ksettings.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QLabel>
@@ -33,7 +33,7 @@
 #include <QLayout>
 #include <QGridLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kdialog.h>

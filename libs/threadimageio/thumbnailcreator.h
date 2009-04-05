@@ -26,17 +26,17 @@
 #ifndef DIGIKAMTHUMBNAILCREATOR_H
 #define DIGIKAMTHUMBNAILCREATOR_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QPixmap>
 #include <QImage>
 
-// KDE includes.
+// KDE includes
 
 #include <kfileitem.h>
 
-// Local includes.
+// Local includes
 
 #include "drawdecoding.h"
 #include "digikam_export.h"

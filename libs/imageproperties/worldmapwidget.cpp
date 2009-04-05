@@ -24,7 +24,7 @@
 #include "worldmapwidget.h"
 #include "worldmapwidget.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QVBoxLayout>
 #include <QStyle>
@@ -33,7 +33,7 @@
 #include <QFile>
 #include <QLabel>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>

@@ -25,12 +25,12 @@
 #ifndef THEME_H
 #define THEME_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QColor>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

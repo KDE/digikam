@@ -24,14 +24,14 @@
 
 #include "imagelister.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdlib>
 #include <cstdio>
 #include <ctime>
 #include <cerrno>
 
-// Qt includes.
+// Qt includes
 
 #include <QFile>
 #include <QFileInfo>
@@ -39,7 +39,7 @@
 #include <QRegExp>
 #include <QDir>
 
-// KDE includes.
+// KDE includes
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -47,7 +47,7 @@
 #include <kmimetype.h>
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "albumdb.h"
 #include "databaseaccess.h"

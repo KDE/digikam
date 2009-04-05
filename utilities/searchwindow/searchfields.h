@@ -24,14 +24,14 @@
 #ifndef SEARCHFIELDS_H
 #define SEARCHFIELDS_H
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QMap>
 
-// KDE includes.
+// KDE includes
 
-// Local includes.
+// Local includes
 
 #include "searchxml.h"
 #include "searchutilities.h"

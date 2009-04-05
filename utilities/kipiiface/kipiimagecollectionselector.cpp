@@ -25,13 +25,13 @@
 #include "kipiimagecollectionselector.h"
 #include "kipiimagecollectionselector.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QHeaderView>
 #include <QTreeWidgetItemIterator>
 #include <QHBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kdialog.h>
@@ -39,7 +39,7 @@
 #include <ktabwidget.h>
 #include <kvbox.h>
 
-// Local includes.
+// Local includes
 
 #include "constants.h"
 #include "album.h"

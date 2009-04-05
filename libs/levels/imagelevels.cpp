@@ -28,11 +28,11 @@
 
 #include "imagelevels.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QFile>
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 #include <cmath>
@@ -40,11 +40,11 @@
 #include <cstdlib>
 #include <cerrno>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "imagehistogram.h"
 

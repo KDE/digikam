@@ -25,7 +25,7 @@
 #include "rgbtool.h"
 #include "rgbtool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QCheckBox>
 #include <QColor>
@@ -39,7 +39,7 @@
 #include <QSlider>
 #include <QToolButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kcombobox.h>
@@ -53,11 +53,11 @@
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Local includes
 
 #include "colorgradientwidget.h"
 #include "colormodifier.h"

@@ -24,11 +24,11 @@
 #ifndef THUMBBARTOOLTIP_H
 #define THUMBBARTOOLTIP_H
 
-// KDE includes.
+// KDE includes
 
 #include <kglobalsettings.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "ditemtooltip.h"

@@ -26,7 +26,7 @@
 #include "imageplugin_core.h"
 #include "imageplugin_core.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -38,7 +38,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "dimgimagefilters.h"

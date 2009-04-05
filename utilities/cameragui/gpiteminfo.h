@@ -25,13 +25,13 @@
 #ifndef GPITEMINFO_H
 #define GPITEMINFO_H
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QByteArray>
 #include <QDateTime>
 
-// Local includes.
+// Local includes
 
 #include "photoinfocontainer.h"
 

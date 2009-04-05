@@ -24,7 +24,7 @@
 #include "gpconfigdlg.h"
 #include "gpconfigdlg.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <Q3Frame>
 #include <Q3Grid>
@@ -41,7 +41,7 @@
 #include <QTabWidget>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kvbox.h>
 #include <klocale.h>

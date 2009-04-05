@@ -24,11 +24,11 @@
 #ifndef IMAGESCANNER_H
 #define IMAGESCANNER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QFileInfo>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "dmetadata.h"

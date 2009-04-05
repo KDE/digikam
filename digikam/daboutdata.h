@@ -24,11 +24,11 @@
 #ifndef DABOUT_DATA_H
 #define DABOUT_DATA_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 #include <klocale.h>

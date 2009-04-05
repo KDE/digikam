@@ -29,11 +29,11 @@
 #ifndef NOISE_REDUCTION_H
 #define NOISE_REDUCTION_H
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Local includes.
+// Local includes
 
 #include "dimgthreadedfilter.h"
 

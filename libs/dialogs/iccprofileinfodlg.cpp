@@ -23,12 +23,12 @@
 
 #include "iccprofileinfodlg.h"
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "iccprofilewidget.h"
 

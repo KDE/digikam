@@ -25,7 +25,7 @@
 #include "restorationtool.h"
 #include "restorationtool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QFile>
 #include <QGridLayout>
@@ -33,7 +33,7 @@
 #include <QLabel>
 #include <QPixmap>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -50,7 +50,7 @@
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 
-// Local includes.
+// Local includes
 
 #include "version.h"
 #include "imageiface.h"

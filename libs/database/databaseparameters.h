@@ -24,15 +24,15 @@
 #ifndef DATABASEPARAMETERS_H
 #define DATABASEPARAMETERS_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

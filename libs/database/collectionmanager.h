@@ -24,16 +24,16 @@
 #ifndef COLLECTIONMANAGER_H
 #define COLLECTIONMANAGER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QStringList>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

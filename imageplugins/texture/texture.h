@@ -25,11 +25,11 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 
-// Local includes.
+// Local includes
 
 #include "dimgthreadedfilter.h"
 

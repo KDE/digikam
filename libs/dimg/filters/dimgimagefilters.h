@@ -29,11 +29,11 @@
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 #define ROUND(x) ((int) ((x) + 0.5))
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

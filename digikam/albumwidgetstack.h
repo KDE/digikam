@@ -25,17 +25,17 @@
 #ifndef ALBUMWIDGETSTACK_H
 #define ALBUMWIDGETSTACK_H
 
-// Qt includes.
+// Qt includes
 
 #include <QStackedWidget>
 #include <QByteArray>
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "imageinfo.h"

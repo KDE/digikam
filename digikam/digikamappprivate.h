@@ -24,7 +24,7 @@
 #ifndef DIGIKAMAPPPRIVATE_H
 #define DIGIKAMAPPPRIVATE_H
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QByteArray>
@@ -35,7 +35,7 @@
 #include <QToolButton>
 #include <QTimer>
 
-// KDE includes.
+// KDE includes
 
 #include <kconfig.h>
 #include <kaction.h>
@@ -43,11 +43,11 @@
 #include <kmenu.h>
 #include <kstatusbar.h>
 
-// LibKIPI includes.
+// LibKIPI includes
 
 #include <libkipi/pluginloader.h>
 
-// Local includes.
+// Local includes
 
 #include "albummanager.h"
 #include "albumsettings.h"

@@ -24,7 +24,7 @@
 #include "editorstackview.h"
 #include "editorstackview.moc"
 
-// Local includes.
+// Local includes
 
 #include "previewwidget.h"
 #include "imageregionwidget.h"

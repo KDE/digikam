@@ -24,12 +24,12 @@
 #ifndef FREE_ROTATION_H
 #define FREE_ROTATION_H
 
-// Qt includes.
+// Qt includes
 
 #include <QSize>
 #include <QColor>
 
-// Local includes.
+// Local includes
 
 #include "dimgthreadedfilter.h"
 

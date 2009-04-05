@@ -24,7 +24,7 @@
 #ifndef SETUPCOLLECTIONS_H
 #define SETUPCOLLECTIONS_H
 
-// Qt includes.
+// Qt includes
 
 #include <QScrollArea>
 

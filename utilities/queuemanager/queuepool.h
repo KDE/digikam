@@ -24,18 +24,18 @@
 #ifndef QUEUE_TAB_H
 #define QUEUE_TAB_H
 
-// Qt includes.
+// Qt includes
 
 #include <QMap>
 #include <QWidget>
 #include <QDragMoveEvent>
 #include <QDropEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <ktabwidget.h>
 
-// Local includes.
+// Local includes
 
 #include "iteminfoset.h"
 

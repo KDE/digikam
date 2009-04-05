@@ -26,7 +26,7 @@
 #ifndef DIMG_H
 #define DIMG_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QByteArray>
 #include <QtCore/QSize>
@@ -35,7 +35,7 @@
 #include <QtGui/QPixmap>
 #include <QtCore/QVariant>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "dshareddata.h"

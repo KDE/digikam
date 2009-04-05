@@ -26,7 +26,7 @@
 #include "imageplugin_charcoal.h"
 #include "imageplugin_charcoal.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kgenericfactory.h>
@@ -37,7 +37,7 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Local includes
 
 #include "charcoaltool.h"
 

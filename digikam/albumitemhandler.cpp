@@ -23,7 +23,7 @@
 
 #include "albumitemhandler.h"
 
-// Local includes.
+// Local includes
 
 #include "albummanager.h"
 

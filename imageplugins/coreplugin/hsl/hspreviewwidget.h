@@ -24,7 +24,7 @@
 #ifndef HSPREVIEWWIDGET_H
 #define HSPREVIEWWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QPaintEvent>

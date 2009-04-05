@@ -25,7 +25,7 @@
 #ifndef BCGMODIFIER_H
 #define BCGMODIFIER_H
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

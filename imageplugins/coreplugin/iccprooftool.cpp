@@ -26,7 +26,7 @@
 #include "iccprooftool.h"
 #include "iccprooftool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QButtonGroup>
 #include <QCheckBox>
@@ -46,7 +46,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -67,12 +67,12 @@
 #include <kurlrequester.h>
 #include <kvbox.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Local includes.
+// Local includes
 
 #include "bcgmodifier.h"
 #include "colorgradientwidget.h"

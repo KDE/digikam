@@ -24,7 +24,7 @@
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiesmetadatatab.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QFile>
 #include <QLabel>
@@ -32,7 +32,7 @@
 #include <QFileInfo>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -42,7 +42,7 @@
 #include <kfileitem.h>
 #include <kglobal.h>
 
-// Local includes.
+// Local includes
 
 #include "exifwidget.h"
 #include "makernotewidget.h"

@@ -26,7 +26,7 @@
 #ifndef RATIOCROPTOOL_H
 #define RATIOCROPTOOL_H
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

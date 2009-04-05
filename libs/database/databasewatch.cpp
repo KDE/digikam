@@ -26,22 +26,22 @@
 #include "moc_databasewatch.cpp"
 #include "moc_databasewatchadaptor.cpp"
 
-// C Ansi includes.
+// C Ansi includes
 
 #include <unistd.h>
 
 
-// Qt includes.
+// Qt includes
 
 #include <QMetaType>
 #include <QtDBus>
 #include <QThread>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "collectionmanager.h"
 

@@ -24,15 +24,15 @@
 #include "albumfiltermodel.h"
 #include "albumfiltermodel.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QSortFilterProxyModel>
 
-// KDE includes.
+// KDE includes
 
 #include <kstringhandler.h>
 
-// Local includes.
+// Local includes
 
 #include "albummodel.h"
 

@@ -24,11 +24,11 @@
 #ifndef GREYCSTORATIONIFACE_H
 #define GREYCSTORATIONIFACE_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtGui/QImage>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "dimgthreadedfilter.h"

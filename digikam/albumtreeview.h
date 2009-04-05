@@ -24,11 +24,11 @@
 #ifndef ALBUMTREEVIEW_H
 #define ALBUMTREEVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QTreeView>
 
-// Local includes.
+// Local includes
 
 #include "albummodel.h"
 #include "albumfiltermodel.h"

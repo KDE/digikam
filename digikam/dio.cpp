@@ -23,13 +23,13 @@
 
 #include "dio.h"
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kio/deletejob.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "imageinfo.h"
 #include "albumsettings.h"

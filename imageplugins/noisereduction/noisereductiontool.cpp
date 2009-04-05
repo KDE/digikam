@@ -25,7 +25,7 @@
 #include "noisereductiontool.h"
 #include "noisereductiontool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QCheckBox>
 #include <QFile>
@@ -35,7 +35,7 @@
 #include <QString>
 #include <QTextStream>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -50,11 +50,11 @@
 #include <kstandarddirs.h>
 #include <ktabwidget.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Local includes
 
 #include "version.h"
 #include "daboutdata.h"

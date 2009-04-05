@@ -24,15 +24,15 @@
 #ifndef CHOICESEARCHUTILITIES_H
 #define CHOICESEARCHUTILITIES_H
 
-// Qt includes.
+// Qt includes
 
 #include <QAbstractListModel>
 #include <QList>
 #include <QVariant>
 
-// KDE includes.
+// KDE includes
 
-// Local includes.
+// Local includes
 
 #include "searchxml.h"
 #include "comboboxutilities.h"

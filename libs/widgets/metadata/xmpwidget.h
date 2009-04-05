@@ -24,7 +24,7 @@
 #ifndef XMPWIDGET_H
 #define XMPWIDGET_H
 
-// Local includes.
+// Local includes
 
 #include "metadatawidget.h"
 #include "digikam_export.h"

@@ -25,11 +25,11 @@
 #ifndef ALBUMFOLDERVIEW_H
 #define ALBUMFOLDERVIEW_H
 
-// KDE includes.
+// KDE includes
 
 #include <kio/job.h>
 
-// Local includes.
+// Local includes
 
 #include "searchtextbar.h"
 #include "folderview.h"

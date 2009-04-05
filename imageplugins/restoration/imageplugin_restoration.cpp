@@ -25,7 +25,7 @@
 #include "imageplugin_restoration.h"
 #include "imageplugin_restoration.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -36,7 +36,7 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Local includes
 
 #include "restorationtool.h"
 

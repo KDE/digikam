@@ -24,20 +24,20 @@
 #include "setuptooltip.h"
 #include "setuptooltip.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QGroupBox>
 #include <QCheckBox>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kvbox.h>
 #include <klocale.h>
 #include <kdialog.h>
 #include <ktabwidget.h>
 
-// Local includes.
+// Local includes
 
 #include "dfontselect.h"
 #include "albumsettings.h"

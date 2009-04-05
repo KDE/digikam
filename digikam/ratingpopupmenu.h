@@ -24,7 +24,7 @@
 #ifndef RATING_POPUP_MENU_H
 #define RATING_POPUP_MENU_H
 
-// KDE includes.
+// KDE includes
 
 #include <kmenu.h>
 

@@ -26,18 +26,18 @@
 #ifndef ALBUMSETTINGS_H
 #define ALBUMSETTINGS_H
 
-// Qt includes.
+// Qt includes
 
 #include <QStringList>
 #include <QString>
 #include <QFont>
 #include <QObject>
 
-// KDE includes.
+// KDE includes
 
 #include <kmultitabbar.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

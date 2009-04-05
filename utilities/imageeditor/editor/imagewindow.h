@@ -25,16 +25,16 @@
 #ifndef IMAGEWINDOW_H
 #define IMAGEWINDOW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QCloseEvent>
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "editorwindow.h"
 #include "imageinfo.h"

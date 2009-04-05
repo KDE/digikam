@@ -29,28 +29,28 @@
 // files io. Uncomment this line only for debugging.
 //#define ENABLE_DEBUG_MESSAGES
 
-// C ANSI includes.
+// C ANSI includes
 
 extern "C"
 {
 #include "iccjpeg.h"
 }
 
-// C+ includes.
+// C+ includes
 
 #include <cstdio>
 #include <cstdlib>
 
-// Qt includes.
+// Qt includes
 
 #include <QFile>
 #include <QByteArray>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "dimgloaderobserver.h"

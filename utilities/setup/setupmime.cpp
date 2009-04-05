@@ -24,7 +24,7 @@
 #include "setupmime.h"
 #include "setupmime.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QGroupBox>
 #include <QLabel>
@@ -34,7 +34,7 @@
 #include <QVBoxLayout>
 #include <QWhatsThis>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kdialog.h>
@@ -42,7 +42,7 @@
 #include <kmessagebox.h>
 #include <kvbox.h>
 
-// Local includes.
+// Local includes
 
 #include "albumsettings.h"
 #include "databaseaccess.h"

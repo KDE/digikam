@@ -24,7 +24,7 @@
 #ifndef ALBUMITEMHANDLER_H
 #define ALBUMITEMHANDLER_H
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 

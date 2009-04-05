@@ -24,7 +24,7 @@
 #include "ratingpopupmenu.h"
 #include "ratingpopupmenu.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QPainter>
@@ -38,12 +38,12 @@
 #include <QEvent>
 #include <QObject>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Local includes
 
 #include "constants.h"
 #include "themeengine.h"

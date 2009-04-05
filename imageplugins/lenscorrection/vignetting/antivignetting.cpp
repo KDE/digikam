@@ -29,12 +29,12 @@
 
 #include "antivignetting.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 #include <cstdlib>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "dimgimagefilters.h"

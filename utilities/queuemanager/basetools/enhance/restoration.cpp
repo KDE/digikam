@@ -24,12 +24,12 @@
 #include "restoration.h"
 #include "restoration.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QLabel>
 
-// KDE includes.
+// KDE includes
 
 #include <kvbox.h>
 #include <klocale.h>
@@ -39,7 +39,7 @@
 #include <kstandarddirs.h>
 #include <kurllabel.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "greycstorationsettings.h"

@@ -24,11 +24,11 @@
 #include "freespacewidget.h"
 #include "freespacewidget.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QPainter>
 #include <QPixmap>
@@ -39,7 +39,7 @@
 #include <QBoxLayout>
 #include <QFontMetrics>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kurl.h>
@@ -47,7 +47,7 @@
 #include <kio/global.h>
 #include <kiconloader.h>
 
-// Local includes.
+// Local includes
 
 #include "freespacetooltip.h"
 #include "albumsettings.h"

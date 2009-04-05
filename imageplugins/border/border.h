@@ -26,13 +26,13 @@
 #ifndef BORDER_H
 #define BORDER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QColor>
 #include <QImage>
 
-// Local includes.
+// Local includes
 
 #include "dimgthreadedfilter.h"
 

@@ -24,16 +24,16 @@
 #ifndef GPSSEARCHWIDGET_H
 #define GPSSEARCHWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QLabel>
 #include <QList>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "config-digikam.h"
 

@@ -24,7 +24,7 @@
 #ifndef CONVERT2JP2_H
 #define CONVERT2JP2_H
 
-// Local includes.
+// Local includes
 
 #include "batchtool.h"
 

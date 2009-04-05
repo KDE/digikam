@@ -24,7 +24,7 @@
 #ifndef SHEARTOOL_H
 #define SHEARTOOL_H
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

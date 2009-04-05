@@ -24,11 +24,11 @@
 #ifndef ITEM_INFO_SET_H
 #define ITEM_INFO_SET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 
-// Local includes.
+// Local includes
 
 #include "imageinfo.h"
 

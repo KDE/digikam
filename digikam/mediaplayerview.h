@@ -24,16 +24,16 @@
 #ifndef MEDIAPLAYERVIEW_H
 #define MEDIAPLAYERVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QStackedWidget>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 #include <phonon/mediaobject.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

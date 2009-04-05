@@ -24,14 +24,14 @@
 #include "mediaplayerview.h"
 #include "mediaplayerview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QLabel>
 #include <QString>
 #include <QFrame>
 #include <QGridLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kdialog.h>
@@ -40,7 +40,7 @@
 #include <phonon/videoplayer.h>
 #include <phonon/videowidget.h>
 
-// Local includes.
+// Local includes
 
 #include "themeengine.h"
 

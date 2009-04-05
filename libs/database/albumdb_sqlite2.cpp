@@ -23,24 +23,24 @@
 
 #include "albumdb_sqlite2.h"
 
-// C ANSI includes.
+// C ANSI includes
 
 extern "C"
 {
 #include <sys/time.h>
 }
 
-// C++ includes.
+// C++ includes
 
 #include <ctime>
 #include <cstdio>
 #include <cstdlib>
 
-// Qt includes.
+// Qt includes
 
 #include <QFile>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 

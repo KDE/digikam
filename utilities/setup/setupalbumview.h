@@ -25,7 +25,7 @@
 #ifndef SETUPALBUMVIEW_H
 #define SETUPALBUMVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QScrollArea>
 

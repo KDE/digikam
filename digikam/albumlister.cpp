@@ -26,19 +26,19 @@
 #include "albumlister.h"
 #include "albumlister.moc"
 
-// C ANSI includes.
+// C ANSI includes
 
 extern "C"
 {
 #include <sys/time.h>
 }
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 #include <ctime>
 
-// Qt includes.
+// Qt includes
 
 #include <QDataStream>
 #include <QFileInfo>
@@ -47,7 +47,7 @@ extern "C"
 #include <QPair>
 #include <QTimer>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kapplication.h>
@@ -55,7 +55,7 @@ extern "C"
 #include <kio/job.h>
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "databaseaccess.h"
 #include "databasewatch.h"

@@ -24,7 +24,7 @@
 #ifndef PREVIEWWIDGET_H
 #define PREVIEWWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <Qt3Support/Q3ScrollView>
 #include <QtGui/QPixmap>
@@ -33,7 +33,7 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPaintEvent>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

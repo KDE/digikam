@@ -28,15 +28,15 @@
 
 #include "greycstorationiface.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cassert>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #define cimg_plugin "greycstoration.h"
 // Unix-like (Linux, Solaris, BSD, MacOSX, Irix,...).
@@ -54,15 +54,15 @@
  */
 #define GREYSTORATION_USING_GFACT 1
 
-// KDE includes.
+// KDE includes
 
 #include <solid/device.h>
 
-// Local includes.
+// Local includes
 
 #include "greycstorationsettings.h"
 
-// CImg includes.
+// CImg includes
 
 #include "CImg.h"
 

@@ -26,11 +26,11 @@
 #ifndef BORDERTOOL_H
 #define BORDERTOOL_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

@@ -24,12 +24,12 @@
 #ifndef IMAGEDIALOG_H
 #define IMAGEDIALOG_H
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 #include <kpreviewwidgetbase.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

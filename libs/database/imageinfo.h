@@ -25,18 +25,18 @@
 #ifndef IMAGEINFO_H
 #define IMAGEINFO_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QDateTime>
 #include <QList>
 #include <QSize>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "dshareddata.h"

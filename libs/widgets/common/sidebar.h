@@ -26,17 +26,17 @@
 #ifndef SIDEBAR_H
 #define SIDEBAR_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtGui/QPixmap>
 #include <QtGui/QSplitter>
 
-// KDE includes.
+// KDE includes
 
 #include <kconfiggroup.h>
 #include <kmultitabbar.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

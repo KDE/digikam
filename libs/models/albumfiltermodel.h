@@ -24,11 +24,11 @@
 #ifndef ALBUMFILTERMODEL_H
 #define ALBUMFILTERMODEL_H
 
-// Qt includes.
+// Qt includes
 
 #include <QSortFilterProxyModel>
 
-// Local includes.
+// Local includes
 
 #include "albummodel.h"
 #include "searchtextbar.h"

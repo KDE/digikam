@@ -25,11 +25,11 @@
 #ifndef BATCHALBUMSSYNCMETADATA_H
 #define BATCHALBUMSSYNCMETADATA_H
 
-// Qt includes.
+// Qt includes
 
 #include <QCloseEvent>
 
-// Local includes.
+// Local includes
 
 #include "imageinfo.h"
 #include "dprogressdlg.h"

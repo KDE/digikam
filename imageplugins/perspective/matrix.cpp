@@ -28,7 +28,7 @@
 
 #include "matrix.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cstring>
 

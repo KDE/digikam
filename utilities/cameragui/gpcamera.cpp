@@ -25,12 +25,12 @@
 
 #include "gpcamera.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 #include <iostream>
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QStringList>
@@ -39,19 +39,19 @@
 #include <QFile>
 #include <QDateTime>
 
-// KDE includes.
+// KDE includes
 
 #include <kcodecs.h>
 #include <klocale.h>
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "config-digikam.h"
 
 #ifdef ENABLE_GPHOTO2
 
-// LibGphoto2 includes.
+// LibGphoto2 includes
 
 extern "C"
 {

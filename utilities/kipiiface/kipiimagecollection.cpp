@@ -27,17 +27,17 @@
 
 #include "kipiimagecollection.h"
 
-// KDE includes.
+// KDE includes
 
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
 
-// LibKIPI includes.
+// LibKIPI includes
 
 #include <libkipi/version.h>
 
-// Local includes.
+// Local includes
 
 #include "constants.h"
 #include "albumitemhandler.h"

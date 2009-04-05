@@ -25,12 +25,12 @@
 #include "canvas.h"
 #include "canvas.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QCache>
 #include <QFile>
@@ -55,7 +55,7 @@
 #include <QPaintEvent>
 #include <QWheelEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kcursor.h>
 #include <kdebug.h>
@@ -64,7 +64,7 @@
 #include <kdatetable.h>
 #include <kglobalsettings.h>
 
-// Local includes.
+// Local includes
 
 #include "imagehistogram.h"
 #include "imagepaniconwidget.h"

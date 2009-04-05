@@ -26,11 +26,11 @@
 #include "lensdistortiontool.h"
 #include "lensdistortiontool.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QBrush>
 #include <QGridLayout>
@@ -39,7 +39,7 @@
 #include <QPen>
 #include <QPixmap>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -51,11 +51,11 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Local includes
 
 #include "daboutdata.h"
 #include "editortoolsettings.h"

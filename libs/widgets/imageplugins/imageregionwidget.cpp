@@ -24,11 +24,11 @@
 #include "imageregionwidget.h"
 #include "imageregionwidget.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QTimer>
 #include <QPainter>
@@ -38,7 +38,7 @@
 #include <QFont>
 #include <QFontMetrics>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
@@ -47,7 +47,7 @@
 #include <kapplication.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "imageiface.h"
 

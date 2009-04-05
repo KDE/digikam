@@ -24,13 +24,13 @@
 #ifndef ASSIGNED_LIST_H
 #define ASSIGNED_LIST_H
 
-// Qt includes.
+// Qt includes
 
 #include <QTreeWidget>
 #include <QWidget>
 #include <QIcon>
 
-// Local includes.
+// Local includes
 
 #include "batchtool.h"
 

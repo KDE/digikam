@@ -24,7 +24,7 @@
 #ifndef LOADING_DESCRIPTION_H
 #define LOADING_DESCRIPTION_H
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "digikam_export.h"

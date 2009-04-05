@@ -23,7 +23,7 @@
 
 #include "downloadhistory.h"
 
-// Local includes.
+// Local includes
 
 #include "albumdb.h"
 #include "databaseaccess.h"

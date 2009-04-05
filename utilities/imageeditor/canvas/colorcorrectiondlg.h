@@ -25,15 +25,15 @@
 #ifndef COLORCORRECTIONDLG_H
 #define COLORCORRECTIONDLG_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kdialog.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

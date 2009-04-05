@@ -24,7 +24,7 @@
 #ifndef SETUPEDITOR_H
 #define SETUPEDITOR_H
 
-// Qt includes.
+// Qt includes
 
 #include <QScrollArea>
 

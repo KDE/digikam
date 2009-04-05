@@ -27,18 +27,18 @@
 #ifndef ALBUM_H
 #define ALBUM_H
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QString>
 #include <QDateTime>
 #include <QMap>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "albuminfo.h"
 #include "databaseurl.h"

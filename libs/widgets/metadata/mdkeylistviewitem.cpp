@@ -25,18 +25,18 @@
 #include "mdkeylistviewitem.h"
 #include "mdkeylistviewitem.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QPalette>
 #include <QFont>
 #include <QPainter>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "themeengine.h"
 

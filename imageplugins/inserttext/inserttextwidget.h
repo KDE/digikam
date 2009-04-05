@@ -25,7 +25,7 @@
 #ifndef INSERTTEXTWIDGET_H
 #define INSERTTEXTWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QImage>
@@ -39,11 +39,11 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 

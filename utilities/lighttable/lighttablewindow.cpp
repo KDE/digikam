@@ -24,13 +24,13 @@
 #include "lighttablewindow.h"
 #include "lighttablewindow.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QHBoxLayout>
 #include <QFrame>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -53,7 +53,7 @@
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
 
-// Libkdcraw includes.
+// Libkdcraw includes
 
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
@@ -62,7 +62,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Local includes
 
 #include "componentsinfo.h"
 #include "digikamapp.h"

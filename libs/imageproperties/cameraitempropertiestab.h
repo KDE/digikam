@@ -24,16 +24,16 @@
 #ifndef CAMERAITEMPROPERTIESTAB_H
 #define CAMERAITEMPROPERTIESTAB_H
 
-// Qt includes.
+// Qt includes
 
 #include <QScrollArea>
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

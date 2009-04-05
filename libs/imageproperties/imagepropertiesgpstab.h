@@ -24,17 +24,17 @@
 #ifndef IMAGEPROPERTIESGPSTAB_H
 #define IMAGEPROPERTIESGPSTAB_H
 
-// Qt includes.
+// Qt includes
 
 #include <QDateTime>
 #include <QString>
 #include <QWidget>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "dmetadata.h"
 #include "worldmapwidget.h"

@@ -24,7 +24,7 @@
 #include "searchview.h"
 #include "searchview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QGradient>
 #include <QHBoxLayout>
@@ -33,7 +33,7 @@
 #include <QTimeLine>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kdialogbuttonbox.h>
@@ -41,7 +41,7 @@
 #include <kpushbutton.h>
 #include <kstandardguiitem.h>
 
-// Local includes.
+// Local includes
 
 #include "searchxml.h"
 #include "themeengine.h"

@@ -24,16 +24,16 @@
 #include "imageinfoalbumsjob.h"
 #include "imageinfoalbumsjob.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "albummanager.h"

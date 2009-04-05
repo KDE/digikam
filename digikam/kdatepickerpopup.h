@@ -26,11 +26,11 @@
 #ifndef KDATEPICKERPOPUP_H
 #define KDATEPICKERPOPUP_H
 
-// Qt includes.
+// Qt includes
 
 #include <QDateTime>
 
-// KDE includes.
+// KDE includes
 
 #include <kdatepicker.h>
 #include <kmenu.h>

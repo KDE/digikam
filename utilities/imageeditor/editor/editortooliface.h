@@ -24,11 +24,11 @@
 #ifndef EDITORTOOLIFACE_H
 #define EDITORTOOLIFACE_H
 
-// Qt includes.
+// Qt includes
 
 #include <qobject.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

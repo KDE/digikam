@@ -25,15 +25,15 @@
 #ifndef DMETADATA_H
 #define DMETADATA_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QByteArray>
 
-// LibKExiv2 includes.
+// LibKExiv2 includes
 
 #include <libkexiv2/kexiv2.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "photoinfocontainer.h"

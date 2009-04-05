@@ -27,24 +27,24 @@
 #ifndef CIETONGUEWIDGET_H
 #define CIETONGUEWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtGui/QWidget>
 #include <QtGui/QColor>
 #include <QtGui/QPaintEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// lcms includes.
+// lcms includes
 
 #include <lcms.h>
 #if LCMS_VERSION < 114
 #define cmsTakeCopyright(profile) "Unknown"
 #endif // LCMS_VERSION < 114
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

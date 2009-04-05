@@ -26,16 +26,16 @@
 #ifndef SCANCONTROLLER_H
 #define SCANCONTROLLER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QThread>
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "initializationobserver.h"

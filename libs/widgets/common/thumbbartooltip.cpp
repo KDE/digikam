@@ -23,14 +23,14 @@
 
 #include "thumbbartooltip.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QPixmap>
 #include <QPainter>
 #include <QTextDocument>
 #include <QFileInfo>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -38,7 +38,7 @@
 #include <kmimetype.h>
 #include <kdeversion.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/kdcraw.h>
 #include <libkdcraw/version.h>
@@ -47,7 +47,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Local includes
 
 #include "thumbbar.h"
 #include "dmetadata.h"

@@ -29,7 +29,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include "imagepropertiesgpstab.h"
 #include "imagepropertiesgpstab.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QFile>
 #include <QFrame>
@@ -39,7 +39,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <QMap>
 #include <QPushButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kcombobox.h>

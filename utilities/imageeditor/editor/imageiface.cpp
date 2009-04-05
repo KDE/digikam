@@ -24,7 +24,7 @@
 
 #include "imageiface.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QSize>
@@ -32,11 +32,11 @@
 #include <QBitmap>
 #include <QPainter>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "exposurecontainer.h"
 #include "iccsettingscontainer.h"

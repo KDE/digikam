@@ -27,12 +27,12 @@
 #include "iconview.h"
 #include "iconview.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <climits>
 #include <cstdlib>
 
-// Qt includes.
+// Qt includes
 
 #include <QCache>
 #include <QList>
@@ -47,14 +47,14 @@
 #include <QStyleOption>
 #include <QRubberBand>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kcursor.h>
 #include <kiconloader.h>
 #include <kglobalsettings.h>
 
-// Local includes.
+// Local includes
 
 #include "ratingbox.h"
 #include "drubberband.h"

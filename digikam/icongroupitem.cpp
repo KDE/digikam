@@ -24,17 +24,17 @@
 
 #include "icongroupitem.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdlib>
 
-// Qt includes.
+// Qt includes
 
 #include <QPixmap>
 #include <QPalette>
 #include <QPainter>
 
-// Local includes.
+// Local includes
 
 #include "iconview.h"
 #include "iconitem.h"

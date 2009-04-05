@@ -23,7 +23,7 @@
 #include "greycstorationwidget.h"
 #include "greycstorationwidget.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -34,12 +34,12 @@
 #include <QTextStream>
 #include <QToolTip>
 
-// KDE includes.
+// KDE includes
 
 #include <kdialog.h>
 #include <klocale.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>

@@ -28,17 +28,17 @@
 
 #include "raindrop.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 #include <cstdlib>
 
-// Qt includes.
+// Qt includes
 
 #include <QDateTime>
 #include <QRect>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "dimgimagefilters.h"

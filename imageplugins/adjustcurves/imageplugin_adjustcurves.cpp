@@ -24,7 +24,7 @@
 #include "imageplugin_adjustcurves.h"
 #include "imageplugin_adjustcurves.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -35,7 +35,7 @@
 #include <klibloader.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "adjustcurvestool.h"
 

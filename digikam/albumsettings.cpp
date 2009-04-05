@@ -26,7 +26,7 @@
 #include "albumsettings.h"
 #include "albumsettings.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <kconfig.h>
 #include <klocale.h>
@@ -36,7 +36,7 @@
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
@@ -45,7 +45,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Local includes
 
 #include "thumbnailsize.h"
 #include "mimefilter.h"

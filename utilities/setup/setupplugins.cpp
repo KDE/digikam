@@ -24,7 +24,7 @@
 #include "setupplugins.h"
 #include "setupplugins.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -32,12 +32,12 @@
 #include <QString>
 #include <QLabel>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kdialog.h>
 
-// LibKIPI includes.
+// LibKIPI includes
 
 #include <libkipi/pluginloader.h>
 #include <libkipi/version.h>

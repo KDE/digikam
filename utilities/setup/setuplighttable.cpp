@@ -24,7 +24,7 @@
 #include "setuplighttable.h"
 #include "setuplighttable.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QColor>
 #include <QLabel>
@@ -32,7 +32,7 @@
 #include <QVBoxLayout>
 #include <QCheckBox>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kdialog.h>

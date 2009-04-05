@@ -25,11 +25,11 @@
 #ifndef LENSDISTORTIONTOOL_H
 #define LENSDISTORTIONTOOL_H
 
-// Qt includes.
+// Qt includes
 
 #include <QImage>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "editortool.h"

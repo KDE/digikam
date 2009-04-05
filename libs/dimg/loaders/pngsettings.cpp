@@ -24,14 +24,14 @@
 #include "pngsettings.h"
 #include "pngsettings.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QLabel>
 #include <QLayout>
 #include <QGridLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kdialog.h>

@@ -24,18 +24,18 @@
 #ifndef PNGLOADER_H
 #define PNGLOADER_H
 
-// C++ includes.
+// C++ includes
 
 #include <cstdarg>
 
-// libPNG includes.
+// libPNG includes
 
 extern "C"
 {
 #include <png.h>
 }
 
-// Local includes.
+// Local includes
 
 #include "dimgloader.h"
 #include "digikam_export.h"

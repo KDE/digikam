@@ -24,7 +24,7 @@
 #include "queuemgrwindow.h"
 #include "queuemgrwindow.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QFile>
 #include <QFileInfo>
@@ -33,7 +33,7 @@
 #include <QGroupBox>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -57,7 +57,7 @@
 #include <kxmlguifactory.h>
 #include <kio/renamedialog.h>
 
-// Libkdcraw includes.
+// Libkdcraw includes
 
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
@@ -66,7 +66,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Local includes
 
 #include "batchtoolsmanager.h"
 #include "actionthread.h"

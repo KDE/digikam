@@ -26,13 +26,13 @@
 #include "tagfolderview.h"
 #include "tagfolderview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QCursor>
 #include <QList>
 #include <QPainter>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -42,7 +42,7 @@
 #include <kmessagebox.h>
 #include <kstringhandler.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "albumdb.h"

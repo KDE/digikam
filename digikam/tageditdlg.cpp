@@ -25,14 +25,14 @@
 #include "tageditdlg.h"
 #include "tageditdlg.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QLabel>
 #include <QLayout>
 #include <QGridLayout>
 #include <QTreeWidget>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klineedit.h>
@@ -44,7 +44,7 @@
 #include <kseparator.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "syncjob.h"

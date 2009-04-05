@@ -25,7 +25,7 @@
 #include "colorcorrectiondlg.h"
 #include "colorcorrectiondlg.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QLabel>
 #include <QFrame>
@@ -36,7 +36,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -45,7 +45,7 @@
 #include <kseparator.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "icctransform.h"

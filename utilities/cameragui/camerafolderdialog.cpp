@@ -24,13 +24,13 @@
 #include "camerafolderdialog.h"
 #include "camerafolderdialog.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QLabel>
 #include <QFrame>
 #include <QGridLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -38,7 +38,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Local includes
 
 #include "cameraiconview.h"
 #include "camerafolderitem.h"

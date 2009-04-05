@@ -24,16 +24,16 @@
 #include "editortool.h"
 #include "editortool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QTimer>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "dimgthreadedfilter.h"
 #include "imagewidget.h"

@@ -25,7 +25,7 @@
 #include "imageplugin.h"
 #include "imageplugin.moc"
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 #include "editortooliface.h"

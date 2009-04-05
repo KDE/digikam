@@ -24,18 +24,18 @@
 #include "batchtool.h"
 #include "batchtool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QDataStream>
 #include <QDateTime>
 #include <QFileInfo>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "dimgloaderobserver.h"
 

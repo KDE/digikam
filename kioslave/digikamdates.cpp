@@ -24,17 +24,17 @@
 
 #include "digikamdates.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdlib>
 
-// Qt includes.
+// Qt includes
 
 #include <QCoreApplication>
 #include <QFile>
 #include <QDataStream>
 
-// KDE includes.
+// KDE includes
 
 #include <kio/global.h>
 #include <kglobal.h>
@@ -42,7 +42,7 @@
 #include <kcomponentdata.h>
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "imagelister.h"

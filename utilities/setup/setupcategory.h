@@ -24,7 +24,7 @@
 #ifndef SETUPCATEGORY_H
 #define SETUPCATEGORY_H
 
-// Qt includes.
+// Qt includes
 
 #include <QScrollArea>
 

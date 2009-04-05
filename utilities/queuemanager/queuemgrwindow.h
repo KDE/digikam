@@ -24,18 +24,18 @@
 #ifndef QUEUEMGRWINDOW_H
 #define QUEUEMGRWINDOW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QMap>
 #include <QString>
 #include <QCloseEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 #include <kxmlguiwindow.h>
 
-// Local includes.
+// Local includes
 
 #include "imageinfo.h"
 #include "setup.h"

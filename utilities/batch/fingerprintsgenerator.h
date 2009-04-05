@@ -24,11 +24,11 @@
 #ifndef FINGERPRINTSGENERATOR_H
 #define FINGERPRINTSGENERATOR_H
 
-// Qt includes.
+// Qt includes
 
 #include <QCloseEvent>
 
-// Local includes.
+// Local includes
 
 #include "dprogressdlg.h"
 

@@ -25,7 +25,7 @@
 #ifndef SETUPMETADATA_H
 #define SETUPMETADATA_H
 
-// Qt includes.
+// Qt includes
 
 #include <QScrollArea>
 

@@ -27,7 +27,7 @@
 #include "digikamapp.h"
 #include "digikamapp.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QDataStream>
 #include <QLabel>
@@ -36,7 +36,7 @@
 #include <QStringList>
 #include <QtDBus>
 
-// KDE includes.
+// KDE includes
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(4,1,68)
@@ -84,12 +84,12 @@
 #include <marble/global.h>
 #endif // HAVE_MARBLEWIDGET
 
-// LibKIPI includes.
+// LibKIPI includes
 
 #include <libkipi/interface.h>
 #include <libkipi/plugin.h>
 
-// Libkdcraw includes.
+// Libkdcraw includes
 
 #include <libkdcraw/kdcraw.h>
 #include <libkdcraw/version.h>
@@ -98,7 +98,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "albumdb.h"

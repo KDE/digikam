@@ -27,7 +27,7 @@
 #include "kdateedit.h"
 #include "kdateedit.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QAbstractItemView>
 #include <QApplication>
@@ -37,7 +37,7 @@
 #include <QMouseEvent>
 #include <QValidator>
 
-// KDE includes.
+// KDE includes
 
 #include <kcalendarsystem.h>
 #include <kglobal.h>

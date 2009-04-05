@@ -25,7 +25,7 @@
 #ifndef THEMEENGINE_H
 #define THEMEENGINE_H
 
-// Qt includes.
+// Qt includes
 
 #include <QStringList>
 #include <QObject>
@@ -33,7 +33,7 @@
 #include <QPixmap>
 #include <QDomElement>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

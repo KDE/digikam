@@ -25,15 +25,15 @@
 #ifndef SPLASHSCREEN_H
 #define SPLASHSCREEN_H
 
-// Qt includes.
+// Qt includes
 
 #include <qpainter.h>
 
-// KDE includes.
+// KDE includes
 
 #include <ksplashscreen.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

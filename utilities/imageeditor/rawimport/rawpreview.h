@@ -24,17 +24,17 @@
 #ifndef RAWPREVIEW_H
 #define RAWPREVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QImage>
 #include <QPixmap>
 #include <QResizeEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "previewwidget.h"

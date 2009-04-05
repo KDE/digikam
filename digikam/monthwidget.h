@@ -25,11 +25,11 @@
 #ifndef MONTHWIDGET_H
 #define MONTHWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 
-// Local includes.
+// Local includes
 
 #include "imageinfo.h"
 

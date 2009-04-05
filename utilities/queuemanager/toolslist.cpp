@@ -24,7 +24,7 @@
 #include "toolslist.h"
 #include "toolslist.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QHeaderView>
 #include <QMimeData>
@@ -33,7 +33,7 @@
 #include <QPainter>
 #include <QDrag>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kdebug.h>

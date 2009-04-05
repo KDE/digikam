@@ -25,11 +25,11 @@
 #ifndef ICCSETTINGSCONTAINER_H
 #define ICCSETTINGSCONTAINER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

@@ -25,7 +25,7 @@
 #ifndef TIFFLOADER_H
 #define TIFFLOADER_H
 
-// C ANSI includes.
+// C ANSI includes
 
 extern "C" 
 {
@@ -33,7 +33,7 @@ extern "C"
 #include <tiff.h>
 }
 
-// Local includes.
+// Local includes
 
 #include "dimgloader.h"
 #include "digikam_export.h"

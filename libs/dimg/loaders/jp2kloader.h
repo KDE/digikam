@@ -24,7 +24,7 @@
 #ifndef JP2KLOADER_H
 #define JP2KLOADER_H
 
-// C ANSI includes.
+// C ANSI includes
 
 #ifndef Q_CC_MSVC
 extern "C"
@@ -35,7 +35,7 @@ extern "C"
 }
 #endif
 
-// Local includes.
+// Local includes
 
 #include "dimgloader.h"
 #include "digikam_export.h"

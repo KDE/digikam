@@ -24,7 +24,7 @@
 #include "comboboxutilities.h"
 #include "comboboxutilities.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QAbstractItemView>
 #include <QAbstractListModel>
@@ -36,7 +36,7 @@
 #include <QTreeView>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>

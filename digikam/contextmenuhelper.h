@@ -24,11 +24,11 @@
 #ifndef CONTEXTMENUHELPER_H
 #define CONTEXTMENUHELPER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QMap>
 
-// KDE includes.
+// KDE includes
 
 #include <kservice.h>
 

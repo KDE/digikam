@@ -24,11 +24,11 @@
 #include "previewwidget.h"
 #include "previewwidget.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QCache>
 #include <QString>
@@ -43,7 +43,7 @@
 #include <QFrame>
 #include <QMouseEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kcursor.h>

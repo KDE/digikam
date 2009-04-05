@@ -23,11 +23,11 @@
 
 #include "databaseparameters.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QDir>
 
-// KDE includes.
+// KDE includes
 
 #include <kcodecs.h>
 

@@ -25,7 +25,7 @@
 #ifndef FREEROTATIONTOOL_H
 #define FREEROTATIONTOOL_H
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

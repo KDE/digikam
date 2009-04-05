@@ -24,13 +24,13 @@
 
 #include "metadatalistviewitem.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QPalette>
 #include <QFont>
 #include <QPainter>
 
-// Local includes.
+// Local includes
 
 #include "ditemtooltip.h"
 

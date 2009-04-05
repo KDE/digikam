@@ -25,7 +25,7 @@
 #include "imagepreviewview.h"
 #include "imagepreviewview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QCursor>
 #include <QDesktopWidget>
@@ -35,7 +35,7 @@
 #include <QString>
 #include <QToolButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 #include <kapplication.h>
@@ -51,12 +51,12 @@
 #include <krun.h>
 #include <kservice.h>
 
-// LibKIPI includes.
+// LibKIPI includes
 
 #include <libkipi/plugin.h>
 #include <libkipi/pluginloader.h>
 
-// Local includes.
+// Local includes
 
 #include "albumdb.h"
 #include "albummanager.h"

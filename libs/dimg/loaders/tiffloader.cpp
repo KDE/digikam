@@ -45,26 +45,26 @@
 //#define ENABLE_DEBUG_MESSAGES
 
 
-// C ANSI includes.
+// C ANSI includes
 extern "C"
 {
 #include <tiffvers.h>
 }
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 
-// Qt includes.
+// Qt includes
 
 #include <QFile>
 #include <QByteArray>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "version.h"
 #include "dimg.h"

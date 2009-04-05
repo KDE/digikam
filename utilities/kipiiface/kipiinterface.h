@@ -26,18 +26,18 @@
 #ifndef KIPIINTERFACE_H
 #define KIPIINTERFACE_H
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QString>
 #include <QPixmap>
 #include <QVariant>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// LibKIPI includes.
+// LibKIPI includes
 
 #include <libkipi/version.h>
 #include <libkipi/interface.h>
@@ -46,7 +46,7 @@
 #include <libkipi/imageinfoshared.h>
 #include <libkipi/imagecollectionshared.h>
 
-// Local includes.
+// Local includes
 
 #include "albummanager.h"
 #include "loadingdescription.h"

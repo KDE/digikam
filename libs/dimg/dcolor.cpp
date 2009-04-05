@@ -28,11 +28,11 @@
 
 #include "dcolor.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 

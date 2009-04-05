@@ -25,7 +25,7 @@
 #include "mainwindow.h"
 #include "mainwindow.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QCheckBox>
 #include <QDateTime>
@@ -40,7 +40,7 @@
 #include <QTextStream>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kcolorbutton.h>
@@ -52,7 +52,7 @@
 #include <kmessagebox.h>
 #include <kuser.h>
 
-// Local includes.
+// Local includes
 
 #include "albumsettings.h"
 #include "folderview.h"

@@ -23,7 +23,7 @@
 
 #include "imageinfolist.h"
 
-// Local includes.
+// Local includes
 
 #include "imageinfo.h"
 #include "imagecomments_p.h"

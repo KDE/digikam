@@ -25,14 +25,14 @@
 #include "gpssearchfolderview.h"
 #include "gpssearchfolderview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QFont>
 #include <QPainter>
 #include <QStyle>
 #include <QCursor>
 
-// KDE includes.
+// KDE includes
 
 #include <kmenu.h>
 #include <klocale.h>
@@ -40,7 +40,7 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "albummanager.h"

@@ -25,13 +25,13 @@
 #ifndef ALBUMICONITEM_H
 #define ALBUMICONITEM_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QDateTime>
 #include <QRect>
 
-// Local includes.
+// Local includes
 
 #include "iconitem.h"
 

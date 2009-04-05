@@ -41,7 +41,7 @@
 
 #include "dcolorcomposer.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 

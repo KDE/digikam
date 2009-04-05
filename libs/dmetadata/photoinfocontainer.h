@@ -24,12 +24,12 @@
 #ifndef PHOTOINFOCONTAINER_H
 #define PHOTOINFOCONTAINER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QString>
 #include <QtCore/QDateTime>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

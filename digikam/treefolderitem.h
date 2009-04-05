@@ -24,11 +24,11 @@
 #ifndef TREEFOLDERITEM_H
 #define TREEFOLDERITEM_H
 
-// Qt includes.
+// Qt includes
 
 #include <QTreeWidgetItem>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

@@ -25,14 +25,14 @@
 #ifndef METADATALISTVIEW_H
 #define METADATALISTVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QString>
 #include <QtCore/QMap>
 #include <QtGui/QResizeEvent>
 #include <QtGui/QTreeWidget>
 
-// Local includes.
+// Local includes
 
 #include "searchtextbar.h"
 #include "metadatawidget.h"

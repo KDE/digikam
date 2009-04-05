@@ -24,7 +24,7 @@
 #ifndef SETUP_H
 #define SETUP_H
 
-// KDE includes.
+// KDE includes
 
 #include <kpagedialog.h>
 

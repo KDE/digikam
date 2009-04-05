@@ -24,15 +24,15 @@
 #ifndef SEARCHFIELDGROUP_H
 #define SEARCHFIELDGROUP_H
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QSet>
 #include <QWidget>
 
-// KDE includes.
+// KDE includes
 
-// Local includes.
+// Local includes
 
 #include "searchxml.h"
 

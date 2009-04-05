@@ -24,12 +24,12 @@
 #ifndef SEARCH_TEXT_BAR_H
 #define SEARCH_TEXT_BAR_H
 
-// KDE includes.
+// KDE includes
 
 #include <klineedit.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

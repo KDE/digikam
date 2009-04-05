@@ -26,7 +26,7 @@
 #include "iccpreviewwidget.h"
 #include "iccpreviewwidget.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QFileInfo>
 #include <QGroupBox>
@@ -34,12 +34,12 @@
 #include <QFrame>
 #include <QScrollArea>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "iccprofilewidget.h"
 

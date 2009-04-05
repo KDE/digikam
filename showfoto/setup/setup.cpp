@@ -24,7 +24,7 @@
 #include "setup.h"
 #include "setup.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -33,7 +33,7 @@
 #include <kglobal.h>
 #include <kvbox.h>
 
-// Local includes.
+// Local includes
 
 #include "setuptooltip.h"
 #include "setupeditor.h"

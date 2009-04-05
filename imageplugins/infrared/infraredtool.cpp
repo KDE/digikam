@@ -27,7 +27,7 @@
 #include "infraredtool.h"
 #include "infraredtool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QImage>
 #include <QLabel>
@@ -37,7 +37,7 @@
 #include <QCheckBox>
 #include <QGridLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -49,7 +49,7 @@
 #include <kglobal.h>
 #include <kconfiggroup.h>
 
-// Local includes.
+// Local includes
 
 #include "version.h"
 #include "daboutdata.h"

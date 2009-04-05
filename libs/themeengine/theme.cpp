@@ -24,7 +24,7 @@
 
 #include "theme.h"
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 

@@ -24,7 +24,7 @@
 #ifndef UNSHARP_MASK_H
 #define UNSHARP_MASK_H
 
-// Local includes.
+// Local includes
 
 #include "dimgthreadedfilter.h"
 

@@ -26,11 +26,11 @@
 #ifndef WHITEBALANCETOOL_H
 #define WHITEBALANCETOOL_H
 
-// Qt includes.
+// Qt includes
 
 #include <QColor>
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

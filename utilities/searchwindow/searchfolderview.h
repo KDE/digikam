@@ -26,7 +26,7 @@
 #ifndef SEARCHFOLDERVIEW_H
 #define SEARCHFOLDERVIEW_H
 
-// Local includes.
+// Local includes
 
 #include "searchtextbar.h"
 #include "folderview.h"

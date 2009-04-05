@@ -35,11 +35,11 @@
                                      (g) * LEVELS_RGB_INTENSITY_GREEN + \
                                      (b) * LEVELS_RGB_INTENSITY_BLUE)
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "dcolor.h"
 #include "digikam_export.h"

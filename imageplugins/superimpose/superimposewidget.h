@@ -26,7 +26,7 @@
 #ifndef SUPERIMPOSEWIDGET_H
 #define SUPERIMPOSEWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QImage>
@@ -36,11 +36,11 @@
 #include <QResizeEvent>
 #include <QMouseEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "imageiface.h"
 #include "dimg.h"

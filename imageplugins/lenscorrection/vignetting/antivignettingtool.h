@@ -25,7 +25,7 @@
 #ifndef ANTIVIGNETTINGTOOL_H
 #define ANTIVIGNETTINGTOOL_H
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

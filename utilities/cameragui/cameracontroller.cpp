@@ -26,19 +26,19 @@
 #include "cameracontroller.h"
 #include "cameracontroller.moc"
 
-// C ANSI includes.
+// C ANSI includes
 
 extern "C"
 {
 #include <unistd.h>
 }
 
-// C++ includes.
+// C++ includes
 
 #include <typeinfo>
 #include <cstdio>
 
-// Qt includes.
+// Qt includes
 
 #include <QMutex>
 #include <QWaitCondition>
@@ -48,7 +48,7 @@ extern "C"
 #include <QRegExp>
 #include <QFileInfo>
 
-// KDE includes.
+// KDE includes
 
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -58,7 +58,7 @@ extern "C"
 #include <kstandarddirs.h>
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "thumbnailsize.h"
 #include "imagewindow.h"

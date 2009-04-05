@@ -24,7 +24,7 @@
 #ifndef DATABASEWATCHADAPTOR_H
 #define DATABASEWATCHADAPTOR_H
 
-// Qt includes.
+// Qt includes
 
 #include <QObject>
 #include <QDBusVariant>

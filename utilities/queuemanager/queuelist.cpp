@@ -26,7 +26,7 @@
 #include "queuelist.h"
 #include "queuelist.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QPainter>
 #include <QDragEnterEvent>
@@ -35,7 +35,7 @@
 #include <QHeaderView>
 #include <QTimer>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -44,7 +44,7 @@
 #include <kmenu.h>
 #include <kactioncollection.h>
 
-// Local includes.
+// Local includes
 
 #include "albumdb.h"
 #include "thumbnailsize.h"

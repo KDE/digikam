@@ -25,11 +25,11 @@
 #include "imagepropertiessidebarcamgui.h"
 #include "imagepropertiessidebarcamgui.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QSplitter>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -39,7 +39,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 
-// Local includes.
+// Local includes
 
 #include "dmetadata.h"
 #include "gpiteminfo.h"

@@ -24,12 +24,12 @@
 #ifndef QUEUEMGRWINDOWPRIVATE_H
 #define QUEUEMGRWINDOWPRIVATE_H
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 #include <kiconloader.h>
 
-// Local includes.
+// Local includes
 
 #include "statusprogressbar.h"
 

@@ -22,18 +22,18 @@
 #ifndef KLENSFUN_H
 #define KLENSFUN_H
 
-// Lib LensFun includes.
+// Lib LensFun includes
 
 extern "C"
 {
 #include <lensfun.h>
 }
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 
-// Local includes.
+// Local includes
 
 #include "dmetadata.h"
 #include "dimgthreadedfilter.h"

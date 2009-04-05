@@ -25,12 +25,12 @@
 #ifndef IMAGEINFOJOB_H
 #define IMAGEINFOJOB_H
 
-// Qt includes.
+// Qt includes
 
 #include <QObject>
 #include <QByteArray>
 
-// Local includes.
+// Local includes
 
 #include "imageinfo.h"
 

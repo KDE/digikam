@@ -27,7 +27,7 @@
 #include "hotpixelstool.h"
 #include "hotpixelstool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QGridLayout>
 #include <QLabel>
@@ -35,7 +35,7 @@
 #include <QProgressBar>
 #include <QPushButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -47,11 +47,11 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rcombobox.h>
 
-// Local includes.
+// Local includes
 
 #include "version.h"
 #include "daboutdata.h"

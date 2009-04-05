@@ -24,18 +24,18 @@
 #include "capturedlg.h"
 #include "capturedlg.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QTimer>
 
-// KDE includes.
+// KDE includes
 
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
 
-// Local includes.
+// Local includes
 
 #include "cameracontroller.h"
 #include "capturewidget.h"

@@ -24,14 +24,14 @@
 
 #include "undocache.h"
 
-// C ANSI includes.
+// C ANSI includes
 
 extern "C"
 {
 #include <unistd.h>
 }
 
-// Qt includes.
+// Qt includes
 
 #include <QByteArray>
 #include <QString>
@@ -39,7 +39,7 @@ extern "C"
 #include <QDataStream>
 #include <QStringList>
 
-// KDE includes.
+// KDE includes
 
 #include <kstandarddirs.h>
 #include <kaboutdata.h>

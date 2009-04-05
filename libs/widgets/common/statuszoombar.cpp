@@ -24,20 +24,20 @@
 #include "statuszoombar.h"
 #include "statuszoombar.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QLayout>
 #include <QSlider>
 #include <QTimer>
 #include <QToolButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kvbox.h>
 
-// Local includes.
+// Local includes
 
 #include "dcursortracker.h"
 #include "thumbnailsize.h"

@@ -25,12 +25,12 @@
 #ifndef TOOL_BAR_H
 #define TOOL_BAR_H
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QKeyEvent>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

@@ -27,17 +27,17 @@
 #include "sharpentool.h"
 #include "sharpentool.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QGridLayout>
 #include <QLabel>
 #include <QStackedWidget>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -52,12 +52,12 @@
 #include <kseparator.h>
 #include <kurl.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Local includes.
+// Local includes
 
 #include "imageiface.h"
 #include "imagepanelwidget.h"

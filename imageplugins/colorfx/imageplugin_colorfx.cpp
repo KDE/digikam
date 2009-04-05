@@ -27,7 +27,7 @@
 #include "imageplugin_colorfx.h"
 #include "imageplugin_colorfx.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kgenericfactory.h>
@@ -38,7 +38,7 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Local includes
 
 #include "colorfxtool.h"
 

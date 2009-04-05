@@ -24,13 +24,13 @@
 #ifndef IMAGECOPYRIGHT_H
 #define IMAGECOPYRIGHT_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QStringList>
 #include <QList>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

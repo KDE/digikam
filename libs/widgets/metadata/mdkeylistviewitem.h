@@ -25,14 +25,14 @@
 #ifndef MDKEYLISTVIEWITEM_H
 #define MDKEYLISTVIEWITEM_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtGui/QTreeWidget>
 #include <QtGui/QTreeWidgetItem>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

@@ -24,11 +24,11 @@
 #include "albumthumbnailloader.h"
 #include "albumthumbnailloader.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QEvent>
 #include <QList>
@@ -36,13 +36,13 @@
 #include <QPainter>
 #include <QPixmap>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "albummanager.h"

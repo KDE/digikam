@@ -25,31 +25,31 @@
 
 #include "albumdb.h"
 
-// C ANSI includes.
+// C ANSI includes
 
 extern "C"
 {
 #include <sys/time.h>
 }
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
 
-// Qt includes.
+// Qt includes
 
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "databasebackend.h"
 #include "collectionmanager.h"

@@ -24,11 +24,11 @@
 #include "watermark.h"
 #include "watermark.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QLabel>
@@ -38,7 +38,7 @@
 #include <QPen>
 #include <QPainter>
 
-// KDE includes.
+// KDE includes
 
 #include <kvbox.h>
 #include <klocale.h>
@@ -51,7 +51,7 @@
 #include <kdialog.h>
 #include <knuminput.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "dimgimagefilters.h"

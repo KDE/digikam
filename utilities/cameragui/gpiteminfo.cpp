@@ -24,7 +24,7 @@
 
 #include "gpiteminfo.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QDataStream>
 

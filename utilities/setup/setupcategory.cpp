@@ -24,7 +24,7 @@
 #include "setupcategory.h"
 #include "setupcategory.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QButtonGroup>
 #include <QGroupBox>
@@ -37,7 +37,7 @@
 #include <QGridLayout>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kpagedialog.h>
@@ -47,7 +47,7 @@
 #include <klineedit.h>
 #include <klistwidget.h>
 
-// Local includes.
+// Local includes
 
 #include "thumbnailsize.h"
 #include "albumsettings.h"

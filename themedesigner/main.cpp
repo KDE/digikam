@@ -22,11 +22,11 @@
  *
  * ============================================================ */
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kaboutdata.h>
@@ -34,7 +34,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 
-// Local includes.
+// Local includes
 
 #include "version.h"
 #include "daboutdata.h"

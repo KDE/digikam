@@ -24,11 +24,11 @@
 #ifndef LOADING_CACHE_INTERFACE_H
 #define LOADING_CACHE_INTERFACE_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "dimg.h"

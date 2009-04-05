@@ -24,28 +24,28 @@
 #ifndef COMPONENTS_INFO_H
 #define COMPONENTS_INFO_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QMap>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kapplication.h>
 
-// LibKIPI includes.
+// LibKIPI includes
 
 #include <libkipi/interface.h>
 
-// Local includes.
+// Local includes
 
 #include "config-digikam.h"
 #include "libsinfodlg.h"
 
 #ifdef ENABLE_GPHOTO2
 
-// LibGphoto2 includes.
+// LibGphoto2 includes
 
 extern "C"
 {

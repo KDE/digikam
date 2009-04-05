@@ -24,26 +24,26 @@
 
 #include "thumbnailtask.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QApplication>
 #include <QImage>
 #include <QVariant>
 #include <QMatrix>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/kdcraw.h>
 
-// Local includes.
+// Local includes
 
 #include "dmetadata.h"
 #include "jpegutils.h"

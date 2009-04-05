@@ -25,7 +25,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QMap>

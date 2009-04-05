@@ -24,7 +24,7 @@
 #ifndef SCHEMAUPDATER_H
 #define SCHEMAUPDATER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 

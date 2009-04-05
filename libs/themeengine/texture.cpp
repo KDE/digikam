@@ -32,18 +32,18 @@
 
 #include "texture.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cstring>
 #include <cstdio>
 
-// Qt includes.
+// Qt includes
 
 #include <QPainter>
 #include <QImage>
 #include <QPixmap>
 
-// Local includes.
+// Local includes
 
 #include "theme.h"
 

@@ -25,7 +25,7 @@
 #ifndef CAMERALIST_H
 #define CAMERALIST_H
 
-// Qt includes.
+// Qt includes
 
 #include <Q3PtrList>
 #include <QObject>

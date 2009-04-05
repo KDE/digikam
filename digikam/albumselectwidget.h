@@ -24,11 +24,11 @@
 #ifndef ALBUMSELECTWIDGET_H
 #define ALBUMSELECTWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 
-// Local includes.
+// Local includes
 
 #include "albummanager.h"
 #include "searchtextbar.h"

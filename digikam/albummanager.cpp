@@ -26,7 +26,7 @@
 #include "albummanager.h"
 #include "albummanager.moc"
 
-// C ANSI includes.
+// C ANSI includes
 
 extern "C"
 {
@@ -35,14 +35,14 @@ extern "C"
 #include <unistd.h>
 }
 
-// C++ includes.
+// C++ includes
 
 #include <clocale>
 #include <cstdlib>
 #include <cstdio>
 #include <cerrno>
 
-// Qt includes.
+// Qt includes
 
 #include <QApplication>
 #include <QDBusConnection>
@@ -55,7 +55,7 @@ extern "C"
 #include <QTextCodec>
 #include <QTimer>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -69,7 +69,7 @@ extern "C"
 #include <kdirwatch.h>
 #include <kconfiggroup.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "albumdb.h"

@@ -25,7 +25,7 @@
 #ifndef SKETCHWIDGET_H
 #define SKETCHWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QXmlStreamReader>

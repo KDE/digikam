@@ -25,16 +25,16 @@
 #ifndef CAMERASELECTION_H
 #define CAMERASELECTION_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QStringList>
 
-// KDE includes.
+// KDE includes
 
 #include <kdialog.h>
 
-// Local includes.
+// Local includes
 
 #include "searchtextbar.h"
 

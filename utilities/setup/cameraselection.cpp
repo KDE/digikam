@@ -25,7 +25,7 @@
 #include "cameraselection.h"
 #include "cameraselection.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QButtonGroup>
 #include <QGridLayout>
@@ -35,7 +35,7 @@
 #include <QRadioButton>
 #include <QTreeWidget>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kcombobox.h>
@@ -48,7 +48,7 @@
 #include <kurlrequester.h>
 #include <kvbox.h>
 
-// Local includes.
+// Local includes
 
 #include "config-digikam.h"
 #include "gpcamera.h"

@@ -25,12 +25,12 @@
 #include "blurtool.h"
 #include "blurtool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QGridLayout>
 #include <QLabel>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -42,11 +42,11 @@
 #include <kconfiggroup.h>
 #include <kdebug.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Local includes
 
 #include "imageiface.h"
 #include "imagepanelwidget.h"

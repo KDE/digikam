@@ -23,18 +23,18 @@
 
 #include "imagecomments.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QSharedData>
 #include <QSet>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
 
-// Local includes.
+// Local includes
 
 #include "albumdb.h"
 #include "imagecomments_p.h"

@@ -26,16 +26,16 @@
 #ifndef FINDDUPLICATESVIEW_H
 #define FINDDUPLICATESVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QPixmap>
 
-// KDE includes.
+// KDE includes
 
 #include <kjob.h>
 
-// Local includes.
+// Local includes
 
 #include "thumbnailloadthread.h"
 

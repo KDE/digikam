@@ -23,12 +23,12 @@
 
 #include "treefolderitem.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QTreeWidget>
 #include <QFont>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 

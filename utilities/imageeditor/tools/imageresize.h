@@ -24,17 +24,17 @@
 #ifndef IMAGE_RESIZE_H
 #define IMAGE_RESIZE_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QCloseEvent>
 #include <QCustomEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kdialog.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

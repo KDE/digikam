@@ -24,7 +24,7 @@
 #ifndef FOLDERVIEWTOOLTIP_H
 #define FOLDERVIEWTOOLTIP_H
 
-// Local includes.
+// Local includes
 
 #include "ditemtooltip.h"
 

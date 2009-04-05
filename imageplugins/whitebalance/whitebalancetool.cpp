@@ -27,7 +27,7 @@
 #include "whitebalancetool.h"
 #include "whitebalancetool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QButtonGroup>
 #include <QFile>
@@ -44,7 +44,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -64,12 +64,12 @@
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Local includes.
+// Local includes
 
 #include "colorgradientwidget.h"
 #include "dcolor.h"

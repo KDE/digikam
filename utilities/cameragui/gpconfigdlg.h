@@ -24,14 +24,14 @@
 #ifndef GPCONFIGDLG_H
 #define GPCONFIGDLG_H
 
-// C ANSI includes.
+// C ANSI includes
 
 extern "C"
 {
 #include <gphoto2.h>
 }
 
-// KDE includes.
+// KDE includes
 
 #include <kdialog.h>
 

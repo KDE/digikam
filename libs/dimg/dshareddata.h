@@ -24,7 +24,7 @@
 #ifndef DSHAREDDATA_H
 #define DSHAREDDATA_H
 
-// Qt includes.
+// Qt includes
 
 #include <qglobal.h>
 #include <qatomic.h>
@@ -33,7 +33,7 @@
 typedef QAtomic QAtomicInt;
 #endif
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

@@ -24,11 +24,11 @@
 #ifndef STATUS_LED_H
 #define STATUS_LED_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtGui/QLabel>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

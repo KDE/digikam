@@ -26,7 +26,7 @@
 #ifndef INFRAREDTOOL_H
 #define INFRAREDTOOL_H
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

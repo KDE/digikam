@@ -26,7 +26,7 @@
 #include "dcursortracker.h"
 #include "dcursortracker.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QEvent>
 #include <QFrame>
@@ -35,7 +35,7 @@
 #include <QTimer>
 #include <QToolTip>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 

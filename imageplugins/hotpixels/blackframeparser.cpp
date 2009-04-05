@@ -40,12 +40,12 @@
 #include "blackframeparser.h"
 #include "blackframeparser.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QImage>
 #include <QStringList>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kdeversion.h>

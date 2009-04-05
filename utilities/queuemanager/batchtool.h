@@ -24,7 +24,7 @@
 #ifndef BATCHTOOL_H
 #define BATCHTOOL_H
 
-// Qt includes.
+// Qt includes
 
 #include <QFileInfo>
 #include <QObject>
@@ -33,12 +33,12 @@
 #include <QMap>
 #include <QList>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 #include <kicon.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 

@@ -23,7 +23,7 @@
 
 #include "loadingcacheinterface.h"
 
-// Local includes.
+// Local includes
 
 #include "loadingcache.h"
 

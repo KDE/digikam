@@ -24,7 +24,7 @@
 #include "imageplugin_perspective.h"
 #include "imageplugin_perspective.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -35,7 +35,7 @@
 #include <klibloader.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "perspectivetool.h"
 

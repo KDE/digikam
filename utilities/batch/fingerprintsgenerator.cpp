@@ -24,7 +24,7 @@
 #include "fingerprintsgenerator.h"
 #include "fingerprintsgenerator.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QTimer>
@@ -34,7 +34,7 @@
 #include <QPointer>
 #include <QCloseEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kcodecs.h>
@@ -42,7 +42,7 @@
 #include <klocale.h>
 #include <kstandardguiitem.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "album.h"

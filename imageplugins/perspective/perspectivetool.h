@@ -24,11 +24,11 @@
 #ifndef PERSPECTIVETOOL_H
 #define PERSPECTIVETOOL_H
 
-// Qt includes.
+// Qt includes
 
 #include <QRect>
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

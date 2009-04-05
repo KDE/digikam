@@ -25,14 +25,14 @@
 #include "albumwidgetstack.h"
 #include "albumwidgetstack.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QFileInfo>
 #include <QSplitter>
 #include <QTimer>
 #include <QWidget>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 #include <kconfiggroup.h>
@@ -41,7 +41,7 @@
 #include <kglobal.h>
 #include <kapplication.h>
 
-// Local includes.
+// Local includes
 
 #include "albumsettings.h"
 #include "albumiconview.h"

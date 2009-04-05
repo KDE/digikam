@@ -25,23 +25,23 @@
 
 #include "hotpixelfixer.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 #include <cstdlib>
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QColor>
 #include <QRegExp>
 #include <QStringList>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 

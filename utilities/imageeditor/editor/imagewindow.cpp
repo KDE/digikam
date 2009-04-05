@@ -25,11 +25,11 @@
 #include "imagewindow.h"
 #include "imagewindow.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 
-// Qt includes.
+// Qt includes
 
 #include <QCloseEvent>
 #include <QDragMoveEvent>
@@ -44,7 +44,7 @@
 #include <QSplitter>
 #include <QTimer>
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -73,7 +73,7 @@
 #include <ktoolbarpopupaction.h>
 #include <kwindowsystem.h>
 
-// Local includes.
+// Local includes
 
 #include "componentsinfo.h"
 #include "album.h"

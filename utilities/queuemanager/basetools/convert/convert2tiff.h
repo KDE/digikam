@@ -24,7 +24,7 @@
 #ifndef CONVERT2TIFF_H
 #define CONVERT2TIFF_H
 
-// Local includes.
+// Local includes
 
 #include "batchtool.h"
 

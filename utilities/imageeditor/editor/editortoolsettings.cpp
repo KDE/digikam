@@ -24,7 +24,7 @@
 #include "editortoolsettings.h"
 #include "editortoolsettings.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QButtonGroup>
 #include <QLabel>
@@ -35,7 +35,7 @@
 #include <QToolButton>
 #include <QVariant>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kcolorbutton.h>
@@ -50,11 +50,11 @@
 #include <kstandardguiitem.h>
 #include <kvbox.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Local includes
 
 #include "colorgradientwidget.h"
 #include "histogramwidget.h"

@@ -24,27 +24,27 @@
 
 #include "dmetadata.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QDomDocument>
 #include <QFile>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/dcrawinfocontainer.h>
 #include <libkdcraw/kdcraw.h>
 
-// Local includes.
+// Local includes
 
 #include "constants.h"
 #include "version.h"

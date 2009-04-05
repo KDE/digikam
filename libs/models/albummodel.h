@@ -24,7 +24,7 @@
 #ifndef ALBUMMODEL_H
 #define ALBUMMODEL_H
 
-// Local includes.
+// Local includes
 
 #include "abstractalbummodel.h"
 

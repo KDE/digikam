@@ -23,12 +23,12 @@
 #include "rawimport.h"
 #include "rawimport.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -38,7 +38,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Local includes
 
 #include "drawdecoding.h"
 #include "histogramwidget.h"

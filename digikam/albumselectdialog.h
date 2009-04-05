@@ -26,15 +26,15 @@
 #ifndef ALBUMSELECTDIALOG_H
 #define ALBUMSELECTDIALOG_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kdialog.h>
 
-// Local includes.
+// Local includes
 
 #include "searchtextbar.h"
 

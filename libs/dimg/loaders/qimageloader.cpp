@@ -25,16 +25,16 @@
 
 #include "qimageloader.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QImage>
 #include <QByteArray>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "dimgloaderobserver.h"

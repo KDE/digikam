@@ -23,7 +23,7 @@
 
 #include "photoinfocontainer.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QDataStream>
 

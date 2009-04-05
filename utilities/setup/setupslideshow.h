@@ -24,11 +24,11 @@
 #ifndef SETUPSLIDESHOW_H
 #define SETUPSLIDESHOW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QScrollArea>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

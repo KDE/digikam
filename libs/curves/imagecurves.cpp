@@ -30,7 +30,7 @@
 
 #include "imagecurves.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 #include <cmath>
@@ -38,11 +38,11 @@
 #include <cstdlib>
 #include <cerrno>
 
-// Qt includes.
+// Qt includes
 
 #include <QFile>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 

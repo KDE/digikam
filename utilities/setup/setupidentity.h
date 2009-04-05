@@ -24,7 +24,7 @@
 #ifndef SETUP_IDENTITY_H
 #define SETUP_IDENTITY_H
 
-// Qt includes.
+// Qt includes
 
 #include <QScrollArea>
 

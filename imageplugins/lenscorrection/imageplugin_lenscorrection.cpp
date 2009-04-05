@@ -24,7 +24,7 @@
 #include "imageplugin_lenscorrection.h"
 #include "imageplugin_lenscorrection.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -35,7 +35,7 @@
 #include <klibloader.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "config-digikam.h"
 #ifdef HAVE_LENSFUN

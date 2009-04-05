@@ -26,7 +26,7 @@
 #include "imageplugin_filmgrain.h"
 #include "imageplugin_filmgrain.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -37,7 +37,7 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Local includes
 
 #include "filmgraintool.h"
 

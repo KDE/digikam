@@ -25,7 +25,7 @@
 #include "imageplugin_noisereduction.h"
 #include "imageplugin_noisereduction.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -36,7 +36,7 @@
 #include <klibloader.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "noisereductiontool.h"
 

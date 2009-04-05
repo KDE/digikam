@@ -26,7 +26,7 @@
 #ifndef ALBUMDB_H
 #define ALBUMDB_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QString>
 #include <QtCore/QList>
@@ -36,11 +36,11 @@
 #include <QtCore/QMap>
 #include <QtCore/QUuid>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "albuminfo.h"
 #include "databasefields.h"

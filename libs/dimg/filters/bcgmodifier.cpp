@@ -27,12 +27,12 @@
 
 #include "bcgmodifier.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 #include <cmath>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 

@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QStringList>
@@ -31,7 +31,7 @@
 #include <QFile>
 #include <QSqlDatabase>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kcmdlineargs.h>
@@ -45,12 +45,12 @@
 #include <kdeversion.h>
 #include <kmessagebox.h>
 
-// Libkexiv2 includes.
+// Libkexiv2 includes
 
 #include <libkexiv2/version.h>
 #include <libkexiv2/kexiv2.h>
 
-// Local includes.
+// Local includes
 
 #include "version.h"
 #include "daboutdata.h"

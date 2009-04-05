@@ -24,15 +24,15 @@
 #ifndef IMAGEATTRIBUTESWATCH_H
 #define IMAGEATTRIBUTESWATCH_H
 
-// Qt includes.
+// Qt includes
 
 #include <QObject>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "databasechangesets.h"
 

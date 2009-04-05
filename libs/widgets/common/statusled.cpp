@@ -24,12 +24,12 @@
 #include "statusled.h"
 #include "statusled.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QPixmap>
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kglobalsettings.h>
 #include <kstandarddirs.h>

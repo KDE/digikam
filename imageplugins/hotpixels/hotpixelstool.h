@@ -28,15 +28,15 @@
 
 #define MAX_PIXEL_DEPTH 4
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 #include "hotpixelfixer.h"

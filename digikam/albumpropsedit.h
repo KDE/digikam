@@ -26,13 +26,13 @@
 #ifndef ALBUMPROPSEDIT_H
 #define ALBUMPROPSEDIT_H
 
-// Qt includes.
+// Qt includes
 
 #include <QDateTime>
 #include <QString>
 #include <QStringList>
 
-// KDE includes.
+// KDE includes
 
 #include <kdialog.h>
 

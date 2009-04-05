@@ -30,15 +30,15 @@
 
 #include "charcoal.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "dimggaussianblur.h"

@@ -24,13 +24,13 @@
 #include "rotate.h"
 #include "rotate.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QLabel>
 #include <QCheckBox>
 
-// KDE includes.
+// KDE includes
 
 #include <kvbox.h>
 #include <klocale.h>
@@ -38,7 +38,7 @@
 #include <kiconloader.h>
 #include <kcombobox.h>
 
-// Local includes.
+// Local includes
 
 #include "jpegutils.h"
 #include "dimg.h"

@@ -24,13 +24,13 @@
 #ifndef INSERTTEXTTOOL_H
 #define INSERTTEXTTOOL_H
 
-// Qt includes.
+// Qt includes
 
 #include <QColor>
 #include <QFont>
 #include <QImage>
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

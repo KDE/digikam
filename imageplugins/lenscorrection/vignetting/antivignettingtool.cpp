@@ -26,7 +26,7 @@
 #include "antivignettingtool.h"
 #include "antivignettingtool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QGridLayout>
 #include <QImage>
@@ -35,7 +35,7 @@
 #include <QPen>
 #include <QPixmap>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -49,11 +49,11 @@
 #include <kseparator.h>
 #include <kstandarddirs.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Local includes
 
 #include "version.h"
 #include "daboutdata.h"

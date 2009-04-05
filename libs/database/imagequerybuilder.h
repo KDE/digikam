@@ -25,13 +25,13 @@
 #ifndef IMAGEQUERYBUILDER_H
 #define IMAGEQUERYBUILDER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QVariant>
 #include <QString>
 
-// Local includes.
+// Local includes
 
 #include "searchxml.h"
 #include "digikam_export.h"

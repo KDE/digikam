@@ -26,7 +26,7 @@
 #include "albumfolderview.h"
 #include "albumfolderview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QCursor>
 #include <QDataStream>
@@ -37,7 +37,7 @@
 #include <QPixmap>
 #include <QPointer>
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 #include <kapplication.h>
@@ -55,7 +55,7 @@
 #include <kmessagebox.h>
 #include <kstringhandler.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "albumdb.h"

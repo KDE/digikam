@@ -25,7 +25,7 @@
 #include "imageplugin_raindrop.h"
 #include "imageplugin_raindrop.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kgenericfactory.h>
@@ -36,7 +36,7 @@
 #include <kdebug.h>
 #include <kapplication.h>
 
-// Local includes.
+// Local includes
 
 #include "raindroptool.h"
 

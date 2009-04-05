@@ -31,17 +31,17 @@
 
 #include "blurfx.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
 
-// Qt includes.
+// Qt includes
 
 #include <QDateTime>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "dimggaussianblur.h"

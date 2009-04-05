@@ -24,11 +24,11 @@
 #ifndef SETUPIOFILES_H
 #define SETUPIOFILES_H
 
-// Qt includes.
+// Qt includes
 
 #include <QScrollArea>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

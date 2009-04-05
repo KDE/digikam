@@ -23,7 +23,7 @@
 
 #include "upgradedb_sqlite2tosqlite3.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QMap>
 #include <QPair>
@@ -32,13 +32,13 @@
 #include <QFileInfo>
 #include <QList>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kio/global.h>
 
-// Local includes.
+// Local includes
 
 #include "albumdb.h"
 #include "databaseaccess.h"

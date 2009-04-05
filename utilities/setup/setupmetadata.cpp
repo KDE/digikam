@@ -25,7 +25,7 @@
 #include "setupmetadata.h"
 #include "setupmetadata.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QButtonGroup>
 #include <QGroupBox>
@@ -34,7 +34,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kdialog.h>
@@ -45,12 +45,12 @@
 #include <kvbox.h>
 #include <ktoolinvocation.h>
 
-// Libkexiv2 includes.
+// Libkexiv2 includes
 
 #include <libkexiv2/version.h>
 #include <libkexiv2/kexiv2.h>
 
-// Local includes.
+// Local includes
 
 #include "albumsettings.h"
 

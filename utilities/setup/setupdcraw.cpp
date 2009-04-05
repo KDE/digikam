@@ -24,11 +24,11 @@
 #include "setupdcraw.h"
 #include "setupdcraw.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kdialog.h>
@@ -37,12 +37,12 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/version.h>
 #include <libkdcraw/dcrawsettingswidget.h>
 
-// Local includes.
+// Local includes
 
 #include "drawdecoding.h"
 

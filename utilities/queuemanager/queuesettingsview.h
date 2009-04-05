@@ -24,13 +24,13 @@
 #ifndef QUEUE_SETTINGS_VIEW_H
 #define QUEUE_SETTINGS_VIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QScrollArea>
 #include <QList>
 #include <QMap>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 #include <ktabwidget.h>

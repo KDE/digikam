@@ -25,11 +25,11 @@
 #ifndef BATCHSYNCMETADATA_H
 #define BATCHSYNCMETADATA_H
 
-// Qt includes.
+// Qt includes
 
 #include <QObject>
 
-// Local includes.
+// Local includes
 
 #include "imageinfo.h"
 

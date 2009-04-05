@@ -24,7 +24,7 @@
 #ifndef FLIP_H
 #define FLIP_H
 
-// Local includes.
+// Local includes
 
 #include "batchtool.h"
 

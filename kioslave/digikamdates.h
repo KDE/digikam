@@ -25,7 +25,7 @@
 #ifndef DIGIKAMDATES_H
 #define DIGIKAMDATES_H
 
-// KDE includes.
+// KDE includes
 
 #include <kio/slavebase.h>
 

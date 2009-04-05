@@ -24,9 +24,9 @@
 #ifndef IMAGEALBUMFILTERMODEL_H
 #define IMAGEALBUMFILTERMODEL_H
 
-// Qt includes.
+// Qt includes
 
-// Local includes.
+// Local includes
 
 #include "imagefiltermodel.h"
 

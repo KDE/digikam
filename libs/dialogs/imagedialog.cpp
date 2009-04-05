@@ -24,12 +24,12 @@
 #include "imagedialog.h"
 #include "imagedialog.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QLabel>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -37,7 +37,7 @@
 #include <kfiledialog.h>
 #include <kimageio.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
@@ -46,7 +46,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Local includes
 
 #include "ditemtooltip.h"
 #include "dmetadata.h"

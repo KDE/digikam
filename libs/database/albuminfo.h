@@ -27,13 +27,13 @@
 
 /** @file albuminfo.h */
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QList>
 #include <QDateTime>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 

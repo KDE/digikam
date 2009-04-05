@@ -24,7 +24,7 @@
 #include "ratingsearchutilities.h"
 #include "ratingsearchutilities.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QAbstractListModel>
 #include <QItemDelegate>
@@ -38,12 +38,12 @@
 #include <QStyleOption>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "constants.h"
 #include "themeengine.h"

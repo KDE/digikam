@@ -26,12 +26,12 @@
 #include "kdatepickerpopup.h"
 #include "kdatepickerpopup.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QDateTime>
 #include <QWidgetAction>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 

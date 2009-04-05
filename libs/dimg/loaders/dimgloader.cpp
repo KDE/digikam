@@ -24,17 +24,17 @@
 
 #include "dimgloader.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QFile>
 
-// KDE includes.
+// KDE includes
 
 #include <kstandarddirs.h>
 #include <kcodecs.h>       // for KMD5
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "dimgprivate.h"
 #include "dmetadata.h"

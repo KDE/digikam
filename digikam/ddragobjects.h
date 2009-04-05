@@ -24,17 +24,17 @@
 #ifndef DDRAGOBJECTS_H
 #define DDRAGOBJECTS_H
 
-// Qt includes.
+// Qt includes
 
 #include <QMimeData>
 #include <QList>
 #include <QStringList>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "cameratype.h"
 

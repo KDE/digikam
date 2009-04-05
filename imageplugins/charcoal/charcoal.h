@@ -24,7 +24,7 @@
 #ifndef CHARCOAL_H
 #define CHARCOAL_H
 
-// Local includes.
+// Local includes
 
 #include "dimgthreadedfilter.h"
 

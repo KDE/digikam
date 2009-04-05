@@ -26,7 +26,7 @@
 #ifndef CAMERAUI_H
 #define CAMERAUI_H
 
-// Qt includes.
+// Qt includes
 
 #include <QDateTime>
 #include <QString>
@@ -34,12 +34,12 @@
 #include <QKeyEvent>
 #include <QCloseEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kxmlguiwindow.h>
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "gpiteminfo.h"
 

@@ -25,15 +25,15 @@
 #ifndef IMAGEPLUGIN_H
 #define IMAGEPLUGIN_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QObject>
 
-// KDE includes.
+// KDE includes
 
 #include <kxmlguiclient.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

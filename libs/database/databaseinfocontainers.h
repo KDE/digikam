@@ -24,7 +24,7 @@
 #ifndef DATABASEINFOCONTAINERS_H
 #define DATABASEINFOCONTAINERS_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QDateTime>

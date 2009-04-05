@@ -25,12 +25,12 @@
 #include "statusnavigatebar.h"
 #include "statusnavigatebar.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QToolButton>
 #include <QHBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kiconloader.h>
 #include <klocale.h>

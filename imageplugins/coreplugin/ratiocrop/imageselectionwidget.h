@@ -26,7 +26,7 @@
 #ifndef IMAGESELECTIONWIDGET_H
 #define IMAGESELECTIONWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <qwidget.h>
 #include <qrect.h>

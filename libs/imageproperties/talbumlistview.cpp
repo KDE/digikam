@@ -25,13 +25,13 @@
 #include "talbumlistview.h"
 #include "talbumlistview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QDropEvent>
 #include <QMouseEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kmenu.h>
@@ -46,7 +46,7 @@
 #include <kdialog.h>
 #include <kstringhandler.h>
 
-// Local includes.
+// Local includes
 
 #include "albumiconitem.h"
 #include "albummanager.h"

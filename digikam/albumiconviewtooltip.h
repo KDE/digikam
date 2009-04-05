@@ -24,7 +24,7 @@
 #ifndef ALBUMICONVIEWTOOLTIP_H
 #define ALBUMICONVIEWTOOLTIP_H
 
-// Local includes.
+// Local includes
 
 #include "imageinfo.h"
 #include "ditemtooltip.h"

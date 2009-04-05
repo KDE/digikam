@@ -25,11 +25,11 @@
 #ifndef IMAGEPROPERTIESSIDEBAR_H
 #define IMAGEPROPERTIESSIDEBAR_H
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "sidebar.h"
 #include "digikam_export.h"

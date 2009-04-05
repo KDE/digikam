@@ -24,7 +24,7 @@
 #ifndef DIMGSHARPEN_H
 #define DIMGSHARPEN_H
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"

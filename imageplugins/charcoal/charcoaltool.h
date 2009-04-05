@@ -25,7 +25,7 @@
 #ifndef CHARCOALTOOL_H
 #define CHARCOALTOOL_H
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

@@ -24,11 +24,11 @@
 #include "editortooliface.h"
 #include "editortooliface.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 
-// Local includes.
+// Local includes
 
 #include "sidebar.h"
 #include "canvas.h"

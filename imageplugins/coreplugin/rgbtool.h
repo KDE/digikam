@@ -24,7 +24,7 @@
 #ifndef RGBTOOL_H
 #define RGBTOOL_H
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

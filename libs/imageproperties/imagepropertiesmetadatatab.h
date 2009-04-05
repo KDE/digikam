@@ -24,16 +24,16 @@
 #ifndef IMAGEPROPERTIESMETADATATAB_H
 #define IMAGEPROPERTIESMETADATATAB_H
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 #include <ktabwidget.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "dmetadata.h"

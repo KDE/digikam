@@ -24,7 +24,7 @@
 #include "histogrambox.h"
 #include "histogrambox.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QButtonGroup>
 #include <QGridLayout>
@@ -37,13 +37,13 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
-// KDE includes.
+// KDE includes
 
 #include <kcombobox.h>
 #include <kicon.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "colorgradientwidget.h"
 #include "histogramwidget.h"

@@ -25,11 +25,11 @@
 #ifndef IMAGEPLUGIN_FREEROTATION_H
 #define IMAGEPLUGIN_FREEROTATION_H
 
-// Qt includes.
+// Qt includes
 
 #include <QVariant>
 
-// Local includes.
+// Local includes
 
 #include "imageplugin.h"
 #include "digikam_export.h"

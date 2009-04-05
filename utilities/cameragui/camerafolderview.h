@@ -25,13 +25,13 @@
 #ifndef CAMERAFOLDERVIEW_H
 #define CAMERAFOLDERVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QPixmap>
 #include <QTreeWidget>
 
-// KDE includes.
+// KDE includes
 
 #include <kiconloader.h>
 

@@ -25,7 +25,7 @@
 #ifndef DIGIKAMSEARCH_H
 #define DIGIKAMSEARCH_H
 
-// KDE includes.
+// KDE includes
 
 #include <kio/slavebase.h>
 

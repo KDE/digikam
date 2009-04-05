@@ -24,7 +24,7 @@
 #ifndef SETUPMIME_H
 #define SETUPMIME_H
 
-// Qt includes.
+// Qt includes
 
 #include <QScrollArea>
 

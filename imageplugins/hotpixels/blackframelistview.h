@@ -25,7 +25,7 @@
 #ifndef BLACKFRAMELISTVIEW_H
 #define BLACKFRAMELISTVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QImage>
@@ -35,12 +35,12 @@
 #include <QPixmap>
 #include <QTreeWidget>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "blackframeparser.h"
 #include "hotpixel.h"

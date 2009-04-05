@@ -24,7 +24,7 @@
 #include "loadingcache.h"
 #include "loadingcache.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QCoreApplication>
 #include <QEvent>
@@ -32,7 +32,7 @@
 #include <QCache>
 #include <QHash>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kdirwatch.h>

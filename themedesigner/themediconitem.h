@@ -25,7 +25,7 @@
 #ifndef THEMEDICONITEM_H
 #define THEMEDICONITEM_H
 
-// Local includes.
+// Local includes
 
 #include "iconitem.h"
 

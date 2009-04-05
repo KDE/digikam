@@ -25,7 +25,7 @@
 #include "digikamfirstrun.h"
 #include "digikamfirstrun.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QLabel>
 #include <QString>
@@ -35,7 +35,7 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -49,7 +49,7 @@
 #include <kurlrequester.h>
 #include <kseparator.h>
 
-// Local includes.
+// Local includes
 
 #include "version.h"
 

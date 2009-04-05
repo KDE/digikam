@@ -24,14 +24,14 @@
 #ifndef DATABASEBACKEND_H
 #define DATABASEBACKEND_H
 
-// Qt includes.
+// Qt includes
 
 #include <QObject>
 #include <QString>
 #include <QStringList>
 #include <QSqlQuery>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "databaseparameters.h"

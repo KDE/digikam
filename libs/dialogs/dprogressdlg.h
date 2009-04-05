@@ -24,15 +24,15 @@
 #ifndef DPROGRESSDLG_H
 #define DPROGRESSDLG_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtGui/QPixmap>
 
-// KDE includes.
+// KDE includes
 
 #include <kdialog.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

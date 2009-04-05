@@ -25,7 +25,7 @@
 #ifndef HSLTOOL_H
 #define HSLTOOL_H
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

@@ -23,11 +23,11 @@
 
 #include "ddragobjects.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QByteArray>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 

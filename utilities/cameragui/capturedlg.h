@@ -24,15 +24,15 @@
 #ifndef CAPTUREDLG_H
 #define CAPTUREDLG_H
 
-// Qt includes.
+// Qt includes
 
 #include <QCloseEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kdialog.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

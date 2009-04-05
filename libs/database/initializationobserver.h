@@ -24,11 +24,11 @@
 #ifndef INITIALIZATIONOBSERVER_H
 #define INITIALIZATIONOBSERVER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

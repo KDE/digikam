@@ -24,12 +24,12 @@
 #ifndef IMAGEINFOCACHE_H
 #define IMAGEINFOCACHE_H
 
-// Qt includes.
+// Qt includes
 
 #include <QObject>
 #include <QHash>
 
-// Local includes.
+// Local includes
 
 #include "databasewatch.h"
 

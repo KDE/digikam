@@ -25,7 +25,7 @@
 #include "setup.h"
 #include "setup.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -35,7 +35,7 @@
 #include <kglobal.h>
 #include <kvbox.h>
 
-// Local includes.
+// Local includes
 
 #include "albumsettings.h"
 #include "batchthumbsgenerator.h"

@@ -28,11 +28,11 @@
 #ifndef DISTORTION_FX_H
 #define DISTORTION_FX_H
 
-// Qt includes.
+// Qt includes
 
 #include <QSize>
 
-// Local includes.
+// Local includes
 
 #include "dimgthreadedfilter.h"
 

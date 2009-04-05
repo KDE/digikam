@@ -24,11 +24,11 @@
 #include "searchfields.h"
 #include "searchfields.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QApplication>
 #include <QCheckBox>
@@ -42,7 +42,7 @@
 #include <QTimeEdit>
 #include <QTreeView>
 
-// KDE includes.
+// KDE includes
 
 #include <kcombobox.h>
 #include <kdebug.h>
@@ -51,11 +51,11 @@
 #include <klocale.h>
 #include <ksqueezedtextlabel.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/squeezedcombobox.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "albummanager.h"

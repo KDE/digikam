@@ -25,7 +25,7 @@
 #ifndef JPEGLOADER_H
 #define JPEGLOADER_H
 
-// C ANSI includes.
+// C ANSI includes
 
 extern "C" 
 {
@@ -33,7 +33,7 @@ extern "C"
 #include <jpeglib.h>
 }
 
-// Local includes.
+// Local includes
 
 #include "dimgloader.h"
 #include "digikam_export.h"

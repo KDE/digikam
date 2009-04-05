@@ -26,16 +26,16 @@
 #ifndef CAMERAICONVIEW_H
 #define CAMERAICONVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QRect>
 #include <QDropEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "iconview.h"
 #include "renamecustomizer.h"

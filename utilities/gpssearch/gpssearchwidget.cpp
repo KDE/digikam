@@ -23,7 +23,7 @@
 
 #include "gpssearchwidget.h"
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 

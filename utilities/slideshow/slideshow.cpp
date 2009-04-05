@@ -27,7 +27,7 @@
 #include "slideshow.h"
 #include "slideshow.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QColor>
 #include <QCursor>
@@ -45,7 +45,7 @@
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusReply>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -56,7 +56,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Local includes
 
 #include "constants.h"
 #include "dimg.h"

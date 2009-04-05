@@ -25,7 +25,7 @@
 #ifndef SIGNALBLOCKER_H
 #define SIGNALBLOCKER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QObject>
 

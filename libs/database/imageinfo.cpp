@@ -24,17 +24,17 @@
 
 #include "imageinfo.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QFile>
 #include <QFileInfo>
 #include <QHash>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "albumdb.h"
 #include "databaseaccess.h"

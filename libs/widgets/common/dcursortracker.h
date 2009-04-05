@@ -26,13 +26,13 @@
 #ifndef DCURSOR_TRACKER_H
 #define DCURSOR_TRACKER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QEvent>
 #include <QtCore/QString>
 #include <QtGui/QLabel>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

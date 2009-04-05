@@ -24,7 +24,7 @@
 #include "lighttablepreview.h"
 #include "lighttablepreview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QPainter>
@@ -38,7 +38,7 @@
 #include <QResizeEvent>
 #include <QDesktopWidget>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -53,7 +53,7 @@
 #include <krun.h>
 #include <kservice.h>
 
-// Local includes.
+// Local includes
 
 #include "albumdb.h"
 #include "albummanager.h"

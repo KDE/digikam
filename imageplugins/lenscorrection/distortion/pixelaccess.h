@@ -31,7 +31,7 @@
 #define PixelAccessXOffset 3
 #define PixelAccessYOffset 3
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 

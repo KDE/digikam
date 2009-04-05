@@ -25,11 +25,11 @@
 #ifndef UMSCAMERA_H
 #define UMSCAMERA_H
 
-// Qt includes.
+// Qt includes
 
 #include <QStringList>
 
-// Local includes.
+// Local includes
 
 #include "dkcamera.h"
 

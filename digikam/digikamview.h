@@ -25,17 +25,17 @@
 #ifndef DIGIKAMVIEW_H
 #define DIGIKAMVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QStringList>
 #include <QMap>
 
-// KDE includes.
+// KDE includes
 
 #include <khbox.h>
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "searchtextbar.h"
 #include "imageinfo.h"

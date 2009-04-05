@@ -24,11 +24,11 @@
 #include "ratingbox.h"
 #include "ratingbox.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QLayout>
 
-// Local includes.
+// Local includes
 
 #include "ratingwidget.h"
 

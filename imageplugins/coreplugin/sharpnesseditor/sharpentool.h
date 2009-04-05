@@ -24,7 +24,7 @@
 #ifndef SHARPENTOOL_H
 #define SHARPENTOOL_H
 
-// Local includes.
+// Local includes
 
 #include <dimg.h>
 #include "editortool.h"

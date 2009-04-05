@@ -24,7 +24,7 @@
 #include "jpegsettings.h"
 #include "jpegsettings.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QFrame>
 #include <QGridLayout>
@@ -32,7 +32,7 @@
 #include <QLayout>
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kcombobox.h>
 #include <kdialog.h>

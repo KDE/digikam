@@ -24,14 +24,14 @@
 #ifndef ABSTRACTALBUMMODEL_H
 #define ABSTRACTALBUMMODEL_H
 
-// Qt includes.
+// Qt includes
 
 #include <QAbstractItemModel>
 #include <QHash>
 #include <QPixmap>
 #include <QSet>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 

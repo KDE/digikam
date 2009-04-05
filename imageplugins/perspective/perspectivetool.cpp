@@ -25,7 +25,7 @@
 #include "perspectivetool.h"
 #include "perspectivetool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QCheckBox>
 #include <QFrame>
@@ -36,7 +36,7 @@
 #include <QSpinBox>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -53,7 +53,7 @@
 #include <kseparator.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Local includes
 
 #include "daboutdata.h"
 #include "dimg.h"

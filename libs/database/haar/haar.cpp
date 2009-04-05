@@ -29,18 +29,18 @@
 
 #include "haar.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdlib>
 #include <cmath>
 #include <queue>
 
-// Qt includes.
+// Qt includes
 
 #include <QImage>
 #include <QString>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 

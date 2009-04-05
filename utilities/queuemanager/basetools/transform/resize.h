@@ -24,7 +24,7 @@
 #ifndef RESIZE_H
 #define RESIZE_H
 
-// Local includes.
+// Local includes
 
 #include "batchtool.h"
 

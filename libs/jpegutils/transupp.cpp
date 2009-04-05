@@ -17,7 +17,7 @@
  */
 #define JPEG_INTERNALS
 
-// Local includes.
+// Local includes
 
 #include "transupp.h"
 

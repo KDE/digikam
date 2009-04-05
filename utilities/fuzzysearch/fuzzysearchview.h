@@ -25,7 +25,7 @@
 #ifndef FUZZYSEARCHVIEW_H
 #define FUZZYSEARCHVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QScrollArea>
 

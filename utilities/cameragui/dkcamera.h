@@ -25,12 +25,12 @@
 #ifndef DKCAMERA_H
 #define DKCAMERA_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QByteArray>
 
-// Local includes.
+// Local includes
 
 #include "gpiteminfo.h"
 

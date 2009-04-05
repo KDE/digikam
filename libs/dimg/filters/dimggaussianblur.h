@@ -24,7 +24,7 @@
 #ifndef DIMGGAUSSIAN_BLUR_H
 #define DIMGGAUSSIAN_BLUR_H
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"

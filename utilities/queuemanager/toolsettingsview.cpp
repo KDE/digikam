@@ -24,14 +24,14 @@
 #include "toolsettingsview.h"
 #include "toolsettingsview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QLabel>
 #include <QString>
 #include <QScrollArea>
 #include <QPushButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kvbox.h>
 #include <khbox.h>
@@ -39,7 +39,7 @@
 #include <klocale.h>
 #include <kdialog.h>
 
-// Local includes.
+// Local includes
 
 #include "themeengine.h"
 

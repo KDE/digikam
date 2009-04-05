@@ -27,13 +27,13 @@
 #ifndef DIGIKAMAPP_H
 #define DIGIKAMAPP_H
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QAction>
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 #include <kxmlguiwindow.h>
@@ -41,7 +41,7 @@
 #include <kio/netaccess.h>
 #include <solid/solidnamespace.h>
 
-// Local includes.
+// Local includes
 
 #include "albumlister.h"
 #include "digikam_export.h"

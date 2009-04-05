@@ -27,7 +27,7 @@
 #include "albumiconview.h"
 #include "albumiconview.moc"
 
-// C ANSI includes.
+// C ANSI includes
 
 extern "C"
 {
@@ -36,12 +36,12 @@ extern "C"
 #include <unistd.h>
 }
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QClipboard>
 #include <QCursor>
@@ -63,7 +63,7 @@ extern "C"
 #include <QTimer>
 #include <QMap>
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -88,7 +88,7 @@ extern "C"
 #include <kurl.h>
 #include <kwindowsystem.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/kdcraw.h>
 #include <libkdcraw/version.h>
@@ -97,7 +97,7 @@ extern "C"
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "albumdb.h"

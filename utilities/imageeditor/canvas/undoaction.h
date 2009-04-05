@@ -25,11 +25,11 @@
 #ifndef UNDOACTION_H
 #define UNDOACTION_H
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

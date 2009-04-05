@@ -25,7 +25,7 @@
 #include "fuzzysearchview.h"
 #include "fuzzysearchview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QFrame>
 #include <QImage>
@@ -37,7 +37,7 @@
 #include <QTimer>
 #include <QToolButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kcolorvalueselector.h>
@@ -55,7 +55,7 @@
 #include <ktabwidget.h>
 #include <kvbox.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "albummanager.h"

@@ -25,7 +25,7 @@
 #ifndef RATINGFILTER_H
 #define RATINGFILTER_H
 
-// Local includes.
+// Local includes
 
 #include "albumlister.h"
 #include "ratingwidget.h"

@@ -26,13 +26,13 @@
 #include "thumbnailcreator.h"
 #include "thumbnailcreator_p.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QFileInfo>
 #include <QFile>
 #include <QPainter>
 
-// KDE includes.
+// KDE includes
 
 #include <kcodecs.h>
 #include <kcomponentdata.h>
@@ -49,12 +49,12 @@
 #include <ktemporaryfile.h>
 #include <kurl.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/kdcraw.h>
 #include <libkdcraw/rawfiles.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "dmetadata.h"

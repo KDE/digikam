@@ -25,17 +25,17 @@
 #ifndef DIMGTHREADEDFILTER_H
 #define DIMGTHREADEDFILTER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QEvent>
 #include <QtCore/QThread>
 #include <QtCore/QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "digikam_export.h"

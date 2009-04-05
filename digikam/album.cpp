@@ -25,12 +25,12 @@
 
 #include "album.h"
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "albumdb.h"
 #include "albummanager.h"

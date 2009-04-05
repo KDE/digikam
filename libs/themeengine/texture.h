@@ -33,11 +33,11 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-// Qt includes.
+// Qt includes
 
 #include <QPixmap>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "theme.h"

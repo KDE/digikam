@@ -24,11 +24,11 @@
 #include "imageresize.h"
 #include "imageresize.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QBrush>
 #include <QCheckBox>
@@ -48,7 +48,7 @@
 #include <QTimer>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -65,11 +65,11 @@
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "imageiface.h"

@@ -24,7 +24,7 @@
 #include "queuesettingsview.h"
 #include "queuesettingsview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QTimer>
 #include <QLabel>
@@ -35,7 +35,7 @@
 #include <QGroupBox>
 #include <QTreeWidget>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kdialog.h>
@@ -43,7 +43,7 @@
 #include <kglobal.h>
 #include <kvbox.h>
 
-// Local includes.
+// Local includes
 
 #include "batchtool.h"
 #include "album.h"

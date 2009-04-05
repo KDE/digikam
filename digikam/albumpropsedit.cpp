@@ -26,7 +26,7 @@
 #include "albumpropsedit.h"
 #include "albumpropsedit.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QCheckBox>
 #include <QDateTime>
@@ -41,7 +41,7 @@
 #include <QPushButton>
 #include <QTextEdit>
 
-// KDE includes.
+// KDE includes
 
 #include <kcombobox.h>
 #include <kcursor.h>
@@ -57,7 +57,7 @@
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "albumdb.h"

@@ -25,12 +25,12 @@
 #ifndef ICCTRANSFORM_H
 #define ICCTRANSFORM_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QByteArray>
 #include <QtCore/QString>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "digikam_export.h"

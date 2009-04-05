@@ -25,13 +25,13 @@
 #ifndef IMAGEPREVIEWVIEW_H
 #define IMAGEPREVIEWVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QImage>
 #include <QResizeEvent>
 #include <QString>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "imageinfo.h"

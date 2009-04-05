@@ -30,13 +30,13 @@
 #include "digikamalbums.h"
 #include "digikamalbums.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QCoreApplication>
 #include <QFileInfo>
 #include <QDataStream>
 
-// KDE includes.
+// KDE includes
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -45,11 +45,11 @@
 #include <kdebug.h>
 #include <kio/deletejob.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rawfiles.h>
 
-// Local includes.
+// Local includes
 
 #include "albumdb.h"
 #include "digikam_export.h"

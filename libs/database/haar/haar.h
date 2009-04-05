@@ -30,11 +30,11 @@
 #ifndef HAAR_H
 #define HAAR_H
 
-// C++ includes.
+// C++ includes
 
 #include <cstring>
 
-// Qt includes.
+// Qt includes
 
 #include <QtGlobal>
 

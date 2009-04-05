@@ -24,11 +24,11 @@
 
 #include "cameratype.h"
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 
-// Local includes.
+// Local includes
 
 #include "cameraui.h"
 

@@ -25,12 +25,12 @@
 #ifndef STATUS_NAVIGATE_BAR_H
 #define STATUS_NAVIGATE_BAR_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtGui/QWidget>
 #include <QtCore/QString>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

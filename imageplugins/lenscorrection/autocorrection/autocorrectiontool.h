@@ -22,7 +22,7 @@
 #ifndef AUTOCORRECTIONTOOL_H
 #define AUTOCORRECTIONTOOL_H
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "editortool.h"

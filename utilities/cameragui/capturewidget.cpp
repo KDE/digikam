@@ -24,14 +24,14 @@
 #include "capturewidget.h"
 #include "capturewidget.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <qpainter.h>
 #include <qimage.h>
 #include <qpixmap.h>
 #include <qrect.h>
 
-// KDE includes.
+// KDE includes
 
 #include <kcursor.h>
 #include <kdebug.h>

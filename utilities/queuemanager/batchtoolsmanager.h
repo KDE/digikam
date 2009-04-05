@@ -24,11 +24,11 @@
 #ifndef BATCHTOOLSMANAGER_H
 #define BATCHTOOLSMANAGER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QObject>
 
-// Local includes.
+// Local includes
 
 #include "batchtool.h"
 

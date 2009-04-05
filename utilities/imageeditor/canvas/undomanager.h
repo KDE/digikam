@@ -26,11 +26,11 @@
 #ifndef UNDOMANAGER_H
 #define UNDOMANAGER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QStringList>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

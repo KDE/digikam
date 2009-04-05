@@ -25,7 +25,7 @@
 #include "imageplugin_texture.h"
 #include "imageplugin_texture.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kgenericfactory.h>
@@ -36,7 +36,7 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Local includes
 
 #include "texturetool.h"
 

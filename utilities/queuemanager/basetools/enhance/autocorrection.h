@@ -24,7 +24,7 @@
 #ifndef AUTO_CORRECTION_H
 #define AUTO_CORRECTION_H
 
-// Local includes.
+// Local includes
 
 #include "batchtool.h"
 

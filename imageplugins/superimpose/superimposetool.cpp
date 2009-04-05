@@ -27,7 +27,7 @@
 #include "superimposetool.h"
 #include "superimposetool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QButtonGroup>
 #include <QDir>
@@ -40,7 +40,7 @@
 #include <QPushButton>
 #include <QToolButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -57,7 +57,7 @@
 #include <kstandarddirs.h>
 #include <qprogressbar.h>
 
-// Local includes.
+// Local includes
 
 #include "daboutdata.h"
 #include "dimg.h"

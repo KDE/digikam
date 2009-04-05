@@ -23,11 +23,11 @@
 #ifndef RAWSETTINGSBOX_H
 #define RAWSETTINGSBOX_H
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "editortoolsettings.h"
 #include "dimg.h"

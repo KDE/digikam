@@ -24,7 +24,7 @@
 #ifndef IMAGEPLUGIN_ADJUSTCURVES_H
 #define IMAGEPLUGIN_ADJUSTCURVES_H
 
-// Local includes.
+// Local includes
 
 #include "imageplugin.h"
 #include "digikam_export.h"

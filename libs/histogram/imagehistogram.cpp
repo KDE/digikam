@@ -27,22 +27,22 @@
 #include "imagehistogram.h"
 #include "imagehistogram.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 #include <cmath>
 #include <cstring>
 
-// Qt includes.
+// Qt includes
 
 #include <QObject>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kapplication.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 

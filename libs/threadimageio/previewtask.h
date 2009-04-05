@@ -25,11 +25,11 @@
 #ifndef PREVIEW_TASK_H
 #define PREVIEW_TASK_H
 
-// Qt includes.
+// Qt includes
 
 #include <QImage>
 
-// Local includes.
+// Local includes
 
 #include "loadsavetask.h"
 

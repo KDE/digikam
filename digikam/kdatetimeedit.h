@@ -24,11 +24,11 @@
 #ifndef KDATETIMEEDIT_H
 #define KDATETIMEEDIT_H
 
-// Qt includes.
+// Qt includes
 
 #include <QDateTime>
 
-// KDE includes.
+// KDE includes
 
 #include <khbox.h>
 

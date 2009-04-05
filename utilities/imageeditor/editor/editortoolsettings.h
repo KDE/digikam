@@ -24,11 +24,11 @@
 #ifndef EDITORTOOLSETTINGS_H
 #define EDITORTOOLSETTINGS_H
 
-// Qt includes.
+// Qt includes
 
 #include <QScrollArea>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "histogrambox.h"

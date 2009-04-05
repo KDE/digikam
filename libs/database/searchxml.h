@@ -24,7 +24,7 @@
 #ifndef SEARCHXML_H
 #define SEARCHXML_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QDateTime>
@@ -33,7 +33,7 @@
 #include <QStringList>
 #include <QVariant>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

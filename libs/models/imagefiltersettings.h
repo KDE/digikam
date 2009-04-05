@@ -24,14 +24,14 @@
 #ifndef IMAGEFILTERSETTINGS_H
 #define IMAGEFILTERSETTINGS_H
 
-// Qt includes.
+// Qt includes
 
 #include <QHash>
 #include <QList>
 #include <QMap>
 #include <QString>
 
-// Local includes.
+// Local includes
 
 #include "searchtextbar.h"
 #include "mimefilter.h"

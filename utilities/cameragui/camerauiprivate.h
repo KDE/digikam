@@ -26,12 +26,12 @@
 #ifndef CAMERAUIPRIVATE_H
 #define CAMERAUIPRIVATE_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QDateTime>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 #include <kselectaction.h>

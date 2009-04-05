@@ -33,20 +33,20 @@
  *
  * ============================================================ */
 
-// C ANSI includes.
+// C ANSI includes
 
 extern "C"
 {
 #include <stdint.h>
 }
 
-// C++ includes.
+// C++ includes
 
 #include <cstring>
 #include <cstdlib>
 #include <cstdio>
 
-// Local includes.
+// Local includes
 
 #include "dimgprivate.h"
 #include "dimg.h"

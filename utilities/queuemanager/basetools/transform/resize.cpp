@@ -24,14 +24,14 @@
 #include "resize.h"
 #include "resize.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QLabel>
 #include <QCheckBox>
 #include <QSize>
 
-// KDE includes.
+// KDE includes
 
 #include <kvbox.h>
 #include <klocale.h>
@@ -40,7 +40,7 @@
 #include <kcombobox.h>
 #include <knuminput.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 

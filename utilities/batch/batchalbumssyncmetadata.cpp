@@ -25,7 +25,7 @@
 #include "batchalbumssyncmetadata.h"
 #include "batchalbumssyncmetadata.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QTimer>
@@ -33,14 +33,14 @@
 #include <QPixmap>
 #include <QCloseEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "albummanager.h"

@@ -24,12 +24,12 @@
 #include "convert2jpeg.h"
 #include "convert2jpeg.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QFileInfo>
 
-// KDE includes.
+// KDE includes
 
 #include <kconfiggroup.h>
 #include <kconfig.h>
@@ -37,7 +37,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "jpegsettings.h"

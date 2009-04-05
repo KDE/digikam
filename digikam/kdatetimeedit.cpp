@@ -24,11 +24,11 @@
 #include "kdatetimeedit.h"
 #include "kdatetimeedit.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QDateTimeEdit>
 
-// KDE includes.
+// KDE includes
 
 #include "kdateedit.h"
 

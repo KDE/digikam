@@ -25,16 +25,16 @@
 #ifndef TAGEDITDLG_H
 #define TAGEDITDLG_H
 
-// Qt includes.
+// Qt includes
 
 #include <QMap>
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kdialog.h>
 
-// Local includes.
+// Local includes
 
 #include "albummanager.h"
 

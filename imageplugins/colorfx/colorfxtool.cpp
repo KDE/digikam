@@ -27,7 +27,7 @@
 #include "colorfxtool.h"
 #include "colorfxtool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QButtonGroup>
 #include <QFrame>
@@ -39,7 +39,7 @@
 #include <QPushButton>
 #include <QToolButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -57,12 +57,12 @@
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Local includes.
+// Local includes
 
 #include "colorgradientwidget.h"
 #include "daboutdata.h"

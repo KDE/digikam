@@ -28,7 +28,7 @@
 #ifndef DISTORTIONFXTOOL_H
 #define DISTORTIONFXTOOL_H
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

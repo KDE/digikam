@@ -25,7 +25,7 @@
 #ifndef FOLDERVIEW_H
 #define FOLDERVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <Q3ListView>
 #include <Q3ListViewItemIterator>
@@ -38,7 +38,7 @@
 #include <QDragEnterEvent>
 #include <QPixmap>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "albummanager.h"

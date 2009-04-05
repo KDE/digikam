@@ -23,18 +23,18 @@
 
 #include "imagequerybuilder.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QFile>
 #include <QDir>
 #include <QMap>
 #include <QRectF>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -43,7 +43,7 @@
 #include <kcomponentdata.h>
 #include <kmimetype.h>
 
-// Local includes.
+// Local includes
 
 #include "databaseaccess.h"
 #include "albumdb.h"

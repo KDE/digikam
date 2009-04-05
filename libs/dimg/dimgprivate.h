@@ -25,14 +25,14 @@
 #ifndef DIMGPRIVATE_H
 #define DIMGPRIVATE_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QByteArray>
 #include <QVariant>
 #include <QMap>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "dshareddata.h"

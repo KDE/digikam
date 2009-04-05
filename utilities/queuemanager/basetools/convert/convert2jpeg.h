@@ -24,7 +24,7 @@
 #ifndef CONVERT2JPEG_H
 #define CONVERT2JPEG_H
 
-// Local includes.
+// Local includes
 
 #include "batchtool.h"
 

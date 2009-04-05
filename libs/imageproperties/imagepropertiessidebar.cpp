@@ -25,13 +25,13 @@
 #include "imagepropertiessidebar.h"
 #include "imagepropertiessidebar.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QRect>
 #include <QSplitter>
 #include <QFileInfo>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kfileitem.h>
@@ -42,7 +42,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
@@ -51,7 +51,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "dmetadata.h"

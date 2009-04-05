@@ -24,11 +24,11 @@
 #ifndef DLOGO_ACTION_H
 #define DLOGO_ACTION_H
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

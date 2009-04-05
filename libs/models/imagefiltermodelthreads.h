@@ -24,11 +24,11 @@
 #ifndef IMAGEALBUMFILTERMODELTHREADS_H
 #define IMAGEALBUMFILTERMODELTHREADS_H
 
-// Qt includes.
+// Qt includes
 
 #include <QThread>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

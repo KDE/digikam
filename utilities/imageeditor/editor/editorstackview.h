@@ -24,11 +24,11 @@
 #ifndef EDITORSTACKVIEW_H
 #define EDITORSTACKVIEW_H
 
-// KDE includes.
+// KDE includes
 
 #include <QStackedWidget>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

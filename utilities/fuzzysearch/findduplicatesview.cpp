@@ -28,7 +28,7 @@
 #include "findduplicatesview.h"
 #include "findduplicatesview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QHeaderView>
 #include <QLayout>
@@ -36,7 +36,7 @@
 #include <QPushButton>
 #include <QTreeWidget>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -44,7 +44,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "albumdb.h"

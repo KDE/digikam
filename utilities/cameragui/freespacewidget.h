@@ -24,12 +24,12 @@
 #ifndef FREESPACEWIDGET_H
 #define FREESPACEWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QWidget>
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 #include <kdeversion.h>

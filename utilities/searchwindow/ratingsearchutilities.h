@@ -24,16 +24,16 @@
 #ifndef RATINGSEARCHUTILITIES_H
 #define RATINGSEARCHUTILITIES_H
 
-// Qt includes.
+// Qt includes
 
 #include <QAbstractListModel>
 #include <QItemDelegate>
 #include <QLabel>
 #include <QComboBox>
 
-// KDE includes.
+// KDE includes
 
-// Local includes.
+// Local includes
 
 #include "ratingwidget.h"
 #include "comboboxutilities.h"

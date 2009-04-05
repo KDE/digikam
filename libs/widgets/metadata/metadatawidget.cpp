@@ -24,7 +24,7 @@
 #include "metadatawidget.h"
 #include "metadatawidget.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QTextDocument>
 #include <QPaintDevice>
@@ -45,7 +45,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -55,7 +55,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "metadatalistview.h"
 #include "metadatalistviewitem.h"

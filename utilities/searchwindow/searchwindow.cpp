@@ -24,18 +24,18 @@
 #include "searchwindow.h"
 #include "searchwindow.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QScrollArea>
 #include <QHBoxLayout>
 #include <QKeyEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "themeengine.h"
 #include "searchview.h"

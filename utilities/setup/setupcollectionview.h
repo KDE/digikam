@@ -25,18 +25,18 @@
 #ifndef SETUPCOLLECTIONVIEW_H
 #define SETUPCOLLECTIONVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QAbstractItemModel>
 #include <QAbstractItemDelegate>
 #include <QList>
 #include <QTreeView>
 
-// KDE includes.
+// KDE includes
 
 #include <kwidgetitemdelegate.h>
 
-// Local includes.
+// Local includes
 
 #include "collectionlocation.h"
 

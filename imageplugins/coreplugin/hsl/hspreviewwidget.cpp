@@ -24,7 +24,7 @@
 #include "hspreviewwidget.h"
 #include "hspreviewwidget.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QImage>
 #include <QPainter>
@@ -32,12 +32,12 @@
 #include <QPaintEvent>
 #include <QResizeEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "hslmodifier.h"

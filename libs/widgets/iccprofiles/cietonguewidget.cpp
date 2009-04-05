@@ -27,11 +27,11 @@
 #include "cietonguewidget.h"
 #include "cietonguewidget.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QImage>
 #include <QPainter>
@@ -40,13 +40,13 @@
 #include <QTimer>
 #include <QPaintEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kiconloader.h>
 
-// Local includes.
+// Local includes
 
 #include "lcmsprf.h"
 

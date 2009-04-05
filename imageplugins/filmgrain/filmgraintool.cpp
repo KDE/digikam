@@ -27,7 +27,7 @@
 #include "filmgraintool.h"
 #include "filmgraintool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QLabel>
 #include <QLCDNumber>
@@ -35,7 +35,7 @@
 #include <QImage>
 #include <QGridLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -47,7 +47,7 @@
 #include <kglobal.h>
 #include <kconfiggroup.h>
 
-// Local includes.
+// Local includes
 
 #include "version.h"
 #include "daboutdata.h"

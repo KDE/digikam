@@ -26,13 +26,13 @@
 #ifndef TAGFILTERVIEW_H
 #define TAGFILTERVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QPixmap>
 #include <QDropEvent>
 #include <QMouseEvent>
 
-// Local includes.
+// Local includes
 
 #include "searchtextbar.h"
 #include "folderview.h"

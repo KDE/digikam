@@ -23,18 +23,18 @@
 
 #include "imagescanner.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QImageReader>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kfilemetainfo.h>
 #include <kmimetype.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "databaseurl.h"
 #include "databaseaccess.h"

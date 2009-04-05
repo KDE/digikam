@@ -25,13 +25,13 @@
 #ifndef IMAGEPLUGINLOADER_H
 #define IMAGEPLUGINLOADER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QObject>
 #include <QString>
 #include <QPair>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "imageplugin.h"

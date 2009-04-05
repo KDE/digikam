@@ -23,7 +23,7 @@
 
 #include "ditemtooltip.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QToolTip>
 #include <QLabel>
@@ -33,7 +33,7 @@
 #include <QApplication>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kglobalsettings.h>

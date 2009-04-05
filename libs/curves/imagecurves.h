@@ -26,16 +26,16 @@
 
 #define ROUND(x) ((int) ((x) + 0.5))
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QPoint>
 #include <QtGui/QPolygon>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

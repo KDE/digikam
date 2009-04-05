@@ -24,11 +24,11 @@
 #ifndef IMAGEPLUGIN_RAINDROP_H
 #define IMAGEPLUGIN_RAINDROP_H
 
-// Qt includes.
+// Qt includes
 
 #include <QVariant>
 
-// Local includes.
+// Local includes
 
 #include "imageplugin.h"
 #include "digikam_export.h"

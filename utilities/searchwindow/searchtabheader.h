@@ -24,11 +24,11 @@
 #ifndef SEARCHTABHEADER_H
 #define SEARCHTABHEADER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 
-// Local includes.
+// Local includes
 
 #include "albuminfo.h"
 

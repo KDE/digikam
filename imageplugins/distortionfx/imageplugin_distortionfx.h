@@ -27,11 +27,11 @@
 #ifndef IMAGEPLUGIN_DISTORTIONFX_H
 #define IMAGEPLUGIN_DISTORTIONFX_H
 
-// Qt includes.
+// Qt includes
 
 #include <QVariant>
 
-// Local includes.
+// Local includes
 
 #include "imageplugin.h"
 #include "digikam_export.h"

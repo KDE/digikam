@@ -25,12 +25,12 @@
 #ifndef LOAD_SAVE_TASK_H
 #define LOAD_SAVE_TASK_H
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QEvent>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "dimgloaderobserver.h"

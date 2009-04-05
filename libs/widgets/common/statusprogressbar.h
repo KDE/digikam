@@ -25,12 +25,12 @@
 #ifndef STATUSPROGRESSBAR_H
 #define STATUSPROGRESSBAR_H
 
-// KDE includes.
+// KDE includes
 
 #include <QtGui/QStackedWidget>
 #include <QtCore/QString>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

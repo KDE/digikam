@@ -24,7 +24,7 @@
 #ifndef SLIDE_SHOW_H
 #define SLIDE_SHOW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QKeyEvent>
 #include <QMouseEvent>
@@ -32,7 +32,7 @@
 #include <QWheelEvent>
 #include <QWidget>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "loadingdescription.h"

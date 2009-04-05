@@ -25,11 +25,11 @@
 #ifndef BWSEPIATOOL_H
 #define BWSEPIATOOL_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "editortool.h"

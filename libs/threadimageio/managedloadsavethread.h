@@ -25,7 +25,7 @@
 #ifndef MANAGED_LOAD_SAVE_THREAD_H
 #define MANAGED_LOAD_SAVE_THREAD_H
 
-// Local includes.
+// Local includes
 
 #include "loadsavethread.h"
 

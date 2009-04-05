@@ -24,7 +24,7 @@
 #include "libsinfodlg.h"
 #include "libsinfodlg.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QStringList>
 #include <QString>
@@ -36,7 +36,7 @@
 #include <QMimeData>
 #include <QClipboard>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -50,12 +50,12 @@
 using namespace Marble;
 #endif // HAVE_MARBLEWIDGET
 
-// Libkexiv2 includes.
+// Libkexiv2 includes
 
 #include <libkexiv2/version.h>
 #include <libkexiv2/kexiv2.h>
 
-// Libkdcraw includes.
+// Libkdcraw includes
 
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
@@ -64,7 +64,7 @@ using namespace Marble;
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// C ANSI includes.
+// C ANSI includes
 
 #ifndef Q_CC_MSVC
 extern "C"
@@ -79,7 +79,7 @@ extern "C"
 }
 #endif
 
-// Local includes.
+// Local includes
 
 #include "daboutdata.h"
 #include "greycstorationiface.h"

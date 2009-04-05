@@ -25,15 +25,15 @@
 #include "abstractalbummodel.moc"
 #include "abstractalbummodelpriv.h"
 
-// Qt includes.
+// Qt includes
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
 
-// Local includes.
+// Local includes
 
 #include "albummanager.h"
 #include "albumthumbnailloader.h"

@@ -24,13 +24,13 @@
 
 #include "icctransform.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QDataStream>
 #include <QFile>
 #include <QtCore/QVarLengthArray>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -38,7 +38,7 @@
 #include <kglobal.h>
 #include <kconfiggroup.h>
 
-// Lcms includes.
+// Lcms includes
 
 #include <lcms.h>
 #if LCMS_VERSION < 114

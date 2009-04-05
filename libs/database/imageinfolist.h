@@ -24,11 +24,11 @@
 #ifndef IMAGEINFOLIST_H
 #define IMAGEINFOLIST_H
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 
-// Local includes.
+// Local includes
 
 #include "imageinfo.h"
 #include "digikam_export.h"

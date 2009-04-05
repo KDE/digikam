@@ -25,12 +25,12 @@
 #ifndef FOLDERITEM_H
 #define FOLDERITEM_H
 
-// Qt includes.
+// Qt includes
 
 #include <Q3ListView>
 #include <QStyleOptionQ3ListView>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

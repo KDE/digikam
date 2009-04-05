@@ -27,7 +27,7 @@
 #include "imageplugin_superimpose.h"
 #include "imageplugin_superimpose.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -38,7 +38,7 @@
 #include <klibloader.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "superimposetool.h"
 

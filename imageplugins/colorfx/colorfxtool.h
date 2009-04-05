@@ -26,7 +26,7 @@
 #ifndef COLORFXTOOL_H
 #define COLORFXTOOL_H
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

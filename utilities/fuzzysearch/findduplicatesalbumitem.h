@@ -24,15 +24,15 @@
 #ifndef FINDDUPLICATESALBUMITEM_H
 #define FINDDUPLICATESALBUMITEM_H
 
-// Qt includes.
+// Qt includes
 
 #include <QTreeWidget>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "imageinfo.h"
 #include "thumbnailloadthread.h"

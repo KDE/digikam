@@ -24,7 +24,7 @@
 #ifndef DATABASEFIELDS_H
 #define DATABASEFIELDS_H
 
-// Qt includes.
+// Qt includes
 
 #include <QFlags>
 #include <QHash>

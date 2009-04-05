@@ -27,7 +27,7 @@
 #include "imagedescedittab.h"
 #include "imagedescedittab.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QLabel>
 #include <QToolButton>
@@ -39,7 +39,7 @@
 #include <QEvent>
 #include <QSignalMapper>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kmenu.h>
@@ -57,7 +57,7 @@
 #include <kselectaction.h>
 #include <kvbox.h>
 
-// Local includes.
+// Local includes
 
 #include "dmetadata.h"
 #include "kdatetimeedit.h"

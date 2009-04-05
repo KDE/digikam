@@ -23,11 +23,11 @@
 
 #include "imageposition.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QSharedData>
 
-// Local includes.
+// Local includes
 
 #include "databaseaccess.h"
 #include "albumdb.h"

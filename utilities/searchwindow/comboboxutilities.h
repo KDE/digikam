@@ -24,7 +24,7 @@
 #ifndef COMBOBOXUTILITIES_H
 #define COMBOBOXUTILITIES_H
 
-// Qt includes.
+// Qt includes
 
 #include <QLabel>
 #include <QLineEdit>
@@ -32,9 +32,9 @@
 #include <QComboBox>
 #include <QPersistentModelIndex>
 
-// KDE includes.
+// KDE includes
 
-// Local includes.
+// Local includes
 
 class QVBoxLayout;
 class QTreeView;

@@ -25,7 +25,7 @@
 
 #include "dimg.h"
 
-// C ANSI includes.
+// C ANSI includes
 
 #ifndef Q_CC_MSVC
 extern "C"
@@ -37,11 +37,11 @@ extern "C"
 }
 #endif
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 
-// Qt includes.
+// Qt includes
 
 #include <QFile>
 #include <QFileInfo>
@@ -49,11 +49,11 @@ extern "C"
 #include <QPixmap>
 #include <QSysInfo>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
@@ -62,7 +62,7 @@ extern "C"
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Local includes
 
 #include "pngloader.h"
 #include "jpegloader.h"

@@ -24,7 +24,7 @@
 #include "timelineview.h"
 #include "timelineview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QButtonGroup>
 #include <QFrame>
@@ -35,7 +35,7 @@
 #include <QTimer>
 #include <QToolButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kcombobox.h>
@@ -51,7 +51,7 @@
 #include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "albummanager.h"

@@ -24,18 +24,18 @@
 #ifndef WORLDMAPWIDGET_H
 #define WORLDMAPWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QFrame>
 #include <QDateTime>
 #include <QDomDocument>
 #include <QList>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

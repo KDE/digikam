@@ -24,13 +24,13 @@
 #ifndef IMAGECOMMENTS_H
 #define IMAGECOMMENTS_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QDateTime>
 #include <QSharedDataPointer>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "albuminfo.h"

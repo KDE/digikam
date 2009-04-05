@@ -24,7 +24,7 @@
 
 #include "albumiconitem.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QFont>
 #include <QFontMetrics>
@@ -34,7 +34,7 @@
 #include <QPixmap>
 #include <QStringList>
 
-// KDE includes.
+// KDE includes
 
 #include <kglobal.h>
 #include <kio/global.h>
@@ -42,7 +42,7 @@
 #include <kstringhandler.h>
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "albumiconview.h"
 #include "albummanager.h"

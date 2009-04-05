@@ -26,13 +26,13 @@
 #include "folderview.h"
 #include "folderview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QPixmap>
 #include <QTimer>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -42,7 +42,7 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 
-// Local includes.
+// Local includes
 
 #include "albummanager.h"
 #include "albumsettings.h"

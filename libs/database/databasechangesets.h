@@ -24,13 +24,13 @@
 #ifndef DATABASECHANGESETS_H
 #define DATABASECHANGESETS_H
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QMetaType>
 #include <QDBusArgument>
 
-// Local includes.
+// Local includes
 
 #include "dbusutilities.h"
 #include "digikam_export.h"

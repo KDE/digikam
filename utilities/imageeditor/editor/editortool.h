@@ -24,13 +24,13 @@
 #ifndef EDITORTOOL_H
 #define EDITORTOOL_H
 
-// Qt includes.
+// Qt includes
 
 #include <QObject>
 #include <QString>
 #include <QPixmap>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

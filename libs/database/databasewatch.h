@@ -24,11 +24,11 @@
 #ifndef DATABASEWATCH_H
 #define DATABASEWATCH_H
 
-// Qt includes.
+// Qt includes
 
 #include <QObject>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "databasechangesets.h"

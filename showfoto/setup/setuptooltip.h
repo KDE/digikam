@@ -24,7 +24,7 @@
 #ifndef SETUPTOOLTIP_H
 #define SETUPTOOLTIP_H
 
-// Qt includes.
+// Qt includes
 
 #include <QScrollArea>
 

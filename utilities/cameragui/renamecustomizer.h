@@ -27,7 +27,7 @@
 #ifndef RENAMECUSTOMIZER_H
 #define RENAMECUSTOMIZER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QMap>
 #include <QRegExp>

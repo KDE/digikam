@@ -24,11 +24,11 @@
 #include "setupiofiles.h"
 #include "setupiofiles.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kdialog.h>
@@ -37,7 +37,7 @@
 #include <kseparator.h>
 #include <kglobal.h>
 
-// Local includes.
+// Local includes
 
 #include "jpegsettings.h"
 #include "pngsettings.h"

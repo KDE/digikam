@@ -26,28 +26,28 @@
 #include "collectionscanner.h"
 #include "collectionscanner.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
-// Qt includes.
+// Qt includes
 
 #include <QDir>
 #include <QFileInfo>
 #include <QStringList>
 #include <QSet>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rawfiles.h>
 
-// Local includes.
+// Local includes
 
 #include "albumdb.h"
 #include "collectionmanager.h"

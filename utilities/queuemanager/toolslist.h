@@ -24,7 +24,7 @@
 #ifndef TOOLS_LIST_H
 #define TOOLS_LIST_H
 
-// Qt includes.
+// Qt includes
 
 #include <QTreeWidget>
 #include <QWidget>
@@ -33,7 +33,7 @@
 #include <QString>
 #include <QList>
 
-// Local includes.
+// Local includes
 
 #include "batchtool.h"
 #include "batchtoolsmanager.h"

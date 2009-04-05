@@ -25,11 +25,11 @@
 #include "thumbbar.h"
 #include "thumbbar.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QDateTime>
 #include <QDir>
@@ -45,7 +45,7 @@
 #include <QTimer>
 #include <QToolTip>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kcodecs.h>
@@ -56,7 +56,7 @@
 #include <klocale.h>
 #include <kmimetype.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/kdcraw.h>
 #include <libkdcraw/version.h>
@@ -65,7 +65,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Local includes
 
 #include "dmetadata.h"
 #include "thumbnailloadthread.h"

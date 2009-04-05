@@ -24,9 +24,9 @@
 #ifndef IMAGEALBUMMODEL_H
 #define IMAGEALBUMMODEL_H
 
-// Qt includes.
+// Qt includes
 
-// Local includes.
+// Local includes
 
 #include "imagemodel.h"
 #include "album.h"

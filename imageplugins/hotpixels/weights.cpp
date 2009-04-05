@@ -25,7 +25,7 @@
 
 #include "weights.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cstring>
 

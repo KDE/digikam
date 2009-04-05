@@ -25,7 +25,7 @@
 #ifndef ICONVIEW_H
 #define ICONVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <Q3ScrollView>
 #include <QResizeEvent>
@@ -34,7 +34,7 @@
 #include <QKeyEvent>
 #include <QFocusEvent>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

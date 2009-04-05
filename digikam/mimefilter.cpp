@@ -24,7 +24,7 @@
 #include "mimefilter.h"
 #include "mimefilter.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>

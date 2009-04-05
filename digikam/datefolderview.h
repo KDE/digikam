@@ -25,11 +25,11 @@
 #ifndef DATEFOLDERVIEW_H
 #define DATEFOLDERVIEW_H
 
-// KDE includes.
+// KDE includes
 
 #include <kvbox.h>
 
-// Local includes.
+// Local includes
 
 #include "albummanager.h"
 #include "folderitem.h"

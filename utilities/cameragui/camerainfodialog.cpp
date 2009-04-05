@@ -24,11 +24,11 @@
 
 #include "camerainfodialog.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QTextEdit>
 
-// KDE includes.
+// KDE includes
 
 #include <kicon.h>
 #include <klocale.h>

@@ -24,15 +24,15 @@
 #ifndef STATUSZOOMBAR_H
 #define STATUSZOOMBAR_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QString>
 
-// KDE includes.
+// KDE includes
 
 #include <khbox.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

@@ -24,7 +24,7 @@
 #ifndef IMAGEREGIONWIDGET_H
 #define IMAGEREGIONWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtGui/QPolygon>
 #include <QtCore/QRect>
@@ -32,7 +32,7 @@
 #include <QtGui/QResizeEvent>
 #include <QtGui/QWheelEvent>
 
-// Local includes.
+// Local includes
 
 #include "previewwidget.h"
 #include "dimg.h"

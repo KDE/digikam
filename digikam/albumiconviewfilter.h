@@ -24,15 +24,15 @@
 #ifndef ALBUMICONVIEWFILTER_H
 #define ALBUMICONVIEWFILTER_H
 
-// Qt includes.
+// Qt includes
 
 #include "QString"
 
-// KDE includes.
+// KDE includes
 
 #include "khbox.h"
 
-// Local includes.
+// Local includes
 
 #include "searchtextbar.h"
 #include "albumlister.h"

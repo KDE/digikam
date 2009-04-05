@@ -24,14 +24,14 @@
 #include "albumiconviewfilter.h"
 #include "albumiconviewfilter.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kdeversion.h>
 #include <kdialog.h>
 
-// Local includes.
+// Local includes
 
 #include "albumsettings.h"
 #include "ratingfilter.h"

@@ -24,11 +24,11 @@
 #ifndef EXIFWIDGET_H
 #define EXIFWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QString>
 
-// Local includes.
+// Local includes
 
 #include "metadatawidget.h"
 #include "digikam_export.h"

@@ -26,16 +26,16 @@
 #ifndef WELCOMEPAGEVIEW_H
 #define WELCOMEPAGEVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QByteArray>
 
-// KDE includes.
+// KDE includes
 
 #include <khtml_part.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

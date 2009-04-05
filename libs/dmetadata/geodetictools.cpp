@@ -27,7 +27,7 @@
 
 #include "geodetictools.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdlib>
 #include <cfloat>

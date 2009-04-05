@@ -24,17 +24,17 @@
 #include "searchfieldgroup.h"
 #include "searchfieldgroup.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QLabel>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "themeengine.h"
 #include "searchgroup.h"

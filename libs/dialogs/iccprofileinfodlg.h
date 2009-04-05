@@ -24,16 +24,16 @@
 #ifndef ICCPROFILEINFODLG_H
 #define ICCPROFILEINFODLG_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QByteArray>
 #include <QtCore/QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kdialog.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

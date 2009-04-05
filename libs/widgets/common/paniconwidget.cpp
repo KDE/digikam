@@ -25,11 +25,11 @@
 #include "paniconwidget.h"
 #include "paniconwidget.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QPainter>
 #include <QPixmap>
@@ -40,7 +40,7 @@
 #include <QMouseEvent>
 #include <QHideEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kcursor.h>

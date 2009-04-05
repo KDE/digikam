@@ -24,12 +24,12 @@
 #ifndef SHEAR_H
 #define SHEAR_H
 
-// Qt includes.
+// Qt includes
 
 #include <QSize>
 #include <QColor>
 
-// Local includes.
+// Local includes
 
 #include "dimgthreadedfilter.h"
 

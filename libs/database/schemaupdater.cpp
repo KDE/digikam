@@ -23,13 +23,13 @@
 
 #include "schemaupdater.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QFileInfo>
 #include <QFile>
 #include <QDir>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kio/job.h>
@@ -38,7 +38,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
@@ -47,7 +47,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Local includes
 
 #include "databasebackend.h"
 #include "albumdb.h"

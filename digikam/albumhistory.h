@@ -27,7 +27,7 @@
 
 /** @file albumhistory.h */
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QObject>

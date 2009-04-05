@@ -24,12 +24,12 @@
 #ifndef ICCPROFILEWIDGET_H
 #define ICCPROFILEWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtGui/QWidget>
 #include <QtCore/QString>
 
-// Local includes.
+// Local includes
 
 #include "metadatawidget.h"
 #include "digikam_export.h"

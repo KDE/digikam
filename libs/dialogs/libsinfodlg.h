@@ -24,15 +24,15 @@
 #ifndef LIBSINFODLG_H
 #define LIBSINFODLG_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QMap>
 
-// KDE includes.
+// KDE includes
 
 #include <kdialog.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

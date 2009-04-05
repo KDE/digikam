@@ -26,12 +26,12 @@
 #ifndef DIRSELECTWIDGET_H
 #define DIRSELECTWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <k3filetreeview.h>
 #include <kurl.h>

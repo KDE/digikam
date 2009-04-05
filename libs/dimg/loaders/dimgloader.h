@@ -25,14 +25,14 @@
 #ifndef DIMGLOADER_H
 #define DIMGLOADER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QMap>
 #include <QString>
 #include <QByteArray>
 #include <QVariant>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "dimg.h"

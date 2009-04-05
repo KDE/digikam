@@ -27,17 +27,17 @@
 #ifndef ALBUMICONVIEW_H
 #define ALBUMICONVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QFont>
 #include <QList>
 #include <QRect>
 
-// KDE includes.
+// KDE includes
 
 #include <kservice.h>
 
-// Local includes.
+// Local includes
 
 #include "albumitemhandler.h"
 #include "iconview.h"

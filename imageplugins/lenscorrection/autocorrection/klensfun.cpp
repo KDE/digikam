@@ -22,7 +22,7 @@
 #include "klensfun.h"
 #include "klensfun.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QByteArray>
 #include <QCheckBox>
@@ -31,14 +31,14 @@
 #include <QString>
 #include <QWidget>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kcombobox.h>
 #include <kdialog.h>
 #include <klocale.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>

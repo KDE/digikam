@@ -25,7 +25,7 @@
 #ifndef PERSPECTIVEWIDGET_H
 #define PERSPECTIVEWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QPoint>
@@ -37,7 +37,7 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "matrix.h"

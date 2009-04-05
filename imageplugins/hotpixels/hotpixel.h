@@ -25,7 +25,7 @@
 #ifndef HOTPIXEL_H
 #define HOTPIXEL_H
 
-// Qt includes.
+// Qt includes
 
 #include <QRect>
 

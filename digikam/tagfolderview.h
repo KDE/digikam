@@ -25,12 +25,12 @@
 #ifndef TAGFOLDERVIEW_H
 #define TAGFOLDERVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QDropEvent>
 #include <QPixmap>
 
-// Local includes.
+// Local includes
 
 #include "searchtextbar.h"
 #include "folderview.h"

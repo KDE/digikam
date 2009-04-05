@@ -25,11 +25,11 @@
 #ifndef DIGIKAMTAGS_H
 #define DIGIKAMTAGS_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kio/slavebase.h>
 

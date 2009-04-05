@@ -25,7 +25,7 @@
 #include "setupeditor.h"
 #include "setupeditor.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QCheckBox>
 #include <QColor>
@@ -33,7 +33,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kmultitabbar.h>
 #include <kapplication.h>

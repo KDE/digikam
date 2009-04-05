@@ -24,7 +24,7 @@
 #ifndef TIMELINEFOLDERVIEW_H
 #define TIMELINEFOLDERVIEW_H
 
-// Local includes.
+// Local includes
 
 #include "searchtextbar.h"
 #include "folderview.h"

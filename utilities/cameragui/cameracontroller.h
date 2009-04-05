@@ -26,7 +26,7 @@
 #ifndef CAMERACONTROLLER_H
 #define CAMERACONTROLLER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QThread>
 #include <QString>
@@ -34,7 +34,7 @@
 #include <QCustomEvent>
 #include <QPixmap>
 
-// Local includes.
+// Local includes
 
 #include "downloadsettingscontainer.h"
 #include "gpiteminfo.h"

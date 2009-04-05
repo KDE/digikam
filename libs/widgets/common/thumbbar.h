@@ -25,7 +25,7 @@
 #ifndef THUMBBAR_H
 #define THUMBBAR_H
 
-// Qt includes.
+// Qt includes
 
 #include <Qt3Support/Q3ScrollView>
 #include <QtCore/QString>
@@ -35,11 +35,11 @@
 #include <QtGui/QPaintEvent>
 #include <QtGui/QWheelEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "thumbbartooltip.h"
 #include "digikam_export.h"

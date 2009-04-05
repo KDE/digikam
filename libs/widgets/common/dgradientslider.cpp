@@ -25,7 +25,7 @@
 #include "dgradientslider.h"
 #include "dgradientslider.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QPainter>
 #include <QPoint>

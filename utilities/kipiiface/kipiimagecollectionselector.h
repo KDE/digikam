@@ -25,17 +25,17 @@
 #ifndef KIPIIMAGECOLLECTIONSELECTOR_H
 #define KIPIIMAGECOLLECTIONSELECTOR_H
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QString>
 
-// LibKIPI includes.
+// LibKIPI includes
 
 #include <libkipi/imagecollection.h>
 #include <libkipi/imagecollectionselector.h>
 
-// Local includes.
+// Local includes
 
 #include "searchtextbar.h"
 #include "albummanager.h"

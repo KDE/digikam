@@ -25,11 +25,11 @@
 #ifndef TEXTURETOOL_H
 #define TEXTURETOOL_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

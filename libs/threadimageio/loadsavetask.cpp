@@ -24,15 +24,15 @@
 
 #include "loadsavetask.h"
 
-// Qt includes.
+// Qt includes
 
 #include <qapplication.h>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "loadsavethread.h"
 #include "managedloadsavethread.h"

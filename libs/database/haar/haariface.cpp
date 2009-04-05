@@ -26,13 +26,13 @@
 
 #include "haariface.h"
 
-// C++ includes.
+// C++ includes
 
 #include <fstream>
 #include <cmath>
 #include <cstring>
 
-// Qt includes.
+// Qt includes
 
 #include <QByteArray>
 #include <QDataStream>
@@ -40,12 +40,12 @@
 #include <QImageReader>
 #include <QMap>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "jpegutils.h"
 #include "dimg.h"

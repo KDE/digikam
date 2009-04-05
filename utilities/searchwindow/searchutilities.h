@@ -24,7 +24,7 @@
 #ifndef SEARCHUTILITIES_H
 #define SEARCHUTILITIES_H
 
-// Qt includes.
+// Qt includes
 
 #include <QObject>
 #include <QWidget>
@@ -35,11 +35,11 @@
 #include <QDoubleSpinBox>
 #include <QSpinBox>
 
-// KDE includes.
+// KDE includes
 
 #include <ksqueezedtextlabel.h>
 
-// Local includes.
+// Local includes
 
 #include "comboboxutilities.h"
 

@@ -28,13 +28,13 @@
 #include "perspectivewidget.h"
 #include "perspectivewidget.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QRegion>
 #include <QPainter>
@@ -46,7 +46,7 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kstandarddirs.h>
 #include <kcursor.h>
@@ -54,7 +54,7 @@
 #include <kglobal.h>
 #include <kapplication.h>
 
-// Local includes.
+// Local includes
 
 #include "triangle.h"
 #include "imageiface.h"

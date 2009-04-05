@@ -25,15 +25,15 @@
 #ifndef IMAGELISTER_H
 #define IMAGELISTER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kio/job.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "imageinfo.h"

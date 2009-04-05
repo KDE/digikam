@@ -23,7 +23,7 @@
 #include "autocorrectiontool.h"
 #include "autocorrectiontool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QBitmap>
 #include <QBrush>
@@ -35,7 +35,7 @@
 #include <QPixmap>
 #include <QTimer>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -49,7 +49,7 @@
 #include <kseparator.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Local includes
 
 #include "daboutdata.h"
 #include "dmetadata.h"

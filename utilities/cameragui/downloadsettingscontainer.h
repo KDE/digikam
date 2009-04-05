@@ -24,7 +24,7 @@
 #ifndef DOWNLOADSETTINGSCONTAINER_H
 #define DOWNLOADSETTINGSCONTAINER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QDateTime>

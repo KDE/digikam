@@ -32,12 +32,12 @@
 #ifndef SYNCJOB_H
 #define SYNCJOB_H
 
-// Qt includes.
+// Qt includes
 
 #include <QObject>
 #include <QPixmap>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 

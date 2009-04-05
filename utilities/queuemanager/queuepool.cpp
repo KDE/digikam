@@ -24,7 +24,7 @@
 #include "queuepool.h"
 #include "queuepool.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <kmessagebox.h>
 #include <kiconloader.h>
@@ -32,7 +32,7 @@
 #include <kdebug.h>
 #include <kapplication.h>
 
-// Local includes.
+// Local includes
 
 #include "ddragobjects.h"
 #include "queuelist.h"

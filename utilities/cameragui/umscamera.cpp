@@ -24,7 +24,7 @@
 
 #include "umscamera.h"
 
-// C ANSI includes.
+// C ANSI includes
 
 extern "C"
 {
@@ -34,7 +34,7 @@ extern "C"
 #include <utime.h>
 }
 
-// Qt includes.
+// Qt includes
 
 #include <QDir>
 #include <QFile>
@@ -42,7 +42,7 @@ extern "C"
 #include <QMatrix>
 #include <QStringList>
 
-// KDE includes.
+// KDE includes
 
 #include <kcodecs.h>
 #include <kdebug.h>
@@ -57,11 +57,11 @@ extern "C"
 #include <solid/storagedrive.h>
 #include <solid/storagevolume.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/kdcraw.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "dmetadata.h"

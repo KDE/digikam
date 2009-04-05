@@ -24,7 +24,7 @@
 #ifndef CONVERT2PNG_H
 #define CONVERT2PNG_H
 
-// Local includes.
+// Local includes
 
 #include "batchtool.h"
 

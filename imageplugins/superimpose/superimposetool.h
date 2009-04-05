@@ -26,11 +26,11 @@
 #ifndef SUPERIMPOSETOOL_H
 #define SUPERIMPOSETOOL_H
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

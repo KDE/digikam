@@ -24,16 +24,16 @@
 #include "albummodel.h"
 #include "albummodel.moc"
 
-// Qt includes.
+// Qt includes
 
-// KDE includes.
+// KDE includes
 
 #include <kcalendarsystem.h>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "albummanager.h"
 #include "albumthumbnailloader.h"

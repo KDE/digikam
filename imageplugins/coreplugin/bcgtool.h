@@ -26,7 +26,7 @@
 #ifndef BCGTOOL_H
 #define BCGTOOL_H
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

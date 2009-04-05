@@ -25,7 +25,7 @@
 #include "setupcollectionview.h"
 #include "moc_setupcollectionview.cpp"
 
-// Qt includes.
+// Qt includes
 
 #include <QGroupBox>
 #include <QLabel>
@@ -38,7 +38,7 @@
 #include <QStyledItemDelegate>
 #include <QToolButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -50,7 +50,7 @@
 #include <kurlrequester.h>
 #include <kwidgetitemdelegate.h>
 
-// Local includes.
+// Local includes
 
 #include "albumsettings.h"
 #include "collectionlocation.h"

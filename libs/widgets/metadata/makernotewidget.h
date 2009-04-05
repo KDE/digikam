@@ -25,7 +25,7 @@
 #ifndef MAKERNOTEWIDGET_H
 #define MAKERNOTEWIDGET_H
 
-// Local includes.
+// Local includes
 
 #include "metadatawidget.h"
 #include "digikam_export.h"

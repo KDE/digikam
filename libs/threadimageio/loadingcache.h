@@ -24,11 +24,11 @@
 #ifndef LOADING_CACHE_H
 #define LOADING_CACHE_H
 
-// Qt includes.
+// Qt includes
 
 #include <QPixmap>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "loadsavethread.h"

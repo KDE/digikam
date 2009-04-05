@@ -23,11 +23,11 @@
 #ifndef RAWIMPORTDLG_H
 #define RAWIMPORTDLG_H
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 #include "dimg.h"

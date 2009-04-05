@@ -24,7 +24,7 @@
 
 #include "themediconitem.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QPainter>
 #include <QPixmap>
@@ -34,14 +34,14 @@
 #include <QFont>
 #include <QDateTime>
 
-// KDE includes.
+// KDE includes
 
 #include <kglobal.h>
 #include <klocale.h>
 #include <kapplication.h>
 #include <kiconloader.h>
 
-// Local includes.
+// Local includes
 
 #include "albumiconitem.h"
 #include "themeengine.h"

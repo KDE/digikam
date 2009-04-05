@@ -24,23 +24,23 @@
 
 #include "printhelper.h"
 
-// C++ includes.
+// C++ includes
 
 #include <memory>
 
-// Qt includes.
+// Qt includes
 
 #include <QCheckBox>
 #include <QPainter>
 #include <QPrinter>
 #include <QPrintDialog>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kdeprintdialog.h>
 
-// Local includes.
+// Local includes
 
 #include "printoptionspage.h"
 #include "icctransform.h"

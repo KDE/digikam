@@ -28,7 +28,7 @@
 
 /** @file albumlister.h */
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QObject>
@@ -36,7 +36,7 @@
 #include <QDateTime>
 #include <QList>
 
-// Local includes.
+// Local includes
 
 #include "searchtextbar.h"
 #include "imageinfo.h"

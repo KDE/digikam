@@ -24,7 +24,7 @@
 #include "searchtextbar.h"
 #include "searchtextbar.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QContextMenuEvent>
 #include <QMenu>
@@ -32,7 +32,7 @@
 #include <QPalette>
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kconfiggroup.h>
 #include <kglobal.h>

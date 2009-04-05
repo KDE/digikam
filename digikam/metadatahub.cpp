@@ -24,19 +24,19 @@
 
 #include "metadatahub.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QFileInfo>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Libkexiv2 includes.
+// Libkexiv2 includes
 
 #include <libkexiv2/version.h>
 
-// Local includes.
+// Local includes
 
 #include "imageinfo.h"
 #include "album.h"

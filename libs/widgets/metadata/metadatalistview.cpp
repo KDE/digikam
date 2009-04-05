@@ -25,18 +25,18 @@
 #include "metadatalistview.h"
 #include "metadatalistview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QHeaderView>
 #include <QTimer>
 #include <QPalette>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "mdkeylistviewitem.h"
 #include "metadatalistviewitem.h"

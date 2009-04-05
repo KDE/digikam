@@ -24,11 +24,11 @@
 #ifndef CAMERAFOLDERDIALOG_H
 #define CAMERAFOLDERDIALOG_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kdialog.h>
 

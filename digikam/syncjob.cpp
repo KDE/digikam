@@ -32,13 +32,13 @@
 #include "syncjob.h"
 #include "syncjob.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QApplication>
 #include <QPainter>
 #include <QEventLoop>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kjob.h>
@@ -50,7 +50,7 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 
-// Local includes.
+// Local includes
 
 #include "albumsettings.h"
 #include "thumbnailsize.h"

@@ -24,11 +24,11 @@
 #include "histogramwidget.h"
 #include "histogramwidget.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QPixmap>
 #include <QPainter>
@@ -43,14 +43,14 @@
 #include <QPaintEvent>
 #include <QMouseEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kcursor.h>
 #include <klocale.h>
 #include <kiconloader.h>
 
-// Local includes.
+// Local includes
 
 #include "ditemtooltip.h"
 #include "imagehistogram.h"

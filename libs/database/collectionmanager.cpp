@@ -23,13 +23,13 @@
 
 #include "collectionmanager.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QCoreApplication>
 #include <QDir>
 #include <QThread>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -45,7 +45,7 @@
 #include <solid/predicate.h>
 
 
-// Local includes.
+// Local includes
 
 #include "databaseaccess.h"
 #include "databasechangesets.h"

@@ -23,14 +23,14 @@
 
 #include "cameraiconviewtooltip.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QPixmap>
 #include <QPainter>
 #include <QTextDocument>
 #include <QDateTime>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -39,7 +39,7 @@
 #include <kdeversion.h>
 #include <kmimetype.h>
 
-// Local includes.
+// Local includes
 
 #include "cameraiconview.h"
 #include "cameraiconitem.h"

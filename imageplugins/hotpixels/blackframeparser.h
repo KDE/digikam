@@ -29,7 +29,7 @@
 #ifndef BLACKFRAMEPARSER_H
 #define BLACKFRAMEPARSER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QImage>
@@ -37,11 +37,11 @@
 #include <QString>
 #include <QRect>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "loadsavethread.h"

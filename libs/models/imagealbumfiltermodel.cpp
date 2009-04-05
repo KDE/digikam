@@ -24,7 +24,7 @@
 #include "imagealbumfiltermodel.h"
 #include "imagealbumfiltermodel.moc"
 
-// Local includes.
+// Local includes
 
 #include "imagefiltermodelpriv.h"
 #include "album.h"

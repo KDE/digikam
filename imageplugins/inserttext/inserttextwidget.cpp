@@ -26,12 +26,12 @@
 #include "inserttextwidget.h"
 #include "inserttextwidget.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QPainter>
 #include <QFont>
@@ -41,13 +41,13 @@
 #include <QPixmap>
 #include <QMouseEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kstandarddirs.h>
 #include <kcursor.h>
 #include <kglobal.h>
 
-// Local includes.
+// Local includes
 
 #include "imageiface.h"
 

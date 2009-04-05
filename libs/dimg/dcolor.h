@@ -24,11 +24,11 @@
 #ifndef DCOLOR_H
 #define DCOLOR_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtGui/QColor>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

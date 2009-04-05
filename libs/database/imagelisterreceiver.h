@@ -25,16 +25,16 @@
 #ifndef IMAGELISTERRECEIVER_H
 #define IMAGELISTERRECEIVER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QList>
 
-// KDE includes.
+// KDE includes
 
 #include <kio/slavebase.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "imagelisterrecord.h"

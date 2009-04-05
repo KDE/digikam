@@ -24,13 +24,13 @@
 #include "albumtreeview.h"
 #include "albumtreeview.moc"
 
-// Qt includes.
+// Qt includes
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "albummanager.h"
 #include "albumsettings.h"

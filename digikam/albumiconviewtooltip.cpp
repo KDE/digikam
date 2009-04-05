@@ -23,14 +23,14 @@
 
 #include "albumiconviewtooltip.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QPixmap>
 #include <QPainter>
 #include <QTextDocument>
 #include <QDateTime>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -38,7 +38,7 @@
 #include <kglobal.h>
 #include <kdeversion.h>
 
-// Local includes.
+// Local includes
 
 #include "albumiconview.h"
 #include "albumiconitem.h"

@@ -24,7 +24,7 @@
 #include "assignedlist.h"
 #include "assignedlist.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QPainter>
 #include <QDragEnterEvent>
@@ -32,7 +32,7 @@
 #include <QFileInfo>
 #include <QHeaderView>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -41,7 +41,7 @@
 #include <kmenu.h>
 #include <kactioncollection.h>
 
-// Local includes.
+// Local includes
 
 #include "queuemgrwindow.h"
 #include "queuesettingsview.h"

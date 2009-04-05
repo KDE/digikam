@@ -24,12 +24,12 @@
 #ifndef IMAGEHISTOGRAM_H
 #define IMAGEHISTOGRAM_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QEvent>
 #include <QtCore/QThread>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

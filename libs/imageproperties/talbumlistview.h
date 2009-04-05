@@ -25,7 +25,7 @@
 #ifndef TALBUMLISTVIEW_H
 #define TALBUMLISTVIEW_H
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "metadatahub.h"

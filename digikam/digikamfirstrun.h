@@ -25,11 +25,11 @@
 #ifndef DIGIKAMFIRSTRUN_H
 #define DIGIKAMFIRSTRUN_H
 
-// KDE includes.
+// KDE includes
 
 #include <kdialog.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

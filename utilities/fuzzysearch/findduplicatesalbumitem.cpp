@@ -23,18 +23,18 @@
 
 #include "findduplicatesalbumitem.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QPainter>
 #include <QTreeWidget>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kstringhandler.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "searchxml.h"

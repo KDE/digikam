@@ -24,17 +24,17 @@
 #include "timelinewidget.h"
 #include "timelinewidget.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QPainter>
 #include <QPixmap>
 #include <QPen>
 
-// KDE includes.
+// KDE includes
 
 #include <kcalendarsystem.h>
 #include <kcursor.h>
@@ -43,7 +43,7 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "themeengine.h"
 

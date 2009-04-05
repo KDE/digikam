@@ -24,11 +24,11 @@
 #ifndef WATERMARK_H
 #define WATERMARK_H
 
-// Qt includes.
+// Qt includes
 
 #include <QFont>
 
-// Local includes.
+// Local includes
 
 #include "batchtool.h"
 

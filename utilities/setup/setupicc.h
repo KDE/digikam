@@ -25,17 +25,17 @@
 #ifndef SETUPICC_H
 #define SETUPICC_H
 
-// Qt includes.
+// Qt includes
 
 #include <QScrollArea>
 #include <QMap>
 #include <QDir>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

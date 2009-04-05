@@ -32,16 +32,16 @@
 
 #include "dimgimagefilters.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cstring>
 #include <cstdlib>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "imagehistogram.h"
 #include "imagelevels.h"

@@ -25,14 +25,14 @@
 #include "ratingfilter.h"
 #include "ratingfilter.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QPainter>
 #include <QPalette>
 #include <QPixmap>
 #include <QCursor>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kmenu.h>
@@ -41,7 +41,7 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Local includes
 
 #include "constants.h"
 #include "dcursortracker.h"

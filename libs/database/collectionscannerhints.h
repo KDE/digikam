@@ -24,13 +24,13 @@
 #ifndef COLLECTIONSCANNERHINTS_H
 #define COLLECTIONSCANNERHINTS_H
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QStringList>
 #include <QDBusArgument>
 
-// Local includes.
+// Local includes
 
 #include "dbusutilities.h"
 #include "digikam_export.h"

@@ -24,11 +24,11 @@
 #include "batchtoolsmanager.h"
 #include "batchtoolsmanager.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "convert2jpeg.h"
 #include "convert2png.h"

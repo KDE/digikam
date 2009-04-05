@@ -25,7 +25,7 @@
 #include "splashscreen.h"
 #include "splashscreen.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QApplication>
 #include <QTimer>
@@ -35,7 +35,7 @@
 #include <QTime>
 #include <QTextDocument>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -44,7 +44,7 @@
 #include <kaboutdata.h>
 #include <kcomponentdata.h>
 
-// Local includes.
+// Local includes
 
 #include "daboutdata.h"
 #include "version.h"

@@ -25,7 +25,7 @@
 #include "datefolderview.h"
 #include "datefolderview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QDateTime>
 #include <QFont>
@@ -33,7 +33,7 @@
 #include <QStyle>
 #include <QFileInfo>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kapplication.h>
@@ -45,7 +45,7 @@
 #include <kcalendarsystem.h>
 #include <kconfiggroup.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "albumdb.h"

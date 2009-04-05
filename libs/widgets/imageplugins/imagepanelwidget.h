@@ -24,7 +24,7 @@
 #ifndef IMAGEPANELWIDGET_H
 #define IMAGEPANELWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtGui/QPolygon>
 #include <QtGui/QImage>
@@ -33,7 +33,7 @@
 #include <QtGui/QResizeEvent>
 #include <QtGui/QWidget>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "digikam_export.h"

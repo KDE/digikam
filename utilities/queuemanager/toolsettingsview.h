@@ -24,11 +24,11 @@
 #ifndef TOOL_SETTINGS_VIEW_H
 #define TOOL_SETTINGS_VIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QStackedWidget>
 
-// Local includes.
+// Local includes
 
 #include "batchtool.h"
 

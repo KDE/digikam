@@ -25,14 +25,14 @@
 #include "sheartool.h"
 #include "sheartool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QCheckBox>
 #include <QGridLayout>
 #include <QImage>
 #include <QLabel>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -46,11 +46,11 @@
 #include <kseparator.h>
 #include <kstandarddirs.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Local includes
 
 #include "daboutdata.h"
 #include "dimg.h"

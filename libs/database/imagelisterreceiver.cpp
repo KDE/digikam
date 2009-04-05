@@ -23,7 +23,7 @@
 
 #include "imagelisterreceiver.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 

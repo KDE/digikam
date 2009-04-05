@@ -25,7 +25,7 @@
 #include "imageplugin_adjustlevels.h"
 #include "imageplugin_adjustlevels.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -36,7 +36,7 @@
 #include <klibloader.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "adjustlevelstool.h"
 

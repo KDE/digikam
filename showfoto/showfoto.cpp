@@ -28,18 +28,18 @@
 #include "showfoto.h"
 #include "showfoto.moc"
 
-// C ANSI includes.
+// C ANSI includes
 
 extern "C"
 {
 #include <unistd.h>
 }
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 
-// Qt includes.
+// Qt includes
 
 #include <QCursor>
 #include <QDir>
@@ -54,7 +54,7 @@ extern "C"
 #include <QSplitter>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -83,7 +83,7 @@ extern "C"
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
 
-// Libkdcraw includes.
+// Libkdcraw includes
 
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
@@ -92,7 +92,7 @@ extern "C"
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Local includes
 
 #include "canvas.h"
 #include "dimginterface.h"

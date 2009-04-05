@@ -24,7 +24,7 @@
 #ifndef SEARCHVIEW_H
 #define SEARCHVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QCache>
 #include <QList>

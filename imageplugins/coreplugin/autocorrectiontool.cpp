@@ -25,7 +25,7 @@
 #include "autocorrectiontool.h"
 #include "autocorrectiontool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QCheckBox>
 #include <QColor>
@@ -41,7 +41,7 @@
 #include <QTimer>
 #include <QToolButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -54,7 +54,7 @@
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
-// Local includes.
+// Local includes
 
 #include "colorgradientwidget.h"
 #include "dimg.h"

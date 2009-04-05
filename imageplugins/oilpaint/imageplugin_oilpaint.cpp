@@ -25,7 +25,7 @@
 #include "imageplugin_oilpaint.h"
 #include "imageplugin_oilpaint.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -36,7 +36,7 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-// Local includes.
+// Local includes
 
 #include "oilpainttool.h"
 

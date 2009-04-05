@@ -24,15 +24,15 @@
 
 #include "digikamtags.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdlib>
 
-// Qt includes.
+// Qt includes
 
 #include <QCoreApplication>
 
-// KDE includes.
+// KDE includes
 
 #include <kcomponentdata.h>
 #include <kdebug.h>
@@ -42,7 +42,7 @@
 #include <kstandarddirs.h>
 #include <kio/global.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "databaseaccess.h"

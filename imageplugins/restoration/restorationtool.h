@@ -25,11 +25,11 @@
 #ifndef RESTORATIONTOOL_H
 #define RESTORATIONTOOL_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

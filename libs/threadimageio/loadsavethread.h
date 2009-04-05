@@ -25,7 +25,7 @@
 #ifndef LOAD_SAVE_THREAD_H
 #define LOAD_SAVE_THREAD_H
 
-// Qt includes.
+// Qt includes
 
 #include <QThread>
 #include <QMutex>
@@ -34,7 +34,7 @@
 #include <QWaitCondition>
 #include <QEvent>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "digikam_export.h"

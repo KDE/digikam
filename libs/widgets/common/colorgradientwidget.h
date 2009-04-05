@@ -24,12 +24,12 @@
 #ifndef COLORGRADIENTWIDGET_H
 #define COLORGRADIENTWIDGET_H
 
-// KDE includes.
+// KDE includes
 
 #include <QtGui/QWidget>
 #include <QtGui/QColor>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

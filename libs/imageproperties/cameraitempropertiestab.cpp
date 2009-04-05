@@ -24,13 +24,13 @@
 #include "cameraitempropertiestab.h"
 #include "cameraitempropertiestab.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QStyle>
 #include <QFile>
 #include <QGridLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -41,7 +41,7 @@
 #include <kmimetype.h>
 #include <kseparator.h>
 
-// Local includes.
+// Local includes
 
 #include "dmetadata.h"
 #include "gpiteminfo.h"

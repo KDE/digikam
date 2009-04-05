@@ -24,7 +24,7 @@
 #ifndef METADATA_H
 #define METADATA_H
 
-// Local includes.
+// Local includes
 
 #include "batchtool.h"
 

@@ -24,18 +24,18 @@
 #ifndef LIGHTTABLEWINDOW_H
 #define LIGHTTABLEWINDOW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QCloseEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 #include <kxmlguiwindow.h>
 #include <ktoggleaction.h>
 
-// Local includes.
+// Local includes
 
 #include "imageinfo.h"
 

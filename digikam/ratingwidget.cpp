@@ -25,18 +25,18 @@
 #include "ratingwidget.h"
 #include "ratingwidget.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QPainter>
 #include <QPalette>
 #include <QPixmap>
 #include <QPolygon>
 
-// Local includes.
+// Local includes
 
 #include "constants.h"
 #include "themeengine.h"

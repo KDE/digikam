@@ -24,21 +24,21 @@
 #include "imagepropertiestab.h"
 #include "imagepropertiestab.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QGridLayout>
 #include <QStyle>
 #include <QFile>
 #include <QPixmap>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kdialog.h>
 #include <kseparator.h>
 
-// Local includes.
+// Local includes
 
 #include "imagepropertiestxtlabel.h"
 

@@ -24,17 +24,17 @@
 #include "exifwidget.h"
 #include "exifwidget.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QMap>
 #include <QFile>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "dmetadata.h"
 #include "metadatalistview.h"

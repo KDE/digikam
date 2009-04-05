@@ -24,12 +24,12 @@
 #ifndef DRUBBERBAND
 #define DRUBBERBAND
 
-// Qt includes.
+// Qt includes
 
 #include <Qt3Support/Q3ScrollView>
 #include <QRubberBand>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

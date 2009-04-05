@@ -24,7 +24,7 @@
 #ifndef IMAGEALBUMFILTERMODELPRIV_H
 #define IMAGEALBUMFILTERMODELPRIV_H
 
-// Qt includes.
+// Qt includes
 
 #include <QMutex>
 #include <QMutexLocker>
@@ -32,7 +32,7 @@
 #include <QTimer>
 #include <QWaitCondition>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 // Yes, we need the EXPORT macro in a private header because

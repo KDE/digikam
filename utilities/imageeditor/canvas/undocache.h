@@ -25,7 +25,7 @@
 #ifndef UNDOCACHE_H
 #define UNDOCACHE_H
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

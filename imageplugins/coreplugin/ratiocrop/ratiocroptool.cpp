@@ -26,7 +26,7 @@
 #include "ratiocroptool.h"
 #include "ratiocroptool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QCheckBox>
 #include <QFrame>
@@ -41,7 +41,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kcolorbutton.h>
@@ -53,12 +53,12 @@
 #include <kstandardguiitem.h>
 #include <kpushbutton.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
-// Local includes.
+// Local includes
 
 #include "editortoolsettings.h"
 #include "imageiface.h"

@@ -25,20 +25,20 @@
 
 #include "undomanager.h"
 
-// C++ includes.
+// C++ includes
 
 #include <typeinfo>
 #include <climits>
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "dimginterface.h"
 #include "undoaction.h"

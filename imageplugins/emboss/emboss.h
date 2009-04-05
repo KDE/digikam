@@ -28,7 +28,7 @@
 #ifndef EMBOSS_H
 #define EMBOSS_H
 
-// Local includes.
+// Local includes
 
 #include "dimgthreadedfilter.h"
 

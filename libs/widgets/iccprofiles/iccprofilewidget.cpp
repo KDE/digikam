@@ -24,7 +24,7 @@
 #include "iccprofilewidget.h"
 #include "iccprofilewidget.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QComboBox>
 #include <QFile>
@@ -33,7 +33,7 @@
 #include <QMap>
 #include <QPushButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -41,14 +41,14 @@
 #include <khbox.h>
 #include <klocale.h>
 
-// Lcms includes.
+// Lcms includes
 
 #include <lcms.h>
 #if LCMS_VERSION < 114
 #define cmsTakeCopyright(profile) "Unknown"
 #endif // LCMS_VERSION < 114
 
-// Local includes.
+// Local includes
 
 #include "cietonguewidget.h"
 #include "metadatalistview.h"

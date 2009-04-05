@@ -26,7 +26,7 @@
 #ifndef ICCPROOFTOOL_H
 #define ICCPROOFTOOL_H
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

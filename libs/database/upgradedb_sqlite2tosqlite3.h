@@ -24,11 +24,11 @@
 #ifndef UPGRADEDB_SQLITE2TOSQLITE3_H
 #define UPGRADEDB_SQLITE2TOSQLITE3_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 
-// Local includes.
+// Local includes
 
 #include "databaseaccess.h"
 

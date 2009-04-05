@@ -26,12 +26,12 @@
 #ifndef RAWLOADER_H
 #define RAWLOADER_H
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
 
-// Local includes.
+// Local includes
 
 #include "dimgloader.h"
 #include "drawdecoding.h"

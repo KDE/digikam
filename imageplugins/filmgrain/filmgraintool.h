@@ -26,7 +26,7 @@
 #ifndef FILMGRAINTOOL_H
 #define FILMGRAINTOOL_H
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

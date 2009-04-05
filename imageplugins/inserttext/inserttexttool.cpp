@@ -26,7 +26,7 @@
 #include "inserttexttool.h"
 #include "inserttexttool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QBrush>
 #include <QButtonGroup>
@@ -43,7 +43,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kaboutdata.h>
@@ -63,7 +63,7 @@
 #include <kstandarddirs.h>
 #include <ktextedit.h>
 
-// Local includes.
+// Local includes
 
 #include "daboutdata.h"
 #include "dimg.h"

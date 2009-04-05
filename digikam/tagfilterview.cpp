@@ -26,7 +26,7 @@
 #include "tagfilterview.h"
 #include "tagfilterview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QPixmap>
@@ -36,7 +36,7 @@
 #include <QDropEvent>
 #include <QMouseEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kmenu.h>
@@ -51,7 +51,7 @@
 #include <kselectaction.h>
 #include <kstringhandler.h>
 
-// Local includes.
+// Local includes
 
 #include "albummanager.h"
 #include "albumdb.h"

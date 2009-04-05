@@ -24,12 +24,12 @@
 #ifndef COLLECTIONLOCATION_H
 #define COLLECTIONLOCATION_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QHash>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "albuminfo.h"

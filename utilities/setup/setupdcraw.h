@@ -24,11 +24,11 @@
 #ifndef SETUPDCRAW_H
 #define SETUPDCRAW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QScrollArea>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

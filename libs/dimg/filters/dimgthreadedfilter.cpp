@@ -25,11 +25,11 @@
 #include "dimgthreadedfilter.h"
 #include "dimgthreadedfilter.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QObject>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 

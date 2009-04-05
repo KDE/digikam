@@ -23,13 +23,13 @@
 #ifndef GREYCSTORATION_WIDGET_H
 #define GREYCSTORATION_WIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QObject>
 #include <QtCore/QFile>
 #include <QtCore/QString>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "greycstorationsettings.h"

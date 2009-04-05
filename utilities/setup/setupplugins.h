@@ -24,7 +24,7 @@
 #ifndef SETUPPLUGINS_H
 #define SETUPPLUGINS_H
 
-// Qt includes.
+// Qt includes
 
 #include <QScrollArea>
 

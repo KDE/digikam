@@ -24,11 +24,11 @@
 #ifndef SUPERIMPOSE_H
 #define SUPERIMPOSE_H
 
-// Qt includes.
+// Qt includes
 
 #include <QRect>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "dcolor.h"

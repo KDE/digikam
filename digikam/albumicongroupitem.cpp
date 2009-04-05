@@ -23,19 +23,19 @@
 
 #include "albumicongroupitem.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QPainter>
 #include <QPixmap>
 
-// KDE includes.
+// KDE includes
 
 #include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstringhandler.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "albumiconview.h"

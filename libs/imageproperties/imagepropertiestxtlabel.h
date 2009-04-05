@@ -25,14 +25,14 @@
 #ifndef IMAGPROPERTIESTXTLABEL_H
 #define IMAGPROPERTIESTXTLABEL_H
 
-// Qt includes.
+// Qt includes
 
 #include <QLabel>
 #include <QPalette>
 #include <QColor>
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kglobalsettings.h>
 #include <ksqueezedtextlabel.h>

@@ -25,7 +25,7 @@
 #include "themediconview.h"
 #include "themediconview.moc"
 
-// Local includes.
+// Local includes
 
 #include "themeengine.h"
 #include "themedicongroupitem.h"

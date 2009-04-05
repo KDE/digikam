@@ -25,7 +25,7 @@
 #include "themeengine.h"
 #include "themeengine.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QHash>
 #include <QFileInfo>
@@ -38,7 +38,7 @@
 #include <QTextStream>
 #include <QDate>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -48,7 +48,7 @@
 #include <kapplication.h>
 #include <kglobalsettings.h>
 
-// Local includes.
+// Local includes
 
 #include "theme.h"
 #include "texture.h"

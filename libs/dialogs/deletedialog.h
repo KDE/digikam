@@ -27,16 +27,16 @@
 #ifndef DELETEDIALOG_H
 #define DELETEDIALOG_H
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 
-// KDE includes.
+// KDE includes
 
 #include <kdialog.h>
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

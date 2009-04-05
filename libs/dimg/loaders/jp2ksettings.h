@@ -24,11 +24,11 @@
 #ifndef JP2KSETTINGS_H
 #define JP2KSETTINGS_H
 
-// KDE includes.
+// KDE includes
 
 #include <QWidget>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

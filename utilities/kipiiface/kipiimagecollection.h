@@ -27,21 +27,21 @@
 #ifndef KIPIIMAGECOLLECTION_H
 #define KIPIIMAGECOLLECTION_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QDate>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// LibKIPI includes.
+// LibKIPI includes
 
 #include <libkipi/imagecollection.h>
 #include <libkipi/imagecollectionshared.h>
 
-// Local includes.
+// Local includes
 
 #include "albummanager.h"
 

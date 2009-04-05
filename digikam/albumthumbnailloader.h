@@ -24,12 +24,12 @@
 #ifndef ALBUMTHUMBNAILLOADER_H
 #define ALBUMTHUMBNAILLOADER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QObject>
 #include <QPixmap>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 

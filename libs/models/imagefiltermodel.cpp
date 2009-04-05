@@ -28,7 +28,7 @@
 #include "imagefiltermodelthreads.h"
 #include "imagefiltermodelthreads.moc"
 
-// Local includes.
+// Local includes
 
 #include "databaseaccess.h"
 #include "databasechangesets.h"

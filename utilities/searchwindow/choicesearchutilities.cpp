@@ -24,16 +24,16 @@
 #include "choicesearchutilities.h"
 #include "choicesearchutilities.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QTreeView>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "searchutilities.h"
 

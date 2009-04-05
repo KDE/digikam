@@ -25,14 +25,14 @@
 #ifndef IMAGELISTERRECORD_H
 #define IMAGELISTERRECORD_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QDataStream>
 #include <QDateTime>
 #include <QSize>
 
-// KDE includes.
+// KDE includes
 
 #include "digikam_export.h"
 #include "albuminfo.h"

@@ -26,7 +26,7 @@
 #include "albumselectdialog.h"
 #include "albumselectdialog.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QLabel>
 #include <QFrame>
@@ -35,14 +35,14 @@
 #include <QGridLayout>
 #include <QPixmap>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kapplication.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Local includes
 
 #include "treefolderitem.h"
 #include "album.h"

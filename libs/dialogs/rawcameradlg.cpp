@@ -24,7 +24,7 @@
 #include "rawcameradlg.h"
 #include "rawcameradlg.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QStringList>
 #include <QString>
@@ -34,7 +34,7 @@
 #include <QTreeWidget>
 #include <QHeaderView>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -42,7 +42,7 @@
 #include <kstandarddirs.h>
 #include <kaboutdata.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>

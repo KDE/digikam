@@ -25,12 +25,12 @@
 #ifndef FILESAVEOPTIONSBOX_H
 #define FILESAVEOPTIONSBOX_H
 
-// KDE includes.
+// KDE includes
 
 #include <QtGui/QStackedWidget>
 #include <QtCore/QString>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "digikam_export.h"

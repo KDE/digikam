@@ -23,19 +23,19 @@
 
 #include "queuetooltip.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QPixmap>
 #include <QPainter>
 #include <QTextDocument>
 #include <QDateTime>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "queuelist.h"
 #include "albumsettings.h"

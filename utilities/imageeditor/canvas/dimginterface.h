@@ -25,13 +25,13 @@
 #ifndef DIMGINTERFACE_H
 #define DIMGINTERFACE_H
 
-// Qt includes.
+// Qt includes
 
 #include <QObject>
 #include <QString>
 #include <QByteArray>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "dimg.h"

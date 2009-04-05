@@ -24,12 +24,12 @@
 #ifndef BATCHTHUMBSGENERATOR_H
 #define BATCHTHUMBSGENERATOR_H
 
-// Qt includes.
+// Qt includes
 
 #include <QPixmap>
 #include <QCloseEvent>
 
-// Local includes.
+// Local includes
 
 #include "dprogressdlg.h"
 

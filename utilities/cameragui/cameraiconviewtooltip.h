@@ -24,7 +24,7 @@
 #ifndef CAMERAICONVIEWTOOLTIP_H
 #define CAMERAICONVIEWTOOLTIP_H
 
-// Local includes.
+// Local includes
 
 #include "gpiteminfo.h"
 #include "ditemtooltip.h"

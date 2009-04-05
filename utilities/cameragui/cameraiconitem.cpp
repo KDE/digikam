@@ -25,17 +25,17 @@
 #include "cameraiconitem.h"
 #include "cameraiconitem.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QPainter>
 #include <QPixmap>
 #include <QTimer>
 
-// KDE includes.
+// KDE includes
 
 #include <kiconloader.h>
 
-// Local includes.
+// Local includes
 
 #include "iconview.h"
 #include "thumbnailsize.h"

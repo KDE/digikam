@@ -25,7 +25,7 @@
 #ifndef SETUPMISC_H
 #define SETUPMISC_H
 
-// Qt includes.
+// Qt includes
 
 #include <QScrollArea>
 

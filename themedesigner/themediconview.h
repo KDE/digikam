@@ -24,12 +24,12 @@
 #ifndef THEMEDICONVIEW_H
 #define THEMEDICONVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QPixmap>
 #include <QResizeEvent>
 
-// Local includes.
+// Local includes
 
 #include "iconview.h"
 

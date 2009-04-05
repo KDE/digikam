@@ -24,7 +24,7 @@
 #include "imageinfocache.h"
 #include "imageinfocache.moc"
 
-// Local includes.
+// Local includes
 
 #include "albumdb.h"
 #include "imageinfo.h"

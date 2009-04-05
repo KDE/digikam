@@ -28,7 +28,7 @@
 #include "channelmixertool.h"
 #include "channelmixertool.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 #include <cmath>
@@ -36,7 +36,7 @@
 #include <cstdlib>
 #include <cerrno>
 
-// Qt includes.
+// Qt includes
 
 #include <QCheckBox>
 #include <QColor>
@@ -53,7 +53,7 @@
 #include <QTimer>
 #include <QToolButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -73,11 +73,11 @@
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Local includes
 
 #include "colorgradientwidget.h"
 #include "daboutdata.h"

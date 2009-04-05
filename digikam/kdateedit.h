@@ -27,7 +27,7 @@
 #ifndef KDATEEDIT_H
 #define KDATEEDIT_H
 
-// Qt includes.
+// Qt includes
 
 #include <QComboBox>
 #include <QDateTime>
@@ -35,7 +35,7 @@
 #include <QMouseEvent>
 #include <QEvent>
 
-// KDE includes.
+// KDE includes
 
 #include "kdatepickerpopup.h"
 

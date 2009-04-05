@@ -30,33 +30,33 @@
 
 #include "pngloader.h"
 
-// C ANSI includes.
+// C ANSI includes
 
 extern "C"
 {
 #include <unistd.h>
 }
 
-// C++ includes.
+// C++ includes
 
 #include <cstdlib>
 #include <cstdio>
 
-// Qt includes.
+// Qt includes
 
 #include <QFile>
 #include <QByteArray>
 #include <QSysInfo>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Libkexiv2 includes.
+// Libkexiv2 includes
 
 #include <libkexiv2/kexiv2.h>
 
-// Local includes.
+// Local includes
 
 #include "version.h"
 #include "dimg.h"

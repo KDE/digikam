@@ -24,17 +24,17 @@
 #ifndef IMAGEPROPERTIESCOLORSTAB_H
 #define IMAGEPROPERTIESCOLORSTAB_H
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QByteArray>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 #include <ktabwidget.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "digikam_export.h"

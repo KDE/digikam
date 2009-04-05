@@ -26,12 +26,12 @@
 #include "charcoaltool.h"
 #include "charcoaltool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QLabel>
 #include <QGridLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kconfig.h>
 #include <klocale.h>
@@ -44,11 +44,11 @@
 #include <kglobal.h>
 #include <kconfiggroup.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Local includes
 
 #include "version.h"
 #include "daboutdata.h"

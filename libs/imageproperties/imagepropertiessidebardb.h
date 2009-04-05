@@ -26,11 +26,11 @@
 #ifndef IMAGEPROPERTIESSIDEBARDB_H
 #define IMAGEPROPERTIESSIDEBARDB_H
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "imageinfolist.h"
 #include "imagepropertiessidebar.h"

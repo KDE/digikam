@@ -24,12 +24,12 @@
 #ifndef AUTOCORRECTIONTOOL_H
 #define AUTOCORRECTIONTOOL_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QPixmap>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "editortool.h"

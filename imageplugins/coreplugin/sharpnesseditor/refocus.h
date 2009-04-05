@@ -24,7 +24,7 @@
 #ifndef REFOCUS_H
 #define REFOCUS_H
 
-// Local includes.
+// Local includes
 
 #include "dimgthreadedfilter.h"
 

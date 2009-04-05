@@ -25,11 +25,11 @@
 #include "adjustcurvestool.h"
 #include "adjustcurvestool.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QButtonGroup>
 #include <QColor>
@@ -45,7 +45,7 @@
 #include <QTimer>
 #include <QToolButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -65,7 +65,7 @@
 #include <kselector.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Local includes
 
 #include "colorgradientwidget.h"
 #include "curveswidget.h"

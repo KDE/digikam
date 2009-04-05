@@ -24,15 +24,15 @@
 #ifndef LIGHTTABLEWINDOWPRIVATE_H
 #define LIGHTTABLEWINDOWPRIVATE_H
 
-// Qt includes.
+// Qt includes
 
 #include <QSplitter>
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 
-// Local includes.
+// Local includes
 
 #include "imagepropertiessidebardb.h"
 #include "statusprogressbar.h"

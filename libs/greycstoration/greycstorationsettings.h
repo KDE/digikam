@@ -31,7 +31,7 @@
 #ifndef GREYCSTORATIONSETTINGS_H
 #define GREYCSTORATIONSETTINGS_H
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

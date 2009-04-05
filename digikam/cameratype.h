@@ -25,7 +25,7 @@
 #ifndef CAMERATYPE_H
 #define CAMERATYPE_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QDateTime>

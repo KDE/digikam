@@ -24,7 +24,7 @@
 #ifndef TIMELINEVIEW_H
 #define TIMELINEVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QDateTime>
 #include <QWidget>

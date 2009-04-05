@@ -24,12 +24,12 @@
 #ifndef IMAGEINFOALBUMSJOB_H
 #define IMAGEINFOALBUMSJOB_H
 
-// Qt includes.
+// Qt includes
 
 #include <QObject>
 #include <QByteArray>
 
-// Local includes.
+// Local includes
 
 #include "albummanager.h"
 #include "imageinfo.h"

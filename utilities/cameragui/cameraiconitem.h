@@ -25,12 +25,12 @@
 #ifndef CAMERAICONITEM_H
 #define CAMERAICONITEM_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QImage>
 
-// Local includes.
+// Local includes
 
 #include "iconitem.h"
 

@@ -25,16 +25,16 @@
 #include "albumhistory.h"
 #include "albumhistory.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QWidget>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 

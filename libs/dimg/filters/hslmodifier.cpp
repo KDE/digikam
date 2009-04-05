@@ -27,16 +27,16 @@
 
 #include "hslmodifier.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 #include <cmath>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "dcolor.h"
 #include "dimg.h"

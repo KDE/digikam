@@ -24,7 +24,7 @@
 
 #include "sketchwidget.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QMap>
 #include <QPainter>
@@ -35,7 +35,7 @@
 #include <QMouseEvent>
 #include <QTime>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>

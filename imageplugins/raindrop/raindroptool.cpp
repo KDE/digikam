@@ -26,14 +26,14 @@
 #include "raindroptool.h"
 #include "raindroptool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QFrame>
 #include <QGridLayout>
 #include <QImage>
 #include <QLabel>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -46,11 +46,11 @@
 #include <knuminput.h>
 #include <kstandarddirs.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Local includes
 
 #include "daboutdata.h"
 #include "editortoolsettings.h"

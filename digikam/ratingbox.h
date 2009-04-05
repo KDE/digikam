@@ -24,7 +24,7 @@
 #ifndef RATINGBOX_H
 #define RATINGBOX_H
 
-// KDE includes.
+// KDE includes
 
 #include <khbox.h>
 

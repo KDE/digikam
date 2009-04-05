@@ -25,17 +25,17 @@
 #ifndef INPAINTINGTOOL_H
 #define INPAINTINGTOOL_H
 
-// Qt includes.
+// Qt includes
 
 #include <QImage>
 #include <QRect>
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kpassivepopup.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "editortool.h"

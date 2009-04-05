@@ -24,13 +24,13 @@
 #include "albumselectwidget.h"
 #include "albumselectwidget.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QHeaderView>
 #include <QTreeWidget>
 #include <QGridLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kdialog.h>
 #include <kdebug.h>
@@ -41,7 +41,7 @@
 #include <kmessagebox.h>
 #include <kinputdialog.h>
 
-// Local includes.
+// Local includes
 
 #include "constants.h"
 #include "album.h"

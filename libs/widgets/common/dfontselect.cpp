@@ -24,13 +24,13 @@
 #include "dfontselect.h"
 #include "dfontselect.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QLabel>
 #include <QEvent>
 #include <QPushButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kfontdialog.h>
 #include <kglobalsettings.h>

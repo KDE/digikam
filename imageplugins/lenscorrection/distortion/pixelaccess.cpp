@@ -25,13 +25,13 @@
 
 #include "pixelaccess.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cstring>
 #include <cmath>
 #include <cstdlib>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 

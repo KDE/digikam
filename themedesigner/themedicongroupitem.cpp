@@ -24,16 +24,16 @@
 
 #include "themedicongroupitem.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QPixmap>
 #include <QPainter>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "themeengine.h"
 #include "themediconview.h"

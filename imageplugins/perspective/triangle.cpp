@@ -23,7 +23,7 @@
 
 #include "triangle.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 #include <cstdlib>

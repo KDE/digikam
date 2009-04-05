@@ -25,7 +25,7 @@
 #ifndef RATINGWIDGET_H
 #define RATINGWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QPaintEvent>

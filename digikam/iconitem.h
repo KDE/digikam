@@ -25,13 +25,13 @@
 #ifndef ICONITEM_H
 #define ICONITEM_H
 
-// Qt includes.
+// Qt includes
 
 #include <QObject>
 #include <QRect>
 #include <QString>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

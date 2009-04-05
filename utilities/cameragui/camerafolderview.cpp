@@ -25,13 +25,13 @@
 #include "camerafolderview.h"
 #include "camerafolderview.moc"
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "camerafolderitem.h"
 

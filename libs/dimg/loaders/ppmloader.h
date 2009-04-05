@@ -26,7 +26,7 @@
 #ifndef PPMLOADER_H
 #define PPMLOADER_H
 
-// Local includes.
+// Local includes
 
 #include "dimgloader.h"
 #include "digikam_export.h"

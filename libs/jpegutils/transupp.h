@@ -20,7 +20,7 @@
 #ifndef TRANSUPP_H
 #define TRANSUPP_H
 
-// LibJPEG includes.
+// LibJPEG includes
 
 extern "C"
 {

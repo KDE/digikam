@@ -25,7 +25,7 @@
 #include "previewloadthread.h"
 #include "previewloadthread.moc"
 
-// Local includes.
+// Local includes
 
 #include "previewtask.h"
 

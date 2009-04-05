@@ -25,7 +25,7 @@
 #ifndef RAINDROP_H
 #define RAINDROP_H
 
-// Local includes.
+// Local includes
 
 #include "dimgthreadedfilter.h"
 

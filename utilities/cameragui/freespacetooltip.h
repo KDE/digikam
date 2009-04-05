@@ -24,7 +24,7 @@
 #ifndef FREESPACETOOLTIP_H
 #define FREESPACETOOLTIP_H
 
-// Local includes.
+// Local includes
 
 #include "ditemtooltip.h"
 

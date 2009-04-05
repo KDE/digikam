@@ -25,7 +25,7 @@
 #include "filesaveoptionsbox.h"
 #include "filesaveoptionsbox.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QCheckBox>
 #include <QGridLayout>
@@ -33,7 +33,7 @@
 #include <QLabel>
 #include <QWidget>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -44,7 +44,7 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-// Local includes.
+// Local includes
 
 #include "jpegsettings.h"
 #include "pngsettings.h"

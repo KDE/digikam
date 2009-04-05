@@ -26,7 +26,7 @@
 #include "cameraui.h"
 #include "cameraui.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QCheckBox>
 #include <QCloseEvent>
@@ -48,7 +48,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kactioncollection.h>
@@ -79,7 +79,7 @@
 #include <kvbox.h>
 #include <ktoggleaction.h>
 
-// Libkdcraw includes.
+// Libkdcraw includes
 
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
@@ -88,7 +88,7 @@
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
-// Local includes.
+// Local includes
 
 #include "componentsinfo.h"
 #include "statuszoombar.h"

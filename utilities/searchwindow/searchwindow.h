@@ -24,11 +24,11 @@
 #ifndef SEARCHWINDOW_H
 #define SEARCHWINDOW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

@@ -24,7 +24,7 @@
 #ifndef MIMEFILTER_H
 #define MIMEFILTER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QComboBox>
 

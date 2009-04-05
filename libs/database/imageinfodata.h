@@ -24,14 +24,14 @@
 #ifndef IMAGEINFODATA_H
 #define IMAGEINFODATA_H
 
-// Qt includes.
+// Qt includes
 
 #include <QDateTime>
 #include <QSize>
 #include <QList>
 #include <qatomic.h>
 
-// Local includes.
+// Local includes
 
 #include "databaseurl.h"
 #include "dshareddata.h"

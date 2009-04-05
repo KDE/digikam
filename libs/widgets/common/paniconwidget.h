@@ -25,7 +25,7 @@
 #ifndef PANICONWIDGET_H
 #define PANICONWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtGui/QWidget>
 #include <QtCore/QRect>
@@ -36,7 +36,7 @@
 #include <QtCore/QTimerEvent>
 #include <QtGui/QPaintEvent>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "dimg.h"

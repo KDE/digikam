@@ -22,12 +22,12 @@
  *
  * ============================================================ */
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QSharedData>
 
-// Local includes.
+// Local includes
 
 #include "databasefields.h"
 

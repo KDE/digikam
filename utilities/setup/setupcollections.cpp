@@ -24,7 +24,7 @@
 #include "setupcollections.h"
 #include "setupcollections.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QGroupBox>
 #include <QLabel>
@@ -35,7 +35,7 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -46,7 +46,7 @@
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 
-// Local includes.
+// Local includes
 
 #include "albumsettings.h"
 #include "setupcollectionview.h"

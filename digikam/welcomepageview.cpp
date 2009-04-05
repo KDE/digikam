@@ -26,7 +26,7 @@
 #include "welcomepageview.h"
 #include "welcomepageview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QTimer>
 #include <QWidget>
@@ -34,7 +34,7 @@
 #include <QFileInfo>
 #include <QTextStream>
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -51,7 +51,7 @@
 #include <ktoolinvocation.h>
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "daboutdata.h"
 #include "version.h"

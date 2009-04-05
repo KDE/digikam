@@ -24,11 +24,11 @@
 #include "editorwindow.h"
 #include "editorwindow.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QByteArray>
 #include <QCursor>
@@ -46,7 +46,7 @@
 #include <QToolButton>
 #include <QWidgetAction>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kaction.h>
@@ -85,11 +85,11 @@
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/version.h>
 
-// Local includes.
+// Local includes
 
 #include "canvas.h"
 #include "dimginterface.h"

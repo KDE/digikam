@@ -24,12 +24,12 @@
 #include "convert2jp2.h"
 #include "convert2jp2.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QFileInfo>
 
-// KDE includes.
+// KDE includes
 
 #include <kconfiggroup.h>
 #include <kconfig.h>
@@ -37,7 +37,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "jp2ksettings.h"

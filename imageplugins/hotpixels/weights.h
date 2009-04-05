@@ -25,7 +25,7 @@
 #ifndef WEIGHTS_H
 #define WEIGHTS_H
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QRect>

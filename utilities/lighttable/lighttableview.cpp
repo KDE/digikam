@@ -25,16 +25,16 @@
 #include "lighttableview.h"
 #include "lighttableview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QGridLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kdialog.h>
 
-// Local includes.
+// Local includes
 
 #include "thumbnailsize.h"
 #include "lighttablepreview.h"

@@ -26,7 +26,7 @@
 #include "cameraiconview.h"
 #include "cameraiconview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QFile>
 #include <QFileInfo>
@@ -40,7 +40,7 @@
 #include <QDropEvent>
 #include <QHash>
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 #include <kapplication.h>
@@ -50,7 +50,7 @@
 #include <kmenu.h>
 #include <kmimetype.h>
 
-// Local includes.
+// Local includes
 
 #include "themeengine.h"
 #include "thumbnailsize.h"

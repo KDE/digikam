@@ -24,7 +24,7 @@
 #include "contextmenuhelper.h"
 #include "contextmenuhelper.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QAction>
 #include <QClipboard>
@@ -33,7 +33,7 @@
 #include <QMimeData>
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -45,12 +45,12 @@
 #include <kmimetypetrader.h>
 #include <kstandardaction.h>
 
-// LibKIPI includes.
+// LibKIPI includes
 
 #include <libkipi/plugin.h>
 #include <libkipi/pluginloader.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "albumdb.h"

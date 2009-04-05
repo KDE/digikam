@@ -23,7 +23,7 @@
 #include "rawsettingsbox.h"
 #include "rawsettingsbox.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QButtonGroup>
 #include <QLabel>
@@ -33,7 +33,7 @@
 #include <QToolBox>
 #include <QToolButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -45,13 +45,13 @@
 #include <ktabwidget.h>
 #include <kvbox.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/version.h>
 #include <libkdcraw/dcrawsettingswidget.h>
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Local includes
 
 #include "histogrambox.h"
 #include "imagedialog.h"

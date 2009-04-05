@@ -24,11 +24,11 @@
 #include "imagepropertiescolorstab.h"
 #include "imagepropertiescolorstab.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QButtonGroup>
 #include <QFrame>
@@ -42,7 +42,7 @@
 #include <QScrollArea>
 #include <QToolButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kapplication.h>
@@ -55,7 +55,7 @@
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "imagehistogram.h"

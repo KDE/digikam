@@ -27,7 +27,7 @@
 #include "renamecustomizer.h"
 #include "renamecustomizer.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QButtonGroup>
 #include <QCheckBox>
@@ -43,7 +43,7 @@
 #include <QTextStream>
 #include <QToolButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kcombobox.h>
@@ -58,7 +58,7 @@
 #include <knuminput.h>
 #include <kicon.h>
 
-// Local includes.
+// Local includes
 
 #include "dcursortracker.h"
 

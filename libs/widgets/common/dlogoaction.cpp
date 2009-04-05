@@ -24,11 +24,11 @@
 #include "dlogoaction.h"
 #include "dlogoaction.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QPalette>
 #include <QPixmap>
@@ -36,7 +36,7 @@
 #include <QTimer>
 #include <QPainter>
 
-// KDE includes.
+// KDE includes
 
 #include <kurllabel.h>
 #include <ktoolbar.h>
@@ -47,7 +47,7 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "daboutdata.h"
 

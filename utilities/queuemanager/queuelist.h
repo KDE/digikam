@@ -24,14 +24,14 @@
 #ifndef QUEUE_LIST_H
 #define QUEUE_LIST_H
 
-// Qt includes.
+// Qt includes
 
 #include <QTreeWidget>
 #include <QWidget>
 #include <QPixmap>
 #include <QIcon>
 
-// Local includes.
+// Local includes
 
 #include "batchtool.h"
 #include "imageinfo.h"

@@ -24,7 +24,7 @@
 #include "setupidentity.h"
 #include "setupidentity.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QGroupBox>
 #include <QLabel>
@@ -32,13 +32,13 @@
 #include <QGridLayout>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kdialog.h>
 #include <klineedit.h>
 
-// Local includes.
+// Local includes
 
 #include "albumsettings.h"
 

@@ -25,7 +25,7 @@
 #ifndef KIPIUPLOADWIDGET_H
 #define KIPIUPLOADWIDGET_H
 
-// LibKIPI includes.
+// LibKIPI includes
 
 #include <libkipi/imagecollection.h>
 #include <libkipi/uploadwidget.h>

@@ -25,14 +25,14 @@
 #include "statusprogressbar.h"
 #include "statusprogressbar.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QProgressBar>
 
-// KDE includes.
+// KDE includes
 
 #include <ksqueezedtextlabel.h>
 #include <klocale.h>

@@ -24,7 +24,7 @@
 #include "searchtabheader.h"
 #include "searchtabheader.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QGroupBox>
 #include <QHBoxLayout>
@@ -35,7 +35,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kdialog.h>
@@ -46,7 +46,7 @@
 #include <ksqueezedtextlabel.h>
 #include <kurllabel.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "albummanager.h"

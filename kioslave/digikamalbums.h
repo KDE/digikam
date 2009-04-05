@@ -29,13 +29,13 @@
 #ifndef DIGIKAMALBUMS_H
 #define DIGIKAMALBUMS_H
 
-// Qt includes.
+// Qt includes
 
 #include <QObject>
 #include <QDateTime>
 #include <QEventLoop>
 
-// KDE includes.
+// KDE includes
 
 #include <kio/slavebase.h>
 #include <kjob.h>

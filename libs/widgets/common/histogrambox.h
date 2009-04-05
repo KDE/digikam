@@ -24,11 +24,11 @@
 #ifndef HISTOGRAMBOX_H
 #define HISTOGRAMBOX_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtGui/QWidget>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

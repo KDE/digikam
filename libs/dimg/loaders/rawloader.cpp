@@ -27,20 +27,20 @@
 #include "rawloader.h"
 #include "rawloader.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QByteArray>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "dimgloaderobserver.h"

@@ -23,7 +23,7 @@
 
 #include "freespacetooltip.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QString>

@@ -26,7 +26,7 @@
 #include "redeyetool.h"
 #include "redeyetool.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QColor>
 #include <QFrame>
@@ -38,7 +38,7 @@
 #include <QPushButton>
 #include <QToolButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kcolordialog.h>
@@ -54,11 +54,11 @@
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
 
-// Local includes.
+// Local includes
 
 #include "bcgmodifier.h"
 #include "colorgradientwidget.h"

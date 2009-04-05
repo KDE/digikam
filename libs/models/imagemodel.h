@@ -24,11 +24,11 @@
 #ifndef IMAGEMODEL_H
 #define IMAGEMODEL_H
 
-// Qt includes.
+// Qt includes
 
 #include <QAbstractListModel>
 
-// Local includes.
+// Local includes
 
 #include "imageinfo.h"
 #include "digikam_export.h"

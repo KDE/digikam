@@ -24,17 +24,17 @@
 
 #include "iconitem.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QPixmap>
 #include <QPainter>
 
-// KDE includes.
+// KDE includes
 
 #include <kiconeffect.h>
 #include <kiconloader.h>
 
-// Local includes.
+// Local includes
 
 #include "icongroupitem.h"
 #include "iconview.h"

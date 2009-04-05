@@ -25,7 +25,7 @@
 #include "setupicc.h"
 #include "setupicc.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QButtonGroup>
 #include <QGroupBox>
@@ -41,7 +41,7 @@
 #include <QGridLayout>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kcombobox.h>
 #include <kconfig.h>
@@ -59,18 +59,18 @@
 #include <kurlrequester.h>
 #include <kvbox.h>
 
-// lcms includes.
+// lcms includes
 
 #include <lcms.h>
 #if LCMS_VERSION < 114
 #define cmsTakeCopyright(profile) "Unknown"
 #endif // LCMS_VERSION < 114
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/squeezedcombobox.h>
 
-// Local includes.
+// Local includes
 
 #include "iccprofileinfodlg.h"
 #include "albumsettings.h"

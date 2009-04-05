@@ -24,17 +24,17 @@
 #ifndef SLIDESHOWSETTINGSCONTAINER_H
 #define SLIDESHOWSETTINGSCONTAINER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QMap>
 #include <QColor>
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "photoinfocontainer.h"
 #include "digikam_export.h"

@@ -25,11 +25,11 @@
 #ifndef ICCPREVIEWWIDGET_H
 #define ICCPREVIEWWIDGET_H
 
-// KDE includes.
+// KDE includes
 
 #include <kpreviewwidgetbase.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

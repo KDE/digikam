@@ -25,7 +25,7 @@
 #include "monthwidget.h"
 #include "monthwidget.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QResizeEvent>
@@ -36,14 +36,14 @@
 #include <QPixmap>
 #include <QPalette>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kglobal.h>
 #include <kcalendarsystem.h>
 #include <kdeversion.h>
 
-// Local includes.
+// Local includes
 
 #include "imageinfo.h"
 #include "albumlister.h"

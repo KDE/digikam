@@ -25,19 +25,19 @@
 #include "thumbnailloadthread.h"
 #include "thumbnailloadthread.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QPainter>
 #include <QHash>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kio/previewjob.h>
 
-// Local includes.
+// Local includes
 
 #include "thumbnailsize.h"
 #include "thumbnailtask.h"

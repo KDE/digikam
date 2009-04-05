@@ -23,7 +23,7 @@
 
 #include "collectionscannerhints.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QHash>
 #include <QList>

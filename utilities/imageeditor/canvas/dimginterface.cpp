@@ -31,14 +31,14 @@
 #include "dimginterface.h"
 #include "dimginterface.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QImage>
@@ -50,13 +50,13 @@
 #include <QImageReader>
 #include <QPainter>
 
-// KDE includes.
+// KDE includes
 
 #include <kcursor.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
 
-// Local includes.
+// Local includes
 
 #include "bcgmodifier.h"
 #include "colorcorrectiondlg.h"

@@ -23,13 +23,13 @@
 
 #include "imagecopyright.h"
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
 
-// Local includes.
+// Local includes
 
 #include "albumdb.h"
 #include "databaseaccess.h"

@@ -25,14 +25,14 @@
 #ifndef IMAGEWIDGET_H
 #define IMAGEWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtGui/QWidget>
 #include <QtCore/QPoint>
 #include <QtGui/QColor>
 #include <QtCore/QString>
 
-// Local includes.
+// Local includes
 
 #include "dcolor.h"
 #include "imageguidewidget.h"

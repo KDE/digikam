@@ -25,13 +25,13 @@
 #include "toolbar.h"
 #include "toolbar.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QHBoxLayout>
 #include <QPixmap>
 #include <QToolButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kiconloader.h>

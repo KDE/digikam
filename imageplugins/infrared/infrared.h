@@ -25,7 +25,7 @@
 #ifndef INFRARED_H
 #define INFRARED_H
 
-// Local includes.
+// Local includes
 
 #include "dimgthreadedfilter.h"
 

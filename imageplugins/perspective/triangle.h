@@ -24,7 +24,7 @@
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
 
-// Qt includes.
+// Qt includes
 
 #include <QPoint>
 

@@ -28,18 +28,18 @@
 #ifndef ALBUMMANAGER_H
 #define ALBUMMANAGER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QObject>
 #include <QString>
 #include <QMap>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// Local includes
 
 #include "albuminfo.h"
 #include "digikam_export.h"

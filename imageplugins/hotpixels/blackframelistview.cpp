@@ -28,7 +28,7 @@
 #include "blackframelistview.h"
 #include "blackframelistview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QPainter>

@@ -25,7 +25,7 @@
 #include "cameralist.h"
 #include "cameralist.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QDateTime>
 #include <QString>
@@ -35,12 +35,12 @@
 #include <QTextStream>
 #include <QTextCodec>
 
-// KDE includes.
+// KDE includes
 
 #include <kmessagebox.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "gpcamera.h"
 #include "cameratype.h"

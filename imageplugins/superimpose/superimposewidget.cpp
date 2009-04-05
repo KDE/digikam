@@ -27,11 +27,11 @@
 #include "superimposewidget.h"
 #include "superimposewidget.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 
-// Qt includes.
+// Qt includes
 
 #include <QPainter>
 #include <QPaintEvent>
@@ -39,13 +39,13 @@
 #include <QPixmap>
 #include <QMouseEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kstandarddirs.h>
 #include <kcursor.h>
 #include <kglobal.h>
 
-// Local includes.
+// Local includes
 
 #include "superimpose.h"
 

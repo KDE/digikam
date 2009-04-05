@@ -25,12 +25,12 @@
 #ifndef DGRADIENTSLIDER_H
 #define DGRADIENTSLIDER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtGui/QWidget>
 #include <QtGui/QColor>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

@@ -25,7 +25,7 @@
 #include "setupalbumview.h"
 #include "setupalbumview.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QButtonGroup>
 #include <QCheckBox>
@@ -35,14 +35,14 @@
 #include <QRadioButton>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kcombobox.h>
 #include <kdialog.h>
 #include <kapplication.h>
 #include <klocale.h>
 
-// Local includes.
+// Local includes
 
 #include "albumsettings.h"
 #include "dfontselect.h"

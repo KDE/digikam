@@ -24,7 +24,7 @@
 #ifndef SETUPLIGHTTABLE_H
 #define SETUPLIGHTTABLE_H
 
-// Qt includes.
+// Qt includes
 
 #include <QScrollArea>
 

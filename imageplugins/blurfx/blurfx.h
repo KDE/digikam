@@ -28,7 +28,7 @@
 #ifndef BLURFX_H
 #define BLURFX_H
 
-// Local includes.
+// Local includes
 
 #include "dimgthreadedfilter.h"
 

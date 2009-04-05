@@ -24,11 +24,11 @@
 #include "searchutilities.h"
 #include "searchutilities.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QAbstractListModel>
 #include <QItemDelegate>
@@ -44,7 +44,7 @@
 #include <QTimeLine>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kdeversion.h>
@@ -53,7 +53,7 @@
 #include <kpushbutton.h>
 #include <kstandardguiitem.h>
 
-// Local includes.
+// Local includes
 
 #include "constants.h"
 #include "albummodel.h"

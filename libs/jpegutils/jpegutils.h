@@ -25,12 +25,12 @@
 #ifndef JPEGUTILS_H
 #define JPEGUTILS_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QImage>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

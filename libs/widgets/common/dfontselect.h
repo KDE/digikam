@@ -24,11 +24,11 @@
 #ifndef DFONTSELECT_H
 #define DFONTSELECT_H
 
-// Qt includes.
+// Qt includes
 
 #include <QFont>
 
-// KDE includes.
+// KDE includes
 
 #include <khbox.h>
 

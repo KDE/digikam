@@ -26,13 +26,13 @@
 #ifndef COLLECTIONSCANNER_H
 #define COLLECTIONSCANNER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QObject>
 #include <QList>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "databaseaccess.h"

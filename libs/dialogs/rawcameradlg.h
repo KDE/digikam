@@ -24,11 +24,11 @@
 #ifndef RAWCAMERADLG_H
 #define RAWCAMERADLG_H
 
-// KDE includes.
+// KDE includes
 
 #include <kdialog.h>
 
-// Local includes.
+// Local includes
 
 #include "searchtextbar.h"
 #include "digikam_export.h"

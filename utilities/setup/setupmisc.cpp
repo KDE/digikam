@@ -24,21 +24,21 @@
 
 #include "setupmisc.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QGroupBox>
 #include <QCheckBox>
 #include <QVBoxLayout>
 #include <QLabel>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kdialog.h>
 #include <kcombobox.h>
 #include <khbox.h>
 
-// Local includes.
+// Local includes
 
 #include "albumsettings.h"
 

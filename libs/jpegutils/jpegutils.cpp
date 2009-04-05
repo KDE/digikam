@@ -29,12 +29,12 @@
 
 #include "jpegutils.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 #include <cstdlib>
 
-// C ANSI includes.
+// C ANSI includes
 
 extern "C"
 {
@@ -46,18 +46,18 @@ extern "C"
 #include <jpeglib.h>
 }
 
-// Qt includes.
+// Qt includes
 
 #include <QImageReader>
 #include <QByteArray>
 #include <QFile>
 #include <QFileInfo>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "dmetadata.h"
 #include "transupp.h"

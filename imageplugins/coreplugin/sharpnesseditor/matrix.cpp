@@ -33,7 +33,7 @@
 
 #include "matrix.h"
 
-// C ANSI includes.
+// C ANSI includes
 
 extern "C"
 {
@@ -41,15 +41,15 @@ extern "C"
 #include "clapack.h"
 }
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 

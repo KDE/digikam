@@ -24,7 +24,7 @@
 
 #include "namefilter.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QStringList>
 

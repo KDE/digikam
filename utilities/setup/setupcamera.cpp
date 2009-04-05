@@ -25,7 +25,7 @@
 #include "setupcamera.h"
 #include "setupcamera.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QGroupBox>
 #include <QPushButton>
@@ -36,7 +36,7 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItemIterator>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -48,7 +48,7 @@
 #include <kapplication.h>
 #include <ktoolinvocation.h>
 
-// Local includes.
+// Local includes
 
 #include "config-digikam.h"
 #include "gpcamera.h"

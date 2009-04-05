@@ -24,7 +24,7 @@
 #ifndef LIGHTTABLEPREVIEW_H
 #define LIGHTTABLEPREVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QImage>
@@ -34,7 +34,7 @@
 #include <QDropEvent>
 #include <QDragMoveEvent>
 
-// Local includes.
+// Local includes
 
 #include "imageinfo.h"
 #include "previewwidget.h"

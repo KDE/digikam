@@ -24,7 +24,7 @@
 #ifndef FUZZYSEARCHFOLDERVIEW_H
 #define FUZZYSEARCHFOLDERVIEW_H
 
-// Local includes.
+// Local includes
 
 #include "searchtextbar.h"
 #include "folderview.h"

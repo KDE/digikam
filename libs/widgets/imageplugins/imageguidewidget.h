@@ -24,7 +24,7 @@
 #ifndef IMAGEGUIDEWIDGET_H
 #define IMAGEGUIDEWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtGui/QWidget>
 #include <QtCore/QPoint>
@@ -36,7 +36,7 @@
 #include <QtCore/QTimerEvent>
 #include <QtGui/QPaintEvent>
 
-// Local includes.
+// Local includes
 
 #include "dcolor.h"
 #include "digikam_export.h"

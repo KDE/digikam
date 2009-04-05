@@ -24,7 +24,7 @@
 #ifndef RESTORATION_H
 #define RESTORATION_H
 
-// Local includes.
+// Local includes
 
 #include "batchtool.h"
 #include "greycstorationiface.h"

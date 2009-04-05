@@ -24,7 +24,7 @@
 #ifndef TIMELINEWIDGET_H
 #define TIMELINEWIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QString>
@@ -35,7 +35,7 @@
 #include <QResizeEvent>
 #include <QMouseEvent>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 

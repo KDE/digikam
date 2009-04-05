@@ -26,16 +26,16 @@
 #ifndef DRAW_DECODING_H
 #define DRAW_DECODING_H
 
-// Qt includes.
+// Qt includes
 
 #include <QList>
 #include <QPolygon>
 
-// LibKDcraw includes.
+// LibKDcraw includes
 
 #include <libkdcraw/rawdecodingsettings.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

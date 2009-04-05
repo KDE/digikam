@@ -25,7 +25,7 @@
 #ifndef RAINDROPTOOL_H
 #define RAINDROPTOOL_H
 
-// Local includes.
+// Local includes
 
 #include "editortool.h"
 

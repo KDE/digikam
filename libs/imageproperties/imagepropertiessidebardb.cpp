@@ -26,13 +26,13 @@
 #include "imagepropertiessidebardb.h"
 #include "imagepropertiessidebardb.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QRect>
 #include <QColor>
 #include <QSplitter>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <kfileitem.h>
@@ -43,7 +43,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "imageinfo.h"

@@ -25,13 +25,13 @@
 #include "inpaintingtool.h"
 #include "inpaintingtool.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 #include <cmath>
 #include <cstring>
 
-// Qt includes.
+// Qt includes
 
 #include <QBrush>
 #include <QCheckBox>
@@ -46,7 +46,7 @@
 #include <QPushButton>
 #include <QTimer>
 
-// KDE includes.
+// KDE includes
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -67,7 +67,7 @@
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 
-// Local includes.
+// Local includes
 
 #include "version.h"
 #include "daboutdata.h"

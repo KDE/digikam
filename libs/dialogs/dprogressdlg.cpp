@@ -24,7 +24,7 @@
 #include "dprogressdlg.h"
 #include "dprogressdlg.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QHeaderView>
 #include <QLabel>
@@ -35,7 +35,7 @@
 #include <QProgressBar>
 #include <QTreeWidget>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>

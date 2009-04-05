@@ -24,14 +24,14 @@
 
 #include "printoptionspage.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QButtonGroup>
 #include <QGridLayout>
 #include <QToolButton>
 #include <QPushButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kconfigdialogmanager.h>
 #include <kconfig.h>
@@ -39,7 +39,7 @@
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
 
-// Local includes.
+// Local includes
 
 #include "digikamconfig.h"
 #include "signalblocker.h"

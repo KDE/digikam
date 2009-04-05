@@ -27,14 +27,14 @@
 #ifndef HAARIFACE_H
 #define HAARIFACE_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QMap>
 #include <QList>
 #include <haar.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

@@ -24,7 +24,7 @@
 #ifndef DIO_H
 #define DIO_H
 
-// KDE includes.
+// KDE includes
 
 #include <kio/job.h>
 #include <kio/copyjob.h>

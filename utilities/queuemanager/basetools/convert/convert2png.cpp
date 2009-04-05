@@ -24,12 +24,12 @@
 #include "convert2png.h"
 #include "convert2png.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QWidget>
 #include <QFileInfo>
 
-// KDE includes.
+// KDE includes
 
 #include <kconfiggroup.h>
 #include <kconfig.h>
@@ -37,7 +37,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 
-// Local includes.
+// Local includes
 
 #include "dimg.h"
 #include "pngsettings.h"

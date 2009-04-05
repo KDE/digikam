@@ -24,7 +24,7 @@
 #ifndef DITEMTOOLTIP_H
 #define DITEMTOOLTIP_H
 
-// Qt includes.
+// Qt includes
 
 #include <QFont>
 #include <QFrame>
@@ -33,12 +33,12 @@
 #include <QResizeEvent>
 #include <QTextDocument>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kglobalsettings.h>
 
-// Local includes.
+// Local includes
 
 #include "themeengine.h"
 #include "digikam_export.h"

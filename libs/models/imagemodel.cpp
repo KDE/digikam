@@ -24,13 +24,13 @@
 #include "imagemodel.h"
 #include "imagemodel.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QSet>
 
-// KDE includes.
+// KDE includes
 
-// Local includes.
+// Local includes
 
 #include "imageinfo.h"
 #include "imageinfolist.h"

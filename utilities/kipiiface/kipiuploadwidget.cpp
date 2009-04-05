@@ -26,11 +26,11 @@
 #include "kipiuploadwidget.h"
 #include "kipiuploadwidget.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
 #include <kdialog.h>
 #include <kdebug.h>
@@ -39,7 +39,7 @@
 #include <kmessagebox.h>
 #include <kinputdialog.h>
 
-// Local includes.
+// Local includes
 
 #include "album.h"
 #include "albumselectwidget.h"

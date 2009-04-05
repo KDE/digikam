@@ -24,21 +24,21 @@
 
 #include "digikamsearch.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdlib>
 
-// Qt includes.
+// Qt includes
 
 #include <QCoreApplication>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 #include "imagelister.h"
