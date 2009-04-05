@@ -459,10 +459,9 @@ QAction* ContextMenuHelper::exec(const QPoint& pos, QAction* at)
         }
         else
         {
-            QMapIterator<int, QAction*> it(d->queueActions);
-            while (it.hasNext())
+            for (QMap<int, QAction*>::iterator it = d->queueActions.begin();
+                 it != d->queueActions.end(); ++it)
             {
-                it.next();
                 if (choice == it.value())
                 {
                     emit signalAddToExistingQueue(it.key());
