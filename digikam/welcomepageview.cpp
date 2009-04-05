@@ -105,24 +105,24 @@ QString WelcomePageView::infoPage()
 {
     QStringList newFeatures;
     newFeatures << i18n("Designed from the ground-up for KDE4, using KDE4 technology:"
-                        "<ul><li>Hardware handling with KDE4's Solid interface</li>"
-                        "<li>More comprehensive multimedia file handling using KDE4's Phonon interface</li>"
-                        "<li>Easy Geolocation with KDE4's Marble interface</li></ul>");
-    newFeatures << i18n("XMP metadata support");
-    newFeatures << i18n("TIFF/EP RAW metadata editing");
-    newFeatures << i18n("Customizable file storage for the digiKam database, supporting remote albums");
-    newFeatures << i18n("Support of multiple root album paths (no more importing into one giant album)");
-    newFeatures << i18n("Thumbnail-bar integration for easy navigation and editing");
-    newFeatures << i18n("Supports the latest camera RAW files");
+                        "<ul><li>Hardware handling with KDE4's Solid interface;</li>"
+                        "<li>More comprehensive multimedia file handling using KDE4's Phonon interface;</li>"
+                        "<li>Easy Geolocation with KDE4's Marble interface.</li></ul>");
+    newFeatures << i18n("XMP metadata support;");
+    newFeatures << i18n("TIFF/EP RAW metadata editing;");
+    newFeatures << i18n("Customizable file storage for the digiKam database, supporting remote albums;");
+    newFeatures << i18n("Support of multiple root album paths (no more importing into one giant album);");
+    newFeatures << i18n("Thumbnail-bar integration for easy navigation and editing;");
+    newFeatures << i18n("Supports the latest camera RAW files;");
     newFeatures << i18n("New/revamped tools:"
-                        "<ul><li>Batch queue manager</li>"
-                        "<li>Revamped camera import wizard</li>"
-                        "<li>LensFun integration: auto-correction of lens distortion</li>"
-                        "<li>Fuzzy searches based on hand-drawn sketches</li>"
-                        "<li>Advanced searches using image meta-information, like keywords and dates</li>"
-                        "<li>User-friendly map searching that gives you the power to search for global photo locations</li>"
-                        "<li>Advanced searches for duplicate and similar images</li></ul>");
-    newFeatures << i18n("...and much more");
+                        "<ul><li>Batch queue manager;</li>"
+                        "<li>Revamped camera import wizard;</li>"
+                        "<li>LensFun integration: auto-correction of lens distortion;</li>"
+                        "<li>Fuzzy searches based on hand-drawn sketches<;/li>"
+                        "<li>Advanced searches using image meta-information, such as keywords and dates;</li>"
+                        "<li>User-friendly map searching that gives you the power to search for global photo locations;</li>"
+                        "<li>Advanced searches for duplicate and similar images;</li></ul>");
+    newFeatures << i18n("...and much more.");
 
 
     QString featureItems;

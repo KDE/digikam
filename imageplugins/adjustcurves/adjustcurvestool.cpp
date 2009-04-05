@@ -173,8 +173,8 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     m_curveSmooth->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/curvemooth.png")));
     m_curveSmooth->setCheckable(true);
     m_curveSmooth->setToolTip(i18n("Curve smooth mode"));
-    m_curveSmooth->setWhatsThis( i18n("With this button, you constrains the curve type "
-                                      "to a smooth line with tension."));
+    m_curveSmooth->setWhatsThis( i18n("With this button, the curve type is constrained to "
+                                      "be a smooth line with tension."));
     m_curveType->addButton(m_curveSmooth, SmoothDrawing);
 
     hlay2->setMargin(0);
@@ -232,7 +232,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     m_resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
     m_resetButton->setToolTip(i18n("Reset current channel curves' values."));
     m_resetButton->setWhatsThis(i18n("If you press this button, all curves' values "
-                                     "from the current selected channel "
+                                     "from the currently selected channel "
                                      "will be reset to the default values."));
 
     QHBoxLayout* l3 = new QHBoxLayout();

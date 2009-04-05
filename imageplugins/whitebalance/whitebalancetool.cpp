@@ -102,9 +102,9 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     // -------------------------------------------------------------
 
     m_previewWidget = new ImageWidget("whitebalance Tool", 0,
-                                      i18n("You can see here the image's white-balance "
-                                           "adjustments preview. You can pick color on image to "
-                                           "see the color level corresponding on histogram."));
+                                      i18n("The image's white-balance adjustments preview "
+                                           "is shown here.  Pick a color on the image to "
+                                           "see the corresponding color level on the histogram."));
     setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
@@ -169,8 +169,8 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     m_pickTemperature->setIcon(KIcon("color-picker-grey"));
     m_pickTemperature->setCheckable(true);
     m_pickTemperature->setToolTip( i18n( "Temperature tone color picker." ) );
-    m_pickTemperature->setWhatsThis( i18n("With this button, you can pick the color from original "
-                                          "image used to set white color balance temperature and "
+    m_pickTemperature->setWhatsThis( i18n("With this button, you can pick the color from the original "
+                                          "image used to set the white color balance temperature and "
                                           "green component."));
 
     KSeparator *line = new KSeparator(Qt::Horizontal, m_gboxSettings->plainPage());
@@ -189,7 +189,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     m_darkInput->setDecimals(2);
     m_darkInput->input()->setRange(0.0, 1.0, 0.01, true);
     m_darkInput->setDefaultValue(0.5);
-    m_darkInput->setWhatsThis( i18n("Set here the shadows noise suppression level."));
+    m_darkInput->setWhatsThis( i18n("Set here the shadow noise suppression level."));
 
     m_saturationLabel = new QLabel(i18n("Saturation:"), m_gboxSettings->plainPage());
     m_saturationInput = new RDoubleNumInput(m_gboxSettings->plainPage());
@@ -210,7 +210,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     m_greenInput->setDecimals(2);
     m_greenInput->input()->setRange(0.2, 2.5, 0.01, true);
     m_greenInput->setDefaultValue(1.0);
-    m_greenInput->setWhatsThis( i18n("Set here the green component to set magenta color "
+    m_greenInput->setWhatsThis( i18n("Set here the green component to control the magenta color "
                                      "cast removal level."));
 
     KSeparator *line2 = new KSeparator(Qt::Horizontal, m_gboxSettings->plainPage());

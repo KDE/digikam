@@ -131,26 +131,26 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
                                                             m_originalImage->sixteenBit(),
                                                             m_gboxSettings->plainPage(), false);
     m_levelsHistogramWidget->setWhatsThis( i18n("This is the histogram drawing of the selected channel "
-                                                "from original image"));
+                                                "from the original image."));
 
     // -------------------------------------------------------------
 
     m_inputLevels = new DGradientSlider(m_gboxSettings->plainPage());
-    m_inputLevels->setWhatsThis( i18n("Select the inputs intensity of the histogram here."));
-    m_inputLevels->setToolTip( i18n( "Intensity inputs." ) );
+    m_inputLevels->setWhatsThis( i18n("Select the input intensity of the histogram here."));
+    m_inputLevels->setToolTip( i18n( "Input intensity." ) );
     m_inputLevels->installEventFilter(this);
 
     m_outputLevels = new DGradientSlider(m_gboxSettings->plainPage());
-    m_outputLevels->setWhatsThis( i18n("Select the outputs intensity of the histogram here."));
-    m_outputLevels->setToolTip( i18n( "Intensity outputs." ) );
+    m_outputLevels->setWhatsThis( i18n("Select the output intensity of the histogram here."));
+    m_outputLevels->setToolTip( i18n( "Output intensity." ) );
     m_outputLevels->installEventFilter(this);
 
     m_minInput = new RIntNumInput(m_gboxSettings->plainPage());
     m_minInput->setRange(0, m_histoSegments, 1);
     m_minInput->setSliderEnabled(false);
     m_minInput->setDefaultValue(0);
-    m_minInput->setWhatsThis( i18n("Select the minimal intensity input value of the histogram here."));
-    m_minInput->setToolTip( i18n( "Minimal intensity input." ) );
+    m_minInput->setWhatsThis( i18n("Select the minimal input intensity value of the histogram here."));
+    m_minInput->setToolTip( i18n( "Minimal input intensity." ) );
 
     m_gammaInput = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_gammaInput->setDecimals(2);
@@ -163,22 +163,22 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     m_maxInput->setRange(0, m_histoSegments, 1);
     m_maxInput->setSliderEnabled(false);
     m_maxInput->setDefaultValue(m_histoSegments);
-    m_maxInput->setToolTip( i18n( "Maximal intensity input." ) );
-    m_maxInput->setWhatsThis( i18n("Select the maximal intensity input value of the histogram here."));
+    m_maxInput->setToolTip( i18n( "Maximal input intensity." ) );
+    m_maxInput->setWhatsThis( i18n("Select the maximal input intensity value of the histogram here."));
 
     m_minOutput = new RIntNumInput(m_gboxSettings->plainPage());
     m_minOutput->setRange(0, m_histoSegments, 1);
     m_minOutput->setSliderEnabled(false);
     m_minOutput->setDefaultValue(0);
-    m_minOutput->setToolTip( i18n( "Minimal intensity output." ) );
-    m_minOutput->setWhatsThis( i18n("Select the minimal intensity output value of the histogram here."));
+    m_minOutput->setToolTip( i18n( "Minimal output intensity." ) );
+    m_minOutput->setWhatsThis( i18n("Select the minimal output intensity value of the histogram here."));
 
     m_maxOutput = new RIntNumInput(m_gboxSettings->plainPage());
     m_maxOutput->setRange(0, m_histoSegments, 1);
     m_maxOutput->setSliderEnabled(false);
     m_maxOutput->setDefaultValue(m_histoSegments);
-    m_maxOutput->setToolTip( i18n( "Maximal intensity output." ) );
-    m_maxOutput->setWhatsThis( i18n("Select the maximal intensity output value of the histogram here."));
+    m_maxOutput->setToolTip( i18n( "Maximal output intensity." ) );
+    m_maxOutput->setWhatsThis( i18n("Select the maximal output intensity value of the histogram here."));
 
     // -------------------------------------------------------------
 
@@ -191,27 +191,27 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     m_pickBlack->setIcon(KIcon("color-picker-black"));
     m_pickBlack->setCheckable(true);
     m_pickBlack->setToolTip( i18n( "All channels shadow tone color picker" ) );
-    m_pickBlack->setWhatsThis( i18n("With this button, you can pick the color from original "
+    m_pickBlack->setWhatsThis( i18n("With this button, you can pick the color from the original "
                                     "image used to set <b>Shadow Tone</b> "
-                                    "levels input on Red, Green, Blue, and Luminosity channels."));
+                                    "input levels on the Red, Green, Blue, and Luminosity channels."));
 
     m_pickGray  = new QToolButton(m_pickerBox);
     m_pickerColorButtonGroup->addButton(m_pickGray, GrayTonal);
     m_pickGray->setIcon(KIcon("color-picker-grey"));
     m_pickGray->setCheckable(true);
     m_pickGray->setToolTip( i18n( "All channels middle tone color picker" ) );
-    m_pickGray->setWhatsThis( i18n("With this button, you can pick the color from original "
+    m_pickGray->setWhatsThis( i18n("With this button, you can pick the color from the original "
                                    "image used to set <b>Middle Tone</b> "
-                                   "levels input on Red, Green, Blue, and Luminosity channels."));
+                                   "input levels on the Red, Green, Blue, and Luminosity channels."));
 
     m_pickWhite = new QToolButton(m_pickerBox);
     m_pickerColorButtonGroup->addButton(m_pickWhite, WhiteTonal);
     m_pickWhite->setIcon(KIcon("color-picker-white"));
     m_pickWhite->setCheckable(true);
     m_pickWhite->setToolTip( i18n( "All channels highlight tone color picker" ) );
-    m_pickWhite->setWhatsThis( i18n("With this button, you can pick the color from original "
+    m_pickWhite->setWhatsThis( i18n("With this button, you can pick the color from the original "
                                     "image used to set <b>Highlight Tone</b> "
-                                    "levels input on Red, Green, Blue, and Luminosity channels."));
+                                    "input levels on the Red, Green, Blue, and Luminosity channels."));
 
     hlay3->setMargin(0);
     hlay3->setSpacing(0);
@@ -233,7 +233,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     m_resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
     m_resetButton->setToolTip( i18n( "Reset current channel levels' values." ) );
     m_resetButton->setWhatsThis( i18n("If you press this button, all levels' values "
-                                      "from the current selected channel "
+                                      "from the currently selected channel "
                                       "will be reset to the default values."));
 
     QLabel *space = new QLabel(m_gboxSettings->plainPage());

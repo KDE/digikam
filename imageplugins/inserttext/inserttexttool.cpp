@@ -248,7 +248,7 @@ void InsertTextTool::readSettings()
     defaultFont.setPointSize(m_defaultSizeFont);
     m_textRotation->setCurrentIndex(group.readEntry("Text Rotation", 0));
     m_fontColorButton->setColor(group.readEntry("Font Color", black));
-    m_textEdit->setText(group.readEntry("Text String", i18n("Enter your text here!")));
+    m_textEdit->setText(group.readEntry("Text String", i18n("Enter your text here.")));
     m_textFont = group.readEntry("Font Properties", defaultFont);
     m_fontChooserWidget->setFont(m_textFont);
     m_alignTextMode = group.readEntry("Text Alignment", (int) ALIGN_LEFT);
