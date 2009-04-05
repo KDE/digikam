@@ -176,7 +176,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
 #endif
     list.insert(i18n("LibKExiv2"),                  KExiv2Iface::KExiv2::version());
     list.insert(i18n("LibExiv2"),                   KExiv2Iface::KExiv2::Exiv2Version());
-    list.insert(i18n("Exiv2 support XMP metadata"), KExiv2Iface::KExiv2::supportXmp() ?
+    list.insert(i18n("Exiv2 supports XMP metadata"),KExiv2Iface::KExiv2::supportXmp() ?
                                                     i18n("Yes") : i18n("No"));
 #if KEXIV2_VERSION >= 0x000300
     list.insert(i18n("Exiv2 can write to Jpeg"),    KExiv2Iface::KExiv2::supportMetadataWritting("image/jpeg") ?

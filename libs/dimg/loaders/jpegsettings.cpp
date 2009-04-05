@@ -90,7 +90,7 @@ JPEGSettings::JPEGSettings(QWidget *parent)
 
     d->labelWarning = new QLabel(i18n("<font size='-1' color='red'><i>"
                           "Warning: <a href='http://en.wikipedia.org/wiki/JPEG'>JPEG</a> is a "
-                          "lossy compression image format!"
+                          "lossy image compression format."
                           "</i></font>"), this);
 
     d->labelWarning->setOpenExternalLinks(true);

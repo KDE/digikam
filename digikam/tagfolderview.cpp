@@ -557,7 +557,7 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
              this, SLOT(slotABCContextMenu()));
 
     d->ABCMenu->menuAction()->setIcon(SmallIcon("tag-addressbook"));
-    d->ABCMenu->menuAction()->setText(i18n("Create Tag From AddressBook"));
+    d->ABCMenu->menuAction()->setText(i18n("Create Tag From Address Book"));
 #endif // HAVE_KDEPIMLIBS
 
     QAction *resetIconAction = new QAction(SmallIcon("view-refresh"),  i18n("Reset Tag Icon"), this);

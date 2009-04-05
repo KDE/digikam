@@ -107,15 +107,15 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     hlay->addWidget(previewOriginalButton);
     previewOriginalButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/original.png")));
     previewOriginalButton->setCheckable(true);
-    previewOriginalButton->setWhatsThis( i18n( "If you enable this option, you will see "
-                                               "the original image." ) );
+    previewOriginalButton->setWhatsThis( i18n( "If this option is enabled, the original image "
+                                               "will be shown." ) );
 
     QToolButton *previewBothButtonVert = new QToolButton( d->prevBBox );
     d->previewButtons->addButton(previewBothButtonVert, ImageGuideWidget::PreviewBothImagesVertCont);
     hlay->addWidget(previewBothButtonVert);
     previewBothButtonVert->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/bothvert.png")));
     previewBothButtonVert->setCheckable(true);
-    previewBothButtonVert->setWhatsThis( i18n( "If you enable this option, the preview area will "
+    previewBothButtonVert->setWhatsThis( i18n( "If this option is enabled, the preview area will "
                                                "split vertically. "
                                                "A contiguous area of the image will be shown, "
                                                "with one half from the original image, "
@@ -126,7 +126,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     hlay->addWidget(previewBothButtonHorz);
     previewBothButtonHorz->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/bothhorz.png")));
     previewBothButtonHorz->setCheckable(true);
-    previewBothButtonHorz->setWhatsThis( i18n( "If you enable this option, the preview area will "
+    previewBothButtonHorz->setWhatsThis( i18n( "If this option is enabled, the preview area will "
                                                "split horizontally. "
                                                "A contiguous area of the image will be shown, "
                                                "with one half from the original image, "
@@ -137,7 +137,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     hlay->addWidget(previewDuplicateBothButtonVert);
     previewDuplicateBothButtonVert->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/duplicatebothvert.png")));
     previewDuplicateBothButtonVert->setCheckable(true);
-    previewDuplicateBothButtonVert->setWhatsThis( i18n( "If you enable this option, the preview area will "
+    previewDuplicateBothButtonVert->setWhatsThis( i18n( "If this option is enabled, the preview area will "
                                                         "split vertically. "
                                                         "The same part of the original and the target image "
                                                         "will be shown side by side.") );
@@ -147,7 +147,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     hlay->addWidget(previewDupplicateBothButtonHorz);
     previewDupplicateBothButtonHorz->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/duplicatebothhorz.png")));
     previewDupplicateBothButtonHorz->setCheckable(true);
-    previewDupplicateBothButtonHorz->setWhatsThis( i18n( "If you enable this option, the preview area will "
+    previewDupplicateBothButtonHorz->setWhatsThis( i18n( "If this option is enabled, the preview area will "
                                                          "split horizontally. "
                                                          "The same part of the original and the target image "
                                                          "will be shown side by side.") );
@@ -157,17 +157,17 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     hlay->addWidget(previewtargetButton);
     previewtargetButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/target.png")));
     previewtargetButton->setCheckable(true);
-    previewtargetButton->setWhatsThis( i18n( "If you enable this option, you will see "
-                                             "the target image." ) );
+    previewtargetButton->setWhatsThis( i18n( "If this option is enabled, the target image "
+                                             "will be shown." ) );
 
     QToolButton *previewToggleMouseOverButton = new QToolButton( d->prevBBox );
     d->previewButtons->addButton(previewToggleMouseOverButton, ImageGuideWidget::PreviewToggleOnMouseOver);
     hlay->addWidget(previewToggleMouseOverButton);
     previewToggleMouseOverButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/togglemouseover.png")));
     previewToggleMouseOverButton->setCheckable(true);
-    previewToggleMouseOverButton->setWhatsThis( i18n( "If you enable this option, you will see "
-                                                      "the original image when the mouse is over image area, "
-                                                      "else the target image." ) );
+    previewToggleMouseOverButton->setWhatsThis( i18n( "If this option is enabled, the original image will "
+                                                      "be shown when the mouse is over image area; otherwise, "
+                                                      "the target image will be shown." ) );
 
     // -------------------------------------------------------------
 

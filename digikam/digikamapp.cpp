@@ -316,7 +316,7 @@ void DigikamApp::show()
         QString message = i18n("<p>The ICC profiles folder seems to be invalid.</p>"
                                "<p>If you want to try setting it again, choose \"Yes\" here, otherwise "
                                "choose \"No\", and the \"Color Management\" feature "
-                               "will be disabled until you solve this issue</p>");
+                               "will be disabled until you solve this issue.</p>");
 
         if (KMessageBox::warningYesNo(this, message) == KMessageBox::Yes)
         {
@@ -821,7 +821,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->imageSortAction = new KSelectAction(i18n("&Sort Images"), this);
-    d->imageSortAction->setWhatsThis(i18n("Sort Albums contents."));
+    d->imageSortAction->setWhatsThis(i18n("Sort Albums' contents."));
     connect(d->imageSortAction, SIGNAL(triggered(int)), d->view, SLOT(slotSortImages(int)));
     actionCollection()->addAction("image_sort", d->imageSortAction);
 
@@ -1342,8 +1342,9 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev,
         }
         default:
         {
-            d->statusBarSelectionText = i18n("%1/%2 items selected", selection.count(),
-                                                                     QString::number(num_images));
+            d->statusBarSelectionText = i18np("%2/%1 item selected",
+                                              "%2/%1 items selected",
+                                              num_images, selection.count());
 
             // multiple images selected
             d->imageViewAction->setEnabled(false);

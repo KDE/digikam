@@ -99,10 +99,10 @@ DeleteWidget::DeleteWidget(QWidget *parent)
     m_shouldDelete = new QCheckBox(m_checkBoxStack);
     m_shouldDelete->setGeometry(QRect(0, 0, 542, 32));
     m_shouldDelete->setToolTip(i18n("If checked, files will be permanently removed instead of being placed "
-                                    "in the Trash Bin"));
+                                    "in the Trash."));
     m_shouldDelete->setWhatsThis(i18n("<p>If this box is checked, files will be "
                                       "<b>permanently removed</b> instead of "
-                                      "being placed in the Trash Bin.</p>"
+                                      "being placed in the Trash.</p>"
                                       "<p><em>Use this option with caution</em>: most filesystems "
                                       "are unable to "
                                       "undelete deleted files reliably.</p>"));
@@ -114,9 +114,9 @@ DeleteWidget::DeleteWidget(QWidget *parent)
     m_doNotShowAgain = new QCheckBox(m_checkBoxStack);
     m_doNotShowAgain->setGeometry(QRect(0, 0, 100, 30));
     m_doNotShowAgain->setToolTip(i18n("If checked, this dialog will no longer be shown, and files will "
-                                      "be directly moved to the Trash Bin"));
+                                      "be directly moved to the Trash."));
     m_doNotShowAgain->setWhatsThis(i18n("If this box is checked, this dialog will no longer be shown, "
-                                        "and files will be directly moved to the Trash Bin"));
+                                        "and files will be directly moved to the Trash."));
     m_doNotShowAgain->setText(i18n("Do not &ask again"));
 
     QVBoxLayout *vbox = new QVBoxLayout(this);

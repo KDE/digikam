@@ -108,7 +108,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     viewport()->setAutoFillBackground(false);
 
     QVBoxLayout *layout = new QVBoxLayout(panel);
-    d->showToolTipsBox  = new QCheckBox(i18n("Show Thumbbar items toolti&ps"), panel);
+    d->showToolTipsBox  = new QCheckBox(i18n("Show Thumbbar items' toolti&ps"), panel);
     d->showToolTipsBox->setWhatsThis(i18n("Set this option to display the image information when "
                                           "the mouse hovers over a thumbbar item."));
 

@@ -774,7 +774,7 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
             {
                 // Which situation? HasProblems or AllRight?
                 if (message)
-                    *message = i18n("This is a removable storage media that will be identified by its label (\"%1\")",
+                    *message = i18n("This is a removable storage medium that will be identified by its label (\"%1\")",
                                     volume.label);
                 if (iconName)
                     *iconName = "drive-removable-media";
@@ -795,7 +795,7 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
     else
     {
         if (message)
-            *message = i18n("It is not possible on your system to identify the storage media of this path. "
+            *message = i18n("It is not possible on your system to identify the storage medium of this path. "
                             "It will be added using the file path as the only identifier. "
                             "This will work well for your local hard disk.");
                 if (iconName)
@@ -822,7 +822,7 @@ CollectionManager::LocationCheckResult CollectionManager::checkNetworkLocation(c
     if (d->checkIfExists(path, assumeDeleted))
     {
         if (message)
-            *message = i18n("There is already a collection for a network share with the same path");
+            *message = i18n("There is already a collection for a network share with the same path.");
         if (iconName)
             *iconName = "dialog-error";
         return LocationNotAllowed;

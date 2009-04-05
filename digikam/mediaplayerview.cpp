@@ -84,7 +84,7 @@ MediaPlayerView::MediaPlayerView(QWidget *parent)
     setAttribute(Qt::WA_DeleteOnClose);
 
     d->errorView      = new QFrame(this);
-    QLabel *errorMsg  = new QLabel(i18n("An error is occurred with media player..."), d->errorView);
+    QLabel *errorMsg  = new QLabel(i18n("An error has occurred with the media player...."), d->errorView);
     QGridLayout *grid = new QGridLayout(d->errorView);
 
     errorMsg->setAlignment(Qt::AlignCenter);

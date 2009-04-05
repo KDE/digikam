@@ -207,9 +207,9 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     m_lumToleranceInput->setDecimals(1);
     m_lumToleranceInput->input()->setRange(0.0, 1.0, 0.1, true);
     m_lumToleranceInput->setDefaultValue(1.0);
-    m_lumToleranceInput->setWhatsThis( i18n("<b>Luminance</b>: this control sets the luminance tolerance of the image."
-                                            "We recommend using either the <b>Color</b> or the <b>Luminance</b> tolerance settings "
-                                            "to make an image correction, not both at the same time. These settings "
+    m_lumToleranceInput->setWhatsThis( i18n("<b>Luminance</b>: this control sets the luminance tolerance of the image. "
+                                            "Using either the <b>Color</b> or the <b>Luminance</b> tolerance settings "
+                                            "to make an image correction is recommended, but not both at the same time. These settings "
                                             "do not influence the main smoothing process controlled by the <b>Details</b> "
                                             "settings."));
 

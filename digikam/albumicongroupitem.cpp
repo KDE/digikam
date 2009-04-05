@@ -114,9 +114,8 @@ void AlbumIconGroupItem::paintBanner(QPainter *p)
         QString year = tmpLocale.formatDate(date);
 
         dateAndComments = i18ncp("%1: day of month with two digits, %2: short month name, %3: year",
-                                 "Album Date: %1 %2 %3 - 1 Item", "Album Date: %1 %2 %3 - %4 Items",
-                                 day, month, year,
-                                 count());
+                                 "Album Date: %2 %3 %4 - 1 Item", "Album Date: %2 %3 %4 - %1 Items",
+                                 count(), day, month, year);
 
         if (!album->caption().isEmpty())
         {

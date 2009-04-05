@@ -73,7 +73,7 @@ JP2KSettings::JP2KSettings(QWidget *parent)
     d->JPEG2000LossLess = new QCheckBox(i18n("Lossless JPEG 2000 files"), this);
 
     d->JPEG2000LossLess->setWhatsThis( i18n("<p>Toggle lossless compression for JPEG 2000 images.</p>"
-                                            "<p>If you enable this option, you will use a lossless method "
+                                            "<p>If this option is enabled, a lossless method will be used "
                                             "to compress JPEG 2000 pictures.</p>"));
 
     d->JPEG2000compression = new KIntNumInput(75, this);

@@ -261,7 +261,7 @@ void ContextMenuHelper::addCreateTagFromAddressbookMenu()
 
     popmenu.addMenu(d->ABCMenu);
     d->ABCMenu->menuAction()->setIcon(SmallIcon("tag-addressbook"));
-    d->ABCMenu->menuAction()->setText(i18n("Create Tag From AddressBook"));
+    d->ABCMenu->menuAction()->setText(i18n("Create Tag From Address Book"));
 #endif // HAVE_KDEPIMLIBS
 }
 

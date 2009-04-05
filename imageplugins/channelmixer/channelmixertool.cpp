@@ -110,8 +110,8 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
 
     m_previewWidget = new ImageWidget("channelmixer Tool", 0,
                                       i18n("You can see here the image's color channels' "
-                                           "gains adjustments preview. You can pick color on image "
-                                           "to see the color level corresponding on histogram."));
+                                           "gain adjustments preview. You can pick a color on the image "
+                                           "to see the corresponding color level on the histogram."));
     setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
@@ -133,24 +133,24 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
     m_redGain->setDecimals(0);
     m_redGain->setRange(-200.0, 200.0, 1);
     m_redGain->setDefaultValue(0);
-    m_redGain->setWhatsThis(i18n("Select the red color gain in percent for "
-                                 "the current channel here."));
+    m_redGain->setWhatsThis(i18n("Select the red color gain, as a percentage, "
+                                 "for the current channel."));
 
     QLabel *greenLabel = new QLabel(i18n("Green:"), m_gboxSettings->plainPage());
     m_greenGain = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_greenGain->setDecimals(0);
     m_greenGain->setRange(-200.0, 200.0, 1);
     m_greenGain->setDefaultValue(0);
-    m_greenGain->setWhatsThis(i18n("Select the green color gain in percent "
-                                   "for the current channel here."));
+    m_greenGain->setWhatsThis(i18n("Select the green color gain, as a percentage, "
+                                   "for the current channel."));
 
     QLabel *blueLabel = new QLabel(i18n("Blue:"), m_gboxSettings->plainPage());
     m_blueGain = new RDoubleNumInput(m_gboxSettings->plainPage());
     m_blueGain->setDecimals(0);
     m_blueGain->setRange(-200.0, 200.0, 1);
     m_blueGain->setDefaultValue(0);
-    m_blueGain->setWhatsThis(i18n("Select the blue color gain in percent for "
-                                  "the current channel here."));
+    m_blueGain->setWhatsThis(i18n("Select the blue color gain, as a percentage, "
+                                  "for the current channel."));
 
     m_resetButton = new QPushButton(i18n("&Reset"), m_gboxSettings->plainPage());
     m_resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));

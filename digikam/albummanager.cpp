@@ -644,9 +644,9 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority, const QStri
                                       i18n("Your locale has changed since this "
                                            "album was last opened.\n"
                                            "Old Locale : %1, New Locale : %2\n"
-                                           "If you changed your locale lately, this is all right.\n"
-                                           "Please notice that if you switched to a locale "
-                                           "that does not support some of the file names in your collection, "
+                                           "If you have recently changed your locale, you need not be concerned.\n"
+                                           "Please note that if you switched to a locale "
+                                           "that does not support some of the filenames in your collection, "
                                            "these files may no longer be found in the collection. "
                                            "If you are sure that you want to "
                                            "continue, click 'Yes'. "
@@ -1639,8 +1639,8 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
     {
         if (sibling->title() == newName)
         {
-            errMsg = i18n("Another album with same name exists\n"
-                          "Please choose another name");
+            errMsg = i18n("Another album with the same name already exists.\n"
+                          "Please choose another name.");
             return false;
         }
         sibling = sibling->m_next;
@@ -1869,8 +1869,8 @@ bool AlbumManager::renameTAlbum(TAlbum* album, const QString& name,
     {
         if (sibling->title() == name)
         {
-            errMsg = i18n("Another tag with same name exists\n"
-                          "Please choose another name");
+            errMsg = i18n("Another tag with the same name already exists.\n"
+                          "Please choose another name.");
             return false;
         }
         sibling = sibling->m_next;

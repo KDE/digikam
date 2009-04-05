@@ -400,7 +400,7 @@ TagsListCreationErrorDialog::TagsListCreationErrorDialog(QWidget* parent, const 
     setMainWidget(box);
     QVBoxLayout* vLay = new QVBoxLayout(box);
 
-    QLabel *label         = new QLabel(i18n("Error been occurred during Tag creation:"), box);
+    QLabel *label         = new QLabel(i18n("An error occurred during tag creation:"), box);
     QTreeWidget *listView = new QTreeWidget(box);
     listView->setHeaderLabels(QStringList() << i18n("Tag Path") << i18n("Error"));
     listView->setRootIsDecorated(false);

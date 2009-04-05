@@ -1709,7 +1709,7 @@ void DigikamView::slideShow(ImageInfoList &infoList)
     int     i = 0;
     float cnt = (float)infoList.count();
     emit signalProgressBarMode(StatusProgressBar::CancelProgressBarMode,
-                               i18n("Preparing slideshow of %1 images. Please wait...", infoList.count()));
+                               i18np("Preparing slideshow of 1 image. Please wait...","Preparing slideshow of %1 images. Please wait...", infoList.count()));
 
     SlideShowSettings settings;
     settings.exifRotate           = AlbumSettings::instance()->getExifRotate();

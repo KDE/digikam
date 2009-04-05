@@ -80,7 +80,7 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
                               "from the right sidebar.\n\n"
                               "GRAY: no filter is active, all items are visible.\n"
                               "RED: filtering is on, but no items match.\n"
-                              "GREEN: filter(s) matches at least one item.\n\n"
+                              "GREEN: filter(s) match(es) at least one item.\n\n"
                               "Any mouse button click will reset all filters."));
 
 #if KDE_IS_VERSION(4,1,0)

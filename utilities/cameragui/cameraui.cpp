@@ -1869,7 +1869,7 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
             return true;
         else
         {
-            errMsg = i18n("A file with same name (%1) exists in folder %2",
+            errMsg = i18n("A file with the same name (%1) already exists in folder %2.",
                           sub, parentURL.path());
             return false;
         }
@@ -1880,7 +1880,7 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
     PAlbum* parent = AlbumManager::instance()->findPAlbum(parentURL);
     if (!parent)
     {
-        errMsg = i18n("Failed to find Album for path '%1'", parentURL.path());
+        errMsg = i18n("Failed to find Album for path '%1'.", parentURL.path());
         return false;
     }
     return AlbumManager::instance()->createPAlbum(parent, sub, QString(), date, QString(), errMsg);

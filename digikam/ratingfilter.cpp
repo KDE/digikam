@@ -147,11 +147,11 @@ void RatingFilter::mousePressEvent(QMouseEvent* e)
 
         KMenu popmenu(this);
         popmenu.addTitle(SmallIcon("digikam"), i18n("Rating Filter"));
-        QAction *geCondAction = popmenu.addAction(i18n("Greater Equal Condition"));
+        QAction *geCondAction = popmenu.addAction(i18n("Greater Than or Equals Condition"));
         geCondAction->setCheckable(true);
-        QAction *eqCondAction = popmenu.addAction(i18n("Equal Condition"));
+        QAction *eqCondAction = popmenu.addAction(i18n("Equals Condition"));
         eqCondAction->setCheckable(true);
-        QAction *leCondAction = popmenu.addAction(i18n("Less Equal Condition"));
+        QAction *leCondAction = popmenu.addAction(i18n("Less Than or Equals Condition"));
         leCondAction->setCheckable(true);
 
         switch(d->filterCond)
@@ -199,17 +199,17 @@ void RatingFilter::updateRatingTooltip()
     {
         case AlbumLister::GreaterEqualCondition:
         {
-            d->ratingTracker->setText(i18n("Rating greater or equal to %1", rating()));
+            d->ratingTracker->setText(i18n("Rating greater than or equal to %1.", rating()));
             break;
         }
         case AlbumLister::EqualCondition:
         {
-            d->ratingTracker->setText(i18n("Rating equal to %1", rating()));
+            d->ratingTracker->setText(i18n("Rating equal to %1.", rating()));
             break;
         }
         case AlbumLister::LessEqualCondition:
         {
-            d->ratingTracker->setText( i18n("Rating less or equal to %1", rating()));
+            d->ratingTracker->setText( i18n("Rating less than or equal to %1.", rating()));
             break;
         }
         default:

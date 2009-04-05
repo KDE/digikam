@@ -139,7 +139,7 @@ void kio_digikamalbums::put(const KUrl& url, int permissions, KIO::JobFlags flag
     int albumID = access.db()->getAlbumForPath(dbUrl.albumRootId(), dbUrl.album(), false);
     if (albumID == -1)
     {
-        error(KIO::ERR_UNKNOWN, i18n("Destination album %1 not found in database", url.directory()));
+        error(KIO::ERR_UNKNOWN, i18n("Destination album %1 not found in database.", url.directory()));
         return;
     }
 
@@ -273,7 +273,7 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
         dstAlbumID = access.db()->getAlbumForPath(dbUrlDst.albumRootId(), dbUrlDst.album(), false);
         if (dstAlbumID == -1)
         {
-            error(KIO::ERR_UNKNOWN, i18n("Destination album %1 not found in database", dst.directory()));
+            error(KIO::ERR_UNKNOWN, i18n("Destination album %1 not found in database.", dst.directory()));
             return;
         }
     }

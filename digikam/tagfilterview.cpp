@@ -909,7 +909,7 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
 
     popmenu.addMenu(d->ABCMenu);
     d->ABCMenu->menuAction()->setIcon(SmallIcon("tag-addressbook"));
-    d->ABCMenu->menuAction()->setText(i18n("Create Tag From AddressBook"));
+    d->ABCMenu->menuAction()->setText(i18n("Create Tag From Address Book"));
 #endif // HAVE_KDEPIMLIBS
 
     if (item)
