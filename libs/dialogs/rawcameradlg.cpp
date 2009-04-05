@@ -106,21 +106,21 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
 
     QLabel *header = new QLabel(page);
 #if KDCRAW_VERSION < 0x000400
-    header->setText(i18n("<p>Using KDcraw library version %2</p>"
-                         "<p>Using Dcraw program version %3</p>"
-                         "<p>1 model in the list</p>",
-                         "<p>Using KDcraw library version %2</p>"
-                         "<p>Using Dcraw program version %3</p>"
-                         "<p>%1 models in the list</p>",
-                         list.count(), KDcrawVer, dcrawVer));
+    header->setText(i18np("<p>Using KDcraw library version %2</p>"
+                          "<p>Using Dcraw program version %3</p>"
+                          "<p>1 model in the list</p>",
+                          "<p>Using KDcraw library version %2</p>"
+                          "<p>Using Dcraw program version %3</p>"
+                          "<p>%1 models in the list</p>",
+                          list.count(), KDcrawVer, dcrawVer));
 #else
-    header->setText(i18n("<p>Using KDcraw library version %2</p>"
-                         "<p>Using LibRaw version %3</p>"
-                         "<p>1 model in the list</p>",
-                         "<p>Using KDcraw library version %2</p>"
-                         "<p>Using LibRaw version %3</p>"
-                         "<p>%1 models in the list</p>",
-                         list.count(), KDcrawVer, librawVer));
+    header->setText(i18np("<p>Using KDcraw library version %2</p>"
+                          "<p>Using LibRaw version %3</p>"
+                          "<p>1 model in the list</p>",
+                          "<p>Using KDcraw library version %2</p>"
+                          "<p>Using LibRaw version %3</p>"
+                          "<p>%1 models in the list</p>",
+                          list.count(), KDcrawVer, librawVer));
 #endif
 
     // --------------------------------------------------------
