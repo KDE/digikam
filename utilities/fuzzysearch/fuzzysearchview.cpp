@@ -354,15 +354,15 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->nameEditSketch = new KLineEdit(hbox2);
     d->nameEditSketch->setClearButtonShown(true);
     d->nameEditSketch->setWhatsThis(i18n("Enter the name of the current sketch search to save in the "
-                                         "\"My Fuzzy Searches\" view"));
+                                         "\"My Fuzzy Searches\" view."));
 
     d->saveBtnSketch  = new QToolButton(hbox2);
     d->saveBtnSketch->setIcon(SmallIcon("document-save"));
     d->saveBtnSketch->setEnabled(false);
     d->saveBtnSketch->setToolTip(i18n("Save current sketch search to a new virtual Album"));
-    d->saveBtnSketch->setWhatsThis(i18n("If you press this button, current sketch "
+    d->saveBtnSketch->setWhatsThis(i18n("If you press this button, the current sketch "
                                         "fuzzy search will be saved to a new search "
-                                        "virtual album using name "
+                                        "virtual album using the name "
                                         "set on the left side."));
 
     // ---------------------------------------------------------------
