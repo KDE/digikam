@@ -60,9 +60,9 @@
 #include "digikamapp.h"
 #include "imageinfo.h"
 #include "lighttablewindow.h"
+#include "queuemgrwindow.h"
 #include "ratingpopupmenu.h"
 #include "tagspopupmenu.h"
-#include "queuemgrwindow.h"
 
 namespace Digikam
 {
