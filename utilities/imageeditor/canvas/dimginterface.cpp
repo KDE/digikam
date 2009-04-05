@@ -435,8 +435,8 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
             }
             else
             {
-                QString message = i18n("Cannot find the ICC color-space profile file. "
-                                       "ICC profiles path seems to be invalid. "
+                QString message = i18n("Cannot find the ICC color-space profile file: "
+                                       "the ICC profile path seems to be invalid. "
                                        "No color transform will be applied. "
                                        "Please check the color management "
                                        "configuration in digiKam's setup to verify the ICC path.");

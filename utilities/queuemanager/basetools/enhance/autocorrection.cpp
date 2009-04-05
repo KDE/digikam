@@ -49,8 +49,8 @@ namespace Digikam
 AutoCorrection::AutoCorrection(QObject* parent)
               : BatchTool("AutoCorrection", BaseTool, parent)
 {
-    setToolTitle(i18n("Colors Auto-correction"));
-    setToolDescription(i18n("A tool to correct automatically image colors"));
+    setToolTitle(i18n("Color Auto-correction"));
+    setToolDescription(i18n("A tool to automatically correct image colors."));
     setToolIcon(KIcon(SmallIcon("autocorrection")));
 
     KVBox *vbox   = new KVBox;

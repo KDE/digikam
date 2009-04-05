@@ -451,7 +451,7 @@ void EditorWindow::setupStandardActions()
     connect(d->viewOverExpoAction, SIGNAL(triggered()), this, SLOT(slotToggleOverExposureIndicator()));
     actionCollection()->addAction("editorwindow_overexposure", d->viewOverExpoAction);
 
-    d->viewCMViewAction = new KToggleAction(KIcon("video-display"), i18n("Color Managed View"), this);
+    d->viewCMViewAction = new KToggleAction(KIcon("video-display"), i18n("Color-Managed View"), this);
     d->viewCMViewAction->setShortcut(Qt::Key_F12);
     connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
     actionCollection()->addAction("editorwindow_cmview", d->viewCMViewAction);
@@ -1784,13 +1784,13 @@ void EditorWindow::setColorManagedViewIndicatorToolTip(bool available, bool cmv)
     if (available)
     {
         if (cmv)
-            tooltip = i18n("Color Managed View is enabled");
+            tooltip = i18n("Color-Managed View is enabled.");
         else
-            tooltip = i18n("Color Managed View is disabled");
+            tooltip = i18n("Color-Managed View is disabled.");
     }
     else
     {
-        tooltip = i18n("Color Management is not configured, so the Color Managed View is not available");
+        tooltip = i18n("Color Management is not configured, so the Color-Managed View is not available.");
     }
     d->cmViewIndicator->setToolTip(tooltip);
 }

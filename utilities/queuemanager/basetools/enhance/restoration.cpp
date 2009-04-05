@@ -51,7 +51,7 @@ Restoration::Restoration(QObject* parent)
            : BatchTool("Restoration", BaseTool, parent), m_cimgIface(0)
 {
     setToolTitle(i18n("Restoration"));
-    setToolDescription(i18n("A tool to restore photograph based on Greystoration"));
+    setToolDescription(i18n("A tool to restore photographs based on Greystoration."));
     setToolIcon(KIcon(SmallIcon("restoration")));
 
     KVBox *vbox   = new KVBox;
@@ -68,10 +68,11 @@ Restoration::Restoration(QObject* parent)
     m_comboBox->insertItem(ReduceJPEGArtefacts, i18n("Reduce JPEG Artifacts"));
     m_comboBox->insertItem(ReduceTexturing,     i18n("Reduce Texturing"));
     m_comboBox->setWhatsThis( i18n("<p>Select the filter preset to use for photograph restoration here:</p>"
-                                   "<p><b>Reduce Uniform Noise</b>: reduce small image artifacts like sensor noise.<br/>"
-                                   "<b>Reduce JPEG Artifacts</b>: reduce large image artifacts like JPEG compression mosaic.<br/>"
-                                   "<b>Reduce Texturing</b>: reduce image artifacts like paper texture or Moire patterns "
-                                   "of a scanned image.</p>"));
+                                   "<p><b>None</b>: Most common values. Puts settings to default.<br/>"
+                                   "<b>Reduce Uniform Noise</b>: reduce small image artifacts such as sensor noise.<br/>"
+                                   "<b>Reduce JPEG Artifacts</b>: reduce large image artifacts, such as a JPEG compression mosaic.<br/>"
+                                   "<b>Reduce Texturing</b>: reduce image artifacts, such as paper texture, or Moire patterns "
+                                   "on scanned images.</p>"));
 
     QLabel *space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);

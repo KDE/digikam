@@ -49,7 +49,7 @@ Convert2JPEG::Convert2JPEG(QObject* parent)
             : BatchTool("Convert2JPEG", BaseTool, parent)
 {
     setToolTitle(i18n("Convert To JPEG"));
-    setToolDescription(i18n("A tool to convert image to JPEG format"));
+    setToolDescription(i18n("A tool to convert images to JPEG format."));
     setToolIcon(KIcon(SmallIcon("image-jpeg")));
 
     m_settings = new JPEGSettings;

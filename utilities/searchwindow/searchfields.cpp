@@ -1854,9 +1854,9 @@ void SearchFieldAlbum::updateComboText()
     {
         setValidValueState(true);
         if (m_type == TypeAlbum)
-            m_comboBox->setLineEditText(i18n("%1 Albums selected", checkedAlbums.count()));
+            m_comboBox->setLineEditText(i18np("1 Album selected", "%1 Albums selected", checkedAlbums.count()));
         else
-            m_comboBox->setLineEditText(i18n("%1 Tags selected", checkedAlbums.count()));
+            m_comboBox->setLineEditText(i18np("1 Tag selected", "%1 Tags selected", checkedAlbums.count()));
     }
 }
 

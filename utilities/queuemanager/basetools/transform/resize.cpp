@@ -51,18 +51,18 @@ Resize::Resize(QObject* parent)
       : BatchTool("Resize", BaseTool, parent)
 {
     setToolTitle(i18n("Resize"));
-    setToolDescription(i18n("A tool to resize image with a customized length"));
+    setToolDescription(i18n("A tool to resize images with a customized length."));
     setToolIcon(KIcon(SmallIcon("transform-scale")));
 
     KVBox *vbox   = new KVBox;
     m_labelPreset = new QLabel(i18n("Preset Length:"), vbox);
     m_comboBox    = new KComboBox(vbox);
-    m_comboBox->insertItem(Tiny,   i18n("Tiny (%1 pixels)",   presetLengthValue(Tiny)));
-    m_comboBox->insertItem(Small,  i18n("Small (%1 pixels)",  presetLengthValue(Small)));
-    m_comboBox->insertItem(Medium, i18n("Medium (%1 pixels)", presetLengthValue(Medium)));
-    m_comboBox->insertItem(Big,    i18n("Big (%1 pixels)",    presetLengthValue(Big)));
-    m_comboBox->insertItem(Large,  i18n("Large (%1 pixels)",  presetLengthValue(Large)));
-    m_comboBox->insertItem(Huge,   i18n("Huge (%1 pixels)",   presetLengthValue(Huge)));
+    m_comboBox->insertItem(Tiny,   i18np("Tiny (1 pixel)",   "Tiny (%1 pixels)",   presetLengthValue(Tiny)));
+    m_comboBox->insertItem(Small,  i18np("Small (1 pixel)",  "Small (%1 pixels)",  presetLengthValue(Small)));
+    m_comboBox->insertItem(Medium, i18np("Medium (1 pixel)", "Medium (%1 pixels)", presetLengthValue(Medium)));
+    m_comboBox->insertItem(Big,    i18np("Big (1 pixel)",    "Big (%1 pixels)",    presetLengthValue(Big)));
+    m_comboBox->insertItem(Large,  i18np("Large (1 pixel)",  "Large (%1 pixels)",  presetLengthValue(Large)));
+    m_comboBox->insertItem(Huge,   i18np("Huge (1 pixel)",   "Huge (%1 pixels)",   presetLengthValue(Huge)));
 
     m_useCustom    = new QCheckBox(i18n("Use Custom Length"), vbox);
     m_customLength = new KIntNumInput(vbox);

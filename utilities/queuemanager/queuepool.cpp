@@ -265,7 +265,7 @@ bool QueuePool::customRenamingRulesAreValid()
     {
         KMessageBox::errorList(kapp->activeWindow(),
                                i18n("Custom renaming rules are invalid for Queues listed below. "
-                                    "Please fix it!"), list);
+                                    "Please fix them."), list);
         return false;
     }
     return true;
@@ -290,7 +290,7 @@ bool QueuePool::assignedBatchToolsListsAreValid()
     {
         KMessageBox::errorList(kapp->activeWindow(),
                                i18n("Assigned batch tools list is empty for Queues listed below. "
-                                    "Please assign tools!"), list);
+                                    "Please assign tools."), list);
         return false;
     }
     return true;

@@ -49,7 +49,7 @@ Flip::Flip(QObject* parent)
     : BatchTool("Flip", BaseTool, parent)
 {
     setToolTitle(i18n("Flip"));
-    setToolDescription(i18n("A tool to flip image horizontally or vertically"));
+    setToolDescription(i18n("A tool to flip images horizontally or vertically."));
     setToolIcon(KIcon(SmallIcon("object-flip-vertical")));
 
     KVBox *vbox   = new KVBox;

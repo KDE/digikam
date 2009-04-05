@@ -66,12 +66,12 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     setModal(true);
     setHelp("iccprofile.anchor", "digikam");
     setButtonText(Ok,        i18n("Convert"));
-    setButtonToolTip(Ok,     i18n("Apply the default color workspace profile to the image"));
+    setButtonToolTip(Ok,     i18n("Apply the default color workspace profile to the image."));
     setButtonText(Cancel,    i18n("Do Nothing"));
     setButtonToolTip(Cancel, i18n("Do not change the image"));
     setButtonText(Apply,     i18n("Assign"));
     setButtonToolTip(Apply,  i18n("Only embed the color workspace profile in the image, "
-                                  "do not change the image"));
+                                  "do not change the image."));
 
     QFileInfo fi(file);
     setCaption(fi.fileName());

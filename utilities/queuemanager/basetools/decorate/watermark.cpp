@@ -134,7 +134,7 @@ WaterMark::WaterMark(QObject* parent)
     d->stringLength->setRange(10, 90);
     d->stringLength->setValue(25);
     d->stringLength->setSliderEnabled(true);
-    d->stringLength->setWhatsThis(i18n("Set here the string length in percent relative of image width."));
+    d->stringLength->setWhatsThis(i18n("Enter here the string length as a percent of the image width."));
     label5->setText(i18n("length (%):"));
 
     QLabel *space = new QLabel(vbox);

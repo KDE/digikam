@@ -49,7 +49,7 @@ Convert2TIFF::Convert2TIFF(QObject* parent)
             : BatchTool("Convert2TIFF", BaseTool, parent)
 {
     setToolTitle(i18n("Convert To TIFF"));
-    setToolDescription(i18n("A tool to convert image to TIFF format"));
+    setToolDescription(i18n("A tool to convert images to TIFF format."));
     setToolIcon(KIcon(SmallIcon("image-tiff")));
 
     m_settings = new TIFFSettings();

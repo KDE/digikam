@@ -114,7 +114,7 @@ AssignedListView::AssignedListView(QWidget *parent)
                 : QTreeWidget(parent)
 {
     setSelectionMode(QAbstractItemView::SingleSelection);
-    setWhatsThis(i18n("This is the list of batch tool assigned."));
+    setWhatsThis(i18n("This is the list of batch tools assigned."));
 
     setDragEnabled(true);
     setAcceptDrops(true);

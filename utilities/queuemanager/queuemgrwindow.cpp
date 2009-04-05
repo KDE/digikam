@@ -337,7 +337,7 @@ void QueueMgrWindow::setupActions()
     connect(d->removeItemsSelAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveSelectedItems()));
     actionCollection()->addAction("queuemgr_removeitemssel", d->removeItemsSelAction);
 
-    d->removeItemsDoneAction = new KAction(i18n("Remove items done"), this);
+    d->removeItemsDoneAction = new KAction(i18n("Removing items completed"), this);
     d->removeItemsDoneAction->setEnabled(false);
     connect(d->removeItemsDoneAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveItemsDone()));
     actionCollection()->addAction("queuemgr_removeitemsdone", d->removeItemsDoneAction);
@@ -480,13 +480,10 @@ void QueueMgrWindow::refreshStatusBar()
     switch (items)
     {
         case 0:
-            message.append(i18n("No item"));
-            break;
-        case 1:
-            message.append(i18n("1 item"));
+            message.append(i18n("No items"));
             break;
         default:
-            message.append(i18n("%1 items", items));
+            message.append(i18np("1 item", "%1 items", items));
             break;
     }
 
@@ -495,13 +492,10 @@ void QueueMgrWindow::refreshStatusBar()
     switch (tasks)
     {
         case 0:
-            message.append(i18n("No task"));
-            break;
-        case 1:
-            message.append(i18n("1 task"));
+            message.append(i18n("No tasks"));
             break;
         default:
-            message.append(i18n("%1 tasks", tasks));
+            message.append(i18np("1 task", "%1 tasks", tasks));
             break;
     }
 
@@ -510,13 +504,10 @@ void QueueMgrWindow::refreshStatusBar()
     switch (totalItems)
     {
         case 0:
-            message.append(i18n("No item"));
-            break;
-        case 1:
-            message.append(i18n("1 item"));
+            message.append(i18n("No items"));
             break;
         default:
-            message.append(i18n("%1 items", totalItems));
+            message.append(i18np("1 item", "%1 items", totalItems));
             break;
     }
 
@@ -525,13 +516,10 @@ void QueueMgrWindow::refreshStatusBar()
     switch (totalTasks)
     {
         case 0:
-            message.append(i18n("No task"));
-            break;
-        case 1:
-            message.append(i18n("1 task"));
+            message.append(i18n("No tasks"));
             break;
         default:
-            message.append(i18n("%1 tasks", totalTasks));
+            message.append(i18np("1 task", "%1 tasks", totalTasks));
             break;
     }
 
@@ -767,7 +755,7 @@ void QueueMgrWindow::slotRun()
 
     if (d->itemsList.empty())
     {
-        KMessageBox::error(this, i18n("There is no item to process in the queues!"));
+        KMessageBox::error(this, i18n("There are no items to process in the queues."));
         processingAborted();
         return;
     }

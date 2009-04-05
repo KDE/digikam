@@ -51,7 +51,7 @@ Rotate::Rotate(QObject* parent)
       : BatchTool("Rotate", BaseTool, parent)
 {
     setToolTitle(i18n("Rotate"));
-    setToolDescription(i18n("A tool to rotate image by 90/180/270 degrees"));
+    setToolDescription(i18n("A tool to rotate images by 90/180/270 degrees."));
     setToolIcon(KIcon(SmallIcon("object-rotate-right")));
 
     KVBox *vbox = new KVBox;
