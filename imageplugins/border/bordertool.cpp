@@ -123,7 +123,7 @@ BorderTool::BorderTool(QObject* parent)
     m_preserveAspectRatio->setText(i18n("Preserve Aspect Ratio"));
     m_preserveAspectRatio->setWhatsThis( i18n("Enable this option if you want to preserve the aspect "
                                               "ratio of image. If enabled, the border width will be "
-                                              "in percent of the image size, else the border width will be "
+                                              "a percentage of the image size, else the border width will be "
                                               "in pixels."));
 
     m_labelBorderPercent  = new QLabel(i18n("Width (%):"), m_gboxSettings->plainPage());
@@ -131,7 +131,7 @@ BorderTool::BorderTool(QObject* parent)
     m_borderPercent->setRange(1, 50, 1);
     m_borderPercent->setSliderEnabled(true);
     m_borderPercent->setDefaultValue(10);
-    m_borderPercent->setWhatsThis( i18n("Set here the border width in percent of the image size."));
+    m_borderPercent->setWhatsThis( i18n("Set here the border width as a percentage of the image size."));
 
     m_labelBorderWidth = new QLabel(i18n("Width (pixels):"), m_gboxSettings->plainPage());
     m_borderWidth      = new RIntNumInput(m_gboxSettings->plainPage());

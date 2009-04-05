@@ -168,12 +168,12 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, int histogr
     new QLabel(i18n("Guide:"), d->guideBox);
     QLabel *space4  = new QLabel(d->guideBox);
     d->guideColorBt = new KColorButton(QColor(Qt::red), d->guideBox);
-    d->guideColorBt->setWhatsThis(i18n("Set here the color used to draw guides dashed-lines."));
+    d->guideColorBt->setWhatsThis(i18n("Set here the color used to draw dashed guide lines."));
     d->guideSize    = new RIntNumInput(d->guideBox);
     d->guideSize->setRange(1, 5, 1);
     d->guideSize->setSliderEnabled(true);
     d->guideSize->setDefaultValue(1);
-    d->guideSize->setWhatsThis(i18n("Set here the width in pixels used to draw guides dashed-lines."));
+    d->guideSize->setWhatsThis(i18n("Set here the width in pixels used to draw dashed guide lines."));
 
     d->guideBox->setStretchFactor(space4, 10);
     d->guideBox->setSpacing(spacingHint());

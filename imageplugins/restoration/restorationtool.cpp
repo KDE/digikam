@@ -104,10 +104,10 @@ RestorationTool::RestorationTool(QObject* parent)
     m_restorationTypeCB->addItem( i18n("Reduce Texturing") );
     m_restorationTypeCB->setWhatsThis( i18n("<p>Select the filter preset to use for photograph restoration here:</p>"
                                             "<p><b>None</b>: Most common values. Puts settings to default.<br/>"
-                                            "<b>Reduce Uniform Noise</b>: reduce small image artifacts like sensor noise.<br/>"
-                                            "<b>Reduce JPEG Artifacts</b>: reduce large image artifacts like JPEG compression mosaic.<br/>"
-                                            "<b>Reduce Texturing</b>: reduce image artifacts like paper texture or Moire patterns "
-                                            "of a scanned image.</p>"));
+                                            "<b>Reduce Uniform Noise</b>: reduce small image artifacts such as sensor noise.<br/>"
+                                            "<b>Reduce JPEG Artifacts</b>: reduce large image artifacts, such as a JPEG compression mosaic.<br/>"
+                                            "<b>Reduce Texturing</b>: reduce image artifacts, such as paper texture, or Moire patterns "
+                                            "on scanned images.</p>"));
 
     grid->addWidget(cimgLogoLabel,       0, 1, 1, 1);
     grid->addWidget(typeLabel,           1, 0, 1, 1);

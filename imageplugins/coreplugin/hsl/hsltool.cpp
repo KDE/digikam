@@ -85,10 +85,10 @@ HSLTool::HSLTool(QObject* parent)
     m_destinationPreviewData = 0;
 
     m_previewWidget = new ImageWidget("hsladjust Tool", 0,
-                                      i18n("Here you can see the image "
-                                           "Hue/Saturation/Lightness adjustments preview. "
-                                           "You can pick color on image "
-                                           "to see the color level corresponding on histogram."));
+                                      i18n("The Hue/Saturation/Lightness adjustment preview "
+                                           "is shown here. "
+                                           "Picking a color on the image will show the "
+                                           "corresponding color level on the histogram."));
     setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
