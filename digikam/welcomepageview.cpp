@@ -118,7 +118,7 @@ QString WelcomePageView::infoPage()
                         "<ul><li>Batch queue manager;</li>"
                         "<li>Revamped camera import wizard;</li>"
                         "<li>LensFun integration: auto-correction of lens distortion;</li>"
-                        "<li>Fuzzy searches based on hand-drawn sketches<;/li>"
+                        "<li>Fuzzy searches based on hand-drawn sketches;</li>"
                         "<li>Advanced searches using image meta-information, such as keywords and dates;</li>"
                         "<li>User-friendly map searching that gives you the power to search for global photo locations;</li>"
                         "<li>Advanced searches for duplicate and similar images;</li></ul>");
