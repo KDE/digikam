@@ -201,9 +201,9 @@ void QueuePool::removeTab(int index)
     int count            = queue->pendingItemsCount();
     if (count > 0)
     {
-        int ret = KMessageBox::questionYesNo(this, 
-                  i18np("It still 1 unprocessed item in \"%2\". Do you want to close this queue?", 
-                        "There still %1 unprocessed items in \"%2\". Do you want to close this queue?", 
+        int ret = KMessageBox::questionYesNo(this,
+                  i18np("There is still 1 unprocessed item in \"%2\". Do you want to close this queue?",
+                        "There are still %1 unprocessed items in \"%2\". Do you want to close this queue?",
                   count, tabText(index)));
         if (ret == KMessageBox::No)
             return;
@@ -263,8 +263,8 @@ bool QueuePool::customRenamingRulesAreValid()
 
     if (!list.isEmpty())
     {
-        KMessageBox::errorList(kapp->activeWindow(), 
-                               i18n("Custom renaming rules is invalid for Queues listed below. "
+        KMessageBox::errorList(kapp->activeWindow(),
+                               i18n("Custom renaming rules are invalid for Queues listed below. "
                                     "Please fix it!"), list);
         return false;
     }
@@ -288,7 +288,7 @@ bool QueuePool::assignedBatchToolsListsAreValid()
 
     if (!list.isEmpty())
     {
-        KMessageBox::errorList(kapp->activeWindow(), 
+        KMessageBox::errorList(kapp->activeWindow(),
                                i18n("Assigned batch tools list is empty for Queues listed below. "
                                     "Please assign tools!"), list);
         return false;
