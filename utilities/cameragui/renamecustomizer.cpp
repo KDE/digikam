@@ -251,7 +251,7 @@ QString ManualRenameInput::createToolTip()
               << p(QString("#"),              i18n("sequence number"))
               << p(QString("#{start,step}"),  i18n("sequence number (custom start + step)"))
               << p(QString("[cam]"),          i18n("camera name"))
-              << p(QString("[date:format]"),  i18n("datetime of the file"));
+              << p(QString("[date:format]"),  i18n("date and time of the file"));
 
     QString tooltip;
     tooltip += QString("<table>");
@@ -382,7 +382,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->renameDefaultCase->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 
     d->renameDefaultCaseType = new KComboBox(d->renameDefaultBox);
-    d->renameDefaultCaseType->insertItem(0, i18n("Leave as Is"));
+    d->renameDefaultCaseType->insertItem(0, i18n("Leave as-is"));
     d->renameDefaultCaseType->insertItem(1, i18n("Upper"));
     d->renameDefaultCaseType->insertItem(2, i18n("Lower"));
     d->renameDefaultCaseType->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
@@ -420,7 +420,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->addOrigNameBox->setWhatsThis(i18n("Set this option to add the original filename."));
 
     d->addDateTimeBox = new QCheckBox(i18n("Add Date && Time"), d->renameCustomBox);
-    d->addDateTimeBox->setWhatsThis( i18n("Set this option to add the camera provided date and time."));
+    d->addDateTimeBox->setWhatsThis( i18n("Set this option to add the camera-provided date and time."));
 
     QWidget *dateTimeWidget = new QWidget(d->renameCustomBox);
     QHBoxLayout *boxLayout2 = new QHBoxLayout(dateTimeWidget);

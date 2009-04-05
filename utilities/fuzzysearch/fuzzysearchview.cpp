@@ -244,13 +244,13 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->nameEditImage = new KLineEdit(hbox4);
     d->nameEditImage->setClearButtonShown(true);
     d->nameEditImage->setWhatsThis(i18n("Enter the name of the current similar image search to save in the "
-                                        "\"My Fuzzy Searches\" view"));
+                                        "\"My Fuzzy Searches\" view."));
 
     d->saveBtnImage  = new QToolButton(hbox4);
     d->saveBtnImage->setIcon(SmallIcon("document-save"));
     d->saveBtnImage->setEnabled(false);
     d->saveBtnImage->setToolTip(i18n("Save current similar image search to a new virtual Album"));
-    d->saveBtnImage->setWhatsThis(i18n("If you press this button, current "
+    d->saveBtnImage->setWhatsThis(i18n("If you press this button, the current "
                                        "similar image search will be saved to a new search "
                                        "virtual album using name "
                                        "set on the left side."));

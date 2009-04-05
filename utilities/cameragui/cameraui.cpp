@@ -1184,7 +1184,7 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
 
         if (totalKbSize >= d->cameraFreeSpace->kBAvail())
         {
-            KMessageBox::error(this, i18n("There is no enough free space on Camera Media "
+            KMessageBox::error(this, i18n("There is no enough free space on the Camera Medium "
                                           "to upload pictures.\n\n"
                                           "Space require: %1\n"
                                           "Available free space: %2",
@@ -1217,7 +1217,7 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
 
         while (d->view->findItem(cameraFolder, name + ext))
         {
-            QString msg(i18n("Camera Folder <b>%1</b> already contains item <b>%2</b><br/>"
+            QString msg(i18n("Camera Folder <b>%1</b> already contains item <b>%2</b>.<br/>"
                              "Please enter a new file name (without extension):",
                              cameraFolder, fi.fileName()));
             name = KInputDialog::getText(i18n("File already exists"), msg, name, &ok, this);

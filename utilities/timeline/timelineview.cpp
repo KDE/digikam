@@ -192,7 +192,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->resetButton = new QToolButton(hbox2);
     d->resetButton->setIcon(SmallIcon("document-revert"));
     d->resetButton->setToolTip(i18n("Clear current selection"));
-    d->resetButton->setWhatsThis(i18n("If you press this button, current dates selection from time-line will be clear."));
+    d->resetButton->setWhatsThis(i18n("If you press this button, the current date selection on the time-line will be cleared."));
     d->nameEdit    = new KLineEdit(hbox2);
     d->nameEdit->setClearButtonShown(true);
     d->nameEdit->setWhatsThis(i18n("Enter the name of the current dates search to save in the "
@@ -202,8 +202,8 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->saveButton->setIcon(SmallIcon("document-save"));
     d->saveButton->setEnabled(false);
     d->saveButton->setToolTip(i18n("Save current selection to a new virtual Album"));
-    d->saveButton->setWhatsThis(i18n("If you press this button, current dates selection from time-line will be "
-                                     "saved to a new search virtual Album using name set on the left side."));
+    d->saveButton->setWhatsThis(i18n("If you press this button, the dates selected on the time-line will be "
+                                     "saved to a new search virtual Album using the name set on the left."));
 
     // ---------------------------------------------------------------
 

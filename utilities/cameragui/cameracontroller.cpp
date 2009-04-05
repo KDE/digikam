@@ -349,9 +349,9 @@ void CameraController::executeCommand(CameraCommand *cmd)
             emit signalConnected(result);
 
             if (result)
-                sendInfo(i18n("Connection established"));
+                sendInfo(i18n("Connection established."));
             else
-                sendInfo(i18n("Connection failed"));
+                sendInfo(i18n("Connection failed."));
 
             break;
         }
@@ -370,7 +370,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
         }
         case(CameraCommand::gp_freeSpace):
         {
-            sendInfo(i18n("Getting camera freespace available..."));
+            sendInfo(i18n("Getting available free space on camera..."));
             unsigned long kBSize  = 0;
             unsigned long kBAvail = 0;
             d->camera->getFreeSpace(kBSize, kBAvail);
@@ -415,7 +415,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             GPItemInfoList itemsList;
             if (!d->camera->getItemsInfoList(folder, itemsList, true))
             {
-                sendError(i18n("Failed to list files in %1", folder));
+                sendError(i18n("Failed to list files in %1.", folder));
             }
 
             if (!itemsList.isEmpty())
@@ -590,7 +590,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             }
             else
             {
-                sendError(i18n("Failed to retrieve file %1 from camera", file));
+                sendError(i18n("Failed to retrieve file %1 from camera.", file));
             }
             break;
         }
