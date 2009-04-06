@@ -172,12 +172,12 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     btnPoint2->setWhatsThis(btnWhatsThis);
 
     QGridLayout *containerLayout  = new QGridLayout;
-    containerLayout->addWidget(btnPoint1,               0, 0, 1,  1);
-    containerLayout->addWidget(m_autoHoriPoint1Label,   0, 1, 1,  1);
-    containerLayout->addWidget(btnPoint2,               1, 0, 1,  1);
-    containerLayout->addWidget(m_autoHoriPoint2Label,   1, 1, 1,  1);
-    containerLayout->addWidget(btnSetHori,              2, 0, 1,  2);
-    containerLayout->addWidget(btnSetVerti,             2, 3, 1,  2);
+    containerLayout->addWidget(btnPoint1,               0, 0, 1, 1);
+    containerLayout->addWidget(m_autoHoriPoint1Label,   0, 1, 1, 1);
+    containerLayout->addWidget(btnPoint2,               1, 0, 1, 1);
+    containerLayout->addWidget(m_autoHoriPoint2Label,   1, 1, 1, 1);
+    containerLayout->addWidget(btnSetHori,              2, 0, 1, 2);
+    containerLayout->addWidget(btnSetVerti,             2, 3, 1, 2);
     containerLayout->setColumnStretch(2, 10);
     containerLayout->setMargin(0);
     m_autoHorizonContainer->setLayout(containerLayout);
