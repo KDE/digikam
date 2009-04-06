@@ -75,7 +75,9 @@ private Q_SLOTS:
     void slotAutoHorizonToggled(bool);
     void slotAutoHorizonP1Clicked();
     void slotAutoHorizonP2Clicked();
-    void slotAutoHorizonSetAngle();
+    void slotAutoHorizonHoriClicked();
+    void slotAutoHorizonVertiClicked();
+    void slotAutoHorizonSetAngle(Orientation);
 
 private:
 
@@ -105,7 +107,6 @@ private:
     QWidget                      *m_autoHorizonContainer;
 
     KDcrawIface::RComboBox       *m_autoCropCB;
-    KDcrawIface::RComboBox       *m_autoHorizonCB;
 
     KDcrawIface::RIntNumInput    *m_angleInput;
 

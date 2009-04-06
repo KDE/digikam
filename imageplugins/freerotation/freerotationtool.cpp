@@ -151,15 +151,10 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     m_autoHorizonContainer   = new QWidget;
     QPushButton *btnPoint1   = new QPushButton(i18n("Point 1"));
     QPushButton *btnPoint2   = new QPushButton(i18n("Point 2"));
-    QPushButton *btnSetAngle = new QPushButton(i18n("Set Angle"));
+    QPushButton *btnSetHori  = new QPushButton(i18n("Horizontal"));
+    QPushButton *btnSetVerti = new QPushButton(i18n("Vertical"));
     m_autoHoriPoint1Label    = new QLabel("(0, 0)");
     m_autoHoriPoint2Label    = new QLabel("(0, 0)");
-
-    QLabel *label6           = new QLabel(i18n("Orientation:"));
-    m_autoHorizonCB          = new RComboBox;
-    m_autoHorizonCB->addItem(i18nc("horizontal auto rotation", "horizontal"));
-    m_autoHorizonCB->addItem(i18nc("vertical auto rotation", "vertical"));
-    m_autoHorizonCB->setDefaultIndex(Horizontal);
 
     QString btnWhatsThis     = i18n("Select some point in the preview widget, "
                                     "then click this button to set it.");
@@ -167,14 +162,13 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     btnPoint2->setWhatsThis(btnWhatsThis);
 
     QGridLayout *containerLayout  = new QGridLayout;
-    containerLayout->addWidget(label6,                  0, 0, 1,  1);
-    containerLayout->addWidget(m_autoHorizonCB,         0, 1, 1, -1);
-    containerLayout->addWidget(btnPoint1,               1, 0, 1,  1);
-    containerLayout->addWidget(m_autoHoriPoint1Label,   1, 1, 1,  1);
-    containerLayout->addWidget(btnPoint2,               2, 0, 1,  1);
-    containerLayout->addWidget(m_autoHoriPoint2Label,   2, 1, 1,  1);
-    containerLayout->addWidget(btnSetAngle,             3, 1, 1,  1);
-    containerLayout->setColumnStretch(3, 10);
+    containerLayout->addWidget(btnPoint1,               0, 0, 1,  1);
+    containerLayout->addWidget(m_autoHoriPoint1Label,   0, 1, 1,  1);
+    containerLayout->addWidget(btnPoint2,               1, 0, 1,  1);
+    containerLayout->addWidget(m_autoHoriPoint2Label,   1, 1, 1,  1);
+    containerLayout->addWidget(btnSetHori,              2, 0, 1,  1);
+    containerLayout->addWidget(btnSetVerti,             2, 3, 1,  1);
+    containerLayout->setColumnStretch(2, 10);
     m_autoHorizonContainer->setLayout(containerLayout);
 
     // -------------------------------------------------------------
@@ -229,8 +223,11 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     connect(btnPoint2, SIGNAL(clicked()),
             this, SLOT(slotAutoHorizonP2Clicked()));
 
-    connect(btnSetAngle, SIGNAL(clicked()),
-            this, SLOT(slotAutoHorizonSetAngle()));
+    connect(btnSetHori, SIGNAL(clicked()),
+            this, SLOT(slotAutoHorizonHoriClicked()));
+
+    connect(btnSetVerti, SIGNAL(clicked()),
+            this, SLOT(slotAutoHorizonVertiClicked()));
 }
 
 FreeRotationTool::~FreeRotationTool()
@@ -276,18 +273,15 @@ void FreeRotationTool::slotResetSettings()
     m_angleInput->blockSignals(true);
     m_antialiasInput->blockSignals(true);
     m_autoCropCB->blockSignals(true);
-    m_autoHorizonCB->blockSignals(true);
 
     m_angleInput->slotReset();
     m_fineAngleInput->slotReset();
     m_antialiasInput->setChecked(true);
     m_autoCropCB->slotReset();
-    m_autoHorizonCB->slotReset();
 
     m_angleInput->blockSignals(false);
     m_antialiasInput->blockSignals(false);
     m_autoCropCB->blockSignals(false);
-    m_autoHorizonCB->blockSignals(false);
 
     slotEffect();
 }
@@ -428,7 +422,17 @@ void FreeRotationTool::slotAutoHorizonP2Clicked()
     m_autoHoriPoint2Label->setText(label);
 }
 
-void FreeRotationTool::slotAutoHorizonSetAngle()
+void FreeRotationTool::slotAutoHorizonHoriClicked()
+{
+    slotAutoHorizonSetAngle(Horizontal);
+}
+
+void FreeRotationTool::slotAutoHorizonVertiClicked()
+{
+    slotAutoHorizonSetAngle(Vertical);
+}
+
+void FreeRotationTool::slotAutoHorizonSetAngle(Orientation orientation)
 {
     // check if all points are set
     if (m_autoHorizonPoint1.isNull() && m_autoHorizonPoint2.isNull())
@@ -445,18 +449,18 @@ void FreeRotationTool::slotAutoHorizonSetAngle()
     {
         rad = atan2((double)(m_autoHorizonPoint1.y() - m_autoHorizonPoint2.y()),
                     (double)(m_autoHorizonPoint1.x() - m_autoHorizonPoint2.x()))
-                    * 180 / M_PI;
+                    * 180.0 / M_PI;
     }
     else
     {
         rad = atan2((double)(m_autoHorizonPoint2.y() - m_autoHorizonPoint1.y()),
                     (double)(m_autoHorizonPoint2.x() - m_autoHorizonPoint1.x()))
-                    * 180 / M_PI;
+                    * 180.0 / M_PI;
     }
     rad = -rad;
 
-    if (m_autoHorizonCB->currentIndex() == Vertical)
-        rad += 90;
+    if (orientation == Vertical)
+        rad += 90.0;
 
     // convert the angle to a string so we can easily split it up
     QString angle = QString::number(rad, 'f', 2);
