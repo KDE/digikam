@@ -177,6 +177,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     containerLayout->addWidget(btnSetHori,              2, 0, 1,  2);
     containerLayout->addWidget(btnSetVerti,             2, 3, 1,  2);
     containerLayout->setColumnStretch(2, 10);
+    containerLayout->setMargin(0);
     m_autoHorizonContainer->setLayout(containerLayout);
 
     // -------------------------------------------------------------
