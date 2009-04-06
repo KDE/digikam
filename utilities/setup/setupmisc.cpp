@@ -80,20 +80,20 @@ SetupMisc::SetupMisc(QWidget* parent)
 
     QVBoxLayout *layout           = new QVBoxLayout(panel);
 
-    d->showTrashDeleteDialogCheck = new QCheckBox(i18n("Confirm when moving items to the &trash"), panel);
+    d->showTrashDeleteDialogCheck = new QCheckBox(i18n("Confirm when moving items to the &trash."), panel);
 
-    d->sidebarApplyDirectlyCheck  = new QCheckBox(i18n("Do not confirm when apply changes in the &right sidebar"), panel);
+    d->sidebarApplyDirectlyCheck  = new QCheckBox(i18n("Do not confirm when applying changes in the &right sidebar."), panel);
 
-    d->showSplashCheck            = new QCheckBox(i18n("&Show splash screen at startup"), panel);
+    d->showSplashCheck            = new QCheckBox(i18n("&Show splash screen at startup."), panel);
 
-    d->scanAtStart                = new QCheckBox(i18n("&Scan for new items at startup (makes startup slower)"), panel);
+    d->scanAtStart                = new QCheckBox(i18n("&Scan for new items at startup (makes startup slower.)"), panel);
 
     KHBox *hbox         = new KHBox(panel);
     d->sidebarTypeLabel = new QLabel(i18n("Sidebar tab title:"), hbox);
     d->sidebarType      = new KComboBox(hbox);
     d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
     d->sidebarType->addItem(i18n("For All Tabs"),        1);
-    d->sidebarType->setToolTip(i18n("Set this option to configure how sidebars tab title are visible."));
+    d->sidebarType->setToolTip(i18n("Set this option to configure how sidebar tab titles are visible."));
 
     // --------------------------------------------------------
 

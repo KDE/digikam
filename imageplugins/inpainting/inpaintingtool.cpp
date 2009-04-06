@@ -87,13 +87,13 @@ InPaintingTool::InPaintingTool(QObject* parent)
               : EditorToolThreaded(parent)
 {
     setObjectName("inpainting");
-    setToolName(i18n("Inpainting"));
+    setToolName(i18n("In-painting"));
     setToolIcon(SmallIcon("inpainting"));
 
     m_isComputed    = false;
     m_previewWidget = new ImageWidget("inpainting Tool", 0,
-                                      i18n("Here you can see the image selection preview with "
-                                           "inpainting applied."),
+                                      i18n("The image selection preview with in-painting applied "
+                                           "is shown here."),
                                            true, ImageGuideWidget::HVGuideMode, false, true);
     setToolView(m_previewWidget);
 
@@ -127,9 +127,9 @@ InPaintingTool::InPaintingTool(QObject* parent)
     m_inpaintingTypeCB->addItem(i18n("Remove Large Artifact"));
     m_inpaintingTypeCB->setWhatsThis( i18n("<p>Select the filter preset to use for photograph restoration here:</p>"
                                            "<p><b>None</b>: Most common values. Puts settings to default.<br/>"
-                                           "<b>Remove Small Artifact</b>: inpaint small image artifact like image glitch.<br/>"
-                                           "<b>Remove Medium Artifact</b>: inpaint medium image artefact.<br/>"
-                                           "<b>Remove Large Artifact</b>: inpaint image artifact like unwanted object.</p>"));
+                                           "<b>Remove Small Artifact</b>: in-paint small image artifacts, such as image glitches.<br/>"
+                                           "<b>Remove Medium Artifact</b>: in-paint medium image artifacts.<br/>"
+                                           "<b>Remove Large Artifact</b>: in-paint large image artifacts, such as unwanted objects.</p>"));
 
     grid->addWidget(cimgLogoLabel,      0, 1, 1, 1);
     grid->addWidget(typeLabel,          1, 0, 1, 1);
@@ -369,14 +369,14 @@ void InPaintingTool::putFinalData()
 
     m_originalImage.bitBltImage(&m_cropImage, m_maskRect.left(), m_maskRect.top());
 
-    iface.putOriginalImage(i18n("InPainting"), m_originalImage.bits());
+    iface.putOriginalImage(i18n("In-Painting"), m_originalImage.bits());
 }
 
 void InPaintingTool::slotLoadSettings()
 {
     KUrl loadInpaintingFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), kapp->activeWindow(),
-                                            QString( i18n("Photograph Inpainting Settings File to Load")) );
+                                            QString( i18n("Photograph In-Painting Settings File to Load")) );
     if( loadInpaintingFile.isEmpty() )
        return;
 
@@ -387,14 +387,14 @@ void InPaintingTool::slotLoadSettings()
         if (!m_settingsWidget->loadSettings(file, QString("# Photograph Inpainting Configuration File V2")))
         {
            KMessageBox::error(kapp->activeWindow(),
-                        i18n("\"%1\" is not a Photograph Inpainting settings text file.",
+                        i18n("\"%1\" is not a Photograph In-Painting settings text file.",
                              loadInpaintingFile.fileName()));
            file.close();
            return;
         }
     }
     else
-        KMessageBox::error(kapp->activeWindow(), i18n("Cannot load settings from the Photograph Inpainting text file."));
+        KMessageBox::error(kapp->activeWindow(), i18n("Cannot load settings from the Photograph In-Painting text file."));
 
     file.close();
     m_inpaintingTypeCB->blockSignals(true);
@@ -407,7 +407,7 @@ void InPaintingTool::slotSaveAsSettings()
 {
     KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), kapp->activeWindow(),
-                                            QString( i18n("Photograph Inpainting Settings File to Save")) );
+                                            QString( i18n("Photograph In-Painting Settings File to Save")) );
     if( saveRestorationFile.isEmpty() )
        return;
 
@@ -416,7 +416,7 @@ void InPaintingTool::slotSaveAsSettings()
     if ( file.open(QIODevice::WriteOnly) )
         m_settingsWidget->saveSettings(file, QString("# Photograph Inpainting Configuration File V2"));
     else
-        KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the Photograph Inpainting text file."));
+        KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the Photograph In-Painting text file."));
 
     file.close();
 }

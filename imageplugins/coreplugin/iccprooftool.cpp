@@ -112,8 +112,8 @@ ICCProofTool::ICCProofTool(QObject* parent)
     m_embeddedICC   = iface.getEmbeddedICCFromOriginalImage();
 
     m_previewWidget = new ImageWidget("colormanagement Tool",0,
-                                      i18n("<p>Here you can see the image preview after "
-                                           "applying a color profile</p>"));
+                                      i18n("<p>A preview of the image after "
+                                           "applying a color profile is shown here.</p>"));
     setToolView(m_previewWidget);
 
     // -------------------------------------------------------------------
@@ -164,13 +164,13 @@ ICCProofTool::ICCProofTool(QObject* parent)
 
     m_BPCBox = new QCheckBox(generalOptions);
     m_BPCBox->setText(i18n("Use BPC"));
-    m_BPCBox->setWhatsThis( i18n("<p>The Black Point Compensation (BPC) feature does work in conjunction "
-                                 "with Relative Colorimetric Intent. Perceptual intent should make no "
-                                 "difference, since BPC is always on, and in Absolute Colorimetric "
+    m_BPCBox->setWhatsThis( i18n("<p>The Black Point Compensation (BPC) feature works in conjunction "
+                                 "with Relative Colorimetric Intent. With Perceptual Intent, it should make no "
+                                 "difference, since BPC is always on, and with Absolute Colorimetric, "
                                  "Intent it is always turned off.</p>"
-                                 "<p>BPC does compensate for a lack of ICC profiles in the dark tone rendering. "
-                                 "With BPC the dark tones are optimally mapped (no clipping) from original media "
-                                 "to the destination rendering media, e.g. the combination of paper and ink.</p>"));
+                                 "<p>BPC compensates for a lack of ICC profiles for rendering dark tones. "
+                                 "With BPC the dark tones are optimally mapped (no clipping) from original the medium "
+                                 "to the destination rendering medium, e.g. the combination of paper and ink.</p>"));
 
     QLabel *intent       = new QLabel(i18n("Rendering Intent:"), generalOptions);
     m_renderingIntentsCB = new RComboBox(generalOptions);
@@ -225,7 +225,7 @@ ICCProofTool::ICCProofTool(QObject* parent)
     //---------- "Input" Page Setup ----------------------------------
 
     m_toolBoxWidgets->insertItem(INPUTPAGE, inProfiles, SmallIcon("camera-photo"), i18n("Input Profile"));
-    inProfiles->setWhatsThis( i18n("<p>Set here all parameters relevant of Input Color "
+    inProfiles->setWhatsThis( i18n("<p>Set here all parameters relevant to Input Color "
                                    "Profiles.</p>"));
 
     QGridLayout *firstPageLayout = new QGridLayout(inProfiles);
@@ -536,8 +536,8 @@ void ICCProofTool::readSettings()
         else
         {
             QString message = i18n("<p>The ICC profiles path seems to be invalid. "
-                                   "You'll not be able to use \"Default profile\" options.</p>"
-                                   "<p>Please fix this in digiKam ICC setup.</p>");
+                                   "You will not be able to use \"Default profile\" options.</p>"
+                                   "<p>Please fix this in the digiKam ICC setup.</p>");
             slotToggledWidgets(false);
             KMessageBox::information(kapp->activeWindow(), message);
         }

@@ -108,11 +108,11 @@ RedEyeTool::RedEyeTool(QObject* parent)
     m_redThreshold->setRange(10, 90, 1);
     m_redThreshold->setSliderEnabled(true);
     m_redThreshold->setDefaultValue(20);
-    m_redThreshold->setWhatsThis(i18n("<p>Sets the red color pixels selection threshold.</p>"
-                                      "<p>Low values will select more red color pixels "
-                                      "(aggressive correction), high values less (mild correction). "
-                                      "Use low value if eye have been selected exactly. "
-                                      "Use high value if other parts of the face are also selected.</p>"));
+    m_redThreshold->setWhatsThis(i18n("<p>Control the red pixel selection threshold.</p>"
+                                      "<p>Low values will select more red pixels "
+                                      "(aggressive correction), high values will select fewer (mild correction). "
+                                      "Use a low value if an eye has been selected exactly. "
+                                      "Use a high value if other parts of the face have been selected too.</p>"));
 
     m_smoothLabel = new QLabel(i18nc("Smoothness when blurring border of changed pixels",
                                      "Smooth:"), m_gboxSettings->plainPage());

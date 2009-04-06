@@ -188,9 +188,9 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
     // -------------------------------------------------------------
 
     m_previewWidget = new ImageWidget("convertbw Tool", 0,
-                                      i18n("Here you can see the black and white conversion "
-                                           "tool preview. You can pick color on image "
-                                           "to see the color level corresponding on histogram."));
+                                      i18n("The black and white conversion tool preview is "
+                                           "shown here. Picking a color on the image will "
+                                           "show the corresponding color level on the histogram."));
     setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
@@ -218,77 +218,77 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
                                                                 i18nc("generic black and white film",
                                                                       "Generic"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Generic</b>:"
-                            "<p>Simulate a generic black and white film</p>"));
+                            "<p>Simulate a generic black and white film.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Agfa 200X"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Agfa 200X</b>:"
-                            "<p>Simulate the Agfa 200X black and white film at 200 ISO</p>"));
+                            "<p>Simulate the Agfa 200X black and white film at 200 ISO.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Agfa Pan 25"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Agfa Pan 25</b>:"
-                            "<p>Simulate the Agfa Pan black and white film at 25 ISO</p>"));
+                            "<p>Simulate the Agfa Pan black and white film at 25 ISO.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Agfa Pan 100"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Agfa Pan 100</b>:"
-                            "<p>Simulate the Agfa Pan black and white film at 100 ISO</p>"));
+                            "<p>Simulate the Agfa Pan black and white film at 100 ISO.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Agfa Pan 400"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Agfa Pan 400</b>:"
-                            "<p>Simulate the Agfa Pan black and white film at 400 ISO</p>"));
+                            "<p>Simulate the Agfa Pan black and white film at 400 ISO.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Ilford Delta 100"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Ilford Delta 100</b>:"
-                            "<p>Simulate the Ilford Delta black and white film at 100 ISO</p>"));
+                            "<p>Simulate the Ilford Delta black and white film at 100 ISO.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Ilford Delta 400"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Ilford Delta 400</b>:"
-                            "<p>Simulate the Ilford Delta black and white film at 400 ISO</p>"));
+                            "<p>Simulate the Ilford Delta black and white film at 400 ISO.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Ilford Delta 400 Pro 3200"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Ilford Delta 400 Pro 3200</b>:"
-                            "<p>Simulate the Ilford Delta 400 Pro black and white film at 3200 ISO</p>"));
+                            "<p>Simulate the Ilford Delta 400 Pro black and white film at 3200 ISO.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Ilford FP4 Plus"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Ilford FP4 Plus</b>:"
-                            "<p>Simulate the Ilford FP4 Plus black and white film at 125 ISO</p>"));
+                            "<p>Simulate the Ilford FP4 Plus black and white film at 125 ISO.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Ilford HP5 Plus"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Ilford HP5 Plus</b>:"
-                            "<p>Simulate the Ilford HP5 Plus black and white film at 400 ISO</p>"));
+                            "<p>Simulate the Ilford HP5 Plus black and white film at 400 ISO.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Ilford PanF Plus"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Ilford PanF Plus</b>:"
-                            "<p>Simulate the Ilford PanF Plus black and white film at 50 ISO</p>"));
+                            "<p>Simulate the Ilford PanF Plus black and white film at 50 ISO.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Ilford XP2 Super"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Ilford XP2 Super</b>:"
-                            "<p>Simulate the Ilford XP2 Super black and white film at 400 ISO</p>"));
+                            "<p>Simulate the Ilford XP2 Super black and white film at 400 ISO.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Kodak Tmax 100"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Kodak Tmax 100</b>:"
-                            "<p>Simulate the Kodak Tmax black and white film at 100 ISO</p>"));
+                            "<p>Simulate the Kodak Tmax black and white film at 100 ISO.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Kodak Tmax 400"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Kodak Tmax 400</b>:"
-                            "<p>Simulate the Kodak Tmax black and white film at 400 ISO</p>"));
+                            "<p>Simulate the Kodak Tmax black and white film at 400 ISO.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Kodak TriX"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Kodak TriX</b>:"
-                            "<p>Simulate the Kodak TriX black and white film at 400 ISO</p>"));
+                            "<p>Simulate the Kodak TriX black and white film at 400 ISO.</p>"));
 
     // -------------------------------------------------------------
 

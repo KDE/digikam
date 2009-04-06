@@ -109,8 +109,8 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     QGroupBox *iconViewGroup = new QGroupBox(i18n("Icon-View Options"), panel);
     QGridLayout *grid        = new QGridLayout(iconViewGroup);
 
-    d->iconShowNameBox       = new QCheckBox(i18n("Show file &name"), iconViewGroup);
-    d->iconShowNameBox->setWhatsThis(i18n("Set this option to show the file name below the image thumbnail."));
+    d->iconShowNameBox       = new QCheckBox(i18n("Show file&name"), iconViewGroup);
+    d->iconShowNameBox->setWhatsThis(i18n("Set this option to show the filename below the image thumbnail."));
 
     d->iconShowSizeBox       = new QCheckBox(i18n("Show file si&ze"), iconViewGroup);
     d->iconShowSizeBox->setWhatsThis(i18n("Set this option to show the file size below the image thumbnail."));
@@ -146,8 +146,8 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     d->rightClickActionComboBox->setToolTip(i18n("Here, choose what should happen when you "
                                                  "click on a thumbnail."));
 
-    d->iconViewFontSelect = new DFontSelect(i18n("Icon-view font:"), panel);
-    d->iconViewFontSelect->setToolTip(i18n("Select here the font used to display text in all icon-view."));
+    d->iconViewFontSelect = new DFontSelect(i18n("Icon View font:"), panel);
+    d->iconViewFontSelect->setToolTip(i18n("Select here the font used to display text in Icon Views."));
 
     grid->addWidget(d->iconShowNameBox,          0, 0, 1, 1);
     grid->addWidget(d->iconShowSizeBox,          1, 0, 1, 1);
@@ -165,22 +165,22 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox *folderViewGroup = new QGroupBox(i18n("Folder-View Options"), panel);
+    QGroupBox *folderViewGroup = new QGroupBox(i18n("Folder View Options"), panel);
     QGridLayout* grid2         = new QGridLayout(folderViewGroup);
 
-    d->iconTreeThumbLabel      = new QLabel(i18n("Tree-view thumbnail size:"), folderViewGroup);
+    d->iconTreeThumbLabel      = new QLabel(i18n("Tree View thumbnail size:"), folderViewGroup);
     d->iconTreeThumbSize       = new KComboBox(folderViewGroup);
     d->iconTreeThumbSize->addItem(QString("16"));
     d->iconTreeThumbSize->addItem(QString("22"));
     d->iconTreeThumbSize->addItem(QString("32"));
     d->iconTreeThumbSize->addItem(QString("48"));
     d->iconTreeThumbSize->setToolTip(i18n("Set this option to configure the size in pixels of "
-                                          "the tree-view thumbnails in digiKam's sidebars."));
+                                          "the Tree View thumbnails in digiKam's sidebars."));
 
-    d->treeViewFontSelect = new DFontSelect(i18n("Tree-view font:"), folderViewGroup);
-    d->treeViewFontSelect->setToolTip(i18n("Select here the font used to display text in all tree-view."));
+    d->treeViewFontSelect = new DFontSelect(i18n("Tree View font:"), folderViewGroup);
+    d->treeViewFontSelect->setToolTip(i18n("Select here the font used to display text in Tree Views."));
 
-    d->showFolderTreeViewItemsCount = new QCheckBox(i18n("Show count of items in all tree-view"), folderViewGroup);
+    d->showFolderTreeViewItemsCount = new QCheckBox(i18n("Show a count of items in Tree Views"), folderViewGroup);
 
     grid2->addWidget(d->iconTreeThumbLabel,           0, 0, 1, 1);
     grid2->addWidget(d->iconTreeThumbSize,            0, 1, 1, 1);
@@ -194,9 +194,9 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Misc Options"), panel);
     QGridLayout* grid3               = new QGridLayout(interfaceOptionsGroup);
 
-    d->previewLoadFullImageSize      = new QCheckBox(i18n("Embedded preview loads full image size"), interfaceOptionsGroup);
-    d->previewLoadFullImageSize->setWhatsThis(i18n("Set this option to load the full image size "
-                                                   "for a preview, instead of with a reduced size. This loads more "
+    d->previewLoadFullImageSize      = new QCheckBox(i18n("Embedded preview loads full-sized images."), interfaceOptionsGroup);
+    d->previewLoadFullImageSize->setWhatsThis(i18n("Set this option to load images at their full size "
+                                                   "for preview, rather than at a reduced size. This loads more "
                                                    "data and will be slow on older computers."));
 
     grid3->setMargin(KDialog::spacingHint());

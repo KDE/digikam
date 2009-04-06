@@ -50,10 +50,10 @@ K_EXPORT_PLUGIN ( InPaintingFactory("digikamimageplugin_inpainting") )
 ImagePlugin_InPainting::ImagePlugin_InPainting(QObject *parent, const QVariantList &)
                       : Digikam::ImagePlugin(parent, "ImagePlugin_InPainting")
 {
-    m_inPaintingAction = new KAction(KIcon("inpainting"), i18n("Inpainting..."), this);
+    m_inPaintingAction = new KAction(KIcon("inpainting"), i18n("In-painting..."), this);
     m_inPaintingAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_E));
-    m_inPaintingAction->setWhatsThis( i18n( "This filter can be used to inpaint a part in a photo. "
-                                            "Select a region to inpaint to use this option.") );
+    m_inPaintingAction->setWhatsThis( i18n( "This filter can be used to in-paint a part in a photo. "
+                                            "To use this option, select a region to in-paint.") );
 
     connect(m_inPaintingAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotInPainting()));
@@ -85,9 +85,9 @@ void ImagePlugin_InPainting::slotInPainting()
     if (!w || !h)
     {
         InPaintingPassivePopup* popup = new InPaintingPassivePopup(kapp->activeWindow());
-        popup->setView(i18n("Inpainting Photograph Tool"),
-                       i18n("You need to select a region to inpaint to use "
-                            "this tool"));
+        popup->setView(i18n("In-Painting Photograph Tool"),
+                       i18n("To use this tool, you need to select a region "
+                            "to in-paint."));
         popup->setAutoDelete(true);
         popup->setTimeout(2500);
         popup->show();

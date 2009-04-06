@@ -96,7 +96,7 @@ SetupEditor::SetupEditor(QWidget* parent)
     d->themebackgroundColor = new QCheckBox(i18n("&Use theme background color"),
                                             interfaceOptionsGroup);
 
-    d->themebackgroundColor->setWhatsThis( i18n("Enable this option to use background theme "
+    d->themebackgroundColor->setWhatsThis( i18n("Enable this option to use the background theme "
                                                 "color in the image editor area.") );
 
     d->colorBox = new KHBox(interfaceOptionsGroup);

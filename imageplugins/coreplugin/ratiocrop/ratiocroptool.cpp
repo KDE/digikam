@@ -237,7 +237,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
     m_guideLinesCB->setDefaultIndex(ImageSelectionWidget::GuideNone);
     m_guideLinesCB->setCurrentIndex(3);
     m_guideLinesCB->setWhatsThis( i18n("With this option, you can display guide lines "
-                                       "which help you to compose your photograph."));
+                                       "to help compose your photograph."));
 
     m_goldenSectionBox = new QCheckBox(i18n("Golden sections"), compositionGuide);
     m_goldenSectionBox->setWhatsThis(i18n("Enable this option to show golden sections."));
@@ -246,16 +246,16 @@ RatioCropTool::RatioCropTool(QObject* parent)
     m_goldenSpiralSectionBox->setWhatsThis(i18n("Enable this option to show golden spiral sections."));
 
     m_goldenSpiralBox = new QCheckBox(i18n("Golden spiral"), compositionGuide);
-    m_goldenSpiralBox->setWhatsThis(i18n("Enable this option to show golden spiral guide."));
+    m_goldenSpiralBox->setWhatsThis(i18n("Enable this option to show a golden spiral guide."));
 
     m_goldenTriangleBox = new QCheckBox(i18n("Golden triangles"), compositionGuide);
     m_goldenTriangleBox->setWhatsThis(i18n("Enable this option to show golden triangles."));
 
     m_flipHorBox = new QCheckBox(i18n("Flip horizontally"), compositionGuide);
-    m_flipHorBox->setWhatsThis(i18n("Enable this option to flip horizontally guidelines."));
+    m_flipHorBox->setWhatsThis(i18n("Enable this option to flip the guidelines horizontally."));
 
     m_flipVerBox = new QCheckBox(i18n("Flip vertically"), compositionGuide);
-    m_flipVerBox->setWhatsThis(i18n("Enable this option to flip vertically guidelines."));
+    m_flipVerBox->setWhatsThis(i18n("Enable this option to flip the guidelines vertically."));
 
     m_colorGuideLabel = new QLabel(i18n("Color and width:"), compositionGuide);
     m_guideColorBt    = new KColorButton( QColor( 250, 250, 255 ), compositionGuide );

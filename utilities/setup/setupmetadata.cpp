@@ -108,10 +108,10 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     QVBoxLayout *gLayout1 = new QVBoxLayout(ExifGroup);
 
     d->ExifRotateBox = new QCheckBox(ExifGroup);
-    d->ExifRotateBox->setText(i18n("Show images/thumbnails &rotated according to orientation tag"));
+    d->ExifRotateBox->setText(i18n("Show images/thumbnails &rotated according to orientation tag."));
 
     d->ExifSetOrientationBox = new QCheckBox(ExifGroup);
-    d->ExifSetOrientationBox->setText(i18n("Set orientation tag to normal after rotate/flip"));
+    d->ExifSetOrientationBox->setText(i18n("Set orientation tag to normal after rotate/flip."));
 
     gLayout1->addWidget(d->ExifRotateBox);
     gLayout1->addWidget(d->ExifSetOrientationBox);
@@ -158,14 +158,14 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     d->writeRawFilesBox = new QCheckBox(commonGroup);
     d->writeRawFilesBox->setText(i18n("&Write Metadata to RAW files (experimental)"));
-    d->writeRawFilesBox->setWhatsThis( i18n("Turn on this option to write metadata into RAW TIFF/EP files based. "
-                                            "This feature require Exiv2 shared library version >= 0.18.0. It still "
-                                            "experimental, and disabled by default."));
+    d->writeRawFilesBox->setWhatsThis( i18n("Turn on this option to write metadata into RAW TIFF/EP files. "
+                                            "This feature requires the Exiv2 shared library, version >= 0.18.0. It is still "
+                                            "experimental, and is disabled by default."));
     d->writeRawFilesBox->setEnabled(KExiv2Iface::KExiv2::supportMetadataWritting("image/x-raw"));
 
     d->updateFileTimeStampBox = new QCheckBox(commonGroup);
     d->updateFileTimeStampBox->setText(i18n("&Update file timestamp when Metadata are saved"));
-    d->updateFileTimeStampBox->setWhatsThis( i18n("Turn on this option to update file timestamp when metadata are saved."));
+    d->updateFileTimeStampBox->setWhatsThis( i18n("Turn on this option to update file timestamps when metadata are saved."));
 
 #if KEXIV2_VERSION >= 0x000600
     d->updateFileTimeStampBox->show();
@@ -207,11 +207,11 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     txt.append(i18n("<br><b><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a></b> - "
                     "an older standard used in digital photography to store "
-                    "photographer information in image."));
+                    "photographer information in images."));
 
     if (KExiv2Iface::KExiv2::supportXmp())
         txt.append(i18n("<br><b><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>XMP</a></b> - "
-                        "a new standard used in digital photography dedicated to replace IPTC."));
+                        "a new standard used in digital photography, designed to replace IPTC."));
 
     txt.append("<br></qt>");
 

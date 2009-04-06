@@ -91,7 +91,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
                                          "If it is not appropriate to add the name of the photographer (for example, if the identify of "
                                          "the photographer needs to be protected) the name of a company or organization can also be used. "
                                          "Once saved, this field should not be changed by anyone. This field does not support the use of "
-                                         "commas or semi-colons as separator. \nThis field is limited to 32 ASCII characters.</p>"));
+                                         "commas or semi-colons as separators. \nThis field is limited to 32 ASCII characters.</p>"));
 
     QLabel *label2     = new QLabel(i18n("Author Title:"), photographerIdGroup);
     d->authorTitleEdit = new KLineEdit(photographerIdGroup);
@@ -174,10 +174,10 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     QLabel *note = new QLabel(i18n("<b>Note: These information are used to set "
                    "<b><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>XMP</a></b> "
-                   "and <b><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a></b> tags contents. "
-                   "There is no limitation with XMP, but take a care that IPTC text tags "
+                   "and <b><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a></b> tag contents. "
+                   "There is no limitation with XMP, but note that IPTC text tags "
                    "only support the printable <b><a href='http://en.wikipedia.org/wiki/Ascii'>ASCII</a></b> "
-                   "characters set and limit strings size. "
+                   "character set, and tag sizes are limited. "
                    "Use contextual help for details.</b>"), panel);
     note->setOpenExternalLinks(true);
     note->setWordWrap(true);

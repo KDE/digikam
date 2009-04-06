@@ -457,7 +457,7 @@ void SetupCollectionModel::apply()
         foreach(const Item &item, failedItems)
             failedPaths << item.path;
         KMessageBox::errorList(m_dialogParentWidget,
-                               i18n("It was not possible to add a collection for the following paths"),
+                               i18n("It was not possible to add a collection for the following paths:"),
                                failedPaths);
     }
 
@@ -516,8 +516,8 @@ void SetupCollectionModel::addCollection(int category)
         {
             if (path.startsWith(item.path))
             {
-                messageFromManager = i18n("You have just previously added a collection "
-                                          "that already contains the path \"%1\"", path);
+                messageFromManager = i18n("You have previously added a collection "
+                                          "that contains the path \"%1\".", path);
                 result = CollectionManager::LocationNotAllowed;
                 break;
             }
@@ -725,11 +725,11 @@ QVariant SetupCollectionModel::data(const QModelIndex &index, int role) const
                     switch (item.location.status())
                     {
                         case CollectionLocation::LocationUnavailable:
-                            return i18n("This collection is currently not available");
+                            return i18n("This collection is currently not available.");
                         case CollectionLocation::LocationAvailable:
-                            return i18n("No problems found: Enjoy this collection");
+                            return i18n("No problems found, enjoy this collection.");
                         case CollectionLocation::LocationHidden:
-                            return i18n("This collection is hidden");
+                            return i18n("This collection is hidden.");
                         default: break;
                     }
                 }

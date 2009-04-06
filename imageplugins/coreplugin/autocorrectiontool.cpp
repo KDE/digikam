@@ -85,9 +85,9 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     // -------------------------------------------------------------
 
     m_previewWidget = new ImageWidget("autocorrection Tool", 0,
-                                      i18n("Here you can see the auto-color correction tool "
-                                           "preview. You can pick color on image "
-                                           "to see the color level corresponding on histogram."));
+                                      i18n("The auto-color correction tool preview is shown "
+                                           "here. Picking a color on the image will show "
+                                           "the corresponding color level on the histogram."));
     setToolView(m_previewWidget);
 
     // -------------------------------------------------------------
