@@ -438,7 +438,7 @@ void FreeRotationTool::slotAutoHorizonSetAngle(Orientation orientation)
     if (m_autoHorizonPoint1.isNull() && m_autoHorizonPoint2.isNull())
         return;
 
-    double rad = 0.0;
+    double radius = 0.0;
     bool flipped = false;
 
     // check point layout
@@ -447,42 +447,42 @@ void FreeRotationTool::slotAutoHorizonSetAngle(Orientation orientation)
     // calculate the angle
     if (flipped)
     {
-        rad = atan2((double)(m_autoHorizonPoint1.y() - m_autoHorizonPoint2.y()),
+        radius = atan2((double)(m_autoHorizonPoint1.y() - m_autoHorizonPoint2.y()),
                     (double)(m_autoHorizonPoint1.x() - m_autoHorizonPoint2.x()))
                     * 180.0 / M_PI;
     }
     else
     {
-        rad = atan2((double)(m_autoHorizonPoint2.y() - m_autoHorizonPoint1.y()),
+        radius = atan2((double)(m_autoHorizonPoint2.y() - m_autoHorizonPoint1.y()),
                     (double)(m_autoHorizonPoint2.x() - m_autoHorizonPoint1.x()))
                     * 180.0 / M_PI;
     }
-    rad = -rad;
+    radius = -radius;
 
     if (orientation == Vertical)
     {
         if (flipped)
-            rad -= 90.0;
+            radius -= 90.0;
         else
-            rad += 90.0;
+            radius += 90.0;
     }
 
     // convert the angle to a string so we can easily split it up
-    QString angle = QString::number(rad, 'f', 2);
+    QString angle = QString::number(radius, 'f', 2);
     QStringList angles = angle.split(".");
 
     // try to set the angle widgets with the extracted values
     if (!angles.isEmpty() && angles.count() == 2)
     {
         bool ok = false;
-        int a = angles[0].toInt(&ok);
-        if (!ok) a = 0;
+        int mainAngle = angles[0].toInt(&ok);
+        if (!ok) mainAngle = 0;
 
-        double fa = (QString("0.") + angles[1]).toDouble(&ok);
-        if (!ok) fa = 0.0;
+        double fineAngle = (QString("0.") + angles[1]).toDouble(&ok);
+        if (!ok) fineAngle = 0.0;
 
-        m_angleInput->setValue(a);
-        m_fineAngleInput->setValue(fa);
+        m_angleInput->setValue(mainAngle);
+        m_fineAngleInput->setValue(fineAngle);
     }
 }
 
