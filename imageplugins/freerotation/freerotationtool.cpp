@@ -151,6 +151,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     m_autoHorizonInput       = new QCheckBox(i18n("Auto-Adjust Horizon"));
     m_autoHorizonContainer   = new QWidget;
 
+    QLabel *label6           = new QLabel(i18n("Points:"));
     QPixmap pm1 = generateBtnPixmap(QString("1"), Qt::red);
     QToolButton *btnPoint1   = new QToolButton;
     btnPoint1->setIcon(pm1);
@@ -159,6 +160,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     QToolButton *btnPoint2   = new QToolButton;
     btnPoint2->setIcon(pm2);
 
+    QLabel *label7           = new QLabel(i18n("Adjustment:"));
     m_horizontalAdjustBtn    = new QPushButton(i18n("Horizontal"));
     m_verticalAdjustBtn      = new QPushButton(i18n("Vertical"));
     m_autoHoriPoint1Label    = new QLabel("(0, 0)");
@@ -172,11 +174,13 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     btnPoint2->setWhatsThis(btnWhatsThis);
 
     QGridLayout *containerLayout  = new QGridLayout;
-    containerLayout->addWidget(btnPoint1,               0, 0, 1, 1);
-    containerLayout->addWidget(m_autoHoriPoint1Label,   0, 1, 1, 1);
-    containerLayout->addWidget(btnPoint2,               1, 0, 1, 1);
-    containerLayout->addWidget(m_autoHoriPoint2Label,   1, 1, 1, 1);
-    containerLayout->addWidget(m_horizontalAdjustBtn,   2, 0, 1, 2);
+    containerLayout->addWidget(label6,                  0, 0, 1, 1);
+    containerLayout->addWidget(label7,                  0, 3, 1, 1);
+    containerLayout->addWidget(btnPoint1,               1, 0, 1, 1);
+    containerLayout->addWidget(m_autoHoriPoint1Label,   1, 1, 1, 1);
+    containerLayout->addWidget(m_horizontalAdjustBtn,   1, 3, 1, 2);
+    containerLayout->addWidget(btnPoint2,               2, 0, 1, 1);
+    containerLayout->addWidget(m_autoHoriPoint2Label,   2, 1, 1, 1);
     containerLayout->addWidget(m_verticalAdjustBtn,     2, 3, 1, 2);
     containerLayout->setColumnStretch(2, 10);
     containerLayout->setMargin(0);
