@@ -33,6 +33,7 @@
 class QLabel;
 class QCheckBox;
 class QPoint;
+class QPixmap;
 
 namespace KDcrawIface
 {
@@ -92,6 +93,7 @@ private:
     void updatePointLabels();
     void resetPoints();
     QString generatePointLabel(const QPoint &p);
+    QPixmap generateBtnPixmap(const QString &label, const QColor &color);
 
 private:
 

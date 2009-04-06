@@ -39,6 +39,8 @@
 #include <QLabel>
 #include <QLayout>
 #include <QPushButton>
+#include <QPainter>
+#include <QToolButton>
 
 // KDE includes
 
@@ -148,8 +150,15 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     m_autoHorizonInput       = new QCheckBox(i18n("Auto-Adjust Horizon"));
     m_autoHorizonContainer   = new QWidget;
-    QPushButton *btnPoint1   = new QPushButton(i18n("Point 1"));
-    QPushButton *btnPoint2   = new QPushButton(i18n("Point 2"));
+
+    QPixmap pm1 = generateBtnPixmap(QString("1"), Qt::red);
+    QToolButton *btnPoint1   = new QToolButton;
+    btnPoint1->setIcon(pm1);
+
+    QPixmap pm2 = generateBtnPixmap(QString("2"), Qt::blue);
+    QToolButton *btnPoint2   = new QToolButton;
+    btnPoint2->setIcon(pm2);
+
     QPushButton *btnSetHori  = new QPushButton(i18n("Horizontal"));
     QPushButton *btnSetVerti = new QPushButton(i18n("Vertical"));
     m_autoHoriPoint1Label    = new QLabel("(0, 0)");
@@ -165,8 +174,8 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     containerLayout->addWidget(m_autoHoriPoint1Label,   0, 1, 1,  1);
     containerLayout->addWidget(btnPoint2,               1, 0, 1,  1);
     containerLayout->addWidget(m_autoHoriPoint2Label,   1, 1, 1,  1);
-    containerLayout->addWidget(btnSetHori,              2, 0, 1,  1);
-    containerLayout->addWidget(btnSetVerti,             2, 3, 1,  1);
+    containerLayout->addWidget(btnSetHori,              2, 0, 1,  2);
+    containerLayout->addWidget(btnSetVerti,             2, 3, 1,  2);
     containerLayout->setColumnStretch(2, 10);
     m_autoHorizonContainer->setLayout(containerLayout);
 
@@ -505,6 +514,23 @@ void FreeRotationTool::setAutoHorizonMode(AutoMode mode)
         m_angleInput->setValue(mainAngle);
         m_fineAngleInput->setValue(fineAngle);
     }
+}
+
+QPixmap FreeRotationTool::generateBtnPixmap(const QString &label, const QColor &color)
+{
+    QPixmap pm(22, 22);
+    pm.fill(Qt::transparent);
+
+    QPainter p(&pm);
+    p.setRenderHint(QPainter::Antialiasing);
+    p.setPen(color);
+
+    p.drawEllipse(1, 1, 20, 20);
+    p.drawText(pm.rect(), label, Qt::AlignHCenter | Qt::AlignVCenter);
+
+    p.end();
+
+    return pm;
 }
 
 }  // namespace DigikamFreeRotationImagesPlugin
