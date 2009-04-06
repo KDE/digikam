@@ -1,6 +1,6 @@
 #MIN_CONFIG(3)
 
-AM_INIT_AUTOMAKE(digikam,0.9.5)
+AM_INIT_AUTOMAKE(digikam,0.9.6)
 
 # -----------------------------------------------------------------
 #
