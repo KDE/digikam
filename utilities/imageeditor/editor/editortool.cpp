@@ -118,6 +118,16 @@ QWidget* EditorTool::toolView() const
 void EditorTool::setToolView(QWidget *view)
 {
     d->view = view;
+    // Will be unblocked in slotInit()
+    // This will prevent resize event signals emit during tool init.
+    d->view->blockSignals(true);
+}
+
+void EditorTool::slotInit()
+{
+    readSettings();
+    // Unlock signals from preview widget when init is done.
+    d->view->blockSignals(false);
 }
 
 void EditorTool::setToolHelp(const QString& anchor)
@@ -208,11 +218,6 @@ void EditorTool::slotCancel()
 {
     writeSettings();
     emit cancelClicked();
-}
-
-void EditorTool::slotInit()
-{
-    readSettings();
 }
 
 // ----------------------------------------------------------------
