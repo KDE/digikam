@@ -190,7 +190,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     mainLayout->addWidget(m_autoHorizonContainer, 10, 0, 1, 3);
     mainLayout->setRowStretch(11, 10);
     mainLayout->setMargin(m_gboxSettings->spacingHint());
-    mainLayout->setSpacing(0);
+    mainLayout->setSpacing(m_gboxSettings->spacingHint());
     m_gboxSettings->plainPage()->setLayout(mainLayout);
 
     setToolSettings(m_gboxSettings);
