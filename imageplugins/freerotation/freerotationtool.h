@@ -89,9 +89,9 @@ private:
     void renderingFinished();
 
     void setAutoHorizonMode(AutoMode);
-    QString generatePointLabel(const QPoint &p);
     void updatePointLabels();
     void resetPoints();
+    QString generatePointLabel(const QPoint &p);
 
 private:
 
