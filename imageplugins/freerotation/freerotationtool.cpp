@@ -161,8 +161,8 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     btnPoint2->setIcon(pm2);
 
     QLabel *label7           = new QLabel(i18n("Adjustment:"));
-    m_horizontalAdjustBtn    = new QPushButton(i18n("Horizontal"));
-    m_verticalAdjustBtn      = new QPushButton(i18n("Vertical"));
+    m_horizontalAdjustBtn    = new QPushButton(i18nc("Horizontal Adjustment", "Horizontal"));
+    m_verticalAdjustBtn      = new QPushButton(i18nc("Vertical Adjustment", "Vertical"));
     m_autoHoriPoint1Label    = new QLabel("(0, 0)");
     m_autoHoriPoint2Label    = new QLabel("(0, 0)");
 
