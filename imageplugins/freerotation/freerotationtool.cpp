@@ -50,21 +50,21 @@
 
 // LibKDcraw includes
 
-#include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
+#include <libkdcraw/rnuminput.h>
 
 // Local includes
 
-#include "version.h"
 #include "daboutdata.h"
 #include "dimg.h"
-#include "imageiface.h"
-#include "imagewidget.h"
 #include "editortoolsettings.h"
 #include "freerotation.h"
+#include "imageiface.h"
+#include "imagewidget.h"
+#include "version.h"
 
-using namespace KDcrawIface;
 using namespace Digikam;
+using namespace KDcrawIface;
 
 namespace DigikamFreeRotationImagesPlugin
 {
