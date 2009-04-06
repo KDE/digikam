@@ -460,7 +460,12 @@ void FreeRotationTool::slotAutoHorizonSetAngle(Orientation orientation)
     rad = -rad;
 
     if (orientation == Vertical)
-        rad += 90.0;
+    {
+        if (flipped)
+            rad -= 90.0;
+        else
+            rad += 90.0;
+    }
 
     // convert the angle to a string so we can easily split it up
     QString angle = QString::number(rad, 'f', 2);
