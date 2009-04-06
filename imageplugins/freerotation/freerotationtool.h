@@ -77,7 +77,6 @@ private Q_SLOTS:
     void slotAutoHorizonP2Clicked();
     void slotAutoHorizonHoriClicked();
     void slotAutoHorizonVertiClicked();
-    void slotAutoHorizonSetAngle(AutoMode);
 
 private:
 
@@ -89,6 +88,7 @@ private:
     void putFinalData();
     void renderingFinished();
 
+    void setAutoHorizonMode(AutoMode);
     QString generatePointLabel(const QPoint &p);
 
 private:

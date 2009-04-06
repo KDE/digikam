@@ -424,15 +424,15 @@ void FreeRotationTool::slotAutoHorizonP2Clicked()
 
 void FreeRotationTool::slotAutoHorizonHoriClicked()
 {
-    slotAutoHorizonSetAngle(AutoHorizontal);
+    setAutoHorizonMode(AutoHorizontal);
 }
 
 void FreeRotationTool::slotAutoHorizonVertiClicked()
 {
-    slotAutoHorizonSetAngle(AutoVertical);
+    setAutoHorizonMode(AutoVertical);
 }
 
-void FreeRotationTool::slotAutoHorizonSetAngle(AutoMode mode)
+void FreeRotationTool::setAutoHorizonMode(AutoMode mode)
 {
     // check if all points are set
     if (m_autoHorizonPoint1.isNull() && m_autoHorizonPoint2.isNull())
