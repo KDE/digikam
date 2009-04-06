@@ -97,65 +97,66 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
                                             EditorToolSettings::Cancel,
                                             EditorToolSettings::ColorGuide);
 
-    QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
 
-    QLabel *label1  = new QLabel(i18n("New width:"), m_gboxSettings->plainPage());
-    m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"), m_gboxSettings->plainPage());
+    QLabel *label1  = new QLabel(i18n("New width:"));
+    m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"));
     m_newWidthLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
-    QLabel *label2   = new QLabel(i18n("New height:"), m_gboxSettings->plainPage());
-    m_newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"), m_gboxSettings->plainPage());
+    QLabel *label2   = new QLabel(i18n("New height:"));
+    m_newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"));
     m_newHeightLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
-    KSeparator *line = new KSeparator(Qt::Horizontal, m_gboxSettings->plainPage());
+    KSeparator *line = new KSeparator(Qt::Horizontal);
 
-    QLabel *label3 = new QLabel(i18n("Main angle:"), m_gboxSettings->plainPage());
-    m_angleInput   = new RIntNumInput(m_gboxSettings->plainPage());
+    QLabel *label3 = new QLabel(i18n("Main angle:"));
+    m_angleInput   = new RIntNumInput;
     m_angleInput->setRange(-180, 180, 1);
     m_angleInput->setSliderEnabled(true);
     m_angleInput->setDefaultValue(0);
-    m_angleInput->setWhatsThis( i18n("An angle in degrees by which to rotate the image. "
-                                     "A positive angle rotates the image clockwise; "
-                                     "a negative angle rotates it counter-clockwise."));
+    m_angleInput->setWhatsThis(i18n("An angle in degrees by which to rotate the image. "
+                                    "A positive angle rotates the image clockwise; "
+                                    "a negative angle rotates it counter-clockwise."));
 
-    QLabel *label4   = new QLabel(i18n("Fine angle:"), m_gboxSettings->plainPage());
-    m_fineAngleInput = new RDoubleNumInput(m_gboxSettings->plainPage());
+    QLabel *label4   = new QLabel(i18n("Fine angle:"));
+    m_fineAngleInput = new RDoubleNumInput;
     m_fineAngleInput->input()->setRange(-5.0, 5.0, 0.01, true);
     m_fineAngleInput->setDefaultValue(0);
-    m_fineAngleInput->setWhatsThis( i18n("This value in degrees will be added to main angle value "
-                                         "to set fine target angle."));
+    m_fineAngleInput->setWhatsThis(i18n("This value in degrees will be added to main angle value "
+                                        "to set fine target angle."));
 
-    m_antialiasInput = new QCheckBox(i18n("Anti-Aliasing"), m_gboxSettings->plainPage());
-    m_antialiasInput->setWhatsThis( i18n("Enable this option to apply the anti-aliasing filter "
-                                         "to the rotated image. "
-                                         "In order to smooth the target image, it will be blurred a little."));
+    m_antialiasInput = new QCheckBox(i18n("Anti-Aliasing"));
+    m_antialiasInput->setWhatsThis(i18n("Enable this option to apply the anti-aliasing filter "
+                                        "to the rotated image. "
+                                        "In order to smooth the target image, it will be blurred a little."));
 
-    QLabel *label5 = new QLabel(i18n("Auto-crop:"), m_gboxSettings->plainPage());
-    m_autoCropCB   = new RComboBox(m_gboxSettings->plainPage());
-    m_autoCropCB->addItem( i18nc("no autocrop", "None") );
-    m_autoCropCB->addItem( i18n("Widest Area") );
-    m_autoCropCB->addItem( i18n("Largest Area") );
+    QLabel *label5 = new QLabel(i18n("Auto-crop:"));
+    m_autoCropCB   = new RComboBox;
+    m_autoCropCB->addItem(i18nc("no autocrop", "None"));
+    m_autoCropCB->addItem(i18n("Widest Area"));
+    m_autoCropCB->addItem(i18n("Largest Area"));
     m_autoCropCB->setDefaultIndex(FreeRotation::NoAutoCrop);
-    m_autoCropCB->setWhatsThis( i18n("Select the method to process image auto-cropping "
-                                     "to remove black frames around a rotated image here."));
+    m_autoCropCB->setWhatsThis(i18n("Select the method to process image auto-cropping "
+                                    "to remove black frames around a rotated image here."));
 
     // -------------------------------------------------------------
 
-    gridSettings->addWidget(label1,             0, 0, 1, 1);
-    gridSettings->addWidget(m_newWidthLabel,    0, 1, 1, 2);
-    gridSettings->addWidget(label2,             1, 0, 1, 1);
-    gridSettings->addWidget(m_newHeightLabel,   1, 1, 1, 2);
-    gridSettings->addWidget(line,               2, 0, 1, 3);
-    gridSettings->addWidget(label3,             3, 0, 1, 3);
-    gridSettings->addWidget(m_angleInput,       4, 0, 1, 3);
-    gridSettings->addWidget(label4,             5, 0, 1, 3);
-    gridSettings->addWidget(m_fineAngleInput,   6, 0, 1, 3);
-    gridSettings->addWidget(m_antialiasInput,   7, 0, 1, 3);
-    gridSettings->addWidget(label5,             8, 0, 1, 1);
-    gridSettings->addWidget(m_autoCropCB,       8, 1, 1, 2);
-    gridSettings->setRowStretch(9, 10);
-    gridSettings->setMargin(m_gboxSettings->spacingHint());
-    gridSettings->setSpacing(0);
+    QGridLayout* mainLayout = new QGridLayout;
+    mainLayout->addWidget(label1,             0, 0, 1, 1);
+    mainLayout->addWidget(m_newWidthLabel,    0, 1, 1, 2);
+    mainLayout->addWidget(label2,             1, 0, 1, 1);
+    mainLayout->addWidget(m_newHeightLabel,   1, 1, 1, 2);
+    mainLayout->addWidget(line,               2, 0, 1, 3);
+    mainLayout->addWidget(label3,             3, 0, 1, 3);
+    mainLayout->addWidget(m_angleInput,       4, 0, 1, 3);
+    mainLayout->addWidget(label4,             5, 0, 1, 3);
+    mainLayout->addWidget(m_fineAngleInput,   6, 0, 1, 3);
+    mainLayout->addWidget(m_antialiasInput,   7, 0, 1, 3);
+    mainLayout->addWidget(label5,             8, 0, 1, 1);
+    mainLayout->addWidget(m_autoCropCB,       8, 1, 1, 2);
+    mainLayout->setRowStretch(9, 10);
+    mainLayout->setMargin(m_gboxSettings->spacingHint());
+    mainLayout->setSpacing(0);
+    m_gboxSettings->plainPage()->setLayout(mainLayout);
 
     setToolSettings(m_gboxSettings);
     init();
