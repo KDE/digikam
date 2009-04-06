@@ -31,6 +31,7 @@
 
 class QLabel;
 class QCheckBox;
+class QPoint;
 
 namespace KDcrawIface
 {
@@ -62,6 +63,11 @@ private Q_SLOTS:
     void slotResetSettings();
     void slotColorGuideChanged();
 
+    void slotAutoHorizonToggled(bool);
+    void slotAutoHorizonBtn1Clicked();
+    void slotAutoHorizonBtn2Clicked();
+    void slotAutoHorizonSetAngle();
+
 private:
 
     void readSettings();
@@ -72,12 +78,22 @@ private:
     void putFinalData();
     void renderingFinished();
 
+    QString generatePointLabel(const QPoint &p);
+
 private:
 
     QLabel                       *m_newWidthLabel;
     QLabel                       *m_newHeightLabel;
+    QLabel                       *m_autoHoriPoint1Label;
+    QLabel                       *m_autoHoriPoint2Label;
 
     QCheckBox                    *m_antialiasInput;
+    QCheckBox                    *m_autoHorizonInput;
+
+    QPoint                        m_autoHorizonPoint1;
+    QPoint                        m_autoHorizonPoint2;
+
+    QWidget                      *m_autoHorizonContainer;
 
     KDcrawIface::RComboBox       *m_autoCropCB;
 
