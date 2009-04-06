@@ -448,14 +448,14 @@ void FreeRotationTool::slotAutoHorizonSetAngle(Orientation orientation)
     if (flipped)
     {
         radius = atan2((double)(m_autoHorizonPoint1.y() - m_autoHorizonPoint2.y()),
-                    (double)(m_autoHorizonPoint1.x() - m_autoHorizonPoint2.x()))
-                    * 180.0 / M_PI;
+                       (double)(m_autoHorizonPoint1.x() - m_autoHorizonPoint2.x()))
+                       * 180.0 / M_PI;
     }
     else
     {
         radius = atan2((double)(m_autoHorizonPoint2.y() - m_autoHorizonPoint1.y()),
-                    (double)(m_autoHorizonPoint2.x() - m_autoHorizonPoint1.x()))
-                    * 180.0 / M_PI;
+                       (double)(m_autoHorizonPoint2.x() - m_autoHorizonPoint1.x()))
+                       * 180.0 / M_PI;
     }
     radius = -radius;
 
