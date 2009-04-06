@@ -155,6 +155,12 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     m_autoHoriPoint1Label    = new QLabel("(0, 0)");
     m_autoHoriPoint2Label    = new QLabel("(0, 0)");
 
+    QLabel *label6           = new QLabel(i18n("Orientation:"));
+    m_autoHorizonCB          = new RComboBox;
+    m_autoHorizonCB->addItem(i18nc("horizontal auto rotation", "horizontal"));
+    m_autoHorizonCB->addItem(i18nc("vertical auto rotation", "vertical"));
+    m_autoHorizonCB->setDefaultIndex(Horizontal);
+
     QString btnLeftWThis    = i18n("Select the left point of the horizon in the preview widget, then click this "
                                    "button to set it.");
     QString btnRightWThis   = i18n("Select the right point of the horizon in the preview widget, then click this "
@@ -163,11 +169,13 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     btnRight->setWhatsThis(btnRightWThis);
 
     QGridLayout *containerLayout  = new QGridLayout;
-    containerLayout->addWidget(btnLeft,                 0, 0, 1, 1);
-    containerLayout->addWidget(m_autoHoriPoint1Label,   0, 1, 1, 1);
-    containerLayout->addWidget(btnRight,                1, 0, 1, 1);
-    containerLayout->addWidget(m_autoHoriPoint2Label,   1, 1, 1, 1);
-    containerLayout->addWidget(btnSetAngle,             2, 0, 1, 1);
+    containerLayout->addWidget(label6,                  0, 0, 1,  1);
+    containerLayout->addWidget(m_autoHorizonCB,         0, 1, 1, -1);
+    containerLayout->addWidget(btnLeft,                 1, 0, 1,  1);
+    containerLayout->addWidget(m_autoHoriPoint1Label,   1, 1, 1,  1);
+    containerLayout->addWidget(btnRight,                2, 0, 1,  1);
+    containerLayout->addWidget(m_autoHoriPoint2Label,   2, 1, 1,  1);
+    containerLayout->addWidget(btnSetAngle,             3, 1, 1,  1);
     containerLayout->setColumnStretch(3, 10);
     m_autoHorizonContainer->setLayout(containerLayout);
 
@@ -270,15 +278,18 @@ void FreeRotationTool::slotResetSettings()
     m_angleInput->blockSignals(true);
     m_antialiasInput->blockSignals(true);
     m_autoCropCB->blockSignals(true);
+    m_autoHorizonCB->blockSignals(true);
 
     m_angleInput->slotReset();
     m_fineAngleInput->slotReset();
     m_antialiasInput->setChecked(true);
     m_autoCropCB->slotReset();
+    m_autoHorizonCB->slotReset();
 
     m_angleInput->blockSignals(false);
     m_antialiasInput->blockSignals(false);
     m_autoCropCB->blockSignals(false);
+    m_autoHorizonCB->blockSignals(false);
 
     slotEffect();
 }
@@ -292,9 +303,6 @@ void FreeRotationTool::prepareEffect()
     m_autoCropCB->setEnabled(false);
     m_autoHorizonInput->setEnabled(false);
     m_autoHorizonContainer->setEnabled(false);
-
-//    if (m_autoHorizonInput->isChecked())
-//        slotAutoHorizonSetAngle();
 
     double angle = m_angleInput->value() + m_fineAngleInput->value();
     bool antialiasing = m_antialiasInput->isChecked();
@@ -323,9 +331,6 @@ void FreeRotationTool::prepareFinal()
     m_autoCropCB->setEnabled(false);
     m_autoHorizonInput->setEnabled(false);
     m_autoHorizonContainer->setEnabled(false);
-
-//    if (m_autoHorizonInput->isChecked())
-//        slotAutoHorizonSetAngle();
 
     double angle      = m_angleInput->value() + m_fineAngleInput->value();
     bool antialiasing = m_antialiasInput->isChecked();
@@ -398,9 +403,6 @@ void FreeRotationTool::slotAutoHorizonToggled(bool t)
 {
     m_autoHorizonContainer->setVisible(t);
     m_autoHorizonContainer->setEnabled(t);
-
-//    m_angleInput->setEnabled(!t);
-//    m_fineAngleInput->setEnabled(!t);
 }
 
 QString FreeRotationTool::generatePointLabel(const QPoint &p)
@@ -434,11 +436,16 @@ void FreeRotationTool::slotAutoHorizonSetAngle()
     if (m_autoHorizonPoint1.isNull() && m_autoHorizonPoint2.isNull())
         return;
 
-    // calculate the angle between the line and the horizon
-    double rad = atan2((double)(m_autoHorizonPoint2.y() - m_autoHorizonPoint1.y()),
-                       (double)(m_autoHorizonPoint2.x() - m_autoHorizonPoint1.x()))
-                       * 180 / M_PI;
-    rad = -rad;
+    double rad = 0.0;
+
+    if (m_autoHorizonCB->currentIndex() == Horizontal)
+    {
+        // calculate the angle between the line and the horizon
+        rad = atan2((double)(m_autoHorizonPoint2.y() - m_autoHorizonPoint1.y()),
+                    (double)(m_autoHorizonPoint2.x() - m_autoHorizonPoint1.x()))
+                    * 180 / M_PI;
+        rad = -rad;
+    }
 
     // convert the angle to a string so we can easily split it up
     QString angle = QString::number(rad, 'f', 2);

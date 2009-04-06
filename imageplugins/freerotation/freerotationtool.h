@@ -56,6 +56,14 @@ class FreeRotationTool : public Digikam::EditorToolThreaded
 
 public:
 
+    enum Orientation
+    {
+        Horizontal = 0,
+        Vertical
+    };
+
+public:
+
     FreeRotationTool(QObject *parent);
     ~FreeRotationTool();
 
@@ -97,6 +105,7 @@ private:
     QWidget                      *m_autoHorizonContainer;
 
     KDcrawIface::RComboBox       *m_autoCropCB;
+    KDcrawIface::RComboBox       *m_autoHorizonCB;
 
     KDcrawIface::RIntNumInput    *m_angleInput;
 
