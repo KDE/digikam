@@ -166,7 +166,9 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     QString btnWhatsThis     = i18n("Select some point in the preview widget, "
                                     "then click this button to set it.");
+    btnPoint1->setToolTip(btnWhatsThis);
     btnPoint1->setWhatsThis(btnWhatsThis);
+    btnPoint2->setToolTip(btnWhatsThis);
     btnPoint2->setWhatsThis(btnWhatsThis);
 
     QGridLayout *containerLayout  = new QGridLayout;
