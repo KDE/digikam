@@ -522,7 +522,7 @@ void FreeRotationTool::setAutoHorizonMode(AutoMode mode)
 
     // convert the angle to a string so we can easily split it up
     QString angle = QString::number(radius, 'f', 2);
-    QStringList angles = angle.split(".");
+    QStringList angles = angle.split('.');
 
     // try to set the angle widgets with the extracted values
     if (!angles.isEmpty() && angles.count() == 2)
