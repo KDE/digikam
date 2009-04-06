@@ -56,10 +56,10 @@ class FreeRotationTool : public Digikam::EditorToolThreaded
 
 public:
 
-    enum Orientation
+    enum AutoMode
     {
-        Horizontal = 0,
-        Vertical
+        AutoHorizontal = 0,
+        AutoVertical
     };
 
 public:
@@ -77,7 +77,7 @@ private Q_SLOTS:
     void slotAutoHorizonP2Clicked();
     void slotAutoHorizonHoriClicked();
     void slotAutoHorizonVertiClicked();
-    void slotAutoHorizonSetAngle(Orientation);
+    void slotAutoHorizonSetAngle(AutoMode);
 
 private:
 

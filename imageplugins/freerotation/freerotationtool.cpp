@@ -424,15 +424,15 @@ void FreeRotationTool::slotAutoHorizonP2Clicked()
 
 void FreeRotationTool::slotAutoHorizonHoriClicked()
 {
-    slotAutoHorizonSetAngle(Horizontal);
+    slotAutoHorizonSetAngle(AutoHorizontal);
 }
 
 void FreeRotationTool::slotAutoHorizonVertiClicked()
 {
-    slotAutoHorizonSetAngle(Vertical);
+    slotAutoHorizonSetAngle(AutoVertical);
 }
 
-void FreeRotationTool::slotAutoHorizonSetAngle(Orientation orientation)
+void FreeRotationTool::slotAutoHorizonSetAngle(AutoMode mode)
 {
     // check if all points are set
     if (m_autoHorizonPoint1.isNull() && m_autoHorizonPoint2.isNull())
@@ -459,7 +459,7 @@ void FreeRotationTool::slotAutoHorizonSetAngle(Orientation orientation)
     }
     radius = -radius;
 
-    if (orientation == Vertical)
+    if (mode == AutoVertical)
     {
         if (flipped)
             radius -= 90.0;
