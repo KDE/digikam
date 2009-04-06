@@ -435,35 +435,28 @@ void FreeRotationTool::slotAutoHorizonSetAngle()
         return;
 
     double rad = 0.0;
+    bool flipped = false;
 
     // check point layout
-    bool flipped = m_autoHorizonPoint2.x() < m_autoHorizonPoint1.x();
+    flipped = m_autoHorizonPoint2.x() < m_autoHorizonPoint1.x();
 
-    if (m_autoHorizonCB->currentIndex() == Horizontal)
+    // calculate the angle
+    if (flipped)
     {
-        // calculate the angle for horizontal alignment
-        if (flipped)
-        {
-            rad = atan2((double)(m_autoHorizonPoint1.y() - m_autoHorizonPoint2.y()),
-                        (double)(m_autoHorizonPoint1.x() - m_autoHorizonPoint2.x()))
-                        * 180 / M_PI;
-        }
-        else
-        {
-            rad = atan2((double)(m_autoHorizonPoint2.y() - m_autoHorizonPoint1.y()),
-                        (double)(m_autoHorizonPoint2.x() - m_autoHorizonPoint1.x()))
-                        * 180 / M_PI;
-        }
-        rad = -rad;
+        rad = atan2((double)(m_autoHorizonPoint1.y() - m_autoHorizonPoint2.y()),
+                    (double)(m_autoHorizonPoint1.x() - m_autoHorizonPoint2.x()))
+                    * 180 / M_PI;
     }
-//    else
-//    {
-//        // calculate the angle for vertical alignment
-//        rad = atan2((double)(m_autoHorizonPoint2.y() - m_autoHorizonPoint1.y()),
-//                    (double)(m_autoHorizonPoint2.x() - m_autoHorizonPoint1.x()))
-//                    * 180 / M_PI;
-//        rad = -rad;
-//    }
+    else
+    {
+        rad = atan2((double)(m_autoHorizonPoint2.y() - m_autoHorizonPoint1.y()),
+                    (double)(m_autoHorizonPoint2.x() - m_autoHorizonPoint1.x()))
+                    * 180 / M_PI;
+    }
+    rad = -rad;
+
+    if (m_autoHorizonCB->currentIndex() == Vertical)
+        rad += 90;
 
     // convert the angle to a string so we can easily split it up
     QString angle = QString::number(rad, 'f', 2);
