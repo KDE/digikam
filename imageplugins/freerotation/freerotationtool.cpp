@@ -149,8 +149,8 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     m_autoHorizonInput       = new QCheckBox(i18n("Auto-Adjust Horizon"));
     m_autoHorizonContainer   = new QWidget;
-    QPushButton *btnLeft     = new QPushButton(i18n("Left Point"));
-    QPushButton *btnRight    = new QPushButton(i18n("Right Point"));
+    QPushButton *btnPoint1   = new QPushButton(i18n("Point 1"));
+    QPushButton *btnPoint2   = new QPushButton(i18n("Point 2"));
     QPushButton *btnSetAngle = new QPushButton(i18n("Set Angle"));
     m_autoHoriPoint1Label    = new QLabel("(0, 0)");
     m_autoHoriPoint2Label    = new QLabel("(0, 0)");
@@ -161,19 +161,17 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     m_autoHorizonCB->addItem(i18nc("vertical auto rotation", "vertical"));
     m_autoHorizonCB->setDefaultIndex(Horizontal);
 
-    QString btnLeftWThis    = i18n("Select the left point of the horizon in the preview widget, then click this "
-                                   "button to set it.");
-    QString btnRightWThis   = i18n("Select the right point of the horizon in the preview widget, then click this "
-                                   "button to set it.");
-    btnLeft->setWhatsThis(btnLeftWThis);
-    btnRight->setWhatsThis(btnRightWThis);
+    QString btnWhatsThis     = i18n("Select some point in the preview widget, "
+                                    "then click this button to set it.");
+    btnPoint1->setWhatsThis(btnWhatsThis);
+    btnPoint2->setWhatsThis(btnWhatsThis);
 
     QGridLayout *containerLayout  = new QGridLayout;
     containerLayout->addWidget(label6,                  0, 0, 1,  1);
     containerLayout->addWidget(m_autoHorizonCB,         0, 1, 1, -1);
-    containerLayout->addWidget(btnLeft,                 1, 0, 1,  1);
+    containerLayout->addWidget(btnPoint1,               1, 0, 1,  1);
     containerLayout->addWidget(m_autoHoriPoint1Label,   1, 1, 1,  1);
-    containerLayout->addWidget(btnRight,                2, 0, 1,  1);
+    containerLayout->addWidget(btnPoint2,               2, 0, 1,  1);
     containerLayout->addWidget(m_autoHoriPoint2Label,   2, 1, 1,  1);
     containerLayout->addWidget(btnSetAngle,             3, 1, 1,  1);
     containerLayout->setColumnStretch(3, 10);
@@ -225,11 +223,11 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     connect(m_autoHorizonInput, SIGNAL(toggled(bool)),
             this, SLOT(slotAutoHorizonToggled(bool)));
 
-    connect(btnLeft, SIGNAL(clicked()),
-            this, SLOT(slotAutoHorizonLeftClicked()));
+    connect(btnPoint1, SIGNAL(clicked()),
+            this, SLOT(slotAutoHorizonP1Clicked()));
 
-    connect(btnRight, SIGNAL(clicked()),
-            this, SLOT(slotAutoHorizonRightClicked()));
+    connect(btnPoint2, SIGNAL(clicked()),
+            this, SLOT(slotAutoHorizonP2Clicked()));
 
     connect(btnSetAngle, SIGNAL(clicked()),
             this, SLOT(slotAutoHorizonSetAngle()));
@@ -416,14 +414,14 @@ QString FreeRotationTool::generatePointLabel(const QPoint &p)
     return label;
 }
 
-void FreeRotationTool::slotAutoHorizonLeftClicked()
+void FreeRotationTool::slotAutoHorizonP1Clicked()
 {
     m_autoHorizonPoint1 = m_previewWidget->getSpotPosition();
     QString label = generatePointLabel(m_autoHorizonPoint1);
     m_autoHoriPoint1Label->setText(label);
 }
 
-void FreeRotationTool::slotAutoHorizonRightClicked()
+void FreeRotationTool::slotAutoHorizonP2Clicked()
 {
     m_autoHorizonPoint2 = m_previewWidget->getSpotPosition();
     QString label = generatePointLabel(m_autoHorizonPoint2);
@@ -438,14 +436,34 @@ void FreeRotationTool::slotAutoHorizonSetAngle()
 
     double rad = 0.0;
 
+    // check point layout
+    bool flipped = m_autoHorizonPoint2.x() < m_autoHorizonPoint1.x();
+
     if (m_autoHorizonCB->currentIndex() == Horizontal)
     {
-        // calculate the angle between the line and the horizon
-        rad = atan2((double)(m_autoHorizonPoint2.y() - m_autoHorizonPoint1.y()),
-                    (double)(m_autoHorizonPoint2.x() - m_autoHorizonPoint1.x()))
-                    * 180 / M_PI;
+        // calculate the angle for horizontal alignment
+        if (flipped)
+        {
+            rad = atan2((double)(m_autoHorizonPoint1.y() - m_autoHorizonPoint2.y()),
+                        (double)(m_autoHorizonPoint1.x() - m_autoHorizonPoint2.x()))
+                        * 180 / M_PI;
+        }
+        else
+        {
+            rad = atan2((double)(m_autoHorizonPoint2.y() - m_autoHorizonPoint1.y()),
+                        (double)(m_autoHorizonPoint2.x() - m_autoHorizonPoint1.x()))
+                        * 180 / M_PI;
+        }
         rad = -rad;
     }
+//    else
+//    {
+//        // calculate the angle for vertical alignment
+//        rad = atan2((double)(m_autoHorizonPoint2.y() - m_autoHorizonPoint1.y()),
+//                    (double)(m_autoHorizonPoint2.x() - m_autoHorizonPoint1.x()))
+//                    * 180 / M_PI;
+//        rad = -rad;
+//    }
 
     // convert the angle to a string so we can easily split it up
     QString angle = QString::number(rad, 'f', 2);

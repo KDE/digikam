@@ -73,8 +73,8 @@ private Q_SLOTS:
     void slotColorGuideChanged();
 
     void slotAutoHorizonToggled(bool);
-    void slotAutoHorizonLeftClicked();
-    void slotAutoHorizonRightClicked();
+    void slotAutoHorizonP1Clicked();
+    void slotAutoHorizonP2Clicked();
     void slotAutoHorizonSetAngle();
 
 private:
