@@ -30,16 +30,17 @@
 
 #include "editortool.h"
 
-class QLabel;
 class QCheckBox;
-class QPoint;
+class QLabel;
 class QPixmap;
+class QPoint;
+class QPushButton;
 
 namespace KDcrawIface
 {
 class RComboBox;
-class RIntNumInput;
 class RDoubleNumInput;
+class RIntNumInput;
 }
 
 namespace Digikam
@@ -90,7 +91,7 @@ private:
     void renderingFinished();
 
     void setAutoHorizonMode(AutoMode);
-    void updatePointLabels();
+    void updatePoints();
     void resetPoints();
     QString generatePointLabel(const QPoint &p);
     QPixmap generateBtnPixmap(const QString &label, const QColor &color);
@@ -104,6 +105,9 @@ private:
 
     QCheckBox                    *m_antialiasInput;
     QCheckBox                    *m_autoHorizonInput;
+
+    QPushButton                  *m_horizontalAdjustBtn;
+    QPushButton                  *m_verticalAdjustBtn;
 
     QPoint                        m_autoHorizonPoint1;
     QPoint                        m_autoHorizonPoint2;

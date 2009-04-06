@@ -38,8 +38,8 @@
 #include <QImage>
 #include <QLabel>
 #include <QLayout>
-#include <QPushButton>
 #include <QPainter>
+#include <QPushButton>
 #include <QToolButton>
 
 // KDE includes
@@ -159,8 +159,8 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     QToolButton *btnPoint2   = new QToolButton;
     btnPoint2->setIcon(pm2);
 
-    QPushButton *btnSetHori  = new QPushButton(i18n("Horizontal"));
-    QPushButton *btnSetVerti = new QPushButton(i18n("Vertical"));
+    m_horizontalAdjustBtn    = new QPushButton(i18n("Horizontal"));
+    m_verticalAdjustBtn      = new QPushButton(i18n("Vertical"));
     m_autoHoriPoint1Label    = new QLabel("(0, 0)");
     m_autoHoriPoint2Label    = new QLabel("(0, 0)");
 
@@ -176,8 +176,8 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     containerLayout->addWidget(m_autoHoriPoint1Label,   0, 1, 1, 1);
     containerLayout->addWidget(btnPoint2,               1, 0, 1, 1);
     containerLayout->addWidget(m_autoHoriPoint2Label,   1, 1, 1, 1);
-    containerLayout->addWidget(btnSetHori,              2, 0, 1, 2);
-    containerLayout->addWidget(btnSetVerti,             2, 3, 1, 2);
+    containerLayout->addWidget(m_horizontalAdjustBtn,   2, 0, 1, 2);
+    containerLayout->addWidget(m_verticalAdjustBtn,     2, 3, 1, 2);
     containerLayout->setColumnStretch(2, 10);
     containerLayout->setMargin(0);
     m_autoHorizonContainer->setLayout(containerLayout);
@@ -234,10 +234,10 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     connect(btnPoint2, SIGNAL(clicked()),
             this, SLOT(slotAutoHorizonP2Clicked()));
 
-    connect(btnSetHori, SIGNAL(clicked()),
+    connect(m_horizontalAdjustBtn, SIGNAL(clicked()),
             this, SLOT(slotAutoHorizonHoriClicked()));
 
-    connect(btnSetVerti, SIGNAL(clicked()),
+    connect(m_verticalAdjustBtn, SIGNAL(clicked()),
             this, SLOT(slotAutoHorizonVertiClicked()));
 }
 
@@ -413,7 +413,7 @@ void FreeRotationTool::slotAutoHorizonToggled(bool t)
 
 QString FreeRotationTool::generatePointLabel(const QPoint &p)
 {
-    if (p.isNull())
+    if (p.x() == -1 && p.y() == -1)
         return QString("(0, 0)");
 
     QString label = QString("(%1, %2)")
@@ -422,8 +422,9 @@ QString FreeRotationTool::generatePointLabel(const QPoint &p)
     return label;
 }
 
-void FreeRotationTool::updatePointLabels()
+void FreeRotationTool::updatePoints()
 {
+    // set labels
     QString tmp;
     tmp = generatePointLabel(m_autoHorizonPoint1);
     m_autoHoriPoint1Label->setText(tmp);
@@ -431,35 +432,43 @@ void FreeRotationTool::updatePointLabels()
     tmp = generatePointLabel(m_autoHorizonPoint2);
     m_autoHoriPoint2Label->setText(tmp);
 
+    // set points in preview widget
     QPolygon points(2);
     points.setPoint(0, m_autoHorizonPoint1);
     points.setPoint(1, m_autoHorizonPoint2);
     m_previewWidget->setPoints(points);
+
+    // enable / disable adjustment buttons
+    bool p1Set      = (m_autoHorizonPoint1.x() != -1 && m_autoHorizonPoint1.y() != -1);
+    bool p2Set      = (m_autoHorizonPoint2.x() != -1 && m_autoHorizonPoint2.y() != -1);
+    bool enableBtn  = p1Set && p2Set;
+    m_horizontalAdjustBtn->setEnabled(enableBtn);
+    m_verticalAdjustBtn->setEnabled(enableBtn);
 }
 
 void FreeRotationTool::resetPoints()
 {
-    m_autoHorizonPoint1.setX(0);
-    m_autoHorizonPoint1.setY(0);
+    m_autoHorizonPoint1.setX(-1);
+    m_autoHorizonPoint1.setY(-1);
 
-    m_autoHorizonPoint2.setX(0);
-    m_autoHorizonPoint2.setY(0);
+    m_autoHorizonPoint2.setX(-1);
+    m_autoHorizonPoint2.setY(-1);
 
     m_previewWidget->resetPoints();
 
-    updatePointLabels();
+    updatePoints();
 }
 
 void FreeRotationTool::slotAutoHorizonP1Clicked()
 {
     m_autoHorizonPoint1 = m_previewWidget->getSpotPosition();
-    updatePointLabels();
+    updatePoints();
 }
 
 void FreeRotationTool::slotAutoHorizonP2Clicked()
 {
     m_autoHorizonPoint2 = m_previewWidget->getSpotPosition();
-    updatePointLabels();
+    updatePoints();
 }
 
 void FreeRotationTool::slotAutoHorizonHoriClicked()
