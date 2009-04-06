@@ -56,13 +56,13 @@ Q_OBJECT
 
 public:
 
-    enum GuideToolMode 
+    enum GuideToolMode
     {
         HVGuideMode=0,
         PickColorMode
     };
 
-    enum RenderingPreviewMode 
+    enum RenderingPreviewMode
     {
         PreviewOriginalImage=0,     // Original image only.
         PreviewBothImagesHorz,      // Horizontal with original and target duplicated.
@@ -83,9 +83,9 @@ public:
 
 public:
 
-    ImageGuideWidget(int w, int h, QWidget *parent=0, 
+    ImageGuideWidget(int w, int h, QWidget *parent=0,
                      bool spotVisible=true, int guideMode=HVGuideMode,
-                     const QColor& guideColor=Qt::red, int guideSize=1, 
+                     const QColor& guideColor=Qt::red, int guideSize=1,
                      bool blink=false, bool useImageSelection=false);
     ~ImageGuideWidget();
 
@@ -97,6 +97,8 @@ public:
     int    getRenderingPreviewMode();
     void   resetSpotPosition();
     void   updatePreview();
+    void   setPoints(const QPolygon &p);
+    void   resetPoints();
 
 public Q_SLOTS:
 

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-02-01
- * Description : a widget to display an image preview with some 
+ * Description : a widget to display an image preview with some
  *               modes to compare effect results.
  *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -50,7 +50,7 @@ Q_OBJECT
 
 public:
 
-    enum ExposureIndicator 
+    enum ExposureIndicator
     {
         UnderExposure=0,
         OverExposure
@@ -58,9 +58,9 @@ public:
 
 public:
 
-    ImageWidget(const QString& settingsSection, QWidget *parent=0, 
-                const QString& previewWhatsThis=QString(), bool prevModeOptions=true, 
-                int guideMode=ImageGuideWidget::PickColorMode, 
+    ImageWidget(const QString& settingsSection, QWidget *parent=0,
+                const QString& previewWhatsThis=QString(), bool prevModeOptions=true,
+                int guideMode=ImageGuideWidget::PickColorMode,
                 bool guideVisible=true, bool useImageSelection=false);
     ~ImageWidget();
 
@@ -75,6 +75,8 @@ public:
     void   writeSettings();
 
     void   setRenderingPreviewMode(int mode);
+    void   setPoints(const QPolygon &p);
+    void   resetPoints();
 
 public Q_SLOTS:
 

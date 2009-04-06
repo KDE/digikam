@@ -430,6 +430,11 @@ void FreeRotationTool::updatePointLabels()
 
     tmp = generatePointLabel(m_autoHorizonPoint2);
     m_autoHoriPoint2Label->setText(tmp);
+
+    QPolygon points(2);
+    points.setPoint(0, m_autoHorizonPoint1);
+    points.setPoint(1, m_autoHorizonPoint2);
+    m_previewWidget->setPoints(points);
 }
 
 void FreeRotationTool::resetPoints()
@@ -439,6 +444,8 @@ void FreeRotationTool::resetPoints()
 
     m_autoHorizonPoint2.setX(0);
     m_autoHorizonPoint2.setY(0);
+
+    m_previewWidget->resetPoints();
 
     updatePointLabels();
 }
@@ -517,6 +524,8 @@ void FreeRotationTool::setAutoHorizonMode(AutoMode mode)
         m_angleInput->setValue(mainAngle);
         m_fineAngleInput->setValue(fineAngle);
     }
+
+    resetPoints();
 }
 
 QPixmap FreeRotationTool::generateBtnPixmap(const QString &label, const QColor &color)

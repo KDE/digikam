@@ -90,6 +90,7 @@ public:
 
     // Current spot position in preview coordinates.
     QPoint      spot;
+    QPolygon    selectedPoints;
 
     QRect       rect;
 
@@ -449,6 +450,32 @@ void ImageGuideWidget::updatePixmap()
              break;
           }
        }
+
+    }
+
+    // add points
+    if (d->selectedPoints.count() > 0)
+    {
+        QPoint point;
+        QColor color;
+        int x = 0;
+        int y = 0;
+
+        for (int i = 0; i < d->selectedPoints.count(); ++i)
+        {
+            // randomize colors a little bit
+            color = (i % 2 == 0) ? QColor(Qt::red) : QColor(Qt::green);
+
+            point = d->selectedPoints.point(i);
+            x = (int)(point.x() * (float)(d->width)  / (float) d->iface->originalWidth());
+            y = (int)(point.y() * (float)(d->height) / (float) d->iface->originalHeight());
+            x += d->rect.x();
+            y += d->rect.y();
+
+            p.setPen(color);
+            p.drawEllipse(x -5 , y - 5, 10, 10);
+            p.drawPoint(x, y);
+        }
     }
 
     p.end();
@@ -633,6 +660,17 @@ void ImageGuideWidget::leaveEvent(QEvent*)
         updatePixmap();
         repaint();
     }
+}
+
+void ImageGuideWidget::setPoints(const QPolygon &p)
+{
+    d->selectedPoints = p;
+    updatePreview();
+}
+
+void ImageGuideWidget::resetPoints()
+{
+    d->selectedPoints.clear();
 }
 
 }  // namespace Digikam

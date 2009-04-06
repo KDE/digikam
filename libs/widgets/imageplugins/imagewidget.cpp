@@ -354,4 +354,14 @@ void ImageWidget::writeSettings()
     config->sync();
 }
 
+void ImageWidget::setPoints(const QPolygon &p)
+{
+    d->previewWidget->setPoints(p);
+}
+
+void ImageWidget::resetPoints()
+{
+    d->previewWidget->resetPoints();
+}
+
 }  // namespace Digikam
