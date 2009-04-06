@@ -163,8 +163,8 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     QLabel *label7           = new QLabel(i18n("Adjustment:"));
     m_horizontalAdjustBtn    = new QPushButton(i18nc("Horizontal Adjustment", "Horizontal"));
     m_verticalAdjustBtn      = new QPushButton(i18nc("Vertical Adjustment", "Vertical"));
-    m_autoHoriPoint1Label    = new QLabel("(0, 0)");
-    m_autoHoriPoint2Label    = new QLabel("(0, 0)");
+    m_autoHoriPoint1Label    = new QLabel(i18n("not set"));
+    m_autoHoriPoint2Label    = new QLabel(i18n("not set"));
 
     QString btnWhatsThis     = i18n("Select some point in the preview widget, "
                                     "then click this button to set it.");
@@ -418,7 +418,7 @@ void FreeRotationTool::slotAutoHorizonToggled(bool t)
 QString FreeRotationTool::generatePointLabel(const QPoint &p)
 {
     if (p.x() == -1 && p.y() == -1)
-        return QString("(0, 0)");
+        return QString(i18n("not set"));
 
     QString label = QString("(%1, %2)")
                            .arg(p.x())
