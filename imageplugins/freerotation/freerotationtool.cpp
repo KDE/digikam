@@ -30,7 +30,6 @@
 // C++ includes.
 
 #include <cmath>
-#include <complex>
 
 // Qt includes
 
