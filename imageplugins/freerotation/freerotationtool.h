@@ -90,6 +90,8 @@ private:
 
     void setAutoHorizonMode(AutoMode);
     QString generatePointLabel(const QPoint &p);
+    void updatePointLabels();
+    void resetPoints();
 
 private:
 

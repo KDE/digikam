@@ -250,7 +250,9 @@ void FreeRotationTool::readSettings()
     m_antialiasInput->setChecked(group.readEntry("Anti Aliasing", true));
     m_autoHorizonInput->setChecked(group.readEntry("Auto Adjust Horizon", false));
 
+    resetPoints();
     slotAutoHorizonToggled(m_autoHorizonInput->isChecked());
+
     slotColorGuideChanged();
     slotEffect();
 }
@@ -283,6 +285,7 @@ void FreeRotationTool::slotResetSettings()
     m_antialiasInput->blockSignals(false);
     m_autoCropCB->blockSignals(false);
 
+    resetPoints();
     slotEffect();
 }
 
@@ -408,18 +411,37 @@ QString FreeRotationTool::generatePointLabel(const QPoint &p)
     return label;
 }
 
+void FreeRotationTool::updatePointLabels()
+{
+    QString tmp;
+    tmp = generatePointLabel(m_autoHorizonPoint1);
+    m_autoHoriPoint1Label->setText(tmp);
+
+    tmp = generatePointLabel(m_autoHorizonPoint2);
+    m_autoHoriPoint2Label->setText(tmp);
+}
+
+void FreeRotationTool::resetPoints()
+{
+    m_autoHorizonPoint1.setX(0);
+    m_autoHorizonPoint1.setY(0);
+
+    m_autoHorizonPoint2.setX(0);
+    m_autoHorizonPoint2.setY(0);
+
+    updatePointLabels();
+}
+
 void FreeRotationTool::slotAutoHorizonP1Clicked()
 {
     m_autoHorizonPoint1 = m_previewWidget->getSpotPosition();
-    QString label = generatePointLabel(m_autoHorizonPoint1);
-    m_autoHoriPoint1Label->setText(label);
+    updatePointLabels();
 }
 
 void FreeRotationTool::slotAutoHorizonP2Clicked()
 {
     m_autoHorizonPoint2 = m_previewWidget->getSpotPosition();
-    QString label = generatePointLabel(m_autoHorizonPoint2);
-    m_autoHoriPoint2Label->setText(label);
+    updatePointLabels();
 }
 
 void FreeRotationTool::slotAutoHorizonHoriClicked()
