@@ -198,15 +198,6 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(btnLeft, SIGNAL(clicked()),
-            this, SLOT(slotAutoHorizonBtn1Clicked()));
-
-    connect(btnRight, SIGNAL(clicked()),
-            this, SLOT(slotAutoHorizonBtn2Clicked()));
-
-    connect(btnSetAngle, SIGNAL(clicked()),
-            this, SLOT(slotAutoHorizonSetAngle()));
-
     connect(m_angleInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
@@ -216,14 +207,24 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     connect(m_antialiasInput, SIGNAL(toggled(bool)),
             this, SLOT(slotEffect()));
 
-    connect(m_autoHorizonInput, SIGNAL(toggled(bool)),
-            this, SLOT(slotAutoHorizonToggled(bool)));
-
     connect(m_autoCropCB, SIGNAL(activated(int)),
             this, SLOT(slotEffect()));
 
     connect(m_gboxSettings, SIGNAL(signalColorGuideChanged()),
             this, SLOT(slotColorGuideChanged()));
+
+    // auto-horizon
+    connect(m_autoHorizonInput, SIGNAL(toggled(bool)),
+            this, SLOT(slotAutoHorizonToggled(bool)));
+
+    connect(btnLeft, SIGNAL(clicked()),
+            this, SLOT(slotAutoHorizonLeftClicked()));
+
+    connect(btnRight, SIGNAL(clicked()),
+            this, SLOT(slotAutoHorizonRightClicked()));
+
+    connect(btnSetAngle, SIGNAL(clicked()),
+            this, SLOT(slotAutoHorizonSetAngle()));
 }
 
 FreeRotationTool::~FreeRotationTool()
@@ -413,14 +414,14 @@ QString FreeRotationTool::generatePointLabel(const QPoint &p)
     return label;
 }
 
-void FreeRotationTool::slotAutoHorizonBtn1Clicked()
+void FreeRotationTool::slotAutoHorizonLeftClicked()
 {
     m_autoHorizonPoint1 = m_previewWidget->getSpotPosition();
     QString label = generatePointLabel(m_autoHorizonPoint1);
     m_autoHoriPoint1Label->setText(label);
 }
 
-void FreeRotationTool::slotAutoHorizonBtn2Clicked()
+void FreeRotationTool::slotAutoHorizonRightClicked()
 {
     m_autoHorizonPoint2 = m_previewWidget->getSpotPosition();
     QString label = generatePointLabel(m_autoHorizonPoint2);
