@@ -487,37 +487,15 @@ void FreeRotationTool::slotAutoHorizonVertiClicked()
 
 void FreeRotationTool::setAutoHorizonMode(AutoMode mode)
 {
-    // check if all points are set
-    if (m_autoHorizonPoint1.isNull() && m_autoHorizonPoint2.isNull())
-        return;
-
     double radius = 0.0;
-    bool flipped = false;
-
-    // check point layout
-    flipped = m_autoHorizonPoint2.x() < m_autoHorizonPoint1.x();
-
-    // calculate the angle
-    if (flipped)
-    {
-        radius = atan2((double)(m_autoHorizonPoint1.y() - m_autoHorizonPoint2.y()),
-                       (double)(m_autoHorizonPoint1.x() - m_autoHorizonPoint2.x()))
-                       * 180.0 / M_PI;
-    }
-    else
-    {
-        radius = atan2((double)(m_autoHorizonPoint2.y() - m_autoHorizonPoint1.y()),
-                       (double)(m_autoHorizonPoint2.x() - m_autoHorizonPoint1.x()))
-                       * 180.0 / M_PI;
-    }
-    radius = -radius;
+    radius = calculateAutoRadius();
 
     if (mode == AutoVertical)
     {
-        if (flipped)
-            radius -= 90.0;
-        else
-            radius += 90.0;
+//        if (flipped)
+//            radius -= 90.0;
+//        else
+//            radius += 90.0;
     }
 
     // convert the angle to a string so we can easily split it up
@@ -556,6 +534,71 @@ QPixmap FreeRotationTool::generateBtnPixmap(const QString &label, const QColor &
     p.end();
 
     return pm;
+}
+
+double FreeRotationTool::calculateAutoRadius()
+{
+    return calculateRadius(m_autoHorizonPoint1, m_autoHorizonPoint2);
+}
+
+//double FreeRotationTool::calculateRadius(const QPoint &p1, const QPoint &p2)
+//{
+//    // check if all points are set
+//    if (p1.isNull() && p2.isNull())
+//        return 0.0;
+//
+//    double radius = 0.0;
+//    bool flipped = false;
+//
+//    // check point layout
+//    flipped = p2.x() < p1.x();
+//
+//    // calculate the angle
+//    if (flipped)
+//    {
+//        radius = atan2((double)(p1.y() - p2.y()),
+//                (double)(p1.x() - p2.x()))
+//                * 180.0 / M_PI;
+//    }
+//    else
+//    {
+//        radius = atan2((double)(p2.y() - p1.y()),
+//                (double)(p2.x() - p1.x()))
+//                * 180.0 / M_PI;
+//    }
+//    radius = -radius;
+//
+//    return radius;
+//}
+
+double FreeRotationTool::calculateRadius(const QPoint &p1, const QPoint &p2)
+{
+    // check if all points are valid
+    if (!pointIsValid(p1) && !pointIsValid(p2))
+        return 0.0;
+
+    double radius = 0.0;
+    bool flipped = false;
+
+    // check point layout
+    flipped = p2.x() < p1.x();
+
+    // calculate the angle
+    if (flipped)
+    {
+        radius = atan2((double)(p1.y() - p2.y()),
+                (double)(p1.x() - p2.x()))
+                * 180.0 / M_PI;
+    }
+    else
+    {
+        radius = atan2((double)(p2.y() - p1.y()),
+                (double)(p2.x() - p1.x()))
+                * 180.0 / M_PI;
+    }
+    radius = -radius;
+
+    return radius;
 }
 
 }  // namespace DigikamFreeRotationImagesPlugin

@@ -90,9 +90,11 @@ private:
     void putFinalData();
     void renderingFinished();
 
-    void setAutoHorizonMode(AutoMode);
-    void updatePoints();
-    void resetPoints();
+    double  calculateRadius(const QPoint &p1, const QPoint &p2);
+    double  calculateAutoRadius();
+    void    setAutoHorizonMode(AutoMode);
+    void    updatePoints();
+    void    resetPoints();
     QString generatePointLabel(const QPoint &p);
     QPixmap generateBtnPixmap(const QString &label, const QColor &color);
 
