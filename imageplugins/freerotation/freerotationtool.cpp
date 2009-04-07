@@ -78,7 +78,7 @@ namespace DigikamFreeRotationImagesPlugin
 {
 
 FreeRotationTool::FreeRotationTool(QObject* parent)
-                        : EditorToolThreaded(parent)
+                : EditorToolThreaded(parent)
 {
     setObjectName("freerotation");
     setToolName(i18n("Free Rotation"));
