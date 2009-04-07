@@ -482,7 +482,7 @@ void FreeRotationTool::setAutoHorizonMode(AutoMode mode)
 {
     double angle = 0.0;
     bool reverse = false;
-    angle = calculateAutoAngle(reverse);
+    angle = calculateAutoAngle(&reverse);
 
     if (mode == AutoVertical)
     {
@@ -530,7 +530,7 @@ QPixmap FreeRotationTool::generateBtnPixmap(const QString &label, const QColor &
     return pm;
 }
 
-double FreeRotationTool::calculateAutoAngle(bool &reverse)
+double FreeRotationTool::calculateAutoAngle(bool *reverse)
 {
     return calculateAngle(m_autoHorizonPoint1, m_autoHorizonPoint2, reverse);
 }
@@ -565,7 +565,7 @@ double FreeRotationTool::calculateAutoAngle(bool &reverse)
 //    return radius;
 //}
 
-double FreeRotationTool::calculateAngle(const QPoint &p1, const QPoint &p2, bool &reverse)
+double FreeRotationTool::calculateAngle(const QPoint &p1, const QPoint &p2, bool *reverse)
 {
     // check if all points are valid
     if (!pointIsValid(p1) && !pointIsValid(p2))
@@ -598,13 +598,12 @@ double FreeRotationTool::calculateAngle(const QPoint &p1, const QPoint &p2, bool
     }
 
     double angle = 0.0;
-    reverse = false;
 
     // check point layout
-    reverse = pRight.y() > pLeft.y();
+    *reverse = pRight.y() > pLeft.y();
 
     // calculate the angle
-    if (reverse)
+    if (*reverse)
     {
         angle = atan2((double)(pLeft.y() - pRight.y()),
                 (double)(pRight.x() - pLeft.x()))
