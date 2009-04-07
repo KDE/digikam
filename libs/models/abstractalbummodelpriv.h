@@ -52,7 +52,7 @@ public:
     {
         // return the n-th of theh children of parent, or 0
         Album *a = parent->firstChild();
-        for (int i=0; i<n; i++)
+        for (int i=0; i<n; ++i)
         {
             a = a->next();
             if (!a)

@@ -1109,13 +1109,13 @@ void DImg::bitBlt (const uchar *src, uchar *dest,
 
     int scurY = sy;
     int dcurY = dy;
-    for (int j = 0 ; j < h ; j++, scurY++, dcurY++)
+    for (int j = 0 ; j < h ; ++j, ++scurY, ++dcurY)
     {
         sptr  = &src [ scurY * slinelength ] + sx * sdepth;
         dptr  = &dest[ dcurY * dlinelength ] + dx * ddepth;
 
             // plain and simple bitBlt
-        for (int i = 0; i < w * sdepth ; i++, sptr++, dptr++)
+        for (int i = 0; i < w * sdepth ; ++i, ++sptr, ++dptr)
         {
             *dptr = *sptr;
         }
@@ -1157,13 +1157,13 @@ void DImg::bitBlend (DColorComposer *composer, const uchar *src, uchar *dest,
 
     int scurY = sy;
     int dcurY = dy;
-    for (int j = 0 ; j < h ; j++, scurY++, dcurY++)
+    for (int j = 0 ; j < h ; ++j, ++scurY, ++dcurY)
     {
         sptr  = &src [ scurY * slinelength ] + sx * sdepth;
         dptr  = &dest[ dcurY * dlinelength ] + dx * ddepth;
 
         // blend src and destination
-        for (int i = 0 ; i < w ; i++, sptr+=sdepth, dptr+=ddepth)
+        for (int i = 0 ; i < w ; ++i, sptr+=sdepth, dptr+=ddepth)
         {
             DColor src(sptr, sixteenBit);
             DColor dst(dptr, sixteenBit);

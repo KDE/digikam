@@ -208,7 +208,7 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
         case 1: // B&W image
             img = QImage( cinfo.output_width, cinfo.output_height, QImage::Format_Indexed8);
             img.setNumColors(256);
-            for (int i = 0 ; i < 256 ; i++)
+            for (int i = 0 ; i < 256 ; ++i)
                 img.setColor(i, qRgb(i, i, i));
             break;
     }
@@ -223,7 +223,7 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
 
     if (cinfo.output_components == 3) {
         // Expand 24->32 bpp.
-        for (uint j=0; j<cinfo.output_height; j++) {
+        for (uint j=0; j<cinfo.output_height; ++j) {
             uchar *in = img.scanLine(j) + cinfo.output_width * 3;
             QRgb *out = (QRgb*)img.scanLine(j);
 

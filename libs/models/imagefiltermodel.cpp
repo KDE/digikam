@@ -327,7 +327,7 @@ void ImageFilterModelPrivate::packageFinished(const ImageFilterModelTodoPackage 
 
     // incorporate result
     QHash<qlonglong, bool>::const_iterator it = package.filterResults.constBegin();
-    for (; it != package.filterResults.constEnd(); it++)
+    for (; it != package.filterResults.constEnd(); ++it)
         filterResults.insert(it.key(), it.value());
 
     // re-add if necessary
