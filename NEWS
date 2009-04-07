@@ -29,5 +29,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 188573 : RW2 converter broken for low light images.
 019 ==> 188642 : GPS data in Digikam shows the wrong places on the map.
 020 ==> 188907 : Album view should display subfolders, like tag view does.
-021 ==> 
-
+021 ==> 183038 : "Select All" action interrupts other widgets. 
+022 ==> 
