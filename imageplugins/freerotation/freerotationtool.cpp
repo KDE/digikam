@@ -576,10 +576,12 @@ double FreeRotationTool::calculateAngle(const QPoint &p1, const QPoint &p2, bool
     double angle = 0.0;
 
     // check point layout
-    *reverse = pRight.y() > pLeft.y();
+    bool _reverse = pRight.y() > pLeft.y();
+    if (reverse)
+        *reverse = _reverse;
 
     // calculate the angle
-    if (*reverse)
+    if (_reverse)
     {
         angle = atan2((double)(pLeft.y() - pRight.y()),
                       (double)(pRight.x() - pLeft.x()))
