@@ -152,11 +152,11 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     m_autoHorizonContainer   = new QWidget;
 
     QLabel *label6           = new QLabel(i18n("Points:"));
-    QPixmap pm1 = generateBtnPixmap(QString("1"), Qt::red);
+    QPixmap pm1 = generateBtnPixmap(QString("1"), Qt::black);
     QToolButton *btnPoint1   = new QToolButton;
     btnPoint1->setIcon(pm1);
 
-    QPixmap pm2 = generateBtnPixmap(QString("2"), Qt::blue);
+    QPixmap pm2 = generateBtnPixmap(QString("2"), Qt::black);
     QToolButton *btnPoint2   = new QToolButton;
     btnPoint2->setIcon(pm2);
 
