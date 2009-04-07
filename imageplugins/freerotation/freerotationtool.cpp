@@ -541,36 +541,6 @@ double FreeRotationTool::calculateAutoAngle(bool *reverse)
     return calculateAngle(m_autoHorizonPoint1, m_autoHorizonPoint2, reverse);
 }
 
-//double FreeRotationTool::calculateRadius(const QPoint &p1, const QPoint &p2)
-//{
-//    // check if all points are set
-//    if (p1.isNull() && p2.isNull())
-//        return 0.0;
-//
-//    double radius = 0.0;
-//    bool flipped = false;
-//
-//    // check point layout
-//    flipped = p2.x() < p1.x();
-//
-//    // calculate the angle
-//    if (flipped)
-//    {
-//        radius = atan2((double)(p1.y() - p2.y()),
-//                (double)(p1.x() - p2.x()))
-//                * 180.0 / M_PI;
-//    }
-//    else
-//    {
-//        radius = atan2((double)(p2.y() - p1.y()),
-//                (double)(p2.x() - p1.x()))
-//                * 180.0 / M_PI;
-//    }
-//    radius = -radius;
-//
-//    return radius;
-//}
-
 double FreeRotationTool::calculateAngle(const QPoint &p1, const QPoint &p2, bool *reverse)
 {
     // check if all points are valid
