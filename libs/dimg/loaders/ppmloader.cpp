@@ -136,7 +136,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         kDebug(50003) << "rgbmax=" << rgbmax << "  fac=" << fac << endl;
     #endif
 
-        for (int h = 0; h < height; h++)
+        for (int h = 0; h < height; ++h)
         {
 
             if (observer && h == checkpoint)
@@ -151,7 +151,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 observer->progressInfo(m_image, 0.1 + (0.9 * ( ((float)h)/((float)height) )));
             }
 
-            for (int w = 0; w < width; w++)
+            for (int w = 0; w < width; ++w)
             {
 
                 fread (src, 6 *sizeof(unsigned char), 1, file);

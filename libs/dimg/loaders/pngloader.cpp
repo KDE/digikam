@@ -401,7 +401,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             return false;
         }
 
-        for (int i = 0; i < height; i++)
+        for (int i = 0; i < height; ++i)
         {
             if (m_sixteenBit)
                 lines[i] = data + (i * width * 8);
@@ -414,11 +414,11 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         // The other way to read images is row by row. Necessary for observer.
         // Now we need to deal with interlacing.
 
-        for (int pass = 0; pass < number_passes; pass++)
+        for (int pass = 0; pass < number_passes; ++pass)
         {
             int y;
             int checkPoint = 0;
-            for (y = 0; y < height; y++)
+            for (y = 0; y < height; ++y)
             {
                 if (observer && y == checkPoint)
                 {
@@ -517,7 +517,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (m_loadFlags & LoadICCData)
     {
-        for (int i = 0; i < num_comments; i++)
+        for (int i = 0; i < num_comments; ++i)
         {
             // Check if we have a Raw profile embedded using ImageMagick technique.
 
@@ -832,7 +832,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     ptr = imageData();
 
     uint checkPoint = 0;
-    for (y = 0; y < imageHeight(); y++)
+    for (y = 0; y < imageHeight(); ++y)
     {
 
         if (observer && y == checkPoint)
@@ -965,7 +965,7 @@ void PNGLoader::writeRawProfile(png_struct *ping, png_info *ping_info, char *pro
 
     dp += 8;
 
-    for (i=0; i < (long) length; i++)
+    for (i=0; i < (long) length; ++i)
     {
         if (i%36 == 0)
             *dp++='\n';

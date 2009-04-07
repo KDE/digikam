@@ -110,9 +110,9 @@ void DImgSharpen::sharpenImage(double radius, double sigma)
         return;
     }
 
-    for(v=(-kernelWidth/2) ; v <= (kernelWidth/2) ; v++)
+    for(v=(-kernelWidth/2) ; v <= (kernelWidth/2) ; ++v)
     {
-        for(u=(-kernelWidth/2) ; u <= (kernelWidth/2) ; u++)
+        for(u=(-kernelWidth/2) ; u <= (kernelWidth/2) ; ++u)
         {
             alpha      = exp(-((double) u*u+v*v)/(2.0*sigma*sigma));
             kernel[i]  = alpha/(2.0*M_PI*sigma*sigma);
@@ -152,7 +152,7 @@ bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
         return(false);
     }
 
-    for(i=0 ; i < (kernelWidth*kernelWidth) ; i++)
+    for(i=0 ; i < (kernelWidth*kernelWidth) ; ++i)
         normalize += kernel[i];
 
     if(fabs(normalize) <= Epsilon)
@@ -160,16 +160,16 @@ bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
 
     normalize = 1.0/normalize;
 
-    for(i=0 ; i < (kernelWidth*kernelWidth) ; i++)
+    for(i=0 ; i < (kernelWidth*kernelWidth) ; ++i)
         normal_kernel[i] = normalize*kernel[i];
 
     double maxClamp = m_destImage.sixteenBit() ? 16777215.0 : 65535.0;
 
-    for(y=0 ; !m_cancel && (y < m_destImage.height()) ; y++)
+    for(y=0 ; !m_cancel && (y < m_destImage.height()) ; ++y)
     {
         sy = y-(kernelWidth/2);
 
-        for(x=0 ; !m_cancel && (x < m_destImage.width()) ; x++)
+        for(x=0 ; !m_cancel && (x < m_destImage.width()) ; ++x)
         {
             k   = normal_kernel;
             red = green = blue = alpha = 0;
@@ -224,7 +224,7 @@ int DImgSharpen::getOptimalKernelWidth(double radius, double sigma)
     {
         normalize=0.0;
 
-        for(u=(-kernelWidth/2) ; u <= (kernelWidth/2) ; u++)
+        for(u=(-kernelWidth/2) ; u <= (kernelWidth/2) ; ++u)
             normalize += exp(-((double) u*u)/(2.0*sigma*sigma))/(SQ2PI*sigma);
 
         u     = kernelWidth/2;

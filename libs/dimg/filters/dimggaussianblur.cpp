@@ -97,7 +97,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
     factor   = exp (lnfactor);
     sd       = exp (lnsd);
 
-    for (i = 0; !m_cancel && (i < nKSize); i++)
+    for (i = 0; !m_cancel && (i < nKSize); ++i)
     {
         x = sqrt ((i - nCenter) * (i - nCenter));
         Kernel[i] = (int)(factor * exp (-0.5 * pow ((x / sd), 2)) / (sd * sqrt (2.0 * M_PI)));
@@ -116,8 +116,8 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
 
     int** arrMult = Alloc2DArray (nKernelWidth, sixteenBit ? 65536 : 256);
 
-    for (i = 0; !m_cancel && (i < nKernelWidth); i++)
-        for (j = 0; !m_cancel && (j < (sixteenBit ? 65536 : 256)); j++)
+    for (i = 0; !m_cancel && (i < nKernelWidth); ++i)
+        for (j = 0; !m_cancel && (j < (sixteenBit ? 65536 : 256)); ++j)
             arrMult[i][j] = j * Kernel[i];
 
     // We need to copy our bits to blur bits
@@ -136,7 +136,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
 
     // Now, we enter in the main loop
 
-    for (h = 0; !m_cancel && (h < height); h++)
+    for (h = 0; !m_cancel && (h < height); ++h)
     {
         for (w = 0; !m_cancel && (w < width); w++, i+=4)
         {
@@ -146,7 +146,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
 
                 // first of all, we need to blur the horizontal lines
 
-                for (n = -radius; !m_cancel && (n <= radius); n++)
+                for (n = -radius; !m_cancel && (n <= radius); ++n)
                 {
                     // if is inside...
                     if (IsInside (width, height, w + n, h))
@@ -185,7 +185,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
 
                 // first of all, we need to blur the horizontal lines
 
-                for (n = -radius; !m_cancel && (n <= radius); n++)
+                for (n = -radius; !m_cancel && (n <= radius); ++n)
                 {
                     // if is inside...
                     if (IsInside (width, height, w + n, h))
@@ -238,7 +238,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
                 uchar *org, *dst;
 
                 // first of all, we need to blur the vertical lines
-                for (n = -radius; !m_cancel && (n <= radius); n++)
+                for (n = -radius; !m_cancel && (n <= radius); ++n)
                 {
                     // if is inside...
                     if (IsInside(width, height, w, h + n))
@@ -278,7 +278,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
                 unsigned short *org, *dst;
 
                 // first of all, we need to blur the vertical lines
-                for (n = -radius; !m_cancel && (n <= radius); n++)
+                for (n = -radius; !m_cancel && (n <= radius); ++n)
                 {
                     // if is inside...
                     if (IsInside(width, height, w, h + n))

@@ -192,7 +192,7 @@ void WhiteBalance::autoExposureAdjustement(uchar* data, int width, int height, b
     expo = -log((float)(i+1) / rgbMax) / log(2);
     kDebug(50003) << "White level at:" << i << endl;
 
-    for (i = 1, sum = 0; (i < (int)rgbMax) && (sum < stop); i++)
+    for (i = 1, sum = 0; (i < (int)rgbMax) && (sum < stop); ++i)
         sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
 
     black = (double)i / rgbMax;
@@ -297,7 +297,7 @@ void WhiteBalance::setLUTv()
     else
         gamma = 1.8*(2.0-d->gamma) - 0.8;
 
-    for (int i = 1; i < (int)d->rgbMax; i++)
+    for (int i = 1; i < (int)d->rgbMax; ++i)
     {
         float x      = (float)(i - d->BP)/(d->WP - d->BP);
         d->curve[i]  = (i < d->BP) ? 0 : (d->rgbMax-1) * pow((double)x, gamma);
@@ -315,7 +315,7 @@ void WhiteBalance::adjustWhiteBalance(uchar *data, int width, int height, bool s
         uchar red, green, blue;
         uchar *ptr = data;
 
-        for (j = 0 ; j < (uint)(width*height) ; j++)
+        for (j = 0 ; j < (uint)(width*height) ; ++j)
         {
             int v, rv[3];
 
@@ -343,7 +343,7 @@ void WhiteBalance::adjustWhiteBalance(uchar *data, int width, int height, bool s
         unsigned short red, green, blue;
         unsigned short *ptr = (unsigned short *)data;
 
-        for (j = 0 ; j < (uint)(width*height) ; j++)
+        for (j = 0 ; j < (uint)(width*height) ; ++j)
         {
             int v, rv[3];
 

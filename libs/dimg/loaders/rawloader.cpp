@@ -133,7 +133,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
         float fac           = 65535.0 / rgbmax;
         checkpoint          = 0;
 
-        for (int h = 0; h < height; h++)
+        for (int h = 0; h < height; ++h)
         {
             if (observer && h == checkpoint)
             {
@@ -145,7 +145,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
                 observer->progressInfo(m_image, 0.7 + 0.2*(((float)h)/((float)height)) );
             }
 
-            for (int w = 0; w < width; w++)
+            for (int w = 0; w < width; ++w)
             {
 #if KDCRAW_VERSION < 0x000400
                 dst[0] = (unsigned short)((src[4]*256 + src[5]) * fac);      // Blue
@@ -184,7 +184,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
             perc = (int)(width * height * 0.01);
             kDebug(50003) << "White Level: " << perc << endl;
-            for (int c = 1 ; c < 4 ; c++)
+            for (int c = 1 ; c < 4 ; ++c)
             {
                 total = 0;
                 for (val = 65535 ; val > 256 ; --val)
@@ -200,7 +200,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
             // Compute the Gamma lut accordingly.
 
-            for (int i=0; i < 65536; i++)
+            for (int i=0; i < 65536; ++i)
             {
                 r = i / white;
                 val = (int)(65536.0 * (r <= 0.018 ? r*4.5 : pow(r, 1.0/gamma) * 1.099-0.099));
@@ -211,7 +211,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             //  Apply Gamma lut to the whole image.
 
             unsigned short *im = (unsigned short *)image;
-            for (int i = 0; i < width*height; i++)
+            for (int i = 0; i < width*height; ++i)
             {
                 im[0] = lut[im[0]];      // Blue
                 im[1] = lut[im[1]];      // Green
@@ -231,7 +231,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
         uchar *src   = (uchar*)data.data();
         checkpoint   = 0;
 
-        for (int h = 0; h < height; h++)
+        for (int h = 0; h < height; ++h)
         {
 
             if (observer && h == checkpoint)
@@ -244,7 +244,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
                 observer->progressInfo(m_image, 0.7 + 0.2*(((float)h)/((float)height)) );
             }
 
-            for (int w = 0; w < width; w++)
+            for (int w = 0; w < width; ++w)
             {
                 // No need to adapt RGB components accordingly with rgbmax value because dcraw
                 // always return rgbmax to 255 in 8 bits/color/pixels.
@@ -357,7 +357,7 @@ void RAWLoader::postProcessing(DImgLoaderObserver *observer)
         DImg tmp(imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage);
         ImageLevels levels(m_rawDecodingSettings.sixteenBitsImage);
         int j=0;
-        for (int i = 0 ; i < 4; i++)
+        for (int i = 0 ; i < 4; ++i)
         {
             levels.setLevelLowInputValue(i,   m_customRawSettings.levelsAdjust[j++]);
             levels.setLevelHighInputValue(i,  m_customRawSettings.levelsAdjust[j++]);

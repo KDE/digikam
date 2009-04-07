@@ -138,7 +138,7 @@ DImg::DImg(const QImage& image)
         uint*  sptr = (uint*)target.bits();
         uchar* dptr = data;
 
-        for (uint i = 0 ; i < w*h ; i++)
+        for (uint i = 0 ; i < w*h ; ++i)
         {
             dptr[0] = qBlue(*sptr);
             dptr[1] = qGreen(*sptr);
@@ -1199,7 +1199,7 @@ QImage DImg::copyQImage()
     uchar* sptr = bits();
     uint*  dptr = (uint*)img.bits();
 
-    for (uint i=0; i < width()*height(); i++)
+    for (uint i=0; i < width()*height(); ++i)
     {
         *dptr++ = qRgba(sptr[2], sptr[1], sptr[0], sptr[3]);
         sptr += 4;
@@ -1247,7 +1247,7 @@ QPixmap DImg::convertToPixmap()
         uchar* sptr = bits();
         uint*  dptr = (uint*)img.bits();
 
-        for (uint i=0; i<width()*height(); i++)
+        for (uint i=0; i<width()*height(); ++i)
         {
             *dptr++ = qRgba(sptr[2], sptr[1], sptr[0], sptr[3]);
             sptr += 4;
@@ -1316,9 +1316,9 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
     int    index;
     DColor pix;
 
-    for (uint x=0 ; x < width() ; x++)
+    for (uint x=0 ; x < width() ; ++x)
     {
-        for (uint y=0 ; y<height() ; y++)
+        for (uint y=0 ; y<height() ; ++y)
         {
             pix   = getPixelColor(x, y);
             index = y*img.bytesPerLine() + x*4;
@@ -1409,7 +1409,7 @@ void DImg::rotate(ANGLE angle)
             {
                 to = newData + y;
 
-                for (uint x=0; x < h; x++)
+                for (uint x=0; x < h; ++x)
                 {
                     *to = *from++;
                     to += w;
@@ -1432,7 +1432,7 @@ void DImg::rotate(ANGLE angle)
             {
                 to = newData + y;
 
-                for (uint x=0; x < h; x++)
+                for (uint x=0; x < h; ++x)
                 {
                     *to = *from++;
                     to += w;
@@ -1465,11 +1465,11 @@ void DImg::rotate(ANGLE angle)
             ullong  tmp;
 
             // can be done inplace
-            for (uint y = 0; y < (h+1)/2; y++)
+            for (uint y = 0; y < (h+1)/2; ++y)
             {
                 line1 = data + y * w;
                 line2 = data + (h-y) * w;
-                for (uint x=0; x < w; x++)
+                for (uint x=0; x < w; ++x)
                 {
                     tmp    = *line1;
                     *line1 = *line2;
@@ -1491,12 +1491,12 @@ void DImg::rotate(ANGLE angle)
             uint  tmp;
 
             // can be done inplace
-            for (uint y = 0; y < (h+1)/2; y++)
+            for (uint y = 0; y < (h+1)/2; ++y)
             {
                 line1 = data + y * w;
                 line2 = data + (h-y) * w;
 
-                for (uint x=0; x < w; x++)
+                for (uint x=0; x < w; ++x)
                 {
                     tmp    = *line1;
                     *line1 = *line2;
@@ -1524,11 +1524,11 @@ void DImg::rotate(ANGLE angle)
             ullong *from = (ullong*) m_priv->data;
             ullong *to;
 
-            for (uint y = 0; y < w; y++)
+            for (uint y = 0; y < w; ++y)
             {
                 to = newData + y + w*(h-1);
 
-                for (uint x=0; x < h; x++)
+                for (uint x=0; x < h; ++x)
                 {
                     *to = *from++;
                     to -= w;
@@ -1547,11 +1547,11 @@ void DImg::rotate(ANGLE angle)
             uint *from = (uint*) m_priv->data;
             uint *to;
 
-            for (uint y = 0; y < w; y++)
+            for (uint y = 0; y < w; ++y)
             {
                 to = newData + y + w*(h-1);
 
-                for (uint x=0; x < h; x++)
+                for (uint x=0; x < h; ++x)
                 {
                     *to = *from++;
                     to -= w;
@@ -1594,12 +1594,12 @@ void DImg::flip(FLIP direction)
                 unsigned short * data = (unsigned short *)bits();
 
                 // can be done inplace
-                for (uint y = 0 ; y < h ; y++)
+                for (uint y = 0 ; y < h ; ++y)
                 {
                     beg = data + y * w * 4;
                     end = beg  + (w-1) * 4;
 
-                    for (uint x=0 ; x < (w/2) ; x++)
+                    for (uint x=0 ; x < (w/2) ; ++x)
                     {
                         memcpy(&tmp, beg, 8);
                         memcpy(beg, end, 8);
@@ -1619,12 +1619,12 @@ void DImg::flip(FLIP direction)
                 uchar* data = bits();
 
                 // can be done inplace
-                for (uint y = 0 ; y < h ; y++)
+                for (uint y = 0 ; y < h ; ++y)
                 {
                     beg = data + y * w * 4;
                     end = beg  + (w-1) * 4;
 
-                    for (uint x=0 ; x < (w/2) ; x++)
+                    for (uint x=0 ; x < (w/2) ; ++x)
                     {
                         memcpy(&tmp, beg, 4);
                         memcpy(beg, end, 4);
@@ -1652,12 +1652,12 @@ void DImg::flip(FLIP direction)
                 unsigned short* data = (unsigned short*) bits();
 
                 // can be done inplace
-                for (uint y = 0 ; y < (h/2) ; y++)
+                for (uint y = 0 ; y < (h/2) ; ++y)
                 {
                     line1 = data + y * w * 4;
                     line2 = data + (h-y-1) * w * 4;
 
-                    for (uint x=0 ; x < w ; x++)
+                    for (uint x=0 ; x < w ; ++x)
                     {
                         memcpy(&tmp, line1, 8);
                         memcpy(line1, line2, 8);
@@ -1677,12 +1677,12 @@ void DImg::flip(FLIP direction)
                 uchar* data = bits();
 
                 // can be done inplace
-                for (uint y = 0 ; y < (h/2) ; y++)
+                for (uint y = 0 ; y < (h/2) ; ++y)
                 {
                     line1 = data + y * w * 4;
                     line2 = data + (h-y-1) * w * 4;
 
-                    for (uint x=0 ; x < w ; x++)
+                    for (uint x=0 ; x < w ; ++x)
                     {
                         memcpy(&tmp, line1, 4);
                         memcpy(line1, line2, 4);
@@ -1742,7 +1742,7 @@ void DImg::convertDepth(int depth)
         uchar*  dptr = data;
         ushort* sptr = (ushort*)bits();
 
-        for (uint i=0; i<width()*height()*4; i++)
+        for (uint i=0; i<width()*height()*4; ++i)
         {
             *dptr++ = (*sptr++ * 255UL)/65535UL;
         }
@@ -1759,7 +1759,7 @@ void DImg::convertDepth(int depth)
         ushort* dptr = (ushort*)data;
         uchar*  sptr = bits();
 
-        for (uint i=0; i<width()*height()*4; i++)
+        for (uint i=0; i<width()*height()*4; ++i)
         {
             *dptr++ = (*sptr++ * 65535ULL)/255ULL;
         }

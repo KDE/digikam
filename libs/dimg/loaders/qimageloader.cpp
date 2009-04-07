@@ -100,7 +100,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     uint*  sptr = (uint*)target.bits();
     uchar* dptr = data;
 
-    for (uint i = 0 ; i < w*h ; i++)
+    for (uint i = 0 ; i < w*h ; ++i)
     {
         dptr[0] = qBlue(*sptr);
         dptr[1] = qGreen(*sptr);

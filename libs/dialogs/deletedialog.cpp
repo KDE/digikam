@@ -140,7 +140,7 @@ DeleteWidget::DeleteWidget(QWidget *parent)
 void DeleteWidget::setFiles(const KUrl::List &files)
 {
     m_fileList->clear();
-    for( KUrl::List::ConstIterator it = files.begin(); it != files.end(); it++)
+    for( KUrl::List::ConstIterator it = files.begin(); it != files.end(); ++it)
     {
         if( (*it).isLocalFile() ) //path is null for non-local
             m_fileList->addItem( (*it).toLocalFile() );

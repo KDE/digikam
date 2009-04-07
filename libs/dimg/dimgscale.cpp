@@ -294,7 +294,7 @@ unsigned int** DImgScale::dimgCalcYPoints(unsigned int *src, int sw, int sh, int
 
     val = 0;
     inc = (sh << 16) / dh;
-    for(i = 0; i < dh; i++)
+    for(i = 0; i < dh; ++i)
     {
         p[j++] = src + ((val >> 16) * sw);
         val += inc;
@@ -313,7 +313,7 @@ ullong** DImgScale::dimgCalcYPoints16(ullong* src, int sw, int sh, int dh)
 
     val = 0;
     inc = (sh << 16) / dh;
-    for(i = 0; i < dh; i++)
+    for(i = 0; i < dh; ++i)
     {
         p[j++] = src + ((val >> 16) * sw);
         val += inc;
@@ -331,7 +331,7 @@ int* DImgScale::dimgCalcXPoints(int sw, int dw)
 
     val = 0;
     inc = (sw << 16) / dw;
-    for(i = 0; i < dw; i++)
+    for(i = 0; i < dw; ++i)
     {
         p[j++] = (val >> 16);
         val += inc;
@@ -353,7 +353,7 @@ int* DImgScale::dimgCalcApoints(int s, int d, int up)
 
         val = 0;
         inc = (s << 16) / d;
-        for(i = 0; i < d; i++)
+        for(i = 0; i < d; ++i)
         {
             p[j++] = (val >> 8) - ((val >> 8) & 0xffffff00);
             if((val >> 16) >= (s - 1))
@@ -369,7 +369,7 @@ int* DImgScale::dimgCalcApoints(int s, int d, int up)
         inc = (s << 16) / d;
         Cp = ((d << 14) / s) + 1;
 
-        for(i = 0; i < d; i++)
+        for(i = 0; i < d; ++i)
         {
             ap = ((0x100 - ((val >> 8) & 0xff)) * Cp) >> 8;
             p[j] = ap | (Cp << 16);
@@ -469,14 +469,14 @@ void DImgScale::dimgSampleRGBA(DImgScaleInfo *isi, unsigned int *dest,
     /* what is the last pixel on the line so we stop there */
     end = dxx + dw;
     /* go through every scanline in the output buffer */
-    for(y = 0; y < dh; y++)
+    for(y = 0; y < dh; ++y)
     {
         /* get the pointer to the start of the destination scanline */
         dptr = dest + dx + ((y + dy) * dow);
         /* calculate the source line we'll scan from */
         sptr = ypoints[dyy + y];
         /* go through the scanline and copy across */
-        for(x = dxx; x < end; x++)
+        for(x = dxx; x < end; ++x)
             *dptr++ = sptr[xpoints[x]];
     }
 }
@@ -500,14 +500,14 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo *isi, unsigned int *dest,
     if(isi->xup_yup == 3)
     {
         /* go through every scanline in the output buffer */
-        for(y = 0; y < dh; y++)
+        for(y = 0; y < dh; ++y)
         {
             /* calculate the source line we'll scan from */
             dptr = dest + dx + ((y + dy) * dow);
             sptr = ypoints[dyy + y];
             if(YAP > 0)
             {
-                for(x = dxx; x < end; x++)
+                for(x = dxx; x < end; ++x)
                 {
                     int r, g, b, a;
                     int rr, gg, bb, aa;
@@ -575,7 +575,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo *isi, unsigned int *dest,
             }
             else
             {
-                for(x = dxx; x < end; x++)
+                for(x = dxx; x < end; ++x)
                 {
                     int r, g, b, a;
                     unsigned int *pix;
@@ -620,13 +620,13 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo *isi, unsigned int *dest,
         int yap;
 
         /* go through every scanline in the output buffer */
-        for(y = 0; y < dh; y++)
+        for(y = 0; y < dh; ++y)
         {
             Cy = YAP >> 16;
             yap = YAP & 0xffff;
 
             dptr = dest + dx + ((y + dy) * dow);
-            for(x = dxx; x < end; x++)
+            for(x = dxx; x < end; ++x)
             {
                 pix = ypoints[dyy + y] + xpoints[x];
                 r = (R_VAL(pix) * yap) >> 10;
@@ -708,10 +708,10 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo *isi, unsigned int *dest,
         int xap;
 
         /* go through every scanline in the output buffer */
-        for(y = 0; y < dh; y++)
+        for(y = 0; y < dh; ++y)
         {
             dptr = dest + dx + ((y + dy) * dow);
-            for(x = dxx; x < end; x++)
+            for(x = dxx; x < end; ++x)
             {
                 Cx = XAP >> 16;
                 xap = XAP & 0xffff;
@@ -799,13 +799,13 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo *isi, unsigned int *dest,
         int a, r, g, b, ax, rx, gx, bx;
         int xap, yap;
 
-        for(y = 0; y < dh; y++)
+        for(y = 0; y < dh; ++y)
         {
             Cy = YAP >> 16;
             yap = YAP & 0xffff;
 
             dptr = dest + dx + ((y + dy) * dow);
-            for(x = dxx; x < end; x++)
+            for(x = dxx; x < end; ++x)
             {
                 Cx = XAP >> 16;
                 xap = XAP & 0xffff;
@@ -927,14 +927,14 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo *isi, unsigned int *dest,
     if(isi->xup_yup == 3)
     {
         /* go through every scanline in the output buffer */
-        for(y = 0; y < dh; y++)
+        for(y = 0; y < dh; ++y)
         {
             /* calculate the source line we'll scan from */
             dptr = dest + dx + ((y + dy) * dow);
             sptr = ypoints[dyy + y];
             if(YAP > 0)
             {
-                for(x = dxx; x < end; x++)
+                for(x = dxx; x < end; ++x)
                 {
                     int r = 0, g = 0, b = 0;
                     int rr = 0, gg = 0, bb = 0;
@@ -994,7 +994,7 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo *isi, unsigned int *dest,
             }
             else
             {
-                for(x = dxx; x < end; x++)
+                for(x = dxx; x < end; ++x)
                 {
                     int r = 0, g = 0, b = 0;
                     unsigned int *pix;
@@ -1036,13 +1036,13 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo *isi, unsigned int *dest,
         int yap;
 
         /* go through every scanline in the output buffer */
-        for(y = 0; y < dh; y++)
+        for(y = 0; y < dh; ++y)
         {
             Cy = YAP >> 16;
             yap = YAP & 0xffff;
 
             dptr = dest + dx + ((y + dy) * dow);
-            for(x = dxx; x < end; x++)
+            for(x = dxx; x < end; ++x)
             {
                 pix = ypoints[dyy + y] + xpoints[x];
                 r = (R_VAL(pix) * yap) >> 10;
@@ -1115,10 +1115,10 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo *isi, unsigned int *dest,
         int xap;
 
         /* go through every scanline in the output buffer */
-        for(y = 0; y < dh; y++)
+        for(y = 0; y < dh; ++y)
         {
             dptr = dest + dx + ((y + dy) * dow);
-            for(x = dxx; x < end; x++)
+            for(x = dxx; x < end; ++x)
             {
                 Cx = XAP >> 16;
                 xap = XAP & 0xffff;
@@ -1194,13 +1194,13 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo *isi, unsigned int *dest,
         int r, g, b, rx, gx, bx;
         int xap, yap;
 
-        for(y = 0; y < dh; y++)
+        for(y = 0; y < dh; ++y)
         {
             Cy = YAP >> 16;
             yap = YAP & 0xffff;
 
             dptr = dest + dx + ((y + dy) * dow);
-            for(x = dxx; x < end; x++)
+            for(x = dxx; x < end; ++x)
             {
                 Cx = XAP >> 16;
                 xap = XAP & 0xffff;
@@ -1316,14 +1316,14 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo *isi, ullong *dest,
     if(isi->xup_yup == 3)
     {
         // go through every scanline in the output buffer
-        for(y = 0; y < dh; y++)
+        for(y = 0; y < dh; ++y)
         {
             // calculate the source line we'll scan from
             dptr = dest + (y * dow);
             sptr = ypoints[dyy + y];
             if(YAP > 0)
             {
-                for(x = dxx; x < end; x++)
+                for(x = dxx; x < end; ++x)
                 {
                     llong r = 0, g = 0, b = 0;
                     llong rr = 0, gg = 0, bb = 0;
@@ -1383,7 +1383,7 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo *isi, ullong *dest,
             }
             else
             {
-                for(x = dxx; x < end; x++)
+                for(x = dxx; x < end; ++x)
                 {
                     llong r = 0, g = 0, b = 0;
                     ullong *pix;
@@ -1425,13 +1425,13 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo *isi, ullong *dest,
         int yap;
 
         // go through every scanline in the output buffer
-        for(y = 0; y < dh; y++)
+        for(y = 0; y < dh; ++y)
         {
             Cy = YAP >> 16;
             yap = YAP & 0xffff;
 
             dptr = dest + y * dow;
-            for(x = dxx; x < end; x++)
+            for(x = dxx; x < end; ++x)
             {
                 pix = ypoints[dyy + y] + xpoints[x];
                 r = (R_VAL16(pix) * yap) >> 10;
@@ -1503,10 +1503,10 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo *isi, ullong *dest,
         int xap;
 
         // go through every scanline in the output buffer
-        for(y = 0; y < dh; y++)
+        for(y = 0; y < dh; ++y)
         {
             dptr = dest + y * dow;
-            for(x = dxx; x < end; x++)
+            for(x = dxx; x < end; ++x)
             {
                 Cx = XAP >> 16;
                 xap = XAP & 0xffff;
@@ -1580,13 +1580,13 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo *isi, ullong *dest,
         llong r, g, b, rx, gx, bx;
         int xap, yap;
 
-        for(y = 0; y < dh; y++)
+        for(y = 0; y < dh; ++y)
         {
             Cy = YAP >> 16;
             yap = YAP & 0xffff;
 	    dptr = dest + y * dow;
 
-            for(x = dxx; x < end; x++)
+            for(x = dxx; x < end; ++x)
             {
                 Cx  = XAP >> 16;
                 xap = XAP & 0xffff;
@@ -1698,14 +1698,14 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo *isi, ullong *dest,
     if(isi->xup_yup == 3)
     {
         /* go through every scanline in the output buffer */
-        for(y = 0; y < dh; y++)
+        for(y = 0; y < dh; ++y)
         {
             /* calculate the source line we'll scan from */
             dptr = dest + (y * dow);
             sptr = ypoints[dyy + y];
             if(YAP > 0)
             {
-                for(x = dxx; x < end; x++)
+                for(x = dxx; x < end; ++x)
                 {
                     llong r, g, b, a;
                     llong rr, gg, bb, aa;
@@ -1773,7 +1773,7 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo *isi, ullong *dest,
             }
             else
             {
-                for(x = dxx; x < end; x++)
+                for(x = dxx; x < end; ++x)
                 {
                     llong r, g, b, a;
                     ullong *pix;
@@ -1818,13 +1818,13 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo *isi, ullong *dest,
         int yap;
 
         /* go through every scanline in the output buffer */
-        for(y = 0; y < dh; y++)
+        for(y = 0; y < dh; ++y)
         {
             Cy = YAP >> 16;
             yap = YAP & 0xffff;
 
             dptr = dest + (y * dow);
-            for(x = dxx; x < end; x++)
+            for(x = dxx; x < end; ++x)
             {
                 pix = ypoints[dyy + y] + xpoints[x];
                 r = (R_VAL16(pix) * yap) >> 10;
@@ -1906,10 +1906,10 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo *isi, ullong *dest,
         int xap;
 
         /* go through every scanline in the output buffer */
-        for(y = 0; y < dh; y++)
+        for(y = 0; y < dh; ++y)
         {
             dptr = dest + y * dow;
-            for(x = dxx; x < end; x++)
+            for(x = dxx; x < end; ++x)
             {
                 Cx = XAP >> 16;
                 xap = XAP & 0xffff;
@@ -1996,13 +1996,13 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo *isi, ullong *dest,
         llong a, r, g, b, ax, rx, gx, bx;
         int xap, yap;
 
-        for(y = 0; y < dh; y++)
+        for(y = 0; y < dh; ++y)
         {
             Cy = YAP >> 16;
             yap = YAP & 0xffff;
 
             dptr = dest + y * dow;
-            for(x = dxx; x < end; x++)
+            for(x = dxx; x < end; ++x)
             {
                 Cx = XAP >> 16;
                 xap = XAP & 0xffff;

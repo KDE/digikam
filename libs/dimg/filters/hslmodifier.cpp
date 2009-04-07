@@ -84,14 +84,14 @@ void HSLModifier::reset()
 {
     // initialize to linear mapping
 
-    for (int i=0; i<65536; i++)
+    for (int i=0; i<65536; ++i)
     {
         d->htransfer16[i] = i;
         d->ltransfer16[i] = i;
         d->stransfer16[i] = i;
     }
 
-    for (int i=0; i<256; i++)
+    for (int i=0; i<256; ++i)
     {
         d->htransfer[i] = i;
         d->ltransfer[i] = i;
@@ -113,7 +113,7 @@ void HSLModifier::applyHSL(DImg& image)
     {
         unsigned short* data = (unsigned short*) image.bits();
 
-        for (uint i=0; i<numberOfPixels; i++)
+        for (uint i=0; i<numberOfPixels; ++i)
         {
             int hue, sat, lig;
 
@@ -136,7 +136,7 @@ void HSLModifier::applyHSL(DImg& image)
     {
         uchar* data = image.bits();
 
-        for (uint i=0; i<numberOfPixels; i++)
+        for (uint i=0; i<numberOfPixels; ++i)
         {
             int hue, sat, lig;
 
@@ -161,7 +161,7 @@ void HSLModifier::setHue(double val)
 {
     int value;
 
-    for (int i = 0; i < 65536; i++)
+    for (int i = 0; i < 65536; ++i)
     {
        value = lround(val * 65535.0 / 360.0);
 
@@ -173,7 +173,7 @@ void HSLModifier::setHue(double val)
           d->htransfer16[i] = i + value;
     }
 
-    for (int i = 0; i < 256; i++)
+    for (int i = 0; i < 256; ++i)
     {
        value = lround(val * 255.0 / 360.0);
 
@@ -193,13 +193,13 @@ void HSLModifier::setSaturation(double val)
     val = CLAMP(val, -100.0, 100.0);
     int value;
 
-    for (int i = 0; i < 65536; i++)
+    for (int i = 0; i < 65536; ++i)
     {
         value = lround( (i * (100.0 + val)) / 100.0 );
         d->stransfer16[i] = CLAMP_0_65535(value);
     }
 
-    for (int i = 0; i < 256; i++)
+    for (int i = 0; i < 256; ++i)
     {
         value = lround( (i * (100.0 + val)) / 100.0 );
         d->stransfer[i]  = CLAMP_0_255(value);
@@ -215,24 +215,24 @@ void HSLModifier::setLightness(double val)
 
     if (val < 0)
     {
-        for (int i = 0; i < 65536; i++)
+        for (int i = 0; i < 65536; ++i)
         {
             d->ltransfer16[i] = lround( (i * ( val + 100.0 )) / 100.0);
         }
 
-        for (int i = 0; i < 256; i++)
+        for (int i = 0; i < 256; ++i)
         {
             d->ltransfer[i] = lround( (i * ( val + 100.0 )) / 100.0);
         }
     }
     else
     {
-        for (int i = 0; i < 65536; i++)
+        for (int i = 0; i < 65536; ++i)
         {
             d->ltransfer16[i] = lround( i * ( 1.0 - val / 100.0 )  + 65535.0 / 100.0 * val );
         }
 
-        for (int i = 0; i < 256; i++)
+        for (int i = 0; i < 256; ++i)
         {
             d->ltransfer[i] = lround( i * ( 1.0 - val / 100.0 )  + 255.0 / 100.0 * val );
         }

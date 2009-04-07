@@ -76,10 +76,10 @@ void BCGModifier::reset()
 {
     // initialize to linear mapping
 
-    for (int i=0; i<65536; i++)
+    for (int i=0; i<65536; ++i)
         d->map16[i] = i;
 
-    for (int i=0; i<256; i++)
+    for (int i=0; i<256; ++i)
         d->map[i] = i;
 
     d->modified = false;
@@ -104,7 +104,7 @@ void BCGModifier::applyBCG(uchar *bits, uint width, uint height, bool sixteenBit
     {
         uchar* data = bits;
 
-        for (uint i=0; i<size; i++)
+        for (uint i=0; i<size; ++i)
         {
             switch (d->channel)
             {
@@ -134,7 +134,7 @@ void BCGModifier::applyBCG(uchar *bits, uint width, uint height, bool sixteenBit
     {
         ushort* data = (ushort*)bits;
 
-        for (uint i=0; i<size; i++)
+        for (uint i=0; i<size; ++i)
         {
             switch (d->channel)
             {
@@ -171,10 +171,10 @@ void BCGModifier::setGamma(double val)
 {
     val = (val < 0.01) ? 0.01 : val;
 
-    for (int i=0; i<65536; i++)
+    for (int i=0; i<65536; ++i)
         d->map16[i] = lround(pow(((double)d->map16[i] / 65535.0), (1.0 / val)) * 65535.0);
 
-    for (int i=0; i<256; i++)
+    for (int i=0; i<256; ++i)
         d->map[i] = lround(pow(((double)d->map[i] / 255.0), (1.0 / val)) * 255.0);
 
     d->modified = true;
@@ -184,12 +184,12 @@ void BCGModifier::setBrightness(double val)
 {
     int val1 = lround(val * 65535);
 
-    for (int i = 0; i < 65536; i++)
+    for (int i = 0; i < 65536; ++i)
         d->map16[i] = d->map16[i] + val1;
 
     val1 = lround(val * 255);
 
-    for (int i = 0; i < 256; i++)
+    for (int i = 0; i < 256; ++i)
         d->map[i] = d->map[i] + val1;
 
     d->modified = true;
@@ -197,10 +197,10 @@ void BCGModifier::setBrightness(double val)
 
 void BCGModifier::setContrast(double val)
 {
-    for (int i = 0; i < 65536; i++)
+    for (int i = 0; i < 65536; ++i)
         d->map16[i] = lround((d->map16[i] - 32767) * val) + 32767;
 
-    for (int i = 0; i < 256; i++)
+    for (int i = 0; i < 256; ++i)
         d->map[i] = lround((d->map[i] - 127) * val) + 127;
 
     d->modified = true;

@@ -280,7 +280,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
             uint checkpoint = 0;
 
-            for (tstrip_t st=0; st < num_of_strips; st++)
+            for (tstrip_t st=0; st < num_of_strips; ++st)
             {
                 if (observer && st == checkpoint)
                 {
@@ -313,7 +313,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                 if (samples_per_pixel == 3)
                 {
-                    for (int i=0; i < bytesRead/6; i++)
+                    for (int i=0; i < bytesRead/6; ++i)
                     {
                         p = dataPtr;
 
@@ -340,7 +340,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 }
                 else if (samples_per_pixel == 1)   // See B.K.O #148400: Greyscale pictures only have _one_ sample per pixel
                 {
-                    for (int i=0; i < bytesRead/2; i++)
+                    for (int i=0; i < bytesRead/2; ++i)
                     {
                         // We have to read two bytes for one pixel
                         p = dataPtr;
@@ -367,7 +367,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 }
                 else
                 {
-                    for (int i=0; i < bytesRead/8; i++)
+                    for (int i=0; i < bytesRead/8; ++i)
                     {
                         p = dataPtr;
 
@@ -466,7 +466,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                 // Reverse red and blue
 
-                for (int i=0; i < pixelsRead; i++)
+                for (int i=0; i < pixelsRead; ++i)
                 {
                     p = dataPtr;
 
@@ -661,7 +661,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     uint checkpoint = 0;
 
-    for (y = 0; y < h; y++)
+    for (y = 0; y < h; ++y)
     {
 
         if (observer && y == checkpoint)
@@ -678,7 +678,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
         i = 0;
 
-        for (x = 0; x < w; x++)
+        for (x = 0; x < w; ++x)
         {
             pixel = &data[((y * w) + x) * imageBytesDepth()];
 
@@ -781,11 +781,11 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         return false;
     }
 
-    for (y = 0 ; y < uint32(thumb.height()) ; y++)
+    for (y = 0 ; y < uint32(thumb.height()) ; ++y)
     {
         i = 0;
 
-        for (x = 0 ; x < uint32(thumb.width()) ; x++)
+        for (x = 0 ; x < uint32(thumb.width()) ; ++x)
         {
             pixelThumb = &dataThumb[((y * thumb.width()) + x) * 4];
 

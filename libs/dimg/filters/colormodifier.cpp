@@ -80,7 +80,7 @@ void ColorModifier::reset()
 {
     // initialize to linear mapping
 
-    for (int i=0; i<65536; i++)
+    for (int i=0; i<65536; ++i)
     {
         d->redMap16[i]   = i;
         d->greenMap16[i] = i;
@@ -88,7 +88,7 @@ void ColorModifier::reset()
         d->alphaMap16[i] = i;
     }
 
-    for (int i=0; i<256; i++)
+    for (int i=0; i<256; ++i)
     {
         d->redMap[i]   = i;
         d->greenMap[i] = i;
@@ -103,7 +103,7 @@ void ColorModifier::setTables(int *redMap, int *greenMap, int *blueMap, int *alp
 {
     if (!sixteenBit)
     {
-        for (int i = 0; i < 256; i++)
+        for (int i = 0; i < 256; ++i)
         {
             if (redMap)
                 d->redMap[i]   = redMap[i];
@@ -117,7 +117,7 @@ void ColorModifier::setTables(int *redMap, int *greenMap, int *blueMap, int *alp
     }
     else
     {
-        for (int i = 0; i < 65536; i++)
+        for (int i = 0; i < 65536; ++i)
         {
             if (redMap)
                 d->redMap16[i]   = redMap[i];
@@ -170,7 +170,7 @@ void ColorModifier::applyColorModifier(DImg& image, double r, double g, double b
     {
         uchar* data = (uchar*) image.bits();
 
-        for (uint i=0; i<image.width()*image.height(); i++)
+        for (uint i=0; i<image.width()*image.height(); ++i)
         {
             data[0] = d->blueMap[data[0]];
             data[1] = d->greenMap[data[1]];
@@ -184,7 +184,7 @@ void ColorModifier::applyColorModifier(DImg& image, double r, double g, double b
     {
         ushort* data = (ushort*) image.bits();
 
-        for (uint i=0; i<image.width()*image.height(); i++)
+        for (uint i=0; i<image.width()*image.height(); ++i)
         {
             data[0] = d->blueMap16[data[0]];
             data[1] = d->greenMap16[data[1]];
@@ -201,7 +201,7 @@ void ColorModifier::setGamma(double val)
     val = (val < 0.01) ? 0.01 : val;
     int val2;
 
-    for (int i=0; i<65536; i++)
+    for (int i=0; i<65536; ++i)
     {
         val2 = (int)(pow(((double)d->redMap16[i] / 65535), (1 / val)) * 65535);
         d->redMap16[i] = CLAMP_0_65535(val2);
@@ -216,7 +216,7 @@ void ColorModifier::setGamma(double val)
         d->alphaMap16[i] = CLAMP_0_65535(val2);
     }
 
-    for (int i=0; i<256; i++)
+    for (int i=0; i<256; ++i)
     {
         val2 = (int)(pow(((double)d->redMap[i] / 255), (1 / val)) * 255);
         d->redMap[i] = CLAMP_0_255(val2);

@@ -346,7 +346,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
         if (cinfo.output_components == 3)
         {
-            for (i = 0; i < cinfo.rec_outbuf_height; i++)
+            for (i = 0; i < cinfo.rec_outbuf_height; ++i)
                 line[i] = data + (i * w * 3);
 
             int checkPoint = 0;
@@ -373,9 +373,9 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                 ptr = data;
 
-                for (y = 0; y < scans; y++)
+                for (y = 0; y < scans; ++y)
                 {
-                    for (x = 0; x < w; x++)
+                    for (x = 0; x < w; ++x)
                     {
                         ptr2[3] = 0xFF;
                         ptr2[2] = ptr[0];
@@ -390,7 +390,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         }
         else if (cinfo.output_components == 1)
         {
-            for (i = 0; i < cinfo.rec_outbuf_height; i++)
+            for (i = 0; i < cinfo.rec_outbuf_height; ++i)
                 line[i] = data + (i * w);
 
             int checkPoint = 0;
@@ -416,9 +416,9 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                 ptr = data;
 
-                for (y = 0; y < scans; y++)
+                for (y = 0; y < scans; ++y)
                 {
-                    for (x = 0; x < w; x++)
+                    for (x = 0; x < w; ++x)
                     {
                         ptr2[3] = 0xFF;
                         ptr2[2] = ptr[0];
@@ -433,7 +433,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         }
         else // CMYK
         {
-            for (i = 0; i < cinfo.rec_outbuf_height; i++)
+            for (i = 0; i < cinfo.rec_outbuf_height; ++i)
                 line[i] = data + (i * w * 4);
 
             int checkPoint = 0;
@@ -460,9 +460,9 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                 ptr = data;
 
-                for (y = 0; y < scans; y++)
+                for (y = 0; y < scans; ++y)
                 {
-                    for (x = 0; x < w; x++)
+                    for (x = 0; x < w; ++x)
                     {
                         // Inspired by Qt's JPEG loader
 
@@ -685,7 +685,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
         uchar* srcPtr = data;
 
-        for (uint j=0; j<h; j++)
+        for (uint j=0; j<h; ++j)
         {
 
             if (observer && j == checkPoint)
@@ -703,7 +703,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
             dstPtr = line;
 
-            for (uint i = 0; i < w; i++)
+            for (uint i = 0; i < w; ++i)
             {
                 dstPtr[2] = srcPtr[0];  // Blue
                 dstPtr[1] = srcPtr[1];  // Green
@@ -720,7 +720,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     {
         unsigned short* srcPtr = (unsigned short*)data;
 
-        for (uint j=0; j<h; j++)
+        for (uint j=0; j<h; ++j)
         {
 
             if (observer && j == checkPoint)
@@ -738,7 +738,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
             dstPtr = line;
 
-            for (uint i = 0; i < w; i++)
+            for (uint i = 0; i < w; ++i)
             {
                 dstPtr[2] = (srcPtr[0] * 255UL)/65535UL;    // Blue
                 dstPtr[1] = (srcPtr[1] * 255UL)/65535UL;    // Green

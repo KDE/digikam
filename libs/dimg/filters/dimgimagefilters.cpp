@@ -103,7 +103,7 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
     memset(&high,      0, sizeof(struct double_packet));
     memset(&low,       0, sizeof(struct double_packet));
 
-    for(i = 0 ; i < histogram->getHistogramSegments() ; i++)
+    for(i = 0 ; i < histogram->getHistogramSegments() ; ++i)
     {
        intensity.red   += histogram->getValue(ImageHistogram::RedChannel, i);
        intensity.green += histogram->getValue(ImageHistogram::GreenChannel, i);
@@ -118,7 +118,7 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
     high = map[histogram->getHistogramSegments()-1];
     memset(equalize_map, 0, histogram->getHistogramSegments()*sizeof(int_packet));
 
-    for(i = 0 ; i < histogram->getHistogramSegments() ; i++)
+    for(i = 0 ; i < histogram->getHistogramSegments() ; ++i)
     {
        if(high.red != low.red)
           equalize_map[i].red = (uint)(((256*histogram->getHistogramSegments() -1) *
@@ -147,7 +147,7 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
         uchar red, green, blue, alpha;
         uchar *ptr = data;
 
-        for (i = 0 ; i < w*h ; i++)
+        for (i = 0 ; i < w*h ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -178,7 +178,7 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
         unsigned short red, green, blue, alpha;
         unsigned short *ptr = (unsigned short *)data;
 
-        for (i = 0 ; i < w*h ; i++)
+        for (i = 0 ; i < w*h ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -402,7 +402,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 
     memset(normalize_map, 0, histogram->getHistogramSegments()*sizeof(struct int_packet));
 
-    for(i = 0 ; i <= (long)histogram->getHistogramSegments()-1 ; i++)
+    for(i = 0 ; i <= (long)histogram->getHistogramSegments()-1 ; ++i)
     {
        if(i < (long) low.red)
           normalize_map[i].red = 0;
@@ -440,7 +440,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
         uchar red, green, blue, alpha;
         uchar *ptr = data;
 
-        for (i = 0 ; i < w*h ; i++)
+        for (i = 0 ; i < w*h ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -471,7 +471,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
         unsigned short red, green, blue, alpha;
         unsigned short *ptr = (unsigned short *)data;
 
-        for (i = 0 ; i < w*h ; i++)
+        for (i = 0 ; i < w*h ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -528,7 +528,7 @@ void DImgImageFilters::normalizeImage(uchar *data, int w, int h, bool sixteenBit
         uchar red, green, blue;
         uchar *ptr = data;
 
-        for (i = 0 ; i < w*h ; i++)
+        for (i = 0 ; i < w*h ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -551,7 +551,7 @@ void DImgImageFilters::normalizeImage(uchar *data, int w, int h, bool sixteenBit
         unsigned short red, green, blue;
         unsigned short *ptr = (unsigned short *)data;
 
-        for (i = 0 ; i < w*h ; i++)
+        for (i = 0 ; i < w*h ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -576,7 +576,7 @@ void DImgImageFilters::normalizeImage(uchar *data, int w, int h, bool sixteenBit
 
     if (range != 0)
     {
-       for (x = (int)param.min ; x <= (int)param.max ; x++)
+       for (x = (int)param.min ; x <= (int)param.max ; ++x)
           param.lut[x] = (unsigned short)((segments-1) * (x - param.min) / range);
     }
     else
@@ -589,7 +589,7 @@ void DImgImageFilters::normalizeImage(uchar *data, int w, int h, bool sixteenBit
         uchar red, green, blue;
         uchar *ptr = data;
 
-        for (i = 0 ; i < w*h ; i++)
+        for (i = 0 ; i < w*h ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -607,7 +607,7 @@ void DImgImageFilters::normalizeImage(uchar *data, int w, int h, bool sixteenBit
         unsigned short red, green, blue;
         unsigned short *ptr = (unsigned short *)data;
 
-        for (i = 0 ; i < w*h ; i++)
+        for (i = 0 ; i < w*h ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -684,7 +684,7 @@ void DImgImageFilters::invertImage(uchar *data, int w, int h, bool sixteenBit)
     {
         uchar *ptr = data;
 
-        for (int i = 0 ; i < w*h ; i++)
+        for (int i = 0 ; i < w*h ; ++i)
         {
             ptr[0] = 255 - ptr[0];
             ptr[1] = 255 - ptr[1];
@@ -697,7 +697,7 @@ void DImgImageFilters::invertImage(uchar *data, int w, int h, bool sixteenBit)
     {
         unsigned short *ptr = (unsigned short *)data;
 
-        for (int i = 0 ; i < w*h ; i++)
+        for (int i = 0 ; i < w*h ; ++i)
         {
             ptr[0] = 65535 - ptr[0];
             ptr[1] = 65535 - ptr[1];
@@ -732,7 +732,7 @@ void DImgImageFilters::channelMixerImage(uchar *data, int Width, int Height, boo
         uchar  nGray, red, green, blue;
         uchar *ptr = data;
 
-        for (i = 0 ; i < Width*Height ; i++)
+        for (i = 0 ; i < Width*Height ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -766,7 +766,7 @@ void DImgImageFilters::channelMixerImage(uchar *data, int Width, int Height, boo
         unsigned short  nGray, red, green, blue;
         unsigned short *ptr = (unsigned short *)data;
 
-        for (i = 0 ; i < Width*Height ; i++)
+        for (i = 0 ; i < Width*Height ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -808,7 +808,7 @@ void DImgImageFilters::changeTonality(uchar *data, int width, int height, bool s
     {
         uchar *ptr = data;
 
-        for (int i = 0 ; i < width*height ; i++)
+        for (int i = 0 ; i < width*height ; ++i)
         {
             // Convert to grayscale using tonal mask
 
@@ -826,7 +826,7 @@ void DImgImageFilters::changeTonality(uchar *data, int width, int height, bool s
     {
         unsigned short *ptr = (unsigned short *)data;
 
-        for (int i = 0 ; i < width*height ; i++)
+        for (int i = 0 ; i < width*height ; ++i)
         {
             // Convert to grayscale using tonal mask
 
@@ -906,9 +906,9 @@ void DImgImageFilters::pixelAntiAliasing(uchar *data, int Width, int Height, dou
     else
         lfWeightX[1] = 1.0 - (lfWeightX[0] = -(X - (double)nX));
 
-    for (int loopx = 0; loopx <= 1; loopx++)
+    for (int loopx = 0; loopx <= 1; ++loopx)
     {
-        for (int loopy = 0; loopy <= 1; loopy++)
+        for (int loopy = 0; loopy <= 1; ++loopy)
         {
             lfWeight = lfWeightX[loopx] * lfWeightY[loopy];
             j = setPositionAdjusted (Width, Height, nX + loopx, nY + loopy);
@@ -953,9 +953,9 @@ void DImgImageFilters::pixelAntiAliasing16(unsigned short *data, int Width, int 
     else
         lfWeightX[1] = 1.0 - (lfWeightX[0] = -(X - (double)nX));
 
-    for (int loopx = 0; loopx <= 1; loopx++)
+    for (int loopx = 0; loopx <= 1; ++loopx)
     {
-        for (int loopy = 0; loopy <= 1; loopy++)
+        for (int loopy = 0; loopy <= 1; ++loopy)
         {
             lfWeight = lfWeightX[loopx] * lfWeightY[loopy];
             j = setPositionAdjusted (Width, Height, nX + loopx, nY + loopy);

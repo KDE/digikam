@@ -120,7 +120,7 @@ ImageLevels::~ImageLevels()
     {
        if (d->lut->luts)
        {
-          for (int i = 0 ; i < d->lut->nchannels ; i++)
+          for (int i = 0 ; i < d->lut->nchannels ; ++i)
               delete [] d->lut->luts[i];
 
           delete [] d->lut->luts;
@@ -147,7 +147,7 @@ bool ImageLevels::isSixteenBits()
 
 void ImageLevels::reset()
 {
-    for (int channel = 0 ; channel < 5 ; channel++)
+    for (int channel = 0 ; channel < 5 ; ++channel)
        levelsChannelReset(channel);
 }
 
@@ -202,7 +202,7 @@ void ImageLevels::levelsChannelAuto(ImageHistogram *hist, int channel)
 
        new_count = 0.0;
 
-       for (i = 0 ; i < (d->sixteenBit ? 65535 : 255) ; i++)
+       for (i = 0 ; i < (d->sixteenBit ? 65535 : 255) ; ++i)
        {
           new_count       += hist->getValue(channel, i);
           percentage      = new_count / count;
@@ -320,9 +320,9 @@ void ImageLevels::levelsCalculateTransfers()
 
     // Recalculate the levels arrays.
 
-    for (j = 0 ; j < 5 ; j++)
+    for (j = 0 ; j < 5 ; ++j)
     {
-      for (i = 0; i <= (d->sixteenBit ? 65535 : 255); i++)
+      for (i = 0; i <= (d->sixteenBit ? 65535 : 255); ++i)
       {
           //  determine input intensity.
 
@@ -412,7 +412,7 @@ void ImageLevels::levelsLutSetup(int nchannels)
 
     if (d->lut->luts)
     {
-       for (i = 0 ; i < d->lut->nchannels ; i++)
+       for (i = 0 ; i < d->lut->nchannels ; ++i)
            delete [] d->lut->luts[i];
 
        delete [] d->lut->luts;
@@ -421,11 +421,11 @@ void ImageLevels::levelsLutSetup(int nchannels)
     d->lut->nchannels = nchannels;
     d->lut->luts      = new unsigned short*[d->lut->nchannels];
 
-    for (i = 0 ; i < d->lut->nchannels ; i++)
+    for (i = 0 ; i < d->lut->nchannels ; ++i)
     {
        d->lut->luts[i] = new unsigned short[(d->sixteenBit ? 65535 : 255) + 1];
 
-       for (v = 0 ; v <= (d->sixteenBit ? 65535 : 255) ; v++)
+       for (v = 0 ; v <= (d->sixteenBit ? 65535 : 255) ; ++v)
        {
           // to add gamma correction use func(v ^ g) ^ 1/g instead.
 
@@ -458,7 +458,7 @@ void ImageLevels::levelsLutProcess(uchar *srcPR, uchar *destPR, int w, int h)
         uchar *ptr = srcPR;
         uchar *dst = destPR;
 
-        for (i = 0 ; i < w*h ; i++)
+        for (i = 0 ; i < w*h ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -492,7 +492,7 @@ void ImageLevels::levelsLutProcess(uchar *srcPR, uchar *destPR, int w, int h)
         unsigned short *ptr = (unsigned short *)srcPR;
         unsigned short *dst = (unsigned short *)destPR;
 
-        for (i = 0 ; i < w*h ; i++)
+        for (i = 0 ; i < w*h ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -638,7 +638,7 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(const KUrl& fileUrl)
        return false;
     }
 
-    for (i = 0 ; i < 5 ; i++)
+    for (i = 0 ; i < 5 ; ++i)
     {
        fields = fscanf (file, "%d %d %d %d ",
                         &low_input[i],
@@ -670,7 +670,7 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(const KUrl& fileUrl)
        }
     }
 
-    for (i = 0 ; i < 5 ; i++)
+    for (i = 0 ; i < 5 ; ++i)
     {
        setLevelGammaValue(i, gamma[i]);
        setLevelLowInputValue(i, d->sixteenBit ? low_input[i]*255 : low_input[i]);
@@ -697,7 +697,7 @@ bool ImageLevels::saveLevelsToGimpLevelsFile(const KUrl& fileUrl)
 
     fprintf (file, "# GIMP Levels File\n");
 
-    for (i = 0 ; i < 5 ; i++)
+    for (i = 0 ; i < 5 ; ++i)
     {
        char buf[256];
        sprintf (buf, "%f", getLevelGammaValue(i));
