@@ -450,14 +450,9 @@ void FreeRotationTool::updatePoints()
 
 void FreeRotationTool::resetPoints()
 {
-    m_autoHorizonPoint1.setX(-1);
-    m_autoHorizonPoint1.setY(-1);
-
-    m_autoHorizonPoint2.setX(-1);
-    m_autoHorizonPoint2.setY(-1);
-
+    setPointInvalid(m_autoHorizonPoint1);
+    setPointInvalid(m_autoHorizonPoint2);
     m_previewWidget->resetPoints();
-
     updatePoints();
 }
 
@@ -597,6 +592,12 @@ double FreeRotationTool::calculateRadius(const QPoint &p1, const QPoint &p2)
     radius = -radius;
 
     return radius;
+}
+
+void FreeRotationTool::setPointInvalid(QPoint &p)
+{
+    p.setX(-1);
+    p.setY(-1);
 }
 
 bool FreeRotationTool::pointIsValid(const QPoint &p)
