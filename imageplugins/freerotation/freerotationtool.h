@@ -90,6 +90,7 @@ private:
     void putFinalData();
     void renderingFinished();
 
+    bool    pointIsValid(const QPoint &p);
     double  calculateRadius(const QPoint &p1, const QPoint &p2);
     double  calculateAutoRadius();
     void    setAutoHorizonMode(AutoMode);

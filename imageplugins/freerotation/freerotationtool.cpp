@@ -417,7 +417,7 @@ void FreeRotationTool::slotAutoHorizonToggled(bool t)
 
 QString FreeRotationTool::generatePointLabel(const QPoint &p)
 {
-    if (p.x() == -1 && p.y() == -1)
+    if (!pointIsValid(p))
         return QString(i18n("not set"));
 
     QString label = QString("(%1, %2)")
@@ -443,11 +443,9 @@ void FreeRotationTool::updatePoints()
     m_previewWidget->setPoints(points);
 
     // enable / disable adjustment buttons
-    bool p1Set      = (m_autoHorizonPoint1.x() != -1 && m_autoHorizonPoint1.y() != -1);
-    bool p2Set      = (m_autoHorizonPoint2.x() != -1 && m_autoHorizonPoint2.y() != -1);
-    bool enableBtn  = p1Set && p2Set;
-    m_horizontalAdjustBtn->setEnabled(enableBtn);
-    m_verticalAdjustBtn->setEnabled(enableBtn);
+    bool valid  = pointIsValid(m_autoHorizonPoint1) && pointIsValid(m_autoHorizonPoint2);
+    m_horizontalAdjustBtn->setEnabled(valid);
+    m_verticalAdjustBtn->setEnabled(valid);
 }
 
 void FreeRotationTool::resetPoints()
@@ -599,6 +597,14 @@ double FreeRotationTool::calculateRadius(const QPoint &p1, const QPoint &p2)
     radius = -radius;
 
     return radius;
+}
+
+bool FreeRotationTool::pointIsValid(const QPoint &p)
+{
+    bool valid = true;
+    if (p.x() == -1 || p.y() == -1)
+        valid = false;
+    return valid;
 }
 
 }  // namespace DigikamFreeRotationImagesPlugin
