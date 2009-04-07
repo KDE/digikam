@@ -1145,7 +1145,7 @@ void TagFilterView::slotABCContextMenu()
 
     if (d->ABCMenu->isEmpty())
     {
-        QAction *nothingFound = d->ABCMenu->addAction(i18n("No AddressBook entries found"));
+        QAction *nothingFound = d->ABCMenu->addAction(i18n("No address book entries found"));
         nothingFound->setEnabled(false);
     }
 #endif // HAVE_KDEPIMLIBS
