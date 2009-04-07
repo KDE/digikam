@@ -516,6 +516,15 @@ void DigikamView::setupConnections()
     connect(d->albumWidgetStack, SIGNAL(signalAddToExistingQueue(int)),
             this, SLOT(slotImageAddToExistingQueue(int)));
 
+    connect(d->albumWidgetStack, SIGNAL(signalGotoAlbumAndItem(ImageInfo&)),
+            this, SLOT(slotGotoAlbumAndItem(ImageInfo&)));
+
+    connect(d->albumWidgetStack, SIGNAL(signalGotoDateAndItem(ImageInfo&)),
+            this, SLOT(slotGotoDateAndItem(ImageInfo&)));
+
+    connect(d->albumWidgetStack, SIGNAL(signalGotoTagAndItem(int)),
+            this, SLOT(slotGotoTagAndItem(int)));
+
     // -- Selection timer ---------------
 
     connect(d->selectionTimer, SIGNAL(timeout()),

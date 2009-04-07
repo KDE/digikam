@@ -85,6 +85,10 @@ Q_SIGNALS:
     void signalFindSimilar();
     void signalAddToExistingQueue(int);
 
+    void signalGotoAlbumAndItem(ImageInfo&);
+    void signalGotoDateAndItem(ImageInfo&);
+    void signalGotoTagAndItem(int);
+
 protected:
 
     void resizeEvent(QResizeEvent* e);
@@ -102,6 +106,7 @@ private Q_SLOTS:
     void slotPanIconSelectionMoved(const QRect&, bool);
     void slotPanIconHiden();
     void slotDeleteItem();
+    void slotGotoTag(int tagID);
 
 private:
 

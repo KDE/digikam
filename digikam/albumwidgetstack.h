@@ -109,6 +109,10 @@ Q_SIGNALS:
     void signalUrlSelected(const KUrl&);
     void signalAddToExistingQueue(int);
 
+    void signalGotoAlbumAndItem(ImageInfo&);
+    void signalGotoDateAndItem(ImageInfo&);
+    void signalGotoTagAndItem(int);
+
 public Q_SLOTS:
 
     void slotEscapePreview();

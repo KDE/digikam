@@ -361,6 +361,7 @@ void ImagePreviewView::slotContextMenu()
     cmhelper.addAction("image_find_similar");
     cmhelper.addActionLightTable();
     cmhelper.addQueueManagerMenu();
+    cmhelper.addGotoMenu(idList);
     cmhelper.addServicesMenu(d->imageInfo, servicesMap);
     cmhelper.addKipiActions();
     popmenu.addSeparator();
@@ -387,6 +388,15 @@ void ImagePreviewView::slotContextMenu()
 
     connect(&cmhelper, SIGNAL(signalAddToExistingQueue(int)),
             this, SIGNAL(signalAddToExistingQueue(int)));
+
+    connect(&cmhelper, SIGNAL(signalGotoTag(int)),
+            this, SLOT(slotGotoTag(int)));
+
+    connect(&cmhelper, SIGNAL(signalGotoAlbum(ImageInfo&)),
+            this, SIGNAL(signalGotoAlbumAndItem(ImageInfo&)));
+
+    connect(&cmhelper, SIGNAL(signalGotoDate(ImageInfo&)),
+            this, SIGNAL(signalGotoDateAndItem(ImageInfo&)));
 
     // handle temporary actions
 
@@ -591,6 +601,11 @@ void ImagePreviewView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh
     QPainter p(pix);
     p.drawPixmap(0, 0, pix2);
     p.end();
+}
+
+void ImagePreviewView::slotGotoTag(int tagID)
+{
+    emit signalGotoTagAndItem(tagID);
 }
 
 }  // namespace Digikam

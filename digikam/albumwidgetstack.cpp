@@ -135,6 +135,15 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
 
     // -----------------------------------------------------------------
 
+    connect(d->imagePreviewView, SIGNAL(signalGotoAlbumAndItem(ImageInfo&)),
+            this, SIGNAL(signalGotoAlbumAndItem(ImageInfo&)));
+
+    connect(d->imagePreviewView, SIGNAL(signalGotoDateAndItem(ImageInfo&)),
+            this, SIGNAL(signalGotoDateAndItem(ImageInfo&)));
+
+    connect(d->imagePreviewView, SIGNAL(signalGotoTagAndItem(int)),
+            this, SIGNAL(signalGotoTagAndItem(int)));
+
     connect(d->imagePreviewView, SIGNAL(signalNextItem()),
             this, SIGNAL(signalNextItem()));
 
