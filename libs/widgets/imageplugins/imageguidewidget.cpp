@@ -453,29 +453,42 @@ void ImageGuideWidget::updatePixmap()
 
     }
 
-    // add points
+    // draw additional points added by the image plugin
     if (d->selectedPoints.count() > 0)
     {
+        QPainter::RenderHints hints = p.renderHints();
+
+        QColor semiTransGuideColor = QColor(d->guideColor.red(),
+                                            d->guideColor.green(),
+                                            d->guideColor.blue(),
+                                            75);
+
         QPoint point;
-        QColor color;
         int x = 0;
         int y = 0;
 
         for (int i = 0; i < d->selectedPoints.count(); ++i)
         {
-            // randomize colors a little bit
-            color = (i % 2 == 0) ? QColor(Qt::red) : QColor(Qt::green);
-
             point = d->selectedPoints.point(i);
             x = (int)(point.x() * (float)(d->width)  / (float) d->iface->originalWidth());
             y = (int)(point.y() * (float)(d->height) / (float) d->iface->originalHeight());
-            x += d->rect.x();
-            y += d->rect.y();
+            x += d->rect.x() + 1;
+            y += d->rect.y() + 1;
 
-            p.setPen(color);
-            p.drawEllipse(x -5 , y - 5, 10, 10);
-            p.drawPoint(x, y);
+            p.save();
+            p.setRenderHints(QPainter::Antialiasing);
+            p.setPen(QPen(d->guideColor, 2, Qt::SolidLine));
+            p.setBrush(QBrush(semiTransGuideColor));
+            p.drawEllipse(QPoint(x, y), 5, 5);
+
+            p.restore();
+            p.setPen(QPen(d->guideColor, 1, Qt::SolidLine));
+            p.setBrush(Qt::NoBrush);
+            p.drawPoint(QPoint(x, y));
+            p.drawText(QPoint(x+10, y-5), QString::number(i+1));
         }
+
+        p.setRenderHints(hints);
     }
 
     p.end();
