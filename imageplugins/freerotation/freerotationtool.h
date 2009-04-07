@@ -74,7 +74,7 @@ private Q_SLOTS:
     void slotResetSettings();
     void slotColorGuideChanged();
 
-    void slotAutoHorizonToggled(bool);
+    void slotManualAdjustToggled(bool);
     void slotAutoHorizonP1Clicked();
     void slotAutoHorizonP2Clicked();
     void slotAutoHorizonHoriClicked();
@@ -109,7 +109,7 @@ private:
     QLabel                       *m_autoHoriPoint2Label;
 
     QCheckBox                    *m_antialiasInput;
-    QCheckBox                    *m_autoHorizonInput;
+    QCheckBox                    *m_manualAdjustInput;
 
     QPushButton                  *m_horizontalAdjustBtn;
     QPushButton                  *m_verticalAdjustBtn;
@@ -118,6 +118,7 @@ private:
     QPoint                        m_autoHorizonPoint2;
 
     QWidget                      *m_autoHorizonContainer;
+    QWidget                      *m_manualAdjustContainer;
 
     KDcrawIface::RComboBox       *m_autoCropCB;
 

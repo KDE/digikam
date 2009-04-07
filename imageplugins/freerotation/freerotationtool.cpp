@@ -114,7 +114,8 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     m_newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"));
     m_newHeightLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
-    KSeparator *line = new KSeparator(Qt::Horizontal);
+    KSeparator *line  = new KSeparator(Qt::Horizontal);
+    KSeparator *line2 = new KSeparator(Qt::Horizontal);
 
     QLabel *label3 = new QLabel(i18n("Main angle:"));
     m_angleInput   = new RIntNumInput;
@@ -148,8 +149,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_autoHorizonInput       = new QCheckBox(i18n("Auto-Adjust Horizon"));
-    m_autoHorizonContainer   = new QWidget;
+    m_manualAdjustInput      = new QCheckBox(i18n("Manual Adjustment"));
 
     QLabel *label6           = new QLabel(i18n("Points:"));
     QPixmap pm1 = generateBtnPixmap(QString("1"), Qt::black);
@@ -173,18 +173,27 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     btnPoint2->setToolTip(btnWhatsThis);
     btnPoint2->setWhatsThis(btnWhatsThis);
 
-    QGridLayout *containerLayout  = new QGridLayout;
-    containerLayout->addWidget(label6,                  0, 0, 1, 1);
-    containerLayout->addWidget(label7,                  0, 3, 1, 1);
-    containerLayout->addWidget(btnPoint1,               1, 0, 1, 1);
-    containerLayout->addWidget(m_autoHoriPoint1Label,   1, 1, 1, 1);
-    containerLayout->addWidget(m_horizontalAdjustBtn,   1, 3, 1, 2);
-    containerLayout->addWidget(btnPoint2,               2, 0, 1, 1);
-    containerLayout->addWidget(m_autoHoriPoint2Label,   2, 1, 1, 1);
-    containerLayout->addWidget(m_verticalAdjustBtn,     2, 3, 1, 2);
-    containerLayout->setColumnStretch(2, 10);
-    containerLayout->setMargin(0);
-    m_autoHorizonContainer->setLayout(containerLayout);
+    m_manualAdjustContainer      = new QWidget;
+    QGridLayout *containerLayout = new QGridLayout;
+    containerLayout->addWidget(label3,              0, 0, 1, 3);
+    containerLayout->addWidget(m_angleInput,        1, 0, 1, 3);
+    containerLayout->addWidget(label4,              2, 0, 1, 3);
+    containerLayout->addWidget(m_fineAngleInput,    3, 0, 1, 3);
+    m_manualAdjustContainer->setLayout(containerLayout);
+
+    m_autoHorizonContainer        = new QWidget;
+    QGridLayout *containerLayout2 = new QGridLayout;
+    containerLayout2->addWidget(label6,                  0, 0, 1, 1);
+    containerLayout2->addWidget(label7,                  0, 3, 1, 1);
+    containerLayout2->addWidget(btnPoint1,               1, 0, 1, 1);
+    containerLayout2->addWidget(m_autoHoriPoint1Label,   1, 1, 1, 1);
+    containerLayout2->addWidget(m_horizontalAdjustBtn,   1, 3, 1, 2);
+    containerLayout2->addWidget(btnPoint2,               2, 0, 1, 1);
+    containerLayout2->addWidget(m_autoHoriPoint2Label,   2, 1, 1, 1);
+    containerLayout2->addWidget(m_verticalAdjustBtn,     2, 3, 1, 2);
+    containerLayout2->setColumnStretch(2, 10);
+    containerLayout2->setMargin(0);
+    m_autoHorizonContainer->setLayout(containerLayout2);
 
     // -------------------------------------------------------------
 
@@ -194,15 +203,13 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     mainLayout->addWidget(label2,                  1, 0, 1, 1);
     mainLayout->addWidget(m_newHeightLabel,        1, 1, 1, 2);
     mainLayout->addWidget(line,                    2, 0, 1, 3);
-    mainLayout->addWidget(label3,                  3, 0, 1, 3);
-    mainLayout->addWidget(m_angleInput,            4, 0, 1, 3);
-    mainLayout->addWidget(label4,                  5, 0, 1, 3);
-    mainLayout->addWidget(m_fineAngleInput,        6, 0, 1, 3);
-    mainLayout->addWidget(m_antialiasInput,        7, 0, 1, 3);
-    mainLayout->addWidget(label5,                  8, 0, 1, 1);
-    mainLayout->addWidget(m_autoCropCB,            8, 1, 1, 2);
-    mainLayout->addWidget(m_autoHorizonInput,      9, 0, 1, 1);
-    mainLayout->addWidget(m_autoHorizonContainer, 10, 0, 1, 3);
+    mainLayout->addWidget(m_autoHorizonContainer,  3, 0, 1, 3);
+    mainLayout->addWidget(line2,                   4, 0, 1, 3);
+    mainLayout->addWidget(label5,                  5, 0, 1, 1);
+    mainLayout->addWidget(m_autoCropCB,            5, 1, 1, 2);
+    mainLayout->addWidget(m_antialiasInput,        6, 0, 1, 3);
+    mainLayout->addWidget(m_manualAdjustInput,     7, 0, 1, 1);
+    mainLayout->addWidget(m_manualAdjustContainer, 8, 0, 1, 3);
     mainLayout->setRowStretch(11, 10);
     mainLayout->setMargin(m_gboxSettings->spacingHint());
     mainLayout->setSpacing(m_gboxSettings->spacingHint());
@@ -229,8 +236,8 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
             this, SLOT(slotColorGuideChanged()));
 
     // auto-horizon
-    connect(m_autoHorizonInput, SIGNAL(toggled(bool)),
-            this, SLOT(slotAutoHorizonToggled(bool)));
+    connect(m_manualAdjustInput, SIGNAL(toggled(bool)),
+            this, SLOT(slotManualAdjustToggled(bool)));
 
     connect(btnPoint1, SIGNAL(clicked()),
             this, SLOT(slotAutoHorizonP1Clicked()));
@@ -263,10 +270,10 @@ void FreeRotationTool::readSettings()
     m_fineAngleInput->setValue(group.readEntry("Fine Angle", m_fineAngleInput->defaultValue()));
     m_autoCropCB->setCurrentIndex(group.readEntry("Auto Crop Type", m_autoCropCB->defaultIndex()));
     m_antialiasInput->setChecked(group.readEntry("Anti Aliasing", true));
-    m_autoHorizonInput->setChecked(group.readEntry("Auto Adjust Horizon", false));
+    m_manualAdjustInput->setChecked(group.readEntry("Manual Adjust", false));
 
     resetPoints();
-    slotAutoHorizonToggled(m_autoHorizonInput->isChecked());
+    slotManualAdjustToggled(m_manualAdjustInput->isChecked());
 
     slotColorGuideChanged();
     slotEffect();
@@ -280,7 +287,7 @@ void FreeRotationTool::writeSettings()
     group.writeEntry("Fine Angle", m_fineAngleInput->value());
     group.writeEntry("Auto Crop Type", m_autoCropCB->currentIndex());
     group.writeEntry("Anti Aliasing", m_antialiasInput->isChecked());
-    group.writeEntry("Auto Adjust Horizon", m_autoHorizonInput->isChecked());
+    group.writeEntry("Manual Adjust", m_manualAdjustInput->isChecked());
     m_previewWidget->writeSettings();
     group.sync();
 }
@@ -311,8 +318,9 @@ void FreeRotationTool::prepareEffect()
     m_fineAngleInput->setEnabled(false);
     m_antialiasInput->setEnabled(false);
     m_autoCropCB->setEnabled(false);
-    m_autoHorizonInput->setEnabled(false);
+    m_manualAdjustInput->setEnabled(false);
     m_autoHorizonContainer->setEnabled(false);
+    m_manualAdjustContainer->setEnabled(false);
 
     double angle = m_angleInput->value() + m_fineAngleInput->value();
     bool antialiasing = m_antialiasInput->isChecked();
@@ -339,8 +347,9 @@ void FreeRotationTool::prepareFinal()
     m_fineAngleInput->setEnabled(false);
     m_antialiasInput->setEnabled(false);
     m_autoCropCB->setEnabled(false);
-    m_autoHorizonInput->setEnabled(false);
+    m_manualAdjustInput->setEnabled(false);
     m_autoHorizonContainer->setEnabled(false);
+    m_manualAdjustContainer->setEnabled(false);
 
     double angle      = m_angleInput->value() + m_fineAngleInput->value();
     bool antialiasing = m_antialiasInput->isChecked();
@@ -400,19 +409,20 @@ void FreeRotationTool::renderingFinished()
     m_fineAngleInput->setEnabled(true);
     m_antialiasInput->setEnabled(true);
     m_autoCropCB->setEnabled(true);
-    m_autoHorizonInput->setEnabled(true);
+    m_manualAdjustInput->setEnabled(true);
     m_autoHorizonContainer->setEnabled(true);
+    m_manualAdjustContainer->setEnabled(true);
 
-    bool autoHorizon = m_autoHorizonInput->isChecked();
-    slotAutoHorizonToggled(autoHorizon);
+    bool autoHorizon = m_manualAdjustInput->isChecked();
+    slotManualAdjustToggled(autoHorizon);
 
     kapp->restoreOverrideCursor();
 }
 
-void FreeRotationTool::slotAutoHorizonToggled(bool t)
+void FreeRotationTool::slotManualAdjustToggled(bool t)
 {
-    m_autoHorizonContainer->setVisible(t);
-    m_autoHorizonContainer->setEnabled(t);
+    m_manualAdjustContainer->setVisible(t);
+    m_manualAdjustContainer->setEnabled(t);
 }
 
 QString FreeRotationTool::generatePointLabel(const QPoint &p)
