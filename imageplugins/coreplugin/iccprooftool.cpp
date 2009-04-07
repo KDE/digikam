@@ -561,13 +561,13 @@ void ICCProofTool::readSettings()
     m_proofProfileBG->button(group.readEntry("ProofProfileMethod", 0))->setChecked(true);
     m_cInput->setValue(group.readEntry("ContrastAdjustment", m_cInput->defaultValue()));
 
-    for (int i = 0 ; i < 5 ; i++)
+    for (int i = 0 ; i < 5 ; ++i)
         m_curvesWidget->curves()->curvesChannelReset(i);
 
     m_curvesWidget->curves()->setCurveType(m_curvesWidget->m_channelType, ImageCurves::CURVE_SMOOTH);
     m_curvesWidget->reset();
 
-    for (int j = 0 ; j < 17 ; j++)
+    for (int j = 0 ; j < 17 ; ++j)
     {
         QPoint disable(-1, -1);
         QPoint p = group.readEntry(QString("CurveAdjustmentPoint%1").arg(j), disable);
@@ -581,7 +581,7 @@ void ICCProofTool::readSettings()
         m_curvesWidget->curves()->setCurvePoint(ImageHistogram::ValueChannel, j, p);
     }
 
-    for (int i = 0 ; i < 5 ; i++)
+    for (int i = 0 ; i < 5 ; ++i)
         m_curvesWidget->curves()->curvesCalculateCurve(i);
 
     // we need to call the set methods here, otherwise the curve will not be updated correctly
@@ -611,7 +611,7 @@ void ICCProofTool::writeSettings()
     group.writeEntry("ProofProfileMethod", m_proofProfileBG->checkedId());
     group.writeEntry("ContrastAdjustment", m_cInput->value());
 
-    for (int j = 0 ; j < 17 ; j++)
+    for (int j = 0 ; j < 17 ; ++j)
     {
         QPoint p = m_curvesWidget->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
 
@@ -648,7 +648,7 @@ void ICCProofTool::slotResetSettings()
     m_cInput->blockSignals(true);
     m_cInput->slotReset();
 
-    for (int i = 0 ; i < 5 ; i++)
+    for (int i = 0 ; i < 5 ; ++i)
        m_curvesWidget->curves()->curvesChannelReset(i);
 
     m_curvesWidget->reset();
@@ -1163,13 +1163,13 @@ void ICCProofTool::slotLoadSettings()
         m_spaceProfilePath->setUrl( stream.readLine() );
         m_cInput->setValue( stream.readLine().toInt() );
 
-        for (int i = 0 ; i < 5 ; i++)
+        for (int i = 0 ; i < 5 ; ++i)
             m_curvesWidget->curves()->curvesChannelReset(i);
 
         m_curvesWidget->curves()->setCurveType(m_curvesWidget->m_channelType, ImageCurves::CURVE_SMOOTH);
         m_curvesWidget->reset();
 
-        for (int j = 0 ; j < 17 ; j++)
+        for (int j = 0 ; j < 17 ; ++j)
         {
             QPoint disable(-1, -1);
             QPoint p;
@@ -1187,7 +1187,7 @@ void ICCProofTool::slotLoadSettings()
 
         blockSignals(false);
 
-        for (int i = 0 ; i < 5 ; i++)
+        for (int i = 0 ; i < 5 ; ++i)
            m_curvesWidget->curves()->curvesCalculateCurve(i);
 
         m_gboxSettings->histogramBox()->histogram()->reset();
@@ -1229,7 +1229,7 @@ void ICCProofTool::slotSaveAsSettings()
         stream << m_spaceProfilePath->url().path() << "\n";
         stream << m_cInput->value() << "\n";
 
-        for (int j = 0 ; j < 17 ; j++)
+        for (int j = 0 ; j < 17 ; ++j)
         {
             QPoint p = m_curvesWidget->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
             if (m_originalImage->sixteenBit())

@@ -108,9 +108,9 @@ void FilmGrain::filmgrainImage(Digikam::DImg *orgImage, int Sensibility)
     srand(seed);
 #endif
 
-    for (int x = 0; !m_cancel && x < Width; x++)
+    for (int x = 0; !m_cancel && x < Width; ++x)
     {
-        for (int y = 0; !m_cancel && y < Height; y++)
+        for (int y = 0; !m_cancel && y < Height; ++y)
         {
             ptr = pGrainBits + x*bytesDepth + (y*Width*bytesDepth);
 
@@ -178,9 +178,9 @@ void FilmGrain::filmgrainImage(Digikam::DImg *orgImage, int Sensibility)
     // get composer for default blending
     Digikam::DColorComposer *composer = Digikam::DColorComposer::getComposer(Digikam::DColorComposer::PorterDuffNone);
 
-    for (int x = 0; !m_cancel && x < Width; x++)
+    for (int x = 0; !m_cancel && x < Width; ++x)
     {
-        for (int y = 0; !m_cancel && y < Height; y++)
+        for (int y = 0; !m_cancel && y < Height; ++y)
         {
             int offset = x*bytesDepth + (y*Width*bytesDepth);
 

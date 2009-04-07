@@ -735,9 +735,9 @@ void ImageSelectionWidget::updatePixmap()
     uchar* ptr = image.bits();
     uchar  r, g, b;
 
-    for (int y=d->rect.top() ; y <= d->rect.bottom() ; y++)
+    for (int y=d->rect.top() ; y <= d->rect.bottom() ; ++y)
     {
-        for (int x=d->rect.left() ; x <= d->rect.right() ; x++)
+        for (int x=d->rect.left() ; x <= d->rect.right() ; ++x)
         {
             if (! d->localRegionSelection.contains(x, y, true) )
             {
@@ -1270,7 +1270,7 @@ void ImageSelectionWidget::mousePressEvent ( QMouseEvent * e )
                                 ImageSelectionWidgetPriv::ResizingBottomLeft,
                                 ImageSelectionWidgetPriv::ResizingBottomRight };
             float dist = -1;
-            for (int i = 0 ; i < 4 ; i++)
+            for (int i = 0 ; i < 4 ; ++i)
             {
                 QPoint point = points[i];
                 float dist2 = distance(pmVirtual, point);

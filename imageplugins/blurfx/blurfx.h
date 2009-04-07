@@ -121,7 +121,7 @@ private:  // Internal filter methods.
        // Now, we alloc the main pointer with Columns
         lpcArray = new int*[Columns];
 
-        for (int i = 0; i < Columns; i++)
+        for (int i = 0; i < Columns; ++i)
             lpcArray[i] = new int[Rows];
 
         return (lpcArray);
@@ -131,7 +131,7 @@ private:  // Internal filter methods.
     inline void Free2DArray (int** lpcArray, int Columns)
     {
        // loop to dealocate the columns
-        for (int i = 0; i < Columns; i++)
+        for (int i = 0; i < Columns; ++i)
             delete [] lpcArray[i];
 
        // now, we delete the main pointer

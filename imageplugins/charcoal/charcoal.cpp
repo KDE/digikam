@@ -89,7 +89,7 @@ void Charcoal::filterImage(void)
         return;
     }
 
-    for(i = 0 ; i < (kernelWidth*kernelWidth) ; i++)
+    for(i = 0 ; i < (kernelWidth*kernelWidth) ; ++i)
         kernel[i]=(-1.0);
 
     kernel[i/2]=kernelWidth*kernelWidth-1.0;
@@ -159,7 +159,7 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
         return(false);
     }
 
-    for(i=0 ; i < (kernelWidth*kernelWidth) ; i++)
+    for(i=0 ; i < (kernelWidth*kernelWidth) ; ++i)
         normalize += kernel[i];
 
     if(fabs(normalize) <= Epsilon)
@@ -167,16 +167,16 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
 
     normalize = 1.0/normalize;
 
-    for(i=0 ; i < (kernelWidth*kernelWidth) ; i++)
+    for(i=0 ; i < (kernelWidth*kernelWidth) ; ++i)
         normal_kernel[i] = normalize*kernel[i];
 
     double maxClamp = m_destImage.sixteenBit() ? 16777215.0 : 65535.0;
 
-    for(y=0 ; !m_cancel && (y < m_destImage.height()) ; y++)
+    for(y=0 ; !m_cancel && (y < m_destImage.height()) ; ++y)
     {
         sy = y-(kernelWidth/2);
 
-        for(x=0 ; !m_cancel && (x < m_destImage.width()) ; x++)
+        for(x=0 ; !m_cancel && (x < m_destImage.width()) ; ++x)
         {
             k   = normal_kernel;
             red = green = blue = alpha = 0;
@@ -231,7 +231,7 @@ int Charcoal::getOptimalKernelWidth(double radius, double sigma)
     {
         normalize=0.0;
 
-        for(u=(-kernelWidth/2) ; u <= (kernelWidth/2) ; u++)
+        for(u=(-kernelWidth/2) ; u <= (kernelWidth/2) ; ++u)
             normalize += exp(-((double) u*u)/(2.0*sigma*sigma))/(SQ2PI*sigma);
 
         u     = kernelWidth/2;

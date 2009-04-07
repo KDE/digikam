@@ -78,13 +78,13 @@ void Matrix::multiply(const Matrix &matrix)
     Matrix   tmp;
     double   t1, t2, t3;
 
-    for (i = 0; i < 3; i++)
+    for (i = 0; i < 3; ++i)
     {
         t1 = matrix.coeff[i][0];
         t2 = matrix.coeff[i][1];
         t3 = matrix.coeff[i][2];
 
-        for (j = 0; j < 3; j++)
+        for (j = 0; j < 3; ++j)
         {
             tmp.coeff[i][j]  = t1 * coeff[0][j];
             tmp.coeff[i][j] += t2 * coeff[1][j];

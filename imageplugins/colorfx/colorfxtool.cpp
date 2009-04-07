@@ -377,7 +377,7 @@ void ColorFXTool::solarize(int factor, uchar *data, int w, int h, bool sb)
         uchar *ptr = data;
         uchar  a, r, g, b;
 
-        for (int x=0 ; x < w*h ; x++)
+        for (int x=0 ; x < w*h ; ++x)
         {
             b = ptr[0];
             g = ptr[1];
@@ -415,7 +415,7 @@ void ColorFXTool::solarize(int factor, uchar *data, int w, int h, bool sb)
         unsigned short *ptr = (unsigned short *)data;
         unsigned short  a, r, g, b;
 
-        for (int x=0 ; x < w*h ; x++)
+        for (int x=0 ; x < w*h ; ++x)
         {
             b = ptr[0];
             g = ptr[1];
@@ -552,9 +552,9 @@ void ColorFXTool::neonFindEdges(uchar *data, int w, int h, bool sb, bool neon, i
 
     double intensityFactor = sqrt( 1 << Intensity );
 
-    for (int h = 0; h < Height; h++)
+    for (int h = 0; h < Height; ++h)
     {
-        for (int w = 0; w < Width; w++)
+        for (int w = 0; w < Width; ++w)
         {
             ptr  = pResBits + getOffset(Width, w, h, bytesDepth);
             ptr1 = pResBits + getOffset(Width, w + Lim_Max (w, BW, Width), h, bytesDepth);
@@ -562,7 +562,7 @@ void ColorFXTool::neonFindEdges(uchar *data, int w, int h, bool sb, bool neon, i
 
             if (sixteenBit)
             {
-                for (int k = 0; k <= 2; k++)
+                for (int k = 0; k <= 2; ++k)
                 {
                     colorPoint  = ((unsigned short *)ptr)[k];
                     colorOther1 = ((unsigned short *)ptr1)[k];
@@ -582,7 +582,7 @@ void ColorFXTool::neonFindEdges(uchar *data, int w, int h, bool sb, bool neon, i
             }
             else
             {
-                for (int k = 0; k <= 2; k++)
+                for (int k = 0; k <= 2; ++k)
                 {
                     colorPoint  = ptr[k];
                     colorOther1 = ptr1[k];

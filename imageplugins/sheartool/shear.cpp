@@ -131,7 +131,7 @@ void Shear::filterImage(void)
 
     Digikam::DImgImageFilters filters;
 
-    for( y = 0; y < new_height; y++)
+    for( y = 0; y < new_height; ++y)
     {
         for( x = 0; x < new_width; x++, p += 4 )
         {
@@ -157,7 +157,7 @@ void Shear::filterImage(void)
                 {
                     pt = setPosition (nWidth, ROUND( nx ), ROUND( ny ));
 
-                    for (int z = 0 ; z < 4 ; z++)
+                    for (int z = 0 ; z < 4 ; ++z)
                     {
                         if (!sixteenBit)
                             pResBits[p+z] = pBits[pt+z];

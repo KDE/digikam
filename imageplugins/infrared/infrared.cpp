@@ -179,9 +179,9 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
         int component;
         grainData.setSixteenBit(sixteenBit);
 
-        for (int x = 0; !m_cancel && x < Width; x++)
+        for (int x = 0; !m_cancel && x < Width; ++x)
         {
-            for (int y = 0; !m_cancel && y < Height; y++)
+            for (int y = 0; !m_cancel && y < Height; ++y)
             {
                 ptr = pGrainBits + x*bytesDepth + (y*Width*bytesDepth);
 
@@ -284,9 +284,9 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
         if (sixteenBit)
             Shade = (Shade + 1) * 256 - 1;
 
-        for (int x = 0; !m_cancel && x < Width; x++)
+        for (int x = 0; !m_cancel && x < Width; ++x)
         {
-            for (int y = 0; !m_cancel && y < Height; y++)
+            for (int y = 0; !m_cancel && y < Height; ++y)
             {
                 int offset = x*bytesDepth + (y*Width*bytesDepth);
 
@@ -337,9 +337,9 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
     // Overlay mode composite value computation is D =  A * (B + (2 * B) * (255 - A)).
 
     outData.setSixteenBit(sixteenBit);
-    for (int x = 0; !m_cancel && x < Width; x++)
+    for (int x = 0; !m_cancel && x < Width; ++x)
     {
-        for (int y = 0; !m_cancel && y < Height; y++)
+        for (int y = 0; !m_cancel && y < Height; ++y)
         {
             offset = x*bytesDepth + (y*Width*bytesDepth);
 

@@ -266,7 +266,7 @@ void PerspectiveWidget::updatePixmap()
     int gXS = m_w / 15;
     int gYS = m_h / 15;
 
-    for (int i = 0 ; i < 15 ; i++)
+    for (int i = 0 ; i < 15 ; ++i)
     {
         int j = i*4;
 
@@ -500,7 +500,7 @@ QPoint PerspectiveWidget::buildPerspective(QPoint orignTopLeft, QPoint orignBott
 
     // Calculate the grid array points.
     double newX, newY;
-    for (int i = 0 ; i < m_grid.size() ; i++)
+    for (int i = 0 ; i < m_grid.size() ; ++i)
     {
         transform.transformPoint(m_grid.point(i).x(), m_grid.point(i).y(), &newX, &newY);
         m_grid.setPoint(i, lround(newX), lround(newY));
@@ -580,7 +580,7 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
     // these loops could be rearranged, depending on which bit of code
     // you'd most like to write more than once.
 
-    for (y = y1; y < y2; y++)
+    for (y = y1; y < y2; ++y)
     {
        // set up inverse transform steps
 
@@ -590,11 +590,11 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
 
         d = dest;
 
-        for (x = x1; x < x2; x++)
+        for (x = x1; x < x2; ++x)
         {
             int i;     //  normalize homogeneous coords
 
-            for (i = 0; i < coords; i++)
+            for (i = 0; i < coords; ++i)
             {
                 if (tw[i] == 1.0)
                 {
@@ -658,7 +658,7 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
                 d += bytesDepth;
             }
 
-            for (i = 0; i < coords; i++)
+            for (i = 0; i < coords; ++i)
             {
                 tu[i] += uinc;
                 tv[i] += vinc;

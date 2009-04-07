@@ -51,7 +51,7 @@ PixelAccess::PixelAccess(Digikam::DImg *srcImage)
     m_imageHeight = m_image->height();
     m_sixteenBit  = m_image->sixteenBit();
 
-    for ( int i = 0 ; i < PixelAccessRegions ; i++ )
+    for ( int i = 0 ; i < PixelAccessRegions ; ++i )
     {
         m_buffer[i] = new Digikam::DImg(m_image->copy(0, 0, m_width, m_height));
 
@@ -64,7 +64,7 @@ PixelAccess::PixelAccess(Digikam::DImg *srcImage)
 
 PixelAccess::~PixelAccess()
 {
-    for( int i = 0 ; i < PixelAccessRegions ; i++ )
+    for( int i = 0 ; i < PixelAccessRegions ; ++i )
        delete m_buffer[i];
 }
 
@@ -124,7 +124,7 @@ void PixelAccess::pixelAccessDoEdge(int i, int j)
     rowEnd = j + m_height;
     if (rowEnd > m_imageHeight) rowEnd = m_imageHeight;
 
-    for( int y = rowStart ; y < rowEnd ; y++ )
+    for( int y = rowStart ; y < rowEnd ; ++y )
     {
         line = pixelAccessAddress(lineStart, y);
         memcpy(line, m_image->scanLine(y) + lineStart * m_depth, lineWidth * m_depth);
@@ -194,7 +194,7 @@ void PixelAccess::pixelAccessGetCubic(double srcX, double srcY, double brighten,
 
     // Or maybe it was a while back...
 
-    for ( int i = 1 ; i < PixelAccessRegions ; i++)
+    for ( int i = 1 ; i < PixelAccessRegions ; ++i)
     {
         if ((xInt >= m_tileMinX[i]) && (xInt < m_tileMaxX[i]) &&
              (yInt >= m_tileMinY[i]) && (yInt < m_tileMaxY[i]) )
@@ -255,14 +255,14 @@ void PixelAccess::cubicInterpolate(uchar* src, int rowStride, uchar* dst,
 
         // for each component, read the values of 4 pixels into array
 
-        for (c = 0 ; c < 4 * numberOfComponents ; c++)
+        for (c = 0 ; c < 4 * numberOfComponents ; ++c)
         {
             verts[c] = vm1 * src16[c] + v * src16[c+rowStride] + vp1 * src16[c+rowStride*2] + vp2 * src16[c+rowStride*3];
         }
 
         // for each component, compute resulting value from array
 
-        for (c = 0 ; c < numberOfComponents ; c++)
+        for (c = 0 ; c < numberOfComponents ; ++c)
         {
             float result;
             result = um1 * verts[c] + u * verts[c+numberOfComponents]
@@ -285,12 +285,12 @@ void PixelAccess::cubicInterpolate(uchar* src, int rowStride, uchar* dst,
     }
     else
     {
-        for (c = 0 ; c < 4 * numberOfComponents ; c++)
+        for (c = 0 ; c < 4 * numberOfComponents ; ++c)
         {
             verts[c] = vm1 * src[c] + v * src[c+rowStride] + vp1 * src[c+rowStride*2] + vp2 * src[c+rowStride*3];
         }
 
-        for (c = 0 ; c < numberOfComponents ; c++)
+        for (c = 0 ; c < numberOfComponents ; ++c)
         {
             float result;
             result = um1 * verts[c] + u * verts[c+numberOfComponents]

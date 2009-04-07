@@ -480,19 +480,19 @@ BWSepiaTool::~BWSepiaTool()
 
 void BWSepiaTool::updatePreviews()
 {
-    for (int i = 0 ; i < m_bwFilters->count(); i++)
+    for (int i = 0 ; i < m_bwFilters->count(); ++i)
     {
         ListWidgetBWPreviewItem* item = dynamic_cast<ListWidgetBWPreviewItem*>(m_bwFilters->item(i));
         item->updatePreview();
     }
 
-    for (int i = 0 ; i < m_bwFilm->count(); i++)
+    for (int i = 0 ; i < m_bwFilm->count(); ++i)
     {
         ListWidgetBWPreviewItem* item = dynamic_cast<ListWidgetBWPreviewItem*>(m_bwFilm->item(i));
         item->updatePreview();
     }
 
-    for (int i = 0 ; i < m_bwTone->count(); i++)
+    for (int i = 0 ; i < m_bwTone->count(); ++i)
     {
         ListWidgetBWPreviewItem* item = dynamic_cast<ListWidgetBWPreviewItem*>(m_bwTone->item(i));
         item->updatePreview();
@@ -577,13 +577,13 @@ void BWSepiaTool::readSettings()
     m_cInput->setValue(group.readEntry("ContrastAdjustment", m_cInput->defaultValue()));
     m_strengthInput->setValue(group.readEntry("StrengthAdjustment", m_strengthInput->defaultValue()));
 
-    for (int i = 0 ; i < 5 ; i++)
+    for (int i = 0 ; i < 5 ; ++i)
         m_curvesWidget->curves()->curvesChannelReset(i);
 
     m_curvesWidget->curves()->setCurveType(m_curvesWidget->m_channelType, ImageCurves::CURVE_SMOOTH);
     m_curvesWidget->reset();
 
-    for (int j = 0 ; j < 17 ; j++)
+    for (int j = 0 ; j < 17 ; ++j)
     {
         QPoint disable(-1, -1);
         QPoint p = group.readEntry(QString("CurveAdjustmentPoint%1").arg(j), disable);
@@ -597,7 +597,7 @@ void BWSepiaTool::readSettings()
         m_curvesWidget->curves()->setCurvePoint(ImageHistogram::ValueChannel, j, p);
     }
 
-    for (int i = 0 ; i < 5 ; i++)
+    for (int i = 0 ; i < 5 ; ++i)
         m_curvesWidget->curves()->curvesCalculateCurve(i);
 
     // we need to call the set methods here, otherwise the curve will not be updated correctly
@@ -622,7 +622,7 @@ void BWSepiaTool::writeSettings()
     group.writeEntry("ContrastAdjustment", m_cInput->value());
     group.writeEntry("StrengthAdjustment", m_strengthInput->value());
 
-    for (int j = 0 ; j < 17 ; j++)
+    for (int j = 0 ; j < 17 ; ++j)
     {
         QPoint p = m_curvesWidget->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
 
@@ -650,7 +650,7 @@ void BWSepiaTool::slotResetSettings()
     m_cInput->slotReset();
     m_strengthInput->slotReset();
 
-    for (int channel = 0 ; channel < 5 ; channel++)
+    for (int channel = 0 ; channel < 5 ; ++channel)
        m_curvesWidget->curves()->curvesChannelReset(channel);
 
     m_curvesWidget->reset();
@@ -1015,13 +1015,13 @@ void BWSepiaTool::slotLoadSettings()
         m_bwTone->setCurrentRow(stream.readLine().toInt());
         m_cInput->setValue(stream.readLine().toInt());
 
-        for (int i = 0 ; i < 5 ; i++)
+        for (int i = 0 ; i < 5 ; ++i)
             m_curvesWidget->curves()->curvesChannelReset(i);
 
         m_curvesWidget->curves()->setCurveType(m_curvesWidget->m_channelType, ImageCurves::CURVE_SMOOTH);
         m_curvesWidget->reset();
 
-        for (int j = 0 ; j < 17 ; j++)
+        for (int j = 0 ; j < 17 ; ++j)
         {
             QPoint disable(-1, -1);
             QPoint p;
@@ -1037,7 +1037,7 @@ void BWSepiaTool::slotLoadSettings()
             m_curvesWidget->curves()->setCurvePoint(ImageHistogram::ValueChannel, j, p);
         }
 
-        for (int i = 0 ; i < 5 ; i++)
+        for (int i = 0 ; i < 5 ; ++i)
            m_curvesWidget->curves()->curvesCalculateCurve(i);
 
         blockWidgetSignals(false);
@@ -1076,7 +1076,7 @@ void BWSepiaTool::slotSaveAsSettings()
         stream << m_bwTone->currentItem() << "\n";
         stream << m_cInput->value() << "\n";
 
-        for (int j = 0 ; j < 17 ; j++)
+        for (int j = 0 ; j < 17 ; ++j)
         {
             QPoint p = m_curvesWidget->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
             if (m_originalImage->sixteenBit())

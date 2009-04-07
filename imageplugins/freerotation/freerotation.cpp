@@ -140,7 +140,7 @@ void FreeRotation::filterImage(void)
                 {
                     j = setPosition (nWidth, (int)lfx, (int)lfy);
 
-                    for (int p = 0 ; p < 4 ; p++)
+                    for (int p = 0 ; p < 4 ; ++p)
                     {
                         if (!sixteenBit)
                             pResBits[i] = pBits[j];

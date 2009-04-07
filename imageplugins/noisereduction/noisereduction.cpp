@@ -123,7 +123,7 @@ void NoiseReduction::filterImage(void)
     memset (src,  0, qMax (width, height) * bytes);
     memset (dest, 0, qMax (width, height) * bytes);
 
-    for (i=0 ; i < qMax(width,height)+2*w-1 ; i++)
+    for (i=0 ; i < qMax(width,height)+2*w-1 ; ++i)
         data[i] = data2[i] = buffer[i] = rbuf[i] = tbuf[i] = 0.0;
 
     // Initialize the damping filter coefficients
@@ -132,7 +132,7 @@ void NoiseReduction::filterImage(void)
 
     // blur the rows
 
-    for (row = 0 ; !m_cancel && (row < height) ; row++)
+    for (row = 0 ; !m_cancel && (row < height) ; ++row)
     {
         memcpy(src, srcPR + row*width*bytes, width*bytes);
         memcpy(dest, src, width*bytes);
@@ -148,17 +148,17 @@ void NoiseReduction::filterImage(void)
 
     // blur the cols
 
-    for (col = 0 ; !m_cancel && (col < width) ; col++)
+    for (col = 0 ; !m_cancel && (col < width) ; ++col)
     {
-        for (int n = 0 ; n < height ; n++)
+        for (int n = 0 ; n < height ; ++n)
             memcpy(src + n*bytes, destPR + (col + width*n)*bytes, bytes);
 
-        for (int n = 0 ; n < height ; n++)
+        for (int n = 0 ; n < height ; ++n)
             memcpy(dest + n*bytes, srcPR + (col + width*n)*bytes, bytes);
 
         blur_line (data+w, data2+w, buffer+w, rbuf+w, tbuf+w, src, dest, height);
 
-        for (int n = 0 ; n < height ; n++)
+        for (int n = 0 ; n < height ; ++n)
             memcpy(destPR + (col + width*n)*bytes, dest + n*bytes, bytes);
 
         progress = (int)(20.0 + ((double)col * 20.0) / width);
@@ -169,7 +169,7 @@ void NoiseReduction::filterImage(void)
     // merge the source and destination (which currently contains
     // the blurred version) images
 
-    for (row = 0 ; !m_cancel && (row < height) ; row++)
+    for (row = 0 ; !m_cancel && (row < height) ; ++row)
     {
         uchar *s            = src;
         uchar *d            = dest;
@@ -193,7 +193,7 @@ void NoiseReduction::filterImage(void)
         t*=t;
         t2*=t2;
 
-        for (u = 0 ; !m_cancel && (u < width) ; u++)
+        for (u = 0 ; !m_cancel && (u < width) ; ++u)
         {
             float dpix[3], spix[3];
             float lum,  red,  green,  blue;
@@ -258,7 +258,7 @@ void NoiseReduction::filterImage(void)
             dpix[1] = green2 + dl;
             dpix[0] =  blue2 + dl;
 
-            for (v = 0 ; !m_cancel && (v < 3) ; v++)
+            for (v = 0 ; !m_cancel && (v < 3) ; ++v)
             {
                 float value  = spix[v];
                 float fvalue = dpix[v];
@@ -371,7 +371,7 @@ void NoiseReduction::blur_line(float* const data, float* const data2, float* con
 
     // Do actual filtering
 
-    for (b = 0 ; !m_cancel && (b < 3) ; b++)
+    for (b = 0 ; !m_cancel && (b < 3) ; ++b)
     {
         for (row = b, idx = 0 ; !m_cancel && (idx < len) ; row += 4, idx++)
         {
@@ -636,10 +636,10 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
 
     // Mirror image edges
 
-    for (i=1 ; i <= w ; i++)
+    for (i=1 ; i <= w ; ++i)
         blp[-i] = blp[i];
 
-    for (i=1 ; i <= w ; i++)
+    for (i=1 ; i <= w ; ++i)
         brp[i] = brp[-i];
 
     if (color < 0) // Calc 2nd derivative
@@ -655,10 +655,10 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
 
         // Mirror image edges
 
-        for (i = 1 ; i <= w ; i++)
+        for (i = 1 ; i <= w ; ++i)
             blp[-i] = blp[i];
 
-        for (i = 1 ; i <= w ; i++)
+        for (i = 1 ; i <= w ; ++i)
             brp[i] = brp[-i];
 
         // boost high frequency in rbuf
@@ -670,17 +670,17 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
 
         // Mirror rbuf edges
 
-        for (i = 1 ; i <= w ; i++)
+        for (i = 1 ; i <= w ; ++i)
             rbuflp[-i] = rbuflp[i];
 
-        for (i = 1 ; i <= w ; i++)
+        for (i = 1 ; i <= w ; ++i)
             rbufrp[i] = rbufrp[-i];
 
         // Lowpass (gauss) filter rbuf, remove phase jitter
 
         iir_filter(rbuflp-w+5, rbufrp+w-5, rbuflp-w+5, m_damping, Gaussian);
 
-        for (i = -w+5; i < width-1+w-5 ; i++)
+        for (i = -w+5; i < width-1+w-5 ; ++i)
         {
             // NOTE: commented from original implementation
             // val = rbuflp[i];
@@ -703,10 +703,10 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
 
         // Mirror rbuf edges
 
-        for (i=1 ; i <= w ; i++)
+        for (i=1 ; i <= w ; ++i)
             rbuflp[-i] = rbuflp[i];
 
-        for (i=1 ; i <= w ; i++)
+        for (i=1 ; i <= w ; ++i)
             rbufrp[i] = rbufrp[-i];
 
         return;
@@ -721,7 +721,7 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
 
     val = m_texture + 1.0;
 
-    for (i = -w+1 ; i <= width-1+w-1 ; i++)
+    for (i = -w+1 ; i <= width-1+w-1 ; ++i)
     {
         blp[i] = mypow(blp[i] - lp2[i], val);
     }
@@ -741,7 +741,7 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
 
         // Mirror left edge
 
-        for (i=1 ; i <= w ; i++)
+        for (i=1 ; i <= w ; ++i)
             src[-i] = src[i];
 
         sum = (src[-1] += src[-2]);
@@ -769,7 +769,7 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
 
         // Mirror right edge
 
-        for (i=1 ; i <= w ; i++)
+        for (i=1 ; i <= w ; ++i)
             src[i] = src[-i];
 
         sum = (src[1] += src[2]);
@@ -795,7 +795,7 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
 
     val = 1.0 / (m_texture + 1.0);
 
-    for (i = -w+1 ; i <= width-1+w-1 ; i++)
+    for (i = -w+1 ; i <= width-1+w-1 ; ++i)
     {
         // Undo  predistortion
 

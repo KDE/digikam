@@ -336,7 +336,7 @@ void AdjustCurvesTool::slotSpotColorChanged(const DColor &color)
 
     // Calculate Red, green, blue curves.
 
-    for (int i = ImageHistogram::ValueChannel ; i <= ImageHistogram::BlueChannel ; i++)
+    for (int i = ImageHistogram::ValueChannel ; i <= ImageHistogram::BlueChannel ; ++i)
        m_curvesWidget->curves()->curvesCalculateCurve(i);
 
     m_curvesWidget->repaint();
@@ -492,14 +492,14 @@ void AdjustCurvesTool::readSettings()
 
     m_curvesWidget->reset();
 
-    for (int i = 0 ; i < 5 ; i++)
+    for (int i = 0 ; i < 5 ; ++i)
     {
         m_curvesWidget->curves()->curvesChannelReset(i);
         m_curvesWidget->curves()->setCurveType(i,
                   (ImageCurves::CurveType)group.readEntry(QString("CurveTypeChannel%1").arg(i),
                   (int)ImageCurves::CURVE_SMOOTH));
 
-        for (int j = 0 ; j < 17 ; j++)
+        for (int j = 0 ; j < 17 ; ++j)
         {
             QPoint disable(-1, -1);
             QPoint p = group.readEntry(QString("CurveAdjustmentChannel%1Point%2").arg(i).arg(j), disable);
@@ -532,11 +532,11 @@ void AdjustCurvesTool::writeSettings()
     group.writeEntry("Histogram Channel", m_gboxSettings->histogramBox()->channel());
     group.writeEntry("Histogram Scale", m_gboxSettings->histogramBox()->scale());
 
-    for (int i = 0 ; i < 5 ; i++)
+    for (int i = 0 ; i < 5 ; ++i)
     {
         group.writeEntry(QString("CurveTypeChannel%1").arg(i), m_curvesWidget->curves()->getCurveType(i));
 
-        for (int j = 0 ; j < 17 ; j++)
+        for (int j = 0 ; j < 17 ; ++j)
         {
             QPoint p = m_curvesWidget->curves()->getCurvePoint(i, j);
 
@@ -557,7 +557,7 @@ void AdjustCurvesTool::writeSettings()
 
 void AdjustCurvesTool::slotResetSettings()
 {
-    for (int channel = 0 ; channel < 5 ; channel++)
+    for (int channel = 0 ; channel < 5 ; ++channel)
        m_curvesWidget->curves()->curvesChannelReset(channel);
 
     m_curvesWidget->reset();

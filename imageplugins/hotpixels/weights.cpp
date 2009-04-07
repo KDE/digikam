@@ -57,17 +57,17 @@ void Weights::operator=(const Weights &w)
         // Allocate mPositions.count() matrices
         mWeightMatrices        = new double**[mPositions.count()];
 
-        for (int i=0 ; i < mPositions.count() ; i++)
+        for (int i=0 ; i < mPositions.count() ; ++i)
         {
             // Allocate mHeight rows on each position
             mWeightMatrices[i] = new double*[mHeight];
 
-            for (uint j=0 ; j < mHeight ; j++)
+            for (uint j=0 ; j < mHeight ; ++j)
             {
                 // Allocate mWidth columns on each row
                 mWeightMatrices[i][j]=new double[mWidth];
 
-                for (uint k=0 ; k < mWidth ; k++)
+                for (uint k=0 ; k < mWidth ; ++k)
                 {
                     mWeightMatrices[i][j][k]=origMatrices[i][j][k];
                 }
@@ -178,12 +178,12 @@ void Weights::calculateWeights()
     // Allocate mPositions.count() matrices.
     mWeightMatrices = new double**[mPositions.count()];
 
-    for (i=0 ; i < (size_t)mPositions.count() ; i++)
+    for (i=0 ; i < (size_t)mPositions.count() ; ++i)
     {
         // Allocate mHeight rows on each position
         mWeightMatrices[i] = new double*[mHeight];
 
-        for (j=0 ; j < mHeight ; j++)
+        for (j=0 ; j < mHeight ; ++j)
         {
             // Allocate mWidth columns on each row
             mWeightMatrices[i][j] = new double[mWidth];

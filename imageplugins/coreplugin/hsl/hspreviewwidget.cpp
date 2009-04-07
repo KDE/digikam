@@ -109,7 +109,7 @@ void HSPreviewWidget::updatePixmap()
     {
         p = (uint *)image.scanLine(ySize - s - 1);
 
-        for( int h = 0 ; h < xSize ; h++ )
+        for( int h = 0 ; h < xSize ; ++h )
         {
             col.setHsv( 359*h/(xSize-1), 255, 192 );
             *p = col.rgb();

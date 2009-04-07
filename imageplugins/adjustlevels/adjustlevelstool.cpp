@@ -584,7 +584,7 @@ void AdjustLevelsTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("adjustlevels Tool");
 
-    for (int i = 0 ; i < 5 ; i++)
+    for (int i = 0 ; i < 5 ; ++i)
     {
         bool sb        = m_originalImage->sixteenBit();
         int max        = sb ? 65535 : 255;
@@ -625,7 +625,7 @@ void AdjustLevelsTool::writeSettings()
     group.writeEntry("Histogram Channel", m_gboxSettings->histogramBox()->channel());
     group.writeEntry("Histogram Scale", m_gboxSettings->histogramBox()->scale());
 
-    for (int i = 0 ; i < 5 ; i++)
+    for (int i = 0 ; i < 5 ; ++i)
     {
         bool sb        = m_originalImage->sixteenBit();
         double gamma   = m_levels->getLevelGammaValue(i);

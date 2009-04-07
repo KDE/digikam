@@ -422,7 +422,7 @@ void RedEyeTool::redEyeFilter(DImg& selection)
         uchar* mptr = mask.bits();
         uchar  r, g, b, r1, g1, b1;
 
-        for (uint i = 0 ; i < selection.width() * selection.height() ; i++)
+        for (uint i = 0 ; i < selection.width() * selection.height() ; ++i)
         {
             b       = ptr[0];
             g       = ptr[1];
@@ -459,7 +459,7 @@ void RedEyeTool::redEyeFilter(DImg& selection)
         unsigned short* mptr = (unsigned short*)mask.bits();
         unsigned short  r, g, b, r1, g1, b1;
 
-        for (uint i = 0 ; i < selection.width() * selection.height() ; i++)
+        for (uint i = 0 ; i < selection.width() * selection.height() ; ++i)
         {
             b       = ptr[0];
             g       = ptr[1];
@@ -503,7 +503,7 @@ void RedEyeTool::redEyeFilter(DImg& selection)
         uchar* mptr  = mask.bits();
         uchar* mptr2 = mask2.bits();
 
-        for (uint i = 0 ; i < mask2.width() * mask2.height() ; i++)
+        for (uint i = 0 ; i < mask2.width() * mask2.height() ; ++i)
         {
             if (mptr2[3] < 255)
             {
@@ -522,7 +522,7 @@ void RedEyeTool::redEyeFilter(DImg& selection)
         unsigned short* mptr  = (unsigned short*)mask.bits();
         unsigned short* mptr2 = (unsigned short*)mask2.bits();
 
-        for (uint i = 0 ; i < mask2.width() * mask2.height() ; i++)
+        for (uint i = 0 ; i < mask2.width() * mask2.height() ; ++i)
         {
             if (mptr2[3] < 65535)
             {

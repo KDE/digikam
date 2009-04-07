@@ -93,9 +93,9 @@ void OilPaint::oilpaintImage(Digikam::DImg &orgImage, Digikam::DImg &destImage, 
     m_averageColorG  = new uint[Smoothness + 1];
     m_averageColorB  = new uint[Smoothness + 1];
 
-    for (int h2 = 0; !m_cancel && (h2 < h); h2++)
+    for (int h2 = 0; !m_cancel && (h2 < h); ++h2)
     {
-        for (int w2 = 0; !m_cancel && (w2 < w); w2++)
+        for (int w2 = 0; !m_cancel && (w2 < w); ++w2)
         {
             mostFrequentColor = MostFrequentColor(orgImage, w2, h2, BrushSize, Smoothness);
             dptr = dest + w2*bytesDepth + (w*h2*bytesDepth);
@@ -149,9 +149,9 @@ Digikam::DColor OilPaint::MostFrequentColor(Digikam::DImg &src, int X, int Y, in
     // Erase the array
     memset(m_intensityCount, 0, (Intensity + 1) * sizeof (uchar));
 
-    for (w = X - Radius; w <= X + Radius; w++)
+    for (w = X - Radius; w <= X + Radius; ++w)
     {
-        for (h = Y - Radius; h <= Y + Radius; h++)
+        for (h = Y - Radius; h <= Y + Radius; ++h)
         {
             // This condition helps to identify when a point doesn't exist
 
@@ -185,7 +185,7 @@ Digikam::DColor OilPaint::MostFrequentColor(Digikam::DImg &src, int X, int Y, in
     I = 0;
     int MaxInstance = 0;
 
-    for (i = 0 ; i <= Intensity ; i++)
+    for (i = 0 ; i <= Intensity ; ++i)
     {
         if (m_intensityCount[i] > MaxInstance)
         {

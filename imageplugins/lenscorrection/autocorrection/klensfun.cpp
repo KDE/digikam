@@ -531,12 +531,12 @@ void KLensFunFilter::filterImage()
 
     if ( m_klf->m_filterCCA )
     {
-        for (unsigned int y=0; !m_cancel && (y < m_orgImage.height()); y++)
+        for (unsigned int y=0; !m_cancel && (y < m_orgImage.height()); ++y)
         {
             if (m_lfModifier->ApplySubpixelDistortion(0.0, y, m_orgImage.width(), 1, pos))
             {
                 float *src = pos;
-                for (unsigned x = 0; !m_cancel && (x < m_destImage.width()); x++)
+                for (unsigned x = 0; !m_cancel && (x < m_destImage.width()); ++x)
                 {
                     Digikam::DColor destPixel;
 
@@ -576,7 +576,7 @@ void KLensFunFilter::filterImage()
         else if (steps == 2 && m_klf->m_filterCCA)
             offset = 50.0;
 
-        for (unsigned int y=0; !m_cancel && (y < m_destImage.height()); y++)
+        for (unsigned int y=0; !m_cancel && (y < m_destImage.height()); ++y)
         {
             if (m_lfModifier->ApplyColorModification(data, 0.0, y, m_destImage.width(),
                                                      1, m_destImage.bytesDepth(), 0))
@@ -603,7 +603,7 @@ void KLensFunFilter::filterImage()
         // we need a deep copy first
         Digikam::DImg tempImage(m_destImage.width(), m_destImage.height(), m_destImage.sixteenBit(), m_destImage.hasAlpha());
 
-        for (unsigned long y=0; !m_cancel && (y < tempImage.height()); y++)
+        for (unsigned long y=0; !m_cancel && (y < tempImage.height()); ++y)
         {
             if (m_lfModifier->ApplyGeometryDistortion(0.0, y, tempImage.width(), 1, pos))
             {

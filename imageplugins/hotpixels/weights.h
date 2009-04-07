@@ -44,9 +44,9 @@ public:
     ~Weights()
     {
         if (!mWeightMatrices) return;
-        for (int i = 0 ; i < mPositions.count() ; i++)
+        for (int i = 0 ; i < mPositions.count() ; ++i)
         {
-            for (unsigned int j = 0; j < mHeight; j++) 
+            for (unsigned int j = 0; j < mHeight; ++j) 
                 delete[] mWeightMatrices[i][j];
         }
     }

@@ -73,9 +73,9 @@ void UnsharpMask::filterImage(void)
     quantum          = m_destImage.sixteenBit() ? 65535 : 255;
     quantumThreshold = quantum*m_threshold;
 
-    for (uint y = 0 ; !m_cancel && (y < m_destImage.height()) ; y++)
+    for (uint y = 0 ; !m_cancel && (y < m_destImage.height()) ; ++y)
     {
-        for (uint x = 0 ; !m_cancel && (x < m_destImage.width()) ; x++)
+        for (uint x = 0 ; !m_cancel && (x < m_destImage.width()) ; ++x)
         {
             p = m_orgImage.getPixelColor(x, y);
             q = m_destImage.getPixelColor(x, y);

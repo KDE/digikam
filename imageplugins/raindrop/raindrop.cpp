@@ -172,7 +172,7 @@ void RainDrop::rainDropsImage(Digikam::DImg *orgImage, Digikam::DImg *destImage,
     srand(seed);
 #endif
 
-    for (i = 0; !m_cancel && (i < Amount); i++)
+    for (i = 0; !m_cancel && (i < Amount); ++i)
     {
         nCounter = 0;
 
@@ -231,9 +231,9 @@ bool RainDrop::CreateRainDrop(uchar *pBits, int Width, int Height, bool sixteenB
         Coeff *= 0.01;
         lfDiv = (double)nHalfSize / log (Coeff * (double)nHalfSize + 1.0);
 
-        for (h = -nHalfSize; !m_cancel && (h <= nHalfSize); h++)
+        for (h = -nHalfSize; !m_cancel && (h <= nHalfSize); ++h)
         {
-            for (w = -nHalfSize; !m_cancel && (w <= nHalfSize); w++)
+            for (w = -nHalfSize; !m_cancel && (w <= nHalfSize); ++w)
             {
                 lfRadius = sqrt (h * h + w * w);
                 lfAngle = atan2 ((double)h, (double)w);
@@ -350,9 +350,9 @@ bool RainDrop::CreateRainDrop(uchar *pBits, int Width, int Height, bool sixteenB
 
         nBlurRadius = DropSize / 25 + 1;
 
-        for (h = -nHalfSize - nBlurRadius; !m_cancel && (h <= nHalfSize + nBlurRadius); h++)
+        for (h = -nHalfSize - nBlurRadius; !m_cancel && (h <= nHalfSize + nBlurRadius); ++h)
         {
-            for (w = -nHalfSize - nBlurRadius; !m_cancel && (w <= nHalfSize + nBlurRadius); w++)
+            for (w = -nHalfSize - nBlurRadius; !m_cancel && (w <= nHalfSize + nBlurRadius); ++w)
             {
                 lfRadius = sqrt (h * h + w * w);
 
@@ -361,9 +361,9 @@ bool RainDrop::CreateRainDrop(uchar *pBits, int Width, int Height, bool sixteenB
                     nTotalR = nTotalG = nTotalB = 0;
                     nBlurPixels = 0;
 
-                    for (nh1 = -nBlurRadius; !m_cancel && (nh1 <= nBlurRadius); nh1++)
+                    for (nh1 = -nBlurRadius; !m_cancel && (nh1 <= nBlurRadius); ++nh1)
                     {
-                        for (nw1 = -nBlurRadius; !m_cancel && (nw1 <= nBlurRadius); nw1++)
+                        for (nw1 = -nBlurRadius; !m_cancel && (nw1 <= nBlurRadius); ++nw1)
                         {
                             nw2 = X + w + nw1;
                             nh2 = Y + h + nh1;
@@ -418,9 +418,9 @@ bool RainDrop::CanBeDropped(int Width, int Height, uchar *pStatusBits, int X, in
     if (pStatusBits == NULL)
         return (true);
 
-    for (h = Y - nHalfSize; h <= Y + nHalfSize; h++)
+    for (h = Y - nHalfSize; h <= Y + nHalfSize; ++h)
     {
-        for (w = X - nHalfSize; w <= X + nHalfSize; w++)
+        for (w = X - nHalfSize; w <= X + nHalfSize; ++w)
         {
             if (IsInside (Width, Height, w, h))
             {
@@ -448,9 +448,9 @@ bool RainDrop::SetDropStatusBits (int Width, int Height, uchar *pStatusBits,
     if (pStatusBits == NULL)
         return (false);
 
-    for (h = Y - nHalfSize; h <= Y + nHalfSize; h++)
+    for (h = Y - nHalfSize; h <= Y + nHalfSize; ++h)
     {
-        for (w = X - nHalfSize; w <= X + nHalfSize; w++)
+        for (w = X - nHalfSize; w <= X + nHalfSize; ++w)
         {
             if (IsInside (Width, Height, w, h))
             {

@@ -221,11 +221,11 @@ void DistortionFX::fisheye(Digikam::DImg *orgImage, Digikam::DImg *destImage, do
 
     // main loop
 
-    for (h = 0; !m_cancel && (h < Height); h++)
+    for (h = 0; !m_cancel && (h < Height); ++h)
     {
         th = lfYScale * (double)(h - nHalfH);
 
-        for (w = 0; !m_cancel && (w < Width); w++)
+        for (w = 0; !m_cancel && (w < Width); ++w)
         {
             tw = lfXScale * (double)(w - nHalfW);
 
@@ -312,11 +312,11 @@ void DistortionFX::twirl(Digikam::DImg *orgImage, Digikam::DImg *destImage, int 
 
     // main loop
 
-    for (h = 0; !m_cancel && (h < Height); h++)
+    for (h = 0; !m_cancel && (h < Height); ++h)
     {
         th = lfYScale * (double)(h - nHalfH);
 
-        for (w = 0; !m_cancel && (w < Width); w++)
+        for (w = 0; !m_cancel && (w < Width); ++w)
         {
             tw = lfXScale * (double)(w - nHalfW);
 
@@ -404,9 +404,9 @@ void DistortionFX::cilindrical(Digikam::DImg *orgImage, Digikam::DImg *destImage
 
     // main loop
 
-    for (h = 0; !m_cancel && (h < Height); h++)
+    for (h = 0; !m_cancel && (h < Height); ++h)
     {
-        for (w = 0; !m_cancel && (w < Width); w++)
+        for (w = 0; !m_cancel && (w < Width); ++w)
         {
             // we find the distance from the center
             nh = fabs ((double)(h - nHalfH));
@@ -477,9 +477,9 @@ void DistortionFX::multipleCorners(Digikam::DImg *orgImage, Digikam::DImg *destI
 
     // main loop
 
-    for (h = 0; !m_cancel && (h < Height); h++)
+    for (h = 0; !m_cancel && (h < Height); ++h)
     {
-        for (w = 0; !m_cancel && (w < Width); w++)
+        for (w = 0; !m_cancel && (w < Width); ++w)
         {
             // we find the distance from the center
             nh = nHalfH - h;
@@ -545,11 +545,11 @@ void DistortionFX::polarCoordinates(Digikam::DImg *orgImage, Digikam::DImg *dest
 
     // main loop
 
-    for (h = 0; !m_cancel && (h < Height); h++)
+    for (h = 0; !m_cancel && (h < Height); ++h)
     {
         th = lfYScale * (double)(h - nHalfH);
 
-        for (w = 0; !m_cancel && (w < Width); w++)
+        for (w = 0; !m_cancel && (w < Width); ++w)
         {
             tw = lfXScale * (double)(w - nHalfW);
 
@@ -625,9 +625,9 @@ void DistortionFX::circularWaves(Digikam::DImg *orgImage, Digikam::DImg *destIma
 
     lfRadMax = sqrt (Height * Height + Width * Width);
 
-    for (h = 0; !m_cancel && (h < Height); h++)
+    for (h = 0; !m_cancel && (h < Height); ++h)
     {
-        for (w = 0; !m_cancel && (w < Width); w++)
+        for (w = 0; !m_cancel && (w < Width); ++w)
         {
             nw = X - w;
             nh = Y - h;
@@ -681,7 +681,7 @@ void DistortionFX::waves(Digikam::DImg *orgImage, Digikam::DImg *destImage,
     {
         int tx;
 
-        for (h = 0; !m_cancel && (h < Height); h++)
+        for (h = 0; !m_cancel && (h < Height); ++h)
         {
             tx = lround(Amplitude * sin ((Frequency * 2) * h * (M_PI / 180)));
             destImage->bitBltImage(orgImage, 0, h,  Width, 1,  tx, h);
@@ -703,7 +703,7 @@ void DistortionFX::waves(Digikam::DImg *orgImage, Digikam::DImg *destImage,
     {
         int ty;
 
-        for (w = 0; !m_cancel && (w < Width); w++)
+        for (w = 0; !m_cancel && (w < Width); ++w)
         {
             ty = lround(Amplitude * sin ((Frequency * 2) * w * (M_PI / 180)));
             destImage->bitBltImage(orgImage, w, 0, 1, Height, w, ty);
@@ -756,9 +756,9 @@ void DistortionFX::blockWaves(Digikam::DImg *orgImage, Digikam::DImg *destImage,
 
     int nHalfW = Width / 2, nHalfH = Height / 2;
 
-    for (int w = 0; !m_cancel && (w < Width); w++)
+    for (int w = 0; !m_cancel && (w < Width); ++w)
     {
-        for (int h = 0; !m_cancel && (h < Height); h++)
+        for (int h = 0; !m_cancel && (h < Height); ++h)
         {
             nw = nHalfW - w;
             nh = nHalfH - h;

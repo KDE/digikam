@@ -134,9 +134,9 @@ void RefocusMatrix::convolve_mat (CMat * result, const CMat * const mata, const 
 {
     register int xr, yr, xa, ya;
 
-    for (yr = -result->radius; yr <= result->radius; yr++)
+    for (yr = -result->radius; yr <= result->radius; ++yr)
     {
-        for (xr = -result->radius; xr <= result->radius; xr++)
+        for (xr = -result->radius; xr <= result->radius; ++xr)
         {
             const int ya_low  = qMax (-mata->radius, yr - matb->radius);
             const int ya_high = qMin (mata->radius, yr + matb->radius);
@@ -144,9 +144,9 @@ void RefocusMatrix::convolve_mat (CMat * result, const CMat * const mata, const 
             const int xa_high = qMin (mata->radius, xr + matb->radius);
             register double val = 0.0;
 
-            for (ya = ya_low; ya <= ya_high; ya++)
+            for (ya = ya_low; ya <= ya_high; ++ya)
             {
-                for (xa = xa_low; xa <= xa_high; xa++)
+                for (xa = xa_low; xa <= xa_high; ++xa)
                 {
                     val += c_mat_elt (mata, xa, ya) *
                         c_mat_elt (matb, xr - xa, yr - ya);
@@ -162,9 +162,9 @@ void RefocusMatrix::convolve_star_mat (CMat * result, const CMat * const mata, c
 {
     register int xr, yr, xa, ya;
 
-    for (yr = -result->radius; yr <= result->radius; yr++)
+    for (yr = -result->radius; yr <= result->radius; ++yr)
     {
-        for (xr = -result->radius; xr <= result->radius; xr++)
+        for (xr = -result->radius; xr <= result->radius; ++xr)
         {
             const int ya_low = qMax (-mata->radius, -matb->radius - yr);
             const int ya_high = qMin (mata->radius, matb->radius - yr);
@@ -172,9 +172,9 @@ void RefocusMatrix::convolve_star_mat (CMat * result, const CMat * const mata, c
             const int xa_high = qMin (mata->radius, matb->radius - xr);
             register double val = 0.0;
 
-            for (ya = ya_low; ya <= ya_high; ya++)
+            for (ya = ya_low; ya <= ya_high; ++ya)
             {
-                for (xa = xa_low; xa <= xa_high; xa++)
+                for (xa = xa_low; xa <= xa_high; ++xa)
                 {
                     val += c_mat_elt (mata, xa, ya) *
                         c_mat_elt (matb, xr + xa, yr + ya);
@@ -190,15 +190,15 @@ void RefocusMatrix::convolve_mat_fun (CMat * result, const CMat * const mata, do
 {
     register int xr, yr, xa, ya;
 
-    for (yr = -result->radius; yr <= result->radius; yr++)
+    for (yr = -result->radius; yr <= result->radius; ++yr)
     {
-        for (xr = -result->radius; xr <= result->radius; xr++)
+        for (xr = -result->radius; xr <= result->radius; ++xr)
         {
             register double val = 0.0;
 
-            for (ya = -mata->radius; ya <= mata->radius; ya++)
+            for (ya = -mata->radius; ya <= mata->radius; ++ya)
             {
-                for (xa = -mata->radius; xa <= mata->radius; xa++)
+                for (xa = -mata->radius; xa <= mata->radius; ++xa)
                 {
                     val += c_mat_elt (mata, xa, ya) * f (xr - xa, yr - ya);
                 }
@@ -225,11 +225,11 @@ void RefocusMatrix::print_c_mat (const CMat * const mat)
 {
     register int x, y;
 
-    for (y = -mat->radius; y <= mat->radius; y++)
+    for (y = -mat->radius; y <= mat->radius; ++y)
     {
         QString output, num;
 
-        for (x = -mat->radius; x <= mat->radius; x++)
+        for (x = -mat->radius; x <= mat->radius; ++x)
         {
             output.append( num.setNum( c_mat_elt (mat, x, y) ) );
         }
@@ -242,11 +242,11 @@ void RefocusMatrix::print_matrix (Mat * matrix)
 {
     int col_idx, row_idx;
 
-    for (row_idx = 0; row_idx < matrix->rows; row_idx++)
+    for (row_idx = 0; row_idx < matrix->rows; ++row_idx)
     {
         QString output, num;
 
-        for (col_idx = 0; col_idx < matrix->cols; col_idx++)
+        for (col_idx = 0; col_idx < matrix->cols; ++col_idx)
         {
             output.append( num.setNum( mat_elt (matrix, row_idx, col_idx) ) );
         }
@@ -261,13 +261,13 @@ Mat *RefocusMatrix::make_s_matrix (CMat * mat, int m, double noise_factor)
     Mat *result = allocate_matrix (mat_size, mat_size);
     register int yr, yc, xr, xc;
 
-    for (yr = -m; yr <= m; yr++)
+    for (yr = -m; yr <= m; ++yr)
     {
-        for (xr = -m; xr <= m; xr++)
+        for (xr = -m; xr <= m; ++xr)
         {
-            for (yc = -m; yc <= m; yc++)
+            for (yc = -m; yc <= m; ++yc)
             {
-                for (xc = -m; xc <= m; xc++)
+                for (xc = -m; xc <= m; ++xc)
                 {
                     *mat_eltptr (result, as_idx (xr, yr, m),
                                 as_idx (xc, yc, m)) =
@@ -291,13 +291,13 @@ Mat *RefocusMatrix::make_s_cmatrix (CMat * mat, int m, double noise_factor)
     Mat *result = allocate_matrix (mat_size, mat_size);
     register int yr, yc, xr, xc;
 
-    for (yr = 0; yr <= m; yr++)
+    for (yr = 0; yr <= m; ++yr)
     {
-        for (xr = 0; xr <= yr; xr++)
+        for (xr = 0; xr <= yr; ++xr)
         {
-            for (yc = -m; yc <= m; yc++)
+            for (yc = -m; yc <= m; ++yc)
             {
-                for (xc = -m; xc <= m; xc++)
+                for (xc = -m; xc <= m; ++xc)
                 {
                     *mat_eltptr (result, as_cidx (xr, yr), as_cidx (xc, yc)) +=
                         c_mat_elt (mat, xr - xc, yr - yc);
@@ -324,9 +324,9 @@ Mat *RefocusMatrix::copy_vec (const CMat * const mat, const int m)
     Mat *result = allocate_matrix (SQR (2 * m + 1), 1);
     register int x, y, index = 0;
 
-    for (y = -m; y <= m; y++)
+    for (y = -m; y <= m; ++y)
     {
-        for (x = -m; x <= m; x++)
+        for (x = -m; x <= m; ++x)
         {
             *mat_eltptr (result, index, 0) = c_mat_elt (mat, x, y);
             index++;
@@ -342,9 +342,9 @@ Mat *RefocusMatrix::copy_cvec (const CMat * const mat, const int m)
     Mat *result = allocate_matrix (as_cidx (m + 1, 0), 1);
     register int x, y, index = 0;
 
-    for (y = 0; y <= m; y++)
+    for (y = 0; y <= m; ++y)
     {
-        for (x = 0; x <= y; x++)
+        for (x = 0; x <= y; ++x)
         {
             *mat_eltptr (result, index, 0) = c_mat_elt (mat, x, y);
             index++;
@@ -360,9 +360,9 @@ CMat *RefocusMatrix::copy_cvec2mat (const Mat * const cvec, const int m)
     CMat *result = allocate_c_mat (m);
     register int x, y;
 
-    for (y = -m; y <= m; y++)
+    for (y = -m; y <= m; ++y)
     {
-        for (x = -m; x <= m; x++)
+        for (x = -m; x <= m; ++x)
         {
             *c_mat_eltptr (result, x, y) = mat_elt (cvec, as_cidx (x, y), 0);
         }
@@ -376,9 +376,9 @@ CMat *RefocusMatrix::copy_vec2mat (const Mat * const cvec, const int m)
     CMat *result = allocate_c_mat (m);
     register int x, y;
 
-    for (y = -m; y <= m; y++)
+    for (y = -m; y <= m; ++y)
     {
-        for (x = -m; x <= m; x++)
+        for (x = -m; x <= m; ++x)
         {
             *c_mat_eltptr (result, x, y) = mat_elt (cvec, as_idx (x, y, m), 0);
         }
@@ -463,17 +463,17 @@ CMat *RefocusMatrix::compute_g_matrix (const CMat * const convolution, const int
     double sum = 0.0;
 
     /* Determine sum of array */
-    for (r = -g->radius; r <= g->radius; r++)
+    for (r = -g->radius; r <= g->radius; ++r)
     {
-        for (c = -g->radius; c <= g->radius; c++)
+        for (c = -g->radius; c <= g->radius; ++c)
         {
             sum += c_mat_elt (g, r, c);
         }
     }
 
-    for (r = -g->radius; r <= g->radius; r++)
+    for (r = -g->radius; r <= g->radius; ++r)
     {
-        for (c = -g->radius; c <= g->radius; c++)
+        for (c = -g->radius; c <= g->radius; ++c)
         {
             *c_mat_eltptr (g, r, c) /= sum;
         }
@@ -489,9 +489,9 @@ void RefocusMatrix::fill_matrix (CMat * matrix, const int m,
     register int x, y;
     init_c_mat (matrix, m);
 
-    for (y = -m; y <= m; y++)
+    for (y = -m; y <= m; ++y)
     {
-        for (x = -m; x <= m; x++)
+        for (x = -m; x <= m; ++x)
         {
             *c_mat_eltptr (matrix, x, y) = f (x, y, fun_arg);
         }
@@ -505,9 +505,9 @@ void RefocusMatrix::fill_matrix2 (CMat * matrix, const int m,
     register int x, y;
     init_c_mat (matrix, m);
 
-    for (y = -m; y <= m; y++)
+    for (y = -m; y <= m; ++y)
     {
-        for (x = -m; x <= m; x++)
+        for (x = -m; x <= m; ++x)
         {
             *c_mat_eltptr (matrix, x, y) = f (x, y, fun_arg1, fun_arg2);
         }
@@ -526,9 +526,9 @@ void RefocusMatrix::make_gaussian_convolution (const double gradius, CMat * conv
 
     if (SQR (gradius) <= 1.0e10F / 3.40282347e28F)
     {
-        for (y = -m; y <= m; y++)
+        for (y = -m; y <= m; ++y)
         {
-            for (x = -m; x <= m; x++)
+            for (x = -m; x <= m; ++x)
             {
                 *c_mat_eltptr (convolution, x, y) = 0;
             }
@@ -540,9 +540,9 @@ void RefocusMatrix::make_gaussian_convolution (const double gradius, CMat * conv
     {
         const double alpha = log (2.0) / SQR (gradius);
 
-        for (y = -m; y <= m; y++)
+        for (y = -m; y <= m; ++y)
         {
-            for (x = -m; x <= m; x++)
+            for (x = -m; x <= m; ++x)
             {
                 *c_mat_eltptr (convolution, x, y) =
                     exp (-alpha * (SQR (x) + SQR (y)));

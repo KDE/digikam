@@ -94,7 +94,7 @@ void AntiVignetting::filterImage()
 
     ldens = new double[diagonal];
 
-    for (i = 0 ; !m_cancel && (i < diagonal) ; i++)
+    for (i = 0 ; !m_cancel && (i < diagonal) ; ++i)
     {
         if ( i >= erad )
            ldens[i] = 1;
@@ -105,11 +105,11 @@ void AntiVignetting::filterImage()
     xctr = ((Height + 1) / 2) + m_xshift;
     yctr = ((Width + 1) / 2) + m_yshift;
 
-    for (row = 0 ; !m_cancel && (row < Width) ; row++)
+    for (row = 0 ; !m_cancel && (row < Width) ; ++row)
     {
         yd = abs(yctr - row);
 
-        for (col = 0 ; !m_cancel && (col < Height) ; col++)
+        for (col = 0 ; !m_cancel && (col < Height) ; ++col)
         {
             p = (col * Width + row)*4;
 

@@ -107,9 +107,9 @@ void Texture::filterImage(void)
 
     // Make textured transparent layout.
 
-    for (int x = 0; !m_cancel && x < w; x++)
+    for (int x = 0; !m_cancel && x < w; ++x)
     {
-        for (int y = 0; !m_cancel && y < h; y++)
+        for (int y = 0; !m_cancel && y < h; ++y)
         {
             offset = x*bytesDepth + (y*w*bytesDepth);
             ptr = data + offset;
@@ -146,9 +146,9 @@ void Texture::filterImage(void)
 
     // Merge layout and image using overlay method.
 
-    for (int x = 0; !m_cancel && x < w; x++)
+    for (int x = 0; !m_cancel && x < w; ++x)
     {
-        for (int y = 0; !m_cancel && y < h; y++)
+        for (int y = 0; !m_cancel && y < h; ++y)
         {
             offset = x*bytesDepth + (y*w*bytesDepth);
             ptr = data + offset;

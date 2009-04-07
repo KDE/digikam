@@ -164,9 +164,9 @@ void BlurFX::zoomBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X, 
     nCount = 0;
 
     // we have reached the main loop
-    for (h = yMin; !m_cancel && (h < yMax); h++)
+    for (h = yMin; !m_cancel && (h < yMax); ++h)
     {
-        for (w = xMin; !m_cancel && (w < xMax); w++)
+        for (w = xMin; !m_cancel && (w < xMax); ++w)
         {
             // ...we enter this loop to sum the bits
 
@@ -180,7 +180,7 @@ void BlurFX::zoomBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X, 
             lfAngle = atan2 ((double)nh, (double)nw);
             lfNewRadius = (lfRadius * Distance) / lfRadMax;
 
-            for (r = 0; !m_cancel && (r <= lfNewRadius); r++)
+            for (r = 0; !m_cancel && (r <= lfNewRadius); ++r)
             {
                 // we need to calc the positions
                 nw = (int)(X - (lfRadius - r) * cos (lfAngle));
@@ -275,7 +275,7 @@ void BlurFX::radialBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X
 
     double *nMultArray = new double[Distance * 2 + 1];
 
-    for (int i = -Distance; i <= Distance; i++)
+    for (int i = -Distance; i <= Distance; ++i)
         nMultArray[i + Distance] = i * ANGLE_RATIO;
 
     // number of added pixels
@@ -283,9 +283,9 @@ void BlurFX::radialBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X
 
     // we have reached the main loop
 
-    for (int h = yMin; !m_cancel && (h < yMax); h++)
+    for (int h = yMin; !m_cancel && (h < yMax); ++h)
     {
-        for (int w = xMin; !m_cancel && (w < xMax); w++)
+        for (int w = xMin; !m_cancel && (w < xMax); ++w)
         {
             // ...we enter this loop to sum the bits
 
@@ -298,7 +298,7 @@ void BlurFX::radialBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X
             Radius = sqrt (nw * nw + nh * nh);
             AngleRad = atan2 ((double)nh, (double)nw);
 
-            for (int a = -Distance; !m_cancel && (a <= Distance); a++)
+            for (int a = -Distance; !m_cancel && (a <= Distance); ++a)
             {
                 Angle = AngleRad + nMultArray[a + Distance];
                 // we need to calc the positions
@@ -431,11 +431,11 @@ void BlurFX::focusBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage,
 
     int nh = 0, nw = 0;
 
-    for (int h = yMin; !m_cancel && (h < yMax); h++)
+    for (int h = yMin; !m_cancel && (h < yMax); ++h)
     {
         nh = Y - h;
 
-        for (int w = xMin; !m_cancel && (w < xMax); w++)
+        for (int w = xMin; !m_cancel && (w < xMax); ++w)
         {
             nw = X - w;
 
@@ -521,7 +521,7 @@ void BlurFX::farBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Dist
 
     int *nKern = new int[Distance * 2 + 1];
 
-    for (int i = 0; i < Distance * 2 + 1; i++)
+    for (int i = 0; i < Distance * 2 + 1; ++i)
     {
         // the first element is 3
         if (i == 0)
@@ -588,9 +588,9 @@ void BlurFX::smartBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Ra
 
     // we have reached the main loop
 
-    for (h = 0; !m_cancel && (h < Height); h++)
+    for (h = 0; !m_cancel && (h < Height); ++h)
     {
-        for (w = 0; !m_cancel && (w < Width); w++)
+        for (w = 0; !m_cancel && (w < Width); ++w)
         {
             // we initialize the variables
             sumR = sumG = sumB = nCount = 0;
@@ -600,7 +600,7 @@ void BlurFX::smartBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Ra
             color.setColor(data + offset, sixteenBit);
 
             // ...we enter this loop to sum the bits
-            for (a = -Radius; !m_cancel && (a <= Radius); a++)
+            for (a = -Radius; !m_cancel && (a <= Radius); ++a)
             {
                 // verify if is inside the rect
                 if (IsInside( Width, Height, w + a, h))
@@ -650,9 +650,9 @@ void BlurFX::smartBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Ra
 
     // we have reached the second part of main loop
 
-    for (w = 0; !m_cancel && (w < Width); w++)
+    for (w = 0; !m_cancel && (w < Width); ++w)
     {
-        for (h = 0;!m_cancel && ( h < Height); h++)
+        for (h = 0;!m_cancel && ( h < Height); ++h)
         {
             // we initialize the variables
             sumR = sumG = sumB = nCount = 0;
@@ -662,7 +662,7 @@ void BlurFX::smartBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Ra
             color.setColor(data + offset, sixteenBit);
 
             // ...we enter this loop to sum the bits
-            for (a = -Radius; !m_cancel && (a <= Radius); a++)
+            for (a = -Radius; !m_cancel && (a <= Radius); ++a)
             {
                 // verify if is inside the rect
                 if (IsInside( Width, Height, w, h + a))
@@ -760,7 +760,7 @@ void BlurFX::motionBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int D
     int *lpXArray = new int[nCount];
     int *lpYArray = new int[nCount];
 
-    for (int i = 0; i < nCount; i++)
+    for (int i = 0; i < nCount; ++i)
     {
         lpXArray[i] = lround( (double)(i - Distance) * nAngX);
         lpYArray[i] = lround( (double)(i - Distance) * nAngY);
@@ -768,15 +768,15 @@ void BlurFX::motionBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int D
 
     // we have reached the main loop
 
-    for (int h = 0; !m_cancel && (h < Height); h++)
+    for (int h = 0; !m_cancel && (h < Height); ++h)
     {
-        for (int w = 0; !m_cancel && (w < Width); w++)
+        for (int w = 0; !m_cancel && (w < Width); ++w)
         {
             // we initialize the variables
             sumR = sumG = sumB = 0;
 
             // ...we enter this loop to sum the bits
-            for (int a = -Distance; !m_cancel && (a <= Distance); a++)
+            for (int a = -Distance; !m_cancel && (a <= Distance); ++a)
             {
                 // we need to calc the positions
                 nw = w + lpXArray[a + Distance];
@@ -847,9 +847,9 @@ void BlurFX::softenerBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage)
 
     int grayLimit = sixteenBit ? 32767 : 127;
 
-    for (int h = 0; !m_cancel && (h < Height); h++)
+    for (int h = 0; !m_cancel && (h < Height); ++h)
     {
-        for (int w = 0; !m_cancel && (w < Width); w++)
+        for (int w = 0; !m_cancel && (w < Width); ++w)
         {
             SomaR = SomaG = SomaB = 0;
 
@@ -861,9 +861,9 @@ void BlurFX::softenerBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage)
             if (Gray > grayLimit)
             {
                 // 7x7
-                for (int a = -3; !m_cancel && (a <= 3); a++)
+                for (int a = -3; !m_cancel && (a <= 3); ++a)
                 {
-                    for (int b = -3; !m_cancel && (b <= 3); b++)
+                    for (int b = -3; !m_cancel && (b <= 3); ++b)
                     {
                         if ((h + a < 0) || (w + b < 0))
                             offsetSoma = offset;
@@ -887,9 +887,9 @@ void BlurFX::softenerBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage)
             else
             {
                 // 3x3
-                for (int a = -1; !m_cancel && (a <= 1); a++)
+                for (int a = -1; !m_cancel && (a <= 1); ++a)
                 {
-                    for (int b = -1; !m_cancel && (b <= 1); b++)
+                    for (int b = -1; !m_cancel && (b <= 1); ++b)
                     {
                         if ((h + a < 0) || (w + b < 0))
                             offsetSoma = offset;
@@ -954,9 +954,9 @@ void BlurFX::shakeBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Di
 
     int h, w, nw, nh;
 
-    for (h = 0; !m_cancel && (h < Height); h++)
+    for (h = 0; !m_cancel && (h < Height); ++h)
     {
-        for (w = 0; !m_cancel && (w < Width); w++)
+        for (w = 0; !m_cancel && (w < Width); ++w)
         {
             offsetLayer = GetOffset(Width, w, h, bytesDepth);
 
@@ -988,9 +988,9 @@ void BlurFX::shakeBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Di
             postProgress(progress);
     }
 
-    for (int h = 0; !m_cancel && (h < Height); h++)
+    for (int h = 0; !m_cancel && (h < Height); ++h)
     {
-        for (int w = 0; !m_cancel && (w < Width); w++)
+        for (int w = 0; !m_cancel && (w < Width); ++w)
         {
             offset = GetOffset(Width, w, h, bytesDepth);
             // read original data to preserve alpha
@@ -1064,9 +1064,9 @@ void BlurFX::frostGlass(Digikam::DImg *orgImage, Digikam::DImg *destImage, int F
     uint *AverageColorG = new uint[range + 1];
     uint *AverageColorB = new uint[range + 1];
 
-    for (h = 0; !m_cancel && (h < Height); h++)
+    for (h = 0; !m_cancel && (h < Height); ++h)
     {
-        for (w = 0; !m_cancel && (w < Width); w++)
+        for (w = 0; !m_cancel && (w < Width); ++w)
         {
             offset = GetOffset(Width, w, h, bytesDepth);
             // read color to preserve alpha
@@ -1141,9 +1141,9 @@ void BlurFX::mosaic(Digikam::DImg *orgImage, Digikam::DImg *destImage, int SizeW
 
             // now, we fill the mosaic's rectangle with the center pixel color
 
-            for (int subw = w; !m_cancel && (subw <= w + SizeW); subw++)
+            for (int subw = w; !m_cancel && (subw <= w + SizeW); ++subw)
             {
-                for (int subh = h; !m_cancel && (subh <= h + SizeH); subh++)
+                for (int subh = h; !m_cancel && (subh <= h + SizeH); ++subh)
                 {
                     // if is inside...
                     if (IsInside(Width, Height, subw, subh))
@@ -1194,9 +1194,9 @@ Digikam::DColor BlurFX::RandomColor(uchar *Bits, int Width, int Height, bool six
     memset(AverageColorG,  0, range );
     memset(AverageColorB,  0, range );
 
-    for (w = X - Radius; !m_cancel && (w <= X + Radius); w++)
+    for (w = X - Radius; !m_cancel && (w <= X + Radius); ++w)
     {
-        for (h = Y - Radius; !m_cancel && (h <= Y + Radius); h++)
+        for (h = Y - Radius; !m_cancel && (h <= Y + Radius); ++h)
         {
             if ((w >= 0) && (w < Width) && (h >= 0) && (h < Height))
             {
@@ -1321,22 +1321,22 @@ void BlurFX::MakeConvolution (Digikam::DImg *orgImage, Digikam::DImg *destImage,
 
     int** arrMult = Alloc2DArray (nKernelWidth, range);
 
-    for (int i = 0; i < nKernelWidth; i++)
-        for (int j = 0; j < range; j++)
+    for (int i = 0; i < nKernelWidth; ++i)
+        for (int j = 0; j < range; ++j)
             arrMult[i][j] = j * Kernel[i];
 
     // Now, we enter in the main loop
 
-    for (h = 0; !m_cancel && (h < Height); h++)
+    for (h = 0; !m_cancel && (h < Height); ++h)
     {
-        for (w = 0; !m_cancel && (w < Width); w++)
+        for (w = 0; !m_cancel && (w < Width); ++w)
         {
             // initialize the variables
             nSumR = nSumG = nSumB = nCount = 0;
 
             // first of all, we need to blur the horizontal lines
 
-            for (n = -Radius; !m_cancel && (n <= Radius); n++)
+            for (n = -Radius; !m_cancel && (n <= Radius); ++n)
             {
                 // if is inside...
                 if (IsInside (Width, Height, w + n, h))
@@ -1388,15 +1388,15 @@ void BlurFX::MakeConvolution (Digikam::DImg *orgImage, Digikam::DImg *destImage,
     }
 
     // We enter in the second main loop
-    for (w = 0; !m_cancel && (w < Width); w++)
+    for (w = 0; !m_cancel && (w < Width); ++w)
     {
-        for (h = 0; !m_cancel && (h < Height); h++)
+        for (h = 0; !m_cancel && (h < Height); ++h)
         {
             // initialize the variables
             nSumR = nSumG = nSumB = nCount = 0;
 
             // first of all, we need to blur the vertical lines
-            for (n = -Radius; !m_cancel && (n <= Radius); n++)
+            for (n = -Radius; !m_cancel && (n <= Radius); ++n)
             {
                 // if is inside...
                 if (IsInside(Width, Height, w, h + n))
