@@ -245,7 +245,7 @@ MainWindow::MainWindow()
     m_folderView->setRootIsDecorated(true);
 
     KIconLoader *iconLoader = KIconLoader::global();
-    for (int i=0; i<10; i++)
+    for (int i=0; i<10; ++i)
     {
         FolderItem* folderItem = new FolderItem(m_folderView, QString("Album %1").arg(i));
         folderItem->setPixmap(0, iconLoader->loadIcon("folder", KIconLoader::NoGroup, 32));

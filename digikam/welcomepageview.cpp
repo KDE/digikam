@@ -126,7 +126,7 @@ QString WelcomePageView::infoPage()
 
 
     QString featureItems;
-    for ( int i = 0 ; i < newFeatures.count() ; i++ )
+    for (int i = 0 ; i < newFeatures.count() ; ++i)
         featureItems += i18n("<li>%1</li>\n", newFeatures[i] );
 
     QString info =

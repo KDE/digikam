@@ -107,7 +107,7 @@ bool AbstractAlbumTreeView::checkExpandedState(const QModelIndex &index)
     anyMatch = result;
 
     int rows = m_albumFilterModel->rowCount(index);
-    for (int i=0; i<rows; i++)
+    for (int i=0; i<rows; ++i)
     {
         QModelIndex child = model()->index(i, 0, index);
         bool childResult = checkExpandedState(child);
@@ -156,7 +156,7 @@ void AbstractCountingAlbumTreeView::updateShowCountState(const QModelIndex &inde
     {
         int rows = m_albumFilterModel->rowCount(index);
         kDebug() << "recursing" << index << rows;
-        for (int i=0; i<rows; i++)
+        for (int i=0; i<rows; ++i)
             updateShowCountState(m_albumFilterModel->index(i, 0, index), true);
     }
 }
@@ -179,7 +179,7 @@ void AbstractCountingAlbumTreeView::slotSetShowCount()
 void AbstractCountingAlbumTreeView::slotRowsInserted(const QModelIndex &parent, int start, int end)
 {
     // initialize showCount state when items are added
-    for (int i=start; i<=end; i++)
+    for (int i=start; i<=end; ++i)
         updateShowCountState(m_albumFilterModel->index(i, 0, parent), false);
 }
 

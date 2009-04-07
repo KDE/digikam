@@ -68,7 +68,7 @@ ThemedIconView::ThemedIconView(QWidget* parent)
               : IconView(parent), d(new ThemedIconViewPriv)
 {
     ThemedIconGroupItem* groupItem = new ThemedIconGroupItem(this);
-    for (int i=0; i<10; i++)
+    for (int i=0; i<10; ++i)
     {
         ThemedIconItem* item = new ThemedIconItem(groupItem);
         if (i > 0 && i < 3)

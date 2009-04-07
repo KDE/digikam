@@ -43,7 +43,7 @@ TreeFolderItem::TreeFolderItem(QTreeWidget *parent, const QString& text, bool sp
 
     if (special)
     {
-        for (int i=0 ; i < columnCount() ; i++)
+        for (int i=0 ; i < columnCount() ; ++i)
         {
             QFont f = font(i);
             f.setItalic(true);
@@ -64,7 +64,7 @@ TreeFolderItem::TreeFolderItem(QTreeWidgetItem *parent, const QString& text, boo
 
     if (special)
     {
-        for (int i=0 ; i < columnCount() ; i++)
+        for (int i=0 ; i < columnCount() ; ++i)
         {
             QFont f = font(i);
             f.setItalic(true);
@@ -84,7 +84,7 @@ TreeFolderItem::~TreeFolderItem()
 void TreeFolderItem::setFocus(bool b)
 {
     m_focus = b;
-    for (int i=0 ; i < columnCount() ; i++)
+    for (int i=0 ; i < columnCount() ; ++i)
     {
         setForeground(i, m_focus ? treeWidget()->palette().link()
                                  : foregroundBrush());

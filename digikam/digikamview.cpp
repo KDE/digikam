@@ -961,14 +961,14 @@ void DigikamView::clearHistory()
 void DigikamView::getBackwardHistory(QStringList &titles)
 {
     d->albumHistory->getBackwardHistory(titles);
-    for (int i=0; i<titles.size(); i++)
+    for (int i=0; i<titles.size(); ++i)
         titles[i] = d->userPresentableAlbumTitle(titles[i]);
 }
 
 void DigikamView::getForwardHistory(QStringList &titles)
 {
     d->albumHistory->getForwardHistory(titles);
-    for (int i=0; i<titles.size(); i++)
+    for (int i=0; i<titles.size(); ++i)
         titles[i] = d->userPresentableAlbumTitle(titles[i]);
 }
 

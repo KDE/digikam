@@ -172,7 +172,7 @@ void RatingWidget::paintEvent(QPaintEvent*)
     if (!isEnabled())
     {
         int x = 0;
-        for (int i = 0; i < RatingMax; i++)
+        for (int i = 0; i < RatingMax; ++i)
         {
             p.drawPixmap(x, 0, d->disPixmap);
             x += d->disPixmap.width()+1;
@@ -181,13 +181,13 @@ void RatingWidget::paintEvent(QPaintEvent*)
     else
     {
         int x = 0;
-        for (int i = 0; i < d->rating; i++)
+        for (int i = 0; i < d->rating; ++i)
         {
             p.drawPixmap(x, 0, d->selPixmap);
             x += d->selPixmap.width()+1;
         }
 
-        for (int i = d->rating; i < RatingMax; i++)
+        for (int i = d->rating; i < RatingMax; ++i)
         {
             p.drawPixmap(x, 0, d->regPixmap);
             x += d->regPixmap.width()+1;

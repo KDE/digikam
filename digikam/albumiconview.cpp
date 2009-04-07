@@ -2096,7 +2096,7 @@ void AlbumIconView::updateRectsAndPixmaps()
     // This makes 5*2 (small) pixmaps.
     if (d->albumSettings->getIconShowRating())
     {
-        for (int sel=0; sel<2; sel++)
+        for (int sel=0; sel<2; ++sel)
         {
             QPixmap basePix;
 
@@ -2106,7 +2106,7 @@ void AlbumIconView::updateRectsAndPixmaps()
             else
                 basePix = d->itemRegPixmap.copy(d->itemRatingRect);
 
-            for (int rating=1; rating<=5; rating++)
+            for (int rating=1; rating<=5; ++rating)
             {
                 // we store first the 5 regular, then the 5 selected pixmaps, for simplicity
                 int index = (sel * 5 + rating) - 1;
@@ -2126,7 +2126,7 @@ void AlbumIconView::updateRectsAndPixmaps()
 
                 // move painter while drawing polygons
                 painter.translate( lround((d->itemRatingRect.width() - margin - rating*(starPolygonSize.width()+1))/2.0) + 2, 1 );
-                for (int s=0; s<rating; s++)
+                for (int s=0; s<rating; ++s)
                 {
                     painter.drawPolygon(d->starPolygon, Qt::WindingFill);
                     painter.translate(starPolygonSize.width() + 1, 0);
