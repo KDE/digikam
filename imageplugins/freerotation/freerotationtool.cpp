@@ -494,6 +494,10 @@ void FreeRotationTool::setAutoHorizonMode(AutoMode mode)
             angle -= 90.0;
     }
 
+    // if auto-adjust has been called twice or more, we need to add the new angle
+    // to the already set values
+    angle = (double)m_angleInput->value() + m_fineAngleInput->value() + angle;
+
     // convert the angle to a string so we can easily split it up
     QString angleStr       = QString::number(angle, 'f', 2);
     QStringList anglesList = angleStr.split('.');
