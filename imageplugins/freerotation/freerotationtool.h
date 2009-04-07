@@ -90,8 +90,8 @@ private:
     void putFinalData();
     void renderingFinished();
 
-    double  calculateAngle(const QPoint &p1, const QPoint &p2);
-    double  calculateAutoAngle();
+    double  calculateAngle(const QPoint &p1, const QPoint &p2, bool &reverse);
+    double  calculateAutoAngle(bool &reverse);
     void    setAutoHorizonMode(AutoMode);
     QPixmap generateBtnPixmap(const QString &label, const QColor &color);
 
